@@ -64,6 +64,7 @@ public:
      *
      * @param aOutFileName is the file name to write.
      * @param aNetlistOptions are the options used to control the netlist output.
+     * @param aReporter is the #REPORTER object to write save status information.
      *
      * @return true if the netlist was written successfully.
      */
@@ -72,7 +73,7 @@ public:
 #define GNL_ALL     ( GNL_LIBRARIES | GNL_SYMBOLS | GNL_PARTS | GNL_HEADER | GNL_NETS )
 
 protected:
-   /**
+    /**
      * A convenience function that creates a new XNODE with an optional textual child.
      * It also provides some insulation from a possible change in XML library.
      *

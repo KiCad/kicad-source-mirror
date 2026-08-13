@@ -258,7 +258,7 @@ public:
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
-    //Note: there are possibly several other resolutions, but HUNDREDTH MICRON is only one known
+    // Note: there are possibly several other resolutions, but HUNDREDTH MICRON is only one known
     enum class RESOLUTION
     {
         HUNDREDTH_MICRON
@@ -908,8 +908,8 @@ public:
         FIGURE_ID   ID;
         LINECODE_ID LineCodeID;
         LAYER_ID    LayerID;
-        SHAPE       Shape; //< Uses the component's coordinate frame if within a component
-                           //< definition, otherwise uses the design's coordinate frame.
+        SHAPE       Shape; ///< Uses the component's coordinate frame if within a component
+                           ///< definition, otherwise uses the design's coordinate frame.
         GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this FIGURE is part of a group
         REUSEBLOCKREF ReuseBlockRef;
         SWAP_RULE     SwapRule = SWAP_RULE::BOTH; ///< Only applicable to Figures in Components
@@ -1349,6 +1349,7 @@ public:
 
     /**
      * @param aNode with a child node containing an EVALUE
+     * @param aContext
      * @param aValueToParse
      *
      * Logs a warning (does not throw) if the child node is not an EVALUE.
@@ -1359,9 +1360,10 @@ public:
      * If no children are present, it just returns an empty vector (without throwing an exception).
      *
      * @param aNode containing a series of POINT objects
+     * @param aContext
      * @param aTestAllChildNodes
      * @param aExpectedNumPoints if UNDEFINED_VALUE (i.e. -1), this is check is disabled
-     * @return std::vector containing all POINT objects
+     * @return all POINT objects
      *
      * Logs a warning (does not throw) if aTestAllChildNodes is true and one of the child nodes
      * is not a valid POINT object.
@@ -1378,13 +1380,13 @@ public:
      * If no children are present, it just returns an empty vector (without throwing an exception).
      *
      * @param aNode containing a series of VERTEX objects
+     * @param aContext
      * @param aTestAllChildNodes
-     * @param aExpectedNumPoints if -1, this is check is disabled
-     * @return std::vector containing all VERTEX objects
+     * @return all VERTEX objects
      *
      * Logs a warning (does not throw) if aTestAllChildNodes is true and one of the child nodes
      * is not a valid VERTEX object.
-     * @throw IO_ERROR if unable to parse a VERTEX object
+     * @throw #IO_ERROR if unable to parse a VERTEX object
      */
     static std::vector<VERTEX> ParseAllChildVertices( XNODE* aNode, PARSER_CONTEXT* aContext,
                                                       bool aTestAllChildNodes = false );
@@ -1393,13 +1395,13 @@ public:
      * If no children are present, it just returns an empty vector (without throwing an exception).
      *
      * @param aNode containing a series of CUTOUT objects
+     * @param aContext
      * @param aTestAllChildNodes
-     * @param aExpectedNumPoints if -1, this is check is disabled
-     * @return std::vector containing all CUTOUT objects
+     * @return all CUTOUT objects
      *
      * Logs a warning (does not throw) if aTestAllChildNodes is true and one of the child nodes
      * is not a valid CUTOUT object.
-     * @throw IO_ERROR if unable to parse a CUTOUT object
+     * @throw #IO_ERROR if unable to parse a CUTOUT object
      */
     static std::vector<CUTOUT> ParseAllChildCutouts( XNODE* aNode, PARSER_CONTEXT* aContext,
                                                      bool aTestAllChildNodes = false );

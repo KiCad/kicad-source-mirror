@@ -65,10 +65,16 @@ class TRANSLINE_PRM
 {
 public:
     /**
+     * @param aType
+     * @param aId
      * @param aKeywordCfg is the keyword used in config to identify the parameter
      *                    only ASCII7 keyword is valid.
      * @param aDlgLabel is a I18n string used to identify the parameter in dialog.
      *                  usually aDlgLabel is same as aKeywordCfg, but translatable.
+     * @param aToolTip is the tooltip for the control.
+     * @param aValue is the initial value of the control.
+     * @param aConvUnit
+     * @param aDefaultUnit
      */
     TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordCfg = "", const wxString& aDlgLabel = wxEmptyString,
                    const wxString& aToolTip = wxEmptyString, double aValue = 0.0, bool aConvUnit = false,

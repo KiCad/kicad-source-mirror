@@ -80,6 +80,8 @@ public:
      * Parse a two-source .dc command directive into its symbols.
      *
      * @param aCmd is the input command string
+     * @param aSource1
+     * @param aSource2
      * @return true if the command was parsed successfully
      */
     bool ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1, SPICE_DC_PARAMS* aSource2 );

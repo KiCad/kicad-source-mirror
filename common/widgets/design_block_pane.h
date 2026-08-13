@@ -50,7 +50,7 @@ public:
      * @param aLibId is the design block library identifier to load.
      * @param aUseCacheLib set to true to fall back to cache library if design block is not found in
      *                     design block library table.
-     * @param aShowErrorMessage set to true to show any error messages.
+     * @param aShowErrorMsg set to true to show any error messages.
      * @param aErrorMsg is an optional string that receives the reason a load failed.
      * @return The design block found in the library or NULL if the design block was not found.
      */

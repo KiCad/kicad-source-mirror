@@ -85,8 +85,6 @@ public:
     /**
      * Parse one block from the stream, returning a BLOCK_BASE representing the raw data of the block.
      *
-     * @param aStream The stream to read from, positioned at the start of the block
-     *                (i.e. the next byte to read is the block type).
      * @param aEndOfObjectsMarker This is set to true if we encounter the end of objects marker.
      */
     std::unique_ptr<BLOCK_BASE> ParseBlock( bool& aEndOfObjectsMarker );

@@ -30,7 +30,7 @@ namespace KIPLATFORM
 
         bool GetCPUInfo( std::vector<CPU_INFO>& aCpuInfos ) override;
         bool GetGPUInfo( std::vector<GPU_INFO>& aGpuInfos ) override;
-        bool GetMemoryInfo( MEMORY_INFO& aRamInfo ) override;
+        bool GetMemoryInfo( MEMORY_INFO& aMemoryInfo ) override;
 
     };
 }

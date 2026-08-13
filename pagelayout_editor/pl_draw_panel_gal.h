@@ -35,7 +35,7 @@ public:
 
     virtual ~PL_DRAW_PANEL_GAL();
 
-    ///< @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
+    /// @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
@@ -43,17 +43,17 @@ public:
      */
     void DisplayDrawingSheet();
 
-    ///< @copydoc EDA_DRAW_PANEL_GAL::SwitchBackend
+    /// @copydoc EDA_DRAW_PANEL_GAL::SwitchBackend
     bool SwitchBackend( GAL_TYPE aGalType ) override;
 
-    ///< @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
+    /// @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
     virtual void SetTopLayer( int aLayer ) override;
 
 protected:
-    ///< Set rendering targets & dependencies for layers.
+    /// Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///< Currently used drawing sheet
+    /// Currently used drawing sheet
     std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;
 
     std::unique_ptr<DS_DRAW_ITEM_PAGE> m_pageDrawItem;

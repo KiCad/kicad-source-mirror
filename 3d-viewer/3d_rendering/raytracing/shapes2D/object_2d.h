@@ -78,12 +78,14 @@ public:
     virtual bool Overlaps( const BBOX_2D& aBBox ) const = 0;
 
     /**
-     * a.Intersects(b) ⇔ !a.Disjoint(b) ⇔ !(a ∩ b = ∅)
+     * a.Intersects(b) ⇔ \!a.Disjoint(b) ⇔ \!(a ∩ b = ∅)
      */
     virtual bool Intersects( const BBOX_2D& aBBox ) const = 0;
 
     /**
+     * @param aSegRay
      * @param aOutT a value between 0.0 and 1.0 in relation to the time of the hit of the segment.
+     * @param aNormalOut
      */
     virtual bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const = 0;
 

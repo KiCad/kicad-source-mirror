@@ -97,7 +97,7 @@ protected:
 class ITEM : public OWNABLE_ITEM, public ITEM_OWNER
 {
 public:
-    ///< Supported item types
+    /// Supported item types
     enum PnsKind
     {
         INVALID_T   =    0,
@@ -229,7 +229,11 @@ public:
      * Collision checking takes all PCB stuff into account (layers, nets, DRC rules).
      * Optionally returns a minimum translation vector for force propagation algorithm.
      *
-     * @param aOther is the item to check collision against.
+     * @param aHead is the item to test for collision.
+     * @param aNode is the item to check for collision against.
+     * @param aLayer is the layer to check for collision against.
+     * @param aCtx is the  collision search context.
+     *
      * @return true, if a collision was found.
      */
     bool Collide( const ITEM* aHead, const NODE* aNode, int aLayer,
@@ -316,7 +320,7 @@ protected:
     PnsKind         m_kind;
     BOARD_ITEM*     m_parent;       // The parent BOARD_ITEM, used when there is a 1:1 map
                                     //   between the PNS::ITEM and the BOARD_ITEM.
-    BOARD_ITEM*     m_sourceItem;   // The progenator BOARD_ITEM for when there is NOT a 1:1 map.
+    BOARD_ITEM*     m_sourceItem;   // The progenitor BOARD_ITEM for when there is NOT a 1:1 map.
                                     //   For instance, dragging a track might produce multiple
                                     //   segments, none of which can be directly mapped to the
                                     //   track.

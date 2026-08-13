@@ -151,14 +151,18 @@ public:
     void Print( wxDC* aDC, const VECTOR2I& aOffset, GBR_DISPLAY_OPTIONS* aOptions );
 
     /**
+     * Convert a lines in #m_ShapeAsPolygon to an equivalent polygon.
+     */
+    void ConvertSegmentToPolygon();
+
+    /**
      * Convert a line to an equivalent polygon.
      *
      * Useful when a line is plotted using a rectangular pen.
      * In this case, the usual segment plot function cannot be used
-     * @param aPolygon is the SHAPE_POLY_SET to fill. If null (usual case),
-     * m_Polygon will be used
+     *
+     * @param aPolygon is the SHAPE_POLY_SET to fill. If null (usual case), #m_ShapeAsPolygon will be used.
      */
-    void ConvertSegmentToPolygon();
     void ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const;
 
     /**
@@ -177,6 +181,7 @@ public:
      * Test if the given wxPoint is within the bounds of this object.
      *
      * @param aRefPos a wxPoint to test
+     * @param aAccuracy is the hit test padding.
      * @return bool - true if a hit, else false
      */
     bool HitTest( const VECTOR2I& aRefPos, int aAccuracy = 0 ) const override;
@@ -187,6 +192,8 @@ public:
      * For now, an ending point must be inside this rect.
      *
      * @param aRefArea a wxPoint to test
+     * @param aContained true to test if this item is contained in \a aRefArea.
+     * @param aAccuracy is the amount of padding for testing.
      * @return true if a hit, else false
      */
     bool HitTest( const BOX2I& aRefArea, bool aContained, int aAccuracy = 0 ) const override;
@@ -203,23 +210,20 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual std::vector<int> ViewGetLayers() const override;
 
-    /// @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLOD()
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
-    ///< @copydoc EDA_ITEM::Visit()
-    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
+    /// @copydoc EDA_ITEM::Visit()
+    INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData,
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
-    ///< @copydoc EDA_ITEM::GetItemDescription()
+    /// @copydoc EDA_ITEM::GetItemDescription()
     virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
-    ///< @copydoc EDA_ITEM::GetMenuImage()
+    /// @copydoc EDA_ITEM::GetMenuImage()
     BITMAPS GetMenuImage() const override;
 
 public:

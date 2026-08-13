@@ -97,7 +97,7 @@ namespace APP_MONITOR
      * This is a singleton class intended to manage sentry
      *
      * The inards of the api in this class are meant to be compiled out when KICAD_USE_SENTRY
-     * is not defined and become "inert" in order to reduce the need to sprinkle #ifdef checks
+     * is not defined and become "inert" in order to reduce the need to sprinkle \#ifdef checks
      * everywhere.
      */
     class KICOMMON_API SENTRY

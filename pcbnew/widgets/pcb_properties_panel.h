@@ -83,7 +83,6 @@ protected:
      * Get the current selection from the selection tool.
      * If the selection is empty and we're in the footprint editor, returns the footprint instead.
      *
-     * @param aSelection [out] reference to a SELECTION pointer that will be set to the selection
      * @param aFallbackSelection [out] local SELECTION object for fallback footprint selection
      * @return const SELECTION& reference to the selection (either real selection or fallback)
      */

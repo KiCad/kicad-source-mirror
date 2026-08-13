@@ -53,10 +53,13 @@
  * moves. A dedup set ensures each footprint is only moved once even when multiple of its pads
  * are in the selection.
  *
+ * @param[in] aSelection is the selected objects to move.
+ * @param[in] aMoveVec is the distance to move \a aSelection.
+ * @param[in] aCommit is the commit object to handle undo/redo actions.
  * @param aAllowFreePads when true, pads are moved individually without promotion.
  */
 static void moveSelectionBy( const PCB_SELECTION& aSelection, const VECTOR2I& aMoveVec,
-                             BOARD_COMMIT& commit, bool aAllowFreePads )
+                             BOARD_COMMIT& aCommit, bool aAllowFreePads )
 {
     std::set<BOARD_ITEM*> moved;
 
@@ -73,7 +76,7 @@ static void moveSelectionBy( const PCB_SELECTION& aSelection, const VECTOR2I& aM
         if( !moved.insert( boardItem ).second )
             continue;
 
-        commit.Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
+        aCommit.Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
         boardItem->Move( aMoveVec );
     }
 }

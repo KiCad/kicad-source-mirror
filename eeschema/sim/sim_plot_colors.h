@@ -51,14 +51,14 @@ public:
     };
 
     /**
-     * @return the wxColor selected in color list.
      * @param aColorId is the index in color list
+     * @return the wxColor selected in color list.
      */
     wxColour GetPlotColor( enum COLOR_SET aColorId );
 
     /**
+     * @param aTraceColors collection of traces in the plot panel
      * @return a new color from the palette
-     * @param a collection of traces in the plot panel
      */
     wxColour GenerateColor( std::map<wxString, wxColour> aTraceColors );
 
@@ -76,7 +76,7 @@ private:
     enum COLOR_SET getPlotColorCount() { return static_cast<enum COLOR_SET>( m_colorList.size() ); }
 
 private:
-    ///< The color list to draw traces, bg, fg, axis...
+    /// The color list to draw traces, bg, fg, axis...
     static std::vector<wxColour> m_colorList;
 
 };

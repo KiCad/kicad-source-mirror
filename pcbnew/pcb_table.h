@@ -254,6 +254,7 @@ public:
      * Convert the TABLE shape to a polyset. details will be included.
      *
      * @param aBuffer a buffer to store the polygon.
+     * @param aLayer is the ID of the layer the table exists on.
      * @param aClearance the clearance around the pad.
      * @param aError the maximum deviation from true circle.
      * @param aErrorLoc should the approximation error be placed outside or inside the polygon?

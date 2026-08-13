@@ -270,7 +270,7 @@ public:
      *
      * DXFs can lack units by design which requires the importing software to make the decision.
      *
-     * @param aUnits is the default unit of the DXF to assume.
+     * @param aUnit is the default unit of the DXF to assume.
      */
     void SetUnit( DXF_IMPORT_UNITS aUnit )
     {
@@ -282,7 +282,7 @@ public:
      *
      * DXF files have no line width explicit parameter, it will be most of time the line width
      * of imported lines.
-     *f
+     *
      * @param aWidth is the line width in mm.
      */
     void SetDefaultLineWidthMM( double aWidth )
@@ -335,6 +335,7 @@ public:
     {
         return m_messages;
     }
+
     // report message to keep trace of not supported dxf entities:
     void ReportMsg( const wxString& aMessage ) override;
 

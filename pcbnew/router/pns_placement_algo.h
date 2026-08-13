@@ -35,11 +35,9 @@ class ITEM;
 class NODE;
 
 /**
- * PLACEMENT_ALGO
- *
  * Abstract class for a P&S placement/dragging algorithm.
- * All subtools (drag, single/diff pair routing and meandering)
- * are derived from it.
+ *
+ * All subtools (drag, single/diff pair routing and meandering) are derived from it.
  */
 
 class PLACEMENT_ALGO : public ALGO_BASE
@@ -51,30 +49,24 @@ public:
     virtual ~PLACEMENT_ALGO () {};
 
     /**
-     * Function Start()
-     *
-     * Starts placement/drag operation at point aP, taking item aStartItem as anchor
+     * Start placement/drag operation at point aP, taking item aStartItem as anchor
      * (unless NULL).
      */
     virtual bool Start( const VECTOR2I& aP, ITEM* aStartItem ) = 0;
 
     /**
-     * Function Move()
-     *
-     * Moves the end of the currently routed primtive(s) to the point aP, taking
+     * Move the end of the currently routed primtive(s) to the point aP, taking
      * aEndItem as the anchor (if not NULL).
      * (unless NULL).
      */
     virtual bool Move( const VECTOR2I& aP, ITEM* aEndItem ) = 0;
 
     /**
-     * Function FixRoute()
-     *
-     * Commits the currently routed items to the parent node, taking
+     * Commit the currently routed items to the parent node, taking
      * aP as the final end point and aEndItem as the final anchor (if provided).
      * @return true, if route has been committed. May return false if the routing
      * result is violating design rules - in such case, the track is only committed
-     * if Settings.CanViolateDRC() is on.
+     * if ROUTING_SETTINGS::AllowDRCViolations() is on.
      */
     virtual bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish = false ) = 0;
 
@@ -87,9 +79,7 @@ public:
     virtual bool HasPlacedAnything() const { return false; }
 
     /**
-     * Function ToggleVia()
-     *
-     * Enables/disables a via at the end of currently routed trace.
+     * Enable/disable a via at the end of currently routed trace.
      */
     virtual bool ToggleVia( bool aEnabled )
     {
@@ -97,9 +87,7 @@ public:
     }
 
     /**
-     * Function IsPlacingVia()
-     *
-     * Returns true if the placer is placing a via (or more vias).
+     * Return true if the placer is placing a via (or more vias).
      */
     virtual bool IsPlacingVia() const
     {
@@ -107,9 +95,7 @@ public:
     }
 
     /**
-     * Function SetLayer()
-     *
-     * Sets the current routing layer.
+     * Set the current routing layer.
      */
     virtual bool SetLayer( int aLayer )
     {
@@ -117,61 +103,45 @@ public:
     }
 
     /**
-     * Function Traces()
-     *
-     * Returns all routed/tuned traces.
+     * Return all routed/tuned traces.
      */
     virtual const ITEM_SET Traces() = 0;
 
     /**
-     * Function CurrentStart()
-     *
-     * Returns the current start of the line(s) being placed/tuned.
+     * Return the current start of the line(s) being placed/tuned.
      */
     virtual const VECTOR2I& CurrentStart() const = 0;
 
     /**
-     * Function CurrentEnd()
-     *
-     * Returns the current end of the line(s) being placed/tuned. It may not be equal
+     * Return the current end of the line(s) being placed/tuned. It may not be equal
      * to the cursor position due to collisions.
      */
     virtual const VECTOR2I& CurrentEnd() const = 0;
 
     /**
-     * Function CurrentNets()
-     *
      * Returns the net(s) of currently routed track(s).
      */
     virtual const std::vector<NET_HANDLE> CurrentNets() const = 0;
 
     /**
-     * Function CurrentLayer()
-     *
-     * Returns the layer of currently routed track.
+     * Return the layer of currently routed track.
      */
     virtual int CurrentLayer() const = 0;
 
     /**
-     * Function CurrentNode()
-     *
-     * Returns the most recent board state.
+     * Return the most recent board state.
      */
     virtual NODE* CurrentNode( bool aLoopsRemoved = false ) const = 0;
 
     /**
-     * Function FlipPosture()
-     *
-     * Toggles the current posture (straight/diagonal) of the trace head.
+     * Toggle the current posture (straight/diagonal) of the trace head.
      */
     virtual void FlipPosture()
     {
     }
 
     /**
-     * Function UpdateSizes()
-     *
-     * Performs on-the-fly update of the width, via diameter & drill size from
+     * Perform on-the-fly update of the width, via diameter & drill size from
      * a settings class. Used to dynamically change these parameters as
      * the track is routed.
      */
@@ -180,9 +150,7 @@ public:
     }
 
     /**
-     * Function SetOrthoMode()
-     *
-     * Forces the router to place a straight 90/45 degree trace (with the end
+     * Force the router to place a straight 90/45 degree trace (with the end
      * as near to the cursor as possible) instead of a standard 135 degree
      * two-segment bend.
      */
@@ -191,9 +159,7 @@ public:
     }
 
     /**
-     * Function GetModifiedNets
-     *
-     * Returns the nets of all currently routed trace(s)
+     * Return the nets of all currently routed trace(s)
      */
     virtual void GetModifiedNets( std::vector<NET_HANDLE> &aNets ) const
     {

@@ -57,7 +57,7 @@ enum class DXF_UNITS
 /**
  * The set of supported output plot formats.
  *
-   They should be kept in order of the radio buttons in the plot panel/windows.
+ * They should be kept in order of the radio buttons in the plot panel/windows.
  */
 enum class PLOT_FORMAT
 {
@@ -214,9 +214,9 @@ public:
      * @param aOffset is the plot offset.
      * @param aIusPerDecimil gives the scaling factor from IUs to device units
      * @param aScale is the user set plot scaling factor (either explicitly
-     *      or using 'fit to A4').
+     *               or using 'fit to A4').
      * @param aMirror flips the plot in the Y direction (useful for toner
-     *      transfers or some kind of film).
+     *                transfers or some kind of film).
      */
     virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) = 0;
@@ -231,7 +231,10 @@ public:
      *                        This updates the internal list of layers that will
      *                        be processed for export.
      */
-    void SetLayersToExport( const std::vector<std::pair<PCB_LAYER_ID, wxString>>& aLayersToExport ) { m_layersToExport = aLayersToExport; }
+    void SetLayersToExport( const std::vector<std::pair<PCB_LAYER_ID, wxString>>& aLayersToExport )
+    {
+        m_layersToExport = aLayersToExport;
+    }
 
     /**
      * @brief Gets the ID of the current layer.
@@ -253,7 +256,6 @@ public:
 
     /**
      * Open or create the plot file \a aFullFilename.
-     * .
      *
      * @param aFullFilename is the full file name of the file to create.
      * @return true if success, false if the file cannot be created/opened.
@@ -299,8 +301,8 @@ public:
      *
      * @param pos is the target position.
      * @param plume specifies the kind of motion: 'U' only moves the pen,
-     *      'D' draw a line from the current position and 'Z' finish
-     *      the drawing and returns the 'pen' to rest (flushes the trace).
+     *              'D' draw a line from the current position and 'Z' finish
+     *              the drawing and returns the 'pen' to rest (flushes the trace).
      */
     virtual void PenTo( const VECTOR2I& pos, char plume ) = 0;
 
@@ -445,7 +447,7 @@ public:
      * Flash a regular polygon. Useful only in Gerber files to flash a regular polygon.
      *
      * @param aShapePos is the center of the circle containing the polygon.
-     * @param aRadius is the radius of the circle containing the polygon.
+     * @param aDiameter is the diameter of the circle containing the polygon.
      * @param aCornerCount is the number of vertices.
      * @param aOrient is the polygon rotation.
      * @param aData is a auxiliary parameter used (if needed) to handle extra info
@@ -472,6 +474,8 @@ public:
      * @param aBold use true to use a bold font Useful only with default width value
      *              (aPenWidth = 0).
      * @param aMultilineAllowed use true to plot text as multiline, otherwise single line.
+     * @param aFont is the font to use to plot the text.
+     * @param aFontMetrics are the metrics used to plot \a aFont.
      * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
      *              not directly used here.
      */
@@ -523,7 +527,8 @@ public:
      * Create a bookmark to a symbol
      *
      * @param aBox is the rectangular click target
-     * @param aSymbolReference is the symbol schematic ref
+     * @param aName
+     * @param aGroupName
      */
     virtual void Bookmark( const BOX2I& aBox, const wxString& aName,
                            const wxString& aGroupName = wxEmptyString )
@@ -543,7 +548,7 @@ public:
      * @param aDiameter is the diameter of the marker.
      * @param aShapeId is the index (used to generate forms characters).
      */
-    void Marker( const VECTOR2I& position, int diametre, unsigned aShapeId );
+    void Marker( const VECTOR2I& aPosition, int aDiameter, unsigned aShapeId );
 
     /**
      * Set the current Gerber layer polarity to positive or negative
@@ -646,12 +651,12 @@ protected:
     void markerSlash( const VECTOR2I& pos, int radius );
 
     /**
-     * Plot a \ bar centered on the position. Building block for markers
+     * Plot a \\ bar centered on the position. Building block for markers
      */
     void markerBackSlash( const VECTOR2I& pos, int radius );
 
     /**
-     * Plot a | bar centered on the position. Building block for markers
+     * Plot a \| bar centered on the position. Building block for markers
      */
     void markerVBar( const VECTOR2I& pos, int radius );
 

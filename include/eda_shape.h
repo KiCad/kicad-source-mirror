@@ -533,7 +533,7 @@ public:
      *
      * Has meaning only for #BEZIER shape.
      *
-     * @param aMinSegLen is the max deviation between the polyline and the curve.
+     * @param aMaxError is the max deviation between the polyline and the curve.
      */
     void RebuildBezierToSegmentsPointsList( int aMaxError );
     void RebuildBezierToSegmentsPointsList() { RebuildBezierToSegmentsPointsList( getMaxError() ); }
@@ -621,7 +621,9 @@ public:
      * @param aClearance is the clearance around the pad.
      * @param aError is the maximum deviation from a true arc.
      * @param aErrorLoc whether any approximation error should be placed inside or outside
-     * @param ignoreLineWidth is used for edge cut items where the line width is only for visualization
+     * @param ignoreLineWidth is used for edge cut items where the line width is only for
+     *                        visualization
+     * @param includeFill
      */
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError, ERROR_LOC aErrorLoc,
                                   bool ignoreLineWidth = false, bool includeFill = false ) const;
@@ -702,6 +704,7 @@ protected:
      *                  shapes.
      * @param aLineChainOnly indicates #SHAPE_POLY_SET is being abused slightly to represent a
      *                       lineChain rather than a closed polygon.
+     * @param aHittesting
      */
     // fixme: move to shape_compound
     std::vector<SHAPE*> makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly = false,

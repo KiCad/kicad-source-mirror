@@ -39,6 +39,8 @@ public:
     /**
      * Apply the final color process using a previous stage color.
      *
+     * @param aShaderPos
+     * @param aInputColor
      * @param aShadeColor The result of the shader.
      * @return the result of the shade process
      */

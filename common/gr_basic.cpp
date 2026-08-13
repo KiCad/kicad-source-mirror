@@ -283,9 +283,6 @@ void GRFilledSegment( wxDC* aDC, const VECTOR2I& aStart, const VECTOR2I& aEnd, i
 }
 
 
-/**
- * Draw a new polyline and fill it if Fill, in screen space.
- */
 static void GRSPoly( wxDC* DC, int n, const VECTOR2I* Points, bool Fill, int width,
                      const COLOR4D& Color, const COLOR4D& BgColor )
 {
@@ -306,9 +303,6 @@ static void GRSPoly( wxDC* DC, int n, const VECTOR2I* Points, bool Fill, int wid
 }
 
 
-/**
- * Draw a new closed polyline and fill it if Fill, in screen space.
- */
 static void GRSClosedPoly( wxDC* aDC, int aPointCount, const VECTOR2I* aPoints, bool aFill,
                            int aWidth, const COLOR4D& aColor, const COLOR4D& aBgColor )
 {
@@ -336,9 +330,6 @@ static void GRSClosedPoly( wxDC* aDC, int aPointCount, const VECTOR2I* aPoints, 
 }
 
 
-/**
- * Draw a new polyline and fill it if Fill, in drawing space.
- */
 void GRPoly( wxDC* DC, int n, const VECTOR2I* Points, bool Fill, int width, const COLOR4D& Color,
              const COLOR4D& BgColor )
 {
@@ -346,9 +337,6 @@ void GRPoly( wxDC* DC, int n, const VECTOR2I* Points, bool Fill, int width, cons
 }
 
 
-/**
- * Draw a closed polyline and fill it if Fill, in object space.
- */
 void GRClosedPoly( wxDC* DC, int n, const VECTOR2I* Points, bool Fill, const COLOR4D& Color )
 {
     GRSClosedPoly( DC, n, Points, Fill, 0, Color, Color );

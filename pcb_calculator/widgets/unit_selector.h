@@ -19,7 +19,7 @@
  */
 
 /**
-  * @file UnitSelector.h
+  * @file unit_selector.h
   * a wxChoiceBox to select units in Pcb_Calculator
   */
 
@@ -42,9 +42,7 @@ public:
     }
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units (meter, herz, ohm, radian )
+     * @return the scaling factor to convert users units to normalized units (meter, herz, ohm, radian ).
      */
     virtual double GetUnitScale() = 0;
 
@@ -54,6 +52,7 @@ public:
     }
 };
 
+
 class UNIT_SELECTOR_LEN: public UNIT_SELECTOR
 {
 public:
@@ -62,12 +61,11 @@ public:
                   const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units (meter)
+     * @return the scaling factor to convert users units to normalized units (meter).
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_THICKNESS: public UNIT_SELECTOR
 {
@@ -77,12 +75,11 @@ public:
                   const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units (meter) including oz/ft^2
+     * @return the scaling factor to convert users units to normalized units (meter) including oz/ft^2.
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_FREQUENCY: public UNIT_SELECTOR
 {
@@ -92,12 +89,11 @@ public:
                   const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units (Hz)
+     * @return the scaling factor to convert users units to normalized units (Hz).
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_ANGLE: public UNIT_SELECTOR
 {
@@ -107,12 +103,11 @@ public:
                   const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units (Hz)
+     * @return the scaling factor to convert users units to normalized units (Hz).
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_RESISTOR: public UNIT_SELECTOR
 {
@@ -122,12 +117,11 @@ public:
                   const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units (Hz)
+     * @return the scaling factor to convert users units to normalized units (Hz).
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_LINEAR_RESISTANCE : public UNIT_SELECTOR
 {
@@ -137,12 +131,11 @@ public:
                   const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units ( ohm/m )
+     * @return the scaling factor to convert users units to normalized units ( ohm/m ).
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_LEN_CABLE : public UNIT_SELECTOR
 {
@@ -152,12 +145,11 @@ public:
                   const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units ( m )
+     * @return the scaling factor to convert users units to normalized units ( m ).
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_VOLTAGE : public UNIT_SELECTOR
 {
@@ -166,12 +158,11 @@ public:
                            const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units ( V )
+     * @return the scaling factor to convert users units to normalized units ( V ).
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_POWER : public UNIT_SELECTOR
 {
@@ -180,12 +171,11 @@ public:
                          const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units ( W )
+     * @return the scaling factor to convert users units to normalized units ( W )
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_SPEED : public UNIT_SELECTOR
 {
@@ -194,12 +184,11 @@ public:
                          const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units ( ohm/m )
+     * @return the scaling factor to convert users units to normalized units ( ohm/m ).
      */
     double GetUnitScale() override;
 };
+
 
 class UNIT_SELECTOR_TIME : public UNIT_SELECTOR
 {
@@ -208,9 +197,7 @@ public:
                         const wxArrayString& choices, long style = 0 );
 
     /**
-     * Function GetUnitScale
-     * @return the scaling factor to convert users units
-     * to normalized units ( ohm/m )
+     * @return the scaling factor to convert users units to normalized units ( ohm/m ).
      */
     double GetUnitScale() override;
 };

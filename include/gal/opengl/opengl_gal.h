@@ -45,7 +45,7 @@
 #define CALLBACK
 #endif
 
-///< The default number of points for circle approximation
+/// The default number of points for circle approximation
 #define SEG_PER_CIRCLE_COUNT  64
 
 class GLUtesselator;
@@ -70,27 +70,25 @@ class GAL_API OPENGL_GAL : public GAL, public HIDPI_GL_CANVAS
 {
 public:
     /**
+     * @param aVcSettings
+     * @param aDisplayOptions are the settings for configuring the canvas.
      * @param aParent is the wxWidgets immediate wxWindow parent of this object.
-     *
      * @param aMouseListener is the wxEvtHandler that should receive the mouse events,
-     *  this can be can be any wxWindow, but is often a wxFrame container.
-     *
-     * @param aPaintListener is the wxEvtHandler that should receive the paint
-     *  event.  This can be any wxWindow, but is often a derived instance
-     *  of this class or a containing wxFrame.  The "paint event" here is
-     *  a wxCommandEvent holding EVT_GAL_REDRAW, as sent by PostPaint().
-     *
+     *                       this can be can be any wxWindow, but is often a wxFrame container.
+     * @param aPaintListener is the wxEvtHandler that should receive the paintevent.  This can
+     *                       be any wxWindow, but is often a derived instance of this class or a
+     *                       containing wxFrame.  The "paint event" here is a wxCommandEvent
+     *                       holding EVT_GAL_REDRAW, as sent by PostPaint().
      * @param aName is the name of this window for use by wxWindow::FindWindowByName()
      */
-    OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIONS& aDisplayOptions,
-                wxWindow* aParent,
+    OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
                 wxEvtHandler* aMouseListener = nullptr, wxEvtHandler* aPaintListener = nullptr,
                 const wxString& aName = wxT( "GLCanvas" ) );
 
     ~OPENGL_GAL();
 
     /**
-     * Checks OpenGL features.
+     * Check OpenGL features.
      *
      * @param aOptions
      * @return wxEmptyString if OpenGL 2.1 or greater is available, otherwise returns error message
@@ -106,7 +104,6 @@ public:
         return IsShownOnScreen() && !GetClientRect().IsEmpty();
     }
 
-    ///< @copydoc GAL::IsVisible()
     bool IsVisible() const override
     {
         return IsShownOnScreen() && !GetClientRect().IsEmpty();
@@ -208,8 +205,7 @@ public:
     /// @copydoc GAL::Flush()
     void Flush() override;
 
-    /// @copydoc GAL::ClearScreen()
-    void ClearScreen( ) override;
+    void ClearScreen() override;
 
     // --------------
     // Transformation
@@ -289,14 +285,13 @@ public:
     // Cursor
     // -------
 
-    /// @copydoc GAL::SetNativeCursorStyle()
     bool SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI ) override;
 
     /// @copydoc GAL::DrawCursor()
     void DrawCursor( const VECTOR2D& aCursorPosition ) override;
 
     /**
-     * Post an event to #m_paint_listener.
+     * Post an event to #m_paintListener.
      *
      * A post is used so that the actual drawing function can use a device context type that
      * is not specific to the wxEVT_PAINT event, just by changing the PostPaint code.
@@ -337,7 +332,7 @@ public:
 
     bool GetScreenshot( wxImage& aDstImage );
 
-    ///< Parameters passed to the GLU tesselator
+    /// Parameters passed to the GLU tesselator
     struct TessParams
     {
         /// Manager used for storing new vertices
@@ -412,13 +407,11 @@ private:
     GLUtesselator*                        m_tesselator;
     std::deque<std::shared_ptr<GLdouble>> m_tessIntersects;
 
-    /// @copydoc GAL::BeginUpdate()
     void beginUpdate() override;
 
-    /// @copydoc GAL::EndUpdate()
     void endUpdate() override;
 
-    ///< Update handler for OpenGL settings
+    /// Update handler for OpenGL settings
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
     /**
@@ -477,6 +470,8 @@ private:
     /**
      * Internal method for circle drawing.
      *
+     * @param aCenterPoint is the circle center point.
+     * @param aRadius is the circle radius.
      * @param aReserve if set to false, reserve 3 vertices for each circle.
      */
     void drawCircle( const VECTOR2D& aCenterPoint, double aRadius, bool aReserve = true );
@@ -496,6 +491,7 @@ private:
      *
      * @param aPointGetter is a function to obtain coordinates of n-th vertex.
      * @param aPointCount is the number of points to be drawn.
+     * @param aWidth is the width of the segments.
      * @param aReserve if set to false, do not reserve vertices internally.
      */
     void drawSegmentChain( const std::function<VECTOR2D( int )>& aPointGetter, int aPointCount,
@@ -519,6 +515,7 @@ private:
     /**
      * Draw a set of polygons with a cached triangulation. Way faster than drawPolygon.
      *
+     * @param aPoly is the polygon to draw.
      * @param aStrokeTriangulation indicates the triangulation should be stroked rather than
      *                             filled.  Used for debugging.
      */

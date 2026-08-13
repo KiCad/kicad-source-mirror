@@ -45,7 +45,7 @@ class OPTIMIZER;
 class MEANDER_PLACER_BASE : public PLACEMENT_ALGO
 {
 public:
-    ///< Result of the length tuning operation
+    /// Result of the length tuning operation
     enum TUNING_STATUS {
         TOO_SHORT = 0,
         TOO_LONG,
@@ -133,15 +133,23 @@ protected:
 
     /**
      * Calculate the total length of the line represented by an item set (tracks and vias)
-     * @param aLine
-     * @return
+     *
+     * @param aLine is the set of segments of the line.
+     * @param aStartPad is the starting pad of the line.
+     * @param aEndPad is the ending pad of the line.
+     *
+     * @return the line length.
      */
     long long int lineLength( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const;
 
     /**
      * Calculate the total delay of the line represented by an item set (tracks and vias)
-     * @param aLine
-     * @return
+     *
+     * @param aLine is the set of segments of the line.
+     * @param aStartPad is the starting pad of the line.
+     * @param aEndPad is the ending pad of the line.
+     *
+     * @return the line delay (in what units?).
      */
     int64_t lineDelay( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const;
 
@@ -162,7 +170,7 @@ protected:
      */
     long long int chainNarrowingOffset() const;
 
-    ///< The tuning results as they were at Start(). The deltas measure change from these.
+    /// The tuning results as they were at Start(). The deltas measure change from these.
     long long int m_baselineLength = 0;
     int64_t       m_baselineDelay = 0;
     bool          m_hasBaseline = false;
@@ -170,23 +178,23 @@ protected:
     ///< Active path length at Start().
     long long int m_startPathLength = 0;
 
-    ///< Aggregate length/delay of other nets in the same chain, cached at Start().
-    ///< The non-edited members of a chain don't change during a tuning session, so we avoid
-    ///< walking the live BOARD on every Move event.
+    /// Aggregate length/delay of other nets in the same chain, cached at Start().
+    /// The non-edited members of a chain don't change during a tuning session, so we avoid
+    /// walking the live BOARD on every Move event.
     long long int m_chainExtrasLength = 0;
     long long int m_chainExtrasDelay = 0;
     bool          m_chainExtrasValid = false;
 
-    ///< Pointer to world to search colliding items.
+    /// Pointer to world to search colliding items.
     NODE* m_world;
 
-    ///< Width of the meandered trace(s).
+    /// Width of the meandered trace(s).
     int m_currentWidth;
 
-    ///< Meander settings.
+    /// Meander settings.
     MEANDER_SETTINGS m_settings;
 
-    ///< The current end point.
+    /// The current end point.
     VECTOR2I m_currentEnd;
 
     SOLID*   m_startPad_p;

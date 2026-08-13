@@ -25,7 +25,6 @@
 #include <regex>
 
 /**
- * @file
  * Test utilities for timestamps
  */
 
@@ -43,9 +42,9 @@ bool IsUUID( const std::string& aStr );
  *
  * Eg. levels=2: /1d33ca6f-67e8-41ae-a0aa-49d857ab38d5/1d33ca6f-67e8-41ae-a0aa-49d857ab38d5/
  *
- * @param  aStr   candidate string
- * @param  levels expected levels
- * @return        true if format matches
+ * @param  aStr    candidate string
+ * @param  aLevels expected levels
+ * @return         true if format matches
  */
 bool IsUUIDPathWithLevels( const std::string& aStr, unsigned aLevels );
 

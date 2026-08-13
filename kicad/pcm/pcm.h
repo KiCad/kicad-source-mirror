@@ -37,7 +37,7 @@
 #include <wx/wx.h>
 
 
-///< Contains list of all valid directories that get extracted from a package archive
+/// Contains list of all valid directories that get extracted from a package archive
 const std::unordered_set<wxString> PCM_PACKAGE_DIRECTORIES( {
         "plugins",
         "footprints",
@@ -50,10 +50,10 @@ const std::unordered_set<wxString> PCM_PACKAGE_DIRECTORIES( {
 } );
 
 
-///< Package states
-///< Package is available if it is not installed and there is a compatible version
-///< Package is unavailable if it is not installed and there are no compatible versions
-///< Pending states are intermediary when (un)installation is scheduled but not yet performed
+/// Package states
+/// Package is available if it is not installed and there is a compatible version
+/// Package is unavailable if it is not installed and there are no compatible versions
+/// Pending states are intermediary when (un)installation is scheduled but not yet performed
 enum PCM_PACKAGE_STATE
 {
     PPS_AVAILABLE = 0,
@@ -66,7 +66,7 @@ enum PCM_PACKAGE_STATE
 };
 
 
-///< Package actions
+/// Package actions
 enum PCM_PACKAGE_ACTION
 {
     PPA_INSTALL = 0,
@@ -97,9 +97,9 @@ class DIALOG_PCM;
  *
  * JSON schema file is expected to be in $KICAD_DATA/schemas directory
  *
- * Installed packages are stored in <user_settings>/installed_packages.json
+ * Installed packages are stored in \<user_settings\>/installed_packages.json
  * If that file is missing PCM will try to reconstruct it from existing
- * directory structure inside $KICADX_3RD_PARTY but package descriptions
+ * directory structure inside \$KICADX_3RD_PARTY but package descriptions
  * and other metadata will be lost.
  */
 class PLUGIN_CONTENT_MANAGER
@@ -111,7 +111,7 @@ public:
     /**
      * @brief Saves metadata of installed packages to disk
      *
-     * Path is <user settings>/installed_packages.json
+     * Path is \<user settings\>/installed_packages.json
      */
     void SaveInstalledPackages();
 
@@ -244,7 +244,7 @@ public:
      */
     const wxString& GetInstalledPackageVersion( const wxString& aPackageId ) const;
 
-    ///< Returns current 3rd party directory path
+    /// Returns current 3rd party directory path
     const wxString& Get3rdPartyPath() const { return m_3rdparty_path; };
 
     /**
@@ -294,8 +294,8 @@ public:
      * @brief Returns pinned status of a package
      *
      * @param aPackageId package id
-     * @return true if package is installed and is pinned
-     * @return false if package is not installed or not pinned
+     * @retval true if package is installed and is pinned
+     * @retval false if package is not installed or not pinned
      */
     bool IsPackagePinned( const wxString& aPackageId ) const;
 
@@ -361,9 +361,9 @@ public:
      * @brief Get the icon bitmaps for installed packages
      *
      * Icons for installed packages are taken from package extracted files in
-     * $KICADX_3RD_PARTY/resources/<packageid> directories
+     * \$KICADX_3RD_PARTY/resources/\<packageid\> directories
      *
-     * @return map of package id -> bitmap
+     * @return map of package id -\> bitmap
      */
     std::unordered_map<wxString, wxBitmap> GetInstalledPackageBitmaps();
 
@@ -406,7 +406,7 @@ public:
     void ShowApiEnablePromptIfNeeded();
 
 private:
-    ///< Default download limit of 10 Mb to not use too much memory
+    /// Default download limit of 10 Mb to not use too much memory
     static constexpr size_t DEFAULT_DOWNLOAD_MEM_LIMIT = 10 * 1024 * 1024;
 
     /**
@@ -416,6 +416,7 @@ private:
      * @param aHash optional sha256 hash
      * @param aPackages resulting packages metadata list
      * @param aReporter progress dialog to use for download
+     * @param aSchemaVersion
      * @return true if packages were successfully downloaded, verified and parsed
      */
     bool fetchPackages( const wxString& aUrl, const std::optional<wxString>& aHash,
@@ -458,7 +459,7 @@ private:
      */
     void updateInstalledPackagesMetadata( const wxString& aRepositoryId );
 
-    ///< Returns current UTC timestamp
+    /// Returns current UTC timestamp
     time_t getCurrentTimestamp() const;
 
     DIALOG_PCM*                                  m_dialog;
@@ -468,6 +469,7 @@ private:
     wxString                                     m_cache_path;
     std::unordered_map<wxString, PCM_REPOSITORY> m_repository_cache;
     STRING_TUPLE_LIST                            m_repository_list; // (id, name, url) tuples
+
     // Using sorted map to keep order of entries in installed list stable
     std::map<wxString, PCM_INSTALLATION_ENTRY> m_installed;
     const static std::tuple<int, int, int>     m_kicad_version;

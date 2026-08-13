@@ -107,17 +107,13 @@ public:
     const PAGE_INFO& GetPageInfo() { return *m_pageInfo; }
     const TITLE_BLOCK& GetTitleBlock() { return *m_titleBlock; }
 
-    /// @copydoc VIEW_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
 
-    /// @copydoc VIEW_ITEM::ViewDraw()
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers()
     std::vector<int> ViewGetLayers() const override;
 
 #if defined(DEBUG)
-    /// @copydoc EDA_ITEM::Show()
     void Show( int x, std::ostream& st ) const override { }
 #endif
 

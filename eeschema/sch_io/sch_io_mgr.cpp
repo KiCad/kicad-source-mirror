@@ -83,7 +83,7 @@ SCH_IO* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     case SCH_EAGLE:           return new SCH_IO_EAGLE();
     case SCH_EASYEDA:         return new SCH_IO_EASYEDA();
     case SCH_EASYEDAPRO:      return new SCH_IO_EASYEDAPRO();
-    case SCH_EASYEDAPRO_V3: return new SCH_IO_EASYEDAPRO_V3();
+    case SCH_EASYEDAPRO_V3:   return new SCH_IO_EASYEDAPRO_V3();
     case SCH_GEDA:            return new SCH_IO_GEDA();
     case SCH_LTSPICE:         return new SCH_IO_LTSPICE();
     case SCH_HTTP:            return new SCH_IO_HTTP_LIB();
@@ -96,13 +96,13 @@ SCH_IO* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
 }
 
 
-const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
+const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aFileType )
 {
     // keep this function in sync with EnumFromStr() relative to the
     // text spellings.  If you change the spellings, you will obsolete
     // library tables, so don't do change, only additions are ok.
 
-    switch( aType )
+    switch( aFileType )
     {
     case SCH_KICAD:           return wxString( wxT( "KiCad" ) );
     case SCH_LEGACY:          return wxString( wxT( "Legacy" ) );
@@ -121,7 +121,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_PCAD:            return wxString( wxT( "P-CAD" ) );
     case SCH_ORCAD:           return wxString( wxT( "OrCAD" ) );
     case SCH_NESTED_TABLE:    return LIBRARY_TABLE_ROW::TABLE_TYPE_NAME;
-    default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ), aType );
+    default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ), aFileType );
     }
 }
 

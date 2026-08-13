@@ -46,14 +46,16 @@ double DoubleFromString( const wxString& TextValue )
 
     /* Convert the period in decimal point */
     buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+
     // An ugly fix needed by WxWidgets 2.9.1 that sometimes
     // back to a point as separator, although the separator is the comma
     buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
 
     /* Find the end of the numeric part
      *(when units are append to the number, remove them)
-    */
+     */
     unsigned brk_point = 0;
+
     while( brk_point < buf.Len() )
     {
         wxChar ch = buf[brk_point];
@@ -96,21 +98,25 @@ void SetPropertyInDialog( enum PRMS_ID aPrmId, double value )
     getTranslinePanel()->SetPrmValue( aPrmId, value );
 }
 
+
 void SetPropertyBgColorInDialog( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol )
 {
     getTranslinePanel()->SetPrmBgColor( aPrmId, aCol );
 }
 
-/* Puts the text into the given result line.
-*/
+/**
+ *Puts the text into the given result line.
+ */
 void SetResultInDialog( int line, const char* aText )
 {
     wxString msg   = wxString::FromUTF8( aText );
     getTranslinePanel()->SetResult( line, msg );
 }
 
-/* print aValue into the given result line.
-*/
+
+/**
+ *print aValue into the given result line.
+ */
 void SetResultInDialog( int aLineNumber, double aValue, const char* aText )
 {
     wxString              msg   = wxString::FromUTF8( aText );
@@ -120,11 +126,13 @@ void SetResultInDialog( int aLineNumber, double aValue, const char* aText )
     getTranslinePanel()->SetResult( aLineNumber, fullmsg );
 }
 
+
 /* Returns a named property value. */
 double GetPropertyInDialog( enum PRMS_ID aPrmId )
 {
     return getTranslinePanel()->GetPrmValue( aPrmId );
 }
+
 
 // Returns true if the param aPrmId is selected
 // Has meaning only for params that have a radio button
@@ -134,12 +142,6 @@ bool IsSelectedInDialog( enum PRMS_ID aPrmId )
 }
 
 
-/**
- * Function GetPrmValue
- * Returns a param value.
- * @param aPrmId = param id to write
- * @return the value always in normalized unit (meter, Hz, Ohm, radian)
- */
 double PANEL_TRANSLINE::GetPrmValue( enum PRMS_ID aPrmId ) const
 {
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
@@ -155,12 +157,7 @@ double PANEL_TRANSLINE::GetPrmValue( enum PRMS_ID aPrmId ) const
     return 1.0;
 }
 
-/**
- * Function SetPrmValue
- * Read/write params values and results
- * @param aPrmId = param id to write
- * @param aValue = value to write
- */
+
 void PANEL_TRANSLINE::SetPrmValue( enum PRMS_ID aPrmId, double aValue )
 {
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
@@ -179,20 +176,16 @@ void PANEL_TRANSLINE::SetPrmValue( enum PRMS_ID aPrmId, double aValue )
             return;
         }
     }
+
     wxLogMessage( wxT( "GetPrmValue: prm %d not found" ), (int) aPrmId );
 }
 
-/**
- * Function SetPrmBgColor
- * Set the background color for a given parameter
- * @param aPrmId = @ref PRMS_ID of the parameter
- * @param aCol = color ( @ref KIGFX::COLOR4D * )
- */
+
 void PANEL_TRANSLINE::SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol )
 {
     wxColour wxcol = wxColour( static_cast<unsigned char>( aCol->r * 255 ),
-            static_cast<unsigned char>( aCol->g * 255 ),
-            static_cast<unsigned char>( aCol->b * 255 ) );
+                               static_cast<unsigned char>( aCol->g * 255 ),
+                               static_cast<unsigned char>( aCol->b * 255 ) );
 
     if( !wxcol.IsOk() )
         return;
@@ -214,12 +207,7 @@ void PANEL_TRANSLINE::SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* 
     }
 }
 
-/**
- * Function SetResult
- * Puts the text into the given result line.
- * @param aLineNumber = the line (0 to MSG_CNT_MAX-1) where to display the text
- * @param aText = the text to display
- */
+
 void PANEL_TRANSLINE::SetResult( int aLineNumber, const wxString& aText )
 {
 #define MSG_CNT_MAX 10
@@ -237,11 +225,7 @@ void PANEL_TRANSLINE::SetResult( int aLineNumber, const wxString& aText )
     messages[aLineNumber]->SetLabel( aText );
 }
 
-/**
- * Function IsPrmSelected
- * @return true if the param aPrmId is selected
- * Has meaning only for params that have a radio button
- */
+
 bool PANEL_TRANSLINE::IsPrmSelected( enum PRMS_ID aPrmId ) const
 {
     switch( aPrmId )

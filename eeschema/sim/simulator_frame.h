@@ -53,7 +53,7 @@ class SPICE_SIMULATOR;
 class SIMULATOR_INIT_ERR : public std::runtime_error
 {
 public:
-    explicit SIMULATOR_INIT_ERR(const std::string& what_arg)
+    explicit SIMULATOR_INIT_ERR( const std::string& what_arg )
         : std::runtime_error(what_arg) {}
 };
 
@@ -134,7 +134,6 @@ public:
      * Add a current trace for a given device to the current plot.
      *
      * @param aDeviceName is the device name (e.g. R1, C1).
-     * @param aParam is the current type (e.g. I, Ic, Id).
      */
     void AddCurrentTrace( const wxString& aDeviceName );
 

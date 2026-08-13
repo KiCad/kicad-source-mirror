@@ -317,6 +317,7 @@ public:
      * changed.
      *
      * @param axis_pos is the vertical axis position to mirror around.
+     * @param aFlipDirection is the axis (X or Y) to mirror around.
      */
     virtual void Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipDirection ) override;
 
@@ -379,7 +380,7 @@ protected:
      * Draws an arrow and updates the shape container.
      * example arrow 0Deg tail:4  (---->)
      *
-     * @param startPoint arrow point.
+     * @param aStartPoint arrow point.
      * @param anAngle arrow angle.
      * @param aLength arrow tail length.
      */
@@ -410,7 +411,7 @@ protected:
     VECTOR2I m_start; ///< Start, FP-relative when in a footprint, board absolute otherwise.
     VECTOR2I m_end;   ///< End, FP-relative when in a footprint, board absolute otherwise.
 
-    ///< Internal cache of drawn shapes
+    /// Internal cache of drawn shapes
     std::vector<std::shared_ptr<SHAPE>> m_shapes;
 
     bool       m_inClearRenderCache;      ///< re-entrancy guard
@@ -494,6 +495,7 @@ public:
      * Update the stored height basing on points coordinates.
      *
      * @param aCrossbarStart is the start point of the crossbar.
+     * @param aCrossbarEnd is the end point of the crossbar.
      */
     void UpdateHeight( const VECTOR2I& aCrossbarStart, const VECTOR2I& aCrossbarEnd );
 

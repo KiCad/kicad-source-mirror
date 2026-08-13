@@ -100,10 +100,10 @@ public:
     /// @copydoc RENDER_SETTINGS::GetColor()
     COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
-    ///< Board-specific version
+    /// Board-specific version
     COLOR4D GetColor( const BOARD_ITEM* aItem, int aLayer ) const;
 
-    ///< nullptr version
+    /// nullptr version
     COLOR4D GetColor( std::nullptr_t, int aLayer ) const
     {
         return GetColor( static_cast<const BOARD_ITEM*>( nullptr ), aLayer );
@@ -174,35 +174,35 @@ public:
     PAD*               m_PadEditModePad;       // Pad currently in Pad Edit Mode (if any)
 
 protected:
-    ///< Maximum font size for netnames (and other dynamically shown strings)
+    /// Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;
 
-    ///< How to display nets and netclasses with color overrides
+    /// How to display nets and netclasses with color overrides
     NET_COLOR_MODE     m_netColorMode;
 
-    ///< Overrides for specific netclass colors
+    /// Overrides for specific netclass colors
     std::map<wxString, KIGFX::COLOR4D> m_netclassColors;
 
-    ///< Overrides for specific net colors, stored as netcodes for the ratsnest to access easily
+    /// Overrides for specific net colors, stored as netcodes for the ratsnest to access easily
     std::map<int, KIGFX::COLOR4D> m_netColors;
 
-    ///< Set of net codes that should not have their ratsnest displayed
+    /// Set of net codes that should not have their ratsnest displayed
     std::set<int> m_hiddenNets;
 
     // These opacity overrides multiply with any opacity in the base layer color
-    double m_trackOpacity;     ///< Opacity override for all tracks
-    double m_viaOpacity;       ///< Opacity override for all types of via
-    double m_padOpacity;       ///< Opacity override for SMD pads and PTHs
-    double m_zoneOpacity;      ///< Opacity override for filled zones
-    double m_imageOpacity;     ///< Opacity override for user images
+    double m_trackOpacity;           ///< Opacity override for all tracks
+    double m_viaOpacity;             ///< Opacity override for all types of via
+    double m_padOpacity;             ///< Opacity override for SMD pads and PTHs
+    double m_zoneOpacity;            ///< Opacity override for filled zones
+    double m_imageOpacity;           ///< Opacity override for user images
     double m_filledShapeOpacity;     ///< Opacity override for graphic shapes
 
-    wxString m_highlightedNetChain;    ///< Active highlighted chain name (if any)
+    wxString m_highlightedNetChain;  ///< Active highlighted chain name (if any)
 
-    ///< Gates the constraint-shadow draw
+    /// Gates the constraint-shadow draw
     std::unordered_set<KIID> m_constrainedItems;
 
-    ///< Selected constraint members shadow highlighted
+    /// Selected constraint members shadow highlighted
     std::unordered_set<KIID> m_highlightedConstraintMembers;
 };
 
@@ -215,13 +215,11 @@ class PCB_PAINTER : public PAINTER
 public:
     PCB_PAINTER( GAL* aGal, FRAME_T aFrameType );
 
-    /// @copydoc PAINTER::GetSettings()
     virtual PCB_RENDER_SETTINGS* GetSettings() override
     {
         return &m_pcbSettings;
     }
 
-    /// @copydoc PAINTER::Draw()
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) override;
 
     /// @copydoc PAINTER::HasUniformColor()

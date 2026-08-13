@@ -89,17 +89,43 @@ public:
     virtual ~TRANSLINE();
 
     const char* m_Name;
+
+    /**
+     * Set a named property to the given value, access through the application.
+     */
     void        setProperty( enum PRMS_ID aPrmId, double aValue );
+
+    /**
+     * Return a property value.
+     */
     double      getProperty( enum PRMS_ID aPrmId );
 
     /// Setter for panel-level parameters that are shared across every calculator type.
     void SetExtraParameter( enum EXTRA_PRMS_ID aPrmId, double aValue ) { m_parameters[aPrmId] = aValue; }
 
-
+    /**
+     *  Get all properties from the UI. Computes some extra ones.
+     */
     virtual void getProperties();
+
+    /**
+     *  Check the input parameters (ie: negative length).
+     *
+     *  Does not check for incompatibility between values as this depends on the line shape.
+     */
     void checkProperties();
-    void setResult( int, double, const char* );
-    void setResult( int, const char* );
+
+    /**
+     * Put the text into the given result line.
+     */
+    void setResult( int aLine, double aValue, const char* aText );
+    void setResult( int aLine, const char* aText );
+
+    /**
+     * Return true if the param @a aPrmId is selected.
+     *
+     * Has meaning only for parameters that have a radio button.
+     */
     bool isSelected( enum PRMS_ID aPrmId );
 
     void         Init();
@@ -112,22 +138,22 @@ public:
 
     /**
      * Computation for synthesis
-     **/
+     */
     virtual void calcSynthesize() {}
 
     /**
-     * Shows synthesis results and checks for errors / warnings.
-     **/
+     * Show synthesis results and checks for errors / warnings.
+     */
     virtual void showAnalyze() {}
 
     /**
-     * Shows analysis results and checks for errors / warnings.
-     **/
+     * Show analysis results and checks for errors / warnings.
+     */
     virtual void showSynthesize() {}
 
     /**
-     * Shows results
-     **/
+     * Show results.
+     */
     virtual void   show_results() {}
 
     void           analyze();
@@ -139,7 +165,23 @@ public:
 protected:
     double m_parameters[EXTRA_PRMS_COUNT];
 
+    /**
+     * Calculate skin depth.
+     *
+     * \f$ \frac{1}{\sqrt{ \pi \cdot f \cdot \mu \cdot \sigma }} \f$
+     */
     double skin_depth();
+
+    /**
+     * Set an error / warning level for a given parameter.
+     *
+     * @see TRANSLINE_OK
+     * @see TRANSLINE_WARNING
+     * @see TRANSLINE_ERROR
+     *
+     * @param aP parameter
+     * @param aErrorLevel Error level
+     */
     void   setErrorLevel( PRMS_ID, char );
 
     /**
@@ -153,7 +195,9 @@ protected:
     void pushSoldermaskParameters( TRANSLINE_CALCULATION_BASE& aCalc,
                                    bool aIncludeFillsGaps = false ) const;
 
-    /// Converts a TRANSLINE_PARAMETER status to a PCB Calculation status
+    /**
+     * Convert a #TRANSLINE_STATUS status to a PCB Calculation status.
+     */
     static char convertParameterStatusCode( TRANSLINE_STATUS aStatus );
 };
 

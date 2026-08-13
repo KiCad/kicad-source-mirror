@@ -345,11 +345,11 @@ public:
     LSET GetPrivateLayers() const { return m_privateLayers; }
     void SetPrivateLayers( const LSET& aLayers ) { m_privateLayers = aLayers; }
 
-    ///< @copydoc BOARD_ITEM_CONTAINER::Add()
+    /// @copydoc BOARD_ITEM_CONTAINER::Add()
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT,
               bool aSkipConnectivity = false ) override;
 
-    ///< @copydoc BOARD_ITEM_CONTAINER::Remove()
+    /// @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) override;
 
     /**
@@ -630,7 +630,8 @@ public:
     std::vector<PAD*> GetNetTiePads( PAD* aPad ) const;
 
     /**
-     * Returns the most likely attribute based on pads
+     * Return the most likely attribute based on pads.
+     *
      * Either FP_THROUGH_HOLE/FP_SMD/OTHER(0)
      * @return 0/FP_SMD/FP_THROUGH_HOLE
      */
@@ -697,7 +698,7 @@ public:
     }
 
     /**
-     * Set the #MODULE_is_LOCKED bit in the m_ModuleStatus.
+     * Set the #FP_is_LOCKED bit in the m_ModuleStatus.
      *
      * @param isLocked true means turn on locked status, else unlock
      */
@@ -750,6 +751,7 @@ public:
      * Run non-board-specific DRC checks on footprint's pads.  These are the checks supported by
      * both the PCB DRC and the Footprint Editor Footprint Checker.
      *
+     * @param aUnitsProvider
      * @param aErrorHandler callback to handle the error messages generated
      */
     void CheckPads( UNITS_PROVIDER* aUnitsProvider,
@@ -812,10 +814,11 @@ public:
      * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
      * when a full polygonal approach is needed.
      *
-     * @param aLayer is the layer to consider, or #UNDEFINED_LAYER to consider all layers.
      * @param aBuffer i the buffer to store polygons.
+     * @param aLayer is the layer to consider, or #UNDEFINED_LAYER to consider all layers.
      * @param aClearance is an additional size to add to pad shapes.
      * @param aMaxError is the maximum deviation from true for arcs.
+     * @param aErrorLoc
      */
     void TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                  int aMaxError, ERROR_LOC aErrorLoc ) const;
@@ -827,12 +830,14 @@ public:
      * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
      * when a full polygonal approach is needed.
      *
-     * @param aLayer is the layer to consider, or #UNDEFINED_LAYER to consider all.
      * @param aBuffer is the buffer to store polygons.
+     * @param aLayer is the layer to consider, or #UNDEFINED_LAYER to consider all.
      * @param aClearance is a value to inflate shapes.
      * @param aError is the maximum error between true arc and polygon approximation.
+     * @param aErrorLoc
      * @param aIncludeText set to true to transform text shapes.
      * @param aIncludeShapes set to true to transform footprint shapes.
+     * @param aIncludePrivateItems set to true to include private items.
      */
     void TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                      int aError, ERROR_LOC aErrorLoc,
@@ -857,6 +862,7 @@ public:
     /**
      * Resolve any references to system tokens supported by the component.
      *
+     * @param aToken is the variable to resolve.
      * @param aDepth a counter to limit recursion and circular references.
      */
     bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
@@ -875,7 +881,8 @@ public:
      * The other hit test methods are just checking the bounding box, which can be quite
      * inaccurate for rotated or oddly-shaped footprints.
      *
-     * @param aPosition is the point to test
+     * @param aPosition is the point to test.
+     * @param aAccuracy is the accuracy limit of the hit test.
      * @return true if aPosition is inside the bounding polygon
      */
     bool HitTestAccurate( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
@@ -1226,7 +1233,10 @@ public:
     unsigned GetNumberedPadCount() const;
 
     /**
-     * @return the next available pad number in the footprint.
+     * Return the next available pad number in the footprint.
+     *
+     * @param aLastPadName is the pad to start from.
+     * @return the next available pad number
      */
     wxString GetNextPadNumber( const wxString& aLastPadName ) const;
 

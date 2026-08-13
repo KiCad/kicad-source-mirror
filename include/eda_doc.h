@@ -40,11 +40,15 @@ class EMBEDDED_FILES;
  *
  * @param aParent main frame.
  * @param aDocName filename of file to open (Full filename or short filename).
- * @param aPaths Additional paths to search for local disk datasheet files
-*/
+ * @param aProject provides variable substitutions.
+ * @param aPaths Additional paths to search for local disk datasheet files.
+ * @param aFilesStack is the list of embedded files.
+ *
+ * @return True if the document was successfully opened. Otherwise, false.
+ */
 bool KICOMMON_API GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject,
-                            SEARCH_STACK* aPaths = nullptr,
-                            std::vector<EMBEDDED_FILES*> aFilesStack = {} );
+                                         SEARCH_STACK* aPaths = nullptr,
+                                         std::vector<EMBEDDED_FILES*> aFilesStack = {} );
 
 
 #endif /* __INCLUDE__EDA_DOC_H__ */

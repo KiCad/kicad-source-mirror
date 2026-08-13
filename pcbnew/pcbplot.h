@@ -175,7 +175,7 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, PCB_PLOT_PARAMS* 
                              const wxString& aLayerName, const wxString& aSheetName,
                              const wxString& aSheetPath, const wxString& aPageNumber,
                              int aPageCount );
-        /**
+/**
  * Plot a sequence of board layer IDs.
  *
  * @param aBoard is the board to plot.
@@ -200,6 +200,7 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
  * @param aPlotter is the plotter to use.
  * @param aLayer is the layer id to plot.
  * @param aPlotOpt is the plot options (files, sketch). Has meaning for some formats only.
+ * @param isPrimaryLayer
  */
 void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt, bool isPrimaryLayer );

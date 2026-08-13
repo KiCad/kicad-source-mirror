@@ -73,6 +73,7 @@ public:
      *
      * @param aIndex is the VRML file's Vertex Index for the vertex to be processed.
      * @param aFacetList is the list of all faces which share this vertex.
+     * @param aCreaseAngle
      */
     void CalcVertexNormal( int aIndex, std::list< FACET* >& aFacetList, float aCreaseAngle );
 

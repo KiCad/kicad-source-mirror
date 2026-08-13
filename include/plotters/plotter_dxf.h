@@ -491,7 +491,31 @@ public:
     // Finds the nearest legacy color to the given RGB values (aR, aG, aB).
     int FindNearestLegacyColor( int aR, int aG, int aB );
 
-    // Retrieves the current layer name based on the output mode and optional layer ID.
+    /**
+     * @brief Retrieves the current layer name or layer color name for DXF plotting.
+     *
+     * This function returns the appropriate layer name or layer color name depending on the specified
+     * DXF_LAYER_OUTPUT_MODE. DXF files do not use RGB definitions for colors, so this function converts
+     * the color to the nearest legacy color name acceptable in DXF files.
+     *
+     * @param aMode The mode determining whether to return the layer name or layer color name.
+     * @param aLayerId Optional parameter specifying the layer ID to use. If not provided, the current layer ID is used.
+     * @return The layer name or color name as a wxString.
+     *
+     * The function operates in two main modes:
+     * 1. Layer_Name or Current_Layer_Name: Returns the name of the specified layer or the current layer.
+     *    - Searches through the `m_layersToExport` list to find the matching layer ID.
+     *    - If the layer ID is found, returns the corresponding layer name.
+     *    - If not found, defaults to "BLACK".
+     *
+     * 2. Layer_Color_Name or Current_Layer_Color_Name: Returns the color name of the specified layer or the current
+     *    layer.
+     *    - Retrieves the color of the layer from the render settings.
+     *    - Finds the nearest legacy color that matches the layer's color.
+     *    - Returns the name of the nearest legacy color.
+     *
+     * If the mode is unknown, returns "Unknown Mode".
+     */
     wxString GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE aMode, std::optional<PCB_LAYER_ID> aLayerId = std::nullopt );
 
 protected:

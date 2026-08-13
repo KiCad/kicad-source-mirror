@@ -87,15 +87,15 @@ public:
 private:
     friend class BOARD_STACKUP_ITEM;
 
-    wxString m_Material;                /// type of material (for dielectric and solder mask)
-    int      m_Thickness;               /// the physical layer thickness in internal units
-    bool     m_ThicknessLocked;         /// true for dielectric layers with a fixed thickness
-                                        /// (for impedance controlled purposes), unused for other layers
-    double           m_EpsilonR;        /// For dielectric (and solder mask) the dielectric constant
-    double           m_LossTangent;     /// For dielectric (and solder mask) the dielectric loss
-    double           m_SpecFreq;        /// For dielectric the frequency (Hz) at which E_R is specified
-    DIELECTRIC_MODEL m_DielectricModel; /// For dielectric the dielectric frequency correction model
-    wxString         m_Color;           /// mainly for silkscreen and solder mask
+    wxString m_Material;                ///< type of material (for dielectric and solder mask)
+    int      m_Thickness;               ///< the physical layer thickness in internal units
+    bool     m_ThicknessLocked;         ///< true for dielectric layers with a fixed thickness
+                                        ///< (for impedance controlled purposes), unused for other layers
+    double           m_EpsilonR;        ///< For dielectric (and solder mask) the dielectric constant
+    double           m_LossTangent;     ///< For dielectric (and solder mask) the dielectric loss
+    double           m_SpecFreq;        ///< For dielectric the frequency (Hz) at which E_R is specified
+    DIELECTRIC_MODEL m_DielectricModel; ///< For dielectric the dielectric frequency correction model
+    wxString         m_Color;           ///< mainly for silkscreen and solder mask
 };
 
 
@@ -207,22 +207,23 @@ public:
 
 private:
     BOARD_STACKUP_ITEM_TYPE m_Type;
-    wxString m_LayerName;   /// name of layer as shown in layer manager. Useful to create reports
-    wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
-    PCB_LAYER_ID m_LayerId; /// the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
-                            /// and UNDEFINED_LAYER (-1) for dielectric layers that are not
-                            /// really layers for the board editor
-    int m_DielectricLayerId;/// the "layer" id for dielectric layers,
-                            /// from 1 (top) to 31 (bottom)
-                            /// (only 31 dielectric layers for 32 copper layers)
+    wxString m_LayerName;   ///< name of layer as shown in layer manager. Useful to create reports
+    wxString m_TypeName;    ///< type name of layer (copper, silk screen, core, prepreg ...)
+    PCB_LAYER_ID m_LayerId; ///< the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
+                            ///< and UNDEFINED_LAYER (-1) for dielectric layers that are not
+                            ///< really layers for the board editor
+    int m_DielectricLayerId;///< the "layer" id for dielectric layers,
+                            ///< from 1 (top) to 31 (bottom)
+                            ///< (only 31 dielectric layers for 32 copper layers)
+
     /// List of dielectric parameters
     /// usually only one item, but in complex (microwave) boards, one can have
     /// more than one dielectric layer between 2 copper layers, and therefore
     /// more than one item in list
     std::vector<DIELECTRIC_PRMS> m_DielectricPrmsList;
 
-    bool m_enabled;         /// true if this stackup item must be taken in account,
-                            /// false to ignore it. Mainly used in dialog stackup editor.
+    bool m_enabled;         ///< true if this stackup item must be taken in account,
+                            ///< false to ignore it. Mainly used in dialog stackup editor.
 };
 
 
@@ -286,7 +287,7 @@ public:
      * Synchronize the BOARD_STACKUP_ITEM* list with the board.
      * Not enabled layers are removed
      * Missing layers are added
-     * @param aSettings, is the current board setting.
+     * @param aSettings is the current board setting.
      * @return true if changes are made
      */
     bool SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings );

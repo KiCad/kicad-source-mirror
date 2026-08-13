@@ -214,8 +214,8 @@ public:
     void RemoveItem( SCH_ITEM* aItem );
 
     /**
-     * Replaces all references to #aOldItem with #aNewItem in the subgraph.
-    */
+     * Replace all references to \a aOldItem with \a aNewItem in the subgraph.
+     */
     void ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem );
 
     // Use this to keep a connection pointer that is not owned by any item
@@ -364,7 +364,7 @@ namespace std
     };
 }
 
-/// Associate a #NET_CODE_NAME with all the subgraphs in that net.
+/// Associate a #NET_NAME_CODE_CACHE_KEY with all the subgraphs in that net.
 typedef std::unordered_map<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> NET_MAP;
 
 /// Lets indexed items detect graph destruction without traversing their schematic parents.
@@ -433,6 +433,7 @@ public:
      * @param aSheetList is the list of possibly modified sheets
      * @param aUnconditional is true if an unconditional full recalculation should be done
      * @param aChangedItemHandler an optional handler to receive any changed items
+     * @param[in] aProgressReporter is the optional #REPORTER object to sent output to.
      */
     void Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional = false,
                       std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr,
@@ -586,7 +587,7 @@ public:
     void RemoveItem( SCH_ITEM* aItem );
 
     /**
-     * Replace all references to #aOldItem with #aNewItem in the graph.
+     * Replace all references to \a aOldItem with \a aNewItem in the graph.
     */
     void ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem );
 
@@ -862,16 +863,15 @@ private:
      *
      * Labels should be connected to something.
      *
-     * @param  aSubgraph      is the subgraph to examine.
-     * @param  aCheckGlobalLabels is true if global labels should be checked for loneliness.
-     * @return                true for no errors, false for errors.
+     * @param aSubgraph is the subgraph to examine.
+     * @return true for no errors, false for errors.
      */
     bool ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
      * Check directive labels should be connected to something.
      *
-     * @return                the number of errors found.
+     * @return the number of errors found.
      */
     int ercCheckDirectiveLabels();
 
@@ -879,8 +879,7 @@ private:
      * Check that a hierarchical sheet has at least one matching label inside the sheet for each
      * port on the parent sheet object.
      *
-     * @param  aSubgraph      is the subgraph to examine.
-     * @return                the number of errors found.
+     * @return the number of errors found.
      */
     int ercCheckHierSheets();
 

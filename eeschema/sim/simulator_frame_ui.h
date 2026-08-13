@@ -60,8 +60,6 @@ class STD_BITMAP_BUTTON;
  * V(OUT) / V(IN)) are stored in vectors of the format "user%d".
  *
  */
-
-
 class SIMULATOR_FRAME_UI : public SIMULATOR_FRAME_UI_BASE
 {
 public:
@@ -107,6 +105,8 @@ public:
 
     /**
      * Get/Set the number of significant digits and the range for formatting a cursor value.
+     *
+     * @param aCursorId is the cursor ID of the format to get.
      * @param aValueCol 0 indicates the X value column; 1 the Y value.
      */
     SPICE_VALUE_FORMAT GetCursorFormat( int aCursorId, int aValueCol ) const
@@ -136,8 +136,9 @@ public:
      * Safely update a field of the associated symbol without dereferencing
      * the symbol.
      *
+     * @param aSheetPath is the instance of the symbol to update
      * @param aSymbol id of the symbol needing updating
-     * @param aId id of the symbol field
+     * @param aRef is the name of the  symbol field
      * @param aValue new value of the symbol field
      */
     void UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const KIID& aSymbol,
@@ -179,7 +180,7 @@ public:
     bool DarkModePlots() const { return m_darkMode; }
     void ToggleDarkModePlots();
 
-    ///< Toggle the current S-parameter tab between Smith chart and amplitude/phase views.
+    /// Toggle the current S-parameter tab between Smith chart and amplitude/phase views.
     void ToggleSmithChart();
 
     void ShowChangedLanguage();
@@ -286,13 +287,15 @@ private:
      * @param aVectorName is the SPICE vector name, such as "I(Net-C1-Pad1)".
      * @param aTraceType describes the type of plot.
      * @param aPlotTab is the tab that should receive the update.
+     * @param aDataX
+     * @param aClearData
      * @param aView is the view the trace should be plotted on; if null, the trace's existing
      *              view is kept (or the tab's default view is used, for a new trace).
      */
     void updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_TAB* aPlotTab,
                       std::vector<double>* aDataX = nullptr, bool aClearData = false, SIM_VIEW* aView = nullptr );
 
-    ///< Reference impedance of the response port for an S-parameter vector, zero when unresolved.
+    /// Reference impedance of the response port for an S-parameter vector, zero when unresolved.
     double getSmithPortImpedance( const wxString& aVectorName );
 
     /**
@@ -482,8 +485,8 @@ private:
 
     MULTI_RUN_STATE             m_multiRunState;
 
-    ///< SPICE expressions need quoted versions of the netnames since KiCad allows '-' and '/'
-    ///< in netnames.
+    /// SPICE expressions need quoted versions of the netnames since KiCad allows '-' and '/'
+    /// in netnames.
     std::vector<wxString>        m_netnames;
 
     SPICE_VALUE_FORMAT           m_cursorFormats[3][2];

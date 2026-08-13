@@ -245,8 +245,7 @@ file( APPEND "${outHeaderFile}"
 
 
 /**
- * Class ${LEXERCLASS}
- * is an automatically generated class using the TokenList2DnsLexer.cmake
+ * An automatically generated class using the TokenList2DnsLexer.cmake
  * technology, based on keywords provided by file:
  *    ${inputFile}
  */
@@ -259,7 +258,6 @@ class ${exportMacro}${LEXERCLASS} : public DSNLEXER
 
 public:
     /**
-     * Constructor ( const std::string&, const wxString& )
      * @param aSExpression is (utf8) text possibly from the clipboard that you want to parse.
      * @param aSource is a description of the origin of @a aSExpression, such as a filename.
      *   If left empty, then _(\"clipboard\") is used.
@@ -270,8 +268,8 @@ public:
     }
 
     /**
-     * Constructor ( FILE* )
-     * takes @a aFile already opened for reading and @a aFilename as parameters.
+     * Take @a aFile already opened for reading and @a aFilename as parameters.
+     *
      * The opened file is assumed to be positioned at the beginning of the file
      * for purposes of accurate line number reporting in error messages.  The
      * FILE is closed by this instance when its destructor is called.
@@ -284,12 +282,12 @@ public:
     }
 
     /**
-     * Constructor ( LINE_READER* )
-     * initializes a lexer and prepares to read from @a aLineReader which
-     * is assumed ready, and may be in use by other DSNLEXERs also.  No ownership
-     * is taken of @a aLineReader. This enables it to be used by other lexers also.
-     * The transition between grammars in such a case, must happen on a text
-     * line boundary, not within the same line of text.
+     * Initialize a lexer and prepares to read from @a aLineReader which
+     * is assumed ready, and may be in use by other DSNLEXERs also.
+     *
+     * No ownership is taken of @a aLineReader. This enables it to be used by other
+     * lexers also.  The transition between grammars in such a case, must happen on
+     * a text line boundary, not within the same line of text.
      *
      * @param aLineReader is any subclassed instance of LINE_READER, such as
      *  STRING_LINE_READER or FILE_LINE_READER.  No ownership is taken of aLineReader.
@@ -300,18 +298,18 @@ public:
     }
 
     /**
-     * Function TokenName
-     * returns the name of the token in ASCII form.
+     * Return the name of the token in ASCII form.
      */
     static const char* TokenName( ${enum}::T aTok );
 
     /**
-     * Function NextTok
-     * returns the next token found in the input file or T_EOF when reaching
-     * the end of file.  Users should wrap this function to return an enum
-     * to aid in grammar debugging while running under a debugger, but leave
-     * this lower level function returning an int (so the enum does not collide
-     * with another usage).
+     * Return the next token found in the input file or T_EOF when reaching
+     * the end of file.
+     *
+     * Users should wrap this function to return an enum to aid in grammar debugging
+     * while running under a debugger, but leave this lower level function returning
+     * an int (so the enum does not collide with another usage).
+     *
      * @return ${enum}::T - the type of token found next.
      * @throw IO_ERROR - only if the LINE_READER throws it.
      */
@@ -321,12 +319,10 @@ public:
     }
 
     /**
-     * Function NeedSYMBOL
-     * calls NextTok() and then verifies that the token read in
-     * satisfies bool IsSymbol().
-     * If not, an IO_ERROR is thrown.
-     * @return int - the actual token read in.
-     * @throw IO_ERROR, if the next token does not satisfy IsSymbol()
+     * Calls NextTok() and then verifies that the token read in satisfies bool IsSymbol().
+     *
+     * @return is the actual token read in.
+     * @throw IO_ERROR, if the next token does not satisfy IsSymbol().
      */
     ${enum}::T NeedSYMBOL()
     {
@@ -334,11 +330,9 @@ public:
     }
 
     /**
-     * Function NeedSYMBOLorNUMBER
-     * calls NextTok() and then verifies that the token read in
-     * satisfies bool IsSymbol() or tok==T_NUMBER.
-     * If not, an IO_ERROR is thrown.
-     * @return int - the actual token read in.
+     * Call NextTok() and then verifies that the token read in satisfies bool IsSymbol() or tok==T_NUMBER.
+     *
+     * @return is the actual token read in.
      * @throw IO_ERROR, if the next token does not satisfy the above test
      */
     ${enum}::T NeedSYMBOLorNUMBER()
@@ -347,8 +341,7 @@ public:
     }
 
     /**
-     * Function CurTok
-     * returns whatever NextTok() returned the last time it was called.
+     * Return whatever NextTok() returned the last time it was called.
      */
     ${enum}::T CurTok()
     {
@@ -356,8 +349,7 @@ public:
     }
 
     /**
-     * Function PrevTok
-     * returns whatever NextTok() returned the 2nd to last time it was called.
+     * Return whatever NextTok() returned the 2nd to last time it was called.
      */
     ${enum}::T PrevTok()
     {
@@ -365,7 +357,6 @@ public:
     }
 
     /**
-     * Function GetCurStrAsToken
      * Used to support 'loose' matches (quoted tokens)
      */
     ${enum}::T GetCurStrAsToken()
@@ -377,14 +368,13 @@ public:
 // example usage
 
 /**
- * Class ${LEXCLASS}_PARSER
- * holds data and functions pertinent to parsing a S-expression file .
+ * Hold data and functions pertinent to parsing a S-expression file.
  *
-class ${PARSERCLASS} : public ${LEXERCLASS}
-{
-
-};
-*/
+ * class ${PARSERCLASS} : public ${LEXERCLASS}
+ * {
+ *
+ * };
+ */
 
 #endif   // ${headerTag}
 "

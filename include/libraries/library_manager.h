@@ -108,6 +108,7 @@ public:
     /**
      * Test for the existence of \a aNickname in the library tables.
      *
+     * @param aNickname is the library nickname.
      * @param aCheckEnabled if true will only return true for enabled libraries
      * @return true if a library \a aNickname exists in the loaded tables.
      */
@@ -213,9 +214,12 @@ protected:
     virtual std::shared_mutex&            globalLibsMutex() = 0;
     virtual std::shared_mutex&            globalLibsMutex() const = 0;
 
-    /// Override in derived class to perform library-specific enumeration.
-    /// @param aUri is the pre-resolved library URI (must be resolved on the main thread
-    ///             since URI expansion accesses PROJECT data that is not thread-safe).
+    /**
+     * Override in derived class to perform library-specific enumeration.
+     * @param aLib
+     * @param aUri is the pre-resolved library URI (must be resolved on the main thread
+     *             since URI expansion accesses PROJECT data that is not thread-safe).
+     */
     virtual void enumerateLibrary( LIB_DATA* aLib, const wxString& aUri ) = 0;
 
     wxString getUri( const LIBRARY_TABLE_ROW* aRow ) const;
@@ -365,8 +369,10 @@ public:
                                          LIBRARY_TABLE_SCOPE aScope );
 
     /**
-     * Returns a flattened list of libraries of the given type
+     * Returns a flattened list of libraries of the given type.
+     *
      * @param aType determines which type of libraries to return (symbol, footprint, ...)
+     * @param aScope
      * @param aIncludeInvalid will include the nicknames of libraries even if they could not be
      *                        loaded for some reason (file not found, etc)
      * @return a list of library nicknames (the first part of a LIB_ID)
@@ -423,8 +429,8 @@ public:
      * Return true if a library table row was added by the Plugin and Content Manager.
      *
      * PCM-managed rows are identified by the full unexpanded URI template emitted by
-     * PCM_LIB_TRAVERSER, namely ${KICADn_3RD_PARTY}/<category>/<pkgid>/<library> where
-     * <category> is one of the PCM content folders and <library> carries the matching
+     * PCM_LIB_TRAVERSER, namely \${KICADn_3RD_PARTY}/\<category\>/\<pkgid\>/\<library\> where
+     * \<category\> is one of the PCM content folders and \<library\> carries the matching
      * library extension. Matching the full template, rather than the expanded absolute
      * path or the env-var prefix alone, prevents false positives both when a user library
      * uses a different env var whose expanded path is a descendant of the 3RD_PARTY

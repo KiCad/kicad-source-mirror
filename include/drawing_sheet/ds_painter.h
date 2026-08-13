@@ -123,7 +123,7 @@ private:
 /**
  * Print the border and title block.
  *
- * @param aDC The device context.
+ * @param aSettings are the render settings for printing the drawing sheet.
  * @param aPageInfo for margins and page size (in mils).
  * @param aSheetName The sheet name, for basic inscriptions.
  * @param aSheetPath The sheetpath (full sheet name), for basic inscriptions.
@@ -133,6 +133,7 @@ private:
  * @param aSheetCount The number of sheets (for text variable resolution).
  * @param aPageNumber The page number.
  * @param aScalar the scale factor to convert from mils to internal units.
+ * @param aProject is the project used for variable substitutions.
  * @param aSheetLayer The layer from Pcbnew.
  * @param aIsFirstPage True when this is the first page.  This only has meaning for schematics.
  *

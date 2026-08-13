@@ -93,7 +93,7 @@ struct BOARD_CONSTRAINT_DIAGNOSTICS
 /**
  * Translates KiCad board geometry to and from the planegcs solver (issue #2329).
  *
- * Build() translates a cluster of #PCB_SHAPEs and the #PCB_CONSTRAINTs among them into a
+ * Build() translates a cluster of #PCB_SHAPE objects and the #PCB_CONSTRAINT objects among them into a
  * planegcs system, scaled into a millimetre frame because raw IU (nanometres) squared in the
  * residuals is badly conditioned.  Solve() runs the solver (optionally pinning a dragged anchor
  * to a cursor position), Apply() writes the solution back to the shapes in IU, and Diagnose()
@@ -140,14 +140,14 @@ public:
      *
      * @param aDragged the anchor being dragged.
      * @param aCursor the cursor target, in IU.
+     * @param aStabilize holds free segment lengths so an angle constraint rotates a segment instead of
+     *                   collapsing it. Off for live dragging.
      * @param aEdited other shapes edited alongside the dragged one excluded from stay-put pins
      * @param aCoDragged second anchor moved by the same handle with its own target pinned at the
-     *                same weight since a polygon edge drag needs two independent points
+     *                   same weight since a polygon edge drag needs two independent points
+     * @param aHoldDraggedRigid holds the dragged shape's own geometry, so it travels whole instead of
+     *                          stretching to meet the relation.
      */
-    /// @p aStabilize holds free segment lengths so an angle constraint rotates a segment instead of
-    /// collapsing it. Off for live dragging.
-    /// @p aHoldDraggedRigid holds the dragged shape's own geometry, so it travels whole instead of
-    /// stretching to meet the relation.
     bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize = false,
                 const std::set<KIID>&                                        aEdited = {},
                 const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt,
@@ -472,22 +472,23 @@ private:
  * @param aBoard the board (or footprint-holder board) owning the constraints.
  * @param aDragged the anchor being dragged.
  * @param aCursor the cursor target, in IU.
- * @param aModified [out] the neighbor shapes whose geometry the solve changed (excludes the
- *                  dragged shape itself), for the caller to stage in a commit.
+ * @param[out] aModified the neighbor shapes whose geometry the solve changed (excludes the
+ *                       dragged shape itself), for the caller to stage in a commit.
  * @param aBeforeModify if set, invoked with each item (neighbor shape or reference constraint whose
- *                  measured value changed) immediately before it is modified, so the caller can
- *                  BOARD_COMMIT::Modify it for a clean undo.  The dragged shape is excluded unless
- *                  @p aIncludeDragged, since the caller stages it itself.
+ *                      measured value changed) immediately before it is modified, so the caller can
+ *                      #BOARD_COMMIT::Modify it for a clean undo.  The dragged shape is excluded unless
+ *                      @p aIncludeDragged, since the caller stages it itself.
  * @param aIncludeDragged if true, the dragged shape is also reported in @p aModified and passed to
- *                  @p aBeforeModify -- for callers (e.g. solve-on-create) that pin where the shape
- *                  already is and do not stage it themselves.
+ *                        @p aBeforeModify -- for callers (e.g. solve-on-create) that pin where the shape
+ *                        already is and do not stage it themselves.
+ * @param aStabilize is?
  * @param aEdited other shapes in this cluster edited alongside the dragged one left free instead
- *                  of stay-pinned back
+ *                of stay-pinned back.
  * @param aCoDragged second anchor moved by the same handle with its own target for a polygon edge
- *                  drag pinned at the same weight as the primary
+ *                   drag pinned at the same weight as the primary.
  * @param aFixedShapes shapes to freeze whole, so the solve moves the rest of the cluster around them
  * @param aHoldDraggedRigid holds the dragged shape's geometry, so it travels whole instead of
- *                  stretching to meet the relation
+ *                          stretching to meet the relation.
  * @return the diagnosis; .solved is false if the cluster could not be built or did not converge.
  */
 CONSTRAINT_DIAGNOSIS
@@ -520,11 +521,13 @@ std::set<KIID> ConstraintReferenceShapes( BOARD* aBoard, const PCB_CONSTRAINT* a
  * pinning the constraint's first member at its current position and letting the solver move the
  * rest.  @p aConstraint must already be on the board.  A failed solve leaves geometry untouched.
  *
- * @param aModified [out] the shapes the solve moved, for the caller to stage in a commit.
+ * @param aBoard is the #BOARD object to constrain.
+ * @param[in] aConstraint is the constraint to apply to \a aBoard.
+ * @param[out] aModified are the shapes the solve moved, for the caller to stage in a commit.
  * @param aBeforeModify if set, invoked with each moved shape and each reference constraint whose
- *                  value changed, just before it changes, so the caller can stage it in the commit.
+ *                      value changed, just before it changes, so the caller can stage it in the commit.
  * @param aFixedShapes shapes to freeze whole for this solve, for a caller that knows which member
- *                  is the reference the others should move to.
+ *                     is the reference the others should move to.
  */
 CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint,
                                                  std::vector<PCB_SHAPE*>*                  aModified = nullptr,

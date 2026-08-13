@@ -138,17 +138,17 @@ enum class TRANSLINE_STATUS
 
 
 /**
-* The base class for all transmission line calculations.
-* This is used by the PCB calculator, and by delay profiles
-*/
+ * The base class for all transmission line calculations.
+ * This is used by the PCB calculator, and by delay profiles
+ */
 class TRANSLINE_CALCULATION_BASE
 {
 public:
     /**
-    * Constructs the transmission line calculation object.
-    *
-    * @aParameters all parameters that are used (as inputs or outputs) by the calculation
-    */
+     * Constructs the transmission line calculation object.
+     *
+     * @param aParameters all parameters that are used (as inputs or outputs) by the calculation.
+     */
     TRANSLINE_CALCULATION_BASE( std::initializer_list<TRANSLINE_PARAMETERS> aParameters )
     {
         InitProperties( aParameters );
@@ -301,17 +301,17 @@ protected:
     bool MinimiseZ0Error2D( TRANSLINE_PARAMETERS aParam1, TRANSLINE_PARAMETERS aParam2 );
 
     /**
-    * Calculate skin depth
-    *
-    * \f$ \frac{1}{\sqrt{ \pi \cdot f \cdot \mu \cdot \sigma }} \f$
-    */
+     * Calculate skin depth
+     *
+     * \f$ \frac{1}{\sqrt{ \pi \cdot f \cdot \mu \cdot \sigma }} \f$
+     */
     double SkinDepth() const;
 
     /**
-    * Calculates the unit propagation delay (ps/cm) for the given effective permittivity
-    *
-    * @aEpsilonEff is the effective permittivity of the material
-    */
+     * Calculates the unit propagation delay (ps/cm) for the given effective permittivity
+     *
+     * @param aEpsilonEff is the effective permittivity of the material
+     */
     static double UnitPropagationDelay( double aEpsilonEff );
 
     /**

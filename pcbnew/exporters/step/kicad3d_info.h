@@ -46,7 +46,8 @@ public:
     static const Standard_GUID& GetID();
 
     /**
-     * Finds or creates the attribute attached to <theLabel>.
+     * Find or create the attribute attached to \a aLabel.
+     *
      * The found or created attribute is returned
      */
     static Handle( KICAD3D_INFO ) Set( const TDF_Label& aLabel,
@@ -62,7 +63,7 @@ public:
     const std::string& GetDisplayName() const { return m_displayName; }
     void               SetDisplayName( const std::string& aName ) { m_displayName = aName; }
 
-    //Overridden methods from TDF_Attribute
+    // Overridden methods from TDF_Attribute
     const Standard_GUID& ID() const override;
     void Restore( const Handle( TDF_Attribute ) & aAttribute ) override;
     Handle( TDF_Attribute ) NewEmpty() const override;

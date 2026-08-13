@@ -258,7 +258,7 @@ public:
      *
      * This function must be called when reading a gerber file and
      * after creating a new gerber item that must be repeated
-     * (i.e when m_XRepeatCount or m_YRepeatCount are > 1)
+     * (i.e when m_XRepeatCount or m_YRepeatCount are \> 1)
      *
      * When an SR block is active (m_SRBlockCollecting is true), this is a no-op
      * because items are collected and replicated as a whole block when the SR
@@ -316,8 +316,8 @@ public:
      */
     void RemoveAttribute( X2_ATTRIBUTE& aAttribute );
 
-    ///< @copydoc EDA_ITEM::Visit()
-    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData, const std::vector<KICAD_T>& aScanTypes ) override;
+    /// @copydoc EDA_ITEM::Visit()
+    INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData, const std::vector<KICAD_T>& aScanTypes ) override;
 
 #if defined( DEBUG )
 
@@ -332,9 +332,9 @@ private:
      * If a end of line is found, read a new line.
      *
      * @param aBuff = buffer (size = GERBER_BUFZ) to fill with a new line
+     * @param aBuffSize = the size in bytes of aBuff
      * @param aText = pointer to the last useful char in aBuff
      *          on return: points the beginning of the next line.
-     * @param aBuffSize = the size in bytes of aBuff
      * @param aFile = the opened GERBER file to read
      * @return a pointer to the beginning of the next line or NULL if end of file
     */
@@ -343,7 +343,7 @@ private:
     bool GetEndOfBlock( char* aBuff, unsigned int aBuffSize, char*& aText, FILE* aGerberFile );
 
     /**
-     * Read a single RS274X command terminated with a %
+     * Read a single RS274X command terminated with a \%
      */
     bool ReadRS274XCommand( char* aBuff, unsigned int aBuffSize, char*& aText );
 
@@ -368,9 +368,9 @@ private:
      *
      * @param aBuff a character buffer at least GERBER_BUFZ long that can be
      *              used to read successive lines from the gerber file.
+     * @param aBuffSize is the size of aBuff
      * @param text A reference to a character pointer which gives the initial
      *             text to read from.
-     * @param aBuffSize is the size of aBuff
      * @param gerber_file Which file to read from for continuation.
      * @return true if a macro was read in successfully, else false.
      */
@@ -386,13 +386,13 @@ public:
                                   ///< false if it must be not drawn
     COLOR4D  m_PositiveDrawColor; ///< The color used to draw positive items
     wxString m_FileName;          ///< Full File Name for this layer
-    wxString m_ImageName;         ///< Image name, from IN <name>* command
+    wxString m_ImageName;         ///< Image name, from IN \<name\>* command
 
     bool                       m_IsX2_file;    ///< True if a X2 gerber attribute was found in file
-    X2_ATTRIBUTE_FILEFUNCTION* m_FileFunction; ///< file function parameters, found in a %TF
+    X2_ATTRIBUTE_FILEFUNCTION* m_FileFunction; ///< file function parameters, found in a \%TF
                                                ///<   command or a G04
-    wxString m_MD5_value;                      ///< MD5 value found in a %TF.MD5 command
-    wxString m_PartString;                     ///< string found in a %TF.Part command
+    wxString m_MD5_value;                      ///< MD5 value found in a \%TF.MD5 command
+    wxString m_PartString;                     ///< string found in a \%TF.Part command
     int      m_GraphicLayer;                   ///< Graphic layer Number
     bool     m_ImageNegative;                  ///< true = Negative image
 
@@ -420,26 +420,26 @@ public:
     int  m_Iterpolation;     ///< Linear, 90 arc, Circ.
     int  m_Current_Tool;     ///< Current Tool (Dcode) number selected
     int  m_Last_Pen_Command; ///< Current or last pen state (0..9, set by Dn
-                             ///<   option with n < 10
+                             ///<   option with n \< 10
     int      m_CommandState; ///< state of gerber analysis command
     int      m_LineNum;      ///< Line number of the gerber file while reading.
     VECTOR2I m_CurrentPos;   ///< current specified coord for plot
     VECTOR2I m_PreviousPos;  ///< old current specified coord for plot
-    VECTOR2I m_IJPos;        ///< IJ coord (for arcs & circles )
+    VECTOR2I m_IJPos;        ///< IJ coord (for arcs \& circles )
 
-    ///< True if a IJ coord was read (for arcs & circles ).
+    /// True if a IJ coord was read (for arcs \& circles ).
     bool m_LastCoordIsIJPos;
 
-    ///< A value ( = radius in circular routing in Excellon files ).
+    /// A value ( = radius in circular routing in Excellon files ).
     int m_ArcRadius;
 
-    ///< Identifier for arc data type (IJ (center) or A## (radius)).
+    /// Identifier for arc data type (IJ (center) or A\#\# (radius)).
     LAST_EXTRA_ARC_DATA_TYPE m_LastArcDataType;
     FILE*                    m_Current_File; // Current file to read
 
     int m_Selected_Tool; // For highlight: current selected Dcode
 
-    ///< True if has DCodes in file or false if no DCodes found.  Perhaps deprecated RS274D file.
+    /// True if has DCodes in file or false if no DCodes found.  Perhaps deprecated RS274D file.
     bool m_Has_DCode;
 
     // true = some DCodes in file are not defined (broken file or deprecated RS274D file).
@@ -456,7 +456,7 @@ public:
     // In polygon mode: 0 = first segm, 1 = next segm
     int m_PolygonFillModeState;
 
-    ///< a collection of APERTURE_MACROS, sorted by name
+    /// a collection of APERTURE_MACROS, sorted by name
     APERTURE_MACRO_SET m_aperture_macros;
 
     // the net attributes set by a %TO.CN, %TO.C and/or %TO.N add object attribute command.
@@ -478,13 +478,13 @@ public:
     GERBER_DRAW_ITEMS m_drawings;       // linked list of Gerber Items to draw
 
     bool               m_SRBlockCollecting;              // true when inside an SR block with
-                                                         // repeat count > 1; items are collected
+                                                         // repeat count \> 1; items are collected
                                                          // and replicated as a whole block
     int                m_SRBlockStartIdx;                // index into m_drawings where the
                                                          // current SR block begins
 
-    ///< Parameters used only to draw (display) items on this layer.
-    ///< Do not change actual coordinates/orientation
+    /// Parameters used only to draw (display) items on this layer.
+    /// Do not change actual coordinates/orientation
     VECTOR2I  m_DisplayOffset;
     EDA_ANGLE m_DisplayRotation;
 

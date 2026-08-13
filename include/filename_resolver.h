@@ -66,7 +66,7 @@ public:
     /**
      * Set the current KiCad project directory as the first entry in the model path list.
      *
-     * @param[in]   aProjDir    current project directory.
+     * @param[in]   aProject    is the current project.
      * @param[out]  flgChanged  optional, set to true if directory was changed.
      * @retval      true        success.
      * @retval      false       failure.
@@ -160,7 +160,7 @@ private:
     bool addPath( const SEARCH_PATH& aPath );
 
     /**
-     * Check the ${ENV_VAR} component of a path and adds it to the resolver's path list if
+     * Check the \${ENV_VAR} component of a path and adds it to the resolver's path list if
      * it is not yet in the list.
      */
     void checkEnvVarPath( const wxString& aPath );

@@ -462,7 +462,11 @@ struct ORCAD_LIBRARY_INFO
 };
 
 
-/** Wire IDs refer to netmap, which supplies the source net names. */
+/**
+ * One parsed 'Views/\<folder\>/Pages/\<page\>' stream, raw structure lists in stream
+ * order.  The net table (netmap) is authoritative for net names: it maps net
+ * database ids to names, and wires carry the same ids.
+ */
 struct ORCAD_RAW_PAGE
 {
     /** Explicit moves prevent vector growth from selecting a copy of the unique_ptr members. */

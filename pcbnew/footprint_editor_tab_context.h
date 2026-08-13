@@ -64,6 +64,7 @@ public:
      *
      * @param aSourceUuid is the source board footprint's UUID, used as the de-dup key and tab label.
      * @param aReference is the placed footprint reference shown on the tab.
+     * @param aBoard is the board being edited.
      */
     FOOTPRINT_EDITOR_TAB_CONTEXT( const KIID& aSourceUuid, const wxString& aReference,
                                   std::unique_ptr<BOARD> aBoard );
@@ -171,16 +172,16 @@ private:
 
     KIND                       m_kind = KIND::LIBRARY;
 
-    ///< Source board footprint UUID, used as the de-dup key and save-back target.
+    /// Source board footprint UUID, used as the de-dup key and save-back target.
     KIID                       m_sourceUuid;
 
-    ///< Identity of an unsaved import, which has no library:name pair to key on.
+    /// Identity of an unsaved import, which has no library:name pair to key on.
     KIID                       m_sessionId;
 
-    ///< Reference designator of the source footprint, shown as the tab label.
+    /// Reference designator of the source footprint, shown as the tab label.
     wxString                   m_reference;
 
-    ///< Editor-to-board UUID remap used to save instance edits back to the original board items.
+    /// Editor-to-board UUID remap used to save instance edits back to the original board items.
     std::map<KIID, KIID>       m_boardFootprintUuids;
 };
 

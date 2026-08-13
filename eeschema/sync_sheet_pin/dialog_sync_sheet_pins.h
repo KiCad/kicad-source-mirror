@@ -54,27 +54,31 @@ public:
     void OnClose( wxCloseEvent& aEvent );
 
     /**
-     * Either the selected #HIERLABEL or #SHEET_PIN will be used as templates for placing the new ones.
+     * Either the selected #DIALOG_SYNC_SHEET_PINS::HIERLABEL or #DIALOG_SYNC_SHEET_PINS::SHEET_PIN will be used
+     * as templates for placing the new ones.
      *
-     * @param aSheet The sheet where the new #HIERLABEL or #SHEET_PIN will be placed. For #SHEET_PIN,
-     *               it's the corresponding sheet symbol.
-     * @param aKind Either PlaceItemKind::HIERLABEL or PlaceItemKind::SHEET_PIN
-     * @param aPlacementTemplateSet All the selected HIERLABELs or SHEET_PINs
+     * @param aSheet The sheet where the new #DIALOG_SYNC_SHEET_PINS::HIERLABEL or #DIALOG_SYNC_SHEET_PINS::SHEET_PIN
+     *               will be placed. For #DIALOG_SYNC_SHEET_PINS::SHEET_PIN, it's the corresponding sheet symbol.
+     * @param aKind Either #DIALOG_SYNC_SHEET_PINS::HIERLABEL or #DIALOG_SYNC_SHEET_PINS::SHEET_PIN
+     * @param aPlacementTemplateSet All the selected #DIALOG_SYNC_SHEET_PINS::HIERLABEL or
+     *                              #DIALOG_SYNC_SHEET_PINS::SHEET_PIN
      */
     void PreparePlacementTemplate( SCH_SHEET* aSheet, PlaceItemKind aKind,
                                    std::set<EDA_ITEM*> const& aPlacementTemplateSet );
 
     /**
-     * Get the Placement Template SHEET_PIN / HIERLABEL used for place a new #HIERLABEL/#SHEET_PIN.
+     * Get the Placement Template SHEET_PIN / HIERLABEL used for place a new #DIALOG_SYNC_SHEET_PINS::HIERLABEL/
+     * #DIALOG_SYNC_SHEET_PINS::SHEET_PIN.
      *
      * @return SCH_HIERLABEL*
      */
     SCH_HIERLABEL* GetPlacementTemplate() const;
 
     /**
-     * End place a new #HIERLABEL/#SHEET_PIN , and add the new item to the corresponding table.
+     * End place a new #DIALOG_SYNC_SHEET_PINS::HIERLABEL/#DIALOG_SYNC_SHEET_PINS::SHEET_PIN , and add the new item
+     * to the corresponding table.
      *
-     * @param aNewItem The new #HIERLABEL/#SHEET_PIN to be placed.
+     * @param aNewItem The new #DIALOG_SYNC_SHEET_PINS::HIERLABEL/#DIALOG_SYNC_SHEET_PINS::SHEET_PIN to be placed.
      */
     void EndPlaceItem( EDA_ITEM* aNewItem );
 

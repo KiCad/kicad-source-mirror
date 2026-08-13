@@ -198,10 +198,8 @@ public:
      * Create a new item and build its draw items in the view. The caller is responsible
      * for adding the item to the model.
      *
-     * @param aType is the type of item:
-     *  DS_TEXT, DS_SEGMENT, DS_RECT, DS_POLYPOLYGON
-     * @return the new item, owned by the caller until it is added to the model, or nullptr
-     *         if the creation was cancelled.
+     * @param aType is the type of item DS_TEXT, DS_SEGMENT, DS_RECT, DS_POLYPOLYGON.
+     * @return a reference to the new item.
      */
     DS_DATA_ITEM* CreateDrawingSheetItem( int aType );
 

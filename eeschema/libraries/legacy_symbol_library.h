@@ -20,7 +20,7 @@
  */
 
 /**
- * @file symbol_library.h
+ * @file legacy_symbol_library.h
  * @brief Definition for symbol library class.
  */
 
@@ -45,10 +45,10 @@ class LEGACY_SYMBOL_LIB;
 
 
 /**
- * A collection of #SYMBOL_LIB objects.
+ * A collection of #LIB_SYMBOL objects.
  *
- * It extends from PROJECT::_ELEM so it can be hung in the PROJECT.  It does not use any
- * UI calls, but rather simply throws an IO_ERROR when there is a problem.
+ * It extends from #PROJECT::_ELEM so it can be hung in the #PROJECT.  It does not use any
+ * UI calls, but rather simply throws an #IO_ERROR when there is a problem.
  */
 class LEGACY_SYMBOL_LIBS : public boost::ptr_vector<LEGACY_SYMBOL_LIB>, public PROJECT::_ELEM
 {

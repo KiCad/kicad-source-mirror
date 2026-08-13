@@ -36,11 +36,9 @@ class wxWindow;
 class KIWAY;
 
 /**
- * Function InvokePcbLibTableEditor
- * shows the modal DIALOG_FP_LIB_TABLE for purposes of editing the global and project
- * library tables.
+ * Show the modal #DIALOG_EDIT_LIBRARY_TABLES for purposes of editing the global and project library tables.
  *
+ * @param aKiway is the #KIWAY object of the caller.
  * @param aCaller is the wxWindow which is invoking the dialog.
- * @return true if either table changed.
  */
 void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller );

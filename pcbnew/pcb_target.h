@@ -97,6 +97,7 @@ public:
      * Used in filling zones calculations.  Circles and arcs are approximated by segments.
      *
      * @param aBuffer is a buffer to store the polygon.
+     * @param aLayer is the ID of the layer to transform.
      * @param aClearance is the clearance around the pad.
      * @param aError is the maximum deviation from a true arc.
      * @param aErrorLoc whether any approximation error should be placed inside or outside

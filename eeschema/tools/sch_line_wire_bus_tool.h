@@ -47,7 +47,7 @@ struct BUS_UNFOLDING_T
     bool flipY;         ///< True if the bus entry should be flipped in the y-axis
     bool label_placed;  ///< True if user has placed the net label
 
-    VECTOR2I origin;   ///< Origin (on the bus) of the unfold
+    VECTOR2I origin;    ///< Origin (on the bus) of the unfold
     wxString net_name;  ///< Net label for the unfolding operation
 
     SCH_BUS_WIRE_ENTRY* entry;
@@ -135,16 +135,17 @@ private:
 
     /**
      * Choose a bus to unfold based on the current tool selection.
-    */
+     */
     SCH_LINE* getBusForUnfolding();
 
     /**
      * Unfold the given bus from the given position.
      *
+     * @param aCommit is the #SCH_COMMIT object to handle undo/redo actions.
      * @param aNet The name of the net to unfold
      * @param aPos The position to unfold the bus from, which will be the cursor if
-     *            not provided, and will then be snapped to the selected bus segment.
-    */
+     *             not provided, and will then be snapped to the selected bus segment.
+     */
     SCH_LINE* doUnfoldBus( SCH_COMMIT& aCommit, const wxString& aNet,
                            const std::optional<VECTOR2I>& aPos = std::nullopt );
 
@@ -156,7 +157,7 @@ private:
      */
     void simplifyWireList();
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     /**

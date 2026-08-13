@@ -73,7 +73,7 @@ public:
     int UnselectItem( const TOOL_EVENT& aEvent );
     int UnselectItems( const TOOL_EVENT& aEvent );
 
-    ///< Sets up handlers for various events.
+    /// Sets up handlers for various events.
     void setTransitions() override;
 
 protected:
@@ -116,14 +116,14 @@ private:
     void unselect( EDA_ITEM* aItem ) override;
 
     /**
-     * Mark item as selected, but does not add it to the #ITEMS_PICKED_LIST.
+     * Mark item as selected, but does not add it to the #SELECTION.
      *
      * @param aItem is an item to be be marked.
      */
     void selectVisually( EDA_ITEM* aItem );
 
     /**
-     * Mark item as selected, but does not add it to the #ITEMS_PICKED_LIST.
+     * Mark item as selected, but does not add it to the #SELECTION.
      *
      * @param aItem is an item to be be marked.
      */

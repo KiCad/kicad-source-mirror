@@ -62,7 +62,7 @@ public:
     static wxString Root();
 
     /**
-     * Parse <root>/corpus.json into resolved entries. Returns false and fills aError on a
+     * Parse \<root\>/corpus.json into resolved entries. Returns false and fills aError on a
      * malformed or missing manifest. An unconfigured corpus returns true with no entries so
      * callers can treat it as a graceful skip.
      */

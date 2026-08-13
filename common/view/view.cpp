@@ -166,7 +166,6 @@ private:
      * Save layers used by the item.
      *
      * @param aLayers is an array containing layer numbers to be saved.
-     * @param aCount is the size of the array.
      */
     void saveLayers( const std::vector<int>& aLayers )
     {

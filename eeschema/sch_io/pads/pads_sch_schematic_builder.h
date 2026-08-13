@@ -61,9 +61,18 @@ public:
     int CreateJunctions( const std::vector<SCH_SIGNAL>& aSignals, SCH_SCREEN* aScreen );
 
     /**
-     * Create net labels for named signals. Signals with OPC endpoints get one label per OPC
-     * point oriented from the adjacent wire; others get one label at a dangling wire end.
-     * aSkipSignals names are ignored (e.g. power nets handled elsewhere).
+     * Create net labels for named signals.
+     *
+     * For signals with OPC endpoints, one label is created per OPC connection point with
+     * orientation derived from the adjacent wire direction. Signals without OPC endpoints
+     * fall back to a single label at a dangling wire end.
+     *
+     * @param aSignals Vector of parsed signal definitions.
+     * @param aScreen Target screen to add labels to.
+     * @param aSignalOpcIds Set of OPC reference strings (e.g. "@@@O48") for signal OPCs.
+     * @param aSkipSignals Signal names to skip (e.g. power nets handled elsewhere).
+     * @param aNetNameLabels is a list of net name labels to create.
+     * @return Number of labels created.
      */
     int CreateNetLabels( const std::vector<SCH_SIGNAL>& aSignals, SCH_SCREEN* aScreen,
                          const std::set<std::string>& aSignalOpcIds,

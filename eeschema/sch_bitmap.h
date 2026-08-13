@@ -68,7 +68,6 @@ public:
 
     const BOX2I GetBoundingBox() const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual std::vector<int> ViewGetLayers() const override;
 
     void Move( const VECTOR2I& aMoveVector ) override;

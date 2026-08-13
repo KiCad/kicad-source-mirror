@@ -80,10 +80,10 @@ namespace google::protobuf { class Any; }
  *
  * @param aItem An #EDA_ITEM to examine.
  * @param aTestData is arbitrary data needed by the inspector to determine
- *  if the EDA_ITEM under test meets its match criteria, and is often NULL
+ *  if the #EDA_ITEM under test meets its match criteria, and is often NULL
  *  with the advent of capturing lambdas.
- * @return A #SEARCH_RESULT type #SEARCH_QUIT if the iterator function is to
- *          stop the scan, else #SEARCH_CONTINUE;
+ * @return A #INSPECT_RESULT type #INSPECT_RESULT::QUIT if the iterator function is to
+ *          stop the scan, else #INSPECT_RESULT::CONTINUE.
  */
 typedef std::function< INSPECT_RESULT ( EDA_ITEM* aItem, void* aTestData ) > INSPECTOR_FUNC;
 
@@ -384,14 +384,14 @@ public:
      * Implementations should call inspector->Inspect() on types in aScanTypes, and may use
      * #IterateForward() to do so on lists of such data.
      *
-     * @param inspector An #INSPECTOR instance to use in the inspection.
-     * @param testData Arbitrary data used by the inspector.
+     * @param aInspector An #INSPECTOR instance to use in the inspection.
+     * @param aTestData Arbitrary data used by the inspector.
      * @param aScanTypes Which #KICAD_T types are of interest and the order in which they should
      *                   be processed.
-     * @return #SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
-     *         else #SCAN_CONTINUE, and determined by the inspector.
+     * @return #INSPECT_RESULT #INSPECT_RESULT::QUIT if the Iterator is to stop the scan,
+     *         else #INSPECT_RESULT::CONTINUE, and determined by the inspector.
      */
-    virtual INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
+    virtual INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData,
                                   const std::vector<KICAD_T>& aScanTypes );
 
     /**
@@ -448,7 +448,9 @@ public:
      * returns a string to indicate that it was not overridden to provide the object
      * specific text.
      *
-     * @param aLong indicates a long string is acceptable
+     * @param aUnitsProvider is the #UNITS_PROVIDER object to handle item units.
+     * @param aFull is a flag to get the extend (full) description.
+     *
      * @return The menu text string.
      */
     virtual wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const;

@@ -32,7 +32,7 @@ class TOOL_INTERACTIVE;
  * Manage a #CONDITIONAL_MENU and some number of CONTEXT_MENUs as sub-menus.
  *
  * Each "top-level" interactive tool can have one of these, and other tools can contribute
- * #CONTEXT_MENUS to it.  There are also helper functions for adding common sets of menu
+ * #CONDITIONAL_MENU objects to it.  There are also helper functions for adding common sets of menu
  * items, for example zoom and grid controls.
  */
 class TOOL_MENU

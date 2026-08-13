@@ -72,8 +72,10 @@ public:
     }
 
     /**
-     * Calculate the number of rows and columns of dimensions of \a aPcb for routing and
+     * Calculate the number of rows and columns of dimensions of \a aBoundingBox for routing and
      * automatic calculation of area.
+     *
+     * @param aBoundingBox is the bounding box to compute the matrix.
      */
     bool ComputeMatrixSize( const BOX2I& aBoundingBox );
 

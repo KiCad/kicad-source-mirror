@@ -25,7 +25,7 @@
 #include <geometry/shape_segment.h>
 
 /**
- * @file Utility functions for ovals (oblongs/stadiums)
+ * Utility functions for ovals (oblongs/stadiums)
  *
  * An "oval" is represented by SHAPE_SEGMENT, but these functions
  * aren't required for most users of SHAPE_SEGMENT.

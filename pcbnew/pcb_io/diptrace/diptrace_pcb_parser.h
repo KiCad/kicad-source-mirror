@@ -266,7 +266,7 @@ struct DT_ZONE
     int cachedFillByteLen = 0; ///< Raw bytes between style block and trailer in inter-zone gap
     int cachedFillRecordCount = 0; ///< Cached-fill record count when payload is 23-byte aligned
     int boardClearance = 0; ///< Raw board-clearance field from zone trailer
-    int zoneId = -1;       ///< Raw per-zone id from zone trailer (matches DipXML CopperPour@Id)
+    int zoneId = -1;       ///< Raw per-zone id from zone trailer (matches DipXML CopperPour\@Id)
     int smdSpokeMode = -1; ///< Raw SMD_Spoke enum from zone trailer
     int smdSpokeWidth = 0; ///< Raw SMD_SpokeWidth from zone trailer
     uint8_t viaDirect = 0; ///< Raw ViaDirect flag from zone trailer

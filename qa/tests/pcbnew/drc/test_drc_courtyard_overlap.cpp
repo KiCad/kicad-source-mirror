@@ -140,8 +140,9 @@ static bool CollisionMatchesExpected( BOARD& aBoard, const PCB_MARKER& aMarker,
  * Check that the produced markers match the expected. This does NOT check ordering,
  * as that is not part of the contract of the DRC function.
  *
- * @param aMarkers    list of markers produced by the DRC
- * @param aCollisions list of expected collisions
+ * @param aBoard         the board to check for collisions.
+ * @param aMarkers       list of markers produced by the DRC.
+ * @param aExpCollisions list of expected collisions.
  */
 static void CheckCollisionsMatchExpected( BOARD& aBoard,
                                           const std::vector<std::unique_ptr<PCB_MARKER>>& aMarkers,
@@ -162,8 +163,10 @@ static void CheckCollisionsMatchExpected( BOARD& aBoard,
 
 
 /**
- * Run a single courtyard overlap testcase
+ * Run a single courtyard overlap test case.
+ *
  * @param aCase The testcase to run.
+ * @param aDumper
  */
 static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase )
 {

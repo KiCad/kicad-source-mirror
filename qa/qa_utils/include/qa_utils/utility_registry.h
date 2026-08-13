@@ -22,8 +22,7 @@ public:
      *
      * This will be used to create the required utility program if needed.
      *
-     * @param  aName      the name of the utility program
-     * @param  aFactory   the factory function that will construct the plugin
+     * @param  aProgInfo  the information about the utility program
      * @return            true if registered OK
      */
     static bool Register( const KI_TEST::UTILITY_PROGRAM& aProgInfo )

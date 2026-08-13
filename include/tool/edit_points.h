@@ -44,7 +44,8 @@ class EDIT_POINT
 {
 public:
     /**
-     * @param aPoint stores coordinates for EDIT_POINT.
+     * @param aPoint stores coordinates for #EDIT_POINT.
+     * @param aConnected is the item the #EDIT_POINT is connected to.
      */
     EDIT_POINT( const VECTOR2I& aPoint, std::pair<EDA_ITEM*, int> aConnected = { nullptr, 0 } ) :
             m_position( aPoint ),
@@ -63,7 +64,7 @@ public:
      * Return coordinates of an EDIT_POINT.
      *
      * @note It may be different than coordinates of a graphical item that is bound to the
-     *       EDIT_POINT.
+     *       #EDIT_POINT.
      */
     virtual VECTOR2I GetPosition() const
     {
@@ -373,6 +374,7 @@ public:
      * Return a point that is at given coordinates or NULL if there is no such point.
      *
      * @param aLocation is the location for searched point.
+     * @param aView is the view item to find the point in.
      */
     EDIT_POINT* FindPoint( const VECTOR2I& aLocation, KIGFX::VIEW *aView );
 
@@ -405,9 +407,10 @@ public:
     }
 
     /**
-     * Add an EDIT_POINT.
+     * Add an #EDIT_POINT.
      *
      * @param aPoint are coordinates of the new point.
+     * @param aConnected is the item the point is connected to.
      */
     void AddPoint( const VECTOR2I& aPoint, std::pair<EDA_ITEM*, int> aConnected = { nullptr, 0 } )
     {
@@ -556,13 +559,10 @@ public:
         return m_lines.size();
     }
 
-    ///< @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;
 
-    ///< @copydoc VIEW_ITEM::ViewDraw()
     virtual void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    ///< @copydoc VIEW_ITEM::ViewGetLayers()
     virtual std::vector<int> ViewGetLayers() const override
     {
         return { LAYER_GP_OVERLAY };

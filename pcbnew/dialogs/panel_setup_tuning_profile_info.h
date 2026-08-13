@@ -39,34 +39,34 @@ public:
 
     ~PANEL_SETUP_TUNING_PROFILE_INFO() override;
 
-    /// Updates the displayed layer names in all grids
+    /// Update the displayed layer names in all grids
     void UpdateLayerNames();
 
-    /// Loads the given profile in to the panel
+    /// Load the given profile in to the panel
     void LoadProfile( const TUNING_PROFILE& aProfile );
 
-    /// Saves the panel to the given profile
+    /// Save the panel to the given profile
     TUNING_PROFILE GetProfile() const;
 
-    /// Updates the parent notebook control
+    /// Update the parent notebook control
     void OnProfileNameChanged( wxCommandEvent& event ) override;
 
-    /// Changes between Single and Differential profiles
+    /// Change between Single and Differential profiles
     void OnChangeProfileType( wxCommandEvent& event ) override;
 
-    /// Adds a row to the track propagation grid
+    /// Add a row to the track propagation grid
     void OnAddTrackRow( wxCommandEvent& event ) override;
 
-    /// Removes a row from the track propagation grid
+    /// Remove a row from the track propagation grid
     void OnRemoveTrackRow( wxCommandEvent& event ) override;
 
-    /// Adds a via override row
+    /// Add a via override row
     void OnAddViaOverride( wxCommandEvent& event ) override;
 
-    /// Removes a via override row
+    /// Remove a via override row
     void OnRemoveViaOverride( wxCommandEvent& event ) override;
 
-    /// Gets the name of this profile
+    /// Get the name of this profile
     wxString GetProfileName() const;
 
     /// Gets the profile name as of the last rename sync
@@ -148,43 +148,45 @@ private:
         double SolderMaskLossTangent{ 0 };
     };
 
-    /// Initialises all controls on the panel
+    /// Initialise all controls on the panel
     void initPanel();
 
     /// Set up the widths of all grid columns
     void setColumnWidths();
 
-    /// Gets the board parameters for microstrip calculations
-    /// @parameter aRow The grid row to calculate board parameters for
+    /// Get the board parameters for microstrip calculations
+    /// @param aRow The grid row to calculate board parameters for
+    /// @param aScale is the scale factor.
     std::pair<CALCULATION_BOARD_PARAMETERS, CALCULATION_RESULT>
     getMicrostripBoardParameters( int aRow, const EDA_IU_SCALE& aScale );
 
-    /// Gets the board parameters for stripline calculations
-    /// @parameter aRow The grid row to calculate board parameters for
+    /// Get the board parameters for stripline calculations
+    /// @param aRow The grid row to calculate board parameters for
+    /// @param aScale is the scale factor.
     std::pair<CALCULATION_BOARD_PARAMETERS, CALCULATION_RESULT>
     getStriplineBoardParameters( int aRow, const EDA_IU_SCALE& aScale );
 
-    /// Calculates the track width or delay for the given propagation grid row
-    /// @returns pair of (width, unit propagation delay) in IU
+    /// Calculate the track width or delay for the given propagation grid row
+    /// @return pair of (width, unit propagation delay) in IU
     CALCULATION_RESULT calculateSingleMicrostrip( const int aRow, CalculationType aCalculationType );
 
-    /// Calculates the track width or delay for the given propagation grid row
-    /// @returns pair of (width, unit propagation delay) in IU
+    /// Calculate the track width or delay for the given propagation grid row
+    /// @return pair of (width, unit propagation delay) in IU
     CALCULATION_RESULT calculateSingleStripline( const int aRow, CalculationType aCalculationType );
 
-    /// Calculates the track width, pair gap, or delay for the given propagation grid row
-    /// @returns tuple of (width, diff pair gap, unit propagation delay) in IU
+    /// Calculate the track width, pair gap, or delay for the given propagation grid row
+    /// @return tuple of (width, diff pair gap, unit propagation delay) in IU
     CALCULATION_RESULT calculateDifferentialMicrostrip( int aRow, CalculationType aCalculationType );
 
-    /// Calculates the track width, pair gap, or delay for the given propagation grid row
-    /// @returns tuple of (width, diff pair gap, unit propagation delay) in IU
+    /// Calculate the track width, pair gap, or delay for the given propagation grid row
+    /// @return tuple of (width, diff pair gap, unit propagation delay) in IU
     CALCULATION_RESULT calculateDifferentialStripline( int aRow, CalculationType aCalculationType );
 
     /// Calculate the effective skin depth for the given parameters
     static double calculateSkinDepth( double aFreq, double aMurc, double aSigma );
 
-    /// Gets the index in to the layer list for the given layer.
-    /// @returns -1 if not found
+    /// Get the index in to the layer list for the given layer.
+    /// @return -1 if not found
     static int getStackupLayerId( const std::vector<BOARD_STACKUP_ITEM*>& aLayerList, PCB_LAYER_ID aPcbLayerId );
 
     struct DIELECTRIC_INFO
@@ -195,35 +197,35 @@ private:
     };
 
     /**
-     * Calculates the geometric average of the dielectric material properties. Note: This is a poor approximation as the
+     * Calculate the geometric average of the dielectric material properties. Note: This is a poor approximation as the
      * electric field distribution is not equal across the dielectrics. However, it will do as an approximation before
      * we have a field solver integrated.
      *
-     * @returns DIELECTRIC_INFO contining calculated values
+     * @returns #DIELECTRIC_INFO contining calculated values
      */
     DIELECTRIC_INFO
     calculateAverageDielectricConstants( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList,
                                          const std::vector<int>&                 dielectricLayerStackupIds,
                                          const EDA_IU_SCALE&                     aIuScale );
 
-    /// Gets the dielectric layers for dielectrics between the two given copper layer IDs
+    /// Get the dielectric layers for dielectrics between the two given copper layer IDs
     void getDielectricLayers( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList, int aSignalLayerId,
                               int aReferenceLayerId, std::vector<int>& aDielectricLayerStackupIds );
 
-    /// Gets the dielectric information for the solder mask covering a given signallayer
+    /// Get the dielectric information for the solder mask covering a given signallayer
     static DIELECTRIC_INFO getSolderMaskParameters( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList,
                                                     const EDA_IU_SCALE& aScale, PCB_LAYER_ID aSignalLayerId );
 
-    /// Gets the target impedance for the profile
+    /// Get the target impedance for the profile
     double getTargetImpedance() const;
 
-    /// Calculates the required track parameters for the given track parameters grid row and col
+    /// Calculate the required track parameters for the given track parameters grid row and col
     void calculateTrackParametersForCell( int aRow, int aCol );
 
-    /// Sets the panel display for the given tuning type
+    /// Set the panel display for the given tuning type
     void onChangeProfileType( TUNING_PROFILE::PROFILE_TYPE aType ) const;
 
-    /// Gets the target frequency in Hz
+    /// Get the target frequency in Hz
     double getFrequency() const;
 
     /// The parent setup panel
@@ -250,7 +252,7 @@ private:
     /// Calculator for coupled (differential) stripline parameters
     COUPLED_STRIPLINE m_coupledStriplineCalc;
 
-    // Electrical resistivity or specific electrical resistance of copper (ohm*meter)
+    /// Electrical resistivity or specific electrical resistance of copper (ohm*meter)
     static constexpr double RHO = 1.72e-8;
 };
 

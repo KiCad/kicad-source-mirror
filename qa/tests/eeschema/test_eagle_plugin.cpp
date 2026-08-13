@@ -285,13 +285,13 @@ BOOST_AUTO_TEST_CASE( LabelsRemainGlobalForFlatNamespace )
 
 
 /**
- * Verify that the Eagle "@<tag>" linking hint on a pin name is stripped from the displayed
- * pin name while still resolving the device <connect> mapping correctly.
+ * Verify that the Eagle "\<tag\>" linking hint on a pin name is stripped from the displayed
+ * pin name while still resolving the device \<connect\> mapping correctly.
  *
  * Regression test for issue #24483: Eagle disambiguates duplicate pin names within a symbol
- * with a trailing "@<tag>" (e.g. "IN@1", "IN@2", "NC@3").  This tag is metadata used only to
- * link pins to pads via <connect>; it should not appear as visible pin text.  The importer
- * was setting the raw Eagle name as the KiCad pin name, leaking "@1"/"@2"/"@3" into the
+ * with a trailing "\<tag>" (e.g. "IN\@1", "IN\@2", "NC\@3").  This tag is metadata used only to
+ * link pins to pads via \<connect\>; it should not appear as visible pin text.  The importer
+ * was setting the raw Eagle name as the KiCad pin name, leaking "\@1"/"\@2"/"\@3" into the
  * schematic.
  */
 BOOST_AUTO_TEST_CASE( PinNameTagStripped )

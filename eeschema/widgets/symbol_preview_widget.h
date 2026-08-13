@@ -42,6 +42,7 @@ public:
      *
      * @param aParent - parent window
      * @param aKiway - an active Kiway instance
+     * @param aIncludeStatus shows the preview status when true
      * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL or GAL_TYPE_CAIRO only)
      */
     SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, bool aIncludeStatus,

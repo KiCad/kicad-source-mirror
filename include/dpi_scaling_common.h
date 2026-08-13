@@ -40,7 +40,6 @@ public:
      * @param aConfig the config store to check for a user value (can be nullptr,
      * in which case on automatically determined values are considered)
      * @param aWindow a WX window to use for automatic DPI determination
-     * @return the scaling factor (1.0 = no scaling)
      */
     DPI_SCALING_COMMON( COMMON_SETTINGS* aConfig, const wxWindow* aWindow );
 

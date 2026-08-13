@@ -33,10 +33,9 @@ class SYMBOL_CHOOSER_FRAME : public SCH_BASE_FRAME
 {
 public:
     /**
-     * @param aKiway
+     * @param aKiway is the parent #KIWAY the symbol chooser.
      * @param aParent is the parent frame of the viewer.
-     * @param aFrameType must be either #FRAME_SCH_LIB_VIEWER or #FRAME_SCH_LIB_VIEWER_MODAL.
-     * @param aLibrary is the library to open when starting (default = NULL).
+     * @param aCancelled is the cancel status of the window.
      */
     SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent, bool& aCancelled );
 
@@ -47,6 +46,7 @@ public:
      *
      * @param aSymbol an optional FPID string to initialize the viewer with and to
      *                return a selected footprint through.
+     * @param aParent is the parent window when shown modally.
      */
     bool ShowModal( wxString* aSymbol, wxWindow* aParent ) override;
 

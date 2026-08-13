@@ -45,8 +45,6 @@ public:
      * Compare current settings to aPcbPlotParams, including not saved parameters in brd file.
      *
      * @param aPcbPlotParams is the #PCB_PLOT_PARAMS to compare/
-     * @param aCompareOnlySavedPrms set to true to compare only saved in file parameters,
-     *        or false to compare the full set of parameters.
      * @return true is parameters are same, false if one (or more) parameter does not match.
      */
     bool        IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
@@ -210,33 +208,33 @@ public:
 private:
     friend class PCB_PLOT_PARAMS_PARSER;
 
-    PLOT_FORMAT      m_format;           /// Plot format type (chooses the driver to be used)
+    PLOT_FORMAT      m_format;           ///< Plot format type (chooses the driver to be used)
     LSET             m_layerSelection;
     LSEQ             m_plotOnAllLayersSequence;
 
-    bool             m_skipNPTH_Pads;   /// Used to disable NPTH pads plotting on copper layers
-    bool             m_plotPadNumbers;  /// Plot pad numbers when sketching pads on fab layers
-    DRILL_MARKS      m_drillMarks;      /// Holes can be not plotted, have a small mark, or be
-                                        ///   plotted in actual size
+    bool             m_skipNPTH_Pads;   ///< Used to disable NPTH pads plotting on copper layers
+    bool             m_plotPadNumbers;  ///< Plot pad numbers when sketching pads on fab layers
+    DRILL_MARKS      m_drillMarks;      ///< Holes can be not plotted, have a small mark, or be
+                                        ///<   plotted in actual size
     PLOT_TEXT_MODE   m_textMode;
-    DXF_OUTLINE_MODE m_DXFPlotMode;     /// FILLED or SKETCH for filled objects.
+    DXF_OUTLINE_MODE m_DXFPlotMode;     ///< FILLED or SKETCH for filled objects.
     DXF_UNITS        m_DXFUnits;
-    bool             m_DXFPolygonMode;  /// In polygon mode, each item to plot is converted to a
-                                        ///   polygon and all polygons are merged.
+    bool             m_DXFPolygonMode;  ///< In polygon mode, each item to plot is converted to a
+                                        ///<   polygon and all polygons are merged.
 
-    bool       m_A4Output;              /// Autoscale the plot to fit an A4 (landscape?) sheet
-    bool       m_autoScale;             /// When true set the scale to fit the board in the page
-    double     m_scale;                 /// Global scale factor, 1.0 plots a board at actual size
-    bool       m_mirror;                /// Mirror the plot around the X axis
+    bool       m_A4Output;              ///< Autoscale the plot to fit an A4 (landscape?) sheet
+    bool       m_autoScale;             ///< When true set the scale to fit the board in the page
+    double     m_scale;                 ///< Global scale factor, 1.0 plots a board at actual size
+    bool       m_mirror;                ///< Mirror the plot around the X axis
 
-    bool       m_negative;              /// Plot in negative color (supported only by some drivers)
-    bool       m_blackAndWhite;         /// Plot in black and white only
+    bool       m_negative;              ///< Plot in negative color (supported only by some drivers)
+    bool       m_blackAndWhite;         ///< Plot in black and white only
     bool       m_plotDrawingSheet;
 
-    std::optional<bool> m_plotViaOnMaskLayer;    /// Deprecated; only used for reading legacy files
+    std::optional<bool> m_plotViaOnMaskLayer;    ///< Deprecated; only used for reading legacy files
 
-    bool       m_subtractMaskFromSilk;  /// On gerbers 'scrape' away the solder mask from
-                                        ///   silkscreen (trim silks)
+    bool       m_subtractMaskFromSilk;  ///< On gerbers 'scrape' away the solder mask from
+                                        ///<   silkscreen (trim silks)
 
 
     /// When plotting gerber files, use a conventional set of Protel extensions instead of .gbr,
@@ -302,7 +300,7 @@ private:
     double     m_dashedLineDashRatio;
     double     m_dashedLineGapRatio;
 
-    COLOR_SETTINGS* m_colors;           /// Pointer to color settings to be used for plotting
+    COLOR_SETTINGS* m_colors;           ///< Pointer to color settings to be used for plotting
 
     /// Dummy colors object that can be created if there is no Pgm context
     std::shared_ptr<COLOR_SETTINGS> m_default_colors;

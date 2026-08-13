@@ -163,7 +163,8 @@ public:
      * Return the information about the #NETINFO_ITEM in \a aList to display in the
      * message panel.
      *
-     * @param aList is the list in which to place the  status information.
+     * @param aFrame is the parent frame that receives the message panel information.
+     * @param aList is the list in which to place the status information.
      */
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

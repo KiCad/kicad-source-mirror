@@ -406,6 +406,7 @@ class GAL_API CAIRO_GAL : public CAIRO_GAL_BASE, public wxWindow
 {
 public:
     /**
+     * @param aDisplayOptions are the options for the GAL.
      * @param aParent is the wxWidgets immediate wxWindow parent of this object.
      * @param aMouseListener is the wxEvtHandler that should receive the mouse events, this
      *                       can be can be any wxWindow, but is often a wxFrame container.
@@ -413,8 +414,7 @@ public:
      *                       can be any wxWindow, but is often a derived instance of this
      *                       class or a containing wxFrame.  The "paint event" here is a
      *                       wxCommandEvent holding EVT_GAL_REDRAW, as sent by PostPaint().
-     *
-     * @param aName is the name of this window for use by wxWindow::FindWindowByName().
+     * @param aName is the name of the Cairo canvas.
      */
     CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
                wxEvtHandler* aMouseListener = nullptr, wxEvtHandler* aPaintListener = nullptr,
@@ -422,7 +422,7 @@ public:
 
     ~CAIRO_GAL();
 
-    ///< @copydoc GAL::IsVisible()
+    /// @copydoc GAL::IsVisible()
     bool IsVisible() const override
     {
         return IsShownOnScreen() && !GetClientRect().IsEmpty();
@@ -535,7 +535,7 @@ public:
      */
     void onSetNativeCursor( wxSetCursorEvent& aEvent );
 
-    ///< Cairo-specific update handlers
+    /// Cairo-specific update handlers
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
 protected:

@@ -42,13 +42,10 @@ class RATSNEST_VIEW_ITEM : public EDA_ITEM
 public:
     RATSNEST_VIEW_ITEM( std::shared_ptr<CONNECTIVITY_DATA> aData );
 
-    /// @copydoc VIEW_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
 
-    /// @copydoc VIEW_ITEM::ViewDraw()
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers()
     std::vector<int> ViewGetLayers() const override;
 
     /**
@@ -79,7 +76,6 @@ public:
     }
 
 #if defined(DEBUG)
-    /// @copydoc EDA_ITEM::Show()
     void Show( int x, std::ostream& st ) const override { }
 #endif
 

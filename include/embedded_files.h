@@ -108,7 +108,7 @@ public:
      *
      * @param aName is the name of the file to load.
      * @param aOverwrite is true if the file should be overwritten if it already exists.
-    */
+     */
     EMBEDDED_FILE* AddFile( const wxFileName& aName, bool aOverwrite );
 
     /**
@@ -133,8 +133,9 @@ public:
      * Remove a file from the collection and frees the memory.
      *
      * @param aName is the name of the file to remove.
+     * @param aErase is flag to determine if the file \a aName gets erased.
      */
-    void RemoveFile( const wxString& name, bool aErase = true );
+    void RemoveFile( const wxString& aName, bool aErase = true );
 
     /**
      * Replace this collection's files with references to @p aSource's files, skipping any whose
@@ -209,8 +210,8 @@ public:
     void ClearEmbeddedFonts();
 
     /**
-     * Take data from the #decompressedData buffer and compresses it using ZSTD
-     * into the #compressedEncodedData buffer.
+     * Take data from the decompressedData buffer and compresses it using ZSTD
+     * into the compressedEncodedData buffer.
      *
      * The data is then Base64 encoded.  This call is used when adding a new file to the
      * collection from disk.
@@ -218,9 +219,9 @@ public:
     static RETURN_CODE  CompressAndEncode( EMBEDDED_FILE& aFile );
 
     /**
-     * Takes data from the #compressedEncodedData buffer and Base64 decodes it.
+     * Takes data from the compressedEncodedData buffer and Base64 decodes it.
      *
-     * The data is then decompressed using ZSTD and stored in the #decompressedData buffer.
+     * The data is then decompressed using ZSTD and stored in the decompressedData buffer.
      * This call is used when loading the embedded files using the parsers.
      *
      * @param aAllowEmptyHash will let this succeed if aFile.data_hash is empty

@@ -143,8 +143,9 @@ public:
     virtual bool LoadFromFile( const wxString& aDirectory = "" );
 
     /**
-     * Calls Store() and then writes the contents of the JSON document to a file
-     * @param aDirectory is the directory to save to, including trailing separator
+     * Calls Store() and then writes the contents of the JSON document to a file.
+     * @param aDirectory is the directory to save to, including trailing separator.
+     * @param aForce is a flag to force a save to file.
      * @return true if the file was saved
      */
     virtual bool SaveToFile( const wxString& aDirectory = "", bool aForce = false );
@@ -210,18 +211,17 @@ public:
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig );
 
     /**
-     * Transfers ownership of a given NESTED_SETTINGS to this object.
-     * Can be used to construct a NESTED_SETTINGS without the parent object needing to know about
+     * Transfers ownership of a given #NESTED_SETTINGS to this object.
+     * Can be used to construct a #NESTED_SETTINGS without the parent object needing to know about
      * the implementation of the nested object;
      *
      * @param aSettings is the settings object to take ownership of
-     * @param aTarget is a pointer to update to the passed in settings
      */
     void AddNestedSettings( NESTED_SETTINGS* aSettings );
 
     /**
      * Saves and frees a nested settings object, if it exists within this one
-     * @param aSettings is a pointer to a NESTED_SETTINGS that has already been added to this one
+     * @param aSettings is a pointer to a #NESTED_SETTINGS that has already been added to this one
      */
     void ReleaseNestedSettings( NESTED_SETTINGS* aSettings );
 
@@ -231,38 +231,40 @@ public:
     }
 
     /**
-    * Sets the given string if the given key/path is present
-    * @param aObj is the source object
-    * @param aTarget is the storage destination
-    * @return True if set, false if not
-    */
-    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
-                              wxString& aTarget );
+     * Sets the given string if the given key/path is present
+     * @param aObj is the source object
+     * @param aPath is the path of \a aObj.
+     * @param aTarget is the storage destination
+     * @return True if set, false if not
+     */
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, wxString& aTarget );
 
     /**
-    * Sets the given bool if the given key/path is present
-    * @param aObj is the source object
-    * @param aTarget is the storage destination
-    * @return True if set, false if not
-    */
+     * Sets the given bool if the given key/path is present.
+     * @param aObj is the source object.
+     * @param aPath is the path of \a aObj.
+     * @param aTarget is the storage destination.
+     * @return True if set, false if not.
+     */
     static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, bool& aTarget );
 
     /**
-    * Sets the given int if the given key/path is present
-    * @param aObj is the source object
-    * @param aTarget is the storage destination
-    * @return True if set, false if not
-    */
+     * Sets the given int if the given key/path is present.
+     * @param aObj is the source object.
+     * @param aPath is the path of \a aObj.
+     * @param aTarget is the storage destination.
+     * @return True if set, false if not.
+     */
     static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, int& aTarget );
 
     /**
-    * Sets the given unsigned int if the given key/path is present
-    * @param aObj is the source object
-    * @param aTarget is the storage destination
-    * @return True if set, false if not
-    */
-    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath ,
-                              unsigned int& aTarget );
+     * Sets the given unsigned int if the given key/path is present.
+     * @param aObj is the source object.
+     * @param aPath is the path of \a aObj.
+     * @param aTarget is the storage destination.
+     * @return True if set, false if not.
+     */
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath, unsigned int& aTarget );
 
     const std::string FormatAsString();
 
@@ -282,12 +284,12 @@ protected:
                             std::function<bool(void)> aMigrator );
 
     /**
-    * Translates a legacy wxConfig value to a given JSON pointer value
-    * @tparam ValueType is the basic type of the value
-    * @param aConfig is the legacy config to read from
-    * @param aKey is the key (within the current path) to read
-    * @param aDest is a string that will form a JSON pointer (key1.key2.key3) to write to
-    */
+     * Translates a legacy wxConfig value to a given JSON pointer value
+     * @tparam ValueType is the basic type of the value
+     * @param aConfig is the legacy config to read from
+     * @param aKey is the key (within the current path) to read
+     * @param aDest is a string that will form a JSON pointer (key1.key2.key3) to write to
+     */
     template<typename ValueType>
     bool fromLegacy( wxConfigBase* aConfig, const std::string& aKey, const std::string& aDest );
 
@@ -301,11 +303,11 @@ protected:
                            const std::string& aDest );
 
     /**
-    * Translates a legacy COLOR4D stored in a wxConfig string to a given JSON pointer value
-    * @param aConfig is the legacy config to read from
-    * @param aKey is the key (within the current path) to read
-    * @param aDest is a string that will form a JSON pointer (key1.key2.key3) to write to
-    */
+     * Translates a legacy COLOR4D stored in a wxConfig string to a given JSON pointer value
+     * @param aConfig is the legacy config to read from
+     * @param aKey is the key (within the current path) to read
+     * @param aDest is a string that will form a JSON pointer (key1.key2.key3) to write to
+     */
     bool fromLegacyColor( wxConfigBase* aConfig, const std::string& aKey,
                           const std::string& aDest );
 
@@ -336,6 +338,7 @@ protected:
      * @tparam ResultType is the type of the retrieved value.
      * @param aJson is the object to act on .
      * @param aKey is the object key to retrieve the value for.
+     * @param aDefault is the default result type.
      * @return the result, or aDefault if aKey is not found.
      */
     template<typename ResultType>

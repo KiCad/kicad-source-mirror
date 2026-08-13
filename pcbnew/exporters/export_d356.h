@@ -61,7 +61,6 @@ public:
     /**
      * Constructs an IPC-356D file writer
      * @param aPcb is the board to extract a netlist from
-     * @param aParent will be used as the parent for any warning dialogs
      */
     IPC356D_WRITER( BOARD* aPcb ) :
             m_pcb( aPcb ),

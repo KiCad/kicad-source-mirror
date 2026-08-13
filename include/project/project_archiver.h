@@ -51,7 +51,7 @@ public:
     /**
      * Create an archive of the project.
      *
-     * @param aSrcFile is the full path to the project to be archived.
+     * @param aSrcDir is the full path to the project to be archived.
      * @param aDestFile is the full path to the zip file to be created.
      * @param aReporter is used to report status.
      * @param aVerbose controls the verbosity of reported status messages.

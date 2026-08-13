@@ -47,6 +47,7 @@ public:
     };
 
     /**
+     * @param aParent is the parent window of this panel.
      * @param aFrameType is the editor the page belongs to, which decides the modes offered.
      * @param aGridSnap points at the live grid snapping mode.
      * @param aInference points at the live inference settings, or null if the editor has none.

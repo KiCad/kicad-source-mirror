@@ -148,7 +148,7 @@ public:
      * Hide wxGrid's SetColLabelSize() method with one which makes sure the size is tall
      * enough for the system GUI font.
      *
-     * @param height
+     * @param aHeight
      */
     void SetColLabelSize( int aHeight );        // Yes, we're hiding a non-virtual method
 
@@ -232,7 +232,8 @@ public:
     /**
      * Set a EUNITS_PROVIDER to enable use of unit- and eval-based Getters.
      *
-     * @param aProvider
+     * @param aProvider the units provider to set.
+     * @param aCol is the column to set the units provider to.
      */
     void SetUnitsProvider( UNITS_PROVIDER* aProvider, int aCol = 0 );
 
@@ -253,7 +254,6 @@ public:
      *
      * @param aRow the cell row index to fetch.
      * @param aCol the cell column index to fetch.
-     * @param aIsOptional if true, indicates to the unit provider the value is optional.
      * @return the value held by the cell in internal units.
      */
     int GetUnitValue( int aRow, int aCol );

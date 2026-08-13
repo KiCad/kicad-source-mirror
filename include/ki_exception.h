@@ -27,10 +27,9 @@
 
 
 /**
- * @ingroup exception_types
+ * @defgroup exception_types Custom KiCad Exception Objects
  * @{
  */
-
 
 /// macro which captures the "call site" values of __FILE_, __FUNCTION__ & __LINE__
 #define THROW_IO_ERROR( msg )   throw IO_ERROR( msg, __FILE__, __FUNCTION__, __LINE__ )
@@ -209,6 +208,6 @@ struct KICOMMON_API FUTURE_FORMAT_ERROR : public PARSE_ERROR
                const wxString& aRequiredGenerator = wxEmptyString );
 };
 
-/** @} exception_types */
+/** @} */
 
 #endif // KI_EXCEPTION_H_

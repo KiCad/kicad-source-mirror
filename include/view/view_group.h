@@ -83,7 +83,6 @@ public:
      */
     virtual void ViewDraw( int aLayer, VIEW* aView ) const override;
 
-    ///@copydoc VIEW_ITEM::ViewGetLayers
     std::vector<int> ViewGetLayers() const override;
 
     /**

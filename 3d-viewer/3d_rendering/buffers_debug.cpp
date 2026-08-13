@@ -27,9 +27,13 @@
 #include <wx/image.h>   // Used for save an image to disk
 
 /**
- * @param aRGBpixelBuffer from the wxWidgets documentation
- * "The data given must have the size (width*height*3).
- *  The data must have been allocated with malloc(), NOT with operator new."
+ * The data given must have the size (width*height*3).
+ * The data must have been allocated with malloc(), NOT with operator new.
+ *
+ * @param aFileName is the file name to save the buffer to.
+ * @param aRGBpixelBuffer from the wxWidgets documentation.
+ * @param aXSize is the width of the buffer in pixels.
+ * @param aYSize is the height of the buffer in pixels.
  */
 static void dbg_save_rgb_buffer( const wxString& aFileName, unsigned char *aRGBpixelBuffer,
                                  unsigned int aXSize, unsigned int aYSize )

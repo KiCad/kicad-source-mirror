@@ -19,8 +19,9 @@
  */
 
 /**
- * @file vrmlv2_node.h
- * defines the base class for VRML2.0 nodes
+ * @file vrml2_node.h
+ *
+ * The base class for VRML2.0 nodes.
  */
 
 /*

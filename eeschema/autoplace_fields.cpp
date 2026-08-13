@@ -128,8 +128,7 @@ public:
 
     /**
      * Do the actual autoplacement.
-     * @param aManual - if true, use extra heuristics for smarter placement when manually
-     * called up.
+     * @param aAlgo is the heuristics for smarter placement.
      */
     void DoAutoplace( AUTOPLACE_ALGO aAlgo )
     {

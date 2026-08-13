@@ -141,6 +141,7 @@ KICOMMON_API bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = 
  *
  * @param aSourceDir is the directory to copy.
  * @param aDestDir is the directory to copy to.
+ * @param aOverwriteExclusions
  * @param aErrors is a string to append any errors to.
  */
 KICOMMON_API bool CopyDirectory( const wxString& aSourceDir, const wxString& aDestDir,

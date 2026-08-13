@@ -640,7 +640,6 @@ public:
     void SetGenerator( const wxString& aGenerator ) { m_generator = aGenerator; }
     const wxString& GetGenerator() const { return m_generator; }
 
-    ///< @copydoc BOARD_ITEM_CONTAINER::Add()
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT,
               bool aSkipConnectivity = false ) override;
 
@@ -694,7 +693,7 @@ public:
      * After loading a file from disk, the footprints do not yet contain the full
      * data for their embedded files, only a reference.  This iterates over all footprints
      * in the board and updates them with the full embedded data.
-    */
+     */
     void FixupEmbeddedData();
 
     void RunOnNestedEmbeddedFiles( const std::function<void( EMBEDDED_FILES* )>& aFunction ) override;
@@ -1266,6 +1265,7 @@ public:
      * Calculate the bounding box containing all board items (or board edge segments).
      *
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
+     * @param aPhysicalLayersOnly is a flag to only compute the bounding box for physical layers.
      * @return the board's bounding box.
      */
     BOX2I ComputeBoundingBox( bool aBoardEdgesOnly = false, bool aPhysicalLayersOnly = false ) const;
@@ -1662,7 +1662,7 @@ public:
 
     /**
      * Finds all fonts used in the board and embeds them in the file if permissions allow
-    */
+     */
     void EmbedFonts() override;
 
     /**

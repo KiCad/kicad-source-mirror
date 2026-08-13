@@ -98,7 +98,8 @@ public:
      * The unit is automatically chosen from ns, us, ms and s, depending on the
      * size of the current count.
      *
-     * @param the stream to print to.
+
+     * @param aStream the stream to print to.
      */
     void Show( std::ostream& aStream = std::cerr )
     {
@@ -205,15 +206,17 @@ private:
  *
  * For example:
  *
+ * \code
  * DURATION duration; // select a duration type as needed
  * {
  *     SCOPED_PROF_TIMER<DURATION> timer( duration );
  *     timed_activity();
  * }
  * // duration is now the time timed activity took
+ * \endcode
  *
  * From C++17, with class template argument deduction, you should be able to
- * omit the <DURATION>.
+ * omit the \<DURATION\>.
  */
 template <typename DURATION>
 class SCOPED_PROF_TIMER : public PROF_TIMER
@@ -230,10 +233,10 @@ public:
     }
 
 private:
-    ///< The counter to use to do the profiling
+    /// The counter to use to do the profiling
     PROF_TIMER m_counter;
 
-    ///< The duration to update at the end of the scope
+    /// The duration to update at the end of the scope
     DURATION& m_duration;
 };
 
@@ -309,7 +312,7 @@ class LATENCY_PROBE
             double timerDelta = 0;
         };
 
-        LATENCY_PROBE( const std::string& aName, int aStages = 8 ) : 
+        LATENCY_PROBE( const std::string& aName, int aStages = 8 ) :
             m_name( aName )
         {
             m_checkpoints.reserve( aStages );
@@ -345,9 +348,9 @@ class LATENCY_PROBE
             using DUR_MS = std::chrono::duration<double, std::milli>;
             return static_cast<DUR_MS>( a - b ).count();
         }
-    
+
     private:
-        
+
         TIME_POINT m_start;
         std::string m_name;
         std::vector<CHECKPOINT> m_checkpoints;

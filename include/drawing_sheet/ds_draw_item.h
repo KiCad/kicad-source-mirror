@@ -549,8 +549,6 @@ public:
      *
      * @param aPageInfo The PAGE_INFO, for page size, margins...
      * @param aTitleBlock The sheet title block, for basic inscriptions.
-     * @param aColor The color for drawing.
-     * @param aAltColor The color for items which need to be "highlighted".
      */
     void BuildDrawItemsList( const PAGE_INFO& aPageInfo, const TITLE_BLOCK& aTitleBlock );
 

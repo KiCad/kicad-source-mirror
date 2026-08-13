@@ -49,7 +49,7 @@ public:
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    ///< Launch a tool to measure between points.
+    /// Launch a tool to measure between points.
     int MeasureTool( const TOOL_EVENT& aEvent );
     int NextLineMode( const TOOL_EVENT& aEvent );
 
@@ -65,7 +65,7 @@ public:
     /// Show the 3D viewer
     int Show3DViewer( const TOOL_EVENT& aEvent );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     /**
@@ -74,7 +74,7 @@ public:
      * When enabled, one may select parts of footprints individually (graphics, pads, etc.),
      * so they can be modified.
      *
-     * @param aEnabled decides if the mode should be enabled.
+     * @param aIsFrame decides if the mode should be enabled.
      */
     void SetFootprintFrame( bool aIsFrame )
     {

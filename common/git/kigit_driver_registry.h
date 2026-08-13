@@ -43,7 +43,7 @@ namespace KIGIT
  * Returns 0 on success, GIT_EMERGECONFLICT (-13) on unresolved conflicts,
  * or any other negative git error code on failure.
  */
-/// uint32_t for mode_out per libgit2; included via <cstdint> by callers.
+/// uint32_t for mode_out per libgit2; included via `<cstdint>` by callers.
 using MERGE_APPLY_FN = int ( * )( const git_merge_driver_source* src,
                                   const char**                   path_out,
                                   unsigned int*                  mode_out,

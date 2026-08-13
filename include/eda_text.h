@@ -327,17 +327,18 @@ public:
     /**
      * Print this text object to the device context \a aDC.
      *
-     * @param aDC the current Device Context.
+     * @param aSettings are the settings used to render the text.
      * @param aOffset draw offset (usually (0,0)).
      * @param aColor text color.
      */
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, const COLOR4D& aColor );
 
     /**
-     * build a list of segments (SHAPE_SEGMENT) to describe a text shape.
+     * Build a list of segments (SHAPE_SEGMENT) to describe a text shape.
+     *
      * @param aTriangulate: true to build also the triangulation of each shape
-     * @param aUseTextRotation: true to use the actual text draw rotation.
-     * false to build a list of shape for a not rotated text ("native" shapes).
+     * @param aBBox is the bounding box that contains the text.
+     * @param aAngle is the angle of the text.
      */
     std::shared_ptr<SHAPE_COMPOUND> GetEffectiveTextShape( bool aTriangulate = true,
                                                            const BOX2I& aBBox = BOX2I(),
@@ -366,7 +367,9 @@ public:
      * Useful in multiline texts to calculate the full text or a line area (for zones filling,
      * locate functions....)
      *
+     * @param aSettings are the settings used to render the text.
      * @param aLine The line of text to consider.  Pass -1 for all lines.
+     *
      * @return the rect containing the line of text (i.e. the position and the size of one line)
      *         this rectangle is calculated for 0 orient text.
      *         If orientation is not 0 the rect must be rotated to match the physical area
@@ -379,6 +382,8 @@ public:
      * Calculates the distance (pitch) between two lines of text.  This distance includes the
      * interline distance plus room for characters like j, {, and [.  It also used for single
      * line text, to calculate the text bounding box.
+     *
+     * @param aSettings are the settings used to render the text.
      */
     int GetInterline( const RENDER_SETTINGS* aSettings ) const;
 
@@ -391,6 +396,7 @@ public:
      * Populate \a aPositions with the position of each line of a multiline text, according
      * to the vertical justification and the rotation of the whole text.
      *
+     * @param aSettings are the settings used to render the text.
      * @param aPositions is the list to populate by the VECTOR2I positions.
      * @param aLineCount is the number of lines (not recalculated here for efficiency reasons.
      */
@@ -478,6 +484,7 @@ protected:
     /**
      * Print each line of this EDA_TEXT.
      *
+     * @param aSettings are the settings used to render the text.
      * @param aOffset draw offset (usually (0,0)).
      * @param aColor text color.
      * @param aText the single line of text to draw.

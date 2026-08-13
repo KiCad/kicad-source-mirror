@@ -204,7 +204,7 @@ public:
     /**
      * Record the list of #KICAD_T types to consider for collection by the Inspect() function.
      *
-     * @param aScanTypes A list of KICAD_Ts.
+     * @param aTypes A list of #KICAD_T enums to collect.
      */
     void SetScanTypes( const std::vector<KICAD_T>& aTypes ) { m_scanTypes = aTypes; }
 

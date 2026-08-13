@@ -84,6 +84,7 @@ public:
      * @param aUnit is unit for symbols that have multiple parts per package.
      * @param aBodyStyle is the alternate body style for the schematic symbols.
      * @param aPosition is the position of the symbol.
+     * @param aParent is the parent object of the newly created symbol.
      */
     SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
                 int aUnit, int aBodyStyle = 0, const VECTOR2I& aPosition = VECTOR2I( 0, 0 ),
@@ -556,12 +557,12 @@ public:
     /**
      * Restore fields to the original library values.
      *
+     * @param aPath is the sheet path instance for variable substitution purposes.
      * @param aUpdateStyle selects whether fields should update the position and text attributes.
      * @param aUpdateRef selects whether the reference field should be updated.
      * @param aUpdateOtherFields selects whether non-reference fields should be updated.
      * @param aResetRef selects whether the reference should be reset to the library value.
-     * @param aResetOtherFields selects whether non-reference fields should be reset to library
-     *                          values.
+     * @param aResetOtherFields selects whether non-reference fields should be reset to library values.
      */
     void UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, bool aUpdateRef,
                        bool aUpdateOtherFields, bool aResetRef, bool aResetOtherFields );
@@ -570,10 +571,11 @@ public:
      * Keep fields other than the reference, include/exclude flags, and alternate pin assignments
      * in sync in multi-unit parts.
      *
-     * @param aSourceSheet the sheet instance of the unit to sync to
-     * @param aProperty [optional] if present, the single property to sync.  (Otherwise the
-     *                  include/exclude flags, alternate pin assignments, and all fields bar the
-     *                  reference will be synced.)
+     * @param aSourceSheet the sheet instance of the unit to sync to.
+     * @param aCommit is the #SCH_COMMIT object for undo/redo actions.
+     * @param aProperty if present, the single property to sync.  (Otherwise the include/exclude flags,
+     *                  alternate pin assignments, and all fields bar the reference will be synced.)
+     * @param aVariantName is the name of the variant to use. An empty string is the default variant.
      */
     void SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT& aCommit,
                          PROPERTY_BASE* aProperty,
@@ -589,6 +591,7 @@ public:
      *
      * @param aScreen is the SCH_SCREEN associated with the current instance of the symbol.
      *                Required when \a aAlgo is AUTOPLACE_MANUAL; optional otherwise.
+     * @param aAlgo is the field placement algorithm to use.
      */
     void AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo ) override;
 
@@ -631,8 +634,6 @@ public:
     /**
      * Populate a vector with all the pins from the library object that match the current unit
      * and bodyStyle.
-     *
-     * @param aPinsList is the list to populate with all of the pins.
      */
     std::vector<SCH_PIN*> GetLibPins() const;
 
@@ -701,9 +702,6 @@ public:
      *              timestamp&gt like /05678E50/A23EF560).
      * @param aRef is the local reference like C45, R56.
      * @param aUnit is the unit selection used for symbols with multiple units per package.
-     * @param aValue is the value used for this instance.
-     * @param aFootprint is the footprint used for this instance (which might have different
-     *                   hole spacing or other board-specific changes from other instances).
      */
     void AddHierarchicalReference( const KIID_PATH& aPath,
                                    const wxString&  aRef,
@@ -815,7 +813,9 @@ public:
      *
      * @note This does not test for  short circuits.
      *
-     * @param aItemList is list of all #DANGLING_END_ITEM items to be tested.
+     * @param aItemListByType is list of all #DANGLING_END_ITEM items to be tested.
+     * @param aItemListByPos
+     * @param aPath is the sheet path instance to be tested.
      * @return true if any pin's state has changed.
      */
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
@@ -915,6 +915,7 @@ public:
      * are shown above other elements in the schematic.
      *
      * @param aPlotter is the #PLOTTER object used to plot pins.
+     * @param aDnp includes "do not populate" indicators when true.
      */
     void PlotPins( PLOTTER* aPlotter, bool aDnp ) const;
 
@@ -1132,7 +1133,7 @@ private:
 
     wxString                    m_signalName;
 
-    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< A #SCH_PIN for every #LIB_PIN.
+    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< A copy of #SCH_PIN objects from the library symbol.
     std::unordered_map<SCH_PIN*, SCH_PIN*> m_pinMap;   ///< Library pin pointer : #SCH_PIN indices.
 
     /// Base (no-variant) pin-to-pad map override applied when no variant override exists for the

@@ -138,6 +138,7 @@ public:
     /**
      * Find the points where this curve crosses aSeg.
      *
+     * @param aSeg is the segment to test for intersection.
      * @param aTreatAsLine extends the segment to an infinite line.
      */
     std::vector<VECTOR2I> Intersect( const SEG& aSeg, bool aTreatAsLine = false ) const;

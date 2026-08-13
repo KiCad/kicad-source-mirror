@@ -84,16 +84,16 @@ struct ERULES
 
     void parse( wxXmlNode* aRules, std::function<void()> aCheckpoint );
 
-    ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
-    ///< Goes into making a scaling factor for "long" pads.
+    /// percent over 100%.  0-> not elongated, 100->twice as wide as is tall
+    /// Goes into making a scaling factor for "long" pads.
     int    psElongationLong;
 
     int    psElongationOffset;  ///< the offset of the hole within the "long" pad.
 
-    ///< solder mask, expressed as percentage of the smaller pad/via dimension
+    /// solder mask, expressed as percentage of the smaller pad/via dimension
     double mvStopFrame;
 
-    ///< solderpaste mask, expressed as percentage of the smaller pad/via dimension
+    /// solderpaste mask, expressed as percentage of the smaller pad/via dimension
     double mvCreamFrame;
     int    mlMinStopFrame;      ///< solder mask, minimum size (Eagle mils, here nanometers)
     int    mlMaxStopFrame;      ///< solder mask, maximum size (Eagle mils, here nanometers)
@@ -106,10 +106,10 @@ struct ERULES
 
     double srRoundness;         ///< corner rounding ratio for SMD pads (percentage)
 
-    ///< corner rounding radius, minimum size (Eagle mils, here nanometers)
+    /// corner rounding radius, minimum size (Eagle mils, here nanometers)
     int    srMinRoundness;
 
-    ///< corner rounding radius, maximum size (Eagle mils, here nanometers)
+    /// corner rounding radius, maximum size (Eagle mils, here nanometers)
     int    srMaxRoundness;
 
     double rvPadTop;            ///< top pad size as percent of drill size
@@ -130,7 +130,7 @@ struct ERULES
 
 
 /**
- * Works with Eagle 6.x XML board files and footprints to implement the Pcbnew #PLUGIN API
+ * Works with Eagle 6.x XML board files and footprints to implement the Pcbnew #PCB_IO API
  * or a portion of it.
  */
 class PCB_IO_EAGLE : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
@@ -305,8 +305,8 @@ private:
      * footprint will **not** match the footprint defined in the `library` section of the Eagle board
      * file.
      *
-     * @note This currently only adjusts the #rlMinPadTop, #rlMinPadInner, and #rlMinPadBottom for round
-     *       through hole pads.
+     * @note This currently only adjusts the #ERULES::rlMinPadTop, #ERULES::rlMinPadInner, and
+     *       #ERULES::rlMinPadBottom for round through hole pads.
      *
      * @note This code assumes that there is no `designrule` section in Eagle footprint library (.lbr)
      *       files.  If this is not the case, this code should be adjusted accordingly.
@@ -338,10 +338,10 @@ private:
     void packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aCenter ) const;
     void packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
 
-    ///< Handles common pad properties
+    /// Handles common pad properties
     void transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const;
 
-    ///< Deletes the footprint templates list
+    /// Deletes the footprint templates list
     void deleteTemplates();
 
     typedef std::vector<ELAYER>     ELAYERS;
@@ -352,7 +352,7 @@ private:
     std::map<wxString, int>          m_eagleLayersIds; ///< Eagle layer ids stored by layer name
     std::map<wxString, PCB_LAYER_ID> m_layer_map;      ///< Map of Eagle layers to KiCad layers
 
-    ///< Eagle class number to KiCad netclass
+    /// Eagle class number to KiCad netclass
     std::map<wxString, std::shared_ptr<NETCLASS>>  m_classMap;
 
     wxString                         m_customRules;

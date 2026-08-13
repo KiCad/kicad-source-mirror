@@ -212,7 +212,7 @@ public:
     }
 
     /**
-     * Set the #m_Pcb member in such as way as to ensure deleting any previous #BOARD.
+     * Set the #m_pcb member in such as way as to ensure deleting any previous #BOARD.
      */
     virtual void SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
 
@@ -279,23 +279,26 @@ public:
      * Place \a aFootprint at the current cursor position (or provided one) and updates footprint coordinates
      * with the new position.
      *
+     * @param aFootprint is the footprint to place.
      * @param aRecreateRatsnest A bool true redraws the footprint ratsnest.
+     * @param aPosition is the coordinates to place the footprint.
      */
-    void PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest = true, std::optional<VECTOR2I> aPosition = std::nullopt );
+    void PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest = true,
+                         std::optional<VECTOR2I> aPosition = std::nullopt );
 
     void ShowPadPropertiesDialog( PAD* aPad );
 
     /**
      * Open a dialog to select a footprint.
      *
-     * @param aPreslect if valid, the #LIB_ID to select (otherwise the global history is used).
+     * @param aPreselect if valid, the #LIB_ID to select (otherwise the global history is used).
      */
     FOOTPRINT* SelectFootprintFromLibrary( LIB_ID aPreselect = LIB_ID() );
 
     /**
      * Add the given footprint to the board.
      *
-     * @param aDC is the current Device Context, to draw the new footprint (can be NULL ).
+     * @param aFootprint is the new footprint to add to board (can be NULL ).
      */
     virtual void AddFootprintToBoard( FOOTPRINT* aFootprint );
 
@@ -369,7 +372,7 @@ public:
     virtual void ActivateGalCanvas() override;
 
     /**
-     * Add \a aListener to post #EDA_EVT_BOARD_CHANGED command events to.
+     * Add \a aListener to post EDA_EVT_BOARD_CHANGED command events to.
      *
      * @warning The caller is responsible for removing any listeners that are no long valid.
      *

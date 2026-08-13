@@ -249,7 +249,8 @@ public:
      *       the project file.  The advantage of relative paths is that is more likely to
      *       work when opening the same project from both Windows and Linux.
      *
-     * @param aLastPath - The last file with full path successfully read.
+     * @param aType
+     * @param aLastPath is the last file with full path successfully read.
      */
     void SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPath );
 
@@ -322,7 +323,7 @@ public:
      */
     void SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState );
 
-    ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()
+    /// @copydoc EDA_DRAW_FRAME::ActivateGalCanvas()
     void ActivateGalCanvas() override;
 
     /**
@@ -428,7 +429,7 @@ public:
      */
     bool Clear_Pcb( bool doAskAboutUnsavedChanges, bool aFinal = false );
 
-    ///< @copydoc PCB_BASE_FRAME::SetBoard()
+    /// @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr ) override
     {
         SetBoard( aBoard, true, aReporter );
@@ -436,12 +437,12 @@ public:
 
     void SetBoard( BOARD* aBoard, bool aBuildConnectivity, PROGRESS_REPORTER* aReporter = nullptr );
 
-    ///< @copydoc PCB_BASE_FRAME::GetModel()
+    /// @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     std::unique_ptr<GRID_HELPER> MakeGridHelper() override;
 
-    ///< @copydoc PCB_BASE_FRAME::SetPageSettings()
+    /// @copydoc PCB_BASE_FRAME::SetPageSettings()
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
 
     bool SaveBoardAsDesignBlock( const wxString& aLibraryName );
@@ -461,9 +462,9 @@ public:
      *                       will be kept or updated.  This library should be in fp lib table,
      *                       and is type is .pretty. False to save footprints in a new library.
      *                       If it is an existing lib, previous footprints will be removed.
-     *
      * @param aLibName optional library name to create, stops dialog call. Must be called with
      *                 \a aStoreInNewLib as true.
+     * @param aLibPath is the path to export the library to.
      */
     void ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
                                     wxString* aLibPath = nullptr );
@@ -483,6 +484,8 @@ public:
      *
      * @param aFullFileName the full filename of the file to create
      * @param aMMtoWRMLunit the VRML scaling factor: 1.0 to export in mm. 0.001 for meters
+     * @param aIncludeUnspecified
+     * @param aIncludeDNP include DNP footprint models on export.
      * @param aExport3DFiles true to copy 3D shapes in the subir a3D_Subdir
      * @param aUseRelativePaths set to true to use relative paths instead of absolute paths
      *                          in the board VRML file URLs.
@@ -541,7 +544,6 @@ public:
     /**
      * Install the corresponding dialog editor for the given item.
      *
-     * @param aDC the current device context.
      * @param aItem a pointer to the BOARD_ITEM to edit.
      */
     void OnEditItemRequest( BOARD_ITEM* aItem ) override;
@@ -762,8 +764,9 @@ protected:
     /**
      * Load the given filename but sets the path to the current project path.
      *
-     * @param full file path of file to be imported.
-     * @param aFileType PCB_FILE_T value for file type
+     * @param aFileName full file path of file to be imported.
+     * @param aFileType PCB_FILE_T value for file type.
+     * @param aProperties is a list of import properties.
      */
     bool importFile( const wxString& aFileName, int aFileType,
                      const std::map<std::string, UTF8>* aProperties = nullptr );
@@ -776,6 +779,7 @@ protected:
      *
      * @param aDefinitions are the importer's caller-owned cached library footprints, captured
      *                     during load before the plugin was destroyed.
+     * @param aBoardPath
      */
     void reconcileImportedFootprintLibraries(
             std::vector<std::unique_ptr<FOOTPRINT>> aDefinitions, const wxString& aBoardPath );

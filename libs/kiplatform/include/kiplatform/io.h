@@ -179,7 +179,7 @@ namespace IO
 
     /**
      * Duplicates the file security data from one file to another ensuring that they are
-     * the same between both.  This assumes that the user has permission to set #aDest
+     * the same between both.  This assumes that the user has permission to set @p aDest
      * @return true if the process was successful
      */
     bool DuplicatePermissions( const wxString& aSrc, const wxString& aDest );

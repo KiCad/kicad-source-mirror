@@ -35,6 +35,7 @@ static inline constexpr void hash_combine( std::size_t& seed )
  * @tparam T      A hashable type
  * @param seed    A seed value input and output for the result.
  * @param val     A hashable object of type T
+ * @param args    A argument list to hash.
  */
 template <typename T, typename... Types>
 static inline constexpr void hash_combine( std::size_t& seed, const T& val, const Types&... args )

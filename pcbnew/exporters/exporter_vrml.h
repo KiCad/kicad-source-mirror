@@ -113,6 +113,8 @@ public:
      * @param aMessages will contain error message(s)
      * @param aFullFileName the full filename of the file to create
      * @param aMMtoWRMLunit the VRML scaling factor: 1.0 to export in mm. 0.001 for meters
+     * @param aIncludeUnspecified
+     * @param aIncludeDNP is a flag to include do no populate items.
      * @param aExport3DFiles true to copy 3D shapes in the subir a3D_Subdir
      * @param aUseRelativePaths set to true to use relative paths instead of absolute paths
      *                          in the board VRML file URLs.

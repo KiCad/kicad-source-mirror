@@ -230,9 +230,9 @@ public:
     /**
      * Look in all existing matchers, return the earliest match of any of the existing.
      *
-     * @param aTerm                 term to look for.
-     * @param aMatchersTriggered    out: number of matcher that found the term.
-     * @param aPostion              out: where the term was found, or #EDA_PATTERN_NOT_FOUND.
+     * @param aTerm                   term to look for.
+     * @param[out] aMatchersTriggered number of matcher that found the term.
+     * @param[out] aPosition          where the term was found, or #EDA_PATTERN_NOT_FOUND.
      *
      * @return true if any matchers found the term
      */

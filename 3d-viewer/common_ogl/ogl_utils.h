@@ -39,17 +39,18 @@
  * @param aUseSelectedMaterial if material should be set for selection mode.
  * @param aSelectionColor material to use for selection in case it is enabled.
  */
-void OglSetMaterial( const SMATERIAL& aMaterial, float aOpacity,
-                     bool aUseSelectedMaterial = false,
+void OglSetMaterial( const SMATERIAL& aMaterial, float aOpacity, bool aUseSelectedMaterial = false,
                      SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) );
 
 /**
- * Sets only the diffuse color and keep other parameters with default values.
+ * Set only the diffuse color and keep other parameters with default values.
  *
  * @param aMaterialDiffuse the diffuse color to assign to material properties.
+ * @param aOpacity is the opacity fo the diffused material.
+ * @param aUseSelectedMaterial if material should be set for selection mode.
+ * @param aSelectionColor material to use for selection in case it is enabled.
  */
-void OglSetDiffuseMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity,
-                            bool aUseSelectedMaterial = false,
+void OglSetDiffuseMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity, bool aUseSelectedMaterial = false,
                             SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) );
 
 /**

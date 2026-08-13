@@ -190,6 +190,7 @@ public:
      * @param aClearance minimum distance that does not qualify as a collision.
      * @param aActual an optional pointer to an int to store the actual distance in the event
      *                of a collision.
+     * @param aLocation is the optional location point of the collision.
      * @return true, when a collision has been found
      */
     virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
@@ -205,6 +206,7 @@ public:
      * @param aClearance minimum distance that does not qualify as a collision.
      * @param aActual an optional pointer to an int to store the actual distance in the event
      *                of a collision.
+     * @param aLocation is the optional location point of the collision.
      * @return true, when a collision has been found
      */
     virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
@@ -216,7 +218,6 @@ public:
      * @param aOther the line chain to test against.
      * @param aPt0 closest point on this line chain (output).
      * @param aPt1 closest point on the other line chain (output).
-     * @param aDistance distance between points (output).
      * @return true, if the operation was successful.
      */
     bool ClosestPoints( const SHAPE_LINE_CHAIN& aOther, VECTOR2I& aPt0, VECTOR2I& aPt1 ) const;
@@ -236,9 +237,8 @@ public:
      * be edge cases, but it is much faster.
      *
      * @param aOther the line chain to test against.
-     * @param aPt0 closest point on this line chain (output).
-     * @param aPt1 closest point on the other line chain (output).
-     * @param aDistance distance between points (output).
+     * @param[out] aPt0 closest point on this line chain.
+     * @param[out] aPt1 closest point on the other line chain.
      * @return true, if the operation was successful.
      */
     bool ClosestSegmentsFast( const SHAPE_LINE_CHAIN& aOther, VECTOR2I& aPt0,
@@ -346,7 +346,7 @@ public:
 
     /**
      * Remove the duplicate points from the line chain.
-    */
+     */
     void RemoveDuplicatePoints();
 
     /**
@@ -620,6 +620,7 @@ public:
      * Search for point \a aP.
      *
      * @param aP is the point to be looked for.
+     * @param aThreshold is the error threshold for the point search.
      * @return the index of the corresponding point in the line chain or negative when not found.
      */
     int Find( const VECTOR2I& aP, int aThreshold = 0 ) const;
@@ -628,6 +629,7 @@ public:
      * Search for segment containing point \a aP.
      *
      * @param aP is the point to be looked for.
+     * @param aThreshold is the error threshold for the point search.
      * @return index of the corresponding segment in the line chain or negative when not found.
      */
     int FindSegment( const VECTOR2I& aP, int aThreshold = 1 ) const;
@@ -675,6 +677,8 @@ public:
      * @param aChain is the line chain to find intersections with.
      * @param aIp is reference to a vector to store found intersections. Intersection points are
      *        sorted with increasing path lengths from the starting point of \a aChain.
+     * @param aExcludeColinearAndTouching
+     * @param aChainBBox
      * @return the number of intersections found.
      */
     int Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp,
@@ -916,10 +920,10 @@ protected:
      *
      * @param aPtIndex index of the point in the chain in which to split the arc
      * @param aCoincident If true, the end point of the first arc will be coincident with the start
-                          point of the second arc at aPtIndex.
-                          If false, the end point of the first arc will be at aPtIndex-1 and the
-                          start point of the second arc will be at aPtIndex, resulting in a short
-                          straight line segment between aPtIndex-1 and aPtIndex.
+     *                    point of the second arc at aPtIndex.
+     *                    If false, the end point of the first arc will be at aPtIndex-1 and the
+     *                    start point of the second arc will be at aPtIndex, resulting in a short
+     *                    straight line segment between aPtIndex-1 and aPtIndex.
      */
     void splitArc( ssize_t aPtIndex, bool aCoincident = false );
 

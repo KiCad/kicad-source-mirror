@@ -110,6 +110,7 @@ protected:
     /**
      * Highlight the item visually.
      *
+     * @param aItem is the item to highlight.
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
@@ -118,6 +119,7 @@ protected:
     /**
      * Unhighlight the item visually.
      *
+     * @param aItem is the item to highlight.
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */

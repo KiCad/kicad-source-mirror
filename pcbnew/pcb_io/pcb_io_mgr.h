@@ -38,7 +38,7 @@ class PROGRESS_REPORTER;
 class REPORTER;
 
 /**
- * A factory which returns an instance of a #PLUGIN.
+ * A factory which returns an instance of a #PCB_IO.
  */
 class PCB_IO_MGR : public IO_MGR
 {
@@ -158,7 +158,7 @@ public:
 
 
     /**
-     * Return a #PLUGIN which the caller can use to import, export, save, or load
+     * Return a #PCB_IO which the caller can use to import, export, save, or load
      * design documents.
      *
      * @note The caller owns the returned object.
@@ -204,20 +204,21 @@ public:
     static PCB_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl = 0 );
 
     /**
-     * Find the requested #PLUGIN and if found, calls the #PLUGIN::LoadBoard() function
-     * on it using the arguments passed to this function.  After the #PLUGIN::LoadBoard()
-     * function returns, the #PLUGIN is Released() as part of this call.
+     * Find the requested #PCB_IO and if found, calls the #PCB_IO::LoadBoard() function
+     * on it using the arguments passed to this function.  After the #PCB_IO::LoadBoard()
+     * function returns, the #PCB_IO is Released() as part of this call.
      *
      * @param aFileType is the #PCB_FILE_T of file to load.
      * @param aFileName is the name of the file to load.
      * @param aProperties is an associative array that allows the caller to
-     *                    pass additional tuning parameters to the PLUGIN.
+     *                    pass additional tuning parameters to the PCB_IO.
      * @param aProject is the optional #PROJECT object primarily used by third party
      *                 importers.
-     * @return the loaded #BOARD object. The caller owns it and it will never be NULL
-     *         because an exception is thrown on error.
+     * @param[in] aProgressReporter is an optional #REPORTER object to write load status infromation to.
+     * @return the loaded #BOARD object.  The  caller owns it an it will never NULL because
+     *         exception thrown if error.
      *
-     * @throw IO_ERROR if the #PLUGIN cannot be found, file cannot be found, or file cannot
+     * @throw IO_ERROR if the #PCB_IO cannot be found, file cannot be found, or file cannot
      *                 be loaded.
      */
     static std::unique_ptr<BOARD> Load( PCB_FILE_T aFileType, const wxString& aFileName,
@@ -231,7 +232,6 @@ public:
      *
      * @param aFileType is the #PCB_FILE_T of file to save.
      * @param aFileName is the name of a file to save to on disk.
-     * @param aBoard is the #BOARD document (data tree) to save or export to disk.
      * @param aBoard is the in memory document tree from which to extract information when
      *               writing to \a aFileName.  The caller continues to own the #BOARD, and
      *               the plugin should refrain from modifying the #BOARD if possible.
@@ -239,7 +239,7 @@ public:
      *                    save the file, because it can take any number of additional named
      *                    tuning arguments that the plugin is known to support.  The caller
      *                    continues to own this object (plugin may not delete it), and plugins
-     *                     should expect it to be optionally NULL.
+     *                    should expect it to be optionally NULL.
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */

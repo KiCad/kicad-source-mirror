@@ -41,6 +41,7 @@ public:
      * @param aItemHeaders an optional array containing the column header names for the dialog.
      * @param aItemList A wxArrayString of the list of elements.
      * @param aPreselectText An item name if an item must be preselected.
+     * @param aSortList is a flag to determine if the list should be alphabetically sorted.
      */
     EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, const wxArrayString& aItemHeaders,
                      const std::vector<wxArrayString>& aItemList, const wxString& aPreselectText = wxEmptyString,

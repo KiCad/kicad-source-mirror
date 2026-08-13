@@ -55,7 +55,7 @@ inline constexpr char APPEND_PRESERVE_DESTINATION_STACKUP[] = "append_preserve_d
  *The compiler writes the "zero argument" constructor for a PCB_IO automatically if you do
  * not provide one.  If you decide you need to provide a zero argument constructor of your
  * own design, that is allowed.  It must be public, and it is what the #PCB_IO_MGR uses.  Parameters
- * may be passed into a PCB_IO via the #PROPERTIES variable for any of the public API functions
+ * may be passed into a PCB_IO via the properties map variable for any of the public API functions
  * which take one.
  *
  *
@@ -76,7 +76,7 @@ class PCB_IO : public IO_BASE
 {
 public:
     /**
-     * Returns board file description for the PCB_IO.
+     * Return board file description for the PCB_IO.
      */
     virtual const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const
     {
@@ -89,19 +89,19 @@ public:
     bool IsPCB_IO() const override { return true; }
 
     /**
-     * Checks if this PCB_IO can read the specified board file.
+     * Check if this PCB_IO can read the specified board file.
      * If not overriden, extension check is used.
      */
     virtual bool CanReadBoard( const wxString& aFileName ) const;
 
     /**
-     * Checks if this PCB_IO can read a footprint from specified file or directory.
+     * Check if this PCB_IO can read a footprint from specified file or directory.
      * If not overriden, extension check is used.
      */
     virtual bool CanReadFootprint( const wxString& aFileName ) const;
 
     /**
-     * Registers a KIDIALOG callback for collecting info from the user.
+     * Register a KIDIALOG callback for collecting info from the user.
      */
     virtual void SetQueryUserCallback( std::function<bool( wxString aTitle, int aIcon,
                                                            wxString aMessage,
@@ -205,7 +205,7 @@ public:
      * If this is a footprint library, the first footprint should be loaded.
      * The default implementation uses FootprintEnumerate and FootprintLoad to load first footprint.
      *
-     * @param aLibraryPath is a path of the footprint file.
+     * @param aFootprintPath is a path of the footprint file.
      * @param aFootprintNameOut is the name output of the loaded footprint.
      * @param aProperties is an associative array that can be used to tell the loader
      *                    implementation to do something special, because it can take
@@ -319,12 +319,11 @@ public:
      * Append supported PLUGIN options to @a aListToAppenTo along with internationalized
      * descriptions.
      *
-     * Options are typically appended so that a derived #PLUGIN can call its base class
+     * Options are typically appended so that a derived #PCB_IO can call its base class
      * function by the same name first, thus inheriting options declared there.  Some base
      * class options could pertain to all Footprint*() functions in all derived PLUGINs.
      *
-     * @note Since aListToAppendTo is a #PROPERTIES object, all options will be unique and
-     *       last guy wins.
+     * @note Since aListToAppendTo is a map all options will be unique and the last guy wins.
      *
      * @param aListToAppendTo holds a tuple of
      * <dl>

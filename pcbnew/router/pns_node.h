@@ -126,7 +126,8 @@ struct COLLISION_SEARCH_OPTIONS
 
 struct COLLISION_SEARCH_CONTEXT
 {
-    COLLISION_SEARCH_CONTEXT( std::set<OBSTACLE>& aObs, const COLLISION_SEARCH_OPTIONS aOpts = COLLISION_SEARCH_OPTIONS() ) :
+    COLLISION_SEARCH_CONTEXT( std::set<OBSTACLE>& aObs,
+                              const COLLISION_SEARCH_OPTIONS aOpts = COLLISION_SEARCH_OPTIONS() ) :
         obstacles( aObs ),
         options( aOpts )
     {
@@ -243,7 +244,7 @@ class NODE : public ITEM_OWNER
 {
 public:
 
-///< Supported item types
+    /// Supported item types
     enum COLLISION_QUERY_SCOPE
     {
         CQS_ALL_RULES               =    1, ///< check all rules
@@ -257,10 +258,10 @@ public:
     NODE();
     ~NODE();
 
-    ///< Return the expected clearance between items a and b.
+    /// Return the expected clearance between items a and b.
     int GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) const;
 
-    ///< Return the pre-set worst case clearance between any pair of items.
+    /// Return the pre-set worst case clearance between any pair of items.
     int GetMaxClearance() const
     {
         return m_maxClearance;
@@ -277,13 +278,13 @@ public:
      */
     void FinalizeBulkAdd();
 
-    ///< Set the worst-case clearance between any pair of items.
+    /// Set the worst-case clearance between any pair of items.
     void SetMaxClearance( int aClearance )
     {
         m_maxClearance = aClearance;
     }
 
-    ///< Assign a clearance resolution function object.
+    /// Assign a clearance resolution function object.
     void SetRuleResolver( RULE_RESOLVER* aFunc )
     {
         m_ruleResolver = aFunc;
@@ -294,13 +295,13 @@ public:
         return m_ruleResolver;
     }
 
-    ///< Return the number of joints.
+    /// Return the number of joints.
     int JointCount() const
     {
         return m_joints.size();
     }
 
-    ///< Return the number of nodes in the inheritance chain (wrs to the root node).
+    /// Return the number of nodes in the inheritance chain (wrs to the root node).
     int Depth() const
     {
         return m_depth;
@@ -309,11 +310,11 @@ public:
     /**
      * Find items colliding (closer than clearance) with the item \a aItem.
      *
-     * @param aItem item to check collisions against
-     * @param aObstacles set of colliding objects found
-     * @param aKindMask mask of obstacle types to take into account
-     * @param aLimitCount stop looking for collisions after finding this number of colliding items
-     * @return number of obstacles found
+     * @param aItem item to check collisions against.
+     * @param aObstacles set of colliding objects found.
+     * @param aOpts is the collision search options.
+     *
+     * @return number of obstacles found.
      */
     int QueryColliding( const ITEM* aItem, OBSTACLES& aObstacles,
                         const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS() ) const;
@@ -441,7 +442,7 @@ public:
                              bool aFollowLockedSegments = false,
                              bool aAllowSegmentSizeMismatch = true );
 
-    ///< Print the contents and joints structure.
+    /// Print the contents and joints structure.
     void Dump( bool aLong = false );
 
     /**
@@ -481,13 +482,13 @@ public:
         return FindJoint( aPos, aItem->Layers().Start(), aItem->Net() );
     }
 
-    ///< Find all lines between a pair of joints. Used by the loop removal procedure.
+    /// Find all lines between a pair of joints. Used by the loop removal procedure.
     int FindLinesBetweenJoints( const JOINT& aA, const JOINT& aB, std::vector<LINE>& aLines );
 
-    ///< Find the joints corresponding to the ends of line \a aLine.
+    /// Find the joints corresponding to the ends of line \a aLine.
     void FindLineEnds( const LINE& aLine, JOINT& aA, JOINT& aB );
 
-    ///< Destroy all child nodes. Applicable only to the root node.
+    /// Destroy all child nodes. Applicable only to the root node.
     void KillChildren();
 
     void AllItemsInNet( NET_HANDLE aNet, std::set<ITEM*>& aItems, int aKindMask = -1 );
@@ -510,7 +511,7 @@ public:
         return m_parent;
     }
 
-    ///< Check if this branch contains an updated version of the m_item from the root branch.
+    /// Check if this branch contains an updated version of the m_item from the root branch.
     bool Overrides( ITEM* aItem ) const
     {
         return m_override.find( aItem ) != m_override.end();
@@ -537,18 +538,18 @@ private:
     NODE( const NODE& aB );
     NODE& operator=( const NODE& aB );
 
-    ///< Try to find matching joint and creates a new one if not found.
+    /// Try to find matching joint and creates a new one if not found.
     JOINT& touchJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet );
 
-    ///< Touch a joint and links it to an m_item.
+    /// Touch a joint and links it to an m_item.
     void linkJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet,
                     ITEM* aWhere );
 
-    ///< Unlink an item from a joint.
+    /// Unlink an item from a joint.
     void unlinkJoint( const VECTOR2I& aPos, const PNS_LAYER_RANGE& aLayers, NET_HANDLE aNet,
                       ITEM* aWhere );
 
-    ///< Helpers for adding/removing items.
+    /// Helpers for adding/removing items.
     void addSolid( SOLID* aSeg );
     void addSegment( SEGMENT* aSeg );
     void addVia( VIA* aVia );
@@ -579,7 +580,7 @@ private:
                            NET_HANDLE aNet );
     ARC* findRedundantArc( ARC* aSeg );
 
-    ///< Scan the joint map, forming a line starting from segment (current).
+    /// Scan the joint map, forming a line starting from segment (current).
     void followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, int aLimit,
                      VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool* aArcReversed,
                      bool& aGuardHit, bool aStopAtLockedJoints, bool aFollowLockedSegments,

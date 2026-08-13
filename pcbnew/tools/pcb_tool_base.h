@@ -38,8 +38,8 @@
 /**
  * PCB_TOOL_BASE
  *
- * A tool operating on a BOARD object
-**/
+ * A tool operating on a #BOARD object.
+ */
 
 class PCB_TOOL_BASE;
 class PCB_EDIT_FRAME;
@@ -70,7 +70,8 @@ public:
     /**
      * Constructor
      *
-     * Creates a tool with given id & name. The name must be unique. */
+     * Create a tool with given id & name. The name must be unique.
+     */
     PCB_TOOL_BASE( TOOL_ID aId, const std::string& aName ) :
             TOOL_INTERACTIVE ( aId, aName ),
             m_isFootprintEditor( false ),
@@ -80,7 +81,8 @@ public:
     /**
      * Constructor
      *
-     * Creates a tool with given name. The name must be unique. */
+     * Creates a tool with given name. The name must be unique.
+     */
     PCB_TOOL_BASE( const std::string& aName ) :
             TOOL_INTERACTIVE ( aName ),
             m_isFootprintEditor( false ),
@@ -93,10 +95,10 @@ public:
     virtual void Reset( RESET_REASON aReason ) override;
 
     /**
-     * Function SetIsFootprintEditor()
+     * Toggle edit footprint mode.
      *
-     * Toggles edit footprint mode. When enabled, one may select parts of footprints individually
-     * (graphics, pads, etc.), so they can be modified.
+     * When enabled, one may select parts of footprints individually (graphics, pads, etc.), so they can be
+     * modified.
      * @param aEnabled decides if the mode should be enabled.
      */
     void SetIsFootprintEditor( bool aEnabled ) { m_isFootprintEditor = aEnabled; }
@@ -154,8 +156,10 @@ protected:
      * More complex interactive processes are not supported here, you
      * should implement a customised event loop for those.
      *
-     * @param aItemCreator the callable that will attempt to create the item
+     * @param aTool
+     * @param aPlacer
      * @param aCommitMessage the message used on a successful commit
+     * @param aOptions
      */
     void doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERACTIVE_PLACER_BASE* aPlacer,
                                      const wxString& aCommitMessage,

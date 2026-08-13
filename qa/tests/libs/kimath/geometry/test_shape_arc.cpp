@@ -1087,11 +1087,11 @@ bool ArePolylineEndPointsNearCircle( const SHAPE_LINE_CHAIN& aPolyline, const VE
 /**
  * Predicate for checking a polyline has all the segment mid points on
  * (near) a circle of given centre and radius
- * @param  aPolyline the polyline to check
- * @param  aCentre   the circle centre
- * @param  aRad      the circle radius
- * @param  aTolEnds  the tolerance for the midpoint-centre distance
- * @return           true if predicate met
+ * @param  aPolyline  the polyline to check
+ * @param  aCentre    the circle centre
+ * @param  aRad       the circle radius
+ * @param  aTolerance the tolerance for the midpoint-centre distance
+ * @return            true if predicate met
  */
 bool ArePolylineMidPointsNearCircle( const SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aCentre,
                                      int aRad, int aTolerance )

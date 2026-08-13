@@ -148,14 +148,13 @@ public:
 
 private:
     /**
-     * Parse netlist sent over KiWay express mail interface and fill \ref m_pcbModules.
+     * Parse netlist sent over KiWay express mail interface and fill \ref m_pcbFootprints.
      *
      * @param aPayload is the netlist from Pcbnew.
-     * @return number of errors during parsing.
      */
     void getPcbModulesFromString( const std::string& aPayload );
 
-    ///< Create changelist.
+    /// Create changelist.
     void getChangeList();
 
     /**

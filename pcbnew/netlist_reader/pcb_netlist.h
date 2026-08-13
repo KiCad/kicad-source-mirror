@@ -257,12 +257,12 @@ private:
     /// The #LIB_ID of the footprint assigned to the component.
     LIB_ID                       m_fpid;
 
-    /// The alt LIB_ID of the footprint, when there are 2 different assigned footprints,
+    /// The alt #LIB_ID of the footprint, when there are 2 different assigned footprints,
     /// One from the netlist, the other from the .cmp file.
     /// this one is a copy of the netlist footprint assignment
     LIB_ID                       m_altFpid;
 
-    /// The #FOOTPRINT loaded for #m_FPID.
+    /// The #FOOTPRINT loaded for #m_fpid.
     std::unique_ptr<FOOTPRINT>   m_footprint;
 
     /// Component-specific properties found in the netlist.
@@ -394,7 +394,7 @@ public:
         return m_netChainNetClasses;
     }
 
-    /// Stored as a #RRGGBB or #RRGGBBAA string; empty means "no override".
+    /// Stored as a \#RRGGBB or \#RRGGBBAA string; empty means "no override".
     void SetSignalColor( const wxString& aNetChain, const wxString& aColor )
     {
         m_netChainColors[aNetChain] = aColor;

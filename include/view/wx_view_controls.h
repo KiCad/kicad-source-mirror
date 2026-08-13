@@ -101,7 +101,6 @@ public:
     /// @copydoc VIEW_CONTROLS::SetCrossHairCursorPosition()
     void SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView ) override;
 
-    /// @copydoc VIEW_CONTROLS::CursorWarp()
     void WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false, bool aWarpView = false ) override;
 
     /// @copydoc VIEW_CONTROLS::CenterOnCursor()

@@ -52,7 +52,8 @@ static bool sort_by_libid( const SCH_SYMBOL* ref, SCH_SYMBOL* cmp )
  * symbol are grouped, allowing later faster calculations (one library search by group
  * of symbols)
  *
- * @param aSymbols is a vector that will take the symbols.
+ * @param[in] aSchematic is the #SCHEMATIC to rescue.
+ * @param[out] aSymbols is a vector that will take the symbols.
  */
 static void getSymbols( SCHEMATIC* aSchematic, std::vector<SCH_SYMBOL*>& aSymbols )
 {

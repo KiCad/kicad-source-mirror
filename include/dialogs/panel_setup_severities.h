@@ -36,6 +36,7 @@ public:
     /**
      * Create the severities setup panel.
      *
+     * @param aParentWindow is the panel parent window.
      * @param aItems is a list of error types that can have a severity.  Must have one or more!
      * @param aSeverities is a map of error code to severity
      * @param aPinMapSpecialCase is used to special-case the ERCE_PIN_TO_PIN_WARNING

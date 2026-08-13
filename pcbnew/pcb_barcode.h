@@ -195,12 +195,12 @@ public:
                                   bool ignoreLineWidth = false ) const override;
 
 
-    // @copydoc BOARD_ITEM::GetEffectiveShape
+    /// @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT,
                                               DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const override;
 
-    /*
+    /**
      * Add two rectangular polygons separately bounding the barcode's symbol and the barcode's text.
      */
     void GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
@@ -243,11 +243,7 @@ public:
     const std::vector<TEXT_VAR_REF_KEY>& GetTextVarReferences() const { return m_text.GetTextVarReferences(); }
 
     /**
-     * Function Move
-     * @param offset : moving vector
-     */
-    /**
-     * Translate the barcode and its text by the given offset.
+     * Move the barcode and its text by the given \a offset.
      *
      * @param offset translation vector in internal units.
      */

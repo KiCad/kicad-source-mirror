@@ -51,7 +51,7 @@ class LINE_READER;
 class NETINFO_ITEM;
 
 /**
- * A #PLUGIN derivation for saving and loading Geda PCB files.
+ * A #PCB_IO derivation for saving and loading Geda PCB files.
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.
  */

@@ -49,9 +49,6 @@ class wxCmdLineParser;
  * Because this class provides a dummy implementation,it is not a certainty that all
  * classes which inherit from this class intend to participate in a #KIWAY.  Those that
  * do must actually interact with the provided #KIWAY.
- *
- * #EDA_BASE_FRAME would not have sufficed because #BM2CMP_FRAME_BASE is not derived
- * from it.
  */
 class KIWAY_PLAYER : public EDA_BASE_FRAME
 {
@@ -132,7 +129,7 @@ public:
                             wxWindow* aResultantFocusWindow = nullptr );
 
     /**
-     * Receive #KIWAY_ROUTED_EVENT messages from other players.
+     * Receive #KIWAY_MAIL_EVENT messages from other players.
      *
      * Override it in derived classes.
      */

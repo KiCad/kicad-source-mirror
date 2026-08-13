@@ -52,7 +52,6 @@ public:
     ~PCB_GRID_HELPER() override;
 
     /**
-     * Function GetSnapped
      * If the PCB_GRID_HELPER has highlighted a snap point (target shown), this function
      * will return a pointer to the item to which it snapped.
      *
@@ -80,11 +79,13 @@ public:
     void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
 
     /**
-     * Chooses the "best" snap anchor around the given point, optionally taking layers from
+     * Choose the "best" snap anchor around the given point, optionally taking layers from
      * the reference item.  The reference item will not be snapped to (it is being dragged or
-     * created) and we choose the layers that can be snapped based on the reference item layer
+     * created) and we choose the layers that can be snapped based on the reference item layer.
+     *
      * @param aOrigin Point we want to snap from
      * @param aReferenceItem Reference item for layer/type special casing
+     * @param aGrid is the grid helper to snap to.
      * @return snapped screen point
      */
     SNAP_RESULT ResolveSnap( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem,
@@ -171,7 +172,7 @@ private:
     /**
      * Find the nearest anchor point to the given position with matching flags.
      *
-     * @param return The nearest anchor point, or nullptr if none found
+     * @return The nearest anchor point, or nullptr if none found.
      */
     ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags );
 
@@ -191,6 +192,7 @@ private:
      * @param aItem The board item for which to compute the anchors
      * @param aRefPos The point for which to compute the anchors (if used by the component)
      * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
+     * @param aSelectionFilter
      */
     void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom,
                          const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter );

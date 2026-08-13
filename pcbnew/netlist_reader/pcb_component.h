@@ -43,7 +43,7 @@ public:
     void SetFootprint( FOOTPRINT* aFootprint );
 
 private:
-    /// The #FOOTPRINT loaded for #m_FPID.
+    /// The #FOOTPRINT loaded for #m_fpid.
     std::unique_ptr<FOOTPRINT>   m_footprint;
 };
 

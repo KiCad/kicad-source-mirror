@@ -242,6 +242,7 @@ public:
     /**
      * Set the shape of the anchor pad for custom shaped pads.
      *
+     * @param aLayer is the layer ID of the pad.
      * @param aShape is the shape of the anchor pad shape( currently, only #PAD_SHAPE::RECTANGLE or
      *               #PAD_SHAPE::CIRCLE.
      */
@@ -264,6 +265,7 @@ public:
         p.y = y;
         SetPosition( p );
     }
+
     void SetX( int x )
     {
         VECTOR2I p = GetPosition();
@@ -624,6 +626,7 @@ public:
      * Convert the pad shape to a closed polygon. Circles and arcs are approximated by segments.
      *
      * @param aBuffer a buffer to store the polygon.
+     * @param aLayer is the layer ID of the pad.
      * @param aClearance the clearance around the pad.
      * @param aMaxError maximum error from true when converting arcs.
      * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
@@ -780,12 +783,11 @@ public:
         m_padStack.ThermalGap() = aOverride;
     }
 
+    void SetRoundRectCornerRadius( PCB_LAYER_ID aLayer, double aRadius );
+
     /**
-     * Has meaning only for rounded rectangle pads.
-     *
      * @return The radius of the rounded corners for this pad.
      */
-    void SetRoundRectCornerRadius( PCB_LAYER_ID aLayer, double aRadius );
     int GetRoundRectCornerRadius( PCB_LAYER_ID aLayer ) const;
 
     VECTOR2I ShapePos( PCB_LAYER_ID aLayer ) const;
@@ -839,6 +841,7 @@ public:
      *
      * Set the position of the chamfers for orientation 0.
      *
+     * @param aLayer is the layer ID of the PAD to chamfer.
      * @param aPositions a bit-set of #RECT_CHAMFER_POSITIONS.
      */
     void SetChamferPositions( PCB_LAYER_ID aLayer, int aPositions )

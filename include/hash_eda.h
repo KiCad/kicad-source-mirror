@@ -59,6 +59,7 @@ enum HASH_FLAGS
  * Calculate hash of an EDA_ITEM.
  *
  * @param aItem is the item for which the hash will be computed.
+ * @param aFlags are the flags to determine what gets hashed.
  * @return Hash value.
  */
 std::size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags = HASH_FLAGS::HASH_ALL );

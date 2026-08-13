@@ -41,7 +41,7 @@ struct TEXT_DIMS
 };
 
 /**
- * Default alpha of "de-emphasised" features (like previously locked-in lines.
+ * Default alpha of "de-emphasized" features (like previously locked-in lines.
  */
 double PreviewOverlayDeemphAlpha( bool aDeemph = true );
 
@@ -70,10 +70,11 @@ COLOR4D GetShadowColor( const COLOR4D& aColor );
  *
  * The GAL attribute context will be restored to its original state after this function is called.
  *
- * @param aGal the GAL to draw on.
+ * @param aView the GAL to draw on.
  * @param aCursorPos the position of the cursor to draw next to.
  * @param aTextQuadrant a vector pointing to the quadrant to draw the text in.
  * @param aStrings list of strings to draw, top to bottom.
+ * @param aDrawingDropShadows is the flag to indicate if drop shadows need to be drawn.
  */
 void DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& aCursorPos,
                            const VECTOR2D& aTextQuadrant, const wxArrayString& aStrings,

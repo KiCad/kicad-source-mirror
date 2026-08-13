@@ -250,7 +250,7 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
  *
  * The new footprint library design is a file path of individual footprint files that contain
  * a single footprint per file.  This class is a helper only for the footprint portion of the
- * PLUGIN API, and only for the #PCB_PLUGIN plugin.  It is private to this implementation file so
+ * PLUGIN API, and only for the #PCB_IO plugin.  It is private to this implementation file so
  * it is not placed into a header.
  */
 class FP_CACHE_ENTRY
@@ -336,7 +336,7 @@ public:
 
 
 /**
- * A #PLUGIN derivation for saving and loading Pcbnew s-expression formatted files.
+ * A #PCB_IO derivation for saving and loading Pcbnew s-expression formatted files.
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.
  */
@@ -373,10 +373,12 @@ public:
     void SaveBoard( const wxString& aFileName, BOARD& aBoard,
                     const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
-    /** Serialize a BOARD to an OUTPUTFORMATTER without file I/O or Prettify.
-     *  Handles init(), EmbedFonts/ClearEmbeddedFonts, header, Format(), and footer.
-     *  The caller owns the formatter and is responsible for flushing/closing it.
-     *  Skips GroupsSanityCheck (no UI interaction allowed from timer callbacks). */
+    /**
+     * Serialize a #BOARD to an #OUTPUTFORMATTER without file I/O or Prettify.
+     *
+     * Handles init(), EmbedFonts/ClearEmbeddedFonts, header, Format(), and footer.
+     * The caller owns the formatter and is responsible for flushing/closing it.
+     * Skips GroupsSanityCheck (no UI interaction allowed from timer callbacks). */
     void FormatBoardToFormatter( OUTPUTFORMATTER* aOut, BOARD* aBoard,
                                  const std::map<std::string, UTF8>* aProperties = nullptr );
 

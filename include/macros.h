@@ -83,7 +83,7 @@
 /**
  * Stringifies the given parameter by placing in quotes.
  *
- * @param cstring STRING (no spaces)
+ * @param x cstring STRING (no spaces)
  * @return "STRING"
  */
 #define TO_STR2(x) #x

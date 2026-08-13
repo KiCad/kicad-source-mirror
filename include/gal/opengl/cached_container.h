@@ -52,7 +52,7 @@ public:
 
     virtual void SetItem( VERTEX_ITEM* aItem ) override;
 
-    ///< @copydoc VERTEX_CONTAINER::FinishItem()
+    /// @copydoc VERTEX_CONTAINER::FinishItem()
     virtual void FinishItem() override;
 
     /**
@@ -68,10 +68,10 @@ public:
      */
     virtual VERTEX* Allocate( unsigned int aSize ) override;
 
-    ///< @copydoc VERTEX_CONTAINER::Delete()
+    /// @copydoc VERTEX_CONTAINER::Delete()
     virtual void Delete( VERTEX_ITEM* aItem ) override;
 
-    ///< @copydoc VERTEX_CONTAINER::Clear()
+    /// @copydoc VERTEX_CONTAINER::Clear()
     virtual void Clear() override;
 
     /**
@@ -84,16 +84,16 @@ public:
      */
     virtual bool IsMapped() const = 0;
 
-    ///< @copydoc VERTEX_CONTAINER::Map()
+    /// @copydoc VERTEX_CONTAINER::Map()
     virtual void Map() override = 0;
 
-    ///< @copydoc VERTEX_CONTAINER::Unmap()
+    /// @copydoc VERTEX_CONTAINER::Unmap()
     virtual void Unmap() override = 0;
 
     virtual unsigned int AllItemsSize() const { return 0; }
 
 protected:
-    ///< Maps size of free memory chunks to their offsets
+    /// Maps size of free memory chunks to their offsets
     typedef std::pair<unsigned int, unsigned int> CHUNK;
     typedef std::multimap<unsigned int, unsigned int> FREE_CHUNK_MAP;
 
@@ -162,11 +162,11 @@ protected:
     std::set<VERTEX_ITEM*> m_items;         ///< Stored VERTEX_ITEMs
     VERTEX_ITEM*           m_item;          ///< Currently modified item
 
-    ///< Properties of currently modified chunk & item
+    /// Properties of currently modified chunk & item
     unsigned int           m_chunkSize;
     unsigned int           m_chunkOffset;
 
-    ///< Maximal vertex index number stored in the container
+    /// Maximal vertex index number stored in the container
     unsigned int           m_maxIndex;
 
 private:

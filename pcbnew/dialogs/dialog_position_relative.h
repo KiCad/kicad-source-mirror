@@ -67,7 +67,7 @@ private:
      * Get the (Cartesian) translation described by the text entries.
      *
      * @param val is the output translation vector.
-     * @param set to true to interpret as polar coordinates.
+     * @param polar set to true to interpret as polar coordinates.
      * @return false if error (though the text conversion functions don't report errors).
      */
     bool getTranslationInIU( VECTOR2I& val, bool polar );

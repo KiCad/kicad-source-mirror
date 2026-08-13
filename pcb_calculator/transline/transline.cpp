@@ -33,30 +33,37 @@
 // depend on Graphic User Interface
 void SetPropertyInDialog( enum PRMS_ID aPrmId, double value );
 
-/* Puts the text into the given result line.
-*/
+/**
+ * Put the text into the given result line.
+ */
 void SetResultInDialog( int line, const char* text );
 
-/* print aValue into the given result line.
-*/
+/**
+ * Print aValue into the given result line.
+ */
 void SetResultInDialog( int aLineNumber, double aValue, const char* aText );
 
-/* Returns a named property value. */
+/**
+ * Return a named property value.
+ */
 double GetPropertyInDialog( enum PRMS_ID aPrmId );
 
-// Returns true if the param aPrmId is selected
-// Has meaning only for params that have a radio button
+/**
+ * Return true if the param @a aPrmId is selected
+ *
+ * Has meaning only for params that have a radio button.
+ */
 bool IsSelectedInDialog( enum PRMS_ID aPrmId );
 
-/** Function SetPropertyBgColorInDialog
- *  Set the background color of a parameter
- *  @param aPrmId = param id to set
- *  @param aCol = new color
+/**
+ *  Set the background color of a parameter.
+ *
+ *  @param aPrmId is parameter ID to set.
+ *  @param aCol is the new color.
  */
 void SetPropertyBgColorInDialog( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol );
 
 
-/* Constructor creates a transmission line instance. */
 TRANSLINE::TRANSLINE()
 {
     m_parameters[MURC_PRM] = 1.0;
@@ -65,7 +72,6 @@ TRANSLINE::TRANSLINE()
 }
 
 
-/* Destructor destroys a transmission line instance. */
 TRANSLINE::~TRANSLINE()
 {
 }
@@ -79,6 +85,7 @@ void TRANSLINE::Init()
     okCol.g        = wxcol.Green() / 255.0;
     okCol.b        = wxcol.Blue() / 255.0;
     int i;
+
     // Initialize these variables mainly to avoid warnings from a static analyzer
     for( i = 0; i < EXTRA_PRMS_COUNT; ++i )
     {
@@ -100,50 +107,36 @@ void TRANSLINE::Init()
 }
 
 
-/* Sets a named property to the given value, access through the
- *  application.
- */
 void TRANSLINE::setProperty( enum PRMS_ID aPrmId, double value )
 {
     SetPropertyInDialog( aPrmId, value );
 }
 
 
-/*
- *Returns true if the param aPrmId is selected
- * Has meaning only for params that have a radio button
- */
 bool TRANSLINE::isSelected( enum PRMS_ID aPrmId )
 {
     return IsSelectedInDialog( aPrmId );
 }
 
 
-/* Puts the text into the given result line.
-*/
-void TRANSLINE::setResult( int line, const char* text )
+void TRANSLINE::setResult( int aLine, const char* aText )
 {
-    SetResultInDialog( line, text );
+    SetResultInDialog( aLine, aText );
 }
 
 
-void TRANSLINE::setResult( int line, double value, const char* text )
+void TRANSLINE::setResult( int aLine, double aValue, const char* aText )
 {
-    SetResultInDialog( line, value, text );
+    SetResultInDialog( aLine, aValue, aText );
 }
 
 
-/* Returns a property value. */
 double TRANSLINE::getProperty( enum PRMS_ID aPrmId )
 {
     return GetPropertyInDialog( aPrmId );
 }
 
 
-/** @function getProperties
- *
- *  Get all properties from the UI. Computes some extra ones.
- **/
 void TRANSLINE::getProperties()
 {
     for( int i = 0; i < DUMMY_PRM; ++i )
@@ -158,15 +151,11 @@ void TRANSLINE::getProperties()
 }
 
 
-/** @function checkProperties
- *
- *  Checks the input parameters (ie: negative length).
- *  Does not check for incompatibility between values as this depends on the line shape.
- **/
 void TRANSLINE::checkProperties()
 {
     // Do not check for values that are results of analyzing / synthesizing
-    // Do not check for transline specific incompatibilities ( like " conductor height should be lesser than dielectric height")
+    // Do not check for transline specific incompatibilities ( like " conductor height should be lesser than
+    // dielectric height")
     if( !std::isfinite( m_parameters[EPSILONR_PRM] ) || m_parameters[EPSILONR_PRM] <= 0 )
         setErrorLevel( EPSILONR_PRM, TRANSLINE_WARNING );
 
@@ -237,6 +226,7 @@ void TRANSLINE::checkProperties()
         setErrorLevel( FREQUENCY_PRM, TRANSLINE_WARNING );
 }
 
+
 void TRANSLINE::analyze()
 {
     getProperties();
@@ -245,6 +235,7 @@ void TRANSLINE::analyze()
     showAnalyze();
     show_results();
 }
+
 
 void TRANSLINE::synthesize()
 {
@@ -256,12 +247,6 @@ void TRANSLINE::synthesize()
 }
 
 
-/**
- * @function skin_depth
- * calculate skin depth
- *
- * \f$ \frac{1}{\sqrt{ \pi \cdot f \cdot \mu \cdot \sigma }} \f$
- */
 double TRANSLINE::skin_depth()
 {
     double depth;
@@ -272,18 +257,6 @@ double TRANSLINE::skin_depth()
 }
 
 
-/**
- * @function setErrorLevel
- *
- * set an error / warning level for a given parameter.
- *
- * @see TRANSLINE_OK
- * @see TRANSLINE_WARNING
- * @see TRANSLINE_ERROR
- *
- * @param aP parameter
- * @param aErrorLevel Error level
- */
 void TRANSLINE::setErrorLevel( PRMS_ID aP, char aErrorLevel )
 {
     switch( aErrorLevel )

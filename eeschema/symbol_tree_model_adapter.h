@@ -43,13 +43,14 @@ public:
     /**
      * Factory function: create a model adapter in a reference-counting container.
      *
-     * @param aLibs library set from which parts will be loaded
+     * @param aParent is the parent window.
+     * @param aLibs library set from which parts will be loaded.
      */
     static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( SCH_BASE_FRAME* aParent,
                                                            SYMBOL_LIBRARY_ADAPTER* aLibs );
 
     /**
-     * Add all the libraries in a SYMBOL_LIB_TABLE to the model.
+     * Add all the libraries in a #LIBRARY_TABLE to the model.
      *
      * @param aFrame is the parent window to display the progress dialog
      */

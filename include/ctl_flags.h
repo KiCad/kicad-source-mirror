@@ -35,7 +35,7 @@
 #define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation. (always saved
                                                 ///< with position 0,0 and rotation = 0 in library).
 #define CTL_OMIT_LIBNAME            (1 << 7)    ///< Omit lib alias when saving (used for
-                                                ///< board/not library)..
+                                                ///< board/not library).
 #define CTL_OMIT_FOOTPRINT_VERSION  (1 << 8)    ///< Omit the version string from the (footprint)
                                                 ///< sexpr group.
 #define CTL_OMIT_FILTERS            (1 << 9)    ///< Omit the ki_fp_filters attribute in

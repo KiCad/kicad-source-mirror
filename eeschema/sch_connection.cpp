@@ -52,7 +52,7 @@
  *
  *     MEMORY{A[15..0] D[7..0] RW CE OE}
  *
- * In named bus groups, the net names are expanded as <BUS_NAME>.<NET_NAME>
+ * In named bus groups, the net names are expanded as \<BUS_NAME\>.\<NET_NAME\>
  * In the above example, the nets would be named like MEMORY.A15, MEMORY.D0, etc.
  *
  *     {USB_DP USB_DN}

@@ -45,7 +45,7 @@ class KICAD_MANAGER_FRAME;
 class PROJECT_TREE_ITEM;
 class PROJECT_TREE;
 
-/** PROJECT_TREE_PANE
+/**
  * Window to display the tree files
  */
 class PROJECT_TREE_PANE : public wxSashLayoutWindow
@@ -78,16 +78,15 @@ protected:
     static wxString GetFileExt( TREE_FILE_TYPE type );
 
     /**
-     * Function GetSelectedData
-     * return the item data from item currently selected (highlighted)
-     * Note this is not necessary the "clicked" item,
-     * because when expanding, collapsing an item this item is not selected
+     * Return the item data from item currently selected (highlighted)
+     *
+     * @note This is not necessary the "clicked" item. When expanding and collapsing an item this item
+     *       is not selected.
      */
     std::vector<PROJECT_TREE_ITEM*> GetSelectedData();
 
     /**
-     * Function GetItemIdData
-     * return the item data corresponding to a wxTreeItemId identifier
+     * Return the item data corresponding to a wxTreeItemId identifier.
      * @param  aId = the wxTreeItemId identifier.
      * @return a PROJECT_TREE_ITEM pointer corresponding to item id aId
      */
@@ -110,31 +109,26 @@ private:
     void onRight( wxTreeEvent& Event );
 
     /**
-     * Function onOpenSelectedFileWithTextEditor
      * Call the text editor to open the selected file in the tree project
      */
     void onOpenSelectedFileWithTextEditor( wxCommandEvent& event );
 
     /**
-     * Function onDeleteFile
      * Delete the selected file or directory in the tree project
      */
     void onDeleteFile( wxCommandEvent& event );
 
     /**
-     * Function onRenameFile
      * Rename the selected file or directory in the tree project
      */
     void onRenameFile( wxCommandEvent& event );
 
     /**
-     * Function onOpenDirectory
      * Handles the right-click menu for opening a directory in the current system file browser
      */
     void onOpenDirectory( wxCommandEvent& event );
 
     /**
-     * Function onCreateNewDirectory
      * Creates a new subdirectory inside the current kicad project directory the user is
      * prompted to enter a directory name
      */
@@ -159,77 +153,77 @@ private:
 
     /**
      * Initialize a new git repository in the current project directory
-    */
+     */
     void onGitInitializeProject( wxCommandEvent& event );
 
     /**
      * Configure (or change) the default remote on an already-initialized repository
-    */
+     */
     void onGitRemoteSettings( wxCommandEvent& event );
 
     /**
      * Commit the current project saved changes to the git repository
-    */
+     */
     void onGitCommit( wxCommandEvent& event );
 
     /**
      * Amend (rewrite) the last commit on the current branch
-    */
+     */
     void onGitAmendCommit( wxCommandEvent& event );
 
     /**
      * Pull the latest changes from the git repository
-    */
+     */
     void onGitPullProject( wxCommandEvent& event );
 
     /**
      * Push the current project changes to the git repository
-    */
+     */
     void onGitPushProject( wxCommandEvent& event );
 
     /**
      * Switch to a different branch in the git repository
-    */
+     */
     void onGitSwitchBranch( wxCommandEvent& event );
 
     /**
      * Compare the current project to a different branch in the git repository
-    */
+     */
     void onGitCompare( wxCommandEvent& event );
 
     /**
      * Remove the git repository from the current project directory
-    */
+     */
     void onGitRemoveVCS( wxCommandEvent& event );
 
     /**
      * Add a file to the git index
-    */
+     */
     void onGitAddToIndex( wxCommandEvent& event );
 
     /**
      * Remove a file from the git index
-    */
+     */
     void onGitRemoveFromIndex( wxCommandEvent& event );
 
     /**
      * Sync the current project with the git repository
-    */
+     */
     void onGitSyncProject( wxCommandEvent& event );
 
     /**
      * Fetch the latest changes from the git repository
-    */
+     */
     void onGitFetch( wxCommandEvent& event );
 
     /**
      * Resolve conflicts in the git repository
-    */
+     */
     void onGitResolveConflict( wxCommandEvent& event );
 
     /**
      * Revert the local repository to the last commit
-    */
+     */
     void onGitRevertLocal( wxCommandEvent& event );
 
     /**
@@ -239,7 +233,7 @@ private:
 
     /**
      * Updates the icons shown in the tree project to reflect the current git status
-    */
+     */
     void updateGitStatusIcons();
 
     /**
@@ -261,13 +255,13 @@ private:
 
     /**
      * Returns true if the current project has any uncommitted changes
-    */
+     */
     bool hasChangedFiles();
 
     /**
      * Returns true if the current project has local commits that have not been pushed to the
      * remote repository
-    */
+     */
     bool hasLocalCommits();
 
     /**
@@ -277,10 +271,10 @@ private:
     void shutdownFileWatcher();
 
     /**
-     * Function addItemToProjectTree
      * @brief  Add the file or directory aName to the project tree
      * @param aName = the filename or the directory name to add in tree
      * @param aParent = the wxTreeItemId item where to add sub tree items
+     * @param aProjectNames
      * @param aRecurse = true to add file or subdir names to the current tree item
      *                   false to stop file add.
      * @return the Id for the new tree item
@@ -289,8 +283,7 @@ private:
                                        std::vector<wxString>* aProjectNames, bool aRecurse );
 
     /**
-     * Function findSubdirTreeItem
-     * searches for the item in tree project which is the node of the subdirectory aSubDir
+     * Search for the item in tree project which is the node of the subdirectory \a aSubDir.
      * @param aSubDir = the directory to find in tree
      * @return the opaque reference to the tree item; if not found, return an invalid tree item
      *         so that wxTreeItemId::IsOk() can be used to test the returned value
@@ -309,7 +302,7 @@ private:
     /**
      * Returns true if the file has already been added to the repository or
      * false if it has not been added yet.
-    */
+     */
     bool canFileBeAddedToVCS( const wxString& aFilePath );
 
     void onGitSyncTimer( wxTimerEvent& event );

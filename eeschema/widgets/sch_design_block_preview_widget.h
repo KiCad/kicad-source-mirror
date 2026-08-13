@@ -41,13 +41,15 @@ public:
     /**
      * Construct a schematic design block preview widget.
      *
-     * @param aParent - parent window
+     * @param aParent is the parent window.
+     * @param aCanvasType is the type of drawing canvas to construct.
+     * @param aIncludeStatus
      */
     SCH_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType, bool aIncludeStatus );
 
     ~SCH_DESIGN_BLOCK_PREVIEW_WIDGET() override;
 
-    /*
+    /**
      * Return whether the widget initialized properly. This could return false if Kiway is
      * not available. If this returns false, no other methods should be called.
      */

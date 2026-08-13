@@ -89,7 +89,7 @@ std::vector<APNP_CASE> GetFootprintAPNPCases()
 /**
  * Check that an #ARRAY_PAD_NUMBER_PROVIDER provides the right names
  * @param aProvider the provider
- * @param aExpNames ordered list of expected names
+ * @param aExpectedNumbers ordered list of expected numbers
  */
 void CheckPadNumberProvider( ARRAY_PAD_NUMBER_PROVIDER& aProvider,
                              std::vector<wxString> aExpectedNumbers )

@@ -57,7 +57,7 @@ public:
     /**
      * Load a design block having @a aDesignBlockName from the library given by @a aNickname.
      *
-     * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW.
+     * @param aNickname is a locator for the "library", it is a "name" in #LIBRARY_TABLE_ROW.
      * @param aDesignBlockName is the name of the design block to load.
      * @param aKeepUUID = true to keep initial items UUID, false to set new UUID
      *                   normally true if loaded in the design block editor, false
@@ -74,7 +74,7 @@ public:
     bool DesignBlockExists( const wxString& aNickname, const wxString& aDesignBlockName );
 
     /**
-     * A version of #DesignBlockLoad() for use after #DesignBlockEnumerate() for more efficient
+     * A version of #LoadDesignBlock() for use after #enumerateLibrary() for more efficient
      * cache management.
      *
      * The return value is const to allow it to return a reference to a cached item.
@@ -96,7 +96,7 @@ public:
      *
      * If a design block by the same name already exists, it is replaced.
      *
-     * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW.
+     * @param aNickname is a locator for the "library", it is a "name" in #LIBRARY_TABLE_ROW.
      * @param aDesignBlock is what to store in the library. The caller continues to own the
      *                   design block after this call.
      * @param aOverwrite when true means overwrite any existing design block by the same name,
@@ -111,7 +111,7 @@ public:
     /**
      * Delete the @a aDesignBlockName from the library given by @a aNickname.
      *
-     * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW.
+     * @param aNickname is a locator for the "library", it is a "name" in #LIBRARY_TABLE_ROW.
      * @param aDesignBlockName is the name of a design block to delete from the specified library.
      *
      * @throw IO_ERROR if there is a problem finding the design block or the library, or deleting

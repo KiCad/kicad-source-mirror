@@ -81,7 +81,7 @@ public:
  * Schematic symbol variants are a set of field and/or properties differentials against the default symbol
  * values.  Each symbol instance may contain 0 or more variants.
  *
- * @note The #REFERENCE field is immutable across variants. Changing it would effectively be a new board.
+ * @note The #FIELD_T::REFERENCE field is immutable across variants. Changing it would effectively be a new board.
  */
 class SCH_SYMBOL_VARIANT : public VARIANT
 {
@@ -142,9 +142,9 @@ struct SCH_SYMBOL_INSTANCE
  * Schematic sheet variants are a set of field and/or properties differentials against the default sheet
  * values.  Each sheet instance may contain 0 or more variants.
  *
- * @note The exceptions to this are the #SHEET_NAME and #SHEET_FILENAME fields and the #SCH_SHEET::m_excludeFromBoard
- *       property.  Changing any of these would effectively be a new board.  They are immutable and will always be
- *       the sheet default value.
+ * @note The exceptions to this are the #FIELD_T::SHEET_NAME and #FIELD_T::SHEET_FILENAME fields and the
+ *       #SCH_SHEET::m_excludedFromBoard property.  Changing any of these would effectively be a new board.
+ *       They are immutable and will always be the sheet default value.
  */
 class SCH_SHEET_VARIANT : public VARIANT
 {
@@ -186,36 +186,41 @@ struct SCH_SHEET_INSTANCE
 
 
 /**
- * @defgroup hierarchical_schematics Hierarchical Schematics
+ * @page understand_hierarchical_schematics Understanding Hierarchical Schematics
  *
  * KiCad supports nesting schematics hierarchically to simplify the creation of complex
- * schematics designs.  A hierarchical schematic uses hierarchical sheets (#SCH_SHEET objects)
- * to reference a given schematic file (#SCH_SCREEN objects).  Each #SCH_SHEET corresponds to
- * a schematic file handled by a #SCH_SCREEN object.  A #SCH_SCREEN object contains schematic
- * drawings and has a filename to read/write its data.
+ * designs.  A hierarchical schematic uses hierarchical sheets (#SCH_SHEET objects)
+ * to reference a given schematic file (#SCH_SCREEN objects).  Each #SCH_SHEET corresponds
+ * to a schematic file handled by a #SCH_SCREEN object.  A #SCH_SCREEN object contains
+ * schematic drawings and has a filename to read/write its data.  It is imperative for
+ * developers to understand how hierarchies work in order to effectively understand the
+ * schematic editor code.
  *
- * In simple hierarchies one #SCH_SHEET object is linked to one #SCH_SCREEN object.
+ * There are two fundamental type of hierarchies in KiCad, simple and complex.
  *
- * In complex hierarchies the a #SCH_SCREEN object shared by more than one #SCH_SHEET object.
- * Therefore all sub-sheets can also be shared. So the same #SCH_SCREEN must handle different
- * symbol references and unit selections depending on which sheet is currently selected, and
- * how a given subsheet is selected. #SCH_SHEET objects share the same #SCH_SCREEN object if
- * they have the same schematic file.
+ * A simple hierarchy is where one #SCH_SHEET object is linked to exactly one #SCH_SCREEN object.
  *
- * In KiCad each #SCH_SYMBOL and #SCH_SHEET receives a UUID when created.  These UUIDs are
- * chained together to form #SCH_SHEET_PATH objects that allow access of instance data in the
- * hierarchy.  The sheet paths have the form /ROOT_SHEET_UUID/SHEET_UUID/SUB_SHEET_UUID/...
+ * A complex hierarchy is where a #SCH_SCREEN object shared by more than one #SCH_SHEET object.
+ * Therefore all sub-sheets of a shared sheet are by definition also be shared. This means that
+ * that items contained in the #SCH_SCREEN object must handle data for more than a single sheet.
+ *
+ * This is where #SCH_SHEET_PATH objects are involved.  Each #SCH_SHEET object is assigned a
+ * UUID (#KIID object) when created.  These UUIDs are chained together to form a #SCH_SHEET_PATH
+ * object that allows access of #SCH_ITEM object instance data stored. Sheet paths have the form
+ * /ROOT_SHEET_UUID/SHEET_UUID/SUB_SHEET_UUID/... Sheet paths are store in the #SCH_ITEM where
+ * they are require to access the items instance data.  For example, symbol reference field
+ * and unit selection instance data are stored in the #SCH_SYMBOL object.  The sheet page
+ * number instance data is stored in the #SCH_SHEET object.
  *
  * For a given #SCH_SCREEN #SCH_SHEET_PATH objects must:
- *   1) Handle all #SCH_SYMBOL references and unit instance data.
- *   2) Handle all #SCH_SHEET page number instance data.
- *   2) Update the currently displayed sheet #SCH_SYMBOL references and #SCH_SHEET page numbers.
+ *   1) Handle all #SCH_SYMBOL references, unit, and variant instance data.
+ *   2) Handle all #SCH_SHEET page number and variant instance data.
+ *   3) Update the currently displayed #SCH_SYMBOL references, #SCH_SHEET page numbers, and
+ *      variant data shown in the current #SCH_SCREEN.
  *
- * The class #SCH_SHEET_PATH handles paths used to access a sheet.  The class #SCH_SHEET_LIST
- * allows one to handle the full (or partial) list of sheets and their paths in a complex
- * hierarchy.  The class #SCH_SCREENS allows one to handle a list of #SCH_SCREEN objects. It is
- * useful to clear or save data, but is not suitable to handle the full complex hierarchy
- * possibilities (usable in flat and simple hierarchies).
+ * The #SCH_SHEET_LIST object allows handling of the full or partial list of sheets and their
+ * paths in a hierarchy.  The #SCH_SCREENS object allows one to handle a list of #SCH_SCREEN
+ * objects.
  */
 
 
@@ -377,8 +382,7 @@ public:
      */
     SCH_SCREEN* LastScreen();
 
-
-    ///< @copydoc SCH_SHEET_PATH::LastScreen()
+    /// @copydoc SCH_SHEET_PATH::LastScreen()
     SCH_SCREEN* LastScreen() const;
 
     bool GetExcludedFromSim() const;
@@ -691,7 +695,7 @@ public:
      * Add a #SCH_SHEET_PATH object to \a aSheets for each sheet in the list that are
      * contained within \a aSheetPath as well as recursively downwards inside aSheetPath.
      *
-     * @param aReferences List of sheets to populate.
+     * @param aSheets List of sheets to populate.
      * @param aSheetPath Path to return sheets from
      */
     void GetSheetsWithinPath( std::vector<SCH_SHEET_PATH>& aSheets,
@@ -701,7 +705,8 @@ public:
     /**
      * Finds a SCH_SHEET_PATH that matches the provided KIID_PATH.
      *
-     * @param aPath The KIID_PATH to search for.
+     * @param aPath The #KIID_PATH to search for.
+     * @param aIncludeLastSheet includes the last sheet in path for comparison.
      */
     std::optional<SCH_SHEET_PATH> GetSheetPathByKIIDPath( const KIID_PATH& aPath,
                                                           bool aIncludeLastSheet = true ) const;
@@ -751,13 +756,15 @@ public:
      *
      * If \a aSheet is the root sheet, the full sheet path and sheet list are built.
      *
-     * The list will be ordered as per #SCH_SCREEN::BuildSheetList which results in sheets
+     * The list will be ordered as per #SCH_SHEET_LIST::BuildSheetList which results in sheets
      * being ordered in the legacy way of using the X and Y positions of the sheets.
      *
      * @see #SortByPageNumbers to sort by page numbers
      *
      * @param aSheet is the starting sheet from which the list is built, or NULL
      *               indicating that g_RootSheet should be used.
+     * @param aCheckIntegrity
+     *
      * @throw std::bad_alloc if the memory for the sheet path list could not be allocated.
      */
     void BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity );
@@ -810,7 +817,7 @@ public:
      *
      * @warning Do not call this on anything other than the full hierarchy.
      *
-     * @param aSymbolInstances is the symbol path information loaded from the root schematic.
+     * @param aSheetInstances is the sheet path information loaded from the root schematic.
      */
     void UpdateSheetInstanceData( const std::vector<SCH_SHEET_INSTANCE>& aSheetInstances );
 

@@ -128,7 +128,7 @@ private:
 
 
 /**
- * This class builds a wxGridTableBase by wrapping an #DESIGN_BLOCK_LIB_TABLE object.
+ * This class builds a wxGridTableBase by wrapping an DESIGN_BLOCK_LIB_TABLE object.
  */
 class DESIGN_BLOCK_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
 {

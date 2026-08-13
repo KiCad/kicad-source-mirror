@@ -61,7 +61,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    ///< Find an item and start moving.
+    /// Find an item and start moving.
     int GetAndPlace( const TOOL_EVENT& aEvent );
 
     /**
@@ -180,7 +180,7 @@ public:
     int Increment( const TOOL_EVENT& aEvent );
 
     /**
-     * A selection filter which prunes the selection to contain only items of type #PCB_MODULE_T.
+     * A selection filter which prunes the selection to contain only items of type #PCB_FOOTPRINT_T.
      */
     static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
                                  PCB_SELECTION_TOOL* sTool );
@@ -192,12 +192,11 @@ public:
                            PCB_SELECTION_TOOL* sTool );
 
 private:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     /**
-     * Send the current selection to the clipboard by formatting it as a fake pcb
-     * see #AppendBoardFromClipboard for importing.
+     * Send the current selection to the clipboard by formatting it as a fake pcb.
      */
     int copyToClipboard( const TOOL_EVENT& aEvent );
 
@@ -209,13 +208,12 @@ private:
     int EditVertices( const TOOL_EVENT& aEvent );
 
     /**
-     * Cut the current selection to the clipboard by formatting it as a fake pcb
-     * see #AppendBoardFromClipboard for importing.
+     * Cut the current selection to the clipboard by formatting it as a fake pcb.
      */
     int cutToClipboard( const TOOL_EVENT& aEvent );
 
-    ///< Return the right modification point (e.g. for rotation), depending on the number of
-    ///< selected items.
+    /// Return the right modification point (e.g. for rotation), depending on the number of
+    /// selected items.
     bool updateModificationPoint( PCB_SELECTION& aSelection );
 
     bool invokeInlineRouter( int aDragMode );
@@ -232,15 +230,15 @@ private:
     bool doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit, bool aAutoStart,
                           std::vector<PCB_SHAPE*>* aConstraintShapes = nullptr );
 
-    ///< Rebuilds the ratsnest for operations that require it outside the commit rebuild
+    /// Rebuilds the ratsnest for operations that require it outside the commit rebuild
     void rebuildConnectivity();
 
-    ///< Re-solve the geometric constraints of any shapes in @p aSelection after a transform.
+    /// Re-solve the geometric constraints of any shapes in @p aSelection after a transform.
     void reSolveConstraintsAfterEdit( const PCB_SELECTION& aSelection );
 
 public:
-    ///< Collect constrainable PCB_SHAPEs in @p aSelection recursing groups and footprints so
-    ///< contained shapes seed clusters too shared with properties panel for drag like settle on edit
+    /// Collect constrainable PCB_SHAPEs in @p aSelection recursing groups and footprints so
+    /// contained shapes seed clusters too shared with properties panel for drag like settle on edit
     static void collectConstraintShapes( const SELECTION& aSelection, std::vector<PCB_SHAPE*>& aShapes );
 
 private:

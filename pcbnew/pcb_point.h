@@ -111,6 +111,7 @@ public:
      * Used in filling zones calculations.  Circles and arcs are approximated by segments.
      *
      * @param aBuffer is a buffer to store the polygon.
+     * @param aLayer is the ID of the layer to transform.
      * @param aClearance is the clearance around the pad.
      * @param aError is the maximum deviation from a true arc.
      * @param aErrorLoc whether any approximation error should be placed inside or outside
@@ -137,10 +138,12 @@ private:
     /// Recompute the cached board position from the library position and parent transform.
     void recomputePosition();
 
-    // Position in parent footprint's library frame (or board space if no parent footprint)
+    /// Position in parent footprint's library frame (or board space if no parent footprint).
     VECTOR2I m_libPos;
-    // Cached board-space position, refreshed when the parent footprint transform changes
+
+    /// Cached board-space position, refreshed when the parent footprint transform changes.
     VECTOR2I m_pos;
-    // Visual size of the point in board space
+
+    /// Visual size of the point in board space.
     int m_size;
 };

@@ -32,7 +32,7 @@ class ARRAY_PAD_NUMBER_PROVIDER
 {
 public:
     /**
-     * @param aFootprint the footprint to gather existing numbers from (nullptr for no footprint)
+     * @param aExistingPadNumbers are the existing footprint pad  numbers from (nullptr for no footprint)
      * @param aArrayOpts the array options that provide the candidate numbers
      */
     ARRAY_PAD_NUMBER_PROVIDER( const std::set<wxString>& aExistingPadNumbers, const ARRAY_OPTIONS& aArrayOpts );

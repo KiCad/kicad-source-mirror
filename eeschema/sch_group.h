@@ -94,23 +94,23 @@ public:
     /// @copydoc EDA_ITEM::Clone
     EDA_ITEM* Clone() const override;
 
-    /*
+    /**
      * Clone this and all descendants
      */
     SCH_GROUP* DeepClone() const;
 
-    /*
+    /**
      * Duplicate this and all descendants
      *
      * @param addToParentGroup if the original is part of a group then the new member will also
-     *                         be added to said group
+     *                         be added to said group.
+     * @param aCommit is the optional #SCH_COMMIT object to handle undo/redo actions.
      */
     SCH_GROUP* DeepDuplicate( bool addToParentGroup, SCH_COMMIT* aCommit = nullptr ) const;
 
     /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
-    /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     /// @copydoc EDA_ITEM::GetBoundingBox
@@ -120,10 +120,8 @@ public:
     INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData,
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers
     std::vector<int> ViewGetLayers() const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     /// @copydoc SCH_ITEM::Move
@@ -141,7 +139,6 @@ public:
     void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
-    /// @copydoc EDA_ITEM::GetItemDescription
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     /// @copydoc EDA_ITEM::GetMenuImage
@@ -153,11 +150,11 @@ public:
     /// @copydoc EDA_ITEM::Matches
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
-    ///< @copydoc SCH_ITEM::RunOnChildren
+    /// @copydoc SCH_ITEM::RunOnChildren
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode ) override;
 
     /// @copydoc SCH_ITEM::swapData
-    void swapData( SCH_ITEM* aImage ) override;
+    void swapData( SCH_ITEM* aItem ) override;
 };
 
 #endif

@@ -61,7 +61,6 @@ public:
      * Call curl_global_init for the application. It must be used only once
      * and before any curl functions that perform requests.
      *
-     * @return True if successful, false if CURL returned an error.
      * @throw IO_ERROR on failure, hopefully with helpful text in it.
      */
     static void Init();

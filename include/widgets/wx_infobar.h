@@ -86,7 +86,7 @@ public:
      * @param aWinId is the ID for this infobar object
      * @param aOverlay is true to overlay the parent instead of being laid out by its sizer
      */
-    WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid = wxID_ANY, bool aOverlay = false );
+    WX_INFOBAR( wxWindow* aParent, wxWindowID aWinId = wxID_ANY, bool aOverlay = false );
 
     ~WX_INFOBAR();
 
@@ -161,9 +161,10 @@ public:
      * Show the infobar with the provided message and icon for a specific period
      * of time.
      *
-     * @param aMessage is the message to display
-     * @param aTime is the amount of time in milliseconds to show the infobar
-     * @param aFlags is the flag containing the icon to display on the left side of the infobar
+     * @param aMessage is the message to display.
+     * @param aTime is the amount of time in milliseconds to show the infobar.
+     * @param aFlags is the flag containing the icon to display on the left side of the infobar.
+     * @param aType is the info bar message type.
      */
     void ShowMessageFor( const wxString& aMessage, int aTime, int aFlags = wxICON_INFORMATION,
                          MESSAGE_TYPE aType = WX_INFOBAR::MESSAGE_TYPE::GENERIC );

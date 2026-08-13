@@ -25,8 +25,8 @@
  * Information which can be added in a gerber P&P file as attribute of a component.
  *
  * This is only applicable to objects having the TA.AperFunction attribute "ComponentMain"
- * There are specific attributes defined attached to the component by the %TO command
- * %TO.CRot,<angle> The rotation angle of the component.
+ * There are specific attributes defined attached to the component by the \%TO command
+ * \%TO.CRot,\<angle\> The rotation angle of the component.
  *   The rotation angle is consistent with the one for graphics objects.
  *   Positive rotation is counter- clockwise as viewed from the top side, even if
  *   the component is on the board side.
@@ -35,20 +35,20 @@
  *   The base orientation on the bottom side is the one on the top side
  *   mirrored around the X axis.
  *
- * %TO.CMfr,<string>     Manufacturer
- * %TO.CMPN,<string>     Manufacturer part number
- * %TO.Cpkg,<string>     Package, as per IPC-7351
- * %TO.CVal,<string>     Value, a string. E.g. 220nF
- * %TO.CMnt,<string>     Mount type: (SMD|TH|Other)
- * %TO.CFtp,<string>     Footprint name, a string. E.g. LQFP-100_14x14mm_P0.5mm
-                         This is the footprint name coming from the CAD tool libraries.
- * %TO.CPgN,<string>     Package name, like the JEDEC JEP95 standard.
- * %TO.CPgD,<string>     Package description.
- * %TO.CHgt,<string>     Height, a decimal, in the unit of the file.
- * %TO.CLbN,<string>     Library name.
- * %TO.CLbD,<string>     Library description.
- * %TO.Sup,<SN>,<SPN>    SN is a field with the supplier name.
- *                       SPN is a field with the supplier part name.
+ * \%TO.CMfr,\<string\>     Manufacturer
+ * \%TO.CMPN,\<string\>     Manufacturer part number
+ * \%TO.Cpkg,\<string\>     Package, as per IPC-7351
+ * \%TO.CVal,\<string\>     Value, a string. E.g. 220nF
+ * \%TO.CMnt,\<string\>     Mount type: (SMD|TH|Other)
+ * \%TO.CFtp,\<string\>     Footprint name, a string. E.g. LQFP-100_14x14mm_P0.5mm
+                            This is the footprint name coming from the CAD tool libraries.
+ * \%TO.CPgN,\<string\>     Package name, like the JEDEC JEP95 standard.
+ * \%TO.CPgD,\<string\>     Package description.
+ * \%TO.CHgt,\<string\>     Height, a decimal, in the unit of the file.
+ * \%TO.CLbN,\<string\>     Library name.
+ * \%TO.CLbD,\<string\>     Library description.
+ * \%TO.Sup,\<SN\>,\<SPN\>  SN is a field with the supplier name.
+ *                          SPN is a field with the supplier part name.
  */
 class GBR_CMP_PNP_METADATA
 {
@@ -92,7 +92,7 @@ public:
  *
  * This is a Unicode string with some chars converted in escaped hexadecimal sequence
  * when creating the file.  The following characters are  always escaped because they
- * are separator in Gerber files: * , \ %.  Non ASCII7 characters can be converted to
+ * are separator in Gerber files: \* , \\ \%.  Non ASCII7 characters can be converted to
  * UTF8 or escaped.
  */
 class GBR_DATA_FIELD
@@ -134,11 +134,11 @@ private:
 /**
  * Information which can be added in a gerber file as attribute of an object.
  *
- * The #GBR_INFO_TYPE types can be OR'ed to add 2 (or more) attributes.  There are only 3
- * net attributes defined attached to an object by the %TO command:
- *  - %TO.P
- *  - %TO.N
- *  - %TO.C
+ * The #GBR_NETINFO_TYPE types can be OR'ed to add 2 (or more) attributes.  There are only 3
+ * net attributes defined attached to an object by the \%TO command:
+ *  - \%TO.P
+ *  - \%TO.N
+ *  - \%TO.C
  *
  * The .P attribute can be used only for flashed pads (using the D03 command) and only for
  * external copper layers, if the component is on a external copper layer for other copper
@@ -241,7 +241,7 @@ public:
     wxString m_Cmpref;    ///< the component reference parent of the data
     wxString m_Netname;   ///< for items associated to a net: the netname
 
-    wxString m_ExtraData;       ///< a string to print after %TO object attributes, if not empty
+    wxString m_ExtraData;       ///< a string to print after \%TO object attributes, if not empty
                                 ///< it is printed "as this"
     /**
      * If true, do not clear all attributes when a attribute has changed.  This is useful

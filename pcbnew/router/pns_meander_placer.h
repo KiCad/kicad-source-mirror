@@ -73,7 +73,6 @@ public:
     /// @copydoc PLACEMENT_ALGO::Traces()
     const ITEM_SET Traces() override;
 
-    /// @copydoc PNS_MEANDER_PLACER_BASE::TunedPath()
     const ITEM_SET TunedPath() override;
 
     /// @copydoc PLACEMENT_ALGO::CurrentStart()
@@ -113,10 +112,10 @@ protected:
 
     virtual void calculateTimeDomainTargets();
 
-    ///< current routing start point (end of tail, beginning of head)
+    /// current routing start point (end of tail, beginning of head)
     VECTOR2I m_currentStart;
 
-    ///< Current world state
+    /// Current world state
     NODE* m_currentNode;
 
     LINE     m_originLine;
@@ -127,13 +126,13 @@ protected:
     MEANDERED_LINE   m_result;
     LINKED_ITEM*     m_initialSegment;
 
-    ///< Total length added by pad to die size.
+    /// Total length added by pad to die size.
     int m_padToDieLength;
 
-    ///< Total length added by pad to die size.
+    /// Total length added by pad to die size.
     int m_padToDieDelay;
 
-    ///< The netclass for the placed segments
+    /// The netclass for the placed segments
     NETCLASS* m_netClass;
 
     long long int m_lastLength;

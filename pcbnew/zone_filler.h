@@ -106,7 +106,6 @@ private:
                                       SHAPE_POLY_SET& aRawFill );
 
     /**
-     * Function fillCopperZone
      * Add non copper areas polygons (pads and tracks with clearance)
      * to a filled copper area
      * used in BuildFilledSolidAreasPolygons when calculating filled areas in a zone
@@ -114,7 +113,6 @@ private:
      * The filled copper area must be computed before
      * BuildFilledSolidAreasPolygons() call this function just after creating the
      *  filled copper area polygon (without clearance areas
-     * @param aPcb: the current board
      */
     bool fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
                          const SHAPE_POLY_SET& aSmoothedOutline,
@@ -123,7 +121,6 @@ private:
     bool fillNonCopperZone( const ZONE* candidate, PCB_LAYER_ID aLayer,
                             const SHAPE_POLY_SET& aSmoothedOutline, SHAPE_POLY_SET& aFillPolys );
     /**
-     * Function buildThermalSpokes
      * Constructs a list of all thermal spokes for the given zone.
      */
     void buildThermalSpokes( const ZONE* box, PCB_LAYER_ID aLayer,
@@ -135,6 +132,11 @@ private:
      * For circular pads, creates an arc ring; for other shapes, creates an inflated ring.
      * Rings are clipped to the zone boundary.
      *
+     * @param aZone is the zone to hatch.
+     * @param aLayer is the zone layer ID.
+     * @param aSmoothedOutline
+     * @param aThermalConnectionPads
+     * @param aFillPolys
      * @param aThermalRings Output parameter to collect the thermal ring geometry. Used later
      *                      to drop hatch holes that would isolate the thermal relief.
      */
@@ -156,12 +158,13 @@ private:
      * The solid areas can be more than one on copper layers, and do not have holes
      *  ( holes are linked by overlapping segments to the main outline)
      * in order to have drawable (and plottable) filled polygons.
-     * @return true if OK, false if the solid polygons cannot be built
      * @param aZone is the zone to fill
+     * @param aLayer is the zone layer ID.
      * @param aFillPolys: A reference to a SHAPE_POLY_SET buffer to store polygons with no holes
      * (holes are linked to main outline by overlapping segments, and these polygons are shrunk
      * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
      * aFillPolys are polygons that will be drawn on screen and plotted
+     * @return true if OK, false if the solid polygons cannot be built
      */
     bool fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys );
 
@@ -169,6 +172,8 @@ private:
      * for zones having the ZONE_FILL_MODE::ZONE_FILL_MODE::HATCH_PATTERN, create a grid pattern
      * in filled areas of aZone, giving to the filled polygons a fill style like a grid
      * @param aZone is the zone to modify
+     * @param aLayer is the zone layer ID
+     * @param aDebugLayer
      * @param aFillPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
      * filled areas, and after adding the grid pattern, the modified filled areas with holes
      * @param aThermalRings: Thermal ring geometry used to drop hatch holes that would isolate
@@ -191,7 +196,7 @@ private:
      *
      * @param aZone the zone, fill mode must be COPPER_THIEVING.
      * @param aLayer the copper layer.
-     * @param aFillPolys IN: pre-cleared valid fill region.  OUT: stamped pattern.
+     * @param[in] aFillPolys pre-cleared valid fill region.  OUT: stamped pattern.
      */
     bool addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                    SHAPE_POLY_SET& aFillPolys );
@@ -201,6 +206,8 @@ private:
      * Runs a deflate/reconnect/inflate cycle and intersects with the pre-deflate boundary
      * to avoid re-inflating into cleared areas.
      *
+     * @param aZone the zone to post process.
+     * @param[in, out] aFillPolys pre-cleared valid fill region replaced with the stamped pattern.
      * @param aSameNetApron copper an abutting same-net zone will supply just outside this
      * zone's boundary.  It is unioned in for the deflate/inflate cycle and clipped back off
      * afterwards, so a shared border is not treated as a convex corner and rounded away.
@@ -218,6 +225,9 @@ private:
      * Used during iterative refill to avoid recomputing thermal reliefs and copper clearances.
      * Only re-applies the higher-priority zone knockout with updated fills.
      *
+     * @param aZone is the zone to modify
+     * @param aLayer is the zone layer ID
+     * @param[in, out] aFillPolys pre-cleared valid fill region replaced with the stamped pattern.
      * @param aSnapshot: If non-null, fills of other zones are read from the snapshot instead
      * of from the live zone objects, ensuring all tasks in a parallel wave see the same
      * pre-wave state.

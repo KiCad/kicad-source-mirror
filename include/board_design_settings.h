@@ -386,6 +386,7 @@ public:
      * Compute the next track width list index when cycling predefined sizes, skipping the
      * index-0 netclass placeholder on roll-over so the sequence stays monotonic.
      *
+     * @param aIndex is the start index track width buffer.
      * @param aForward steps larger when true, smaller when false.
      */
     int GetNextTrackWidthIndex( int aIndex, bool aForward ) const;
@@ -434,6 +435,7 @@ public:
      * Compute the next via size list index when cycling predefined sizes, skipping the
      * index-0 netclass placeholder on roll-over so the sequence stays monotonic.
      *
+     * @param aIndex is the via size list index.
      * @param aForward steps larger when true, smaller when false.
      */
     int GetNextViaSizeIndex( int aIndex, bool aForward ) const;
@@ -511,6 +513,7 @@ public:
      * Compute the next diff pair dimensions list index when cycling predefined sizes, skipping
      * the index-0 netclass placeholder on roll-over so the sequence stays monotonic.
      *
+     * @param aIndex is the index of the next differential pair.
      * @param aForward steps larger when true, smaller when false.
      */
     int GetNextDiffPairIndex( int aIndex, bool aForward ) const;

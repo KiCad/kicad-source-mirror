@@ -174,7 +174,7 @@ struct GIT_BACKEND_FIXTURE
     }
 
 
-    /// Drop branch.<aBranch>.merge / .remote, simulating a repo where Add Version
+    /// Drop branch.\<aBranch\>.merge / .remote, simulating a repo where Add Version
     /// Control wired up `origin` but never set per-branch upstream tracking.
     bool clearUpstreamConfig( git_repository* aRepo, const wxString& aBranch )
     {
@@ -194,7 +194,7 @@ struct GIT_BACKEND_FIXTURE
     }
 
 
-    /// Set branch.<aBranch>.merge = refs/heads/<aBranch>, branch.<aBranch>.remote = origin.
+    /// Set branch.\<aBranch\>.merge = refs/heads/\<aBranch\>, branch.\<aBranch\>.remote = origin.
     bool setUpstreamConfig( git_repository* aRepo, const wxString& aBranch )
     {
         git_config* cfg = nullptr;
@@ -449,7 +449,7 @@ BOOST_AUTO_TEST_CASE( AmendFileList_ExcludesFilesOutsideProject )
 
 /**
  * When the local branch has no upstream configured, GetUpstreamShorthand must
- * synthesise <remote>/<branch> so the pull fallback and first-push paths have
+ * synthesise \<remote\>/\<branch\> so the pull fallback and first-push paths have
  * a meaningful target to display and act on.
  */
 BOOST_AUTO_TEST_CASE( GetUpstreamShorthand_NoUpstreamFallsBackToRemoteSlashBranch )
@@ -578,7 +578,7 @@ BOOST_AUTO_TEST_CASE( GetDifferentFiles_DifferentTreeAmendKeepsAheadFile )
  * Add Version Control wired up `origin` but never set per-branch upstream
  * tracking used to fail with "Could not lookup commit" because FETCH_HEAD has
  * no merge-marked entry.  The fallback in PerformPull resolves the implicit
- * target via refs/remotes/origin/<branch> and persists the upstream config.
+ * target via refs/remotes/origin/\<branch\> and persists the upstream config.
  */
 BOOST_AUTO_TEST_CASE( PerformPull_NoUpstreamConfig_FallbackSucceedsAndWritesUpstream )
 {
@@ -663,7 +663,7 @@ BOOST_AUTO_TEST_CASE( PerformPull_RebaseConfigReplaysLocalCommit )
 
 /**
  * Push -u behavior: after the first successful push from a branch with no
- * upstream configured, branch.<name>.merge and .remote should be populated so
+ * upstream configured, branch.\<name\>.merge and .remote should be populated so
  * subsequent pull/push hit the FETCH_HEAD path instead of the fallback.
  */
 BOOST_AUTO_TEST_CASE( Push_FirstPushSetsUpstreamTracking )

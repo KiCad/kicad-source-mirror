@@ -79,8 +79,9 @@ public:
      * \a aFilename.
      *
      * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
-     *  token table need not contain the lexer separators such as '(' ')', etc.
+     *                      token table need not contain the lexer separators such as '(' ')', etc.
      * @param aKeywordCount is the count of tokens in aKeywordTable.
+     * @param aKeywordMap is the map of #KEYWORD objects.
      * @param aFile is an open file, which will be closed when this is destructed.
      * @param aFileName is the name of the file
      */
@@ -91,8 +92,9 @@ public:
      * Initialize a DSN lexer and prepares to read from @a aSExpression.
      *
      * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
-     *  token table need not contain the lexer separators such as '(' ')', etc.
+     *                      token table need not contain the lexer separators such as '(' ')', etc.
      * @param aKeywordCount is the count of tokens in aKeywordTable.
+     * @param aKeywordMap is the map of #KEYWORD objects.
      * @param aSExpression is text to feed through a STRING_LINE_READER
      * @param aSource is a description of aSExpression, used for error reporting.
      */
@@ -115,11 +117,12 @@ public:
      *
      * No ownership is taken of @a aLineReader. This enables it to be used by other DSNLEXERs.
      *
-     * @param aKeywordTable is an array of #KEYWORDS holding \a aKeywordCount.  This
-     *  token table need not contain the lexer separators such as '(' ')', etc.
+     * @param aKeywordTable is an array of #KEYWORD objectsS holding \a aKeywordCount.  This
+     *                      token table need not contain the lexer separators such as '(' ')', etc.
      * @param aKeywordCount is the count of tokens in aKeywordTable.
+     * @param aKeywordMap is the map of #KEYWORD objects.
      * @param aLineReader is any subclassed instance of LINE_READER, such as
-     *  #STRING_LINE_READER or #FILE_LINE_READER.  No ownership is taken.
+     *                    #STRING_LINE_READER or #FILE_LINE_READER.  No ownership is taken.
      */
     DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount, const KEYWORD_MAP* aKeywordMap,
               LINE_READER* aLineReader = nullptr );
@@ -137,8 +140,9 @@ public:
      * Usable only for DSN lexers which share the same #LINE_READER.
      *
      * Synchronizes the pointers handling the data read by the #LINE_READER.  Allows 2
-     * #DNSLEXER objects to share the same current line, when switching from a #DNSLEXER
-     * to another #DNSLEXER
+     * #DSNLEXER objects to share the same current line, when switching from a #DSNLEXER
+     * to another #DSNLEXER
+     *
      * @param aLexer the model.
      * @return true if the sync can be made ( at least the same line reader ).
      */
@@ -163,7 +167,7 @@ public:
      * Manage a stack of LINE_READERs in order to handle nested file inclusion.
      *
      * This function pushes aLineReader onto the top of a stack of LINE_READERs and makes
-     * it the current #LINE_READER with its own #GetSource(), line number and line text.
+     * it the current #LINE_READER with its own LINE_READER::GetSource(), line number and line text.
      * A grammar must be designed such that the "include" token (whatever its various names),
      * and any of its parameters are not followed by anything on that same line,
      * because PopReader always starts reading from a new line upon returning to
@@ -179,10 +183,10 @@ public:
      * current #LINE_READER and its previous position in its input stream and the
      * its latest line number should pertain.  PopReader always starts reading
      * from a new line upon returning to the previous #LINE_READER.  A pop is only
-     * possible if there are at least 2 #LINE_READERs on the stack, since popping
-     * the last one is not supported.
+     * possible if there are at least 2 #LINE_READER objectss on the stack, since
+     * popping the last one is not supported.
      *
-     * @return the LINE_READER that was in use before the pop, or NULL
+     * @return the #LINE_READER that was in use before the pop, or NULL
      *   if there was not at least two readers on the stack and therefore the
      *   pop failed.
      */
@@ -322,7 +326,7 @@ public:
      * Test a token to see if it is a symbol.
      *
      * This means it cannot be a special delimiter character such as #DSN_LEFT, #DSN_RIGHT,
-     * #DSN_QUOTE, etc.  It may however, coincidentally match a keyword and still be a symbol.
+     * #DSN_QUOTE_DEF, etc.  It may however, coincidentally match a keyword and still be a symbol.
      */
     static bool IsSymbol( int aTok );
 

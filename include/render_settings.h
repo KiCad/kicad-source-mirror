@@ -151,6 +151,7 @@ public:
      * @param aEnabled tells if highlighting should be enabled.
      * @param aNetcode is optional and if specified, turns on highlighting only for the net with
      *                 number given as the parameter.
+     * @param aMulti
      */
     inline void SetHighlight( bool aEnabled, int aNetcode = -1, bool aMulti = false )
     {

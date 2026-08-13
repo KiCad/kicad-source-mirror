@@ -80,6 +80,7 @@ public:
     virtual bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const = 0;
 
     /**
+     * @param aRay is the ray to test for intersection.
      * @param aMaxDistance is the maximum distance of the test.
      * @return true if \a aRay intersects the object.
      */

@@ -367,13 +367,13 @@ static bool validateLongEntry( const wxTextEntry& entry, long& dest, const wxStr
 
 
 /**
- * Validates and saves (if valid) the type and offset of an array axis numbering
+ * Validate and save (if valid) the type and offset of an array axis numbering
  *
  * @param offsetEntry the entry of the offset (text)
  * @param typeEntry the entry of the axis nmbering scheme (choice)
- * @param type the destination of the type if valid
- * @param offset the destination of the offset if valid
- * @param errors error string accumulator
+ * @param aStepEntry
+ * @param aAxis
+ * @param errors is the list of error messages if any
  * @return if all valid
  */
 static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& typeEntry,

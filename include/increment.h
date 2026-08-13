@@ -98,5 +98,4 @@ KICOMMON_API int IndexFromAlphabetic( const wxString& aStr, const wxString& aAlp
  * @param aZeroBasedNonUnitCols If true, cols other than the right most use the 0'th entry
  *                              (e.g. Z -> AA, not BA, but 9 -> 10, not 00).
  */
-KICOMMON_API wxString AlphabeticFromIndex( size_t aN, const wxString& aAlphabet,
-                                           bool aZeroBasedNonUnitCols );
+KICOMMON_API wxString AlphabeticFromIndex( size_t aIndex, const wxString& aAlphabet, bool aZeroBasedNonUnitCols );

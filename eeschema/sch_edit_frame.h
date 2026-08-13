@@ -293,8 +293,6 @@ public:
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
-     *
-     * @return True if any connection state changes were made.
      */
     void TestDanglingEnds();
 
@@ -404,6 +402,7 @@ public:
      * @param aStartNumber The start number for non-sheet-based annotation styles.
      * @param aResetAnnotation Clear any previous annotation if true.  Otherwise, keep the
      *                         existing symbol annotation.
+     * @param aRegroupUnits regroups symbol units when true.
      * @param aRepairTimestamps Test for and repair any duplicate time stamps if true.
      *                          Otherwise, keep the existing time stamps.  This option
      *                          could change previous annotation because time stamps are
@@ -431,10 +430,12 @@ public:
      * - Multiple part per package symbols where the reference designator is different between
      *   parts.
      *
-     * @return Number of annotation errors found.
-     * @param aReporter A handler for error reporting.
+     * @param aErrorHandler
      * @param aAnnotateScope See #ANNOTATE_SCOPE_T Check the current sheet only if true.
      *                       Otherwise check the entire schematic.
+     * @param aRecursive
+     * @param aSymbolFilter
+     * @return Number of annotation errors found.
      */
     int CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, ANNOTATE_SCOPE_T aAnnotateScope,
                        bool aRecursive, SYMBOL_FILTER aSymbolFilter );
@@ -553,6 +554,7 @@ public:
      * File names foo.sch and Foo.sch are unique files on Linux and MacOS but on Windows
      * this would result in a broken schematic.
      *
+     * @param aOldName
      * @param aSchematicFileName is the absolute path and file name of the file to test.
      * @return true if the user accepts the potential file name clash risk.
      */
@@ -677,6 +679,7 @@ public:
     /**
      * Remove a given junction and heals any wire segments under the junction.
      *
+     * @param aCommit is the commit to undo the junction delete.
      * @param aItem The junction to delete
      */
     void DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aItem );
@@ -714,6 +717,7 @@ public:
      * If it is a delete command, items are put on list with the .Flags member
      * set to DELETED.
      *
+     * @param aScreen is the undo/redo screen.
      * @param aItemToCopy is the schematic item modified by the command to undo.
      * @param aTypeCommand is the command type (see enum UNDO_REDO).
      * @param aAppend set to true to add the item to the previous undo list.
@@ -930,7 +934,7 @@ public:
     void FocusSearch();
 
     /**
-     * Add \a aListener to post #EDA_EVT_SCHEMATIC_CHANGED command events to.
+     * Add \a aListener to post EDA_EVT_SCHEMATIC_CHANGED command events to.
      *
      * @warning The caller is responsible for removing any listeners that are no long valid.
      *
@@ -1072,8 +1076,9 @@ private:
     /**
      *  Load the given filename but sets the path to the current project path.
      *
-     *  @param full filepath of file to be imported.
-     *  @param aFileType SCH_FILE_T value for file type
+     * @param aFileName full filepath of file to be imported.
+     * @param aFileType SCH_FILE_T value for file type.
+     * @param aProperties
      */
     bool importFile( const wxString& aFileName, int aFileType,
                      const std::map<std::string, UTF8>* aProperties = nullptr );

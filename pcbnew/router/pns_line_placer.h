@@ -133,7 +133,7 @@ public:
      *
      * @return true if route has been committed. May return false if the routing result is
      *         violating design rules.  In such cases, the track is only committed if
-     *         CanViolateDRC() is on.
+     *         ROUTING_SETTINGS::AllowDRCViolations() is on.
      */
     bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish ) override;
 
@@ -322,25 +322,26 @@ private:
      * Perform a single routing algorithm step, for the end point \a aP.
      *
      * @param aP is the  ending point of current route.
-     * @return true if the line has been changed.
      */
     void routeStep( const VECTOR2I& aP );
 
-    ///< Route step walk around mode.
+    /// Route step walk around mode.
     bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail );
     bool rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisionMask, PNS::PNS_MODE aMode, bool& aViaOk );
     bool splitHeadTail( const LINE& aNewLine, const LINE& aOldTail, LINE& aNewHead, LINE& aNewTail );
-    bool cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aCursor,  double lengthThreshold, SHAPE_LINE_CHAIN& aOut );
-    bool clipAndCheckCollisions( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aL, SHAPE_LINE_CHAIN& aOut, int &thresholdDist );
+    bool cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aCursor, double lengthThreshold,
+                            SHAPE_LINE_CHAIN& aOut );
+    bool clipAndCheckCollisions( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aL, SHAPE_LINE_CHAIN& aOut,
+                                 int &thresholdDist );
 
     void updatePStart( const LINE& tail );
 
     //bool rhPostSplitHeadTail( )
 
-    ///< Route step shove mode.
+    /// Route step shove mode.
     bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail );
 
-    ///< Route step mark obstacles mode.
+    /// Route step mark obstacles mode.
     bool rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail );
 
     const VIA makeVia( const VECTOR2I& aP );

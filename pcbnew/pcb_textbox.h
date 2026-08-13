@@ -165,13 +165,13 @@ public:
     }
 
     /**
-     * Function TransformTextToPolySet
      * Convert the text to a polygonSet describing the actual character strokes (one per segment).
      * Used in 3D viewer
      * Circles and arcs are approximated by segments
      * @param aBuffer = SHAPE_POLY_SET to store the polygon corners
      * @param aClearance = the clearance around the text
      * @param aMaxError = the maximum error to allow when approximating curves
+     * @param aErrorLoc
      */
     void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aMaxError,
                                  ERROR_LOC aErrorLoc ) const;
@@ -182,7 +182,7 @@ public:
                                   int aMaxError, ERROR_LOC aErrorLoc,
                                   bool aIgnoreLineWidth = false ) const override;
 
-    // @copydoc BOARD_ITEM::GetEffectiveShape
+    /// @copydoc BOARD_ITEM::GetEffectiveShape()
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT,
                                               DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const override;
@@ -197,10 +197,10 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    ///< Tests whether the border is disabled, as configured by the stroke
+    /// Tests whether the border is disabled, as configured by the stroke
     bool IsBorderEnabled() const;
 
-    ///< Disables the border, this is done by changing the stroke internally
+    /// Disables the border, this is done by changing the stroke internally
     void SetBorderEnabled( bool enabled );
 
     void SetBorderWidth( const int aSize );

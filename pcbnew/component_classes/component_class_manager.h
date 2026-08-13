@@ -47,18 +47,24 @@ public:
     explicit COMPONENT_CLASS_MANAGER( BOARD* board );
 
     /// @brief Gets the full effective class name for the given set of constituent classes
-    static wxString
-    GetFullClassNameForConstituents( const std::unordered_set<wxString>& classNames );
+    static wxString GetFullClassNameForConstituents( const std::unordered_set<wxString>& classNames );
 
     /// @brief Gets the full effective class name for the given set of constituent classes
     /// @param classNames a sorted vector of consituent class names
     static wxString GetFullClassNameForConstituents( const std::vector<wxString>& classNames );
 
-    /// @brief Gets an effective component class for the given constituent class names
-    /// @param classNames The names of the constituent component classes
-    /// @return Effective COMPONENT_CLASS object
-    COMPONENT_CLASS*
-    GetEffectiveStaticComponentClass( const std::unordered_set<wxString>& classNames );
+    /**
+     * Computes and returns an effective component class for a (possibly empty) set of constituent
+     * class names. This is called by the netlist updater to set static component classes on footprints.
+     *
+     * Where constituent or effective component classes already exist, they are re-used. This allows
+     * efficient comparison of (effective) component classes by pointer in DRC checks.
+     *
+     * Preconditions: InitNetlistUpdate() must be called before invoking this method.
+     * @param classNames The constitent component class names
+     * @return A pointer to an effective COMPONENT_CLASS representing all constituent component classes
+     */
+    COMPONENT_CLASS* GetEffectiveStaticComponentClass( const std::unordered_set<wxString>& classNames );
 
     /// Returns the unassigned component class
     const COMPONENT_CLASS* GetNoneComponentClass() const { return m_noneClass.get(); }
@@ -101,7 +107,7 @@ public:
     void InvalidateComponentClasses();
 
     /// Rebuilds any caches that may be required by custom assignment rules
-    /// @param fp the footprint to rebuild. If null, rebuilds all footprint caches
+    /// @param aFootprint is the footprint to rebuild. If null, rebuilds all footprint caches.
     void RebuildRequiredCaches( FOOTPRINT* aFootprint = nullptr ) const;
 
     static std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE>

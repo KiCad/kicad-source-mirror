@@ -46,12 +46,11 @@ enum class LEADER_MODE
 };
 
 /**
- * @return the number of segments to approximate a arc by segments
- * with a given max error (this number is >= 1)
+ * @return the number of segments to approximate a arc by segments with a given max error (this number is >= 1)
  * @param aRadius is the radius od the circle or arc
  * @param aErrorMax is the max error
  * This is the max distance between the middle of a segment and the circle.
- * @param aArcAngleDegree is the arc angle
+ * @param aArcAngle is the arc angle
  */
 int GetArcToSegmentCount( int aRadius, int aErrorMax, const EDA_ANGLE& aArcAngle );
 
@@ -101,7 +100,8 @@ int GetCircleToPolyCorrection( int aMaxError );
  * that if the starting vector is on a square grid, the resulting snapped
  * vector will still be on the same grid.
 
- * @param a vector to be snapped
+ * @param aVec a vector to be snapped
+ * @param only45 is a flag to limit snapping to 45 degrees.
  * @return the snapped vector
  */
 template<typename T>
@@ -162,15 +162,15 @@ VECTOR2<T> GetVectorSnapped90( const VECTOR2<T>& aVec )
 }
 
 /**
- * Clamps a vector to values that can be negated, respecting numeric limits
+ * Clamp a vector to values that can be negated, respecting numeric limits
  * of coordinates data type with specified padding.
  *
  * Numeric limits are (-2^31 + 1) to (2^31 - 1).
  *
  * Takes care of rounding in case of floating point to integer conversion.
  *
- * @param aCoord - vector to clamp.
- * @param aPadding - padding from the limits. Must not be negative.
+ * @param aCoords is the vector to clamp.
+ * @param aPadding is the padding from the limits. Must not be negative.
  * @return clamped vector.
  */
 template <typename in_type, typename ret_type = in_type, typename pad_type = unsigned int,

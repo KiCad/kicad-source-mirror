@@ -62,6 +62,8 @@ public:
 
     /**
      * Remove (and optionally deletes) the indexed item from the list.
+     *
+     * @param aIndex is the index of the item to delete.
      * @param aDeep If true, the source item should be deleted as well as its entry in the list.
      */
     virtual void DeleteItem( int aIndex, bool aDeep ) = 0;
@@ -149,8 +151,6 @@ public:
      * @param aUnitsProvider is the units provider that will be used to output coordinates
      * @param aSeverity is the severity of this item
      * @param aItemMap is a map allowing the lookup of items from KIIDs
-     *
-     * @return None
      */
     virtual void GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* aUnitsProvider,
                                    SEVERITY aSeverity, const std::map<KIID, EDA_ITEM*>& aItemMap ) const;
@@ -197,6 +197,7 @@ protected:
      *
      * @param aItem is the affected item being described
      * @param aIndex is 0 for the main item and 1 for the aux item
+     * @param aUnitsProvider is the provider to handle units.
      */
     virtual wxString getItemDescription( EDA_ITEM* aItem, int aIndex, UNITS_PROVIDER* aUnitsProvider ) const;
 

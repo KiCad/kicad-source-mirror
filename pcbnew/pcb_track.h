@@ -154,10 +154,11 @@ public:
      * Circles (vias) and arcs (ends of tracks) are approximated by segments.
      *
      * @param aBuffer is a buffer to store the polygon
-     * @param aClearance is the clearance around the pad
-     * @param aError is the maximum deviation from true circle
-     * @param ignoreLineWidth is used for edge cut items where the line width is only for
-     *                        visualization
+     * @param aLayer is the ID of the layer to transform.
+     * @param aClearance is the clearance around the pad.
+     * @param aError is the maximum deviation from true circle.
+     * @param aErrorLoc
+     * @param ignoreLineWidth is used for edge cut items where the line width is only for visualization.
      */
     double GetCoverageArea( int aTextMargin ) const override;
 
@@ -418,6 +419,7 @@ public:
     void    SetViaType( VIATYPE aViaType )
     {
         m_viaType = aViaType;
+
         // If someone updates a VIA to TH, we want to kick out any non-outer layers
         SanitizeLayers();
     }
@@ -472,16 +474,16 @@ public:
 
     static std::optional<VIA_PARAMETER_ERROR>
             ValidateViaParameters( std::optional<int> aDiameter,
-                                    std::optional<int> aPrimaryDrill,
-                                    std::optional<PCB_LAYER_ID> aPrimaryStartLayer = std::nullopt,
-                                    std::optional<PCB_LAYER_ID> aPrimaryEndLayer = std::nullopt,
-                                    std::optional<int> aSecondaryDrill = std::nullopt,
-                                    std::optional<PCB_LAYER_ID> aSecondaryStartLayer = std::nullopt,
-                                    std::optional<PCB_LAYER_ID> aSecondaryEndLayer = std::nullopt,
-                                    std::optional<int> aTertiaryDrill = std::nullopt,
-                                    std::optional<PCB_LAYER_ID> aTertiaryStartLayer = std::nullopt,
-                                    std::optional<PCB_LAYER_ID> aTertiaryEndLayer = std::nullopt,
-                                    int aCopperLayerCount = 0 );
+                                   std::optional<int> aPrimaryDrill,
+                                   std::optional<PCB_LAYER_ID> aPrimaryStartLayer = std::nullopt,
+                                   std::optional<PCB_LAYER_ID> aPrimaryEndLayer = std::nullopt,
+                                   std::optional<int> aSecondaryDrill = std::nullopt,
+                                   std::optional<PCB_LAYER_ID> aSecondaryStartLayer = std::nullopt,
+                                   std::optional<PCB_LAYER_ID> aSecondaryEndLayer = std::nullopt,
+                                   std::optional<int> aTertiaryDrill = std::nullopt,
+                                   std::optional<PCB_LAYER_ID> aTertiaryStartLayer = std::nullopt,
+                                   std::optional<PCB_LAYER_ID> aTertiaryEndLayer = std::nullopt,
+                                   int aCopperLayerCount = 0 );
 
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( PCB_LAYER_ID aLayer ) const;
@@ -694,7 +696,7 @@ public:
     /**
      * Set the drill value for vias.
      *
-     * @param aDrill is the new drill diameter
+     * @param aSize is the new drill diameter.
      */
     void SetPrimaryDrillSize( const VECTOR2I& aSize );
     const VECTOR2I& GetPrimaryDrillSize() const { return m_padStack.Drill().size; }
@@ -709,7 +711,10 @@ public:
     PCB_LAYER_ID GetPrimaryDrillEndLayer() const { return m_padStack.Drill().end; }
 
     void SetFrontPostMachining( const std::optional<PAD_DRILL_POST_MACHINING_MODE>& aMode );
-    std::optional<PAD_DRILL_POST_MACHINING_MODE> GetFrontPostMachining() const { return m_padStack.FrontPostMachining().mode; }
+    std::optional<PAD_DRILL_POST_MACHINING_MODE> GetFrontPostMachining() const
+    {
+        return m_padStack.FrontPostMachining().mode;
+    }
 
     void SetFrontPostMachiningMode( PAD_DRILL_POST_MACHINING_MODE aMode )
     {
@@ -729,7 +734,10 @@ public:
     int GetFrontPostMachiningAngle() const { return m_padStack.FrontPostMachining().angle; }
 
     void SetBackPostMachining( const std::optional<PAD_DRILL_POST_MACHINING_MODE>& aMode );
-    std::optional<PAD_DRILL_POST_MACHINING_MODE> GetBackPostMachining() const { return m_padStack.BackPostMachining().mode; }
+    std::optional<PAD_DRILL_POST_MACHINING_MODE> GetBackPostMachining() const
+    {
+        return m_padStack.BackPostMachining().mode;
+    }
 
     void SetBackPostMachiningMode( PAD_DRILL_POST_MACHINING_MODE aMode )
     {
@@ -846,7 +854,7 @@ public:
     bool GetIsNotFree() const           { return !m_isFree; }
     void SetIsNotFree( bool aNotFree )  { m_isFree = !aNotFree; }
 
-    // @copydoc BOARD_ITEM::GetEffectiveShape
+    /// @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT,
                                               DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const override;

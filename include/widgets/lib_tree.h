@@ -60,7 +60,6 @@ public:
      * @param aParent parent window containing this tree widget.
      * @param aRecentSearchesKey a key into a global map storing recent searches (usually "power",
      *                           "symbols", or "footprints", but could be further differentiated).
-     * @param aLibTable table containing libraries and items to display.
      * @param aAdapter a LIB_TREE_MODEL_ADAPTER instance to use.
      * @param aFlags selection of sub-widgets to include and other options.
      * @param aDetails if not null, a custom HTML_WINDOW to hold symbol details. If null this
@@ -201,7 +200,7 @@ protected:
     void postPreselectEvent();
 
     /**
-     * Post #SYMBOL_SELECTED event to notify the selection handler that a part has been selected.
+     * Post EVT_LIBITEM_CHOSEN event to notify the selection handler that a part has been selected.
      */
     void postSelectEvent();
 

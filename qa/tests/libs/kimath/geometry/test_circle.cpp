@@ -235,7 +235,7 @@ struct CIR_CIR_VECPT_CASE : public KI_TEST::NAMED_CASE
 
 // clang-format off
 /**
- * Test cases for #CIRCLE::Intersect( const CIRCLE& aCircle )
+ * Test cases for #CIRCLE::Intersect(const CIRCLE&)const
  */
 static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
     {
@@ -355,7 +355,7 @@ struct SEG_SEG_VECPT_CASE : public KI_TEST::NAMED_CASE
 
 // clang-format off
 /**
- * Test cases for #CIRCLE::Intersect( const SEG& aSeg )
+ * Test cases for #CIRCLE::Intersect(const SEG&)const
  */
 static const std::vector<SEG_SEG_VECPT_CASE> intersect_seg_cases = {
     {
@@ -414,7 +414,7 @@ BOOST_DATA_TEST_CASE( Intersect, boost::unit_test::data::make( intersect_seg_cas
 
 // clang-format off
 /**
- * Test cases for #CIRCLE::IntersectLine( const SEG& aSeg )
+ * Test cases for #CIRCLE::IntersectLine(const SEG&)const
  */
 static const std::vector<SEG_SEG_VECPT_CASE> intersect_line_cases = {
     {
@@ -486,7 +486,7 @@ struct CIR_SEG_VECPT_CASE : public KI_TEST::NAMED_CASE
 
 // clang-format off
 /**
- * Test cases for #CIRCLE::Intersect( const SEG& aSeg )
+ * Test cases for #CIRCLE::Intersect(const SEG&)const
  */
 static const std::vector<CIR_SEG_VECPT_CASE> construct_tan_tan_pt_cases = {
     {

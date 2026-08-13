@@ -112,7 +112,7 @@ public:
      * @param aFileVersion The schematic file version to parser.  Defaults to the schematic
      *                     file being parsed when \a aIsCopyableOnly is false.
      */
-    void ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyablyOnly = false,
+    void ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly = false,
                          int aFileVersion = SEXPR_SCHEMATIC_FILE_VERSION );
 
     int GetParsedRequiredVersion() const { return m_requiredVersion; }
@@ -233,7 +233,7 @@ private:
     /**
      * Parse stroke definition \a aStroke.
      *
-     * @param aStrokeDef A reference to the #STROKE_PARAMS structure to write to.
+     * @param aStroke A reference to the #STROKE_PARAMS structure to write to.
      */
     void parseStroke( STROKE_PARAMS& aStroke );
 

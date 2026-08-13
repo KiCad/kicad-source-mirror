@@ -45,7 +45,7 @@ bool IsA( const I& aObject )
 /**
  * A lightweight dynamic downcast.
  *
- * Cast \a aObject to type Casted*.  Uses #EDA_ITEM::Type() and #EDA_ITEM::ClassOf() to
+ * Cast \a aObject to type Casted*.  Uses #EDA_ITEM::Type() and object specific ClassOf method to
  * check if type matches.
  *
  * @param aObject object to be casted.

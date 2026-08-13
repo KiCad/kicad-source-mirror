@@ -40,7 +40,6 @@ public:
     /// Main loop
     int Main( const TOOL_EVENT& aEvent );
 
-    /// @copydoc TOOL_BASE::setTransitions()
     void setTransitions() override;
 
 private:

@@ -43,8 +43,6 @@ public:
     /**
      * @param aKiway
      * @param aParent is the parent frame of the viewer.
-     * @param aFrameType must be either #FRAME_SCH_LIB_VIEWER or #FRAME_SCH_LIB_VIEWER_MODAL.
-     * @param aLibrary is the library to open when starting (default = NULL).
      */
     SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 

@@ -20,13 +20,6 @@
 #include "gerber_collectors.h"
 
 
-/**
- * The examining function within the INSPECTOR which is passed to the iterate function.
- *
- * @param testItem is an EDA_ITEM to examine.
- * @param testData is not used here.
- * @return SEARCH_QUIT if the iterator is to stop the scan, else SCAN_CONTINUE.
- */
 INSPECT_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     if( testItem->HitTest( m_refPos ) )

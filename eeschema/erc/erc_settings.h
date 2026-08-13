@@ -299,6 +299,7 @@ public:
     /**
      * Set the exclusion state of a marker while keeping the cached severity counts in sync.
      *
+     * @param aMarker is the marker to include or exclude.
      * @param aExcluded true to exclude the marker, false to restore it.
      * @param aComment optional exclusion comment.
      */

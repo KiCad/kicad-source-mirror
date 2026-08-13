@@ -37,6 +37,7 @@
  * doesn't allow that method.
  *
  * @param aItem generic T object.
+ * @param aLayer is the layer ID of \a aObject.
  * @return a SHAPE* object equivalent to object.
  */
 template <class T>
@@ -52,6 +53,7 @@ static const SHAPE* shapeFunctor( T aItem, int aLayer )
  * doesn't allow that method.
  *
  * @param aObject is a generic T object.
+ * @param aLayer is the layer ID of \a aObject.
  * @return a BOX2I object containing the bounding box of the T object.
  */
 template <class T>

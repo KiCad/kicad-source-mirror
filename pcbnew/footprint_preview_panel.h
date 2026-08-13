@@ -85,8 +85,9 @@ private:
     /**
      * Create a new panel
      *
-     * @param aKiway the connected KIWAY
+     * @param aKiway the connected #KIWAY
      * @param aParent the owning WX window
+     * @param aUnitsProvider
      * @param aOpts the GAL options (ownership is assumed)
      * @param aGalType the displayed GAL type
      */

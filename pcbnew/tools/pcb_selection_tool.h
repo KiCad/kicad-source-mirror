@@ -101,24 +101,24 @@ public:
      */
     PCB_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter );
 
-    ///< Select a single item under cursor event handler.
+    /// Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );
 
     int SelectColumns( const TOOL_EVENT& aEvent );
     int SelectRows( const TOOL_EVENT& aEvent );
     int SelectTable( const TOOL_EVENT& aEvent );
 
-    ///< Clear current selection event handler.
+    /// Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
     void ClearSelection( bool aQuietMode = false );
 
-    ///< Select all items on the board
+    /// Select all items on the board
     int SelectAll( const TOOL_EVENT& aEvent );
 
-    ///< Unselect all items on the board
+    /// Unselect all items on the board
     int UnselectAll( const TOOL_EVENT& aEvent );
 
-    ///< Change the selection mode
+    /// Change the selection mode
     int SetSelectRect( const TOOL_EVENT& aEvent );
     int SetSelectPoly( const TOOL_EVENT& aEvent );
 
@@ -243,13 +243,13 @@ public:
         return m_filter;
     }
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
-    ///< Zoom the screen to center and fit the current selection.
+    /// Zoom the screen to center and fit the current selection.
     void zoomFitSelection();
 
-    ///< Zoom the screen to fit the bounding box for cross probing/selection sync.
+    /// Zoom the screen to fit the bounding box for cross probing/selection sync.
     void ZoomFitCrossProbeBBox( const BOX2I& bbox );
 
     /**
@@ -280,10 +280,13 @@ public:
          * on another layer as well, but a via with only one connection will be selected.
          */
         STOP_AT_JUNCTION,
+
         /** Stop when reaching a segment (next track/arc/via). */
         STOP_AT_SEGMENT,
+
         /** Stop when reaching a pad. */
         STOP_AT_PAD,
+
         /** Select the entire net. */
         STOP_NEVER
     };
@@ -291,6 +294,7 @@ public:
     /**
      * Select connected tracks and vias.
      *
+     * @param aStartItems
      * @param aStopCondition Indicates where to stop selecting more items.
      */
     void selectAllConnectedTracks( const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems,
@@ -349,7 +353,7 @@ public:
 
     /**
      * Drop footprints that are not directly selected
-    */
+     */
     void FilterCollectorForFootprints( GENERAL_COLLECTOR& aCollector,
                                        const VECTOR2I& aWhere ) const;
 
@@ -559,23 +563,23 @@ private:
      */
     void selectAllItemsOnSheet( wxString& aSheetPath );
 
-    ///< Select all footprints belonging to same sheet, from Eeschema using cross-probing.
+    /// Select all footprints belonging to same sheet, from Eeschema using cross-probing.
     int selectSheetContents( const TOOL_EVENT& aEvent );
 
-    ///< Select all footprints belonging to same hierarchical sheet as the selected footprint
-    ///< (same sheet path).
+    /// Select all footprints belonging to same hierarchical sheet as the selected footprint
+    /// (same sheet path).
     int selectSameSheet( const TOOL_EVENT& aEvent );
 
-    ///< Set selection to items passed by parameter and connected nets (optionally).
-    ///< Zooms to fit, if enabled
+    /// Set selection to items passed by parameter and connected nets (optionally).
+    /// Zooms to fit, if enabled
     int  syncSelection( const TOOL_EVENT& aEvent );
     int  syncSelectionWithNets( const TOOL_EVENT& aEvent );
     void doSyncSelection( const std::vector<BOARD_ITEM*>& aItems, bool aWithNets );
 
-    ///< Invoke filter dialog and modify current selection
+    /// Invoke filter dialog and modify current selection
     int filterSelection( const TOOL_EVENT& aEvent );
 
-    ///< Return true if the given item passes the current SELECTION_FILTER_OPTIONS.
+    /// Return true if the given item passes the current SELECTION_FILTER_OPTIONS.
     bool itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
                            PCB_SELECTION_FILTER_OPTIONS* aRejected = nullptr );
 
@@ -649,7 +653,7 @@ private:
 
     bool                     m_lockedItemsFiltered;
 
-    // Anchor cell for shift+click range selection in a PCB_TABLE
+    /// Anchor cell for shift+click range selection in a PCB_TABLE.
     PCB_TABLECELL*           m_previousFirstCell;
 
     /// Private state (opaque pointer/compilation firewall)

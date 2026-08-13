@@ -122,10 +122,12 @@ protected:
     /**
      * Processes a selection and determines whether the given property should be available or not
      * and what the common value should be for the items in the selection.
+     *
      * @param aSelection is a set of EDA_ITEMs to process
-     * @param aProperty is the property to look up
+     * @param aPropName is the property to look up
      * @param aValue will be filled with the value common to the selection, or null if different
      * @param aWritable will be set to whether or not the property can be written for the selection
+     * @param aChoices
      * @return true if the property is available for all the items in the selection
      */
     bool extractValueAndWritability( const SELECTION& aSelection, const wxString& aPropName,

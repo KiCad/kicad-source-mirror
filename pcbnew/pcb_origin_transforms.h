@@ -43,65 +43,60 @@ public:
     virtual double FromDisplay( double aValue, COORD_TYPES_T aCoordType ) const override;
     virtual EDA_ANGLE FromDisplay( const EDA_ANGLE& aValue, COORD_TYPES_T aCoordType ) const override;
 
+    // =============== Single-axis Relative Transforms ===============
+
     /**
      * Transform a 2-D coordinate point referenced to the internal origin
      * to the equivalent point referenced to the user-selected display origin.
      *
-     * @param aValue a point referenced to the internal origin
+     * @param aInternalValue a point referenced to the internal origin
      * @returns the point re-referenced to the user-selected display origin
      */
-
-    /**
-     * Transform a 2-D coordinate point referenced to the user-selected
-     * display origin to the equivalent point referenced to the internal origin.
-     *
-     * @param aValue a point referenced to the user-selected display origin
-     * @returns the point re-referenced to the internal origin
-     */
-
-    /**
-     * Transform a relative 2-D coordinate delta referenced to the user-selected
-     * display origin to the equivalent delta referenced to the internal origin.
-     *
-     * This is initially intended to handle axis inversion of a delta between
-     * two display points, but could be extended to handle other transforms.
-     *
-     * @param aValue a delta referenced to the internal origin
-     * @returns the delta re-referenced to the user-selected display origin
-     */
-
-    /**
-     * Transform a relative 2-D coordinate delta referenced to the user-selected
-     * display origin to the equivalent delta referenced to the internal origin.
-     *
-     * This is initially intended to handle axis inversion of a delta between
-     * two display points, but could be extended to handle other transforms.
-     *
-     * @param aValue a delta referenced to the user-selected display origin
-     * @returns the delta re-referenced to the internal origin
-     */
-
-
-    // =============== Single-axis Relative Transforms ===============
-
     template<typename T>
     T ToDisplayRelX( T aInternalValue ) const
     {
         return ORIGIN_TRANSFORMS::ToDisplayRel( aInternalValue, invertXAxis() );
     }
 
+    /**
+     * Transform a 2-D coordinate point referenced to the user-selected
+     * display origin to the equivalent point referenced to the internal origin.
+     *
+     * @param aInternalValue a point referenced to the user-selected display origin
+     * @returns the point re-referenced to the internal origin
+     */
     template<typename T>
     T ToDisplayRelY( T aInternalValue ) const
     {
         return ORIGIN_TRANSFORMS::ToDisplayRel( aInternalValue, invertYAxis() );
     }
 
+    /**
+     * Transform a relative 2-D coordinate delta referenced to the user-selected
+     * display origin to the equivalent delta referenced to the internal origin.
+     *
+     * This is initially intended to handle axis inversion of a delta between
+     * two display points, but could be extended to handle other transforms.
+     *
+     * @param aDisplayValue a delta referenced to the internal origin
+     * @returns the delta re-referenced to the user-selected display origin
+     */
     template<typename T>
     T FromDisplayRelX( T aDisplayValue ) const
     {
         return ORIGIN_TRANSFORMS::FromDisplayRel( aDisplayValue, invertXAxis() );
     }
 
+    /**
+     * Transform a relative 2-D coordinate delta referenced to the user-selected
+     * display origin to the equivalent delta referenced to the internal origin.
+     *
+     * This is initially intended to handle axis inversion of a delta between
+     * two display points, but could be extended to handle other transforms.
+     *
+     * @param aDisplayValue a delta referenced to the user-selected display origin
+     * @returns the delta re-referenced to the internal origin
+     */
     template<typename T>
     T FromDisplayRelY( T aDisplayValue ) const
     {

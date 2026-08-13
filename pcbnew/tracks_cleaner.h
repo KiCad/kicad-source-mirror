@@ -61,7 +61,7 @@ public:
 private:
     bool filterItem( BOARD_CONNECTED_ITEM* aItem );
 
-    /*
+    /**
      * Removes track segments which are connected to more than one net (short circuits).
      */
     void removeShortingTrackSegments();
@@ -83,8 +83,7 @@ private:
                   bool aDeleteDuplicateSegments, bool aMergeSegments );
 
     /**
-     * helper function
-     * merge aTrackRef and aCandidate, when possible,
+     * Merge \a aSeg1 and \a aSeg2, when possible,
      * i.e. when they are colinear, same width, and obviously same layer
      * @return true if the segments are merged, false if not
      * @param aSeg1 is the reference
@@ -93,19 +92,20 @@ private:
     bool mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 );
 
     /**
-     * helper function
-     * test if 2 segments are colinear.  Does not modify the connectivity
-     * @return true if the segments are colinear
+     * Test if 2 segments are colinear.  Does not modify the connectivity
      * @param aSeg1 is the reference
      * @param aSeg2 is the candidate
+     * @param aDummySeg
+     * @return true if the segments are colinear
      */
     bool testMergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2, PCB_TRACK* aDummySeg = nullptr );
 
     /**
-     * @return true if a track end position is a node, i.e. a end connected
      * to more than one item.
      * @param aTrack is the track to test.
-     * @param aTstStart = true ot test the start point of the track or false for end point
+     * @param aTstStart = true to test the start point of the track or false for end point
+     * @param aTstEnd
+     * @return true if a track end position is a node, i.e. a end connected
      */
     bool testTrackEndpointIsNode( PCB_TRACK* aTrack, bool aTstStart, bool aTstEnd );
 

@@ -148,7 +148,16 @@ inline VECTOR2I OrcadTransformPoint( int aOrient, int aWidth, int aHeight, int a
 class ORCAD_CONVERTER
 {
 public:
-    /** aDesign is mutated and must outlive the converter. */
+    /**
+     * @param aDesign parsed design; held by reference and MUTATED during
+     *                conversion (page-content shift, placeholder symbol
+     *                insertion), so it must outlive the converter.
+     * @param aSchematic is KiCad schematic to load into.
+     * @param aReporter is an optional #REPORTER object to write status information.
+     * @param aProgressReporter is and option progress dialog to show coversion progress.
+     *
+     * [orcad_converter_sheet.cpp]
+     */
     ORCAD_CONVERTER( ORCAD_DESIGN& aDesign, SCHEMATIC* aSchematic, REPORTER* aReporter,
                      PROGRESS_REPORTER* aProgressReporter = nullptr );
 

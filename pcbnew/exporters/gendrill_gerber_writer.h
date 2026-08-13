@@ -85,8 +85,8 @@ private:
      *
      * @param aFullFilename is the full file name.
      * @param aIsNpth set to true for a NPTH file or false for a PTH file.
-     * @param aLayerPair is the first board layer and the last board layer for this drill file
-     *                   for blind buried vias, they are not always top and bottom layers/
+     * @param aSpan is the first board layer and the last board layer for this drill file
+     *              for blind buried vias, they are not always top and bottom layers.
      * @return hole count or -1 if the file cannot be created.
      */
     int createDrillFile( wxString& aFullFilename, bool aIsNpth, const DRILL_SPAN& aSpan );
@@ -102,7 +102,7 @@ private:
                               DRILL_LAYER_PAIR aLayerPair );
 
     /**
-     * @param aPair is the layer pair.
+     * @param aSpan is the layer span.
      * @param aNPTH set to true to generate the filename of NPTH holes.
      * @param aMerge_PTH_NPTH set to true to generate the filename of a file which contains both
      *                        NPH and NPTH holes

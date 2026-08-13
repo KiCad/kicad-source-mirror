@@ -219,7 +219,7 @@ protected:
          *               specifying the type of anchor (which may be used to filter out
          *               unwanted anchors per the settings).
          * @param aPointTypes The point types that this anchor represents in geometric terms.
-         * @param aItem The item to which the anchor belongs.
+         * @param aItems The items to which the anchor belongs.
          */
         ANCHOR( const VECTOR2I& aPos, int aFlags, int aPointTypes, std::vector<EDA_ITEM*> aItems ) :
                 pos( aPos ), flags( aFlags ), pointTypes( aPointTypes ),
@@ -393,7 +393,7 @@ private:
     /// Manage the construction geometry, snap lines, reference points, etc.
     SNAP_MANAGER m_snapManager;
 
-    /// #VIEW_ITEM for visualising anchor points, if enabled.
+    /// #KIGFX::VIEW_ITEM for visualising anchor points, if enabled.
     std::unique_ptr<KIGFX::ANCHOR_DEBUG> m_anchorDebug;
 };
 

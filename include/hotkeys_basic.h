@@ -81,8 +81,8 @@ enum HOTKEY_ACTION_TYPE
 /**
  * @param aText the base text on which to append the hotkey.
  * @param aHotKey the hotkey keycode.
- * @param aStyle #IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys).
- *               #IS_COMMENT to add <spaces><(keyname)> mainly in tool tips.
+ * @param aStyle #IS_HOTKEY to add \<tab\>\<keyname\> (shortcuts in menus, same as hotkeys).
+ *               #IS_COMMENT to add \<spaces\>\<(keyname)\> mainly in tool tips.
  */
 wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE aStyle = IS_HOTKEY );
 
@@ -90,8 +90,6 @@ wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE a
  * Display the current hotkey list.
  *
  * @param aFrame current active frame.
- * @param aToolMgr the tool manager holding the registered actions from which the hotkeys
- *                 will be harvested.
  */
 void DisplayHotkeyList( EDA_BASE_FRAME* aFrame );
 

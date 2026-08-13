@@ -43,7 +43,6 @@ public:
     /// @copydoc VIEW::Update()
     virtual void Update( const VIEW_ITEM* aItem, int aUpdateFlags ) const override;
 
-    /// @copydoc VIEW::Update()
     virtual void Update( const VIEW_ITEM* aItem ) const override;
 
     /**

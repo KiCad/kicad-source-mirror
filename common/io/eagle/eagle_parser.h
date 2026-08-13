@@ -200,9 +200,8 @@ size_t GetNodeCount( const wxXmlNode* aNode );
 /**
  * Provide an easy access to the children of an XML node via their names.
  *
- * @param  currentNode is a pointer to a wxXmlNode, whose children will be mapped.
- * @return NODE_MAP is a map linking the name of each children to the children itself (via a
- *                  wxXmlNode*)
+ * @param aCurrentNode is a pointer to a wxXmlNode, whose children will be mapped.
+ * @return NODE_MAP is a map linking the name of each children to the children itself (via a wxXmlNode*)
  */
 NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
 
@@ -228,6 +227,7 @@ struct EAGLE_BASE
      * Send a message to the #IO_BASE #REPORTER object if one exists.
      *
      * @param aMsg is the message to send to the #REPORTER object.
+     * @param aSeverity is the #REPORTER message severity.
      */
     void Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
 
@@ -248,7 +248,7 @@ struct EAGLE_BASE
  *   The "/<VERSION>" is omitted when referencing the asset without specifying a particular version.
  *   For example, "urn:adsk.eagle:component:60986/2" references version 2 of component 60986 and
  *   "urn:adsk.eagle:library:60968" references library 60986 without specifying a version.
- * 
+ *
  * Autodesk Fusion can use a different format instead, e.g.:
  * "urn:adsk.wipprod:fs.file:vf.RSKzNVZVQPeDNm7Bnfr3WQ"
  */

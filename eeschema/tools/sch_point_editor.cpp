@@ -495,6 +495,9 @@ public:
     /**
      * Update the coordinates of 4 corners of a rectangle, according to constraints
      * and the moved corner
+     *
+     * @param aEditedPoint
+     * @param aPoints
      * @param minWidth is the minimal width constraint
      * @param minHeight is the minimal height constraint
      * @param topLeft is the RECT_TOPLEFT to constraint

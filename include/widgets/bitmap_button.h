@@ -51,7 +51,7 @@ public:
     /**
      * Set the amount of padding present on each side of the bitmap.
      *
-     * @param aPadding is the amount in DIP of padding for each side.
+     * @param aPaddingDIP is the amount in DIP of padding for each side.
      */
     void SetPadding( int aPaddingDIP );
 

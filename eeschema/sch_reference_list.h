@@ -379,12 +379,10 @@ public:
      * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
      * @param aAlgoOption Define the annotation style.  See #ANNOTATE_ALGO_T.
      * @param aStartNumber The start number for non-sheet-based annotation styles.
-     * @param aAdditionalReferences Additional references to check for duplicates
-     * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
-     *        aStartNumber)
-     * @param aHierarchy Optional sheet path hierarchy for resetting the references'
-     *        sheet numbers based on their sheet's place in the hierarchy. Set
-     *        nullptr if not desired.
+     * @param aAdditionalRefs Additional references to check for duplicates,
+     * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides aStartNumber).
+     * @param aHierarchy Optional sheet path hierarchy for resetting the references' sheet numbers
+     *                   based on their sheet's place in the hierarchy. Set nullptr if not desired.
      */
     void ReannotateByOptions( ANNOTATE_ORDER_T             aSortOption,
                               ANNOTATE_ALGO_T              aAlgoOption,
@@ -411,12 +409,10 @@ public:
      * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
      * @param aAlgoOption Define the annotation style.  See #ANNOTATE_ALGO_T.
      * @param aStartNumber The start number for non-sheet-based annotation styles.
-     * @param appendUndo True if the annotation operation should be added to an existing undo,
-     *                   false if it should be separately undo-able.
      * @param aLockedUnitMap A SCH_MULTI_UNIT_REFERENCE_MAP of reference designator wxStrings
      *      to SCH_REFERENCE_LISTs. May be an empty map. If not empty, any multi-unit parts
      *      found in this map will be annotated as a group rather than individually.
-     * @param aAdditionalReferences Additional references to check for duplicates
+     * @param aAdditionalRefs Additional references to check for duplicates
      * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
      *        aStartNumber)
      */
@@ -581,7 +577,7 @@ public:
      * Return the first unused reference number from the properties given in aRef, ensuring
      * all of the units in aRequiredUnits are also unused.
      *
-     * @param aIndex The index of the reference item used for the search pattern.
+     * @param aRef is the reference item used for the search pattern.
      * @param aMinValue The minimum value for the current search.
      * @param aRequiredUnits List of units to ensure are free
      */

@@ -37,10 +37,15 @@ public:
 
     /**
      * the cleanup function.
+     *
+     * @param aDryRun performs a dry run clean up if true.
+     * @param aItemsList is the list of items cleaned up.
      * @param aMergeRects = merge for segments forming a rectangle into a rect
      * @param aDeleteRedundant = true to delete null graphics and duplicated graphics
      * @param aMergePads = true to apply Pad Editor's merge algorithm to all pads in footprint
      *                     (it is assumed this will only be run on FPEditor boards)
+     * @param aFixBoardOutlines fixes board outlines one clean up if true.
+     * @param aTolerance
      */
     void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM>>* aItemsList,
                        bool aMergeRects, bool aDeleteRedundant, bool aMergePads,

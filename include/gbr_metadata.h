@@ -170,7 +170,7 @@ public:
         /// Aperture used to draw component outline courtyard in placement files.
         GBR_APERTURE_ATTRIB_CMP_COURTYARD,
 
-        ///< aperture used for other purposes. Requires a text description of this feature.
+        /// aperture used for other purposes. Requires a text description of this feature.
         GBR_APERTURE_ATTRIB_OTHER,
         GBR_APERTURE_ATTRIB_END ///< sentinel: max value
     };
@@ -188,11 +188,13 @@ public:
     }
 
     /**
+     * @param aAttribute
      * @param aUseX1StructuredComment false in X2 mode and true in X1 mode to add the net
      *                                attribute inside a compatible X1 structured comment
-     *                                starting by "G04 #@! "
+     *                                starting by "G04 \#\@\! "
+     * @param aCustomAttribute
      * @return the full command string corresponding to the aperture attribute
-     *         like "%TA.AperFunction,<function>*%"
+     *         like "\%TA.AperFunction,\<function\>\*\%"
      */
     static std::string FormatAttribute( GBR_APERTURE_ATTRIB aAttribute,
                                         bool                aUseX1StructuredComment,
@@ -336,7 +338,7 @@ wxString FormatStringFromGerber( const wxString& aString );
  *                                 from file before adding new attribute (happens when a previous
  *                                 attribute no longer exists).
  * @param aUseX1StructuredComment false in X2 mode and true in X1 mode to add the net attribute
- *                                in compatible X1 structured comment (i.e. prefixed by "G04 #@! ")
+ *                                in compatible X1 structured comment (i.e. prefixed by "G04 \#\@\! \")
  * @return false if nothing can be done (GBR_NETLIST_METADATA has GBR_APERTURE_ATTRIB_NONE,
  *         and true if OK. If the new attribute(s) is the same as current attribute(s),
  *         \a aPrintedText will be empty.

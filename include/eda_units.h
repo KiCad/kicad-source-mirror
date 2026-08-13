@@ -124,8 +124,9 @@ namespace EDA_UNIT_UTILS
      * @note Internal units for board items can be either deci-mils or nanometers depending
      *       on how KiCad is built.
      *
+     * @param aIuScale is the internal units scalar for the conversion.
      * @param aValue A coordinate value to convert.
-     * @param aDataType The EDA_UNITS data type for @param aValue
+     * @param aDataType The EDA_UNITS data type.
      * @return A std::string object containing the converted value.
      */
     KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue,
@@ -179,6 +180,7 @@ namespace EDA_UNIT_UTILS
         /**
          * Convert \a aValue in internal units to the appropriate user units defined by \a aUnit.
          *
+         * @param aIuScale is the internal units scalar for the conversion.
          * @param aUnit The units to convert \a aValue to.
          * @param aValue The value in internal units to convert.
          * @return The converted value, in double.
@@ -193,6 +195,7 @@ namespace EDA_UNIT_UTILS
          * This function should be used to display values in dialogs because a value entered in mm
          * (for instance 2.0 mm) could need up to 8 digits mantissa to preserve precision.
          *
+         * @param aIuScale is the internal units scalar for the conversion.
          * @param aUnits Units (INCHES, MILLIMETRE ..).
          * @param aValue Value in internal units.
          * @param aAddUnitsText Add units text with appropriate separators.
@@ -213,6 +216,7 @@ namespace EDA_UNIT_UTILS
          * because the mantissa of the number displayed has 4 digits max for readability.  The
          * actual internal value could need up to 8 digits to preserve precision.
          *
+         * @param aIuScale is the internal units scalar for the conversion.
          * @param aUnits Units (IN, MM, ...)
          * @param aValue The double value to convert.
          * @param aAddUnitsText If true, adds the unit label to the end of the string.
@@ -253,6 +257,7 @@ namespace EDA_UNIT_UTILS
          * @param aIuScale The internal units scale for the current frame/app.
          * @param aUnits The units of \a aTextValue.
          * @param aTextValue A reference to a wxString object containing the string to convert.
+         * @param aType The EDA_DATA_TYPE to convert.
          * @return A double representing that value in internal units.
          */
         KICOMMON_API double DoubleValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
@@ -272,6 +277,7 @@ namespace EDA_UNIT_UTILS
          * @param aIuScale The internal units scale for the current frame/app.
          * @param aUnits The units of \a aTextValue.
          * @param aTextValue A reference to a wxString object containing the string to convert.
+         * @param aType The EDA_DATA_TYPE to convert.
          * @return A long long int representing that value in internal units.
          */
         KICOMMON_API long long int ValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,

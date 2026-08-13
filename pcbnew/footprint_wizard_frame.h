@@ -45,7 +45,7 @@ public:
 
     ~FOOTPRINT_WIZARD_FRAME();
 
-    ///< @copydoc PCB_BASE_FRAME::GetModel()
+    /// @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     /// Return a duplicate of the generated footprint.  The caller takes ownership.

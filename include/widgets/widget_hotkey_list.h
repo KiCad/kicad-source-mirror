@@ -41,7 +41,8 @@ public:
      * Create a #WIDGET_HOTKEY_LIST.
      *
      * @param aParent is the parent widget.
-     * @param aHotkeys is the #EDA_HOTKEY_CONFIG data: a hotkey store is constructed from this.
+     * @param aHotkeyStore is the #HOTKEY_STORE with the hot key information.
+     * @param readOnly makes the list read only if true.
      */
     WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore, bool readOnly );
 
@@ -121,8 +122,8 @@ protected:
      * g_CommonSectionTag means the key code must only be checked with the aSectionTag section
      * and g_CommonSectionTag section.
      *
+     * @param aAction is the tool action into which the key is proposed to be installed.
      * @param aKey is the key to check.
-     * @param aActionName is the name of the action into which the key is proposed to be installed.
      *
      * @return true if the user accepted the overwrite or no conflict existed.
      */

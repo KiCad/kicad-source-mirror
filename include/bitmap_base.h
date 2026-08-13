@@ -182,21 +182,21 @@ public:
     bool SetImage( const wxImage& aImage );
 
     /**
-    * Write the bitmap data to \a aOutStream.
-    *
-    * This writes binary data, not hexadecimal strings
-    *
-    * @param aOutStream The output stream to write to.
-    * @return true if success writing else false.
-    */
+     * Write the bitmap data to \a aOutStream.
+     *
+     * This writes binary data, not hexadecimal strings
+     *
+     * @param aOutStream The output stream to write to.
+     * @return true if success writing else false.
+     */
     bool SaveImageData( wxOutputStream& aOutStream ) const;
 
     /**
-     * Load an image data saved by #SaveData.
+     * Load an image data saved by #SaveImageData.
      *
      * The file format must be png format in hexadecimal.
      *
-     * @param aLine the LINE_READER used to read the data file.
+     * @param aLine the #LINE_READER used to read the data file.
      * @param aErrorMsg Description of the error if an error occurs while loading the
      *                  png bitmap data.
      * @return true if the bitmap loaded successfully.

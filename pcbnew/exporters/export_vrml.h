@@ -38,13 +38,17 @@ public:
     /**
      * Exports the board and its footprint shapes 3D (vrml files only) as a
      * vrml file
+     *
+     * @param aProject is the project to export.
+     * @param aMessages
      * @param aFullFileName is the full filename of the board vrml file to create
      * @param aMMtoWRMLunit is the convert factor from mm to the desired vrml file
+     * @param aIncludeUnspecified
+     * @param aIncludeDNP is the flag to include do not populate items.
      * @param aExport3DFiles = true to copy 3D fp vrml models to a folder,
-     * and use " { inline fp_3d_model_filename }" keyword in vrml board file
-     * false to include them in the vrml board file
-     * @param aUseRelativePaths = true to use fp 3D relative paths,
-     * false to use absolute paths
+     *                         and use \"{ inline fp_3d_model_filename }\" keyword in vrml board file
+     *                         false to include them in the vrml board file
+     * @param aUseRelativePaths = true to use fp 3D relative paths, false to use absolute paths
      * @param a3D_Subdir is the folder to copy 3D fp models
      * @param aXRef = X position of board (in mm)
      * @param aYRef = Y position of board (in mm)

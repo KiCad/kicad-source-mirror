@@ -88,10 +88,10 @@ class wxFileSystemWatcherEvent;
  * check the optional cache library.
  *
  * @param aLibId is the symbol library identifier to load.
- * @param aLibMgr is the #SYMBOL_LIBRARY_MANAGER_ADAPTER to load the alias from.
+ * @param aLibMgr is the #SYMBOL_LIBRARY_ADAPTER to load the alias from.
  * @param aCacheLib is an optional cache library.
  * @param aParent is an optional parent window when displaying an error message.
- * @param aShowErrorMessage set to true to show any error messages.
+ * @param aShowErrorMsg set to true to show any error messages.
  *
  * @return The symbol found in the library or NULL if the symbol was not found.
  */
@@ -100,8 +100,8 @@ LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_ADAPTER* aLibM
                              bool aShowErrorMsg = false );
 
 /**
- * A shim class between EDA_DRAW_FRAME and several derived classes:
- * SYMBOL_EDIT_FRAME, SYMBOL_VIEWER_FRAME, and SCH_EDIT_FRAME, and it brings in a
+ * A shim class between #EDA_DRAW_FRAME and several derived classes:
+ * #SYMBOL_EDIT_FRAME, #SYMBOL_VIEWER_FRAME, and #SCH_EDIT_FRAME, and it brings in a
  * common way of handling the provided virtual functions for the derived classes.
  *
  * The motivation here is to switch onto GetScreen() for the underlying data model.
@@ -166,7 +166,8 @@ public:
      *
      * @param aFilter is an optional #SYMBOL_LIBRARY_FILTER filter to pass the allowed library names
      *                and/or the library name to load the symbol from and/or some other filter
-     * @param aHistoryList is the list of previously loaded symbols - will be edited
+     * @param aHistoryList is the list of previously loaded symbols - will be edited.
+     * @param aAlreadyPlaced is a list of symbols that have already been placed.
      * @param aHighlight is the name of symbol to highlight in the list.
      *                   highlights none if there isn't one by that name.
      * @param aShowFootprints is the whether to show footprints in the dialog.
@@ -189,7 +190,7 @@ public:
      * @param aLibId is the symbol library identifier to load.
      * @param aUseCacheLib set to true to fall back to cache library if symbol is not found in
      *                     symbol library table.
-     * @param aShowErrorMessage set to true to show any error messages.
+     * @param aShowErrorMsg set to true to show any error messages.
      * @return The symbol found in the library or NULL if the symbol was not found.
      */
     LIB_SYMBOL* GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLib = false,

@@ -122,20 +122,20 @@ public:
     }
 
     /**
-      * Compute the perpendicular projection point of aP on a line passing through
-      * ends of the segment.
-      *
-      * @param aP point to project
-      * @return projected point
-      */
+     * Compute the perpendicular projection point of aP on a line passing through
+     * ends of the segment.
+     *
+     * @param aP point to project
+     * @return projected point
+     */
     VECTOR2I LineProject( const VECTOR2I& aP ) const;
 
     /**
-      * Determine on which side of directed line passing via segment ends point aP lies.
-      *
-      * @param aP point to determine the orientation wrs to self
-      * @return: < 0: left, 0 : on the line, > 0 : right
-      */
+     * Determine on which side of directed line passing via segment ends point aP lies.
+     *
+     * @param aP point to determine the orientation wrs to self
+     * @return: < 0: left, 0 : on the line, > 0 : right
+     */
     int Side( const VECTOR2I& aP ) const
     {
         const ecoord det = ( B - A ).Cross( aP - A );
@@ -144,53 +144,54 @@ public:
     }
 
     /**
-      * Return the closest Euclidean distance between point aP and the line defined by
-      * the ends of segment (this).
-      *
-      * @param aP the point to test
-      * @param aDetermineSide: when true, the sign of the returned value indicates
-      * the side of the line at which we are (negative = left)
-      * @return the distance
-      */
+     * Return the closest Euclidean distance between point aP and the line defined by
+     * the ends of segment (this).
+     *
+     * @param aP the point to test
+     * @param aDetermineSide: when true, the sign of the returned value indicates
+     * the side of the line at which we are (negative = left)
+     * @return the distance
+     */
     int LineDistance( const VECTOR2I& aP, bool aDetermineSide = false ) const;
 
     /**
-      * Determine the smallest angle between two segments
-      *
-      * @param aOther point to determine the orientation wrs to self
-      * @return smallest angle between this and aOther
-      */
+     * Determine the smallest angle between two segments
+     *
+     * @param aOther point to determine the orientation wrs to self
+     * @return smallest angle between this and aOther
+     */
     EDA_ANGLE Angle( const SEG& aOther ) const;
 
     /**
-      * Compute a point on the segment (this) that is closest to point \a aP.
-      *
-      * @return the nearest point
-      */
+     * Compute a point on the segment (this) that is closest to point \a aP.
+     *
+     * @return the nearest point
+     */
     const VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
 
     /**
-      * Compute a point on the segment (this) that is closest to any point on \a aSeg.
-      *
-      * @return the nearest point
-      */
+     * Compute a point on the segment (this) that is closest to any point on \a aSeg.
+     *
+     * @return the nearest point
+     */
     const VECTOR2I NearestPoint( const SEG &aSeg ) const;
 
     /**
-      * Compute closest points between this segment and \a aSeg.
-      *
-      * @param aPtA point on this segment (output)
-      * @param aPtB point on the other segment (output)
-      * @param aDistSq squared distance between points (output)
-      * @return true if the operation was successful
-      */
+     * Compute closest points between this segment and \a aSeg.
+     *
+     * @param aSeg is the segement to compare against.
+     * @param[out] aPtA point on this segment.
+     * @param[out] aPtB point on the other segment.
+     * @param[out] aDistSq squared distance between points.
+     * @return true if the operation was successful.
+     */
     bool NearestPoints( const SEG& aSeg, VECTOR2I& aPtA, VECTOR2I& aPtB, int64_t& aDistSq ) const;
 
     /**
-      * Reflect a point using this segment as axis.
-      *
-      * @return the reflected point
-      */
+     * Reflect a point using this segment as axis.
+     *
+     * @return the reflected point
+     */
     const VECTOR2I ReflectPoint( const VECTOR2I& aP ) const;
 
     /**
@@ -394,7 +395,7 @@ private:
     bool mutualDistanceSquared( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const;
 
 private:
-    ///< index within the parent shape (used when m_is_local == false)
+    /// index within the parent shape (used when m_is_local == false)
     int m_index;
 };
 

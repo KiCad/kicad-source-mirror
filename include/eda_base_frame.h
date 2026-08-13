@@ -192,7 +192,7 @@ public:
      *
      * @param aEvent is the wxUpdateUIEvent to be processed.
      * @param aFrame is the frame to get the selection from
-     * @param aCond are the #UI SELECTION_CONDITIONS used
+     * @param aCond are the UI #ACTION_CONDITIONS used.
      */
     static void HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAME* aFrame,
                                      ACTION_CONDITIONS& aCond );
@@ -257,6 +257,7 @@ public:
      *
      * @param aErrorMsg is the message to display.
      * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
+     * @param aType is the type of infobar message to show.
      */
     void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton = false,
                            INFOBAR_MESSAGE_TYPE aType = INFOBAR_MESSAGE_TYPE::GENERIC );
@@ -284,7 +285,7 @@ public:
      *
      * The infobar will be closed after a timeout.
      *
-     * @param aErrorMsg is the message to display.
+     * @param aWarningMsg is the message to display.
      * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
      */
     void ShowInfoBarWarning( const wxString& aWarningMsg, bool aShowCloseButton = false );
@@ -295,7 +296,7 @@ public:
      *
      * The infobar will be closed after a timeout.
      *
-     * @param aErrorMsg is the message to display.
+     * @param aMsg is the message to display.
      * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
      */
     void ShowInfoBarMsg( const wxString& aMsg, bool aShowCloseButton = false );
@@ -397,7 +398,7 @@ public:
      * Fetch the file name from the file history list.
      *
      * This removes the selected file, if this file does not exist.  The menu is also updated,
-     * if #FILE_HISTORY::UseMenu was called at initialization time.
+     * if #FILE_HISTORY::AddFilesToMenu was called at initialization time.
      *
      * @param cmdId The command ID associated with the \a aFileHistory object.
      * @param type Please document me!

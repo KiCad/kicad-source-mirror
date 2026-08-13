@@ -167,12 +167,13 @@ public:
     wxString GetClass() const override { return wxT( "PCB_TEXT" ); }
 
     /**
-     * Function TransformTextToPolySet
      * Convert the text to a polygonSet describing the actual character strokes (one per segment).
      * Circles and arcs are approximated by segments.
+     *
      * @param aBuffer SHAPE_POLY_SET to store the polygon corners
      * @param aClearance the clearance around the text
      * @param aMaxError the maximum error to allow when approximating curves
+     * @param aErrorLoc
      */
     void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aMaxError, ERROR_LOC aErrorLoc ) const;
 
@@ -211,7 +212,6 @@ public:
 
     std::vector<int> ViewGetLayers() const override;
 
-    ///< @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     const BOX2I GetBoundingBox() const override;

@@ -122,6 +122,7 @@ public:
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
      *
+     * @param aSettings
      * @param aPoints is a buffer to fill with polygon corners coordinates.
      * @param aPos is the position of the shape.
      */

@@ -53,7 +53,7 @@ static FILENAME_RESOLVER* resolver;
  * Convert a single Edge_Cuts graphic into IDF segments and append them to @p aLines.
  *
  * Shared between the board outline and footprint cutout emitters so both encode identical
- * geometry into the #BOARD_OUTLINE section.
+ * geometry into the BOARD_OUTLINE section.
  */
 static void idf_append_shape( PCB_SHAPE* aGraphic, double aScale, double aOffX, double aOffY,
                               std::list<IDF_SEGMENT*>& aLines )
@@ -191,7 +191,7 @@ static void idf_append_shape( PCB_SHAPE* aGraphic, double aScale, double aOffX, 
 
 /**
  * Retrieve line segment information from the edge layer and compiles the data into a form
- * which can be output as an IDFv3 compliant #BOARD_OUTLINE section.
+ * which can be output as an IDFv3 compliant BOARD_OUTLINE section.
  */
 static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
 {

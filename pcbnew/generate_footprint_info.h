@@ -35,7 +35,7 @@ class LIB_ID;
 wxString GenerateFootprintInfo( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, LIB_ID const& aLibId );
 
 /**
- * Get a URL to the documentation for a #LIB_ID in a #FP_LIB_TABLE. This is suitable for opening
+ * Get a URL to the documentation for a #LIB_ID in a #LIBRARY_TABLE. This is suitable for opening
  * in a web browser. Currently, for want of a proper home in the format, this is usually
  * found in the "description" field of the footprint.
  *

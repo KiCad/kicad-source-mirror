@@ -77,9 +77,9 @@ public:
      *
      * @param aDialogTitle title for the dialog window
      * @param aListLabel label for the list of libraries
-     * @param aExtraCheckboxes [optional] list of label/valuePointer pairs from which to construct extra
-     *                         checkboxes in the dialog.  Values are written back to the pointers when
-     *                         the dialog is finished.
+     * @param aExtraCheckboxes list of label/valuePointer pairs from which to construct extra checkboxes
+     *                         in the dialog.  Values are written back to the pointers when the dialog is
+     *                         finished.
      * @return the library or wxEmptyString on abort.
      */
     wxString SelectLibrary( const wxString& aDialogTitle, const wxString& aListLabel,
@@ -88,7 +88,9 @@ public:
     /**
      * Add an existing library to either the global or project library table.
      *
-     * @param aFileName the library to add; a file open dialog will be displayed if empty.
+     * @param aDialogTitle is the dialog title.
+     * @param aLibName the library to add; a file open dialog will be displayed if empty.
+     * @param aScope
      * @return true if successfully added.
      */
     bool AddLibrary( const wxString& aDialogTitle, const wxString& aLibName = wxEmptyString,
@@ -97,7 +99,6 @@ public:
     /**
      * Install the corresponding dialog editor for the given item.
      *
-     * @param aDC the current device context.
      * @param aItem a pointer to the BOARD_ITEM to edit.
      */
     virtual void OnEditItemRequest( BOARD_ITEM* aItem ) {};
@@ -154,6 +155,7 @@ public:
      * Put data pointed by List in the previous state, i.e. the state memorized by \a aList.
      *
      * @param aList a PICKED_ITEMS_LIST pointer to the list of items to undo/redo.
+     * @param aRehatchShapes is true to rehatch shapes on undo/redo.
      */
     void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRehatchShapes = true );
 
@@ -202,10 +204,8 @@ public:
 
     wxAuiManager& GetAuiManager() { return m_auimgr; }
 
-    ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;
 
-    ///< @copydoc PCB_BASE_FRAME::SetBoard()
     virtual void SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr ) override;
 
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
@@ -225,7 +225,7 @@ public:
      * remove old commands.
      *
      * @param whichList the #UNDO_REDO_CONTAINER to clear.
-     * @param aItemCount the count of items to remove. < 0 for all items.
+     * @param aItemCount the count of items to remove. \< 0 for all items.
      */
     void ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount = -1 ) override;
 
@@ -234,7 +234,7 @@ public:
     APPEARANCE_CONTROLS* GetAppearancePanel() { return m_appearancePanel; }
 
     /**
-     * Acess to the layer pair settings controller of the board, if available
+     * Access to the layer pair settings controller of the board, if available
      */
     LAYER_PAIR_SETTINGS* GetLayerPairSettings() { return m_layerPairSettings.get(); }
 
@@ -276,7 +276,7 @@ protected:
 
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox; // a combo box to display and select active layer
 
-    wxAuiNotebook*          m_tabbedPanel;        /// Panel with Layers and Object Inspector tabs
+    wxAuiNotebook*          m_tabbedPanel;        ///< Panel with Layers and Object Inspector tabs
 };
 
 #endif

@@ -292,7 +292,7 @@ public:
      * The examining function within the INSPECTOR which is passed to the Iterate function.
      * Search and collect all the objects which match the test data.
      *
-     * @param testItem An EDA_ITEM to examine.
+     * @param aTestItem An #EDA_ITEM to examine.
      * @param aTestData is not used in this class.
      * @return SEARCH_QUIT if the Iterator is to stop the scan, else SCAN_CONTINUE
      */
@@ -327,6 +327,7 @@ public:
      *
      * @param aVisibleLayerMask is the current visible layers (bit mask).
      * @param aPreferredLayer is the layer to search first.
+     * @param aView is the view to collect from.
      */
     GENERAL_COLLECTORS_GUIDE( const LSET& aVisibleLayerMask, PCB_LAYER_ID aPreferredLayer,
                               KIGFX::VIEW* aView )

@@ -1673,12 +1673,10 @@ static std::optional<DOGBONE_CORNER_ROUTINE::PARAMETERS> GetDogboneParams( PCB_B
 }
 
 /**
- * Prompt the user for chamfer parameters
+ * Prompt the user for chamfer parameters.
  *
  * @param aFrame
- * @param aErrorMsg filled with an error message if the parameter is invalid somehow
- * @return std::optional<int> the chamfer parameters or std::nullopt if no
- * valid fillet specified
+ * @return std::optional<int> the chamfer parameters or std::nullopt if no valid fillet specified.
  */
 static std::optional<CHAMFER_PARAMS> GetChamferParams( PCB_BASE_EDIT_FRAME& aFrame )
 {

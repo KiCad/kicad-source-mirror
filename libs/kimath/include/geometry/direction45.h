@@ -88,6 +88,7 @@ public:
 
     /**
      * @param aVec vector in world space, whose direction will be translated into a DIRECTION_45.
+     * @param a90
      */
     DIRECTION_45( const VECTOR2I &aVec, bool a90 = false ) :
             m_90deg( a90 )
@@ -99,6 +100,7 @@ public:
 
     /**
      * @param aSeg segment, whose direction will be translated into a DIRECTION_45.
+     * @param a90
      */
     DIRECTION_45( const SEG& aSeg, bool a90 = false ) :
             m_90deg( a90 )
@@ -112,6 +114,7 @@ public:
      * Create a DIRECTION_45 from the endpoints of a given arc.
      *
      * @param aArc will be translated into the closest DIRECTION_45
+     * @param a90
      */
     DIRECTION_45( const SHAPE_ARC& aArc, bool a90 = false ) :
             m_90deg( a90 )
@@ -347,10 +350,10 @@ private:
         return;
     }
 
-    ///< our actual direction
+    /// our actual direction
     Directions m_dir;
 
-    ///< Are we routing on 45 or 90 degree increments
+    /// Are we routing on 45 or 90 degree increments
     bool m_90deg;
 };
 

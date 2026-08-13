@@ -51,7 +51,7 @@ struct LP_CACHE;
 
 
 /**
- * A #PLUGIN derivation which could possibly be put into a DLL/DSO.
+ * A #PCB_IO derivation which could possibly be put into a DLL/DSO.
  *
  * As with any PLUGIN, there is no UI, i.e. windowing calls allowed.
  */
@@ -122,8 +122,6 @@ protected:
     /**
      * Parse an ASCII decimal floating point value and scales it into a BIU according to the
      * current value of diskToBui.
-     *
-     * This function is the complement of #fmtBIU().  One has to know what the other is doing.
      *
      * @param aValue is the ASCII value in C locale form with possible leading whitespace
      * @param nptrptr may be NULL, but if not, then it tells where to put a pointer to the
@@ -198,8 +196,7 @@ protected:
     double  biuToDisk;              ///< convert from BIUs to disk engineering units
                                     ///< with this scale factor
 
-    double  diskToBiu;              ///< convert from disk engineering units to BIUs
-    ///< with this scale factor
+    double  diskToBiu;              ///< convert from disk engineering units to BIUs with this scale factor
 };
 
 #endif  // PCB_IO_KICAD_LEGACY_H_

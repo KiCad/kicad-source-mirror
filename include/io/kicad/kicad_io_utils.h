@@ -72,9 +72,9 @@ KICOMMON_API void FormatCustomProperties( OUTPUTFORMATTER* aOut, const EDA_ITEM&
 KICOMMON_API void FormatStreamData( OUTPUTFORMATTER& aOut, const wxStreamBuffer& aStream );
 
 /**
- * Controls the pretty-printing mode used by Prettify
+ * Control the pretty-printing mode used by Prettify().
  */
-enum class KICOMMON_API FORMAT_MODE
+KICOMMON_API enum class FORMAT_MODE
 {
     NORMAL,                     ///< Follows standard pretty-printing rules
     COMPACT_TEXT_PROPERTIES,    ///< Collapses certain text properties to single-line
@@ -92,6 +92,7 @@ enum class KICOMMON_API FORMAT_MODE
  * - End of multi-line lists (close paren) goes on a single line at same indentation as its start
  *
  * For example:
+ * \code
  * (first
  *  (second
  *   (third list)
@@ -102,6 +103,7 @@ enum class KICOMMON_API FORMAT_MODE
  *   (and a sub list)
  *  )
  * )
+ * \endcode
  */
 KICOMMON_API void Prettify( std::string& aSource, FORMAT_MODE aMode = FORMAT_MODE::NORMAL );
 

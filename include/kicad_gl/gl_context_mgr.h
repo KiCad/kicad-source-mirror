@@ -111,6 +111,7 @@ public:
      * Run the given function first releasing the GL context lock, then restoring it.
      *
      * @param aFunction is the function to be executed.
+     * @param args is the list of arguements.
      */
     template<typename Func, typename... Args>
     auto RunWithoutCtxLock( Func&& aFunction, Args&&... args )
@@ -134,13 +135,13 @@ public:
     }
 
 private:
-    ///< Map of GL contexts & their parent canvases.
+    /// Map of GL contexts & their parent canvases.
     std::map<wxGLContext*, wxGLCanvas*> m_glContexts;
 
-    ///< Currently bound GL context.
+    /// Currently bound GL context.
     wxGLContext* m_glCtx;
 
-    ///< Lock to prevent unexpected GL context switching.
+    /// Lock to prevent unexpected GL context switching.
     std::mutex m_glCtxMutex;
 };
 

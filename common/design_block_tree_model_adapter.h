@@ -30,7 +30,10 @@ public:
     /**
      * Factory function: create a model adapter in a reference-counting container.
      *
-     * @param aLibs library set from which parts will be loaded
+     * @param aParent is the parent window.
+     * @param aLibs library set from which parts will be loaded.
+     * @param aSettings
+     * @param aContextMenuTool
      */
     static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( EDA_BASE_FRAME* aParent, DESIGN_BLOCK_LIBRARY_ADAPTER* aLibs,
                                                            APP_SETTINGS_BASE::LIB_TREE& aSettings,

@@ -99,7 +99,8 @@ public:
 
     void ImportSettingsFrom( BOARD* aBoard );
 
-    /** Must be called if the copper layers count has changed
+    /**
+     * Must be called if the copper layers count has changed
      * or solder mask, solder paste or silkscreen layers are
      * enabled or disabled
      * Rebuild the Layer Stack Panel if the new layer set differs
@@ -112,6 +113,7 @@ public:
 
     /// @return the BOARD_STACKUP_ITEM managed by the row aRow
     BOARD_STACKUP_ITEM* GetStackupItem( int aRow );
+
     /// @return the BOARD_STACKUP_ITEM sublayermanaged by the row aRow
     int GetSublayerId( int aRow );
 
@@ -122,22 +124,20 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    /** Creates the controls in a BOARD_STACKUP_ROW_UI_ITEM relative to the aStackupItem.
-     * @return a BOARD_STACKUP_ROW_UI_ITEM filled with corresponding widgets
-     * @param aRow is the row index in the row list
-     * @param aStackupItem is the stackup item controlled by the created
-     * BOARD_STACKUP_ROW_UI_ITEM.
-     * @param aSublayerIdx is used only for BS_ITEM_TYPE_DIELECTRIC stackup items.
-     * this is the index of the sublayer to used inside aStackupItem
-     * (from 0 to sub layer count - 1)
+    /**
+     * Create the controls in a BOARD_STACKUP_ROW_UI_ITEM relative to the aStackupItem.
+     * @param ui_row_item is the row index in the row list
+     * @param aPos
      */
     void lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_row_item, int aPos );
 
-    /** add a Spacer in m_fgGridSizer when a empty cell is needed
+    /**
+     * add a Spacer in m_fgGridSizer when a empty cell is needed
      */
     wxControl* addSpacer( int aPos );
 
-    /** Populate m_fgGridSizer with items to handle stackup parameters
+    /**
+     * Populate m_fgGridSizer with items to handle stackup parameters
      * This is a full list:
      * all copper layers and all tech layers that are supported by the stackup
      * items not in the current board stackup will be not shown, but they are
@@ -148,21 +148,24 @@ private:
      */
     void buildLayerStackPanel( bool aCreateInitialStackup = false, bool aRelinkStackup = false );
 
-    /** Synchronize the full stackup shown in m_fgGridSizer according to the stackup of the
+    /**
+     * Synchronize the full stackup shown in m_fgGridSizer according to the stackup of the
      * current board and optionally update the stackup params (thickness, color ... )
      * @param aFullSync = true to update stackup params, false to only update the list
      * of shown items
      */
     void synchronizeWithBoard( bool aFullSync );
 
-    /** Show or do not show items in m_fgGridSizer according to the stackup of the
+    /**
+     * Show or do not show items in m_fgGridSizer according to the stackup of the
      * current board.
      * The panel stackup stores all possible layers (because the number of layers is set
      * from an other panel), but only some of them must be actually shown on screen
      */
     void showOnlyActiveLayers();
 
-    /** Populate m_fgGridSizer with items to handle stackup parameters
+    /**
+     * Populate m_fgGridSizer with items to handle stackup parameters
      * If previous items are in list, remove old items
      * New prms are added
      * must be called after adding or deleting a dielectric parameter set
@@ -170,7 +173,8 @@ private:
      */
     void rebuildLayerStackPanel( bool aRelinkItems = false );
 
-    /** Transfer current UI settings to m_stackup but not to the board
+    /**
+     * Transfer current UI settings to m_stackup but not to the board
      */
     bool transferDataFromUIToStackup();
 
@@ -201,16 +205,18 @@ private:
 	void onCopperLayersSelCount( wxCommandEvent& event ) override;
 	void onAdjustDielectricThickness( wxCommandEvent& event ) override;
 
-    /** Update the icons color (swatches in first grid column)
+    /**
+     * Update the icons color (swatches in first grid column)
      * @param aRow is the row (index in m_rowUiItemsList) that manages the icon to update.
      * if -1 all icons will be updated
      */
     void updateIconColor( int aRow = -1 );
 
-    /** @return the color of the BOARD_STACKUP_ITEM at row aRow,
-     * to draw a bitmap color according to the selected color
-     * or the best default color (for dielectric or copper item)
+    /**
      * @param aRow is the row index to find the color.
+     * @return the color of the BOARD_STACKUP_ITEM at row aRow,
+     *         to draw a bitmap color according to the selected color
+     *         or the best default color (for dielectric or copper item)
      */
     wxColor getColorIconItem( int aRow );
 
@@ -250,7 +256,7 @@ private:
     };
 
     /**
-     * Normalises a frequency in Hz to a value and a units multiplier
+     * Normalise a frequency in Hz to a value and a units multiplier.
      */
     static std::pair<double, FREQ_UNITS> normaliseFrequency( double aFreq );
 

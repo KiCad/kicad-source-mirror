@@ -66,7 +66,6 @@ public:
 
     //void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual std::vector<int> ViewGetLayers() const override;
 
     void Move( const VECTOR2I& aMoveVector ) override;

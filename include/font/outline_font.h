@@ -43,7 +43,7 @@
 namespace KIFONT
 {
 /**
- * Class OUTLINE_FONT implements outline font drawing.
+ * Implement outline font drawing.
  */
 class GAL_API OUTLINE_FONT : public FONT
 {
@@ -94,6 +94,10 @@ public:
      * Load an outline font. TrueType (.ttf) and OpenType (.otf) are supported.
      *
      * @param aFontFileName is the (platform-specific) fully qualified name of the font file
+     * @param aBold loads the bold font if true
+     * @param aItalic loads the italic font if true
+     * @param aEmbeddedFiles
+     * @param aForDrawingSheet
      */
     static OUTLINE_FONT* LoadFont( const wxString& aFontFileName, bool aBold, bool aItalic,
                                    const std::vector<wxString>* aEmbeddedFiles,

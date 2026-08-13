@@ -53,8 +53,7 @@ public:
      * Read application and common configs.
      *
      * @param aCommonConfig the common config store.
-     * @param aCfg          the application config base.
-     * @param aBaseName     the application's GAL options key prefix.
+     * @param aWindowConfig the application config base.
      * @param aWindow       the wx parent window (used for DPI scaling).
      */
     void ReadConfig( COMMON_SETTINGS& aCommonConfig, WINDOW_SETTINGS& aWindowConfig,

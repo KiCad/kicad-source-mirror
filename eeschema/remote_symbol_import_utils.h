@@ -107,7 +107,7 @@ LIB_ID BuildRemoteLibId( const wxString& aResolvedLibrary, const wxString& aReso
  * Apply a list of footprint LIB_IDs to a symbol about to be saved.
  *
  * The first LIB_ID is written to the symbol's Footprint field as a fully-qualified
- * <nickname>:<itemName> string (overwriting any previous value). Remaining LIB_IDs are
+ * \<nickname\>:\<itemName\> string (overwriting any previous value). Remaining LIB_IDs are
  * appended to the symbol's footprint filter list as bare item names (filters are globs
  * over footprint name only and would not match colon-qualified strings).
  *

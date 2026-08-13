@@ -70,7 +70,6 @@ public:
         m_points.Clear();
     }
 
-    /// @copydoc SHAPE::BBox()
     const BOX2I BBox( int aClearance = 0 ) const override
     {
         return m_points.BBox( aClearance );
@@ -144,7 +143,6 @@ public:
         m_points.Append( aP );
     }
 
-    /// @copydoc SHAPE::Collide()
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override
     {

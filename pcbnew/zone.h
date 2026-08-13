@@ -185,7 +185,7 @@ public:
     /**
      * Return any local clearances set in the "classic" (ie: pre-rule) system.
      *
-     * @param aSource [out] optionally reports the source as a user-readable string.
+     * @param[out] aSource optionally reports the source as a user-readable string.
      * @return the clearance in internal units.
      */
     std::optional<int> GetLocalClearance( wxString* aSource ) const override
@@ -433,6 +433,7 @@ public:
      * Test if a point is near an outline edge or a corner of this zone.
      *
      * @param aPosition the VECTOR2I to test
+     * @param aAccuracy is the allowable error for the hit test
      * @return true if a hit, else false
      */
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
@@ -473,7 +474,6 @@ public:
      *
      * @param aLayer is the layer of the zone to retrieve
      * @param aBuffer = a buffer to store the polygons
-     * @param aError = Maximum error allowed between true arc and polygon approx
      */
     void TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aBuffer ) const;
 
@@ -486,6 +486,8 @@ public:
      *
      * @param aBuffer is a buffer to store the polygon
      * @param aClearance is the min clearance around outlines
+     * @param aError is the maximum deviation from true circle
+     * @param aErrorLoc
      * @param aBoardOutline is the board outline (if a valid one exists; nullptr otherwise)
      */
     void TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
@@ -496,10 +498,11 @@ public:
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments
      *
-     * @param aLayer is the layer of the filled zone to retrieve
      * @param aBuffer is a buffer to store the polygon
+     * @param aLayer is the layer of the filled zone to retrieve
      * @param aClearance is the clearance around the pad
      * @param aError is the maximum deviation from true circle
+     * @param aErrorLoc
      * @param ignoreLineWidth is used for edge cut items where the line width is only for
      *                        visualization
      */
@@ -525,7 +528,8 @@ public:
      *
      * @param  refPos     is the VECTOR2I to test.
      * @param  aAccuracy  increase the item bounding box by this amount.
-     * @param  aCornerHit [out, optional] is the index of the closest vertex found when return value is true.
+     * @param[out]  aCornerHit is the index of the closest vertex found when return
+     *                         value is true.
      * @return true if some edge was found to be closer to refPos than aClearance.
      */
     bool HitTestForEdge( const VECTOR2I& refPos, int aAccuracy,
@@ -537,7 +541,7 @@ public:
     bool HitTest( const BOX2I& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
     /**
-     * @copydoc EDA_ITEM::HitTest(const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
+     * @copydoc EDA_ITEM::HitTest(const SHAPE_LINE_CHAIN& aPoly, bool aContained) const
      */
     bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override;
 
@@ -568,7 +572,8 @@ public:
     /**
      * Rotate the outlines.
      *
-     * @param aCentre is rot centre
+     * @param aCentre is rotation center point.
+     * @param aAngle is the rotation angle around \a aCentre.
      */
     void Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle ) override;
 
@@ -877,7 +882,7 @@ public:
      *                             previous parameters.
      */
     void SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle, int aBorderHatchPitch,
-                                bool aRebuilBorderHatch );
+                                bool aRebuildBorderHatch );
 
     /**
      * Clear the zone's hatch.
@@ -947,13 +952,15 @@ protected:
 
     std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> m_layerProperties;
 
-    /* Priority: when a zone outline is inside and other zone, if its priority is higher
+    /**
+     * Priority: when a zone outline is inside and other zone, if its priority is higher
      * the other zone priority, it will be created inside.
      * if priorities are equal, a DRC error is set
      */
     unsigned              m_priority;
 
-    /* A zone outline can be a keepout zone.
+    /**
+     * A zone outline can be a rule area.
      * It will be never filled, and DRC should test for pads, tracks and vias
      */
     bool m_isRuleArea;
@@ -965,13 +972,15 @@ protected:
     PLACEMENT_SOURCE_T    m_placementAreaSourceType;
     wxString              m_placementAreaSource;
 
-    /* A zone outline can be a teardrop zone with different rules for priority
+    /**
+     * A zone outline can be a teardrop zone with different rules for priority
      * (always bigger priority than copper zones) and never removed from a
      * copper zone having the same netcode
      */
     TEARDROP_TYPE         m_teardropType;
 
-    /* For keepout zones only:
+    /**
+     * For keepout zones only:
      * what is not allowed inside the keepout ( pads, tracks and vias )
      */
     bool                  m_doNotAllowZoneFills;

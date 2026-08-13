@@ -44,8 +44,10 @@ public:
      *
      * @param aFrame  the parent frame (usually a PCB_EDIT_FRAME or FOOTPRINT_CHOOSER_FRAME)
      * @param aParent the parent window (usually a DIALOG_SHIM or FOOTPRINT_CHOOSER_FRAME)
+     * @param aFootprintHistoryList is the list of previously chosen footprints.
+     * @param aFilter is the footprint list filter.
      * @param aAcceptHandler a handler to be called on double-click of a footprint
-     * @param aEscapeHandler a handler to be called on <ESC>
+     * @param aEscapeHandler a handler to be called on \<ESC\>
      */
     PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                              const wxArrayString& aFootprintHistoryList,

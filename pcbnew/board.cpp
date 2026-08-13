@@ -3625,7 +3625,7 @@ PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, cons
 
 
 /**
- * Used by #GetSortedPadListByXCoord to sort a pad list by X coordinate value.
+ * Used by #BOARD::GetSortedPadListByXthenYCoord to sort a pad list by X coordinate value.
  *
  * This function is used to build ordered pads lists
  */

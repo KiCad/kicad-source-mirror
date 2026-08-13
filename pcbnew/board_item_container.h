@@ -54,6 +54,7 @@ public:
 
     /**
      * @brief Adds an item to the container.
+     * @param aItem is the board item to add.
      * @param aMode decides whether the item is added in the beginning or at the end of the list.
      * @param aSkipConnectivity skip connectivity update (useful for file loading, when
      * the connectivity is updated after end of loading).

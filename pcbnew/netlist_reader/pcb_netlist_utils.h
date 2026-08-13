@@ -27,8 +27,9 @@ FOOTPRINT* LoadFootprintFromProject( BOARD* aBoard, const LIB_ID& aFootprintId,
                                      bool aKeepUuid = false );
 
 /**
- * Load the footprints for each #SCH_COMPONENT in \a aNetlist from the list of libraries.
+ * Load the footprints for each #SCH_SYMBOL in \a aNetlist from the list of libraries.
  *
+ * @param aBoard is the #BOARD to load the footprint into.
  * @param aNetlist is the netlist of components to load the footprints into.
  * @param aReporter is the #REPORTER object to report to.
  * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error

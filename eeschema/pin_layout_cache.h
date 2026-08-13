@@ -154,7 +154,7 @@ private:
     /**
      * Transform text info to suit a pin's
      *
-     * @param the 'nominal' text info for a PIN_RIGHT pin, which will be adjusted
+     * @param aTextInfo the 'nominal' text info for a PIN_RIGHT pin, which will be adjusted
      */
     void transformTextForPin( TEXT_INFO& aTextInfo ) const;
 

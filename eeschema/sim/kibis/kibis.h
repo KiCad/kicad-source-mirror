@@ -93,6 +93,7 @@ public:
     {
         return true;
     };
+
     // Check function if using ramp data
     virtual bool Check( const dvdtTypMinMax& aRisingRp, const dvdtTypMinMax& aFallingRp ) const
     {
@@ -308,10 +309,13 @@ public:
 
     /** @brief Return true if the model has a pulldown transistor */
     bool HasPulldown() const;
+
     /** @brief Return true if the model has a pullup transistor */
     bool HasPullup() const;
+
     /** @brief Return true if the model has a clamp diode to the gnd net */
     bool HasGNDClamp() const;
+
     /** @brief Return true if the model has a clamp diode to the power net */
     bool HasPOWERClamp() const;
 
@@ -340,7 +344,6 @@ public:
      */
     std::vector<std::pair<IbisWaveform*, IbisWaveform*>> waveformPairs();
 
-
     /** @brief Generate a square waveform
      *
      *  For maximum accuracy, we need a waveform pair.
@@ -359,9 +362,7 @@ public:
                                     const std::pair<IbisWaveform*, IbisWaveform*>& aPair,
                                     const KIBIS_PARAMETER&                         aParam );
 
-
     /** @brief Copy a waveform, and substract the first value to all samples
-     *
      *
      * @param aIn Input waveform
      * @return Output waveform
@@ -378,6 +379,7 @@ public:
      *  Examples : "VCC", "GPIOA", "CLK", etc...
      */
     std::string m_signalName;
+
     /** @brief Pin Number
      * Examples : 1, 2, 3 ( or for BGA ), A1, A2, A3, etc...
      */
@@ -385,8 +387,10 @@ public:
 
     /** @brief Resistance from die to pin */
     TypMinMaxValue m_Rpin;
+
     /** @brief Inductance from die to pin */
     TypMinMaxValue m_Lpin;
+
     /** @brief Capacitance from pin to GND */
     TypMinMaxValue m_Cpin;
 
@@ -427,7 +431,6 @@ public:
      *  @param aPair1 @see waveformPairs()
      *  @param aPair2 @see waveformPairs()
      *  @param aParam Parameters
-     *  @param aIndex Index for numbering spice .SUBCKT
      */
     void getKuKdTwoWaveforms( KIBIS_MODEL&                                   aModel,
                               const std::pair<IbisWaveform*, IbisWaveform*>& aPair1,
@@ -493,8 +496,10 @@ class KIBIS_COMPONENT : public KIBIS_BASE
 {
 public:
     KIBIS_COMPONENT( KIBIS& aToplevel, const IbisComponent& aSource, IbisParser& aParser );
+
     /** @brief Name of the component */
     std::string m_name;
+
     /** @brief Name of the manufacturer */
     std::string m_manufacturer;
 
@@ -529,6 +534,7 @@ public:
 
     /** @brief Return the model with name aName . Nullptr if not found */
     KIBIS_MODEL* GetModel( const std::string& aName );
+
     /** @brief Return the component with name aName . Nullptr if not found */
     KIBIS_COMPONENT* GetComponent( const std::string& aName );
 };

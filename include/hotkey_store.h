@@ -64,8 +64,6 @@ public:
 
     /**
      * Construct a HOTKEY_STORE from a list of hotkey sections
-     *
-     * @param aHotkeys the hotkey configs that will be managed by this store.
      */
     HOTKEY_STORE();
 

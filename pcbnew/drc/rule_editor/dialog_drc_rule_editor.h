@@ -83,7 +83,7 @@ public:
     /**
      * Updates the rule tree item data by transferring data from the rule editor panel and updating the item text.
      *
-     * @param aRuleTreeItemData The data of the rule tree item to be updated.
+     * @param aCurrentRuleTreeItemData The data of the rule tree item to be updated.
      */
     void UpdateRuleTypeTreeItemData( RULE_TREE_ITEM_DATA* aCurrentRuleTreeItemData ) override;
 
@@ -96,7 +96,7 @@ public:
      * @return true if the option should be enabled, false otherwise.
      */
     bool isEnabled( RULE_TREE_ITEM_DATA*         aRuleTreeItemData,
-                                                  RULE_EDITOR_TREE_CONTEXT_OPT aOption ) override;
+                    RULE_EDITOR_TREE_CONTEXT_OPT aOption ) override;
 
     /**
      * Removes a rule from the rule tree after confirmation, deleting the item and associated data.
@@ -124,7 +124,7 @@ private:
 
     void SaveRulesToFile();
 
-    /**                                                                                                               
+    /**
      * Creates a new rule tree node with a unique name and assigns the appropriate constraint data.
      *
      * @param aRuleTreeItemData The rule tree item data for the node.
@@ -134,7 +134,7 @@ private:
      * @return The newly created rule tree node.
      */
     RULE_TREE_NODE buildRuleTreeNode( RULE_TREE_ITEM_DATA* aRuleTreeItemData,
-                                    const wxString& aBaseName = wxEmptyString );
+                                      const wxString& aBaseName = wxEmptyString );
 
     /**
      * Creates a new rule tree node with the specified parameters, generating a new ID if not provided.
@@ -144,7 +144,7 @@ private:
      * @param aParentId The ID of the parent node, if any.
      * @param aConstraintType The constraint type, if any.
      * @param aChildNodes List of child nodes.
-     * @param id Optional ID for the node.
+     * @param aId Optional ID for the node.
      *
      * @return The newly created RULE_TREE_NODE.
      */

@@ -46,7 +46,7 @@ struct SPICE_VALUE_FORMAT
 };
 
 
-///< Helper class to handle Spice way of expressing values (e.g. 10.5 Meg)
+/// Helper class to handle Spice way of expressing values (e.g. 10.5 Meg)
 class SPICE_VALUE
 {
 public:
@@ -71,7 +71,7 @@ public:
     {
     }
 
-    ///< Parses the string to create a Spice value (e.g. 100n)
+    /// Parses the string to create a Spice value (e.g. 100n)
     SPICE_VALUE( const wxString& aString );
 
     SPICE_VALUE( int aInt, UNIT_PREFIX aPrefix = PFX_NONE ) :
@@ -106,8 +106,8 @@ public:
 
     /**
      * Return string value with a particular precision and range.
-     * @param aPrecision number of significant digits
-     * @param aRange "~" + unit for autorage; otherwise SI prefix + unit
+     *
+     * @param aFormat is the SPICE format to convert to string.
      */
     wxString ToString( const SPICE_VALUE_FORMAT& aFormat );
 
@@ -163,7 +163,7 @@ public:
     SPICE_VALUE operator*( const SPICE_VALUE& aOther ) const;
     SPICE_VALUE operator/( const SPICE_VALUE& aOther ) const;
 
-    ///< Remove redundant zeros from the end of a string.
+    /// Remove redundant zeros from the end of a string.
     static void StripZeros( wxString& aString );
 
     static UNIT_PREFIX ParseSIPrefix( wxChar c );
@@ -172,12 +172,12 @@ private:
     double      m_base;
     UNIT_PREFIX m_prefix;
 
-    ///< Was the value defined using the Spice notation?
+    /// Was the value defined using the Spice notation?
     bool        m_spiceStr;
 };
 
 
-///< Helper class to recognize Spice formatted values
+/// Helper class to recognize Spice formatted values
 class SPICE_VALIDATOR : public wxTextValidator
 {
 public:
@@ -194,6 +194,6 @@ public:
     bool Validate( wxWindow* aParent ) override;
 
 private:
-    ///< Is it valid to get an empty value?
+    /// Is it valid to get an empty value?
     bool m_emptyAllowed;
 };

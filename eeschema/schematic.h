@@ -611,6 +611,7 @@ public:
      * Delete all information for @a aVariantName.
      *
      * @param aVariantName is the name of the variant to remove.
+     * @param aCommit is the commit object to handle undo/redo actions.
      */
     void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit = nullptr );
 

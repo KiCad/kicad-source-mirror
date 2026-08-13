@@ -287,6 +287,7 @@ public:
      * @note It is the responsibility of the caller to add the newly created segment
      * to the screen.
      *
+     * @param aCommit is the #SCH_COMMIT object to handle undo/redo actions.
      * @param aPoint Point at which to break the segment
      * @return The newly created segment.
      */

@@ -207,11 +207,13 @@ public:
 
     /**
      * Convert a SHAPE_POLY_SET to TopoDS_Shape's (polygonal vertical prisms, or flat faces)
-     * @param aShapes is the TopoDS_Shape list to append to
-     * @param aPolySet is the polygon set
-     * @param aConvertToArcs set to approximate with arcs
+     *
+     * @param aShapes is the TopoDS_Shape list to append to.
+     * @param aPolySet is the polygon set.
+     * @param aConvertToArcs set to approximate with arcs.
      * @param aThickness is the height of the created prism, or 0.0: flat face pointing up, -0.0: down.
-     * @param aOrigin is the origin of the coordinates
+     * @param aZposition is the Z axis coordinate of the shape.
+     * @param aOrigin is the origin of the coordinates.
      * @return true if success
      */
     bool MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
@@ -249,12 +251,13 @@ public:
     /**
      * Make a segment shape based on start and end point. If they're too close, make a cylinder.
      * It is a specialized version of MakeShape()
-     * @param aShape is the TopoDS_Shape to initialize (must be empty)
-     * @param aStartPoint is the start point of the segment
-     * @param aEndPoint is the end point of the segment
-     * @param aWidth is the width of the segment
+     * @param aShape is the TopoDS_Shape to initialize (must be empty).
+     * @param aStartPoint is the start point of the segment.
+     * @param aEndPoint is the end point of the segment.
+     * @param aWidth is the width of the segment.
      * @param aThickness is the height of the created segment, or 0.0: flat face pointing up, -0.0: down.
-     * @param aOrigin is the origin of the coordinates
+     * @param aZposition is the Z axis position of the segment.
+     * @param aOrigin is the origin of the coordinates.
      * @return true if success
      */
     bool MakeShapeAsThickSegment( TopoDS_Shape& aShape, const VECTOR2D& aStartPoint,

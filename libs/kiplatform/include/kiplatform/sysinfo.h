@@ -62,7 +62,7 @@ public:
     /**
      * Retrieve GPU info for the system
      *
-     * @param aGPUInfos is an vector for GPU_INFO objects to be stored in
+     * @param aGpuInfos is an vector for GPU_INFO objects to be stored in
      *
      * @return true if info was fetchable, false if failure to retrieve info
      */
@@ -71,7 +71,7 @@ public:
     /**
      * Retrieve CPU info for the system
      *
-     * @param aCPUInfos is an vector for CPU_INFO objects to be stored in
+     * @param aCpuInfos is an vector for CPU_INFO objects to be stored in
      *
      * @return true if info was fetchable, false if failure to retrieve info
      */

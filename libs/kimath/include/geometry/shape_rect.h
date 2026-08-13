@@ -144,9 +144,9 @@ public:
         return std::min( m_w, m_h );
     }
 
-    bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const override
+    bool Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aActual ) const override
     {
-        return SHAPE::Collide( aShape, aClearance, aMTV );
+        return SHAPE::Collide( aShape, aClearance, aActual );
     }
 
     bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
@@ -155,7 +155,6 @@ public:
         return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
     }
 
-    /// @copydoc SHAPE::Collide()
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override;
 

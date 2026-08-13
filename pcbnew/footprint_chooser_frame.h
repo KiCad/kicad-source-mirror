@@ -45,12 +45,13 @@ class FOOTPRINT_CHOOSER_FRAME : public PCB_BASE_FRAME
 public:
     ~FOOTPRINT_CHOOSER_FRAME();
 
-    ///< @copydoc PCB_BASE_FRAME::GetModel()
+    /// @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     /**
      * @param aFootprint an optional FPID string to initialize the viewer with and to
      *                   return a selected footprint through.
+     * @param aParent is the parent window of the dialog.
      */
     bool ShowModal( wxString* aFootprint, wxWindow* aParent ) override;
 

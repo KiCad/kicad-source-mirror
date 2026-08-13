@@ -123,7 +123,7 @@ private:
     /**
      * Set the attribute value.
      *
-     * @param aReference is a reference to the symbol to set the attribute.
+     * @param aRef is a reference to the symbol to set the attribute.
      * @param aAttributeName is the name of the symbol attribute.
      * @param aValue is the value to set the attribute.
      * @param aVariantName is an optional variant name to set the variant attribute.

@@ -80,6 +80,7 @@ public:
     /**
      * @brief Loads a CADSTAR PCB Archive file into the KiCad BOARD object given
      * @param aBoard
+     * @param aProject
      */
     void Load( BOARD* aBoard, PROJECT* aProject );
 
@@ -247,7 +248,7 @@ private:
     /**
      * @brief
      * @param aCadstarShape
-     * @param aCadstarLayerID KiCad layer to draw on
+     * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aLineStyle Line style of the line (solid, dash, etc.)
      * @param aShapeName for reporting warnings/errors to the user
@@ -270,7 +271,8 @@ private:
 
     /**
      * @brief Uses PCB_SHAPEs to draw the cutouts on m_board object
-     * @param aVertices
+     *
+     * @param aCutouts
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aContainer to draw on (e.g. m_board)
@@ -292,6 +294,7 @@ private:
 
     /**
      * @brief Uses PCB_SHAPE to draw the vertices on m_board object
+     *
      * @param aCadstarVertices
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
@@ -302,7 +305,6 @@ private:
      * @param aScalingFactor scale shape by this amount
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
      * @param aMirrorInvert if true, mirrors the shape
-     * @param aCadstarGroupID to add the shape to
      */
     void drawCadstarVerticesAsShapes( const std::vector<VERTEX>& aCadstarVertices,
                                       const PCB_LAYER_ID& aKiCadLayer,
@@ -337,6 +339,7 @@ private:
 
     /**
      * @brief Returns a pointer to a PCB_SHAPE object. Caller owns the object.
+     *
      * @param aCadstarStartPoint
      * @param aCadstarVertex
      * @param aContainer to draw on (e.g. m_board). Can be nullptr.
@@ -405,7 +408,7 @@ private:
      * @param aWidthOverride Sets all tracks to this width, or, if it is UNDEFINED_LAYER, uses the
      *                       width in the shapes
      * @return
-    */
+     */
     std::vector<PCB_TRACK*> makeTracksFromShapes( const std::vector<PCB_SHAPE*>& aShapes,
                                                   BOARD_ITEM_CONTAINER* aParentContainer,
                                                   NETINFO_ITEM* aNet = nullptr,
@@ -430,7 +433,7 @@ private:
      * @param aPointToOffset Point that we want to offset by aOffsetAmount
      * @param aRefPoint Reference point to use for determine the angle of the offset
      * @param aOffsetAmount
-    */
+     */
     void applyRouteOffset( VECTOR2I* aPointToOffset, const VECTOR2I& aRefPoint,
                            const long& aOffsetAmount );
 
@@ -439,7 +442,7 @@ private:
      */
     void applyTextCode( EDA_TEXT* aKiCadText, const TEXTCODE_ID& aCadstarTextCodeID );
 
-    //Helper Functions for obtaining CADSTAR elements in the parsed structures
+    // Helper Functions for obtaining CADSTAR elements in the parsed structures
     int        getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
     LINE_STYLE getLineStyle( const LINECODE_ID& aCadstarLineCodeID );
     COPPERCODE getCopperCode( const COPPERCODE_ID& aCadstaCopperCodeID );
@@ -452,7 +455,7 @@ private:
     VIACODE    getViaCode( const VIACODE_ID& aCadstarViaCodeID );
     wxString   getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
     wxString   getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
-              const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
+                                  const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
     LAYER_TYPE getLayerType( const LAYER_ID aCadstarLayerID );
 
     // Helper Functions for obtaining individual elements as KiCad elements:
@@ -484,7 +487,7 @@ private:
      * @brief
      * @param aCadstarLength
      * @return
-    */
+     */
     int getKiCadLength( long long aCadstarLength )
     {
         return aCadstarLength * KiCadUnitMultiplier;
@@ -494,7 +497,7 @@ private:
      * @brief
      * @param aCadstarAngle
      * @return
-    */
+     */
     double getAngleTenthDegree( const long long& aCadstarAngle )
     {
         // CADSTAR v6 (which outputted Format Version 8) and earlier versions used 1/10 degree
@@ -514,7 +517,7 @@ private:
      * @brief
      * @param aCadstarAngle
      * @return
-    */
+     */
     EDA_ANGLE getAngle( const long long& aCadstarAngle )
     {
         // CADSTAR v6 (which outputted Format Version 8) and earlier versions used 1/10 degree

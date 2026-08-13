@@ -125,7 +125,8 @@ private:
     void onCloseButtonClicked( wxCommandEvent& aEvent );
 
     /**
-     * Handles character addition in the Scintilla text control, performing auto-complete and context-sensitive operations.
+     * Handles character addition in the Scintilla text control, performing auto-complete and context-sensitive
+     * operations.
      *
      * @param aEvent The event triggered when a character is added.
      */
@@ -141,21 +142,22 @@ private:
     /**
      * Checks the syntax of the DRC rule condition and reports any errors.
      *
-     * @param event The event triggered by the syntax check action.
+     * @param aEvent The event triggered by the syntax check action.
      */
     void onCheckSyntax( wxCommandEvent& aEvent ) override;
 
     /**
      * Handles clicks on error links in the syntax error report and navigates to the error location.
      *
-     * @param event The event triggered when an error link is clicked.
+     * @param aEvent The event triggered when an error link is clicked.
      */
     void onErrorLinkClicked( wxHtmlLinkEvent& aEvent ) override;
 
     /**
-     * Handles right-click context menu actions for text editing (undo, redo, cut, copy, paste, delete, select all, zoom).
+     * Handles right-click context menu actions for text editing (undo, redo, cut, copy, paste, delete, select all,
+     * zoom).
      *
-     * @param event The event triggered by the right-click menu.
+     * @param aEvent The event triggered by the right-click menu.
      */
     void onContextMenu( wxMouseEvent& aEvent ) override;
 

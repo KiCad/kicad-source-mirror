@@ -228,8 +228,8 @@ public:
      *
      * The #LSEQ element will be in the same sequence as aWishListSequence if they are present.
      *
-     * @param aWishListSequence establishes the order of the returned LSEQ, and the LSEQ will only
-     *        contain PCB_LAYER_IDs which are present in this set.
+     * @param aSequence establishes the order of the returned LSEQ, and the LSEQ will only
+     *                  contain #PCB_LAYER_ID enums which are present in this set.
      */
     LSEQ Seq( const LSEQ& aSequence ) const;
 
@@ -283,7 +283,6 @@ public:
      * BACK and FRONT copper layers, mask, paste, solder layers are swapped
      * internal layers are flipped only if the copper layers count is known.
      *
-     * @param aMask = the LSET to flip
      * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
      *  internal layers will be not flipped because the layer count is not known
      */

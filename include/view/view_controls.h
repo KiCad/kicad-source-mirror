@@ -192,7 +192,7 @@ public:
     /**
      * Set the speed of autopanning.
      *
-     * @param aSpeed is a new speed for autopanning.
+     * @param aAcceleration is a new acceleration for autopanning.
      */
     virtual void SetAutoPanAcceleration( float aAcceleration )
     {
@@ -285,6 +285,8 @@ public:
      *
      * @param aPosition is the requested cursor position in the world coordinates.
      * @param aWarpView enables/disables view warp if the cursor is outside the current viewport.
+     * @param aTriggeredByArrows
+     * @param aArrowCommand
      */
     virtual void SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true,
                                     bool aTriggeredByArrows = false, long aArrowCommand = 0 ) = 0;

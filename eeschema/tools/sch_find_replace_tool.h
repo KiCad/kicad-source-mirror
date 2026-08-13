@@ -52,17 +52,18 @@ public:
     int UpdateFind( const TOOL_EVENT& aEvent );
 
 private:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     /**
      * Advance the search and returns the next matching item after \a aAfter.
      *
-     * @param aScreen Pointer to the screen used for searching
-     * @param aAfter Starting match to compare
-     * @param aData Search data to compare against or NULL to match the first item found
-     * @param reverse Search in reverse (find previous)
-     * @return pointer to the next search item found or NULL if nothing found
+     * @param aScreen Pointer to the screen used for searching.
+     * @param aSheet is the sheet path for item instances.
+     * @param aAfter Starting match to compare.
+     * @param aData Search data to compare against or NULL to match the first item found.
+     * @param reverse Search in reverse (find previous).
+     * @return pointer to the next search item found or NULL if nothing found.
      */
     SCH_ITEM* nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, SCH_ITEM* aAfter,
                          EDA_SEARCH_DATA& aData, bool reverse );

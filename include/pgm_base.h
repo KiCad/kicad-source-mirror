@@ -290,6 +290,7 @@ public:
      *
      * @param aHeadless If true, run in headless mode (e.g. for unit tests)
      * Useful in application that do not use python, to disable python dependency at run time
+     * @param aIsUnitTest indicates whether or not the running application is a unit test.
      * @return true if success, false if failure and program is to terminate.
      */
     bool InitPgm( bool aHeadless = false, bool aIsUnitTest = false );
@@ -321,6 +322,7 @@ public:
      * The purpose is to have a central place to log a wxWidgets error message and/or sentry report.
      *
      * @param aPtr Pass the std::current_exception() from within the catch block.
+     * @param aUnhandled
      */
     void HandleException( std::exception_ptr aPtr, bool aUnhandled = false );
 

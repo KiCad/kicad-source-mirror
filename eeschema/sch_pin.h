@@ -244,7 +244,7 @@ public:
      *       list of pin alternates, it's set to an empty string which results in the alternate
      *       being set to the default pin.
      *
-     * @param is the name of the pin alternate in #m_alternates.
+     * @param aAlt is the name of the pin alternate in #m_alternates.
      */
     void SetAlt( const wxString& aAlt );
 
@@ -285,6 +285,8 @@ public:
     /**
      * @param aIncludeLabelsOnInvisiblePins - if false, do not include labels for invisible pins
      *                                       in the calculation.
+     * @param aIncludeNameAndNumber includes the pin name and number in the bounding box when true.
+     * @param aIncludeElectricalType includes the pin electrical type indicator in the bounding box when true.
      */
     BOX2I GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
                           bool aIncludeElectricalType ) const;
@@ -340,8 +342,14 @@ public:
     /**
      * Plot the pin name and number.
      *
+     * @param aPlotter is the plotter object to plot to.
+     * @param aPinPos is the position of the pin to plot.
+     * @param aPinOrient is the orientation of the pin to plot.
      * @param aTextInside - draw the names & numbers inside the symbol body (ie: in the opposite
      *                      direction of \a aPinOrient).
+     * @param aDrawPinNum
+     * @param aDrawPinName
+     * @param aDimmed
      */
     void PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIENTATION aPinOrient,
                        int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const;

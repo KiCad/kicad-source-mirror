@@ -95,8 +95,7 @@ public:
      * @param aFileName is the name of the file to use as input and may be foreign in
      *                  nature or native in nature.
      *
-     * @param aKiway is the #KIWAY object used to access the symbol libraries loaded
-     *               by the project.
+     * @param aSchematic is the #SCHEMATIC object to load the schematic into.
      *
      * @param aAppendToMe is an existing #SCH_SHEET to append to, but if NULL then this means
      *                    "do not append, rather load anew".
@@ -116,7 +115,7 @@ public:
      *                 possible.
      */
     virtual SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                          SCH_SHEET*             aAppendToMe = nullptr,
+                                          SCH_SHEET* aAppendToMe = nullptr,
                                           const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
@@ -148,7 +147,7 @@ public:
      *                    tuning arguments that the plugin is known to support.  The caller
      *                    continues to own this object (plugin may not delete it), and plugins
      *                    should expect it to be optionally NULL.  Set the
-     *                    #PropSaveCurrentSheetOnly property to only save the current sheet.
+     *                    \"PropSaveCurrentSheetOnly\" property to only save the current sheet.
      *                    Otherwise, all hierarchical sheets are saved.
      *
      * @throw IO_ERROR if there is a problem saving or exporting.

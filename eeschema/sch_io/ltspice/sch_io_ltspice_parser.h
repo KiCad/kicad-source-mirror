@@ -94,7 +94,8 @@ public:
      * Function responsible for loading the .asc and .asy files in intermediate data structure.
      *
      * @param aSheet variable representing the current sheet.
-     * @param mapOfFiles a string map containing all the data from .asc and .asy files.
+     * @param outLT_ASCs
+     * @param aAsyFileNames a list containing all .asc and .asy files.
      */
     void Parse( SCH_SHEET_PATH* aSheet, std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
                 const std::vector<wxString>& aAsyFileNames );
@@ -103,8 +104,10 @@ public:
     /**
      * Method for plotting Lines from Asy files
      *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
+     * @param aSymbol
+     * @param aLTSymbol
+     * @param aIndex
+     * @param aShape
      */
     void CreateLines( LIB_SYMBOL* aSymbol, LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
                       SCH_SHAPE* aShape );
@@ -112,7 +115,7 @@ public:
     /**
      * Method for plotting Schematic Lines from Asy files
      *
-     * @param aAscfile object representing asc file.
+     * @param aLTSymbol object representing asc file symbol.
      * @param aIndex index.
      * @param aSheet a object on which the circle is represented.
      */
@@ -121,8 +124,9 @@ public:
     /**
      * Main Method for loading indermediate data to kicacd object from asy files
      *
-     * @param aAscfiles array object representing asc files.
      * @param aSheet a object on which the symbols are represented.
+     * @param outLT_ASCs
+     * @param aAsyFiles array object representing asc files.
      */
     void CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
                              std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
@@ -223,6 +227,11 @@ public:
 
     /**
      * Create a power symbol.
+     *
+     * @param aOffset
+     * @param aValue
+     * @param aFontSize
+     * @param aSheet is the sheet instance path of the power symbol.
      * @param aWires Schematic wires.  (Allows us to correctly orient the power symbol.)
      */
     SCH_SYMBOL* CreatePowerSymbol( const VECTOR2I& aOffset, const wxString& aValue, int aFontSize,
@@ -231,7 +240,12 @@ public:
 
     /**
      * Create a label.
+     *
      * @param aType Currently supported types: SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T
+     * @param aOffset
+     * @param aValue
+     * @param aFontSize
+     * @param aWires Schematic wires.  (Allows us to correctly orient the power symbol.)
      */
     SCH_LABEL_BASE* CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset, const wxString& aValue,
                                      int aFontSize, std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires );

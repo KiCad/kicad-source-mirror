@@ -115,8 +115,8 @@ enum class PLACEMENT_SOURCE_T
 };
 
 /**
- * ZONE_SETTINGS
- * handles zones parameters.
+ * Handle zones parameters.
+ *
  * Because a zone can be on copper or non copper layers, and can be also
  * a keepout area, some parameters are irrelevant depending on the type of zone
  */
@@ -162,7 +162,8 @@ public:
 
     bool            m_Locked;
 
-    /* A zone outline can be a teardrop zone with different rules
+    /**
+     * A zone outline can be a teardrop zone with different rules
      * priority, smoothed corners, thermal relief...
      */
     TEARDROP_TYPE   m_TeardropType;
@@ -174,7 +175,7 @@ private:
     unsigned int    m_cornerRadius;          // Corner chamfer distance / fillet radius
     ZONE_CONNECTION m_padConnection;
 
-    /*
+    /**
      * Keepout zones and keepout flags.
      * Note that DRC rules can set keepouts on zones whether they're a keepout or not.
      */
@@ -218,14 +219,16 @@ public:
 
     /**
      * A helper routine for the various zone dialogs (copper, non-copper, keepout).
+     *
      * @param aList the wxDataViewListCtrl to populate
      * @param aFrame the parent editor frame
+     * @param aLayers is the list of layers to set up
      */
     void SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame, LSET aLayers );
 
     /**
-     * Function ExportSetting
-     * copy settings to a given zone
+     * Copy settings to a given zone.
+     *
      * @param aTarget: the given zone
      * @param aFullExport: if false: some parameters are NOT exported
      *   because they must not be  exported when export settings from a zone to others zones

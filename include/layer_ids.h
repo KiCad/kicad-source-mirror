@@ -269,7 +269,7 @@ enum GAL_LAYER_ID: int
     /// Draw via holes (pad holes do not use this layer).
     LAYER_VIA_HOLES          = GAL_LAYER_ID_START + 22,
 
-     /// Layer for DRC markers with #SEVERITY_ERROR.
+     /// Layer for DRC markers with #RPT_SEVERITY_ERROR.
     LAYER_DRC_ERROR          = GAL_LAYER_ID_START + 23,
     LAYER_DRAWINGSHEET       = GAL_LAYER_ID_START + 24, ///< Sheet frame and title block.
     LAYER_GP_OVERLAY         = GAL_LAYER_ID_START + 25, ///< General purpose overlay.
@@ -293,7 +293,7 @@ enum GAL_LAYER_ID: int
     LAYER_PAD_HOLEWALLS      = GAL_LAYER_ID_START + 34,
     LAYER_VIA_HOLEWALLS      = GAL_LAYER_ID_START + 35,
 
-    /// Layer for DRC markers with #SEVERITY_WARNING.
+    /// Layer for DRC markers with #RPT_SEVERITY_WARNING.
     LAYER_DRC_WARNING        = GAL_LAYER_ID_START + 36,
 
     /// Layer for DRC markers which have been individually excluded.
@@ -740,7 +740,7 @@ inline bool IsNonCopperLayer( int aLayerId )
 
 /**
  * Test whether a layer is a copper layer, optionally including synthetic copper layers such
- * as #LAYER_VIA_THROUGH, #LAYER_PADS_SMD_FR, etc.
+ * as #LAYER_VIA_THROUGH, #LAYER_PADS, etc.
  *
  * @param aLayerId
  * @param aIncludeSyntheticCopperLayers

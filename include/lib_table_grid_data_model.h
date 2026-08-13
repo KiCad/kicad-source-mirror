@@ -43,7 +43,7 @@ enum COL_ORDER
 };
 
 /**
- * This abstract base class mixes any object derived from #LIB_TABLE into wxGridTableBase
+ * This abstract base class mixes any object derived from #LIBRARY_TABLE into wxGridTableBase
  * so the result can be used as any type of library table within wxGrid.
  */
 class LIB_TABLE_GRID_DATA_MODEL : public WX_GRID_TABLE_BASE

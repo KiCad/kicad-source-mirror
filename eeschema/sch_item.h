@@ -232,10 +232,11 @@ public:
      * @param addToParentGroup Indicates whether or not the new item is added to the group
      *                         (if any) containing the old item.  If true, aCommit must be
      *                         provided.
+     * @param[out] aCommit is the optional commit object for undo/redo operations.
      * @param aDoClone (default = false) indicates unique values (such as timestamp and
      *                 sheet name) should be duplicated.  Use only for undo/redo operations.
      */
-    SCH_ITEM* Duplicate( bool addToParentGroup, SCH_COMMIT* aCommit = nullptr, bool doClone = false ) const;
+    SCH_ITEM* Duplicate( bool addToParentGroup, SCH_COMMIT* aCommit = nullptr, bool aDoClone = false ) const;
 
     // Note: 0 represents "All Units", NOT the first unit
     virtual void SetUnit( int aUnit ) { m_unit = aUnit; }
@@ -553,8 +554,6 @@ public:
      * Add all the connection points for this item to \a aPoints.
      *
      * Not all schematic items have connection points so the default method does nothing.
-     *
-     * @param aPoints is the list of connection points to add to.
      */
     virtual std::vector<VECTOR2I> GetConnectionPoints() const { return {}; }
 
@@ -616,7 +615,8 @@ public:
     /**
      * Create a new connection object associated with this object.
      *
-     * @param aPath is the sheet path to initialize.
+     * @param[in] aPath is the sheet path to initialize.
+     * @param[in] aGraph is the connection graph to initialize.
      */
     SCH_CONNECTION* InitializeConnection( const SCH_SHEET_PATH& aPath, CONNECTION_GRAPH* aGraph );
 
@@ -697,12 +697,14 @@ public:
     /**
      * Plot the item to \a aPlotter.
      *
+     * @param[in] aPlotter is the #PLOTTER object to plot to.
      * @param aBackground a poor-man's Z-order.  The routine will get called twice, first with
      *                    aBackground true and then with aBackground false.
-     * @param aUnit - which unit to print.
-     * @param aBodyStyle - which body style to print.
-     * @param aOffset relative offset.
-     * @param aDimmed reduce brightness of item.
+     * @param[in] aPlotOpts are the options that control the plot output.
+     * @param aUnit is which unit to print.
+     * @param aBodyStyle is which body style to print.
+     * @param aOffset is a relative offset.
+     * @param aDimmed to reduce brightness of item.
      */
     virtual void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                        int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed)

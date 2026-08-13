@@ -32,8 +32,7 @@
 
 
 /**
- * Function scaletoIU
- * converts a distance given in floating point to our internal units
+ * Convert a distance given in floating point to our internal units.
  */
 extern int scaletoIU( double aCoord, bool isMetric ); // defined it rs274d_read_XY_and_IJ_coordinates.cpp
 
@@ -247,8 +246,8 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
 }
 
 
-/* Function HasNegativeItems
- * return true if at least one item must be drawn in background color
+/**
+ * Return true if at least one item must be drawn in background color
  * used to optimize screen refresh
  */
 bool GERBER_FILE_IMAGE::HasNegativeItems()
@@ -280,6 +279,7 @@ bool GERBER_FILE_IMAGE::HasNegativeItems()
     return m_hasNegativeItems == 1;
 }
 
+
 int GERBER_FILE_IMAGE::GetDcodesCount()
 {
     int count = 0;
@@ -298,14 +298,6 @@ int GERBER_FILE_IMAGE::GetDcodesCount()
 }
 
 
-/**
- * Function StepAndRepeatItem
- * Gerber format has a command Step an Repeat
- * This function must be called when reading a gerber file and
- * after creating a new gerber item that must be repeated
- * (i.e when m_XRepeatCount or m_YRepeatCount are > 1)
- * @param aItem = the item to repeat
- */
 void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
 {
     // When collecting items for a block-level SR replication, individual item
@@ -381,9 +373,9 @@ void GERBER_FILE_IMAGE::FinishStepAndRepeatBlock()
 
 
 /**
- * Function DisplayImageInfo
- * has knowledge about the frame and how and where to put status information
+ * Has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
+ *
  * Display info about Image Parameters.
  * These parameters are valid for the entire file, and must set only once
  * (If more than once, only the last value is used)

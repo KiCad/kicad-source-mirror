@@ -19,7 +19,8 @@
 
 /**
  * @file test_altium_parser_sch.cpp
- * Test suite for #ALTIUM_PARSER_SCH
+ *
+ * Test suite for #ALTIUM_COMPOUND_FILE.
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>

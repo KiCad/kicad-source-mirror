@@ -173,7 +173,7 @@ private:
                                   int aGateNumber );
     void          loadTextAttributes( EDA_TEXT* aText, const std::unique_ptr<ETEXT>& aAttributes ) const;
 
-    ///< Move net labels that are detached from any wire to the nearest wire
+    /// Move net labels that are detached from any wire to the nearest wire
     void adjustNetLabels();
 
     /**
@@ -189,7 +189,7 @@ private:
     wxString        getLibName();
     wxFileName      getLibFileName();
 
-    ///< Checks if there are other wires or pins at the position of the tested pin
+    /// Checks if there are other wires or pins at the position of the tested pin
     bool checkConnections( const SCH_SYMBOL* aSymbol, const SCH_PIN* aPin ) const;
 
     /**
@@ -227,10 +227,10 @@ private:
         {
         }
 
-        ///< Link to the parent symbol
+        /// Link to the parent symbol
         const SCH_SYMBOL* cmp;
 
-        ///< Screen where the parent symbol is located
+        /// Screen where the parent symbol is located
         SCH_SCREEN* screen;
 
         /* Map of the symbol units: for each unit there is a flag saying
@@ -240,7 +240,7 @@ private:
         std::map<int, bool> units;
     };
 
-    ///< Map references to missing symbol units data
+    /// Map references to missing symbol units data
     std::map<wxString, EAGLE_MISSING_CMP> m_missingCmps;
 
     SCH_SHEET*  m_rootSheet;      ///< The root sheet of the schematic being loaded
@@ -257,7 +257,7 @@ private:
     std::map<wxString, EAGLE_LIBRARY>  m_eagleLibs;
     std::map<wxString, std::unique_ptr<EMODULE>> m_eagleModules;
 
-    std::unordered_map<wxString, bool> m_userValue; ///< deviceset/@uservalue for device.
+    std::unordered_map<wxString, bool> m_userValue; ///< deviceset/\@uservalue for device.
 
     IO_RELEASER<SCH_IO>                m_pi;                ///< PI to create KiCad symbol library.
 
@@ -267,30 +267,30 @@ private:
     std::map<wxString, wxString>       m_powerPorts;        ///< map from symbol reference to global
                                                             ///<   label equivalent
 
-    ///< Wire intersection points, used for quick checks whether placing a net label in a particular
-    ///< place would short two nets.
+    /// Wire intersection points, used for quick checks whether placing a net label in a particular
+    /// place would short two nets.
     std::vector<VECTOR2I> m_wireIntersections;
 
-    ///< Wires and labels of a single connection (segment in Eagle nomenclature)
+    /// Wires and labels of a single connection (segment in Eagle nomenclature)
     struct SEG_DESC
     {
-        ///< Test if a particular label is attached to any of the stored segments
+        /// Test if a particular label is attached to any of the stored segments
         const SEG* LabelAttached( const SCH_LABEL_BASE* aLabel ) const;
 
         std::vector<SCH_LABEL_BASE*> labels;
         std::vector<SEG> segs;
     };
 
-    ///< Segments representing wires for intersection checking
+    /// Segments representing wires for intersection checking
     std::vector<SEG_DESC> m_segments;
 
-    ///< Nets as defined in the <nets> sections of an Eagle schematic file.
+    /// Nets as defined in the \<nets\> sections of an Eagle schematic file.
     std::map<wxString, ENET> m_nets;
 
-    ///< Positions of pins and wire endings mapped to its parent
+    /// Positions of pins and wire endings mapped to its parent
     std::map<VECTOR2I, std::set<const EDA_ITEM*>> m_connPoints;
 
-    ///< The fully parsed Eagle schematic file.
+    /// The fully parsed Eagle schematic file.
     std::unique_ptr<EAGLE_DOC> m_eagleDoc;
 };
 

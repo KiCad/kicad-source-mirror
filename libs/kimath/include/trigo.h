@@ -158,7 +158,7 @@ const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const V
                            bool aMinArcAngle = true );
 
 /**
- * Test if \a aRefPoint is with \a aDistance on the line defined by \a aStart and \a aEnd..
+ * Test if \a aRefPoint is with \a aDistance on the line defined by \a aStart and \a aEnd.
  *
  * @param aRefPoint = reference point to test
  * @param aStart is the first end-point of the line segment

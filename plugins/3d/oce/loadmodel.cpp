@@ -449,12 +449,12 @@ static inline std::ostream& operator<<( std::ostream& aOStream, const Quantity_C
 
 
 /**
- * Gets a string for a given TopAbs_ShapeEnum element
+ * Get a string for a given TopAbs_ShapeEnum element.
  *
- * @param aLabel Label to convert
- * @param aShapeTool Handle to shape tool being used
- * @param aColorTool Handle to color tool being used
- * @param aPregMsg Any prefixed message to insert (used for indentation in dump)
+ * @param aLabel Label to convert.
+ * @param aShapeTool Handle to shape tool being used.
+ * @param aColorTool Handle to color tool being used.
+ * @param aPreMsg Any prefixed message to insert (used for indentation in dump).
  */
 static void printLabel( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool,
                         Handle( XCAFDoc_ColorTool ) aColorTool, const char* aPreMsg = nullptr )

@@ -86,6 +86,7 @@ public:
      * @param aTheme The theme to take color data from to stick into render settings, can be
      *        left blank for default.
      * @param aSch The schematic to further copy settings from to be put into aRenderSettings.
+     * @param aDrawingSheetOverride
      */
     void InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSettings, const wxString& aTheme,
                              SCHEMATIC* aSch,

@@ -29,7 +29,7 @@
 class SCH_RULE_AREA;
 
 
-/*
+/**
  * Spin style for labels of all kinds on schematics.
  *
  * Basically a higher level abstraction of rotation and justification of text.
@@ -90,7 +90,7 @@ private:
 };
 
 
-/*
+/**
  * Label and flag shapes used with text objects.
  */
 enum LABEL_FLAG_SHAPE : unsigned int
@@ -108,7 +108,7 @@ enum LABEL_FLAG_SHAPE : unsigned int
     F_RECTANGLE
 };
 
-/*
+/**
  * Specific enums for property manager (not used elsewhere)
  */
 enum LABEL_SHAPE : unsigned int
@@ -242,6 +242,7 @@ public:
     /**
      * Build an array of { pageNumber, pageName } pairs.
      *
+     * @param aPath is the sheet path to get the references from.
      * @param pages [out] Array of { pageNumber, pageName } pairs.
      */
     void GetIntersheetRefs( const SCH_SHEET_PATH* aPath,
@@ -255,6 +256,8 @@ public:
     /**
      * Resolve any references to system tokens supported by the label.
      *
+     * @param aPath is the sheet path for the variable to resolve.
+     * @param token is the variable to resolve.
      * @param aDepth a counter to limit recursion and circular references.
      */
     virtual bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const;
@@ -285,8 +288,9 @@ public:
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
      *
-     * @param aPoints A buffer to fill with polygon corners coordinates
-     * @param Pos Position of the shape, for texts and labels: do nothing
+     * @param aSettings are the render settings for creating the graphic shape.
+     * @param aPoints A buffer to fill with polygon corners coordinates.
+     * @param Pos Position of the shape, for texts and labels: do nothing.
      */
     virtual void CreateGraphicShape( const RENDER_SETTINGS* aSettings,
                                      std::vector<VECTOR2I>& aPoints, const VECTOR2I& Pos ) const

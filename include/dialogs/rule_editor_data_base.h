@@ -52,78 +52,78 @@ public:
 
     /**
      * Get the unique ID of the rule.
-     * 
+     *
      * @return The unique ID of the rule.
      */
     int GetId() { return m_id; }
 
     /**
      * Set the unique ID of the rule.
-     * 
+     *
      * @param aId The unique ID to set.
      */
     void SetId( int aId ) { m_id = aId; }
 
     /**
      * Get the parent ID of the rule.
-     * 
+     *
      * @return The parent ID of the rule, or -1 if no parent is set.
      */
     int GetParentId() { return m_parentId.value_or( -1 ); }
 
     /**
      * Set the parent ID of the rule.
-     * 
+     *
      * @param aParentId The parent ID to set.
      */
     void SetParentId( int aParentId ) { m_parentId = aParentId; }
 
     /**
      * Get the name of the rule.
-     * 
+     *
      * @return The name of the rule.
      */
     wxString GetRuleName() { return m_ruleName; }
 
     /**
      * Set the name of the rule.
-     * 
+     *
      * @param aRuleName The name of the rule to set.
      */
     void SetRuleName( wxString aRuleName ) { m_ruleName = aRuleName; }
 
     /**
      * Get the comment associated with the rule.
-     * 
+     *
      * @return The comment of the rule.
      */
     wxString GetComment() { return m_comment; }
 
     /**
      * Set the comment for the rule.
-     * 
+     *
      * @param aComment The comment to set.
      */
     void SetComment( wxString aComment ) { m_comment = aComment; }
 
     /**
      * Check if the rule is marked as new.
-     * 
+     *
      * @return True if the rule is new (being created), false if it is being edited.
      */
     bool IsNew() { return m_isNew; }
 
     /**
      * Mark the rule as new or not.
-     * 
+     *
      * @param aIsNew True to mark the rule as new, false to mark it as existing.
      */
     void SetIsNew( bool aIsNew ) { m_isNew = aIsNew; }
 
     /**
      * Implementation of the polymorphic `CopyFrom` method.
-     * 
-     * @param source The source object to copy from.
+     *
+     * @param aSource The source object to copy from.
      */
     void CopyFrom( const ICopyable& aSource ) override
     {
@@ -137,7 +137,7 @@ private:
     std::optional<int> m_parentId; // Optional parent ID of the rule.
     wxString           m_ruleName;
     wxString           m_comment;
-    bool               m_isNew = false; /**< Flag indicating if the user is creating a new rule (true) 
+    bool               m_isNew = false; /**< Flag indicating if the user is creating a new rule (true)
                                               or editing an existing rule (false). */
 };
 

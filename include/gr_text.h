@@ -47,7 +47,7 @@ class PLOTTER;
  *
  * @param aPenSize the pen size to clamp.
  * @param aSize the char size (height or width, or its wxSize).
- * @param aBold true if text accept bold pen size.
+ * @param aStrict true if text accept bold pen size.
  * @return the max pen size allowed.
  */
 int ClampTextPenSize( int aPenSize, int aSize, bool aStrict = false );
@@ -100,20 +100,21 @@ int GRTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSi
 /**
  * Print a graphic text through wxDC.
  *
- *  @param aDC is the current Device Context.
- *  @param aPos is the text position (according to h_justify, v_justify).
- *  @param aColor is the text color.
- *  @param aText is the text to draw.
- *  @param aOrient is the angle.
- *  @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
- *  @param aH_justify is the horizontal justification (Left, center, right).
- *  @param aV_justify is the vertical justification (bottom, center, top).
- *  @param aWidth is the line width (pen width) (use default width if aWidth = 0).
- *      if width < 0 : draw segments in sketch mode, width = abs(width)
- *      Use a value min(aSize.x, aSize.y) / 5 for a bold text.
- *  @param aItalic is the true to simulate an italic font.
- *  @param aBold use true to use a bold font. Useful only with default width value (aWidth = 0).
- *  @param aFont is the font to use, or nullptr for the KiCad stroke font
+ * @param aDC is the current Device Context.
+ * @param aPos is the text position (according to h_justify, v_justify).
+ * @param aColor is the text color.
+ * @param aText is the text to draw.
+ * @param aOrient is the angle.
+ * @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
+ * @param aH_justify is the horizontal justification (Left, center, right).
+ * @param aV_justify is the vertical justification (bottom, center, top).
+ * @param aWidth is the line width (pen width) (use default width if aWidth = 0).
+ *               if width < 0 : draw segments in sketch mode, width = abs(width)
+ *               Use a value min(aSize.x, aSize.y) / 5 for a bold text.
+ * @param aItalic is the true to simulate an italic font.
+ * @param aBold use true to use a bold font. Useful only with default width value (aWidth = 0).
+ * @param aFont is the font to use, or nullptr for the KiCad stroke font
+ * @param aFontMetrics are the font metrics to use for printing text.
  */
 void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const KIGFX::COLOR4D& aColor,
                   const wxString& aText, const EDA_ANGLE& aOrient, const VECTOR2I& aSize,

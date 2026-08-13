@@ -84,7 +84,7 @@ public:
 
     void OnIdle( wxIdleEvent& aEvent );
 
-    ///< Zoom the screen to fit the bounding box for cross probing/selection sync.
+    /// Zoom the screen to fit the bounding box for cross probing/selection sync.
     void ZoomFitCrossProbeBBox( const BOX2I& aBBox );
 
     /**
@@ -180,19 +180,19 @@ public:
      */
     void CancelDisambiguation() { m_disambiguateTimer.Stop(); }
 
-    ///< Clear current selection event handler.
+    /// Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
 
-    ///< Select all visible items in sheet
+    /// Select all visible items in sheet
     int SelectAll( const TOOL_EVENT& aEvent );
 
-    ///< Unselect all visible items in sheet
+    /// Unselect all visible items in sheet
     int UnselectAll( const TOOL_EVENT& aEvent );
 
-    ///< Select next net item
+    /// Select next net item
     int SelectNext( const TOOL_EVENT& aEvent );
 
-    ///< Select previous net item
+    /// Select previous net item
     int SelectPrevious( const TOOL_EVENT& aEvent );
 
     void ClearSelection( bool aQuietMode = false );
@@ -229,8 +229,8 @@ public:
     bool CollectHits( SCH_COLLECTOR& aCollector, const VECTOR2I& aWhere,
                       const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } );
 
-    ///< Set selection to items passed by parameter.
-    ///< Zooms to fit, if enabled.
+    /// Set selection to items passed by parameter.
+    /// Zooms to fit, if enabled.
     void SyncSelection( const std::optional<SCH_SHEET_PATH>& targetSheetPath, SCH_ITEM* focusItem,
                         const std::vector<SCH_ITEM*>& items );
 
@@ -263,25 +263,25 @@ private:
      * Apply rules to narrow the collection down to selectable objects, and then heuristics
      * to try and narrow it to a single object.
      *
-     * @param aCollector [in, out] Provides collection conditions and stores collected items.
+     * @param[in, out] aCollector Provides collection conditions and stores collected items.
      * @param aWhere point where we should narrow (if relevant)
-     * @param aCheckLocked If false, remove locked elements from #collector
-     * @param aSelectedOnly If true, remove non-selected items from #collector
+     * @param aCheckLocked If false, remove locked elements from #SCH_COLLECTOR
+     * @param aSelectedOnly If true, remove non-selected items from #SCH_COLLECTOR
+     * @param aRejected
      */
-    void narrowSelection( SCH_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked,
+    void narrowSelection( SCH_COLLECTOR& aCollector, const VECTOR2I& aWhere, bool aCheckLocked,
                           bool aSelectedOnly = false,
                           SCH_SELECTION_FILTER_OPTIONS* aRejected = nullptr );
 
     /**
      * Perform a click-type selection at a point (usually the cursor position).
      *
-     * @param aCollector [in, out] Provides collection conditions and stores collected items.
+     * @param[in, out] aCollector Provides collection conditions and stores collected items.
      * @param aWhere Point from which the selection should be made.
-     * @param aItem [out, optional] The newly selected item if only one was selected, otherwise
-     *              unchanged.
-     * @param aSelectionCancelledFlag [out] Allows the function to inform its caller that a
-     *                                selection was canceled (for instance, by clicking outside of
-     *                                the disambiguation menu).
+     * @param[out] aItem The newly selected item if only one was selected, otherwise unchanged.
+     * @param[out] aSelectionCancelledFlag Allows the function to inform its caller that a
+     *                                     selection was canceled (for instance, by clicking outside of
+     *                                     the disambiguation menu).
      * @param aAdd Indicates if found item(s) should be added to the selection.
      * @param aSubtract Indicates if found item(s) should be subtracted from the selection.
      * @param aExclusiveOr Indicates if found item(s) should be toggle in the selection.
@@ -386,7 +386,7 @@ private:
 
     void filterCollectedItems( SCH_COLLECTOR& aCollector, bool aMultiSelect );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
 private:

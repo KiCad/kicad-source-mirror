@@ -83,7 +83,7 @@ namespace ENV_VAR
      * KICAD8_TEMPLATE_DIR.
      *
      * If this value exists in the map, it will be returned.  If not, the map will be searched
-     * for keys that are versioned variants of <aBaseName> (@see IsVersionedEnvVar), and the
+     * for keys that are versioned variants of \<aBaseName\> (@see IsVersionedEnvVar), and the
      * first match's value will be returned.  If there are no matches, std::nullopt will be
      * returned.
      *

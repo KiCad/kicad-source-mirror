@@ -19,7 +19,8 @@
  */
 
 /**
- * @file vrmlv1_node.h
+ * @file vrml1_node.h
+ *
  * Define the base class for VRML1.0 nodes.
  */
 
@@ -210,6 +211,7 @@ public:
      * kicad_3dsg library.
      *
      * @param aParent is a pointer to the parent SG node.
+     * @param sp
      * @return is non-NULL on success.
      */
     virtual SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) = 0;

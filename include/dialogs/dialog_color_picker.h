@@ -75,13 +75,13 @@ class DIALOG_COLOR_PICKER : public DIALOG_COLOR_PICKER_BASE
 {
 public:
     /**
-     * Dialog constructor
-     * @param aParent is the caller
-     * @param aCurrentColor is the current color, used to show it in dialog
+     * @param aParent is the caller.
+     * @param aCurrentColor is the current color, used to show it in dialog.
      * @param aAllowOpacityControl true to allow opacity (alpha channel) setting
-     * false to not show this setting (opacity = 1.0 always)
+     *                             false to not show this setting (opacity = 1.0 always).
      * @param aUserColors if not null is a list of defined colors replacing the dialog
-     *                    predefined colors
+     *                    predefined colors.
+     * @param aDefaultColor is the default color.
      */
 	DIALOG_COLOR_PICKER( wxWindow* aParent, const KIGFX::COLOR4D& aCurrentColor, bool aAllowOpacityControl,
 	                     std::vector<CUSTOM_COLOR_ITEM>* aUserColors = nullptr,
@@ -134,23 +134,23 @@ private:
     void createRGBBitmap();             ///< generate the bitmap that shows the RVB color space
     void drawRGBPalette();              ///< draws the RVB color space
 
-    ///< repaint a static bitmap with the aColor4D color
+    /// Repaint a static bitmap with the aColor4D color.
     void updatePreview( wxStaticBitmap* aStaticBitmap, KIGFX::COLOR4D& aColor4D );
 
-    ///< Event handler from wxSlider: brightness (value) control
+    /// Event handler from wxSlider: brightness (value) control.
 	void OnChangeBrightness( wxScrollEvent& event ) override;
 
-    ///< Event handler from wxSlider: alpha (transparency) control
+    /// Event handler from wxSlider: alpha (transparency) control.
     void OnChangeAlpha( wxScrollEvent& event ) override;
 
-    ///< Event handlers from wxSpinControl
+    /// Event handlers from wxSpinControl
     void OnChangeEditRed( wxSpinEvent& event ) override;
     void OnChangeEditGreen( wxSpinEvent& event ) override;
     void OnChangeEditBlue( wxSpinEvent& event ) override;
     void OnChangeEditHue( wxSpinEvent& event ) override;
     void OnChangeEditSat( wxSpinEvent& event ) override;
 
-    ///< mouse handlers, when clicking on a palette bitmap
+    /// mouse handlers, when clicking on a palette bitmap
 	void onRGBMouseClick( wxMouseEvent& event ) override;
 	void onRGBMouseDrag( wxMouseEvent& event ) override;
 	void onHSVMouseClick( wxMouseEvent& event ) override;
@@ -160,7 +160,7 @@ private:
 
     void OnColorValueText( wxCommandEvent& event ) override;
 
-    ///< Event handler for the reset button press
+    /// Event handler for the reset button press.
     void OnResetButton( wxCommandEvent& aEvent ) override;
 
     /**
@@ -173,19 +173,19 @@ private:
      */
 	bool setHSvaluesFromCursor( const wxPoint& aMouseCursor );
 
-    ///< Event handler for defined color buttons
+    /// Event handler for defined color buttons.
     void buttColorClick( wxMouseEvent& event );
 
-    ///< Event handler for double click on color buttons
+    /// Event handler for double click on color buttons.
     void colorDClick( wxMouseEvent& event );
 
-    ///< called when creating the dialog
+    /// Called when creating the dialog.
     bool TransferDataToWindow() override;
 
     /**
      * Create the bitmap buttons for each defined colors.
      *
-     * If aPredefinedColors is nullptr, a internal predefined list will be used.
+     * If \a aPredefinedColors is nullptr, a internal predefined list will be used.
      */
     void initDefinedColors( std::vector<CUSTOM_COLOR_ITEM>* aPredefinedColors );
 

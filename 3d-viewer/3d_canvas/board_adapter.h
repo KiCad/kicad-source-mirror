@@ -78,7 +78,7 @@ public:
     /**
      * Update the cache manager pointer.
      *
-     * @param aCachePointer: the pointer to the 3D cache manager.
+     * @param aCacheMgr is the pointer to the 3D cache manager.
      */
     void Set3dCacheManager( S3D_CACHE* aCacheMgr ) noexcept { m_3dModelManager = aCacheMgr; }
     S3D_CACHE* Get3dCacheManager() const noexcept { return m_3dModelManager; }
@@ -87,9 +87,10 @@ public:
      * Check if a layer is enabled.
      *
      * @param aLayer layer ID to get status.
+     * @param aVisibilityFlags is the layer visibility to determine if \a aLayer is enabled.
+     * @return true if the layer is enabled otherwise false.
      */
-    bool Is3dLayerEnabled( PCB_LAYER_ID aLayer,
-                           const std::bitset<LAYER_3D_END>& aVisibilityFlags ) const;
+    bool Is3dLayerEnabled( PCB_LAYER_ID aLayer, const std::bitset<LAYER_3D_END>& aVisibilityFlags ) const;
 
     /**
      * Test if footprint should be displayed in relation to attributes and the flags.

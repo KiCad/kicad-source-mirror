@@ -28,7 +28,7 @@
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 
-/*
+/**
  * Flag to enable advanced config debugging
  *
  * Use "KICAD_ADVANCED_CONFIG" to enable.

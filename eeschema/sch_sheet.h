@@ -57,7 +57,7 @@ public:
     /**
      * Copy \a aSheet into a new object.
      *
-     * All sheet pins are copied as is except and the #SCH_SHEET_PIN object's #m_Parent pointers
+     * All sheet pins are copied as is except and the #SCH_SHEET_PIN object's #m_parent pointers
      * are set to the new copied parent object.
      */
     SCH_SHEET( const SCH_SHEET& aSheet );
@@ -123,9 +123,9 @@ public:
     void SetFields( const std::vector<SCH_FIELD>& aFields );
 
     /**
-     * Add a @aField to the list of fields.
+     * Add @a aFieldName to the list of fields.
      *
-     * @note This has no affect if @aField is the sheet file name or sheet name fields.
+     * @note This has no affect if @a aFieldName is the sheet file name or sheet name fields.
      */
     SCH_FIELD* AddField( const SCH_FIELD& aField );
 
@@ -208,6 +208,8 @@ public:
     /**
      * Resolve any references to system tokens supported by the sheet.
      *
+     * @param aPath is the sheet instance to resolve with.
+     * @param token is the text variable to resolve.
      * @param aDepth is a counter to limit recursion and circular references.
      */
     bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth = 0 ) const;
@@ -648,7 +650,7 @@ protected:
      *          at index 0 must be the root sheet.
      *
      * @param[in] aInstance is the hierarchical path of the sheet.
-     * @param[in] aReference is the new page number for the sheet.
+     * @param[in] aPageNumber is the new page number for the sheet.
      */
     void setPageNumber( const KIID_PATH& aInstance, const wxString& aPageNumber );
 

@@ -293,6 +293,7 @@ public:
      * drawing if the requested point is out of view or if center on location is requested.
      *
      * @param aPos is the point to go to.
+     * @param aAllowScroll is the flag to enable location scrolling.
      */
     void FocusOnLocation( const VECTOR2I& aPos, bool aAllowScroll = true );
 
@@ -300,6 +301,7 @@ public:
      * Focus on a particular canvas item.
      *
      * @param aItem is the item to focus on. nullptr clears the focus.
+     * @param aAllowScroll is the flag to enable item scrolling.
      */
     virtual void FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll = true ) {}
 
@@ -314,6 +316,7 @@ public:
     /**
      * Print the drawing-sheet (frame and title block).
      *
+     * @param aSettings are the rendering settings used for printing.
      * @param aScreen screen to draw.
      * @param aProperties Optional properties for text variable resolution.
      * @param aMils2Iu The mils to Iu conversion factor.
@@ -497,7 +500,6 @@ public:
     /**
      * Save the current view as an image file.
      *
-     * @param aFrame The current draw frame view to save.
      * @param aFileName The file name to save the image.  This will overwrite an existing file.
      * @param aBitmapType The type of bitmap create as defined by wxImage.
      * @return True if the file was successfully saved or false if the file failed to be saved.
@@ -520,6 +522,7 @@ public:
      * Must be static at the moment because this needs to be called from the preferences dialog,
      * which can exist without the frame in question actually being created.
      *
+     * @param aScope is the scope of the plugins to get.
      * @param aCfg is the settings to read the plugin ordering from.
      */
     static std::vector<const PLUGIN_ACTION*> GetOrderedPluginActions( PLUGIN_ACTION_SCOPE aScope,
@@ -556,9 +559,6 @@ protected:
 
     /**
      * Return the canvas type stored in the application settings.
-     *
-     * @param aCfg is the APP_SETTINGS_BASE config storing the canvas type.
-     * If nullptr (default) the KifaceSettings() will be used
      */
     EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting();
 
@@ -575,7 +575,7 @@ protected:
 
     wxSocketServer*             m_socketServer;
 
-    ///< Prevents opening same file multiple times.
+    /// Prevents opening same file multiple times.
     std::unique_ptr<LOCKFILE> m_file_checker;
 
     COLOR4D              m_gridColor;         // Grid color

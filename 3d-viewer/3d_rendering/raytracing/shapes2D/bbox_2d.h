@@ -72,7 +72,7 @@ public:
     /**
      * Set bounding box based on another bounding box.
      *
-     * @param BBOX_2D a bounding box to initialize this one.
+     * @param aBBox is a bounding box to initialize this one.
      */
     void Set( const BBOX_2D& aBBox );
 
@@ -117,7 +117,8 @@ public:
     /**
      * Test if a circle intersects this box.
      *
-     * @param aBBox the bounding box to check if it intersects.
+     * @param aCenter of the circle to test for intersection.
+     * @param aRadiusSquared is the radius squared of the circle to test for intersection.
      */
     bool Intersects( const SFVEC2F& aCenter, float aRadiusSquared ) const;
 

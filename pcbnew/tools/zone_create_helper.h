@@ -43,22 +43,22 @@ public:
      */
     struct PARAMS
     {
-        ///< Should create a keepout zone?
+        /// Should create a keepout zone?
         bool m_keepout;
 
-        ///< Are we creating copper theiving zone?
+        /// Are we creating copper theiving zone?
         bool m_thieving = false;
 
-        ///< Layer to begin drawing
+        /// Layer to begin drawing
         PCB_LAYER_ID m_layer;
 
-        ///< The zone mode to operate in
+        /// The zone mode to operate in
         ZONE_MODE m_mode;
 
-        ///< Zone settings source (for similar and cutout zones)
+        /// Zone settings source (for similar and cutout zones)
         ZONE* m_sourceZone;
 
-        ///< Zone leader mode
+        /// Zone leader mode
         LEADER_MODE m_leaderMode;
     };
 
@@ -72,8 +72,8 @@ public:
 
     ZONE* GetZone() const { return m_zone.get(); }
 
-    /*
-     * Interface for receiving #POLYGON_GEOM_MANAGER update
+    /**
+     * Interface for receiving #POLYGON_GEOM_MANAGER update.
      */
     void OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr ) override;
 
@@ -118,23 +118,24 @@ public:
 private:
 
     /**
-     * Choose a new priority for @aZoneInfo.  This will be the lowest unused zone priority number
+     * Choose a new priority for @a aZoneInfo.  This will be the lowest unused zone priority number.
+     *
      * @param aZoneInfo ZONE_SETTINGS to apply the new priority number to
      */
     void setUniquePriority( ZONE_SETTINGS& aZoneInfo );
 
     DRAWING_TOOL& m_tool;
 
-    ///< Parameters of the zone to be drawn
+    /// Parameters of the zone to be drawn
     PARAMS& m_params;
 
-    ///< The preview item to display
+    /// The preview item to display
     KIGFX::PREVIEW::POLYGON_ITEM m_previewItem;
 
-    ///< view that show the preview item
+    /// view that show the preview item
     KIGFX::VIEW& m_parentView;
 
-    ///< The zone-in-progress
+    /// The zone-in-progress
     std::unique_ptr<ZONE> m_zone;
 };
 

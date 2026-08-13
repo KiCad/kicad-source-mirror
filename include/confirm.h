@@ -118,7 +118,7 @@ KICOMMON_API void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessa
  * @param aMessage is the message text to display
  * @param aExtraInfo is the extra data that can be optionally displayed in a collapsible pane
  */
-KICOMMON_API void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage,
+KICOMMON_API void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage,
                                       const wxString& aExtraInfo = wxEmptyString );
 
 /**
@@ -142,6 +142,7 @@ KICOMMON_API bool IsOK( wxWindow* aParent, const wxString& aMessage );
  *                         Passing wxEmptyString will hide this portion of the dialog.
  * @param aOKLabel is the text to display in the OK button.
  * @param aCancelLabel is the text to display in the cancel button.
+ * @param aApplyToAll
  *
  * @return wxID_OK or wxID_CANCEL depending on the button the user selected.
  */

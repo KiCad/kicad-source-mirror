@@ -66,8 +66,8 @@ void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::filesystem::pa
  *
  * Helps when writing tests or utilities that can be fed an external file.
  *
- * @param aFilename   the file to read in
- * @returns           a new #BOARD_ITEM, which is nullptr if the read or parse failed.
+ * @param aStream   the stream to read in
+ * @returns         a new #BOARD_ITEM, which is nullptr if the read or parse failed.
  */
 std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream );
 

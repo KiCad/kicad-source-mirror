@@ -286,6 +286,7 @@ public:
     /**
      * Return a color that is mixed with the input by a factor.
      *
+     * @param aColor is the color to mix with this color.
      * @param aFactor Specifies how much of the original color to keep (valid values: 0.0 .. 1.0).
      * @return COLOR4D Mixed color.
      */

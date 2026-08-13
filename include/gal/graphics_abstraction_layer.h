@@ -371,8 +371,6 @@ public:
 
     /**
      * Clear the screen.
-     *
-     * @param aColor is the color used for clearing.
      */
     virtual void ClearScreen() {};
 
@@ -1070,8 +1068,9 @@ public:
     /**
      * Set the cursor in the native panel.
      *
-     * @param aCursor is the cursor to use in the native panel
-     * @return true if the cursor was updated, false if the cursor given was already set
+     * @param aCursor is the cursor to use in the native panell
+     * @param aHiDPI is used to determine if high DPI cursors should be used.
+     * @return true if the cursor was updated, false if the cursor given was already set.
      */
     virtual bool SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI );
 

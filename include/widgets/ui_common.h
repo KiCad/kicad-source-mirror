@@ -117,7 +117,7 @@ KICOMMON_API bool IsInputControlFocused( wxWindow* aFocus = nullptr );
 /**
  * Check if a input control has focus.
  *
- * @param aFocus Control that test if editable
+ * @param aControl is the control to test if editable.
  * @return True if control is input and editable OR control is not a input. False if control is
  *         input and not editable.
  */

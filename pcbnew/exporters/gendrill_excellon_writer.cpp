@@ -20,7 +20,7 @@
  */
 
 /**
- * @file gendrill_Excellon_writer.cpp
+ * @file gendrill_excellon_writer.cpp
  * @brief Functions to create EXCELLON drill files and report files.
  */
 

@@ -93,28 +93,31 @@ public:
 
     /**
      * Creates an Gerber job file in JSON format
+     *
      * @param aFullFilename = the full filename
-     * @param aParams = true for a NPTH file, false for a PTH file
      * @return true, or false if the file cannot be created
      */
     bool  WriteJSONJobFile( const wxString& aFullFilename );
 
 private:
-    /** @return SIDE_NONE if no silk screen layer is in list
-     * SIDE_TOP if top silk screen layer is in list
-     * SIDE_BOTTOM if bottom silk screen layer is in list
-     * SIDE_BOTH if top and bottom silk screen layers are in list
+    /**
+     * @retval SIDE_NONE if no silk screen layer is in list
+     * @retval SIDE_TOP if top silk screen layer is in list
+     * @retval SIDE_BOTTOM if bottom silk screen layer is in list
+     * @retval SIDE_BOTH if top and bottom silk screen layers are in list
      */
     enum ONSIDE hasSilkLayers();
 
-    /** @return SIDE_NONE if no soldermask layer is in list
-     * SIDE_TOP if top soldermask layer is in list
-     * SIDE_BOTTOM if bottom soldermask layer is in list
-     * SIDE_BOTH if top and bottom soldermask layers are in list
+    /**
+     * @retval SIDE_NONE if no soldermask layer is in list
+     * @retval SIDE_TOP if top soldermask layer is in list
+     * @retval SIDE_BOTTOM if bottom soldermask layer is in list
+     * @retval SIDE_BOTH if top and bottom soldermask layers are in list
      */
     enum ONSIDE hasSolderMasks();
 
-    /** @return the key associated to sides used for some layers
+    /**
+     * @return the key associated to sides used for some layers
      * No TopOnly BotOnly Both
      */
     const char* sideKeyValue( enum ONSIDE aValue );
@@ -146,12 +149,14 @@ private:
      */
     void addJSONDesignRules();
 
-    /** A helper function to convert a wxString ( therefore a Unicode text ) to
+    /**
+     * A helper function to convert a wxString ( therefore a Unicode text ) to
      * a JSON compatible string (a escaped unicode sequence of 4 hexa).
      */
     std::string formatStringFromUTF32( const wxString& aText );
 
-    /** A helper function to convert a double in Pcbnew internal units to
+    /**
+     * A helper function to convert a double in Pcbnew internal units to
      * a JSON double value (in mm), with only 4 digits in mantissa for a better readability
      * when printed using %g or equivalent format.
      */

@@ -106,9 +106,14 @@ private:
  * are skipped, and a reconciliation failure is reported rather than thrown so an import is never
  * aborted by it.
  *
- * @param aProperties carries the manager-chosen cache nickname and provenance source libraries;
- *                    a standalone import passes nullptr and the nickname is derived from
- *                    @p aSchematicPath.
+ * @param[in] aPlugin is the #SCH_IO plugin used to load the schematic.
+ * @param[in] aSchematic is the #SCHEMATIC to reconcile imported symbols.
+ * @param[in] aProject is the currently opened  #PROJECT.
+ * @param[in] aSchematicPath is the file path of the schematic.
+ * @param[in] aProperties carries the manager-chosen cache nickname and provenance source libraries;
+ *                        a standalone import passes nullptr and the nickname is derived from
+ *                        @p aSchematicPath.
+ * @param[in] aReporter is the #REPORTER object to write status information to.
  */
 SYMBOL_IMPORT_RECONCILE_RESULT
 ReconcileImportedSymbols( SCH_IO& aPlugin, SCHEMATIC& aSchematic, PROJECT& aProject,

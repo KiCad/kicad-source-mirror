@@ -40,7 +40,8 @@ public:
      *
      * @param aFrame  the parent frame (usually a SCH_EDIT_FRAME or PCB_EDIT_FRAME)
      * @param aParent the parent design block pane
-     * @param aAcceptHandler a handler to be called on double-click of a footprint
+     * @param aHistoryList is list of previously chosen design block library IDs.
+     * @param aSelectHandler a handler to be called on double-click of a footprint
      * @param aContextMenuTool the tool that will be used to provide an appropriate context menu
      *                         for the design block actions available in that frame
      */

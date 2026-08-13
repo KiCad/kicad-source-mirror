@@ -35,21 +35,21 @@ public:
 
     virtual ~GERBVIEW_DRAW_PANEL_GAL();
 
-    ///< @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
+    /// @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
     virtual void SetHighContrastLayer( int aLayer ) override;
 
-    ///< @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
+    /// @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    ///< @copydoc EDA_DRAW_PANEL_GAL::OnShow()
+    /// @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
 
-    ///< @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
+    /// @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
     virtual void SetTopLayer( int aLayer ) override;
 
-    ///< @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
+    /// @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
     BOX2I GetDefaultViewBBox() const override;
 
     /**
@@ -66,10 +66,10 @@ public:
     DS_PROXY_VIEW_ITEM* GetDrawingSheet() const { return m_drawingSheet.get(); }
 
 protected:
-    ///< Set rendering targets & dependencies for layers.
+    /// Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///< Currently used drawing-sheet (borders and title block)
+    /// Currently used drawing-sheet (borders and title block)
     std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;
 };
 

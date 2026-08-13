@@ -52,7 +52,7 @@ class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
 public:
     ~FOOTPRINT_VIEWER_FRAME();
 
-    ///< @copydoc PCB_BASE_FRAME::GetModel()
+    /// @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     SELECTION& GetCurrentSelection() override;
@@ -88,11 +88,11 @@ public:
      * If no current footprint, rebuild the list of footprints available in a given footprint
      * library.
      *
-     * @param aMode #NEXT_PART or #PREVIOUS_PART.
+     * @param aMode #FPVIEWER_CONSTANTS::NEXT_PART or #FPVIEWER_CONSTANTS::PREVIOUS_PART.
      */
     void SelectAndViewFootprint( FPVIEWER_CONSTANTS aMode );
 
-    ///< @copydoc EDADRAW_FRAME::UpdateMsgPanel
+    /// @copydoc EDA_DRAW_FRAME::UpdateMsgPanel
     void UpdateMsgPanel() override;
 
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;

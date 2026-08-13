@@ -78,7 +78,9 @@ KICOMMON_API wxString JoinExtensions( const std::vector<std::string>& aExts );
 /**
  * Replace any environment variable & text variable references with their values.
  *
- * @param aString a string containing (perhaps) references to env var
+ * @param aString a string containing (perhaps) references to env var.
+ * @param aProject the project to get variable substitutions from.
+ *
  * @return the expanded environment variable.
  */
 KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject );
@@ -118,7 +120,7 @@ KICOMMON_API wxString NormalizeFilePathForTextVars( const wxString& aPath );
  * resolving. Nested references are captured at every nesting level.
  *
  * Used by the reactive dependency tracker to register edges on SetText without
- * needing a resolver context. Escape sequences (`\${...}`) are skipped. `@{...}`
+ * needing a resolver context. Escape sequences (`\${...}`) are skipped. `\@{...}`
  * math expressions are walked so that nested `${...}` inside them is captured.
  */
 KICOMMON_API std::vector<TEXT_VAR_REF_KEY> ExtractTextVarReferences( const wxString& aSource );
@@ -126,11 +128,11 @@ KICOMMON_API std::vector<TEXT_VAR_REF_KEY> ExtractTextVarReferences( const wxStr
 /**
  * Multi-pass text variable expansion and math expression evaluation.
  *
- * Performs recursive resolution of both ${...} variable references and @{...} math expressions,
+ * Performs recursive resolution of both ${...} variable references and \@{...} math expressions,
  * then cleans up escape sequences (\${...} and \@{...}) to display literals.
  *
  * This helper encapsulates the common pattern used across schematic text components:
- * - While text contains ${...} or @{...} and depth < max:
+ * - While text contains ${...} or \@{...} and depth < max:
  *   - Expand variables via ExpandTextVars()
  *   - Evaluate math expressions via EXPRESSION_EVALUATOR
  * - Convert escape markers back to literals

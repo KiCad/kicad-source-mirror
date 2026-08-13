@@ -45,7 +45,7 @@ public:
      * @param aOrigPos original item position (used for computing the circular array radius)
      */
     DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, std::unique_ptr<ARRAY_OPTIONS>& aOptions,
-                         bool enableNumbering, const VECTOR2I& aOrigPos );
+                         bool aEnableNumbering, const VECTOR2I& aOrigPos );
     ~DIALOG_CREATE_ARRAY();
 
     // Implement the RECEIVER interface for the callback from the TOOL
@@ -75,7 +75,7 @@ private:
      */
     std::unique_ptr<ARRAY_OPTIONS>& m_settings;
 
-    /*
+    /**
      * The position of the original item(s), used for finding radius, etc
      */
     const VECTOR2I m_originalItemPosition;

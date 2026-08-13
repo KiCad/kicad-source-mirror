@@ -19,7 +19,7 @@
  */
 
 /**
- * @file pcad_plugin.h
+ * @file pcb_io_pcad.h
  * @brief Pcbnew PLUGIN for P-Cad 200x ASCII *.pcb format.
  */
 

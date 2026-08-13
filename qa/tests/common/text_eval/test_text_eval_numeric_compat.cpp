@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE( SetVar )
 
 /**
  * A list of valid test cases adapted from numeric evaluator
- * All expressions are wrapped in @{} to use the text_eval system
+ * All expressions are wrapped in \@{} to use the text_eval system
  */
 static const std::vector<TEXT_EVAL_CASE> eval_cases_valid = {
     // Empty case - text_eval handles this differently than numeric evaluator

@@ -88,6 +88,7 @@ public:
      * Set the parent #SGNODE of this object.
      *
      * @param aParent [in] is the desired parent node
+     * @param notify
      * @return true if the operation succeeds; false if the given node is not allowed to
      *         be a parent to the derived object.
      */

@@ -37,7 +37,7 @@ public:
     /**
      * Write a vector of rows to the stream.
      *
-     * @param cols The rows to write.
+     * @param aRows The rows to write.
      */
     void WriteLines( const std::vector<std::vector<wxString>>& aRows );
 

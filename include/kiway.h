@@ -178,6 +178,7 @@ struct KIFACE
 
     /**
      * Called just once shortly after the DSO is loaded.
+     *
      * It is the second function called, immediately after the KIFACE_GETTER().  However
      * before either of those, static C++ constructors are called.  The DSO implementation
      * should do process level initialization here, not project specific since there will
@@ -185,6 +186,7 @@ struct KIFACE
      *
      * @param aProgram is the process block: #PGM_BASE*.
      * @param aCtlBits consists of bit flags from the set of KFCTL_* \#defines above.
+     * @param aKiway
      * @return true if DSO initialized OK, false if not.  When returning false, the loader
      *         may optionally decide to terminate the process or not, but will not put out
      *         any UI because that is the duty of this function to say why it is returning
@@ -451,7 +453,7 @@ public:
     LOCAL_HISTORY& LocalHistory() { return *m_local_history; }
 
     /**
-     * Change the language and then calls ShowChangedLanguage() on all #KIWAY_PLAYERs.
+     * Change the language and then calls ShowChangedLanguage() on all #KIWAY_PLAYER objects.
      */
     virtual void SetLanguage( int aLanguage );
 

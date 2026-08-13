@@ -41,7 +41,8 @@ public:
     /**
      * Construct a schematic design block preview widget.
      *
-     * @param aParent - parent window
+     * @param aParent is the widget parent window.
+     * @param aFrame is the main window of the widget.
      */
     PCB_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aParent, PCB_EDIT_FRAME* aFrame );
 

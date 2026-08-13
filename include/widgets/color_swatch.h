@@ -58,6 +58,11 @@ public:
      * @param aParent parent window.
      * @param aColor initial swatch color.
      * @param aID id to use when sending swatch events.
+     * @param aBackground is the background color of the swatch.
+     * @param aDefault is the default color for the swatch.
+     * @param aSwatchType
+     * @param aTriggerWithSingleClick is used to indicate if the color picker is launched with a single or
+     *                                double left mouse button click.
      */
     COLOR_SWATCH( wxWindow* aParent, const KIGFX::COLOR4D& aColor, int aID,
                   const KIGFX::COLOR4D& aBackground, const KIGFX::COLOR4D& aDefault,

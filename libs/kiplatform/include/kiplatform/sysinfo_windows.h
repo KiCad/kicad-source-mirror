@@ -35,47 +35,45 @@ namespace KIPLATFORM
 
         bool GetCPUInfo( std::vector<CPU_INFO>& aCpuInfos ) override;
         bool GetGPUInfo( std::vector<GPU_INFO>& aGpuInfos ) override;
-        bool GetMemoryInfo( MEMORY_INFO& aRamInfo ) override;
+        bool GetMemoryInfo( MEMORY_INFO& aMemoryInfo ) override;
 
     private:
         HRESULT openWmi();
         HRESULT freeWmi();
 
         /**
-         * Fetches gpu info from directx and registry
-         * WMI unforunately has a uint32 max value issue for reporting gpu memory, meanwhile directx does not have this issue
+         * Fetche gpu info from directx and registry.
          *
-         * We only lightly poke directx to get the info we need and don't actually use it
+         * WMI unfortunately has a uint32 max value issue for reporting gpu memory, meanwhile directx does not
+         * have this issue.  We only lightly poke directx to get the info we need and don't actually use it.
          */
         bool gpuFromDirectX( std::vector<GPU_INFO>& aGpuInfos );
 
         /**
-         * Extracts the driver version for an dapter from the directx section of the registry
+         * Extract the driver version for an adapter from the directx section of the registry.
          *
-         * @param aAdapterLuid is the unique adapter (gpu) id to look for in the registry
-         * @param aDriverVersion is the string variable that will be updated
+         * @param aAdapterLuid is the unique adapter (gpu) id to look for in the registry.
+         * @param aDriverVersion is the string variable that will be updated.
          *
-         * @return True if successfully retrieved the driver version
+         * @return True if successfully retrieved the driver version.
          */
         bool getVersionFromDXRegistry( int64_t aAdapterLuid, std::string& aDriverVersion );
 
         /**
-         * Attempts to convert the Windows driver version string to the vendor version string if possible
+         * Attempt to convert the Windows driver version string to the vendor version string if possible.
          *
-         * @param aManufacturer is the name of the vendor
-         * @param aVersion is the windows driver version string to convert
+         * @param aManufacturer is the name of the vendor.
+         * @param aVersion is the windows driver version string to convert.
          *
-         * @return Vendor version string
+         * @return Vendor version string.
          */
         std::string improveDriverVersion( const std::string& aManufacturer, const std::string& aVersion );
 
         /**
-         * Converts a win32 LPVARIANT to a string
+         * Convert a win32 LPVARIANT to a string.
          *
-         * @param aVar is the LPVARIANT to be converted
-         * @param aReturnString is the string to store the variant within
-         *
-         * @return LPVARIANT as string
+         * @param aVar is the LPVARIANT to be converted.
+         * @param aReturnString is the string to store the variant within.
          */
         void variantToString( const LPVARIANT aVar, std::string& aReturnString ) const;
 

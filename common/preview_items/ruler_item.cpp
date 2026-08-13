@@ -113,10 +113,13 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
  * Draw labeled ticks on a line. Ticks are spaced according to a
  * maximum density. Minor ticks are not labeled.
  *
- * @param aGal the GAL to draw on
- * @param aOrigin start of line to draw ticks on
- * @param aLine line vector
- * @param aMinorTickLen length of minor ticks in IU
+ * @param aView is the view to draw on.
+ * @param aOrigin start of line to draw ticks on.
+ * @param aLine line vector.
+ * @param aMinorTickLen length of minor ticks in IU.
+ * @param aIuScale
+ * @param aUnits
+ * @param aDrawingDropShadows flags if drop shadows should be drawn on the ticks.
  */
 void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
                          double aMinorTickLen, const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
@@ -278,14 +281,14 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 
 
 /**
- * Draw simple ticks on the back of a line such that the line is
- * divided into n parts.
+ * Draw simple ticks on the back of a line such that the line is divided into n parts.
  *
- * @param aGal the GAL to draw on
+ * @param aView is the view to draw on
  * @param aOrigin start of line to draw ticks on
  * @param aLine line vector
  * @param aTickLen length of ticks in IU
  * @param aNumDivisions number of parts to divide the line into
+ * @param aDrawingDropShadows flags if drop shadows should be drawn on the ticks.
  */
 void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
                         double aTickLen, int aNumDivisions, bool aDrawingDropShadows )

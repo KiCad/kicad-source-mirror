@@ -48,6 +48,7 @@ public:
      * @param aReporter The reporter the library reports to
      * @param aForceFullParse Caller requires fully parsed models.  If false fallback models can
      *                        be generarted for performance.
+     * @param aResolver is the resolver callback function.
      * @return The library loaded in a newly constructed object.
      */
     static std::unique_ptr<SIM_LIBRARY>
@@ -59,6 +60,7 @@ public:
      * Spice for SIM_LIBRARY_SPICE).
      *
      * @param aFilePath Path to the file.
+     * @param aReporter is where to write file read status messages.
      * @throw IO_ERROR on read or parsing error.
      */
     virtual void ReadFile( const wxString& aFilePath, REPORTER& aReporter ) = 0;

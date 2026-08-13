@@ -45,7 +45,8 @@ public:
 
     /**
      * Construct a renderer that renders a single icon next to the cell's value text
-     * @param aIcon is the icon to render next to the cell's value
+     * @param aIcon is the icon to render next to the cell's value.
+     * @param aPreferredIconSize is the preferred icon size.
      */
     GRID_CELL_ICON_TEXT_RENDERER( const wxBitmapBundle& aIcon,
                                   wxSize aPreferredIconSize = wxDefaultSize );

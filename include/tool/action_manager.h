@@ -187,9 +187,9 @@ public:
     /**
      * Return list of TOOL_ACTIONs.
      *
-     * #TOOL_ACTIONs add themselves to the list upon their creation.
+     * #TOOL_ACTION objects add themselves to the list upon their creation.
      *
-     * @return List of TOOL_ACTIONs.
+     * @return List of #TOOL_ACTION objects.
      */
     static std::list<TOOL_ACTION*>& GetActionList()
     {
@@ -221,20 +221,20 @@ private:
     void processHotKey( TOOL_ACTION* aAction, const std::map<std::string, int>& aLegacyMap,
                         const std::map<std::string, std::pair<int, int>>& aHotKeyMap );
 
-    ///< Tool manager needed to run actions
+    /// Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;
 
-    ///< Map for indexing actions by their names
+    /// Map for indexing actions by their names
     std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
 
-    ///< Map for recording actions that have custom UI IDs
+    /// Map for recording actions that have custom UI IDs
     std::map<int, TOOL_ACTION*> m_customUIIdIndex;
 
-    ///< Map for indexing actions by their hotkeys
+    /// Map for indexing actions by their hotkeys
     typedef std::map<int, std::list<TOOL_ACTION*> > HOTKEY_LIST;
     HOTKEY_LIST m_actionHotKeys;
 
-    ///< Quick action<->hot key lookup
+    /// Quick action<->hot key lookup
     std::map<int, int> m_hotkeys;
 
     /// Map the command ID that wx uses for the action to the UI conditions for the

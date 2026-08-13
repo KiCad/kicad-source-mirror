@@ -104,9 +104,14 @@ private:
  * project footprint library and re-point FPIDs.  A reconciliation failure is reported rather than
  * thrown so an import is never aborted by it.
  *
+ * @param aDefinitions
+ * @param aBoard is the #BOARD to reconcile the footprints.
+ * @param aProject is the #PROJECT \a aBoard belongs to.
+ * @param aBoardPath
  * @param aProperties carries the manager-chosen cache nickname and provenance source libraries;
  *                    a standalone import passes nullptr and the nickname is derived from
  *                    @p aBoardPath.
+ * @param[in] aReporter is the #REPORTER object to write messages to.
  */
 FOOTPRINT_IMPORT_RECONCILE_RESULT
 ReconcileImportedFootprints( std::vector<std::unique_ptr<FOOTPRINT>> aDefinitions, BOARD& aBoard,

@@ -40,7 +40,7 @@ class NUMERIC_EVALUATOR_COMPAT;
 /**
  * @brief High-level wrapper for evaluating mathematical and string expressions in wxString format
  *
- * This class provides a simple interface for evaluating expressions containing @{} syntax
+ * This class provides a simple interface for evaluating expressions containing '\@{}' syntax
  * within wxString objects. It supports both map-based variable lookup and flexible
  * callback-based variable resolution for dynamic data access.
  *
@@ -56,7 +56,7 @@ class NUMERIC_EVALUATOR_COMPAT;
  * evaluator.SetVariable("product", "Widget");
  * evaluator.SetVariable("qty", 3);
  *
- * wxString input = "Product: @{upper(${product})} - Total: @{currency(${price} * ${qty})}";
+ * wxString input = "Product: '\@{upper(${product})}' - Total: '\@{currency(${price}' * '${qty})}'";
  * wxString result = evaluator.Evaluate(input);
  * // Result: "Product: WIDGET - Total: $299.97"
  *
@@ -68,7 +68,7 @@ class NUMERIC_EVALUATOR_COMPAT;
  *     return calc_parser::MakeError<calc_parser::Value>("Variable not found: " + varName);
  * };
  * EXPRESSION_EVALUATOR callbackEvaluator(callback);
- * wxString result2 = callbackEvaluator.Evaluate("Current time: @{${current_time}}");
+ * wxString result2 = callbackEvaluator.Evaluate("Current time: '\@{${current_time}}'");
  * @endcode
  */
 class KICOMMON_API EXPRESSION_EVALUATOR
@@ -245,8 +245,8 @@ public:
     void SetVariables( const std::unordered_map<wxString, wxString>& aVariables );
 
     /**
-     * @brief Main evaluation function - processes input string and evaluates all @{} expressions
-     * @param aInput Input string potentially containing @{} expressions
+     * @brief Main evaluation function - processes input string and evaluates all '\@{}' expressions
+     * @param aInput Input string potentially containing '\@{}' expressions
      * @return Fully evaluated string with all expressions replaced by their values
      *
      * Variables are resolved using the callback (if set) or stored variables.
@@ -323,7 +323,7 @@ public:
 
     /**
      * @brief Test if an expression can be parsed without evaluating it
-     * @param aExpression Single expression to test (without @{} wrapper)
+     * @param aExpression Single expression to test (without '\@{}' wrapper)
      * @return true if expression is syntactically valid
      *
      * This creates a temporary evaluator to test syntax only.
@@ -331,16 +331,16 @@ public:
     bool TestExpression( const wxString& aExpression );
 
     /**
-     * @brief Count the number of @{} expressions in input string
+     * @brief Count the number of '\@{}' expressions in input string
      * @param aInput Input string to analyze
-     * @return Number of @{} expression blocks found
+     * @return Number of '\@{}' expression blocks found
      */
     size_t CountExpressions( const wxString& aInput ) const;
 
     /**
-     * @brief Extract all @{} expressions from input without evaluating
+     * @brief Extract all '\@{}' expressions from input without evaluating
      * @param aInput Input string to analyze
-     * @return Vector of expression strings (content between @{} markers)
+     * @return Vector of expression strings (content between '\@{}' markers)
      */
     std::vector<wxString> ExtractExpressions( const wxString& aInput ) const;
 
@@ -400,7 +400,7 @@ private:
         VariableCallback aVariableCallback );
 
     /**
-     * @brief Expand ${variable} patterns that are outside @{} expressions
+     * @brief Expand ${variable} patterns that are outside '\@{}' expressions
      * @param aInput Input string to process
      * @param aTempNumericVars Temporary numeric variables
      * @param aTempStringVars Temporary string variables
@@ -419,7 +419,7 @@ private:
  * the new EXPRESSION_EVALUATOR backend. It maintains the same API to allow
  * seamless migration of existing code.
  *
- * The key difference is that expressions are automatically wrapped in @{...}
+ * The key difference is that expressions are automatically wrapped in '\@{...}'
  * syntax before evaluation.
  *
  * Example usage:

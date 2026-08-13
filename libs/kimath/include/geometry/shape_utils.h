@@ -85,7 +85,7 @@ std::array<SEG, 4> BoxToSegs( const BOX2I& aBox );
  */
 void CollectBoxCorners( const BOX2I& aBox, std::vector<VECTOR2I>& aCorners );
 
-/*
+/**
  * Get a SHAPE_LINE_CHAIN representing the outline of a box.
  *
  * The first point and winding direction are not specified.
@@ -134,6 +134,8 @@ SHAPE_ARC MakeArcCw90( const VECTOR2I& aCenter, int aRadius, DIRECTION_45::Direc
  * Get a SHAPE_ARC representing a 180-degree arc in the clockwise direction with the
  * midpoint in the given direction from the center.
  *
+ * @param aCenter is the center of the arc.
+ * @param aRadius is the radius of the arc.
  * @param aDir is the direction from the center to the midpoint (only N, E, S, W are valid).
  */
 SHAPE_ARC MakeArcCw180( const VECTOR2I& aCenter, int aRadius, DIRECTION_45::Directions aDir );
@@ -144,6 +146,8 @@ SHAPE_ARC MakeArcCw180( const VECTOR2I& aCenter, int aRadius, DIRECTION_45::Dire
  * For directions N, E, S, W, the point is the center of the side.
  * For directions NW, NE, SW, SE, the point is the corner.
  *
+ * @param aRect is the rectangle to test for a point.
+ * @param aDir is the direction to test.
  * @param aOutset is a distance to move the point outwards from the rectangle,
  *                in the direction of the corner (i.e. perpendicular to the side,
  *                or 45 degrees from the corner).
@@ -160,7 +164,7 @@ VECTOR2I GetPoint( const SHAPE_RECT& aRect, DIRECTION_45::Directions aDir, int a
 std::vector<TYPED_POINT2I> GetCircleKeyPoints( const CIRCLE& aCircle, bool aIncludeCenter );
 
 
-/*
+/**
  * Take a polygon and 'rectify' it, so that all sides are H/V.
  *
  * The entire original polygon is contained within the new one.

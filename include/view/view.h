@@ -112,6 +112,7 @@ public:
     /**
      * Find all visible items that touch or are within the rectangle \a aRect.
      *
+     * @param[in] aRect is the area to query.
      * @param aResult result of the search, containing VIEW_ITEMs associated with their layers.
      *                Sorted according to the rendering order (items that are on top of the
      *                rendering stack as first).
@@ -122,6 +123,7 @@ public:
     /**
      * Run a function on all visible items that touch or are within the rectangle \a aRect.
      *
+     * @param aRect is the area to query.
      * @param aFunc the function to be executed; return true to continue, false to end query.
      */
     void Query( const BOX2I& aRect, const std::function<bool( VIEW_ITEM* )>& aFunc ) const;
@@ -210,7 +212,7 @@ public:
     }
 
     /**
-     * Set the painter object used by the view for drawing #VIEW_ITEMS.
+     * Set the painter object used by the view for drawing #VIEW_ITEM objects.
      */
     inline void SetPainter( PAINTER* aPainter )
     {
@@ -218,7 +220,7 @@ public:
     }
 
     /**
-     * Return the painter object used by the view for drawing #VIEW_ITEMS.
+     * Return the painter object used by the view for drawing #VIEW_ITEM objects.
      *
      * @return Pointer to the currently used Painter instance.
      */
@@ -537,7 +539,7 @@ public:
     /**
      * Sorts m_orderedLayers after layer rendering order has changed.
      * Must be called after calling SetLayerOrder with aAutoSort = false
-     */ 
+     */
     void SortOrderedLayers();
 
     /**

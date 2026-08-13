@@ -1268,7 +1268,7 @@ private:
     DSN_T                    layer_type; ///< one of: T_signal, T_power, T_mixed, T_jumper
     int                      direction;
 
-    ///< [forbidden | high | medium | low | free | \<positive_integer\> | -1]
+    /// [forbidden | high | medium | low | free | \<positive_integer\> | -1]
     int                      cost;
     int                      cost_type;  ///< T_length | T_way
     RULE*                    rules;
@@ -3717,7 +3717,7 @@ public:
     void FromSESSION( BOARD* aBoard, COMMIT& aCommit );
 
     /**
-     * Write the internal #SESSION instance out as a #SPECTRA DSN format file.
+     * Write the internal #SESSION instance out as a SPECCTRA DSN format file.
      *
      * @param aFilename The file to save to.
      */
@@ -3893,7 +3893,7 @@ private:
      * @param aVia The #VIA to build the padstack from.
      * @return The padstack, which is on the heap only, user must save or delete it.
      */
-    PADSTACK* makeVia( const ::PCB_VIA* aVia );
+    PADSTACK* makeVia( const PCB_VIA* aVia );
 
     /**
      * Delete all the NETs that may be in here.

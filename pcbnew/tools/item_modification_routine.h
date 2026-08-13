@@ -42,19 +42,19 @@
 class ITEM_MODIFICATION_ROUTINE
 {
 public:
-    /*
-    * Handlers for receiving changes from the tool
-    *
-    * These are used to allow the tool's caller to make changes to
-    * affected board items using extra information that the tool
-    * does not have access to (e.g. is this an FP editor, was
-    * the line created from a rectangle and needs to be added, not
-    * modified, etc).
-    *
-    * We can't store them up until the end, because modifications
-    * need the old state to be known, so this allows the caller to
-    * inject the dependencies for how to handle the changes.
-    */
+    /**
+     * Handlers for receiving changes from the tool
+     *
+     * These are used to allow the tool's caller to make changes to
+     * affected board items using extra information that the tool
+     * does not have access to (e.g. is this an FP editor, was
+     * the line created from a rectangle and needs to be added, not
+     * modified, etc).
+     *
+     * We can't store them up until the end, because modifications
+     * need the old state to be known, so this allows the caller to
+     * inject the dependencies for how to handle the changes.
+     */
     class CHANGE_HANDLER
     {
     public:
@@ -166,7 +166,7 @@ public:
 
 protected:
     /**
-     * The BOARD used when creating new shapes
+     * The #BOARD used when creating new shapes
      */
     BOARD_ITEM* GetBoard() const { return m_board; }
 
@@ -226,7 +226,6 @@ public:
      *
      * @param aLineA the first line
      * @param aLineB the second line
-     * @return did the action succeed
      */
     virtual void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) = 0;
 

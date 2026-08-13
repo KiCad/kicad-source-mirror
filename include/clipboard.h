@@ -50,8 +50,8 @@ struct CLIPBOARD_MIME_DATA
 /**
  * Store information to the system clipboard.
  *
- * @param aText is the information to be stored, expected UTF8 encoding.  The text will be
- *              stored as Unicode string (not stored as UTF8 string).
+ * @param aTextUTF8 is the information to be stored, expected UTF8 encoding.  The text will be
+ *                  stored as Unicode string (not stored as UTF8 string).
  * @return False if error occurred.
  */
 bool SaveClipboard( const std::string& aTextUTF8 );

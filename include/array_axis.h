@@ -62,7 +62,6 @@ public:
 
     /**
      * Get the alphabet for the current numbering scheme.
-     * @param  type the numbering scheme.
      * @return the alphabet (as a string).
      */
     const wxString& GetAlphabet() const;

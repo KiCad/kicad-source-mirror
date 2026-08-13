@@ -19,8 +19,9 @@
  */
 
 /**
- * @file vrmlv2_node.h
- * defines the base class for VRML1.0 nodes
+ * @file vrml1_base.h
+ *
+ * Define the base class for VRML1.0 nodes.
  */
 
 #ifndef VRML1_BASE_H

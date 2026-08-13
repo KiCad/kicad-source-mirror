@@ -19,9 +19,9 @@
  */
 
 /**
-  * @file UnitSelector.cpp
-  * a wxChoiceBox to select units in Pcb_Calculator
-  */
+ * @file unit_selector.cpp
+ * a wxChoiceBox to select units in Pcb_Calculator
+ */
 
 #include "unit_selector.h"
 #include "units_scales.h"
@@ -39,10 +39,8 @@ UNIT_SELECTOR_LEN::UNIT_SELECTOR_LEN( wxWindow *parent, wxWindowID id,
 }
 
 
-/*
- * Function GetUnitScale
- * return the scaling factor to convert users units
- * to normalized units (meter)
+/**
+ * Return the scaling factor to convert users units to normalized units (meter).
  */
 double UNIT_SELECTOR_LEN::GetUnitScale()
 {
@@ -54,6 +52,7 @@ double UNIT_SELECTOR_LEN::GetUnitScale()
     case 3: return UNIT_MIL;    break;
     case 4: return UNIT_INCH;   break;
     }
+
     return 1.0;
 }
 

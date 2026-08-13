@@ -50,6 +50,9 @@ public:
      *
      * @param aFrame  the parent frame (usually a SCH_EDIT_FRAME or SYMBOL_CHOOSER_FRAME)
      * @param aParent the parent window (usually a DIALOG_SHIM or SYMBOL_CHOOSER_FRAME)
+     * @param aFilter
+     * @param aHistoryList
+     * @param aAlreadyPlaced
      * @param aAllowFieldEdits  if false, all functions that allow the user to edit fields (currently just
      *                          footprint selection) will not be available.
      * @param aShowFootprints   if false, all footprint preview and selection features are disabled. This
@@ -57,7 +60,7 @@ public:
      * @param aCancelled [out] value indicating the user has cancelled the loading symbols progress dialog
      *                   before we even get to showing the symbol chooser dialog.
      * @param aAcceptHandler a handler to be called on double-click of a footprint
-     * @param aEscapeHandler a handler to be called on <ESC>
+     * @param aEscapeHandler a handler to be called on \<ESC\>
      */
     PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aParent,
                           const SYMBOL_LIBRARY_FILTER* aFilter,

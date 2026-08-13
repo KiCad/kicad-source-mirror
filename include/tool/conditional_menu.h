@@ -37,7 +37,7 @@ enum class BITMAPS : unsigned int;
 class CONDITIONAL_MENU : public ACTION_MENU
 {
 public:
-    ///< Constant to indicate that we do not care about an #ENTRY location in the menu.
+    /// Constant to indicate that we do not care about an #ENTRY location in the menu.
     static const int ANY_ORDER = -1;
 
     CONDITIONAL_MENU( TOOL_INTERACTIVE* aTool );
@@ -61,7 +61,7 @@ public:
     /**
      * Add a checked menu entry to run a TOOL_ACTION on selected items.
      *
-     * The condition for checking the menu entry should be supplied through a #ACTION_CONDITION
+     * The condition for checking the menu entry should be supplied through a #ACTION_CONDITIONS
      * registered with the #ACTION_MANAGER.
      *
      * @param aAction is a menu entry to be added.
@@ -77,12 +77,10 @@ public:
 
     /**
      * Add a submenu to the menu.
-     * CONDITIONAL_MENU takes ownership of the added menu, so it will be freed when the
-     * CONDITIONAL_MENU object is destroyed.
+     * #CONDITIONAL_MENU takes ownership of the added menu, so it will be freed when the
+     * #CONDITIONAL_MENU object is destroyed.
      *
      * @param aMenu is the submenu to be added.
-     * @param aExpand determines if the added submenu items should be added as individual items
-     *                or as a submenu.
      * @param aCondition is a condition that has to be fulfilled to show the submenu entry in
      *                   the menu.
      * @param aOrder determines location of the added menu, higher numbers are put on the bottom.
@@ -114,7 +112,7 @@ public:
      void Resolve();
 
 private:
-    ///< Helper class to organize menu entries.
+    /// Helper class to organize menu entries.
     class ENTRY
     {
     public:
@@ -166,7 +164,7 @@ private:
 
         ~ENTRY();
 
-        ///< Possible entry types.
+        /// Possible entry types.
         enum ENTRY_TYPE {
             ACTION,
             MENU,
@@ -234,19 +232,19 @@ private:
             wxMenuItem*        wxItem;
         } m_data;
 
-        ///< Condition to be fulfilled to show the entry in menu.
+        /// Condition to be fulfilled to show the entry in menu.
         SELECTION_CONDITION m_condition;
 
-        ///< Order number, the higher the number the lower position it takes it is in the menu.
+        /// Order number, the higher the number the lower position it takes it is in the menu.
         int m_order;
 
         bool m_isCheckmarkEntry;
     };
 
-    ///< Inserts the entry, preserving the requested order.
+    /// Inserts the entry, preserving the requested order.
     void addEntry( ENTRY aEntry );
 
-    ///< List of all menu entries.
+    /// List of all menu entries.
     std::list<ENTRY> m_entries;
 };
 

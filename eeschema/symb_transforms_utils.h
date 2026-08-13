@@ -40,7 +40,7 @@ void OrientAndMirrorSymbolItems( LIB_SYMBOL* aLibSymbol, int aOrientation );
  * The modified pin orientation is the actual pin orientation/mirror
  * when the parent symbol is drawn.
  * @param aPin is the SCH_PIN to modify
- * @param aOrientation is the orientation+mirror value like returned by SCH_SYMBOL::GetOrientation()
+ * @param aOrientMirror is the orientation+mirror value like returned by SCH_SYMBOL::GetOrientation()
  */
 void RotateAndMirrorPin( SCH_PIN& aPin, int aOrientMirror );
 

@@ -25,7 +25,7 @@
 
 
 /**
- * @file test_block_snippets.cpp
+ * @file test_block_additional.cpp
  *
  * This file contains additional tests for blocks (avoids having to have
  * a really complex JSON structure with keys and/or reflection for tons of block

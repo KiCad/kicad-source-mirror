@@ -60,10 +60,10 @@ public:
     std::vector<int> ViewGetLayers() const override;
 
     /**
-     * Draw the preview - this is done by calling the two functions:
-     * setupGal() and drawPreviewShape(). If you need more than this,
-     * or direct access to the VIEW, you probably should make a new
-     *.
+     * Draw the preview.
+     *
+     * This is done by calling setupGal() and drawPreviewShape(). If you need more than this,
+     * or direct access to the #VIEW, you probably should make a new?.
      */
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
@@ -83,19 +83,19 @@ public:
         return "SIMPLE_OVERLAY_ITEM";
     }
 
-    ///< Set the stroke color to set before drawing preview
+    /// Set the stroke color to set before drawing preview
     void SetStrokeColor( const COLOR4D& aNewColor )
     {
         m_strokeColor = aNewColor;
     }
 
-    ///< Set the fill color to set before drawing preview
+    /// Set the fill color to set before drawing preview
     void SetFillColor( const COLOR4D& aNewColor )
     {
         m_fillColor = aNewColor;
     }
 
-    ///< Set the line width to set before drawing preview
+    /// Set the line width to set before drawing preview
     void SetLineWidth( double aNewWidth )
     {
         m_lineWidth = aNewWidth;
@@ -116,8 +116,7 @@ private:
     /**
      * Draw the preview onto the given GAL. setupGal() will be called before this function.
      *
-     * Subclasses should implement this in terms of their own graphical
-     * data.
+     * Subclasses should implement this in terms of their own graphical data.
      */
     virtual void drawPreviewShape( KIGFX::VIEW* aView ) const { };
 

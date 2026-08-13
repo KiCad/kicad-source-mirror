@@ -429,9 +429,9 @@ private:
      * Parse the render cache for any object derived from #EDA_TEXT.
      *
      * @param aText A pointer to the #EDA_TEXT object to save the parsed settings into.
-     * @throw PARSE_ERROR if the text syntax is not valid.
+     * @throw #PARSE_ERROR if the text syntax is not valid.
      */
-    void parseRenderCache( EDA_TEXT* text );
+    void parseRenderCache( EDA_TEXT* aText );
 
     FP_3DMODEL* parse3DModel( bool aFileNameAlreadyParsed = false );
 
@@ -501,13 +501,13 @@ private:
     void resolveGroups( BOARD_ITEM* aParent );
     void resolveConstraints( BOARD_ITEM* aParent );
 
-    ///< The type of progress bar timeout
+    /// The type of progress bar timeout
     using TIMEOUT = std::chrono::milliseconds;
 
-    ///< The clock used for the timestamp (guaranteed to be monotonic).
+    /// The clock used for the timestamp (guaranteed to be monotonic).
     using CLOCK = std::chrono::steady_clock;
 
-    ///< The type of the time stamps.
+    /// The type of the time stamps.
     using TIME_PT = std::chrono::time_point<CLOCK>;
 
     BOARD*              m_board;
@@ -522,7 +522,7 @@ private:
     bool                m_preserveDestinationStackup; ///< append keeps destination stackup
     LAYER_MAPPING_HANDLER m_layerMappingHandler;        ///< optional remap of appended layers onto dest
 
-    ///< if resetting UUIDs, record new ones to update groups with.
+    /// if resetting UUIDs, record new ones to update groups with.
     KIID_MAP            m_resetKIIDMap;
 
     bool                m_showLegacySegmentZoneWarning;

@@ -153,10 +153,8 @@ public:
     /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
-    /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const override;
 
     /// @copydoc EDA_ITEM::GetBoundingBox
@@ -171,10 +169,8 @@ public:
     INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData,
                           const std::vector<KICAD_T>& aScanTypes ) override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers
     std::vector<int> ViewGetLayers() const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     /// @copydoc BOARD_ITEM::Move

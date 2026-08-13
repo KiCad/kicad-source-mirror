@@ -81,24 +81,23 @@ public:
     // clang-format on
 
     /**
-     * Return a #SCH_IO which the caller can use to import, export, save, or load
+     * Return a #SCH_IO plugin which the caller can use to import, export, save, or load
      * design documents.
      *
-     * @param aFileType is from #SCH_FILE_T and tells which plugin to find.
+     * @param aFileType is the file type of which plugin to find.
      *
      * @return the plugin corresponding to aFileType or NULL if not found.
      *  Caller owns the returned object.
      */
-    APIEXPORT
-    static SCH_IO* FindPlugin( SCH_FILE_T aFileType );
+    APIEXPORT static SCH_IO* FindPlugin( SCH_FILE_T aFileType );
 
     /**
-     * Return a brief name for a plugin, given aFileType enum.
+     * Return a brief name for a plugin, given \a aFileType enum.
      */
     static const wxString ShowType( SCH_FILE_T aFileType );
 
     /**
-     * Return the #SCH_FILE_T from the corresponding plugin type name: "kicad", "legacy", etc.
+     * Return the file type from the corresponding plugin type name: "kicad", "legacy", etc.
      */
     static SCH_FILE_T EnumFromStr( const wxString& aFileType );
 

@@ -46,8 +46,9 @@ public:
     /**
      * Draw a rectangle on the current layer.
      *
-     * @param aC1     rectangle corner 1.
-     * @param aC2     rectangle corner 2.
+     * @param aC1 is the rectangle corner 1.
+     * @param aC2 is the rectangle corner 2.
+     * @param aDeEmphasised is the flag to indicate if the rectangle should be drawn deemphasised.
      */
     void DrawRectangle( const VECTOR2I& aC1, const VECTOR2I& aC2, bool aDeEmphasised );
 
@@ -97,7 +98,7 @@ public:
      * @param aDashFill     dash fill distance.
      * @param aDeEmphasised draw the line de-emphasized.
      */
-    void DrawLineDashed( const VECTOR2I& aStart, const VECTOR2I& aEn, int aDashStep,
+    void DrawLineDashed( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aDashStep,
                          int aDashFill, bool aDeEmphasised );
 
     /**
@@ -108,8 +109,7 @@ public:
      * @param aEnd          line end point.
      * @param aDeEmphasised draw the line de-emphasized.
      */
-    void DrawLineWithAngleHighlight(
-            const VECTOR2I& aStart, const VECTOR2I& aEnd, bool aDeEmphasised );
+    void DrawLineWithAngleHighlight( const VECTOR2I& aStart, const VECTOR2I& aEnd, bool aDeEmphasised );
 
     /**
      * Draw an arc on the current layer, with a special highlight when
@@ -120,8 +120,7 @@ public:
      * @param aStartAngle the arc start angle.
      * @param aEndAngle   the arc end angle.
      */
-    void DrawArcWithAngleHighlight( const VECTOR2I& aOrigin, double aRad, double aStartAngle,
-                                    double aEndAngle );
+    void DrawArcWithAngleHighlight( const VECTOR2I& aOrigin, double aRad, double aStartAngle, double aEndAngle );
 
 private:
     /**
@@ -129,12 +128,12 @@ private:
      */
     COLOR4D getSpecialAngleColour() const;
 
-    ///< The GAL to draw into
+    /// The GAL to draw into
     KIGFX::GAL& m_gal;
 
     const KIGFX::RENDER_SETTINGS& m_render_settings;
 
-    ///< The current layer to draw onto
+    /// The current layer to draw onto
     GAL_LAYER_ID m_currLayer;
 
     /// The line width to use for items

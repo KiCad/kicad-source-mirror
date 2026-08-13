@@ -41,9 +41,8 @@ public:
     {}
 
     /**
-     * Creates a functor that tests the current grid size.
+     * Create a functor that tests the current grid size.
      *
-     * @param aAdapter is the board adapter the setting is in
      * @param aGridSize is the grid size to test for.
      * @return Functor testing if the flag is set.
      */

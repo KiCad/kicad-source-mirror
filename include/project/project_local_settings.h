@@ -46,7 +46,7 @@ struct KICOMMON_API PROJECT_FILE_STATE
  *
  * Examples include layer visibility, recently-used design entry settings, and so on.
  *
- * The backing store is a JSON file named <project>.kicad_prl
+ * The backing store is a JSON file named \<project\>.kicad_prl
  *
  * This file doesn't need to exist for a project to be loaded.  It will be created on-demand if
  * any of the things stored here are modified by the user.

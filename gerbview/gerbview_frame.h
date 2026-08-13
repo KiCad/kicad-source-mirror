@@ -99,8 +99,8 @@ public:
     /**
      * Change the visibility of an element category.
      *
-     * @param aItemIdVisible is an item id from the enum GERBVIEW_LAYER_ID
-     * @param aNewState = The new visibility state of the element category
+     * @param aLayerID is an item id from the enum #GERBVIEW_LAYER_ID.
+     * @param aNewState = The new visibility state of the element category.
      *  (see enum PCB)
      */
     void SetElementVisibility( int aLayerID, bool aNewState );
@@ -168,8 +168,8 @@ public:
 
     /**
      * Update the currently "selected" layer within the #GERBER_LAYER_WIDGET.
+     *
      * The currently active layer is defined by the return value of GetActiveLayer().
-     * <p>
      * This function cannot be inline without including layer_widget.h in here and we do not
      * want to do that.
      */
@@ -354,8 +354,6 @@ public:
      *
      * @param aItemsList = the list of items modified by the command to undo
      * @param aTypeCommand = command type (see enum UNDO_REDO)
-     * @param aTransformPoint = the reference point of the transformation,
-     *                          for commands like move
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                              UNDO_REDO aTypeCommand )
@@ -363,7 +361,7 @@ public:
         // currently: do nothing in GerbView.
     }
 
-    ///< @copydoc EDA_DRAW_FRAME::ActivateGalCanvas
+    /// @copydoc EDA_DRAW_FRAME::ActivateGalCanvas
     void ActivateGalCanvas() override;
 
     /**
@@ -437,7 +435,7 @@ public:
      */
     COLOR4D GetGridColor() override;
 
-    ///< @copydoc EDA_DRAW_FRAME::SetGridColor()
+    /// @copydoc EDA_DRAW_FRAME::SetGridColor()
     virtual void SetGridColor( const COLOR4D& aColor ) override;
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override

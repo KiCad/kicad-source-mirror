@@ -70,6 +70,8 @@ public:
      * @param aFullFilename is the full filename.
      * @param aLayer is the layer (F_Cu or B_Cu) to generate.
      * @param aIncludeBrdEdges use true to include board outlines.
+     * @param aExcludeDNP determine if footprints marked as DNP should be excluded.
+     * @param aExcludeBOM determine if footprints in BOM should be excluded.
      * @return component count, or -1 if the file cannot be created.
      */
     int CreatePlaceFile( const wxString& aFullFilename, PCB_LAYER_ID aLayer, bool aIncludeBrdEdges,

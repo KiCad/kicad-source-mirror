@@ -181,16 +181,17 @@ public:
     void SetPreselectNode( const LIB_ID& aLibId, int aUnit );
 
     /**
-     * Add the given list of symbols by alias. To be called in the setup
-     * phase.
+     * Add the given list of symbols by alias. To be called in the setup phase.
      *
      * @param aNodeName    the parent node the symbols will appear under
      * @param aDesc        the description field of the parent node
      * @param aItemList    list of symbols
+     * @param aPinned
+     * @param aPresorted
      */
     LIB_TREE_NODE_LIBRARY& DoAddLibrary( const wxString& aNodeName, const wxString& aDesc,
                                          const std::vector<LIB_TREE_ITEM*>& aItemList,
-                                         bool pinned, bool presorted );
+                                         bool aPinned, bool aPresorted );
 
     /**
      * Remove one of the system groups from the library.
@@ -359,12 +360,12 @@ public:
 
 protected:
     /**
-     * Convert #SYM_TREE_NODE -> wxDataViewItem.
+     * Convert #LIB_TREE_NODE -> wxDataViewItem.
      */
     static wxDataViewItem ToItem( const LIB_TREE_NODE* aNode );
 
     /**
-     * Convert wxDataViewItem -> #SYM_TREE_NODE.
+     * Convert wxDataViewItem -> #LIB_TREE_NODE.
      */
     static LIB_TREE_NODE* ToNode( wxDataViewItem aItem );
 

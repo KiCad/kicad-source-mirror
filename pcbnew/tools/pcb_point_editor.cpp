@@ -209,7 +209,7 @@ enum DIMENSION_POINTS
 };
 
 
-///< Text boxes have different point counts depending on their orientation.
+/// Text boxes have different point counts depending on their orientation.
 enum TEXTBOX_POINT_COUNT
 {
     WHEN_RECTANGLE = RECT_MAX_POINTS,
@@ -474,14 +474,15 @@ public:
      * Update the coordinates of 4 corners of a rectangle, according to constraints and the
      * moved corner
      *
-     * @param aPoints the points list
-     *
-     * @param aTopLeft [in/out] is the RECT_TOPLEFT to constraint
-     * @param aTopRight [in/out] is the RECT_TOPRIGHT to constraint
-     * @param aBotLeft [in/out] is the RECT_BOTLEFT to constraint
-     * @param aBotRight [in/out] is the RECT_BOTRIGHT to constraint
+     * @param aEditedPoint
+     * @param aEditPoints the points list
+     * @param[in,out] aTopLeft is the RECT_TOPLEFT to constraint
+     * @param[in,out] aTopRight is the RECT_TOPRIGHT to constraint
+     * @param[in,out] aBotLeft is the RECT_BOTLEFT to constraint
+     * @param[in,out] aBotRight is the RECT_BOTRIGHT to constraint
      * @param aHole the location of the pad's hole
      * @param aHoleSize the pad's hole size (or {0,0} if it has no hole)
+     * @param aMinSize
      */
     static void PinEditedCorner( const EDIT_POINT& aEditedPoint, const EDIT_POINTS& aEditPoints,
                                 VECTOR2I& aTopLeft, VECTOR2I& aTopRight, VECTOR2I& aBotLeft, VECTOR2I& aBotRight,

@@ -32,13 +32,13 @@
 #include <qa_utils/geometry/geometry.h>
 
 /**
- * @brief Utility functions for testing geometry functions.
+ * Utility functions for testing geometry functions.
  */
 namespace GEOM_TEST
 {
 
 /**
- * @brief Geometric quadrants, from top-right, anti-clockwise
+ * Geometric quadrants, from top-right, anti-clockwise
  *
  *     ^ y
  *     |
@@ -50,8 +50,8 @@ enum class QUADRANT {
     Q1, Q2, Q3, Q4
 };
 
-/*
- * @brief Check value in Quadrant 1 (x and y both >= 0)
+/**
+ * Check value in Quadrant 1 (x and y both >= 0)
  */
 template<typename T>
 bool IsInQuadrant( const VECTOR2<T>& aPoint, QUADRANT aQuadrant )
@@ -77,8 +77,8 @@ bool IsInQuadrant( const VECTOR2<T>& aPoint, QUADRANT aQuadrant )
     return isInQuad;
 }
 
-/*
- * @Brief Check if both ends of a segment are in Quadrant 1
+/**
+ * Check if both ends of a segment are in Quadrant 1
  */
 inline bool SegmentCompletelyInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
 {
@@ -86,8 +86,8 @@ inline bool SegmentCompletelyInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
             && IsInQuadrant( aSeg.B, aQuadrant );
 }
 
-/*
- * @brief Check if at least one end of the segment is in Quadrant 1
+/**
+ * Check if at least one end of the segment is in Quadrant 1
  */
 inline bool SegmentEndsInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
 {
@@ -95,8 +95,8 @@ inline bool SegmentEndsInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
             || IsInQuadrant( aSeg.B, aQuadrant );
 }
 
-/*
- * @brief Check if a segment is entirely within a certain radius of a point.
+/**
+ * Check if a segment is entirely within a certain radius of a point.
  */
 inline bool SegmentCompletelyWithinRadius( const SEG& aSeg, const VECTOR2I& aPt, const int aRadius )
 {
@@ -111,7 +111,7 @@ inline bool SegmentCompletelyWithinRadius( const SEG& aSeg, const VECTOR2I& aPt,
  * @tparam T the dimension type
  * @param aPtA the first point
  * @param aPtB the second point
- * @param aExpDist the expected distance
+ * @param aExpDist the distance to test against
  * @param aTol the permitted tolerance
  */
 template <typename T>
@@ -132,10 +132,11 @@ bool IsPointAtDistance( const VECTOR2<T>& aPtA, const VECTOR2<T>& aPtB, T aExpDi
 /**
  * Predicate for checking a set of points is within a certain tolerance of
  * a circle
+ * @tparam T the dimension type
  * @param  aPoints   the points to check
  * @param  aCentre   the circle centre
  * @param  aRad      the circle radius
- * @param  aTolEnds  the tolerance for the endpoint-centre distance
+ * @param  aTol      the circle tolerance
  * @return           true if predicate met
  */
 template <typename T>
@@ -158,9 +159,10 @@ bool ArePointsNearCircle(
     return ok;
 }
 
-/*
- * @brief Check if two vectors are perpendicular
+/**
+ * Check if two vectors are perpendicular
  *
+ * @tparam T the dimension type
  * @param a: vector A
  * @param b: vector B
  * @param aTolerance: the allowed deviation from PI/2 (e.g. when rounding)
@@ -178,8 +180,8 @@ bool ArePerpendicular( const VECTOR2<T>& a, const VECTOR2<T>& b, const EDA_ANGLE
     return KI_TEST::IsWithin( angle.AsRadians(), ANGLE_90.AsRadians(), aTolerance.AsRadians() );
 }
 
-/*
- * @brief Fillet every polygon in a set and return a new set
+/**
+ * Fillet every polygon in a set and return a new set.
  */
 inline SHAPE_POLY_SET FilletPolySet( SHAPE_POLY_SET& aPolySet, int aRadius, int aError )
 {
@@ -311,7 +313,7 @@ inline bool IsPolySetValid( const SHAPE_POLY_SET& aSet )
 }
 
 /**
- * @brief Check that two SEGs have the same end points, in either order
+ * Check that two SEGs have the same end points, in either order
  *
  * That is to say SEG(A, B) == SEG(A, B), but also SEG(A, B) == SEG(B, A)
  */

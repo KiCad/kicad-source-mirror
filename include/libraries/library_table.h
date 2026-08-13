@@ -155,12 +155,17 @@ public:
      * Creates a library table from a file on disk
      * @param aPath is the path to a library table file to parse
      * @param aScope is the scope of this table (is it global or part of a project)
+     * @param aExpectedType is expected library type.
      */
     LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScope,
                    LIBRARY_TABLE_TYPE aExpectedType = LIBRARY_TABLE_TYPE::UNINITIALIZED );
 
     /**
      * Creates a library table from parsed text
+     *
+     * @note \a aFromClipboard isn't actually used, but might keep people from calling this with a string
+     *       filepath, which isn't going to do what they expected.
+     *
      * @param aFromClipboard isn't actually used, but might keep people from calling this with a string
      *                       filepath, which isn't going to do what they expected.
      * @param aBuffer is a string containing data to parse
@@ -208,6 +213,9 @@ public:
 
     /**
      * Returns true if the given (fully-expanded) URI exists as a library in this table
+     *
+     * @param aUri is the URI to test for.
+     * @param aProject is the currently loaded project.
      * @param aSubstituted is true if the URI should be compared with full (expanded/substituted)
      *                     versions of the row URIs
      */

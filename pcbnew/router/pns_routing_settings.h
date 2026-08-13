@@ -60,55 +60,55 @@ class ROUTING_SETTINGS : public NESTED_SETTINGS
 public:
     ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
-    ///< Return the routing mode.
+    /// Return the routing mode.
     PNS_MODE Mode() const { return m_routingMode; }
 
-    ///< Set the routing mode.
+    /// Set the routing mode.
     void SetMode( PNS_MODE aMode ) { m_routingMode = aMode; }
 
-    ///< Return the optimizer effort. Bigger means cleaner traces, but slower routing.
+    /// Return the optimizer effort. Bigger means cleaner traces, but slower routing.
     PNS_OPTIMIZATION_EFFORT OptimizerEffort() const { return m_optimizerEffort; }
 
-    ///< Set the optimizer effort. Bigger means cleaner traces, but slower routing.
+    /// Set the optimizer effort. Bigger means cleaner traces, but slower routing.
     void SetOptimizerEffort( PNS_OPTIMIZATION_EFFORT aEffort ) { m_optimizerEffort = aEffort; }
 
-    ///< Return true if shoving vias is enabled.
+    /// Return true if shoving vias is enabled.
     bool ShoveVias() const { return m_shoveVias; }
 
-    ///< Enable/disable shoving vias.
+    /// Enable/disable shoving vias.
     void SetShoveVias( bool aShoveVias ) { m_shoveVias = aShoveVias; }
 
-    ///< Return true if loop (redundant track) removal is on.
+    /// Return true if loop (redundant track) removal is on.
     bool RemoveLoops() const { return m_removeLoops; }
 
-    ///< Enable/disable loop (redundant track) removal.
+    /// Enable/disable loop (redundant track) removal.
     void SetRemoveLoops( bool aRemoveLoops ) { m_removeLoops = aRemoveLoops; }
 
-    ///< Return true if suggesting the finish of currently placed track is on.
+    /// Return true if suggesting the finish of currently placed track is on.
     bool SuggestFinish() { return m_suggestFinish; }
 
-    ///< Enable displaying suggestions for finishing the currently placed track.
+    /// Enable displaying suggestions for finishing the currently placed track.
     void SetSuggestFinish( bool aSuggestFinish ) { m_suggestFinish = aSuggestFinish; }
 
-    ///< Return true if Smart Pads (optimized connections) is enabled.
+    /// Return true if Smart Pads (optimized connections) is enabled.
     bool SmartPads() const { return m_smartPads; }
 
-    ///< Enable/disable Smart Pads (optimized connections).
+    /// Enable/disable Smart Pads (optimized connections).
     void SetSmartPads( bool aSmartPads ) { m_smartPads = aSmartPads; }
 
-    ///< Return true if follow mouse mode is active (permanently on for the moment).
+    /// Return true if follow mouse mode is active (permanently on for the moment).
     bool FollowMouse() const
     {
         return m_followMouse && !( Mode() == RM_MarkObstacles );
     }
 
-    ///< Return true if smoothing segments during dragging is enabled.
+    /// Return true if smoothing segments during dragging is enabled.
     bool SmoothDraggedSegments() const { return m_smoothDraggedSegments; }
 
-    ///< Enable/disable smoothing segments during dragging.
+    /// Enable/disable smoothing segments during dragging.
     void SetSmoothDraggedSegments( bool aSmooth ) { m_smoothDraggedSegments = aSmooth; }
 
-    ///< Return true if jumping over unmovable obstacles is on.
+    /// Return true if jumping over unmovable obstacles is on.
     bool JumpOverObstacles() const { return m_jumpOverObstacles; }
     void SetJumpOverObstacles( bool aJump ) { m_jumpOverObstacles = aJump; }
 

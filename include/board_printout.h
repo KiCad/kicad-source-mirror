@@ -95,7 +95,7 @@ protected:
     /// Enable layers visibility for a printout.
     virtual void setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet );
 
-    /// Configure #PAINTER object for a printout.
+    /// Configure #KIGFX::PAINTER object for a printout.
     virtual void setupPainter( KIGFX::PAINTER& aPainter );
 
     /// Configure #GAL object for a printout.
@@ -104,7 +104,7 @@ protected:
     /// Return bounding box of the printed objects (excluding drawing-sheet frame).
     virtual BOX2I getBoundingBox() = 0;
 
-    /// Return the #PAINTER instance used to draw the items.
+    /// Return the #KIGFX::PAINTER instance used to draw the items.
     virtual std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) = 0;
 
     /// Source VIEW object (note that actual printing only refers to this object).

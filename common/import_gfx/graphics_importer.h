@@ -262,6 +262,8 @@ public:
      * @param aCenter is the circle center point expressed in mm.
      * @param aRadius is the circle radius expressed in mm.
      * @param aStroke is the shape stroke parameters.
+     * @param aFilled is a flag to indicate if the circle should be filled.
+     * @param[in] aFillColor is the fill color if the circle should be filled.
      */
     virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, const IMPORTED_STROKE& aStroke,
                             bool aFilled, const COLOR4D& aFillColor ) = 0;
@@ -282,8 +284,8 @@ public:
      * Create an object representing a polygon.
      *
      * @param aVertices is the array of vertices.
-     * @param aWidth is the stroke width.
      * @param aStroke is the shape stroke parameters.
+     * @param aFilled is a flag to indicate if the circle should be filled.
      * @param aFillColor is the fill color.
      */
     virtual void AddPolygon( const std::vector<VECTOR2D>& aVertices, const IMPORTED_STROKE& aStroke,
@@ -296,10 +298,10 @@ public:
      * @param aText is the displayed text.
      * @param aHeight is the text height expressed in mm.
      * @param aWidth is the text width expressed in mm.
+     * @param aThickness is the text strke thickness.
      * @param aOrientation is the text orientation angle expressed in degrees.
      * @param aHJustify is the text horizontal justification.
      * @param aVJustify is the text vertical justification.
-     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      * @param aColor is the shape color
      */
     virtual void AddText( const VECTOR2D& aOrigin, const wxString& aText, double aHeight,
@@ -328,6 +330,8 @@ public:
      * @param aMinorRadius is the semi-minor radius expressed in mm.
      * @param aRotation is the rotation of the major axis from +X (CCW).
      * @param aStroke is the shape stroke parameters.
+     * @param aFilled is a flag to indicate if the circle should be filled.
+     * @param[in] aFillColor is the fill color if the circle should be filled.
      */
     virtual void AddEllipse( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
                              const EDA_ANGLE& aRotation, const IMPORTED_STROKE& aStroke, bool aFilled,

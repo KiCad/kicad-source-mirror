@@ -44,13 +44,12 @@ public:
     RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, const EDA_IU_SCALE& aIuScale,
                 EDA_UNITS userUnits, bool aFlipX, bool aFlipY );
 
-    ///< @copydoc EDA_ITEM::ViewBBox()
+    /// @copydoc EDA_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
 
-    ///< @copydoc EDA_ITEM::ViewGetLayers()
+    /// @copydoc EDA_ITEM::ViewGetLayers()
     std::vector<int> ViewGetLayers() const override;
 
-    ///< @copydoc EDA_ITEM::ViewDraw();
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
     void SetColor( const COLOR4D& aColor ) { m_color = aColor; }

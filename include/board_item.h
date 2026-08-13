@@ -381,6 +381,7 @@ public:
      *
      * @param addToParentGroup Indicates whether or not the new item is added to the group
      *                         containing the old item.  If true, aCommit must be provided.
+     * @param aCommit is the commit object for undo/redo.
      */
     virtual BOARD_ITEM* Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit = nullptr ) const;
 
@@ -441,6 +442,7 @@ public:
      * Rotate this object.
      *
      * @param aRotCentre the rotation center point.
+     * @param aAngle the amount to rotation around the center point.
      */
     virtual void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle );
 
@@ -477,7 +479,7 @@ public:
      * Mirror this object relative to a given horizontal axis the layer is not changed.
      *
      * @param aCentre the mirror point.
-     * @param aMirrorAroundXAxis mirror across X axis instead of Y (the default).
+     * @param aFlipDirection mirror across X axis instead of Y (the default).
      */
     virtual void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
 
@@ -518,6 +520,7 @@ public:
      * Convert the item shape to a closed polygon. Circles and arcs are approximated by segments.
      *
      * @param aBuffer a buffer to store the polygon.
+     * @param aLayer is the layer of the shape to transform.
      * @param aClearance the clearance around the polygonal shape (inflated polygon).
      * @param aError the maximum deviation from true circle.
      * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
@@ -533,6 +536,7 @@ public:
      * fills and details (if any) will be included.
      *
      * @param aBuffer a buffer to store the polygon.
+     * @param aLayer is the layer of the shape to transform.
      * @param aClearance the clearance around the pad.
      * @param aError the maximum deviation from true circle.
      * @param aErrorLoc should the approximation error be placed outside or inside the polygon?

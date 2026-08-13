@@ -31,7 +31,7 @@
 #include <tools/pcb_tool_base.h>
 
 /**
- *Generic tool for picking an item.
+ * Generic tool for picking an item.
  */
 class PCB_PICKER_TOOL : public PCB_TOOL_BASE, public PICKER_TOOL_BASE
 {
@@ -61,10 +61,10 @@ public:
     PCB_PICKER_TOOL();
     virtual ~PCB_PICKER_TOOL() = default;
 
-    ///< @copydoc TOOL_BASE::Init()
+    /// @copydoc TOOL_BASE::Init()
     bool Init() override;
 
-    ///< Main event loop.
+    /// Main event loop.
     int Main( const TOOL_EVENT& aEvent );
 
     /**
@@ -105,18 +105,18 @@ public:
     }
 
 protected:
-    ///< @copydoc TOOL_INTERACTIVE::setTransitions();
+    /// @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
-    ///< Applies the requested VIEW_CONTROLS settings.
+    /// Applies the requested VIEW_CONTROLS settings.
     void setControls();
 
-    ///< Reinitialize tool to its initial state.
+    /// Reinitialize tool to its initial state.
     void reset() override;
 
 private:
-    ///< The layer set to use for optional snapping.
-    LSET                             m_layerMask;
+    /// The layer set to use for optional snapping.
+    LSET                              m_layerMask;
 
     PCB_SELECTION_TOOL::AREA_PREVIEW  m_areaPreviewHandler;
 

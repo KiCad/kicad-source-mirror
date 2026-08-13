@@ -218,7 +218,7 @@ struct print_log_value<wchar_t[ N ]>
 
 
 /**
- * Boost print helper for wxPoint. Note operator<< for this type doesn't
+ * Boost print helper for wxPoint. Note operator\<\< for this type doesn't
  * exist in non-DEBUG builds.
  */
 std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aVec );
@@ -259,7 +259,7 @@ using MATCH_PRED = std::function<bool( const EXP_OBJ&, const FOUND_OBJ& )>;
  * and a function to check if a given "found" object corresponds to a given
  * "expected object". Conditions:
  *
- * * The expected object type needs `operator<<` (for logging)
+ * * The expected object type needs `operator\<\<` (for logging)
  * * The expected object container does not contain multiple references to the
  *   same object.
  * * Identical values are also can't be present as the predicate can't tell which
@@ -276,11 +276,10 @@ using MATCH_PRED = std::function<bool( const EXP_OBJ&, const FOUND_OBJ& )>;
  * When you have two containers of identical types (or you have a suitable
  * `operator==`) and ordering is important, you can use `BOOST_CHECK_EQUAL_COLLECTIONS`
  *
- *@param aExpected  a container of "expected" items, usually from a test case
- *@param aMatched   a container of "found" items, usually the result of some
- *                  routine under test
- *@param aMatchPredicate a predicate that determines if a given "found" object
- *                  matches a given "expected" object.
+ * @param aExpected  a container of "expected" items, usually from a test case
+ * @param aFound     a container of "found" items, usually the result of some routine under test
+ * @param aMatchPredicate a predicate that determines if a given "found" object
+ *                        matches a given "expected" object.
  */
 template <typename EXP_CONT, typename FOUND_CONT, typename MATCH_PRED>
 void CheckUnorderedMatches( const EXP_CONT& aExpected, const FOUND_CONT& aFound,
@@ -359,10 +358,10 @@ struct NAMED_CASE
 /**
  * A test macro to check a wxASSERT is thrown.
  *
- * wxCHECK/wxASSERT only fire when wxDEBUG_LEVEL > 0, so the macro must key off
+ * wxCHECK/wxASSERT only fire when wxDEBUG_LEVEL \> 0, so the macro must key off
  * that rather than KiCad's own DEBUG define. QABUILD defines neither DEBUG nor
  * NDEBUG but is still built against a wxWidgets with assertions enabled, so the
- * previous #ifdef DEBUG gate silently skipped checks in that configuration.
+ * previous \#ifdef DEBUG gate silently skipped checks in that configuration.
  */
 #if wxDEBUG_LEVEL > 0
 #define CHECK_WX_ASSERT( STATEMENT ) BOOST_CHECK_THROW( STATEMENT, KI_TEST::WX_ASSERT_ERROR );

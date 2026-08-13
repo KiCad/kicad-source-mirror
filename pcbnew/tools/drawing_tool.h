@@ -118,7 +118,7 @@ public:
     };
 
     /**
-     * Return the current drawing mode of the DRAWING_TOOL or #MODE::NONE if not currently in
+     * Return the current drawing mode of the DRAWING_TOOL or #NONE if not currently in
      * any drawing mode.
      */
     MODE GetDrawingMode() const;
@@ -287,12 +287,15 @@ private:
     /**
      * Start drawing a selected shape (i.e. PCB_SHAPE).
      *
-     * @param aGraphic is an object that is going to be used by the tool for drawing. Must be already created.
-     *                 The tool deletes the object if it is not added to a BOARD.
-     * @param aStartingPoint is a starting point for this new PCB_SHAPE. If it exists the new item has its
-     *                       start point set to aStartingPoint, and its settings (width, layer) set to the
-     *                       current default values.
-     * @return False if the tool was canceled before the origin was set or origin and end are the same point.
+     * @param aTool  the tool event to draw the shape.
+     * @param aGraphic is an object that is going to be used by the tool for drawing. Must be
+     *                 already created. The tool deletes the object if it is not added to a BOARD.
+     * @param aStartingPoint is a starting point for this new PCB_SHAPE. If it exists the new
+     *                       item has its start point set to aStartingPoint, and its settings
+     *                       (width, layer) set to the current default values.
+     * @param aCommittedGraphics
+     * @return False if the tool was canceled before the origin was set or origin and end are
+     *         the same point.
      */
     bool drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std::optional<VECTOR2D> aStartingPoint,
                     std::stack<PCB_SHAPE*>* aCommittedGraphics );
@@ -303,8 +306,10 @@ private:
     /**
      * Run the interactive drawing event loop for a shape, driven by a SHAPE_DRAW_BEHAVIOR.
      *
+     * @param aTool  the tool event to draw the managed shape.
      * @param aGraphic  the shape being drawn; must already be created.  On cancel the unique_ptr is reset;
      *                  on completion the caller can take ownership (e.g. to release into a COMMIT).
+     * @param aBehavior  defines the drawing behavior of the managed shape.
      * @param aInitialPts  points to pre-load into the behaviour before the first user click, e.g. start
      *                     point and mirrored control point for tangent-continuous bezier chaining.
      * @return the outcome of the drawing loop: see @ref SHAPE_DRAW_RESULT.
@@ -364,7 +369,7 @@ private:
     }
 
     /**
-     * Clamps the end vector to respect numeric limits of radius representation
+     * Clamp the end vector to respect numeric limits of radius representation.
      *
      * @param aOrigin - the origin vector.
      * @param aEnd - the end vector.

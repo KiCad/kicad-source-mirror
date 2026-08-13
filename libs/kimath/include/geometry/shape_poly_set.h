@@ -613,7 +613,7 @@ public:
      * vertex.
      *
      * @param  aRelativeIndices is the set of relative indices.
-     * @param  aGlobalIdx [out] is the computed global index.
+     * @param[out] aGlobalIdx is the computed global index.
      * @return true if the relative indices are correct; false otherwise. The computed
      *         global index is returned in the \p aGlobalIdx reference.
      */
@@ -1045,9 +1045,9 @@ public:
     void BooleanXor( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b );
 
     /**
-    * Extract all contours from this polygon set, then recreate polygons with holes.
-    * Essentially XOR'ing, but faster. Self-intersecting polygons are not supported.
-    */
+     * Extract all contours from this polygon set, then recreate polygons with holes.
+     * Essentially XOR'ing, but faster. Self-intersecting polygons are not supported.
+     */
     void RebuildHolesFromContours();
 
     /**
@@ -1058,12 +1058,13 @@ public:
      * the outline.
      *
      * @param aAmount is the number of units to offset edges.
-     * @param aCornerStrategy #ALLOW_ACUTE_CORNERS to preserve all angles,
-     *                        #CHAMFER_ACUTE_CORNERS to chop angles less than 90°,
-     *                        #ROUND_ACUTE_CORNERS to round off angles less than 90°,
-     *                        #ROUND_ALL_CORNERS to round regardless of angles
+     * @param aCornerStrategy #CORNER_STRATEGY::ALLOW_ACUTE_CORNERS to preserve all angles,
+     *                        #CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS to chop angles less than 90°,
+     *                        #CORNER_STRATEGY::ROUND_ACUTE_CORNERS to round off angles less than 90°,
+     *                        #CORNER_STRATEGY::ROUND_ALL_CORNERS to round regardless of angles
      * @param aMaxError is the allowable deviation when rounding corners with an approximated
      *                  polygon
+     * @param aSimplify simplifies the polygon when true.
      */
     void Inflate( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
                   bool aSimplify = false );
@@ -1078,10 +1079,10 @@ public:
      *
      * @param aLine is the line to perform offsetting on.
      * @param aAmount is the number of units to offset the line chain.
-     * @param aCornerStrategy #ALLOW_ACUTE_CORNERS to preserve all angles,
-     *                        #CHAMFER_ACUTE_CORNERS to chop angles less than 90°,
-     *                        #ROUND_ACUTE_CORNERS to round off angles less than 90°,
-     *                        #ROUND_ALL_CORNERS to round regardless of angles
+     * @param aCornerStrategy #CORNER_STRATEGY::ALLOW_ACUTE_CORNERS to preserve all angles,
+     *                        #CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS to chop angles less than 90°,
+     *                        #CORNER_STRATEGY::ROUND_ACUTE_CORNERS to round off angles less than 90°,
+     *                        #CORNER_STRATEGY::ROUND_ALL_CORNERS to round regardless of angles
      * @param aMaxError is the allowable deviation when rounding corners with an approximated
      *                  polygon
      * @param aSimplify set to simplify the output polygon.
@@ -1175,6 +1176,7 @@ public:
      * Check if point \a aP lies on an edge or vertex of some of the outlines or holes.
      *
      * @param aP is the point to check.
+     * @param aAccuracy is the allowable accuracy of the test.
      * @return true if the point lies on the edge of any polygon.
      */
     bool PointOnEdge( const VECTOR2I& aP, int aAccuracy = 0 ) const;
@@ -1185,10 +1187,10 @@ public:
      *
      * @param aShape shape to check collision against
      * @param aClearance minimum clearance
-     * @param aActual [out] an optional pointer to an int to store the actual distance in the
-     *                event of a collision.
-     * @param aLocation [out] an option pointer to a point to store a nearby location in the
-     *                  event of a collision.
+     * @param[out] aActual an optional pointer to an int to store the actual distance in the
+     *                     event of a collision.
+     * @param[out] aLocation an option pointer to a point to store a nearby location in the
+     *                       event of a collision.
      * @return true if there is a collision.
      */
     bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
@@ -1210,6 +1212,8 @@ public:
      *                    than aClearance distance, then there is a collision.
      * @param aActual an optional pointer to an int to store the actual distance in the event
      *                of a collision.
+     * @param[out] aLocation an optional pointer to a point to store a nearby location in the
+     *                       event of a collision.
      * @return true if the point aP collides with the polygon; false in any other case.
      */
     bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
@@ -1231,6 +1235,7 @@ public:
      *                    than aClearance distance, then there is a collision.
      * @param aActual an optional pointer to an int to store the actual distance in the event
      *                of a collision.
+     * @param[out] aLocation is an optional object for the coordinates of the collision.
      * @return true if the segment aSeg collides with the polygon, false in any other case.
      */
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
@@ -1252,11 +1257,11 @@ public:
     /**
      * Check whether aPoint collides with any edge of any of the contours of the polygon.
      *
-     * @param  aPoint     is the VECTOR2I point whose collision with respect to the polygon
+     * @param aPoint      is the VECTOR2I point whose collision with respect to the polygon
      *                    will be tested.
-     * @param  aClearance is the security distance; if \p aPoint lies closer to a vertex than
-     *                    aClearance distance, then there is a collision.
      * @param aClosestVertex is the index of the closes vertex to \p aPoint.
+     * @param aClearance is the security distance; if \p aPoint lies closer to a vertex than
+     *                   aClearance distance, then there is a collision.
      * @return bool - true if there is a collision, false in any other case.
      */
     bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX* aClosestVertex = nullptr,
@@ -1280,6 +1285,7 @@ public:
      *
      * @param aP is the point to check
      * @param aSubpolyIndex is the subpolygon to check, or -1 to check all
+     * @param aAccuracy
      * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
      *                       editing in between, but the caller MUST cache the bbox caches
      *                       before calling (via BuildBBoxCaches(), above)
@@ -1407,8 +1413,8 @@ public:
      *
      * @param  aPoint is the point whose distance to the aIndex-th polygon has to be measured.
      * @param  aIndex is the index of the polygon whose distance to aPoint has to be measured.
-     * @param  aNearest [out] an optional pointer to be filled in with the point on the
-     *                  polyset which is closest to aPoint.
+     * @param[out] aNearest an optional pointer to be filled in with the point on the
+     *                      polyset which is closest to aPoint.
      * @return The minimum distance between \a aPoint and all the segments of the \a aIndex-th
      *         polygon. If the point is contained in the polygon, the distance is zero.
      */
@@ -1422,8 +1428,8 @@ public:
      * @param  aSegment is the segment whose distance to the aIndex-th polygon has to be
      *                  measured.
      * @param  aIndex   is the index of the polygon whose distance to aPoint has to be measured.
-     * @param  aNearest [out] an optional pointer to be filled in with the point on the
-     *                  polyset which is closest to aSegment.
+     * @param[out] aNearest an optional pointer to be filled in with the point on the
+     *                      polyset which is closest to aSegment.
      * @return The minimum distance between \a aSegment and all the segments of the \a aIndex-th
      *         polygon. If the point is contained in the polygon, the distance is zero.
      */
@@ -1435,8 +1441,9 @@ public:
      * Squared distances are used because they avoid the cost of doing square-roots.
      *
      * @param  aPoint is the point whose distance to the set has to be measured.
-     * @param  aNearest [out] an optional pointer to be filled in with the point on the
-     *                  polyset which is closest to aPoint.
+     * @param  aOutlineOnly
+     * @param[out]  aNearest an optional pointer to be filled in with the point on the
+     *                       polyset which is closest to aPoint.
      * @return The minimum distance squared between aPoint and all the polygons in the set.
      *         If the point is contained in any of the polygons, the distance is zero.
      */
@@ -1453,9 +1460,8 @@ public:
      * Squared distances are used because they avoid the cost of doing square-roots.
      *
      * @param  aSegment is the segment whose distance to the polygon set has to be measured.
-     * @param  aSegmentWidth is the width of the segment; defaults to zero.
-     * @param  aNearest [out] an optional pointer to be filled in with the point on the
-     *                  polyset which is closest to aSegment.
+     * @param[out]  aNearest an optional pointer to be filled in with the point on the
+     *                       polyset which is closest to \a aSegment.
      * @return  The minimum distance squared between aSegment and all the polygons in the set.
      *          If the point is contained in the polygon, the distance is zero.
      */
@@ -1472,8 +1478,8 @@ public:
     /**
      * Build a SHAPE_POLY_SET from a bunch of outlines in provided in random order.
      *
-     * @param aPath set of closed outlines forming the polygon.
-     *              Positive orientation = outline, negative = hole
+     * @param aPaths set of closed outlines forming the polygon.
+     *               Positive orientation = outline, negative = hole
      * @param aEvenOdd forces the even-off fill rule (default is non zero)
      */
     void BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths,

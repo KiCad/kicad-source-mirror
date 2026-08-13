@@ -44,8 +44,9 @@ public:
     /**
      *  Create a new 3D Canvas with a attribute list.
      *
-     *  @param aParent the parent creator of this canvas.
-     *  @param aGLAttribs openGL attributes created by #OGL_ATT_LIST::GetAttributesList.
+     * @param aParent the parent creator of this canvas.
+     * @param aGLAttribs openGL attributes created by #OGL_ATT_LIST::GetAttributesList.
+     * @param aCacheManager is the 3D object cache manager.
      */
     EDA_3D_MODEL_VIEWER( wxWindow* aParent, const wxGLAttributes& aGLAttribs,
                          S3D_CACHE* aCacheManager = nullptr );

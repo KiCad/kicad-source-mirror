@@ -196,12 +196,12 @@ public:
      *  Selected Drill Unit: Imperial (inches)
      *
      *  Drill report for plated through holes :
-     *  T1  0,025"  0,64mm  (88 holes)
-     *  T2  0,031"  0,79mm  (120 holes)
-     *  T3  0,032"  0,81mm  (151 holes)  (with 1 slot)
-     *  T4  0,040"  1,02mm  (43 holes)
-     *  T5  0,079"  2,00mm  (1 hole)  (with 1 slot)
-     *  T6  0,120"  3,05mm  (1 hole)  (with 1 slot)
+     *  T1  0,025\"  0,64mm  (88 holes)
+     *  T2  0,031\"  0,79mm  (120 holes)
+     *  T3  0,032\"  0,81mm  (151 holes)  (with 1 slot)
+     *  T4  0,040\"  1,02mm  (43 holes)
+     *  T5  0,079\"  2,00mm  (1 hole)  (with 1 slot)
+     *  T6  0,120\"  3,05mm  (1 hole)  (with 1 slot)
      *
      *  Total plated holes count 404
      *
@@ -214,23 +214,24 @@ public:
      *
      *
      *  Drill report for holes from layer Interne1 to layer Interne2 :
-     *  T1  0,025"  0,64mm  (3 holes)
+     *  T1  0,025\"  0,64mm  (3 holes)
      *
      *  Total plated holes count 3
      *
      *
      *  Drill report for holes from layer Interne2 to layer Composant :
-     *  T1  0,025"  0,64mm  (1 hole)
+     *  T1  0,025\"  0,64mm  (1 hole)
      *
      *  Total plated holes count 1
      *
      *
      *  Drill report for unplated through holes :
-     *  T1  0,120"  3,05mm  (1 hole)  (with 1 slot)
+     *  T1  0,120\"  3,05mm  (1 hole)  (with 1 slot)
      *
      *  Total unplated holes count 1
      *
      * @param aFullFileName is the name of the file to create.
+     * @param aReporter is the optional reporter object to send information text to.
      * @return true if the file is created.
      */
     bool GenDrillReportFile( const wxString& aFullFileName, REPORTER* aReporter = nullptr );
@@ -263,7 +264,7 @@ protected:
      * are listed.  If aLayerPair identifies with [F_Cu, B_Cu], then pad holes are always
      * included also.
      *
-     * @param aLayerPair is an inclusive range of layers.
+     * @param aSpan is an inclusive range of layers.
      * @param aGenerateNPTH_list :
      *       true to create NPTH only list (with no plated holes)
      *       false to created plated holes list (with no NPTH )
@@ -297,26 +298,26 @@ protected:
     /**
      * Print m_toolListBuffer[] tools to aOut and returns total hole count.
      *
-     * @param aOut is the current OUTPUTFORMATTER to print summary.
+     * @param aOut is the current #OUTPUTFORMATTER to print summary.
      * @param aSummary selects which tools the summary covers.
      */
-    unsigned printToolSummary( FILE* out, TOOL_SUMMARY aSummary ) const;
+    unsigned printToolSummary( FILE* aOut, TOOL_SUMMARY aSummary ) const;
 
     /**
      * @return a string from aPair to identify the layer layer pair.
-     * string is "<layer1Name>"-"<layer2Name>"
+     * string is "\<layer1Name\>"-"\<layer2Name\>"
      * used to generate a filename for drill files and drill maps
      */
     const std::string layerPairName( DRILL_LAYER_PAIR aPair ) const;
 
     /**
      * @return a string from aLayer to identify the layer.
-     * string are "front" "back" or "in<aLayer>"
+     * string are \"front\" \"back\" or "in\<aLayer\>"
      */
     const std::string layerName( PCB_LAYER_ID aLayer ) const;
 
     /**
-     * @param aPair is the layer pair.
+     * @param aSpan is the layer span.
      * @param aNPTH use true to generate the filename of NPTH holes.
      * @param aMerge_PTH_NPTH use true to generate the filename of a file which containd both
      *                        NPH and NPTH holes.
@@ -329,7 +330,7 @@ protected:
 
 
     /**
-     * @param aPair is the layer pair.
+     * @param aSpan is the layer span.
      * @param aFeature Is the protection feature represented by the file
      * @return a filename which identifies the specific protection feature.
      * It is the board file name followed by the feature name and the layer(s) associated with it.
@@ -339,15 +340,16 @@ protected:
 
 
     /**
-     * @param aLayerPair is the layer pair (Drill from rom first layer to second layer)
+     * The standard X2 FileFunction for drill files is
+     * \%TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],
+     * Drill[Route][Mixed]\*\%
+     * There is no X1 version, as the Gerber drill files uses only X2 format
+     * There is a compatible NC drill version.
+     *
+     * @param aSpan is the layer span (Drill from rom first layer to second layer)
      * @param aHoleType is type of drill file (PTH, NPTH, mixed)
      * @param aCompatNCdrill is true when generating NC (Excellon) compatible drill file
      * @return a wxString containing the .FileFunction attribute.
-     * the standard X2 FileFunction for drill files is
-     * %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],
-     * Drill[Route][Mixed]*%
-     * There is no X1 version, as the Gerber drill files uses only X2 format
-     * There is a compatible NC drill version.
      */
     const wxString BuildFileFunctionAttributeString( const DRILL_SPAN& aSpan,
                                                      TYPE_FILE aHoleType,

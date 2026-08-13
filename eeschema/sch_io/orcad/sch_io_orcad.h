@@ -40,6 +40,24 @@ class SCHEMATIC;
 std::string OrcadNormalizeCfbName( const std::string& aName );
 
 
+/**
+ * A SCH_IO derivation for loading OrCAD Capture schematic designs (.dsn).
+ *
+ * An OrCAD .dsn is an OLE2/CFB compound document.  The plugin reads the root
+ * 'Library' stream (string table, fonts, page settings), the 'Cache' and
+ * 'Packages/\<name\>' streams (symbol definitions, package pin maps) and the
+ * 'Views/\<folder\>/Pages/\<page\>' streams (page content), then hands the parsed
+ * design to ORCAD_CONVERTER.
+ *
+ * Supported: the modern stream framing (Library version 3 and later, i.e.
+ * OrCAD 10.x/2003 onward) and the pre-2003 v2.0 framing (parsed with the v2 page
+ * reader; its legacy symbol cache is not decoded, so v2 symbol graphics are
+ * synthesized placeholders).  Unambiguous hierarchical block designs are recreated
+ * as KiCad hierarchical sheets.  Designs with incomplete or ambiguous block
+ * mappings fall back to separate top-level sheets, materialized once per block
+ * occurrence with that occurrence's reference designators.  OLE-embedded pictures
+ * are skipped with a warning.
+ */
 class SCH_IO_ORCAD : public SCH_IO
 {
 public:

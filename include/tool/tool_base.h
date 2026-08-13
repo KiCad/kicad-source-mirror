@@ -159,9 +159,9 @@ protected:
     void attachManager( TOOL_MANAGER* aManager );
 
     /**
-     * Returns the instance of #VIEW object used in the application. It allows tools to draw.
+     * Return the instance of #KIGFX::VIEW object used in the application. It allows tools to draw.
      *
-     * @return The instance of VIEW.
+     * @return The instance of #KIGFX::VIEW.
      */
     KIGFX::VIEW* getView() const;
 

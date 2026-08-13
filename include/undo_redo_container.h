@@ -157,7 +157,7 @@ public:
     void ClearItemsList();
 
     /**
-     * Delete the list of pickers AND the data pointed by #m_PickedItem or #m_PickedItemLink
+     * Delete the list of pickers AND the data pointed by #ITEM_PICKER::m_pickedItem or #ITEM_PICKER::m_link.
      * according to the type of undo/redo command recorded.
      */
     void ClearListAndDeleteItems( std::function<void(EDA_ITEM*)> aItemDeleter );

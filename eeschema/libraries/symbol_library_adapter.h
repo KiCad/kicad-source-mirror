@@ -98,7 +98,7 @@ public:
     /**
      * Load a #LIB_SYMBOL having @a aName from the library given by @a aNickname.
      *
-     * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW
+     * @param aNickname is a locator for the "library", it is a "name" in #LIBRARY_TABLE_ROW
      * @param aName is the name of the #LIB_SYMBOL to load.
      *
      * @return the symbol alias if found or NULL if not found. If not null, the pointer

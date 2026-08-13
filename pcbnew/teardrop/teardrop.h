@@ -208,7 +208,8 @@ private:
                                  const VECTOR2I& aOtherPos ) const;
     /**
      * Compute the 2 points on pad/via of the teardrop shape
-     * @return false if these 2 points are not found
+     *
+     * @param aParams are the teardrop parameters
      * @param aLayer is the layer for the teardrop
      * @param aItem is the via/pad/track used to build the teardrop
      * @param aPos is the via/pad position, or track start or end
@@ -219,19 +220,19 @@ private:
      * C and E ( aPts[2] and  aPts[4] ) are points on the aViaPad
      * D ( aPts[3] ) is midpoint behind the aViaPad centre
      * m_heightRatio is the factor to calculate the aViaPad teardrop size
-    */
+     * @return false if these 2 points are not found
+     */
     bool computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, PCB_LAYER_ID aLayer,
                               BOARD_ITEM* aItem, const VECTOR2I& aPos,
                               std::vector<VECTOR2I>& aPts ) const;
 
     /**
      * Find a track connected to the end of another track
-     * @return a reference to the touching track (or nullptr)
      * @param aMatchType returns the end point id 0, STARTPOINT, ENDPOINT
      * @param aTrackRef is the reference track
      * @param aSourceTrack is the board track aTrackRef stands in for, excluded from the search
      * @param aEndpoint is the coordinate to test
-     * @param tracksRTree is an RTree containing the available tracks
+     * @return a reference to the touching track (or nullptr)
      */
     PCB_TRACK* findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_TRACK* aTrackRef,
                                   PCB_TRACK* aSourceTrack, const VECTOR2I& aEndPoint ) const;
@@ -299,7 +300,7 @@ private:
     void setTeardropPriorities();
 
     /**
-     * @return true if a point on a track can be found as anchor point of a teardrop
+     * @param aParams are the teardrop settings.
      * @param aStartPoint is the start point of the track found (always inside the teardrop)
      * @param aEndPoint is the start point of the track found (always outside the teardrop)
      * @param aIntersection is the point where the track's centerline meets the pad/via edge
@@ -309,10 +310,8 @@ private:
      * @param aOtherPos is the via/pad position, or track start or end
      * @param aEffectiveTeardropLen is the actual teardrop length, that can be smaller than expected
      *  if the connected track length is too small
-     * @param aFollowTracks = true to use a connected track to aTrack if aTrack is too small
-     * @param aTrackLookupList is the list of tracks to explore if aFollowTracks = true
-     * m_lengthRatio is the length of teardrop (ratio pad/via size/teardrop len)
-    */
+     * @return true if a point on a track can be found as anchor point of a teardrop
+     */
     bool findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aParams, VECTOR2I& aStartPoint,
                                   VECTOR2I& aEndPoint, VECTOR2I& aIntersection,
                                   PCB_TRACK*& aTrack, PCB_TRACK* aSourceTrack, BOARD_ITEM* aOther,

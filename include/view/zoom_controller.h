@@ -73,8 +73,8 @@ public:
     /// The default minimum step factor for accelerating controller.
     static constexpr double DEFAULT_ACCELERATION_SCALE = 5.0;
 
-    /*
-     * A class interface that provides timestamps for events.
+    /**
+     * A interface that provides timestamps for events.
      */
     class TIMESTAMP_PROVIDER
     {
@@ -88,6 +88,7 @@ public:
     };
 
     /**
+     * @param aScale is the acceleration scalar.
      * @param aAccTimeout the timeout - if a scroll happens within this timeframe,
      *                    the zoom will be faster.
      * @param aTimestampProv a provider for timestamps. If null, a default will be provided,

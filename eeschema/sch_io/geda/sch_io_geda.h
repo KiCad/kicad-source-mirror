@@ -318,7 +318,7 @@ private:
     /// Loaded symbols for this import session, keyed by basename.
     std::map<wxString, std::unique_ptr<LIB_SYMBOL>> m_libSymbols;
 
-    /// Sequential counter for auto-generated #PWR references.
+    /// Sequential counter for auto-generated \#PWR references.
     int m_powerCounter;
 
     /// Net endpoint positions in raw gEDA coordinates for junction detection.

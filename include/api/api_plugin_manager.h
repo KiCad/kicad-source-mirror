@@ -50,6 +50,7 @@ public:
      * Clears the loaded plugins and actions and re-scans the filesystem to register new ones.
      * @param aDirectoryToScan can be provided to scan an arbitrary directory instead of the
      *                         stock paths; provided for QA testing.
+     * @param aReporter is a #REPORTER object to write status information to.
      */
     void ReloadPlugins( std::optional<wxString> aDirectoryToScan = std::nullopt,
                         std::shared_ptr<REPORTER> aReporter = nullptr );
@@ -74,6 +75,7 @@ public:
      *                   plugin configuration file
      * @param aStdout is a pointer to a string to fill with the stdout output of the action
      * @param aStderr is a pointer to a string to fill with the stderr output of the action
+     * @param aReporter is a #REPORTER object to write status information to.
      * @return the exit code from the action process
      */
     int InvokeActionSync( const wxString& aIdentifier, std::vector<wxString> aExtraArgs,

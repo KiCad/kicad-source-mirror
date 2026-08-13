@@ -132,7 +132,7 @@ public:
     int DdImportFootprint( const TOOL_EVENT& aEvent );
 
 private:
-    ///< Sets up handlers for various events.
+    /// Sets up handlers for various events.
     void setTransitions() override;
 
     /**
@@ -151,6 +151,7 @@ private:
     /**
      * Add and select or just select for move/place command a list of board items.
      *
+     * @param aCommit is the commit for undo/redo handling.
      * @param aItems is the list of items
      * @param aIsNew = true to add items to the current board, false to just select if
      *               items are already managed by the current board
@@ -158,6 +159,7 @@ private:
      *                        (if false, the top-left item's origin will be used)
      * @param aReannotateDuplicates = true to reannotate any footprints with a designator
      *                                that already exist in the board.
+     * @param aSkipMove
      */
     bool placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM*>& aItems, bool aIsNew, bool aAnchorAtOrigin,
                           bool aReannotateDuplicates, bool aSkipMove );

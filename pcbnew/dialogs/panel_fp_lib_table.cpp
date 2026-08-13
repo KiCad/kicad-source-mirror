@@ -66,7 +66,7 @@
 
 
 /**
- * This class builds a wxGridTableBase by wrapping an #FP_LIB_TABLE object.
+ * This class builds a wxGridTableBase by wrapping an #LIBRARY_TABLE object.
  */
 class FP_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
 {

@@ -38,7 +38,7 @@ class wxFileName;
 class LOCKFILE;
 
 
-/// Project settings path will be <projectname> + this
+/// Project settings path will be \<projectname\> + this
 #define PROJECT_BACKUPS_DIR_SUFFIX wxT( "-backups" )
 
 #define DEFAULT_THEME wxString( wxT( "user" ) )
@@ -74,6 +74,7 @@ public:
      * Take ownership of the pointer passed in.
      *
      * @param aSettings is a settings object to register.
+     * @param aLoadNow loads the settings on registration when true.
      * @return a handle to the owned pointer.
      */
     template<typename T>
@@ -93,7 +94,8 @@ public:
     /**
      * If the given settings object is registered, save it to disk and unregister it.
      *
-     * @param aSettings is the object to release
+     * @param aSettings is the object to release.
+     * @param aSave performs a save to file when true.
      */
     void FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave = true );
 
@@ -549,7 +551,7 @@ private:
      */
     bool unloadProjectFile( PROJECT* aProject, bool aSave );
 
-    ///< Helper to create built-in colors and register them.
+    /// Helper to create built-in colors and register them.
     void registerBuiltinColorSettings();
 
 private:

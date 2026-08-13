@@ -70,8 +70,7 @@ typedef enum {
 
 
 void GRResetPenAndBrush( wxDC* DC );
-void GRSetColorPen( wxDC* DC, const COLOR4D& Color, int width = 1,
-                    wxPenStyle stype = wxPENSTYLE_SOLID );
+void GRSetColorPen( wxDC* DC, const COLOR4D& Color, int width = 1, wxPenStyle stype = wxPENSTYLE_SOLID );
 void GRSetBrush( wxDC* DC, const COLOR4D& Color, bool fill = false );
 
 /**
@@ -104,17 +103,17 @@ void GRPoly( wxDC* DC, int n, const VECTOR2I* Points, bool Fill, int width, cons
  * @param doFill true if polygon is to be filled, else false and only the boundary is drawn.
  * @param aColor the color of the border and the fill.
  */
-void GRClosedPoly( wxDC* aDC, int aPointCount, const VECTOR2I* aPoints, bool doFill,
-                   const COLOR4D& aColor );
+void GRClosedPoly( wxDC* aDC, int aPointCount, const VECTOR2I* aPoints, bool doFill, const COLOR4D& aColor );
 
 /**
  * Draw a circle onto the drawing context \a aDC centered at the user coordinates (x,y).
  *
  * @param aDC the device context into which drawing should occur.
- * @param x The x coordinate in user space of the center of the circle.
- * @param y The y coordinate in user space of the center of the circle.
+ * @param aPos The x/y coordinates in user space of the center of the circle.
  * @param aRadius is the radius of the circle.
- * @param aColor is the color to draw.
+ * @param aWidth is the line with of the circle.
+ * @param aStrokeColor is the outline color of the circle.
+ * @param aFillColor is the fill color of the circle.
  * @see COLOR4D
  */
 void GRFilledCircle( wxDC* aDC, const VECTOR2I& aPos, int aRadius, int aWidth,
@@ -129,13 +128,11 @@ void GRFilledArc( wxDC* DC, const VECTOR2I& aStart, const VECTOR2I& aEnd, const 
 void GRFilledSegment( wxDC* aDC, const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth,
                       const COLOR4D& aColor );
 
-void GRCSegm( wxDC* aDC, const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth,
-              const COLOR4D& aColor );
+void GRCSegm( wxDC* aDC, const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth, const COLOR4D& aColor );
 
 void GRFilledRect( wxDC* DC, const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth,
                    const COLOR4D& aColor, const COLOR4D& aBgColor );
-void GRRect( wxDC* DC, const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth,
-             const COLOR4D& aColor );
+void GRRect( wxDC* DC, const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth, const COLOR4D& aColor );
 
 void GRSFilledRect( wxDC* DC, int x1, int y1, int x2, int y2, int width, const COLOR4D& Color,
                     const COLOR4D& BgColor );

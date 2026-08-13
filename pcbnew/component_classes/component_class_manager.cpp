@@ -37,17 +37,6 @@ COMPONENT_CLASS_MANAGER::COMPONENT_CLASS_MANAGER( BOARD* board ) :
 }
 
 
-/**
- * Computes and returns an effective component class for a (possibly empty) set of constituent
- * class names. This is called by the netlist updater to set static component classes on footprints.
- *
- * Where constituent or effective component classes already exist, they are re-used. This allows
- * efficient comparison of (effective) component classes by pointer in DRC checks.
- *
- * Preconditions: InitNetlistUpdate() must be called before invoking this method.
- * @param classNames The constitent component class names
- * @return A pointer to an effective COMPONENT_CLASS representing all constituent component classes
- */
 COMPONENT_CLASS* COMPONENT_CLASS_MANAGER::GetEffectiveStaticComponentClass(
         const std::unordered_set<wxString>& classNames )
 {

@@ -29,9 +29,17 @@ class FOOTPRINT;
 /**
  * Footprints (after loaded by reading a netlist for instance) are moved
  * to be in a small free area (outside the current board) without overlapping.
+<<<<<<< HEAD
  * @param aFootprints: a list of footprints to be spread out.
+=======
+ *
+ * @param[in] aFootprints: a list of footprints to be spread out.
+>>>>>>> b1a43310e7 (Fix Doxygen comment build warnings.)
  * @param aTargetBoxPosition the position of the upper left corner of the
  *        area allowed to spread footprints
+ * @param aGroupBySheet is a flag to determine if \a aFootprints should be grouped by sheet.
+ * @param aComponentGap is the keepout gap to place footprints.
+ * @param aGroupGap is the gap to maintain between footprint groups.
  */
 void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, const VECTOR2I& aTargetBoxPosition,
                        bool aGroupBySheet = true, int aComponentGap = pcbIUScale.mmToIU( 1 ),

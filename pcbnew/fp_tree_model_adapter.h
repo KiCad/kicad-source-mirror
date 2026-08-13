@@ -33,6 +33,7 @@ public:
     /**
      * Factory function: create a model adapter in a reference-counting container.
      *
+     * @param aParent is the parent window.
      * @param aLibs library set from which parts will be loaded
      */
     static wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Create( PCB_BASE_FRAME* aParent,

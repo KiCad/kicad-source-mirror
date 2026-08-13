@@ -105,9 +105,8 @@ static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
  * Show a wxFileDialog asking for a #BOARD filename to open.
  *
  * @param aParent is a wxFrame passed to wxFileDialog.
- * @param aCtl is where to put the OpenProjectFiles() control bits.
  * @param aFileName on entry is a probable choice, on return is the chosen filename.
- * @param aKicadFilesOnly true to list KiCad pcb files plugins only, false to list import plugins.
+ * @param aCtl is where to put the OpenProjectFiles() control bits.
  * @return  true if chosen, else false if user aborted.
  */
 bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCtl = 0 )

@@ -1087,6 +1087,7 @@ EXCLUDE_PATTERNS       = */resources/bitmaps_png/*.md \
                          */pcb_calculator/attenuators/*.md \
                          */eeschema/*.md \
                          */eeschema/dialogs/*.md \
+                         */pcbnew/*.md \
                          */pcbnew/dialogs/*.md \
                          */qa/data/* \
                          */libs/kiplatform/gtk/wayland-pointer-constraints-unstable-v1.h \

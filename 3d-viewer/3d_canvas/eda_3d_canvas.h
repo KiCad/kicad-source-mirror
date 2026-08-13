@@ -62,10 +62,11 @@ public:
     /**
      *  Create a new 3D Canvas with an attribute list.
      *
-     *  @param aParent the parent creator of this canvas.
-     *  @param aGLAttribs openGL attributes created by #OGL_ATT_LIST::GetAttributesList.
-     *  @param aBoard The board.
-     *  @param aSettings the settings options to be used by this canvas.
+     * @param aParent the parent creator of this canvas.
+     * @param aGLAttribs openGL attributes created by #OGL_ATT_LIST::GetAttributesList.
+     * @param aSettings the settings options to be used by this canvas.
+     * @param aCamera is the #CAMERA settings.
+     * @param a3DCachePointer is a pointer to the 3D cache.
      */
     EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttribs, BOARD_ADAPTER& aSettings,
                    CAMERA& aCamera, S3D_CACHE* a3DCachePointer );
@@ -75,7 +76,7 @@ public:
     /**
      * Set a dispatcher that processes events and forwards them to tools.
      *
-     * #DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
+     * #EDA_DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
      * handlers from the DRAW_PANEL_GAL and parent frame.
      *
      * @param aEventDispatcher is the object that will be used for dispatching events.

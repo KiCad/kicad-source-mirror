@@ -79,7 +79,8 @@ public:
      * Update the score for this part. This is accumulative - it will be
      * called once per search term.
      *
-     * @param aMatcher  an EDA_COMBINED_MATCHER initialized with the search term
+     * @param aMatchers an EDA_COMBINED_MATCHER initialized with the search term.
+     * @param aFilter is an optional filter callback.
      */
     virtual void UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                               std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) = 0;
@@ -200,12 +201,12 @@ public:
      *
      * All fields will be populated from the LIB_ALIAS, including children
      * (unit nodes will be generated automatically).  This does not keep
-     * the pointer to the #LIB_ALIAS object because at any time, a #LIB_ALIAS
+     * the pointer to the #LIB_SYMBOL object because at any time, a #LIB_SYMBOL
      * can be remove from a library which will result in an invalid pointer.
      * The alias must be resolved at the time of use.  Anything else is a bug.
      *
-     * @param aParent   parent node, should be a CMP_TREE_NODE_LIB
-     * @param aItem     LIB_COMPONENT to populate the node.
+     * @param aParent   parent node, should be a #LIB_TREE_NODE
+     * @param aItem     #LIB_TREE_ITEM to populate the node.
      */
     LIB_TREE_NODE_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem );
 
@@ -214,9 +215,6 @@ public:
      */
     void Update( LIB_TREE_ITEM* aItem );
 
-    /**
-     * Perform the actual search.
-     */
     void UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 
@@ -255,7 +253,7 @@ public:
     /**
      * Construct a new alias node, add it to this library, and return it.
      *
-     * @param aItem    LIB_COMPONENT to provide data
+     * @param aItem is the #LIB_TREE_ITEM to add to this node.
      */
     LIB_TREE_NODE_ITEM& AddItem( LIB_TREE_ITEM* aItem );
 

@@ -29,7 +29,7 @@
  * Macro to create const vectors containing enum values to enable easy iteration.
  *
  * @warning Do not use in new code. Use the #DEFINE_ENUM_CLASS_WITH_ITERATOR and
- *          #DECLARE_ENUM_CLASS_ITERATOR macros instead (unless they don't work ;) ).
+ *          #DECLARE_ENUM_TO_WXANY macros instead (unless they don't work ;) ).
  *
  * Usage:
  * [header]

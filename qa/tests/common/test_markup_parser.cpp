@@ -62,7 +62,7 @@ struct PARSE_CASE
 };
 
 /**
- * Test the #Parse method.
+ * Test the #MARKUP::MARKUP_PARSER::Parse method.
  */
 BOOST_AUTO_TEST_CASE( Parse )
 {

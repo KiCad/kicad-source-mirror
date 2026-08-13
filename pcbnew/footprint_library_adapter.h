@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 
 #ifndef FOOTPRINT_LIBRARY_ADAPTER_H
 #define FOOTPRINT_LIBRARY_ADAPTER_H
@@ -98,7 +98,7 @@ public:
     /**
      * Load a #FOOTPRINT having @a aName from the library given by @a aNickname.
      *
-     * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW
+     * @param aNickname is a locator for the \"library\", it is a "name" in #LIBRARY_TABLE_ROW
      * @param aName is the name of the #FOOTPRINT to load.
      * @param aKeepUUID = true to keep initial items UUID, false to set new UUID
      *                   normally true if loaded in the footprint editor, false

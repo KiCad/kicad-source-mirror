@@ -122,6 +122,7 @@ public:
      * If \a aKiface is NULL or in single-instance then quit (wxID_EXIT) is used, otherwise
      * close (wxID_CLOSE) is used.
      *
+     * @param aKiface is the face to close.
      * @param aAppname is the application name to append to the tooltip.
      */
     void AddQuitOrClose( KIFACE_BASE* aKiface, wxString aAppname = "" );

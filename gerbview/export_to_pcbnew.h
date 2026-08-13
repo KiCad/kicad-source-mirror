@@ -118,7 +118,9 @@ private:
     /**
      * Write a non-copper polygon to the board file.
      *
+     * @param aPolys are the polygons to write.
      * @param aLayer is the technical layer to use.
+     * @param aOffset is the optional polygon offset.
      */
     void writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLayer,
                           const VECTOR2I& aOffset = { 0, 0 } );
@@ -127,7 +129,7 @@ private:
      * Write a filled circle to the board file (with line thickness = 0).
      *
      * @param aCenterPosition is the actual position of the filled circle,
-     *  given by <round_flashed_shape>->GetABPosition()
+     *  given by \<round_flashed_shape\> GetABPosition().
      * @param aRadius is the circle radius.
      * @param aLayer is the layer to use.
      */
@@ -159,6 +161,7 @@ private:
      * the pad.
      *
      * @param aGbrItem is the flashed Gerber item to export.
+     * @param aLayer is the layer ID to export.
      */
     void export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
 

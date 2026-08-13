@@ -70,6 +70,7 @@ public:
      * are relatives to the marker position (are not absolute).
      *
      * @param aPolygon is the #SHAPE_LINE_CHAIN to fill with the shape.
+     * @param aScale
      */
     void ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon, int aScale = -1 ) const;
 
@@ -115,6 +116,7 @@ public:
      * Test if the given #VECTOR2I is within the bounds of this object.
      *
      * @param aHitPosition is the #VECTOR2I to test (in internal units).
+     * @param aAccuracy is the allowable hit test error.
      * @return true if a hit, else false.
      */
     bool HitTestMarker( const VECTOR2I& aHitPosition, int aAccuracy ) const;

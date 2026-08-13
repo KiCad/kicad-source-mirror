@@ -70,8 +70,8 @@ private:
 
     /**
      * Get a block by its key, and check that it is of the expected type.
-      *
-      * @tparam T must be a BLOCK_DATA struct with a BLOCK_TYPE_CODE member
+     *
+     * @tparam T must be a BLOCK_DATA struct with a BLOCK_TYPE_CODE member
      */
     template <ALLEGRO_BLOCK_DATA T>
     const T* expectBlockByKey( uint32_t aKey ) const
@@ -140,6 +140,8 @@ private:
     /**
      * Give @a aItem and its children ids derived from the Allegro block they came from.
      *
+     * @param aItem
+     * @param aKey
      * @param aSeq is advanced once per item stamped, so several items sharing one source block
      *             still get distinct ids.
      */
@@ -170,7 +172,8 @@ private:
     /**
      * Build the shapes from an 0x14 shape list
      */
-    std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14_GRAPHIC& aGraphicList, BOARD_ITEM_CONTAINER& aParent );
+    std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14_GRAPHIC& aGraphicList,
+                                                         BOARD_ITEM_CONTAINER& aParent );
     std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper, BOARD_ITEM_CONTAINER& aParent );
 
     /**
@@ -221,8 +224,10 @@ private:
     /**
      * Build a ZONE from an 0x0E, 0x24 or 0x28 block.
      *
+     * @param aBoundaryBlock
      * @param aRelatedBlocks are blocks to get net (0x1B) and fill (0x28) info from
      * @param aZoneFillHandler is a management object for efficiently dealing with filled zones
+     * @param aParent
      */
     std::unique_ptr<ZONE> buildZone( const BLOCK_BASE&                     aBoundaryBlock,
                                      const std::vector<const BLOCK_BASE*>& aRelatedBlocks,

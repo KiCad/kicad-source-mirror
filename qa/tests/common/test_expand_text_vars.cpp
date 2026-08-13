@@ -382,7 +382,7 @@ BOOST_AUTO_TEST_SUITE_END()
  *
  * ResolveTextVars and ExpandTextVars used a function-local static EXPRESSION_EVALUATOR
  * shared across all threads. CONNECTION_GRAPH evaluates schematic labels in parallel
- * via a thread pool and label text may contain @{...} expressions, which caused the
+ * via a thread pool and label text may contain \@{...} expressions, which caused the
  * shared evaluator's internal ERROR_COLLECTOR vector to be mutated concurrently, leading
  * to heap corruption and a segfault inside std::vector::clear.
  *

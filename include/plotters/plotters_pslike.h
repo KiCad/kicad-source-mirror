@@ -546,9 +546,9 @@ protected:
     /**
      * Start a PDF stream (for the page).
      *
-     * @param handle -1 (default) for a new object. Especially from PDF 1.5 streams can contain
+     * @param aHandle -1 (default) for a new object. Especially from PDF 1.5 streams can contain
      *               a lot of things, but for the moment we only handle page content.
-     * @eturn The object handle opened
+     * @return The object handle opened
      */
     int startPdfStream( int aHandle = -1 );
 
@@ -755,8 +755,9 @@ protected:
     /**
      * Output the string which define pen and brush color, shape, transparency
      *
+     * @param aLineWidth is the width of the line to plot.
      * @param aIsGroup If false, do not form a new group for the style.
-     * @param aExtraStyle If given, the string will be added into the style string before closing
+     * @param aExtraStyle If given, the string will be added into the style string before closing.
      */
     void setSVGPlotStyle( int aLineWidth, bool aIsGroup = true,
                           const std::string& aExtraStyle = {} );

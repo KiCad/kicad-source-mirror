@@ -42,8 +42,8 @@ namespace PNS {
 class JOINT : public ITEM
 {
 public:
-    ///< Joints are hashed by their position, layers and net.
-    ///<  Linked items are, obviously, not hashed.
+    /// Joints are hashed by their position, layers and net.
+    ///  Linked items are, obviously, not hashed.
     struct HASH_TAG
     {
         VECTOR2I pos;
@@ -94,7 +94,8 @@ public:
     }
 
     /**
-     * Checks if a joint connects two segments of the same net, layer, and width.
+     * Check if a joint connects two segments of the same net, layer, and width.
+     *
      * @param aAllowLockedSegs will consider joints between locked and unlocked segments as trivial
      * @return true if the joint is a trivial line corner
      */
@@ -179,7 +180,6 @@ public:
         return m_linkedItems.Size() == 1 && m_linkedItems.Count( SEGMENT_T ) == 1;
     }
 
-
     bool IsTraceWidthChange() const
     {
         if( m_linkedItems.Count( SEGMENT_T ) != 2 )
@@ -211,7 +211,7 @@ public:
         return seg1->Width() != seg2->Width();
     }
 
-    ///< Link the joint to a given board item (when it's added to the NODE).
+    /// Link the joint to a given board item (when it's added to the NODE).
     void Link( ITEM* aItem )
     {
         if( m_linkedItems.Contains( aItem ) )
@@ -220,18 +220,23 @@ public:
         m_linkedItems.Add( aItem );
     }
 
-    ///< Unlink a given board item from the joint (upon its removal from a NODE)
-    ///< @return true if the joint became dangling after unlinking.
+    /**
+     * Unlink a given board item from the joint (upon its removal from a NODE)
+     *
+     * @return true if the joint became dangling after unlinking.
+     */
     bool Unlink( ITEM* aItem )
     {
         m_linkedItems.Erase( aItem );
+
         if( m_linkedItems.Size() == 0 )
             m_layers = PNS_LAYER_RANGE( -1 );
+
         return m_linkedItems.Size() == 0;
     }
 
-    ///< For trivial joints, return the segment adjacent to (aCurrent). For non-trival ones,
-    ///< return NULL, indicating the end of line.
+    /// For trivial joints, return the segment adjacent to (aCurrent). For non-trival ones,
+    /// return NULL, indicating the end of line.
     LINKED_ITEM* NextSegment( LINKED_ITEM* aCurrent, bool aAllowLockedSegs = false ) const
     {
         const std::vector<ITEM*>& citems = m_linkedItems.CItems();
@@ -282,7 +287,6 @@ public:
 
         return nullptr;
     }
-
 
     /// trivial accessors
     const HASH_TAG& Tag() const
@@ -360,13 +364,13 @@ public:
     }
 
 private:
-    ///< hash tag for unordered_multimap
+    /// hash tag for unordered_multimap
     HASH_TAG m_tag;
 
-    ///< list of items linked to this joint
+    /// list of items linked to this joint
     ITEM_SET m_linkedItems;
 
-    ///< locked (non-movable) flag
+    /// locked (non-movable) flag
     bool m_locked;
 };
 

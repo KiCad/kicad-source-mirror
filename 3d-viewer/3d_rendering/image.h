@@ -140,17 +140,17 @@ public:
      * Perform a copy operation based on \a aOperation type.
      *
      * The available image operations.
-     *  - IMAGE_OP::RAW        this <- aImgA
-     *  - IMAGE_OP::ADD        this <- CLAMP(aImgA + aImgB)
-     *  - IMAGE_OP::SUB        this <- CLAMP(aImgA - aImgB)
-     *  - IMAGE_OP::DIF        this <- abs(aImgA - aImgB)
-     *  - IMAGE_OP::MUL        this <- aImgA * aImgB
-     *  - IMAGE_OP::AND        this <- aImgA & aImgB
-     *  - IMAGE_OP::OR         this <- aImgA | aImgB
-     *  - IMAGE_OP::XOR        this <- aImgA ^ aImgB
-     *  - IMAGE_OP::BLEND50    this <- (aImgA + aImgB) / 2
-     *  - IMAGE_OP::MIN        this <- (aImgA < aImgB) ? aImgA : aImgB
-     *  - IMAGE_OP::MAX        this <- (aImgA > aImgB) ? aImgA : aImgB
+     *  - IMAGE_OP::RAW        this \<- aImgA
+     *  - IMAGE_OP::ADD        this \<- CLAMP(aImgA + aImgB)
+     *  - IMAGE_OP::SUB        this \<- CLAMP(aImgA - aImgB)
+     *  - IMAGE_OP::DIF        this \<- abs(aImgA - aImgB)
+     *  - IMAGE_OP::MUL        this \<- aImgA * aImgB
+     *  - IMAGE_OP::AND        this \<- aImgA & aImgB
+     *  - IMAGE_OP::OR         this \<- aImgA | aImgB
+     *  - IMAGE_OP::XOR        this \<- aImgA ^ aImgB
+     *  - IMAGE_OP::BLEND50    this \<- (aImgA + aImgB) / 2
+     *  - IMAGE_OP::MIN        this \<- (aImgA < aImgB) ? aImgA : aImgB
+     *  - IMAGE_OP::MAX        this \<- (aImgA > aImgB) ? aImgA : aImgB
      *
      * @param aImgA an image input.
      * @param aImgB an image input.
@@ -214,7 +214,7 @@ private:
      * Calculate the coordinates points in accord with the current clamping settings.
      *
      * @param aXo X coordinate to be converted (output).
-     * @param aXo Y coordinate to be converted (output).
+     * @param aYo Y coordinate to be converted (output).
      * @return bool - true if the coordinates are inside the image, false otherwise.
      */
     bool wrapCoords( int* aXo, int* aYo ) const;

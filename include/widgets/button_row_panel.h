@@ -78,8 +78,9 @@ public:
     /**
      * Construct a SIMPLE_BUTTON_PANEL with a set of buttons on each side.
      *
-     * @param aLeftBtns: buttons on the left side, from left to right
-     * @param aRightBtns: buttons on the right side, from left to right
+     * @param aWindow is the parent window.
+     * @param aLeftBtns: buttons on the left side, from left to right.
+     * @param aRightBtns: buttons on the right side, from left to right.
      */
     BUTTON_ROW_PANEL( wxWindow* aWindow, const BTN_DEF_LIST& aLeftBtns, const BTN_DEF_LIST& aRightBtns );
 
@@ -87,9 +88,8 @@ private:
     /**
      * Add a set of buttons to one side of the panel.
      *
-     * @param aSizer the sizer to add them to
-     * @param aLeft  place on the left (false for right)
-     * @param aDefs  list of button defs, from left to right
+     * @param aLeft  place on the left (false for right).
+     * @param aDefs  list of button defs, from left to right.
      */
     void addButtons( bool aLeft, const BTN_DEF_LIST& aDefs );
 

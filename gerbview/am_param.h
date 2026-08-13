@@ -317,11 +317,11 @@ public:
      *
      * a parameter can be:
      *      a number
-     *      a reference to an aperture definition parameter value: $1 to $3 ...
+     *      a reference to an aperture definition parameter value: \$1 to \$3 ...
      * a parameter definition can be complex and have operators between numbers and/or other
      * parameter
-     * like $1+3 or $2x2..
-     * Parameters are separated by a comma ( of finish by *)
+     * like \$1+3 or \$2x2..
+     * Parameters are separated by a comma ( of finish by \*)
      * @param aText = pointer to the parameter to read. Will be modified to point to the next field
      * @return true if a param is read, or false
      */
@@ -331,13 +331,13 @@ private:
     /**
      * has meaning to define parameter local to an aperture macro
      * this is the id of a parameter defined like
-     * $n = ....
+     * \$n = ....
      * n is the index
      */
     int    m_index;
 
     /**
-     * List of operands/operators to evaluate the actual value if a par def is $3/2,
+     * List of operands/operators to evaluate the actual value if a par def is \$3/2,
      * there are 3 items in stack: 3 (type PUSHPARM) , / (type DIV), 2 (type PUSHVALUE).
      */
     std::vector<AM_PARAM_ITEM> m_paramStack;

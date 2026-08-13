@@ -142,9 +142,10 @@ public:
      *
      * Used in Netlist format dialog box creation.
      *
-     * @param parent is the wxNotebook parent.
-     * @param title is the title of the notebook page.
-     * @param id_NetType is the netlist ID type.
+     * @param aParent is the wxNotebook parent.
+     * @param aTitle is the title of the notebook page.
+     * @param aIdNetType is the netlist ID type.
+     * @param aCustom
      */
     EXPORT_NETLIST_PAGE( wxNotebook* aParent, const wxString& aTitle, NETLIST_TYPE_ID aIdNetType, bool aCustom );
     ~EXPORT_NETLIST_PAGE() = default;

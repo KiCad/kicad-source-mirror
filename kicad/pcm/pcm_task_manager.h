@@ -72,11 +72,12 @@ public:
      * @param aPackage package metadata
      * @param aVersion version to be installed
      * @param aRepositoryId id of the source repository
+     * @param isUpdate
      *
      * @return int status of the process
      */
     PCM_TASK_MANAGER::STATUS DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
-                             const wxString& aRepositoryId, const bool isUpdate );
+                                                 const wxString& aRepositoryId, const bool isUpdate );
 
     /**
      * @brief Enqueue package uninstallation

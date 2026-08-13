@@ -50,7 +50,7 @@ public:
         TYPE,
         MODEL,
         LIB
-    )
+    );
 
     SIM_MODEL_RAW_SPICE( const std::string& aSpiceSource = "" );
 

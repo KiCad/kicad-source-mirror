@@ -231,7 +231,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    ///< The possible states of DRAWING_TOOL
+    /// The possible states of DRAWING_TOOL
     enum class MODE
     {
         // Initial hover state to identify diff pair / first track
@@ -244,16 +244,16 @@ public:
         FIXED_MODE
     };
 
-    ///< Return the current mode of the tool
+    /// Return the current mode of the tool
     MODE GetMode() const { return m_mode; }
 
-    ///< Set the current mode of the tool
+    /// Set the current mode of the tool
     void SetMode( const MODE aMode ) { m_mode = aMode; }
 
-    ///< The tool entry point
+    /// The tool entry point
     int ShowDiffPhaseSkew( const TOOL_EVENT& aEvent );
 
-    ///< Flags for the analysis state of the selected tracks
+    /// Flags for the analysis state of the selected tracks
     enum class DIFF_PAIR_VALIDITY : int
     {
         VALID = 0,
@@ -265,36 +265,36 @@ public:
     };
 
 protected:
-    ///< Set up handlers for tool events
+    /// Set up handlers for tool events
     void setTransitions() override;
 
-    ///< Highlight nets when in MODE::HOVER and we have active nets in scope
+    /// Highlight nets when in MODE::HOVER and we have active nets in scope
     void updateNetHighlights( bool aRefresh = true ) const;
 
-    ///< Handle hover events before a DP pair is selected
+    /// Handle hover events before a DP pair is selected
     void doInitialHover( const PCB_SELECTION_TOOL* aSelectionTool, GENERAL_COLLECTORS_GUIDE aGuide );
 
-    ///< Display the phase overlay for the current hover item
+    /// Display the phase overlay for the current hover item
     void doDisplayOverlay();
 
-    ///< Use the router to get the +ve and -ve paths from the selected item
+    /// Use the router to get the +ve and -ve paths from the selected item
     void getNetPaths();
 
-    ///< Normalises the path to ensure SHAPE_LINE_CHAIN points are in overall path walk order
+    /// Normalises the path to ensure SHAPE_LINE_CHAIN points are in overall path walk order
     static void normalisePathItems( const PNS::ITEM_SET& aPath, const PNS::SOLID* aStartPad );
 
-    ///< Determine which end of the extracted paths we are defining as the signal start point
+    /// Determine which end of the extracted paths we are defining as the signal start point
     DIFF_PAIR_VALIDITY determinePathDirections();
 
-    ///< Reverses the direction of the selected and coupled paths (including swapping
-    ///< start / end pads
+    /// Reverses the direction of the selected and coupled paths (including swapping
+    /// start / end pads
     static void reversePath( PNS::ITEM_SET& aPath, PNS::SOLID** aStartPad, PNS::SOLID** aEndPad );
 
-    ///< Report to the user any errors after determining the signal direction
-    ///< @returns true if any errors reported, otherwise false
+    /// Report to the user any errors after determining the signal direction
+    /// @returns true if any errors reported, otherwise false
     bool reportValidityErrors( DIFF_PAIR_VALIDITY aDirection ) const;
 
-    ///< Struct to represent one cumulative length and delay point
+    /// Struct to represent one cumulative length and delay point
     struct CUMULATIVE_ENTRY
     {
         int64_t                             m_Length{ 0 };
@@ -304,12 +304,12 @@ protected:
         VECTOR2I                            m_End{ 0, 0 };
     };
 
-    ///< Builds the length / delay calculation items from a given path
+    /// Builds the length / delay calculation items from a given path
     void buildLengthDelayItems( const PNS::ITEM_SET& aPath, const PNS::SOLID* aStartPad, const PNS::SOLID* aEndPad,
                                 const NETINFO_ITEM* aNet, std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems,
                                 LENGTH_DELAY_ITEM_DETAILS& aItemDetails ) const;
 
-    ///< Start and end pad lengths and delays (pad-to-die + inferred via-in-pad)
+    /// Start and end pad lengths and delays (pad-to-die + inferred via-in-pad)
     struct START_END_DETAILS
     {
         int64_t StartPadLength{ 0 };
@@ -318,41 +318,41 @@ protected:
         int64_t EndPadDelay{ 0 };
     };
 
-    ///< Builds a vector in which each entry represents the cumulative length and delay at the start
-    ///< of a given segment. The first and last segments are virtual to allow the total length to be stored.
-    ///< Total size of the returned vectors is (numSegments + 2).
+    /// Builds a vector in which each entry represents the cumulative length and delay at the start
+    /// of a given segment. The first and last segments are virtual to allow the total length to be stored.
+    /// Total size of the returned vectors is (numSegments + 2).
     static std::vector<CUMULATIVE_ENTRY>
     buildCumulativeLengthsAndDelays( const std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems,
                                      const LENGTH_DELAY_ITEM_DETAILS& aLengthDelayDetails, const PNS::SOLID* aStartPad,
                                      const PNS::SOLID* aEndPad, START_END_DETAILS& aStartEndDetails );
 
-    ///< Splits the calculation items from compound segments in to individual items
+    /// Splits the calculation items from compound segments in to individual items
     static void splitLengthItems( std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems );
 
-    ///< Finds all parallel segment runs in the selected and coupled tracks
+    /// Finds all parallel segment runs in the selected and coupled tracks
     std::vector<PARALLEL_RUN> findParallelRuns() const;
 
-    ///< Finds all parallel segment runs in the selected and coupled tracks within the given segment ranges and
-    ///< track spacing
+    /// Finds all parallel segment runs in the selected and coupled tracks within the given segment ranges and
+    /// track spacing
     void findParallelRunsImpl( std::pair<std::size_t, std::size_t> aRangeA, std::pair<std::size_t, std::size_t> aRangeB,
                                double aMaxSpacing, std::vector<PARALLEL_RUN>& aRuns ) const;
 
-    ///< Linear interpolate from point A to B at line fraction T
+    /// Linear interpolate from point A to B at line fraction T
     static VECTOR2D lerp( const VECTOR2D aA, const VECTOR2D aB, const double aT )
     {
         return { aA.x + ( aB.x - aA.x ) * aT, aA.y + ( aB.y - aA.y ) * aT };
     }
 
-    ///< Gets the cumulative length and delay at the given fractional coordinate in the given segment
+    /// Gets the cumulative length and delay at the given fractional coordinate in the given segment
     static std::pair<int64_t, int64_t>
     getCumulativeLengthAndDelayAt( const LENGTH_DELAY_ITEM_DETAILS&     aLengthDelayDetails,
                                    const START_END_DETAILS&             aPadDetails,
                                    const std::vector<CUMULATIVE_ENTRY>& aCumulative, std::size_t aSegIdx, double aT );
 
-    ///< Gets the maximum diff pair gap for the given item, taken from DRC rules
+    /// Gets the maximum diff pair gap for the given item, taken from DRC rules
     int getMaxDiffPairGap( const BOARD_CONNECTED_ITEM* aItem ) const;
 
-    ///< Struct containing a final computed output diff segment
+    /// Struct containing a final computed output diff segment
     struct OUTPUT_SEGMENT
     {
         /// The start point of the segment
@@ -374,7 +374,7 @@ protected:
         double RelativeValueAtMid;
     };
 
-    ///< Builds the final overlay output segments for plotting
+    /// Builds the final overlay output segments for plotting
     void buildDiffOverlaySegments( double aTargetSubsegmentSize );
 
     std::vector<OUTPUT_SEGMENT>
@@ -382,45 +382,45 @@ protected:
                                   const std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aSourceItemDetails,
                                   const std::vector<KNOWN_RELATIVE_POINT>& aKnownPoints, double aTargetSubsegmentSize );
 
-    ///< Builds a vector of known relative skew points on each track
+    /// Builds a vector of known relative skew points on each track
     void buildKnownRelativePoints( const std::vector<PARALLEL_RUN>& aKnownRuns );
 
-    ///< Determines where to apply overlay segment subsections on the source segments
+    /// Determines where to apply overlay segment subsections on the source segments
     static std::vector<double> buildSplitPositions( const std::vector<CUMULATIVE_ENTRY>& aSegments,
                                                     double                               aTargetSubsegmentSize );
 
-    ///< Returns the coordinate at the given linear distance along the line, along with the segment
-    ///< index the point belongs to
+    /// Returns the coordinate at the given linear distance along the line, along with the segment
+    /// index the point belongs to
     static std::pair<VECTOR2D, std::size_t>
     pointAtDistance( const std::vector<CUMULATIVE_ENTRY>&              aSegments,
                      const std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aSourceItemDetails, double aDist );
 
-    ///< Linearly interpolates between colour1 and colour2, with interpolation point given by
-    ///< aS [0-1]
+    /// Linearly interpolates between colour1 and colour2, with interpolation point given by
+    /// aS [0-1]
     COLOR4D interpolateColours( const COLOR4D& aColour1, const COLOR4D& aColour2, double aS, bool aUseLogScale ) const;
 
-    ///< Draws the visual skew overlay
+    /// Draws the visual skew overlay
     void drawDiffOverlay() const;
 
-    ///< Shows the diff stats nearest the cursor
+    /// Shows the diff stats nearest the cursor
     void doShowStatsAtCursor();
 
-    ///< Determines the nearest points to the cursor from the diff segments
+    /// Determines the nearest points to the cursor from the diff segments
     std::pair<std::size_t, bool> getNearestDiffSegments( const VECTOR2D& aCursorPos, double aHitTestDistance ) const;
 
-    ///< Ensures we have an active VIEW_OVERLAY to display the diff graphics
+    /// Ensures we have an active VIEW_OVERLAY to display the diff graphics
     void getOverlay();
 
-    ///< Refreshes the VIEW_OVERLAY in the active VIEW
+    /// Refreshes the VIEW_OVERLAY in the active VIEW
     void updateOverlay() const;
 
-    ///< Clears the VIEW_OVERLAY
+    /// Clears the VIEW_OVERLAY
     void clearOverlay() const;
 
-    ///< Resets all select-specific variables
+    /// Resets all select-specific variables
     void resetStateVariables();
 
-    ///< Updates the message panel
+    /// Updates the message panel
     void updateMessagePanel() const;
 
 private:

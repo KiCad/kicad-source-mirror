@@ -152,14 +152,15 @@ class KICOMMON_API GRID_CELL_PATH_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
     /**
-     * Constructor
-     *
+     * @param aParentDialog
+     * @param aGrid
      * @param aCurrentDir is current directory the path editor will open at
      * @param aNormalize indicates whether to normalize the selected path (replace part of path
      *                   with variables or relative path)
      * @param aNormalizeBasePath is the path to use when trying to base variables (generally
      *                           current project path)
      * @param aFileFilterFn a callback which provides a file extension(s) filter.
+     * @param aEmbedCallback
      */
     GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParentDialog, WX_GRID* aGrid, wxString* aCurrentDir,
                            bool aNormalize, const wxString& aNormalizeBasePath,
@@ -175,8 +176,8 @@ public:
     { }
 
     /**
-     * Constructor
-     *
+     * @param aParentDialog
+     * @param aGrid
      * @param aCurrentDir is current directory the path editor will open at
      * @param aFileFilter is the file extension(s) to filter by. If empty, the path editor will
      *                    switch to folder mode instead of file.
@@ -184,6 +185,7 @@ public:
      *                   with variables or relative path)
      * @param aNormalizeBasePath is the path to use when trying to base variables (generally
      *                           current project path)
+     * @param aEmbedCallback
      */
     GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParentDialog, WX_GRID* aGrid, wxString* aCurrentDir,
                            const wxString& aFileFilter, bool aNormalize = false,

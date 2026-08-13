@@ -44,7 +44,7 @@ public:
     DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aParentFrame, std::vector<SCH_TABLECELL*> aCells );
     ~DIALOG_TABLECELL_PROPERTIES();
 
-    ///< @return the value depending on the way the dialog was closed.
+    /// @return the value depending on the way the dialog was closed.
     enum TABLECELL_PROPS_RETVALUE GetReturnValue() { return m_returnValue; }
 
 private:

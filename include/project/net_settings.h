@@ -279,11 +279,11 @@ public:
     void RecomputeEffectiveNetclasses();
 
     /**
-     * Get a NETCLASS object from a given Netclass name string
+     * Get a NETCLASS object from a given Netclass name string.
      *
-     * @param aNetClassName the Netclass name to resolve
-     * @return shared pointer to the requested NETCLASS object, or the default NETCLASS
-    */
+     * @param aNetName the Netclass name to resolve.
+     * @return shared pointer to the requested NETCLASS object, or the default NETCLASS.
+     */
     std::shared_ptr<NETCLASS> GetNetClassByName( const wxString& aNetName ) const;
 
     /**

@@ -35,7 +35,7 @@ struct CADSTAR_PART_PIN;
 struct CADSTAR_PART_NODE;
 
 /**
- * CADSTAR Parts Library (*.lib) model - a data structure describing the contents of the
+ * CADSTAR Parts Library (\*.lib) model - a data structure describing the contents of the
  * file format
  */
 struct CADSTAR_PARTS_LIB_MODEL
@@ -74,7 +74,7 @@ struct CADSTAR_PART_ENTRY
      * Pin names can be a maximum of 10 characters
      * (Typically used for naming of BGA pads - equivalent to KiCad Pin Numbers)
      *
-     * E.g: *PNM 1=A1 2=A2 3=A3 4=B1 5=B2 6=B3
+     * E.g: \*PNM 1=A1 2=A2 3=A3 4=B1 5=B2 6=B3
      */
     std::map<long, std::string> m_PinNamesMap;
 
@@ -83,23 +83,23 @@ struct CADSTAR_PART_ENTRY
      *
      * Equivalent to KiCad Pin Names
      *
-     * E.g: *PLB 1=STROBE 2=OFFSET 3=OFFSET 5=+ 6=+v
+     * E.g: \*PLB 1=STROBE 2=OFFSET 3=OFFSET 5=+ 6=+v
      */
     std::map<long, std::string> m_PinLabelsMap;
 
     /**
      * Groups of pins that are interchangeable with each other.
      *
-     * E.g: *EQU 2=1, 6=5, 8=9=10, 12=13
+     * E.g: \*EQU 2=1, 6=5, 8=9=10, 12=13
      */
     std::vector<std::vector<long>> m_PinEquivalences;
 
     /**
      * Groups of INTERNAL gates that are interchangeable with each other.
      *
-     * E.g: *SYM SYM1
-     *      *INT 1 3
-     *      *INT 2 5
+     * E.g: \*SYM SYM1
+     *      \*INT 1 3
+     *      \*INT 2 5
      *
      * The gate described by pins 1 and 3 above, can be swapped internally with the gate described
      * by pins 2 and 5 but they CANNOT be swapped with gates in another part
@@ -109,9 +109,9 @@ struct CADSTAR_PART_ENTRY
     /**
      * Groups of EXTERNAL gates that are interchangeable with each other.
      *
-     * E.g: *SYM SYM2
-     *      *EXT 1 3
-     *      *EXT 2 5
+     * E.g: \*SYM SYM2
+     *      \*EXT 1 3
+     *      \*EXT 2 5
      *
      * The gate described by pins 1 and 3 above, can be swapped internally with the gate described
      * by pins 2 and 5 AND they can be swapped with same gates in another part
@@ -119,8 +119,8 @@ struct CADSTAR_PART_ENTRY
     std::vector<CADSTAR_SWAP_GROUP> m_ExternalSwapGroup;
 
     /**
-     * Star (*) line
-     * *<User-defined name> <Value>
+     * Star (\*) line
+     * \*\<User-defined name\> \<Value\>
      * This line is ignored by CADSTAR. Usually they are used by third party tools.
      * These lines are treated as attributes of the Parts library (i.e. Attribute Type =
      * Parts Library).
@@ -128,32 +128,32 @@ struct CADSTAR_PART_ENTRY
     std::map<std::string, std::string> m_UserAttributes;
 
     /**
-     * Dollar sign ($) line
-     * $[!]<SCM Attribute name>(<Attribute value>)
+     * Dollar sign (\$) line
+     * \$[\!]\<SCM Attribute name\>(\<Attribute value\>)
      * Attributes related to the schematic symbol.
-     * Is set to read-only if exclamation mark (!) is present
+     * Is set to read-only if exclamation mark (\!) is present
      */
     std::map<std::string, CADSTAR_ATTRIBUTE_VALUE> m_SchAttributes;
 
     /**
-     * Percentage sign (%) line
-     * %[!]<PCB Attribute name>(<Attribute value>)
+     * Percentage sign (\%) line
+     * \%[\!]\<PCB Attribute name\>(\<Attribute value\>)
      * Attributes related to the PCB component / footprint.
-     * Is set to read-only if exclamation mark (!) is present
+     * Is set to read-only if exclamation mark (\!) is present
      */
     std::map<std::string, CADSTAR_ATTRIBUTE_VALUE> m_PcbAttributes;
 
     /**
      * At symbol (@) line
-     * [@[!]<SCM/PCB Attribute name>(<Attribute value>)]
+     * [\@[\!]\<SCM/PCB Attribute name\>(\<Attribute value\>)]
      * Attributes related to the PCB component AND the schematic symbol.
-     * Is set to read-only if exclamation mark (!) is present
+     * Is set to read-only if exclamation mark (\!) is present
      */
     std::map<std::string, CADSTAR_ATTRIBUTE_VALUE> m_SchAndPcbAttributes;
 
     /**
      * Tilde (~) line
-     * ~[!]<Parts Library Attribute Name>(<Attribute Value>)
+     * ~[\!]\<Parts Library Attribute Name\>(\<Attribute Value\>)
      * Attributes related to the Part itself. It cannot be displayed
      * on the PCB or schematic but it is used in CADSTAR to search for
      * parts in the library browser
