@@ -63,6 +63,7 @@
 #include <wx/timectrl.h>
 #endif
 #include <wx/variant.h>
+#include <wx/weakref.h>
 
 #include <algorithm>
 #include <functional>
@@ -71,6 +72,7 @@
 
 BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
     EVT_CHAR_HOOK( DIALOG_SHIM::OnCharHook )
+    EVT_ACTIVATE( DIALOG_SHIM::OnActivate )
 END_EVENT_TABLE()
 
 
@@ -1474,15 +1476,52 @@ void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
         SelectAllInTextCtrls( GetChildren() );
         registerUndoRedoHandlers( GetChildren() );
 
-        if( m_initialFocusTarget )
-            KIPLATFORM::UI::ForceFocus( m_initialFocusTarget );
-        else
-            KIPLATFORM::UI::ForceFocus( this );     // Focus the dialog itself
+        forceInitialFocus();
 
         m_firstPaintEvent = false;
     }
 
     event.Skip();
+}
+
+
+void DIALOG_SHIM::forceInitialFocus()
+{
+    // Skip targets that can't take focus (e.g. hidden on a notebook page) so ESC still works
+    if( m_initialFocusTarget && m_initialFocusTarget->IsShownOnScreen()
+            && m_initialFocusTarget->CanAcceptFocus() )
+    {
+        KIPLATFORM::UI::ForceFocus( m_initialFocusTarget );
+    }
+    else
+    {
+        KIPLATFORM::UI::ForceFocus( this );
+    }
+}
+
+
+void DIALOG_SHIM::OnActivate( wxActivateEvent& aEvent )
+{
+    // Null FindFocus() means focus landed on a non-wx element (WM title bar, GTK tab strip)
+    // where ESC never reaches OnCharHook; defer via CallAfter since GTK reports null transiently
+    if( aEvent.GetActive() && !m_firstPaintEvent )
+    {
+        wxWeakRef<DIALOG_SHIM> self( this );
+
+        CallAfter(
+                [self]()
+                {
+                    DIALOG_SHIM* dlg = self;
+
+                    if( dlg && KIPLATFORM::UI::IsWindowActive( dlg )
+                            && wxWindow::FindFocus() == nullptr )
+                    {
+                        dlg->forceInitialFocus();
+                    }
+                } );
+    }
+
+    aEvent.Skip();
 }
 
 

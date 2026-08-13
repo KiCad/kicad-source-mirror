@@ -226,7 +226,12 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 
         DRC_TOOL* drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
         drcTool->DestroyDRCDialog();
+
+        return;
     }
+
+    // Let DIALOG_SHIM re-establish keyboard focus so ESC keeps closing the dialog.
+    aEvent.Skip();
 }
 
 

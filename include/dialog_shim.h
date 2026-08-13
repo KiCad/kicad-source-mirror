@@ -286,6 +286,13 @@ private:
      * EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
      */
     void OnCloseWindow( wxCloseEvent& aEvent );
+    void OnActivate( wxActivateEvent& aEvent );
+
+    /**
+     * Focus the requested initial target if it is visible, otherwise focus the dialog
+     * itself so keyboard events (especially ESC) are always delivered.
+     */
+    void forceInitialFocus();
 
     void OnSize( wxSizeEvent& aEvent );
     void OnMove( wxMoveEvent& aEvent );
