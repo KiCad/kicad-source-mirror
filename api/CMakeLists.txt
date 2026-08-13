@@ -75,10 +75,13 @@ target_compile_definitions( kiapi PRIVATE KIAPI_IMPORTEXPORT=APIEXPORT )
 target_compile_definitions( kiapi INTERFACE KIAPI_IMPORTEXPORT=APIIMPORT )
 
 # https://groups.google.com/g/protobuf/c/PDR1bqRazts
+# Force-define KIAPI_IMPORTEXPORT helpers in every TU that includes generated protobuf
+# headers. Use -imacros (not -include) on Clang/GCC: CMake injects the PCH as -include,
+# and Clang ignores the PCH unless that -include is first on the command line.
 if(MSVC)
     target_compile_options( kiapi PUBLIC /FI${CMAKE_CURRENT_SOURCE_DIR}/../include/import_export.h )
 else()
-    target_compile_options( kiapi PUBLIC -include ${CMAKE_CURRENT_SOURCE_DIR}/../include/import_export.h )
+    target_compile_options( kiapi PUBLIC -imacros ${CMAKE_CURRENT_SOURCE_DIR}/../include/import_export.h )
 endif()
 
 if( APPLE )
