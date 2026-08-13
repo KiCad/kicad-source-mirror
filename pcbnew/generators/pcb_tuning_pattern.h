@@ -234,7 +234,15 @@ public:
 
     const BOX2I GetBoundingBox() const override
     {
-        return getOutline().BBox();
+        BOX2I bbox = getOutline().BBox();
+
+        // The outline is synthesized from the baseline and the meander settings, so it can both be
+        // empty and under-cover the copper.  PCB_GROUP inflates unconditionally, so skip it when
+        // there are no members rather than absorb a half-millimetre box at the origin.
+        if( !m_items.empty() )
+            bbox.Merge( PCB_GROUP::GetBoundingBox() );
+
+        return bbox;
     }
 
     std::vector<int> ViewGetLayers() const override
@@ -244,7 +252,18 @@ public:
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
-        return getOutline().Collide( aPosition, aAccuracy );
+        if( getOutline().Collide( aPosition, aAccuracy ) )
+            return true;
+
+        // Members of a generator are never selectable on their own, so the pattern has to answer
+        // for any copper the outline misses
+        for( BOARD_ITEM* item : GetBoardItems() )
+        {
+            if( item->HitTest( aPosition, aAccuracy ) )
+                return true;
+        }
+
+        return false;
     }
 
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const override
@@ -403,6 +422,19 @@ public:
 
     LENGTH_TUNING_MODE GetTuningMode() const { return m_tuningMode; }
     void               SetTuningMode( LENGTH_TUNING_MODE aMode ) { m_tuningMode = aMode; }
+
+    // The un-meandered route the pattern was placed over; the outline is derived from it.
+    const std::optional<SHAPE_LINE_CHAIN>& GetBaseLine() const { return m_baseLine; }
+    void SetBaseLine( const SHAPE_LINE_CHAIN& aBaseLine ) { m_baseLine = aBaseLine; }
+
+    const std::optional<SHAPE_LINE_CHAIN>& GetBaseLineCoupled() const { return m_baseLineCoupled; }
+    void SetBaseLineCoupled( const SHAPE_LINE_CHAIN& aBaseLine ) { m_baseLineCoupled = aBaseLine; }
+
+    int  GetDiffPairGap() const { return m_diffPairGap; }
+    void SetDiffPairGap( int aValue ) { m_diffPairGap = aValue; }
+
+    const wxString& GetLastNetName() const { return m_lastNetName; }
+    void            SetLastNetName( const wxString& aNetName ) { m_lastNetName = aNetName; }
 
     PNS::ROUTER_MODE GetPNSMode()
     {

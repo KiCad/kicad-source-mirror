@@ -894,6 +894,9 @@ struct ASMARTUNION6
     double   mitterradiusratio = 0.0;
     bool     singleside = false;
 
+    std::vector<VECTOR2I> baseline;
+    std::vector<VECTOR2I> baselinecoupled;
+
     explicit ASMARTUNION6( ALTIUM_BINARY_PARSER& aReader );
 };
 

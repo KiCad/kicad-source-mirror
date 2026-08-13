@@ -936,6 +936,34 @@ ASMARTUNION6::ASMARTUNION6( ALTIUM_BINARY_PARSER& aReader )
     mitterradiusratio = ALTIUM_PROPS_UTILS::ReadDouble( props, wxT( "MITTERRADIUSRATIO" ), 0.0 );
     singleside   = ALTIUM_PROPS_UTILS::ReadBool( props, wxT( "SINGLESIDE" ), false );
 
+    // The un-meandered route the accordion replaced, as consecutive LINE<n> segments.  Nothing
+    // else records it, so it is the only source for KiCad's tuning-pattern baseline
+    auto readBaseline = [&props]( const wxString& aPrefix, std::vector<VECTOR2I>& aOut )
+    {
+        for( int i = 0;; ++i )
+        {
+            wxString prefix = wxString::Format( wxT( "%s%d." ), aPrefix, i );
+            wxString firstX = prefix + wxT( "X1" );
+
+            if( props.find( firstX ) == props.end() )
+                break;
+
+            VECTOR2I a( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, firstX, wxT( "0mil" ) ),
+                        -ALTIUM_PROPS_UTILS::ReadKicadUnit( props, prefix + wxT( "Y1" ), wxT( "0mil" ) ) );
+            VECTOR2I b( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, prefix + wxT( "X2" ), wxT( "0mil" ) ),
+                        -ALTIUM_PROPS_UTILS::ReadKicadUnit( props, prefix + wxT( "Y2" ), wxT( "0mil" ) ) );
+
+            for( const VECTOR2I& pt : { a, b } )
+            {
+                if( aOut.empty() || aOut.back() != pt )
+                    aOut.push_back( pt );
+            }
+        }
+    };
+
+    readBaseline( wxT( "LINE" ), baseline );
+    readBaseline( wxT( "LINEOTHER" ), baselinecoupled );
+
     if( aReader.HasParsingError() )
         THROW_IO_ERROR( wxT( "SmartUnions stream was not parsed correctly" ) );
 }

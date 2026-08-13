@@ -42,6 +42,7 @@
 #include <pcb_shape.h>
 #include <pcb_generator.h>
 #include <generators/pcb_tuning_pattern.h>
+#include <geometry/shape_line_chain.h>
 #include <project.h>
 #include <pcb_text.h>
 #include <project/net_settings.h>
@@ -698,6 +699,80 @@ BOOST_AUTO_TEST_CASE( LengthTuningPatterns )
     BOOST_CHECK_EQUAL( tuningCount, 8 );
     BOOST_CHECK_EQUAL( singleCount, 4 );
     BOOST_CHECK_EQUAL( diffPairCount, 4 );
+}
+
+
+/**
+ * Follow-up to https://gitlab.com/kicad/code/kicad/-/issues/24654
+ *
+ * A generator's members are never selectable in their own right, so the tuning pattern itself has to
+ * be hittable.  Its outline -- and with it the bounding box and the point hit test -- is derived
+ * entirely from the baseline, which the importer left empty: the imported meanders became
+ * unselectable and un-editable.  Altium keeps the un-meandered route in the SmartUnions LINE/
+ * LINEOTHER properties, so verify every imported pattern carries it and can be picked on it.
+ */
+BOOST_AUTO_TEST_CASE( LengthTuningPatternsAreSelectable )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24654/PCB1.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    int checked = 0;
+
+    for( PCB_GENERATOR* generator : board->Generators() )
+    {
+        PCB_TUNING_PATTERN* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( generator );
+
+        if( !pattern )
+            continue;
+
+        checked++;
+
+        BOOST_REQUIRE_MESSAGE( pattern->GetBaseLine().has_value(),
+                               "Imported tuning pattern has no baseline" );
+        BOOST_REQUIRE_GT( pattern->GetBaseLine()->PointCount(), 1 );
+
+        const SHAPE_LINE_CHAIN& baseLine = *pattern->GetBaseLine();
+
+        // Editing snaps the origin onto copper, so the endpoints have to be the baseline's own
+        BOOST_CHECK( pattern->GetPosition() == baseLine.CPoint( 0 ) );
+        BOOST_CHECK( pattern->GetEnd() == baseLine.CLastPoint() );
+
+        if( pattern->GetTuningMode() == DIFF_PAIR )
+        {
+            BOOST_REQUIRE_MESSAGE( pattern->GetBaseLineCoupled().has_value(),
+                                   "Imported diff-pair tuning pattern has no coupled baseline" );
+            BOOST_CHECK_GT( pattern->GetBaseLineCoupled()->PointCount(), 1 );
+            BOOST_CHECK_GT( pattern->GetDiffPairGap(), 0 );
+        }
+
+        BOOST_CHECK_MESSAGE( !pattern->GetLastNetName().IsEmpty(),
+                             "Imported tuning pattern is not attributed to a net" );
+
+        // Clicking anywhere along the meander has to land on the generator
+        for( int i = 0; i < baseLine.PointCount(); ++i )
+        {
+            BOOST_CHECK_MESSAGE( pattern->HitTest( baseLine.CPoint( i ), 0 ),
+                                 "Tuning pattern is not hittable on its own baseline" );
+        }
+
+        BOX2I bbox = pattern->GetBoundingBox();
+
+        BOOST_CHECK_MESSAGE( bbox.Contains( baseLine.BBox() ),
+                             "Tuning pattern bounding box does not cover its baseline" );
+
+        for( BOARD_ITEM* item : pattern->GetBoardItems() )
+        {
+            BOOST_CHECK_MESSAGE( bbox.Contains( item->GetBoundingBox() ),
+                                 "Tuning pattern bounding box does not cover its member copper" );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( checked, 8 );
 }
 
 
