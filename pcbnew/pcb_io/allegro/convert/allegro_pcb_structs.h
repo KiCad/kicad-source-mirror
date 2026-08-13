@@ -1304,6 +1304,7 @@ struct BLK_0x1C_PADSTACK
      *
      * V>=172 (21 fixed):
      *   Slot 14 = ~TSM (top solder mask)
+     *   Slot 15 = ~BSM (bottom solder mask)
      */
     enum SLOTS
     {
@@ -1312,8 +1313,15 @@ struct BLK_0x1C_PADSTACK
         PASTEMASK_TOP_V16X  = 5,
         FILMMASK_TOP_V16X   = 7,
 
+        SOLDERMASK_TOP_V165 = 1,
+        PASTEMASK_TOP_V165  = 6,
+        FILMMASK_TOP_V165   = 8,
+
         // V>=172 verified slots
         SOLDERMASK_TOP_V17X = 14,
+        SOLDERMASK_BOT_V17X = 15,
+        PASTEMASK_TOP_V17X  = 16,
+        PASTEMASK_BOT_V17X  = 17
     };
 
     /**
