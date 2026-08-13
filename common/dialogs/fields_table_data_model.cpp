@@ -29,6 +29,47 @@
 #include <widgets/ui_common.h>
 
 
+GRID_CELL_RESOLVED_TEXT_RENDERER::GRID_CELL_RESOLVED_TEXT_RENDERER() :
+        wxGridCellStringRenderer()
+{
+}
+
+
+void GRID_CELL_RESOLVED_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect,
+                                             int aRow, int aCol, bool isSelected )
+{
+    wxString value = aGrid.GetCellValue( aRow, aCol );
+
+    if( auto* model = dynamic_cast<FIELDS_TABLE_DATA_MODEL_BASE*>( aGrid.GetTable() ) )
+        value = model->GetResolvedValue( aRow, aCol );
+
+    wxRect rect = aRect;
+    rect.Inflate( -1 );
+
+    wxGridCellRenderer::Draw( aGrid, aAttr, aDC, aRect, aRow, aCol, isSelected );
+    SetTextColoursAndFont( aGrid, aAttr, aDC, isSelected );
+    aGrid.DrawTextRectangle( aDC, value, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
+}
+
+
+wxSize GRID_CELL_RESOLVED_TEXT_RENDERER::GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, int aRow,
+                                                      int aCol )
+{
+    wxString value = aGrid.GetCellValue( aRow, aCol );
+
+    if( auto* model = dynamic_cast<FIELDS_TABLE_DATA_MODEL_BASE*>( aGrid.GetTable() ) )
+        value = model->GetResolvedValue( aRow, aCol );
+
+    return wxGridCellStringRenderer::DoGetBestSize( aAttr, aDC, value );
+}
+
+
+wxGridCellRenderer* GRID_CELL_RESOLVED_TEXT_RENDERER::Clone() const
+{
+    return new GRID_CELL_RESOLVED_TEXT_RENDERER();
+}
+
+
 const wxString FIELDS_TABLE_DATA_MODEL_BASE::QUANTITY_VARIABLE = wxS( "${QUANTITY}" );
 const wxString FIELDS_TABLE_DATA_MODEL_BASE::ITEM_NUMBER_VARIABLE = wxS( "${ITEM_NUMBER}" );
 

@@ -40,49 +40,6 @@
 #include <footprint_fields_data_model.h>
 
 
-/**
- * Cell renderer that shows the expanded result of text variables (e.g. "${VALUE}" is
- * displayed as "10K").  The actual cell still stores the raw variable so it can be
- * edited directly.
- */
-class GRID_CELL_RESOLVED_TEXT_RENDERER : public wxGridCellStringRenderer
-{
-public:
-    GRID_CELL_RESOLVED_TEXT_RENDERER() :
-            wxGridCellStringRenderer()
-    {
-    }
-
-    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect, int aRow, int aCol,
-               bool isSelected ) override
-    {
-        wxString value = aGrid.GetCellValue( aRow, aCol );
-
-        if( auto* model = dynamic_cast<FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL*>( aGrid.GetTable() ) )
-            value = model->GetResolvedValue( aRow, aCol );
-
-        wxRect rect = aRect;
-        rect.Inflate( -1 );
-
-        wxGridCellRenderer::Draw( aGrid, aAttr, aDC, aRect, aRow, aCol, isSelected );
-        SetTextColoursAndFont( aGrid, aAttr, aDC, isSelected );
-        aGrid.DrawTextRectangle( aDC, value, rect, wxALIGN_LEFT, wxALIGN_CENTRE );
-    }
-
-    wxSize GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, int aRow, int aCol ) override
-    {
-        wxString value = aGrid.GetCellValue( aRow, aCol );
-
-        if( auto* model = dynamic_cast<FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL*>( aGrid.GetTable() ) )
-            value = model->GetResolvedValue( aRow, aCol );
-
-        return wxGridCellStringRenderer::DoGetBestSize( aAttr, aDC, value );
-    }
-
-    wxGridCellRenderer* Clone() const override { return new GRID_CELL_RESOLVED_TEXT_RENDERER(); }
-};
-
-
 void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
                                                          bool aAddedByUser )
 {

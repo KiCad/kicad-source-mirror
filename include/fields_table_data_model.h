@@ -162,6 +162,7 @@ public:
     BOM_PRESET GetBomSettings();
     wxString   Export( const BOM_FMT_PRESET& aSettings );
 
+    virtual wxString GetResolvedValue( int aRow, int aCol ) = 0;
     virtual wxString GetExportValue( int aRow, int aCol, const wxString& aRefDelimiter,
                                      const wxString& aRefRangeDelimiter ) = 0;
 
@@ -221,6 +222,25 @@ protected:
     // m_rows and m_cols are just a generated view based on the data store,
     // and are rebuilt as the user changes grouping, sorting, filtering, etc.
     std::map<KIID_PATH, std::map<wxString, wxString>> m_dataStore;
+};
+
+
+/**
+ * Cell renderer that shows the expanded result of text variables (e.g. "${VALUE}" is
+ * displayed as "10K").  The actual cell still stores the raw variable so it can be
+ * edited directly.
+ */
+class GRID_CELL_RESOLVED_TEXT_RENDERER : public wxGridCellStringRenderer
+{
+public:
+    GRID_CELL_RESOLVED_TEXT_RENDERER();
+
+    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect, int aRow, int aCol,
+               bool isSelected ) override;
+
+    wxSize GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, int aRow, int aCol ) override;
+
+    wxGridCellRenderer* Clone() const override;
 };
 
 
@@ -448,7 +468,7 @@ public:
         return GetGroupedValue( m_rows[aRow], aCol );
     }
 
-    wxString GetResolvedValue( int aRow, int aCol )
+    wxString GetResolvedValue( int aRow, int aCol ) override
     {
         return GetGroupedValue( m_rows[aRow], aCol, wxT( ", " ), wxT( "-" ), true, false );
     }
