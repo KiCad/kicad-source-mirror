@@ -30,13 +30,15 @@ struct FIELDS_TABLE_SETTINGS;
 enum class FIELD_T : int;
 
 class FIELDS_TABLE_DATA_MODEL_BASE;
+class JOB_EXPORT_BOM;
 class VIEW_CONTROLS_GRID_DATA_MODEL;
 class wxGridCellEditor;
 
 class DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
 {
 public:
-    DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings );
+    DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings,
+                         FIELDS_TABLE_BOM_SETTINGS& aBomSettings );
     ~DIALOG_FIELDS_TABLE() override;
 
     void ShowEditTab();
@@ -65,11 +67,16 @@ public:
 
 
 protected:
-    FIELDS_TABLE_SETTINGS& GetPanelSettings() { return m_panelSettings; }
-    wxSize                 GetDefaultDialogSize() const;
+    wxSize GetDefaultDialogSize() const;
 
     void AddField( const wxString& aFieldName, const wxString& aLabelValue, bool aShow, bool aGroupBy,
                    bool aAddedByUser = false );
+
+    static void loadJobBomPreset( const JOB_EXPORT_BOM& aJob, BOM_PRESET& aPreset );
+    static void loadJobBomFmtPreset( const JOB_EXPORT_BOM& aJob, BOM_FMT_PRESET& aPreset );
+    void        saveJobSettings( JOB_EXPORT_BOM& aJob );
+
+    bool savePresets( bool aSaveCurrentSettings );
 
 
     void RestorePanelLayout();
@@ -128,7 +135,8 @@ protected:
     virtual wxString                      resolveVariant() const = 0;
 
 protected:
-    FIELDS_TABLE_SETTINGS& m_panelSettings;
+    FIELDS_TABLE_SETTINGS&     m_cfgDialogSettings;
+    FIELDS_TABLE_BOM_SETTINGS& m_cfgBomSettings;
 
     VIEW_CONTROLS_GRID_DATA_MODEL* m_viewControlsDataModel = nullptr;
 

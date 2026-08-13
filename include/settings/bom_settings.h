@@ -97,6 +97,21 @@ struct KICOMMON_API BOM_FMT_PRESET
     static std::vector<BOM_FMT_PRESET> BuiltInPresets();
 };
 
+
+struct KICOMMON_API FIELDS_TABLE_BOM_SETTINGS
+{
+    wxString m_BomExportFileName;
+
+    /// List of stored BOM presets
+    BOM_PRESET              m_BomSettings;
+    std::vector<BOM_PRESET> m_BomPresets;
+
+    /// List of stored BOM format presets
+    BOM_FMT_PRESET              m_BomFmtSettings;
+    std::vector<BOM_FMT_PRESET> m_BomFmtPresets;
+};
+
+
 KICOMMON_API bool operator!=( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
 KICOMMON_API bool operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
 

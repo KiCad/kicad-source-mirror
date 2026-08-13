@@ -26,9 +26,11 @@
 #include <bitmaps.h>
 #include <common.h>
 #include <confirm.h>
+#include <core/kicad_algo.h>
 #include <eda_list_dialog.h>
 #include <fields_table_data_model.h>
 #include <grid_tricks.h>
+#include <jobs/job_export_bom.h>
 #include <settings/app_settings.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
@@ -71,9 +73,11 @@ protected:
 } // namespace
 
 
-DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings ) :
+DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings,
+                                          FIELDS_TABLE_BOM_SETTINGS& aBomSettings ) :
         DIALOG_FIELDS_TABLE_BASE( aParent ),
-        m_panelSettings( aPanelSettings )
+        m_cfgDialogSettings( aPanelSettings ),
+        m_cfgBomSettings( aBomSettings )
 {
     m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
     m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
@@ -207,6 +211,143 @@ wxString DIALOG_FIELDS_TABLE::GetDefaultBomFileName( const wxString& aInputFileN
 }
 
 
+void DIALOG_FIELDS_TABLE::loadJobBomPreset( const JOB_EXPORT_BOM& aJob, BOM_PRESET& aPreset )
+{
+    aPreset.name = aJob.m_bomPresetName;
+    aPreset.excludeDNP = aJob.m_excludeDNP;
+    aPreset.filterString = aJob.m_filterString;
+    aPreset.sortAsc = aJob.m_sortAsc;
+    aPreset.sortField = aJob.m_sortField;
+    aPreset.groupSymbols = aJob.m_groupSymbols;
+
+    aPreset.fieldsOrdered.clear();
+
+    size_t i = 0;
+
+    for( const wxString& fieldName : aJob.m_fieldsOrdered )
+    {
+        BOM_FIELD field;
+        field.name = fieldName;
+        field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
+        field.groupBy = alg::contains( aJob.m_fieldsGroupBy, field.name );
+
+        if( ( aJob.m_fieldsLabels.size() > i ) && !aJob.m_fieldsLabels[i].IsEmpty() )
+            field.label = aJob.m_fieldsLabels[i];
+        else if( IsGeneratedField( field.name ) )
+            field.label = GetGeneratedFieldDisplayName( field.name );
+        else
+            field.label = field.name;
+
+        aPreset.fieldsOrdered.emplace_back( field );
+        i++;
+    }
+}
+
+
+void DIALOG_FIELDS_TABLE::loadJobBomFmtPreset( const JOB_EXPORT_BOM& aJob, BOM_FMT_PRESET& aPreset )
+{
+    aPreset.name = aJob.m_bomFmtPresetName;
+    aPreset.fieldDelimiter = aJob.m_fieldDelimiter;
+    aPreset.keepLineBreaks = aJob.m_keepLineBreaks;
+    aPreset.keepTabs = aJob.m_keepTabs;
+    aPreset.includeByteOrderMark = aJob.m_includeByteOrderMark;
+    aPreset.refDelimiter = aJob.m_refDelimiter;
+    aPreset.refRangeDelimiter = aJob.m_refRangeDelimiter;
+    aPreset.stringDelimiter = aJob.m_stringDelimiter;
+}
+
+
+void DIALOG_FIELDS_TABLE::saveJobSettings( JOB_EXPORT_BOM& aJob )
+{
+    aJob.SetConfiguredOutputPath( m_outputFileName->GetValue() );
+
+    if( m_currentBomFmtPreset )
+        aJob.m_bomFmtPresetName = m_currentBomFmtPreset->name;
+    else
+        aJob.m_bomFmtPresetName = wxEmptyString;
+
+    if( m_currentBomPreset )
+        aJob.m_bomPresetName = m_currentBomPreset->name;
+    else
+        aJob.m_bomPresetName = wxEmptyString;
+
+    BOM_FMT_PRESET fmtSettings = GetCurrentBomFmtSettings();
+    aJob.m_fieldDelimiter = fmtSettings.fieldDelimiter;
+    aJob.m_stringDelimiter = fmtSettings.stringDelimiter;
+    aJob.m_refDelimiter = fmtSettings.refDelimiter;
+    aJob.m_refRangeDelimiter = fmtSettings.refRangeDelimiter;
+    aJob.m_keepTabs = fmtSettings.keepTabs;
+    aJob.m_keepLineBreaks = fmtSettings.keepLineBreaks;
+    aJob.m_includeByteOrderMark = fmtSettings.includeByteOrderMark;
+
+    BOM_PRESET presetFields = getDataModel()->GetBomSettings();
+    aJob.m_sortAsc = presetFields.sortAsc;
+    aJob.m_excludeDNP = presetFields.excludeDNP;
+    aJob.m_filterString = presetFields.filterString;
+    aJob.m_sortField = presetFields.sortField;
+    aJob.m_groupSymbols = presetFields.groupSymbols;
+
+    aJob.m_fieldsOrdered.clear();
+    aJob.m_fieldsLabels.clear();
+    aJob.m_fieldsGroupBy.clear();
+
+    for( const BOM_FIELD& modelField : getDataModel()->GetFieldsOrdered() )
+    {
+        if( modelField.show )
+            aJob.m_fieldsOrdered.emplace_back( modelField.name );
+        else
+            aJob.m_fieldsOrdered.emplace_back( wxT( "__" ) + modelField.name );
+
+        aJob.m_fieldsLabels.emplace_back( modelField.label );
+
+        if( modelField.groupBy )
+            aJob.m_fieldsGroupBy.emplace_back( modelField.name );
+    }
+
+    aJob.SetSelectedVariant( getSelectedVariant() );
+}
+
+
+bool DIALOG_FIELDS_TABLE::savePresets( bool aSaveCurrentSettings )
+{
+    bool modified = false;
+
+    std::vector<BOM_PRESET> presets = GetUserBomPresets();
+
+    if( m_cfgBomSettings.m_BomPresets != presets )
+    {
+        modified = true;
+        m_cfgBomSettings.m_BomPresets = presets;
+    }
+
+    BOM_PRESET bomSettings = getDataModel()->GetBomSettings();
+
+    if( aSaveCurrentSettings && m_cfgBomSettings.m_BomSettings != bomSettings )
+    {
+        modified = true;
+        m_cfgBomSettings.m_BomSettings = bomSettings;
+    }
+
+    std::vector<BOM_FMT_PRESET> fmts = GetUserBomFmtPresets();
+
+    if( m_cfgBomSettings.m_BomFmtPresets != fmts )
+    {
+        modified = true;
+        m_cfgBomSettings.m_BomFmtPresets = fmts;
+    }
+
+    BOM_FMT_PRESET fmtSettings = GetCurrentBomFmtSettings();
+
+    if( aSaveCurrentSettings && m_cfgBomSettings.m_BomFmtSettings != fmtSettings )
+    {
+        modified = true;
+        m_cfgBomSettings.m_BomFmtSettings = fmtSettings;
+    }
+
+    return modified;
+}
+
+
 wxSize DIALOG_FIELDS_TABLE::GetDefaultDialogSize() const
 {
     return ConvertDialogToPixels( wxSize( 600, 300 ) );
@@ -215,9 +356,9 @@ wxSize DIALOG_FIELDS_TABLE::GetDefaultDialogSize() const
 
 void DIALOG_FIELDS_TABLE::RestorePanelLayout()
 {
-    bool sidebarCollapsed = m_panelSettings.sidebar_collapsed;
-    int  sashPosition = m_panelSettings.sash_pos;
-    int  variantSashPosition = m_panelSettings.variant_sash_pos;
+    bool sidebarCollapsed = m_cfgDialogSettings.sidebar_collapsed;
+    int  sashPosition = m_cfgDialogSettings.sash_pos;
+    int  variantSashPosition = m_cfgDialogSettings.variant_sash_pos;
 
     m_viewControlsGrid->ShowHideColumns( "0 1 2 3" );
 
@@ -238,10 +379,10 @@ void DIALOG_FIELDS_TABLE::RestorePanelLayout()
 
 void DIALOG_FIELDS_TABLE::SavePanelLayout()
 {
-    if( !m_panelSettings.sidebar_collapsed )
-        m_panelSettings.sash_pos = m_splitterMainWindow->GetSashPosition();
+    if( !m_cfgDialogSettings.sidebar_collapsed )
+        m_cfgDialogSettings.sash_pos = m_splitterMainWindow->GetSashPosition();
 
-    m_panelSettings.variant_sash_pos = m_splitter_left->GetSashPosition();
+    m_cfgDialogSettings.variant_sash_pos = m_splitter_left->GetSashPosition();
 }
 
 
@@ -252,7 +393,7 @@ void DIALOG_FIELDS_TABLE::SaveColumnWidths()
         if( m_grid->IsColShown( i ) )
         {
             std::string fieldName( getDataModel()->GetColFieldName( i ).ToUTF8() );
-            m_panelSettings.field_widths[fieldName] = m_grid->GetColSize( i );
+            m_cfgDialogSettings.field_widths[fieldName] = m_grid->GetColSize( i );
         }
     }
 }
@@ -346,9 +487,9 @@ void DIALOG_FIELDS_TABLE::SetupAllColumnProperties()
 
             std::string key( getDataModel()->GetColFieldName( col ).ToUTF8() );
 
-            if( m_panelSettings.field_widths.count( key ) && ( m_panelSettings.field_widths.at( key ) > 0 ) )
+            if( m_cfgDialogSettings.field_widths.count( key ) && ( m_cfgDialogSettings.field_widths.at( key ) > 0 ) )
             {
-                m_grid->SetColSize( col, m_panelSettings.field_widths.at( key ) );
+                m_grid->SetColSize( col, m_cfgDialogSettings.field_widths.at( key ) );
             }
             else
             {
@@ -388,20 +529,20 @@ void DIALOG_FIELDS_TABLE::setSideBarButtonLook( bool aIsLeftPanelCollapsed )
 
 void DIALOG_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
 {
-    if( m_panelSettings.sidebar_collapsed )
+    if( m_cfgDialogSettings.sidebar_collapsed )
     {
-        m_panelSettings.sidebar_collapsed = false;
-        m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, m_panelSettings.sash_pos );
+        m_cfgDialogSettings.sidebar_collapsed = false;
+        m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, m_cfgDialogSettings.sash_pos );
     }
     else
     {
-        m_panelSettings.sash_pos = m_splitterMainWindow->GetSashPosition();
+        m_cfgDialogSettings.sash_pos = m_splitterMainWindow->GetSashPosition();
 
-        m_panelSettings.sidebar_collapsed = true;
+        m_cfgDialogSettings.sidebar_collapsed = true;
         m_splitterMainWindow->Unsplit( m_leftPanel );
     }
 
-    setSideBarButtonLook( m_panelSettings.sidebar_collapsed );
+    setSideBarButtonLook( m_cfgDialogSettings.sidebar_collapsed );
 }
 
 
@@ -953,8 +1094,8 @@ void DIALOG_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         m_viewControlsDataModel->SetValue( i, LABEL_COLUMN, label );
         m_grid->SetColLabelValue( col, label );
 
-        if( m_panelSettings.field_widths.count( fieldNameStr ) )
-            m_grid->SetColSize( col, m_panelSettings.field_widths.at( fieldNameStr ) );
+        if( m_cfgDialogSettings.field_widths.count( fieldNameStr ) )
+            m_grid->SetColSize( col, m_cfgDialogSettings.field_widths.at( fieldNameStr ) );
 
         // Set shown columns
         bool show = getDataModel()->GetShowColumn( col );

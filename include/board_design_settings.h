@@ -246,7 +246,7 @@ class PAD;
 /**
  * Container for design settings for a #BOARD object.
  */
-class BOARD_DESIGN_SETTINGS : public NESTED_SETTINGS
+class BOARD_DESIGN_SETTINGS : public NESTED_SETTINGS, public FIELDS_TABLE_BOM_SETTINGS
 {
 public:
     BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
@@ -778,16 +778,6 @@ public:
 
     /// Enable inclusion of stackup height in track length measurements and length tuning
     bool       m_UseHeightForLengthCalcs;
-
-    wxString  m_BomExportFileName;
-
-    /// List of stored BOM presets
-    BOM_PRESET                  m_BomSettings;
-    std::vector<BOM_PRESET>     m_BomPresets;
-
-    /// List of stored BOM format presets
-    BOM_FMT_PRESET              m_BomFmtSettings;
-    std::vector<BOM_FMT_PRESET> m_BomFmtPresets;
 
 private:
     VECTOR2I   m_auxOrigin;  ///< origin for plot exports

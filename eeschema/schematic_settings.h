@@ -62,7 +62,7 @@ public:
  * These are loaded from Eeschema settings but then overwritten by the project settings.
  * All of the values are stored in IU, but the backing file stores in mils.
  */
-class SCHEMATIC_SETTINGS : public NESTED_SETTINGS
+class SCHEMATIC_SETTINGS : public NESTED_SETTINGS, public FIELDS_TABLE_BOM_SETTINGS
 {
 public:
     SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
@@ -128,16 +128,6 @@ public:
     wxString  m_PlotDirectoryName;
 
     TEMPLATES m_TemplateFieldNames;
-
-    wxString  m_BomExportFileName;
-
-    /// List of stored BOM presets
-    BOM_PRESET                  m_BomSettings;
-    std::vector<BOM_PRESET>     m_BomPresets;
-
-    /// List of stored BOM format presets
-    BOM_FMT_PRESET              m_BomFmtSettings;
-    std::vector<BOM_FMT_PRESET> m_BomFmtPresets;
 
     KIFONT::METRICS             m_FontMetrics;
 

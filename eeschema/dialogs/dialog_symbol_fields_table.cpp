@@ -205,7 +205,7 @@ private:
 
 
 DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob ) :
-        DIALOG_FIELDS_TABLE( parent, parent->eeconfig()->m_FieldEditorPanel ),
+        DIALOG_FIELDS_TABLE( parent, parent->eeconfig()->m_FieldEditorPanel, parent->Schematic().Settings() ),
         m_parent( parent ),
         m_schSettings( parent->Schematic().Settings() ),
         m_job( aJob )
@@ -299,7 +299,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     if( m_job )
         m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
     else
-        m_outputFileName->SetValue( m_schSettings.m_BomExportFileName );
+        m_outputFileName->SetValue( m_cfgBomSettings.m_BomExportFileName );
 
     Center();
 
@@ -327,7 +327,10 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
 DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
-    savePresetsToSchematic();
+    if( savePresets( !m_job ) )
+    {
+        m_parent->OnModify();
+    }
 
     SavePanelLayout();
     SaveColumnWidths();
@@ -360,66 +363,28 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     LoadFieldNames();   // loads rows into m_viewControlsDataModel and columns into m_dataModel
 
     // Load our BOM view presets
-    SetUserBomPresets( m_schSettings.m_BomPresets );
+    SetUserBomPresets( m_cfgBomSettings.m_BomPresets );
 
-    BOM_PRESET preset = m_schSettings.m_BomSettings;
+    BOM_PRESET preset = m_cfgBomSettings.m_BomSettings;
 
     if( m_job )
-    {
-        preset.name = m_job->m_bomPresetName;
-        preset.excludeDNP = m_job->m_excludeDNP;
-        preset.filterString = m_job->m_filterString;
-        preset.sortAsc = m_job->m_sortAsc;
-        preset.sortField = m_job->m_sortField;
-        preset.groupSymbols = m_job->m_groupSymbols;
-
-        preset.fieldsOrdered.clear();
-
-        size_t i = 0;
-
-        for( const wxString& fieldName : m_job->m_fieldsOrdered )
-        {
-            BOM_FIELD field;
-            field.name = fieldName;
-            field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
-            field.groupBy = alg::contains( m_job->m_fieldsGroupBy, field.name );
-
-            if( ( m_job->m_fieldsLabels.size() > i ) && !m_job->m_fieldsLabels[i].IsEmpty() )
-                field.label = m_job->m_fieldsLabels[i];
-            else if( IsGeneratedField( field.name ) )
-                field.label = GetGeneratedFieldDisplayName( field.name );
-            else
-                field.label = field.name;
-
-            preset.fieldsOrdered.emplace_back( field );
-            i++;
-        }
-    }
+        loadJobBomPreset( *m_job, preset );
 
     ApplyBomPreset( preset );
     syncBomPresetSelection();
 
     // Load BOM export format presets
-    SetUserBomFmtPresets( m_schSettings.m_BomFmtPresets );
-    BOM_FMT_PRESET fmtPreset = m_schSettings.m_BomFmtSettings;
+    SetUserBomFmtPresets( m_cfgBomSettings.m_BomFmtPresets );
+    BOM_FMT_PRESET fmtPreset = m_cfgBomSettings.m_BomFmtSettings;
 
     if( m_job )
-    {
-        fmtPreset.name = m_job->m_bomFmtPresetName;
-        fmtPreset.fieldDelimiter = m_job->m_fieldDelimiter;
-        fmtPreset.keepLineBreaks = m_job->m_keepLineBreaks;
-        fmtPreset.keepTabs = m_job->m_keepTabs;
-        fmtPreset.includeByteOrderMark = m_job->m_includeByteOrderMark;
-        fmtPreset.refDelimiter = m_job->m_refDelimiter;
-        fmtPreset.refRangeDelimiter = m_job->m_refRangeDelimiter;
-        fmtPreset.stringDelimiter = m_job->m_stringDelimiter;
-    }
+        loadJobBomFmtPreset( *m_job, fmtPreset );
 
     ApplyBomFmtPreset( fmtPreset );
     syncBomFmtPresetSelection();
 
     if( !m_job )
-        m_outputFileName->SetValue( m_parent->Schematic().Settings().m_BomExportFileName );
+        m_outputFileName->SetValue( m_cfgBomSettings.m_BomExportFileName );
 
     TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
     SCH_SELECTION_TOOL* selectionTool = toolMgr->GetTool<SCH_SELECTION_TOOL>();
@@ -599,8 +564,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 {
-    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
-
     // Build a pop menu:
     wxMenu menu;
 
@@ -621,12 +584,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
     menu.Append( 4206, _( "Highlight on Cross-probe" ),
                  _( "Highlight corresponding item on canvas when it is selected in the table" ),
                  wxITEM_CHECK );
-    menu.Check( 4206, cfg.selection_mode == 0 );
+    menu.Check( 4206, m_cfgDialogSettings.selection_mode == 0 );
 
     menu.Append( 4207, _( "Select on Cross-probe" ),
                  _( "Select corresponding item on canvas when it is selected in the table" ),
                  wxITEM_CHECK );
-    menu.Check( 4207, cfg.selection_mode == 1 );
+    menu.Check( 4207, m_cfgDialogSettings.selection_mode == 1 );
 
     // menu_id is the selected submenu id from the popup menu or wxID_NONE
     int menu_id = m_bMenu->GetPopupMenuSelectionFromUser( menu );
@@ -649,17 +612,17 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
     }
     else if( menu_id == 3 || menu_id == 4206 )
     {
-        if( cfg.selection_mode != 0 )
-            cfg.selection_mode = 0;
+        if( m_cfgDialogSettings.selection_mode != 0 )
+            m_cfgDialogSettings.selection_mode = 0;
         else
-            cfg.selection_mode = 2;
+            m_cfgDialogSettings.selection_mode = 2;
     }
     else if( menu_id == 4 || menu_id == 4207 )
     {
-        if( cfg.selection_mode != 1 )
-            cfg.selection_mode = 1;
+        if( m_cfgDialogSettings.selection_mode != 1 )
+            m_cfgDialogSettings.selection_mode = 1;
         else
-            cfg.selection_mode = 2;
+            m_cfgDialogSettings.selection_mode = 2;
     }
 }
 
@@ -682,8 +645,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
 {
-    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
-
     // Cross-probing should only work in Edit page
     if( m_nbPages->GetSelection() != 0 )
         return;
@@ -706,7 +667,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
             symbols.insert( ref.GetSymbol() );
     }
 
-    if( cfg.selection_mode == 0 )
+    if( m_cfgDialogSettings.selection_mode == 0 )
     {
         SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
@@ -724,7 +685,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
             m_parent->ClearFocus();
         }
     }
-    else if( cfg.selection_mode == 1 )
+    else if( m_cfgDialogSettings.selection_mode == 1 )
     {
         SCH_SELECTION_TOOL*    selTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
         std::vector<SCH_ITEM*> items( symbols.begin(), symbols.end() );
@@ -741,7 +702,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 {
     if( TransferDataFromWindow() )
     {
-        m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
+        m_cfgBomSettings.m_BomExportFileName = m_outputFileName->GetValue();
         m_parent->SaveProject();
         ClearModify();
     }
@@ -861,9 +822,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     // close the file before we tell the user it's done with the info modal :workflow meme:
     out.Close();
 
-    if( m_schSettings.m_BomExportFileName != m_outputFileName->GetValue() )
+    if( m_cfgBomSettings.m_BomExportFileName != m_outputFileName->GetValue() )
     {
-        m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
+        m_cfgBomSettings.m_BomExportFileName = m_outputFileName->GetValue();
         m_parent->OnModify();
     }
 
@@ -881,7 +842,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnCancel( wxCommandEvent& aEvent )
     else
     {
         // Discard any unsaved edit in the output filename field
-        m_outputFileName->SetValue( m_schSettings.m_BomExportFileName );
+        m_outputFileName->SetValue( m_cfgBomSettings.m_BomExportFileName );
         Close();
     }
 }
@@ -893,60 +854,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
 
     if( m_job )
     {
-        m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
-
-        if( m_currentBomFmtPreset )
-            m_job->m_bomFmtPresetName = m_currentBomFmtPreset->name;
-        else
-            m_job->m_bomFmtPresetName = wxEmptyString;
-
-        if( m_currentBomPreset )
-            m_job->m_bomPresetName = m_currentBomPreset->name;
-        else
-            m_job->m_bomPresetName = wxEmptyString;
-
-        BOM_FMT_PRESET fmtSettings = GetCurrentBomFmtSettings();
-        m_job->m_fieldDelimiter = fmtSettings.fieldDelimiter;
-        m_job->m_stringDelimiter = fmtSettings.stringDelimiter;
-        m_job->m_refDelimiter = fmtSettings.refDelimiter;
-        m_job->m_refRangeDelimiter = fmtSettings.refRangeDelimiter;
-        m_job->m_keepTabs = fmtSettings.keepTabs;
-        m_job->m_keepLineBreaks = fmtSettings.keepLineBreaks;
-        m_job->m_includeByteOrderMark = fmtSettings.includeByteOrderMark;
-
-        BOM_PRESET presetFields = m_dataModel->GetBomSettings();
-        m_job->m_sortAsc = presetFields.sortAsc;
-        m_job->m_excludeDNP = presetFields.excludeDNP;
-        m_job->m_filterString = presetFields.filterString;
-        m_job->m_sortField = presetFields.sortField;
-        m_job->m_groupSymbols = presetFields.groupSymbols;
-
-        m_job->m_fieldsOrdered.clear();
-        m_job->m_fieldsLabels.clear();
-        m_job->m_fieldsGroupBy.clear();
-
-        for( const BOM_FIELD& modelField : m_dataModel->GetFieldsOrdered() )
-        {
-            if( modelField.show )
-                m_job->m_fieldsOrdered.emplace_back( modelField.name );
-            else
-                m_job->m_fieldsOrdered.emplace_back( wxT( "__" ) + modelField.name );
-
-            m_job->m_fieldsLabels.emplace_back( modelField.label );
-
-            if( modelField.groupBy )
-                m_job->m_fieldsGroupBy.emplace_back( modelField.name );
-        }
-
-        m_job->SetSelectedVariant( getSelectedVariant() );
-
+        saveJobSettings( *m_job );
         EndModal( wxID_OK );
     }
     else
     {
-        if( m_schSettings.m_BomExportFileName != m_outputFileName->GetValue() )
+        if( m_cfgBomSettings.m_BomExportFileName != m_outputFileName->GetValue() )
         {
-            m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
+            m_cfgBomSettings.m_BomExportFileName = m_outputFileName->GetValue();
             m_parent->OnModify();
         }
 
@@ -986,57 +901,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 
     if( wxWindow* parent = GetParent() )
         wxQueueEvent( parent, evt );
-}
-
-
-void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
-{
-    bool modified = false;
-
-    // Save our BOM presets
-    std::vector<BOM_PRESET> presets;
-
-    for( const auto& [name, preset] : m_bomPresets )
-    {
-        if( !preset.readOnly )
-            presets.emplace_back( preset );
-    }
-
-    if( m_schSettings.m_BomPresets != presets )
-    {
-        modified = true;
-        m_schSettings.m_BomPresets = presets;
-    }
-
-    if( m_schSettings.m_BomSettings != m_dataModel->GetBomSettings() && !m_job )
-    {
-        modified = true;
-        m_schSettings.m_BomSettings = m_dataModel->GetBomSettings();
-    }
-
-    // Save our BOM Format presets
-    std::vector<BOM_FMT_PRESET> fmts;
-
-    for( const auto& [name, preset] : m_bomFmtPresets )
-    {
-        if( !preset.readOnly )
-            fmts.emplace_back( preset );
-    }
-
-    if( m_schSettings.m_BomFmtPresets != fmts )
-    {
-        modified = true;
-        m_schSettings.m_BomFmtPresets = fmts;
-    }
-
-    if( m_schSettings.m_BomFmtSettings != GetCurrentBomFmtSettings() && !m_job )
-    {
-        modified = true;
-        m_schSettings.m_BomFmtSettings = GetCurrentBomFmtSettings();
-    }
-
-    if( modified )
-        m_parent->OnModify();
 }
 
 

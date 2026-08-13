@@ -125,8 +125,6 @@ private:
 private:
     FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
 
-    void savePresetsToBoard();
-
     void onAddVariant( wxCommandEvent& aEvent ) override;
     void onDeleteVariant( wxCommandEvent& aEvent ) override;
     void onRenameVariant( wxCommandEvent& aEvent ) override;
@@ -143,8 +141,6 @@ private:
 
     FOOTPRINT_REFERENCE_LIST                 m_footprintsList;
     FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
-
-    BOARD_DESIGN_SETTINGS& m_boardSettings;
 
     JOB_EXPORT_BOM* m_job;
 
