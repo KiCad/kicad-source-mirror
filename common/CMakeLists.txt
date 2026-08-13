@@ -240,7 +240,6 @@ set( KICOMMON_SRCS
     dialogs/eda_list_dialog.cpp
     dialogs/eda_list_dialog_base.cpp
     dialogs/dialog_fields_table_base.cpp
-    dialogs/dialog_fields_table.cpp
     dialogs/dialog_rc_job.cpp
     dialogs/dialog_rc_job_base.cpp
     dialogs/dialog_restore_local_history.cpp
@@ -548,6 +547,7 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_design_block_properties_base.cpp
     dialogs/dialog_display_html_text_base.cpp
     dialogs/dialog_edit_library_tables.cpp
+    dialogs/dialog_fields_table.cpp
     dialogs/fields_table_data_model.cpp
     dialogs/dialog_grid_settings.cpp
     dialogs/dialog_grid_settings_base.cpp

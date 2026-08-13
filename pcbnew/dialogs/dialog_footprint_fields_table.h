@@ -44,13 +44,10 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void ShowHideColumn( int aCol, bool aShow );
-
 private:
-    void SetupColumnProperties( int aCol );
+    void SetupColumnProperties( int aCol ) override;
     void SetupAllColumnProperties();
-    void AddField( const wxString& displayName, const wxString& aCanonicalName, bool show,
-                   bool groupBy, bool addedByUser = false );
+
     void setScope( FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
 
     /**
@@ -59,23 +56,13 @@ private:
      */
     void LoadFieldNames();
 
-    void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
-    void OnAddField( wxCommandEvent& event ) override;
-    void OnRemoveField( wxCommandEvent& event ) override;
-    void OnRenameField( wxCommandEvent& event ) override;
-
-    void OnColSort( wxGridEvent& aEvent );
     void OnColMove( wxGridEvent& aEvent );
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
 
-    void OnFilterText( wxCommandEvent& aEvent ) override;
     void OnScope( wxCommandEvent& event ) override;
-    void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
-    void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnMenu( wxCommandEvent& event ) override;
 
     void OnTableCellClick( wxGridEvent& event ) override;
-    void OnGridMouseMove( wxMouseEvent& aEvent );
 
     void OnExport( wxCommandEvent& aEvent ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
@@ -84,9 +71,6 @@ private:
     void OnClose( wxCloseEvent& aEvent ) override;
 
     void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
-    void OnPageChanged( wxNotebookEvent& event ) override;
-    void OnPreviewRefresh( wxCommandEvent& event ) override;
-    void PreviewRefresh();
 
 
     // BOARD listener event handlers
@@ -141,10 +125,10 @@ private:
     void RestoreGridSelection( const std::set<KIID>& aKIIDs );
 
 private:
-    void       doApplyBomPreset( const BOM_PRESET& aPreset ) override;
-    void       doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset ) override;
-    BOM_PRESET getDataModelBomPreset() override;
-    void       savePresetsToBoard();
+    FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
+
+    void doApplyBomPreset( const BOM_PRESET& aPreset ) override;
+    void savePresetsToBoard();
 
     void onAddVariant( wxCommandEvent& aEvent ) override;
     void onDeleteVariant( wxCommandEvent& aEvent ) override;
@@ -155,17 +139,10 @@ private:
 
     void updateVariantButtonStates();
 
-    wxString getSelectedVariant() const;
-
     wxString resolveVariant() const;
 
 private:
     PCB_EDIT_FRAME* m_parent;
-
-    // Index in the fields list control for each MANDATORY_FIELD type
-    std::map<FIELD_T, int> m_mandatoryFieldListIndexes;
-
-    VIEW_CONTROLS_GRID_DATA_MODEL* m_viewControlsDataModel = nullptr;
 
     FOOTPRINT_REFERENCE_LIST                 m_footprintsList;
     FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;

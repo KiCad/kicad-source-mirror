@@ -331,7 +331,6 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
     m_grid->GetGridWindow()->Bind( wxEVT_MOTION, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnGridMouseMove, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_FOOTPRINT_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_FOOTPRINT_FIELDS_TABLE::onBomFmtPresetChanged, this );
-    m_viewControlsGrid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnViewControlsCellChanged, this );
 
     if( !m_job )
     {
@@ -379,7 +378,6 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::~DIALOG_FOOTPRINT_FIELDS_TABLE()
     m_grid->Unbind( wxEVT_GRID_COL_MOVE, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnColMove, this );
     m_cbBomPresets->Unbind( wxEVT_CHOICE, &DIALOG_FOOTPRINT_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Unbind( wxEVT_CHOICE, &DIALOG_FOOTPRINT_FIELDS_TABLE::onBomFmtPresetChanged, this );
-    m_viewControlsGrid->Unbind( wxEVT_GRID_CELL_CHANGED, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnViewControlsCellChanged, this );
 
     // Delete the GRID_TRICKS.
     m_viewControlsGrid->PopEventHandler( true );
@@ -678,34 +676,6 @@ bool DIALOG_FOOTPRINT_FIELDS_TABLE::TransferDataFromWindow()
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxString& aLabelValue, bool show,
-                                              bool groupBy, bool addedByUser )
-{
-    // Users can add fields with variable names that match the special names in the grid,
-    // e.g. ${QUANTITY} so make sure we don't add them twice
-    for( int row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
-    {
-        if( FieldNamesAreDuplicates( m_viewControlsDataModel->GetCanonicalFieldName( row ), aFieldName ) )
-        {
-            return;
-        }
-    }
-
-    m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser );
-
-    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
-    m_grid->ProcessTableMessage( msg );
-
-    m_viewControlsGrid->OnAddRow(
-            [&]() -> std::pair<int, int>
-            {
-                m_viewControlsDataModel->AppendRow( aFieldName, aLabelValue, show, groupBy );
-
-                return { m_viewControlsDataModel->GetNumberRows() - 1, -1 };
-            } );
-}
-
-
 void DIALOG_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
 {
     auto addMandatoryField =
@@ -757,147 +727,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
-{
-    wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Add Field" ) );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    wxString fieldName = dlg.GetValue();
-
-    if( fieldName.IsEmpty() )
-    {
-        DisplayError( this, _( "Field must have a name." ) );
-        return;
-    }
-
-    for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
-    {
-        if( FieldNamesAreDuplicates( fieldName, m_dataModel->GetColFieldName( i ) ) )
-        {
-            DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ), fieldName ) );
-            return;
-        }
-    }
-
-    AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false, true );
-
-    SetupColumnProperties( m_dataModel->GetColsCount() - 1 );
-
-    syncBomPresetSelection();
-    OnModify();
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
-{
-    m_viewControlsGrid->OnDeleteRows(
-            [&]( int row )
-            {
-                for( FIELD_T id : MANDATORY_FIELDS )
-                {
-                    if( m_mandatoryFieldListIndexes[id] == row )
-                    {
-                        DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                              (int) m_mandatoryFieldListIndexes.size() ) );
-                        return false;
-                    }
-                }
-
-                return IsOK( this, wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
-                                                     m_viewControlsDataModel->GetValue( row, DISPLAY_NAME_COLUMN ) ) );
-            },
-            [&]( int row )
-            {
-                wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
-                int      col = m_dataModel->GetFieldNameCol( fieldName );
-
-                if( col != -1 )
-                    m_dataModel->RemoveColumn( col );
-
-                m_viewControlsDataModel->DeleteRow( row );
-
-                syncBomPresetSelection();
-                OnModify();
-            } );
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
-{
-    wxArrayInt selectedRows = m_viewControlsGrid->GetSelectedRows();
-
-    if( selectedRows.empty() && m_viewControlsGrid->GetGridCursorRow() >= 0 )
-        selectedRows.push_back( m_viewControlsGrid->GetGridCursorRow() );
-
-    if( selectedRows.empty() )
-        return;
-
-    int row = selectedRows[0];
-
-    for( FIELD_T id : MANDATORY_FIELDS )
-    {
-        if( m_mandatoryFieldListIndexes[id] == row )
-        {
-            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory and names cannot be changed." ),
-                                                  (int) m_mandatoryFieldListIndexes.size() ) );
-            return;
-        }
-    }
-
-    wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
-    wxString label = m_viewControlsDataModel->GetValue( row, LABEL_COLUMN );
-    bool     labelIsAutogenerated = label.IsSameAs( GetGeneratedFieldDisplayName( fieldName ) );
-
-    int col = m_dataModel->GetFieldNameCol( fieldName );
-    wxCHECK_RET( col != -1, wxS( "Existing field name missing from data model" ) );
-
-    wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Rename Field" ), fieldName );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    wxString newFieldName = dlg.GetValue();
-
-    // No change, no-op
-    if( newFieldName == fieldName )
-        return;
-
-    // New field name already exists
-    if( m_dataModel->GetFieldNameCol( newFieldName ) != -1 )
-    {
-        wxString confirm_msg = wxString::Format( _( "Field name %s already exists." ), newFieldName );
-        DisplayError( this, confirm_msg );
-        return;
-    }
-
-    m_dataModel->RenameColumn( col, newFieldName );
-    m_viewControlsDataModel->SetCanonicalFieldName( row, newFieldName );
-    m_viewControlsDataModel->SetValue( row, DISPLAY_NAME_COLUMN, newFieldName );
-
-    if( labelIsAutogenerated )
-    {
-        m_viewControlsDataModel->SetValue( row, LABEL_COLUMN, GetGeneratedFieldDisplayName( newFieldName ) );
-        wxGridEvent evt( m_viewControlsGrid->GetId(), wxEVT_GRID_CELL_CHANGED, m_viewControlsGrid, row, LABEL_COLUMN );
-        OnViewControlsCellChanged( evt );
-    }
-
-    syncBomPresetSelection();
-    OnModify();
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
-{
-    m_dataModel->SetFilter( m_filter->GetValue() );
-    m_dataModel->RebuildRows();
-    m_grid->ForceRefresh();
-
-    syncBomPresetSelection();
-}
-
-
 void DIALOG_FOOTPRINT_FIELDS_TABLE::setScope( SCOPE aScope )
 {
     m_dataModel->SetPath( m_parent->GetLastSchematicSheetPath() );
@@ -914,16 +743,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
     case 1: setScope( SCOPE::SCOPE_SHEET );           break;
     case 2: setScope( SCOPE::SCOPE_SHEET_RECURSIVE ); break;
     }
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
-{
-    m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
-    m_dataModel->RebuildRows();
-    m_grid->ForceRefresh();
-
-    syncBomPresetSelection();
 }
 
 
@@ -994,40 +813,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
-{
-    int         sortCol = aEvent.GetCol();
-    std::string key( m_dataModel->GetColFieldName( sortCol ).ToUTF8() );
-    bool        ascending;
-
-    // Don't sort by item number, it is generated by the sort
-    if( m_dataModel->ColIsItemNumber( sortCol ) )
-    {
-        aEvent.Veto();
-        return;
-    }
-
-    // This is bonkers, but wxWidgets doesn't tell us ascending/descending in the event, and
-    // if we ask it will give us pre-event info.
-    if( m_grid->IsSortingBy( sortCol ) )
-    {
-        // same column; invert ascending
-        ascending = !m_grid->IsSortOrderAscending();
-    }
-    else
-    {
-        // different column; start with ascending
-        ascending = true;
-    }
-
-    m_dataModel->SetSorting( sortCol, ascending );
-    m_dataModel->RebuildRows();
-    m_grid->ForceRefresh();
-
-    syncBomPresetSelection();
-}
-
-
 void DIALOG_FOOTPRINT_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
 {
     int origPos = aEvent.GetCol();
@@ -1069,119 +854,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::ShowHideColumn( int aCol, bool aShow )
-{
-    if( aShow )
-        m_grid->ShowCol( aCol );
-    else
-        m_grid->HideCol( aCol );
-
-    m_dataModel->SetShowColumn( aCol, aShow );
-
-    syncBomPresetSelection();
-
-    if( m_nbPages->GetSelection() == 1 )
-        PreviewRefresh();
-    else
-        m_grid->ForceRefresh();
-
-    OnModify();
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent )
-{
-    int row = aEvent.GetRow();
-
-    wxCHECK( row < m_viewControlsGrid->GetNumberRows(), /* void */ );
-
-    switch( aEvent.GetCol() )
-    {
-    case LABEL_COLUMN:
-    {
-        wxString label = m_viewControlsDataModel->GetValue( row, LABEL_COLUMN );
-        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
-        int      dataCol = m_dataModel->GetFieldNameCol( fieldName );
-
-        if( dataCol != -1 )
-        {
-            m_dataModel->SetColLabelValue( dataCol, label );
-            m_grid->SetColLabelValue( dataCol, label );
-
-            if( m_nbPages->GetSelection() == 1 )
-                PreviewRefresh();
-            else
-                m_grid->ForceRefresh();
-
-            syncBomPresetSelection();
-            OnModify();
-        }
-
-        break;
-    }
-
-    case SHOW_FIELD_COLUMN:
-    {
-        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
-        bool     value = m_viewControlsDataModel->GetValueAsBool( row, SHOW_FIELD_COLUMN );
-        int      dataCol = m_dataModel->GetFieldNameCol( fieldName );
-
-        if( dataCol != -1 )
-            ShowHideColumn( dataCol, value );
-
-        break;
-    }
-
-    case GROUP_BY_COLUMN:
-    {
-        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
-        bool     value = m_viewControlsDataModel->GetValueAsBool( row, GROUP_BY_COLUMN );
-        int      dataCol = m_dataModel->GetFieldNameCol( fieldName );
-
-        if( m_dataModel->ColIsQuantity( dataCol ) && value )
-        {
-            DisplayError( this, _( "The Quantity column cannot be grouped by." ) );
-
-            value = false;
-            m_viewControlsDataModel->SetValueAsBool( row, GROUP_BY_COLUMN, value );
-            break;
-        }
-
-        if( m_dataModel->ColIsItemNumber( dataCol ) && value )
-        {
-            DisplayError( this, _( "The Item Number column cannot be grouped by." ) );
-
-            value = false;
-            m_viewControlsDataModel->SetValueAsBool( row, GROUP_BY_COLUMN, value );
-            break;
-        }
-
-        m_dataModel->SetGroupColumn( dataCol, value );
-        m_dataModel->RebuildRows();
-
-        if( m_nbPages->GetSelection() == 1 )
-            PreviewRefresh();
-        else
-            m_grid->ForceRefresh();
-
-        syncBomPresetSelection();
-        OnModify();
-        break;
-    }
-
-    default:
-        break;
-    }
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
-{
-    m_dataModel->RebuildRows();
-    m_grid->ForceRefresh();
-}
-
-
 void DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 {
     if( m_dataModel->IsExpanderColumn( event.GetCol() ) )
@@ -1194,36 +866,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
     else
     {
         event.Skip();
-    }
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnGridMouseMove( wxMouseEvent& aEvent )
-{
-    aEvent.Skip();
-
-    wxPoint pos = aEvent.GetPosition();
-    int     ux, uy;
-    m_grid->CalcUnscrolledPosition( pos.x, pos.y, &ux, &uy );
-    int row = m_grid->YToRow( uy );
-    int col = m_grid->XToCol( ux );
-
-
-    if( row == wxNOT_FOUND || col == wxNOT_FOUND )
-    {
-        m_grid->GetGridWindow()->UnsetToolTip();
-        return;
-    }
-
-    wxString rawValue = m_dataModel->GetValue( row, col );
-
-    if( rawValue.Contains( wxT( "${" ) ) )
-    {
-        m_grid->GetGridWindow()->SetToolTip( rawValue );
-    }
-    else
-    {
-        m_grid->GetGridWindow()->UnsetToolTip();
     }
 }
 
@@ -1270,37 +912,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
         m_boardSettings.m_BomExportFileName = m_outputFileName->GetValue();
         m_parent->SaveBoard();
         ClearModify();
-    }
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnPageChanged( wxNotebookEvent& event )
-{
-    if( m_dataModel->GetColsCount() )
-        PreviewRefresh();
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& event )
-{
-    PreviewRefresh();
-    syncBomFmtPresetSelection();
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::PreviewRefresh()
-{
-    bool saveIncludeExcudedFromBOM = m_dataModel->GetIncludeExcludedFromBOM();
-
-    m_dataModel->SetIncludeExcludedFromBOM( false );
-    m_dataModel->RebuildRows();
-
-    m_textOutput->SetValue( m_dataModel->Export( GetCurrentBomFmtSettings() ) );
-
-    if( saveIncludeExcudedFromBOM )
-    {
-        m_dataModel->SetIncludeExcludedFromBOM( true );
-        m_dataModel->RebuildRows();
     }
 }
 
@@ -1630,28 +1241,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset 
         PreviewRefresh();
     else
         m_grid->ForceRefresh();
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset )
-{
-    m_textFieldDelimiter->ChangeValue( aPreset.fieldDelimiter );
-    m_textStringDelimiter->ChangeValue( aPreset.stringDelimiter );
-    m_textRefDelimiter->ChangeValue( aPreset.refDelimiter );
-    m_textRefRangeDelimiter->ChangeValue( aPreset.refRangeDelimiter );
-    m_checkKeepTabs->SetValue( aPreset.keepTabs );
-    m_checkKeepLineBreaks->SetValue( aPreset.keepLineBreaks );
-    m_checkIncludeByteOrderMark->SetValue( aPreset.includeByteOrderMark );
-
-    // Refresh the preview if that's the current page
-    if( m_nbPages->GetSelection() == 1 )
-        PreviewRefresh();
-}
-
-
-BOM_PRESET DIALOG_FOOTPRINT_FIELDS_TABLE::getDataModelBomPreset()
-{
-    return m_dataModel->GetBomSettings();
 }
 
 
@@ -2002,19 +1591,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::updateVariantButtonStates()
     m_renameVariantButton->Enable( false );
     m_editVariantDescButton->Enable( false );
     m_deleteVariantButton->Enable( false );
-}
-
-
-wxString DIALOG_FOOTPRINT_FIELDS_TABLE::getSelectedVariant() const
-{
-    wxString retv;
-
-    int selection = m_variantListBox->GetSelection();
-
-    if( ( selection == wxNOT_FOUND ) || ( m_variantListBox->GetString( selection ) == GetDefaultVariantName() ) )
-        return retv;
-
-    return m_variantListBox->GetString( selection );
 }
 
 

@@ -44,13 +44,10 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void ShowHideColumn( int aCol, bool aShow );
-
 private:
-    void SetupColumnProperties( int aCol );
+    void SetupColumnProperties( int aCol ) override;
     void SetupAllColumnProperties();
-    void AddField( const wxString& displayName, const wxString& aCanonicalName, bool show,
-                   bool groupBy, bool addedByUser = false );
+
     void setScope( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
 
     /**
@@ -59,23 +56,13 @@ private:
      */
     void LoadFieldNames();
 
-    void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
-    void OnAddField( wxCommandEvent& event ) override;
-    void OnRemoveField( wxCommandEvent& event ) override;
-    void OnRenameField( wxCommandEvent& event ) override;
-
-    void OnColSort( wxGridEvent& aEvent );
     void OnColMove( wxGridEvent& aEvent );
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
 
-    void OnFilterText( wxCommandEvent& aEvent ) override;
     void OnScope( wxCommandEvent& event ) override;
-    void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
-    void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnMenu( wxCommandEvent& event ) override;
 
     void OnTableCellClick( wxGridEvent& event ) override;
-    void OnGridMouseMove( wxMouseEvent& aEvent );
 
     void OnExport( wxCommandEvent& aEvent ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
@@ -84,9 +71,6 @@ private:
     void OnClose( wxCloseEvent& aEvent ) override;
 
     void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
-    void OnPageChanged( wxNotebookEvent& event ) override;
-    void OnPreviewRefresh( wxCommandEvent& event ) override;
-    void PreviewRefresh();
 
 
     // Schematic listener event handlers
@@ -108,13 +92,13 @@ private:
      */
     void RestoreGridSelection( const std::set<wxString>& aFullPaths );
 
+    FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
+
 private:
     SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol, SCH_REFERENCE_LIST& aCachedRefs );
     SCH_REFERENCE_LIST getSheetSymbolReferences( SCH_SHEET& aSheet );
 
     void doApplyBomPreset( const BOM_PRESET& aPreset ) override;
-    void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset ) override;
-    BOM_PRESET getDataModelBomPreset() override;
     void savePresetsToSchematic();
 
     void onAddVariant( wxCommandEvent& aEvent ) override;
@@ -126,17 +110,10 @@ private:
 
     void updateVariantButtonStates();
 
-    wxString getSelectedVariant() const;
-
     wxString resolveVariant() const;
 
 private:
     SCH_EDIT_FRAME*                    m_parent;
-
-    // Index in the fields list control for each MANDATORY_FIELD type
-    std::map<FIELD_T, int>             m_mandatoryFieldListIndexes;
-
-    VIEW_CONTROLS_GRID_DATA_MODEL*     m_viewControlsDataModel = nullptr;
 
     SCH_REFERENCE_LIST                 m_symbolsList;
     SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;

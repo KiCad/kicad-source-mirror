@@ -27,14 +27,19 @@
 #include <settings/bom_settings.h>
 
 struct FIELDS_TABLE_SETTINGS;
+enum class FIELD_T : int;
 
-class KICOMMON_API DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
+class FIELDS_TABLE_DATA_MODEL_BASE;
+class VIEW_CONTROLS_GRID_DATA_MODEL;
+
+class DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
 {
 public:
     DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings );
 
     void ShowEditTab();
     void ShowExportTab();
+    void ShowHideColumn( int aCol, bool aShow );
 
     /**
      * Derive the default BOM output file name from the input file name by swapping the
@@ -61,8 +66,14 @@ protected:
     FIELDS_TABLE_SETTINGS& GetPanelSettings() { return m_panelSettings; }
     wxSize                 GetDefaultDialogSize() const;
 
+    void AddField( const wxString& aFieldName, const wxString& aLabelValue, bool aShow, bool aGroupBy,
+                   bool aAddedByUser = false );
+
+
     void RestorePanelLayout();
     void SavePanelLayout();
+
+    virtual void SetupColumnProperties( int aCol ) = 0;
 
     // Set bitmap and tooltip according to left panel visibility
     void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
@@ -70,9 +81,26 @@ protected:
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
     void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
+    void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
+
+    void OnAddField( wxCommandEvent& aEvent ) override;
+    void OnRemoveField( wxCommandEvent& aEvent ) override;
+    void OnRenameField( wxCommandEvent& aEvent ) override;
 
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
+    void OnFilterText( wxCommandEvent& aEvent ) override;
+    void OnGroupSymbolsToggled( wxCommandEvent& aEvent ) override;
+    void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
+    void OnColSort( wxGridEvent& aEvent );
+    void OnGridMouseMove( wxMouseEvent& aEvent );
+
+    void OnPageChanged( wxNotebookEvent& aEvent ) override;
+    void OnPreviewRefresh( wxCommandEvent& aEvent ) override;
     void OnSidebarToggle( wxCommandEvent& event ) override;
+
+    void PreviewRefresh();
+
+    wxString getSelectedVariant() const;
 
     void syncBomPresetSelection();
     void rebuildBomPresetsWidget();
@@ -80,18 +108,24 @@ protected:
     void onBomPresetChanged( wxCommandEvent& aEvent );
     void loadDefaultBomPresets();
     virtual void doApplyBomPreset( const BOM_PRESET& aPreset ) = 0;
-    virtual BOM_PRESET getDataModelBomPreset() = 0;
+    BOM_PRESET   getDataModelBomPreset();
 
     void syncBomFmtPresetSelection();
     void rebuildBomFmtPresetsWidget();
     void updateBomFmtPresetSelection( const wxString& aName );
     void onBomFmtPresetChanged( wxCommandEvent& aEvent );
     void loadDefaultBomFmtPresets();
-    virtual void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset ) = 0;
+    void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
 
+    virtual FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const = 0;
 
 protected:
     FIELDS_TABLE_SETTINGS& m_panelSettings;
+
+    VIEW_CONTROLS_GRID_DATA_MODEL* m_viewControlsDataModel = nullptr;
+
+    // Index in the fields list control for each MANDATORY_FIELD type
+    std::map<FIELD_T, int> m_mandatoryFieldListIndexes;
 
     std::map<wxString, BOM_PRESET>     m_bomPresets;
     BOM_PRESET*                        m_currentBomPreset = nullptr;

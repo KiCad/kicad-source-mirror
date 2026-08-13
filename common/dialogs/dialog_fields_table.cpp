@@ -23,9 +23,12 @@
 
 #include <algorithm>
 #include <bitmaps.h>
+#include <common.h>
 #include <confirm.h>
 #include <eda_list_dialog.h>
+#include <fields_table_data_model.h>
 #include <settings/app_settings.h>
+#include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/ui_common.h>
@@ -56,6 +59,54 @@ void DIALOG_FIELDS_TABLE::ShowEditTab()
 void DIALOG_FIELDS_TABLE::ShowExportTab()
 {
     m_nbPages->SetSelection( 1 );
+}
+
+
+void DIALOG_FIELDS_TABLE::ShowHideColumn( int aCol, bool aShow )
+{
+    if( aShow )
+        m_grid->ShowCol( aCol );
+    else
+        m_grid->HideCol( aCol );
+
+    getDataModel()->SetShowColumn( aCol, aShow );
+
+    syncBomPresetSelection();
+
+    if( m_nbPages->GetSelection() == 1 )
+        PreviewRefresh();
+    else
+        m_grid->ForceRefresh();
+
+    OnModify();
+}
+
+
+void DIALOG_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxString& aLabelValue, bool aShow, bool aGroupBy,
+                                    bool aAddedByUser )
+{
+    // Users can add fields with variable names that match the special names in the grid,
+    // e.g. ${QUANTITY} so make sure we don't add them twice
+    for( int row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
+    {
+        if( FieldNamesAreDuplicates( m_viewControlsDataModel->GetCanonicalFieldName( row ), aFieldName ) )
+        {
+            return;
+        }
+    }
+
+    getDataModel()->AddColumn( aFieldName, aLabelValue, aAddedByUser );
+
+    wxGridTableMessage msg( getDataModel(), wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
+    m_grid->ProcessTableMessage( msg );
+
+    m_viewControlsGrid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                m_viewControlsDataModel->AppendRow( aFieldName, aLabelValue, aShow, aGroupBy );
+
+                return { m_viewControlsDataModel->GetNumberRows() - 1, -1 };
+            } );
 }
 
 
@@ -206,6 +257,351 @@ void DIALOG_FIELDS_TABLE::OnSizeViewControlsGrid( wxSizeEvent& event )
 }
 
 
+void DIALOG_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent )
+{
+    int row = aEvent.GetRow();
+
+    wxCHECK( row < m_viewControlsGrid->GetNumberRows(), /* void */ );
+
+    switch( aEvent.GetCol() )
+    {
+    case LABEL_COLUMN:
+    {
+        wxString label = m_viewControlsDataModel->GetValue( row, LABEL_COLUMN );
+        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+        int      dataCol = getDataModel()->GetFieldNameCol( fieldName );
+
+        if( dataCol != -1 )
+        {
+            getDataModel()->SetColLabelValue( dataCol, label );
+            m_grid->SetColLabelValue( dataCol, label );
+
+            if( m_nbPages->GetSelection() == 1 )
+                PreviewRefresh();
+            else
+                m_grid->ForceRefresh();
+
+            syncBomPresetSelection();
+            OnModify();
+        }
+
+        break;
+    }
+
+    case SHOW_FIELD_COLUMN:
+    {
+        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+        bool     value = m_viewControlsDataModel->GetValueAsBool( row, SHOW_FIELD_COLUMN );
+        int      dataCol = getDataModel()->GetFieldNameCol( fieldName );
+
+        if( dataCol != -1 )
+            ShowHideColumn( dataCol, value );
+
+        break;
+    }
+
+    case GROUP_BY_COLUMN:
+    {
+        wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+        bool     value = m_viewControlsDataModel->GetValueAsBool( row, GROUP_BY_COLUMN );
+        int      dataCol = getDataModel()->GetFieldNameCol( fieldName );
+
+        if( getDataModel()->ColIsQuantity( dataCol ) && value )
+        {
+            DisplayError( this, _( "The Quantity column cannot be grouped by." ) );
+
+            value = false;
+            m_viewControlsDataModel->SetValueAsBool( row, GROUP_BY_COLUMN, value );
+            break;
+        }
+
+        if( getDataModel()->ColIsItemNumber( dataCol ) && value )
+        {
+            DisplayError( this, _( "The Item Number column cannot be grouped by." ) );
+
+            value = false;
+            m_viewControlsDataModel->SetValueAsBool( row, GROUP_BY_COLUMN, value );
+            break;
+        }
+
+        getDataModel()->SetGroupColumn( dataCol, value );
+        getDataModel()->RebuildRows();
+
+        if( m_nbPages->GetSelection() == 1 )
+            PreviewRefresh();
+        else
+            m_grid->ForceRefresh();
+
+        syncBomPresetSelection();
+        OnModify();
+        break;
+    }
+
+    default: break;
+    }
+}
+
+
+void DIALOG_FIELDS_TABLE::OnAddField( wxCommandEvent& aEvent )
+{
+    wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Add Field" ) );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    wxString fieldName = dlg.GetValue();
+
+    if( fieldName.IsEmpty() )
+    {
+        DisplayError( this, _( "Field must have a name." ) );
+        return;
+    }
+
+    for( int i = 0; i < getDataModel()->GetNumberCols(); ++i )
+    {
+        if( FieldNamesAreDuplicates( fieldName, getDataModel()->GetColFieldName( i ) ) )
+        {
+            DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ), fieldName ) );
+            return;
+        }
+    }
+
+    AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false, true );
+
+    SetupColumnProperties( getDataModel()->GetColsCount() - 1 );
+
+    syncBomPresetSelection();
+    OnModify();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnRemoveField( wxCommandEvent& aEvent )
+{
+    m_viewControlsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                for( FIELD_T id : MANDATORY_FIELDS )
+                {
+                    if( m_mandatoryFieldListIndexes[id] == row )
+                    {
+                        DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                              (int) m_mandatoryFieldListIndexes.size() ) );
+                        return false;
+                    }
+                }
+
+                return IsOK( this, wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
+                                                     m_viewControlsDataModel->GetValue( row, DISPLAY_NAME_COLUMN ) ) );
+            },
+            [&]( int row )
+            {
+                wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+                int      col = getDataModel()->GetFieldNameCol( fieldName );
+
+                if( col != -1 )
+                    getDataModel()->RemoveColumn( col );
+
+                m_viewControlsDataModel->DeleteRow( row );
+
+                syncBomPresetSelection();
+                OnModify();
+            } );
+}
+
+
+void DIALOG_FIELDS_TABLE::OnRenameField( wxCommandEvent& aEvent )
+{
+    wxArrayInt selectedRows = m_viewControlsGrid->GetSelectedRows();
+
+    if( selectedRows.empty() && m_viewControlsGrid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_viewControlsGrid->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
+        return;
+
+    int row = selectedRows[0];
+
+    for( FIELD_T id : MANDATORY_FIELDS )
+    {
+        if( m_mandatoryFieldListIndexes[id] == row )
+        {
+            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory and names cannot be changed." ),
+                                                  (int) m_mandatoryFieldListIndexes.size() ) );
+            return;
+        }
+    }
+
+    wxString fieldName = m_viewControlsDataModel->GetCanonicalFieldName( row );
+    wxString label = m_viewControlsDataModel->GetValue( row, LABEL_COLUMN );
+    bool     labelIsAutogenerated = label.IsSameAs( GetGeneratedFieldDisplayName( fieldName ) );
+
+    int col = getDataModel()->GetFieldNameCol( fieldName );
+    wxCHECK_RET( col != -1, wxS( "Existing field name missing from data model" ) );
+
+    wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Rename Field" ), fieldName );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    wxString newFieldName = dlg.GetValue();
+
+    // No change, no-op
+    if( newFieldName == fieldName )
+        return;
+
+    // New field name already exists
+    if( getDataModel()->GetFieldNameCol( newFieldName ) != -1 )
+    {
+        wxString confirm_msg = wxString::Format( _( "Field name %s already exists." ), newFieldName );
+        DisplayError( this, confirm_msg );
+        return;
+    }
+
+    getDataModel()->RenameColumn( col, newFieldName );
+    m_viewControlsDataModel->SetCanonicalFieldName( row, newFieldName );
+    m_viewControlsDataModel->SetValue( row, DISPLAY_NAME_COLUMN, newFieldName );
+
+    if( labelIsAutogenerated )
+    {
+        m_viewControlsDataModel->SetValue( row, LABEL_COLUMN, GetGeneratedFieldDisplayName( newFieldName ) );
+        wxGridEvent evt( m_viewControlsGrid->GetId(), wxEVT_GRID_CELL_CHANGED, m_viewControlsGrid, row, LABEL_COLUMN );
+        OnViewControlsCellChanged( evt );
+    }
+
+    syncBomPresetSelection();
+    OnModify();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
+{
+    getDataModel()->SetFilter( m_filter->GetValue() );
+    getDataModel()->RebuildRows();
+    m_grid->ForceRefresh();
+
+    syncBomPresetSelection();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& aEvent )
+{
+    getDataModel()->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
+    getDataModel()->RebuildRows();
+    m_grid->ForceRefresh();
+
+    syncBomPresetSelection();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
+{
+    getDataModel()->RebuildRows();
+    m_grid->ForceRefresh();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
+{
+    int  sortCol = aEvent.GetCol();
+    bool ascending;
+
+    // Don't sort by item number, it is generated by the sort
+    if( getDataModel()->ColIsItemNumber( sortCol ) )
+    {
+        aEvent.Veto();
+        return;
+    }
+
+    // This is bonkers, but wxWidgets doesn't tell us ascending/descending in the event, and
+    // if we ask it will give us pre-event info.
+    if( m_grid->IsSortingBy( sortCol ) )
+    {
+        // same column; invert ascending
+        ascending = !m_grid->IsSortOrderAscending();
+    }
+    else
+    {
+        // different column; start with ascending
+        ascending = true;
+    }
+
+    getDataModel()->SetSorting( sortCol, ascending );
+    getDataModel()->RebuildRows();
+    m_grid->ForceRefresh();
+
+    syncBomPresetSelection();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnGridMouseMove( wxMouseEvent& aEvent )
+{
+    aEvent.Skip();
+
+    wxPoint pos = aEvent.GetPosition();
+    int     ux, uy;
+    m_grid->CalcUnscrolledPosition( pos.x, pos.y, &ux, &uy );
+    int row = m_grid->YToRow( uy );
+    int col = m_grid->XToCol( ux );
+
+    if( row == wxNOT_FOUND || col == wxNOT_FOUND )
+    {
+        m_grid->GetGridWindow()->UnsetToolTip();
+        return;
+    }
+
+    wxString rawValue = getDataModel()->GetValue( row, col );
+
+    if( rawValue.Contains( wxT( "${" ) ) )
+        m_grid->GetGridWindow()->SetToolTip( rawValue );
+    else
+        m_grid->GetGridWindow()->UnsetToolTip();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnPageChanged( wxNotebookEvent& aEvent )
+{
+    if( getDataModel()->GetColsCount() )
+        PreviewRefresh();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& aEvent )
+{
+    PreviewRefresh();
+    syncBomFmtPresetSelection();
+}
+
+
+void DIALOG_FIELDS_TABLE::PreviewRefresh()
+{
+    bool saveIncludeExcudedFromBOM = getDataModel()->GetIncludeExcludedFromBOM();
+
+    getDataModel()->SetIncludeExcludedFromBOM( false );
+    getDataModel()->RebuildRows();
+
+    m_textOutput->SetValue( getDataModel()->Export( GetCurrentBomFmtSettings() ) );
+
+    if( saveIncludeExcudedFromBOM )
+    {
+        getDataModel()->SetIncludeExcludedFromBOM( true );
+        getDataModel()->RebuildRows();
+    }
+}
+
+
+wxString DIALOG_FIELDS_TABLE::getSelectedVariant() const
+{
+    wxString retv;
+
+    int selection = m_variantListBox->GetSelection();
+
+    if( ( selection == wxNOT_FOUND ) || ( m_variantListBox->GetString( selection ) == GetDefaultVariantName() ) )
+        return retv;
+
+    return m_variantListBox->GetString( selection );
+}
+
+
 std::vector<BOM_PRESET> DIALOG_FIELDS_TABLE::GetUserBomPresets() const
 {
     std::vector<BOM_PRESET> ret;
@@ -307,6 +703,12 @@ void DIALOG_FIELDS_TABLE::rebuildBomPresetsWidget()
 
     m_cbBomPresets->SetSelection( default_idx );
     m_currentBomPreset = static_cast<BOM_PRESET*>( m_cbBomPresets->GetClientData( default_idx ) );
+}
+
+
+BOM_PRESET DIALOG_FIELDS_TABLE::getDataModelBomPreset()
+{
+    return getDataModel()->GetBomSettings();
 }
 
 
@@ -624,6 +1026,22 @@ void DIALOG_FIELDS_TABLE::ApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset )
 
     updateBomFmtPresetSelection( aPreset.name );
     doApplyBomFmtPreset( aPreset );
+}
+
+
+void DIALOG_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset )
+{
+    m_textFieldDelimiter->ChangeValue( aPreset.fieldDelimiter );
+    m_textStringDelimiter->ChangeValue( aPreset.stringDelimiter );
+    m_textRefDelimiter->ChangeValue( aPreset.refDelimiter );
+    m_textRefRangeDelimiter->ChangeValue( aPreset.refRangeDelimiter );
+    m_checkKeepTabs->SetValue( aPreset.keepTabs );
+    m_checkKeepLineBreaks->SetValue( aPreset.keepLineBreaks );
+    m_checkIncludeByteOrderMark->SetValue( aPreset.includeByteOrderMark );
+
+    // Refresh the preview if that's the current page
+    if( m_nbPages->GetSelection() == 1 )
+        PreviewRefresh();
 }
 
 
