@@ -46,8 +46,19 @@ struct POINT_INFO
     /// True if there is a bus entry at the point and it connects to more than one wire
     bool hasBusEntryToMultipleWires;
 
+    /// True if there is a bus entry at the point and three or more bus segments fork there
+    bool hasBusEntryToMultipleBuses;
+
     /// True if there is a bus segment at the point
     bool hasBusAtPoint;
+
+    /// True when an explicit junction dot is permitted here, meaning a junction that is free of a
+    /// bus entry or where the entry coincides with a genuine wire or bus fork.
+    bool AllowsExplicitJunction() const
+    {
+        return isJunction
+               && ( !hasBusEntry || hasBusEntryToMultipleWires || hasBusEntryToMultipleBuses );
+    }
 };
 
 /**
