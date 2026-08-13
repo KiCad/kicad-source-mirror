@@ -271,6 +271,7 @@ set( KICOMMON_SRCS
     widgets/indicator_icon.cpp
     widgets/kistatusbar.cpp
     widgets/kistatusbar_popup.cpp
+    widgets/mdw_change_orders.cpp
     widgets/number_badge.cpp
     widgets/progress_reporter_base.cpp
     widgets/report_severity.cpp
@@ -667,6 +668,8 @@ set( COMMON_ABOUT_DLG_SRCS
 
 set( COMMON_GIT_DLG_SRCS
     dialogs/git/dialog_git_switch.cpp
+    dialogs/git/dialog_mdw_change_orders.cpp
+    dialogs/git/dialog_mdw_change_orders_base.cpp
     dialogs/git/dialog_git_credentials.cpp
     dialogs/git/git_credentials_prompt.cpp
     dialogs/git/dialog_git_credentials_base.cpp
