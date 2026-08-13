@@ -24,8 +24,11 @@
 #include <algorithm>
 #include <memory>
 
+#include <wx/filename.h>
+#include <wx/filesys.h>
 #include <wx/print.h>
 #include <wx/cmndata.h>
+#include <wx/regex.h>
 
 #if wxUSE_GTKPRINT
 #include <wx/gtk/print.h>
@@ -234,16 +237,38 @@ namespace PRINTING
         return PrintPDF( aFile, true );
     }
 
+    // GTK opens its scratch file with the g_mkstemp() templates "gtkprintXXXXXX" and
+    // "gtkprint_XXXXXX", so the name is the only thing separating it from a destination the user
+    // picked. Matching the whole template rather than the prefix keeps a file the user named
+    // gtkprint-something safe
+    static bool isSpoolName( const wxString& aFileName )
+    {
+        static wxRegEx spoolTemplate( wxS( "^gtkprint_?[A-Z0-9]{6}$" ) );
+
+        return spoolTemplate.Matches( aFileName );
+    }
+
+
     void ResetPrintToFilePath( wxPrintData& aData )
     {
-        aData.SetFilename( wxEmptyString );
+        if( isSpoolName( wxFileName( aData.GetFilename() ).GetFullName() ) )
+            aData.SetFilename( wxEmptyString );
 
 #if wxUSE_GTKPRINT
-        // The temporary destination lives in the native GtkPrintSettings output URI, which the
-        // wx-level filename does not track, so it has to be unset directly.
         wxGtkPrintNativeData* nativeData = dynamic_cast<wxGtkPrintNativeData*>( aData.GetNativeData() );
 
-        if( nativeData && nativeData->GetPrintConfig() )
+        if( !nativeData || !nativeData->GetPrintConfig() )
+            return;
+
+        const gchar* uri = gtk_print_settings_get( nativeData->GetPrintConfig(),
+                                                   GTK_PRINT_SETTINGS_OUTPUT_URI );
+
+        if( !uri )
+            return;
+
+        wxFileName destination = wxFileSystem::URLToFileName( wxString::FromUTF8( uri ) );
+
+        if( isSpoolName( destination.GetFullName() ) )
             gtk_print_settings_unset( nativeData->GetPrintConfig(), GTK_PRINT_SETTINGS_OUTPUT_URI );
 #endif
     }
