@@ -95,9 +95,10 @@ PRINT_RESULT PrintPDF(const std::string& aFile)
     return PrintPDF(aFile, true);
 }
 
-void ResetPrintToFilePath( wxPrintData& aData )
+// macOS routes print-to-file through its own save panel and never parks a spool path in the
+// print data, so the only destination there is the one the user asked for
+void ResetPrintToFilePath( wxPrintData& )
 {
-    aData.SetFilename( wxEmptyString );
 }
 
 } // namespace PRINTING

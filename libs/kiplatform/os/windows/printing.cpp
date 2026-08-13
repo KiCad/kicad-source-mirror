@@ -458,11 +458,10 @@ namespace KIPLATFORM
 {
 namespace PRINTING
 {
-    // Windows keeps the print-to-file destination in the wx-level filename, so clearing it
-    // is sufficient here.
-    void ResetPrintToFilePath( wxPrintData& aData )
+    // Windows spools through the driver rather than a scratch file, so the wx-level filename
+    // only ever holds the destination the user asked for
+    void ResetPrintToFilePath( wxPrintData& )
     {
-        aData.SetFilename( wxEmptyString );
     }
 } // namespace PRINTING
 } // namespace KIPLATFORM
