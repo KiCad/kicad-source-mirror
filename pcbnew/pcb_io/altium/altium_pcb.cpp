@@ -45,6 +45,7 @@
 #include <generators_mgr.h>
 #include <generators/pcb_tuning_pattern.h>
 #include <router/pns_meander.h>
+#include <geometry/shape_line_chain.h>
 #include <core/profile.h>
 #include <string_utils.h>
 #include <tools/pad_tool.h>
@@ -4559,10 +4560,20 @@ void ALTIUM_PCB::HelperCreateTuningPatterns()
         if( itemsIt == m_unionToBoardItems.end() || itemsIt->second.empty() )
             continue;
 
+        // Without a baseline the pattern can be neither re-tuned nor reset, so wrapping the copper
+        // would only take it away from the user
+        if( tuning.baseline.size() < 2
+            || ( tuning.is_diffpair && tuning.baselinecoupled.size() < 2 ) )
+        {
+            continue;
+        }
+
         const std::vector<BOARD_ITEM*>& items = itemsIt->second;
 
         LENGTH_TUNING_MODE mode = tuning.is_diffpair ? LENGTH_TUNING_MODE::DIFF_PAIR
                                                      : LENGTH_TUNING_MODE::SINGLE;
+
+        SHAPE_LINE_CHAIN baseLine( tuning.baseline );
 
         PCB_LAYER_ID layer = items.front()->GetLayer();
 
@@ -4591,14 +4602,12 @@ void ALTIUM_PCB::HelperCreateTuningPatterns()
             pattern->SetCornerRadiusPercentage( std::clamp( percent, 0, 100 ) );
         }
 
-        BOX2I bbox;
-        int   netCode = -1;
-        bool  singleNet = true;
+        int  netCode = -1;
+        bool singleNet = true;
 
         for( BOARD_ITEM* item : items )
         {
             pattern->AddItem( item );
-            bbox.Merge( item->GetBoundingBox() );
 
             if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
             {
@@ -4612,15 +4621,52 @@ void ALTIUM_PCB::HelperCreateTuningPatterns()
         // SetNetCode reassigns the net of every member, so only apply it when the union is on a
         // single net.  Differential-pair meanders span two nets that must both be preserved.
         if( netCode >= 0 && singleNet )
+        {
             pattern->SetNetCode( netCode );
+        }
+        else
+        {
+            // Name the pattern after the net at the baseline start, the one an edit snaps to
+            const VECTOR2I& origin = baseLine.CPoint( 0 );
+            SEG::ecoord     bestDist = std::numeric_limits<SEG::ecoord>::max();
+            wxString        bestNet;
+
+            for( BOARD_ITEM* item : items )
+            {
+                PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
+
+                if( !track )
+                    continue;
+
+                SEG::ecoord dist = SEG( track->GetStart(), track->GetEnd() ).SquaredDistance( origin );
+
+                if( dist < bestDist )
+                {
+                    bestDist = dist;
+                    bestNet = track->GetNetname();
+                }
+            }
+
+            pattern->SetLastNetName( bestNet );
+        }
 
         if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( items.front() ) )
             pattern->SetWidth( track->GetWidth() );
 
-        // The router rebuilds the baseline from the member tracks when the pattern is edited;
-        // the stored endpoints are only an initial hint, so the member extents suffice.
-        pattern->SetPosition( bbox.GetOrigin() );
-        pattern->SetEnd( bbox.GetEnd() );
+        pattern->SetBaseLine( baseLine );
+        pattern->SetPosition( baseLine.CPoint( 0 ) );
+        pattern->SetEnd( baseLine.CLastPoint() );
+
+        if( mode == LENGTH_TUNING_MODE::DIFF_PAIR )
+        {
+            SHAPE_LINE_CHAIN baseLineCoupled( tuning.baselinecoupled );
+
+            pattern->SetBaseLineCoupled( baseLineCoupled );
+
+            int centreToCentre = baseLine.Distance( baseLineCoupled.CPoint( 0 ), false );
+
+            pattern->SetDiffPairGap( std::max( centreToCentre - pattern->GetWidth(), 0 ) );
+        }
 
         m_board->Add( pattern.release(), ADD_MODE::INSERT );
         created++;
