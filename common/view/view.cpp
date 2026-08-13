@@ -37,6 +37,7 @@
 #include <gal/painter.h>
 #include <algorithm>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <core/profile.h>
 
@@ -227,7 +228,7 @@ void VIEW::OnDestroy( VIEW_ITEM* aItem )
     if( aItem->m_viewPrivData )
     {
         if( aItem->m_viewPrivData->m_view )
-            aItem->m_viewPrivData->m_view->VIEW::Remove( aItem );
+            aItem->m_viewPrivData->m_view->unlinkItem( aItem );
 
         delete aItem->m_viewPrivData;
         aItem->m_viewPrivData = nullptr;
@@ -305,8 +306,10 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     if( !aItem->m_viewPrivData )
         aItem->m_viewPrivData = new VIEW_ITEM_DATA;
 
-    wxASSERT_MSG( aItem->m_viewPrivData->m_view == nullptr || aItem->m_viewPrivData->m_view == this,
-                  wxS( "Already in a different view!" ) );
+    // One view pointer and one index per item, so re-registering strands the first entry to
+    // dangle at free time
+    if( VIEW* previous = aItem->m_viewPrivData->m_view )
+        previous->unlinkItem( aItem );
 
     aItem->m_viewPrivData->m_view = this;
     aItem->m_viewPrivData->m_drawPriority = aDrawPriority;
@@ -344,16 +347,27 @@ void VIEW::AddBatch( const std::vector<VIEW_ITEM*>& aItems )
 {
     // Phase 1: Register all items and collect per-layer data
     std::unordered_map<int, std::vector<std::pair<VIEW_ITEM*, BOX2I>>> layerBulk;
+    std::unordered_set<VIEW_ITEM*>                                     seen;
+    std::vector<VIEW_ITEM*>                                            registered;
+
+    seen.reserve( aItems.size() );
+    registered.reserve( aItems.size() );
 
     for( VIEW_ITEM* item : aItems )
     {
-        if( !item )
+        // A repeat within the batch cannot be detached below because its layer entries are not
+        // inserted until phase 2, so it would reach BulkLoad twice
+        if( !item || !seen.insert( item ).second )
             continue;
 
         int drawPriority = m_nextDrawPriority++;
 
         if( !item->m_viewPrivData )
             item->m_viewPrivData = new VIEW_ITEM_DATA;
+
+        // Same single-registration invariant as Add()
+        if( VIEW* previous = item->m_viewPrivData->m_view )
+            previous->unlinkItem( item );
 
         item->m_viewPrivData->m_view = this;
         item->m_viewPrivData->m_drawPriority = drawPriority;
@@ -373,6 +387,7 @@ void VIEW::AddBatch( const std::vector<VIEW_ITEM*>& aItems )
 
         item->viewPrivData()->saveLayers( layers );
         m_allItems->push_back( item );
+        registered.push_back( item );
 
         for( int layer : layers )
             layerBulk[layer].emplace_back( item, bbox );
@@ -390,11 +405,8 @@ void VIEW::AddBatch( const std::vector<VIEW_ITEM*>& aItems )
     // INITIAL_ADD is required even though VIEW_ITEM_DATA defaults VISIBLE=true (making
     // SetVisible a no-op). Without it, items reused after VIEW::Clear() retain stale GAL
     // cache group IDs that point to freed memory.
-    for( VIEW_ITEM* item : aItems )
+    for( VIEW_ITEM* item : registered )
     {
-        if( !item || !item->m_viewPrivData || item->m_viewPrivData->m_view != this )
-            continue;
-
         SetVisible( item, true );
         Update( item, KIGFX::INITIAL_ADD );
     }
@@ -402,6 +414,12 @@ void VIEW::AddBatch( const std::vector<VIEW_ITEM*>& aItems )
 
 
 void VIEW::Remove( VIEW_ITEM* aItem )
+{
+    unlinkItem( aItem );
+}
+
+
+void VIEW::unlinkItem( VIEW_ITEM* aItem )
 {
     static int s_gcCounter = 0;
 
