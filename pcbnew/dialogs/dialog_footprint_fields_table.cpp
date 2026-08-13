@@ -652,7 +652,8 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnCancel( wxCommandEvent& aEvent )
 
 void DIALOG_FOOTPRINT_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
 {
-    TransferDataFromWindow();
+    if( !TransferDataFromWindow() )
+        return;
 
     if( m_job )
     {

@@ -75,6 +75,7 @@ const wxString FIELDS_TABLE_DATA_MODEL_BASE::ITEM_NUMBER_VARIABLE = wxS( "${ITEM
 
 
 FIELDS_TABLE_DATA_MODEL_BASE::FIELDS_TABLE_DATA_MODEL_BASE() :
+        m_edited( false ),
         m_sortColumn( 0 ),
         m_sortAscending( false ),
         m_groupingEnabled( false ),

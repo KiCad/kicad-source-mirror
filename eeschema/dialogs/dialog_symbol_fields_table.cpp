@@ -323,6 +323,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
 DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
+    if( m_aborted )
+        return;
+
     if( savePresets( !m_job ) )
     {
         m_parent->OnModify();
@@ -722,7 +725,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnCancel( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
 {
-    TransferDataFromWindow();
+    if( !TransferDataFromWindow() )
+        return;
 
     if( m_job )
     {
