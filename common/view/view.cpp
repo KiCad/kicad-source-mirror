@@ -229,7 +229,7 @@ void VIEW::OnDestroy( VIEW_ITEM* aItem )
     if( aItem->m_viewPrivData )
     {
         if( aItem->m_viewPrivData->m_view )
-            aItem->m_viewPrivData->m_view->VIEW::Remove( aItem );
+            aItem->m_viewPrivData->m_view->unlinkItem( aItem );
 
         delete aItem->m_viewPrivData;
         aItem->m_viewPrivData = nullptr;
@@ -305,8 +305,10 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     if( !aItem->m_viewPrivData )
         aItem->m_viewPrivData = new VIEW_ITEM_DATA;
 
-    wxASSERT_MSG( aItem->m_viewPrivData->m_view == nullptr || aItem->m_viewPrivData->m_view == this,
-                  wxS( "Already in a different view!" ) );
+    // One view pointer and one index per item, so re-registering strands the first entry to
+    // dangle at free time
+    if( VIEW* previous = aItem->m_viewPrivData->m_view )
+        previous->unlinkItem( aItem );
 
     aItem->m_viewPrivData->m_view = this;
     aItem->m_viewPrivData->m_drawPriority = aDrawPriority;
@@ -341,6 +343,12 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
 
 
 void VIEW::Remove( VIEW_ITEM* aItem )
+{
+    unlinkItem( aItem );
+}
+
+
+void VIEW::unlinkItem( VIEW_ITEM* aItem )
 {
     static int s_gcCounter = 0;
 

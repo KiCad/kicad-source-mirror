@@ -789,6 +789,17 @@ protected:
         }
     };
 
+    /**
+     * Detach a single #VIEW_ITEM from this view.
+     *
+     * Child items are left alone. Composite-aware traversal belongs to the Add() and Remove()
+     * overrides that know about the item hierarchy, so callers that have already handled the
+     * children use this instead of Remove().
+     *
+     * @param aItem is the item to detach. It is ignored if it belongs to a different view.
+     */
+    void unlinkItem( VIEW_ITEM* aItem );
+
     /// Redraw contents within rectangle \a aRect.
     void redrawRect( const BOX2I& aRect );
 
