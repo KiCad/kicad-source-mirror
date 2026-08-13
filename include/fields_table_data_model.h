@@ -186,6 +186,10 @@ public:
     wxString SerializeUndoState() const override;
     void     RestoreUndoState( const wxString& aState ) override;
 
+
+    // Stuff this class knows nothing about, but needs to guarantee that the templated class implements
+    virtual void ExpandCollapseRow( int aRow ) = 0;
+
 protected:
     // Helper functions to deal with translating wxGrid values to and from
     // named field values like ${DNP}
@@ -326,7 +330,7 @@ public:
     }
 
 
-    void ExpandCollapseRow( int aRow )
+    void ExpandCollapseRow( int aRow ) override
     {
         if( m_rows[aRow].m_state == ROW_STATE::COLLAPSED )
             ExpandRow( aRow );

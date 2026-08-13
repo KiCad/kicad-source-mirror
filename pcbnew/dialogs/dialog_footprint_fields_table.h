@@ -60,8 +60,6 @@ private:
     void OnScope( wxCommandEvent& event ) override;
     void OnMenu( wxCommandEvent& event ) override;
 
-    void OnTableCellClick( wxGridEvent& event ) override;
-
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
     void OnOk( wxCommandEvent& aEvent ) override;

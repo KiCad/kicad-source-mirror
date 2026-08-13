@@ -552,6 +552,22 @@ void DIALOG_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
 }
 
 
+void DIALOG_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
+{
+    if( getDataModel()->IsExpanderColumn( event.GetCol() ) )
+    {
+        m_grid->ClearSelection();
+
+        getDataModel()->ExpandCollapseRow( event.GetRow() );
+        m_grid->SetGridCursor( event.GetRow(), event.GetCol() );
+    }
+    else
+    {
+        event.Skip();
+    }
+}
+
+
 void DIALOG_FIELDS_TABLE::OnTableValueChanged( wxGridEvent& aEvent )
 {
     m_grid->ForceRefresh();

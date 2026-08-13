@@ -626,22 +626,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
-{
-    if( m_dataModel->IsExpanderColumn( event.GetCol() ) )
-    {
-        m_grid->ClearSelection();
-
-        m_dataModel->ExpandCollapseRow( event.GetRow() );
-        m_grid->SetGridCursor( event.GetRow(), event.GetCol() );
-    }
-    else
-    {
-        event.Skip();
-    }
-}
-
-
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
 {
     // Cross-probing should only work in Edit page

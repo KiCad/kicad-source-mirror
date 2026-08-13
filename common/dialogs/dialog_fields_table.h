@@ -91,6 +91,7 @@ protected:
     // Set bitmap and tooltip according to left panel visibility
     void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
 
+    void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
     void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
