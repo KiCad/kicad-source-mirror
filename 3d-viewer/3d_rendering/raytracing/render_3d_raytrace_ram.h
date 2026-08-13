@@ -40,7 +40,7 @@ public:
     wxSize   GetRealBufferSize();
 
     void SetCurWindowSize( const wxSize& aSize ) override;
-    bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
+    bool Redraw( bool aIsMoving ) override;
 
 private:
     void initPbo() override;

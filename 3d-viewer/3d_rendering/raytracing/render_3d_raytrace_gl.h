@@ -40,7 +40,7 @@ public:
     ~RENDER_3D_RAYTRACE_GL();
 
     void SetCurWindowSize( const wxSize& aSize ) override;
-    bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
+    bool Redraw( bool aIsMoving ) override;
 
 protected:
     void initPbo() override;

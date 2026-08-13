@@ -401,8 +401,7 @@ void RENDER_3D_RAYTRACE_BASE::createItemsFromContainer( const BVH_CONTAINER_2D* 
 extern void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline );
 
 
-void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter,
-                                 bool aOnlyLoadCopperAndShapes )
+void RENDER_3D_RAYTRACE_BASE::Reload( bool aOnlyLoadCopperAndShapes, std::stop_token aStop )
 {
     m_reloadRequested = false;
 
@@ -415,11 +414,17 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
 
     if( !aOnlyLoadCopperAndShapes )
     {
-        m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
-        m_boardAdapter.CreateLayers( aStatusReporter );
+        m_boardAdapter.InitSettings( m_activityReporter, m_warningReporter );
+        m_boardAdapter.CreateLayers( m_activityReporter );
 
         SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter();
         m_camera.SetBoardLookAtPos( camera_pos );
+    }
+
+    {
+        // Drop the BVH before freeing objects it indexes (and before any layer rebuild).
+        std::lock_guard<std::mutex> lock( m_hitTestMutex );
+        m_accelerator.reset();
     }
 
     m_objectContainer.Clear();
@@ -427,9 +432,17 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
     m_extrusionMaterials.clear();
 
     setupMaterials();
+    
+    if( aStop.stop_requested() )
+        return;
 
-    if( aStatusReporter )
-        aStatusReporter->Report( _( "Load Raytracing: board" ) );
+    if( m_activityReporter )
+    {
+        if( aOnlyLoadCopperAndShapes )
+            m_activityReporter->Report( _( "Building hit-test scene..." ) );
+        else
+            m_activityReporter->Report( _( "Load Raytracing: board" ) );
+    }
 
     // Create and add the outline board
     delete m_outlineBoard2dObjects;
@@ -659,8 +672,13 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
         }
     }
 
-    if( aStatusReporter )
-        aStatusReporter->Report( _( "Load Raytracing: layers" ) );
+    if( m_activityReporter )
+    {
+        if( aOnlyLoadCopperAndShapes )
+            m_activityReporter->Report( _( "Building hit-test scene: layers..." ) );
+        else
+            m_activityReporter->Report( _( "Load Raytracing: layers" ) );
+    }
 
     // Add layers maps (except B_Mask and F_Mask)
     for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& entry :
@@ -754,6 +772,9 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
         }
 
         createItemsFromContainer( container2d, layer_id, materialLayer, layerColor, 0.0f );
+
+        if( aStop.stop_requested() )
+            return;
     } // for each layer on map
 
     // Create plated copper
@@ -889,10 +910,18 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
     int64_t stats_startLoad3DmodelsTime = stats_endConvertTime;
 #endif
 
-    if( aStatusReporter )
-        aStatusReporter->Report( _( "Loading 3D models..." ) );
+    if( m_activityReporter )
+    {
+        if( aOnlyLoadCopperAndShapes )
+            m_activityReporter->Report( _( "Building hit-test scene: 3D models..." ) );
+        else
+            m_activityReporter->Report( _( "Loading 3D models..." ) );
+    }
 
-    load3DModels( m_objectContainer, aOnlyLoadCopperAndShapes );
+    load3DModels( m_objectContainer, aOnlyLoadCopperAndShapes, aStop );
+
+    if( aStop.stop_requested() )
+        return;
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     int64_t stats_endLoad3DmodelsTime = GetRunningMicroSecs();
@@ -1062,16 +1091,31 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
         m_camera.SetMinZoom( min_zoom );
     }
 
-    // Create an accelerator
-    delete m_accelerator;
-    m_accelerator = new BVH_PBRT( m_objectContainer, 8, SPLITMETHOD::MIDDLE );
+    if( aStop.stop_requested() )
+        return;
 
-    if( aStatusReporter )
+    // Create an accelerator
+    std::unique_ptr<ACCELERATOR_3D> accelerator =
+            std::make_unique<BVH_PBRT>( m_objectContainer, 8, SPLITMETHOD::MIDDLE );
+
+    {
+        std::lock_guard<std::mutex> lock( m_hitTestMutex );
+        m_accelerator = std::move( accelerator );
+    }
+
+    if( m_activityReporter )
     {
         // Calculation time in seconds
         double calculation_time = (double) ( GetRunningMicroSecs() - stats_startReloadTime ) / 1e6;
 
-        aStatusReporter->Report( wxString::Format( _( "Reload time %.3f s" ), calculation_time ) );
+        if( aOnlyLoadCopperAndShapes )
+        {
+            m_activityReporter->Report( wxString::Format( _( "Hit-test scene ready in %.3f s" ), calculation_time ) );
+        }
+        else
+        {
+            m_activityReporter->Report( wxString::Format( _( "Reload time %.3f s" ), calculation_time ) );
+        }
     }
 }
 
@@ -2167,8 +2211,8 @@ bool RENDER_3D_RAYTRACE_BASE::addExtrudedBodyToRaytracer( CONTAINER_3D& aDstCont
 }
 
 
-void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer,
-                                            bool aSkipMaterialInformation )
+void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation,
+                                            std::stop_token aStop )
 {
     if( !m_boardAdapter.GetBoard() )
         return;
@@ -2184,6 +2228,9 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer,
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
+        if( aStop.stop_requested() )
+            return;
+
         bool hasModels = !fp->Models().empty();
         bool showMissing = m_boardAdapter.m_Cfg->m_Render.show_missing_models;
 

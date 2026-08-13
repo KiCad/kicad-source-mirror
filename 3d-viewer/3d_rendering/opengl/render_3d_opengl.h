@@ -43,6 +43,8 @@
 
 #include <map>
 #include <memory>
+#include <stop_token>
+#include <thread>
 
 typedef std::map<PCB_LAYER_ID, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> MAP_OGL_DISP_LISTS;
 typedef std::list<std::shared_ptr<TRIANGLE_DISPLAY_LIST>>                    LIST_TRIANGLES;
@@ -60,9 +62,12 @@ public:
     ~RENDER_3D_OPENGL();
 
     void SetCurWindowSize( const wxSize& aSize ) override;
-    bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
+    bool Redraw( bool aIsMoving ) override;
 
     int GetWaitForEditingTimeOut() override;
+
+    void JoinBgWorker() override;
+    void StopBgWorker() override;
 
     void SetCurrentRollOverItem( BOARD_ITEM* aRollOverItem )
     {
@@ -160,13 +165,14 @@ private:
     void generateViaCovers( float aPlatingThickness3d, float aUnitScale );
 
     /**
-     * Load footprint models from the cache and load it to openGL lists in the form of
-     * #MODEL_3D objects.
+     * Load footprint models from the cache and load it to deferred openGL lists
+     * (#MODEL_3D_DEFERRED) objects.
      *
      * This map of models will work as a local cache for this render. (cache based on
-     * MODEL_3D with associated openGL lists in GPU memory)
+     * MODEL_3D_DEFERRED with openGL lists in GPU memory on request)
+     * @param aStop the stop token to allow cancellation of the loading process.
      */
-    void load3dModels( REPORTER* aStatusReporter );
+    void load3dModels( std::stop_token aStop = std::stop_token() );
 
     void createPlaceholderModel();
     struct MODELTORENDER
@@ -194,6 +200,8 @@ private:
     void renderPlaceholderForFootprint( std::list<MODELTORENDER>& aDstRenderList, const glm::mat4& aFpMatrix,
                                         const FOOTPRINT* aFootprint, bool aRenderTransparentOnly, bool aIsSelected,
                                         float aOpacity );
+
+    void renderExtrudedBodies();
 
     void renderOpaqueModels( const glm::mat4 &aCameraViewMatrix );
     void renderTransparentModels( const glm::mat4 &aCameraViewMatrix );
@@ -242,11 +250,15 @@ private:
      */
     void backfillPostMachine();
 
-    void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
+    void reload();
 
     void setArrowMaterial();
 
     void freeAllLists();
+
+    void startBgWorker();
+    void bgWorker( std::stop_token aStop );
+    void sendRefreshView();
 
     struct
     {
@@ -261,8 +273,34 @@ private:
         SMATERIAL m_GrayMaterial;
     } m_materials;
 
-    EDA_3D_CANVAS* m_canvas;
+    EDA_3D_CANVAS*       m_canvas;
+    std::jthread         m_bgWorkerThread;
+    std::recursive_mutex m_renderMutex;
 
+private:
+    // Helper functions for safe access
+    template <typename T>
+    void assignRenderPtr( std::shared_ptr<T>& aDst, std::shared_ptr<T> aVal )
+    {
+        std::lock_guard lock( m_renderMutex );
+        aDst = std::move( aVal );
+    }
+
+    template <typename TMap>
+    void assignRenderMap( TMap& aMap, const typename TMap::key_type& aKey, typename TMap::mapped_type aVal )
+    {
+        std::lock_guard lock( m_renderMutex );
+        aMap[aKey] = std::move( aVal );
+    }
+
+    void appendRenderTriangleList( std::shared_ptr<TRIANGLE_DISPLAY_LIST> aTriangles )
+    {
+        std::lock_guard lock( m_renderMutex );
+        m_triangles.push_back( std::move( aTriangles ) );
+    }
+
+private:
+    // Access to the following members must be protected by m_renderMutex:
     MAP_OGL_DISP_LISTS  m_layers;
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_platedPadsFront;
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_platedPadsBack;
@@ -290,8 +328,8 @@ private:
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_viaBackCover;
 
     // Caches
-    std::map<wxString, std::shared_ptr<MODEL_3D>>           m_3dModelMap;
-    std::map<std::vector<float>, glm::mat4> m_3dModelMatrixMap;
+    std::map<wxString, std::shared_ptr<MODEL_3D_DEFERRED>> m_3dModelMap;
+    std::map<std::vector<float>, glm::mat4>                m_3dModelMatrixMap;
 
     BOARD_ITEM*         m_currentRollOverItem;
 
@@ -302,8 +340,6 @@ private:
 
     std::map<const FOOTPRINT*, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> m_extrudedBodyLists;
     std::map<const FOOTPRINT*, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> m_extrudedPadLists;
-
-    void renderExtrudedBodies();
 };
 
 #endif // RENDER_3D_OPENGL_H

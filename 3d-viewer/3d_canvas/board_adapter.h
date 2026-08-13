@@ -42,6 +42,7 @@
 #include <pcb_dimension.h>
 #include <reporter.h>
 #include <dialogs/dialog_color_picker.h>
+#include <stop_token>
 
 class COLOR_SETTINGS;
 class FOOTPRINT;
@@ -124,14 +125,14 @@ public:
      * @param aStatusReporter the pointer for the status reporter.
      * @param aWarningReporter pointer for the warning reporter.
      */
-    void InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
+    void InitSettings( std::shared_ptr<REPORTER> aStatusReporter, std::shared_ptr<REPORTER> aWarningReporter );
 
     /**
      * Creates the layers for the board, should be called after InitSettings
      *
      * @param aStatusReporter the pointer for the status reporter.
      */
-    void CreateLayers( REPORTER* aStatusReporter );
+    void CreateLayers( std::shared_ptr<REPORTER> aStatusReporter, std::stop_token aStop = std::stop_token() );
 
     /**
      * Board integer units To 3D units.
@@ -455,7 +456,7 @@ private:
      * @return false if the outline could not be created
      */
     bool createBoardPolygon( wxString* aErrorMsg );
-    void createLayers( REPORTER* aStatusReporter );
+    void createLayers( std::shared_ptr<REPORTER> aStatusReporter, std::stop_token aStop );
     void destroyLayers();
 
     // Helper functions to create the board

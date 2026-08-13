@@ -67,8 +67,7 @@ void RENDER_3D_RAYTRACE_RAM::SetCurWindowSize( const wxSize& aSize )
 }
 
 
-bool RENDER_3D_RAYTRACE_RAM::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
-                                     REPORTER* aWarningReporter )
+bool RENDER_3D_RAYTRACE_RAM::Redraw( bool aIsMoving )
 {
     bool requestRedraw = false;
 
@@ -91,12 +90,12 @@ bool RENDER_3D_RAYTRACE_RAM::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     // Reload board if it was requested
     if( m_reloadRequested )
     {
-        if( aStatusReporter )
-            aStatusReporter->Report( _( "Loading..." ) );
+        if( m_activityReporter )
+            m_activityReporter->Report( _( "Loading..." ) );
 
         //aIsMoving = true;
         requestRedraw = true;
-        Reload( aStatusReporter, aWarningReporter, false );
+        Reload( false );
     }
 
 
@@ -134,7 +133,7 @@ bool RENDER_3D_RAYTRACE_RAM::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         {
             if( m_outputBuffer )
             {
-                render( m_outputBuffer, aStatusReporter );
+                render( m_outputBuffer );
 
                 if( m_renderState != RT_RENDER_STATE_FINISH )
                     requestRedraw = true;

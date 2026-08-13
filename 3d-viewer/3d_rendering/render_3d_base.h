@@ -54,11 +54,9 @@ public:
      * Redraw the view.
      *
      * @param aIsMoving if the user is moving the scene, it should be render in preview mode.
-     * @param aStatusReporter a pointer to the status progress reporter.
      * @return true if the render would like to redraw again.
      */
-    virtual bool Redraw( bool aIsMoving, REPORTER* aStatusReporter = nullptr,
-                         REPORTER* aWarningReporter = nullptr ) = 0;
+    virtual bool Redraw( bool aIsMoving ) = 0;
 
     /**
      * @todo This must be reviewed to add flags to improve specific render.
@@ -81,12 +79,34 @@ public:
     virtual int GetWaitForEditingTimeOut() = 0;
 
     /**
+     * Block until any in-progress background loading has finished.
+     */
+    virtual void JoinBgWorker() {}
+
+    /**
+     * Request stop and join any in-progress background loading.
+     */
+    virtual void StopBgWorker() {}
+
+    /**
      * Set a new busy indicator factory.
      *
      * When set, this factory will be used to generate busy indicators when
      * suitable. If not set, no busy indicator will be used.
      */
     void SetBusyIndicatorFactory( BUSY_INDICATOR::FACTORY aNewFactory );
+
+    /**
+     * Set the reporters for activity and warning messages.
+     *
+     * @param aActivityReporter a shared pointer to the activity reporter.
+     * @param aWarningReporter a shared pointer to the warning reporter.
+     */
+    void SetReporters( std::shared_ptr<REPORTER> aActivityReporter, std::shared_ptr<REPORTER> aWarningReporter )
+    {
+        m_activityReporter = aActivityReporter;
+        m_warningReporter = aWarningReporter;
+    }
 
 protected:
     /**
@@ -107,6 +127,9 @@ protected:
 
     /// The window size that this camera is working.
     wxSize m_windowSize;
+
+    std::shared_ptr<REPORTER> m_activityReporter;
+    std::shared_ptr<REPORTER> m_warningReporter;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

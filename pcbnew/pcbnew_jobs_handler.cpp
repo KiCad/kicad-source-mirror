@@ -919,7 +919,10 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     RENDER_3D_RAYTRACE_RAM raytrace( boardAdapter, camera );
     raytrace.SetCurWindowSize( windowSize );
 
-    for( bool first = true; raytrace.Redraw( false, m_reporter, m_reporter ); first = false )
+    std::shared_ptr<REPORTER> reporter( m_reporter, []( REPORTER* ) {} );
+    raytrace.SetReporters( reporter, reporter );
+
+    for( bool first = true; raytrace.Redraw( false ); first = false )
     {
         if( first )
         {

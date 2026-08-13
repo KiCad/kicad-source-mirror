@@ -30,6 +30,9 @@
 #include <plugins/3dapi/c3dmodel.h>
 
 #include <map>
+#include <memory>
+#include <mutex>
+#include <stop_token>
 
 class PAD;
 class PCB_VIA;
@@ -63,8 +66,15 @@ public:
 
     int GetWaitForEditingTimeOut() override;
 
-    void Reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter,
-                 bool aOnlyLoadCopperAndShapes );
+    void Reload( bool aOnlyLoadCopperAndShapes, std::stop_token aStop = {} );
+
+    /**
+     * Drop the hover BVH so #IntersectBoardItem becomes a no-op.
+     *
+     * Must be called before board-adapter layers are destroyed/rebuilt (e.g. OpenGL
+     * CreateLayers), because LAYER_ITEM still references those OBJECT_2Ds.
+     */
+    void InvalidateHitTesting();
 
     BOARD_ITEM *IntersectBoardItem( const RAY& aRay );
 
@@ -76,9 +86,9 @@ protected:
                                    float aLayerZOffset );
 
     void restartRenderState();
-    void renderTracing( uint8_t* ptrPBO, REPORTER* aStatusReporter );
-    void postProcessShading( uint8_t* ptrPBO, REPORTER* aStatusReporter );
-    void postProcessBlurFinish( uint8_t* ptrPBO, REPORTER* aStatusReporter );
+    void renderTracing( uint8_t* ptrPBO );
+    void postProcessShading( uint8_t* ptrPBO );
+    void postProcessBlurFinish( uint8_t* ptrPBO );
     void renderBlockTracing( uint8_t* ptrPBO , signed int iBlock );
     void renderFinalColor( uint8_t* ptrPBO, const SFVEC4F& rgbColor,
                            bool applyColorSpaceConversion );
@@ -116,7 +126,7 @@ protected:
                                 float aBottomInnerRadius, float aSurfaceZ, float aDepth,
                                 bool aIsFront );
     void backfillPostMachine();
-    void load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation );
+    void load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation, std::stop_token aStop = {} );
     void addPlaceholderToRaytracer( CONTAINER_3D& aDstContainer, const FOOTPRINT* aFootprint,
                                     const glm::mat4& aFpMatrix, bool aHasExtrudedBody = false );
     bool addExtrudedBodyToRaytracer( CONTAINER_3D& aDstContainer, const FOOTPRINT* aFootprint );
@@ -128,7 +138,7 @@ protected:
 
     void initializeBlockPositions();
 
-    void render( uint8_t* ptrPBO, REPORTER* aStatusReporter );
+    void render( uint8_t* ptrPBO );
     void renderPreview( uint8_t* ptrPBO );
 
     static SFVEC4F premultiplyAlpha( const SFVEC4F& aInput );
@@ -184,7 +194,10 @@ protected:
     CONTAINER_2D* m_outlineBoard2dObjects;
     BVH_CONTAINER_2D* m_antioutlineBoard2dObjects;
 
-    ACCELERATOR_3D* m_accelerator;
+    std::unique_ptr<ACCELERATOR_3D> m_accelerator;
+
+    /// Serializes hover BVH use
+    std::mutex m_hitTestMutex;
 
     SFVEC4F m_backgroundColorTop;
     SFVEC4F m_backgroundColorBottom;

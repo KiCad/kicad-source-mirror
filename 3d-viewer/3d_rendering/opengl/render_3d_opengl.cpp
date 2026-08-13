@@ -35,11 +35,13 @@
 #include <lset.h>
 #include <pgm_base.h>
 #include <math/util.h>      // for KiROUND
+#include <base_units.h>
+
 #include <utility>
 #include <vector>
-#include <wx/log.h>
 
-#include <base_units.h>
+#include <wx/log.h>
+#include <wx/utils.h>
 
 /**
  * Scale conversion from 3d model units to pcb units
@@ -87,7 +89,9 @@ RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdap
 
 RENDER_3D_OPENGL::~RENDER_3D_OPENGL()
 {
-    wxLogTrace( m_logTrace, wxT( "RENDER_3D_OPENGL::RENDER_3D_OPENGL" ) );
+    wxLogTrace( m_logTrace, wxT( "RENDER_3D_OPENGL::~RENDER_3D_OPENGL" ) );
+
+    StopBgWorker();
 
     freeAllLists();
 
@@ -475,7 +479,7 @@ void RENDER_3D_OPENGL::renderBoardBody( bool aSkipRenderHoles )
 
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> board_disp_list_def = nullptr;
 
-    if( aSkipRenderHoles )
+    if( aSkipRenderHoles || !m_boardWithHoles )
         board_disp_list_def = m_board;
     else
         board_disp_list_def = m_boardWithHoles;
@@ -514,8 +518,7 @@ static inline SFVEC4F premultiplyAlpha( const SFVEC4F& aInput )
 }
 
 
-bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
-                               REPORTER* aWarningReporter )
+bool RENDER_3D_OPENGL::Redraw( bool aIsMoving )
 {
     // Initialize OpenGL
     if( !m_canvasInitialized )
@@ -526,35 +529,38 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
     EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
 
-    if( m_reloadRequested )
+    const bool reloadRequested = m_reloadRequested;
+
+    if( reloadRequested )
     {
         std::unique_ptr<BUSY_INDICATOR> busy = CreateBusyIndicator();
 
-        if( aStatusReporter )
-            aStatusReporter->Report( _( "Loading..." ) );
+        if( m_activityReporter )
+            m_activityReporter->Report( _( "Loading..." ) );
 
         // Careful here!
         // We are in the middle of rendering and the reload method may show
-        // a dialog box that requires the opengl context for a redraw
-        Pgm().GetGLContextManager()->RunWithoutCtxLock( [this, aStatusReporter, aWarningReporter]()
+        // a dialog box that requires the opengl context for a redraw.
+        //
+        // reload() runs outside m_renderMutex: it stops/joins the previous
+        // background worker, and that worker needs the mutex to publish
+        // intermediate results before it can exit.
+        Pgm().GetGLContextManager()->RunWithoutCtxLock( [this]()
         {
-            reload( aStatusReporter, aWarningReporter );
+            reload();
         } );
+    }
 
-        // generate a new 3D grid as the size of the board may had changed
-        m_lastGridType = static_cast<GRID3D_TYPE>( cfg.grid_type );
+    const GRID3D_TYPE gridType = static_cast<GRID3D_TYPE>( cfg.grid_type );
+
+    // Regenerate after reload (board size may have changed) or when the grid type setting changes.
+    if( reloadRequested || gridType != m_lastGridType )
+    {
+        m_lastGridType = gridType;
         generate3dGrid( m_lastGridType );
     }
-    else
-    {
-        // Check if grid was changed
-        if( cfg.grid_type != m_lastGridType )
-        {
-            // and generate a new one
-            m_lastGridType = static_cast<GRID3D_TYPE>( cfg.grid_type );
-            generate3dGrid( m_lastGridType );
-        }
-    }
+
+    std::lock_guard<std::recursive_mutex> lock( m_renderMutex );
 
     setupMaterials();
 
@@ -1242,8 +1248,13 @@ void RENDER_3D_OPENGL::get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstR
                 continue;
             }
 
-            if( const std::shared_ptr<MODEL_3D>& modelPtr = cache_i->second )
+            if( const std::shared_ptr<MODEL_3D_DEFERRED>& modelPtrDef = cache_i->second )
             {
+                std::shared_ptr<MODEL_3D> modelPtr = modelPtrDef->MakeOrGet();
+
+                if( !modelPtr )
+                    continue;
+
                 bool opaque = sM.m_Opacity >= 1.0;
 
                 if( ( !aRenderTransparentOnly && modelPtr->HasOpaqueMeshes() && opaque ) ||

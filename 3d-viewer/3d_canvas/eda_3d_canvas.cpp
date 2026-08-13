@@ -55,6 +55,8 @@
 #include <kiway_mail.h>
 #include <widgets/wx_busy_indicator.h>
 #include <zone.h>
+#include <chrono>
+#include <ratio>
 
 
 /**
@@ -68,7 +70,7 @@ const wxChar* EDA_3D_CANVAS::m_logTrace = wxT( "KI_TRACE_EDA_3D_CANVAS" );
 
 
 // A custom event, used to call DoRePaint during an idle time
-wxDEFINE_EVENT( wxEVT_REFRESH_CUSTOM_COMMAND, wxEvent );
+wxDEFINE_EVENT( wxEVT_REFRESH_CUSTOM_COMMAND, wxCommandEvent );
 
 
 BEGIN_EVENT_TABLE( EDA_3D_CANVAS, HIDPI_GL_3D_CANVAS )
@@ -121,11 +123,8 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttrib
 
     m_is_currently_painting.clear();
 
-    m_3d_render_raytracing = new RENDER_3D_RAYTRACE_GL( this, m_boardAdapter, m_camera );
-    m_3d_render_opengl = new RENDER_3D_OPENGL( this, m_boardAdapter, m_camera );
-
-    wxASSERT( m_3d_render_raytracing != nullptr );
-    wxASSERT( m_3d_render_opengl != nullptr );
+    m_3d_render_raytracing = std::make_unique<RENDER_3D_RAYTRACE_GL>( this, m_boardAdapter, m_camera );
+    m_3d_render_opengl = std::make_unique<RENDER_3D_OPENGL>( this, m_boardAdapter, m_camera );
 
     auto busy_indicator_factory =
             []()
@@ -138,7 +137,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttrib
 
     // We always start with the opengl engine (raytracing is avoided due to very
     // long calculation time)
-    m_3d_render = m_3d_render_opengl;
+    m_3d_render = m_3d_render_opengl.get();
 
     m_boardAdapter.ReloadColorSettings();
 
@@ -174,6 +173,13 @@ EDA_3D_CANVAS::~EDA_3D_CANVAS()
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::~EDA_3D_CANVAS" ) );
 
+    // Detach UI reporters before joining/destroying renderers that may still report.
+    if( m_activityReporterSync )
+        m_activityReporterSync->SetNullReporter();
+
+    if( m_warningReporterSync )
+        m_warningReporterSync->SetNullReporter();
+
     delete m_accelerator3DShapes;
     m_accelerator3DShapes = nullptr;
 
@@ -183,6 +189,11 @@ EDA_3D_CANVAS::~EDA_3D_CANVAS()
 
 void EDA_3D_CANVAS::releaseOpenGL()
 {
+    // Join the bg worker before taking the GL lock or destroying renderers. The worker
+    // may still be in ReloadRaytracingForHitTesting() and must not outlive either renderer.
+    if( m_3d_render_opengl )
+        m_3d_render_opengl->StopBgWorker();
+
     if( m_glRC )
     {
         GL_CONTEXT_MANAGER* gl_mgr = Pgm().GetGLContextManager();
@@ -192,14 +203,11 @@ void EDA_3D_CANVAS::releaseOpenGL()
         {
             gl_mgr->LockCtx( m_glRC, this );
 
-            delete m_3d_render_raytracing;
-            m_3d_render_raytracing = nullptr;
-
-            delete m_3d_render_opengl;
-            m_3d_render_opengl = nullptr;
-
-            // This is just a copy of a pointer, can safely be set to NULL.
             m_3d_render = nullptr;
+
+            // OpenGL dtor joins the bg worker; reset it before raytracing.
+            m_3d_render_opengl.reset();
+            m_3d_render_raytracing.reset();
 
             gl_mgr->UnlockCtx( m_glRC );
             gl_mgr->DestroyCtx( m_glRC );
@@ -314,8 +322,18 @@ void EDA_3D_CANVAS::GetScreenshot( wxImage& aDstImage )
 }
 
 
+void EDA_3D_CANVAS::JoinBgWorker()
+{
+    if( m_3d_render )
+        m_3d_render->JoinBgWorker();
+}
+
+
 void EDA_3D_CANVAS::ReloadRequest( BOARD* aBoard , S3D_CACHE* aCachePointer )
 {
+    if( m_3d_render_opengl )
+        m_3d_render_opengl->StopBgWorker();
+
     if( aCachePointer != nullptr )
         m_boardAdapter.Set3dCacheManager( aCachePointer );
 
@@ -329,9 +347,23 @@ void EDA_3D_CANVAS::ReloadRequest( BOARD* aBoard , S3D_CACHE* aCachePointer )
 }
 
 
+void EDA_3D_CANVAS::ReloadRaytracingForHitTesting( std::stop_token aStop )
+{
+    if( m_3d_render_raytracing )
+        m_3d_render_raytracing->Reload( true, aStop );
+}
+
+
+void EDA_3D_CANVAS::InvalidateRaytracingHitTesting()
+{
+    if( m_3d_render_raytracing )
+        m_3d_render_raytracing->InvalidateHitTesting();
+}
+
+
 void EDA_3D_CANVAS::RenderRaytracingRequest()
 {
-    m_3d_render = m_3d_render_raytracing;
+    m_3d_render = m_3d_render_raytracing.get();
 
     if( m_3d_render )
         m_3d_render->ReloadRequest();
@@ -390,10 +422,24 @@ void EDA_3D_CANVAS::DoRePaint()
     if( !GetParent()->GetParent()->IsShownOnScreen() )
         return; // The parent board editor frame is no more alive
 
+    if( !m_activityReporterSync || !m_warningReporterSync )
+    {
+        m_statusBarReporter =
+                std::make_unique<STATUSBAR_REPORTER>( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
+        m_infoBarReporter = std::make_unique<INFOBAR_REPORTER>( m_parentInfoBar );
+
+        m_activityReporterSync = std::make_shared<SYNC_REPORTER>( *m_statusBarReporter );
+        m_warningReporterSync = std::make_shared<SYNC_REPORTER>( *m_infoBarReporter );
+
+        if( m_3d_render_opengl )
+            m_3d_render_opengl->SetReporters( m_activityReporterSync, m_warningReporterSync );
+
+        if( m_3d_render_raytracing )
+            m_3d_render_raytracing->SetReporters( m_activityReporterSync, m_warningReporterSync );
+    }
+
     wxString            err_messages;
-    INFOBAR_REPORTER    warningReporter( m_parentInfoBar );
-    STATUSBAR_REPORTER  activityReporter( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
-    int64_t             start_time = GetRunningMicroSecs();
+    auto                start_time = std::chrono::steady_clock::now();
     GL_CONTEXT_MANAGER* gl_mgr = Pgm().GetGLContextManager();
 
     if( !gl_mgr )
@@ -413,8 +459,8 @@ void EDA_3D_CANVAS::DoRePaint()
     // CreateCtx could and does fail per sentry crash events, lets be graceful
     if( m_glRC == nullptr )
     {
-        warningReporter.Report( _( "OpenGL context creation error" ), RPT_SEVERITY_ERROR );
-        warningReporter.Finalize();
+        m_warningReporterSync->Report( _( "OpenGL context creation error" ), RPT_SEVERITY_ERROR );
+        m_warningReporterSync->Finalize();
         m_is_currently_painting.clear();
         return;
     }
@@ -444,10 +490,10 @@ void EDA_3D_CANVAS::DoRePaint()
 
         if( !m_is_opengl_version_supported )
         {
-            warningReporter.Report( _( "Your OpenGL version is not supported. Minimum required "
+            m_warningReporterSync->Report( _( "Your OpenGL version is not supported. Minimum required "
                                        "is 1.5." ), RPT_SEVERITY_ERROR );
 
-            warningReporter.Finalize();
+            m_warningReporterSync->Finalize();
         }
     }
 
@@ -467,7 +513,7 @@ void EDA_3D_CANVAS::DoRePaint()
     // Don't attempt to ray trace if OpenGL doesn't support it.
     if( !m_opengl_supports_raytracing )
     {
-        m_3d_render = m_3d_render_opengl;
+        m_3d_render = m_3d_render_opengl.get();
         m_render_raytracing_was_requested = false;
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
     }
@@ -484,7 +530,7 @@ void EDA_3D_CANVAS::DoRePaint()
           && m_render_raytracing_was_requested )
         {
             m_render_raytracing_was_requested = false;
-            m_3d_render = m_3d_render_opengl;
+            m_3d_render = m_3d_render_opengl.get();
         }
     }
 
@@ -522,26 +568,7 @@ void EDA_3D_CANVAS::DoRePaint()
         {
             m_3d_render->SetCurWindowSize( clientSize );
 
-            bool reloadRaytracingForCalculations = false;
-
-            if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL
-                    && m_3d_render_opengl->IsReloadRequestPending() )
-            {
-                reloadRaytracingForCalculations = true;
-            }
-
-            requested_redraw = m_3d_render->Redraw( m_mouse_was_moved || m_camera_is_moving,
-                                                    &activityReporter, &warningReporter );
-
-            // Raytracer renderer is responsible for some features also used by the OpenGL
-            // renderer.
-            // FIXME: Presumably because raytracing renderer reload is called only after current
-            // renderer redraw, the old zoom value stays for a single frame. This is ugly, but only
-            // cosmetic, so I'm not fixing that for now: I don't know how to do this without
-            // reloading twice (maybe it's not too bad of an idea?) or doing a complicated
-            // refactor.
-            if( reloadRaytracingForCalculations )
-                m_3d_render_raytracing->Reload( nullptr, nullptr, true );
+            requested_redraw = m_3d_render->Redraw( m_mouse_was_moved || m_camera_is_moving );
         }
         catch( std::runtime_error& )
         {
@@ -575,19 +602,21 @@ void EDA_3D_CANVAS::DoRePaint()
 
     gl_mgr->UnlockCtx( m_glRC );
 
-    if( m_mouse_was_moved || m_camera_is_moving )
-    {
-        // Calculation time in milliseconds
-        const double calculation_time = (double)( GetRunningMicroSecs() - start_time ) / 1e3;
+    // Calculation time in milliseconds
+    const double calculation_time =
+            std::chrono::duration<double, std::milli>( std::chrono::steady_clock::now() - start_time ).count();
 
-        activityReporter.Report( wxString::Format( _( "Last render time %.0f ms" ),
-                                 calculation_time ) );
+    if( m_parentStatusBar )
+    {
+        m_parentStatusBar->SetStatusText( wxString::Format( _( "Last render time %.0f ms" ), calculation_time ),
+                                          EDA_3D_VIEWER_STATUSBAR::RENDER_TIME );
     }
 
     // This will reset the flag of camera parameters changed
     m_camera.ParametersChanged();
 
-    warningReporter.Finalize();
+    if( m_warningReporterSync )
+        m_warningReporterSync->Finalize();
 
     if( !err_messages.IsEmpty() )
         wxLogMessage( err_messages );
@@ -751,7 +780,7 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
     // Handle raytracing/OpenGL renderer selection
     if( !m_opengl_supports_raytracing )
     {
-        m_3d_render = m_3d_render_opengl;
+        m_3d_render = m_3d_render_opengl.get();
         m_render_raytracing_was_requested = false;
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
     }
@@ -764,7 +793,7 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
             && m_render_raytracing_was_requested )
         {
             m_render_raytracing_was_requested = false;
-            m_3d_render = m_3d_render_opengl;
+            m_3d_render = m_3d_render_opengl.get();
         }
     }
 
@@ -785,25 +814,20 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
         }
     }
 
-    // Perform the actual rendering
-    bool requested_redraw = false;
+    // Perform the actual rendering. The first redraw may start background loading;
+    // wait for it to finish and redraw once more before reading pixels.
     if( m_3d_render )
     {
         try
         {
             m_3d_render->SetCurWindowSize( clientSize );
+            m_3d_render->Redraw( false );
 
-            bool reloadRaytracingForCalculations = false;
-            if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL
-                && m_3d_render_opengl->IsReloadRequestPending() )
+            if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
             {
-                reloadRaytracingForCalculations = true;
+                m_3d_render->JoinBgWorker();
+                m_3d_render->Redraw( false );
             }
-
-            requested_redraw = m_3d_render->Redraw( false, nullptr, nullptr );
-
-            if( reloadRaytracingForCalculations )
-                m_3d_render_raytracing->Reload( nullptr, nullptr, true );
         }
         catch( std::runtime_error& )
         {
@@ -814,8 +838,9 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
         }
     }
 
+    glFinish();
+
     // Read pixels from framebuffer to the provided buffer
-    // Note: This reads RGB format. Adjust format as needed.
     glReadPixels( 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer );
 
     // Check for OpenGL errors
@@ -1424,9 +1449,9 @@ void EDA_3D_CANVAS::RenderEngineChanged()
     {
         switch( cfg->m_Render.engine )
         {
-        case RENDER_ENGINE::OPENGL:     m_3d_render = m_3d_render_opengl;     break;
-        case RENDER_ENGINE::RAYTRACING: m_3d_render = m_3d_render_raytracing; break;
-        default:                        m_3d_render = nullptr;                break;
+        case RENDER_ENGINE::OPENGL:     m_3d_render = m_3d_render_opengl.get();     break;
+        case RENDER_ENGINE::RAYTRACING: m_3d_render = m_3d_render_raytracing.get(); break;
+        default:                        m_3d_render = nullptr;                      break;
         }
     }
 

@@ -29,13 +29,22 @@
 #include <gal/hidpi_gl_3D_canvas.h>
 #include <wx/image.h>
 #include <wx/timer.h>
+#include <memory>
+#include <stop_token>
 
 
 class WX_INFOBAR;
 class wxStatusBar;
+class INFOBAR_REPORTER;
+class STATUSBAR_REPORTER;
+class SYNC_REPORTER;
 class BOARD;
 class RENDER_3D_RAYTRACE_GL;
 class RENDER_3D_OPENGL;
+
+
+// A custom event, used to call DoRePaint during an idle time
+wxDECLARE_EVENT( wxEVT_REFRESH_CUSTOM_COMMAND, wxCommandEvent );
 
 
 #define EDA_3D_CANVAS_ID (wxID_HIGHEST + 1321)
@@ -82,6 +91,18 @@ public:
     void ReloadRequest( BOARD* aBoard = nullptr, S3D_CACHE* aCachePointer = nullptr );
 
     /**
+     * Rebuild the auxiliary raytracing BVH used for hover hit-testing in OpenGL mode.
+     *
+     * Called from the OpenGL background loader once board layers are ready.
+     */
+    void ReloadRaytracingForHitTesting( std::stop_token aStop );
+
+    /**
+     * Invalidate the hover hit-test BVH before board layers are rebuilt.
+     */
+    void InvalidateRaytracingHitTesting();
+
+    /**
      * Query if there is a pending reload request.
      *
      * @return true if it wants to reload, false if there is no reload pending.
@@ -110,6 +131,11 @@ public:
      *  @param aDstImage - Screenshot destination image.
      */
     void GetScreenshot( wxImage& aDstImage );
+
+    /**
+     * Block until any in-progress OpenGL background loading has finished.
+     */
+    void JoinBgWorker();
 
     /**
      * Select a specific 3D view or operation.
@@ -302,6 +328,12 @@ private:
     wxStatusBar*           m_parentStatusBar = nullptr;         // Parent statusbar to report progress
     WX_INFOBAR*            m_parentInfoBar = nullptr;
 
+    std::unique_ptr<STATUSBAR_REPORTER> m_statusBarReporter;
+    std::unique_ptr<INFOBAR_REPORTER>   m_infoBarReporter;
+
+    std::shared_ptr<SYNC_REPORTER> m_activityReporterSync;
+    std::shared_ptr<SYNC_REPORTER> m_warningReporterSync;
+
     wxGLContext*           m_glRC = nullptr;                    // Current OpenGL context
     bool                   m_is_opengl_initialized = false;
     bool                   m_is_opengl_version_supported = true;
@@ -318,9 +350,11 @@ private:
     int                    m_moving_speed_multiplier = 3; // Camera animation speed multiplier option
 
     BOARD_ADAPTER&         m_boardAdapter;            // Pre-computed 3D info and settings
-    RENDER_3D_BASE*        m_3d_render = nullptr;
-    RENDER_3D_RAYTRACE_GL* m_3d_render_raytracing;
-    RENDER_3D_OPENGL*      m_3d_render_opengl;
+
+    /// Non-owning pointer to the active renderer (one of the two below).
+    RENDER_3D_BASE*                        m_3d_render = nullptr;
+    std::unique_ptr<RENDER_3D_RAYTRACE_GL> m_3d_render_raytracing;
+    std::unique_ptr<RENDER_3D_OPENGL>      m_3d_render_opengl;
 
     bool                   m_opengl_supports_raytracing = true;
     bool                   m_render_raytracing_was_requested = false;
