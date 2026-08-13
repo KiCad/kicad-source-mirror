@@ -69,6 +69,9 @@ public:
 protected:
     wxSize GetDefaultDialogSize() const;
 
+    void EnableSelectionEvents();
+    void DisableSelectionEvents();
+
     void AddField( const wxString& aFieldName, const wxString& aLabelValue, bool aShow, bool aGroupBy,
                    bool aAddedByUser = false );
 
@@ -94,6 +97,7 @@ protected:
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
+    virtual void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) = 0;
     void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
     void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
 

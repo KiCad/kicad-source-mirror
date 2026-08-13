@@ -360,6 +360,20 @@ wxSize DIALOG_FIELDS_TABLE::GetDefaultDialogSize() const
 }
 
 
+void DIALOG_FIELDS_TABLE::EnableSelectionEvents()
+{
+    m_grid->Connect( wxEVT_GRID_RANGE_SELECTED,
+                     wxGridRangeSelectEventHandler( DIALOG_FIELDS_TABLE::OnTableRangeSelected ), nullptr, this );
+}
+
+
+void DIALOG_FIELDS_TABLE::DisableSelectionEvents()
+{
+    m_grid->Disconnect( wxEVT_GRID_RANGE_SELECTED,
+                        wxGridRangeSelectEventHandler( DIALOG_FIELDS_TABLE::OnTableRangeSelected ), nullptr, this );
+}
+
+
 void DIALOG_FIELDS_TABLE::RestorePanelLayout()
 {
     bool sidebarCollapsed = m_cfgDialogSettings.sidebar_collapsed;

@@ -796,22 +796,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnCurrentSchematicSheetChanged( wxCommandEve
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::EnableSelectionEvents()
-{
-    m_grid->Connect( wxEVT_GRID_RANGE_SELECTED,
-                     wxGridRangeSelectEventHandler( DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableRangeSelected ),
-                     nullptr, this );
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::DisableSelectionEvents()
-{
-    m_grid->Disconnect( wxEVT_GRID_RANGE_SELECTED,
-                        wxGridRangeSelectEventHandler( DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableRangeSelected ),
-                        nullptr, this );
-}
-
-
 std::set<KIID> DIALOG_FOOTPRINT_FIELDS_TABLE::SaveGridSelection()
 {
     std::set<KIID> selectedFullPaths;

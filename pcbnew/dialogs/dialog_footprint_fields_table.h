@@ -55,7 +55,7 @@ private:
      */
     void LoadFieldNames();
 
-    void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
+    void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) override;
 
     void OnScope( wxCommandEvent& event ) override;
     void OnMenu( wxCommandEvent& event ) override;
@@ -102,9 +102,6 @@ private:
     }
 
     void OnCurrentSchematicSheetChanged( wxCommandEvent& aEvent );
-
-    void EnableSelectionEvents();
-    void DisableSelectionEvents();
 
     /**
      * Saves the current grid selection as a set of footprint full paths for later restoration.

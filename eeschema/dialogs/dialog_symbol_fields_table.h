@@ -55,7 +55,7 @@ private:
      */
     void LoadFieldNames();
 
-    void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
+    void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) override;
 
     void OnScope( wxCommandEvent& event ) override;
     void OnMenu( wxCommandEvent& event ) override;
@@ -70,9 +70,6 @@ private:
     void OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
     void OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
     void OnSchSheetChanged( SCHEMATIC& aSch ) override;
-
-    void EnableSelectionEvents();
-    void DisableSelectionEvents();
 
     /**
      * Saves the current grid selection as a set of symbol full paths for later restoration.

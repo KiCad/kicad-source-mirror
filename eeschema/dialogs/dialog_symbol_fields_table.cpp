@@ -909,22 +909,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSheetChanged( SCHEMATIC& aSch )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::EnableSelectionEvents()
-{
-    m_grid->Connect( wxEVT_GRID_RANGE_SELECTED,
-                     wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
-                     nullptr, this );
-}
-
-
-void DIALOG_SYMBOL_FIELDS_TABLE::DisableSelectionEvents()
-{
-    m_grid->Disconnect( wxEVT_GRID_RANGE_SELECTED,
-                        wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
-                        nullptr, this );
-}
-
-
 std::set<wxString> DIALOG_SYMBOL_FIELDS_TABLE::SaveGridSelection()
 {
     std::set<wxString> selectedFullPaths;
