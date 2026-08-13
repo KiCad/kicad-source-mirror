@@ -290,6 +290,13 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Xcode older than 26 gates std::jthread / std::stop_token behind the
+# experimental library. Enable it for C++20.
+if( APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+    add_compile_options( -fexperimental-library )
+    add_link_options( -fexperimental-library )
+endif()
+
 # Check if the current generator is multi-config (Ninja Multi-Config, Visual Studio, Xcode)
 get_property(IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 
