@@ -112,6 +112,7 @@ set( QA_EESCHEMA_SRCS
     test_issue22576_subsheet_standalone.cpp
     test_issue22694_global_hier_label.cpp
     test_issue24044_expression_net_names.cpp
+    test_issue24134_bus_fork_at_entry.cpp
     test_issue23719_global_label_chain.cpp
     test_issue24107_multiunit_grouping.cpp
     test_issue24072_symbol_arc_edit_mode.cpp

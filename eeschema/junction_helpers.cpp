@@ -43,11 +43,18 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
     info.hasExplicitJunctionDot = false;
     info.isJunction = false;
     info.hasBusEntryToMultipleWires = false;
+    info.hasBusEntryToMultipleBuses = false;
     info.hasBusAtPoint = false;
 
     bool                         breakLines[2] = { false };
     std::unordered_set<int>      exitAngles[2];
     std::vector<const SCH_LINE*> midPointLines[2];
+
+    // Synthetic bus angles injected by entries, subtracted later to find genuine bus directions
+    int busEntryBusAngles = 0;
+
+    // Bus segments terminating here; a real fork ends at least one bus, a crossing ends none
+    int busEndpointSegments = 0;
 
     EE_RTREE filtered;
     std::list<std::unique_ptr<SCH_LINE>> mergedLines;
@@ -185,6 +192,9 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
             {
                 breakLines[layer] = true;
                 exitAngles[layer].insert( line->GetAngleFrom( aPosition ) );
+
+                if( layer == BUSES )
+                    busEndpointSegments++;
             }
             else if( line->HitTest( aPosition, -1 ) )
             {
@@ -205,6 +215,7 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
             {
                 breakLines[BUSES] = true;
                 exitAngles[BUSES].insert( uniqueAngle++ );
+                busEntryBusAngles++;
                 breakLines[WIRES] = true;
                 exitAngles[WIRES].insert( uniqueAngle++ );
                 info.hasBusEntry = true;
@@ -263,6 +274,11 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
         // Any more wires must be multiple wires, but any more buses means a wire
         // crossing at the bus entry root.
         info.hasBusEntryToMultipleWires = exitAngles[WIRES].size() > 2 && exitAngles[BUSES].size() == 1;
+
+        // Drop the entry's own synthetic angle; three real directions with a terminating bus is
+        // a fork, while crossings with no terminating bus must not be auto-joined
+        const int realBusAngles = static_cast<int>( exitAngles[BUSES].size() ) - busEntryBusAngles;
+        info.hasBusEntryToMultipleBuses = realBusAngles >= 3 && busEndpointSegments >= 1;
     }
 
     // Any three things of the same type is a junction of some sort
@@ -336,7 +352,7 @@ std::vector<SCH_JUNCTION*> JUNCTION_HELPERS::PreviewJunctions( const SCH_SCREEN*
     {
         POINT_INFO info = AnalyzePoint( combined, pt, false );
 
-        if( info.isJunction && ( !info.hasBusEntry || info.hasBusEntryToMultipleWires ) )
+        if( info.AllowsExplicitJunction() )
         {
             SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
 
