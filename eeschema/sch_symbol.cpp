@@ -2884,6 +2884,18 @@ bool SCH_SYMBOL::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPat
 }
 
 
+bool SCH_SYMBOL::SetInstanceProjectName( const KIID_PATH& aSheetPath, const wxString& aProjectName )
+{
+    SCH_SYMBOL_INSTANCE* instance = getInstance( aSheetPath );
+
+    if( !instance )
+        return false;
+
+    instance->m_ProjectName = aProjectName;
+    return true;
+}
+
+
 void SCH_SYMBOL::SetOrientation( int aOrientation )
 {
     TRANSFORM temp = TRANSFORM();

@@ -1,0 +1,155 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "8e6ca136-54f3-48c5-afff-68b237534eb4")
+	(paper "A4")
+	(lib_symbols)
+	(sheet
+		(at 73.66 19.05)
+		(size 13.97 5.08)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "af5bb00b-cab5-44ce-9731-12dfdbf0dd8b")
+		(property "Sheetname" "dual gpio LED8"
+			(at 73.66 18.3384 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "dual gpio LED.kicad_sch"
+			(at 73.66 24.7146 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "GPIO" input
+			(at 73.66 21.59 180)
+			(uuid "0e6226a3-c20e-46a2-bbda-0ac80142a303")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VDD" input
+			(at 87.63 20.32 0)
+			(uuid "8816b161-4d89-4b71-a12f-45c1301f056c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "VSS" input
+			(at 87.63 22.86 0)
+			(uuid "12a21a2b-ec12-4f46-be6d-aa8b702b2a95")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "issue21821"
+				(path "/17c4bf89-456c-4209-aa21-31be7397f5ca/adf4c8f0-c33f-488a-8e8d-4ca6638d0792"
+					(page "19")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 30.48 17.78)
+		(size 13.97 5.08)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "fd71c97e-9deb-4a95-a605-8e0c9eaa9729")
+		(property "Sheetname" "dual gpio LED0"
+			(at 30.48 17.0684 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+				(hide yes)
+			)
+		)
+		(property "Sheetfile" "dual gpio LED.kicad_sch"
+			(at 30.48 23.4446 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "GPIO" input
+			(at 30.48 20.32 180)
+			(uuid "18aece25-a467-422a-8332-a3b30b281a03")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VDD" input
+			(at 44.45 19.05 0)
+			(uuid "50fa683c-b03b-408f-94a1-19abadb35c50")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "VSS" input
+			(at 44.45 21.59 0)
+			(uuid "4fcbaa05-5f55-43f0-85ba-85e50aebc6e5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "issue21821"
+				(path "/17c4bf89-456c-4209-aa21-31be7397f5ca/adf4c8f0-c33f-488a-8e8d-4ca6638d0792"
+					(page "9")
+				)
+			)
+		)
+	)
+)

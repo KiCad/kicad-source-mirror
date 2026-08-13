@@ -484,3 +484,25 @@ wxString UniqueGroupName( SCH_SCREEN* aScreen, const wxString& aBaseName )
 
     return aBaseName;
 }
+
+
+void PrunePastedSymbolInstances( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic )
+{
+    wxCHECK( aSymbol && aSchematic.IsValid(), /* void */ );
+
+    const wxString projectName = aSchematic.Project().GetProjectName();
+
+    std::vector<KIID_PATH> pathsToRemove;
+
+    // Claiming rewrites a field in place, so only the removals have to wait for the walk to end
+    for( const SCH_SYMBOL_INSTANCE& instance : aSymbol->GetInstances() )
+    {
+        if( !aSchematic.IsInstancePathInProject( instance.m_Path ) )
+            pathsToRemove.emplace_back( instance.m_Path );
+        else if( instance.m_ProjectName != projectName )
+            aSymbol->SetInstanceProjectName( instance.m_Path, projectName );
+    }
+
+    for( const KIID_PATH& path : pathsToRemove )
+        aSymbol->RemoveInstance( path );
+}

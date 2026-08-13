@@ -145,6 +145,33 @@ public:
 
     SCH_SHEET* GetTopLevelSheet( int aIndex = 0 ) const;
 
+    /**
+     * Check if a UUID names one of this schematic's top level sheets.
+     *
+     * @param aUuid is the sheet UUID to look for.
+     * @return true if aUuid belongs to a top-level sheet, or to the root sheet when it is not
+     *         virtual.
+     */
+    bool IsTopLevelSheetUuid( const KIID& aUuid ) const;
+
+    /**
+     * Strip the leading virtual root from a stored instance path, which SCH_SHEET_PATH::Path()
+     * omits but stored instances may still name.
+     *
+     * @param aPath is an instance path in either form.
+     * @return @a aPath in SCH_SHEET_PATH::Path() form.
+     */
+    KIID_PATH NormalizeInstancePath( const KIID_PATH& aPath ) const;
+
+    /**
+     * Test whether an instance path is rooted in this schematic's top level sheets.  A
+     * schematic file can be shared between projects, so the stored project name isn't reliable.
+     *
+     * @param aPath is an instance path, with or without a leading virtual root.
+     * @return true when @a aPath is rooted in this schematic.
+     */
+    bool IsInstancePathInProject( const KIID_PATH& aPath ) const;
+
     void SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets );
 
     /**

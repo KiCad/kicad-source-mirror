@@ -2073,6 +2073,45 @@ SCH_SHEET* SCHEMATIC::GetTopLevelSheet( int aIndex ) const
     return m_topLevelSheets[index];
 }
 
+
+bool SCHEMATIC::IsTopLevelSheetUuid( const KIID& aUuid ) const
+{
+    if( !m_rootSheet )
+        return false;
+
+    // A non-virtual root is the only sheet above the hierarchy
+    if( m_rootSheet->m_Uuid != niluuid )
+        return aUuid == m_rootSheet->m_Uuid;
+
+    for( const SCH_SHEET* sheet : m_topLevelSheets )
+    {
+        if( sheet && sheet->m_Uuid == aUuid )
+            return true;
+    }
+
+    return false;
+}
+
+
+KIID_PATH SCHEMATIC::NormalizeInstancePath( const KIID_PATH& aPath ) const
+{
+    KIID_PATH path = aPath;
+
+    if( m_rootSheet && m_rootSheet->m_Uuid == niluuid && !path.empty() && path.front() == niluuid )
+        path.erase( path.begin() );
+
+    return path;
+}
+
+
+bool SCHEMATIC::IsInstancePathInProject( const KIID_PATH& aPath ) const
+{
+    const KIID_PATH path = NormalizeInstancePath( aPath );
+
+    return !path.empty() && IsTopLevelSheetUuid( path.front() );
+}
+
+
 void SCHEMATIC::AddTopLevelSheet( SCH_SHEET* aSheet )
 {
     wxCHECK_RET( aSheet, wxS( "Cannot add null sheet!" ) );

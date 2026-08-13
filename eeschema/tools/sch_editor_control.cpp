@@ -2455,16 +2455,7 @@ void SCH_EDITOR_CONTROL::prunePastedSymbolInstances()
     {
         wxCHECK2( symbol, continue );
 
-        std::vector<KIID_PATH> instancePathsToRemove;
-
-        for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
-        {
-            if( instance.m_ProjectName != m_frame->Prj().GetProjectName() || instance.m_Path.empty() )
-                instancePathsToRemove.emplace_back( instance.m_Path );
-        }
-
-        for( const KIID_PATH& path : instancePathsToRemove )
-            symbol->RemoveInstance( path );
+        PrunePastedSymbolInstances( symbol, m_frame->Schematic() );
     }
 }
 

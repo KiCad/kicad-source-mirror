@@ -122,3 +122,15 @@ wxString UniqueSheetName( SCH_SCREEN* aScreen, const wxString& aBaseName );
  * exists on aScreen.
  */
 wxString UniqueGroupName( SCH_SCREEN* aScreen, const wxString& aBaseName );
+
+/**
+ * Discard the instance data a paste dragged in from somewhere else, keyed by path rather than
+ * project name since that field is empty in files written before KiCad 7.
+ *
+ * @warning Only call this when cleaning up after a paste; it can clobber symbol instances for
+ *          schematics shared across projects otherwise.
+ *
+ * @param aSymbol    is the pasted symbol whose instances are reconciled.
+ * @param aSchematic is the schematic the paste target belongs to.
+ */
+void PrunePastedSymbolInstances( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic );

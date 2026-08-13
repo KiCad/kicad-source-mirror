@@ -398,6 +398,15 @@ public:
      */
     bool AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath );
 
+    /**
+     * Set the owning project of the instance stored for \a aSheetPath.
+     *
+     * @param aSheetPath is the full sheet path of the instance to reassign.
+     * @param aProjectName is the name of the project that now owns the instance.
+     * @return false if no instance is stored for aSheetPath.
+     */
+    bool SetInstanceProjectName( const KIID_PATH& aSheetPath, const wxString& aProjectName );
+
 
     const BOX2I GetBoundingBox() const override;
 
