@@ -62,14 +62,10 @@ private:
 
     void OnTableCellClick( wxGridEvent& event ) override;
 
-    void OnExport( wxCommandEvent& aEvent ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
     void OnOk( wxCommandEvent& aEvent ) override;
     void OnClose( wxCloseEvent& aEvent ) override;
-
-    void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
-
 
     // Schematic listener event handlers
     void OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
@@ -106,6 +102,7 @@ private:
     void updateVariantButtonStates();
 
     wxString resolveVariant() const override;
+    bool     resolveTextVar( wxString* aToken ) const override;
 
 private:
     SCH_EDIT_FRAME*                    m_parent;

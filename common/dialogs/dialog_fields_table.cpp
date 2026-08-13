@@ -22,15 +22,19 @@
 #include "fields_view_controls_grid_data_model.h"
 
 #include <algorithm>
+#include <functional>
 #include <string>
 #include <bitmaps.h>
 #include <common.h>
 #include <confirm.h>
 #include <core/kicad_algo.h>
+#include <eda_base_frame.h>
 #include <eda_list_dialog.h>
 #include <fields_table_data_model.h>
 #include <grid_tricks.h>
 #include <jobs/job_export_bom.h>
+#include <kiplatform/ui.h>
+#include <reporter.h>
 #include <settings/app_settings.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
@@ -39,6 +43,8 @@
 #include <widgets/grid_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/ui_common.h>
+#include <wx/ffile.h>
+#include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wx/grid.h>
 #include <wx/msgdlg.h>
@@ -951,6 +957,124 @@ void DIALOG_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& aEvent )
 {
     PreviewRefresh();
     syncBomFmtPresetSelection();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& aEvent )
+{
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
+    path = Prj().AbsolutePath( path );
+
+    // Calculate the export filename
+    wxFileName fn( Prj().AbsolutePath( m_parentFrame->GetCurrentFileName() ) );
+    fn.SetExt( FILEEXT::CsvFileExtension );
+
+    wxFileDialog saveDlg( this, _( "Bill of Materials Output File" ), path, fn.GetFullName(),
+                          FILEEXT::CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &saveDlg );
+
+    if( saveDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxFileName file = wxFileName( saveDlg.GetPath() );
+    wxString   defaultPath = fn.GetPathWithSep();
+
+    if( IsOK( this, wxString::Format( _( "Do you want to use a path relative to\n'%s'?" ), defaultPath ) ) )
+    {
+        if( !file.MakeRelativeTo( defaultPath ) )
+        {
+            DisplayErrorMessage( this, _( "Cannot make path relative (target volume different from file "
+                                          "volume)!" ) );
+        }
+    }
+
+    m_outputFileName->SetValue( file.GetFullPath() );
+}
+
+
+void DIALOG_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
+{
+    if( getDataModel()->IsEdited() )
+    {
+        if( OKOrCancelDialog( nullptr, _( "Unsaved data" ),
+                              _( "Changes have not yet been saved. Export unsaved data?" ), "", _( "OK" ),
+                              _( "Cancel" ) )
+            == wxID_CANCEL )
+        {
+            return;
+        }
+    }
+
+    // Create output directory if it does not exist (also transform it in absolute form).
+    // Bail if it fails.
+
+    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
+    {
+        return resolveTextVar( token );
+    };
+
+    wxString sourceFileName = m_parentFrame->GetCurrentFileName();
+    wxString path = m_outputFileName->GetValue();
+
+    if( path.IsEmpty() )
+    {
+        // Match the behaviour of other exporters and default to the source filename with a CSV
+        // extension in the project directory when the user leaves the field blank.
+        path = GetDefaultBomFileName( sourceFileName );
+
+        if( path.IsEmpty() )
+        {
+            DisplayError( this, _( "No output file specified in Export tab." ) );
+            return;
+        }
+
+        m_outputFileName->SetValue( path );
+    }
+
+    path = ExpandTextVars( NormalizeFilePathForTextVars( path ), &textResolver );
+    path = ExpandEnvVarSubstitutions( path, &Prj() );
+
+    wxFileName outputFile = wxFileName::FileName( path );
+    wxString   msg;
+
+    if( !EnsureFileDirectoryExists( &outputFile, Prj().AbsolutePath( sourceFileName ), &NULL_REPORTER::GetInstance() ) )
+    {
+        msg.Printf( _( "Could not open/create path '%s'." ), outputFile.GetPath() );
+        DisplayError( this, msg );
+        return;
+    }
+
+    wxFFile out( outputFile.GetFullPath(), "wb" );
+
+    if( !out.IsOpened() )
+    {
+        msg.Printf( _( "Could not create BOM output '%s'." ), outputFile.GetFullPath() );
+        DisplayError( this, msg );
+        return;
+    }
+
+    PreviewRefresh();
+
+    if( !out.Write( m_textOutput->GetValue() ) )
+    {
+        msg.Printf( _( "Could not write BOM output '%s'." ), outputFile.GetFullPath() );
+        DisplayError( this, msg );
+        return;
+    }
+
+    // close the file before we tell the user it's done with the info modal :workflow meme:
+    out.Close();
+
+    if( m_cfgBomSettings.m_BomExportFileName != m_outputFileName->GetValue() )
+    {
+        m_cfgBomSettings.m_BomExportFileName = m_outputFileName->GetValue();
+        m_parentFrame->OnModify();
+    }
+
+    msg.Printf( _( "Wrote BOM output to '%s'" ), outputFile.GetFullPath() );
+    DisplayInfoMessage( this, msg );
 }
 
 

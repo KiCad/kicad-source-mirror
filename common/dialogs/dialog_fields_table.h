@@ -110,6 +110,8 @@ protected:
 
     void OnPageChanged( wxNotebookEvent& aEvent ) override;
     void OnPreviewRefresh( wxCommandEvent& aEvent ) override;
+    void OnOutputFileBrowseClicked( wxCommandEvent& aEvent ) override;
+    void OnExport( wxCommandEvent& aEvent ) override;
     void OnSidebarToggle( wxCommandEvent& event ) override;
 
     void PreviewRefresh();
@@ -133,6 +135,7 @@ protected:
 
     virtual FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const = 0;
     virtual wxString                      resolveVariant() const = 0;
+    virtual bool                          resolveTextVar( wxString* aToken ) const = 0;
 
 protected:
     FIELDS_TABLE_SETTINGS&     m_cfgDialogSettings;

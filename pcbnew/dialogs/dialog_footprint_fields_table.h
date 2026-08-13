@@ -62,14 +62,10 @@ private:
 
     void OnTableCellClick( wxGridEvent& event ) override;
 
-    void OnExport( wxCommandEvent& aEvent ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
     void OnOk( wxCommandEvent& aEvent ) override;
     void OnClose( wxCloseEvent& aEvent ) override;
-
-    void OnOutputFileBrowseClicked( wxCommandEvent& event ) override;
-
 
     // BOARD listener event handlers
     void OnBoardItemsAdded( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
@@ -135,6 +131,7 @@ private:
     void updateVariantButtonStates();
 
     wxString resolveVariant() const override;
+    bool     resolveTextVar( wxString* aToken ) const override;
 
 private:
     PCB_EDIT_FRAME* m_parent;
