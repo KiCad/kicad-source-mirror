@@ -493,6 +493,24 @@ void HIERARCHY_PANE::onContextMenu( wxContextMenuEvent& aEvent )
 }
 
 
+void HIERARCHY_PANE::resyncAfterTopLevelSheetChange( const SCH_SHEET_PATH& aPreviousSheet )
+{
+    // Adding or removing a top-level sheet drops the connection graph, and the emptied graph
+    // reads as minor, so no cleanup is needed to get a full rebuild out of this
+    SCH_COMMIT dummy( m_frame );
+
+    m_frame->RecalculateConnections( &dummy, NO_CLEANUP );
+    m_frame->UpdateHierarchyNavigator();
+
+    // Removing the displayed sheet moves the current sheet without telling the canvas, which
+    // otherwise keeps drawing the deleted screen and the surviving page looks empty
+    if( m_frame->GetCurrentSheet() != aPreviousSheet )
+        m_frame->DisplayCurrentSheet();
+
+    m_frame->OnModify();
+}
+
+
 void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
 {
     wxMenu          ctxMenu;
@@ -552,7 +570,7 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
 
             if( !newName.IsEmpty() )
             {
-                SCH_COMMIT commit( m_frame );
+                SCH_SHEET_PATH previousSheet = m_frame->GetCurrentSheet();
 
                 // Create new sheet and screen
                 SCH_SHEET* newSheet = new SCH_SHEET( &m_frame->Schematic() );
@@ -587,10 +605,7 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
                 newSheetPath.push_back( newSheet );
                 newSheetPath.SetPageNumber( pageStr );
 
-                commit.Push( _( "Add new top-level sheet" ) );
-
-                // Refresh the hierarchy tree
-                UpdateHierarchyTree();
+                resyncAfterTopLevelSheetChange( previousSheet );
             }
         }
         break;
@@ -616,16 +631,11 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
                     break;
                 }
 
-                SCH_COMMIT commit( m_frame );
+                SCH_SHEET_PATH previousSheet = m_frame->GetCurrentSheet();
 
                 // Remove from schematic
                 if( m_frame->Schematic().RemoveTopLevelSheet( sheet ) )
-                {
-                    commit.Push( _( "Delete top-level sheet" ) );
-
-                    // Refresh the hierarchy tree
-                    UpdateHierarchyTree();
-                }
+                    resyncAfterTopLevelSheetChange( previousSheet );
             }
         }
         break;

@@ -122,6 +122,41 @@ std::unique_ptr<SCHEMATIC> LoadHierarchyFromRoot( const std::string& rootFilenam
 }
 
 
+std::unique_ptr<SCHEMATIC> ReadSchematicFromStream( std::istream& aStream, PROJECT* aProject )
+{
+    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
+
+    schematic->SetProject( aProject );
+
+    SCH_SHEET*  rootSheet = new SCH_SHEET( schematic.get() );
+    SCH_SCREEN* screen = new SCH_SCREEN( schematic.get() );
+
+    rootSheet->SetScreen( screen );
+    screen->SetParent( schematic.get() );
+    schematic->SetTopLevelSheets( { rootSheet } );
+
+    STDISTREAM_LINE_READER reader;
+    reader.SetStream( aStream );
+
+    SCH_IO_KICAD_SEXPR_PARSER parser( &reader, nullptr, 0, rootSheet );
+    parser.ParseSchematic( rootSheet );
+
+    // Link symbol instances the way LoadSchematic does for the single-sheet case
+    rootSheet->GetScreen()->UpdateLocalLibSymbolLinks();
+
+    SCH_SHEET_LIST sheets = schematic->BuildSheetListSortedByPageNumbers();
+
+    sheets.UpdateSymbolInstanceData( schematic->RootScreen()->GetSymbolInstances() );
+    sheets.UpdateSheetInstanceData( schematic->RootScreen()->GetSheetInstances() );
+    sheets.AnnotatePowerSymbols();
+
+    for( SCH_SHEET_PATH& sheet : sheets )
+        sheet.UpdateAllScreenReferences();
+
+    return schematic;
+}
+
+
 void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
                     std::unique_ptr<SCHEMATIC>& aSchematic )
 {
