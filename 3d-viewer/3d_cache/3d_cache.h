@@ -174,7 +174,8 @@ private:
     // the real load function (can supply a cache entry pointer to member functions)
     SCENEGRAPH* load( const wxString& aModelFile, const wxString& aBasePath,
                       S3D_CACHE_ENTRY** aCachePtr = nullptr,
-                      std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack = {} );
+                      std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack = {},
+                      S3DMODEL** aRenderModel = nullptr );
 
     /// Cache entries.
     std::list< S3D_CACHE_ENTRY* > m_CacheList;

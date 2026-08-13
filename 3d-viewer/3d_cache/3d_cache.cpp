@@ -81,8 +81,8 @@ public:
 
 private:
     // prohibit assignment and default copy constructor
-    S3D_CACHE_ENTRY( const S3D_CACHE_ENTRY& source );
-    S3D_CACHE_ENTRY& operator=( const S3D_CACHE_ENTRY& source );
+    S3D_CACHE_ENTRY( const S3D_CACHE_ENTRY& source ) = delete;
+    S3D_CACHE_ENTRY& operator=( const S3D_CACHE_ENTRY& source ) = delete;
 
     wxString m_CacheBaseName;  // base name of cache file
 };
@@ -139,54 +139,75 @@ S3D_CACHE::~S3D_CACHE()
 
 SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, const wxString& aBasePath,
                              S3D_CACHE_ENTRY** aCachePtr,
-                             std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack )
+                             std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack,
+                             S3DMODEL** aRenderModel )
 {
     if( aCachePtr )
         *aCachePtr = nullptr;
 
+    if( aRenderModel )
+        *aRenderModel = nullptr;
+
     wxString full3Dpath = m_FNResolver->ResolvePath( aModelFile, aBasePath, std::move( aEmbeddedFilesStack ) );
+
+    // In CLI / scripting contexts, transparently substitute a matching
+    // STEP model for a missing WRL reference so renders and exports
+    // don't silently lose geometry.  The GUI handles this via the
+    // DIALOG_MIGRATE_3D_MODELS load-time auto-migration, so we skip the
+    // fallback there to avoid masking user-visible "missing" state.
+    if( full3Dpath.empty() && !Pgm().IsGUI() && MODEL_SUBSTITUTION::IsWrlExtension( aModelFile ) )
+    {
+        std::lock_guard<std::mutex> catLock( m_substCatalogMutex );
+
+        if( !m_substCatalogBuilt )
+        {
+            const wxString projectPath =
+                    m_project ? m_project->GetProjectPath() : wxString();
+            m_substCatalog.Build( projectPath, m_FNResolver );
+            m_substCatalogBuilt = true;
+        }
+
+        const wxString subst = m_substCatalog.FindMatchFor( aModelFile );
+
+        if( !subst.IsEmpty() )
+        {
+            wxLogTrace( MASK_3D_CACHE,
+                        wxT( "%s:%s:%d\n * [3D model] substituting '%s' -> '%s'\n" ),
+                        __FILE__, __FUNCTION__, __LINE__, aModelFile, subst );
+            full3Dpath = subst;
+        }
+    }
 
     if( full3Dpath.empty() )
     {
-        // In CLI / scripting contexts, transparently substitute a matching
-        // STEP model for a missing WRL reference so renders and exports
-        // don't silently lose geometry.  The GUI handles this via the
-        // DIALOG_MIGRATE_3D_MODELS load-time auto-migration, so we skip the
-        // fallback there to avoid masking user-visible "missing" state.
-        if( !Pgm().IsGUI() && MODEL_SUBSTITUTION::IsWrlExtension( aModelFile ) )
-        {
-            std::lock_guard<std::mutex> catLock( m_substCatalogMutex );
-
-            if( !m_substCatalogBuilt )
-            {
-                const wxString projectPath =
-                        m_project ? m_project->GetProjectPath() : wxString();
-                m_substCatalog.Build( projectPath, m_FNResolver );
-                m_substCatalogBuilt = true;
-            }
-
-            const wxString subst = m_substCatalog.FindMatchFor( aModelFile );
-
-            if( !subst.IsEmpty() )
-            {
-                wxLogTrace( MASK_3D_CACHE,
-                            wxT( "%s:%s:%d\n * [3D model] substituting '%s' -> '%s'\n" ),
-                            __FILE__, __FUNCTION__, __LINE__, aModelFile, subst );
-                full3Dpath = subst;
-            }
-        }
-
-        if( full3Dpath.empty() )
-        {
-            // the model cannot be found; we cannot proceed
-            wxLogTrace( MASK_3D_CACHE, wxT( "%s:%s:%d\n * [3D model] could not find model '%s'\n" ),
-                        __FILE__, __FUNCTION__, __LINE__, aModelFile );
-            return nullptr;
-        }
+        // the model cannot be found; we cannot proceed
+        wxLogTrace( MASK_3D_CACHE, wxT( "%s:%s:%d\n * [3D model] could not find model '%s'\n" ),
+                    __FILE__, __FUNCTION__, __LINE__, aModelFile );
+        return nullptr;
     }
 
     // check cache if file is already loaded
     std::lock_guard<std::mutex> lock( mutex3D_cache );
+
+    auto finishEntry = [&]( S3D_CACHE_ENTRY* ep ) -> SCENEGRAPH*
+    {
+        if( !ep )
+            return nullptr;
+
+        if( aCachePtr )
+            *aCachePtr = ep;
+
+        // Lazy renderData conversion under the same lock that owns the entry.
+        if( aRenderModel )
+        {
+            if( !ep->renderData && ep->sceneData )
+                ep->renderData = S3D::GetModel( ep->sceneData );
+
+            *aRenderModel = ep->renderData;
+        }
+
+        return ep->sceneData;
+    };
 
     std::map< wxString, S3D_CACHE_ENTRY*, rsort_wxString >::iterator mi;
     mi = m_CacheMap.find( full3Dpath );
@@ -229,14 +250,13 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, const wxString& aBasePa
             }
         }
 
-        if( nullptr != aCachePtr )
-            *aCachePtr = mi->second;
-
-        return mi->second->sceneData;
+        return finishEntry( mi->second );
     }
 
     // a cache item does not exist; search the Filename->Cachename map
-    return checkCache( full3Dpath, aCachePtr );
+    S3D_CACHE_ENTRY* ep = nullptr;
+    checkCache( full3Dpath, &ep );
+    return finishEntry( ep );
 }
 
 
@@ -512,6 +532,8 @@ bool S3D_CACHE::SetProject( PROJECT* aProject )
 
     if( m_FNResolver->SetProject( aProject, &hasChanged ) && hasChanged )
     {
+        std::lock_guard<std::mutex> lock( mutex3D_cache );
+
         m_CacheMap.clear();
 
         std::list< S3D_CACHE_ENTRY* >::iterator sL = m_CacheList.begin();
@@ -552,6 +574,8 @@ std::list< wxString > const* S3D_CACHE::GetFileFilters() const
 
 void S3D_CACHE::FlushCache( bool closePlugins )
 {
+    std::lock_guard<std::mutex> lock( mutex3D_cache );
+
     std::list< S3D_CACHE_ENTRY* >::iterator sCL = m_CacheList.begin();
     std::list< S3D_CACHE_ENTRY* >::iterator eCL = m_CacheList.end();
 
@@ -579,26 +603,10 @@ void S3D_CACHE::ClosePlugins()
 S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName, const wxString& aBasePath,
                                std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack )
 {
-    S3D_CACHE_ENTRY* cp = nullptr;
-    SCENEGRAPH*      sp = load( aModelFileName, aBasePath, &cp, std::move( aEmbeddedFilesStack ) );
+    S3DMODEL* mp = nullptr;
 
-    if( !sp )
+    if( !load( aModelFileName, aBasePath, nullptr, std::move( aEmbeddedFilesStack ), &mp ) )
         return nullptr;
-
-    if( !cp )
-    {
-        wxLogTrace( MASK_3D_CACHE,
-                    wxT( "%s:%s:%d\n  * [BUG] model loaded with no associated S3D_CACHE_ENTRY" ),
-                    __FILE__, __FUNCTION__, __LINE__ );
-
-        return nullptr;
-    }
-
-    if( cp->renderData )
-        return cp->renderData;
-
-    S3DMODEL* mp = S3D::GetModel( sp );
-    cp->renderData = mp;
 
     return mp;
 }
