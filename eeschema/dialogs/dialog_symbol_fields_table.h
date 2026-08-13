@@ -77,7 +77,6 @@ private:
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnGridMouseMove( wxMouseEvent& aEvent );
 
-    void OnSidebarToggle( wxCommandEvent& event ) override;
     void OnExport( wxCommandEvent& aEvent ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;

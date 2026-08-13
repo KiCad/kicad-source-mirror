@@ -177,7 +177,7 @@ private:
 
 
 DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob ) :
-        DIALOG_FIELDS_TABLE( parent ),
+        DIALOG_FIELDS_TABLE( parent, parent->GetPcbNewSettings()->m_FieldEditorPanel ),
         m_parent( parent ),
         m_boardSettings( parent->GetBoard()->GetDesignSettings() ),
         m_job( aJob )
@@ -312,23 +312,9 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
 
     finishDialogSettings();
 
-    SetSize( wxSize( horizPixelsFromDU( 600 ), vertPixelsFromDU( 300 ) ) );
+    SetSize( GetDefaultDialogSize() );
 
-    PCBNEW_SETTINGS::PANEL_FOOTPRINT_FIELDS_TABLE& cfg = m_parent->GetPcbNewSettings()->m_FieldEditorPanel;
-
-    m_viewControlsGrid->ShowHideColumns( "0 1 2 3" );
-
-    CallAfter( [this, cfg]()
-               {
-                   if( cfg.sidebar_collapsed )
-                       m_splitterMainWindow->Unsplit( m_leftPanel );
-                   else
-                       m_splitterMainWindow->SetSashPosition( cfg.sash_pos );
-
-                   setSideBarButtonLook( cfg.sidebar_collapsed );
-
-                   m_splitter_left->SetSashPosition( cfg.variant_sash_pos );
-               } );
+    RestorePanelLayout();
 
     OptOut( m_outputFileName );
 
@@ -374,12 +360,9 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::~DIALOG_FOOTPRINT_FIELDS_TABLE()
 
     savePresetsToBoard();
 
-    PCBNEW_SETTINGS::PANEL_FOOTPRINT_FIELDS_TABLE& cfg = m_parent->GetPcbNewSettings()->m_FieldEditorPanel;
+    SavePanelLayout();
 
-    if( !cfg.sidebar_collapsed )
-        cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
-
-    cfg.variant_sash_pos = m_splitter_left->GetSashPosition();
+    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
@@ -459,8 +442,8 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::SetupColumnProperties( int aCol )
 
 void DIALOG_FOOTPRINT_FIELDS_TABLE::SetupAllColumnProperties()
 {
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
-    wxSize           defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
+    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
+    wxSize                 defaultDlgSize = GetDefaultDialogSize();
 
     // Restore column sorting order and widths
     m_grid->AutoSizeColumns( false );
@@ -495,10 +478,9 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::SetupAllColumnProperties()
 
             std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
 
-            if( cfg->m_FieldEditorPanel.field_widths.count( key )
-                && ( cfg->m_FieldEditorPanel.field_widths.at( key ) > 0 ) )
+            if( cfg.field_widths.count( key ) && ( cfg.field_widths.at( key ) > 0 ) )
             {
-                m_grid->SetColSize( col, cfg->m_FieldEditorPanel.field_widths.at( key ) );
+                m_grid->SetColSize( col, cfg.field_widths.at( key ) );
             }
             else
             {
@@ -947,7 +929,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event
 
 void DIALOG_FOOTPRINT_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 {
-    PCBNEW_SETTINGS::PANEL_FOOTPRINT_FIELDS_TABLE& cfg = m_parent->GetPcbNewSettings()->m_FieldEditorPanel;
+    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
 
     // Build a pop menu:
     wxMenu menu;
@@ -1051,14 +1033,14 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
     int origPos = aEvent.GetCol();
 
     // Save column widths since the setup function uses the saved config values
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
         if( m_grid->IsColShown( i ) )
         {
             std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
+            cfg.field_widths[fieldName] = m_grid->GetColSize( i );
         }
     }
 
@@ -1248,7 +1230,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnGridMouseMove( wxMouseEvent& aEvent )
 
 void DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
 {
-    PCBNEW_SETTINGS::PANEL_FOOTPRINT_FIELDS_TABLE& cfg = m_parent->GetPcbNewSettings()->m_FieldEditorPanel;
+    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
 
     // Cross-probing should only work in Edit page
     if( m_nbPages->GetSelection() != 0 )
@@ -1356,27 +1338,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& e
     }
 
     m_outputFileName->SetValue( file.GetFullPath() );
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
-{
-    PCBNEW_SETTINGS::PANEL_FOOTPRINT_FIELDS_TABLE& cfg = m_parent->GetPcbNewSettings()->m_FieldEditorPanel;
-
-    if( cfg.sidebar_collapsed )
-    {
-        cfg.sidebar_collapsed = false;
-        m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, cfg.sash_pos );
-    }
-    else
-    {
-        cfg.sash_pos = m_splitterMainWindow->GetSashPosition();
-
-        cfg.sidebar_collapsed = true;
-        m_splitterMainWindow->Unsplit( m_leftPanel );
-    }
-
-    setSideBarButtonLook( cfg.sidebar_collapsed );
 }
 
 
@@ -1629,16 +1590,16 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset 
             continue;
         }
 
-        PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
-        std::string      fieldNameStr( fieldName.ToUTF8() );
+        FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
+        std::string            fieldNameStr( fieldName.ToUTF8() );
 
         // Set column labels
         const wxString& label = m_dataModel->GetColLabelValue( col );
         m_viewControlsDataModel->SetValue( i, LABEL_COLUMN, label );
         m_grid->SetColLabelValue( col, label );
 
-        if( cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
-            m_grid->SetColSize( col, cfg->m_FieldEditorPanel.field_widths.at( fieldNameStr ) );
+        if( cfg.field_widths.count( fieldNameStr ) )
+            m_grid->SetColSize( col, cfg.field_widths.at( fieldNameStr ) );
 
         // Set shown columns
         bool show = m_dataModel->GetShowColumn( col );

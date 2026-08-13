@@ -26,10 +26,12 @@
 #include <dialog_fields_table_base.h>
 #include <settings/bom_settings.h>
 
+struct FIELDS_TABLE_SETTINGS;
+
 class KICOMMON_API DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
 {
 public:
-    using DIALOG_FIELDS_TABLE_BASE::DIALOG_FIELDS_TABLE_BASE;
+    DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings );
 
     void ShowEditTab();
     void ShowExportTab();
@@ -56,6 +58,12 @@ public:
 
 
 protected:
+    FIELDS_TABLE_SETTINGS& GetPanelSettings() { return m_panelSettings; }
+    wxSize                 GetDefaultDialogSize() const;
+
+    void RestorePanelLayout();
+    void SavePanelLayout();
+
     // Set bitmap and tooltip according to left panel visibility
     void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
 
@@ -64,6 +72,7 @@ protected:
     void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
 
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
+    void OnSidebarToggle( wxCommandEvent& event ) override;
 
     void syncBomPresetSelection();
     void rebuildBomPresetsWidget();
@@ -82,6 +91,8 @@ protected:
 
 
 protected:
+    FIELDS_TABLE_SETTINGS& m_panelSettings;
+
     std::map<wxString, BOM_PRESET>     m_bomPresets;
     BOM_PRESET*                        m_currentBomPreset = nullptr;
     BOM_PRESET*                        m_lastSelectedBomPreset = nullptr;

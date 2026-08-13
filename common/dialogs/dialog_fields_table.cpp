@@ -25,6 +25,7 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_list_dialog.h>
+#include <settings/app_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/ui_common.h>
@@ -37,6 +38,13 @@
 #else
 #define COLUMN_MARGIN 15
 #endif
+
+
+DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings ) :
+        DIALOG_FIELDS_TABLE_BASE( aParent ),
+        m_panelSettings( aPanelSettings )
+{
+}
 
 
 void DIALOG_FIELDS_TABLE::ShowEditTab()
@@ -63,6 +71,44 @@ wxString DIALOG_FIELDS_TABLE::GetDefaultBomFileName( const wxString& aInputFileN
 }
 
 
+wxSize DIALOG_FIELDS_TABLE::GetDefaultDialogSize() const
+{
+    return ConvertDialogToPixels( wxSize( 600, 300 ) );
+}
+
+
+void DIALOG_FIELDS_TABLE::RestorePanelLayout()
+{
+    bool sidebarCollapsed = m_panelSettings.sidebar_collapsed;
+    int  sashPosition = m_panelSettings.sash_pos;
+    int  variantSashPosition = m_panelSettings.variant_sash_pos;
+
+    m_viewControlsGrid->ShowHideColumns( "0 1 2 3" );
+
+    CallAfter(
+            [this, sidebarCollapsed, sashPosition, variantSashPosition]()
+            {
+                if( sidebarCollapsed )
+                    m_splitterMainWindow->Unsplit( m_leftPanel );
+                else
+                    m_splitterMainWindow->SetSashPosition( sashPosition );
+
+                setSideBarButtonLook( sidebarCollapsed );
+
+                m_splitter_left->SetSashPosition( variantSashPosition );
+            } );
+}
+
+
+void DIALOG_FIELDS_TABLE::SavePanelLayout()
+{
+    if( !m_panelSettings.sidebar_collapsed )
+        m_panelSettings.sash_pos = m_splitterMainWindow->GetSashPosition();
+
+    m_panelSettings.variant_sash_pos = m_splitter_left->GetSashPosition();
+}
+
+
 void DIALOG_FIELDS_TABLE::setSideBarButtonLook( bool aIsLeftPanelCollapsed )
 {
     // Set bitmap and tooltip according to left panel visibility
@@ -77,6 +123,25 @@ void DIALOG_FIELDS_TABLE::setSideBarButtonLook( bool aIsLeftPanelCollapsed )
         m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
         m_sidebarButton->SetToolTip( _( "Collapse left panel" ) );
     }
+}
+
+
+void DIALOG_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
+{
+    if( m_panelSettings.sidebar_collapsed )
+    {
+        m_panelSettings.sidebar_collapsed = false;
+        m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, m_panelSettings.sash_pos );
+    }
+    else
+    {
+        m_panelSettings.sash_pos = m_splitterMainWindow->GetSashPosition();
+
+        m_panelSettings.sidebar_collapsed = true;
+        m_splitterMainWindow->Unsplit( m_leftPanel );
+    }
+
+    setSideBarButtonLook( m_panelSettings.sidebar_collapsed );
 }
 
 

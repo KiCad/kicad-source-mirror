@@ -230,16 +230,6 @@ public:
         std::vector<BOM_PLUGIN_SETTINGS> plugins;
     };
 
-    struct PANEL_SYMBOL_FIELDS_TABLE
-    {
-        std::map<std::string, int> field_widths;
-        wxString                   export_filename;
-        int                        selection_mode;
-        int                        sash_pos;
-        bool                       sidebar_collapsed;
-        int                        variant_sash_pos;
-    };
-
     struct PANEL_LIB_VIEW
     {
         int lib_list_width;
@@ -343,7 +333,7 @@ public:
     PANEL_ANNOTATE            m_AnnotatePanel;
     PANEL_BOM                 m_BomPanel;
 
-    PANEL_SYMBOL_FIELDS_TABLE m_FieldEditorPanel;
+    FIELDS_TABLE_SETTINGS     m_FieldEditorPanel;
     PANEL_LIB_VIEW            m_LibViewPanel;
     PANEL_NETLIST             m_NetlistPanel;
     PANEL_SYM_CHOOSER         m_SymChooserPanel;

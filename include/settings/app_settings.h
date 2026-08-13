@@ -105,6 +105,20 @@ struct KICOMMON_API WINDOW_SETTINGS
     GRID_SETTINGS grid;
 };
 
+
+/**
+ * Dialog settings for the lib/symbol/footprint table editors across the various editors.
+ */
+struct KICOMMON_API FIELDS_TABLE_SETTINGS
+{
+    std::map<std::string, int> field_widths;
+    int                        selection_mode;
+    int                        sash_pos;
+    bool                       sidebar_collapsed;
+    int                        variant_sash_pos;
+};
+
+
 /**
  * APP_SETTINGS_BASE is a settings class that should be derived for each standalone KiCad
  * application.  It stores settings that should exist for every app, but may be different from
