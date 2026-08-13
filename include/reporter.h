@@ -154,6 +154,8 @@ public:
         m_reportedSeverityMask = 0;
     }
 
+    virtual void Finalize() {};
+
 private:
     int m_reportedSeverityMask;
 };
@@ -163,15 +165,16 @@ private:
  * A thread-safe REPORTER wrapper that serializes forwarding to an underlying reporter.
  *
  * Use it when several worker threads may report concurrently through one reporter that is not
- * itself thread-safe.  The wrapped reporter must outlive this object.  This only guards against
- * data races on the wrapped reporter's state, it does not marshal calls onto a UI thread, so the
- * wrapped reporter must be safe to touch from a background thread.
+ * itself thread-safe.  The wrapped reporter must outlive this object unless
+ * #SetNullReporter has been called.  This only guards against data races on the wrapped
+ * reporter's state; it does not marshal calls onto a UI thread, so the wrapped reporter must
+ * be safe to touch from a background thread (or use CallAfter itself).
  */
 class KICOMMON_API SYNC_REPORTER : public REPORTER
 {
 public:
     SYNC_REPORTER( REPORTER& aReporter ) :
-            m_reporter( aReporter )
+            m_reporter( &aReporter )
     { }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
@@ -188,8 +191,12 @@ public:
 
     void Clear() override;
 
+    void Finalize() override;
+
+    void SetNullReporter();
+
 protected:
-    REPORTER&          m_reporter;
+    REPORTER*          m_reporter;
     mutable std::mutex m_mutex;
 };
 

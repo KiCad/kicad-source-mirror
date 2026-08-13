@@ -102,7 +102,7 @@ REPORTER& SYNC_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     std::lock_guard lock( m_mutex );
 
-    m_reporter.Report( aText, aSeverity );
+    m_reporter->Report( aText, aSeverity );
     return *this;
 }
 
@@ -111,7 +111,7 @@ REPORTER& SYNC_REPORTER::ReportTail( const wxString& aText, SEVERITY aSeverity )
 {
     std::lock_guard lock( m_mutex );
 
-    m_reporter.ReportTail( aText, aSeverity );
+    m_reporter->ReportTail( aText, aSeverity );
     return *this;
 }
 
@@ -120,7 +120,7 @@ REPORTER& SYNC_REPORTER::ReportHead( const wxString& aText, SEVERITY aSeverity )
 {
     std::lock_guard lock( m_mutex );
 
-    m_reporter.ReportHead( aText, aSeverity );
+    m_reporter->ReportHead( aText, aSeverity );
     return *this;
 }
 
@@ -129,7 +129,23 @@ void SYNC_REPORTER::Clear()
 {
     std::lock_guard lock( m_mutex );
 
-    m_reporter.Clear();
+    m_reporter->Clear();
+}
+
+
+void SYNC_REPORTER::Finalize()
+{
+    std::lock_guard lock( m_mutex );
+
+    m_reporter->Finalize();
+}
+
+
+void SYNC_REPORTER::SetNullReporter()
+{
+    std::lock_guard lock( m_mutex );
+
+    m_reporter = &NULL_REPORTER::GetInstance();
 }
 
 
@@ -137,7 +153,7 @@ bool SYNC_REPORTER::HasMessage() const
 {
     std::lock_guard lock( m_mutex );
 
-    return m_reporter.HasMessage();
+    return m_reporter->HasMessage();
 }
 
 
@@ -145,7 +161,7 @@ bool SYNC_REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
 {
     std::lock_guard lock( m_mutex );
 
-    return m_reporter.HasMessageOfSeverity( aSeverityMask );
+    return m_reporter->HasMessageOfSeverity( aSeverityMask );
 }
 
 
@@ -153,7 +169,7 @@ EDA_UNITS SYNC_REPORTER::GetUnits() const
 {
     std::lock_guard lock( m_mutex );
 
-    return m_reporter.GetUnits();
+    return m_reporter->GetUnits();
 }
 
 
@@ -370,8 +386,22 @@ REPORTER& STATUSBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity 
 
     if( m_statusBar )
     {
-        // The message will be ellipsized automatically
-        m_statusBar->SetStatusText( aText, m_position );
+        wxStatusBar* statusBar = m_statusBar;
+        int          position = m_position;
+
+        if( wxIsMainThread() )
+        {
+            // The message will be ellipsized automatically
+            statusBar->SetStatusText( aText, position );
+        }
+        else
+        {
+            statusBar->CallAfter(
+                    [statusBar, position, aText]()
+                    {
+                        statusBar->SetStatusText( aText, position );
+                    } );
+        }
     }
 
     return *this;

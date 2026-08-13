@@ -341,7 +341,7 @@ public:
     /**
      * Update the infobar with the reported text.
      */
-    void Finalize();
+    void Finalize() override;
 
 private:
     bool                      m_messageSet;
