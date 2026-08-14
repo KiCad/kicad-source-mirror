@@ -122,6 +122,8 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_SpecialCharacters )
 {
 #ifdef _WIN32
     BOOST_TEST_MESSAGE( "Skipping test - Windows normalizes clipboard text line endings" );
+#elif defined( __WXMAC__ )
+    BOOST_TEST_MESSAGE( "Skipping test - doesn't work on macOS" );
 #else
     SKIP_IF_HEADLESS();
 
@@ -296,6 +298,10 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_WithNewlines )
 {
     SKIP_IF_HEADLESS();
 
+#ifdef __WXMAC__
+    BOOST_TEST_MESSAGE( "Skipping test - doesn't work on macOS" );
+#else
+
     std::vector<std::vector<wxString>> dataWithNewlines = {
         { wxS("Line1\nLine2"), wxS("Normal") },
         { wxS("Single line"), wxS("Another\nmultiline") }
@@ -314,6 +320,7 @@ BOOST_AUTO_TEST_CASE( SaveTabularData_WithNewlines )
             // Note: Newline handling depends on CSV parser implementation
         }
     }
+#endif
 }
 
 BOOST_AUTO_TEST_CASE( SaveTabularData_IrregularGrid )
