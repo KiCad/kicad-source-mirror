@@ -533,8 +533,6 @@ public:
 private:
     /**
      * Run time identification, _keep private_ so it can never be changed after a ctor sets it.
-     *
-     * See comment near SetType() regarding virtual functions.
      */
     KICAD_T        m_structType;
 
