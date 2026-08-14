@@ -141,4 +141,6 @@ BOOST_FIXTURE_TEST_CASE( SchematicVariantDoesNotLeakIntoDataStore, ISSUE24915_FI
     BOOST_CHECK_EQUAL( ModelValue( baseModel, wxS( "R1" ), wxS( "Value" ) ), wxS( "6k2" ) );
     BOOST_CHECK_EQUAL( ModelValue( baseModel, wxS( "R3" ), wxS( "Value" ) ), wxS( "1M" ) );
     BOOST_CHECK_EQUAL( ModelValue( baseModel, wxS( "R2" ), wxS( "${DNP}" ) ), wxS( "0" ) );
+
+    BOOST_CHECK_EQUAL( ExportValue( baseModel, wxS( "R2" ), wxS( "${DNP}" ) ), wxEmptyString );
 }

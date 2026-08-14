@@ -968,6 +968,7 @@ BOOST_AUTO_TEST_CASE( VariantSpecificFieldDereferencing )
     // Create a variant with a different value field
     m_schematic->AddVariant( variantName );
     symbol->GetField( FIELD_T::VALUE )->SetText( variantValue, &m_schematic->Hierarchy()[0], variantName );
+    symbol->SetDNP( true, &m_schematic->Hierarchy()[0], variantName );
 
     // Verify default value
     BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0], false, 0 ),
@@ -1001,10 +1002,23 @@ BOOST_AUTO_TEST_CASE( VariantSpecificFieldDereferencing )
     BOOST_CHECK_EQUAL( token, variantValue );
 
     // Test 5: ResolveTextVar with empty variant - should return default
+    m_schematic->SetCurrentVariant( variantName );
     token = wxS( "VALUE" );
     resolved = symbol->ResolveTextVar( &m_schematic->Hierarchy()[0], &token, wxEmptyString, 0 );
     BOOST_CHECK( resolved );
     BOOST_CHECK_EQUAL( token, defaultValue );
+
+    // Test 6: ResolveTextVar DNP without a variant parameter - should return current variant
+    token = wxS( "DNP" );
+    resolved = symbol->ResolveTextVar( &m_schematic->Hierarchy()[0], &token, 0 );
+    BOOST_CHECK( resolved );
+    BOOST_CHECK_EQUAL( token, wxS( "DNP" ) );
+
+    // Test 7: ResolveTextVar DNP with empty variant - should return default
+    token = wxS( "DNP" );
+    resolved = symbol->ResolveTextVar( &m_schematic->Hierarchy()[0], &token, wxEmptyString, 0 );
+    BOOST_CHECK( resolved );
+    BOOST_CHECK_EQUAL( token, wxEmptyString );
 }
 
 

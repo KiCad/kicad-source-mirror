@@ -2310,7 +2310,12 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const
 {
-    return ResolveTextVar( aPath, token, wxEmptyString, aDepth );
+    wxString variant;
+
+    if( Schematic() )
+        variant = Schematic()->GetCurrentVariant();
+
+    return ResolveTextVar( aPath, token, variant, aDepth );
 }
 
 
@@ -2334,7 +2339,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     if( !schematic )
         return false;
 
-    wxString variant = aVariantName.IsEmpty() ? schematic->GetCurrentVariant() : aVariantName;
+    wxString variant = aVariantName;
 
     if( operatingPoint.Matches( *token ) )
     {
