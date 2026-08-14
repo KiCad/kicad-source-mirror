@@ -136,11 +136,14 @@ DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTIN
     m_viewControlsGrid->SetDefaultRowSize( m_viewControlsGrid->GetDefaultRowSize() - FromDIP( 4 ) );
 
     m_filter->SetDescriptiveText( _( "Filter" ) );
+
+    m_grid->GetGridWindow()->Bind( wxEVT_MOUSEWHEEL, &DIALOG_FIELDS_TABLE::OnGridMouseWheel, this );
 }
 
 
 DIALOG_FIELDS_TABLE::~DIALOG_FIELDS_TABLE()
 {
+    m_grid->GetGridWindow()->Unbind( wxEVT_MOUSEWHEEL, &DIALOG_FIELDS_TABLE::OnGridMouseWheel, this );
     m_viewControlsGrid->PopEventHandler( true );
 }
 
@@ -973,6 +976,31 @@ void DIALOG_FIELDS_TABLE::OnGridMouseMove( wxMouseEvent& aEvent )
         m_grid->GetGridWindow()->SetToolTip( rawValue );
     else
         m_grid->GetGridWindow()->UnsetToolTip();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnGridMouseWheel( wxMouseEvent& aEvent )
+{
+    if( aEvent.GetWheelAxis() != wxMOUSE_WHEEL_VERTICAL || aEvent.GetModifiers() != wxMOD_SHIFT )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    // Accumulate so high-resolution wheels and trackpads aren't truncated.
+    m_gridWheelRotation += aEvent.GetWheelRotation();
+
+    int lines = m_gridWheelRotation / aEvent.GetWheelDelta();
+    m_gridWheelRotation -= lines * aEvent.GetWheelDelta();
+
+    if( lines == 0 )
+        return;
+
+    int scrollLines = aEvent.IsPageScroll() ? m_grid->GetScrollPageSize( wxHORIZONTAL )
+                                            : aEvent.GetLinesPerAction();
+
+    wxPoint viewStart = m_grid->GetViewStart();
+    m_grid->Scroll( viewStart.x - lines * scrollLines, viewStart.y );
 }
 
 

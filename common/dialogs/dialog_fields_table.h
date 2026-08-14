@@ -112,6 +112,7 @@ protected:
     void OnColSort( wxGridEvent& aEvent );
     void OnColMove( wxGridEvent& aEvent );
     void OnGridMouseMove( wxMouseEvent& aEvent );
+    void OnGridMouseWheel( wxMouseEvent& aEvent );
 
     void OnPageChanged( wxNotebookEvent& aEvent ) override;
     void OnPreviewRefresh( wxCommandEvent& aEvent ) override;
@@ -147,6 +148,7 @@ protected:
     FIELDS_TABLE_BOM_SETTINGS& m_cfgBomSettings;
 
     VIEW_CONTROLS_GRID_DATA_MODEL* m_viewControlsDataModel = nullptr;
+    int                            m_gridWheelRotation = 0;
 
     // Index in the fields list control for each MANDATORY_FIELD type
     std::map<FIELD_T, int> m_mandatoryFieldListIndexes;
