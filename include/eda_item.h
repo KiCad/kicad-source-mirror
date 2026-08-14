@@ -61,7 +61,7 @@ class EDA_GROUP;
 class MSG_PANEL_ITEM;
 class EMBEDDED_FILES;
 
-namespace google { namespace protobuf { class Any; } }
+namespace google::protobuf { class Any; }
 
 
 /**
