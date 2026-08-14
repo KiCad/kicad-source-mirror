@@ -1501,6 +1501,7 @@ namespace
                 case 0x0400:
                 case 0x0C00: definitionPin.nameOffsetJustification = 1; break;
                 case 0x0500:
+                case 0x0D00:
                 case 0x0F00: definitionPin.nameOffsetJustification = 2; break;
                 default:
                     PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal name-offset presentation" ),
@@ -1509,17 +1510,16 @@ namespace
                     break;
                 }
 
-                switch( visibilityFlags & 0xCF00 )
+                switch( visibilityFlags & 0x0F00 )
                 {
-                case 0x0000:
-                case 0xC000: definitionPin.numberOffsetJustification = 0; break;
+                case 0x0000: definitionPin.numberOffsetJustification = 0; break;
                 case 0x0800:
-                case 0x0C00:
-                case 0xCC00: definitionPin.numberOffsetJustification = 1; break;
+                case 0x0C00: definitionPin.numberOffsetJustification = 1; break;
+                case 0x0D00: definitionPin.numberOffsetJustification = 8; break;
                 case 0x0F00: definitionPin.numberOffsetJustification = 2; break;
                 default:
                     PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal number-offset presentation" ),
-                                                               visibilityFlags & 0xCF00, pinSource,
+                                                               visibilityFlags & 0x0F00, pinSource,
                                                                aModel.diagnostics );
                     break;
                 }

@@ -1406,8 +1406,10 @@ types:
         type: u2
         doc: >-
           Bit 0 rotates the pin number. Bits 4-7 use the same angle-dependent justification
-          permutations as the pin name. Bits 8-11 select the name/number offset presentation,
-          and bits 14-15 are exported as PADS pin visibility flags.
+          permutations as the pin name. Bits 8-11 select the name/number offset presentation;
+          paired Logic 9 terminal records prove code 0xD as a 90-degree/right name offset and a
+          zero-degree/right-bottom number offset. Bits 14-15 are independent PADS pin visibility
+          flags and are not part of the offset-presentation code.
 
   part_type_controller:
     params:

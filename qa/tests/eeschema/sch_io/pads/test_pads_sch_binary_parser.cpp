@@ -2584,6 +2584,55 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
 }
 
 
+BOOST_AUTO_TEST_CASE( TerminalOffsetPresentation )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    std::vector<uint8_t>   fixture = loadBinaryFixture( "pin_styles.sch" );
+    PADS_SCH_MODEL         baseline = parser.Parse( fixture, wxS( "pin_styles.sch" ) );
+    const MODEL_PIN_DEFINITION& baselinePin =
+            itemNamed( baseline.definitions, wxS( "BATCHB_PIN_STYLES" ) ).pins[0];
+    const size_t visibilityOffset = baselinePin.source.absoluteOffset + 24;
+
+    writeU16( fixture, visibilityOffset, 0x8040 );
+    PADS_SCH_MODEL visibilityOnly = parser.Parse( fixture, wxS( "terminal-visibility-only.sch" ) );
+    const MODEL_PIN_DEFINITION& visibilityOnlyPin =
+            itemNamed( visibilityOnly.definitions, wxS( "BATCHB_PIN_STYLES" ) ).pins[0];
+
+    BOOST_CHECK_EQUAL( visibilityOnlyPin.visibilityFlags, 0x80 );
+    BOOST_CHECK( std::ranges::none_of( visibilityOnly.diagnostics,
+                                       [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                       {
+                                           return aDiagnostic.message.Contains(
+                                                          wxS( "terminal number-offset presentation" ) )
+                                                  && aDiagnostic.source.controller == 8
+                                                  && aDiagnostic.source.recordIndex
+                                                             == baselinePin.source.recordIndex;
+                                       } ) );
+
+    writeU16( fixture, visibilityOffset, 0x0D40 );
+    PADS_SCH_MODEL pairedPresentation = parser.Parse( fixture, wxS( "terminal-presentation-0d.sch" ) );
+    const MODEL_PIN_DEFINITION& pairedPin =
+            itemNamed( pairedPresentation.definitions, wxS( "BATCHB_PIN_STYLES" ) ).pins[0];
+
+    BOOST_CHECK_EQUAL( pairedPin.visibilityAndNumberPresentationFlags, 0x0D40 );
+    BOOST_CHECK_EQUAL( pairedPin.nameOffsetAngle, 900 );
+    BOOST_CHECK_EQUAL( pairedPin.nameOffsetJustification, 2 );
+    BOOST_CHECK_EQUAL( pairedPin.numberOffsetAngle, 0 );
+    BOOST_CHECK_EQUAL( pairedPin.numberOffsetJustification, 8 );
+    BOOST_CHECK( std::ranges::none_of( pairedPresentation.diagnostics,
+                                       [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                       {
+                                           return ( aDiagnostic.message.Contains(
+                                                            wxS( "terminal name-offset presentation" ) )
+                                                    || aDiagnostic.message.Contains(
+                                                            wxS( "terminal number-offset presentation" ) ) )
+                                                  && aDiagnostic.source.controller == 8
+                                                  && aDiagnostic.source.recordIndex
+                                                             == baselinePin.source.recordIndex;
+                                       } ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( PartPinsAndGates )
 {
     PADS_SCH_BINARY_PARSER parser;
