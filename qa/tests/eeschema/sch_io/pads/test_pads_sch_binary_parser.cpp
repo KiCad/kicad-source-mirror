@@ -1764,10 +1764,10 @@ BOOST_AUTO_TEST_CASE( VisibilityAndUnderlineOptionMatrix )
                                                            wxS( "visibility_options.sch" ) );
 
     auto underlined = std::ranges::find( model.texts, wxS( "STYLE_UNDERLINE" ),
-                                         []( const MODEL_TEXT& aText )
-                                         {
-                                             return aText.text.text;
-                                         } );
+                                        []( const MODEL_TEXT& aText )
+                                        {
+                                            return aText.text.text;
+                                        } );
     BOOST_REQUIRE( underlined != model.texts.end() );
     BOOST_CHECK( underlined->presentation.underline );
     BOOST_CHECK( !underlined->presentation.bold );
@@ -1779,9 +1779,9 @@ BOOST_AUTO_TEST_CASE( VisibilityAndUnderlineOptionMatrix )
     for( uint8_t flags = 0; flags < 32; ++flags )
     {
         const wxString reference = wxString::Format( wxS( "R%u" ), flags + 1 );
-        auto           placement = std::ranges::find( model.placements, reference,
-                                                      []( const MODEL_PLACEMENT& aPlacement )
-                                                      {
+        auto placement = std::ranges::find( model.placements, reference,
+                                            []( const MODEL_PLACEMENT& aPlacement )
+                                            {
                                                 return aPlacement.reference.text;
                                             } );
         BOOST_REQUIRE_MESSAGE( placement != model.placements.end(), reference );
@@ -4326,10 +4326,12 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
 
 BOOST_AUTO_TEST_CASE( TerminalJustificationCodes )
 {
-    static constexpr std::array<const char*, 6> fixtures = {
-        "terminal_justification_0_6",    "terminal_justification_7_13",    "terminal_justification_14_15",
-        "terminal_justification_90_0_6", "terminal_justification_90_7_13", "terminal_justification_90_14_15"
-    };
+    static constexpr std::array<const char*, 6> fixtures = { "terminal_justification_0_6",
+                                                             "terminal_justification_7_13",
+                                                             "terminal_justification_14_15",
+                                                             "terminal_justification_90_0_6",
+                                                             "terminal_justification_90_7_13",
+                                                             "terminal_justification_90_14_15" };
 
     PADS_SCH_BINARY_PARSER binaryParser;
 
@@ -4348,8 +4350,10 @@ BOOST_AUTO_TEST_CASE( TerminalJustificationCodes )
 
         for( size_t pin = 0; pin < binaryDefinition.pins.size(); ++pin )
         {
-            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameAngle, asciiDefinition->pins[pin].pn_angle * 10 );
-            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberAngle, asciiDefinition->pins[pin].pl_angle * 10 );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameAngle,
+                               asciiDefinition->pins[pin].pn_angle * 10 );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberAngle,
+                               asciiDefinition->pins[pin].pl_angle * 10 );
             BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameJustification, asciiDefinition->pins[pin].pn_just );
             BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberJustification, asciiDefinition->pins[pin].pl_just );
         }
