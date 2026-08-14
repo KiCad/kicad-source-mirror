@@ -610,29 +610,27 @@ protected:
             if( !m_cols[i].m_group )
                 continue;
 
+            wxString fieldName = m_cols[i].m_fieldName;
+
+            wxString lh = m_dataStore[lhItemKey][fieldName];
+            wxString rh = m_dataStore[rhItemKey][fieldName];
+
             // If the field is generated (e.g. ${QUANTITY}), we need to resolve it through the
             // item to get the actual current value; otherwise we need to pull it out of the store
             // so the refresh can regroup based on values that haven't been applied yet.
-            wxString lh, rh;
-
-            if( IsGeneratedField( m_cols[i].m_fieldName )
-                || IsGeneratedField( m_dataStore[lhItemKey][m_cols[i].m_fieldName] ) )
+            if( IsGeneratedField( fieldName ) )
             {
-                lh = getFieldResolvedLiveValue( lhItem, m_cols[i].m_fieldName );
+                lh = getFieldResolvedLiveValue( lhItem, fieldName );
+                rh = getFieldResolvedLiveValue( rhItem, fieldName );
             }
+            // If we're not generated, we might still have a variable reference in the value,
+            // e.g. "10K ${TOLERANCE}", which still needs to be resolved
             else
             {
-                lh = m_dataStore[lhItemKey][m_cols[i].m_fieldName];
-            }
-
-            if( IsGeneratedField( m_cols[i].m_fieldName )
-                || IsGeneratedField( m_dataStore[rhItemKey][m_cols[i].m_fieldName] ) )
-            {
-                rh = getFieldResolvedLiveValue( rhItem, m_cols[i].m_fieldName );
-            }
-            else
-            {
-                rh = m_dataStore[rhItemKey][m_cols[i].m_fieldName];
+                if( lh.Contains( wxT( "${" ) ) )
+                    lh = resolveTextVars( lhItem, lh );
+                if( rh.Contains( wxT( "${" ) ) )
+                    rh = resolveTextVars( rhItem, rh );
             }
 
             if( lh != rh )
