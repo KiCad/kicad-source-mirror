@@ -1210,6 +1210,15 @@ void LIBRARY_MANAGER_ADAPTER::ProjectTablesReloaded(
 
 void LIBRARY_MANAGER_ADAPTER::CheckTableRow( LIBRARY_TABLE_ROW& aRow )
 {
+    // A disabled row is never used; skip validation so a disabled unreachable HTTP backend
+    // can't stall the library table dialog, and clear any stale error from an earlier check
+    if( aRow.Disabled() )
+    {
+        aRow.SetOk( true );
+        aRow.SetErrorDescription( wxEmptyString );
+        return;
+    }
+
     // Testing is expensive; skip it if we already have a library with the same
     // nickname and URI as the row under test
     if( std::optional<LIB_DATA*> libData = fetchIfLoaded( aRow.Nickname() ) )
@@ -1844,6 +1853,14 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
     {
         wxString nickname = row->Nickname();
         LIBRARY_TABLE_SCOPE scope = row->Scope();
+
+        // Disabled libraries must never be contacted; skipping here keeps a broken or slow
+        // backend (e.g. an unreachable HTTP library) from blocking startup loads
+        if( row->Disabled() )
+        {
+            m_loadTotal.fetch_sub( 1 );
+            continue;
+        }
 
         if( check( nickname, m_libraries, m_librariesMutex ) )
         {

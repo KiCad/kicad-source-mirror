@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "DeviceEnabled")(type "KiCad")(uri "${QA_ISSUE24855_DIR}/Device.kicad_sym")(options "")(descr ""))
+  (lib (name "DeviceDisabled")(type "KiCad")(uri "${QA_ISSUE24855_DIR}/Device.kicad_sym")(options "")(descr "")(disabled))
+)
