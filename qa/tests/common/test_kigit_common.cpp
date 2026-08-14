@@ -59,6 +59,7 @@ struct ScopedTempDir
         fn.AppendDir( wxString::Format( "kicad-qa-git-%lld-%p", ticks, this ) );
         wxFileName::Mkdir( fn.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
+#ifdef __WXMAC__
         // Store the realpath-resolved form.  libgit2 canonicalizes the repo workdir with
         // realpath(3), so on macOS -- where /var is a symlink to /private/var -- any path
         // derived from the repo differs textually from the one we built above unless we
@@ -74,6 +75,9 @@ struct ScopedTempDir
         {
             path = fn.GetPath();
         }
+#else
+        path = fn.GetPath();
+#endif
     }
 
     ~ScopedTempDir()
