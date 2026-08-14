@@ -45,6 +45,7 @@
 #include <project/project_archiver.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
+#include <reporter.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>
 #include <settings/json_settings_internals.h>
@@ -1726,19 +1727,29 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
         }
     }
 
-    // Step 2: Stay under the total size limit
+    // Step 2: Stay under the total size limit.  files[0] is the archive just written and is
+    // never pruned; a retention limit trims history and must not leave the project with none
     if( settings.limit_total_size > 0 )
     {
-        wxULongLong totalSize = 0;
+        const wxULongLong limit( settings.limit_total_size );
+        wxULongLong       totalSize = 0;
 
         for( const wxString& file : files )
             totalSize += wxFileName::GetSize( file );
 
-        while( !files.empty() && totalSize > static_cast<wxULongLong>( settings.limit_total_size ) )
+        while( files.size() > 1 && totalSize > limit )
         {
             totalSize -= wxFileName::GetSize( files.back() );
             wxRemoveFile( files.back() );
             files.pop_back();
+        }
+
+        if( totalSize > limit )
+        {
+            aReporter.Report( _( "One backup of this project is larger than the total backup size "
+                                 "limit.  KiCad kept the new backup; increase the limit in "
+                                 "Preferences." ),
+                              RPT_SEVERITY_WARNING );
         }
     }
 
