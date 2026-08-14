@@ -154,8 +154,7 @@ FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic,
         font = s_fontMap[key];
 
     if( !font )
-        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic, aEmbeddedFiles,
-                                       aForDrawingSheet );
+        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic, aEmbeddedFiles, aForDrawingSheet );
 
     if( !font )
         font = getDefaultFont();
@@ -174,10 +173,9 @@ bool FONT::IsStroke( const wxString& aFontName )
 }
 
 
-void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
-                             wxArrayString& aTextLines, std::vector<VECTOR2I>& aPositions,
-                             std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs,
-                             const METRICS& aFontMetrics ) const
+void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition, wxArrayString& aTextLines,
+                             std::vector<VECTOR2I>& aPositions, std::vector<VECTOR2I>& aExtents,
+                             const TEXT_ATTRIBUTES& aAttrs, const METRICS& aFontMetrics ) const
 {
     wxStringSplit( aText, aTextLines, '\n' );
     int lineCount = aTextLines.Count();
@@ -189,8 +187,8 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
     for( int i = 0; i < lineCount; i++ )
     {
         VECTOR2I pos( aPosition.x, aPosition.y + i * interline );
-        VECTOR2I end = boundingBoxSingleLine( nullptr, aTextLines[i], pos, aAttrs.m_Size,
-                                              aAttrs.m_Italic, aFontMetrics );
+        VECTOR2I end = boundingBoxSingleLine( nullptr, aTextLines[i], pos, aAttrs.m_Size, aAttrs.m_Italic,
+                                              aFontMetrics );
         VECTOR2I bBox( end - pos );
 
         aExtents.push_back( bBox );
@@ -213,12 +211,10 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
 
     switch(  aAttrs.m_Valign )
     {
-    case GR_TEXT_V_ALIGN_TOP:                            break;
-    case GR_TEXT_V_ALIGN_CENTER: offset.y -= height / 2; break;
-    case GR_TEXT_V_ALIGN_BOTTOM: offset.y -= height;     break;
-    case GR_TEXT_V_ALIGN_INDETERMINATE:
-        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
-        break;
+    case GR_TEXT_V_ALIGN_TOP:                                                                              break;
+    case GR_TEXT_V_ALIGN_CENTER:        offset.y -= height / 2;                                            break;
+    case GR_TEXT_V_ALIGN_BOTTOM:        offset.y -= height;                                                break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
     }
 
     for( int i = 0; i < lineCount; i++ )
@@ -230,12 +226,10 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
 
         switch( aAttrs.m_Halign )
         {
-        case GR_TEXT_H_ALIGN_LEFT:                                              break;
-        case GR_TEXT_H_ALIGN_CENTER: lineOffset.x = -lineSize.x / 2;            break;
-        case GR_TEXT_H_ALIGN_RIGHT:  lineOffset.x = -( lineSize.x + offset.x ); break;
-        case GR_TEXT_H_ALIGN_INDETERMINATE:
-            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
-            break;
+        case GR_TEXT_H_ALIGN_LEFT:                                                                             break;
+        case GR_TEXT_H_ALIGN_CENTER:        lineOffset.x = -lineSize.x / 2;                                    break;
+        case GR_TEXT_H_ALIGN_RIGHT:         lineOffset.x = -( lineSize.x + offset.x );                         break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
         }
 
         aPositions.push_back( aPosition + lineOffset );
@@ -345,8 +339,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
             barGlyph.AddPoint( barEnd );
             barGlyph.Finalize();
 
-            aGlyphs->push_back( barGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false, aAngle, aMirror,
-                                                    aOrigin ) );
+            aGlyphs->push_back( barGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false, aAngle, aMirror, aOrigin ) );
         }
     }
 
@@ -367,8 +360,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
             barGlyph.AddPoint( barEnd );
             barGlyph.Finalize();
 
-            aGlyphs->push_back( barGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false, aAngle, aMirror,
-                                                    aOrigin ) );
+            aGlyphs->push_back( barGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false, aAngle, aMirror, aOrigin ) );
         }
     }
 
@@ -490,17 +482,16 @@ VECTOR2I FONT::GetAlignedDrawPosition( const wxString& aText, const VECTOR2I& aA
 }
 
 
-VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
-                                      const VECTOR2I& aPosition, const VECTOR2I& aSize,
-                                      bool aItalic, const METRICS& aFontMetrics ) const
+VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText, const VECTOR2I& aPosition,
+                                      const VECTOR2I& aSize, bool aItalic, const METRICS& aFontMetrics ) const
 {
     TEXT_STYLE_FLAGS textStyle = 0;
 
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    VECTOR2I extents = drawMarkup( aBBox, nullptr, aText, aPosition, aSize, ANGLE_0, false,
-                                   VECTOR2I(), textStyle, aFontMetrics );
+    VECTOR2I extents = drawMarkup( aBBox, nullptr, aText, aPosition, aSize, ANGLE_0, false, VECTOR2I(),
+                                   textStyle, aFontMetrics );
 
     return extents;
 }
@@ -512,9 +503,8 @@ VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
  * In this context, a "word" is EITHER a run of marked-up text (subscript, superscript or
  * overbar), OR a run of non-marked-up text separated by spaces.
  */
-void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
-                      const std::unique_ptr<MARKUP::NODE>& aNode, const KIFONT::FONT* aFont,
-                      const VECTOR2I& aSize, TEXT_STYLE_FLAGS aTextStyle,
+void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords, const std::unique_ptr<MARKUP::NODE>& aNode,
+                      const KIFONT::FONT* aFont, const VECTOR2I& aSize, TEXT_STYLE_FLAGS aTextStyle,
                       bool aInsideMarkup = false )
 {
     TEXT_STYLE_FLAGS textStyle = aTextStyle;
@@ -547,9 +537,8 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
 
             if( aNode->has_content() )
             {
-                VECTOR2I next = aFont->GetTextAsGlyphs( nullptr, nullptr, aNode->asWxString(),
-                                                        aSize, { 0, 0 }, ANGLE_0, false, { 0, 0 },
-                                                        textStyle );
+                VECTOR2I next = aFont->GetTextAsGlyphs( nullptr, nullptr, aNode->asWxString(), aSize, { 0, 0 },
+                                                        ANGLE_0, false, { 0, 0 }, textStyle );
                 word += aNode->asWxString();
                 width += next.x;
             }
@@ -575,8 +564,8 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
             // wxStringTokenizer collapses consecutive spaces, which corrupts content
             // like ~{     } where spaces are intentional.
             wxString content = aNode->asWxString();
-            int      w = aFont->GetTextAsGlyphs( nullptr, nullptr, content, aSize, { 0, 0 },
-                                                  ANGLE_0, false, { 0, 0 }, textStyle ).x;
+            int      w = aFont->GetTextAsGlyphs( nullptr, nullptr, content, aSize, { 0, 0 }, ANGLE_0, false,
+                                                 { 0, 0 }, textStyle ).x;
 
             aWords->emplace_back( std::make_pair( content, w ) );
         }
@@ -594,9 +583,8 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
                 wxString chars = word;
                 chars.Trim();
 
-                int w = aFont->GetTextAsGlyphs( nullptr, nullptr, chars.IsEmpty() ? word : chars,
-                                                aSize, { 0, 0 }, ANGLE_0, false, { 0, 0 },
-                                                textStyle ).x;
+                int w = aFont->GetTextAsGlyphs( nullptr, nullptr, chars.IsEmpty() ? word : chars, aSize,
+                                                { 0, 0 }, ANGLE_0, false, { 0, 0 }, textStyle ).x;
 
                 aWords->emplace_back( std::make_pair( word, w ) );
             }
@@ -629,8 +617,8 @@ void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSi
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    int spaceWidth = GetTextAsGlyphs( nullptr, nullptr, wxS( " " ), aSize, VECTOR2I(), ANGLE_0,
-                                      false, VECTOR2I(), textStyle ).x;
+    int spaceWidth = GetTextAsGlyphs( nullptr, nullptr, wxS( " " ), aSize, VECTOR2I(), ANGLE_0, false,
+                                      VECTOR2I(), textStyle ).x;
 
     wxArrayString  textLines;
     wxStringSplit( aText, textLines, '\n' );
