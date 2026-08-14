@@ -170,18 +170,9 @@ static VECTOR2I localPoint( const PADS_SCH_BINARY::SOURCE_POINT& aPoint )
 }
 
 
-static VECTOR2I placedFieldOffset( const PADS_SCH_BINARY::MODEL_PLACEMENT& aPlacement,
-                                   const PADS_SCH_BINARY::MODEL_FIELD&     aField )
+static VECTOR2I placedFieldOffset( const PADS_SCH_BINARY::MODEL_FIELD& aField )
 {
-    PADS_SCH_BINARY::SOURCE_POINT point = aField.position;
-
-    if( aPlacement.mirrorFlags & 1 )
-        point.x = -point.x;
-
-    if( aPlacement.mirrorFlags & 2 )
-        point.y = -point.y;
-
-    return localPoint( point );
+    return localPoint( aField.position );
 }
 
 
@@ -2232,16 +2223,13 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
             strokedFields++;
         }
         BOOST_CHECK_EQUAL( builtField->GetTextAngle().AsTenthsOfADegree(), sourceField.angle );
-        BOOST_CHECK_EQUAL( builtField->GetPosition(),
-                           r1->GetPosition() + placedFieldOffset( fieldModel.placements.front(), sourceField ) );
+        BOOST_CHECK_EQUAL( builtField->GetPosition(), r1->GetPosition() + placedFieldOffset( sourceField ) );
         BOOST_CHECK_EQUAL( builtField->IsBold(), sourceField.presentation.bold );
         BOOST_CHECK_EQUAL( builtField->IsItalic(), sourceField.presentation.italic );
-        BOOST_CHECK(
-                builtField->GetHorizJustify()
-                == GetFlippedAlignment( horizontalJustification( sourceField.presentation.horizontalJustification ) ) );
-        BOOST_CHECK(
-                builtField->GetVertJustify()
-                == GetFlippedAlignment( verticalJustification( sourceField.presentation.verticalJustification ) ) );
+        BOOST_CHECK( builtField->GetHorizJustify()
+                     == horizontalJustification( sourceField.presentation.horizontalJustification ) );
+        BOOST_CHECK( builtField->GetVertJustify()
+                     == verticalJustification( sourceField.presentation.verticalJustification ) );
 
         if( !sourceField.presentation.font.text.IsEmpty()
             && sourceField.presentation.font.text != wxS( "Default Font" ) )
@@ -2254,101 +2242,6 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     // zeros would satisfy the loop without comparing anything
     BOOST_CHECK_GT( sizedFields, 0u );
     BOOST_CHECK_GT( strokedFields, 0u );
-}
-
-
-// Mirroring has to negate the field offsets. Comparing against a helper that recomputes the
-// production formula cannot detect a wrong transform, so build the same model twice and compare.
-BOOST_AUTO_TEST_CASE( BinaryMirroredFieldOffsetsAreNegated )
-{
-    using namespace PADS_SCH_BINARY;
-
-    auto offsetsFor =
-            [&]( uint32_t aMirrorFlags )
-            {
-                m_schematic.Reset();
-
-                SCH_SHEET*     destination = m_schematic.GetTopLevelSheet();
-                PADS_SCH_MODEL model = parseBinaryFixture( wxS( "fields" ) );
-
-                model.placements.front().mirrored = aMirrorFlags != 0;
-                model.placements.front().mirrorFlags = aMirrorFlags;
-
-                PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, destination,
-                                                 binaryFixture( wxS( "fields" ) ) );
-
-                SCH_SHEET_PATH path;
-
-                path.push_back( destination );
-
-                std::map<wxString, VECTOR2I> offsets;
-
-                for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
-                {
-                    // The const overload is deliberate; the mutable GetField( FIELD_T ) creates a
-                    // missing mandatory field and would hide its absence
-                    const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( item );
-
-                    if( static_cast<SCH_SYMBOL*>( item )->GetRef( &path ) != wxS( "R1" ) )
-                        continue;
-
-                    for( const MODEL_FIELD& sourceField : model.placements.front().fields )
-                    {
-                        const SCH_FIELD* field = nullptr;
-
-                        if( sourceField.name.text == wxS( "REF-DES" ) )
-                            field = symbol->GetField( FIELD_T::REFERENCE );
-                        else if( sourceField.name.text == wxS( "PART-TYPE" ) )
-                            field = symbol->GetField( FIELD_T::VALUE );
-                        else
-                            field = symbol->GetField( sourceField.name.text );
-
-                        if( field )
-                            offsets[field->GetName()] = field->GetPosition() - symbol->GetPosition();
-                    }
-                }
-
-                return offsets;
-            };
-
-    std::map<wxString, VECTOR2I> plain = offsetsFor( 0 );
-
-    BOOST_REQUIRE( !plain.empty() );
-
-    // Each axis is checked on its own, so a build that swapped the two flag meanings fails here
-    // where a 0-against-3 comparison alone would not
-    struct MIRROR_CASE
-    {
-        uint32_t flags;
-        bool     negateX;
-        bool     negateY;
-    };
-
-    for( const MIRROR_CASE& mirrorCase : { MIRROR_CASE{ 1, true, false }, MIRROR_CASE{ 2, false, true },
-                                           MIRROR_CASE{ 3, true, true } } )
-    {
-        BOOST_TEST_CONTEXT( mirrorCase.flags )
-        {
-            std::map<wxString, VECTOR2I> mirrored = offsetsFor( mirrorCase.flags );
-            size_t                       compared = 0;
-
-            for( const auto& [name, offset] : plain )
-            {
-                auto it = mirrored.find( name );
-
-                BOOST_REQUIRE( it != mirrored.end() );
-                BOOST_CHECK_EQUAL( it->second.x, mirrorCase.negateX ? -offset.x : offset.x );
-                BOOST_CHECK_EQUAL( it->second.y, mirrorCase.negateY ? -offset.y : offset.y );
-
-                if( offset.x != 0 || offset.y != 0 )
-                    compared++;
-            }
-
-            // A field on the symbol origin negates to itself, so an all-zero set would satisfy the
-            // loop under any transform
-            BOOST_CHECK_GT( compared, 0u );
-        }
-    }
 }
 
 

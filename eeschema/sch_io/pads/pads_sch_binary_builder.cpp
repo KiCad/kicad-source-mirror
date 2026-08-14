@@ -808,8 +808,7 @@ namespace
     }
 
 
-    void applyField( SCH_SYMBOL* aSymbol, const MODEL_PLACEMENT& aPlacement, const MODEL_FIELD& aSource,
-                     std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    void applyField( SCH_SYMBOL* aSymbol, const MODEL_FIELD& aSource, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
         SCH_FIELD* field = nullptr;
 
@@ -833,25 +832,11 @@ namespace
         if( !field )
             THROW_IO_ERROR( FormatParserError( aSource.source, wxS( "could not stage symbol field" ) ) );
 
-        SOURCE_POINT position = aSource.position;
-
-        if( aPlacement.mirrorFlags & 1 )
-            position.x = -position.x;
-
-        if( aPlacement.mirrorFlags & 2 )
-            position.y = -position.y;
-
         field->SetText( aSource.value.text );
-        field->SetPosition( aSymbol->GetPosition() + localPoint( position ) );
+        field->SetPosition( aSymbol->GetPosition() + localPoint( aSource.position ) );
         field->SetTextAngle( EDA_ANGLE( aSource.angle, TENTHS_OF_A_DEGREE_T ) );
         applyTextPresentation( field, aSource.presentation, aSource.visible && aSource.presentation.visible,
                                aDiagnostics );
-
-        if( aPlacement.mirrorFlags & 1 )
-            field->SetHorizJustify( GetFlippedAlignment( field->GetHorizJustify() ) );
-
-        if( aPlacement.mirrorFlags & 2 )
-            field->SetVertJustify( GetFlippedAlignment( field->GetVertJustify() ) );
     }
 
 
@@ -895,7 +880,7 @@ namespace
         symbol->AddHierarchicalReference( aPath.Path(), reference, unit );
 
         for( const MODEL_FIELD& field : aPlacement.fields )
-            applyField( symbol.get(), aPlacement, field, aDiagnostics );
+            applyField( symbol.get(), field, aDiagnostics );
 
         symbol->SetExcludedFromBoard( library->GetPins().empty() );
 
