@@ -304,7 +304,11 @@ bool TOOL_MANAGER::doRunAction( const std::string& aActionName, bool aNow, const
 
     if( !action )
     {
-        wxASSERT_MSG( false, wxString::Format( "Could not find action %s.", aActionName ) );
+        // Names reaching this overload come from outside KiCad (the IPC API, plugins), so an
+        // unknown one is caller error to report, not an internal fault to assert on
+        wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::doRunAction - no action named %s" ),
+                    aActionName );
+
         return false;
     }
 
