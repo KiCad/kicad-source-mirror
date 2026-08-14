@@ -46,6 +46,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <footprint.h>
 #include <footprint_import_reconciler.h>
+#include <jobs/job_export_bom.h>
 #include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
 #include <jobs/job_export_pcb_ipc2581.h>
@@ -118,6 +119,7 @@
 #include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_export_odbpp.h>
 #include <dialogs/dialog_export_step.h>
+#include <dialogs/dialog_footprint_fields_table.h>
 #include <dialogs/dialog_plot.h>
 #include <dialogs/dialog_drc_job_config.h>
 #include <dialogs/dialog_render_job.h>
@@ -142,6 +144,22 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
         m_cliBoard( nullptr ),
         m_toolManager( nullptr )
 {
+    Register( "bom", std::bind( &PCBNEW_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_BOM* bomJob = dynamic_cast<JOB_EXPORT_BOM*>( job );
+
+                  PCB_EDIT_FRAME* editFrame = static_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( bomJob && editFrame, false );
+
+                  DIALOG_FOOTPRINT_FIELDS_TABLE dlg( editFrame, bomJob );
+
+                  if( dlg.WasAborted() )
+                      return false;
+
+                  return dlg.ShowModal() == wxID_OK;
+              } );
     Register( "3d", std::bind( &PCBNEW_JOBS_HANDLER::JobExportStep, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
@@ -602,6 +620,350 @@ LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard
     }
 
     return layerMask;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportBom( JOB* aJob )
+{
+    JOB_EXPORT_BOM* aBomJob = dynamic_cast<JOB_EXPORT_BOM*>( aJob );
+
+    wxCHECK( aBomJob, CLI::EXIT_CODES::ERR_UNKNOWN );
+
+    BOARD* board = getBoard( aBomJob->m_filename );
+
+    if( !board )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    aJob->SetTitleBlock( board->GetTitleBlock() );
+    board->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
+
+    wxString currentVariant = aBomJob->GetSelectedVariant();
+
+    if( !currentVariant.IsEmpty() && currentVariant != wxS( "all" ) )
+        board->SetCurrentVariant( currentVariant );
+
+    FOOTPRINT_REFERENCE_LIST referenceList;
+
+    // Annotation warning check (and gather footprints for data model)
+    bool hasWarned = false;
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        referenceList.push_back( FOOTPRINT_REF( *fp ) );
+
+        if( !fp->IsAnnotated() && !hasWarned )
+        {
+            m_reporter->Report( _( "Warning: board has unannotated footprints, please use the PCB "
+                                   "editor to annotate them\n" ),
+                                RPT_SEVERITY_WARNING );
+            hasWarned = true;
+        }
+    }
+
+    // Build our data model
+    FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList, nullptr );
+    dataModel.SetCurrentVariant( currentVariant );
+
+    // Mandatory fields first
+    for( FIELD_T fieldId : MANDATORY_FIELDS )
+        dataModel.AddColumn( GetCanonicalFieldName( fieldId ), GetDefaultFieldName( fieldId, DO_TRANSLATE ), false );
+
+    // Generated/virtual fields (e.g. ${QUANTITY}, ${ITEM_NUMBER}) present only in the fields table
+    dataModel.AddColumn( FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE,
+                         GetGeneratedFieldDisplayName( FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE ),
+                         false );
+    dataModel.AddColumn( FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE,
+                         GetGeneratedFieldDisplayName( FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE ),
+                         false );
+
+    // Attribute fields (boolean flags on footprints)
+    dataModel.AddColumn( wxS( "${DNP}" ), GetGeneratedFieldDisplayName( wxS( "${DNP}" ) ), false );
+    dataModel.AddColumn( wxS( "${EXCLUDE_FROM_BOM}" ), GetGeneratedFieldDisplayName( wxS( "${EXCLUDE_FROM_BOM}" ) ),
+                         false );
+    dataModel.AddColumn( wxS( "${EXCLUDE_FROM_BOARD}" ), GetGeneratedFieldDisplayName( wxS( "${EXCLUDE_FROM_BOARD}" ) ),
+                         false );
+    dataModel.AddColumn( wxS( "${EXCLUDE_FROM_SIM}" ), GetGeneratedFieldDisplayName( wxS( "${EXCLUDE_FROM_SIM}" ) ),
+                         false );
+
+    // User field names in footprints second
+    std::set<wxString> userFieldNames;
+
+    for( size_t i = 0; i < referenceList.size(); ++i )
+    {
+        FOOTPRINT& footprint = referenceList[i].GetFootprint();
+
+        for( PCB_FIELD* field : footprint.GetFields() )
+        {
+            if( !field->IsMandatory() && !field->IsPrivate() )
+                userFieldNames.insert( field->GetName() );
+        }
+    }
+
+    for( const wxString& fieldName : userFieldNames )
+        dataModel.AddColumn( fieldName, GetGeneratedFieldDisplayName( fieldName ), true );
+
+    // Add any templateFieldNames which aren't already present in the userFieldNames
+    // TODO: template field names not implemented in board editor
+
+    BOM_PRESET preset;
+
+    // Load a preset if one is specified
+    if( !aBomJob->m_bomPresetName.IsEmpty() )
+    {
+        // Find the preset
+        const BOM_PRESET* boardPreset = nullptr;
+
+        for( const BOM_PRESET& p : BOM_PRESET::BuiltInPresets() )
+        {
+            if( p.name == aBomJob->m_bomPresetName )
+            {
+                boardPreset = &p;
+                break;
+            }
+        }
+
+        for( const BOM_PRESET& p : board->GetDesignSettings().m_BomPresets )
+        {
+            if( p.name == aBomJob->m_bomPresetName )
+            {
+                boardPreset = &p;
+                break;
+            }
+        }
+
+        if( !boardPreset )
+        {
+            m_reporter->Report(
+                    wxString::Format( _( "BOM preset '%s' not found" ) + wxS( "\n" ), aBomJob->m_bomPresetName ),
+                    RPT_SEVERITY_ERROR );
+
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        preset = *boardPreset;
+    }
+    else
+    {
+        // Normalize field names so that bare generated-field tokens (e.g. "QUANTITY") are
+        // accepted alongside the canonical "${QUANTITY}" form. Shell expansion of ${VAR}
+        // inside double quotes silently produces an empty string, so this also guards against
+        // that common CLI pitfall.
+        auto normalizeFieldName = [&dataModel]( const wxString& aName ) -> wxString
+        {
+            if( aName.IsEmpty() )
+                return wxEmptyString;
+
+            if( IsGeneratedField( aName ) )
+                return aName;
+
+            wxString wrapped = wxS( "${" ) + aName + wxS( "}" );
+
+            if( IsGeneratedField( wrapped ) && dataModel.GetFieldNameCol( wrapped ) != -1 )
+                return wrapped;
+
+            return aName;
+        };
+
+        size_t i = 0;
+
+        for( const wxString& rawFieldName : aBomJob->m_fieldsOrdered )
+        {
+            wxString fieldName = normalizeFieldName( rawFieldName );
+
+            if( fieldName.IsEmpty() )
+            {
+                i++;
+                continue;
+            }
+
+            // Handle wildcard. We allow the wildcard anywhere in the list, but it needs to respect
+            // fields that come before and after the wildcard.
+            if( fieldName == wxS( "*" ) )
+            {
+                for( const BOM_FIELD& modelField : dataModel.GetFieldsOrdered() )
+                {
+                    struct BOM_FIELD field;
+
+                    field.name = modelField.name;
+                    field.show = true;
+                    field.groupBy = false;
+                    field.label = field.name;
+
+                    bool fieldAlreadyPresent = false;
+
+                    for( BOM_FIELD& presetField : preset.fieldsOrdered )
+                    {
+                        if( presetField.name == field.name )
+                        {
+                            fieldAlreadyPresent = true;
+                            break;
+                        }
+                    }
+
+                    bool fieldLaterInList = false;
+
+                    for( const wxString& fieldInList : aBomJob->m_fieldsOrdered )
+                    {
+                        if( normalizeFieldName( fieldInList ) == field.name )
+                        {
+                            fieldLaterInList = true;
+                            break;
+                        }
+                    }
+
+                    if( !fieldAlreadyPresent && !fieldLaterInList )
+                        preset.fieldsOrdered.emplace_back( field );
+                }
+
+                continue;
+            }
+
+            struct BOM_FIELD field;
+
+            field.name = fieldName;
+            field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
+
+            field.groupBy = alg::contains( aBomJob->m_fieldsGroupBy, field.name )
+                            || alg::contains( aBomJob->m_fieldsGroupBy, rawFieldName );
+
+            if( ( aBomJob->m_fieldsLabels.size() > i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
+                field.label = aBomJob->m_fieldsLabels[i];
+            else if( IsGeneratedField( field.name ) )
+                field.label = GetGeneratedFieldDisplayName( field.name );
+            else
+                field.label = field.name;
+
+            preset.fieldsOrdered.emplace_back( field );
+            i++;
+        }
+
+        preset.sortAsc = aBomJob->m_sortAsc;
+        preset.sortField = normalizeFieldName( aBomJob->m_sortField );
+        preset.filterString = aBomJob->m_filterString;
+        preset.groupSymbols = aBomJob->m_groupSymbols;
+        preset.excludeDNP = aBomJob->m_excludeDNP;
+    }
+
+    BOM_FMT_PRESET fmt;
+
+    // Load a format preset if one is specified
+    if( !aBomJob->m_bomFmtPresetName.IsEmpty() )
+    {
+        std::optional<BOM_FMT_PRESET> boardFmtPreset;
+
+        for( const BOM_FMT_PRESET& p : BOM_FMT_PRESET::BuiltInPresets() )
+        {
+            if( p.name == aBomJob->m_bomFmtPresetName )
+            {
+                boardFmtPreset = p;
+                break;
+            }
+        }
+
+        for( const BOM_FMT_PRESET& p : board->GetDesignSettings().m_BomFmtPresets )
+        {
+            if( p.name == aBomJob->m_bomFmtPresetName )
+            {
+                boardFmtPreset = p;
+                break;
+            }
+        }
+
+        if( !boardFmtPreset )
+        {
+            m_reporter->Report( wxString::Format( _( "BOM format preset '%s' not found" ) + wxS( "\n" ),
+                                                  aBomJob->m_bomFmtPresetName ),
+                                RPT_SEVERITY_ERROR );
+
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        fmt = *boardFmtPreset;
+    }
+    else
+    {
+        fmt.fieldDelimiter = aBomJob->m_fieldDelimiter;
+        fmt.stringDelimiter = aBomJob->m_stringDelimiter;
+        fmt.refDelimiter = aBomJob->m_refDelimiter;
+        fmt.refRangeDelimiter = aBomJob->m_refRangeDelimiter;
+        fmt.keepTabs = aBomJob->m_keepTabs;
+        fmt.keepLineBreaks = aBomJob->m_keepLineBreaks;
+        fmt.includeByteOrderMark = aBomJob->m_includeByteOrderMark;
+    }
+
+    if( aBomJob->GetConfiguredOutputPath().IsEmpty() )
+    {
+        wxFileName fn = board->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( FILEEXT::CsvFileExtension );
+
+        aBomJob->SetConfiguredOutputPath( fn.GetFullName() );
+    }
+
+    wxString configuredPath = aBomJob->GetConfiguredOutputPath();
+    bool     hasVariantPlaceholder = configuredPath.Contains( wxS( "${VARIANT}" ) );
+
+    // Determine which variants to process
+    std::vector<wxString> variantsToProcess;
+
+    if( aBomJob->m_variantNames.size() > 1 && hasVariantPlaceholder )
+    {
+        variantsToProcess = aBomJob->m_variantNames;
+    }
+    else
+    {
+        variantsToProcess.push_back( currentVariant );
+    }
+
+    for( const wxString& variantName : variantsToProcess )
+    {
+        std::vector<wxString> singleVariant = { variantName };
+        dataModel.SetVariantNames( singleVariant );
+        dataModel.SetCurrentVariant( variantName );
+        dataModel.UpdateReferences( dataModel.GetReferenceList() );
+        dataModel.ApplyBomPreset( preset );
+
+        wxString outPath;
+
+        if( hasVariantPlaceholder )
+        {
+            wxString variantPath = configuredPath;
+            variantPath.Replace( wxS( "${VARIANT}" ), variantName );
+            aBomJob->SetConfiguredOutputPath( variantPath );
+            outPath = aBomJob->GetFullOutputPath( board->GetProject() );
+            aBomJob->SetConfiguredOutputPath( configuredPath );
+        }
+        else
+        {
+            outPath = aBomJob->GetFullOutputPath( board->GetProject() );
+        }
+
+        if( !PATHS::EnsurePathExists( outPath, true ) )
+        {
+            m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
+
+        wxFile f;
+
+        if( !f.Open( outPath, wxFile::write ) )
+        {
+            m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ), outPath ),
+                                RPT_SEVERITY_ERROR );
+
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        bool res = f.Write( dataModel.Export( fmt ) );
+
+        if( !res )
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+        aJob->AddOutput( outPath );
+
+        m_reporter->Report( wxString::Format( _( "Wrote bill of materials to '%s'." ), outPath ), RPT_SEVERITY_ACTION );
+    }
+
+    return CLI::EXIT_CODES::OK;
 }
 
 
