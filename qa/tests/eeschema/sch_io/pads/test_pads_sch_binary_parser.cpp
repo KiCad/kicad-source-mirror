@@ -3326,40 +3326,42 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     PADS_SCH_MODEL         model = parser.Parse( loadBinaryFixture( "page_graphics.sch" ), wxS( "page_graphics.sch" ) );
 
     BOOST_REQUIRE_EQUAL( model.sheets.size(), 1 );
-    BOOST_REQUIRE_EQUAL( model.graphics.size(), 178 );
-    BOOST_CHECK_EQUAL( std::ranges::count_if( model.graphics,
-                                              []( const MODEL_PAGE_GRAPHIC& aGraphic )
+    BOOST_REQUIRE_EQUAL( model.worksheets.size(), 1u );
+    BOOST_REQUIRE_EQUAL( model.worksheets[0].graphics.size(), 86u );
+    BOOST_REQUIRE_EQUAL( model.graphics.size(), 6u );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( model.worksheets[0].graphics,
+                                              []( const MODEL_GRAPHIC& aGraphic )
                                               {
-                                                  return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::LINE;
+                                                  return aGraphic.kind == MODEL_GRAPHIC_KIND::LINE;
                                               } ),
-                       63 );
-    BOOST_CHECK_GE( std::ranges::count_if( model.graphics,
-                                           []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                       31 );
+    BOOST_CHECK_GE( std::ranges::count_if( model.worksheets[0].graphics,
+                                           []( const MODEL_GRAPHIC& aGraphic )
                                            {
-                                               return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::POLYLINE;
+                                               return aGraphic.kind == MODEL_GRAPHIC_KIND::POLYLINE;
                                            } ),
                     1 );
-    BOOST_CHECK_EQUAL( std::ranges::count_if( model.graphics,
-                                              []( const MODEL_PAGE_GRAPHIC& aGraphic )
+    BOOST_CHECK_EQUAL( std::ranges::count_if( model.worksheets[0].graphics,
+                                              []( const MODEL_GRAPHIC& aGraphic )
                                               {
-                                                  return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT;
+                                                  return aGraphic.kind == MODEL_GRAPHIC_KIND::TEXT;
                                               } ),
-                       105 );
-    auto titleText = std::ranges::find_if( model.graphics,
-                                           []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                       52 );
+    auto titleText = std::ranges::find_if( model.worksheets[0].graphics,
+                                           []( const MODEL_GRAPHIC& aGraphic )
                                            {
-                                               return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT
-                                                      && aGraphic.graphic.text.text == wxS( "TITLE:" );
+                                               return aGraphic.kind == MODEL_GRAPHIC_KIND::TEXT
+                                                      && aGraphic.text.text == wxS( "TITLE:" );
                                            } );
-    BOOST_REQUIRE( titleText != model.graphics.end() );
-    BOOST_CHECK_EQUAL( titleText->graphic.presentation.height, 100 );
-    BOOST_CHECK_EQUAL( titleText->graphic.presentation.width, 10 );
-    auto titleGroup = std::ranges::find( titleText->graphic.properties, wxS( "page_graphic_group" ),
+    BOOST_REQUIRE( titleText != model.worksheets[0].graphics.end() );
+    BOOST_CHECK_EQUAL( titleText->presentation.height, 100 );
+    BOOST_CHECK_EQUAL( titleText->presentation.width, 10 );
+    auto titleGroup = std::ranges::find( titleText->properties, wxS( "page_graphic_group" ),
                                          []( const SOURCE_PROPERTY& aProperty )
                                          {
                                              return aProperty.name.text;
                                          } );
-    BOOST_REQUIRE( titleGroup != titleText->graphic.properties.end() );
+    BOOST_REQUIRE( titleGroup != titleText->properties.end() );
     const uint16_t titleTextCount =
             readU16( loadBinaryFixture( "page_graphics.sch" ), titleGroup->source.absoluteOffset + 64 );
     BOOST_REQUIRE_GT( titleTextCount, 1u );
@@ -3386,12 +3388,14 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     PADS_SCH_MODEL      noncontiguous = parser.Parse( noncontiguousPredecessor, wxS( "page-text-noncontiguous.sch" ) );
     std::vector<size_t> recoveredRecords;
 
-    for( const MODEL_PAGE_GRAPHIC& graphic : noncontiguous.graphics )
+    const MODEL_WORKSHEET& noncontiguousWorksheet = itemNamed( noncontiguous.worksheets, wxS( "SIZEB" ) );
+
+    for( const MODEL_GRAPHIC& graphic : noncontiguousWorksheet.graphics )
     {
-        if( graphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT
-            && propertyValue( graphic.graphic.properties, wxS( "page_graphic_group" ) ) == titleGroup->value.text )
+        if( graphic.kind == MODEL_GRAPHIC_KIND::TEXT
+            && propertyValue( graphic.properties, wxS( "page_graphic_group" ) ) == titleGroup->value.text )
         {
-            recoveredRecords.push_back( graphic.graphic.source.recordIndex );
+            recoveredRecords.push_back( graphic.source.recordIndex );
         }
     }
 
@@ -3511,6 +3515,60 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
                                                   return aDiagnostic.source == rawStroke->source && aDiagnostic.property
                                                          && aDiagnostic.property->name == rawStroke->name.text
                                                          && aDiagnostic.property->disposition == rawStroke->disposition;
+                                              } ),
+                       1u );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeWorksheetRecognition )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    const PADS_SCH_MODEL   minimal = parser.Parse( loadBinaryFixture( "minimal_v13.sch" ), wxS( "minimal_v13.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( minimal.worksheets.size(), 1u );
+    BOOST_CHECK_EQUAL( minimal.worksheets[0].name.text, wxS( "SIZEB" ) );
+    BOOST_CHECK_EQUAL( minimal.worksheets[0].graphics.size(), 86u );
+    BOOST_CHECK( minimal.graphics.empty() );
+
+    const PADS_SCH_MODEL page = parser.Parse( loadBinaryFixture( "page_graphics.sch" ), wxS( "page_graphics.sch" ) );
+    BOOST_REQUIRE_EQUAL( page.worksheets.size(), 1u );
+    BOOST_CHECK_EQUAL( page.worksheets[0].name.text, wxS( "SIZEB" ) );
+    BOOST_CHECK_EQUAL( page.worksheets[0].graphics.size(), 86u );
+    BOOST_REQUIRE_EQUAL( page.graphics.size(), 6u );
+    BOOST_CHECK( std::ranges::all_of( page.graphics,
+                                      []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                      {
+                                          return propertyValue( aGraphic.graphic.properties,
+                                                                wxS( "page_graphic_group" ) )
+                                                 == wxS( "BATCHB_PAGE_GRAPHICS" );
+                                      } ) );
+
+    std::vector<uint8_t> distinct = loadBinaryFixture( "page_graphics.sch" );
+    const std::string    duplicateName = "BATCHB_SIZEB";
+    auto duplicateRecord = std::search( distinct.begin(), distinct.end(), duplicateName.begin(), duplicateName.end() );
+    BOOST_REQUIRE( duplicateRecord != distinct.end() );
+    const size_t duplicateOffset = std::distance( distinct.begin(), duplicateRecord );
+    const size_t firstVertex = readU32( distinct, duplicateOffset + 0x34 );
+    const size_t vertexOffset = sheetControllerOffset( distinct, 5 ) + firstVertex * 8;
+    writeU16( distinct, vertexOffset, readU16( distinct, vertexOffset ) + 2 );
+
+    const PADS_SCH_MODEL distinctPage = parser.Parse( distinct, wxS( "distinct-page-graphics.sch" ) );
+    BOOST_REQUIRE_EQUAL( distinctPage.worksheets.size(), 1u );
+    BOOST_CHECK_EQUAL( distinctPage.worksheets[0].name.text, wxS( "SIZEB" ) );
+    BOOST_CHECK_EQUAL( distinctPage.graphics.size(), 92u );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( distinctPage.graphics,
+                                              []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                              {
+                                                  return propertyValue( aGraphic.graphic.properties,
+                                                                        wxS( "page_graphic_group" ) )
+                                                         == wxS( "BATCHB_SIZEB" );
+                                              } ),
+                       86u );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( distinctPage.diagnostics,
+                                              []( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                              {
+                                                  return aDiagnostic.message.Contains(
+                                                          wxS( "distinct worksheet layout preserved" ) );
                                               } ),
                        1u );
 }

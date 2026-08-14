@@ -296,6 +296,58 @@ namespace
     }
 
 
+    bool samePointValue( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
+    {
+        return aLeft.x == aRight.x && aLeft.y == aRight.y;
+    }
+
+
+    bool samePresentationValue( const MODEL_TEXT_PRESENTATION& aLeft, const MODEL_TEXT_PRESENTATION& aRight )
+    {
+        return aLeft.height == aRight.height && aLeft.width == aRight.width && aLeft.font.text == aRight.font.text
+               && aLeft.horizontalJustification == aRight.horizontalJustification
+               && aLeft.verticalJustification == aRight.verticalJustification && aLeft.bold == aRight.bold
+               && aLeft.italic == aRight.italic && aLeft.underline == aRight.underline
+               && aLeft.visible == aRight.visible;
+    }
+
+
+    bool sameGraphicValue( const MODEL_GRAPHIC& aLeft, const MODEL_GRAPHIC& aRight )
+    {
+        return aLeft.kind == aRight.kind && aLeft.text.text == aRight.text.text && aLeft.lineStyle == aRight.lineStyle
+               && aLeft.strokeWidth == aRight.strokeWidth && aLeft.fill == aRight.fill
+               && samePresentationValue( aLeft.presentation, aRight.presentation ) && aLeft.angle == aRight.angle
+               && aLeft.arcSweepAngle == aRight.arcSweepAngle && aLeft.arcClockwise == aRight.arcClockwise
+               && samePointValue( aLeft.arcCenter, aRight.arcCenter )
+               && samePointValue( aLeft.arcBoundsStart, aRight.arcBoundsStart )
+               && samePointValue( aLeft.arcBoundsEnd, aRight.arcBoundsEnd )
+               && std::ranges::equal( aLeft.points, aRight.points, samePointValue );
+    }
+
+
+    bool sameWorksheetValue( const MODEL_WORKSHEET& aLeft, const MODEL_WORKSHEET& aRight )
+    {
+        std::vector<const MODEL_GRAPHIC*> leftDrawing;
+        std::vector<const MODEL_GRAPHIC*> rightDrawing;
+        std::vector<const MODEL_GRAPHIC*> leftText;
+        std::vector<const MODEL_GRAPHIC*> rightText;
+
+        for( const MODEL_GRAPHIC& graphic : aLeft.graphics )
+            ( graphic.kind == MODEL_GRAPHIC_KIND::TEXT ? leftText : leftDrawing ).push_back( &graphic );
+
+        for( const MODEL_GRAPHIC& graphic : aRight.graphics )
+            ( graphic.kind == MODEL_GRAPHIC_KIND::TEXT ? rightText : rightDrawing ).push_back( &graphic );
+
+        const auto equalPointers = []( const MODEL_GRAPHIC* aLeftGraphic, const MODEL_GRAPHIC* aRightGraphic )
+        {
+            return sameGraphicValue( *aLeftGraphic, *aRightGraphic );
+        };
+
+        return std::ranges::equal( leftDrawing, rightDrawing, equalPointers )
+               && std::ranges::is_permutation( leftText, rightText, equalPointers );
+    }
+
+
     bool isProvenGraphicStrokeWidth( uint8_t aWidth )
     {
         constexpr std::array<uint16_t, 13> widths{ 1, 2, 5, 7, 8, 10, 11, 15, 20, 25, 30, 31, 40 };
@@ -1793,13 +1845,7 @@ namespace
                         { graphic.source, { aModel.sheets[aSheetIndex].id, graphic.source }, std::move( graphic ) } );
             }
 
-            static const std::set<wxString> worksheetFields = {
-                wxS( "Approved" ),   wxS( "Checked By" ),       wxS( "Designed" ),   wxS( "Drawing Number" ),
-                wxS( "Drawn By" ),   wxS( "Number of Sheets" ), wxS( "Revision" ),   wxS( "Scale" ),
-                wxS( "Sheet Name" ), wxS( "Sheet Number" ),     wxS( "Sheet Size" ), wxS( "Title" )
-            };
-            std::set<wxString> groupFields;
-            auto               belongsToGroup = [&]( const MODEL_PAGE_GRAPHIC& aGraphic )
+            auto belongsToGroup = [&]( const MODEL_PAGE_GRAPHIC& aGraphic )
             {
                 if( aGraphic.sheet.id != aModel.sheets[aSheetIndex].id )
                     return false;
@@ -1812,27 +1858,57 @@ namespace
                                             } );
             };
 
+            size_t numericEdgeMarkers = 0;
+            size_t alphabeticEdgeMarkers = 0;
+            size_t textGraphics = 0;
+            size_t drawingGraphics = 0;
+            bool   hasTitleAnchor = false;
+            bool   hasSheetAnchor = false;
+            bool   hasRevisionAnchor = false;
+
             for( const MODEL_PAGE_GRAPHIC& pageGraphic : aModel.graphics )
             {
-                if( belongsToGroup( pageGraphic ) && pageGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT
-                    && worksheetFields.contains( pageGraphic.graphic.text.text ) )
+                if( !belongsToGroup( pageGraphic ) )
+                    continue;
+
+                if( pageGraphic.graphic.kind != MODEL_GRAPHIC_KIND::TEXT )
                 {
-                    groupFields.insert( pageGraphic.graphic.text.text );
+                    ++drawingGraphics;
+                    continue;
                 }
+
+                ++textGraphics;
+                wxString text = pageGraphic.graphic.text.text.Upper();
+
+                if( text.length() == 1 && text[0] >= '0' && text[0] <= '9' )
+                    ++numericEdgeMarkers;
+
+                if( text.length() == 1 && text[0] >= 'A' && text[0] <= 'Z' )
+                    ++alphabeticEdgeMarkers;
+
+                hasTitleAnchor |= text == wxS( "TITLE" ) || text.StartsWith( wxS( "TITLE:" ) );
+                hasSheetAnchor |= text == wxS( "SHEET NUMBER" ) || text == wxS( "NUMBER OF SHEETS" )
+                                  || text.StartsWith( wxS( "SHEET:" ) );
+                hasRevisionAnchor |= text == wxS( "REVISION" ) || text.StartsWith( wxS( "REV:" ) )
+                                     || text.StartsWith( wxS( "REVISION " ) );
             }
 
-            if( groupFields == worksheetFields )
+            const bool worksheet = drawingGraphics >= 30 && textGraphics >= 30 && numericEdgeMarkers >= 4
+                                   && alphabeticEdgeMarkers >= 4 && hasTitleAnchor && hasSheetAnchor
+                                   && hasRevisionAnchor;
+
+            if( worksheet )
             {
-                MODEL_WORKSHEET worksheet;
-                worksheet.source = source;
-                worksheet.sheet = { aModel.sheets[aSheetIndex].id, source };
-                worksheet.name = groupName;
+                MODEL_WORKSHEET modelWorksheet;
+                modelWorksheet.source = source;
+                modelWorksheet.sheet = { aModel.sheets[aSheetIndex].id, source };
+                modelWorksheet.name = groupName;
 
                 for( auto graphic = aModel.graphics.begin(); graphic != aModel.graphics.end(); )
                 {
                     if( belongsToGroup( *graphic ) )
                     {
-                        worksheet.graphics.push_back( std::move( graphic->graphic ) );
+                        modelWorksheet.graphics.push_back( std::move( graphic->graphic ) );
                         graphic = aModel.graphics.erase( graphic );
                     }
                     else
@@ -1841,7 +1917,33 @@ namespace
                     }
                 }
 
-                aModel.worksheets.push_back( std::move( worksheet ) );
+                auto existing = std::ranges::find_if( aModel.worksheets,
+                                                      [&]( const MODEL_WORKSHEET& aWorksheet )
+                                                      {
+                                                          return aWorksheet.sheet.id == modelWorksheet.sheet.id;
+                                                      } );
+
+                if( existing == aModel.worksheets.end() )
+                {
+                    aModel.worksheets.push_back( std::move( modelWorksheet ) );
+                }
+                else if( !sameWorksheetValue( *existing, modelWorksheet ) )
+                {
+                    SOURCE_PROPERTY distinct =
+                            sourceProperty( wxS( "distinct_worksheet_layout" ), groupName.text, source );
+                    distinct.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                    aModel.diagnostics.push_back( MakePropertyDiagnostic(
+                            RPT_SEVERITY_WARNING, distinct,
+                            wxS( "distinct worksheet layout preserved as schematic page graphics" ) ) );
+
+                    for( MODEL_GRAPHIC& graphic : modelWorksheet.graphics )
+                    {
+                        graphic.properties.push_back( distinct );
+                        aModel.graphics.push_back( { graphic.source,
+                                                     { aModel.sheets[aSheetIndex].id, graphic.source },
+                                                     std::move( graphic ) } );
+                    }
+                }
             }
         }
 
@@ -1879,21 +1981,6 @@ namespace
                 }
             }
 
-            auto samePoint = []( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
-            {
-                return aLeft.x == aRight.x && aLeft.y == aRight.y;
-            };
-            auto sameGeometry = [&]( const MODEL_GRAPHIC& aLeft, const MODEL_GRAPHIC& aRight )
-            {
-                return aLeft.kind == aRight.kind && aLeft.lineStyle == aRight.lineStyle
-                       && aLeft.strokeWidth == aRight.strokeWidth && aLeft.fill == aRight.fill
-                       && aLeft.angle == aRight.angle && aLeft.arcSweepAngle == aRight.arcSweepAngle
-                       && aLeft.arcClockwise == aRight.arcClockwise
-                       && samePoint( aLeft.arcCenter, aRight.arcCenter )
-                       && samePoint( aLeft.arcBoundsStart, aRight.arcBoundsStart )
-                       && samePoint( aLeft.arcBoundsEnd, aRight.arcBoundsEnd )
-                       && std::ranges::equal( aLeft.points, aRight.points, samePoint );
-            };
             std::set<GROUP_KEY> equivalentGroups;
 
             for( const auto& [key, geometry] : candidates )
@@ -1902,7 +1989,7 @@ namespace
                     && std::ranges::equal( geometry, canonicalGeometry,
                                            [&]( const MODEL_GRAPHIC* aLeft, const MODEL_GRAPHIC* aRight )
                                            {
-                                               return sameGeometry( *aLeft, *aRight );
+                                               return sameGraphicValue( *aLeft, *aRight );
                                            } ) )
                 {
                     equivalentGroups.insert( key );

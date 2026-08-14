@@ -1753,14 +1753,15 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     setTitleField( wxS( "Company Name" ), wxS( "Company" ) );
     setTitleField( wxS( "Code" ), wxS( "Code" ) );
 
-    auto worksheetTemplate = std::ranges::find_if( model.graphics,
-                                                   []( const MODEL_PAGE_GRAPHIC& aGraphic )
+    BOOST_REQUIRE( !model.worksheets.empty() );
+    auto worksheetTemplate = std::ranges::find_if( model.worksheets.front().graphics,
+                                                   []( const MODEL_GRAPHIC& aGraphic )
                                                    {
-                                                       return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT;
+                                                       return aGraphic.kind == MODEL_GRAPHIC_KIND::TEXT;
                                                    } );
-    BOOST_REQUIRE( worksheetTemplate != model.graphics.end() );
+    BOOST_REQUIRE( worksheetTemplate != model.worksheets.front().graphics.end() );
     MODEL_WORKSHEET worksheet;
-    worksheet.source = worksheetTemplate->graphic.source;
+    worksheet.source = worksheetTemplate->source;
     worksheet.sheet = { model.sheets.front().id, worksheet.source };
     worksheet.name.text = wxS( "CI_WORKSHEET" );
     worksheet.name.source = worksheet.source;
@@ -1773,7 +1774,7 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
 
     for( const auto& [text, position] : worksheetMarkers )
     {
-        MODEL_GRAPHIC graphic = worksheetTemplate->graphic;
+        MODEL_GRAPHIC graphic = *worksheetTemplate;
         graphic.text.text = text;
         graphic.points = { position };
         worksheet.graphics.push_back( std::move( graphic ) );
