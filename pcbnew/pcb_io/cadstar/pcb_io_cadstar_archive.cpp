@@ -139,6 +139,10 @@ BOARD* PCB_IO_CADSTAR_ARCHIVE::LoadBoard( const wxString& aFileName, BOARD* aApp
 
     m_loaded_footprints = tempPCB.GetLoadedLibraryFootpints();
 
+    // tempPCB is about to go out of scope.  Do NOT leave footprints pointing to it.
+    for( FOOTPRINT* footprint : m_loaded_footprints )
+        footprint->SetParent( nullptr );
+
     return m_board;
 }
 
