@@ -45,8 +45,6 @@ enums:
     4: filled_closed
   graphic_line_style:
     0: dashed
-    1: dotted
-    2: dash_dot
     0xff: solid
   offpage_variant:
     0: variant_0
@@ -1217,6 +1215,7 @@ types:
       - id: line_style
         type: u1
         enum: graphic_line_style
+        doc: Logic 9 paired exports prove 0 only for dashed closed polygons and 0xff for solid graphics. Controlled ASCII probes rejected 1 and open-graphic 0; other values remain unsupported rather than inferred.
       - id: vertex_count
         type: u2
       - id: stroke_width_mils
