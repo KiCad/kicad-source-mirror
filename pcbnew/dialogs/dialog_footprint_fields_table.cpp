@@ -30,6 +30,7 @@
 #include <template_fieldnames.h>
 #include <kiface_base.h>
 #include <pcb_edit_frame.h>
+#include <footprint.h>
 #include <widgets/wx_infobar.h>
 #include <tools/board_editor_control.h>
 #include <widgets/grid_text_button_helpers.h>

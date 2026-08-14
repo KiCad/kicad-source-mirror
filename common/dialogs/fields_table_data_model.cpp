@@ -27,6 +27,7 @@
 
 #include <nlohmann/json.hpp>
 #include <widgets/ui_common.h>
+#include <wx/dc.h>
 
 
 GRID_CELL_RESOLVED_TEXT_RENDERER::GRID_CELL_RESOLVED_TEXT_RENDERER() :
