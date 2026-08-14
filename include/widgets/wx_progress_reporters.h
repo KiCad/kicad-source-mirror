@@ -63,7 +63,8 @@ public:
      *   of a virtual zone fills 0 to 1/n progress bar full size of the nth virtual zone index
      * @param aCanAbort indicates if the Cancel button should be shown
      * @param aReserveSpaceForMessage will ensure that the dialog is laid out for status messages,
-     *        preventing layout issues on Windows when reporting a message after the initial layout
+     *        preventing layout issues on Windows when reporting a message after the initial layout.
+     *        Will also cause the messages to be ellipsized.
      */
     WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle, int aNumPhases, int aCanAbort,
                           bool aReserveSpaceForMessage = true );
@@ -91,7 +92,7 @@ private:
 
 private:
     wxAppProgressIndicator m_appProgressIndicator;
-    int                    m_messageWidth;
+    bool                   m_reservedSize;
 
     // Rate-limit expensive dialog repaint and event draining.
     THROTTLE               m_updateThrottle;

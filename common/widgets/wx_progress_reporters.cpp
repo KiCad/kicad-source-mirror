@@ -25,12 +25,21 @@
 #include <widgets/wx_progress_reporters.h>
 
 
+static wxString getPlaceholderText()
+{
+    const int c_numChars = 80;
+
+    return wxString( L'\u2002', c_numChars ); // EN SPACE
+}
+
+
 WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle,
                                             int aNumPhases, int aCanAbort,
                                             bool aReserveSpaceForMessage ) :
         PROGRESS_REPORTER_BASE( aNumPhases ),
-        WX_PROGRESS_REPORTER_BASE( aTitle,
-                                   ( aReserveSpaceForMessage ? wxString( ' ', 80 ) : wxString( wxT( "" ) ) ),
+        WX_PROGRESS_REPORTER_BASE( aTitle, aReserveSpaceForMessage
+                                           ? getPlaceholderText()
+                                           : wxString( wxEmptyString ),
                                    1, aParent,
                                    // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
                                                          // quasi-modal dialog
@@ -39,7 +48,7 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
                                                          // causes all sorts of grief
                                    aCanAbort | wxPD_ELAPSED_TIME ),
         m_appProgressIndicator( aParent ),
-        m_messageWidth( 0 ),
+        m_reservedSize( aReserveSpaceForMessage ),
         m_updateThrottle( std::chrono::milliseconds( 100 ) ),
         m_lastUpdateResult( true )
 {
@@ -70,28 +79,25 @@ bool WX_PROGRESS_REPORTER::updateUI()
 
     SetRange( 1000 );
 
-    wxString message;
-    bool     messageChanged;
-
+    wxString message; // Empty message means unchanged
     {
         std::lock_guard<std::mutex> guard( m_mutex );
-        message = m_rptMessage;
-        messageChanged = m_messageChanged.exchange( false );
+        bool                        messageChanged = m_messageChanged.exchange( false );
+
+        if( messageChanged )
+            message = m_rptMessage;
     }
 
-    // Perhaps the window size is too small if the new message to display is bigger
-    // than the previous message. in this case, resize the WX_PROGRESS_REPORTER window
-    // GetTextExtent has probably bugs in wxWidgets < 3.1.6, so calling it only when
-    // the message has changed is mandatory
-    if( messageChanged )
-    {
-        int newWidth = GetTextExtent( message ).x;
+    // Remove trailing newline
+    if( !message.empty() && message.Last() == '\n' )
+        message.RemoveLast();
 
-        if( newWidth > m_messageWidth )
-        {
-            m_messageWidth = newWidth;
-            Fit();
-        }
+    if( m_reservedSize && !message.empty() )
+    {
+        wxSize maxSize = GetTextExtent( getPlaceholderText() );
+
+        wxClientDC dc( this );
+        message = wxControl::Ellipsize( message, dc, wxELLIPSIZE_MIDDLE, maxSize.x );
     }
 
     // Allowing interaction with other windows has unintended consequences
@@ -99,6 +105,9 @@ bool WX_PROGRESS_REPORTER::updateUI()
 
     // Returns false when cancelled (if it's a cancellable dialog)
     bool diag = WX_PROGRESS_REPORTER_BASE::Update( cur, message );
+
+    if( !message.empty() )
+        Fit();
 
     DrainPendingEvents();
 

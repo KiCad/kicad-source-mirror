@@ -120,8 +120,6 @@ protected:
 
     // True if the displayed message has changed,
     // so perhaps there is a need to resize the window
-    // Note the resize is made only if the size of the new message
-    // is bigger than the old message
     std::atomic_bool   m_messageChanged;
 };
 
