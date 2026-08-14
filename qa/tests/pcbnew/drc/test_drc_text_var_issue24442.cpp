@@ -102,9 +102,10 @@ BOOST_FIXTURE_TEST_CASE( DRCTextVarIssue24442, DRC_TEXT_VAR_TEST_FIXTURE )
     BOOST_CHECK_EQUAL( genericWarnings, 2 );
 
     // A matched marker is the intended diagnostic, so those five texts must not
-    // also be flagged as unresolved variables.  Only the escaped literal, whose
-    // displayed text still carries a bare ${...}, remains an unresolved variable.
-    BOOST_CHECK_EQUAL( unresolvedVars, 1 );
+    // also be flagged as unresolved variables.  The escaped literal should also
+    // not trigger an unresolved variable warning as that's not likely the user's
+    // expectation.
+    BOOST_CHECK_EQUAL( unresolvedVars, 0 );
 
     auto containsMsg =
             []( const std::vector<wxString>& aList, const wxString& aNeedle )

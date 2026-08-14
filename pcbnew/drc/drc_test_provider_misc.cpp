@@ -427,6 +427,8 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         PCB_DIMENSION_T
     };
 
+    static wxRegEx varRefRegEx( wxT( ".*^\\${.*}.*" ) );
+
     auto testAssertion =
             [&]( BOARD_ITEM* item, const wxString& text, const VECTOR2I& pos, int layer )
             {
@@ -510,14 +512,12 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     // A matched ${DRC_ERROR}/${DRC_WARNING} is the intended signal; the resolved
                     // text still carries a literal ${...}, so flag the unresolved variable only
                     // when no marker fired (matching the drawing-sheet path below).
-                    if( testAssertion( item, textItem->GetText(), item->GetPosition(),
-                                       item->GetLayer() ) )
+                    if( testAssertion( item, textItem->GetText(), item->GetPosition(), item->GetLayer() ) )
                     {
                         // Don't run unresolved test
                     }
-                    else if( ExpandEnvVarSubstitutions( textItem->GetShownText( true ),
-                                                        nullptr /*project already done*/ )
-                                     .Matches( wxT( "*${*}*" ) ) )
+                    else if( varRefRegEx.Matches( ExpandEnvVarSubstitutions( textItem->GetShownText( true ),
+                                                                             nullptr /*project already done*/ ) ) )
                     {
                         auto drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                         drcItem->SetItems( item );
@@ -557,7 +557,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
             {
                 // Don't run unresolved test
             }
-            else if( text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
+            else if( varRefRegEx.Matches( text->GetShownText( true ) ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                 drcItem->SetItems( drawingSheet );

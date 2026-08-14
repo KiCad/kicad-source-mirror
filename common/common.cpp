@@ -501,24 +501,25 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
     wxString strResult;
     strResult.Alloc( strlen ); // best guess (improves performance)
 
-    auto getVersionedEnvVar = []( const wxString& aMatch, wxString& aResult ) -> bool
-    {
-        for( const wxString& var : ENV_VAR::GetPredefinedEnvVars() )
-        {
-            if( var.Matches( aMatch ) )
+    auto getVersionedEnvVar =
+            []( const wxString& aMatch, wxString& aResult ) -> bool
             {
-                const auto value = ENV_VAR::GetEnvVar<wxString>( var );
+                for( const wxString& var : ENV_VAR::GetPredefinedEnvVars() )
+                {
+                    if( var.Matches( aMatch ) )
+                    {
+                        const auto value = ENV_VAR::GetEnvVar<wxString>( var );
 
-                if( !value )
-                    continue;
+                        if( !value )
+                            continue;
 
-                aResult += *value;
-                return true;
-            }
-        }
+                        aResult += *value;
+                        return true;
+                    }
+                }
 
-        return false;
-    };
+                return false;
+            };
 
     for( size_t n = 0; n < strlen; n++ )
     {
@@ -557,7 +558,8 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
                         str_n = str[++n]; // skip the bracket
                         break;
 
-                    default: bracket = Bracket_None;
+                    default:
+                        bracket = Bracket_None;
                     }
                 }
 
@@ -580,6 +582,20 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
             }
 
             wxString strVarName( str.c_str() + n + 1, m - n - 1 );
+
+            if( strVarName == wxT( "DRC_WARNING" )
+                    || strVarName == wxT( "DRC_ERROR" )
+                    || strVarName == wxT( "ERC_WARNING" )
+                    || strVarName == wxT( "ERC_ERROR" ) )
+            {
+                strResult << '$';
+                strResult << str[n];        // bracket
+                strResult += strVarName;
+                n = m - 1;                  // skip variable name
+                str_n = str[n];
+                break;
+            }
+
 
             // NB: use wxGetEnv instead of wxGetenv as otherwise variables
             //     set through wxSetEnv may not be read correctly!
@@ -703,7 +719,8 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
 
             KI_FALLTHROUGH;
 
-        default: strResult += str_n;
+        default:
+            strResult += str_n;
         }
     }
 
