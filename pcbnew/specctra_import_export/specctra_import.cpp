@@ -439,17 +439,18 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
 
     // Item-local failures (unknown layer id, missing padstack) throw from the make* helpers; run
     // each item through this guard so one bad wire or via is dropped instead of aborting.
-    auto skipOnError = [&skipped]( auto&& aBuild )
-    {
-        try
-        {
-            aBuild();
-        }
-        catch( const IO_ERROR& )
-        {
-            ++skipped;
-        }
-    };
+    auto skipOnError =
+            [&skipped]( auto&& aBuild )
+            {
+                try
+                {
+                    aBuild();
+                }
+                catch( const IO_ERROR& )
+                {
+                    ++skipped;
+                }
+            };
 
     for( NET_OUT& net_out : net_outs )
     {
@@ -468,76 +469,81 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
         for( WIRE& wire : net_out.wires )
         {
             skipOnError( [&]()
-            {
-                DSN_T shape = wire.m_shape->Type();
+                    {
+                        DSN_T shape = wire.m_shape->Type();
 
-                if( shape == T_path )
-                {
-                    PATH* path = static_cast<PATH*>( wire.m_shape );
+                        if( shape == T_path )
+                        {
+                            PATH* path = static_cast<PATH*>( wire.m_shape );
 
-                    for( unsigned pt = 0; pt < path->points.size() - 1; ++pt )
-                        aCommit.Add( makeTRACK( &wire, path, pt, netoutCode ) );
-                }
-                else if( shape == T_qarc )
-                {
-                    QARC* qarc = static_cast<QARC*>( wire.m_shape );
+                            for( unsigned pt = 0; pt < path->points.size() - 1; ++pt )
+                                aCommit.Add( makeTRACK( &wire, path, pt, netoutCode ) );
+                        }
+                        else if( shape == T_qarc )
+                        {
+                            QARC* qarc = static_cast<QARC*>( wire.m_shape );
 
-                    aCommit.Add( makeARC( &wire, qarc, netoutCode ) );
-                }
-                else if( shape == T_polygon )
-                {
-                    // Wire polygons are zone fills from FreeRouter / Specctra
-                    // ((polygon ...) or Specctra's (poly ...)).  The board already has its
-                    // zones; keep those and ignore the session pour geometry.
-                }
-                else
-                {
-                    wxString netId = From_UTF8( wire.m_net_id.c_str() );
-                    THROW_IO_ERRORF(_( "Unsupported wire shape: '%s' for net: '%s'" ), GetTokenText( shape ), netId );
-                }
-            } );
+                            aCommit.Add( makeARC( &wire, qarc, netoutCode ) );
+                        }
+                        else if( shape == T_polygon )
+                        {
+                            // Wire polygons are zone fills from FreeRouter / Specctra
+                            // ((polygon ...) or Specctra's (poly ...)).  The board already has its
+                            // zones; keep those and ignore the session pour geometry.
+                        }
+                        else
+                        {
+                            wxString netId = From_UTF8( wire.m_net_id.c_str() );
+                            THROW_IO_ERRORF( _( "Unsupported wire shape: '%s' for net: '%s'" ),
+                                             GetTokenText( shape ),
+                                             netId );
+                        }
+                    } );
         }
 
         for( WIRE_VIA& wire_via : net_out.wire_vias )
         {
             skipOnError( [&]()
-            {
-                int netCode = 0;
+                    {
+                        int netCode = 0;
 
-                // page 144 of spec says wire_via's net_id is optional
-                if( net_out.net_id.size() )
-                {
-                    wxString netName = From_UTF8( net_out.net_id.c_str() );
-                    NETINFO_ITEM* netvia = aBoard->FindNet( netName );
+                        // page 144 of spec says wire_via's net_id is optional
+                        if( net_out.net_id.size() )
+                        {
+                            wxString netName = From_UTF8( net_out.net_id.c_str() );
+                            NETINFO_ITEM* netvia = aBoard->FindNet( netName );
 
-                    if( netvia )
-                        netCode = netvia->GetNetCode();
-                }
+                            if( netvia )
+                                netCode = netvia->GetNetCode();
+                        }
 
-                // example: (via Via_15:8_mil 149000 -71000 )
+                        // example: (via Via_15:8_mil 149000 -71000 )
 
-                PADSTACK* padstack = m_session->route->library->FindPADSTACK( wire_via.GetPadstackId() );
+                        PADSTACK* padstack = m_session->route->library->FindPADSTACK( wire_via.GetPadstackId() );
 
-                if( !padstack )
-                {
-                    // Dick  Feb 29, 2008:
-                    // Freerouter has a bug where it will not round trip all vias.  Vias which have
-                    // a (use_via) element will be round tripped.  Vias which do not, don't come back
-                    // in in the session library, even though they may be actually used in the
-                    // pre-routed, protected wire_vias. So until that is fixed, create the padstack
-                    // from its name as a work around.
-                    wxString psid( From_UTF8( wire_via.GetPadstackId().c_str() ) );
+                        if( !padstack )
+                        {
+                            // Dick  Feb 29, 2008:
+                            // Freerouter has a bug where it will not round trip all vias.  Vias which have
+                            // a (use_via) element will be round tripped.  Vias which do not, don't come back
+                            // in in the session library, even though they may be actually used in the
+                            // pre-routed, protected wire_vias. So until that is fixed, create the padstack
+                            // from its name as a work around.
+                            wxString psid( From_UTF8( wire_via.GetPadstackId().c_str() ) );
 
-                    THROW_IO_ERRORF( _( "A wire_via refers to missing padstack '%s'." ), psid );
-                }
+                            THROW_IO_ERRORF( _( "A wire_via refers to missing padstack '%s'." ), psid );
+                        }
 
-                std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
+                        std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
-                int via_drill_default = netSettings->GetDefaultNetclass()->GetViaDrill();
+                        int via_drill_default = netSettings->GetDefaultNetclass()->GetViaDrill();
 
-                for( unsigned v = 0; v < wire_via.m_vertexes.size(); ++v )
-                    aCommit.Add( makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode, via_drill_default ) );
-            } );
+                        for( unsigned v = 0; v < wire_via.m_vertexes.size(); ++v )
+                        {
+                            aCommit.Add( makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode,
+                                                  via_drill_default ) );
+                        }
+                    } );
         }
     }
 
