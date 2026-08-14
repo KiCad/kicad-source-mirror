@@ -100,6 +100,8 @@ std::optional<ORCAD_PRIMITIVE> readPrimitiveBody( ORCAD_STREAM& aStream, int aTy
 // Nested prefix-framed vector graphic inside library parts.
 std::optional<ORCAD_PRIMITIVE> readSymbolVector( ORCAD_STREAM& aStream )
 {
+    ORCAD_STREAM::NEST_GUARD guard( aStream, wxS( "symbol vector" ) );
+
     // Type bytes (48,48) consumed; own prefix chain starts at second, so rewind one byte.
     aStream.Seek( aStream.GetOffset() - 1 );
 

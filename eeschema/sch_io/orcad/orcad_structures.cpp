@@ -194,6 +194,8 @@ void ORCAD_STRUCT_READER::SkipStructure( const ORCAD_PREFIXES& aPrefixes, const 
 
 ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
 {
+    ORCAD_STREAM::NEST_GUARD guard( m_stream, wxS( "structure" ) );
+
     size_t         start = m_stream.GetOffset();
     ORCAD_PREFIXES pfx = ReadPrefixes();
 

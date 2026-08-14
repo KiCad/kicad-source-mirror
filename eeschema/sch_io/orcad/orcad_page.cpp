@@ -327,6 +327,8 @@ static void readOccurrence( ORCAD_STREAM& aStream, ORCAD_OCC_SCOPE& aScope )
 // optional separator preamble, then part/block occ; only part/block kept, rest read to stay aligned.
 static ORCAD_OCC_SCOPE readOccScope( ORCAD_STREAM& aStream )
 {
+    ORCAD_STREAM::NEST_GUARD guard( aStream, wxS( "occurrence scope" ) );
+
     ORCAD_OCC_SCOPE scope;
 
     uint16_t netCount = aStream.ReadU16();
@@ -486,6 +488,8 @@ static void v2Structure( ORCAD_STREAM& aStream, const std::vector<std::string>& 
 
 static ORCAD_WIRE v2Wire( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
 {
+    ORCAD_STREAM::NEST_GUARD guard( aStream, wxS( "v2 wire" ) );
+
     uint8_t type = v2Prefix( aStream, aStrings );
 
     ORCAD_WIRE wire;
@@ -575,7 +579,7 @@ static ORCAD_PLACED_INSTANCE v2PlacedInstance( ORCAD_STREAM& aStream,
 }
 
 
-static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDepth = 0 );
+static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType );
 
 
 static ORCAD_PRIMITIVE v2Primitive( ORCAD_STREAM& aStream )
@@ -611,11 +615,9 @@ static ORCAD_SYMBOL_DEF v2SymbolDef( ORCAD_STREAM& aStream,
 }
 
 
-static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDepth )
+static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType )
 {
-    // Symbol vectors nest recursively; bound depth so crafted chain cannot exhaust stack.
-    if( aDepth > 32 )
-        THROW_IO_ERROR( wxS( "v2 primitive nesting too deep" ) );
+    ORCAD_STREAM::NEST_GUARD guard( aStream, wxS( "v2 primitive" ) );
 
     uint8_t         type = aType;
     ORCAD_PRIMITIVE prim;
@@ -711,7 +713,7 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDe
         {
             uint8_t nestedType = aStream.ReadU8();
             aStream.ExpectByte( 0x00, wxS( "v2 vector prim pad" ) );
-            prim.children.push_back( v2PrimBody( aStream, nestedType, aDepth + 1 ) );
+            prim.children.push_back( v2PrimBody( aStream, nestedType ) );
         }
 
         aStream.ReadLzt(); // vector name

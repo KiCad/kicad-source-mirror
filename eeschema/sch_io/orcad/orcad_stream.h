@@ -63,6 +63,27 @@ public:
     /// Returned by FindPreamble() when no further preamble exists.
     static constexpr size_t npos = static_cast<size_t>( -1 );
 
+    /// Nesting limit of the recursive readers; real files stay far below it.
+    static constexpr int MAX_NESTING = 64;
+
+    /**
+     * Depth counter for the recursive readers, kept on the stream because the cache, structure
+     * and occurrence parsers all recurse through one stream.  Child counts come from the file,
+     * so entering level MAX_NESTING + 1 throws IO_ERROR naming aWhat.
+     */
+    class NEST_GUARD
+    {
+    public:
+        NEST_GUARD( ORCAD_STREAM& aStream, const wxString& aWhat );
+        ~NEST_GUARD();
+
+        NEST_GUARD( const NEST_GUARD& ) = delete;
+        NEST_GUARD& operator=( const NEST_GUARD& ) = delete;
+
+    private:
+        ORCAD_STREAM& m_stream;
+    };
+
     ORCAD_STREAM( const void* aData, size_t aLength );
     explicit ORCAD_STREAM( const std::vector<char>& aData );
 
@@ -171,6 +192,7 @@ private:
     const uint8_t* m_data;
     size_t         m_size;
     size_t         m_offset;
+    int            m_nesting;
 };
 
 

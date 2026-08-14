@@ -42,7 +42,8 @@ static wxString hexOf( const uint8_t* aBytes, size_t aCount )
 ORCAD_STREAM::ORCAD_STREAM( const void* aData, size_t aLength ) :
         m_data( static_cast<const uint8_t*>( aData ) ),
         m_size( aLength ),
-        m_offset( 0 )
+        m_offset( 0 ),
+        m_nesting( 0 )
 {
 }
 
@@ -50,6 +51,25 @@ ORCAD_STREAM::ORCAD_STREAM( const void* aData, size_t aLength ) :
 ORCAD_STREAM::ORCAD_STREAM( const std::vector<char>& aData ) :
         ORCAD_STREAM( aData.data(), aData.size() )
 {
+}
+
+
+ORCAD_STREAM::NEST_GUARD::NEST_GUARD( ORCAD_STREAM& aStream, const wxString& aWhat ) :
+        m_stream( aStream )
+{
+    // Throw before the count goes up; a failed constructor gets no destructor
+    if( m_stream.m_nesting >= MAX_NESTING )
+    {
+        THROW_IO_ERRORF( wxS( "OrCAD %s: nested deeper than %d levels" ), aWhat, MAX_NESTING );
+    }
+
+    m_stream.m_nesting++;
+}
+
+
+ORCAD_STREAM::NEST_GUARD::~NEST_GUARD()
+{
+    m_stream.m_nesting--;
 }
 
 
