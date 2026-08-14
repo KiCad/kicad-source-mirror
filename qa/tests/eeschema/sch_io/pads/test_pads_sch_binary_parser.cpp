@@ -1764,10 +1764,10 @@ BOOST_AUTO_TEST_CASE( VisibilityAndUnderlineOptionMatrix )
                                                            wxS( "visibility_options.sch" ) );
 
     auto underlined = std::ranges::find( model.texts, wxS( "STYLE_UNDERLINE" ),
-                                        []( const MODEL_TEXT& aText )
-                                        {
-                                            return aText.text.text;
-                                        } );
+                                         []( const MODEL_TEXT& aText )
+                                         {
+                                             return aText.text.text;
+                                         } );
     BOOST_REQUIRE( underlined != model.texts.end() );
     BOOST_CHECK( underlined->presentation.underline );
     BOOST_CHECK( !underlined->presentation.bold );
@@ -1779,9 +1779,9 @@ BOOST_AUTO_TEST_CASE( VisibilityAndUnderlineOptionMatrix )
     for( uint8_t flags = 0; flags < 32; ++flags )
     {
         const wxString reference = wxString::Format( wxS( "R%u" ), flags + 1 );
-        auto placement = std::ranges::find( model.placements, reference,
-                                            []( const MODEL_PLACEMENT& aPlacement )
-                                            {
+        auto           placement = std::ranges::find( model.placements, reference,
+                                                      []( const MODEL_PLACEMENT& aPlacement )
+                                                      {
                                                 return aPlacement.reference.text;
                                             } );
         BOOST_REQUIRE_MESSAGE( placement != model.placements.end(), reference );
@@ -3009,11 +3009,40 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
 }
 
 
+BOOST_AUTO_TEST_CASE( PlacementTransformOptions )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model = parser.Parse( loadBinaryFixture( "placement_transform_options.sch" ),
+                                                 wxS( "placement_transform_options.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.placements.size(), 8 );
+
+    const std::array<int, 4> angles = { 0, 900, 1800, 2700 };
+
+    for( size_t i = 0; i < model.placements.size(); ++i )
+    {
+        const MODEL_PLACEMENT& placement = model.placements[i];
+        const uint16_t         expectedMirror = i / angles.size();
+
+        BOOST_CHECK_EQUAL( placement.reference.text, wxString::Format( wxS( "R%zu" ), i + 1 ) );
+        BOOST_CHECK_EQUAL( placement.angle, angles[i % angles.size()] );
+        BOOST_CHECK_EQUAL( placement.mirrorFlags, expectedMirror );
+        BOOST_CHECK_EQUAL( placement.mirrored, expectedMirror != 0 );
+        BOOST_CHECK_EQUAL( propertyValue( placement.properties, wxS( "raw_angle" ) ),
+                           wxString::Format( wxS( "%d" ), angles[i % angles.size()] ) );
+        BOOST_CHECK_EQUAL( propertyValue( placement.properties, wxS( "raw_mirror" ) ),
+                           wxString::Format( wxS( "%u" ), expectedMirror ) );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
 {
     PADS_SCH_BINARY_PARSER           binaryParser;
-    const std::array<std::string, 6> fixtures = { "placement_transform", "fields",           "connectors", "multigate",
-                                                  "field_justification", "pin_justification" };
+    const std::array<std::string, 7> fixtures = {
+        "placement_transform", "placement_transform_options", "fields",           "connectors",
+        "multigate",           "field_justification",         "pin_justification"
+    };
 
     for( const std::string& fixture : fixtures )
     {
@@ -3113,8 +3142,10 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 {
                     BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "display_flags" ) ),
                                        wxString::Format( wxS( "%d" ), asciiField.visibility ) );
-                    const wxString expectedAttributeIndex =
-                            fixture == "fields" || fixture == "field_justification" ? wxS( "10" ) : wxS( "65535" );
+                    const wxString expectedAttributeIndex = fixture == "fields" || fixture == "field_justification"
+                                                                            || fixture == "placement_transform_options"
+                                                                    ? wxS( "10" )
+                                                                    : wxS( "65535" );
                     BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "component_attribute_index" ) ),
                                        expectedAttributeIndex );
                 }
@@ -4295,12 +4326,10 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
 
 BOOST_AUTO_TEST_CASE( TerminalJustificationCodes )
 {
-    static constexpr std::array<const char*, 6> fixtures = { "terminal_justification_0_6",
-                                                             "terminal_justification_7_13",
-                                                             "terminal_justification_14_15",
-                                                             "terminal_justification_90_0_6",
-                                                             "terminal_justification_90_7_13",
-                                                             "terminal_justification_90_14_15" };
+    static constexpr std::array<const char*, 6> fixtures = {
+        "terminal_justification_0_6",    "terminal_justification_7_13",    "terminal_justification_14_15",
+        "terminal_justification_90_0_6", "terminal_justification_90_7_13", "terminal_justification_90_14_15"
+    };
 
     PADS_SCH_BINARY_PARSER binaryParser;
 
@@ -4319,10 +4348,8 @@ BOOST_AUTO_TEST_CASE( TerminalJustificationCodes )
 
         for( size_t pin = 0; pin < binaryDefinition.pins.size(); ++pin )
         {
-            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameAngle,
-                               asciiDefinition->pins[pin].pn_angle * 10 );
-            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberAngle,
-                               asciiDefinition->pins[pin].pl_angle * 10 );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameAngle, asciiDefinition->pins[pin].pn_angle * 10 );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberAngle, asciiDefinition->pins[pin].pl_angle * 10 );
             BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameJustification, asciiDefinition->pins[pin].pn_just );
             BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberJustification, asciiDefinition->pins[pin].pl_just );
         }

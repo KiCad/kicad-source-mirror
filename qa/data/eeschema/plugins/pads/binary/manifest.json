@@ -292,6 +292,20 @@
       "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained seven symbol terminals whose independent name and number justification codes are 7 through 13. No third-party design content"
     },
     {
+      "binary": "placement_transform_options.sch",
+      "ascii": "placement_transform_options.txt",
+      "binary_sha256": "0180a6555e793b7adf50657e77d65327bf9ab6d832a8bdc8af3b2bdfe46dddee",
+      "ascii_sha256": "521e4becdf86d2bc4e1abefbc56aa4f579e20840b12aa0ccf592b9f102ed323f",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "placement_rotations_0_90_180_270_degrees",
+        "placement_mirror_flags_0_and_1",
+        "asymmetric_field_positions",
+        "native_save_reexport_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save and all-section Logic 9.0 re-export retained eight resistor placements covering rotations 0, 90, 180, and 270 degrees with mirror flags 0 and 1 and asymmetric field positions. No third-party design content"
+    },
+    {
       "binary": "terminal_justification_14_15.sch",
       "ascii": "terminal_justification_14_15.txt",
       "binary_sha256": "73e590b030ecd10c21f4a26484f625e8471ff946e1b3a5470b7031a54b35ac52",

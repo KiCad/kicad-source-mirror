@@ -983,7 +983,10 @@ types:
         doc: Observed semantic values are 0, 900, 1800, and 2700; other values are preserved and warned by the importer.
       - id: mirror_flags
         type: u2
-        doc: Observed semantic values are 0, 2, and 3; other values are preserved and warned by the importer.
+        doc: >-
+          Controlled native-save/re-export parity proves values 0 and 1; the paired production
+          corpus proves 2 and 3. Bit 0 maps to KiCad SYM_MIRROR_Y and bit 1 maps to
+          SYM_MIRROR_X. Other values are preserved and warned by the importer.
       - id: reference_x_half_mil
         type: s2
       - id: reference_y_half_mil
