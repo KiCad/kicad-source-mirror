@@ -45,6 +45,7 @@ enums:
     4: filled_closed
   graphic_line_style:
     0: dashed
+    1: dotted
     0xff: solid
   offpage_variant:
     0: variant_0
@@ -1215,7 +1216,7 @@ types:
       - id: line_style
         type: u1
         enum: graphic_line_style
-        doc: Logic 9 paired exports prove 0 only for dashed closed polygons and 0xff for solid graphics. Controlled ASCII probes rejected 1 and open-graphic 0; other values remain unsupported rather than inferred.
+        doc: Paired Logic 9 exports prove 0 for dashed closed polygons, 1 for dotted closed polygons, and 0xff for solid graphics. A controlled minimal ASCII probe rejected open-graphic 0 and style 1 with an otherwise unrelated primitive set; it is rejection evidence, not a global invalidation. Other values remain unsupported rather than inferred.
       - id: vertex_count
         type: u2
       - id: stroke_width_mils

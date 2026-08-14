@@ -1153,6 +1153,7 @@ namespace
                     {
                     case 0xFF: graphic.lineStyle = MODEL_LINE_STYLE::SOLID; break;
                     case 0: graphic.lineStyle = MODEL_LINE_STYLE::DASH; break;
+                    case 1: graphic.lineStyle = MODEL_LINE_STYLE::DOT; break;
                     default:
                         PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "page graphic line style" ), lineStyle,
                                                                    graphicSource, aModel.diagnostics );

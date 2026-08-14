@@ -3378,7 +3378,7 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     BOOST_CHECK_EQUAL( ( *line )->graphic.strokeWidth, 20 );
     BOOST_CHECK( ( *line )->graphic.lineStyle == MODEL_LINE_STYLE::SOLID );
     std::vector<uint8_t> unprovedLineStyle = loadBinaryFixture( "page_graphics.sch" );
-    unprovedLineStyle[( *line )->graphic.source.absoluteOffset + 1] = 1;
+    unprovedLineStyle[( *line )->graphic.source.absoluteOffset + 1] = 2;
     PADS_SCH_MODEL unprovedStyleModel = parser.Parse( unprovedLineStyle, wxS( "unproved-line-style.sch" ) );
     auto unprovedStyleGraphic = std::ranges::find_if( unprovedStyleModel.graphics,
                                                        [&]( const MODEL_PAGE_GRAPHIC& aGraphic )
@@ -3392,7 +3392,7 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
                                               []( const PARSER_DIAGNOSTIC& aDiagnostic )
                                               {
                                                   return aDiagnostic.message.Contains(
-                                                          wxS( "page graphic line style 1" ) );
+                                                          wxS( "page graphic line style 2" ) );
                                               } ),
                        1 );
     auto circle = customKind( MODEL_GRAPHIC_KIND::CIRCLE );
