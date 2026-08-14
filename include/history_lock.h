@@ -137,6 +137,15 @@ public:
      */
     void ReleaseRepository();
 
+    /**
+     * Re-open the git repository and index after ReleaseRepository().  Exists so a caller can
+     * close the handle to work on the repository's files directly and then carry on; the file
+     * lock is held across the release, so no other process can have touched it in between.
+     *
+     * @return the repository, or nullptr if the handles could not be re-acquired
+     */
+    git_repository* ReopenRepository();
+
 private:
     wxString                      m_projectPath;
     wxString                      m_historyPath;

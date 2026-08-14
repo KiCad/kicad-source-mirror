@@ -1599,9 +1599,36 @@ static bool copyTreeObjects( git_repository* aSrcRepo, git_odb* aSrcOdb, git_odb
 }
 
 
+static std::vector<wxString> listPackFiles( git_repository* aRepo )
+{
+    std::vector<wxString> packs;
+    wxString packPath = wxString::FromUTF8( git_repository_path( aRepo ) ) + wxS( "objects" )
+                        + wxFileName::GetPathSeparator() + wxS( "pack" );
+    wxDir packDir( packPath );
+
+    if( !packDir.IsOpened() )
+        return packs;
+
+    wxString name;
+    bool     cont = packDir.GetFirst( &name, wxEmptyString, wxDIR_FILES );
+
+    while( cont )
+    {
+        if( name.EndsWith( wxS( ".pack" ) ) || name.EndsWith( wxS( ".idx" ) ) )
+            packs.push_back( packPath + wxFileName::GetPathSeparator() + name );
+
+        cont = packDir.GetNext( &name );
+    }
+
+    return packs;
+}
+
+
 // Compact loose objects into a packfile and remove the originals.
 // Equivalent to git gc
-static bool compactRepository( git_repository* aRepo, PROGRESS_REPORTER* aReporter = nullptr )
+// Prior packs are reported via aSupersededPacks, not deleted, since libgit2 keeps them open
+static bool compactRepository( git_repository* aRepo, PROGRESS_REPORTER* aReporter = nullptr,
+                               std::vector<wxString>* aSupersededPacks = nullptr )
 {
     git_packbuilder* pb = nullptr;
 
@@ -1616,6 +1643,8 @@ static bool compactRepository( git_repository* aRepo, PROGRESS_REPORTER* aReport
         return false;
     }
 
+    // Walk every ref so pruning cannot drop objects only a Save_/Last_Save_ tag still holds
+    git_revwalk_push_glob( walk, "refs/*" );
     git_revwalk_push_head( walk );
     git_oid oid;
 
@@ -1652,6 +1681,20 @@ static bool compactRepository( git_repository* aRepo, PROGRESS_REPORTER* aReport
     {
         git_packbuilder_free( pb );
         return false;
+    }
+
+    // Pack names are content addressed, so an unchanged repo rewrites the same file; exclude it
+    const char* newPackName = git_packbuilder_name( pb );
+
+    if( aSupersededPacks && newPackName )
+    {
+        wxString newPackStem = wxS( "pack-" ) + wxString::FromUTF8( newPackName );
+
+        for( const wxString& pack : listPackFiles( aRepo ) )
+        {
+            if( wxFileName( pack ).GetName() != newPackStem )
+                aSupersededPacks->push_back( pack );
+        }
     }
 
     git_packbuilder_free( pb );
@@ -1713,12 +1756,24 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
         aReporter->Report( _( "Compacting local history..." ) );
 
     // Pack loose objects first. Can bring size within limit without a full rebuild.
-    compactRepository( repo, aReporter );
+    std::vector<wxString> supersededPacks;
+    compactRepository( repo, aReporter, &supersededPacks );
+
+    // libgit2 holds the packs open, so release the repository before deleting them
+    lock.ReleaseRepository();
+
+    for( const wxString& pack : supersededPacks )
+        wxRemoveFile( pack );
 
     current = dirSizeRecursive( hist );
 
     if( current <= aMaxBytes )
         return true; // within limit after compaction
+
+    repo = lock.ReopenRepository();
+
+    if( !repo )
+        return false;
 
     // Collect commits newest-first using revwalk
     git_revwalk* walk = nullptr;
