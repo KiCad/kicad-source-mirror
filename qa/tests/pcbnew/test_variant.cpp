@@ -157,6 +157,33 @@ BOOST_AUTO_TEST_CASE( FootprintDNPForVariant )
 
 
 /**
+ * Test footprint text variable resolution for variants
+ */
+BOOST_AUTO_TEST_CASE( FootprintVariantTextVarResolution )
+{
+    BOARD     board;
+    FOOTPRINT fp( &board );
+
+    board.AddVariant( "Production" );
+    board.SetCurrentVariant( "Production" );
+
+    fp.SetAttributes( 0 );
+
+    FOOTPRINT_VARIANT prodVariant( "Production" );
+    prodVariant.SetDNP( true );
+    fp.SetVariant( prodVariant );
+
+    wxString token = wxS( "DNP" );
+    BOOST_CHECK( fp.ResolveTextVar( &token ) );
+    BOOST_CHECK_EQUAL( token, wxS( "DNP" ) );
+
+    token = wxS( "DNP" );
+    BOOST_CHECK( fp.ResolveTextVar( &token, wxEmptyString ) );
+    BOOST_CHECK_EQUAL( token, wxEmptyString );
+}
+
+
+/**
  * Test footprint BOM exclusion for variant
  */
 BOOST_AUTO_TEST_CASE( FootprintBOMExclusionForVariant )

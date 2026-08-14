@@ -278,7 +278,7 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( con
 
         std::function<bool( wxString* )> footprintResolver = [&]( wxString* token ) -> bool
         {
-            return footprint.ResolveTextVar( token, depth + 1 );
+            return footprint.ResolveTextVar( token, m_currentVariant, depth + 1 );
         };
 
         return ExpandTextVars( aFieldName, &footprintResolver );
@@ -298,7 +298,7 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( const FOOTPRI
     // stored in the data store.
     std::function<bool( wxString* )> footprintResolver = [&]( wxString* token ) -> bool
     {
-        return aRef.GetFootprint().ResolveTextVar( token );
+        return aRef.GetFootprint().ResolveTextVar( token, m_currentVariant );
     };
 
     return ExpandTextVars( aText, &footprintResolver );

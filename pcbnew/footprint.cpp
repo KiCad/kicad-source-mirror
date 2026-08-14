@@ -1175,13 +1175,31 @@ void FOOTPRINT::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "NET_NAME(<pad_number>)" ) );
     aVars->push_back( wxT( "NET_CLASS(<pad_number>)" ) );
     aVars->push_back( wxT( "PIN_NAME(<pad_number>)" ) );
+    aVars->push_back( wxT( "EXCLUDE_FROM_BOM" ) );
+    aVars->push_back( wxT( "EXCLUDE_FROM_BOARD" ) );
+    aVars->push_back( wxT( "EXCLUDE_FROM_SIM" ) );
+    aVars->push_back( wxT( "EXCLUDE_FROM_POS_FILES" ) );
+    aVars->push_back( wxT( "DNP" ) );
 }
 
 
 bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    wxString variant;
+
+    if( GetBoard() )
+        variant = GetBoard()->GetCurrentVariant();
+
+    return ResolveTextVar( token, variant, aDepth );
+}
+
+
+bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, int aDepth ) const
+{
     if( GetBoard() && GetBoard()->GetBoardUse() == BOARD_USE::FPHOLDER )
         return false;
+
+    wxString variant = aVariantName;
 
     if( token->IsSameAs( wxT( "REFERENCE" ) ) )
     {
@@ -1232,6 +1250,45 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
                 return true;
             }
         }
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
+    {
+        *token = wxEmptyString;
+
+        if( GetExcludedFromBOMForVariant( variant ) )
+            *token = _( "Excluded from BOM" );
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_POS_FILES" ) ) )
+    {
+        *token = wxEmptyString;
+
+        if( GetExcludedFromPosFilesForVariant( variant ) )
+            *token = _( "Excluded from position files" );
+
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOARD" ) ) )
+    {
+        // Footprints are never excluded from board by definition
+        *token = wxEmptyString;
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_SIM" ) ) )
+    {
+        // Footprints are never excluded from sim at this time
+        *token = wxEmptyString;
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "DNP" ) ) )
+    {
+        *token = wxEmptyString;
+
+        if( GetDNPForVariant( variant ) )
+            *token = _( "DNP" );
+
+        return true;
     }
     else if( PCB_FIELD* field = GetField( *token ) )
     {
