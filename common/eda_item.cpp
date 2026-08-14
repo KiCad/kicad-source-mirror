@@ -358,7 +358,9 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
     // do not call initVars()
 
-    m_structType   = aItem.m_structType;
+    // m_structType is set by the constructor and must never be assigned. Copying it leaves a
+    // derived object reporting its base type while keeping its own vtable.
+
     m_flags        = aItem.m_flags;
     m_parent       = aItem.m_parent;
     m_group        = aItem.m_group;

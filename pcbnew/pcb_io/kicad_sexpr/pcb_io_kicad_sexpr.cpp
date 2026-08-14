@@ -2267,7 +2267,10 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
     std::string      prefix;
     std::string      type;
     VECTOR2I         pos = aText->GetTextPos();
-    const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( aText );
+
+    // Match the Type() dispatch in Format(). A field body is headerless, so it is only valid
+    // inside the (property ...) its caller opened.
+    const PCB_FIELD* field = aText->Type() == PCB_FIELD_T ? static_cast<const PCB_FIELD*>( aText ) : nullptr;
 
     // Always format dimension text as gr_text
     if( dynamic_cast<const PCB_DIMENSION_BASE*>( aText ) )
