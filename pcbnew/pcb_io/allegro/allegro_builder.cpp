@@ -2075,7 +2075,11 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
     text->SetText( strGraphic->m_Value );
     text->SetTextWidth( scale( fontDef->m_CharWidth ) );
     text->SetTextHeight( scale( fontDef->m_CharHeight ) );
-    text->SetTextThickness( std::max( 1, scale( fontDef->m_StrokeWidth ) ) );
+
+    if( fontDef->m_StrokeWidth > 0 )
+        text->SetTextThickness( scale( fontDef->m_StrokeWidth ) );
+    else
+        text->SetTextThickness( GetPenSizeForNormal( scale( fontDef->m_CharHeight ) ) );
 
     const EDA_ANGLE textAngle = fromMillidegrees( aStrWrapper.m_Rotation );
     text->SetTextAngle( textAngle );
@@ -3163,7 +3167,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         else if( textClass == LAYER_INFO::CLASS::REF_DES && isAssembly )
         {
             // Assembly refdes becomes a user field with the KiCad reference variable
-            PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "Reference" ) );
+            PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "Ref Des" ) );
             field->SetText( wxS( "${REFERENCE}" ) );
             field->SetVisible( false );
             fp->Add( field, ADD_MODE::APPEND );
