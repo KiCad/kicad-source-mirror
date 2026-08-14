@@ -470,12 +470,23 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
         }
         else if( track->Type() == PCB_ARC_T )
         {
-            PCB_ARC*  arc = static_cast<PCB_ARC*>( track );
-            PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
-            shape.SetArcGeometry( arc->GetStart(), arc->GetMid(), arc->GetEnd() );
-            shape.SetWidth( arc->GetWidth() );
+            const PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
 
-            AddShape( shape );
+            // Too small arcs cannot be really handled: arc center (and arc radius)
+            // cannot be safely computed
+            if( !arc->IsDegenerated( 10 /* in IU */ ) )
+            {
+                PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
+                shape.SetArcGeometry( arc->GetStart(), arc->GetMid(), arc->GetEnd() );
+                shape.SetWidth( arc->GetWidth() );
+
+                AddShape( shape );
+            }
+            else
+            {
+                // Approximate this very small arc by a segment.
+                AddFeatureLine( track->GetStart(), track->GetEnd(), track->GetWidth() );
+            }
 
             subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName,
                                   m_featuresList.size() - 1 );

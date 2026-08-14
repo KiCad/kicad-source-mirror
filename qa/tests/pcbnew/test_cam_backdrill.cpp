@@ -21,6 +21,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <netinfo.h>
 #include <pad.h>
 #include <pcb_shape.h>
 #include <pcbnew/exporters/gendrill_excellon_writer.h>
@@ -513,6 +514,70 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledRectangleOnSilk )
 
     // The degenerate donut_rc symbol should not appear anymore.
     BOOST_CHECK( !silkContents.Contains( wxT( "donut_rc" ) ) );
+
+    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
+BOOST_AUTO_TEST_CASE( OdbPpDegenerateTrackArc )
+{
+    wxFileName tempDir = MakeTempDir();
+
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( &board, wxT( "TestNet" ), 1 );
+    board.Add( net );
+
+    PCB_ARC* arc = new PCB_ARC( &board );
+    arc->SetStart( VECTOR2I( 110737101, 51206997 ) );
+    arc->SetMid( VECTOR2I( 110737003, 51206898 ) );
+    arc->SetEnd( VECTOR2I( 110736905, 51206799 ) );
+    arc->SetWidth( pcbIUScale.mmToIU( 0.11684 ) );
+    arc->SetLayer( F_Cu );
+    arc->SetNet( net );
+
+    board.Add( arc );
+
+    wxFileName odbRoot( tempDir.GetFullPath(), wxEmptyString );
+    odbRoot.AppendDir( wxT( "odb_out" ) );
+    BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    PCB_IO_ODBPP                odbExporter;
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["sigfig"] = "4";
+    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( odbRoot.GetFullPath(), &board, &props ) );
+
+    wxFileName copperFeatures( odbRoot.GetFullPath(), wxT( "features" ) );
+    copperFeatures.AppendDir( wxT( "steps" ) );
+    copperFeatures.AppendDir( wxT( "pcb" ) );
+    copperFeatures.AppendDir( wxT( "layers" ) );
+    copperFeatures.AppendDir( wxT( "f.cu" ) );
+    BOOST_REQUIRE( copperFeatures.FileExists() );
+
+    wxFFile  copperStream( copperFeatures.GetFullPath(), wxT( "rb" ) );
+    wxString copperContents;
+    BOOST_REQUIRE( copperStream.ReadAll( &copperContents ) );
+    copperStream.Close();
+
+    int               lineCount = 0;
+    int               arcCount = 0;
+    wxStringTokenizer lines( copperContents, wxT( "\n" ) );
+
+    while( lines.HasMoreTokens() )
+    {
+        wxString line = lines.GetNextToken();
+
+        if( line.StartsWith( wxT( "L " ) ) )
+            lineCount++;
+        else if( line.StartsWith( wxT( "A " ) ) )
+            arcCount++;
+    }
+
+    BOOST_CHECK_EQUAL( lineCount, 1 );
+    BOOST_CHECK_EQUAL( arcCount, 0 );
 
     wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
     wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );

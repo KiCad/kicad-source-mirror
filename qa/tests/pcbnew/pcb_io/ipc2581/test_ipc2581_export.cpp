@@ -37,6 +37,7 @@
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <footprint.h>
+#include <netinfo.h>
 #include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
@@ -448,6 +449,38 @@ BOOST_AUTO_TEST_CASE( ComplexBoardExport )
             }
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( DegenerateTrackArcExportsAsLine )
+{
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( &board, wxT( "TestNet" ), 1 );
+    board.Add( net );
+
+    PCB_ARC* arc = new PCB_ARC( &board );
+    arc->SetStart( VECTOR2I( 110737101, 51206997 ) );
+    arc->SetMid( VECTOR2I( 110737003, 51206898 ) );
+    arc->SetEnd( VECTOR2I( 110736905, 51206799 ) );
+    arc->SetWidth( pcbIUScale.mmToIU( 0.11684 ) );
+    arc->SetLayer( F_Cu );
+    arc->SetNet( net );
+    board.Add( arc );
+
+    wxString tempPath = CreateTempFile();
+
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "6";
+
+    m_ipc2581Plugin.SaveBoard( tempPath, &board, &props );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    BOOST_CHECK( FileContainsPattern( tempPath, wxT( "<Line " ) ) );
+    BOOST_CHECK( !FileContainsPattern( tempPath, wxT( "<Arc " ) ) );
 }
 
 

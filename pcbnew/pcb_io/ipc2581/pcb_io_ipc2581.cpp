@@ -3838,11 +3838,26 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                 }
                 else if( track->Type() == PCB_ARC_T )
                 {
-                    PCB_ARC* arc = static_cast<PCB_ARC*>( track );
-                    PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
-                    shape.SetArcGeometry( arc->GetStart(), arc->GetMid(), arc->GetEnd() );
-                    shape.SetWidth( maskAdjustedWidth( arc ) );
-                    addShape( specialNode, shape );
+                    const PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
+
+                    // Too small arcs cannot be really handled: arc center (and arc radius)
+                    // cannot be safely computed
+                    if( !arc->IsDegenerated( 10 /* in IU */ ) )
+                    {
+                        PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
+                        shape.SetArcGeometry( arc->GetStart(), arc->GetMid(), arc->GetEnd() );
+                        shape.SetWidth( maskAdjustedWidth( arc ) );
+                        addShape( specialNode, shape );
+                    }
+                    else
+                    {
+                        // Approximate this very small arc by a segment.
+                        PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+                        shape.SetStart( track->GetStart() );
+                        shape.SetEnd( track->GetEnd() );
+                        shape.SetWidth( maskAdjustedWidth( track ) );
+                        addShape( specialNode, shape );
+                    }
                 }
                 else
                 {
