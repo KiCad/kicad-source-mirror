@@ -319,3 +319,23 @@ void HISTORY_LOCK_MANAGER::ReleaseRepository()
         m_repoOwned = false;
     }
 }
+
+
+git_repository* HISTORY_LOCK_MANAGER::ReopenRepository()
+{
+    if( m_repo && m_index )
+        return m_repo;
+
+    ReleaseRepository();
+
+    if( !m_fileLock || !m_fileLock->Locked() )
+    {
+        m_lockError = _( "Cannot re-open history repository without the file lock" );
+        return nullptr;
+    }
+
+    if( !openRepository() || !acquireIndexLock() )
+        return nullptr;
+
+    return m_repo;
+}
