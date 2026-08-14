@@ -105,7 +105,7 @@ static wxString convertLtSpiceTextToNgspice( const wxString& aText )
 
                 wxString u = tok[i].Upper();
 
-                if( modifiers.IsEmpty() && !c_modifiers.contains( tok[i] ) )
+                if( modifiers.IsEmpty() && !c_modifiers.contains( u ) )
                     args.Add( tok[i] );
                 else
                     modifiers.Add( tok[i] );
@@ -1312,10 +1312,14 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
 
         wxString simParams;
         wxString pwlArgs;
+        wxString upperValue = value.Upper();
 
-        if( value.Upper().StartsWith( wxS( "PWL " ), &pwlArgs ) && value.Upper().Contains( wxS( "FILE=" ) ) )
+        if( upperValue.StartsWith( wxS( "PWL " ) ) && upperValue.Contains( wxS( "FILE=" ) ) )
         {
             // TODO: support REPEAT statements
+
+            // Take the arguments from the original text so the data file path keeps its case
+            pwlArgs = value.Mid( 4 );
 
             if( !value2.IsEmpty() )
                 pwlArgs << wxS( " " ) << value2;
