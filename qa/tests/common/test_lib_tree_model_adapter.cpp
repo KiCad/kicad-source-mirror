@@ -49,6 +49,19 @@ public:
         auto it = m_colWidths.find( aColumn );
         return it != m_colWidths.end() ? it->second : -1;
     }
+
+    LIB_TREE_NODE_ROOT& GetTree() { return m_tree; }
+
+    /// Offer Lifecycle after Item as a team library row does, and say whether a fit is armed for it
+    bool OffersLifecycleFit()
+    {
+        offerColumn( wxT( "Lifecycle" ), wxT( "Item" ) );
+        return m_fitOffered.has_value();
+    }
+
+    bool IsAutoWidth( const wxString& aHeader ) const { return isAutoWidth( aHeader ); }
+
+    bool MayNarrowItem() const { return mayNarrow( wxT( "Lifecycle" ), wxT( "Item" ) ); }
 };
 
 
@@ -206,5 +219,131 @@ BOOST_AUTO_TEST_CASE( SingleLetterSearchMatchesDeviceNameOverKeywordCollision )
         }
     }
 }
+
+// A part in Recently Used or Already Placed shows the state its library row shows
+BOOST_AUTO_TEST_CASE( RecentAndPlacedRowsShowTheirLibraryState )
+{
+    APP_SETTINGS_BASE::LIB_TREE  settings;
+    TEST_LIB_TREE_MODEL_ADAPTER* adapter = new TEST_LIB_TREE_MODEL_ADAPTER( settings );
+    TEST_LIB_TREE_ITEM           c( wxT( "acme-passives" ), wxT( "C" ), wxT( "cap capacitor" ),
+                                    wxT( "Unpolarized capacitor" ) );
+    std::vector<LIB_TREE_ITEM*>  items{ &c };
+
+    adapter->DoAddLibrary( wxT( "-- Recently Used --" ), wxEmptyString, items, false, true )
+            .m_IsRecentlyUsedGroup = true;
+    adapter->DoAddLibrary( wxT( "-- Already Placed --" ), wxEmptyString, items, false, true )
+            .m_IsAlreadyPlacedGroup = true;
+
+    LIB_TREE_NODE_LIBRARY& library = adapter->DoAddLibrary( wxT( "acme-passives" ), wxEmptyString, items, false, true );
+
+    // As the team's listing set it on the library row
+    const wxString state = wxT( "Not for New Designs" );
+    library.m_Children[0]->m_Fields[wxT( "Lifecycle" )] = state;
+    adapter->RefreshLifecycle( library );
+
+    int groups = 0;
+
+    for( const std::unique_ptr<LIB_TREE_NODE>& group : adapter->GetTree().m_Children )
+    {
+        if( !group->m_IsRecentlyUsedGroup && !group->m_IsAlreadyPlacedGroup )
+            continue;
+
+        ++groups;
+        BOOST_REQUIRE_EQUAL( group->m_Children.size(), 1 );
+        BOOST_CHECK_EQUAL( group->m_Children[0]->m_Fields[wxT( "Lifecycle" )], state );
+    }
+
+    BOOST_CHECK_EQUAL( groups, 2 );
+
+    adapter->DecRef();
+}
+
+
+// A fitted width carries over only while the user leaves it, and settings without the record fit again
+BOOST_AUTO_TEST_CASE( LifecycleFitsAgainUnlessTheUserSizedIt )
+{
+    auto settingsWith = []( const wxString& aHeader, std::optional<int> aSaved, std::optional<int> aFitted )
+    {
+        APP_SETTINGS_BASE::LIB_TREE settings;
+
+        if( aSaved )
+            settings.column_widths[aHeader] = *aSaved;
+
+        if( aFitted )
+            settings.auto_widths[aHeader] = *aFitted;
+
+        return settings;
+    };
+
+    auto fits = [&]( std::optional<int> aSaved, std::optional<int> aFitted )
+    {
+        APP_SETTINGS_BASE::LIB_TREE  settings = settingsWith( wxT( "Lifecycle" ), aSaved, aFitted );
+        TEST_LIB_TREE_MODEL_ADAPTER* adapter = new TEST_LIB_TREE_MODEL_ADAPTER( settings );
+        bool                         armed = adapter->OffersLifecycleFit();
+
+        adapter->DecRef();
+        return armed;
+    };
+
+    // The fit may narrow Item only while Item's width is automatic too
+    auto itemIsAuto = [&]( std::optional<int> aSaved, std::optional<int> aFitted )
+    {
+        APP_SETTINGS_BASE::LIB_TREE  settings = settingsWith( wxT( "Item" ), aSaved, aFitted );
+        TEST_LIB_TREE_MODEL_ADAPTER* adapter = new TEST_LIB_TREE_MODEL_ADAPTER( settings );
+        bool                         automatic = adapter->IsAutoWidth( wxT( "Item" ) );
+
+        adapter->DecRef();
+        return automatic;
+    };
+
+    BOOST_CHECK( fits( std::nullopt, std::nullopt ) );
+    BOOST_CHECK( fits( 96, 96 ) );
+    BOOST_CHECK( !fits( 140, 96 ) );
+
+    // A round M Lifecycle width was fitted and saved with no record
+    BOOST_CHECK( fits( 96, std::nullopt ) );
+
+    BOOST_CHECK( itemIsAuto( std::nullopt, std::nullopt ) );
+    BOOST_CHECK( itemIsAuto( 200, 200 ) );
+    BOOST_CHECK( !itemIsAuto( 300, std::nullopt ) );
+    BOOST_CHECK( !itemIsAuto( 350, 200 ) );
+
+    // Lifecycle never offered yet, so the saved Item width of every earlier chooser must make room for it once
+    APP_SETTINGS_BASE::LIB_TREE  firstOffer = settingsWith( wxT( "Item" ), 300, std::nullopt );
+    TEST_LIB_TREE_MODEL_ADAPTER* adapter = new TEST_LIB_TREE_MODEL_ADAPTER( firstOffer );
+    BOOST_CHECK( adapter->MayNarrowItem() );
+    adapter->DecRef();
+
+    // That fit recorded both widths, and the user has since widened Item
+    APP_SETTINGS_BASE::LIB_TREE laterOffer = settingsWith( wxT( "Item" ), 320, 180 );
+    laterOffer.column_widths[wxT( "Lifecycle" )] = 140;
+    laterOffer.auto_widths[wxT( "Lifecycle" )] = 140;
+    adapter = new TEST_LIB_TREE_MODEL_ADAPTER( laterOffer );
+    BOOST_CHECK( !adapter->MayNarrowItem() );
+    adapter->DecRef();
+}
+
+
+// Widths of the Windows run, where a 250 px footprint pane clipped a claimed state at half the pane and a chooser
+// clipped "Not for New Designs" once a 17 px scrollbar appeared
+BOOST_AUTO_TEST_CASE( LifecycleFitTakesTheRoomItemCanSpare )
+{
+    using FIT = LIB_TREE_MODEL_ADAPTER;
+
+    FIT::FITTED_WIDTHS pane = FIT::FitWidths( 250, 17, 151, 79, 300, 50, true );
+    BOOST_CHECK_EQUAL( pane.offered, 151 );
+    BOOST_CHECK_LE( pane.offered + pane.after, 250 - 17 );
+    BOOST_CHECK_GE( pane.after, ( 250 - 17 ) / 3 );
+
+    FIT::FITTED_WIDTHS chooser = FIT::FitWidths( 400, 17, 126, 79, 300, 50, true );
+    BOOST_CHECK_EQUAL( chooser.offered, 126 );
+    BOOST_CHECK_EQUAL( chooser.offered + chooser.after, 400 - 17 );
+
+    // A state too long for the pane leaves Item its third, and a width the user gave Item is kept
+    FIT::FITTED_WIDTHS longState = FIT::FitWidths( 250, 17, 400, 79, 300, 50, true );
+    BOOST_CHECK_EQUAL( longState.after, ( 250 - 17 ) / 3 );
+    BOOST_CHECK_EQUAL( FIT::FitWidths( 250, 17, 151, 79, 217, 50, false ).after, 217 );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

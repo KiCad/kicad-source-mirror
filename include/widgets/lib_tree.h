@@ -155,10 +155,30 @@ public:
      */
     void Regenerate( bool aKeepState );
 
+    /// Called after a regeneration whose search text differs from the last one reported
+    void SetQueryChangedHandler( std::function<void( const wxString& aQuery )> aHandler )
+    {
+        m_queryChanged = std::move( aHandler );
+    }
+
+    /**
+     * Replace the rows of an external results group, keeping the expanded libraries and a
+     * selection outside the group, and expand the group when it has rows.
+     */
+    void RefillGroup( LIB_TREE_NODE_LIBRARY& aGroup, const std::function<void( LIB_TREE_NODE_LIBRARY& )>& aFill );
+
+    HTML_WINDOW* GetDetailsCtrl() const { return m_details_ctrl; }
+
     /**
      * Refresh the tree (mainly to update highlighting and asterisking)
      */
     void RefreshLibTree();
+
+    /**
+     * Refresh the tree after row fields changed. An active filter is run again so rows enter or leave it, and the
+     * selection is kept.
+     */
+    void RefreshFiltered();
 
     wxWindow* GetFocusTarget();
 
@@ -188,6 +208,9 @@ protected:
      * If a wxDataViewitem is valid, select it and post a selection event.
      */
     void selectIfValid( const wxDataViewItem& aTreeId );
+
+    /// Open every outside-search group that has rows, since nothing local decides whether to show them
+    void expandResultsGroups();
 
     void centerIfValid( const wxDataViewItem& aTreeId );
 
@@ -275,6 +298,7 @@ protected:
     wxPoint            m_hoverPos;
     wxDataViewItem     m_hoverItem;
     wxRect             m_hoverItemRect;
+    wxPoint            m_tipPos;       ///< Where the lifecycle tooltip was last decided
 
     /// Debounces the query typed in the search control.
     WX_DEBOUNCED_ACTION m_queryDebounce;
@@ -286,6 +310,9 @@ protected:
     wxRect             m_previewItemRect;
     wxPopupWindow*     m_previewWindow;
     bool               m_previewDisabled;
+
+    std::function<void( const wxString& )> m_queryChanged;
+    wxString                               m_reportedQuery;
 };
 
 /// Custom event sent when an item is selected in the list.

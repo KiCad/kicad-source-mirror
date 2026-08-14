@@ -36,6 +36,7 @@
 #include <wx/sizer.h>
 #include <wx/srchctrl.h>
 #include <wx/statline.h>
+#include <wx/tooltip.h>
 #include <wx/popupwin.h>
 
 #include <eda_doc.h>                    // for GetAssociatedDocument()
@@ -486,12 +487,91 @@ void LIB_TREE::Regenerate( bool aKeepState )
     // Restore the state
     if( aKeepState )
         setState( current );
+
+    expandResultsGroups();
+
+    if( m_queryChanged && filter != m_reportedQuery )
+    {
+        m_reportedQuery = filter;
+        m_queryChanged( filter );
+    }
+}
+
+
+void LIB_TREE::RefillGroup( LIB_TREE_NODE_LIBRARY& aGroup, const std::function<void( LIB_TREE_NODE_LIBRARY& )>& aFill )
+{
+    STATE          current = getState();
+    LIB_TREE_NODE* selected = GetCurrentTreeNode();
+    LIB_TREE_NODE* selectedGroup = selected;
+
+    while( selectedGroup && selectedGroup->m_Type != LIB_TREE_NODE::TYPE::LIBRARY )
+        selectedGroup = selectedGroup->m_Parent;
+
+    {
+        // The selection only blinks, and Cocoa reports every native change, so a pending choice must not see it
+        wxEventBlocker blocker( m_tree_ctrl, wxEVT_DATAVIEW_SELECTION_CHANGED );
+
+        m_adapter->RefillGroup( aGroup, aFill );
+        setState( current );
+
+        // getState cannot name a row in another outside-search group, though the row survives the refill
+        if( selectedGroup && selectedGroup != &aGroup && selectedGroup->m_IsExternalResultsGroup )
+            m_tree_ctrl->Select( wxDataViewItem( selected ) );
+    }
+
+    // The selected row itself was replaced, which the blocker hid
+    if( selectedGroup == &aGroup )
+        postPreselectEvent();
+
+    expandResultsGroups();
+}
+
+
+void LIB_TREE::expandResultsGroups()
+{
+    wxDataViewItemArray libraries;
+    m_adapter->GetChildren( wxDataViewItem( nullptr ), libraries );
+
+    for( const wxDataViewItem& item : libraries )
+    {
+        LIB_TREE_NODE* group = m_adapter->GetTreeNodeFor( item );
+
+        // GTK ignores expanding a row that had no children before a reset, but follows a path to a leaf
+        if( group && group->m_IsExternalResultsGroup && !group->m_Children.empty() )
+            m_tree_ctrl->ExpandAncestors( wxDataViewItem( group->m_Children.front().get() ) );
+    }
 }
 
 
 void LIB_TREE::RefreshLibTree()
 {
     m_adapter->RefreshTree();
+}
+
+
+void LIB_TREE::RefreshFiltered()
+{
+    if( !m_query_ctrl || m_query_ctrl->IsEmpty() )
+    {
+        RefreshLibTree();
+        return;
+    }
+
+    std::vector<LIB_ID> selection;
+    GetSelectedLibIds( selection );
+
+    Regenerate( true );
+
+    // Regenerate keeps one row at most and selects the best match when nothing was selected
+    wxDataViewItemArray items;
+
+    for( const LIB_ID& libId : selection )
+    {
+        if( wxDataViewItem item = m_adapter->FindItem( libId ); isShown( item ) )
+            items.push_back( item );
+    }
+
+    m_tree_ctrl->SetSelections( items );
 }
 
 
@@ -623,7 +703,14 @@ LIB_TREE::STATE LIB_TREE::getState() const
             state.expanded.push_back( item );
     }
 
-    state.selection = GetSelectedLibId();
+    LIB_TREE_NODE* group = GetCurrentTreeNode();
+
+    while( group && group->m_Type != LIB_TREE_NODE::TYPE::LIBRARY )
+        group = group->m_Parent;
+
+    // A row of an outside search shares its LIB_ID with the library copy, which is all setState can find
+    if( !group || !group->m_IsExternalResultsGroup )
+        state.selection = GetSelectedLibId();
 
     state.scrollpos = {
         m_tree_ctrl->HasScrollbar( wxHORIZONTAL ) ? m_tree_ctrl->GetScrollPos( wxHORIZONTAL ) : 0,
@@ -842,18 +929,38 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
     if( m_tree_ctrl->IsShownOnScreen() )
         mouseOverWindow |= m_tree_ctrl->GetScreenRect().Contains( screenPos );
 
+    m_adapter->FitOfferedColumn();
+
+    wxPoint           clientPos = m_tree_ctrl->ScreenToClient( screenPos );
+    wxDataViewItem    item;
+    wxDataViewColumn* col = nullptr;
+
+    if( mouseOverWindow )
+        m_tree_ctrl->HitTest( clientPos, item, col );
+
+    // A state clipped by a narrow pane is still readable in full, measured only once the mouse moves
+    // WX_DATAVIEWCTRL ignores text tooltips, hence the wxToolTip
+    if( clientPos != m_tipPos )
+    {
+        m_tipPos = clientPos;
+
+        wxString clipped = m_adapter->ClippedLifecycle( item, col );
+
+        if( clipped != m_tree_ctrl->GetToolTipText() )
+        {
+            if( clipped.IsEmpty() )
+                m_tree_ctrl->UnsetToolTip();
+            else
+                m_tree_ctrl->SetToolTip( new wxToolTip( clipped ) );
+        }
+    }
+
     if( m_previewDisabled || topLevelFocus != topLevelParent || !mouseOverWindow )
     {
         m_hoverDebounce.Cancel();
         hidePreview();
         return;
     }
-
-    wxPoint           clientPos = m_tree_ctrl->ScreenToClient( screenPos );
-    wxDataViewItem    item;
-    wxDataViewColumn* col = nullptr;
-
-    m_tree_ctrl->HitTest( clientPos, item, col );
 
     if( m_previewItem.IsOk() )
     {

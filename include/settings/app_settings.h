@@ -178,6 +178,7 @@ public:
         std::map<wxString, int> column_widths; ///< Column widths, keyed by header name.
         std::vector<wxString>   open_libs;     ///< list of libraries the user has open in the tree.
         std::vector<wxString>   offered_columns; ///< Columns shown once unasked, so hiding one sticks.
+        std::map<wxString, int> auto_widths;     ///< Widths a fit last gave, so a saved width that differs sticks.
     };
 
     struct PANEL_DESIGN_BLOCK_CHOOSER

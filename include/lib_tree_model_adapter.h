@@ -33,6 +33,8 @@
 #include <functional>
 #include <set>
 #include <map>
+#include <memory>
+#include <optional>
 
 /**
  * Adapter class in the symbol selector Model-View-Adapter (mediated MVC)
@@ -90,7 +92,10 @@
 #include <project.h>
 
 ;
+class LIBRARY_TABLE_ROW;
 class TOOL_DISPATCHER;
+enum class MDW_LIBRARY_TYPE;
+struct MDW_MEMBER_CHANGES;
 class TOOL_INTERACTIVE;
 class EDA_BASE_FRAME;
 
@@ -115,6 +120,45 @@ public:
      * @return true if @p aWidth is a plausible persisted column width, false if it is corrupt.
      */
     static bool IsValidColumnWidth( int aWidth );
+
+    /// The full lifecycle state of aItem when aColumn is Lifecycle and too narrow to show it, else empty
+    wxString ClippedLifecycle( const wxDataViewItem& aItem, const wxDataViewColumn* aColumn ) const;
+
+    /**
+     * Size a newly offered column to its widest cell and narrow the column it follows so that both fit the tree,
+     * once it is shown at its width. The fit follows the cells as they change until the user resizes either column.
+     */
+    void FitOfferedColumn();
+
+    struct FITTED_WIDTHS
+    {
+        int offered = 0;
+        int after = 0;
+    };
+
+    /**
+     * The widths FitOfferedColumn() gives an offered column whose widest cell needs aWidest and the column it follows,
+     * now aAfter wide, in a tree aClient wide that may yet show a vertical scrollbar aScrollbar wide. The column it
+     * follows keeps a third of the room and narrows only when aNarrowAfter.
+     */
+    static FITTED_WIDTHS FitWidths( int aClient, int aScrollbar, int aWidest, int aOfferedMin, int aAfter,
+                                    int aAfterMin, bool aNarrowAfter );
+
+    /// Show each team part's lifecycle state as its source last listed it
+    void RefreshLifecycle();
+
+    /// RefreshLifecycle for the libraries whose listings aChanges names, and for rows not yet bound to a team when
+    /// aChanges could bind them
+    void RefreshLifecycle( const MDW_MEMBER_CHANGES& aChanges );
+
+    /// Show the lifecycle state of each team part of aLibNode again, as after an item was rebuilt from its file
+    void RefreshLifecycle( LIB_TREE_NODE_LIBRARY& aLibNode );
+
+    /// RefreshLifecycle and redraw as listings land, for a tree that has no editor frame to hear them
+    void FollowLifecycle();
+
+    /// Rebuild aNode from aItem, keeping its library's team lifecycle states over the item's own fields
+    void UpdateItem( LIB_TREE_NODE_ITEM& aNode, LIB_TREE_ITEM* aItem );
 
 public:
     /**
@@ -192,6 +236,12 @@ public:
      * Remove one of the system groups from the library.
      */
     void RemoveGroup( bool aRecentlyUsedGroup, bool aAlreadyPlacedGroup );
+
+    /**
+     * Replace the children of an external results group while the view is reset. aFill adds them
+     * in the order they are shown.
+     */
+    void RefillGroup( LIB_TREE_NODE_LIBRARY& aGroup, const std::function<void( LIB_TREE_NODE_LIBRARY& )>& aFill );
 
     std::vector<wxString> GetAvailableColumns() const { return m_availableColumns; }
 
@@ -441,6 +491,53 @@ private:
 protected:
     void addColumnIfNecessary( const wxString& aHeader );
 
+    /// Show a column, after aAfter when that is shown, the first time it becomes available, and leave it hidden
+    /// once the user hides it.
+    void offerColumn( const wxString& aHeader, const wxString& aAfter = wxEmptyString );
+
+    /// True when aHeader's saved width is none, or the one a fit last gave it, rather than one the user set
+    bool isAutoWidth( const wxString& aHeader ) const;
+
+    /// True when fitting the offered column aHeader may narrow the column aAfter it follows
+    bool mayNarrow( const wxString& aHeader, const wxString& aAfter ) const;
+
+    /// The kind of team library the adapter's libraries can be, or nothing for one that holds no parts of a team
+    std::optional<MDW_LIBRARY_TYPE> libraryType();
+
+    /// The details pane line for the lifecycle of aLibId, empty for a part that is not a team part
+    wxString lifecycleInfo( const LIB_ID& aLibId );
+
+    /// Show the lifecycle state the workspace lists for each item of aLibNode, whose aType table row is aRow
+    void showLifecycle( LIB_TREE_NODE_LIBRARY& aLibNode, MDW_LIBRARY_TYPE aType, const LIBRARY_TABLE_ROW& aRow );
+
+    /**
+     * Show aStates, by item name, as aLibNode's lifecycle column. A team row never shows its items' own Lifecycle
+     * fields; aHasLifecycle says its source has states, and aStates is null until they are listed.
+     */
+    void applyLifecycle( LIB_TREE_NODE_LIBRARY& aLibNode, bool aTeamRow, bool aHasLifecycle,
+                         const std::map<wxString, wxString>* aStates );
+
+    /// Show aState, or no state when null, as aNode's lifecycle
+    void setLifecycle( LIB_TREE_NODE& aNode, const wxString* aState );
+
+    /// Show the lifecycle of aLibNode's items on their Recently Used and Already Placed rows too
+    void showInGroups( const LIB_TREE_NODE_LIBRARY& aLibNode );
+
+    /// The width a cell needs to show aText unclipped
+    int cellWidth( const wxString& aText ) const;
+
+    /// A field's text as its cell draws it, on one line
+    static wxString cellText( const wxString& aField );
+
+    /// The width the widest cell of the column aHeader needs, or 0 when all are empty
+    int widestCell( const wxString& aHeader ) const;
+
+    /// aNode's field aKey as its column shows it
+    wxString fieldText( const LIB_TREE_NODE& aNode, const wxString& aKey ) const;
+
+    /// True when the item aNode has edits not saved yet
+    virtual bool isModified( const LIB_TREE_NODE& aNode ) const { return false; }
+
     void recreateColumns();
     void createMissingColumns();
 
@@ -459,6 +556,30 @@ protected:
     wxDataViewCtrl*              m_widget;
     std::function<void()>        m_lazyLoadHandler;
     std::map<wxString, int>      m_redrawNudge;
+
+    std::set<wxString>           m_lifecycleLibs; ///< Libraries whose states come from a team
+
+    /// Source locator and library id of each library last shown as a team row
+    std::map<wxString, std::pair<wxString, wxString>> m_teamLibs;
+
+    std::shared_ptr<std::function<void( const MDW_MEMBER_CHANGES& )>> m_lifecycleListener;
+
+    /// A column offered after another, which FitOfferedColumn() still has to make room for
+    std::optional<std::pair<wxString, wxString>> m_fitOffered;
+
+    /// The widths FitOfferedColumn() last gave an offered column and the column it follows, zero before the first fit
+    struct AUTO_FIT
+    {
+        wxString header;
+        wxString after;
+        int      width = 0;
+        int      afterWidth = 0;
+        bool     narrowAfter = false; ///< The column it follows has no width the user set
+    };
+
+    std::optional<AUTO_FIT> m_autoFit;
+    std::set<wxString>      m_armedFits; ///< Offered columns this tree has fitted, or will once shown
+    bool                    m_cellsChanged = false; ///< A lifecycle cell changed since the last fit
 
 private:
     SORT_MODE                    m_sort_mode;

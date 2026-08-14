@@ -36,6 +36,43 @@
 #include <zoom_defines.h>
 
 
+namespace
+{
+
+/// Widths by column header, stored as a JSON object
+PARAM_LAMBDA<nlohmann::json>* columnWidthsParam( const std::string& aPath, std::map<wxString, int>& aWidths )
+{
+    return new PARAM_LAMBDA<nlohmann::json>( aPath,
+            [&aWidths]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::object();
+
+                for( const auto& [name, width] : aWidths )
+                    ret[std::string( name.ToUTF8() )] = width;
+
+                return ret;
+            },
+            [&aWidths]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                aWidths.clear();
+
+                for( const auto& entry : aJson.items() )
+                {
+                    if( !entry.value().is_number_integer() )
+                        continue;
+
+                    aWidths[entry.key()] = entry.value().get<int>();
+                }
+            },
+            {} );
+}
+
+} // namespace
+
+
 APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::USER, aSchemaVersion ),
         m_CrossProbing(),
@@ -153,34 +190,12 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM_LIST<wxString>( "lib_tree.offered_columns",
             &m_LibTree.offered_columns, {} ) );
 
-    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "lib_tree.column_widths",
-            [&]() -> nlohmann::json
-            {
-                nlohmann::json ret = nlohmann::json::object();
-
-                for( const std::pair<const wxString, int>& pair : m_LibTree.column_widths )
-                    ret[std::string( pair.first.ToUTF8() )] = pair.second;
-
-                return ret;
-            },
-            [&]( const nlohmann::json& aJson )
-            {
-                if( !aJson.is_object() )
-                    return;
-
-                m_LibTree.column_widths.clear();
-
-                for( const auto& entry : aJson.items() )
-                {
-                    if( !entry.value().is_number_integer() )
-                        continue;
-
-                    m_LibTree.column_widths[ entry.key() ] = entry.value().get<int>();
-                }
-            },
-            {} ) );
+    m_params.emplace_back( columnWidthsParam( "lib_tree.column_widths", m_LibTree.column_widths ) );
 
     // Let the save drop widths for columns that no longer exist
+    m_params.back()->SetClearUnknownKeys();
+
+    m_params.emplace_back( columnWidthsParam( "lib_tree.auto_widths", m_LibTree.auto_widths ) );
     m_params.back()->SetClearUnknownKeys();
 
     m_params.emplace_back(

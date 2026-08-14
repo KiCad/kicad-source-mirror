@@ -189,6 +189,8 @@ set( QA_COMMON_SRCS
     test_mdw_item_locator.cpp
     test_mdw_part_description.cpp
     test_mdw_release_readiness.cpp
+    test_mdw_revision_labels.cpp
+    test_mdw_serial_worker.cpp
     test_mdw_run_until_stopped.cpp
     test_throttle.cpp
     view/test_zoom_controller.cpp

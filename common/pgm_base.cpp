@@ -78,6 +78,7 @@
 #include <trace_helpers.h>
 
 #include <widgets/kistatusbar.h>
+#include <widgets/mdw_member_index.h>
 #include <widgets/wx_splash.h>
 
 #ifdef _MSC_VER
@@ -277,6 +278,7 @@ void PGM_BASE::HostMdwFramework()
     if( MdwEnabled() )
     {
         StartMdwFramework();
+        MDW_SETUP::SweepDeadCopies();
     }
 }
 
@@ -345,6 +347,8 @@ MDW_FRAMEWORK_LEASE::~MDW_FRAMEWORK_LEASE()
 
 void PGM_BASE::DestroyMdwFramework()
 {
+    MDW_MEMBER_INDEX::Shutdown();
+
     {
         std::lock_guard<std::mutex> lock( m_mdw_mutex );
         m_mdw_host = false;
