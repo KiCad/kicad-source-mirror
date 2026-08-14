@@ -64,6 +64,23 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName, bool aSet
 }
 
 
+static const TOP_LEVEL_SHEET_INFO* findDeclaredTopLevelSheet(
+        const std::vector<TOP_LEVEL_SHEET_INFO>& aProjectSheets, const wxString& aProjectPath,
+        const wxFileName& aFile )
+{
+    for( const TOP_LEVEL_SHEET_INFO& info : aProjectSheets )
+    {
+        wxFileName candidate( aProjectPath, info.filename );
+        candidate.MakeAbsolute();
+
+        if( candidate.SameAs( aFile ) )
+            return &info;
+    }
+
+    return nullptr;
+}
+
+
 SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
                                             SCH_IO_MGR::SCH_FILE_T aFormat,
                                             bool aSetActive,
@@ -119,41 +136,72 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
     try
     {
-        SCH_SHEET* rootSheet = pi->LoadSchematicFile( schFile.GetFullPath(), schematic.get() );
+        const wxString                           projectDir = project->GetProjectPath();
+        const std::vector<TOP_LEVEL_SHEET_INFO>& projectSheets =
+                project->GetProjectFile().GetTopLevelSheets();
+        const TOP_LEVEL_SHEET_INFO* namedSheet = findDeclaredTopLevelSheet( projectSheets,
+                                                                           projectDir, schFile );
+        std::vector<SCH_SHEET*> loadedSheets;
 
-        if( !rootSheet )
+        // Load every declared top-level sheet so headless callers plot what the GUI does
+        // A missing named file still fails to load rather than falling back to its siblings
+        if( projectSheets.size() > 1 && namedSheet && schFile.FileExists() )
         {
-            schematic->SetProject( nullptr );
-            return nullptr;
+            for( const TOP_LEVEL_SHEET_INFO& info : projectSheets )
+            {
+                wxFileName sheetFn( projectDir, info.filename );
+                sheetFn.MakeAbsolute();
+
+                if( !sheetFn.FileExists() )
+                    continue;
+
+                SCH_SHEET* sheet = pi->LoadSchematicFile( sheetFn.GetFullPath(), schematic.get() );
+
+                if( !sheet )
+                    continue;
+
+                // Sub-sheet instance paths key off this UUID, so only a nil entry keeps the loaded one
+                if( info.uuid != niluuid )
+                    const_cast<KIID&>( sheet->m_Uuid ) = info.uuid;
+
+                if( !info.name.IsEmpty() )
+                    sheet->SetName( info.name );
+
+                loadedSheets.push_back( sheet );
+            }
         }
 
-        std::vector<SCH_SHEET*> topLevelSheets = schematic->GetTopLevelSheets();
-        bool rootIsTopLevel = std::find( topLevelSheets.begin(), topLevelSheets.end(), rootSheet )
-                              != topLevelSheets.end();
-        bool rootIsVirtualRoot = rootSheet == &schematic->Root() || rootSheet->IsVirtualRootSheet();
-
-        if( !rootIsTopLevel && !rootIsVirtualRoot )
-            schematic->SetTopLevelSheets( { rootSheet } );
-
-        // Make ${SHEETNAME} work on the root sheet until we properly support naming the root
-        // sheet.  Prefer the display name from the matching schematic.top_level_sheets entry in
-        // the project file so CLI/API exports show the same name the GUI does.
-        if( rootSheet->GetName().IsEmpty() )
+        if( !loadedSheets.empty() )
         {
-            wxString rootName = _( "Root" );
+            schematic->SetTopLevelSheets( loadedSheets );
+        }
+        else
+        {
+            SCH_SHEET* rootSheet = pi->LoadSchematicFile( schFile.GetFullPath(), schematic.get() );
 
-            for( const TOP_LEVEL_SHEET_INFO& info : project->GetProjectFile().GetTopLevelSheets() )
+            if( !rootSheet )
             {
-                wxFileName candidate( project->GetProjectPath(), info.filename );
-
-                if( candidate.SameAs( schFile ) && !info.name.IsEmpty() )
-                {
-                    rootName = info.name;
-                    break;
-                }
+                schematic->SetProject( nullptr );
+                return nullptr;
             }
 
-            rootSheet->SetName( rootName );
+            std::vector<SCH_SHEET*> topLevelSheets = schematic->GetTopLevelSheets();
+            bool rootIsTopLevel = std::find( topLevelSheets.begin(), topLevelSheets.end(),
+                                             rootSheet ) != topLevelSheets.end();
+            bool rootIsVirtualRoot = rootSheet == &schematic->Root()
+                                     || rootSheet->IsVirtualRootSheet();
+
+            if( !rootIsTopLevel && !rootIsVirtualRoot )
+                schematic->SetTopLevelSheets( { rootSheet } );
+
+            // Make ${SHEETNAME} work on the root sheet until we properly support naming it
+            if( rootSheet->GetName().IsEmpty() )
+            {
+                if( namedSheet && !namedSheet->name.IsEmpty() )
+                    rootSheet->SetName( namedSheet->name );
+                else
+                    rootSheet->SetName( _( "Root" ) );
+            }
         }
     }
     catch( ... )
