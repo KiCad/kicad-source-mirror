@@ -28,6 +28,7 @@
 #include <set>
 
 #include <bitmaps.h>
+#include <common.h>
 #include <confirm.h>
 #include <kidialog.h>
 #include <validators.h>
@@ -177,6 +178,17 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataToWindow()
         {
             wxString value;
             bool isExternal = wxGetEnv( envvar, &value );
+
+            // Obsolete versioned vars (e.g. KICAD9_FOOTPRINT_DIR) resolve at runtime but show blank here
+            // Resolve the same way so the row matches what's actually used
+            if( value.IsEmpty() && !isExternal )
+            {
+                wxString token = wxString::Format( wxS( "${%s}" ), envvar );
+                wxString resolved = ExpandEnvVarSubstitutions( token, nullptr );
+
+                if( resolved != token )
+                    value = resolved;
+            }
 
             AppendEnvVar( envvar, value, isExternal );
         }
