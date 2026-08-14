@@ -241,15 +241,20 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
 
     DESIGN_BLOCK_TREE_MODEL_ADAPTER* adapter = static_cast<DESIGN_BLOCK_TREE_MODEL_ADAPTER*>( m_adapter.get() );
 
-    // Clear all existing libraries then re-add
-    adapter->ClearLibraries();
+    {
+        // ClearLibraries frees nodes the tree control still holds rows for, and the repopulate
+        // reads from disk, so the view stays detached across both
+        LIB_TREE_MODEL_ADAPTER::ResetTreeView resetGuard( *adapter );
 
-    rebuildHistoryNode();
+        adapter->ClearLibraries();
 
-    if( !m_historyList.empty() )
-        adapter->SetPreselectNode( m_historyList[0], 0 );
+        rebuildHistoryNode();
 
-    adapter->AddLibraries( m_frame );
+        if( !m_historyList.empty() )
+            adapter->SetPreselectNode( m_historyList[0], 0 );
+
+        adapter->AddLibraries( m_frame );
+    }
 
     m_tree->Regenerate( true );
 
@@ -362,8 +367,19 @@ void PANEL_DESIGN_BLOCK_CHOOSER::addDesignBlockToHistory( const LIB_ID& aLibId )
     while( m_historyList.size() >= 8 )
         m_historyList.pop_back();
 
-    rebuildHistoryNode();
+    // Detaching the view collapses it, and Regenerate() can only save state it can still read,
+    // so carry the open libraries across by nickname
+    std::vector<wxString> openLibs = m_adapter->GetOpenLibs();
+
+    {
+        // rebuildHistoryNode frees the recently-used nodes the tree control still holds rows for
+        LIB_TREE_MODEL_ADAPTER::ResetTreeView resetGuard( *m_adapter );
+
+        rebuildHistoryNode();
+    }
+
     m_tree->Regenerate( true );
+    m_adapter->OpenLibs( openLibs );
 
     SelectLibId( savedId );
 }

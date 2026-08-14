@@ -337,6 +337,26 @@ public:
 
     void ShowChangedLanguage();
 
+    /**
+     * RAII guard that detaches the GtkTreeView from the model across a tree rebuild so a deferred
+     * frame-clock tick cannot validate rows pointing at nodes the rebuild frees.  It also drops
+     * any queued scroll into those rows.
+     *
+     * Construct before any node is freed.
+     */
+    class ResetTreeView
+    {
+    public:
+        explicit ResetTreeView( LIB_TREE_MODEL_ADAPTER& aAdapter );
+        ~ResetTreeView();
+
+        ResetTreeView( const ResetTreeView& ) = delete;
+        ResetTreeView& operator=( const ResetTreeView& ) = delete;
+
+    private:
+        LIB_TREE_MODEL_ADAPTER& m_adapter;
+    };
+
 protected:
     /**
      * Convert #SYM_TREE_NODE -> wxDataViewItem.
@@ -410,35 +430,6 @@ protected:
     virtual PROJECT::LIB_TYPE_T getLibType() = 0;
 
     void resortTree();
-
-    /**
-     * RAII guard that detaches the GtkTreeView from the model across a tree rebuild so a deferred
-     * frame-clock tick cannot validate rows pointing at nodes the rebuild frees.
-     *
-     * Construct before any node is freed.
-     */
-    class ResetTreeView
-    {
-    public:
-        explicit ResetTreeView( LIB_TREE_MODEL_ADAPTER& aAdapter ) :
-                m_adapter( aAdapter )
-        {
-            m_adapter.Freeze();
-            m_adapter.BeforeReset();
-        }
-
-        ~ResetTreeView()
-        {
-            m_adapter.AfterReset();
-            m_adapter.Thaw();
-        }
-
-        ResetTreeView( const ResetTreeView& ) = delete;
-        ResetTreeView& operator=( const ResetTreeView& ) = delete;
-
-    private:
-        LIB_TREE_MODEL_ADAPTER& m_adapter;
-    };
 
 private:
     /**

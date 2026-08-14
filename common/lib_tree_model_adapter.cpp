@@ -175,6 +175,25 @@ LIB_TREE_MODEL_ADAPTER::~LIB_TREE_MODEL_ADAPTER()
 {}
 
 
+LIB_TREE_MODEL_ADAPTER::ResetTreeView::ResetTreeView( LIB_TREE_MODEL_ADAPTER& aAdapter ) :
+        m_adapter( aAdapter )
+{
+    // A queued GtkTreeView scroll holds a row reference into the nodes the caller is about to
+    // free, so drop it while those rows are still valid (#24433, #24757)
+    KIPLATFORM::UI::CancelPendingScroll( m_adapter.m_widget );
+
+    m_adapter.Freeze();
+    m_adapter.BeforeReset();
+}
+
+
+LIB_TREE_MODEL_ADAPTER::ResetTreeView::~ResetTreeView()
+{
+    m_adapter.AfterReset();
+    m_adapter.Thaw();
+}
+
+
 TOOL_DISPATCHER* LIB_TREE_MODEL_ADAPTER::GetToolDispatcher() const
 {
     return m_parent->GetToolDispatcher();
