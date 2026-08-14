@@ -185,9 +185,9 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         {
             m_debugDecorator->NewStage( "fix", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
-            m_debugDecorator->Message( wxString::Format( "fix (%d, %d)", evt.p.x, evt.p.y ) );
             bool rv = m_router->FixRoute( evt.p, ritem, false, false );
-            printf( "  fix -> (%d, %d) ret %d\n", evt.p.x, evt.p.y, rv ? 1 : 0 );
+            m_debugDecorator->Message( wxString::Format( "fix -> (%d, %d) ret %d",
+                                                        evt.p.x, evt.p.y, rv ? 1 : 0 ) );
             break;
         }
 
@@ -196,7 +196,6 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
             m_debugDecorator->NewStage( "unfix", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
             m_debugDecorator->Message( wxString::Format( "unfix (%d, %d)", evt.p.x, evt.p.y ) );
-            printf( "  unfix\n" );
             m_router->UndoLastSegment();
             break;
         }

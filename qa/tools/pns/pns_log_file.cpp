@@ -452,6 +452,12 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt, const wx
         fname_dump = boardFileName;
     }
 
+    if( !fname_dump.IsFileReadable() )
+    {
+        aRpt->Report( wxT( "Could not load board file" ), RPT_SEVERITY_ERROR );
+        return false;
+    }
+
     wxFileName fname_project( logFileName );
     fname_project.SetExt( wxT( "kicad_pro" ) );
     fname_project.MakeAbsolute();
