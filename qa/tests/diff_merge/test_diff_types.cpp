@@ -425,6 +425,10 @@ BOOST_AUTO_TEST_CASE( JsonEncodesUtf8NotLocale )
 #ifndef _WIN32
 BOOST_AUTO_TEST_CASE( WriteDiffOutputStdoutWritesContent )
 {
+    std::ostream* savedLog = boost::unit_test::unit_test_log.get_stream(
+            boost::unit_test::OF_CLF );
+    boost::unit_test::unit_test_log.set_stream( std::cerr );
+
     fflush( stdout );
 
     int pipeFd[2];
@@ -449,6 +453,9 @@ BOOST_AUTO_TEST_CASE( WriteDiffOutputStdoutWritesContent )
 
     BOOST_REQUIRE( bytesRead >= 0 );
     BOOST_CHECK_EQUAL( std::string( buffer, static_cast<std::size_t>( bytesRead ) ), content );
+
+    if( savedLog )
+        boost::unit_test::unit_test_log.set_stream( *savedLog );
 }
 #endif
 
