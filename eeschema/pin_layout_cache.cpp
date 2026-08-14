@@ -67,9 +67,9 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     const int halfLength = m_pin.GetLength() / 2;
     bool      verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
 
-    // Half the number height, which runs perpendicular to the pin in both orientations so the gap
-    // stays constant across rotations. A wrapped column spans several lines, use its full height.
-    int perpHeight = m_numExtentsCache.m_Extents.y;
+    // Nominal size, not the measured glyph bbox, which stroke fonts inflate for descenders
+    // digits never have; using it kept the gap constant across rotations without the extra push
+    int perpHeight = num_size;
 
     if( formatted.Contains( '\n' ) )
     {
