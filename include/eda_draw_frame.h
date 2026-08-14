@@ -37,7 +37,6 @@ struct EDA_SEARCH_DATA;
 struct PLUGIN_ACTION;
 class LIB_TREE;
 class EDA_ITEM;
-class wxSingleInstanceChecker;
 class ACTION_TOOLBAR;
 class GRID_HELPER;
 class COLOR_SETTINGS;

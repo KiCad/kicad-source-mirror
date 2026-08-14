@@ -578,3 +578,161 @@ KIPLATFORM::IO::MAPPED_FILE::~MAPPED_FILE()
     if( m_fileHandle )
         CloseHandle( m_fileHandle );
 }
+
+
+
+// Past any content, so reading a held lock's owner still works; SQLite's PENDING_BYTE offset
+static constexpr DWORD LOCK_BYTE_OFFSET = 0x40000000;
+
+
+KIPLATFORM::IO::FILE_LOCK::STATE KIPLATFORM::IO::FILE_LOCK::Acquire( const wxString& aPath,
+                                                                     bool& aCreated )
+{
+    Release();
+
+    // FILE_SHARE_DELETE lets the owner remove the lock file while we still hold it open
+    auto openFile = [&]( DWORD aAccess, DWORD aDisposition )
+    {
+        return CreateFileW( aPath.wc_str(), aAccess,
+                            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
+                            aDisposition, FILE_ATTRIBUTE_NORMAL, nullptr );
+    };
+
+    HANDLE handle = openFile( GENERIC_READ | GENERIC_WRITE, CREATE_NEW );
+
+    aCreated = handle != INVALID_HANDLE_VALUE;
+
+    if( !aCreated )
+        handle = openFile( GENERIC_READ | GENERIC_WRITE, OPEN_EXISTING );
+
+    if( handle == INVALID_HANDLE_VALUE )
+    {
+        // Fall back to read-only so we can still report the lock owner
+        handle = openFile( GENERIC_READ, OPEN_EXISTING );
+
+        if( handle != INVALID_HANDLE_VALUE )
+        {
+            m_handle = handle;
+            m_state = STATE::UNSUPPORTED;
+        }
+
+        return m_state;
+    }
+
+    m_handle = handle;
+
+    OVERLAPPED overlapped = {};
+    overlapped.Offset = LOCK_BYTE_OFFSET;
+
+    if( LockFileEx( handle, LOCKFILE_EXCLUSIVE_LOCK | LOCKFILE_FAIL_IMMEDIATELY, 0, 1, 0,
+                    &overlapped ) )
+    {
+        m_state = STATE::HELD;
+    }
+    else if( GetLastError() == ERROR_LOCK_VIOLATION || GetLastError() == ERROR_IO_PENDING )
+    {
+        m_state = STATE::BUSY;
+    }
+    else
+    {
+        m_state = STATE::UNSUPPORTED;
+    }
+
+    return m_state;
+}
+
+
+bool KIPLATFORM::IO::FILE_LOCK::OpenForInspect( const wxString& aPath, bool& aHeldByAnother )
+{
+    Release();
+
+    aHeldByAnother = false;
+
+    HANDLE handle = CreateFileW( aPath.wc_str(), GENERIC_READ,
+                                 FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
+                                 OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr );
+
+    if( handle == INVALID_HANDLE_VALUE )
+        return false;
+
+    m_handle = handle;
+
+    OVERLAPPED overlapped = {};
+    overlapped.Offset = LOCK_BYTE_OFFSET;
+
+    // Briefly take the lock to test for a holder, then release; m_state stays NONE
+    if( LockFileEx( handle, LOCKFILE_EXCLUSIVE_LOCK | LOCKFILE_FAIL_IMMEDIATELY, 0, 1, 0,
+                    &overlapped ) )
+    {
+        UnlockFileEx( handle, 0, 1, 0, &overlapped );
+    }
+    else if( GetLastError() == ERROR_LOCK_VIOLATION || GetLastError() == ERROR_IO_PENDING )
+    {
+        aHeldByAnother = true;
+    }
+
+    return true;
+}
+
+
+bool KIPLATFORM::IO::FILE_LOCK::IsOpen() const
+{
+    return m_handle != nullptr;
+}
+
+
+bool KIPLATFORM::IO::FILE_LOCK::ReadAll( std::string& aContents ) const
+{
+    if( !IsOpen() )
+        return false;
+
+    LARGE_INTEGER zero = {};
+
+    if( !SetFilePointerEx( m_handle, zero, nullptr, FILE_BEGIN ) )
+        return false;
+
+    aContents.clear();
+
+    char  buffer[4096];
+    DWORD read = 0;
+
+    while( ReadFile( m_handle, buffer, sizeof( buffer ), &read, nullptr ) && read > 0 )
+        aContents.append( buffer, read );
+
+    return true;
+}
+
+
+bool KIPLATFORM::IO::FILE_LOCK::Rewrite( const std::string& aContents )
+{
+    if( !IsOpen() )
+        return false;
+
+    LARGE_INTEGER zero = {};
+
+    if( !SetFilePointerEx( m_handle, zero, nullptr, FILE_BEGIN ) || !SetEndOfFile( m_handle ) )
+        return false;
+
+    DWORD written = 0;
+
+    if( !WriteFile( m_handle, aContents.data(), static_cast<DWORD>( aContents.size() ), &written,
+                    nullptr ) )
+    {
+        return false;
+    }
+
+    return written == aContents.size();
+}
+
+
+void KIPLATFORM::IO::FILE_LOCK::Release()
+{
+    if( IsOpen() )
+    {
+        // Closing the handle releases the lock, same as process death would
+        CloseHandle( m_handle );
+        m_handle = nullptr;
+    }
+
+    m_state = STATE::NONE;
+}

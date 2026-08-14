@@ -57,7 +57,7 @@ public:
 
     // The PGM_* classes can have difficulties at termination if they
     // are not destroyed soon enough.  Relying on a static destructor can be
-    // too late for contained objects like wxSingleInstanceChecker.
+    // too late for the objects they contain.
     void Destroy();
 
 protected:

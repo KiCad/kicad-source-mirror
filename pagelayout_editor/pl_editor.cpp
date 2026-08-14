@@ -20,7 +20,6 @@
  */
 
 #include <wx/file.h>
-#include <wx/snglinst.h>
 
 #include <kiface_base.h>
 #include <confirm.h>

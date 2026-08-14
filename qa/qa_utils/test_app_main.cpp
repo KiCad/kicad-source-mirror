@@ -30,9 +30,11 @@
 
 #include <typeinfo>
 #include <string_utils.h>
+#include <wx/app.h>
 #include <wx/filename.h>
+#include <wx/init.h>
+#include <wx/log.h>
 #include <wx/stdpaths.h>
-#include <wx/snglinst.h>
 #include <wx/html/htmlwin.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
@@ -94,11 +96,9 @@ static struct PGM_TEST_FRAME : public PGM_BASE
 
     void OnPgmExit()
     {
-        printf("Destroy\n");
         Kiway.OnKiwayEnd();
 
-        // Destroy everything in PGM_BASE, especially wxSingleInstanceCheckerImpl
-        // earlier than wxApp and earlier than static destruction would.
+        // Destroy PGM_BASE earlier than wxApp and static destruction would
         PGM_BASE::Destroy();
     }
 

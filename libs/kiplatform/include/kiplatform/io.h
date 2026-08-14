@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <cstddef>
 #include <cstdint>
+#include <string>
 #include <vector>
 
 class wxString;
@@ -64,6 +65,97 @@ namespace IO
 #endif
 
         std::vector<uint8_t> m_fallbackBuffer;
+    };
+
+    /**
+     * An exclusive advisory lock on a file, held for the lifetime of this object.
+     *
+     * The operating system releases the lock when the holding process dies, however it dies,
+     * so a lock that can be taken proves that whoever wrote the file is gone.  That answer
+     * costs nothing to obtain and needs no cooperation from the other process, unlike a
+     * recorded process id, which is meaningless outside the pid namespace that recorded it.
+     *
+     * POSIX uses flock(2), which is held by the open file description; Windows locks a byte
+     * far past the end of the file so that readers can still see the contents.  The
+     * descriptor is opened close-on-exec: a child that inherited it would keep the lock alive
+     * past the death of its owner.
+     *
+     * Windows releases the locks of a process that died in its own time rather than at once,
+     * so shortly after a crash a lock can still read as held.  That errs towards leaving a
+     * lock alone, which is the safe direction to err in.
+     *
+     * Content is read and written through the locked descriptor rather than by path, so that
+     * a file replaced underneath us cannot be mistaken for the one we hold.
+     */
+    class FILE_LOCK
+    {
+    public:
+        enum class STATE
+        {
+            NONE,           ///< No file is open
+            HELD,           ///< We hold the lock
+            BUSY,           ///< Another process holds the lock
+            UNSUPPORTED     ///< The file is open but the filesystem cannot answer
+        };
+
+        FILE_LOCK() = default;
+        ~FILE_LOCK();
+
+        FILE_LOCK( FILE_LOCK&& aOther ) noexcept;
+        FILE_LOCK& operator=( FILE_LOCK&& aOther ) noexcept;
+
+        FILE_LOCK( const FILE_LOCK& ) = delete;
+        FILE_LOCK& operator=( const FILE_LOCK& ) = delete;
+
+        /**
+         * Open @p aPath, creating it if it does not exist, and try to take the lock without
+         * ever blocking on it.
+         *
+         * The file stays open whatever the outcome, so the caller can read the contents of a
+         * lock another process holds.
+         *
+         * @param aPath      file to open and lock.
+         * @param aCreated   set true if this call created the file, false if it existed.
+         * @return the resulting lock state.
+         */
+        STATE Acquire( const wxString& aPath, bool& aCreated );
+
+        /**
+         * Open an existing file and report whether another process holds its lock, creating
+         * nothing and keeping no lock of our own, so that a caller which only wants to know who
+         * holds a lock cannot disturb it.
+         *
+         * @param aPath          file to look at.
+         * @param aHeldByAnother set true only when another process provably holds the lock, so
+         *                       that an answer we cannot obtain never reads as in use.
+         * @return true if the file was opened, and its contents can therefore be read.
+         */
+        bool OpenForInspect( const wxString& aPath, bool& aHeldByAnother );
+
+        bool IsOpen() const;
+
+        /**
+         * Read the whole file through the descriptor we hold.
+         */
+        bool ReadAll( std::string& aContents ) const;
+
+        /**
+         * Replace the file contents through the descriptor we hold, keeping the same inode.
+         */
+        bool Rewrite( const std::string& aContents );
+
+        /**
+         * Release the lock and close the file.
+         */
+        void Release();
+
+    private:
+#ifdef _WIN32
+        void* m_handle = nullptr;
+#else
+        int   m_fd = -1;
+#endif
+        STATE m_state = STATE::NONE;
     };
 
     /**

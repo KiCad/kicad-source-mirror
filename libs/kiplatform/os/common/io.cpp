@@ -37,6 +37,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fcntl.h>
+#include <sys/file.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
@@ -340,4 +341,158 @@ void KIPLATFORM::IO::MAPPED_FILE::readIntoBuffer( const wxString& aFileName )
 
     m_data = m_fallbackBuffer.data();
     m_size = m_fallbackBuffer.size();
+}
+
+
+#if !defined( _WIN32 )
+
+
+KIPLATFORM::IO::FILE_LOCK::STATE KIPLATFORM::IO::FILE_LOCK::Acquire( const wxString& aPath,
+                                                                     bool& aCreated )
+{
+    Release();
+
+    int fd = open( aPath.fn_str(), O_RDWR | O_CREAT | O_EXCL | O_CLOEXEC, 0666 );
+
+    aCreated = fd >= 0;
+
+    if( !aCreated )
+        fd = open( aPath.fn_str(), O_RDWR | O_CLOEXEC );
+
+    if( fd < 0 )
+    {
+        // Fall back to read-only so we can still report the lock owner
+        m_fd = open( aPath.fn_str(), O_RDONLY | O_CLOEXEC );
+
+        if( m_fd >= 0 )
+            m_state = STATE::UNSUPPORTED;
+
+        return m_state;
+    }
+
+    m_fd = fd;
+
+    if( flock( fd, LOCK_EX | LOCK_NB ) == 0 )
+        m_state = STATE::HELD;
+    else if( errno == EWOULDBLOCK )
+        m_state = STATE::BUSY;
+    else
+        m_state = STATE::UNSUPPORTED;
+
+    return m_state;
+}
+
+
+bool KIPLATFORM::IO::FILE_LOCK::OpenForInspect( const wxString& aPath, bool& aHeldByAnother )
+{
+    Release();
+
+    aHeldByAnother = false;
+
+    m_fd = open( aPath.fn_str(), O_RDONLY | O_CLOEXEC );
+
+    if( m_fd < 0 )
+        return false;
+
+    // Briefly take the lock to test for a holder, then release; m_state stays NONE
+    if( flock( m_fd, LOCK_EX | LOCK_NB ) == 0 )
+        flock( m_fd, LOCK_UN );
+    else if( errno == EWOULDBLOCK )
+        aHeldByAnother = true;
+
+    return true;
+}
+
+
+bool KIPLATFORM::IO::FILE_LOCK::IsOpen() const
+{
+    return m_fd >= 0;
+}
+
+
+bool KIPLATFORM::IO::FILE_LOCK::ReadAll( std::string& aContents ) const
+{
+    if( !IsOpen() || lseek( m_fd, 0, SEEK_SET ) < 0 )
+        return false;
+
+    aContents.clear();
+
+    char    buffer[4096];
+    ssize_t bytes;
+
+    while( ( bytes = read( m_fd, buffer, sizeof( buffer ) ) ) > 0 )
+        aContents.append( buffer, static_cast<size_t>( bytes ) );
+
+    return bytes >= 0;
+}
+
+
+bool KIPLATFORM::IO::FILE_LOCK::Rewrite( const std::string& aContents )
+{
+    if( !IsOpen() || ftruncate( m_fd, 0 ) < 0 || lseek( m_fd, 0, SEEK_SET ) < 0 )
+        return false;
+
+    size_t written = 0;
+
+    while( written < aContents.size() )
+    {
+        ssize_t bytes = write( m_fd, aContents.data() + written, aContents.size() - written );
+
+        if( bytes <= 0 )
+            return false;
+
+        written += static_cast<size_t>( bytes );
+    }
+
+    return true;
+}
+
+
+void KIPLATFORM::IO::FILE_LOCK::Release()
+{
+    if( IsOpen() )
+    {
+        // Closing the descriptor releases the lock, same as process death would
+        close( m_fd );
+        m_fd = -1;
+    }
+
+    m_state = STATE::NONE;
+}
+
+#endif // !_WIN32
+
+
+
+KIPLATFORM::IO::FILE_LOCK::~FILE_LOCK()
+{
+    Release();
+}
+
+
+KIPLATFORM::IO::FILE_LOCK::FILE_LOCK( FILE_LOCK&& aOther ) noexcept
+{
+    *this = std::move( aOther );
+}
+
+
+KIPLATFORM::IO::FILE_LOCK& KIPLATFORM::IO::FILE_LOCK::operator=( FILE_LOCK&& aOther ) noexcept
+{
+    if( this == &aOther )
+        return *this;
+
+    Release();
+
+#ifdef _WIN32
+    m_handle = aOther.m_handle;
+    aOther.m_handle = nullptr;
+#else
+    m_fd = aOther.m_fd;
+    aOther.m_fd = -1;
+#endif
+
+    m_state = aOther.m_state;
+    aOther.m_state = STATE::NONE;
+
+    return *this;
 }

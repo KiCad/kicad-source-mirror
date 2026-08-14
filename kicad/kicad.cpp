@@ -501,9 +501,7 @@ void PGM_KICAD::OnPgmExit()
         m_settings_manager->Save();
     }
 
-    // Destroy everything in PGM_KICAD,
-    // especially wxSingleInstanceCheckerImpl earlier than wxApp and earlier
-    // than static destruction would.
+    // Destroy PGM_KICAD earlier than wxApp and static destruction would
     Destroy();
     GetGitBackend()->Shutdown();
     delete GetGitBackend();

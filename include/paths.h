@@ -162,11 +162,6 @@ public:
     static wxString GetDocumentationPath();
 
     /**
-     * Gets the path used for wxSingleInstanceChecker lock files
-     */
-    static wxString GetInstanceCheckerPath();
-
-    /**
      * Gets a path to use for user-visible log files
      */
     static wxString GetLogsPath();

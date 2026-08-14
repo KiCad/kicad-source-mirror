@@ -43,7 +43,6 @@
 #include <trace_helpers.h>
 #include <length_delay_calculation/length_delay_calculation.h>
 #include <lockfile.h>
-#include <wx/snglinst.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <pcbnew_id.h>
 #include <wildcards_and_files_ext.h>
@@ -494,16 +493,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     wxASSERT_MSG( wx_filename.IsAbsolute(), wxT( "Path is not absolute!" ) );
 
     std::unique_ptr<LOCKFILE> lock = std::make_unique<LOCKFILE>( fullFileName );
-
-    if( !lock->Valid() && lock->IsLockedByMe() )
-    {
-        // If we cannot acquire the lock but we appear to be the one who locked it, check to
-        // see if there is another KiCad instance running.  If not, then we can override the
-        // lock.  This could happen if KiCad crashed or was interrupted.
-
-        if( !Pgm().SingleInstance()->IsAnotherRunning() )
-            lock->OverrideLock();
-    }
 
     if( !lock->Valid() )
     {

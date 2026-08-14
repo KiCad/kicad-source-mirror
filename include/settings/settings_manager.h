@@ -34,7 +34,6 @@ class KIWAY;
 class PROJECT;
 class PROJECT_FILE;
 class REPORTER;
-class wxSingleInstanceChecker;
 class wxFileName;
 class LOCKFILE;
 

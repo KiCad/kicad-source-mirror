@@ -24,7 +24,6 @@
 #include <wx/debug.h>
 #include <wx/dir.h>
 #include <wx/filename.h>
-#include <wx/snglinst.h>
 #include <wx/stdpaths.h>
 #include <wx/utils.h>
 
@@ -1018,12 +1017,11 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     if( m_projects.count( fullPath ) )
         return true;
 
-    LOCKFILE lockFile( fullPath );
+    // A passive load only inspects the lock rather than taking it
+    LOCKFILE lockFile = aSetActive ? LOCKFILE( fullPath ) : LOCKFILE::Inspect( fullPath );
 
     if( !lockFile.Valid() )
-    {
         wxLogTrace( traceSettings, wxT( "Project %s is locked; opening read-only" ), fullPath );
-    }
 
     // No MDI yet
     if( aSetActive && !m_projects.empty() )
@@ -1097,7 +1095,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     {
         project->SetReadOnly( !lockFile.Valid() || project->GetProjectFile().IsReadOnly() );
 
-        if( lockFile && aSetActive )
+        if( lockFile.Valid() && aSetActive )
             project->SetProjectLock( new LOCKFILE( std::move( lockFile ) ) );
     }
 

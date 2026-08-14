@@ -494,16 +494,6 @@ wxString PATHS::GetDocumentationPath()
 }
 
 
-wxString PATHS::GetInstanceCheckerPath()
-{
-    wxFileName path;
-    path.AssignDir( wxStandardPaths::Get().GetTempDir() );
-    path.AppendDir( "org.kicad.kicad" );
-    path.AppendDir( "instances" );
-    return path.GetPathWithSep();
-}
-
-
 wxString PATHS::GetLogsPath()
 {
     wxFileName tmp;

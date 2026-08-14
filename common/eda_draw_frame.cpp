@@ -67,7 +67,6 @@
 #include <widgets/net_inspector_panel.h>
 #include <widgets/filedlg_hook_new_library.h>
 #include <wx/event.h>
-#include <wx/snglinst.h>
 #include <widgets/ui_common.h>
 #include <widgets/search_pane.h>
 #include <wx/dirdlg.h>
@@ -75,7 +74,6 @@
 #include <wx/debug.h>
 #include <wx/socket.h>
 
-#include <wx/snglinst.h>
 #include <wx/fdrepdlg.h>
 #include <tool/editor_conditions.h>
 
@@ -281,15 +279,6 @@ bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
     m_file_checker.reset();
 
     m_file_checker = std::make_unique<LOCKFILE>( aFileName );
-
-    if( !m_file_checker->Valid() && m_file_checker->IsLockedByMe() )
-    {
-        // If we cannot acquire the lock but we appear to be the one who locked it, check to see if
-        // there is another KiCad instance running.  If there is not, then we can override the lock.
-        // This could happen if KiCad crashed or was interrupted.
-        if( !Pgm().SingleInstance()->IsAnotherRunning() )
-            m_file_checker->OverrideLock();
-    }
 
     // If the file is valid, return true.  This could mean that the file is locked or it could mean
     // that the file is read-only.

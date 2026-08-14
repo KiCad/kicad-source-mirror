@@ -31,6 +31,11 @@
 #include <settings/settings_manager.h>
 
 #include <json_common.h>
+#include <kiplatform/io.h>
+#include <lockfile.h>
+#include <project.h>
+
+#include <wx/filename.h>
 
 #include <filesystem>
 #include <fstream>
@@ -179,6 +184,105 @@ BOOST_AUTO_TEST_CASE( ColorThemeNotRewrittenWhenUnchanged )
 
     BOOST_CHECK( !cfg.SaveToFile( wxEmptyString ) );
     BOOST_CHECK_EQUAL( before, readFile( themePath ) );
+}
+
+
+// Writes a loadable project plus a lock file owned by aOwner, and returns the project path.
+static wxString seedLockedProject( const fs::path& aDir, const std::string& aName,
+                                   const nlohmann::json& aOwner )
+{
+    fs::path pro = aDir / ( aName + ".kicad_pro" );
+
+    {
+        std::ofstream out( pro.string() );
+        out << R"({"meta": {"filename": ")" << aName << R"(.kicad_pro", "version": 3}})";
+    }
+
+    std::ofstream lck( LOCKFILE::LockPathFor( wxString( pro.string() ) ).ToStdString() );
+    lck << aOwner.dump();
+
+    return wxString( pro.string() );
+}
+
+
+static nlohmann::json selfOwnerRecord()
+{
+    nlohmann::json owner;
+    owner["username"] = std::string( wxGetUserId().mb_str() );
+    owner["hostname"] = std::string( wxGetHostName().mb_str() );
+    owner["token"] = "0123456789abcdef0123456789abcdef";
+    return owner;
+}
+
+
+// Issue #11458 - a crash-orphaned self lock must be reclaimed, not leave the project read-only
+BOOST_AUTO_TEST_CASE( StaleOwnProjectLockIsReclaimedOnLoad )
+{
+    // No OS lock is held, the state a crash leaves behind
+    wxString projectPath = seedLockedProject( m_tempDir, "stale", selfOwnerRecord() );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( projectPath ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_REQUIRE( project );
+
+    BOOST_CHECK( !project->IsReadOnly() );
+    BOOST_CHECK( project->GetProjectLock() != nullptr );
+    BOOST_CHECK( wxFileName::FileExists( LOCKFILE::LockPathFor( projectPath ) ) );
+}
+
+
+// Foreign lock is the negative control - the project must still open read-only, untouched
+BOOST_AUTO_TEST_CASE( ForeignProjectLockOpensReadOnlyAndIsNotStolen )
+{
+    nlohmann::json owner;
+    owner["username"] = "someone-else";
+    owner["hostname"] = "another-host";
+
+    wxString projectPath = seedLockedProject( m_tempDir, "locked", owner );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( projectPath ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_REQUIRE( project );
+
+    // A lock we cannot take degrades to read-only, never to refusing the project
+    BOOST_CHECK( project->IsReadOnly() );
+
+    BOOST_REQUIRE( wxFileName::FileExists( LOCKFILE::LockPathFor( projectPath ) ) );
+
+    LOCKFILE reread( projectPath );
+    BOOST_CHECK_EQUAL( reread.GetUsername(), wxString( "someone-else" ) );
+    BOOST_CHECK_EQUAL( reread.GetHostname(), wxString( "another-host" ) );
+}
+
+
+// A live same-user lock held by another KiCad process must never be taken
+BOOST_AUTO_TEST_CASE( LiveProjectLockNotStolenFromAnotherExecutable )
+{
+    wxString projectPath = seedLockedProject( m_tempDir, "live", selfOwnerRecord() );
+
+    KIPLATFORM::IO::FILE_LOCK owner;
+    bool                      created = false;
+
+    BOOST_REQUIRE( owner.Acquire( LOCKFILE::LockPathFor( projectPath ), created )
+                   == KIPLATFORM::IO::FILE_LOCK::STATE::HELD );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( projectPath ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_REQUIRE( project );
+
+    BOOST_CHECK( project->IsReadOnly() );
+
+    BOOST_REQUIRE( wxFileName::FileExists( LOCKFILE::LockPathFor( projectPath ) ) );
+
+    std::ifstream in( LOCKFILE::LockPathFor( projectPath ).ToStdString() );
+    BOOST_CHECK_EQUAL( nlohmann::json::parse( in ).value( "token", std::string() ),
+                       std::string( "0123456789abcdef0123456789abcdef" ) );
 }
 
 

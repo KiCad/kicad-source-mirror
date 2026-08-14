@@ -36,7 +36,6 @@
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <macros.h>
-#include <wx/snglinst.h>
 #include <gestfich.h>
 #include <paths.h>
 #include <pcbnew_settings.h>

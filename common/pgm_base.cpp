@@ -32,7 +32,6 @@
 #include <wx/filename.h>
 #include <wx/msgdlg.h>
 #include <wx/propgrid/propgrid.h>
-#include <wx/snglinst.h>
 #include <wx/stdpaths.h>
 #include <wx/sysopt.h>
 #include <wx/filedlg.h>
@@ -186,8 +185,6 @@ void PGM_BASE::Destroy()
     KICAD_CURL::Cleanup();
 
     APP_MONITOR::SENTRY::Instance()->Cleanup();
-
-    m_pgm_checker.reset();
 
 #ifdef _MSC_VER
     winrt::uninit_apartment();
@@ -386,23 +383,6 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
         return false;
     }
 #endif
-
-    // Ensure the instance checker directory exists
-    // It should be globally writable because it is shared between all users on Linux, and so on a
-    // multi-user machine, other need to be able to access it to check for the lock files or make
-    // their own lock files.
-    wxString instanceCheckerDir = PATHS::GetInstanceCheckerPath();
-    PATHS::EnsurePathExists( instanceCheckerDir );
-    wxChmod( instanceCheckerDir,
-             wxPOSIX_USER_READ | wxPOSIX_USER_WRITE | wxPOSIX_USER_EXECUTE |
-             wxPOSIX_GROUP_READ | wxPOSIX_GROUP_WRITE | wxPOSIX_GROUP_EXECUTE |
-             wxPOSIX_OTHERS_READ | wxPOSIX_OTHERS_WRITE | wxPOSIX_OTHERS_EXECUTE );
-
-    wxString instanceCheckerName = wxString::Format( wxS( "%s-%s" ), pgm_name,
-                                                     GetMajorMinorVersion() );
-
-    m_pgm_checker = std::make_unique<wxSingleInstanceChecker>();
-    m_pgm_checker->Create( instanceCheckerName, instanceCheckerDir );
 
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:

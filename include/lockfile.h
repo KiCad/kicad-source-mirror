@@ -26,126 +26,137 @@
 #define INCLUDE__LOCK_FILE_H_
 
 #include <wx/wx.h>
-#include <wx/file.h>
 #include <wx/filefn.h>
 #include <wx/log.h>
 #include <wx/filename.h>
 #include <json_common.h>
+#include <kiplatform/io.h>
 #include <wildcards_and_files_ext.h>
 
-#define LCK "KICAD_LOCKING"
+#include <cstdint>
+#include <random>
+#include <string>
 
+/**
+ * Flag to enable project lock file debug tracing.
+ *
+ * Use "KICAD_LOCKING" to enable.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar* traceLockFile = wxT( "KICAD_LOCKING" );
+
+/**
+ * Advisory lock over a file, taken by writing a sibling lock file and holding an exclusive
+ * lock on it for as long as this object lives.
+ *
+ * The operating system drops that lock when the owning process dies, so a lock file we can
+ * lock is one whose writer is gone and whose contents we may take over.  That keeps a session
+ * killed by a crash from pinning its project read-only forever, without ever guessing at the
+ * liveness of a process we cannot see.
+ */
 class LOCKFILE
 {
 public:
     LOCKFILE( const wxString &filename, bool aRemoveOnRelease = true ) :
-            m_originalFile( filename ), m_fileCreated( false ), m_status( false ),
-            m_removeOnRelease( aRemoveOnRelease ), m_errorMsg( "" )
+            m_removeOnRelease( aRemoveOnRelease )
     {
         if( filename.IsEmpty() )
             return;
 
-        wxLogTrace( LCK, "Trying to lock %s", filename );
-        wxFileName fn( filename );
-        fn.SetName( FILEEXT::LockFilePrefix + fn.GetName() );
-        fn.SetExt( fn.GetExt() + '.' + FILEEXT::LockFileExtension );
+        wxLogTrace( traceLockFile, "Trying to lock %s", filename );
+        m_lockFilename = LockPathFor( filename );
 
-        if( !fn.IsDirWritable() )
+        if( !wxFileName( m_lockFilename ).IsDirWritable() )
         {
-            wxLogTrace( LCK, "File is not writable: %s", filename );
+            wxLogTrace( traceLockFile, "File is not writable: %s", filename );
             m_status = true;
             m_removeOnRelease = false;
             return;
         }
 
-        m_lockFilename = fn.GetFullPath();
+        bool created = false;
+        KIPLATFORM::IO::FILE_LOCK::STATE state = m_lock.Acquire( m_lockFilename, created );
 
-        wxFile file;
-        try
+        if( !m_lock.IsOpen() )
         {
-            bool lock_success = false;
-            bool rw_success = false;
-
-            {
-                wxLogNull suppressExpectedErrorMessages;
-
-                lock_success = file.Open( m_lockFilename, wxFile::write_excl );
-
-                if( !lock_success )
-                    rw_success = file.Open( m_lockFilename, wxFile::read );
-            }
-
-            if( lock_success )
-            {
-                m_fileCreated = true;
-                m_status = true;
-                m_username = wxGetUserId();
-                m_hostname = wxGetHostName();
-                nlohmann::json j;
-                j["username"] = std::string( m_username.mb_str() );
-                j["hostname"] = std::string( m_hostname.mb_str() );
-                std::string lock_info = j.dump();
-                file.Write( lock_info );
-                file.Close();
-                wxLogTrace( LCK, "Locked %s", filename );
-            }
-            else if( rw_success )
-            {
-                wxString lock_info;
-                file.ReadAll( &lock_info );
-                file.Close();
-
-                // Cloud-synced drives can present a lock file before its contents finish syncing.
-                // Treat an empty or corrupt file as unknown-owner stale rather than a hard error.
-                try
-                {
-                    nlohmann::json j = nlohmann::json::parse( std::string( lock_info.mb_str() ) );
-                    m_username = wxString( j.at( "username" ).get<std::string>() );
-                    m_hostname = wxString( j.at( "hostname" ).get<std::string>() );
-                }
-                catch( const std::exception& parseError )
-                {
-                    m_username = wxEmptyString;
-                    m_hostname = wxEmptyString;
-                    wxLogTrace( LCK, "Unreadable lock contents for %s: %s", filename,
-                                parseError.what() );
-                }
-
-                m_errorMsg = _( "Lock file already exists" );
-                wxLogTrace( LCK, "Existing Lock for %s", filename );
-            }
-            else
-            {
-                throw std::runtime_error( "Failed to open lock file" );
-            }
+            wxLogTrace( traceLockFile, "Could not open a lock file for %s", filename );
+            return;
         }
-        catch( std::exception& e )
+
+        // Creating the file does not make the lock ours, since another process can take the lock
+        // between our create and our own attempt.  Exclusive creation decides only where the
+        // filesystem cannot lock at all.
+        if( created && state != KIPLATFORM::IO::FILE_LOCK::STATE::BUSY )
         {
-            wxLogError( "Got an error trying to lock %s: %s", filename, e.what() );
-
-            if( m_fileCreated )
-            {
-                wxRemoveFile( m_lockFilename );
-                m_fileCreated = false;
-            }
-
-            m_errorMsg = _( "Failed to access lock file" );
-            m_status = false;
+            claim();
+            wxLogTrace( traceLockFile, "Locked %s", filename );
+            return;
         }
+
+        readOwner();
+
+        // Whoever wrote this lock holds it until their process dies, so a lock we can take is
+        // one nobody is using.  Only our own is safe to take over: where the filesystem locks
+        // locally, as network shares often do, another user's lock may be live elsewhere.
+        if( state == KIPLATFORM::IO::FILE_LOCK::STATE::HELD && IsLockedByMe() )
+        {
+            claim();
+            wxLogTrace( traceLockFile, "Reclaimed the abandoned lock on %s", filename );
+            return;
+        }
+
+        wxLogTrace( traceLockFile, "Existing Lock for %s", filename );
+    }
+
+    /**
+     * Look at a lock without taking it: nothing is created, nothing is claimed and nothing is
+     * removed on release, so a caller that only wants to know who holds a lock cannot disturb
+     * it.  Valid() then answers whether the lock is free rather than whether we hold it, and
+     * Locked() is always false.
+     */
+    static LOCKFILE Inspect( const wxString& aFilename )
+    {
+        LOCKFILE probe;
+        bool     heldByAnother = false;
+
+        if( !aFilename.IsEmpty() )
+        {
+            probe.m_lockFilename = LockPathFor( aFilename );
+
+            if( probe.m_lock.OpenForInspect( probe.m_lockFilename, heldByAnother ) )
+                probe.readOwner();
+        }
+
+        probe.m_status = !heldByAnother;
+
+        return probe;
+    }
+
+    /**
+     * @return the path of the lock file that guards aFilename.
+     */
+    static wxString LockPathFor( const wxString& aFilename )
+    {
+        wxFileName fn( aFilename );
+        fn.SetName( FILEEXT::LockFilePrefix + fn.GetName() );
+        fn.SetExt( fn.GetExt() + '.' + FILEEXT::LockFileExtension );
+
+        return fn.GetFullPath();
     }
 
     LOCKFILE( LOCKFILE&& other ) noexcept :
-            m_originalFile( std::move( other.m_originalFile ) ),
             m_lockFilename( std::move( other.m_lockFilename ) ),
             m_username( std::move( other.m_username ) ),
             m_hostname( std::move( other.m_hostname ) ),
-            m_fileCreated( other.m_fileCreated ),
+            m_token( std::move( other.m_token ) ),
+            m_lock( std::move( other.m_lock ) ),
+            m_owned( other.m_owned ),
             m_status( other.m_status ),
-            m_removeOnRelease( other.m_removeOnRelease ),
-            m_errorMsg( std::move( other.m_errorMsg ) )
+            m_removeOnRelease( other.m_removeOnRelease )
     {
         // Disable unlock in the moved-from object
-        other.m_fileCreated = false;
+        other.m_owned = false;
     }
 
     ~LOCKFILE()
@@ -158,17 +169,20 @@ public:
      */
     void UnlockFile()
     {
-        wxLogTrace( LCK, "Unlocking %s", m_lockFilename );
+        wxLogTrace( traceLockFile, "Unlocking %s", m_lockFilename );
 
-        if( m_fileCreated && checkUserAndHost() )
+        // Remove the file before dropping the lock, so that the window in which another
+        // process could adopt a lock we are abandoning never opens
+        if( m_owned && stillOwnLock() )
         {
             if( m_removeOnRelease )
                 wxRemoveFile( m_lockFilename );
 
-            m_fileCreated = false;
+            m_owned = false;
             m_status = false;
-            m_errorMsg = wxEmptyString;
         }
+
+        m_lock.Release();
     }
 
     /**
@@ -178,55 +192,14 @@ public:
      */
     bool OverrideLock( bool aRemoveOnRelease = true )
     {
-        wxLogTrace( LCK, "Overriding lock on %s", m_lockFilename );
+        wxLogTrace( traceLockFile, "Overriding lock on %s", m_lockFilename );
 
-        if( !m_fileCreated )
-        {
-            try
-            {
-                wxFile file;
-                bool success = false;
+        if( !m_owned && m_lock.IsOpen() )
+            claim();
 
-                {
-                    wxLogNull suppressExpectedErrorMessages;
-                    success = file.Open( m_lockFilename, wxFile::write );
-                }
+        m_removeOnRelease = aRemoveOnRelease;
 
-                if( success )
-                {
-                    m_username = wxGetUserId();
-                    m_hostname = wxGetHostName();
-                    nlohmann::json j;
-                    j["username"] = std::string( m_username.mb_str() );
-                    j["hostname"] = std::string( m_hostname.mb_str() );
-                    std::string lock_info = j.dump();
-                    file.Write( lock_info );
-                    file.Close();
-                    m_fileCreated = true;
-                    m_status = true;
-                    m_removeOnRelease = aRemoveOnRelease;
-                    m_errorMsg = wxEmptyString;
-                    wxLogTrace( LCK, "Successfully overrode lock on %s", m_lockFilename );
-                    return true;
-                }
-
-                return false;
-            }
-            catch( std::exception& e )
-            {
-                wxLogError( "Got exception trying to override lock on %s: %s",
-                            m_lockFilename, e.what() );
-
-                return false;
-            }
-        }
-        else
-        {
-            wxLogTrace( LCK, "Upgraded lock on %s to delete on release", m_lockFilename );
-            m_removeOnRelease = aRemoveOnRelease;
-        }
-
-        return true;
+        return m_status;
     }
 
     bool IsLockedByMe()
@@ -251,14 +224,9 @@ public:
      */
     wxString GetHostname(){ return m_hostname; }
 
-    /**
-     * @return Last error message generated.
-     */
-    wxString GetErrorMsg(){ return m_errorMsg; }
-
     bool Locked() const
     {
-        return m_fileCreated;
+        return m_owned;
     }
 
     bool Valid() const
@@ -266,57 +234,114 @@ public:
         return m_status;
     }
 
-    explicit operator bool() const
-    {
-        return m_status;
-    }
-
 private:
-    wxString m_originalFile;
+    // Only Inspect() builds a lock that holds nothing
+    LOCKFILE() = default;
+
     wxString m_lockFilename;
     wxString m_username;
     wxString m_hostname;
-    bool m_fileCreated;
-    bool m_status;
-    bool m_removeOnRelease;
-    wxString m_errorMsg;
+    wxString m_token;
+    KIPLATFORM::IO::FILE_LOCK m_lock;
+    bool m_owned = false;
+    bool m_status = false;
+    bool m_removeOnRelease = false;
 
-    bool checkUserAndHost()
+    /**
+     * @return a value no other lock will carry.  Process ids cannot serve here: sandboxed
+     *         KiCads each number their processes from one, so two of them collide routinely.
+     */
+    static wxString newToken()
     {
-        wxFileName fileName( m_lockFilename );
+        std::random_device rd;
 
-        if( !fileName.FileExists() )
+        uint64_t high = ( static_cast<uint64_t>( rd() ) << 32 ) | rd();
+        uint64_t low = ( static_cast<uint64_t>( rd() ) << 32 ) | rd();
+
+        return wxString::Format( wxS( "%016llx%016llx" ),
+                                 static_cast<unsigned long long>( high ),
+                                 static_cast<unsigned long long>( low ) );
+    }
+
+    void claim()
+    {
+        m_username = wxGetUserId();
+        m_hostname = wxGetHostName();
+        m_token = newToken();
+
+        nlohmann::json j;
+        j["username"] = std::string( m_username.mb_str() );
+        j["hostname"] = std::string( m_hostname.mb_str() );
+        j["token"] = std::string( m_token.mb_str() );
+
+        if( m_lock.Rewrite( j.dump() ) )
         {
-            wxLogTrace( LCK, "File does not exist: %s", m_lockFilename );
+            m_owned = true;
+            m_status = true;
+        }
+        else
+        {
+            wxLogTrace( traceLockFile, "Could not write the lock record for %s", m_lockFilename );
+        }
+    }
+
+    /**
+     * @return true if the lock file holds a record we could parse.  Cloud-synced drives can
+     *         present a lock file before its contents finish syncing, so an empty or corrupt
+     *         one counts as an unknown owner rather than a hard error.
+     */
+    bool readRecord( nlohmann::json& aRecord ) const
+    {
+        std::string contents;
+
+        if( !m_lock.ReadAll( contents ) )
+            return false;
+
+        aRecord = nlohmann::json::parse( contents, nullptr, false );
+
+        if( aRecord.is_discarded() )
+        {
+            wxLogTrace( traceLockFile, "Unreadable lock contents for %s", m_lockFilename );
             return false;
         }
 
-        wxFile file;
+        return true;
+    }
 
-        try
+    void readOwner()
+    {
+        nlohmann::json record;
+
+        if( readRecord( record ) )
         {
-            if( file.Open( m_lockFilename, wxFile::read ) )
-            {
-                wxString lock_info;
-                file.ReadAll( &lock_info );
-                nlohmann::json j = nlohmann::json::parse( std::string( lock_info.mb_str() ) );
-
-                if( m_username == wxString( j["username"].get<std::string>() )
-                        && m_hostname == wxString( j["hostname"].get<std::string>() ) )
-                {
-                    wxLogTrace( LCK, "User and host match for lock %s", m_lockFilename );
-                    return true;
-                }
-            }
+            m_username = wxString( record.value( "username", std::string() ) );
+            m_hostname = wxString( record.value( "hostname", std::string() ) );
+            m_token = wxString( record.value( "token", std::string() ) );
         }
-        catch( std::exception &e )
+        else
         {
-            wxLogError( "Got exception trying to check user/host for lock on %s: %s",
-                        m_lockFilename,
-                        e.what() );
+            m_username = wxEmptyString;
+            m_hostname = wxEmptyString;
+            m_token = wxEmptyString;
         }
+    }
 
-        wxLogTrace( LCK, "User and host DID NOT match for lock %s", m_lockFilename );
+    /**
+     * @return true if the lock file still carries the record we wrote, so that a lock another
+     *         process has since taken over is left alone.
+     */
+    bool stillOwnLock()
+    {
+        nlohmann::json record;
+
+        if( m_token.IsEmpty() || !readRecord( record ) )
+            return false;
+
+        if( m_token == wxString( record.value( "token", std::string() ) ) )
+            return true;
+
+        wxLogTrace( traceLockFile, "Lock on %s is no longer ours", m_lockFilename );
+
         return false;
     }
 };

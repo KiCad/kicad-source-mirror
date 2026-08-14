@@ -31,11 +31,11 @@
 
 
 #include <typeinfo>
+#include <wx/app.h>
 #include <wx/cmdline.h>
 #include <wx/dialog.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
-#include <wx/snglinst.h>
 #include <wx/html/htmlwin.h>
 
 #include <api/api_server.h>
@@ -98,8 +98,7 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
             m_settings_manager->Save();
         }
 
-        // Destroy everything in PGM_BASE, especially wxSingleInstanceCheckerImpl
-        // earlier than wxApp and earlier than static destruction would.
+        // Destroy PGM_BASE earlier than wxApp and static destruction would
         PGM_BASE::Destroy();
 
         if( GIT_BACKEND* backend = GetGitBackend() )

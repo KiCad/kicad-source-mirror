@@ -2084,9 +2084,10 @@ bool checkForLockedFiles( const wxString& aProjectPath, std::vector<wxString>& a
                         baseName = baseName.BeforeLast( '.' );  // Remove .lck
                         wxFileName originalFile( dirPath, baseName );
 
-                        // Check if this is a valid LOCKFILE (not stale and not ours)
-                        LOCKFILE testLock( originalFile.GetFullPath() );
-                        if( testLock.Valid() && !testLock.IsLockedByMe() )
+                        // Inspect without taking the lock so we don't disturb another session
+                        LOCKFILE testLock = LOCKFILE::Inspect( originalFile.GetFullPath() );
+
+                        if( !testLock.Valid() && !testLock.IsLockedByMe() )
                         {
                             aLockedFiles.push_back( fullPath.GetFullPath() );
                         }
