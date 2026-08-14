@@ -1395,12 +1395,16 @@ types:
         type: u2
         doc: >-
           Terminal rotation is bit 0 and the side selector is bits 1-2. Bit 8 rotates the pin
-          name; bits 12-15 select its justification class.
+          name. Bits 12-15 encode the PADS justification code. At zero degrees the inverse
+          nibble permutation is 0,4,1,5,8,12,9,13,2,6,3,7,10,14,11,15; at 90 degrees it is
+          0,4,2,6,8,12,10,14,1,5,3,7,9,13,11,15. Genuine native-save/reopen fixtures cover
+          every source code 0 through 15 at both angles.
       - id: visibility_and_number_presentation_flags
         type: u2
         doc: >-
-          Bit 0 rotates the pin number, bits 4-7 select its justification, bits 8-11 select the
-          name/number offset presentation, and bits 14-15 are exported as PADS pin visibility flags.
+          Bit 0 rotates the pin number. Bits 4-7 use the same angle-dependent justification
+          permutations as the pin name. Bits 8-11 select the name/number offset presentation,
+          and bits 14-15 are exported as PADS pin visibility flags.
 
   part_type_controller:
     params:

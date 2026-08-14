@@ -264,6 +264,84 @@
         "native_reopen_persistence"
       ],
       "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained 16 uniquely referenced placements, each with seven placed-pin overrides using one justification code from 0 through 15. No third-party design content"
+    },
+    {
+      "binary": "terminal_justification_0_6.sch",
+      "ascii": "terminal_justification_0_6.txt",
+      "binary_sha256": "2533d2591e2f7bd863372d288bd5c957f83e1a5106b007ce746c3fd357fad734",
+      "ascii_sha256": "78bdff1a6a2016251b91375e3575b498fa4e11d4f1031dfddfe15e3e7380116f",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "terminal_name_justification_codes_0_through_6",
+        "terminal_number_justification_codes_0_through_6",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained seven symbol terminals whose independent name and number justification codes are 0 through 6. No third-party design content"
+    },
+    {
+      "binary": "terminal_justification_7_13.sch",
+      "ascii": "terminal_justification_7_13.txt",
+      "binary_sha256": "5d83e14d5103c00cd3a4cbbde033d298b4fefe09791390c52e9410ab8be9aad5",
+      "ascii_sha256": "d39627d107f49c7bbca29f0453ac06c96d9b21e2395b5e4f767cee94968f35fd",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "terminal_name_justification_codes_7_through_13",
+        "terminal_number_justification_codes_7_through_13",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained seven symbol terminals whose independent name and number justification codes are 7 through 13. No third-party design content"
+    },
+    {
+      "binary": "terminal_justification_14_15.sch",
+      "ascii": "terminal_justification_14_15.txt",
+      "binary_sha256": "73e590b030ecd10c21f4a26484f625e8471ff946e1b3a5470b7031a54b35ac52",
+      "ascii_sha256": "9c6b9e2a6122505f4522c34e03a812fd6e71f8eec96c7140d293d323c96992e2",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "terminal_name_justification_codes_14_and_15",
+        "terminal_number_justification_codes_14_and_15",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained symbol terminals with independent name and number justification codes 14 and 15. No third-party design content"
+    },
+    {
+      "binary": "terminal_justification_90_0_6.sch",
+      "ascii": "terminal_justification_90_0_6.txt",
+      "binary_sha256": "ccf0f1c925dba69cace7eea0f757c50ac4f4618d1726891a2e091662ee152376",
+      "ascii_sha256": "c1dc739cd815505577d7903c28f40c81400ae5cb8539db39bb667ffd89dc9195",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "terminal_name_justification_codes_0_through_6_at_90_degrees",
+        "terminal_number_justification_codes_0_through_6_at_90_degrees",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained seven symbol terminals whose independent name and number angles are 90 degrees and justification codes are 0 through 6. No third-party design content"
+    },
+    {
+      "binary": "terminal_justification_90_7_13.sch",
+      "ascii": "terminal_justification_90_7_13.txt",
+      "binary_sha256": "5f6b960487926e15b8b976ceabe0c248421b88f64b852aecac46dedff3eeb67f",
+      "ascii_sha256": "328fe000cacbd4df3b19d81dce0b55717420607cd4bb088526abbb594498371a",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "terminal_name_justification_codes_7_through_13_at_90_degrees",
+        "terminal_number_justification_codes_7_through_13_at_90_degrees",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained seven symbol terminals whose independent name and number angles are 90 degrees and justification codes are 7 through 13. No third-party design content"
+    },
+    {
+      "binary": "terminal_justification_90_14_15.sch",
+      "ascii": "terminal_justification_90_14_15.txt",
+      "binary_sha256": "b8a4dc11d003d8e34b3235d69bc6f072995df19bce3b9aa609eafeefe544f294",
+      "ascii_sha256": "f960c3934b9deab622fe40017a8835fd9ca5fcb3b3fc657e638f885b22ab39c1",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "terminal_name_justification_codes_14_and_15_at_90_degrees",
+        "terminal_number_justification_codes_14_and_15_at_90_degrees",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained symbol terminals whose independent name and number angles are 90 degrees and justification codes are 14 and 15. No third-party design content"
     }
   ]
 }

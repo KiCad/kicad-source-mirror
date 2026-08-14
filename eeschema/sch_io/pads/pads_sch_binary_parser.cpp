@@ -41,6 +41,17 @@ namespace PADS_SCH_BINARY
 
 namespace
 {
+    static constexpr std::array<uint16_t, 16> JUSTIFICATION_BY_NIBBLE_0 = { 0, 4, 1, 5, 8,  12, 9,  13,
+                                                                            2, 6, 3, 7, 10, 14, 11, 15 };
+    static constexpr std::array<uint16_t, 16> JUSTIFICATION_BY_NIBBLE_90 = { 0, 4, 2, 6, 8,  12, 10, 14,
+                                                                             1, 5, 3, 7, 9, 13, 11, 15 };
+
+
+    uint16_t terminalJustification( uint16_t aNibble, bool aRotated )
+    {
+        return aRotated ? JUSTIFICATION_BY_NIBBLE_90[aNibble] : JUSTIFICATION_BY_NIBBLE_0[aNibble];
+    }
+
 
     constexpr size_t   OUTER_DIRECTORY_OFFSET = 0x20;
     constexpr size_t   OUTER_DESCRIPTOR_BYTES = 28;
@@ -1471,38 +1482,15 @@ namespace
                 definitionPin.nameAngle = ( presentationFlags & 0x0100 ) != 0 ? 900 : 0;
                 definitionPin.numberAngle = ( visibilityFlags & 0x0001 ) != 0 ? 900 : 0;
 
-                switch( presentationFlags & 0xF100 )
-                {
-                case 0x0000:
-                case 0x0100: definitionPin.nameJustification = 0; break;
-                case 0x2000: definitionPin.nameJustification = 1; break;
-                case 0x2100: definitionPin.nameJustification = 2; break;
-                case 0x9000: definitionPin.nameJustification = 6; break;
-                default:
-                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal name presentation" ),
-                                                               presentationFlags & 0xF100, pinSource,
-                                                               aModel.diagnostics );
-                    break;
-                }
+                definitionPin.nameJustification = terminalJustification( ( presentationFlags >> 12 ) & 0x0F,
+                                                                         definitionPin.nameAngle != 0 );
 
                 if( ( presentationFlags & 0x00F8 ) != 0 )
                     PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal side" ), presentationFlags, pinSource,
                                                                aModel.diagnostics );
 
-                switch( visibilityFlags & 0x00F0 )
-                {
-                case 0x0000: definitionPin.numberJustification = 0; break;
-                case 0x0010: definitionPin.numberJustification = 4; break;
-                case 0x0020: definitionPin.numberJustification = 1; break;
-                case 0x0040: definitionPin.numberJustification = 8; break;
-                case 0x0060: definitionPin.numberJustification = 9; break;
-                case 0x0080: definitionPin.numberJustification = 2; break;
-                default:
-                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal number justification" ),
-                                                               visibilityFlags & 0x00F0, pinSource,
-                                                               aModel.diagnostics );
-                    break;
-                }
+                definitionPin.numberJustification = terminalJustification( ( visibilityFlags >> 4 ) & 0x0F,
+                                                                           definitionPin.numberAngle != 0 );
                 const uint16_t nameOffsetFlags = visibilityFlags & 0x0F00;
                 definitionPin.nameOffsetAngle = ( nameOffsetFlags & 0x0100 ) != 0 ? 900 : 0;
                 definitionPin.numberOffsetAngle = ( nameOffsetFlags & 0x0200 ) != 0 ? 900 : 0;
@@ -2523,10 +2511,9 @@ namespace
                 pinReference.numberPresentationFlags = aCursor.U16At( pinOffset + 10 );
                 pinReference.numberAngle = ( pinReference.numberPresentationFlags & 0x0001 ) != 0 ? 900 : 0;
 
-                static constexpr std::array<uint16_t, 16> justificationByNibble = { 0, 4, 1, 5, 8,  12, 9,  13,
-                                                                                    2, 6, 3, 7, 10, 14, 11, 15 };
                 pinReference.numberJustification =
-                        justificationByNibble[( pinReference.numberPresentationFlags >> 4 ) & 0x0F];
+                        terminalJustification( ( pinReference.numberPresentationFlags >> 4 ) & 0x0F,
+                                               pinReference.numberAngle != 0 );
 
                 pinReference.hasNumberPlacement = true;
                 placement.pins.push_back( std::move( pinReference ) );

@@ -4293,4 +4293,41 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
 }
 
 
+BOOST_AUTO_TEST_CASE( TerminalJustificationCodes )
+{
+    static constexpr std::array<const char*, 6> fixtures = { "terminal_justification_0_6",
+                                                             "terminal_justification_7_13",
+                                                             "terminal_justification_14_15",
+                                                             "terminal_justification_90_0_6",
+                                                             "terminal_justification_90_7_13",
+                                                             "terminal_justification_90_14_15" };
+
+    PADS_SCH_BINARY_PARSER binaryParser;
+
+    for( const char* fixture : fixtures )
+    {
+        const std::string binaryName = std::string( fixture ) + ".sch";
+        const std::string asciiName = std::string( fixture ) + ".txt";
+        PADS_SCH_MODEL binary = binaryParser.Parse( loadBinaryFixture( binaryName ), wxString::FromUTF8( binaryName ) );
+        PADS_SCH::PADS_SCH_PARSER asciiParser;
+        BOOST_REQUIRE( asciiParser.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/" + asciiName ) );
+
+        const MODEL_SYMBOL_DEFINITION& binaryDefinition = itemNamed( binary.definitions, wxS( "BATCHB_PIN_STYLES" ) );
+        const PADS_SCH::SYMBOL_DEF*    asciiDefinition = asciiParser.GetSymbolDef( "BATCHB_PIN_STYLES" );
+        BOOST_REQUIRE( asciiDefinition );
+        BOOST_REQUIRE_EQUAL( binaryDefinition.pins.size(), asciiDefinition->pins.size() );
+
+        for( size_t pin = 0; pin < binaryDefinition.pins.size(); ++pin )
+        {
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameAngle,
+                               asciiDefinition->pins[pin].pn_angle * 10 );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberAngle,
+                               asciiDefinition->pins[pin].pl_angle * 10 );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameJustification, asciiDefinition->pins[pin].pn_just );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberJustification, asciiDefinition->pins[pin].pl_just );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
