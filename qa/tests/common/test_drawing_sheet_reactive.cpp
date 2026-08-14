@@ -80,19 +80,21 @@ BOOST_AUTO_TEST_CASE( AttachRegistersProxyAsDependent )
     PAGE_INFO    page;
     TITLE_BLOCK  tb;
 
-    DS_PROXY_VIEW_ITEM proxy( unityScale, &page, nullptr, &tb, nullptr );
-
     TEXT_VAR_TRACKER tracker;
-    proxy.AttachToTracker( &tracker );
 
-    // The proxy should be registered as a dependent on every title-block key
-    // its template references.
-    BOOST_CHECK(
-            tracker.Index().DependentCount(
-                    TEXT_VAR_REF_KEY::FromToken( wxT( "REVISION" ) ) ) > 0u );
-    BOOST_CHECK(
-            tracker.Index().DependentCount(
-                    TEXT_VAR_REF_KEY::FromToken( wxT( "TITLE" ) ) ) > 0u );
+    {
+        DS_PROXY_VIEW_ITEM proxy( unityScale, &page, nullptr, &tb, nullptr );
+        proxy.AttachToTracker( &tracker );
+
+        // The proxy should be registered as a dependent on every title-block key
+        // its template references.
+        BOOST_CHECK(
+                tracker.Index().DependentCount(
+                        TEXT_VAR_REF_KEY::FromToken( wxT( "REVISION" ) ) ) > 0u );
+        BOOST_CHECK(
+                tracker.Index().DependentCount(
+                        TEXT_VAR_REF_KEY::FromToken( wxT( "TITLE" ) ) ) > 0u );
+    }
 }
 
 
@@ -101,24 +103,27 @@ BOOST_AUTO_TEST_CASE( InvalidationReachesProxyViaListener )
     PAGE_INFO    page;
     TITLE_BLOCK  tb;
 
-    DS_PROXY_VIEW_ITEM proxy( unityScale, &page, nullptr, &tb, nullptr );
     TEXT_VAR_TRACKER   tracker;
-    proxy.AttachToTracker( &tracker );
 
-    // Frames install a long-lived listener that routes invalidations to the
-    // current drawing sheet proxy. Verify the dispatch semantics with a
-    // minimal listener.
-    EDA_ITEM* seenDep = nullptr;
-    (void) tracker.AddInvalidateListener(
-            [&]( EDA_ITEM* dep, const TEXT_VAR_REF_KEY& )
-            {
-                if( dep == &proxy )
-                    seenDep = dep;
-            } );
+    {
+        DS_PROXY_VIEW_ITEM proxy( unityScale, &page, nullptr, &tb, nullptr );
+        proxy.AttachToTracker( &tracker );
 
-    tracker.InvalidateKey( TEXT_VAR_REF_KEY::FromToken( wxT( "REVISION" ) ) );
+        // Frames install a long-lived listener that routes invalidations to the
+        // current drawing sheet proxy. Verify the dispatch semantics with a
+        // minimal listener.
+        EDA_ITEM* seenDep = nullptr;
+        (void) tracker.AddInvalidateListener(
+                [&]( EDA_ITEM* dep, const TEXT_VAR_REF_KEY& )
+                {
+                    if( dep == &proxy )
+                        seenDep = dep;
+                } );
 
-    BOOST_CHECK_EQUAL( seenDep, &proxy );
+        tracker.InvalidateKey( TEXT_VAR_REF_KEY::FromToken( wxT( "REVISION" ) ) );
+
+        BOOST_CHECK_EQUAL( seenDep, &proxy );
+    }
 }
 
 
