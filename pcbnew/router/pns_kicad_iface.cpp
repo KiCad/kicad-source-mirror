@@ -2696,16 +2696,10 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
         via_board->Padstack().SetUnconnectedLayerMode( via->UnconnectedLayerMode() );
         via_board->SetIsFree( via->IsFree() );
+        // A via holds its copper span in the primary drill layers, so this call is the only
+        // writer of both; a write back from the PNS hole layers can only repeat or corrupt it
         via_board->SetLayerPair( GetBoardLayerFromPNSLayer( via->Layers().Start() ),
                                  GetBoardLayerFromPNSLayer( via->Layers().End() ) );
-
-        PNS_LAYER_RANGE holeLayers = via->HoleLayers();
-
-        if( holeLayers.Start() >= 0 && holeLayers.End() >= 0 )
-        {
-            via_board->SetPrimaryDrillStartLayer( GetBoardLayerFromPNSLayer( holeLayers.Start() ) );
-            via_board->SetPrimaryDrillEndLayer( GetBoardLayerFromPNSLayer( holeLayers.End() ) );
-        }
 
         via_board->SetFrontPostMachining( via->HolePostMachining() );
         via_board->SetSecondaryDrillSize( via->SecondaryDrill() );
@@ -2819,16 +2813,10 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
         via_board->Padstack().SetUnconnectedLayerMode( via->UnconnectedLayerMode() );
         via_board->SetIsFree( via->IsFree() );
+        // A via holds its copper span in the primary drill layers, so this call is the only
+        // writer of both; a write back from the PNS hole layers can only repeat or corrupt it
         via_board->SetLayerPair( GetBoardLayerFromPNSLayer( via->Layers().Start() ),
                                  GetBoardLayerFromPNSLayer( via->Layers().End() ) );
-
-        PNS_LAYER_RANGE holeLayers = via->HoleLayers();
-
-        if( holeLayers.Start() >= 0 && holeLayers.End() >= 0 )
-        {
-            via_board->SetPrimaryDrillStartLayer( GetBoardLayerFromPNSLayer( holeLayers.Start() ) );
-            via_board->SetPrimaryDrillEndLayer( GetBoardLayerFromPNSLayer( holeLayers.End() ) );
-        }
 
         via_board->SetFrontPostMachining( via->HolePostMachining() );
         via_board->SetSecondaryDrillSize( via->SecondaryDrill() );

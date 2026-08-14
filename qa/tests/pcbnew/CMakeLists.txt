@@ -130,6 +130,7 @@ set( QA_PCBNEW_SRCS
     test_multichannel.cpp
     test_pns_tuning_path_through_pad.cpp
     test_pns_diff_pair_tuning_width.cpp
+    test_pns_via_layer_span.cpp
     test_variant.cpp
     test_text_variable_resolution.cpp
     test_zone.cpp

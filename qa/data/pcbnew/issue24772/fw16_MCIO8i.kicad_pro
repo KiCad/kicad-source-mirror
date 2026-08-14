@@ -1,0 +1,2322 @@
+{
+  "board": {
+    "3dviewports": [],
+    "design_settings": {
+      "defaults": {
+        "apply_defaults_to_fp_barcodes": false,
+        "apply_defaults_to_fp_dimensions": false,
+        "apply_defaults_to_fp_fields": false,
+        "apply_defaults_to_fp_shapes": false,
+        "apply_defaults_to_fp_text": false,
+        "board_outline_line_width": 0.1,
+        "copper_line_width": 0.2,
+        "copper_text_italic": false,
+        "copper_text_size_h": 1.5,
+        "copper_text_size_v": 1.5,
+        "copper_text_thickness": 0.3,
+        "copper_text_upright": false,
+        "courtyard_line_width": 0.05,
+        "dimension_precision": 4,
+        "dimension_units": 3,
+        "dimensions": {
+          "arrow_length": 1270000,
+          "extension_offset": 500000,
+          "keep_text_aligned": true,
+          "suppress_zeroes": false,
+          "text_position": 0,
+          "units_format": 1
+        },
+        "fab_line_width": 0.1,
+        "fab_text_italic": false,
+        "fab_text_size_h": 1.0,
+        "fab_text_size_v": 1.0,
+        "fab_text_thickness": 0.15,
+        "fab_text_upright": false,
+        "other_line_width": 0.15,
+        "other_text_italic": false,
+        "other_text_size_h": 1.0,
+        "other_text_size_v": 1.0,
+        "other_text_thickness": 0.15,
+        "other_text_upright": false,
+        "pads": {
+          "drill": 0.0,
+          "height": 0.8,
+          "width": 0.4
+        },
+        "silk_line_width": 0.15,
+        "silk_text_italic": false,
+        "silk_text_size_h": 1.0,
+        "silk_text_size_v": 1.0,
+        "silk_text_thickness": 0.15,
+        "silk_text_upright": false,
+        "zones": {
+          "border_display_style": 2,
+          "border_hatch_pitch": 0.5,
+          "corner_radius": 0.0,
+          "corner_smoothing": 0,
+          "fill_mode": 0,
+          "hatch_gap": 1.5,
+          "hatch_orientation": 0.0,
+          "hatch_smoothing_level": 0,
+          "hatch_smoothing_value": 0.1,
+          "hatch_thickness": 1.0,
+          "min_clearance": 0.0,
+          "min_island_area": 10.0,
+          "min_thickness": 0.2,
+          "pad_connection": 2,
+          "remove_islands": 0,
+          "thermal_relief_gap": 0.5,
+          "thermal_relief_spoke_width": 0.5
+        }
+      },
+      "diff_pair_dimensions": [
+        {
+          "gap": 0.0,
+          "via_gap": 0.0,
+          "width": 0.0
+        }
+      ],
+      "drc_exclusions": [],
+      "meta": {
+        "version": 2
+      },
+      "rule_severities": {
+        "annular_width": "error",
+        "assertion_failure": "error",
+        "clearance": "error",
+        "connection_width": "warning",
+        "copper_edge_clearance": "error",
+        "copper_sliver": "warning",
+        "courtyards_overlap": "error",
+        "creepage": "error",
+        "diff_pair_gap_out_of_range": "error",
+        "diff_pair_uncoupled_length_too_long": "error",
+        "drill_out_of_range": "error",
+        "duplicate_footprints": "warning",
+        "extra_footprint": "warning",
+        "footprint": "error",
+        "footprint_filters_mismatch": "warning",
+        "footprint_symbol_field_mismatch": "warning",
+        "footprint_symbol_mismatch": "warning",
+        "footprint_type_mismatch": "warning",
+        "hole_clearance": "error",
+        "hole_near_hole": "error",
+        "hole_to_hole": "error",
+        "holes_co_located": "warning",
+        "invalid_outline": "error",
+        "isolated_copper": "warning",
+        "item_on_disabled_layer": "error",
+        "items_not_allowed": "error",
+        "length_out_of_range": "error",
+        "lib_footprint_issues": "warning",
+        "lib_footprint_mismatch": "warning",
+        "malformed_courtyard": "error",
+        "microvia_drill_out_of_range": "error",
+        "mirrored_text_on_front_layer": "warning",
+        "missing_courtyard": "error",
+        "missing_footprint": "warning",
+        "missing_tuning_profile": "warning",
+        "net_conflict": "warning",
+        "nonmirrored_text_on_back_layer": "warning",
+        "npth_inside_courtyard": "warning",
+        "padstack": "warning",
+        "pth_inside_courtyard": "warning",
+        "shorting_items": "error",
+        "silk_edge_clearance": "warning",
+        "silk_over_copper": "warning",
+        "silk_overlap": "warning",
+        "skew_out_of_range": "error",
+        "solder_mask_bridge": "error",
+        "starved_thermal": "error",
+        "text_height": "warning",
+        "text_on_edge_cuts": "error",
+        "text_thickness": "warning",
+        "through_hole_pad_without_hole": "error",
+        "too_many_vias": "error",
+        "track_angle": "error",
+        "track_dangling": "warning",
+        "track_not_centered_on_via": "warning",
+        "track_on_post_machined_layer": "error",
+        "track_segment_length": "error",
+        "track_width": "error",
+        "tracks_crossing": "error",
+        "tuning_profile_track_geometries": "warning",
+        "unconnected_items": "error",
+        "unresolved_variable": "error",
+        "via_dangling": "warning",
+        "via_diameter": "error",
+        "zones_intersect": "error"
+      },
+      "rules": {
+        "max_error": 0.005,
+        "min_clearance": 0.1016,
+        "min_connection": 0.1016,
+        "min_copper_edge_clearance": 0.254,
+        "min_groove_width": 0.0,
+        "min_hole_clearance": 0.1016,
+        "min_hole_to_hole": 0.1016,
+        "min_microvia_diameter": 1.0,
+        "min_microvia_drill": 1.0,
+        "min_resolved_spokes": 2,
+        "min_silk_clearance": 0.0,
+        "min_text_height": 1.0,
+        "min_text_thickness": 0.15,
+        "min_through_hole_diameter": 0.2,
+        "min_track_width": 0.1016,
+        "min_via_annular_width": 0.0,
+        "min_via_diameter": 0.3,
+        "solder_mask_clearance": 0.0,
+        "solder_mask_min_width": 0.0,
+        "solder_mask_to_copper_clearance": 0.005,
+        "use_height_for_length_calcs": true
+      },
+      "teardrop_options": [
+        {
+          "td_onpthpad": true,
+          "td_onroundshapesonly": false,
+          "td_onsmdpad": true,
+          "td_ontrackend": true,
+          "td_onvia": true
+        }
+      ],
+      "teardrop_parameters": [
+        {
+          "td_allow_use_two_tracks": true,
+          "td_curve_segcount": 1,
+          "td_height_ratio": 1.0,
+          "td_length_ratio": 0.5,
+          "td_maxheight": 3.0,
+          "td_maxlen": 1.5,
+          "td_on_pad_in_zone": false,
+          "td_target_name": "td_round_shape",
+          "td_width_to_size_filter_ratio": 0.9
+        },
+        {
+          "td_allow_use_two_tracks": true,
+          "td_curve_segcount": 1,
+          "td_height_ratio": 1.0,
+          "td_length_ratio": 0.5,
+          "td_maxheight": 3.0,
+          "td_maxlen": 1.0,
+          "td_on_pad_in_zone": false,
+          "td_target_name": "td_rect_shape",
+          "td_width_to_size_filter_ratio": 0.9
+        },
+        {
+          "td_allow_use_two_tracks": true,
+          "td_curve_segcount": 1,
+          "td_height_ratio": 1.0,
+          "td_length_ratio": 0.5,
+          "td_maxheight": 3.0,
+          "td_maxlen": 1.0,
+          "td_on_pad_in_zone": false,
+          "td_target_name": "td_track_end",
+          "td_width_to_size_filter_ratio": 0.9
+        }
+      ],
+      "track_widths": [
+        0.0
+      ],
+      "tuning_pattern_settings": {
+        "diff_pair_defaults": {
+          "corner_radius_percentage": 80,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.2,
+          "single_sided": false,
+          "spacing": 1.016
+        },
+        "diff_pair_skew_defaults": {
+          "corner_radius_percentage": 80,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.0,
+          "single_sided": false,
+          "spacing": 0.6
+        },
+        "single_track_defaults": {
+          "corner_radius_percentage": 80,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.2,
+          "single_sided": false,
+          "spacing": 0.6
+        }
+      },
+      "via_dimensions": [
+        {
+          "diameter": 0.0,
+          "drill": 0.0
+        },
+        {
+          "diameter": 0.3,
+          "drill": 0.2
+        },
+        {
+          "diameter": 0.35,
+          "drill": 0.2
+        },
+        {
+          "diameter": 0.45,
+          "drill": 0.3
+        }
+      ],
+      "zones_allow_external_fillets": false
+    },
+    "ipc2581": {
+      "bom_rev": "",
+      "dist": "",
+      "distpn": "",
+      "internal_id": "",
+      "mfg": "",
+      "mpn": "",
+      "sch_revision": ""
+    },
+    "layer_pairs": [
+      {
+        "bottomLayer": 10,
+        "enabled": true,
+        "topLayer": 4
+      }
+    ],
+    "layer_presets": [],
+    "viewports": []
+  },
+  "boards": [],
+  "component_class_settings": {
+    "assignments": [],
+    "meta": {
+      "version": 0
+    },
+    "sheet_component_classes": {
+      "enabled": false
+    }
+  },
+  "cvpcb": {
+    "equivalence_files": []
+  },
+  "erc": {
+    "erc_exclusions": [],
+    "meta": {
+      "version": 0
+    },
+    "pin_map": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        2,
+        0,
+        0,
+        1,
+        0,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    ],
+    "rule_severities": {
+      "bus_definition_conflict": "error",
+      "bus_entry_needed": "error",
+      "bus_to_bus_conflict": "error",
+      "bus_to_net_conflict": "error",
+      "different_unit_footprint": "error",
+      "different_unit_net": "error",
+      "duplicate_reference": "error",
+      "duplicate_sheet_names": "error",
+      "endpoint_off_grid": "warning",
+      "extra_units": "error",
+      "field_name_whitespace": "warning",
+      "footprint_filter": "ignore",
+      "footprint_link_issues": "warning",
+      "four_way_junction": "ignore",
+      "global_label_dangling": "warning",
+      "ground_pin_not_ground": "warning",
+      "hier_label_mismatch": "error",
+      "isolated_pin_label": "warning",
+      "label_dangling": "error",
+      "label_multiple_wires": "warning",
+      "lib_symbol_issues": "warning",
+      "lib_symbol_mismatch": "warning",
+      "missing_bidi_pin": "warning",
+      "missing_input_pin": "warning",
+      "missing_power_pin": "error",
+      "missing_unit": "warning",
+      "multiple_net_names": "warning",
+      "net_not_bus_member": "warning",
+      "no_connect_connected": "warning",
+      "no_connect_dangling": "warning",
+      "pin_not_connected": "error",
+      "pin_not_driven": "error",
+      "pin_to_pin": "error",
+      "power_pin_not_driven": "error",
+      "same_local_global_label": "warning",
+      "similar_label_and_power": "warning",
+      "similar_labels": "warning",
+      "similar_power": "warning",
+      "simulation_model_issue": "warning",
+      "single_global_label": "ignore",
+      "stacked_pin_name": "warning",
+      "unannotated": "error",
+      "unconnected_wire_endpoint": "warning",
+      "undefined_netclass": "error",
+      "unit_value_mismatch": "error",
+      "unresolved_variable": "error",
+      "wire_dangling": "error"
+    }
+  },
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "meta": {
+    "filename": "fw16_MCIO8i.kicad_pro",
+    "version": 3
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "bus_width": 12,
+        "clearance": 0.1016,
+        "diff_pair_gap": 0.1016,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.1016,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.3,
+        "name": "Default",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 2147483647,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.1016,
+        "tuning_profile": "",
+        "via_diameter": 0.45,
+        "via_drill": 0.3,
+        "wire_width": 6
+      },
+      {
+        "clearance": 0.1016,
+        "name": "PCIe",
+        "pcb_color": "rgb(255, 0, 255)",
+        "priority": 0,
+        "schematic_color": "rgb(255, 0, 255)",
+        "tuning_profile": "PCIe",
+        "via_diameter": 0.35,
+        "via_drill": 0.2
+      },
+      {
+        "clearance": 0.1016,
+        "name": "PCIeCLK",
+        "pcb_color": "rgb(128, 77, 0)",
+        "priority": 1,
+        "schematic_color": "rgb(128, 77, 0)",
+        "tuning_profile": "PCIeCLK",
+        "via_diameter": 0.35,
+        "via_drill": 0.2
+      },
+      {
+        "clearance": 0.1016,
+        "name": "Power",
+        "pcb_color": "rgb(255, 153, 0)",
+        "priority": 2,
+        "schematic_color": "rgb(255, 153, 0)",
+        "track_width": 0.3,
+        "tuning_profile": "",
+        "via_diameter": 0.45,
+        "via_drill": 0.3
+      }
+    ],
+    "meta": {
+      "version": 5
+    },
+    "net_colors": null,
+    "netclass_assignments": {
+      "/I2C_PWR": [
+        "Power"
+      ],
+      "/MCIO/B_RX.0+": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.0-": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.1+": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.1-": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.2+": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.2-": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.3+": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.3-": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.4+": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.4-": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.5+": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.5-": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.6+": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.6-": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.7+": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX.7-": [
+        "PCIe"
+      ],
+      "/MCIO/B_RX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.0+": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.0-": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.1+": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.1-": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.2+": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.2-": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.3+": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.3-": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.4+": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.4-": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.5+": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.5-": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.6+": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.6-": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.7+": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX.7-": [
+        "PCIe"
+      ],
+      "/MCIO/B_TX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX0+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX0-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX1+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX1-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX2+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX2-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX3+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX3-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX4+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX4-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX5+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX5-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX6+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX6-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX7+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.RX7-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX0+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX0-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX1+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX1-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX2+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX2-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX3+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX3-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX4+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX4-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX5+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX5-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX6+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX6-": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX7+": [
+        "PCIe"
+      ],
+      "/MCIO/PCI.TX7-": [
+        "PCIe"
+      ],
+      "/MCIO/PEX_RETIME.CLK+": [
+        "PCIe"
+      ],
+      "/MCIO/PEX_RETIME.CLK-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.0+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.0-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.1+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.1-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.2+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.2-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.3+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.3-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.4+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.4-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.5+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.5-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.6+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.6-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.7+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX.7-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_RX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.0+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.0-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.1+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.1-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.2+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.2-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.3+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.3-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.4+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.4-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.5+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.5-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.6+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.6-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.7+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX.7-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/A_TX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.0+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.0-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.1+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.1-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.2+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.2-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.3+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.3-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.4+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.4-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.5+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.5-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.6+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.6-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.7+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX.7-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_RX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.0+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.0-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.1+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.1-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.2+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.2-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.3+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.3-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.4+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.4-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.5+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.5-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.6+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.6-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.7+": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX.7-": [
+        "PCIe"
+      ],
+      "/PCIe-Retimer/B_TX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/PCIe-clk-mux/CLK+": [
+        "PCIe"
+      ],
+      "/PCIe-clk-mux/CLK-": [
+        "PCIe"
+      ],
+      "/PCIe-clk-mux/CLKIN+": [
+        "PCIe"
+      ],
+      "/PCIe-clk-mux/CLKIN-": [
+        "PCIe"
+      ],
+      "/PCIe-clk-mux/CLKOUT+": [
+        "PCIe"
+      ],
+      "/PCIe-clk-mux/CLKOUT-": [
+        "PCIe"
+      ],
+      "/PCIe-clk-mux/PEX.CLK+": [
+        "PCIeCLK"
+      ],
+      "/PCIe-clk-mux/PEX.CLK-": [
+        "PCIeCLK"
+      ],
+      "/PCIe-clk-mux/PWR.3V3": [
+        "Power"
+      ],
+      "/PCIe-clk-mux/PWR.5V": [
+        "Power"
+      ],
+      "/PCIe_retimer/A_RX.0+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.0-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.1+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.1-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.2+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.2-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.3+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.3-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.4+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.4-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.5+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.5-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.6+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.6-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.7+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX.7-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_RX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.0+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.0-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.1+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.1-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.2+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.2-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.3+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.3-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.4+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.4-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.5+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.5-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.6+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.6-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.7+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX.7-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/A_TX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.0+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.0-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.1+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.1-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.2+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.2-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.3+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.3-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.4+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.4-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.5+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.5-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.6+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.6-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.7+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX.7-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_RX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.0+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.0-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.1+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.1-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.2+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.2-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.3+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.3-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.4+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.4-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.5+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.5-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.6+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.6-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.7+": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX.7-": [
+        "PCIe"
+      ],
+      "/PCIe_retimer/B_TX{[0..7]- [0..7]+}": [
+        "PCIe"
+      ],
+      "/PEX_CLK+": [
+        "PCIe"
+      ],
+      "/PEX_CLK-": [
+        "PCIe"
+      ],
+      "/PEX_CLK_REQ": [
+        "PCIe"
+      ],
+      "/PEX_RST": [
+        "PCIe"
+      ],
+      "/RX0+": [
+        "PCIe"
+      ],
+      "/RX0-": [
+        "PCIe"
+      ],
+      "/RX1+": [
+        "PCIe"
+      ],
+      "/RX1-": [
+        "PCIe"
+      ],
+      "/RX2+": [
+        "PCIe"
+      ],
+      "/RX2-": [
+        "PCIe"
+      ],
+      "/RX3+": [
+        "PCIe"
+      ],
+      "/RX3-": [
+        "PCIe"
+      ],
+      "/RX4+": [
+        "PCIe"
+      ],
+      "/RX4-": [
+        "PCIe"
+      ],
+      "/RX5+": [
+        "PCIe"
+      ],
+      "/RX5-": [
+        "PCIe"
+      ],
+      "/RX6+": [
+        "PCIe"
+      ],
+      "/RX6-": [
+        "PCIe"
+      ],
+      "/RX7+": [
+        "PCIe"
+      ],
+      "/RX7-": [
+        "PCIe"
+      ],
+      "/TX0+": [
+        "PCIe"
+      ],
+      "/TX0-": [
+        "PCIe"
+      ],
+      "/TX1+": [
+        "PCIe"
+      ],
+      "/TX1-": [
+        "PCIe"
+      ],
+      "/TX2+": [
+        "PCIe"
+      ],
+      "/TX2-": [
+        "PCIe"
+      ],
+      "/TX3+": [
+        "PCIe"
+      ],
+      "/TX3-": [
+        "PCIe"
+      ],
+      "/TX4+": [
+        "PCIe"
+      ],
+      "/TX4-": [
+        "PCIe"
+      ],
+      "/TX5+": [
+        "PCIe"
+      ],
+      "/TX5-": [
+        "PCIe"
+      ],
+      "/TX6+": [
+        "PCIe"
+      ],
+      "/TX6-": [
+        "PCIe"
+      ],
+      "/TX7+": [
+        "PCIe"
+      ],
+      "/TX7-": [
+        "PCIe"
+      ],
+      "/fxbeam/12V_PWR": [
+        "Power"
+      ],
+      "/fxbeam/A_RX.0+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.0-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.1+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.1-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.2+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.2-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.3+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.3-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.4+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.4-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.5+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.5-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.6+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.6-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.7+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_RX.7-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.0+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.0-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.1+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.1-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.2+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.2-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.3+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.3-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.4+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.4-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.5+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.5-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.6+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.6-": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.7+": [
+        "PCIe"
+      ],
+      "/fxbeam/A_TX.7-": [
+        "PCIe"
+      ],
+      "/fxbeam/PEX.CLK+": [
+        "PCIe"
+      ],
+      "/fxbeam/PEX.CLK-": [
+        "PCIe"
+      ],
+      "/fxbeam/PEX_CLK+": [
+        "PCIe"
+      ],
+      "/fxbeam/PEX_CLK-": [
+        "PCIe"
+      ],
+      "/fxbeam/PWR.3V3": [
+        "Power"
+      ],
+      "/fxbeam/PWR.5V": [
+        "Power"
+      ],
+      "12V_FAN": [
+        "Power"
+      ],
+      "3V3_ALW": [
+        "Power"
+      ],
+      "5V_ALW": [
+        "Power"
+      ],
+      "GND": [
+        "Power"
+      ],
+      "Net-(D3-PadA)": [
+        "Power"
+      ],
+      "Net-(D3-PadC)": [
+        "Power"
+      ],
+      "Net-(D4-PadA)": [
+        "Power"
+      ],
+      "Net-(D5-PadA)": [
+        "Power"
+      ],
+      "Net-(D6-PadA)": [
+        "Power"
+      ],
+      "Net-(D6-PadC)": [
+        "Power"
+      ],
+      "Net-(EEPROM1-E0)": [
+        "Power"
+      ],
+      "Net-(EEPROM1-VCC)": [
+        "Power"
+      ],
+      "Net-(FAN1-Pad1)": [
+        "Power"
+      ],
+      "Net-(FAN1-Pad4)": [
+        "Power"
+      ],
+      "Net-(FAN2-Pad1)": [
+        "Power"
+      ],
+      "Net-(FAN2-Pad4)": [
+        "Power"
+      ],
+      "Net-(FAN_L1-Pad1)": [
+        "Power"
+      ],
+      "Net-(FAN_L1-Pad4)": [
+        "Power"
+      ],
+      "Net-(FAN_R1-Pad1)": [
+        "Power"
+      ],
+      "Net-(FAN_R1-Pad4)": [
+        "Power"
+      ],
+      "Net-(IN1-3V3_ALW-PadPA4)": [
+        "Power"
+      ],
+      "Net-(IN1-5V_ALW-PadPK7)": [
+        "Power"
+      ],
+      "unconnected-(R10-Pad1)": [
+        "Power"
+      ],
+      "unconnected-(R3-Pad1)": [
+        "Power"
+      ],
+      "unconnected-(R6-Pad1)": [
+        "Power"
+      ],
+      "unconnected-(R7-Pad1)": [
+        "Power"
+      ]
+    },
+    "netclass_patterns": []
+  },
+  "pcbnew": {
+    "find_by_properties": {
+      "recent_queries": []
+    },
+    "last_paths": {
+      "gencad": "",
+      "idf": "",
+      "netlist": "",
+      "plot": "Production/",
+      "pos_files": "Production/",
+      "specctra_dsn": "",
+      "step": "fw16_MCIO8i.step",
+      "svg": "",
+      "vrml": ""
+    },
+    "page_layout_descr_file": ""
+  },
+  "schematic": {
+    "annotate_start_num": 0,
+    "annotation": {
+      "method": 0,
+      "sort_order": 0
+    },
+    "bom_export_filename": "${PROJECTNAME}.csv",
+    "bom_fmt_presets": [],
+    "bom_fmt_settings": {
+      "field_delimiter": ",",
+      "keep_line_breaks": false,
+      "keep_tabs": false,
+      "name": "CSV",
+      "ref_delimiter": ",",
+      "ref_range_delimiter": "",
+      "string_delimiter": "\""
+    },
+    "bom_presets": [],
+    "bom_settings": {
+      "exclude_dnp": false,
+      "fields_ordered": [
+        {
+          "group_by": false,
+          "label": "Reference",
+          "name": "Reference",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Qty",
+          "name": "${QUANTITY}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Value",
+          "name": "Value",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "DNP",
+          "name": "${DNP}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Exclude from BOM",
+          "name": "${EXCLUDE_FROM_BOM}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Exclude from Board",
+          "name": "${EXCLUDE_FROM_BOARD}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Footprint",
+          "name": "Footprint",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Datasheet",
+          "name": "Datasheet",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MAXIMUM_PACKAGE_HEIGHT",
+          "name": "MAXIMUM_PACKAGE_HEIGHT",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "PARTREV",
+          "name": "PARTREV",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "STANDARD",
+          "name": "STANDARD",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Description",
+          "name": "Description",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "#",
+          "name": "${ITEM_NUMBER}",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "PROD_ID",
+          "name": "PROD_ID",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Tolerance",
+          "name": "Tolerance",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Voltage",
+          "name": "Voltage",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Minimum Qty",
+          "name": "Minimum Qty",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Operating Temperature Range",
+          "name": "Operating Temperature Range",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Overload Voltage (Max)",
+          "name": "Overload Voltage (Max)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Category",
+          "name": "Category",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC",
+          "name": "LCSC",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Part",
+          "name": "Part",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Power(Watts)",
+          "name": "Power(Watts)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Price",
+          "name": "Price",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Process",
+          "name": "Process",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Resistance",
+          "name": "Resistance",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Class",
+          "name": "Class",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Stock",
+          "name": "Stock",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Temperature Coefficient",
+          "name": "Temperature Coefficient",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Capacitance",
+          "name": "Capacitance",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Type",
+          "name": "Type",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer",
+          "name": "Manufacturer",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Voltage Rated",
+          "name": "Voltage Rated",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Attrition Qty",
+          "name": "Attrition Qty",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC PN",
+          "name": "LCSC PN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC Part",
+          "name": "LCSC Part",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MPN",
+          "name": "MPN",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "VERIFIER",
+          "name": "VERIFIER",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "CREATOR",
+          "name": "CREATOR",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Tol. R",
+          "name": "Tol. R",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer URL",
+          "name": "Manufacturer URL",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "VE (V)",
+          "name": "VE (V)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "TCR (ppm/ °C).1",
+          "name": "TCR (ppm/ °C).1",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "SNAPEDA_PN",
+          "name": "SNAPEDA_PN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "W (mm)",
+          "name": "W (mm)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "R",
+          "name": "R",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Critical Parameter",
+          "name": "Critical Parameter",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "H (mm)",
+          "name": "H (mm)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "L (mm)",
+          "name": "L (mm)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Size",
+          "name": "Size",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Mounting Technology",
+          "name": "Mounting Technology",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "TCR (ppm/ °C)",
+          "name": "TCR (ppm/ °C)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Match Code",
+          "name": "Match Code",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "PRated (mW)",
+          "name": "PRated (mW)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Published Date",
+          "name": "Published Date",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Part Number",
+          "name": "Part Number",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Demoboard",
+          "name": "Demoboard",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Operating Temperature",
+          "name": "Operating Temperature",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Q (%)",
+          "name": "Q (%)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "RISO",
+          "name": "RISO",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Fl (mm)",
+          "name": "Fl (mm)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Tol. C",
+          "name": "Tol. C",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "DF (%)",
+          "name": "DF (%)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "C",
+          "name": "C",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Ceramic Type",
+          "name": "Ceramic Type",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "VR (V (DC))",
+          "name": "VR (V (DC))",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC Part #",
+          "name": "LCSC Part #",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Exclude from Simulation",
+          "name": "${EXCLUDE_FROM_SIM}",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "JLCPCB Part #",
+          "name": "JLCPCB Part #",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "ISAT,30% (A)",
+          "name": "ISAT,30% (A)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "L (µH)",
+          "name": "L (µH)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "RDC typ. (mΩ)",
+          "name": "RDC typ. (mΩ)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "IR (mA)",
+          "name": "IR (mA)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "RDC (mΩ)",
+          "name": "RDC (mΩ)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "ISAT (mA)",
+          "name": "ISAT (mA)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "IR 2 (mA)",
+          "name": "IR 2 (mA)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "IRP,40K (A)",
+          "name": "IRP,40K (A)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "fres (MHz)",
+          "name": "fres (MHz)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "RDC max. (mΩ)",
+          "name": "RDC max. (mΩ)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Type/Size",
+          "name": "Type/Size",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Endurance (h)",
+          "name": "Endurance (h)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Library",
+          "name": "Sim.Library",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "VOP (V)",
+          "name": "VOP (V)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Created Date",
+          "name": "Created Date",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Series",
+          "name": "Series",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "ILeak (µA)",
+          "name": "ILeak (µA)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "IRIPPLE (mA)",
+          "name": "IRIPPLE (mA)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "RESR (mΩ)",
+          "name": "RESR (mΩ)",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "JLCPCB Part #'",
+          "name": "JLCPCB Part #'",
+          "show": false
+        }
+      ],
+      "filter_string": "",
+      "group_symbols": true,
+      "include_excluded_from_bom": false,
+      "name": "",
+      "sort_asc": false,
+      "sort_field": "JLCPCB Part #"
+    },
+    "bus_aliases": {},
+    "connection_grid_size": 50.0,
+    "drawing": {
+      "dashed_lines_dash_length_ratio": 12.0,
+      "dashed_lines_gap_length_ratio": 3.0,
+      "default_line_thickness": 6.0,
+      "default_text_size": 50.0,
+      "field_names": [],
+      "hop_over_size_choice": 0,
+      "intersheets_ref_own_page": false,
+      "intersheets_ref_prefix": "",
+      "intersheets_ref_short": false,
+      "intersheets_ref_show": false,
+      "intersheets_ref_suffix": "",
+      "junction_size_choice": 3,
+      "label_size_ratio": 0.375,
+      "operating_point_overlay_i_precision": 3,
+      "operating_point_overlay_i_range": "~A",
+      "operating_point_overlay_v_precision": 3,
+      "operating_point_overlay_v_range": "~V",
+      "overbar_offset_ratio": 1.23,
+      "pin_symbol_size": 25.0,
+      "text_offset_ratio": 0.15
+    },
+    "legacy_lib_dir": "",
+    "legacy_lib_list": [],
+    "meta": {
+      "version": 1
+    },
+    "net_format_name": "",
+    "ngspice": {
+      "fix_include_paths": true,
+      "meta": {
+        "version": 0
+      },
+      "model_mode": 4,
+      "workbook_filename": ""
+    },
+    "page_layout_descr_file": "",
+    "plot_directory": "",
+    "reuse_designators": true,
+    "space_save_all_events": true,
+    "spice_current_sheet_as_root": false,
+    "spice_external_command": "spice \"%I\"",
+    "spice_model_current_sheet_as_root": true,
+    "spice_save_all_currents": false,
+    "spice_save_all_dissipations": false,
+    "spice_save_all_voltages": false,
+    "subpart_first_id": 65,
+    "subpart_id_separator": 0,
+    "top_level_sheets": [
+      {
+        "filename": "fw16_MCIO8i.kicad_sch",
+        "name": "fw16_MCIO8i",
+        "uuid": "50f5fd03-67f8-43d1-8bfe-dca2cf908bf0"
+      }
+    ],
+    "used_designators": "",
+    "variants": []
+  },
+  "sheets": [
+    [
+      "50f5fd03-67f8-43d1-8bfe-dca2cf908bf0",
+      "fw16_MCIO8i"
+    ],
+    [
+      "8477da45-41b5-48a1-9c5b-2402988eb1f4",
+      "fxbeam"
+    ],
+    [
+      "b129293c-459e-48f0-b955-fe94d8ad35a8",
+      "PCIe-clk-mux"
+    ],
+    [
+      "82aaed48-f89e-4ddb-8b6a-ae1d907b7f39",
+      "MCIO"
+    ]
+  ],
+  "text_variables": {},
+  "tuning_profiles": {
+    "meta": {
+      "version": 0
+    },
+    "tuning_profiles_impedance_geometric": [
+      {
+        "enable_time_domain_tuning": true,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "In2.Cu",
+            "delay": 6883000,
+            "diff_pair_gap": 152400,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "F.Cu",
+            "width": 105918
+          },
+          {
+            "bottom_reference_layer": "B.Cu",
+            "delay": 6883000,
+            "diff_pair_gap": 152400,
+            "signal_layer": "In4.Cu",
+            "top_reference_layer": "In3.Cu",
+            "width": 105918
+          },
+          {
+            "bottom_reference_layer": "In2.Cu",
+            "delay": 5538200,
+            "diff_pair_gap": 101600,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 111760
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 5538200,
+            "diff_pair_gap": 101600,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "In3.Cu",
+            "width": 111760
+          },
+          {
+            "bottom_reference_layer": "In3.Cu",
+            "delay": 6824200,
+            "diff_pair_gap": 50000000,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "F.Cu",
+            "width": 50000000
+          },
+          {
+            "bottom_reference_layer": "B.Cu",
+            "delay": 6824200,
+            "diff_pair_gap": 50000000,
+            "signal_layer": "In3.Cu",
+            "top_reference_layer": "In2.Cu",
+            "width": 50000000
+          }
+        ],
+        "profile_name": "PCIe",
+        "target_impedance": 85.0,
+        "type": 1,
+        "via_overrides": [],
+        "via_prop_delay": 6500000
+      },
+      {
+        "enable_time_domain_tuning": true,
+        "layer_entries": [
+          {
+            "bottom_reference_layer": "In2.Cu",
+            "delay": 6883000,
+            "diff_pair_gap": 304800,
+            "signal_layer": "In1.Cu",
+            "top_reference_layer": "F.Cu",
+            "width": 102616
+          },
+          {
+            "bottom_reference_layer": "B.Cu",
+            "delay": 6883000,
+            "diff_pair_gap": 304800,
+            "signal_layer": "In4.Cu",
+            "top_reference_layer": "In3.Cu",
+            "width": 102616
+          },
+          {
+            "bottom_reference_layer": "In2.Cu",
+            "delay": 5568500,
+            "diff_pair_gap": 152400,
+            "signal_layer": "F.Cu",
+            "top_reference_layer": "UNDEFINED",
+            "width": 120396
+          },
+          {
+            "bottom_reference_layer": "UNDEFINED",
+            "delay": 5568500,
+            "diff_pair_gap": 152400,
+            "signal_layer": "B.Cu",
+            "top_reference_layer": "In3.Cu",
+            "width": 120396
+          },
+          {
+            "bottom_reference_layer": "In3.Cu",
+            "delay": 6824200,
+            "diff_pair_gap": 50000000,
+            "signal_layer": "In2.Cu",
+            "top_reference_layer": "F.Cu",
+            "width": 50000000
+          },
+          {
+            "bottom_reference_layer": "B.Cu",
+            "delay": 6824200,
+            "diff_pair_gap": 50000000,
+            "signal_layer": "In3.Cu",
+            "top_reference_layer": "In2.Cu",
+            "width": 50000000
+          }
+        ],
+        "profile_name": "PCIeCLK",
+        "target_impedance": 90.0,
+        "type": 1,
+        "via_overrides": [],
+        "via_prop_delay": 6500000
+      }
+    ]
+  }
+}
