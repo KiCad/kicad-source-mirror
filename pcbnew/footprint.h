@@ -873,6 +873,8 @@ public:
      */
     void IncrementReference( int aDelta );
 
+    bool IsAnnotated() const { return !GetReference().IsEmpty() && GetReference().Last() != '?'; }
+
     /**
      * @return the value text.
      */
