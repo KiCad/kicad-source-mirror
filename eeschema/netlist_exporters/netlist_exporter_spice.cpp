@@ -185,7 +185,18 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
     for( SCH_SHEET_PATH& sheet : BuildSheetList( aNetlistOptions ) )
     {
+        std::vector<SCH_ITEM*> sheetItems;
+
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            sheetItems.push_back( item );
+
+        std::ranges::sort( sheetItems,
+                           []( const SCH_ITEM* a, const SCH_ITEM* b )
+                           {
+                               return a->m_Uuid < b->m_Uuid;
+                           } );
+
+        for( SCH_ITEM* item : sheetItems )
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
 
