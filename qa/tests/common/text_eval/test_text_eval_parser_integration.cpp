@@ -423,7 +423,9 @@ BOOST_AUTO_TEST_CASE( RealWorldPerformance )
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start );
 
     // Should process 1000 expressions in reasonable time (less than 100 ms)
+#ifndef DEBUG
     BOOST_CHECK_LT( duration.count(), 100 );
+#endif
 
     // Test that results are consistent
     for( auto& expr : expressions )

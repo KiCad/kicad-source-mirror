@@ -462,7 +462,9 @@ BOOST_AUTO_TEST_CASE( DatePerformance )
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start );
 
     // Should complete in reasonable time (less than 100 milliseconds for 1000 operations)
+#ifndef DEBUG
     BOOST_CHECK_LT( duration.count(), 100 );
+#endif
 }
 
 BOOST_AUTO_TEST_SUITE_END()
