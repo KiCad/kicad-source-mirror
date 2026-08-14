@@ -126,7 +126,13 @@ BOOST_AUTO_TEST_CASE( ValueCompare )
             { { wxT( "K5" ),   wxT( "1K" ) },    -1 },
             { { wxT( "1K5" ),  wxT( "K55" ) },    1 },
             { { wxT( "1R5" ),  wxT( "1.5" ) },    0 },
+            // Capacitor values using an SI prefix as the decimal separator.
+            { { wxT( "1u5" ),  wxT( "1.5u" ) },   0 },
             { { wxT( "1u5F" ), wxT( "1.5uF" ) },  0 },
+            { { wxT( "2u2F" ), wxT( "2.2uF" ) },  0 },
+            { { wxT( "1n5F" ), wxT( "1.5nF" ) },  0 },
+            { { wxT( "12n1F" ), wxT( "12.1nF" ) }, 0 },
+            { { wxT( "5p6F" ), wxT( "5.6pF" ) },  0 },
             { { wxT( "1µ5" ),  wxT( "1u5" ) },    0 },
     };
 
@@ -135,6 +141,16 @@ BOOST_AUTO_TEST_CASE( ValueCompare )
         BOOST_CHECK_MESSAGE( ValueStringCompare( c.first.first, c.first.second ) == c.second,
                              c.first.first + " AND " + c.first.second + " failed" );
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( ValueCompareAlphanumericIdentifiers )
+{
+    // Textual identifiers must not be parsed as numbers just because they contain SI/RKM letters.
+    // They sort after pure numbers and use normal lexical ordering relative to other identifiers.
+    BOOST_CHECK_GT( ValueStringCompare( wxT( "T9G" ), wxT( "1" ) ), 0 );
+    BOOST_CHECK_GT( ValueStringCompare( wxT( "1182T117P" ), wxT( "9999" ) ), 0 );
+    BOOST_CHECK_GT( ValueStringCompare( wxT( "G4W" ), wxT( "F1" ) ), 0 );
 }
 
 

@@ -1254,7 +1254,19 @@ int SplitString( const wxString& strToSplit,
             {
                 continue;
             }
-            if( infix == 0 && NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( c, &scale ) )
+            // This can be tricky to get to parse things like 4K7 (or just K7)
+            // but not G4W
+            if(
+                // Only allow one infix character e.g. 4K7, not 4KK7
+                infix == 0
+                // Allowed only it isn't the first character, or nothing follows it,
+                // e.g. K7 but not K7X
+                && ( ii > 0 || strEnd->IsEmpty() )
+                // Also make sure its a valid SI separator, e.g. 4K7 but not 4X7
+                && NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( c, &scale )
+                // Finally make that the combo makes sense e.g. T9G fails because TG is not a valid combo,
+                // but unfortunately cursed constructions like 1u5F are indeed found in the wild
+                && ApplyModifier( scale, c + *strEnd ) )
             {
                 infix = c;
                 continue;
