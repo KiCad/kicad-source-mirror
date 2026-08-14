@@ -31,6 +31,7 @@
 #include <chrono>
 #include <fstream>
 #include <memory>
+#include <cstdlib>
 
 
 namespace
@@ -57,7 +58,22 @@ struct ScopedTempDir
         fn.AssignDir( base );
         fn.AppendDir( wxString::Format( "kicad-qa-git-%lld-%p", ticks, this ) );
         wxFileName::Mkdir( fn.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-        path = fn.GetPath();
+
+        // Store the realpath-resolved form.  libgit2 canonicalizes the repo workdir with
+        // realpath(3), so on macOS -- where /var is a symlink to /private/var -- any path
+        // derived from the repo differs textually from the one we built above unless we
+        // resolve symlinks here too.  Comparisons against GetGitRootDirectory() rely on this.
+        char* resolved = realpath( fn.GetPath().utf8_string().c_str(), nullptr );
+
+        if( resolved )
+        {
+            path = wxString::FromUTF8( resolved );
+            free( resolved );
+        }
+        else
+        {
+            path = fn.GetPath();
+        }
     }
 
     ~ScopedTempDir()
@@ -150,8 +166,10 @@ BOOST_AUTO_TEST_CASE( GitRootDirectoryReturnsWorkdir )
     // Should be the repo path (with trailing separator).
     wxFileName rootFn;
     rootFn.AssignDir( root );
+    rootFn.MakeAbsolute();
     wxFileName tmpFn;
     tmpFn.AssignDir( tmp.path );
+    tmpFn.MakeAbsolute();
     BOOST_CHECK_EQUAL( rootFn.GetFullPath().ToStdString(), tmpFn.GetFullPath().ToStdString() );
 }
 
