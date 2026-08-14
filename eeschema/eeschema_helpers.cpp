@@ -65,6 +65,23 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName, bool aSet
 }
 
 
+static const TOP_LEVEL_SHEET_INFO* findDeclaredTopLevelSheet(
+        const std::vector<TOP_LEVEL_SHEET_INFO>& aProjectSheets, const wxString& aProjectPath,
+        const wxFileName& aFile )
+{
+    for( const TOP_LEVEL_SHEET_INFO& info : aProjectSheets )
+    {
+        wxFileName candidate( aProjectPath, info.filename );
+        candidate.MakeAbsolute();
+
+        if( candidate.SameAs( aFile ) )
+            return &info;
+    }
+
+    return nullptr;
+}
+
+
 SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
                                             SCH_IO_MGR::SCH_FILE_T aFormat,
                                             bool aSetActive,
@@ -120,32 +137,62 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
     try
     {
-        SCH_SHEET* rootSheet = pi->LoadSchematicFile( schFile.GetFullPath(), schematic );
+        const wxString                           projectDir = project->GetProjectPath();
+        const std::vector<TOP_LEVEL_SHEET_INFO>& projectSheets =
+                project->GetProjectFile().GetTopLevelSheets();
+        const TOP_LEVEL_SHEET_INFO* namedSheet = findDeclaredTopLevelSheet( projectSheets,
+                                                                           projectDir, schFile );
+        std::vector<SCH_SHEET*> loadedSheets;
 
-        if( !rootSheet )
-            return nullptr;
-
-        schematic->SetTopLevelSheets( { rootSheet } );
-
-        // Make ${SHEETNAME} work on the root sheet until we properly support naming the root
-        // sheet.  Prefer the display name from the matching schematic.top_level_sheets entry in
-        // the project file so CLI/API exports show the same name the GUI does.
-        if( rootSheet->GetName().IsEmpty() )
+        // Load every declared top-level sheet so headless callers plot what the GUI does
+        // A missing named file still fails to load rather than falling back to its siblings
+        if( projectSheets.size() > 1 && namedSheet && schFile.FileExists() )
         {
-            wxString rootName = _( "Root" );
-
-            for( const TOP_LEVEL_SHEET_INFO& info : project->GetProjectFile().GetTopLevelSheets() )
+            for( const TOP_LEVEL_SHEET_INFO& info : projectSheets )
             {
-                wxFileName candidate( project->GetProjectPath(), info.filename );
+                wxFileName sheetFn( projectDir, info.filename );
+                sheetFn.MakeAbsolute();
 
-                if( candidate.SameAs( schFile ) && !info.name.IsEmpty() )
-                {
-                    rootName = info.name;
-                    break;
-                }
+                if( !sheetFn.FileExists() )
+                    continue;
+
+                SCH_SHEET* sheet = pi->LoadSchematicFile( sheetFn.GetFullPath(), schematic );
+
+                if( !sheet )
+                    continue;
+
+                // Sub-sheet instance paths key off this UUID, so only a nil entry keeps the loaded one
+                if( info.uuid != niluuid )
+                    const_cast<KIID&>( sheet->m_Uuid ) = info.uuid;
+
+                if( !info.name.IsEmpty() )
+                    sheet->SetName( info.name );
+
+                loadedSheets.push_back( sheet );
             }
+        }
 
-            rootSheet->SetName( rootName );
+        if( !loadedSheets.empty() )
+        {
+            schematic->SetTopLevelSheets( loadedSheets );
+        }
+        else
+        {
+            SCH_SHEET* rootSheet = pi->LoadSchematicFile( schFile.GetFullPath(), schematic );
+
+            if( !rootSheet )
+                return nullptr;
+
+            schematic->SetTopLevelSheets( { rootSheet } );
+
+            // Make ${SHEETNAME} work on the root sheet until we properly support naming it
+            if( rootSheet->GetName().IsEmpty() )
+            {
+                if( namedSheet && !namedSheet->name.IsEmpty() )
+                    rootSheet->SetName( namedSheet->name );
+                else
+                    rootSheet->SetName( _( "Root" ) );
+            }
         }
     }
     catch( ... )

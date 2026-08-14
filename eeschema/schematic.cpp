@@ -1120,7 +1120,19 @@ wxString SCHEMATIC::GetUniqueFilenameForCurrentSheet()
     if( startIdx >= CurrentSheet().size() )
         return wxEmptyString;
 
-    wxFileName rootFn( CurrentSheet().at( startIdx )->GetFileName() );
+    SCH_SHEET* topSheet = CurrentSheet().at( startIdx );
+
+    // A top-level sheet keeps its file on the screen, because the SHEET_FILENAME field is only
+    // set on the sheet instances that a parent sheet owns
+    wxString topFileName;
+
+    if( topSheet->GetScreen() )
+        topFileName = topSheet->GetScreen()->GetFileName();
+
+    if( topFileName.IsEmpty() )
+        topFileName = topSheet->GetFileName();
+
+    wxFileName rootFn( topFileName );
     wxString   filename = rootFn.GetName();
 
     for( unsigned i = startIdx + 1; i < CurrentSheet().size(); i++ )
