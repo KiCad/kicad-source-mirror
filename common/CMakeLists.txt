@@ -254,7 +254,9 @@ set( KICOMMON_SRCS
     dialogs/dialog_rc_job_base.cpp
     dialogs/dialog_restore_local_history.cpp
     dialogs/dialog_HTML_reporter_base.cpp
+    dialogs/git/workspace_item_files.cpp
     dialogs/mdw_library_checkin_rows.cpp
+    dialogs/git/workspace_search_query.cpp
     dialogs/panel_startwizard_libraries_base.cpp
     dialogs/panel_startwizard_privacy_base.cpp
     dialogs/panel_startwizard_settings_base.cpp
@@ -705,6 +707,7 @@ set( COMMON_GIT_DLG_SRCS
     dialogs/git/panel_git_stashes_base.cpp
     dialogs/git/panel_git_tags.cpp
     dialogs/git/panel_git_tags_base.cpp
+    dialogs/git/panel_mdw_versions.cpp
     dialogs/git/panel_git_repos.cpp
     dialogs/git/panel_git_repos_base.cpp
 
