@@ -57,3 +57,28 @@ message SchematicNetlistResponse
 
   repeated kiapi.schematic.types.SchematicNet nets = 2;
 }
+
+// A design variant known to the schematic.
+message SchematicVariant
+{
+  string name = 1;
+  string description = 2;
+}
+
+// Returns SchematicVariantsResponse
+message GetSchematicVariants
+{
+  // Type must be DT_SCHEMATIC and only the project is considered
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+message SchematicVariantsResponse
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  // Every variant in the schematic excluding the default.
+  repeated SchematicVariant variants = 2;
+
+  // The variant selected in the editor.  Empty means the default variant is selected.
+  string current_variant = 3;
+}

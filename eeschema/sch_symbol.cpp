@@ -5011,6 +5011,18 @@ void SCH_SYMBOL::DeleteVariant( const KIID_PATH& aPath, const wxString& aVariant
 }
 
 
+void SCH_SYMBOL::ClearVariantField( const KIID_PATH& aPath, const wxString& aVariantName,
+                                    const wxString& aFieldName )
+{
+    SCH_SYMBOL_INSTANCE* instance = getInstance( aPath );
+
+    if( !instance || !instance->m_Variants.contains( aVariantName ) )
+        return;
+
+    instance->m_Variants[aVariantName].m_Fields.erase( aFieldName );
+}
+
+
 void SCH_SYMBOL::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName,
                                 const wxString& aNewName )
 {

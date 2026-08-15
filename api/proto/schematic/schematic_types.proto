@@ -285,12 +285,17 @@ message SheetSymbol
   SchematicField filename_field = 8;
   repeated SchematicField user_fields = 9;
   repeated SheetPin pins = 10;
+
+  // attributes shared by every instance of this sheet
   bool exclude_from_sim = 11;
   bool exclude_from_bom = 12;
   bool exclude_from_board = 13;
   bool dnp = 14;
 
-  // For existing sheets, gives the path to the subsheet instance.  Leave blank for new sheets.
+  // The sheet that contains this instance.
+  //
+  // On a create or update request the targeted sheet comes from the request header, and this
+  // field reports the sheet the returned instance was read from.
   kiapi.common.types.SheetPath path = 15;
 
   // Page numbers in KiCad are arbitrary user data and don't have to be numeric
@@ -298,6 +303,9 @@ message SheetSymbol
   bool fields_autoplaced = 17;
 
   repeated kiapi.common.types.CustomProperty custom_properties = 18;
+
+  // The variants carried by this instance.
+  SheetVariants variants = 19;
 }
 
 enum SchematicSymbolType
@@ -405,15 +413,50 @@ message SchematicSymbolAttributes
   bool do_not_populate = 5;
 }
 
-// Data that can change between design variants
+// What one design variant changes about a placed symbol.
 message SchematicSymbolVariant
 {
   string name = 1;
-  string description = 2;
 
+  // override description for this variant
+  optional string description = 2;
+
+  // complete set of attributes for a symbol with this variant
   SchematicSymbolAttributes attributes = 3;
 
+  // The fields this variant overrides, keyed by field name.  Fields left out resolve to the
+  // symbol's own value.
   map<string, string> fields = 4;
+}
+
+// All variants for a symbol
+message SchematicSymbolVariants
+{
+  repeated SchematicSymbolVariant variants = 1;
+}
+
+// What one design variant changes about a placed sheet.
+message SheetVariant
+{
+  string name = 1;
+
+  // The variant's description override
+  optional string description = 2;
+
+  // The attributes in effect for this variant.
+  optional bool exclude_from_sim = 3;
+  optional bool exclude_from_bom = 4;
+  optional bool dnp = 5;
+
+  // The fields this variant overrides, keyed by field name.
+  map<string, string> fields = 6;
+}
+
+// The complete set of variants carried by one instance of a sheet.  Update semantics match
+// SchematicSymbolVariants.
+message SheetVariants
+{
+  repeated SheetVariant variants = 1;
 }
 
 message PinMapEntry
@@ -539,6 +582,9 @@ message SchematicSymbolInstance
   // Symbol instances may refer to the same graphical symbol from multiple different sheets
   // in a hierarchical schematic.  Each instance will have its own reference designator, and
   // may also have a different selected unit and other attributes.
+  //
+  // On a create or update request the targeted sheet comes from the request header, and this
+  // field reports the sheet the returned instance was read from.
   kiapi.common.types.SheetPath path = 2;
 
   kiapi.common.types.Vector2 position = 3;
@@ -553,6 +599,8 @@ message SchematicSymbolInstance
   SchematicField datasheet_field = 10;
   SchematicField description_field = 11;
 
+  // The attributes of the default variant, shared by every instance of this symbol.  Give one
+  // instance its own attributes through a named variant instead.
   SchematicSymbolAttributes attributes = 12;
 
   SchematicSymbolUnit unit = 13;
@@ -561,7 +609,7 @@ message SchematicSymbolInstance
   bool show_pin_numbers = 16;
   kiapi.common.types.Distance pin_name_offset = 17;
 
-  repeated SchematicSymbolVariant variants = 18;
+  reserved 18;   // repeated SchematicSymbolVariant, superseded by the SchematicSymbolVariants set
 
   repeated SchematicField user_fields = 19;
   PinMapInstanceOverride pin_map_override = 20;
@@ -573,6 +621,9 @@ message SchematicSymbolInstance
   SchematicPassthroughMode passthrough = 23;
 
   repeated kiapi.common.types.CustomProperty custom_properties = 24;
+
+  // The variants carried by this instance.
+  SchematicSymbolVariants variants = 25;
 }
 
 message SheetInstance

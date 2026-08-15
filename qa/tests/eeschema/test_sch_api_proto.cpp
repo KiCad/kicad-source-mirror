@@ -280,7 +280,8 @@ BOOST_AUTO_TEST_CASE( PerPlacementAttributes )
     kiapi::schematic::types::SchematicSymbolInstance proto;
     BOOST_REQUIRE( PackSymbol( &proto, symbol, path ) );
 
-    kiapi::schematic::types::SchematicSymbolVariant* variant = proto.add_variants();
+    kiapi::schematic::types::SchematicSymbolVariant* variant =
+            proto.mutable_variants()->add_variants();
     variant->set_name( variantName.ToUTF8() );
     variant->mutable_attributes()->set_do_not_populate( !baseDNP );
 
@@ -288,6 +289,27 @@ BOOST_AUTO_TEST_CASE( PerPlacementAttributes )
 
     BOOST_CHECK_EQUAL( symbol->GetDNP( &path, variantName ), !baseDNP );
     BOOST_CHECK_EQUAL( symbol->GetDNP(), baseDNP );
+    BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );
+
+    // An unset variant set leaves the placement's variants alone.
+    kiapi::schematic::types::SchematicSymbolInstance untouched;
+    untouched.mutable_reference_field()->mutable_text()->set_text(
+            symbol->GetRef( &path ).ToUTF8() );
+
+    ApplySymbolInstance( symbol, untouched, path, m_schematic.get() );
+
+    BOOST_CHECK_EQUAL( symbol->GetDNP( &path, variantName ), !baseDNP );
+
+    // Sending the set back without a variant removes it from this placement, while the variant
+    // itself stays registered with the schematic.
+    kiapi::schematic::types::SchematicSymbolInstance cleared;
+    BOOST_REQUIRE( PackSymbol( &cleared, symbol, path ) );
+    BOOST_REQUIRE_EQUAL( cleared.variants().variants_size(), 1 );
+    cleared.mutable_variants()->clear_variants();
+
+    ApplySymbolInstance( symbol, cleared, path, m_schematic.get() );
+
+    BOOST_CHECK_EQUAL( symbol->GetDNP( &path, variantName ), baseDNP );
     BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );
 }
 

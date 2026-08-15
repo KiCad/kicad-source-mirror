@@ -2139,6 +2139,18 @@ void SCH_SHEET::DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantN
 }
 
 
+void SCH_SHEET::ClearVariantField( const KIID_PATH& aPath, const wxString& aVariantName,
+                                   const wxString& aFieldName )
+{
+    SCH_SHEET_INSTANCE* instance = getInstance( aPath );
+
+    if( !instance || !instance->m_Variants.contains( aVariantName ) )
+        return;
+
+    instance->m_Variants[aVariantName].m_Fields.erase( aFieldName );
+}
+
+
 void SCH_SHEET::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName,
                                const wxString& aNewName )
 {

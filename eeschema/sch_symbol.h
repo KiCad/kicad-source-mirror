@@ -1018,6 +1018,10 @@ public:
 
     void DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName );
 
+    // Remove a variant's override of one field
+    void ClearVariantField( const KIID_PATH& aPath, const wxString& aVariantName,
+                            const wxString& aFieldName );
+
     void RenameVariant( const KIID_PATH& aPath, const wxString& aOldName, const wxString& aNewName );
 
     void CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVariant,

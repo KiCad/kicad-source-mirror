@@ -518,6 +518,12 @@ public:
      */
     const std::vector<SCH_SHEET_INSTANCE>& GetInstances() const { return m_instances; }
 
+    /// Return this sheet's placement record under @a aParentPath, or nullptr if it has none.
+    const SCH_SHEET_INSTANCE* GetInstance( const KIID_PATH& aParentPath ) const
+    {
+        return getInstance( aParentPath );
+    }
+
     /**
      * Check to see if this sheet has a root sheet instance.
      *
@@ -544,6 +550,10 @@ public:
     void AddInstance( const SCH_SHEET_INSTANCE& aInstance );
 
     void DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName );
+
+    // Remove a variant's override of one field
+    void ClearVariantField( const KIID_PATH& aPath, const wxString& aVariantName,
+                            const wxString& aFieldName );
 
     void RenameVariant( const KIID_PATH& aPath, const wxString& aOldName, const wxString& aNewName );
 

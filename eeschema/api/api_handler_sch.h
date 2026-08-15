@@ -166,6 +166,9 @@ private:
     HANDLER_RESULT<commands::HighlightNetsResponse> handleHighlightNets(
             const HANDLER_CONTEXT<commands::HighlightNets>& aCtx );
 
+    HANDLER_RESULT<kiapi::schematic::commands::SchematicVariantsResponse>
+    handleGetSchematicVariants( const HANDLER_CONTEXT<kiapi::schematic::commands::GetSchematicVariants>& aCtx );
+
     SCHEMATIC* schematic() const;
 
     void filterValidSchTypes( std::set<KICAD_T>& aTypeList );

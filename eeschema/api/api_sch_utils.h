@@ -65,6 +65,19 @@ PIN_MAP_INSTANCE_OVERRIDE UnpackPinMapOverride( const kiapi::schematic::types::P
 bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* aInput,
                 const SCH_SHEET_PATH& aPath );
 
+/**
+ * Unpack the every placement data from the input. Placement data is applied separately by #ApplySheetInstance.
+ */
 tl::expected<bool, kiapi::common::ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput, const kiapi::schematic::types::SheetSymbol& aInput );
+
+/**
+ * Apply the placement data in a sheet message to @a aSheet: page number and the variants the
+ * message carries.
+ *
+ * @a aParentPath is the path of the sheet that contains @a aSheet, which is how a sheet's
+ * placement records are keyed.
+ */
+void ApplySheetInstance( SCH_SHEET* aSheet, const kiapi::schematic::types::SheetSymbol& aInput,
+                         const SCH_SHEET_PATH& aParentPath, SCHEMATIC* aSchematic );
 
 #endif //KICAD_API_SCH_UTILS_H
