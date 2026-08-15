@@ -19,6 +19,7 @@
 
 #define BOOST_TEST_NO_MAIN
 
+#include <wx/app.h>
 #include <wx/cmdline.h>
 #include <wx/stdstream.h>
 #include <wx/wfstream.h>
@@ -218,5 +219,11 @@ bool init_pns_test_suite( )
 
 int main( int argc, char* argv[] )
 {
-    return unit_test_main( &init_pns_test_suite, argc, argv );
+    wxApp::SetInstance( new wxAppConsole );
+    wxInitialize( argc, argv );
+
+    int ret = unit_test_main( &init_pns_test_suite, argc, argv );
+
+    wxUninitialize();
+    return ret;
 }
