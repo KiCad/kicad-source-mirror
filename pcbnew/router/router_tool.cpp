@@ -83,10 +83,14 @@ using namespace std::placeholders;
 #include "router_status_view_item.h"
 #include "pns_router.h"
 #include "pns_itemset.h"
+#include "pns_line.h"
+#include "pns_linked_item.h"
 #include "pns_logger.h"
+#include "pns_node.h"
+#include "pns_optimizer.h"
 #include "pns_placement_algo.h"
+#include "pns_segment.h"
 #include "pns_drag_algo.h"
-
 #include "pns_kicad_iface.h"
 
 #include <ratsnest/ratsnest_data.h>
@@ -603,6 +607,8 @@ bool ROUTER_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::routerContinueFromEnd, hasOtherEnd );
     menu.AddItem( PCB_ACTIONS::routerAttemptFinish,   hasOtherEnd );
     menu.AddItem( PCB_ACTIONS::routerAutorouteSelected, notRoutingCond
+                                                            && SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::routerOptimizeSelected, notRoutingCond
                                                             && SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::breakTrack,            notRoutingCond );
 
@@ -2005,6 +2011,94 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
 }
 
 
+int ROUTER_TOOL::OptimizeSelected( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
+    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() == 0 )
+        return 0;
+
+    std::vector<BOARD_CONNECTED_ITEM*> trackItems;
+
+    for( EDA_ITEM* item : selection.GetItemsSortedBySelectionOrder() )
+    {
+        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+            trackItems.push_back( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+    }
+
+    if( trackItems.empty() )
+        return 0;
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+    Activate();
+
+    PNS::NODE* world = m_router->GetWorld();
+
+    // Differential pairs can't be optimized as individual lines
+    // TODO once we have a differential pair line primitive, we could handle them...
+    int dpSkipped = std::erase_if( trackItems,
+                                   [&]( BOARD_CONNECTED_ITEM* aItem )
+                                   {
+                                       PNS::RULE_RESOLVER* rr = world->GetRuleResolver();
+                                       return rr && rr->DpCoupledNet( aItem->GetNet() );
+                                   } );
+
+    if( dpSkipped > 0 )
+        frame->ShowInfoBarMsg( _( "Differential pair members cannot be optimized." ) );
+
+    for( BOARD_CONNECTED_ITEM* trackItem : trackItems )
+    {
+        PNS::ITEM* pnsItem = world->FindItemByParent( trackItem );
+
+        if( !pnsItem || !pnsItem->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T ) )
+            continue;
+
+        PNS::LINKED_ITEM* linkedItem = static_cast<PNS::LINKED_ITEM*>( pnsItem );
+
+        PNS::LINE originalLine = world->AssembleLine( linkedItem );
+
+        // TODO: could allow these once we have arc-aware drag/optimize
+        if( originalLine.ArcCount() > 0 )
+            continue;
+
+        PNS::NODE* branch = world->Branch();
+        branch->Remove( originalLine );
+
+        PNS::LINE optimizedLine( originalLine );
+        optimizedLine.ClearLinks();
+
+        int effort = PNS::OPTIMIZER::MERGE_SEGMENTS
+                     | PNS::OPTIMIZER::MERGE_OBTUSE
+                     | PNS::OPTIMIZER::MERGE_COLINEAR
+                     | PNS::OPTIMIZER::SMART_PADS
+                     | PNS::OPTIMIZER::FANOUT_CLEANUP;
+
+        if( m_router->Settings().GetRestrictAngles() )
+            effort |= PNS::OPTIMIZER::REQUIRE_OBTUSE_ANGLES;
+
+        bool optimized = PNS::OPTIMIZER::Optimize( &optimizedLine, effort, branch );
+
+        if( !optimized || optimizedLine.CompareGeometry( originalLine ) )
+        {
+            delete branch;
+            continue;
+        }
+
+        if( branch->CheckColliding( &optimizedLine ) )
+        {
+            delete branch;
+            continue;
+        }
+
+        branch->Add( optimizedLine );
+        m_router->CommitRouting( branch );
+    }
+
+    return 0;
+}
+
+
 int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 {
     if( m_inRouterTool )
@@ -3146,6 +3240,7 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::RouteSelected,          PCB_ACTIONS::routerRouteSelected.MakeEvent() );
     Go( &ROUTER_TOOL::RouteSelected,          PCB_ACTIONS::routerRouteSelectedFromEnd.MakeEvent() );
     Go( &ROUTER_TOOL::RouteSelected,          PCB_ACTIONS::routerAutorouteSelected.MakeEvent() );
+    Go( &ROUTER_TOOL::OptimizeSelected,       PCB_ACTIONS::routerOptimizeSelected.MakeEvent() );
     Go( &ROUTER_TOOL::DpDimensionsDialog,     PCB_ACTIONS::routerDiffPairDialog.MakeEvent() );
     Go( &ROUTER_TOOL::SettingsDialog,         PCB_ACTIONS::routerSettingsDialog.MakeEvent() );
     Go( &ROUTER_TOOL::ChangeRouterMode,       PCB_ACTIONS::routerHighlightMode.MakeEvent() );
