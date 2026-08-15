@@ -97,8 +97,9 @@ BOOST_FIXTURE_TEST_CASE( ERCTextVarIssue24442, ERC_TEXT_VAR_FIXTURE )
     BOOST_CHECK_EQUAL( genericWarnings, 2 );
 
     // The four matched markers must not double-report as unresolved variables;
-    // only the escaped literal, whose shown text keeps a bare ${...}, remains.
-    BOOST_CHECK_EQUAL( unresolvedVars, 1 );
+    // The escaped literal should also not trigger an unresolved variable warning
+    // as that's not likely the user's expectation.
+    BOOST_CHECK_EQUAL( unresolvedVars, 0 );
 
     auto containsMsg =
             []( const std::vector<wxString>& aList, const wxString& aNeedle )
