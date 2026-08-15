@@ -23,8 +23,9 @@
  * Contains common object definitions
  */
 
-#ifndef CADSTAR_ARCHIVE_OBJECTS_H_
-#define CADSTAR_ARCHIVE_OBJECTS_H_
+#pragma once
+
+#define CADSTAR_FONT_NAME wxT( "CADSTAR" )
 
 
 enum class CADSTAR_PIN_TYPE
@@ -52,6 +53,3 @@ enum class CADSTAR_PIN_POSITION
     BOTTOM_LEFT  = 2,
     BOTTOM_RIGHT = 3
 };
-
-
-#endif // CADSTAR_ARCHIVE_OBJECTS_H_

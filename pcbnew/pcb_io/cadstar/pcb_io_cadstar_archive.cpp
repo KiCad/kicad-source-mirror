@@ -102,9 +102,8 @@ BOARD* PCB_IO_CADSTAR_ARCHIVE::LoadBoard( const wxString& aFileName, BOARD* aApp
     // Collect the font substitution warnings (RAII - automatically reset on scope exit)
     FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
 
-    CADSTAR_PCB_ARCHIVE_LOADER tempPCB( aFileName, m_layer_mapping_handler,
-                                        m_show_layer_mapping_warnings, m_progressReporter,
-                                        m_reporter );
+    CADSTAR_PCB_ARCHIVE_LOADER tempPCB( aFileName, m_layer_mapping_handler, m_show_layer_mapping_warnings,
+                                        m_progressReporter, m_reporter );
     tempPCB.Load( m_board, aProject );
 
     //center the board:

@@ -41,7 +41,11 @@
 
 struct CADSTAR_IMPORT_FIXTURE
 {
-    CADSTAR_IMPORT_FIXTURE() {}
+    CADSTAR_IMPORT_FIXTURE()
+    {
+        // Don't internally throw on font substitution warnings
+        wxLog::SetTimestamp( wxEmptyString );
+    }
 
     PCB_IO_CADSTAR_ARCHIVE cstarPlugin;
     PCB_IO_KICAD_SEXPR     kicadPlugin;
@@ -87,15 +91,13 @@ BOOST_AUTO_TEST_CASE( CadstarFootprintImport )
                                                   footprintName,
                                                   libName.first ) )
             {
-                FOOTPRINT* eagleFp = cstarPlugin.FootprintLoad( cstarLibraryPath, footprintName,
-                                                                false, nullptr );
+                FOOTPRINT* eagleFp = cstarPlugin.FootprintLoad( cstarLibraryPath, footprintName, false, nullptr );
                 BOOST_CHECK( eagleFp );
 
                 BOOST_CHECK_EQUAL( "REF**", eagleFp->GetReference() );
                 BOOST_CHECK_EQUAL( footprintName, eagleFp->GetValue() );
 
-                FOOTPRINT* kicadFp = kicadPlugin.FootprintLoad( kicadLibraryPath, footprintName,
-                                                                true, nullptr );
+                FOOTPRINT* kicadFp = kicadPlugin.FootprintLoad( kicadLibraryPath, footprintName, true, nullptr );
                 BOOST_CHECK( kicadFp );
 
                 KI_TEST::CheckFootprint( kicadFp, eagleFp );
