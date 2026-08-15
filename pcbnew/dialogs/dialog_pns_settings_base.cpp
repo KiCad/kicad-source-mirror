@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -68,13 +68,16 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	sbModeSizer->Add( m_rbWalkaround, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bColumns->Add( sbModeSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bColumns->Add( sbModeSizer, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bColumns->Add( 5, 0, 0, 0, 5 );
 
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
+
 	wxStaticBoxSizer* bOptions;
-	bOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options") ), wxVERTICAL );
+	bOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Routing") ), wxVERTICAL );
 
 	wxGridSizer* gSizer1;
 	gSizer1 = new wxGridSizer( 0, 1, 2, 0 );
@@ -89,21 +92,6 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	gSizer1->Add( m_smartPads, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_smoothDragged = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Smooth dragged segments"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_smoothDragged->SetToolTip( _("When enabled, the router attempts to merge several jagged segments into a single straight one (dragging mode).") );
-
-	gSizer1->Add( m_smoothDragged, 0, wxRIGHT|wxLEFT, 5 );
-
-	m_suggestEnding = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Suggest track finish"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_suggestEnding->Enable( false );
-
-	gSizer1->Add( m_suggestEnding, 0, wxRIGHT|wxLEFT, 5 );
-
-	m_optimizeEntireDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize entire track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_optimizeEntireDraggedTrack->SetToolTip( _("When enabled, the entire portion of the track that is visible on the screen will be optimized and re-routed when a segment is dragged.  When disabled, only the area near the segment being dragged will be optimized.") );
-
-	gSizer1->Add( m_optimizeEntireDraggedTrack, 0, wxRIGHT|wxLEFT, 5 );
-
 	m_autoPosture = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Use mouse path to set track posture"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_autoPosture->SetToolTip( _("When enabled, the posture of tracks will be guided by how the mouse is moved from the starting location") );
 
@@ -114,11 +102,46 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	gSizer1->Add( m_fixAllSegments, 0, wxRIGHT|wxLEFT, 5 );
 
+	m_suggestEnding = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Suggest track finish"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_suggestEnding->Enable( false );
+
+	gSizer1->Add( m_suggestEnding, 0, wxRIGHT|wxLEFT, 5 );
+
 
 	bOptions->Add( gSizer1, 1, wxEXPAND, 5 );
 
 
-	bColumns->Add( bOptions, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer5->Add( bOptions, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dragging") ), wxVERTICAL );
+
+	wxGridSizer* gSizer4;
+	gSizer4 = new wxGridSizer( 0, 1, 2, 0 );
+
+	m_smoothDragged = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Smooth dragged segments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_smoothDragged->SetToolTip( _("When enabled, the router attempts to merge several jagged segments into a single straight one (dragging mode).") );
+
+	gSizer4->Add( m_smoothDragged, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_optimizeEntireDraggedTrack = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Optimize entire track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_optimizeEntireDraggedTrack->SetToolTip( _("When enabled, the entire portion of the track that is visible on the screen will be optimized and re-routed when a segment is dragged.  When disabled, only the area near the segment being dragged will be optimized.") );
+
+	gSizer4->Add( m_optimizeEntireDraggedTrack, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_restrictAngles = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Avoid sharp angles"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_restrictAngles->SetToolTip( _("When enabled, dragged traces will be optimized to avoid creating 90-degree or acute corners in most situations.") );
+
+	gSizer4->Add( m_restrictAngles, 0, wxLEFT|wxRIGHT, 5 );
+
+
+	sbSizer4->Add( gSizer4, 0, wxEXPAND, 5 );
+
+
+	bSizer5->Add( sbSizer4, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+
+
+	bColumns->Add( bSizer5, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bColumns, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );

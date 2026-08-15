@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,11 +42,12 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbWalkaround;
 		wxCheckBox* m_removeLoops;
 		wxCheckBox* m_smartPads;
-		wxCheckBox* m_smoothDragged;
-		wxCheckBox* m_suggestEnding;
-		wxCheckBox* m_optimizeEntireDraggedTrack;
 		wxCheckBox* m_autoPosture;
 		wxCheckBox* m_fixAllSegments;
+		wxCheckBox* m_suggestEnding;
+		wxCheckBox* m_smoothDragged;
+		wxCheckBox* m_optimizeEntireDraggedTrack;
+		wxCheckBox* m_restrictAngles;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;

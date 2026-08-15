@@ -152,6 +152,9 @@ public:
     bool GetFixAllSegments() const { return m_fixAllSegments; }
     void SetFixAllSegments( bool aEnable ) { m_fixAllSegments = aEnable; }
 
+    bool GetRestrictAngles() const { return m_restrictAngles; }
+    void SetRestrictAngles( bool aEnable ) { m_restrictAngles = aEnable; }
+
     double WalkaroundHugLengthThreshold() const { return m_walkaroundHugLengthThreshold; }
 
     int ViaForcePropIterationLimit() const { return m_viaForcePropIterationLimit; }
@@ -173,6 +176,7 @@ private:
     bool m_optimizeEntireDraggedTrack;
     bool m_autoPosture;
     bool m_fixAllSegments;
+    bool m_restrictAngles;
 
     DIRECTION_45::CORNER_MODE m_cornerMode;
 
