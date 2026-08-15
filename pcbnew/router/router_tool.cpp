@@ -2047,6 +2047,8 @@ int ROUTER_TOOL::OptimizeSelected( const TOOL_EVENT& aEvent )
     if( dpSkipped > 0 )
         frame->ShowInfoBarMsg( _( "Differential pair members cannot be optimized." ) );
 
+    bool groupStart = true;
+
     for( BOARD_CONNECTED_ITEM* trackItem : trackItems )
     {
         PNS::ITEM* pnsItem = world->FindItemByParent( trackItem );
@@ -2091,9 +2093,16 @@ int ROUTER_TOOL::OptimizeSelected( const TOOL_EVENT& aEvent )
             continue;
         }
 
+        if( groupStart )
+            groupStart = false;
+        else
+            m_iface->SetCommitFlags( APPEND_UNDO );
+
         branch->Add( optimizedLine );
         m_router->CommitRouting( branch );
     }
+
+    m_iface->SetCommitFlags( 0 );
 
     return 0;
 }
