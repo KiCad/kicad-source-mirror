@@ -372,7 +372,7 @@ public:
 
         ChangeValue( POLAR_START_X, p0.x );
         ChangeValue( POLAR_START_Y, p0.y );
-        ChangeValue( LENGTH, p0.Distance( p1 ) );
+        ChangeValue( LENGTH, KiROUND( p0.Distance( p1 ) ) );
         ChangeAngleValue( ANGLE, -EDA_ANGLE( p1 - p0 ) );
     }
 
@@ -465,12 +465,12 @@ public:
         {
             const VECTOR2D center = CalcArcCenter( start, end, angle );
 
-            double radius = ( center - start ).EuclideanNorm();
-            double max_offset = std::max( std::abs( center.x ), std::abs( center.y ) ) + radius;
-            VECTOR2I center_i = VECTOR2I( center.x, center.y );
+            const double   radius = ( center - start ).EuclideanNorm();
+            const double   max_offset = std::max( std::abs( center.x ), std::abs( center.y ) ) + radius;
+            const VECTOR2I center_i = KiROUND( center );
 
-            if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0 )
-                || center_i == start || center_i == end )
+            if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0 ) || center_i == start
+                || center_i == end )
             {
                 aErrs.push_back( wxString::Format( _( "Invalid Arc with radius %f and angle %f." ),
                                                    radius, angle.AsDegrees() ) );
