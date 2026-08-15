@@ -301,6 +301,9 @@ std::unique_ptr<PNS::ITEM> PNS_LOG_FILE::parseLegacyItemFromString( wxStringToke
 
 bool comparePnsItems( const PNS::ITEM* a , const PNS::ITEM* b )
 {
+    if( !a || !b )
+        return false;
+
     if( a->Kind() != b->Kind() )
         return false;
 
@@ -357,10 +360,10 @@ const std::set<PNS::ITEM*> deduplicate( const std::vector<PNS::ITEM*>& items )
                 isDuplicate = true;
                 break;
             }
-
-            if( !isDuplicate )
-                rv.insert( item );
         }
+
+        if( !isDuplicate )
+            rv.insert( item );
     }
 
     return rv;
@@ -370,9 +373,6 @@ const std::set<PNS::ITEM*> deduplicate( const std::vector<PNS::ITEM*>& items )
 bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOther )
 {
     COMMIT_STATE check( aOther );
-
-    //printf("pre-compare: %d/%d\n", check.m_addedItems.size(), check.m_removedIds.size() );
-    //printf("pre-compare (log): %d/%d\n", m_addedItems.size(), m_removedIds.size() );
 
     for( const KIID& uuid : m_removedIds )
     {
@@ -387,17 +387,21 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
 
     for( PNS::ITEM* item : addedItems )
     {
+        bool matched = false;
+
         for( PNS::ITEM* chk : chkAddedItems )
         {
             if( comparePnsItems( item, chk ) )
             {
                 chkAddedItems.erase( chk );
+                matched = true;
                 break;
             }
         }
-    }
 
-    //printf("post-compare: %d/%d\n", chkAddedItems.size(), check.m_removedIds.size() );
+        if( !matched )
+            return false;
+    }
 
     if( chkAddedItems.empty() && check.m_removedIds.empty() )
         return true;
@@ -585,7 +589,9 @@ bool PNS_LOG_FILE::loadJsonLog( const wxString& aFilename, REPORTER* aRpt, bool 
         for( const nlohmann::json& addedItem : logJson.at( "addedItems" ) )
         {
             m_parsed_items.push_back( std::move( parseItem( addedItem ) ) );
-            m_commitState.m_addedItems.push_back( m_parsed_items.back().get() );
+
+            if( m_parsed_items.back() )
+                m_commitState.m_addedItems.push_back( m_parsed_items.back().get() );
         }
 
         for( const nlohmann::json& addedItem : logJson.at( "removedItems" ) )
@@ -650,7 +656,9 @@ bool PNS_LOG_FILE::loadLegacyLog( const wxString& aFilename, REPORTER* aRpt )
             else if( cmd == wxT( "added" ) )
             {
                 m_parsed_items.push_back( std::move( parseLegacyItemFromString( tokens ) ) );
-                m_commitState.m_addedItems.push_back( m_parsed_items.back().get() );
+
+                if( m_parsed_items.back() )
+                    m_commitState.m_addedItems.push_back( m_parsed_items.back().get() );
             }
             else if( cmd == wxT( "removed" ) )
             {
