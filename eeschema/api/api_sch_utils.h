@@ -32,13 +32,29 @@ class EDA_ITEM;
 class SCH_SYMBOL;
 class SCH_SHEET;
 class SCH_SHEET_PATH;
+class SCHEMATIC;
 
 std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer );
 
 bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, const SCH_SYMBOL* aInput,
                  const SCH_SHEET_PATH& aPath );
 
+/**
+ * Unpack the geometry, the library definition, fields, and the default-variant attributes that
+ * are shared between every placement. Single-placement data is handled by #ApplySymbolInstance.
+ */
 bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::SchematicSymbolInstance& aInput );
+
+/**
+ * Apply placement-specific data to an @a aSymbol at @a aPath: reference, unit, and
+ * the per-placement attribute and field differentials.
+ *
+ * Variant names are registered with @a aSchematic so that the UI offers them for selection.
+ * @a aSymbol must already be in the schematic; the other placements of the symbol are untouched.
+ */
+void ApplySymbolInstance( SCH_SYMBOL* aSymbol,
+                          const kiapi::schematic::types::SchematicSymbolInstance& aInput,
+                          const SCH_SHEET_PATH& aPath, SCHEMATIC* aSchematic );
 
 /// Pack/unpack a pin-to-pad map instance override to/from its protobuf form (issue #2282).
 void PackPinMapOverride( kiapi::schematic::types::PinMapInstanceOverride* aOutput,

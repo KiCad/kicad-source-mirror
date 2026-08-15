@@ -23,6 +23,7 @@
 
 #include <sch_pin.h>
 #include <lib_symbol.h>
+#include <schematic.h>
 #include <sch_symbol.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -216,11 +217,16 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
     attributes->set_exclude_from_position_files( instance.m_ExcludedFromPosFiles );
     attributes->set_do_not_populate( instance.m_DNP );
 
+    // Descriptions belong to the schematic's variant registry rather than to each record.
+    SCHEMATIC* schematic = aInput->Schematic();
+
     for( const auto& [name, variantInfo] : instance.m_Variants )
     {
         kiapi::schematic::types::SchematicSymbolVariant* variant = aOutput->add_variants();
         variant->set_name( name.ToUTF8() );
-        variant->set_description( variantInfo.m_Description.ToUTF8() );
+
+        if( schematic )
+            variant->set_description( schematic->GetVariantDescription( name ).ToUTF8() );
 
         attributes = variant->mutable_attributes();
         attributes->set_exclude_from_simulation( variantInfo.m_ExcludedFromSim );
@@ -248,19 +254,9 @@ bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::Schematic
     if( !aOutput->Deserialize( any ) )
         return false;
 
-    SCH_SYMBOL_INSTANCE instance;
-    instance.m_Path = UnpackSheetPath( aInput.path() );
-    instance.m_Reference = wxString::FromUTF8( aInput.reference_field().text().text() );
-    instance.m_Unit = aInput.has_unit() ? aInput.unit().unit() : 1;
-
     if( aInput.has_attributes() )
     {
         const SchematicSymbolAttributes& attrs = aInput.attributes();
-        instance.m_ExcludedFromSim = attrs.exclude_from_simulation();
-        instance.m_ExcludedFromBOM = attrs.exclude_from_bill_of_materials();
-        instance.m_ExcludedFromBoard = attrs.exclude_from_board();
-        instance.m_ExcludedFromPosFiles = attrs.exclude_from_position_files();
-        instance.m_DNP = attrs.do_not_populate();
 
         aOutput->SetExcludedFromSim( attrs.exclude_from_simulation() );
         aOutput->SetExcludedFromBOM( attrs.exclude_from_bill_of_materials() );
@@ -269,32 +265,79 @@ bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::Schematic
         aOutput->SetDNP( attrs.do_not_populate() );
     }
 
-    for( const SchematicSymbolVariant& variantProto : aInput.variants() )
-    {
-        SCH_SYMBOL_VARIANT variant( wxString::FromUTF8( variantProto.name() ) );
-        variant.m_Description = wxString::FromUTF8( variantProto.description() );
-
-        if( variantProto.has_attributes() )
-        {
-            const SchematicSymbolAttributes& vAttrs = variantProto.attributes();
-            variant.m_ExcludedFromSim = vAttrs.exclude_from_simulation();
-            variant.m_ExcludedFromBOM = vAttrs.exclude_from_bill_of_materials();
-            variant.m_ExcludedFromBoard = vAttrs.exclude_from_board();
-            variant.m_ExcludedFromPosFiles = vAttrs.exclude_from_position_files();
-            variant.m_DNP = vAttrs.do_not_populate();
-        }
-
-        for( const auto& [key, value] : variantProto.fields() )
-            variant.m_Fields[ wxString::FromUTF8( key ) ] = wxString::FromUTF8( value );
-
-        instance.m_Variants.emplace( variant.m_Name, std::move( variant ) );
-    }
-
     if( aInput.has_pin_map_override() )
         aOutput->SetPinMapOverride( UnpackPinMapOverride( aInput.pin_map_override() ) );
 
-    aOutput->AddHierarchicalReference( instance );
     return true;
+}
+
+
+void ApplySymbolInstance( SCH_SYMBOL* aSymbol,
+                          const kiapi::schematic::types::SchematicSymbolInstance& aInput,
+                          const SCH_SHEET_PATH& aPath, SCHEMATIC* aSchematic )
+{
+    using namespace kiapi::schematic::types;
+
+    wxString            reference = wxString::FromUTF8( aInput.reference_field().text().text() );
+    int                 unit = aInput.has_unit() ? aInput.unit().unit() : 1;
+    SCH_SYMBOL_INSTANCE existing;
+
+    if( aSymbol->GetInstance( existing, aPath.Path() ) )
+    {
+        if( !reference.IsEmpty() )
+            aSymbol->SetRef( &aPath, reference );
+
+        aSymbol->SetUnitSelection( &aPath, unit );
+    }
+    else
+    {
+        SCH_SYMBOL_INSTANCE instance;
+        instance.m_Path = aPath.Path();
+        instance.m_Reference = reference;
+        instance.m_Unit = unit;
+
+        aSymbol->AddHierarchicalReference( instance );
+    }
+
+    // The displayed unit follows the placement the request targeted, as it does in the editor.
+    aSymbol->SetUnit( unit );
+
+    for( const SchematicSymbolVariant& variantProto : aInput.variants() )
+    {
+        wxString name = wxString::FromUTF8( variantProto.name() );
+
+        // The empty name selects the default variant, whose values are the symbol's own.
+        if( name.IsEmpty() )
+            continue;
+
+        if( aSchematic )
+        {
+            aSchematic->AddVariant( name );
+
+            if( !variantProto.description().empty() )
+            {
+                aSchematic->SetVariantDescription( name,
+                                                   wxString::FromUTF8( variantProto.description() ) );
+            }
+        }
+
+        if( variantProto.has_attributes() )
+        {
+            const SchematicSymbolAttributes& attrs = variantProto.attributes();
+
+            aSymbol->SetExcludedFromSim( attrs.exclude_from_simulation(), &aPath, name );
+            aSymbol->SetExcludedFromBOM( attrs.exclude_from_bill_of_materials(), &aPath, name );
+            aSymbol->SetExcludedFromBoard( attrs.exclude_from_board(), &aPath, name );
+            aSymbol->SetExcludedFromPosFiles( attrs.exclude_from_position_files(), &aPath, name );
+            aSymbol->SetDNP( attrs.do_not_populate(), &aPath, name );
+        }
+
+        for( const auto& [key, value] : variantProto.fields() )
+        {
+            aSymbol->SetFieldText( wxString::FromUTF8( key ), wxString::FromUTF8( value ), &aPath,
+                                   name );
+        }
+    }
 }
 
 

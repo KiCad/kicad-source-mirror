@@ -917,11 +917,14 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 
         bool unpacked = false;
 
+        // Retained past the unpack: the placement data it carries is applied once the symbol is
+        // in the schematic.
+        kiapi::schematic::types::SchematicSymbolInstance symbolProto;
+
         if( *type == SCH_SYMBOL_T )
         {
-            kiapi::schematic::types::SchematicSymbolInstance symbol;
-            unpacked = anyItem.UnpackTo( &symbol )
-                       && UnpackSymbol( static_cast<SCH_SYMBOL*>( item.get() ), symbol );
+            unpacked = anyItem.UnpackTo( &symbolProto )
+                       && UnpackSymbol( static_cast<SCH_SYMBOL*>( item.get() ), symbolProto );
         }
         else if( *type == SCH_SHEET_T )
         {
@@ -1076,10 +1079,13 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 
             if( createdItem->Type() == SCH_SYMBOL_T )
             {
-                kiapi::schematic::types::SchematicSymbolInstance symbol;
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( createdItem );
+                kiapi::schematic::types::SchematicSymbolInstance packed;
 
-                if( PackSymbol( &symbol, static_cast<SCH_SYMBOL*>( createdItem ), targetPath ) )
-                    newItem.PackFrom( symbol );
+                ApplySymbolInstance( symbol, symbolProto, targetPath, schematic() );
+
+                if( PackSymbol( &packed, symbol, targetPath ) )
+                    newItem.PackFrom( packed );
             }
             else if( createdItem->Type() == SCH_SHEET_T )
             {
@@ -1095,6 +1101,11 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         }
         else
         {
+            std::vector<SCH_SYMBOL_INSTANCE> placements;
+
+            if( existingItem->Type() == SCH_SYMBOL_T )
+                placements = static_cast<SCH_SYMBOL*>( existingItem )->GetInstances();
+
             commit->Modify( existingItem, targetScreen );
             existingItem->SwapItemData( static_cast<SCH_ITEM*>( item.get() ) );
 
@@ -1106,11 +1117,18 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 
             if( existingItem->Type() == SCH_SYMBOL_T )
             {
-                SCH_SHEET_PATH path = existingPath;
-                kiapi::schematic::types::SchematicSymbolInstance symbol;
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( existingItem );
+                kiapi::schematic::types::SchematicSymbolInstance packed;
 
-                if( PackSymbol( &symbol, static_cast<SCH_SYMBOL*>( existingItem ), path ) )
-                    newItem.PackFrom( symbol );
+                // SwapItemData handed the symbol the temporary's (empty) instance list, so restore
+                // every placement before applying the one the request targets.
+                for( const SCH_SYMBOL_INSTANCE& placement : placements )
+                    symbol->AddHierarchicalReference( placement );
+
+                ApplySymbolInstance( symbol, symbolProto, existingPath, schematic() );
+
+                if( PackSymbol( &packed, symbol, existingPath ) )
+                    newItem.PackFrom( packed );
             }
             else if( existingItem->Type() == SCH_SHEET_T )
             {

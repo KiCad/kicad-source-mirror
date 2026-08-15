@@ -223,8 +223,15 @@ BOOST_AUTO_TEST_CASE( KitchenSink )
 
                 std::unique_ptr<SCH_SYMBOL> output = std::make_unique<SCH_SYMBOL>();
 
+                // A symbol reaches its schematic through the screen it sits on, which is where
+                // the variant registry lives.
+                output->SetParent( m_schematic->RootScreen() );
+
                 BOOST_REQUIRE_NO_THROW( result = UnpackSymbol( output.get(), symbolProto ) );
                 BOOST_REQUIRE_MESSAGE( result, "Deserialization failed" );
+
+                BOOST_REQUIRE_NO_THROW( ApplySymbolInstance( output.get(), symbolProto, path,
+                                                             m_schematic.get() ) );
 
                 kiapi::schematic::types::SchematicSymbolInstance outputProto;
                 BOOST_REQUIRE_NO_THROW( result = PackSymbol( &outputProto, output.get(), path ) );
@@ -248,6 +255,40 @@ BOOST_AUTO_TEST_CASE( KitchenSink )
             break;
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( PerPlacementAttributes )
+{
+    wxFileName fn( KI_TEST::GetEeschemaTestDataDir(), wxS( "api_kitchen_sink.kicad_sch" ) );
+    LoadSchematic( fn );
+    SCH_SHEET_PATH path = m_schematic->CurrentSheet();
+
+    SCH_SYMBOL* symbol = nullptr;
+
+    for( SCH_ITEM* item : m_schematic->RootScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        symbol = static_cast<SCH_SYMBOL*>( item );
+        break;
+    }
+
+    BOOST_REQUIRE( symbol );
+
+    const wxString variantName( wxS( "api-variant" ) );
+    const bool     baseDNP = symbol->GetDNP();
+
+    kiapi::schematic::types::SchematicSymbolInstance proto;
+    BOOST_REQUIRE( PackSymbol( &proto, symbol, path ) );
+
+    kiapi::schematic::types::SchematicSymbolVariant* variant = proto.add_variants();
+    variant->set_name( variantName.ToUTF8() );
+    variant->mutable_attributes()->set_do_not_populate( !baseDNP );
+
+    ApplySymbolInstance( symbol, proto, path, m_schematic.get() );
+
+    BOOST_CHECK_EQUAL( symbol->GetDNP( &path, variantName ), !baseDNP );
+    BOOST_CHECK_EQUAL( symbol->GetDNP(), baseDNP );
+    BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
