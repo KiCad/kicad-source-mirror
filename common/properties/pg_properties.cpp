@@ -372,6 +372,10 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aFlags 
     {
         distanceIU = aVariant.GetLong();
     }
+    else if( aVariant.GetType() == wxPG_VARIANT_TYPE_LONGLONG )
+    {
+        distanceIU = static_cast<long>( aVariant.GetLongLong().GetValue() );
+    }
     else if( aVariant.GetType() == wxPG_VARIANT_TYPE_ULONGLONG )
     {
         distanceIU = static_cast<long>( aVariant.GetULongLong().GetValue() );
