@@ -235,7 +235,9 @@ static std::shared_ptr<CONDITIONAL_MENU> makeRoutingToolsMenu( TOOL_INTERACTIVE*
     menu->AddItem( PCB_ACTIONS::unrouteSelected, isRoutable );
     menu->AddItem( PCB_ACTIONS::unrouteSegment, isRoutable );
     menu->AddItem( PCB_ACTIONS::routerAutorouteSelected, isRoutable );
-    menu->AddItem( PCB_ACTIONS::routerOptimizeSelected, isRoutable );
+
+    const SELECTION_CONDITION isOptimizable = SELECTION_CONDITIONS::HasTypes( trackTypes ) && notMovingCondition;
+    menu->AddItem( PCB_ACTIONS::routerOptimizeSelected, isOptimizable );
 
     return menu;
 }
