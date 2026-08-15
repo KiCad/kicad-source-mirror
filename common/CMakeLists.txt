@@ -808,6 +808,7 @@ set( COMMON_SRCS
     bitmap_base.cpp
     board_printout.cpp
     clipboard.cpp
+    column_formatter.cpp
     commit.cpp
     draw_panel_gal.cpp
     gal_display_options_common.cpp
@@ -848,6 +849,7 @@ set( COMMON_SRCS
     render_settings.cpp
     status_popup.cpp
     stroke_params.cpp
+    table_io.cpp
     template_fieldnames.cpp
     textentry_tricks.cpp
     undo_redo_container.cpp
