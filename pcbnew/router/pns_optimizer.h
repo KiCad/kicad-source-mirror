@@ -105,8 +105,9 @@ public:
         RESTRICT_VERTEX_RANGE = 0x40,
         MERGE_COLINEAR        = 0x80,    ///< Merge co-linear segments
         RESTRICT_AREA         = 0x100,
-        LIMIT_CORNER_COUNT    = 0x200  ///< Do not attempt to optimize if the resulting line's
-                                       ///< corner count is outside the predefined range
+        LIMIT_CORNER_COUNT    = 0x200,  ///< Do not attempt to optimize if the resulting line's
+                                        ///< corner count is outside the predefined range
+        REQUIRE_OBTUSE_ANGLES = 0x400   ///< Try to prevent 90-degree or acute corners in a drag
     };
 
     OPTIMIZER( NODE* aWorld );
@@ -175,6 +176,8 @@ private:
     bool runSmartPads( LINE* aLine );
     bool mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentLine, int step );
     bool fanoutCleanup( LINE * aLine );
+    bool dragFixCorners( LINE* aLine );
+    bool dragFixCorner( LINE* aLine, int aVIdx );
     bool mergeDpSegments( DIFF_PAIR *aPair );
     bool mergeDpStep( DIFF_PAIR *aPair, bool aTryP, int step );
 
@@ -341,6 +344,20 @@ public:
 private:
     int m_minCorners;
     int m_angleMask;
+};
+
+
+class OBTUSE_ONLY_CONSTRAINT : public OPT_CONSTRAINT
+{
+public:
+    OBTUSE_ONLY_CONSTRAINT( NODE* aWorld ) :
+        OPT_CONSTRAINT( aWorld )
+    {
+    }
+
+    bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                const SHAPE_LINE_CHAIN& aCurrentPath,
+                const SHAPE_LINE_CHAIN& aReplacement ) override;
 };
 
 

@@ -580,6 +580,9 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     if( Settings().SmoothDraggedSegments() )
         effort |= OPTIMIZER::MERGE_COLINEAR;
 
+    if( Settings().GetRestrictAngles() )
+        effort |= OPTIMIZER::REQUIRE_OBTUSE_ANGLES;
+
     optimizer.SetEffortLevel( effort );
 
     VECTOR2I  anchor( aP );

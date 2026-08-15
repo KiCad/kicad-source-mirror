@@ -1,0 +1,1699 @@
+{
+  "addedItems": [
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 171050000,
+          "y": 109350000
+        },
+        "start": {
+          "x": 164150000,
+          "y": 102450000
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 164150000,
+          "y": 102450000
+        },
+        "start": {
+          "x": 157935176,
+          "y": 102450000
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 157935176,
+          "y": 102450000
+        },
+        "start": {
+          "x": 156500000,
+          "y": 101014824
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 156500000,
+          "y": 101014824
+        },
+        "start": {
+          "x": 156500000,
+          "y": 100900000
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 149364824,
+          "y": 102450000
+        },
+        "start": {
+          "x": 145050000,
+          "y": 102450000
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 156500000,
+          "y": 100900000
+        },
+        "start": {
+          "x": 156050000,
+          "y": 100450000
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 156050000,
+          "y": 100450000
+        },
+        "start": {
+          "x": 151364824,
+          "y": 100450000
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 151364824,
+          "y": 100450000
+        },
+        "start": {
+          "x": 149364824,
+          "y": 102450000
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 145050000,
+          "y": 102450000
+        },
+        "start": {
+          "x": 137500000,
+          "y": 110000000
+        },
+        "type": "segment",
+        "width": 500000
+      }
+    }
+  ],
+  "board_hash": "1026C7D0426E1BF75F1DD2D1BB3EA629",
+  "events": [
+    {
+      "layer": 0,
+      "position": {
+        "x": 155100000,
+        "y": 103050000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 1,
+      "uuids": [
+        "7fb5ad41-1032-4ce5-b007-ee508af0a8b9"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155100000,
+        "y": 103050000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155100000,
+        "y": 102850000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155100000,
+        "y": 102700000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155150000,
+        "y": 102500000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155150000,
+        "y": 102350000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155200000,
+        "y": 102250000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155200000,
+        "y": 102200000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155250000,
+        "y": 102100000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155250000,
+        "y": 102050000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155250000,
+        "y": 101850000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101850000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101750000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101700000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101650000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101600000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101550000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101400000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155300000,
+        "y": 101350000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101250000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101250000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101150000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101100000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101050000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101050000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101000000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101000000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 101000000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100950000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100950000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100900000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100900000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100850000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100850000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100850000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100800000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100750000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100750000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100700000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100700000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100650000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100650000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100600000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100600000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100550000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100550000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100550000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100500000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100500000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100500000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155350000,
+        "y": 100500000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155400000,
+        "y": 100500000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155400000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155450000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155450000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155500000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155500000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155500000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155550000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155550000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155600000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155600000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155650000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155650000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155650000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155700000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155700000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155750000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155750000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155800000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155800000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155800000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155850000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155850000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155900000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155900000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155950000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155950000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 155950000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 156000000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 156000000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 156050000,
+        "y": 100450000
+      },
+      "sizes": {
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "uuids": []
+    }
+  ],
+  "headItems": [
+    {
+      "kind": "line",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A"
+    }
+  ],
+  "mode": 1,
+  "removedItems": [
+    "3af6f98f-fcc2-4e9d-8033-66f0eba6969a",
+    "7fb5ad41-1032-4ce5-b007-ee508af0a8b9",
+    "94bae631-88f5-415e-95b0-0a5999867c2f"
+  ]
+}
