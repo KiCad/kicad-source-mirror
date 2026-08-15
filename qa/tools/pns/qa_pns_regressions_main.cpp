@@ -41,6 +41,7 @@
 using namespace boost::unit_test;
 
 std::map<wxString, wxString> g_testBoards;
+static bool g_updateGolden = false;
 
 struct PNS_TEST_CASE
 {
@@ -107,6 +108,19 @@ public:
             }
 
             player.SetReporter( m_logger.m_Reporter );
+
+            if( g_updateGolden )
+            {
+                player.ReplayLog( &logFile, 0, 0, -1, true );
+
+                if( logFile.SaveLog( aTestData->GetDataPath(), m_logger.m_Reporter ) )
+                    BOOST_TEST_MESSAGE( "Updated golden file: " << aTestData->GetDataPath() );
+                else
+                    BOOST_TEST_ERROR( "Failed to save golden file: " << aTestData->GetDataPath() );
+
+                return true;
+            }
+
             player.ReplayLog( &logFile, 0 );
 
             auto cstate = player.GetRouterUpdatedItems();
@@ -221,6 +235,12 @@ int main( int argc, char* argv[] )
 {
     wxApp::SetInstance( new wxAppConsole );
     wxInitialize( argc, argv );
+
+    for( int i = 1; i < argc; i++ )
+    {
+        if( wxString( argv[i] ).Cmp( wxT( "--update-golden" ) ) == 0 )
+            g_updateGolden = true;
+    }
 
     int ret = unit_test_main( &init_pns_test_suite, argc, argv );
 
