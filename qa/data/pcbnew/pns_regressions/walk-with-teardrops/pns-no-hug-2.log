@@ -29,166 +29,6 @@
       "net": "/Progger/SWCLK",
       "shape": {
         "end": {
-          "x": 58900000,
-          "y": 39952942
-        },
-        "start": {
-          "x": 58900000,
-          "y": 41812663
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 58900000,
-          "y": 41812663
-        },
-        "start": {
-          "x": 59673123,
-          "y": 42585785
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 59673123,
-          "y": 42585785
-        },
-        "start": {
-          "x": 59673123,
-          "y": 59892562
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 59673123,
-          "y": 59892562
-        },
-        "start": {
-          "x": 59270000,
-          "y": 60295686
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 50000000,
-          "y": 59024315
-        },
-        "start": {
-          "x": 50000000,
-          "y": 59650000
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 48560000,
-          "y": 56354365
-        },
-        "start": {
-          "x": 48560000,
-          "y": 57584314
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 47915635,
-          "y": 55710000
-        },
-        "start": {
-          "x": 48560000,
-          "y": 56354365
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 47004365,
-          "y": 55710000
-        },
-        "start": {
-          "x": 47915635,
-          "y": 55710000
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
           "x": 50447056,
           "y": 31500000
         },
@@ -209,6 +49,146 @@
       "net": "/Progger/SWCLK",
       "shape": {
         "end": {
+          "x": 59673123,
+          "y": 42585785
+        },
+        "start": {
+          "x": 59673123,
+          "y": 60076877
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 59673123,
+          "y": 60076877
+        },
+        "start": {
+          "x": 58035000,
+          "y": 61715000
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 49112994,
+          "y": 61715000
+        },
+        "start": {
+          "x": 47847993,
+          "y": 60450000
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 47847993,
+          "y": 60450000
+        },
+        "start": {
+          "x": 47004365,
+          "y": 60450000
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 58900000,
+          "y": 41812663
+        },
+        "start": {
+          "x": 59673123,
+          "y": 42585785
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 58035000,
+          "y": 61715000
+        },
+        "start": {
+          "x": 49112994,
+          "y": 61715000
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 58900000,
+          "y": 39952942
+        },
+        "start": {
+          "x": 58900000,
+          "y": 41812663
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
           "x": 46360000,
           "y": 56354365
         },
@@ -250,91 +230,51 @@
       "shape": {
         "end": {
           "x": 47004365,
+          "y": 55710000
+        },
+        "start": {
+          "x": 47915635,
+          "y": 55710000
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 47915635,
+          "y": 55710000
+        },
+        "start": {
+          "x": 48560000,
+          "y": 56354365
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 47004365,
           "y": 60450000
         },
         "start": {
           "x": 46360000,
           "y": 59805635
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 49112994,
-          "y": 61715000
-        },
-        "start": {
-          "x": 47847993,
-          "y": 60450000
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 47847993,
-          "y": 60450000
-        },
-        "start": {
-          "x": 47004365,
-          "y": 60450000
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 58035000,
-          "y": 61715000
-        },
-        "start": {
-          "x": 49112994,
-          "y": 61715000
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        1,
-        1
-      ],
-      "net": "/Progger/SWCLK",
-      "shape": {
-        "end": {
-          "x": 59270000,
-          "y": 60480000
-        },
-        "start": {
-          "x": 58035000,
-          "y": 61715000
         },
         "type": "segment",
         "width": 200000
@@ -369,12 +309,32 @@
       "net": "/Progger/SWCLK",
       "shape": {
         "end": {
-          "x": 59270000,
-          "y": 60295686
+          "x": 48560000,
+          "y": 56354365
         },
         "start": {
-          "x": 59270000,
-          "y": 60480000
+          "x": 48560000,
+          "y": 57584314
+        },
+        "type": "segment",
+        "width": 200000
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        1,
+        1
+      ],
+      "net": "/Progger/SWCLK",
+      "shape": {
+        "end": {
+          "x": 50000000,
+          "y": 59024315
+        },
+        "start": {
+          "x": 50000000,
+          "y": 59650000
         },
         "type": "segment",
         "width": 200000

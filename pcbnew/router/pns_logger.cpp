@@ -20,6 +20,7 @@
  */
 
 #include "pns_logger.h"
+#include "pns_hole.h"
 
 #include <json_common.h>
 
@@ -197,6 +198,12 @@ nlohmann::json LOGGER::formatRouterItemAsJSON( const PNS::ITEM* aItem )
             auto via = static_cast<const VIA*>( aItem );
             ret["shape"] = formatShapeAsJSON( aItem->Shape( aItem->Layers().Start() ) ); // JE: pad stacks
             ret["drill"] = via->Drill();
+            break;
+        }
+        case ITEM::HOLE_T:
+        {
+            auto hole = static_cast<const HOLE*>( aItem );
+            ret["shape"] = formatShapeAsJSON( hole->Shape( -1 ) );
             break;
         }
         default:

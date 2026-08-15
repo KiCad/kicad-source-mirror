@@ -9,26 +9,6 @@
       "net": "A",
       "shape": {
         "end": {
-          "x": 118500000,
-          "y": 73000000
-        },
-        "start": {
-          "x": 118587500,
-          "y": 73087500
-        },
-        "type": "segment",
-        "width": 200000
-      }
-    },
-    {
-      "kind": "segment",
-      "layers": [
-        0,
-        0
-      ],
-      "net": "A",
-      "shape": {
-        "end": {
           "x": 118587500,
           "y": 73087500
         },
@@ -50,8 +30,8 @@
       "net": "A",
       "shape": {
         "center": {
-          "x": 115988860,
-          "y": 72809702
+          "x": 116100000,
+          "y": 72737325
         },
         "radius": 300000,
         "type": "circle"
@@ -63,7 +43,35 @@
         0,
         1
       ],
-      "net": "A"
+      "net": "A",
+      "shape": {
+        "center": {
+          "x": 116100000,
+          "y": 72737325
+        },
+        "radius": 150000,
+        "type": "circle"
+      }
+    },
+    {
+      "kind": "segment",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "A",
+      "shape": {
+        "end": {
+          "x": 118500000,
+          "y": 73000000
+        },
+        "start": {
+          "x": 118587500,
+          "y": 73087500
+        },
+        "type": "segment",
+        "width": 200000
+      }
     }
   ],
   "board_hash": "2CB9DD4B531C9C9A9980386DCBABE2DF",
@@ -75,12 +83,12 @@
         "y": 73087500
       },
       "sizes": {
-        "layerBottom": 1,
+        "layerBottom": 2,
         "layerTop": 0,
-        "trackWidth": 200000,
-        "trackWidthIsExplicit": false,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
         "viaDiameter": 600000,
-        "viaDrill": 300000,
+        "viaDrill": 250000,
         "viaType": 4
       },
       "type": 0,
@@ -6329,4 +6337,3 @@
   ],
   "test_case_type": 0
 }
-
