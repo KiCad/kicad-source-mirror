@@ -69,6 +69,7 @@ add_dependencies( qa_gerbview gerbview )
 target_link_libraries( qa_gerbview
     gerbview_kiface_objects
     pcbcommon
+    3d-viewer
     gal
     common
     gal

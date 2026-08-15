@@ -1101,6 +1101,7 @@ target_link_libraries( pcbcommon PUBLIC
     delaunator
     kimath
     kiplatform
+    markdown_lib
     nanoflann
     zint
 )
