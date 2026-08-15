@@ -82,9 +82,9 @@ public:
      * Pure decision used to discard backlogged OS key auto-repeat events.
      *
      * A repeat event is stale (and must be dropped) only when it belongs to the same burst as
-     * the previously processed event (same key seen less than AutoRepeatWindowMs ago) and the
-     * key is no longer physically held. The leading edge of every press is kept, so a quick tap
-     * whose key has already bounced up still runs once.
+     * the previously processed event (same key with no key-up, and less than AutoRepeatWindowMs
+     * ago) and the key is no longer physically held. The leading edge of every press is kept,
+     * so a quick tap whose key has already bounced up still runs once.
      *
      * @param aKeyCode    key code of the current event.
      * @param aNowMs      current time in milliseconds.
