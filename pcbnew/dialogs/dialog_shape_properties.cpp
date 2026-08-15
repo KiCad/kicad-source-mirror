@@ -406,19 +406,27 @@ class ARC_GEOM_SYNCER : public GEOM_SYNCER
 public:
     enum CTRL_IDX
     {
-        //CSA
+        // CSA: center, start, angle
         CSA_CENTER_X = 0,
         CSA_CENTER_Y,
         CSA_START_X,
         CSA_START_Y,
         CSA_ANGLE,
 
+        // SME: start, mid, end
         SME_START_X,
         SME_START_Y,
         SME_MID_X,
         SME_MID_Y,
         SME_END_X,
         SME_END_Y,
+
+        // CRAA: center, radius, angle (start), angle (end)
+        CRAA_CENTER_X,
+        CRAA_CENTER_Y,
+        CRAA_RADIUS,
+        CRAA_ANGLE_START,
+        CRAA_ANGLE_END,
 
         NUM_CTRLS
     };
@@ -440,6 +448,12 @@ public:
                    {
                        OnSMEChange();
                    } );
+
+        BindCtrls( CRAA_CENTER_X, CRAA_ANGLE_END,
+                   [this]()
+                   {
+                       OnCRAAChange();
+                   } );
     }
 
     bool Validate( wxArrayString& aErrs ) const override
@@ -449,6 +463,12 @@ public:
         if( angle == ANGLE_0 )
         {
             aErrs.push_back( _( "Arc angle must be greater than 0" ) );
+            return false;
+        }
+
+        if( GetIntValue( CRAA_RADIUS ) <= 0 )
+        {
+            aErrs.push_back( _( "Radius must be greater than 0" ) );
             return false;
         }
 
@@ -485,6 +505,7 @@ public:
     {
         updateCSA();
         updateSME();
+        updateCRAA();
     }
 
     void OnCSAChange()
@@ -498,6 +519,7 @@ public:
         GetShape().SetArcAngleAndEnd( angle );
 
         updateSME();
+        updateCRAA();
     }
 
     void updateCSA()
@@ -521,6 +543,7 @@ public:
         GetShape().SetArcGeometry( p0, p1, p2 );
 
         updateCSA();
+        updateCRAA();
     }
 
     void updateSME()
@@ -535,6 +558,49 @@ public:
         ChangeValue( SME_MID_Y, p1.y );
         ChangeValue( SME_END_X, p2.x );
         ChangeValue( SME_END_Y, p2.y );
+    }
+
+    void OnCRAAChange()
+    {
+        const VECTOR2I  center{ GetIntValue( CRAA_CENTER_X ), GetIntValue( CRAA_CENTER_Y ) };
+        const int       radius = GetIntValue( CRAA_RADIUS );
+        const EDA_ANGLE start_angle = GetAngleValue( CRAA_ANGLE_START );
+        const EDA_ANGLE end_angle = GetAngleValue( CRAA_ANGLE_END );
+
+        // The angles are the directions of the start/end radius lines, measured in the
+        // same convention as the stored arc (i.e. passing the mid point), so we account
+        // for the sweep direction automatically.
+        const VECTOR2I start_pt = center + GetRotated( VECTOR2I( radius, 0 ), -start_angle );
+        const VECTOR2I end_pt = center + GetRotated( VECTOR2I( radius, 0 ), -end_angle );
+
+        EDA_ANGLE sweep = ( end_angle - start_angle ).Normalize();
+
+        // Equal angles describe a full-circle arc.
+        if( sweep == ANGLE_0 )
+            sweep = ANGLE_360;
+
+        const VECTOR2I mid_pt = center + GetRotated( VECTOR2I( radius, 0 ), -( start_angle + sweep / 2.0 ) );
+
+        GetShape().SetArcGeometry( start_pt, mid_pt, end_pt );
+
+        updateCSA();
+        updateSME();
+    }
+
+    void updateCRAA()
+    {
+        const PCB_SHAPE& shape = GetShape();
+
+        const VECTOR2I center = shape.GetCenter();
+        const int      radius = shape.GetRadius();
+        const VECTOR2I start_pt = shape.GetStart();
+        const VECTOR2I end_pt = shape.GetEnd();
+
+        ChangeValue( CRAA_CENTER_X, center.x );
+        ChangeValue( CRAA_CENTER_Y, center.y );
+        ChangeValue( CRAA_RADIUS, radius );
+        ChangeAngleValue( CRAA_ANGLE_START, EDA_ANGLE( start_pt - center ).Normalize() );
+        ChangeAngleValue( CRAA_ANGLE_END, EDA_ANGLE( end_pt - center ).Normalize() );
     }
 };
 
@@ -1003,10 +1069,19 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         AddXYPointToSizer( *aParent, *m_gbsArcBySME, 0, 3, _( "Mid Point" ), false, m_boundCtrls );
         AddXYPointToSizer( *aParent, *m_gbsArcBySME, 3, 0, _( "End Point" ), false, m_boundCtrls );
 
+        AddXYPointToSizer( *aParent, *m_gbsArcByCRAA, 0, 0, _( "Center" ), false, m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsArcByCRAA, 0, 3, _( "Radius" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false,
+                         m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsArcByCRAA, 1, 3, _( "Start Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true,
+                         m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsArcByCRAA, 2, 3, _( "End Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true,
+                         m_boundCtrls );
+
         m_geomSync = std::make_unique<ARC_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
         showPage( *m_gbsArcByCSA, true );
         showPage( *m_gbsArcBySME );
+        showPage( *m_gbsArcByCRAA );
         break;
 
     case SHAPE_T::CIRCLE:

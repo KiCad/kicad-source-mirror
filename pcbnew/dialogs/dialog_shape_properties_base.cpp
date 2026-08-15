@@ -147,6 +147,22 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_arcBySME->Layout();
 	bSizer9->Fit( m_arcBySME );
 	m_notebookShapeDefs->AddPage( m_arcBySME, _("By Start/Mid/End"), false );
+	m_arcByCRAA = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer9a;
+	bSizer9a = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsArcByCRAA = new wxGridBagSizer( 4, 5 );
+	m_gbsArcByCRAA->SetFlexibleDirection( wxBOTH );
+	m_gbsArcByCRAA->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer9a->Add( m_gbsArcByCRAA, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_arcByCRAA->SetSizer( bSizer9a );
+	m_arcByCRAA->Layout();
+	bSizer9a->Fit( m_arcByCRAA );
+	m_notebookShapeDefs->AddPage( m_arcByCRAA, _("By Center/Radius/Angles"), false );
 	m_circle = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );

@@ -62,6 +62,8 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxGridBagSizer* m_gbsArcByCSA;
 		wxPanel* m_arcBySME;
 		wxGridBagSizer* m_gbsArcBySME;
+		wxPanel* m_arcByCRAA;
+		wxGridBagSizer* m_gbsArcByCRAA;
 		wxPanel* m_circle;
 		wxGridBagSizer* m_gbsCircleCenterRadius;
 		wxPanel* m_circleCenterPoint;
