@@ -143,6 +143,13 @@ private:
     bool tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk );
     VVIA* checkVirtualVia( const VECTOR2D& aP, SEGMENT* aSeg );
 
+    ///< When the cursor is unreachable (e.g. inside a colliding hull), find the best
+    ///< anchor vertex to preserve through optimizer.
+    VECTOR2I bestAnchorForPoint( const SHAPE_LINE_CHAIN& aLine, const VECTOR2I& aP ) const;
+
+    ///< Returns true if the vertex at aVertexIndex has a non-obtuse corner
+    bool pointHasBadCorner( const SHAPE_LINE_CHAIN& aLine, int aVertexIndex ) const;
+
 
     VIA_HANDLE             m_initialVia;
     VIA_HANDLE             m_draggedVia;

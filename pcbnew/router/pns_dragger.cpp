@@ -585,7 +585,7 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     VECTOR2I  anchor( aP );
 
     if( aDragged.CLine().Find( aP ) < 0 )
-        anchor = aDragged.CLine().NearestPoint( aP );
+        anchor = bestAnchorForPoint( aDragged.CLine(), aP );
 
     optimizer.SetPreserveVertex( anchor );
     aDragged.Line().Split( anchor );
@@ -613,6 +613,69 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     m_lastNode->Add( draggedPostOpt );
     m_draggedItems.Clear();
     m_draggedItems.Add( draggedPostOpt );
+}
+
+
+bool DRAGGER::pointHasBadCorner( const SHAPE_LINE_CHAIN& aLine, int aVertexIndex ) const
+{
+    if( aVertexIndex <= 0 || aVertexIndex >= aLine.PointCount() - 1 )
+        return false;
+
+    SEG segBefore( aLine.CPoint( aVertexIndex - 1 ), aLine.CPoint( aVertexIndex ) );
+    SEG segAfter( aLine.CPoint( aVertexIndex ), aLine.CPoint( aVertexIndex + 1 ) );
+
+    DIRECTION_45 dirBefore( segBefore );
+    DIRECTION_45 dirAfter( segAfter );
+
+    return dirBefore.Angle( dirAfter ) & ( DIRECTION_45::ANG_ACUTE
+                                           | DIRECTION_45::ANG_RIGHT
+                                           | DIRECTION_45::ANG_HALF_FULL );
+}
+
+
+VECTOR2I DRAGGER::bestAnchorForPoint( const SHAPE_LINE_CHAIN& aLine, const VECTOR2I& aP ) const
+{
+    VECTOR2I nearest = aLine.NearestPoint( aP );
+    int      vertIdx = aLine.Find( nearest );
+
+    if( vertIdx < 0 || !pointHasBadCorner( aLine, vertIdx ) )
+    {
+        PNS_DBG( Dbg(), Message, wxString::Format( "anchor: nearest pt used (vert=%d)", vertIdx ) );
+        return nearest;
+    }
+
+    for( int offset = 1; offset < aLine.PointCount(); offset++ )
+    {
+        int rightIdx = vertIdx + offset;
+        std::optional<VECTOR2I> candidate;
+
+        if( rightIdx < aLine.PointCount() && !pointHasBadCorner( aLine, rightIdx ) )
+            candidate = aLine.CPoint( rightIdx );
+
+        int leftIdx = vertIdx - offset;
+
+        if( leftIdx >= 0 && !pointHasBadCorner( aLine, leftIdx ) )
+        {
+            VECTOR2I leftPt = aLine.CPoint( leftIdx );
+
+            if( !candidate || ( leftPt - aP ).SquaredEuclideanNorm() < ( *candidate - aP ).SquaredEuclideanNorm() )
+            {
+                PNS_DBG( Dbg(), Message, wxString::Format( "anchor: good alt vertex idx %d", leftIdx ) );
+                PNS_DBG( Dbg(), AddPoint, leftPt, GREEN, 100000, wxT( "drag-anchor-alt" ) );
+                return leftPt;
+            }
+        }
+
+        if( candidate.has_value() )
+        {
+            PNS_DBG( Dbg(), Message, wxString::Format( "anchor: good alt vertex idx %d", rightIdx ) );
+            PNS_DBG( Dbg(), AddPoint, *candidate, GREEN, 100000, wxT( "drag-anchor-alt" ) );
+            return *candidate;
+        }
+    }
+
+    PNS_DBG( Dbg(), Message, wxString::Format( "anchor: nearest pt bad; no alternative (vert=%d)", vertIdx ) );
+    return nearest;
 }
 
 
