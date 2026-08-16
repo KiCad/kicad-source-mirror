@@ -27,6 +27,7 @@
 
 class wxRearrangeList;
 class wxBitmapButton;
+class COLOR_SETTINGS;
 
 class JOB_EXPORT_PCB_PLOT;
 
@@ -71,8 +72,14 @@ private:
     void applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
     wxString    getSelectedVariant() const;
+    COLOR_SETTINGS* getColorSettings() const;
 
     void arrangeAllLayersList( const LSEQ& aSeq );
+    void addColorThemeSelector();
+    void populateColorThemeSelector();
+    void setColorThemeSelection( const wxString& aTheme );
+    bool formatUsesColorTheme();
+    void updateColorThemeControl();
     void transferPlotParamsToJob();
     void updatePdfColorOptions();
     void updateJobOutputLabel();
@@ -104,6 +111,9 @@ private:
 
     STD_BITMAP_BUTTON*  m_bpMoveUp;
     STD_BITMAP_BUTTON*  m_bpMoveDown;
+
+    wxStaticText* m_colorThemeLabel;
+    wxChoice*     m_colorTheme;
 
     JOB_EXPORT_PCB_PLOT* m_job;
 

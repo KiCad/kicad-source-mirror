@@ -35,6 +35,7 @@ JOB_EXPORT_PCB_PNG::JOB_EXPORT_PCB_PNG() :
     m_antialias( true ),
     m_useBackgroundColor( true )
 {
+    m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_colorTheme, m_colorTheme ) );
     m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
     m_params.emplace_back( new JOB_PARAM<int>( "dpi", &m_dpi, m_dpi ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "antialias", &m_antialias, m_antialias ) );

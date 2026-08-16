@@ -21,6 +21,7 @@
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_export_pcb_ipc2581.h>
 #include <jobs/job_export_pcb_odb.h>
+#include <jobs/job_export_pcb_png.h>
 #include <jobs/job_export_pcb_plot.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
@@ -323,6 +324,23 @@ BOOST_AUTO_TEST_CASE( PcbPlotVariantRoundTrip )
     loaded.FromJson( j );
 
     BOOST_CHECK( loaded.m_variant == wxS( "VarPlot" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PcbPngColorThemeRoundTrip )
+{
+    JOB_EXPORT_PCB_PNG job;
+    job.m_colorTheme = wxS( "_builtin_classic" );
+
+    nlohmann::json j;
+    job.ToJson( j );
+
+    BOOST_CHECK_EQUAL( j.value( "color_theme", "" ), "_builtin_classic" );
+
+    JOB_EXPORT_PCB_PNG loaded;
+    loaded.FromJson( j );
+
+    BOOST_CHECK( loaded.m_colorTheme == wxS( "_builtin_classic" ) );
 }
 
 
