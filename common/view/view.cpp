@@ -877,11 +877,10 @@ void VIEW::UpdateAllLayersColor()
 
             for( int layer : viewData->m_layers )
             {
-                const COLOR4D color = m_painter->GetSettings()->GetColor( item, layer );
-                int           group = viewData->getGroup( layer );
+                int group = viewData->getGroup( layer );
 
                 if( group >= 0 )
-                    m_gal->ChangeGroupColor( group, color );
+                    recolorGroup( item, layer, group );
             }
         }
     }
@@ -1396,6 +1395,15 @@ void VIEW::SortOrderedLayers()
 }
 
 
+void VIEW::recolorGroup( VIEW_ITEM* aItem, int aLayer, int aGroup )
+{
+    if( m_painter->HasUniformColor( aItem, aLayer ) )
+        m_gal->ChangeGroupColor( aGroup, m_painter->GetSettings()->GetColor( aItem, aLayer ) );
+    else
+        updateItemGeometry( aItem, aLayer );
+}
+
+
 void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 {
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
@@ -1404,13 +1412,10 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
     if( !viewData )
         return;
 
-    // Obtain the color that should be used for coloring the item on the specific layerId
-    const COLOR4D color = m_painter->GetSettings()->GetColor( aItem, aLayer );
     int group = viewData->getGroup( aLayer );
 
-    // Change the color, only if it has group assigned
     if( group >= 0 )
-        m_gal->ChangeGroupColor( group, color );
+        recolorGroup( aItem, aLayer, group );
 }
 
 

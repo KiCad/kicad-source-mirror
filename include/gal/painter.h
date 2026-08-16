@@ -92,6 +92,12 @@ public:
      */
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) = 0;
 
+    /**
+     * Return false when drawing the item on the given layer emits more than one colour, so
+     * a cached group of it cannot be recoloured in place and must be repainted instead.
+     */
+    virtual bool HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const { return true; }
+
 protected:
     /// Instance of graphic abstraction layer that gives an interface to call
     /// commands used to draw (eg. DrawLine, DrawCircle, etc.)
