@@ -20,6 +20,8 @@
  */
 
 #include <pgm_base.h>
+#include <api/common/commands/cross_probe_commands.pb.h>
+#include <api/cross_probe_client.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_dde.h>
@@ -919,41 +921,37 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
 
 void CVPCB_MAINFRAME::SendComponentSelectionToSch( bool aClearSelectionOnly )
 {
-    if( m_netlist.IsEmpty() )
+    if( m_netlist.IsEmpty() && !aClearSelectionOnly )
         return;
 
-    std::string command = "$SELECT: ";
+    kiapi::common::commands::SyncSelection sync;
 
-    if( aClearSelectionOnly )
+    if( !aClearSelectionOnly )
     {
-        // Sending an empty list means clearing the selection.
-        if( Kiface().IsSingle() )
-            SendCommand( MSG_TO_SCH, command );
-        else
-            Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, command, this );
+        int selection = m_symbolsListBox->GetSelection();
 
-        return;
+        if( selection < 0 ) // Nothing selected
+            return;
+
+        if( m_netlist.GetComponent( selection ) == nullptr )
+            return;
+
+        // Now select the corresponding symbol on the schematic:
+        wxString ref = m_netlist.GetComponent( selection )->GetReference();
+
+        sync.set_mode( kiapi::common::commands::SSM_ITEMS_ONLY );
+        sync.add_items()->mutable_footprint()->set_reference( ref.ToUTF8() );
     }
 
-    int selection = m_symbolsListBox->GetSelection();
-
-    if( selection < 0 ) // Nothing selected
-        return;
-
-    if( m_netlist.GetComponent( selection ) == nullptr )
-        return;
-
-    // Now select the corresponding symbol on the schematic:
-    wxString ref = m_netlist.GetComponent( selection )->GetReference();
-
-    // The prefix 0,F before the reference is for selecting the symbol
-    // (one can select a pin with a different prefix)
-    command += wxT( "0,F" ) + EscapeString( ref, CTX_IPC );
-
     if( Kiface().IsSingle() )
-        SendCommand( MSG_TO_SCH, command );
+    {
+        CROSS_PROBE_CLIENT::SendToFrame( FRAME_SCH, sync );
+    }
     else
-        Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, command, this );
+    {
+        std::string payload = sync.SerializeAsString();
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, payload, this );
+    }
 }
 
 

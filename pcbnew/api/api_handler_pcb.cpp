@@ -27,8 +27,9 @@
 #include <api/api_handler_pcb.h>
 #include <api/api_pcb_utils.h>
 #include <api/api_enums.h>
-#include <wx/log.h>
 #include <api/api_utils.h>
+#include <api/cross_probe_client.h>
+#include <wx/log.h>
 #include <base_screen.h>
 #include <board_commit.h>
 #include <board_connected_item.h>
@@ -2619,7 +2620,8 @@ HANDLER_RESULT<CrossProbeAnnounceResponse> API_HANDLER_PCB::handleCrossProbeAnno
     wxLogTrace( traceApi, "Received announce from frame %d at %s",
                 aCtx.Request.frame_type(), aCtx.Request.socket_path() );
 
-    // TODO(JE)
+    CROSS_PROBE_CLIENT::RegisterPeer( static_cast<FRAME_T>( aCtx.Request.frame_type() ),
+                                      aCtx.Request.socket_path() );
 
     CrossProbeAnnounceResponse response;
     response.set_status( CPS_OK );

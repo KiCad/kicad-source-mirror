@@ -24,6 +24,7 @@
 #include <api/api_handler_sch.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
+#include <api/cross_probe_client.h>
 #include <api/headless_sch_context.h>
 #include <core/json_serializers.h>
 #include <pgm_base.h>
@@ -224,7 +225,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             if( Kiface().IsSingle() )
             {
                 // only run this under single_top, not under a project manager.
-                frame->CreateServer( KICAD_SCH_PORT_SERVICE_NUMBER );
+                if( !CROSS_PROBE_CLIENT::IsOnStandardSocketPath() )
+                    CROSS_PROBE_CLIENT::AnnounceToPrimary( FRAME_SCH );
             }
 
             return frame;

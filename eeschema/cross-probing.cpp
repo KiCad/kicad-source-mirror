@@ -22,6 +22,7 @@
 #include <wx/tokenzr.h>
 #include <api/api_utils.h>
 #include <api/common/commands/cross_probe_commands.pb.h>
+#include <api/cross_probe_client.h>
 #include <fmt.h>
 #include <kiface_base.h>
 #include <kiway.h>
@@ -380,15 +381,13 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
     if( sync.items_size() == 0 )
         return;
 
-    std::string payload = sync.SerializeAsString();
-
     if( Kiface().IsSingle() )
     {
-        // Legacy standalone path; removed when TCP transport is deleted.
-        SendCommand( MSG_TO_PCB, payload );
+        CROSS_PROBE_CLIENT::SendToFrame( FRAME_PCB_EDITOR, sync );
     }
     else
     {
+        std::string payload = sync.SerializeAsString();
         Kiway().ExpressMail( FRAME_PCB_EDITOR, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION,
                              payload, this );
     }

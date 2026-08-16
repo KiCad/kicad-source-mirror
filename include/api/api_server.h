@@ -80,6 +80,16 @@ public:
 
     const std::string& Token() const { return m_token; }
 
+    /**
+     * Return the default API socket path (without the ipc:// scheme).
+     */
+    static wxFileName StandardSocketPath();
+
+    /**
+     * Return the default API socket URL (including the ipc:// scheme).
+     */
+    static std::string StandardSocketUrl();
+
 private:
 
     /**

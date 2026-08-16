@@ -22,6 +22,7 @@
 #include <api/api_enums.h>
 #include <api/api_sch_utils.h>
 #include <api/api_utils.h>
+#include <api/cross_probe_client.h>
 #include <api/sch_context.h>
 #include <fmt.h>
 #include <wx/log.h>
@@ -1599,7 +1600,8 @@ HANDLER_RESULT<CrossProbeAnnounceResponse> API_HANDLER_SCH::handleCrossProbeAnno
     wxLogTrace( traceApi, "Received announce from frame %d at %s",
                 aCtx.Request.frame_type(), aCtx.Request.socket_path() );
 
-    // TODO(JE)
+    CROSS_PROBE_CLIENT::RegisterPeer( static_cast<FRAME_T>( aCtx.Request.frame_type() ),
+                                      aCtx.Request.socket_path() );
 
     CrossProbeAnnounceResponse response;
     response.set_status( CPS_OK );

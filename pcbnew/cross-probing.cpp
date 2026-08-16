@@ -30,6 +30,7 @@
 #include <wx/tokenzr.h>
 #include <api/api_utils.h>
 #include <api/common/commands/cross_probe_commands.pb.h>
+#include <api/cross_probe_client.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <fmt.h>
@@ -474,15 +475,13 @@ void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems,
     if( sync.items_size() == 0 )
         return;
 
-    std::string payload = sync.SerializeAsString();
-
     if( Kiface().IsSingle() )
     {
-        // Legacy standalone path; removed when TCP transport is deleted.
-        SendCommand( MSG_TO_SCH, payload );
+        CROSS_PROBE_CLIENT::SendToFrame( FRAME_SCH, sync );
     }
     else
     {
+        std::string payload = sync.SerializeAsString();
         Kiway().ExpressMail( FRAME_SCH, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION, payload, this );
     }
 }
@@ -529,6 +528,7 @@ void PCB_EDIT_FRAME::SendCrossProbeItem( BOARD_ITEM* aSyncItem )
     }
 }
 
+
 void PCB_EDIT_FRAME::SetLastSchematicSheetPath( const KIID_PATH& aPath )
 {
     if( m_lastSchematicSheetPath == aPath )
@@ -539,23 +539,6 @@ void PCB_EDIT_FRAME::SetLastSchematicSheetPath( const KIID_PATH& aPath )
     wxCommandEvent event( EDA_EVT_PCB_LAST_SCH_SHEET_CHANGED, GetId() );
     event.SetEventObject( this );
     wxPostEvent( this, event );
-}
-
-
-static wxString sheetPathFromProto( const kiapi::common::types::SheetPath& aPath )
-{
-    wxString str = wxT( "/" );
-
-    for( int i = 1; i < aPath.path_size(); ++i )
-    {
-        str += wxString::FromUTF8( aPath.path( i ).value() );
-        str += wxT( "/" );
-    }
-
-    if( str.Length() > 1 )
-        str.RemoveLast();
-
-    return str;
 }
 
 

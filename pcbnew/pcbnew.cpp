@@ -28,6 +28,7 @@
 #include <api/api_handler_pcb.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
+#include <api/cross_probe_client.h>
 #include <api/headless_footprint_context.h>
 #include <api/headless_pcb_context.h>
 #include <kiface_base.h>
@@ -271,7 +272,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             if( Kiface().IsSingle() )
             {
                 // only run this under single_top, not under a project manager.
-                frame->CreateServer( KICAD_PCB_PORT_SERVICE_NUMBER );
+                if( !CROSS_PROBE_CLIENT::IsOnStandardSocketPath() )
+                    CROSS_PROBE_CLIENT::AnnounceToPrimary( FRAME_PCB_EDITOR );
             }
 
             return frame;
