@@ -119,13 +119,13 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
 
     bool hasIgnored = false;
 
-    for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
+    for( const std::reference_wrapper<RC_ITEM>& item : DRC_ITEM::GetItemsWithSeverities() )
     {
-        int code = item.GetErrorCode();
+        int code = item.get().GetErrorCode();
 
         if( code > 0 && bds.Ignore( code ) )
         {
-            fprintf( fp, "    - %s\n", TO_UTF8( HYPERLINK_DV_RENDERER::StripMarkup( item.GetErrorMessage( false ) ) ) );
+            fprintf( fp, "    - %s\n", TO_UTF8( HYPERLINK_DV_RENDERER::StripMarkup( item.get().GetErrorMessage( false ) ) ) );
             hasIgnored = true;
         }
     }
@@ -206,15 +206,15 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         reportHead.schematic_parity.push_back( violation );
     }
 
-    for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
+    for( const std::reference_wrapper<RC_ITEM>& item : DRC_ITEM::GetItemsWithSeverities() )
     {
-        int code = item.GetErrorCode();
+        int code = item.get().GetErrorCode();
 
         if( code > 0 && bds.Ignore( code ) )
         {
             RC_JSON::IGNORED_CHECK ignoredCheck;
-            ignoredCheck.key = item.GetSettingsKey();
-            ignoredCheck.description = HYPERLINK_DV_RENDERER::StripMarkup( item.GetErrorMessage( false ) );
+            ignoredCheck.key = item.get().GetSettingsKey();
+            ignoredCheck.description = HYPERLINK_DV_RENDERER::StripMarkup( item.get().GetErrorMessage( false ) );
             reportHead.ignored_checks.push_back( ignoredCheck );
         }
     }
