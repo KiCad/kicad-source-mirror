@@ -40,8 +40,8 @@
 class wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
 {
 public:
-    wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl( wxVariantDataFactory factory )
-        : wxAnyToVariantRegistration( factory )
+    wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl( wxVariantDataFactory factory ) :
+            wxAnyToVariantRegistration( factory )
     {
     }
 
@@ -60,6 +60,7 @@ public:
     {
         return wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl::GetInstance();
     }
+
 private:
     static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b)
     {
@@ -70,20 +71,19 @@ private:
 };
 
 
-wxAnyValueTypeScopedPtr wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl::s_instance(
-        new wxAnyValueTypeImpl<std::optional<int>>() );
+wxAnyValueTypeScopedPtr
+wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<std::optional<int>>() );
 
 
 static wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl
-        s_wxAnyToSTD_OPTIONAL_INT_VARIANTRegistration(
-                &STD_OPTIONAL_INT_VARIANT_DATA::VariantDataFactory );
+        s_wxAnyToSTD_OPTIONAL_INT_VARIANTRegistration( &STD_OPTIONAL_INT_VARIANT_DATA::VariantDataFactory );
 
 
 class wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
 {
 public:
-    wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl( wxVariantDataFactory factory )
-        : wxAnyToVariantRegistration( factory )
+    wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl( wxVariantDataFactory factory ) :
+            wxAnyToVariantRegistration( factory )
     {
     }
 
@@ -102,6 +102,7 @@ public:
     {
         return wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl::GetInstance();
     }
+
 private:
     static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b)
     {
@@ -112,20 +113,19 @@ private:
 };
 
 
-wxAnyValueTypeScopedPtr wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl::s_instance(
-        new wxAnyValueTypeImpl<std::optional<double>>() );
+wxAnyValueTypeScopedPtr
+wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<std::optional<double>>() );
 
 
 static wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl
-        s_wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistration(
-                &STD_OPTIONAL_DOUBLE_VARIANT_DATA::VariantDataFactory );
+        s_wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistration( &STD_OPTIONAL_DOUBLE_VARIANT_DATA::VariantDataFactory );
 
 
 class wxAnyToEDA_ANGLE_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
 {
 public:
-    wxAnyToEDA_ANGLE_VARIANTRegistrationImpl( wxVariantDataFactory factory )
-        : wxAnyToVariantRegistration( factory )
+    wxAnyToEDA_ANGLE_VARIANTRegistrationImpl( wxVariantDataFactory factory ) :
+            wxAnyToVariantRegistration( factory )
     {
     }
 
@@ -144,6 +144,7 @@ public:
     {
         return wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::GetInstance();
     }
+
 private:
     static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b)
     {
@@ -154,8 +155,7 @@ private:
 };
 
 
-wxAnyValueTypeScopedPtr
-        wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<EDA_ANGLE>() );
+wxAnyValueTypeScopedPtr wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<EDA_ANGLE>() );
 
 
 static wxAnyToEDA_ANGLE_VARIANTRegistrationImpl
@@ -165,8 +165,8 @@ static wxAnyToEDA_ANGLE_VARIANTRegistrationImpl
 class wxAnyToCOLOR4D_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
 {
 public:
-    wxAnyToCOLOR4D_VARIANTRegistrationImpl( wxVariantDataFactory factory )
-            : wxAnyToVariantRegistration( factory )
+    wxAnyToCOLOR4D_VARIANTRegistrationImpl( wxVariantDataFactory factory ) :
+            wxAnyToVariantRegistration( factory )
     {
     }
 
@@ -185,6 +185,7 @@ public:
     {
         return wxAnyToCOLOR4D_VARIANTRegistrationImpl::GetInstance();
     }
+
 private:
     static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b)
     {
@@ -195,8 +196,7 @@ private:
 };
 
 
-wxAnyValueTypeScopedPtr wxAnyToCOLOR4D_VARIANTRegistrationImpl::s_instance(
-        new wxAnyValueTypeImpl<KIGFX::COLOR4D>() );
+wxAnyValueTypeScopedPtr wxAnyToCOLOR4D_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<KIGFX::COLOR4D>() );
 
 
 static wxAnyToCOLOR4D_VARIANTRegistrationImpl
@@ -430,8 +430,7 @@ wxString PGPROPERTY_AREA::ValueToString( wxVariant& aVariant, int aArgFlags ) co
     }
     else
     {
-        wxFAIL_MSG( wxString::Format( wxS( "Unexpected variant type in PGPROPERTY_AREA: %s" ),
-                                      aVariant.GetType() ) );
+        wxFAIL_MSG( wxString::Format( wxS( "Unexpected variant type in PGPROPERTY_AREA: %s" ), aVariant.GetType() ) );
         return wxEmptyString;
     }
 
@@ -648,8 +647,7 @@ wxSize PGPROPERTY_COLORENUM::OnMeasureImage( int aItem ) const
 }
 
 
-void PGPROPERTY_COLORENUM::OnCustomPaint( wxDC& aDC, const wxRect& aRect,
-                                          wxPGPaintData& aPaintData )
+void PGPROPERTY_COLORENUM::OnCustomPaint( wxDC& aDC, const wxRect& aRect, wxPGPaintData& aPaintData )
 {
     int index = aPaintData.m_choiceItem;
 
