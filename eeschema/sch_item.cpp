@@ -698,7 +698,7 @@ bool SCH_ITEM::operator==( const SCH_ITEM& aOther ) const
     if( Type() != aOther.Type() )
         return false;
 
-    return compare( aOther, !COMPARE_FLAGS::UUID ) == 0;
+    return compare( aOther, ~COMPARE_FLAGS::UUID ) == 0;
 }
 
 
@@ -713,7 +713,7 @@ bool SCH_ITEM::operator<( const SCH_ITEM& aOther ) const
 
 bool SCH_ITEM::cmp_items::operator()( const SCH_ITEM* aFirst, const SCH_ITEM* aSecond ) const
 {
-    return aFirst->compare( *aSecond, !COMPARE_FLAGS::UUID ) < 0;
+    return aFirst->compare( *aSecond, ~COMPARE_FLAGS::UUID ) < 0;
 }
 
 
