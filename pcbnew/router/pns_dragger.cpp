@@ -573,44 +573,42 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     aDragged.ClearLinks();
     aDragged.Unmark();
 
-    if( Settings().GetOptimizeEntireDraggedTrack() )
+    OPTIMIZER optimizer( m_lastNode );
+
+    int effort = OPTIMIZER::MERGE_SEGMENTS;
+
+    if( Settings().SmoothDraggedSegments() )
+        effort |= OPTIMIZER::MERGE_COLINEAR;
+
+    optimizer.SetEffortLevel( effort );
+
+    VECTOR2I  anchor( aP );
+
+    if( aDragged.CLine().Find( aP ) < 0 )
+        anchor = aDragged.CLine().NearestPoint( aP );
+
+    optimizer.SetPreserveVertex( anchor );
+    aDragged.Line().Split( anchor );
+
+    PNS_DBG( Dbg(), AddPoint, anchor, YELLOW, 100000, wxT( "drag-anchor" ) );
+
+    if( !Settings().GetOptimizeEntireDraggedTrack() )
     {
-        OPTIMIZER optimizer( m_lastNode );
-
-        int effort =
-                OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY | OPTIMIZER::RESTRICT_AREA;
-
-        if( Settings().SmoothDraggedSegments() )
-            effort |= OPTIMIZER::MERGE_COLINEAR;
-
-        optimizer.SetEffortLevel( effort );
-
         OPT_BOX2I affectedArea = aDragged.ChangedArea( &aOrig );
-        VECTOR2I  anchor( aP );
-
-        if( aDragged.CLine().Find( aP ) < 0 )
-            anchor = aDragged.CLine().NearestPoint( aP );
-
-        optimizer.SetPreserveVertex( anchor );
 
         if( !affectedArea )
             affectedArea = BOX2I( aP ); // No valid area yet? set to minimum to disable optimization
 
-        PNS_DBG( Dbg(), AddPoint, anchor, YELLOW, 100000, wxT( "drag-anchor" ) );
         PNS_DBG( Dbg(), AddShape, *affectedArea, RED, 0, wxT( "drag-affected-area" ) );
 
         optimizer.SetRestrictArea( *affectedArea );
-
-        PNS_DBG( Dbg(), AddItem, &aDragged, RED, 0, wxT( "drag-preopt" ) );
-        aDragged.Line().Split( anchor );
-
-        optimizer.Optimize( &aDragged, &draggedPostOpt, &origLine );
-        PNS_DBG( Dbg(), AddItem, &aDragged, GREEN, 0, wxT( "drag-postopt" ) );
     }
-    else
-    {
-        draggedPostOpt = aDragged;
-    }
+
+    PNS_DBG( Dbg(), AddItem, &aDragged, RED, 0, wxT( "drag-preopt" ) );
+
+    optimizer.Optimize( &aDragged, &draggedPostOpt, &origLine );
+    aDragged = draggedPostOpt;
+    PNS_DBG( Dbg(), AddItem, &aDragged, GREEN, 0, wxT( "drag-postopt" ) );
 
     m_lastNode->Add( draggedPostOpt );
     m_draggedItems.Clear();
