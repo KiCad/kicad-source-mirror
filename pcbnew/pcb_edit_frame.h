@@ -118,11 +118,6 @@ public:
     KIID_PATH GetLastSchematicSheetPath() const { return m_lastSchematicSheetPath; }
 
     /**
-     * Used to find items by selection synchronization spec string.
-     */
-    std::vector<BOARD_ITEM*> FindItemsFromSyncSelection( std::string syncStr );
-
-    /**
      * @return the name of the wxAuiPaneInfo managing the Search panel
      */
     static const wxString SearchPaneName() { return wxT( "Search" ); }

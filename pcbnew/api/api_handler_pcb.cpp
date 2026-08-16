@@ -23,9 +23,11 @@
 #include <properties/property.h>
 
 #include <common.h>
+#include <fmt.h>
 #include <api/api_handler_pcb.h>
 #include <api/api_pcb_utils.h>
 #include <api/api_enums.h>
+#include <wx/log.h>
 #include <api/api_utils.h>
 #include <base_screen.h>
 #include <board_commit.h>
@@ -167,6 +169,9 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
 
     registerHandler<GetPageSettings, types::PageSettings>( &API_HANDLER_PCB::handleGetPageSettings );
     registerHandler<SetPageSettings, types::PageSettings>( &API_HANDLER_PCB::handleSetPageSettings );
+
+    registerHandler<CrossProbeAnnounce, CrossProbeAnnounceResponse>( &API_HANDLER_PCB::handleCrossProbeAnnounce );
+    registerHandler<SyncSelection, SyncSelectionResponse>( &API_HANDLER_PCB::handleSyncSelection );
 }
 
 
@@ -2605,4 +2610,34 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportSt
     job.m_subtractHolesFromCopperAreas = aCtx.Request.subtract_holes_from_copper_areas();
 
     return ExecuteBoardJob( pcbContext(), job );
+}
+
+
+HANDLER_RESULT<CrossProbeAnnounceResponse> API_HANDLER_PCB::handleCrossProbeAnnounce(
+        const HANDLER_CONTEXT<CrossProbeAnnounce>& aCtx )
+{
+    wxLogTrace( traceApi, "Received announce from frame %d at %s",
+                aCtx.Request.frame_type(), aCtx.Request.socket_path() );
+
+    // TODO(JE)
+
+    CrossProbeAnnounceResponse response;
+    response.set_status( CPS_OK );
+    return response;
+}
+
+
+HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_PCB::handleSyncSelection( const HANDLER_CONTEXT<SyncSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SyncSelectio" ) )
+        return tl::unexpected( *headless );
+
+    std::string req = aCtx.Request.SerializeAsString();
+    frame()->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, req );
+
+    // TODO(JE) move handling directly here so we can return an error if items aren't found, etc
+
+    SyncSelectionResponse response;
+    response.set_status( CPS_OK );
+    return response;
 }

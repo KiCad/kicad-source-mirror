@@ -1,0 +1,92 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+
+package kiapi.common.commands;
+
+import "common/types/base_types.proto";
+
+enum CrossProbeStatus
+{
+  CPS_UNSPECIFIED = 0;
+  CPS_OK          = 1;
+  CPS_NOT_FOUND   = 2;
+  CPS_INVALID     = 3;
+}
+
+// Internal KiCad API; may be removed without notice.
+// When running in standalone, the first frame to start will get the well-known API socket path.
+// Others can use this to set up a bidirectional link.  Since we don't plan to keep standalone
+// mode around for the long-term, this is a temporary workaround that doesn't change the whole
+// paradigm of the API away from client-server.
+message CrossProbeAnnounce
+{
+  kiapi.common.types.FrameType frame_type = 1;
+  string socket_path = 2;
+  string api_token = 3;
+}
+
+// Internal KiCad API; may be removed without notice.
+message CrossProbeAnnounceResponse
+{
+  CrossProbeStatus status  = 1;
+  string message = 2;
+}
+
+message FootprintSelectionSpec
+{
+  string reference = 1;
+}
+
+message PadSelectionSpec
+{
+  // Parent footprint
+  string reference = 1;
+  string number = 2;
+}
+
+message SelectionSpec
+{
+  oneof spec {
+    FootprintSelectionSpec footprint = 1;
+    PadSelectionSpec pad = 2;
+    kiapi.common.types.SheetPath sheet_path = 3;
+  }
+}
+
+enum SyncSelectionMode
+{
+  SSM_UNKNOWN = 0;
+  SSM_ITEMS_ONLY = 1;
+  SSM_ITEMS_AND_NETS = 2;
+}
+
+message SyncSelection
+{
+  SyncSelectionMode mode = 1;
+  SelectionSpec focus_item = 2;
+  repeated SelectionSpec items = 3;
+}
+
+message SyncSelectionResponse
+{
+  CrossProbeStatus status = 1;
+  string message = 2;
+}

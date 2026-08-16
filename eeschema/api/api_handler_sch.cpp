@@ -23,6 +23,8 @@
 #include <api/api_sch_utils.h>
 #include <api/api_utils.h>
 #include <api/sch_context.h>
+#include <fmt.h>
+#include <wx/log.h>
 #include <magic_enum.hpp>
 #include <base_screen.h>
 #include <jobs/job_export_bom.h>
@@ -43,6 +45,7 @@
 #include <schematic.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
@@ -148,6 +151,9 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<GetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleGetPageSettings );
     registerHandler<SetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleSetPageSettings );
     registerHandler<GetSchematicNetlist, SchematicNetlistResponse>( &API_HANDLER_SCH::handleGetSchematicNetlist );
+
+    registerHandler<CrossProbeAnnounce, CrossProbeAnnounceResponse>( &API_HANDLER_SCH::handleCrossProbeAnnounce );
+    registerHandler<SyncSelection, SyncSelectionResponse>( &API_HANDLER_SCH::handleSyncSelection );
 }
 
 
@@ -1582,5 +1588,37 @@ API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schemat
         }
     }
 
+    return response;
+}
+
+
+// TODO(JE) factor out
+HANDLER_RESULT<CrossProbeAnnounceResponse> API_HANDLER_SCH::handleCrossProbeAnnounce(
+        const HANDLER_CONTEXT<CrossProbeAnnounce>& aCtx )
+{
+    wxLogTrace( traceApi, "Received announce from frame %d at %s",
+                aCtx.Request.frame_type(), aCtx.Request.socket_path() );
+
+    // TODO(JE)
+
+    CrossProbeAnnounceResponse response;
+    response.set_status( CPS_OK );
+    return response;
+}
+
+
+HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_SCH::handleSyncSelection(
+        const HANDLER_CONTEXT<SyncSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SyncSelectio" ) )
+        return tl::unexpected( *headless );
+
+    std::string req = aCtx.Request.SerializeAsString();
+    m_frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, req );
+
+    // TODO(JE) move handling directly here so we can return an error if items aren't found, etc
+
+    SyncSelectionResponse response;
+    response.set_status( CPS_OK );
     return response;
 }

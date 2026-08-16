@@ -28,6 +28,8 @@
  */
 
 #include <wx/tokenzr.h>
+#include <api/api_utils.h>
+#include <api/common/commands/cross_probe_commands.pb.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <fmt.h>
@@ -64,6 +66,10 @@
 #include <libraries/library_table.h>
 #include <wx/filename.h>
 #include <wx/log.h>
+
+
+using namespace kiapi::common::commands;
+using google::protobuf::RepeatedPtrField;
 
 /* Execute a remote command sent via a socket on port KICAD_PCB_PORT_SERVICE_NUMBER
  *
@@ -341,97 +347,143 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 }
 
 
-template <typename ItemContainer>
-void collectItemsForSyncParts( ItemContainer& aItems, std::set<wxString>& parts )
+static std::vector<BOARD_ITEM*> findItemsFromSyncSelection( const BOARD* aBoard,
+                                                            const RepeatedPtrField<SelectionSpec>& aItems )
 {
-    for( EDA_ITEM* item : aItems )
+    std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
+    wxCHECK( aBoard, {} );
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
-        switch( item->Type() )
+        wxString fpRef = footprint->GetReference();
+
+        for( int index = 0; index < aItems.size(); ++index )
         {
-        case PCB_GROUP_T:
-        {
-            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+            const SelectionSpec& spec = aItems[index];
 
-            collectItemsForSyncParts( group->GetItems(), parts );
-            break;
-        }
-        case PCB_FOOTPRINT_T:
-        {
-            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
-            wxString   ref = footprint->GetReference();
+            switch( spec.spec_case() )
+            {
+            case SelectionSpec::SpecCase::kFootprint:
+            {
+                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
+                    orderPairs.emplace_back( index, footprint );
 
-            parts.emplace( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
-            break;
-        }
+                break;
+            }
 
-        case PCB_PAD_T:
-        {
-            PAD*      pad = static_cast<PAD*>( item );
-            wxString  ref = pad->GetParentFootprint()->GetReference();
+            case SelectionSpec::SpecCase::kPad:
+            {
+                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
+                {
+                    wxString padNumber = wxString::FromUTF8( spec.pad().number() );
 
-            parts.emplace( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
-                           + EscapeString( pad->GetNumber(), CTX_IPC ) );
-            break;
-        }
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( padNumber == pad->GetNumber() )
+                            orderPairs.emplace_back( index, pad );
+                    }
+                }
 
-        default: break;
+                break;
+            }
+
+            case SelectionSpec::SpecCase::kSheetPath:
+            {
+                KIID_PATH fpSheetPath = footprint->GetPath();
+
+                if( fpSheetPath.IsContainedWithin( kiapi::common::UnpackSheetPath( spec.sheet_path() ) ) )
+                    orderPairs.emplace_back( index, footprint );
+
+                break;
+            }
+
+            default:
+                break;
+            }
         }
     }
+
+    std::ranges::sort( orderPairs,
+                       []( const std::pair<int, BOARD_ITEM*>& a, const std::pair<int, BOARD_ITEM*>& b ) -> bool
+                       {
+                           return a.first < b.first;
+                       } );
+
+    std::vector<BOARD_ITEM*> items;
+    items.reserve( orderPairs.size() );
+
+    for( BOARD_ITEM* val : orderPairs | std::views::values )
+        items.push_back( val );
+
+    return items;
+}
+
+
+static bool selectionSpecFromItem( const EDA_ITEM* aItem, SelectionSpec& aSpec )
+{
+    switch( aItem->Type() )
+    {
+    case PCB_FOOTPRINT_T:
+    {
+        auto footprint = static_cast<const FOOTPRINT*>( aItem );
+        aSpec.mutable_footprint()->set_reference( footprint->GetReference().ToUTF8() );
+        return true;
+    }
+
+    case PCB_PAD_T:
+    {
+        auto pad = static_cast<const PAD*>( aItem );
+
+        if( const FOOTPRINT* footprint = pad->GetParentFootprint() )
+        {
+            aSpec.mutable_pad()->set_reference( footprint->GetReference().ToUTF8() );
+            aSpec.mutable_pad()->set_number( pad->GetNumber().ToUTF8() );
+            return true;
+        }
+
+        break;
+    }
+
+    default: break;
+    }
+
+    return false;
 }
 
 
 void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems,
                                            EDA_ITEM* aFocusItem, bool aForce )
 {
-    std::string command = "$SELECT: ";
+    SyncSelection sync;
 
     if( aFocusItem )
     {
-        std::deque<EDA_ITEM*> focusItems = { aFocusItem };
-        std::set<wxString>    focusParts;
-        collectItemsForSyncParts( focusItems, focusParts );
+        SelectionSpec focusSpec;
 
-        if( focusParts.size() > 0 )
+        if( selectionSpecFromItem( aFocusItem, focusSpec ) )
         {
-            command += "1,";
-            command += *focusParts.begin();
-            command += ",";
-        }
-        else
-        {
-            command += "0,";
+            sync.set_mode( SyncSelectionMode::SSM_ITEMS_AND_NETS );
+            sync.mutable_focus_item()->CopyFrom( focusSpec );
+            sync.mutable_items()->Add()->CopyFrom( focusSpec );
         }
     }
-    else
-    {
-        command += "0,";
-    }
 
-    std::set<wxString> parts;
-    collectItemsForSyncParts( aItems, parts );
+    for( EDA_ITEM* item : aItems )
+        selectionSpecFromItem( item, *sync.add_items() );
 
-    if( parts.empty() )
+    if( sync.items_size() == 0 )
         return;
 
-    for( wxString part : parts )
-    {
-        command += part;
-        command += ",";
-    }
-
-    command.pop_back();
+    std::string payload = sync.SerializeAsString();
 
     if( Kiface().IsSingle() )
     {
-        SendCommand( MSG_TO_SCH, command );
+        // Legacy standalone path; removed when TCP transport is deleted.
+        SendCommand( MSG_TO_SCH, payload );
     }
     else
     {
-        // Typically ExpressMail is going to be s-expression packets, but since
-        // we have existing interpreter of the selection packet on the other
-        // side in place, we use that here.
-        Kiway().ExpressMail( FRAME_SCH, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION, command,
-                             this );
+        Kiway().ExpressMail( FRAME_SCH, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION, payload, this );
     }
 }
 
@@ -490,89 +542,20 @@ void PCB_EDIT_FRAME::SetLastSchematicSheetPath( const KIID_PATH& aPath )
 }
 
 
-std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string syncStr )
+static wxString sheetPathFromProto( const kiapi::common::types::SheetPath& aPath )
 {
-    wxArrayString syncArray = wxStringTokenize( syncStr, "," );
+    wxString str = wxT( "/" );
 
-    std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
-
-    for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+    for( int i = 1; i < aPath.path_size(); ++i )
     {
-        if( footprint == nullptr )
-            continue;
-
-        wxString fpSheetPath = footprint->GetPath().AsString().BeforeLast( '/' );
-        wxString fpUUID = footprint->m_Uuid.AsString();
-
-        if( fpSheetPath.IsEmpty() )
-            fpSheetPath += '/';
-
-        if( fpUUID.empty() )
-            continue;
-
-        wxString fpRefEscaped = EscapeString( footprint->GetReference(), CTX_IPC );
-
-        for( unsigned index = 0; index < syncArray.size(); ++index )
-        {
-            wxString syncEntry = syncArray[index];
-
-            if( syncEntry.empty() )
-                continue;
-
-            wxString syncData = syncEntry.substr( 1 );
-
-            switch( syncEntry.GetChar( 0 ).GetValue() )
-            {
-            case 'S': // Select sheet with subsheets: S<Sheet path>
-                if( fpSheetPath.StartsWith( syncData ) )
-                {
-                    orderPairs.emplace_back( index, footprint );
-                }
-                break;
-            case 'F': // Select footprint: F<Reference>
-                if( syncData == fpRefEscaped )
-                {
-                    orderPairs.emplace_back( index, footprint );
-                }
-                break;
-            case 'P': // Select pad: P<Footprint reference>/<Pad number>
-            {
-                if( syncData.StartsWith( fpRefEscaped ) )
-                {
-                    wxString selectPadNumberEscaped =
-                            syncData.substr( fpRefEscaped.size() + 1 ); // Skips the slash
-
-                    wxString selectPadNumber = UnescapeString( selectPadNumberEscaped );
-
-                    for( PAD* pad : footprint->Pads() )
-                    {
-                        if( selectPadNumber == pad->GetNumber() )
-                        {
-                            orderPairs.emplace_back( index, pad );
-                        }
-                    }
-                }
-                break;
-            }
-            default: break;
-            }
-        }
+        str += wxString::FromUTF8( aPath.path( i ).value() );
+        str += wxT( "/" );
     }
 
-    std::sort(
-            orderPairs.begin(), orderPairs.end(),
-            []( const std::pair<int, BOARD_ITEM*>& a, const std::pair<int, BOARD_ITEM*>& b ) -> bool
-            {
-                return a.first < b.first;
-            } );
+    if( str.Length() > 1 )
+        str.RemoveLast();
 
-    std::vector<BOARD_ITEM*> items;
-    items.reserve( orderPairs.size() );
-
-    for( const std::pair<int, BOARD_ITEM*>& pair : orderPairs )
-        items.push_back( pair.second );
-
-    return items;
+    return str;
 }
 
 
@@ -788,32 +771,13 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
     case MAIL_SELECTION_FORCE:
     {
-        // $SELECT: <mode 0 - only footprints, 1 - with connections>,<spec1>,<spec2>,<spec3>
-        std::string prefix = "$SELECT: ";
-
-        if( !payload.compare( 0, prefix.size(), prefix ) )
+        if( SyncSelection sync; sync.ParseFromString( payload ) )
         {
-            std::string del = ",";
-            std::string paramStr = payload.substr( prefix.size() );
-            size_t      modeEnd = paramStr.find( del );
-            bool        selectConnections = false;
-
-            try
-            {
-                if( std::stoi( paramStr.substr( 0, modeEnd ) ) == 1 )
-                    selectConnections = true;
-            }
-            catch( std::invalid_argument& )
-            {
-                wxFAIL;
-            }
-
-            std::vector<BOARD_ITEM*> items =
-                    FindItemsFromSyncSelection( paramStr.substr( modeEnd + 1 ) );
+            std::vector<BOARD_ITEM*> items = findItemsFromSyncSelection( GetBoard(), sync.items() );
 
             m_ProbingSchToPcb = true; // recursion guard
 
-            if( selectConnections )
+            if( sync.mode() == SyncSelectionMode::SSM_ITEMS_AND_NETS )
                 GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, &items );
             else
                 GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, &items );

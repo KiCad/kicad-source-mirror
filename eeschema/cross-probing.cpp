@@ -20,6 +20,8 @@
  */
 
 #include <wx/tokenzr.h>
+#include <api/api_utils.h>
+#include <api/common/commands/cross_probe_commands.pb.h>
 #include <fmt.h>
 #include <kiface_base.h>
 #include <kiway.h>
@@ -324,7 +326,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
 void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems, bool aForce )
 {
-    std::vector<wxString> parts;
+    kiapi::common::commands::SyncSelection sync;
 
     for( EDA_ITEM* item : aItems )
     {
@@ -333,19 +335,20 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
         case SCH_SYMBOL_T:
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            wxString    ref = symbol->GetField( FIELD_T::REFERENCE )->GetText();
-
-            parts.push_back( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
+            kiapi::common::commands::SelectionSpec* spec = sync.add_items();
+            spec->mutable_footprint()->set_reference( symbol->GetField( FIELD_T::REFERENCE )->GetText().ToUTF8() );
             break;
         }
 
         case SCH_SHEET_T:
         {
             // For cross probing, we need the full path of the sheet, because
-            // we search by the footprint path prefix in the PCB editor
-            wxString full_path = GetCurrentSheet().PathAsString() + item->m_Uuid.AsString();
+            // we search by the footprint path prefix in the PCB editor.
+            KIID_PATH path = GetCurrentSheet().Path();
+            path.push_back( item->m_Uuid );
 
-            parts.push_back( wxT( "S" ) + full_path );
+            kiapi::common::commands::SelectionSpec* spec = sync.add_items();
+            kiapi::common::PackSheetPath( *spec->mutable_sheet_path(), path );
             break;
         }
 
@@ -361,8 +364,9 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
 
             for( const wxString& pad : ExpandStackedPinNotation( effective ) )
             {
-                parts.push_back( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
-                                 + EscapeString( pad, CTX_IPC ) );
+                kiapi::common::commands::SelectionSpec* spec = sync.add_items();
+                spec->mutable_pad()->set_reference( ref.ToUTF8() );
+                spec->mutable_pad()->set_number( pad.ToUTF8() );
             }
 
             break;
@@ -373,30 +377,20 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
         }
     }
 
-    if( parts.empty() )
+    if( sync.items_size() == 0 )
         return;
 
-    std::string command = "$SELECT: 0,";
-
-    for( wxString part : parts )
-    {
-        command += part;
-        command += ",";
-    }
-
-    command.pop_back();
+    std::string payload = sync.SerializeAsString();
 
     if( Kiface().IsSingle() )
     {
-        SendCommand( MSG_TO_PCB, command );
+        // Legacy standalone path; removed when TCP transport is deleted.
+        SendCommand( MSG_TO_PCB, payload );
     }
     else
     {
-        // Typically ExpressMail is going to be s-expression packets, but since
-        // we have existing interpreter of the selection packet on the other
-        // side in place, we use that here.
         Kiway().ExpressMail( FRAME_PCB_EDITOR, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION,
-                             command, this );
+                             payload, this );
     }
 }
 
@@ -653,14 +647,11 @@ bool sheetContainsOnlyWantedItems(
 
 
 std::optional<std::tuple<SCH_SHEET_PATH, SCH_ITEM*, std::vector<SCH_ITEM*>>>
-findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSyncStr,
-                            bool aFocusOnFirst )
+findItemsFromSyncSelection( const SCHEMATIC& aSchematic,
+                            const kiapi::common::commands::SyncSelection& aSync )
 {
-    wxArrayString syncArray = wxStringTokenize( aSyncStr, wxS( "," ) );
-
     std::unordered_map<wxString, std::vector<SCH_REFERENCE>>             syncSymMap;
     std::unordered_map<wxString, std::unordered_map<wxString, SCH_PIN*>> syncPinMap;
-    std::unordered_map<SCH_SHEET_PATH, double>                           symScores;
     std::unordered_map<SCH_SHEET_PATH, bool>                             fullyWantedCache;
 
     std::optional<wxString>                                    focusSymbol;
@@ -680,37 +671,23 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSync
             orderedSheets.push_back( sheetPath );
     }
 
-    // Init sync maps from the sync string
-    for( size_t i = 0; i < syncArray.size(); i++ )
+    const bool focusOnFirst = ( aSync.mode() == kiapi::common::commands::SSM_ITEMS_AND_NETS ) && aSync.has_focus_item();
+
+    for( const kiapi::common::commands::SelectionSpec& spec : aSync.items() )
     {
-        wxString syncEntry = syncArray[i];
-
-        if( syncEntry.empty() )
-            continue;
-
-        wxString syncData = syncEntry.substr( 1 );
-
-        switch( syncEntry.GetChar( 0 ).GetValue() )
+        switch( spec.spec_case() )
         {
-        case 'F': // Select by footprint: F<Reference>
+        case kiapi::common::commands::SelectionSpec::kFootprint:
         {
-            wxString symRef = UnescapeString( syncData );
-
-            if( aFocusOnFirst && ( i == 0 ) )
-                focusSymbol = symRef;
-
+            wxString symRef = wxString::FromUTF8( spec.footprint().reference() );
             syncSymMap[symRef] = std::vector<SCH_REFERENCE>();
             break;
         }
 
-        case 'P': // Select by pad: P<Footprint reference>/<Pad number>
+        case kiapi::common::commands::SelectionSpec::kPad:
         {
-            wxString symRef = UnescapeString( syncData.BeforeFirst( '/' ) );
-            wxString padNum = UnescapeString( syncData.AfterFirst( '/' ) );
-
-            if( aFocusOnFirst && ( i == 0 ) )
-                focusPin = std::make_pair( symRef, padNum );
-
+            wxString symRef = wxString::FromUTF8( spec.pad().reference() );
+            wxString padNum = wxString::FromUTF8( spec.pad().number() );
             syncPinMap[symRef][padNum] = nullptr;
             break;
         }
@@ -718,6 +695,17 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSync
         default:
             break;
         }
+    }
+
+    if( focusOnFirst )
+    {
+        const kiapi::common::commands::SelectionSpec& focusSpec = aSync.focus_item();
+
+        if( focusSpec.has_footprint() )
+            focusSymbol = wxString::FromUTF8( focusSpec.footprint().reference() );
+        else if( focusSpec.has_pad() )
+            focusPin = std::make_pair( wxString::FromUTF8( focusSpec.pad().reference() ),
+                                       wxString::FromUTF8( focusSpec.pad().number() ) );
     }
 
     // Lambda definitions
@@ -834,7 +822,7 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSync
                 return std::make_tuple( aSheet, aFocusItem, itemsVector );
             };
 
-    if( aFocusOnFirst )
+    if( focusOnFirst )
     {
         for( const SCH_SHEET_PATH& sheetPath : orderedSheets )
         {
@@ -996,57 +984,44 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
     case MAIL_SELECTION_FORCE:
     {
-        // $SELECT: 0,<spec1>,<spec2>,<spec3>
-        // Try to select specified items.
+        kiapi::common::commands::SyncSelection sync;
 
-        // $SELECT: 1,<spec1>,<spec2>,<spec3>
-        // Select and focus on <spec1> item, select other specified items that are on the
-        // same sheet.
-
-        std::string prefix = "$SELECT: ";
-
-        std::string paramStr = payload.substr( prefix.size() );
-
-        // Empty/broken command: we need at least 2 chars for sync string.
-        if( paramStr.size() < 2 )
-            break;
-
-        std::string syncStr = paramStr.substr( 2 );
-
-        bool focusOnFirst = ( paramStr[0] == '1' );
-
-        std::optional<std::tuple<SCH_SHEET_PATH, SCH_ITEM*, std::vector<SCH_ITEM*>>> findRet =
-                findItemsFromSyncSelection( Schematic(), syncStr, focusOnFirst );
-
-        if( findRet )
+        if( sync.ParseFromString( payload ) )
         {
-            auto& [sheetPath, focusItem, items] = *findRet;
+            std::optional<std::tuple<SCH_SHEET_PATH, SCH_ITEM*, std::vector<SCH_ITEM*>>> findRet =
+                    findItemsFromSyncSelection( Schematic(), sync );
 
-            m_syncingPcbToSchSelection = true; // recursion guard
-
-            GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( sheetPath, focusItem,
-                                                                            items );
-
-            m_syncingPcbToSchSelection = false;
-
-            if( eeconfig()->m_CrossProbing.flash_selection )
+            if( findRet )
             {
-                wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): flash enabled, items=%zu", items.size() );
-                if( items.empty() )
+                auto& [sheetPath, focusItem, items] = *findRet;
+
+                m_syncingPcbToSchSelection = true; // recursion guard
+
+                GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( sheetPath, focusItem, items );
+
+                m_syncingPcbToSchSelection = false;
+
+                if( eeconfig()->m_CrossProbing.flash_selection )
                 {
-                    wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): nothing to flash" );
+                    wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): flash enabled, items=%zu",
+                                items.size() );
+
+                    if( items.empty() )
+                    {
+                        wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): nothing to flash" );
+                    }
+                    else
+                    {
+                        std::vector<SCH_ITEM*> itemPtrs;
+                        std::copy( items.begin(), items.end(), std::back_inserter( itemPtrs ) );
+
+                        StartCrossProbeFlash( itemPtrs );
+                    }
                 }
                 else
                 {
-                    std::vector<SCH_ITEM*> itemPtrs;
-                    std::copy( items.begin(), items.end(), std::back_inserter( itemPtrs ) );
-
-                    StartCrossProbeFlash( itemPtrs );
+                    wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): flash disabled" );
                 }
-            }
-            else
-            {
-                wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): flash disabled" );
             }
         }
 

@@ -28,6 +28,7 @@ set( KIAPI_PROTO_SRCS
     common/types/wizards.proto
 
     common/commands/base_commands.proto
+    common/commands/cross_probe_commands.proto
     common/commands/editor_commands.proto
     common/commands/project_commands.proto
 

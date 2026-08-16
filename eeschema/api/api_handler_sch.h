@@ -23,6 +23,7 @@
 
 #include <api/api_handler_editor.h>
 #include <api/sch_context.h>
+#include <api/common/commands/cross_probe_commands.pb.h>
 #include <api/common/commands/editor_commands.pb.h>
 #include <api/common/commands/project_commands.pb.h>
 #include <google/protobuf/empty.pb.h>
@@ -152,6 +153,12 @@ private:
 
     HANDLER_RESULT<kiapi::schematic::types::SchematicNetlistResponse>
     handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schematic::types::GetSchematicNetlist>& aCtx );
+
+    HANDLER_RESULT<commands::CrossProbeAnnounceResponse>
+    handleCrossProbeAnnounce( const HANDLER_CONTEXT<commands::CrossProbeAnnounce>& aCtx );
+
+    HANDLER_RESULT<commands::SyncSelectionResponse>
+    handleSyncSelection( const HANDLER_CONTEXT<commands::SyncSelection>& aCtx );
 
     SCHEMATIC* schematic() const;
 
