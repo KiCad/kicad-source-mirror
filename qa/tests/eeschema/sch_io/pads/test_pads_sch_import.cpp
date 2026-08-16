@@ -20,6 +20,8 @@
 #include <boost/test/unit_test.hpp>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <nlohmann/json.hpp>
+
 #include <base_units.h>
 #include <bitmap_base.h>
 #include <connection_graph.h>
