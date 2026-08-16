@@ -2555,16 +2555,16 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::un
 
         if( libtext->GetText() == wxT( "${REFERENCE}" ) )
         {
-            // Move text & attributes to Reference field and discard LIB_TEXT item
-            aSymbol->GetReferenceField().EDA_TEXT::operator=( *libtext );
+            // Keep the deviceset prefix because the Eagle text is only a placeholder
+            aSymbol->GetReferenceField().SetAttributes( *libtext );
 
             // Show Reference field if Eagle reference was uppercase
             showRefDes = etext->text == wxT( ">NAME" );
         }
         else if( libtext->GetText() == wxT( "${VALUE}" ) )
         {
-            // Move text & attributes to Value field and discard LIB_TEXT item
-            aSymbol->GetValueField().EDA_TEXT::operator=( *libtext );
+            // Keep the field value because the Eagle text is only a placeholder
+            aSymbol->GetValueField().SetAttributes( *libtext );
 
             // Show Value field if Eagle reference was uppercase
             showValue = etext->text == wxT( ">VALUE" );
@@ -2579,7 +2579,7 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::un
             {
                 SCH_FIELD* field = new SCH_FIELD( aSymbol.get(), FIELD_T::USER, fieldName );
 
-                field->EDA_TEXT::operator=( *libtext );
+                field->SetAttributes( *libtext );
 
                 // Field visibility is determined by the symbol instance attributes.
                 field->SetVisible( false );
