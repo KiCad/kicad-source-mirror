@@ -2380,9 +2380,7 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
                 items.push( child );
 
                 if( auto it = m_gitStatusIcons.find( child ); it != m_gitStatusIcons.end() )
-                {
                     m_TreeProject->SetItemState( child, static_cast<int>( it->second ) );
-                }
 
                 child = m_TreeProject->GetNextChild( current, cookie );
             }
@@ -2666,8 +2664,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     GitUserConfig userConfig = configHandler.GetUserConfig();
 
     // Collect modified files in the repository
-    GIT_STATUS_HANDLER statusHandler( m_TreeProject->GitCommon() );
-    auto fileStatusMap = statusHandler.GetFileStatus();
+    GIT_STATUS_HANDLER             statusHandler( m_TreeProject->GitCommon() );
+    std::map<wxString, FileStatus> fileStatusMap = statusHandler.GetFileStatus();
 
     std::map<wxString, int> modifiedFiles;
     std::set<wxString> selected_files;
@@ -2705,6 +2703,7 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         // Convert to relative path for the modifiedFiles map
         wxString relativePath = absPath;
+
         if( relativePath.StartsWith( repoWorkDir ) )
         {
             relativePath = relativePath.Mid( repoWorkDir.length() );
@@ -2759,7 +2758,7 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     // Create a commit dialog
     DIALOG_GIT_COMMIT dlg( wxGetTopLevelParent( this ), repo, userConfig.authorName, userConfig.authorEmail,
                            modifiedFiles );
-    auto              ret = dlg.ShowModal();
+    int               ret = dlg.ShowModal();
 
     if( ret != wxID_OK )
         return;
@@ -2779,13 +2778,12 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     }
 
     GIT_COMMIT_HANDLER commitHandler( repo );
-    auto result = commitHandler.PerformCommit( files, dlg.GetCommitMessage(),
-                                              dlg.GetAuthorName(), dlg.GetAuthorEmail() );
+    CommitResult       result = commitHandler.PerformCommit( files, dlg.GetCommitMessage(), dlg.GetAuthorName(),
+                                                             dlg.GetAuthorEmail() );
 
     if( result != CommitResult::Success )
     {
-        wxMessageBox( wxString::Format( _( "Failed to create commit: %s" ),
-                                        commitHandler.GetErrorString() ) );
+        wxMessageBox( wxString::Format( _( "Failed to create commit: %s" ), commitHandler.GetErrorString() ) );
         return;
     }
 
@@ -2951,10 +2949,10 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
     GIT_CONFIG_HANDLER configHandler( m_TreeProject->GitCommon() );
     GitUserConfig      userConfig = configHandler.GetUserConfig();
 
-    GIT_STATUS_HANDLER statusHandler( m_TreeProject->GitCommon() );
-    auto               fileStatusMap = statusHandler.GetFileStatus();
-    wxString           repoWorkDir = statusHandler.GetWorkingDirectory();
-    wxString           projectPath = Prj().GetProjectPath();
+    GIT_STATUS_HANDLER             statusHandler( m_TreeProject->GitCommon() );
+    std::map<wxString, FileStatus> fileStatusMap = statusHandler.GetFileStatus();
+    wxString                       repoWorkDir = statusHandler.GetWorkingDirectory();
+    wxString                       projectPath = Prj().GetProjectPath();
 
 #ifdef _WIN32
     projectPath.Replace( wxS( "\\" ), wxS( "/" ) );
@@ -2989,9 +2987,7 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
             continue;
 
         if( fn.GetName().StartsWith( FILEEXT::LockFilePrefix ) || fn.GetName().EndsWith( FILEEXT::BackupFileSuffix ) )
-        {
             continue;
-        }
 
         if( fn.GetPath().Contains( Prj().GetProjectName() + wxT( "-backups" ) ) )
             continue;
@@ -3100,8 +3096,8 @@ bool PROJECT_TREE_PANE::canFileBeAddedToVCS( const wxString& aFile )
     if( !m_TreeProject->GetGitRepo() )
         return false;
 
-    GIT_STATUS_HANDLER statusHandler( m_TreeProject->GitCommon() );
-    auto fileStatusMap = statusHandler.GetFileStatus();
+    GIT_STATUS_HANDLER             statusHandler( m_TreeProject->GitCommon() );
+    std::map<wxString, FileStatus> fileStatusMap = statusHandler.GetFileStatus();
 
     // Check if file is already tracked or staged
     for( const auto& [filePath, fileStatus] : fileStatusMap )

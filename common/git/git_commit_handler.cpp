@@ -29,11 +29,10 @@ GIT_COMMIT_HANDLER::~GIT_COMMIT_HANDLER()
 {}
 
 
-CommitResult
-GIT_COMMIT_HANDLER::PerformCommit( const std::vector<wxString>& aFiles,
-                                   const wxString&              aMessage,
-                                   const wxString&              aAuthorName,
-                                   const wxString&              aAuthorEmail )
+CommitResult GIT_COMMIT_HANDLER::PerformCommit( const std::vector<wxString>& aFiles,
+                                                const wxString&              aMessage,
+                                                const wxString&              aAuthorName,
+                                                const wxString&              aAuthorEmail )
 {
     return GetGitBackend()->Commit( this, aFiles, aMessage, aAuthorName, aAuthorEmail );
 }
