@@ -38,10 +38,7 @@
 #include <unistd.h>
 #endif
 
-#include <nng/nng.h>
-#include <nng/protocol/reqrep0/req.h>
-
-#include <import_export.h>
+#include <api/api_client.h>
 #include <api/api_utils.h>
 #include <api/common/envelope.pb.h>
 #include <api/common/commands/base_commands.pb.h>
@@ -111,67 +108,10 @@ private:
 class API_TEST_CLIENT
 {
 public:
-    API_TEST_CLIENT()
-    {
-        int ret = nng_req0_open( &m_socket );
+    API_TEST_CLIENT() : m_client( 10000 ) {}
 
-        if( ret == 0 )
-        {
-            m_isOpen = true;
-            nng_socket_set_ms( m_socket, NNG_OPT_RECVTIMEO, 10000 );
-            nng_socket_set_ms( m_socket, NNG_OPT_SENDTIMEO, 10000 );
-        }
-        else
-        {
-            m_lastError =
-                    wxString::Format( wxS( "nng_req0_open failed: %s" ), wxString::FromUTF8( nng_strerror( ret ) ) );
-        }
-    }
-
-    ~API_TEST_CLIENT()
-    {
-        if( m_isOpen )
-            nng_close( m_socket );
-    }
-
-    bool Connect( const wxString& aSocketUrl )
-    {
-        if( !m_isOpen )
-            return false;
-
-        if( m_isConnected )
-            return true;
-
-        int ret = nng_dial( m_socket, aSocketUrl.ToStdString().c_str(), nullptr, 0 );
-
-        if( ret != 0 )
-        {
-            m_lastError = wxString::Format( wxS( "nng_dial failed: %s" ), wxString::FromUTF8( nng_strerror( ret ) ) );
-            return false;
-        }
-
-        m_isConnected = true;
-        return true;
-    }
-
-    void Disconnect()
-    {
-        if( m_isOpen )
-        {
-            nng_close( m_socket );
-            m_isOpen = false;
-            m_isConnected = false;
-
-            int ret = nng_req0_open( &m_socket );
-
-            if( ret == 0 )
-            {
-                m_isOpen = true;
-                nng_socket_set_ms( m_socket, NNG_OPT_RECVTIMEO, 10000 );
-                nng_socket_set_ms( m_socket, NNG_OPT_SENDTIMEO, 10000 );
-            }
-        }
-    }
+    bool Connect( const wxString& aSocketUrl ) { return m_client.Connect( aSocketUrl ); }
+    void Disconnect() { m_client.Disconnect(); }
 
     const wxString& LastError() const { return m_lastError; }
 
@@ -180,7 +120,7 @@ public:
         kiapi::common::commands::Ping ping;
         kiapi::common::ApiResponse    response;
 
-        if( !sendCommand( ping, &response ) )
+        if( !send( ping, response ) )
             return false;
 
         if( aStatusOut )
@@ -194,7 +134,7 @@ public:
         kiapi::common::commands::GetVersion request;
         kiapi::common::ApiResponse          response;
 
-        if( !sendCommand( request, &response ) )
+        if( !send( request, response ) )
             return false;
 
         if( response.status().status() != kiapi::common::AS_OK )
@@ -223,7 +163,7 @@ public:
 
         kiapi::common::ApiResponse response;
 
-        if( !sendCommand( request, &response ) )
+        if( !send( request, response ) )
             return false;
 
         if( response.status().status() != kiapi::common::AS_OK )
@@ -261,7 +201,7 @@ public:
 
         kiapi::common::ApiResponse response;
 
-        if( !sendCommand( request, &response ) )
+        if( !send( request, response ) )
             return false;
 
         if( response.status().status() != kiapi::common::AS_OK )
@@ -299,7 +239,7 @@ public:
 
         kiapi::common::ApiResponse response;
 
-        if( !sendCommand( request, &response ) )
+        if( !send( request, response ) )
         {
             m_lastError = wxS( "Failed to send command" );
             return false;
@@ -351,7 +291,7 @@ public:
 
         kiapi::common::ApiResponse response;
 
-        if( !sendCommand( request, &response ) )
+        if( !send( request, response ) )
         {
             m_lastError = wxS( "Failed to send command" );
             return false;
@@ -371,7 +311,7 @@ public:
         kiapi::common::commands::CloseAllDocuments request;
         kiapi::common::ApiResponse                 response;
 
-        return sendCommand( request, &response );
+        return send( request, response );
     }
 
     /**
@@ -382,7 +322,7 @@ public:
     {
         kiapi::common::ApiResponse apiResponse;
 
-        if( !sendCommand( aJobRequest, &apiResponse ) )
+        if( !send( aJobRequest, apiResponse ) )
             return false;
 
         if( apiResponse.status().status() != kiapi::common::AS_OK )
@@ -403,74 +343,23 @@ public:
     template <typename T>
     bool SendCommand( const T& aMessage, kiapi::common::ApiResponse* aResponse )
     {
-        return sendCommand( aMessage, aResponse );
+        return send( aMessage, *aResponse );
     }
 
 private:
-    template <typename T>
-    bool sendCommand( const T& aMessage, kiapi::common::ApiResponse* aResponse )
+    bool send( const google::protobuf::Message& aRequest, kiapi::common::ApiResponse& aResponse )
     {
-        if( !m_isConnected )
+        if( !m_client.Send( aRequest, aResponse, "kicad.qa" ) )
         {
-            m_lastError = wxS( "API client is not connected" );
-            return false;
-        }
-
-        kiapi::common::ApiRequest request;
-        request.mutable_header()->set_client_name( "kicad.qa" );
-
-        if( !request.mutable_message()->PackFrom( aMessage ) )
-        {
-            m_lastError = wxS( "Failed to pack command into ApiRequest" );
-            return false;
-        }
-
-        std::string requestStr = request.SerializeAsString();
-        void*       sendBuf = nng_alloc( requestStr.size() );
-
-        if( !sendBuf )
-        {
-            m_lastError = wxS( "nng_alloc failed" );
-            return false;
-        }
-
-        memcpy( sendBuf, requestStr.data(), requestStr.size() );
-
-        int ret = nng_send( m_socket, sendBuf, requestStr.size(), NNG_FLAG_ALLOC );
-
-        if( ret != 0 )
-        {
-            m_lastError = wxString::Format( wxS( "nng_send failed: %s" ), wxString::FromUTF8( nng_strerror( ret ) ) );
-            return false;
-        }
-
-        char*  reply = nullptr;
-        size_t replySize = 0;
-
-        ret = nng_recv( m_socket, &reply, &replySize, NNG_FLAG_ALLOC );
-
-        if( ret != 0 )
-        {
-            m_lastError = wxString::Format( wxS( "nng_recv failed: %s" ), wxString::FromUTF8( nng_strerror( ret ) ) );
-            return false;
-        }
-
-        std::string responseStr( reply, replySize );
-        nng_free( reply, replySize );
-
-        if( !aResponse->ParseFromString( responseStr ) )
-        {
-            m_lastError = wxS( "Failed to parse reply from KiCad" );
+            m_lastError = m_client.GetLastError();
             return false;
         }
 
         return true;
     }
 
-    nng_socket m_socket;
-    bool       m_isOpen = false;
-    bool       m_isConnected = false;
-    wxString   m_lastError;
+    KICAD_API_CLIENT m_client;
+    wxString         m_lastError;
 };
 
 

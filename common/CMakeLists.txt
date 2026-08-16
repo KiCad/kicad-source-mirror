@@ -355,6 +355,7 @@ set( KICOMMON_SRCS
     io/io_base.cpp
     io/io_utils.cpp
 
+    api/api_client.cpp
     api/api_handler.cpp
     api/api_plugin.cpp
     api/api_plugin_manager.cpp
