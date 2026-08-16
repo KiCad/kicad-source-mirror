@@ -2370,7 +2370,7 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         wxTreeItemId current = items.top();
         items.pop();
 
-        if( m_TreeProject->ItemHasChildren( current ) )
+        if( current.IsOk() && m_TreeProject->ItemHasChildren( current ) )
         {
             wxTreeItemIdValue cookie;
             wxTreeItemId      child = m_TreeProject->GetFirstChild( current, cookie );
