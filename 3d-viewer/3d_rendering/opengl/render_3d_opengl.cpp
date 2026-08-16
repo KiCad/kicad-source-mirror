@@ -94,7 +94,8 @@ RENDER_3D_OPENGL::~RENDER_3D_OPENGL()
 
     freeAllLists();
 
-    glDeleteTextures( 1, &m_circleTexture );
+    if( m_canvasInitialized )
+        glDeleteTextures( 1, &m_circleTexture );
 
     delete m_spheres_gizmo;
 }
@@ -949,7 +950,7 @@ void RENDER_3D_OPENGL::freeAllLists()
         map.clear();                      \
     }
 
-    if( glIsList( m_grid ) )
+    if( m_canvasInitialized && glIsList( m_grid ) )
         glDeleteLists( m_grid, 1 );
 
     m_grid = 0;
