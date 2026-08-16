@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ALTIUM_BINARY_PARSER_H
-#define _ALTIUM_BINARY_PARSER_H
+#pragma once
 
 #include "altium_props_utils.h"
 
@@ -38,8 +37,8 @@
 
 namespace CFB
 {
-class CompoundFileReader;
-struct COMPOUND_FILE_ENTRY;
+    class CompoundFileReader;
+    struct COMPOUND_FILE_ENTRY;
 } // namespace CFB
 
 /**
@@ -125,8 +124,7 @@ private:
 class ALTIUM_BINARY_PARSER
 {
 public:
-    ALTIUM_BINARY_PARSER( const ALTIUM_COMPOUND_FILE& aFile,
-                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    ALTIUM_BINARY_PARSER( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     ALTIUM_BINARY_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize );
     ~ALTIUM_BINARY_PARSER() = default;
 
@@ -287,20 +285,19 @@ public:
     std::map<wxString, wxString> ReadProperties(
             std::function<std::map<wxString, wxString>( const std::string& )> handleBinaryData =
                     []( const std::string& )
-            {
-                return std::map<wxString, wxString>();
-            } );
+                    {
+                        return std::map<wxString, wxString>();
+                    } );
 
     void Skip( size_t aLength )
     {
-        if( GetRemainingBytes() >= aLength )
-        {
-            m_pos += aLength;
-        }
-        else
+        if( GetRemainingBytes() < aLength )
         {
             m_error = true;
+            return;
         }
+
+        m_pos += aLength;
     }
 
     void SkipSubrecord()
@@ -308,44 +305,47 @@ public:
         if( m_subrecord_end == nullptr || m_subrecord_end < m_pos )
         {
             m_error = true;
+            return;
         }
-        else
-        {
-            m_pos = m_subrecord_end;
-        }
+
+        m_pos = m_subrecord_end;
     };
 
     size_t GetRemainingBytes() const
     {
-        return m_pos == nullptr ? 0 : m_size - ( m_pos - m_content.get() );
+        if( m_pos == nullptr || m_content.get() + m_size < m_pos )
+            return 0;
+
+        return m_size - ( m_pos - m_content.get() );
     }
 
     size_t GetRemainingSubrecordBytes() const
     {
-        return m_pos == nullptr || m_subrecord_end == nullptr || m_subrecord_end <= m_pos ?
-                       0 :
-                       m_subrecord_end - m_pos;
+        if( m_pos == nullptr || m_subrecord_end == nullptr || m_subrecord_end < m_pos )
+            return 0;
+
+        return m_subrecord_end - m_pos;
     };
 
-    bool HasParsingError()
-    {
-        return m_error;
-    }
+    bool HasParsingError() { return m_error; }
 
 private:
     std::unique_ptr<char[]> m_content;
     size_t                  m_size;
 
-    char* m_pos;           // current read pointer
-    char* m_subrecord_end; // pointer which points to next subrecord start
-    bool  m_error;
+    char*                   m_pos;           // current read pointer
+    char*                   m_subrecord_end; // pointer which points to next subrecord start
+    bool                    m_error;
 };
 
 
 class ALTIUM_BINARY_READER
 {
 public:
-    ALTIUM_BINARY_READER( const std::string& binaryData ) : m_data( binaryData ), m_position( 0 ) {}
+    ALTIUM_BINARY_READER( const std::string& binaryData ) :
+            m_data( binaryData ),
+            m_position( 0 )
+    {}
 
     int32_t ReadInt32()
     {
@@ -409,7 +409,8 @@ private:
 class ALTIUM_COMPRESSED_READER : public ALTIUM_BINARY_READER
 {
 public:
-    ALTIUM_COMPRESSED_READER( const std::string& aData ) : ALTIUM_BINARY_READER( aData )
+    ALTIUM_COMPRESSED_READER( const std::string& aData ) :
+            ALTIUM_BINARY_READER( aData )
     {}
 
     std::pair<int, std::string*> ReadCompressedString()
@@ -454,5 +455,3 @@ private:
         return &decompressedData;
     }
 };
-
-#endif //_ALTIUM_BINARY_PARSER_H
