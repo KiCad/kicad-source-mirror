@@ -1170,6 +1170,9 @@ bool FIELDS_GRID_TABLE::EraseRow( size_t aRow )
 void FIELDS_GRID_TABLE::SwapRows( size_t a, size_t b )
 {
     wxCHECK( a < this->size() && b < this->size(), /*void*/ );
+    wxCHECK( a < m_isInherited.size() && b < m_isInherited.size() && a < m_parentFields.size()
+                     && b < m_parentFields.size(),
+             /*void*/ );
 
     std::swap( at( a ), at( b ) );
 

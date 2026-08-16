@@ -126,8 +126,12 @@ public:
 
     void SetFieldInherited( size_t aRow, const SCH_FIELD& aParent )
     {
-        m_isInherited.resize( aRow + 1, false );
-        m_parentFields.resize( aRow + 1 );
+        if( m_isInherited.size() <= aRow )
+            m_isInherited.resize( aRow + 1, false );
+
+        if( m_parentFields.size() <= aRow )
+            m_parentFields.resize( aRow + 1 );
+
         m_parentFields[aRow] = aParent;
         m_isInherited[aRow] = true;
     }
