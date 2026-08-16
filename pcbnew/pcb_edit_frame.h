@@ -112,6 +112,8 @@ public:
      */
     void ExecuteRemoteCommand( const char* cmdline ) override;
 
+    void HandleRemoteNetHighlight( const std::vector<wxString>& aNetNames );
+
     void KiwayMailIn( KIWAY_MAIL_EVENT& aEvent ) override;
 
     void      SetLastSchematicSheetPath( const KIID_PATH& aPath );

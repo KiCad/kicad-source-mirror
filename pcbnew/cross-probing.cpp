@@ -27,6 +27,7 @@
  * Note: these ports must be enabled for firewall protection
  */
 
+#include <api/api_handler_pcb.h>
 #include <wx/tokenzr.h>
 #include <api/api_utils.h>
 #include <api/common/commands/cross_probe_commands.pb.h>
@@ -40,7 +41,6 @@
 #include <pcb_group.h>
 #include <zone.h>
 #include <collectors.h>
-#include <eda_dde.h>
 #include <kiface_base.h>
 #include <kiway_mail.h>
 #include <string_utils.h>
@@ -70,7 +70,6 @@
 
 
 using namespace kiapi::common::commands;
-using google::protobuf::RepeatedPtrField;
 
 /* Execute a remote command sent via a socket on port KICAD_PCB_PORT_SERVICE_NUMBER
  *
@@ -296,127 +295,171 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-std::string FormatProbeItem( BOARD_ITEM* aItem )
+void PCB_EDIT_FRAME::HandleRemoteNetHighlight( const std::vector<wxString>& aNetNames )
 {
-    if( !aItem )
-        return "$CLEAR: \"HIGHLIGHTED\""; // message to clear highlight state
+    NETINFO_ITEM* netinfo;
+    int    netcode = -1;
+    bool   multiHighlight = false;
+    BOARD* pcb = GetBoard();
 
-    switch( aItem->Type() )
+    CROSS_PROBING_SETTINGS& crossProbingSettings = GetPcbNewSettings()->m_CrossProbing;
+    KIGFX::VIEW*            view = m_toolManager->GetView();
+    KIGFX::RENDER_SETTINGS* renderSettings = view->GetPainter()->GetSettings();
+
+    if( aNetNames.empty() )
     {
-    case PCB_FOOTPRINT_T:
-    {
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
-        return fmt::format( "$PART: \"{}\"", TO_UTF8( footprint->GetReference() ) );
-    }
+        auto* pcbRender = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings );
 
-    case PCB_PAD_T:
-    {
-        PAD*       pad = static_cast<PAD*>( aItem );
-        FOOTPRINT* footprint = pad->GetParentFootprint();
+        bool hadHighlight = renderSettings->IsHighlightEnabled();
+        bool hadChain = pcbRender && !pcbRender->GetHighlightedNetChain().IsEmpty();
 
-        return fmt::format( "$PART: \"{}\" $PAD: \"{}\"",
-                            TO_UTF8( footprint->GetReference() ),
-                            TO_UTF8( pad->GetNumber() ) );
-    }
+        if( hadHighlight )
+            renderSettings->SetHighlight( false );
 
-    case PCB_FIELD_T:
-    {
-        PCB_FIELD*  field = static_cast<PCB_FIELD*>( aItem );
-        FOOTPRINT*  footprint = field->GetParentFootprint();
-        const char* text_key;
+        if( hadChain )
+            pcbRender->SetHighlightedNetChain( wxString() );
 
-        /* This can't be a switch since the break need to pull out
-         * from the outer switch! */
-        if( field->IsReference() )
-            text_key = "$REF:";
-        else if( field->IsValue() )
-            text_key = "$VAL:";
-        else
-            break;
+        if( hadHighlight || hadChain )
+            view->UpdateAllLayersColor();
 
-        return fmt::format( "$PART: \"{}\" {} \"{}\"",
-                            TO_UTF8( footprint->GetReference() ),
-                            text_key,
-                            TO_UTF8( field->GetText() ) );
-    }
-
-    default:
-        break;
-    }
-
-    return "";
-}
-
-
-static std::vector<BOARD_ITEM*> findItemsFromSyncSelection( const BOARD* aBoard,
-                                                            const RepeatedPtrField<SelectionSpec>& aItems )
-{
-    std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
-    wxCHECK( aBoard, {} );
-
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
-    {
-        wxString fpRef = footprint->GetReference();
-
-        for( int index = 0; index < aItems.size(); ++index )
+        if( pcb->IsHighLightNetON() )
         {
-            const SelectionSpec& spec = aItems[index];
+            pcb->ResetNetHighLight();
+            SetMsgPanel( pcb );
+        }
 
-            switch( spec.spec_case() )
-            {
-            case SelectionSpec::SpecCase::kFootprint:
-            {
-                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
-                    orderPairs.emplace_back( index, footprint );
+        GetCanvas()->Refresh();
+        return;
+    }
 
-                break;
-            }
+    if( aNetNames.size() == 1 && ( netinfo = pcb->FindNet( aNetNames[0] ) ) )
+    {
+        netcode = netinfo->GetNetCode();
 
-            case SelectionSpec::SpecCase::kPad:
+        std::vector<MSG_PANEL_ITEM> items;
+        netinfo->GetMsgPanelInfo( this, items );
+        SetMsgPanel( items );
+
+        // If the incoming net belongs to a net chain, promote the single-net
+        // highlight into a multi-net highlight covering every chain member so
+        // the PCB mirrors the chain highlight happening on the schematic side.
+        const wxString& chainName = netinfo->GetNetChain();
+
+        if( !chainName.IsEmpty() )
+        {
+            pcb->SetHighLightNet( netcode );
+            renderSettings->SetHighlight( true, netcode );
+            multiHighlight = true;
+
+            for( NETINFO_ITEM* candidate : pcb->GetNetInfo() )
             {
-                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
+                if( !candidate || candidate == netinfo )
+                    continue;
+
+                if( candidate->GetNetChain() == chainName )
                 {
-                    wxString padNumber = wxString::FromUTF8( spec.pad().number() );
-
-                    for( PAD* pad : footprint->Pads() )
-                    {
-                        if( padNumber == pad->GetNumber() )
-                            orderPairs.emplace_back( index, pad );
-                    }
+                    pcb->SetHighLightNet( candidate->GetNetCode(), true );
+                    renderSettings->SetHighlight( true, candidate->GetNetCode(), true );
                 }
-
-                break;
             }
 
-            case SelectionSpec::SpecCase::kSheetPath:
+            if( auto* pcbRender = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings ) )
+                pcbRender->SetHighlightedNetChain( chainName );
+
+            netcode = -1;
+        }
+    }
+    else
+    {
+        bool first = true;
+
+        for( const wxString& netName : aNetNames )
+        {
+            netinfo = pcb->FindNet( netName );
+
+            if( netinfo )
             {
-                KIID_PATH fpSheetPath = footprint->GetPath();
+                if( first )
+                {
+                    // TODO: Once buses are included in netlist, show bus name
+                    std::vector<MSG_PANEL_ITEM> items;
+                    netinfo->GetMsgPanelInfo( this, items );
+                    SetMsgPanel( items );
+                    first = false;
 
-                if( fpSheetPath.IsContainedWithin( kiapi::common::UnpackSheetPath( spec.sheet_path() ) ) )
-                    orderPairs.emplace_back( index, footprint );
-
-                break;
+                    pcb->SetHighLightNet( netinfo->GetNetCode() );
+                    renderSettings->SetHighlight( true, netinfo->GetNetCode() );
+                    multiHighlight = true;
+                }
+                else
+                {
+                    pcb->SetHighLightNet( netinfo->GetNetCode(), true );
+                    renderSettings->SetHighlight( true, netinfo->GetNetCode(), true );
+                }
             }
+        }
 
-            default:
-                break;
+        netcode = -1;
+    }
+
+    BOX2I bbox;
+
+    if( netcode > 0 || multiHighlight )
+    {
+        if( !multiHighlight )
+        {
+            renderSettings->SetHighlight( ( netcode >= 0 ), netcode );
+            pcb->SetHighLightNet( netcode );
+        }
+        else
+        {
+            // Just pick the first one for area calculation
+            netcode = *pcb->GetHighLightNetCodes().begin();
+        }
+
+        pcb->HighLightON();
+
+        auto merge_area =
+                [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem )
+                {
+                    if( aItem->GetNetCode() == netcode )
+                        bbox.Merge( aItem->GetBoundingBox() );
+                };
+
+        if( crossProbingSettings.center_on_items )
+        {
+            for( ZONE* zone : pcb->Zones() )
+                merge_area( zone );
+
+            for( PCB_TRACK* track : pcb->Tracks() )
+                merge_area( track );
+
+            for( FOOTPRINT* fp : pcb->Footprints() )
+            {
+                for( PAD* p : fp->Pads() )
+                    merge_area( p );
             }
         }
     }
+    else
+    {
+        renderSettings->SetHighlight( false );
+    }
 
-    std::ranges::sort( orderPairs,
-                       []( const std::pair<int, BOARD_ITEM*>& a, const std::pair<int, BOARD_ITEM*>& b ) -> bool
-                       {
-                           return a.first < b.first;
-                       } );
+    if( crossProbingSettings.center_on_items && bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
+    {
+        if( crossProbingSettings.zoom_to_fit )
+            GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->ZoomFitCrossProbeBBox( bbox );
 
-    std::vector<BOARD_ITEM*> items;
-    items.reserve( orderPairs.size() );
+        FocusOnLocation( bbox.Centre() );
+    }
 
-    for( BOARD_ITEM* val : orderPairs | std::views::values )
-        items.push_back( val );
+    view->UpdateAllLayersColor();
 
-    return items;
+    // Ensure the display is refreshed, because in some installs the refresh is done only
+    // when the gal canvas has the focus, and that is not the case when crossprobing from
+    // Eeschema:
+    GetCanvas()->Refresh();
 }
 
 
@@ -475,56 +518,91 @@ void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems,
     if( sync.items_size() == 0 )
         return;
 
+    sync.set_context( aForce ? SyncSelectionContext::SSC_EXPLICIT : SyncSelectionContext::SSC_IMPLICIT );
+
     if( Kiface().IsSingle() )
     {
         CROSS_PROBE_CLIENT::SendToFrame( FRAME_SCH, sync );
     }
     else
     {
-        std::string payload = sync.SerializeAsString();
-        Kiway().ExpressMail( FRAME_SCH, aForce ? MAIL_SELECTION_FORCE : MAIL_SELECTION, payload, this );
+        std::string payload;
+        kiapi::common::PackKiwayApiMessage( sync, payload );
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, payload, this );
     }
 }
 
 
 void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 {
-    std::string packet = fmt::format( "$NET: \"{}\"", TO_UTF8( aNetName ) );
+    kiapi::common::commands::HighlightNets message;
 
-    if( !packet.empty() )
+    message.add_net_name( aNetName.ToUTF8() );
+
+    if( Kiface().IsSingle() )
     {
-        if( Kiface().IsSingle() )
-        {
-            SendCommand( MSG_TO_SCH, packet );
-        }
-        else
-        {
-            // Typically ExpressMail is going to be s-expression packets, but since
-            // we have existing interpreter of the cross probe packet on the other
-            // side in place, we use that here.
-            Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
-        }
+        CROSS_PROBE_CLIENT::SendToFrame( FRAME_SCH, message );
+    }
+    else
+    {
+        std::string payload;
+        kiapi::common::PackKiwayApiMessage( message, payload );
+        Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, payload, this );
     }
 }
 
 
 void PCB_EDIT_FRAME::SendCrossProbeItem( BOARD_ITEM* aSyncItem )
 {
-    std::string packet = FormatProbeItem( aSyncItem );
-
-    if( !packet.empty() )
+    if( !aSyncItem )
     {
-        if( Kiface().IsSingle() )
-        {
-            SendCommand( MSG_TO_SCH, packet );
-        }
-        else
-        {
-            // Typically ExpressMail is going to be s-expression packets, but since
-            // we have existing interpreter of the cross probe packet on the other
-            // side in place, we use that here.
-            Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
-        }
+        SendCrossProbeNetName( wxEmptyString );
+        return;
+    }
+
+    kiapi::common::commands::FocusOnItem message;
+    SelectionSpec* spec = message.mutable_focus_item();
+
+    switch( aSyncItem->Type() )
+    {
+    case PCB_FOOTPRINT_T:
+    {
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aSyncItem );
+        spec->mutable_footprint()->set_reference( footprint->GetReference().ToUTF8() );
+        break;
+    }
+
+    case PCB_PAD_T:
+    {
+        PAD*       pad = static_cast<PAD*>( aSyncItem );
+        FOOTPRINT* footprint = pad->GetParentFootprint();
+
+        spec->mutable_pad()->set_reference( footprint->GetReference().ToUTF8() );
+        spec->mutable_pad()->set_number( pad->GetNumber().ToUTF8() );
+        break;
+    }
+
+    case PCB_FIELD_T:
+    {
+        PCB_FIELD*  field = static_cast<PCB_FIELD*>( aSyncItem );
+        FOOTPRINT*  footprint = field->GetParentFootprint();
+        spec->mutable_footprint()->set_reference( footprint->GetReference().ToUTF8() );
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    if( Kiface().IsSingle() )
+    {
+        CROSS_PROBE_CLIENT::SendToFrame( FRAME_SCH, message );
+    }
+    else
+    {
+        std::string payload;
+        kiapi::common::PackKiwayApiMessage( message, payload );
+        Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, payload, this );
     }
 }
 
@@ -741,57 +819,13 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         break;
     }
 
+    // Handled as API messages
     case MAIL_CROSS_PROBE:
-        ExecuteRemoteCommand( payload.c_str() );
-        break;
-
-
     case MAIL_SELECTION:
-        if( !GetPcbNewSettings()->m_CrossProbing.on_selection )
-            break;
-
-        KI_FALLTHROUGH;
-
-    case MAIL_SELECTION_FORCE:
-    {
-        if( SyncSelection sync; sync.ParseFromString( payload ) )
-        {
-            std::vector<BOARD_ITEM*> items = findItemsFromSyncSelection( GetBoard(), sync.items() );
-
-            m_ProbingSchToPcb = true; // recursion guard
-
-            if( sync.mode() == SyncSelectionMode::SSM_ITEMS_AND_NETS )
-                GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, &items );
-            else
-                GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, &items );
-
-            // Update 3D viewer highlighting
-            Update3DView( false, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
-
-            m_ProbingSchToPcb = false;
-
-            if( GetPcbNewSettings()->m_CrossProbing.flash_selection )
-            {
-                wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: flash enabled, items=%zu", items.size() );
-                if( items.empty() )
-                {
-                    wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: nothing to flash" );
-                }
-                else
-                {
-                    std::vector<BOARD_ITEM*> boardItems;
-                    std::copy( items.begin(), items.end(), std::back_inserter( boardItems ) );
-                    StartCrossProbeFlash( boardItems );
-                }
-            }
-            else
-            {
-                wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: flash disabled" );
-            }
-        }
+        if( ApiRequest request; request.ParseFromString( payload.c_str() ) )
+            m_apiHandler->Handle( request );
 
         break;
-    }
 
     case MAIL_PCB_UPDATE:
         m_toolManager->RunAction( ACTIONS::updatePcbFromSchematic );

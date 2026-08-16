@@ -215,6 +215,8 @@ public:
      */
     void ExecuteRemoteCommand( const char* cmdline ) override;
 
+    void HandleRemoteNetHighlight( const wxString& aNetName );
+
     void KiwayMailIn( KIWAY_MAIL_EVENT& aEvent ) override;
 
     /**
@@ -825,6 +827,7 @@ public:
 
     void FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll = true ) override;
 
+    void SetSyncingSelection( bool aSet ) { m_syncingPcbToSchSelection = aSet; }
     bool IsSyncingSelection() { return m_syncingPcbToSchSelection; }
 
     /**
@@ -934,6 +937,8 @@ public:
     }
 
     void ClearToolbarControl( int aId ) override;
+
+    void StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems );
 
     DECLARE_EVENT_TABLE()
 
@@ -1065,7 +1070,6 @@ private:
 
     void CaptureHierarchyPaneSize();
 
-    void StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems );
     void OnCrossProbeFlashTimer( wxTimerEvent& aEvent );
 
 private:

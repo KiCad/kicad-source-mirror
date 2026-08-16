@@ -301,4 +301,21 @@ KICOMMON_API void PackProject( types::ProjectSpecifier& aOutput, const PROJECT& 
     aOutput.set_path( aInput.GetProjectPath().ToUTF8() );
 }
 
+
+const KICOMMON_API std::string KiwayClientName = "org.kicad.internal.kiway";
+const KICOMMON_API std::string StandaloneCrossProbeClientName = "org.kicad.internal.crossprobe";
+
+
+KICOMMON_API bool PackKiwayApiMessage( const google::protobuf::Message& aMessage, std::string& aBytes )
+{
+    ApiRequest request;
+    request.mutable_header()->set_client_name( KiwayClientName );
+
+    if( !request.mutable_message()->PackFrom( aMessage ) )
+        return false;
+
+    aBytes = request.SerializeAsString();
+    return true;
+}
+
 } // namespace kiapi::common

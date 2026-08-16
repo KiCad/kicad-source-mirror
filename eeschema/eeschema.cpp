@@ -33,7 +33,6 @@
 #include <cli_progress_reporter.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <eda_dde.h>
 #include "eeschema_jobs_handler.h"
 #include "eeschema_helpers.h"
 #include <diff_merge/diff_doc_kind.h>

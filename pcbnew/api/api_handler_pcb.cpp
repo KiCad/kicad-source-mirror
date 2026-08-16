@@ -86,6 +86,7 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/report_severity.h>
 #include <drc/rule_editor/drc_re_rule_loader.h>
+#include <trace_helpers.h>
 #include <wx/ffile.h>
 
 using namespace kiapi::common::commands;
@@ -173,6 +174,7 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
 
     registerHandler<CrossProbeAnnounce, CrossProbeAnnounceResponse>( &API_HANDLER_PCB::handleCrossProbeAnnounce );
     registerHandler<SyncSelection, SyncSelectionResponse>( &API_HANDLER_PCB::handleSyncSelection );
+    registerHandler<HighlightNets, HighlightNetsResponse>( &API_HANDLER_PCB::handleHighlightNets );
 }
 
 
@@ -1761,7 +1763,6 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardEditorAppearanceSettings(
         return tl::unexpected( *busy );
 
     PCB_DISPLAY_OPTIONS options = frame()->GetDisplayOptions();
-    KIGFX::PCB_VIEW* view = frame()->GetCanvas()->GetView();
     PCBNEW_SETTINGS* editorSettings = frame()->GetPcbNewSettings();
     const BoardEditorAppearanceSettings& newSettings = aCtx.Request.settings();
 
@@ -2629,17 +2630,163 @@ HANDLER_RESULT<CrossProbeAnnounceResponse> API_HANDLER_PCB::handleCrossProbeAnno
 }
 
 
+using google::protobuf::RepeatedPtrField;
+
+static std::vector<BOARD_ITEM*> findItemsFromSyncSelection( const BOARD* aBoard,
+                                                            const RepeatedPtrField<SelectionSpec>& aItems )
+{
+    std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
+    wxCHECK( aBoard, {} );
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+    {
+        wxString fpRef = footprint->GetReference();
+
+        for( int index = 0; index < aItems.size(); ++index )
+        {
+            const SelectionSpec& spec = aItems[index];
+
+            switch( spec.spec_case() )
+            {
+            case SelectionSpec::SpecCase::kFootprint:
+            {
+                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
+                    orderPairs.emplace_back( index, footprint );
+
+                break;
+            }
+
+            case SelectionSpec::SpecCase::kPad:
+            {
+                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
+                {
+                    wxString padNumber = wxString::FromUTF8( spec.pad().number() );
+
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( padNumber == pad->GetNumber() )
+                            orderPairs.emplace_back( index, pad );
+                    }
+                }
+
+                break;
+            }
+
+            case SelectionSpec::SpecCase::kSheetPath:
+            {
+                KIID_PATH fpSheetPath = footprint->GetPath();
+
+                if( fpSheetPath.IsContainedWithin( kiapi::common::UnpackSheetPath( spec.sheet_path() ) ) )
+                    orderPairs.emplace_back( index, footprint );
+
+                break;
+            }
+
+            default: break;
+            }
+        }
+    }
+
+    std::ranges::sort( orderPairs,
+                       []( const std::pair<int, BOARD_ITEM*>& a, const std::pair<int, BOARD_ITEM*>& b ) -> bool
+                       {
+                           return a.first < b.first;
+                       } );
+
+    std::vector<BOARD_ITEM*> items;
+    items.reserve( orderPairs.size() );
+
+    for( BOARD_ITEM* val : orderPairs | std::views::values )
+        items.push_back( val );
+
+    return items;
+}
+
+
 HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_PCB::handleSyncSelection( const HANDLER_CONTEXT<SyncSelection>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SyncSelectio" ) )
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SyncSelection" ) )
         return tl::unexpected( *headless );
 
     std::string req = aCtx.Request.SerializeAsString();
     frame()->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, req );
 
-    // TODO(JE) move handling directly here so we can return an error if items aren't found, etc
-
     SyncSelectionResponse response;
+
+    const CROSS_PROBING_SETTINGS& settings = frame()->GetPcbNewSettings()->m_CrossProbing;
+
+    if( !settings.on_selection && aCtx.Request.context() != SyncSelectionContext::SSC_EXPLICIT )
+    {
+        response.set_status( CPS_DISABLED );
+        response.set_message( "implicit selection sync disabled by user" );
+        return response;
+    }
+
+    std::vector<BOARD_ITEM*> items = findItemsFromSyncSelection( board(), aCtx.Request.items() );
+
+    frame()->m_ProbingSchToPcb = true; // recursion guard
+
+    if( aCtx.Request.mode() == SyncSelectionMode::SSM_ITEMS_AND_NETS )
+        frame()->GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, &items );
+    else
+        frame()->GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, &items );
+
+    // Update 3D viewer highlighting
+    frame()->Update3DView( false, frame()->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
+
+    frame()->m_ProbingSchToPcb = false;
+
+    if( settings.flash_selection )
+    {
+        wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: flash enabled, items=%zu", items.size() );
+        if( items.empty() )
+        {
+            wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: nothing to flash" );
+        }
+        else
+        {
+            std::vector<BOARD_ITEM*> boardItems;
+            std::copy( items.begin(), items.end(), std::back_inserter( boardItems ) );
+            frame()->StartCrossProbeFlash( boardItems );
+        }
+    }
+    else
+    {
+        wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE) PCB: flash disabled" );
+    }
+
+    response.set_status( CPS_OK );
+    return response;
+}
+
+
+HANDLER_RESULT<HighlightNetsResponse> API_HANDLER_PCB::handleHighlightNets(
+        const HANDLER_CONTEXT<HighlightNets>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "HighlightNets" ) )
+        return tl::unexpected( *headless );
+
+    HighlightNetsResponse response;
+    CROSS_PROBING_SETTINGS& crossProbingSettings = frame()->GetPcbNewSettings()->m_CrossProbing;
+
+    if( aCtx.ClientName == StandaloneCrossProbeClientName
+        || aCtx.ClientName == KiwayClientName )
+    {
+        if( !crossProbingSettings.auto_highlight )
+        {
+            response.set_status( CPS_DISABLED );
+            response.set_message( "net highlight cross-probing disabled by user" );
+            return response;
+        }
+    }
+
+    std::vector<wxString> nets;
+
+    for( const std::string& name : aCtx.Request.net_name() )
+        nets.emplace_back( wxString::FromUTF8( name ) );
+
+    frame()->HandleRemoteNetHighlight( nets );
+
     response.set_status( CPS_OK );
     return response;
 }

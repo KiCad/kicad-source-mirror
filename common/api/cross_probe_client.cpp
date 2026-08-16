@@ -46,7 +46,7 @@ static bool sendRequest( const std::string& aUrl, const google::protobuf::Messag
 
     kiapi::common::ApiResponse response;
 
-    if( !client.Send( aRequest, response, "kicad.cross-probe" ) )
+    if( !client.Send( aRequest, response, kiapi::common::StandaloneCrossProbeClientName ) )
     {
         wxLogTrace( traceApi,
                     wxString::Format( wxS( "crossprobe: failed to send to %s" ), wxString::FromUTF8( aUrl ) ) );

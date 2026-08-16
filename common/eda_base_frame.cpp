@@ -37,7 +37,6 @@
 #include <dialogs/panel_spacemouse.h>
 #include <dialogs/panel_data_collection.h>
 #include <dialogs/panel_plugin_settings.h>
-#include <eda_dde.h>
 #include <file_history.h>
 #include <id.h>
 #include <kiface_base.h>
@@ -346,8 +345,6 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
     delete m_fileHistory;
 
     ClearUndoRedoList();
-
-    SocketCleanup();
 
     KIPLATFORM::APP::RemoveShutdownBlockReason( this );
 }

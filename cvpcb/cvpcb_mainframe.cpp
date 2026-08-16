@@ -24,7 +24,6 @@
 #include <api/cross_probe_client.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <eda_dde.h>
 #include <footprint_library_adapter.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>

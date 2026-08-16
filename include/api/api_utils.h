@@ -27,6 +27,7 @@
 #include <base_units.h>
 #include <core/typeinfo.h>
 #include <lib_id.h>
+#include <api/common/envelope.pb.h>
 #include <api/common/types/base_types.pb.h>
 #include <layer_ids.h>
 #include <geometry/shape_line_chain.h>
@@ -92,6 +93,11 @@ KICOMMON_API void PackSheetPath( types::SheetPath& aOutput, const KIID_PATH& aIn
 KICOMMON_API KIID_PATH UnpackSheetPath( const types::SheetPath& aInput );
 
 KICOMMON_API void PackProject( types::ProjectSpecifier& aOutput, const PROJECT& aInput );
+
+extern const KICOMMON_API std::string KiwayClientName;
+extern const KICOMMON_API std::string StandaloneCrossProbeClientName;
+
+KICOMMON_API bool PackKiwayApiMessage( const google::protobuf::Message& aMessage, std::string& aBytes );
 
 } // namespace kiapi::common
 

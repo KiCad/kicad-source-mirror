@@ -29,6 +29,7 @@ enum CrossProbeStatus
   CPS_OK          = 1;
   CPS_NOT_FOUND   = 2;
   CPS_INVALID     = 3;
+  CPS_DISABLED    = 4;
 }
 
 // Internal KiCad API; may be removed without notice.
@@ -78,15 +79,49 @@ enum SyncSelectionMode
   SSM_ITEMS_AND_NETS = 2;
 }
 
+enum SyncSelectionContext
+{
+  SSC_UNKNOWN = 0;
+
+  // Implicit user action (e.g. just clicking on an item)
+  SSC_IMPLICIT = 1;
+
+  // Explicit user action (e.g. running a "select in other window" action)
+  SSC_EXPLICIT = 2;
+}
+
 message SyncSelection
 {
-  SyncSelectionMode mode = 1;
-  SelectionSpec focus_item = 2;
-  repeated SelectionSpec items = 3;
+  SyncSelectionContext context = 1;
+  SyncSelectionMode mode = 2;
+  SelectionSpec focus_item = 3;
+  repeated SelectionSpec items = 4;
 }
 
 message SyncSelectionResponse
 {
   CrossProbeStatus status = 1;
+  string message = 2;
+}
+
+message HighlightNets
+{
+  repeated string net_name = 1;
+}
+
+message HighlightNetsResponse
+{
+  CrossProbeStatus status  = 1;
+  string message = 2;
+}
+
+message FocusOnItem
+{
+  SelectionSpec focus_item = 1;
+}
+
+message FocusOnItemResponse
+{
+  CrossProbeStatus status  = 1;
   string message = 2;
 }

@@ -166,6 +166,9 @@ private:
     HANDLER_RESULT<commands::SyncSelectionResponse> handleSyncSelection(
             const HANDLER_CONTEXT<commands::SyncSelection>& aCtx );
 
+    HANDLER_RESULT<commands::HighlightNetsResponse> handleHighlightNets(
+            const HANDLER_CONTEXT<commands::HighlightNets>& aCtx );
+
 protected:
     kiapi::common::types::DocumentType thisDocumentType() const override
     {
