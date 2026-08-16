@@ -21,6 +21,7 @@
 
 #include <map>
 #include <set>
+#include <utility>
 
 #include <wx/filefn.h>
 #include <wx/filename.h>
@@ -136,7 +137,11 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
     if( !aSchematic )
         return result;
 
-    std::map<wxString, LIB_SYMBOL*> defByName;
+    // source nickname + item name, so same-name parts from different libraries stay split
+    using SOURCE_KEY = std::pair<wxString, wxString>;
+
+    std::map<SOURCE_KEY, LIB_SYMBOL*>            defByKey;
+    std::map<wxString, std::vector<LIB_SYMBOL*>> defsByName;
 
     for( const std::unique_ptr<LIB_SYMBOL>& def : aDefinitions )
     {
@@ -145,9 +150,27 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
         if( name.IsEmpty() )
             name = def->GetName();
 
-        if( !name.IsEmpty() )
-            defByName.emplace( name, def.get() );
+        if( name.IsEmpty() )
+            continue;
+
+        defByKey.emplace( SOURCE_KEY( def->GetLibId().GetUniStringLibNickname(), name ), def.get() );
+        defsByName[name].push_back( def.get() );
     }
+
+    // definitions can carry a different nickname from the placed symbols, so a unique name still
+    // matches, but an ambiguous one must not
+    auto findDef = [&]( const wxString& aNick, const wxString& aName ) -> LIB_SYMBOL*
+    {
+        if( auto it = defByKey.find( SOURCE_KEY( aNick, aName ) ); it != defByKey.end() )
+            return it->second;
+
+        auto byName = defsByName.find( aName );
+
+        if( byName == defsByName.end() || byName->second.size() != 1 )
+            return nullptr;
+
+        return byName->second.front();
+    };
 
     // preload source libs before membership queries
     for( const wxString& nick : aSourceLibNicknames )
@@ -190,9 +213,9 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
             // link only when it holds the same part.
             if( !provenance.count( nick ) )
             {
-                auto def = defByName.find( aName );
+                LIB_SYMBOL* def = findDef( ownNick, aName );
 
-                if( def == defByName.end() || !sameInterface( *candidate, *def->second ) )
+                if( !def || !sameInterface( *candidate, *def ) )
                     continue;
             }
 
@@ -204,16 +227,10 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
 
     std::vector<SCH_SYMBOL*> symbols = placedSymbols( aSchematic );
 
-    // per-instance target keyed by nick+name, so same-name parts from different libs stay split
-    // empty target = cache-bound
-    std::map<wxString, wxString>                 targetByKey;
-    std::set<wxString>                           cacheNames;
-    std::map<wxString, std::vector<SCH_SYMBOL*>> instancesByName;
-
-    auto keyOf = []( const wxString& aNick, const wxString& aName )
-    {
-        return aNick + wxS( "\x1f" ) + aName;
-    };
+    // per-instance target, empty target = cache-bound
+    std::map<SOURCE_KEY, wxString>                 targetByKey;
+    std::set<SOURCE_KEY>                           cacheKeys;
+    std::map<SOURCE_KEY, std::vector<SCH_SYMBOL*>> instancesByKey;
 
     for( SCH_SYMBOL* symbol : symbols )
     {
@@ -222,9 +239,9 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
         if( name.IsEmpty() )
             continue;
 
-        instancesByName[name].push_back( symbol );
+        SOURCE_KEY key( symbol->GetLibId().GetUniStringLibNickname(), name );
 
-        wxString key = keyOf( symbol->GetLibId().GetUniStringLibNickname(), name );
+        instancesByKey[key].push_back( symbol );
 
         if( targetByKey.count( key ) )
             continue;
@@ -233,49 +250,105 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
         targetByKey[key] = sourceNick;
 
         if( sourceNick.IsEmpty() )
-            cacheNames.insert( name );
+            cacheKeys.insert( key );
     }
 
-    // canonical def per cache name, fall back to the placed instance cache if importer gave none
-    std::map<wxString, LIB_SYMBOL*>          cacheDefs;
-    std::vector<std::unique_ptr<LIB_SYMBOL>> placedDefs;
+    // one library cannot hold two items of the same name, so a collision takes a suffix
+    std::set<wxString> takenNames;
 
-    for( const wxString& name : cacheNames )
+    auto uniqueName = [&takenNames]( const wxString& aName )
     {
-        if( auto it = defByName.find( name ); it != defByName.end() )
+        wxString candidate = aName;
+
+        for( int suffix = 1; !takenNames.insert( candidate ).second; ++suffix )
+            candidate = wxString::Format( wxS( "%s_%d" ), aName, suffix );
+
+        return candidate;
+    };
+
+    // canonical def per cache key, fall back to the placed instance cache if importer gave none
+    std::map<wxString, LIB_SYMBOL*>          cacheDefs;
+    std::map<SOURCE_KEY, wxString>           cacheNameByKey;
+    std::map<const LIB_SYMBOL*, wxString>    cacheNameByDef;
+    std::vector<std::unique_ptr<LIB_SYMBOL>> placedDefs;
+    std::vector<wxString>                    renameReports;
+
+    // a derived symbol extends its parent by name, which a rename can move
+    std::vector<std::pair<LIB_SYMBOL*, SOURCE_KEY>> parentFixups;
+
+    for( const SOURCE_KEY& key : cacheKeys )
+    {
+        const wxString& name = key.second;
+        LIB_SYMBOL*     def = findDef( key.first, name );
+
+        if( !def )
         {
-            cacheDefs[name] = it->second;
-            continue;
-        }
+            const std::vector<SCH_SYMBOL*>& instances = instancesByKey[key];
 
-        const std::vector<SCH_SYMBOL*>& instances = instancesByName[name];
+            if( instances.empty() || !instances.front()->GetLibSymbolRef() )
+                continue;
 
-        if( instances.empty() || !instances.front()->GetLibSymbolRef() )
-            continue;
+            wxString firstSig = placedSignature( instances.front() );
 
-        wxString firstSig = placedSignature( instances.front() );
-
-        for( auto it = instances.begin() + 1; it != instances.end(); ++it )
-        {
-            if( placedSignature( *it ) != firstSig )
+            for( auto it = instances.begin() + 1; it != instances.end(); ++it )
             {
-                m_reporter.Report( wxString::Format( _( "Imported symbol '%s' has conflicting "
-                                                        "placed definitions; keeping the first." ),
-                                                     name ),
-                                   RPT_SEVERITY_WARNING );
-                break;
+                if( placedSignature( *it ) != firstSig )
+                {
+                    m_reporter.Report( wxString::Format( _( "Imported symbol '%s' has conflicting "
+                                                            "placed definitions; keeping the "
+                                                            "first." ), name ),
+                                       RPT_SEVERITY_WARNING );
+                    break;
+                }
             }
+
+            placedDefs.push_back(
+                    std::make_unique<LIB_SYMBOL>( *instances.front()->GetLibSymbolRef() ) );
+            def = placedDefs.back().get();
         }
 
-        placedDefs.push_back(
-                std::make_unique<LIB_SYMBOL>( *instances.front()->GetLibSymbolRef() ) );
-        cacheDefs[name] = placedDefs.back().get();
+        // one definition serving several source libraries stays a single cache item
+        if( auto it = cacheNameByDef.find( def ); it != cacheNameByDef.end() )
+        {
+            cacheNameByKey[key] = it->second;
+            continue;
+        }
+
+        wxString cacheName = uniqueName( name );
+
+        cacheNameByDef[def] = cacheName;
+        cacheNameByKey[key] = cacheName;
+        cacheDefs[cacheName] = def;
+
+        if( !def->GetParentName().IsEmpty() )
+            parentFixups.emplace_back( def, SOURCE_KEY( key.first, def->GetParentName() ) );
+
+        if( cacheName != name )
+        {
+            renameReports.push_back(
+                    wxString::Format( _( "Imported symbol '%s' from '%s' was renamed to '%s' "
+                                         "because another library supplies a different symbol of "
+                                         "that name." ), name, key.first, cacheName ) );
+        }
+    }
+
+    for( const auto& [def, parentKey] : parentFixups )
+    {
+        if( auto it = cacheNameByKey.find( parentKey ); it != cacheNameByKey.end() )
+            def->SetParentName( it->second );
     }
 
     if( !cacheDefs.empty() )
         writeAndRegisterCache( aCacheNickname, cacheDefs, result );
 
-    // re-point nicks to the resolved lib, keep the item name
+    // no rename happened if the cache did not publish
+    if( !result.m_cacheNickname.IsEmpty() )
+    {
+        for( const wxString& report : renameReports )
+            m_reporter.Report( report, RPT_SEVERITY_WARNING );
+    }
+
+    // re-point nicks to the resolved lib, cache-bound symbols also take their cache item name
     for( SCH_SYMBOL* symbol : symbols )
     {
         LIB_ID   libId = symbol->GetLibId();
@@ -284,7 +357,8 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
         if( name.IsEmpty() )
             continue;
 
-        auto it = targetByKey.find( keyOf( libId.GetUniStringLibNickname(), name ) );
+        SOURCE_KEY key( libId.GetUniStringLibNickname(), name );
+        auto       it = targetByKey.find( key );
 
         if( it == targetByKey.end() )
         {
@@ -295,13 +369,16 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
         // empty resolution = cache-bound, resolves only once the cache is published
         if( it->second.IsEmpty() )
         {
-            if( result.m_cacheNickname.IsEmpty() )
+            auto cacheName = cacheNameByKey.find( key );
+
+            if( result.m_cacheNickname.IsEmpty() || cacheName == cacheNameByKey.end() )
             {
                 result.m_unresolved++;
                 continue;
             }
 
             libId.SetLibNickname( aCacheNickname );
+            libId.SetLibItemName( cacheName->second );
             symbol->SetLibId( libId );
             result.m_linkedToCache++;
         }
@@ -374,7 +451,11 @@ void SYMBOL_IMPORT_RECONCILER::writeAndRegisterCache(
         for( const auto& [name, def] : aCacheDefs )
         {
             std::unique_ptr<LIB_SYMBOL> copy = std::make_unique<LIB_SYMBOL>( *def );
-            LIB_ID                      id = copy->GetLibId();
+
+            // the library is keyed by the symbol name, which SetLibId leaves alone
+            copy->SetName( name );
+
+            LIB_ID id = copy->GetLibId();
 
             id.SetLibNickname( aCacheNickname );
             copy->SetLibId( id );

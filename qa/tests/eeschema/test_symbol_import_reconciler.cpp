@@ -32,6 +32,7 @@
 #include <pgm_base.h>
 #include <project.h>
 #include <project_sch.h>
+#include <reporter.h>
 #include <schematic.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
@@ -405,6 +406,100 @@ BOOST_AUTO_TEST_CASE( EquivalentNamesakeTakesTheLink )
 
     BOOST_CHECK_EQUAL( candidate.m_symbol->GetLibId().GetUniStringLibNickname(), sourceNick );
     BOOST_CHECK_GT( result.m_linkedToSource, 0 );
+
+    wxFileName::Rmdir( projectPath, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Two source libraries supplying different symbols under one bare name must both survive the
+// cache; keying the cache by the bare name alone dropped the second and relinked its instance
+BOOST_AUTO_TEST_CASE( SameNameFromDifferentLibrariesKeepsBothDefinitions )
+{
+    wxString projectPath = stageProject( wxS( "symreconcile_namecollide" ) );
+    PROJECT& project = Pgm().GetSettingsManager().Prj();
+
+    IMPORTED_SAMPLE sample = importSample( project );
+
+    // two real imported symbols that a pin count tells apart
+    SCH_SYMBOL* firstPlaced = nullptr;
+    SCH_SYMBOL* secondPlaced = nullptr;
+
+    for( SCH_SYMBOL* symbol : placedSymbols( *sample.m_schematic ) )
+    {
+        const std::unique_ptr<LIB_SYMBOL>& part = symbol->GetLibSymbolRef();
+
+        if( !part || part->GetPins().empty() )
+            continue;
+
+        if( !firstPlaced )
+            firstPlaced = symbol;
+        else if( part->GetPins().size() != firstPlaced->GetLibSymbolRef()->GetPins().size() )
+            secondPlaced = symbol;
+
+        if( secondPlaced )
+            break;
+    }
+
+    BOOST_REQUIRE( firstPlaced );
+    BOOST_REQUIRE( secondPlaced );
+
+    const wxString sharedName = wxS( "SHARED_SYM" );
+    const size_t   firstPins = firstPlaced->GetLibSymbolRef()->GetPins().size();
+    const size_t   secondPins = secondPlaced->GetLibSymbolRef()->GetPins().size();
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> defs;
+
+    // the same bare name under two source libraries, both placed and defined
+    auto relabel = [&]( SCH_SYMBOL* aSymbol, const wxString& aNickname )
+    {
+        auto def = std::make_unique<LIB_SYMBOL>( *aSymbol->GetLibSymbolRef() );
+        def->SetName( sharedName );
+        def->SetLibId( LIB_ID( aNickname, sharedName ) );
+        defs.push_back( std::move( def ) );
+
+        aSymbol->SetLibId( LIB_ID( aNickname, sharedName ) );
+    };
+
+    relabel( firstPlaced, wxS( "libAlpha" ) );
+    relabel( secondPlaced, wxS( "libBeta" ) );
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &project );
+    BOOST_REQUIRE( adapter );
+
+    const wxString           cacheNick = wxS( "namecollide-import-syms" );
+    WX_STRING_REPORTER       reporter;
+    SYMBOL_IMPORT_RECONCILER reconciler( *adapter, project.GetProjectPath(), reporter );
+
+    SYMBOL_IMPORT_RECONCILE_RESULT result =
+            reconciler.Reconcile( sample.m_schematic.get(), std::move( defs ), cacheNick, {} );
+
+    BOOST_CHECK_EQUAL( result.m_cacheNickname, cacheNick );
+
+    LIB_ID firstId = firstPlaced->GetLibId();
+    LIB_ID secondId = secondPlaced->GetLibId();
+
+    BOOST_CHECK_EQUAL( firstId.GetUniStringLibNickname(), cacheNick );
+    BOOST_CHECK_EQUAL( secondId.GetUniStringLibNickname(), cacheNick );
+    BOOST_CHECK_MESSAGE( firstId.GetUniStringLibItemName() != secondId.GetUniStringLibItemName(),
+                         "Symbols from two source libraries share one cache item name" );
+
+    // each instance still resolves to the symbol it was imported as
+    LIB_SYMBOL* firstLinked = adapter->LoadSymbol( cacheNick, firstId.GetUniStringLibItemName() );
+    LIB_SYMBOL* secondLinked = adapter->LoadSymbol( cacheNick, secondId.GetUniStringLibItemName() );
+
+    BOOST_REQUIRE( firstLinked );
+    BOOST_REQUIRE( secondLinked );
+    BOOST_CHECK_EQUAL( firstLinked->GetPins().size(), firstPins );
+    BOOST_CHECK_EQUAL( secondLinked->GetPins().size(), secondPins );
+
+    // the user is told which symbol the cache renamed
+    const wxString renamed = firstId.GetUniStringLibItemName() == sharedName
+                                     ? secondId.GetUniStringLibItemName()
+                                     : firstId.GetUniStringLibItemName();
+
+    BOOST_CHECK_MESSAGE( reporter.GetMessages().Contains(
+                                 wxString::Format( wxS( "renamed to '%s'" ), renamed ) ),
+                         "Cache rename was not reported" );
 
     wxFileName::Rmdir( projectPath, wxPATH_RMDIR_RECURSIVE );
 }

@@ -21,6 +21,7 @@
 
 #include <map>
 #include <set>
+#include <utility>
 
 #include <wx/dir.h>
 #include <wx/filename.h>
@@ -33,6 +34,7 @@
 #include <project.h>
 #include <project_pcb.h>
 #include <reporter.h>
+#include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <io/io_mgr.h>
 #include <pcb_io/pcb_io.h>
@@ -100,15 +102,37 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
     if( !aBoard )
         return result;
 
-    std::map<wxString, FOOTPRINT*> defByName;
+    // source nickname + item name, so same-name parts from different libraries stay split
+    using SOURCE_KEY = std::pair<wxString, wxString>;
+
+    std::map<SOURCE_KEY, FOOTPRINT*>            defByKey;
+    std::map<wxString, std::vector<FOOTPRINT*>> defsByName;
 
     for( const std::unique_ptr<FOOTPRINT>& def : aDefinitions )
     {
         wxString name = def->GetFPID().GetUniStringLibItemName();
 
-        if( !name.IsEmpty() )
-            defByName.emplace( name, def.get() );
+        if( name.IsEmpty() )
+            continue;
+
+        defByKey.emplace( SOURCE_KEY( def->GetFPID().GetUniStringLibNickname(), name ), def.get() );
+        defsByName[name].push_back( def.get() );
     }
+
+    // definitions can carry a different nickname from the placed footprints, so a unique name still
+    // matches, but an ambiguous one must not
+    auto findDef = [&]( const wxString& aNick, const wxString& aName ) -> FOOTPRINT*
+    {
+        if( auto it = defByKey.find( SOURCE_KEY( aNick, aName ) ); it != defByKey.end() )
+            return it->second;
+
+        auto byName = defsByName.find( aName );
+
+        if( byName == defsByName.end() || byName->second.size() != 1 )
+            return nullptr;
+
+        return byName->second.front();
+    };
 
     // preload source libs before membership queries
     for( const wxString& nick : aSourceLibNicknames )
@@ -151,15 +175,15 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
             }
             else
             {
-                auto def = defByName.find( aName );
+                FOOTPRINT* def = findDef( ownNick, aName );
 
-                if( def == defByName.end() )
+                if( !def )
                     continue;
 
                 // one load answers both existence and equivalence, FootprintExists is itself a load
                 std::unique_ptr<FOOTPRINT> candidate( m_adapter.LoadFootprint( nick, aName, true ) );
 
-                if( !candidate || !sameInterface( *candidate, *def->second ) )
+                if( !candidate || !sameInterface( *candidate, *def ) )
                     continue;
             }
 
@@ -169,16 +193,10 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
         return matches.size() == 1 ? matches.front() : wxString( wxEmptyString );
     };
 
-    // per-instance target keyed by nick+name, so same-name parts from different libs stay split
-    // empty target = cache-bound
-    std::map<wxString, wxString>                targetByKey;
-    std::set<wxString>                          cacheNames;
-    std::map<wxString, std::vector<FOOTPRINT*>> instancesByName;
-
-    auto keyOf = []( const wxString& aNick, const wxString& aName )
-    {
-        return aNick + wxS( "\x1f" ) + aName;
-    };
+    // per-instance target, empty target = cache-bound
+    std::map<SOURCE_KEY, wxString>                targetByKey;
+    std::set<SOURCE_KEY>                          cacheKeys;
+    std::map<SOURCE_KEY, std::vector<FOOTPRINT*>> instancesByKey;
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
@@ -187,9 +205,9 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
         if( name.IsEmpty() )
             continue;
 
-        instancesByName[name].push_back( fp );
+        SOURCE_KEY key( fp->GetFPID().GetUniStringLibNickname(), name );
 
-        wxString key = keyOf( fp->GetFPID().GetUniStringLibNickname(), name );
+        instancesByKey[key].push_back( fp );
 
         if( targetByKey.count( key ) )
             continue;
@@ -198,49 +216,99 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
         targetByKey[key] = sourceNick;
 
         if( sourceNick.IsEmpty() )
-            cacheNames.insert( name );
+            cacheKeys.insert( key );
     }
 
-    // canonical def per cache name, fall back to unique placed instance if importer gave none
-    std::map<wxString, FOOTPRINT*>          cacheDefs;
-    std::vector<std::unique_ptr<FOOTPRINT>> placedDefs;
+    // a .pretty holds one file per footprint, so the file name must be unique, and case-folded for
+    // a cache moved to Windows or macOS
+    std::set<wxString> takenFiles;
 
-    for( const wxString& name : cacheNames )
+    auto uniqueName = [&takenFiles]( const wxString& aName )
     {
-        if( auto it = defByName.find( name ); it != defByName.end() )
+        for( int suffix = 0; ; ++suffix )
         {
-            cacheDefs[name] = it->second;
-            continue;
+            wxString candidate = suffix ? wxString::Format( wxS( "%s_%d" ), aName, suffix ) : aName;
+            wxString fileName = candidate;
+
+            ReplaceIllegalFileNameChars( fileName, '_' );
+            fileName.MakeLower();
+
+            if( takenFiles.insert( fileName ).second )
+                return candidate;
         }
+    };
 
-        const std::vector<FOOTPRINT*>& instances = instancesByName[name];
+    // canonical def per cache key, fall back to unique placed instance if importer gave none
+    std::map<wxString, FOOTPRINT*>          cacheDefs;
+    std::map<SOURCE_KEY, wxString>          cacheNameByKey;
+    std::map<const FOOTPRINT*, wxString>    cacheNameByDef;
+    std::vector<std::unique_ptr<FOOTPRINT>> placedDefs;
+    std::vector<wxString>                   renameReports;
 
-        if( instances.empty() )
-            continue;
+    for( const SOURCE_KEY& key : cacheKeys )
+    {
+        const wxString& name = key.second;
+        FOOTPRINT*      def = findDef( key.first, name );
 
-        wxString firstSig = placedSignature( instances.front() );
-
-        for( auto it = instances.begin() + 1; it != instances.end(); ++it )
+        if( !def )
         {
-            if( placedSignature( *it ) != firstSig )
+            const std::vector<FOOTPRINT*>& instances = instancesByKey[key];
+
+            if( instances.empty() )
+                continue;
+
+            wxString firstSig = placedSignature( instances.front() );
+
+            for( auto it = instances.begin() + 1; it != instances.end(); ++it )
             {
-                m_reporter.Report( wxString::Format( _( "Imported footprint '%s' has conflicting "
-                                                        "placed definitions; keeping the first." ),
-                                                     name ),
-                                   RPT_SEVERITY_WARNING );
-                break;
+                if( placedSignature( *it ) != firstSig )
+                {
+                    m_reporter.Report( wxString::Format( _( "Imported footprint '%s' has "
+                                                            "conflicting placed definitions; "
+                                                            "keeping the first." ), name ),
+                                       RPT_SEVERITY_WARNING );
+                    break;
+                }
             }
+
+            placedDefs.emplace_back( static_cast<FOOTPRINT*>( instances.front()->Clone() ) );
+            def = placedDefs.back().get();
         }
 
-        placedDefs.emplace_back( static_cast<FOOTPRINT*>( instances.front()->Clone() ) );
-        cacheDefs[name] = placedDefs.back().get();
+        // one definition serving several source libraries stays a single cache item
+        if( auto it = cacheNameByDef.find( def ); it != cacheNameByDef.end() )
+        {
+            cacheNameByKey[key] = it->second;
+            continue;
+        }
+
+        wxString cacheName = uniqueName( name );
+
+        cacheNameByDef[def] = cacheName;
+        cacheNameByKey[key] = cacheName;
+        cacheDefs[cacheName] = def;
+
+        if( cacheName != name )
+        {
+            renameReports.push_back(
+                    wxString::Format( _( "Imported footprint '%s' from '%s' was renamed to '%s' "
+                                         "because another library supplies a different footprint "
+                                         "of that name." ), name, key.first, cacheName ) );
+        }
     }
 
     // write residuals to an atomic .pretty and register the row
     if( !cacheDefs.empty() )
         writeAndRegisterCache( aCacheNickname, cacheDefs, result );
 
-    // re-point nicks to the resolved lib, keep the item name
+    // no rename happened if the cache did not publish
+    if( !result.m_cacheNickname.IsEmpty() )
+    {
+        for( const wxString& report : renameReports )
+            m_reporter.Report( report, RPT_SEVERITY_WARNING );
+    }
+
+    // re-point nicks to the resolved lib, cache-bound footprints also take their cache item name
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
         LIB_ID   fpid = fp->GetFPID();
@@ -249,7 +317,8 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
         if( name.IsEmpty() )
             continue;
 
-        auto it = targetByKey.find( keyOf( fpid.GetUniStringLibNickname(), name ) );
+        SOURCE_KEY key( fpid.GetUniStringLibNickname(), name );
+        auto       it = targetByKey.find( key );
 
         if( it == targetByKey.end() )
         {
@@ -260,13 +329,16 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
         // empty resolution = cache-bound, resolves only once the cache is published
         if( it->second.IsEmpty() )
         {
-            if( result.m_cacheNickname.IsEmpty() )
+            auto cacheName = cacheNameByKey.find( key );
+
+            if( result.m_cacheNickname.IsEmpty() || cacheName == cacheNameByKey.end() )
             {
                 result.m_unresolved++;
                 continue;
             }
 
             fpid.SetLibNickname( aCacheNickname );
+            fpid.SetLibItemName( cacheName->second );
             fp->SetFPID( fpid );
             result.m_linkedToCache++;
         }
@@ -341,6 +413,7 @@ void FOOTPRINT_IMPORT_RECONCILER::writeAndRegisterCache(
             LIB_ID id = def->GetFPID();
 
             id.SetLibNickname( aCacheNickname );
+            id.SetLibItemName( name );
             def->SetFPID( id );
             def->SetReference( wxS( "REF**" ) );
             pi->FootprintSave( tempPath, def, &properties );

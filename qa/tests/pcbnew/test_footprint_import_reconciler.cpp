@@ -429,6 +429,111 @@ BOOST_AUTO_TEST_CASE( CollidingNicknameDoesNotStealTheLink )
 }
 
 
+// Two source libraries supplying different footprints under one bare name must both survive the
+// cache; keying the cache by the bare name alone dropped the second and relinked its instance
+BOOST_AUTO_TEST_CASE( SameNameFromDifferentLibrariesKeepsBothDefinitions )
+{
+    stageProject( wxS( "fpreconcile_namecollide" ) );
+    PROJECT& project = Pgm().GetSettingsManager().Prj();
+
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/HiFive/HiFive1.B01.PcbDoc";
+
+    PCB_IO_ALTIUM_DESIGNER plugin;
+    std::unique_ptr<BOARD> source = std::make_unique<BOARD>();
+    source->SetProject( &project );
+    plugin.LoadBoard( dataPath, source.get(), nullptr, &project );
+
+    // two real imported footprints that a pad count tells apart
+    FOOTPRINT* firstSource = nullptr;
+    FOOTPRINT* secondSource = nullptr;
+
+    for( FOOTPRINT* fp : source->Footprints() )
+    {
+        if( fp->Pads().empty() )
+            continue;
+
+        if( !firstSource )
+            firstSource = fp;
+        else if( fp->Pads().size() != firstSource->Pads().size() )
+            secondSource = fp;
+
+        if( secondSource )
+            break;
+    }
+
+    BOOST_REQUIRE( firstSource );
+    BOOST_REQUIRE( secondSource );
+
+    const wxString sharedName = wxS( "SHARED_FP" );
+    const size_t   firstPads = firstSource->Pads().size();
+    const size_t   secondPads = secondSource->Pads().size();
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    board->SetProject( &project );
+
+    std::vector<std::unique_ptr<FOOTPRINT>> defs;
+
+    // the same bare name under two source libraries, both placed and defined
+    auto place = [&]( const FOOTPRINT* aSource, const wxString& aNickname )
+    {
+        FOOTPRINT* placed = static_cast<FOOTPRINT*>( aSource->Clone() );
+        placed->SetFPID( LIB_ID( aNickname, sharedName ) );
+        board->Add( placed, ADD_MODE::APPEND );
+
+        std::unique_ptr<FOOTPRINT> def( static_cast<FOOTPRINT*>( aSource->Clone() ) );
+        def->SetFPID( LIB_ID( aNickname, sharedName ) );
+        defs.push_back( std::move( def ) );
+
+        return placed;
+    };
+
+    FOOTPRINT* firstPlaced = place( firstSource, wxS( "libAlpha" ) );
+    FOOTPRINT* secondPlaced = place( secondSource, wxS( "libBeta" ) );
+
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &project );
+    BOOST_REQUIRE( adapter );
+
+    const wxString              cacheNick = wxS( "namecollide-import-fps" );
+    WX_STRING_REPORTER          reporter;
+    FOOTPRINT_IMPORT_RECONCILER reconciler( *adapter, project.GetProjectPath(), reporter );
+
+    FOOTPRINT_IMPORT_RECONCILE_RESULT result =
+            reconciler.Reconcile( board.get(), std::move( defs ), cacheNick, {} );
+
+    BOOST_CHECK_EQUAL( result.m_cacheNickname, cacheNick );
+    BOOST_CHECK_EQUAL( result.m_savedToCache, 2 );
+
+    LIB_ID firstId = firstPlaced->GetFPID();
+    LIB_ID secondId = secondPlaced->GetFPID();
+
+    BOOST_CHECK_EQUAL( firstId.GetUniStringLibNickname(), cacheNick );
+    BOOST_CHECK_EQUAL( secondId.GetUniStringLibNickname(), cacheNick );
+    BOOST_CHECK_MESSAGE( firstId.GetUniStringLibItemName() != secondId.GetUniStringLibItemName(),
+                         "Footprints from two source libraries share one cache item name" );
+
+    // each instance still resolves to the footprint it was imported as
+    std::unique_ptr<FOOTPRINT> firstLinked(
+            adapter->LoadFootprint( cacheNick, firstId.GetUniStringLibItemName(), true ) );
+    std::unique_ptr<FOOTPRINT> secondLinked(
+            adapter->LoadFootprint( cacheNick, secondId.GetUniStringLibItemName(), true ) );
+
+    BOOST_REQUIRE( firstLinked );
+    BOOST_REQUIRE( secondLinked );
+    BOOST_CHECK_EQUAL( firstLinked->Pads().size(), firstPads );
+    BOOST_CHECK_EQUAL( secondLinked->Pads().size(), secondPads );
+
+    // the user is told which footprint the cache renamed
+    const wxString renamed = firstId.GetUniStringLibItemName() == sharedName
+                                     ? secondId.GetUniStringLibItemName()
+                                     : firstId.GetUniStringLibItemName();
+
+    BOOST_CHECK_MESSAGE( reporter.GetMessages().Contains(
+                                 wxString::Format( wxS( "renamed to '%s'" ), renamed ) ),
+                         "Cache rename was not reported" );
+}
+
+
 // A project row already owning the cache nickname is a user library even when no .pretty sits at
 // the generated path, so publishing must not rewrite its URI
 BOOST_AUTO_TEST_CASE( ExistingUserRowIsNotRepurposed )

@@ -84,6 +84,7 @@ public:
 
 private:
     /// Write the residual definitions into an atomically-published .kicad_sym and register its row.
+    /// @p aCacheDefs is keyed by the item name each definition takes in the cache.
     void writeAndRegisterCache( const wxString&                        aCacheNickname,
                                 const std::map<wxString, LIB_SYMBOL*>& aCacheDefs,
                                 SYMBOL_IMPORT_RECONCILE_RESULT&        aResult );
