@@ -1260,16 +1260,8 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFl
     if( m_shapesDirty )
         BuildEffectiveShapes();
 
-    // In some cases we want to add in any backdrill or post-machining
-    if( ( aUsage == PHYSICAL_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
-            || ( aUsage == SILK_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) ) )
-    {
-        std::shared_ptr<SHAPE_COMPOUND> effective_compound = std::make_shared<SHAPE_COMPOUND>();
-        effective_compound->AddShape( m_drawCache->m_effectiveShapes.at( aLayer ) );
-        effective_compound->AddShape( GetEffectiveHoleShape( aLayer, aUsage ) );
-        return effective_compound;
-    }
-
+    // A normal padstack keeps one shape, under ALL_LAYERS, so the cache accepts only the remapped
+    // layer.  The machining tests below still use the layer that the caller asked for
     PCB_LAYER_ID effectiveLayer = Padstack().EffectiveLayerFor( aLayer );
 
     const PAD_DRAW_CACHE_DATA& drawCache = getDrawCache();
@@ -1280,6 +1272,16 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFl
     wxCHECK_MSG( drawCache.m_effectiveShapes.at( effectiveLayer ), nullptr,
                  wxString::Format( wxT( "Null shape in PAD::GetEffectiveShape for layer %s." ),
                                    magic_enum::enum_name( effectiveLayer ) ) );
+
+    // In some cases we want to add in any backdrill or post-machining
+    if( ( aUsage == PHYSICAL_CLEARANCE_CONSTRAINT || aUsage == SILK_CLEARANCE_CONSTRAINT )
+            && IsBackdrilledOrPostMachined( aLayer ) )
+    {
+        std::shared_ptr<SHAPE_COMPOUND> effective_compound = std::make_shared<SHAPE_COMPOUND>();
+        effective_compound->AddShape( drawCache.m_effectiveShapes.at( effectiveLayer ) );
+        effective_compound->AddShape( GetEffectiveHoleShape( aLayer, aUsage ) );
+        return effective_compound;
+    }
 
     return drawCache.m_effectiveShapes.at( effectiveLayer );
 }

@@ -1212,7 +1212,8 @@ INSPECT_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData, const std:
 
 std::shared_ptr<SHAPE_SEGMENT> PCB_VIA::GetEffectiveHoleShape( PCB_LAYER_ID aLayer, DRC_CONSTRAINT_T aUsage ) const
 {
-    int holeSize = Padstack().Drill().size.x;
+    // An unset padstack drill falls back to the netclass value
+    int holeSize = GetDrillValue();
 
     // See if we want to include a larger backdrill or post-machining hole
     if( aUsage == HOLE_TO_HOLE_CONSTRAINT

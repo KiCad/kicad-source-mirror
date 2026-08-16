@@ -32,6 +32,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <footprint.h>
+#include <netclass.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_marker.h>
@@ -729,4 +730,107 @@ BOOST_FIXTURE_TEST_CASE( CountersinkAngleDecidegrees, BACKDRILL_TEST_FIXTURE )
 
     const PADSTACK::POST_MACHINING_PROPS& backPM = via->Padstack().BackPostMachining();
     BOOST_CHECK_EQUAL( backPM.angle, 600 );
+}
+
+
+/**
+ * A normal padstack holds one shape, stored under PADSTACK::ALL_LAYERS.  A backdrilled pad
+ * queried on an inner layer must still find that shape instead of throwing.
+ */
+BOOST_FIXTURE_TEST_CASE( PadEffectiveShapeOnBackdrilledInnerLayer, BACKDRILL_TEST_FIXTURE )
+{
+    int netCode = GetNetCode( "TestNet" );
+
+    int padSize = pcbIUScale.mmToIU( 1.5 );
+    int backdrillSize = pcbIUScale.mmToIU( 2.0 );
+
+    FOOTPRINT* fp = CreateFootprintWithPad( VECTOR2I( pcbIUScale.mmToIU( 140 ), pcbIUScale.mmToIU( 10 ) ),
+                                            netCode );
+
+    PAD* pad = fp->Pads().front();
+
+    BOOST_REQUIRE( pad->Padstack().Mode() == PADSTACK::MODE::NORMAL );
+
+    SetPadBackdrill( pad, F_Cu, In2_Cu, backdrillSize );
+
+    BOOST_REQUIRE( pad->IsBackdrilledOrPostMachined( In1_Cu ) );
+
+    std::shared_ptr<SHAPE> physIn1;
+    std::shared_ptr<SHAPE> silkIn1;
+
+    BOOST_REQUIRE_NO_THROW( physIn1 = pad->GetEffectiveShape( In1_Cu, FLASHING::ALWAYS_FLASHED,
+                                                              PHYSICAL_CLEARANCE_CONSTRAINT ) );
+    BOOST_REQUIRE_NO_THROW( silkIn1 = pad->GetEffectiveShape( In1_Cu, FLASHING::ALWAYS_FLASHED,
+                                                              SILK_CLEARANCE_CONSTRAINT ) );
+
+    // Physical and silk clearance have to keep items out of the drilled area
+    BOOST_REQUIRE( physIn1 );
+    BOOST_REQUIRE( silkIn1 );
+    BOOST_CHECK_EQUAL( physIn1->BBox().GetWidth(), backdrillSize );
+    BOOST_CHECK_EQUAL( silkIn1->BBox().GetWidth(), backdrillSize );
+
+    // B_Cu is outside the backdrill, so it keeps the copper shape
+    std::shared_ptr<SHAPE> physB;
+
+    BOOST_REQUIRE_NO_THROW( physB = pad->GetEffectiveShape( B_Cu, FLASHING::ALWAYS_FLASHED,
+                                                            PHYSICAL_CLEARANCE_CONSTRAINT ) );
+    BOOST_REQUIRE( physB );
+    BOOST_CHECK_EQUAL( physB->BBox().GetWidth(), padSize );
+}
+
+
+/**
+ * A via can leave its drill unset and inherit the netclass value.  The hole shape must resolve
+ * that fallback, or hole-to-hole DRC measures from a zero-width hole and reports nothing.
+ */
+BOOST_FIXTURE_TEST_CASE( ViaHoleShapeUsesNetclassDrill, BACKDRILL_TEST_FIXTURE )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    int netclassDrill = pcbIUScale.mmToIU( 0.4 );
+    int holeToHoleMin = pcbIUScale.mmToIU( 0.5 );
+
+    bds.m_HoleToHoleMin = holeToHoleMin;
+    bds.m_DRCEngine->InitEngine( wxFileName() );
+
+    int netCode = GetNetCode( "TestNet" );
+
+    std::shared_ptr<NETCLASS> netclass = std::make_shared<NETCLASS>( "TestClass" );
+    netclass->SetViaDrill( netclassDrill );
+    m_board->FindNet( netCode )->SetNetClass( netclass );
+
+    // 0.7 mm apart leaves a 0.3 mm web between two 0.4 mm holes, under the minimum
+    VECTOR2I firstPos( pcbIUScale.mmToIU( 150 ), pcbIUScale.mmToIU( 10 ) );
+    VECTOR2I secondPos( firstPos.x + pcbIUScale.mmToIU( 0.7 ), firstPos.y );
+
+    auto addVia =
+            [&]( const VECTOR2I& aPos ) -> PCB_VIA*
+            {
+                PCB_VIA* via = new PCB_VIA( m_board.get() );
+                via->SetPosition( aPos );
+                via->SetLayerPair( F_Cu, B_Cu );
+                via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.6 ) );
+                via->SetDrillDefault();
+                via->SetNetCode( netCode );
+                m_board->Add( via );
+                return via;
+            };
+
+    PCB_VIA* first = addVia( firstPos );
+    PCB_VIA* second = addVia( secondPos );
+
+    BOOST_REQUIRE_EQUAL( first->GetDrillValue(), netclassDrill );
+
+    std::shared_ptr<SHAPE_SEGMENT> hole = first->GetEffectiveHoleShape( UNDEFINED_LAYER, HOLE_TO_HOLE_CONSTRAINT );
+
+    BOOST_REQUIRE( hole );
+    BOOST_CHECK_EQUAL( hole->GetWidth(), netclassDrill );
+
+    RebuildConnectivity();
+
+    std::vector<DRC_ITEM> violations = RunDRCForErrorCode( DRCE_DRILLED_HOLES_TOO_CLOSE );
+
+    BOOST_REQUIRE_EQUAL( violations.size(), 1u );
+    BOOST_CHECK( violations[0].GetMainItemID() == first->m_Uuid
+                 || violations[0].GetMainItemID() == second->m_Uuid );
 }
