@@ -1073,6 +1073,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/from_to_cache.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/convert_shape_list_to_polygon.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_engine.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_exclusion.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_cache_generator.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule.cpp

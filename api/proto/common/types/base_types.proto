@@ -510,16 +510,6 @@ enum ElectricalPinType
   EPT_NO_CONNECT = 12;
 }
 
-message RuleCheckerMarkerID
-{
-  string opaque_id = 1;
-}
-
-message RuleCheckerMarker
-{
-  RuleCheckerMarkerID id = 1;
-}
-
 enum RuleSeverity
 {
   RS_UNKNOWN = 0;

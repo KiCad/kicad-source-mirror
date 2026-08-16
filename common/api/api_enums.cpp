@@ -25,6 +25,7 @@
 #include <api/common/types/base_types.pb.h>
 #include <api/board/board_commands.pb.h>
 #include <api/board/board.pb.h>
+#include <api/board/board_rules.pb.h>
 #include <api/board/board_types.pb.h>
 #include <api/schematic/schematic_jobs.pb.h>
 #include <api/schematic/schematic_types.pb.h>

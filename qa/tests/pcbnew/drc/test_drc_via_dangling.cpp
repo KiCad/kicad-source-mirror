@@ -49,7 +49,7 @@ BOOST_FIXTURE_TEST_CASE( DRCViaDanglingRuleTest, DRC_REGRESSION_TEST_FIXTURE )
             {
                 PCB_MARKER temp( aItem, aPos );
 
-                if( bds.m_DrcExclusions.find( temp.SerializeToString() ) == bds.m_DrcExclusions.end() )
+                if( bds.m_DrcExclusions.find( DRC_EXCLUSION::FromMarker( temp ) ) == bds.m_DrcExclusions.end() )
                     violations.push_back( *aItem );
             } );
 

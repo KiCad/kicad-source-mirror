@@ -21,6 +21,7 @@
 #include <import_export.h>
 #include <api/api_enums.h>
 #include <api/board/board.pb.h>
+#include <api/board/board_rules.pb.h>
 #include <api/board/board_types.pb.h>
 #include <api/board/board_commands.pb.h>
 #include <api/board/board_jobs.pb.h>

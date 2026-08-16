@@ -37,6 +37,7 @@
 #include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/pcb_io.h>
 #include <pcb_marker.h>
+#include <api/board/board_rules.pb.h>
 #include <pcb_track.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -127,24 +128,22 @@ void DRC_BASE_FIXTURE::loadBoardAndVerifyInitialExclusions( const wxString& aBoa
     // Board test file comes with initial exclusions, check if they are preserved after loading
     const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     size_t                       initialExclusionsCount = bds.m_DrcExclusions.size();
-    size_t                       initialExclusionsCommentsCount = bds.m_DrcExclusionComments.size();
     BOOST_TEST_MESSAGE( "Initial DRC exclusions count: " << initialExclusionsCount );
     BOOST_CHECK_EQUAL( initialExclusionsCount, (size_t) aExpectedInitialExclusions );
-    BOOST_TEST_MESSAGE( "Initial DRC exclusion comments count: " << initialExclusionsCommentsCount );
-    BOOST_CHECK_EQUAL( initialExclusionsCommentsCount, (size_t) aExpectedInitialExclusions );
 }
 
 void DRC_BASE_FIXTURE::createAndVerifyInitialExclusionMarkers()
 {
     const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     std::vector<PCB_MARKER*>     markers;
-    for( const wxString exclusion : bds.m_DrcExclusions )
+
+    for( const DRC_EXCLUSION& exclusion : bds.m_DrcExclusions )
     {
-        PCB_MARKER* marker = PCB_MARKER::DeserializeFromString( exclusion );
+        PCB_MARKER* marker = PCB_MARKER::FromProto( exclusion.ToProto().marker() );
+
         if( marker )
         {
-            wxString comment = bds.m_DrcExclusionComments.at( exclusion );
-            marker->SetExcluded( true, comment );
+            marker->SetExcluded( true, exclusion.GetComment() );
             markers.push_back( marker );
             m_board->Add( marker );
         }
@@ -383,12 +382,18 @@ BOOST_FIXTURE_TEST_CASE( DRCExclusionsSurviveProjectRoundTrip, DRC_REGRESSION_TE
 
     runDrcAndCreateMarkers( m_board.get() );
 
-    std::map<wxString, int> keyCounts;
-    std::map<wxString, int> expectedKeys;
+    auto markerKey =
+        []( const PCB_MARKER* aMarker ) -> std::string
+        {
+            return nlohmann::json( DRC_EXCLUSION::FromMarker( *aMarker ) ).dump();
+        };
+
+    std::map<std::string, int> keyCounts;
+    std::map<std::string, int> expectedKeys;
 
     for( PCB_MARKER* marker : m_board->Markers() )
     {
-        wxString serialized = marker->SerializeToString();
+        std::string serialized = markerKey( marker );
 
         keyCounts[serialized]++;
 
@@ -399,7 +404,7 @@ BOOST_FIXTURE_TEST_CASE( DRCExclusionsSurviveProjectRoundTrip, DRC_REGRESSION_TE
     // A violation found on several copper layers is reported once per layer but serializes to a
     // single key, so one stored exclusion has to cover every marker that shares it
     bool sharedKeys = std::any_of( keyCounts.begin(), keyCounts.end(),
-                                   []( const std::pair<const wxString, int>& aEntry )
+                                   []( const std::pair<const std::string, int>& aEntry )
                                    {
                                        return aEntry.second > 1;
                                    } );
@@ -425,18 +430,18 @@ BOOST_FIXTURE_TEST_CASE( DRCExclusionsSurviveProjectRoundTrip, DRC_REGRESSION_TE
 
     // Violations have to be reported against the same items, at the same place, and just as
     // often, on a board that has just been reloaded, or no exclusion can survive the trip
-    std::map<wxString, int> reloadedKeys;
+    std::map<std::string, int> reloadedKeys;
 
     for( PCB_MARKER* marker : m_board->Markers() )
     {
         if( !isCourtyardOverlap( marker ) )
-            reloadedKeys[marker->SerializeToString()]++;
+            reloadedKeys[markerKey( marker )]++;
     }
 
-    for( const std::pair<const wxString, int>& entry : expectedKeys )
+    for( const std::pair<const std::string, int>& entry : expectedKeys )
         BOOST_CHECK_MESSAGE( reloadedKeys[entry.first] == entry.second, "key not reproduced: " << entry.first );
 
-    for( const std::pair<const wxString, int>& entry : reloadedKeys )
+    for( const std::pair<const std::string, int>& entry : reloadedKeys )
         BOOST_CHECK_MESSAGE( expectedKeys.count( entry.first ), "key appeared only after reload: " << entry.first );
 
     m_board->ResolveDRCExclusions( false );
@@ -444,6 +449,6 @@ BOOST_FIXTURE_TEST_CASE( DRCExclusionsSurviveProjectRoundTrip, DRC_REGRESSION_TE
     for( PCB_MARKER* marker : m_board->Markers() )
     {
         BOOST_CHECK_MESSAGE( marker->IsExcluded() || isCourtyardOverlap( marker ),
-                             "exclusion lost for " << marker->SerializeToString() );
+                             "exclusion lost for " << markerKey( marker ) );
     }
 }

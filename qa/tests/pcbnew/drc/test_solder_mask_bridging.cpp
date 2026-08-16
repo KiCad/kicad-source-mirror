@@ -64,7 +64,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
             {
                 PCB_MARKER temp( aItem, aPos );
 
-                if( bds.m_DrcExclusions.find( temp.SerializeToString() ) == bds.m_DrcExclusions.end() )
+                if( bds.m_DrcExclusions.find( DRC_EXCLUSION::FromMarker( temp ) ) == bds.m_DrcExclusions.end() )
                     violations.push_back( *aItem );
             } );
 

@@ -1,0 +1,130 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Jon Evans <jon@craftyjon.com>
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+
+package kiapi.schematic;
+
+import "common/types/base_types.proto";
+
+enum ErcErrorType
+{
+  ERCET_UNKNOWN = 0;
+  ERCET_DUPLICATE_SHEET_NAME = 1;
+  ERCET_ENDPOINT_OFF_GRID = 2;
+  ERCET_PIN_NOT_CONNECTED = 3;
+  ERCET_PIN_NOT_DRIVEN = 4;
+  ERCET_POWERPIN_NOT_DRIVEN = 5;
+  ERCET_HIERARCHICAL_LABEL = 6;
+  ERCET_NOCONNECT_CONNECTED = 7;
+  ERCET_NOCONNECT_NOT_CONNECTED = 8;
+  ERCET_LABEL_NOT_CONNECTED = 9;
+  ERCET_SIMILAR_LABELS = 10;
+  ERCET_SIMILAR_POWER = 11;
+  ERCET_SIMILAR_LABEL_AND_POWER = 12;
+  ERCET_SINGLE_GLOBAL_LABEL = 13;
+  ERCET_SAME_LOCAL_GLOBAL_LABEL = 14;
+  ERCET_SAME_LOCAL_GLOBAL_POWER = 15;
+  ERCET_DIFFERENT_UNIT_FP = 16;
+  ERCET_MISSING_POWER_INPUT_PIN = 17;
+  ERCET_MISSING_INPUT_PIN = 18;
+  ERCET_MISSING_BIDI_PIN = 19;
+  ERCET_MISSING_UNIT = 20;
+  ERCET_DIFFERENT_UNIT_NET = 21;
+  ERCET_BUS_ALIAS_CONFLICT = 22;
+  ERCET_DRIVER_CONFLICT = 23;
+  ERCET_BUS_ENTRY_CONFLICT = 24;
+  ERCET_BUS_TO_BUS_CONFLICT = 25;
+  ERCET_BUS_TO_NET_CONFLICT = 26;
+  ERCET_GROUND_PIN_NOT_GROUND = 27;
+  ERCET_LABEL_SINGLE_PIN = 28;
+  ERCET_UNRESOLVED_VARIABLE = 29;
+  ERCET_UNDEFINED_NETCLASS = 30;
+  ERCET_SIMULATION_MODEL = 31;
+  ERCET_WIRE_DANGLING = 32;
+  ERCET_LIB_SYMBOL_ISSUES = 33;
+  ERCET_LIB_SYMBOL_MISMATCH = 34;
+  ERCET_FOOTPRINT_LINK_ISSUES = 35;
+  ERCET_FOOTPRINT_FILTERS = 36;
+  ERCET_UNANNOTATED = 37;
+  ERCET_EXTRA_UNITS = 38;
+  ERCET_DIFFERENT_UNIT_VALUE = 39;
+  ERCET_DUPLICATE_REFERENCE = 40;
+  ERCET_BUS_ENTRY_NEEDED = 41;
+  ERCET_FOUR_WAY_JUNCTION = 42;
+  ERCET_LABEL_MULTIPLE_WIRES = 43;
+  ERCET_UNCONNECTED_WIRE_ENDPOINT = 44;
+  ERCET_STACKED_PIN_SYNTAX = 45;
+  ERCET_PIN_MAP_BAD_PAD = 46;
+  ERCET_PIN_MAP_UNMAPPED_PIN = 47;
+  ERCET_PIN_MAP_DUPLICATE_PAD = 48;
+  ERCET_PIN_MAP_STALE_PIN = 49;
+  ERCET_EMPTY_LABEL_NAME = 50;
+  ERCET_VARIANT_SYMBOL_INVALID = 51;
+  ERCET_VARIANT_SYMBOL_INCOMPATIBLE = 52;
+
+  ERCET_DUPLICATE_PIN_ERROR = 53;
+  ERCET_PIN_TO_PIN_WARNING = 54;
+  ERCET_PIN_TO_PIN_ERROR = 55;
+  ERCET_ANNOTATION_ACTION = 56;
+  ERCET_GENERIC_WARNING = 57;
+  ERCET_GENERIC_ERROR = 58;
+  ERCET_FIELD_NAME_WHITESPACE = 59;
+}
+
+// See ErcMarker child field
+message ErcSymbolChildReference
+{
+  oneof lookup {
+    // Look up a field or text object by its contents
+    string text_value = 1;
+  }
+}
+
+message ErcMarker
+{
+  ErcErrorType error_type = 1;
+  kiapi.common.types.Vector2 position = 2;
+
+  // For now will be up to 2 items
+  repeated kiapi.common.types.KIID items = 3;
+
+  // Present only if this marker applies to a specific instance of a subsheet
+  optional kiapi.common.types.SheetPath sheet_specific_path = 4;
+
+  optional kiapi.common.types.SheetPath main_item_sheet_path = 5;
+  optional kiapi.common.types.SheetPath aux_item_sheet_path = 6;
+
+  // When the ERC marker refers to an item that has no KIID itself (e.g a symbol field)
+  // the parent item will be in items and this will be used to look up the child
+  optional ErcSymbolChildReference child = 7;
+}
+
+message ErcSeveritySetting
+{
+  ErcErrorType rule_type = 1;
+  kiapi.common.types.RuleSeverity severity = 2;
+}
+
+message ErcExclusion
+{
+  ErcMarker marker = 1;
+  string comment = 2;
+}

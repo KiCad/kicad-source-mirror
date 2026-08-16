@@ -36,10 +36,12 @@ set( KIAPI_PROTO_SRCS
     board/board_commands.proto
     board/board_jobs.proto
     board/board_types.proto
+    board/board_rules.proto
 
     schematic/schematic_types.proto
     schematic/schematic_commands.proto
     schematic/schematic_jobs.proto
+    schematic/schematic_rules.proto
     )
 
 # Generated C++ code must be in the build dir; it is dependent on the version of protoc installed

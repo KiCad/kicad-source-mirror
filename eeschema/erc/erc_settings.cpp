@@ -28,8 +28,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 
-
-const int ercSettingsSchemaVersion = 0;
+const int ercSettingsSchemaVersion = 1;
 
 
 
@@ -87,7 +86,7 @@ int ERC_SETTINGS::m_PinMinDrive[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_T
 
 
 ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
-        NESTED_SETTINGS( "erc", ercSettingsSchemaVersion, aParent, aPath )
+        NESTED_SETTINGS( "erc", ercSettingsSchemaVersion, aParent, aPath, false )
 {
     ResetPinMap();
 
@@ -171,8 +170,8 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             {
                 nlohmann::json js = nlohmann::json::array();
 
-                for( const wxString& entry : m_ErcExclusions )
-                    js.push_back( { entry, m_ErcExclusionComments[ entry ] } );
+                for( const ERC_EXCLUSION& exclusion : m_ErcExclusions )
+                    js.push_back( exclusion );
 
                 return js;
             },
@@ -185,16 +184,13 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
                 for( const nlohmann::json& entry : aObj )
                 {
-                    if( entry.is_array() )
-                    {
-                        wxString serialized = entry[0].get<wxString>();
-                        m_ErcExclusions.insert( serialized );
-                        m_ErcExclusionComments[ serialized ] = entry[1].get<wxString>();
-                    }
-                    else if( entry.is_string() )
-                    {
-                        m_ErcExclusions.insert( entry.get<wxString>() );
-                    }
+                    if( !entry.is_object() )
+                        continue;
+
+                    ERC_EXCLUSION exclusion = entry.get<ERC_EXCLUSION>();
+
+                    if( !exclusion.GetSortKey().empty() )
+                        m_ErcExclusions.insert( exclusion );
                 }
             },
             {} ) );
@@ -245,6 +241,8 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             {} ) );
 
+    registerMigration( 0, 1, std::bind( &ERC_SETTINGS::migrateSchema0to1, this ) );
+
     // Pin weights used for sorting. Take care, sorting is descending!
     m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_NIC,           11 );
     m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_UNSPECIFIED,   10 );
@@ -260,6 +258,41 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_PinTypeWeights.emplace( ELECTRICAL_PINTYPE::PT_NC,            0 );
 
     m_ERCSortingMetric = ERC_PIN_SORTING_METRIC::SM_HEURISTICS;
+}
+
+
+bool ERC_SETTINGS::migrateSchema0to1()
+{
+    // Schema 0 to 1: convert ERC exclusions from legacy pipe-delimited strings to ProtoJSON
+    std::optional<nlohmann::json> opt = Get<nlohmann::json>( "erc_exclusions" );
+
+    if( !opt )
+        return true;
+
+    m_ErcExclusionsLegacy.clear();
+
+    for( const nlohmann::json& entry : *opt )
+    {
+        if( entry.is_array() && entry.size() > 0 )
+        {
+            wxString markerData = entry[0].get<wxString>();
+            wxString comment    = entry.size() > 1 ? entry[1].get<wxString>() : wxString();
+
+            if( !markerData.IsEmpty() )
+                m_ErcExclusionsLegacy.emplace( markerData, comment );
+        }
+        else if( entry.is_string() )
+        {
+            wxString markerData = entry.get<wxString>();
+
+            if( !markerData.IsEmpty() )
+                m_ErcExclusionsLegacy.emplace( markerData, wxString() );
+        }
+    }
+
+    Set( "erc_exclusions", nlohmann::json::array() );
+
+    return true;
 }
 
 
@@ -340,7 +373,12 @@ struct CompareMarkers
         const VECTOR2I& p2 = item2->GetPosition();
 
         if( p1 == p2 )
-            return item1->SerializeToString() < item2->SerializeToString();
+        {
+            ERC_EXCLUSION ex1 = ERC_EXCLUSION::FromMarker( *item1 );
+            ERC_EXCLUSION ex2 = ERC_EXCLUSION::FromMarker( *item2 );
+
+            return ex1.GetSortKey() < ex2.GetSortKey();
+        }
 
         // VECTOR2::operator< orders by squared magnitude, which is not a strict
         // weak ordering: mirrored points like (a, b) and (b, a) compare equal

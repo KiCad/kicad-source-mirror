@@ -47,6 +47,7 @@
 #include <sch_label.h>
 #include <sch_line.h>
 #include <sch_marker.h>
+#include <api/schematic/schematic_rules.pb.h>
 #include <sch_no_connect.h>
 #include <sch_rule_area.h>
 #include <sch_screen.h>
@@ -188,6 +189,11 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
     if( m_project )
     {
         PROJECT_FILE& project = m_project->GetProjectFile();
+
+        // ERC exclusions migrations can't be resolved until the schematic is loaded.
+        // Make sure to process them here if they exist so that they get persisted by the save below.
+        if( !project.m_ErcSettings->m_ErcExclusionsLegacy.empty() )
+            ResolveERCExclusionsPostUpdate();
 
         // d'tor will save settings to file
         delete project.m_ErcSettings;
@@ -565,58 +571,44 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
     SCH_SHEET_LIST sheetList = Hierarchy();
     ERC_SETTINGS&  settings = ErcSettings();
 
-    // Migrate legacy marker exclusions to new format to ensure exclusion matching functions across
-    // file versions. Silently drops any legacy exclusions which can not be mapped to the new format
-    // without risking an incorrect exclusion - this is preferable to silently dropping
-    // new ERC errors / warnings due to an incorrect match between a legacy and new
-    // marker serialization format
-    std::set<wxString> migratedExclusions;
-
-    for( auto it = settings.m_ErcExclusions.begin(); it != settings.m_ErcExclusions.end(); )
+    // Have to handle legacy exclusions here rather than as a settings migration
+    // because we need to pass the built sheet list after the schematic is fully loaded
+    for( const auto& [markerData, comment] : settings.m_ErcExclusionsLegacy )
     {
-        SCH_MARKER* testMarker = SCH_MARKER::DeserializeFromString( sheetList, *it );
-
-        if( !testMarker )
+        if( SCH_MARKER* testMarker = SCH_MARKER::FromLegacyString( sheetList, markerData ) )
         {
-            it = settings.m_ErcExclusions.erase( it );
-            continue;
-        }
+            ERC_EXCLUSION exclusion = ERC_EXCLUSION::FromMarker( *testMarker );
+            exclusion.SetComment( comment );
+            delete testMarker;
 
-        if( testMarker->IsLegacyMarker() )
-        {
-            const wxString settingsKey = testMarker->GetRCItem()->GetSettingsKey();
+            // Legacy format can sometimes have the same exclusion multiple times,
+            // without and with a comment.  If this happens, replace the existing one
+            // if we can go from no comment to comment
+            auto [it, inserted] = settings.m_ErcExclusions.insert( exclusion );
 
-            if( settingsKey != wxT( "pin_to_pin" ) && settingsKey != wxT( "hier_label_mismatch" )
-                && settingsKey != wxT( "different_unit_net" ) )
+            if( !inserted && !comment.empty() && it->GetComment().empty() )
             {
-                migratedExclusions.insert( testMarker->SerializeToString() );
+                ERC_EXCLUSION updated = *it;
+                updated.SetComment( comment );
+                settings.m_ErcExclusions.erase( it );
+                settings.m_ErcExclusions.insert( updated );
             }
-
-            it = settings.m_ErcExclusions.erase( it );
         }
-        else
-        {
-            ++it;
-        }
-
-        delete testMarker;
     }
 
-    settings.m_ErcExclusions.insert( migratedExclusions.begin(), migratedExclusions.end() );
-
-    // End of legacy exclusion removal / migrations
+    settings.m_ErcExclusionsLegacy.clear();
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
-            SCH_MARKER*                  marker = static_cast<SCH_MARKER*>( item );
-            wxString                     serialized = marker->SerializeToString();
-            std::set<wxString>::iterator it = settings.m_ErcExclusions.find( serialized );
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+            ERC_EXCLUSION lookup = ERC_EXCLUSION::FromMarker( *marker );
+            auto          it = settings.m_ErcExclusions.find( lookup );
 
             if( it != settings.m_ErcExclusions.end() )
             {
-                marker->SetExcluded( true, settings.m_ErcExclusionComments[serialized] );
+                marker->SetExcluded( true, it->GetComment() );
                 settings.m_ErcExclusions.erase( it );
             }
         }
@@ -624,13 +616,13 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
     std::vector<SCH_MARKER*> newMarkers;
 
-    for( const wxString& serialized : settings.m_ErcExclusions )
+    for( const ERC_EXCLUSION& exclusion : settings.m_ErcExclusions )
     {
-        SCH_MARKER* marker = SCH_MARKER::DeserializeFromString( sheetList, serialized );
+        SCH_MARKER* marker = SCH_MARKER::FromProto( exclusion.ToProto().marker(), sheetList );
 
         if( marker )
         {
-            marker->SetExcluded( true, settings.m_ErcExclusionComments[serialized] );
+            marker->SetExcluded( true, exclusion.GetComment() );
             newMarkers.push_back( marker );
         }
     }
@@ -1356,10 +1348,9 @@ void SCHEMATIC::RecordERCExclusions()
 {
     // Use a sorted sheetList to reduce file churn
     SCH_SHEET_LIST sheetList = Hierarchy();
-    ERC_SETTINGS&  ercSettings = ErcSettings();
+    ERC_SETTINGS& ercSettings = ErcSettings();
 
     ercSettings.m_ErcExclusions.clear();
-    ercSettings.m_ErcExclusionComments.clear();
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
@@ -1369,9 +1360,7 @@ void SCHEMATIC::RecordERCExclusions()
 
             if( marker->IsExcluded() )
             {
-                wxString serialized = marker->SerializeToString();
-                ercSettings.m_ErcExclusions.insert( serialized );
-                ercSettings.m_ErcExclusionComments[serialized] = marker->GetComment();
+                ercSettings.m_ErcExclusions.insert( ERC_EXCLUSION::FromMarker( *marker ) );
             }
         }
     }

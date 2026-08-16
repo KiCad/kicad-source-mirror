@@ -30,6 +30,11 @@ class DRC_ITEM;
 class MSG_PANEL_ITEM;
 
 
+namespace kiapi::board
+{
+class DrcMarker;
+}
+
 class PCB_MARKER : public BOARD_ITEM, public MARKER_BASE
 {
 public:
@@ -44,9 +49,11 @@ public:
 
     const KIID GetUUID() const override { return m_Uuid; }
 
-    wxString SerializeToString() const;
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
 
-    static PCB_MARKER* DeserializeFromString( const wxString& data );
+    static PCB_MARKER* FromProto( const kiapi::board::DrcMarker& aMsg );
+    static PCB_MARKER* FromLegacyString( const wxString& aData );
 
     void Move( const VECTOR2I& aMoveVector ) override
     {

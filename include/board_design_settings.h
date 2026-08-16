@@ -22,9 +22,12 @@
 
 #include <memory>
 #include <optional>
+#include <set>
+#include <string>
 #include <vector>
 
 #include <board_stackup_manager/board_stackup.h>
+#include <drc/drc_exclusion.h>
 #include <eda_units.h>
 #include <lset.h>
 #include <settings/nested_settings.h>
@@ -652,6 +655,7 @@ private:
     void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
 
     bool migrateSchema0to1();
+    bool migrateSchema2to3();
 
 public:
     // Note: the first value in each dimensions list is the current netclass value
@@ -695,8 +699,7 @@ public:
 
     std::shared_ptr<DRC_ENGINE>  m_DRCEngine;
     std::map<int, SEVERITY>      m_DRCSeverities;           // Map from DRCErrorCode to SEVERITY
-    std::set<wxString>           m_DrcExclusions;           // Serialized excluded DRC markers
-    std::map<wxString, wxString> m_DrcExclusionComments;    // Map from serialization to comment
+    std::set<DRC_EXCLUSION, DRC_EXCLUSION_COMPARE> m_DrcExclusions;
 
     // When smoothing the zone's outline there's the question of external fillets (that is, those
     // applied to concave corners).  While it seems safer to never have copper extend outside the

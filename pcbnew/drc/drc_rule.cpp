@@ -22,6 +22,7 @@
 #include <board_item.h>
 #include <api/api_enums.h>
 #include <api/board/board.pb.h>
+#include <api/board/board_rules.pb.h>
 #include <base_units.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_rule_condition.h>

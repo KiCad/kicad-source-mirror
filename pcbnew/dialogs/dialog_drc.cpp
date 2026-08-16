@@ -912,9 +912,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
             marker->SetExcluded( true, dlg.GetValue() );
 
-            wxString serialized = marker->SerializeToString();
-            bds().m_DrcExclusions.insert( serialized );
-            bds().m_DrcExclusionComments[serialized] = dlg.GetValue();
+            DRC_EXCLUSION exclusion = DRC_EXCLUSION::FromMarker( *marker );
+            exclusion.SetComment( dlg.GetValue() );
+            bds().m_DrcExclusions.erase( exclusion );
+            bds().m_DrcExclusions.insert( exclusion );
 
             // Update view
             static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
@@ -927,10 +928,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() ) )
         {
             marker->SetExcluded( false );
-
-            wxString serialized = marker->SerializeToString();
-            bds().m_DrcExclusions.erase( serialized );
-            bds().m_DrcExclusionComments.erase( serialized );
+            bds().m_DrcExclusions.erase( DRC_EXCLUSION::FromMarker( *marker ) );
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             {
@@ -967,9 +965,9 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
             marker->SetExcluded( true, comment );
 
-            wxString serialized = marker->SerializeToString();
-            bds().m_DrcExclusions.insert( serialized );
-            bds().m_DrcExclusionComments[serialized] = comment;
+            DRC_EXCLUSION exclusion = DRC_EXCLUSION::FromMarker( *marker );
+            exclusion.SetComment( comment );
+            bds().m_DrcExclusions.insert( exclusion );
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             {
@@ -1000,10 +998,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             if( candidateDrcItem->GetViolatingRule() == drcItem->GetViolatingRule() )
             {
                 marker->SetExcluded( false );
-
-                wxString serialized = marker->SerializeToString();
-                bds().m_DrcExclusions.erase( serialized );
-                bds().m_DrcExclusionComments.erase( serialized );
+                bds().m_DrcExclusions.erase( DRC_EXCLUSION::FromMarker( *marker ) );
             }
         }
 
@@ -1020,9 +1015,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
             if( candidateDrcItem->GetViolatingRule() == drcItem->GetViolatingRule() )
             {
                 marker->SetExcluded( true );
-
-                wxString serialized = marker->SerializeToString();
-                bds().m_DrcExclusions.insert( serialized );
+                bds().m_DrcExclusions.insert( DRC_EXCLUSION::FromMarker( *marker ) );
             }
         }
 
@@ -1315,7 +1308,7 @@ void DIALOG_DRC::ExcludeMarker()
         if( marker && marker->GetSeverity() != RPT_SEVERITY_EXCLUSION )
         {
             marker->SetExcluded( true );
-            bds().m_DrcExclusions.insert( marker->SerializeToString() );
+            bds().m_DrcExclusions.insert( DRC_EXCLUSION::FromMarker( *marker ) );
             m_frame->GetCanvas()->GetView()->Update( marker );
 
             // Update view

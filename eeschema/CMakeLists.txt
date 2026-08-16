@@ -384,6 +384,7 @@ set( SYNC_SHEET_PIN_SRCS
 
 set( EESCHEMA_ERC_SRCS
     erc/erc.cpp
+    erc/erc_exclusion.cpp
     erc/erc_item.cpp
     erc/erc_report.cpp
     erc/erc_sch_pin_context.cpp

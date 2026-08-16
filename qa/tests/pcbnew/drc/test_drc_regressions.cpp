@@ -184,7 +184,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
                 {
                     markers.emplace_back( PCB_MARKER( aItem, aPos ) );
 
-                    if( bds.m_DrcExclusions.find( markers.back().SerializeToString() )
+                    if( bds.m_DrcExclusions.find( DRC_EXCLUSION::FromMarker( markers.back() ) )
                         == bds.m_DrcExclusions.end() )
                     {
                         violations.push_back( *aItem );

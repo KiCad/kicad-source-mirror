@@ -1,0 +1,351 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Jon Evans <jon@craftyjon.com>
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+
+package kiapi.board;
+
+import "common/types/base_types.proto";
+import "board/board_types.proto";
+
+message MinimumConstraints
+{
+  kiapi.common.types.Distance min_clearance = 1;
+  kiapi.common.types.Distance min_groove_width = 2;
+  kiapi.common.types.Distance min_connection_width = 3;
+  kiapi.common.types.Distance min_track_width = 4;
+  kiapi.common.types.Distance min_via_annular_width = 5;
+  kiapi.common.types.Distance min_via_size = 6;
+  kiapi.common.types.Distance min_through_drill = 7;
+  kiapi.common.types.Distance min_microvia_size = 8;
+  kiapi.common.types.Distance min_microvia_drill = 9;
+  kiapi.common.types.Distance copper_edge_clearance = 10;
+  kiapi.common.types.Distance hole_clearance = 11;
+  kiapi.common.types.Distance hole_to_hole_min = 12;
+  kiapi.common.types.Distance silk_clearance = 13;
+  int32 min_resolved_spokes = 14;
+  kiapi.common.types.Distance min_silk_text_height = 15;
+  kiapi.common.types.Distance min_silk_text_thickness = 16;
+}
+
+message PresetTrackWidth
+{
+  kiapi.common.types.Distance width = 1;
+}
+
+message PresetViaDimension
+{
+  kiapi.common.types.Distance diameter = 1;
+  kiapi.common.types.Distance drill = 2;
+}
+
+message PresetDiffPairDimension
+{
+  kiapi.common.types.Distance width = 1;
+  kiapi.common.types.Distance gap = 2;
+  kiapi.common.types.Distance via_gap = 3;
+}
+
+message PredefinedSizes
+{
+  repeated PresetTrackWidth tracks = 1;
+  repeated PresetViaDimension vias = 2;
+  repeated PresetDiffPairDimension diff_pairs = 3;
+}
+
+message SolderMaskPasteDefaults
+{
+  kiapi.common.types.Distance mask_expansion = 1;
+  kiapi.common.types.Distance mask_min_width = 2;
+  kiapi.common.types.Distance mask_to_copper_clearance = 3;
+  kiapi.common.types.Distance paste_margin = 4;
+  double paste_margin_ratio = 5;
+  bool allow_soldermask_bridges_in_footprints = 6;
+}
+
+enum TeardropTarget
+{
+  TDT_UNKNOWN = 0;
+  TDT_ROUND = 1;
+  TDT_RECT = 2;
+  TDT_TRACK = 3;
+}
+
+message TeardropTargetParams
+{
+  bool enabled = 1;
+  kiapi.common.types.Distance max_length = 2;
+  kiapi.common.types.Distance max_width = 3;
+  double best_length_ratio = 4;
+  double best_width_ratio = 5;
+  double width_to_size_filter_ratio = 6;
+  bool curved_edges = 7;
+  bool allow_two_tracks = 8;
+  bool on_pads_in_zones = 9;
+}
+
+message TeardropTargetEntry
+{
+  TeardropTarget target = 1;
+  TeardropTargetParams params = 2;
+}
+
+message TeardropDefaults
+{
+  bool target_vias = 1;
+  bool target_pth_pads = 2;
+  bool target_smd_pads = 3;
+  bool target_track_to_track = 4;
+  bool use_round_shapes_only = 5;
+  repeated TeardropTargetEntry target_params = 6;
+}
+
+message ViaProtectionDefaults
+{
+  bool tent_front = 1;
+  bool tent_back = 2;
+  bool cover_front = 3;
+  bool cover_back = 4;
+  bool plug_front = 5;
+  bool plug_back = 6;
+  bool cap = 7;
+  bool fill = 8;
+}
+
+enum DrcErrorType
+{
+  DRCET_UNKNOWN = 0;
+  DRCET_UNCONNECTED_ITEMS = 1;
+  DRCET_SHORTING_ITEMS = 2;
+  DRCET_ALLOWED_ITEMS = 3;
+  DRCET_TEXT_ON_EDGECUTS = 4;
+  DRCET_CLEARANCE = 5;
+  DRCET_CREEPAGE = 6;
+  DRCET_TRACKS_CROSSING = 7;
+  DRCET_EDGE_CLEARANCE = 8;
+  DRCET_ZONES_INTERSECT = 9;
+  DRCET_ISOLATED_COPPER = 10;
+  DRCET_STARVED_THERMAL = 11;
+  DRCET_DANGLING_VIA = 12;
+  DRCET_DANGLING_TRACK = 13;
+  DRCET_DRILLED_HOLES_TOO_CLOSE = 14;
+  DRCET_DRILLED_HOLES_COLOCATED = 15;
+  DRCET_HOLE_CLEARANCE = 16;
+  DRCET_CONNECTION_WIDTH = 17;
+  DRCET_TRACK_WIDTH = 18;
+  DRCET_TRACK_ANGLE = 19;
+  DRCET_TRACK_SEGMENT_LENGTH = 20;
+  DRCET_ANNULAR_WIDTH = 21;
+  DRCET_DRILL_OUT_OF_RANGE = 22;
+  DRCET_VIA_DIAMETER = 23;
+  DRCET_PADSTACK = 24;
+  DRCET_PADSTACK_INVALID = 25;
+  DRCET_MICROVIA_DRILL_OUT_OF_RANGE = 26;
+  DRCET_OVERLAPPING_FOOTPRINTS = 27;
+  DRCET_MISSING_COURTYARD = 28;
+  DRCET_MALFORMED_COURTYARD = 29;
+  DRCET_PTH_IN_COURTYARD = 30;
+  DRCET_NPTH_IN_COURTYARD = 31;
+  DRCET_DISABLED_LAYER_ITEM = 32;
+  DRCET_INVALID_OUTLINE = 33;
+  DRCET_MISSING_FOOTPRINT = 34;
+  DRCET_DUPLICATE_FOOTPRINT = 35;
+  DRCET_NET_CONFLICT = 36;
+  DRCET_EXTRA_FOOTPRINT = 37;
+  DRCET_SCHEMATIC_PARITY = 38;
+  DRCET_SCHEMATIC_FIELDS_PARITY = 39;
+  DRCET_FOOTPRINT_FILTERS = 40;
+  DRCET_LIB_FOOTPRINT_ISSUES = 41;
+  DRCET_LIB_FOOTPRINT_MISMATCH = 42;
+  DRCET_UNRESOLVED_VARIABLE = 43;
+  DRCET_ASSERTION_FAILURE = 44;
+  DRCET_GENERIC_WARNING = 45;
+  DRCET_GENERIC_ERROR = 46;
+  DRCET_COPPER_SLIVER = 47;
+  DRCET_SILK_CLEARANCE = 48;
+  DRCET_SILK_MASK_CLEARANCE = 49;
+  DRCET_SILK_EDGE_CLEARANCE = 50;
+  DRCET_SOLDERMASK_BRIDGE = 51;
+  DRCET_TEXT_HEIGHT = 52;
+  DRCET_TEXT_THICKNESS = 53;
+  DRCET_LENGTH_OUT_OF_RANGE = 54;
+  DRCET_SKEW_OUT_OF_RANGE = 55;
+  DRCET_VIA_COUNT_OUT_OF_RANGE = 56;
+  DRCET_DIFF_PAIR_GAP_OUT_OF_RANGE = 57;
+  DRCET_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG = 58;
+  DRCET_FOOTPRINT = 59;
+  DRCET_FOOTPRINT_TYPE_MISMATCH = 60;
+  DRCET_PAD_TH_WITH_NO_HOLE = 61;
+  DRCET_MIRRORED_TEXT_ON_FRONT_LAYER = 62;
+  DRCET_NONMIRRORED_TEXT_ON_BACK_LAYER = 63;
+  DRCET_MISSING_TUNING_PROFILE = 64;
+  DRCET_TUNING_PROFILE_IMPLICIT_RULES = 65;
+  DRCET_TRACK_ON_POST_MACHINED_LAYER = 66;
+  DRCET_TRACK_NOT_CENTERED_ON_VIA = 67;
+  DRCET_FOOTPRINT_SCALED_WITH_PADS = 68;
+  DRCET_NET_CHAIN_STUB_TOO_LONG = 69;
+  DRCET_NET_CHAIN_RETURN_PATH_BREAK = 70;
+  DRCET_NET_CHAIN_TUNING_PROFILES = 71;
+}
+
+message DrcMarker
+{
+  DrcErrorType error_type = 1;
+  kiapi.common.types.Vector2 position = 2;
+  // May be up to 4 items involved
+  repeated kiapi.common.types.KIID items = 3;
+  kiapi.board.types.BoardLayer layer = 4;
+}
+
+message DrcSeveritySetting
+{
+  DrcErrorType rule_type = 1;
+  kiapi.common.types.RuleSeverity severity = 2;
+}
+
+message DrcExclusion
+{
+  DrcMarker marker = 1;
+  string comment = 2;
+}
+
+enum CustomRuleLayerMode
+{
+  CRLM_UNKNOWN = 0;
+  CRLM_OUTER = 1;
+  CRLM_INNER = 2;
+}
+
+enum CustomRuleConstraintType
+{
+  CRCT_UNKNOWN = 0;
+  CRCT_CLEARANCE = 1;
+  CRCT_CREEPAGE = 2;
+  CRCT_HOLE_CLEARANCE = 3;
+  CRCT_HOLE_TO_HOLE = 4;
+  CRCT_EDGE_CLEARANCE = 5;
+  CRCT_HOLE_SIZE = 6;
+  CRCT_COURTYARD_CLEARANCE = 7;
+  CRCT_SILK_CLEARANCE = 8;
+  CRCT_TEXT_HEIGHT = 9;
+  CRCT_TEXT_THICKNESS = 10;
+  CRCT_TRACK_WIDTH = 11;
+  CRCT_TRACK_SEGMENT_LENGTH = 12;
+  CRCT_ANNULAR_WIDTH = 13;
+  CRCT_ZONE_CONNECTION = 14;
+  CRCT_THERMAL_RELIEF_GAP = 15;
+  CRCT_THERMAL_SPOKE_WIDTH = 16;
+  CRCT_MIN_RESOLVED_SPOKES = 17;
+  CRCT_SOLDER_MASK_EXPANSION = 18;
+  CRCT_SOLDER_PASTE_ABS_MARGIN = 19;
+  CRCT_SOLDER_PASTE_REL_MARGIN = 20;
+  CRCT_DISALLOW = 21;
+  CRCT_VIA_DIAMETER = 22;
+  CRCT_LENGTH = 23;
+  CRCT_SKEW = 24;
+  CRCT_DIFF_PAIR_GAP = 25;
+  CRCT_MAX_UNCOUPLED = 26;
+  CRCT_DIFF_PAIR_INTRA_SKEW = 27;
+  CRCT_VIA_COUNT = 28;
+  CRCT_PHYSICAL_CLEARANCE = 29;
+  CRCT_PHYSICAL_HOLE_CLEARANCE = 30;
+  CRCT_ASSERTION = 31;
+  CRCT_CONNECTION_WIDTH = 32;
+  CRCT_TRACK_ANGLE = 33;
+  CRCT_VIA_DANGLING = 34;
+  CRCT_BRIDGED_MASK = 35;
+  CRCT_SOLDER_MASK_SLIVER = 36;
+  CRCT_NET_CHAIN_LENGTH = 37;
+  CRCT_NET_CHAIN_STUB_LENGTH = 38;
+  CRCT_NET_CHAIN_RETURN_PATH = 39;
+}
+
+enum CustomRuleConstraintOption
+{
+  CRCO_UNKNOWN = 0;
+  CRCO_SKEW_WITHIN_DIFF_PAIRS = 1;
+  CRCO_SPACE_DOMAIN = 2;
+  CRCO_TIME_DOMAIN = 3;
+}
+
+enum CustomRuleDisallowType
+{
+  CRDT_UNKNOWN = 0;
+  CRDT_THROUGH_VIAS = 1;
+  CRDT_MICRO_VIAS = 2;
+  CRDT_BLIND_VIAS = 3;
+  CRDT_BURIED_VIAS = 4;
+  CRDT_TRACKS = 5;
+  CRDT_PADS = 6;
+  CRDT_ZONES = 7;
+  CRDT_TEXTS = 8;
+  CRDT_GRAPHICS = 9;
+  CRDT_HOLES = 10;
+  CRDT_FOOTPRINTS = 11;
+}
+
+message CustomRuleDisallowSettings
+{
+  repeated CustomRuleDisallowType types = 1;
+}
+
+message CustomRuleConstraint
+{
+  CustomRuleConstraintType type = 1;
+  optional string name = 2;
+
+  oneof value {
+    // nanometers, picoseconds, or unitless depending on constraint type
+    kiapi.common.types.MinOptMax numeric = 3;
+    CustomRuleDisallowSettings disallow = 4;
+    kiapi.board.types.ZoneConnectionStyle zone_connection = 5;
+    string assertion_expression = 6;
+  }
+
+  // grab bag of stuff; may be refactored to more specific messages later
+  repeated CustomRuleConstraintOption options = 100;
+}
+
+message CustomRule
+{
+  string condition = 1;
+  repeated CustomRuleConstraint constraints = 2;
+
+  oneof layer_condition {
+    kiapi.board.types.BoardLayer single_layer = 3;
+    CustomRuleLayerMode layer_mode = 4;
+  }
+
+  kiapi.common.types.RuleSeverity severity = 5;
+
+  string name = 6;
+  optional string comments = 7;
+}
+
+message BoardDesignRules
+{
+  MinimumConstraints constraints = 1;
+  PredefinedSizes predefined_sizes = 2;
+  SolderMaskPasteDefaults solder_mask_paste = 3;
+  TeardropDefaults teardrops = 4;
+  ViaProtectionDefaults via_protection = 5;
+  repeated DrcSeveritySetting severities = 6;
+  repeated DrcExclusion exclusions = 7;
+}

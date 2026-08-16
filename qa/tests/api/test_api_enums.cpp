@@ -26,6 +26,7 @@
 // Common
 #include <api/api_enums.h>
 #include <api/board/board.pb.h>
+#include <api/board/board_rules.pb.h>
 #include <api/common/types/enums.pb.h>
 #include <eda_shape.h>
 #include <core/mirror.h>

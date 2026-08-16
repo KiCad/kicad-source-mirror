@@ -28,6 +28,7 @@
 #include <sch_label.h>
 #include <sch_sheet_pin.h>
 #include <symbol.h>
+#include <api/schematic/schematic_rules.pb.h>
 #include <api/schematic/schematic_types.pb.h>
 
 using namespace kiapi::schematic;
@@ -323,5 +324,150 @@ PIN_MAP_OVERRIDE_MODE FromProtoEnum( types::PinMapOverrideMode aValue )
     default:
         wxCHECK_MSG( false, PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT,
                      "Unhandled case in FromProtoEnum<types::PinMapOverrideMode>" );
+    }
+}
+
+
+template<>
+ErcErrorType ToProtoEnum( ERCE_T aValue )
+{
+    switch( aValue )
+    {
+    case ERCE_DUPLICATE_SHEET_NAME:         return ErcErrorType::ERCET_DUPLICATE_SHEET_NAME;
+    case ERCE_ENDPOINT_OFF_GRID:            return ErcErrorType::ERCET_ENDPOINT_OFF_GRID;
+    case ERCE_PIN_NOT_CONNECTED:            return ErcErrorType::ERCET_PIN_NOT_CONNECTED;
+    case ERCE_PIN_NOT_DRIVEN:               return ErcErrorType::ERCET_PIN_NOT_DRIVEN;
+    case ERCE_POWERPIN_NOT_DRIVEN:          return ErcErrorType::ERCET_POWERPIN_NOT_DRIVEN;
+    case ERCE_HIERACHICAL_LABEL:            return ErcErrorType::ERCET_HIERARCHICAL_LABEL;
+    case ERCE_NOCONNECT_CONNECTED:          return ErcErrorType::ERCET_NOCONNECT_CONNECTED;
+    case ERCE_NOCONNECT_NOT_CONNECTED:      return ErcErrorType::ERCET_NOCONNECT_NOT_CONNECTED;
+    case ERCE_LABEL_NOT_CONNECTED:          return ErcErrorType::ERCET_LABEL_NOT_CONNECTED;
+    case ERCE_SIMILAR_LABELS:               return ErcErrorType::ERCET_SIMILAR_LABELS;
+    case ERCE_SIMILAR_POWER:                return ErcErrorType::ERCET_SIMILAR_POWER;
+    case ERCE_SIMILAR_LABEL_AND_POWER:      return ErcErrorType::ERCET_SIMILAR_LABEL_AND_POWER;
+    case ERCE_SINGLE_GLOBAL_LABEL:          return ErcErrorType::ERCET_SINGLE_GLOBAL_LABEL;
+    case ERCE_SAME_LOCAL_GLOBAL_LABEL:      return ErcErrorType::ERCET_SAME_LOCAL_GLOBAL_LABEL;
+    case ERCE_SAME_LOCAL_GLOBAL_POWER:      return ErcErrorType::ERCET_SAME_LOCAL_GLOBAL_POWER;
+    case ERCE_DIFFERENT_UNIT_FP:            return ErcErrorType::ERCET_DIFFERENT_UNIT_FP;
+    case ERCE_MISSING_POWER_INPUT_PIN:      return ErcErrorType::ERCET_MISSING_POWER_INPUT_PIN;
+    case ERCE_MISSING_INPUT_PIN:            return ErcErrorType::ERCET_MISSING_INPUT_PIN;
+    case ERCE_MISSING_BIDI_PIN:             return ErcErrorType::ERCET_MISSING_BIDI_PIN;
+    case ERCE_MISSING_UNIT:                 return ErcErrorType::ERCET_MISSING_UNIT;
+    case ERCE_DIFFERENT_UNIT_NET:           return ErcErrorType::ERCET_DIFFERENT_UNIT_NET;
+    case ERCE_BUS_ALIAS_CONFLICT:           return ErcErrorType::ERCET_BUS_ALIAS_CONFLICT;
+    case ERCE_DRIVER_CONFLICT:              return ErcErrorType::ERCET_DRIVER_CONFLICT;
+    case ERCE_BUS_ENTRY_CONFLICT:           return ErcErrorType::ERCET_BUS_ENTRY_CONFLICT;
+    case ERCE_BUS_TO_BUS_CONFLICT:          return ErcErrorType::ERCET_BUS_TO_BUS_CONFLICT;
+    case ERCE_BUS_TO_NET_CONFLICT:          return ErcErrorType::ERCET_BUS_TO_NET_CONFLICT;
+    case ERCE_GROUND_PIN_NOT_GROUND:        return ErcErrorType::ERCET_GROUND_PIN_NOT_GROUND;
+    case ERCE_LABEL_SINGLE_PIN:             return ErcErrorType::ERCET_LABEL_SINGLE_PIN;
+    case ERCE_UNRESOLVED_VARIABLE:          return ErcErrorType::ERCET_UNRESOLVED_VARIABLE;
+    case ERCE_UNDEFINED_NETCLASS:           return ErcErrorType::ERCET_UNDEFINED_NETCLASS;
+    case ERCE_SIMULATION_MODEL:             return ErcErrorType::ERCET_SIMULATION_MODEL;
+    case ERCE_WIRE_DANGLING:                return ErcErrorType::ERCET_WIRE_DANGLING;
+    case ERCE_LIB_SYMBOL_ISSUES:            return ErcErrorType::ERCET_LIB_SYMBOL_ISSUES;
+    case ERCE_LIB_SYMBOL_MISMATCH:          return ErcErrorType::ERCET_LIB_SYMBOL_MISMATCH;
+    case ERCE_FOOTPRINT_LINK_ISSUES:        return ErcErrorType::ERCET_FOOTPRINT_LINK_ISSUES;
+    case ERCE_FOOTPRINT_FILTERS:            return ErcErrorType::ERCET_FOOTPRINT_FILTERS;
+    case ERCE_UNANNOTATED:                  return ErcErrorType::ERCET_UNANNOTATED;
+    case ERCE_EXTRA_UNITS:                  return ErcErrorType::ERCET_EXTRA_UNITS;
+    case ERCE_DIFFERENT_UNIT_VALUE:         return ErcErrorType::ERCET_DIFFERENT_UNIT_VALUE;
+    case ERCE_DUPLICATE_REFERENCE:          return ErcErrorType::ERCET_DUPLICATE_REFERENCE;
+    case ERCE_BUS_ENTRY_NEEDED:             return ErcErrorType::ERCET_BUS_ENTRY_NEEDED;
+    case ERCE_FOUR_WAY_JUNCTION:            return ErcErrorType::ERCET_FOUR_WAY_JUNCTION;
+    case ERCE_LABEL_MULTIPLE_WIRES:         return ErcErrorType::ERCET_LABEL_MULTIPLE_WIRES;
+    case ERCE_UNCONNECTED_WIRE_ENDPOINT:    return ErcErrorType::ERCET_UNCONNECTED_WIRE_ENDPOINT;
+    case ERCE_STACKED_PIN_SYNTAX:           return ErcErrorType::ERCET_STACKED_PIN_SYNTAX;
+    case ERCE_PIN_MAP_BAD_PAD:              return ErcErrorType::ERCET_PIN_MAP_BAD_PAD;
+    case ERCE_PIN_MAP_UNMAPPED_PIN:         return ErcErrorType::ERCET_PIN_MAP_UNMAPPED_PIN;
+    case ERCE_PIN_MAP_DUPLICATE_PAD:        return ErcErrorType::ERCET_PIN_MAP_DUPLICATE_PAD;
+    case ERCE_PIN_MAP_STALE_PIN:            return ErcErrorType::ERCET_PIN_MAP_STALE_PIN;
+    case ERCE_EMPTY_LABEL_NAME:             return ErcErrorType::ERCET_EMPTY_LABEL_NAME;
+    case ERCE_VARIANT_SYMBOL_INVALID:       return ErcErrorType::ERCET_VARIANT_SYMBOL_INVALID;
+    case ERCE_VARIANT_SYMBOL_INCOMPATIBLE:  return ErcErrorType::ERCET_VARIANT_SYMBOL_INCOMPATIBLE;
+    case ERCE_DUPLICATE_PIN_ERROR:          return ErcErrorType::ERCET_DUPLICATE_PIN_ERROR;
+    case ERCE_PIN_TO_PIN_WARNING:           return ErcErrorType::ERCET_PIN_TO_PIN_WARNING;
+    case ERCE_PIN_TO_PIN_ERROR:             return ErcErrorType::ERCET_PIN_TO_PIN_ERROR;
+    case ERCE_ANNOTATION_ACTION:            return ErcErrorType::ERCET_ANNOTATION_ACTION;
+    case ERCE_GENERIC_WARNING:              return ErcErrorType::ERCET_GENERIC_WARNING;
+    case ERCE_GENERIC_ERROR:                return ErcErrorType::ERCET_GENERIC_ERROR;
+    case ERCE_FIELD_NAME_WHITESPACE:        return ErcErrorType::ERCET_FIELD_NAME_WHITESPACE;
+
+    case ERCE_UNSPECIFIED:
+    default:
+        wxCHECK_MSG( false, ErcErrorType::ERCET_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<ERCE_T>" );
+    }
+}
+
+
+template<>
+ERCE_T FromProtoEnum( ErcErrorType aValue )
+{
+    switch( aValue )
+    {
+    case ErcErrorType::ERCET_DUPLICATE_SHEET_NAME:          return ERCE_DUPLICATE_SHEET_NAME;
+    case ErcErrorType::ERCET_ENDPOINT_OFF_GRID:             return ERCE_ENDPOINT_OFF_GRID;
+    case ErcErrorType::ERCET_PIN_NOT_CONNECTED:             return ERCE_PIN_NOT_CONNECTED;
+    case ErcErrorType::ERCET_PIN_NOT_DRIVEN:                return ERCE_PIN_NOT_DRIVEN;
+    case ErcErrorType::ERCET_POWERPIN_NOT_DRIVEN:           return ERCE_POWERPIN_NOT_DRIVEN;
+    case ErcErrorType::ERCET_HIERARCHICAL_LABEL:            return ERCE_HIERACHICAL_LABEL;
+    case ErcErrorType::ERCET_NOCONNECT_CONNECTED:           return ERCE_NOCONNECT_CONNECTED;
+    case ErcErrorType::ERCET_NOCONNECT_NOT_CONNECTED:       return ERCE_NOCONNECT_NOT_CONNECTED;
+    case ErcErrorType::ERCET_LABEL_NOT_CONNECTED:           return ERCE_LABEL_NOT_CONNECTED;
+    case ErcErrorType::ERCET_SIMILAR_LABELS:                return ERCE_SIMILAR_LABELS;
+    case ErcErrorType::ERCET_SIMILAR_POWER:                 return ERCE_SIMILAR_POWER;
+    case ErcErrorType::ERCET_SIMILAR_LABEL_AND_POWER:       return ERCE_SIMILAR_LABEL_AND_POWER;
+    case ErcErrorType::ERCET_SINGLE_GLOBAL_LABEL:           return ERCE_SINGLE_GLOBAL_LABEL;
+    case ErcErrorType::ERCET_SAME_LOCAL_GLOBAL_LABEL:       return ERCE_SAME_LOCAL_GLOBAL_LABEL;
+    case ErcErrorType::ERCET_SAME_LOCAL_GLOBAL_POWER:       return ERCE_SAME_LOCAL_GLOBAL_POWER;
+    case ErcErrorType::ERCET_DIFFERENT_UNIT_FP:             return ERCE_DIFFERENT_UNIT_FP;
+    case ErcErrorType::ERCET_MISSING_POWER_INPUT_PIN:       return ERCE_MISSING_POWER_INPUT_PIN;
+    case ErcErrorType::ERCET_MISSING_INPUT_PIN:             return ERCE_MISSING_INPUT_PIN;
+    case ErcErrorType::ERCET_MISSING_BIDI_PIN:              return ERCE_MISSING_BIDI_PIN;
+    case ErcErrorType::ERCET_MISSING_UNIT:                  return ERCE_MISSING_UNIT;
+    case ErcErrorType::ERCET_DIFFERENT_UNIT_NET:            return ERCE_DIFFERENT_UNIT_NET;
+    case ErcErrorType::ERCET_BUS_ALIAS_CONFLICT:            return ERCE_BUS_ALIAS_CONFLICT;
+    case ErcErrorType::ERCET_DRIVER_CONFLICT:               return ERCE_DRIVER_CONFLICT;
+    case ErcErrorType::ERCET_BUS_ENTRY_CONFLICT:            return ERCE_BUS_ENTRY_CONFLICT;
+    case ErcErrorType::ERCET_BUS_TO_BUS_CONFLICT:           return ERCE_BUS_TO_BUS_CONFLICT;
+    case ErcErrorType::ERCET_BUS_TO_NET_CONFLICT:           return ERCE_BUS_TO_NET_CONFLICT;
+    case ErcErrorType::ERCET_GROUND_PIN_NOT_GROUND:         return ERCE_GROUND_PIN_NOT_GROUND;
+    case ErcErrorType::ERCET_LABEL_SINGLE_PIN:              return ERCE_LABEL_SINGLE_PIN;
+    case ErcErrorType::ERCET_UNRESOLVED_VARIABLE:           return ERCE_UNRESOLVED_VARIABLE;
+    case ErcErrorType::ERCET_UNDEFINED_NETCLASS:            return ERCE_UNDEFINED_NETCLASS;
+    case ErcErrorType::ERCET_SIMULATION_MODEL:              return ERCE_SIMULATION_MODEL;
+    case ErcErrorType::ERCET_WIRE_DANGLING:                 return ERCE_WIRE_DANGLING;
+    case ErcErrorType::ERCET_LIB_SYMBOL_ISSUES:             return ERCE_LIB_SYMBOL_ISSUES;
+    case ErcErrorType::ERCET_LIB_SYMBOL_MISMATCH:           return ERCE_LIB_SYMBOL_MISMATCH;
+    case ErcErrorType::ERCET_FOOTPRINT_LINK_ISSUES:         return ERCE_FOOTPRINT_LINK_ISSUES;
+    case ErcErrorType::ERCET_FOOTPRINT_FILTERS:             return ERCE_FOOTPRINT_FILTERS;
+    case ErcErrorType::ERCET_UNANNOTATED:                   return ERCE_UNANNOTATED;
+    case ErcErrorType::ERCET_EXTRA_UNITS:                   return ERCE_EXTRA_UNITS;
+    case ErcErrorType::ERCET_DIFFERENT_UNIT_VALUE:          return ERCE_DIFFERENT_UNIT_VALUE;
+    case ErcErrorType::ERCET_DUPLICATE_REFERENCE:           return ERCE_DUPLICATE_REFERENCE;
+    case ErcErrorType::ERCET_BUS_ENTRY_NEEDED:              return ERCE_BUS_ENTRY_NEEDED;
+    case ErcErrorType::ERCET_FOUR_WAY_JUNCTION:             return ERCE_FOUR_WAY_JUNCTION;
+    case ErcErrorType::ERCET_LABEL_MULTIPLE_WIRES:          return ERCE_LABEL_MULTIPLE_WIRES;
+    case ErcErrorType::ERCET_UNCONNECTED_WIRE_ENDPOINT:     return ERCE_UNCONNECTED_WIRE_ENDPOINT;
+    case ErcErrorType::ERCET_STACKED_PIN_SYNTAX:            return ERCE_STACKED_PIN_SYNTAX;
+    case ErcErrorType::ERCET_PIN_MAP_BAD_PAD:               return ERCE_PIN_MAP_BAD_PAD;
+    case ErcErrorType::ERCET_PIN_MAP_UNMAPPED_PIN:          return ERCE_PIN_MAP_UNMAPPED_PIN;
+    case ErcErrorType::ERCET_PIN_MAP_DUPLICATE_PAD:         return ERCE_PIN_MAP_DUPLICATE_PAD;
+    case ErcErrorType::ERCET_PIN_MAP_STALE_PIN:             return ERCE_PIN_MAP_STALE_PIN;
+    case ErcErrorType::ERCET_EMPTY_LABEL_NAME:              return ERCE_EMPTY_LABEL_NAME;
+    case ErcErrorType::ERCET_VARIANT_SYMBOL_INVALID:        return ERCE_VARIANT_SYMBOL_INVALID;
+    case ErcErrorType::ERCET_VARIANT_SYMBOL_INCOMPATIBLE:   return ERCE_VARIANT_SYMBOL_INCOMPATIBLE;
+    case ErcErrorType::ERCET_DUPLICATE_PIN_ERROR:           return ERCE_DUPLICATE_PIN_ERROR;
+    case ErcErrorType::ERCET_PIN_TO_PIN_WARNING:            return ERCE_PIN_TO_PIN_WARNING;
+    case ErcErrorType::ERCET_PIN_TO_PIN_ERROR:              return ERCE_PIN_TO_PIN_ERROR;
+    case ErcErrorType::ERCET_ANNOTATION_ACTION:             return ERCE_ANNOTATION_ACTION;
+    case ErcErrorType::ERCET_GENERIC_WARNING:               return ERCE_GENERIC_WARNING;
+    case ErcErrorType::ERCET_GENERIC_ERROR:                 return ERCE_GENERIC_ERROR;
+    case ErcErrorType::ERCET_FIELD_NAME_WHITESPACE:         return ERCE_FIELD_NAME_WHITESPACE;
+
+    case ErcErrorType::ERCET_UNKNOWN:
+    default:
+        return ERCE_UNSPECIFIED;
     }
 }

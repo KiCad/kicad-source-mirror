@@ -64,10 +64,10 @@ BOOST_FIXTURE_TEST_CASE( DRCUnconnectedExclusionsSave, DRC_UNCONNECTED_SAVE_FIXT
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     BOOST_CHECK( !bds.m_DrcExclusions.empty() );
 
-    // Get the serialized exclusion
-    wxString serialized = marker->SerializeToString();
-    BOOST_CHECK( bds.m_DrcExclusions.count( serialized ) == 1 );
-    BOOST_CHECK( bds.m_DrcExclusionComments[serialized] == "Test exclusion comment" );
+    // Get the recorded exclusion
+    DRC_EXCLUSION recordedExclusion = DRC_EXCLUSION::FromMarker( *marker );
+    BOOST_CHECK( bds.m_DrcExclusions.count( recordedExclusion ) == 1 );
+    BOOST_CHECK( recordedExclusion.GetComment() == "Test exclusion comment" );
 
     // Simulate saving and reloading
     // Clear the marker but keep the exclusions in design settings

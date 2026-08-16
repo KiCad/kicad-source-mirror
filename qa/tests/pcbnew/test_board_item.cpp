@@ -649,7 +649,7 @@ BOOST_AUTO_TEST_CASE( Issue24696_SwapItemDataKeepsGroupMembership )
 
 // Partial hardening for the BOARD::RecordDRCExclusions crash family (Sentry KICAD-YT2,
 // KICAD-YTA).  A PCB_MARKER may legitimately carry a null RC_ITEM (its ctor and dtor both guard
-// the member), but SerializeToString() dereferences it unconditionally, so recording exclusions
+// the member), but DRC_EXCLUSION::FromMarker() dereferences it unconditionally, so recording exclusions
 // during a project save or window close faulted on such a marker.
 BOOST_AUTO_TEST_CASE( RecordDRCExclusionsSkipsMarkerWithoutRCItem )
 {

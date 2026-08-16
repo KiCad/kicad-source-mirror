@@ -34,7 +34,7 @@
 #include <project/project_file.h>
 #include <advanced_config.h>
 
-const int bdsSchemaVersion = 2;
+const int bdsSchemaVersion = 3;
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
@@ -395,8 +395,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             {
                 nlohmann::json js = nlohmann::json::array();
 
-                for( const wxString& entry : m_DrcExclusions )
-                    js.push_back( { entry, m_DrcExclusionComments[ entry ] } );
+                for( const DRC_EXCLUSION& exclusion : m_DrcExclusions )
+                    js.push_back( exclusion );
 
                 return js;
             },
@@ -409,15 +409,12 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
                 for( const nlohmann::json& entry : aObj )
                 {
-                    if( entry.is_array() )
+                    if( entry.is_object() )
                     {
-                        wxString serialized = entry[0].get<wxString>();
-                        m_DrcExclusions.insert( serialized );
-                        m_DrcExclusionComments[ serialized ] = entry[1].get<wxString>();
-                    }
-                    else if( entry.is_string() )
-                    {
-                        m_DrcExclusions.insert( entry.get<wxString>() );
+                        DRC_EXCLUSION exclusion = entry.get<DRC_EXCLUSION>();
+
+                        if( !exclusion.GetSortKey().empty() )
+                            m_DrcExclusions.insert( exclusion );
                     }
                 }
             },
@@ -1082,6 +1079,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
                 return true;
             } );
+
+    registerMigration( 2, 3, std::bind( &BOARD_DESIGN_SETTINGS::migrateSchema2to3, this ) );
 }
 
 
@@ -1138,7 +1137,6 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_MinSilkTextThickness        = aOther.m_MinSilkTextThickness;
     m_DRCSeverities               = aOther.m_DRCSeverities;
     m_DrcExclusions               = aOther.m_DrcExclusions;
-    m_DrcExclusionComments        = aOther.m_DrcExclusionComments;
     m_ZoneKeepExternalFillets     = aOther.m_ZoneKeepExternalFillets;
     m_MaxError                    = aOther.m_MaxError;
     m_SolderMaskExpansion         = aOther.m_SolderMaskExpansion;
@@ -1244,7 +1242,6 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_MinSilkTextThickness   != aOther.m_MinSilkTextThickness ) return false;
     if( m_DRCSeverities          != aOther.m_DRCSeverities ) return false;
     if( m_DrcExclusions          != aOther.m_DrcExclusions ) return false;
-    if( m_DrcExclusionComments   != aOther.m_DrcExclusionComments ) return false;
     if( m_ZoneKeepExternalFillets     != aOther.m_ZoneKeepExternalFillets ) return false;
     if( m_MaxError                    != aOther.m_MaxError ) return false;
     if( m_SolderMaskExpansion         != aOther.m_SolderMaskExpansion ) return false;
@@ -1376,6 +1373,47 @@ bool BOARD_DESIGN_SETTINGS::migrateSchema0to1()
     precision += extraDigits;
 
     Set( precision_ptr, precision );
+
+    return true;
+}
+
+
+bool BOARD_DESIGN_SETTINGS::migrateSchema2to3()
+{
+    // Schema 2 to 3: convert DRC exclusions from legacy pipe-delimited strings to ProtoJSON
+    std::optional<nlohmann::json> opt = Get<nlohmann::json>( "drc_exclusions" );
+
+    if( !opt )
+        return true;
+
+    nlohmann::json migrated = nlohmann::json::array();
+
+    for( const nlohmann::json& entry : *opt )
+    {
+        if( entry.is_object() )
+        {
+            migrated.push_back( entry );
+        }
+        else if( entry.is_array() && entry.size() > 0 )
+        {
+            wxString markerData = entry[0].get<wxString>();
+            wxString comment    = entry.size() > 1 ? entry[1].get<wxString>() : wxString();
+
+            DRC_EXCLUSION ex = DRC_EXCLUSION::FromLegacyStrings( markerData, comment );
+
+            if( !ex.GetSortKey().empty() )
+                migrated.push_back( ex );
+        }
+        else if( entry.is_string() )
+        {
+            DRC_EXCLUSION ex = DRC_EXCLUSION::FromLegacyStrings( entry.get<wxString>(), wxString() );
+
+            if( !ex.GetSortKey().empty() )
+                migrated.push_back( ex );
+        }
+    }
+
+    Set( "drc_exclusions", migrated );
 
     return true;
 }

@@ -80,7 +80,9 @@
 #include <zone_filler.h>
 
 #include <api/common/types/base_types.pb.h>
+#include <api/board/board_rules.pb.h>
 #include <connectivity/connectivity_data.h>
+#include <google/protobuf/util/json_util.h>
 #include <drc/drc_rule_condition.h>
 #include <drc/drc_rule_parser.h>
 #include <widgets/appearance_controls.h>
@@ -693,16 +695,8 @@ HANDLER_RESULT<BoardDesignRulesResponse> API_HANDLER_PCB::handleGetBoardDesignRu
         setting->set_severity( ToProtoEnum<SEVERITY, types::RuleSeverity>( severity ) );
     }
 
-    for( const wxString& serialized : bds.m_DrcExclusions )
-    {
-        kiapi::board::DrcExclusion* exclusion = rules->add_exclusions();
-        exclusion->mutable_marker()->mutable_id()->set_opaque_id( serialized.ToStdString() );
-
-        auto it = bds.m_DrcExclusionComments.find( serialized );
-
-        if( it != bds.m_DrcExclusionComments.end() )
-            exclusion->set_comment( it->second.ToStdString() );
-    }
+    for( const DRC_EXCLUSION& exclusion : bds.m_DrcExclusions )
+        rules->add_exclusions()->CopyFrom( exclusion.ToProto() );
 
     response.set_custom_rules_status( CRS_NONE );
 
@@ -887,23 +881,9 @@ HANDLER_RESULT<BoardDesignRulesResponse> API_HANDLER_PCB::handleSetBoardDesignRu
     if( rules.exclusions_size() > 0 )
     {
         newSettings.m_DrcExclusions.clear();
-        newSettings.m_DrcExclusionComments.clear();
 
         for( const kiapi::board::DrcExclusion& exclusion : rules.exclusions() )
-        {
-            wxString serialized = wxString::FromUTF8( exclusion.marker().id().opaque_id() );
-
-            if( serialized.IsEmpty() )
-            {
-                ApiResponseStatus e;
-                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-                e.set_error_message( "DrcExclusion marker id must not be empty" );
-                return tl::unexpected( e );
-            }
-
-            newSettings.m_DrcExclusions.insert( serialized );
-            newSettings.m_DrcExclusionComments[serialized] = wxString::FromUTF8( exclusion.comment() );
-        }
+            newSettings.m_DrcExclusions.insert( DRC_EXCLUSION::FromProto( exclusion ) );
     }
 
     std::vector<BOARD_DESIGN_SETTINGS::VALIDATION_ERROR> errors = newSettings.ValidateDesignRules();
