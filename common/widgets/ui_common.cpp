@@ -92,11 +92,9 @@ wxSize KIUI::GetTextSize( const wxString& aSingleLine, wxWindow* aWindow )
 
 wxFont KIUI::GetMonospacedUIFont( int aRelativeSize )
 {
-    static int guiFontSize = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
+    static const int guiFontSize = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
 
-    guiFontSize += aRelativeSize;
-
-    wxFont font( guiFontSize, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
+    wxFont font( guiFontSize + aRelativeSize, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
 
 #ifdef __WXMAC__
     // https://trac.wxwidgets.org/ticket/19210
