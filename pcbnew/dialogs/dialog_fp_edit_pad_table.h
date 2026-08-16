@@ -34,7 +34,8 @@ class DIALOG_FP_EDIT_PAD_TABLE : public DIALOG_FP_EDIT_PAD_TABLE_BASE
 {
 public:
     // Column indices (after adding Type column)
-    enum COLS {
+    enum COLS
+    {
         COL_NUMBER = 0,
         COL_TYPE,
         COL_SHAPE,
@@ -45,7 +46,8 @@ public:
         COL_DRILL_X,
         COL_DRILL_Y,
         COL_P2D_LENGTH,
-        COL_P2D_DELAY
+        COL_P2D_DELAY,
+        COL_COUNT,
     };
 
     DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOOTPRINT* aFootprint );
@@ -63,11 +65,16 @@ private:
     void OnSelectCell( wxGridEvent& aEvent ) override;
     void OnUpdateUI( wxUpdateUIEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
+    void OnExportButtonClick( wxCommandEvent& aEvent ) override;
+    void OnImportButtonClick( wxCommandEvent& aEvent ) override;
 
     void InitColumnProportions();
 
     void updateSummary();
     void setRowNullableEditors( int aRowId ) const;
+
+    void setPadFromGridCell( PAD& aPad, int aRowId, COLS aCol );
+    void restoreOriginalPadData();
 
     PAD* getPadForRow( int aRowId ) const;
 
@@ -94,6 +101,8 @@ private:
         int        padToDieLength{ 0 };
         int        padToDieDelay{ 0 };
     };
+
+    void restorePadFromSnapshot( PAD& aPad, const PAD_SNAPSHOT& aSnap ) const;
 
     // Comparison function to order the pads in the map
     struct PAD_SNAPSHOT_COMPARE
@@ -127,7 +136,18 @@ private:
         }
     };
 
-    std::map<PAD*, PAD_SNAPSHOT, PAD_SNAPSHOT_COMPARE> m_originalPads;      // original pad data for cancel rollback
+    // Original pad data for cancel rollback, keyed by raw pointer: pad numbers
+    // can be edited in the grid, so no value-dependent ordering may be used for
+    // the key.
+    std::map<PAD*, PAD_SNAPSHOT> m_originalPads;
+
+    // Pads shown in the grid, ordered by pad number.
+    std::vector<PAD*> m_rowPads;
+
+    // Pads removed during the dialog session (by import, and later by row
+    // deletion), kept alive until the dialog is accepted or cancelled.
+    std::vector<PAD*> m_removedPads;
+
     bool                              m_cancelled = false; // set if user hit cancel
 
     FOOTPRINT*                        m_footprint;
