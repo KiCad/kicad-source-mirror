@@ -439,6 +439,7 @@ set( BMAPS_MID
     pad
     pad_enumerate
     pad_number
+    pad_table
     pads_mask_layers
     pads_remove
     path

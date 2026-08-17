@@ -1210,7 +1210,7 @@ TOOL_ACTION PCB_ACTIONS::padTable( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Pad Table..." ) )
         .Tooltip( _( "Displays pad table for bulk editing of pads" ) )
-        .Icon( BITMAPS::pin_table ) );
+        .Icon( BITMAPS::pad_table ) );
 
 TOOL_ACTION PCB_ACTIONS::checkFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.checkFootprint" )

@@ -415,6 +415,7 @@ enum class BITMAPS : unsigned int
     pad_enumerate,
     pad_number,
     pad_sketch,
+    pad_table,
     pads_mask_layers,
     pads_npth,
     pads_npth_bottom,
