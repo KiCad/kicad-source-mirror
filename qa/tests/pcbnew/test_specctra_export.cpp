@@ -245,6 +245,11 @@ BOOST_AUTO_TEST_CASE( SpecctraImportSkipsInvalidWireLayer )
         << ")\n";
     out.close();
 
+#ifdef __WXMAC__
+    // Don't convert log messages to throws, as they will trip up BOOST_REQUIRE_NO_THROW
+    wxLog::SetTimestamp( wxEmptyString );
+#endif
+
     BOOST_REQUIRE_NO_THROW( importSession( board.get(), ses.Str() ) );
 
     // The session replaces all unlocked traces; only the valid wire survives, the bogus wire and
