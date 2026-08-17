@@ -1556,6 +1556,9 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
     m_connectivity->Remove( aBoardItem );
 
+    // Bump here, not in ~FOOTPRINT/~ZONE, so an item kept alive after removal (undo) still invalidates
+    IncrementTimeStamp();
+
     if( aRemoveMode != REMOVE_MODE::BULK )
         InvokeListeners( &BOARD_LISTENER::OnBoardItemRemoved, *this, aBoardItem );
 }

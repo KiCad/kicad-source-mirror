@@ -118,9 +118,6 @@ void ZONE::CopyFrom( const BOARD_ITEM* aOther )
 ZONE::~ZONE()
 {
     delete m_Poly;
-
-    if( BOARD* board = GetBoard() )
-        board->IncrementTimeStamp();
 }
 
 
