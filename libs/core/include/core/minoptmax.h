@@ -41,6 +41,16 @@ public:
 
     bool IsNull() const { return m_isNull; }
 
+    bool Matches( const T v ) const
+    {
+        if( m_hasMin && v < m_min )
+            return false;
+        if( m_hasMax && v > m_max )
+            return false;
+
+        return true;
+    }
+
 private:
     bool m_isNull = true;
     T    m_min{};
