@@ -216,7 +216,13 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFileName )
      * Now (2014) Ucamco (the company which manages the Gerber format) encourages use of .gbr
      * only and the Gerber X2 file format.
      */
-    filetypes = _( "Gerber files" ) + AddFileExtListToFilter( { "g*", "pho" } ) + wxT( "|" );
+    filetypes = _( "Gerber files" ) + wxT( " (*.g*; *.pho)|" )
+                + AddFileExtListToFilter( { "g*",  "pho", "gbr", "gtl", "gbl", "gto", "gbo", "gts", "gbs",
+                                            "gtp", "gbp", "gta", "gba", "gko", "gpt", "gpb", "gm1", "gm2",
+                                            "gm3", "gm4", "gm5", "gm6", "gm7", "gm8", "gm9", "g1",  "g2",
+                                            "g3",  "g4",  "g5",  "g6",  "g7",  "g8",  "g9" } )
+                          .AfterFirst( '|' )
+                + wxT( "|" );
 
     /* Special gerber filetypes */
     filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "gtl" } ) + wxT( "|" );
