@@ -89,6 +89,15 @@ enum FOOTPRINT_ATTR_T
     FP_DNP                      = 0x0040
 };
 
+
+enum class FOOTPRINT_TYPE
+{
+    UNSPECIFIED,
+    THROUGH_HOLE,
+    SMD
+};
+
+
 enum class EXTRUSION_MATERIAL
 {
     PLASTIC = 0,
@@ -510,6 +519,9 @@ public:
     int GetAttributes() const { return m_attributes; }
     void SetAttributes( int aAttributes ) { m_attributes = aAttributes; }
 
+    FOOTPRINT_TYPE GetFootprintType() const;
+    void           SetFootprintType( FOOTPRINT_TYPE aFootprintType );
+
     bool AllowMissingCourtyard() const { return m_allowMissingCourtyard; }
     void SetAllowMissingCourtyard( bool aAllow ) { m_allowMissingCourtyard = aAllow; }
 
@@ -696,7 +708,7 @@ public:
      * Footprints with plated through-hole pads should usually be marked through hole even if they
      * also have SMD because they might not be auto-placed.  Exceptions to this might be shielded
      * connectors.  Otherwise, footprints with SMD pads should be marked SMD.
-     * Footprints with no connecting pads should be marked "Other"
+     * Footprints with no connecting pads should be marked "Unspecified"
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
@@ -1185,7 +1197,7 @@ public:
 
     /**
      * Get the type of footprint
-     * @return "SMD"/"Through hole"/"Other" based on attributes
+     * @return "SMD"/"Through hole"/"Unspecified" based on attributes
      */
     wxString GetTypeName() const;
 

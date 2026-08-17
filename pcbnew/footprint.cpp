@@ -1798,13 +1798,36 @@ int FOOTPRINT::GetLikelyAttribute() const
 
 wxString FOOTPRINT::GetTypeName() const
 {
-    if( ( m_attributes & FP_SMD ) == FP_SMD )
+    if( GetFootprintType() == FOOTPRINT_TYPE::SMD )
         return _( "SMD" );
 
-    if( ( m_attributes & FP_THROUGH_HOLE ) == FP_THROUGH_HOLE )
+    if( GetFootprintType() == FOOTPRINT_TYPE::THROUGH_HOLE )
         return _( "Through hole" );
 
-    return _( "Other" );
+    return _( "Unspecified" );
+}
+
+
+FOOTPRINT_TYPE FOOTPRINT::GetFootprintType() const
+{
+    if( m_attributes & FP_SMD )
+        return FOOTPRINT_TYPE::SMD;
+
+    if( m_attributes & FP_THROUGH_HOLE )
+        return FOOTPRINT_TYPE::THROUGH_HOLE;
+
+    return FOOTPRINT_TYPE::UNSPECIFIED;
+}
+
+
+void FOOTPRINT::SetFootprintType( FOOTPRINT_TYPE aMountingStyle )
+{
+    m_attributes &= ~( FP_THROUGH_HOLE | FP_SMD );
+
+    if( aMountingStyle == FOOTPRINT_TYPE::THROUGH_HOLE )
+        m_attributes |= FP_THROUGH_HOLE;
+    else if( aMountingStyle == FOOTPRINT_TYPE::SMD )
+        m_attributes |= FP_SMD;
 }
 
 
@@ -5177,6 +5200,11 @@ static struct FOOTPRINT_DESC
 {
     FOOTPRINT_DESC()
     {
+        ENUM_MAP<FOOTPRINT_TYPE>::Instance()
+                .Map( FOOTPRINT_TYPE::THROUGH_HOLE, _HKI( "Through hole" ) )
+                .Map( FOOTPRINT_TYPE::SMD,          _HKI( "SMD" ) )
+                .Map( FOOTPRINT_TYPE::UNSPECIFIED,  _HKI( "Unspecified" ) );
+
         ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
 
         if( zcMap.Choices().GetCount() == 0 )
@@ -5266,6 +5294,9 @@ static struct FOOTPRINT_DESC
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
+        propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, FOOTPRINT_TYPE>(
+                    _HKI( "Footprint Type" ), &FOOTPRINT::SetFootprintType,
+                    &FOOTPRINT::GetFootprintType ), groupAttributes );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Not in Schematic" ),
                     &FOOTPRINT::SetBoardOnly, &FOOTPRINT::IsBoardOnly ), groupAttributes );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude From Position Files" ),
@@ -5301,3 +5332,5 @@ static struct FOOTPRINT_DESC
                     groupOverrides );
     }
 } _FOOTPRINT_DESC;
+
+ENUM_TO_WXANY( FOOTPRINT_TYPE );
