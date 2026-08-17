@@ -43,6 +43,7 @@
 #include <component_classes/component_class.h>
 #include <component_classes/component_class_cache_proxy.h>
 #include <drc/drc_item.h>
+#include <diff_merge/property_value_converter.h>
 #include <embedded_files.h>
 #include <font/font.h>
 #include <font/outline_font.h>
@@ -1293,6 +1294,31 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
     else if( PCB_FIELD* field = GetField( *token ) )
     {
         *token = field->GetShownText( false, aDepth + 1 );
+        return true;
+    }
+    // The great property resolver: ${PROPERTY.My_Property}
+    else if( token->StartsWith( wxS( "PROPERTY." ) ) )
+    {
+        // Get the second half, convert _ to ' '
+        wxString propertyName = token->AfterFirst( '.' );
+        propertyName.Replace( wxS( "_" ), wxS( " " ) );
+
+        // Check if the property manager knows this property
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        PROPERTY_BASE*    property = propMgr.GetProperty( TYPE_HASH( *this ), propertyName );
+
+        if( !property || property->IsHiddenFromPropertiesManager() )
+            return false;
+
+        if( !propMgr.IsAvailableFor( TYPE_HASH( *this ), property, const_cast<FOOTPRINT*>( this ) ) )
+            return false;
+
+        KICAD_DIFF::DIFF_VALUE value = KICAD_DIFF::WxAnyToDiffValue( Get( property ), property );
+
+        if( value.GetType() == KICAD_DIFF::DIFF_VALUE::T::NONE )
+            return false;
+
+        *token = value.ToDisplayString( EDA_UNITS::MM, pcbIUScale );
         return true;
     }
 

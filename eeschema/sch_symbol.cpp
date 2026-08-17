@@ -47,6 +47,7 @@
 #include <project_sch.h>
 #include <libraries/symbol_library_adapter.h>
 #include <variant_symbol_utils.h>
+#include <diff_merge/property_value_converter.h>
 
 #include <utility>
 #include <validators.h>
@@ -2813,6 +2814,31 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
 
         // If we got here, no pin was found - report unresolved
         *token = wxString::Format( wxT( "<Unresolved: pin %s>" ), pinNumber );
+        return true;
+    }
+    // The great property resolver: ${PROPERTY.My_Property}
+    else if( token->StartsWith( wxS( "PROPERTY." ) ) )
+    {
+        // Get the second half, convert _ to ' '
+        wxString propertyName = token->AfterFirst( '.' );
+        propertyName.Replace( wxS( "_" ), wxS( " " ) );
+
+        // Check if the property manager knows this property
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        PROPERTY_BASE*    property = propMgr.GetProperty( TYPE_HASH( *this ), propertyName );
+
+        if( !property || property->IsHiddenFromPropertiesManager() )
+            return false;
+
+        if( !propMgr.IsAvailableFor( TYPE_HASH( *this ), property, const_cast<SCH_SYMBOL*>( this ) ) )
+            return false;
+
+        KICAD_DIFF::DIFF_VALUE value = KICAD_DIFF::WxAnyToDiffValue( Get( property ), property );
+
+        if( value.GetType() == KICAD_DIFF::DIFF_VALUE::T::NONE )
+            return false;
+
+        *token = value.ToDisplayString( EDA_UNITS::MM, pcbIUScale );
         return true;
     }
 
