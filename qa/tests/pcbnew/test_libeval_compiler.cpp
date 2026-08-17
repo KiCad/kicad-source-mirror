@@ -106,9 +106,8 @@ const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
 };
 
 
-static bool testEvalExpr( const wxString& expr, const LIBEVAL::VALUE& expectedResult,
-                          bool expectError = false, BOARD_ITEM* itemA = nullptr,
-                          BOARD_ITEM* itemB = nullptr )
+static bool testEvalExpr( const wxString& expr, const LIBEVAL::VALUE& expectedResult, bool expectError = false,
+                          BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )
 {
     PCBEXPR_COMPILER  compiler( new PCBEXPR_UNIT_RESOLVER() );
     PCBEXPR_UCODE     ucode;
@@ -199,8 +198,8 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
     std::shared_ptr<NETCLASS> netclass1( new NETCLASS( "HV_LINE" ) );
     std::shared_ptr<NETCLASS> netclass2( new NETCLASS( "otherClass" ) );
 
-    auto net1info = new NETINFO_ITEM( &brd, "net1", 1 );
-    auto net2info = new NETINFO_ITEM( &brd, "net2", 2 );
+    NETINFO_ITEM* net1info = new NETINFO_ITEM( &brd, "net1", 1 );
+    NETINFO_ITEM* net2info = new NETINFO_ITEM( &brd, "net2", 2 );
 
     net1info->SetNetClass( netclass1 );
     net2info->SetNetClass( netclass2 );
@@ -247,13 +246,11 @@ BOOST_AUTO_TEST_CASE( IntrospectedExtendedNumericProperties )
     FOOTPRINT footprint( &brd );
     footprint.SetLocalSolderPasteMarginRatio( 0.125 );
 
-    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == 0.125" ), VAL( 1.0 ), false,
-                  &footprint );
+    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == 0.125" ), VAL( 1.0 ), false, &footprint );
 
     footprint.SetLocalSolderPasteMarginRatio( std::nullopt );
 
-    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == null" ), VAL( 1.0 ), false,
-                  &footprint );
+    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == null" ), VAL( 1.0 ), false, &footprint );
 }
 
 BOOST_AUTO_TEST_CASE( RenamedProperties )
@@ -287,14 +284,15 @@ BOOST_AUTO_TEST_CASE( IntrospectedColorProperties )
     BOARD     brd;
     PCB_TABLE table( &brd, 0 );
 
-    const auto checkColor = [&]( const COLOR4D& aColor, const wxString& aExpectedCss )
-    {
-        table.SetBorderColor( aColor );
-        BOOST_CHECK_EQUAL( aColor.ToCSSString(), aExpectedCss );
+    auto checkColor =
+            [&]( const COLOR4D& aColor, const wxString& aExpectedCss )
+            {
+                table.SetBorderColor( aColor );
+                BOOST_CHECK_EQUAL( aColor.ToCSSString(), aExpectedCss );
 
-        wxString expression = wxT( "A.Border_Color == '" ) + aExpectedCss + wxT( "'" );
-        testEvalExpr( expression, VAL( 1.0 ), false, &table );
-    };
+                wxString expression = wxT( "A.Border_Color == '" ) + aExpectedCss + wxT( "'" );
+                testEvalExpr( expression, VAL( 1.0 ), false, &table );
+            };
 
     checkColor( COLOR4D( 0.25, 0.5, 0.75, 0.5 ), wxT( "rgba(64, 128, 191, 0.502)" ) );
     checkColor( COLOR4D( wxString( wxT( "red" ) ) ), wxT( "rgb(255, 0, 0)" ) );
@@ -339,8 +337,7 @@ BOOST_AUTO_TEST_CASE( ExpressionPropertyTypesAreSupported )
 
     for( const auto& [field, types] : fieldTypes )
     {
-        BOOST_CHECK_MESSAGE( types.size() == 1,
-                             "Incompatible expression types for property: " << field.mb_str() );
+        BOOST_CHECK_MESSAGE( types.size() == 1, "Incompatible expression types for property: " << field.mb_str() );
     }
 
     expectCompileError( wxT( "A.Shape" ) );
@@ -375,9 +372,9 @@ BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
     std::shared_ptr<NET_SETTINGS> netSettings = brd.GetDesignSettings().m_NetSettings;
     netSettings->SetNetChainClass( wxT( "ChainHS" ), wxT( "HighSpeed" ) );
 
-    auto netUnclassified = new NETINFO_ITEM( &brd, "netA", 1 );
-    auto netClassified   = new NETINFO_ITEM( &brd, "netB", 2 );
-    auto netNoChain      = new NETINFO_ITEM( &brd, "netC", 3 );
+    NETINFO_ITEM* netUnclassified = new NETINFO_ITEM( &brd, "netA", 1 );
+    NETINFO_ITEM* netClassified   = new NETINFO_ITEM( &brd, "netB", 2 );
+    NETINFO_ITEM* netNoChain      = new NETINFO_ITEM( &brd, "netC", 3 );
 
     netUnclassified->SetNetChain( wxT( "ChainOrphan" ) );
     netClassified->SetNetChain( wxT( "ChainHS" ) );
@@ -392,24 +389,17 @@ BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
 
     // A chain with no class assignment must not match any inNetChainClass() pattern,
     // including the '*' wildcard.
-    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 0.0 ), false, &trackUnclassified,
-                  &trackUnclassified );
-    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 0.0 ), false, &trackUnclassified,
-                  &trackUnclassified );
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 0.0 ), false, &trackUnclassified, &trackUnclassified );
+    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 0.0 ), false, &trackUnclassified, &trackUnclassified );
 
     // Net with no chain at all must not match either.
-    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 0.0 ), false, &trackNoChain,
-                  &trackNoChain );
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 0.0 ), false, &trackNoChain, &trackNoChain );
 
     // Properly classified chain must match both wildcard and exact patterns.
-    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 1.0 ), false, &trackClassified,
-                  &trackClassified );
-    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 1.0 ), false, &trackClassified,
-                  &trackClassified );
-    testEvalExpr( wxT( "A.inNetChainClass('High*')" ), VAL( 1.0 ), false, &trackClassified,
-                  &trackClassified );
-    testEvalExpr( wxT( "A.inNetChainClass('LowSpeed')" ), VAL( 0.0 ), false, &trackClassified,
-                  &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 1.0 ), false, &trackClassified, &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 1.0 ), false, &trackClassified, &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('High*')" ), VAL( 1.0 ), false, &trackClassified, &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('LowSpeed')" ), VAL( 0.0 ), false, &trackClassified, &trackClassified );
 }
 
 BOOST_AUTO_TEST_CASE( ParentNavigation )
