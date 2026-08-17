@@ -681,11 +681,13 @@ void DIALOG_FP_EDIT_PAD_TABLE::restoreOriginalPadData()
 
     for( PAD* pad : m_footprint->Pads() )
     {
+        // Clear brighted even if the pad isn't original
+        pad->ClearBrightened();
+
         if( !m_originalPads.contains( pad ) )
             continue;
 
         restorePadFromSnapshot( *pad, m_originalPads.at( pad ) );
-        pad->ClearBrightened();
 
         if( canvas )
             canvas->GetView()->Update( pad, KIGFX::REPAINT );
