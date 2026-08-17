@@ -331,4 +331,56 @@ BOOST_AUTO_TEST_CASE( RotatedSymbolFieldSizingDimensions )
 }
 
 
+BOOST_AUTO_TEST_CASE( EffectiveJustifyRoundTripFromCenter )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "issue16538" ) );
+    fn.SetName( wxS( "issue16538" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+
+    SCH_SYMBOL* symbol = GetSymbolByRef( wxS( "R1" ) );
+    BOOST_REQUIRE( symbol );
+
+    SCH_FIELD* field = symbol->GetField( FIELD_T::REFERENCE );
+    BOOST_REQUIRE( field );
+
+    symbol->SetOrientation( SYM_ORIENT_0 + SYM_MIRROR_Y );
+
+    field->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    BOOST_REQUIRE( field->IsHorizJustifyFlipped() );
+
+    for( GR_TEXT_H_ALIGN_T justify : { GR_TEXT_H_ALIGN_LEFT, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_H_ALIGN_RIGHT } )
+    {
+        field->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        field->SetEffectiveHorizJustify( justify );
+
+        BOOST_CHECK_MESSAGE( field->GetEffectiveHorizJustify() == justify,
+                             wxString::Format( wxS( "Horizontal justification %d set from center "
+                                                    "reads back as %d" ),
+                                               static_cast<int>( justify ),
+                                               static_cast<int>( field->GetEffectiveHorizJustify() ) ) );
+    }
+
+    symbol->SetOrientation( SYM_ORIENT_0 + SYM_MIRROR_X );
+
+    field->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+    BOOST_REQUIRE( field->IsVertJustifyFlipped() );
+
+    for( GR_TEXT_V_ALIGN_T justify : { GR_TEXT_V_ALIGN_TOP, GR_TEXT_V_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM } )
+    {
+        field->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        field->SetEffectiveVertJustify( justify );
+
+        BOOST_CHECK_MESSAGE( field->GetEffectiveVertJustify() == justify,
+                             wxString::Format( wxS( "Vertical justification %d set from center "
+                                                    "reads back as %d" ),
+                                               static_cast<int>( justify ),
+                                               static_cast<int>( field->GetEffectiveVertJustify() ) ) );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
