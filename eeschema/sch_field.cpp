@@ -520,23 +520,12 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
 
 void SCH_FIELD::SetEffectiveHorizJustify( GR_TEXT_H_ALIGN_T aJustify )
 {
-    GR_TEXT_H_ALIGN_T actualJustify;
+    // The justification must be stored before asking whether it is flipped, as a center
+    // justification has no side to report.
+    SetHorizJustify( aJustify );
 
-    switch( aJustify )
-    {
-    case GR_TEXT_H_ALIGN_LEFT:
-        actualJustify = IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_RIGHT : GR_TEXT_H_ALIGN_LEFT;
-        break;
-
-    case GR_TEXT_H_ALIGN_RIGHT:
-        actualJustify = IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_LEFT : GR_TEXT_H_ALIGN_RIGHT;
-        break;
-
-    default:
-        actualJustify = aJustify;
-    }
-
-    SetHorizJustify( actualJustify );
+    if( IsHorizJustifyFlipped() )
+        SetHorizJustify( MapHorizJustify( -aJustify ) );
 }
 
 
@@ -578,23 +567,10 @@ bool SCH_FIELD::IsVertJustifyFlipped() const
 
 void SCH_FIELD::SetEffectiveVertJustify( GR_TEXT_V_ALIGN_T aJustify )
 {
-    GR_TEXT_V_ALIGN_T actualJustify;
+    SetVertJustify( aJustify );
 
-    switch( aJustify )
-    {
-    case GR_TEXT_V_ALIGN_TOP:
-        actualJustify = IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_BOTTOM : GR_TEXT_V_ALIGN_TOP;
-        break;
-
-    case GR_TEXT_V_ALIGN_BOTTOM:
-        actualJustify = IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_TOP : GR_TEXT_V_ALIGN_BOTTOM;
-        break;
-
-    default:
-        actualJustify = aJustify;
-    }
-
-    SetVertJustify( actualJustify );
+    if( IsVertJustifyFlipped() )
+        SetVertJustify( MapVertJustify( -aJustify ) );
 }
 
 
