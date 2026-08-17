@@ -129,7 +129,7 @@ public:
     ~DP_PRIMITIVE_PAIR();
 
     void SetAnchors( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN );
-
+    void SetPrimitives(ITEM* aPrimP, ITEM* aPrimN );
     const VECTOR2I& AnchorP() const { return m_anchorP; }
     const VECTOR2I& AnchorN() const { return m_anchorN; }
 
@@ -151,6 +151,11 @@ public:
     {
         printf( "-- Prim-P %p anchor [%d, %d]\n", m_primP, m_anchorP.x, m_anchorP.y );
         printf( "-- Prim-N %p anchor [%d, %d]\n", m_primN, m_anchorN.x, m_anchorN.y );
+    }
+
+    void Unlink()
+    {
+        m_primP = m_primN = nullptr;
     }
 
 private:

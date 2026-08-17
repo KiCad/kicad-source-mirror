@@ -38,8 +38,8 @@ class LINE;
 
 DP_PRIMITIVE_PAIR::DP_PRIMITIVE_PAIR( ITEM* aPrimP, ITEM* aPrimN )
 {
-    m_primP = aPrimP->Clone();
-    m_primN = aPrimN->Clone();
+    m_primP = aPrimP;
+    m_primN = aPrimN;
 
     m_anchorP = m_primP->Anchor( 0 );
     m_anchorN = m_primN->Anchor( 0 );
@@ -50,6 +50,12 @@ void DP_PRIMITIVE_PAIR::SetAnchors( const VECTOR2I& aAnchorP, const VECTOR2I& aA
 {
     m_anchorP = aAnchorP;
     m_anchorN = aAnchorN;
+}
+
+void  DP_PRIMITIVE_PAIR::SetPrimitives(ITEM* aPrimP, ITEM* aPrimN )
+{
+    m_primP = aPrimP;
+    m_primN = aPrimN;
 }
 
 
@@ -64,12 +70,8 @@ DP_PRIMITIVE_PAIR::DP_PRIMITIVE_PAIR( const VECTOR2I& aAnchorP, const VECTOR2I& 
 DP_PRIMITIVE_PAIR::DP_PRIMITIVE_PAIR( const DP_PRIMITIVE_PAIR& aOther )
 {
     m_primP = m_primN = nullptr;
-
-    if( aOther.m_primP )
-        m_primP = aOther.m_primP->Clone();
-
-    if( aOther.m_primN )
-        m_primN = aOther.m_primN->Clone();
+    m_primP = aOther.m_primP;
+    m_primN = aOther.m_primN;
 
     m_anchorP = aOther.m_anchorP;
     m_anchorN = aOther.m_anchorN;
@@ -79,10 +81,14 @@ DP_PRIMITIVE_PAIR::DP_PRIMITIVE_PAIR( const DP_PRIMITIVE_PAIR& aOther )
 DP_PRIMITIVE_PAIR& DP_PRIMITIVE_PAIR::operator=( const DP_PRIMITIVE_PAIR& aOther )
 {
     if( aOther.m_primP )
-        m_primP = aOther.m_primP->Clone();
+    {
+        m_primP = aOther.m_primP;
+    }
 
     if( aOther.m_primN )
-        m_primN = aOther.m_primN->Clone();
+    {
+        m_primN = aOther.m_primN;
+    }
 
     m_anchorP = aOther.m_anchorP;
     m_anchorN = aOther.m_anchorN;
@@ -122,7 +128,8 @@ DIRECTION_45 DP_PRIMITIVE_PAIR::anchorDirection( const ITEM* aItem, const VECTOR
 void DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I& aMidpoint,
                                            VECTOR2I& aDirection ) const
 {
-    assert( m_primP && m_primN );
+    if( !m_primN || !m_primP )
+        return;
 
     VECTOR2I aP, aN;
 
