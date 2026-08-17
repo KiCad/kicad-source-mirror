@@ -99,8 +99,6 @@ DP_PRIMITIVE_PAIR& DP_PRIMITIVE_PAIR::operator=( const DP_PRIMITIVE_PAIR& aOther
 
 DP_PRIMITIVE_PAIR::~DP_PRIMITIVE_PAIR()
 {
-    delete m_primP;
-    delete m_primN;
 }
 
 
