@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-21 21:09+0300\n"
+"POT-Creation-Date: 2026-08-17 15:37+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4097,6 +4097,9 @@ msgstr "Units"
 msgid "Inches"
 msgstr "Inches"
 
+msgid "Constrain to H, V, 45"
+msgstr "Constrain to H, V, 45"
+
 msgid "Search"
 msgstr "Search"
 
@@ -6063,6 +6066,10 @@ msgstr "Archived file '%s'."
 #, c-format
 msgid "Failed to archive file '%s'."
 msgstr "Failed to archive file '%s'."
+
+#, c-format
+msgid "Failed to archive file '%s': %s"
+msgstr "Failed to archive file '%s': %s"
 
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
@@ -12905,6 +12912,9 @@ msgstr "Import Graphics"
 msgid "No file selected!"
 msgstr "No file selected!"
 
+msgid "Import scale must be a positive number."
+msgstr "Import scale must be a positive number."
+
 msgid "Items in the imported file could not be handled properly."
 msgstr "Items in the imported file could not be handled properly."
 
@@ -12934,6 +12944,9 @@ msgstr "Import Parameters"
 
 msgid "Import scale:"
 msgstr "Import scale:"
+
+msgid "1.0"
+msgstr "1.0"
 
 msgid "DXF Parameters"
 msgstr "DXF Parameters"
@@ -13675,6 +13688,10 @@ msgstr "Back to Previous Selected Sheet"
 
 msgid "Show Field Name"
 msgstr "Show Field Name"
+
+#, c-format
+msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
+msgstr "Re-linked %d imported footprint assignment(s) to library '%s'."
 
 #, c-format
 msgid "Unnamed Group, %zu members"
@@ -23175,9 +23192,6 @@ msgstr "KiCad Drawing Sheet Editor"
 msgid "coord origin: Right Bottom page corner"
 msgstr "coord origin: Right Bottom page corner"
 
-msgid "Constrain to H, V, 45"
-msgstr "Constrain to H, V, 45"
-
 msgid "Error Init Printer info"
 msgstr "Error Init Printer info"
 
@@ -25133,6 +25147,9 @@ msgstr "Modified items via API"
 
 msgid "Deleted items via API"
 msgstr "Deleted items via API"
+
+msgid "Flipped items via API"
+msgstr "Flipped items via API"
 
 msgid "Autoplacing components..."
 msgstr "Autoplacing components…"
@@ -35216,16 +35233,6 @@ msgstr "Finalizing board"
 msgid "Could not load component class assignment rules"
 msgstr "Could not load component class assignment rules"
 
-msgid "New Footprint Library"
-msgstr "New Footprint Library"
-
-#, c-format
-msgid "Error saving footprint %s to project specific library."
-msgstr "Error saving footprint %s to project specific library."
-
-msgid "Error saving project specific footprint library table."
-msgstr "Error saving project specific footprint library table."
-
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Error saving custom rules file '%s'."
@@ -35237,6 +35244,10 @@ msgid ""
 msgstr ""
 "Error saving board file '%s'.\n"
 "%s"
+
+#, c-format
+msgid "Could not reconcile imported footprint libraries: %s"
+msgstr "Could not reconcile imported footprint libraries: %s"
 
 msgid "Generate ODB++ Files"
 msgstr "Generate ODB++ Files"
@@ -35418,6 +35429,37 @@ msgstr ""
 msgid "Footprint library not enabled."
 msgstr "Footprint library not enabled."
 
+#, c-format
+msgid ""
+"Imported footprint '%s' has conflicting placed definitions; keeping the "
+"first."
+msgstr ""
+"Imported footprint '%s' has conflicting placed definitions; keeping the "
+"first."
+
+msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
+msgstr "Cannot reconcile imported footprints: no KiCad footprint writer."
+
+#, c-format
+msgid "Error writing imported footprint cache '%s': %s"
+msgstr "Error writing imported footprint cache '%s': %s"
+
+#, c-format
+msgid ""
+"A library already exists at '%s'; leaving imported footprints unresolved."
+msgstr ""
+"A library already exists at '%s'; leaving imported footprints unresolved."
+
+#, c-format
+msgid "Could not publish imported footprint cache to '%s'."
+msgstr "Could not publish imported footprint cache to '%s'."
+
+msgid "Cannot register imported footprint cache: no project library table."
+msgstr "Cannot register imported footprint cache: no project library table."
+
+msgid "Error saving project footprint library table."
+msgstr "Error saving project footprint library table."
+
 msgid "Loading footprints..."
 msgstr "Loading footprints..."
 
@@ -35463,6 +35505,9 @@ msgstr "Export Footprint"
 #, c-format
 msgid "Footprint exported to file '%s'."
 msgstr "Footprint exported to file '%s'."
+
+msgid "New Footprint Library"
+msgstr "New Footprint Library"
 
 #, c-format
 msgid "Delete footprint '%s' from library '%s'?"
@@ -35692,9 +35737,6 @@ msgstr "Please select a file to import."
 
 msgid "Please select a valid layer."
 msgstr "Please select a valid layer."
-
-msgid "1.0"
-msgstr "1.0"
 
 msgid "DXF default line width:"
 msgstr "DXF default line width:"
@@ -43786,6 +43828,13 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#, c-format
+#~ msgid "Error saving footprint %s to project specific library."
+#~ msgstr "Error saving footprint %s to project specific library."
+
+#~ msgid "Error saving project specific footprint library table."
+#~ msgstr "Error saving project specific footprint library table."
 
 #~ msgid ""
 #~ "The following files will be deleted when restoring this commit:\n"
