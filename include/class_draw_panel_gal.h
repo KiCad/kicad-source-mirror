@@ -36,6 +36,7 @@
 #include <widgets/msgpanel.h>
 #include <memory>
 #include <mutex>
+#include <chrono>
 
 #include <gal/cursors.h>
 
@@ -285,9 +286,9 @@ protected:
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
 
-    wxLongLong               m_lastRepaintStart; ///< Timestamp of the last repaint start
-    wxLongLong               m_lastRepaintEnd;   ///< Timestamp of the last repaint end
-    wxTimer                  m_refreshTimer;     ///< Timer to prevent too-frequent refreshing
+    std::chrono::steady_clock::time_point m_lastRepaintStart; ///< Timestamp of the last repaint start
+    std::chrono::steady_clock::time_point m_lastRepaintEnd;   ///< Timestamp of the last repaint end
+    wxTimer                               m_refreshTimer;     ///< Timer to prevent too-frequent refreshing
 
     std::mutex               m_refreshMutex;     ///< Blocks multiple calls to the draw
 

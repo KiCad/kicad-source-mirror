@@ -73,8 +73,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_MouseCapturedLost( false ),
         m_parent( aParentWindow ),
         m_edaFrame( nullptr ),
-        m_lastRepaintStart( 0 ),
-        m_lastRepaintEnd( 0 ),
         m_drawing( false ),
         m_drawingEnabled( false ),
         m_needIdleRefresh( false ),
@@ -263,7 +261,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
     if( m_drawing )
         return false;
 
-    m_lastRepaintStart = wxGetLocalTimeMillis();
+    m_lastRepaintStart = std::chrono::steady_clock::now();
 
     // Repaint the canvas, and fix scrollbar cursors
     // Usually called by a OnPaint event, but because it does not use a wxPaintDC,
@@ -308,7 +306,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         // because the window content may have been invalidated by the OS.
         if( aAllowSkip && !viewDirty && !cursorMoved && !hasPendingItemUpdates )
         {
-            m_lastRepaintEnd = wxGetLocalTimeMillis();
+            m_lastRepaintEnd = std::chrono::steady_clock::now();
             return true;
         }
 
@@ -344,7 +342,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         // view targets nor the cursor position have changed.
         if( aAllowSkip && !viewDirty && !cursorMoved )
         {
-            m_lastRepaintEnd = wxGetLocalTimeMillis();
+            m_lastRepaintEnd = std::chrono::steady_clock::now();
             return true;
         }
 
@@ -430,7 +428,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         );
     }
 
-    m_lastRepaintEnd = wxGetLocalTimeMillis();
+    m_lastRepaintEnd = std::chrono::steady_clock::now();
 
     return true;
 }
@@ -482,14 +480,9 @@ void EDA_DRAW_PANEL_GAL::RequestRefresh()
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
-    wxLongLong now = wxGetLocalTimeMillis();
-    wxLongLong delta = now - m_lastRepaintEnd;
+    auto now = std::chrono::steady_clock::now();
+    auto delta = std::chrono::duration_cast<std::chrono::milliseconds>( now - m_lastRepaintStart ).count();
     bool galInitialized = m_gal && m_gal->IsInitialized();
-
-    // wxGetLocalTimeMillis is wall clock, so an NTP correction or manual
-    // clock change can make delta negative. Treat that as "long enough".
-    if( delta < 0 )
-        delta = 0;
 
     // When vsync is available the driver throttles SwapBuffers, so we only need
     // a small guard to avoid queueing work faster than the GPU can consume it.
@@ -508,6 +501,8 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
         if( reported >= 24 && reported <= 1000 )
             refreshHz = reported;
 
+        refreshHz += 5; // Repaint slightly faster to avoid adding latency
+
         minPeriodMs = 1000 / refreshHz;
     }
 
@@ -518,7 +513,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
     }
     else if( !m_refreshTimer.IsRunning() )
     {
-        m_refreshTimer.StartOnce( static_cast<int>( ( minPeriodMs - delta ).GetValue() ) );
+        m_refreshTimer.StartOnce( static_cast<int>( minPeriodMs - delta ) );
     }
 }
 
