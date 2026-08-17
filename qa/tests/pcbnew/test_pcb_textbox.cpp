@@ -22,8 +22,32 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/pdf_test_utils.h>
 #include <board.h>
 #include <pcb_textbox.h>
+#include <pcbplot.h>
+#include <pcb_plot_params.h>
+#include <plotters/plotter_gerber.h>
+#include <lset.h>
+
+#include <wx/filename.h>
+
+#include <vector>
+
+
+class RECORDING_GERBER_PLOTTER : public GERBER_PLOTTER
+{
+public:
+    using GERBER_PLOTTER::PlotPoly;
+
+    void PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int aWidth, void* aData ) override
+    {
+        m_plottedPolys.push_back( aPoly );
+        GERBER_PLOTTER::PlotPoly( aPoly, aFill, aWidth, aData );
+    }
+
+    std::vector<SHAPE_LINE_CHAIN> m_plottedPolys;
+};
 
 
 struct PCB_TEXTBOX_FIXTURE
@@ -172,6 +196,53 @@ BOOST_AUTO_TEST_CASE( GetMinSizeAllowsWidthReduction )
 
     BOOST_CHECK_EQUAL( minSize.x, 0 );
     BOOST_CHECK_GT( minSize.y, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( EmptyKnockoutPlotsTheBox )
+{
+    const int left = pcbIUScale.mmToIU( 10.0 );
+    const int top = pcbIUScale.mmToIU( 10.0 );
+    const int right = pcbIUScale.mmToIU( 30.0 );
+    const int bottom = pcbIUScale.mmToIU( 15.0 );
+
+    PCB_TEXTBOX* box = new PCB_TEXTBOX( &m_board );
+    box->SetText( wxEmptyString );
+    box->SetLayer( F_SilkS );
+    box->SetIsKnockout( true );
+    box->SetBorderEnabled( false );
+    box->SetTextSize( VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    box->SetStart( VECTOR2I( left, top ) );
+    box->SetEnd( VECTOR2I( right, bottom ) );
+    m_board.Add( box );
+
+    RECORDING_GERBER_PLOTTER plotter;
+    SIMPLE_RENDER_SETTINGS   renderSettings;
+    plotter.SetRenderSettings( &renderSettings );
+
+    wxString gbrPath = wxFileName::CreateTempFileName( wxT( "kicad_gbr_knockout" ) );
+    BOOST_REQUIRE( !gbrPath.IsEmpty() );
+    BOOST_REQUIRE( plotter.OpenFile( gbrPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), pcbIUScale.IU_PER_MILS / 10, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ) ) );
+
+    PCB_PLOT_PARAMS plotOpts;
+    plotOpts.SetFormat( PLOT_FORMAT::GERBER );
+
+    PlotStandardLayer( &m_board, &plotter, LSET( { F_SilkS } ), plotOpts );
+
+    BOOST_REQUIRE( plotter.EndPlot() );
+    wxRemoveFile( gbrPath );
+
+    BOOST_REQUIRE_MESSAGE( plotter.m_plottedPolys.size() == 1,
+                           "expected one plotted polygon, got " << plotter.m_plottedPolys.size() );
+
+    BOX2I plotted = plotter.m_plottedPolys[0].BBox();
+
+    BOOST_CHECK_EQUAL( plotted.GetLeft(), left );
+    BOOST_CHECK_EQUAL( plotted.GetTop(), top );
+    BOOST_CHECK_EQUAL( plotted.GetRight(), right );
+    BOOST_CHECK_EQUAL( plotted.GetBottom(), bottom );
 }
 
 
