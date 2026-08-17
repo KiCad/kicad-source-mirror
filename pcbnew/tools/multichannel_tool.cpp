@@ -1772,6 +1772,23 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             // Copy 3D model settings
             targetFP->Models() = refFP->Models();
 
+            std::set<PAD*> consumedPads;
+
+            for( PAD* refPad : refFP->Pads() )
+            {
+                for( PAD* targetPad : targetFP->Pads() )
+                {
+                    if( consumedPads.contains( targetPad ) || targetPad->GetNumber() != refPad->GetNumber() )
+                    {
+                        continue;
+                    }
+
+                    consumedPads.insert( targetPad );
+                    targetPad->ImportSettingsFrom( *refPad );
+                    break;
+                }
+            }
+
             aCompatData.m_affectedItems.insert( targetFP );
             aCompatData.m_groupableItems.insert( targetFP );
 

@@ -2970,4 +2970,82 @@ BOOST_FIXTURE_TEST_CASE( GenerateSheetRAIncludesLooseInterBlockRouting, MULTICHA
 }
 
 
+/**
+ * Test that repeat layout copies pad settings (zone connection style, clearance, 
+ * solder mask margin, thermal spoke width) from the reference channel to the
+ * target channel (issue 25244).
+ */
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesPadOverrides, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22548/issue22548", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    RULE_AREA* refArea = nullptr;
+    RULE_AREA* targetArea = nullptr;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_ruleName.Contains( wxT( "Untitled Sheet/" ) ) )
+            refArea = &ra;
+        else if( ra.m_ruleName.Contains( wxT( "Untitled Sheet1/" ) ) )
+            targetArea = &ra;
+    }
+
+    BOOST_REQUIRE( refArea );
+    BOOST_REQUIRE( targetArea );
+
+    FOOTPRINT* refFP = nullptr;
+    FOOTPRINT* targetFP = nullptr;
+
+    for( FOOTPRINT* fp : refArea->m_components )
+    {
+        if( fp->GetReference() == wxT( "U1" ) )
+            refFP = fp;
+    }
+
+    for( FOOTPRINT* fp : targetArea->m_components )
+    {
+        if( fp->GetReference() == wxT( "U2" ) )
+            targetFP = fp;
+    }
+
+    BOOST_REQUIRE( refFP );
+    BOOST_REQUIRE( targetFP );
+
+    PAD* refPad = refFP->FindPadByNumber( wxT( "1" ) );
+
+    BOOST_REQUIRE( refPad );
+
+    refPad->SetLocalZoneConnection( ZONE_CONNECTION::NONE );
+    refPad->SetLocalSolderMaskMargin( pcbIUScale.mmToIU( 0.15 ) );
+
+    BOOST_REQUIRE( targetFP->FindPadByNumber( wxT( "1" ) )->GetLocalZoneConnection() == ZONE_CONNECTION::INHERITED );
+
+    mtTool->CheckRACompatibility( refArea->m_zone );
+
+    ruleData->m_compatMap[targetArea].m_doCopy = true;
+    ruleData->m_options.m_copyPlacement = true;
+
+    BOOST_REQUIRE( mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_zone ) >= 0 );
+
+    PAD* targetPad = targetFP->FindPadByNumber( wxT( "1" ) );
+
+    BOOST_REQUIRE( targetPad );
+
+    BOOST_CHECK( targetPad->GetLocalZoneConnection() == ZONE_CONNECTION::NONE );
+    BOOST_CHECK( targetPad->GetLocalSolderMaskMargin() == refPad->GetLocalSolderMaskMargin() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
