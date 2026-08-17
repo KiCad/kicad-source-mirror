@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-08-12 14:51+0000\n"
+"PO-Revision-Date: 2026-08-17 12:35+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -14534,15 +14534,23 @@ msgid ""
 "\n"
 "Would you like to force-create a manual chain link between these components?"
 msgstr ""
+"Non è stato trovato alcun percorso net chain tra %s e %s tramite componenti "
+"passanti.\n"
+"\n"
+"Si desidera creare manualmente un collegamento net chain tra questi "
+"componenti?"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:438
 msgid "Selected components have no connected pins to anchor a manual chain."
 msgstr ""
+"I componenti selezionati non hanno pin connessi per l'aggancio a una chain "
+"manuale."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:470
 #, c-format
 msgid "Showing manual chain between %s and %s. Use Refresh to restore all."
 msgstr ""
+"Mostra la chain manuale tra %s e %s. Usare Aggiorna per ripristinare tutto."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:510
 #, c-format
