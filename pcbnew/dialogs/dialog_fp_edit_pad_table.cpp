@@ -473,7 +473,9 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
 
 DIALOG_FP_EDIT_PAD_TABLE::~DIALOG_FP_EDIT_PAD_TABLE()
 {
-    if( m_cancelled )
+    // Roll back any session changes unless the dialog was accepted. This means
+    // rollback happens on both title-bar 'X'/Esc and Cancel.
+    if( !m_accepted )
         RestoreOriginalPadState();
 
     // destroy GRID_TRICKS before m_grid.
@@ -960,6 +962,8 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
     commit.Push( _( "Edit Pads" ) );
     m_frame->Refresh();
 
+    m_accepted = true;
+
     return true;
 }
 
@@ -1163,7 +1167,8 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnUpdateUI( wxUpdateUIEvent& aEvent )
 
 void DIALOG_FP_EDIT_PAD_TABLE::OnCancel( wxCommandEvent& aEvent )
 {
-    m_cancelled = true;
+    // The destructor rolls back everything that was not accepted.
+    m_accepted = false;
     aEvent.Skip();
 }
 

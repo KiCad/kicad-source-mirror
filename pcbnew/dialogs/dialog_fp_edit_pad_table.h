@@ -148,9 +148,10 @@ private:
     // deletion), kept alive until the dialog is accepted or cancelled.
     std::vector<PAD*> m_removedPads;
 
-    bool                              m_cancelled = false; // set if user hit cancel
+    /// Set when the changes are committed on OK
+    bool m_accepted = false;
 
-    FOOTPRINT*                        m_footprint;
-    std::unique_ptr<UNITS_PROVIDER>   m_unitsProvider;
-    bool                              m_summaryDirty;
+    FOOTPRINT*                      m_footprint;
+    std::unique_ptr<UNITS_PROVIDER> m_unitsProvider;
+    bool                            m_summaryDirty;
 };
