@@ -20,6 +20,8 @@
 
 #include "dialog_sheet_properties.h"
 
+#include <algorithm>
+
 #include <kiface_base.h>
 #include <wx/string.h>
 #include <wx/log.h>
@@ -128,10 +130,21 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
     wxString variantName = m_frame->Schematic().GetCurrentVariant();
 
-    // Push a copy of each field into m_updateFields
+    std::vector<SCH_FIELD*> orderedFields;
+
     for( SCH_FIELD& field : m_sheet->GetFields() )
+        orderedFields.push_back( &field );
+
+    std::stable_sort( orderedFields.begin(), orderedFields.end(),
+                      []( const SCH_FIELD* lhs, const SCH_FIELD* rhs )
+                      {
+                          return lhs->GetOrdinal() < rhs->GetOrdinal();
+                      } );
+
+    // Push a copy of each field into m_updateFields
+    for( SCH_FIELD* field : orderedFields )
     {
-        SCH_FIELD field_copy( field );
+        SCH_FIELD field_copy( *field );
 
 #ifdef __WINDOWS__
         // Filenames are stored using unix notation, so convert to Windows notation
@@ -144,7 +157,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 #endif
 
         if( !field_copy.IsMandatory() )
-            field_copy.SetText( m_sheet->GetFieldText( field.GetName(), &instance, variantName ) );
+            field_copy.SetText( m_sheet->GetFieldText( field->GetName(), &instance, variantName ) );
 
         // change offset to be symbol-relative
         field_copy.Offset( -m_sheet->GetPosition() );
@@ -407,6 +420,9 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         else if( fieldName.IsEmpty() )
             field.SetName( _( "untitled" ) );
 
+        if( !field.IsMandatory() )
+            field.SetOrdinal( ordinal++ );
+
         SCH_FIELD* existingField = m_sheet->GetField( fieldName );
         SCH_FIELD* tmp;
 
@@ -431,9 +447,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
                 tmp->SetText( variantText, &instance, variantName );
             }
         }
-
-        if( !field.IsMandatory() )
-            field.SetOrdinal( ordinal++ );
     }
 
     for( int ii = (int) m_sheet->GetFields().size() - 1; ii >= 0; ii-- )
@@ -457,6 +470,12 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         if( !found )
             m_sheet->GetFields().erase( m_sheet->GetFields().begin() + ii );
     }
+
+    std::stable_sort( m_sheet->GetFields().begin(), m_sheet->GetFields().end(),
+                      []( const SCH_FIELD& lhs, const SCH_FIELD& rhs )
+                      {
+                          return lhs.GetOrdinal() < rhs.GetOrdinal();
+                      } );
 
     m_sheet->SetBorderWidth( m_borderWidth.GetIntValue() );
 
