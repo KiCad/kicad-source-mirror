@@ -591,6 +591,7 @@ public:
 protected:
     friend SCH_SHEET_PATH;
     friend SCH_IO_KICAD_SEXPR_PARSER;
+    friend SCHEMATIC;          // Only to swap a staged screen in, see SCHEMATIC::AdoptContent().
 
     void setInstances( const std::vector<SCH_SHEET_INSTANCE>& aInstances )
     {

@@ -50,6 +50,9 @@
 #include <api/schematic/schematic_rules.pb.h>
 #include <sch_no_connect.h>
 #include <sch_rule_area.h>
+#include <sch_symbol.h>
+#include <sch_pin.h>
+#include <sch_sheet.h>
 #include <sch_screen.h>
 #include <sch_sheet_pin.h>
 #include <sch_selection_tool.h>
@@ -403,11 +406,13 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 
     for( SCH_SHEET* sheet : validSheets )
     {
-        sheet->SetParent( m_rootSheet );
-
+        // Parent to the root sheet, not the root screen. SCH_SCREEN::Append() reparents to
+        // itself, so this has to follow it. A headless import reaches the schematic through
+        // the sheet, and SCHEMATIC::AdoptContent() parents the same way.
         if( m_rootSheet->GetScreen() )
             m_rootSheet->GetScreen()->Append( sheet );
 
+        sheet->SetParent( m_rootSheet );
         m_topLevelSheets.push_back( sheet );
     }
 
@@ -441,6 +446,117 @@ CONNECTION_GRAPH* SCHEMATIC::AdoptImportedTopLevelHierarchy( std::vector<SCH_SHE
     m_currentSheet->Swap( aCurrentSheet );
     m_labelToPageRefsMap.clear();
     return std::exchange( m_connectionGraph, aConnectionGraph );
+}
+
+
+void SCHEMATIC::AdoptContent( SCHEMATIC_CONTENT&& aContent ) noexcept
+{
+    SCH_SHEET*  target = aContent.targetSheet ? aContent.targetSheet : m_rootSheet;
+    SCH_SCREEN* outgoingScreen = nullptr;
+
+    // Replacing the screen while also replacing the top level sheets frees the outgoing sheets
+    // twice, once through the screen's R-tree and once through the sheet list
+    wxCHECK_RET( !aContent.screen || aContent.topLevelSheets.empty(),
+                 wxS( "AdoptContent cannot replace both the screen and the top level sheets" ) );
+
+    // The virtual root's screen owns the top level sheets through its R-tree, so replacing it
+    // outright frees sheets that m_topLevelSheets still names
+    wxCHECK_RET( !aContent.screen || target != m_rootSheet,
+                 wxS( "AdoptContent cannot replace the virtual root screen" ) );
+
+    // Replacing the top level sheets deletes the outgoing ones and everything below them, so the
+    // only coherent target is the virtual root whose container index is being replaced with it
+    wxCHECK_RET( aContent.topLevelSheets.empty() || target == m_rootSheet,
+                 wxS( "AdoptContent can only replace the top level sheets through the virtual root" ) );
+
+    if( aContent.screen )
+    {
+        // A sheet and its screen are one identity to the rest of the schematic, so the
+        // incoming screen inherits the identity of the sheet it is hung on.
+        aContent.screen->m_uuid = target->m_Uuid;
+        aContent.screen->IncRefCount();
+        outgoingScreen = std::exchange( target->m_screen, aContent.screen.release() );
+    }
+    else if( SCH_SCREEN* screen = target->GetScreen() )
+    {
+        screen->m_rtree = std::move( aContent.screenItems );
+
+        if( aContent.screenLibSymbols )
+            screen->m_libSymbols.swap( aContent.screenLibSymbols->m_libSymbols );
+
+        --screen->m_modification_sync;
+
+        // The index now owns what it names, so the staged items lose their owners.
+        for( std::unique_ptr<SCH_ITEM>& item : aContent.itemOwners )
+            item.release();
+    }
+
+    std::vector<SCH_SHEET*> outgoingTopLevelSheets;
+
+    if( !aContent.topLevelSheets.empty() )
+    {
+        outgoingTopLevelSheets.swap( m_topLevelSheets );
+        m_topLevelSheets = std::move( aContent.topLevelSheets );
+
+        for( SCH_SHEET* sheet : m_topLevelSheets )
+            sheet->SetParent( m_rootSheet );
+    }
+
+    m_hierarchy.swap( aContent.hierarchy );
+
+    if( aContent.currentSheet )
+        m_currentSheet->Swap( *aContent.currentSheet );
+
+    m_labelToPageRefsMap.clear();
+
+    CONNECTION_GRAPH* outgoingGraph = std::exchange( m_connectionGraph, aContent.connectionGraph.release() );
+
+
+    // The hierarchy and the current sheet named sheets that the outgoing screen and the
+    // outgoing top level sheets own, so neither could be destroyed before now.
+    for( SCH_SHEET* sheet : outgoingTopLevelSheets )
+        delete sheet;
+
+    if( outgoingScreen )
+    {
+        outgoingScreen->DecRefCount();
+
+        if( outgoingScreen->GetRefCount() == 0 )
+            delete outgoingScreen;
+    }
+
+    if( aContent.embeddedFiles )
+    {
+        *GetEmbeddedFiles() = std::move( *aContent.embeddedFiles );
+        Settings().m_SchDrawingSheetFileName.swap( aContent.drawingSheetFileName );
+    }
+
+    // Anything still reachable once the outgoing sheets and screen are gone survived the adoption
+    // while holding SCH_CONNECTIONs that name the outgoing graph. Symbol and sheet pins carry
+    // their own connection maps, so the indexed items alone are not enough, and Recalculate only
+    // re-points what it considers dirty.
+    SCH_SCREENS retained( Root() );
+
+    for( SCH_SCREEN* screen = retained.GetFirst(); screen; screen = retained.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            item->SetConnectionGraph( m_connectionGraph );
+
+            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+            {
+                for( std::unique_ptr<SCH_PIN>& pin : symbol->GetRawPins() )
+                    pin->SetConnectionGraph( m_connectionGraph );
+            }
+            else if( SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item ) )
+            {
+                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                    pin->SetConnectionGraph( m_connectionGraph );
+            }
+        }
+    }
+
+    delete outgoingGraph;
 }
 
 
