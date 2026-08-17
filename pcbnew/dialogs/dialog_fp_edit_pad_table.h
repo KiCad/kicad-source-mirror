@@ -67,11 +67,14 @@ private:
     void OnCancel( wxCommandEvent& aEvent ) override;
     void OnExportButtonClick( wxCommandEvent& aEvent ) override;
     void OnImportButtonClick( wxCommandEvent& aEvent ) override;
+    void OnAddRow( wxCommandEvent& aEvent ) override;
+    void OnDeleteRow( wxCommandEvent& aEvent ) override;
 
     void InitColumnProportions();
 
     void updateSummary();
     void setRowNullableEditors( int aRowId ) const;
+    void fillGridRow( int aRowId, PAD* aPad );
 
     void setPadFromGridCell( PAD& aPad, int aRowId, COLS aCol );
     void restoreOriginalPadData();

@@ -169,7 +169,22 @@ DIALOG_FP_EDIT_PAD_TABLE_BASE::DIALOG_FP_EDIT_PAD_TABLE_BASE( wxWindow* parent, 
 	topSizer->Add( m_contentSizer, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizer91;
+	bSizer91 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_buttonAdd = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer91->Add( m_buttonAdd, 0, wxALL, 5 );
+
+	m_buttonDelete = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer91->Add( m_buttonDelete, 0, wxALL, 5 );
+
+
+	bSizer9->Add( bSizer91, 0, wxEXPAND, 5 );
+
+
+	bSizer9->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -178,7 +193,7 @@ DIALOG_FP_EDIT_PAD_TABLE_BASE::DIALOG_FP_EDIT_PAD_TABLE_BASE( wxWindow* parent, 
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizer9->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizer9->Add( m_sdbSizer, 0, wxALL, 5 );
 
 
 	topSizer->Add( bSizer9, 0, wxEXPAND, 5 );
@@ -199,6 +214,8 @@ DIALOG_FP_EDIT_PAD_TABLE_BASE::DIALOG_FP_EDIT_PAD_TABLE_BASE( wxWindow* parent, 
 	m_btnExportToClipboard->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnExportButtonClick ), NULL, this );
 	m_btnImportFromFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnImportButtonClick ), NULL, this );
 	m_btnImportFromClipboard->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnImportButtonClick ), NULL, this );
+	m_buttonAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnAddRow ), NULL, this );
+	m_buttonDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnDeleteRow ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnCancel ), NULL, this );
 }
 
@@ -213,6 +230,8 @@ DIALOG_FP_EDIT_PAD_TABLE_BASE::~DIALOG_FP_EDIT_PAD_TABLE_BASE()
 	m_btnExportToClipboard->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnExportButtonClick ), NULL, this );
 	m_btnImportFromFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnImportButtonClick ), NULL, this );
 	m_btnImportFromClipboard->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnImportButtonClick ), NULL, this );
+	m_buttonAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnAddRow ), NULL, this );
+	m_buttonDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnDeleteRow ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_EDIT_PAD_TABLE_BASE::OnCancel ), NULL, this );
 
 }

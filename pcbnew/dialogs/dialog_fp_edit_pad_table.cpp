@@ -30,7 +30,9 @@
 #include <widgets/grid_text_helpers.h>
 #include <widgets/grid_combobox.h>
 #include <base_units.h>
+#include <bitmaps.h>
 #include <units_provider.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <board.h>
 #include <footprint.h>
 #include <footprint_edit_frame.h>
@@ -437,6 +439,9 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
 
     // add Cut, Copy, and Paste to wxGrid
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
+    m_buttonAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_buttonDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
 
@@ -1461,6 +1466,91 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnImportButtonClick( wxCommandEvent& aEvent )
         m_grid->DeleteRows( neededRows, currentRows - neededRows );
 
     TransferDataToWindow();
+    updateSummary();
+
+    if( canvas )
+        canvas->ForceRefresh();
+}
+
+
+void DIALOG_FP_EDIT_PAD_TABLE::OnAddRow( wxCommandEvent& aEvent )
+{
+    if( !m_footprint )
+        return;
+
+    PCB_BASE_FRAME*     base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
+    PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
+    KIGFX::PCB_VIEW*    view = canvas ? static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() ) : nullptr;
+
+    m_grid->OnAddRow(
+            [&]() -> std::pair<int, int>
+            {
+                std::unique_ptr<PAD> newPad;
+
+                // Copy the settings of the last pad onto the new pad and offset
+                // its position by the current grid so the copy is easy to find.
+                if( !m_rowPads.empty() )
+                {
+                    PAD* last = m_rowPads.back();
+                    newPad = std::make_unique<PAD>( *last );
+                }
+                else
+                {
+                    newPad = std::make_unique<PAD>( m_footprint );
+                }
+
+                PAD* pad = newPad.get();
+
+                if( view )
+                    view->Add( pad );
+
+                m_rowPads.push_back( pad );
+                m_footprint->Add( newPad.release() );
+
+                int row = m_grid->GetNumberRows();
+                m_grid->AppendRows( 1 );
+                fillGridRow( row, pad );
+                updateSummary();
+
+                if( canvas )
+                    canvas->ForceRefresh();
+
+                return { row, COL_NUMBER };
+            } );
+}
+
+
+void DIALOG_FP_EDIT_PAD_TABLE::OnDeleteRow( wxCommandEvent& aEvent )
+{
+    if( !m_footprint )
+        return;
+
+    PCB_BASE_FRAME*     base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
+    PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
+    KIGFX::PCB_VIEW*    view = canvas ? static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() ) : nullptr;
+
+    m_grid->OnDeleteRows(
+            [&]( int row )
+            {
+                if( row < 0 || static_cast<size_t>( row ) >= m_rowPads.size() )
+                    return;
+
+                PAD* pad = m_rowPads[row];
+
+                pad->ClearBrightened();
+                m_footprint->Remove( pad );
+
+                if( view )
+                    view->Remove( pad );
+
+                // Keep the pad alive: on OK it is staged as a removal, on cancel
+                // it is re-added to the footprint.
+                m_removedPads.push_back( pad );
+
+                m_rowPads.erase( m_rowPads.begin() + row );
+                m_grid->DeleteRows( row, 1 );
+            } );
+
     updateSummary();
 
     if( canvas )

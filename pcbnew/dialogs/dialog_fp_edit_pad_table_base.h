@@ -27,6 +27,7 @@ class WX_GRID;
 #include <wx/icon.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
+#include <wx/bmpbuttn.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,6 +53,8 @@ class DIALOG_FP_EDIT_PAD_TABLE_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbAppendToExisiting;
 		wxButton* m_btnImportFromFile;
 		wxButton* m_btnImportFromClipboard;
+		wxBitmapButton* m_buttonAdd;
+		wxBitmapButton* m_buttonDelete;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -63,6 +66,8 @@ class DIALOG_FP_EDIT_PAD_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnSize( wxSizeEvent& event ) = 0;
 		virtual void OnExportButtonClick( wxCommandEvent& event ) = 0;
 		virtual void OnImportButtonClick( wxCommandEvent& event ) = 0;
+		virtual void OnAddRow( wxCommandEvent& event ) = 0;
+		virtual void OnDeleteRow( wxCommandEvent& event ) = 0;
 		virtual void OnCancel( wxCommandEvent& event ) = 0;
 
 
