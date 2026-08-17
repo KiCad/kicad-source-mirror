@@ -221,6 +221,7 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
     }
 }
 
+
 BOOST_AUTO_TEST_CASE( IntrospectedExtendedNumericProperties )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -253,6 +254,7 @@ BOOST_AUTO_TEST_CASE( IntrospectedExtendedNumericProperties )
     testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == null" ), VAL( 1.0 ), false, &footprint );
 }
 
+
 BOOST_AUTO_TEST_CASE( RenamedProperties )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -276,6 +278,7 @@ BOOST_AUTO_TEST_CASE( RenamedProperties )
     testEvalExpr( wxT( "A.Start_Y == 2mm" ), VAL( 1.0 ), false, &track );
 }
 
+
 BOOST_AUTO_TEST_CASE( IntrospectedColorProperties )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -295,8 +298,11 @@ BOOST_AUTO_TEST_CASE( IntrospectedColorProperties )
             };
 
     checkColor( COLOR4D( 0.25, 0.5, 0.75, 0.5 ), wxT( "rgba(64, 128, 191, 0.502)" ) );
+#ifndef __WXMAC__   // WXMAC doesn't have colour names initialized when run headless
     checkColor( COLOR4D( wxString( wxT( "red" ) ) ), wxT( "rgb(255, 0, 0)" ) );
+#endif
 }
+
 
 BOOST_AUTO_TEST_CASE( ExpressionPropertyTypesAreSupported )
 {
@@ -343,6 +349,7 @@ BOOST_AUTO_TEST_CASE( ExpressionPropertyTypesAreSupported )
     expectCompileError( wxT( "A.Shape" ) );
 }
 
+
 BOOST_AUTO_TEST_CASE( IntrospectedPropertyAvailability )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -361,6 +368,7 @@ BOOST_AUTO_TEST_CASE( IntrospectedPropertyAvailability )
 
     testEvalExpr( wxT( "A.Priority == 7" ), VAL( 1.0 ), false, &zone );
 }
+
 
 BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
 {
@@ -401,6 +409,7 @@ BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
     testEvalExpr( wxT( "A.inNetChainClass('High*')" ), VAL( 1.0 ), false, &trackClassified, &trackClassified );
     testEvalExpr( wxT( "A.inNetChainClass('LowSpeed')" ), VAL( 0.0 ), false, &trackClassified, &trackClassified );
 }
+
 
 BOOST_AUTO_TEST_CASE( ParentNavigation )
 {
