@@ -31,6 +31,12 @@
     "update_check_prompt": false,
     "zone_fill_warning": false
   },
+  "embed_file_defaults": {
+    "datasheet": true,
+    "drawing_sheet": true,
+    "model_3d": false,
+    "sim_model": false
+  },
   "environment": {
     "vars": null
   },
@@ -98,6 +104,6 @@
     "pdf_viewer_name": "",
     "text_editor": "",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/seth/code/kicad/kicad-v10/qa/tests"
+    "working_dir": "/home/wayne/src/kicad-stable/qa/tests"
   }
 }
