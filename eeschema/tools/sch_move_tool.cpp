@@ -1469,6 +1469,9 @@ SCH_SHEET* SCH_MOVE_TOOL::findTargetSheet( const SCH_SELECTION& aSelection, cons
         }
     }
 
+    if( sheet && dropWouldRecurse( aSelection, sheet ) )
+        sheet = nullptr;
+
     bool dropAllowedBySelection = !aHasSheetPins;
     bool dropAllowedByModifiers = !aIsGraphicsOnly || aCtrlDown;
 
@@ -1476,6 +1479,38 @@ SCH_SHEET* SCH_MOVE_TOOL::findTargetSheet( const SCH_SELECTION& aSelection, cons
         sheet = nullptr;
 
     return sheet;
+}
+
+
+bool SCH_MOVE_TOOL::dropWouldRecurse( const SCH_SELECTION& aSelection, const SCH_SHEET* aTargetSheet )
+{
+    SCH_SCREEN* destScreen = aTargetSheet->GetScreen();
+
+    if( !destScreen || destScreen->GetFileName().IsEmpty() )
+        return false;
+
+    std::vector<SCH_SHEET*> movedSheets;
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        if( item->Type() == SCH_SHEET_T )
+            movedSheets.push_back( static_cast<SCH_SHEET*>( item ) );
+    }
+
+    if( movedSheets.empty() )
+        return false;
+
+    SCH_SHEET_LIST hierarchy = m_frame->Schematic().Hierarchy();
+
+    for( SCH_SHEET* movedSheet : movedSheets )
+    {
+        SCH_SHEET_LIST movedHierarchy( movedSheet );
+
+        if( hierarchy.TestForRecursion( movedHierarchy, destScreen->GetFileName() ) )
+            return true;
+    }
+
+    return false;
 }
 
 
