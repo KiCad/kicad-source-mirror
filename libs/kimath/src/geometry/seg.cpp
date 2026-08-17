@@ -620,9 +620,20 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 }
 
 
-bool SEG::Contains( const VECTOR2I& aP ) const
+bool SEG::Contains( const VECTOR2I& aP, int aSqDistanceThreshold ) const
 {
-    return SquaredDistance( aP ) <= 3;
+    /* Warning. This code does work in most - but not all of the cases.
+       Take the segment (0,0) - (10,0) and the point (9, 1). With the distance threshold of 3,
+       the point is assumed as contained in by the segment:
+
+             (9,1)\  
+       (0,0) ------ (10, 0)
+
+       I've made the distance threshold configurable (using the default of value of 3),
+       to not break any existing code that relies on the current rounding behaviour, but we need to
+       think of more accurate (and degeneracy-free) solution. */
+    
+    return SquaredDistance( aP ) <= aSqDistanceThreshold;
 }
 
 

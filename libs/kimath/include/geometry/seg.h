@@ -359,7 +359,7 @@ public:
         return m_index;
     }
 
-    bool Contains( const VECTOR2I& aP ) const;
+    bool Contains( const VECTOR2I& aP, int aSqDistanceThreshold = 3 ) const;
 
     void Reverse()
     {
