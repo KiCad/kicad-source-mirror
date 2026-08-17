@@ -327,6 +327,7 @@ bool OleRenderWmf( const std::vector<uint8_t>& aWmf, int aMaxWidth, int aMaxHeig
         return false;
     }
 
+    // libwmf takes a non-const buffer, so render from a copy rather than exposing the caller's.
     std::vector<uint8_t> normalized = aWmf;
 
     if( normalized.size() >= 40 && readU32( normalized.data() ) == 0x9AC6CDD7 )
