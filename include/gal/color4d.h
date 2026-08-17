@@ -385,11 +385,12 @@ public:
      */
     static EDA_COLOR_T FindNearestLegacyColor( int aR, int aG, int aB );
 
-    // Color components: red, green, blue, alpha
-    double r; ///< Red component
-    double g; ///< Green component
-    double b; ///< Blue component
-    double a; ///< Alpha component
+    // Color components: red, green, blue, alpha.  Defaulted because the string constructors
+    // leave them untouched when the string is not a color.
+    double r = 0.0; ///< Red component
+    double g = 0.0; ///< Green component
+    double b = 0.0; ///< Blue component
+    double a = 1.0; ///< Alpha component
 
     // Optional text for evaluated colors
     std::shared_ptr<wxString> m_text;
