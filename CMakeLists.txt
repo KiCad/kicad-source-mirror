@@ -880,9 +880,8 @@ include_directories( SYSTEM ${OCC_INCLUDE_DIR} )
 # Try to find Protobuf with modern approach first, fallback to legacy if needed
 set( _protobuf_found FALSE )
 
-# KiCad 11 relies on proto3 optional behavior available since 3.15
-# Should be set to 3.15 but not enforcing yet
-set( PROTOBUF_MIN_VERSION 3.12 )
+# KiCad 11 relies on protobuf 3.15+
+set( PROTOBUF_MIN_VERSION 3.15 )
 
 if( NOT KICAD_USE_CMAKE_FINDPROTOBUF )
     message( STATUS "Attempting to find Protobuf using CONFIG mode..." )
