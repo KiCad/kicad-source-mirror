@@ -1022,8 +1022,20 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
 
                     bool sameNet = isSameNet( aOther );
 
-                    if( aOther->Type() != PCB_VIA_T && sameNet )
+                    if( aOther->Type() == PCB_PAD_T )
+                    {
+                        // A copper-zone can be placed with thermal reliefs turned off
+                        // We don't want to accidentally place vias on top of that pad
+                        // So process the PAD as a obstacle we need to clear
+                        PAD* pad = static_cast<PAD*>( aOther );
+
+                        if( !pad->FlashLayer( layer ) )
+                            return false;
+                    }
+                    else if( aOther->Type() != PCB_VIA_T && sameNet )
+                    {
                         return false;
+                    }
 
                     // Our copper against theirs.
                     int margin = viaSize / 2 + evalConstraint( CLEARANCE_CONSTRAINT, aOther, layer );
