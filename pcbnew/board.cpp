@@ -2108,6 +2108,10 @@ BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) 
     if( IsFootprintHolder() )
         return aItem;
 
+    // catches a future alias between the cache key and the cached item's own UUID
+    wxASSERT_MSG( aItem && aItem->m_Uuid == aId,
+                  wxT( "BOARD identity cache key must be the item's own UUID" ) );
+
     if( auto prev = m_cachedIdByItem.find( aItem );
         prev != m_cachedIdByItem.end() && prev->second != aId )
     {
