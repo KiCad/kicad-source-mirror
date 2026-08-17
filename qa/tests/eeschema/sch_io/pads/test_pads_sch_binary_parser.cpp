@@ -832,6 +832,19 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         graphic( pageGraphic.graphic, sheet );
         out.back().properties["owner_sheet"] = owner;
     }
+    for( const MODEL_WORKSHEET& worksheet : aModel.worksheets )
+    {
+        auto& record = addOwned( CANONICAL_KIND::GRAPHIC, worksheet.sheet );
+        int   sheet = record.sheet;
+        auto  owner = record.properties.at( "owner_sheet" );
+        out.pop_back();
+
+        for( const MODEL_GRAPHIC& worksheetGraphic : worksheet.graphics )
+        {
+            graphic( worksheetGraphic, sheet );
+            out.back().properties["owner_sheet"] = owner;
+        }
+    }
     return out;
 }
 
@@ -3797,7 +3810,9 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
                                       && aRecord.kind != CANONICAL_KIND::LABEL
                                       && aRecord.kind != CANONICAL_KIND::JUNCTION
                                       && ( aRecord.kind != CANONICAL_KIND::GRAPHIC
-                                           || !aRecord.properties.contains( "page_graphic_group" ) );
+                                           || !aRecord.properties.contains( "page_graphic_group" )
+                                           || aRecord.properties.at( "page_graphic_group" ).value
+                                                      != CANONICAL_VALUE( std::string( "BATCHB_PAGE_GRAPHICS" ) ) );
                            } );
 
             return aRecords;
