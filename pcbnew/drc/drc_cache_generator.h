@@ -34,5 +34,11 @@ public:
 
     virtual ~DRC_CACHE_GENERATOR() = default;
 
+    /**
+     * Discard the board's run-time DRC caches and regenerate them from scratch.
+     *
+     * Safe to call repeatedly; each run starts from a clean slate, so callers don't need to
+     * invalidate the caches themselves first.
+     */
     virtual bool Run() override;
 };

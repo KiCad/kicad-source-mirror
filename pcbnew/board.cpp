@@ -3742,6 +3742,16 @@ void BOARD::SanitizeNetcodes()
 }
 
 
+void BOARD::OnZonesFilled( const std::vector<ZONE*>& aZones )
+{
+    if( aZones.empty() )
+        return;
+
+    for( PCB_GENERATOR* generator : m_generators )
+        generator->OnZoneFillChanged( aZones );
+}
+
+
 void BOARD::AddListener( BOARD_LISTENER* aListener )
 {
     if( !alg::contains( m_listeners, aListener ) )

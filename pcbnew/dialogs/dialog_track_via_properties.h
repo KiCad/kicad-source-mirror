@@ -20,20 +20,26 @@
  */
 
 #include <dialogs/dialog_track_via_properties_base.h>
+#include <tools/pcb_selection.h>
 #include <widgets/unit_binder.h>
 #include <optional>
 #include <layer_ids.h>
 #include <via_protection_ui_mixin.h>
 
-class PCB_SELECTION;
 class PCB_BASE_EDIT_FRAME;
 class PAD;
 class PADSTACK;
+class PCB_VIA;
 
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE, public VIA_PROTECTION_UI_MIXIN
 {
 public:
     DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, const PCB_SELECTION& aItems );
+
+    /**
+     * This constructor is intended for editing standalone virtual vias, i.e. for configuring via stitching
+     */
+    DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_VIA* aStandaloneVia );
 
     ~DIALOG_TRACK_VIA_PROPERTIES();
 
@@ -66,8 +72,15 @@ private:
     bool TransferDataToWindow() override;
 
 private:
+    /// Used for standalone via mode to flow through the normal update logic
+    PCB_SELECTION        m_viaStandaloneSelection;
     PCB_BASE_EDIT_FRAME* m_frame;
-    const PCB_SELECTION& m_items;      // List of items to be modified.
+    const PCB_SELECTION& m_items;       // List of items to be modified.
+
+    /// Dialog was constructed for a standalone via (via stitching
+    bool                 m_standalone = false;
+
+    void commonInit( PCB_BASE_EDIT_FRAME* aParent );
 
     UNIT_BINDER          m_trackStartX, m_trackStartY;
     UNIT_BINDER          m_trackEndX, m_trackEndY;

@@ -52,6 +52,7 @@
 #include <pcb_track.h>
 #include <pcb_generator.h>
 #include <generators/pcb_tuning_pattern.h>
+#include <generators/pcb_via_stitch.h>
 #include <pad.h>
 #include <footprint.h>
 #include <pcb_field.h>
@@ -618,8 +619,37 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
 }
 
 
-void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
+SELECTION PCB_PROPERTIES_PANEL::filterOutReadOnlyGenChildren( const SELECTION& aSelection )
 {
+    SELECTION filtered;
+    filtered.SetIsHover( aSelection.IsHover() );
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        if( item->IsBOARD_ITEM() )
+        {
+            EDA_GROUP* parent = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
+
+            if( parent && parent->AsEdaItem()->Type() == PCB_GENERATOR_T
+                && static_cast<PCB_GENERATOR*>( parent->AsEdaItem() )->ChildrenAreReadOnly() )
+            {
+                continue;
+            }
+        }
+
+        filtered.Add( item );
+    }
+
+    return filtered;
+}
+
+
+void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aRawSelection )
+{
+    // Strip read-only generator children (like stitch vias)
+    SELECTION        editableSelection = filterOutReadOnlyGenChildren( aRawSelection );
+    const SELECTION& aSelection = editableSelection;
+
     m_currentFieldNames.clear();
 
     for( EDA_ITEM* item : aSelection )
@@ -841,7 +871,18 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
         return;
 
     SELECTION fallbackSelection;
-    const SELECTION& selection = getSelection( fallbackSelection );
+    SELECTION rawSelection = getSelection( fallbackSelection );
+
+    // Strip read-only generator children, last ditch sanity check
+    SELECTION filtered = filterOutReadOnlyGenChildren( rawSelection );
+
+    if( filtered.Empty() )
+    {
+        aEvent.Veto();
+        return;
+    }
+
+    const SELECTION& selection = filtered;
 
     wxCHECK( getPropertyFromEvent( aEvent ), /* void */ );
 
@@ -1131,6 +1172,12 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 
     auto tuningNet = m_propMgr.GetProperty( TYPE_HASH( PCB_TUNING_PATTERN ), _HKI( "Net" ) );
     tuningNet->SetChoices( nets );
+
+    auto stitchNet = m_propMgr.GetProperty( TYPE_HASH( PCB_VIA_STITCH ), _HKI( "Net" ) );
+    stitchNet->SetChoices( nets );
+
+    auto stitchGuardedNet = m_propMgr.GetProperty( TYPE_HASH( PCB_VIA_STITCH ), _HKI( "Guarded Net" ) );
+    stitchGuardedNet->SetChoices( nets );
 }
 
 

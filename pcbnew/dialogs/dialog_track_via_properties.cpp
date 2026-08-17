@@ -78,6 +78,56 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_editLayer( PADSTACK::ALL_LAYERS ),
         m_padstackDirty( false )
 {
+    commonInit( aParent );
+}
+
+
+DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
+                                                          PCB_VIA*             aStandaloneVia ) :
+        DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
+        m_frame( aParent ),
+        m_items( m_viaStandaloneSelection ),
+        m_trackStartX( aParent, m_TrackStartXLabel, m_TrackStartXCtrl, nullptr ),
+        m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
+        m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, nullptr ),
+        m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
+        m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit ),
+        m_trackMaskMargin( aParent, m_trackMaskMarginLabel, m_trackMaskMarginCtrl, m_trackMaskMarginUnit ),
+        m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, nullptr ),
+        m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
+        m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit ),
+        m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit ),
+        m_backdrillFrontSize( aParent, m_backdrillFrontSizeLabel, m_backdrillFrontSizeCtrl, m_backdrillFrontSizeUnits ),
+        m_backdrillBackSize( aParent, m_backdrillBackSizeLabel, m_backdrillBackSizeCtrl, m_backdrillBackSizeUnits ),
+        m_topPostMachineSize1( aParent, m_topPostMachineSize1Label, m_topPostMachineSize1Ctrl,
+                               m_topPostMachineSize1Units ),
+        m_topPostMachineSize2( aParent, m_topPostMachineSize2Label, m_topPostMachineSize2Ctrl,
+                               m_topPostMachineSize2Units ),
+        m_bottomPostMachineSize1( aParent, m_bottomPostMachineSize1Label, m_bottomPostMachineSize1Ctrl,
+                                  m_bottomPostMachineSize1Units ),
+        m_bottomPostMachineSize2( aParent, m_bottomPostMachineSize2Label, m_bottomPostMachineSize2Ctrl,
+                                  m_bottomPostMachineSize2Units ),
+        m_teardropHDPercent( aParent, m_stHDRatio, m_tcHDRatio, m_stHDRatioUnits ),
+        m_teardropLenPercent( aParent, m_stLenPercentLabel, m_tcLenPercent, nullptr ),
+        m_teardropMaxLen( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
+        m_teardropWidthPercent( aParent, m_stWidthPercentLabel, m_tcWidthPercent, nullptr ),
+        m_teardropMaxWidth( aParent, m_stMaxWidthLabel, m_tcMaxWidth, m_stMaxWidthUnits ),
+        m_tracks( false ),
+        m_vias( false ),
+        m_editLayer( PADSTACK::ALL_LAYERS ),
+        m_padstackDirty( false )
+{
+    wxASSERT( aStandaloneVia );
+
+    m_standalone = true;
+    m_viaStandaloneSelection.Add( aStandaloneVia );
+
+    commonInit( aParent );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::commonInit( PCB_BASE_EDIT_FRAME* aParent )
+{
     m_useCalculatedSize = true;
 
     wxASSERT( !m_items.Empty() );
@@ -1219,7 +1269,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
     for( PCB_TRACK* track : selected_tracks )
     {
-        commit.Modify( track );
+        
+        if( !m_standalone )
+            commit.Modify( track );
 
         switch( track->Type() )
         {
@@ -1675,7 +1727,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    commit.Push( _( "Edit Track/Via Properties" ) );
+    if( !m_standalone )
+        commit.Push( _( "Edit Track/Via Properties" ) );
+
     return true;
 }
 

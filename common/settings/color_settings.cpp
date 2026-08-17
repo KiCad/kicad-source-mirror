@@ -150,6 +150,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "board.via_net_names",            LAYER_VIA_NETNAMES       );
     CLR( "board.points",                   LAYER_POINTS             );
     CLR( "board.grid_items",               LAYER_GRIDITEMS          );
+    CLR( "board.via_stitching",            LAYER_VIA_STITCHING      );
 
     CLR( "board.copper.f",      F_Cu    );
     CLR( "board.copper.in1",    In1_Cu  );

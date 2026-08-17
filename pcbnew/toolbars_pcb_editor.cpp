@@ -234,7 +234,9 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
                             .AddAction( PCB_ACTIONS::tuneDiffPair )
                             .AddAction( PCB_ACTIONS::tuneSkew ) )
               .AppendAction( PCB_ACTIONS::showDiffPhaseSkew )
-              .AppendAction( PCB_ACTIONS::drawVia )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Via tools" ) )
+                            .AddAction( PCB_ACTIONS::drawVia )
+                            .AddAction( PCB_ACTIONS::drawViaStitchArea ) )
               .AppendAction( PCB_ACTIONS::drawZone )
               .WithContextMenu(
                   []( TOOL_MANAGER* aMgr ) -> std::unique_ptr<ACTION_MENU>

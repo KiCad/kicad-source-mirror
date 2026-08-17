@@ -2190,8 +2190,35 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     // Cancel leaves it unchanged and must not trigger a constraint resolve
     const int undoBefore = editFrame->GetUndoCommandCount();
 
+    // Detector to reject attempting to edit generated items that may be selectable
+    // but we don't want to remain read-only to outside-the-generator editing
+    auto containsReadOnlyGenChild = []( const SELECTION& aSel ) -> bool
+    {
+        for( EDA_ITEM* item : aSel )
+        {
+            if( !item->IsBOARD_ITEM() )
+                continue;
+
+            EDA_GROUP* parent = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
+
+            if( !parent || parent->AsEdaItem()->Type() != PCB_GENERATOR_T )
+                continue;
+
+            PCB_GENERATOR* gen = static_cast<PCB_GENERATOR*>( parent->AsEdaItem() );
+
+            if( gen->ChildrenAreReadOnly() )
+                return true;
+        }
+
+        return false;
+    };
+
+    if( containsReadOnlyGenChild( selection ) )
+    {
+        wxBell();
+    }
     // Tracks & vias are treated in a special way:
-    if( ( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )( selection ) )
+    else if( ( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )( selection ) )
     {
         DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection );
         dlg.ShowQuasiModal(); // QuasiModal required for NET_SELECTOR

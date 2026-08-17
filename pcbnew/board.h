@@ -1500,6 +1500,11 @@ public:
     void OnRatsnestChanged();
 
     /**
+     * Notify the board that the listed zones were just refilled. 
+     */
+    void OnZonesFilled( const std::vector<ZONE*>& aZones );
+
+    /**
      * Consistency check of internal m_groups structure.
      *
      * @param repair if true, modify groups structure until it passes the sanity check.

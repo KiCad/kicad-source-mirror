@@ -205,6 +205,7 @@ hole_to_hole_min
 host
 href
 id
+ij
 image
 inward
 island
@@ -371,6 +372,8 @@ table
 table_cell
 tags
 target
+template
+templates
 text
 title
 title_block

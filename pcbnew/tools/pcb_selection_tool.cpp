@@ -48,6 +48,7 @@ using namespace std::placeholders;
 #include <gal/painter.h>
 #include <router/router_tool.h>
 #include <pcbnew_settings.h>
+#include <tool/action_menu.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/tool_event_utils.h>
@@ -509,7 +510,49 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !selectionCancelled )
             {
                 m_toolMgr->VetoContextMenuMouseWarp();
-                m_menu->ShowContextMenu( m_selection );
+
+                // If every item in the selection shares the same generator parent and that
+                // generator provides a child context menu, show it instead of the standard
+                // selection menu.  This lets a generator restrict what users can do to its
+                // (otherwise individually-selectable) children.
+                ACTION_MENU*   genMenu = nullptr;
+                PCB_GENERATOR* sharedParent = nullptr;
+                bool           allSameParent = !m_selection.Empty();
+
+                for( EDA_ITEM* item : m_selection )
+                {
+                    if( !item->IsBOARD_ITEM() )
+                    {
+                        allSameParent = false;
+                        break;
+                    }
+
+                    EDA_GROUP* parent = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
+
+                    if( !parent || parent->AsEdaItem()->Type() != PCB_GENERATOR_T )
+                    {
+                        allSameParent = false;
+                        break;
+                    }
+
+                    PCB_GENERATOR* gen = static_cast<PCB_GENERATOR*>( parent->AsEdaItem() );
+
+                    if( !sharedParent )
+                        sharedParent = gen;
+                    else if( sharedParent != gen )
+                    {
+                        allSameParent = false;
+                        break;
+                    }
+                }
+
+                if( allSameParent && sharedParent )
+                    genMenu = sharedParent->GetChildContextMenu( this );
+
+                if( genMenu )
+                    SetContextMenu( genMenu, CMENU_NOW );
+                else
+                    m_menu->ShowContextMenu( m_selection );
             }
         }
         else if( evt->IsDblClick( BUT_LEFT ) )
@@ -669,6 +712,32 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     // Note: multi-track dragging is currently supported, but not multi-via
                     bool   routable = ( segs >= 1 || arcs >= 1 || vias == 1 )
                                         && ( segs + arcs + vias == m_selection.GetSize() );
+
+                    // Vias that belong to a generator with individually-selectable children
+                    // (e.g. via stitching) should use the plain move flow so the parent
+                    // generator can react to the new child position.  The PNS router would
+                    // hijack the drag and skip that hook.
+                    if( routable )
+                    {
+                        for( EDA_ITEM* item : m_selection )
+                        {
+                            if( !item->IsBOARD_ITEM() )
+                                continue;
+
+                            EDA_GROUP* parent = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
+
+                            if( !parent || parent->AsEdaItem()->Type() != PCB_GENERATOR_T )
+                                continue;
+
+                            PCB_GENERATOR* gen = static_cast<PCB_GENERATOR*>( parent->AsEdaItem() );
+
+                            if( gen->ChildrenAreIndividuallySelectable() )
+                            {
+                                routable = false;
+                                break;
+                            }
+                        }
+                    }
 
                     if( routable && trackDragAction == TRACK_DRAG_ACTION::DRAG )
                         m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree );
@@ -2617,7 +2686,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
     std::set<EDA_ITEM*> toDeselect;
     std::set<EDA_ITEM*> toSelect;
 
-    // Promote generated members to their PCB_GENERATOR parents
+    // Promote generated members to their PCB_GENERATOR parents.  Generators that mark
+    // their children as individually selectable are exempt.
     for( EDA_ITEM* item : m_selection )
     {
         if( !item->IsBOARD_ITEM() )
@@ -2628,6 +2698,11 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
 
         if( parent && parent->AsEdaItem()->Type() == PCB_GENERATOR_T )
         {
+            PCB_GENERATOR* gen = static_cast<PCB_GENERATOR*>( parent->AsEdaItem() );
+
+            if( gen->ChildrenAreIndividuallySelectable() )
+                continue;
+
             toDeselect.insert( item );
 
             if( !parent->AsEdaItem()->IsSelected() )
@@ -3965,7 +4040,12 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     }
 
     if( aItem->GetParentGroup() && aItem->GetParentGroup()->AsEdaItem()->Type() == PCB_GENERATOR_T )
-        return false;
+    {
+        PCB_GENERATOR* gen = static_cast<PCB_GENERATOR*>( aItem->GetParentGroup()->AsEdaItem() );
+
+        if( !gen->ChildrenAreIndividuallySelectable() )
+            return false;
+    }
 
     const ZONE*          zone = nullptr;
     const PCB_VIA*       via = nullptr;
@@ -4422,6 +4502,20 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
     case PCB_GROUP_T:
     case PCB_GENERATOR_T:
     {
+        // Poly-outline generators (e.g. via stitching) define a region; measure distance
+        // to that outline instead of to their generated children, otherwise clicks landing
+        // inside the region but away from any child get a huge distance and the generator
+        // gets pruned by the sloppiness heuristic.
+        if( const PCB_GENERATOR_POLY* poly = dynamic_cast<const PCB_GENERATOR_POLY*>( aItem ) )
+        {
+            int actual = aMaxDistance;
+
+            if( poly->Outline().Collide( loc, aMaxDistance, &actual ) )
+                distance = actual;
+
+            break;
+        }
+
         PCB_GROUP* group = static_cast<PCB_GROUP*>( aItem );
 
         for( BOARD_ITEM* member : group->GetBoardItems() )
@@ -4907,16 +5001,49 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
         }
 
         // If any element is a member of a group, replace those elements with the top containing
-        // group.
-        if( EDA_GROUP* top = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor ) )
-        {
-            if( top->AsEdaItem() != item )
-            {
-                toAdd.insert( top->AsEdaItem() );
-                top->AsEdaItem()->SetFlags( CANDIDATE );
+        // group.  Exception: generators that mark their children as individually selectable
+        // (e.g. via stitching) — keep the child and drop the parent generator from the
+        // collector so the child wins over the surrounding generator shape.
+        PCB_GENERATOR* selectableParent = nullptr;
 
-                aCollector.Remove( item );
-                continue;
+        if( EDA_GROUP* parent = item->GetParentGroup() )
+        {
+            if( parent->AsEdaItem()->Type() == PCB_GENERATOR_T )
+            {
+                PCB_GENERATOR* gen = static_cast<PCB_GENERATOR*>( parent->AsEdaItem() );
+
+                if( gen->ChildrenAreIndividuallySelectable() )
+                    selectableParent = gen;
+            }
+        }
+
+        if( !selectableParent )
+        {
+            if( EDA_GROUP* top = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor ) )
+            {
+                if( top->AsEdaItem() != item )
+                {
+                    toAdd.insert( top->AsEdaItem() );
+                    top->AsEdaItem()->SetFlags( CANDIDATE );
+
+                    aCollector.Remove( item );
+                    continue;
+                }
+            }
+        }
+        else
+        {
+            for( int k = aCollector.GetCount() - 1; k >= 0; --k )
+            {
+                if( aCollector[k] == selectableParent )
+                {
+                    aCollector.Remove( k );
+
+                    if( k < j )
+                        --j;
+
+                    break;
+                }
             }
         }
 

@@ -34,7 +34,8 @@ enum class ZONE_MODE
     ADD,             ///< Add a new zone/keepout with fresh settings
     CUTOUT,          ///< Make a cutout to an existing zone
     SIMILAR,         ///< Add a new zone with the same settings as an existing one
-    GRAPHIC_POLYGON
+    GRAPHIC_POLYGON,
+    STITCH
 };
 
 class DESIGN_BLOCK;
@@ -236,6 +237,7 @@ public:
     static TOOL_ACTION lineModeNext;         ///< Cycle through angle modes
     static TOOL_ACTION angleSnapModeChanged; ///< Notification event when angle mode changes
     static TOOL_ACTION closeOutline;
+    static TOOL_ACTION drawViaStitchArea;
 
     /// Increase width of currently drawn line
     static TOOL_ACTION incWidth;
@@ -298,6 +300,12 @@ public:
     static TOOL_ACTION genRemove;
 
     static TOOL_ACTION generatorsShowManager;
+
+    /// Exclude selected stitching vias from their parent via-stitch generator.
+    static TOOL_ACTION excludeStitchVia;
+
+    /// Restore every manually-excluded via in the selected via-stitch generators.
+    static TOOL_ACTION clearStitchViaExclusions;
 
     // Point Editor
     static TOOL_ACTION pointEditorAddCorner;

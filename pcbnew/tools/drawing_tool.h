@@ -85,7 +85,8 @@ public:
         VIA,
         TUNING,
         TABLE,
-        BARCODE
+        BARCODE,
+        STITCH
     };
 
     /**
@@ -106,6 +107,10 @@ public:
     /**
      */
     int PlaceTuningPattern( const TOOL_EVENT& aEvent );
+
+    /**
+     */
+    int PlaceViaStitch( const TOOL_EVENT& aEvent );
 
     /**
      * Start interactively drawing a line.

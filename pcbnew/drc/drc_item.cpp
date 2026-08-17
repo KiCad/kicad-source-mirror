@@ -201,6 +201,10 @@ DRC_ITEM DRC_ITEM::schematicFieldsParity( DRCE_SCHEMATIC_FIELDS_PARITY,
         _HKI( "Footprint field does not match symbol field" ),
         wxT( "footprint_symbol_field_mismatch" ) );
 
+DRC_ITEM DRC_ITEM::viaStitchOverlap( DRCE_VIA_STITCH_OVERLAP,
+        _HKI( "Via-stitching zones overlap for same net" ),
+        wxT( "via_stitch_overlap" ) );
+
 DRC_ITEM DRC_ITEM::libFootprintIssues( DRCE_LIB_FOOTPRINT_ISSUES,
         _HKI( "Footprint not found in libraries" ),
         wxT( "lib_footprint_issues" ) );
@@ -357,6 +361,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::connectionWidth,
         DRC_ITEM::trackOnPostMachinedLayer,
         DRC_ITEM::trackNotCenteredOnVia,
+        DRC_ITEM::viaStitchOverlap,
         DRC_ITEM::tuningProfileImplicitRules,
 
         DRC_ITEM::heading_schematic_parity,
@@ -488,6 +493,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_MISSING_TUNING_PROFILE:        return std::make_shared<DRC_ITEM>( missingTuningProfile );
     case DRCE_TRACK_ON_POST_MACHINED_LAYER:  return std::make_shared<DRC_ITEM>( trackOnPostMachinedLayer );
     case DRCE_TRACK_NOT_CENTERED_ON_VIA:     return std::make_shared<DRC_ITEM>( trackNotCenteredOnVia );
+    case DRCE_VIA_STITCH_OVERLAP:            return std::make_shared<DRC_ITEM>( viaStitchOverlap );
 
     default:
         return nullptr;

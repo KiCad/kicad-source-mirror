@@ -345,6 +345,17 @@ TOOL_ACTION PCB_ACTIONS::drawPolygon( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( ZONE_MODE::GRAPHIC_POLYGON ) );
 
+TOOL_ACTION PCB_ACTIONS::drawViaStitchArea( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.drawViaStitchArea" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'N' )
+        .LegacyHotkeyName( "Draw Via Stitch area" )
+        .FriendlyName( _( "Draw Via Stitch area" ) )
+        .Tooltip( _( "Draw a via stitch area" ) )
+        .Icon( BITMAPS::add_via_stitch )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ZONE_MODE::STITCH ) );
+
 TOOL_ACTION PCB_ACTIONS::drawRectangle( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.rectangle" )
         .Scope( AS_GLOBAL )
@@ -3118,6 +3129,20 @@ TOOL_ACTION PCB_ACTIONS::generatorsShowManager( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Generators Manager" ) )
         .Tooltip( _( "Show a manager dialog for Generator objects" ) )
         .Icon( BITMAPS::pin_table ) );
+
+TOOL_ACTION PCB_ACTIONS::excludeStitchVia( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.excludeStitchVia" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Exclude From Stitching" ) )
+        .Tooltip( _( "Remove the selected via from its via-stitch generator and prevent "
+                     "it from being regenerated" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::clearStitchViaExclusions( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.clearStitchViaExclusions" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Clear Via Stitching Exclusions" ) )
+        .Tooltip( _( "Restore all vias previously excluded from the selected via-stitch "
+                     "generators" ) ) );
 
 
 // LENGTH_TUNER_TOOL

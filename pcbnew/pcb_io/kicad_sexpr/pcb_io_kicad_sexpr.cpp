@@ -2879,6 +2879,19 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATOR* aGenerator ) const
             formatPolyPts( val );
             m_out->Print( ")" );
         }
+        else if( value.CheckType<std::vector<VECTOR2I>>() )
+        {
+            // Unitless integer pairs
+            std::vector<VECTOR2I> val;
+            value.GetAs( &val );
+
+            m_out->Print( "(%s (cells", key.c_str() );
+
+            for( const VECTOR2I& cell : val )
+                m_out->Print( "(ij %d %d)", cell.x, cell.y );
+
+            m_out->Print( "))" );
+        }
         else
         {
             wxString val;
@@ -2897,6 +2910,25 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATOR* aGenerator ) const
 
             m_out->Print( "(%s %s)", key.c_str(), m_out->Quotew( val ).c_str() );
         }
+    }
+
+    std::vector<std::pair<wxString, const BOARD_ITEM*>> templateItems = aGenerator->GetTemplateItems();
+
+    if( !templateItems.empty() )
+    {
+        m_out->Print( "(templates" );
+
+        for( const auto& [name, item] : templateItems )
+        {
+            if( !item )
+                continue;
+
+            m_out->Print( "(template (name %s)", m_out->Quotew( name ).c_str() );
+            Format( item );
+            m_out->Print( ")" ); // Close `template` token.
+        }
+
+        m_out->Print( ")" ); // Close `templates` token.
     }
 
     wxArrayString memberIds;

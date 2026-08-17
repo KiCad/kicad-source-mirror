@@ -42,7 +42,10 @@
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
 #include <chrono>
+#include <memory>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 
 class PCB_ARC;
@@ -167,9 +170,25 @@ private:
 
     struct GENERATOR_INFO : GROUP_INFO
     {
-        PCB_LAYER_ID   layer;
-        wxString       genType;
-        STRING_ANY_MAP properties;
+        PCB_LAYER_ID                            layer;
+        wxString                                genType;
+        STRING_ANY_MAP                          properties;
+
+        /// Named template items parsed from the generator's (templates …) section.
+        /// Each entry is a fully-parsed BOARD_ITEM that's NOT on the board — it's a
+        /// settings carrier owned by the generator (e.g. via-stitch's via template).
+        /// Handed over to the generator via PCB_GENERATOR::SetTemplateItem() after
+        /// SetProperties() during the group-resolution pass.
+        std::vector<std::pair<wxString, std::unique_ptr<BOARD_ITEM>>> templates;
+
+        // The unique_ptr in `templates` makes this struct move-only.  std::vector resize
+        // requires a noexcept move-ctor to move (rather than copy, which is deleted), so
+        // declare the move/copy operations explicitly.
+        GENERATOR_INFO()                                       = default;
+        GENERATOR_INFO( GENERATOR_INFO&& ) noexcept            = default;
+        GENERATOR_INFO& operator=( GENERATOR_INFO&& ) noexcept = default;
+        GENERATOR_INFO( const GENERATOR_INFO& )                = delete;
+        GENERATOR_INFO& operator=( const GENERATOR_INFO& )     = delete;
     };
 
     /// Deferred constraint, resolved against the parsed items once the whole file is read,
@@ -291,6 +310,7 @@ private:
     void          parseGROUP( BOARD_ITEM* aParent );
     void          parseCONSTRAINT( BOARD_ITEM* aParent );
     void          parseGENERATOR( BOARD_ITEM* aParent );
+    void          parseGENERATOR_templates( GENERATOR_INFO& aGenInfo );
 
     // Parse a board, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
     BOARD*      parseBOARD_unchecked();

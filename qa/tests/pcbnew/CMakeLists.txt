@@ -125,6 +125,7 @@ set( QA_PCBNEW_SRCS
     test_tracks_cleaner.cpp
     test_triangulation.cpp
     test_tuning_pattern_layer.cpp
+    test_via_stitch.cpp
     test_multichannel.cpp
     test_pns_tuning_path_through_pad.cpp
     test_pns_diff_pair_tuning_width.cpp

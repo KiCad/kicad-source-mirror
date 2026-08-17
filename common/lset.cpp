@@ -822,7 +822,8 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_CONFLICTS_SHADOW,
         LAYER_CONSTRAINT_SHADOW,
         LAYER_POINTS,
-        LAYER_GRIDITEMS
+        LAYER_GRIDITEMS,
+        LAYER_VIA_STITCHING
     };
 
     static const GAL_SET saved( visible, arrayDim( visible ) );

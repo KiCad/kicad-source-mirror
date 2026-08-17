@@ -1618,19 +1618,19 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
     //
     // First add all group objects so subsequent getItem() calls for nested groups work.
 
-    std::vector<const GROUP_INFO*> groupTypeObjects;
+    std::vector<GROUP_INFO*> groupTypeObjects;
 
-    for( const GROUP_INFO& groupInfo : m_groupInfos )
+    for( GROUP_INFO& groupInfo : m_groupInfos )
         groupTypeObjects.emplace_back( &groupInfo );
 
-    for( const GENERATOR_INFO& genInfo : m_generatorInfos )
+    for( GENERATOR_INFO& genInfo : m_generatorInfos )
         groupTypeObjects.emplace_back( &genInfo );
 
-    for( const GROUP_INFO* groupInfo : groupTypeObjects )
+    for( GROUP_INFO* groupInfo : groupTypeObjects )
     {
         PCB_GROUP* group = nullptr;
 
-        if( const GENERATOR_INFO* genInfo = dynamic_cast<const GENERATOR_INFO*>( groupInfo ) )
+        if( GENERATOR_INFO* genInfo = dynamic_cast<GENERATOR_INFO*>( groupInfo ) )
         {
             GENERATORS_MGR& mgr = GENERATORS_MGR::Instance();
 
@@ -1642,6 +1642,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
 
             gen->SetLayer( genInfo->layer );
             gen->SetProperties( genInfo->properties );
+
+            for( auto& [name, item] : genInfo->templates )
+                gen->SetTemplateItem( name, std::move( item ) );
         }
         else
         {
@@ -1671,7 +1674,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
         }
     }
 
-    for( const GROUP_INFO* groupInfo : groupTypeObjects )
+    for( GROUP_INFO* groupInfo : groupTypeObjects )
     {
         if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( getItem( groupInfo->uuid ) ) )
         {
@@ -7573,6 +7576,51 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP_members( GROUP_INFO& aGroupInfo )
 }
 
 
+void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR_templates( GENERATOR_INFO& aGenInfo )
+{
+    for( T tok = NextTok(); tok != T_RIGHT; tok = NextTok() )
+    {
+        if( tok != T_LEFT )
+            Expecting( T_LEFT );
+
+        if( NextTok() != T_template )
+            Expecting( T_template );
+
+        wxString                    templateName;
+        std::unique_ptr<BOARD_ITEM> parsed;
+
+        // Parse (template ...
+        for( T innerTok = NextTok(); innerTok != T_RIGHT; innerTok = NextTok() )
+        {
+            if( innerTok != T_LEFT )
+                Expecting( T_LEFT );
+
+            T inner = NextTok();
+
+            switch( inner )
+            {
+            case T_name:
+                NeedSYMBOLorNUMBER();
+                templateName = FromUTF8();
+                NeedRIGHT();
+                break;
+
+            case T_via:
+                // A duplicate item in the same (template …) block replaces the previous one.
+                parsed.reset( parsePCB_VIA() );
+                // parsePCB_VIA consumes the closing T_RIGHT itself.
+                break;
+
+            default: Expecting( "name or via" );
+            }
+        }
+
+        if( parsed )
+            aGenInfo.templates.emplace_back( templateName, std::move( parsed ) );
+    }
+}
+
+
 void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP( BOARD_ITEM* aParent )
 {
     wxCHECK_RET( CurTok() == T_group, wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GROUP." ) );
@@ -7905,6 +7953,10 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
             parseGROUP_members( genInfo );
             break;
 
+        case T_templates:
+            parseGENERATOR_templates( genInfo );
+            break;
+
         default:
         {
             wxString pName = FromUTF8();
@@ -7970,8 +8022,34 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
                     break;
                 }
 
+                case T_cells:
+                {
+                    std::vector<VECTOR2I> cells;
+
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token != T_LEFT )
+                            Expecting( T_LEFT );
+
+                        if( NextTok() != T_ij )
+                            Expecting( T_ij );
+
+                        VECTOR2I cell;
+
+                        cell.x = parseInt( "column index" );
+                        cell.y = parseInt( "row index" );
+
+                        NeedRIGHT();
+                        cells.push_back( cell );
+                    }
+
+                    NeedRIGHT();
+                    genInfo.properties.emplace( pName, wxAny( cells ) );
+                    break;
+                }
+
                 default:
-                    Expecting( "xy or pts" );
+                    Expecting( "xy, pts or cells" );
                 }
 
                 break;

@@ -44,6 +44,7 @@ enum class VISIBILITY_LAYER
     FOOTPRINT_TEXT,
     FOOTPRINT_ANCHORS,
     LY_POINTS,              // Do not use POINTS: it collide with a Windows header define
+    VIA_STITCHING,
     RATSNEST,
     DRC_WARNINGS,
     DRC_ERRORS,

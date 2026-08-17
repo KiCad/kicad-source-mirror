@@ -198,6 +198,7 @@ set( BMAPS_MID
     add_textbox
     add_tracks
     add_via
+    add_via_stitch
     add_zone_cutout
     add_zone
     align_elements_to_grid

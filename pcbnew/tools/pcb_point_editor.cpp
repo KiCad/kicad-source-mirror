@@ -614,6 +614,30 @@ private:
 };
 
 
+class GENERATOR_POLY_POINT_EDIT_BEHAVIOR : public POLYGON_POINT_EDIT_BEHAVIOR
+{
+public:
+    GENERATOR_POLY_POINT_EDIT_BEHAVIOR( PCB_GENERATOR_POLY& aGen ) :
+            POLYGON_POINT_EDIT_BEHAVIOR( aGen.Outline() ),
+            m_gen( aGen )
+    {
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        // Defer to the base class to update the polygon
+        POLYGON_POINT_EDIT_BEHAVIOR::UpdateItem( aEditedPoint, aPoints, aCommit, aUpdatedItems );
+
+        // Flag the generator has to be updated based on potential outline change
+        m_gen.MarkDirty();
+    }
+
+private:
+    PCB_GENERATOR_POLY& m_gen;
+};
+
+
 class REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
     enum REFIMG_POINTS
@@ -2359,8 +2383,17 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
     case PCB_GENERATOR_T:
     {
-        PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( aItem );
-        m_editorBehavior = std::make_unique<GENERATOR_POINT_EDIT_BEHAVIOR>( *generator );
+        if( dynamic_cast<PCB_GENERATOR_POLY*>( aItem ) )
+        {
+            PCB_GENERATOR_POLY* generator = static_cast<PCB_GENERATOR_POLY*>( aItem );
+            m_editorBehavior = std::make_unique<GENERATOR_POLY_POINT_EDIT_BEHAVIOR>( *generator );
+            break;
+        }
+        else
+        {
+            PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( aItem );
+            m_editorBehavior = std::make_unique<GENERATOR_POINT_EDIT_BEHAVIOR>( *generator );
+        }
         break;
     }
 

@@ -31,6 +31,8 @@ class PCB_EDIT_FRAME;
 class PROGRESS_REPORTER;
 class WX_PROGRESS_REPORTER;
 class ZONE_FILLER;
+class PCB_GENERATOR;
+class BOARD_COMMIT;
 
 #define ZONE_FILLER_TOOL_NAME "pcbnew.ZoneFiller"
 
@@ -82,6 +84,16 @@ private:
 
     void rebuildConnectivity( bool aHeadless = false );
     void refresh();
+
+    /**
+     * Kicks all the generators as they may need to update after a zone fill update
+     */
+    std::vector<PCB_GENERATOR*> regenerateDirtyGenerators( BOARD_COMMIT& aCommit );
+
+    /**
+     * Triggers refill of zones near the given generators
+     */
+    void refillAroundGenerators( const std::vector<PCB_GENERATOR*>& aRegenerated );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

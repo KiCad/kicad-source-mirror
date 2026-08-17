@@ -19,6 +19,7 @@
 
 #include <core/spinlock.h>
 #include <connectivity/connectivity_data.h>
+#include <tools/generator_tool.h>
 #include <tools/zone_create_helper.h>
 #include <tool/tool_manager.h>
 #include <zone.h>
@@ -30,6 +31,9 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <view/view_controls.h>
+#include <generators/pcb_via_stitch.h>
+#include <dialogs/dialog_via_stitch_properties.h>
+#include <pcb_base_edit_frame.h>
 
 ZONE_CREATE_HELPER::ZONE_CREATE_HELPER( DRAWING_TOOL& aTool, PARAMS& aParams ):
         m_tool( aTool ),
@@ -105,8 +109,8 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
         zoneInfo.SetPadConnection( ZONE_CONNECTION::NONE );
     }
 
-    if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON
-            && ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
+    if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON && m_params.m_mode != ZONE_MODE::STITCH
+        && ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
     {
         setUniquePriority( zoneInfo );
     }
@@ -122,7 +126,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
             zoneInfo.m_Netcode = bci->GetNetCode();
     }
 
-    if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON && !m_params.m_thieving )
+    if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON && m_params.m_mode != ZONE_MODE::STITCH && !m_params.m_thieving )
     {
         // When drawing a new zone, skip the pre-draw dialog for thieving copper and
         // graphic polygons as it is more disruptive than useful
@@ -246,6 +250,45 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             commit.Push( _( "Draw Zone" ) );
 
             m_tool.GetManager()->RunAction<EDA_ITEM*>( ACTIONS::selectItem, aZone.release() );
+            break;
+        }
+
+        case ZONE_MODE::STITCH:
+        {
+            BOARD*          board = m_tool.getModel<BOARD>();
+            GENERATOR_TOOL* generatorTool = m_tool.GetManager()->GetTool<GENERATOR_TOOL>();
+
+            // Build the stitcher detached from the board so the properties dialog can
+            // edit its settings before we commit it.  Parented to the board (without
+            // being added) so net lookups in the dialog work.
+            std::unique_ptr<PCB_VIA_STITCH> stitcher = std::make_unique<PCB_VIA_STITCH>();
+            stitcher->SetFlags( IS_NEW );
+            stitcher->SetParent( board );
+            stitcher->SetOutline( *aZone->Outline() );
+            stitcher->InitializeDefaults( board );
+
+            // Pop the properties dialog up-front so the user picks net / pitch / pattern
+            // before any vias materialize.  Cancel discards the whole creation.
+            PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_tool.GetManager()->GetToolHolder() );
+
+            if( editFrame )
+            {
+                DIALOG_VIA_STITCH_PROPERTIES dlg( editFrame, stitcher.get() );
+
+                if( dlg.ShowModal() != wxID_OK )
+                    break;
+            }
+
+            BOARD_COMMIT    commit( &m_tool );
+            PCB_VIA_STITCH* released = stitcher.release();
+
+            released->EditStart( generatorTool, board, &commit );
+            released->Update( generatorTool, board, &commit );
+            released->EditFinish( generatorTool, board, &commit );
+
+            commit.Push( _( "Create Via Stitch" ) );
+
+            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, released );
             break;
         }
 

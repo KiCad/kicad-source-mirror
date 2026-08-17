@@ -120,7 +120,10 @@ enum PCB_DRC_CODE
 
     DRCE_SCHEMATIC_FIELDS_PARITY, // Mismatch with schematic fields
 
-    DRCE_LAST = DRCE_SCHEMATIC_FIELDS_PARITY
+    DRCE_VIA_STITCH_OVERLAP,      // Two same-net via-stitching zones overlap — placement priority
+                                  // is undefined in the overlap, leading to nondeterministic vias.
+
+    DRCE_LAST = DRCE_VIA_STITCH_OVERLAP
 };
 
 
@@ -269,6 +272,7 @@ private:
     static DRC_ITEM trackOnPostMachinedLayer;
     static DRC_ITEM trackNotCenteredOnVia;
     static DRC_ITEM schematicFieldsParity;
+    static DRC_ITEM viaStitchOverlap;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;

@@ -34,6 +34,7 @@ set( QA_KIMATH_SRCS
     geometry/test_fillet.cpp
     geometry/test_half_line.cpp
     geometry/test_oval.cpp
+    geometry/test_poisson_disk.cpp
     geometry/test_poly_triangulation.cpp
     geometry/test_triangulation_benchmark.cpp
     geometry/test_poly_ystripes_index.cpp

@@ -174,6 +174,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_unused_pad_layers_base.cpp
     dialogs/dialog_update_pcb.cpp
     dialogs/dialog_update_pcb_base.cpp
+    dialogs/dialog_via_stitch_properties.cpp
+    dialogs/dialog_via_stitch_properties_base.cpp
     dialogs/dialog_multichannel_generate_rule_areas_base.cpp
     dialogs/dialog_multichannel_generate_rule_areas.cpp
     dialogs/dialog_multichannel_repeat_layout_base.cpp
@@ -295,6 +297,8 @@ set( PCBNEW_MICROWAVE_SRCS
 
 set( PCBNEW_GENERATORS_SRCS
     generators/pcb_tuning_pattern.cpp
+    generators/pcb_via_stitch.cpp
+    generators/via_stitch_tool.cpp
     )
 
 set( PCBNEW_DRC_SRCS
@@ -326,6 +330,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_track_segment_length.cpp
     drc/drc_test_provider_zone_connections.cpp
     drc/drc_test_provider_via_diameter.cpp
+    drc/drc_test_provider_via_stitch.cpp
     drc/drc_test_provider_solder_mask.cpp
     drc/drc_test_provider_silk_clearance.cpp
     drc/drc_test_provider_matched_length.cpp

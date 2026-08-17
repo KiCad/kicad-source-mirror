@@ -26,7 +26,10 @@
 
 
 PCB_GENERATOR::PCB_GENERATOR( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer ) :
-        PCB_GROUP( aParent, PCB_GENERATOR_T, aLayer )
+        PCB_GROUP( aParent, PCB_GENERATOR_T, aLayer ),
+        m_generatorType(),
+        m_origin(),
+        m_isDirty( false )
 {
 }
 

@@ -44,6 +44,7 @@
 #include <tools/edit_tool.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/drc_tool.h>
+#include <tools/generator_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
@@ -1741,6 +1742,36 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         {
             m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genFinishEdit, aCommit,
                                              static_cast<PCB_GENERATOR*>( sel_items.back() ) );
+        }
+
+        // If any moved item is the child of a generator that allows individual selection
+        // (e.g. a via-stitch via), regenerate the parent so it can react to the new child
+        // position (the via stitch generator infers its grid offset from the dragged via).
+        std::set<PCB_GENERATOR*> regenParents;
+
+        for( BOARD_ITEM* item : sel_items )
+        {
+            EDA_GROUP* parent = item->GetParentGroup();
+
+            if( !parent )
+                continue;
+
+            PCB_GENERATOR* gen = dynamic_cast<PCB_GENERATOR*>( parent->AsEdaItem() );
+
+            if( gen && gen->ChildrenAreIndividuallySelectable() )
+                regenParents.insert( gen );
+        }
+
+        if( !regenParents.empty() )
+        {
+            GENERATOR_TOOL* genTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+
+            for( PCB_GENERATOR* gen : regenParents )
+            {
+                gen->EditStart( genTool, board, aCommit );
+                gen->Update( genTool, board, aCommit );
+                gen->EditFinish( genTool, board, aCommit );
+            }
         }
 
         EDA_ITEMS oItems( orig_items.begin(), orig_items.end() );

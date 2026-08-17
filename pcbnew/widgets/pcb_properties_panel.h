@@ -84,6 +84,13 @@ protected:
      */
     EDA_ITEM* getFrontItem();
 
+    /**
+     * Creates a new selection with any generator children removed that are part of a read only generator.
+     *
+     * @param aSelection the selection to filter
+     */
+    static SELECTION filterOutReadOnlyGenChildren( const SELECTION& aSelection );
+
 protected:
     PCB_BASE_EDIT_FRAME* m_frame;
     PROPERTY_MANAGER&    m_propMgr;

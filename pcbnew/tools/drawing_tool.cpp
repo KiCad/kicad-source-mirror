@@ -3555,7 +3555,7 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
     *aZone = nullptr;
 
     // not an action that needs a source zone
-    if( aMode == ZONE_MODE::ADD || aMode == ZONE_MODE::GRAPHIC_POLYGON )
+    if( aMode == ZONE_MODE::ADD || aMode == ZONE_MODE::GRAPHIC_POLYGON || aMode == ZONE_MODE::STITCH )
         return true;
 
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -3604,6 +3604,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         drawMode = MODE::GRAPHIC_POLYGON;
 
     const bool drawingThieving = aEvent.IsAction( &PCB_ACTIONS::drawCopperThievingZone );
+
+    if( aEvent.IsAction( &PCB_ACTIONS::drawViaStitchArea ) )
+        drawMode = MODE::STITCH;
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, drawMode );
 
@@ -4657,6 +4660,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawRuleArea.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawSimilarZone.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawViaStitchArea.MakeEvent() );
     Go( &DRAWING_TOOL::DrawVia,               PCB_ACTIONS::drawVia.MakeEvent() );
     Go( &DRAWING_TOOL::PlacePoint,            PCB_ACTIONS::placePoint.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceReferenceImage,   PCB_ACTIONS::placeReferenceImage.MakeEvent() );

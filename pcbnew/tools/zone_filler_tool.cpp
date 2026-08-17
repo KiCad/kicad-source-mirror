@@ -42,6 +42,8 @@
 #include "zone_filler.h"
 #include "teardrop/teardrop.h"
 #include <core/profile.h>
+#include <pcb_generator.h>
+#include <tools/generator_tool.h>
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
     PCB_TOOL_BASE( ZONE_FILLER_TOOL_NAME ),
@@ -57,6 +59,70 @@ ZONE_FILLER_TOOL::~ZONE_FILLER_TOOL()
 
 void ZONE_FILLER_TOOL::Reset( RESET_REASON aReason )
 {
+}
+
+
+std::vector<PCB_GENERATOR*> ZONE_FILLER_TOOL::regenerateDirtyGenerators( BOARD_COMMIT& aCommit )
+{
+    std::vector<PCB_GENERATOR*> regenerated;
+
+    BOARD*          brd = board();
+    GENERATOR_TOOL* genTool = m_toolMgr ? m_toolMgr->GetTool<GENERATOR_TOOL>() : nullptr;
+
+    if( !brd || !genTool )
+        return regenerated;
+
+    for( PCB_GENERATOR* gen : brd->Generators() )
+    {
+        if( !gen->IsDirty() )
+            continue;
+
+        gen->EditStart( genTool, brd, &aCommit );
+        gen->Update( genTool, brd, &aCommit );
+        gen->EditFinish( genTool, brd, &aCommit );
+        regenerated.push_back( gen );
+    }
+
+    return regenerated;
+}
+
+
+void ZONE_FILLER_TOOL::refillAroundGenerators( const std::vector<PCB_GENERATOR*>& aRegenerated )
+{
+    if( aRegenerated.empty() )
+        return;
+
+    BOARD* brd = board();
+
+    if( !brd )
+        return;
+
+    // Build a list of zones that need refill after wacking the generators
+    // and deduplicate
+    std::set<ZONE*> uniqueZones;
+
+    for( PCB_GENERATOR* gen : aRegenerated )
+    {
+        std::vector<ZONE*> zones = gen->GetZonesNeedingRefillAfterUpdate();
+
+        for( ZONE* zone : zones )
+            uniqueZones.insert( zone );
+    }
+
+    if( uniqueZones.empty() )
+        return;
+
+    std::vector<ZONE*> toRefill( uniqueZones.begin(), uniqueZones.end() );
+
+    brd->IncrementTimeStamp(); // make the just-pushed children visible to the refill
+
+    BOARD_COMMIT refillCommit( this );
+    ZONE_FILLER  refiller( brd, &refillCommit );
+
+    if( refiller.Fill( toRefill ) )
+        refillCommit.Push( wxEmptyString, APPEND_UNDO | SKIP_CONNECTIVITY | ZONE_FILL_OP );
+    else
+        refillCommit.Revert();
 }
 
 
@@ -170,9 +236,17 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         if( m_filler->GetProgressReporter() )
             m_filler->GetProgressReporter()->AdvancePhase();
 
+        // First pass on allowing generators like via-stitch to update
+        board()->OnZonesFilled( toFill );
+        std::vector<PCB_GENERATOR*> regenerated = regenerateDirtyGenerators( commit );
+
         commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
+
         if( !aHeadless )
             frame->m_ZoneFillsDirty = false;
+
+        // Refill again as generators like via stitches can cause punch outs
+        refillAroundGenerators( regenerated );
     }
     else
     {
@@ -261,11 +335,25 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( m_filler->Fill( toFill ) )
-        commit.Push( _( "Auto-fill Zone(s)" ), APPEND_UNDO | SKIP_CONNECTIVITY | ZONE_FILL_OP );
-    else
-        commit.Revert();
+    bool                        filled = m_filler->Fill( toFill );
+    std::vector<PCB_GENERATOR*> regenerated;
 
+    if( filled )
+    {
+        board()->OnZonesFilled( toFill );
+        regenerated = regenerateDirtyGenerators( commit );
+
+        commit.Push( _( "Auto-fill Zone(s)" ), APPEND_UNDO | SKIP_CONNECTIVITY | ZONE_FILL_OP );
+    }
+    else
+    {
+        commit.Revert();
+    }
+
+    if( filled )
+        refillAroundGenerators( regenerated );
+
+    rebuildConnectivity();
     PostFillRefresh();
 
     if( GetRunningMicroSecs() - startTime > 3000000 )   // 3 seconds

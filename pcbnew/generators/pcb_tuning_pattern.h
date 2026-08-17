@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include <eda_item.h>
 #include <geometry/geometry_utils.h>
 #include <pcb_base_edit_frame.h>

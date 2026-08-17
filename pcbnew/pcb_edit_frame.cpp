@@ -108,6 +108,7 @@
 #include <tools/pcb_group_tool.h>
 #include <tools/generator_tool.h>
 #include <tools/diff_phase_skew_tool.h>
+#include <generators/via_stitch_tool.h>
 #include <tools/drc_tool.h>
 #include <tools/drc_rule_editor_tool.h>
 #include <tools/global_edit_tool.h>
@@ -1068,6 +1069,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCB_GROUP_TOOL );
     m_toolManager->RegisterTool( new CONSTRAINT_EDIT_TOOL );
     m_toolManager->RegisterTool( new GENERATOR_TOOL );
+    m_toolManager->RegisterTool( new VIA_STITCH_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->RegisterTool( new MULTICHANNEL_TOOL );
     m_toolManager->RegisterTool( new EMBED_TOOL );
