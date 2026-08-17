@@ -35,7 +35,7 @@ std::map<FRAME_T, std::string> CROSS_PROBE_CLIENT::s_peers;
 
 static bool sendRequest( const std::string& aUrl, const google::protobuf::Message& aRequest )
 {
-    KICAD_API_CLIENT client;
+    KICAD_API_CLIENT client( 100 );
 
     if( !client.Connect( wxString::FromUTF8( aUrl ) ) )
     {
@@ -68,8 +68,13 @@ bool CROSS_PROBE_CLIENT::SendToFrame( FRAME_T aTarget, const google::protobuf::M
             targetUrl = s_peers.at( aTarget );
     }
 
+    KICAD_API_SERVER& server = Pgm().GetApiServer();
+
     if( !targetUrl )
         targetUrl = KICAD_API_SERVER::StandardSocketUrl();
+
+    if( server.Running() && *targetUrl == server.SocketPath() )
+        return false;
 
     return sendRequest( *targetUrl, aRequest );
 }
@@ -87,6 +92,9 @@ void CROSS_PROBE_CLIENT::AnnounceToPrimary( FRAME_T aFrameType )
 
     std::string primaryUrl = KICAD_API_SERVER::StandardSocketUrl();
     std::string ourUrl = server.SocketPath();
+
+    if( primaryUrl == ourUrl )
+        return;
 
     kiapi::common::commands::CrossProbeAnnounce announce;
     announce.set_frame_type( static_cast<kiapi::common::types::FrameType>( aFrameType ) );

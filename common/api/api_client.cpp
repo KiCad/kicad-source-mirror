@@ -26,10 +26,11 @@
 #include <wx/translation.h>
 
 
-KICAD_API_CLIENT::KICAD_API_CLIENT( int aTimeoutMs ) :
+KICAD_API_CLIENT::KICAD_API_CLIENT( int aTimeoutMs, bool aBlock ) :
         m_socket(),
         m_isOpen( false ),
-        m_isConnected( false )
+        m_isConnected( false ),
+        m_block( aBlock )
 {
     int ret = nng_req0_open( &m_socket );
 
@@ -134,8 +135,9 @@ bool KICAD_API_CLIENT::Send( const google::protobuf::Message& aRequest, kiapi::c
 
     char*  reply = nullptr;
     size_t replySize = 0;
+    int    flags = m_block ? 0 : NNG_FLAG_NONBLOCK;
 
-    ret = nng_recv( m_socket, &reply, &replySize, NNG_FLAG_ALLOC );
+    ret = nng_recv( m_socket, &reply, &replySize, NNG_FLAG_ALLOC | flags );
 
     if( ret != 0 )
     {

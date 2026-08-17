@@ -34,7 +34,7 @@
 class KICOMMON_API KICAD_API_CLIENT
 {
 public:
-    explicit KICAD_API_CLIENT( int aTimeoutMs = 1000 );
+    explicit KICAD_API_CLIENT( int aTimeoutMs = 1000, bool aBlock = true );
     ~KICAD_API_CLIENT();
 
     bool Connect( const wxString& aSocketUrl );
@@ -60,6 +60,7 @@ private:
     bool       m_isOpen;
     bool       m_isConnected;
     wxString   m_lastError;
+    bool       m_block;
 };
 
 
