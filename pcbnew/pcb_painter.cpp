@@ -1088,6 +1088,50 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 }
 
 
+static bool viaHoleShowsLayerPair( const PCB_VIA* aVia )
+{
+    PCB_LAYER_ID layerTop, layerBottom;
+    aVia->LayerPair( &layerTop, &layerBottom );
+
+    return aVia->GetViaType() == VIATYPE::BLIND || aVia->GetViaType() == VIATYPE::BURIED
+           || ( aVia->GetViaType() == VIATYPE::MICROVIA && ( layerTop != F_Cu || layerBottom != B_Cu ) );
+}
+
+
+bool PCB_PAINTER::HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const
+{
+    if( aLayer != LAYER_VIA_HOLES && aLayer != LAYER_VIA_HOLEWALLS && aLayer != LAYER_PAD_HOLEWALLS )
+    {
+        return true;
+    }
+
+    if( !aItem->IsBOARD_ITEM() )
+        return true;
+
+    const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( aItem );
+
+    if( aLayer == LAYER_PAD_HOLEWALLS )
+    {
+        if( item->Type() != PCB_PAD_T )
+            return true;
+
+        const PAD* pad = static_cast<const PAD*>( item );
+
+        return pad->GetDrillSizeX() <= 0 || ( pad->GetSecondaryDrillSizeX() <= 0 && pad->GetTertiaryDrillSizeX() <= 0 );
+    }
+
+    if( item->Type() != PCB_VIA_T )
+        return true;
+
+    const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
+
+    if( aLayer == LAYER_VIA_HOLES )
+        return !viaHoleShowsLayerPair( via );
+
+    return via->GetSecondaryDrillSize().value_or( 0 ) <= 0 && via->GetTertiaryDrillSize().value_or( 0 ) <= 0;
+}
+
+
 void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 {
     const BOARD* board = aVia->GetBoard();
@@ -1103,10 +1147,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     aVia->LayerPair( &layerTop, &layerBottom );
 
     // Blind/buried vias (and microvias) will use different hole and label rendering
-    bool isBlindBuried = aVia->GetViaType() == VIATYPE::BLIND
-            || aVia->GetViaType() == VIATYPE::BURIED
-            || ( aVia->GetViaType() == VIATYPE::MICROVIA
-                 && ( layerTop != F_Cu || layerBottom != B_Cu ) );
+    bool isBlindBuried = viaHoleShowsLayerPair( aVia );
 
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )

@@ -844,6 +844,8 @@ protected:
     /// Update colors that are used for an item to be drawn.
     void updateItemColor( VIEW_ITEM* aItem, int aLayer );
 
+    void recolorGroup( VIEW_ITEM* aItem, int aLayer, int aGroup );
+
     /// Update all information needed to draw an item.
     void updateItemGeometry( VIEW_ITEM* aItem, int aLayer );
 

@@ -194,6 +194,9 @@ public:
     /// @copydoc PAINTER::Draw()
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) override;
 
+    /// @copydoc PAINTER::HasUniformColor()
+    virtual bool HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const override;
+
 protected:
     PCB_VIEWERS_SETTINGS_BASE* viewer_settings();
 
