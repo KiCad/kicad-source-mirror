@@ -3191,6 +3191,9 @@ std::shared_ptr<GRAPH_NODE> CREEPAGE_GRAPH::AddNetElements( int aNetCode, PCB_LA
 
     for( ZONE* zone : m_board.Zones() )
     {
+        if( zone->GetIsRuleArea() )
+            continue;
+
         if( zone->GetNetCode() != aNetCode || !zone->IsOnLayer( aLayer ) )
             continue;
 
