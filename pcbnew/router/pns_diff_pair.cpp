@@ -30,6 +30,8 @@
 
 #include "pns_diff_pair.h"
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
+#include "pns_utils.h"
 
 namespace PNS {
 
@@ -75,6 +77,8 @@ DP_PRIMITIVE_PAIR::DP_PRIMITIVE_PAIR( const DP_PRIMITIVE_PAIR& aOther )
 
     m_anchorP = aOther.m_anchorP;
     m_anchorN = aOther.m_anchorN;
+    m_isMidtrace = aOther.m_isMidtrace;
+    m_name = aOther.m_name;
 }
 
 
@@ -92,6 +96,9 @@ DP_PRIMITIVE_PAIR& DP_PRIMITIVE_PAIR::operator=( const DP_PRIMITIVE_PAIR& aOther
 
     m_anchorP = aOther.m_anchorP;
     m_anchorN = aOther.m_anchorN;
+
+    m_isMidtrace = aOther.m_isMidtrace;
+    m_name = aOther.m_name;
 
     return *this;
 }

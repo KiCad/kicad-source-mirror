@@ -95,10 +95,14 @@ class DP_GATEWAY
 {
 public:
     DP_GATEWAY( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN, bool aIsDiagonal,
-                int aAllowedEntryAngles = DIRECTION_45::ANG_OBTUSE, int aPriority = 0 ) :
+                int aAllowedEntryAngles = DIRECTION_45::ANG_OBTUSE, int aPriority = 0,
+                int aDirectionMask = 0,
+                const wxString aName = wxT("") ) :
             m_anchorP( aAnchorP ),
             m_anchorN( aAnchorN ), m_isDiagonal( aIsDiagonal ),
-            m_allowedEntryAngles( aAllowedEntryAngles ), m_priority( aPriority )
+            m_allowedEntryAngles( aAllowedEntryAngles ), m_priority( aPriority ),
+          m_directionMask( aDirectionMask ),
+            m_name( aName )
     {
         m_hasEntryLines = false;
     }
@@ -108,7 +112,26 @@ public:
     }
 
     void SetDimensions( const DP_DIMENSIONS& aDims ) {  m_dims = aDims; }
+
+    void SetPrimaryDirection( DIRECTION_45 aPrimDir )
+    {
+        m_directionMask = aPrimDir.Mask();
+    }    
+
+    void AddPrimaryDirection( DIRECTION_45 aPrimDir )
+    {
+        m_directionMask |= aPrimDir.Mask();
+    }
+
+    bool HasPrimaryDirection() const { return m_directionMask != 0; }
+
+    int PrimaryDirectionMask() const
+    {
+        return m_directionMask;
+    }
+
     const DP_DIMENSIONS& Dimensions() const { return m_dims; }
+    void SetDirections( DIRECTION_45 dP, DIRECTION_45 dN ) { m_dirP = dP; m_dirN = dN; }
 
     /**
      * @return true if the gateway anchors lie on a diagonal line.
@@ -117,6 +140,9 @@ public:
     {
         return m_isDiagonal;
     }
+
+    void SetName( const wxString& aName) { m_name = aName; }
+    const wxString GetName() const;
 
     const VECTOR2I& AnchorP() const { return m_anchorP; }
 
@@ -147,6 +173,12 @@ public:
         m_hasEntryLines = true;
     }
 
+    void SetAnchors( const VECTOR2I& aP, const VECTOR2I& aN )
+    {
+        m_anchorP = aP;
+        m_anchorN = aN;
+    }
+
     const SHAPE_LINE_CHAIN& EntryP() const { return m_entryP; }
     const SHAPE_LINE_CHAIN& EntryN() const { return m_entryN; }
     const DIFF_PAIR Entry() const ;
@@ -166,6 +198,8 @@ private:
     bool m_isDiagonal;
     int m_allowedEntryAngles;
     int m_priority;
+    int m_directionMask;
+    wxString m_name;
 };
 
 /**
@@ -208,9 +242,40 @@ public:
         printf( "-- Prim-N %p anchor [%d, %d]\n", m_primN, m_anchorN.x, m_anchorN.y );
     }
 
+    void SetIsMidtrace( bool aMidtrace )
+    {
+        m_isMidtrace = aMidtrace;
+    }
+
+    bool IsMidtrace() const
+    {
+        return m_isMidtrace;
+    }
+
     void Unlink()
     {
         m_primP = m_primN = nullptr;
+    }
+
+    void SetName( const wxString& aName ) { m_name = aName; }
+    const wxString& GetName() const { return m_name; }
+
+    bool HasDefinedGap() const { return m_gap.has_value(); }
+    int GetGap() const { return *m_gap; }
+    void SetGap( int aGap ) { m_gap = aGap; }
+
+    void SetFixedDirection( DIRECTION_45 aDir )
+    {
+        m_fixedDirection = aDir;
+    }
+
+    bool HasFixedDirection() const {
+        return m_fixedDirection.has_value();
+    }
+
+    DIRECTION_45 FixedDirection() const 
+    {
+        return m_fixedDirection.value();
     }
 
 private:
@@ -219,6 +284,10 @@ private:
     ITEM* m_primP;
     ITEM* m_primN;
     VECTOR2I m_anchorP, m_anchorN;
+    bool m_isMidtrace;
+    std::optional<DIRECTION_45> m_fixedDirection;
+    wxString m_name;
+    std::optional<int> m_gap;
 };
 
 /**
@@ -292,6 +361,9 @@ private:
 class DIFF_PAIR : public LINK_HOLDER
 {
 public:
+
+    static constexpr int DP_PARALLELITY_THRESHOLD = 10;
+
     struct COUPLED_SEGMENTS
     {
         COUPLED_SEGMENTS ( const SEG& aCoupledP, const SEG& aParentP, int aIndexP,
@@ -301,7 +373,9 @@ public:
             parentP( aParentP ),
             parentN( aParentN ),
             indexP( aIndexP ),
-            indexN( aIndexN )
+            indexN( aIndexN ),
+            linkP( nullptr ),
+            linkN( nullptr )
         {}
 
         SEG coupledP;
@@ -310,6 +384,8 @@ public:
         SEG parentN;
         int indexP;
         int indexN;
+        ITEM *linkP;
+        ITEM *linkN;
     };
 
     typedef std::vector<COUPLED_SEGMENTS> COUPLED_SEGMENTS_VEC;
