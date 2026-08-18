@@ -63,7 +63,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildSymbol( const SYMBOL_DEF& aSymbolDef )
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxString::FromUTF8( aSymbolDef.name ) );
 
     // Add graphics
-    for( const auto& graphic : aSymbolDef.graphics )
+    for( const SYMBOL_GRAPHIC& graphic : aSymbolDef.graphics )
     {
         std::vector<SCH_SHAPE*> shapes = createShapes( graphic );
 
@@ -72,7 +72,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildSymbol( const SYMBOL_DEF& aSymbolDef )
     }
 
     // Add pins
-    for( const auto& pin : aSymbolDef.pins )
+    for( const SYMBOL_PIN& pin : aSymbolDef.pins )
     {
         SCH_PIN* schPin = createPin( pin, libSymbol );
 
@@ -81,22 +81,20 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildSymbol( const SYMBOL_DEF& aSymbolDef )
     }
 
     // Add embedded text labels
-    for( const auto& text : aSymbolDef.texts )
+    for( const SYMBOL_TEXT& text : aSymbolDef.texts )
     {
         if( text.content.empty() )
             continue;
 
-        SCH_TEXT* schText = new SCH_TEXT(
-                VECTOR2I( toKiCadUnits( text.position.x ), -toKiCadUnits( text.position.y ) ),
-                wxString::FromUTF8( text.content ), LAYER_DEVICE );
+        SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
+                                                    -toKiCadUnits( text.position.y ) ),
+                                          wxString::FromUTF8( text.content ), LAYER_DEVICE );
 
         if( text.size > 0.0 )
         {
             int scaledSize = toKiCadUnits( text.size );
-            int charHeight = static_cast<int>(
-                        scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-            int charWidth = static_cast<int>(
-                        scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+            int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+            int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
             schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
         }
 
@@ -127,13 +125,13 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateSymbol( const SYMBOL_DEF& aSymbo
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol(
-        const PARTTYPE_DEF& aPartType, const std::vector<SYMBOL_DEF>& aSymbolDefs )
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol( const PARTTYPE_DEF& aPartType,
+                                                           const std::vector<SYMBOL_DEF>& aSymbolDefs )
 {
     // Build a lookup from CAEDECAL name to definition
     std::map<std::string, const SYMBOL_DEF*> symDefByName;
 
-    for( const auto& sd : aSymbolDefs )
+    for( const SYMBOL_DEF& sd : aSymbolDefs )
         symDefByName[sd.name] = &sd;
 
     int gateCount = static_cast<int>( aPartType.gates.size() );
@@ -160,7 +158,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol(
         const SYMBOL_DEF& symDef = *sdIt->second;
 
         // Add graphics for this unit
-        for( const auto& graphic : symDef.graphics )
+        for( const SYMBOL_GRAPHIC& graphic : symDef.graphics )
         {
             std::vector<SCH_SHAPE*> shapes = createShapes( graphic );
 
@@ -195,23 +193,20 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol(
         }
 
         // Add embedded text labels for this unit
-        for( const auto& text : symDef.texts )
+        for( const SYMBOL_TEXT& text : symDef.texts )
         {
             if( text.content.empty() )
                 continue;
 
-            SCH_TEXT* schText = new SCH_TEXT(
-                    VECTOR2I( toKiCadUnits( text.position.x ),
-                              -toKiCadUnits( text.position.y ) ),
-                    wxString::FromUTF8( text.content ), LAYER_DEVICE );
+            SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
+                                                        -toKiCadUnits( text.position.y ) ),
+                                              wxString::FromUTF8( text.content ), LAYER_DEVICE );
 
             if( text.size > 0.0 )
             {
                 int scaledSize = toKiCadUnits( text.size );
-                int charHeight = static_cast<int>(
-                            scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-                int charWidth = static_cast<int>(
-                            scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+                int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+                int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
                 schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
             }
 
@@ -230,8 +225,8 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol(
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitSymbol(
-        const PARTTYPE_DEF& aPartType, const std::vector<SYMBOL_DEF>& aSymbolDefs )
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitSymbol( const PARTTYPE_DEF& aPartType,
+                                                                 const std::vector<SYMBOL_DEF>& aSymbolDefs )
 {
     // Use a prefixed key to avoid collision with CAEDECAL symbols that may
     // share the same name as the PARTTYPE (e.g. both named "TL082").
@@ -248,8 +243,8 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitSymbol(
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol(
-        const PARTTYPE_DEF& aPartType, const SYMBOL_DEF& aSymbolDef )
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol( const PARTTYPE_DEF& aPartType,
+                                                                const SYMBOL_DEF& aSymbolDef )
 {
     // Cache by PARTTYPE + CAEDECAL pair. A single-gate PARTTYPE with multiple decal
     // variants (e.g. horizontal vs vertical resistor) needs a separate LIB_SYMBOL per
@@ -266,7 +261,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol(
     // Build from the CAEDECAL then apply pin overrides from the PARTTYPE gate
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxString::FromUTF8( aSymbolDef.name ) );
 
-    for( const auto& graphic : aSymbolDef.graphics )
+    for( const SYMBOL_GRAPHIC& graphic : aSymbolDef.graphics )
     {
         std::vector<SCH_SHAPE*> shapes = createShapes( graphic );
 
@@ -300,18 +295,15 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol(
         if( text.content.empty() )
             continue;
 
-        SCH_TEXT* schText = new SCH_TEXT(
-                VECTOR2I( toKiCadUnits( text.position.x ),
-                          -toKiCadUnits( text.position.y ) ),
-                wxString::FromUTF8( text.content ), LAYER_DEVICE );
+        SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
+                                                    -toKiCadUnits( text.position.y ) ),
+                                          wxString::FromUTF8( text.content ), LAYER_DEVICE );
 
         if( text.size > 0.0 )
         {
             int scaledSize = toKiCadUnits( text.size );
-            int charHeight = static_cast<int>(
-                        scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-            int charWidth = static_cast<int>(
-                        scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+            int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+            int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
             schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
         }
 
@@ -324,7 +316,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol(
     // Show pin names/numbers if any gate pin has an explicit name
     bool hasPinNames = false;
 
-    for( const auto& pin : gate.pins )
+    for( const PARTTYPE_PIN& pin : gate.pins )
     {
         if( !pin.pin_name.empty() )
         {
@@ -345,9 +337,9 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol(
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol(
-        const PARTTYPE_DEF& aPartType, const SYMBOL_DEF& aSymbolDef,
-        const std::string& aPinNumber )
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol( const PARTTYPE_DEF& aPartType,
+                                                                    const SYMBOL_DEF& aSymbolDef,
+                                                                    const std::string& aPinNumber )
 {
     std::string cacheKey = aPartType.name + ":" + aSymbolDef.name + ":" + aPinNumber;
     auto it = m_symbolCache.find( cacheKey );
@@ -357,7 +349,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol(
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxString::FromUTF8( aSymbolDef.name ) );
 
-    for( const auto& graphic : aSymbolDef.graphics )
+    for( const SYMBOL_GRAPHIC& graphic : aSymbolDef.graphics )
     {
         std::vector<SCH_SHAPE*> shapes = createShapes( graphic );
 
@@ -385,23 +377,20 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol(
             libSymbol->AddDrawItem( schPin );
     }
 
-    for( const auto& text : aSymbolDef.texts )
+    for( const SYMBOL_TEXT& text : aSymbolDef.texts )
     {
         if( text.content.empty() )
             continue;
 
-        SCH_TEXT* schText = new SCH_TEXT(
-                VECTOR2I( toKiCadUnits( text.position.x ),
-                          -toKiCadUnits( text.position.y ) ),
-                wxString::FromUTF8( text.content ), LAYER_DEVICE );
+        SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
+                                                    -toKiCadUnits( text.position.y ) ),
+                                          wxString::FromUTF8( text.content ), LAYER_DEVICE );
 
         if( text.size > 0.0 )
         {
             int scaledSize = toKiCadUnits( text.size );
-            int charHeight = static_cast<int>(
-                        scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-            int charWidth = static_cast<int>(
-                        scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+            int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+            int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
             schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
         }
 
@@ -420,9 +409,9 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol(
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol(
-        const PARTTYPE_DEF& aPartType, const SYMBOL_DEF& aSymbolDef,
-        const std::vector<std::string>& aPinNumbers )
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol( const PARTTYPE_DEF& aPartType,
+                                                                    const SYMBOL_DEF& aSymbolDef,
+                                                                    const std::vector<std::string>& aPinNumbers )
 {
     int unitCount = static_cast<int>( aPinNumbers.size() );
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxString::FromUTF8( aPartType.name ) );
@@ -442,7 +431,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol(
     {
         int unit = u + 1;
 
-        for( const auto& graphic : aSymbolDef.graphics )
+        for( const SYMBOL_GRAPHIC& graphic : aSymbolDef.graphics )
         {
             std::vector<SCH_SHAPE*> shapes = createShapes( graphic );
 
@@ -479,23 +468,20 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol(
             }
         }
 
-        for( const auto& text : aSymbolDef.texts )
+        for( const SYMBOL_TEXT& text : aSymbolDef.texts )
         {
             if( text.content.empty() )
                 continue;
 
-            SCH_TEXT* schText = new SCH_TEXT(
-                    VECTOR2I( toKiCadUnits( text.position.x ),
-                              -toKiCadUnits( text.position.y ) ),
-                    wxString::FromUTF8( text.content ), LAYER_DEVICE );
+            SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
+                                                        -toKiCadUnits( text.position.y ) ),
+                                              wxString::FromUTF8( text.content ), LAYER_DEVICE );
 
             if( text.size > 0.0 )
             {
                 int scaledSize = toKiCadUnits( text.size );
-                int charHeight = static_cast<int>(
-                            scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-                int charWidth = static_cast<int>(
-                            scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+                int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+                int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
                 schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
             }
 
@@ -514,9 +500,10 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol(
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitConnectorSymbol(
-        const PARTTYPE_DEF& aPartType, const SYMBOL_DEF& aSymbolDef,
-        const std::vector<std::string>& aPinNumbers, const std::string& aCacheKey )
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitConnectorSymbol( const PARTTYPE_DEF& aPartType,
+                                                                          const SYMBOL_DEF& aSymbolDef,
+                                                                          const std::vector<std::string>& aPinNumbers,
+                                                                          const std::string& aCacheKey )
 {
     auto it = m_symbolCache.find( aCacheKey );
 
@@ -558,7 +545,7 @@ SCH_SHAPE* PADS_SCH_SYMBOL_BUILDER::createShape( const SYMBOL_GRAPHIC& aGraphic 
     {
         bool hasArcs = false;
 
-        for( const auto& pt : aGraphic.points )
+        for( const GRAPHIC_POINT& pt : aGraphic.points )
         {
             if( pt.arc.has_value() )
             {
@@ -571,9 +558,8 @@ SCH_SHAPE* PADS_SCH_SYMBOL_BUILDER::createShape( const SYMBOL_GRAPHIC& aGraphic 
         {
             shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
 
-            for( const auto& pt : aGraphic.points )
-                shape->AddPoint( VECTOR2I( toKiCadUnits( pt.coord.x ),
-                                           -toKiCadUnits( pt.coord.y ) ) );
+            for( const GRAPHIC_POINT& pt : aGraphic.points )
+                shape->AddPoint( VECTOR2I( toKiCadUnits( pt.coord.x ), -toKiCadUnits( pt.coord.y ) ) );
         }
         else
         {
@@ -591,10 +577,8 @@ SCH_SHAPE* PADS_SCH_SYMBOL_BUILDER::createShape( const SYMBOL_GRAPHIC& aGraphic 
 
         if( aGraphic.points.size() >= 2 )
         {
-            VECTOR2I start( toKiCadUnits( aGraphic.points[0].coord.x ),
-                           -toKiCadUnits( aGraphic.points[0].coord.y ) );
-            VECTOR2I end( toKiCadUnits( aGraphic.points[1].coord.x ),
-                         -toKiCadUnits( aGraphic.points[1].coord.y ) );
+            VECTOR2I start( toKiCadUnits( aGraphic.points[0].coord.x ), -toKiCadUnits( aGraphic.points[0].coord.y ) );
+            VECTOR2I end( toKiCadUnits( aGraphic.points[1].coord.x ), -toKiCadUnits( aGraphic.points[1].coord.y ) );
 
             shape->SetStart( start );
             shape->SetEnd( end );
@@ -628,10 +612,8 @@ SCH_SHAPE* PADS_SCH_SYMBOL_BUILDER::createShape( const SYMBOL_GRAPHIC& aGraphic 
         double startAngle = aGraphic.start_angle * M_PI / 180.0;
         double endAngle = aGraphic.end_angle * M_PI / 180.0;
 
-        VECTOR2I startPt( center.x + radius * cos( startAngle ),
-                          center.y - radius * sin( startAngle ) );
-        VECTOR2I endPt( center.x + radius * cos( endAngle ),
-                        center.y - radius * sin( endAngle ) );
+        VECTOR2I startPt( center.x + radius * cos( startAngle ), center.y - radius * sin( startAngle ) );
+        VECTOR2I endPt( center.x + radius * cos( endAngle ), center.y - radius * sin( endAngle ) );
 
         shape->SetStart( startPt );
         shape->SetEnd( endPt );
@@ -849,7 +831,10 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& a
     // Determine which visual style to use based on the KiCad symbol name
     std::string upper = aKiCadName;
     std::transform( upper.begin(), upper.end(), upper.begin(),
-                    []( unsigned char c ) { return std::toupper( c ); } );
+                    []( unsigned char c )
+                    {
+                        return std::toupper( c );
+                    } );
 
     bool isGround = ( upper == "GND" || upper == "GNDA" || upper == "GNDPWR" );
     bool isGNDD = ( upper == "GNDD" );
@@ -1108,8 +1093,8 @@ std::string PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant( const std::string
 }
 
 
-void PADS_SCH_SYMBOL_BUILDER::AddHiddenPowerPins(
-        LIB_SYMBOL* aSymbol, const std::vector<PARTTYPE_DEF::SIGPIN>& aSigpins )
+void PADS_SCH_SYMBOL_BUILDER::AddHiddenPowerPins( LIB_SYMBOL* aSymbol,
+                                                  const std::vector<PARTTYPE_DEF::SIGPIN>& aSigpins )
 {
     if( !aSymbol )
         return;
@@ -1168,7 +1153,10 @@ bool PADS_SCH_SYMBOL_BUILDER::IsPowerSymbol( const std::string& aName )
     // Convert to uppercase for case-insensitive comparison
     std::string upper = aName;
     std::transform( upper.begin(), upper.end(), upper.begin(),
-                    []( unsigned char c ) { return std::toupper( c ); } );
+                    []( unsigned char c )
+                    {
+                        return std::toupper( c );
+                    } );
 
     // Check for ground variants
     if( upper == "GND" || upper == "AGND" || upper == "DGND" || upper == "PGND" ||
@@ -1197,7 +1185,10 @@ std::optional<LIB_ID> PADS_SCH_SYMBOL_BUILDER::GetKiCadPowerSymbolId( const std:
     // Convert to uppercase for case-insensitive comparison
     std::string upper = aPadsName;
     std::transform( upper.begin(), upper.end(), upper.begin(),
-                    []( unsigned char c ) { return std::toupper( c ); } );
+                    []( unsigned char c )
+                    {
+                        return std::toupper( c );
+                    } );
 
     // Map common power symbol names to KiCad power library symbols
     struct PowerMapping
