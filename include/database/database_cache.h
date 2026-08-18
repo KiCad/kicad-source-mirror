@@ -23,6 +23,7 @@
 
 #include <chrono>
 #include <list>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 
@@ -48,6 +49,8 @@ public:
 
     void Put( const std::string& aQuery, const CacheValueType& aResult )
     {
+        std::lock_guard<std::mutex> lock( m_mutex );
+
         auto it = m_cache.find( aQuery );
 
         time_t time = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
@@ -74,6 +77,8 @@ public:
 
     bool Get( const std::string& aQuery, CacheValueType& aResult )
     {
+        std::lock_guard<std::mutex> lock( m_mutex );
+
         auto it = m_cache.find( aQuery );
 
         if( it == m_cache.end() )
@@ -94,10 +99,20 @@ public:
         return true;
     }
 
-    void SetMaxSize( size_t aMaxSize ) { m_maxSize = aMaxSize; }
-    void SetMaxAge( time_t aMaxAge ) { m_maxAge = aMaxAge; }
+    void SetMaxSize( size_t aMaxSize )
+    {
+        std::lock_guard<std::mutex> lock( m_mutex );
+        m_maxSize = aMaxSize;
+    }
+
+    void SetMaxAge( time_t aMaxAge )
+    {
+        std::lock_guard<std::mutex> lock( m_mutex );
+        m_maxAge = aMaxAge;
+    }
 
 private:
+    mutable std::mutex m_mutex;
     size_t m_maxSize;
     time_t m_maxAge;
     std::list<CACHE_ENTRY> m_cacheMru;
