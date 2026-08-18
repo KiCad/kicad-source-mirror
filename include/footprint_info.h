@@ -79,6 +79,10 @@ public:
         return m_keywords;
     }
 
+    /**
+     * Returns the cache itself, not a copy.
+     * Lets ScoreTerms() cache normalization across calls.
+     */
     std::vector<SEARCH_TERM>& GetSearchTerms() override;
 
     unsigned GetPadCount()
@@ -129,6 +133,14 @@ protected:
 
     /// lazily load stuff not filled in by constructor.  This may throw IO_ERRORS.
     virtual void load() { };
+
+    /**
+     * Safe to build once and keep.
+     * Name fields come from the constructor.
+     * Keyword and description fields come from load(), one-shot behind m_loaded.
+     * All source fields are final by the time this runs.
+     */
+    void cacheSearchTerms();
 
     FOOTPRINT_LIST* m_owner; ///< provides access to FP_LIB_TABLE
 
