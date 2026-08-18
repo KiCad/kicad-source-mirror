@@ -170,7 +170,7 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    // Clears m_indexedInBoard as it goes. Items that outlive the board rely on that to know
+    // Clears m_boardCacheOwner as it goes. Items that outlive the board rely on that to know
     // ~BOARD_ITEM must not walk their parent chain back into freed memory
     ClearItemByIdCache();
 
@@ -2050,6 +2050,10 @@ void BOARD::CacheItemById( BOARD_ITEM* aItem ) const
     if( IsFootprintHolder() )
         return;
 
+    // Hand the item to this board. A stale owner cannot evict it.
+    if( aItem->m_boardCacheOwner && aItem->m_boardCacheOwner != this )
+        aItem->m_boardCacheOwner->UncacheItemByPtr( aItem );
+
     // Called once per item on load, so probe and insert in one lookup per map and pay for the
     // aliasing fixups only when a key was already taken
     auto [idIt, idInserted] = m_itemByIdCache.try_emplace( aItem->m_Uuid, aItem );
@@ -2072,14 +2076,15 @@ void BOARD::CacheItemById( BOARD_ITEM* aItem ) const
         if( auto prev = m_cachedIdByItem.find( idIt->second );
             prev != m_cachedIdByItem.end() && prev->second == aItem->m_Uuid )
         {
-            idIt->second->m_indexedInBoard = false;
+            idIt->second->m_boardCacheOwner = nullptr;
             m_cachedIdByItem.erase( prev );
         }
 
         idIt->second = aItem;
     }
 
-    aItem->m_indexedInBoard = true;
+    // Set owner last, see CacheAndReturnItemById()
+    aItem->m_boardCacheOwner = const_cast<BOARD*>( this );
 }
 
 
@@ -2097,7 +2102,7 @@ void BOARD::UncacheItemById( const KIID& aId ) const
     if( auto cached = m_cachedIdByItem.find( item );
         cached != m_cachedIdByItem.end() && cached->second == aId )
     {
-        item->m_indexedInBoard = false;
+        item->m_boardCacheOwner = nullptr;
         m_cachedIdByItem.erase( cached );
     }
 }
@@ -2107,6 +2112,10 @@ BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) 
 {
     if( IsFootprintHolder() )
         return aItem;
+
+    // Hand the item to this board. A stale owner cannot evict it.
+    if( aItem->m_boardCacheOwner && aItem->m_boardCacheOwner != this )
+        aItem->m_boardCacheOwner->UncacheItemByPtr( aItem );
 
     // catches a future alias between the cache key and the cached item's own UUID
     wxASSERT_MSG( aItem && aItem->m_Uuid == aId,
@@ -2127,14 +2136,16 @@ BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) 
         if( auto prev = m_cachedIdByItem.find( existing->second );
             prev != m_cachedIdByItem.end() && prev->second == aId )
         {
-            existing->second->m_indexedInBoard = false;
+            existing->second->m_boardCacheOwner = nullptr;
             m_cachedIdByItem.erase( prev );
         }
     }
 
     m_itemByIdCache.insert_or_assign( aId, aItem );
     m_cachedIdByItem.insert_or_assign( aItem, aId );
-    aItem->m_indexedInBoard = true;
+
+    // Set owner last, a half-done update then reads as not indexed
+    aItem->m_boardCacheOwner = const_cast<BOARD*>( this );
 
     return aItem;
 }
@@ -2142,7 +2153,8 @@ BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) 
 
 void BOARD::UncacheItemByPtr( const BOARD_ITEM* aItem )
 {
-    aItem->m_indexedInBoard = false;
+    // Clear owner first, the item no longer points to this board
+    aItem->m_boardCacheOwner = nullptr;
 
     if( auto cached = m_cachedIdByItem.find( aItem ); cached != m_cachedIdByItem.end() )
     {
@@ -2168,7 +2180,7 @@ void BOARD::UncacheItemByPtr( const BOARD_ITEM* aItem )
 void BOARD::ClearItemByIdCache()
 {
     for( const auto& [item, id] : m_cachedIdByItem )
-        item->m_indexedInBoard = false;
+        item->m_boardCacheOwner = nullptr;
 
     m_itemByIdCache.clear();
     m_cachedIdByItem.clear();
