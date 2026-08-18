@@ -25,10 +25,9 @@
 #define PADS_BINARY_UTILS_H_
 
 #include <algorithm>
-#include <array>
 #include <cstdint>
-#include <functional>
 #include <cstring>
+#include <optional>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -41,10 +40,8 @@
 namespace PADS_IO
 {
 
-// A live SDB record header carries the FE FF (little-endian 0xFFFE) sentinel; an all-ones 32-bit
-// field is a free/unset slot.
+// A live SDB record header carries the FE FF (little-endian 0xFFFE) sentinel.
 constexpr uint16_t SDB_RECORD_SENTINEL = 0xFFFE;
-constexpr uint32_t SDB_FIELD_UNSET = 0xFFFFFFFF;
 
 // PADS BASIC coordinate units per mil (one BASIC unit is 1/38100 mil).
 constexpr double SDB_BASIC_PER_MIL = 38100.0;
@@ -75,12 +72,6 @@ inline uint32_t getU32LE( const std::vector<uint8_t>& aData, size_t aOffset )
 }
 
 
-inline int32_t getI32LE( const std::vector<uint8_t>& aData, size_t aOffset )
-{
-    return static_cast<int32_t>( getU32LE( aData, aOffset ) );
-}
-
-
 inline double getF64LE( const std::vector<uint8_t>& aData, size_t aOffset )
 {
     uint64_t bits = 0;
@@ -105,77 +96,23 @@ inline float getF32LE( const std::vector<uint8_t>& aData, size_t aOffset )
 }
 
 
-/// Returned by findSignature when the signature does not occur.
-constexpr size_t SIGNATURE_NOT_FOUND = static_cast<size_t>( -1 );
-
 /**
- * First offset >= @p aFrom at which the non-empty signature @p aSig (length @p aSigLen) matches in
- * @p aData, or @ref SIGNATURE_NOT_FOUND when it does not occur. An empty signature is unsupported
- * and yields @ref SIGNATURE_NOT_FOUND. Callers apply their own bounds for any fields trailing the
- * matched signature.
+ * Read at most @p aCount leading bytes of @p aFileName into @p aOut, which is sized to what was
+ * actually read. Returns false on open error. Format probes use this so recognizing a file does
+ * not cost a full read of it.
  */
-inline size_t findSignature( const std::vector<uint8_t>& aData, const uint8_t* aSig, size_t aSigLen,
-                             size_t aFrom = 0 )
+inline bool ReadFileHeader( const wxString& aFileName, std::vector<uint8_t>& aOut, size_t aCount )
 {
-    if( aSigLen == 0 || aData.size() < aSigLen || aFrom > aData.size() - aSigLen )
-        return SIGNATURE_NOT_FOUND;
+    std::ifstream file( aFileName.fn_str(), std::ios::binary );
 
-    auto it = std::search( aData.begin() + static_cast<std::ptrdiff_t>( aFrom ), aData.end(), aSig,
-                           aSig + aSigLen );
+    if( !file.is_open() )
+        return false;
 
-    return it == aData.end() ? SIGNATURE_NOT_FOUND : static_cast<size_t>( it - aData.begin() );
-}
+    aOut.resize( aCount );
+    file.read( reinterpret_cast<char*>( aOut.data() ), static_cast<std::streamsize>( aCount ) );
+    aOut.resize( static_cast<size_t>( file.gcount() ) );
 
-
-/// Overload for the fixed-size std::array signatures the SCH reader uses.
-template <size_t N>
-inline size_t findSignature( const std::vector<uint8_t>& aData, const std::array<uint8_t, N>& aSig,
-                             size_t aFrom = 0 )
-{
-    return findSignature( aData, aSig.data(), N, aFrom );
-}
-
-
-/// True iff @p aSig occurs exactly once in @p aData (the uniqueness gate some anchors require).
-inline bool signatureIsUnique( const std::vector<uint8_t>& aData, const uint8_t* aSig,
-                               size_t aSigLen )
-{
-    size_t first = findSignature( aData, aSig, aSigLen );
-
-    return first != SIGNATURE_NOT_FOUND
-           && findSignature( aData, aSig, aSigLen, first + 1 ) == SIGNATURE_NOT_FOUND;
-}
-
-
-/// A contiguous stride-N record run: its base offset and member count.
-struct STRIDE_RUN
-{
-    size_t base = 0;
-    size_t count = 0;
-};
-
-
-/**
- * From a hit anywhere inside a stride-@p aStride record run, back up to the run's first member
- * (staying at or above @p aLo) then count the contiguous members forward (staying within @p aHi).
- *
- * Pure geometry; @p aIsMember decides membership at a candidate offset. The caller keeps whatever
- * it does with each member (dedup, read, emit). Returns the run base and member count.
- */
-inline STRIDE_RUN extendStrideRun( size_t aHit, size_t aStride, size_t aLo, size_t aHi,
-                                   const std::function<bool( size_t )>& aIsMember )
-{
-    size_t base = aHit;
-
-    while( base >= aLo + aStride && aIsMember( base - aStride ) )
-        base -= aStride;
-
-    size_t count = 0;
-
-    while( base + ( count + 1 ) * aStride <= aHi && aIsMember( base + count * aStride ) )
-        ++count;
-
-    return { base, count };
+    return true;
 }
 
 
@@ -258,13 +195,30 @@ inline bool HasSdbMagic( const std::vector<uint8_t>& aData, uint8_t aMagic1 )
 }
 
 
+/// Where a footer check failed and what was wrong with it.
+struct SDB_FOOTER_ERROR
+{
+    size_t      offset;
+    const char* detail;
+};
+
+
 /**
- * Validate a PADS SDB footer at @p aFooterStart: the ASCII GUID followed by an
+ * Check a PADS SDB footer at @p aFooterStart: the ASCII GUID followed by an
  * absolute back-pointer to the serialized container-item array.
  *
- * Throws IO_ERROR when the buffer is too small, the GUID does not match, or the
- * back-pointer cannot address the array's four-byte count before the footer.
- * The GUID differs per format, so the caller supplies it.
+ * Returns the failing offset and reason, or an empty optional when the footer is
+ * well formed. The GUID differs per format, so the caller supplies it. Reporting
+ * rather than throwing keeps the offset with the check that knows it, so callers
+ * need not re-derive which check tripped.
+ */
+std::optional<SDB_FOOTER_ERROR> CheckSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart,
+                                                const char* aGuid, size_t aGuidLen );
+
+
+/**
+ * As @ref CheckSdbFooter, throwing a bare IO_ERROR on failure. For callers that
+ * do not annotate their diagnostics with a file offset.
  */
 void ValidateSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart, const char* aGuid,
                         size_t aGuidLen );
@@ -273,9 +227,8 @@ void ValidateSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart, 
 /**
  * Bounds-checked little-endian read cursor over a PADS binary buffer.
  *
- * The random-access @c *At accessors throw IO_ERROR on an out-of-range read
- * rather than indexing past the buffer. The sequential reads advance an internal
- * position; the decoders read almost entirely by absolute offset.
+ * The @c *At accessors throw IO_ERROR on an out-of-range read rather than
+ * indexing past the buffer.
  *
  * The cursor holds a reference to the caller's buffer, which must outlive the
  * cursor.
@@ -285,11 +238,7 @@ class BINARY_CURSOR
 public:
     explicit BINARY_CURSOR( const std::vector<uint8_t>& aData ) : m_data( aData ) {}
 
-    size_t Tell() const { return m_pos; }
     size_t Size() const { return m_data.size(); }
-    void   Seek( size_t aPos ) { m_pos = aPos; }
-
-    bool Remaining( size_t aCount ) const { return InBounds( m_pos, aCount ); }
 
     // Overflow-safe: a near-SIZE_MAX offset must not wrap aOffset + aCount into range.
     bool InBounds( size_t aOffset, size_t aCount ) const
@@ -337,17 +286,6 @@ public:
         return readFixedString( m_data, aOffset, aMaxLen );
     }
 
-    // As StringAt but without trailing-space trimming.
-    std::string StringRawAt( size_t aOffset, size_t aMaxLen ) const
-    {
-        return readFixedStringRaw( m_data, aOffset, aMaxLen );
-    }
-
-    uint8_t  U8() { uint8_t v = U8At( m_pos ); m_pos += 1; return v; }
-    uint16_t U16() { uint16_t v = U16At( m_pos ); m_pos += 2; return v; }
-    uint32_t U32() { uint32_t v = U32At( m_pos ); m_pos += 4; return v; }
-    int32_t  I32() { int32_t v = I32At( m_pos ); m_pos += 4; return v; }
-
 private:
     void check( size_t aOffset, size_t aCount ) const
     {
@@ -359,7 +297,6 @@ private:
     }
 
     const std::vector<uint8_t>& m_data;
-    size_t                      m_pos = 0;
 };
 
 
@@ -387,12 +324,6 @@ public:
     std::string Str( size_t aOffset, size_t aMaxLen ) const
     {
         return m_cursor.StringAt( m_base + aOffset, aMaxLen );
-    }
-
-    // As Str but without trailing-space trimming.
-    std::string StrRaw( size_t aOffset, size_t aMaxLen ) const
-    {
-        return m_cursor.StringRawAt( m_base + aOffset, aMaxLen );
     }
 
     size_t Base() const { return m_base; }

@@ -28,23 +28,30 @@
 namespace PADS_IO
 {
 
+std::optional<SDB_FOOTER_ERROR> CheckSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart,
+                                                const char* aGuid, size_t aGuidLen )
+{
+    if( aFooterStart + aGuidLen + 4 > aData.size() )
+        return SDB_FOOTER_ERROR{ aData.size(), "PADS binary file too small for the footer" };
+
+    if( std::memcmp( &aData[aFooterStart], aGuid, aGuidLen ) != 0 )
+        return SDB_FOOTER_ERROR{ aFooterStart, "Invalid PADS binary footer GUID" };
+
+    size_t   backPointerOffset = aFooterStart + aGuidLen;
+    uint32_t containerItemsOffset = getU32LE( aData, backPointerOffset );
+
+    if( containerItemsOffset > aFooterStart || aFooterStart - containerItemsOffset < 4 )
+        return SDB_FOOTER_ERROR{ backPointerOffset, "Invalid PADS binary container-item back-pointer" };
+
+    return std::nullopt;
+}
+
+
 void ValidateSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart, const char* aGuid,
                         size_t aGuidLen )
 {
-    // Subtract rather than add so a near-SIZE_MAX offset cannot wrap past the check
-    if( aData.size() < 4 || aGuidLen > aData.size() - 4
-        || aFooterStart > aData.size() - aGuidLen - 4 )
-    {
-        THROW_IO_ERROR( "PADS binary file too small for the footer" );
-    }
-
-    if( std::memcmp( &aData[aFooterStart], aGuid, aGuidLen ) != 0 )
-        THROW_IO_ERROR( "Invalid PADS binary footer GUID" );
-
-    uint32_t containerItemsOffset = getU32LE( aData, aFooterStart + aGuidLen );
-
-    if( containerItemsOffset > aFooterStart || aFooterStart - containerItemsOffset < 4 )
-        THROW_IO_ERROR( "Invalid PADS binary container-item back-pointer" );
+    if( std::optional<SDB_FOOTER_ERROR> error = CheckSdbFooter( aData, aFooterStart, aGuid, aGuidLen ) )
+        THROW_IO_ERROR( error->detail );
 }
 
 } // namespace PADS_IO
