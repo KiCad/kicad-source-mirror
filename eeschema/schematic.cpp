@@ -192,7 +192,7 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
 
         // ERC exclusions migrations can't be resolved until the schematic is loaded.
         // Make sure to process them here if they exist so that they get persisted by the save below.
-        if( !project.m_ErcSettings->m_ErcExclusionsLegacy.empty() )
+        if( project.m_ErcSettings && !project.m_ErcSettings->m_ErcExclusionsLegacy.empty() )
             ResolveERCExclusionsPostUpdate();
 
         // d'tor will save settings to file
