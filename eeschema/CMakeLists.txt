@@ -503,6 +503,7 @@ set( EESCHEMA_SRCS
     api/sch_api_save.cpp
     api/sch_context.cpp
 
+    libraries/legacy_cache_reconcile.cpp
     libraries/legacy_symbol_library.cpp
     libraries/symbol_library_adapter.cpp
 

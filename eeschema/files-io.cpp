@@ -34,11 +34,10 @@
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiplatform/ui.h>
+#include <libraries/legacy_cache_reconcile.h>
 #include <libraries/legacy_symbol_library.h>
 #include <libraries/symbol_library_adapter.h>
 #include <local_history.h>
-#include <sch_symbol.h>
-#include <set>
 #include <lockfile.h>
 #include <pgm_base.h>
 #include <core/profile.h>
@@ -584,55 +583,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                             (*table)->Save();
                         }
 
-                        std::vector<wxString> cacheSymbols = adapter->GetSymbolNames( nickname );
-                        std::set<wxString> cacheSymbolSet( cacheSymbols.begin(), cacheSymbols.end() );
+                        std::vector<LOAD_MESSAGE> libErrors;
 
-                        if( !cacheSymbolSet.empty() )
-                        {
-                            std::vector<wxString> loadedLibs;
+                        ReconcileLegacyCacheSymbols( *adapter, nickname, schematic, libErrors );
 
-                            for( const wxString& libName : adapter->GetLibraryNames() )
-                            {
-                                if( libName == nickname )
-                                    continue;
-
-                                std::optional<LIB_STATUS> status = adapter->GetLibraryStatus( libName );
-
-                                if( status && status->load_status == LOAD_STATUS::LOADED )
-                                    loadedLibs.push_back( libName );
-                            }
-
-                            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
-                            {
-                                for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
-                                {
-                                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-                                    LIB_ID newId = symbol->GetLibId();
-                                    UTF8 fullLibName = newId.Format();
-
-                                    if( cacheSymbolSet.count( fullLibName.wx_str() ) )
-                                    {
-                                        bool alreadyExists = false;
-
-                                        for( const wxString& libName : loadedLibs )
-                                        {
-                                            if( adapter->LoadSymbol( libName, fullLibName.wx_str() ) )
-                                            {
-                                                alreadyExists = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if( !alreadyExists )
-                                        {
-                                            newId.SetLibNickname( nickname );
-                                            newId.SetLibItemName( fullLibName );
-                                            symbol->SetLibId( newId );
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+                            statusBar->AddWarningMessages( "load", libErrors );
                     }
                 }
 
