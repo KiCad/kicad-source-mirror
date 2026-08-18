@@ -33,8 +33,7 @@
 #include <confirm.h>
 #include <grid_tricks.h>
 
-SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces,
-                                    bool aSingleLine,
+SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces, bool aSingleLine,
                                     std::function<void( wxKeyEvent& )> onAcceptFn,
                                     std::function<void( wxStyledTextEvent& )> onCharAddedFn ) :
         m_te( aScintilla ),
@@ -81,8 +80,7 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
     // Dispatch command-keys in Scintilla control.
     m_te->Bind( wxEVT_CHAR_HOOK, &SCINTILLA_TRICKS::onCharHook, this );
 
-    m_te->Bind( wxEVT_SYS_COLOUR_CHANGED,
-                wxSysColourChangedEventHandler( SCINTILLA_TRICKS::onThemeChanged ), this );
+    m_te->Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( SCINTILLA_TRICKS::onThemeChanged ), this );
 }
 
 
