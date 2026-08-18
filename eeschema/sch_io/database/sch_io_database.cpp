@@ -361,6 +361,7 @@ void SCH_IO_DATABASE::cacheLib()
     m_cacheTimestamp = currentTimestampSeconds;
     m_cacheSignature = signature;
     m_cachePopulated = true;
+    m_modifyHash++;
 }
 
 void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )

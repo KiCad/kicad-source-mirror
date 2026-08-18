@@ -56,7 +56,7 @@ public:
                                       { FILEEXT::DatabaseLibraryFileExtension } );
     }
 
-    int GetModifyHash() const override { return 0; }
+    int GetModifyHash() const override { return m_modifyHash; }
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
@@ -126,6 +126,8 @@ private:
 
     /// True once the LIB_SYMBOL cache has been materialized at least once.
     bool m_cachePopulated;
+
+    int m_modifyHash = 0;
 
     /// Signature of the raw database rows at last materialization; used to skip rebuilding the
     /// LIB_SYMBOL cache when a re-query returns identical data.
