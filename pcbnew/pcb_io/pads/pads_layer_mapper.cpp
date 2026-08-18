@@ -175,22 +175,17 @@ PADS_LAYER_TYPE PADS_LAYER_MAPPER::ParseLayerName( const std::string& aLayerName
     if( it != m_layerNameMap.end() )
         return it->second;
 
-    if( normalized.find( "top" ) != std::string::npos ||
-        normalized.find( "layer 1" ) != std::string::npos ||
-        normalized == "1" )
-    {
+    // Match the whole name, or an ordinal prefix for the numbered inner layers. A substring is not
+    // evidence of copper: "Top Notes", "Topology" and "Bot Assy Text" all contain one, and an
+    // unknown layer becomes documentation rather than silkscreen on F_Cu.
+    if( normalized == "top" || normalized == "layer 1" || normalized == "1" )
         return PADS_LAYER_TYPE::COPPER_TOP;
-    }
 
-    if( normalized.find( "bottom" ) != std::string::npos ||
-        normalized.find( "bot" ) != std::string::npos )
-    {
+    if( normalized == "bottom" || normalized == "bot" )
         return PADS_LAYER_TYPE::COPPER_BOTTOM;
-    }
 
-    if( normalized.find( "inner" ) != std::string::npos ||
-        normalized.find( "mid" ) != std::string::npos ||
-        normalized.find( "internal" ) != std::string::npos )
+    if( normalized == "internal" || normalized.starts_with( "inner " )
+        || normalized.starts_with( "mid " ) )
     {
         return PADS_LAYER_TYPE::COPPER_INNER;
     }

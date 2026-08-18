@@ -21,11 +21,11 @@
 
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
-#include <io/pads/pads_unit_converter.h>
 #include <math/vector2d.h>
-#include "pads_layer_mapper.h"
+#include "pads_pcb_converter.h"
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -68,13 +68,13 @@ public:
     DefaultLayerMappingCallback( const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
 
 private:
-    int scaleSize( double aVal ) const;
-    int scaleCoord( double aVal, bool aIsX ) const;
+    /// Shorthands for the converter's transform, which the loaders below use everywhere.
+    int scaleSize( double aVal ) const { return m_converter->ScaleSize( aVal ); }
+    int scaleCoord( double aVal, bool aIsX ) const { return m_converter->ScaleCoord( aVal, aIsX ); }
 
     /// Scale a board point to a KiCad position, applying the per-axis origin and the Y-flip.
-    VECTOR2I     scalePoint( double aX, double aY ) const;
-    PCB_LAYER_ID getMappedLayer( int aPadsLayer ) const;
-    void         ensureNet( const std::string& aNetName );
+    VECTOR2I     scalePoint( double aX, double aY ) const { return m_converter->ScalePoint( aX, aY ); }
+    PCB_LAYER_ID getMappedLayer( int aPadsLayer ) const { return m_converter->GetMappedLayer( aPadsLayer ); }
 
     void loadBoardSetup();
     void loadNets();
@@ -96,31 +96,16 @@ private:
     void loadGraphicLines();
     void setBoardOutlineArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev, const PADS_IO::ARC_POINT& aCurr );
     void loadTracksAndVias();
-    void loadTexts();
     void loadCopperShapes();
     void loadZones();
-    void loadKeepouts();
-    void loadDimensions();
-
-    /// Emit a .kicad_dru beside the board carrying one clearance rule per differential pair
-    /// with a gap.
-    void generateDrcRules( const wxString& aFileName );
-    void reportStatistics();
     void clearLoadingState();
 
-    std::map<wxString, PCB_LAYER_ID> m_layerMap;
-
     // Valid only during LoadBoard, cleared by clearLoadingState().
-    BOARD*                             m_loadBoard = nullptr;
-    const PADS_IO::BINARY_PARSER*      m_parser = nullptr;
-    PADS_UNIT_CONVERTER                m_unitConverter;
-    PADS_LAYER_MAPPER                  m_layerMapper;
-    std::vector<PADS_LAYER_INFO>       m_layerInfos;
-    double                             m_scaleFactor = 0.0;
-    double                             m_originX = 0.0;
-    double                             m_originY = 0.0;
-    int                                m_minObjectSize = 1000;
-    std::map<std::string, std::string> m_pinToNetMap;
+    BOARD*                              m_loadBoard = nullptr;
+    const PADS_IO::BINARY_PARSER*       m_parser = nullptr;
+    std::unique_ptr<PADS_PCB_CONVERTER> m_converter;
+    int                                 m_minObjectSize = 1000;
+    std::map<std::string, std::string>  m_pinToNetMap;
 
     // One footprint per parser part index, so loadClusterGroups() can resolve the
     // part-index-keyed cluster membership to a footprint.

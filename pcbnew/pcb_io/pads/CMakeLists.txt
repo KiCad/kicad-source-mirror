@@ -6,6 +6,7 @@ set( PADS2PCBNEW_SRCS
     pads_sdb.cpp
     pads_layer_mapper.cpp
     pads_parser.cpp
+    pads_pcb_converter.cpp
     pcb_io_pads.cpp
     pcb_io_pads_binary.cpp
     )
