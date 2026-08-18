@@ -771,6 +771,24 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 else
                 {
                     m_selection = RequestSelection( SCH_COLLECTOR::MovableItems );
+
+                    // Pins aren't movable in the schematic editor, so if someone starts a drag on a
+                    // pin, promote it to the parent symbol.
+                    if( m_selection.Size() == 0 )
+                    {
+                        m_selection = RequestSelection( { SCH_PIN_T } );
+
+                        if( m_selection.Size() > 0 )
+                        {
+                            SCH_PIN* pin = static_cast<SCH_PIN*>( m_selection.GetItem( 0 ) );
+
+                            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParentSymbol() ) )
+                            {
+                                m_selection.Clear();
+                                m_selection.Add( symbol );
+                            }
+                        }
+                    }
                 }
 
                 // Check if dragging has started within any of selected items bounding box
