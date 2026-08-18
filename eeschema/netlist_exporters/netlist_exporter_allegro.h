@@ -72,6 +72,19 @@ public:
      */
     static bool CompareLibPin( const SCH_PIN* aPin1, const SCH_PIN* aPin2 );
 
+    /**
+     * Generate an Allegro room name from a sheet path.
+     *
+     * Allegro doesn't accept '/' in a room name, so the hierarchy separators become dashes and
+     * any other character Allegro doesn't accept becomes an underscore: "/Power Supply/
+     * Regulators/" turns into "Power_Supply-Regulators".  The root sheet, which has no name of
+     * its own, is named after the root schematic file.
+     *
+     * @param aSheetPath sheet the room represents.
+     * @return a room name safe to use as a ROOM property value.
+     */
+    static wxString formatRoom( const SCH_SHEET_PATH& aSheetPath );
+
 private:
     void extractComponentsInfo();
 

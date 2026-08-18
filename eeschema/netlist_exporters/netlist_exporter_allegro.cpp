@@ -183,7 +183,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
                 continue;
 
             m_packageProperties.insert( std::pair<wxString,
-                                        wxString>( sheet.PathHumanReadable(),
+                                        wxString>( formatRoom( sheet ),
                                                    symbol->GetRef( &sheet ) ) );
             m_orderedSymbolsSheetpath.push_back( std::pair<SCH_SYMBOL*,
                                                  SCH_SHEET_PATH>( symbol, sheet ) );
@@ -674,6 +674,46 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
 }
 
 
+wxString NETLIST_EXPORTER_ALLEGRO::formatRoom( const SCH_SHEET_PATH& aSheetPath )
+{
+    wxString path = aSheetPath.PathHumanReadable();
+
+    // Use root schematic file name for root
+    if( path == wxS( "/" ) )
+        path = aSheetPath.PathHumanReadable( false );
+
+    // The leading and trailing separators carry no information; the ones in between become
+    // dashes below.
+    while( path.StartsWith( wxS( "/" ) ) )
+        path = path.Mid( 1 );
+
+    while( path.EndsWith( wxS( "/" ) ) )
+        path.RemoveLast();
+
+    wxString roomName;
+
+    for( wxUniChar c : path )
+    {
+        if( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || ( c >= '0' && c <= '9' )
+            || c == '_' || c == '-' )
+        {
+            roomName << c;
+        }
+        else if( c == '/' )
+        {
+            // Use dash to represent our hierarchy breaks
+            roomName << wxS( "-" );
+        }
+        else
+        {
+            roomName << wxS( "_" );
+        }
+    }
+
+    return roomName;
+}
+
+
 wxString NETLIST_EXPORTER_ALLEGRO::formatDevice( wxString aString )
 {
     aString.MakeLower();
@@ -689,13 +729,11 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
     while( !m_packageProperties.empty() )
     {
         std::multimap<wxString, wxString>::iterator iter = m_packageProperties.begin();
-        wxString                                    sheetPathText = iter->first;
-
-        fmt::print( m_f, "'ROOM' '{}' ; ", TO_UTF8( formatText( sheetPathText ) ) );
+        wxString                                    roomName = iter->first;
 
         std::vector<wxString> refTexts;
 
-        auto pairIter = m_packageProperties.equal_range( sheetPathText );
+        auto pairIter = m_packageProperties.equal_range( roomName );
 
         for( iter = pairIter.first; iter != pairIter.second; ++iter )
         {
@@ -704,6 +742,14 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
         }
 
         m_packageProperties.erase( pairIter.first, pairIter.second );
+
+        // Nothing to name the room after (a schematic with no file name yet); leave these
+        // symbols without a ROOM rather than writing out an empty property.
+        if( roomName.IsEmpty() )
+            continue;
+
+        // formatRoom() already restricted this to characters that need no quoting or escaping.
+        fmt::print( m_f, "'ROOM' '{}' ; ", TO_UTF8( roomName ) );
 
         std::stable_sort( refTexts.begin(), refTexts.end(),
                           NETLIST_EXPORTER_ALLEGRO::CompareSymbolRef );
