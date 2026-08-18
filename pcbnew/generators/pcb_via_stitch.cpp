@@ -829,7 +829,7 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
 
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> perLayerFills;
 
-    for( ZONE* zone : aBoard->Zones() )
+    for( ZONE* zone : collectAllZones( aBoard ) )
     {
         if( zone->GetIsRuleArea() )
             continue;
@@ -1075,7 +1075,7 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
 
     obstacles.Simplify();
 
-    for( ZONE* zone : aBoard->Zones() )
+    for( ZONE* zone : collectAllZones( aBoard ) )
     {
         if( !zone->GetBoundingBox().Intersects( queryBBox ) )
             continue;
@@ -1341,7 +1341,7 @@ std::vector<ZONE*> PCB_VIA_STITCH::GetZonesNeedingRefillAfterUpdate() const
     BOX2I myBBox = GetBoundingBox();
 
     // Lets return all intersecting zones with different nets
-    for( ZONE* zone : brd->Zones() )
+    for( ZONE* zone : collectAllZones( brd ) )
     {
         if( zone->GetIsRuleArea() )
             continue;
@@ -1492,6 +1492,28 @@ void PCB_VIA_STITCH::SetGuardedNetCode( int aNetCode )
     }
 
     MarkDirty();
+}
+
+
+std::vector<ZONE*> PCB_VIA_STITCH::collectAllZones( const BOARD* aBoard )
+{
+    std::vector<ZONE*> zones;
+
+    if( !aBoard )
+        return zones;
+
+    zones.reserve( aBoard->Zones().size() );
+
+    for( ZONE* zone : aBoard->Zones() )
+        zones.push_back( zone );
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+    {
+        for( ZONE* zone : footprint->Zones() )
+            zones.push_back( zone );
+    }
+
+    return zones;
 }
 
 

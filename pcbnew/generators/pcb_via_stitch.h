@@ -240,6 +240,12 @@ private:
      */
     std::set<VECTOR2I> buildPlacementCells( BOARD* aBoard ) const;
 
+    /**
+     * Grabs all zones we need to consider for via placement.
+     * Namely footprints can have zones (rule areas) for keepouts under them.
+     */
+    static std::vector<ZONE*> collectAllZones( const BOARD* aBoard );
+
 
 public:
     /**
