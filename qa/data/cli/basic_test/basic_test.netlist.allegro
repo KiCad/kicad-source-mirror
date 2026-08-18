@@ -1,6 +1,6 @@
 (NETLIST)
 (Source: E:\kicad\kicad\qa\data\cli\basic_test\basic_test.kicad_sch)
-(Date: 2025-12-05T23:11:58-0500)
+(Date: 2026-08-17T20:22:14)
 $PACKAGES
 ! '10k_resistor_smd_r_1206_3216metric' ! '10k' ; R1,
 	R2,
@@ -12,7 +12,7 @@ $PACKAGES
 	J4
 ! 'tlv2371dbv_package_to_sot_smd_sot-23-5' ! 'TLV2371DBV' ; U1
 $A_PROPERTIES
-'ROOM' '/' ; C1,
+'ROOM' 'basic_test' ; C1,
 	J1,
 	J2,
 	J3,
