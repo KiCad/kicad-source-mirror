@@ -326,4 +326,53 @@ BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateIsIdempotent )
 }
 
 
+BOOST_AUTO_TEST_CASE( ReadOnlyTemplateProducesWritableProject )
+{
+    CreateTemplateStructure( "rotemplate", { "rotemplate-lib" },
+                             { "rotemplate.kicad_pro", "rotemplate.kicad_sch", "rotemplate-lib/component.kicad_sym" } );
+
+    fs::path templatePath = m_tempDir / "rotemplate";
+    fs::path destPath = m_tempDir / "rwproject";
+    fs::create_directories( destPath );
+
+    const std::vector<fs::path> templateFiles = { templatePath / "rotemplate.kicad_pro",
+                                                  templatePath / "rotemplate.kicad_sch",
+                                                  templatePath / "rotemplate-lib" / "component.kicad_sym" };
+
+    for( const fs::path& file : templateFiles )
+    {
+        fs::permissions( file, fs::perms::owner_write | fs::perms::group_write | fs::perms::others_write,
+                         fs::perm_options::remove );
+    }
+
+    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( templatePath.string() ) );
+
+    wxFileName newProjectPath;
+    newProjectPath.SetPath( wxString::FromUTF8( destPath.string() ) );
+    newProjectPath.SetName( wxS( "rwproject" ) );
+    newProjectPath.SetExt( wxS( "kicad_pro" ) );
+
+    wxString errorMsg;
+    bool     created = tmpl.CreateProject( newProjectPath, &errorMsg );
+
+    // Restore write permission before asserting, so that a failed assertion still leaves the
+    // fixture able to remove the temporary directory.
+    for( const fs::path& file : templateFiles )
+        fs::permissions( file, fs::perms::owner_write, fs::perm_options::add );
+
+    BOOST_REQUIRE_MESSAGE( created, "CreateProject failed: " + errorMsg.ToStdString() );
+
+    const std::vector<fs::path> projectFiles = { destPath / "rwproject.kicad_pro", destPath / "rwproject.kicad_sch",
+                                                 destPath / "rwproject-lib" / "component.kicad_sym" };
+
+    for( const fs::path& file : projectFiles )
+    {
+        wxFileName fn( wxString::FromUTF8( file.string() ) );
+
+        BOOST_REQUIRE_MESSAGE( fn.FileExists(), file.string() + " was not created" );
+        BOOST_CHECK_MESSAGE( fn.IsFileWritable(), file.string() + " is read only" );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
