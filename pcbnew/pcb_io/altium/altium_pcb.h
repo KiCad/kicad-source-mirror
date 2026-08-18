@@ -257,7 +257,6 @@ private:
 
     void HelperSetZoneLayers( ZONE& aZone, const ALTIUM_LAYER aAltiumLayer );
     void HelperSetZoneKeepoutRestrictions( ZONE& aZone, const uint8_t aKeepoutRestrictions );
-    void HelperFootprintZoneToLibFrame( ZONE& aZone, const FOOTPRINT& aFootprint );
     void HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
                                              const ALTIUM_LAYER aAltiumLayer,
                                              const uint8_t      aKeepoutRestrictions );

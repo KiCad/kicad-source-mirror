@@ -2846,7 +2846,6 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
 
-        HelperFootprintZoneToLibFrame( *zone, *aFootprint );
 
         HelperSetZoneLayers( *zone, aElem.layer );
 
@@ -5378,25 +5377,6 @@ void ALTIUM_PCB::HelperSetZoneKeepoutRestrictions( ZONE& aZone, const uint8_t aK
 }
 
 
-void ALTIUM_PCB::HelperFootprintZoneToLibFrame( ZONE& aZone, const FOOTPRINT& aFootprint )
-{
-    // A footprint zone stores its outline in the footprint's local frame and derives its board
-    // position by applying the footprint transform.  The importer builds the outline in board
-    // coordinates, so it must be re-based here or the zone drifts by the footprint offset when the
-    // board is re-centered at the end of the import.
-    const VECTOR2I  origin = aFootprint.GetPosition();
-    const EDA_ANGLE orientation = aFootprint.GetOrientation();
-    SHAPE_POLY_SET& poly = *aZone.Outline();
-
-    for( auto it = poly.IterateWithHoles(); it; it++ )
-    {
-        VECTOR2I pt = *it - origin;
-        RotatePoint( pt, -orientation );
-        poly.SetVertex( it.GetIndex(), pt );
-    }
-}
-
-
 void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
                                                      const ALTIUM_LAYER aAltiumLayer,
                                                      const uint8_t      aKeepoutRestrictions )
@@ -5431,7 +5411,6 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*         aFoo
 
     aShape.EDA_SHAPE::TransformShapeToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, ERROR_INSIDE );
 
-    HelperFootprintZoneToLibFrame( *zone, *aFootprint );
 
     zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                  ZONE::GetDefaultHatchPitch(), true );
