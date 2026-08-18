@@ -227,8 +227,12 @@ static void build_via_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             rk.y_size = 0; // Round so height = 0
             rk.rotation = 0;
 
+            // the value indicates which sides are *not* accessible
+            rk.soldermask = 0;
+
             if( via->IsTented( F_Mask ) )
                 rk.soldermask |= 1;
+
             if( via->IsTented( B_Mask ) )
                 rk.soldermask |= 2;
 

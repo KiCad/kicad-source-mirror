@@ -28,22 +28,22 @@ class wxWindow;
  * Useful because 356A (when implemented) must be sorted before outputting it */
 struct D356_RECORD
 {
-    bool       smd;
-    bool       hole;
+    bool       smd = false;
+    bool       hole = false;
     wxString   netname;
     wxString   refdes;
     wxString   pin;
-    bool       midpoint;
-    int        drill;
-    bool       mechanical;
-    int        access;      // Access 0 is 'both sides'
-    int        soldermask;
+    bool       midpoint = false;
+    int        drill = 0;
+    bool       mechanical = false;
+    int        access = 0;      // Access 0 is 'both sides'
+    int        soldermask = 0;
     // All these in PCB units, will be output in decimils
-    int        x_location;
-    int        y_location;
-    int        x_size;
-    int        y_size;
-    int        rotation;
+    int        x_location = 0;
+    int        y_location = 0;
+    int        x_size = 0;
+    int        y_size = 0;
+    int        rotation = 0;
 };
 
 
