@@ -1000,8 +1000,8 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( wxT( "Board6 stream is not fully parsed" ) );
 
-    m_board->GetDesignSettings().SetAuxOrigin( elem.sheetpos );
-    m_board->GetDesignSettings().SetGridOrigin( elem.sheetpos );
+    m_board->GetDesignSettings().SetAuxOrigin( elem.origin );
+    m_board->GetDesignSettings().SetGridOrigin( elem.origin );
 
     // read layercount from stackup, because LAYERSETSCOUNT is not always correct?!
     size_t layercount = 0;

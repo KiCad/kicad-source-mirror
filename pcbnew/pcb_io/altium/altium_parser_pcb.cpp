@@ -586,6 +586,8 @@ ABOARD6::ABOARD6( ALTIUM_BINARY_PARSER& aReader )
     if( props.empty() )
         THROW_IO_ERROR( wxT( "Board6 stream has no properties!" ) );
 
+    origin    = VECTOR2I( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "ORIGINX" ), wxT( "0mil" ) ),
+                          -ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "ORIGINY" ), wxT( "0mil" ) ) );
     sheetpos  = VECTOR2I( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "SHEETX" ), wxT( "0mil" ) ),
                           -ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "SHEETY" ), wxT( "0mil" ) ) );
     sheetsize = wxSize( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "SHEETWIDTH" ), wxT( "0mil" ) ),

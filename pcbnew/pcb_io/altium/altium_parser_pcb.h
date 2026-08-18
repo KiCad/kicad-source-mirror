@@ -489,6 +489,10 @@ struct ALIBRARY
 
 struct ABOARD6
 {
+    // ORIGINX/ORIGINY, the user's relative origin.  Distinct from the sheet placement below
+    VECTOR2I origin;
+
+    // SHEETX/SHEETY, the drawing sheet corner.  Not a design origin
     VECTOR2I sheetpos;
     wxSize   sheetsize;
 

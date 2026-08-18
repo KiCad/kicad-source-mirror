@@ -29,6 +29,7 @@
 #include <pcbnew/pcb_io/altium/pcb_io_altium_designer.h>
 #include <pcbnew/pcb_io/altium/altium_parser_pcb.h>
 
+#include <base_units.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -876,6 +877,61 @@ BOOST_AUTO_TEST_CASE( RegionSolderMaskExpansion )
     }
 
     BOOST_CHECK_MESSAGE( exactMatches == 1, "F_Mask relief aperture must exactly match exactly one copper region" );
+}
+
+
+// The importer recentres the board on the page after parsing and shifts both origins by that same
+// vector, so only the origin's offset from the board outline survives the move
+static void checkImportedOriginOffset( PCB_IO_ALTIUM_DESIGNER& aPlugin,
+                                       const std::string& aRelativePath,
+                                       double aExpectedXmm, double aExpectedYmm )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + aRelativePath;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    aPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    const BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+
+    // Altium carries a single relative origin, so both KiCad origins have to land on it
+    BOOST_CHECK( bds.GetGridOrigin() == bds.GetAuxOrigin() );
+
+    BOX2I outline = board->GetBoardEdgesBoundingBox();
+
+    BOOST_REQUIRE_GT( outline.GetArea(), 0 );
+
+    double offsetXmm = pcbIUScale.IUTomm( bds.GetGridOrigin().x - outline.GetLeft() );
+    double offsetYmm = pcbIUScale.IUTomm( bds.GetGridOrigin().y - outline.GetTop() );
+
+    // Absorbs the edge-cut stroke width the bounding box adds, far below the tens of millimetres
+    // separating the relative origin from the sheet corner on these boards
+    const double toleranceMm = 1.0;
+
+    BOOST_CHECK_MESSAGE( std::abs( offsetXmm - aExpectedXmm ) < toleranceMm,
+                         wxString::Format( "%s: origin sits %.3f mm right of the outline corner, "
+                                           "expected %.3f",
+                                           aRelativePath, offsetXmm, aExpectedXmm ) );
+
+    BOOST_CHECK_MESSAGE( std::abs( offsetYmm - aExpectedYmm ) < toleranceMm,
+                         wxString::Format( "%s: origin sits %.3f mm below the outline corner, "
+                                           "expected %.3f",
+                                           aRelativePath, offsetYmm, aExpectedYmm ) );
+}
+
+
+// https://gitlab.com/kicad/code/kicad/-/issues/25057
+BOOST_AUTO_TEST_CASE( RelativeOriginNotSheetCorner )
+{
+    // The sheet corner would land 186.600/142.375 mm from these offsets
+    checkImportedOriginOffset( m_altiumPlugin,
+                               "plugins/altium/eDP_adapter_dvt1_source/eDP_adapter_dvt1.PcbDoc",
+                               46.300, 7.400 );
+
+    // Origin sits on the left edge; the sheet corner would land 51.308/50.165 mm away
+    checkImportedOriginOffset( m_altiumPlugin, "plugins/altium/issue24847/PCB1.PcbDoc", 0.000,
+                               15.000 );
 }
 
 
