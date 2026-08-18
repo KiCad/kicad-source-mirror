@@ -211,7 +211,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20260623  // Migrate reference image scale for PNG pixel-density fix
 //#define SEXPR_BOARD_FILE_VERSION    20260624  // Geometric constraints (#2329)
 //#define SEXPR_BOARD_FILE_VERSION    20260728  // Grid items
-#define SEXPR_BOARD_FILE_VERSION      20260816  // Via stitching and guarding
+//#define SEXPR_BOARD_FILE_VERSION    20260816  // Via stitching and guarding
+#define SEXPR_BOARD_FILE_VERSION      20260818  // Line ending shapes
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

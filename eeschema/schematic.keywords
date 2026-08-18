@@ -1,6 +1,8 @@
 alternate
 anchor
 angles
+arrow
+arrow_open
 arc
 associated_footprints
 at
@@ -53,6 +55,7 @@ embedded_fonts
 embedded_files
 end
 end_angle
+end_shape
 entry
 extends
 external
@@ -179,8 +182,10 @@ net_chain
 nets
 to
 span
+square
 start
 start_angle
+start_shape
 stroke
 symbol
 symbol_instances

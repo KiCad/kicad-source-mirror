@@ -20,7 +20,9 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/unit_test.hpp>
 
+#include <drc/drc_rtree.h>
 #include <pcb_shape.h>
+#include <geometry/shape_segment.h>
 #include <properties/property_mgr.h>
 #include <properties/property.h>
 #include <i18n_utility.h>
@@ -56,4 +58,81 @@ BOOST_AUTO_TEST_CASE( PCBShapeCornerRadiusValidation )
 
     auto resultOK = prop->Validate( wxAny( 200 ), &shape );
     BOOST_CHECK( !resultOK.has_value() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ShapeEffectiveGeometryHitsLineEnding )
+{
+    PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+    shape.SetLayer( F_Cu );
+    shape.SetStart( VECTOR2I( 0, 0 ) );
+    shape.SetEnd( VECTOR2I( 1000, 0 ) );
+    shape.SetWidth( 100 );
+    shape.SetStartEndingStyle( LINE_ENDING_STYLE::SQUARE );
+    shape.SetStartEndingLength( 400 );
+    shape.SetStartEndingWidth( 400 );
+
+    std::shared_ptr<SHAPE> effectiveShape = shape.GetEffectiveShape( F_Cu );
+    SHAPE_SEGMENT          probe( VECTOR2I( 0, -150 ), VECTOR2I( 0, 150 ), 20 );
+
+    BOOST_REQUIRE( effectiveShape );
+    BOOST_CHECK( effectiveShape->Collide( probe.GetSeg(), 0 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PCBShapeLineEndingRTreeQuery )
+{
+    PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+    shape.SetLayer( F_Cu );
+    shape.SetStart( VECTOR2I( 0, 0 ) );
+    shape.SetEnd( VECTOR2I( 1000, 0 ) );
+    shape.SetWidth( 100 );
+    shape.SetStartEndingStyle( LINE_ENDING_STYLE::SQUARE );
+    shape.SetStartEndingLength( 400 );
+    shape.SetStartEndingWidth( 400 );
+
+    PCB_SHAPE probe( nullptr, SHAPE_T::SEGMENT );
+    probe.SetLayer( F_Cu );
+    probe.SetStart( VECTOR2I( 0, -150 ) );
+    probe.SetEnd( VECTOR2I( 0, 150 ) );
+    probe.SetWidth( 20 );
+
+    DRC_RTREE rtree;
+    rtree.Insert( &shape, F_Cu, CLEARANCE_CONSTRAINT );
+    rtree.Build();
+
+    BOOST_CHECK_EQUAL( rtree.QueryColliding( &probe, F_Cu, F_Cu ), 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( PCBShapeHitTestHitsLineEnding )
+{
+    PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+    shape.SetLayer( F_Cu );
+    shape.SetStart( VECTOR2I( 0, 0 ) );
+    shape.SetEnd( VECTOR2I( 1000, 0 ) );
+    shape.SetWidth( 100 );
+    shape.SetStartEndingStyle( LINE_ENDING_STYLE::SQUARE );
+    shape.SetStartEndingLength( 400 );
+    shape.SetStartEndingWidth( 400 );
+
+    BOOST_CHECK( shape.HitTest( VECTOR2I( 0, 150 ), 0 ) );
+
+    BOX2I selection( VECTOR2I( -50, 100 ), VECTOR2I( 100, 80 ) );
+    BOOST_CHECK( shape.HitTest( selection, false, 0 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PCBShapeShortLineHitTestHitsConsumedBodyEnding )
+{
+    PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+    shape.SetLayer( F_Cu );
+    shape.SetStart( VECTOR2I( 0, 0 ) );
+    shape.SetEnd( VECTOR2I( 100, 0 ) );
+    shape.SetWidth( 20 );
+    shape.SetEndEndingStyle( LINE_ENDING_STYLE::ARROW );
+    shape.SetEndEndingLength( 400 );
+    shape.SetEndEndingWidth( 400 );
+
+    BOOST_CHECK( shape.HitTest( VECTOR2I( -200, 100 ), 0 ) );
 }

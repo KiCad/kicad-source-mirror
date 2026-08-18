@@ -28,6 +28,7 @@
 
 #include <eda_units.h>
 #include <core/wx_stl_compat.h>
+#include <line_ending.h>
 #include <hashtables.h>
 #include <lib_id.h>
 #include <layer_ids.h>     // PCB_LAYER_ID
@@ -274,6 +275,13 @@ private:
     void parseTextBoxContent( PCB_TEXTBOX* aTextBox );
 
     void bakeTextBoxLib( PCB_TEXTBOX* aTextBox );
+
+    /**
+     * Parse a line ending definition from the token stream.
+     *
+     * @param aEnding A reference to the #LINE_ENDING structure to write to.
+     */
+    void parseLineEnding( LINE_ENDING& aEnding );
 
     PCB_SHAPE*           parsePCB_SHAPE( BOARD_ITEM* aParent );
     PCB_TEXT*            parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEXT* aBaseText = nullptr );

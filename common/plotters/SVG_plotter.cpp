@@ -288,7 +288,9 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
         case LINE_STYLE::DEFAULT:
         case LINE_STYLE::SOLID:
         default:
-            //do nothing
+            // Explicitly reset the dash pattern: stroke-dasharray is inherited in SVG, so
+            // inline path styles inside a dashed group would otherwise pick it up.
+            fmt::print( m_outputFile, "stroke-dasharray:none;" );
             break;
         }
     }

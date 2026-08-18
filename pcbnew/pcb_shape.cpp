@@ -1634,9 +1634,23 @@ const BOX2I PCB_SHAPE::ViewBBox() const
 }
 
 
+const BOX2I PCB_SHAPE::GetBoundingBox() const
+{
+    BOX2I bbox = getBoundingBox();
+    BOX2I endingsBBox;
+
+    if( GetLineEndingsBoundingBox( endingsBBox, GetEffectiveWidth() ) )
+        bbox.Merge( endingsBBox );
+
+    bbox.Normalize();
+
+    return bbox;
+}
+
+
 std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
-    return std::make_shared<SHAPE_COMPOUND>( MakeEffectiveShapes() );
+    return std::make_shared<SHAPE_COMPOUND>( MakeEffectiveShapesWithLineEndings( GetEffectiveWidth() ) );
 }
 
 

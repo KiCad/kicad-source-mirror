@@ -253,6 +253,48 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
 }
 
 
+BOOST_FIXTURE_TEST_CASE( ZoneFillClearsLineEndings, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "line_ending_zone_flood/line_ending_zone_flood", m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    KI_TEST::FillZones( m_board.get() );
+
+    std::vector<DRC_ITEM> violations;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I&, int,
+                 const std::function<void( PCB_MARKER* )>& )
+            {
+                if( aItem->GetErrorCode() == DRCE_CLEARANCE || aItem->GetErrorCode() == DRCE_SHORTING_ITEMS )
+                {
+                    violations.push_back( *aItem );
+                }
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+    bds.m_DRCEngine->ClearViolationHandler();
+
+    if( violations.empty() )
+    {
+        BOOST_CHECK_EQUAL( violations.size(), 0 );
+        return;
+    }
+
+    UNITS_PROVIDER            unitsProvider( pcbIUScale, EDA_UNITS::INCH );
+    std::map<KIID, EDA_ITEM*> itemMap;
+    m_board->FillItemMap( itemMap );
+
+    for( const DRC_ITEM& item : violations )
+        BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+
+    BOOST_ERROR( wxString::Format( "Zone fill line-ending regression failed with %d "
+                                   "clearance/shorting violations",
+                                   (int) violations.size() ) );
+}
+
+
 /**
  * Test for issue 23053: Zone clearance violations between zones with iterative refill.
  *

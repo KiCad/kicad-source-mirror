@@ -26,6 +26,7 @@
 #include <functional>
 #include <stack>
 #include <optional>
+#include <eda_shape.h>
 #include <tool/tool_menu.h>
 #include <tools/pcb_selection.h>
 #include <tools/pcb_tool_base.h>

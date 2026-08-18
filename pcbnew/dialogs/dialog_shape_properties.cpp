@@ -43,6 +43,16 @@
 
 #include <dialogs/geom_field_helpers.h>
 #include <tools/drawing_tool.h>
+#include <line_ending.h>
+#include <widgets/line_ending_bitmap.h>
+
+
+// Mapping between wxChoice index and LINE_ENDING_STYLE enum.
+// Dropdown order: None, Arrow, Open Arrow, Circle, Square
+static bool isOpenShape( SHAPE_T aShape )
+{
+    return aShape == SHAPE_T::ARC || aShape == SHAPE_T::BEZIER || aShape == SHAPE_T::SEGMENT;
+}
 
 
 /**
@@ -946,6 +956,7 @@ private:
     void onTechLayersChanged( wxCommandEvent& event ) override;
 
     bool Validate() override;
+    void createLineEndingControls( PCB_BASE_EDIT_FRAME* aParent );
 
     void enableNetInfo()
     {
@@ -977,6 +988,38 @@ private:
     UNIT_BINDER           m_thickness;
     UNIT_BINDER           m_solderMaskMargin;
 
+    wxBoxSizer*       m_endingsSizer;
+    wxStaticText*     m_startShapeLabel;
+    wxBitmapComboBox* m_startShapeChoice;
+    wxStaticText*     m_endShapeLabel;
+    wxBitmapComboBox* m_endShapeChoice;
+    wxStaticText*     m_startLengthLabel;
+    wxTextCtrl*       m_startLengthCtrl;
+    wxStaticText*     m_startLengthUnits;
+    wxStaticText*     m_endLengthLabel;
+    wxTextCtrl*       m_endLengthCtrl;
+    wxStaticText*     m_endLengthUnits;
+    wxStaticText*     m_startWidthLabel;
+    wxTextCtrl*       m_startWidthCtrl;
+    wxStaticText*     m_startWidthUnits;
+    wxStaticText*     m_endWidthLabel;
+    wxTextCtrl*       m_endWidthCtrl;
+    wxStaticText*     m_endWidthUnits;
+    wxStaticText*     m_startStrokeWidthLabel;
+    wxTextCtrl*       m_startStrokeWidthCtrl;
+    wxStaticText*     m_startStrokeWidthUnits;
+    wxStaticText*     m_endStrokeWidthLabel;
+    wxTextCtrl*       m_endStrokeWidthCtrl;
+    wxStaticText*     m_endStrokeWidthUnits;
+    wxStaticText*     m_endingsHelpLabel;
+
+    std::unique_ptr<UNIT_BINDER> m_startLength;
+    std::unique_ptr<UNIT_BINDER> m_startWidth;
+    std::unique_ptr<UNIT_BINDER> m_startStrokeWidth;
+    std::unique_ptr<UNIT_BINDER> m_endLength;
+    std::unique_ptr<UNIT_BINDER> m_endWidth;
+    std::unique_ptr<UNIT_BINDER> m_endStrokeWidth;
+
     std::vector<BOUND_CONTROL>   m_boundCtrls;
     std::unique_ptr<GEOM_SYNCER> m_geomSync;
     PCB_SHAPE                    m_workingCopy;
@@ -984,6 +1027,113 @@ private:
 
 
 static std::map<SHAPE_T, int> s_lastTabForShape;
+
+
+void DIALOG_SHAPE_PROPERTIES::createLineEndingControls( PCB_BASE_EDIT_FRAME* aParent )
+{
+    wxCHECK_RET( m_upperSizer, wxT( "Shape properties dialog has no upper sizer" ) );
+
+    m_endingsSizer = new wxBoxSizer( wxVERTICAL );
+
+    wxGridBagSizer* gbSizerEndings = new wxGridBagSizer( 3, 0 );
+    gbSizerEndings->SetFlexibleDirection( wxBOTH );
+    gbSizerEndings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+    m_startShapeLabel = new wxStaticText( this, wxID_ANY, _( "Start Shape:" ) );
+    m_startShapeLabel->Wrap( -1 );
+    gbSizerEndings->Add( m_startShapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL | wxRIGHT,
+                         5 );
+
+    m_startShapeChoice = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0,
+                                               nullptr, wxCB_READONLY );
+    gbSizerEndings->Add( m_startShapeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL | wxEXPAND,
+                         5 );
+
+    m_endShapeLabel = new wxStaticText( this, wxID_ANY, _( "End Shape:" ) );
+    m_endShapeLabel->Wrap( -1 );
+    gbSizerEndings->Add( m_endShapeLabel, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ),
+                         wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
+
+    m_endShapeChoice = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0,
+                                             nullptr, wxCB_READONLY );
+    gbSizerEndings->Add( m_endShapeChoice, wxGBPosition( 0, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL | wxEXPAND,
+                         5 );
+
+    auto addEndingValue = [&]( int aRow, int aCol, const wxString& aLabel, wxStaticText*& aLabelCtrl,
+                               wxTextCtrl*& aValueCtrl, wxStaticText*& aUnitsCtrl, int aFlags )
+    {
+        aLabelCtrl = new wxStaticText( this, wxID_ANY, aLabel );
+        aLabelCtrl->Wrap( -1 );
+        gbSizerEndings->Add( aLabelCtrl, wxGBPosition( aRow, aCol ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL | aFlags,
+                             5 );
+
+        aValueCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1, -1 ), 0 );
+        gbSizerEndings->Add( aValueCtrl, wxGBPosition( aRow, aCol + 1 ), wxGBSpan( 1, 1 ),
+                             wxALIGN_CENTER_VERTICAL | wxEXPAND, 5 );
+
+        aUnitsCtrl = new wxStaticText( this, wxID_ANY, _( "unit" ) );
+        aUnitsCtrl->Wrap( -1 );
+        aUnitsCtrl->SetMinSize( wxSize( 60, -1 ) );
+        gbSizerEndings->Add( aUnitsCtrl, wxGBPosition( aRow, aCol + 2 ), wxGBSpan( 1, 1 ),
+                             wxALIGN_CENTER_VERTICAL | wxLEFT, 3 );
+    };
+
+    addEndingValue( 1, 0, _( "Start Length:" ), m_startLengthLabel, m_startLengthCtrl, m_startLengthUnits, wxRIGHT );
+    addEndingValue( 1, 4, _( "End Length:" ), m_endLengthLabel, m_endLengthCtrl, m_endLengthUnits, wxLEFT | wxRIGHT );
+    addEndingValue( 2, 0, _( "Start Width:" ), m_startWidthLabel, m_startWidthCtrl, m_startWidthUnits, wxRIGHT );
+    addEndingValue( 2, 4, _( "End Width:" ), m_endWidthLabel, m_endWidthCtrl, m_endWidthUnits, wxLEFT | wxRIGHT );
+    addEndingValue( 3, 0, _( "Start Stroke Width:" ), m_startStrokeWidthLabel, m_startStrokeWidthCtrl,
+                    m_startStrokeWidthUnits, wxRIGHT );
+    addEndingValue( 3, 4, _( "End Stroke Width:" ), m_endStrokeWidthLabel, m_endStrokeWidthCtrl, m_endStrokeWidthUnits,
+                    wxLEFT | wxRIGHT );
+
+    gbSizerEndings->AddGrowableCol( 1 );
+    gbSizerEndings->AddGrowableCol( 5 );
+
+    m_endingsSizer->Add( gbSizerEndings, 0, wxEXPAND | wxALL, 5 );
+
+    m_endingsHelpLabel = new wxStaticText( this, wxID_ANY, wxEmptyString );
+    m_endingsHelpLabel->Wrap( -1 );
+    m_endingsSizer->Add( m_endingsHelpLabel, 0, wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+
+    m_upperSizer->Insert( 1, m_endingsSizer, 0, wxEXPAND, 5 );
+
+    wxColour fg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+    wxSize   iconSize( 80, 24 );
+
+    struct
+    {
+        wxString          name;
+        LINE_ENDING_STYLE style;
+    } shapeItems[] = {
+        { _( "None" ), LINE_ENDING_STYLE::NONE },
+        { _( "Arrow" ), LINE_ENDING_STYLE::ARROW },
+        { _( "Open Arrow" ), LINE_ENDING_STYLE::ARROW_OPEN },
+        { _( "Circle" ), LINE_ENDING_STYLE::CIRCLE },
+        { _( "Square" ), LINE_ENDING_STYLE::SQUARE },
+    };
+
+    for( const auto& item : shapeItems )
+    {
+        wxBitmap startBmp = MakeLineEndingBitmap( item.style, iconSize, fg, bg, this, false );
+        wxBitmap endBmp = MakeLineEndingBitmap( item.style, iconSize, fg, bg, this, true );
+        m_startShapeChoice->Append( item.name, startBmp );
+        m_endShapeChoice->Append( item.name, endBmp );
+    }
+
+    m_startShapeChoice->SetSelection( 0 );
+    m_endShapeChoice->SetSelection( 0 );
+
+    m_startLength = std::make_unique<UNIT_BINDER>( aParent, m_startLengthLabel, m_startLengthCtrl, m_startLengthUnits );
+    m_startWidth = std::make_unique<UNIT_BINDER>( aParent, m_startWidthLabel, m_startWidthCtrl, m_startWidthUnits );
+    m_startStrokeWidth = std::make_unique<UNIT_BINDER>( aParent, m_startStrokeWidthLabel, m_startStrokeWidthCtrl,
+                                                        m_startStrokeWidthUnits );
+    m_endLength = std::make_unique<UNIT_BINDER>( aParent, m_endLengthLabel, m_endLengthCtrl, m_endLengthUnits );
+    m_endWidth = std::make_unique<UNIT_BINDER>( aParent, m_endWidthLabel, m_endWidthCtrl, m_endWidthUnits );
+    m_endStrokeWidth = std::make_unique<UNIT_BINDER>( aParent, m_endStrokeWidthLabel, m_endStrokeWidthCtrl,
+                                                      m_endStrokeWidthUnits );
+}
 
 
 DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_SHAPE* aShape ):
@@ -997,6 +1147,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 {
     SetTitle( wxString::Format( GetTitle(), m_item->GetFriendlyName() ) );
     m_hash_key = TO_UTF8( GetTitle() );
+
+    createLineEndingControls( aParent );
 
     wxFont infoFont = KIUI::GetSmallInfoFont( this );
     m_techLayersLabel->SetFont( infoFont );
@@ -1218,6 +1370,13 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         m_cornerRadius.Show( false );
     }
 
+    // Only show line ending controls for open shapes
+    m_endingsSizer->Show( isOpenShape( m_item->GetShape() ) );
+
+    m_endingsHelpLabel->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
+    m_endingsHelpLabel->SetLabel( wxString::Format( _( "Shape sizes of 0 = auto (%g\u00d7 line width)." ),
+                                                    LINE_ENDING::DEFAULT_RATIO_LENGTH ) );
+
     SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
@@ -1332,6 +1491,19 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     enableNetInfo();
     enableTechLayers();
 
+    // Line endings (only for open shapes)
+    if( isOpenShape( m_item->GetShape() ) )
+    {
+        m_startShapeChoice->SetSelection( LINE_ENDING::StyleToChoiceIndex( m_item->GetStartEndingStyle() ) );
+        m_endShapeChoice->SetSelection( LINE_ENDING::StyleToChoiceIndex( m_item->GetEndEndingStyle() ) );
+        m_startLength->SetValue( m_item->GetStartEndingLength() );
+        m_startWidth->SetValue( m_item->GetStartEndingWidth() );
+        m_startStrokeWidth->SetValue( m_item->GetStartEndingStrokeWidth() );
+        m_endLength->SetValue( m_item->GetEndEndingLength() );
+        m_endWidth->SetValue( m_item->GetEndEndingWidth() );
+        m_endStrokeWidth->SetValue( m_item->GetEndEndingStrokeWidth() );
+    }
+
     return DIALOG_SHAPE_PROPERTIES_BASE::TransferDataToWindow();
 }
 
@@ -1384,6 +1556,38 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
         m_item->SetLocalSolderMaskMargin( {} );
     else
         m_item->SetLocalSolderMaskMargin( m_solderMaskMargin.GetIntValue() );
+
+    // Line endings (only for open shapes)
+    if( isOpenShape( m_item->GetShape() ) )
+    {
+        int startSel = m_startShapeChoice->GetSelection();
+
+        if( startSel >= 0 && startSel < LINE_ENDING::s_defaultChoiceCount )
+            m_item->SetStartEndingStyle( LINE_ENDING::s_defaultChoiceOrder[startSel] );
+
+        int endSel = m_endShapeChoice->GetSelection();
+
+        if( endSel >= 0 && endSel < LINE_ENDING::s_defaultChoiceCount )
+            m_item->SetEndEndingStyle( LINE_ENDING::s_defaultChoiceOrder[endSel] );
+
+        if( !m_startLength->IsIndeterminate() )
+            m_item->SetStartEndingLength( std::max( 0, m_startLength->GetIntValue() ) );
+
+        if( !m_startWidth->IsIndeterminate() )
+            m_item->SetStartEndingWidth( std::max( 0, m_startWidth->GetIntValue() ) );
+
+        if( !m_startStrokeWidth->IsIndeterminate() )
+            m_item->SetStartEndingStrokeWidth( std::max( 0, m_startStrokeWidth->GetIntValue() ) );
+
+        if( !m_endLength->IsIndeterminate() )
+            m_item->SetEndEndingLength( std::max( 0, m_endLength->GetIntValue() ) );
+
+        if( !m_endWidth->IsIndeterminate() )
+            m_item->SetEndEndingWidth( std::max( 0, m_endWidth->GetIntValue() ) );
+
+        if( !m_endStrokeWidth->IsIndeterminate() )
+            m_item->SetEndEndingStrokeWidth( std::max( 0, m_endStrokeWidth->GetIntValue() ) );
+    }
 
     m_item->RebuildBezierToSegmentsPointsList( m_item->GetMaxError() );
 

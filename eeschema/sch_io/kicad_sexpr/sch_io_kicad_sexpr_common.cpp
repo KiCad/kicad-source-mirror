@@ -236,6 +236,8 @@ void formatArc( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aArc, bool aIsPrivate,
                        formatIU( aArc->GetEnd(), aInvertY ).c_str() );
 
     aStroke.Format( aFormatter, schIUScale );
+    aArc->GetStartEnding().Format( aFormatter, schIUScale, "start_shape" );
+    aArc->GetEndEnding().Format( aFormatter, schIUScale, "end_shape" );
     formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
@@ -310,6 +312,8 @@ void formatBezier( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aBezier, bool aIsPriv
     aFormatter->Print( ")" );  // Closes pts token
 
     aStroke.Format( aFormatter, schIUScale );
+    aBezier->GetStartEnding().Format( aFormatter, schIUScale, "start_shape" );
+    aBezier->GetEndEnding().Format( aFormatter, schIUScale, "end_shape" );
     formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )
@@ -346,6 +350,8 @@ void formatPoly( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aPolyLine, bool aIsPriv
     aFormatter->Print( ")" );  // Closes pts token
 
     aStroke.Format( aFormatter, schIUScale );
+    aPolyLine->GetStartEnding().Format( aFormatter, schIUScale, "start_shape" );
+    aPolyLine->GetEndEnding().Format( aFormatter, schIUScale, "end_shape" );
     formatFill( aFormatter, aFillMode, aFillColor );
 
     if( aUuid != niluuid )

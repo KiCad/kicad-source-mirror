@@ -24,9 +24,12 @@
 #include <core/mirror.h>
 #include <sch_painter.h>
 #include <sch_plotter.h>
+#include <geometry/shape_compound.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_utils.h>
 #include <geometry/geometry_utils.h>
 #include <sch_line.h>
+#include <eda_shape.h>
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
 #include <connection_graph.h>
@@ -42,6 +45,30 @@
 #include <properties/property_mgr.h>
 #include <origin_transforms.h>
 #include <math/util.h>
+
+
+namespace
+{
+
+bool hasLineEnding( const SCH_LINE& aLine )
+{
+    return aLine.GetStartEndingStyle() != LINE_ENDING_STYLE::NONE
+           || aLine.GetEndEndingStyle() != LINE_ENDING_STYLE::NONE;
+}
+
+
+EDA_SHAPE makeLineEndingShape( const SCH_LINE& aLine )
+{
+    EDA_SHAPE shape( SHAPE_T::SEGMENT, aLine.GetPenWidth(), FILL_T::NO_FILL );
+    shape.SetStart( aLine.GetStartPoint() );
+    shape.SetEnd( aLine.GetEndPoint() );
+    shape.SetStartEnding( aLine.GetStartEnding() );
+    shape.SetEndEnding( aLine.GetEndEnding() );
+
+    return shape;
+}
+
+} // namespace
 
 
 SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
@@ -91,6 +118,8 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
     m_lastResolvedColor = aLine.m_lastResolvedColor;
 
     m_operatingPoint = aLine.m_operatingPoint;
+    m_startEnding = aLine.m_startEnding;
+    m_endEnding = aLine.m_endEnding;
 
     // Don't apply groups to cloned lines. We have too many areas where we clone them
     // temporarily, then modify/split/join them in the line movement routines after the
@@ -279,6 +308,15 @@ const BOX2I SCH_LINE::GetBoundingBox() const
     int   ymax = std::max( m_start.y, m_end.y ) + width + 1;
 
     BOX2I ret( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin, ymax - ymin ) );
+
+    if( IsGraphicLine() )
+    {
+        EDA_SHAPE tempShape = makeLineEndingShape( *this );
+        BOX2I     endingsBBox;
+
+        if( tempShape.GetLineEndingsBoundingBox( endingsBBox, GetPenWidth() ) )
+            ret.Merge( endingsBBox );
+    }
 
     return ret;
 }
@@ -857,6 +895,16 @@ bool SCH_LINE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     if( aPosition == m_start || aPosition == m_end )
         return true;
 
+    if( IsGraphicLine() && hasLineEnding( *this ) )
+    {
+        EDA_SHAPE      tempShape = makeLineEndingShape( *this );
+        SHAPE_COMPOUND shape( tempShape.MakeEffectiveShapesWithLineEndings( GetPenWidth() ) );
+        const SHAPE&   hitShape = shape;
+        int            accuracy = aAccuracy >= 0 ? aAccuracy : abs( aAccuracy );
+
+        return hitShape.Collide( aPosition, accuracy );
+    }
+
     if( aAccuracy >= 0 )
         aAccuracy += GetPenWidth() / 2;
     else
@@ -876,6 +924,15 @@ bool SCH_LINE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
     if ( aAccuracy )
         rect.Inflate( aAccuracy );
 
+    if( IsGraphicLine() && hasLineEnding( *this ) )
+    {
+        EDA_SHAPE        tempShape = makeLineEndingShape( *this );
+        SHAPE_COMPOUND   shape( tempShape.MakeEffectiveShapesWithLineEndings( GetPenWidth() ) );
+        SHAPE_LINE_CHAIN selection = KIGEOM::BoxToLineChain( rect );
+
+        return KIGEOM::ShapeHitTest( selection, shape, aContained );
+    }
+
     if( aContained )
         return rect.Contains( m_start ) && rect.Contains( m_end );
 
@@ -887,6 +944,14 @@ bool SCH_LINE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
 {
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
+
+    if( IsGraphicLine() && hasLineEnding( *this ) )
+    {
+        EDA_SHAPE      tempShape = makeLineEndingShape( *this );
+        SHAPE_COMPOUND shape( tempShape.MakeEffectiveShapesWithLineEndings( GetPenWidth() ) );
+
+        return KIGEOM::ShapeHitTest( aPoly, shape, aContained );
+    }
 
     SHAPE_SEGMENT line( m_start, m_end, GetPenWidth() );
     return KIGEOM::ShapeHitTest( aPoly, line, aContained );
@@ -902,6 +967,8 @@ void SCH_LINE::swapData( SCH_ITEM* aItem )
     std::swap( m_startIsDangling, item->m_startIsDangling );
     std::swap( m_endIsDangling, item->m_endIsDangling );
     std::swap( m_stroke, item->m_stroke );
+    std::swap( m_startEnding, item->m_startEnding );
+    std::swap( m_endEnding, item->m_endEnding );
 }
 
 
@@ -935,10 +1002,30 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetDash( penWidth, GetEffectiveLineStyle() );
 
-    aPlotter->MoveTo( m_start );
-    aPlotter->FinishTo( m_end );
+    VECTOR2I plotStart = m_start;
+    VECTOR2I plotEnd = m_end;
+    bool     drawLineBody = true;
+
+    if( IsGraphicLine() )
+    {
+        drawLineBody =
+                EDA_SHAPE::ShortenSegmentForEndings( plotStart, plotEnd, GetStartEnding(), GetEndEnding(), penWidth );
+    }
+
+    if( drawLineBody )
+    {
+        aPlotter->MoveTo( plotStart );
+        aPlotter->FinishTo( plotEnd );
+    }
 
     aPlotter->SetDash( penWidth, LINE_STYLE::SOLID );
+
+    if( IsGraphicLine() )
+    {
+        EDA_ANGLE lineAngle( m_end - m_start );
+        GetStartEnding().Plot( aPlotter, m_start, lineAngle + ANGLE_180, penWidth );
+        GetEndEnding().Plot( aPlotter, m_end, lineAngle, penWidth );
+    }
 
     // Plot attributes to a hypertext menu
     std::vector<wxString> properties;
@@ -1069,6 +1156,12 @@ bool SCH_LINE::operator==( const SCH_ITEM& aOther ) const
     if( m_stroke.GetLineStyle() != other.m_stroke.GetLineStyle() )
         return false;
 
+    if( m_startEnding != other.m_startEnding )
+        return false;
+
+    if( m_endEnding != other.m_endEnding )
+        return false;
+
     return true;
 }
 
@@ -1101,6 +1194,12 @@ double SCH_LINE::Similarity( const SCH_ITEM& aOther ) const
         similarity *= 0.9;
 
     if( m_stroke.GetLineStyle() != other.m_stroke.GetLineStyle() )
+        similarity *= 0.9;
+
+    if( m_startEnding != other.m_startEnding )
+        similarity *= 0.9;
+
+    if( m_endEnding != other.m_endEnding )
         similarity *= 0.9;
 
     return similarity;
@@ -1258,6 +1357,17 @@ static struct SCH_LINE_DESC
 {
     SCH_LINE_DESC()
     {
+        ENUM_MAP<LINE_ENDING_STYLE>& endingStyleEnum = ENUM_MAP<LINE_ENDING_STYLE>::Instance();
+
+        if( endingStyleEnum.Choices().GetCount() == 0 )
+        {
+            endingStyleEnum.Map( LINE_ENDING_STYLE::NONE, _HKI( "None" ) )
+                    .Map( LINE_ENDING_STYLE::ARROW, _HKI( "Arrow" ) )
+                    .Map( LINE_ENDING_STYLE::CIRCLE, _HKI( "Circle" ) )
+                    .Map( LINE_ENDING_STYLE::SQUARE, _HKI( "Square" ) )
+                    .Map( LINE_ENDING_STYLE::ARROW_OPEN, _HKI( "Open Arrow" ) );
+        }
+
         ENUM_MAP<LINE_STYLE>& lineStyleEnum = ENUM_MAP<LINE_STYLE>::Instance();
 
         if( lineStyleEnum.Choices().GetCount() == 0 )
@@ -1335,6 +1445,41 @@ static struct SCH_LINE_DESC
 
         propMgr.AddProperty( new PROPERTY<SCH_LINE, COLOR4D>( _HKI( "Color" ),
                     &SCH_LINE::SetLineColor, &SCH_LINE::GetLineColor ) );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, LINE_ENDING_STYLE>( _HKI( "Start Shape" ),
+                                                                             &SCH_LINE::SetStartEndingStyle,
+                                                                             &SCH_LINE::GetStartEndingStyle ) )
+                .SetAvailableFunc( isGraphicLine );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start Length" ), &SCH_LINE::SetStartEndingLength,
+                                                          &SCH_LINE::GetStartEndingLength, PROPERTY_DISPLAY::PT_SIZE ) )
+                .SetAvailableFunc( isGraphicLine );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start Width" ), &SCH_LINE::SetStartEndingWidth,
+                                                          &SCH_LINE::GetStartEndingWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+                .SetAvailableFunc( isGraphicLine );
+
+        propMgr.AddProperty(
+                       new PROPERTY<SCH_LINE, int>( _HKI( "Start Stroke Width" ), &SCH_LINE::SetStartEndingStrokeWidth,
+                                                    &SCH_LINE::GetStartEndingStrokeWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+                .SetAvailableFunc( isGraphicLine );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, LINE_ENDING_STYLE>(
+                                     _HKI( "End Shape" ), &SCH_LINE::SetEndEndingStyle, &SCH_LINE::GetEndEndingStyle ) )
+                .SetAvailableFunc( isGraphicLine );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End Length" ), &SCH_LINE::SetEndEndingLength,
+                                                          &SCH_LINE::GetEndEndingLength, PROPERTY_DISPLAY::PT_SIZE ) )
+                .SetAvailableFunc( isGraphicLine );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End Width" ), &SCH_LINE::SetEndEndingWidth,
+                                                          &SCH_LINE::GetEndEndingWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+                .SetAvailableFunc( isGraphicLine );
+
+        propMgr.AddProperty(
+                       new PROPERTY<SCH_LINE, int>( _HKI( "End Stroke Width" ), &SCH_LINE::SetEndEndingStrokeWidth,
+                                                    &SCH_LINE::GetEndEndingStrokeWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+                .SetAvailableFunc( isGraphicLine );
     }
 } _SCH_LINE_DESC;
 

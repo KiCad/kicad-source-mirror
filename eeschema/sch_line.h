@@ -22,6 +22,7 @@
 #define _SCH_LINE_H_
 
 #include <sch_item.h>
+#include <line_ending.h>
 #include <wx/pen.h>     // for wxPenStyle
 #include <list>         // for std::list
 #include <geometry/seg.h>
@@ -196,6 +197,33 @@ public:
     virtual bool HasLineStroke() const override { return true; }
     virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
+
+    const LINE_ENDING& GetStartEnding() const { return m_startEnding; }
+    void               SetStartEnding( const LINE_ENDING& aEnding ) { m_startEnding = aEnding; }
+
+    const LINE_ENDING& GetEndEnding() const { return m_endEnding; }
+    void               SetEndEnding( const LINE_ENDING& aEnding ) { m_endEnding = aEnding; }
+
+    LINE_ENDING_STYLE GetStartEndingStyle() const { return m_startEnding.GetStyle(); }
+    void              SetStartEndingStyle( LINE_ENDING_STYLE aStyle ) { m_startEnding.SetStyle( aStyle ); }
+
+    LINE_ENDING_STYLE GetEndEndingStyle() const { return m_endEnding.GetStyle(); }
+    void              SetEndEndingStyle( LINE_ENDING_STYLE aStyle ) { m_endEnding.SetStyle( aStyle ); }
+
+    int  GetStartEndingLength() const { return m_startEnding.GetLength(); }
+    void SetStartEndingLength( int aLength ) { m_startEnding.SetLength( aLength ); }
+    int  GetStartEndingWidth() const { return m_startEnding.GetWidth(); }
+    void SetStartEndingWidth( int aWidth ) { m_startEnding.SetWidth( aWidth ); }
+
+    int  GetEndEndingLength() const { return m_endEnding.GetLength(); }
+    void SetEndEndingLength( int aLength ) { m_endEnding.SetLength( aLength ); }
+    int  GetEndEndingWidth() const { return m_endEnding.GetWidth(); }
+    void SetEndEndingWidth( int aWidth ) { m_endEnding.SetWidth( aWidth ); }
+
+    int  GetStartEndingStrokeWidth() const { return m_startEnding.GetStrokeWidth(); }
+    void SetStartEndingStrokeWidth( int aWidth ) { m_startEnding.SetStrokeWidth( aWidth ); }
+    int  GetEndEndingStrokeWidth() const { return m_endEnding.GetStrokeWidth(); }
+    void SetEndEndingStrokeWidth( int aWidth ) { m_endEnding.SetStrokeWidth( aWidth ); }
 
     bool IsStrokeEquivalent( const SCH_LINE* aLine )
     {
@@ -385,6 +413,8 @@ private:
     VECTOR2I           m_end;              ///< Line end point
     EDA_ANGLE          m_storedAngle;      ///< Stored angle
     STROKE_PARAMS      m_stroke;           ///< Line stroke properties.
+    LINE_ENDING        m_startEnding;      ///< Line ending at start point.
+    LINE_ENDING        m_endEnding;        ///< Line ending at end point.
 
     // If real-time connectivity gets disabled (due to being too slow on a particular
     // design), we can no longer rely on getting the NetClass to find netclass-specific

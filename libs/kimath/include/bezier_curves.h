@@ -119,6 +119,77 @@ public:
                + ( t3 * End );
     }
 
+    /**
+     * Split the Bezier curve into two curves at \a aT using de Casteljau subdivision.
+     *
+     * @param aT the t value to split the curve at (0 = start, 1 = end).
+     * @param aLeft receives the curve segment from 0 to \a aT.
+     * @param aRight receives the curve segment from \a aT to 1.
+     */
+    constexpr void Split( double aT, BEZIER& aLeft, BEZIER& aRight ) const
+    {
+        const VECTOR2<NumericType> startC1 = Start + aT * ( C1 - Start );
+        const VECTOR2<NumericType> c1C2 = C1 + aT * ( C2 - C1 );
+        const VECTOR2<NumericType> c2End = C2 + aT * ( End - C2 );
+        const VECTOR2<NumericType> leftC2 = startC1 + aT * ( c1C2 - startC1 );
+        const VECTOR2<NumericType> rightC1 = c1C2 + aT * ( c2End - c1C2 );
+        const VECTOR2<NumericType> shared = leftC2 + aT * ( rightC1 - leftC2 );
+
+        aLeft = BEZIER( Start, startC1, leftC2, shared );
+        aRight = BEZIER( shared, rightC1, c2End, End );
+    }
+
+    /**
+     * Extract a sub-curve from \a aT0 to \a aT1 using de Casteljau subdivision.
+     */
+    constexpr BEZIER SubCurve( double aT0, double aT1 ) const
+    {
+        double t0 = aT0;
+        double t1 = aT1;
+
+        if( t0 < 0.0 )
+            t0 = 0.0;
+        else if( t0 > 1.0 )
+            t0 = 1.0;
+
+        if( t1 < 0.0 )
+            t1 = 0.0;
+        else if( t1 > 1.0 )
+            t1 = 1.0;
+
+        if( t1 <= t0 )
+        {
+            const VECTOR2<NumericType> point = PointAt( t0 );
+            return BEZIER( point, point, point, point );
+        }
+
+        if( t0 == 0.0 && t1 == 1.0 )
+            return *this;
+
+        BEZIER left;
+        BEZIER right;
+
+        if( t0 == 0.0 )
+        {
+            Split( t1, left, right );
+            return left;
+        }
+
+        if( t1 == 1.0 )
+        {
+            Split( t0, left, right );
+            return right;
+        }
+
+        Split( t1, left, right );
+
+        BEZIER unused;
+        BEZIER subCurve;
+        left.Split( t0 / t1, unused, subCurve );
+
+        return subCurve;
+    }
+
     VECTOR2<NumericType> Start;
     VECTOR2<NumericType> C1;
     VECTOR2<NumericType> C2;

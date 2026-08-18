@@ -106,12 +106,12 @@ public:
     KIGFX::COLOR4D GetColor() const { return m_color; }
     void SetColor( const KIGFX::COLOR4D& aColor ) { m_color = aColor; }
 
-    bool operator!=( const STROKE_PARAMS& aOther ) const
+    bool operator==( const STROKE_PARAMS& aOther ) const
     {
-        return m_width != aOther.m_width
-                || m_lineStyle != aOther.m_lineStyle
-                || m_color != aOther.m_color;
+        return m_width == aOther.m_width && m_lineStyle == aOther.m_lineStyle && m_color == aOther.m_color;
     }
+
+    bool operator!=( const STROKE_PARAMS& aOther ) const { return !( *this == aOther ); }
 
     void Format( OUTPUTFORMATTER* out, const EDA_IU_SCALE& aIuScale ) const;
 

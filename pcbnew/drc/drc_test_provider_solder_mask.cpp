@@ -22,6 +22,7 @@
 #include <board_connected_item.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_shape.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
 #include <thread_pool.h>
@@ -46,6 +47,22 @@
     - DRCE_SILK_MASK_CLEARANCE
     - DRCE_SOLDERMASK_BRIDGE
 */
+
+
+static void addItemPolysWithEndings( BOARD_ITEM* aItem, SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                     int aError, ERROR_LOC aErrorLoc )
+{
+    if( aItem->Type() == PCB_SHAPE_T )
+    {
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
+        shape->TransformWithLineEndingsToPolygon( aBuffer, aClearance, aError, aErrorLoc );
+    }
+    else
+    {
+        aItem->TransformShapeToPolygon( aBuffer, aLayer, aClearance, aError, aErrorLoc );
+    }
+}
+
 
 class DRC_TEST_PROVIDER_SOLDER_MASK : public ::DRC_TEST_PROVIDER
 {
@@ -204,7 +221,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
             }
             else
             {
-                aItem->TransformShapeToPolygon( *solderMask, layer, clearance, m_maxError, ERROR_OUTSIDE );
+                addItemPolysWithEndings( aItem, *solderMask, layer, clearance, m_maxError, ERROR_OUTSIDE );
             }
 
             m_itemTree->Insert( aItem, layer, NULL_CONSTRAINT, m_largestClearance );

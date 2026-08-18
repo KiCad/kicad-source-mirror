@@ -34,6 +34,8 @@ angle
 arc
 arc_segments
 area
+arrow
+arrow_open
 arrow1a
 arrow1b
 arrow2a
@@ -47,6 +49,7 @@ autoplace_cost180
 aux_axis_origin
 backdrill
 back
+background
 barcode
 best_length_ratio
 best_width_ratio
@@ -131,6 +134,7 @@ embedded_files
 enabled
 end
 end_angle
+end_shape
 epsilon_r
 exclude_from_pos_files
 exclude_from_bom
@@ -227,6 +231,7 @@ leader
 leader_length
 left
 legacy_teardrops
+length
 lib_id
 linear
 line_spacing
@@ -359,10 +364,12 @@ source
 spacing
 span
 spec_frequency
+square
 stackup
 start
 start_angle
 start_end_only
+start_shape
 status
 stroke
 style

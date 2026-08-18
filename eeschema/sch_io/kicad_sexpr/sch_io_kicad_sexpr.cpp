@@ -1543,6 +1543,13 @@ void SCH_IO_KICAD_SEXPR::saveLine( SCH_LINE* aLine )
                                                        aLine->GetEndPoint().y ).c_str() );
 
     line_stroke.Format( m_out, schIUScale );
+
+    if( aLine->GetLayer() == LAYER_NOTES )
+    {
+        aLine->GetStartEnding().Format( m_out, schIUScale, "start_shape" );
+        aLine->GetEndEnding().Format( m_out, schIUScale, "end_shape" );
+    }
+
     KICAD_FORMAT::FormatUuid( m_out, aLine->m_Uuid );
 
     if( aLine->IsLocked() )

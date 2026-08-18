@@ -29,6 +29,7 @@
 
 #include <symbol_library_common.h>
 #include <lib_id.h>
+#include <line_ending.h>
 #include <progress_reporter.h>
 #include <schematic_lexer.h>
 #include <sch_file_versions.h>
@@ -229,6 +230,13 @@ private:
      * @param aStrokeDef A reference to the #STROKE_PARAMS structure to write to.
      */
     void parseStroke( STROKE_PARAMS& aStroke );
+
+    /**
+     * Parse a line ending definition from the token stream.
+     *
+     * @param aEnding A reference to the #LINE_ENDING structure to write to.
+     */
+    void parseLineEnding( LINE_ENDING& aEnding );
 
     void parseFill( FILL_PARAMS& aFill );
 

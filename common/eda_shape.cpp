@@ -29,16 +29,19 @@
 #include <eda_draw_frame.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_circle.h>
+#include <geometry/shape_compound.h>
 #include <geometry/shape_ellipse.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
+#include <geometry/shape_utils.h>
 #include <geometry/roundrect.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/roundrect.h>
 #include <macros.h>
 #include <algorithm>
+#include <iterator>
 #include <properties/property_validators.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
@@ -54,6 +57,8 @@ EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
         m_endsSwapped( false ),
         m_shape( aType ),
         m_stroke( aLineWidth, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_startEnding(),
+        m_endEnding(),
         m_fill( aFill ),
         m_fillColor( COLOR4D::UNSPECIFIED ),
         m_hatchingDirty( true ),
@@ -74,6 +79,8 @@ EDA_SHAPE::~EDA_SHAPE()
 EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
         m_endsSwapped( false ),
         m_stroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_startEnding(),
+        m_endEnding(),
         m_fill(),
         m_hatchingDirty( true ),
         m_rectangleHeight( 0 ),
@@ -172,6 +179,8 @@ EDA_SHAPE::EDA_SHAPE( const EDA_SHAPE& aOther ) :
         m_endsSwapped( aOther.m_endsSwapped ),
         m_shape( aOther.m_shape ),
         m_stroke( aOther.m_stroke ),
+        m_startEnding( aOther.m_startEnding ),
+        m_endEnding( aOther.m_endEnding ),
         m_fill( aOther.m_fill ),
         m_fillColor( aOther.m_fillColor ),
         m_hatchingDirty( true ),
@@ -221,6 +230,8 @@ EDA_SHAPE& EDA_SHAPE::operator=( const EDA_SHAPE& aOther )
         m_poly = std::make_unique<SHAPE_POLY_SET>( *aOther.m_poly );
     else
         m_poly.reset();
+    m_startEnding = aOther.m_startEnding;
+    m_endEnding = aOther.m_endEnding;
     m_editState = aOther.m_editState;
     m_proxyItem = aOther.m_proxyItem;
 
@@ -1620,8 +1631,19 @@ const BOX2I EDA_SHAPE::getBoundingBox() const
 }
 
 
+static bool hasLineEnding( const LINE_ENDING& aStartEnding, const LINE_ENDING& aEndEnding );
+
+
 bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
+    if( hasLineEnding( m_startEnding, m_endEnding ) )
+    {
+        SHAPE_COMPOUND shape( MakeEffectiveShapesWithLineEndings( GetEffectiveWidth() ) );
+        const SHAPE&   hitShape = shape;
+
+        return hitShape.Collide( aPosition, std::max( 0, aAccuracy ) );
+    }
+
     double maxdist = aAccuracy;
 
     if( GetWidth() > 0 )
@@ -1815,6 +1837,14 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
     BOX2I arect = aRect;
     arect.Normalize();
     arect.Inflate( aAccuracy );
+
+    if( hasLineEnding( m_startEnding, m_endEnding ) )
+    {
+        SHAPE_LINE_CHAIN selection = KIGEOM::BoxToLineChain( arect );
+        SHAPE_COMPOUND   shape( MakeEffectiveShapesWithLineEndings( GetEffectiveWidth() ) );
+
+        return KIGEOM::ShapeHitTest( selection, shape, aContained );
+    }
 
     BOX2I bbox = getBoundingBox();
 
@@ -2026,7 +2056,9 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 
 bool EDA_SHAPE::hitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
 {
-    SHAPE_COMPOUND shape( MakeEffectiveShapes() );
+    SHAPE_COMPOUND shape( hasLineEnding( m_startEnding, m_endEnding )
+                                  ? MakeEffectiveShapesWithLineEndings( GetEffectiveWidth() )
+                                  : MakeEffectiveShapes() );
 
     return KIGEOM::ShapeHitTest( aPoly, shape, aContained );
 }
@@ -2246,8 +2278,37 @@ void EDA_SHAPE::SetPolyPoints( const std::vector<VECTOR2I>& aPoints )
 }
 
 
-std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapesForStroking() const
+std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapesForStroking( int aLineWidth ) const
 {
+    if( aLineWidth < 0 )
+        aLineWidth = GetEffectiveWidth();
+
+    if( m_startEnding.GetShortenDepth( aLineWidth ) > 0 || m_endEnding.GetShortenDepth( aLineWidth ) > 0 )
+    {
+        switch( m_shape )
+        {
+        // Stroke() has no Bezier primitive, so it gets the flattened polyline.  One chain,
+        // not loose segments, or the pattern restarts at every vertex (same reason as the
+        // unshortened case below).
+        case SHAPE_T::BEZIER:
+        {
+            std::vector<VECTOR2I> pts;
+
+            for( const VECTOR2D& pt : ShortenedBezierPolyline( aLineWidth ) )
+                pts.emplace_back( VECTOR2I( pt ) );
+
+            return { new SHAPE_LINE_CHAIN( pts ) };
+        }
+
+        case SHAPE_T::SEGMENT:
+        case SHAPE_T::ARC:
+        case SHAPE_T::POLY: return makeShortenedBodyShapes( aLineWidth, true );
+
+        // Other shapes have no body shortening; fall through to the standard cases.
+        default: break;
+        }
+    }
+
     switch( m_shape )
     {
     // Stroke() has no Bezier primitive, so it gets the flattened polyline.  One chain, not
@@ -2427,6 +2488,465 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 }
 
 
+static SHAPE_LINE_CHAIN lineEndingClosedChain( const std::vector<VECTOR2I>& aPolygon )
+{
+    SHAPE_LINE_CHAIN chain;
+
+    for( size_t ii = 0; ii < aPolygon.size(); ++ii )
+    {
+        if( ii == aPolygon.size() - 1 && aPolygon[ii] == aPolygon.front() )
+            continue;
+
+        chain.Append( aPolygon[ii] );
+    }
+
+    chain.SetClosed( true );
+    return chain;
+}
+
+
+static bool hasLineEnding( const LINE_ENDING& aStartEnding, const LINE_ENDING& aEndEnding )
+{
+    return aStartEnding.GetStyle() != LINE_ENDING_STYLE::NONE || aEndEnding.GetStyle() != LINE_ENDING_STYLE::NONE;
+}
+
+
+static void addLineEndingEffectiveShapes( std::vector<SHAPE*>& aShapes, const LINE_ENDING& aEnding,
+                                          const VECTOR2I& aPoint, const EDA_ANGLE& aTangent, int aLineWidth )
+{
+    if( aEnding.GetStyle() == LINE_ENDING_STYLE::NONE )
+        return;
+
+    std::vector<VECTOR2I> polygon;
+    aEnding.GetShapes( aPoint, aTangent, aLineWidth, polygon );
+
+    if( polygon.empty() )
+        return;
+
+    if( aEnding.GetStyle() == LINE_ENDING_STYLE::ARROW_OPEN )
+    {
+        int width = aEnding.GetStrokeWidth() > 0 ? aEnding.GetStrokeWidth() : aLineWidth;
+
+        if( polygon.size() >= 3 )
+        {
+            aShapes.emplace_back( new SHAPE_SEGMENT( polygon[0], polygon[1], std::max( 0, width ) ) );
+            aShapes.emplace_back( new SHAPE_SEGMENT( polygon[1], polygon[2], std::max( 0, width ) ) );
+        }
+
+        return;
+    }
+
+    if( polygon.size() < 3 )
+        return;
+
+    SHAPE_LINE_CHAIN outline = lineEndingClosedChain( polygon );
+
+    if( outline.PointCount() >= 3 )
+        aShapes.emplace_back( new SHAPE_SIMPLE( outline ) );
+
+    if( aEnding.GetStrokeWidth() > 0 )
+    {
+        for( int ii = 0; ii < outline.SegmentCount(); ++ii )
+            aShapes.emplace_back( new SHAPE_SEGMENT( outline.CSegment( ii ), aEnding.GetStrokeWidth() ) );
+    }
+}
+
+
+std::vector<SHAPE*> EDA_SHAPE::MakeLineEndingEffectiveShapes( int aLineWidth ) const
+{
+    std::vector<SHAPE*> effectiveShapes;
+    VECTOR2I            startPoint;
+    VECTOR2I            endPoint;
+
+    if( !hasLineEnding( m_startEnding, m_endEnding ) )
+        return effectiveShapes;
+
+    if( !GetLineEndingEndpoints( startPoint, endPoint ) )
+        return effectiveShapes;
+
+    EDA_ANGLE startTangent;
+    EDA_ANGLE endTangent;
+
+    GetEndingTangents( startTangent, endTangent, aLineWidth );
+
+    addLineEndingEffectiveShapes( effectiveShapes, m_startEnding, startPoint, startTangent, aLineWidth );
+    addLineEndingEffectiveShapes( effectiveShapes, m_endEnding, endPoint, endTangent, aLineWidth );
+
+    return effectiveShapes;
+}
+
+
+std::vector<SHAPE*> EDA_SHAPE::makeShortenedBodyShapes( int aLineWidth, bool aEdgeOnly ) const
+{
+    std::vector<SHAPE*> effectiveShapes;
+    bool shortenBody = m_startEnding.GetShortenDepth( aLineWidth ) > 0 || m_endEnding.GetShortenDepth( aLineWidth ) > 0;
+
+    if( !shortenBody )
+    {
+        effectiveShapes = makeEffectiveShapes( aEdgeOnly );
+    }
+    else
+    {
+        int width = GetEffectiveWidth();
+
+        switch( m_shape )
+        {
+        case SHAPE_T::SEGMENT:
+        {
+            VECTOR2I start = GetStart();
+            VECTOR2I end = GetEnd();
+
+            if( ShortenSegmentForEndings( start, end, m_startEnding, m_endEnding, aLineWidth ) )
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( start, end, width ) );
+
+            break;
+        }
+
+        case SHAPE_T::ARC:
+        {
+            EDA_ANGLE startAngle;
+            EDA_ANGLE endAngle;
+            CalcArcAngles( startAngle, endAngle );
+
+            EDA_ANGLE originalStartAngle = startAngle;
+            EDA_ANGLE arcAngle = endAngle - startAngle;
+
+            if( ShortenArcForEndings( startAngle, arcAngle, GetRadius(), aLineWidth ) )
+            {
+                VECTOR2I startPoint = GetStart();
+                RotatePoint( startPoint, m_arcCenter, -( startAngle - originalStartAngle ) );
+                effectiveShapes.emplace_back( new SHAPE_ARC( m_arcCenter, startPoint, arcAngle, width ) );
+            }
+
+            break;
+        }
+
+        case SHAPE_T::BEZIER:
+        {
+            std::vector<VECTOR2D> pts = ShortenedBezierPolyline( aLineWidth );
+
+            for( size_t ii = 1; ii < pts.size(); ++ii )
+            {
+                effectiveShapes.emplace_back(
+                        new SHAPE_SEGMENT( VECTOR2I( pts[ii - 1] ), VECTOR2I( pts[ii] ), width ) );
+            }
+
+            break;
+        }
+
+        case SHAPE_T::POLY:
+        {
+            if( ( !aEdgeOnly && ( IsSolidFill() || IsHatchedFill() || IsProxyItem() ) )
+                || GetPolyShape().OutlineCount() == 0 )
+            {
+                effectiveShapes = makeEffectiveShapes( aEdgeOnly );
+                break;
+            }
+
+            for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
+            {
+                const SHAPE_LINE_CHAIN& outline = GetPolyShape().COutline( ii );
+
+                if( outline.PointCount() < 2 )
+                    continue;
+
+                std::vector<VECTOR2I> pts;
+
+                if( !GetShortenedBodyPolyPoints( outline, ii, pts, aLineWidth ) )
+                    continue;
+
+                for( size_t jj = 1; jj < pts.size(); ++jj )
+                    effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[jj - 1], pts[jj], width ) );
+
+                if( outline.IsClosed() )
+                    effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts.back(), pts.front(), width ) );
+            }
+
+            break;
+        }
+
+        default: effectiveShapes = makeEffectiveShapes( aEdgeOnly ); break;
+        }
+    }
+
+    return effectiveShapes;
+}
+
+
+std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapesWithLineEndings( int aLineWidth ) const
+{
+    std::vector<SHAPE*> effectiveShapes = makeShortenedBodyShapes( aLineWidth );
+
+    for( SHAPE* shape : MakeLineEndingEffectiveShapes( aLineWidth ) )
+        effectiveShapes.emplace_back( shape );
+
+    return effectiveShapes;
+}
+
+
+static void addLineEndingPolygon( SHAPE_POLY_SET& aBuffer, const LINE_ENDING& aEnding, const VECTOR2I& aPoint,
+                                  const EDA_ANGLE& aTangent, int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                  int aLineWidth )
+{
+    if( aEnding.GetStyle() == LINE_ENDING_STYLE::NONE )
+        return;
+
+    std::vector<VECTOR2I> polygon;
+    aEnding.GetShapes( aPoint, aTangent, aLineWidth, polygon );
+
+    if( polygon.empty() )
+        return;
+
+    auto addStrokedSegment = [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aStrokeWidth )
+    {
+        int width = std::max( 0, aStrokeWidth ) + 2 * aClearance;
+
+        if( width > 0 )
+            TransformOvalToPolygon( aBuffer, aStart, aEnd, width, aError, aErrorLoc );
+    };
+
+    if( aEnding.GetStyle() == LINE_ENDING_STYLE::ARROW_OPEN )
+    {
+        int strokeWidth = aEnding.GetStrokeWidth() > 0 ? aEnding.GetStrokeWidth() : aLineWidth;
+
+        if( polygon.size() >= 3 )
+        {
+            addStrokedSegment( polygon[0], polygon[1], strokeWidth );
+            addStrokedSegment( polygon[1], polygon[2], strokeWidth );
+        }
+
+        return;
+    }
+
+    if( polygon.size() < 3 )
+        return;
+
+    SHAPE_LINE_CHAIN outline = lineEndingClosedChain( polygon );
+
+    if( outline.PointCount() >= 3 )
+    {
+        SHAPE_POLY_SET fill;
+        fill.NewOutline();
+
+        for( int ii = 0; ii < outline.PointCount(); ++ii )
+            fill.Append( outline.CPoint( ii ) );
+
+        if( aClearance > 0 )
+        {
+            int inflate = aClearance;
+
+            if( aErrorLoc == ERROR_OUTSIDE )
+                inflate += aError;
+
+            fill.Inflate( inflate, CORNER_STRATEGY::ROUND_ALL_CORNERS, aError );
+        }
+
+        aBuffer.Append( fill );
+    }
+
+    if( aEnding.GetStrokeWidth() > 0 )
+    {
+        for( int ii = 0; ii < outline.SegmentCount(); ++ii )
+        {
+            const SEG& seg = outline.CSegment( ii );
+            addStrokedSegment( seg.A, seg.B, aEnding.GetStrokeWidth() );
+        }
+    }
+}
+
+
+void EDA_SHAPE::TransformLineEndingsToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                               int aLineWidth ) const
+{
+    VECTOR2I startPoint;
+    VECTOR2I endPoint;
+
+    if( !hasLineEnding( m_startEnding, m_endEnding ) )
+        return;
+
+    if( !GetLineEndingEndpoints( startPoint, endPoint ) )
+        return;
+
+    EDA_ANGLE startTangent;
+    EDA_ANGLE endTangent;
+
+    GetEndingTangents( startTangent, endTangent, aLineWidth );
+
+    addLineEndingPolygon( aBuffer, m_startEnding, startPoint, startTangent, aClearance, aError, aErrorLoc, aLineWidth );
+    addLineEndingPolygon( aBuffer, m_endEnding, endPoint, endTangent, aClearance, aError, aErrorLoc, aLineWidth );
+}
+
+
+void EDA_SHAPE::TransformWithLineEndingsToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                                   ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
+{
+    int  lineWidth = ignoreLineWidth ? 0 : GetEffectiveWidth();
+    bool shortenBody = m_startEnding.GetShortenDepth( lineWidth ) > 0 || m_endEnding.GetShortenDepth( lineWidth ) > 0;
+
+    if( !shortenBody )
+    {
+        TransformShapeToPolygon( aBuffer, aClearance, aError, aErrorLoc, ignoreLineWidth );
+    }
+    else
+    {
+        int width = ignoreLineWidth ? 0 : GetWidth();
+        width += 2 * aClearance;
+
+        switch( m_shape )
+        {
+        case SHAPE_T::SEGMENT:
+        {
+            VECTOR2I start = GetStart();
+            VECTOR2I end = GetEnd();
+
+            if( ShortenSegmentForEndings( start, end, m_startEnding, m_endEnding, lineWidth ) )
+                TransformOvalToPolygon( aBuffer, start, end, width, aError, aErrorLoc );
+
+            break;
+        }
+
+        case SHAPE_T::ARC:
+        {
+            EDA_ANGLE startAngle;
+            EDA_ANGLE endAngle;
+            CalcArcAngles( startAngle, endAngle );
+
+            EDA_ANGLE originalStartAngle = startAngle;
+            EDA_ANGLE arcAngle = endAngle - startAngle;
+
+            if( ShortenArcForEndings( startAngle, arcAngle, GetRadius(), lineWidth ) )
+            {
+                VECTOR2I startPoint = GetStart();
+                RotatePoint( startPoint, m_arcCenter, -( startAngle - originalStartAngle ) );
+                SHAPE_ARC arc( m_arcCenter, startPoint, arcAngle, width );
+
+                TransformArcToPolygon( aBuffer, arc.GetP0(), arc.GetArcMid(), arc.GetP1(), width, aError, aErrorLoc );
+            }
+
+            break;
+        }
+
+        case SHAPE_T::BEZIER:
+        {
+            std::vector<VECTOR2D> pts = ShortenedBezierPolyline( lineWidth );
+
+            for( size_t ii = 1; ii < pts.size(); ++ii )
+            {
+                TransformOvalToPolygon( aBuffer, VECTOR2I( pts[ii - 1] ), VECTOR2I( pts[ii] ), width, aError,
+                                        aErrorLoc );
+            }
+
+            break;
+        }
+
+        case SHAPE_T::POLY:
+        {
+            bool solidFill = IsSolidFill() || IsHatchedFill() || IsProxyItem();
+
+            if( solidFill || !IsPolyShapeValid() )
+            {
+                TransformShapeToPolygon( aBuffer, aClearance, aError, aErrorLoc, ignoreLineWidth );
+                break;
+            }
+
+            for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
+            {
+                const SHAPE_LINE_CHAIN& outline = GetPolyShape().COutline( ii );
+
+                if( outline.PointCount() < 2 )
+                    continue;
+
+                std::vector<VECTOR2I> pts;
+
+                if( !GetShortenedBodyPolyPoints( outline, ii, pts, lineWidth ) )
+                    continue;
+
+                for( size_t jj = 1; jj < pts.size(); ++jj )
+                {
+                    TransformOvalToPolygon( aBuffer, pts[jj - 1], pts[jj], width, aError, aErrorLoc );
+                }
+
+                if( outline.IsClosed() )
+                {
+                    TransformOvalToPolygon( aBuffer, pts.back(), pts.front(), width, aError, aErrorLoc );
+                }
+            }
+
+            break;
+        }
+
+        default: TransformShapeToPolygon( aBuffer, aClearance, aError, aErrorLoc, ignoreLineWidth ); break;
+        }
+    }
+
+    TransformLineEndingsToPolygon( aBuffer, aClearance, aError, aErrorLoc, lineWidth );
+}
+
+
+bool EDA_SHAPE::GetLineEndingsBoundingBox( BOX2I& aBBox, int aLineWidth ) const
+{
+    auto mergeEnding =
+            [&]( const LINE_ENDING& aEnding, const VECTOR2I& aPoint, const EDA_ANGLE& aTangent, bool& aHasBox )
+    {
+        if( aEnding.GetStyle() == LINE_ENDING_STYLE::NONE )
+            return;
+
+        std::vector<VECTOR2I> polygon;
+        aEnding.GetShapes( aPoint, aTangent, aLineWidth, polygon );
+
+        if( polygon.empty() )
+            return;
+
+        BOX2I endingBBox( polygon.front(), VECTOR2I( 0, 0 ) );
+
+        for( const VECTOR2I& point : polygon )
+            endingBBox.Merge( point );
+
+        int stroke = aEnding.GetStrokeWidth();
+
+        if( aEnding.GetStyle() == LINE_ENDING_STYLE::ARROW_OPEN && stroke <= 0 )
+            stroke = aLineWidth;
+
+        endingBBox.Inflate( std::max( 0, stroke ) / 2 );
+
+        if( !aHasBox )
+        {
+            aBBox = endingBBox;
+            aHasBox = true;
+        }
+        else
+        {
+            aBBox.Merge( endingBBox );
+        }
+    };
+
+    VECTOR2I startPoint;
+    VECTOR2I endPoint;
+
+    if( !hasLineEnding( m_startEnding, m_endEnding ) )
+        return false;
+
+    if( !GetLineEndingEndpoints( startPoint, endPoint ) )
+        return false;
+
+    bool      hasBox = false;
+    EDA_ANGLE startTangent;
+    EDA_ANGLE endTangent;
+
+    GetEndingTangents( startTangent, endTangent, aLineWidth );
+
+    mergeEnding( m_startEnding, startPoint, startTangent, hasBox );
+    mergeEnding( m_endEnding, endPoint, endTangent, hasBox );
+
+    if( hasBox )
+    {
+        aBBox.Normalize();
+    }
+
+    return hasBox;
+}
+
+
 std::vector<VECTOR2I> EDA_SHAPE::GetPolyPoints() const
 {
     const SHAPE_POLY_SET& poly = GetPolyShape();
@@ -2539,8 +3059,7 @@ void EDA_SHAPE::beginEdit( const VECTOR2I& aPosition )
         m_editState = 1;
         break;
 
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -2579,9 +3098,7 @@ bool EDA_SHAPE::continueEdit( const VECTOR2I& aPosition )
     }
         return true;
 
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-        return false;
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() ); return false;
     }
 }
 
@@ -2594,9 +3111,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECTANGLE:
-        SetEnd( aPosition );
-        break;
+    case SHAPE_T::RECTANGLE: SetEnd( aPosition ); break;
 
     case SHAPE_T::BEZIER:
     {
@@ -2614,13 +3129,9 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
             SetEnd( aPosition );
             break;
 
-        case 2:
-            SetBezierC1( aPosition );
-            break;
+        case 2: SetBezierC1( aPosition ); break;
 
-        case 3:
-            SetBezierC2( aPosition );
-            break;
+        case 3: SetBezierC2( aPosition ); break;
         }
 
         RebuildBezierToSegmentsPointsList( getMaxError() );
@@ -2641,9 +3152,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
         switch( m_editState )
         {
-        case 0:
-            SetArcGeometry( aPosition, aPosition, aPosition );
-            return;
+        case 0: SetArcGeometry( aPosition, aPosition, aPosition ); return;
 
         case 1:
             m_end = aPosition;
@@ -2654,7 +3163,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         case 3:
         {
             VECTOR2I v = m_start - m_end;
-            double chordBefore = v.SquaredEuclideanNorm();
+            double   chordBefore = v.SquaredEuclideanNorm();
 
             if( m_editState == 2 )
                 m_start = aPosition;
@@ -2682,9 +3191,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
             break;
         }
 
-        case 5:
-            SetArcGeometry( GetStart(), aPosition, GetEnd() );
-            return;
+        case 5: SetArcGeometry( GetStart(), aPosition, GetEnd() ); return;
         }
 
         // Calculate center based on start, end, and radius
@@ -2739,8 +3246,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
     }
 
     case SHAPE_T::POLY:
-        GetPolyShape().Outline( 0 ).SetPoint( GetPolyShape().Outline( 0 ).GetPointCount() - 1,
-                                              aPosition );
+        GetPolyShape().Outline( 0 ).SetPoint( GetPolyShape().Outline( 0 ).GetPointCount() - 1, aPosition );
         break;
 
     case SHAPE_T::ELLIPSE:
@@ -2862,8 +3368,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         break;
     }
 
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -2905,8 +3410,7 @@ void EDA_SHAPE::endEdit( bool aClosed )
         break;
     }
 
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
@@ -2916,7 +3420,7 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     EDA_SHAPE* image = dynamic_cast<EDA_SHAPE*>( aImage );
     assert( image );
 
-    #define SWAPITEM( x ) std::swap( x, image->x )
+#define SWAPITEM( x ) std::swap( x, image->x )
     SWAPITEM( m_stroke );
     SWAPITEM( m_start );
     SWAPITEM( m_end );
@@ -2932,7 +3436,9 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     SWAPITEM( m_fillColor );
     SWAPITEM( m_editState );
     SWAPITEM( m_endsSwapped );
-    #undef SWAPITEM
+    SWAPITEM( m_startEnding );
+    SWAPITEM( m_endEnding );
+#undef SWAPITEM
 
     m_hatchingDirty = true;
 }
@@ -2940,11 +3446,23 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
 
 int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
 {
-#define EPSILON 2       // Should be enough for rounding errors on calculated items
+#define EPSILON 2 // Should be enough for rounding errors on calculated items
 
-#define TEST( a, b ) { if( a != b ) return a - b; }
-#define TEST_E( a, b ) { if( abs( a - b ) > EPSILON ) return a - b; }
-#define TEST_PT( a, b ) { TEST_E( a.x, b.x ); TEST_E( a.y, b.y ); }
+#define TEST( a, b )                                                                                                   \
+    {                                                                                                                  \
+        if( a != b )                                                                                                   \
+            return a - b;                                                                                              \
+    }
+#define TEST_E( a, b )                                                                                                 \
+    {                                                                                                                  \
+        if( abs( a - b ) > EPSILON )                                                                                   \
+            return a - b;                                                                                              \
+    }
+#define TEST_PT( a, b )                                                                                                \
+    {                                                                                                                  \
+        TEST_E( a.x, b.x );                                                                                            \
+        TEST_E( a.y, b.y );                                                                                            \
+    }
 
     TEST_PT( m_start, aOther->m_start );
     TEST_PT( m_end, aOther->m_end );
@@ -2996,8 +3514,8 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
 }
 
 
-void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
-                                         ERROR_LOC aErrorLoc, bool ignoreLineWidth, bool includeFill ) const
+void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                         bool ignoreLineWidth, bool includeFill ) const
 {
     bool solidFill = IsSolidFill() || ( IsHatchedFill() && !includeFill ) || IsProxyItem();
     int  width = ignoreLineWidth ? 0 : GetWidth();
@@ -3028,8 +3546,8 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
 
             if( solidFill )
             {
-                TransformRoundChamferedRectToPolygon( aBuffer, position, size, ANGLE_0, GetCornerRadius(),
-                                                      0.0, 0, width / 2, aError, aErrorLoc );
+                TransformRoundChamferedRectToPolygon( aBuffer, position, size, ANGLE_0, GetCornerRadius(), 0.0, 0,
+                                                      width / 2, aError, aErrorLoc );
             }
             else
             {
@@ -3093,9 +3611,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
         TransformArcToPolygon( aBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError, aErrorLoc );
         break;
 
-    case SHAPE_T::SEGMENT:
-        TransformOvalToPolygon( aBuffer, GetStart(), GetEnd(), width, aError, aErrorLoc );
-        break;
+    case SHAPE_T::SEGMENT: TransformOvalToPolygon( aBuffer, GetStart(), GetEnd(), width, aError, aErrorLoc ); break;
 
     case SHAPE_T::POLY:
     {
@@ -3107,7 +3623,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
             for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
             {
                 const SHAPE_LINE_CHAIN& poly = GetPolyShape().Outline( ii );
-                SHAPE_POLY_SET tmp;
+                SHAPE_POLY_SET          tmp;
                 tmp.NewOutline();
 
                 for( int jj = 0; jj < (int) poly.GetPointCount(); ++jj )
@@ -3146,7 +3662,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
     case SHAPE_T::BEZIER:
     {
         std::vector<VECTOR2I> ctrlPts = { GetStart(), GetBezierC1(), GetBezierC2(), GetEnd() };
-        BEZIER_POLY converter( ctrlPts );
+        BEZIER_POLY           converter( ctrlPts );
         std::vector<VECTOR2I> poly;
         converter.GetPoly( poly, aError );
 
@@ -3197,9 +3713,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
         break;
     }
 
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-        break;
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() ); break;
     }
 
     if( IsHatchedFill() && includeFill )
@@ -3328,9 +3842,14 @@ bool EDA_SHAPE::operator==( const EDA_SHAPE& aOther ) const
 
         break;
 
-    default:
-        return false;
+    default: return false;
     }
+
+    if( m_startEnding != aOther.m_startEnding )
+        return false;
+
+    if( m_endEnding != aOther.m_endEnding )
+        return false;
 
     return true;
 }
@@ -3380,8 +3899,8 @@ double EDA_SHAPE::Similarity( const EDA_SHAPE& aOther ) const
     }
 
     {
-        int m = GetPolyShape().TotalVertices();
-        int n = aOther.GetPolyShape().TotalVertices();
+        int                   m = GetPolyShape().TotalVertices();
+        int                   n = aOther.GetPolyShape().TotalVertices();
         std::vector<VECTOR2I> poly;
         std::vector<VECTOR2I> otherPoly;
         VECTOR2I              lastPt( 0, 0 );
@@ -3410,12 +3929,550 @@ double EDA_SHAPE::Similarity( const EDA_SHAPE& aOther ) const
         similarity *= std::pow( 0.9, m + n - 2 * longest );
     }
 
+    if( m_startEnding != aOther.m_startEnding )
+        similarity *= 0.9;
+
+    if( m_endEnding != aOther.m_endEnding )
+        similarity *= 0.9;
+
     return similarity;
+}
+
+
+static double bezierLength( const BEZIER<double>& aBezier, double aT0, double aT1 );
+
+static double findBezierTAtLength( const BEZIER<double>& aBezier, double aTargetLength, double aTotalLength );
+
+
+void EDA_SHAPE::GetEndingTangents( EDA_ANGLE& aStartTangent, EDA_ANGLE& aEndTangent, int aLineWidth ) const
+{
+    aStartTangent = ANGLE_0;
+    aEndTangent = ANGLE_0;
+
+    switch( m_shape )
+    {
+    case SHAPE_T::SEGMENT:
+    {
+        EDA_ANGLE lineAngle( GetEnd() - GetStart() );
+        aStartTangent = lineAngle + ANGLE_180;
+        aEndTangent = lineAngle;
+        break;
+    }
+
+    case SHAPE_T::ARC:
+    {
+        SHAPE_ARC arc( GetStart(), GetArcMid(), GetEnd(), 0 );
+        double    radius = arc.GetRadius();
+        EDA_ANGLE startRadius = arc.GetStartAngle();
+        EDA_ANGLE endRadius = arc.GetEndAngle();
+        bool      cw = arc.GetCentralAngle() < ANGLE_0;
+
+        // Offset tangent angle by half the shortening depth for better visual alignment.
+        if( aLineWidth > 0 && radius > 0 )
+        {
+            int startDepth = m_startEnding.GetCurveOrientationDepth( aLineWidth );
+
+            if( startDepth > 0 )
+            {
+                EDA_ANGLE offset( RAD2DEG( ( startDepth / 2.0 ) / radius ), DEGREES_T );
+
+                if( cw )
+                    startRadius -= offset;
+                else
+                    startRadius += offset;
+            }
+
+            int endDepth = m_endEnding.GetCurveOrientationDepth( aLineWidth );
+
+            if( endDepth > 0 )
+            {
+                EDA_ANGLE offset( RAD2DEG( ( endDepth / 2.0 ) / radius ), DEGREES_T );
+
+                if( cw )
+                    endRadius += offset;
+                else
+                    endRadius -= offset;
+            }
+        }
+
+        if( cw )
+        {
+            aStartTangent = startRadius + ANGLE_90;
+            aEndTangent = endRadius - ANGLE_90;
+        }
+        else
+        {
+            aStartTangent = startRadius - ANGLE_90;
+            aEndTangent = endRadius + ANGLE_90;
+        }
+
+        break;
+    }
+
+    case SHAPE_T::BEZIER:
+    {
+        // Tangent = (original endpoint - shortened endpoint) so that the
+        // end shape aligns with the visible curve endpoint.
+        const BEZIER<double>          sourceCurve{ VECTOR2D( m_start ), VECTOR2D( m_bezierC1 ), VECTOR2D( m_bezierC2 ),
+                                          VECTOR2D( m_end ) };
+        std::optional<double>         totalLength;
+        std::optional<BEZIER<double>> shortened = ShortenedBezierCurve( aLineWidth );
+        const std::vector<VECTOR2I>&  bpts = GetBezierPoints();
+
+        auto fallbackStartTangent = [&]() -> EDA_ANGLE
+        {
+            if( GetStart() != GetBezierC1() )
+                return EDA_ANGLE( GetStart() - GetBezierC1() );
+
+            if( bpts.size() >= 2 )
+                return EDA_ANGLE( bpts.front() - bpts[1] );
+
+            return ANGLE_0;
+        };
+
+        auto fallbackEndTangent = [&]() -> EDA_ANGLE
+        {
+            if( GetEnd() != GetBezierC2() )
+                return EDA_ANGLE( GetEnd() - GetBezierC2() );
+
+            if( bpts.size() >= 2 )
+                return EDA_ANGLE( bpts.back() - bpts[bpts.size() - 2] );
+
+            return ANGLE_0;
+        };
+
+        auto openArrowFlexTangent = [&]( const LINE_ENDING& aEnding, bool aStart ) -> std::optional<EDA_ANGLE>
+        {
+            if( aEnding.GetStyle() != LINE_ENDING_STYLE::ARROW_OPEN )
+                return std::nullopt;
+
+            int depth = aEnding.GetCurveOrientationDepth( aLineWidth );
+
+            if( depth <= 0 )
+                return std::nullopt;
+
+            if( !totalLength )
+                totalLength = bezierLength( sourceCurve, 0.0, 1.0 );
+
+            if( *totalLength <= 0.0 )
+                return std::nullopt;
+
+            double distanceFromStart = std::min<double>( depth, *totalLength );
+
+            if( !aStart )
+                distanceFromStart = *totalLength - distanceFromStart;
+
+            double   t = findBezierTAtLength( sourceCurve, distanceFromStart, *totalLength );
+            VECTOR2D sample = sourceCurve.PointAt( t );
+            VECTOR2D endpoint = aStart ? VECTOR2D( GetStart() ) : VECTOR2D( GetEnd() );
+            VECTOR2D delta = endpoint - sample;
+
+            if( delta.EuclideanNorm() <= 0.0 )
+                return std::nullopt;
+
+            return EDA_ANGLE( delta );
+        };
+
+        if( shortened )
+        {
+            VECTOR2D startDelta = VECTOR2D( GetStart() ) - shortened->Start;
+
+            if( startDelta.EuclideanNorm() > 0 )
+                aStartTangent = EDA_ANGLE( startDelta );
+            else
+                aStartTangent = fallbackStartTangent();
+
+            VECTOR2D endDelta = VECTOR2D( GetEnd() ) - shortened->End;
+
+            if( endDelta.EuclideanNorm() > 0 )
+                aEndTangent = EDA_ANGLE( endDelta );
+            else
+                aEndTangent = fallbackEndTangent();
+        }
+        else
+        {
+            aStartTangent = fallbackStartTangent();
+            aEndTangent = fallbackEndTangent();
+        }
+
+        if( std::optional<EDA_ANGLE> startFlex = openArrowFlexTangent( m_startEnding, true ) )
+            aStartTangent = *startFlex;
+
+        if( std::optional<EDA_ANGLE> endFlex = openArrowFlexTangent( m_endEnding, false ) )
+            aEndTangent = *endFlex;
+
+        break;
+    }
+
+    case SHAPE_T::POLY:
+    {
+        const SHAPE_POLY_SET& poly = GetPolyShape();
+
+        if( poly.OutlineCount() > 0 )
+        {
+            const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
+            int                     ptCount = outline.PointCount();
+
+            if( ptCount >= 2 )
+            {
+                aStartTangent = EDA_ANGLE( outline.CPoint( 0 ) - outline.CPoint( 1 ) );
+                aEndTangent = EDA_ANGLE( outline.CPoint( ptCount - 1 ) - outline.CPoint( ptCount - 2 ) );
+            }
+        }
+
+        break;
+    }
+
+    default:
+        aStartTangent = ANGLE_0;
+        aEndTangent = ANGLE_0;
+        break;
+    }
+}
+
+
+bool EDA_SHAPE::GetLineEndingEndpoints( VECTOR2I& aStartPoint, VECTOR2I& aEndPoint ) const
+{
+    switch( m_shape )
+    {
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::ARC:
+        aStartPoint = GetStart();
+        aEndPoint = GetEnd();
+        return true;
+
+    case SHAPE_T::POLY:
+    {
+        const SHAPE_POLY_SET& poly = GetPolyShape();
+
+        if( poly.OutlineCount() == 0 )
+            return false;
+
+        const SHAPE_LINE_CHAIN& outline = poly.COutline( 0 );
+
+        if( outline.PointCount() < 2 )
+            return false;
+
+        aStartPoint = outline.CPoint( 0 );
+        aEndPoint = outline.CPoint( outline.PointCount() - 1 );
+        return true;
+    }
+
+    case SHAPE_T::BEZIER:
+    {
+        const std::vector<VECTOR2I>& bpts = GetBezierPoints();
+
+        if( bpts.size() < 2 )
+            return false;
+
+        aStartPoint = bpts.front();
+        aEndPoint = bpts.back();
+        return true;
+    }
+
+    default: return false;
+    }
+}
+
+
+bool EDA_SHAPE::ShortenSegmentForEndings( VECTOR2I& aStart, VECTOR2I& aEnd, const LINE_ENDING& aStartEnding,
+                                          const LINE_ENDING& aEndEnding, int aLineWidth )
+{
+    VECTOR2I delta = aEnd - aStart;
+    double   len = delta.EuclideanNorm();
+
+    if( len == 0 )
+        return true;
+
+    int startDepth = aStartEnding.GetShortenDepth( aLineWidth );
+    int endDepth = aEndEnding.GetShortenDepth( aLineWidth );
+    int totalDepth = std::max( 0, startDepth ) + std::max( 0, endDepth );
+
+    if( totalDepth <= 0 )
+        return true;
+
+    if( totalDepth >= len )
+    {
+        aEnd = aStart;
+        return false;
+    }
+
+    VECTOR2D dir( delta.x / len, delta.y / len );
+
+    if( startDepth > 0 )
+    {
+        aStart.x += KiROUND( dir.x * startDepth );
+        aStart.y += KiROUND( dir.y * startDepth );
+    }
+
+    if( endDepth > 0 )
+    {
+        aEnd.x -= KiROUND( dir.x * endDepth );
+        aEnd.y -= KiROUND( dir.y * endDepth );
+    }
+
+    return true;
+}
+
+
+bool EDA_SHAPE::ShortenArcForEndings( EDA_ANGLE& aStartAngle, EDA_ANGLE& aArcAngle, double aRadius,
+                                      int aLineWidth ) const
+{
+    if( aRadius <= 0 )
+        return true;
+
+    int startDepth = m_startEnding.GetShortenDepth( aLineWidth );
+    int endDepth = m_endEnding.GetShortenDepth( aLineWidth );
+    int totalDepth = std::max( 0, startDepth ) + std::max( 0, endDepth );
+
+    if( totalDepth <= 0 )
+        return true;
+
+    double arcLength = std::abs( aRadius * aArcAngle.AsRadians() );
+
+    if( totalDepth >= arcLength )
+    {
+        aArcAngle = ANGLE_0;
+        return false;
+    }
+
+    EDA_ANGLE startOffset = EDA_ANGLE( RAD2DEG( std::max( 0, startDepth ) / aRadius ), DEGREES_T );
+    EDA_ANGLE totalOffset = EDA_ANGLE( RAD2DEG( totalDepth / aRadius ), DEGREES_T );
+
+    if( aArcAngle > ANGLE_0 )
+    {
+        aStartAngle += startOffset;
+        aArcAngle -= totalOffset;
+    }
+    else
+    {
+        aStartAngle -= startOffset;
+        aArcAngle += totalOffset;
+    }
+
+    return true;
+}
+
+
+static double bezierSpeedAt( const BEZIER<double>& aBezier, double aT )
+{
+    double tInv = 1.0 - aT;
+
+    VECTOR2D derivative = 3.0 * tInv * tInv * ( aBezier.C1 - aBezier.Start )
+                          + 6.0 * tInv * aT * ( aBezier.C2 - aBezier.C1 )
+                          + 3.0 * aT * aT * ( aBezier.End - aBezier.C2 );
+
+    return derivative.EuclideanNorm();
+}
+
+
+static double bezierLength( const BEZIER<double>& aBezier, double aT0, double aT1 )
+{
+    if( aT1 <= aT0 )
+        return 0.0;
+
+    // 16-point Gauss-Legendre integration.  This avoids allocating and
+    // flattening a sub-curve on every binary-search step during redraw.
+    static constexpr double nodes[] = {
+        0.0950125098376374, 0.2816035507792590, 0.4580167776572274, 0.6178762444026438,
+        0.7554044083550030, 0.8656312023878318, 0.9445750230732326, 0.9894009349916499
+    };
+
+    static constexpr double weights[] = { 0.1894506104550685, 0.1826034150449236, 0.1691565193950025,
+                                          0.1495959888165767, 0.1246289712555339, 0.0951585116824928,
+                                          0.0622535239386479, 0.0271524594117541 };
+
+    static_assert( std::size( nodes ) == std::size( weights ) );
+
+    double halfWidth = ( aT1 - aT0 ) / 2.0;
+    double center = ( aT0 + aT1 ) / 2.0;
+    double length = 0.0;
+
+    for( size_t ii = 0; ii < std::size( nodes ); ++ii )
+    {
+        double offset = halfWidth * nodes[ii];
+        length +=
+                weights[ii] * ( bezierSpeedAt( aBezier, center - offset ) + bezierSpeedAt( aBezier, center + offset ) );
+    }
+
+    return halfWidth * length;
+}
+
+
+static double findBezierTAtLength( const BEZIER<double>& aBezier, double aTargetLength, double aTotalLength )
+{
+    if( aTargetLength <= 0.0 )
+        return 0.0;
+
+    if( aTargetLength >= aTotalLength )
+        return 1.0;
+
+    double low = 0.0;
+    double high = 1.0;
+
+    // Keep the parameter search tighter than the flattened-length tolerance.
+    static constexpr int paramSearchIterations = 24;
+
+    for( int ii = 0; ii < paramSearchIterations; ++ii )
+    {
+        double mid = ( low + high ) / 2.0;
+        double len = bezierLength( aBezier, 0.0, mid );
+
+        if( len < aTargetLength )
+            low = mid;
+        else
+            high = mid;
+    }
+
+    return ( low + high ) / 2.0;
+}
+
+
+std::optional<BEZIER<double>> EDA_SHAPE::ShortenedBezierCurve( int aLineWidth ) const
+{
+    if( m_shape != SHAPE_T::BEZIER )
+        return std::nullopt;
+
+    BEZIER<double> curve{ VECTOR2D( m_start ), VECTOR2D( m_bezierC1 ), VECTOR2D( m_bezierC2 ), VECTOR2D( m_end ) };
+
+    int startDepth = m_startEnding.GetShortenDepth( aLineWidth );
+    int endDepth = m_endEnding.GetShortenDepth( aLineWidth );
+
+    if( startDepth <= 0 && endDepth <= 0 )
+        return curve;
+
+    double totalLength = bezierLength( curve, 0.0, 1.0 );
+
+    if( totalLength <= 0.0 || startDepth + endDepth >= totalLength )
+        return std::nullopt;
+
+    double t0 = findBezierTAtLength( curve, startDepth, totalLength );
+    double t1 = findBezierTAtLength( curve, totalLength - endDepth, totalLength );
+
+    if( t1 <= t0 )
+        return std::nullopt;
+
+    return curve.SubCurve( t0, t1 );
+}
+
+
+std::vector<VECTOR2D> EDA_SHAPE::ShortenedBezierPolyline( int aLineWidth ) const
+{
+    std::vector<VECTOR2D>         pts;
+    std::optional<BEZIER<double>> curve = ShortenedBezierCurve( aLineWidth );
+
+    if( !curve )
+    {
+        return pts;
+    }
+
+    std::vector<VECTOR2D> ctrlPts = { curve->Start, curve->C1, curve->C2, curve->End };
+    BEZIER_POLY           converter( ctrlPts );
+
+    converter.GetPoly( pts, std::max( 1, getMaxError() ) );
+
+    return pts;
+}
+
+
+bool EDA_SHAPE::ShortenPolyForEndings( VECTOR2D& aFirst, VECTOR2D& aLast, const VECTOR2D& aSecond,
+                                       const VECTOR2D& aPenultimate, int aLineWidth ) const
+{
+    int startDepth = m_startEnding.GetShortenDepth( aLineWidth );
+    int endDepth = m_endEnding.GetShortenDepth( aLineWidth );
+    int totalDepth = std::max( 0, startDepth ) + std::max( 0, endDepth );
+
+    if( totalDepth <= 0 )
+        return true;
+
+    double startSegLen = ( aSecond - aFirst ).EuclideanNorm();
+    double endSegLen = ( aLast - aPenultimate ).EuclideanNorm();
+    bool   twoPointPoly = aSecond == aLast && aPenultimate == aFirst;
+
+    if( twoPointPoly && startSegLen <= totalDepth )
+    {
+        aLast = aFirst;
+        return false;
+    }
+
+    if( startDepth > 0 && startSegLen <= startDepth )
+    {
+        aLast = aFirst;
+        return false;
+    }
+
+    if( endDepth > 0 && endSegLen <= endDepth )
+    {
+        aLast = aFirst;
+        return false;
+    }
+
+    if( startDepth > 0 )
+    {
+        VECTOR2D dir = aSecond - aFirst;
+
+        if( startSegLen > 0 )
+            aFirst = aFirst + dir * ( startDepth / startSegLen );
+    }
+
+    if( endDepth > 0 )
+    {
+        VECTOR2D dir = aLast - aPenultimate;
+
+        if( endSegLen > 0 )
+            aLast = aLast - dir * ( endDepth / endSegLen );
+    }
+
+    return true;
+}
+
+
+bool EDA_SHAPE::ShortenBodyPolyPoints( std::vector<VECTOR2I>& aPoints, bool aClosed, int aOutlineIdx,
+                                       int aLineWidth ) const
+{
+    if( aPoints.size() < 2 )
+        return false;
+
+    if( aClosed || aOutlineIdx != 0 )
+        return true;
+
+    VECTOR2D first = aPoints.front();
+    VECTOR2D last = aPoints.back();
+
+    if( !ShortenPolyForEndings( first, last, VECTOR2D( aPoints[1] ), VECTOR2D( aPoints[aPoints.size() - 2] ),
+                                aLineWidth ) )
+    {
+        aPoints.clear();
+        return false;
+    }
+
+    aPoints.front() = VECTOR2I( first );
+    aPoints.back() = VECTOR2I( last );
+
+    return true;
+}
+
+
+bool EDA_SHAPE::GetShortenedBodyPolyPoints( const SHAPE_LINE_CHAIN& aOutline, int aOutlineIdx,
+                                            std::vector<VECTOR2I>& aPoints, int aLineWidth ) const
+{
+    aPoints.clear();
+
+    if( aOutline.PointCount() < 2 )
+        return false;
+
+    aPoints.reserve( aOutline.PointCount() );
+
+    for( const VECTOR2I& pt : aOutline.CPoints() )
+        aPoints.emplace_back( pt );
+
+    return ShortenBodyPolyPoints( aPoints, aOutline.IsClosed(), aOutlineIdx, aLineWidth );
 }
 
 
 IMPLEMENT_ENUM_TO_WXANY( SHAPE_T )
 IMPLEMENT_ENUM_TO_WXANY( LINE_STYLE )
+IMPLEMENT_ENUM_TO_WXANY( LINE_ENDING_STYLE )
 IMPLEMENT_ENUM_TO_WXANY( UI_FILL_MODE )
 
 
@@ -3688,5 +4745,69 @@ static struct EDA_SHAPE_DESC
                     shapeProps )
                 .SetAvailableFunc( fillAvailable )
                 .SetIsHiddenFromRulesEditor();
+
+        auto isOpenShape = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                return !shape->IsClosed();
+
+            return false;
+        };
+
+        ENUM_MAP<LINE_ENDING_STYLE>& endingStyleEnum = ENUM_MAP<LINE_ENDING_STYLE>::Instance();
+
+        if( endingStyleEnum.Choices().GetCount() == 0 )
+        {
+            endingStyleEnum.Map( LINE_ENDING_STYLE::NONE, _HKI( "None" ) )
+                    .Map( LINE_ENDING_STYLE::ARROW, _HKI( "Arrow" ) )
+                    .Map( LINE_ENDING_STYLE::CIRCLE, _HKI( "Circle" ) )
+                    .Map( LINE_ENDING_STYLE::SQUARE, _HKI( "Square" ) )
+                    .Map( LINE_ENDING_STYLE::ARROW_OPEN, _HKI( "Open Arrow" ) );
+        }
+
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_ENDING_STYLE>( _HKI( "Start Shape" ),
+                                                                              &EDA_SHAPE::SetStartEndingStyle,
+                                                                              &EDA_SHAPE::GetStartEndingStyle ),
+                             shapeProps )
+                .SetAvailableFunc( isOpenShape );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Length" ), &EDA_SHAPE::SetStartEndingLength,
+                                                           &EDA_SHAPE::GetStartEndingLength,
+                                                           PROPERTY_DISPLAY::PT_SIZE ),
+                             shapeProps )
+                .SetAvailableFunc( isOpenShape );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Width" ), &EDA_SHAPE::SetStartEndingWidth,
+                                                           &EDA_SHAPE::GetStartEndingWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                             shapeProps )
+                .SetAvailableFunc( isOpenShape );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>(
+                                     _HKI( "Start Stroke Width" ), &EDA_SHAPE::SetStartEndingStrokeWidth,
+                                     &EDA_SHAPE::GetStartEndingStrokeWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                             shapeProps )
+                .SetAvailableFunc( isOpenShape );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_ENDING_STYLE>( _HKI( "End Shape" ),
+                                                                              &EDA_SHAPE::SetEndEndingStyle,
+                                                                              &EDA_SHAPE::GetEndEndingStyle ),
+                             shapeProps )
+                .SetAvailableFunc( isOpenShape );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Length" ), &EDA_SHAPE::SetEndEndingLength,
+                                                           &EDA_SHAPE::GetEndEndingLength, PROPERTY_DISPLAY::PT_SIZE ),
+                             shapeProps )
+                .SetAvailableFunc( isOpenShape );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Width" ), &EDA_SHAPE::SetEndEndingWidth,
+                                                           &EDA_SHAPE::GetEndEndingWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                             shapeProps )
+                .SetAvailableFunc( isOpenShape );
+
+        propMgr.AddProperty(
+                       new PROPERTY<EDA_SHAPE, int>( _HKI( "End Stroke Width" ), &EDA_SHAPE::SetEndEndingStrokeWidth,
+                                                     &EDA_SHAPE::GetEndEndingStrokeWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                       shapeProps )
+                .SetAvailableFunc( isOpenShape );
     }
 } _EDA_SHAPE_DESC;

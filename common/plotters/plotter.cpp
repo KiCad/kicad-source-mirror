@@ -33,6 +33,7 @@
  */
 
 #include <trigo.h>
+#include <eda_shape.h>
 #include <plotters/plotter.h>
 #include <text_eval/text_eval_wrapper.h>
 #include <geometry/shape_line_chain.h>

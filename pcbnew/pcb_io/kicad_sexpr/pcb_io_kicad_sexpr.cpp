@@ -1191,6 +1191,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
         stroke.Format( m_out, pcbIUScale );
     }
 
+    aShape->GetStartEnding().Format( m_out, pcbIUScale, "start_shape" );
+    aShape->GetEndEnding().Format( m_out, pcbIUScale, "end_shape" );
+
     // The filled flag represents if a solid fill is present on circles, rectangles and polygons
     if( ( aShape->GetShape() == SHAPE_T::POLY ) || ( aShape->GetShape() == SHAPE_T::RECTANGLE )
         || ( aShape->GetShape() == SHAPE_T::CIRCLE ) || ( aShape->GetShape() == SHAPE_T::ELLIPSE ) )

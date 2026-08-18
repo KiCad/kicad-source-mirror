@@ -28,6 +28,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_netchain.h>
 #include <callback_gal.h>
+#include <geometry/shape_arc.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
 #include <geometry/roundrect.h>
@@ -1994,8 +1995,21 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     }
     else
     {
-        curr_wire_shape.emplace_back( aLine->GetStartPoint().x, aLine->GetStartPoint().y, 0 );
-        curr_wire_shape.emplace_back( aLine->GetEndPoint().x, aLine->GetEndPoint().y, 0 );
+        VECTOR2I lineStart = aLine->GetStartPoint();
+        VECTOR2I lineEnd = aLine->GetEndPoint();
+        bool     drawLineBody = true;
+
+        if( aLine->IsGraphicLine() )
+        {
+            drawLineBody = EDA_SHAPE::ShortenSegmentForEndings( lineStart, lineEnd, aLine->GetStartEnding(),
+                                                                aLine->GetEndEnding(), KiROUND( width ) );
+        }
+
+        if( drawLineBody )
+        {
+            curr_wire_shape.emplace_back( lineStart.x, lineStart.y, 0 );
+            curr_wire_shape.emplace_back( lineEnd.x, lineEnd.y, 0 );
+        }
     }
 
     for( size_t ii = 1; ii < curr_wire_shape.size(); ii++ )
@@ -2032,6 +2046,17 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 
             m_gal->DrawArc( center, ( dstart - center ).EuclideanNorm(), startAngle, angle );
         }
+    }
+
+    // Line endings for graphic lines
+    if( aLine->IsGraphicLine() && !drawingShadows )
+    {
+        VECTOR2I  start = aLine->GetStartPoint();
+        VECTOR2I  end = aLine->GetEndPoint();
+        EDA_ANGLE lineAngle( end - start );
+
+        aLine->GetStartEnding().Draw( *m_gal, start, lineAngle + ANGLE_180, width, color );
+        aLine->GetEndEnding().Draw( *m_gal, end, lineAngle, width, color );
     }
 }
 
@@ -2072,21 +2097,16 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                 {
                 case SHAPE_T::ARC:
                 {
-                    VECTOR2D start = shape->GetStart();
-                    VECTOR2D mid = shape->GetArcMid();
-                    VECTOR2D end = shape->GetEnd();
-                    VECTOR2D center = CalcArcCenter( start, mid, end );
+                    SHAPE_ARC arc( shape->GetStart(), shape->GetArcMid(), shape->GetEnd(), 0 );
+                    EDA_ANGLE startAngle = arc.GetStartAngle();
+                    EDA_ANGLE arcAngle = arc.GetCentralAngle();
 
-                    EDA_ANGLE startAngle( start - center );
-                    EDA_ANGLE midAngle( mid - center );
-                    EDA_ANGLE endAngle( end - center );
+                    if( shape->ShortenArcForEndings( startAngle, arcAngle, arc.GetRadius(),
+                                                     KiROUND( getLineWidth( shape, false ) ) ) )
+                    {
+                        m_gal->DrawArc( arc.GetCenter(), arc.GetRadius(), startAngle, arcAngle );
+                    }
 
-                    EDA_ANGLE angle1 = midAngle - startAngle;
-                    EDA_ANGLE angle2 = endAngle - midAngle;
-
-                    EDA_ANGLE angle = angle1.Normalize180() + angle2.Normalize180();
-
-                    m_gal->DrawArc( center, ( start - center ).EuclideanNorm(), startAngle, angle );
                     break;
                 }
 
@@ -2115,29 +2135,34 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
 
                 case SHAPE_T::POLY:
                 {
-                    const std::vector<SHAPE*> polySegments = shape->MakeEffectiveShapes( true );
+                    if( shape->GetPolyShape().OutlineCount() == 0 )
+                        break;
 
-                    if( !polySegments.empty() )
+                    const SHAPE_LINE_CHAIN& outline = shape->GetPolyShape().COutline( 0 );
+                    std::vector<VECTOR2I>   pts;
+
+                    if( !shape->GetShortenedBodyPolyPoints( outline, 0, pts, KiROUND( getLineWidth( shape, false ) ) ) )
                     {
-                        std::deque<VECTOR2D> pts;
-
-                        for( SHAPE* polySegment : polySegments )
-                            pts.push_back( static_cast<SHAPE_SEGMENT*>( polySegment )->GetSeg().A );
-
-                        pts.push_back( static_cast<SHAPE_SEGMENT*>( polySegments.back() )->GetSeg().B );
-
-                        for( SHAPE* polySegment : polySegments )
-                            delete polySegment;
-
-                        m_gal->DrawPolygon( pts );
+                        break;
                     }
+
+                    std::deque<VECTOR2D> drawPts;
+
+                    for( const VECTOR2I& pt : pts )
+                        drawPts.emplace_back( pt );
+
+                    m_gal->DrawPolygon( drawPts );
                     break;
                 }
 
                 case SHAPE_T::BEZIER:
                 {
-                    m_gal->DrawCurve( shape->GetStart(), shape->GetBezierC1(),
-                                      shape->GetBezierC2(), shape->GetEnd() );
+                    std::optional<BEZIER<double>> curve =
+                            shape->ShortenedBezierCurve( KiROUND( getLineWidth( shape, false ) ) );
+
+                    if( curve )
+                        m_gal->DrawCurve( curve->Start, curve->C1, curve->C2, curve->End, shape->GetMaxError() );
+
                     break;
                 }
 
@@ -2243,6 +2268,8 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
 
         if( lineWidth > 0 )
         {
+            int lineWidthIU = KiROUND( lineWidth );
+
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( lineWidth );
@@ -2254,11 +2281,11 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             }
             else
             {
-                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking();
+                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking( lineWidthIU );
 
                 for( SHAPE* shape : shapes )
                 {
-                    STROKE_PARAMS::Stroke( shape, lineStyle, KiROUND( lineWidth ), &m_schSettings,
+                    STROKE_PARAMS::Stroke( shape, lineStyle, lineWidthIU, &m_schSettings,
                                            [this]( const VECTOR2I& a, const VECTOR2I& b )
                                            {
                                                if( a == b )
@@ -2270,6 +2297,23 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
 
                 for( SHAPE* shape : shapes )
                     delete shape;
+            }
+        }
+
+        // Line endings for open shapes
+        if( !aShape->IsClosed()
+            && ( aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+                 || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE ) )
+        {
+            EDA_ANGLE startTangent, endTangent;
+            aShape->GetEndingTangents( startTangent, endTangent, KiROUND( lineWidth ) );
+
+            VECTOR2I startPt, endPt;
+
+            if( aShape->GetLineEndingEndpoints( startPt, endPt ) )
+            {
+                aShape->GetStartEnding().Draw( *m_gal, startPt, startTangent, lineWidth, color );
+                aShape->GetEndEnding().Draw( *m_gal, endPt, endTangent, lineWidth, color );
             }
         }
     }

@@ -39,6 +39,7 @@
 #include <zone.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_shape.h>
 #include <pcb_target.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
@@ -1787,9 +1788,16 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
         break;
     }
 
+    case PCB_SHAPE_T:
+    {
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
+
+        shape->TransformWithLineEndingsToPolygon( aHoles, aGap, m_maxError, ERROR_OUTSIDE, aIgnoreLineWidth );
+        break;
+    }
+
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
-    case PCB_SHAPE_T:
     case PCB_TARGET_T:
         aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE, aIgnoreLineWidth );
         break;

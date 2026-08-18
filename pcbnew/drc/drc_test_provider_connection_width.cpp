@@ -80,6 +80,21 @@ namespace std
 }
 
 
+static void addItemPolysWithEndings( BOARD_ITEM* aItem, SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                     int aError, ERROR_LOC aErrorLoc )
+{
+    if( aItem->Type() == PCB_SHAPE_T )
+    {
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
+        shape->TransformWithLineEndingsToPolygon( aBuffer, aClearance, aError, aErrorLoc );
+    }
+    else
+    {
+        aItem->TransformShapeToPolygon( aBuffer, aLayer, aClearance, aError, aErrorLoc );
+    }
+}
+
+
 class DRC_TEST_PROVIDER_CONNECTION_WIDTH : public DRC_TEST_PROVIDER
 {
 public:
@@ -365,7 +380,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                 ITEMS_POLY& itemsPoly = dataset[ { aNetcode, aLayer } ];
 
                 for( BOARD_ITEM* item : itemsPoly.Items )
-                    item->TransformShapeToPolygon( itemsPoly.Poly, aLayer, 0, ARC_HIGH_DEF, ERROR_OUTSIDE );
+                    addItemPolysWithEndings( item, itemsPoly.Poly, aLayer, 0, ARC_HIGH_DEF, ERROR_OUTSIDE );
 
                 itemsPoly.Poly.Fracture();
 

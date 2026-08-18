@@ -38,6 +38,22 @@
     - DRCE_COPPER_SLIVER
 */
 
+
+static void addItemPolysWithEndings( BOARD_ITEM* aItem, SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                     int aError, ERROR_LOC aErrorLoc )
+{
+    if( aItem->Type() == PCB_SHAPE_T )
+    {
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
+        shape->TransformWithLineEndingsToPolygon( aBuffer, aClearance, aError, aErrorLoc );
+    }
+    else
+    {
+        aItem->TransformShapeToPolygon( aBuffer, aLayer, aClearance, aError, aErrorLoc );
+    }
+}
+
+
 class DRC_TEST_PROVIDER_SLIVER_CHECKER : public DRC_TEST_PROVIDER
 {
 public:
@@ -128,8 +144,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                             }
                             else
                             {
-                                item->TransformShapeToPolygon( poly, layer, 0, ARC_LOW_DEF,
-                                                               ERROR_INSIDE );
+                                addItemPolysWithEndings( item, poly, layer, 0, ARC_LOW_DEF, ERROR_INSIDE );
                             }
 
                             if( m_drcEngine->IsCancelled() )

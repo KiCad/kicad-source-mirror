@@ -2047,7 +2047,7 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
             || aItem->GetLayer() == Margin
             || IsKicadCopperLayer( aItem->GetLayer() ) )
     {
-        std::vector<SHAPE*> shapes = aItem->MakeEffectiveShapes();
+        std::vector<SHAPE*> shapes = aItem->MakeEffectiveShapesWithLineEndings( aItem->GetEffectiveWidth() );
 
         for( SHAPE* shape : shapes )
         {

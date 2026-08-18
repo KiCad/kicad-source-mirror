@@ -1,0 +1,5 @@
+(version 1)
+(rule line_ending_different_net_clearance
+	(constraint clearance (min 0.5mm))
+	(condition "A.Net != B.Net")
+)

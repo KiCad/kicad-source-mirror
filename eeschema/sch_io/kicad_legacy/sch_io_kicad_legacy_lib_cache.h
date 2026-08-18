@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include <eda_shape.h>  // FILL_T
+#include <eda_fill.h>
 
 #include "sch_io/sch_io_lib_cache.h"
 

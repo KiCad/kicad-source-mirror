@@ -48,11 +48,13 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_ellipse.h>
+#include <bezier_curves.h>
 #include <utility>
 #include <vector>
 #include <wx/log.h>
 #include <macros.h>
 #include <callback_gal.h>
+#include <line_ending.h>
 #include <pcb_barcode.h>
 
 
@@ -741,40 +743,50 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         {
             unsigned int segCount = GetCircleSegmentCount( aShape->GetBoundingBox().GetSizeMax() );
 
-            createArcSegments( aShape->GetCenter(), aShape->GetStart(), aShape->GetArcAngle(),
-                               segCount, linewidth, aContainer, *aOwner );
+            EDA_ANGLE origStartAngle;
+            EDA_ANGLE endAngle;
+            aShape->CalcArcAngles( origStartAngle, endAngle );
+
+            EDA_ANGLE startAngle = origStartAngle;
+            EDA_ANGLE arcAngle = endAngle - startAngle;
+            if( !aShape->ShortenArcForEndings( startAngle, arcAngle, aShape->GetRadius(), linewidth ) )
+            {
+                break;
+            }
+
+            // Rotate the original start point by the angular offset from shortening.
+            VECTOR2I arcStart = aShape->GetStart();
+            RotatePoint( arcStart, aShape->GetCenter(), origStartAngle - startAngle );
+
+            createArcSegments( aShape->GetCenter(), arcStart, arcAngle, segCount, linewidth, aContainer, *aOwner );
             break;
         }
 
         case SHAPE_T::SEGMENT:
-            addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( aShape->GetStart() ),
-                                 TO_SFVEC2F( aShape->GetEnd() ), linewidth3DU, *aOwner );
+        {
+            VECTOR2I segStart = aShape->GetStart();
+            VECTOR2I segEnd = aShape->GetEnd();
+
+            if( !EDA_SHAPE::ShortenSegmentForEndings( segStart, segEnd, aShape->GetStartEnding(),
+                                                      aShape->GetEndEnding(), linewidth ) )
+            {
+                break;
+            }
+
+            addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( segStart ), TO_SFVEC2F( segEnd ), linewidth3DU, *aOwner );
             break;
+        }
 
         case SHAPE_T::BEZIER:
         {
-            SHAPE_POLY_SET polyList;
+            std::vector<VECTOR2D> pts = aShape->ShortenedBezierPolyline( linewidth );
 
-            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(),
-                                             ERROR_INSIDE );
-
-            // Some polygons can be a bit complex (especially when coming from a
-            // picture of a text converted to a polygon
-            // So call Simplify before calling ConvertPolygonToTriangles, just in case.
-            polyList.Simplify();
-
-            if( polyList.IsEmpty() ) // Just for caution
-                break;
-
-            if( margin != 0 )
+            for( size_t i = 0; i + 1 < pts.size(); i++ )
             {
-                CORNER_STRATEGY cornerStr = margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS
-                                                        : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
-
-                polyList.Inflate( margin, cornerStr, aShape->GetMaxError() );
+                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( VECTOR2I( pts[i] ) ), TO_SFVEC2F( VECTOR2I( pts[i + 1] ) ),
+                                     linewidth3DU, *aOwner );
             }
 
-            ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
             break;
         }
 
@@ -811,16 +823,34 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             }
             else
             {
-                std::vector<VECTOR2I> pts = aShape->GetCorners();
+                const SHAPE_POLY_SET& polyShape = aShape->GetPolyShape();
 
-                for( int i = 0; i < pts.size() - 1; i++ )
+                for( int outlineIdx = 0; outlineIdx < polyShape.OutlineCount(); ++outlineIdx )
                 {
-                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[i] ), TO_SFVEC2F( pts[i + 1] ), linewidth3DU,
-                                         *aOwner );
-                }
+                    const SHAPE_LINE_CHAIN& outline = polyShape.COutline( outlineIdx );
 
-                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[pts.size() - 1] ), TO_SFVEC2F( pts[0] ), linewidth3DU,
-                                     *aOwner );
+                    if( outline.PointCount() < 2 )
+                        continue;
+
+                    std::vector<VECTOR2I> pts;
+
+                    if( !aShape->GetShortenedBodyPolyPoints( outline, outlineIdx, pts, linewidth ) )
+                    {
+                        continue;
+                    }
+
+                    for( size_t i = 0; i + 1 < pts.size(); i++ )
+                    {
+                        addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[i] ), TO_SFVEC2F( pts[i + 1] ), linewidth3DU,
+                                             *aOwner );
+                    }
+
+                    if( outline.IsClosed() )
+                    {
+                        addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts.back() ), TO_SFVEC2F( pts.front() ),
+                                             linewidth3DU, *aOwner );
+                    }
+                }
             }
             break;
         }
@@ -879,7 +909,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
     if( lineStyle > LINE_STYLE::FIRST_TYPE )
     {
-        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking();
+        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking( linewidth );
         SFVEC2F             a3DU;
         SFVEC2F             b3DU;
 
@@ -901,6 +931,70 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
         for( SHAPE* shape : shapes )
             delete shape;
+    }
+
+    // Render line endings.
+    if( aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+        || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
+    {
+        EDA_ANGLE startTangent, endTangent;
+        aShape->GetEndingTangents( startTangent, endTangent, aShape->GetWidth() );
+
+        VECTOR2I startPt, endPt;
+
+        if( aShape->GetLineEndingEndpoints( startPt, endPt ) )
+        {
+            auto addEnding = [&]( const LINE_ENDING& aEnding, const VECTOR2I& aPoint, const EDA_ANGLE& aTangent )
+            {
+                if( aEnding.GetStyle() == LINE_ENDING_STYLE::NONE )
+                    return;
+
+                std::vector<VECTOR2I> polygon;
+                aEnding.GetShapes( aPoint, aTangent, linewidth, polygon );
+
+                if( polygon.empty() )
+                    return;
+
+                if( aEnding.GetStyle() == LINE_ENDING_STYLE::ARROW_OPEN )
+                {
+                    // Open V-shape: draw as thick line segments, not a filled polygon.
+                    int   strokeW = aEnding.GetStrokeWidth() > 0 ? aEnding.GetStrokeWidth() : linewidth;
+                    float stroke3DU = TO_3DU( strokeW );
+
+                    for( size_t ii = 0; ii + 1 < polygon.size(); ii++ )
+                    {
+                        addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( polygon[ii] ), TO_SFVEC2F( polygon[ii + 1] ),
+                                             stroke3DU, *aOwner );
+                    }
+                }
+                else
+                {
+                    if( aEnding.GetStrokeWidth() > 0 )
+                    {
+                        float stroke3DU = TO_3DU( aEnding.GetStrokeWidth() );
+
+                        for( size_t ii = 0; ii < polygon.size(); ii++ )
+                        {
+                            size_t next = ( ii + 1 ) % polygon.size();
+
+                            addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( polygon[ii] ), TO_SFVEC2F( polygon[next] ),
+                                                 stroke3DU, *aOwner );
+                        }
+                    }
+
+                    SHAPE_POLY_SET polySet;
+                    polySet.NewOutline();
+
+                    for( const VECTOR2I& pt : polygon )
+                        polySet.Append( pt );
+
+                    ConvertPolygonToTriangles( polySet, *aContainer, m_biuTo3Dunits, *aOwner );
+                }
+            };
+
+            addEnding( aShape->GetStartEnding(), startPt, startTangent );
+            addEnding( aShape->GetEndEnding(), endPt, endTangent );
+        }
     }
 
     if( isHatchedFill )

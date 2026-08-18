@@ -20,6 +20,7 @@
 #ifndef DIALOG_SHAPE_PROPERTIES_H
 #define DIALOG_SHAPE_PROPERTIES_H
 
+#include <memory>
 
 class SCH_SHAPE;
 class SCH_BASE_FRAME;
@@ -27,6 +28,7 @@ class SCH_BASE_FRAME;
 
 #include <dialog_shape_properties_base.h>
 #include <widgets/unit_binder.h>
+#include <line_ending.h>
 
 
 class DIALOG_SHAPE_PROPERTIES : public DIALOG_SHAPE_PROPERTIES_BASE
@@ -52,6 +54,40 @@ private:
     SCH_BASE_FRAME* m_frame;
     SCH_SHAPE*      m_shape;
     UNIT_BINDER     m_borderWidth;
+
+    wxBoxSizer*       m_endingsSizer;
+    wxStaticText*     m_startShapeLabel;
+    wxBitmapComboBox* m_startShapeChoice;
+    wxStaticText*     m_endShapeLabel;
+    wxBitmapComboBox* m_endShapeChoice;
+    wxStaticText*     m_startLengthLabel;
+    wxTextCtrl*       m_startLengthCtrl;
+    wxStaticText*     m_startLengthUnits;
+    wxStaticText*     m_endLengthLabel;
+    wxTextCtrl*       m_endLengthCtrl;
+    wxStaticText*     m_endLengthUnits;
+    wxStaticText*     m_startWidthLabel;
+    wxTextCtrl*       m_startWidthCtrl;
+    wxStaticText*     m_startWidthUnits;
+    wxStaticText*     m_endWidthLabel;
+    wxTextCtrl*       m_endWidthCtrl;
+    wxStaticText*     m_endWidthUnits;
+    wxStaticText*     m_startStrokeWidthLabel;
+    wxTextCtrl*       m_startStrokeWidthCtrl;
+    wxStaticText*     m_startStrokeWidthUnits;
+    wxStaticText*     m_endStrokeWidthLabel;
+    wxTextCtrl*       m_endStrokeWidthCtrl;
+    wxStaticText*     m_endStrokeWidthUnits;
+    wxStaticText*     m_endingsHelpLabel;
+
+    std::unique_ptr<UNIT_BINDER> m_startLength;
+    std::unique_ptr<UNIT_BINDER> m_startWidth;
+    std::unique_ptr<UNIT_BINDER> m_startStrokeWidth;
+    std::unique_ptr<UNIT_BINDER> m_endLength;
+    std::unique_ptr<UNIT_BINDER> m_endWidth;
+    std::unique_ptr<UNIT_BINDER> m_endStrokeWidth;
+
+    void createLineEndingControls( SCH_BASE_FRAME* aParent );
 };
 
 #endif // DIALOG_SHAPE_PROPERTIES_H

@@ -640,6 +640,7 @@ set( COMMON_WIDGET_SRCS
     widgets/filter_combobox.cpp
     widgets/font_choice.cpp
     widgets/footprint_choice.cpp
+    widgets/line_ending_bitmap.cpp
     widgets/footprint_diff_widget.cpp
     widgets/footprint_preview_widget.cpp
     widgets/widget_diff_canvas.cpp
@@ -848,6 +849,7 @@ set( COMMON_SRCS
     reference_image.cpp
     render_settings.cpp
     status_popup.cpp
+    line_ending.cpp
     stroke_params.cpp
     table_io.cpp
     template_fieldnames.cpp

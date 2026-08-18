@@ -23,6 +23,7 @@
 #include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <bezier_curves.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <footprint.h>
 #include <pcb_textbox.h>
@@ -1027,15 +1028,27 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
             return true;
 
         LINE_STYLE lineStyle = graphic->GetLineStyle();
+        bool       hasEndings = graphic->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+                          || graphic->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE;
+        bool endingsAlreadyAdded = false;
 
         if( lineStyle == LINE_STYLE::SOLID )
         {
-            graphic->TransformShapeToPolySet( m_poly_shapes[pcblayer][graphic->GetNetname()], pcblayer, 0,
-                                              maxError, ERROR_INSIDE );
+            if( hasEndings )
+            {
+                graphic->TransformWithLineEndingsToPolygon( m_poly_shapes[pcblayer][graphic->GetNetname()], 0, maxError,
+                                                            ERROR_INSIDE );
+                endingsAlreadyAdded = true;
+            }
+            else
+            {
+                graphic->TransformShapeToPolySet( m_poly_shapes[pcblayer][graphic->GetNetname()], pcblayer, 0, maxError,
+                                                  ERROR_INSIDE );
+            }
         }
         else
         {
-            std::vector<SHAPE*>        shapes = graphic->MakeEffectiveShapesForStroking();
+            std::vector<SHAPE*>        shapes = graphic->MakeEffectiveShapesForStroking( graphic->GetWidth() );
             const PCB_PLOT_PARAMS&     plotParams = m_board->GetPlotOptions();
             KIGFX::PCB_RENDER_SETTINGS renderSettings;
 
@@ -1055,6 +1068,69 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
 
             for( SHAPE* shape : shapes )
                 delete shape;
+        }
+
+        // Add line ending shapes.
+        if( !endingsAlreadyAdded
+            && ( graphic->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+                 || graphic->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE ) )
+        {
+            EDA_ANGLE startTangent, endTangent;
+            graphic->GetEndingTangents( startTangent, endTangent, graphic->GetWidth() );
+
+            VECTOR2I startPt, endPt;
+
+            if( graphic->GetLineEndingEndpoints( startPt, endPt ) )
+            {
+                auto addEnding = [&]( const LINE_ENDING& aEnding, const VECTOR2I& aPoint, const EDA_ANGLE& aTangent )
+                {
+                    if( aEnding.GetStyle() == LINE_ENDING_STYLE::NONE )
+                        return;
+
+                    std::vector<VECTOR2I> polygon;
+                    aEnding.GetShapes( aPoint, aTangent, graphic->GetWidth(), polygon );
+
+                    if( !polygon.empty() )
+                    {
+                        if( aEnding.GetStyle() == LINE_ENDING_STYLE::ARROW_OPEN )
+                        {
+                            // Open V-shape: draw as thick line segments, not a filled polygon.
+                            int strokeW = aEnding.GetStrokeWidth() > 0 ? aEnding.GetStrokeWidth() : graphic->GetWidth();
+
+                            for( size_t ii = 0; ii + 1 < polygon.size(); ii++ )
+                            {
+                                TransformOvalToPolygon( m_poly_shapes[pcblayer][graphic->GetNetname()], polygon[ii],
+                                                        polygon[ii + 1], strokeW, maxError, ERROR_INSIDE );
+                            }
+                        }
+                        else
+                        {
+                            if( aEnding.GetStrokeWidth() > 0 )
+                            {
+                                for( size_t ii = 0; ii < polygon.size(); ii++ )
+                                {
+                                    size_t next = ( ii + 1 ) % polygon.size();
+
+                                    TransformOvalToPolygon( m_poly_shapes[pcblayer][graphic->GetNetname()], polygon[ii],
+                                                            polygon[next], aEnding.GetStrokeWidth(), maxError,
+                                                            ERROR_INSIDE );
+                                }
+                            }
+
+                            SHAPE_POLY_SET polySet;
+                            polySet.NewOutline();
+
+                            for( const VECTOR2I& pt : polygon )
+                                polySet.Append( pt );
+
+                            m_poly_shapes[pcblayer][graphic->GetNetname()].Append( polySet );
+                        }
+                    }
+                };
+
+                addEnding( graphic->GetStartEnding(), startPt, startTangent );
+                addEnding( graphic->GetEndEnding(), endPt, endTangent );
+            }
         }
 
         if( graphic->IsHatchedFill() )

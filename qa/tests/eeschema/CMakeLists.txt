@@ -210,6 +210,7 @@ set( QA_EESCHEMA_SRCS
     test_flat_hierarchy.cpp
     test_multi_top_level_sheets.cpp
     test_save_load_schematic.cpp
+    test_sch_line_ending_io.cpp
     test_sch_ellipse_roundtrip.cpp
     test_project_name_instances.cpp
     test_legacy_load.cpp

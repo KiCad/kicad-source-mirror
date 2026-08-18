@@ -21,14 +21,18 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 
+#include <bezier_curves.h>
 #include <core/mirror.h>
 #include <geometry/ellipse.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/approximation.h>
 #include <geometry/shape_ellipse.h>
+#include <eda_fill.h>
 #include <properties/property.h>
 #include <stroke_params.h>
+#include <line_ending.h>
 #include <trigo.h>
 #include <api/serializable.h>
 
@@ -51,29 +55,6 @@ enum class SHAPE_T : int
     BEZIER,
     ELLIPSE,
     ELLIPSE_ARC
-};
-
-
-// WARNING: Do not change these values without updating dialogs that depend on their position values
-enum class FILL_T : int
-{
-    NO_FILL = 1,
-    FILLED_SHAPE,               ///< Fill with object color.
-    FILLED_WITH_BG_BODYCOLOR,   //< Fill with background body color.
-    FILLED_WITH_COLOR,          //< Fill with a separate color.
-    HATCH,
-    REVERSE_HATCH,
-    CROSS_HATCH
-};
-
-
-enum UI_FILL_MODE
-{
-    NONE = 0,
-    SOLID,
-    HATCH,
-    REVERSE_HATCH,
-    CROSS_HATCH
 };
 
 
@@ -183,6 +164,101 @@ public:
 
     virtual void SetShape( SHAPE_T aShape )    { m_shape = aShape; }
     SHAPE_T      GetShape() const              { return m_shape; }
+
+    const LINE_ENDING& GetStartEnding() const { return m_startEnding; }
+    void               SetStartEnding( const LINE_ENDING& aEnding ) { m_startEnding = aEnding; }
+
+    const LINE_ENDING& GetEndEnding() const { return m_endEnding; }
+    void               SetEndEnding( const LINE_ENDING& aEnding ) { m_endEnding = aEnding; }
+
+    LINE_ENDING_STYLE GetStartEndingStyle() const { return m_startEnding.GetStyle(); }
+    void              SetStartEndingStyle( LINE_ENDING_STYLE aStyle ) { m_startEnding.SetStyle( aStyle ); }
+
+    LINE_ENDING_STYLE GetEndEndingStyle() const { return m_endEnding.GetStyle(); }
+    void              SetEndEndingStyle( LINE_ENDING_STYLE aStyle ) { m_endEnding.SetStyle( aStyle ); }
+
+    int  GetStartEndingLength() const { return m_startEnding.GetLength(); }
+    void SetStartEndingLength( int aLength ) { m_startEnding.SetLength( aLength ); }
+    int  GetStartEndingWidth() const { return m_startEnding.GetWidth(); }
+    void SetStartEndingWidth( int aWidth ) { m_startEnding.SetWidth( aWidth ); }
+
+    int  GetEndEndingLength() const { return m_endEnding.GetLength(); }
+    void SetEndEndingLength( int aLength ) { m_endEnding.SetLength( aLength ); }
+    int  GetEndEndingWidth() const { return m_endEnding.GetWidth(); }
+    void SetEndEndingWidth( int aWidth ) { m_endEnding.SetWidth( aWidth ); }
+
+    int  GetStartEndingStrokeWidth() const { return m_startEnding.GetStrokeWidth(); }
+    void SetStartEndingStrokeWidth( int aWidth ) { m_startEnding.SetStrokeWidth( aWidth ); }
+    int  GetEndEndingStrokeWidth() const { return m_endEnding.GetStrokeWidth(); }
+    void SetEndEndingStrokeWidth( int aWidth ) { m_endEnding.SetStrokeWidth( aWidth ); }
+
+    /**
+     * Compute outward-facing tangent angles at the start and end of the shape.
+     *
+     * When aLineWidth > 0, the tangent accounts for line shortening so that
+     * end shapes align with the visible stroke on tight curves.
+     */
+    void GetEndingTangents( EDA_ANGLE& aStartTangent, EDA_ANGLE& aEndTangent, int aLineWidth = 0 ) const;
+
+    /**
+     * Return the source endpoints used to place line endings.
+     *
+     * @return false if the shape does not have usable endpoints for line endings.
+     */
+    bool GetLineEndingEndpoints( VECTOR2I& aStartPoint, VECTOR2I& aEndPoint ) const;
+
+    /**
+     * Shorten a segment body for line endings.
+     *
+     * Static so SCH_LINE (which doesn't inherit EDA_SHAPE) can use it too.
+     *
+     * @return false if the line endings consume the whole segment body.
+     */
+    static bool ShortenSegmentForEndings( VECTOR2I& aStart, VECTOR2I& aEnd, const LINE_ENDING& aStartEnding,
+                                          const LINE_ENDING& aEndEnding, int aLineWidth );
+
+    /**
+     * Shorten an arc body for line endings.
+     *
+     * @return false if the line endings consume the whole arc body.
+     */
+    bool ShortenArcForEndings( EDA_ANGLE& aStartAngle, EDA_ANGLE& aArcAngle, double aRadius, int aLineWidth ) const;
+
+    /**
+     * Return the cubic Bezier curve shortened for line endings.
+     *
+     * The shortening distance is mapped onto the source curve using a
+     * fixed-cost numerical arc-length estimator, then the curve is subdivided with
+     * de Casteljau so curve-capable backends can keep a Bezier.
+     */
+    std::optional<BEZIER<double>> ShortenedBezierCurve( int aLineWidth ) const;
+
+    /**
+     * Return the flattened Bezier polyline after line-ending shortening.
+     */
+    std::vector<VECTOR2D> ShortenedBezierPolyline( int aLineWidth ) const;
+
+    bool ShortenPolyForEndings( VECTOR2D& aFirst, VECTOR2D& aLast, const VECTOR2D& aSecond,
+                                const VECTOR2D& aPenultimate, int aLineWidth ) const;
+
+    /**
+     * Apply line-ending body shortening to copied/generated polyline points.
+     *
+     * Line endings belong to the first open outline only.  Other outlines are
+     * returned unchanged.
+     *
+     * @return false if the outline is invalid or the line endings consume its body.
+     */
+    bool ShortenBodyPolyPoints( std::vector<VECTOR2I>& aPoints, bool aClosed, int aOutlineIdx, int aLineWidth ) const;
+
+    /**
+     * Copy an outline and apply line-ending body shortening when applicable.
+     *
+     * @return false if the outline is invalid or the line endings consume its body.
+     */
+    bool GetShortenedBodyPolyPoints( const SHAPE_LINE_CHAIN& aOutline, int aOutlineIdx, std::vector<VECTOR2I>& aPoints,
+                                     int aLineWidth ) const;
+
 
     /**
      * Return the starting point of the graphic.
@@ -464,6 +540,21 @@ public:
         return makeEffectiveShapes( aEdgeOnly );
     }
 
+    /**
+     * Make the line-ending geometry associated with this shape.
+     *
+     * Caller owns the objects.
+     */
+    std::vector<SHAPE*> MakeLineEndingEffectiveShapes( int aLineWidth ) const;
+
+    /**
+     * Make effective geometry for the shape body shortened for line endings plus the
+     * line-ending geometry itself.
+     *
+     * Caller owns the objects.
+     */
+    std::vector<SHAPE*> MakeEffectiveShapesWithLineEndings( int aLineWidth ) const;
+
     virtual std::vector<SHAPE*> MakeEffectiveShapesForHitTesting() const
     {
         return makeEffectiveShapes( false, false, true );
@@ -476,9 +567,16 @@ public:
      * pattern runs continuously along the curve instead of restarting at every point of its
      * polyline approximation.  Every other shape comes from MakeEffectiveShapes(), edges only.
      *
+     * If the shape has line endings that consume part of the body, the body is shortened
+     * accordingly (a shortened Bezier still comes back as one SHAPE_LINE_CHAIN).
+     *
      * Caller owns the objects.
+     *
+     * @param aLineWidth is the width used to size the line endings; -1 uses
+     *                   GetEffectiveWidth() (callers whose width is resolved externally, e.g.
+     *                   by render settings, must pass it explicitly).
      */
-    std::vector<SHAPE*> MakeEffectiveShapesForStroking() const;
+    std::vector<SHAPE*> MakeEffectiveShapesForStroking( int aLineWidth = -1 ) const;
 
     void ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
@@ -518,6 +616,20 @@ public:
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
                                   ERROR_LOC aErrorLoc, bool ignoreLineWidth = false,
                                   bool includeFill = false ) const;
+
+    /**
+     * Append only the line-ending geometry associated with this shape to a polygon set.
+     */
+    void TransformLineEndingsToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                        int aLineWidth ) const;
+
+    /**
+     * Convert the shape body shortened for line endings plus line-ending geometry to polygons.
+     */
+    void TransformWithLineEndingsToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                            bool ignoreLineWidth = false ) const;
+
+    bool GetLineEndingsBoundingBox( BOX2I& aBBox, int aLineWidth ) const;
 
     int Compare( const EDA_SHAPE* aOther ) const;
 
@@ -586,6 +698,15 @@ protected:
     std::vector<SHAPE*> makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly = false,
                                              bool aHittesting = false ) const;
 
+    /**
+     * Make effective geometry for the shape body shortened for line endings, without the
+     * line-ending geometry itself.  Falls back to makeEffectiveShapes() when no shortening
+     * applies.
+     *
+     * Caller owns the objects.
+     */
+    std::vector<SHAPE*> makeShortenedBodyShapes( int aLineWidth, bool aEdgeOnly = false ) const;
+
     SHAPE_ELLIPSE buildShapeEllipse() const;
 
     /// When m_shape == ELLIPSE_ARC, recompute m_start/m_end from m_ellipse.
@@ -602,6 +723,8 @@ protected:
     bool                   m_endsSwapped;  // true if start/end were swapped e.g. SetArcAngleAndEnd
     SHAPE_T                m_shape;        // Shape: line, Circle, Arc
     STROKE_PARAMS          m_stroke;       // Line style, width, etc.
+    LINE_ENDING            m_startEnding;  // Line ending at start point
+    LINE_ENDING            m_endEnding;    // Line ending at end point
     FILL_T                 m_fill;
     COLOR4D                m_fillColor;
 
@@ -632,5 +755,6 @@ protected:
 
 DECLARE_ENUM_TO_WXANY( SHAPE_T );
 DECLARE_ENUM_TO_WXANY( LINE_STYLE );
+DECLARE_ENUM_TO_WXANY( LINE_ENDING_STYLE );
 DECLARE_ENUM_TO_WXANY( UI_FILL_MODE );
 

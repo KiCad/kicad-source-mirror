@@ -46,6 +46,7 @@
 #include <pcb_plot_params.h>                  // for PCB_PLOT_PARAMS, PCB_PL...
 #include <advanced_config.h>
 
+#include <line_ending.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <footprint.h>
@@ -991,8 +992,18 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         switch( aShape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            m_plotter->ThickSegment( aShape->GetStart(), aShape->GetEnd(), thickness, getMetadata() );
+        {
+            VECTOR2I segStart = aShape->GetStart();
+            VECTOR2I segEnd = aShape->GetEnd();
+
+            if( EDA_SHAPE::ShortenSegmentForEndings( segStart, segEnd, aShape->GetStartEnding(), aShape->GetEndEnding(),
+                                                     thickness ) )
+            {
+                m_plotter->ThickSegment( segStart, segEnd, thickness, getMetadata() );
+            }
+
             break;
+        }
 
         case SHAPE_T::CIRCLE:
             if( isSolidFill )
@@ -1024,6 +1035,20 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                 m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness,
                                         getMetadata() );
             }
+            else if( aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+                     || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
+            {
+                EDA_ANGLE startAngle;
+                EDA_ANGLE endAngle;
+                aShape->CalcArcAngles( startAngle, endAngle );
+
+                EDA_ANGLE arcAngle = endAngle - startAngle;
+                if( aShape->ShortenArcForEndings( startAngle, arcAngle, aShape->GetRadius(), thickness ) )
+                {
+                    m_plotter->ThickArc( VECTOR2D( aShape->GetCenter() ), startAngle, arcAngle, aShape->GetRadius(),
+                                         thickness, getMetadata() );
+                }
+            }
             else
             {
                 m_plotter->ThickArc( *aShape, getMetadata(), thickness );
@@ -1033,14 +1058,59 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         }
 
         case SHAPE_T::BEZIER:
-            m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezierC1(),
-                                    aShape->GetBezierC2(), aShape->GetEnd(), 0, thickness );
+        {
+            std::optional<BEZIER<double>> curve = aShape->ShortenedBezierCurve( thickness );
+
+            if( curve && m_plotter->GetPlotterType() == PLOT_FORMAT::SVG )
+            {
+                m_plotter->BezierCurve( VECTOR2I( curve->Start ), VECTOR2I( curve->C1 ), VECTOR2I( curve->C2 ),
+                                        VECTOR2I( curve->End ), aShape->GetMaxError(), thickness );
+            }
+            else
+            {
+                std::vector<VECTOR2D> pts = aShape->ShortenedBezierPolyline( thickness );
+
+                for( size_t i = 0; i + 1 < pts.size(); i++ )
+                {
+                    m_plotter->ThickSegment( VECTOR2I( pts[i] ), VECTOR2I( pts[i + 1] ), thickness, getMetadata() );
+                }
+            }
+
             break;
+        }
 
         case SHAPE_T::POLY:
             if( aShape->IsPolyShapeValid() )
             {
-                if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
+                bool hasEndings = aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+                                  || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE;
+
+                auto plotStrokeOutline = [&]( const SHAPE_LINE_CHAIN& aOutline, int aOutlineIdx )
+                {
+                    if( aOutline.PointCount() < 2 )
+                        return;
+
+                    if( hasEndings )
+                    {
+                        std::vector<VECTOR2I> pts;
+
+                        if( !aShape->GetShortenedBodyPolyPoints( aOutline, aOutlineIdx, pts, thickness ) )
+                            return;
+
+                        SHAPE_LINE_CHAIN shortened;
+
+                        for( const VECTOR2I& pt : pts )
+                            shortened.Append( pt );
+
+                        shortened.SetClosed( aOutline.IsClosed() );
+                        m_plotter->PlotPoly( shortened, FILL_T::NO_FILL, thickness, getMetadata() );
+                        return;
+                    }
+
+                    m_plotter->PlotPoly( aOutline, FILL_T::NO_FILL, thickness, getMetadata() );
+                };
+
+                if( !hasEndings && m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
                 {
                     m_plotter->ThickPoly( aShape->GetPolyShape(), thickness, getMetadata() );
                 }
@@ -1056,10 +1126,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                     if( thickness > 0 )
                     {
                         for( int jj = 0; jj < origPoly.OutlineCount(); ++jj )
-                        {
-                            m_plotter->PlotPoly( origPoly.COutline( jj ), FILL_T::NO_FILL,
-                                                 thickness, getMetadata() );
-                        }
+                            plotStrokeOutline( origPoly.COutline( jj ), jj );
                     }
 
                     if( !isSolidFill )
@@ -1180,7 +1247,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     }
     else
     {
-        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking();
+        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking( thickness );
 
         for( SHAPE* shape : shapes )
         {
@@ -1194,6 +1261,22 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
         for( SHAPE* shape : shapes )
             delete shape;
+    }
+
+    // Plot line endings for open shapes.
+    if( aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+        || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
+    {
+        EDA_ANGLE startTangent, endTangent;
+        aShape->GetEndingTangents( startTangent, endTangent, thickness );
+
+        VECTOR2I startPt, endPt;
+
+        if( aShape->GetLineEndingEndpoints( startPt, endPt ) )
+        {
+            aShape->GetStartEnding().Plot( m_plotter, startPt, startTangent, thickness, getMetadata() );
+            aShape->GetEndEnding().Plot( m_plotter, endPt, endTangent, thickness, getMetadata() );
+        }
     }
 
     if( isHatchedFill )

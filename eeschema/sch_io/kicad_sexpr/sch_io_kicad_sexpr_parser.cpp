@@ -731,6 +731,55 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
 }
 
 
+void SCH_IO_KICAD_SEXPR_PARSER::parseLineEnding( LINE_ENDING& aEnding )
+{
+    // Current token is T_start_shape or T_end_shape. Next token is the style.
+    T token = NextTok();
+
+    switch( token )
+    {
+    case T_arrow: aEnding.SetStyle( LINE_ENDING_STYLE::ARROW ); break;
+    case T_circle: aEnding.SetStyle( LINE_ENDING_STYLE::CIRCLE ); break;
+    case T_square: aEnding.SetStyle( LINE_ENDING_STYLE::SQUARE ); break;
+    case T_arrow_open: aEnding.SetStyle( LINE_ENDING_STYLE::ARROW_OPEN ); break;
+    case T_none: aEnding.SetStyle( LINE_ENDING_STYLE::NONE ); break;
+    default: Expecting( "arrow, circle, square, arrow_open, or none" );
+    }
+
+    // Parse optional sub-tokens
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_length:
+            aEnding.SetLength( parseInternalUnits( "length" ) );
+            NeedRIGHT();
+            break;
+
+        case T_width:
+            aEnding.SetWidth( parseInternalUnits( "width" ) );
+            NeedRIGHT();
+            break;
+
+        case T_stroke:
+        {
+            STROKE_PARAMS stroke;
+            parseStroke( stroke );
+            aEnding.SetStroke( stroke );
+            break;
+        }
+
+        default: Expecting( "length, width, or stroke" );
+        }
+    }
+}
+
+
 void SCH_IO_KICAD_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 {
     wxCHECK_RET( CurTok() == T_fill, "Cannot parse " + GetTokenString( CurTok() ) + " as a fill." );
@@ -1619,8 +1668,23 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolArc()
             arc->SetFillColor( fill.m_Color );
             break;
 
-        default:
-            Expecting( "start, mid, end, radius, stroke, or fill" );
+        case T_start_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            arc->SetStartEnding( ending );
+            break;
+        }
+
+        case T_end_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            arc->SetEndEnding( ending );
+            break;
+        }
+
+        default: Expecting( "start, mid, end, radius, stroke, fill, start_shape, or end_shape" );
         }
     }
 
@@ -1776,8 +1840,23 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolBezier()
             bezier->SetFillColor( fill.m_Color );
             break;
 
-        default:
-            Expecting( "pts, stroke, or fill" );
+        case T_start_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            bezier->SetStartEnding( ending );
+            break;
+        }
+
+        case T_end_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            bezier->SetEndEnding( ending );
+            break;
+        }
+
+        default: Expecting( "pts, stroke, fill, start_shape, or end_shape" );
         }
     }
 
@@ -2180,8 +2259,23 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPolyLine()
             poly->SetFillColor( fill.m_Color );
             break;
 
-        default:
-            Expecting( "pts, stroke, or fill" );
+        case T_start_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            poly->SetStartEnding( ending );
+            break;
+        }
+
+        case T_end_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            poly->SetEndEnding( ending );
+            break;
+        }
+
+        default: Expecting( "pts, stroke, fill, start_shape, or end_shape" );
         }
     }
 
@@ -3281,6 +3375,8 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
                 line->SetEndPoint( outline.CPoint(1) );
                 line->SetStroke( poly->GetStroke() );
                 line->SetLocked( poly->IsLocked() );
+                line->SetStartEnding( poly->GetStartEnding() );
+                line->SetEndEnding( poly->GetEndEnding() );
                 const_cast<KIID&>( line->m_Uuid ) = poly->m_Uuid;
 
                 screen->Append( line );
@@ -4639,6 +4735,22 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchPolyLine()
             fixupSchFillMode( polyline.get() );
             break;
 
+        case T_start_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            polyline->SetStartEnding( ending );
+            break;
+        }
+
+        case T_end_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            polyline->SetEndEnding( ending );
+            break;
+        }
+
         case T_uuid:
             NeedSYMBOL();
             const_cast<KIID&>( polyline->m_Uuid ) = parseKIID();
@@ -4650,8 +4762,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchPolyLine()
             NeedRIGHT();
             break;
 
-        default:
-            Expecting( "pts, uuid, stroke, fill or locked" );
+        default: Expecting( "pts, uuid, stroke, fill, locked, start_shape, or end_shape" );
         }
     }
 
@@ -4723,6 +4834,22 @@ SCH_LINE* SCH_IO_KICAD_SEXPR_PARSER::parseLine()
             line->SetStroke( stroke );
             break;
 
+        case T_start_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            line->SetStartEnding( ending );
+            break;
+        }
+
+        case T_end_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            line->SetEndEnding( ending );
+            break;
+        }
+
         case T_uuid:
             NeedSYMBOL();
             const_cast<KIID&>( line->m_Uuid ) = parseKIID();
@@ -4734,8 +4861,7 @@ SCH_LINE* SCH_IO_KICAD_SEXPR_PARSER::parseLine()
             NeedRIGHT();
             break;
 
-        default:
-            Expecting( "pts, uuid, stroke or locked" );
+        default: Expecting( "pts, uuid, stroke, locked, start_shape, or end_shape" );
         }
     }
 
@@ -4792,6 +4918,22 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchArc()
             fixupSchFillMode( arc.get() );
             break;
 
+        case T_start_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            arc->SetStartEnding( ending );
+            break;
+        }
+
+        case T_end_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            arc->SetEndEnding( ending );
+            break;
+        }
+
         case T_uuid:
             NeedSYMBOL();
             const_cast<KIID&>( arc->m_Uuid ) = parseKIID();
@@ -4803,8 +4945,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchArc()
             NeedRIGHT();
             break;
 
-        default:
-            Expecting( "start, mid, end, stroke, fill, uuid or locked" );
+        default: Expecting( "start, mid, end, stroke, fill, locked, start_shape, end_shape, or uuid" );
         }
     }
 
@@ -5077,6 +5218,22 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchBezier()
             fixupSchFillMode( bezier.get() );
             break;
 
+        case T_start_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            bezier->SetStartEnding( ending );
+            break;
+        }
+
+        case T_end_shape:
+        {
+            LINE_ENDING ending;
+            parseLineEnding( ending );
+            bezier->SetEndEnding( ending );
+            break;
+        }
+
         case T_uuid:
             NeedSYMBOL();
             const_cast<KIID&>( bezier->m_Uuid ) = parseKIID();
@@ -5088,8 +5245,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchBezier()
             NeedRIGHT();
             break;
 
-        default:
-            Expecting( "pts, stroke, fill, uuid or locked" );
+        default: Expecting( "pts, stroke, fill, locked, start_shape, end_shape, or uuid" );
         }
     }
 
