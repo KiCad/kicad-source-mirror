@@ -109,6 +109,12 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
 
     cacheLib();
 
+    if( auto cacheIt = m_nameToSymbolcache.find( aAliasName ); cacheIt != m_nameToSymbolcache.end() )
+    {
+        LIB_SYMBOL* cached = cacheIt->second.get();
+        return cached->Duplicate();
+    }
+
     /*
      * Table names are tricky, in order to allow maximum flexibility to the user.
      * The slash character is used as a separator between a table name and symbol name, but symbol
