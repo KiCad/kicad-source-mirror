@@ -671,50 +671,51 @@ void DP_GATEWAYS::BuildOrthoProjections( DP_GATEWAYS& aEntries, const VECTOR2I& 
 }
 
 
-bool DP_GATEWAYS::FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool aPrefDiagonal,
-                               DIFF_PAIR& aDp )
+std::vector<DP_GATEWAYS::FIT_RESULT> DP_GATEWAYS::FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool aFitVias )
 {
-    DP_CANDIDATE best;
+    std::vector<DP_GATEWAYS::FIT_RESULT> results;
 
-    int bestScore = -1000;
-    bool found = false;
+    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
+    PNS_DBG( dbg, BeginGroup, wxT("fit-gateways"), 0 );
+    bool found; 
+
+    for ( bool diagonal : { true, false } )
+    {
     for( const DP_GATEWAY& g_entry : aEntry.Gateways() )
     {
         for( const DP_GATEWAY& g_target : aTarget.Gateways() )
         {
-            for( bool preferred : { false, true } )
-            {
-                int score = preferred ? 0 : -3;
-                score += g_entry.Priority();
-                score += g_target.Priority();
+                FIT_RESULT result;
+                result.score = g_entry.Priority();
+                result.score += g_target.Priority();
 
-                if( score >= bestScore )
+                //PNS_DBG( dbg, Message, wxString::Format("mm cl %d", m_dims.MinClearance() ) );
+
+                DIFF_PAIR l( m_dims );
+                
+                //PNS_DBG( dbg, Message, wxString::Format("mm cl2 %d", l.Dimensions().MinClearance() ) );
+
+                
+
+                if( l.BuildInitial( g_entry, g_target, diagonal, aFitVias, result.coupledRatio, result.aspectRatio ) )
                 {
-                    DIFF_PAIR l( m_gap );
+                        result.p = l.CP();
+                        result.n = l.CN();
+                        result.diagonal = diagonal;
+                        result.entry = g_entry;
+                        result.target = g_target;
+                        result.isConcave = isGatewayConcave( g_entry, l );
+                        results.push_back( result );
 
-                    if( l.BuildInitial( g_entry, g_target, preferred ? aPrefDiagonal
-                                                                     : !aPrefDiagonal ) )
-                    {
-                        best.p = l.CP();
-                        best.n = l.CN();
-                        bestScore = score;
-                        found = true;
+    
                     }
+            }    
                 }
             }
-        }
-    }
+    PNS_DBGN( dbg, EndGroup );
 
-
-    if( found )
-    {
-        aDp.SetGap( m_gap );
-        aDp.SetShape( best.p, best.n );
-        return true;
-    }
-
-    return false;
+    return results;
 }
 
 

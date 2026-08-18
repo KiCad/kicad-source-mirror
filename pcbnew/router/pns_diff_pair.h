@@ -328,8 +328,21 @@ public:
                        bool aViaMode = false );
     void BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool aPreferDiagonal );
 
-    bool FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool aPrefDiagonal,
-                      DIFF_PAIR& aDp );
+    struct FIT_RESULT
+    {
+        SHAPE_LINE_CHAIN p, n;
+        DP_GATEWAY entry, target;
+        float aspectRatio;
+        float coupledRatio;
+        bool isDiagonal;
+        int score;
+        bool diagonal;
+        bool entryAngleOK;
+        bool targetAngleOK;
+        bool isConcave;
+    };
+
+    std::vector<FIT_RESULT> FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool aFitVias );
 
     std::vector<DP_GATEWAY>& Gateways() { return m_gateways; }
 
