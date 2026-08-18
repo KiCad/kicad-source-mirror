@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-17 15:37+0300\n"
-"PO-Revision-Date: 2026-08-02 19:02+0000\n"
+"PO-Revision-Date: 2026-08-18 11:29+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5105,7 +5105,7 @@ msgstr "最小グリッド間隔:"
 #: common/dialogs/panel_gal_options_base.cpp:72
 #: common/widgets/gal_options_panel_base.cpp:72
 msgid "Snap to grid:"
-msgstr "グリッドにスナップ:"
+msgstr "グリッドに吸着:"
 
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
@@ -5955,7 +5955,7 @@ msgstr "DP ギャップ"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "Tuning Profile"
-msgstr "調整プロファイル"
+msgstr "等長配線の調整プロファイル"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -7866,7 +7866,7 @@ msgstr "タグの削除に失敗しました。"
 
 #: common/git/kicad_git_errors.cpp:74
 msgid "Unknown error."
-msgstr "不明なエラー."
+msgstr "原因不明のエラー."
 
 #: common/git/kicad_git_errors.cpp:75
 msgid "No error."
@@ -8355,11 +8355,11 @@ msgstr "選択から除外"
 
 #: common/hotkey_store.cpp:53
 msgid "Ignore Grid Snaps"
-msgstr "グリッド スナップを無視"
+msgstr "グリッド 吸着を無視"
 
 #: common/hotkey_store.cpp:54
 msgid "Ignore Other Snaps"
-msgstr "他のスナップを無視"
+msgstr "他の吸着を無視"
 
 #: common/hotkey_store.cpp:61 common/tool/action_menu.cpp:242
 #: common/tool/action_menu.cpp:258 common/tool/actions.cpp:152
@@ -9924,9 +9924,9 @@ msgid "Failed to archive file '%s'."
 msgstr "ファイル '%s' にアーカイブできませんでした。"
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "ファイル '%s' にアーカイブできませんでした。"
+msgstr "ファイル '%s' にアーカイブできませんでした: %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
@@ -19901,9 +19901,8 @@ msgstr "ファイルが未選択です!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:191
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:197
-#, fuzzy
 msgid "Import scale must be a positive number."
-msgstr "拡大／縮小率は正の数でなければなりません。"
+msgstr "インポート拡大／縮小率は正の数でなければなりません。"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:234
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:252
@@ -20046,7 +20045,7 @@ msgstr "フィールド '%s' が異なります: %s; %s ."
 #: eeschema/lib_symbol.cpp:2343
 #, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "回路図シンボルにフィールドがない: %s."
+msgstr "回路図シンボルが欠損している: %s."
 
 #: eeschema/lib_symbol.cpp:2353
 msgid "Footprint filter count differs."
@@ -21048,9 +21047,11 @@ msgid "Show Field Name"
 msgstr "フィールド名を表示"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "%s のフットプリントを '%s' から '%s' へ変更します。"
+msgstr ""
+"%d 個のインポートされたフットプリント割り当てをライブラリ '%s' に再リンクしま"
+"した。"
 
 #: eeschema/sch_group.cpp:349 pcbnew/pcb_group.cpp:419
 #, c-format
@@ -27023,7 +27024,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1239
 msgid "Generate Bill of Materials..."
-msgstr "部品表を生成..."
+msgstr "部品表(BOM)を生成..."
 
 #: eeschema/tools/sch_actions.cpp:1240
 msgid "Generate a bill of materials for the current schematic"
@@ -27149,7 +27150,7 @@ msgstr "描画とドラッグの操作を水平、垂直、45度に制限しま�
 
 #: eeschema/tools/sch_actions.cpp:1373 pcbnew/tools/pcb_actions.cpp:1533
 msgid "Switch to next angle snapping mode"
-msgstr "次の角度スナップモードに切り替える"
+msgstr "次の角度吸着モードに切り替える"
 
 #: eeschema/tools/sch_actions.cpp:1383
 msgid "Annotate Automatically"
@@ -33335,7 +33336,7 @@ msgstr "サポートしていません"
 #: libs/kiplatform/include/printing.h:54
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:568
 msgid "Unknown error"
-msgstr "不明なエラー"
+msgstr "原因不明のエラー"
 
 #: libs/kiplatform/os/windows/environment.cpp:82
 #, c-format
@@ -36266,9 +36267,8 @@ msgid "Deleted items via API"
 msgstr "API経由でアイテムを削除"
 
 #: pcbnew/api/api_handler_pcb.cpp:1627
-#, fuzzy
 msgid "Flipped items via API"
-msgstr "API経由でアイテムを削除"
+msgstr "API経由でアイテムを反転"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:884
 msgid "Autoplacing components..."
@@ -37728,7 +37728,7 @@ msgstr "配線長の調整パターン"
 #: pcbnew/dialogs/dialog_board_setup.cpp:206
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
 msgid "Tuning Profiles"
-msgstr "調整プロファイル"
+msgstr "等長配線の調整プロファイル"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:228
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -44271,7 +44271,7 @@ msgstr "図形に吸着"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:336
 msgid "Snap to pads:"
-msgstr "パッドにスナップ:"
+msgstr "パッドに吸着:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:338
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
@@ -44286,7 +44286,7 @@ msgstr "配線時"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:350
 msgid "Snap to tracks and vias:"
-msgstr "配線とビアにスナップ:"
+msgstr "配線とビアに吸着:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:352
 #: pcbnew/dialogs/panel_edit_options_base.cpp:360
@@ -44295,7 +44295,7 @@ msgstr "マウス カーソルが配線内に入った時にカーソルを配�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:364
 msgid "Snap to graphics:"
-msgstr "図形にスナップ:"
+msgstr "図形に吸着:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:366
 #: pcbnew/dialogs/panel_edit_options_base.cpp:374
@@ -46800,11 +46800,11 @@ msgstr "配線伝播遅延を計算できませんでした"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:830
 msgid "Tuning profile must have a name"
-msgstr "調整プロファイルには名前を付ける必要があります"
+msgstr "等長配線の調整プロファイルには名前を付ける必要があります"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:845
 msgid "Duplicated signal layer configuration in tuning profile"
-msgstr "調整プロファイル内の重複した信号レイアーの構成"
+msgstr "等長配線の調整プロファイル内の重複した信号レイアーの構成"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:873
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:884
@@ -47166,7 +47166,7 @@ msgstr "ネットクラス '%s' (uvia)"
 #: pcbnew/drc/drc_engine.cpp:517 pcbnew/drc/drc_engine.cpp:538
 #, c-format
 msgid "tuning profile '%s'"
-msgstr "調整プロファイル '%s'"
+msgstr "等長配線の調整プロファイル '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:599
 #, c-format
@@ -47789,11 +47789,11 @@ msgstr "裏面レイヤーの非ミラーテキスト"
 
 #: pcbnew/drc/drc_item.cpp:305
 msgid "Missing tuning profile"
-msgstr "調整プロファイル がありません"
+msgstr "等長配線の調整プロファイル がありません"
 
 #: pcbnew/drc/drc_item.cpp:309
 msgid "Tuning profile track geometries"
-msgstr "調整プロファイル配線形状"
+msgstr "等長配線の調整プロファイル配線形状"
 
 #: pcbnew/drc/drc_item.cpp:313
 msgid "Track connected to post-machined or backdrilled layer"
@@ -48642,7 +48642,7 @@ msgstr "アサーションを確認中..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:646
 msgid "Checking for missing tuning profiles..."
-msgstr "調整プロファイルを確認中..."
+msgstr "等長配線の調整プロファイルを確認中..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:95
 msgid "Gathering physical items..."
@@ -49822,9 +49822,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1234
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported footprint libraries: %s"
-msgstr "フットプリント ライブラリ '%s' を作成できません。"
+msgstr "インポートされたフットプリントライブラリを突き合せできませんでした: %s"
 
 #: pcbnew/files.cpp:1277
 msgid "Generate ODB++ Files"
@@ -50066,38 +50066,44 @@ msgid ""
 "Imported footprint '%s' has conflicting placed definitions; keeping the "
 "first."
 msgstr ""
+"インポートされたフットプリント '%s' には配置上の競合定義があります; 最初の定"
+"義を採用します。"
 
 #: pcbnew/footprint_import_reconciler.cpp:270
-#, fuzzy
 msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
 msgstr ""
-"未使用のフットプリント %s を削除できません (フットプリントはロックされていま"
-"す)。"
+"インポートされたフットプリントを突き合せできません: 当該KiCad フットプリント "
+"ライター プラグインがありません。"
 
 #: pcbnew/footprint_import_reconciler.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr "ドリル レポート ファイル '%s' の作成に失敗"
+msgstr "インポートされたフットプリント キャッシュの書き込みエラー '%s': %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:335
 #, c-format
 msgid ""
 "A library already exists at '%s'; leaving imported footprints unresolved."
 msgstr ""
+"ライブラリがすでに '%s' に存在します; インポートされたフットプリントは未解決"
+"です。"
 
 #: pcbnew/footprint_import_reconciler.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported footprint cache to '%s'."
-msgstr "BOMを '%s' に書き込めませんでした。"
+msgstr ""
+"インポートされたフットプリントのキャッシュを '%s' に 書き出すことができません"
+"でした。"
 
 #: pcbnew/footprint_import_reconciler.cpp:369
 msgid "Cannot register imported footprint cache: no project library table."
 msgstr ""
+"インポートされたフットプリント キャッシュを登録できません: プロジェクト "
+"ライブラリ テーブルがありません。"
 
 #: pcbnew/footprint_import_reconciler.cpp:393
-#, fuzzy
 msgid "Error saving project footprint library table."
-msgstr "プロジェクトのフットプリント ライブラリ テーブルを読み込み中にエラー。"
+msgstr "プロジェクトのフットプリント ライブラリ テーブルを書き込み中にエラー。"
 
 #: pcbnew/footprint_info_impl.cpp:196
 msgid "Loading footprints..."
@@ -56784,11 +56790,11 @@ msgstr "フットプリントをまとめる"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:871
 msgid "Angle snap lines: 45°"
-msgstr "角度スナップ線: 45°"
+msgstr "角度吸着線: 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:875
 msgid "Angle snap lines: 90°"
-msgstr "角度スナップ線: 90°"
+msgstr "角度吸着線: 90°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:889
 #, c-format
@@ -57190,7 +57196,7 @@ msgstr "ポイントを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:195
 msgid "Add reference/snap points"
-msgstr "参照/スナップ ポイントを追加する"
+msgstr "参照/吸着 ポイントを追加する"
 
 #: pcbnew/tools/pcb_actions.cpp:203
 msgid "Place Reference Images"
@@ -57305,27 +57311,27 @@ msgstr "円弧の形状を変更"
 
 #: pcbnew/tools/pcb_actions.cpp:427
 msgid "Snap to Objects on the Active Layer Only"
-msgstr "アクティブ レイヤーのオブジェクトに対してのみスナップ"
+msgstr "アクティブ レイヤーのオブジェクトに対してのみ吸着"
 
 #: pcbnew/tools/pcb_actions.cpp:428
 msgid "Enables snapping to objects on the active layer only"
-msgstr "アクティブレイヤーでのみオブジェクトのスナップを有効にする"
+msgstr "アクティブレイヤーでのみオブジェクトの吸着を有効にする"
 
 #: pcbnew/tools/pcb_actions.cpp:433
 msgid "Snap to Objects on All Layers"
-msgstr "すべてのレイヤーのオブジェクトに対してスナップ"
+msgstr "すべてのレイヤーのオブジェクトに対して吸着"
 
 #: pcbnew/tools/pcb_actions.cpp:434
 msgid "Enables snapping to objects on all visible layers"
-msgstr "すべての表示レイヤーのオブジェクトに対してスナップ"
+msgstr "すべての表示レイヤーのオブジェクトに対して吸着"
 
 #: pcbnew/tools/pcb_actions.cpp:440
 msgid "Toggle Snapping Between Active and All Layers"
-msgstr "スナップの設定をアクティブ レイヤーとすべてのレイヤーで切り替え"
+msgstr "吸着の設定をアクティブ レイヤーとすべてのレイヤーとの間で切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:441
 msgid "Toggles between snapping on all visible layers and only the active area"
-msgstr "スナップの設定をすべての表示レイヤーとアクティブ レイヤーで切り替え"
+msgstr "吸着の設定をすべての表示レイヤーとアクティブ レイヤーとの間で切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:455
 msgid "Close the in progress outline"
@@ -59640,11 +59646,11 @@ msgstr "フットプリントとテキストの原点を十字で表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show explicit snap points as crosses"
-msgstr "詳しくスナップ ポイントを十字で表示"
+msgstr "吸着ポイントを十字で明示的に表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Locked Item Shadow"
-msgstr "ロックしたアイテムの領域"
+msgstr "ロックしたアイテムの影"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show a shadow on locked items"
@@ -59660,7 +59666,7 @@ msgstr "衝突しているフットプリントのコートヤードを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Board Area Shadow"
-msgstr "基板領域表示"
+msgstr "基板領域の影"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Show board area shadow"
