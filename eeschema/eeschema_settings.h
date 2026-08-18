@@ -190,6 +190,7 @@ public:
         int  highlight_thickness;
         bool draw_selected_children;
         bool fill_shapes;
+        bool select_pin_selects_symbol;
         bool highlight_netclass_colors;
         int    highlight_netclass_colors_thickness;
         double highlight_netclass_colors_alpha;
