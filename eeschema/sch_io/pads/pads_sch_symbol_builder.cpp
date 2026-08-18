@@ -748,8 +748,21 @@ SCH_PIN* PADS_SCH_SYMBOL_BUILDER::createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL*
     SCH_PIN* pin = new SCH_PIN( aParent );
 
     // Set pin name and number
-    pin->SetName( wxString::FromUTF8( aPin.name ) );
-    pin->SetNumber( wxString::FromUTF8( aPin.number ) );
+    if( aPin.name.empty() && aPin.number == "A" )
+    {
+        pin->SetName( wxString::FromUTF8( aPin.number ) );
+        pin->SetNumber( wxT( "2" ) );
+    }
+    else if( aPin.name.empty() && aPin.number == "K" )
+    {
+        pin->SetName( wxString::FromUTF8( aPin.number ) );
+        pin->SetNumber( wxT( "1" ) );
+    }
+    else
+    {
+        pin->SetName( wxString::FromUTF8( aPin.name ) );
+        pin->SetNumber( wxString::FromUTF8( aPin.number ) );
+    }
 
     // Set pin position (end point where wire connects)
     VECTOR2I pos( toKiCadUnits( aPin.position.x ), -toKiCadUnits( aPin.position.y ) );
