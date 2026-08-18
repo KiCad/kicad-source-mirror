@@ -42,7 +42,7 @@ if( APPLE )
     set( EXTRA_PYTEST_ENVIRONMENT "DYLD_FALLBACK_LIBRARY_PATH=${CAIRO_LIB_BASE}" )
 
 elseif ( MSVC )
-    set( EXTRA_PYTEST_ENVIRONMENT "FONTCONFIG_PATH=${CMAKE_SOURCE_DIR}/qa/resources/windows/fonts/" )
+    set( EXTRA_PYTEST_ENVIRONMENT "FONTCONFIG_PATH=${CMAKE_SOURCE_DIR}/qa/resources/windows/fonts/;PYTHONUTF8=1;PYTHONIOENCODING=utf-8" )
 endif()
 
 # Use pytest-xdist for parallel CLI test execution when available
