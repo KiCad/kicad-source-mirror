@@ -97,7 +97,6 @@ public:
             m_isKnockout( aOther.m_isKnockout ),
             m_isLocked( aOther.m_isLocked )
     {
-        // Cache membership is owned by BOARD: clones start detached from any board index
     }
 
     BOARD_ITEM& operator=( const BOARD_ITEM& aOther )
@@ -109,7 +108,19 @@ public:
         m_layer = aOther.m_layer;
         m_isKnockout = aOther.m_isKnockout;
         m_isLocked = aOther.m_isLocked;
+        // Owner stays with the target, do not copy it
         return *this;
+    }
+
+    // A default move would copy the owner. Do not move it.
+    BOARD_ITEM( BOARD_ITEM&& aOther ) :
+            BOARD_ITEM( static_cast<const BOARD_ITEM&>( aOther ) )
+    {
+    }
+
+    BOARD_ITEM& operator=( BOARD_ITEM&& aOther )
+    {
+        return operator=( static_cast<const BOARD_ITEM&>( aOther ) );
     }
 
     ~BOARD_ITEM() override;
@@ -360,7 +371,7 @@ public:
     bool IsLocked() const override;
     void SetLocked( bool aLocked ) override { m_isLocked = aLocked; }
 
-    bool IsIndexedInBoard() const { return m_indexedInBoard; }
+    bool IsIndexedInBoard() const { return m_boardCacheOwner != nullptr; }
 
     int GetMaxError() const;
 
@@ -495,9 +506,8 @@ protected:
     bool            m_isKnockout;
     bool            m_isLocked;
 
-    // Mirrors BOARD identity-cache membership so ~BOARD_ITEM can evict without walking a parent
-    // chain that may already be freed.  Maintained by BOARD; clones start detached.
-    mutable bool    m_indexedInBoard = false;
+    // Board that indexed this item, or nullptr. Set only by BOARD. Clones start detached.
+    mutable BOARD*  m_boardCacheOwner = nullptr;
 
     friend class BOARD;
 };
