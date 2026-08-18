@@ -47,3 +47,6 @@ thirdparty/json_schema_validator/**    -format.clang-format-kicad -whitespace
 # Scripts
 *.sh    text eol=lf
 *.bat   text eol=crlf
+
+# Turn off auto-crlf, these files are needed inplace
+*.csv       -text
