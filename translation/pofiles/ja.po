@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-17 15:36+0300\n"
-"PO-Revision-Date: 2026-08-02 19:01+0000\n"
+"PO-Revision-Date: 2026-08-18 11:29+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -166,14 +166,13 @@ msgid "Loading 3D models..."
 msgstr "3D モデルを読み込み中..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid "Load completed in %.3f s"
-msgstr "%s が完了"
+msgstr "読み込みが %.3f 秒で完了"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1172
-#, fuzzy
 msgid "Stopping background load..."
-msgstr "背景色を印刷"
+msgstr "バックグラウンドスレッド読み込みを停止します..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1891
 #: eeschema/libraries/legacy_symbol_library.cpp:535
@@ -3439,6 +3438,9 @@ msgid ""
 "Can increase compatibility with older software that does not import UTF-8 "
 "correctly, such as Excel. Can worsen compatibility in some cases."
 msgstr ""
+"UTF-8のBOM(バイトオーダーマスク)を正しく取り込めないExcelなどの古い"
+"ソフトウェアとの互換性を向上させることができます。ただし場合によっては互換性"
+"を悪化させる可能性もあります。"
 
 #: common/dialogs/dialog_fields_table_base.cpp:332
 msgid "Format presets:"
@@ -3476,9 +3478,8 @@ msgid "Apply, Save Schematic && Continue"
 msgstr "適用して、回路図の保存 && 続行"
 
 #: common/dialogs/dialog_fields_table_base.h:149
-#, fuzzy
 msgid "Fields Table"
-msgstr "シンボル フィールド テーブル"
+msgstr "フィールド テーブル"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
 msgid "Generate Database Connection"
@@ -6584,7 +6585,7 @@ msgstr "DP ギャップ"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "Tuning Profile"
-msgstr "調整プロファイル"
+msgstr "等長配線の調整プロファイル"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -6683,22 +6684,20 @@ msgid "Always"
 msgstr "常時"
 
 #: common/dialogs/panel_snapping_base.cpp:17
-#, fuzzy
 msgid "Grid Snapping"
-msgstr "グリッド設定"
+msgstr "グリッド スナッピング"
 
 #: common/dialogs/panel_snapping_base.cpp:29
 msgid "Snap to grid:"
-msgstr "グリッドにスナップ:"
+msgstr "グリッドに吸着:"
 
 #: common/dialogs/panel_snapping_base.cpp:33
 msgid "When grid shown"
 msgstr "グリッド表示時のみ"
 
 #: common/dialogs/panel_snapping_base.cpp:37
-#, fuzzy
 msgid "Snap the cursor to the active grid"
-msgstr "アクティブ レイヤーのオブジェクトに対してのみスナップ"
+msgstr "カーソルをアクティブなグリッドに対して吸着"
 
 #: common/dialogs/panel_snapping_base.cpp:47 pcbnew/tools/pcb_control.cpp:2416
 msgid "Object Snapping"
@@ -6706,7 +6705,7 @@ msgstr "オブジェクトのスナッピング"
 
 #: common/dialogs/panel_snapping_base.cpp:61
 msgid "Snap to pads:"
-msgstr "パッドにスナップ:"
+msgstr "パッドに吸着:"
 
 #: common/dialogs/panel_snapping_base.cpp:68
 msgid "Capture cursor when the mouse enters a pad area"
@@ -6715,7 +6714,7 @@ msgstr ""
 
 #: common/dialogs/panel_snapping_base.cpp:72
 msgid "Snap to tracks and vias:"
-msgstr "配線とビアにスナップ:"
+msgstr "配線とビアに吸着:"
 
 #: common/dialogs/panel_snapping_base.cpp:79
 msgid "Capture cursor when the mouse approaches a track"
@@ -6723,7 +6722,7 @@ msgstr "マウス カーソルが配線内に入った時にカーソルを配�
 
 #: common/dialogs/panel_snapping_base.cpp:83
 msgid "Snap to graphics:"
-msgstr "図形にスナップ:"
+msgstr "図形に吸着:"
 
 #: common/dialogs/panel_snapping_base.cpp:90
 msgid "Capture cursor when the mouse approaches graphical control points"
@@ -6731,14 +6730,12 @@ msgstr ""
 "マウス カーソルが図形制御点に近づいた時にカーソルを図形制御点に引き込みます"
 
 #: common/dialogs/panel_snapping_base.cpp:97
-#, fuzzy
 msgid "Snap to objects on all layers"
-msgstr "すべてのレイヤーのオブジェクトに対してスナップ"
+msgstr "すべてのレイヤーのオブジェクトに対して吸着"
 
 #: common/dialogs/panel_snapping_base.cpp:98
-#, fuzzy
 msgid "When unchecked, only objects on the active layer are snapped to"
-msgstr "アクティブレイヤーでのみオブジェクトのスナップを有効にする"
+msgstr "チェックを外すと、アクティブレイヤー上のオブジェクトのみ吸着される"
 
 #: common/dialogs/panel_snapping_base.cpp:108
 #, fuzzy
@@ -6746,38 +6743,36 @@ msgid "Snap Inference"
 msgstr "表側リファレンス面"
 
 #: common/dialogs/panel_snapping_base.cpp:117
-#, fuzzy
 msgid "Object geometry"
-msgstr "オブジェクトA"
+msgstr "オブジェクト形状"
 
 #: common/dialogs/panel_snapping_base.cpp:118
 msgid "Snap to endpoints, midpoints, centres and edges of existing objects"
-msgstr ""
+msgstr "既存オブジェクトの端点、中点、中心、端に吸着"
 
 #: common/dialogs/panel_snapping_base.cpp:122
-#, fuzzy
 msgid "Construction extensions"
-msgstr "キャッシュの構築"
+msgstr "描画補助線延長"
 
 #: common/dialogs/panel_snapping_base.cpp:123
 msgid "Snap to virtual extensions of lines and arcs"
-msgstr ""
+msgstr "線や円弧の仮想的な延長上に吸着"
 
 #: common/dialogs/panel_snapping_base.cpp:127
 msgid "Tangent and normal contacts"
-msgstr ""
+msgstr "接線・法線接触"
 
 #: common/dialogs/panel_snapping_base.cpp:128
 msgid "Snap where the dragged geometry meets an arc tangentially or normally"
-msgstr ""
+msgstr "ドラッグした形状が円弧に接線方向または法線方向に接する箇所で吸着"
 
 #: common/dialogs/panel_snapping_base.cpp:132
 msgid "Alignment and equal spacing"
-msgstr ""
+msgstr "整列・等間隔"
 
 #: common/dialogs/panel_snapping_base.cpp:133
 msgid "Snap to alignment with, and equal spacing between, nearby objects"
-msgstr ""
+msgstr "近くのオブジェクトに吸着して整列、等間隔に配置"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
 msgid "Pan and Rotate"
@@ -8718,7 +8713,7 @@ msgstr "タグの削除に失敗しました。"
 
 #: common/git/kicad_git_errors.cpp:70
 msgid "Unknown error."
-msgstr "不明なエラー."
+msgstr "原因不明のエラー."
 
 #: common/git/kicad_git_errors.cpp:71
 msgid "No error."
@@ -9196,11 +9191,11 @@ msgstr "選択から除外"
 
 #: common/hotkey_store.cpp:49
 msgid "Ignore Grid Snaps"
-msgstr "グリッド スナップを無視"
+msgstr "グリッド 吸着を無視"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
-msgstr "他のスナップを無視"
+msgstr "他の吸着を無視"
 
 #: common/hotkey_store.cpp:57 common/tool/action_menu.cpp:238
 #: common/tool/action_menu.cpp:254 common/tool/actions.cpp:148
@@ -9596,9 +9591,8 @@ msgid "Schematic: Generate Bill of Materials"
 msgstr "回路図: 部品表 (BOM) を生成"
 
 #: common/jobs/job_export_bom.cpp:127
-#, fuzzy
 msgid "PCB: Generate Bill of Materials"
-msgstr "部品表を生成..."
+msgstr "PCB:部品表(BOM)を生成"
 
 #: common/jobs/job_export_pcb_3d.cpp:185
 msgid "3D model export"
@@ -11082,9 +11076,9 @@ msgid "Failed to archive file '%s'."
 msgstr "ファイル '%s' にアーカイブできませんでした。"
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "ファイル '%s' にアーカイブできませんでした。"
+msgstr "ファイル '%s' にアーカイブできませんでした: %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
@@ -13973,8 +13967,9 @@ msgid ""
 "Net chain rebuild failed with an unknown error.  The schematic may have "
 "stale chain data; reload to recover."
 msgstr ""
-"ネット チェーンの再構築が不明なエラーで失敗しました。 回路図に古いチェーン "
-"データが含まれている可能性があります。再読み込みして復旧してください。"
+"ネット チェーンの再構築が原因不明のエラーで失敗しました。 回路図に古い"
+"チェーン データが含まれている可能性があります。再読み込みして復旧してください"
+"。"
 
 #: eeschema/connection_graph.cpp:5238
 #, c-format
@@ -19647,9 +19642,8 @@ msgid "Sheet background:"
 msgstr "シート背景:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:119
-#, fuzzy
 msgid "Power symbols:"
-msgstr "電源シンボル"
+msgstr "電源シンボル:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:123
 #: eeschema/widgets/search_handlers.cpp:479
@@ -20234,9 +20228,8 @@ msgid "Generate error"
 msgstr "エラーを生成"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:32
-#, fuzzy
 msgid "Check for missing fields"
-msgstr "調整プロファイルを確認中..."
+msgstr "欠損を確認"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:36
 #, fuzzy
@@ -21107,14 +21100,14 @@ msgstr ""
 "しません"
 
 #: eeschema/erc/erc.cpp:2629
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s': symbol '%s' not found in libraries"
-msgstr "シンボル '%s' がライブラリ gEDA に見つかりません。"
+msgstr "バリアント'%s': シンボル'%s' がライブラリーに見つかりません"
 
 #: eeschema/erc/erc.cpp:2651
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s', alternate '%s': %s"
-msgstr "バリアント '%s' はすでに存在します。"
+msgstr "バリアント'%s', 代替 '%s': %s"
 
 #: eeschema/erc/erc.cpp:2675
 msgid "Checking sheet names..."
@@ -21330,9 +21323,8 @@ msgid "Field name has leading or trailing whitespace"
 msgstr "フィールド名の末尾か先頭(または両方)に空白文字を含んでいます"
 
 #: eeschema/erc/erc_item.cpp:174
-#, fuzzy
 msgid "Label has an empty name"
-msgstr "ラベルは空にできません。"
+msgstr "ラベル名が空です"
 
 #: eeschema/erc/erc_item.cpp:178
 msgid "Pin map references a pad that does not exist on the footprint"
@@ -21493,9 +21485,9 @@ msgstr ""
 "さい。"
 
 #: eeschema/files-io.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a recognised schematic format."
-msgstr " 認められたマトリックス タイプではありません。"
+msgstr "'%s' は認められた回路図フォーマットではありません。"
 
 #: eeschema/files-io.cpp:403
 msgid ""
@@ -21754,9 +21746,8 @@ msgstr "ファイルが未選択です!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:187
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:246
-#, fuzzy
 msgid "Import scale must be a positive number."
-msgstr "拡大／縮小率は正の数でなければなりません。"
+msgstr "インポート拡大／縮小率は正の数でなければなりません。"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:230
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:326
@@ -21862,9 +21853,8 @@ msgid "Name differs."
 msgstr "%s は名前が異なります。"
 
 #: eeschema/lib_symbol.cpp:2198
-#, fuzzy
 msgid "Library ID differs."
-msgstr "ライブラリー ID"
+msgstr "ライブラリー IDが異なります。"
 
 #: eeschema/lib_symbol.cpp:2211
 #, fuzzy
@@ -21915,9 +21905,9 @@ msgid "Field '%s' differs: %s; %s."
 msgstr "フィールド '%s' が異なります: %s; %s ."
 
 #: eeschema/lib_symbol.cpp:2372
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' fonts differ."
-msgstr "フィールドの数が異なります。"
+msgstr "フィールド '%s' のフォントが異なります。"
 
 #: eeschema/lib_symbol.cpp:2385
 #, fuzzy, c-format
@@ -21942,7 +21932,7 @@ msgstr "'%s' の設定が異なります。"
 #: eeschema/lib_symbol.cpp:2425
 #, fuzzy, c-format
 msgid "Field '%s' privacy flags differ."
-msgstr "フィールド '%s' が異なります: %s; %s ."
+msgstr "フィールド '%s' の表示フラグが異なります。"
 
 #: eeschema/lib_symbol.cpp:2441
 #, fuzzy, c-format
@@ -21952,7 +21942,7 @@ msgstr "%s は位置が異なります。"
 #: eeschema/lib_symbol.cpp:2464
 #, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "回路図シンボルにフィールドがない: %s."
+msgstr "回路図シンボルが欠損している: %s."
 
 #: eeschema/lib_symbol.cpp:2475
 msgid "Footprint filter count differs."
@@ -23029,16 +23019,16 @@ msgstr "<名前なし>"
 msgid ""
 "Invalid binary file hex data size. Chars expected: %d, hex string length: %d"
 msgstr ""
+"バイナリ ファイルの16進数データサイズが不正。想定している文字数: %d, 16進数の"
+"文字長: %d"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:140
-#, fuzzy
 msgid "Storage stream was not parsed correctly"
-msgstr "'%s' 正しく解釈されませんでした。"
+msgstr "ストレージ ストリームが正しく解釈されませんでした"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:152
-#, fuzzy
 msgid "Additional stream was not parsed correctly"
-msgstr "'%s' 正しく解釈されませんでした。"
+msgstr "追加ストリームが 正しく解釈されませんでした"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1345
 #, c-format
@@ -23177,9 +23167,9 @@ msgstr ""
 "れていない形式である可能性があります。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5610
-#, fuzzy, c-format
+#, c-format
 msgid "Converting symbol '%s'"
-msgstr "シンボルを変換"
+msgstr "シンボル'%s' を変換中"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5873
 #, c-format
@@ -24164,9 +24154,9 @@ msgid "Invalid property value"
 msgstr "不正なプロパティの値"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1304
-#, fuzzy, c-format
+#, c-format
 msgid "Variant symbol override contains invalid character '%c'"
-msgstr "シンボル %s に不正な文字 '%c' が含まれています"
+msgstr "バリアント シンボル 上書きに不正な文字 '%c' が含まれています"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1310
 #, fuzzy
@@ -24388,7 +24378,7 @@ msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:83
 msgid "OrCAD stream size exceeds the compound file"
-msgstr ""
+msgstr "OrCADのストリームサイズがファイルサイズを超過しています"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:232
 msgid ""
@@ -24468,9 +24458,9 @@ msgid "OrCAD Capture symbol library files"
 msgstr "OrCAD Capture シンボル ライブラリ ファイル"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS file: %s"
-msgstr "PADS Logicファイル '%s' の解釈に失敗しました。"
+msgstr "PADS Logicファイル '%s' の解釈に失敗しました"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1457
 #, c-format
@@ -24528,9 +24518,9 @@ msgid "Unrecognized library type"
 msgstr "認識されないレイヤー '%s'"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Loading symbol library '%s'"
-msgstr "シンボル ライブラリ %s の読み込み中にエラー。"
+msgstr "シンボル ライブラリ '%s' の読み込み中"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:318
 #, fuzzy, c-format
@@ -24538,9 +24528,9 @@ msgid "Library '%s' Convert err: \"%s\""
 msgstr "ライブラリ '%s': %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s': %s"
-msgstr "シンボル ライブラリ %s の読み込み中にエラー"
+msgstr "シンボル ライブラリ'%s' の読み込み中にエラー: %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:329
 #, fuzzy, c-format
@@ -24553,9 +24543,9 @@ msgid "Error saving symbol '%s': %s"
 msgstr "シンボル %s 読み込み中にエラー: %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol '%s': unknown error"
-msgstr "シンボル %s 読み込み中にエラー: %s"
+msgstr "シンボル '%s' 保存中にエラー: 原因不明のエラー"
 
 #: eeschema/sch_item.cpp:194 eeschema/sch_item.cpp:215
 #: eeschema/sch_item.cpp:899
@@ -27281,11 +27271,11 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_tab.cpp:538
 msgid "Normalized Z/Z0 (ports differ)"
-msgstr ""
+msgstr "規格化インピーダンス(Z/Z0) (ポートの基準インピーダンスに違いが有る場合)"
 
 #: eeschema/sim/sim_plot_tab.cpp:540
 msgid "Normalized Z/Z0"
-msgstr ""
+msgstr "規格化インピーダンス(Z/Z0)"
 
 #: eeschema/sim/sim_plot_tab.cpp:1145
 #, c-format
@@ -27588,7 +27578,7 @@ msgstr "電力損失"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3757
 msgid "Refl. Coeff."
-msgstr ""
+msgstr "反射係数"
 
 #: eeschema/sim/simulator_frame_ui.cpp:4031
 #: eeschema/sim/simulator_frame_ui.cpp:4147
@@ -28339,6 +28329,8 @@ msgid ""
 "Imported symbol '%s' from '%s' was renamed to '%s' because another library "
 "supplies a different symbol of that name."
 msgstr ""
+"インポートされたシンボル '%s' は別のライブラリーが同じ名前のシンボルを提供し"
+"ているので '%s' から '%s' に名前を変更した。"
 
 #: eeschema/symbol_import_reconciler.cpp:410
 #, fuzzy, c-format
@@ -28383,13 +28375,11 @@ msgstr ""
 "ブラリ テーブルがありません。"
 
 #: eeschema/symbol_import_reconciler.cpp:549
-#, fuzzy
 msgid ""
 "Error saving project symbol library table; imported symbols left unresolved."
 msgstr ""
-"プロジェクトのシンボル ライブラリ テーブルを書き込もうとしたところ、エラーが"
-"発生しました。\n"
-"  %s"
+"プロジェクトのシンボルライブラリ テーブルの保存中にエラー;インポートされた"
+"シンボルが未解決のまま残っています。"
 
 #: eeschema/symbol_import_reconciler.cpp:610
 #, fuzzy, c-format
@@ -29496,7 +29486,7 @@ msgstr "ライブラリから別のシンボルを割り当て"
 
 #: eeschema/tools/sch_actions.cpp:985
 msgid "Remove the variant symbol override and revert to the base symbol"
-msgstr ""
+msgstr "バリアント シンボルの上書きを削除し変更を破棄し基底のシンボルに戻す"
 
 #: eeschema/tools/sch_actions.cpp:991 pcbnew/tools/pcb_actions.cpp:1697
 msgid "Assign Netclass..."
@@ -29896,7 +29886,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1373
 msgid "Generate Bill of Materials..."
-msgstr "部品表を生成..."
+msgstr "部品表(BOM)を生成..."
 
 #: eeschema/tools/sch_actions.cpp:1374
 msgid "Generate a bill of materials for the current schematic"
@@ -30022,7 +30012,7 @@ msgstr "描画とドラッグの操作を水平、垂直、45度に制限しま�
 
 #: eeschema/tools/sch_actions.cpp:1507 pcbnew/tools/pcb_actions.cpp:1808
 msgid "Switch to next angle snapping mode"
-msgstr "次の角度スナップモードに切り替える"
+msgstr "次の角度吸着モードに切り替える"
 
 #: eeschema/tools/sch_actions.cpp:1517
 msgid "Annotate Automatically"
@@ -30310,11 +30300,11 @@ msgstr "二次信号トレース (電流または位相) を点線で描画"
 
 #: eeschema/tools/sch_actions.cpp:1860
 msgid "Smith Chart"
-msgstr ""
+msgstr "スミスチャート"
 
 #: eeschema/tools/sch_actions.cpp:1861
 msgid "Show S-parameter results on a Smith chart"
-msgstr ""
+msgstr "スミスチャートにSパラメーターの結果を表示"
 
 #: eeschema/tools/sch_actions.cpp:1866
 msgid "Dark Mode Plots"
@@ -30708,11 +30698,14 @@ msgid ""
 "Change Symbol is not available when a design variant is active. Use Set "
 "Variant Symbol or switch to the default variant first."
 msgstr ""
+"デザインバリアントがアクティブな場合シンボルの変更は利用出来ません。"
+"バリアントシンボルの設定あるいは、デフォルトバリアントにまずは切り替えてくだ"
+"さい。"
 
 #: eeschema/tools/sch_edit_tool.cpp:2700
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load symbol '%s' from library."
-msgstr "シンボル \"%s\" を ライブラリー \"%s\" からロードできませんでした.。"
+msgstr "シンボル '%s' をライブラリから読み込みできませんでした。"
 
 #: eeschema/tools/sch_edit_tool.cpp:2717
 #, c-format
@@ -30720,14 +30713,16 @@ msgid ""
 "The selected symbol '%s' is not pin-compatible with the base symbol '%s'.\n"
 "\n"
 msgstr ""
+"選択したシンボル '%s' は基底シンボル '%s' とピン互換性が有りません。\n"
+"\n"
 
 #: eeschema/tools/sch_edit_tool.cpp:2725
 msgid "Choose a symbol with equivalent pins and pin positions."
-msgstr ""
+msgstr "ピンとピンの位置が同じシンボルを選択してください。"
 
 #: eeschema/tools/sch_edit_tool.cpp:2726
 msgid "Variant Symbol Compatibility"
-msgstr ""
+msgstr "バリアント シンボルの互換性"
 
 #: eeschema/tools/sch_edit_tool.cpp:2739
 #, fuzzy
@@ -30870,6 +30865,8 @@ msgid ""
 "Bulk Edit Symbol Library Links is not available when a design variant is "
 "active. Switch to the default variant first."
 msgstr ""
+"デザイン バリアントが有効な場合シンボル ライブラリ リンクの一括編集は使用でき"
+"ません。デフォルト バリアントにまずは切り替えてください。"
 
 #: eeschema/tools/sch_editor_control.cpp:3866
 #, c-format
@@ -31305,7 +31302,7 @@ msgstr "ピンを繰り返し"
 #: eeschema/variant_symbol_utils.cpp:54
 #, c-format
 msgid "Candidate has %d unit(s), base requires %d"
-msgstr ""
+msgstr "候補は %d ユニット、基底は %dを必要としている"
 
 #: eeschema/variant_symbol_utils.cpp:65
 #, c-format
@@ -31323,11 +31320,9 @@ msgid "Unit %d, body style %d: pin '%s' position mismatch (%d,%d) vs (%d,%d)"
 msgstr ""
 
 #: eeschema/variant_symbol_utils.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %d, body style %d: pin '%s' type mismatch ('%s' vs '%s')"
-msgstr ""
-"ユニットで %d個、 モデル ピン '%s' をシンボル ピン '%s' と '%s' にマッピング"
-"されます。"
+msgstr "ユニット %d, ボディスタイル %d: ピン '%s' タイプ 不一致 ('%s' 対 '%s')"
 
 #: eeschema/variant_symbol_utils.cpp:170
 #, c-format
@@ -36993,7 +36988,7 @@ msgstr "サポートしていません"
 #: libs/kiplatform/include/printing.h:54
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:694
 msgid "Unknown error"
-msgstr "不明なエラー"
+msgstr "原因不明のエラー"
 
 #: libs/kiplatform/os/windows/environment.cpp:82
 #, c-format
@@ -40140,9 +40135,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_board.cpp:1072
-#, fuzzy
 msgid "Flipped items via API"
-msgstr "API経由でアイテムを削除"
+msgstr "API経由でアイテムを反転"
 
 #: pcbnew/api/api_handler_pcb.cpp:1651 pcbnew/tools/zone_filler_tool.cpp:158
 #: pcbnew/tools/zone_filler_tool.cpp:243 pcbnew/tools/zone_filler_tool.cpp:441
@@ -41196,43 +41190,49 @@ msgstr "コンポーネント パッドは %s と %sで異なる。"
 #: pcbnew/constraints/constraint_builder.cpp:277
 #, c-format
 msgid "%s needs two line segments.  Click them to constrain."
-msgstr ""
+msgstr "%s には2つの線分が必要です。  クリックして拘束を設定してください。"
 
 #: pcbnew/constraints/constraint_builder.cpp:282
 #, c-format
 msgid "%s needs two line segments of nonzero length.  Click them to constrain."
 msgstr ""
+"%s には2つの長さが零でない線分が必要です。  クリックして拘束を設定してくださ"
+"い。"
 
 #: pcbnew/constraints/constraint_builder.cpp:287
 #, c-format
 msgid ""
 "%s needs one line segment, or two anchor points.  Click them to constrain."
 msgstr ""
+"%s には1つの線分または2つのアンカーポイントが必要です。  クリックして拘束を設"
+"定してください。"
 
 #: pcbnew/constraints/constraint_builder.cpp:291
 #, c-format
 msgid "%s needs one line segment.  Click it to constrain."
-msgstr ""
+msgstr "%s には1つの線分が必要です。  クリックして拘束を設定してください。"
 
 #: pcbnew/constraints/constraint_builder.cpp:296
 #, c-format
 msgid "%s needs two arcs, circles or ellipses.  Click them to constrain."
 msgstr ""
+"%s には2つの円弧、円あるいは楕円が必要です。  クリックして拘束を設定してくだ"
+"さい。"
 
 #: pcbnew/constraints/constraint_builder.cpp:300
 #, c-format
 msgid "%s needs two arcs or circles.  Click them to constrain."
-msgstr ""
+msgstr "%s には2つの円弧、円が必要です。  クリックして拘束を設定してください。"
 
 #: pcbnew/constraints/constraint_builder.cpp:304
 #, c-format
 msgid "%s needs one arc or circle.  Click it to constrain."
-msgstr ""
+msgstr "%s には1つの円弧、円が必要です。  クリックして拘束を設定してください。"
 
 #: pcbnew/constraints/constraint_builder.cpp:308
 #, c-format
 msgid "%s needs one arc.  Click it to constrain."
-msgstr ""
+msgstr "%s には1つの円弧が必要です。  クリックして拘束を設定してください。"
 
 #: pcbnew/constraints/constraint_builder.cpp:313
 #, c-format
@@ -41240,10 +41240,12 @@ msgid ""
 "%s needs a line and a curve, or two arcs or circles.  Click them to "
 "constrain."
 msgstr ""
+"%s には直線と曲線、あるいは2つの円弧または円が必要です。  クリックして拘束を"
+"設定してください。"
 
 #: pcbnew/constraints/pcb_constraint.cpp:191
 msgid "start"
-msgstr "開始"
+msgstr "始点"
 
 #: pcbnew/constraints/pcb_constraint.cpp:192
 #, fuzzy
@@ -41251,9 +41253,8 @@ msgid "end"
 msgstr "終点"
 
 #: pcbnew/constraints/pcb_constraint.cpp:193
-#, fuzzy
 msgid "mid"
-msgstr "混在"
+msgstr "中点"
 
 #: pcbnew/constraints/pcb_constraint.cpp:194
 msgid "center"
@@ -41264,86 +41265,72 @@ msgid "radius"
 msgstr "半径"
 
 #: pcbnew/constraints/pcb_constraint.cpp:196
-#, fuzzy
 msgid "vertex"
-msgstr "反転"
+msgstr "頂点"
 
 #: pcbnew/constraints/pcb_constraint.cpp:207
 msgid "Coincident"
-msgstr ""
+msgstr "一致拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:210 pcbnew/tools/pcb_actions.cpp:67
 msgid "Parallel"
-msgstr ""
+msgstr "平行拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:211 pcbnew/tools/pcb_actions.cpp:77
 msgid "Perpendicular"
-msgstr ""
+msgstr "直交拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:212 pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Collinear"
-msgstr "ポリライン"
+msgstr "同一直線拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:213
-#, fuzzy
 msgid "Symmetric"
-msgstr "対称"
+msgstr "対称拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:214
-#, fuzzy
 msgid "Equal length"
-msgstr "ケーブル長"
+msgstr "等長拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:215
-#, fuzzy
 msgid "Equal radius"
-msgstr "半径"
+msgstr "等半径拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:216
-#, fuzzy
 msgid "Point on line"
-msgstr "円上のポイント"
+msgstr "線上点拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:217
-#, fuzzy
 msgid "Midpoint"
-msgstr "中間点"
+msgstr "中点拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:218
-#, fuzzy
 msgid "Fixed position"
-msgstr "グリッド位置"
+msgstr "座標位置固定拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:219
-#, fuzzy
 msgid "Fixed length"
-msgstr "ダイの長さ"
+msgstr "固定長拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:220 pcbnew/tools/pcb_actions.cpp:157
-#, fuzzy
 msgid "Concentric"
-msgstr "中心"
+msgstr "同心拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:221
-#, fuzzy
 msgid "Fixed radius"
-msgstr "フィレット半径:"
+msgstr "定半径拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:222
-#, fuzzy
 msgid "Angular dimension"
-msgstr "引出寸法線を追加"
+msgstr "角度拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:223 pcbnew/tools/pcb_actions.cpp:117
-#, fuzzy
 msgid "Tangent"
-msgstr "損失正接"
+msgstr "正接拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:224
-#, fuzzy
 msgid "Arc angle"
-msgstr "配線の角度"
+msgstr "弧角拘束"
 
 #: pcbnew/constraints/pcb_constraint.cpp:225
 #: pcbnew/constraints/pcb_constraint.cpp:228 pcbnew/pad.cpp:3697
@@ -41351,31 +41338,30 @@ msgid "Undefined"
 msgstr "未定義"
 
 #: pcbnew/constraints/pcb_constraint.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Constraint: %s (%zu members)"
-msgstr "グループ '%s', %zu メンバー"
+msgstr "拘束: %s (%zu メンバー)"
 
 #: pcbnew/constraints/pcb_constraint.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "corner %lld"
-msgstr "角 %d"
+msgstr "コーナー %lld"
 
 #: pcbnew/constraints/pcb_constraint.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "vertex %lld"
-msgstr "反転"
+msgstr "頂点 %lld"
 
 #: pcbnew/constraints/pcb_constraint.cpp:483
-#, fuzzy
 msgid "Constraint Properties"
-msgstr "フットプリントのプロパティ"
+msgstr "拘束プロパティ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:487
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:419
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2104
 msgid "Driving"
-msgstr ""
+msgstr "駆動拘束"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:480
 msgid "(multiple board outlines not supported)"
@@ -41861,7 +41847,7 @@ msgstr "配線長の調整パターン"
 #: pcbnew/dialogs/dialog_board_setup.cpp:205
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:87
 msgid "Tuning Profiles"
-msgstr "調整プロファイル"
+msgstr "等長配線の調整プロファイル"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:227
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -42143,9 +42129,8 @@ msgid "Geometric Constraints"
 msgstr "制約"
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:105
-#, fuzzy
 msgid "Enter an arc angle between 0 and 360 degrees."
-msgstr "0度と90度に揃った小さな十字線を使用する"
+msgstr "0度から360度の間の円弧の角度を入力します。"
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:120
 #, fuzzy
@@ -42153,18 +42138,16 @@ msgid "Enter a value greater than zero."
 msgstr "線幅は０より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:148
-#, fuzzy
 msgid "Edit Geometric Constraint"
-msgstr "比誘電率"
+msgstr "幾何学的拘束編集"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.cpp:36
 msgid "Driving (locks the geometry)"
-msgstr ""
+msgstr "駆動(形状は変形しない)"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.h:46
-#, fuzzy
 msgid "Constraint Value"
-msgstr "制約が適用されました。"
+msgstr "拘束値"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:131
 msgid "Legacy Teardrop Properties"
@@ -42631,12 +42614,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:358
 msgid "Enter a positive length for a driving dimension."
-msgstr ""
+msgstr "駆動拘束の寸法には正の長さを入力してください。"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:359
-#, fuzzy
 msgid "Invalid Value"
-msgstr "不正な Vinh 値。"
+msgstr "不正値"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:387
 msgid "Edit Dimension Properties"
@@ -42646,7 +42628,7 @@ msgstr "寸法線のプロパティを編集"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2103
 msgid "Driven"
-msgstr ""
+msgstr "参照寸法"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:421
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
@@ -42688,6 +42670,8 @@ msgid ""
 "Driven follows the measured geometry; Driving forces the geometry to the "
 "entered length; Arbitrary shows custom text"
 msgstr ""
+"参照寸法は測定された形状に追従する;駆動拘束は入力された長さにより形状を変形さ"
+"せる;カスタムテキストは拘束されない"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:127
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
@@ -45659,7 +45643,7 @@ msgstr "終点"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:170
 msgid "Angular extent"
-msgstr ""
+msgstr "角度範囲"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:311
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:83
@@ -45731,7 +45715,7 @@ msgstr "極性"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:147
 msgid "Major tick every:"
-msgstr ""
+msgstr "主要な項目:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:156
 #, fuzzy
@@ -45739,9 +45723,8 @@ msgid "lines"
 msgstr "線"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:160
-#, fuzzy
 msgid "Priority:"
-msgstr "優先度"
+msgstr "優先度:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:169
 #, fuzzy
@@ -47566,6 +47549,8 @@ msgid ""
 "When enabled, dragged traces will be optimized to avoid creating 90-degree "
 "or acute corners in most situations."
 msgstr ""
+"有効にすると、ドラックされた配線はほとんどの場合、90度あるいは鋭角にならない"
+"ように最適化されます。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
@@ -48489,42 +48474,36 @@ msgid "Update PCB from Schematic"
 msgstr "回路図から基板を更新"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties.cpp:61
-#, fuzzy
 msgid "Via Stitching Properties"
-msgstr "ビアのプロパティ"
+msgstr "ビア ステッチングのプロパティ"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
-#, fuzzy
 msgid "Normal Grid"
-msgstr "標準"
+msgstr "格子状グリッド"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:76
-#, fuzzy
 msgid "Staggered Grid"
-msgstr "切り返し:"
+msgstr "千鳥足状グリッド"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:77
 msgid "Poisson"
-msgstr "ポアソン分布"
+msgstr "ポアソン ディスク サンプリング"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:80
-#, fuzzy
 msgid "Pitch:"
-msgstr "切り替え"
+msgstr "ピッチ(\\(\\lambda/10\\) 〜 \\(\\lambda/20\\) 以下):"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:91
 msgid "Seed:"
-msgstr ""
+msgstr "擬似乱数の種:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:98
-#, fuzzy
 msgid "Via Properties:"
-msgstr "ビアのプロパティ"
+msgstr "ビアのプロパティ:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:102
-#, fuzzy
 msgid "Configure"
-msgstr "設定..."
+msgstr "設定"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:81
 #, fuzzy
@@ -51626,11 +51605,11 @@ msgstr "配線伝播遅延を計算できませんでした"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:919
 msgid "Tuning profile must have a name"
-msgstr "調整プロファイルには名前を付ける必要があります"
+msgstr "等長配線の調整プロファイルには名前を付ける必要があります"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:934
 msgid "Duplicated signal layer configuration in tuning profile"
-msgstr "調整プロファイル内の重複した信号レイアーの構成"
+msgstr "等長配線の調整プロファイル内の重複した信号レイアーの構成"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:962
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:973
@@ -51812,7 +51791,7 @@ msgstr "ゾーン ハッチングの塗りつぶし オフセット"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:61
 msgid "Use solid fills for hatched zones"
-msgstr ""
+msgstr "ハッチングゾーンは塗りつぶしを使う"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:62
 msgid ""
@@ -51820,6 +51799,9 @@ msgid ""
 "on large boards. This local setting takes effect the next time zones are "
 "filled."
 msgstr ""
+"プロトタイプ ゾーン塗りつぶしモード では、ハッチング表示のゾーンを実線塗りつ"
+"ぶし表示にすることで、大規模な基板でのパフォーマンスを向上させます。この"
+"ローカル設定は次回ゾーンの塗りつぶし処理が実行された際に適用されます。"
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
 msgid "Default Properties for New Zones"
@@ -52015,7 +51997,7 @@ msgstr "ネットクラス '%s' (uvia)"
 #: pcbnew/drc/drc_engine.cpp:511 pcbnew/drc/drc_engine.cpp:532
 #, c-format
 msgid "tuning profile '%s'"
-msgstr "調整プロファイル '%s'"
+msgstr "等長配線の調整プロファイル '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:593
 #, c-format
@@ -52562,7 +52544,7 @@ msgstr "フットプリントとシンボルのカスタムフィールドが一
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Via-stitching zones overlap for same net"
-msgstr ""
+msgstr "同一ネットではビア ステッチングが重なり合う"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Footprint not found in libraries"
@@ -52620,6 +52602,8 @@ msgstr "必須の参照レイヤーに連続導体を配線せずにネット �
 #: pcbnew/drc/drc_item.cpp:273
 msgid "Net chain nets do not have consistent tuning profile assignment"
 msgstr ""
+"ネットチェーン内の各ネット間で等長配線の調整プロファイルの設定が一致していま"
+"せん"
 
 #: pcbnew/drc/drc_item.cpp:277
 msgid "Skew between tracks out of range"
@@ -52666,11 +52650,11 @@ msgstr "裏面レイヤーの非ミラーテキスト"
 
 #: pcbnew/drc/drc_item.cpp:318
 msgid "Missing tuning profile"
-msgstr "調整プロファイル がありません"
+msgstr "等長配線の調整プロファイル がありません"
 
 #: pcbnew/drc/drc_item.cpp:322
 msgid "Tuning profile track geometries"
-msgstr "調整プロファイル配線形状"
+msgstr "等長配線の調整プロファイル配線形状"
 
 #: pcbnew/drc/drc_item.cpp:326
 msgid "Track connected to post-machined or backdrilled layer"
@@ -53537,17 +53521,18 @@ msgstr "アサーションを確認中..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:649
 msgid "Checking for missing tuning profiles..."
-msgstr "調整プロファイルを確認中..."
+msgstr "等長配線の調整プロファイルを確認中..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:57
-#, fuzzy
 msgid "Checking net chain tuning profiles..."
-msgstr "調整プロファイルを確認中..."
+msgstr "ネット チェーンの等長配線の調整プロファイルを確認中..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:86
 #, c-format
 msgid "Net chain %s nets have multiple tuning profiles assigned"
 msgstr ""
+"ネット チェーンの %s ネットには複数の等長配線の調整プロファイルが割り当てられ"
+"ています"
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:91
 msgid "Gathering physical items..."
@@ -55003,6 +54988,8 @@ msgid ""
 "Imported footprint '%s' from '%s' was renamed to '%s' because another "
 "library supplies a different footprint of that name."
 msgstr ""
+"インポートされたライブラリ '%s' は別のライブラリーが同じ名前のライブラリを提"
+"供しているので '%s' から '%s' に名前を変更した。"
 
 #: pcbnew/footprint_import_reconciler.cpp:370
 #, fuzzy, c-format
@@ -55479,9 +55466,8 @@ msgstr "調整"
 #: pcbnew/generators/pcb_via_stitch.h:72 pcbnew/generators/pcb_via_stitch.h:75
 #: pcbnew/generators/pcb_via_stitch.h:77
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Via Stitching"
-msgstr "高速切替:"
+msgstr "ビア ステッチング"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1387
 #, fuzzy
@@ -55494,57 +55480,49 @@ msgid "Drill"
 msgstr "ドリル"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1506
-#, fuzzy
 msgid "Pitch"
-msgstr "切り替え"
+msgstr "ピッチ"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1512
-#, fuzzy
 msgid "Plain grid"
-msgstr "グリッドを非表示"
+msgstr "格子状グリッド"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1513
-#, fuzzy
 msgid "Staggered grid"
-msgstr "切り返し:"
+msgstr "千鳥足状グリッド"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1514
-#, fuzzy
 msgid "Poisson disk"
-msgstr "ポアソン分布"
+msgstr "ポアソン ディスク サンプリング"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1539
-#, fuzzy
 msgid "Stitch"
-msgstr "切り替え"
+msgstr "ステッチング"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1540
 msgid "Guard"
-msgstr ""
+msgstr "ガード"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1545
 msgid "Seed"
-msgstr ""
+msgstr "擬似乱数の種"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1562
 #: pcbnew/widgets/pcb_properties_panel.cpp:1179
-#, fuzzy
 msgid "Guarded Net"
-msgstr "ネットを追加"
+msgstr "ガード対象のネット"
 
 #: pcbnew/generators/pcb_via_stitch.h:123
-#, fuzzy
 msgid "Stitching Update"
-msgstr "存在するパス:"
+msgstr "ステッチングの更新"
 
 #: pcbnew/generators/via_stitch_tool.cpp:106
-#, fuzzy
 msgid "Exclude Via From Stitching"
-msgstr "シミュレーションから除外"
+msgstr "ステッチングからビアを除外"
 
 #: pcbnew/generators/via_stitch_tool.cpp:146 pcbnew/tools/pcb_actions.cpp:3143
 msgid "Clear Via Stitching Exclusions"
-msgstr ""
+msgstr "ビア ステッチング除外の除去"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:227
 msgid "Please select a file to import."
@@ -55593,9 +55571,8 @@ msgid "Map layers"
 msgstr "どのレイヤーを採用するか選択"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:161
-#, fuzzy
 msgid "Single layer:"
-msgstr "信号レイヤー"
+msgstr "単数レイヤー:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Group imported items"
@@ -57000,10 +56977,12 @@ msgstr "1234.0 (mm)"
 #: pcbnew/pcb_dimension.cpp:2181
 msgid "Driving requires both dimension endpoints bound to objects"
 msgstr ""
+"駆動拘束をするために、寸法線の両端点がどれかの図形に正しく結びついていなけれ"
+"ばなりません"
 
 #: pcbnew/pcb_dimension.cpp:2208
 msgid "Enter a positive length for a driving dimension"
-msgstr ""
+msgstr "駆動寸法には正の長さを入れてください"
 
 #: pcbnew/pcb_dimension.cpp:2219 pcbnew/widgets/pcb_properties_panel.cpp:1024
 #, fuzzy
@@ -57177,11 +57156,11 @@ msgstr "パッドのタイプ"
 
 #: pcbnew/pcb_griditem.cpp:536
 msgid "Extent X"
-msgstr ""
+msgstr "X 範囲"
 
 #: pcbnew/pcb_griditem.cpp:541
 msgid "Extent Y"
-msgstr ""
+msgstr "Y 範囲"
 
 #: pcbnew/pcb_griditem.cpp:546
 #, fuzzy
@@ -57205,12 +57184,11 @@ msgstr "最小間隔"
 
 #: pcbnew/pcb_griditem.cpp:567
 msgid "Phi Extent"
-msgstr ""
+msgstr "Φ 範囲"
 
 #: pcbnew/pcb_griditem.cpp:573
-#, fuzzy
 msgid "Phi Spacing"
-msgstr "最小間隔"
+msgstr "Φ 間隔"
 
 #: pcbnew/pcb_griditem.cpp:579 pcbnew/widgets/search_handlers.cpp:229
 #: pcbnew/zone.cpp:1125 pcbnew/zone.cpp:2314
@@ -61965,9 +61943,8 @@ msgstr ""
 #: pcbnew/tools/constraint_edit_tool.cpp:781
 #: pcbnew/tools/constraint_edit_tool.cpp:800
 #: pcbnew/tools/constraint_edit_tool.cpp:821 pcbnew/tools/drawing_tool.cpp:210
-#, fuzzy
 msgid "Apply Geometric Constraint"
-msgstr "比誘電率"
+msgstr "幾何学的拘束を適用"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:848
 msgid "A geometric constraint could not be satisfied by this edit."
@@ -62378,11 +62355,11 @@ msgstr "フットプリントをまとめる"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:890
 msgid "Angle snap lines: 45°"
-msgstr "角度スナップ線: 45°"
+msgstr "角度吸着線: 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:894
 msgid "Angle snap lines: 90°"
-msgstr "角度スナップ線: 90°"
+msgstr "角度吸着線: 90°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:908
 #, c-format
@@ -62742,176 +62719,154 @@ msgid "Constrain the two selected segments to be perpendicular"
 msgstr "選択された線セグメントを円弧に変換"
 
 #: pcbnew/tools/pcb_actions.cpp:87
-#, fuzzy
 msgid "Equal Length"
-msgstr "全長"
+msgstr "等長拘束"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Constrain the two selected segments to be of equal length"
-msgstr ""
+msgstr "選択した二つの線分を等しい長さに拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:98
-#, fuzzy
 msgid "Constrain the two selected segments to be collinear"
-msgstr "選択された線セグメントを円弧に変換"
+msgstr "選択した二つの線分を同じ直線上に拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:107
-#, fuzzy
 msgid "Angular Dimension"
-msgstr "寸法線を追加"
+msgstr "角度拘束"
 
 #: pcbnew/tools/pcb_actions.cpp:108
-#, fuzzy
 msgid "Constrain the angle between the two selected segments"
-msgstr "選択した2つの選択したピンをつなぐ新しいネット チェーンを作成"
+msgstr "選択した2つの線分の角度を拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:118
 msgid ""
 "Constrain the selected line and curve, or two curves, to touch tangentially"
-msgstr ""
+msgstr "選択した線分と曲線、または2つの曲線が接線方向に接触するよう拘束"
 
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Constrain the selected segment to be horizontal"
-msgstr "選択された線セグメントを円弧に変換"
+msgstr "選択した線分を水平に拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:138
-#, fuzzy
 msgid "Constrain the selected segment to be vertical"
-msgstr "選択された線セグメントを円弧に変換"
+msgstr "選択した線分を垂直に拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:147
-#, fuzzy
 msgid "Fixed Length"
-msgstr "ダイの長さ"
+msgstr "固定長拘束"
 
 #: pcbnew/tools/pcb_actions.cpp:148
-#, fuzzy
 msgid "Lock the selected segment to its current length"
-msgstr "ネット ナビゲーターで選択したネットを探す"
+msgstr "選択した線分を今の長さに固定する"
 
 #: pcbnew/tools/pcb_actions.cpp:158
 msgid "Constrain the two selected circles, arcs or ellipses to share a center"
-msgstr ""
+msgstr "選択した2つの円、弧、または楕円の中心を同じに拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:167
-#, fuzzy
 msgid "Equal Radius"
-msgstr "主半径"
+msgstr "等半径拘束"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 msgid "Constrain the two selected circles or arcs to be of equal radius"
-msgstr ""
+msgstr "選択した二つの円または弧を同じ半径で拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:177
-#, fuzzy
 msgid "Fixed Radius"
-msgstr "フィレット半径:"
+msgstr "定半径拘束"
 
 #: pcbnew/tools/pcb_actions.cpp:178
 msgid "Lock the selected circle or arc to its current radius"
-msgstr ""
+msgstr "選択した円や円弧の半径を今のまま固定する"
 
 #: pcbnew/tools/pcb_actions.cpp:187
-#, fuzzy
 msgid "Arc Angle"
-msgstr "円弧終点角度"
+msgstr "円弧角度拘束"
 
 #: pcbnew/tools/pcb_actions.cpp:188
-#, fuzzy
 msgid "Drive the selected arc's swept angle"
-msgstr "現在選択されている行をひとつ下の行と入れ替え"
+msgstr "選択した円弧の掃引角度を拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:197
-#, fuzzy
 msgid "Fix in Place..."
-msgstr "検索と置換 (&p)..."
+msgstr "点座標位置固定拘束..."
 
 #: pcbnew/tools/pcb_actions.cpp:198
 msgid ""
 "Click a point to pin it where it is, grounding the shapes constrained to it"
-msgstr ""
+msgstr "点をクリックしてその場所に固定し、そこに形状を拘束する"
 
 #: pcbnew/tools/pcb_actions.cpp:207
-#, fuzzy
 msgid "Coincident..."
-msgstr "シンボル変換"
+msgstr "一致拘束..."
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Click two shape endpoints to make them coincide"
-msgstr ""
+msgstr "形状の端点を2つクリックして一致させる"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Point on Line..."
-msgstr "円上のポイント"
+msgstr "線上点拘束..."
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Click an endpoint, then a segment or circle, to put the point on it"
-msgstr ""
+msgstr "端点をクリックし、次に線分または円をクリックして点をそこに置く"
 
 #: pcbnew/tools/pcb_actions.cpp:227
-#, fuzzy
 msgid "Midpoint..."
-msgstr "中点を移動..."
+msgstr "中点拘束..."
 
 #: pcbnew/tools/pcb_actions.cpp:228
 msgid "Click an endpoint, then a segment, to put the point at its midpoint"
-msgstr ""
+msgstr "端点をクリックし、次に線分をクリックして点を中点に置く"
 
 #: pcbnew/tools/pcb_actions.cpp:237
-#, fuzzy
 msgid "Symmetric..."
-msgstr "対称"
+msgstr "対称拘束..."
 
 #: pcbnew/tools/pcb_actions.cpp:238
 msgid "Click two endpoints, then a segment axis, to mirror them across it"
-msgstr ""
+msgstr "二つの端点をクリックし、次に線分の軸をクリックしてその軸に対して鏡像にする"
 
 #: pcbnew/tools/pcb_actions.cpp:247
-#, fuzzy
 msgid "Always Show Geometric Constraints"
-msgstr "常に十字線を表示"
+msgstr "常に幾何学的拘束を表示する"
 
 #: pcbnew/tools/pcb_actions.cpp:248
 msgid "Always show the geometric-constraint diagnostics overlay"
-msgstr ""
+msgstr "幾何学的拘束オーバーレイを常に表示する"
 
 #: pcbnew/tools/pcb_actions.cpp:255
 msgid "Show Geometric Constraints on Hover Only"
-msgstr ""
+msgstr "ホバー時のみ幾何学的拘束を表示する"
 
 #: pcbnew/tools/pcb_actions.cpp:256
 msgid "Reveal a shape's geometric constraints only while hovering it"
-msgstr ""
+msgstr "図形にカーソルを合わせているときだけその図形の幾何学的拘束を表示する"
 
 #: pcbnew/tools/pcb_actions.cpp:263
-#, fuzzy
 msgid "Geometric Constraints..."
-msgstr "配線の長さ制約を確認中..."
+msgstr "幾何学的拘束..."
 
 #: pcbnew/tools/pcb_actions.cpp:264
 msgid "List, locate and delete the board's geometric constraints"
-msgstr ""
+msgstr "基板の幾何学的拘束を一覧し特定、削除する"
 
 #: pcbnew/tools/pcb_actions.cpp:271
-#, fuzzy
 msgid "Remove geometric constraints referencing the selected items"
-msgstr "選択アイテムから最初のラインを作成"
+msgstr "選択アイテムから参照する幾何学的拘束を削除する"
 
 #: pcbnew/tools/pcb_actions.cpp:278
-#, fuzzy
 msgid "Show/hide the geometric constraints panel"
-msgstr "検索パネルの表示/非表示"
+msgstr "幾何学的拘束パネルの表示/非表示"
 
 #: pcbnew/tools/pcb_actions.cpp:284
-#, fuzzy
 msgid "Automatic Constraints"
-msgstr "制約"
+msgstr "自動拘束"
 
 #: pcbnew/tools/pcb_actions.cpp:285
 msgid "Automatically add geometric constraints while drawing"
-msgstr ""
+msgstr "描画中に自動的に幾何学的拘束を追加する"
 
 #: pcbnew/tools/pcb_actions.cpp:292
 msgid "Create Rule Area from Selection..."
@@ -63001,7 +62956,7 @@ msgstr "ポイントを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:446
 msgid "Add reference/snap points"
-msgstr "参照/スナップ ポイントを追加する"
+msgstr "参照/吸着 ポイントを追加する"
 
 #: pcbnew/tools/pcb_actions.cpp:454
 msgid "Place Reference Images"
@@ -63120,27 +63075,27 @@ msgstr "線幅を細く"
 
 #: pcbnew/tools/pcb_actions.cpp:682
 msgid "Snap to Objects on the Active Layer Only"
-msgstr "アクティブ レイヤーのオブジェクトに対してのみスナップ"
+msgstr "アクティブ レイヤーのオブジェクトに対してのみ吸着"
 
 #: pcbnew/tools/pcb_actions.cpp:683
 msgid "Enables snapping to objects on the active layer only"
-msgstr "アクティブレイヤーでのみオブジェクトのスナップを有効にする"
+msgstr "アクティブレイヤーでのみオブジェクトの吸着を有効にする"
 
 #: pcbnew/tools/pcb_actions.cpp:688
 msgid "Snap to Objects on All Layers"
-msgstr "すべてのレイヤーのオブジェクトに対してスナップ"
+msgstr "すべてのレイヤーのオブジェクトに対して吸着"
 
 #: pcbnew/tools/pcb_actions.cpp:689
 msgid "Enables snapping to objects on all visible layers"
-msgstr "すべての表示レイヤーのオブジェクトに対してスナップ"
+msgstr "すべての表示レイヤーのオブジェクトに対して吸着"
 
 #: pcbnew/tools/pcb_actions.cpp:695
 msgid "Toggle Snapping Between Active and All Layers"
-msgstr "スナップの設定をアクティブ レイヤーとすべてのレイヤーで切り替え"
+msgstr "吸着の設定をアクティブ レイヤーとすべてのレイヤーとの間で切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:696
 msgid "Toggles between snapping on all visible layers and only the active area"
-msgstr "スナップの設定をすべての表示レイヤーとアクティブ レイヤーで切り替え"
+msgstr "吸着の設定をすべての表示レイヤーとアクティブ レイヤーとの間で切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:702
 msgid "Close the in progress outline"
@@ -63773,9 +63728,8 @@ msgid "Export Specctra DSN routing info"
 msgstr "Specctra DSN 配線情報ファイル (*.dsn) へエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1531
-#, fuzzy
 msgid "Bulk Edit Footprint Fields..."
-msgstr "フットプリント フィールドを編集"
+msgstr "フットプリントフィールドを一括編集..."
 
 #: pcbnew/tools/pcb_actions.cpp:1532
 #, fuzzy
@@ -65551,28 +65505,25 @@ msgstr "フットプリントとテキストの原点を十字で表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show explicit snap points as crosses"
-msgstr "詳しくスナップ ポイントを十字で表示"
+msgstr "吸着ポイントを十字で明示的に表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 #: pcbnew/widgets/panel_selection_filter.cpp:237
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
-#, fuzzy
 msgid "Grid Items"
-msgstr "アイテムをグループ化"
+msgstr "グリッド上のアイテム"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
-#, fuzzy
 msgid "Show custom routing/placement grids"
-msgstr "自動配置を許可する"
+msgstr "カスタム配線/配置 グリッドを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Show via stitching generator outlines"
-msgstr "アウトライン モードでビアを表示"
+msgstr "ビア ステッチングをアウトラインで表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Locked Item Shadow"
-msgstr "ロックしたアイテムの領域"
+msgstr "ロックしたアイテムの影"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Show a shadow on locked items"
@@ -65587,18 +65538,16 @@ msgid "Show colliding footprint courtyards"
 msgstr "衝突しているフットプリントのコートヤードを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:361
-#, fuzzy
 msgid "Constrained Item Shadow"
-msgstr "ロックしたアイテムの領域"
+msgstr "拘束したアイテムの影"
 
 #: pcbnew/widgets/appearance_controls.cpp:361
-#, fuzzy
 msgid "Show a shadow on constrained items"
-msgstr "ロックしたアイテムに影を表示する"
+msgstr "拘束したアイテムに影を表示する"
 
 #: pcbnew/widgets/appearance_controls.cpp:362
 msgid "Board Area Shadow"
-msgstr "基板領域表示"
+msgstr "基板領域の影"
 
 #: pcbnew/widgets/appearance_controls.cpp:362
 msgid "Show board area shadow"
