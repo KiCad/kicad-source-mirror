@@ -752,8 +752,6 @@ struct PADS_SCH_MODEL
     std::vector<PRESERVED_CONTROLLER_PAYLOAD> preservedControllerPayloads;
     std::vector<PARSER_DIAGNOSTIC>            diagnostics;
 
-    bool HasUniqueTypedIds() const;
-    bool AllReferencesResolved() const;
     void ValidateOrThrow() const;
 
     bool operator==( const PADS_SCH_MODEL& ) const = default;

@@ -1921,8 +1921,6 @@ BOOST_AUTO_TEST_CASE( ModelContract )
 
     BOOST_CHECK_EQUAL( first.version, 0x000D );
     BOOST_REQUIRE_EQUAL( first.sheets.size(), 1 );
-    BOOST_CHECK( first.AllReferencesResolved() );
-    BOOST_CHECK( first.HasUniqueTypedIds() );
     BOOST_CHECK_EQUAL( first.sheets[0].index, 0 );
     BOOST_CHECK_EQUAL( first.sheets[0].id.Value(), 1 );
     BOOST_CHECK_EQUAL( first.sheets[0].source.file, wxS( "minimal_v13.sch" ) );
