@@ -157,18 +157,10 @@ void PADS_SCH_SDB::verifyFooter()
 
     m_footerOffset = m_data.size() - FOOTER_SIZE;
 
-    try
+    if( std::optional<PADS_IO::SDB_FOOTER_ERROR> error =
+                PADS_IO::CheckSdbFooter( m_data, m_footerOffset, FOOTER_GUID, FOOTER_GUID_SIZE ) )
     {
-        PADS_IO::ValidateSdbFooter( m_data, m_footerOffset, FOOTER_GUID, FOOTER_GUID_SIZE );
-    }
-    catch( const IO_ERROR& error )
-    {
-        size_t failingOffset = m_footerOffset;
-
-        if( std::memcmp( m_data.data() + m_footerOffset, FOOTER_GUID, FOOTER_GUID_SIZE ) == 0 )
-            failingOffset += FOOTER_GUID_SIZE;
-
-        throwAt( failingOffset, error.What() );
+        throwAt( error->offset, error->detail );
     }
 
     size_t backPointerOffset = m_footerOffset + FOOTER_GUID_SIZE;
