@@ -20,6 +20,9 @@
 
 #include <kiplatform/environment.h>
 
+#include <memory>
+#include <string>
+
 #import <Cocoa/Cocoa.h>
 #import <CFNetwork/CFNetwork.h>
 #include <wx/osx/core/cfstring.h>
@@ -198,20 +201,23 @@ bool evaluatePACScript( CFURLRef aPacUrl, CFURLRef aTargetUrl, KIPLATFORM::ENV::
                                                  cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                              timeoutInterval:10.0];
 
-        __block NSData*  scriptData = nil;
-        __block NSError* fetchError = nil;
+        // The handler's NSData is autoreleased in the delegate queue's pool, which drains
+        // as soon as the handler returns, so nothing Objective-C can be handed to the
+        // waiting thread. Copy the bytes into a shared buffer instead: the block owns its
+        // own reference, so a handler that fires after the wait times out still has
+        // somewhere valid to write.
+        auto script = std::make_shared<std::string>();
 
-        // The completion handler may run after dispatch_semaphore_wait times out, so
-        // the semaphore must outlive both paths. Block capture retains the semaphore
-        // automatically (OS_OBJECT_USE_OBJC), so releasing our own reference after the
-        // wait is safe even if the block has not yet fired.
+        // Block capture retains the semaphore (OS_OBJECT_USE_OBJC), so releasing our own
+        // reference after the wait is safe even if the handler has not yet fired.
         dispatch_semaphore_t semaphore = dispatch_semaphore_create( 0 );
 
         NSURLSessionDataTask* task = [[NSURLSession sharedSession]
                   dataTaskWithRequest:request
                     completionHandler:^( NSData* data, NSURLResponse* response, NSError* error ) {
-                        scriptData = data;
-                        fetchError = error;
+                        if( !error && data )
+                            script->assign( (const char*) [data bytes], [data length] );
+
                         dispatch_semaphore_signal( semaphore );
                     }];
 
@@ -223,17 +229,18 @@ bool evaluatePACScript( CFURLRef aPacUrl, CFURLRef aTargetUrl, KIPLATFORM::ENV::
 
         if( waitResult != 0 )
         {
-            // Timed out. Cancel the task so its completion block can fire and release
-            // its captured semaphore reference, otherwise the block leaks until it runs.
+            // Timed out. Cancel so the handler runs and drops its share of the buffer;
+            // reading the buffer from here on would race with that handler.
             [task cancel];
             return false;
         }
 
-        if( fetchError || !scriptData )
+        if( script->empty() )
             return false;
 
-        NSString* scriptString = [[[NSString alloc] initWithData:scriptData
-                                                        encoding:NSUTF8StringEncoding] autorelease];
+        NSString* scriptString = [[[NSString alloc] initWithBytes:script->data()
+                                                           length:script->size()
+                                                         encoding:NSUTF8StringEncoding] autorelease];
 
         if( !scriptString )
             return false;
