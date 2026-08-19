@@ -265,6 +265,13 @@ private:
     void dragSegmentFree( const VECTOR2I& aP, int aIndex );
     void dragCornerFree( const VECTOR2I& aP, int aIndex );
 
+    /**
+     * Used to rebuild arcs in the walkaround since the graph only stores vertices.  This looks at
+     * points that are untouched between the output and the input and pushes the arc data back into 
+     * the path
+     */
+    void restoreUntouchedArcs( SHAPE_LINE_CHAIN& aPath, const SHAPE_LINE_CHAIN& aOriginal );
+
     VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
                                       int aIndex ) const;
 

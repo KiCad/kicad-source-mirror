@@ -251,6 +251,49 @@ static int areNeighbours( int x, int y, int max = 0 )
 SHAPE_LINE_CHAIN g_pnew, g_hnew;
 #endif
 
+
+void LINE::restoreUntouchedArcs( SHAPE_LINE_CHAIN& aPath, const SHAPE_LINE_CHAIN& aOriginal )
+{
+    if( aOriginal.ArcCount() == 0 )
+        return;
+
+    const int origCount = aOriginal.PointCount();
+    const int pathCount = aPath.PointCount();
+
+    int head = 0;
+
+    while( head < origCount && head < pathCount
+           && aOriginal.CPoint( head ) == aPath.CPoint( head ) )
+    {
+        head++;
+    }
+
+    int tail = 0;
+
+    while( tail < origCount - head && tail < pathCount - head
+           && aOriginal.CPoint( origCount - 1 - tail ) == aPath.CPoint( pathCount - 1 - tail ) )
+    {
+        tail++;
+    }
+
+    if( head == 0 && tail == 0 )
+        return;
+
+    SHAPE_LINE_CHAIN rebuilt;
+
+    if( head > 0 )
+        rebuilt = aOriginal.Slice( 0, head - 1 );
+
+    if( head + tail < pathCount )
+        rebuilt.Append( aPath.Slice( std::max( head - 1, 0 ), pathCount - tail - 1 ) );
+
+    if( tail > 0 )
+        rebuilt.Append( aOriginal.Slice( origCount - tail, origCount - 1 ) );
+
+    aPath = std::move( rebuilt );
+}
+
+
 bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const
 {
     const SHAPE_LINE_CHAIN& line( CLine() );
@@ -611,6 +654,11 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
 
     if( appendV )
         out.Append( v->pos );
+
+    // Vertices outside the hull are emitted twice; the duplicates have to go before the point
+    // runs can be matched against the original
+    out.Simplify2( false );
+    restoreUntouchedArcs( out, pnew );
 
     aPath = std::move( out );
     return true;
