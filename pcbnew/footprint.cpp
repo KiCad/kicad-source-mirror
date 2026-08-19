@@ -1201,12 +1201,20 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
 
     if( token->IsSameAs( wxT( "REFERENCE" ) ) )
     {
-        *token = Reference().GetShownText( false, aDepth + 1 );
+        if( const PCB_FIELD* reference = GetField( FIELD_T::REFERENCE ) )
+            *token = reference->GetShownText( false, aDepth + 1 );
+        else
+            token->Clear();
+
         return true;
     }
     else if( token->IsSameAs( wxT( "VALUE" ) ) )
     {
-        *token = Value().GetShownText( false, aDepth + 1 );
+        if( const PCB_FIELD* value = GetField( FIELD_T::VALUE ) )
+            *token = value->GetShownText( false, aDepth + 1 );
+        else
+            token->Clear();
+
         return true;
     }
     else if( token->IsSameAs( wxT( "LAYER" ) ) )
@@ -2000,6 +2008,12 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
             bbox.Merge( text->GetBoundingBox() );
         }
 
+        // A footprint is constructed with its mandatory fields, but they can be removed again
+        // through the editing dialogs or the scripting API, and the const accessors return
+        // nullptr rather than recreating them.
+        const PCB_FIELD* value = GetField( FIELD_T::VALUE );
+        const PCB_FIELD* reference = GetField( FIELD_T::REFERENCE );
+
         // This can be further optimized when aIncludeInvisibleText is true, but currently
         // leaving this as is until it's determined there is a noticeable speed hit.
         bool   valueLayerIsVisible = true;
@@ -2011,24 +2025,30 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
             // not being present in the current PCB stackup.  Values, references, and all
             // footprint text can also be turned off via the GAL meta-layers, so the 2nd and
             // 3rd "&&" conditionals handle that.
-            valueLayerIsVisible = board->IsLayerVisible( Value().GetLayer() )
-                                  && board->IsElementVisible( LAYER_FP_VALUES )
-                                  && board->IsElementVisible( LAYER_FP_TEXT );
+            if( value )
+            {
+                valueLayerIsVisible = board->IsLayerVisible( value->GetLayer() )
+                                      && board->IsElementVisible( LAYER_FP_VALUES )
+                                      && board->IsElementVisible( LAYER_FP_TEXT );
+            }
 
-            refLayerIsVisible = board->IsLayerVisible( Reference().GetLayer() )
-                                && board->IsElementVisible( LAYER_FP_REFERENCES )
-                                && board->IsElementVisible( LAYER_FP_TEXT );
+            if( reference )
+            {
+                refLayerIsVisible = board->IsLayerVisible( reference->GetLayer() )
+                                    && board->IsElementVisible( LAYER_FP_REFERENCES )
+                                    && board->IsElementVisible( LAYER_FP_TEXT );
+            }
         }
 
 
-        if( ( Value().IsVisible() && valueLayerIsVisible ) || noDrawItems )
+        if( value && ( ( value->IsVisible() && valueLayerIsVisible ) || noDrawItems ) )
         {
-            bbox.Merge( Value().GetBoundingBox() );
+            bbox.Merge( value->GetBoundingBox() );
         }
 
-        if( ( Reference().IsVisible() && refLayerIsVisible ) || noDrawItems )
+        if( reference && ( ( reference->IsVisible() && refLayerIsVisible ) || noDrawItems ) )
         {
-            bbox.Merge( Reference().GetBoundingBox() );
+            bbox.Merge( reference->GetBoundingBox() );
         }
     }
 

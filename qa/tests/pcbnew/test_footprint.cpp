@@ -199,4 +199,53 @@ BOOST_AUTO_TEST_CASE( FootprintCloneSharesEmbeddedFiles )
 }
 
 
+// The footprint properties dialogs write their fields back by deleting every field and
+// recreating it from the grid, and the scripting API can remove fields outright.  Either one
+// can leave a footprint without its mandatory fields while a commit is still computing the
+// damage bounding box for it.
+BOOST_AUTO_TEST_CASE( FootprintBoundingBoxWithoutMandatoryFields )
+{
+    BOARD     board;
+    FOOTPRINT fp( &board );
+
+    const int shapeSize = pcbIUScale.mmToIU( 3.0 );
+
+    {
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &fp, SHAPE_T::RECTANGLE );
+        shape->SetLayer( F_Cu );
+        shape->SetStart( VECTOR2I( 0, 0 ) );
+        shape->SetEnd( VECTOR2I( shapeSize, shapeSize ) );
+        shape->SetWidth( pcbIUScale.mmToIU( 0.1 ) );
+
+        fp.Add( shape.release() );
+    }
+
+    // Keep the annotations out of the bounding box so that dropping them cannot change it for
+    // a legitimate reason.
+    for( FIELD_T id : { FIELD_T::REFERENCE, FIELD_T::VALUE } )
+        fp.GetField( id )->SetVisible( false );
+
+    const BOX2I withFields = fp.GetBoundingBox();
+
+    for( FIELD_T id : { FIELD_T::REFERENCE, FIELD_T::VALUE } )
+    {
+        std::unique_ptr<PCB_FIELD> field( fp.GetField( id ) );
+        BOOST_REQUIRE( field );
+        fp.Remove( field.get() );
+    }
+
+    const FOOTPRINT& constFp = fp;
+    BOOST_REQUIRE( !constFp.GetField( FIELD_T::REFERENCE ) );
+    BOOST_REQUIRE( !constFp.GetField( FIELD_T::VALUE ) );
+
+    BOOST_CHECK( fp.GetBoundingBox() == withFields );
+
+    // Text variables resolve against the same fields, and are read while the footprint is in
+    // this state to draw it.
+    wxString token = wxS( "VALUE" );
+    BOOST_CHECK( fp.ResolveTextVar( &token ) );
+    BOOST_CHECK( token.IsEmpty() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
