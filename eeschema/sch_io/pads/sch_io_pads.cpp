@@ -613,8 +613,9 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             // falling back to net-name matching (e.g. GND → GND, +5V → +5V).
             std::string powerStyle;
 
-            if( isPower && ptIt != parser.GetPartTypes().end()
-                && !ptIt->second.special_variants.empty() )
+            if( isPower
+                    && ptIt != parser.GetPartTypes().end()
+                    && !ptIt->second.special_variants.empty() )
             {
                 int varIdx = std::max( 0, part.gate_index );
                 varIdx = std::min( varIdx, static_cast<int>( ptIt->second.special_variants.size() ) - 1 );
@@ -624,13 +625,18 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                                                                                           variant.pin_type );
             }
 
-            if( isPower && powerStyle.empty() )
+            std::optional<LIB_ID> powerLibId;
+
+            if( isPower )
             {
                 std::string rawNetName = part.power_net_name.empty() ? part.symbol_name
                                                                      : part.power_net_name;
 
-                std::optional<LIB_ID> powerLibId = PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetKiCadPowerSymbolId( rawNetName );
+                powerLibId = PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetKiCadPowerSymbolId( rawNetName );
+            }
 
+            if( isPower && powerStyle.empty() )
+            {
                 if( powerLibId )
                     powerStyle = std::string( powerLibId->GetLibItemName().c_str() );
             }
@@ -643,10 +649,10 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             {
                 instanceSymbol = symbolBuilder.BuildKiCadPowerSymbol( powerStyle );
 
-                LIB_ID libId;
-                libId.SetLibNickname( wxT( "power" ) );
-                libId.SetLibItemName( wxString::FromUTF8( powerStyle ) );
-                symbol->SetLibId( libId );
+                if( !powerLibId.has_value() )
+                    powerLibId = LIB_ID( wxT( "power" ), wxString::FromUTF8( powerStyle ) );
+
+                symbol->SetLibId( powerLibId.value() );
             }
             else
             {
@@ -1079,13 +1085,15 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                 if( pwrSym )
                 {
-                    auto symbolPtr = std::make_unique<SCH_SYMBOL>();
-                    SCH_SYMBOL* symbol = symbolPtr.get();
+                    std::unique_ptr<SCH_SYMBOL> symbol = std::make_unique<SCH_SYMBOL>();
 
-                    LIB_ID libId;
-                    libId.SetLibNickname( wxT( "power" ) );
-                    libId.SetLibItemName( wxString::FromUTF8( powerStyle ) );
-                    symbol->SetLibId( libId );
+                    std::optional<LIB_ID> libId =
+                            PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetKiCadPowerSymbolId( opc.signal_name );
+
+                    if( !libId.has_value() )
+                        libId = LIB_ID( wxT( "power" ), wxString::FromUTF8( powerStyle ) );
+
+                    symbol->SetLibId( libId.value() );
                     symbol->SetLibSymbol( pwrSym );
                     symbol->SetPosition( pos );
                     symbol->SetUnit( 1 );
@@ -1111,8 +1119,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                     symbol->GetField( FIELD_T::REFERENCE )->SetVisible( false );
 
                     symbol->ClearFlags();
-                    ctx.screen->Append( symbolPtr.release() );
-                    continue;
+                    ctx.screen->Append( symbol.release() );
                 }
             }
 
