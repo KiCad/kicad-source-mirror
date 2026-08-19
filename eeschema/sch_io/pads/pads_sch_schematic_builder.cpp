@@ -81,13 +81,13 @@ wxString PADS_SCH_SCHEMATIC_BUILDER::convertNetName( const std::string& aName ) 
 
 
 int PADS_SCH_SCHEMATIC_BUILDER::CreateWires( const std::vector<SCH_SIGNAL>& aSignals,
-                                              SCH_SCREEN*                    aScreen )
+                                             SCH_SCREEN*                    aScreen )
 {
     int wireCount = 0;
 
-    for( const auto& signal : aSignals )
+    for( const SCH_SIGNAL& signal : aSignals )
     {
-        for( const auto& wire : signal.wires )
+        for( const WIRE_SEGMENT& wire : signal.wires )
         {
             SCH_LINE* schLine = CreateWire( wire );
 
@@ -117,11 +117,11 @@ SCH_LINE* PADS_SCH_SCHEMATIC_BUILDER::CreateWire( const WIRE_SEGMENT& aWire )
 
 
 int PADS_SCH_SCHEMATIC_BUILDER::CreateJunctions( const std::vector<SCH_SIGNAL>& aSignals,
-                                                  SCH_SCREEN*                    aScreen )
+                                                 SCH_SCREEN*                    aScreen )
 {
     std::vector<VECTOR2I> junctionPoints = findJunctionPoints( aSignals );
 
-    for( const auto& pt : junctionPoints )
+    for( const VECTOR2I& pt : junctionPoints )
     {
         SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
         junction->SetFlags( IS_NEW );
@@ -132,17 +132,16 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateJunctions( const std::vector<SCH_SIGNAL>& 
 }
 
 
-std::vector<VECTOR2I> PADS_SCH_SCHEMATIC_BUILDER::findJunctionPoints(
-        const std::vector<SCH_SIGNAL>& aSignals )
+std::vector<VECTOR2I> PADS_SCH_SCHEMATIC_BUILDER::findJunctionPoints( const std::vector<SCH_SIGNAL>& aSignals )
 {
     std::vector<VECTOR2I> junctions;
 
-    for( const auto& signal : aSignals )
+    for( const SCH_SIGNAL& signal : aSignals )
     {
         // Count how many wire endpoints connect at each point
         std::map<std::pair<int, int>, int> pointCount;
 
-        for( const auto& wire : signal.wires )
+        for( const WIRE_SEGMENT& wire : signal.wires )
         {
             VECTOR2I start( toKiCadUnits( wire.start.x ), toKiCadY( wire.start.y ) );
             VECTOR2I end( toKiCadUnits( wire.end.x ), toKiCadY( wire.end.y ) );
@@ -155,9 +154,7 @@ std::vector<VECTOR2I> PADS_SCH_SCHEMATIC_BUILDER::findJunctionPoints(
         for( const auto& [coords, count] : pointCount )
         {
             if( count >= 3 )
-            {
                 junctions.emplace_back( coords.first, coords.second );
-            }
         }
     }
 
@@ -165,14 +162,14 @@ std::vector<VECTOR2I> PADS_SCH_SCHEMATIC_BUILDER::findJunctionPoints(
 }
 
 
-int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels(
-        const std::vector<SCH_SIGNAL>& aSignals, SCH_SCREEN* aScreen,
-        const std::set<std::string>& aSignalOpcIds, const std::set<std::string>& aSkipSignals,
-        const std::map<std::string, NETNAME_LABEL>& aNetNameLabels )
+int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels( const std::vector<SCH_SIGNAL>& aSignals, SCH_SCREEN* aScreen,
+                                                 const std::set<std::string>& aSignalOpcIds,
+                                                 const std::set<std::string>& aSkipSignals,
+                                                 const std::map<std::string, NETNAME_LABEL>& aNetNameLabels )
 {
     int labelCount = 0;
 
-    for( const auto& signal : aSignals )
+    for( const SCH_SIGNAL& signal : aSignals )
     {
         if( signal.name.empty() || signal.name[0] == '$' )
             continue;
@@ -195,7 +192,7 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels(
 
         std::vector<PLACEMENT> opcPlacements;
 
-        for( const auto& wire : signal.wires )
+        for( const WIRE_SEGMENT& wire : signal.wires )
         {
             if( wire.vertices.size() < 2 )
                 continue;
@@ -230,10 +227,9 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels(
             // zero-length, so it is only used when no NETNAMES entry matches.
             auto nnIt = aNetNameLabels.find( placement.anchorRef );
 
-            SPIN_STYLE orient = ( nnIt != aNetNameLabels.end() )
-                                        ? SpinFromNetNameLabel( nnIt->second )
-                                        : computeLabelOrientation( placement.labelPos,
-                                                                   placement.adjPos );
+            SPIN_STYLE orient = ( nnIt != aNetNameLabels.end() ) ? SpinFromNetNameLabel( nnIt->second )
+                                                                 : computeLabelOrientation( placement.labelPos,
+                                                                                            placement.adjPos );
 
             SCH_GLOBALLABEL* label = CreateNetLabel( signal, placement.labelPos, orient );
 
@@ -267,8 +263,8 @@ SPIN_STYLE PADS_SCH_SCHEMATIC_BUILDER::SpinFromNetNameLabel( const NETNAME_LABEL
 }
 
 
-SPIN_STYLE PADS_SCH_SCHEMATIC_BUILDER::computeLabelOrientation(
-        const VECTOR2I& aLabelPos, const VECTOR2I& aAdjacentPos )
+SPIN_STYLE PADS_SCH_SCHEMATIC_BUILDER::computeLabelOrientation( const VECTOR2I& aLabelPos,
+                                                                const VECTOR2I& aAdjacentPos )
 {
     // The wire goes from aLabelPos toward aAdjacentPos. The label text extends
     // in the opposite direction so it doesn't overlap the wire.
@@ -287,8 +283,8 @@ SPIN_STYLE PADS_SCH_SCHEMATIC_BUILDER::computeLabelOrientation(
 
 
 SCH_GLOBALLABEL* PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabel( const SCH_SIGNAL& aSignal,
-                                                              const VECTOR2I&   aPosition,
-                                                              SPIN_STYLE        aOrientation )
+                                                             const VECTOR2I&   aPosition,
+                                                             SPIN_STYLE        aOrientation )
 {
     wxString labelName = convertNetName( aSignal.name );
 
@@ -318,8 +314,8 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
         if( wire.vertices.size() < 2 )
             continue;
 
-        auto first = wire.vertices.front();
-        auto last = wire.vertices.back();
+        POINT first = wire.vertices.front();
+        POINT last = wire.vertices.back();
 
         endpointCount[{ static_cast<int>( first.x * 1000 ),
                         static_cast<int>( first.y * 1000 ) }]++;
@@ -330,7 +326,7 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
     // Also count pin connection positions so we can avoid placing on a pin
     std::set<std::pair<int, int>> pinEndpoints;
 
-    for( const auto& wire : aSignal.wires )
+    for( const WIRE_SEGMENT& wire : aSignal.wires )
     {
         if( wire.vertices.size() < 2 )
             continue;
@@ -340,26 +336,26 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
         // with "@@@") are off-page connectors, not physical pins.
         if( !wire.endpoint_a.empty() && wire.endpoint_a.substr( 0, 3 ) != "@@@" )
         {
-            auto pt = wire.vertices.front();
+            POINT pt = wire.vertices.front();
             pinEndpoints.insert( { static_cast<int>( pt.x * 1000 ),
                                    static_cast<int>( pt.y * 1000 ) } );
         }
 
         if( !wire.endpoint_b.empty() && wire.endpoint_b.substr( 0, 3 ) != "@@@" )
         {
-            auto pt = wire.vertices.back();
+            POINT pt = wire.vertices.back();
             pinEndpoints.insert( { static_cast<int>( pt.x * 1000 ),
                                    static_cast<int>( pt.y * 1000 ) } );
         }
     }
 
     // Prefer a dangling endpoint that is NOT at a pin
-    for( const auto& wire : aSignal.wires )
+    for( const WIRE_SEGMENT& wire : aSignal.wires )
     {
         if( wire.vertices.size() < 2 )
             continue;
 
-        for( const auto* vtx : { &wire.vertices.front(), &wire.vertices.back() } )
+        for( const POINT* vtx : { &wire.vertices.front(), &wire.vertices.back() } )
         {
             auto key = std::make_pair( static_cast<int>( vtx->x * 1000 ),
                                        static_cast<int>( vtx->y * 1000 ) );
@@ -370,12 +366,12 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
     }
 
     // Fallback: any dangling endpoint (even if at a pin)
-    for( const auto& wire : aSignal.wires )
+    for( const WIRE_SEGMENT& wire : aSignal.wires )
     {
         if( wire.vertices.size() < 2 )
             continue;
 
-        for( const auto* vtx : { &wire.vertices.front(), &wire.vertices.back() } )
+        for( const POINT* vtx : { &wire.vertices.front(), &wire.vertices.back() } )
         {
             auto key = std::make_pair( static_cast<int>( vtx->x * 1000 ),
                                        static_cast<int>( vtx->y * 1000 ) );
@@ -386,11 +382,11 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
     }
 
     // Last resort: first endpoint of the first wire that has vertices
-    for( const auto& wire : aSignal.wires )
+    for( const WIRE_SEGMENT& wire : aSignal.wires )
     {
         if( !wire.vertices.empty() )
         {
-            const auto& vtx = wire.vertices[0];
+            const POINT& vtx = wire.vertices[0];
             return VECTOR2I( toKiCadUnits( vtx.x ), toKiCadY( vtx.y ) );
         }
     }
@@ -400,16 +396,16 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
 
 
 int PADS_SCH_SCHEMATIC_BUILDER::CreateBusWires( const std::vector<SCH_SIGNAL>& aSignals,
-                                                 SCH_SCREEN*                    aScreen )
+                                                SCH_SCREEN*                    aScreen )
 {
     int busCount = 0;
 
-    for( const auto& signal : aSignals )
+    for( const SCH_SIGNAL& signal : aSignals )
     {
         if( !IsBusSignal( signal.name ) )
             continue;
 
-        for( const auto& wire : signal.wires )
+        for( const WIRE_SEGMENT& wire : signal.wires )
         {
             SCH_LINE* busLine = CreateBusWire( wire );
 
@@ -455,11 +451,8 @@ bool PADS_SCH_SCHEMATIC_BUILDER::IsBusSignal( const std::string& aName )
         {
             std::string range = aName.substr( bracketPos + 1, closeBracket - bracketPos - 1 );
 
-            if( range.find( ':' ) != std::string::npos ||
-                range.find( ".." ) != std::string::npos )
-            {
+            if( range.find( ':' ) != std::string::npos || range.find( ".." ) != std::string::npos )
                 return true;
-            }
         }
     }
 
@@ -474,11 +467,8 @@ bool PADS_SCH_SCHEMATIC_BUILDER::IsBusSignal( const std::string& aName )
         {
             std::string range = aName.substr( anglePos + 1, closeAngle - anglePos - 1 );
 
-            if( range.find( ':' ) != std::string::npos ||
-                range.find( ".." ) != std::string::npos )
-            {
+            if( range.find( ':' ) != std::string::npos || range.find( ".." ) != std::string::npos )
                 return true;
-            }
         }
     }
 
@@ -487,7 +477,7 @@ bool PADS_SCH_SCHEMATIC_BUILDER::IsBusSignal( const std::string& aName )
 
 
 void PADS_SCH_SCHEMATIC_BUILDER::ApplyPartAttributes( SCH_SYMBOL*           aSymbol,
-                                                       const PART_PLACEMENT& aPlacement )
+                                                      const PART_PLACEMENT& aPlacement )
 {
     if( !aSymbol || !m_schematic )
         return;
@@ -501,8 +491,9 @@ void PADS_SCH_SCHEMATIC_BUILDER::ApplyPartAttributes( SCH_SYMBOL*           aSym
         if( sepPos == std::string::npos )
             sepPos = ref.rfind( '.' );
 
-        if( sepPos != std::string::npos && sepPos + 1 < ref.size()
-            && std::isalpha( static_cast<unsigned char>( ref[sepPos + 1] ) ) )
+        if( sepPos != std::string::npos
+                && sepPos + 1 < ref.size()
+                && std::isalpha( static_cast<unsigned char>( ref[sepPos + 1] ) ) )
         {
             ref = ref.substr( 0, sepPos );
         }
@@ -513,19 +504,15 @@ void PADS_SCH_SCHEMATIC_BUILDER::ApplyPartAttributes( SCH_SYMBOL*           aSym
     // Value field is always the PARTTYPE name. Parametric values like VALUE1
     // flow through CreateCustomFields as user-defined fields.
     if( !aPlacement.part_type.empty() )
-    {
         aSymbol->SetValueFieldText( wxString::FromUTF8( aPlacement.part_type ) );
-    }
 
     // Look for PCB DECAL attribute to set footprint
-    for( const auto& attr : aPlacement.attributes )
+    for( const PART_ATTRIBUTE& attr : aPlacement.attributes )
     {
         if( attr.name == "PCB DECAL" || attr.name == "PCB_DECAL" || attr.name == "FOOTPRINT" )
         {
             if( !attr.value.empty() )
-            {
                 aSymbol->SetFootprintFieldText( wxString::FromUTF8( attr.value ) );
-            }
 
             break;
         }
@@ -537,14 +524,14 @@ void PADS_SCH_SCHEMATIC_BUILDER::ApplyPartAttributes( SCH_SYMBOL*           aSym
 
 
 void PADS_SCH_SCHEMATIC_BUILDER::ApplyFieldSettings( SCH_SYMBOL*           aSymbol,
-                                                      const PART_PLACEMENT& aPlacement )
+                                                     const PART_PLACEMENT& aPlacement )
 {
     if( !aSymbol )
         return;
 
     PADS_ATTRIBUTE_MAPPER mapper;
 
-    for( const auto& attr : aPlacement.attributes )
+    for( const PART_ATTRIBUTE& attr : aPlacement.attributes )
     {
         SCH_FIELD* field = nullptr;
         bool isRefOrValue = false;
@@ -585,18 +572,14 @@ void PADS_SCH_SCHEMATIC_BUILDER::ApplyFieldSettings( SCH_SYMBOL*           aSymb
             field->SetPosition( aSymbol->GetPosition() + fieldPos );
 
             if( attr.rotation != 0.0 )
-            {
                 field->SetTextAngleDegrees( attr.rotation );
-            }
 
             if( attr.height > 0 )
             {
-                int scaledH = static_cast<int>(
-                        schIUScale.MilsToIU( attr.height )
-                        * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-                int scaledW = static_cast<int>(
-                        schIUScale.MilsToIU( attr.height )
-                        * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+                int scaledH = KiROUND( schIUScale.MilsToIU( attr.height )
+                                        * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+                int scaledW = KiROUND( schIUScale.MilsToIU( attr.height )
+                                        * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
                 field->SetTextSize( VECTOR2I( scaledW, scaledH ) );
             }
             else
@@ -628,7 +611,7 @@ void PADS_SCH_SCHEMATIC_BUILDER::ApplyFieldSettings( SCH_SYMBOL*           aSymb
 
 
 int PADS_SCH_SCHEMATIC_BUILDER::CreateCustomFields( SCH_SYMBOL*           aSymbol,
-                                                     const PART_PLACEMENT& aPlacement )
+                                                    const PART_PLACEMENT& aPlacement )
 {
     if( !aSymbol )
         return 0;
@@ -638,7 +621,7 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateCustomFields( SCH_SYMBOL*           aSymbo
 
     std::set<std::string> processedNames;
 
-    for( const auto& attr : aPlacement.attributes )
+    for( const PART_ATTRIBUTE& attr : aPlacement.attributes )
     {
         // Skip standard fields that are handled by ApplyPartAttributes
         if( mapper.IsStandardField( attr.name ) )
@@ -924,7 +907,7 @@ SCH_HIERLABEL* PADS_SCH_SCHEMATIC_BUILDER::CreateHierLabel( const std::string& a
 
 
 bool PADS_SCH_SCHEMATIC_BUILDER::IsGlobalSignal( const std::string& aSignalName,
-                                                  const std::set<int>& aSheetNumbers )
+                                                 const std::set<int>& aSheetNumbers )
 {
     if( aSignalName.empty() )
         return false;

@@ -834,7 +834,11 @@ SCH_PIN* PADS_SCH_SYMBOL_BUILDER::createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL*
 LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& aKiCadName )
 {
     // Convert mm coordinates from KiCad power symbol library to internal units
-    auto mm = [&]( double v ) { return schIUScale.mmToIU( v ); };
+    auto mm =
+            [&]( double v )
+            {
+                return schIUScale.mmToIU( v );
+            };
 
     LIB_SYMBOL* sym = new LIB_SYMBOL( wxString::FromUTF8( aKiCadName ) );
     sym->SetGlobalPower();

@@ -516,12 +516,14 @@ struct PARTTYPE_DEF
 
     // For special symbols ($GND_SYMS, $PWR_SYMS, $OSR_SYMS)
     std::string                 special_keyword;
+
     struct SPECIAL_VARIANT
     {
         std::string decal_name;
         std::string pin_type;
         std::string net_suffix;
     };
+
     std::vector<SPECIAL_VARIANT> special_variants;
 
     // For CONN-based connectors
@@ -533,6 +535,7 @@ struct PARTTYPE_DEF
         std::string pin_number;
         std::string net_name;
     };
+
     std::vector<SIGPIN>         sigpins;
 
     // Swap group lines

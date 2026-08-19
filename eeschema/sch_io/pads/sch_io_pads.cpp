@@ -68,8 +68,9 @@ static std::string extractConnectorPinNumber( const std::string& aRef )
     if( sepPos == std::string::npos )
         sepPos = aRef.rfind( '.' );
 
-    if( sepPos != std::string::npos && sepPos + 1 < aRef.size()
-        && std::isdigit( static_cast<unsigned char>( aRef[sepPos + 1] ) ) )
+    if( sepPos != std::string::npos
+            && sepPos + 1 < aRef.size()
+            && std::isdigit( static_cast<unsigned char>( aRef[sepPos + 1] ) ) )
     {
         return aRef.substr( sepPos + 1 );
     }
@@ -90,8 +91,9 @@ static std::string extractConnectorBaseRef( const std::string& aRef )
     if( sepPos == std::string::npos )
         sepPos = aRef.rfind( '.' );
 
-    if( sepPos != std::string::npos && sepPos + 1 < aRef.size()
-        && std::isdigit( static_cast<unsigned char>( aRef[sepPos + 1] ) ) )
+    if( sepPos != std::string::npos
+            && sepPos + 1 < aRef.size()
+            && std::isdigit( static_cast<unsigned char>( aRef[sepPos + 1] ) ) )
     {
         return aRef.substr( 0, sepPos );
     }
@@ -111,8 +113,9 @@ static std::string stripGateSuffix( const std::string& aRef )
     if( sepPos == std::string::npos )
         sepPos = aRef.rfind( '.' );
 
-    if( sepPos != std::string::npos && sepPos + 1 < aRef.size()
-        && std::isalpha( static_cast<unsigned char>( aRef[sepPos + 1] ) ) )
+    if( sepPos != std::string::npos
+            && sepPos + 1 < aRef.size()
+            && std::isalpha( static_cast<unsigned char>( aRef[sepPos + 1] ) ) )
     {
         return aRef.substr( 0, sepPos );
     }
@@ -128,10 +131,8 @@ static SCH_TEXT* createSchText( const PADS_SCH::TEXT_ITEM& aText, const VECTOR2I
     if( aText.height > 0 )
     {
         int scaledSize = schIUScale.MilsToIU( aText.height );
-        int charHeight = static_cast<int>( scaledSize
-                                           * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-        int charWidth = static_cast<int>( scaledSize
-                                          * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+        int charHeight = static_cast<int>( scaledSize  * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+        int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
         schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
     }
 
@@ -167,7 +168,7 @@ static int computePowerOrientation( const std::string& aOpcId,
     VECTOR2I adjPos = aOpcPos;
     bool found = false;
 
-    for( const auto& signal : aSignals )
+    for( const PADS_SCH::SCH_SIGNAL& signal : aSignals )
     {
         for( const auto& wire : signal.wires )
         {
@@ -176,10 +177,8 @@ static int computePowerOrientation( const std::string& aOpcId,
 
             if( wire.endpoint_a == opcRef )
             {
-                adjPos = VECTOR2I(
-                        schIUScale.MilsToIU( KiROUND( wire.vertices[1].x ) ),
-                        aPageHeightIU
-                                - schIUScale.MilsToIU( KiROUND( wire.vertices[1].y ) ) );
+                adjPos = VECTOR2I( schIUScale.MilsToIU( KiROUND( wire.vertices[1].x ) ),
+                                   aPageHeightIU - schIUScale.MilsToIU( KiROUND( wire.vertices[1].y ) ) );
                 found = true;
                 break;
             }
@@ -187,11 +186,8 @@ static int computePowerOrientation( const std::string& aOpcId,
             if( wire.endpoint_b == opcRef )
             {
                 size_t last = wire.vertices.size() - 1;
-                adjPos = VECTOR2I(
-                        schIUScale.MilsToIU( KiROUND( wire.vertices[last - 1].x ) ),
-                        aPageHeightIU
-                                - schIUScale.MilsToIU(
-                                        KiROUND( wire.vertices[last - 1].y ) ) );
+                adjPos = VECTOR2I( schIUScale.MilsToIU( KiROUND( wire.vertices[last - 1].x ) ),
+                                   aPageHeightIU - schIUScale.MilsToIU( KiROUND( wire.vertices[last - 1].y ) ) );
                 found = true;
                 break;
             }
@@ -405,8 +401,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
         for( int sheetNum : sheetNumbers )
         {
-            SCH_SHEET* subSheet = schBuilder.CreateHierarchicalSheet(
-                    sheetNum, totalSheets, rootSheet, aFileName );
+            SCH_SHEET* subSheet = schBuilder.CreateHierarchicalSheet( sheetNum, totalSheets, rootSheet, aFileName );
 
             if( !subSheet )
                 continue;
@@ -416,8 +411,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             {
                 if( hdr.sheet_num == sheetNum && !hdr.sheet_name.empty() )
                 {
-                    subSheet->GetField( FIELD_T::SHEET_NAME )->SetText(
-                            wxString::FromUTF8( hdr.sheet_name ) );
+                    subSheet->GetField( FIELD_T::SHEET_NAME )->SetText( wxString::FromUTF8( hdr.sheet_name ) );
 
                     break;
                 }
@@ -519,8 +513,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 if( ptDef.gates.size() > 1 )
                 {
                     // Multi-gate PARTTYPE: composite multi-unit symbol
-                    libSymbol = symbolBuilder.GetOrCreateMultiUnitSymbol(
-                            ptDef, parser.GetSymbolDefs() );
+                    libSymbol = symbolBuilder.GetOrCreateMultiUnitSymbol( ptDef, parser.GetSymbolDefs() );
                     libItemName = ptDef.name;
                     isMultiGate = true;
                 }
@@ -537,9 +530,8 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                     const PADS_SCH::SYMBOL_DEF* symDef = parser.GetSymbolDef( decalName );
 
-                    connectorPinNumber = ptDef.is_connector
-                                                ? extractConnectorPinNumber( part.reference )
-                                                : std::string();
+                    connectorPinNumber = ptDef.is_connector ? extractConnectorPinNumber( part.reference )
+                                                            : std::string();
 
                     if( symDef && !connectorPinNumber.empty() )
                     {
@@ -552,8 +544,9 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                         {
                             std::string cacheKey = ptDef.name + ":conn:" + baseRef;
 
-                            libSymbol = symbolBuilder.GetOrCreateMultiUnitConnectorSymbol(
-                                    ptDef, *symDef, groupIt->second.pinNumbers, cacheKey );
+                            libSymbol = symbolBuilder.GetOrCreateMultiUnitConnectorSymbol( ptDef, *symDef,
+                                                                                           groupIt->second.pinNumbers,
+                                                                                           cacheKey );
                             libItemName = ptDef.name + "_" + baseRef;
                             isConnector = true;
                             isMultiGate = true;
@@ -594,12 +587,11 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                 if( !symDef )
                 {
-                    m_errorMessages.emplace(
-                            wxString::Format( wxT( "PADS Import: symbol '%s' not found,"
-                                                   " part '%s' skipped" ),
-                                              wxString::FromUTF8( part.symbol_name ),
-                                              wxString::FromUTF8( part.reference ) ),
-                            RPT_SEVERITY_WARNING );
+                    m_errorMessages.emplace( wxString::Format( wxT( "PADS Import: symbol '%s' not found,"
+                                                                    " part '%s' skipped" ),
+                                                               wxString::FromUTF8( part.symbol_name ),
+                                                               wxString::FromUTF8( part.reference ) ),
+                                             RPT_SEVERITY_WARNING );
                     continue;
                 }
 
@@ -625,23 +617,19 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 && !ptIt->second.special_variants.empty() )
             {
                 int varIdx = std::max( 0, part.gate_index );
-                varIdx = std::min(
-                        varIdx,
-                        static_cast<int>( ptIt->second.special_variants.size() ) - 1 );
-                const auto& variant = ptIt->second.special_variants[varIdx];
+                varIdx = std::min( varIdx, static_cast<int>( ptIt->second.special_variants.size() ) - 1 );
+                const PADS_SCH::PARTTYPE_DEF::SPECIAL_VARIANT& variant = ptIt->second.special_variants[varIdx];
 
-                powerStyle = PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant(
-                        variant.decal_name, variant.pin_type );
+                powerStyle = PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant( variant.decal_name,
+                                                                                          variant.pin_type );
             }
 
             if( isPower && powerStyle.empty() )
             {
-                std::string rawNetName = part.power_net_name.empty()
-                                                 ? part.symbol_name
-                                                 : part.power_net_name;
+                std::string rawNetName = part.power_net_name.empty() ? part.symbol_name
+                                                                     : part.power_net_name;
 
-                auto powerLibId =
-                        PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetKiCadPowerSymbolId( rawNetName );
+                std::optional<LIB_ID> powerLibId = PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetKiCadPowerSymbolId( rawNetName );
 
                 if( powerLibId )
                     powerStyle = std::string( powerLibId->GetLibItemName().c_str() );
@@ -674,9 +662,8 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             }
 
             symbol->SetLibSymbol( instanceSymbol );
-            symbol->SetPosition( VECTOR2I(
-                    schIUScale.MilsToIU( KiROUND( part.position.x ) ),
-                    pageHeightIU - schIUScale.MilsToIU( KiROUND( part.position.y ) ) ) );
+            symbol->SetPosition( VECTOR2I( schIUScale.MilsToIU( KiROUND( part.position.x ) ),
+                                           pageHeightIU - schIUScale.MilsToIU( KiROUND( part.position.y ) ) ) );
 
             int orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;
 
@@ -727,18 +714,15 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             // to symbols. Only the primary gate (index 0) or the first connector
             // pin gets the deterministic UUID since one footprint maps to one
             // symbol instance.
-            bool isPrimaryUnit = isConnector
-                                         ? ( symbol->GetUnit() == 1 )
-                                         : ( !isMultiGate || part.gate_index == 0 );
+            bool isPrimaryUnit = isConnector ? ( symbol->GetUnit() == 1 )
+                                             : ( !isMultiGate || part.gate_index == 0 );
 
             if( !isPower && isPrimaryUnit )
             {
-                std::string baseRef = isConnector
-                                              ? extractConnectorBaseRef( part.reference )
-                                              : stripGateSuffix( part.reference );
+                std::string baseRef = isConnector ? extractConnectorBaseRef( part.reference )
+                                                  : stripGateSuffix( part.reference );
 
-                const_cast<KIID&>( symbol->m_Uuid ) =
-                        PADS_COMMON::GenerateDeterministicUuid( baseRef );
+                const_cast<KIID&>( symbol->m_Uuid ) = PADS_COMMON::GenerateDeterministicUuid( baseRef );
             }
 
             symbol->SetRef( &ctx.path, wxString::FromUTF8( part.reference ) );
@@ -782,8 +766,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                         for( const auto& attr : part.attributes )
                         {
-                            if( attr.name == "VALUE" || attr.name == "VALUE1"
-                                || attr.name == "Value1" )
+                            if( attr.name == "VALUE" || attr.name == "VALUE1" || attr.name == "Value1" )
                             {
                                 SCH_FIELD* valField = symbol->GetField( FIELD_T::VALUE );
                                 int fx = schIUScale.MilsToIU( KiROUND( attr.position.x ) );
@@ -791,22 +774,18 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                                 if( part.mirror_flags & 1 )
                                     fx = -fx;
 
-                                VECTOR2I fieldPos( fx,
-                                                   -schIUScale.MilsToIU(
-                                                           KiROUND( attr.position.y ) ) );
+                                VECTOR2I fieldPos( fx, -schIUScale.MilsToIU( KiROUND( attr.position.y ) ) );
                                 valField->SetPosition( symbol->GetPosition() + fieldPos );
 
                                 int fieldTextSize = schIUScale.MilsToIU( 50 );
-                                valField->SetTextSize(
-                                        VECTOR2I( fieldTextSize, fieldTextSize ) );
+                                valField->SetTextSize( VECTOR2I( fieldTextSize, fieldTextSize ) );
 
                                 // Keep the PADS-authored alignment instead of forcing
                                 // center; otherwise this override undoes the justification
                                 // applied by ApplyFieldSettings.
                                 GR_TEXT_H_ALIGN_T hJustify = GR_TEXT_H_ALIGN_LEFT;
                                 GR_TEXT_V_ALIGN_T vJustify = GR_TEXT_V_ALIGN_BOTTOM;
-                                PADS_COMMON::DecodeJustification( attr.justification,
-                                                                  hJustify, vJustify );
+                                PADS_COMMON::DecodeJustification( attr.justification, hJustify, vJustify );
 
                                 if( part.mirror_flags & 1 )
                                     hJustify = GetFlippedAlignment( hJustify );
@@ -824,9 +803,8 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             {
                 symbol->GetField( FIELD_T::REFERENCE )->SetVisible( false );
 
-                wxString netName = part.power_net_name.empty()
-                                           ? wxString::FromUTF8( part.symbol_name )
-                                           : wxString::FromUTF8( part.power_net_name );
+                wxString netName = part.power_net_name.empty() ? wxString::FromUTF8( part.symbol_name )
+                                                               : wxString::FromUTF8( part.power_net_name );
 
                 if( netName.StartsWith( wxT( "/" ) ) )
                     netName = wxT( "~{" ) + netName.Mid( 1 ) + wxT( "}" );
@@ -845,9 +823,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 else
                     hierRef = part.reference;
 
-                symbol->AddHierarchicalReference( ctx.path.Path(),
-                                                  wxString::FromUTF8( hierRef ),
-                                                  symbol->GetUnit() );
+                symbol->AddHierarchicalReference( ctx.path.Path(), wxString::FromUTF8( hierRef ), symbol->GetUnit() );
             }
 
             symbol->ClearFlags();
@@ -859,8 +835,8 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             {
                 std::string baseRef = extractConnectorBaseRef( part.reference );
                 wxString labelText = wxString::Format( wxT( "%s.%s" ),
-                        wxString::FromUTF8( baseRef ),
-                        wxString::FromUTF8( connectorPinNumber ) );
+                                                       wxString::FromUTF8( baseRef ),
+                                                       wxString::FromUTF8( connectorPinNumber ) );
 
                 VECTOR2I pinPos = symbol->GetPosition();
                 std::vector<SCH_PIN*> pins = symbol->GetPins();
@@ -893,16 +869,16 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
         auto ptIt = parser.GetPartTypes().find( opc.symbol_lib );
 
         if( ptIt != parser.GetPartTypes().end()
-            && !ptIt->second.special_keyword.empty() && ptIt->second.special_keyword != "OFF"
-            && !ptIt->second.special_variants.empty() )
+                && !ptIt->second.special_keyword.empty()
+                && ptIt->second.special_keyword != "OFF"
+                && !ptIt->second.special_variants.empty() )
         {
             int idx = std::max( 0, opc.flags2 );
-            idx = std::min( idx,
-                            static_cast<int>( ptIt->second.special_variants.size() ) - 1 );
-            const auto& variant = ptIt->second.special_variants[idx];
+            idx = std::min( idx, static_cast<int>( ptIt->second.special_variants.size() ) - 1 );
+            const PADS_SCH::PARTTYPE_DEF::SPECIAL_VARIANT& variant = ptIt->second.special_variants[idx];
 
-            if( !PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant(
-                        variant.decal_name, variant.pin_type ).empty() )
+            if( !PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant( variant.decal_name,
+                                                                              variant.pin_type ).empty() )
             {
                 powerSignalNames.insert( opc.signal_name );
             }
@@ -948,14 +924,10 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 // Each consecutive pair of vertices becomes a wire segment
                 for( size_t v = 0; v + 1 < wire.vertices.size(); v++ )
                 {
-                    VECTOR2I start(
-                            schIUScale.MilsToIU( KiROUND( wire.vertices[v].x ) ),
-                            pageHeightIU
-                                    - schIUScale.MilsToIU( KiROUND( wire.vertices[v].y ) ) );
-                    VECTOR2I end(
-                            schIUScale.MilsToIU( KiROUND( wire.vertices[v + 1].x ) ),
-                            pageHeightIU
-                                    - schIUScale.MilsToIU( KiROUND( wire.vertices[v + 1].y ) ) );
+                    VECTOR2I start( schIUScale.MilsToIU( KiROUND( wire.vertices[v].x ) ),
+                                    pageHeightIU - schIUScale.MilsToIU( KiROUND( wire.vertices[v].y ) ) );
+                    VECTOR2I end( schIUScale.MilsToIU( KiROUND( wire.vertices[v + 1].x ) ),
+                                  pageHeightIU - schIUScale.MilsToIU( KiROUND( wire.vertices[v + 1].y ) ) );
 
                     if( start == end )
                         continue;
@@ -985,16 +957,14 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                     if( connectorBaseRefs.count( ref ) )
                     {
-                        const auto& vtx = wire.vertices.front();
-                        VECTOR2I pos(
-                                schIUScale.MilsToIU( KiROUND( vtx.x ) ),
-                                pageHeightIU - schIUScale.MilsToIU( KiROUND( vtx.y ) ) );
+                        const PADS_SCH::POINT& vtx = wire.vertices.front();
+                        VECTOR2I pos( schIUScale.MilsToIU( KiROUND( vtx.x ) ),
+                                      pageHeightIU - schIUScale.MilsToIU( KiROUND( vtx.y ) ) );
 
                         // Compute label orientation from adjacent vertex
-                        const auto& adj = wire.vertices[1];
-                        VECTOR2I adjPos(
-                                schIUScale.MilsToIU( KiROUND( adj.x ) ),
-                                pageHeightIU - schIUScale.MilsToIU( KiROUND( adj.y ) ) );
+                        const PADS_SCH::POINT& adj = wire.vertices[1];
+                        VECTOR2I adjPos( schIUScale.MilsToIU( KiROUND( adj.x ) ),
+                                         pageHeightIU - schIUScale.MilsToIU( KiROUND( adj.y ) ) );
 
                         int dx = adjPos.x - pos.x;
                         int dy = adjPos.y - pos.y;
@@ -1024,17 +994,15 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                     if( connectorBaseRefs.count( ref ) )
                     {
-                        const auto& vtx = wire.vertices.back();
-                        VECTOR2I pos(
-                                schIUScale.MilsToIU( KiROUND( vtx.x ) ),
-                                pageHeightIU - schIUScale.MilsToIU( KiROUND( vtx.y ) ) );
+                        const PADS_SCH::POINT& vtx = wire.vertices.back();
+                        VECTOR2I pos( schIUScale.MilsToIU( KiROUND( vtx.x ) ),
+                                      pageHeightIU - schIUScale.MilsToIU( KiROUND( vtx.y ) ) );
 
                         // Compute label orientation from adjacent vertex
                         size_t lastIdx = wire.vertices.size() - 1;
-                        const auto& adj = wire.vertices[lastIdx - 1];
-                        VECTOR2I adjPos(
-                                schIUScale.MilsToIU( KiROUND( adj.x ) ),
-                                pageHeightIU - schIUScale.MilsToIU( KiROUND( adj.y ) ) );
+                        const PADS_SCH::POINT& adj = wire.vertices[lastIdx - 1];
+                        VECTOR2I adjPos( schIUScale.MilsToIU( KiROUND( adj.x ) ),
+                                         pageHeightIU - schIUScale.MilsToIU( KiROUND( adj.y ) ) );
 
                         int dx = adjPos.x - pos.x;
                         int dy = adjPos.y - pos.y;
@@ -1071,8 +1039,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
         }
 
         // Create net labels, skipping power nets that get dedicated symbols
-        schBuilder.CreateNetLabels( sheetSignals, ctx.screen, signalOpcIds,
-                                    powerSignalNames, netNameLabels );
+        schBuilder.CreateNetLabels( sheetSignals, ctx.screen, signalOpcIds, powerSignalNames, netNameLabels );
 
         // Place off-page connectors: power/ground types become SCH_SYMBOL with
         // KiCad standard power graphics; signal types become SCH_GLOBALLABEL.
@@ -1087,25 +1054,23 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 continue;
 
             VECTOR2I pos( schIUScale.MilsToIU( KiROUND( opc.position.x ) ),
-                          pageHeightIU
-                                  - schIUScale.MilsToIU( KiROUND( opc.position.y ) ) );
+                          pageHeightIU - schIUScale.MilsToIU( KiROUND( opc.position.y ) ) );
 
             // Resolve power style from the PARTTYPE variant definition
             std::string powerStyle;
             auto opcPtIt = parser.GetPartTypes().find( opc.symbol_lib );
 
             if( opcPtIt != parser.GetPartTypes().end()
-                && !opcPtIt->second.special_keyword.empty() && opcPtIt->second.special_keyword != "OFF"
-                && !opcPtIt->second.special_variants.empty() )
+                    && !opcPtIt->second.special_keyword.empty()
+                    && opcPtIt->second.special_keyword != "OFF"
+                    && !opcPtIt->second.special_variants.empty() )
             {
                 int idx = std::max( 0, opc.flags2 );
-                idx = std::min( idx,
-                                static_cast<int>(
-                                        opcPtIt->second.special_variants.size() ) - 1 );
-                const auto& variant = opcPtIt->second.special_variants[idx];
+                idx = std::min( idx, static_cast<int>( opcPtIt->second.special_variants.size() ) - 1 );
+                const PADS_SCH::PARTTYPE_DEF::SPECIAL_VARIANT& variant = opcPtIt->second.special_variants[idx];
 
-                powerStyle = PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant(
-                        variant.decal_name, variant.pin_type );
+                powerStyle = PADS_SCH::PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant( variant.decal_name,
+                                                                                          variant.pin_type );
             }
 
             if( !powerStyle.empty() )
@@ -1128,9 +1093,8 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                     // VCC and PWR_TRIANGLE have pin pointing up (body above pin).
                     // All others (GND, GNDD, PWR_BAR, VEE, Earth) have pin pointing down.
                     bool pinUp = ( powerStyle == "VCC" || powerStyle == "PWR_TRIANGLE" );
-                    int orient = computePowerOrientation(
-                            std::to_string( opc.id ), sheetSignals, pos, pinUp,
-                            pageHeightIU );
+                    int orient = computePowerOrientation( std::to_string( opc.id ), sheetSignals, pos, pinUp,
+                                                          pageHeightIU );
 
                     symbol->SetOrientation( orient );
 
@@ -1182,8 +1146,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             SCH_SCREEN* textScreen = screenForSheet( textItem.sheet_number );
 
             VECTOR2I pos( schIUScale.MilsToIU( KiROUND( textItem.position.x ) ),
-                          pageHeightIU
-                                  - schIUScale.MilsToIU( KiROUND( textItem.position.y ) ) );
+                          pageHeightIU - schIUScale.MilsToIU( KiROUND( textItem.position.y ) ) );
 
             textScreen->Append( createSchText( textItem, pos ) );
         }
@@ -1205,18 +1168,15 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
             for( const PADS_SCH::SYMBOL_GRAPHIC& prim : linesItem.primitives )
             {
-                int strokeWidth = prim.line_width > 0.0
-                                          ? schIUScale.MilsToIU( KiROUND( prim.line_width ) )
-                                          : 0;
+                int strokeWidth = prim.line_width > 0.0 ? schIUScale.MilsToIU( KiROUND( prim.line_width ) )
+                                                        : 0;
 
                 LINE_STYLE lineStyle = PADS_COMMON::PadsLineStyleToKiCad( prim.line_style );
 
                 if( prim.type == PADS_SCH::GRAPHIC_TYPE::CIRCLE )
                 {
-                    VECTOR2I center(
-                            schIUScale.MilsToIU( KiROUND( ox + prim.center.x ) ),
-                            pageHeightIU
-                                    - schIUScale.MilsToIU( KiROUND( oy + prim.center.y ) ) );
+                    VECTOR2I center( schIUScale.MilsToIU( KiROUND( ox + prim.center.x ) ),
+                                     pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.center.y ) ) );
                     int radius = schIUScale.MilsToIU( KiROUND( prim.radius ) );
 
                     SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
@@ -1232,16 +1192,10 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 else if( prim.type == PADS_SCH::GRAPHIC_TYPE::RECTANGLE
                          && prim.points.size() == 2 )
                 {
-                    VECTOR2I pos(
-                            schIUScale.MilsToIU( KiROUND( ox + prim.points[0].coord.x ) ),
-                            pageHeightIU
-                                    - schIUScale.MilsToIU(
-                                            KiROUND( oy + prim.points[0].coord.y ) ) );
-                    VECTOR2I end(
-                            schIUScale.MilsToIU( KiROUND( ox + prim.points[1].coord.x ) ),
-                            pageHeightIU
-                                    - schIUScale.MilsToIU(
-                                            KiROUND( oy + prim.points[1].coord.y ) ) );
+                    VECTOR2I pos( schIUScale.MilsToIU( KiROUND( ox + prim.points[0].coord.x ) ),
+                                  pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.points[0].coord.y ) ) );
+                    VECTOR2I end( schIUScale.MilsToIU( KiROUND( ox + prim.points[1].coord.x ) ),
+                                  pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.points[1].coord.y ) ) );
 
                     SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE );
                     rect->SetPosition( pos );
@@ -1257,18 +1211,10 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 {
                     for( size_t p = 0; p + 1 < prim.points.size(); p++ )
                     {
-                        VECTOR2I start(
-                                schIUScale.MilsToIU(
-                                        KiROUND( ox + prim.points[p].coord.x ) ),
-                                pageHeightIU
-                                        - schIUScale.MilsToIU(
-                                                KiROUND( oy + prim.points[p].coord.y ) ) );
-                        VECTOR2I end(
-                                schIUScale.MilsToIU(
-                                        KiROUND( ox + prim.points[p + 1].coord.x ) ),
-                                pageHeightIU
-                                        - schIUScale.MilsToIU(
-                                                KiROUND( oy + prim.points[p + 1].coord.y ) ) );
+                        VECTOR2I start( schIUScale.MilsToIU( KiROUND( ox + prim.points[p].coord.x ) ),
+                                        pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.points[p].coord.y ) ) );
+                        VECTOR2I end( schIUScale.MilsToIU( KiROUND( ox + prim.points[p + 1].coord.x ) ),
+                                      pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.points[p + 1].coord.y ) ) );
 
                         if( start == end )
                             continue;
@@ -1278,10 +1224,8 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                             const PADS_SCH::ARC_DATA& ad = *prim.points[p].arc;
                             double cx = ( ad.bbox_x1 + ad.bbox_x2 ) / 2.0;
                             double cy = ( ad.bbox_y1 + ad.bbox_y2 ) / 2.0;
-                            VECTOR2I center(
-                                    schIUScale.MilsToIU( KiROUND( ox + cx ) ),
-                                    pageHeightIU
-                                            - schIUScale.MilsToIU( KiROUND( oy + cy ) ) );
+                            VECTOR2I center( schIUScale.MilsToIU( KiROUND( ox + cx ) ),
+                                             pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + cy ) ) );
 
                             double sx = start.x - center.x;
                             double sy = start.y - center.y;
@@ -1297,19 +1241,13 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                             if( mlen > 0.001 )
                             {
-                                midPt.x = center.x
-                                           + static_cast<int>( radius * mx / mlen );
-                                midPt.y = center.y
-                                           + static_cast<int>( radius * my / mlen );
+                                midPt.x = center.x + static_cast<int>( radius * mx / mlen );
+                                midPt.y = center.y + static_cast<int>( radius * my / mlen );
                             }
                             else
                             {
-                                midPt.x = center.x
-                                           + static_cast<int>( -sy * radius
-                                                               / std::max( radius, 1.0 ) );
-                                midPt.y = center.y
-                                           + static_cast<int>( sx * radius
-                                                               / std::max( radius, 1.0 ) );
+                                midPt.x = center.x + static_cast<int>( -sy * radius / std::max( radius, 1.0 ) );
+                                midPt.y = center.y + static_cast<int>( sx * radius / std::max( radius, 1.0 ) );
                             }
 
                             if( ad.angle < 0 )
@@ -1329,8 +1267,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                         }
                         else
                         {
-                            SCH_LINE* line = new SCH_LINE(
-                                    start, SCH_LAYER_ID::LAYER_NOTES );
+                            SCH_LINE* line = new SCH_LINE( start, SCH_LAYER_ID::LAYER_NOTES );
                             line->SetEndPoint( end );
                             line->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
                             linesScreen->Append( line );
@@ -1345,10 +1282,8 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 if( textItem.content.empty() )
                     continue;
 
-                VECTOR2I pos(
-                        schIUScale.MilsToIU( KiROUND( ox + textItem.position.x ) ),
-                        pageHeightIU
-                                - schIUScale.MilsToIU( KiROUND( oy + textItem.position.y ) ) );
+                VECTOR2I pos( schIUScale.MilsToIU( KiROUND( ox + textItem.position.x ) ),
+                              pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + textItem.position.y ) ) );
 
                 linesScreen->Append( createSchText( textItem, pos ) );
             }
@@ -1381,8 +1316,7 @@ void SCH_IO_PADS::EnumerateSymbolLib( wxArrayString&                     aSymbol
 {
     ensureLoadedLibrary( aLibraryPath );
 
-    bool powerSymbolsOnly = aProperties
-                            && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
+    bool powerSymbolsOnly = aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
 
     for( const auto& [name, symbol] : m_librarySymbols )
     {
@@ -1400,8 +1334,7 @@ void SCH_IO_PADS::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>&          aSymbol
 {
     ensureLoadedLibrary( aLibraryPath );
 
-    bool powerSymbolsOnly = aProperties
-                            && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
+    bool powerSymbolsOnly = aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
 
     for( const auto& [name, symbol] : m_librarySymbols )
     {
@@ -1442,8 +1375,9 @@ void SCH_IO_PADS::ensureLoadedLibrary( const wxString& aLibraryPath )
 {
     long long timestamp = getLibraryTimestamp( aLibraryPath );
 
-    if( m_libraryCacheValid && aLibraryPath == m_cachedLibraryPath
-        && timestamp == m_cachedLibraryTimestamp )
+    if( m_libraryCacheValid
+            && aLibraryPath == m_cachedLibraryPath
+            && timestamp == m_cachedLibraryTimestamp )
     {
         return;
     }
