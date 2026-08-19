@@ -493,7 +493,7 @@ wxFileName EnsureDefaultProjectTemplate( const wxString& aBaseDir )
         if( !proj.IsOpened() )
             return wxFileName();
 
-        proj.Write( wxT( "{}" ) );
+        proj.Write( wxT( "{\n  \"meta\": {\n    \"version\": 1\n  }\n}\n" ) );
         proj.Close();
     }
 
