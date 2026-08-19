@@ -167,22 +167,15 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSheet( const LIB_ID& aLibId, SCH_SHEET
         return false;
     }
 
+    wxString                      error;
     std::unique_ptr<DESIGN_BLOCK> blk;
 
-    try
-    {
-        blk.reset( Prj().DesignBlockLibs()->LoadDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.What() );
-        return false;
-    }
+    blk.reset( Prj().DesignBlockLibs()->LoadDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName(), false,
+                                                         &error ) );
 
     if( !blk )
     {
-        DisplayErrorMessage(
-                this, wxString::Format( _( "Design block '%s' does not exist." ), aLibId.GetUniStringLibItemName() ) );
+        DisplayErrorMessage( this, error );
         return false;
     }
 
@@ -508,22 +501,15 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
         }
     }
 
+    wxString                      error;
     std::unique_ptr<DESIGN_BLOCK> blk;
 
-    try
-    {
-        blk.reset( Prj().DesignBlockLibs()->LoadDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName() ) );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.What() );
-        return false;
-    }
+    blk.reset( Prj().DesignBlockLibs()->LoadDesignBlock( aLibId.GetLibNickname(), aLibId.GetLibItemName(), false,
+                                                         &error ) );
 
     if( !blk )
     {
-        DisplayErrorMessage(
-                this, wxString::Format( _( "Design block '%s' does not exist." ), aLibId.GetUniStringLibItemName() ) );
+        DisplayErrorMessage( this, error );
         return false;
     }
 

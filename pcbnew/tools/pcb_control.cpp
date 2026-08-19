@@ -1418,12 +1418,7 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
     std::unique_ptr<DESIGN_BLOCK> designBlock( designBlockPane->GetDesignBlock( selectedLibId, true, true ) );
 
     if( !designBlock )
-    {
-        wxString msg;
-        msg.Printf( _( "Could not find design block %s." ), selectedLibId.GetUniStringLibId() );
-        editFrame->ShowInfoBarError( msg, true );
         return 1;
-    }
 
     if( designBlock->GetBoardFile().IsEmpty() || !wxFileName::FileExists( designBlock->GetBoardFile() ) )
     {
@@ -1561,13 +1556,11 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
     auto applyOneGroup = [&]( PCB_GROUP* group, wxString& outErr ) -> bool
     {
         DESIGN_BLOCK_PANE*            pane = editFrame->GetDesignBlockPane();
-        std::unique_ptr<DESIGN_BLOCK> designBlock( pane->GetDesignBlock( group->GetDesignBlockLibId(), true, true ) );
+        std::unique_ptr<DESIGN_BLOCK> designBlock(
+                pane->GetDesignBlock( group->GetDesignBlockLibId(), true, false, &outErr ) );
 
         if( !designBlock )
-        {
-            outErr = _( "design block is not in the loaded libraries" );
             return false;
-        }
 
         if( designBlock->GetBoardFile().IsEmpty() )
         {
@@ -1853,12 +1846,7 @@ int PCB_CONTROL::PlaceLinkedDesignBlock( const TOOL_EVENT& aEvent )
                                                                                 true, true ) );
 
     if( !designBlock )
-    {
-        wxString msg;
-        msg.Printf( _( "Could not find design block %s." ), group->GetDesignBlockLibId().GetUniStringLibId() );
-        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
         return 1;
-    }
 
     if( designBlock->GetBoardFile().IsEmpty() )
     {
@@ -1909,12 +1897,7 @@ int PCB_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
                                                                                 true, true ) );
 
     if( !designBlock )
-    {
-        wxString msg;
-        msg.Printf( _( "Could not find design block %s." ), group->GetDesignBlockLibId().GetUniStringLibId() );
-        m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
         return 1;
-    }
 
     editFrame->GetDesignBlockPane()->SelectLibId( group->GetDesignBlockLibId() );
 

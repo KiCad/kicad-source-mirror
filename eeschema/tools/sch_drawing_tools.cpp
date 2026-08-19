@@ -788,13 +788,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                                                                 true, true ) );
 
             if( !designBlock )
-            {
-                wxString msg;
-                msg.Printf( _( "Could not find design block %s." ),
-                            designBlockPane->GetSelectedLibId().GetUniStringLibId() );
-                m_frame->ShowInfoBarError( msg, true );
                 return 0;
-            }
 
             sheetFileName = designBlock->GetSchematicFile();
 

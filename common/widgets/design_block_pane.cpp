@@ -102,25 +102,26 @@ void DESIGN_BLOCK_PANE::RefreshLibs()
 }
 
 
-DESIGN_BLOCK* DESIGN_BLOCK_PANE::GetDesignBlock( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowErrorMsg )
+DESIGN_BLOCK* DESIGN_BLOCK_PANE::GetDesignBlock( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowErrorMsg,
+                                                 wxString* aErrorMsg )
 {
     DESIGN_BLOCK_LIBRARY_ADAPTER* prjLibs = m_frame->Prj().DesignBlockLibs();
 
     wxCHECK_MSG( prjLibs, nullptr, wxS( "Invalid design block library table." ) );
 
-    DESIGN_BLOCK* designBlock = nullptr;
+    wxString      error;
+    DESIGN_BLOCK* designBlock = prjLibs->DesignBlockLoadWithOptionalNickname( aLibId, true, &error );
 
-    try
+    if( !designBlock )
     {
-        designBlock = prjLibs->DesignBlockLoadWithOptionalNickname( aLibId, true );
-    }
-    catch( const IO_ERROR& ioe )
-    {
+        if( aErrorMsg )
+            *aErrorMsg = error;
+
         if( aShowErrorMsg )
         {
             wxString msg = wxString::Format( _( "Error loading design block %s from library '%s'." ),
                                              aLibId.GetLibItemName().wx_str(), aLibId.GetLibNickname().wx_str() );
-            DisplayErrorMessage( m_frame, msg, ioe.What() );
+            DisplayErrorMessage( m_frame, msg, error );
         }
     }
 

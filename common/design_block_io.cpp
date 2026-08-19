@@ -276,7 +276,7 @@ void DESIGN_BLOCK_IO::DesignBlockEnumerate( wxArrayString&  aDesignBlockNames,
     wxDir dir( aLibraryPath );
 
     if( !dir.IsOpened() )
-        THROW_IO_ERRORF( _( "Design block '%s' does not exist." ), aLibraryPath );
+        THROW_IO_ERRORF( _( "Design block library folder '%s' could not be opened." ), aLibraryPath );
 
     wxString dirname;
     wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadDesignBlockPathExtension );
@@ -302,7 +302,7 @@ DESIGN_BLOCK* DESIGN_BLOCK_IO::DesignBlockLoad( const wxString& aLibraryPath,
     wxString dbMetadataPath = dbPath + aDesignBlockName + wxT( "." ) + FILEEXT::JsonFileExtension;
 
     if( !wxDir::Exists( dbPath ) )
-        THROW_IO_ERRORF( _( "Design block '%s' does not exist." ), dbPath );
+        THROW_IO_ERRORF( _( "Design block '%s' does not exist in library '%s'." ), aDesignBlockName, aLibraryPath );
 
     DESIGN_BLOCK* newDB = new DESIGN_BLOCK();
 
