@@ -561,6 +561,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving )
         generate3dGrid( m_lastGridType );
     }
 
+    releaseRetiredRenderPtrs();
+
     std::lock_guard<std::recursive_mutex> lock( m_renderMutex );
 
     setupMaterials();
@@ -1111,6 +1113,17 @@ void RENDER_3D_OPENGL::freeAllLists()
 
     DELETE_AND_FREE_MAP( m_extrudedBodyLists )
     DELETE_AND_FREE_MAP( m_extrudedPadLists )
+}
+
+
+void RENDER_3D_OPENGL::releaseRetiredRenderPtrs()
+{
+    std::vector<std::shared_ptr<void>> retired;
+
+    {
+        std::lock_guard<std::recursive_mutex> lock( m_renderMutex );
+        retired.swap( m_retiredRenderPtrs );
+    }
 }
 
 

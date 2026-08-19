@@ -256,6 +256,8 @@ private:
 
     void freeAllLists();
 
+    void releaseRetiredRenderPtrs();
+
     void startBgWorker();
     void bgWorker( std::stop_token aStop );
     void sendRefreshView();
@@ -283,6 +285,7 @@ private:
     void assignRenderPtr( std::shared_ptr<T>& aDst, std::shared_ptr<T> aVal )
     {
         std::lock_guard lock( m_renderMutex );
+        retireRenderPtr( aDst );
         aDst = std::move( aVal );
     }
 
@@ -290,7 +293,16 @@ private:
     void assignRenderMap( TMap& aMap, const typename TMap::key_type& aKey, typename TMap::mapped_type aVal )
     {
         std::lock_guard lock( m_renderMutex );
-        aMap[aKey] = std::move( aVal );
+        typename TMap::mapped_type& slot = aMap[aKey];
+        retireRenderPtr( slot );
+        slot = std::move( aVal );
+    }
+
+    template <typename T>
+    void retireRenderPtr( std::shared_ptr<T>& aPtr )
+    {
+        if( aPtr )
+            m_retiredRenderPtrs.push_back( std::move( aPtr ) );
     }
 
     void appendRenderTriangleList( std::shared_ptr<TRIANGLE_DISPLAY_LIST> aTriangles )
@@ -315,6 +327,7 @@ private:
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerThroughHoles;
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerViaThroughHoles;
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerThroughHoleRings;
+    std::vector<std::shared_ptr<void>>           m_retiredRenderPtrs;
 
     LIST_TRIANGLES      m_triangles;       ///< store pointers so can be deleted latter
     GLuint              m_circleTexture;
