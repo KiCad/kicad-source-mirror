@@ -67,12 +67,13 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
             "libraries",
             [&]() -> nlohmann::json
             {
-                // TODO: implement this; libraries are read-only from KiCad at the moment
-                return {};
+                // TODO(JE) implement library config editor.  For now just round-trip
+                return m_librariesConfig;
             },
-            [&]( const nlohmann::json aObj )
+            [&]( const nlohmann::json& aObj )
             {
                 m_Tables.clear();
+                m_librariesConfig = aObj;
 
                 if( !aObj.is_array() )
                     return;

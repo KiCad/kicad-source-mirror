@@ -21,6 +21,7 @@
 #ifndef KICAD_DATABASE_LIB_SETTINGS_H
 #define KICAD_DATABASE_LIB_SETTINGS_H
 
+#include <json_common.h>
 #include <settings/json_settings.h>
 #include <wx/string.h>
 
@@ -120,6 +121,9 @@ public:
 
 protected:
     wxString getFileExt() const override;
+
+private:
+    nlohmann::json m_librariesConfig;
 };
 
 #endif //KICAD_DATABASE_LIB_SETTINGS_H
