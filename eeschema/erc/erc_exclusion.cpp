@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <nlohmann/json.hpp>
+
 #include <erc/erc_exclusion.h>
 #include <sch_marker.h>
 #include <sch_sheet_path.h>

@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <nlohmann/json.hpp>
+
 #include <board_design_settings.h>
 #include <pcb_marker.h>
 
