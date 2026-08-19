@@ -41,6 +41,7 @@ JOB_EXPORT_BOM::JOB_EXPORT_BOM() :
     m_sortField(),
     m_sortAsc( true ),
     m_filterString(),
+    m_filterScope( BOM_FILTER_SCOPE::REFERENCE ),
     m_excludeDNP( false ),
     m_groupSymbols( true ),
     m_variantNames()
@@ -76,6 +77,7 @@ JOB_EXPORT_BOM::JOB_EXPORT_BOM() :
     m_params.emplace_back( new JOB_PARAM<wxString>( "sort_field", &m_sortField, m_sortField ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "sort_asc", &m_sortAsc, m_sortAsc ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "filter_string", &m_filterString, m_filterString ) );
+    m_params.emplace_back( new JOB_PARAM<BOM_FILTER_SCOPE>( "filter_scope", &m_filterScope, m_filterScope ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "exclude_dnp", &m_excludeDNP, m_excludeDNP ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "group_symbols", &m_groupSymbols, m_groupSymbols ) );
 

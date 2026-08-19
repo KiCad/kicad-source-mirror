@@ -475,7 +475,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     {
         const FOOTPRINT& footprint = ref.GetFootprint();
 
-        if( !m_filter.IsEmpty() && !matcher.Find( footprint.GetReferenceAsString().Lower() ) )
+        if( !MatchesFilter( ref, footprint.GetReferenceAsString(), matcher ) )
             continue;
 
         if( m_excludeDNP )

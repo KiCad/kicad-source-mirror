@@ -80,6 +80,7 @@ void to_json( nlohmann::json& j, const BOM_PRESET& p )
         { "sort_field", p.sortField },
         { "sort_asc", p.sortAsc },
         { "filter_string", p.filterString },
+        { "filter_scope", p.filterScope },
         { "group_symbols", p.groupSymbols },
         { "exclude_dnp", p.excludeDNP },
         { "include_excluded_from_bom", p.includeExcludedFromBOM },
@@ -97,6 +98,7 @@ void from_json( const nlohmann::json& j, BOM_PRESET& f )
     j.at( "sort_field" ).get_to( f.sortField );
     j.at( "sort_asc" ).get_to( f.sortAsc );
     j.at( "filter_string" ).get_to( f.filterString );
+    f.filterScope = j.value( "filter_scope", BOM_FILTER_SCOPE::REFERENCE );
     j.at( "group_symbols" ).get_to( f.groupSymbols );
     j.at( "exclude_dnp" ).get_to( f.excludeDNP );
 
@@ -114,6 +116,7 @@ bool BOM_PRESET::operator==( const BOM_PRESET& rhs ) const
         && this->sortField == rhs.sortField
         && this->sortAsc == rhs.sortAsc
         && this->filterString == rhs.filterString
+        && this->filterScope == rhs.filterScope
         && this->groupSymbols == rhs.groupSymbols
         && this->excludeDNP == rhs.excludeDNP
         && this->includeExcludedFromBOM == rhs.includeExcludedFromBOM;
@@ -123,7 +126,8 @@ bool BOM_PRESET::operator==( const BOM_PRESET& rhs ) const
 BOM_PRESET BOM_PRESET::DefaultEditing()
 {
     BOM_PRESET p{
-        _HKI( "Default Editing" ), true, {}, _( "Reference" ), true, "", true, false, true
+        _HKI( "Default Editing" ), true, {}, _( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
+        true, false, true
     };
 
     p.fieldsOrdered = std::vector<BOM_FIELD>{
@@ -146,7 +150,8 @@ BOM_PRESET BOM_PRESET::DefaultEditing()
 BOM_PRESET BOM_PRESET::GroupedByValue()
 {
     BOM_PRESET p{
-        _HKI( "Grouped By Value" ), true, {}, _( "Reference" ), true, "", true, false, false
+        _HKI( "Grouped By Value" ), true, {}, _( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
+        true, false, false
     };
 
     p.fieldsOrdered = std::vector<BOM_FIELD>{
@@ -166,7 +171,7 @@ BOM_PRESET BOM_PRESET::GroupedByValueFootprint()
 {
     BOM_PRESET p{
         _HKI( "Grouped By Value and Footprint" ), true, {}, _( "Reference" ), true, "",
-        true, false, false
+        BOM_FILTER_SCOPE::REFERENCE, true, false, false
     };
 
     p.fieldsOrdered = std::vector<BOM_FIELD>{
@@ -185,7 +190,8 @@ BOM_PRESET BOM_PRESET::GroupedByValueFootprint()
 BOM_PRESET BOM_PRESET::Attributes()
 {
     BOM_PRESET p{
-        _HKI( "Attributes" ), true, {}, _( "Reference" ), true, "", true, false, true
+        _HKI( "Attributes" ), true, {}, _( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
+        true, false, true
     };
 
     p.fieldsOrdered = std::vector<BOM_FIELD>{

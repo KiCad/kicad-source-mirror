@@ -107,6 +107,7 @@ protected:
 
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
     void OnFilterText( wxCommandEvent& aEvent ) override;
+    void OnFilterScope( wxCommandEvent& aEvent ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& aEvent ) override;
     void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnColSort( wxGridEvent& aEvent );

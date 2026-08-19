@@ -502,7 +502,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     {
         SCH_REFERENCE ref = m_symbolsList[i];
 
-        if( !m_filter.IsEmpty() && !matcher.Find( ref.GetFullRef().Lower() ) )
+        if( !MatchesFilter( ref, ref.GetFullRef(), matcher ) )
             continue;
 
         if( m_excludeDNP )

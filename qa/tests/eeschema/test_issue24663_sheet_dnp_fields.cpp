@@ -84,4 +84,18 @@ BOOST_FIXTURE_TEST_CASE( SheetDNPEffectiveInSymbolFields, ISSUE24663_FIXTURE )
     // value of "1" draws it checked. The stored attribute is still the symbol's own "0".
     SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW row( r1, ROW_STATE::NON_EXPANDABLE );
     BOOST_CHECK_EQUAL( model.GetGroupedValue( row, dnpCol ), wxS( "1" ) );
+
+    // Resolved output and filtering use the attribute's visible string representation,
+    // not the checkbox renderer's internal value.
+    BOOST_CHECK_EQUAL( model.GetGroupedValue( row, dnpCol, wxT( ", " ), wxT( "-" ), true, false ), wxS( "DNP" ) );
+
+    model.SetShowColumn( dnpCol, true );
+    model.SetFilterScope( BOM_FILTER_SCOPE::VISIBLE );
+    model.SetFilter( wxS( "DNP" ) );
+    model.RebuildRows();
+    BOOST_CHECK_EQUAL( model.GetNumberRows(), 1 );
+
+    model.SetFilter( wxS( "1" ) );
+    model.RebuildRows();
+    BOOST_CHECK_EQUAL( model.GetNumberRows(), 0 );
 }

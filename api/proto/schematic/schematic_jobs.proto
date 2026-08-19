@@ -160,6 +160,13 @@ enum BOMSortDirection
 	BSD_DESCENDING = 2;
 }
 
+enum BOMFilterScope
+{
+	BFS_REFERENCE = 0;
+	BFS_VISIBLE = 1;
+	BFS_ALL = 2;
+}
+
 message BOMFieldSettings
 {
 	// If supplied, will apply a default or user-stored preset to the other field settings.
@@ -176,6 +183,9 @@ message BOMFieldSettings
 	BOMSortDirection sort_direction = 4;
 
 	string filter = 5;
+
+	// Fields searched by the filter; defaults to reference designators if unspecified
+	BOMFilterScope filter_scope = 6;
 }
 
 // Exports a schematic bill of materials. Returns RunJobResponse.

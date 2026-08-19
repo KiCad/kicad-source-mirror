@@ -76,6 +76,7 @@ class KICOMMON_API DIALOG_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxNotebook* m_nbPages;
 		wxPanel* m_panelEdit;
 		wxSearchCtrl* m_filter;
+		wxChoice* m_filterScope;
 		wxStaticLine* m_staticline31;
 		wxChoice* m_scope;
 		wxStaticLine* m_staticline311;
@@ -128,6 +129,7 @@ class KICOMMON_API DIALOG_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFilterScope( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnScope( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }

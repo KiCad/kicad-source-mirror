@@ -839,6 +839,7 @@ int PCBNEW_JOBS_HANDLER::JobExportBom( JOB* aJob )
         preset.sortAsc = aBomJob->m_sortAsc;
         preset.sortField = normalizeFieldName( aBomJob->m_sortField );
         preset.filterString = aBomJob->m_filterString;
+        preset.filterScope = aBomJob->m_filterScope;
         preset.groupSymbols = aBomJob->m_groupSymbols;
         preset.excludeDNP = aBomJob->m_excludeDNP;
     }

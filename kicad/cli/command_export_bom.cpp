@@ -80,6 +80,11 @@ CLI::EXPORT_BOM_COMMAND::EXPORT_BOM_COMMAND( KIWAY::FACE_T aFaceId ) :
             .default_value( std::string( "" ) )
             .metavar( "FILTER" );
 
+    m_argParser.add_argument( ARG_FILTER_SCOPE )
+            .help( UTF8STDSTR( _( ARG_FILTER_SCOPE_DESC ) ) )
+            .default_value( std::string( "reference" ) )
+            .choices( "reference", "visible", "all" );
+
     m_argParser.add_argument( ARG_EXCLUDE_DNP )
             .help( UTF8STDSTR( _( ARG_EXCLUDE_DNP_DESC ) ) )
             .flag();
@@ -173,6 +178,14 @@ int CLI::EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
     bomJob->m_sortField = From_UTF8( m_argParser.get<std::string>( ARG_SORT_FIELD ).c_str() );
     bomJob->m_sortAsc = m_argParser.get<bool>( ARG_SORT_ASC );
     bomJob->m_filterString = From_UTF8( m_argParser.get<std::string>( ARG_FILTER ).c_str() );
+
+    const std::string filterScope = m_argParser.get<std::string>( ARG_FILTER_SCOPE );
+
+    if( filterScope == "visible" )
+        bomJob->m_filterScope = BOM_FILTER_SCOPE::VISIBLE;
+    else if( filterScope == "all" )
+        bomJob->m_filterScope = BOM_FILTER_SCOPE::ALL;
+
     bomJob->m_excludeDNP = m_argParser.get<bool>( ARG_EXCLUDE_DNP );
 
     if( m_argParser.get<bool>( DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM ) )

@@ -28,15 +28,12 @@
 #include <widgets/ui_common.h>
 
 #include <common.h>
+#include <eda_pattern_match.h>
 #include <kiid.h>
 #include <refdes_utils.h>
+#include <settings/bom_settings.h>
 #include <string_utils.h>
 #include <wx/debug.h>
-
-
-struct BOM_FIELD;
-struct BOM_PRESET;
-struct BOM_FMT_PRESET;
 
 
 /**
@@ -138,6 +135,8 @@ public:
 
     void            SetFilter( const wxString& aFilter ) { m_filter = aFilter; }
     const wxString& GetFilter() { return m_filter; }
+    void             SetFilterScope( BOM_FILTER_SCOPE aScope ) { m_filterScope = aScope; }
+    BOM_FILTER_SCOPE GetFilterScope() const { return m_filterScope; }
 
     void SetGroupingEnabled( bool aGroup ) { m_groupingEnabled = aGroup; }
     bool GetGroupingEnabled() { return m_groupingEnabled; }
@@ -193,19 +192,21 @@ public:
 protected:
     // Helper functions to deal with translating wxGrid values to and from
     // named field values like ${DNP}
-    bool isAttribute( const wxString& aFieldName );
+    bool     isAttribute( const wxString& aFieldName );
+    wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
 
     virtual bool isCellReadOnly( int aRow, int aCol );
 
 protected:
-    bool     m_edited;
-    int      m_sortColumn;
-    bool     m_sortAscending;
-    wxString m_filter;
-    bool     m_groupingEnabled;
-    bool     m_excludeDNP;
-    bool     m_includeExcluded;
-    bool     m_rebuildsEnabled;
+    bool             m_edited;
+    int              m_sortColumn;
+    bool             m_sortAscending;
+    wxString         m_filter;
+    BOM_FILTER_SCOPE m_filterScope;
+    bool             m_groupingEnabled;
+    bool             m_excludeDNP;
+    bool             m_includeExcluded;
+    bool             m_rebuildsEnabled;
 
     wxString              m_currentVariant;  ///< Current variant name for highlighting
     std::vector<wxString> m_variantNames;    ///< Variant names for multi-variant DNP filtering
@@ -392,9 +393,14 @@ public:
 
                 if( resolveVars )
                 {
+                    if( ColIsAttribute( aCol ) )
+                    {
+                        itemFieldValue =
+                                getAttributeResolvedValue( m_cols[aCol].m_fieldName, itemFieldValue == wxS( "1" ) );
+                    }
                     // Generated fields (e.g. ${FOOTPRINT_LIBRARY}) can't have un-applied values as they're
                     // read-only.  Resolve them against the field.
-                    if( IsGeneratedField( m_cols[aCol].m_fieldName ) )
+                    else if( IsGeneratedField( m_cols[aCol].m_fieldName ) )
                     {
                         itemFieldValue = getFieldResolvedLiveValue( item, m_cols[aCol].m_fieldName );
                     }
@@ -485,6 +491,77 @@ public:
 
 
 protected:
+    bool MatchesFilter( const ITEM_TYPE& aItem, const wxString& aReference,
+                        EDA_COMBINED_MATCHER& aMatcher )
+    {
+        if( m_filter.IsEmpty() )
+            return true;
+
+        // There is a slight difference between how the reference field is matched between
+        // 'reference' mode and all other modes that only applies to multiunit symbols in the
+        // symbol fields table.
+        //
+        // For compatibility, a filter like U1A will match a multiunit U1 that has a unit A
+        // in 'reference' mode, but not in any other mode. It won't match a C1A to a C1 that
+        // isn't mulitunit.
+        //
+        // In non-reference mode, because multiunit symbols are all grouped together,
+        // e.g. U1A and U1B are in the same row as U1, the filter will only match if the
+        // reference is exactly U1.
+        //
+        // None of this matters for the footprint fields table / other future tables.
+        if( m_filterScope == BOM_FILTER_SCOPE::REFERENCE )
+            return aMatcher.Find( aReference.Lower() );
+
+        KIID_PATH key = getDataStoreKey( aItem );
+        auto      itemIt = m_dataStore.find( key );
+
+        if( itemIt == m_dataStore.end() )
+            return false;
+
+        for( size_t i = 0; i < m_cols.size(); ++i )
+        {
+            const DATA_MODEL_COL& col = m_cols[i];
+
+            if( m_filterScope == BOM_FILTER_SCOPE::VISIBLE && !col.m_show )
+                continue;
+
+            auto fieldIt = itemIt->second.find( col.m_fieldName );
+
+            if( fieldIt == itemIt->second.end() )
+                continue;
+
+            wxString value = fieldIt->second;
+
+            // We want to match on things like DNP and Excluded from BOM when the
+            // checkbox is checked
+            if( ColIsAttribute( static_cast<int>( i ) ) )
+            {
+                bool effectiveValue = value == wxS( "1" )
+                                      || attributeInheritedFromSheet( aItem, col.m_fieldName );
+                value = getAttributeResolvedValue( col.m_fieldName, effectiveValue );
+            }
+            // For generated fields, we always want to match on the resolved value,
+            // not the stored variable
+            else if( IsGeneratedField( col.m_fieldName ) )
+            {
+                value = getFieldResolvedLiveValue( aItem, col.m_fieldName );
+            }
+            // Same as above, but for field values that contain a mix of text and variables, e.g. "Value: ${VALUE}"
+            // The point is to match on what the user can see
+            else if( IsGeneratedValue( value ) )
+            {
+                value = resolveTextVars( aItem, value );
+            }
+
+            if( aMatcher.Find( value.Lower() ) )
+                return true;
+        }
+
+        return false;
+    }
+
+
     virtual bool attributeInheritedFromSheet( const ITEM_TYPE& aItem, const wxString& aAttributeName ) const
     {
         return false;

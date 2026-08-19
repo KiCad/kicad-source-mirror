@@ -22,6 +22,7 @@
 #define JOB_EXPORT_BOM_H
 
 #include <kicommon.h>
+#include <settings/bom_settings.h>
 #include <vector>
 #include "job.h"
 
@@ -61,6 +62,7 @@ public:
     wxString              m_sortField;
     bool                  m_sortAsc;
     wxString              m_filterString;
+    BOM_FILTER_SCOPE      m_filterScope;
     bool                  m_excludeDNP;
     bool                  m_groupSymbols;
 

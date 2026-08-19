@@ -44,6 +44,21 @@ KICOMMON_API void to_json( nlohmann::json& j, const BOM_FIELD& f );
 KICOMMON_API void from_json( const nlohmann::json& j, BOM_FIELD& f );
 
 
+enum class BOM_FILTER_SCOPE
+{
+    REFERENCE,
+    VISIBLE,
+    ALL
+};
+
+NLOHMANN_JSON_SERIALIZE_ENUM( BOM_FILTER_SCOPE,
+                              {
+                                      { BOM_FILTER_SCOPE::REFERENCE, "reference" },
+                                      { BOM_FILTER_SCOPE::VISIBLE, "visible" },
+                                      { BOM_FILTER_SCOPE::ALL, "all" },
+                              } )
+
+
 // A complete preset defining a BOM "View" with a list of all the fields to show,
 // group by, order, filtering settings, etc.
 struct KICOMMON_API BOM_PRESET
@@ -54,6 +69,7 @@ struct KICOMMON_API BOM_PRESET
     wxString               sortField;
     bool                   sortAsc = true;
     wxString               filterString;
+    BOM_FILTER_SCOPE       filterScope = BOM_FILTER_SCOPE::REFERENCE;
     bool                   groupSymbols = false;
     bool                   excludeDNP = false;
     bool                   includeExcludedFromBOM = false;

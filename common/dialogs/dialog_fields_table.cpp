@@ -169,6 +169,12 @@ void DIALOG_FIELDS_TABLE::ShowHideColumn( int aCol, bool aShow )
 
     getDataModel()->SetShowColumn( aCol, aShow );
 
+    if( getDataModel()->GetFilterScope() == BOM_FILTER_SCOPE::VISIBLE
+        && !getDataModel()->GetFilter().IsEmpty() )
+    {
+        getDataModel()->RebuildRows();
+    }
+
     syncBomPresetSelection();
 
     if( m_nbPages->GetSelection() == 1 )
@@ -225,6 +231,7 @@ void DIALOG_FIELDS_TABLE::loadJobBomPreset( const JOB_EXPORT_BOM& aJob, BOM_PRES
     aPreset.name = aJob.m_bomPresetName;
     aPreset.excludeDNP = aJob.m_excludeDNP;
     aPreset.filterString = aJob.m_filterString;
+    aPreset.filterScope = aJob.m_filterScope;
     aPreset.sortAsc = aJob.m_sortAsc;
     aPreset.sortField = aJob.m_sortField;
     aPreset.groupSymbols = aJob.m_groupSymbols;
@@ -293,6 +300,7 @@ void DIALOG_FIELDS_TABLE::saveJobSettings( JOB_EXPORT_BOM& aJob )
     aJob.m_sortAsc = presetFields.sortAsc;
     aJob.m_excludeDNP = presetFields.excludeDNP;
     aJob.m_filterString = presetFields.filterString;
+    aJob.m_filterScope = presetFields.filterScope;
     aJob.m_sortField = presetFields.sortField;
     aJob.m_groupSymbols = presetFields.groupSymbols;
 
@@ -872,6 +880,16 @@ void DIALOG_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_FIELDS_TABLE::OnFilterScope( wxCommandEvent& aEvent )
+{
+    getDataModel()->SetFilterScope( static_cast<BOM_FILTER_SCOPE>( m_filterScope->GetSelection() ) );
+    getDataModel()->RebuildRows();
+    m_grid->ForceRefresh();
+
+    syncBomPresetSelection();
+}
+
+
 void DIALOG_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& aEvent )
 {
     getDataModel()->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
@@ -1296,6 +1314,7 @@ void DIALOG_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     m_grid->SetSortingColumn( getDataModel()->GetSortCol(), getDataModel()->GetSortAsc() );
     m_groupSymbolsBox->SetValue( getDataModel()->GetGroupingEnabled() );
     m_filter->ChangeValue( getDataModel()->GetFilter() );
+    m_filterScope->SetSelection( static_cast<int>( getDataModel()->GetFilterScope() ) );
 
     SetupAllColumnProperties();
 
@@ -1374,6 +1393,7 @@ void DIALOG_FIELDS_TABLE::syncBomPresetSelection()
                 // Check the simple settings first
                 if( !( preset.sortAsc == current.sortAsc
                        && preset.filterString == current.filterString
+                       && preset.filterScope == current.filterScope
                        && preset.groupSymbols == current.groupSymbols
                        && preset.excludeDNP == current.excludeDNP
                        && preset.includeExcludedFromBOM == current.includeExcludedFromBOM ) )

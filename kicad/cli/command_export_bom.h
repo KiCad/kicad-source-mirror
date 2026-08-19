@@ -75,6 +75,9 @@ namespace CLI
 #define ARG_FILTER "--filter"
 #define ARG_FILTER_DESC "Filter string to remove output lines."
 
+#define ARG_FILTER_SCOPE "--filter-scope"
+#define ARG_FILTER_SCOPE_DESC "Fields to search when filtering: reference, visible, or all."
+
 #define ARG_EXCLUDE_DNP "--exclude-dnp"
 #define ARG_EXCLUDE_DNP_DESC "Exclude components marked Do-Not-Populate."
 

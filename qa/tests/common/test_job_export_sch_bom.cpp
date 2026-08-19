@@ -81,6 +81,48 @@ BOOST_AUTO_TEST_CASE( EmptyVariantRoundTrip )
 }
 
 
+BOOST_AUTO_TEST_CASE( FilterScopeRoundTripAndDefault )
+{
+    JOB_EXPORT_BOM job;
+    job.m_filterScope = BOM_FILTER_SCOPE::ALL;
+
+    nlohmann::json j;
+    job.ToJson( j );
+
+    BOOST_REQUIRE( j.contains( "filter_scope" ) );
+    BOOST_CHECK_EQUAL( j.at( "filter_scope" ).get<std::string>(), "all" );
+
+    JOB_EXPORT_BOM loaded;
+    loaded.FromJson( j );
+    BOOST_CHECK( loaded.m_filterScope == BOM_FILTER_SCOPE::ALL );
+
+    j.erase( "filter_scope" );
+    loaded.m_filterScope = BOM_FILTER_SCOPE::VISIBLE;
+    loaded.FromJson( j );
+    BOOST_CHECK( loaded.m_filterScope == BOM_FILTER_SCOPE::REFERENCE );
+}
+
+
+BOOST_AUTO_TEST_CASE( BomPresetFilterScopeRoundTripAndDefault )
+{
+    BOM_PRESET preset = BOM_PRESET::DefaultEditing();
+    preset.filterScope = BOM_FILTER_SCOPE::VISIBLE;
+
+    nlohmann::json j = preset;
+
+    BOOST_REQUIRE( j.contains( "filter_scope" ) );
+    BOOST_CHECK_EQUAL( j.at( "filter_scope" ).get<std::string>(), "visible" );
+
+    BOM_PRESET loaded = j.get<BOM_PRESET>();
+    BOOST_CHECK( loaded.filterScope == BOM_FILTER_SCOPE::VISIBLE );
+
+    j.erase( "filter_scope" );
+    loaded.filterScope = BOM_FILTER_SCOPE::ALL;
+    from_json( j, loaded );
+    BOOST_CHECK( loaded.filterScope == BOM_FILTER_SCOPE::REFERENCE );
+}
+
+
 // Issue #23932: saving a job used to append the choice every time, so the list grew
 // without bound. Setting the selection must replace the list, never grow it.
 BOOST_AUTO_TEST_CASE( VariantNoAccumulation )

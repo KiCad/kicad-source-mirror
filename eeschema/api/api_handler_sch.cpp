@@ -1408,6 +1408,22 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     bomJob.m_sortField = wxString::FromUTF8( aCtx.Request.fields().sort_field() );
     bomJob.m_filterString = wxString::FromUTF8( aCtx.Request.fields().filter() );
 
+    switch( aCtx.Request.fields().filter_scope() )
+    {
+    case kiapi::schematic::jobs::BOMFilterScope::BFS_VISIBLE:
+        bomJob.m_filterScope = BOM_FILTER_SCOPE::VISIBLE;
+        break;
+
+    case kiapi::schematic::jobs::BOMFilterScope::BFS_ALL:
+        bomJob.m_filterScope = BOM_FILTER_SCOPE::ALL;
+        break;
+
+    case kiapi::schematic::jobs::BOMFilterScope::BFS_REFERENCE:
+    default:
+        bomJob.m_filterScope = BOM_FILTER_SCOPE::REFERENCE;
+        break;
+    }
+
     if( aCtx.Request.fields().sort_direction() == kiapi::schematic::jobs::BOMSortDirection::BSD_ASCENDING )
     {
         bomJob.m_sortAsc = true;

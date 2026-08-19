@@ -204,6 +204,12 @@ DIALOG_FIELDS_TABLE_BASE::DIALOG_FIELDS_TABLE_BASE( wxWindow* parent, wxWindowID
 
 	bControls->Add( m_filter, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
+	wxString m_filterScopeChoices[] = { _("References"), _("Visible"), _("All") };
+	int m_filterScopeNChoices = sizeof( m_filterScopeChoices ) / sizeof( wxString );
+	m_filterScope = new wxChoice( m_panelEdit, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_filterScopeNChoices, m_filterScopeChoices, 0 );
+	m_filterScope->SetSelection( 0 );
+	bControls->Add( m_filterScope, 0, wxALL, 5 );
+
 	m_staticline31 = new wxStaticLine( m_panelEdit, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bControls->Add( m_staticline31, 0, wxEXPAND | wxALL, 3 );
 
@@ -450,6 +456,7 @@ DIALOG_FIELDS_TABLE_BASE::DIALOG_FIELDS_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_nbPages->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_FIELDS_TABLE_BASE::OnPageChanged ), NULL, this );
 	m_filter->Connect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_FIELDS_TABLE_BASE::OnFilterMouseMoved ), NULL, this );
 	m_filter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnFilterText ), NULL, this );
+	m_filterScope->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnFilterScope ), NULL, this );
 	m_scope->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnScope ), NULL, this );
 	m_groupSymbolsBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnGroupSymbolsToggled ), NULL, this );
 	m_bRefresh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
@@ -492,6 +499,7 @@ DIALOG_FIELDS_TABLE_BASE::~DIALOG_FIELDS_TABLE_BASE()
 	m_nbPages->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_FIELDS_TABLE_BASE::OnPageChanged ), NULL, this );
 	m_filter->Disconnect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_FIELDS_TABLE_BASE::OnFilterMouseMoved ), NULL, this );
 	m_filter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnFilterText ), NULL, this );
+	m_filterScope->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnFilterScope ), NULL, this );
 	m_scope->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnScope ), NULL, this );
 	m_groupSymbolsBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnGroupSymbolsToggled ), NULL, this );
 	m_bRefresh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );

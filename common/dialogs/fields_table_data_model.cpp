@@ -79,6 +79,7 @@ FIELDS_TABLE_DATA_MODEL_BASE::FIELDS_TABLE_DATA_MODEL_BASE() :
         m_edited( false ),
         m_sortColumn( 0 ),
         m_sortAscending( false ),
+        m_filterScope( BOM_FILTER_SCOPE::REFERENCE ),
         m_groupingEnabled( false ),
         m_excludeDNP( false ),
         m_includeExcluded( false ),
@@ -393,6 +394,7 @@ void FIELDS_TABLE_DATA_MODEL_BASE::ApplyBomPreset( const BOM_PRESET& aPreset )
     SetSorting( sortCol, aPreset.sortAsc );
 
     SetFilter( aPreset.filterString );
+    SetFilterScope( aPreset.filterScope );
     SetExcludeDNP( aPreset.excludeDNP );
     SetIncludeExcludedFromBOM( aPreset.includeExcludedFromBOM );
 
@@ -411,6 +413,7 @@ BOM_PRESET FIELDS_TABLE_DATA_MODEL_BASE::GetBomSettings()
 
     current.sortAsc = GetSortAsc();
     current.filterString = GetFilter();
+    current.filterScope = GetFilterScope();
     current.groupSymbols = GetGroupingEnabled();
     current.excludeDNP = GetExcludeDNP();
     current.includeExcludedFromBOM = GetIncludeExcludedFromBOM();
@@ -498,6 +501,26 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::isAttribute( const wxString& aFieldName )
     return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
+}
+
+
+wxString FIELDS_TABLE_DATA_MODEL_BASE::getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const
+{
+    if( !aValue )
+        return wxEmptyString;
+
+    if( aFieldName == wxS( "${DNP}" ) )
+        return _( "DNP" );
+    else if( aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
+        return _( "Excluded from board" );
+    else if( aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) )
+        return _( "Excluded from BOM" );
+    else if( aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
+        return _( "Excluded from position files" );
+    else if( aFieldName == wxS( "${EXCLUDE_FROM_SIM}" ) )
+        return _( "Excluded from simulation" );
+
+    return wxEmptyString;
 }
 
 
