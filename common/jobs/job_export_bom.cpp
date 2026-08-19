@@ -94,6 +94,14 @@ JOB_EXPORT_BOM::JOB_EXPORT_BOM() :
 }
 
 
+void JOB_EXPORT_BOM::FromJson( const nlohmann::json& aJson )
+{
+    JOB::FromJson( aJson );
+    m_bomPresetName = wxEmptyString;
+    m_bomFmtPresetName = wxEmptyString;
+}
+
+
 wxString JOB_EXPORT_BOM::GetSelectedVariant() const
 {
     if( !m_variantNames.empty() )

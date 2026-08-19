@@ -30,6 +30,7 @@ class KICOMMON_API JOB_EXPORT_BOM : public JOB
 {
 public:
     JOB_EXPORT_BOM();
+    void     FromJson( const nlohmann::json& aJson ) override;
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
 

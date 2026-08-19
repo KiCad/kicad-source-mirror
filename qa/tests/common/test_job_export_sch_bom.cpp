@@ -103,6 +103,27 @@ BOOST_AUTO_TEST_CASE( FilterScopeRoundTripAndDefault )
 }
 
 
+BOOST_AUTO_TEST_CASE( PresetNamesAreClearedOnDeserialization )
+{
+    JOB_EXPORT_BOM job;
+    job.m_bomPresetName = wxS( "fields" );
+    job.m_bomFmtPresetName = wxS( "format" );
+    job.m_filterString = wxS( "R1" );
+    job.m_fieldDelimiter = wxS( ";" );
+
+    nlohmann::json j;
+    job.ToJson( j );
+
+    JOB_EXPORT_BOM loaded;
+    loaded.FromJson( j );
+
+    BOOST_CHECK( loaded.m_bomPresetName.IsEmpty() );
+    BOOST_CHECK( loaded.m_bomFmtPresetName.IsEmpty() );
+    BOOST_CHECK( loaded.m_filterString == wxS( "R1" ) );
+    BOOST_CHECK( loaded.m_fieldDelimiter == wxS( ";" ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( BomPresetFilterScopeRoundTripAndDefault )
 {
     BOM_PRESET preset = BOM_PRESET::DefaultEditing();

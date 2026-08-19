@@ -278,16 +278,8 @@ void DIALOG_FIELDS_TABLE::loadJobBomFmtPreset( const JOB_EXPORT_BOM& aJob, BOM_F
 void DIALOG_FIELDS_TABLE::saveJobSettings( JOB_EXPORT_BOM& aJob )
 {
     aJob.SetConfiguredOutputPath( m_outputFileName->GetValue() );
-
-    if( m_currentBomFmtPreset )
-        aJob.m_bomFmtPresetName = m_currentBomFmtPreset->name;
-    else
-        aJob.m_bomFmtPresetName = wxEmptyString;
-
-    if( m_currentBomPreset )
-        aJob.m_bomPresetName = m_currentBomPreset->name;
-    else
-        aJob.m_bomPresetName = wxEmptyString;
+    aJob.m_bomFmtPresetName = wxEmptyString;
+    aJob.m_bomPresetName = wxEmptyString;
 
     BOM_FMT_PRESET fmtSettings = GetCurrentBomFmtSettings();
     aJob.m_fieldDelimiter = fmtSettings.fieldDelimiter;
