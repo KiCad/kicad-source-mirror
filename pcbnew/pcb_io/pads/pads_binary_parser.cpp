@@ -35,6 +35,7 @@
 #include <unordered_set>
 
 #include <fmt/format.h>
+#include <geometry/eda_angle.h>
 #include <io/pads/pads_binary_utils.h>
 #include <ki_exception.h>
 #include <wx/log.h>
@@ -45,10 +46,8 @@ namespace PADS_IO
 // Section 4 pad-shape codes. The finger shapes 0 (OF) and 1 (RF) carry a non-zero finLength
 // (size B); the round 2 (R) and square 3 (S) never do.
 static const std::map<uint8_t, std::string> PAD_SHAPE_NAMES = {
-    { 0x00, "OF" },
-    { 0x01, "RF" },
-    { 0x02, "R" },
-    { 0x03, "S" },
+    { 0x00, "OF" }, { 0x01, "RF" }, { 0x02, "R" },  { 0x03, "S" },
+    { 0x06, "RT" }, { 0x07, "ST" }, { 0x08, "RA" }, { 0x09, "SA" },
 };
 
 
@@ -158,23 +157,15 @@ BINARY_PARSER::~BINARY_PARSER() = default;
 
 bool BINARY_PARSER::IsBinaryPadsFile( const wxString& aFileName )
 {
-    std::ifstream file( aFileName.fn_str(), std::ios::binary );
+    std::vector<uint8_t> header;
 
-    if( !file.is_open() )
+    if( !PADS_IO::ReadFileHeader( aFileName, header, 4 ) || header.size() < 4 )
         return false;
 
-    uint8_t header[4];
-    file.read( reinterpret_cast<char*>( header ), 4 );
-
-    if( file.gcount() < 4 )
+    if( !PADS_IO::HasSdbMagic( header, 0xFF ) )
         return false;
 
-    if( header[0] != 0x00 || header[1] != 0xFF )
-        return false;
-
-    uint16_t version = static_cast<uint16_t>( header[2] ) | ( static_cast<uint16_t>( header[3] ) << 8 );
-
-    return PADS_SDB::IsSupportedVersion( version );
+    return PADS_SDB::IsSupportedVersion( PADS_IO::getU16LE( header, 2 ) );
 }
 
 
@@ -204,7 +195,6 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     m_version = m_sdb.Version();
     m_originX = m_sdb.Coords().OriginX();
     m_originY = m_sdb.Coords().OriginY();
-    m_originFound = m_sdb.Coords().Found();
 
     m_parameters.origin.x = static_cast<double>( m_originX );
     m_parameters.origin.y = static_cast<double>( m_originY );
@@ -234,7 +224,7 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
 
     // Sections 10 and 11 are circularly serialized fixed arrays. Reconstruct their direct
     // owner/piece links before any graphic decoder consumes them.
-    KITIME( computeSec12Base() );
+    KITIME( computeSec12CleanRows() );
     KITIME( buildOwnerRuns() );
 
     KITIME( parseBoardOutlineDirect() );
@@ -259,6 +249,8 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     KITIME( parseDimensions() );
 
     KITIME( resolveNetAnchors() );
+
+#undef KITIME
 
     m_parts.erase( std::remove_if( m_parts.begin(), m_parts.end(),
                                    []( const PART& p )
@@ -525,7 +517,6 @@ void BINARY_PARSER::parsePadStacks()
 
     m_padStackPool.assign( entry->physicalCount, {} );
     m_padStackDrillSpans.assign( entry->physicalCount, { 0, 0 } );
-    m_padStackCache.clear();
     std::vector<int32_t> maxPadDiameter( entry->physicalCount, 0 );
 
     const uint32_t layerRecordSize = m_version <= 0x2021 ? 20 : 24;
@@ -578,25 +569,46 @@ void BINARY_PARSER::parsePadStacks()
         SDB_RECORD stackRec = m_sdb.RecordAt( base );
         uint32_t   layerStart = stackRec.U32( layout.layerStartOff );
         uint8_t    layerCount = stackRec.U8( layout.layerCountOff );
+        bool       endCursor = m_version == 0x2022;
+        bool       successorMetadata = endCursor || m_version == 0x2027;
+        bool       rawLayerSelector = successorMetadata;
 
         if( layerCount > 0
-            && ( layerStart >= layerSection->count || layerCount > layerSection->count - layerStart ) )
+            && ( layerSection->count == 0 || layerCount > layerSection->count
+                 || ( endCursor
+                              ? layerStart > layerSection->count
+                              : layerStart >= layerSection->count || layerCount > layerSection->count - layerStart ) ) )
             THROW_IO_ERROR( "Invalid PADS pad-layer range" );
 
         if( layerCount > 0 )
         {
+            const uint32_t controllerPhase = endCursor ? 2 % layerSection->count : 0;
+
             for( uint32_t layerIdx = 0; layerIdx < layerCount; ++layerIdx )
             {
-                uint32_t   rowBase = layerTableStart + ( layerStart + layerIdx ) * layerRecordSize;
-                SDB_RECORD rowRec = m_sdb.RecordAt( rowBase );
-                uint32_t   geometryBase = rowBase;
+                // PADS 2022's controller cursor is two rows ahead of the first geometry row.
+                // Both observed dialects put selector/shape in each geometry row's successor.
+                uint32_t geometryIndex = endCursor ? ( layerStart + layerSection->count - controllerPhase + layerIdx )
+                                                             % layerSection->count
+                                                   : layerStart + layerIdx;
 
-                if( m_version == 0x2022 && layerStart + layerIdx > 0 )
-                    geometryBase -= layerRecordSize;
+                // v0x2022's table is a ring, so its successor wraps; without the modulo the last
+                // geometry row read past the table. v0x2027's base is rotated back four bytes, so
+                // its row-count successor still lands on selector and shape inside the section.
+                uint32_t metadataIndex = geometryIndex;
+
+                if( successorMetadata )
+                {
+                    metadataIndex = endCursor ? ( geometryIndex + 1 ) % layerSection->count
+                                              : geometryIndex + 1;
+                }
+                uint32_t geometryBase = layerTableStart + geometryIndex * layerRecordSize;
+                uint32_t metadataBase = layerTableStart + metadataIndex * layerRecordSize;
 
                 SDB_RECORD geometryRec = m_sdb.RecordAt( geometryBase );
-                uint8_t    selector = rowRec.U8( 0 );
-                uint8_t    shapeCode = rowRec.U8( 1 );
+                SDB_RECORD metadataRec = m_sdb.RecordAt( metadataBase );
+                uint8_t    selector = metadataRec.U8( 0 );
+                uint8_t    shapeCode = metadataRec.U8( 1 );
                 auto       shapeIt = PAD_SHAPE_NAMES.find( shapeCode );
                 maxPadDiameter[i] = std::max( maxPadDiameter[i], geometryRec.I32( 4 ) );
 
@@ -606,18 +618,25 @@ void BINARY_PARSER::parsePadStacks()
                 PAD_STACK_LAYER layer = defaultLayer;
                 layer.layer = selector == 0      ? 0
                               : selector == 0xFF ? -1
-                                                 : static_cast<int>( selector ) + ( m_version == 0x2022 ? 0 : 1 );
+                                                 : static_cast<int>( selector ) + ( rawLayerSelector ? 0 : 1 );
                 layer.shape = shapeIt->second;
                 layer.sizeA = static_cast<double>( geometryRec.I32( 4 ) );
                 int32_t sizeB = geometryRec.I32( 8 );
-                layer.sizeB = sizeB > 0 ? static_cast<double>( sizeB ) : layer.sizeA;
+
+                if( layer.shape == "RT" || layer.shape == "ST" )
+                {
+                    layer.sizeB = layer.sizeA;
+                    layer.thermal_outer_diameter = std::max( sizeB, 0 );
+                }
+                else
+                {
+                    layer.sizeB = sizeB > 0 ? static_cast<double>( sizeB ) : layer.sizeA;
+                }
+
                 layers.push_back( std::move( layer ) );
             }
         }
-
-        m_padStackCache[static_cast<int>( i )] = layers;
     }
-
 }
 
 
@@ -764,7 +783,7 @@ void BINARY_PARSER::parseDecalNameTableOld()
 
     for( size_t k = 0; k < sec14->count; ++k )
     {
-        size_t off = start + k * stride;
+        size_t     off = start + k * stride;
         SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( off ) );
 
         if( rec.U16( SENTINEL_OFFSET ) != SDB_RECORD_SENTINEL )
@@ -867,8 +886,6 @@ void BINARY_PARSER::parsePartTypeTable()
     if( !m_cursor.InBounds( start, static_cast<size_t>( sec17->count ) * recSize ) )
         THROW_IO_ERROR( "Invalid PADS parttype-controller extent" );
 
-    m_partTypeDecalIndex.clear();
-    m_partTypeDecalIndex.reserve( sec17->count );
     m_partTypeDecalIndices.clear();
     m_partTypeDecalIndices.reserve( sec17->count );
     m_partTypeNames.clear();
@@ -895,7 +912,6 @@ void BINARY_PARSER::parsePartTypeTable()
         if( isLegacyLayout && record.I32( decalOff ) >= 0 )
             decalIndices.push_back( record.I32( decalOff ) );
 
-        m_partTypeDecalIndex.push_back( decalIndices.empty() ? -1 : decalIndices.front() );
         m_partTypeDecalIndices.push_back( std::move( decalIndices ) );
 
         m_partTypeNames.push_back( record.Str( nameOff, 36 ) );
@@ -1043,9 +1059,9 @@ void BINARY_PARSER::assignDefaultPadStacks()
         if( decal.terminals.empty() )
             continue;
 
-        if( m_padStackCache.count( 0 ) )
+        if( !m_padStackPool.empty() && !m_padStackPool[0].empty() )
         {
-            decal.pad_stacks[0] = m_padStackCache[0];
+            decal.pad_stacks[0] = m_padStackPool[0];
 
             if( !m_padStackDrillSpans.empty() )
                 decal.drill_spans[0] = m_padStackDrillSpans[0];
@@ -1171,16 +1187,15 @@ void BINARY_PARSER::parseNetConnectionsNew()
     constexpr size_t RING_PREFIX = 36;
     if( connections->physicalBytes != connections->physicalCount * RECORD_SIZE
         || connections->physicalOffset < RING_PREFIX
-        || !m_cursor.InBounds( connections->physicalOffset - RING_PREFIX,
-                               connections->physicalBytes + RING_PREFIX ) )
+        || !m_cursor.InBounds( connections->physicalOffset - RING_PREFIX, connections->physicalBytes + RING_PREFIX ) )
     {
         THROW_IO_ERROR( "Invalid PADS net-connection ring extent" );
     }
 
     auto connectionU32 = [&]( uint32_t aIndex, size_t aField )
     {
-        size_t logical = connections->physicalOffset - RING_PREFIX
-                         + static_cast<size_t>( aIndex ) * RECORD_SIZE + aField;
+        size_t logical =
+                connections->physicalOffset - RING_PREFIX + static_cast<size_t>( aIndex ) * RECORD_SIZE + aField;
         return m_cursor.U32At( logical );
     };
 
@@ -1358,7 +1373,7 @@ void BINARY_PARSER::resolveNetAnchors()
 
 void BINARY_PARSER::parseNetNamesOld()
 {
-    std::unordered_set<std::string> existing;
+    std::unordered_set<std::string>         existing;
     std::unordered_map<std::string, size_t> netIndexByName;
 
     // Route and via records address nets by a dense ordinal into the serialized net table, not by
@@ -1371,7 +1386,7 @@ void BINARY_PARSER::parseNetNamesOld()
 
     for( size_t i = 0; i < netOffsets.size(); ++i )
     {
-        SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( netOffsets[i] ) );
+        SDB_RECORD  rec = m_sdb.RecordAt( static_cast<uint32_t>( netOffsets[i] ) );
         std::string name = rec.Str( 12, 48 );
 
         if( name.empty() || !isValidNetName( name ) )
@@ -1492,8 +1507,7 @@ void BINARY_PARSER::parseNetConnectionsOld()
     {
         SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( base + i * RECORD_SIZE ) );
 
-        if( ( rec.U32( 0 ) & 0xFFFFU ) != ENDPOINT_FLAG
-            || ( rec.U32( 36 ) & 0xFFFFFFC0U ) != MARKER )
+        if( ( rec.U32( 0 ) & 0xFFFFU ) != ENDPOINT_FLAG || ( rec.U32( 36 ) & 0xFFFFFFC0U ) != MARKER )
         {
             THROW_IO_ERROR( "Invalid PADS legacy net-connection ring framing" );
         }
@@ -1553,8 +1567,7 @@ void BINARY_PARSER::parseNetConnectionsOld()
         uint32_t    anchorObject = 0;
         uint32_t    anchorOrdinal = 0;
 
-        if( !netRecordName( offset, name, count, edgeIndex, anchorObject, anchorOrdinal )
-            || !isValidNetName( name ) )
+        if( !netRecordName( offset, name, count, edgeIndex, anchorObject, anchorOrdinal ) || !isValidNetName( name ) )
             continue;
 
         if( edgeIndex >= stream.size() )
@@ -1615,9 +1628,9 @@ void BINARY_PARSER::parseNetClasses()
     if( edges.empty() )
         return;
 
-    const size_t NAME_STRIDE = m_version <= 0x2022 ? 28 : 280;
-    constexpr size_t NAME_OFFSET = 8;
-    const size_t NAME_LEN = m_version <= 0x2022 ? 8 : 48;
+    const size_t       NAME_STRIDE = m_version <= 0x2022 ? 28 : 280;
+    constexpr size_t   NAME_OFFSET = 8;
+    const size_t       NAME_LEN = m_version <= 0x2022 ? 8 : 48;
     const SDB_SECTION* names = getSection( 66 );
 
     if( !names || names->physicalCount < owners.size()
@@ -1754,7 +1767,7 @@ void BINARY_PARSER::applyNetClassClearances( const std::vector<NET_CLASS_RULE_ED
         if( owner == aOwnerOrdinal.end() )
             continue;
 
-        SDB_RECORD value = m_sdb.RecordAt( values->physicalOffset + index * valueStride );
+        SDB_RECORD         value = m_sdb.RecordAt( values->physicalOffset + index * valueStride );
         BIN_NET_CLASS_DEF& netClass = m_netClasses[owner->second];
 
         netClass.clearance = value.I32( 12 );
@@ -1801,8 +1814,8 @@ void BINARY_PARSER::parseDiffPairs()
 
     for( uint32_t i = 0; i < records->physicalCount; ++i )
     {
-        size_t             objStart = base + static_cast<size_t>( i ) * OBJECT_SIZE;
-        SDB_RECORD         obj = m_sdb.RecordAt( objStart );
+        size_t     objStart = base + static_cast<size_t>( i ) * OBJECT_SIZE;
+        SDB_RECORD obj = m_sdb.RecordAt( objStart );
 
         if( !m_netSelfPtrToName.count( obj.U32( NET_A_HANDLE ) )
             || !m_netSelfPtrToName.count( obj.U32( NET_B_HANDLE ) ) )
@@ -1849,8 +1862,8 @@ void BINARY_PARSER::parseTextRecords()
     if( s8->physicalCount == 0 )
         return;
 
-    const bool validStringPool = ( s9->physicalBytes == 0 && s9->count == 0 )
-                                 || ( s9->stride == 1 && s9->physicalBytes == s9->count );
+    const bool validStringPool =
+            ( s9->physicalBytes == 0 && s9->count == 0 ) || ( s9->stride == 1 && s9->physicalBytes == s9->count );
 
     if( ( recordSize != 64 && recordSize != 72 ) || s8->physicalOffset < ringRotation || !validStringPool
         || s9->physicalOffset != s8->physicalOffset + s8->physicalBytes )
@@ -1868,34 +1881,24 @@ void BINARY_PARSER::parseTextRecords()
         THROW_IO_ERROR( "Invalid PADS text-controller extent" );
     }
 
-    auto cStringStartAt = [this, poolHi]( size_t aAbs ) -> bool
-    {
-        if( aAbs >= poolHi )
-            return false;
+    parsePlacementFields( *s8, recordBase, recordSize, ringRotation );
+    parseFreeText( *s8, recordBase, recordSize, ringRotation, poolBase, poolHi );
+}
 
-        size_t e = aAbs;
 
-        while( e < poolHi && m_data[e] != 0 )
-        {
-            if( m_data[e] < 0x20 || m_data[e] >= 0x7F )
-                return false;
-
-            ++e;
-        }
-
-        return e > aAbs;
-    };
-
+void BINARY_PARSER::parsePlacementFields( const SDB_SECTION& aText, size_t aRecordBase, size_t aRecordSize,
+                                          size_t aRingRotation )
+{
     auto fieldAttribute = [&]( uint32_t aIndex )
     {
-        SDB_RECORD record = m_sdb.RecordAt( recordBase + static_cast<size_t>( aIndex ) * recordSize );
+        SDB_RECORD record = m_sdb.RecordAt( aRecordBase + static_cast<size_t>( aIndex ) * aRecordSize );
         ATTRIBUTE  attribute;
-        attribute.height = record.I32( ringRotation );
-        attribute.width = record.I32( ringRotation + 4 );
-        attribute.x = record.I32( ringRotation + 8 );
-        attribute.y = record.I32( ringRotation + 12 );
-        attribute.orientation = toBasicAngle( record.I32( ringRotation + 16 ) );
-        attribute.mirrored = record.I32( ringRotation + 20 ) != 0;
+        attribute.height = record.I32( aRingRotation );
+        attribute.width = record.I32( aRingRotation + 4 );
+        attribute.x = record.I32( aRingRotation + 8 );
+        attribute.y = record.I32( aRingRotation + 12 );
+        attribute.orientation = toBasicAngle( record.I32( aRingRotation + 16 ) );
+        attribute.mirrored = record.I32( aRingRotation + 20 ) != 0;
         return attribute;
     };
 
@@ -1904,7 +1907,7 @@ void BINARY_PARSER::parseTextRecords()
         if( fieldStart < 0 )
             continue;
 
-        if( partIndex >= m_parts.size() || static_cast<uint32_t>( fieldStart ) >= s8->physicalCount )
+        if( partIndex >= m_parts.size() || static_cast<uint32_t>( fieldStart ) >= aText.physicalCount )
             THROW_IO_ERROR( "Invalid PADS placement field-presentation link" );
 
         std::vector<ATTRIBUTE> attributes;
@@ -1916,11 +1919,11 @@ void BINARY_PARSER::parseTextRecords()
             if( !visited.insert( fieldIndex ).second )
                 THROW_IO_ERROR( "Cyclic PADS placement field-list link" );
 
-            if( fieldIndex >= s8->physicalCount )
+            if( fieldIndex >= aText.physicalCount )
                 THROW_IO_ERROR( "Invalid PADS placement field-list link" );
 
             ATTRIBUTE  attribute = fieldAttribute( fieldIndex );
-            SDB_RECORD metadata = m_sdb.RecordAt( recordBase + static_cast<size_t>( fieldIndex + 1 ) * recordSize );
+            SDB_RECORD metadata = m_sdb.RecordAt( aRecordBase + static_cast<size_t>( fieldIndex + 1 ) * aRecordSize );
             uint32_t   presentation = metadata.U32( 24 );
             uint8_t    fieldKind = static_cast<uint8_t>( presentation >> 16 );
             attribute.visible = ( fieldKind & 0x20 ) != 0;
@@ -1964,38 +1967,61 @@ void BINARY_PARSER::parseTextRecords()
 
         m_parts[partIndex].attributes = std::move( attributes );
     }
+}
 
-    for( uint32_t index = 0; index < s8->physicalCount; ++index )
+
+void BINARY_PARSER::parseFreeText( const SDB_SECTION& aText, size_t aRecordBase, size_t aRecordSize,
+                                   size_t aRingRotation, size_t aPoolBase, size_t aPoolHi )
+{
+    auto cStringStartAt = [this, aPoolHi]( size_t aAbs ) -> bool
     {
-        SDB_RECORD geom = m_sdb.RecordAt( recordBase + static_cast<size_t>( index ) * recordSize );
-        SDB_RECORD meta = m_sdb.RecordAt( recordBase + static_cast<size_t>( index + 1 ) * recordSize );
+        if( aAbs >= aPoolHi )
+            return false;
 
-        if( meta.U16( 4 ) != 0xFFFE || meta.U32( 12 ) != 0 || ( recordSize == 72 && meta.U32( 28 ) != 0x49000000 ) )
+        size_t e = aAbs;
+
+        while( e < aPoolHi && m_data[e] != 0 )
+        {
+            if( m_data[e] < 0x20 || m_data[e] >= 0x7F )
+                return false;
+
+            ++e;
+        }
+
+        return e > aAbs;
+    };
+
+    for( uint32_t index = 0; index < aText.physicalCount; ++index )
+    {
+        SDB_RECORD geom = m_sdb.RecordAt( aRecordBase + static_cast<size_t>( index ) * aRecordSize );
+        SDB_RECORD meta = m_sdb.RecordAt( aRecordBase + static_cast<size_t>( index + 1 ) * aRecordSize );
+
+        if( meta.U16( 4 ) != 0xFFFE || meta.U32( 12 ) != 0 || ( aRecordSize == 72 && meta.U32( 28 ) != 0x49000000 ) )
             continue;
 
         uint32_t layerWord = meta.U32( 24 );
 
-        if( ( layerWord >> 16 ) != 0x0020 || geom.I32( ringRotation ) <= 0 || geom.I32( ringRotation + 4 ) <= 0 )
+        if( ( layerWord >> 16 ) != 0x0020 || geom.I32( aRingRotation ) <= 0 || geom.I32( aRingRotation + 4 ) <= 0 )
             continue;
 
-        size_t soff = poolBase + meta.U32( 8 );
+        size_t soff = aPoolBase + meta.U32( 8 );
 
-        if( soff < poolBase || soff >= poolHi || ( soff != poolBase && m_data[soff - 1] != 0 )
+        if( soff < aPoolBase || soff >= aPoolHi || ( soff != aPoolBase && m_data[soff - 1] != 0 )
             || !cStringStartAt( soff ) )
         {
             continue;
         }
 
-        std::string content = m_sdb.RecordAt( soff ).Str( 0, poolHi - soff );
+        std::string content = m_sdb.RecordAt( soff ).Str( 0, aPoolHi - soff );
 
         if( content.empty() )
             continue;
 
-        int32_t    height = geom.I32( ringRotation );
-        int32_t    linewidth = geom.I32( ringRotation + 4 );
-        int32_t    x = geom.I32( ringRotation + 8 );
-        int32_t    y = geom.I32( ringRotation + 12 );
-        int32_t    angleRaw = geom.I32( ringRotation + 16 );
+        int32_t height = geom.I32( aRingRotation );
+        int32_t linewidth = geom.I32( aRingRotation + 4 );
+        int32_t x = geom.I32( aRingRotation + 8 );
+        int32_t y = geom.I32( aRingRotation + 12 );
+        int32_t angleRaw = geom.I32( aRingRotation + 16 );
 
         TEXT text;
         text.content = content;
@@ -2058,11 +2084,11 @@ std::map<uint32_t, size_t> BINARY_PARSER::parseRouteJunctionNets() const
     if( !relationships || !junctions || !nets || !routeChains )
         THROW_IO_ERROR( "Missing PADS route-relationship controllers" );
 
-    std::map<uint32_t, size_t> result;
+    std::map<uint32_t, size_t>               result;
     std::vector<std::pair<uint32_t, size_t>> junctionSignals;
-    size_t                     cursor = relationships->physicalOffset;
-    const size_t               end = cursor + relationships->physicalBytes;
-    size_t                     signalIndex = 0;
+    size_t                                   cursor = relationships->physicalOffset;
+    const size_t                             end = cursor + relationships->physicalBytes;
+    size_t                                   signalIndex = 0;
 
     auto readU32 = [&]()
     {
@@ -2156,17 +2182,6 @@ void BINARY_PARSER::parseRouteVertices()
     // Section 60 identifies via instances and their net/via-definition ordinals. Sections
     // 62-64 store routed copper as 48-byte object descriptors, a layer table, and compressed
     // 12-byte geometry cells; a separate 32-byte header arena carries width, layer, and links.
-    struct ViaLocation
-    {
-        int32_t     x = 0;
-        int32_t     y = 0;
-        std::string netName;
-        int         viaIndex = -1;
-        bool        relationshipNet = false;
-    };
-
-    std::vector<ViaLocation> viaLocations;
-
     const SDB_SECTION* entry60 = getSection( SECTION::Vias );
 
     if( !entry60 )
@@ -2174,6 +2189,31 @@ void BINARY_PARSER::parseRouteVertices()
 
     if( entry60->count == 0 )
         return;
+
+    std::map<std::string, ROUTE> routes = seedRoutesFromVias( decodeViaLocations() );
+
+    decodeRoutedCopper( routes );
+
+    // Vias seeded from the junction controller are emitted even when the route-object
+    // controller is empty, so a board with stitching but no routed copper keeps them.
+    for( auto& [netName, route] : routes )
+    {
+        if( route.tracks.empty() && route.vias.empty() )
+            continue;
+
+        m_routes.push_back( std::move( route ) );
+    }
+}
+
+
+std::vector<BINARY_PARSER::VIA_LOCATION> BINARY_PARSER::decodeViaLocations()
+{
+    m_junctionHandleNets.clear();
+
+    const SDB_SECTION* entry60 = getSection( SECTION::Vias );
+
+    if( !entry60 )
+        THROW_IO_ERROR( "Missing PADS via controller" );
 
     if( entry60->stride == 0 )
         THROW_IO_ERROR( "Invalid PADS via-controller stride" );
@@ -2205,8 +2245,6 @@ void BINARY_PARSER::parseRouteVertices()
 
     const std::map<uint32_t, size_t> junctionNets = parseRouteJunctionNets();
 
-    std::map<uint32_t, std::set<size_t>> junctionHandleNets;
-
     for( size_t junction = 0; junction < typeBytes.size(); ++junction )
     {
         auto netIt = junctionNets.find( static_cast<uint32_t>( junction ) );
@@ -2221,10 +2259,11 @@ void BINARY_PARSER::parseRouteVertices()
         uint32_t     objectHandle = m_cursor.U32At( typeByte - 19 );
 
         if( objectHandle != 0 )
-            junctionHandleNets[objectHandle].insert( netIt->second );
+            m_junctionHandleNets[objectHandle].insert( netIt->second );
     }
 
-    auto _pt_emitPass = std::chrono::steady_clock::now();
+    std::vector<VIA_LOCATION> viaLocations;
+
     for( size_t junction = 0; junction < typeBytes.size(); ++junction )
     {
         size_t  typeByte = typeBytes[junction];
@@ -2254,25 +2293,30 @@ void BINARY_PARSER::parseRouteVertices()
             netName = it->second;
         }
 
-        ViaLocation via;
+        VIA_LOCATION via;
         via.x = vx;
         via.y = vy;
-        via.netName = netName;
+        via.netName = std::move( netName );
         via.viaIndex = m_cursor.U8At( typeByte - 3 );
         via.relationshipNet = relationshipIt != junctionNets.end();
-        viaLocations.push_back( via );
+        viaLocations.push_back( std::move( via ) );
     }
 
-    std::map<std::pair<int32_t, int32_t>, ViaLocation> uniqueVias;
+    // Co-located vias are one physical via serialized once per junction that touches it, so the
+    // survivor takes the strongest net evidence any of them carries.
+    std::map<std::pair<int32_t, int32_t>, VIA_LOCATION> uniqueVias;
 
-    for( const ViaLocation& via : viaLocations )
+    for( VIA_LOCATION& via : viaLocations )
     {
-        auto [it, inserted] = uniqueVias.emplace( std::make_pair( via.x, via.y ), via );
+        auto [it, inserted] = uniqueVias.try_emplace( std::make_pair( via.x, via.y ) );
 
         if( inserted )
+        {
+            it->second = std::move( via );
             continue;
+        }
 
-        ViaLocation& existing = it->second;
+        VIA_LOCATION& existing = it->second;
 
         if( existing.viaIndex != via.viaIndex )
             THROW_IO_ERROR( "Conflicting co-located PADS via definitions" );
@@ -2282,7 +2326,7 @@ void BINARY_PARSER::parseRouteVertices()
             if( existing.relationshipNet && existing.netName != via.netName )
                 THROW_IO_ERROR( "Conflicting co-located PADS via relationships" );
 
-            existing.netName = via.netName;
+            existing.netName = std::move( via.netName );
             existing.relationshipNet = true;
         }
         else if( !existing.relationshipNet && !via.netName.empty() )
@@ -2290,21 +2334,25 @@ void BINARY_PARSER::parseRouteVertices()
             if( !existing.netName.empty() && existing.netName != via.netName )
                 THROW_IO_ERROR( "Conflicting co-located PADS via net state" );
 
-            existing.netName = via.netName;
+            existing.netName = std::move( via.netName );
         }
     }
 
-    viaLocations.clear();
-    viaLocations.reserve( uniqueVias.size() );
+    std::vector<VIA_LOCATION> deduplicated;
+    deduplicated.reserve( uniqueVias.size() );
 
     for( auto& [coordinate, via] : uniqueVias )
-        viaLocations.push_back( std::move( via ) );
+        deduplicated.push_back( std::move( via ) );
 
-    logParsePhase( "emitPass", _pt_emitPass );
+    return deduplicated;
+}
 
+
+std::map<std::string, ROUTE> BINARY_PARSER::seedRoutesFromVias( const std::vector<VIA_LOCATION>& aVias ) const
+{
     std::map<std::string, ROUTE> routes;
 
-    for( const ViaLocation& via : viaLocations )
+    for( const VIA_LOCATION& via : aVias )
     {
         ROUTE& route = routes[via.netName];
         route.net_name = via.netName;
@@ -2363,6 +2411,12 @@ void BINARY_PARSER::parseRouteVertices()
         route.vias.push_back( std::move( viaDef ) );
     }
 
+    return routes;
+}
+
+
+void BINARY_PARSER::decodeRoutedCopper( std::map<std::string, ROUTE>& aRoutes )
+{
     const SDB_SECTION* routeObjects = getSection( SECTION::RouteObjects );
     const SDB_SECTION* routeLayers = getSection( SECTION::RouteLayers );
     const SDB_SECTION* routeCells = getSection( SECTION::RouteCells );
@@ -2370,8 +2424,7 @@ void BINARY_PARSER::parseRouteVertices()
     if( !routeObjects || !routeLayers || !routeCells )
         THROW_IO_ERROR( "Missing PADS route controllers" );
 
-    if( routeLayers->count == 0
-        || static_cast<uint64_t>( routeLayers->count ) * 2 != routeLayers->totalBytes )
+    if( routeLayers->count == 0 || static_cast<uint64_t>( routeLayers->count ) * 2 != routeLayers->totalBytes )
     {
         THROW_IO_ERROR( "Invalid PADS route-layer controller extent" );
     }
@@ -2393,401 +2446,418 @@ void BINARY_PARSER::parseRouteVertices()
         THROW_IO_ERROR( "Invalid PADS route-object controller extent" );
     }
 
-    if( routeObjects->count > 0 )
+    struct ROUTE_OBJECT
     {
-        struct ROUTE_OBJECT
+        int32_t  width = 0;
+        uint32_t style = 0;
+        uint32_t cellCount = 0;
+    };
+
+    size_t           objectBytes = routeObjects->physicalBytes;
+    size_t           layerTable = routeLayers->physicalOffset;
+    std::vector<int> serializedLayerOrder;
+    bool             legacyObjects = routeObjects->stride == 36;
+    size_t           objectStride = legacyObjects ? 36 : 48;
+    size_t           widthOffset = legacyObjects ? 8 : 20;
+    size_t           cellCountOffset = legacyObjects ? 24 : 36;
+
+    auto ringU32 = [&]( size_t aRingStart, size_t aOffset )
+    {
+        uint32_t value = 0;
+
+        for( size_t byte = 0; byte < 4; ++byte )
         {
-            int32_t  width = 0;
-            uint32_t style = 0;
-            uint32_t cellCount = 0;
-        };
-
-        size_t           objectBytes = routeObjects->physicalBytes;
-        size_t           layerTable = routeLayers->physicalOffset;
-        std::vector<int> serializedLayerOrder;
-        bool             legacyObjects = routeObjects->stride == 36;
-        size_t           objectStride = legacyObjects ? 36 : 48;
-        size_t           widthOffset = legacyObjects ? 8 : 20;
-        size_t           cellCountOffset = legacyObjects ? 24 : 36;
-
-        auto ringU32 = [&]( size_t aRingStart, size_t aOffset )
-        {
-            uint32_t value = 0;
-
-            for( size_t byte = 0; byte < 4; ++byte )
-            {
-                size_t physical = aRingStart + ( aOffset + byte ) % objectBytes;
-                value |= static_cast<uint32_t>( m_cursor.U8At( physical ) ) << ( byte * 8 );
-            }
-
-            return value;
-        };
-
-        std::vector<bool> seenLayers( routeLayers->physicalCount, false );
-        serializedLayerOrder.reserve( routeLayers->physicalCount );
-
-        for( uint32_t layer = 0; layer < routeLayers->physicalCount; ++layer )
-        {
-            uint16_t serializedLayer = m_cursor.U16At( layerTable + static_cast<size_t>( layer ) * 2 );
-
-            if( serializedLayer >= routeLayers->physicalCount || seenLayers[serializedLayer] )
-                THROW_IO_ERROR( "Invalid PADS route-layer permutation" );
-
-            seenLayers[serializedLayer] = true;
-            serializedLayerOrder.push_back( serializedLayer );
+            size_t physical = aRingStart + ( aOffset + byte ) % objectBytes;
+            value |= static_cast<uint32_t>( m_cursor.U8At( physical ) ) << ( byte * 8 );
         }
 
-        if( layerTable != 0 )
-        {
-            auto padsLayerForSerializedIndex = [&]( size_t aIndex )
-            {
-                return aIndex < serializedLayerOrder.size() ? serializedLayerOrder[aIndex] + 1
-                                                            : static_cast<int>( aIndex ) + 1;
-            };
+        return value;
+    };
 
-            size_t                    ringStart = routeObjects->physicalOffset;
-            std::vector<ROUTE_OBJECT> objects;
+    std::vector<bool> seenLayers( routeLayers->physicalCount, false );
+    serializedLayerOrder.reserve( routeLayers->physicalCount );
 
-            for( uint32_t i = 0; i < routeObjects->physicalCount; ++i )
-            {
-                size_t       base = ( 32 + static_cast<size_t>( i ) * objectStride ) % objectBytes;
-                ROUTE_OBJECT object;
+    for( uint32_t layer = 0; layer < routeLayers->physicalCount; ++layer )
+    {
+        uint16_t serializedLayer = m_cursor.U16At( layerTable + static_cast<size_t>( layer ) * 2 );
 
-                object.width = static_cast<int32_t>( ringU32( ringStart, base + widthOffset ) ) * 4;
-                object.style = ringU32( ringStart, base + ( legacyObjects ? 20 : 32 ) );
-                object.cellCount = ringU32( ringStart, base + cellCountOffset );
-                objects.push_back( object );
-            }
+        if( serializedLayer >= routeLayers->physicalCount || seenLayers[serializedLayer] )
+            THROW_IO_ERROR( "Invalid PADS route-layer permutation" );
 
-            struct ROUTE_CELL
-            {
-                int32_t x1 = 0;
-                int32_t y = 0;
-                int32_t x2 = 0;
-            };
-
-            size_t                  cellStart = routeCells->physicalOffset;
-            std::vector<ROUTE_CELL> cells;
-
-            for( uint32_t i = 0; i < routeCells->count; ++i )
-            {
-                size_t  base = cellStart + static_cast<size_t>( i ) * 12;
-                int32_t first = m_cursor.I32At( base );
-                int32_t second = m_cursor.I32At( base + 4 );
-                int32_t third = m_cursor.I32At( base + 8 );
-
-                cells.push_back( { first, second, third } );
-            }
-
-            size_t             cursor = 0;
-            struct DECODED_TRACK
-            {
-                TRACK       track;
-                std::string netName;
-            };
-
-            std::vector<DECODED_TRACK> decodedPieces;
-            std::vector<int>   objectLayers( objects.size() );
-            std::vector<uint32_t> objectHandles( objects.size() );
-
-            const SDB_SECTION* routeController = getSection( 25 );
-            const SDB_SECTION* allocatorDescriptors = getSection( 26 );
-            const SDB_SECTION* layerObjectCounts = getSection( 27 );
-            const SDB_SECTION* layerObjectHandles = getSection( 29 );
-            const SDB_SECTION* routeNodes = getSection( 61 );
-
-            if( !routeController || !allocatorDescriptors || !layerObjectCounts || !layerObjectHandles
-                || !routeNodes || !m_cursor.InBounds( routeController->physicalOffset + 180, 8 )
-                || layerObjectCounts->physicalCount != routeLayers->physicalCount )
-            {
-                THROW_IO_ERROR( "Invalid PADS route allocator controllers" );
-            }
-
-            std::array<uint16_t, 4> allocatorPageCounts;
-
-            for( size_t group = 0; group < allocatorPageCounts.size(); ++group )
-                allocatorPageCounts[group] = m_cursor.U16At( routeController->physicalOffset + 180 + group * 2 );
-
-            size_t nodePageStart = static_cast<size_t>( allocatorPageCounts[0] ) + allocatorPageCounts[1]
-                                   + allocatorPageCounts[2];
-            size_t nodePageCount = allocatorPageCounts[3];
-
-            if( nodePageCount == 0 || nodePageStart + nodePageCount > allocatorDescriptors->physicalCount )
-                THROW_IO_ERROR( "Invalid PADS route node page group" );
-
-            struct NODE_PAGE
-            {
-                uint32_t base = 0;
-                uint32_t liveCount = 0;
-                size_t   firstOrdinal = 0;
-            };
-
-            std::vector<NODE_PAGE> nodePages;
-            size_t                 allocatedNodes = 0;
-
-            for( size_t page = 0; page < nodePageCount; ++page )
-            {
-                size_t descriptor = allocatorDescriptors->physicalOffset + ( nodePageStart + page ) * 12;
-                uint32_t liveCount;
-
-                if( page + 1 < nodePageCount )
-                    liveCount = m_cursor.U32At( descriptor + 20 );
-                else if( allocatedNodes <= routeNodes->physicalCount )
-                    liveCount = routeNodes->physicalCount - allocatedNodes;
-                else
-                    THROW_IO_ERROR( "Invalid PADS route node page counts" );
-
-                nodePages.push_back( { m_cursor.U32At( descriptor ), liveCount, allocatedNodes } );
-                allocatedNodes += liveCount;
-            }
-
-            if( allocatedNodes != routeNodes->physicalCount )
-                THROW_IO_ERROR( "Invalid PADS route node extent" );
-
-            std::vector<uint32_t> routeNodeHandles;
-            routeNodeHandles.reserve( routeNodes->physicalCount );
-
-            for( const NODE_PAGE& page : nodePages )
-            {
-                for( uint32_t index = 0; index < page.liveCount; ++index )
-                    routeNodeHandles.push_back( page.base + index * 56 );
-            }
-
-            std::map<uint32_t, size_t> routeNodeOrdinals;
-
-            for( size_t ordinal = 0; ordinal < routeNodeHandles.size(); ++ordinal )
-                routeNodeOrdinals.emplace( routeNodeHandles[ordinal], ordinal );
-
-            std::vector<std::vector<size_t>> routeNodeLinks( routeNodeHandles.size() );
-
-            for( size_t ordinal = 0; ordinal < routeNodeHandles.size(); ++ordinal )
-            {
-                size_t nodeOffset = routeNodes->physicalOffset + ordinal * 12;
-
-                for( uint32_t linkedHandle : { m_cursor.U32At( nodeOffset ), m_cursor.U32At( nodeOffset + 4 ) } )
-                {
-                    auto linkedIt = routeNodeOrdinals.find( linkedHandle );
-
-                    if( linkedIt == routeNodeOrdinals.end() )
-                        continue;
-
-                    routeNodeLinks[linkedIt->second].push_back( ordinal );
-                }
-            }
-
-            std::map<uint32_t, std::set<size_t>> routeNodeNets;
-
-            for( size_t root = 0; root < routeNodeHandles.size(); ++root )
-            {
-                std::set<size_t> componentNets;
-                std::set<size_t> visited{ root };
-                std::vector<size_t> frontier{ root };
-
-                while( !frontier.empty() && componentNets.empty() )
-                {
-                    std::vector<size_t> next;
-
-                    for( size_t ordinal : frontier )
-                    {
-                        auto netIt = junctionHandleNets.find( routeNodeHandles[ordinal] );
-
-                        if( netIt != junctionHandleNets.end() )
-                            componentNets.insert( netIt->second.begin(), netIt->second.end() );
-
-                        for( size_t linked : routeNodeLinks[ordinal] )
-                        {
-                            if( visited.insert( linked ).second )
-                                next.push_back( linked );
-                        }
-                    }
-
-                    frontier = std::move( next );
-                }
-
-                routeNodeNets.emplace( routeNodeHandles[root], std::move( componentNets ) );
-            }
-
-            auto nodeOrdinal = [&]( uint32_t aHandle ) -> std::optional<size_t>
-            {
-                auto it = routeNodeOrdinals.find( aHandle );
-
-                if( it != routeNodeOrdinals.end() )
-                    return it->second;
-
-                return std::nullopt;
-            };
-
-            std::vector<int> serializedObjectLayers;
-            std::vector<uint32_t> serializedObjectHandles;
-            std::map<uint32_t, int> routeHandleLayers;
-            size_t           handleOrdinal = 0;
-
-            for( size_t layer = 0; layer < layerObjectCounts->physicalCount; ++layer )
-            {
-                uint32_t count = m_cursor.U32At( layerObjectCounts->physicalOffset + layer * 4 );
-
-                if( handleOrdinal + count > layerObjectHandles->physicalCount )
-                    THROW_IO_ERROR( "Invalid PADS per-layer route handle counts" );
-
-                for( size_t index = 0; index < count; ++index, ++handleOrdinal )
-                {
-                    uint32_t handle = m_cursor.U32At( layerObjectHandles->physicalOffset + handleOrdinal * 4 );
-
-                    if( handle == 0 )
-                        continue;
-
-                    int padsLayer = padsLayerForSerializedIndex( layer );
-                    auto [layerIt, inserted] = routeHandleLayers.emplace( handle, padsLayer );
-
-                    if( !inserted && layerIt->second != padsLayer )
-                        THROW_IO_ERROR( "Conflicting PADS route-handle layers" );
-
-                    auto     ordinal = nodeOrdinal( handle );
-
-                    if( !ordinal )
-                        THROW_IO_ERROR( "Invalid PADS route node handle" );
-
-                    uint32_t classTag = m_cursor.U32At( routeNodes->physicalOffset + *ordinal * 12 + 8 );
-
-                    if( ( classTag & 0x00800000 ) != 0 )
-                    {
-                        serializedObjectLayers.push_back( padsLayer );
-                        serializedObjectHandles.push_back( handle );
-                    }
-                }
-            }
-
-            if( handleOrdinal != layerObjectHandles->physicalCount
-                || serializedObjectLayers.size() != objects.size() )
-            {
-                THROW_IO_ERROR( "Invalid PADS route object-node mapping" );
-            }
-
-            for( size_t sequence = 0; sequence < serializedObjectLayers.size(); ++sequence )
-            {
-                size_t object = ( sequence + objects.size() - 1 ) % objects.size();
-                objectLayers[object] = serializedObjectLayers[sequence];
-                objectHandles[object] = serializedObjectHandles[sequence];
-            }
-
-            struct ROUTE_CHUNK
-            {
-                size_t objectIndex = 0;
-                size_t cellStart = 0;
-            };
-
-            std::vector<ROUTE_CHUNK> chunks;
-
-            // The object array is a ring whose logical base is 32 bytes into its physical
-            // storage. Its last descriptor therefore owns the first cell chunk, followed by
-            // descriptors 0..N-2. The descriptor cell counts partition the cell stream exactly.
-            for( size_t sequence = 0; sequence < objects.size(); ++sequence )
-            {
-                size_t match = ( sequence + objects.size() - 1 ) % objects.size();
-
-                if( cursor + objects[match].cellCount > cells.size() )
-                    THROW_IO_ERROR( "Invalid PADS route-cell partition" );
-
-                const ROUTE_OBJECT& object = objects[match];
-
-                // 0x100 and 0x1000 are the serialized jumper and via/special bits used by
-                // the PADS ROUTE writer. Their cells belong to those auxiliary objects, not
-                // ordinary routed-copper polylines.
-                if( object.width > 0 && ( object.style & 0x1100 ) == 0 )
-                    chunks.push_back( { match, cursor } );
-
-                cursor += object.cellCount;
-            }
-
-            if( cursor != cells.size() )
-                THROW_IO_ERROR( "Invalid PADS route-cell extent" );
-
-            for( const ROUTE_CHUNK& chunk : chunks )
-            {
-                const ROUTE_OBJECT& object = objects[chunk.objectIndex];
-
-                TRACK  track;
-                track.layer = objectLayers[chunk.objectIndex];
-                track.width = object.width;
-
-                if( track.layer <= 0 || static_cast<size_t>( track.layer ) >= m_layerInfos.size() )
-                    THROW_IO_ERROR( "Invalid PADS route-object layer" );
-
-                int routingDirection = m_layerInfos[track.layer].routing_direction;
-
-                if( routingDirection < 0 || routingDirection > 4 )
-                    THROW_IO_ERROR( "Invalid PADS routing direction" );
-
-                bool fixedIsX = routingDirection == 1;
-
-                for( size_t j = 0; j < object.cellCount; ++j )
-                {
-                    const ROUTE_CELL& cell = cells[chunk.cellStart + j];
-                    double            x1 = fixedIsX ? cell.x1 : cell.y;
-                    double            y1 = fixedIsX ? cell.y : cell.x1;
-                    double            x2 = fixedIsX ? cell.x2 : cell.y;
-                    double            y2 = fixedIsX ? cell.y : cell.x2;
-
-                    if( track.points.empty() || track.points.back().x != x1 || track.points.back().y != y1 )
-                    {
-                        track.points.emplace_back( x1, y1 );
-                    }
-
-                    if( x1 != x2 || y1 != y2 )
-                        track.points.emplace_back( x2, y2 );
-
-                }
-
-                if( track.points.size() < 2 )
-                    continue;
-
-                auto                    handleIt = routeNodeNets.find( objectHandles[chunk.objectIndex] );
-                std::optional<size_t>   netIndex;
-
-                if( handleIt == routeNodeNets.end() )
-                    THROW_IO_ERROR( "Missing PADS route-object node relationship" );
-
-                const std::set<size_t>& handleNets = handleIt->second;
-
-                if( handleNets.size() > 1 )
-                    THROW_IO_ERROR( wxString::Format( "Conflicting PADS route-object handle nets "
-                                                      "(object %zu, handle 0x%08X, nets %zu)",
-                                                      chunk.objectIndex, objectHandles[chunk.objectIndex],
-                                                      handleNets.size() ) );
-
-                if( handleNets.size() == 1 )
-                    netIndex = *handleNets.begin();
-
-                if( !netIndex || *netIndex >= m_nets.size() )
-                {
-                    const ARC_POINT& first = track.points.front();
-                    const ARC_POINT& last = track.points.back();
-                    THROW_IO_ERROR( fmt::format( "Missing PADS route-object net relationship "
-                                                 "(object {}, handle 0x{:08X}, layer {}, cells {}, "
-                                                 "first {:.0f},{:.0f}, last {:.0f},{:.0f})",
-                                                 chunk.objectIndex, objectHandles[chunk.objectIndex], track.layer,
-                                                 object.cellCount, first.x, first.y, last.x, last.y ) );
-                }
-
-                decodedPieces.push_back( { std::move( track ), m_nets[*netIndex].name } );
-            }
-
-            for( DECODED_TRACK& decoded : decodedPieces )
-            {
-                ROUTE& route = routes[decoded.netName];
-                route.net_name = decoded.netName;
-                route.tracks.push_back( std::move( decoded.track ) );
-            }
-        }
+        seenLayers[serializedLayer] = true;
+        serializedLayerOrder.push_back( serializedLayer );
     }
 
-    for( auto& [netName, route] : routes )
+    if( layerTable == 0 )
+        return;
+
+    size_t                    ringStart = routeObjects->physicalOffset;
+    std::vector<ROUTE_OBJECT> objects;
+
+    for( uint32_t i = 0; i < routeObjects->physicalCount; ++i )
     {
-        if( route.tracks.empty() && route.vias.empty() )
+        size_t       base = ( 32 + static_cast<size_t>( i ) * objectStride ) % objectBytes;
+        ROUTE_OBJECT object;
+
+        object.width = static_cast<int32_t>( ringU32( ringStart, base + widthOffset ) ) * 4;
+        object.style = ringU32( ringStart, base + ( legacyObjects ? 20 : 32 ) );
+        object.cellCount = ringU32( ringStart, base + cellCountOffset );
+        objects.push_back( object );
+    }
+
+    struct ROUTE_CELL
+    {
+        int32_t x1 = 0;
+        int32_t y = 0;
+        int32_t x2 = 0;
+    };
+
+    size_t                  cellStart = routeCells->physicalOffset;
+    std::vector<ROUTE_CELL> cells;
+
+    for( uint32_t i = 0; i < routeCells->count; ++i )
+    {
+        size_t  base = cellStart + static_cast<size_t>( i ) * 12;
+        int32_t first = m_cursor.I32At( base );
+        int32_t second = m_cursor.I32At( base + 4 );
+        int32_t third = m_cursor.I32At( base + 8 );
+
+        cells.push_back( { first, second, third } );
+    }
+
+    size_t cursor = 0;
+
+    struct DECODED_TRACK
+    {
+        TRACK       track;
+        std::string netName;
+    };
+
+    std::vector<DECODED_TRACK> decodedPieces;
+
+    // Each object's layer, its route-node handle and the nets that handle reaches come from the
+    // section-25/26/27/29/61 allocator graph, which is decoded whole before any cell is read.
+    const ROUTE_OBJECT_NODES nodes = resolveRouteObjectNodes( *routeLayers, objects.size(), serializedLayerOrder );
+
+    const std::vector<int>&                     objectLayers = nodes.layers;
+    const std::vector<uint32_t>&                objectHandles = nodes.handles;
+    const std::map<uint32_t, std::set<size_t>>& routeNodeNets = nodes.handleNets;
+
+    struct ROUTE_CHUNK
+    {
+        size_t objectIndex = 0;
+        size_t cellStart = 0;
+    };
+
+    std::vector<ROUTE_CHUNK> chunks;
+
+    // The object array is a ring whose logical base is 32 bytes into its physical
+    // storage. Its last descriptor therefore owns the first cell chunk, followed by
+    // descriptors 0..N-2. The descriptor cell counts partition the cell stream exactly.
+    for( size_t sequence = 0; sequence < objects.size(); ++sequence )
+    {
+        size_t match = ( sequence + objects.size() - 1 ) % objects.size();
+
+        if( cursor + objects[match].cellCount > cells.size() )
+            THROW_IO_ERROR( "Invalid PADS route-cell partition" );
+
+        const ROUTE_OBJECT& object = objects[match];
+
+        // 0x100 and 0x1000 are the serialized jumper and via/special bits used by
+        // the PADS ROUTE writer. Their cells belong to those auxiliary objects, not
+        // ordinary routed-copper polylines.
+        if( object.width > 0 && ( object.style & 0x1100 ) == 0 )
+            chunks.push_back( { match, cursor } );
+
+        cursor += object.cellCount;
+    }
+
+    if( cursor != cells.size() )
+        THROW_IO_ERROR( "Invalid PADS route-cell extent" );
+
+    for( const ROUTE_CHUNK& chunk : chunks )
+    {
+        const ROUTE_OBJECT& object = objects[chunk.objectIndex];
+
+        TRACK track;
+        track.layer = objectLayers[chunk.objectIndex];
+        track.width = object.width;
+
+        if( track.layer <= 0 || static_cast<size_t>( track.layer ) >= m_layerInfos.size() )
+            THROW_IO_ERROR( "Invalid PADS route-object layer" );
+
+        int routingDirection = m_layerInfos[track.layer].routing_direction;
+
+        if( routingDirection < 0 || routingDirection > 4 )
+            THROW_IO_ERROR( "Invalid PADS routing direction" );
+
+        bool fixedIsX = routingDirection == 1;
+
+        for( size_t j = 0; j < object.cellCount; ++j )
+        {
+            const ROUTE_CELL& cell = cells[chunk.cellStart + j];
+            double            x1 = fixedIsX ? cell.x1 : cell.y;
+            double            y1 = fixedIsX ? cell.y : cell.x1;
+            double            x2 = fixedIsX ? cell.x2 : cell.y;
+            double            y2 = fixedIsX ? cell.y : cell.x2;
+
+            if( track.points.empty() || track.points.back().x != x1 || track.points.back().y != y1 )
+            {
+                track.points.emplace_back( x1, y1 );
+            }
+
+            if( x1 != x2 || y1 != y2 )
+                track.points.emplace_back( x2, y2 );
+        }
+
+        if( track.points.size() < 2 )
             continue;
 
-        m_routes.push_back( std::move( route ) );
+        auto                  handleIt = routeNodeNets.find( objectHandles[chunk.objectIndex] );
+        std::optional<size_t> netIndex;
+
+        if( handleIt == routeNodeNets.end() )
+            THROW_IO_ERROR( "Missing PADS route-object node relationship" );
+
+        const std::set<size_t>& handleNets = handleIt->second;
+
+        if( handleNets.size() > 1 )
+            THROW_IO_ERROR( wxString::Format( "Conflicting PADS route-object handle nets "
+                                              "(object %zu, handle 0x%08X, nets %zu)",
+                                              chunk.objectIndex, objectHandles[chunk.objectIndex],
+                                              handleNets.size() ) );
+
+        if( handleNets.size() == 1 )
+            netIndex = *handleNets.begin();
+
+        if( !netIndex || *netIndex >= m_nets.size() )
+        {
+            const ARC_POINT& first = track.points.front();
+            const ARC_POINT& last = track.points.back();
+            THROW_IO_ERROR( fmt::format( "Missing PADS route-object net relationship "
+                                         "(object {}, handle 0x{:08X}, layer {}, cells {}, "
+                                         "first {:.0f},{:.0f}, last {:.0f},{:.0f})",
+                                         chunk.objectIndex, objectHandles[chunk.objectIndex], track.layer,
+                                         object.cellCount, first.x, first.y, last.x, last.y ) );
+        }
+
+        decodedPieces.push_back( { std::move( track ), m_nets[*netIndex].name } );
     }
+
+    for( DECODED_TRACK& decoded : decodedPieces )
+    {
+        ROUTE& route = aRoutes[decoded.netName];
+        route.net_name = decoded.netName;
+        route.tracks.push_back( std::move( decoded.track ) );
+    }
+}
+
+
+BINARY_PARSER::ROUTE_OBJECT_NODES
+BINARY_PARSER::resolveRouteObjectNodes( const SDB_SECTION& aRouteLayers, size_t aObjectCount,
+                                        const std::vector<int>& aSerializedLayerOrder )
+{
+    ROUTE_OBJECT_NODES nodes;
+    nodes.layers.assign( aObjectCount, 0 );
+    nodes.handles.assign( aObjectCount, 0 );
+
+    auto padsLayerForSerializedIndex = [&]( size_t aIndex )
+    {
+        return aIndex < aSerializedLayerOrder.size() ? aSerializedLayerOrder[aIndex] + 1
+                                                     : static_cast<int>( aIndex ) + 1;
+    };
+
+    const SDB_SECTION* routeController = getSection( 25 );
+    const SDB_SECTION* allocatorDescriptors = getSection( 26 );
+    const SDB_SECTION* layerObjectCounts = getSection( 27 );
+    const SDB_SECTION* layerObjectHandles = getSection( 29 );
+    const SDB_SECTION* routeNodes = getSection( 61 );
+
+    if( !routeController || !allocatorDescriptors || !layerObjectCounts || !layerObjectHandles || !routeNodes
+        || !m_cursor.InBounds( routeController->physicalOffset + 180, 8 )
+        || layerObjectCounts->physicalCount != aRouteLayers.physicalCount )
+    {
+        THROW_IO_ERROR( "Invalid PADS route allocator controllers" );
+    }
+
+    std::array<uint16_t, 4> allocatorPageCounts;
+
+    for( size_t group = 0; group < allocatorPageCounts.size(); ++group )
+        allocatorPageCounts[group] = m_cursor.U16At( routeController->physicalOffset + 180 + group * 2 );
+
+    size_t nodePageStart =
+            static_cast<size_t>( allocatorPageCounts[0] ) + allocatorPageCounts[1] + allocatorPageCounts[2];
+    size_t nodePageCount = allocatorPageCounts[3];
+
+    if( nodePageCount == 0 || nodePageStart + nodePageCount > allocatorDescriptors->physicalCount )
+        THROW_IO_ERROR( "Invalid PADS route node page group" );
+
+    struct NODE_PAGE
+    {
+        uint32_t base = 0;
+        uint32_t liveCount = 0;
+        size_t   firstOrdinal = 0;
+    };
+
+    std::vector<NODE_PAGE> nodePages;
+    size_t                 allocatedNodes = 0;
+
+    for( size_t page = 0; page < nodePageCount; ++page )
+    {
+        size_t   descriptor = allocatorDescriptors->physicalOffset + ( nodePageStart + page ) * 12;
+        uint32_t liveCount;
+
+        if( page + 1 < nodePageCount )
+            liveCount = m_cursor.U32At( descriptor + 20 );
+        else if( allocatedNodes <= routeNodes->physicalCount )
+            liveCount = routeNodes->physicalCount - allocatedNodes;
+        else
+            THROW_IO_ERROR( "Invalid PADS route node page counts" );
+
+        nodePages.push_back( { m_cursor.U32At( descriptor ), liveCount, allocatedNodes } );
+        allocatedNodes += liveCount;
+    }
+
+    if( allocatedNodes != routeNodes->physicalCount )
+        THROW_IO_ERROR( "Invalid PADS route node extent" );
+
+    std::vector<uint32_t> routeNodeHandles;
+    routeNodeHandles.reserve( routeNodes->physicalCount );
+
+    for( const NODE_PAGE& page : nodePages )
+    {
+        for( uint32_t index = 0; index < page.liveCount; ++index )
+            routeNodeHandles.push_back( page.base + index * 56 );
+    }
+
+    std::map<uint32_t, size_t> routeNodeOrdinals;
+
+    for( size_t ordinal = 0; ordinal < routeNodeHandles.size(); ++ordinal )
+        routeNodeOrdinals.emplace( routeNodeHandles[ordinal], ordinal );
+
+    std::vector<std::vector<size_t>> routeNodeLinks( routeNodeHandles.size() );
+
+    for( size_t ordinal = 0; ordinal < routeNodeHandles.size(); ++ordinal )
+    {
+        size_t nodeOffset = routeNodes->physicalOffset + ordinal * 12;
+
+        for( uint32_t linkedHandle : { m_cursor.U32At( nodeOffset ), m_cursor.U32At( nodeOffset + 4 ) } )
+        {
+            auto linkedIt = routeNodeOrdinals.find( linkedHandle );
+
+            if( linkedIt == routeNodeOrdinals.end() )
+                continue;
+
+            routeNodeLinks[linkedIt->second].push_back( ordinal );
+        }
+    }
+
+    // A node's nets are those of the nearest junctions reachable from it, taking every junction
+    // at that first distance and stopping there rather than draining the whole component -- a
+    // deeper junction belongs to a different net and must not bleed into this one. The visited
+    // marks are stamped with the root ordinal so the buffers survive across roots unallocated.
+    std::map<uint32_t, std::set<size_t>>& routeNodeNets = nodes.handleNets;
+    std::vector<uint32_t>                 visitedStamp( routeNodeHandles.size(), UINT32_MAX );
+    std::vector<size_t>                   frontier;
+    std::vector<size_t>                   next;
+
+    for( size_t root = 0; root < routeNodeHandles.size(); ++root )
+    {
+        std::set<size_t> componentNets;
+
+        visitedStamp[root] = static_cast<uint32_t>( root );
+        frontier.assign( 1, root );
+
+        while( !frontier.empty() && componentNets.empty() )
+        {
+            next.clear();
+
+            for( size_t ordinal : frontier )
+            {
+                auto netIt = m_junctionHandleNets.find( routeNodeHandles[ordinal] );
+
+                if( netIt != m_junctionHandleNets.end() )
+                    componentNets.insert( netIt->second.begin(), netIt->second.end() );
+
+                for( size_t linked : routeNodeLinks[ordinal] )
+                {
+                    if( visitedStamp[linked] == static_cast<uint32_t>( root ) )
+                        continue;
+
+                    visitedStamp[linked] = static_cast<uint32_t>( root );
+                    next.push_back( linked );
+                }
+            }
+
+            frontier.swap( next );
+        }
+
+        routeNodeNets.emplace( routeNodeHandles[root], std::move( componentNets ) );
+    }
+
+    auto nodeOrdinal = [&]( uint32_t aHandle ) -> std::optional<size_t>
+    {
+        auto it = routeNodeOrdinals.find( aHandle );
+
+        if( it != routeNodeOrdinals.end() )
+            return it->second;
+
+        return std::nullopt;
+    };
+
+    std::vector<int>        serializedObjectLayers;
+    std::vector<uint32_t>   serializedObjectHandles;
+    std::map<uint32_t, int> routeHandleLayers;
+    size_t                  handleOrdinal = 0;
+
+    for( size_t layer = 0; layer < layerObjectCounts->physicalCount; ++layer )
+    {
+        uint32_t count = m_cursor.U32At( layerObjectCounts->physicalOffset + layer * 4 );
+
+        if( handleOrdinal + count > layerObjectHandles->physicalCount )
+            THROW_IO_ERROR( "Invalid PADS per-layer route handle counts" );
+
+        for( size_t index = 0; index < count; ++index, ++handleOrdinal )
+        {
+            uint32_t handle = m_cursor.U32At( layerObjectHandles->physicalOffset + handleOrdinal * 4 );
+
+            if( handle == 0 )
+                continue;
+
+            int padsLayer = padsLayerForSerializedIndex( layer );
+            auto [layerIt, inserted] = routeHandleLayers.emplace( handle, padsLayer );
+
+            if( !inserted && layerIt->second != padsLayer )
+                THROW_IO_ERROR( "Conflicting PADS route-handle layers" );
+
+            auto ordinal = nodeOrdinal( handle );
+
+            if( !ordinal )
+                THROW_IO_ERROR( "Invalid PADS route node handle" );
+
+            uint32_t classTag = m_cursor.U32At( routeNodes->physicalOffset + *ordinal * 12 + 8 );
+
+            if( ( classTag & 0x00800000 ) != 0 )
+            {
+                serializedObjectLayers.push_back( padsLayer );
+                serializedObjectHandles.push_back( handle );
+            }
+        }
+    }
+
+    if( handleOrdinal != layerObjectHandles->physicalCount || serializedObjectLayers.size() != aObjectCount )
+    {
+        THROW_IO_ERROR( "Invalid PADS route object-node mapping" );
+    }
+
+    for( size_t sequence = 0; sequence < serializedObjectLayers.size(); ++sequence )
+    {
+        size_t object = ( sequence + aObjectCount - 1 ) % aObjectCount;
+        nodes.layers[object] = serializedObjectLayers[sequence];
+        nodes.handles[object] = serializedObjectHandles[sequence];
+    }
+
+    return nodes;
 }
 
 
@@ -2874,11 +2944,11 @@ void BINARY_PARSER::parseCopperShapes()
         copper.name = name;
         copper.filled = true;
 
-        size_t pieceRotation = sec11->totalBytes - ( pieceStride - 8 );
+        size_t   pieceRotation = sec11->totalBytes - ( pieceStride - 8 );
         uint32_t levelIndex = ( sec11Index + 1 ) % sec11->count;
-        uint8_t level = ringU8( *sec11, pieceRotation, pieceStride, levelIndex, 1 );
-        copper.width = static_cast<double>( ringI32( *sec11, pieceRotation, pieceStride,
-                                                     sec11Index, pieceStride - 8 ) );
+        uint8_t  level = ringU8( *sec11, pieceRotation, pieceStride, levelIndex, 1 );
+        copper.width =
+                static_cast<double>( ringI32( *sec11, pieceRotation, pieceStride, sec11Index, pieceStride - 8 ) );
         copper.layer = level;
 
         for( const VECTOR2I& pt : loop )
@@ -2922,7 +2992,7 @@ void BINARY_PARSER::parseDimensions()
         if( it == m_ownerRuns.end() )
             continue;
 
-        int32_t startRow = it->second.vertexStart - m_sec12Base;
+        int32_t startRow = it->second.vertexStart;
 
         int32_t bp1x = 0, bp1y = 0, bp2x = 0, bp2y = 0, arwx = 0, arwy = 0, attr = 0;
 
@@ -2952,9 +3022,8 @@ void BINARY_PARSER::parseDimensions()
 }
 
 
-void BINARY_PARSER::computeSec12Base()
+void BINARY_PARSER::computeSec12CleanRows()
 {
-    m_sec12Base = 0;
     m_sec12CleanRows = 0;
 
     const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
@@ -2969,8 +3038,8 @@ void BINARY_PARSER::computeSec12Base()
 }
 
 
-uint8_t BINARY_PARSER::ringU8( const SDB_SECTION& aSection, size_t aRotation, size_t aStride,
-                               uint32_t aIndex, size_t aField ) const
+uint8_t BINARY_PARSER::ringU8( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex,
+                               size_t aField ) const
 {
     if( aSection.totalBytes == 0 || aIndex >= aSection.count || aField >= aStride )
         THROW_IO_ERROR( "Invalid PADS circular-controller record access" );
@@ -2981,8 +3050,8 @@ uint8_t BINARY_PARSER::ringU8( const SDB_SECTION& aSection, size_t aRotation, si
 }
 
 
-uint32_t BINARY_PARSER::ringU32( const SDB_SECTION& aSection, size_t aRotation, size_t aStride,
-                                uint32_t aIndex, size_t aField ) const
+uint32_t BINARY_PARSER::ringU32( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex,
+                                 size_t aField ) const
 {
     uint32_t value = 0;
 
@@ -2993,15 +3062,15 @@ uint32_t BINARY_PARSER::ringU32( const SDB_SECTION& aSection, size_t aRotation, 
 }
 
 
-int32_t BINARY_PARSER::ringI32( const SDB_SECTION& aSection, size_t aRotation, size_t aStride,
-                                uint32_t aIndex, size_t aField ) const
+int32_t BINARY_PARSER::ringI32( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex,
+                                size_t aField ) const
 {
     return static_cast<int32_t>( ringU32( aSection, aRotation, aStride, aIndex, aField ) );
 }
 
 
-std::string BINARY_PARSER::ringStr( const SDB_SECTION& aSection, size_t aRotation, size_t aStride,
-                                    uint32_t aIndex, size_t aField, size_t aLength ) const
+std::string BINARY_PARSER::ringStr( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex,
+                                    size_t aField, size_t aLength ) const
 {
     std::string value;
     value.reserve( aLength );
@@ -3045,7 +3114,7 @@ void BINARY_PARSER::buildOwnerRuns()
         if( name.empty() || m_ownerRuns.count( name ) )
             continue;
 
-        uint32_t lagIndex = ( ownerIndex + 1 ) % sec10->count;
+        uint32_t  lagIndex = ( ownerIndex + 1 ) % sec10->count;
         OWNER_RUN run;
         run.pieceStart = ringI32( *sec10, 68, stride, lagIndex, DRW_ITEM::PIECE_START );
         run.vertexStart = ringI32( *sec10, 68, stride, lagIndex, DRW_ITEM::VERTEX_START );
@@ -3055,6 +3124,47 @@ void BINARY_PARSER::buildOwnerRuns()
         run.ownerIndex = ownerIndex;
         m_ownerRuns.emplace( std::move( name ), run );
     }
+}
+
+
+SDB_RECORD BINARY_PARSER::arcRecordFor( const SDB_SECTION& aArcParameters, int32_t aArcStart, int32_t aAttr,
+                                        const char* aWhat ) const
+{
+    uint64_t arcIndex = static_cast<uint64_t>( aArcStart ) + static_cast<uint32_t>( aAttr );
+
+    if( aArcStart < 0 || arcIndex >= aArcParameters.count
+        || aArcParameters.totalBytes != static_cast<uint64_t>( aArcParameters.count ) * 20 )
+    {
+        THROW_IO_ERROR( wxString::Format( "Invalid PADS %s arc range", aWhat ) );
+    }
+
+    return m_sdb.RecordAt( aArcParameters.physicalOffset + arcIndex * 20 );
+}
+
+
+// An arc-parameter record carries only the arc's bounding box, so the center and radius are
+// derived from it and the sweep from the two corners' angles about that center. The corners are
+// owner-relative, so the returned center is offset back into the same frame the caller emits.
+static ARC deriveArc( const SDB_RECORD& aArcRecord, const ARC_VERTEX& aStart, const ARC_VERTEX& aEnd, double aOriginX,
+                      double aOriginY )
+{
+    double xmin = aArcRecord.I32( 0 );
+    double ymin = aArcRecord.I32( 4 );
+    double xmax = aArcRecord.I32( 8 );
+    double ymax = aArcRecord.I32( 12 );
+    double centerX = ( xmin + xmax ) / 2.0;
+    double centerY = ( ymin + ymax ) / 2.0;
+    double startAngle = std::atan2( aStart.y - centerY, aStart.x - centerX ) * 180.0 / M_PI;
+    double endAngle = std::atan2( aEnd.y - centerY, aEnd.x - centerX ) * 180.0 / M_PI;
+
+    ARC arc{};
+    arc.cx = centerX + aOriginX;
+    arc.cy = centerY + aOriginY;
+    arc.radius = ( xmax - xmin ) / 2.0;
+    arc.start_angle = startAngle;
+    arc.delta_angle = EDA_ANGLE( endAngle - startAngle, DEGREES_T ).Normalize180().AsDegrees();
+
+    return arc;
 }
 
 
@@ -3111,54 +3221,24 @@ void BINARY_PARSER::parseBoardOutlineDirect()
 
             POLYLINE outline;
             outline.layer = 1;
-            outline.width = static_cast<double>( ringI32( *pieces, pieceRotation, pieceStride,
-                                                          pieceIndex, pieceStride - 8 ) );
+            outline.width =
+                    static_cast<double>( ringI32( *pieces, pieceRotation, pieceStride, pieceIndex, pieceStride - 8 ) );
             outline.closed = decoded.size() >= 3 && decoded.front().x == decoded.back().x
                              && decoded.front().y == decoded.back().y;
 
             for( size_t index = 0; index < decoded.size(); ++index )
             {
                 const ARC_VERTEX& vertex = decoded[index];
-                double rawX = static_cast<double>( vertex.x ) + originX;
-                double rawY = static_cast<double>( vertex.y ) + originY;
+                double            rawX = static_cast<double>( vertex.x ) + originX;
+                double            rawY = static_cast<double>( vertex.y ) + originY;
 
                 if( index > 0 && decoded[index - 1].attr >= 0 )
                 {
-                    uint64_t arcIndex = static_cast<uint64_t>( run.arcStart )
-                                        + static_cast<uint32_t>( decoded[index - 1].attr );
+                    SDB_RECORD arcRecord =
+                            arcRecordFor( *arcParameters, run.arcStart, decoded[index - 1].attr, "board-outline" );
 
-                    if( run.arcStart < 0 || arcIndex >= arcParameters->count
-                        || arcParameters->totalBytes != static_cast<uint64_t>( arcParameters->count ) * 20 )
-                    {
-                        THROW_IO_ERROR( "Invalid PADS board-outline arc range" );
-                    }
-
-                    SDB_RECORD arcRecord = m_sdb.RecordAt( arcParameters->physicalOffset + arcIndex * 20 );
-                    double xmin = arcRecord.I32( 0 );
-                    double ymin = arcRecord.I32( 4 );
-                    double xmax = arcRecord.I32( 8 );
-                    double ymax = arcRecord.I32( 12 );
-                    double centerX = ( xmin + xmax ) / 2.0;
-                    double centerY = ( ymin + ymax ) / 2.0;
-                    double radius = ( xmax - xmin ) / 2.0;
-                    const ARC_VERTEX& start = decoded[index - 1];
-                    double startAngle = std::atan2( start.y - centerY, start.x - centerX ) * 180.0 / M_PI;
-                    double endAngle = std::atan2( vertex.y - centerY, vertex.x - centerX ) * 180.0 / M_PI;
-                    double delta = endAngle - startAngle;
-
-                    while( delta <= -180.0 )
-                        delta += 360.0;
-
-                    while( delta > 180.0 )
-                        delta -= 360.0;
-
-                    ARC arc{};
-                    arc.cx = centerX + originX;
-                    arc.cy = centerY + originY;
-                    arc.radius = radius;
-                    arc.start_angle = startAngle;
-                    arc.delta_angle = delta;
-                    outline.points.emplace_back( rawX, rawY, arc );
+                    outline.points.emplace_back( rawX, rawY,
+                                                 deriveArc( arcRecord, decoded[index - 1], vertex, originX, originY ) );
                 }
                 else
                 {
@@ -3271,38 +3351,11 @@ void BINARY_PARSER::parseGraphicLines()
 
                 if( index > 0 && decoded[index - 1].attr >= 0 )
                 {
-                    uint64_t arcIndex =
-                            static_cast<uint64_t>( run.arcStart ) + static_cast<uint32_t>( decoded[index - 1].attr );
+                    SDB_RECORD arcRecord =
+                            arcRecordFor( *arcParameters, run.arcStart, decoded[index - 1].attr, "graphic" );
 
-                    if( run.arcStart < 0 || arcIndex >= arcParameters->count )
-                        THROW_IO_ERROR( "Invalid PADS graphic arc range" );
-
-                    SDB_RECORD        arcRecord = m_sdb.RecordAt( arcParameters->physicalOffset + arcIndex * 20 );
-                    double            xmin = arcRecord.I32( 0 );
-                    double            ymin = arcRecord.I32( 4 );
-                    double            xmax = arcRecord.I32( 8 );
-                    double            ymax = arcRecord.I32( 12 );
-                    double            centerX = ( xmin + xmax ) / 2.0;
-                    double            centerY = ( ymin + ymax ) / 2.0;
-                    double            radius = ( xmax - xmin ) / 2.0;
-                    const ARC_VERTEX& start = decoded[index - 1];
-                    double            startAngle = std::atan2( start.y - centerY, start.x - centerX ) * 180.0 / M_PI;
-                    double            endAngle = std::atan2( vertex.y - centerY, vertex.x - centerX ) * 180.0 / M_PI;
-                    double            delta = endAngle - startAngle;
-
-                    while( delta <= -180.0 )
-                        delta += 360.0;
-
-                    while( delta > 180.0 )
-                        delta -= 360.0;
-
-                    ARC arc{};
-                    arc.cx = centerX + originX;
-                    arc.cy = centerY + originY;
-                    arc.radius = radius;
-                    arc.start_angle = startAngle;
-                    arc.delta_angle = delta;
-                    graphic.points.emplace_back( rawX, rawY, arc );
+                    graphic.points.emplace_back( rawX, rawY,
+                                                 deriveArc( arcRecord, decoded[index - 1], vertex, originX, originY ) );
                 }
                 else
                 {
@@ -3348,12 +3401,12 @@ bool BINARY_PARSER::fetchOwnerLoop( const std::string& aName, size_t aMaxVerts, 
     if( !pieces || it->second.pieceCount < 1 || it->second.pieceStart < 0 )
         return false;
 
-    size_t pieceStride = m_version <= 0x2024 ? 16 : 20;
-    size_t pieceHead = pieceStride == 16 ? 8 : 12;
-    size_t cornerField = pieceStride == 16 ? 12 : 16;
-    size_t pieceRotation = pieces->totalBytes - pieceHead;
-    int32_t corners = ringI32( *pieces, pieceRotation, pieceStride,
-                               static_cast<uint32_t>( it->second.pieceStart ), cornerField );
+    size_t  pieceStride = m_version <= 0x2024 ? 16 : 20;
+    size_t  pieceHead = pieceStride == 16 ? 8 : 12;
+    size_t  cornerField = pieceStride == 16 ? 12 : 16;
+    size_t  pieceRotation = pieces->totalBytes - pieceHead;
+    int32_t corners =
+            ringI32( *pieces, pieceRotation, pieceStride, static_cast<uint32_t>( it->second.pieceStart ), cornerField );
 
     if( corners < 4 || static_cast<size_t>( corners ) > aMaxVerts + 1 )
         return false;
@@ -3408,8 +3461,8 @@ bool BINARY_PARSER::fetchOwnerCirclePoints( const std::string& aName, VECTOR2I& 
     size_t cornerField = pieceStride == 16 ? 12 : 16;
     size_t pieceRotation = pieces->totalBytes - pieceHead;
 
-    if( ringI32( *pieces, pieceRotation, pieceStride, static_cast<uint32_t>( it->second.pieceStart ),
-                 cornerField ) != 2 )
+    if( ringI32( *pieces, pieceRotation, pieceStride, static_cast<uint32_t>( it->second.pieceStart ), cornerField )
+        != 2 )
     {
         return false;
     }
@@ -3580,16 +3633,15 @@ void BINARY_PARSER::parseCopperPours()
     if( !sec52 || !sec53 || !sec54 )
         THROW_IO_ERROR( "Missing PADS copper-pour controllers" );
 
-    if( sec52->physicalBytes != sec52->count * OWNER_SIZE
-        || sec53->physicalBytes != sec53->count * PIECE_SIZE
+    if( sec52->physicalBytes != sec52->count * OWNER_SIZE || sec53->physicalBytes != sec53->count * PIECE_SIZE
         || sec54->physicalBytes != sec54->count * VERTEX_SIZE )
         THROW_IO_ERROR( "Invalid PADS copper-pour controller framing" );
 
     for( uint32_t index = 0; index < sec52->count; ++index )
     {
-        const size_t offset = sec52->physicalOffset + static_cast<size_t>( index ) * OWNER_SIZE;
+        const size_t  offset = sec52->physicalOffset + static_cast<size_t>( index ) * OWNER_SIZE;
         const uint8_t outlineType = m_cursor.U8At( offset + 87 );
-        std::string name = m_cursor.StringAt( offset + 70, 14 );
+        std::string   name = m_cursor.StringAt( offset + 70, 14 );
 
         if( outlineType != 0x32 || name.rfind( "POR", 0 ) != 0 )
             continue;
@@ -3634,9 +3686,9 @@ void BINARY_PARSER::parseCopperPours()
 
             if( pieceType == 0x33 && cornerCount == 2 )
             {
-            // Circle piece: the two "corners" are diametrically opposite endpoints, not a
-            // 2-point polygon -- the downstream zone builder requires at least 3 points and
-            // would silently drop it. Synthesize a regular polygon approximation instead.
+                // Circle piece: the two "corners" are diametrically opposite endpoints, not a
+                // 2-point polygon -- the downstream zone builder requires at least 3 points and
+                // would silently drop it. Synthesize a regular polygon approximation instead.
                 int32_t x0 = owner.rawX + m_cursor.I32At( vOff );
                 int32_t y0 = owner.rawY + m_cursor.I32At( vOff + 4 );
                 int32_t x1 = owner.rawX + m_cursor.I32At( vOff + VERTEX_SIZE );
@@ -3650,7 +3702,7 @@ void BINARY_PARSER::parseCopperPours()
 
                 for( int s = 0; s < CIRCLE_SEGMENTS; ++s )
                 {
-                    double angle = 2.0 * M_PI * s / CIRCLE_SEGMENTS;
+                    double  angle = 2.0 * M_PI * s / CIRCLE_SEGMENTS;
                     int32_t rawX = static_cast<int32_t>( std::lround( cx + radius * std::cos( angle ) ) );
                     int32_t rawY = static_cast<int32_t>( std::lround( cy + radius * std::sin( angle ) ) );
 
@@ -3814,10 +3866,10 @@ void BINARY_PARSER::linkPartsToDecals()
     }
 
     // Placement -> decal chain: parttype index I from m_partTypeIndex, then
-    // m_partTypeDecalIndex[I] for the decal_index, then m_decalNameTable[decal_index] for the
+    // m_partTypeDecalIndices[I] for the decal_index, then m_decalNameTable[decal_index] for the
     // name. The decal-name table covers connectors and mounting holes section 10 lacks, so this
     // resolves the full placed set.
-    if( m_partTypeDecalIndex.empty() || m_decalNameTable.empty() )
+    if( m_partTypeDecalIndices.empty() || m_decalNameTable.empty() )
         return;
 
     for( size_t partIdx = 0; partIdx < m_parts.size(); ++partIdx )
@@ -3834,7 +3886,7 @@ void BINARY_PARSER::linkPartsToDecals()
 
         uint32_t partTypeIdx = hintIt->second;
 
-        if( partTypeIdx >= m_partTypeDecalIndex.size() )
+        if( partTypeIdx >= m_partTypeDecalIndices.size() )
             continue;
 
         uint8_t alternate = 0;
@@ -3843,12 +3895,11 @@ void BINARY_PARSER::linkPartsToDecals()
         if( alternateIt != m_partDecalAlternate.end() )
             alternate = alternateIt->second;
 
-        int32_t decalIndex = m_partTypeDecalIndex[partTypeIdx];
+        const std::vector<int32_t>& decalIndices = m_partTypeDecalIndices[partTypeIdx];
+        int32_t                     decalIndex = decalIndices.empty() ? -1 : decalIndices.front();
 
-        if( partTypeIdx < m_partTypeDecalIndices.size() && alternate < m_partTypeDecalIndices[partTypeIdx].size() )
-        {
-            decalIndex = m_partTypeDecalIndices[partTypeIdx][alternate];
-        }
+        if( alternate < decalIndices.size() )
+            decalIndex = decalIndices[alternate];
 
         if( decalIndex < 0 || static_cast<size_t>( decalIndex ) >= m_decalNameTable.size() )
             continue;

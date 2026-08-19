@@ -182,17 +182,14 @@ public:
 
     int      GetLayerCount() const { return m_parameters.layer_count; }
     uint16_t GetVersion() const { return m_version; }
-    bool     IsBasicUnits() const { return true; }
 
     std::vector<LAYER_INFO> GetLayerInfos() const;
 
-    int32_t GetSec12BaseForTest() const { return m_sec12Base; }
-    size_t  GetNetConnectionEndpointCountForTest() const { return m_netConnectionEndpoints.size(); }
     std::set<std::string> GetPadStackShapesForTest() const
     {
         std::set<std::string> shapes;
 
-        for( const auto& [idx, layers] : m_padStackCache )
+        for( const std::vector<PAD_STACK_LAYER>& layers : m_padStackPool )
         {
             for( const PAD_STACK_LAYER& psl : layers )
                 shapes.insert( psl.shape );
@@ -208,6 +205,18 @@ public:
 
 private:
     static constexpr int32_t ANGLE_SCALE = 1800000;
+
+    /// One placed via recovered from the section-60 junction ring. relationshipNet records
+    /// whether netName came from the section-49 relationship graph, which outranks the
+    /// record's own net index when co-located vias disagree.
+    struct VIA_LOCATION
+    {
+        int32_t     x = 0;
+        int32_t     y = 0;
+        std::string netName;
+        int         viaIndex = -1;
+        bool        relationshipNet = false;
+    };
 
     bool isOldFormat() const { return m_sdb.IsOldFormat(); }
 
@@ -238,6 +247,12 @@ private:
     void parsePartTypeTable();
     void parseBoardOutlineDirect();
     void parseGraphicLines();
+
+    // Resolve the section-13 arc-parameter record that a corner's attr ordinal names, relative to
+    // its owner's arc cursor. aWhat names the calling decoder in the range error.
+    SDB_RECORD arcRecordFor( const SDB_SECTION& aArcParameters, int32_t aArcStart, int32_t aAttr,
+                             const char* aWhat ) const;
+
     void parseNetNames();
     void parseNetNamesNew();
     void parseNetNamesOld();
@@ -274,18 +289,52 @@ private:
     // pairs are not serialized, so coverage is limited to override pairs. v0x2027 only.
     void parseDiffPairs();
     void parseRouteVertices();
+
+    // Section-60 phase of parseRouteVertices: decode the via-junction ring, join each junction
+    // to its net through the section-49 relationship graph, and de-duplicate by coordinate.
+    std::vector<VIA_LOCATION> decodeViaLocations();
+
+    // Seed one ROUTE per net from the decoded vias, resolving each via's padstack and drill span
+    // through the decal it names.
+    std::map<std::string, ROUTE> seedRoutesFromVias( const std::vector<VIA_LOCATION>& aVias ) const;
+
+    // Decode the sections 62/63/64 routed-copper descriptors into tracks and append them to the
+    // seeded routes, attributing each object to a net through its route-node handle. Returns
+    // false when the route-object controller declares nothing, which the caller reads as "this
+    // board carries no routing" and drops the seeded via-only routes along with it.
+    void decodeRoutedCopper( std::map<std::string, ROUTE>& aRoutes );
+
+    /// Every routed-copper object's PADS layer and route-node handle, indexed by object ordinal,
+    /// plus the net set each handle reaches through the node link graph.
+    struct ROUTE_OBJECT_NODES
+    {
+        std::vector<int>                     layers;
+        std::vector<uint32_t>                handles;
+        std::map<uint32_t, std::set<size_t>> handleNets;
+    };
+
+    // Walk the section-25/26/27/29/61 route-node allocator to recover the layer, node handle and
+    // reachable nets of every routed-copper object. aObjectCount is the section-62 descriptor
+    // count, which the per-layer handle scan must reproduce exactly.
+    ROUTE_OBJECT_NODES resolveRouteObjectNodes( const SDB_SECTION& aRouteLayers, size_t aObjectCount,
+                                                const std::vector<int>& aSerializedLayerOrder );
+
     void parseTextRecords();
+
+    // Attach the section-8 field-presentation chain of every placement that declares one to its
+    // PART as attributes. Consumes m_partFieldStart.
+    void parsePlacementFields( const SDB_SECTION& aText, size_t aRecordBase, size_t aRecordSize, size_t aRingRotation );
+
+    // Emit a TEXT for every free-text section-8 record whose lagged metadata declares a
+    // string-pool offset and a text layer.
+    void parseFreeText( const SDB_SECTION& aText, size_t aRecordBase, size_t aRecordSize, size_t aRingRotation,
+                        size_t aPoolBase, size_t aPoolHi );
+
     void parseTerminals();
 
-    // Synthesize a placeholder terminal layout for every decal that has no terminals yet but
-    // carries a recorded count in m_decalTerminalCount. Positions are not separately indexed
-    // for these, so the layout is correct in count only.
-
+    // Give every decal that owns terminals the global padstack-zero default; a decal's own
+    // serialized (pin, ref) pairs override it later.
     void assignDefaultPadStacks();
-
-    // Recover the per-pin pad-stack assignment from the section-15 tail (pin, ref) pair pool.
-    // Descriptor decals are sliced by the section-14 descriptor table; the de-duplicated
-    // library decals by the section-13 0x4D00 table. Each ref indexes m_padStackPool.
 
     // Apply one decal's (pin, ref) pair slice: pin 0 sets the decal default, pin>0 overrides
     // that terminal. Shared by the descriptor and library passes.
@@ -322,13 +371,11 @@ private:
     // Owner DRW name -> lagged run, keyed by the +44 name. Built once by buildOwnerRuns().
     std::map<std::string, OWNER_RUN> m_ownerRuns;
 
-    // Section 12 is a direct fixed array. The retained base member is zero and exists only for
-    // the focused parser regression accessor.
-    int32_t m_sec12Base = 0;
+    // Section 12 is a direct fixed array, so its usable row count is its declared record count.
     int32_t m_sec12CleanRows = 0;
 
     void buildOwnerRuns();
-    void computeSec12Base();
+    void computeSec12CleanRows();
 
     uint8_t     ringU8( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex,
                         size_t aField ) const;
@@ -374,14 +421,6 @@ private:
     // Coordinate origin from the serialized board-setup block.
     int32_t m_originX = 0;
     int32_t m_originY = 0;
-    bool    m_originFound = false;
-
-    // Board outline DRW absolute origin from section 9 LINE item records. Section 11 board
-    // outline vertices are DRW-relative and need this offset to reach binary absolute.
-
-    // Default via dimensions extracted from section 4 pad stacks
-    // Pad stack cache indexed by section 4 record number
-    std::map<int, std::vector<PAD_STACK_LAYER>> m_padStackCache;
 
     // Section-4 pad-stack pool, 0-based from its versioned logical ring start. Section-16
     // (terminal, padstack) pairs index this pool directly.
@@ -389,7 +428,7 @@ private:
     std::vector<std::pair<int, int>>          m_padStackDrillSpans;
 
     // Part index -> parttype index from the NEXT section 22 record (@+4 with +1 block lag).
-    // Indexes into m_partTypeDecalIndex.
+    // Indexes into m_partTypeDecalIndices.
     std::map<size_t, uint32_t> m_partTypeIndex;
 
     // Placement index -> first section-8 field-presentation record from section 22 +96.
@@ -402,16 +441,14 @@ private:
     // is selected from the NEXT 96 B placement record's @+56 field. Indexes m_decalNameTable.
     std::map<size_t, uint32_t> m_partDecalIndex;
 
-    // Parttype-definition logical ring, 44 bytes before section 17's physical cursor. Each
-    // modern parttype carries a decal index at +96; v0x2022 carries it at +112.
-    std::vector<int32_t> m_partTypeDecalIndex;
-
-    // All decal indices for each parttype: primary, then alternates. New-format parttype records
-    // store duplicate index pairs at +96/+100, +104/+108, ... until -1.
+    // All decal indices for each parttype, primary first, then alternates. The parttype table is
+    // the logical ring 44 bytes before section 17's physical cursor. New-format records store
+    // duplicate index pairs at +96/+100, +104/+108, ... until -1; v0x2022 carries a single index
+    // at +112. An empty entry means the parttype declares no decal.
     std::vector<std::vector<int32_t>> m_partTypeDecalIndices;
 
     // The parttype's own alias name at logical +44, parallel to
-    // m_partTypeDecalIndex. This is the *PARTTYPE name a part references directly -- often a
+    // m_partTypeDecalIndices. This is the *PARTTYPE name a part references directly -- often a
     // manufacturer part number -- distinct from the physical decal it resolves to.
     std::vector<std::string> m_partTypeNames;
 
@@ -434,6 +471,11 @@ private:
 
     // Decal name -> start cursor (i32 @ +44) into the section-15 (pin, padstack-ref) pool.
     std::map<std::string, int32_t> m_decalStackStart;
+
+    // Route-node object handle -> the nets its section-60 junction belongs to. Built by
+    // decodeViaLocations from the section-49 relationship graph; decodeRoutedCopper walks the
+    // route-node link graph out from each object to reach it.
+    std::map<uint32_t, std::set<size_t>> m_junctionHandleNets;
 
     // Section 23 array index -> net name, used to attribute structural vias to nets.
     std::map<uint32_t, std::string> m_sec23IndexToNet;

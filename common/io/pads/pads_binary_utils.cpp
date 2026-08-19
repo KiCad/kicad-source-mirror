@@ -31,8 +31,12 @@ namespace PADS_IO
 std::optional<SDB_FOOTER_ERROR> CheckSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart,
                                                 const char* aGuid, size_t aGuidLen )
 {
-    if( aFooterStart + aGuidLen + 4 > aData.size() )
+    // Subtract rather than add so a near-SIZE_MAX offset cannot wrap past the check
+    if( aData.size() < 4 || aGuidLen > aData.size() - 4
+        || aFooterStart > aData.size() - aGuidLen - 4 )
+    {
         return SDB_FOOTER_ERROR{ aData.size(), "PADS binary file too small for the footer" };
+    }
 
     if( std::memcmp( &aData[aFooterStart], aGuid, aGuidLen ) != 0 )
         return SDB_FOOTER_ERROR{ aFooterStart, "Invalid PADS binary footer GUID" };

@@ -486,6 +486,19 @@ void PCB_IO_PADS_BINARY::buildPad( FOOTPRINT* aFootprint, const PADS_IO::PART_DE
                 if( stackLayer.sizeA <= 0 )
                     continue;
 
+                // RT/ST are plane thermal-relief spoke patterns and RA/SA are anti-pad
+                // clearances. Neither is pad copper, so they must not reach the shape below.
+                // KiCad derives the relief geometry from the zone, so an RT/ST row only says
+                // that this pad connects through spokes rather than solid copper.
+                if( stackLayer.shape == "RT" || stackLayer.shape == "ST" )
+                {
+                    pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+                    continue;
+                }
+
+                if( stackLayer.shape == "RA" || stackLayer.shape == "SA" )
+                    continue;
+
                 if( modernZeroDefaultSmd && stackLayer.layer == 0 )
                     continue;
 
