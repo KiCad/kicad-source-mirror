@@ -259,21 +259,22 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     if( signals.size() < 1 )
         signals.push_back( m_grid->GetCellValue( m_menuRow, m_menuCol ) );
 
-    auto addMeasurement = [this]( const wxString& cmd, wxString signal )
-    {
-        if( signal.EndsWith( _( " (phase)" ) ) )
-            return;
+    auto addMeasurement =
+            [this]( const wxString& cmd, wxString signal )
+            {
+                if( signal.EndsWith( _( " (phase)" ) ) )
+                    return;
 
-        if( signal.EndsWith( _( " (gain)" ) ) || signal.EndsWith( _( " (amplitude)" ) ) )
-        {
-            signal = signal.Left( signal.length() - 7 );
+                if( signal.EndsWith( _( " (gain)" ) ) || signal.EndsWith( _( " (amplitude)" ) ) )
+                {
+                    signal = signal.Left( signal.length() - 7 );
 
-            if( signal.Upper().StartsWith( wxS( "V(" ) ) )
-                signal = wxS( "vdb" ) + signal.Mid( 1 );
-        }
+                    if( signal.Upper().StartsWith( wxS( "V(" ) ) )
+                        signal = wxS( "vdb" ) + signal.Mid( 1 );
+                }
 
-        m_parent->AddMeasurement( cmd + wxS( " " ) + signal );
-    };
+                m_parent->AddMeasurement( cmd + wxS( " " ) + signal );
+            };
 
     if( event.GetId() == MYID_MEASURE_MIN )
     {
@@ -408,15 +409,16 @@ void CURSORS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
 void CURSORS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
-    auto getSignalName = [this]( int row ) -> wxString
-    {
-        wxString signal = m_grid->GetCellValue( row, COL_CURSOR_SIGNAL );
+    auto getSignalName =
+            [this]( int row ) -> wxString
+            {
+                wxString signal = m_grid->GetCellValue( row, COL_CURSOR_SIGNAL );
 
-        if( signal.EndsWith( "[2 - 1]" ) )
-            signal = signal.Left( signal.length() - 7 );
+                if( signal.EndsWith( "[2 - 1]" ) )
+                    signal = signal.Left( signal.length() - 7 );
 
-        return signal;
-    };
+                return signal;
+            };
 
     if( event.GetId() == MYID_FORMAT_VALUE )
     {
@@ -552,7 +554,10 @@ public:
         m_frame->m_SuppressGridEvents++;
     }
 
-    ~SUPPRESS_GRID_CELL_EVENTS() { m_frame->m_SuppressGridEvents--; }
+    ~SUPPRESS_GRID_CELL_EVENTS()
+    {
+        m_frame->m_SuppressGridEvents--;
+    }
 
 private:
     SIMULATOR_FRAME_UI* m_frame;
@@ -560,7 +565,7 @@ private:
 
 
 #define ID_SIM_REFRESH 10207
-#define REFRESH_INTERVAL 50 // 20 frames/second.
+#define REFRESH_INTERVAL 50   // 20 frames/second.
 
 
 SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_EDIT_FRAME* aSchematicFrame ) :
@@ -620,8 +625,7 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
 
     Bind( EVT_SIM_CURSOR_UPDATE, &SIMULATOR_FRAME_UI::onPlotCursorUpdate, this );
 
-    Bind(
-            wxEVT_TIMER,
+    Bind( wxEVT_TIMER,
             [&]( wxTimerEvent& aEvent )
             {
                 OnSimRefresh( false );
@@ -786,7 +790,7 @@ void SIMULATOR_FRAME_UI::LoadSettings( EESCHEMA_SETTINGS* aCfg )
     const EESCHEMA_SETTINGS::SIMULATOR& settings = aCfg->m_Simulator;
 
     // Read subwindows sizes (should be > 0 )
-    m_splitterLeftRightSashPosition = settings.view.plot_panel_width;
+    m_splitterLeftRightSashPosition      = settings.view.plot_panel_width;
     m_splitterPlotAndConsoleSashPosition = settings.view.plot_panel_height;
     m_splitterSignalsSashPosition        = settings.view.signal_panel_height;
     m_splitterCursorsSashPosition        = settings.view.cursors_panel_height;
@@ -802,10 +806,10 @@ void SIMULATOR_FRAME_UI::SaveSettings( EESCHEMA_SETTINGS* aCfg )
 {
     EESCHEMA_SETTINGS::SIMULATOR& settings = aCfg->m_Simulator;
 
-    settings.view.plot_panel_width = m_splitterLeftRight->GetSashPosition();
-    settings.view.plot_panel_height = m_splitterPlotAndConsole->GetSashPosition();
-    settings.view.signal_panel_height = m_splitterSignals->GetSashPosition();
-    settings.view.cursors_panel_height = m_splitterCursors->GetSashPosition();
+    settings.view.plot_panel_width          = m_splitterLeftRight->GetSashPosition();
+    settings.view.plot_panel_height         = m_splitterPlotAndConsole->GetSashPosition();
+    settings.view.signal_panel_height       = m_splitterSignals->GetSashPosition();
+    settings.view.cursors_panel_height      = m_splitterCursors->GetSashPosition();
     settings.view.measurements_panel_height = m_splitterMeasurements->GetSashPosition();
     settings.view.white_background          = !m_darkMode;
 
@@ -897,16 +901,16 @@ void SIMULATOR_FRAME_UI::SetSubWindowsSashSize()
 void sortSignals( std::vector<wxString>& signals )
 {
     std::sort( signals.begin(), signals.end(),
-               []( const wxString& lhs, const wxString& rhs )
-               {
-                   // Sort voltages first
-                   if( lhs.Upper().StartsWith( 'V' ) && !rhs.Upper().StartsWith( 'V' ) )
-                       return true;
-                   else if( !lhs.Upper().StartsWith( 'V' ) && rhs.Upper().StartsWith( 'V' ) )
-                       return false;
+            []( const wxString& lhs, const wxString& rhs )
+            {
+                // Sort voltages first
+                if( lhs.Upper().StartsWith( 'V' ) && !rhs.Upper().StartsWith( 'V' ) )
+                    return true;
+                else if( !lhs.Upper().StartsWith( 'V' ) && rhs.Upper().StartsWith( 'V' ) )
+                    return false;
 
-                   return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
-               } );
+                return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+            } );
 }
 
 
@@ -1306,7 +1310,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
             wxString directiveParams;
 
             if( line.StartsWith( wxS( ".SAVE" ), &directiveParams )
-                || line.StartsWith( wxS( ".PROBE" ), &directiveParams ) )
+                    || line.StartsWith( wxS( ".PROBE" ), &directiveParams ) )
             {
                 wxStringTokenizer paramsTokenizer( directiveParams, " \t", wxTOKEN_STRTOK );
 
@@ -1354,7 +1358,7 @@ void SIMULATOR_FRAME_UI::OnFilterMouseMoved( wxMouseEvent& aEvent )
 #if defined( __WXOSX__ ) // Doesn't work properly on other ports
     wxPoint pos = aEvent.GetPosition();
     wxRect  ctrlRect = m_filter->GetScreenRect();
-    int     buttonWidth = ctrlRect.GetHeight(); // Presume buttons are square
+    int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
 
     if( m_filter->IsSearchButtonVisible() && pos.x < buttonWidth )
         SetCursor( wxCURSOR_ARROW );
@@ -1818,7 +1822,7 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
             switch( plotTab->GetSimType() )
             {
             case ST_TRAN:
-                if( signalType.StartsWith( 'P' ) )
+                if ( signalType.StartsWith( 'P' ) )
                     units = wxS( "J" );
                 else
                     units += wxS( ".s" );
@@ -1830,15 +1834,17 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
             case ST_DISTO:
             case ST_NOISE:
             case ST_FFT:
-            case ST_SENS: // If there is a vector, it is frequency
+            case ST_SENS:       // If there is a vector, it is frequency
                 units += wxS( "·Hz" );
                 break;
 
-            case ST_DC: // Could be a lot of things : V, A, deg C, ohm, ...
-            case ST_OP: // There is no vector for integration
-            case ST_PZ: // There is no vector for integration
-            case ST_TF: // There is no vector for integration
-            default: units += wxS( "·?" ); break;
+            case ST_DC:         // Could be a lot of things : V, A, deg C, ohm, ...
+            case ST_OP:         // There is no vector for integration
+            case ST_PZ:         // There is no vector for integration
+            case ST_TF:         // There is no vector for integration
+            default:
+                units += wxS( "·?" );
+                break;
             }
         }
 
@@ -1956,7 +1962,7 @@ void SIMULATOR_FRAME_UI::RemoveTuner( TUNER_SLIDER* aTuner )
     m_tuners.remove( aTuner );
 
     if( std::find( m_multiRunState.tuners.begin(), m_multiRunState.tuners.end(), aTuner )
-        != m_multiRunState.tuners.end() )
+            != m_multiRunState.tuners.end() )
     {
         clearMultiRunState( true );
     }
@@ -2013,7 +2019,9 @@ void SIMULATOR_FRAME_UI::AddMeasurement( const wxString& aCmd )
 
 void SIMULATOR_FRAME_UI::DoFourier( const wxString& aSignal, const wxString& aFundamental )
 {
-    wxString cmd = wxString::Format( wxS( "fourier %s %s" ), SPICE_VALUE( aFundamental ).ToSpiceString(), aSignal );
+    wxString cmd = wxString::Format( wxS( "fourier %s %s" ),
+                                     SPICE_VALUE( aFundamental ).ToSpiceString(),
+                                     aSignal );
 
     simulator()->Command( cmd.ToStdString() );
 }
@@ -2278,21 +2286,27 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
 
         break;
 
-    case ST_DC: data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str(), -1 ); break;
+    case ST_DC:
+        data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str(), -1 );
+        break;
 
     case ST_NOISE:
     case ST_TRAN:
-    case ST_FFT: data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str(), size ); break;
+    case ST_FFT:
+        data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str(), size );
+        break;
 
-    default: wxFAIL_MSG( wxT( "Unhandled plot type" ) );
+    default:
+        wxFAIL_MSG( wxT( "Unhandled plot type" ) );
     }
 
     SPICE_DC_PARAMS source1, source2;
     int             sweepCount = 1;
     size_t          sweepSize = std::numeric_limits<size_t>::max();
 
-    if( simType == ST_DC && circuitModel()->ParseDCCommand( aPlotTab->GetSimCommand(), &source1, &source2 )
-        && !source2.m_source.IsEmpty() )
+    if( simType == ST_DC
+            && circuitModel()->ParseDCCommand( aPlotTab->GetSimCommand(), &source1, &source2 )
+            && !source2.m_source.IsEmpty() )
     {
         SPICE_VALUE v = ( source2.m_vend - source2.m_vstart ) / source2.m_vincrement;
 
@@ -2497,7 +2511,8 @@ void SIMULATOR_FRAME_UI::signalsGridCursorUpdate(
                 KIGFX::COLOR4D color( trace->GetPen().GetColour() );
                 m_signalsGrid->SetCellValue( r, COL_SIGNAL_COLOR, color.ToCSSString() );
             }
-            else if( t == SIGNALS_GRID_COLUMNS::COL_CURSOR_1 || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_2
+            else if( t == SIGNALS_GRID_COLUMNS::COL_CURSOR_1
+                     || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_2
                      || t > SIGNALS_GRID_COLUMNS::COL_CURSOR_2 )
             {
                 if( !attr->HasRenderer() )
@@ -2526,8 +2541,10 @@ void SIMULATOR_FRAME_UI::signalsGridCursorUpdate(
                 attr->SetTextColour( *wxRED );
                 m_signalsGrid->SetCellValue( r, static_cast<int>( t ), getViewLabel( plotTab, nullptr ) );
             }
-            else if( t == SIGNALS_GRID_COLUMNS::COL_Y_SCALE || t == SIGNALS_GRID_COLUMNS::COL_SIGNAL_COLOR
-                     || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_1 || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_2
+            else if( t == SIGNALS_GRID_COLUMNS::COL_Y_SCALE
+                     || t == SIGNALS_GRID_COLUMNS::COL_SIGNAL_COLOR
+                     || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_1
+                     || t == SIGNALS_GRID_COLUMNS::COL_CURSOR_2
                      || t > SIGNALS_GRID_COLUMNS::COL_CURSOR_2 )
             {
                 attr->SetEditor( nullptr );
@@ -2565,100 +2582,104 @@ void SIMULATOR_FRAME_UI::updateSignalsGrid()
 
 void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
 {
-    auto quoteNetNames = [&]( wxString aExpression ) -> wxString
-    {
-        std::vector<bool> mask( aExpression.length(), false );
-
-        auto isNetnameChar = []( wxUniChar aChar ) -> bool
-        {
-            wxUint32 value = aChar.GetValue();
-
-            if( ( value >= '0' && value <= '9' ) || ( value >= 'A' && value <= 'Z' )
-                || ( value >= 'a' && value <= 'z' ) )
+    auto quoteNetNames =
+            [&]( wxString aExpression ) -> wxString
             {
-                return true;
-            }
+                std::vector<bool> mask( aExpression.length(), false );
 
-            switch( value )
-            {
-            case '_':
-            case '/':
-            case '+':
-            case '-':
-            case '~':
-            case '.': return true;
-            default: break;
-            }
+                auto isNetnameChar =
+                        []( wxUniChar aChar ) -> bool
+                        {
+                            wxUint32 value = aChar.GetValue();
 
-            return false;
-        };
+                            if( ( value >= '0' && value <= '9' ) || ( value >= 'A' && value <= 'Z' )
+                                || ( value >= 'a' && value <= 'z' ) )
+                            {
+                                return true;
+                            }
 
-        for( const wxString& netname : m_netnames )
-        {
-            size_t pos = aExpression.find( netname );
+                            switch( value )
+                            {
+                            case '_':
+                            case '/':
+                            case '+':
+                            case '-':
+                            case '~':
+                            case '.':
+                                return true;
+                            default:
+                                break;
+                            }
 
-            while( pos != wxString::npos )
-            {
-                for( size_t i = 0; i < netname.length(); ++i )
-                    mask[pos + i] = true; // Mark the positions of the netname
+                            return false;
+                        };
 
-                pos = aExpression.find( netname, pos + 1 ); // Find the next occurrence
-            }
-        }
-
-        for( size_t i = 0; i < aExpression.length(); ++i )
-        {
-            if( !mask[i] || ( i > 0 && mask[i - 1] ) )
-                continue;
-
-            size_t j = i + 1;
-
-            while( j < aExpression.length() )
-            {
-                if( mask[j] )
+                for( const wxString& netname : m_netnames )
                 {
-                    ++j;
-                    continue;
+                    size_t pos = aExpression.find( netname );
+
+                    while( pos != wxString::npos )
+                    {
+                        for( size_t i = 0; i < netname.length(); ++i )
+                            mask[pos + i] = true; // Mark the positions of the netname
+
+                        pos = aExpression.find( netname, pos + 1 ); // Find the next occurrence
+                    }
                 }
 
-                if( isNetnameChar( aExpression[j] ) )
+                for( size_t i = 0; i < aExpression.length(); ++i )
                 {
-                    mask[j] = true;
-                    ++j;
+                    if( !mask[i] || ( i > 0 && mask[i - 1] ) )
+                        continue;
+
+                    size_t j = i + 1;
+
+                    while( j < aExpression.length() )
+                    {
+                        if( mask[j] )
+                        {
+                            ++j;
+                            continue;
+                        }
+
+                        if( isNetnameChar( aExpression[j] ) )
+                        {
+                            mask[j] = true;
+                            ++j;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
-                else
+
+                wxString quotedNetnames = "";
+                bool     startQuote = true;
+
+                // put quotes around all the positions that were found above
+                for( size_t i = 0; i < aExpression.length(); i++ )
                 {
-                    break;
+                    if( mask[i] && startQuote )
+                    {
+                        quotedNetnames = quotedNetnames + "\"";
+                        startQuote = false;
+                    }
+                    else if( !mask[i] && !startQuote )
+                    {
+                        quotedNetnames = quotedNetnames + "\"";
+                        startQuote = true;
+                    }
+
+                    wxString ch = aExpression[i];
+                    quotedNetnames = quotedNetnames + ch;
                 }
-            }
-        }
 
-        wxString quotedNetnames = "";
-        bool     startQuote = true;
+                if( !startQuote )
+                    quotedNetnames = quotedNetnames + "\"";
 
-        // put quotes around all the positions that were found above
-        for( size_t i = 0; i < aExpression.length(); i++ )
-        {
-            if( mask[i] && startQuote )
-            {
-                quotedNetnames = quotedNetnames + "\"";
-                startQuote = false;
-            }
-            else if( !mask[i] && !startQuote )
-            {
-                quotedNetnames = quotedNetnames + "\"";
-                startQuote = true;
-            }
-
-            wxString ch = aExpression[i];
-            quotedNetnames = quotedNetnames + ch;
-        }
-
-        if( !startQuote )
-            quotedNetnames = quotedNetnames + "\"";
-
-        return quotedNetnames;
-    };
+                return quotedNetnames;
+            };
 
     for( const auto& [id, signal] : m_userDefinedSignals )
     {
@@ -2773,8 +2794,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
         for( const nlohmann::json& tab_js : js["tabs"] )
         {
             wxString simCommand;
-            int      simOptions =
-                    NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS;
+            int      simOptions = NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS
+                                    | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS;
 
             if( !tab_js.contains( "commands" ) || !tab_js["commands"].is_array() )
                 continue;
@@ -2943,41 +2964,42 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
         for( int yy = 0; yy <= ( tempCustomCursorsCnt - m_customCursorsCnt ); yy++ )
             CreateNewCursor();
 
-        auto addCursor = [=, this]( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace, const wxString& aSignalName, int aCursorId,
-                                    const nlohmann::json& aCursor_js )
-        {
-            if( aCursorId >= 1 )
-            {
-                aPlotTab->EnableCursor( aTrace, aCursorId, aSignalName );
-
-                // tolerate a missing or null position from an older workbook saved
-                // with a non-finite cursor coordinate
-                nlohmann::json position = aCursor_js.value( "position", nlohmann::json() );
-
-                if( position.is_number() )
+        auto addCursor =
+                [=, this]( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace, const wxString& aSignalName,
+                           int aCursorId, const nlohmann::json& aCursor_js )
                 {
-                    if( CURSOR* cursor = aTrace->GetCursor( aCursorId ) )
-                        cursor->SetCoordX( position.get<double>() );
-                }
-            }
+                    if( aCursorId >= 1 )
+                    {
+                        aPlotTab->EnableCursor( aTrace, aCursorId, aSignalName );
 
-            wxString xFormat( aCursor_js.value( "x_format", "" ) );
-            wxString yFormat( aCursor_js.value( "y_format", "" ) );
-            int      formatSlot;
+                        // tolerate a missing or null position from an older workbook saved
+                        // with a non-finite cursor coordinate
+                        nlohmann::json position = aCursor_js.value( "position", nlohmann::json() );
 
-            if( aCursorId == -1 )
-                formatSlot = 2; // we are a "cursorD"
-            else if( aCursorId < 3 )
-                formatSlot = aCursorId - 1;
-            else
-                formatSlot = aCursorId;
+                        if( position.is_number() )
+                        {
+                            if( CURSOR* cursor = aTrace->GetCursor( aCursorId ) )
+                                cursor->SetCoordX( position.get<double>() );
+                        }
+                    }
 
-            if( !xFormat.IsEmpty() )
-                m_cursorFormatsDyn[formatSlot][0].FromString( xFormat );
+                    wxString xFormat( aCursor_js.value( "x_format", "" ) );
+                    wxString yFormat( aCursor_js.value( "y_format", "" ) );
+                    int      formatSlot;
 
-            if( !yFormat.IsEmpty() )
-                m_cursorFormatsDyn[formatSlot][1].FromString( yFormat );
-        };
+                    if( aCursorId == -1 )
+                        formatSlot = 2; // we are a "cursorD"
+                    else if( aCursorId < 3 )
+                        formatSlot = aCursorId - 1;
+                    else
+                        formatSlot = aCursorId;
+
+                    if( !xFormat.IsEmpty() )
+                        m_cursorFormatsDyn[formatSlot][0].FromString( xFormat );
+
+                    if( !yFormat.IsEmpty() )
+                        m_cursorFormatsDyn[formatSlot][1].FromString( yFormat );
+                };
 
         for( const auto& [plotTab, traces_js] : traceInfo )
         {
@@ -3145,33 +3167,34 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
         if( !( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS ) )
             commands_js.push_back( ".kicad esavenone" );
 
-        nlohmann::json tab_js = nlohmann::json(
-                { { "analysis", SPICE_SIMULATOR::TypeToName( simType, true ) }, { "commands", commands_js } } );
+        nlohmann::json tab_js = nlohmann::json( { { "analysis", SPICE_SIMULATOR::TypeToName( simType, true ) },
+                                                  { "commands", commands_js } } );
 
         if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab ) )
         {
             nlohmann::json traces_js = nlohmann::json::array();
 
-            auto findSignalName = [&]( const wxString& aVectorName ) -> wxString
-            {
-                wxString vectorName;
-                wxString suffix;
+            auto findSignalName =
+                    [&]( const wxString& aVectorName ) -> wxString
+                    {
+                        wxString vectorName;
+                        wxString suffix;
 
-                if( aVectorName.EndsWith( _( " (phase)" ) ) )
-                    suffix = _( " (phase)" );
-                else if( aVectorName.EndsWith( _( " (gain)" ) ) )
-                    suffix = _( " (gain)" );
+                        if( aVectorName.EndsWith( _( " (phase)" ) ) )
+                            suffix = _( " (phase)" );
+                        else if( aVectorName.EndsWith( _( " (gain)" ) ) )
+                            suffix = _( " (gain)" );
 
-                vectorName = aVectorName.Left( aVectorName.Length() - suffix.Length() );
+                        vectorName = aVectorName.Left( aVectorName.Length() - suffix.Length() );
 
-                for( const auto& [id, signal] : m_userDefinedSignals )
-                {
-                    if( vectorName == vectorNameFromSignalId( id ) )
-                        return signal + suffix;
-                }
+                        for( const auto& [id, signal] : m_userDefinedSignals )
+                        {
+                            if( vectorName == vectorNameFromSignalId( id ) )
+                                return signal + suffix;
+                        }
 
-                return aVectorName;
-            };
+                        return aVectorName;
+                    };
 
             for( const auto& [name, trace] : plotTab->GetTraces() )
             {
@@ -3198,7 +3221,8 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 
             for( const auto& [measurement, format] : plotTab->Measurements() )
             {
-                measurements_js.push_back( nlohmann::json( { { "expr", measurement }, { "format", format } } ) );
+                measurements_js.push_back( nlohmann::json( { { "expr",   measurement },
+                                                             { "format", format } } ) );
             }
 
             tab_js[ "traces" ]          = traces_js;
@@ -3268,15 +3292,15 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 
             if( plotTab->IsLegendShown() )
             {
-                tab_js["legend"] = nlohmann::json(
-                        { { "x", plotTab->GetLegendPosition().x }, { "y", plotTab->GetLegendPosition().y } } );
+                tab_js["legend"] = nlohmann::json( { { "x", plotTab->GetLegendPosition().x },
+                                                     { "y", plotTab->GetLegendPosition().y } } );
             }
 
             mpWindow* plotWin = plotTab->GetPlotWin();
 
-            tab_js["margins"] = nlohmann::json( { { "left", plotWin->GetMarginLeft() },
-                                                  { "right", plotWin->GetMarginRight() },
-                                                  { "top", plotWin->GetMarginTop() },
+            tab_js["margins"] = nlohmann::json( { { "left",   plotWin->GetMarginLeft() },
+                                                  { "right",  plotWin->GetMarginRight() },
+                                                  { "top",    plotWin->GetMarginTop() },
                                                   { "bottom", plotWin->GetMarginBottom() } } );
         }
 
@@ -3326,14 +3350,16 @@ SIM_TRACE_TYPE SIMULATOR_FRAME_UI::getXAxisType( SIM_TYPE aType ) const
     switch( aType )
     {
     /// @todo SPT_LOG_FREQUENCY
-    case ST_AC: return SPT_LIN_FREQUENCY;
-    case ST_SP: return SPT_LIN_FREQUENCY;
-    case ST_FFT: return SPT_LIN_FREQUENCY;
-    case ST_DC: return SPT_SWEEP;
-    case ST_TRAN: return SPT_TIME;
+    case ST_AC:    return SPT_LIN_FREQUENCY;
+    case ST_SP:    return SPT_LIN_FREQUENCY;
+    case ST_FFT:   return SPT_LIN_FREQUENCY;
+    case ST_DC:    return SPT_SWEEP;
+    case ST_TRAN:  return SPT_TIME;
     case ST_NOISE: return SPT_LIN_FREQUENCY;
 
-    default: wxFAIL_MSG( wxString::Format( wxS( "Unhandled simulation type: %d" ), (int) aType ) ); return SPT_UNKNOWN;
+    default:
+        wxFAIL_MSG( wxString::Format( wxS( "Unhandled simulation type: %d" ), (int) aType ) );
+        return SPT_UNKNOWN;
     }
 }
 
@@ -3519,8 +3545,8 @@ void SIMULATOR_FRAME_UI::ToggleSmithChart()
 
             if( !seen )
             {
-                shownVectors.push_back(
-                        { stashed.vectorName, stashed.displayName, stashed.baseType, plotTab->GetDefaultView() } );
+                shownVectors.push_back( { stashed.vectorName, stashed.displayName, stashed.baseType,
+                                          plotTab->GetDefaultView() } );
             }
         }
     }
@@ -3664,26 +3690,25 @@ void SIMULATOR_FRAME_UI::onPlotClose( wxAuiNotebookEvent& event )
 
 void SIMULATOR_FRAME_UI::onPlotClosed( wxAuiNotebookEvent& event )
 {
-    CallAfter(
-            [this]()
-            {
-                rebuildSignalsList();
-                rebuildSignalsGrid( m_filter->GetValue() );
-                updatePlotCursors();
+    CallAfter( [this]()
+               {
+                   rebuildSignalsList();
+                   rebuildSignalsGrid( m_filter->GetValue() );
+                   updatePlotCursors();
 
-                //To avoid a current side effect in dynamic cursors while closing one out of many sim tabs
-                updateSignalsGrid();
+                   //To avoid a current side effect in dynamic cursors while closing one out of many sim tabs
+                   updateSignalsGrid();
 
-                SIM_TAB* panel = GetCurrentSimTab();
+                   SIM_TAB* panel = GetCurrentSimTab();
 
-                if( !panel || panel->GetSimType() != ST_OP )
-                {
-                    SCHEMATIC& schematic = m_schematicFrame->Schematic();
-                    schematic.ClearOperatingPoints();
-                    m_schematicFrame->RefreshOperatingPointDisplay();
-                    m_schematicFrame->GetCanvas()->Refresh();
-                }
-            } );
+                   if( !panel || panel->GetSimType() != ST_OP )
+                   {
+                       SCHEMATIC& schematic = m_schematicFrame->Schematic();
+                       schematic.ClearOperatingPoints();
+                       m_schematicFrame->RefreshOperatingPointDisplay();
+                       m_schematicFrame->GetCanvas()->Refresh();
+                   }
+               } );
 }
 
 
@@ -3982,13 +4007,14 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
         }
     };
 
-    auto formatValue = [this]( double aValue, int aCursorId, int aCol ) -> wxString
-    {
-        if( ( !m_simulatorFrame->SimFinished() && aCol == 1 ) || std::isnan( aValue ) )
-            return wxS( "--" );
-        else
-            return SPICE_VALUE( aValue ).ToString( m_cursorFormatsDyn[aCursorId][aCol] );
-    };
+    auto formatValue =
+            [this]( double aValue, int aCursorId, int aCol ) -> wxString
+            {
+                if( ( !m_simulatorFrame->SimFinished() && aCol == 1 ) || std::isnan( aValue ) )
+                    return wxS( "--" );
+                else
+                    return SPICE_VALUE( aValue ).ToString( m_cursorFormatsDyn[aCursorId][aCol] );
+            };
 
     for( const auto& [name, trace] : plotTab->GetTraces() )
     {
@@ -4378,11 +4404,13 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
             {
             case SPT_VOLTAGE: value.Append( wxS( "V" ) ); break;
             case SPT_CURRENT: value.Append( wxS( "A" ) ); break;
-            case SPT_POWER: value.Append( wxS( "W" ) ); break;
-            default: value.Append( wxS( "?" ) ); break;
+            case SPT_POWER:   value.Append( wxS( "W" ) ); break;
+            default:          value.Append( wxS( "?" ) ); break;
             }
 
-            msg.Printf( wxT( "%s%s\n" ), ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ), value );
+            msg.Printf( wxT( "%s%s\n" ),
+                        ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
+                        value );
 
             m_simConsole->AppendText( msg );
             m_simConsole->SetInsertionPointEnd();
