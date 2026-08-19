@@ -24,6 +24,7 @@
 #include <any>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <set>
 #include <vector>
 
@@ -101,6 +102,12 @@ public:
     bool SelectAll( const std::string& aTable, const std::string& aKey,
                     std::vector<ROW>& aResults );
 
+    void ClearCache( const std::string& aTable )
+    {
+        if( m_cache )
+            m_cache->Clear( aTable );
+    }
+
     std::string GetLastError() const { return m_lastError; }
 
 private:
@@ -129,6 +136,8 @@ private:
     long m_timeout;
 
     char m_quoteChar;
+
+    mutable std::mutex m_queryMutex;
 
     typedef DATABASE_CACHE<std::map<std::string, ROW>> DB_CACHE_TYPE;
 
