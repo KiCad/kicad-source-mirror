@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-17 15:37+0300\n"
-"PO-Revision-Date: 2026-08-19 13:54+0000\n"
+"PO-Revision-Date: 2026-08-19 20:46+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -32055,7 +32055,7 @@ msgstr "Upravte lokálny súbor v textovom editore"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
-msgstr "Pridať predvolené úložisko"
+msgstr "Pridať predvolený repozitár"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Fully qualified repository url:"
@@ -32063,15 +32063,15 @@ msgstr "Plne kvalifikovaná url repozitára:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 msgid "Add Repository"
-msgstr "Pridať úložisko"
+msgstr "Pridať repozitár"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
 msgid "Add repository"
-msgstr "Pridať úložisko"
+msgstr "Pridať repozitár"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:77
 msgid "Remove repository"
-msgstr "Odstrániť úložisko"
+msgstr "Odstrániť repozitár"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
@@ -32131,7 +32131,7 @@ msgstr "Odinštalovať"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
-msgstr "Úložisko (%d)"
+msgstr "Repozitár (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:169
 msgid "Apply Pending Changes"
@@ -32173,7 +32173,7 @@ msgstr "Balíček"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:88
 msgid "Repository"
-msgstr "Úložisko"
+msgstr "Repozitár"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
@@ -32360,7 +32360,7 @@ msgstr "Sťahovanie je príliš veľké."
 
 #: kicad/pcm/pcm.cpp:275
 msgid "Fetching repository"
-msgstr "Načítavam úložisko"
+msgstr "Načítavam repozitár"
 
 #: kicad/pcm/pcm.cpp:312
 #, c-format
@@ -32434,7 +32434,7 @@ msgstr "Príprava na načítanie úložísk"
 
 #: kicad/pcm/pcm.cpp:1198
 msgid "Fetching repository..."
-msgstr "Načítavam úložisko..."
+msgstr "Načítavam repozitár..."
 
 #: kicad/pcm/pcm.cpp:1211
 msgid "Reviewing packages..."
@@ -32460,7 +32460,7 @@ msgstr "Nepodarilo sa vytvoriť adresár pre sťahovanie!"
 #: kicad/pcm/pcm_task_manager.cpp:132
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Sťahovanie url balíčka: '%s'"
+msgstr "Sťahovanie balíčka z url: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:146
 #, c-format
@@ -32709,7 +32709,7 @@ msgstr "Pridať projekt do správy verzií..."
 
 #: kicad/project_tree_pane.cpp:1037
 msgid "Initialize a new repository"
-msgstr "Inicializovať nové úložisko"
+msgstr "Inicializovať nový repozitár"
 
 #: kicad/project_tree_pane.cpp:1040
 msgid "Configure Default Remote..."
