@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-17 15:37+0300\n"
-"PO-Revision-Date: 2026-08-18 11:29+0000\n"
+"PO-Revision-Date: 2026-08-19 13:54+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -9271,7 +9271,7 @@ msgstr "ロックしたアイテムの影"
 
 #: common/layer_id.cpp:157
 msgid "Courtyard collision shadow"
-msgstr "コートヤード衝突の領域"
+msgstr "コートヤード衝突の影"
 
 #: common/layer_id.cpp:158
 msgid "Board outline area"
@@ -9301,7 +9301,7 @@ msgstr "ライブラリ テーブル '%s' の読み込み中のエラー"
 #: common/lib_table_grid_tricks.cpp:62
 #, c-format
 msgid "Error loading library '%s'"
-msgstr "シンボル ライブラリ %s の読み込み中にエラー"
+msgstr "ライブラリ '%s' の読み込み中にエラー"
 
 #: common/lib_table_grid_tricks.cpp:111
 msgid "Edit Settings..."
@@ -9618,7 +9618,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"不正な lib_id（デザインブロックライブラリリンクID） \n"
+"不正な lib_id（ライブラリリンクID） \n"
 "ファイル: '%s'\n"
 "行: %d\n"
 "オフセット: %d"
@@ -19000,9 +19000,7 @@ msgstr "出力ディレクトリの作成に失敗しました。\n"
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
-msgstr ""
-"警告: 回路図にアノテーションのエラーがあります。回路図 エディターで修正してく"
-"ださい\n"
+msgstr "警告: 回路図に注釈のエラーがあります。回路図 エディターで修正してください\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:455
 #: eeschema/eeschema_jobs_handler.cpp:582
@@ -20077,7 +20075,7 @@ msgstr "「シミュレーションから除外」の設定が異なります。
 
 #: eeschema/lib_symbol.cpp:2423
 msgid "Exclude from bill of materials settings differ."
-msgstr "[部品表から除外] の設定が異なります。"
+msgstr "'部品表(BOM)から除外' の設定が異なります。"
 
 #: eeschema/lib_symbol.cpp:2432
 msgid "Exclude from board settings differ."
@@ -26854,7 +26852,7 @@ msgstr "選択したシンボルをシンボル エディターで開く"
 
 #: eeschema/tools/sch_actions.cpp:1080
 msgid "Set the exclude from bill of materials attribute"
-msgstr "[部品表から除外]の属性を設定"
+msgstr "'部品表(BOM)から除外' の属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1086
 msgid "Set the exclude from simulation attribute"
@@ -26862,7 +26860,7 @@ msgstr "[シミュレーションから除外]の属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1092
 msgid "Set the exclude from board attribute"
-msgstr "[部品表から除外]の属性を設定"
+msgstr "'基板から除外' の属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1098
 msgid "Set the exclude from position files attribute"
@@ -41903,7 +41901,7 @@ msgstr "線幅は０より大きくする必要があります。"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
-msgstr "最初:"
+msgstr "アウトセット（輪郭作成）:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:30
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:79
@@ -41916,7 +41914,7 @@ msgstr "外側をグリッドの倍数に丸める(可能な場合)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
-msgstr "これは矩形の最初ではないため不可能です."
+msgstr "これは矩形のアウトセット（輪郭作成）の場合だけ可能です。"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:43
 msgid "Round corners (when possible)"
@@ -41952,12 +41950,12 @@ msgstr "デフォルトのレイヤー"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 msgid "Delete source items after outset"
-msgstr "開始後に元のオブジェクトを削除する"
+msgstr "アウトセット（輪郭）作成後に元のオブジェクトを削除する"
 
 #: pcbnew/dialogs/dialog_outset_items_base.h:77
 #: pcbnew/tools/item_modification_routine.cpp:651
 msgid "Outset Items"
-msgstr "最初のアイテム"
+msgstr "アウトセット（輪郭作成）アイテム"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:183
 #: pcbnew/dialogs/dialog_pad_properties_base.h:322 pcbnew/pad.cpp:3448
@@ -50073,7 +50071,7 @@ msgstr ""
 msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
 msgstr ""
 "インポートされたフットプリントを突き合せできません: 当該KiCad フットプリント "
-"ライター プラグインがありません。"
+"ライター がありません。"
 
 #: pcbnew/footprint_import_reconciler.cpp:312
 #, c-format
@@ -56950,11 +56948,11 @@ msgstr "いくつかのポリゴンは交差することができません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:657
 msgid "Unable to outset the selected items."
-msgstr "選択した配線を最初にすることができません。"
+msgstr "選択したアイテムをアウトセット（輪郭作成）できません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:659
 msgid "Some of the items could not be outset."
-msgstr "いくつかのアイテムを最初にすることができません。"
+msgstr "いくつかのアイテムはアウトセット（輪郭作成）できませんでした。"
 
 #: pcbnew/tools/multichannel_tool.cpp:89
 msgid "(none)"
@@ -57160,11 +57158,11 @@ msgstr "選択した図形ラインから配線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:98
 msgid "Create Outsets from Selection..."
-msgstr "選択対象から最初を作成…"
+msgstr "選択対象からアウトセット（輪郭）を作成…"
 
 #: pcbnew/tools/pcb_actions.cpp:99
 msgid "Create outset lines from the selected item"
-msgstr "選択アイテムから最初のラインを作成"
+msgstr "選択アイテムからアウトセット（輪郭）を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:167
 msgid "Add Barcode"
@@ -57379,7 +57377,7 @@ msgstr "フットプリント エディターで開く"
 
 #: pcbnew/tools/pcb_actions.cpp:573
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "[部品表から除外]の設定を切り替え"
+msgstr "'部品表(BOM)から除外' の設定を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:579
 msgid "Toggle the exclude from position files attribute"
