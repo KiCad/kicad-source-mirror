@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-17 15:36+0300\n"
-"PO-Revision-Date: 2026-07-29 22:08+0000\n"
+"PO-Revision-Date: 2026-08-19 20:46+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -168,14 +168,13 @@ msgid "Loading 3D models..."
 msgstr "Načítavanie 3D modelov..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid "Load completed in %.3f s"
-msgstr "Ukončené za %s"
+msgstr "Načítanie ukončené za %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1172
-#, fuzzy
 msgid "Stopping background load..."
-msgstr "Tlačiť farba pozadia"
+msgstr "Ukončovanie načítavania v pozadí..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1891
 #: eeschema/libraries/legacy_symbol_library.cpp:535
@@ -206,7 +205,7 @@ msgstr "Načítavanie..."
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:442
 #, fuzzy
 msgid "Building hit-test scene..."
-msgstr "Tvorba výplne zón..."
+msgstr "Vytváranie hit-test scény..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:444
 msgid "Load Raytracing: board"
@@ -215,7 +214,7 @@ msgstr "Načítať Raytracing: doska"
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:678
 #, fuzzy
 msgid "Building hit-test scene: layers..."
-msgstr "Tvorba výplne zón..."
+msgstr "Vytváranie hit-test scény: vrstvy..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:680
 msgid "Load Raytracing: layers"
@@ -224,12 +223,12 @@ msgstr "Načítať Raytracing: vrstvy"
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:916
 #, fuzzy
 msgid "Building hit-test scene: 3D models..."
-msgstr "Načítavanie 3D modelov súčiastok..."
+msgstr "Vytváranie hit-test scény: 3D modely súčiastok..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1113
-#, c-format
+#, c-format, fuzzy
 msgid "Hit-test scene ready in %.3f s"
-msgstr ""
+msgstr "Hit-test scéna bude pripravená za %.3f s"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1117
 #, c-format
@@ -3206,11 +3205,10 @@ msgstr ""
 "\"%s\"?"
 
 #: common/dialogs/dialog_fields_table.cpp:1046
-#, fuzzy
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
-"Nie je možné vytvoriť relatívnu cestu (cieľový objem sa líši od objemu "
-"súboru na doske)!"
+"Cestu nie je možné nastaviť ako relatívnu (cieľový zväzok sa líši od "
+"súborového zväzku)!"
 
 #: common/dialogs/dialog_fields_table.cpp:1059
 msgid "Unsaved data"
@@ -3437,15 +3435,17 @@ msgid "Keep line breaks"
 msgstr "Zachovať zalomenia riadkov"
 
 #: common/dialogs/dialog_fields_table_base.cpp:324
-#, fuzzy
 msgid "Include byte order mark"
-msgstr "Zahrňte okrajovú vrstvu dosky"
+msgstr "Zahrnúť značku radenia bajtov"
 
 #: common/dialogs/dialog_fields_table_base.cpp:325
 msgid ""
 "Can increase compatibility with older software that does not import UTF-8 "
 "correctly, such as Excel. Can worsen compatibility in some cases."
 msgstr ""
+"Toto môže zvýšiť kompatibilitu so starším softvérom, ktorý neimportuje UTF-8 "
+"správne, ako napríklad Excel. V niektorých prípadoch môže naopak zhoršiť "
+"kompatibilitu."
 
 #: common/dialogs/dialog_fields_table_base.cpp:332
 msgid "Format presets:"
@@ -3483,9 +3483,8 @@ msgid "Apply, Save Schematic && Continue"
 msgstr "Použiť, uložiť schému a pokračovať"
 
 #: common/dialogs/dialog_fields_table_base.h:149
-#, fuzzy
 msgid "Fields Table"
-msgstr "Tabuľka polí symbolov"
+msgstr "Tabuľka polí"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
 msgid "Generate Database Connection"
@@ -6691,9 +6690,8 @@ msgid "Always"
 msgstr "Vždy"
 
 #: common/dialogs/panel_snapping_base.cpp:17
-#, fuzzy
 msgid "Grid Snapping"
-msgstr "Nastavenia mriežky"
+msgstr "Prichytávanie mriežky"
 
 #: common/dialogs/panel_snapping_base.cpp:29
 msgid "Snap to grid:"
@@ -6704,9 +6702,8 @@ msgid "When grid shown"
 msgstr "Ak je mriežka zobrazená"
 
 #: common/dialogs/panel_snapping_base.cpp:37
-#, fuzzy
 msgid "Snap the cursor to the active grid"
-msgstr "Prichytávať k objektom len na aktívnej vrstve"
+msgstr "Prichytiť kurzor k aktívnej mriežke"
 
 #: common/dialogs/panel_snapping_base.cpp:47 pcbnew/tools/pcb_control.cpp:2416
 msgid "Object Snapping"
@@ -6737,45 +6734,44 @@ msgid "Capture cursor when the mouse approaches graphical control points"
 msgstr "Zachyťte kurzor, keď sa myš priblíži ku grafickým kontrolným bodom"
 
 #: common/dialogs/panel_snapping_base.cpp:97
-#, fuzzy
 msgid "Snap to objects on all layers"
-msgstr "Prichytávať k objektom na všetkých vrstvách"
+msgstr "Prichytiť k objektom na všetkých vrstvách"
 
 #: common/dialogs/panel_snapping_base.cpp:98
-#, fuzzy
 msgid "When unchecked, only objects on the active layer are snapped to"
-msgstr "Zapne prichytávanie k objektom len na aktívnej vrstve"
+msgstr "Ak nie je začiarknuté, prichytí sa iba k objektom na aktívnej vrstve"
 
 #: common/dialogs/panel_snapping_base.cpp:108
-#, fuzzy
 msgid "Snap Inference"
-msgstr "Horná referencia"
+msgstr "Odvodzovanie prichytenia"
 
 #: common/dialogs/panel_snapping_base.cpp:117
-#, fuzzy
 msgid "Object geometry"
-msgstr "Objekt A"
+msgstr "Geometria objektu"
 
 #: common/dialogs/panel_snapping_base.cpp:118
 msgid "Snap to endpoints, midpoints, centres and edges of existing objects"
 msgstr ""
+"Prichytiť ku koncovým bodom, stredným bodom, stredom a hranám existujúcich "
+"objektov"
 
 #: common/dialogs/panel_snapping_base.cpp:122
-#, fuzzy
 msgid "Construction extensions"
-msgstr "Vytváranie vyrovnávacích pamätí"
+msgstr "Pomocné predĺženia"
 
 #: common/dialogs/panel_snapping_base.cpp:123
 msgid "Snap to virtual extensions of lines and arcs"
-msgstr ""
+msgstr "Prichytávať k virtuálnym predĺženiam čiar a oblúkov"
 
 #: common/dialogs/panel_snapping_base.cpp:127
 msgid "Tangent and normal contacts"
-msgstr ""
+msgstr "Tangenciálne a normálové kontakty"
 
 #: common/dialogs/panel_snapping_base.cpp:128
 msgid "Snap where the dragged geometry meets an arc tangentially or normally"
 msgstr ""
+"Prichytiť v mieste, kde sa presúvaná geometria dotýka oblúka dotyčne alebo "
+"kolmo"
 
 #: common/dialogs/panel_snapping_base.cpp:132
 msgid "Alignment and equal spacing"
@@ -11609,7 +11605,7 @@ msgstr "Pridať položky do skupiny"
 
 #: common/tool/actions.cpp:219
 msgid "Remove Items"
-msgstr "Vymazať Predmet"
+msgstr "Odstrániť položky"
 
 #: common/tool/actions.cpp:220
 msgid "Remove items from group"
@@ -24485,7 +24481,7 @@ msgid ""
 "The file does not contain a 'Views' storage; it is not a supported OrCAD "
 "Capture design."
 msgstr ""
-"Súbor neobsahuje úložisko „Zobrazenia“; nie je to podporovaný návrh OrCAD "
+"Súbor neobsahuje úložisko 'Zobrazenia'; nie je to podporovaný návrh OrCAD "
 "Capture."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:309
@@ -35817,7 +35813,7 @@ msgstr ""
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
-msgstr "Pridať predvolené úložisko"
+msgstr "Pridať predvolený repozitár"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Fully qualified repository url:"
@@ -35825,15 +35821,15 @@ msgstr "Plne kvalifikovaná url repozitára:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 msgid "Add Repository"
-msgstr "Pridať úložisko"
+msgstr "Pridať repozitár"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
 msgid "Add repository"
-msgstr "Pridať úložisko"
+msgstr "Pridať repozitár"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:77
 msgid "Remove repository"
-msgstr "Odstrániť úložisko"
+msgstr "Odstrániť repozitár"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
@@ -35893,7 +35889,7 @@ msgstr "Odinštalovať"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
-msgstr "Úložisko (%d)"
+msgstr "Repozitár (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:168
 msgid "Apply Pending Changes"
@@ -35940,7 +35936,7 @@ msgstr "Balíček"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:88
 msgid "Repository"
-msgstr "Úložisko"
+msgstr "Repozitár"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
@@ -36136,7 +36132,7 @@ msgstr "Sťahovanie je príliš veľké."
 
 #: kicad/pcm/pcm.cpp:275
 msgid "Fetching repository"
-msgstr "Načítavam úložisko"
+msgstr "Načítavam repozitár"
 
 #: kicad/pcm/pcm.cpp:312
 #, c-format
@@ -36210,7 +36206,7 @@ msgstr "Príprava na načítanie úložísk"
 
 #: kicad/pcm/pcm.cpp:1220
 msgid "Fetching repository..."
-msgstr "Načítavam úložisko..."
+msgstr "Načítavam repozitár..."
 
 #: kicad/pcm/pcm.cpp:1233
 msgid "Reviewing packages..."
@@ -36236,7 +36232,7 @@ msgstr "Nepodarilo sa vytvoriť adresár pre sťahovanie!"
 #: kicad/pcm/pcm_task_manager.cpp:132
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Sťahovanie url balíčka: '%s'"
+msgstr "Sťahovanie balíčka z url: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:146
 #, c-format
@@ -36485,7 +36481,7 @@ msgstr "Pridať projekt do správy verzií..."
 
 #: kicad/project_tree_pane.cpp:1034
 msgid "Initialize a new repository"
-msgstr "Inicializovať nové úložisko"
+msgstr "Inicializovať nový repozitár"
 
 #: kicad/project_tree_pane.cpp:1037
 msgid "Configure Default Remote..."
@@ -47638,7 +47634,7 @@ msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Ak je deaktivované, s prekovmi sa zaobchádza ako s nepohyblivými predmetmi a "
+"Ak je deaktivované, s prekovmi sa zaobchádza ako s nepohyblivými objektami a "
 "budú sa obchádzať namiesto odsúvať."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
@@ -65698,7 +65694,7 @@ msgstr "Ukázať puzdrá, ktoré sú na prednej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Footprints Back"
-msgstr "Puzdra späť"
+msgstr "Zadné puzdrá"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show footprints that are on board's back"
@@ -66016,7 +66012,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:1056
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 msgid "Objects"
-msgstr "Predmety"
+msgstr "Objekty"
 
 #: pcbnew/widgets/appearance_controls.cpp:1684
 msgid "Double click or middle click for color change, right click for menu"
