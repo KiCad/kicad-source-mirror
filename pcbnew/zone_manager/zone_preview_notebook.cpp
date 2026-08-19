@@ -23,6 +23,7 @@
  */
 
 #include "zone_preview_notebook.h"
+#include <memory>
 #include <wx/debug.h>
 #include <wx/imaglist.h>
 #include <wx/panel.h>
@@ -59,7 +60,8 @@ public:
     {
         SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
 
-        m_canvas = new ZONE_PREVIEW_CANVAS( aBoard, aZone->Clone( aLayer ), aLayer, this, aOpts, aGalType );
+        m_canvas = new ZONE_PREVIEW_CANVAS( aBoard, std::unique_ptr<ZONE>( aZone->Clone( aLayer ) ), aLayer, this,
+                                            aOpts, aGalType );
         GetSizer()->Add( m_canvas, 1, wxEXPAND );
         Layout();
         GetSizer()->Fit( this );
@@ -127,8 +129,9 @@ void ZONE_PREVIEW_NOTEBOOK::OnZoneSelectionChanged( ZONE* aZone )
         }
     }
 
-    while( GetPageCount() )
-        RemovePage( 0 );
+    // Detaching a page destroys the native window under its GAL canvas but leaves the canvas
+    // repainting into it, so the pages have to be destroyed outright
+    DeleteAllPages();
 
     if( !aZone )
         return;
@@ -156,6 +159,10 @@ void ZONE_PREVIEW_NOTEBOOK::OnZoneSelectionChanged( ZONE* aZone )
             preferredPage = page;
     }
 
+    // A zone on a rescue layer has no UI order, so it yields no pages and nothing to select
+    if( GetPageCount() == 0 )
+        return;
+
     if( !preferredPage )
         preferredPage = static_cast<ZONE_PREVIEW_NOTEBOOK_PAGE*>( GetPage( 0 ) );
 
@@ -168,7 +175,6 @@ void ZONE_PREVIEW_NOTEBOOK::OnZoneSelectionChanged( ZONE* aZone )
 
 void ZONE_PREVIEW_NOTEBOOK::OnPageChanged( wxNotebookEvent& aEvent )
 {
-    SetSelection( aEvent.GetSelection() );
     aEvent.Skip();
 
     // Reinit canvas size parameters and display
