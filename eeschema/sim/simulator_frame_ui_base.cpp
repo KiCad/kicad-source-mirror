@@ -94,7 +94,7 @@ SIMULATOR_FRAME_UI_BASE::SIMULATOR_FRAME_UI_BASE( wxWindow* parent, wxWindowID i
 	m_signalsGrid = new WX_GRID( m_panelSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_signalsGrid->CreateGrid( 0, 5 );
+	m_signalsGrid->CreateGrid( 0, 6 );
 	m_signalsGrid->EnableEditing( true );
 	m_signalsGrid->EnableGridLines( true );
 	m_signalsGrid->EnableDragGridSize( false );
@@ -103,16 +103,18 @@ SIMULATOR_FRAME_UI_BASE::SIMULATOR_FRAME_UI_BASE( wxWindow* parent, wxWindowID i
 	// Columns
 	m_signalsGrid->SetColSize( 0, 207 );
 	m_signalsGrid->SetColSize( 1, 33 );
-	m_signalsGrid->SetColSize( 2, 38 );
-	m_signalsGrid->SetColSize( 3, 55 );
+	m_signalsGrid->SetColSize( 2, 55 );
+	m_signalsGrid->SetColSize( 3, 38 );
 	m_signalsGrid->SetColSize( 4, 55 );
+	m_signalsGrid->SetColSize( 5, 55 );
 	m_signalsGrid->EnableDragColMove( false );
 	m_signalsGrid->EnableDragColSize( true );
 	m_signalsGrid->SetColLabelValue( 0, _("Signal") );
 	m_signalsGrid->SetColLabelValue( 1, _("Plot") );
-	m_signalsGrid->SetColLabelValue( 2, _("Color") );
-	m_signalsGrid->SetColLabelValue( 3, _("Cursor 1") );
-	m_signalsGrid->SetColLabelValue( 4, _("Cursor 2") );
+	m_signalsGrid->SetColLabelValue( 2, _("Y Scale") );
+	m_signalsGrid->SetColLabelValue( 3, _("Color") );
+	m_signalsGrid->SetColLabelValue( 4, _("Cursor 1") );
+	m_signalsGrid->SetColLabelValue( 5, _("Cursor 2") );
 	m_signalsGrid->SetColLabelSize( -1 );
 	m_signalsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

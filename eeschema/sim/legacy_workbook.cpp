@@ -44,7 +44,9 @@ void SIMULATOR_FRAME_UI::parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace
                 cursor->SetCoordX( x );
 
                 aTrace->SetCursor( aCursorId, cursor );
-                aPlotTab->GetPlotWin()->AddLayer( cursor );
+
+                if( SIM_VIEW* view = aTrace->GetView() )
+                    view->AddLayer( cursor );
             };
 
     wxArrayString items = wxSplit( aParams, '|' );
@@ -320,7 +322,7 @@ bool SIMULATOR_FRAME_UI::loadLegacyWorkbook( const wxString& aPath )
             else
             {
                 wxString vectorName = vectorNameFromSignalName( plotTab, signalName, nullptr );
-                TRACE*   trace = plotTab->GetOrAddTrace( vectorName, (int) traceType );
+                TRACE*   trace = plotTab->GetOrAddTrace( vectorName, (int) traceType, plotTab->GetDefaultView() );
 
                 if( version >= 4 && trace )
                     parseTraceParams( plotTab, trace, signalName, param );

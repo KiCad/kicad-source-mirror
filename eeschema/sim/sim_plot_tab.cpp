@@ -282,9 +282,10 @@ bool SMITH_GRID::GetChartView( mpWindow& aWindow, double aZoom, const wxRealPoin
 
 static bool smithView( mpWindow& aWindow, SMITH_VIEW& aView )
 {
-    SIM_PLOT_TAB* tab = dynamic_cast<SIM_PLOT_TAB*>( aWindow.GetParent() );
-    double        zoom = tab ? tab->GetSmithZoom() : 1.0;
-    wxRealPoint   pan = tab ? tab->GetSmithPan() : wxRealPoint( 0.0, 0.0 );
+    // the layers of a Smith chart are drawn on the SIM_VIEW carrying its own pan and zoom
+    SIM_VIEW*   view = dynamic_cast<SIM_VIEW*>( &aWindow );
+    double      zoom = view ? view->GetSmithZoom() : 1.0;
+    wxRealPoint pan = view ? view->GetSmithPan() : wxRealPoint( 0.0, 0.0 );
 
     return SMITH_GRID::GetChartView( aWindow, zoom, pan, aView );
 }
@@ -1301,85 +1302,66 @@ void CURSOR::UpdateReference()
 }
 
 
-SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
-        SIM_TAB( aSimCommand, parent ),
+SIM_VIEW::SIM_VIEW( SIM_PLOT_TAB* aPlotTab, wxWindow* aParent ) :
+        mpWindow( aParent, wxID_ANY ),
         m_axis_x( nullptr ),
         m_axis_y1( nullptr ),
         m_axis_y2( nullptr ),
         m_axis_y3( nullptr ),
+        m_legend( nullptr ),
+        m_plotTab( aPlotTab ),
         m_smithGrid( nullptr ),
-        m_dotted_cp( false ),
-        m_smithMode( false ),
+        m_smithChart( false ),
         m_smithZoom( 1.0 ),
         m_smithPanning( false ),
         m_smithLeftSkipped( false )
 {
-    m_sizer   = new wxBoxSizer( wxVERTICAL );
-    m_plotWin = new mpWindow( this, wxID_ANY );
-
-    m_plotWin->LimitView( true );
-    m_plotWin->SetMargins( 30, 70, 45, 70 );
-    UpdatePlotColors();
-
-    // Smith-mode pan/zoom, these run before mpWindow's handlers and skip when not in Smith mode
-    m_plotWin->Bind( wxEVT_MOUSEWHEEL, &SIM_PLOT_TAB::onSmithMouseWheel, this );
-    m_plotWin->Bind( wxEVT_MAGNIFY, &SIM_PLOT_TAB::onSmithMagnify, this );
-    m_plotWin->Bind( wxEVT_MIDDLE_DOWN, &SIM_PLOT_TAB::onSmithMiddleDown, this );
-    m_plotWin->Bind( wxEVT_LEFT_DOWN, &SIM_PLOT_TAB::onSmithLeftDown, this );
-    m_plotWin->Bind( wxEVT_MOTION, &SIM_PLOT_TAB::onSmithMotion, this );
-    m_plotWin->Bind( wxEVT_LEFT_UP, &SIM_PLOT_TAB::onSmithLeftUp, this );
-    m_plotWin->Bind( wxEVT_LEFT_DCLICK, &SIM_PLOT_TAB::onSmithDClick, this );
-    m_plotWin->Bind( wxEVT_RIGHT_DOWN, &SIM_PLOT_TAB::onSmithRightDown, this );
-    m_plotWin->Bind( wxEVT_RIGHT_UP, &SIM_PLOT_TAB::onSmithRightUp, this );
+    // Smith-mode pan/zoom, these run before mpWindow's handlers and skip when not a Smith chart
+    Bind( wxEVT_MOUSEWHEEL, &SIM_VIEW::onSmithMouseWheel, this );
+    Bind( wxEVT_MAGNIFY, &SIM_VIEW::onSmithMagnify, this );
+    Bind( wxEVT_MIDDLE_DOWN, &SIM_VIEW::onSmithMiddleDown, this );
+    Bind( wxEVT_LEFT_DOWN, &SIM_VIEW::onSmithLeftDown, this );
+    Bind( wxEVT_MOTION, &SIM_VIEW::onSmithMotion, this );
+    Bind( wxEVT_LEFT_UP, &SIM_VIEW::onSmithLeftUp, this );
+    Bind( wxEVT_LEFT_DCLICK, &SIM_VIEW::onSmithDClick, this );
+    Bind( wxEVT_RIGHT_DOWN, &SIM_VIEW::onSmithRightDown, this );
+    Bind( wxEVT_RIGHT_UP, &SIM_VIEW::onSmithRightUp, this );
 
     // route the context-menu zoom commands to the Smith view
     for( int id : { mpID_ZOOM_IN, mpID_ZOOM_OUT, mpID_FIT, mpID_CENTER } )
-        m_plotWin->Bind( wxEVT_MENU, &SIM_PLOT_TAB::onSmithMenuCommand, this, id );
-
-    updateAxes();
-
-    // a mpInfoLegend displays le name of traces on the left top panel corner:
-    m_legend = new mpInfoLegend( wxRect( 0, 0, 200, 40 ), wxTRANSPARENT_BRUSH );
-    m_legend->SetVisible( false );
-    m_plotWin->AddLayer( m_legend );
-    m_LastLegendPosition = m_legend->GetPosition();
-
-    m_plotWin->EnableDoubleBuffer( true );
-    m_plotWin->UpdateAll();
-
-    m_sizer->Add( m_plotWin, 1, wxALL | wxEXPAND, 1 );
-    SetSizer( m_sizer );
+        Bind( wxEVT_MENU, &SIM_VIEW::onSmithMenuCommand, this, id );
 }
 
 
-SIM_PLOT_TAB::~SIM_PLOT_TAB()
+void SIM_VIEW::OnXViewChanged()
 {
-    // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
+    if( m_plotTab )
+        m_plotTab->SyncXView( this );
 }
 
 
-void SIM_PLOT_TAB::SetY1Scale( bool aLock, double aMin, double aMax )
+void SIM_VIEW::SetY1Scale( bool aLock, double aMin, double aMax )
 {
     wxCHECK( m_axis_y1, /* void */ );
     m_axis_y1->SetAxisMinMax( aLock, aMin, aMax );
 }
 
 
-void SIM_PLOT_TAB::SetY2Scale( bool aLock, double aMin, double aMax )
+void SIM_VIEW::SetY2Scale( bool aLock, double aMin, double aMax )
 {
     wxCHECK( m_axis_y2, /* void */ );
     m_axis_y2->SetAxisMinMax( aLock, aMin, aMax );
 }
 
 
-void SIM_PLOT_TAB::SetY3Scale( bool aLock, double aMin, double aMax )
+void SIM_VIEW::SetY3Scale( bool aLock, double aMin, double aMax )
 {
     wxCHECK( m_axis_y3, /* void */ );
     m_axis_y3->SetAxisMinMax( aLock, aMin, aMax );
 }
 
 
-wxString SIM_PLOT_TAB::GetUnitsX() const
+wxString SIM_VIEW::GetUnitsX() const
 {
     LOG_SCALE<mpScaleXLog>* logScale = dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x );
     LIN_SCALE<mpScaleX>*    linScale = dynamic_cast<LIN_SCALE<mpScaleX>*>( m_axis_x );
@@ -1393,7 +1375,7 @@ wxString SIM_PLOT_TAB::GetUnitsX() const
 }
 
 
-wxString SIM_PLOT_TAB::GetUnitsY1() const
+wxString SIM_VIEW::GetUnitsY1() const
 {
     LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y1 );
 
@@ -1404,7 +1386,7 @@ wxString SIM_PLOT_TAB::GetUnitsY1() const
 }
 
 
-wxString SIM_PLOT_TAB::GetUnitsY2() const
+wxString SIM_VIEW::GetUnitsY2() const
 {
     LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y2 );
 
@@ -1415,7 +1397,7 @@ wxString SIM_PLOT_TAB::GetUnitsY2() const
 }
 
 
-wxString SIM_PLOT_TAB::GetUnitsY3() const
+wxString SIM_VIEW::GetUnitsY3() const
 {
     LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y3 );
 
@@ -1426,144 +1408,192 @@ wxString SIM_PLOT_TAB::GetUnitsY3() const
 }
 
 
-void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
+wxString SIM_VIEW::GetUnitsForTrace( TRACE* aTrace ) const
 {
-    switch( GetSimType() )
+    if( m_plotTab->GetSimType() == ST_AC )
     {
-        case ST_AC:
-            if( !m_axis_x )
+        if( aTrace->GetType() & SPT_AC_PHASE )
+            return GetUnitsY2();
+        else
+            return GetUnitsY1();
+    }
+    else
+    {
+        if( aTrace->GetType() & SPT_POWER )
+            return GetUnitsY3();
+        else if( aTrace->GetType() & SPT_CURRENT )
+            return GetUnitsY2();
+        else
+            return GetUnitsY1();
+    }
+}
+
+
+int SIM_VIEW::GetAxisSlot( TRACE* aTrace ) const
+{
+    if( ( aTrace->GetType() & SPT_AC_PHASE )
+        || ( ( m_plotTab->GetSimType() != ST_AC ) && ( aTrace->GetType() & SPT_CURRENT ) ) )
+    {
+        return 2;
+    }
+    else if( aTrace->GetType() & SPT_POWER )
+    {
+        return 3;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+
+mpScaleY* SIM_VIEW::GetAxisBySlot( int aSlot ) const
+{
+    switch( aSlot )
+    {
+    case 2: return m_axis_y2;
+    case 3: return m_axis_y3;
+    default: return m_axis_y1;
+    }
+}
+
+
+void SIM_VIEW::updateAxes( int aNewTraceType )
+{
+    switch( m_plotTab->GetSimType() )
+    {
+    case ST_AC:
+        if( !m_axis_x )
+        {
+            m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+            m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+            AddLayer( m_axis_x );
+
+            m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dB" ), mpALIGN_LEFT );
+            m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+            AddLayer( m_axis_y1 );
+
+            m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "°" ), mpALIGN_RIGHT );
+            m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
+            m_axis_y2->SetMasterScale( m_axis_y1 );
+            AddLayer( m_axis_y2 );
+        }
+
+        m_axis_x->SetName( _( "Frequency" ) );
+        m_axis_y1->SetName( _( "Gain" ) );
+        m_axis_y2->SetName( _( "Phase" ) );
+        break;
+
+    case ST_SP:
+        if( !m_axis_x )
+        {
+            m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+            m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+            AddLayer( m_axis_x );
+
+            m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "" ), mpALIGN_LEFT );
+            m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+            AddLayer( m_axis_y1 );
+
+            m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "°" ), mpALIGN_RIGHT );
+            m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
+            m_axis_y2->SetMasterScale( m_axis_y1 );
+            AddLayer( m_axis_y2 );
+        }
+
+        m_axis_x->SetName( _( "Frequency" ) );
+        m_axis_y1->SetName( _( "Amplitude" ) );
+        m_axis_y2->SetName( _( "Phase" ) );
+        break;
+
+    case ST_DC: prepareDCAxes( aNewTraceType ); break;
+
+    case ST_NOISE:
+        if( !m_axis_x )
+        {
+            m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+            m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+            AddLayer( m_axis_x );
+
+            if( ( aNewTraceType & SPT_CURRENT ) == 0 )
             {
-                m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
-                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
-
-                m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dB" ), mpALIGN_LEFT );
-                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
-                m_plotWin->AddLayer( m_axis_y1 );
-
-                m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "°" ), mpALIGN_RIGHT );
-                m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
-                m_axis_y2->SetMasterScale( m_axis_y1 );
-                m_plotWin->AddLayer( m_axis_y2 );
-            }
-
-            m_axis_x->SetName( _( "Frequency" ) );
-            m_axis_y1->SetName( _( "Gain" ) );
-            m_axis_y2->SetName( _( "Phase" ) );
-            break;
-
-        case ST_SP:
-            if( !m_axis_x )
-            {
-                m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
-                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
-
                 m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "" ), mpALIGN_LEFT );
                 m_axis_y1->SetNameAlign( mpALIGN_LEFT );
-                m_plotWin->AddLayer( m_axis_y1 );
-
-                m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "°" ), mpALIGN_RIGHT );
+                AddLayer( m_axis_y1 );
+            }
+            else
+            {
+                m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "" ), mpALIGN_RIGHT );
                 m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
-                m_axis_y2->SetMasterScale( m_axis_y1 );
-                m_plotWin->AddLayer( m_axis_y2 );
+                AddLayer( m_axis_y2 );
             }
+        }
 
-            m_axis_x->SetName( _( "Frequency" ) );
-            m_axis_y1->SetName( _( "Amplitude" ) );
-            m_axis_y2->SetName( _( "Phase" ) );
-            break;
+        m_axis_x->SetName( _( "Frequency" ) );
 
-        case ST_DC:
-            prepareDCAxes( aNewTraceType );
-            break;
+        if( m_axis_y1 )
+            m_axis_y1->SetName( _( "Noise (V/√Hz)" ) );
 
-        case ST_NOISE:
-            if( !m_axis_x )
-            {
-                m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
-                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
+        if( m_axis_y2 )
+            m_axis_y2->SetName( _( "Noise (A/√Hz)" ) );
 
-                if( ( aNewTraceType & SPT_CURRENT ) == 0 )
-                {
-                    m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "" ), mpALIGN_LEFT );
-                    m_axis_y1->SetNameAlign( mpALIGN_LEFT );
-                    m_plotWin->AddLayer( m_axis_y1 );
-                }
-                else
-                {
-                    m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "" ), mpALIGN_RIGHT );
-                    m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
-                    m_plotWin->AddLayer( m_axis_y2 );
-                }
-            }
+        break;
 
-            m_axis_x->SetName( _( "Frequency" ) );
+    case ST_FFT:
+        if( !m_axis_x )
+        {
+            m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+            m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+            AddLayer( m_axis_x );
 
-            if( m_axis_y1 )
-                m_axis_y1->SetName( _( "Noise (V/√Hz)" ) );
+            m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dB" ), mpALIGN_LEFT );
+            m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+            AddLayer( m_axis_y1 );
+        }
 
-            if( m_axis_y2 )
-                m_axis_y2->SetName( _( "Noise (A/√Hz)" ) );
+        m_axis_x->SetName( _( "Frequency" ) );
+        m_axis_y1->SetName( _( "Intensity" ) );
+        break;
 
-            break;
+    case ST_TRAN:
+        if( !m_axis_x )
+        {
+            m_axis_x = new TIME_SCALE( wxEmptyString, wxT( "s" ), mpALIGN_BOTTOM );
+            m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+            AddLayer( m_axis_x );
 
-        case ST_FFT:
-            if( !m_axis_x )
-            {
-                m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
-                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
+            m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "V" ), mpALIGN_LEFT );
+            m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+            AddLayer( m_axis_y1 );
 
-                m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dB" ), mpALIGN_LEFT );
-                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
-                m_plotWin->AddLayer( m_axis_y1 );
-            }
+            m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "A" ), mpALIGN_RIGHT );
+            m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
+            m_axis_y2->SetMasterScale( m_axis_y1 );
+            AddLayer( m_axis_y2 );
+        }
 
-            m_axis_x->SetName( _( "Frequency" ) );
-            m_axis_y1->SetName( _( "Intensity" ) );
-            break;
+        m_axis_x->SetName( _( "Time" ) );
+        m_axis_y1->SetName( _( "Voltage" ) );
+        m_axis_y2->SetName( _( "Current" ) );
 
-        case ST_TRAN:
-            if( !m_axis_x )
-            {
-                m_axis_x = new TIME_SCALE( wxEmptyString, wxT( "s" ), mpALIGN_BOTTOM );
-                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
+        if( aNewTraceType & SPT_POWER )
+            EnsureThirdYAxisExists();
 
-                m_axis_y1 = new LIN_SCALE<mpScaleY>(wxEmptyString, wxT( "V" ), mpALIGN_LEFT );
-                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
-                m_plotWin->AddLayer( m_axis_y1 );
+        if( m_axis_y3 )
+            m_axis_y3->SetName( _( "Power" ) );
 
-                m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "A" ), mpALIGN_RIGHT );
-                m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
-                m_axis_y2->SetMasterScale( m_axis_y1 );
-                m_plotWin->AddLayer( m_axis_y2 );
-            }
+        break;
 
-            m_axis_x->SetName( _( "Time" ) );
-            m_axis_y1->SetName( _( "Voltage" ) );
-            m_axis_y2->SetName( _( "Current" ) );
-
-            if( aNewTraceType & SPT_POWER )
-                EnsureThirdYAxisExists();
-
-            if( m_axis_y3 )
-                m_axis_y3->SetName( _( "Power" ) );
-
-            break;
-
-        default:
-            // suppress warnings
-            break;
+    default:
+        // suppress warnings
+        break;
     }
 
-    if( GetSimType() == ST_TRAN || GetSimType() == ST_DC )
+    if( m_plotTab->GetSimType() == ST_TRAN || m_plotTab->GetSimType() == ST_DC )
     {
         if( m_axis_y3 )
         {
-            m_plotWin->SetMargins( 30, 160, 45, 70 );
+            SetMargins( 30, 160, 45, 70 );
 
             if( m_axis_y2 )
                 m_axis_y2->SetNameAlign( mpALIGN_BORDER_RIGHT );
@@ -1573,7 +1603,7 @@ void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
         }
         else
         {
-            m_plotWin->SetMargins( 30, 70, 45, 70 );
+            SetMargins( 30, 70, 45, 70 );
 
             if( m_axis_y2 )
                 m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
@@ -1581,24 +1611,24 @@ void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
     }
 
     if( m_axis_x )
-        m_axis_x->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+        m_axis_x->SetFont( KIUI::GetStatusFont( this ) );
 
     if( m_axis_y1 )
-        m_axis_y1->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+        m_axis_y1->SetFont( KIUI::GetStatusFont( this ) );
 
     if( m_axis_y2 )
-        m_axis_y2->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+        m_axis_y2->SetFont( KIUI::GetStatusFont( this ) );
 
     if( m_axis_y3 )
-        m_axis_y3->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+        m_axis_y3->SetFont( KIUI::GetStatusFont( this ) );
 
     UpdateAxisVisibility();
 }
 
 
-void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
+void SIM_VIEW::prepareDCAxes( int aNewTraceType )
 {
-    wxString sim_cmd = GetSimCommand().Lower();
+    wxString sim_cmd = m_plotTab->GetSimCommand().Lower();
     wxString rem;
 
     if( sim_cmd.StartsWith( ".dc", &rem ) )
@@ -1625,7 +1655,7 @@ void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
             {
                 m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "V" ), mpALIGN_BOTTOM );
                 m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
+                AddLayer( m_axis_x );
             }
 
             m_axis_x->SetName( _( "Voltage (swept)" ) );
@@ -1636,7 +1666,7 @@ void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
             {
                 m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "A" ), mpALIGN_BOTTOM );
                 m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
+                AddLayer( m_axis_x );
             }
 
             m_axis_x->SetName( _( "Current (swept)" ) );
@@ -1645,9 +1675,9 @@ void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
         case 'r':
             if( !m_axis_x )
             {
-                m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "Ω" ), mpALIGN_BOTTOM );
+                m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "Ω" ), mpALIGN_BOTTOM );
                 m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
+                AddLayer( m_axis_x );
             }
 
             m_axis_x->SetName( _( "Resistance (swept)" ) );
@@ -1658,7 +1688,7 @@ void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
             {
                 m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "°C" ), mpALIGN_BOTTOM );
                 m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
-                m_plotWin->AddLayer( m_axis_x );
+                AddLayer( m_axis_x );
             }
 
             m_axis_x->SetName( _( "Temperature (swept)" ) );
@@ -1669,14 +1699,14 @@ void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
         {
             m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "V" ), mpALIGN_LEFT );
             m_axis_y1->SetNameAlign( mpALIGN_LEFT );
-            m_plotWin->AddLayer( m_axis_y1 );
+            AddLayer( m_axis_y1 );
         }
 
         if( !m_axis_y2 )
         {
             m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "A" ), mpALIGN_RIGHT );
             m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
-            m_plotWin->AddLayer( m_axis_y2 );
+            AddLayer( m_axis_y2 );
         }
 
         m_axis_y1->SetName( _( "Voltage (measured)" ) );
@@ -1691,15 +1721,15 @@ void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
 }
 
 
-void SIM_PLOT_TAB::EnsureThirdYAxisExists()
+void SIM_VIEW::EnsureThirdYAxisExists()
 {
     if( !m_axis_y3 )
     {
-        m_plotWin->SetMargins( 30, 160, 45, 70 );
+        SetMargins( 30, 160, 45, 70 );
         m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_BORDER_RIGHT );
         m_axis_y3->SetNameAlign( mpALIGN_BORDER_RIGHT );
         m_axis_y3->SetMasterScale( m_axis_y1 );
-        m_plotWin->AddLayer( m_axis_y3 );
+        AddLayer( m_axis_y3 );
     }
 
     if( m_axis_y3 )
@@ -1713,175 +1743,17 @@ void SIM_PLOT_TAB::EnsureThirdYAxisExists()
 }
 
 
-void SIM_PLOT_TAB::UpdatePlotColors()
-{
-    // Update bg and fg colors:
-    m_plotWin->SetColourTheme( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::BACKGROUND ),
-                               m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::FOREGROUND ),
-                               m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ) );
-
-    if( m_smithGrid )
-        m_smithGrid->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ), 1 ) );
-
-    m_plotWin->UpdateAll();
-}
-
-
-void SIM_PLOT_TAB::OnLanguageChanged()
-{
-    updateAxes();
-    m_plotWin->UpdateAll();
-}
-
-
-void SIM_PLOT_TAB::UpdateTraceStyle( TRACE* trace )
-{
-    int        type = trace->GetType();
-    wxPenStyle penStyle;
-
-    if( ( type & SPT_AC_GAIN ) > 0 )
-        penStyle = wxPENSTYLE_SOLID;
-    else if( ( type & SPT_AC_PHASE ) > 0 )
-        penStyle = m_dotted_cp ? wxPENSTYLE_DOT : wxPENSTYLE_SOLID;
-    else if( ( type & SPT_CURRENT ) > 0 )
-        penStyle = m_dotted_cp ? wxPENSTYLE_DOT : wxPENSTYLE_SOLID;
-    else
-        penStyle = wxPENSTYLE_SOLID;
-
-    trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
-    m_sessionTraceColors[ trace->GetName() ] = trace->GetTraceColour();
-}
-
-
-TRACE* SIM_PLOT_TAB::GetOrAddTrace( const wxString& aVectorName, int aType )
-{
-    TRACE* trace = GetTrace( aVectorName, aType );
-
-    if( !trace )
-    {
-        updateAxes( aType );
-
-        if( GetSimType() == ST_TRAN || GetSimType() == ST_DC )
-        {
-            bool hasVoltageTraces = false;
-
-            for( const auto& [ id, candidate ] : m_traces )
-            {
-                if( candidate->GetType() & SPT_VOLTAGE )
-                {
-                    hasVoltageTraces = true;
-                    break;
-                }
-            }
-
-            if( !hasVoltageTraces )
-            {
-                if( m_axis_y2 )
-                    m_axis_y2->SetMasterScale( nullptr );
-
-                if( m_axis_y3 )
-                    m_axis_y3->SetMasterScale( nullptr );
-            }
-        }
-
-        if( aType & SPT_SP_SMITH )
-            trace = new SMITH_TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
-        else
-            trace = new TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
-
-        if( m_sessionTraceColors.count( aVectorName ) )
-            trace->SetTraceColour( m_sessionTraceColors[ aVectorName ] );
-        else
-            trace->SetTraceColour( m_colors.GenerateColor( m_sessionTraceColors ) );
-
-        UpdateTraceStyle( trace );
-        m_traces[ getTraceId( aVectorName, aType ) ] = trace;
-
-        m_plotWin->AddLayer( (mpLayer*) trace );
-    }
-
-    return trace;
-}
-
-
-void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vector<double>& aY,
-                                 int aSweepCount, size_t aSweepSize, bool aIsMultiRun,
-                                 const std::vector<wxString>& aMultiRunLabels )
-{
-    // smith traces carry Re/Im of the reflection coefficient, not frequency
-    bool smithTrace = ( trace->GetType() & SPT_SP_SMITH ) > 0;
-
-    if( dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x ) && !smithTrace )
-    {
-        // log( 0 ) is not valid.
-        if( aX.size() > 0 && aX[0] == 0 )
-        {
-            aX.erase( aX.begin() );
-            aY.erase( aY.begin() );
-        }
-    }
-
-    if( GetSimType() == ST_AC || GetSimType() == ST_FFT )
-    {
-        if( trace->GetType() & SPT_AC_PHASE )
-        {
-            for( double& pt : aY )
-                pt = pt * 180.0 / M_PI;                     // convert to degrees
-        }
-        else
-        {
-            for( double& pt : aY )
-                pt = MagnitudeToDb( pt );                   // NaN where there is no signal
-        }
-    }
-
-    trace->SetData( aX, aY );
-    trace->SetSweepCount( aSweepCount );
-    trace->SetSweepSize( aSweepSize );
-    trace->SetIsMultiRun( aIsMultiRun );
-    trace->SetMultiRunLabels( aMultiRunLabels );
-
-    // Phase and currents on second Y axis, except for AC currents, those use the same axis as voltage
-    if( smithTrace )
-    {
-        // drawn through the chart geometry, not the axis transforms
-        trace->SetScale( nullptr, nullptr );
-    }
-    else if( ( trace->GetType() & SPT_AC_PHASE )
-             || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
-    {
-        trace->SetScale( m_axis_x, m_axis_y2 );
-    }
-    else if( trace->GetType() & SPT_POWER )
-    {
-        trace->SetScale( m_axis_x, m_axis_y3 );
-    }
-    else
-    {
-        trace->SetScale( m_axis_x, m_axis_y1 );
-    }
-
-    for( auto& [ cursorId, cursor ] : trace->GetCursors() )
-    {
-        if( cursor )
-            cursor->UpdateForNewData();
-    }
-
-    UpdateAxisVisibility();
-}
-
-
-void SIM_PLOT_TAB::UpdateAxisVisibility()
+void SIM_VIEW::UpdateAxisVisibility()
 {
     bool hasY1Traces = false;
     bool hasY2Traces = false;
     bool hasY3Traces = false;
 
-    if( !m_smithMode )
+    if( !m_smithChart )
     {
-        for( const auto& [name, trace] : m_traces )
+        for( const auto& [name, trace] : m_plotTab->GetTraces() )
         {
-            if( !trace )
+            if( !trace || trace->GetView() != this )
                 continue;
 
             if( trace->GetType() & SPT_POWER )
@@ -1889,7 +1761,7 @@ void SIM_PLOT_TAB::UpdateAxisVisibility()
                 hasY3Traces = true;
             }
             else if( ( trace->GetType() & SPT_AC_PHASE )
-                     || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
+                     || ( ( m_plotTab->GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
             {
                 hasY2Traces = true;
             }
@@ -1902,9 +1774,9 @@ void SIM_PLOT_TAB::UpdateAxisVisibility()
 
     bool visibilityChanged = false;
 
-    if( m_axis_x && m_axis_x->IsVisible() != !m_smithMode )
+    if( m_axis_x && m_axis_x->IsVisible() != !m_smithChart )
     {
-        m_axis_x->SetVisible( !m_smithMode );
+        m_axis_x->SetVisible( !m_smithChart );
         visibilityChanged = true;
     }
 
@@ -1927,403 +1799,19 @@ void SIM_PLOT_TAB::UpdateAxisVisibility()
     }
 
     if( visibilityChanged )
-        m_plotWin->UpdateAll();
+        UpdateAll();
 }
 
 
-void SIM_PLOT_TAB::DeleteTrace( TRACE* aTrace )
-{
-    for( const auto& [ name, trace ] : m_traces )
-    {
-        if( trace == aTrace )
-        {
-            m_traces.erase( name );
-            break;
-        }
-    }
-
-    for( const auto& [ id, cursor ] : aTrace->GetCursors() )
-    {
-        if( cursor )
-            m_plotWin->DelLayer( cursor, true );
-    }
-
-    m_plotWin->DelLayer( aTrace, true, true );
-    ResetScales( false );
-    UpdateAxisVisibility();
-    UpdateSmithReferenceImpedance();
-}
-
-
-bool SIM_PLOT_TAB::DeleteTrace( const wxString& aVectorName, int aTraceType )
-{
-    if( TRACE* trace = GetTrace( aVectorName, aTraceType ) )
-    {
-        DeleteTrace( trace );
-        return true;
-    }
-
-    return false;
-}
-
-
-void SIM_PLOT_TAB::SetSmithMode( bool aEnable )
-{
-    // only S-parameter tabs have a Smith view, a stale workbook cannot force one elsewhere
-    if( aEnable && GetSimType() != ST_SP )
-        return;
-
-    if( m_smithMode == aEnable )
-        return;
-
-    m_smithMode = aEnable;
-
-    // a mode switch mid-gesture must not leave a pan or a skipped click behind
-    m_smithPanning = false;
-    m_smithLeftSkipped = false;
-
-    if( aEnable && !m_smithGrid )
-    {
-        m_smithGrid = new SMITH_GRID();
-        m_smithGrid->SetFont( KIUI::GetStatusFont( m_plotWin ) );
-        m_smithGrid->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ), 1 ) );
-        m_plotWin->AddLayer( m_smithGrid );
-    }
-
-    if( m_smithGrid )
-        m_smithGrid->SetVisible( aEnable );
-
-    if( aEnable )
-        UpdateSmithReferenceImpedance();
-
-    ResetSmithView();
-
-    UpdateAxisVisibility();
-    m_plotWin->UpdateAll();
-}
-
-
-void SIM_PLOT_TAB::UpdateSmithReferenceImpedance()
-{
-    if( !m_smithGrid )
-        return;
-
-    double z0 = 0.0;
-    bool   mixed = false;
-    bool   unresolved = false;
-
-    for( const auto& [name, trace] : m_traces )
-    {
-        SMITH_TRACE* smithTrace = dynamic_cast<SMITH_TRACE*>( trace );
-
-        if( !smithTrace )
-            continue;
-
-        double traceZ0 = smithTrace->GetReferenceImpedance();
-
-        if( traceZ0 <= 0.0 )
-            unresolved = true;
-        else if( z0 == 0.0 )
-            z0 = traceZ0;
-        else if( traceZ0 != z0 )
-            mixed = true;
-    }
-
-    // a trace whose port impedance is unknown leaves no single reference to name either
-    m_smithGrid->SetReferenceImpedance( mixed || unresolved ? 0.0 : z0 );
-    m_smithGrid->SetMixedReferences( mixed );
-}
-
-
-bool SIM_PLOT_TAB::getSmithView( SMITH_VIEW& aView ) const
-{
-    return SMITH_GRID::GetChartView( *m_plotWin, m_smithZoom, m_smithPan, aView );
-}
-
-
-void SIM_PLOT_TAB::SmithZoomAt( const wxPoint& aPos, double aFactor )
-{
-    SMITH_VIEW view;
-
-    if( !getSmithView( view ) )
-        return;
-
-    double newZoom = std::clamp( m_smithZoom * aFactor, 1.0, 50.0 );
-
-    if( newZoom <= 1.0 )
-    {
-        ResetSmithView();
-        m_plotWin->Refresh();
-        return;
-    }
-
-    // keep the point under the cursor fixed while zooming
-    m_smithPan = SMITH_MATH::ZoomAboutPoint( view, aPos, newZoom );
-    m_smithZoom = newZoom;
-
-    m_plotWin->Refresh();
-}
-
-
-void SIM_PLOT_TAB::SmithPanBy( const wxPoint& aDelta )
-{
-    SMITH_VIEW view;
-
-    if( !getSmithView( view ) )
-        return;
-
-    m_smithPan.x -= aDelta.x / view.radius;
-    m_smithPan.y += aDelta.y / view.radius;
-
-    m_plotWin->Refresh();
-}
-
-
-void SIM_PLOT_TAB::onSmithMouseWheel( wxMouseEvent& aEvent )
-{
-    if( !m_smithMode )
-    {
-        aEvent.Skip();
-        return;
-    }
-
-    // swallow horizontal scroll too, mpWindow would pan its hidden axes with it
-    if( aEvent.GetWheelAxis() != wxMOUSE_WHEEL_VERTICAL || aEvent.GetWheelRotation() == 0 )
-        return;
-
-    // do not skip, or mpWindow would also zoom its hidden axes
-    SmithZoomAt( aEvent.GetPosition(), aEvent.GetWheelRotation() > 0 ? 1.2 : 1.0 / 1.2 );
-}
-
-
-void SIM_PLOT_TAB::onSmithMagnify( wxMouseEvent& aEvent )
-{
-    if( !m_smithMode )
-    {
-        aEvent.Skip();
-        return;
-    }
-
-    double factor = aEvent.GetMagnification() + 1.0;
-
-    if( factor > 0.0 )
-        SmithZoomAt( aEvent.GetPosition(), factor );
-}
-
-
-void SIM_PLOT_TAB::onSmithMiddleDown( wxMouseEvent& aEvent )
-{
-    // keep mpWindow's middle-button pan off the hidden axes
-    if( !m_smithMode )
-        aEvent.Skip();
-}
-
-
-void SIM_PLOT_TAB::onSmithLeftDown( wxMouseEvent& aEvent )
-{
-    // clear stale pan state so it cannot hijack a cursor grab
-    m_smithPanning = false;
-    m_smithLeftSkipped = false;
-
-    wxPoint pos = aEvent.GetPosition();
-
-    if( m_smithMode && !m_plotWin->IsInsideInfoLayer( pos ) )
-    {
-        m_smithPanning = true;
-        m_smithPanLast = pos;
-        return;
-    }
-
-    // on a cursor or the legend, let mpWindow drag it, and remember that it saw the click
-    // so the matching motions and release reach it too
-    m_smithLeftSkipped = true;
-    aEvent.Skip();
-}
-
-
-void SIM_PLOT_TAB::onSmithMotion( wxMouseEvent& aEvent )
-{
-    if( m_smithMode && aEvent.Dragging() )
-    {
-        if( aEvent.LeftIsDown() && !m_smithLeftSkipped )
-        {
-            // a left drag mpWindow did not see the start of, pan if one is active, and
-            // swallow either way so mpWindow cannot rubber-band from a stale click point
-            if( m_smithPanning )
-            {
-                wxPoint pos = aEvent.GetPosition();
-
-                SmithPanBy( pos - m_smithPanLast );
-                m_smithPanLast = pos;
-            }
-
-            return;
-        }
-
-        // keep mpWindow's middle-button pan off the hidden axes
-        if( aEvent.MiddleIsDown() )
-            return;
-    }
-
-    aEvent.Skip();
-}
-
-
-void SIM_PLOT_TAB::onSmithLeftUp( wxMouseEvent& aEvent )
-{
-    if( m_smithMode )
-    {
-        m_smithPanning = false;
-
-        // a release mpWindow saw no click for would zoom the hidden axes to the rect
-        // between its stale click point and this position
-        if( !m_smithLeftSkipped )
-            return;
-
-        m_smithLeftSkipped = false;
-    }
-
-    aEvent.Skip();
-}
-
-
-void SIM_PLOT_TAB::onSmithDClick( wxMouseEvent& aEvent )
-{
-    wxPoint pos = aEvent.GetPosition();
-
-    if( m_smithMode && !m_plotWin->IsInsideInfoLayer( pos ) )
-    {
-        ResetSmithView();
-        m_plotWin->Refresh();
-        return;
-    }
-
-    aEvent.Skip();
-}
-
-
-void SIM_PLOT_TAB::onSmithRightDown( wxMouseEvent& aEvent )
-{
-    // remember where the menu opened, for its zoom commands
-    if( m_smithMode )
-        m_smithMenuPos = aEvent.GetPosition();
-
-    aEvent.Skip();
-}
-
-
-void SIM_PLOT_TAB::onSmithRightUp( wxMouseEvent& aEvent )
-{
-    if( !m_smithMode )
-    {
-        aEvent.Skip();
-        return;
-    }
-
-    // no zoom history here, so grey out Undo/Redo and show the menu ourselves
-    wxMenu* menu = m_plotWin->GetPopupMenu();
-
-    menu->Enable( mpID_ZOOM_UNDO, false );
-    menu->Enable( mpID_ZOOM_REDO, false );
-
-    m_plotWin->PopupMenu( menu, aEvent.GetPosition() );
-}
-
-
-void SIM_PLOT_TAB::onSmithMenuCommand( wxCommandEvent& aEvent )
-{
-    if( !m_smithMode )
-    {
-        aEvent.Skip();
-        return;
-    }
-
-    switch( aEvent.GetId() )
-    {
-    case mpID_ZOOM_IN: SmithZoomAt( m_smithMenuPos, 1.5 ); break;
-    case mpID_ZOOM_OUT: SmithZoomAt( m_smithMenuPos, 1.0 / 1.5 ); break;
-
-    case mpID_FIT:
-        ResetSmithView();
-        m_plotWin->Refresh();
-        break;
-
-    case mpID_CENTER:
-    {
-        SMITH_VIEW view;
-
-        if( getSmithView( view ) )
-        {
-            m_smithPan = view.ToGamma( m_smithMenuPos );
-            m_plotWin->Refresh();
-        }
-
-        break;
-    }
-
-    default: aEvent.Skip();
-    }
-}
-
-
-void SIM_PLOT_TAB::EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName )
-{
-    CURSOR* cursor;
-
-    if( aTrace->GetType() & SPT_SP_SMITH )
-    {
-        SMITH_TRACE* smithTrace = static_cast<SMITH_TRACE*>( aTrace );
-
-        cursor = new SMITH_CURSOR( smithTrace, this );
-
-        // start somewhere on the locus, biased per cursor id like the rectangular case
-        const std::vector<double>& freqs = smithTrace->GetFrequencies();
-
-        if( !freqs.empty() )
-            cursor->SetCoordX( freqs[freqs.size() * ( aCursorId == 1 ? 2 : 3 ) / 5] );
-    }
-    else
-    {
-        mpWindow* win = GetPlotWin();
-        int       width = win->GetXScreen() - win->GetMarginLeft() - win->GetMarginRight();
-        int       center = win->GetMarginLeft() + KiROUND( width * ( aCursorId == 1 ? 0.4 : 0.6 ) );
-
-        cursor = new CURSOR( aTrace, this );
-
-        cursor->SetX( center );
-    }
-
-    cursor->SetName( aSignalName );
-    aTrace->SetCursor( aCursorId, cursor );
-    m_plotWin->AddLayer( cursor );
-
-    // Notify the parent window about the changes
-    wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
-}
-
-
-void SIM_PLOT_TAB::DisableCursor( TRACE* aTrace, int aCursorId )
-{
-    if( CURSOR* cursor = aTrace->GetCursor( aCursorId ) )
-    {
-        aTrace->SetCursor( aCursorId, nullptr );
-        GetPlotWin()->DelLayer( cursor, true );
-
-        // Notify the parent window about the changes
-        wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
-    }
-}
-
-
-void SIM_PLOT_TAB::ResetScales( bool aIncludeX )
+void SIM_VIEW::ResetScales( bool aIncludeX )
 {
     if( m_axis_x && aIncludeX )
     {
         m_axis_x->ResetDataRange();
 
-        if( GetSimType() == ST_TRAN )
+        if( m_plotTab->GetSimType() == ST_TRAN )
         {
-            wxStringTokenizer tokenizer( GetSimCommand(), " \t\r\n", wxTOKEN_STRTOK );
+            wxStringTokenizer tokenizer( m_plotTab->GetSimCommand(), " \t\r\n", wxTOKEN_STRTOK );
             wxString          cmd = tokenizer.GetNextToken().Lower();
 
             wxASSERT( cmd == wxS( ".tran" ) );
@@ -2354,9 +1842,1022 @@ void SIM_PLOT_TAB::ResetScales( bool aIncludeX )
     if( m_axis_y3 )
         m_axis_y3->ResetDataRange();
 
-    for( auto& [ name, trace ] : m_traces )
-        trace->UpdateScales();
+    for( auto& [name, trace] : m_plotTab->GetTraces() )
+    {
+        if( trace->GetView() == this )
+            trace->UpdateScales();
+    }
+}
+
+
+void SIM_VIEW::SetSmithChart( bool aEnable )
+{
+    if( m_smithChart == aEnable )
+        return;
+
+    m_smithChart = aEnable;
+
+    // a mode switch mid-gesture must not leave a pan or a skipped click behind
+    m_smithPanning = false;
+    m_smithLeftSkipped = false;
+
+    if( aEnable && !m_smithGrid )
+    {
+        m_smithGrid = new SMITH_GRID();
+        m_smithGrid->SetFont( KIUI::GetStatusFont( this ) );
+        m_smithGrid->SetPen( wxPen( m_plotTab->GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ), 1 ) );
+        AddLayer( m_smithGrid );
+    }
+
+    if( m_smithGrid )
+        m_smithGrid->SetVisible( aEnable );
+
+    if( aEnable )
+        UpdateSmithReferenceImpedance();
+
+    ResetSmithView();
+
+    UpdateAxisVisibility();
+    UpdateAll();
+}
+
+
+void SIM_VIEW::UpdateSmithReferenceImpedance()
+{
+    if( !m_smithGrid )
+        return;
+
+    double z0 = 0.0;
+    bool   mixed = false;
+    bool   unresolved = false;
+
+    for( const auto& [name, trace] : m_plotTab->GetTraces() )
+    {
+        SMITH_TRACE* smithTrace = dynamic_cast<SMITH_TRACE*>( trace );
+
+        if( !smithTrace || smithTrace->GetView() != this )
+            continue;
+
+        double traceZ0 = smithTrace->GetReferenceImpedance();
+
+        if( traceZ0 <= 0.0 )
+            unresolved = true;
+        else if( z0 == 0.0 )
+            z0 = traceZ0;
+        else if( traceZ0 != z0 )
+            mixed = true;
+    }
+
+    // a trace whose port impedance is unknown leaves no single reference to name either
+    m_smithGrid->SetReferenceImpedance( mixed || unresolved ? 0.0 : z0 );
+    m_smithGrid->SetMixedReferences( mixed );
+}
+
+
+void SIM_VIEW::UpdateSmithGridColor()
+{
+    if( m_smithGrid )
+        m_smithGrid->SetPen( wxPen( m_plotTab->GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ), 1 ) );
+}
+
+
+bool SIM_VIEW::getSmithView( SMITH_VIEW& aView ) const
+{
+    return SMITH_GRID::GetChartView( const_cast<SIM_VIEW&>( *this ), m_smithZoom, m_smithPan, aView );
+}
+
+
+void SIM_VIEW::SmithZoomAt( const wxPoint& aPos, double aFactor )
+{
+    SMITH_VIEW view;
+
+    if( !getSmithView( view ) )
+        return;
+
+    double newZoom = std::clamp( m_smithZoom * aFactor, 1.0, 50.0 );
+
+    if( newZoom <= 1.0 )
+    {
+        ResetSmithView();
+        Refresh();
+        return;
+    }
+
+    // keep the point under the cursor fixed while zooming
+    m_smithPan = SMITH_MATH::ZoomAboutPoint( view, aPos, newZoom );
+    m_smithZoom = newZoom;
+
+    Refresh();
+}
+
+
+void SIM_VIEW::SmithPanBy( const wxPoint& aDelta )
+{
+    SMITH_VIEW view;
+
+    if( !getSmithView( view ) )
+        return;
+
+    m_smithPan.x -= aDelta.x / view.radius;
+    m_smithPan.y += aDelta.y / view.radius;
+
+    Refresh();
+}
+
+
+void SIM_VIEW::onSmithMouseWheel( wxMouseEvent& aEvent )
+{
+    if( !m_smithChart )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    // swallow horizontal scroll too, mpWindow would pan its hidden axes with it
+    if( aEvent.GetWheelAxis() != wxMOUSE_WHEEL_VERTICAL || aEvent.GetWheelRotation() == 0 )
+        return;
+
+    // do not skip, or mpWindow would also zoom its hidden axes
+    SmithZoomAt( aEvent.GetPosition(), aEvent.GetWheelRotation() > 0 ? 1.2 : 1.0 / 1.2 );
+}
+
+
+void SIM_VIEW::onSmithMagnify( wxMouseEvent& aEvent )
+{
+    if( !m_smithChart )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    double factor = aEvent.GetMagnification() + 1.0;
+
+    if( factor > 0.0 )
+        SmithZoomAt( aEvent.GetPosition(), factor );
+}
+
+
+void SIM_VIEW::onSmithMiddleDown( wxMouseEvent& aEvent )
+{
+    // keep mpWindow's middle-button pan off the hidden axes
+    if( !m_smithChart )
+        aEvent.Skip();
+}
+
+
+void SIM_VIEW::onSmithLeftDown( wxMouseEvent& aEvent )
+{
+    // clear stale pan state so it cannot hijack a cursor grab
+    m_smithPanning = false;
+    m_smithLeftSkipped = false;
+
+    wxPoint pos = aEvent.GetPosition();
+
+    if( m_smithChart && !IsInsideInfoLayer( pos ) )
+    {
+        m_smithPanning = true;
+        m_smithPanLast = pos;
+        return;
+    }
+
+    // on a cursor or the legend, let mpWindow drag it, and remember that it saw the click
+    // so the matching motions and release reach it too
+    m_smithLeftSkipped = true;
+    aEvent.Skip();
+}
+
+
+void SIM_VIEW::onSmithMotion( wxMouseEvent& aEvent )
+{
+    if( m_smithChart && aEvent.Dragging() )
+    {
+        if( aEvent.LeftIsDown() && !m_smithLeftSkipped )
+        {
+            // a left drag mpWindow did not see the start of, pan if one is active, and
+            // swallow either way so mpWindow cannot rubber-band from a stale click point
+            if( m_smithPanning )
+            {
+                wxPoint pos = aEvent.GetPosition();
+
+                SmithPanBy( pos - m_smithPanLast );
+                m_smithPanLast = pos;
+            }
+
+            return;
+        }
+
+        // keep mpWindow's middle-button pan off the hidden axes
+        if( aEvent.MiddleIsDown() )
+            return;
+    }
+
+    aEvent.Skip();
+}
+
+
+void SIM_VIEW::onSmithLeftUp( wxMouseEvent& aEvent )
+{
+    if( m_smithChart )
+    {
+        m_smithPanning = false;
+
+        // a release mpWindow saw no click for would zoom the hidden axes to the rect
+        // between its stale click point and this position
+        if( !m_smithLeftSkipped )
+            return;
+
+        m_smithLeftSkipped = false;
+    }
+
+    aEvent.Skip();
+}
+
+
+void SIM_VIEW::onSmithDClick( wxMouseEvent& aEvent )
+{
+    wxPoint pos = aEvent.GetPosition();
+
+    if( m_smithChart && !IsInsideInfoLayer( pos ) )
+    {
+        ResetSmithView();
+        Refresh();
+        return;
+    }
+
+    aEvent.Skip();
+}
+
+
+void SIM_VIEW::onSmithRightDown( wxMouseEvent& aEvent )
+{
+    // remember where the menu opened, for its zoom commands
+    if( m_smithChart )
+        m_smithMenuPos = aEvent.GetPosition();
+
+    aEvent.Skip();
+}
+
+
+void SIM_VIEW::onSmithRightUp( wxMouseEvent& aEvent )
+{
+    if( !m_smithChart )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    // no zoom history here, so grey out Undo/Redo and show the menu ourselves
+    wxMenu* menu = GetPopupMenu();
+
+    menu->Enable( mpID_ZOOM_UNDO, false );
+    menu->Enable( mpID_ZOOM_REDO, false );
+
+    PopupMenu( menu, aEvent.GetPosition() );
+}
+
+
+void SIM_VIEW::onSmithMenuCommand( wxCommandEvent& aEvent )
+{
+    if( !m_smithChart )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    switch( aEvent.GetId() )
+    {
+    case mpID_ZOOM_IN: SmithZoomAt( m_smithMenuPos, 1.5 ); break;
+    case mpID_ZOOM_OUT: SmithZoomAt( m_smithMenuPos, 1.0 / 1.5 ); break;
+
+    case mpID_FIT:
+        ResetSmithView();
+        Refresh();
+        break;
+
+    case mpID_CENTER:
+    {
+        SMITH_VIEW view;
+
+        if( getSmithView( view ) )
+        {
+            m_smithPan = view.ToGamma( m_smithMenuPos );
+            Refresh();
+        }
+
+        break;
+    }
+
+    default: aEvent.Skip();
+    }
+}
+
+
+SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
+        SIM_TAB( aSimCommand, parent ),
+        m_dotted_cp( false ),
+        m_syncingXView( false ),
+        m_smithMode( false )
+{
+    m_mouseWheelActions = convertMouseWheelActions( SIM_MOUSE_WHEEL_ACTION_SET::GetMouseDefaults() );
+
+    m_sizer = new wxBoxSizer( wxVERTICAL );
+    SetSizer( m_sizer );
+
+    AddView();
+}
+
+
+SIM_PLOT_TAB::~SIM_PLOT_TAB()
+{
+    // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
+}
+
+
+void SIM_PLOT_TAB::ApplyPreferences( const SIM_PREFERENCES& aPrefs )
+{
+    m_mouseWheelActions = convertMouseWheelActions( aPrefs.mouse_wheel_actions );
+
+    for( SIM_VIEW* view : m_views )
+        view->SetMouseWheelActions( m_mouseWheelActions );
+}
+
+
+SIM_VIEW* SIM_PLOT_TAB::AddView()
+{
+    SIM_VIEW* view = new SIM_VIEW( this, this );
+
+    view->LimitView( true );
+    view->SetMargins( 30, 70, 45, 70 );
+    view->SetMouseWheelActions( m_mouseWheelActions );
+
+    view->updateAxes();
+
+    // a mpInfoLegend displays the name of traces on the left top panel corner:
+    mpInfoLegend* legend = new mpInfoLegend( wxRect( 0, 0, 200, 40 ), wxTRANSPARENT_BRUSH );
+    legend->SetVisible( false );
+    view->AddLayer( legend );
+    view->m_legend = legend;
+    view->m_lastLegendPosition = legend->GetPosition();
+
+    view->EnableDoubleBuffer( true );
+    view->SetSmithChart( m_smithMode );
+
+    m_views.push_back( view );
+    m_sizer->Add( view, 1, wxALL | wxEXPAND, 1 );
+
+    UpdatePlotColors();
+
+    if( m_views.size() > 1 )
+        SyncXView( m_views[0] );
+
+    view->UpdateAll();
+    Layout();
+
+    wxQueueEvent( this, new wxCommandEvent( EVT_SIM_VIEWS_CHANGED ) );
+
+    return view;
+}
+
+
+bool SIM_PLOT_TAB::RemoveView( SIM_VIEW* aView )
+{
+    if( m_views.size() <= 1 )
+        return false;
+
+    auto it = std::find( m_views.begin(), m_views.end(), aView );
+
+    if( it == m_views.end() )
+        return false;
+
+    // The traces routed to this view lose their axes along with it, so drop them rather than
+    // leaving them behind holding a destroyed view (and its destroyed axis layers).  Their
+    // signals stay in the Signals grid, simply no longer plotted, and can be assigned to one
+    // of the remaining views.
+    std::vector<TRACE*> plottedHere;
+
+    for( const auto& [name, trace] : m_traces )
+    {
+        trace->ClearYScaleViewIf( aView );
+
+        if( trace->GetView() == aView )
+            plottedHere.push_back( trace );
+    }
+
+    // DeleteTrace() erases from m_traces, so it cannot run while iterating it
+    for( TRACE* trace : plottedHere )
+        DeleteTrace( trace );
+
+    m_sizer->Detach( aView );
+    m_views.erase( it );
+    aView->Destroy();
+
+    Layout();
+
+    // Any Y-scale ranges that were merged with the removed view are now stale; recompute them
+    // (and refresh) so the remaining views reflect only the traces that are still present.
+    ResetScales( false );
+
+    for( SIM_VIEW* view : m_views )
+        view->UpdateAll();
+
+    wxQueueEvent( this, new wxCommandEvent( EVT_SIM_VIEWS_CHANGED ) );
+
+    return true;
+}
+
+
+int SIM_PLOT_TAB::GetViewIndex( SIM_VIEW* aView ) const
+{
+    for( size_t i = 0; i < m_views.size(); ++i )
+    {
+        if( m_views[i] == aView )
+            return (int) i;
+    }
+
+    return -1;
+}
+
+
+void SIM_PLOT_TAB::SyncXView( SIM_VIEW* aSource )
+{
+    if( m_syncingXView || !aSource )
+        return;
+
+    m_syncingXView = true;
+
+    double scaleX = aSource->GetScaleX();
+    double pos = aSource->GetPosX();
+    double desiredMin = aSource->GetDesiredXmin();
+    double desiredMax = aSource->GetDesiredXmax();
+
+    for( SIM_VIEW* view : m_views )
+    {
+        if( view == aSource )
+            continue;
+
+        view->SetScaleX( scaleX );
+        view->SetXRange( pos, desiredMax, desiredMin );
+        view->UpdateAll();
+    }
+
+    m_syncingXView = false;
+}
+
+
+wxString SIM_PLOT_TAB::GetLabelX() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetLabelX() : wxString( wxS( "" ) );
+}
+
+
+wxString SIM_PLOT_TAB::GetUnitsX() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetUnitsX() : wxString( wxS( "" ) );
+}
+
+
+wxString SIM_PLOT_TAB::GetUnitsForTrace( TRACE* aTrace ) const
+{
+    SIM_VIEW* view = aTrace->GetView() ? aTrace->GetView() : GetDefaultView();
+    return view ? view->GetUnitsForTrace( aTrace ) : wxString( wxS( "" ) );
+}
+
+
+void SIM_PLOT_TAB::ShowGrid( bool aEnable )
+{
+    for( SIM_VIEW* view : m_views )
+        view->ShowGrid( aEnable );
+}
+
+
+bool SIM_PLOT_TAB::IsGridShown() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view && view->IsGridShown();
+}
+
+
+void SIM_PLOT_TAB::ShowLegend( bool aEnable )
+{
+    for( SIM_VIEW* view : m_views )
+        view->ShowLegend( aEnable );
+}
+
+
+bool SIM_PLOT_TAB::IsLegendShown() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view && view->IsLegendShown();
+}
+
+
+wxPoint SIM_PLOT_TAB::GetLegendPosition() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetLegendPosition() : wxPoint();
+}
+
+
+void SIM_PLOT_TAB::SetLegendPosition( const wxPoint& aPosition )
+{
+    if( SIM_VIEW* view = GetDefaultView() )
+        view->SetLegendPosition( aPosition );
+
+    m_LastLegendPosition = aPosition;
+}
+
+
+wxString SIM_PLOT_TAB::GetLabelY1() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetLabelY1() : wxString( wxS( "" ) );
+}
+
+
+wxString SIM_PLOT_TAB::GetLabelY2() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetLabelY2() : wxString( wxS( "" ) );
+}
+
+
+wxString SIM_PLOT_TAB::GetLabelY3() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetLabelY3() : wxString( wxS( "" ) );
+}
+
+
+wxString SIM_PLOT_TAB::GetUnitsY1() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetUnitsY1() : wxString( wxS( "" ) );
+}
+
+
+wxString SIM_PLOT_TAB::GetUnitsY2() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetUnitsY2() : wxString( wxS( "" ) );
+}
+
+
+wxString SIM_PLOT_TAB::GetUnitsY3() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetUnitsY3() : wxString( wxS( "" ) );
+}
+
+
+bool SIM_PLOT_TAB::GetY1Scale( double* aMin, double* aMax ) const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view && view->GetY1Scale( aMin, aMax );
+}
+
+
+bool SIM_PLOT_TAB::GetY2Scale( double* aMin, double* aMax ) const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view && view->GetY2Scale( aMin, aMax );
+}
+
+
+bool SIM_PLOT_TAB::GetY3Scale( double* aMin, double* aMax ) const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view && view->GetY3Scale( aMin, aMax );
+}
+
+
+void SIM_PLOT_TAB::SetY1Scale( bool aLock, double aMin, double aMax )
+{
+    if( SIM_VIEW* view = GetDefaultView() )
+        view->SetY1Scale( aLock, aMin, aMax );
+}
+
+
+void SIM_PLOT_TAB::SetY2Scale( bool aLock, double aMin, double aMax )
+{
+    if( SIM_VIEW* view = GetDefaultView() )
+        view->SetY2Scale( aLock, aMin, aMax );
+}
+
+
+void SIM_PLOT_TAB::SetY3Scale( bool aLock, double aMin, double aMax )
+{
+    if( SIM_VIEW* view = GetDefaultView() )
+        view->SetY3Scale( aLock, aMin, aMax );
+}
+
+
+void SIM_PLOT_TAB::EnsureThirdYAxisExists()
+{
+    if( SIM_VIEW* view = GetDefaultView() )
+        view->EnsureThirdYAxisExists();
+}
+
+
+void SIM_PLOT_TAB::UpdatePlotColors()
+{
+    for( SIM_VIEW* view : m_views )
+    {
+        view->SetColourTheme( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::BACKGROUND ),
+                              m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::FOREGROUND ),
+                              m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ) );
+
+        view->UpdateSmithGridColor();
+        view->UpdateAll();
+    }
+}
+
+
+void SIM_PLOT_TAB::SetSmithMode( bool aEnable )
+{
+    // only S-parameter tabs have a Smith view, a stale workbook cannot force one elsewhere
+    if( aEnable && GetSimType() != ST_SP )
+        return;
+
+    if( m_smithMode == aEnable )
+        return;
+
+    m_smithMode = aEnable;
+
+    for( SIM_VIEW* view : m_views )
+        view->SetSmithChart( aEnable );
+}
+
+
+void SIM_PLOT_TAB::UpdateSmithReferenceImpedance()
+{
+    for( SIM_VIEW* view : m_views )
+        view->UpdateSmithReferenceImpedance();
+}
+
+
+double SIM_PLOT_TAB::GetSmithZoom() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetSmithZoom() : 1.0;
+}
+
+
+wxRealPoint SIM_PLOT_TAB::GetSmithPan() const
+{
+    SIM_VIEW* view = GetDefaultView();
+    return view ? view->GetSmithPan() : wxRealPoint( 0.0, 0.0 );
+}
+
+
+void SIM_PLOT_TAB::ResetSmithView()
+{
+    for( SIM_VIEW* view : m_views )
+    {
+        view->ResetSmithView();
+        view->Refresh();
+    }
+}
+
+
+void SIM_PLOT_TAB::SetSmithView( double aZoom, double aPanX, double aPanY )
+{
+    for( SIM_VIEW* view : m_views )
+        view->SetSmithView( aZoom, aPanX, aPanY );
+}
+
+
+void SIM_PLOT_TAB::SmithZoomAt( const wxPoint& aPos, double aFactor )
+{
+    for( SIM_VIEW* view : m_views )
+        view->SmithZoomAt( aPos, aFactor );
+}
+
+
+void SIM_PLOT_TAB::SmithPanBy( const wxPoint& aDelta )
+{
+    for( SIM_VIEW* view : m_views )
+        view->SmithPanBy( aDelta );
+}
+
+
+void SIM_PLOT_TAB::OnLanguageChanged()
+{
+    for( SIM_VIEW* view : m_views )
+    {
+        view->updateAxes();
+        view->UpdateAll();
+    }
+}
+
+
+void SIM_PLOT_TAB::UpdateTraceStyle( TRACE* trace )
+{
+    int        type = trace->GetType();
+    wxPenStyle penStyle;
+
+    if( ( type & SPT_AC_GAIN ) > 0 )
+        penStyle = wxPENSTYLE_SOLID;
+    else if( ( type & SPT_AC_PHASE ) > 0 )
+        penStyle = m_dotted_cp ? wxPENSTYLE_DOT : wxPENSTYLE_SOLID;
+    else if( ( type & SPT_CURRENT ) > 0 )
+        penStyle = m_dotted_cp ? wxPENSTYLE_DOT : wxPENSTYLE_SOLID;
+    else
+        penStyle = wxPENSTYLE_SOLID;
+
+    trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
+    m_sessionTraceColors[trace->GetName()] = trace->GetTraceColour();
+}
+
+
+TRACE* SIM_PLOT_TAB::GetOrAddTrace( const wxString& aVectorName, int aType, SIM_VIEW* aView )
+{
+    TRACE* trace = GetTrace( aVectorName, aType );
+
+    if( !trace && aView )
+    {
+        aView->updateAxes( aType );
+
+        if( GetSimType() == ST_TRAN || GetSimType() == ST_DC )
+        {
+            bool hasVoltageTraces = false;
+
+            for( const auto& [id, candidate] : m_traces )
+            {
+                if( candidate->GetView() == aView && ( candidate->GetType() & SPT_VOLTAGE ) )
+                {
+                    hasVoltageTraces = true;
+                    break;
+                }
+            }
+
+            if( !hasVoltageTraces )
+            {
+                if( aView->m_axis_y2 )
+                    aView->m_axis_y2->SetMasterScale( nullptr );
+
+                if( aView->m_axis_y3 )
+                    aView->m_axis_y3->SetMasterScale( nullptr );
+            }
+        }
+
+        if( aType & SPT_SP_SMITH )
+            trace = new SMITH_TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
+        else
+            trace = new TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
+
+        if( m_sessionTraceColors.count( aVectorName ) )
+            trace->SetTraceColour( m_sessionTraceColors[aVectorName] );
+        else
+            trace->SetTraceColour( m_colors.GenerateColor( m_sessionTraceColors ) );
+
+        UpdateTraceStyle( trace );
+        m_traces[getTraceId( aVectorName, aType )] = trace;
+
+        trace->SetView( aView );
+        aView->AddLayer( (mpLayer*) trace );
+    }
+
+    return trace;
+}
+
+
+void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vector<double>& aY, int aSweepCount,
+                                 size_t aSweepSize, bool aIsMultiRun, const std::vector<wxString>& aMultiRunLabels )
+{
+    SIM_VIEW* view = trace->GetView();
+
+    wxCHECK( view, /* void */ );
+
+    // smith traces carry Re/Im of the reflection coefficient, not frequency
+    bool smithTrace = ( trace->GetType() & SPT_SP_SMITH ) > 0;
+
+    if( dynamic_cast<LOG_SCALE<mpScaleXLog>*>( view->m_axis_x ) && !smithTrace )
+    {
+        // log( 0 ) is not valid.
+        if( aX.size() > 0 && aX[0] == 0 )
+        {
+            aX.erase( aX.begin() );
+            aY.erase( aY.begin() );
+        }
+    }
+
+    if( GetSimType() == ST_AC || GetSimType() == ST_FFT )
+    {
+        if( trace->GetType() & SPT_AC_PHASE )
+        {
+            for( double& pt : aY )
+                pt = pt * 180.0 / M_PI; // convert to degrees
+        }
+        else
+        {
+            for( double& pt : aY )
+                pt = MagnitudeToDb( pt ); // NaN where there is no signal
+        }
+    }
+
+    trace->SetData( aX, aY );
+    trace->SetSweepCount( aSweepCount );
+    trace->SetSweepSize( aSweepSize );
+    trace->SetIsMultiRun( aIsMultiRun );
+    trace->SetMultiRunLabels( aMultiRunLabels );
+
+    // Phase and currents on second Y axis, except for AC currents, those use the same axis as voltage
+    if( smithTrace )
+    {
+        // drawn through the chart geometry, not the axis transforms
+        trace->SetScale( nullptr, nullptr );
+    }
+    else if( ( trace->GetType() & SPT_AC_PHASE )
+             || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
+    {
+        trace->SetScale( view->m_axis_x, view->m_axis_y2 );
+    }
+    else if( trace->GetType() & SPT_POWER )
+    {
+        trace->SetScale( view->m_axis_x, view->m_axis_y3 );
+    }
+    else
+    {
+        trace->SetScale( view->m_axis_x, view->m_axis_y1 );
+    }
+
+    for( auto& [cursorId, cursor] : trace->GetCursors() )
+    {
+        if( cursor )
+            cursor->UpdateForNewData();
+    }
+
+    view->UpdateAxisVisibility();
+}
+
+
+void SIM_PLOT_TAB::DeleteTrace( TRACE* aTrace )
+{
+    for( const auto& [name, trace] : m_traces )
+    {
+        if( trace == aTrace )
+        {
+            m_traces.erase( name );
+            break;
+        }
+    }
+
+    if( SIM_VIEW* view = aTrace->GetView() )
+    {
+        for( const auto& [id, cursor] : aTrace->GetCursors() )
+        {
+            if( cursor )
+                view->DelLayer( cursor, true );
+        }
+
+        view->DelLayer( aTrace, true, true );
+        view->UpdateAxisVisibility();
+        view->UpdateSmithReferenceImpedance();
+    }
+
+    ResetScales( false );
+}
+
+
+bool SIM_PLOT_TAB::DeleteTrace( const wxString& aVectorName, int aTraceType )
+{
+    if( TRACE* trace = GetTrace( aVectorName, aTraceType ) )
+    {
+        DeleteTrace( trace );
+        return true;
+    }
+
+    return false;
+}
+
+
+void SIM_PLOT_TAB::EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName )
+{
+    SIM_VIEW* view = aTrace->GetView();
+
+    wxCHECK( view, /* void */ );
+
+    CURSOR* cursor;
+
+    if( aTrace->GetType() & SPT_SP_SMITH )
+    {
+        SMITH_TRACE* smithTrace = static_cast<SMITH_TRACE*>( aTrace );
+
+        cursor = new SMITH_CURSOR( smithTrace, this );
+
+        // start somewhere on the locus, biased per cursor id like the rectangular case
+        const std::vector<double>& freqs = smithTrace->GetFrequencies();
+
+        if( !freqs.empty() )
+            cursor->SetCoordX( freqs[freqs.size() * ( aCursorId == 1 ? 2 : 3 ) / 5] );
+    }
+    else
+    {
+        int width = view->GetXScreen() - view->GetMarginLeft() - view->GetMarginRight();
+        int center = view->GetMarginLeft() + KiROUND( width * ( aCursorId == 1 ? 0.4 : 0.6 ) );
+
+        cursor = new CURSOR( aTrace, this );
+
+        cursor->SetX( center );
+    }
+
+    cursor->SetName( aSignalName );
+
+    aTrace->SetCursor( aCursorId, cursor );
+    view->AddLayer( cursor );
+
+    // Notify the parent window about the changes
+    wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+}
+
+
+void SIM_PLOT_TAB::DisableCursor( TRACE* aTrace, int aCursorId )
+{
+    if( CURSOR* cursor = aTrace->GetCursor( aCursorId ) )
+    {
+        aTrace->SetCursor( aCursorId, nullptr );
+
+        if( SIM_VIEW* view = aTrace->GetView() )
+            view->DelLayer( cursor, true );
+
+        // Notify the parent window about the changes
+        wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+    }
+}
+
+
+void SIM_PLOT_TAB::ResetScales( bool aIncludeX )
+{
+    for( SIM_VIEW* view : m_views )
+        view->ResetScales( aIncludeX );
+
+    // Merge Y-axis auto-fit ranges for traces whose "Y Scale" has been explicitly linked to
+    // another view, so that the linked axes end up sharing the same numeric range -- as if all
+    // the involved traces were plotted together in a single view.
+    std::map<std::pair<SIM_VIEW*, int>, std::vector<TRACE*>> groups;
+
+    for( const auto& [name, trace] : m_traces )
+    {
+        if( SIM_VIEW* view = trace->GetView() )
+            groups[{ trace->GetYScaleView(), view->GetAxisSlot( trace ) }].push_back( trace );
+    }
+
+    for( const auto& [key, traces] : groups )
+    {
+        std::vector<SIM_VIEW*> actualViews;
+
+        for( TRACE* trace : traces )
+        {
+            SIM_VIEW* view = trace->GetView();
+
+            if( std::find( actualViews.begin(), actualViews.end(), view ) == actualViews.end() )
+                actualViews.push_back( view );
+        }
+
+        if( actualViews.size() <= 1 )
+            continue; // All traces already share the same, single axis object.
+
+        bool   haveRange = false;
+        double minV = 0.0;
+        double maxV = 0.0;
+
+        for( TRACE* trace : traces )
+        {
+            double lo = trace->GetMinY();
+            double hi = trace->GetMaxY();
+
+            if( !haveRange )
+            {
+                minV = lo;
+                maxV = hi;
+                haveRange = true;
+            }
+            else
+            {
+                minV = std::min( minV, lo );
+                maxV = std::max( maxV, hi );
+            }
+        }
+
+        if( !haveRange )
+            continue;
+
+        for( SIM_VIEW* view : actualViews )
+        {
+            if( mpScaleY* axis = view->GetAxisBySlot( key.second ) )
+                axis->SetDataRange( minV, maxV );
+        }
+    }
+}
+
+
+mpWindow* SIM_PLOT_TAB::GetPlotWin() const
+{
+    return GetDefaultView();
 }
 
 
 wxDEFINE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );
+wxDEFINE_EVENT( EVT_SIM_VIEWS_CHANGED, wxCommandEvent );

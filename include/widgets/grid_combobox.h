@@ -29,6 +29,20 @@
 class wxGrid;
 
 
+///< Renders a combobox cell's text with an always-visible dropdown arrow, so it reads as a
+///< dropdown even when it isn't currently being edited (matching GRID_CELL_COMBOBOX's editor).
+class KICOMMON_API GRID_CELL_COMBOBOX_RENDERER : public wxGridCellStringRenderer
+{
+public:
+    wxGridCellRenderer* Clone() const override;
+
+    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect, int aRow, int aCol,
+               bool isSelected ) override;
+
+    wxSize GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, int aRow, int aCol ) override;
+};
+
+
 class KICOMMON_API GRID_CELL_COMBOBOX : public wxGridCellEditor
 {
 public:

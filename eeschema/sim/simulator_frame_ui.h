@@ -41,6 +41,7 @@ class EESCHEMA_SETTINGS;
 class SPICE_CIRCUIT_MODEL;
 
 class TUNER_SLIDER;
+class STD_BITMAP_BUTTON;
 
 
 /**
@@ -287,9 +288,11 @@ private:
      * @param aVectorName is the SPICE vector name, such as "I(Net-C1-Pad1)".
      * @param aTraceType describes the type of plot.
      * @param aPlotTab is the tab that should receive the update.
+     * @param aView is the view the trace should be plotted on; if null, the trace's existing
+     *              view is kept (or the tab's default view is used, for a new trace).
      */
     void updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_TAB* aPlotTab,
-                      std::vector<double>* aDataX = nullptr, bool aClearData = false );
+                      std::vector<double>* aDataX = nullptr, bool aClearData = false, SIM_VIEW* aView = nullptr );
 
     ///< Reference impedance of the response port for an S-parameter vector, zero when unresolved.
     double getSmithPortImpedance( const wxString& aVectorName );
@@ -364,6 +367,37 @@ private:
     void updateMeasurementsFromGrid();
 
     /**
+     * Grow (but never shrink below \a aMinWidth) a grid column to fit its current contents.
+     *
+     * @param aExtraPadding additional width to reserve beyond the content, e.g. for a combo
+     *                      box column's dropdown arrow so it doesn't crowd the text.
+     */
+    void autoSizeGridColumn( WX_GRID* aGrid, int aCol, int aMinWidth, int aExtraPadding = 0 );
+
+    ///< The Signals grid's "Plot" column choices: "Disabled" plus one entry per current view.
+    wxArrayString getViewChoices( SIM_PLOT_TAB* aPlotTab ) const;
+
+    ///< The Signals grid's "Plot" column label for a given view ("Disabled" if null).
+    wxString getViewLabel( SIM_PLOT_TAB* aPlotTab, SIM_VIEW* aView ) const;
+
+    ///< The views a trace's Y-axis scale could be linked to: every view except its own (since
+    ///< linking to its own view is equivalent to -- and represented by -- "Default").
+    std::vector<SIM_VIEW*> getYScaleTargetViews( SIM_PLOT_TAB* aPlotTab, SIM_VIEW* aOwnView ) const;
+
+    ///< The Signals grid's "Y Scale" column choices: "Default" plus one entry per eligible view.
+    wxArrayString getYScaleChoices( SIM_PLOT_TAB* aPlotTab, SIM_VIEW* aOwnView ) const;
+
+    ///< The Signals grid's "Y Scale" column label for a trace ("Default" if not explicitly linked).
+    wxString getYScaleLabel( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace ) const;
+
+    void onAddView( wxCommandEvent& aEvent );
+    void onRemoveView( wxCommandEvent& aEvent );
+
+    ///< Enable/disable the add/remove-view buttons for the currently-shown tab (the remove
+    ///< button is disabled when only one view remains, or when there's no plot tab).
+    void updateViewButtons();
+
+    /**
      * Apply component values specified using tuner sliders to the current netlist.
      */
     void applyTuners();
@@ -420,6 +454,9 @@ public:
 private:
     SIMULATOR_FRAME*             m_simulatorFrame;
     SCH_EDIT_FRAME*              m_schematicFrame;
+
+    STD_BITMAP_BUTTON* m_addViewButton = nullptr;
+    STD_BITMAP_BUTTON* m_removeViewButton = nullptr;
 
     std::vector<wxString>        m_signals;
     std::map<int, wxString>      m_userDefinedSignals;

@@ -18,11 +18,46 @@
  */
 
 #include <widgets/grid_combobox.h>
+#include <algorithm>
+#include <wx/dc.h>
+#include <wx/grid.h>
+#include <wx/renderer.h>
 
 
 //-------- Renderer ---------------------------------------------------------------------
-// None required; just render as normal text.
 
+wxGridCellRenderer* GRID_CELL_COMBOBOX_RENDERER::Clone() const
+{
+    return new GRID_CELL_COMBOBOX_RENDERER( *this );
+}
+
+
+void GRID_CELL_COMBOBOX_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect, int aRow,
+                                        int aCol, bool isSelected )
+{
+    int arrowWidth = aRect.GetHeight();
+
+    wxRect textRect = aRect;
+    textRect.width = std::max( 0, textRect.width - arrowWidth );
+
+    wxGridCellStringRenderer::Draw( aGrid, aAttr, aDC, textRect, aRow, aCol, isSelected );
+
+    wxRect arrowRect = aRect;
+    arrowRect.x += textRect.width;
+    arrowRect.width = arrowWidth;
+
+    wxRendererNative::Get().DrawDropArrow( &aGrid, aDC, arrowRect );
+}
+
+
+wxSize GRID_CELL_COMBOBOX_RENDERER::GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, int aRow, int aCol )
+{
+    wxSize size = wxGridCellStringRenderer::GetBestSize( aGrid, aAttr, aDC, aRow, aCol );
+
+    size.x += size.y; // Reserve a square area for the always-visible dropdown arrow.
+
+    return size;
+}
 
 
 //-------- Editor -----------------------------------------------------------------------

@@ -26,6 +26,7 @@
 
 #include "sim_types.h"
 #include <map>
+#include <vector>
 #include <limits>
 #include <widgets/mathplot.h>
 #include <math/util.h>
@@ -37,6 +38,7 @@
 
 class SIMULATOR_FRAME;
 class SIM_PLOT_TAB;
+class SIM_VIEW;
 class TRACE;
 
 /**
@@ -46,8 +48,12 @@ class TRACE;
  * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_TAB, a specific
  * simulation command (.TRAN, .AC, etc.), and simulation settings (save all currents, etc.).
  *
- * Each plot can have multiple TRACEs.  While internally each TRACE can have multiple cursors,
- * the GUI supports only two cursors (and a differential cursor) for each plot.
+ * Each SIM_PLOT_TAB holds one or more SIM_VIEWs, stacked vertically.  All the views of a tab
+ * share the same (synchronized) X axis, but each has its own independent Y axis scaling, so
+ * signals with very different magnitudes can be routed to separate views.  Each TRACE belongs
+ * to exactly one SIM_VIEW (or none, if the signal isn't currently plotted).  While internally
+ * each TRACE can have multiple cursors, the GUI supports only two cursors (and a differential
+ * cursor) for each plot.
  *
  * TRACEs are identified by a signal (V(OUT), I(R2), etc.) and a type (SPT_VOLTAGE, SPT_AC_PHASE,
  * etc.).
@@ -130,9 +136,11 @@ class TRACE : public mpFXYVector
 {
 public:
     TRACE( const wxString& aName, SIM_TRACE_TYPE aType ) :
-           mpFXYVector( aName ),
-           m_type( aType ),
-           m_isMultiRun( false )
+            mpFXYVector( aName ),
+            m_type( aType ),
+            m_isMultiRun( false ),
+            m_view( nullptr ),
+            m_yScaleView( nullptr )
     {
         SetContinuity( true );
         ShowName( false );
@@ -194,12 +202,35 @@ public:
     void SetMultiRunLabels( const std::vector<wxString>& aLabels ) { m_multiRunLabels = aLabels; }
     const std::vector<wxString>& GetMultiRunLabels() const { return m_multiRunLabels; }
 
+    ///< The SIM_VIEW this trace is currently plotted on (nullptr if not plotted anywhere).
+    SIM_VIEW* GetView() const { return m_view; }
+    void      SetView( SIM_VIEW* aView ) { m_view = aView; }
+
+    ///< The view whose Y-axis scale this trace's axis should match (defaults to its own view).
+    ///< When set to a view other than its own, this trace's Y-axis range is merged with that
+    ///< of every other trace targeting the same view/axis, as if they were all plotted together.
+    SIM_VIEW* GetYScaleView() const { return m_yScaleView ? m_yScaleView : m_view; }
+    void      SetYScaleView( SIM_VIEW* aView ) { m_yScaleView = ( aView == m_view ) ? nullptr : aView; }
+
+    ///< True if this trace's Y-axis scale hasn't been explicitly linked to another view (i.e.
+    ///< it defaults to its own view's scale).
+    bool IsYScaleDefault() const { return m_yScaleView == nullptr; }
+
+    ///< Clears an explicit Y-scale link if it pointed at a view that no longer exists.
+    void ClearYScaleViewIf( SIM_VIEW* aView )
+    {
+        if( m_yScaleView == aView )
+            m_yScaleView = nullptr;
+    }
+
 protected:
     std::map<int, CURSOR*> m_cursors;       // No ownership; the mpWindow owns the CURSORs
     SIM_TRACE_TYPE         m_type;
     wxColour               m_traceColour;
     bool                   m_isMultiRun;
     std::vector<wxString>  m_multiRunLabels;
+    SIM_VIEW*              m_view;       // No ownership; the SIM_PLOT_TAB owns the SIM_VIEWs
+    SIM_VIEW*              m_yScaleView; // No ownership; nullptr means "same as m_view"
 };
 
 
@@ -316,37 +347,35 @@ struct SMITH_STASHED_CURSOR
 };
 
 
-class SIM_PLOT_TAB : public SIM_TAB
+/**
+ * A single stacked plot area within a SIM_PLOT_TAB.
+ *
+ * All the SIM_VIEWs of a tab share the same (synchronized) X axis range, but each has its own
+ * independent set of Y axes (voltage/current/power), legend, and grid/data-range state.
+ */
+class SIM_VIEW : public mpWindow
 {
 public:
-    SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent );
+    SIM_VIEW( SIM_PLOT_TAB* aPlotTab, wxWindow* aParent );
 
-    virtual ~SIM_PLOT_TAB();
+    ///< Mirrors this view's X range onto every other view of the same tab.
+    void OnXViewChanged() override;
 
-    void ApplyPreferences( const SIM_PREFERENCES& aPrefs ) override
+    ///< Directly set this view's X range (used to mirror another view's zoom/pan onto this one).
+    void SetXRange( double aPos, double aDesiredMax, double aDesiredMin )
     {
-        m_plotWin->SetMouseWheelActions( convertMouseWheelActions( aPrefs.mouse_wheel_actions ) );
+        SetXView( aPos, aDesiredMax, aDesiredMin );
     }
 
-    wxString GetLabelX() const
-    {
-        return m_axis_x ? m_axis_x->GetName() : wxString( wxS( "" ) );
-    }
+    SIM_PLOT_TAB* GetPlotTab() const { return m_plotTab; }
 
-    wxString GetLabelY1() const
-    {
-        return m_axis_y1 ? m_axis_y1->GetName() : wxString( wxS( "" ) );
-    }
+    wxString GetLabelX() const { return m_axis_x ? m_axis_x->GetName() : wxString( wxS( "" ) ); }
 
-    wxString GetLabelY2() const
-    {
-        return m_axis_y2 ? m_axis_y2->GetName() : wxString( wxS( "" ) );
-    }
+    wxString GetLabelY1() const { return m_axis_y1 ? m_axis_y1->GetName() : wxString( wxS( "" ) ); }
 
-    wxString GetLabelY3() const
-    {
-        return m_axis_y3 ? m_axis_y3->GetName() : wxString( wxS( "" ) );
-    }
+    wxString GetLabelY2() const { return m_axis_y2 ? m_axis_y2->GetName() : wxString( wxS( "" ) ); }
+
+    wxString GetLabelY3() const { return m_axis_y3 ? m_axis_y3->GetName() : wxString( wxS( "" ) ); }
 
     bool GetY1Scale( double* aMin, double* aMax ) const
     {
@@ -381,17 +410,14 @@ public:
     wxString GetUnitsY2() const;
     wxString GetUnitsY3() const;
 
-    const std::map<wxString, TRACE*>& GetTraces() const
-    {
-        return m_traces;
-    }
+    ///< Get the display units (e.g. "V", "A", "dB") for a given trace plotted on this view.
+    wxString GetUnitsForTrace( TRACE* aTrace ) const;
 
-    TRACE* GetTrace( const wxString& aVecName, int aType ) const
-    {
-        auto trace = m_traces.find( getTraceId( aVecName, aType ) );
+    ///< Get the Y-axis slot (1, 2 or 3) a trace of this type is plotted on.
+    int GetAxisSlot( TRACE* aTrace ) const;
 
-        return trace == m_traces.end() ? nullptr : trace->second;
-    }
+    ///< Get the Y-axis scale object for a given slot (1, 2 or 3), or nullptr if not created yet.
+    mpScaleY* GetAxisBySlot( int aSlot ) const;
 
     void ShowGrid( bool aEnable )
     {
@@ -407,7 +433,7 @@ public:
         if( m_axis_y3 )
             m_axis_y3->SetTicks( !aEnable );
 
-        m_plotWin->UpdateAll();
+        UpdateAll();
     }
 
     bool IsGridShown() const
@@ -421,49 +447,43 @@ public:
     void ShowLegend( bool aEnable )
     {
         m_legend->SetVisible( aEnable );
-        m_plotWin->UpdateAll();
+        UpdateAll();
     }
 
-    bool IsLegendShown() const
-    {
-        return m_legend->IsVisible();
-    }
+    bool IsLegendShown() const { return m_legend->IsVisible(); }
 
-    wxPoint GetLegendPosition() const
-    {
-        return m_legend->GetPosition();
-    }
+    wxPoint GetLegendPosition() const { return m_legend->GetPosition(); }
 
     void SetLegendPosition( const wxPoint& aPosition )
     {
         m_legend->Move( aPosition );
         m_legend->UpdateReference();
-        m_LastLegendPosition = aPosition;
+        m_lastLegendPosition = aPosition;
     }
 
-    /**
-     * Draw secondary signal traces (current or phase) with dotted lines
-     */
-    void SetDottedSecondary( bool aEnable )
-    {
-        m_dotted_cp = aEnable;
+    ///< Reset the Y (and, if requested, X) scale ranges to fit this view's own traces.
+    void ResetScales( bool aIncludeX );
 
-        for( const auto& [ name, trace ] : m_traces )
-            UpdateTraceStyle( trace );
+    ///< Create/Ensure axes are available for plotting.
+    void updateAxes( int aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
 
-        m_plotWin->UpdateAll();
-    }
+    void UpdateAxisVisibility();
 
-    bool GetDottedSecondary() const
-    {
-        return m_dotted_cp;
-    }
+    void EnsureThirdYAxisExists();
 
-    void SetSmithMode( bool aEnable );
-    bool IsSmithMode() const { return m_smithMode; }
+    // ---- Smith chart --------------------------------------------------------------------
 
-    ///< Refresh the grid z0 from the shown Smith traces.
+    ///< Show/hide this view's Smith chart overlay.  The mode itself is owned by the tab; each
+    ///< view keeps its own grid layer and pan/zoom so the stacked charts stay independent.
+    void SetSmithChart( bool aEnable );
+
+    bool IsSmithChart() const { return m_smithChart; }
+
+    ///< Refresh the grid z0 from the Smith traces shown on this view.
     void UpdateSmithReferenceImpedance();
+
+    ///< Re-read the Smith grid pen from the tab's color theme.
+    void UpdateSmithGridColor();
 
     double             GetSmithZoom() const { return m_smithZoom; }
     const wxRealPoint& GetSmithPan() const { return m_smithPan; }
@@ -474,7 +494,6 @@ public:
         m_smithPan = wxRealPoint( 0.0, 0.0 );
     }
 
-    ///< Restore a saved view, values are validated and clamped.
     void SetSmithView( double aZoom, double aPanX, double aPanY )
     {
         m_smithZoom = std::isfinite( aZoom ) ? std::clamp( aZoom, 1.0, 50.0 ) : 1.0;
@@ -485,75 +504,18 @@ public:
     void SmithZoomAt( const wxPoint& aPos, double aFactor );
     void SmithPanBy( const wxPoint& aDelta );
 
-    ///< Traces and cursors set aside while in Smith mode, restored when leaving it.
-    std::vector<SMITH_STASHED_TRACE>&  SmithStashedTraces() { return m_smithStashedTraces; }
-    std::vector<SMITH_STASHED_CURSOR>& SmithStashedCursors() { return m_smithStashedCursors; }
-
-    ///< Turn on/off the cursor for a particular trace.
-    void EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName );
-    void DisableCursor( TRACE* aTrace, int aCursorId );
-
-    ///< Reset scale ranges to fit the current traces.
-    void ResetScales( bool aIncludeX );
-
-    ///< Update trace line style
-    void UpdateTraceStyle( TRACE* trace );
-
-    ///< Update plot colors
-    void UpdatePlotColors();
-
-    void OnLanguageChanged() override;
-
-    ///< Getter for math plot window
-    mpWindow* GetPlotWin() const { return m_plotWin; }
-
-    TRACE* GetOrAddTrace( const wxString& aVectorName, int aType );
-
-    void SetTraceData( TRACE* aTrace, std::vector<double>& aX, std::vector<double>& aY,
-                       int aSweepCount, size_t aSweepSize, bool aIsMultiRun = false,
-                       const std::vector<wxString>& aMultiRunLabels = {} );
-
-    bool DeleteTrace( const wxString& aVectorName, int aTraceType );
-    void DeleteTrace( TRACE* aTrace );
-
-    std::vector<std::pair<wxString, wxString>>& Measurements() { return m_measurements; }
-
-    void EnsureThirdYAxisExists();
-
 public:
-    wxPoint m_LastLegendPosition;
+    wxPoint m_lastLegendPosition;
+
+    mpScaleXBase* m_axis_x;
+    mpScaleY*     m_axis_y1;
+    mpScaleY*     m_axis_y2;
+    mpScaleY*     m_axis_y3;
+    mpInfoLegend* m_legend;
 
 private:
-    static mpWindow::MouseWheelActionSet
-    convertMouseWheelActions( const SIM_MOUSE_WHEEL_ACTION_SET& s )
-    {
-        static_assert( static_cast<unsigned>( mpWindow::MouseWheelAction::COUNT )
-                               == static_cast<unsigned>( SIM_MOUSE_WHEEL_ACTION::COUNT ),
-                       "mpWindow::MouseWheelAction enum must match SIM_MOUSE_WHEEL_ACTION" );
-
-        using A = mpWindow::MouseWheelAction;
-        mpWindow::MouseWheelActionSet m;
-        m.verticalUnmodified = static_cast<A>( s.vertical_unmodified );
-        m.verticalWithCtrl   = static_cast<A>( s.vertical_with_ctrl );
-        m.verticalWithShift  = static_cast<A>( s.vertical_with_shift );
-        m.verticalWithAlt    = static_cast<A>( s.vertical_with_alt );
-        m.horizontal         = static_cast<A>( s.horizontal );
-
-        return m;
-    }
-
-    wxString getTraceId( const wxString& aVectorName, int aType ) const
-    {
-        return wxString::Format( wxS( "%s%d" ), aVectorName, aType & SPT_Y_AXIS_MASK );
-    }
-
     ///< @brief Construct the plot axes for DC simulation plot.
     void prepareDCAxes( int aNewTraceType );
-
-    ///< Create/Ensure axes are available for plotting
-    void updateAxes( int aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
-
-    void UpdateAxisVisibility();
 
     void onSmithMouseWheel( wxMouseEvent& aEvent );
     void onSmithMagnify( wxMouseEvent& aEvent );
@@ -569,31 +531,222 @@ private:
     bool getSmithView( SMITH_VIEW& aView ) const;
 
 private:
+    SIM_PLOT_TAB* m_plotTab;
+
+    SMITH_GRID* m_smithGrid;
+
+    bool        m_smithChart;
+    double      m_smithZoom;
+    wxRealPoint m_smithPan;
+    bool        m_smithPanning;
+    bool        m_smithLeftSkipped;
+    wxPoint     m_smithPanLast;
+    wxPoint     m_smithMenuPos;
+};
+
+
+class SIM_PLOT_TAB : public SIM_TAB
+{
+public:
+    SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent );
+
+    virtual ~SIM_PLOT_TAB();
+
+    void ApplyPreferences( const SIM_PREFERENCES& aPrefs ) override;
+
+    // ---- View management ----------------------------------------------------------------
+
+    const std::vector<SIM_VIEW*>& GetViews() const { return m_views; }
+
+    SIM_VIEW* GetView( int aIndex ) const
+    {
+        return ( aIndex >= 0 && aIndex < (int) m_views.size() ) ? m_views[aIndex] : nullptr;
+    }
+
+    int GetViewIndex( SIM_VIEW* aView ) const;
+
+    int GetViewCount() const { return (int) m_views.size(); }
+
+    ///< The view new traces default to, and legacy (single-view) settings apply to.
+    SIM_VIEW* GetDefaultView() const { return m_views.empty() ? nullptr : m_views[0]; }
+
+    ///< Add a new (empty) view, stacked below the existing ones.
+    SIM_VIEW* AddView();
+
+    ///< Remove a view.  Any traces plotted on it are unplotted (not deleted from the grid).
+    ///< The last remaining view cannot be removed.
+    bool RemoveView( SIM_VIEW* aView );
+
+    ///< Mirror aSource's current X range onto every other view of this tab.
+    void SyncXView( SIM_VIEW* aSource );
+
+    // ---- Tab-wide accessors (identical across views; delegate to the default view) -------
+
+    wxString GetLabelX() const;
+    wxString GetUnitsX() const;
+
+    ///< Get the display units (e.g. "V", "A", "dB") for a given trace's own view.
+    wxString GetUnitsForTrace( TRACE* aTrace ) const;
+
+    // ---- Settings shared/fanned out across all views --------------------------------------
+
+    void ShowGrid( bool aEnable );
+    bool IsGridShown() const;
+
+    void    ShowLegend( bool aEnable );
+    bool    IsLegendShown() const;
+    wxPoint GetLegendPosition() const;
+    void    SetLegendPosition( const wxPoint& aPosition );
+
+    // ---- Default-view convenience (used by the Analysis Properties dialog) ----------------
+
+    wxString GetLabelY1() const;
+    wxString GetLabelY2() const;
+    wxString GetLabelY3() const;
+    wxString GetUnitsY1() const;
+    wxString GetUnitsY2() const;
+    wxString GetUnitsY3() const;
+
+    bool GetY1Scale( double* aMin, double* aMax ) const;
+    bool GetY2Scale( double* aMin, double* aMax ) const;
+    bool GetY3Scale( double* aMin, double* aMax ) const;
+    void SetY1Scale( bool aLock, double aMin, double aMax );
+    void SetY2Scale( bool aLock, double aMin, double aMax );
+    void SetY3Scale( bool aLock, double aMin, double aMax );
+
+    void EnsureThirdYAxisExists();
+
+    /**
+     * Draw secondary signal traces (current or phase) with dotted lines
+     */
+    void SetDottedSecondary( bool aEnable )
+    {
+        m_dotted_cp = aEnable;
+
+        for( const auto& [name, trace] : m_traces )
+            UpdateTraceStyle( trace );
+
+        for( SIM_VIEW* view : m_views )
+            view->UpdateAll();
+    }
+
+    bool GetDottedSecondary() const { return m_dotted_cp; }
+
+    ///< Smith mode is tab-wide: every view of the tab shows a Smith chart while it is on.
+    void SetSmithMode( bool aEnable );
+    bool IsSmithMode() const { return m_smithMode; }
+
+    ///< Refresh the grid z0 from the shown Smith traces, on every view.
+    void UpdateSmithReferenceImpedance();
+
+    ///< The saved/restored pan and zoom track the default view.
+    double      GetSmithZoom() const;
+    wxRealPoint GetSmithPan() const;
+
+    void ResetSmithView();
+
+    ///< Restore a saved view, values are validated and clamped.
+    void SetSmithView( double aZoom, double aPanX, double aPanY );
+
+    void SmithZoomAt( const wxPoint& aPos, double aFactor );
+    void SmithPanBy( const wxPoint& aDelta );
+
+    ///< Traces and cursors set aside while in Smith mode, restored when leaving it.
+    std::vector<SMITH_STASHED_TRACE>&  SmithStashedTraces() { return m_smithStashedTraces; }
+    std::vector<SMITH_STASHED_CURSOR>& SmithStashedCursors() { return m_smithStashedCursors; }
+
+    ///< Turn on/off the cursor for a particular trace.
+    void EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName );
+    void DisableCursor( TRACE* aTrace, int aCursorId );
+
+    ///< Reset scale ranges to fit the current traces, on every view.
+    void ResetScales( bool aIncludeX );
+
+    ///< Update trace line style
+    void UpdateTraceStyle( TRACE* trace );
+
+    ///< Update plot colors
+    void UpdatePlotColors();
+
+    wxColour GetPlotColor( SIM_PLOT_COLORS::COLOR_SET aColorId ) { return m_colors.GetPlotColor( aColorId ); }
+
+    void OnLanguageChanged() override;
+
+    ///< Getter for the default view's math plot window (back-compat for zoom undo/redo, export).
+    mpWindow* GetPlotWin() const;
+
+    ///< Get (or create, on aView) the TRACE for a signal.  If the trace already exists (on any
+    ///< view), it is returned unchanged -- callers wanting to move an existing trace to a
+    ///< different view should DeleteTrace() it first.
+    TRACE* GetOrAddTrace( const wxString& aVectorName, int aType, SIM_VIEW* aView );
+
+    void SetTraceData( TRACE* aTrace, std::vector<double>& aX, std::vector<double>& aY, int aSweepCount,
+                       size_t aSweepSize, bool aIsMultiRun = false, const std::vector<wxString>& aMultiRunLabels = {} );
+
+    bool DeleteTrace( const wxString& aVectorName, int aTraceType );
+    void DeleteTrace( TRACE* aTrace );
+
+    const std::map<wxString, TRACE*>& GetTraces() const { return m_traces; }
+
+    TRACE* GetTrace( const wxString& aVecName, int aType ) const
+    {
+        auto trace = m_traces.find( getTraceId( aVecName, aType ) );
+
+        return trace == m_traces.end() ? nullptr : trace->second;
+    }
+
+    std::vector<std::pair<wxString, wxString>>& Measurements() { return m_measurements; }
+
+public:
+    wxPoint m_LastLegendPosition;
+
+private:
+    static mpWindow::MouseWheelActionSet convertMouseWheelActions( const SIM_MOUSE_WHEEL_ACTION_SET& s )
+    {
+        static_assert( static_cast<unsigned>( mpWindow::MouseWheelAction::COUNT )
+                               == static_cast<unsigned>( SIM_MOUSE_WHEEL_ACTION::COUNT ),
+                       "mpWindow::MouseWheelAction enum must match SIM_MOUSE_WHEEL_ACTION" );
+
+        using A = mpWindow::MouseWheelAction;
+        mpWindow::MouseWheelActionSet m;
+        m.verticalUnmodified = static_cast<A>( s.vertical_unmodified );
+        m.verticalWithCtrl = static_cast<A>( s.vertical_with_ctrl );
+        m.verticalWithShift = static_cast<A>( s.vertical_with_shift );
+        m.verticalWithAlt = static_cast<A>( s.vertical_with_alt );
+        m.horizontal = static_cast<A>( s.horizontal );
+
+        return m;
+    }
+
+    wxString getTraceId( const wxString& aVectorName, int aType ) const
+    {
+        return wxString::Format( wxS( "%s%d" ), aVectorName, aType & SPT_Y_AXIS_MASK );
+    }
+
+private:
     SIM_PLOT_COLORS              m_colors;
     std::map<wxString, wxColour> m_sessionTraceColors;
 
-    // Top-level plot window
-    mpWindow*                    m_plotWin;
-    wxBoxSizer*                  m_sizer;
+    // Top-level sizer; holds all the stacked SIM_VIEWs
+    wxBoxSizer* m_sizer;
 
-    // Traces to be plotted
-    std::map<wxString, TRACE*>   m_traces;
+    // Stacked plot views (owned via wx parent-child, except when explicitly removed)
+    std::vector<SIM_VIEW*> m_views;
 
-    mpScaleXBase*                m_axis_x;
-    mpScaleY*                    m_axis_y1;
-    mpScaleY*                    m_axis_y2;
-    mpScaleY*                    m_axis_y3;
-    mpInfoLegend*                m_legend;
-    SMITH_GRID*                  m_smithGrid;
+    // Cached so newly-added views can be initialized with the current preferences
+    mpWindow::MouseWheelActionSet m_mouseWheelActions;
 
-    bool                         m_dotted_cp;
-    bool                         m_smithMode;
-    double                       m_smithZoom;
-    wxRealPoint                  m_smithPan;
-    bool                         m_smithPanning;
-    bool                         m_smithLeftSkipped;
-    wxPoint                      m_smithPanLast;
-    wxPoint                      m_smithMenuPos;
+    // Traces to be plotted; each knows which view (if any) it's currently plotted on
+    std::map<wxString, TRACE*> m_traces;
+
+    bool m_dotted_cp;
+
+    // Re-entrancy guard for SyncXView()
+    bool m_syncingXView;
+
+    // Smith-chart mode is a property of the whole tab; each SIM_VIEW carries its own grid
+    // layer and pan/zoom state.
+    bool m_smithMode;
 
     std::vector<SMITH_STASHED_TRACE>  m_smithStashedTraces;
     std::vector<SMITH_STASHED_CURSOR> m_smithStashedCursors;
@@ -603,5 +756,9 @@ private:
 };
 
 wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );
+
+///< Fired whenever a view is added to or removed from a SIM_PLOT_TAB, so the Signals grid can
+///< refresh its "Plot" column dropdown choices.
+wxDECLARE_EVENT( EVT_SIM_VIEWS_CHANGED, wxCommandEvent );
 
 #endif

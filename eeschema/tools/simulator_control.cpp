@@ -73,18 +73,15 @@ int SIMULATOR_CONTROL::NewAnalysisTab( const TOOL_EVENT& aEvent )
     DIALOG_SIM_COMMAND dlg( m_simulatorFrame, m_circuitModel, m_simulator->Settings() );
     WX_STRING_REPORTER reporter;
 
-    m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
-                                               reporter );
+    m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS, reporter );
 
     if( reporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
     {
-        DisplayErrorMessage( m_simulatorFrame, _( "Errors during netlist generation." ),
-                             reporter.GetMessages() );
+        DisplayErrorMessage( m_simulatorFrame, _( "Errors during netlist generation." ), reporter.GetMessages() );
     }
     else if( reporter.HasMessageOfSeverity( RPT_SEVERITY_WARNING ) )
     {
-        DisplayInfoMessage( m_simulatorFrame, _( "Warnings during netlist generation." ),
-                            reporter.GetMessages() );
+        DisplayInfoMessage( m_simulatorFrame, _( "Warnings during netlist generation." ), reporter.GetMessages() );
     }
 
     dlg.SetSimCommand( wxS( "*" ) );
@@ -142,8 +139,7 @@ wxString SIMULATOR_CONTROL::getDefaultPath()
 {
     wxFileName path = m_simulator->Settings()->GetWorkbookFilename();
 
-    path.Normalize( FN_NORMALIZE_FLAGS|wxPATH_NORM_ENV_VARS,
-                    m_simulatorFrame->Prj().GetProjectPath() );
+    path.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS, m_simulatorFrame->Prj().GetProjectPath() );
     return path.GetPath();
 }
 
@@ -157,9 +153,8 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
 
     if( filename.IsEmpty() )
     {
-        wxFileDialog saveAsDlg( m_simulatorFrame, _( "Save Simulation Workbook As" ),
-                                getDefaultPath(), getDefaultFilename(),
-                                FILEEXT::WorkbookFileWildcard(),
+        wxFileDialog saveAsDlg( m_simulatorFrame, _( "Save Simulation Workbook As" ), getDefaultPath(),
+                                getDefaultFilename(), FILEEXT::WorkbookFileWildcard(),
                                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         KIPLATFORM::UI::AllowNetworkFileSystems( &saveAsDlg );
@@ -179,8 +174,8 @@ int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
-        wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "",
-                              FILEEXT::PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+        wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "", FILEEXT::PngFileWildcard(),
+                              wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         KIPLATFORM::UI::AllowNetworkFileSystems( &saveDlg );
 
@@ -252,7 +247,7 @@ int SIMULATOR_CONTROL::ExportPlotToSchematic( const TOOL_EVENT& aEvent )
             wxString out;
             out << wxBase64Encode( buff );
 
-            #define MIME_BASE64_LENGTH 76
+#define MIME_BASE64_LENGTH 76
             size_t first = 0;
 
             while( first < out.Length() )
@@ -287,8 +282,7 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
     {
         const wxChar SEPARATOR = ';';
 
-        wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot Data" ), "", "",
-                              FILEEXT::CsvFileWildcard(),
+        wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot Data" ), "", "", FILEEXT::CsvFileWildcard(),
                               wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         KIPLATFORM::UI::AllowNetworkFileSystems( &saveDlg );
@@ -362,7 +356,7 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
         out.Write( wxS( "\r\n" ) );
 
         // write each row's numerical value
-        for ( std::size_t curRow=0; curRow < rowCount; curRow++ )
+        for( std::size_t curRow = 0; curRow < rowCount; curRow++ )
         {
             double xAxisValue = traces.begin()->second->GetDataX().at( curRow );
             out.Write( wxString::Format( wxT( "%g%c" ), xAxisValue, SEPARATOR ) );
@@ -394,12 +388,20 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
-        mpWindow* plot = plotTab->GetPlotWin();
+        // The X axis is shared (kept in sync) across all of a tab's views, so horizontal zoom
+        // only needs to be applied to the default view -- its OnXViewChanged() propagates the new
+        // X range to the others.  The Y axes are independent, so vertical zoom (and zoom-to-fit's
+        // Y component) must be applied to every view, or only the default view would rescale.
+        SIM_VIEW*                     defaultView = plotTab->GetDefaultView();
+        const std::vector<SIM_VIEW*>& views = plotTab->GetViews();
+
+        if( !defaultView )
+            return 0;
 
         if( plotTab->IsSmithMode() )
         {
             // the chart is drawn from the Smith view, not the hidden axes
-            wxPoint center( plot->GetScrX() / 2, plot->GetScrY() / 2 );
+            wxPoint center( defaultView->GetScrX() / 2, defaultView->GetScrY() / 2 );
 
             if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
             {
@@ -412,7 +414,6 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
             else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) )
             {
                 plotTab->ResetSmithView();
-                plot->Refresh();
             }
 
             return 0;
@@ -420,32 +421,48 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 
         if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
         {
-            plot->ZoomIn();
+            defaultView->ZoomIn(); // both axes on the default view; its X range syncs to the others
+
+            for( SIM_VIEW* view : views )
+            {
+                if( view != defaultView )
+                    view->ZoomIn( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxVERTICAL );
+            }
         }
         else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) )
         {
-            plot->ZoomOut();
+            defaultView->ZoomOut();
+
+            for( SIM_VIEW* view : views )
+            {
+                if( view != defaultView )
+                    view->ZoomOut( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxVERTICAL );
+            }
         }
         else if( aEvent.IsAction( &ACTIONS::zoomInHorizontally ) )
         {
-            plot->ZoomIn( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxHORIZONTAL );
+            defaultView->ZoomIn( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxHORIZONTAL );
         }
         else if( aEvent.IsAction( &ACTIONS::zoomOutHorizontally ) )
         {
-            plot->ZoomOut( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxHORIZONTAL );
+            defaultView->ZoomOut( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxHORIZONTAL );
         }
         else if( aEvent.IsAction( &ACTIONS::zoomInVertically ) )
         {
-            plot->ZoomIn( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxVERTICAL );
+            for( SIM_VIEW* view : views )
+                view->ZoomIn( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxVERTICAL );
         }
         else if( aEvent.IsAction( &ACTIONS::zoomOutVertically ) )
         {
-            plot->ZoomOut( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxVERTICAL );
+            for( SIM_VIEW* view : views )
+                view->ZoomOut( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxVERTICAL );
         }
         else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) )
         {
             wxCommandEvent dummy;
-            plot->OnFit( dummy );
+
+            for( SIM_VIEW* view : views )
+                view->OnFit( dummy );
         }
     }
 
@@ -621,8 +638,8 @@ public:
     }
 
     NETLIST_VIEW_DIALOG( wxWindow* parent ) :
-            DIALOG_SHIM( parent, wxID_ANY, _( "SPICE Netlist" ), wxDefaultPosition,
-                         wxSize( 800, 800 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+            DIALOG_SHIM( parent, wxID_ANY, _( "SPICE Netlist" ), wxDefaultPosition, wxSize( 800, 800 ),
+                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
             m_textCtrl( nullptr ),
             m_reporter( nullptr )
     {
@@ -644,7 +661,7 @@ public:
         for( int i = 0; i < wxSTC_STYLE_MAX; ++i )
             m_textCtrl->StyleSetFont( i, fixedFont );
 
-        m_textCtrl->StyleClearAll();  // Addresses a bug in wx3.0 where styles are not correctly set
+        m_textCtrl->StyleClearAll(); // Addresses a bug in wx3.0 where styles are not correctly set
 
         m_textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
         m_textCtrl->SetLexer( wxSTC_LEX_SPICE );
@@ -665,8 +682,7 @@ public:
         SetSizer( sizer );
         Layout();
 
-        Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ),
-                 nullptr, this );
+        Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ), nullptr, this );
 
         m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_textCtrl, wxT( "{}" ), false );
 
@@ -684,9 +700,9 @@ public:
     REPORTER* GetReporter() { return m_reporter; }
 
 private:
-    wxSplitterWindow*                 m_splitter;
-    wxStyledTextCtrl*                 m_textCtrl;
-    WX_HTML_REPORT_BOX*               m_reporter;
+    wxSplitterWindow*   m_splitter;
+    wxStyledTextCtrl*   m_textCtrl;
+    WX_HTML_REPORT_BOX* m_reporter;
 
     std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
 };
@@ -714,8 +730,7 @@ int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
     STRING_FORMATTER    formatter;
     NETLIST_VIEW_DIALOG dlg( m_simulatorFrame );
 
-    m_circuitModel->GetNetlist( m_simulatorFrame->GetCurrentSimCommand(),
-                                m_simulatorFrame->GetCurrentOptions(),
+    m_circuitModel->GetNetlist( m_simulatorFrame->GetCurrentSimCommand(), m_simulatorFrame->GetCurrentOptions(),
                                 &formatter, *dlg.GetReporter() );
 
     dlg.SetNetlist( wxString( formatter.GetString() ) );

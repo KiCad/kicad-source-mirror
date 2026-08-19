@@ -677,6 +677,23 @@ public:
         }
     }
 
+    /** Force this axis' data range to an explicit [minV, maxV], as if it had been computed by
+     *  ExtendDataRange().  Used to synchronize the Y-axis range across views when signals are
+     *  routed to share another view's Y-axis scale (see SIM_PLOT_TAB's "Y Scale" column).
+     */
+    void SetDataRange( double minV, double maxV )
+    {
+        m_minV = minV;
+        m_maxV = maxV;
+        m_rangeSet = true;
+
+        if( m_minV == m_maxV )
+        {
+            m_minV = m_minV - 1.0;
+            m_maxV = m_maxV + 1.0;
+        }
+    }
+
     virtual void ResetDataRange()
     {
         m_rangeSet = false;
@@ -1330,6 +1347,12 @@ protected:
      * \return true if the changes were applied
      */
     virtual bool SetYView( double pos, double desiredMax, double desiredMin );
+
+    /** Called whenever the visible X range changes (pan, zoom, fit, ...).
+     *  Override to react to (or mirror) X-axis view changes, e.g. to keep multiple
+     *  windows showing the same X range in sync.
+     */
+    virtual void OnXViewChanged() {}
 
     // wxList m_layers;    //!< List of attached plot layers
     wxLayerList m_layers;   // !< List of attached plot layers
