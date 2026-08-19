@@ -120,7 +120,7 @@ bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem, std::map<PCB_LAYER_ID, 
 
     if( originalLayers != newLayers )
     {
-        m_commit->Modify( aItem );
+        m_commit->Modify( aItem, nullptr, RECURSE_MODE::RECURSE );
         aItem->SetLayerSet( newLayers );
         frame()->GetCanvas()->GetView()->Update( aItem, KIGFX::GEOMETRY );
         return true;
@@ -144,6 +144,9 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
     // Change tracks.
     for( PCB_TRACK* segm : frame()->GetBoard()->Tracks() )
     {
+        if( dynamic_cast<PCB_GENERATOR*>( segm->GetParentGroup() ) )
+            continue;
+
         if( segm->Type() == PCB_VIA_T )
         {
             PCB_VIA*     via = static_cast<PCB_VIA*>( segm );
