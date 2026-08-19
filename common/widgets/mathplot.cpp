@@ -209,12 +209,14 @@ wxSize mpInfoLayer::GetSize() const
 mpInfoLegend::mpInfoLegend() :
         mpInfoLayer()
 {
+    SetFont( (wxFont&) *wxSMALL_FONT );
 }
 
 
 mpInfoLegend::mpInfoLegend( wxRect rect, const wxBrush* brush ) :
         mpInfoLayer( rect, brush )
 {
+    SetFont( (wxFont&) *wxSMALL_FONT );
 }
 
 
@@ -282,6 +284,10 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
             textY += mpLEGEND_MARGIN;
             m_dim.height = textY;
             dc.DrawRectangle( m_dim.x, m_dim.y, m_dim.width, m_dim.height );
+
+            // Set explicitly: other layers (e.g. plot cursors) leave their own text colour on
+            // the DC, which would otherwise leak into the legend's labels.
+            dc.SetTextForeground( w.GetForegroundColour() );
 
             for( unsigned int p2 = 0; p2 < w.CountAllLayers(); p2++ )
             {
