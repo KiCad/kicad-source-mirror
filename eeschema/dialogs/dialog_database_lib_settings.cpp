@@ -87,7 +87,10 @@ bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataFromWindow()
     settings->m_Cache.max_size = m_spinCacheSize->GetValue();
     settings->m_Cache.max_age = m_spinCacheTimeout->GetValue();
 
+    // Kept read-only elsewhere to avoid reformatting hand-edited files spuriously
+    settings->SetReadOnly( false );
     settings->SaveToFile();
+    settings->SetReadOnly( true );
 
     return true;
 }

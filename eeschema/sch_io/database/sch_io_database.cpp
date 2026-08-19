@@ -539,6 +539,7 @@ void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
     {
         std::string path( aSettingsPath.ToUTF8() );
         m_settings = std::make_unique<DATABASE_LIB_SETTINGS>( path );
+        m_settings->SetReadOnly( true );
 
         tryLoad();
     }
