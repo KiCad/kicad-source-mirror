@@ -85,7 +85,7 @@ public:
 
 private:
     // Static unit information table ordered by parsing priority (longest first)
-    static constexpr std::array<UnitInfo, 15> s_unitTable = {{
+    static constexpr std::array<UnitInfo, 16> s_unitTable = {{
         // Multi-character composite units first (longest matches)
         {Unit::PS_PER_MM,     "ps/mm", "Picoseconds per millimeter", 1.0},
         {Unit::PS_PER_CM,     "ps/cm", "Picoseconds per centimeter", 1.0},
@@ -100,6 +100,7 @@ private:
         {Unit::CM,            "cm",    "Centimeters", 10.0},
         {Unit::INCH,          "in",    "Inches", 25.4},
         {Unit::MIL,           "mil",   "Mils (thousandths of an inch)", 25.4 / 1000.0},
+        {Unit::MIL,           "mils",  "Mils (thousandths of an inch)", 25.4 / 1000.0},
         {Unit::UM,            "um",    "Micrometers", 1.0 / 1000.0},
         {Unit::PS,            "ps",    "Picoseconds", 1.0},
         {Unit::FS,            "fs",    "Femtoseconds", 1.0},
