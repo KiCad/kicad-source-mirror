@@ -1100,6 +1100,11 @@ bool PrepareSaveAsFiles( SCHEMATIC& aSchematic, SCH_SCREENS& aScreens,
         if( screen == aSchematic.RootScreen() )
             continue;
 
+        // The virtual root's screen only holds the top-level sheets and has no file of its own
+        // A destination here would be a nameless path that callers turn into a stray ".kicad_sch"
+        if( screen == aSchematic.Root().GetScreen() )
+            continue;
+
         wxFileName src = screen->GetFileName();
 
         if( !src.IsAbsolute() )
