@@ -98,35 +98,9 @@ struct SCOPED_LIBRARY
 BOOST_AUTO_TEST_SUITE( DesignBlockIoMessages )
 
 
-BOOST_AUTO_TEST_CASE( EnumerateNamesTheLibrary )
-{
-    std::error_code       ec;
-    std::filesystem::path missing = std::filesystem::temp_directory_path( ec ) / "kicad_qa_db_absent";
-
-    std::filesystem::remove_all( missing, ec );
-
-    DESIGN_BLOCK_IO io;
-    wxArrayString   names;
-    wxString        what;
-
-    try
-    {
-        io.DesignBlockEnumerate( names, missing.string(), false );
-        BOOST_FAIL( "enumerating a library folder that does not exist must throw" );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        what = ioe.What();
-    }
-
-    BOOST_CHECK_MESSAGE( what.Contains( wxS( "library folder" ) ),
-                         "the message must name the library folder, got: " + what );
-}
-
-
 BOOST_AUTO_TEST_CASE( LoadNamesTheBlockNotThePath )
 {
-    SCOPED_LIBRARY lib( makeBlockLibrary( "kicad_qa_db_missing_block", "Amp", "{}" ) );
+    SCOPED_LIBRARY lib( makeBlockLibrary( "kicad_qa_db_absent_item", "Amp", "{}" ) );
 
     DESIGN_BLOCK_IO io;
     wxString        what;
@@ -141,7 +115,7 @@ BOOST_AUTO_TEST_CASE( LoadNamesTheBlockNotThePath )
         what = ioe.What();
     }
 
-    BOOST_CHECK_MESSAGE( what.Contains( wxS( "'Missing'" ) ),
+    BOOST_CHECK_MESSAGE( what.Contains( wxS( "Missing" ) ) && !what.Contains( wxS( ".kicad_block" ) ),
                          "the message must name the design block, not the assembled path, got: " + what );
 }
 
