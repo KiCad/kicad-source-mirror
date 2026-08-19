@@ -21,7 +21,7 @@
 #include <chrono>
 #include <iostream>
 #include <string_view>
-#include <unordered_set>
+#include <set>
 #include <utility>
 #include <bs_thread_pool.hpp>
 #include <wx/datetime.h>
@@ -691,83 +691,189 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
     std::lock_guard lock( m_symbolLoadMutex );
     std::unique_ptr<LIB_SYMBOL> symbol = nullptr;
 
-    if( aRow.count( aTable.symbols_col ) )
+    if( aRow.contains( aTable.symbols_col ) )
     {
-        LIB_SYMBOL* originalSymbol = nullptr;
+        std::string symbols = std::any_cast<std::string>( aRow.at( aTable.symbols_col ) );
+        wxString    symbolsStr = wxString( symbols.c_str(), wxConvUTF8 );
+        wxStringTokenizer tokenizer( symbolsStr, ";\t\r\n", wxTOKEN_STRTOK );
 
-        // TODO: Support multiple options for symbol
-        std::string symbolIdStr = std::any_cast<std::string>( aRow.at( aTable.symbols_col ) );
-        LIB_ID symbolId;
-        symbolId.Parse( std::any_cast<std::string>( aRow.at( aTable.symbols_col ) ) );
+        std::vector<LIB_ID> symbolIds;
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            wxString token = tokenizer.GetNextToken();
+            LIB_ID   id;
+            id.Parse( std::string( token.ToUTF8() ) );
+
+            if( id.IsValid() )
+                symbolIds.push_back( id );
+        }
 
         // A row's Symbols column may resolve back into the same database library (issue #24249,
         // e.g. a mistyped library nickname). The adapter would route that lookup back into
         // SCH_IO_DATABASE::LoadSymbol and re-enter loadSymbolFromRow on the same row until the
         // stack overflows. Track in-flight LIB_IDs and skip the recursive load on re-entry.
-        struct CYCLE_GUARD
+        std::vector<LIB_SYMBOL*> sourceSymbols;
+        std::vector<wxString>    sourceSymbolNames;
+
+        for( const LIB_ID& symbolId : symbolIds )
         {
-            std::unordered_set<wxString>* set;
-            wxString                      key;
-            bool                          owns = false;
+            wxString symbolIdStr = symbolId.Format().wx_str();
 
-            ~CYCLE_GUARD()
-            {
-                if( owns )
-                    set->erase( key );
-            }
-        } guard{ &m_inProgressLoads, {}, false };
-
-        bool cycle = false;
-
-        if( symbolId.IsValid() )
-        {
-            guard.key = symbolId.Format().wx_str();
-            guard.owns = m_inProgressLoads.insert( guard.key ).second;
-            cycle = !guard.owns;
-
-            if( cycle )
+            if( !m_inProgressLoads.insert( symbolIdStr ).second )
             {
                 wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: cycle detected resolving '%s' "
                                                 "(row '%s' in table '%s'); skipping recursive load" ),
                             symbolIdStr, aSymbolName, aTable.name );
+                continue;
+            }
+
+            LIB_SYMBOL* src = m_adapter->LoadSymbol( symbolId );
+            m_inProgressLoads.erase( symbolIdStr );
+
+            if( src )
+            {
+                sourceSymbols.push_back( src );
+                sourceSymbolNames.push_back( src->GetName() );
             }
             else
             {
-                originalSymbol = m_adapter->LoadSymbol( symbolId );
+                wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: source symbol '%s' not found" ), symbolIdStr );
             }
         }
 
-        if( originalSymbol )
+        if( sourceSymbols.empty() )
         {
-            symbol.reset( originalSymbol->Duplicate() );
-            symbol->SetSourceLibId( symbolId );
+            // Actual symbol not found: return metadata only; error will be indicated in the
+            // symbol chooser
+            symbol.reset( new LIB_SYMBOL( aSymbolName ) );
         }
-        else if( cycle )
+        else if( sourceSymbols.size() == 1 )
         {
-            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: source symbol '%s' is a self-reference, "
-                                            "will create empty symbol" ), symbolIdStr );
+            symbol.reset( sourceSymbols[0]->Duplicate() );
+            symbol->SetSourceLibId( symbolIds[0] );
+            symbol->SetName( aSymbolName );
         }
-        else if( !symbolId.IsValid() )
+        else
         {
-            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: source symbol id '%s' is invalid, "
-                                            "will create empty symbol" ), symbolIdStr );
-        }
-        else if( !symbolIdStr.empty() )
-        {
-            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: source symbol '%s' not found, "
-                                            "will create empty symbol" ), symbolIdStr );
-        }
-    }
+            // If the database row specifies multiple symbols, put together a composite,
+            // but since source symbols may already have multiple body styles, we
+            // need to flatten out any common to all body styles items on source symbols.
+            // Since we don't support varying all properties, take those from the first one.
 
-    if( !symbol )
-    {
-        // Actual symbol not found: return metadata only; error will be indicated in the
-        // symbol chooser
-        symbol.reset( new LIB_SYMBOL( aSymbolName ) );
+            symbol.reset( new LIB_SYMBOL( aSymbolName ) );
+            symbol->SetSourceLibId( symbolIds[0] );
+
+            symbol->SetShowPinNames( sourceSymbols[0]->GetShowPinNames() );
+            symbol->SetShowPinNumbers( sourceSymbols[0]->GetShowPinNumbers() );
+            symbol->SetPinNameOffset( sourceSymbols[0]->GetPinNameOffset() );
+
+            for( FIELD_T fieldId : MANDATORY_FIELDS )
+            {
+                if( SCH_FIELD* srcField = sourceSymbols[0]->GetField( fieldId ) )
+                {
+                    SCH_FIELD* dstField = symbol->GetField( fieldId );
+                    *dstField = *srcField;
+                    dstField->SetParent( symbol.get() );
+                }
+            }
+
+            std::vector<wxString> bodyStyleNames;
+            std::vector<int> sourceBodyStyleCounts;
+            std::vector<int> compositeBodyStyleBase;
+
+            int nextBodyStyle = 1;
+
+            for( size_t i = 0; i < sourceSymbols.size(); ++i )
+            {
+                int srcCount = std::max( 1, sourceSymbols[i]->GetBodyStyleCount() );
+                sourceBodyStyleCounts.push_back( srcCount );
+                compositeBodyStyleBase.push_back( nextBodyStyle );
+
+                if( srcCount == 1 )
+                {
+                    bodyStyleNames.push_back( sourceSymbolNames[i] );
+                }
+                else
+                {
+                    for( int style = 1; style <= srcCount; ++style )
+                    {
+                        wxString styleName = sourceSymbols[i]->GetBodyStyleDescription( style, false );
+                        bodyStyleNames.push_back( sourceSymbolNames[i] + wxT( " (" ) + styleName + wxT( ")" ) );
+                    }
+                }
+
+                nextBodyStyle += srcCount;
+            }
+
+            int totalBodyStyles = nextBodyStyle - 1;
+
+            symbol->SetHasDeMorganBodyStyles( false );
+            symbol->SetBodyStyleNames( bodyStyleNames );
+
+            std::set<wxString> mergedFieldNames;
+
+            for( size_t i = 0; i < sourceSymbols.size(); ++i )
+            {
+                std::unique_ptr<LIB_SYMBOL> srcSymbol( sourceSymbols[i]->Duplicate() );
+                int srcCount = sourceBodyStyleCounts[i];
+                int base = compositeBodyStyleBase[i];
+
+                for( SCH_ITEM& item : srcSymbol->GetDrawItems() )
+                {
+                    if( item.Type() == SCH_FIELD_T )
+                    {
+                        SCH_FIELD& field = static_cast<SCH_FIELD&>( item );
+
+                        if( field.IsMandatory() || !mergedFieldNames.insert( field.GetName() ).second )
+                            continue;
+
+                        int targetStyle;
+
+                        if( item.GetBodyStyle() == 0 )
+                            targetStyle = base;
+                        else
+                            targetStyle = base + ( item.GetBodyStyle() - 1 );
+
+                        if( targetStyle > totalBodyStyles )
+                            continue;
+
+                        SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
+                        newItem->SetParent( symbol.get() );
+                        newItem->SetBodyStyle( targetStyle );
+                        symbol->AddDrawItem( newItem, false );
+                    }
+                    else if( item.GetBodyStyle() == 0 )
+                    {
+                        for( int bodyStyle = 0; bodyStyle < srcCount; ++bodyStyle )
+                        {
+                            SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
+                            newItem->SetParent( symbol.get() );
+                            newItem->SetBodyStyle( base + bodyStyle );
+                            symbol->AddDrawItem( newItem, false );
+                        }
+                    }
+                    else
+                    {
+                        int targetStyle = base + ( item.GetBodyStyle() - 1 );
+
+                        if( targetStyle > totalBodyStyles )
+                            continue;
+
+                        SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
+                        newItem->SetParent( symbol.get() );
+                        newItem->SetBodyStyle( targetStyle );
+                        symbol->AddDrawItem( newItem, false );
+                    }
+                }
+            }
+
+            symbol->GetDrawItems().sort();
+        }
     }
     else
     {
-        symbol->SetName( aSymbolName );
+        symbol.reset( new LIB_SYMBOL( aSymbolName ) );
     }
 
     LIB_ID libId = symbol->GetLibId();
