@@ -117,6 +117,7 @@ private:
 
     std::string columnsFor( const std::string& aTable );
 
+    /// The caller must already hold m_queryMutex.
     bool selectAllAndCache( const std::string& aTable, const std::string& aKey );
 
     std::unique_ptr<nanodbc::connection> m_conn;

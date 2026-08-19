@@ -564,8 +564,6 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
 
 bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const std::string& aKey )
 {
-    std::lock_guard lock( m_queryMutex );
-
     try
     {
         nanodbc::statement statement( *m_conn );
@@ -731,6 +729,8 @@ bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const st
 
 bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::string& aKey, std::vector<ROW>& aResults )
 {
+    std::lock_guard lock( m_queryMutex );
+
     if( !m_conn )
     {
         wxLogTrace( traceDatabase, wxT( "Called SelectAll without valid connection!" ) );
