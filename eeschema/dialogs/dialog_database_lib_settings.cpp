@@ -67,6 +67,28 @@ bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataToWindow()
 
 bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataFromWindow()
 {
+    DATABASE_LIB_SETTINGS* settings = m_plugin->Settings();
+
+    if( m_rbConnectionString->GetValue() )
+    {
+        settings->m_Source.connection_string = m_txtConnectionString->GetValue().ToStdString();
+        settings->m_Source.dsn.clear();
+        settings->m_Source.username.clear();
+        settings->m_Source.password.clear();
+    }
+    else
+    {
+        settings->m_Source.connection_string.clear();
+        settings->m_Source.dsn = m_txtDSN->GetValue().ToStdString();
+        settings->m_Source.username = m_txtUser->GetValue().ToStdString();
+        settings->m_Source.password = m_txtPassword->GetValue().ToStdString();
+    }
+
+    settings->m_Cache.max_size = m_spinCacheSize->GetValue();
+    settings->m_Cache.max_age = m_spinCacheTimeout->GetValue();
+
+    settings->SaveToFile();
+
     return true;
 }
 
