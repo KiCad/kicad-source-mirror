@@ -22,6 +22,7 @@
 #include <wx/wx.h>
 
 #include <core/typeinfo.h>
+#include <erc/erc_settings.h>
 #include <layer_ids.h>
 #include <lib_symbol.h>
 #include <pin_type.h>
