@@ -19,6 +19,12 @@
 
 #include <boost/test/unit_test.hpp>
 #include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_interactive.h>
+#include <tool/action_menu.h>
+
+#include <wx/display.h>
+#include <wx/evtloop.h>
 
 /**
  * Tests for TOOL_DISPATCHER::ShouldDropAutoRepeat, the pure decision that discards backlogged
@@ -88,6 +94,82 @@ BOOST_AUTO_TEST_CASE( DifferentKeyIsNewBurst )
 
     // A different hotkey arriving immediately is not part of the R burst.
     BOOST_CHECK( !TOOL_DISPATCHER::ShouldDropAutoRepeat( 'F', 1010, false, lastKey, lastTime ) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+namespace
+{
+const TOOL_EVENT ARM_MENU_EVENT( TC_COMMAND, TA_ACTION, std::string( "test.armContextMenu" ) );
+
+
+class YIELDING_EVENT_LOOP : public wxEventLoop
+{
+public:
+    bool IsYielding() const override { return true; }
+};
+
+
+class CONTEXT_MENU_TEST_TOOL : public TOOL_INTERACTIVE
+{
+public:
+    CONTEXT_MENU_TEST_TOOL() :
+            TOOL_INTERACTIVE( "test.contextMenuTool" ),
+            m_menuRan( false ),
+            m_menu( true )
+    {
+    }
+
+    void Reset( RESET_REASON aReason ) override {}
+
+    int ArmMenu( const TOOL_EVENT& aEvent )
+    {
+        Activate();
+        SetContextMenu( &m_menu, CMENU_NOW );
+        Wait( TOOL_EVENT( TC_COMMAND, TA_CHOICE_MENU_CLOSED ) );
+        m_menuRan = true;
+
+        return 0;
+    }
+
+    bool m_menuRan;
+
+private:
+    void setTransitions() override { Go( &CONTEXT_MENU_TEST_TOOL::ArmMenu, ARM_MENU_EVENT ); }
+
+    ACTION_MENU m_menu;
+};
+} // namespace
+
+
+BOOST_AUTO_TEST_SUITE( ToolManagerContextMenu )
+
+BOOST_AUTO_TEST_CASE( RightClickOpensMenuWhileEventLoopYields )
+{
+#ifdef __WXGTK__
+    if( wxDisplay::GetCount() == 0 )
+    {
+        BOOST_TEST_MESSAGE( "Skipping test - no display available" );
+        return;
+    }
+#endif
+
+    TOOL_MANAGER            mgr;
+    CONTEXT_MENU_TEST_TOOL* tool = new CONTEXT_MENU_TEST_TOOL();
+
+    mgr.SetEnvironment( nullptr, nullptr, nullptr, nullptr, nullptr );
+    mgr.RegisterTool( tool );
+    mgr.ResetTools( TOOL_BASE::RUN );
+
+    YIELDING_EVENT_LOOP  loop;
+    wxEventLoopActivator activate( &loop );
+
+    mgr.ProcessEvent( ARM_MENU_EVENT );
+    BOOST_CHECK( !tool->m_menuRan );
+
+    mgr.ProcessEvent( TOOL_EVENT( TC_MOUSE, TA_MOUSE_CLICK, BUT_RIGHT ) );
+    BOOST_CHECK( tool->m_menuRan );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
