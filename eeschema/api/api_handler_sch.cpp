@@ -2005,6 +2005,19 @@ HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_SCH::handleSyncSelection(
         return response;
     }
 
+    // A request carrying no items asks for nothing to be selected, so there is nothing to find.
+    if( aCtx.Request.items_size() == 0 )
+    {
+        m_frame->SetSyncingSelection( true ); // recursion guard
+
+        m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( std::nullopt, nullptr, {} );
+
+        m_frame->SetSyncingSelection( false );
+
+        response.set_status( CPS_OK );
+        return response;
+    }
+
     std::optional<std::tuple<SCH_SHEET_PATH, SCH_ITEM*, std::vector<SCH_ITEM*>>> findRet =
                     findItemsFromSyncSelection( *schematic(), aCtx.Request );
 
