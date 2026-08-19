@@ -331,12 +331,14 @@ void EASYEDAPRO::IterateZipFiles(
 
 std::vector<nlohmann::json> EASYEDAPRO::ParseJsonLines( wxInputStream&  aInput, const wxString& aSource )
 {
-    wxTextInputStream txt( aInput, wxS( " " ), wxConvUTF8 );
+    // wxTextInputStream reads a byte at a time, so an unbuffered zip stream inflates per character
+    wxBufferedInputStream buffered( aInput, 64 * 1024 );
+    wxTextInputStream     txt( buffered, wxS( " " ), wxConvUTF8 );
 
     int currentLine = 1;
 
     std::vector<nlohmann::json> lines;
-    while( aInput.CanRead() )
+    while( buffered.CanRead() )
     {
         try
         {
@@ -368,14 +370,15 @@ std::vector<nlohmann::json> EASYEDAPRO::ParseJsonLines( wxInputStream&  aInput, 
 std::vector<std::vector<nlohmann::json>>
 EASYEDAPRO::ParseJsonLinesWithSeparation( wxInputStream& aInput, const wxString& aSource )
 {
-    wxTextInputStream txt( aInput, wxS( " " ), wxConvUTF8 );
+    wxBufferedInputStream buffered( aInput, 64 * 1024 );
+    wxTextInputStream     txt( buffered, wxS( " " ), wxConvUTF8 );
 
     int currentLine = 1;
 
     std::vector<std::vector<nlohmann::json>> lineBlocks;
     lineBlocks.emplace_back();
 
-    while( aInput.CanRead() )
+    while( buffered.CanRead() )
     {
         try
         {

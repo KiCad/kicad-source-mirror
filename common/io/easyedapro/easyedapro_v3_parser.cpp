@@ -248,7 +248,9 @@ static wxString ParseDocUuid( const nlohmann::json& aHead )
 static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
                              std::vector<V3_DOC_RAW>& aDocs )
 {
-    wxTextInputStream txt( aInput, wxS( " " ), wxConvUTF8 );
+    // wxTextInputStream reads a byte at a time, so an unbuffered zip stream inflates per character
+    wxBufferedInputStream buffered( aInput, 64 * 1024 );
+    wxTextInputStream     txt( buffered, wxS( " " ), wxConvUTF8 );
 
     int                      currentLine = 1;
     std::optional<V3_DOC_RAW> currentDoc;
@@ -262,7 +264,7 @@ static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
         }
     };
 
-    while( aInput.CanRead() )
+    while( buffered.CanRead() )
     {
         wxString rawLine = txt.ReadLine();
 
@@ -374,10 +376,11 @@ static bool HasValidV3LibraryContents( const V3_LIBRARY_CONTENTS& aContents, con
 
 static void ScanEpruDocTypes( wxInputStream& aInput, const wxString& aSource, std::set<wxString>& aDocTypes )
 {
-    wxTextInputStream txt( aInput, wxS( " " ), wxConvUTF8 );
-    int               currentLine = 1;
+    wxBufferedInputStream buffered( aInput, 64 * 1024 );
+    wxTextInputStream     txt( buffered, wxS( " " ), wxConvUTF8 );
+    int                   currentLine = 1;
 
-    while( aInput.CanRead() )
+    while( buffered.CanRead() )
     {
         wxString rawLine = txt.ReadLine();
 
