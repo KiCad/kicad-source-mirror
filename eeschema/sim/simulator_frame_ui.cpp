@@ -577,34 +577,12 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
 
     m_filter->SetHint( _( "Filter" ) );
 
-    if( wxSizer* signalsSizer = m_panelSignals->GetSizer() )
-    {
-        wxBoxSizer* viewButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
-
-        m_addViewButton = new STD_BITMAP_BUTTON( m_panelSignals, wxID_ANY, wxNullBitmap, wxDefaultPosition,
-                                                 wxDefaultSize, wxBU_AUTODRAW | 0 );
-        m_addViewButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-        m_addViewButton->SetToolTip( _( "Add a new signal view" ) );
-
-        m_removeViewButton = new STD_BITMAP_BUTTON( m_panelSignals, wxID_ANY, wxNullBitmap, wxDefaultPosition,
-                                                    wxDefaultSize, wxBU_AUTODRAW | 0 );
-        m_removeViewButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-        m_removeViewButton->SetToolTip( _( "Remove the last signal view" ) );
-
-        viewButtonsSizer->Add( m_addViewButton, 0, wxRIGHT, 2 );
-        viewButtonsSizer->Add( m_removeViewButton, 0, 0, 0 );
-
-        signalsSizer->Insert( 1, viewButtonsSizer, 0, wxALIGN_RIGHT | wxALL, 2 );
-
-        m_addViewButton->Bind( wxEVT_BUTTON, &SIMULATOR_FRAME_UI::onAddView, this );
-        m_removeViewButton->Bind( wxEVT_BUTTON, &SIMULATOR_FRAME_UI::onRemoveView, this );
-    }
-
     Bind( EVT_SIM_VIEWS_CHANGED,
           [&]( wxCommandEvent& aEvent )
           {
               rebuildSignalsGrid( m_filter->GetValue() );
               updatePlotCursors();
+              OnModify();
           } );
 
     m_signalsGrid->wxGrid::SetLabelFont( KIUI::GetStatusFont( this ) );
@@ -938,8 +916,6 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
 
     m_signalsGrid->ClearRows();
 
-    updateViewButtons();
-
     SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
     if( !plotPanel )
@@ -1192,40 +1168,6 @@ wxString SIMULATOR_FRAME_UI::getYScaleLabel( SIM_PLOT_TAB* aPlotTab, TRACE* aTra
         return _( "Default" );
 
     return getViewLabel( aPlotTab, aTrace->GetYScaleView() );
-}
-
-
-void SIMULATOR_FRAME_UI::onAddView( wxCommandEvent& aEvent )
-{
-    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
-    {
-        plotTab->AddView();
-        OnModify();
-    }
-}
-
-
-void SIMULATOR_FRAME_UI::onRemoveView( wxCommandEvent& aEvent )
-{
-    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
-    {
-        const std::vector<SIM_VIEW*>& views = plotTab->GetViews();
-
-        if( !views.empty() && plotTab->RemoveView( views.back() ) )
-            OnModify();
-    }
-}
-
-
-void SIMULATOR_FRAME_UI::updateViewButtons()
-{
-    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-
-    if( m_addViewButton )
-        m_addViewButton->Enable( plotTab != nullptr );
-
-    if( m_removeViewButton )
-        m_removeViewButton->Enable( plotTab && plotTab->GetViewCount() > 1 );
 }
 
 

@@ -21,8 +21,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIMULATOR_FRAME_UI_H
-#define SIMULATOR_FRAME_UI_H
+#pragma once
 
 
 #include <sim/simulator_frame_ui_base.h>
@@ -278,8 +277,7 @@ private:
     /**
      * Get the simulator output vector name for a given signal name and type.
      */
-    wxString vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab, const wxString& aSignalName,
-                                       int* aTraceType );
+    wxString vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab, const wxString& aSignalName, int* aTraceType );
 
     /**
      * Update a trace in a particular SIM_PLOT_TAB.  If the panel does not contain the given
@@ -389,13 +387,6 @@ private:
 
     ///< The Signals grid's "Y Scale" column label for a trace ("Default" if not explicitly linked).
     wxString getYScaleLabel( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace ) const;
-
-    void onAddView( wxCommandEvent& aEvent );
-    void onRemoveView( wxCommandEvent& aEvent );
-
-    ///< Enable/disable the add/remove-view buttons for the currently-shown tab (the remove
-    ///< button is disabled when only one view remains, or when there's no plot tab).
-    void updateViewButtons();
 
     /**
      * Apply component values specified using tuner sliders to the current netlist.
@@ -517,5 +508,3 @@ private:
     // Count all available cursors in m_signalsGrid
     int                          m_customCursorsCnt; // Defaults to 2 + 1
 };
-
-#endif // SIMULATOR_FRAME_UI_H

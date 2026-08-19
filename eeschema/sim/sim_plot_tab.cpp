@@ -22,6 +22,7 @@
  */
 
 #include <wx/tokenzr.h>
+#include <widgets/std_bitmap_button.h>
 #include "sim_plot_colors.h"
 #include "sim_plot_tab.h"
 #include "simulator_frame.h"
@@ -30,6 +31,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+
 
 
 static wxString formatFloat( double x, int nDigits )
@@ -2160,8 +2162,42 @@ SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
 {
     m_mouseWheelActions = convertMouseWheelActions( SIM_MOUSE_WHEEL_ACTION_SET::GetMouseDefaults() );
 
+    wxBoxSizer* outerSizer = new wxBoxSizer( wxVERTICAL );
+
     m_viewsSizer = new wxBoxSizer( wxVERTICAL );
-    SetSizer( m_viewsSizer );
+    outerSizer->Add( m_viewsSizer, 1, wxEXPAND, 0 );
+
+    wxBoxSizer* viewButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    STD_BITMAP_BUTTON* addViewButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap );
+    addViewButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    addViewButton->SetToolTip( _( "Add a new signal view" ) );
+
+    STD_BITMAP_BUTTON* removeViewButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap );
+    removeViewButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    removeViewButton->SetToolTip( _( "Remove the last signal view" ) );
+
+    viewButtonsSizer->Add( addViewButton, 0, wxLEFT, 5 );
+    viewButtonsSizer->Add( removeViewButton, 0, wxLEFT, 30 );
+
+    addViewButton->Bind( wxEVT_BUTTON,
+            [this]( wxCommandEvent& aEvent )
+            {
+                AddView();
+            } );
+
+    removeViewButton->Bind( wxEVT_BUTTON,
+            [this]( wxCommandEvent& aEvent )
+            {
+                const std::vector<SIM_VIEW*>& views = GetViews();
+
+                if( !views.empty() )
+                    RemoveView( views.back() );
+            } );
+
+    outerSizer->Add( viewButtonsSizer, 0, wxEXPAND | wxTOP | wxBOTTOM, 3 );
+
+    SetSizer( outerSizer );
 
     AddView();
 }
