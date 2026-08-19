@@ -29,8 +29,8 @@ class STD_BITMAP_BUTTON;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/panel.h>
 #include <wx/statline.h>
+#include <wx/panel.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -57,8 +57,9 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_btnMoveUp;
 		STD_BITMAP_BUTTON* m_btnMoveDown;
 		STD_BITMAP_BUTTON* m_btnMoveBottom;
-		STD_BITMAP_BUTTON* m_btnDelete;
+		wxStaticLine* m_staticline2;
 		STD_BITMAP_BUTTON* m_btnAutoAssign;
+		STD_BITMAP_BUTTON* m_btnDelete;
 		wxPanel* m_zonePanel;
 		wxBoxSizer* m_rightColumn;
 		wxBoxSizer* m_sizerProperties;
@@ -86,8 +87,8 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		virtual void OnMoveUpClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDownClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveBottomClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDeleteClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAutoAssignClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateDisplayedZonesClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOk( wxCommandEvent& event ) { event.Skip(); }
 

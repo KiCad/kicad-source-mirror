@@ -202,17 +202,11 @@ void DIALOG_ZONE_MANAGER::GenericProcessChar( wxKeyEvent& aEvent )
 void DIALOG_ZONE_MANAGER::OnDialogCharHook( wxKeyEvent& aEvent )
 {
     if( aEvent.GetKeyCode() == WXK_UP )
-    {
         NavigateZoneSelection( -1 );
-    }
     else if( aEvent.GetKeyCode() == WXK_DOWN )
-    {
         NavigateZoneSelection( 1 );
-    }
     else
-    {
         aEvent.Skip();
-    }
 }
 
 
@@ -436,11 +430,8 @@ void DIALOG_ZONE_MANAGER::OnDeleteClick( wxCommandEvent& aEvent )
     if( !originalZone )
         return;
 
-    if( std::find( m_zonesToDelete.begin(), m_zonesToDelete.end(), originalZone )
-        != m_zonesToDelete.end() )
-    {
+    if( std::find( m_zonesToDelete.begin(), m_zonesToDelete.end(), originalZone ) != m_zonesToDelete.end() )
         return;
-    }
 
     wxString msg = wxString::Format( _( "Delete zone '%s'?" ), originalZone->GetZoneName() );
 
@@ -505,9 +496,8 @@ void DIALOG_ZONE_MANAGER::OnAutoAssignClick( wxCommandEvent& aEvent )
             m_zoneSettingsBag.SetZonePriority( clone.get(), newPri );
         }
 
-        PostProcessZoneViewSelChange(
-                m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(),
-                                                   m_viewZonesOverview->GetSelection() ) );
+        PostProcessZoneViewSelChange( m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(),
+                                                                         m_viewZonesOverview->GetSelection() ) );
     }
 
     for( auto& [zone, priority] : savedPriorities )
@@ -561,9 +551,8 @@ void DIALOG_ZONE_MANAGER::OnLayerFilterChanged( wxCommandEvent& aEvent )
         m_modelZonesOverview->SetLayerFilter( layer );
     }
 
-    PostProcessZoneViewSelChange(
-            m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(),
-                                               m_viewZonesOverview->GetSelection() ) );
+    PostProcessZoneViewSelChange( m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(),
+                                                                     m_viewZonesOverview->GetSelection() ) );
 }
 
 
@@ -633,11 +622,8 @@ void DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange( wxCommandEvent& aEvent )
 {
     unsigned count = aEvent.GetInt();
 
-    for( STD_BITMAP_BUTTON* btn : { m_btnMoveTop, m_btnMoveUp, m_btnMoveDown, m_btnMoveBottom,
-                                    m_btnAutoAssign } )
-    {
+    for( STD_BITMAP_BUTTON* btn : { m_btnMoveTop, m_btnMoveUp, m_btnMoveDown, m_btnMoveBottom, m_btnAutoAssign } )
         btn->Enable( count > 1 );
-    }
 }
 
 
