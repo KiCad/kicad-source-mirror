@@ -975,6 +975,11 @@ EDA_ANGLE SHAPE_ARC::GetCentralAngle() const
     VECTOR2L  center = GetCenter();
     EDA_ANGLE angle = EDA_ANGLE( m_end - center ) - EDA_ANGLE( m_start - center );
 
+    // Straight arc has no circumcircle, thus the angle is only rounding noise.  IsCCW() gives
+    // clockwise on a zero cross product, so the correction below would make a full circle
+    if( IsEffectiveLine() )
+        return angle;
+
     // Using only m_start and m_end arc points to calculate the central arc is not enough
     // there are 2 arcs having the same center and end points.
     // Using the middle point is mandatory to know what arc is the right one.

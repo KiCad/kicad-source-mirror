@@ -1355,4 +1355,35 @@ BOOST_AUTO_TEST_CASE( DegenerateArcCoincidentPoints )
 }
 
 
+// Collinear points from the reported board.  The 6 nm span is more than the coincident-point
+// guard in CalcArcCenter(), thus the centre still runs out to the coordinate limit
+BOOST_AUTO_TEST_CASE( CollinearArcSweepIsNotAFullTurn )
+{
+    const SHAPE_ARC arc( VECTOR2I( 2275000, 3123714 ),
+                         VECTOR2I( 2275000, 3123715 ),
+                         VECTOR2I( 2275000, 3123720 ),
+                         127000 );
+
+    BOOST_CHECK_LT( std::abs( arc.GetCentralAngle().AsDegrees() ), 1.0 );
+
+    // Length is radius times sweep, thus a spurious turn is worth metres here
+    BOOST_CHECK_LT( arc.GetLength(), 1000.0 );
+}
+
+
+// The guard must not catch major arcs, which are the only users of the full-turn correction
+BOOST_AUTO_TEST_CASE( CurvedArcsKeepTheirSweep )
+{
+    const SHAPE_ARC quarter( VECTOR2I( 1000000, 0 ), VECTOR2I( 707107, 707107 ),
+                             VECTOR2I( 0, 1000000 ), 127000 );
+
+    BOOST_CHECK_CLOSE( quarter.GetCentralAngle().AsDegrees(), 90.0, 0.01 );
+
+    const SHAPE_ARC major( VECTOR2I( 1000000, 0 ), VECTOR2I( -1000000, 0 ),
+                           VECTOR2I( 0, -1000000 ), 127000 );
+
+    BOOST_CHECK_CLOSE( major.GetCentralAngle().AsDegrees(), 270.0, 0.01 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

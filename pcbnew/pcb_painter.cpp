@@ -989,6 +989,10 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     EDA_ANGLE start_angle = aArc->GetArcAngleStart();
     EDA_ANGLE angle = aArc->GetAngle();
 
+    // GetRadius() clamps a runaway centre but GetCenter() does not, thus the two disagree and
+    // the copper draws far from the track.  The plotter substitutes the chord for this reason
+    bool degenerate = aArc->IsDegenerated( 10 /* in IU */ );
+
     if( IsNetnameLayer( aLayer ) )
     {
         if( !pcbconfig() || pcbconfig()->m_Display.m_NetNames < 2 )
@@ -1002,6 +1006,14 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         if( netname.IsEmpty() )
             return;
 
+        // Radius and centre disagree here, thus the arc length and the tangent are meaningless
+        if( degenerate )
+        {
+            const SHAPE_SEGMENT chord( { aArc->GetStart(), aArc->GetEnd() }, width );
+            renderNetNameForSegment( chord, color, netname );
+            return;
+        }
+
         // Arc length must accommodate the label width.
         double arcLen = std::abs( radius * angle.AsRadians() );
 
@@ -1010,7 +1022,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 
         // Tangent at the arc midpoint is perpendicular to the radius there.
         VECTOR2I  midPt = aArc->GetMid();
-        VECTOR2D  radial = midPt - aArc->GetCenter();
+        VECTOR2D  radial = VECTOR2D( midPt ) - center;
         EDA_ANGLE textOrientation( VECTOR2D( -radial.y, radial.x ) );
         textOrientation = -textOrientation;
         textOrientation.Normalize90();
@@ -1051,7 +1063,10 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
             width = width + m_lockedShadowMargin;
 
-        m_gal->DrawArcSegment( center, radius, start_angle, angle, width, m_maxError );
+        if( degenerate )
+            m_gal->DrawSegment( aArc->GetStart(), aArc->GetEnd(), width );
+        else
+            m_gal->DrawArcSegment( center, radius, start_angle, angle, width, m_maxError );
     }
 
     // Clearance lines
@@ -1076,7 +1091,15 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
             m_gal->SetIsStroke( true );
             m_gal->SetStrokeColor( color );
 
-            m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2, m_maxError );
+            if( degenerate )
+            {
+                m_gal->DrawSegment( aArc->GetStart(), aArc->GetEnd(), width + clearance * 2 );
+            }
+            else
+            {
+                m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2,
+                                       m_maxError );
+            }
         }
     }
 
