@@ -202,10 +202,11 @@ bool SaveSchematicCopy( SCHEMATIC& aSchematic, PROJECT& aProject, const wxString
     if( !schematicFileName.IsOk() || !schematicFileName.IsDirWritable() )
         return false;
 
-    SCH_SHEET*  rootSheet = &aSchematic.Root();
+    // Root() is the virtual root, whose screen only holds the top-level sheets
+    SCH_SHEET*  rootSheet = aSchematic.GetTopLevelSheet();
     SCH_SCREEN* rootScreen = aSchematic.RootScreen();
 
-    if( !rootScreen )
+    if( !rootSheet || !rootScreen )
         return false;
 
     if( schematicFileName.GetFullPath() == rootScreen->GetFileName() )

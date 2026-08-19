@@ -25,10 +25,12 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
 
+#include <eeschema/api/sch_api_save.h>
 #include <eeschema/save_project_utils.h>
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include <sch_symbol.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 #include <wx/ffile.h>
@@ -95,6 +97,17 @@ wxFileName SAVEAS_SUBSHEET_FIXTURE::GetSchematicPath( const wxString& aRelativeP
     fn.SetName( aRelativePath );
     fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
     return fn;
+}
+
+static bool ScreensContain( SCH_SCREENS& aScreens, SCH_SCREEN* aScreen )
+{
+    for( size_t i = 0; i < aScreens.GetCount(); i++ )
+    {
+        if( aScreens.GetScreen( i ) == aScreen )
+            return true;
+    }
+
+    return false;
 }
 
 BOOST_FIXTURE_TEST_SUITE( SaveAsSubsheetCopy, SAVEAS_SUBSHEET_FIXTURE )
@@ -227,6 +240,108 @@ BOOST_AUTO_TEST_CASE( NoCopyKeepsOriginalPaths )
 
     wxFileName internalExpected( m_srcDir.GetFullPath(), wxS( "issue13212_subsheet_1.kicad_sch" ) );
     BOOST_CHECK_EQUAL( internal->GetFileName(), internalExpected.GetFullPath() );
+}
+
+// A destination on the virtual root's screen becomes a nameless path that the callers stamp
+// an extension onto, writing a stray ".kicad_sch" beside the real schematic
+BOOST_AUTO_TEST_CASE( VirtualRootScreenGetsNoDestination )
+{
+    LoadSchematic( GetSchematicPath( wxS( "issue13212" ) ) );
+
+    SCH_SCREENS screens( m_schematic->Root() );
+    wxFileName srcRoot = GetSchematicPath( wxS( "issue13212" ) );
+
+    wxFileName destRoot( m_baseDir );
+    destRoot.AppendDir( wxS( "virtualroot" ) );
+    destRoot.SetName( wxS( "issue13212" ) );
+    destRoot.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    wxFileName destDir( destRoot );
+    destDir.SetFullName( wxEmptyString );
+    BOOST_REQUIRE( destDir.DirExists() || destDir.Mkdir( 0777, wxPATH_MKDIR_FULL ) );
+
+    SCH_SCREEN* virtualRootScreen = m_schematic->Root().GetScreen();
+    BOOST_REQUIRE( virtualRootScreen );
+    BOOST_REQUIRE( virtualRootScreen != m_schematic->RootScreen() );
+    BOOST_REQUIRE( ScreensContain( screens, virtualRootScreen ) );
+
+    std::unordered_map<SCH_SCREEN*, wxString> filenameMap;
+    wxString msg;
+
+    m_schematic->Root().SetFileName( destRoot.GetFullName() );
+    m_schematic->RootScreen()->SetFileName( destRoot.GetFullPath() );
+
+    BOOST_CHECK( PrepareSaveAsFiles( *m_schematic, screens, srcRoot, destRoot, false, true,
+                                     false, filenameMap, msg ) );
+
+    BOOST_CHECK_EQUAL( virtualRootScreen->GetFileName(), wxString() );
+}
+
+BOOST_AUTO_TEST_CASE( VirtualRootScreenGetsNoDestinationOnCopy )
+{
+    LoadSchematic( GetSchematicPath( wxS( "issue13212" ) ) );
+
+    SCH_SCREENS screens( m_schematic->Root() );
+    wxFileName srcRoot = GetSchematicPath( wxS( "issue13212" ) );
+
+    wxFileName destRoot( m_baseDir );
+    destRoot.AppendDir( wxS( "virtualrootcopy" ) );
+    destRoot.SetName( wxS( "issue13212" ) );
+    destRoot.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    wxFileName destDir( destRoot );
+    destDir.SetFullName( wxEmptyString );
+    BOOST_REQUIRE( destDir.DirExists() || destDir.Mkdir( 0777, wxPATH_MKDIR_FULL ) );
+
+    SCH_SCREEN* virtualRootScreen = m_schematic->Root().GetScreen();
+    BOOST_REQUIRE( virtualRootScreen );
+    BOOST_REQUIRE( virtualRootScreen != m_schematic->RootScreen() );
+    BOOST_REQUIRE( ScreensContain( screens, virtualRootScreen ) );
+
+    std::unordered_map<SCH_SCREEN*, wxString> filenameMap;
+    wxString msg;
+
+    filenameMap[m_schematic->RootScreen()] = destRoot.GetFullPath();
+
+    BOOST_CHECK( PrepareSaveAsFiles( *m_schematic, screens, srcRoot, destRoot, true, true,
+                                     false, filenameMap, msg ) );
+
+    BOOST_CHECK( !filenameMap.contains( virtualRootScreen ) );
+}
+
+// The API save-copy took Root() as the sheet to write, so it emitted the virtual root's
+// container screen and the copy came out valid but empty
+BOOST_AUTO_TEST_CASE( ApiSaveCopyWritesTheTopLevelSheet )
+{
+    LoadSchematic( GetSchematicPath( wxS( "issue13212" ) ) );
+
+    std::vector<wxString> references;
+
+    for( SCH_ITEM* item : m_schematic->RootScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        references.push_back( static_cast<SCH_SYMBOL*>( item )->GetField( FIELD_T::REFERENCE )->GetText() );
+
+    BOOST_REQUIRE( !references.empty() );
+
+    wxFileName destFile( m_baseDir );
+    destFile.AppendDir( wxS( "apicopy" ) );
+    destFile.SetName( wxS( "copy" ) );
+    destFile.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    wxFileName destDir( destFile );
+    destDir.SetFullName( wxEmptyString );
+    BOOST_REQUIRE( destDir.DirExists() || destDir.Mkdir( 0777, wxPATH_MKDIR_FULL ) );
+
+    BOOST_REQUIRE( SCH_API_SAVE::SaveSchematicCopy( *m_schematic, m_schematic->Project(),
+                                                    destFile.GetFullPath(), false ) );
+
+    wxFFile written( destFile.GetFullPath(), wxS( "rb" ) );
+    BOOST_REQUIRE( written.IsOpened() );
+
+    wxString content;
+    written.ReadAll( &content );
+
+    for( const wxString& reference : references )
+        BOOST_CHECK( content.Contains( wxS( "\"" ) + reference + wxS( "\"" ) ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
