@@ -252,7 +252,7 @@ SHAPE_LINE_CHAIN g_pnew, g_hnew;
 #endif
 
 
-void LINE::restoreUntouchedArcs( SHAPE_LINE_CHAIN& aPath, const SHAPE_LINE_CHAIN& aOriginal )
+void LINE::restoreUntouchedArcs( SHAPE_LINE_CHAIN& aPath, const SHAPE_LINE_CHAIN& aOriginal ) const
 {
     if( aOriginal.ArcCount() == 0 )
         return;

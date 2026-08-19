@@ -270,7 +270,7 @@ private:
      * points that are untouched between the output and the input and pushes the arc data back into 
      * the path
      */
-    void restoreUntouchedArcs( SHAPE_LINE_CHAIN& aPath, const SHAPE_LINE_CHAIN& aOriginal );
+    void restoreUntouchedArcs( SHAPE_LINE_CHAIN& aPath, const SHAPE_LINE_CHAIN& aOriginal ) const;
 
     VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
                                       int aIndex ) const;
