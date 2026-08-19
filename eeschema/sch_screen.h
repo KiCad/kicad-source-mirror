@@ -77,7 +77,7 @@ struct PICKED_SYMBOL
 {
     LIB_ID LibId;
     int    Unit;
-    int    Convert;
+    int    BodyStyle;
 
     bool   KeepSymbol;
     bool   PlaceAllUnits;
@@ -86,7 +86,7 @@ struct PICKED_SYMBOL
 
     PICKED_SYMBOL() :
             Unit( 1 ),
-            Convert( 1 ),
+            BodyStyle( 1 ),
             KeepSymbol( false ),
             PlaceAllUnits( false )
     {

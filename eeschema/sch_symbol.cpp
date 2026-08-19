@@ -126,7 +126,7 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId, const S
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet, const PICKED_SYMBOL& aSel,
                         const VECTOR2I& aPosition, EDA_ITEM* aParent ) :
-        SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, aPosition, aParent )
+        SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.BodyStyle, aPosition, aParent )
 {
     // Set any fields that were modified as part of the symbol selection
     for( const auto& [fieldId, fieldValue] : aSel.Fields )

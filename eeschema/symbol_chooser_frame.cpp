@@ -38,7 +38,7 @@ static void AddSymbolToHistory( const PICKED_SYMBOL& aSymbol )
                     {
                         return candidate.LibId == aSymbol.LibId
                                 && candidate.Unit == aSymbol.Unit
-                                && candidate.Convert == aSymbol.Convert;
+                                && candidate.BodyStyle == aSymbol.BodyStyle;
                     } );
 
     // Add the new name at the beginning of the history list

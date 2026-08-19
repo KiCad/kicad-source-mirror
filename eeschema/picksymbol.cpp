@@ -75,6 +75,9 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
     if( sel.Unit == 0 )
         sel.Unit = 1;
 
+    if( sel.BodyStyle == 0 )
+        sel.BodyStyle = 1;
+
     sel.Fields = dlg.GetFields();
     sel.LibId = id;
 
