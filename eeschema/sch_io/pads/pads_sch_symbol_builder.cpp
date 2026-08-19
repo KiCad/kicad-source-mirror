@@ -742,6 +742,67 @@ SCH_PIN* PADS_SCH_SYMBOL_BUILDER::createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL*
 }
 
 
+/// The distinct body shapes KiCad power symbols are drawn with. Several PADS power names share
+/// a shape, so the name maps to a style and the style alone decides the geometry.
+enum class POWER_STYLE
+{
+    GROUND_BARS,   // three descending horizontal bars, body below the pin
+    FILLED_BAR,    // one thick filled bar, body below the pin
+    FILLED_ARROW,  // filled triangle, body above the pin
+    OPEN_ARROW,    // two open arrow strokes, body below the pin
+    OPEN_CIRCLE    // open circle, body above the pin
+};
+
+
+static POWER_STYLE powerStyleFromName( const std::string& aUpperName )
+{
+    if( aUpperName == "GND" || aUpperName == "GNDA" || aUpperName == "GNDPWR" || aUpperName == "EARTH"
+        || aUpperName == "CHASSIS" )
+    {
+        return POWER_STYLE::GROUND_BARS;
+    }
+
+    if( aUpperName == "GNDD" || aUpperName == "PWR_BAR" )
+        return POWER_STYLE::FILLED_BAR;
+
+    if( aUpperName == "PWR_TRIANGLE" )
+        return POWER_STYLE::FILLED_ARROW;
+
+    if( aUpperName == "VEE" || aUpperName == "VSS" )
+        return POWER_STYLE::OPEN_ARROW;
+
+    return POWER_STYLE::OPEN_CIRCLE;
+}
+
+
+static SCH_SHAPE* addPolyline( LIB_SYMBOL* aSymbol, const std::vector<VECTOR2I>& aPoints, int aWidth = 0 )
+{
+    SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+
+    for( const VECTOR2I& point : aPoints )
+        shape->AddPoint( point );
+
+    shape->SetStroke( STROKE_PARAMS( aWidth, LINE_STYLE::SOLID ) );
+    aSymbol->AddDrawItem( shape );
+
+    return shape;
+}
+
+
+static void addPowerPin( LIB_SYMBOL* aSymbol, const std::string& aKiCadName, PIN_ORIENTATION aOrientation )
+{
+    SCH_PIN* pin = new SCH_PIN( aSymbol );
+    pin->SetNumber( wxT( "1" ) );
+    pin->SetName( wxString::FromUTF8( aKiCadName ) );
+    pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+    pin->SetVisible( false );
+    pin->SetLength( 0 );
+    pin->SetPosition( VECTOR2I( 0, 0 ) );
+    pin->SetOrientation( aOrientation );
+    aSymbol->AddDrawItem( pin );
+}
+
+
 LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& aKiCadName )
 {
     // Convert mm coordinates from KiCad power symbol library to internal units
@@ -763,50 +824,26 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& a
                         return std::toupper( c );
                     } );
 
-    bool isGround = ( upper == "GND" || upper == "GNDA" || upper == "GNDPWR" );
-    bool isGNDD = ( upper == "GNDD" );
-    bool isPwrBar = ( upper == "PWR_BAR" );
-    bool isPwrTriangle = ( upper == "PWR_TRIANGLE" );
-    bool isVEE = ( upper == "VEE" || upper == "VSS" );
-    bool isEarth = ( upper == "EARTH" || upper == "CHASSIS" );
-
-    // Default to VCC style (open arrow up) for anything not matched above
-    bool isVCC = !isGround && !isGNDD && !isPwrBar && !isPwrTriangle && !isVEE && !isEarth;
-
-    if( isGround )
+    switch( powerStyleFromName( upper ) )
+    {
+    case POWER_STYLE::GROUND_BARS:
     {
         const std::array<std::tuple<double, double, double>, 3> bars{ std::tuple{ -1.27, 1.27, -1.27 },
                                                                       std::tuple{ -0.762, 0.762, -1.778 },
                                                                       std::tuple{ -0.254, 0.254, -2.286 } };
 
         for( const auto& [x1, x2, y] : bars )
-        {
-            SCH_SHAPE* bar = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-            bar->AddPoint( VECTOR2I( mm( x1 ), mm( y ) ) );
-            bar->AddPoint( VECTOR2I( mm( x2 ), mm( y ) ) );
-            bar->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-            sym->AddDrawItem( bar );
-        }
+            addPolyline( sym, { VECTOR2I( mm( x1 ), mm( y ) ), VECTOR2I( mm( x2 ), mm( y ) ) } );
 
-        SCH_SHAPE* stem = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        stem->AddPoint( VECTOR2I( 0, 0 ) );
-        stem->AddPoint( VECTOR2I( 0, mm( -1.27 ) ) );
-        stem->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( stem );
-
-        SCH_PIN* pin = new SCH_PIN( sym );
-        pin->SetNumber( wxT( "1" ) );
-        pin->SetName( wxString::FromUTF8( aKiCadName ) );
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetVisible( false );
-        pin->SetLength( 0 );
-        pin->SetPosition( VECTOR2I( 0, 0 ) );
-        pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
-        sym->AddDrawItem( pin );
+        addPolyline( sym, { VECTOR2I( 0, 0 ), VECTOR2I( 0, mm( -1.27 ) ) } );
+        addPowerPin( sym, aKiCadName, PIN_ORIENTATION::PIN_DOWN );
+        break;
     }
-    else if( isGNDD )
+
+    case POWER_STYLE::FILLED_BAR:
     {
-        // GNDD: thick filled bar + vertical stem
+        // Placed with 180 degree rotation for positive supplies (+V1) so the bar points up on
+        // the schematic. Negative supplies (-V1) use it unrotated.
         SCH_SHAPE* bar = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
         bar->SetStart( VECTOR2I( mm( -1.27 ), mm( -1.524 ) ) );
         bar->SetEnd( VECTOR2I( mm( 1.27 ), mm( -2.032 ) ) );
@@ -814,147 +851,32 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& a
         bar->SetFillMode( FILL_T::FILLED_SHAPE );
         sym->AddDrawItem( bar );
 
-        SCH_SHAPE* stem = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        stem->AddPoint( VECTOR2I( mm( 0 ), mm( 0 ) ) );
-        stem->AddPoint( VECTOR2I( mm( 0 ), mm( -1.524 ) ) );
-        stem->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( stem );
-
-        SCH_PIN* pin = new SCH_PIN( sym );
-        pin->SetNumber( wxT( "1" ) );
-        pin->SetName( wxString::FromUTF8( aKiCadName ) );
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetVisible( false );
-        pin->SetLength( 0 );
-        pin->SetPosition( VECTOR2I( 0, 0 ) );
-        pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
-        sym->AddDrawItem( pin );
+        addPolyline( sym, { VECTOR2I( mm( 0 ), mm( 0 ) ), VECTOR2I( mm( 0 ), mm( -1.524 ) ) } );
+        addPowerPin( sym, aKiCadName, PIN_ORIENTATION::PIN_DOWN );
+        break;
     }
-    else if( isPwrBar )
-    {
-        // PWR_BAR: same bar-down shape as GNDD. Placed with 180° rotation for
-        // positive supplies (+V1) so the bar points up on the schematic.
-        // Negative supplies (-V1) use GNDD directly without rotation.
-        SCH_SHAPE* bar = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
-        bar->SetStart( VECTOR2I( mm( -1.27 ), mm( -1.524 ) ) );
-        bar->SetEnd( VECTOR2I( mm( 1.27 ), mm( -2.032 ) ) );
-        bar->SetStroke( STROKE_PARAMS( mm( 0.254 ), LINE_STYLE::SOLID ) );
-        bar->SetFillMode( FILL_T::FILLED_SHAPE );
-        sym->AddDrawItem( bar );
 
-        SCH_SHAPE* stem = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        stem->AddPoint( VECTOR2I( mm( 0 ), mm( 0 ) ) );
-        stem->AddPoint( VECTOR2I( mm( 0 ), mm( -1.524 ) ) );
-        stem->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( stem );
-
-        SCH_PIN* pin = new SCH_PIN( sym );
-        pin->SetNumber( wxT( "1" ) );
-        pin->SetName( wxString::FromUTF8( aKiCadName ) );
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetVisible( false );
-        pin->SetLength( 0 );
-        pin->SetPosition( VECTOR2I( 0, 0 ) );
-        pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
-        sym->AddDrawItem( pin );
-    }
-    else if( isPwrTriangle )
+    case POWER_STYLE::FILLED_ARROW:
     {
-        // PWR_TRIANGLE: filled triangle pointing UP (like -9V style)
-        SCH_SHAPE* tri = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        tri->AddPoint( VECTOR2I( mm( 0.762 ), mm( 1.27 ) ) );
-        tri->AddPoint( VECTOR2I( mm( -0.762 ), mm( 1.27 ) ) );
-        tri->AddPoint( VECTOR2I( mm( 0 ), mm( 2.54 ) ) );
-        tri->AddPoint( VECTOR2I( mm( 0.762 ), mm( 1.27 ) ) );
-        tri->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+        SCH_SHAPE* tri = addPolyline( sym, { VECTOR2I( mm( 0.762 ), mm( 1.27 ) ),
+                                             VECTOR2I( mm( -0.762 ), mm( 1.27 ) ),
+                                             VECTOR2I( mm( 0 ), mm( 2.54 ) ),
+                                             VECTOR2I( mm( 0.762 ), mm( 1.27 ) ) } );
         tri->SetFillMode( FILL_T::FILLED_SHAPE );
-        sym->AddDrawItem( tri );
 
-        SCH_SHAPE* stem = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        stem->AddPoint( VECTOR2I( mm( 0 ), mm( 0 ) ) );
-        stem->AddPoint( VECTOR2I( mm( 0 ), mm( 1.27 ) ) );
-        stem->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( stem );
-
-        SCH_PIN* pin = new SCH_PIN( sym );
-        pin->SetNumber( wxT( "1" ) );
-        pin->SetName( wxString::FromUTF8( aKiCadName ) );
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetVisible( false );
-        pin->SetLength( 0 );
-        pin->SetPosition( VECTOR2I( 0, 0 ) );
-        pin->SetOrientation( PIN_ORIENTATION::PIN_UP );
-        sym->AddDrawItem( pin );
+        addPolyline( sym, { VECTOR2I( mm( 0 ), mm( 0 ) ), VECTOR2I( mm( 0 ), mm( 1.27 ) ) } );
+        addPowerPin( sym, aKiCadName, PIN_ORIENTATION::PIN_UP );
+        break;
     }
-    else if( isVEE )
-    {
-        // VEE: inverted arrow (pointing down), pin at bottom
-        SCH_SHAPE* arrow1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        arrow1->AddPoint( VECTOR2I( mm( -0.762 ), mm( -1.27 ) ) );
-        arrow1->AddPoint( VECTOR2I( mm( 0 ), mm( -2.54 ) ) );
-        arrow1->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( arrow1 );
 
-        SCH_SHAPE* arrow2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        arrow2->AddPoint( VECTOR2I( mm( 0 ), mm( -2.54 ) ) );
-        arrow2->AddPoint( VECTOR2I( mm( 0.762 ), mm( -1.27 ) ) );
-        arrow2->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( arrow2 );
+    case POWER_STYLE::OPEN_ARROW:
+        addPolyline( sym, { VECTOR2I( mm( -0.762 ), mm( -1.27 ) ), VECTOR2I( mm( 0 ), mm( -2.54 ) ) } );
+        addPolyline( sym, { VECTOR2I( mm( 0 ), mm( -2.54 ) ), VECTOR2I( mm( 0.762 ), mm( -1.27 ) ) } );
+        addPolyline( sym, { VECTOR2I( mm( 0 ), mm( 0 ) ), VECTOR2I( mm( 0 ), mm( -2.54 ) ) } );
+        addPowerPin( sym, aKiCadName, PIN_ORIENTATION::PIN_DOWN );
+        break;
 
-        SCH_SHAPE* stemLine = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        stemLine->AddPoint( VECTOR2I( mm( 0 ), mm( 0 ) ) );
-        stemLine->AddPoint( VECTOR2I( mm( 0 ), mm( -2.54 ) ) );
-        stemLine->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( stemLine );
-
-        SCH_PIN* pin = new SCH_PIN( sym );
-        pin->SetNumber( wxT( "1" ) );
-        pin->SetName( wxString::FromUTF8( aKiCadName ) );
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetVisible( false );
-        pin->SetLength( 0 );
-        pin->SetPosition( VECTOR2I( 0, 0 ) );
-        pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
-        sym->AddDrawItem( pin );
-    }
-    else if( isEarth )
-    {
-        // Earth: horizontal bars descending in width + vertical stem
-        SCH_SHAPE* bar1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        bar1->AddPoint( VECTOR2I( mm( -1.27 ), mm( -1.27 ) ) );
-        bar1->AddPoint( VECTOR2I( mm( 1.27 ), mm( -1.27 ) ) );
-        bar1->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( bar1 );
-
-        SCH_SHAPE* bar2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        bar2->AddPoint( VECTOR2I( mm( -0.762 ), mm( -1.778 ) ) );
-        bar2->AddPoint( VECTOR2I( mm( 0.762 ), mm( -1.778 ) ) );
-        bar2->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( bar2 );
-
-        SCH_SHAPE* bar3 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        bar3->AddPoint( VECTOR2I( mm( -0.254 ), mm( -2.286 ) ) );
-        bar3->AddPoint( VECTOR2I( mm( 0.254 ), mm( -2.286 ) ) );
-        bar3->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( bar3 );
-
-        SCH_SHAPE* stemLine = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        stemLine->AddPoint( VECTOR2I( mm( 0 ), mm( 0 ) ) );
-        stemLine->AddPoint( VECTOR2I( mm( 0 ), mm( -1.27 ) ) );
-        stemLine->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( stemLine );
-
-        SCH_PIN* pin = new SCH_PIN( sym );
-        pin->SetNumber( wxT( "1" ) );
-        pin->SetName( wxString::FromUTF8( aKiCadName ) );
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetVisible( false );
-        pin->SetLength( 0 );
-        pin->SetPosition( VECTOR2I( 0, 0 ) );
-        pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
-        sym->AddDrawItem( pin );
-    }
-    else if( isVCC )
+    case POWER_STYLE::OPEN_CIRCLE:
     {
         SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
         circle->SetCenter( VECTOR2I( 0, mm( 2.032 ) ) );
@@ -963,21 +885,10 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& a
         circle->SetFillMode( FILL_T::NO_FILL );
         sym->AddDrawItem( circle );
 
-        SCH_SHAPE* stem = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        stem->AddPoint( VECTOR2I( 0, 0 ) );
-        stem->AddPoint( VECTOR2I( 0, mm( 1.397 ) ) );
-        stem->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( stem );
-
-        SCH_PIN* pin = new SCH_PIN( sym );
-        pin->SetNumber( wxT( "1" ) );
-        pin->SetName( wxString::FromUTF8( aKiCadName ) );
-        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-        pin->SetVisible( false );
-        pin->SetLength( 0 );
-        pin->SetPosition( VECTOR2I( 0, 0 ) );
-        pin->SetOrientation( PIN_ORIENTATION::PIN_UP );
-        sym->AddDrawItem( pin );
+        addPolyline( sym, { VECTOR2I( 0, 0 ), VECTOR2I( 0, mm( 1.397 ) ) } );
+        addPowerPin( sym, aKiCadName, PIN_ORIENTATION::PIN_UP );
+        break;
+    }
     }
 
     sym->GetReferenceField().SetText( wxT( "#PWR" ) );
