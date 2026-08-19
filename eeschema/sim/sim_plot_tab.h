@@ -724,20 +724,19 @@ private:
     }
 
 private:
-    SIM_PLOT_COLORS              m_colors;
-    std::map<wxString, wxColour> m_sessionTraceColors;
+    SIM_PLOT_COLORS               m_colors;
+    std::map<wxString, wxColour>  m_sessionTraceColors;
 
-    // Top-level sizer; holds all the stacked SIM_VIEWs
-    wxBoxSizer* m_sizer;
+    wxBoxSizer*                   m_viewsSizer;      // Holds all the stacked SIM_VIEWs
 
     // Stacked plot views (owned via wx parent-child, except when explicitly removed)
-    std::vector<SIM_VIEW*> m_views;
+    std::vector<SIM_VIEW*>        m_views;
 
     // Cached so newly-added views can be initialized with the current preferences
     mpWindow::MouseWheelActionSet m_mouseWheelActions;
 
     // Traces to be plotted; each knows which view (if any) it's currently plotted on
-    std::map<wxString, TRACE*> m_traces;
+    std::map<wxString, TRACE*>    m_traces;
 
     bool m_dotted_cp;
 

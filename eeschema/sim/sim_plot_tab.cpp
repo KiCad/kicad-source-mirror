@@ -2160,8 +2160,8 @@ SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
 {
     m_mouseWheelActions = convertMouseWheelActions( SIM_MOUSE_WHEEL_ACTION_SET::GetMouseDefaults() );
 
-    m_sizer = new wxBoxSizer( wxVERTICAL );
-    SetSizer( m_sizer );
+    m_viewsSizer = new wxBoxSizer( wxVERTICAL );
+    SetSizer( m_viewsSizer );
 
     AddView();
 }
@@ -2203,7 +2203,7 @@ SIM_VIEW* SIM_PLOT_TAB::AddView()
     view->SetSmithChart( m_smithMode );
 
     m_views.push_back( view );
-    m_sizer->Add( view, 1, wxALL | wxEXPAND, 1 );
+    m_viewsSizer->Add( view, 1, wxALL | wxEXPAND, 1 );
 
     UpdatePlotColors();
 
@@ -2247,7 +2247,7 @@ bool SIM_PLOT_TAB::RemoveView( SIM_VIEW* aView )
     for( TRACE* trace : plottedHere )
         DeleteTrace( trace );
 
-    m_sizer->Detach( aView );
+    m_viewsSizer->Detach( aView );
     m_views.erase( it );
     aView->Destroy();
 
