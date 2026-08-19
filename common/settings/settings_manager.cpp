@@ -1091,13 +1091,10 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     bool success = loadProjectFile( *project );
 
-    if( success )
-    {
-        project->SetReadOnly( !lockFile.Valid() || project->GetProjectFile().IsReadOnly() );
+    project->SetReadOnly( !lockFile.Valid() || project->GetProjectFile().IsReadOnly() );
 
-        if( lockFile.Valid() && aSetActive )
-            project->SetProjectLock( new LOCKFILE( std::move( lockFile ) ) );
-    }
+    if( lockFile.Valid() && aSetActive )
+        project->SetProjectLock( new LOCKFILE( std::move( lockFile ) ) );
 
     m_projects_list.push_back( std::move( project ) );
     m_projects[fullPath] = m_projects_list.back().get();

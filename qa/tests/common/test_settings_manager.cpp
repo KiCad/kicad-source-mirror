@@ -32,6 +32,7 @@
 
 #include <json_common.h>
 #include <kiplatform/io.h>
+#include <kiway.h>
 #include <lockfile.h>
 #include <project.h>
 
@@ -283,6 +284,59 @@ BOOST_AUTO_TEST_CASE( LiveProjectLockNotStolenFromAnotherExecutable )
     std::ifstream in( LOCKFILE::LockPathFor( projectPath ).ToStdString() );
     BOOST_CHECK_EQUAL( nlohmann::json::parse( in ).value( "token", std::string() ),
                        std::string( "0123456789abcdef0123456789abcdef" ) );
+}
+
+
+class TEST_KIWAY : public KIWAY
+{
+public:
+    TEST_KIWAY( SETTINGS_MANAGER& aManager ) :
+            KIWAY( KFCTL_STANDALONE ),
+            m_manager( aManager )
+    {
+    }
+
+    void ProjectChanged() override
+    {
+        m_notified = true;
+        m_lockHeldWhenNotified = m_manager.Prj().GetProjectLock() != nullptr;
+    }
+
+    bool Notified() const { return m_notified; }
+    bool LockHeldWhenNotified() const { return m_lockHeldWhenNotified; }
+
+private:
+    SETTINGS_MANAGER& m_manager;
+    bool              m_notified = false;
+    bool              m_lockHeldWhenNotified = false;
+};
+
+
+BOOST_AUTO_TEST_CASE( ProjectOwnsItsLockBeforeTheChangeIsAnnounced )
+{
+    fs::path pro = m_tempDir / "unversioned.kicad_pro";
+
+    {
+        std::ofstream out( pro.string() );
+        out << "{}";
+    }
+
+    wxString projectPath = wxString( pro.string() );
+
+    SETTINGS_MANAGER mgr;
+    TEST_KIWAY       kiway( mgr );
+
+    mgr.SetKiway( &kiway );
+    mgr.LoadProject( projectPath );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_REQUIRE( project );
+    BOOST_REQUIRE( kiway.Notified() );
+
+    BOOST_CHECK_MESSAGE( kiway.LockHeldWhenNotified(), "The project must own its lock before the change is announced" );
+
+    BOOST_CHECK( project->GetProjectLock() != nullptr );
+    BOOST_CHECK( wxFileName::FileExists( LOCKFILE::LockPathFor( projectPath ) ) );
 }
 
 
