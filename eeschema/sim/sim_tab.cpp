@@ -80,17 +80,16 @@ SIM_NOPLOT_TAB::SIM_NOPLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) 
     m_sizer = new wxBoxSizer( wxVERTICAL );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );
 
-    m_textInfo = new wxStaticText( dynamic_cast<wxWindow*>( this ), wxID_ANY, "", wxDefaultPosition,
-                                   wxDefaultSize, wxALL | wxEXPAND | wxALIGN_CENTER_HORIZONTAL );
+    m_textInfo = new wxStaticText( this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize,
+                                   wxALL | wxEXPAND | wxALIGN_CENTER_HORIZONTAL );
     m_textInfo->SetFont( KIUI::GetControlFont( this ).Bold() );
     m_textInfo->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-    m_textInfo->SetLabel( _( "Simulation provided no plots. Please refer to console window "
-                             "for results." ) );
+    m_textInfo->SetLabel( _( "Simulation provided no plots. Please refer to console window for results." ) );
 
     m_sizer->Add( m_textInfo, 1, wxALL | wxEXPAND, 5 );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );
 
-    dynamic_cast<wxWindow*>( this )->SetSizer( m_sizer );
+    SetSizer( m_sizer );
 }
 
 
@@ -101,8 +100,7 @@ SIM_NOPLOT_TAB::~SIM_NOPLOT_TAB()
 
 void SIM_NOPLOT_TAB::OnLanguageChanged()
 {
-    m_textInfo->SetLabel( _( "Simulation provided no plots. Please refer to console window "
-                             "for results." ) );
+    m_textInfo->SetLabel( _( "Simulation provided no plots. Please refer to console window for results." ) );
 }
 
 
