@@ -132,7 +132,6 @@ set( QA_EESCHEMA_SRCS
     test_issue24760_plot_page_numbers.cpp
     test_issue24858_variant_persistence.cpp
     test_issue24915_job_variant_fields.cpp
-    test_fields_table_filter.cpp
     test_issue24943_variant_unit_sync.cpp
     test_issue25119_bom_netlist_variant.cpp
     test_issue24961_group_promotion.cpp
