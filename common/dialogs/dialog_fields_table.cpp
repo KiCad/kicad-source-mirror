@@ -80,10 +80,12 @@ protected:
 
 
 DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings,
-                                          FIELDS_TABLE_BOM_SETTINGS& aBomSettings ) :
+                                          FIELDS_TABLE_BOM_SETTINGS& aBomSettings,
+                                          JOB_EXPORT_BOM* aJob ) :
         DIALOG_FIELDS_TABLE_BASE( aParent ),
         m_cfgDialogSettings( aPanelSettings ),
-        m_cfgBomSettings( aBomSettings )
+        m_cfgBomSettings( aBomSettings ),
+        m_job( aJob )
 {
     m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
     m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
@@ -1364,14 +1366,36 @@ void DIALOG_FIELDS_TABLE::rebuildBomPresetsWidget()
     }
 
     m_cbBomPresets->Append( wxT( "---" ) );
-    m_cbBomPresets->Append( _( "Save preset..." ) );
-    m_cbBomPresets->Append( _( "Delete preset..." ) );
+
+    if( !m_job )
+    {
+        m_cbBomPresets->Append( _( "Save preset..." ) );
+        m_cbBomPresets->Append( _( "Delete preset..." ) );
+    }
 
     // At least the built-in presets should always be present
     wxASSERT( !m_bomPresets.empty() );
 
     m_cbBomPresets->SetSelection( default_idx );
     m_currentBomPreset = static_cast<BOM_PRESET*>( m_cbBomPresets->GetClientData( default_idx ) );
+}
+
+
+int DIALOG_FIELDS_TABLE::presetDashDashDashIndex( int aPresetCount ) const
+{
+    return aPresetCount - ( m_job ? 1 : 3 );
+}
+
+
+int DIALOG_FIELDS_TABLE::presetSavePresetIndex( int aPresetCount ) const
+{
+    return m_job ? wxNOT_FOUND : aPresetCount - 2;
+}
+
+
+int DIALOG_FIELDS_TABLE::presetDeletePresetIndex( int aPresetCount ) const
+{
+    return m_job ? wxNOT_FOUND : aPresetCount - 1;
 }
 
 
@@ -1438,7 +1462,7 @@ void DIALOG_FIELDS_TABLE::syncBomPresetSelection()
     }
     else
     {
-        m_cbBomPresets->SetSelection( m_cbBomPresets->GetCount() - 3 ); // separator
+        m_cbBomPresets->SetSelection( presetDashDashDashIndex( m_cbBomPresets->GetCount() ) );
     }
 
     m_currentBomPreset = static_cast<BOM_PRESET*>( m_cbBomPresets->GetClientData( m_cbBomPresets->GetSelection() ) );
@@ -1472,7 +1496,7 @@ void DIALOG_FIELDS_TABLE::updateBomPresetSelection( const wxString& aName )
     }
     else if( idx < 0 )
     {
-        m_cbBomPresets->SetSelection( m_cbBomPresets->GetCount() - 3 ); // separator
+        m_cbBomPresets->SetSelection( presetDashDashDashIndex( m_cbBomPresets->GetCount() ) );
     }
 }
 
@@ -1488,16 +1512,16 @@ void DIALOG_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
                 if( m_currentBomPreset )
                     m_cbBomPresets->SetStringSelection( m_currentBomPreset->name );
                 else
-                    m_cbBomPresets->SetSelection( m_cbBomPresets->GetCount() - 3 );
+                    m_cbBomPresets->SetSelection( presetDashDashDashIndex( m_cbBomPresets->GetCount() ) );
             };
 
-    if( index == count - 3 )
+    if( index == presetDashDashDashIndex( count ) )
     {
         // Separator: reject the selection
         resetSelection();
         return;
     }
-    else if( index == count - 2 )
+    else if( index == presetSavePresetIndex( count ) )
     {
         // Save current state to new preset
         wxString name;
@@ -1560,7 +1584,7 @@ void DIALOG_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
         return;
     }
-    else if( index == count - 1 )
+    else if( index == presetDeletePresetIndex( count ) )
     {
         // Delete a preset
         wxArrayString              headers;
@@ -1749,8 +1773,12 @@ void DIALOG_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
     }
 
     m_cbBomFmtPresets->Append( wxT( "---" ) );
-    m_cbBomFmtPresets->Append( _( "Save preset..." ) );
-    m_cbBomFmtPresets->Append( _( "Delete preset..." ) );
+
+    if( !m_job )
+    {
+        m_cbBomFmtPresets->Append( _( "Save preset..." ) );
+        m_cbBomFmtPresets->Append( _( "Delete preset..." ) );
+    }
 
     // At least the built-in presets should always be present
     wxASSERT( !m_bomFmtPresets.empty() );
@@ -1787,7 +1815,7 @@ void DIALOG_FIELDS_TABLE::syncBomFmtPresetSelection()
     }
     else
     {
-        m_cbBomFmtPresets->SetSelection( m_cbBomFmtPresets->GetCount() - 3 ); // separator
+        m_cbBomFmtPresets->SetSelection( presetDashDashDashIndex( m_cbBomFmtPresets->GetCount() ) );
     }
 
     int idx = m_cbBomFmtPresets->GetSelection();
@@ -1822,7 +1850,7 @@ void DIALOG_FIELDS_TABLE::updateBomFmtPresetSelection( const wxString& aName )
     }
     else if( idx < 0 )
     {
-        m_cbBomFmtPresets->SetSelection( m_cbBomFmtPresets->GetCount() - 3 ); // separator
+        m_cbBomFmtPresets->SetSelection( presetDashDashDashIndex( m_cbBomFmtPresets->GetCount() ) );
     }
 }
 
@@ -1838,16 +1866,16 @@ void DIALOG_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
                 if( m_currentBomFmtPreset )
                     m_cbBomFmtPresets->SetStringSelection( m_currentBomFmtPreset->name );
                 else
-                    m_cbBomFmtPresets->SetSelection( m_cbBomFmtPresets->GetCount() - 3 );
+                    m_cbBomFmtPresets->SetSelection( presetDashDashDashIndex( m_cbBomFmtPresets->GetCount() ) );
             };
 
-    if( index == count - 3 )
+    if( index == presetDashDashDashIndex( count ) )
     {
         // Separator: reject the selection
         resetSelection();
         return;
     }
-    else if( index == count - 2 )
+    else if( index == presetSavePresetIndex( count ) )
     {
         // Save current state to new preset
         wxString name;
@@ -1910,7 +1938,7 @@ void DIALOG_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
 
         return;
     }
-    else if( index == count - 1 )
+    else if( index == presetDeletePresetIndex( count ) )
     {
         // Delete a preset
         wxArrayString              headers;

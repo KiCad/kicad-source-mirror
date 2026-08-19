@@ -134,8 +134,6 @@ private:
     FOOTPRINT_REFERENCE_LIST                 m_footprintsList;
     FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
 
-    JOB_EXPORT_BOM* m_job;
-
     bool m_aborted = false;
 
 public:

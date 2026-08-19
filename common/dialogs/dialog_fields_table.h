@@ -38,7 +38,7 @@ class DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
 {
 public:
     DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings,
-                         FIELDS_TABLE_BOM_SETTINGS& aBomSettings );
+                         FIELDS_TABLE_BOM_SETTINGS& aBomSettings, JOB_EXPORT_BOM* aJob );
     ~DIALOG_FIELDS_TABLE() override;
 
     void ShowEditTab();
@@ -127,6 +127,9 @@ protected:
 
     void syncBomPresetSelection();
     void rebuildBomPresetsWidget();
+    int  presetDashDashDashIndex( int aPresetCount ) const;
+    int  presetSavePresetIndex( int aPresetCount ) const;
+    int  presetDeletePresetIndex( int aPresetCount ) const;
     void updateBomPresetSelection( const wxString& aName );
     void onBomPresetChanged( wxCommandEvent& aEvent );
     void loadDefaultBomPresets();
@@ -147,6 +150,7 @@ protected:
 protected:
     FIELDS_TABLE_SETTINGS&     m_cfgDialogSettings;
     FIELDS_TABLE_BOM_SETTINGS& m_cfgBomSettings;
+    JOB_EXPORT_BOM*            m_job;
 
     VIEW_CONTROLS_GRID_DATA_MODEL* m_viewControlsDataModel = nullptr;
     int                            m_gridWheelRotation = 0;

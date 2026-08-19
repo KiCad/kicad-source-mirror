@@ -107,8 +107,6 @@ private:
 
     SCHEMATIC_SETTINGS&                m_schSettings;
 
-    JOB_EXPORT_BOM* m_job;
-
     bool m_aborted = false;
 
 public:

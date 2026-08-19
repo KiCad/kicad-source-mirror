@@ -201,10 +201,9 @@ private:
 
 
 DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob ) :
-        DIALOG_FIELDS_TABLE( parent, parent->eeconfig()->m_FieldEditorPanel, parent->Schematic().Settings() ),
+        DIALOG_FIELDS_TABLE( parent, parent->eeconfig()->m_FieldEditorPanel, parent->Schematic().Settings(), aJob ),
         m_parent( parent ),
-        m_schSettings( parent->Schematic().Settings() ),
-        m_job( aJob )
+        m_schSettings( parent->Schematic().Settings() )
 {
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, SYMBOL_FILTER_NON_POWER );

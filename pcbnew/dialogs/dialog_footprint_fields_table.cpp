@@ -147,9 +147,8 @@ private:
 
 DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob ) :
         DIALOG_FIELDS_TABLE( parent, parent->GetPcbNewSettings()->m_FieldEditorPanel,
-                             parent->GetBoard()->GetDesignSettings() ),
-        m_parent( parent ),
-        m_job( aJob )
+                             parent->GetBoard()->GetDesignSettings(), aJob ),
+        m_parent( parent )
 {
     // Get all footprints from the list of board sheets
     for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
