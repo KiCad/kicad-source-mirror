@@ -1,1 +1,1 @@
-kicad-python>=0.5
+kicad-python>=0.8

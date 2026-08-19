@@ -18,7 +18,9 @@
  */
 
 #include <fstream>
+#include <set>
 #include <sstream>
+#include <string>
 
 #include <boost/test/unit_test.hpp>
 #include <wx/dir.h>
@@ -93,6 +95,60 @@ bool textFilesMatch( const wxString& aGoldenPath, const wxString& aGeneratedPath
 }
 
 
+/**
+ * Read @a aPath into a string, or return an empty string if it cannot be opened.
+ */
+static std::string readFile( const wxString& aPath )
+{
+    std::ifstream stream( aPath.ToStdString(), std::ios::binary );
+
+    if( !stream.is_open() )
+        return {};
+
+    std::ostringstream contents;
+    contents << stream.rdbuf();
+    return contents.str();
+}
+
+
+static size_t countOccurrences( const std::string& aHaystack, const std::string& aNeedle )
+{
+    size_t count = 0;
+
+    for( size_t pos = aHaystack.find( aNeedle ); pos != std::string::npos;
+         pos = aHaystack.find( aNeedle, pos + aNeedle.size() ) )
+    {
+        ++count;
+    }
+
+    return count;
+}
+
+
+/**
+ * Return every distinct #RRGGBB literal appearing in @a aSvg.
+ */
+static std::set<std::string> collectColours( const std::string& aSvg )
+{
+    std::set<std::string> colours;
+
+    for( size_t pos = aSvg.find( '#' ); pos != std::string::npos; pos = aSvg.find( '#', pos + 1 ) )
+    {
+        std::string colour = aSvg.substr( pos, 7 );
+
+        if( colour.size() < 7 )
+            continue;
+
+        if( colour.find_first_not_of( "0123456789ABCDEFabcdef", 1 ) != std::string::npos )
+            continue;
+
+        colours.insert( colour );
+    }
+
+    return colours;
+}
+
+
 BOOST_AUTO_TEST_SUITE( ApiJobs )
 
 
@@ -110,7 +166,8 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardSvg, API_SERVER_E2E_FIXTURE )
     BOOST_REQUIRE_MESSAGE( Client().OpenDocument( boardPath.GetFullPath(), &document ),
                            "OpenDocument failed: " + Client().LastError() );
 
-    wxFileName outputPath = wxFileName::CreateTempFileName( wxS( "api_job_svg_" ) );
+    wxString   tempFile = wxFileName::CreateTempFileName( wxS( "api_job_svg_" ) );
+    wxFileName outputPath( tempFile );
     outputPath.SetExt( wxS( "svg" ) );
 
     kiapi::board::jobs::RunBoardJobExportSvg request;
@@ -122,6 +179,7 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardSvg, API_SERVER_E2E_FIXTURE )
     request.mutable_plot_settings()->set_plot_drawing_sheet( false );
     request.mutable_plot_settings()->set_drill_marks( kiapi::board::jobs::PDM_FULL );
     request.set_page_mode( kiapi::board::jobs::BJPM_EACH_LAYER_OWN_FILE );
+    request.set_precision( 4 );
 
     kiapi::common::types::RunJobResponse response;
     BOOST_REQUIRE_MESSAGE( Client().RunJob( request, &response ), "RunJob failed: " + Client().LastError() );
@@ -134,16 +192,39 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardSvg, API_SERVER_E2E_FIXTURE )
     wxString generatedPath = wxString::FromUTF8( response.output_path( 0 ) );
     BOOST_REQUIRE_MESSAGE( wxFileName::FileExists( generatedPath ), "Generated SVG does not exist: " + generatedPath );
 
-    // Image comparison in c++ would be hard; so for now just check size is close
-    constexpr long target_size = 41839;
-    wxFileName generatedFn( generatedPath );
-    BOOST_CHECK_LT( std::abs( target_size - static_cast<long>( generatedFn.GetSize().GetValue() ) ), 10 );
+    // Plot fidelity is covered by the kicad-cli SVG regression tests, which rasterize and compare
+    // against golden artwork.  All this test has to establish is that the job honoured the request.
+    const std::string svg = readFile( generatedPath );
+
+    BOOST_REQUIRE_MESSAGE( !svg.empty(), "Generated SVG is empty or unreadable: " + generatedPath );
+    BOOST_CHECK( svg.find( "<svg" ) != std::string::npos );
+    BOOST_CHECK( svg.find( "</svg>" ) != std::string::npos );
+
+    // The board page is A4, and the four decimals are the requested precision
+    BOOST_CHECK( svg.find( "width=\"297.0022mm\" height=\"210.0072mm\"" ) != std::string::npos );
+
+    std::set<std::string> colours = collectColours( svg );
+    BOOST_REQUIRE_MESSAGE( !colours.empty(), "Plot declares no colours at all" );
+
+    for( const std::string& colour : colours )
+    {
+        BOOST_CHECK_MESSAGE( colour == "#000000" || colour == "#FFFFFF",
+                             "black_and_white was requested but the plot contains " + colour );
+    }
+
+    // F.Cu of this board is dense; a near-empty plot means the layer selection was dropped
+    BOOST_CHECK_GT( countOccurrences( svg, "<path" ), 100u );
 
     if( wxFileName::FileExists( generatedPath ) )
         wxRemoveFile( generatedPath );
 
-    if( wxFileName::FileExists( outputPath.GetFullPath() ) )
+    // A per-layer export turns the requested output path into a directory
+    if( wxFileName::DirExists( outputPath.GetFullPath() ) )
+        wxFileName::Rmdir( outputPath.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+    else if( wxFileName::FileExists( outputPath.GetFullPath() ) )
         wxRemoveFile( outputPath.GetFullPath() );
+
+    wxRemoveFile( tempFile );
 }
 
 
