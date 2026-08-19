@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-17 15:37+0300\n"
-"PO-Revision-Date: 2026-07-27 14:02+0000\n"
+"PO-Revision-Date: 2026-08-19 13:54+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -10436,7 +10436,7 @@ msgstr "Pridať položky do skupiny"
 
 #: common/tool/actions.cpp:223
 msgid "Remove Items"
-msgstr "Vymazať Predmet"
+msgstr "Odstrániť položky"
 
 #: common/tool/actions.cpp:224
 msgid "Remove items from group"
@@ -43038,7 +43038,7 @@ msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Ak je deaktivované, s prekovmi sa zaobchádza ako s nepohyblivými predmetmi a "
+"Ak je deaktivované, s prekovmi sa zaobchádza ako s nepohyblivými objektami a "
 "budú sa obchádzať namiesto odsúvať."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
@@ -59646,7 +59646,7 @@ msgstr "Ukázať puzdrá, ktoré sú na prednej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Footprints Back"
-msgstr "Puzdra späť"
+msgstr "Zadné puzdrá"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Show footprints that are on board's back"
@@ -59937,7 +59937,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:1052
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 msgid "Objects"
-msgstr "Predmety"
+msgstr "Objekty"
 
 #: pcbnew/widgets/appearance_controls.cpp:1680
 msgid "Double click or middle click for color change, right click for menu"
