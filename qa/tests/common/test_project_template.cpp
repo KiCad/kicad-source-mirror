@@ -24,6 +24,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <project_template.h>
+#include <settings/settings_manager.h>
 
 #include <wx/dir.h>
 #include <wx/filename.h>
@@ -287,6 +288,35 @@ BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateSeedsBaseDir )
 
     BOOST_REQUIRE( title != nullptr );
     BOOST_CHECK( !title->IsEmpty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ProjectCreatedFromDefaultTemplateLoads )
+{
+    wxString   baseDir = wxString::FromUTF8( ( m_tempDir / "default_load" ).string() );
+    wxFileName seeded = EnsureDefaultProjectTemplate( baseDir );
+
+    BOOST_REQUIRE( seeded.IsOk() );
+
+    fs::path destPath = m_tempDir / "fromdefault";
+    fs::create_directories( destPath );
+
+    PROJECT_TEMPLATE tmpl( seeded.GetPath() );
+
+    wxFileName newProjectPath;
+    newProjectPath.SetPath( wxString::FromUTF8( destPath.string() ) );
+    newProjectPath.SetName( wxS( "fromdefault" ) );
+    newProjectPath.SetExt( wxS( "kicad_pro" ) );
+
+    wxString errorMsg;
+
+    BOOST_REQUIRE_MESSAGE( tmpl.CreateProject( newProjectPath, &errorMsg ),
+                           "CreateProject should succeed: " + errorMsg.ToStdString() );
+
+    SETTINGS_MANAGER mgr;
+
+    BOOST_CHECK_MESSAGE( mgr.LoadProject( newProjectPath.GetFullPath() ),
+                         "A project made from the default template must load" );
 }
 
 
