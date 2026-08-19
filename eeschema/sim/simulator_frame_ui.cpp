@@ -990,7 +990,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
             TRACE*   trace = plotPanel->GetTrace( vectorName, traceType );
 
             // A trace can exist but not be plotted on any view (e.g. after its view was removed);
-            // such an orphan is shown the same as a never-plotted signal ("Disabled", in red).
+            // such an orphan is shown the same as a never-plotted signal.
             bool plotted = trace && trace->GetView();
 
             m_signalsGrid->AppendRows( 1 );
@@ -1002,11 +1002,11 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
             attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
             if( !plotted )
-                attr->SetTextColour( *wxRED );
+                attr->SetTextColour( *wxLIGHT_GREY );
 
             m_signalsGrid->SetAttr( row, COL_SIGNAL_SHOW, attr );
-            m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW,
-                                         getViewLabel( plotPanel, trace ? trace->GetView() : nullptr ) );
+            m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, getViewLabel( plotPanel, trace ? trace->GetView()
+                                                                                              : nullptr ) );
 
             if( !plotted )
             {
@@ -1087,8 +1087,8 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
     }
 
     autoSizeGridColumn( m_signalsGrid, COL_SIGNAL_NAME, 207 );
-    autoSizeGridColumn( m_signalsGrid, COL_SIGNAL_SHOW, 33, 40 );
-    autoSizeGridColumn( m_signalsGrid, COL_Y_SCALE, 33, 40 );
+    autoSizeGridColumn( m_signalsGrid, COL_SIGNAL_SHOW, 32, 22 );
+    autoSizeGridColumn( m_signalsGrid, COL_Y_SCALE, 40, 22 );
     autoSizeGridColumn( m_signalsGrid, COL_SIGNAL_COLOR, 38 );
 
     for( int col = COL_CURSOR_1; col < m_signalsGrid->GetNumberCols(); ++col )
@@ -1111,10 +1111,12 @@ void SIMULATOR_FRAME_UI::autoSizeGridColumn( WX_GRID* aGrid, int aCol, int aMinW
 }
 
 
+#define UNPLOTTED _( "none" )
+
 wxArrayString SIMULATOR_FRAME_UI::getViewChoices( SIM_PLOT_TAB* aPlotTab ) const
 {
     wxArrayString choices;
-    choices.Add( _( "Disabled" ) );
+    choices.Add( UNPLOTTED );
 
     if( aPlotTab )
     {
@@ -1129,11 +1131,11 @@ wxArrayString SIMULATOR_FRAME_UI::getViewChoices( SIM_PLOT_TAB* aPlotTab ) const
 wxString SIMULATOR_FRAME_UI::getViewLabel( SIM_PLOT_TAB* aPlotTab, SIM_VIEW* aView ) const
 {
     if( !aView || !aPlotTab )
-        return _( "Disabled" );
+        return UNPLOTTED;
 
     int index = aPlotTab->GetViewIndex( aView );
 
-    return index >= 0 ? wxString::Format( _( "View %d" ), index + 1 ) : _( "Disabled" );
+    return index >= 0 ? wxString::Format( _( "View %d" ), index + 1 ) : UNPLOTTED;
 }
 
 
@@ -2443,8 +2445,8 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
 
 // TODO make sure where to instantiate and how to style correct
 // Better ask someone..
-template void SIMULATOR_FRAME_UI::signalsGridCursorUpdate<SIGNALS_GRID_COLUMNS, int, int>( SIGNALS_GRID_COLUMNS, int,
-                                                                                           int );
+template
+void SIMULATOR_FRAME_UI::signalsGridCursorUpdate<SIGNALS_GRID_COLUMNS, int, int>( SIGNALS_GRID_COLUMNS, int, int );
 
 template <typename T, typename U, typename R>
 void SIMULATOR_FRAME_UI::signalsGridCursorUpdate(
@@ -2538,7 +2540,7 @@ void SIMULATOR_FRAME_UI::signalsGridCursorUpdate(
                     attr->SetRenderer( new GRID_CELL_COMBOBOX_RENDERER() );
 
                 attr->SetReadOnly( false );
-                attr->SetTextColour( *wxRED );
+                attr->SetTextColour( *wxLIGHT_GREY );
                 m_signalsGrid->SetCellValue( r, static_cast<int>( t ), getViewLabel( plotTab, nullptr ) );
             }
             else if( t == SIGNALS_GRID_COLUMNS::COL_Y_SCALE
