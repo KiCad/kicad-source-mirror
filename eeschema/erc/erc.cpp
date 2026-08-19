@@ -1953,11 +1953,11 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
                     wxString        text = label->GetShownText( &sheet, false );
 
                     auto& map = item->Type() == SCH_LABEL_T ? localLabels : globalLabels;
+                    auto it   = map.find( text );
 
-                    if( !map.count( text ) )
-                    {
+                    // Use the lowest label UUID to ensure the check is deterministic.
+                    if( ( it == map.end() ) || ( label->m_Uuid < it->second.first->m_Uuid ) )
                         map[text] = std::make_pair( label, sheet );
-                    }
                 }
                 else if( item->Type() == SCH_PIN_T )
                 {
@@ -1976,11 +1976,11 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
                                             : symbol->GetValue( true, &sheet, false );
 
                     auto& map = pin->IsGlobalPower() ? globalLabels : localLabels;
+                    auto it   = map.find( text );
 
-                    if( !map.count( text ) )
-                    {
+                    // Use the lowest pin UUID to ensure the check is deterministic.
+                    if( ( it == map.end() ) || ( pin->m_Uuid < it->second.first->m_Uuid ) )
                         map[text] = std::make_pair( pin, sheet );
-                    }
                 }
             }
         }
