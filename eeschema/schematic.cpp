@@ -423,32 +423,6 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 }
 
 
-CONNECTION_GRAPH* SCHEMATIC::AdoptImportedHierarchy( SCH_SHEET_LIST&&  aHierarchy,
-                                                     SCH_SHEET_PATH*  aCurrentSheet,
-                                                     CONNECTION_GRAPH* aConnectionGraph ) noexcept
-{
-    m_hierarchy.swap( aHierarchy );
-
-    if( aCurrentSheet )
-        m_currentSheet->Swap( *aCurrentSheet );
-
-    m_labelToPageRefsMap.clear();
-    return std::exchange( m_connectionGraph, aConnectionGraph );
-}
-
-
-CONNECTION_GRAPH* SCHEMATIC::AdoptImportedTopLevelHierarchy( std::vector<SCH_SHEET*>& aTopLevelSheets,
-                                                             SCH_SHEET_LIST&& aHierarchy, SCH_SHEET_PATH& aCurrentSheet,
-                                                             CONNECTION_GRAPH* aConnectionGraph ) noexcept
-{
-    m_topLevelSheets.swap( aTopLevelSheets );
-    m_hierarchy.swap( aHierarchy );
-    m_currentSheet->Swap( aCurrentSheet );
-    m_labelToPageRefsMap.clear();
-    return std::exchange( m_connectionGraph, aConnectionGraph );
-}
-
-
 void SCHEMATIC::AdoptContent( SCHEMATIC_CONTENT&& aContent ) noexcept
 {
     SCH_SHEET*  target = aContent.targetSheet ? aContent.targetSheet : m_rootSheet;

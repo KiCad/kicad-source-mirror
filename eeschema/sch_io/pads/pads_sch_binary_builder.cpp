@@ -569,8 +569,7 @@ namespace
         libId.SetLibNickname( wxS( "pads_import" ) );
         libId.SetLibItemName( library->GetName() );
         symbol->SetLibId( libId );
-        auto libraryCopy = std::make_unique<LIB_SYMBOL>( *library );
-        symbol->SetLibSymbol( libraryCopy.release() );
+        symbol->SetLibSymbol( library.release() );
         symbol->SetPosition( pagePoint( aLabel.position, aPageHeight ) );
         symbol->SetOrientation( orientation );
         const wxString reference = wxString::Format( wxS( "#PWR%04zu" ), aOrdinal + 1 );
@@ -617,40 +616,130 @@ namespace
     }
 
 
-    const MODEL_SYMBOL_DEFINITION& definitionById( const PADS_SCH_MODEL& aModel, DEFINITION_ID aId )
+    struct MODEL_INDEX
     {
-        auto definition = std::ranges::find( aModel.definitions, aId, &MODEL_SYMBOL_DEFINITION::id );
+        using POINT_KEY = std::tuple<uint32_t, int64_t, int64_t>;
 
-        if( definition == aModel.definitions.end() )
+        explicit MODEL_INDEX( const PADS_SCH_MODEL& aModel )
+        {
+            for( const MODEL_PLACEMENT& placement : aModel.placements )
+                placementsBySheet[placement.sheet.id].push_back( &placement );
+
+            for( const MODEL_NET& net : aModel.nets )
+            {
+                netsById.emplace( net.id, &net );
+                netsBySheet[net.sheet.id].push_back( &net );
+
+                for( const MODEL_CONNECTION& connection : net.connections )
+                {
+                    if( connection.vertices.size() < 2 )
+                        continue;
+
+                    endpointAdjacency[{ net.id.Value(), connection.vertices.front().x, connection.vertices.front().y }]
+                            .push_back( connection.vertices[1] );
+                    endpointAdjacency[{ net.id.Value(), connection.vertices.back().x, connection.vertices.back().y }]
+                            .push_back( connection.vertices[connection.vertices.size() - 2] );
+                }
+            }
+
+            for( const MODEL_BUS& bus : aModel.buses )
+                busesBySheet[bus.sheet.id].push_back( &bus );
+
+            for( const MODEL_LABEL& label : aModel.labels )
+                labelsBySheet[label.sheet.id].push_back( &label );
+
+            for( const MODEL_JUNCTION& junction : aModel.junctions )
+                junctionsBySheet[junction.sheet.id].push_back( &junction );
+
+            for( const MODEL_TEXT& text : aModel.texts )
+                textsBySheet[text.sheet.id].push_back( &text );
+
+            for( const MODEL_PAGE_GRAPHIC& graphic : aModel.graphics )
+                graphicsBySheet[graphic.sheet.id].push_back( &graphic );
+
+            for( const MODEL_EMBEDDED_IMAGE& image : aModel.images )
+                imagesBySheet[image.sheet.id].push_back( &image );
+
+            for( const MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
+            {
+                definitionsById.emplace( definition.id, &definition );
+                std::map<PIN_ID, const MODEL_PIN_DEFINITION*>& definitionPins = pinsByDefinition[definition.id];
+
+                for( const MODEL_PIN_DEFINITION& pin : definition.pins )
+                    definitionPins.emplace( pin.id, &pin );
+            }
+
+            for( const MODEL_PART_TYPE& partType : aModel.partTypes )
+                partTypesById.emplace( partType.id, &partType );
+        }
+
+        template <typename T>
+        static const std::vector<const T*>& ForSheet( const std::map<SHEET_ID, std::vector<const T*>>& aMap,
+                                                      SHEET_ID                                         aSheet )
+        {
+            static const std::vector<const T*> empty;
+            auto                               found = aMap.find( aSheet );
+            return found == aMap.end() ? empty : found->second;
+        }
+
+        std::map<SHEET_ID, std::vector<const MODEL_PLACEMENT*>>      placementsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_NET*>>            netsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_BUS*>>            busesBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_LABEL*>>          labelsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_JUNCTION*>>       junctionsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_TEXT*>>           textsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_PAGE_GRAPHIC*>>   graphicsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_EMBEDDED_IMAGE*>> imagesBySheet;
+        std::map<NET_ID, const MODEL_NET*>                           netsById;
+        std::map<POINT_KEY, std::vector<SOURCE_POINT>>               endpointAdjacency;
+
+        std::map<DEFINITION_ID, const MODEL_SYMBOL_DEFINITION*>                definitionsById;
+        std::map<PART_TYPE_ID, const MODEL_PART_TYPE*>                         partTypesById;
+        std::map<DEFINITION_ID, std::map<PIN_ID, const MODEL_PIN_DEFINITION*>> pinsByDefinition;
+    };
+
+
+    const MODEL_SYMBOL_DEFINITION& definitionById( const MODEL_INDEX& aIndex, DEFINITION_ID aId )
+    {
+        auto definition = aIndex.definitionsById.find( aId );
+
+        if( definition == aIndex.definitionsById.end() )
             THROW_IO_ERROR( wxS( "resolved definition is missing during schematic staging" ) );
 
-        return *definition;
+        return *definition->second;
     }
 
 
-    const MODEL_PART_TYPE& partById( const PADS_SCH_MODEL& aModel, PART_TYPE_ID aId )
+    const MODEL_PART_TYPE& partById( const MODEL_INDEX& aIndex, PART_TYPE_ID aId )
     {
-        auto part = std::ranges::find( aModel.partTypes, aId, &MODEL_PART_TYPE::id );
+        auto part = aIndex.partTypesById.find( aId );
 
-        if( part == aModel.partTypes.end() )
+        if( part == aIndex.partTypesById.end() )
             THROW_IO_ERROR( wxS( "resolved part type is missing during schematic staging" ) );
 
-        return *part;
+        return *part->second;
     }
 
 
-    const MODEL_PIN_DEFINITION& pinById( const MODEL_SYMBOL_DEFINITION& aDefinition, PIN_ID aId )
+    const MODEL_PIN_DEFINITION& pinById( const MODEL_INDEX& aIndex, const MODEL_SYMBOL_DEFINITION& aDefinition,
+                                         PIN_ID aId )
     {
-        auto pin = std::ranges::find( aDefinition.pins, aId, &MODEL_PIN_DEFINITION::id );
+        auto definitionPins = aIndex.pinsByDefinition.find( aDefinition.id );
 
-        if( pin == aDefinition.pins.end() )
+        if( definitionPins == aIndex.pinsByDefinition.end() )
             THROW_IO_ERROR( wxS( "resolved pin is missing during schematic staging" ) );
 
-        return *pin;
+        auto pin = definitionPins->second.find( aId );
+
+        if( pin == definitionPins->second.end() )
+            THROW_IO_ERROR( wxS( "resolved pin is missing during schematic staging" ) );
+
+        return *pin->second;
     }
 
 
-    void addDefinitionUnit( LIB_SYMBOL* aLibrary, const MODEL_SYMBOL_DEFINITION& aDefinition, const MODEL_GATE* aGate,
+    void addDefinitionUnit( const MODEL_INDEX& aIndex, LIB_SYMBOL* aLibrary,
+                            const MODEL_SYMBOL_DEFINITION& aDefinition, const MODEL_GATE* aGate,
                             int aUnit, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics,
                             const std::vector<PLACED_PIN_REFERENCE>* aPlacementPins = nullptr,
                             const MODEL_CONNECTOR_PIN*               aConnectorPin = nullptr )
@@ -673,7 +762,7 @@ namespace
 
         auto addPin = [&]( const PIN_REFERENCE& aPinReference, size_t aPinOrdinal )
         {
-            std::unique_ptr<SCH_PIN> pin = makePin( pinById( aDefinition, aPinReference.id ), aLibrary );
+            std::unique_ptr<SCH_PIN> pin = makePin( pinById( aIndex, aDefinition, aPinReference.id ), aLibrary );
 
             if( aGate && aPinOrdinal < aGate->logicalPins.size() )
             {
@@ -724,11 +813,11 @@ namespace
     }
 
 
-    std::unique_ptr<LIB_SYMBOL> makeLibrarySymbol( const PADS_SCH_MODEL& aModel, const MODEL_PLACEMENT& aPlacement,
+    std::unique_ptr<LIB_SYMBOL> makeLibrarySymbol( const MODEL_INDEX& aIndex, const MODEL_PLACEMENT& aPlacement,
                                                    std::vector<PARSER_DIAGNOSTIC>& aDiagnostics, wxString& aReference,
                                                    int& aUnit )
     {
-        const MODEL_PART_TYPE& part = partById( aModel, aPlacement.partType.id );
+        const MODEL_PART_TYPE& part = partById( aIndex, aPlacement.partType.id );
         wxString               libraryName = part.name.text;
         auto                   library = std::make_unique<LIB_SYMBOL>( libraryName );
         const MODEL_GATE*      connectorGate = nullptr;
@@ -744,7 +833,7 @@ namespace
 
         if( connectorGate )
         {
-            const MODEL_SYMBOL_DEFINITION& definition = definitionById( aModel, aPlacement.definition.id );
+            const MODEL_SYMBOL_DEFINITION& definition = definitionById( aIndex, aPlacement.definition.id );
             library->SetUnitCount( static_cast<int>( connectorGate->connectorPins.size() ), false );
             library->LockUnits( true );
             aReference = aPlacement.reference.text.BeforeLast( '-' );
@@ -757,7 +846,7 @@ namespace
             for( size_t index = 0; index < connectorGate->connectorPins.size(); ++index )
             {
                 const MODEL_CONNECTOR_PIN& connectorPin = connectorGate->connectorPins[index];
-                addDefinitionUnit( library.get(), definition, connectorGate, static_cast<int>( index + 1 ),
+                addDefinitionUnit( aIndex, library.get(), definition, connectorGate, static_cast<int>( index + 1 ),
                                    aDiagnostics, &aPlacement.pins, &connectorPin );
 
                 if( aPlacement.reference.text.EndsWith( wxS( "-" ) + connectorPin.number.text ) )
@@ -775,20 +864,20 @@ namespace
 
             for( const MODEL_GATE& gate : part.gates )
             {
-                const MODEL_SYMBOL_DEFINITION&           definition = gate.unit == aPlacement.unit
-                                                                              ? definitionById( aModel, aPlacement.definition.id )
-                                                                              : definitionById( aModel, gate.definition.id );
+                const DEFINITION_ID definitionId =
+                        gate.unit == aPlacement.unit ? aPlacement.definition.id : gate.definition.id;
+                const MODEL_SYMBOL_DEFINITION&           definition = definitionById( aIndex, definitionId );
                 const std::vector<PLACED_PIN_REFERENCE>* placementPins =
                         gate.unit == aPlacement.unit ? &aPlacement.pins : nullptr;
-                addDefinitionUnit( library.get(), definition, &gate, static_cast<int>( gate.unit ), aDiagnostics,
-                                   placementPins );
+                addDefinitionUnit( aIndex, library.get(), definition, &gate, static_cast<int>( gate.unit ),
+                                   aDiagnostics, placementPins );
             }
         }
         else
         {
-            const MODEL_SYMBOL_DEFINITION& definition = definitionById( aModel, aPlacement.definition.id );
+            const MODEL_SYMBOL_DEFINITION& definition = definitionById( aIndex, aPlacement.definition.id );
             const MODEL_GATE*              gate = part.gates.empty() ? nullptr : &part.gates.front();
-            addDefinitionUnit( library.get(), definition, gate, 0, aDiagnostics, &aPlacement.pins );
+            addDefinitionUnit( aIndex, library.get(), definition, gate, 0, aDiagnostics, &aPlacement.pins );
         }
 
         for( const MODEL_SIGNAL_PIN& signalPin : part.signalPins )
@@ -840,20 +929,20 @@ namespace
     }
 
 
-    std::unique_ptr<SCH_SYMBOL> makeSymbol( const PADS_SCH_MODEL& aModel, const MODEL_PLACEMENT& aPlacement,
+    std::unique_ptr<SCH_SYMBOL> makeSymbol( const MODEL_INDEX& aIndex, const MODEL_PLACEMENT& aPlacement,
                                             const SCH_SHEET_PATH& aPath, int aPageHeight,
                                             std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
         wxString                    reference = aPlacement.reference.text;
         int                         unit = static_cast<int>( aPlacement.unit );
-        std::unique_ptr<LIB_SYMBOL> library = makeLibrarySymbol( aModel, aPlacement, aDiagnostics, reference, unit );
+        std::unique_ptr<LIB_SYMBOL> library = makeLibrarySymbol( aIndex, aPlacement, aDiagnostics, reference, unit );
         auto                        symbol = std::make_unique<SCH_SYMBOL>();
         LIB_ID                      libId;
         libId.SetLibNickname( wxS( "pads_import" ) );
         libId.SetLibItemName( library->GetName() );
         symbol->SetLibId( libId );
-        auto libraryCopy = std::make_unique<LIB_SYMBOL>( *library );
-        symbol->SetLibSymbol( libraryCopy.release() );
+        symbol->SetExcludedFromBoard( library->GetPins().empty() );
+        symbol->SetLibSymbol( library.release() );
         symbol->SetPosition( pagePoint( aPlacement.position, aPageHeight ) );
 
         const int angle = NormalizeAngle( aPlacement.angle );
@@ -881,8 +970,6 @@ namespace
 
         for( const MODEL_FIELD& field : aPlacement.fields )
             applyField( symbol.get(), field, aDiagnostics );
-
-        symbol->SetExcludedFromBoard( library->GetPins().empty() );
 
         return symbol;
     }
@@ -1311,62 +1398,55 @@ namespace
                 THROW_IO_ERROR( wxS( "staged schematic has incomplete hierarchy state" ) );
         }
 
-        void CommitNoexcept( SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe ) noexcept
+        /// Pack the staged schematic into the form SCHEMATIC::AdoptContent() takes.  Everything
+        /// this allocates is still owned off to the side, so a throw here changes nothing.
+        SCHEMATIC_CONTENT PackContent( SCH_SHEET* aAppendToMe )
         {
-            CONNECTION_GRAPH* previousGraph = nullptr;
-
-            if( replacementScreen )
-            {
-                replacementScreen->IncRefCount();
-                SCH_SCREEN* previousScreen = destinationRoot->AdoptImportedScreen( replacementScreen.get() );
-                previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ), &*replacementCurrentSheet,
-                                                                    connectionGraph.get() );
-                replacementScreen.release();
-                connectionGraph.release();
-                previousScreen->DecRefCount();
-
-                if( previousScreen->GetRefCount() == 0 )
-                    delete previousScreen;
-            }
-            else if( topLevelCache )
-            {
-                aSchematic->Root().GetScreen()->AdoptImportedContent( std::move( topLevelIndex ), *topLevelCache );
-                previousGraph = aSchematic->AdoptImportedTopLevelHierarchy(
-                        topLevelSheets, std::move( hierarchy ), *replacementCurrentSheet, connectionGraph.get() );
-                connectionGraph.release();
-
-                for( std::unique_ptr<SCH_SHEET>& sheet : topLevelOwners )
-                    sheet.release();
-
-                for( SCH_SHEET* oldSheet : topLevelSheets )
-                    delete oldSheet;
-            }
-            else
-            {
-                aAppendToMe->GetScreen()->AdoptImportedContent( std::move( appendIndex ), *appendCache );
-                previousGraph =
-                        aSchematic->AdoptImportedHierarchy( std::move( hierarchy ), nullptr, connectionGraph.get() );
-                connectionGraph.release();
-
-                for( std::unique_ptr<SCH_ITEM>& item : appendItems )
-                    item.release();
-            }
+            SCHEMATIC_CONTENT content;
+            content.hierarchy = std::move( hierarchy );
+            content.currentSheet = std::move( replacementCurrentSheet );
+            content.connectionGraph = std::move( connectionGraph );
 
             if( replacementEmbeddedFiles )
             {
-                *aSchematic->GetEmbeddedFiles() = std::move( *replacementEmbeddedFiles );
-                aSchematic->Settings().m_SchDrawingSheetFileName.swap( replacementDrawingSheet );
+                content.embeddedFiles.emplace( std::move( *replacementEmbeddedFiles ) );
+                content.drawingSheetFileName = std::move( replacementDrawingSheet );
             }
 
-            delete previousGraph;
+            if( replacementScreen )
+            {
+                content.targetSheet = destinationRoot;
+                content.screen = std::move( replacementScreen );
+            }
+            else if( topLevelCache )
+            {
+                // The virtual root owns the top-level sheets, so it is the target here.
+                content.screenItems = std::move( topLevelIndex );
+                content.screenLibSymbols = std::move( topLevelCache );
+                content.topLevelSheets = std::move( topLevelSheets );
+
+                for( std::unique_ptr<SCH_SHEET>& sheet : topLevelOwners )
+                    content.itemOwners.emplace_back( std::move( sheet ) );
+            }
+            else
+            {
+                content.targetSheet = aAppendToMe;
+                content.screenItems = std::move( appendIndex );
+                content.screenLibSymbols = std::move( appendCache );
+                content.itemOwners = std::move( appendItems );
+            }
+
+            return content;
         }
 
         void Commit( SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe, const std::function<void()>& aBeforeCommit )
         {
+            SCHEMATIC_CONTENT content = PackContent( aAppendToMe );
+
             if( aBeforeCommit )
                 aBeforeCommit();
 
-            CommitNoexcept( aSchematic, aAppendToMe );
+            aSchematic->AdoptContent( std::move( content ) );
         }
     };
 
@@ -1546,74 +1626,7 @@ namespace
     }
 
 
-    struct MODEL_INDEX
-    {
-        using POINT_KEY = std::tuple<uint32_t, int64_t, int64_t>;
-
-        explicit MODEL_INDEX( const PADS_SCH_MODEL& aModel )
-        {
-            for( const MODEL_PLACEMENT& placement : aModel.placements )
-                placementsBySheet[placement.sheet.id].push_back( &placement );
-
-            for( const MODEL_NET& net : aModel.nets )
-            {
-                netsById.emplace( net.id, &net );
-                netsBySheet[net.sheet.id].push_back( &net );
-
-                for( const MODEL_CONNECTION& connection : net.connections )
-                {
-                    if( connection.vertices.size() < 2 )
-                        continue;
-
-                    endpointAdjacency[{ net.id.Value(), connection.vertices.front().x, connection.vertices.front().y }]
-                            .push_back( connection.vertices[1] );
-                    endpointAdjacency[{ net.id.Value(), connection.vertices.back().x, connection.vertices.back().y }]
-                            .push_back( connection.vertices[connection.vertices.size() - 2] );
-                }
-            }
-
-            for( const MODEL_BUS& bus : aModel.buses )
-                busesBySheet[bus.sheet.id].push_back( &bus );
-
-            for( const MODEL_LABEL& label : aModel.labels )
-                labelsBySheet[label.sheet.id].push_back( &label );
-
-            for( const MODEL_JUNCTION& junction : aModel.junctions )
-                junctionsBySheet[junction.sheet.id].push_back( &junction );
-
-            for( const MODEL_TEXT& text : aModel.texts )
-                textsBySheet[text.sheet.id].push_back( &text );
-
-            for( const MODEL_PAGE_GRAPHIC& graphic : aModel.graphics )
-                graphicsBySheet[graphic.sheet.id].push_back( &graphic );
-
-            for( const MODEL_EMBEDDED_IMAGE& image : aModel.images )
-                imagesBySheet[image.sheet.id].push_back( &image );
-        }
-
-        template <typename T>
-        static const std::vector<const T*>& ForSheet( const std::map<SHEET_ID, std::vector<const T*>>& aMap,
-                                                      SHEET_ID                                         aSheet )
-        {
-            static const std::vector<const T*> empty;
-            auto                               found = aMap.find( aSheet );
-            return found == aMap.end() ? empty : found->second;
-        }
-
-        std::map<SHEET_ID, std::vector<const MODEL_PLACEMENT*>>      placementsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_NET*>>            netsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_BUS*>>            busesBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_LABEL*>>          labelsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_JUNCTION*>>       junctionsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_TEXT*>>           textsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_PAGE_GRAPHIC*>>   graphicsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_EMBEDDED_IMAGE*>> imagesBySheet;
-        std::map<NET_ID, const MODEL_NET*>                           netsById;
-        std::map<POINT_KEY, std::vector<SOURCE_POINT>>               endpointAdjacency;
-    };
-
-
-    void stageSheetContent( STAGED_SCHEMATIC& aStaged, const PADS_SCH_MODEL& aModel, const MODEL_INDEX& aIndex,
+    void stageSheetContent( STAGED_SCHEMATIC& aStaged, const MODEL_INDEX& aIndex,
                             const MODEL_SHEET& aSourceSheet, SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath )
     {
         PAGE_INFO page = pageInfo( aSourceSheet );
@@ -1624,7 +1637,7 @@ namespace
         for( const MODEL_PLACEMENT* placement : MODEL_INDEX::ForSheet( aIndex.placementsBySheet, aSourceSheet.id ) )
         {
             std::unique_ptr<SCH_SYMBOL> symbol =
-                    makeSymbol( aModel, *placement, aPath, pageHeight, aStaged.result.diagnostics );
+                    makeSymbol( aIndex, *placement, aPath, pageHeight, aStaged.result.diagnostics );
             aScreen->Append( symbol.get() );
             symbol.release();
             ++aStaged.result.counts.symbols;
@@ -2022,14 +2035,12 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
                 THROW_IO_ERROR( wxS( "cannot replace a schematic without a top-level sheet and screen" ) );
 
             staged.replacementScreen = std::make_unique<SCH_SCREEN>( aSchematic );
-            staged.replacementScreen->SetImportStagingUuid( staged.destinationRoot->m_Uuid );
             staged.replacementScreen->SetFileName( aSourcePath );
             SCH_SHEET_PATH rootPath;
             rootPath.push_back( staged.destinationRoot );
             staged.hierarchy.push_back( rootPath );
             staged.replacementCurrentSheet.emplace( rootPath );
-            stageSheetContent( staged, aModel, modelIndex, *sourceSheets.front(), staged.replacementScreen.get(),
-                               rootPath );
+            stageSheetContent( staged, modelIndex, *sourceSheets.front(), staged.replacementScreen.get(), rootPath );
         }
         else
         {
@@ -2040,8 +2051,8 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
                 const MODEL_SHEET& sourceSheet = *sourceSheets[index];
                 auto               sheet = std::make_unique<SCH_SHEET>( aSchematic );
                 auto               screen = new SCH_SCREEN( aSchematic );
-                const_cast<KIID&>( sheet->m_Uuid ) = screen->GetUuid();
                 sheet->SetScreen( screen );
+                sheet->SyncUuidToScreen();
                 sheet->SetParent( &aSchematic->Root() );
                 sheet->GetField( FIELD_T::SHEET_NAME )->SetText( sourceSheet.name.text );
                 wxString filename = sanitizedFilename( sourceSheet.name.text, index, usedFilenames );
@@ -2051,7 +2062,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
                 SCH_SHEET_PATH path;
                 path.push_back( sheet.get() );
                 path.SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
-                stageSheetContent( staged, aModel, modelIndex, sourceSheet, screen, path );
+                stageSheetContent( staged, modelIndex, sourceSheet, screen, path );
                 staged.hierarchy.push_back( path );
 
                 if( index == 0 )
@@ -2069,7 +2080,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
         SCH_SCREEN*        temporaryScreen = staged.appendCache.get();
         SCH_SHEET_PATH     path;
         path.push_back( aAppendToMe );
-        stageSheetContent( staged, aModel, modelIndex, sourceSheet, temporaryScreen, path );
+        stageSheetContent( staged, modelIndex, sourceSheet, temporaryScreen, path );
 
         std::vector<SCH_ITEM*> temporaryItems;
 
@@ -2112,7 +2123,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
             SCH_SHEET_PATH childPath( rootPath );
             childPath.push_back( child.get() );
             childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), firstChildPage + index ) );
-            stageSheetContent( staged, aModel, modelIndex, sourceSheet, childScreen, childPath );
+            stageSheetContent( staged, modelIndex, sourceSheet, childScreen, childPath );
             child->SetParent( aAppendToMe->GetScreen() );
             staged.appendItems.emplace_back( std::move( child ) );
         }

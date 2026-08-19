@@ -229,13 +229,6 @@ public:
      */
     void SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets );
 
-    CONNECTION_GRAPH* AdoptImportedHierarchy( SCH_SHEET_LIST&& aHierarchy, SCH_SHEET_PATH* aCurrentSheet,
-                                               CONNECTION_GRAPH* aConnectionGraph ) noexcept;
-
-    CONNECTION_GRAPH* AdoptImportedTopLevelHierarchy( std::vector<SCH_SHEET*>& aTopLevelSheets,
-                                                      SCH_SHEET_LIST&& aHierarchy, SCH_SHEET_PATH& aCurrentSheet,
-                                                      CONNECTION_GRAPH* aConnectionGraph ) noexcept;
-
     /**
      * Take a staged schematic over from an importer in one indivisible step.
      *

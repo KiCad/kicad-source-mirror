@@ -300,14 +300,6 @@ void SCH_SHEET::SyncUuidToScreen()
 }
 
 
-SCH_SCREEN* SCH_SHEET::AdoptImportedScreen( SCH_SCREEN* aScreen ) noexcept
-{
-    SCH_SCREEN* previous = m_screen;
-    m_screen = aScreen;
-    return previous;
-}
-
-
 int SCH_SHEET::GetScreenCount() const
 {
     if( m_screen == nullptr )

@@ -45,6 +45,7 @@
 #include <stroke_params.h>
 
 #include <advanced_config.h>
+#include <io/pads/pads_binary_utils.h>
 #include <io/pads/pads_common.h>
 #include <locale_io.h>
 #include <progress_reporter.h>
@@ -391,7 +392,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
         screen->SetFileName( aFileName );
         rootSheet->SetScreen( screen );
 
-        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
+        rootSheet->SyncUuidToScreen();
     }
 
     SCH_SHEET_PATH rootPath;
@@ -1564,12 +1565,12 @@ bool SCH_IO_PADS::isBinarySchematicFile( const wxString& aFileName ) const
 {
     try
     {
-        std::vector<uint8_t> data;
+        std::vector<uint8_t> header;
 
         // Recognition intentionally does not test the version.  A PADS binary from an unsupported
         // producer belongs to this importer and must receive the binary parser's version diagnostic.
-        return PADS_SCH_BINARY::PADS_SCH_BINARY_READER::ReadFile( aFileName, data )
-               && PADS_SCH_BINARY::PADS_SCH_BINARY_READER::IsBinaryFamily( data );
+        return PADS_IO::ReadFileHeader( aFileName, header, 2 )
+               && PADS_SCH_BINARY::PADS_SCH_BINARY_READER::IsBinaryFamily( header );
     }
     catch( ... )
     {
