@@ -399,7 +399,7 @@ public:
                         itemFieldValue = getFieldResolvedLiveValue( item, m_cols[aCol].m_fieldName );
                     }
                     // We have a field that contains both non-variable text and a variable
-                    else if( itemFieldValue.Contains( wxT( "${" ) ) )
+                    else if( IsGeneratedValue( itemFieldValue ) )
                     {
                         // Resolve variables in the un-applied value using the parent symbol and instance
                         // data.
@@ -627,9 +627,9 @@ protected:
             // e.g. "10K ${TOLERANCE}", which still needs to be resolved
             else
             {
-                if( lh.Contains( wxT( "${" ) ) )
+                if( IsGeneratedValue( lh ) )
                     lh = resolveTextVars( lhItem, lh );
-                if( rh.Contains( wxT( "${" ) ) )
+                if( IsGeneratedValue( rh ) )
                     rh = resolveTextVars( rhItem, rh );
             }
 

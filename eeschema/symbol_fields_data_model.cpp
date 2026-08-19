@@ -103,7 +103,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
     if( aRow >= 0 && aRow < (int) m_rows.size() && aCol >= 0 && aCol < (int) m_cols.size() && !ColIsReference( aCol )
         && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol ) )
     {
-        if( rawValue.Contains( wxT( "${" ) ) )
+        if( IsGeneratedValue( rawValue ) )
             needsTextVarRenderer = true;
     }
 
@@ -319,7 +319,7 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( const 
             return aRef.GetSymbol()->ResolveTextVar( &path, token, m_currentVariant, depth + 1 );
         };
 
-        return ExpandTextVars( aFieldName, &symbolResolver );
+        return ResolveTextVars( aFieldName, &symbolResolver, depth );
     }
 
     return wxEmptyString;
@@ -339,7 +339,8 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( const SCH_REFERE
         return aRef.GetSymbol()->ResolveTextVar( &aRef.GetSheetPath(), token, m_currentVariant );
     };
 
-    return ExpandTextVars( aText, &symbolResolver );
+    int depth = 0;
+    return ResolveTextVars( aText, &symbolResolver, depth );
 }
 
 

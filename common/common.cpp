@@ -467,11 +467,17 @@ wxString GetGeneratedFieldDisplayName( const wxString& aSource )
 }
 
 
-bool IsGeneratedField( const wxString& aSource )
+bool IsGeneratedField( const wxString& aFieldName )
 {
     // Per-thread regex.  Callers include parallel ERC/connection-graph workers.
-    thread_local wxRegEx expr( wxS( "^\\$\\{[\\w.]*\\}$" ) );
-    return expr.Matches( aSource );
+    thread_local wxRegEx expr( wxS( "^(\\$\\{[\\w.]*\\}|@\\{.*\\})$" ) );
+    return expr.Matches( aFieldName );
+}
+
+
+bool IsGeneratedValue( const wxString& aValue )
+{
+    return aValue.Contains( wxT( "${" ) ) || aValue.Contains( wxT( "@{" ) );
 }
 
 

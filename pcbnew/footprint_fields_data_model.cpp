@@ -101,7 +101,7 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
     if( aRow >= 0 && aRow < (int) m_rows.size() && aCol >= 0 && aCol < (int) m_cols.size() && !ColIsReference( aCol )
         && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol ) )
     {
-        if( rawValue.Contains( wxT( "${" ) ) )
+        if( IsGeneratedValue( rawValue ) )
             needsTextVarRenderer = true;
     }
 
@@ -281,7 +281,7 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( con
             return footprint.ResolveTextVar( token, m_currentVariant, depth + 1 );
         };
 
-        return ExpandTextVars( aFieldName, &footprintResolver );
+        return ResolveTextVars( aFieldName, &footprintResolver, depth );
     }
 
     return wxEmptyString;
@@ -301,7 +301,8 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( const FOOTPRI
         return aRef.GetFootprint().ResolveTextVar( token, m_currentVariant );
     };
 
-    return ExpandTextVars( aText, &footprintResolver );
+    int depth = 0;
+    return ResolveTextVars( aText, &footprintResolver, depth );
 }
 
 

@@ -146,9 +146,14 @@ KICOMMON_API wxString ResolveTextVars( const wxString& aSource, const std::funct
 KICOMMON_API wxString GetGeneratedFieldDisplayName( const wxString& aSource );
 
 /**
- * Returns true if the string is generated, e.g contains a single text var reference
+ * Returns true if the entire string is generated, e.g is a single text var reference
  */
-KICOMMON_API bool IsGeneratedField( const wxString& aSource );
+KICOMMON_API bool IsGeneratedField( const wxString& aFieldName );
+
+/**
+ * Returns true if some of the string is generated, e.g contains a text var or expression
+ */
+KICOMMON_API bool IsGeneratedValue( const wxString& aValue );
 
 /**
  * Returns a user-visible HTML string describing a footprint reference designator.
