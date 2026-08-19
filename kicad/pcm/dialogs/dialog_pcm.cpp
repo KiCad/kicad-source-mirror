@@ -268,6 +268,7 @@ void DIALOG_PCM::OnManageRepositoriesClicked( wxCommandEvent& event )
             cfg->m_PcmRepositories = std::move( dialog_data );
 
         setRepositoryListFromPcm();
+        setInstalledPackages();
     }
 
     dialog->Destroy();
@@ -329,6 +330,7 @@ void DIALOG_PCM::OnRefreshClicked( wxCommandEvent& event )
 {
     m_pcm->DiscardRepositoryCache( m_selectedRepositoryId );
     setRepositoryData( m_selectedRepositoryId );
+    setInstalledPackages();
 }
 
 
@@ -362,6 +364,7 @@ void DIALOG_PCM::OnRepositoryChoice( wxCommandEvent& event )
     m_selectedRepositoryId = data->GetData();
 
     setRepositoryData( m_selectedRepositoryId );
+    setInstalledPackages();
 
     if( KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
         cfg->m_PcmLastSelectedRepoId = m_selectedRepositoryId;
@@ -561,6 +564,10 @@ void DIALOG_PCM::updatePendingActionsTab()
 void DIALOG_PCM::setInstalledPackages()
 {
     m_installedPanel->ClearData();
+
+    // This rewrites stale repository ids and refreshes package metadata, so it has to run
+    // before the entries are copied into the view data
+    m_pcm->ResolveInstalledPackageRepositories();
 
     const std::vector<PCM_INSTALLATION_ENTRY> installed = m_pcm->GetInstalledPackages();
     std::vector<PACKAGE_VIEW_DATA>            package_list;
