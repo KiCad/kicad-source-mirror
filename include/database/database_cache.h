@@ -111,6 +111,19 @@ public:
         m_maxAge = aMaxAge;
     }
 
+    void Clear( const std::string& aQuery )
+    {
+        std::lock_guard<std::mutex> lock( m_mutex );
+
+        auto it = m_cache.find( aQuery );
+
+        if( it != m_cache.end() )
+        {
+            m_cacheMru.erase( it->second );
+            m_cache.erase( it );
+        }
+    }
+
 private:
     mutable std::mutex m_mutex;
     size_t m_maxSize;

@@ -25,7 +25,12 @@
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
 #include <wildcards_and_files_ext.h>
+#include <atomic>
+#include <condition_variable>
+#include <mutex>
 #include <optional>
+#include <shared_mutex>
+#include <thread>
 #include <unordered_set>
 
 
@@ -94,7 +99,15 @@ public:
     bool TestConnection( wxString* aErrorMsg = nullptr );
 
 private:
+    typedef std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> TABLE_RESULT_LIST;
+
     void cacheLib();
+
+    size_t computeSignature( const TABLE_RESULT_LIST& aTableResults ) const;
+
+    bool  materializeCache( const TABLE_RESULT_LIST& aTableResults,
+                            std::map<wxString, std::unique_ptr<LIB_SYMBOL>>& aSymbolCache,
+                            std::map<wxString, std::pair<std::string, std::string>>& aSanitizedNameMap );
 
     void ensureSettings( const wxString& aSettingsPath );
 
@@ -125,7 +138,7 @@ private:
     long long m_cacheTimestamp;
 
     /// True once the LIB_SYMBOL cache has been materialized at least once.
-    bool m_cachePopulated;
+    std::atomic<bool> m_cachePopulated{ false };
 
     int m_modifyHash = 0;
 
@@ -140,6 +153,17 @@ private:
     /// Re-entrancy guard for cacheLib(), tripped when a self-referential load routes back through
     /// the adapter into LoadSymbol mid-build.
     bool m_inCacheLib = false;
+
+    void startBackgroundRefresh();
+    void stopBackgroundRefresh();
+    void backgroundRefreshWorker();
+
+    std::thread             m_refreshThread;
+    std::atomic<bool>       m_refreshRunning{ false };
+    std::condition_variable m_refreshCV;
+    std::mutex              m_refreshMutex;
+    std::shared_mutex       m_cacheMutex;
+    std::mutex              m_symbolLoadMutex;
 
     wxString m_lastError;
 };
