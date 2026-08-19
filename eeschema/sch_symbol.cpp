@@ -2838,7 +2838,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
         if( value.GetType() == KICAD_DIFF::DIFF_VALUE::T::NONE )
             return false;
 
-        *token = value.ToDisplayString( EDA_UNITS::MM, pcbIUScale );
+        *token = value.ToDisplayString( EDA_UNITS::MILS, schIUScale );
         return true;
     }
 
