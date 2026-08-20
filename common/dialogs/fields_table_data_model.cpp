@@ -318,6 +318,10 @@ void FIELDS_TABLE_DATA_MODEL_BASE::DisableRebuilds()
 void FIELDS_TABLE_DATA_MODEL_BASE::SetGroupColumn( int aCol, bool aGroup )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
+
+    if( ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
+        aGroup = false;
+
     m_cols[aCol].m_group = aGroup;
 }
 
