@@ -1463,6 +1463,52 @@ BOOST_AUTO_TEST_CASE( ComponentCopperRegionNets )
 }
 
 
+/**
+ * Component copper regions become custom pads whose primitives are built in board coordinates,
+ * but a PAD defaults to its footprint's angle and serializes the footprint-relative one, so the
+ * geometry is rotated twice unless the absolute orientation is forced to zero.
+ */
+BOOST_AUTO_TEST_CASE( ComponentCopperRegionOrientation )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    int regionCount = 0;
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        if( footprint->GetOrientation().IsZero() )
+            continue;
+
+        for( PAD* pad : footprint->Pads() )
+        {
+            PCB_LAYER_ID copperLayer = pad->IsOnLayer( F_Cu ) ? F_Cu : B_Cu;
+
+            // Region-derived pads are the custom-shaped ones Altium left without a number
+            if( pad->GetShape( copperLayer ) != PAD_SHAPE::CUSTOM || !pad->GetNumber().IsEmpty() )
+                continue;
+
+            regionCount++;
+
+            // PAD normalizes the library-frame angle, so cancelling the footprint rotation
+            // leaves the absolute angle at a full turn rather than at zero
+            EDA_ANGLE absolute = pad->GetOrientation();
+            absolute.Normalize();
+
+            BOOST_CHECK_MESSAGE( absolute.IsZero(),
+                                 wxString::Format( wxT( "Region pad in %s is rotated %.1f degrees" ),
+                                                   footprint->GetReference(), absolute.AsDegrees() ) );
+            BOOST_CHECK( !pad->GetFPRelativeOrientation().IsZero() );
+        }
+    }
+
+    BOOST_REQUIRE_GT( regionCount, 0 );
+}
+
+
 // The importer recentres the board on the page after parsing and shifts both origins by that same
 // vector, so only the origin's offset from the board outline survives the move
 static void checkImportedOriginOffset( PCB_IO_ALTIUM_DESIGNER& aPlugin,

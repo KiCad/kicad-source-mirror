@@ -3228,6 +3228,9 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         pad->SetPosition( anchorPos );
         pad->SetNetCode( GetNetCode( aElem.net ) );
 
+        // The primitives below are board-absolute, but a pad defaults to its footprint's angle
+        pad->SetOrientation( ANGLE_0 );
+
         SHAPE_POLY_SET shapePolys = polySet;
         shapePolys.Move( -anchorPos );
         pad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, shapePolys, 0, true );
