@@ -111,9 +111,9 @@ DIALOG_SYMBOL_CHOOSER::~DIALOG_SYMBOL_CHOOSER()
 }
 
 
-LIB_ID DIALOG_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit ) const
+LIB_ID DIALOG_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit, int* aBodyStyle ) const
 {
-    return m_chooserPanel->GetSelectedLibId( aUnit );
+    return m_chooserPanel->GetSelectedLibId( aUnit, aBodyStyle );
 }
 
 

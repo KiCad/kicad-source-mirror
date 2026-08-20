@@ -29,9 +29,11 @@
 
 class wxPanel;
 class wxTimer;
+class wxChoice;
 class wxSplitterWindow;
 
 class SYMBOL_LIBRARY_FILTER;
+class LIB_SYMBOL;
 class SYMBOL_PREVIEW_WIDGET;
 class FOOTPRINT_PREVIEW_WIDGET;
 class FOOTPRINT_SELECT_WIDGET;
@@ -83,7 +85,7 @@ public:
      * @param aUnit if not NULL, the selected unit is filled in here.
      * @return the #LIB_ID of the symbol that has been selected.
      */
-    LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
+    LIB_ID GetSelectedLibId( int* aUnit = nullptr, int* aBodyStyle = nullptr ) const;
 
     int GetItemCount() const { return m_adapter->GetItemCount(); }
 
@@ -118,6 +120,9 @@ protected:
 
     void onFootprintSelected( wxCommandEvent& aEvent );
     void onSymbolSelected( wxCommandEvent& aEvent );
+
+    void onSelectBodyStyle( wxCommandEvent& aEvent );
+    void updateBodyStyleChoice( LIB_SYMBOL* aSymbol );
 
     /**
      * Handle parent frame menu events to block tree preview
@@ -178,6 +183,9 @@ protected:
     bool                      m_allow_field_edits;
     bool                      m_show_footprints;
     wxString                  m_fp_override;
+    wxStaticText*            m_bodyStyleLabel;
+    wxChoice*                m_bodyStyleChoice;
+    int                      m_selectedBodyStyle;
 
     std::vector<std::pair<FIELD_T, wxString>>  m_field_edits;
 

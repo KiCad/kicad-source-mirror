@@ -67,7 +67,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
         return PICKED_SYMBOL();
 
     PICKED_SYMBOL sel;
-    LIB_ID id = dlg.GetSelectedLibId( &sel.Unit );
+    LIB_ID id = dlg.GetSelectedLibId( &sel.Unit, &sel.BodyStyle );
 
     if( !id.IsValid() )
         return PICKED_SYMBOL();

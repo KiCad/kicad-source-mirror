@@ -46,6 +46,9 @@
 #include <wx/timer.h>
 #include <wx/wxhtml.h>
 #include <wx/log.h>
+#include <wx/choice.h>
+#include <wx/stattext.h>
+#include <lib_symbol.h>
 
 
 wxString PANEL_SYMBOL_CHOOSER::g_symbolSearchString;
@@ -64,14 +67,16 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_hsplitter( nullptr ),
         m_vsplitter( nullptr ),
         m_fp_sel_ctrl( nullptr ),
-        m_fp_preview( nullptr ),
         m_tree( nullptr ),
         m_details( nullptr ),
         m_acceptHandler( std::move( aAcceptHandler ) ),
         m_escapeHandler( std::move( aEscapeHandler ) ),
         m_showPower( false ),
         m_allow_field_edits( aAllowFieldEdits ),
-        m_show_footprints( aShowFootprints )
+        m_show_footprints( aShowFootprints ),
+        m_bodyStyleLabel( nullptr ),
+        m_bodyStyleChoice( nullptr ),
+        m_selectedBodyStyle( 1 )
 {
     m_frame = aFrame;
 
@@ -264,6 +269,9 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     if( m_fp_sel_ctrl )
         m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::onFootprintSelected, this );
 
+    if( m_bodyStyleChoice )
+        m_bodyStyleChoice->Bind( wxEVT_CHOICE, &PANEL_SYMBOL_CHOOSER::onSelectBodyStyle, this );
+
     if( m_details )
         m_details->Bind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnDetailsCharHook, this );
 
@@ -373,6 +381,14 @@ wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
 
     m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, &m_frame->Kiway(), true, backend );
     m_symbol_preview->SetLayoutDirection( wxLayout_LeftToRight );
+
+    wxBoxSizer* bodyStyleSizer = new wxBoxSizer( wxHORIZONTAL );
+    m_bodyStyleLabel = new wxStaticText( panel, wxID_ANY, _( "Body style:" ) );
+    m_bodyStyleChoice = new wxChoice( panel, wxID_ANY );
+    m_bodyStyleChoice->Enable( false );
+    bodyStyleSizer->Add( m_bodyStyleLabel, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxTOP | wxBOTTOM, 5 );
+    bodyStyleSizer->Add( m_bodyStyleChoice, 1, wxEXPAND | wxALL, 5 );
+    sizer->Add( bodyStyleSizer, 0, wxEXPAND | wxBOTTOM, 5 );
 
     if( m_show_footprints )
     {
@@ -501,9 +517,54 @@ void PANEL_SYMBOL_CHOOSER::SetPreselect( const LIB_ID& aPreselect )
 }
 
 
-LIB_ID PANEL_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit ) const
+LIB_ID PANEL_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit, int* aBodyStyle ) const
 {
-    return m_tree->GetSelectedLibId( aUnit );
+    LIB_ID id = m_tree->GetSelectedLibId( aUnit );
+
+    if( aBodyStyle )
+        *aBodyStyle = m_selectedBodyStyle;
+
+    return id;
+}
+
+
+void PANEL_SYMBOL_CHOOSER::updateBodyStyleChoice( LIB_SYMBOL* aSymbol )
+{
+    int bodyStyleCount = aSymbol ? std::max( aSymbol->GetBodyStyleCount(), 1 ) : 1;
+
+    m_bodyStyleChoice->Enable( bodyStyleCount > 1 );
+    m_bodyStyleChoice->Clear();
+
+    if( bodyStyleCount > 1 )
+    {
+        for( int i = 1; i <= bodyStyleCount; i++ )
+            m_bodyStyleChoice->Append( aSymbol->GetBodyStyleDescription( i, false ) );
+
+        if( m_selectedBodyStyle > static_cast<int>( m_bodyStyleChoice->GetCount() ) )
+            m_selectedBodyStyle = 1;
+
+        m_bodyStyleChoice->SetSelection( m_selectedBodyStyle - 1 );
+    }
+    else
+    {
+        m_selectedBodyStyle = 1;
+    }
+}
+
+
+void PANEL_SYMBOL_CHOOSER::onSelectBodyStyle( wxCommandEvent& aEvent )
+{
+    int selection = m_bodyStyleChoice->GetSelection();
+
+    if( selection < 0 )
+        return;
+
+    m_selectedBodyStyle = selection + 1;
+
+    LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
+
+    if( node && node->m_LibId.IsValid() )
+        m_symbol_preview->DisplaySymbol( node->m_LibId, node->m_Unit, m_selectedBodyStyle );
 }
 
 
@@ -678,7 +739,11 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
 
     if( node && node->m_LibId.IsValid() )
     {
-        m_symbol_preview->DisplaySymbol( node->m_LibId, node->m_Unit );
+        LIB_SYMBOL* symbol = m_frame->GetLibSymbol( node->m_LibId );
+
+        updateBodyStyleChoice( symbol );
+
+        m_symbol_preview->DisplaySymbol( node->m_LibId, node->m_Unit, m_selectedBodyStyle );
 
         if( !node->m_Footprint.IsEmpty() )
         {
@@ -716,7 +781,7 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
         if( m_fp_preview && m_fp_preview->IsInitialized() )
             m_fp_preview->SetStatusText( wxEmptyString );
 
-        populateFootprintSelector( LIB_ID() );
+        updateBodyStyleChoice( nullptr );
     }
 }
 
