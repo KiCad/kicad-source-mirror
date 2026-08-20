@@ -881,14 +881,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
         }
     }
 
-    DisableSelectionEvents();
-
-    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-        updateSelectionItems();
-
-    m_dataModel->RebuildRows();
-    RestoreGridSelection( savedSelection );
-    EnableSelectionEvents();
+    rebuildRowsPreservingSelection( savedSelection );
 }
 
 
@@ -904,14 +897,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC& aSch, std::vector
             m_dataModel->RemoveReferences( getSheetSymbolReferences( *static_cast<SCH_SHEET*>( item ) ) );
     }
 
-    DisableSelectionEvents();
-
-    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-        updateSelectionItems();
-
-    m_dataModel->RebuildRows();
-    RestoreGridSelection( savedSelection );
-    EnableSelectionEvents();
+    rebuildRowsPreservingSelection( savedSelection );
 }
 
 
@@ -963,14 +949,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
         }
     }
 
-    DisableSelectionEvents();
-
-    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-        updateSelectionItems();
-
-    m_dataModel->RebuildRows();
-    RestoreGridSelection( savedSelection );
-    EnableSelectionEvents();
+    rebuildRowsPreservingSelection( savedSelection );
 }
 
 
@@ -979,33 +958,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSheetChanged( SCHEMATIC& aSch )
     m_dataModel->SetPath( aSch.CurrentSheet() );
 
     if( m_dataModel->GetScope() != SCOPE::SCOPE_ALL )
-    {
-        std::set<wxString> savedSelection = SaveGridSelection();
-
-        DisableSelectionEvents();
-
-        if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-            updateSelectionItems();
-
-        m_dataModel->RebuildRows();
-        RestoreGridSelection( savedSelection );
-
-        EnableSelectionEvents();
-    }
+        rebuildRowsPreservingSelection();
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSelectionChanged( SCHEMATIC& aSch )
 {
     if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-    {
-        DisableSelectionEvents();
-
-        updateSelectionItems();
-        m_dataModel->RebuildRows();
-
-        EnableSelectionEvents();
-    }
+        rebuildRowsPreservingSelection();
 }
 
 
@@ -1074,6 +1034,26 @@ void DIALOG_SYMBOL_FIELDS_TABLE::RestoreGridSelection( const std::set<wxString>&
             }
         }
     }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::rebuildRowsPreservingSelection()
+{
+    rebuildRowsPreservingSelection( SaveGridSelection() );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::rebuildRowsPreservingSelection( const std::set<wxString>& aSavedSelection )
+{
+    DisableSelectionEvents();
+
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+        updateSelectionItems();
+
+    m_dataModel->RebuildRows();
+    RestoreGridSelection( aSavedSelection );
+
+    EnableSelectionEvents();
 }
 
 

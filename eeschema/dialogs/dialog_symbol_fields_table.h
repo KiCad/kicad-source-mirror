@@ -83,6 +83,9 @@ private:
      */
     void RestoreGridSelection( const std::set<wxString>& aFullPaths );
 
+    void rebuildRowsPreservingSelection();
+    void rebuildRowsPreservingSelection( const std::set<wxString>& aSavedSelection );
+
     FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
 
 private:

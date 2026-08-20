@@ -115,6 +115,9 @@ private:
      */
     void RestoreGridSelection( const std::set<KIID>& aKIIDs );
 
+    void rebuildRowsPreservingSelection();
+    void rebuildRowsPreservingSelection( const std::set<KIID>& aSavedSelection );
+
 private:
     FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
 

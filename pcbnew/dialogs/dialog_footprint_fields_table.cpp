@@ -753,7 +753,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsAdded( BOARD& aPcb, std::vector<
         return;
 
     std::set<KIID> savedSelection = SaveGridSelection();
-    DisableSelectionEvents();
 
     for( FOOTPRINT_REF& ref : addedRefs )
     {
@@ -767,14 +766,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsAdded( BOARD& aPcb, std::vector<
 
 
     m_dataModel->AddReferences( addedRefs );
-
-    if( selectionScope )
-        updateSelectionItems();
-
-    m_dataModel->RebuildRows();
-
-    RestoreGridSelection( savedSelection );
-    EnableSelectionEvents();
+    rebuildRowsPreservingSelection( savedSelection );
 }
 
 
@@ -788,14 +780,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsRemoved( BOARD& aPcb, std::vecto
             m_dataModel->RemoveFootprint( FOOTPRINT_REF( *static_cast<FOOTPRINT*>( item ) ) );
     }
 
-    DisableSelectionEvents();
-
-    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-        updateSelectionItems();
-
-    m_dataModel->RebuildRows();
-    RestoreGridSelection( savedSelection );
-    EnableSelectionEvents();
+    rebuildRowsPreservingSelection( savedSelection );
 }
 
 
@@ -815,7 +800,6 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsChanged( BOARD& aPcb, std::vecto
         return;
 
     std::set<KIID> savedSelection = SaveGridSelection();
-    DisableSelectionEvents();
 
     for( FOOTPRINT_REF& ref : changedRefs )
     {
@@ -829,14 +813,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsChanged( BOARD& aPcb, std::vecto
 
 
     m_dataModel->UpdateReferences( changedRefs );
-
-    if( selectionScope )
-        updateSelectionItems();
-
-    m_dataModel->RebuildRows();
-
-    RestoreGridSelection( savedSelection );
-    EnableSelectionEvents();
+    rebuildRowsPreservingSelection( savedSelection );
 }
 
 
@@ -847,33 +824,14 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnCurrentSchematicSheetChanged( wxCommandEve
     m_dataModel->SetPath( m_parent->GetLastSchematicSheetPath() );
 
     if( m_dataModel->GetScope() != SCOPE::SCOPE_ALL )
-    {
-        std::set<KIID> savedSelection = SaveGridSelection();
-
-        DisableSelectionEvents();
-
-        if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-            updateSelectionItems();
-
-        m_dataModel->RebuildRows();
-        RestoreGridSelection( savedSelection );
-
-        EnableSelectionEvents();
-    }
+        rebuildRowsPreservingSelection();
 }
 
 
 void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardSelectionChanged( BOARD& aPcb )
 {
     if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-    {
-        DisableSelectionEvents();
-
-        updateSelectionItems();
-        m_dataModel->RebuildRows();
-
-        EnableSelectionEvents();
-    }
+        rebuildRowsPreservingSelection();
 }
 
 
@@ -942,6 +900,26 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::RestoreGridSelection( const std::set<KIID>& 
             }
         }
     }
+}
+
+
+void DIALOG_FOOTPRINT_FIELDS_TABLE::rebuildRowsPreservingSelection()
+{
+    rebuildRowsPreservingSelection( SaveGridSelection() );
+}
+
+
+void DIALOG_FOOTPRINT_FIELDS_TABLE::rebuildRowsPreservingSelection( const std::set<KIID>& aSavedSelection )
+{
+    DisableSelectionEvents();
+
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+        updateSelectionItems();
+
+    m_dataModel->RebuildRows();
+    RestoreGridSelection( aSavedSelection );
+
+    EnableSelectionEvents();
 }
 
 
