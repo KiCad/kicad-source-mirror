@@ -65,6 +65,8 @@ public:
 
     FOOTPRINT_WIZARD_MANAGER* Manager() const { return m_wizardManager.get(); }
 
+    void SetBuildMessage( const wxString& aMessage ) { m_buildMessageBox->SetValue( aMessage ); }
+
 private:
     void                OnSize( wxSizeEvent& event ) override;
 

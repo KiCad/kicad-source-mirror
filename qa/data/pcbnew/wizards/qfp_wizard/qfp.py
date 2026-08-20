@@ -62,6 +62,8 @@ def _parameter_definitions() -> list[WizardParameter]:
             WizardParameterCategory.WPC_PADS,
             WizardParameterDataType.WPDT_DISTANCE,
             from_mm(0.8),
+            min_value=from_mm(0.1),
+            max_value=from_mm(25)
         ),
         WizardParameter.create(
             "X1",
@@ -120,6 +122,14 @@ def _parameter_definitions() -> list[WizardParameter]:
             from_mm(0.25),
             min_value=from_mm(0.2),
         ),
+        WizardParameter.create(
+            "ref_prefix",
+            "Reference Prefix",
+            WizardParameterCategory.WPC_METADATA,
+            WizardParameterDataType.WPDT_STRING,
+            "U",
+            validation_regex="^[a-zA-Z]+$"
+        ),
     ]
 
 
@@ -154,6 +164,12 @@ class QfpParameters:
         value = self._params[key].value
         if not isinstance(value, bool):
             raise TypeError(f"{key} must be bool, got {type(value).__name__}")
+        return value
+
+    def _str(self, key: str) -> str:
+        value = self._params[key].value
+        if not isinstance(value, str):
+            raise TypeError(f"{key} must be str, got {type(value).__name__}")
         return value
 
     @property
@@ -195,6 +211,10 @@ class QfpParameters:
     @property
     def oval(self) -> bool:
         return self._bool("oval")
+
+    @property
+    def ref_prefix(self) -> str:
+        return self._str("ref_prefix")
 
     def _validate(self):
         if self.n < 4 or self.n % 4 != 0:
@@ -330,7 +350,7 @@ class QfpWizard(WizardBase):
         text_offset = v_pitch // 2 + text_size + pad_length // 2
         attrs = QfpWizard._text_attributes(text_size, text_thickness)
 
-        footprint.reference_field.text.value = "REF**"
+        footprint.reference_field.text.value = f"{params.ref_prefix}?"
         footprint.reference_field.text.layer = BoardLayer.BL_F_SilkS
         footprint.reference_field.text.position = Vector2.from_xy(0, -text_offset)
         footprint.reference_field.text.attributes = attrs
