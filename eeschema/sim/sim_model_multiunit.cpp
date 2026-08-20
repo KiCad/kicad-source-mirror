@@ -198,9 +198,9 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
     std::vector<wxString> basePinOrder;   // model-pin names in base header order
     std::set<wxString>    basePinSet;
 
-    for( const SIM_MODEL_PIN& pin : aBaseModel.GetPins() )
+    for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : aBaseModel.GetPins() )
     {
-        wxString name( pin.modelPinName );
+        wxString name( pin.get().modelPinName );
         basePinOrder.push_back( name );
         basePinSet.insert( name );
     }
@@ -308,7 +308,8 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
         if( !mapped )
         {
             THROW_IO_ERRORF( _( "Model '%s' pin '%s' is neither shared nor assigned to any unit." ),
-                             aBaseModelName, basePin );
+                             aBaseModelName,
+                             basePin );
         }
     }
 
@@ -335,7 +336,8 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
             else
             {
                 // Per-instance pin not mapped for this instance: leave it not-connected.
-                instance.nodes.push_back( wxString::Format( wxS( "nc_%zu_%s" ), m_instances.size(),
+                instance.nodes.push_back( wxString::Format( wxS( "nc_%zu_%s" ),
+                                                            m_instances.size(),
                                                             encodeIdentifier( basePin ) ) );
             }
         }
@@ -395,25 +397,27 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
 wxString SIM_MODEL_MULTIUNIT::computeSignature() const
 {
     std::string canon = m_baseModelName.ToStdString();
-    canon += "|";
+    canon += '|';
 
-    for( const SIM_MODEL_PIN& pin : GetPins() )
-        canon += pin.modelPinName + ",";
+    for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : GetPins() )
+        canon += pin.get().modelPinName + ',';
 
-    canon += "|";
+    canon += '|';
 
     for( const INSTANCE& instance : m_instances )
     {
         for( const wxString& node : instance.nodes )
-            canon += node.ToStdString() + ",";
+            canon += node.ToStdString() + ',';
 
-        canon += ";";
+        canon += ';';
     }
 
     uint64_t hash = stableHash64( canon );
 
-    return wxString::Format( wxS( "kicad_mu_%s_%zuu_%016llx" ), encodeIdentifier( m_baseModelName ),
-                             m_instances.size(), static_cast<unsigned long long>( hash ) );
+    return wxString::Format( wxS( "kicad_mu_%s_%zuu_%016llx" ),
+                             encodeIdentifier( m_baseModelName ),
+                             m_instances.size(),
+                             hash );
 }
 
 
@@ -435,10 +439,10 @@ std::string SPICE_GENERATOR_MULTIUNIT::ModelLine( const SPICE_ITEM& aItem ) cons
 
     std::string result = fmt::format( ".subckt {}", model.m_signature.ToStdString() );
 
-    for( const SIM_MODEL_PIN& pin : GetPins() )
-        result += " " + pin.modelPinName;
+    for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : GetPins() )
+        result += " " + pin.get().modelPinName;
 
-    result += "\n";
+    result += '\n';
 
     int index = 1;
 
@@ -449,7 +453,7 @@ std::string SPICE_GENERATOR_MULTIUNIT::ModelLine( const SPICE_ITEM& aItem ) cons
         for( const wxString& node : instance.nodes )
             result += " " + node.ToStdString();
 
-        result += " " + model.m_baseModelName.ToStdString() + "\n";
+        result += " " + model.m_baseModelName.ToStdString() + '\n';
     }
 
     result += ".ends\n";
@@ -468,8 +472,12 @@ std::vector<std::string> SPICE_GENERATOR_MULTIUNIT::CurrentNames( const SPICE_IT
     }
     else
     {
-        for( const SIM_MODEL_PIN& pin : GetPins() )
-            currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.modelPinName ) );
+        for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : GetPins() )
+        {
+            currentNames.push_back( fmt::format( "I({}:{})",
+                                                 ItemName( aItem ),
+                                                 pin.get().modelPinName ) );
+        }
     }
 
     return currentNames;

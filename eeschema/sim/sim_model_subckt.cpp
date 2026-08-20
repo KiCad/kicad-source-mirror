@@ -62,16 +62,15 @@ std::vector<std::string> SPICE_GENERATOR_SUBCKT::CurrentNames( const SPICE_ITEM&
     }
     else
     {
-        for( const SIM_MODEL_PIN& pin : GetPins() )
-            currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.modelPinName ) );
+        for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : GetPins() )
+            currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.get().modelPinName ) );
     }
 
     return currentNames;
 }
 
 
-void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary,
-                                           const std::string& aSpiceCode )
+void SPICE_MODEL_PARSER_SUBCKT::ReadModel( const SIM_LIBRARY_SPICE& aLibrary, const std::string& aSpiceCode )
 {
     tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
@@ -151,7 +150,7 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
     SIM_MODEL::SetBaseModel( aBaseModel );
 
     // Pins aren't constant for subcircuits, so they need to be copied from the base model.
-    for( const SIM_MODEL_PIN& pin : GetBaseModel()->GetPins() )
+    for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : GetBaseModel()->GetPins() )
         AddPin( pin );
 
     // Same for parameters.

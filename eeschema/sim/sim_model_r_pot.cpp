@@ -35,11 +35,17 @@ std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const
 
     if( position != "" )
     {
-        return fmt::format( ".model {} potentiometer( r={} position={} )\n", aItem.modelName, r,
+        return fmt::format( ".model {} potentiometer( r={} position={} )\n",
+                            aItem.modelName,
+                            r,
                             position );
     }
     else
-        return fmt::format( ".model {} potentiometer( r={} )\n", aItem.modelName, r );
+    {
+        return fmt::format( ".model {} potentiometer( r={} )\n",
+                            aItem.modelName,
+                            r );
+    }
 }
 
 
@@ -52,7 +58,7 @@ std::string SPICE_GENERATOR_R_POT::TunerCommand( const SPICE_ITEM& aItem, double
 
 
 SIM_MODEL_R_POT::SIM_MODEL_R_POT() :
-    SIM_MODEL( TYPE::R_POT, std::make_unique<SPICE_GENERATOR_R_POT>( *this ) )
+        SIM_MODEL( TYPE::R_POT, std::make_unique<SPICE_GENERATOR_R_POT>( *this ) )
 {
     static std::vector<PARAM::INFO> paramInfos = makeParamInfos();
 

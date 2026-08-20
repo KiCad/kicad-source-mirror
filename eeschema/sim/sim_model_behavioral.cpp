@@ -66,7 +66,7 @@ std::string SPICE_GENERATOR_BEHAVIORAL::ItemLine( const SPICE_ITEM& aItem ) cons
 
 
 SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType ) :
-    SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_BEHAVIORAL>( *this ) )
+        SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_BEHAVIORAL>( *this ) )
 {
     static PARAM::INFO resistor  = makeParams( "r", "Expression for resistance",  "Ω" );
     static PARAM::INFO capacitor = makeParams( "c", "Expression for capacitance", "F" );
@@ -90,7 +90,7 @@ bool SIM_MODEL_BEHAVIORAL::parseValueField( const std::string& aValueField )
 {
     std::string expr = aValueField;
 
-    if( expr.find( "=" ) == std::string::npos )
+    if( expr.find( '=' ) == std::string::npos )
         return false;
 
     boost::replace_first( expr, "=", "" );

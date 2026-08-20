@@ -58,7 +58,7 @@ std::vector<std::string> SPICE_GENERATOR_NGSPICE::CurrentNames( const SPICE_ITEM
 
 
 SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
-    SIM_MODEL_SPICE( aType, std::make_unique<SPICE_GENERATOR_NGSPICE>( *this ) )
+        SIM_MODEL_SPICE( aType, std::make_unique<SPICE_GENERATOR_NGSPICE>( *this ) )
 {
     const MODEL_INFO& modelInfo = ModelInfo( getModelType() );
 
@@ -66,8 +66,8 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
     {
         // For now, only the geometry and flags parameters.
         if( paramInfo.category == SIM_MODEL::PARAM::CATEGORY::PRINCIPAL
-            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY
-            || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
+                || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::GEOMETRY
+                || paramInfo.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
         {
             AddParam( paramInfo );
         }
@@ -80,7 +80,7 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType ) :
 
 int SIM_MODEL_NGSPICE::doFindParam( const std::string& aParamName ) const
 {
-    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
+    for( int ii = 0; ii < GetParamCount(); ++ii )
     {
         const PARAM& param = GetParam( ii );
 
@@ -89,7 +89,7 @@ int SIM_MODEL_NGSPICE::doFindParam( const std::string& aParamName ) const
     }
 
     // Look for escaped param names as a second pass (as they're less common)
-    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
+    for( int ii = 0; ii < GetParamCount(); ++ii )
     {
         const PARAM& param = GetParam( ii );
 
@@ -116,7 +116,7 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     // First we try to use the name as is. Note that you can't set instance parameters from this
     // function, it's for ".model" cards, not for instantiations.
 
-    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
+    for( int ii = 0; ii < GetParamCount(); ++ii )
     {
         const PARAM& param = GetParam( ii );
 
@@ -131,7 +131,7 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     }
 
     // Look for escaped param names as a second pass (as they're less common)
-    for( int ii = 0; ii < (int) GetParamCount(); ++ii )
+    for( int ii = 0; ii < GetParamCount(); ++ii )
     {
         const PARAM& param = GetParam( ii );
 
@@ -159,7 +159,7 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
         {
             // Find an actual parameter with the same id.  Even if the ngspiceParam was
             // superfluous, its alias target might not be.
-            for( int ii = 0; ii < (int) GetParamCount(); ++ii )
+            for( int ii = 0; ii < GetParamCount(); ++ii )
             {
                 const PARAM::INFO& paramInfo = GetParam( ii ).info;
 

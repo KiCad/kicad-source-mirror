@@ -44,8 +44,8 @@ std::vector<std::string> SPICE_GENERATOR_IBIS::CurrentNames( const SPICE_ITEM& a
 {
     std::vector<std::string> currentNames;
 
-    for( const SIM_MODEL_PIN& pin : GetPins() )
-        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.modelPinName ) );
+    for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : GetPins() )
+        currentNames.push_back( fmt::format( "I({}:{})", ItemName( aItem ), pin.get().modelPinName ) );
 
     return currentNames;
 }

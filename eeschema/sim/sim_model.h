@@ -19,8 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SIM_MODEL_H
-#define SIM_MODEL_H
+#pragma once
 
 #include <wx/string.h>
 #include <map>
@@ -405,26 +404,20 @@ public:
     static SPICE_INFO SpiceInfo( TYPE aType );
 
 
-    static TYPE ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields,
-                                    bool aResolve, int aDepth, REPORTER& aReporter );
+    static TYPE ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
+                                    REPORTER& aReporter );
 
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<SCH_PIN*>& aPins,
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );
+
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
                                               REPORTER& aReporter );
 
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel,
-                                              const std::vector<SCH_PIN*>& aPins,
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
+                                              const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
                                               REPORTER& aReporter );
 
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel,
-                                              const std::vector<SCH_PIN*>& aPins,
-                                              const std::vector<SCH_FIELD>& aFields,
-                                              bool aResolve, int aDepth,
-                                              REPORTER& aReporter );
-
-    static std::unique_ptr<SIM_MODEL> Create( const std::vector<SCH_FIELD>& aFields,
-                                              bool aResolve, int aDepth,
-                                              const std::vector<SCH_PIN*>& aPins,
-                                              REPORTER& aReporter );
+    static std::unique_ptr<SIM_MODEL> Create( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
+                                              const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );
 
     const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
     const SIM_MODEL_SERIALIZER& Serializer() const { return *m_serializer; }
@@ -554,5 +547,3 @@ private:
     bool                                  m_isEnabled;
     bool                                  m_isStoredInValue;
 };
-
-#endif // SIM_MODEL_H

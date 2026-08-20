@@ -479,16 +479,14 @@ void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields, const SCH_SHEET_PA
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<SCH_PIN*>& aPins,
-                                              REPORTER& aReporter )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model = Create( aType );
 
     try
     {
         // Passing nullptr to ReadDataFields will make it act as if all fields were empty.
-        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ),
-                               false, 0, aPins );
+        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), false, 0, aPins );
     }
     catch( IO_ERROR& )
     {
@@ -499,8 +497,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<SCH_
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
-                                              const std::vector<SCH_PIN*>& aPins,
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
                                               REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model;
@@ -525,8 +522,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 
     try
     {
-        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ),
-                               false, 0, aPins );
+        model->ReadDataFields( static_cast<const std::vector<SCH_FIELD>*>( nullptr ), false, 0, aPins );
     }
     catch( IO_ERROR& )
     {
@@ -537,10 +533,9 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
-                                              const std::vector<SCH_PIN*>& aPins,
-                                              const std::vector<SCH_FIELD>& aFields,
-                                              bool aResolve, int aDepth, REPORTER& aReporter )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
+                                              const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
+                                              REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model;
 
@@ -552,11 +547,8 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 
         // Check for an override in the case of IBIS models.
         // The other models require type to be set from the base model.
-        if( dynamic_cast<const SIM_MODEL_IBIS*>( aBaseModel ) &&
-            type_override != TYPE::NONE )
-        {
+        if( dynamic_cast<const SIM_MODEL_IBIS*>( aBaseModel ) && type_override != TYPE::NONE )
             type = type_override;
-        }
 
         if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( aBaseModel ) )
             model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
@@ -589,8 +581,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFields,
-                                              bool aResolve, int aDepth,
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
                                               const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter )
 {
     TYPE type = ReadTypeFromFields( aFields, aResolve, aDepth, aReporter );
@@ -693,16 +684,14 @@ std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> SIM_MODEL::GetPins() co
     return pins;
 }
 
-void SIM_MODEL::AssignSymbolPinNumberToModelPin( int aModelPinIndex,
-                                                 const wxString& aSymbolPinNumber )
+void SIM_MODEL::AssignSymbolPinNumberToModelPin( int aModelPinIndex, const wxString& aSymbolPinNumber )
 {
     if( aModelPinIndex >= 0 && aModelPinIndex < (int) m_modelPins.size() )
         m_modelPins.at( aModelPinIndex ).symbolPinNumber = aSymbolPinNumber;
 }
 
 
-void SIM_MODEL::AssignSymbolPinNumberToModelPin( const std::string& aModelPinName,
-                                                 const wxString& aSymbolPinNumber )
+void SIM_MODEL::AssignSymbolPinNumberToModelPin( const std::string& aModelPinName, const wxString& aSymbolPinNumber )
 {
     for( SIM_MODEL_PIN& pin : m_modelPins )
     {
@@ -780,8 +769,7 @@ void SIM_MODEL::doSetParamValue( int aParamIndex, const std::string& aValue )
 }
 
 
-void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
-                               SIM_VALUE::NOTATION aNotation )
+void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue, SIM_VALUE::NOTATION aNotation )
 {
     // Notation conversion is very slow.  Avoid if possible.
 
@@ -799,19 +787,11 @@ void SIM_MODEL::SetParamValue( int aParamIndex, const std::string& aValue,
 
 
     if( aValue.find( ',' ) != std::string::npos )
-    {
-        doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation,
-                                                                  SIM_VALUE::NOTATION::SI ) );
-    }
+        doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation, SIM_VALUE::NOTATION::SI ) );
     else if( aNotation != SIM_VALUE::NOTATION::SI && !plainNumber( aValue ) )
-    {
-        doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation,
-                                                                  SIM_VALUE::NOTATION::SI ) );
-    }
+        doSetParamValue( aParamIndex, SIM_VALUE::ConvertNotation( aValue, aNotation, SIM_VALUE::NOTATION::SI ) );
     else
-    {
         doSetParamValue( aParamIndex, aValue );
-    }
 }
 
 
@@ -1881,8 +1861,10 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
         }
         else
         {
-            spiceParamsInfo.m_Text.Printf( wxT( "type=\"%s\" model=\"%s\" lib=\"%s\"" ), device,
-                                           model, lib );
+            spiceParamsInfo.m_Text.Printf( wxT( "type=\"%s\" model=\"%s\" lib=\"%s\"" ),
+                                           device,
+                                           model,
+                                           lib );
         }
 
         deviceInfo.m_Text = SIM_MODEL::DeviceInfo( SIM_MODEL::DEVICE_T::SPICE ).fieldValue;
@@ -1920,7 +1902,5 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 }
 
 
-template void SIM_MODEL::MigrateSimModel<SCH_SYMBOL>( SCH_SYMBOL& aSymbol,
-                                                      const PROJECT* aProject );
-template void SIM_MODEL::MigrateSimModel<LIB_SYMBOL>( LIB_SYMBOL& aSymbol,
-                                                      const PROJECT* aProject );
+template void SIM_MODEL::MigrateSimModel<SCH_SYMBOL>( SCH_SYMBOL& aSymbol, const PROJECT* aProject );
+template void SIM_MODEL::MigrateSimModel<LIB_SYMBOL>( LIB_SYMBOL& aSymbol, const PROJECT* aProject );

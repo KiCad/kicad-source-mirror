@@ -29,10 +29,8 @@ std::string SPICE_GENERATOR_SWITCH::ItemLine( const SPICE_ITEM& aItem ) const
     switch( m_model.GetType() )
     {
     case SIM_MODEL::TYPE::SW_V:
-    {
         result = SPICE_GENERATOR::ItemLine( aItem );
         break;
-    }
 
     case SIM_MODEL::TYPE::SW_I:
     {
@@ -98,8 +96,7 @@ std::vector<std::reference_wrapper<const SIM_MODEL_PIN>> SPICE_GENERATOR_SWITCH:
 
 
 SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) :
-    SIM_MODEL( aType,
-               std::make_unique<SPICE_GENERATOR_SWITCH>( *this ) )
+        SIM_MODEL( aType, std::make_unique<SPICE_GENERATOR_SWITCH>( *this ) )
 {
     static std::vector<PARAM::INFO> vsw = makeSwVParamInfos();
     static std::vector<PARAM::INFO> isw = makeSwIParamInfos();
@@ -109,11 +106,13 @@ SIM_MODEL_SWITCH::SIM_MODEL_SWITCH( TYPE aType ) :
     case TYPE::SW_V:
         for( const PARAM::INFO& paramInfo : vsw )
             AddParam( paramInfo );
+
         break;
 
     case TYPE::SW_I:
         for( const PARAM::INFO& paramInfo : isw )
             AddParam( paramInfo );
+
         break;
 
     default:

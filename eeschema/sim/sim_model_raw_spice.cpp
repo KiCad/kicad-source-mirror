@@ -59,10 +59,10 @@ std::string SPICE_GENERATOR_RAW_SPICE::ItemPins( const SPICE_ITEM& aItem ) const
 
     if( !GetPins().empty() )
     {
-        for( const SIM_MODEL_PIN& pin : GetPins() )
+        for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : GetPins() )
         {
             auto it = std::find( aItem.pinNumbers.begin(), aItem.pinNumbers.end(),
-                                 pin.symbolPinNumber );
+                                 pin.get().symbolPinNumber );
 
             if( it != aItem.pinNumbers.end() )
             {
@@ -119,8 +119,8 @@ std::string SPICE_GENERATOR_RAW_SPICE::Preview( const SPICE_ITEM& aItem ) const
 
 
 SIM_MODEL_RAW_SPICE::SIM_MODEL_RAW_SPICE( const std::string& aSpiceSource ) :
-    SIM_MODEL( TYPE::RAWSPICE, std::make_unique<SPICE_GENERATOR_RAW_SPICE>( *this ) ),
-    m_spiceCode( aSpiceSource )
+        SIM_MODEL( TYPE::RAWSPICE, std::make_unique<SPICE_GENERATOR_RAW_SPICE>( *this ) ),
+        m_spiceCode( aSpiceSource )
 {
     static std::vector<PARAM::INFO> paramInfos = makeParamInfos();
 
