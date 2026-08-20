@@ -1132,7 +1132,8 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         GetLibTree()->Unselect();
 
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
-    m_SyncPinEdit = aSymbol && aSymbol->IsRoot() && aSymbol->IsMultiUnit() && !aSymbol->UnitsLocked();
+    if( !m_symbol || !m_symbol->IsRoot() || !m_symbol->IsMultiUnit() || m_symbol->UnitsLocked() )
+        m_SyncPinEdit = false;
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
