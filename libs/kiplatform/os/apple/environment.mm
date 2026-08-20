@@ -198,8 +198,7 @@ bool evaluatePACScript( CFURLRef aPacUrl, CFURLRef aTargetUrl, KIPLATFORM::ENV::
                                                  cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                              timeoutInterval:10.0];
 
-        __block NSData*  scriptData = nil;
-        __block NSError* fetchError = nil;
+        __block NSString* scriptString = nil;
 
         // The completion handler may run after dispatch_semaphore_wait times out, so
         // the semaphore must outlive both paths. Block capture retains the semaphore
@@ -210,8 +209,12 @@ bool evaluatePACScript( CFURLRef aPacUrl, CFURLRef aTargetUrl, KIPLATFORM::ENV::
         NSURLSessionDataTask* task = [[NSURLSession sharedSession]
                   dataTaskWithRequest:request
                     completionHandler:^( NSData* data, NSURLResponse* response, NSError* error ) {
-                        scriptData = data;
-                        fetchError = error;
+                        if( data && !error )
+                        {
+                            scriptString = [[NSString alloc] initWithData:data
+                                                                encoding:NSUTF8StringEncoding];
+                        }
+
                         dispatch_semaphore_signal( semaphore );
                     }];
 
@@ -229,14 +232,10 @@ bool evaluatePACScript( CFURLRef aPacUrl, CFURLRef aTargetUrl, KIPLATFORM::ENV::
             return false;
         }
 
-        if( fetchError || !scriptData )
-            return false;
-
-        NSString* scriptString = [[[NSString alloc] initWithData:scriptData
-                                                        encoding:NSUTF8StringEncoding] autorelease];
-
         if( !scriptString )
             return false;
+
+        [scriptString autorelease];
 
         CFErrorRef error = nullptr;
         CFArrayRef pacProxies = CFNetworkCopyProxiesForAutoConfigurationScript(
