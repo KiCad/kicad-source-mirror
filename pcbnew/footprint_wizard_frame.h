@@ -34,6 +34,7 @@
 
 class wxSashLayoutWindow;
 class wxSashEvent;
+class wxTextCtrl;
 class FOOTPRINT_EDIT_FRAME;
 class FOOTPRINT_WIZARD_PROPERTIES_PANEL;
 

@@ -25,6 +25,7 @@
 #include <wx/listbox.h>
 #include <wx/numformatter.h>
 #include <wx/statline.h>
+#include <wx/textctrl.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 
