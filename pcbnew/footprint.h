@@ -947,6 +947,21 @@ public:
     std::deque<PCB_FIELD*>& GetFields() { return m_fields; }
 
     /**
+     * Replace the fields with \a aFields, reusing the existing mandatory field objects.
+     *
+     * Destroying and recreating a mandatory field invalidates every pointer to it, including
+     * the board's item-by-id cache entry, and leaves the footprint without a reference or a
+     * value for as long as the rebuild takes.  The const field accessors return nullptr in
+     * that state, so anything reading the footprint meanwhile dereferences null.
+     *
+     * @param aFields is the new field set, mandatory fields included.
+     * @param aAdded receives the fields created here, which the footprint now owns.
+     * @param aDetached receives the fields dropped here, which the caller must dispose of.
+     */
+    void UpdateFields( const std::vector<PCB_FIELD>& aFields, std::vector<PCB_FIELD*>& aAdded,
+                       std::vector<PCB_FIELD*>& aDetached );
+
+    /**
      * Return the next ordinal for a user field for this footprint
      */
     int GetNextFieldOrdinal() const;

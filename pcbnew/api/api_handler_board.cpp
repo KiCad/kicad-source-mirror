@@ -33,6 +33,7 @@
 #include <kicad_clipboard.h>
 #include <pad.h>
 #include <pcb_base_edit_frame.h>
+#include <pcb_field.h>
 #include <pcb_group.h>
 #include <pcb_track.h>
 #include <layer_ids.h>
@@ -198,6 +199,14 @@ void API_HANDLER_BOARD::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>&
     {
         if( BOARD_ITEM* item = board->ResolveItem( pair.first, true ) )
         {
+            // A footprint without its mandatory fields is not a state the editor can load or
+            // render; the const field accessors return nullptr and callers dereference them
+            if( item->Type() == PCB_FIELD_T && static_cast<PCB_FIELD*>( item )->IsMandatory() )
+            {
+                aItemsToDelete[pair.first] = ItemDeletionStatus::IDS_IMMUTABLE;
+                continue;
+            }
+
             validatedItems.push_back( item );
             aItemsToDelete[pair.first] = ItemDeletionStatus::IDS_OK;
         }

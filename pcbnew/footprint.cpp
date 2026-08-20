@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <cmath>
 #include <unordered_set>
+#include <utility>   // std::as_const
 
 #include <wx/log.h>
 #include <wx/debug.h>
@@ -42,6 +43,7 @@
 #include <convert_shape_list_to_polygon.h>
 #include <component_classes/component_class.h>
 #include <component_classes/component_class_cache_proxy.h>
+#include <core/kicad_algo.h>
 #include <drc/drc_item.h>
 #include <diff_merge/property_value_converter.h>
 #include <embedded_files.h>
@@ -735,6 +737,54 @@ void FOOTPRINT::GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly )
                {
                    return lhs->GetOrdinal() < rhs->GetOrdinal();
                } );
+}
+
+
+void FOOTPRINT::UpdateFields( const std::vector<PCB_FIELD>& aFields, std::vector<PCB_FIELD*>& aAdded,
+                              std::vector<PCB_FIELD*>& aDetached )
+{
+    std::deque<PCB_FIELD*> updated;
+
+    for( const PCB_FIELD& field : aFields )
+    {
+        PCB_FIELD* live = nullptr;
+
+        // The const overload reports a missing mandatory field instead of quietly creating one
+        if( field.IsMandatory() )
+            live = const_cast<PCB_FIELD*>( std::as_const( *this ).GetField( field.GetId() ) );
+
+        if( live )
+        {
+            *live = field;
+            live->ClearEditFlags();
+            live->SetParent( this );
+        }
+        else
+        {
+            live = field.CloneField();
+            aAdded.push_back( live );
+        }
+
+        updated.push_back( live );
+    }
+
+    for( PCB_FIELD* field : m_fields )
+    {
+        if( !alg::contains( updated, field ) )
+            aDetached.push_back( field );
+    }
+
+    // Add() and Remove() carry the board's item-by-id cache and the geometry caches with them
+    for( PCB_FIELD* field : aDetached )
+        Remove( field );
+
+    for( PCB_FIELD* field : aAdded )
+        Add( field );
+
+    // Add() appends, so restore the order the caller asked for
+    m_fields = std::move( updated );
+
+    InvalidateGeometryCaches();
 }
 
 

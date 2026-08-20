@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include <boost/test/unit_test.hpp>
 #include <wx/filefn.h>
 #include <wx/filename.h>
@@ -26,6 +28,7 @@
 #include <api/board/board.pb.h>
 #include <api/board/board_commands.pb.h>
 #include <api/board/board_rules.pb.h>
+#include <pcb_field.h>
 
 
 class TEMP_KITCHEN_SINK_COPY
@@ -195,6 +198,55 @@ BOOST_FIXTURE_TEST_CASE( OpenSingleBoard, API_SERVER_E2E_FIXTURE )
                            "GetItems failed: " + Client().LastError() );
 
     BOOST_CHECK_GT( footprintCount, 0 );
+}
+
+
+// A footprint stripped of its reference or value is a state neither the editor nor the const
+// field accessors can cope with, so the deletion has to be refused outright
+BOOST_FIXTURE_TEST_CASE( DeleteMandatoryFieldIsRefused, API_SERVER_E2E_FIXTURE )
+{
+    BOOST_REQUIRE_MESSAGE( Start(), LastError() );
+
+    kiapi::common::types::DocumentSpecifier document;
+    wxFileName boardPath( wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() ), wxS( "api_kitchen_sink.kicad_pcb" ) );
+
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( boardPath.GetFullPath(), &document ),
+                           "OpenDocument failed: " + Client().LastError() );
+
+    FOOTPRINT footprint( nullptr );
+
+    BOOST_REQUIRE_MESSAGE( Client().GetFirstFootprint( document, &footprint ),
+                           "GetFirstFootprint failed: " + Client().LastError() );
+
+    const PCB_FIELD* reference = std::as_const( footprint ).GetField( FIELD_T::REFERENCE );
+    BOOST_REQUIRE( reference );
+
+    kiapi::common::commands::DeleteItems request;
+    *request.mutable_header()->mutable_document() = document;
+    request.add_item_ids()->set_value( reference->m_Uuid.AsStdString() );
+
+    kiapi::common::ApiResponse response;
+
+    BOOST_REQUIRE_MESSAGE( Client().SendCommand( request, &response ),
+                           "DeleteItems failed: " + Client().LastError() );
+    BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_OK );
+
+    kiapi::common::commands::DeleteItemsResponse deleteResponse;
+
+    BOOST_REQUIRE( response.message().UnpackTo( &deleteResponse ) );
+    BOOST_REQUIRE_EQUAL( deleteResponse.deleted_items_size(), 1 );
+    BOOST_CHECK_EQUAL( deleteResponse.deleted_items( 0 ).status(),
+                       kiapi::common::commands::ItemDeletionStatus::IDS_IMMUTABLE );
+
+    FOOTPRINT after( nullptr );
+
+    BOOST_REQUIRE_MESSAGE( Client().GetFirstFootprint( document, &after ),
+                           "GetFirstFootprint after delete failed: " + Client().LastError() );
+
+    const PCB_FIELD* survivor = std::as_const( after ).GetField( FIELD_T::REFERENCE );
+
+    BOOST_REQUIRE( survivor );
+    BOOST_CHECK( survivor->m_Uuid == reference->m_Uuid );
 }
 
 

@@ -20,11 +20,15 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <qa_utils/geometry/geometry.h>
 
+#include <utility>
+
 #include <board.h>
+#include <core/kicad_algo.h>
 #include <embedded_files.h>
 #include <geometry/shape_utils.h>
 #include <footprint.h>
 #include <mmh3_hash.h>
+#include <pcb_field.h>
 #include <pcb_shape.h>
 
 
@@ -199,10 +203,8 @@ BOOST_AUTO_TEST_CASE( FootprintCloneSharesEmbeddedFiles )
 }
 
 
-// The footprint properties dialogs write their fields back by deleting every field and
-// recreating it from the grid, and the scripting API can remove fields outright.  Either one
-// can leave a footprint without its mandatory fields while a commit is still computing the
-// damage bounding box for it.
+// Moving a footprint leaves the source with no fields at all, and the damage bounding box is
+// computed for footprints in that state
 BOOST_AUTO_TEST_CASE( FootprintBoundingBoxWithoutMandatoryFields )
 {
     BOARD     board;
@@ -245,6 +247,137 @@ BOOST_AUTO_TEST_CASE( FootprintBoundingBoxWithoutMandatoryFields )
     wxString token = wxS( "VALUE" );
     BOOST_CHECK( fp.ResolveTextVar( &token ) );
     BOOST_CHECK( token.IsEmpty() );
+}
+
+
+// The properties dialogs write the whole grid back at once, and the mandatory fields have to
+// come through it as the same objects
+BOOST_AUTO_TEST_CASE( FootprintUpdateFieldsReusesMandatoryFields )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+
+    board.Add( fp );
+
+    fp->GetField( FIELD_T::VALUE )->SetText( wxS( "old value" ) );
+
+    PCB_FIELD* userField = new PCB_FIELD( fp, FIELD_T::USER, wxS( "MPN" ) );
+    userField->SetText( wxS( "PESD5V0S1BL" ) );
+    fp->Add( userField );
+
+    PCB_FIELD*  reference = fp->GetField( FIELD_T::REFERENCE );
+    PCB_FIELD*  value = fp->GetField( FIELD_T::VALUE );
+    const KIID  referenceId = reference->m_Uuid;
+    const KIID  userFieldId = userField->m_Uuid;
+
+    // What the grid hands back: the mandatory fields edited, the user field dropped and a
+    // different one added
+    std::vector<PCB_FIELD> newFields;
+
+    for( FIELD_T id : { FIELD_T::REFERENCE, FIELD_T::VALUE, FIELD_T::DATASHEET,
+                        FIELD_T::DESCRIPTION } )
+    {
+        newFields.push_back( *fp->GetField( id ) );
+    }
+
+    newFields[1].SetText( wxS( "new value" ) );
+    newFields.emplace_back( fp, FIELD_T::USER, wxS( "LCSC" ) );
+
+    std::vector<PCB_FIELD*> added;
+    std::vector<PCB_FIELD*> detached;
+
+    fp->UpdateFields( newFields, added, detached );
+
+    BOOST_CHECK( fp->GetField( FIELD_T::REFERENCE ) == reference );
+    BOOST_CHECK( fp->GetField( FIELD_T::VALUE ) == value );
+    BOOST_CHECK_EQUAL( value->GetText(), wxS( "new value" ) );
+    BOOST_CHECK( value->GetParent() == fp );
+
+    BOOST_REQUIRE_EQUAL( added.size(), 1 );
+    BOOST_CHECK_EQUAL( added.front()->GetName(), wxS( "LCSC" ) );
+    BOOST_CHECK( added.front()->GetParent() == fp );
+
+    BOOST_REQUIRE_EQUAL( detached.size(), 1 );
+    BOOST_CHECK( detached.front() == userField );
+
+    BOOST_CHECK_EQUAL( fp->GetFields().size(), newFields.size() );
+    BOOST_CHECK( !alg::contains( fp->GetFields(), userField ) );
+
+    // The board indexes items by KIID, so it has to learn about the new field and forget the
+    // dropped one.  ResolveItem falls back to a linear scan, so the index itself is what tells
+    // us the new field was registered.
+    BOOST_CHECK( board.ResolveItem( referenceId, true ) == reference );
+    BOOST_CHECK( added.front()->IsIndexedInBoard() );
+    BOOST_CHECK( board.ResolveItem( userFieldId, true ) == nullptr );
+
+    for( PCB_FIELD* field : detached )
+        delete field;
+}
+
+
+// A grid write that only edits the mandatory fields adds and removes nothing, so nothing else
+// bumps the board timestamp the bounding box cache is keyed on
+BOOST_AUTO_TEST_CASE( FootprintUpdateFieldsInvalidatesGeometryCache )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+
+    board.Add( fp );
+
+    fp->GetField( FIELD_T::VALUE )->SetText( wxS( "V" ) );
+
+    const BOX2I before = fp->GetBoundingBox();
+
+    std::vector<PCB_FIELD> newFields;
+
+    for( PCB_FIELD* field : fp->GetFields() )
+        newFields.push_back( *field );
+
+    for( PCB_FIELD& field : newFields )
+    {
+        if( field.GetId() == FIELD_T::VALUE )
+            field.SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50.0 ), 0 ) );
+    }
+
+    std::vector<PCB_FIELD*> added;
+    std::vector<PCB_FIELD*> detached;
+
+    fp->UpdateFields( newFields, added, detached );
+
+    BOOST_REQUIRE( added.empty() );
+    BOOST_REQUIRE( detached.empty() );
+    BOOST_CHECK( fp->GetBoundingBox() != before );
+}
+
+
+// A footprint that has already lost a mandatory field gets it back as a new object, which the
+// caller has to hand to the view itself
+BOOST_AUTO_TEST_CASE( FootprintUpdateFieldsRestoresMissingMandatoryField )
+{
+    BOARD     board;
+    FOOTPRINT fp( &board );
+
+    std::vector<PCB_FIELD> newFields;
+
+    for( FIELD_T id : { FIELD_T::REFERENCE, FIELD_T::VALUE, FIELD_T::DATASHEET,
+                        FIELD_T::DESCRIPTION } )
+    {
+        newFields.push_back( *fp.GetField( id ) );
+    }
+
+    std::unique_ptr<PCB_FIELD> orphan( fp.GetField( FIELD_T::VALUE ) );
+    fp.Remove( orphan.get() );
+    BOOST_REQUIRE( !std::as_const( fp ).GetField( FIELD_T::VALUE ) );
+
+    std::vector<PCB_FIELD*> added;
+    std::vector<PCB_FIELD*> detached;
+
+    fp.UpdateFields( newFields, added, detached );
+
+    BOOST_CHECK( detached.empty() );
+    BOOST_REQUIRE_EQUAL( added.size(), 1 );
+    BOOST_CHECK( added.front() == std::as_const( fp ).GetField( FIELD_T::VALUE ) );
+    BOOST_CHECK( added.front() != orphan.get() );
 }
 
 
