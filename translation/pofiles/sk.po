@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-17 15:37+0300\n"
-"PO-Revision-Date: 2026-08-19 20:46+0000\n"
+"PO-Revision-Date: 2026-08-20 08:29+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -11133,7 +11133,7 @@ msgstr "Polárne súradnice"
 
 #: common/tool/actions.cpp:1162
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Prepínanie medzi polárnym a karteziánskym súradnicovým systémom"
+msgstr "Prepínanie medzi polárnym a kartézskym súradnicovým systémom"
 
 #: common/tool/actions.cpp:1171
 msgid "Reset Local Coordinates"
@@ -41693,7 +41693,7 @@ msgstr "Otočiť okolo stredu výberu"
 #: pcbnew/dialogs/dialog_offset_item_base.cpp:65
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:109
 msgid "Use polar coordinates"
-msgstr "Použite polárne súradnice"
+msgstr "Použiť polárne súradnice"
 
 #: pcbnew/dialogs/dialog_move_exact_base.h:69
 msgid "Move Item"
@@ -44675,7 +44675,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
-msgstr "Minimálna šírka spoja:"
+msgstr "Minimálna šírka spojenia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:97
 msgid "The minimum copper width of connected copper items."
@@ -44753,7 +44753,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
-msgstr "Rozstupy spojov:"
+msgstr "Odstup medzi otvormi:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
 msgid ""
@@ -48055,7 +48055,7 @@ msgstr "(%s maximálna šírka prstenca %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:306
 msgid "Checking nets for minimum connection width..."
-msgstr "Kontroluje sa minimálna šírka pripojenia spojov..."
+msgstr "Kontroluje sa minimálna šírka spojení..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:450
 #, c-format
@@ -48092,7 +48092,7 @@ msgstr "Kontrolujú sa min. vzdialenosti grafiky na medi..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:164
 msgid "Checking copper graphic hole clearances..."
-msgstr "Kontrolujú sa min. vzdialenosti otvoru a grafiky na medi..."
+msgstr "Kontrolujú sa min. vzdialenosti otvoru a grafických prvkov na medi..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
 msgid "Checking copper zone clearances..."
@@ -56141,7 +56141,7 @@ msgstr "Zistené obmedzenia veľkosti otvoru: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:728
 msgid "Hole Clearance"
-msgstr "Odstup otvoru"
+msgstr "Odstup od otvoru"
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 #: pcbnew/tools/board_inspection_tool.cpp:1448
