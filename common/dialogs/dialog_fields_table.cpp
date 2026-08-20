@@ -703,6 +703,7 @@ void DIALOG_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent )
 
             value = false;
             m_viewControlsDataModel->SetValueAsBool( row, GROUP_BY_COLUMN, value );
+            m_viewControlsGrid->ForceRefresh();
             break;
         }
 
@@ -712,6 +713,7 @@ void DIALOG_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent )
 
             value = false;
             m_viewControlsDataModel->SetValueAsBool( row, GROUP_BY_COLUMN, value );
+            m_viewControlsGrid->ForceRefresh();
             break;
         }
 
