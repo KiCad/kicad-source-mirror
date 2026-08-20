@@ -31,6 +31,7 @@ class wxPanel;
 class wxTimer;
 class wxChoice;
 class wxSplitterWindow;
+class wxStaticText;
 
 class SYMBOL_LIBRARY_FILTER;
 class LIB_SYMBOL;
