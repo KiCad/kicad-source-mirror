@@ -983,9 +983,9 @@ int ALTIUM_PCB::GetNetCode( uint16_t aId ) const
     {
         return NETINFO_LIST::UNCONNECTED;
     }
-    else if( m_altiumToKicadNetcodes.size() < aId )
+    else if( aId >= m_altiumToKicadNetcodes.size() )
     {
-        THROW_IO_ERROR( wxString::Format( wxT( "Netcode with id %d does not exist. Only %d nets "
+        THROW_IO_ERROR( wxString::Format( wxT( "Netcode with id %d does not exist. Only %zu nets "
                                                "are known" ),
                                           aId, m_altiumToKicadNetcodes.size() ) );
     }
