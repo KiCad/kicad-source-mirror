@@ -550,6 +550,33 @@ BOOST_AUTO_TEST_CASE( NetclassAssignment )
 
 
 /**
+ * Altium nets can be nameless.  NETINFO_LIST keys nets by name and the unconnected net owns the
+ * empty string, so the importer substitutes a placeholder.  That placeholder must not land on a
+ * name the board already uses, or the two nets are merged.
+ */
+BOOST_AUTO_TEST_CASE( UnnamedNetPlaceholderAvoidsCollisions )
+{
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    int                    counter = 0;
+
+    wxString first = AltiumUnnamedNetName( *board, counter );
+    BOOST_CHECK_EQUAL( first, wxT( "__ALTIUM_UNNAMED_NET_1" ) );
+
+    board->Add( new NETINFO_ITEM( board.get(), first, -1 ), ADD_MODE::APPEND );
+    board->Add( new NETINFO_ITEM( board.get(), wxT( "__ALTIUM_UNNAMED_NET_2" ), -1 ),
+                ADD_MODE::APPEND );
+
+    wxString second = AltiumUnnamedNetName( *board, counter );
+    BOOST_CHECK_EQUAL( second, wxT( "__ALTIUM_UNNAMED_NET_3" ) );
+
+    board->Add( new NETINFO_ITEM( board.get(), second, -1 ), ADD_MODE::APPEND );
+
+    // Three distinct nets plus the unconnected net; a collision would have aliased one away
+    BOOST_CHECK_EQUAL( board->GetNetInfo().GetNetCount(), 4 );
+}
+
+
+/**
  * Verify that copper zones in imported Altium boards have non-zero local clearance values
  * derived from rules whose scope expressions match polygons.
  * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/18408

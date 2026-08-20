@@ -112,6 +112,16 @@ struct ALTIUM_EMBEDDED_MODEL_DATA
         : m_modelname(name), m_rotation(rotation), m_z_offset(z_offset), m_data(std::move(data)) {}
 };
 
+/**
+ * Invent a placeholder name for an Altium net that has none.
+ *
+ * NETINFO_LIST keys nets by name and the unconnected net owns the empty string, so a nameless
+ * net has to be given one or it is merged into another net.  @p aCounter is advanced past every
+ * candidate that is already taken on @p aBoard.
+ */
+wxString AltiumUnnamedNetName( const BOARD& aBoard, int& aCounter );
+
+
 // type declaration required for a helper method
 class ALTIUM_PCB;
 typedef std::function<void( const ALTIUM_PCB_COMPOUND_FILE&, const CFB::COMPOUND_FILE_ENTRY* )>
