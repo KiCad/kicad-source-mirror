@@ -167,23 +167,8 @@ int FIELDS_TABLE_DATA_MODEL_BASE::GetColDataWidth( int aCol )
 {
     int width = 0;
 
-    if( ColIsReference( aCol ) )
-    {
-        for( int row = 0; row < GetNumberRows(); ++row )
-            width = std::max( width, KIUI::GetTextSize( GetValue( row, aCol ), GetView() ).x );
-    }
-    else
-    {
-        wxString fieldName = GetColFieldName( aCol ); // symbol fieldName or Qty string
-
-        for( auto& [unused, fieldStore] : m_dataStore )
-        {
-            auto it = fieldStore.find( fieldName );
-
-            if( it != fieldStore.end() )
-                width = std::max( width, KIUI::GetTextSize( it->second, GetView() ).x );
-        }
-    }
+    for( int row = 0; row < GetNumberRows(); ++row )
+        width = std::max( width, KIUI::GetTextSize( GetResolvedValue( row, aCol ), GetView() ).x );
 
     return width;
 }
