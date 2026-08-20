@@ -99,11 +99,18 @@ wxString AltiumUnnamedNetName( const BOARD& aBoard, int& aCounter )
 }
 
 
+// Altium scope expressions are not case sensitive, so neither is the unrestricted scope
+static bool IsAltiumScopeAll( const wxString& aExpr )
+{
+    return aExpr.IsSameAs( wxS( "All" ), false );
+}
+
+
 static bool GetAltiumNetclassScopeName( const ARULE6& aRule, wxString* aNetclassName )
 {
     static const wxString prefix = wxT( "InNetClass('" );
 
-    if( aRule.scope2expr != wxT( "All" ) || !aRule.scope1expr.StartsWith( prefix )
+    if( !IsAltiumScopeAll( aRule.scope2expr ) || !aRule.scope1expr.StartsWith( prefix )
         || !aRule.scope1expr.EndsWith( wxT( "')" ) ) )
     {
         return false;
@@ -117,12 +124,18 @@ static bool GetAltiumNetclassScopeName( const ARULE6& aRule, wxString* aNetclass
 
 
 void ApplyAltiumNetclassRules( const std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>>& aRulesByKind,
-                               NET_SETTINGS& aNetSettings )
+                               NET_SETTINGS& aNetSettings, std::vector<const ARULE6*>* aUnresolved )
 {
     const std::map<wxString, std::shared_ptr<NETCLASS>>& netclasses = aNetSettings.GetNetclasses();
 
     for( const auto& [kind, rules] : aRulesByKind )
     {
+        if( kind != ALTIUM_RULE_KIND::CLEARANCE && kind != ALTIUM_RULE_KIND::WIDTH
+            && kind != ALTIUM_RULE_KIND::ROUTING_VIAS )
+        {
+            continue;
+        }
+
         std::set<wxString> applied;
 
         for( const ARULE6& rule : rules )
@@ -135,7 +148,12 @@ void ApplyAltiumNetclassRules( const std::map<ALTIUM_RULE_KIND, std::vector<ARUL
             auto it = netclasses.find( netclassName );
 
             if( it == netclasses.end() )
+            {
+                if( aUnresolved )
+                    aUnresolved->push_back( &rule );
+
                 continue;
+            }
 
             // rules are sorted by ascending Altium priority, so the first match is the winner
             if( !applied.insert( netclassName ).second )
@@ -1017,7 +1035,7 @@ const ARULE6* ALTIUM_PCB::GetRuleDefault( ALTIUM_RULE_KIND aKind ) const
 
     for( const ARULE6& rule : rules->second )
     {
-        if( rule.enabled && rule.scope1expr == wxT( "All" ) && rule.scope2expr == wxT( "All" ) )
+        if( rule.enabled && IsAltiumScopeAll( rule.scope1expr ) && IsAltiumScopeAll( rule.scope2expr ) )
             return &rule;
     }
 
@@ -2725,7 +2743,23 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
         defaultNetclass->SetViaDrill( routingViasRule->holeWidth );
     }
 
-    ApplyAltiumNetclassRules( m_rules, *netSettings );
+    std::vector<const ARULE6*> unresolvedNetclassRules;
+
+    ApplyAltiumNetclassRules( m_rules, *netSettings, &unresolvedNetclassRules );
+
+    if( m_reporter )
+    {
+        for( const ARULE6* rule : unresolvedNetclassRules )
+        {
+            wxString netclassName;
+            GetAltiumNetclassScopeName( *rule, &netclassName );
+
+            m_reporter->Report( wxString::Format( _( "Altium rule '%s' applies to netclass '%s', which this "
+                                                     "board does not define. Its constraint is not imported." ),
+                                                  rule->name, netclassName ),
+                                RPT_SEVERITY_INFO );
+        }
+    }
 
     // Composite netclasses cached the values we just changed
     HelperAssignNetclassesToNets();

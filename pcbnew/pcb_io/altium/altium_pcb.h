@@ -131,9 +131,13 @@ wxString AltiumUnnamedNetName( const BOARD& aBoard, int& aCounter );
  * clearance, width and routing-via kinds.  Each vector in @p aRulesByKind must be sorted by
  * ARULE6::priority ascending; the first enabled match for a netclass wins, because Altium
  * priority 1 is the most specific.  Disabled rules are skipped.
+ *
+ * @p aUnresolved, when given, collects the rules that name a netclass the board does not define.
+ * Those constraints are lost, and the pointers alias @p aRulesByKind.
  */
 void ApplyAltiumNetclassRules( const std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>>& aRulesByKind,
-                               NET_SETTINGS& aNetSettings );
+                               NET_SETTINGS& aNetSettings,
+                               std::vector<const ARULE6*>* aUnresolved = nullptr );
 
 
 // type declaration required for a helper method

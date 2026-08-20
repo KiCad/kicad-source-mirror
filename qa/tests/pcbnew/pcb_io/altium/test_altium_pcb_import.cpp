@@ -607,6 +607,45 @@ BOOST_AUTO_TEST_CASE( RulesPopulateNetclasses )
 
 
 /**
+ * An Altium design can keep a rule for a netclass it no longer defines, and the constraint is
+ * then lost with nothing to show for it.  HiFive1.B01.PcbDoc carries a Width rule scoped to
+ * InNetClass('PWR') but declares no such netclass, while Fastino_Ground_Isolator.PcbDoc resolves
+ * every netclass its rules name and so must stay quiet.
+ */
+BOOST_AUTO_TEST_CASE( UnresolvedNetclassRulesAreReported )
+{
+    auto messagesFor =
+            [this]( const std::string& aRelativePath )
+            {
+                KI_TEST::CAPTURING_REPORTER reporter;
+                m_altiumPlugin.SetReporter( &reporter );
+
+                std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+                m_altiumPlugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + aRelativePath, board.get(), nullptr );
+                m_altiumPlugin.SetReporter( nullptr );
+
+                std::vector<wxString> hits;
+
+                for( const KI_TEST::CAPTURING_REPORTER::MESSAGE& message : reporter.GetMessages() )
+                {
+                    if( message.text.Contains( wxS( "does not define" ) ) )
+                        hits.push_back( message.text );
+                }
+
+                return hits;
+            };
+
+    std::vector<wxString> hiFive = messagesFor( "plugins/altium/HiFive/HiFive1.B01.PcbDoc" );
+
+    BOOST_REQUIRE_EQUAL( hiFive.size(), 1 );
+    BOOST_CHECK( hiFive[0].Contains( wxS( "'PWR'" ) ) );
+
+    // A board whose rules all resolve must not be told anything
+    BOOST_CHECK_EQUAL( messagesFor( "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc" ).size(), 0 );
+}
+
+
+/**
  * Altium allows several rules of one kind to target the same netclass and resolves them by
  * priority, where 1 is the most specific.  Disabled rules never apply, and a rule is only about
  * one netclass when its second scope is unrestricted.
