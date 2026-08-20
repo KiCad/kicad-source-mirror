@@ -47,7 +47,8 @@ public:
     {
         SCOPE_ALL = 0,
         SCOPE_SHEET,
-        SCOPE_SHEET_RECURSIVE
+        SCOPE_SHEET_RECURSIVE,
+        SCOPE_SELECTION
     };
 
     SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( const SCH_REFERENCE_LIST& aSymbolsList, wxGridCellAttr* aURLEditor ) :

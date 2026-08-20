@@ -475,6 +475,12 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     {
         const FOOTPRINT& footprint = ref.GetFootprint();
 
+        if( m_scope == SCOPE::SCOPE_SELECTION
+            && !m_selectionItems.contains( getDataStoreKey( ref ) ) )
+        {
+            continue;
+        }
+
         if( !MatchesFilter( ref, footprint.GetReferenceAsString(), matcher ) )
             continue;
 

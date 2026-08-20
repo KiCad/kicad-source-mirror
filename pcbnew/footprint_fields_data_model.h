@@ -60,7 +60,8 @@ public:
     {
         SCOPE_ALL = 0,
         SCOPE_SHEET,
-        SCOPE_SHEET_RECURSIVE
+        SCOPE_SHEET_RECURSIVE,
+        SCOPE_SELECTION
     };
 
     FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( const FOOTPRINT_REFERENCE_LIST& aFootprintReferenceList,

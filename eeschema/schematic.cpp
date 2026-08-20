@@ -1319,6 +1319,12 @@ void SCHEMATIC::OnSchSheetChanged()
 }
 
 
+void SCHEMATIC::OnSchSelectionChanged()
+{
+    InvokeListeners( &SCHEMATIC_LISTENER::OnSchSelectionChanged, *this );
+}
+
+
 void SCHEMATIC::AddListener( SCHEMATIC_LISTENER* aListener )
 {
     if( !alg::contains( m_listeners, aListener ) )

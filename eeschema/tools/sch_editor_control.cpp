@@ -622,6 +622,7 @@ int SCH_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::CrossProbeToPcb( const TOOL_EVENT& aEvent )
 {
+    m_frame->Schematic().OnSchSelectionChanged();
     doCrossProbeSchToPcb( aEvent, false );
     return 0;
 }

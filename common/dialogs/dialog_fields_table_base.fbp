@@ -1880,7 +1880,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Entire Project&quot; &quot;Current Sheet Only&quot; &quot;Current Sheet and Down&quot;</property>
+                                        <property name="choices">&quot;Entire Project&quot; &quot;Current Sheet Only&quot; &quot;Current Sheet and Down&quot; &quot;Selection&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>

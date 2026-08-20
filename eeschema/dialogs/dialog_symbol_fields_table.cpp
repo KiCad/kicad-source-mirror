@@ -30,6 +30,7 @@
 #include <template_fieldnames.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
+#include <sch_group.h>
 #include <widgets/wx_infobar.h>
 #include <sch_reference_list.h>
 #include <tools/sch_editor_control.h>
@@ -545,7 +546,70 @@ void DIALOG_SYMBOL_FIELDS_TABLE::setScope( SCOPE aScope )
 {
     m_dataModel->SetPath( m_parent->GetCurrentSheet() );
     m_dataModel->SetScope( aScope );
+
+    if( aScope == SCOPE::SCOPE_SELECTION )
+        updateSelectionItems();
+
     m_dataModel->RebuildRows();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::updateSelectionItems()
+{
+    std::unordered_set<KIID_PATH> selectionItems;
+    SCH_SELECTION_TOOL*           selectionTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    const SCH_SELECTION&          selection = selectionTool->GetSelection();
+    const KIID_PATH               currentSheetPath = m_parent->GetCurrentSheet().Path();
+
+    auto addSelectionItem = [&]( EDA_ITEM* aItem )
+    {
+        SCH_SYMBOL* symbol = nullptr;
+
+        if( aItem->Type() == SCH_SYMBOL_T )
+            symbol = static_cast<SCH_SYMBOL*>( aItem );
+        else if( aItem->GetParent() && aItem->GetParent()->Type() == SCH_SYMBOL_T )
+            symbol = static_cast<SCH_SYMBOL*>( aItem->GetParent() );
+
+        if( symbol )
+        {
+            KIID_PATH path = currentSheetPath;
+            path.push_back( symbol->m_Uuid );
+            selectionItems.insert( path );
+
+            return;
+        }
+
+        if( aItem->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+
+            SCH_SHEET_PATH selectedPath = m_parent->GetCurrentSheet();
+            selectedPath.push_back( sheet );
+
+            SCH_REFERENCE_LIST references;
+            m_parent->Schematic().Hierarchy().GetSymbolsWithinPath( references, selectedPath, SYMBOL_FILTER_NON_POWER );
+
+            for( const SCH_REFERENCE& ref : references )
+            {
+                if( ref.GetSymbol() )
+                {
+                    KIID_PATH path = ref.GetSheetPath().Path();
+                    path.push_back( ref.GetSymbol()->m_Uuid );
+                    selectionItems.insert( path );
+                }
+            }
+        }
+    };
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == SCH_GROUP_T )
+            static_cast<SCH_GROUP*>( item )->RunOnChildren( addSelectionItem, RECURSE_MODE::RECURSE );
+        else
+            addSelectionItem( item );
+    }
+
+    m_dataModel->SetSelectionItems( selectionItems );
 }
 
 
@@ -556,6 +620,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
     case 0: setScope( SCOPE::SCOPE_ALL );             break;
     case 1: setScope( SCOPE::SCOPE_SHEET );           break;
     case 2: setScope( SCOPE::SCOPE_SHEET_RECURSIVE ); break;
+    case 3: setScope( SCOPE::SCOPE_SELECTION );       break;
     }
 }
 
@@ -629,6 +694,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
 {
     // Cross-probing should only work in Edit page
     if( m_nbPages->GetSelection() != 0 )
+        return;
+
+    // Cross-probing is disabled when we're in selection scope mode, otherwise
+    // we're just in a loop
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
         return;
 
     // Multi-select can grab the rows that are expanded child refs, and also the row
@@ -812,6 +882,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
     }
 
     DisableSelectionEvents();
+
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+        updateSelectionItems();
+
     m_dataModel->RebuildRows();
     RestoreGridSelection( savedSelection );
     EnableSelectionEvents();
@@ -831,6 +905,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC& aSch, std::vector
     }
 
     DisableSelectionEvents();
+
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+        updateSelectionItems();
+
     m_dataModel->RebuildRows();
     RestoreGridSelection( savedSelection );
     EnableSelectionEvents();
@@ -886,6 +964,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
     }
 
     DisableSelectionEvents();
+
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+        updateSelectionItems();
+
     m_dataModel->RebuildRows();
     RestoreGridSelection( savedSelection );
     EnableSelectionEvents();
@@ -896,13 +978,32 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSheetChanged( SCHEMATIC& aSch )
 {
     m_dataModel->SetPath( aSch.CurrentSheet() );
 
-    if( m_dataModel->GetScope() != SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL )
+    if( m_dataModel->GetScope() != SCOPE::SCOPE_ALL )
     {
         std::set<wxString> savedSelection = SaveGridSelection();
 
         DisableSelectionEvents();
+
+        if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+            updateSelectionItems();
+
         m_dataModel->RebuildRows();
         RestoreGridSelection( savedSelection );
+
+        EnableSelectionEvents();
+    }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSelectionChanged( SCHEMATIC& aSch )
+{
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+    {
+        DisableSelectionEvents();
+
+        updateSelectionItems();
+        m_dataModel->RebuildRows();
+
         EnableSelectionEvents();
     }
 }

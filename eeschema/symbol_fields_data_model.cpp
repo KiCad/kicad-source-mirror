@@ -502,6 +502,12 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     {
         SCH_REFERENCE ref = m_symbolsList[i];
 
+        if( m_scope == SCOPE::SCOPE_SELECTION
+            && !m_selectionItems.contains( getDataStoreKey( ref ) ) )
+        {
+            continue;
+        }
+
         if( !MatchesFilter( ref, ref.GetFullRef(), matcher ) )
             continue;
 

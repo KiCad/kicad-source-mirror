@@ -2128,6 +2128,7 @@ int BOARD_EDITOR_CONTROL::ZonePriorityMoveToBottom( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::CrossProbeToSch( const TOOL_EVENT& aEvent )
 {
+    m_frame->GetBoard()->OnBoardSelectionChanged();
     doCrossProbePcbToSch( aEvent, false );
     return 0;
 }

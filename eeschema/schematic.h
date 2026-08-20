@@ -70,6 +70,8 @@ public:
     // This is called when the user changes to a new sheet, not when a sheet is altered.
     // Sheet alteration events will call OnSchItems*
     virtual void OnSchSheetChanged( SCHEMATIC& aSch ) {}
+
+    virtual void OnSchSelectionChanged( SCHEMATIC& aSch ) {}
 };
 
 enum SCH_CLEANUP_FLAGS
@@ -379,6 +381,11 @@ public:
       * altered.
       */
     void OnSchSheetChanged();
+
+    /**
+     * Notify the schematic and its listeners that the editor selection has changed.
+     */
+    void OnSchSelectionChanged();
 
     /**
      * Add a listener to the schematic to receive calls whenever something on the

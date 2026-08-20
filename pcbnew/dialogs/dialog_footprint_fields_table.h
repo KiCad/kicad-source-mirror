@@ -48,6 +48,7 @@ private:
     wxGridCellEditor* createDatasheetEditor() override;
 
     void setScope( FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
+    void updateSelectionItems();
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
@@ -69,6 +70,7 @@ private:
     void OnBoardItemsAdded( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
     void OnBoardItemsRemoved( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
     void OnBoardItemsChanged( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
+    void OnBoardSelectionChanged( BOARD& aPcb ) override;
 
     void OnBoardItemAdded( BOARD& aPcb, BOARD_ITEM* aPcbItem ) override
     {

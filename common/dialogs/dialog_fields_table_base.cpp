@@ -213,7 +213,7 @@ DIALOG_FIELDS_TABLE_BASE::DIALOG_FIELDS_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_staticline31 = new wxStaticLine( m_panelEdit, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bControls->Add( m_staticline31, 0, wxEXPAND | wxALL, 3 );
 
-	wxString m_scopeChoices[] = { _("Entire Project"), _("Current Sheet Only"), _("Current Sheet and Down") };
+	wxString m_scopeChoices[] = { _("Entire Project"), _("Current Sheet Only"), _("Current Sheet and Down"), _("Selection") };
 	int m_scopeNChoices = sizeof( m_scopeChoices ) / sizeof( wxString );
 	m_scope = new wxChoice( m_panelEdit, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_scopeNChoices, m_scopeChoices, 0 );
 	m_scope->SetSelection( 0 );

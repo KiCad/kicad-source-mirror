@@ -3735,6 +3735,12 @@ void BOARD::OnItemsChanged( std::vector<BOARD_ITEM*>& aItems )
 }
 
 
+void BOARD::OnBoardSelectionChanged()
+{
+    InvokeListeners( &BOARD_LISTENER::OnBoardSelectionChanged, *this );
+}
+
+
 void BOARD::OnItemsCompositeUpdate( std::vector<BOARD_ITEM*>& aAddedItems, std::vector<BOARD_ITEM*>& aRemovedItems,
                                     std::vector<BOARD_ITEM*>& aChangedItems )
 {

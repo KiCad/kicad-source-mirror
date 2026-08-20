@@ -342,6 +342,7 @@ public:
     virtual void OnBoardNetSettingsChanged( BOARD& aBoard ) { }
     virtual void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) { }
     virtual void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) { }
+    virtual void OnBoardSelectionChanged( BOARD& aBoard ) { }
     virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) { }
     virtual void OnBoardRatsnestChanged( BOARD& aBoard ) { }
     virtual void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
@@ -1485,6 +1486,11 @@ public:
       * been modified in some way.
       */
     void OnItemsChanged( std::vector<BOARD_ITEM*>& aItems );
+
+    /**
+     * Notify the board and its listeners that the editor selection has changed.
+     */
+    void OnBoardSelectionChanged();
 
     /**
       * Notify the board and its listeners that items on the board have

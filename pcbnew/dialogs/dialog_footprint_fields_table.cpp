@@ -31,6 +31,7 @@
 #include <kiface_base.h>
 #include <pcb_edit_frame.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <widgets/wx_infobar.h>
 #include <tools/board_editor_control.h>
 #include <widgets/grid_text_button_helpers.h>
@@ -495,7 +496,46 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::setScope( SCOPE aScope )
 {
     m_dataModel->SetPath( m_parent->GetLastSchematicSheetPath() );
     m_dataModel->SetScope( aScope );
+
+    if( aScope == SCOPE::SCOPE_SELECTION )
+        updateSelectionItems();
+
     m_dataModel->RebuildRows();
+}
+
+
+void DIALOG_FOOTPRINT_FIELDS_TABLE::updateSelectionItems()
+{
+    std::unordered_set<KIID_PATH> selectionItems;
+    PCB_SELECTION_TOOL*           selectionTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION&          selection = selectionTool->GetSelection();
+
+    auto addSelectionItem = [&]( EDA_ITEM* aItem )
+    {
+        FOOTPRINT* footprint = nullptr;
+
+        if( aItem->Type() == PCB_FOOTPRINT_T )
+            footprint = static_cast<FOOTPRINT*>( aItem );
+        else if( aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )
+            footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
+
+        if( footprint )
+        {
+            KIID_PATH path;
+            path.push_back( footprint->m_Uuid );
+            selectionItems.insert( path );
+        }
+    };
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == PCB_GROUP_T )
+            static_cast<PCB_GROUP*>( item )->RunOnChildren( addSelectionItem, RECURSE_MODE::RECURSE );
+        else
+            addSelectionItem( item );
+    }
+
+    m_dataModel->SetSelectionItems( selectionItems );
 }
 
 
@@ -506,6 +546,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
     case 0: setScope( SCOPE::SCOPE_ALL );             break;
     case 1: setScope( SCOPE::SCOPE_SHEET );           break;
     case 2: setScope( SCOPE::SCOPE_SHEET_RECURSIVE ); break;
+    case 3: setScope( SCOPE::SCOPE_SELECTION );       break;
     }
 }
 
@@ -579,6 +620,11 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent
 {
     // Cross-probing should only work in Edit page
     if( m_nbPages->GetSelection() != 0 )
+        return;
+
+    // Cross-probing is disabled when we're in selection scope mode, otherwise
+    // we're just in a loop
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
         return;
 
     // Multi-select can grab the rows that are expanded child refs, and also the row
@@ -701,7 +747,9 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsAdded( BOARD& aPcb, std::vector<
             addedRefs.push_back( FOOTPRINT_REF( *static_cast<FOOTPRINT*>( item ) ) );
     }
 
-    if( addedRefs.empty() )
+    bool selectionScope = m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION;
+
+    if( addedRefs.empty() && !selectionScope )
         return;
 
     std::set<KIID> savedSelection = SaveGridSelection();
@@ -719,6 +767,10 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsAdded( BOARD& aPcb, std::vector<
 
 
     m_dataModel->AddReferences( addedRefs );
+
+    if( selectionScope )
+        updateSelectionItems();
+
     m_dataModel->RebuildRows();
 
     RestoreGridSelection( savedSelection );
@@ -737,6 +789,10 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsRemoved( BOARD& aPcb, std::vecto
     }
 
     DisableSelectionEvents();
+
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+        updateSelectionItems();
+
     m_dataModel->RebuildRows();
     RestoreGridSelection( savedSelection );
     EnableSelectionEvents();
@@ -753,7 +809,9 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsChanged( BOARD& aPcb, std::vecto
             changedRefs.push_back( FOOTPRINT_REF( *static_cast<FOOTPRINT*>( item ) ) );
     }
 
-    if( changedRefs.empty() )
+    bool selectionScope = m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION;
+
+    if( changedRefs.empty() && !selectionScope )
         return;
 
     std::set<KIID> savedSelection = SaveGridSelection();
@@ -771,6 +829,10 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsChanged( BOARD& aPcb, std::vecto
 
 
     m_dataModel->UpdateReferences( changedRefs );
+
+    if( selectionScope )
+        updateSelectionItems();
+
     m_dataModel->RebuildRows();
 
     RestoreGridSelection( savedSelection );
@@ -784,13 +846,32 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnCurrentSchematicSheetChanged( wxCommandEve
 
     m_dataModel->SetPath( m_parent->GetLastSchematicSheetPath() );
 
-    if( m_dataModel->GetScope() != FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL )
+    if( m_dataModel->GetScope() != SCOPE::SCOPE_ALL )
     {
         std::set<KIID> savedSelection = SaveGridSelection();
 
         DisableSelectionEvents();
+
+        if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+            updateSelectionItems();
+
         m_dataModel->RebuildRows();
         RestoreGridSelection( savedSelection );
+
+        EnableSelectionEvents();
+    }
+}
+
+
+void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardSelectionChanged( BOARD& aPcb )
+{
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+    {
+        DisableSelectionEvents();
+
+        updateSelectionItems();
+        m_dataModel->RebuildRows();
+
         EnableSelectionEvents();
     }
 }

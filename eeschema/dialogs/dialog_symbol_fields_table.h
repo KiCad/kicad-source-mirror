@@ -48,6 +48,7 @@ private:
     wxGridCellEditor* createDatasheetEditor() override;
 
     void setScope( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
+    void updateSelectionItems();
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
@@ -70,6 +71,7 @@ private:
     void OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
     void OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
     void OnSchSheetChanged( SCHEMATIC& aSch ) override;
+    void OnSchSelectionChanged( SCHEMATIC& aSch ) override;
 
     /**
      * Saves the current grid selection as a set of symbol full paths for later restoration.

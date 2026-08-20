@@ -20,6 +20,7 @@
 #pragma once
 
 #include <set>
+#include <unordered_set>
 #include <vector>
 #include <algorithm>
 #include <map>
@@ -133,10 +134,13 @@ public:
     void         DisableRebuilds();
     virtual void RebuildRows() = 0;
 
-    void            SetFilter( const wxString& aFilter ) { m_filter = aFilter; }
-    const wxString& GetFilter() { return m_filter; }
+    void             SetFilter( const wxString& aFilter ) { m_filter = aFilter; }
+    const wxString&  GetFilter() { return m_filter; }
     void             SetFilterScope( BOM_FILTER_SCOPE aScope ) { m_filterScope = aScope; }
     BOM_FILTER_SCOPE GetFilterScope() const { return m_filterScope; }
+
+    void SetSelectionItems( const std::unordered_set<KIID_PATH>& aItems ) { m_selectionItems = aItems; }
+    void ClearSelectionItems() { m_selectionItems.clear(); }
 
     void SetGroupingEnabled( bool aGroup ) { m_groupingEnabled = aGroup; }
     bool GetGroupingEnabled() { return m_groupingEnabled; }
@@ -208,8 +212,12 @@ protected:
     bool             m_includeExcluded;
     bool             m_rebuildsEnabled;
 
+    ///< Items included by the user selection scope
+    std::unordered_set<KIID_PATH> m_selectionItems;
+
     wxString              m_currentVariant;  ///< Current variant name for highlighting
     std::vector<wxString> m_variantNames;    ///< Variant names for multi-variant DNP filtering
+
 
     std::vector<DATA_MODEL_COL> m_cols;
 
