@@ -41,6 +41,7 @@
 #include <common.h>
 #include <core/utf8.h>
 #include <eda_text.h>
+#include <ki_exception.h>
 #include <netinfo.h>
 #include <netclass.h>
 #include <pcb_track.h>
@@ -107,11 +108,33 @@ struct ALTIUM_PCB_IMPORT_FIXTURE
         return ruleAreas;
     }
 
+    static int getNetCode( ALTIUM_PCB& aImporter, const std::vector<int>& aNetcodes, uint16_t aId )
+    {
+        aImporter.m_altiumToKicadNetcodes = aNetcodes;
+        return aImporter.GetNetCode( aId );
+    }
+
     PCB_IO_ALTIUM_DESIGNER m_altiumPlugin;
 };
 
 
 BOOST_FIXTURE_TEST_SUITE( AltiumPcbImport, ALTIUM_PCB_IMPORT_FIXTURE )
+
+
+// An Altium net id equal to the number of known nets used to index one past the end
+BOOST_AUTO_TEST_CASE( NetCodeRejectsIdPastEnd )
+{
+    BOARD                 board;
+    LAYER_MAPPING_HANDLER layerMappingHandler;
+    ALTIUM_PCB            importer( &board, nullptr, layerMappingHandler );
+
+    const std::vector<int> netcodes = { 1, 2, 3 };
+
+    BOOST_CHECK_EQUAL( getNetCode( importer, netcodes, 2 ), 3 );
+    BOOST_CHECK_THROW( getNetCode( importer, netcodes, 3 ), IO_ERROR );
+    BOOST_CHECK_EQUAL( getNetCode( importer, netcodes, ALTIUM_NET_UNCONNECTED ),
+                       NETINFO_LIST::UNCONNECTED );
+}
 
 
 BOOST_AUTO_TEST_CASE( DimensionBoldPropertyParsing )
