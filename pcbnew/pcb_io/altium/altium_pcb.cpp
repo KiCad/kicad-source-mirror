@@ -3956,7 +3956,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     double ratio = aElem.sizeAndShape->cornerradius[altLayer] / 200.;
                     ps.SetRoundRectRadiusRatio( ratio, aLayer );
                 }
-                else if( aElem.topsize.x == aElem.topsize.y )
+                else if( aSize.x == aSize.y )
                 {
                     ps.SetShape( PAD_SHAPE::CIRCLE, aLayer );
                 }
