@@ -165,7 +165,7 @@ wxString FIELDS_TABLE_DATA_MODEL_BASE::GetColFieldName( int aCol )
 
 int FIELDS_TABLE_DATA_MODEL_BASE::GetColDataWidth( int aCol )
 {
-    int width = 0;
+    int width = KIUI::GetTextSize( GetColLabelValue( aCol ), GetView() ).x;
 
     for( int row = 0; row < GetNumberRows(); ++row )
         width = std::max( width, KIUI::GetTextSize( GetResolvedValue( row, aCol ), GetView() ).x );
@@ -378,7 +378,16 @@ void FIELDS_TABLE_DATA_MODEL_BASE::ApplyBomPreset( const BOM_PRESET& aPreset )
     int sortCol = GetFieldNameCol( aPreset.sortField );
 
     if( sortCol == -1 )
-        sortCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
+    {
+        for( int col = 0; col < GetNumberCols(); ++col )
+        {
+            if( ColIsItemIdentifier( col ) )
+            {
+                sortCol = col;
+                break;
+            }
+        }
+    }
 
     SetSorting( sortCol, aPreset.sortAsc );
 

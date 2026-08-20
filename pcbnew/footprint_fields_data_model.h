@@ -152,7 +152,7 @@ private:
     void updateDataStoreFootprintField( const FOOTPRINT_REF& aFootprintRef, const wxString& aFieldName );
 
     KIID_PATH getDataStoreKey( const FOOTPRINT_REF& aItem ) const override;
-    wxString  getItemReference( const FOOTPRINT_REF& aItem ) const override;
+    wxString  getItemIdentifier( const FOOTPRINT_REF& aItem ) const override;
 
 protected:
     FOOTPRINT_REFERENCE_LIST m_footprintsList;

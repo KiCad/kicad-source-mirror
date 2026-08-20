@@ -430,7 +430,7 @@ void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
     attr->SetReadOnly( false );
 
     // Set some column types to specific editors
-    if( getDataModel()->ColIsReference( aCol ) )
+    if( getDataModel()->ColIsItemIdentifier( aCol ) )
     {
         attr->SetReadOnly();
         attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );

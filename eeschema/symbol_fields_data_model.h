@@ -145,7 +145,7 @@ private:
     void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName );
 
     KIID_PATH getDataStoreKey( const SCH_REFERENCE& aItem ) const override;
-    wxString  getItemReference( const SCH_REFERENCE& aItem ) const override;
+    wxString  getItemIdentifier( const SCH_REFERENCE& aItem ) const override;
 
 protected:
     /**

@@ -73,7 +73,7 @@ KIID_PATH FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getDataStoreKey( const FOOTPR
 }
 
 
-wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getItemReference( const FOOTPRINT_REF& aItem ) const
+wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getItemIdentifier( const FOOTPRINT_REF& aItem ) const
 {
     return aItem.GetFootprint().GetReferenceAsString();
 }

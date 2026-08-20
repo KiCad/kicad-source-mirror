@@ -122,6 +122,12 @@ public:
     bool ColIsFootprint( int aCol );
     bool ColIsAttribute( int aCol );
 
+    /**
+     * Reference for symbol/fields tables,
+     * lib_id for lib tables.
+     */
+    virtual bool ColIsItemIdentifier( int aCol ) { return ColIsReference( aCol ); }
+
     bool IsExpanderColumn( int aCol ) const override;
 
     void SetSorting( int aCol, bool aAscending );
@@ -381,7 +387,7 @@ public:
 
         for( const ITEM_TYPE& item : aRow.m_items )
         {
-            if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
+            if( ColIsItemIdentifier( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
             {
                 items.push_back( item );
             }
@@ -445,7 +451,7 @@ public:
             }
         }
 
-        if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
+        if( ColIsItemIdentifier( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
         {
             // Remove duplicates (other units of multi-unit parts)
             std::sort( items.begin(), items.end(),
@@ -463,14 +469,33 @@ public:
             items.erase( logicalEnd, items.end() );
         }
 
-        if( ColIsReference( aCol ) )
+        // References are the item-identifier column for schematic symbols and footprints and have
+        // special formatting for representing reference ranges.  Library item identifiers are joined
+        // without reference-range formatting.
+        if( ColIsItemIdentifier( aCol ) )
         {
-            std::vector<wxString> references;
+            std::vector<wxString> itemIdentifiers;
 
             for( const ITEM_TYPE& item : items )
-                references.push_back( getItemReference( item ) );
+                itemIdentifiers.push_back( getItemIdentifier( item ) );
 
-            fieldValue = UTIL::FormatRefDesRanges( references, refDelimiter, refRangeDelimiter );
+            // C1-15, C17 kind of formatting
+            if( ColIsReference( aCol ) )
+            {
+                fieldValue = UTIL::FormatRefDesRanges( itemIdentifiers, refDelimiter, refRangeDelimiter );
+            }
+            else
+            {
+                fieldValue.clear();
+
+                for( const wxString& itemIdentifier : itemIdentifiers )
+                {
+                    if( !fieldValue.IsEmpty() )
+                        fieldValue += refDelimiter;
+
+                    fieldValue += itemIdentifier;
+                }
+            }
         }
         else if( ColIsQuantity( aCol ) )
             fieldValue = wxString::Format( wxT( "%d" ), (int) items.size() );
@@ -619,7 +644,7 @@ protected:
                         return a > b;
                 };
 
-        // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
+        // Primary sort key is sortCol; secondary is always the item identifier.
         if( aSortCol < 0 || aSortCol >= this->GetNumberCols() )
             aSortCol = 0;
 
@@ -630,7 +655,7 @@ protected:
                                .Trim( true )
                                .Trim( false );
 
-        if( lhs == rhs || this->ColIsReference( aSortCol ) )
+        if( lhs == rhs || this->ColIsItemIdentifier( aSortCol ) )
         {
             if( aAscending )
                 return cmpRowItems( lhRow.m_items[0], rhRow.m_items[0] );
@@ -643,59 +668,43 @@ protected:
         }
     }
 
-    // Used for sorting row items that are grouped with a single row, e.g. the references
+    // Used for sorting items that are grouped within a single row by their item identifiers.
     virtual bool cmpRowItems( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem )
     {
-        return StrNumCmp( getItemReference( lhItem ), getItemReference( rhItem ), true ) < 0;
+        return StrNumCmp( getItemIdentifier( lhItem ), getItemIdentifier( rhItem ), true ) < 0;
     }
 
     virtual bool unitMatch( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem ) = 0;
 
     bool groupMatch( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem )
     {
-        int  refCol = -1;
         bool matchFound = false;
-
-        for( size_t i = 0; i < m_cols.size(); ++i )
-        {
-            if( ColIsReference( static_cast<int>( i ) ) )
-            {
-                refCol = static_cast<int>( i );
-                break;
-            }
-        }
-
-        if( refCol == -1 )
-            return false;
-
-        // First check the reference column.  This can be done directly from the items as
-        // references can't be edited in the grid.
-        if( m_cols[refCol].m_group )
-        {
-            // If we're grouping by reference, then only the prefix must match.
-            if( UTIL::GetRefDesPrefix( getItemReference( lhItem ) )
-                != UTIL::GetRefDesPrefix( getItemReference( rhItem ) ) )
-            {
-                return false;
-            }
-
-            matchFound = true;
-        }
 
         KIID_PATH lhItemKey = getDataStoreKey( lhItem );
         KIID_PATH rhItemKey = getDataStoreKey( rhItem );
 
-        // Now check all the other columns.
         for( size_t i = 0; i < m_cols.size(); ++i )
         {
-            // Handled already
-            if( static_cast<int>( i ) == refCol )
-                continue;
-
             if( !m_cols[i].m_group )
                 continue;
 
-            wxString fieldName = m_cols[i].m_fieldName;
+            int col = static_cast<int>( i );
+
+            // Schematic and PCB references are item identifiers and group by reference prefix.
+            // Library item identifiers and library references use ordinary exact matching below.
+            if( ColIsItemIdentifier( col ) && ColIsReference( col ) )
+            {
+                if( UTIL::GetRefDesPrefix( getItemIdentifier( lhItem ) )
+                    != UTIL::GetRefDesPrefix( getItemIdentifier( rhItem ) ) )
+                {
+                    return false;
+                }
+
+                matchFound = true;
+                continue;
+            }
+
+            const wxString& fieldName = m_cols[i].m_fieldName;
 
             wxString lh = m_dataStore[lhItemKey][fieldName];
             wxString rh = m_dataStore[rhItemKey][fieldName];
@@ -731,8 +740,8 @@ protected:
     {
         CollapseForSort();
 
-        // We're going to sort the rows based on their first reference, so the first reference
-        // had better be the lowest one.
+        // We're going to sort the rows based on their first item, so the first item identifier had
+        // better be the lowest one.
         for( DATA_MODEL_ROW<ITEM_TYPE>& row : m_rows )
         {
             std::sort( row.m_items.begin(), row.m_items.end(),
@@ -760,7 +769,7 @@ protected:
     }
 
     virtual KIID_PATH getDataStoreKey( const ITEM_TYPE& aItem ) const = 0;
-    virtual wxString  getItemReference( const ITEM_TYPE& aItem ) const = 0;
+    virtual wxString  getItemIdentifier( const ITEM_TYPE& aItem ) const = 0;
 
     /**
      * Explicitly bypasses the data store's field values and retries them from

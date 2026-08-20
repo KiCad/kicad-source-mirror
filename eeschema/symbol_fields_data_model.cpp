@@ -75,7 +75,7 @@ KIID_PATH SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDataStoreKey( const SCH_REFER
 }
 
 
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getItemReference( const SCH_REFERENCE& aItem ) const
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getItemIdentifier( const SCH_REFERENCE& aItem ) const
 {
     return aItem.GetRef() + aItem.GetRefNumber();
 }
