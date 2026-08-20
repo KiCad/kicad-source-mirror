@@ -46,6 +46,18 @@ public:
     bool EditPinProperties( SCH_PIN* aPin, bool aFocusPinNumber );
     int PushPinProperties( const TOOL_EVENT& aEvent );
 
+    /**
+     * Propagate the edits made to \a aPin to the matching pins of the other units.
+     *
+     * Pins are matched against \a aOriginalPin, a copy of \a aPin taken before the edit, so that
+     * pins which tracked the old geometry are still recognized.  A pin that \a aPin now subsumes
+     * (because it became common to all units) is deleted.
+     *
+     * @return the number of pins deleted from \a aSymbol.
+     */
+    static int SynchronizeOtherUnits( LIB_SYMBOL* aSymbol, SCH_PIN* aPin,
+                                      const SCH_PIN& aOriginalPin );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;
