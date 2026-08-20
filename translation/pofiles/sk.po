@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-17 15:36+0300\n"
-"PO-Revision-Date: 2026-08-19 20:46+0000\n"
+"PO-Revision-Date: 2026-08-20 08:29+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -6775,11 +6775,12 @@ msgstr ""
 
 #: common/dialogs/panel_snapping_base.cpp:132
 msgid "Alignment and equal spacing"
-msgstr ""
+msgstr "Zarovnanie a rovnaké rozostupy"
 
 #: common/dialogs/panel_snapping_base.cpp:133
 msgid "Snap to alignment with, and equal spacing between, nearby objects"
 msgstr ""
+"Prichytiť k zarovnaniu s blízkymi objektmi a k rovnakým rozostupom medzi nimi"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
 msgid "Pan and Rotate"
@@ -7463,9 +7464,8 @@ msgstr "Nastavenie zobrazenia"
 #: common/eda_base_frame.cpp:1613 common/eda_base_frame.cpp:1624
 #: common/eda_base_frame.cpp:1649 common/eda_base_frame.cpp:1664
 #: common/eda_base_frame.cpp:1699 common/eda_base_frame.cpp:1719
-#, fuzzy
 msgid "Snapping"
-msgstr "Uzavretie"
+msgstr "Prichytávanie"
 
 #: common/eda_base_frame.cpp:1614 common/eda_base_frame.cpp:1625
 #: common/eda_base_frame.cpp:1651 common/eda_base_frame.cpp:1666
@@ -7803,9 +7803,8 @@ msgid "Barcode"
 msgstr "Čiarový kód"
 
 #: common/eda_item.cpp:470
-#, fuzzy
 msgid "GridItem"
-msgstr "Mriežka"
+msgstr "Oblastná mriežka"
 
 #: common/eda_item.cpp:473 eeschema/sch_junction.cpp:343
 #: eeschema/sch_junction.h:101
@@ -11332,6 +11331,8 @@ msgid ""
 "One backup of this project is larger than the total backup size limit.  "
 "KiCad kept the new backup; increase the limit in Preferences."
 msgstr ""
+"Jedna zo záloh tohto projektu je väčšia ako celkový limit veľkosti zálohy.  "
+"KiCad si ponechal novú zálohu; zvýšte limit v nastaveniach."
 
 #: common/startwizard/startwizard.cpp:96
 #, c-format
@@ -12320,7 +12321,7 @@ msgstr "Polárne súradnice"
 
 #: common/tool/actions.cpp:1171
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Prepínanie medzi polárnym a karteziánskym súradnicovým systémom"
+msgstr "Prepínanie medzi polárnym a kartézskym súradnicovým systémom"
 
 #: common/tool/actions.cpp:1180
 msgid "Reset Local Coordinates"
@@ -23089,6 +23090,8 @@ msgstr "<bez mena>"
 msgid ""
 "Invalid binary file hex data size. Chars expected: %d, hex string length: %d"
 msgstr ""
+"Neplatná veľkosť hexadecimálnych dát binárneho súboru. Očakávané znaky: %d, "
+"dĺžka hexadecimálneho reťazca: %d"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:140
 #, fuzzy
@@ -24447,7 +24450,7 @@ msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:83
 msgid "OrCAD stream size exceeds the compound file"
-msgstr ""
+msgstr "Veľkosť dátového toku OrCAD, presahuje zložený súbor"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:232
 msgid ""
@@ -27298,11 +27301,11 @@ msgstr "Opakovaný rozklad jednotky nepriniesol žiadne inštancie."
 
 #: eeschema/sim/sim_plot_tab.cpp:538
 msgid "Normalized Z/Z0 (ports differ)"
-msgstr ""
+msgstr "Normalizované Z/Z0 (porty sa nezhodujú)"
 
 #: eeschema/sim/sim_plot_tab.cpp:540
 msgid "Normalized Z/Z0"
-msgstr ""
+msgstr "Normalizované Z/Z0"
 
 #: eeschema/sim/sim_plot_tab.cpp:1145
 #, c-format
@@ -28359,6 +28362,8 @@ msgid ""
 "Imported symbol '%s' from '%s' was renamed to '%s' because another library "
 "supplies a different symbol of that name."
 msgstr ""
+"Importovaný symbol '%s' z '%s' bol premenovaný na '%s', pretože iná knižnica "
+"už poskytuje symbol s týmto názvom."
 
 #: eeschema/symbol_import_reconciler.cpp:410
 #, fuzzy, c-format
@@ -29529,6 +29534,7 @@ msgstr "Priraďte iný symbol z knižnice"
 #: eeschema/tools/sch_actions.cpp:985
 msgid "Remove the variant symbol override and revert to the base symbol"
 msgstr ""
+"Odstrániť prepísanie variantného symbolu a vrátiť sa k základnému symbolu"
 
 #: eeschema/tools/sch_actions.cpp:991 pcbnew/tools/pcb_actions.cpp:1697
 msgid "Assign Netclass..."
@@ -45828,7 +45834,7 @@ msgstr "Koncový bod"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:170
 msgid "Angular extent"
-msgstr ""
+msgstr "Uhlový rozsah"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:311
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:83
@@ -45855,26 +45861,22 @@ msgid "By Center and Size"
 msgstr "Podľa stredu a veľkosti"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:353
-#, fuzzy
 msgid "Radius spacing:"
-msgstr "Polomer:"
+msgstr "Rozstup v polomere:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:354
-#, fuzzy
 msgid "Angular spacing:"
-msgstr "Prstence:"
+msgstr "Uhlový rozstup:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:362
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:121
-#, fuzzy
 msgid "Spacing X:"
-msgstr "Rozstup (s):"
+msgstr "Rozstup X:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:363
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:134
-#, fuzzy
 msgid "Spacing Y:"
-msgstr "Rozstup (s):"
+msgstr "Rozstup Y:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:433
 #, fuzzy
@@ -45882,20 +45884,18 @@ msgid "Edit Grid Item Properties"
 msgstr "Vlastnosti grafickej položky"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:98
-#, fuzzy
 msgid "Grid type:"
-msgstr "Typ plôšky:"
+msgstr "Typ mriežky:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:102
 #: pcbnew/pcb_griditem.cpp:498
-#, fuzzy
 msgid "Cartesian"
-msgstr "Súradnice"
+msgstr "Kartézsky"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:102
 #: pcbnew/pcb_griditem.cpp:499
 msgid "Polar"
-msgstr "Polárne"
+msgstr "Polárny"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:147
 msgid "Major tick every:"
@@ -46269,7 +46269,7 @@ msgstr "Otočiť okolo stredu výberu"
 #: pcbnew/dialogs/dialog_offset_item_base.cpp:65
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:109
 msgid "Use polar coordinates"
-msgstr "Použite polárne súradnice"
+msgstr "Použiť polárne súradnice"
 
 #: pcbnew/dialogs/dialog_move_exact_base.h:69
 msgid "Move Item"
@@ -49417,7 +49417,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
-msgstr "Minimálna šírka spoja:"
+msgstr "Minimálna šírka spojenia:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:97
 msgid "The minimum copper width of connected copper items."
@@ -49495,7 +49495,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
-msgstr "Rozstupy spojov:"
+msgstr "Odstup medzi otvormi:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
 msgid ""
@@ -53006,7 +53006,7 @@ msgstr "(%s maximálna šírka prstenca %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:302
 msgid "Checking nets for minimum connection width..."
-msgstr "Kontroluje sa minimálna šírka pripojenia spojov..."
+msgstr "Kontroluje sa minimálna šírka spojení..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:446
 #, c-format
@@ -53043,7 +53043,7 @@ msgstr "Kontrolujú sa min. vzdialenosti grafiky na medi..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:159
 msgid "Checking copper graphic hole clearances..."
-msgstr "Kontrolujú sa min. vzdialenosti otvoru a grafiky na medi..."
+msgstr "Kontrolujú sa min. vzdialenosti otvoru a grafických prvkov na medi..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:167
 msgid "Checking copper zone clearances..."
@@ -57312,46 +57312,41 @@ msgid "Grid Item"
 msgstr "Položky skupiny"
 
 #: pcbnew/pcb_griditem.cpp:530
-#, fuzzy
 msgid "Grid Type"
-msgstr "Typ plôšky"
+msgstr "Typ mriežky"
 
 #: pcbnew/pcb_griditem.cpp:536
 msgid "Extent X"
-msgstr ""
+msgstr "Rozsah X"
 
 #: pcbnew/pcb_griditem.cpp:541
 msgid "Extent Y"
-msgstr ""
+msgstr "Rozsah Y"
 
 #: pcbnew/pcb_griditem.cpp:546
-#, fuzzy
 msgid "Spacing X"
-msgstr "Rozstup (s):"
+msgstr "Rozstup X"
 
 #: pcbnew/pcb_griditem.cpp:551
-#, fuzzy
 msgid "Spacing Y"
-msgstr "Rozstup (s):"
+msgstr "Rozstup Y"
 
 #: pcbnew/pcb_griditem.cpp:556
-#, fuzzy
 msgid "Radius Extent"
-msgstr "Polomer"
+msgstr "Rozsah polomeru"
 
 #: pcbnew/pcb_griditem.cpp:561
-#, fuzzy
 msgid "Radius Spacing"
-msgstr "Min. rozstup"
+msgstr "Uhlový rozstup"
 
 #: pcbnew/pcb_griditem.cpp:567
 msgid "Phi Extent"
-msgstr ""
+msgstr "Phi rozsah"
 
 #: pcbnew/pcb_griditem.cpp:573
 #, fuzzy
 msgid "Phi Spacing"
-msgstr "Min. rozstup"
+msgstr "Phi Spacing"
 
 #: pcbnew/pcb_griditem.cpp:579 pcbnew/widgets/search_handlers.cpp:229
 #: pcbnew/zone.cpp:1125 pcbnew/zone.cpp:2314
@@ -61680,7 +61675,7 @@ msgstr "Zistené obmedzenia veľkosti otvoru: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:737
 msgid "Hole Clearance"
-msgstr "Odstup otvoru"
+msgstr "Odstup od otvoru"
 
 #: pcbnew/tools/board_inspection_tool.cpp:738
 #: pcbnew/tools/board_inspection_tool.cpp:1460
