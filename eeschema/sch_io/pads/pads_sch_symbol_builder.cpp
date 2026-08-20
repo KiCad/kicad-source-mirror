@@ -290,7 +290,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol( const PARTTYPE_D
             libSymbol->AddDrawItem( schPin );
     }
 
-    for( const auto& text : aSymbolDef.texts )
+    for( const SYMBOL_TEXT& text : aSymbolDef.texts )
     {
         if( text.content.empty() )
             continue;
@@ -423,7 +423,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol( const PARTTY
 
     if( !aPartType.gates.empty() )
     {
-        for( const auto& ptPin : aPartType.gates[0].pins )
+        for( const PARTTYPE_PIN& ptPin : aPartType.gates[0].pins )
             ptPinById[ptPin.pin_id] = &ptPin;
     }
 
@@ -777,8 +777,8 @@ SCH_PIN* PADS_SCH_SYMBOL_BUILDER::createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL*
     // the side field indicates which edge of the symbol body the pin is on.
     // Pin decal names containing "VRT" indicate perpendicular pins.
     PIN_ORIENTATION orientation = PIN_ORIENTATION::PIN_RIGHT;
-    bool isVerticalDecal = ( aPin.pin_decal_name.find( "VRT" ) != std::string::npos );
-    int angle = static_cast<int>( aPin.rotation ) % 360;
+    bool            isVerticalDecal = ( aPin.pin_decal_name.find( "VRT" ) != std::string::npos );
+    int             angle = static_cast<int>( aPin.rotation ) % 360;
 
     if( isVerticalDecal )
     {
@@ -861,8 +861,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& a
     bool isEarth = ( upper == "EARTH" || upper == "CHASSIS" );
 
     // Default to VCC style (open arrow up) for anything not matched above
-    bool isVCC = !isGround && !isGNDD && !isPwrBar && !isPwrTriangle
-                 && !isVEE && !isEarth;
+    bool isVCC = !isGround && !isGNDD && !isPwrBar && !isPwrTriangle && !isVEE && !isEarth;
 
     if( isGround )
     {
@@ -1081,7 +1080,10 @@ std::string PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant( const std::string
 {
     std::string upper = aDecalName;
     std::transform( upper.begin(), upper.end(), upper.begin(),
-                    []( unsigned char c ) { return std::toupper( c ); } );
+                    []( unsigned char c )
+                    {
+                        return std::toupper( c );
+                    } );
 
     bool isPositive = !upper.empty() && upper[0] == '+';
     bool isGround = ( aPinType == "G" );
@@ -1125,7 +1127,7 @@ void PADS_SCH_SYMBOL_BUILDER::AddHiddenPowerPins( LIB_SYMBOL* aSymbol,
             existingPins.insert( static_cast<const SCH_PIN&>( item ).GetNumber() );
     }
 
-    for( const auto& sp : aSigpins )
+    for( const PARTTYPE_DEF::SIGPIN& sp : aSigpins )
     {
         wxString pinNum = wxString::FromUTF8( sp.pin_number );
 

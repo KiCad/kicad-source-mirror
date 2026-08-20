@@ -309,46 +309,49 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
     aDC.SetClippingRegion( plotRect );
 
     // enough segments to keep the chord error under a pixel at this circle's screen radius
-    auto segmentsFor = [&]( double aR ) -> int
-    {
-        return std::clamp( KiROUND( M_PI * std::sqrt( aR * view.radius ) ), 64, 4096 );
-    };
+    auto segmentsFor =
+            [&]( double aR ) -> int
+            {
+                return std::clamp( KiROUND( M_PI * std::sqrt( aR * view.radius ) ), 64, 4096 );
+            };
 
     // draw a gamma-plane circle, keeping only the parts inside the unit circle
-    auto drawClippedCircle = [&]( double aCx, double aCy, double aR )
-    {
-        constexpr double LIMIT = 1.0002;
-
-        std::vector<wxPoint> run;
-        int                  segments = segmentsFor( aR );
-
-        for( int ii = 0; ii <= segments; ii++ )
-        {
-            double angle = 2.0 * M_PI * ii / segments;
-            double re = aCx + aR * cos( angle );
-            double im = aCy + aR * sin( angle );
-
-            if( re * re + im * im <= LIMIT )
+    auto drawClippedCircle =
+            [&]( double aCx, double aCy, double aR )
             {
-                run.push_back( view.ToScreen( re, im ) );
-            }
-            else
-            {
+                constexpr double LIMIT = 1.0002;
+
+                std::vector<wxPoint> run;
+                int                  segments = segmentsFor( aR );
+
+                for( int ii = 0; ii <= segments; ii++ )
+                {
+                    double angle = 2.0 * M_PI * ii / segments;
+                    double re = aCx + aR * cos( angle );
+                    double im = aCy + aR * sin( angle );
+
+                    if( re * re + im * im <= LIMIT )
+                    {
+                        run.push_back( view.ToScreen( re, im ) );
+                    }
+                    else
+                    {
+                        if( run.size() > 1 )
+                            aDC.DrawLines( (int) run.size(), run.data() );
+
+                        run.clear();
+                    }
+                }
+
                 if( run.size() > 1 )
                     aDC.DrawLines( (int) run.size(), run.data() );
+            };
 
-                run.clear();
-            }
-        }
-
-        if( run.size() > 1 )
-            aDC.DrawLines( (int) run.size(), run.data() );
-    };
-
-    auto formatValue = []( double aValue ) -> wxString
-    {
-        return wxString::Format( wxS( "%g" ), aValue );
-    };
+    auto formatValue =
+            []( double aValue ) -> wxString
+            {
+                return wxString::Format( wxS( "%g" ), aValue );
+            };
 
     // ohm labels for a single reference impedance, normalized labels without one
     double labelScale = m_z0 > 0.0 ? m_z0 : 1.0;
@@ -361,11 +364,12 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
     wxRealPoint lowGamma = view.ToGamma( wxPoint( mL, mT + plotH ) );
     wxRealPoint highGamma = view.ToGamma( wxPoint( mL + plotW, mT ) );
 
-    auto poleDistance = [&]( double aRe )
-    {
-        return std::hypot( std::max( { lowGamma.x - aRe, aRe - highGamma.x, 0.0 } ),
-                           std::max( { lowGamma.y, -highGamma.y, 0.0 } ) );
-    };
+    auto poleDistance =
+            [&]( double aRe )
+            {
+                return std::hypot( std::max( { lowGamma.x - aRe, aRe - highGamma.x, 0.0 } ),
+                                   std::max( { lowGamma.y, -highGamma.y, 0.0 } ) );
+            };
 
     bool zoomedIn = ( plotW / 2.0 ) / view.radius < 1.0;
     bool converged = zoomedIn && std::min( poleDistance( 1.0 ), poleDistance( -1.0 ) ) < FINEST_SCALE;
@@ -403,85 +407,90 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
     // panned/zoomed out of view.
     constexpr double LABEL_LIMIT = 1.0002;
 
-    auto anchorPos = [&]( double aRe, double aIm, wxPoint& aOut ) -> bool
-    {
-        if( aRe * aRe + aIm * aIm > LABEL_LIMIT )
-            return false;
+    auto anchorPos =
+            [&]( double aRe, double aIm, wxPoint& aOut ) -> bool
+            {
+                if( aRe * aRe + aIm * aIm > LABEL_LIMIT )
+                    return false;
 
-        wxPoint p = view.ToScreen( aRe, aIm );
+                wxPoint p = view.ToScreen( aRe, aIm );
 
-        if( !plotRect.Contains( p ) )
-            return false;
+                if( !plotRect.Contains( p ) )
+                    return false;
 
-        aOut = p;
-        return true;
-    };
+                aOut = p;
+                return true;
+            };
 
     // anchor off-screen, put the label where the gridline meets the plot edge
-    auto edgePos = [&]( double aCx, double aCy, double aR, wxPoint& aOut ) -> bool
-    {
-        int  bestMargin = std::numeric_limits<int>::max();
-        bool found = false;
-        int  segments = segmentsFor( aR );
-
-        for( int ii = 0; ii <= segments; ii++ )
-        {
-            double angle = 2.0 * M_PI * ii / segments;
-            double re = aCx + aR * cos( angle );
-            double im = aCy + aR * sin( angle );
-
-            if( re * re + im * im > LABEL_LIMIT )
-                continue;
-
-            wxPoint p = view.ToScreen( re, im );
-
-            if( !plotRect.Contains( p ) )
-                continue;
-
-            int margin = std::min( { p.x - mL, mL + plotW - p.x, p.y - mT, mT + plotH - p.y } );
-
-            if( margin < bestMargin )
+    auto edgePos =
+            [&]( double aCx, double aCy, double aR, wxPoint& aOut ) -> bool
             {
-                bestMargin = margin;
-                aOut = p;
-                found = true;
-            }
-        }
+                int  bestMargin = std::numeric_limits<int>::max();
+                bool found = false;
+                int  segments = segmentsFor( aR );
 
-        return found;
-    };
+                for( int ii = 0; ii <= segments; ii++ )
+                {
+                    double angle = 2.0 * M_PI * ii / segments;
+                    double re = aCx + aR * cos( angle );
+                    double im = aCy + aR * sin( angle );
 
-    auto clampToPlot = [&]( const wxPoint& aPos, const wxSize& aExt ) -> wxPoint
-    {
-        return wxPoint( std::clamp( aPos.x, mL + 1, mL + plotW - aExt.x - 1 ),
-                        std::clamp( aPos.y, mT + 1, mT + plotH - aExt.y - 1 ) );
-    };
+                    if( re * re + im * im > LABEL_LIMIT )
+                        continue;
+
+                    wxPoint p = view.ToScreen( re, im );
+
+                    if( !plotRect.Contains( p ) )
+                        continue;
+
+                    int margin = std::min( { p.x - mL, mL + plotW - p.x, p.y - mT, mT + plotH - p.y } );
+
+                    if( margin < bestMargin )
+                    {
+                        bestMargin = margin;
+                        aOut = p;
+                        found = true;
+                    }
+                }
+
+                return found;
+            };
+
+    auto clampToPlot =
+            [&]( const wxPoint& aPos, const wxSize& aExt ) -> wxPoint
+            {
+                return wxPoint( std::clamp( aPos.x, mL + 1, mL + plotW - aExt.x - 1 ),
+                                std::clamp( aPos.y, mT + 1, mT + plotH - aExt.y - 1 ) );
+            };
 
     std::vector<wxRect> placed;
 
-    auto drawLabel = [&]( const wxString& aLabel, const wxPoint& aPos, const wxSize& aExt )
-    {
-        wxPoint pos = clampToPlot( aPos, aExt );
-        wxRect  box( pos, aExt );
+    auto drawLabel =
+            [&]( const wxString& aLabel, const wxPoint& aPos, const wxSize& aExt )
+            {
+                wxPoint pos = clampToPlot( aPos, aExt );
+                wxRect  box( pos, aExt );
 
-        box.Inflate( 2, 1 );
+                box.Inflate( 2, 1 );
 
-        for( const wxRect& seen : placed )
-        {
-            if( seen.Intersects( box ) )
-                return;
-        }
+                for( const wxRect& seen : placed )
+                {
+                    if( seen.Intersects( box ) )
+                        return;
+                }
 
-        placed.push_back( box );
-        aDC.DrawText( aLabel, pos );
-    };
+                placed.push_back( box );
+                aDC.DrawText( aLabel, pos );
+            };
 
-    auto drawEdgeLabel = [&]( const wxString& aLabel, const wxPoint& aAt )
-    {
-        wxSize ext = aDC.GetTextExtent( aLabel );
+    auto drawEdgeLabel =
+            [&]( const wxString& aLabel, const wxPoint& aAt )
+            {
+                wxSize ext = aDC.GetTextExtent( aLabel );
 
-        drawLabel( aLabel, wxPoint( aAt.x - ext.x / 2, aAt.y + 3 ), ext );
-    };
+                drawLabel( aLabel, wxPoint( aAt.x - ext.x / 2, aAt.y + 3 ), ext );
+            };
 
     // push reactance labels just outside the rim, clamped so j50 and -j50 are not clipped
     auto drawRimLabel = [&]( const wxString& aLabel, const wxPoint& aAt, double aRe, double aIm )
@@ -577,20 +586,21 @@ void SMITH_TRACE::Plot( wxDC& aDC, mpWindow& aWindow )
 
     std::vector<wxPoint> pts;
 
-    auto flush = [&]()
-    {
-        if( pts.size() > 1 )
-        {
-            aDC.DrawLines( (int) pts.size(), pts.data() );
-        }
-        else if( pts.size() == 1 )
-        {
-            aDC.SetBrush( wxBrush( m_pen.GetColour() ) );
-            aDC.DrawCircle( pts[0], 2 );
-        }
+    auto flush =
+            [&]()
+            {
+                if( pts.size() > 1 )
+                {
+                    aDC.DrawLines( (int) pts.size(), pts.data() );
+                }
+                else if( pts.size() == 1 )
+                {
+                    aDC.SetBrush( wxBrush( m_pen.GetColour() ) );
+                    aDC.DrawCircle( pts[0], 2 );
+                }
 
-        pts.clear();
-    };
+                pts.clear();
+            };
 
     for( size_t start = 0; start < count; start += chunk )
     {
@@ -648,8 +658,11 @@ void SMITH_CURSOR::snapToFrequency( double aFreq )
     size_t end = freqs.size();
     size_t chunk = m_trace->GetSweepSize();
 
-    if( m_trace->GetSweepCount() > 1 && chunk > 0 && chunk != std::numeric_limits<size_t>::max() && m_index >= 0
-        && (size_t) m_index < freqs.size() )
+    if( m_trace->GetSweepCount() > 1
+            && chunk > 0
+            && chunk != std::numeric_limits<size_t>::max()
+            && m_index >= 0
+            && (size_t) m_index < freqs.size() )
     {
         begin = ( (size_t) m_index / chunk ) * chunk;
         end = std::min( freqs.size(), begin + chunk );
@@ -883,7 +896,8 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     }
     else if( absolute )
     {
-        lines.push_back( wxString::Format( wxS( "Z = %s %s j%s" ), formatSI( zr, wxS( "Ω" ) ),
+        lines.push_back( wxString::Format( wxS( "Z = %s %s j%s" ),
+                                           formatSI( zr, wxS( "Ω" ) ),
                                            zi < 0 ? wxS( "-" ) : wxS( "+" ),
                                            formatSI( std::fabs( zi ), wxS( "Ω" ) ) ) );
 
@@ -898,8 +912,10 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     }
     else
     {
-        lines.push_back( wxString::Format( wxS( "z = %s %s j%s" ), formatFloat( zr, 3 ),
-                                           zi < 0 ? wxS( "-" ) : wxS( "+" ), formatFloat( std::fabs( zi ), 3 ) ) );
+        lines.push_back( wxString::Format( wxS( "z = %s %s j%s" ),
+                                           formatFloat( zr, 3 ),
+                                           zi < 0 ? wxS( "-" ) : wxS( "+" ),
+                                           formatFloat( std::fabs( zi ), 3 ) ) );
     }
 
     double rl = SMITH_MATH::ReturnLoss( gm );
@@ -967,7 +983,8 @@ void CURSOR::Move( wxPoint aDelta )
 {
     Update();
 
-    if( m_trace->IsMultiRun() && m_window && m_trace->GetSweepCount() > 1
+    if( m_trace->IsMultiRun() && m_window
+            && m_trace->GetSweepCount() > 1
             && m_trace->GetSweepSize() != std::numeric_limits<size_t>::max() )
     {
         int newY = m_reference.y + aDelta.y;
@@ -1031,8 +1048,10 @@ void CURSOR::doSetCoordX( double aValue )
     int    sweepCount = m_trace->GetSweepCount();
     size_t sweepSize = m_trace->GetSweepSize();
 
-    if( snapToNearest && m_trace->IsMultiRun() && sweepCount > 1
-            && sweepSize != std::numeric_limits<size_t>::max() && sweepSize > 0
+    if( snapToNearest && m_trace->IsMultiRun()
+            && sweepCount > 1
+            && sweepSize != std::numeric_limits<size_t>::max()
+            && sweepSize > 0
             && std::isfinite( snapTargetY ) )
     {
         double bestDistance = std::numeric_limits<double>::infinity();
@@ -1083,8 +1102,10 @@ void CURSOR::doSetCoordX( double aValue )
             m_sweepIndex = bestSweep;
     }
 
-    if( m_trace->IsMultiRun() && sweepCount > 1
-            && sweepSize != std::numeric_limits<size_t>::max() && sweepSize > 0 )
+    if( m_trace->IsMultiRun()
+            && sweepCount > 1
+            && sweepSize != std::numeric_limits<size_t>::max()
+            && sweepSize > 0 )
     {
         size_t available = static_cast<size_t>( sweepCount ) * sweepSize;
 

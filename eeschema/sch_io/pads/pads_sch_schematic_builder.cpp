@@ -220,7 +220,7 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels( const std::vector<SCH_SIGNAL>& 
             }
         }
 
-        for( const auto& placement : opcPlacements )
+        for( const PLACEMENT& placement : opcPlacements )
         {
             // Prefer the orientation authored in the PADS *NETNAMES* section. The wire
             // direction is unreliable for off-page connectors whose stub wire is
@@ -309,7 +309,7 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
     // Only first and last vertices are true endpoints; interior ones are bends.
     std::map<std::pair<int, int>, int> endpointCount;
 
-    for( const auto& wire : aSignal.wires )
+    for( const WIRE_SEGMENT& wire : aSignal.wires )
     {
         if( wire.vertices.size() < 2 )
             continue;
@@ -317,10 +317,8 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
         POINT first = wire.vertices.front();
         POINT last = wire.vertices.back();
 
-        endpointCount[{ static_cast<int>( first.x * 1000 ),
-                        static_cast<int>( first.y * 1000 ) }]++;
-        endpointCount[{ static_cast<int>( last.x * 1000 ),
-                        static_cast<int>( last.y * 1000 ) }]++;
+        endpointCount[{ static_cast<int>( first.x * 1000 ), static_cast<int>( first.y * 1000 ) }]++;
+        endpointCount[{ static_cast<int>( last.x * 1000 ), static_cast<int>( last.y * 1000 ) }]++;
     }
 
     // Also count pin connection positions so we can avoid placing on a pin
@@ -337,15 +335,13 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
         if( !wire.endpoint_a.empty() && wire.endpoint_a.substr( 0, 3 ) != "@@@" )
         {
             POINT pt = wire.vertices.front();
-            pinEndpoints.insert( { static_cast<int>( pt.x * 1000 ),
-                                   static_cast<int>( pt.y * 1000 ) } );
+            pinEndpoints.insert( { static_cast<int>( pt.x * 1000 ), static_cast<int>( pt.y * 1000 ) } );
         }
 
         if( !wire.endpoint_b.empty() && wire.endpoint_b.substr( 0, 3 ) != "@@@" )
         {
             POINT pt = wire.vertices.back();
-            pinEndpoints.insert( { static_cast<int>( pt.x * 1000 ),
-                                   static_cast<int>( pt.y * 1000 ) } );
+            pinEndpoints.insert( { static_cast<int>( pt.x * 1000 ), static_cast<int>( pt.y * 1000 ) } );
         }
     }
 
@@ -357,8 +353,7 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
 
         for( const POINT* vtx : { &wire.vertices.front(), &wire.vertices.back() } )
         {
-            auto key = std::make_pair( static_cast<int>( vtx->x * 1000 ),
-                                       static_cast<int>( vtx->y * 1000 ) );
+            auto key = std::make_pair( static_cast<int>( vtx->x * 1000 ), static_cast<int>( vtx->y * 1000 ) );
 
             if( endpointCount[key] == 1 && pinEndpoints.count( key ) == 0 )
                 return VECTOR2I( toKiCadUnits( vtx->x ), toKiCadY( vtx->y ) );
@@ -373,8 +368,7 @@ VECTOR2I PADS_SCH_SCHEMATIC_BUILDER::chooseLabelPosition( const SCH_SIGNAL& aSig
 
         for( const POINT* vtx : { &wire.vertices.front(), &wire.vertices.back() } )
         {
-            auto key = std::make_pair( static_cast<int>( vtx->x * 1000 ),
-                                       static_cast<int>( vtx->y * 1000 ) );
+            auto key = std::make_pair( static_cast<int>( vtx->x * 1000 ), static_cast<int>( vtx->y * 1000 ) );
 
             if( endpointCount[key] == 1 )
                 return VECTOR2I( toKiCadUnits( vtx->x ), toKiCadY( vtx->y ) );
@@ -711,18 +705,19 @@ void PADS_SCH_SCHEMATIC_BUILDER::CreateTitleBlock( SCH_SCREEN* aScreen )
         return;
 
     // Look up the first non-empty value from a list of candidate field names
-    auto findField = [this]( const std::initializer_list<const char*>& aCandidates ) -> std::string
-    {
-        for( const char* name : aCandidates )
-        {
-            auto it = m_params.fields.find( name );
+    auto findField =
+            [this]( const std::initializer_list<const char*>& aCandidates ) -> std::string
+            {
+                for( const char* name : aCandidates )
+                {
+                    auto it = m_params.fields.find( name );
 
-            if( it != m_params.fields.end() && !it->second.empty() )
-                return it->second;
-        }
+                    if( it != m_params.fields.end() && !it->second.empty() )
+                        return it->second;
+                }
 
-        return {};
-    };
+                return {};
+            };
 
     TITLE_BLOCK tb;
 
