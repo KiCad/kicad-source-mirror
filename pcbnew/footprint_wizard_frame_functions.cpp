@@ -151,3 +151,8 @@ void FOOTPRINT_WIZARD_FRAME::OnWizardParametersChanged()
     DisplayWizardInfos();
 }
 
+
+void FOOTPRINT_WIZARD_FRAME::SetBuildMessage( const wxString& aMessage )
+{
+    m_buildMessageBox->SetValue( aMessage );
+}
