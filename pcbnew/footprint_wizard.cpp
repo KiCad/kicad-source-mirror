@@ -95,7 +95,7 @@ bool FOOTPRINT_WIZARD_MANAGER::RefreshInfo( FOOTPRINT_WIZARD* aWizard )
     std::vector<wxString> args = {
         wxS( "--get-info" ),
         wxS( "--lang" ),
-        lang->CanonicalName
+        lang ? lang->CanonicalName : wxString( wxS( "en" ) )
     };
 
     wxString out, err;
@@ -227,6 +227,9 @@ std::unique_ptr<WIZARD_PARAMETER> WIZARD_PARAMETER::Create( const kiapi::common:
         p = std::make_unique<WIZARD_BOOL_PARAMETER>();
         static_cast<WIZARD_BOOL_PARAMETER*>( p.get() )->FromProto( aProto.bool_() );
     }
+
+    if( !p )
+        return p;
 
     p->identifier = wxString::FromUTF8( aProto.identifier() );
     p->name = wxString::FromUTF8( aProto.name() );
@@ -393,5 +396,8 @@ void WIZARD_INFO::FromProto( const kiapi::common::types::WizardInfo& aProto )
     parameters.reserve( aProto.parameters_size() );
 
     for( const kiapi::common::types::WizardParameter& parameter : aProto.parameters() )
-        parameters.emplace_back( WIZARD_PARAMETER::Create( parameter ) );
+    {
+        if( std::unique_ptr<WIZARD_PARAMETER> param = WIZARD_PARAMETER::Create( parameter ); param )
+            parameters.emplace_back( std::move( param ) );
+    }
 }
