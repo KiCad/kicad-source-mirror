@@ -69,8 +69,9 @@ const ARULE6* selectAltiumPolygonRule( const std::vector<ARULE6>& aRulesByPriori
 {
     for( const ARULE6& rule : aRulesByPriorityAsc )
     {
-        if( altiumScopeExprMatchesPolygon( rule.scope1expr )
-            || altiumScopeExprMatchesPolygon( rule.scope2expr ) )
+        if( rule.enabled
+            && ( altiumScopeExprMatchesPolygon( rule.scope1expr )
+                 || altiumScopeExprMatchesPolygon( rule.scope2expr ) ) )
         {
             return &rule;
         }

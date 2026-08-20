@@ -823,6 +823,17 @@ BOOST_AUTO_TEST_CASE( SelectAltiumPolygonRule_PriorityOrder )
     BOOST_CHECK( selectAltiumPolygonRule( rules ) == nullptr );
 
     BOOST_CHECK( selectAltiumPolygonRule( {} ) == nullptr );
+
+    // A rule Altium ignores must not beat the one it actually applies
+    rules = {
+        makeRule( 1, wxT( "InPolygon And InNet('GND')" ), wxT( "All" ), 100 ),
+        makeRule( 2, wxT( "InPolygon" ), wxT( "All" ), 200 ),
+    };
+    rules[0].enabled = false;
+
+    selected = selectAltiumPolygonRule( rules );
+    BOOST_REQUIRE( selected != nullptr );
+    BOOST_CHECK_EQUAL( selected->clearanceGap, 200 );
 }
 
 
