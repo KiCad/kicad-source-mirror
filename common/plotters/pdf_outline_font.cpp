@@ -480,7 +480,7 @@ void PDF_OUTLINE_FONT_MANAGER::EncodeString( const wxString& aText, KIFONT::OUTL
     if( !aRuns || !aFont )
         return;
 
-    auto permission = aFont->GetEmbeddingPermission();
+    KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION permission = aFont->GetEmbeddingPermission();
 
     if( permission != KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION::INSTALLABLE
             && permission != KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION::EDITABLE )
@@ -501,8 +501,7 @@ void PDF_OUTLINE_FONT_MANAGER::EncodeString( const wxString& aText, KIFONT::OUTL
 
     hb_buffer_t* buffer = hb_buffer_create();
     hb_buffer_set_cluster_level( buffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES );
-    hb_buffer_add_utf8( buffer, textUtf8.c_str(), static_cast<int>( textUtf8.size() ), 0,
-                        static_cast<int>( textUtf8.size() ) );
+    hb_buffer_add_utf8( buffer, textUtf8.c_str(), (int) textUtf8.size(), 0, (int) textUtf8.size() );
     hb_buffer_guess_segment_properties( buffer );
 
     hb_font_t* hbFont = hb_ft_font_create_referenced( aFont->GetFace() );

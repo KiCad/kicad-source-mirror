@@ -2119,6 +2119,115 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
         text = evaluator.Evaluate( text );
     }
 
+    if( !aFont )
+        aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
+
+
+
+
+
+    if( aFont->IsOutline() )
+    {
+        KIFONT::OUTLINE_FONT*                      outlineFont = static_cast<KIFONT::OUTLINE_FONT*>( aFont );
+        KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION permission = outlineFont->GetEmbeddingPermission();
+
+        if( permission != KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION::INSTALLABLE
+                    && permission != KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION::EDITABLE )
+        {
+            // If we're not allowed to embed the fonts, then the PDF text plotting code won't work.  In that
+            // case we have to fall back to the standard text plotting (using a CALLBACK_GAL), and render
+            // phantom text (which will be searchable) behind the stroke font.  This is a long way from ideal,
+            // but it is what it is.
+            int render_mode = 3;    // invisible
+
+            VECTOR2I pos( aPos );
+            const char *fontname = aItalic ? ( aBold ? "/KicadFontBI" : "/KicadFontI" )
+                                           : ( aBold ? "/KicadFontB"  : "/KicadFont"  );
+
+            // Compute the copious transformation parameters of the Current Transform Matrix
+            double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
+            double wideningFactor, heightFactor;
+
+            VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
+            bool     textMirrored = aSize.x < 0;
+
+            computeTextParameters( aPos, aText, aOrient, t_size, textMirrored, aH_justify, aV_justify, aWidth,
+                                   aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f,
+                                   &heightFactor );
+
+            SetColor( aColor );
+            SetCurrentLineWidth( aWidth, aData );
+
+            wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
+
+            VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic, aFontMetrics ) );
+
+            if( textMirrored )
+                full_box.x *= -1;
+
+            VECTOR2I box_x( full_box.x, 0 );
+            VECTOR2I box_y( 0, full_box.y );
+
+            RotatePoint( box_x, aOrient );
+            RotatePoint( box_y, aOrient );
+
+            if( aH_justify == GR_TEXT_H_ALIGN_CENTER )
+                pos -= box_x / 2;
+            else if( aH_justify == GR_TEXT_H_ALIGN_RIGHT )
+                pos -= box_x;
+
+            if( aV_justify == GR_TEXT_V_ALIGN_CENTER )
+                pos += box_y / 2;
+            else if( aV_justify == GR_TEXT_V_ALIGN_TOP )
+                pos += box_y;
+
+            while( str_tok.HasMoreTokens() )
+            {
+                wxString word = str_tok.GetNextToken();
+
+                computeTextParameters( pos, word, aOrient, t_size, textMirrored, GR_TEXT_H_ALIGN_LEFT,
+                                       GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor,
+                                       &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+
+                // Extract the changed width and rotate by the orientation to get the offset for the
+                // next word
+                VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, aWidth, aBold, aItalic, aFontMetrics ).x, 0 );
+
+                if( textMirrored )
+                    bbox.x *= -1;
+
+                RotatePoint( bbox, aOrient );
+                pos += bbox;
+
+                // Don't try to output a blank string
+                if( word.Trim( false ).Trim( true ).empty() )
+                    continue;
+
+                /* We use the full CTM instead of the text matrix because the same
+                   coordinate system will be used for the overlining. Also the %f
+                   for the trig part of the matrix to avoid %g going in exponential
+                   format (which is not supported) */
+                fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} {:g} Tf {} Tr {:g} Tz ",
+                            ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
+                            fontname,
+                            heightFactor,
+                            render_mode,
+                            wideningFactor * 100 );
+
+                std::string txt_pdf = encodeStringForPlotter( word );
+                fmt::println( m_workFile, "{} Tj ET", txt_pdf );
+                // Restore the CTM
+                fmt::println( m_workFile, "Q" );
+            }
+
+            // Plot the stroked text (if requested)
+            PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
+                           aBold, aMultilineAllowed, aFont, aFontMetrics );
+
+            return;
+        }
+    }
+
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
 
