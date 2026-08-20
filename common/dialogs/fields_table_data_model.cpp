@@ -514,15 +514,15 @@ wxString FIELDS_TABLE_DATA_MODEL_BASE::getAttributeResolvedValue( const wxString
         return wxEmptyString;
 
     if( aFieldName == wxS( "${DNP}" ) )
-        return _( "DNP" );
+        return wxS( "DNP" );
     else if( aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
-        return _( "Excluded from board" );
+        return wxS( "Excluded from board" );
     else if( aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) )
-        return _( "Excluded from BOM" );
+        return wxS( "Excluded from BOM" );
     else if( aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
-        return _( "Excluded from position files" );
+        return wxS( "Excluded from position files" );
     else if( aFieldName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        return _( "Excluded from simulation" );
+        return wxS( "Excluded from simulation" );
 
     return wxEmptyString;
 }

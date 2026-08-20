@@ -1254,7 +1254,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
         *token = wxEmptyString;
 
         if( GetExcludedFromBOMForVariant( variant ) )
-            *token = _( "Excluded from BOM" );
+            *token = wxS( "Excluded from BOM" );
 
         return true;
     }
@@ -1263,7 +1263,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
         *token = wxEmptyString;
 
         if( GetExcludedFromPosFilesForVariant( variant ) )
-            *token = _( "Excluded from position files" );
+            *token = wxS( "Excluded from position files" );
 
         return true;
     }
@@ -1284,7 +1284,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
         *token = wxEmptyString;
 
         if( GetDNPForVariant( variant ) )
-            *token = _( "DNP" );
+            *token = wxS( "DNP" );
 
         return true;
     }

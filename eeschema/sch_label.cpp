@@ -861,7 +861,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         for( SCH_RULE_AREA* ruleArea : directive->GetConnectedRuleAreas() )
         {
             if( ruleArea->GetExcludedFromBOM( aPath, variant ) )
-                *token = _( "Excluded from BOM" );
+                *token = wxS( "Excluded from BOM" );
         }
 
         return true;
@@ -874,7 +874,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         for( SCH_RULE_AREA* ruleArea : directive->GetConnectedRuleAreas() )
         {
             if( ruleArea->GetExcludedFromBoard( aPath, variant ) )
-                *token = _( "Excluded from board" );
+                *token = wxS( "Excluded from board" );
         }
 
         return true;
@@ -887,7 +887,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         for( SCH_RULE_AREA* ruleArea : directive->GetConnectedRuleAreas() )
         {
             if( ruleArea->GetExcludedFromSim( aPath, variant ) )
-                *token = _( "Excluded from simulation" );
+                *token = wxS( "Excluded from simulation" );
         }
 
         return true;
@@ -900,7 +900,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         for( SCH_RULE_AREA* ruleArea : directive->GetConnectedRuleAreas() )
         {
             if( ruleArea->GetDNP( aPath, variant ) )
-                *token = _( "DNP" );
+                *token = wxS( "DNP" );
         }
 
         return true;

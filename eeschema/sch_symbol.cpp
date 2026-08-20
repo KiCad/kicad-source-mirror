@@ -2537,7 +2537,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
         *token = wxEmptyString;
 
         if( aPath->GetExcludedFromBOM( variant ) || this->ResolveExcludedFromBOM( aPath, variant ) )
-            *token = _( "Excluded from BOM" );
+            *token = wxS( "Excluded from BOM" );
 
         return true;
     }
@@ -2546,7 +2546,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
         *token = wxEmptyString;
 
         if( aPath->GetExcludedFromBoard( variant ) || this->ResolveExcludedFromBoard( aPath, variant ) )
-            *token = _( "Excluded from board" );
+            *token = wxS( "Excluded from board" );
 
         return true;
     }
@@ -2555,7 +2555,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
         *token = wxEmptyString;
 
         if( aPath->GetExcludedFromSim( variant ) || this->ResolveExcludedFromSim( aPath, variant ) )
-            *token = _( "Excluded from simulation" );
+            *token = wxS( "Excluded from simulation" );
 
         return true;
     }
@@ -2564,7 +2564,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
         *token = wxEmptyString;
 
         if( aPath->GetDNP( variant ) || this->ResolveDNP( aPath, variant ) )
-            *token = _( "DNP" );
+            *token = wxS( "DNP" );
 
         return true;
     }
