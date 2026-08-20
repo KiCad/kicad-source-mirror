@@ -44,6 +44,7 @@
 #include <ki_exception.h>
 #include <netinfo.h>
 #include <netclass.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
 #include <pcb_generator.h>
@@ -1264,6 +1265,43 @@ BOOST_AUTO_TEST_CASE( RegionSolderMaskExpansion )
     }
 
     BOOST_CHECK_MESSAGE( exactMatches == 1, "F_Mask relief aperture must exactly match exactly one copper region" );
+}
+
+
+// A component copper region carries a net in Altium, but as a custom pad it used to import
+// unconnected, breaking every connection the part makes through its own copper
+BOOST_AUTO_TEST_CASE( ComponentCopperRegionNets )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    int regionCount = 0;
+    int connectedCount = 0;
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            PCB_LAYER_ID copperLayer = pad->IsOnLayer( F_Cu ) ? F_Cu : B_Cu;
+
+            if( pad->GetShape( copperLayer ) != PAD_SHAPE::CUSTOM || !pad->GetNumber().IsEmpty() )
+                continue;
+
+            regionCount++;
+
+            if( pad->GetNetCode() > 0 )
+            {
+                connectedCount++;
+                BOOST_CHECK( !pad->GetNetname().IsEmpty() );
+            }
+        }
+    }
+
+    BOOST_REQUIRE_GT( regionCount, 0 );
+    BOOST_CHECK_GT( connectedCount, 0 );
 }
 
 

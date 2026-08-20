@@ -3072,6 +3072,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
         pad->SetSize( PADSTACK::ALL_LAYERS, { anchorSize, anchorSize } );
         pad->SetPosition( anchorPos );
+        pad->SetNetCode( GetNetCode( aElem.net ) );
 
         SHAPE_POLY_SET shapePolys = polySet;
         shapePolys.Move( -anchorPos );
