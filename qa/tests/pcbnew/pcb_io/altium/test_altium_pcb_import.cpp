@@ -85,6 +85,28 @@ struct ALTIUM_PCB_IMPORT_FIXTURE
         aImporter.ConvertArcs6ToBoardItemOnLayer( aArc, aLayer );
     }
 
+    static std::vector<const ZONE*> collectRuleAreas( const BOARD& aBoard )
+    {
+        std::vector<const ZONE*> ruleAreas;
+
+        for( const ZONE* zone : aBoard.Zones() )
+        {
+            if( zone->GetIsRuleArea() )
+                ruleAreas.push_back( zone );
+        }
+
+        for( const FOOTPRINT* footprint : aBoard.Footprints() )
+        {
+            for( const ZONE* zone : footprint->Zones() )
+            {
+                if( zone->GetIsRuleArea() )
+                    ruleAreas.push_back( zone );
+            }
+        }
+
+        return ruleAreas;
+    }
+
     PCB_IO_ALTIUM_DESIGNER m_altiumPlugin;
 };
 
@@ -344,6 +366,86 @@ BOOST_AUTO_TEST_CASE( UnusedInternalPlanesNotMapped )
         BOOST_CHECK_MESSAGE( !mappedLayerNames.count( name ),
                              wxString::Format( "Unused layer '%s' reached the mapper", name ) );
     }
+}
+
+
+/**
+ * Altium leaves the keepout restriction mask empty when the layer already says what a primitive
+ * does, so the mask has to be substituted from the layer.  An internal plane is negative and
+ * anything drawn on it takes copper away; the Keep-Out layer keeps everything out.  eDP_adapter
+ * carries both kinds and no explicit mask, so importing the raw zero produced rule areas which
+ * restricted nothing.
+ */
+BOOST_AUTO_TEST_CASE( KeepoutRestrictionsImpliedByLayer )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/eDP_adapter_dvt1_source/eDP_adapter_dvt1.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    int planeSplits = 0;
+    int keepOutLayer = 0;
+    int inert = 0;
+
+    for( const ZONE* zone : collectRuleAreas( *board ) )
+    {
+        const bool tracks = zone->GetDoNotAllowTracks();
+        const bool vias = zone->GetDoNotAllowVias();
+        const bool pads = zone->GetDoNotAllowPads();
+        const bool fills = zone->GetDoNotAllowZoneFills();
+        const bool footprints = zone->GetDoNotAllowFootprints();
+
+        if( fills && !tracks && !vias && !pads && !footprints )
+            planeSplits++;
+        else if( fills && tracks && vias && pads && !footprints )
+            keepOutLayer++;
+        else if( !fills && !tracks && !vias && !pads && !footprints )
+            inert++;
+    }
+
+    BOOST_CHECK_EQUAL( inert, 0 );
+    BOOST_CHECK_EQUAL( planeSplits, 87 );
+    BOOST_CHECK_EQUAL( keepOutLayer, 8 );
+}
+
+
+/**
+ * A shape-based region stores its restriction mask under the property key KEEPOUTRESTRICTIONS.
+ * The importer used to read a truncated spelling which never matched, so every keepout region
+ * fell back to the all-restrictions default.  Fastino's regions carry 17, which is vias plus
+ * through-hole pads; KiCad only has a combined pad restriction, so the through-hole bit alone
+ * cannot be represented and vias are the only restriction that survives.
+ */
+BOOST_AUTO_TEST_CASE( ExplicitKeepoutRestrictionMaskIsRead )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    int viasOnly = 0;
+    int everything = 0;
+
+    for( const ZONE* zone : collectRuleAreas( *board ) )
+    {
+        const bool tracks = zone->GetDoNotAllowTracks();
+        const bool vias = zone->GetDoNotAllowVias();
+        const bool pads = zone->GetDoNotAllowPads();
+        const bool fills = zone->GetDoNotAllowZoneFills();
+
+        if( vias && !tracks && !pads && !fills )
+            viasOnly++;
+        else if( vias && tracks && pads && fills )
+            everything++;
+    }
+
+    BOOST_CHECK_EQUAL( everything, 0 );
+    BOOST_CHECK_EQUAL( viasOnly, 2 );
 }
 
 

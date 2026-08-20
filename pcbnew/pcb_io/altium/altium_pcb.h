@@ -259,6 +259,15 @@ private:
 
     void HelperSetZoneLayers( ZONE& aZone, const ALTIUM_LAYER aAltiumLayer );
     void HelperSetZoneKeepoutRestrictions( ZONE& aZone, const uint8_t aKeepoutRestrictions );
+
+    /**
+     * Resolve an Altium keepout restriction mask, substituting the restrictions implied by the
+     * layer when the mask is empty.
+     *
+     * @return the mask to apply, or zero if the keepout restricts nothing and should be dropped.
+     */
+    uint8_t HelperGetKeepoutRestrictions( const uint8_t aKeepoutRestrictions, const ALTIUM_LAYER aAltiumLayer );
+
     void HelperFootprintZoneToLibFrame( ZONE& aZone, const FOOTPRINT& aFootprint );
     void HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
                                              const ALTIUM_LAYER aAltiumLayer,

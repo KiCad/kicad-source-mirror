@@ -47,6 +47,14 @@ const uint16_t ALTIUM_POLYGON_NONE = std::numeric_limits<uint16_t>::max();
 // 65534 seems to be belonging to board outline
 const uint16_t ALTIUM_POLYGON_BOARD = std::numeric_limits<uint16_t>::max() - 1;
 
+// bits of the keepout restriction mask carried by tracks, arcs, fills and regions
+const uint8_t ALTIUM_KEEPOUT_VIA = 0x01;
+const uint8_t ALTIUM_KEEPOUT_TRACK = 0x02;
+const uint8_t ALTIUM_KEEPOUT_COPPER = 0x04;
+const uint8_t ALTIUM_KEEPOUT_SMD_PAD = 0x08;
+const uint8_t ALTIUM_KEEPOUT_TH_PAD = 0x10;
+const uint8_t ALTIUM_KEEPOUT_ALL = 0x1F;
+
 
 enum class ALTIUM_UNIT
 {

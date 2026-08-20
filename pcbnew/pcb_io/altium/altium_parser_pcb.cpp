@@ -1038,7 +1038,7 @@ AARC6::AARC6( ALTIUM_BINARY_PARSER& aReader )
     if( remaining >= 10 )
         keepoutrestrictions = aReader.Read<uint8_t>();
     else
-        keepoutrestrictions = is_keepout ? 0x1F : 0;
+        keepoutrestrictions = is_keepout ? ALTIUM_KEEPOUT_ALL : uint8_t( 0 );
 
     layer = altium_versioned_layer( layer_v6, layer_v7 );
 
@@ -1394,7 +1394,7 @@ ATRACK6::ATRACK6( ALTIUM_BINARY_PARSER& aReader )
     if( remaining >= 10 )
         keepoutrestrictions = aReader.Read<uint8_t>();
     else
-        keepoutrestrictions = is_keepout ? 0x1F : 0;
+        keepoutrestrictions = is_keepout ? ALTIUM_KEEPOUT_ALL : uint8_t( 0 );
 
     layer = altium_versioned_layer( layer_v6, layer_v7 );
 
@@ -1587,7 +1587,7 @@ AFILL6::AFILL6( ALTIUM_BINARY_PARSER& aReader )
     if( remaining >= 10 )
         keepoutrestrictions = aReader.Read<uint8_t>();
     else
-        keepoutrestrictions = is_keepout ? 0x1F : 0;
+        keepoutrestrictions = is_keepout ? ALTIUM_KEEPOUT_ALL : uint8_t( 0 );
 
     layer = altium_versioned_layer( layer_v6, layer_v7 );
 
@@ -1634,8 +1634,11 @@ AREGION6::AREGION6( ALTIUM_BINARY_PARSER& aReader, bool aExtendedVertices )
     bool is_cutout = ALTIUM_PROPS_UTILS::ReadBool( properties, wxT( "ISBOARDCUTOUT" ), false );
 
     is_shapebased = ALTIUM_PROPS_UTILS::ReadBool( properties, wxT( "ISSHAPEBASED" ), false );
+
+    // The truncated KEEPOUTRESTRIC spelling never matched a real key, so every region fell back
+    // to the all-restrictions default
     keepoutrestrictions = static_cast<uint8_t>(
-            ALTIUM_PROPS_UTILS::ReadInt( properties, wxT( "KEEPOUTRESTRIC" ), 0x1F ) );
+            ALTIUM_PROPS_UTILS::ReadInt( properties, wxT( "KEEPOUTRESTRICTIONS" ), ALTIUM_KEEPOUT_ALL ) );
 
     // TODO: this can differ from the other subpolyindex?!
     // Note: "the other subpolyindex" is "polygon"
