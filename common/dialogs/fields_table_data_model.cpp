@@ -375,7 +375,7 @@ void FIELDS_TABLE_DATA_MODEL_BASE::ApplyBomPreset( const BOM_PRESET& aPreset )
         // design anyway.
         if( col == -1 )
         {
-            AddColumn( field.name, field.label, true );
+            AddColumn( field.name, field.label, false );
             col = GetFieldNameCol( field.name );
         }
         else
