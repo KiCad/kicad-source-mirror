@@ -64,13 +64,15 @@ void FOOTPRINT_WIZARD_FRAME::RegenerateFootprint()
 
     if( result )
     {
+        m_builtFootprint = *result;
         m_buildMessageBox->SetValue( footprintWizard->Info().meta.description );
         //  Add the object to board
-        GetBoard()->Add( *result, ADD_MODE::APPEND );
-        ( *result )->SetPosition( VECTOR2I( 0, 0 ) );
+        GetBoard()->Add( m_builtFootprint, ADD_MODE::APPEND );
+        m_builtFootprint->SetPosition( VECTOR2I( 0, 0 ) );
     }
     else
     {
+        m_builtFootprint = nullptr;
         m_buildMessageBox->SetValue( result.error() );
     }
 
@@ -87,9 +89,7 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_FRAME::GetMyWizard()
 
 FOOTPRINT* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 {
-    // TODO(JE) should this be cached?
-    tl::expected<FOOTPRINT*, wxString> result = Manager()->Generate( m_currentWizard );
-    return result.value_or( nullptr );
+    return m_builtFootprint;
 }
 
 
@@ -101,6 +101,7 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
         return;
 
     m_currentWizard = nullptr;
+    m_builtFootprint = nullptr;
     wxString wizardIdentifier = wizardSelector.GetWizard();
 
     if( !wizardIdentifier.IsEmpty() )

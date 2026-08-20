@@ -136,6 +136,7 @@ private:
 protected:
     FOOTPRINT_WIZARD* m_currentWizard;
     wxString        m_wizardStatus;         ///< current wizard status
+    FOOTPRINT*      m_builtFootprint;
 
 private:
     FOOTPRINT_WIZARD_PROPERTIES_PANEL* m_parametersPanel; ///< Panel for the parameter grid

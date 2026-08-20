@@ -98,6 +98,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     SetIcon( icon );
 
     m_currentWizard = nullptr;
+    m_builtFootprint = nullptr;
     m_wizardManager = std::make_unique<FOOTPRINT_WIZARD_MANAGER>();
 
     // Create the GAL canvas.
