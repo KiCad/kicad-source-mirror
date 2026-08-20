@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <erc/erc_exclusion.h>
 #include <sch_marker.h>
