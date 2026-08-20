@@ -24,7 +24,22 @@
 #include <boost/uuid/uuid_io.hpp>
 
 #include <wx/fileconf.h>
+#include <wx/filename.h>
 #include <wx/log.h>
+
+
+/**
+ * wxFileConfig resolves a relative local filename against the user's home directory rather than
+ * the working directory, and reports nothing when the result does not exist, so a .PrjPcb named
+ * relatively on a command line would parse as an empty file.
+ */
+static wxString absoluteProjectPath( const wxString& aPrjPcbPath )
+{
+    wxFileName fn( aPrjPcbPath );
+    fn.MakeAbsolute();
+
+    return fn.GetFullPath();
+}
 
 
 KIID AltiumUniqueIdToKiid( const wxString& aUniqueId )
@@ -105,7 +120,7 @@ std::map<wxString, wxString> ParseAltiumProjectParameters( const wxString& aPrjP
 {
     std::map<wxString, wxString> parameters;
 
-    wxFileConfig config( wxEmptyString, wxEmptyString, wxEmptyString, aPrjPcbPath,
+    wxFileConfig config( wxEmptyString, wxEmptyString, wxEmptyString, absoluteProjectPath( aPrjPcbPath ),
                          wxCONFIG_USE_NO_ESCAPE_CHARACTERS );
 
     wxString groupname;
@@ -148,7 +163,7 @@ std::vector<ALTIUM_PROJECT_VARIANT> ParseAltiumProjectVariants( const wxString& 
 {
     std::vector<ALTIUM_PROJECT_VARIANT> variants;
 
-    wxFileConfig config( wxEmptyString, wxEmptyString, wxEmptyString, aPrjPcbPath,
+    wxFileConfig config( wxEmptyString, wxEmptyString, wxEmptyString, absoluteProjectPath( aPrjPcbPath ),
                          wxCONFIG_USE_NO_ESCAPE_CHARACTERS );
 
     wxString groupname;

@@ -21,6 +21,9 @@
 
 #include <common/io/altium/altium_project_variants.h>
 
+#include <wx/filefn.h>
+#include <wx/filename.h>
+
 
 BOOST_AUTO_TEST_SUITE( AltiumProjectVariants )
 
@@ -50,6 +53,26 @@ BOOST_AUTO_TEST_CASE( ParseVariationBackslashBeforeSeparator )
     BOOST_CHECK_EQUAL( entry.designator, wxS( "R1" ) );
     BOOST_CHECK_EQUAL( entry.kind, 1 );
     BOOST_CHECK_EQUAL( entry.uniqueId, wxS( "" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ParseParametersFromRelativePath )
+{
+    wxFileName projectFile( wxString::FromUTF8( KI_TEST::GetTestDataRootDir() )
+                            + wxS( "pcbnew/plugins/altium/issue24456/Fastino_Ground_Isolator.PrjPcb" ) );
+
+    const wxString previousCwd = wxGetCwd();
+
+    BOOST_REQUIRE( wxSetWorkingDirectory( projectFile.GetPath() ) );
+
+    // wxFileConfig anchors a relative name at the home directory, so an unanchored name reaches
+    // it as a path that does not exist and every section goes missing without an error
+    std::map<wxString, wxString> parameters =
+            ParseAltiumProjectParameters( projectFile.GetFullName() );
+
+    wxSetWorkingDirectory( previousCwd );
+
+    BOOST_CHECK_EQUAL( parameters[wxS( "PCB_REVISION" )], wxS( "A" ) );
 }
 
 
