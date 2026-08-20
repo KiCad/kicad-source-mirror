@@ -1103,10 +1103,6 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
     // to the best value
     if( partLocked != symbol->UnitsLocked() )
     {
-        // Enable synchronized pin edit mode for symbols with interchangeable units
-        m_frame->m_SyncPinEdit = !symbol->UnitsLocked();
-
-        // also set default edit options to the better value
         // Usually if units are locked, graphic items are specific to each unit
         // and if units are interchangeable, graphic items are common to units
         m_frame->SetDrawSpecificUnit( symbol->UnitsLocked() );

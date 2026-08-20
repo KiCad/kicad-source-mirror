@@ -709,7 +709,9 @@ int SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
         return 0;
 
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    editFrame->m_SyncPinEdit = !editFrame->m_SyncPinEdit;
+
+    if( SYMBOL_EDITOR_SETTINGS* cfg = editFrame->GetSettings() )
+        cfg->m_SyncPinEdit = !cfg->m_SyncPinEdit;
 
     return 0;
 }

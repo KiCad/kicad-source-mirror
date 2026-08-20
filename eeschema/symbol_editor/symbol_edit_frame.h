@@ -669,29 +669,6 @@ private:
     DECLARE_EVENT_TABLE()
 
 public:
-    /**
-     * Set to true to synchronize pins at the same position when editing symbols with multiple
-     * units or multiple body styles.  Deleting or moving pins will affect all pins at the same
-     * location.
-     * When units are interchangeable, synchronizing editing of pins is usually the best way,
-     * because if units are interchangeable, it implies that all similar pins are at the same
-     * location.
-     * When units are not interchangeable, do not synchronize editing of pins, because each symbol
-     * is specific, and there are no (or few) similar pins between units.
-     *
-     * Setting this to false allows editing each pin per symbol or body style regardless other
-     * pins at the same location. This requires the user to open each symbol or body style to make
-     * changes to the other pins at the same location.
-     *
-     * To know if others pins must be coupled when editing a pin, use SynchronizePins() instead
-     * of m_syncPinEdit, because SynchronizePins() is more reliable (takes in account the fact
-     * units are interchangeable, there are more than one unit).
-     *
-     * @todo Determine why this member variable is public when all the rest are private and
-     *       either make it private or document why it needs to be public.
-     */
-    bool          m_SyncPinEdit;
-
 private:
     ///< Helper screen used when no symbol is loaded
     SCH_SCREEN*         m_dummyScreen;

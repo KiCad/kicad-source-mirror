@@ -192,8 +192,6 @@ void SYMBOL_EDIT_FRAME::activateSymbolTab( SYMBOL_EDITOR_TAB_CONTEXT* aContext )
         GetLibTree()->SelectLibId( m_symbol->GetLibId() );
     }
 
-    m_SyncPinEdit = m_symbol && m_symbol->IsRoot() && m_symbol->IsMultiUnit() && !m_symbol->UnitsLocked();
-
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(), GetCanvas()->GetViewControls(),
                                    GetSettings(), this );
 

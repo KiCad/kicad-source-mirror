@@ -87,6 +87,9 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "show_hidden_lib_pins",
             &m_ShowHiddenPins, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "synchronized_pins_mode",
+            &m_SyncPinEdit, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "drag_pins_along_with_edges",
             &m_dragPinsAlongWithEdges, true ) );
 

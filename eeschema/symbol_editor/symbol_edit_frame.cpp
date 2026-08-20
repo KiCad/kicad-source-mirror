@@ -125,8 +125,6 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_isSymbolFromSchematic( false ),
         m_libTreeAutoHiddenForSchematicEdit( false )
 {
-    m_SyncPinEdit = false;
-
     m_symbol = nullptr;
     m_treePane = nullptr;
     m_libMgr = nullptr;
@@ -684,7 +682,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto syncedPinsModeCond =
             [this]( const SELECTION& )
             {
-                return m_SyncPinEdit;
+                return SynchronizePins();
             };
 
     auto haveDatasheetCond =
@@ -1131,10 +1129,6 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     else
         GetLibTree()->Unselect();
 
-    // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
-    if( !m_symbol || !m_symbol->IsRoot() || !m_symbol->IsMultiUnit() || m_symbol->UnitsLocked() )
-        m_SyncPinEdit = false;
-
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     GetRenderSettings()->m_ShowUnit = m_unit;
@@ -1234,7 +1228,7 @@ void SYMBOL_EDIT_FRAME::SetBodyStyle( int aBodyStyle )
 
 bool SYMBOL_EDIT_FRAME::SynchronizePins()
 {
-    return m_SyncPinEdit && m_symbol && m_symbol->IsMultiUnit() && !m_symbol->UnitsLocked();
+    return m_settings && m_settings->m_SyncPinEdit && m_symbol && m_symbol->IsMultiUnit() && !m_symbol->UnitsLocked();
 }
 
 

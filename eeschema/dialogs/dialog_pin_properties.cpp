@@ -34,6 +34,8 @@
 #include <wx/hyperlink.h>
 #include <symbol_preview_widget.h>
 
+#include "symbol_editor_settings.h"
+
 class ALT_PIN_DATA_MODEL : public WX_GRID_TABLE_BASE, public std::vector<SCH_PIN::ALT>
 {
 public:
@@ -295,7 +297,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
 
     wxString commonUnitsToolTip;
 
-    if( m_frame->m_SyncPinEdit )
+    if( m_frame->SynchronizePins() )
     {
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY, _( "Exit sync pins mode" ),
                                                        wxEmptyString );
@@ -304,7 +306,9 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
                       std::function<void( wxHyperlinkEvent& aEvent )>(
                       [&]( wxHyperlinkEvent& aEvent )
                       {
-                          m_frame->m_SyncPinEdit = false;
+                          if( SYMBOL_EDITOR_SETTINGS* cfg = m_frame->GetSettings() )
+                              cfg->m_SyncPinEdit = !cfg->m_SyncPinEdit;
+
                           m_infoBar->Dismiss();
                       } ) );
 
@@ -411,7 +415,7 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
     m_dummyPin->SetShape( m_choiceStyle->GetPinShapeSelection() );
     m_dummyPin->SetVisible( m_checkShow->GetValue() );
 
-    if( event.GetEventObject() == m_checkApplyToAllParts && m_frame->m_SyncPinEdit )
+    if( event.GetEventObject() == m_checkApplyToAllParts && m_frame->SynchronizePins() )
     {
         m_infoBar->ShowMessage( getSyncPinsMessage() );
         m_infoBar->GetSizer()->Layout();

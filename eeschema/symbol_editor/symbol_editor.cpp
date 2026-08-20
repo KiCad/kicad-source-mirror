@@ -206,9 +206,6 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromLib( const wxString& aLibName, const wxStr
     if( !symbol || !LoadOneLibrarySymbol( symbol, aLibName, aUnit, aBodyStyle ) )
         return false;
 
-    // Enable synchronized pin edit mode for symbols with interchangeable units
-    m_SyncPinEdit = GetCurSymbol()->IsMultiUnit() && !GetCurSymbol()->UnitsLocked();
-
     m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
     RebuildSymbolUnitAndBodyStyleLists();
