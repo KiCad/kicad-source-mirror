@@ -138,6 +138,7 @@ set( QA_COMMON_SRCS
     io/test_csv.cpp
     io/altium/test_altium_parser.cpp
     io/altium/test_altium_parser_utils.cpp
+    io/altium/test_altium_project_variants.cpp
     io/cadstar/test_cadstar_parts_parser.cpp
 
     io/cadstar/test_cadstar_archive_parser.cpp

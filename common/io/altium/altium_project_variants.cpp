@@ -41,11 +41,17 @@ KIID AltiumUniqueIdToKiid( const wxString& aUniqueId )
 }
 
 
-static ALTIUM_VARIANT_ENTRY ParseVariationString( const wxString& aValue )
+ALTIUM_VARIANT_ENTRY ParseVariationString( const wxString& aValue )
 {
     ALTIUM_VARIANT_ENTRY entry;
 
-    for( const wxString& token : wxSplit( aValue, '|' ) )
+    // AlternatePart is the last named field on the line; everything after it belongs to the
+    // alternate part definition rather than to the component itself
+    bool inAlternatePart = false;
+
+    // UniqueId targets are backslash-delimited paths, so wxSplit's default '\' escape would
+    // merge the field that follows one ending in a separator
+    for( const wxString& token : wxSplit( aValue, '|', '\0' ) )
     {
         int eqPos = token.Find( '=' );
 
@@ -55,7 +61,20 @@ static ALTIUM_VARIANT_ENTRY ParseVariationString( const wxString& aValue )
         wxString key = token.Left( eqPos ).Trim().Trim( false );
         wxString val = token.Mid( eqPos + 1 ).Trim().Trim( false );
 
-        if( key.CmpNoCase( wxS( "Designator" ) ) == 0 )
+        if( key.CmpNoCase( wxS( "AlternatePart" ) ) == 0 )
+        {
+            inAlternatePart = true;
+
+            // Typically empty for Kind=1 and a library reference for Kind=0
+            if( !val.empty() )
+                entry.alternateFields[wxS( "LibReference" )] = val;
+        }
+        else if( inAlternatePart )
+        {
+            if( !val.empty() )
+                entry.alternateFields[key] = val;
+        }
+        else if( key.CmpNoCase( wxS( "Designator" ) ) == 0 )
         {
             entry.designator = val;
         }
@@ -76,49 +95,6 @@ static ALTIUM_VARIANT_ENTRY ParseVariationString( const wxString& aValue )
             val.ToLong( &k );
             entry.kind = static_cast<int>( k );
         }
-        else if( key.CmpNoCase( wxS( "AlternatePart" ) ) == 0 )
-        {
-            if( val.empty() )
-                continue;
-
-            // AlternatePart contains sub-fields in the same pipe-delimited format, but since
-            // it appears at the end of the line, the remaining tokens are its sub-fields.
-            // We've already split on '|', so we just keep accumulating from here.
-            // However, wxSplit already split everything. The AlternatePart sub-fields are the
-            // remaining tokens after this one. We handle this below after the loop.
-        }
-    }
-
-    // Parse AlternatePart sub-fields. In the raw line, AlternatePart= is followed by
-    // pipe-separated key=value pairs that are part of the alternate part definition.
-    // Since we already split on '|', find the AlternatePart token and treat everything
-    // after it as sub-fields.
-    bool inAlternatePart = false;
-
-    for( const wxString& token : wxSplit( aValue, '|' ) )
-    {
-        int eqPos = token.Find( '=' );
-
-        if( eqPos == wxNOT_FOUND )
-            continue;
-
-        wxString key = token.Left( eqPos ).Trim().Trim( false );
-        wxString val = token.Mid( eqPos + 1 ).Trim().Trim( false );
-
-        if( key.CmpNoCase( wxS( "AlternatePart" ) ) == 0 )
-        {
-            inAlternatePart = true;
-
-            // The value after AlternatePart= might itself be the first sub-field value
-            // In practice it's typically empty for Kind=1, or a lib reference for Kind=0
-            if( !val.empty() )
-                entry.alternateFields[wxS( "LibReference" )] = val;
-
-            continue;
-        }
-
-        if( inAlternatePart && !val.empty() )
-            entry.alternateFields[key] = val;
     }
 
     return entry;

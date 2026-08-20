@@ -59,6 +59,14 @@ struct ALTIUM_PROJECT_VARIANT
 
 
 /**
+ * Parse a single pipe-delimited Altium "Variation" string into its component entry.
+ *
+ * Exposed for unit testing; consumers normally obtain entries via ParseAltiumProjectVariants().
+ */
+ALTIUM_VARIANT_ENTRY ParseVariationString( const wxString& aValue );
+
+
+/**
  * Parse all [ProjectVariantN] sections from an Altium .PrjPcb project file.
  *
  * @param aPrjPcbPath Full path to the .PrjPcb file.
