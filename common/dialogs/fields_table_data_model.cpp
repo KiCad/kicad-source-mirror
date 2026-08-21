@@ -109,6 +109,8 @@ void FIELDS_TABLE_DATA_MODEL_BASE::MoveColumn( int aCol, int aNewPos )
 
 void FIELDS_TABLE_DATA_MODEL_BASE::RemoveColumn( int aCol )
 {
+    wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
+
     for( auto& [unused, fieldsStore] : m_dataStore )
     {
         fieldsStore.erase( m_cols[aCol].m_fieldName );
@@ -116,11 +118,31 @@ void FIELDS_TABLE_DATA_MODEL_BASE::RemoveColumn( int aCol )
 
     m_cols.erase( m_cols.begin() + aCol );
 
+    if( m_sortColumn == aCol )
+        m_sortColumn = 0;
+    else if( m_sortColumn > aCol )
+        m_sortColumn--;
+
+    if( auto attrIt = m_colAttrs.find( aCol ); attrIt != m_colAttrs.end() )
+    {
+        wxSafeDecRef( attrIt->second );
+        m_colAttrs.erase( attrIt );
+    }
+
+    std::map<int, wxGridCellAttr*> shiftedColAttrs;
+
+    for( const auto& [col, attr] : m_colAttrs )
+        shiftedColAttrs[col > aCol ? col - 1 : col] = attr;
+
+    m_colAttrs.swap( shiftedColAttrs );
+
     if( wxGrid* grid = GetView() )
     {
         wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_COLS_DELETED, aCol, 1 );
         grid->ProcessTableMessage( msg );
     }
+
+    m_edited = true;
 }
 
 

@@ -511,7 +511,7 @@ void DIALOG_LIB_FIELDS_TABLE::SetupAllColumnProperties()
             }
             else
             {
-                int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
+                int textWidth = m_dataModel->GetColDataWidth( col ) + COLUMN_MARGIN;
                 int maxWidth = defaultDlgSize.x / 3;
 
                 m_grid->SetColSize( col, std::clamp( textWidth, 100, maxWidth ) );
@@ -1089,7 +1089,7 @@ void DIALOG_LIB_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxStri
         }
     }
 
-    m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser, aIsCheckbox );
+    m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser );
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
     m_grid->ProcessTableMessage( msg );
