@@ -351,13 +351,11 @@ public:
 
         topLeft.x = std::max( me.m_Pos.x, rect.m_Pos.x );
 
-        bottomRight.x = std::min( size_type( me.m_Pos.x ) + me.m_Size.x,
-                                  size_type( rect.m_Pos.x ) + rect.m_Size.x );
+        bottomRight.x = std::min( me.GetRight(), rect.GetRight() );
 
         topLeft.y = std::max( me.m_Pos.y, rect.m_Pos.y );
 
-        bottomRight.y = std::min( size_type( me.m_Pos.y ) + me.m_Size.y,
-                                  size_type( rect.m_Pos.y ) + rect.m_Size.y );
+        bottomRight.y = std::min( me.GetBottom(), rect.GetBottom() );
 
         if( topLeft.x < bottomRight.x && topLeft.y < bottomRight.y )
             return BOX2<Vec>( topLeft, SizeVec( bottomRight ) - topLeft );
