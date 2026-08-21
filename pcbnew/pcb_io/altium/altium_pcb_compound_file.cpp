@@ -96,7 +96,7 @@ void ALTIUM_PCB_COMPOUND_FILE::cacheLibFootprintNames()
             m_reader->EnumFiles( tentry, 1,
                         [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string&, int ) -> int
                         {
-                            std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
+                            std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen / 2 - 1 );
 
                             if( m_reader->IsStream( entry ) && fileName == L"Parameters" )
                             {
@@ -178,7 +178,7 @@ bool ALTIUM_PCB_COMPOUND_FILE::CacheLibModels()
         [&]( const CFB::COMPOUND_FILE_ENTRY* stepEntry, const CFB::utf16string&, int ) -> int
         {
             long     fileNumber;
-            wxString fileName = UTF16ToUTF8( stepEntry->name, stepEntry->nameLen );
+            wxString fileName = UTF16ToUTF8( stepEntry->name, stepEntry->nameLen / 2 - 1 );
 
             if( !fileName.ToLong( &fileNumber ) )
                 return 0;

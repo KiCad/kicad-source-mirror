@@ -31,6 +31,7 @@
 #pragma once
 
 #include <algorithm>
+#include <set>
 #include <stdint.h>
 #include <string.h>
 #include <exception>
@@ -374,36 +375,61 @@ public:
 
     void EnumFiles(const COMPOUND_FILE_ENTRY* entry, int maxLevel, EnumFilesCallback callback) const
     {
+        // KiCad: the directory ids come from an untrusted file, so a cyclic or self-referential
+        // sibling recursed here until the stack was gone. Sibling recursion carries the same
+        // level, so maxLevel cannot bound it; track the ids already visited instead.
         utf16string dir;
-        EnumNodes(GetEntry(entry->childID), 0, maxLevel, dir, callback);
+        std::set<uint32_t> visited;
+        visited.insert(entry->childID);
+        EnumNodes(GetEntry(entry->childID), 0, maxLevel, dir, callback, visited);
     }
 
 private:
 
+    // KiCad: nameLen is a file-supplied byte count over a fixed 32-unit array, and the callbacks
+    // hand it straight to UTF16ToWstring or rely on the name being terminated. MS-CFB requires it
+    // to be even, to include the terminator and to be at most 64, so validate before the callback
+    // rather than truncating a bad name into a different valid-looking one.
+    static bool HasValidName(const COMPOUND_FILE_ENTRY* entry)
+    {
+        if (entry->nameLen < 2 || entry->nameLen > 64 || (entry->nameLen % 2) != 0)
+            return false;
+
+        return entry->name[entry->nameLen / 2 - 1] == 0;
+    }
+
     // Enum entries with same level, including 'entry' itself
     void EnumNodes(const COMPOUND_FILE_ENTRY* entry, int currentLevel, int maxLevel,
-        const utf16string& dir, EnumFilesCallback callback) const
+        const utf16string& dir, EnumFilesCallback callback, std::set<uint32_t>& visited) const
     {
         if (maxLevel > 0 && currentLevel >= maxLevel)
             return;
         if (entry == nullptr)
             return;
 
+        // Only linked entries are reached, and MS-CFB requires every one of those to carry a
+        // valid name, so a bad length here means the directory is corrupt
+        if (!HasValidName(entry))
+            throw FileCorrupted();
+
         if( callback(entry, dir, currentLevel + 1) != 0 )
             return;
 
         const COMPOUND_FILE_ENTRY* child = GetEntry(entry->childID);
-        if (child != nullptr)
+        if (child != nullptr && visited.insert(entry->childID).second)
         {
             utf16string newDir = dir;
             if (dir.length() != 0)
                 newDir.append(1, '\n');
-            newDir.append(entry->name, entry->nameLen / 2);
-            EnumNodes(GetEntry(entry->childID), currentLevel + 1, maxLevel, newDir, callback);
+            newDir.append(entry->name, entry->nameLen / 2 - 1);
+            EnumNodes(child, currentLevel + 1, maxLevel, newDir, callback, visited);
         }
 
-        EnumNodes(GetEntry(entry->leftSiblingID), currentLevel, maxLevel, dir, callback);
-        EnumNodes(GetEntry(entry->rightSiblingID), currentLevel, maxLevel, dir, callback);
+        if (entry->leftSiblingID != 0xFFFFFFFF && visited.insert(entry->leftSiblingID).second)
+            EnumNodes(GetEntry(entry->leftSiblingID), currentLevel, maxLevel, dir, callback, visited);
+
+        if (entry->rightSiblingID != 0xFFFFFFFF && visited.insert(entry->rightSiblingID).second)
+            EnumNodes(GetEntry(entry->rightSiblingID), currentLevel, maxLevel, dir, callback, visited);
     }
 
     void ReadStream(size_t sector, size_t offset, char* buffer, size_t len) const

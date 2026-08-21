@@ -447,12 +447,41 @@ BOOST_AUTO_TEST_CASE( SharedOleContentsBitmapExtraction )
 }
 
 
+// A directory entry that names itself as its own sibling must terminate. The vendored
+// CompoundFileReader::EnumFiles walks the tree recursively with no visited set, so this exhausted
+// the stack on a crafted container.
+BOOST_AUTO_TEST_CASE( OleDirectoryCycleTerminates )
+{
+    constexpr size_t SECTOR_SIZE = 512;
+    constexpr size_t RIGHT_SIBLING_OFFSET = 72;
+
+    std::vector<uint16_t> name = { 'C', 'O', 'N', 'T', 'E', 'N', 'T', 'S', 0 };
+    std::vector<uint8_t>  contents( 64, 0 );
+
+    contents[0] = 'B';
+    contents[1] = 'M';
+
+    std::vector<uint8_t> cfb = makeOlePreviewCfb( name, contents );
+
+    // The stream entry is directory index 1, immediately after the root
+    const size_t streamEntry = 2 * SECTOR_SIZE + 128;
+
+    writeLe32( cfb, streamEntry + RIGHT_SIBLING_OFFSET, 1 );
+
+    OLE_IMAGE_PAYLOAD image = ExtractOleImage( cfb.data(), cfb.size() );
+
+    // The walk must terminate AND still reach the stream, so a visited set that pruned too much
+    // would fail here rather than pass quietly
+    BOOST_CHECK( image.type == OLE_IMAGE_TYPE::BMP );
+}
+
+
 // A plausible header size is a weak DIB signature on its own. Claiming the stream on it alone hides
 // the OlePres000 preview, because the caller only falls through on an unrecognized type and never
 // on a failed decode.
 BOOST_AUTO_TEST_CASE( OleContentsRejectsBogusDib )
 {
-    std::vector<uint16_t> name = { 'C', 'O', 'N', 'T', 'E', 'N', 'T', 'S' };
+    std::vector<uint16_t> name = { 'C', 'O', 'N', 'T', 'E', 'N', 'T', 'S', 0 };
     std::vector<uint8_t>  contents( 64, 0 );
 
     writeLe32( contents, 0, 40 );    // biSize, the weak signature

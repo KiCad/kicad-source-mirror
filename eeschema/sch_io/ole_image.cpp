@@ -50,9 +50,9 @@ uint32_t readU32( const uint8_t* aData )
 
 bool entryNameIs( const CFB::COMPOUND_FILE_ENTRY* aEntry, std::u16string_view aName )
 {
-    size_t length = aEntry->nameLen >= 2 ? aEntry->nameLen / 2 - 1 : 0;
-
-    if( length != aName.size() )
+    // nameLen counts bytes including the terminator and comes from the file, so require the exact
+    // encoded length rather than letting an odd value divide down onto a real name
+    if( aEntry->nameLen != 2 * ( aName.size() + 1 ) || aEntry->name[aName.size()] != 0 )
         return false;
 
     for( size_t i = 0; i < aName.size(); ++i )
