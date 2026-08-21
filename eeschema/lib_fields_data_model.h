@@ -49,6 +49,8 @@ public:
     }
 
     static const wxString SYMBOL_NAME;
+    static const wxString SYMBOL_IS_POWER;
+    static const wxString SYMBOL_IS_LOCAL_POWER;
 
     void CreateDerivedSymbolImmediate( int aRow, int aCol, wxString& aNewSymbolName );
 
@@ -56,6 +58,7 @@ public:
 
     wxString GetTypeName( int row, int col ) override;
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;
+    void     ClearCell( int aRow, int aCol ) override;
 
     wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) override;
 
@@ -100,10 +103,15 @@ private:
     bool unitMatch( LIB_SYMBOL* const& lhItem, LIB_SYMBOL* const& rhItem ) override;
 
     bool fieldIsAttribute( const wxString& aFieldName ) const override;
+    bool isCellReadOnly( int aRow, int aCol ) override;
 
     wxString getAttributeValue( const LIB_SYMBOL*, const wxString& aAttributeName );
     void setAttributeValue( LIB_SYMBOL* aSymbol, const wxString& aAttributeName, const wxString& aValue );
     wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const override;
+
+    bool isPowerSymbolControlledField( const wxString& aFieldName ) const;
+    bool getStoredPowerSymbolValue( LIB_SYMBOL* aSymbol ) const;
+    void setPowerSymbolDefaults( LIB_SYMBOL* aSymbol );
 
     wxString getFieldResolvedLiveValue( LIB_SYMBOL* const& aSymbol, const wxString& aFieldName ) override;
     wxString resolveTextVars( LIB_SYMBOL* const& aSymbol, const wxString& aText ) override;

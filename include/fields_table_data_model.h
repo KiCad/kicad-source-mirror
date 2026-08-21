@@ -284,7 +284,7 @@ public:
     /**
      * Removes the entry from the data store, does not just set it to empty string.
      */
-    void ClearCell( int aRow, int aCol )
+    virtual void ClearCell( int aRow, int aCol )
     {
         wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), "Invalid Row Number" );
         wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );

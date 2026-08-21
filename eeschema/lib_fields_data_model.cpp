@@ -33,6 +33,8 @@
 
 
 const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME = wxS( "Symbol Name" );
+const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER = wxS( "${SYMBOL_IS_POWER}" );
+const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER = wxS( "${SYMBOL_IS_LOCAL_POWER}" );
 
 
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
@@ -104,15 +106,79 @@ std::vector<LIB_SYMBOL*> LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getAllItems() const
 
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aValue )
 {
+    wxCHECK_RET( aRow >= 0 && aRow < (int) m_rows.size(), wxS( "Invalid row number" ) );
     wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), wxS( "Invalid column number" ) );
 
     if( ColIsItemIdentifier( aCol ) )
         return;
 
     LIB_FIELDS_TABLE_DATA_MODEL_ROW& rowGroup = m_rows[aRow];
+    const wxString&                  fieldName = m_cols[aCol].m_fieldName;
 
     for( LIB_SYMBOL* symbol : rowGroup.m_items )
-        m_dataStore[getDataStoreKey( symbol )][m_cols[aCol].m_fieldName] = aValue;
+    {
+        std::map<wxString, wxString>& fields = m_dataStore[getDataStoreKey( symbol )];
+
+        if( fieldName == SYMBOL_IS_POWER )
+        {
+            fields[fieldName] = aValue;
+
+            if( aValue == wxS( "1" ) )
+                setPowerSymbolDefaults( symbol );
+        }
+        else if( fieldName == SYMBOL_IS_LOCAL_POWER )
+        {
+            // Local Power is disabled in the symbol properties dialog until Power is enabled.
+            if( getStoredPowerSymbolValue( symbol ) )
+            {
+                fields[fieldName] = aValue;
+                setPowerSymbolDefaults( symbol );
+            }
+        }
+        else if( getStoredPowerSymbolValue( symbol ) && isPowerSymbolControlledField( fieldName ) )
+        {
+            if( fieldName == GetCanonicalFieldName( FIELD_T::VALUE ) )
+                fields[fieldName] = symbol->GetName();
+            else
+                fields[fieldName] = wxS( "1" );
+        }
+        else
+        {
+            fields[fieldName] = aValue;
+        }
+    }
+
+    m_edited = true;
+}
+
+
+void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ClearCell( int aRow, int aCol )
+{
+    wxCHECK_RET( aRow >= 0 && aRow < (int) m_rows.size(), wxS( "Invalid row number" ) );
+    wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), wxS( "Invalid column number" ) );
+
+    const wxString& fieldName = m_cols[aCol].m_fieldName;
+
+    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+    {
+        std::map<wxString, wxString>& fields = m_dataStore[getDataStoreKey( symbol )];
+
+        if( fieldName == SYMBOL_IS_POWER )
+        {
+            fields.erase( fieldName );
+        }
+        else if( getStoredPowerSymbolValue( symbol ) && isPowerSymbolControlledField( fieldName ) )
+        {
+            if( fieldName == GetCanonicalFieldName( FIELD_T::VALUE ) )
+                fields[fieldName] = symbol->GetName();
+            else
+                fields[fieldName] = wxS( "1" );
+        }
+        else
+        {
+            fields.erase( fieldName );
+        }
+    }
 
     m_edited = true;
 }
@@ -127,8 +193,37 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemIdentifier( int aCol )
 
 bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::fieldIsAttribute( const wxString& aFieldName ) const
 {
-    return FIELDS_TABLE_DATA_MODEL_BASE::fieldIsAttribute( aFieldName ) || aFieldName == wxS( "${SYMBOL_IS_POWER}" )
-           || aFieldName == wxS( "${SYMBOL_IS_LOCAL_POWER}" );
+    return FIELDS_TABLE_DATA_MODEL_BASE::fieldIsAttribute( aFieldName ) || aFieldName == SYMBOL_IS_POWER
+           || aFieldName == SYMBOL_IS_LOCAL_POWER;
+}
+
+
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::isCellReadOnly( int aRow, int aCol )
+{
+    if( FIELDS_TABLE_DATA_MODEL<LIB_SYMBOL*>::isCellReadOnly( aRow, aCol ) )
+        return true;
+
+    if( m_cols[aCol].m_fieldName == SYMBOL_IS_LOCAL_POWER )
+    {
+        for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+        {
+            if( getStoredPowerSymbolValue( symbol ) )
+                return false;
+        }
+
+        return true;
+    }
+
+    if( !isPowerSymbolControlledField( m_cols[aCol].m_fieldName ) )
+        return false;
+
+    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+    {
+        if( !getStoredPowerSymbolValue( symbol ) )
+            return false;
+    }
+
+    return true;
 }
 
 
@@ -375,10 +470,13 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const LIB_SYMBOL*
     if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
         return aSymbol->GetExcludedFromSim() ? wxS( "1" ) : wxS( "0" );
 
-    if( aAttributeName == wxS( "${SYMBOL_IS_POWER}" ) )
+    if( aAttributeName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
+        return aSymbol->GetExcludedFromPosFiles() ? wxS( "1" ) : wxS( "0" );
+
+    if( aAttributeName == SYMBOL_IS_POWER )
         return aSymbol->IsPower() ? wxS( "1" ) : wxS( "0" );
 
-    if( aAttributeName == wxS( "${SYMBOL_IS_LOCAL_POWER}" ) )
+    if( aAttributeName == SYMBOL_IS_LOCAL_POWER )
         return aSymbol->IsLocalPower() ? wxS( "1" ) : wxS( "0" );
 
 
@@ -397,23 +495,52 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( LIB_SYMBOL* aSymbol,
         aSymbol->SetExcludedFromBOM( aValue == wxS( "1" ) );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
         aSymbol->SetExcludedFromSim( aValue == wxS( "1" ) );
-    else if( aAttributeName == wxS( "${SYMBOL_IS_LOCAL_POWER}" ) )
-    {
-        // Turning off local power still leaves the global flag set
-        if( aValue == wxS( "0" ) )
-            aSymbol->SetGlobalPower();
-        else
-            aSymbol->SetLocalPower();
-    }
-    else if( aAttributeName == wxS( "${SYMBOL_IS_POWER}" ) )
-    {
-        if( aValue == wxS( "0" ) )
-            aSymbol->SetNormal();
-        else
-            aSymbol->SetGlobalPower();
-    }
+    else if( aAttributeName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
+        aSymbol->SetExcludedFromPosFiles( aValue == wxS( "1" ) );
     else
         wxLogDebug( "Unknown attribute name: %s", aAttributeName );
+}
+
+
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::isPowerSymbolControlledField( const wxString& aFieldName ) const
+{
+    return aFieldName == GetCanonicalFieldName( FIELD_T::VALUE )
+           || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
+}
+
+
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getStoredPowerSymbolValue( LIB_SYMBOL* aSymbol ) const
+{
+    wxString value;
+
+    if( getStoredFieldValue( aSymbol, SYMBOL_IS_POWER, value ) )
+        return value == wxS( "1" );
+
+    return GetFieldNameCol( SYMBOL_IS_POWER ) == -1 && aSymbol->IsPower();
+}
+
+
+void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setPowerSymbolDefaults( LIB_SYMBOL* aSymbol )
+{
+    std::map<wxString, wxString>& fields = m_dataStore[getDataStoreKey( aSymbol )];
+
+    fields[GetCanonicalFieldName( FIELD_T::VALUE )] = aSymbol->GetName();
+
+    static const std::vector<wxString> exclusionFields = {
+        wxS( "${EXCLUDE_FROM_BOARD}" ),
+        wxS( "${EXCLUDE_FROM_BOM}" ),
+        wxS( "${EXCLUDE_FROM_POS_FILES}" ),
+        wxS( "${EXCLUDE_FROM_SIM}" ),
+    };
+
+    for( const wxString& fieldName : exclusionFields )
+    {
+        if( GetFieldNameCol( fieldName ) != -1 )
+            fields[fieldName] = wxS( "1" );
+    }
 }
 
 
@@ -422,9 +549,9 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeResolvedValue( const wxS
     if( !aValue )
         return wxEmptyString;
 
-    if( aFieldName == wxS( "${SYMBOL_IS_POWER}" ) )
+    if( aFieldName == SYMBOL_IS_POWER )
         return wxS( "Power Symbol" );
-    else if( aFieldName == wxS( "${SYMBOL_IS_LOCAL_POWER}" ) )
+    else if( aFieldName == SYMBOL_IS_LOCAL_POWER )
         return wxS( "Local Power Symbol" );
 
     return FIELDS_TABLE_DATA_MODEL_BASE::getAttributeResolvedValue( aFieldName, aValue );
@@ -565,9 +692,43 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( LIB_SYMBOL* const& 
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBOL* )> symbolChangeHandler,
                                                    std::function<void()> postApplyHandler )
 {
+    int powerCol = GetFieldNameCol( SYMBOL_IS_POWER );
+    int localPowerCol = GetFieldNameCol( SYMBOL_IS_LOCAL_POWER );
+
     for( LIB_SYMBOL* symbol : m_symbolsList )
     {
         bool symbolModified = false;
+        bool symbolIsPower = symbol->IsPower();
+        bool symbolIsLocalPower = symbol->IsLocalPower();
+        wxString value;
+
+        if( powerCol != -1 )
+            symbolIsPower = getStoredFieldValue( symbol, SYMBOL_IS_POWER, value ) && value == wxS( "1" );
+
+        if( localPowerCol != -1 )
+        {
+            symbolIsLocalPower = getStoredFieldValue( symbol, SYMBOL_IS_LOCAL_POWER, value )
+                                 && value == wxS( "1" );
+        }
+
+        // Local power is a subtype of power, so apply the two checkbox columns as one
+        // three-state property rather than allowing column order to determine the result.
+        if( powerCol != -1 && !symbolIsPower )
+            symbolIsLocalPower = false;
+        else if( symbolIsLocalPower )
+            symbolIsPower = true;
+
+        if( symbol->IsPower() != symbolIsPower || symbol->IsLocalPower() != symbolIsLocalPower )
+        {
+            if( symbolIsLocalPower )
+                symbol->SetLocalPower();
+            else if( symbolIsPower )
+                symbol->SetGlobalPower();
+            else
+                symbol->SetNormal();
+
+            symbolModified = true;
+        }
 
         for( size_t i = 0; i < m_cols.size(); ++i )
         {
@@ -577,6 +738,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             bool                  currentlyPresent = getStoredFieldValue( symbol, srcName, srcValue );
 
             if( srcName == SYMBOL_NAME )
+                continue;
+
+            if( srcName == SYMBOL_IS_POWER || srcName == SYMBOL_IS_LOCAL_POWER )
                 continue;
 
             // Attributes bypass the field logic, so handle them first
@@ -649,9 +813,11 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             if( destField->GetId() == FIELD_T::VALUE )
             {
                 // Value field cannot be empty
-                if( !srcValue.IsEmpty() && destField->GetText() != srcValue )
+                wxString newValue = symbolIsPower ? symbol->GetName() : srcValue;
+
+                if( !newValue.IsEmpty() && destField->GetText() != newValue )
                 {
-                    symbol->GetField( FIELD_T::VALUE )->SetText( srcValue );
+                    symbol->GetField( FIELD_T::VALUE )->SetText( newValue );
                     symbolModified = true;
                 }
             }

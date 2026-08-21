@@ -74,6 +74,14 @@ public:
     }
 
 protected:
+    bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false ) override
+    {
+        if( m_grid->IsReadOnly( aRow, aCol ) )
+            return false;
+
+        return GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
+    }
+
     void showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent ) override
     {
         int row = m_grid->GetGridCursorRow();
@@ -90,7 +98,7 @@ protected:
         if( row >= 0 && col >= 0 )
         {
             revertMenu->Enable( m_dataModel->IsCellEdited( row, col ) );
-            clearMenu->Enable( !m_dataModel->IsCellClear( row, col ) );
+            clearMenu->Enable( !m_grid->IsReadOnly( row, col ) && !m_dataModel->IsCellClear( row, col ) );
             deriveMenu->Enable( m_dataModel->IsRowSingleSymbol( row ) );
 
             if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
@@ -537,8 +545,9 @@ void DIALOG_LIB_FIELDS_TABLE::loadFieldNames()
     AddField( wxS( "${EXCLUDE_FROM_BOM}" ), _( "Exclude From BOM" ), true, false );
     AddField( wxS( "${EXCLUDE_FROM_SIM}" ), _( "Exclude From Simulation" ), true, false );
     AddField( wxS( "${EXCLUDE_FROM_BOARD}" ), _( "Exclude From Board" ), true, false );
-    AddField( wxS( "${SYMBOL_IS_POWER}" ), _( "Power Symbol" ), true, false );
-    AddField( wxS( "${SYMBOL_IS_LOCAL_POWER}" ), _( "Local Power Symbol" ), true, false );
+    AddField( wxS( "${EXCLUDE_FROM_POS_FILES}" ), _( "Exclude From Position Files" ), true, false );
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER, _( "Power Symbol" ), true, false );
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER, _( "Local Power Symbol" ), true, false );
 
     std::set<wxString> userFieldNames;
 
@@ -652,12 +661,6 @@ std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
             }
         }
 
-        std::erase_if( preset.fieldsOrdered,
-                       []( const BOM_FIELD& aField )
-                       {
-                           return aField.name == wxS( "${EXCLUDE_FROM_POS_FILES}" );
-                       } );
-
         if( preset.name == BOM_PRESET::DefaultEditing().name )
         {
             preset.groupSymbols = false;
@@ -672,8 +675,10 @@ std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
                 { wxS( "${EXCLUDE_FROM_BOM}" ), wxS( "Exclude From BOM" ), true, false },
                 { wxS( "${EXCLUDE_FROM_SIM}" ), wxS( "Exclude From Simulation" ), true, false },
                 { wxS( "${EXCLUDE_FROM_BOARD}" ), wxS( "Exclude From Board" ), true, false },
-                { wxS( "${SYMBOL_IS_POWER}" ), wxS( "Power Symbol" ), true, false },
-                { wxS( "${SYMBOL_IS_LOCAL_POWER}" ), wxS( "Local Power Symbol" ), true, false },
+                { wxS( "${EXCLUDE_FROM_POS_FILES}" ), wxS( "Exclude From Position Files" ), true, false },
+                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER, wxS( "Power Symbol" ), true, false },
+                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER,
+                  wxS( "Local Power Symbol" ), true, false },
             };
         }
     }
