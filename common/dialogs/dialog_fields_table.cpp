@@ -424,6 +424,18 @@ void DIALOG_FIELDS_TABLE::SaveColumnWidths()
 }
 
 
+wxGridCellEditor* DIALOG_FIELDS_TABLE::createFootprintEditor()
+{
+    return new GRID_CELL_FPID_EDITOR( this, wxEmptyString );
+}
+
+
+void DIALOG_FIELDS_TABLE::onBomSettingsChanged()
+{
+    m_parentFrame->OnModify();
+}
+
+
 void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
 {
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -438,7 +450,7 @@ void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
     }
     else if( getDataModel()->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
     {
-        attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
+        attr->SetEditor( createFootprintEditor() );
         getDataModel()->SetColAttr( attr, aCol );
     }
     else if( getDataModel()->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
@@ -454,7 +466,7 @@ void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
         attr->SetRenderer( new wxGridCellNumberRenderer() );
         getDataModel()->SetColAttr( attr, aCol );
     }
-    else if( getDataModel()->ColIsAttribute( aCol ) )
+    else if( getDataModel()->ColIsCheck( aCol ) )
     {
         attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
         attr->SetRenderer( new GRID_CELL_CHECKBOX_RENDERER() );
@@ -1142,7 +1154,7 @@ void DIALOG_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     if( m_cfgBomSettings.m_BomExportFileName != m_outputFileName->GetValue() )
     {
         m_cfgBomSettings.m_BomExportFileName = m_outputFileName->GetValue();
-        m_parentFrame->OnModify();
+        onBomSettingsChanged();
     }
 
     msg.Printf( _( "Wrote BOM output to '%s'" ), outputFile.GetFullPath() );
@@ -1332,13 +1344,19 @@ void DIALOG_FIELDS_TABLE::loadDefaultBomPresets()
     m_bomPresetMRU.clear();
 
     // Load the read-only defaults
-    for( const BOM_PRESET& preset : BOM_PRESET::BuiltInPresets() )
+    for( const BOM_PRESET& preset : getBuiltInBomPresets() )
     {
         m_bomPresets[preset.name] = preset;
         m_bomPresets[preset.name].readOnly = true;
 
         m_bomPresetMRU.Add( preset.name );
     }
+}
+
+
+std::vector<BOM_PRESET> DIALOG_FIELDS_TABLE::getBuiltInBomPresets() const
+{
+    return BOM_PRESET::BuiltInPresets();
 }
 
 

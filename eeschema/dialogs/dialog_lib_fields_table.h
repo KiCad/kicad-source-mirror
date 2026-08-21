@@ -19,16 +19,18 @@
 
 #pragma once
 
-#include <dialog_lib_fields_table_base.h>
-#include <sch_reference_list.h>
+#include <dialogs/dialog_fields_table.h>
 #include <lib_fields_data_model.h>
-#include <fields_view_controls_grid_data_model.h>
 
-class SYMBOL_EDIT_FRAME;
+#include <vector>
+
+#include <wx/arrstr.h>
+
 class LIB_SYMBOL;
+class SYMBOL_EDIT_FRAME;
 
 
-class DIALOG_LIB_FIELDS_TABLE : public DIALOG_LIB_FIELDS_TABLE_BASE
+class DIALOG_LIB_FIELDS_TABLE : public DIALOG_FIELDS_TABLE
 {
 public:
     enum SCOPE : int
@@ -37,61 +39,40 @@ public:
         SCOPE_RELATED_SYMBOLS
     };
 
-    DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* parent, DIALOG_LIB_FIELDS_TABLE::SCOPE aScope );
+    DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SCOPE aScope );
     ~DIALOG_LIB_FIELDS_TABLE() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void ShowHideColumn( int aCol, bool aShow );
-
 private:
-    void UpdateFieldList();
-    void AddField( const wxString& aFieldName, const wxString& aLabelValue, bool show, bool groupBy,
-                   bool addedByUser = false, bool aIsCheckbox = false );
-    void RemoveField( const wxString& fieldName );
-    void RenameField( const wxString& oldName, const wxString& newName );
-    void RegroupSymbols();
+    wxGridCellEditor* createFootprintEditor() override;
+    wxGridCellEditor* createDatasheetEditor() override;
+    void              onBomSettingsChanged() override {}
 
-    void OnColSort( wxGridEvent& aEvent );
-    void OnColMove( wxGridEvent& aEvent );
-    void SetupColumnProperties( int aCol );
-    void SetupAllColumnProperties();
-    void setScope( SCOPE aScope );
-    // Set bitmap and tooltip according to left panel visibility
-    void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
+    FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
 
+    void loadFieldNames();
     void loadSymbols( const wxArrayString& aSymbolNames );
+    void setScope( SCOPE aScope );
 
-    void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
-    void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
-    void OnAddField( wxCommandEvent& event ) override;
-    void OnRenameField( wxCommandEvent& event ) override;
-    void OnRemoveField( wxCommandEvent& event ) override;
+    void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) override {}
+    void OnScope( wxCommandEvent& aEvent ) override;
+    void OnMenu( wxCommandEvent& aEvent ) override;
 
-    void OnFilterMouseMoved( wxMouseEvent& event ) override;
-    void OnFilterText( wxCommandEvent& event ) override;
-    void OnScope( wxCommandEvent& event ) override;
-    void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
-    void OnRegroupSymbols( wxCommandEvent& event ) override;
+    std::vector<BOM_PRESET> getBuiltInBomPresets() const override;
 
-    void OnTableValueChanged( wxGridEvent& event ) override;
-    void OnTableCellClick( wxGridEvent& event ) override;
-    void OnTableItemContextMenu( wxGridEvent& event ) override;
-    void OnTableColSize( wxGridSizeEvent& event ) override;
+    void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
+    void OnCancel( wxCommandEvent& aEvent ) override;
+    void OnOk( wxCommandEvent& aEvent ) override;
+    void OnClose( wxCloseEvent& aEvent ) override;
 
-    void OnSidebarToggle( wxCommandEvent& event ) override;
-    void OnCancel( wxCommandEvent& event ) override;
-    void OnOk( wxCommandEvent& event ) override;
-    void OnApply( wxCommandEvent& event ) override;
-    void OnClose( wxCloseEvent& event ) override;
+    wxString resolveVariant() const override { return wxEmptyString; }
+    bool     resolveTextVar( wxString* aToken ) const override;
 
 private:
     SYMBOL_EDIT_FRAME*                 m_parent;
-    SCOPE                              m_scope;
-
-    VIEW_CONTROLS_GRID_DATA_MODEL*     m_viewControlsDataModel;
-
-    LIB_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
+    SCOPE                              m_symbolScope;
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
     std::vector<LIB_SYMBOL*>           m_symbolsList;
 };

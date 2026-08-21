@@ -89,7 +89,9 @@ protected:
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();
 
+    virtual wxGridCellEditor* createFootprintEditor();
     virtual wxGridCellEditor* createDatasheetEditor() = 0;
+    virtual void              onBomSettingsChanged();
 
     // Set bitmap and tooltip according to left panel visibility
     void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
@@ -133,6 +135,7 @@ protected:
     void updateBomPresetSelection( const wxString& aName );
     void onBomPresetChanged( wxCommandEvent& aEvent );
     void loadDefaultBomPresets();
+    virtual std::vector<BOM_PRESET> getBuiltInBomPresets() const;
     void       doApplyBomPreset( const BOM_PRESET& aPreset );
     BOM_PRESET getDataModelBomPreset();
 

@@ -121,6 +121,7 @@ public:
     bool ColIsValue( int aCol );
     bool ColIsFootprint( int aCol );
     bool ColIsAttribute( int aCol );
+    virtual bool ColIsCheck( int aCol ) { return ColIsAttribute( aCol ); }
 
     /**
      * Reference for symbol/fields tables,

@@ -111,11 +111,30 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM_MAP<int>( "lib_field_editor.field_widths",
             &m_LibFieldEditor.field_widths, {} ) );
 
+    m_params.emplace_back( new PARAM<int>( "lib_field_editor.selection_mode",
+            &m_LibFieldEditor.selection_mode, 0 ) );
+
     m_params.emplace_back( new PARAM<int>( "lib_field_editor.sash_pos",
             &m_LibFieldEditor.sash_pos, 400 ) );
 
+    m_params.emplace_back( new PARAM<int>( "lib_field_editor.variant_sash_pos",
+            &m_LibFieldEditor.variant_sash_pos, 500 ) );
+
     m_params.emplace_back( new PARAM<bool>( "lib_field_editor.sidebar_collapsed",
             &m_LibFieldEditor.sidebar_collapsed, false ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "lib_field_editor.bom_export_filename",
+            &m_LibFieldEditorBom.m_BomExportFileName, "${PROJECTNAME}.csv" ) );
+
+    m_params.emplace_back( new PARAM<BOM_PRESET>( "lib_field_editor.bom_settings",
+            &m_LibFieldEditorBom.m_BomSettings, {} ) );
+    m_params.emplace_back( new PARAM_LIST<BOM_PRESET>( "lib_field_editor.bom_presets",
+            &m_LibFieldEditorBom.m_BomPresets, {} ) );
+
+    m_params.emplace_back( new PARAM<BOM_FMT_PRESET>( "lib_field_editor.bom_fmt_settings",
+            &m_LibFieldEditorBom.m_BomFmtSettings, BOM_FMT_PRESET::CSV() ) );
+    m_params.emplace_back( new PARAM_LIST<BOM_FMT_PRESET>( "lib_field_editor.bom_fmt_presets",
+            &m_LibFieldEditorBom.m_BomFmtPresets, {} ) );
 
     m_params.emplace_back( new PARAM<bool>( "pin_table.crossprobe_on_selection",
             &m_PinTable.crossprobe_on_selection, true ) );

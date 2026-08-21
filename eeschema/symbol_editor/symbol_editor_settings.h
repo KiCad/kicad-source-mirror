@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <settings/app_settings.h>
+#include <settings/bom_settings.h>
 #include <settings/snap_settings.h>
 #include <project/sch_project_settings.h>
 
@@ -50,13 +51,6 @@ public:
     {
         int label_delta;
         int pin_step;
-    };
-
-    struct PANEL_LIB_FIELDS_TABLE
-    {
-        std::map<std::string, int> field_widths;
-        int                        sash_pos;
-        bool                       sidebar_collapsed;
     };
 
     struct PIN_TABLE
@@ -126,7 +120,8 @@ public:
 
     SCH_SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
-    PANEL_LIB_FIELDS_TABLE m_LibFieldEditor;
+    FIELDS_TABLE_SETTINGS     m_LibFieldEditor;
+    FIELDS_TABLE_BOM_SETTINGS m_LibFieldEditorBom;
 
     PIN_TABLE m_PinTable;
 
