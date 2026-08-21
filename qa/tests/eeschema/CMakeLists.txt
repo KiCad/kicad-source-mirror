@@ -127,6 +127,7 @@ set( QA_EESCHEMA_SRCS
     test_variant_field_text_vars.cpp
     test_issue24663_sheet_dnp_fields.cpp
     test_issue25112_shared_sheet_field_scope.cpp
+    test_issue25209_derived_body_styles.cpp
     test_issue25280_pin_sync_units.cpp
     test_issue24360_root_sheetname.cpp
     test_issue24217_cli_variant_export.cpp
