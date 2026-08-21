@@ -25,6 +25,8 @@
 
 #include <increment.h>
 
+#include <limits>
+
 
 /**
  * Declares a struct as the Boost test fixture.
@@ -84,6 +86,35 @@ BOOST_AUTO_TEST_CASE( BasicCase )
         { "A12", -1, 0, "A11" },
         { "A12", 1, 1, "B12" },
         { "A12", -1, 1, "nullopt" },
+        // Zero padding is re-applied on the way down and dropped when the number gets wider
+        { "010", -1, 0, "009" },
+        { "01", 1000, 0, "1001" },
+        // No part is that far right
+        { "1", 1, std::numeric_limits<size_t>::max(), "nullopt" },
+    };
+
+    STRING_INCREMENTER incrementer;
+    incrementer.SetSkipIOSQXZ( true );
+
+    for( const auto& c : cases )
+    {
+        BOOST_TEST_INFO( "Input: " << c.input << " Delta: " << c.delta << " Part: " << c.part );
+        wxString result = incrementer.Increment( c.input, c.delta, c.part ).value_or( "nullopt" );
+        BOOST_CHECK_EQUAL( result, c.expected );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( NonAsciiParts, *boost::unit_test::timeout( 30 ) )
+{
+    // Non-ASCII characters are skippable, not incrementable, and must never stall the scan
+    // (#25299). U+3042 is hiragana A, U+FF11 a full-width one
+    const std::vector<INCREMENT_TEST_CASE> cases{
+        { wxString( L"1あ" ), 1, 0, wxString( L"2あ" ) },
+        { wxString( L"あ1" ), 1, 0, wxString( L"あ2" ) },
+        { wxString( L"あ1" ), 1, 1, "nullopt" },
+        { wxString( L"１" ), 1, 0, "nullopt" },
+        { wxString( L"A-１" ), 1, 0, wxString( L"B-１" ) },
     };
 
     STRING_INCREMENTER incrementer;

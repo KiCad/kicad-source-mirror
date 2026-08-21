@@ -60,6 +60,13 @@ enum PAGE_OPTION
 };
 
 /**
+ * Upper bound on DS_DATA_ITEM::m_RepeatCount.
+ *
+ * Every repeat is a real draw item, so an unbounded count stalls the editor.
+ */
+constexpr int DS_MAX_REPEAT_COUNT = 100;
+
+/**
  * A coordinate point.
  *
  * The position is always relative to the corner anchor.
