@@ -42,7 +42,12 @@ public:
     API_HANDLER_EDITOR( EDA_BASE_FRAME* aFrame = nullptr );
 
 protected:
-    /// If the header is valid, returns the item container
+    /**
+     * If the header is valid, returns the item container.
+     *
+     * The server sends a request to each editor until one replies with a status that is not
+     * AS_UNHANDLED. Call this before you read editor state.
+     */
     HANDLER_RESULT<std::optional<KIID>> validateItemHeaderDocument(
             const kiapi::common::types::ItemHeader& aHeader );
 
