@@ -108,7 +108,7 @@ private:
     bool storageIsSharedAcrossPaths( const wxString& aFieldName ) const;
 
     // True when an ancestor sheet forces this attribute on, not the symbol itself.
-    bool attributeInheritedFromSheet( const SCH_REFERENCE& aRef, const wxString& aAttributeName ) const override;
+    bool attributeForcedOnBySheet( const SCH_REFERENCE& aRef, const wxString& aAttributeName ) const override;
 
     wxString getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
                                 const wxString& aVariantNames );

@@ -115,7 +115,7 @@ private:
      * Footprint attributes are don't currently track when they are inherited from the sheet,
      * so this function always returns false. That probably needs to change.
      */
-    bool attributeInheritedFromSheet( const FOOTPRINT_REF& aRef, const wxString& aAttributeName ) const override;
+    bool attributeForcedOnBySheet( const FOOTPRINT_REF& aRef, const wxString& aAttributeName ) const override;
 
     wxString getAttributeValue( const FOOTPRINT_REF& aRef, const wxString& aAttributeName,
                                 const wxString& aVariantNames );

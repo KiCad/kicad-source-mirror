@@ -487,7 +487,7 @@ public:
 
                 // Show the effective state when a sheet forces it on, but do not change
                 // the stored value so the symbol is never stamped on apply.
-                if( ColIsAttribute( aCol ) && attributeInheritedFromSheet( item, m_cols[aCol].m_fieldName ) )
+                if( ColIsAttribute( aCol ) && attributeForcedOnBySheet( item, m_cols[aCol].m_fieldName ) )
                     itemFieldValue = wxS( "1" );
 
                 if( resolveVars )
@@ -646,8 +646,7 @@ protected:
             // checkbox is checked
             if( ColIsAttribute( static_cast<int>( i ) ) )
             {
-                bool effectiveValue = value == wxS( "1" )
-                                      || attributeInheritedFromSheet( aItem, col.m_fieldName );
+                bool effectiveValue = value == wxS( "1" ) || attributeForcedOnBySheet( aItem, col.m_fieldName );
                 value = getAttributeResolvedValue( col.m_fieldName, effectiveValue );
             }
             // For generated fields, we always want to match on the resolved value,
@@ -671,13 +670,18 @@ protected:
     }
 
 
-    virtual bool attributeInheritedFromSheet( const ITEM_TYPE& aItem, const wxString& aAttributeName ) const
+    /**
+     * Sheets can force all the symbols in them to have certain attributes on, like DNP. They can't force them off.
+     *
+     * Returns true if the attribute is forced on by a sheet
+     */
+    virtual bool attributeForcedOnBySheet( const ITEM_TYPE& aItem, const wxString& aAttributeName ) const
     {
         return false;
     }
 
 
-    bool rowAttributeInheritedFromSheet( const DATA_MODEL_ROW<ITEM_TYPE>& aRow, int aCol )
+    bool allRowItemsHaveAttributeForcedOnBySheet( const DATA_MODEL_ROW<ITEM_TYPE>& aRow, int aCol )
     {
         if( !ColIsAttribute( aCol ) || aRow.m_items.empty() )
             return false;
@@ -686,7 +690,7 @@ protected:
         // stays editable and shows the indeterminate state.
         for( const ITEM_TYPE& item : aRow.m_items )
         {
-            if( !attributeInheritedFromSheet( item, m_cols[aCol].m_fieldName ) )
+            if( !attributeForcedOnBySheet( item, m_cols[aCol].m_fieldName ) )
                 return false;
         }
 
@@ -696,7 +700,7 @@ protected:
     bool isCellReadOnly( int aRow, int aCol ) override
     {
         return FIELDS_TABLE_DATA_MODEL_BASE::isCellReadOnly( aRow, aCol )
-               || rowAttributeInheritedFromSheet( m_rows[aRow], aCol );
+               || allRowItemsHaveAttributeForcedOnBySheet( m_rows[aRow], aCol );
     }
 
 
@@ -785,10 +789,24 @@ protected:
             wxString lh = getDataStoreFieldValue( lhItemKey, fieldName );
             wxString rh = getDataStoreFieldValue( rhItemKey, fieldName );
 
+            // Normalize attributes so absent and explicitly false values group together, while
+            // still honoring edits in the data store and effective values inherited from sheets.
+            if( ColIsAttribute( col ) )
+            {
+                // Sheets can force values like DNP on, but it can't force them off
+                bool lhEffectiveValue = lh == wxS( "1" ) || attributeForcedOnBySheet( lhItem, fieldName );
+                bool rhEffectiveValue = rh == wxS( "1" ) || attributeForcedOnBySheet( rhItem, fieldName );
+
+                if( lhEffectiveValue != rhEffectiveValue )
+                    return false;
+
+                matchFound = true;
+                continue;
+            }
             // If the field is generated (e.g. ${QUANTITY}), we need to resolve it through the
             // item to get the actual current value; otherwise we need to pull it out of the store
             // so the refresh can regroup based on values that haven't been applied yet.
-            if( IsGeneratedField( fieldName ) )
+            else if( IsGeneratedField( fieldName ) )
             {
                 lh = getFieldResolvedLiveValue( lhItem, fieldName );
                 rh = getFieldResolvedLiveValue( rhItem, fieldName );

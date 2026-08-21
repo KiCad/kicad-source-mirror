@@ -398,8 +398,8 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFE
 }
 
 
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::attributeInheritedFromSheet( const SCH_REFERENCE& aRef,
-                                                                        const wxString&      aAttributeName ) const
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::attributeForcedOnBySheet( const SCH_REFERENCE& aRef,
+                                                                     const wxString&      aAttributeName ) const
 {
     const SCH_SHEET_PATH& path = aRef.GetSheetPath();
 

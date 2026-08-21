@@ -336,8 +336,7 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const FOOTP
 }
 
 
-bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::attributeInheritedFromSheet( const FOOTPRINT_REF&,
-                                                                           const wxString& ) const
+bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::attributeForcedOnBySheet( const FOOTPRINT_REF&, const wxString& ) const
 {
     // TODO: So if a symbol has DNP set to false, and the sheet is in has DNP set to true,
     // the symbol will be effectively DNP true. This will propogate to the footprint correctly.
