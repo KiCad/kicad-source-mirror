@@ -313,10 +313,14 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     updateUnitCount();
 
+    // The map accessor is raw storage, so a derived symbol has to be shown its root's names
+    std::shared_ptr<LIB_SYMBOL>    root = m_libEntry->GetRootSymbol();
+    const std::map<int, wxString>& unitNames = root->GetUnitDisplayNames();
+
     for( int unit = 0; unit < m_libEntry->GetUnitCount(); unit++ )
     {
-        if( m_libEntry->GetUnitDisplayNames().contains( unit + 1 ) )
-            m_unitNamesGrid->SetCellValue( unit, 1, m_libEntry->GetUnitDisplayNames().at( unit + 1 ) );
+        if( unitNames.contains( unit + 1 ) )
+            m_unitNamesGrid->SetCellValue( unit, 1, unitNames.at( unit + 1 ) );
     }
 
     if( m_libEntry->HasDeMorganBodyStyles() )
@@ -338,6 +342,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     {
         m_radioSingle->SetValue( true );
     }
+
+    syncBodyStyleControls();
 
     m_OptionPower->SetValue( m_libEntry->IsPower() );
     m_OptionLocalPower->SetValue( m_libEntry->IsLocalPower() );
@@ -704,44 +710,50 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_libEntry->SetName( newName );
     m_libEntry->SetKeyWords( m_KeywordCtrl->GetValue() );
-    m_libEntry->SetUnitCount( m_unitSpinCtrl->GetValue(), true );
-    m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 && !m_OptionPartsInterchangeable->GetValue() );
 
-    m_libEntry->GetUnitDisplayNames().clear();
+    // A derived symbol owns no drawings, so none of this is its to change and none of it is
+    // written out on save
+    if( !m_libEntry->IsDerived() )
+    {
+        m_libEntry->SetUnitCount( m_unitSpinCtrl->GetValue(), true );
+        m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 && !m_OptionPartsInterchangeable->GetValue() );
 
-    for( int row = 0; row < m_unitNamesGrid->GetNumberRows(); row++ )
-    {
-        if( !m_unitNamesGrid->GetCellValue( row, 1 ).IsEmpty() )
-            m_libEntry->GetUnitDisplayNames()[row+1] = m_unitNamesGrid->GetCellValue( row, 1 );
-    }
+        m_libEntry->GetUnitDisplayNames().clear();
 
-    // SetBodyStyleCount() adds and deletes draw items relative to the current body style count,
-    // so it has to run before the flag and the names it is derived from are overwritten
-    if( m_radioSingle->GetValue() )
-    {
-        m_libEntry->SetBodyStyleCount( 1, false, false );
-        m_libEntry->SetHasDeMorganBodyStyles( false );
-        m_libEntry->SetBodyStyleNames( {} );
-    }
-    else if( m_radioDeMorgan->GetValue() )
-    {
-        m_libEntry->SetBodyStyleCount( 2, false, true );
-        m_libEntry->SetHasDeMorganBodyStyles( true );
-        m_libEntry->SetBodyStyleNames( {} );
-    }
-    else
-    {
-        std::vector<wxString> bodyStyleNames;
-
-        for( int row = 0; row < m_bodyStyleNamesGrid->GetNumberRows(); ++row )
+        for( int row = 0; row < m_unitNamesGrid->GetNumberRows(); row++ )
         {
-            if( !m_bodyStyleNamesGrid->GetCellValue( row, 0 ).IsEmpty() )
-                bodyStyleNames.push_back( m_bodyStyleNamesGrid->GetCellValue( row, 0 ) );
+            if( !m_unitNamesGrid->GetCellValue( row, 1 ).IsEmpty() )
+                m_libEntry->GetUnitDisplayNames()[row+1] = m_unitNamesGrid->GetCellValue( row, 1 );
         }
 
-        m_libEntry->SetBodyStyleCount( bodyStyleNames.size(), true, true );
-        m_libEntry->SetHasDeMorganBodyStyles( false );
-        m_libEntry->SetBodyStyleNames( bodyStyleNames );
+        // SetBodyStyleCount() adds and deletes draw items relative to the current count, so it
+        // has to run before the flag and the names it derives from are overwritten
+        if( m_radioSingle->GetValue() )
+        {
+            m_libEntry->SetBodyStyleCount( 1, false, false );
+            m_libEntry->SetHasDeMorganBodyStyles( false );
+            m_libEntry->SetBodyStyleNames( {} );
+        }
+        else if( m_radioDeMorgan->GetValue() )
+        {
+            m_libEntry->SetBodyStyleCount( 2, false, true );
+            m_libEntry->SetHasDeMorganBodyStyles( true );
+            m_libEntry->SetBodyStyleNames( {} );
+        }
+        else
+        {
+            std::vector<wxString> bodyStyleNames;
+
+            for( int row = 0; row < m_bodyStyleNamesGrid->GetNumberRows(); ++row )
+            {
+                if( !m_bodyStyleNamesGrid->GetCellValue( row, 0 ).IsEmpty() )
+                    bodyStyleNames.push_back( m_bodyStyleNamesGrid->GetCellValue( row, 0 ) );
+            }
+
+            m_libEntry->SetBodyStyleCount( bodyStyleNames.size(), true, true );
+            m_libEntry->SetHasDeMorganBodyStyles( false );
+            m_libEntry->SetBodyStyleNames( bodyStyleNames );
+        }
     }
 
     if( m_OptionPower->GetValue() )
@@ -825,12 +837,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnBodyStyle( wxCommandEvent& event )
 {
-    m_bodyStyleNamesGrid->Enable( m_radioCustom->GetValue() );
-
-    m_bpAddBodyStyle->Enable( m_radioCustom->GetValue() );
-    m_bpMoveUpBodyStyle->Enable( m_radioCustom->GetValue() );
-    m_bpMoveDownBodyStyle->Enable( m_radioCustom->GetValue() );
-    m_bpDeleteBodyStyle->Enable( m_radioCustom->GetValue() );
+    syncBodyStyleControls();
 }
 
 
@@ -1192,7 +1199,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditFootprintFilter( wxCommandEvent& event 
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    m_OptionPartsInterchangeable->Enable( m_unitSpinCtrl->GetValue() > 1 );
+    m_OptionPartsInterchangeable->Enable( !m_libEntry->IsDerived() && m_unitSpinCtrl->GetValue() > 1 );
     m_pinNameOffset.Enable( m_PinsNameInsideButt->GetValue() );
 
     if( m_grid->IsCellEditControlShown() )
@@ -1271,7 +1278,31 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::syncControlStates( bool aIsAlias )
     bSizerLowerBasicPanel->Show( !aIsAlias );
     m_inheritanceSelectCombo->Enable( aIsAlias );
     m_inheritsStaticText->Enable( aIsAlias );
+
+    // The drawings a derived symbol inherits carry the units and body styles with them
+    m_unitSpinCtrl->Enable( !aIsAlias );
+    m_unitNamesGrid->Enable( !aIsAlias );
+
+    syncBodyStyleControls();
+
     m_grid->ForceRefresh();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::syncBodyStyleControls()
+{
+    bool editable = !m_libEntry->IsDerived();
+    bool custom = editable && m_radioCustom->GetValue();
+
+    m_radioSingle->Enable( editable );
+    m_radioDeMorgan->Enable( editable );
+    m_radioCustom->Enable( editable );
+
+    m_bodyStyleNamesGrid->Enable( custom );
+    m_bpAddBodyStyle->Enable( custom );
+    m_bpMoveUpBodyStyle->Enable( custom );
+    m_bpMoveDownBodyStyle->Enable( custom );
+    m_bpDeleteBodyStyle->Enable( custom );
 }
 
 

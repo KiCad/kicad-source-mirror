@@ -279,7 +279,8 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary, 
     m_duplicatePinNumbersAreJumpers = aSymbol.m_duplicatePinNumbersAreJumpers;
 
     m_unitDisplayNames = aSymbol.GetUnitDisplayNames();
-    m_bodyStyleNames = aSymbol.GetBodyStyleNames();
+    // Raw member, not the accessor, which would bake a root's body styles into a derived copy
+    m_bodyStyleNames = aSymbol.m_bodyStyleNames;
 
     ClearSelected();
 
@@ -334,7 +335,8 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     m_duplicatePinNumbersAreJumpers = aSymbol.m_duplicatePinNumbersAreJumpers;
 
     m_unitDisplayNames = aSymbol.GetUnitDisplayNames();
-    m_bodyStyleNames = aSymbol.GetBodyStyleNames();
+    // Raw member, not the accessor, which would bake a root's body styles into a derived copy
+    m_bodyStyleNames = aSymbol.m_bodyStyleNames;
 
     m_drawings.clear();
 
@@ -450,10 +452,33 @@ std::shared_ptr<LIB_SYMBOL> LIB_SYMBOL::GetRootSymbol() const
 }
 
 
+bool LIB_SYMBOL::UnitsLocked() const
+{
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->m_unitsLocked;
+    }
+
+    return m_unitsLocked;
+}
+
+
 wxString LIB_SYMBOL::GetUnitDisplayName( int aUnit, bool aLabel ) const
 {
-    if( m_unitDisplayNames.contains( aUnit ) )
-        return m_unitDisplayNames.at( aUnit );
+    const LIB_SYMBOL*           owner = this;
+    std::shared_ptr<LIB_SYMBOL> root;
+
+    if( IsDerived() )
+    {
+        root = GetSafeRootSymbol( this, __FUNCTION__ );
+        owner = root.get();
+    }
+
+    if( owner->m_unitDisplayNames.contains( aUnit ) )
+        return owner->m_unitDisplayNames.at( aUnit );
     else if( aLabel )
         return wxString::Format( _( "Unit %s" ), LIB_SYMBOL::LetterSubReference( aUnit, 'A' ) );
     else
@@ -472,8 +497,11 @@ wxString LIB_SYMBOL::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) cons
     }
     else if( IsMultiBodyStyle() )
     {
-        if( aBodyStyle <= (int) m_bodyStyleNames.size() )
-            return m_bodyStyleNames[aBodyStyle - 1];
+        const std::vector<wxString>& names = GetBodyStyleNames();
+
+        // Draw items common to every body style carry a body style of 0
+        if( aBodyStyle >= BODY_STYLE::BASE && aBodyStyle <= (int) names.size() )
+            return names[aBodyStyle - 1];
     }
 
     return wxT( "?" );
@@ -2034,6 +2062,43 @@ int LIB_SYMBOL::GetUnitCount() const
     }
 
     return m_unitCount;
+}
+
+
+int LIB_SYMBOL::GetBodyStyleCount() const
+{
+    if( HasDeMorganBodyStyles() )
+        return 2;
+
+    return std::max( 1, (int) GetBodyStyleNames().size() );
+}
+
+
+bool LIB_SYMBOL::HasDeMorganBodyStyles() const
+{
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->m_demorgan;
+    }
+
+    return m_demorgan;
+}
+
+
+const std::vector<wxString>& LIB_SYMBOL::GetBodyStyleNames() const
+{
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return root->m_bodyStyleNames;
+    }
+
+    return m_bodyStyleNames;
 }
 
 

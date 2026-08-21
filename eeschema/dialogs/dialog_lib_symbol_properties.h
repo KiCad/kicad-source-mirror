@@ -86,6 +86,7 @@ private:
 
     bool updateUnitCount();
     void syncControlStates( bool aIsAlias );
+    void syncBodyStyleControls();
     void addInheritedFields( const std::shared_ptr<LIB_SYMBOL>& aParent );
 
 public:

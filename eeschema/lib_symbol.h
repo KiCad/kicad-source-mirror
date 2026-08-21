@@ -361,9 +361,13 @@ public:
 
     /**
      * Check whether symbol units are interchangeable.
+     *
+     * The units belong to the drawings, so a derived symbol resolves this through its root
+     * symbol.
+     *
      * @return False when interchangeable, true otherwise.
      */
-    bool UnitsLocked() const { return m_unitsLocked; }
+    bool UnitsLocked() const;
 
     /**
      * Overwrite all the existing fields in this symbol with fields supplied in \a aFieldsList.
@@ -871,24 +875,21 @@ public:
      * @return true if the symbol has multiple units per symbol.
      * When true, the reference has a sub reference to identify symbol.
      */
-    bool IsMultiUnit() const override { return m_unitCount > 1; }
+    bool IsMultiUnit() const override { return GetUnitCount() > 1; }
 
     static wxString LetterSubReference( int aUnit, wxChar aInitialLetter );
 
     bool IsMultiBodyStyle() const override { return GetBodyStyleCount() > 1; }
 
-    int GetBodyStyleCount() const override
-    {
-        if( m_demorgan )
-            return 2;
-        else
-            return std::max( 1, (int) m_bodyStyleNames.size() );
-    }
+    /**
+     * The body styles are a property of the drawings, which a derived symbol inherits from its
+     * root symbol rather than owning, so these resolve through the inheritance chain.
+     */
+    int GetBodyStyleCount() const override;
+    bool HasDeMorganBodyStyles() const override;
+    const std::vector<wxString>& GetBodyStyleNames() const;
 
-    bool HasDeMorganBodyStyles() const override { return m_demorgan; }
     void SetHasDeMorganBodyStyles( bool aFlag ) { m_demorgan = aFlag; }
-
-    const std::vector<wxString>& GetBodyStyleNames() const { return m_bodyStyleNames; }
     void SetBodyStyleNames( const std::vector<wxString>& aBodyStyleNames ) { m_bodyStyleNames = aBodyStyleNames; }
 
     /**
