@@ -265,8 +265,7 @@ RC_TREE_NODE* RC_TREE_MODEL::createNode( RC_TREE_NODE* aParent,
 {
     RC_TREE_NODE* node = new RC_TREE_NODE( aParent, aRcItem, aType );
 
-    m_handles.push_back( std::make_unique<RC_TREE_NODE::HANDLE>() );
-    node->m_Handle = m_handles.back().get();
+    node->m_Handle = &m_handles.emplace_back();
     node->m_Handle->m_Node = node;
 
     return node;
@@ -295,34 +294,26 @@ void RC_TREE_MODEL::deleteNodeTree( RC_TREE_NODE* aNode )
 }
 
 
-RC_TREE_MODEL::~RC_TREE_MODEL()
+void RC_TREE_MODEL::clearTree()
 {
     for( RC_TREE_NODE* topLevelNode : m_tree )
     {
         retireNodeTree( topLevelNode );
         deleteNodeTree( topLevelNode );
     }
+
+    m_tree.clear();
 }
 
 
-void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities )
+RC_TREE_MODEL::~RC_TREE_MODEL()
 {
-    wxWindowUpdateLocker updateLock( m_view );
+    clearTree();
+}
 
-    std::shared_ptr<RC_ITEM> selectedRcItem = nullptr;
 
-    if( m_view )
-    {
-        RC_TREE_NODE* selectedNode = ToNode( m_view->GetSelection() );
-        selectedRcItem = selectedNode ? selectedNode->m_RcItem : nullptr;
-
-        // Even with the updateLock, wxWidgets sometimes ties its knickers in a knot trying
-        // to run a wxdataview_selection_changed_callback() on a row that has been deleted.
-        m_view->UnselectAll();
-    }
-
-    BeforeReset();
-
+void RC_TREE_MODEL::rebuildTree( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities )
+{
     m_rcItemsProvider = std::move( aProvider );
 
     if( aSeverities != m_severities )
@@ -331,14 +322,7 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
     if( m_rcItemsProvider )
         m_rcItemsProvider->SetSeverities( m_severities );
 
-    for( RC_TREE_NODE* topLevelNode : m_tree )
-    {
-        retireNodeTree( topLevelNode );
-        deleteNodeTree( topLevelNode );
-    }
-
-    m_tree.clear();
-    m_handles.clear();
+    clearTree();
 
     // wxDataView::ExpandAll() pukes with large lists
     int count = 0;
@@ -371,6 +355,28 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
                 n->m_Children.push_back( createNode( n, rcItem, RC_TREE_NODE::COMMENT ) );
         }
     }
+}
+
+
+void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities )
+{
+    wxWindowUpdateLocker updateLock( m_view );
+
+    std::shared_ptr<RC_ITEM> selectedRcItem = nullptr;
+
+    if( m_view )
+    {
+        RC_TREE_NODE* selectedNode = ToNode( m_view->GetSelection() );
+        selectedRcItem = selectedNode ? selectedNode->m_RcItem : nullptr;
+
+        // Even with the updateLock, wxWidgets sometimes ties its knickers in a knot trying
+        // to run a wxdataview_selection_changed_callback() on a row that has been deleted.
+        m_view->UnselectAll();
+    }
+
+    BeforeReset();
+
+    rebuildTree( std::move( aProvider ), aSeverities );
 
     // Must be called after a significant change of items to force the
     // wxDataViewModel to reread all of them, repopulating itself entirely.
