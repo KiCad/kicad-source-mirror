@@ -101,7 +101,6 @@ public:
     static const wxString ITEM_NUMBER_VARIABLE;
     static const wxString SYMBOL_NAME;
 
-    void CreateDerivedSymbol( int aRow, int aCol, wxString& aNewSymbolName );
     void CreateDerivedSymbolImmediate( int aRow, int aCol, wxString& aNewSymbolName );
 
     void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser, bool aIsCheckbox );

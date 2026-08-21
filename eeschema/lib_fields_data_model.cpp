@@ -473,35 +473,6 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
 }
 
 
-void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::CreateDerivedSymbol( int aRow, int aCol, wxString& aNewSymbolName )
-{
-    wxCHECK_RET( aRow >= 0 && aRow < (int) m_rows.size(), "Invalid Row Number" );
-    wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
-
-    const LIB_SYMBOL* parentSymbol = m_rows[aRow].m_Refs[0];
-    const wxString& fieldName = m_cols[aCol].m_fieldName;
-
-    std::map<wxString, LIB_DATA_ELEMENT>& parentFieldStore = m_dataStore[parentSymbol->m_Uuid];
-
-    // Use a special field name that won't conflict with real fields
-    wxString derivedSymbolFieldName = "__DERIVED_SYMBOL_" + fieldName + "__";
-
-    // Store derived symbol creation data under special field name so ApplyData can find it
-    LIB_DATA_ELEMENT& targetElement = parentFieldStore[derivedSymbolFieldName];
-    targetElement.m_createDerivedSymbol = true;
-    targetElement.m_derivedSymbolName = aNewSymbolName;
-    targetElement.m_currentData = aNewSymbolName;
-    targetElement.m_isModified = true;
-    targetElement.m_originalData = parentSymbol->m_Uuid.AsString();
-
-    wxLogTrace( traceLibFieldTable, "CreateDerivedSymbol: Parent symbol name='%s', UUID='%s'",
-                parentSymbol->GetName(), parentSymbol->m_Uuid.AsString() );
-    wxLogTrace( traceLibFieldTable, "CreateDerivedSymbol: Stored creation request for symbol '%s' under parent UUID %s, special field '%s'",
-                aNewSymbolName, parentSymbol->m_Uuid.AsString(), derivedSymbolFieldName );
-
-    m_edited = true;
-}
-
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::CreateDerivedSymbolImmediate( int aRow, int aCol, wxString& aNewSymbolName )
 {
     wxCHECK_RET( aRow >= 0 && aRow < (int) m_rows.size(), "Invalid Row Number" );
