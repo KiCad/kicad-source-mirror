@@ -244,4 +244,22 @@ BOOST_AUTO_TEST_CASE( RepeatedLabelStepsLettersAndNumbersCleanly )
 }
 
 
+BOOST_AUTO_TEST_CASE( RepeatedLabelStepsPastNonAsciiCharacters, *boost::unit_test::timeout( 30 ) )
+{
+    // A non-ASCII character in the label used to hang the incrementer, so the draw list never
+    // finished building (#25299). U+3042 is hiragana A, U+FF11 a full-width one
+    const std::vector<wxString> mixed = repeatTexts( wxString( L"1あ" ), 3, 1 );
+    const std::vector<wxString> expMixed = { wxString( L"1あ" ), wxString( L"2あ" ),
+                                             wxString( L"3あ" ) };
+    BOOST_CHECK_EQUAL_COLLECTIONS( mixed.begin(), mixed.end(), expMixed.begin(), expMixed.end() );
+
+    // Full-width digits have no ASCII part to step, so every copy keeps the base label
+    const std::vector<wxString> fullWidth = repeatTexts( wxString( L"１" ), 3, 1 );
+    const std::vector<wxString> expFullWidth = { wxString( L"１" ), wxString( L"１" ),
+                                                 wxString( L"１" ) };
+    BOOST_CHECK_EQUAL_COLLECTIONS( fullWidth.begin(), fullWidth.end(), expFullWidth.begin(),
+                                   expFullWidth.end() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
