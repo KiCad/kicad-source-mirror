@@ -20,7 +20,9 @@
 
 #include <api/api_pcb_utils.h>
 #include <api/api_enums.h>
+#include <api/board/board.pb.h>
 #include <board.h>
+#include <google/protobuf/any.pb.h>
 #include <board_item_container.h>
 #include <footprint.h>
 #include <lset.h>
@@ -122,6 +124,25 @@ LSET UnpackLayerSet( const google::protobuf::RepeatedField<int>& aProtoLayerSet 
     }
 
     return set;
+}
+
+
+void PackBoardStackup( const BOARD& aBoard, BoardStackup& aOut )
+{
+    google::protobuf::Any any;
+
+    aBoard.GetStackupOrDefault().Serialize( any );
+    any.UnpackTo( &aOut );
+
+    for( BoardStackupLayer& layer : *aOut.mutable_layers() )
+    {
+        if( layer.type() == BoardStackupLayerType::BSLT_DIELECTRIC )
+            continue;
+
+        PCB_LAYER_ID id = FromProtoEnum<PCB_LAYER_ID>( layer.layer() );
+
+        layer.set_user_name( aBoard.GetLayerName( id ) );
+    }
 }
 
 }   // namespace kiapi::board

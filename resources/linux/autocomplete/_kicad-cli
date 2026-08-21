@@ -373,6 +373,7 @@ _kicad_cli_pcb_export_commands() {
         'ply:Export PLY'
         'pos:Generate Position File'
         'ps:Generate Postscript from a list of layers'
+        'stackup:Export a board stackup report'
         'stats:Generate a board statistics report'
         'step:Export STEP'
         'stl:Export STL'
@@ -441,6 +442,9 @@ _kicad_cli_pcb_export() {
                     ;;
                 (ps)
                     _kicad_cli_pcb_export_ps
+                    ;;
+                (stackup)
+                    _kicad_cli_pcb_export_stackup
                     ;;
                 (stats)
                     _kicad_cli_pcb_export_stats
@@ -848,6 +852,25 @@ _kicad_cli_pcb_export_ps() {
         '(--track-width-correction -C)'{--track-width-correction,-C}'[Track width correction \[mm\]. Used to compensate errors in track widths, pad and via sizes. \[nargs=0..1\] \[default: 0\]]' \
         '(--x-scale-factor -X)'{--x-scale-factor,-X}'[X scale adjust for exact scale. \[nargs=0..1\] \[default: 1\]]' \
         '(--y-scale-factor -Y)'{--y-scale-factor,-Y}'[Y scale adjust for exact scale. \[nargs=0..1\] \[default: 1\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_stackup() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '--exclude-board-options[Omit board options from the CSV export]' \
+        '--exclude-color[Omit color from the CSV export]' \
+        '--exclude-epsilon-r[Omit Epsilon R from the CSV export]' \
+        '--exclude-finish[Omit board finish from the CSV export]' \
+        '--exclude-loss-tangent[Omit loss tangent from the CSV export]' \
+        '--exclude-material[Omit material from the CSV export]' \
+        '--exclude-thickness[Omit thickness from the CSV export]' \
+        '--format[Output file format; valid options: csv, json \[nargs=0..1\] \[default: "csv"\]]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
+        '--units[CSV units; valid options: in, mm \[nargs=0..1\] \[default: "mm"\]]' \
         && return 0
 }
 

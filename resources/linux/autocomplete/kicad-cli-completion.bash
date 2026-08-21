@@ -83,7 +83,7 @@ _kicad_cli()
             return 0
             ;;
         "pcb export")
-            COMPREPLY=( $(compgen -W "3dpdf brep drill dxf gencad gerbers glb hpgl ipc2581 ipcd356 odb pdf ply pos ps stats step stl stpz svg u3d vrml xao --help -h" -- "$cur") )
+            COMPREPLY=( $(compgen -W "3dpdf brep drill dxf gencad gerbers glb hpgl ipc2581 ipcd356 odb pdf ply pos ps stackup stats step stl stpz svg u3d vrml xao --help -h" -- "$cur") )
             return 0
             ;;
         "pcb export 3dpdf")
@@ -144,6 +144,10 @@ _kicad_cli()
             ;;
         "pcb export ps")
             COMPREPLY=( $(compgen -W "--black-and-white --cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --drawing-sheet --drill-shape-opt --erd --ev --exclude-refdes --exclude-value --force-a4 --hdnp --help --hide-DNP-footprints-on-fab-layers --ibt --include-border-title --layers --mirror --mode-multi --mode-single --negative --output --scale --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --theme --track-width-correction --x-scale-factor --y-scale-factor -A -C -D -X -Y -h -l -m -n -o -t" -- "$cur") )
+            return 0
+            ;;
+        "pcb export stackup")
+            COMPREPLY=( $(compgen -W "--exclude-board-options --exclude-color --exclude-epsilon-r --exclude-finish --exclude-loss-tangent --exclude-material --exclude-thickness --format --help --output --units -h -o" -- "$cur") )
             return 0
             ;;
         "pcb export stats")

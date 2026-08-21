@@ -63,6 +63,7 @@
 #include <jobs/job_export_pcb_pos.h>
 #include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_stats.h>
+#include <jobs/job_export_pcb_stackup.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_pcb_render.h>
@@ -125,7 +126,15 @@
 #include <dialogs/dialog_render_job.h>
 #include <dialogs/dialog_gencad_export_options.h>
 #include <dialogs/dialog_board_stats_job.h>
+#include <dialogs/dialog_board_stackup_job.h>
+#include <board_stackup_manager/board_stackup.h>
+#include <board_stackup_manager/board_stackup_reporter.h>
+#include <api/api_pcb_utils.h>
+#include <api/board/board.pb.h>
+#include <google/protobuf/util/json_util.h>
+#include <fstream>
 #include <paths.h>
+#include <streamwrapper.h>
 #include <tools/zone_filler_tool.h>
 
 #include <locale_io.h>
@@ -290,6 +299,28 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   wxWindow* parent = aParent ? aParent : static_cast<wxWindow*>( editFrame );
 
                   DIALOG_BOARD_STATS_JOB dlg( parent, statsJob );
+
+                  return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "stackup", std::bind( &PCBNEW_JOBS_HANDLER::JobExportStackup, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_PCB_STACKUP* stackupJob = dynamic_cast<JOB_EXPORT_PCB_STACKUP*>( job );
+
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( stackupJob && editFrame, false );
+
+                  if( stackupJob->m_filename.IsEmpty() && editFrame->GetBoard() )
+                  {
+                      wxFileName boardName = editFrame->GetBoard()->GetFileName();
+                      stackupJob->m_filename = boardName.GetFullPath();
+                  }
+
+                  wxWindow* parent = aParent ? aParent : static_cast<wxWindow*>( editFrame );
+
+                  DIALOG_BOARD_STACKUP_JOB dlg( parent, stackupJob );
 
                   return dlg.ShowModal() == wxID_OK;
               } );
@@ -2115,6 +2146,114 @@ int PCBNEW_JOBS_HANDLER::JobExportStats( JOB* aJob )
     m_reporter->Report( wxString::Format( _( "Wrote board statistics to '%s'.\n" ), outPath ), RPT_SEVERITY_ACTION );
 
     statsJob->AddOutput( outPath );
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportStackup( JOB* aJob )
+{
+    JOB_EXPORT_PCB_STACKUP* stackupJob = dynamic_cast<JOB_EXPORT_PCB_STACKUP*>( aJob );
+
+    if( stackupJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* brd = getBoard( stackupJob->m_filename );
+
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    wxFileName boardFile = brd->GetFileName();
+
+    if( boardFile.GetName().IsEmpty() )
+        boardFile = wxFileName( stackupJob->m_filename );
+
+    wxString output;
+
+    switch( stackupJob->m_format )
+    {
+    case JOB_EXPORT_PCB_STACKUP::OUTPUT_FORMAT::JSON:
+    {
+        kiapi::board::BoardStackup stackupMsg;
+        kiapi::board::PackBoardStackup( *brd, stackupMsg );
+
+        google::protobuf::util::JsonPrintOptions jsonOptions;
+        jsonOptions.add_whitespace = true;
+
+        std::string json;
+
+        if( !google::protobuf::util::MessageToJsonString( stackupMsg, &json, jsonOptions ).ok() )
+        {
+            m_reporter->Report( _( "Failed to serialize board stackup\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        output = wxString::FromUTF8( json );
+        break;
+    }
+
+    case JOB_EXPORT_PCB_STACKUP::OUTPUT_FORMAT::CSV:
+    {
+        BOARD_DESIGN_SETTINGS& bds = brd->GetDesignSettings();
+        BOARD_STACKUP          stackup = bds.GetStackupDescriptor();
+        stackup.SynchronizeWithBoard( &bds );
+
+        for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
+        {
+            if( item->GetBrdLayerId() != UNDEFINED_LAYER )
+                item->SetLayerName( brd->GetLayerName( item->GetBrdLayerId() ) );
+        }
+
+        EDA_UNITS unitsForReport =
+                stackupJob->m_units == JOB_EXPORT_PCB_STACKUP::UNITS::MM ? EDA_UNITS::MM : EDA_UNITS::INCH;
+
+        STACKUP_CSV_OPTIONS options;
+        options.includeColor = stackupJob->m_includeColor;
+        options.includeMaterial = stackupJob->m_includeMaterial;
+        options.includeThickness = stackupJob->m_includeThickness;
+        options.includeEpsilonR = stackupJob->m_includeEpsilonR;
+        options.includeLossTangent = stackupJob->m_includeLossTangent;
+        options.includeFinish = stackupJob->m_includeFinish;
+        options.includeBoardOptions = stackupJob->m_includeBoardOptions;
+
+        output = BuildStackupCsv( stackup, unitsForReport, options );
+        break;
+    }
+    }
+
+    if( stackupJob->GetConfiguredOutputPath().IsEmpty() && stackupJob->GetWorkingOutputPath().IsEmpty() )
+        stackupJob->SetDefaultOutputPath( boardFile.GetFullPath() );
+
+    wxString outPath = resolveJobOutputPath( aJob, brd );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    OPEN_OSTREAM( outFile, TO_UTF8( outPath ) );
+
+    if( !outFile )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to create file '%s'.\n" ), outPath ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    outFile << TO_UTF8( output );
+
+    const bool writeOk = static_cast<bool>( outFile );
+    CLOSE_STREAM( outFile );
+
+    if( !writeOk )
+    {
+        m_reporter->Report( wxString::Format( _( "Error writing file '%s'.\n" ), outPath ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    m_reporter->Report( wxString::Format( _( "Wrote board stackup to '%s'.\n" ), outPath ), RPT_SEVERITY_ACTION );
+
+    stackupJob->AddOutput( outPath );
 
     return CLI::EXIT_CODES::OK;
 }

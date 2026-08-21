@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 Jon Evans <jon@craftyjon.com>
+ * Copyright (C) 2026 Krishna Swaroop <krishna.swaroop@pixxel.co.in>
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,34 +18,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_API_PCB_UTLIS_H
-#define KICAD_API_PCB_UTLIS_H
+#ifndef COMMAND_PCB_EXPORT_STACKUP_H
+#define COMMAND_PCB_EXPORT_STACKUP_H
 
-#include <memory>
-#include <core/typeinfo.h>
-#include <import_export.h>
-#include <layer_ids.h>
-#include <lset.h>
-#include <api/common/types/base_types.pb.h>
-#include <api/board/board_types.pb.h>
+#include "command_pcb_export_base.h"
 
-class BOARD;
-class BOARD_ITEM;
-class BOARD_ITEM_CONTAINER;
-
-std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAINER* aContainer );
-
-namespace kiapi::board
+namespace CLI
 {
+class PCB_EXPORT_STACKUP_COMMAND : public PCB_EXPORT_BASE_COMMAND
+{
+public:
+    PCB_EXPORT_STACKUP_COMMAND();
 
-class BoardStackup;
+    int doPerform( KIWAY& aKiway ) override;
+};
+} // namespace CLI
 
-void PackLayerSet( google::protobuf::RepeatedField<int>& aOutput, const LSET& aLayerSet );
-
-LSET UnpackLayerSet( const google::protobuf::RepeatedField<int>& aInput );
-
-void PackBoardStackup( const BOARD& aBoard, BoardStackup& aOut );
-
-}   // namespace kiapi::board
-
-#endif //KICAD_API_PCB_UTLIS_H
+#endif
