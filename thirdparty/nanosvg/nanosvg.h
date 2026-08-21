@@ -29,6 +29,9 @@
 #ifndef NANOSVG_H
 #define NANOSVG_H
 
+#include <stdio.h>
+
+
 
 // NanoSVG is a simple stupid single-header-file SVG parse. The output of the parser is a list of cubic bezier shapes.
 //
@@ -51,7 +54,7 @@
 /* Example Usage:
 	// Load SVG
 	NSVGimage* image;
-	image = nsvgParseFromFile("test.svg", "px", 96);
+	image = nsvgParseFromFile(fopen("test.svg", "rb"), "px", 96);
 	printf("size: %f x %f\n", image->width, image->height);
 	// Use...
 	for (NSVGshape *shape = image->shapes; shape != NULL; shape = shape->next) {
@@ -66,9 +69,8 @@
 	nsvgDelete(image);
 */
 
-#include <cstdio>
-
 enum NSVGpaintType {
+	NSVG_PAINT_UNDEF = -1,
 	NSVG_PAINT_NONE = 0,
 	NSVG_PAINT_COLOR = 1,
 	NSVG_PAINT_LINEAR_GRADIENT = 2,
@@ -102,6 +104,12 @@ enum NSVGflags {
 	NSVG_FLAGS_VISIBLE = 0x01
 };
 
+enum NSVGpaintOrder {
+	NSVG_PAINT_FILL = 0x00,
+	NSVG_PAINT_MARKERS = 0x01,
+	NSVG_PAINT_STROKE = 0x02,
+};
+
 typedef struct NSVGgradientStop {
 	unsigned int color;
 	float offset;
@@ -116,7 +124,7 @@ typedef struct NSVGgradient {
 } NSVGgradient;
 
 typedef struct NSVGpaint {
-	char type;
+	signed char type;
 	union {
 		unsigned int color;
 		NSVGgradient* gradient;
@@ -140,14 +148,18 @@ typedef struct NSVGshape
 	float opacity;				// Opacity of the shape.
 	float strokeWidth;			// Stroke width (scaled).
 	float strokeDashOffset;		// Stroke dash offset (scaled).
-	float strokeDashArray[8];			// Stroke dash array (scaled).
-	char strokeDashCount;				// Number of dash values in dash array.
+	float strokeDashArray[8];	// Stroke dash array (scaled).
+	char strokeDashCount;		// Number of dash values in dash array.
 	char strokeLineJoin;		// Stroke join type.
 	char strokeLineCap;			// Stroke cap type.
 	float miterLimit;			// Miter limit
 	char fillRule;				// Fill rule, see NSVGfillRule.
+    unsigned char paintOrder;	// Encoded paint order (3×2-bit fields) see NSVGpaintOrder
 	unsigned char flags;		// Logical or of NSVG_FLAGS_* flags
 	float bounds[4];			// Tight bounding box of the shape [minx,miny,maxx,maxy].
+	char fillGradient[64];		// Optional 'id' of fill gradient
+	char strokeGradient[64];	// Optional 'id' of stroke gradient
+	float xform[6];				// Root transformation for fill/stroke gradient
 	NSVGpath* paths;			// Linked list of paths in the image.
 	struct NSVGshape* next;		// Pointer to next shape, or NULL if last element.
 } NSVGshape;
@@ -159,18 +171,24 @@ typedef struct NSVGimage
 	NSVGshape* shapes;			// Linked list of shapes in the image.
 } NSVGimage;
 
-// Parses SVG file from a file, returns SVG image as paths.
-// fp will be closed after reading the file
-NSVGimage* nsvgParseFromFile( FILE* fp, const char* units, float dpi);
+// Parses an SVG stream and closes it, including on failure.
+NSVGimage* nsvgParseFromFile(FILE* fp, const char* units, float dpi);
 
 // Parses SVG file from a null terminated string, returns SVG image as paths.
 // Important note: changes the string.
 NSVGimage* nsvgParse(char* input, const char* units, float dpi);
+
+// Uses the supplied font configuration without changing or taking ownership of it.
+struct _FcConfig;
+NSVGimage* nsvgParseWithFontConfig(char* input, const char* units, float dpi, struct _FcConfig* fontConfig);
 
 // Duplicates a path.
 NSVGpath* nsvgDuplicatePath(NSVGpath* p);
 
 // Deletes an image.
 void nsvgDelete(NSVGimage* image);
+
+
+
 
 #endif // NANOSVG_H

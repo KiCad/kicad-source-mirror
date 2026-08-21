@@ -23,6 +23,11 @@
 #include <import_gfx/graphics_importer_buffer.h>
 #include <eda_item.h>
 #include <base_units.h>
+#include <nanosvg.h>
+#include <nanosvgrast.h>
+#include <memory>
+#include <fontconfig/fontconfig.h>
+#include <paths.h>
 
 
 class SVG_IMPORT_TEST_IMPORTER : public GRAPHICS_IMPORTER
@@ -183,6 +188,229 @@ BOOST_AUTO_TEST_CASE( MultiNodeClosedPath )
 
     BOOST_CHECK_MESSAGE( importer.m_polygons[0].size() > 4,
                          "Multi-node polygon should have many vertices" );
+}
+
+
+namespace
+{
+using SVG_IMAGE = std::unique_ptr<NSVGimage, decltype( &nsvgDelete )>;
+
+SVG_IMAGE parseSvgText( const std::string& aBody )
+{
+    using FONT_CONFIG = std::unique_ptr<FcConfig, decltype( &FcConfigDestroy )>;
+    static FONT_CONFIG fonts = []
+    {
+        FONT_CONFIG config( FcConfigCreate(), FcConfigDestroy );
+        BOOST_REQUIRE( config );
+
+        for( const char* file : { "NimbusSans-Regular.t1", "NimbusSans-Bold.t1", "NimbusSans-Italic.t1" } )
+        {
+            wxCharBuffer path = ( PATHS::GetStockDataPath() + wxS( "/libwmf/fonts/" )
+                                  + wxString::FromUTF8( file ) ).utf8_str();
+            BOOST_REQUIRE( FcConfigAppFontAddFile( config.get(), reinterpret_cast<const FcChar8*>( path.data() ) ) );
+        }
+
+        return config;
+    }();
+
+    std::string svg = "<svg width=\"300\" height=\"150\" xmlns=\"http://www.w3.org/2000/svg\">"
+                      + aBody + "</svg>";
+    return SVG_IMAGE( nsvgParseWithFontConfig( svg.data(), "px", 96, fonts.get() ), nsvgDelete );
+}
+
+std::vector<NSVGshape*> svgShapes( const SVG_IMAGE& aImage )
+{
+    std::vector<NSVGshape*> result;
+
+    for( NSVGshape* shape = aImage->shapes; shape; shape = shape->next )
+        result.push_back( shape );
+
+    return result;
+}
+}
+
+
+BOOST_AUTO_TEST_CASE( TextOutlinesRasterize )
+{
+    auto image = parseSvgText( "<text x=\"10\" y=\"60\" font-family=\"sans-serif\" font-size=\"40\">"
+                               "<![CDATA[UMC]]></text>" );
+    BOOST_REQUIRE( image );
+    BOOST_REQUIRE_EQUAL( svgShapes( image ).size(), 3 );
+    std::unique_ptr<NSVGrasterizer, decltype( &nsvgDeleteRasterizer )> rasterizer(
+            nsvgCreateRasterizer(), nsvgDeleteRasterizer );
+    BOOST_REQUIRE( rasterizer );
+    std::vector<unsigned char> pixels( 300 * 150 * 4 );
+    nsvgRasterize( rasterizer.get(), image.get(), 0, 0, 1, pixels.data(), 300, 150, 300 * 4 );
+    size_t ink = 0;
+
+    for( size_t i = 3; i < pixels.size(); i += 4 )
+        ink += pixels[i] != 0;
+
+    BOOST_CHECK_GT( ink, 200 );
+}
+
+
+BOOST_AUTO_TEST_CASE( TextEntitiesAndCdata )
+{
+    auto encoded = parseSvgText( "<text y=\"50\">&lt;&amp;&#x3a9;&#233;</text>" );
+    auto literal = parseSvgText( "<text y=\"50\"><![CDATA[<&Ωé]]></text>" );
+    auto unexpanded = parseSvgText( "<text y=\"50\"><![CDATA[&lt;]]></text>" );
+    BOOST_REQUIRE( encoded );
+    BOOST_REQUIRE( literal );
+    BOOST_REQUIRE( unexpanded );
+    auto a = svgShapes( encoded );
+    auto b = svgShapes( literal );
+    BOOST_REQUIRE_EQUAL( a.size(), 4 );
+    BOOST_REQUIRE_EQUAL( b.size(), a.size() );
+    BOOST_CHECK_EQUAL( svgShapes( unexpanded ).size(), 4 );
+
+    for( size_t i = 0; i < a.size(); ++i )
+    {
+        for( int axis = 0; axis < 4; ++axis )
+            BOOST_CHECK_SMALL( a[i]->bounds[axis] - b[i]->bounds[axis], 0.001f );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( TextPositionListsAndSpans )
+{
+    auto image = parseSvgText( "<text x=\"10 50 100\" y=\"40 60 80\" font-size=\"20\">"
+                              "H<tspan dx=\"3\" dy=\"4\">H</tspan>H</text>" );
+    BOOST_REQUIRE( image );
+    auto shapes = svgShapes( image );
+    BOOST_REQUIRE_EQUAL( shapes.size(), 3 );
+    BOOST_CHECK_SMALL( shapes[1]->bounds[0] - shapes[0]->bounds[0] - 43, 0.001f );
+    BOOST_CHECK_SMALL( shapes[1]->bounds[1] - shapes[0]->bounds[1] - 24, 0.001f );
+    BOOST_CHECK_SMALL( shapes[2]->bounds[0] - shapes[0]->bounds[0] - 90, 0.001f );
+    BOOST_CHECK_SMALL( shapes[2]->bounds[1] - shapes[0]->bounds[1] - 40, 0.001f );
+}
+
+
+BOOST_AUTO_TEST_CASE( TextAnchorCoversSpans )
+{
+    auto start = parseSvgText( "<text x=\"150\" y=\"60\" font-size=\"30\">H<tspan>H</tspan>H</text>" );
+    auto middle = parseSvgText( "<text x=\"150\" y=\"60\" font-size=\"30\" text-anchor=\"middle\">"
+                                "H<tspan>H</tspan>H</text>" );
+    auto end = parseSvgText( "<text x=\"150\" y=\"60\" font-size=\"30\" text-anchor=\"end\">"
+                             "H<tspan>H</tspan>H</text>" );
+    BOOST_REQUIRE( start );
+    BOOST_REQUIRE( middle );
+    BOOST_REQUIRE( end );
+    auto a = svgShapes( start );
+    auto b = svgShapes( middle );
+    auto c = svgShapes( end );
+    BOOST_REQUIRE_EQUAL( a.size(), 3 );
+    BOOST_REQUIRE_EQUAL( b.size(), 3 );
+    BOOST_REQUIRE_EQUAL( c.size(), 3 );
+    float shift = a[0]->bounds[0] - b[0]->bounds[0];
+    BOOST_CHECK_GT( shift, 20 );
+
+    for( size_t i = 0; i < a.size(); ++i )
+    {
+        BOOST_CHECK_SMALL( a[i]->bounds[0] - b[i]->bounds[0] - shift, 0.001f );
+        BOOST_CHECK_SMALL( a[i]->bounds[0] - c[i]->bounds[0] - 2 * shift, 0.001f );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( TextTransformsAndInheritedStyle )
+{
+    auto image = parseSvgText( "<g font-family=\"sans-serif\" font-size=\"20\" fill=\"#123456\">"
+                              "<text x=\"10\" y=\"40\">H</text>"
+                              "<text x=\"10\" y=\"40\" transform=\"translate(100,0) rotate(90)\">H</text>"
+                              "<text x=\"10\" y=\"40\" font-size=\"40\">H</text></g>" );
+    BOOST_REQUIRE( image );
+    auto shapes = svgShapes( image );
+    BOOST_REQUIRE_EQUAL( shapes.size(), 3 );
+    BOOST_CHECK_EQUAL( shapes[0]->fill.color, 0xff563412u );
+    BOOST_CHECK_SMALL( shapes[1]->bounds[0] - ( 100 - shapes[0]->bounds[3] ), 0.001f );
+    BOOST_CHECK_SMALL( shapes[1]->bounds[1] - shapes[0]->bounds[0], 0.001f );
+    float height = shapes[0]->bounds[3] - shapes[0]->bounds[1];
+    BOOST_CHECK_SMALL( shapes[2]->bounds[3] - shapes[2]->bounds[1] - 2 * height, 0.05f );
+}
+
+
+BOOST_AUTO_TEST_CASE( UpdatedParserPreservesLocalDefaults )
+{
+    auto image = parseSvgText( "<style>.s { fill: #ff0000; }</style>"
+                              "<path style=\"fill:#00ff00\" class=\"s\" d=\"M0 0 L10 0 L10 10 Z\"/>" );
+    BOOST_REQUIRE( image );
+    BOOST_REQUIRE( image->shapes );
+    BOOST_CHECK_EQUAL( image->shapes->fill.color, 0xff00ff00u );
+    BOOST_CHECK_EQUAL( image->shapes->strokeWidth, 0 );
+    std::string svg = "<svg width=\"200\" viewBox=\"0 0 100 100\"><rect width=\"100\" height=\"100\"/></svg>";
+    SVG_IMAGE inferred( nsvgParse( svg.data(), "px", 96 ), nsvgDelete );
+    BOOST_REQUIRE( inferred );
+    BOOST_CHECK_EQUAL( inferred->width, 200 );
+    BOOST_CHECK_EQUAL( inferred->height, 100 );
+    BOOST_REQUIRE( inferred->shapes );
+    BOOST_CHECK_EQUAL( inferred->shapes->bounds[0], 50 );
+}
+
+BOOST_AUTO_TEST_CASE( TextWhitespaceAndFontVariants )
+{
+    auto regular = parseSvgText( "<text y=\"50\" font-family=\"sans-serif\" font-size=\"30\"> H  H </text>" );
+    auto spans = parseSvgText( "<text y=\"50\" font-family=\"sans-serif\" font-size=\"30\">"
+                               "H <tspan> H</tspan></text>" );
+    auto bold = parseSvgText( "<text y=\"50\" font-family=\"sans-serif\" font-size=\"30\" font-weight=\"700\">H</text>" );
+    auto italic = parseSvgText( "<text y=\"50\" font-family=\"sans-serif\" font-size=\"30\" font-style=\"italic\">H</text>" );
+    BOOST_REQUIRE( regular );
+    BOOST_REQUIRE( spans );
+    BOOST_REQUIRE( bold );
+    BOOST_REQUIRE( italic );
+    auto a = svgShapes( regular );
+    auto b = svgShapes( spans );
+    BOOST_REQUIRE_EQUAL( a.size(), 2 );
+    BOOST_REQUIRE_EQUAL( b.size(), 2 );
+    BOOST_REQUIRE( bold->shapes );
+    BOOST_REQUIRE( italic->shapes );
+    BOOST_CHECK_SMALL( a[1]->bounds[0] - b[1]->bounds[0], 0.001f );
+    float width = a[0]->bounds[2] - a[0]->bounds[0];
+    BOOST_CHECK_GT( bold->shapes->bounds[2] - bold->shapes->bounds[0], width );
+    BOOST_CHECK_GT( italic->shapes->bounds[2] - italic->shapes->bounds[0], width );
+}
+
+
+BOOST_AUTO_TEST_CASE( DefinitionsDoNotConsumeTextState )
+{
+    auto reference = parseSvgText( "<text x=\"150\" y=\"60\" text-anchor=\"middle\" fill=\"#123456\">HH</text>"
+                                   "<text x=\"20\" y=\"100\">H</text>" );
+    auto definitions = parseSvgText( "<text x=\"150\" y=\"60\" text-anchor=\"middle\" fill=\"#123456\">H"
+                                     "<defs><g><tspan>ignored</tspan></g><defs><tspan>nested</tspan></defs>"
+                                     "<tspan>also ignored</tspan></defs>H</text><text x=\"20\" y=\"100\">H</text>" );
+    BOOST_REQUIRE( reference );
+    BOOST_REQUIRE( definitions );
+    auto a = svgShapes( reference );
+    auto b = svgShapes( definitions );
+    BOOST_REQUIRE_EQUAL( a.size(), 3 );
+    BOOST_REQUIRE_EQUAL( b.size(), a.size() );
+
+    for( size_t i = 0; i < a.size(); ++i )
+    {
+        BOOST_CHECK_EQUAL( a[i]->fill.color, b[i]->fill.color );
+
+        for( int axis = 0; axis < 4; ++axis )
+            BOOST_CHECK_SMALL( a[i]->bounds[axis] - b[i]->bounds[axis], 0.001f );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( InvalidNumericEntitiesStayLiteral )
+{
+    auto encoded = parseSvgText( "<text y=\"50\">&#zz;&#xzz;&#12z;</text>" );
+    auto literal = parseSvgText( "<text y=\"50\"><![CDATA[&#zz;&#xzz;&#12z;]]></text>" );
+    BOOST_REQUIRE( encoded );
+    BOOST_REQUIRE( literal );
+    auto a = svgShapes( encoded );
+    auto b = svgShapes( literal );
+    BOOST_REQUIRE_EQUAL( a.size(), 17 );
+    BOOST_REQUIRE_EQUAL( b.size(), a.size() );
+
+    for( size_t i = 0; i < a.size(); ++i )
+    {
+        for( int axis = 0; axis < 4; ++axis )
+            BOOST_CHECK_SMALL( a[i]->bounds[axis] - b[i]->bounds[axis], 0.001f );
+    }
 }
 
 

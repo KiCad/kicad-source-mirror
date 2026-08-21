@@ -235,6 +235,7 @@ target_link_libraries( qa_common
     qa_utils
     Boost::headers
     Boost::unit_test_framework
+    Fontconfig::Fontconfig
     ${wxWidgets_LIBRARIES}
     ZLIB::ZLIB
     ${CMAKE_DL_LIBS}
