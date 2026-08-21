@@ -24,6 +24,7 @@
 #define __BOX2_H
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <optional>
 
@@ -790,7 +791,12 @@ public:
 
     ecoord_type Distance( const Vec& aP ) const
     {
-        return sqrt( SquaredDistance( aP ) );
+        const double dist = std::sqrt( static_cast<double>( SquaredDistance( aP ) ) );
+
+        if constexpr( std::is_floating_point<ecoord_type>() )
+            return static_cast<ecoord_type>( dist );
+        else
+            return KiROUND<double, ecoord_type>( dist );
     }
 
     /**
@@ -836,7 +842,12 @@ public:
      */
     ecoord_type Distance( const BOX2<Vec>& aBox ) const
     {
-        return sqrt( SquaredDistance( aBox ) );
+        const double dist = std::sqrt( static_cast<double>( SquaredDistance( aBox ) ) );
+
+        if constexpr( std::is_floating_point<ecoord_type>() )
+            return static_cast<ecoord_type>( dist );
+        else
+            return KiROUND<double, ecoord_type>( dist );
     }
 
     /**
