@@ -24,10 +24,11 @@
 #include <wx/containr.h>
 #include <wx/statbox.h> // needed to provide a hint that wx libraries instantiated
                         // wxNavigationEnabled<wxControl>
+#include <kicommon.h>
 
 
-wxDECLARE_EVENT( WX_COLLAPSIBLE_PANE_HEADER_CHANGED, wxCommandEvent );
-wxDECLARE_EVENT( WX_COLLAPSIBLE_PANE_CHANGED, wxCommandEvent );
+extern const KICOMMON_API wxEventTypeTag<wxCommandEvent> WX_COLLAPSIBLE_PANE_HEADER_CHANGED;
+extern const KICOMMON_API wxEventTypeTag<wxCommandEvent> WX_COLLAPSIBLE_PANE_CHANGED;
 
 /**
  * A header control for #WX_COLLAPSIBLE_PANE.
@@ -35,7 +36,7 @@ wxDECLARE_EVENT( WX_COLLAPSIBLE_PANE_CHANGED, wxCommandEvent );
  * Looks like a static text with a unicode arrow prepended to show the state.
  * Takes the same space as a static text.  This is similar to the wxCollapsiblePane on GTK.
  */
-class WX_COLLAPSIBLE_PANE_HEADER : public wxControl
+class KICOMMON_API WX_COLLAPSIBLE_PANE_HEADER : public wxControl
 {
 public:
     WX_COLLAPSIBLE_PANE_HEADER()
@@ -102,7 +103,7 @@ private:
  * - Doesn't have the same sizer bugs.
  * - Uses proper window colors.
  */
-class WX_COLLAPSIBLE_PANE : public wxNavigationEnabled<wxControl>
+class KICOMMON_API WX_COLLAPSIBLE_PANE : public wxNavigationEnabled<wxControl>
 {
 public:
     WX_COLLAPSIBLE_PANE()

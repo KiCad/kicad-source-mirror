@@ -1174,27 +1174,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             // crashes when switching projects during library preload.
             if( !aborted )
             {
-                // Collect and report library load errors from adapter
-                wxString errors = adapter->GetLibraryLoadErrors();
-
-                wxLogTrace( traceLibraries,
-                            "pcbnew PreloadLibraries: adapter errors.IsEmpty()=%d, length=%zu",
-                            errors.IsEmpty(), errors.length() );
-
-                if( !errors.IsEmpty() )
-                {
-                    std::vector<KI_ERROR> messages = ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
-
-                    wxLogTrace( traceLibraries, "  -> adapter: collected %zu messages",
-                                messages.size() );
-
-                    if( !messages.empty() )
-                        Pgm().AddLibraryLoadMessages( messages );
-                }
-                else
-                {
-                    wxLogTrace( traceLibraries, "  -> no errors from footprint adapter" );
-                }
+                // Report library load errors from adapter
+                Pgm().AddLibraryLoadMessages( adapter->GetLibraryLoadErrors() );
             }
             else
             {

@@ -546,16 +546,15 @@ KICOMMON_API wxString GetDefaultVariantName();
 
 KICOMMON_API int SortVariantNames( const wxString& aLhs, const wxString& aRhs );
 
-class KI_ERROR;
+class IO_ERROR;
 
 /**
  * Parse library load error messages, extracting user-facing information while
- * stripping internal code locations.
+ * stripping internal code locations. Mainly used because of nested exceptions from IO plugins.
  *
- * @param aErrorString is the raw error string from GetLibraryLoadErrors()
- * @param aSeverity is the severity to assign to all extracted messages
- * @return vector of LOAD_MESSAGE with cleaned error text
+ * @param aException is the raw IO exception from a loader plugin
+ * @return a single-line friendly
  */
-KICOMMON_API std::vector<KI_ERROR> ExtractLibraryLoadErrors( const wxString& aErrorString, int aSeverity );
+KICOMMON_API wxString ExtractLibraryLoadException( const IO_ERROR& aException );
 
 #endif  // STRING_UTILS_H

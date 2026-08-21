@@ -191,7 +191,10 @@ BOOST_AUTO_TEST_CASE( PartiallyLoadedTableReportsNoSpuriousErrors )
     adapter.SeedLoaded( wxS( "Connector" ) );
     adapter.SeedLoadError( wxS( "BadLib" ), wxS( "File is corrupt" ) );
 
-    const wxString errors = adapter.GetLibraryLoadErrors();
+    wxString errors;
+
+    for( const KI_ERROR& error : adapter.GetLibraryLoadErrors() )
+        errors.Append( error.AsString() + "\n" );
 
     // The unloaded-but-present rows must not masquerade as missing-from-table errors.
     BOOST_CHECK( !errors.Contains( wxS( "not found in library table" ) ) );

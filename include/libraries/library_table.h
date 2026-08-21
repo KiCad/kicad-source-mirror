@@ -60,7 +60,13 @@ struct KICOMMON_API LIBRARY_ERROR
         message( aMessage )
     {};
 
+    LIBRARY_ERROR( const wxString& aMessage, const wxString& aExtraDetails ) :
+        message( aMessage ),
+        details( aExtraDetails )
+    {};
+
     wxString message;
+    wxString details;
 };
 
 

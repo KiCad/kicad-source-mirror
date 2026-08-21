@@ -749,10 +749,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
         {
             SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-            wxString errors = adapter->GetLibraryLoadErrors();
-
-            if( !errors.IsEmpty() )
-                statusBar->AddWarningMessages( "load", errors );
+            statusBar->AddWarningMessages( "load", adapter->GetLibraryLoadErrors() );
         }
 
         break;

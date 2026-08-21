@@ -22,52 +22,270 @@
 #include <wx/statusbr.h>
 #include <wx/gauge.h>
 #include <wx/stattext.h>
+#include <wx/statbmp.h>
+#include <wx/scrolwin.h>
+#include <wx/textctrl.h>
+#include <wx/sizer.h>
+#include <wx/font.h>
+#include <wx/artprov.h>
 #include <wx/tokenzr.h>
 #include <fmt/format.h>
 #include <array>
 #include <ranges>
 #include <widgets/kistatusbar.h>
-#include <widgets/wx_html_report_box.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/ui_common.h>
+#include <widgets/wx_collapsible_pane.h>
+#include <wx/frame.h>
+#include <wx/time.h>
+#include <kiplatform/ui.h>
+#include <map>
 #include <pgm_base.h>
 #include <background_jobs_monitor.h>
 #include <notifications_manager.h>
 #include <bitmaps.h>
 #include <reporter.h>
-#include <dialog_HTML_reporter_base.h>
 #include <trace_helpers.h>
 #include <wx/dcclient.h>
 
 
-class STATUSBAR_WARNING_REPORTER_DIALOG : public DIALOG_HTML_REPORTER
+class ERROR_CARD : public wxPanel
 {
 public:
-    STATUSBAR_WARNING_REPORTER_DIALOG( wxWindow* aParent, KISTATUSBAR* aStatusBar ) :
-            DIALOG_HTML_REPORTER( aParent, wxID_ANY, _( "Messages" ) ),
+    ERROR_CARD( wxWindow* aParent, const KI_ERROR& aError, int aWrapWidth ) :
+            wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ), wxBORDER_NONE )
+    {
+        wxColour fg, bg;
+        KIPLATFORM::UI::GetInfoBarColours( fg, bg );
+        SetBackgroundColour( bg );
+        SetForegroundColour( fg );
+
+        wxBoxSizer* outerSizer = new wxBoxSizer( wxHORIZONTAL );
+
+        wxArtID artId = wxART_WARNING;
+
+        switch( aError.GetSeverity() )
+        {
+        case RPT_SEVERITY_ERROR:   artId = wxART_ERROR;       break;
+        case RPT_SEVERITY_INFO:    artId = wxART_INFORMATION; break;
+        default:
+            break;
+        }
+
+        wxStaticBitmap* icon = new wxStaticBitmap(
+                this, wxID_ANY, wxArtProvider::GetBitmapBundle( artId, wxART_OTHER, FromDIP( wxSize( 16, 16 ) ) ) );
+        icon->SetBackgroundColour( bg );
+        outerSizer->Add( icon, 0, wxALL, 4 );
+
+        wxBoxSizer* textSizer = new wxBoxSizer( wxVERTICAL );
+
+        if( aError.HasTitle() )
+        {
+            wxStaticText* title = new wxStaticText( this, wxID_ANY, aError.GetTitle() );
+            title->SetFont( KIUI::GetControlFont( this ).Bold() );
+
+            if( aWrapWidth > 0 )
+                title->Wrap( aWrapWidth );
+
+            textSizer->Add( title, 0, wxALL | wxEXPAND, 1 );
+        }
+
+        if( aError.HasDescription() )
+        {
+            wxStaticText* desc = new wxStaticText( this, wxID_ANY, aError.GetDescription() );
+
+            if( aWrapWidth > 0 )
+                desc->Wrap( aWrapWidth );
+
+            textSizer->Add( desc, 0, wxALL | wxEXPAND, 1 );
+        }
+
+        if( aError.HasDebugText() )
+        {
+            WX_COLLAPSIBLE_PANE* pane = new WX_COLLAPSIBLE_PANE( this, wxID_ANY,
+                                                                 _( "Additional information" ) );
+            pane->Collapse();
+            pane->SetBackgroundColour( bg );
+            textSizer->Add( pane, 0, wxEXPAND | wxALL, 1 );
+
+            wxWindow* paneWin = pane->GetPane();
+            paneWin->SetBackgroundColour( bg );
+            const wxString& text = aError.GetDebugText();
+            int paneHeight = GetCharHeight() * ( 2 + text.Freq( '\n' ) );
+
+            wxTextCtrl* debugText = new wxTextCtrl( paneWin, wxID_ANY, text, wxDefaultPosition,
+                                                    FromDIP( wxSize( -1, paneHeight ) ),
+                                                    wxTE_MULTILINE | wxTE_READONLY | wxTE_DONTWRAP );
+
+            wxFont monoFont = debugText->GetFont();
+            monoFont.SetFamily( wxFONTFAMILY_TELETYPE );
+            debugText->SetFont( monoFont );
+
+            wxBoxSizer* paneSizer = new wxBoxSizer( wxVERTICAL );
+            paneSizer->Add( debugText, 1, wxEXPAND | wxALL, 2 );
+            paneWin->SetSizer( paneSizer );
+            paneWin->Layout();
+
+            pane->Bind( WX_COLLAPSIBLE_PANE_CHANGED,
+                        [this]( wxCommandEvent& aEvt )
+                        {
+                            aEvt.Skip();
+
+                            wxWindow* scrolled = GetParent();
+                            wxWindow* frame = scrolled->GetParent();
+
+                            scrolled->Layout();
+
+                            if( wxSizer* sizer = scrolled->GetSizer() )
+                                sizer->Fit( scrolled );
+
+                            frame->Layout();
+                            frame->Refresh();
+                        } );
+        }
+
+        outerSizer->Add( textSizer, 1, wxEXPAND | wxTOP, 3 );
+
+        SetSizer( outerSizer );
+        Layout();
+    }
+};
+
+
+static long long g_warning_list_closed_timer = 0;
+
+
+class STATUSBAR_WARNING_LIST : public wxFrame
+{
+public:
+    STATUSBAR_WARNING_LIST( KISTATUSBAR* aStatusBar, wxWindow* aParent ) :
+            wxFrame( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, FromDIP( wxSize( 600, 200 ) ),
+                     wxFRAME_NO_TASKBAR | wxBORDER_STATIC ),
             m_statusBar( aStatusBar )
     {
-        m_clearButton = new wxButton( this, wxID_CLEAR, _( "Clear" ) );
-        m_clearButton->Bind( wxEVT_BUTTON,
-                             &STATUSBAR_WARNING_REPORTER_DIALOG::onClearButtonClick, this );
+        SetSizeHints( FromDIP( wxSize( 600, 200 ) ), wxDefaultSize );
 
-        m_sdbSizer->Insert( 0, m_clearButton, 0, wxALL, 5 );
-        GetSizer()->Layout();
-        GetSizer()->Fit( this );
+        wxColour fg, bg;
+        KIPLATFORM::UI::GetInfoBarColours( fg, bg );
+        SetBackgroundColour( bg );
+
+        wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+
+        m_scrolledWindow =
+                new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL | wxBORDER_SIMPLE );
+        m_scrolledWindow->SetScrollRate( 5, 5 );
+        m_scrolledWindow->SetBackgroundColour( bg );
+        m_scrolledWindow->SetForegroundColour( fg );
+
+        m_contentSizer = new wxBoxSizer( wxVERTICAL );
+        m_scrolledWindow->SetSizer( m_contentSizer );
+        m_scrolledWindow->Layout();
+
+        mainSizer->Add( m_scrolledWindow, 1, wxEXPAND, 0 );
+
+        wxBoxSizer* btnSizer = new wxBoxSizer( wxHORIZONTAL );
+        btnSizer->AddStretchSpacer( 1 );
+        wxButton* clearButton = new wxButton( this, wxID_CLEAR, _( "Clear Warnings" ) );
+        clearButton->Bind( wxEVT_BUTTON, &STATUSBAR_WARNING_LIST::onClearButtonClick, this );
+        btnSizer->Add( clearButton, 0, wxALL, 5 );
+        mainSizer->Add( btnSizer, 0, wxEXPAND | wxTOP | wxRIGHT | wxLEFT | wxBOTTOM, 5 );
+
+        SetSizer( mainSizer );
+        Layout();
+
+        Bind( wxEVT_KILL_FOCUS, &STATUSBAR_WARNING_LIST::onFocusLoss, this );
+        m_scrolledWindow->Bind( wxEVT_KILL_FOCUS, &STATUSBAR_WARNING_LIST::onFocusLoss, this );
+        Bind( wxEVT_CHAR_HOOK, &STATUSBAR_WARNING_LIST::onCharHook, this );
+        Bind( wxEVT_CLOSE_WINDOW, &STATUSBAR_WARNING_LIST::onClose, this );
+
+        rebuildMessages();
     }
 
+
+    ~STATUSBAR_WARNING_LIST() override
+    {
+        Unbind( wxEVT_KILL_FOCUS, &STATUSBAR_WARNING_LIST::onFocusLoss, this );
+        m_scrolledWindow->Unbind( wxEVT_KILL_FOCUS, &STATUSBAR_WARNING_LIST::onFocusLoss, this );
+        Unbind( wxEVT_CHAR_HOOK, &STATUSBAR_WARNING_LIST::onCharHook, this );
+        Unbind( wxEVT_CLOSE_WINDOW, &STATUSBAR_WARNING_LIST::onClose, this );
+    }
+
+
+    void rebuildMessages()
+    {
+        m_contentSizer->Clear( true );
+
+        int wrapWidth = m_scrolledWindow->GetClientSize().x;
+
+        if( wrapWidth < 100 )
+            wrapWidth = FromDIP( 580 );
+        else
+            wrapWidth -= FromDIP( 40 );  // Card borders/margins + severity icon + padding
+
+        auto messages = m_statusBar->GetWarningMessages();
+
+        for( const auto& msgs : messages | std::views::values )
+        {
+            for( const KI_ERROR& msg : msgs )
+            {
+                ERROR_CARD* card = new ERROR_CARD( m_scrolledWindow, msg, wrapWidth );
+                m_contentSizer->Add( card, 0, wxEXPAND | wxALL, 2 );
+            }
+        }
+
+        m_scrolledWindow->Layout();
+        m_contentSizer->Fit( m_scrolledWindow );
+        Layout();
+        Refresh();
+    }
+
+
 private:
+    void onFocusLoss( wxFocusEvent& aEvent )
+    {
+        if( !IsDescendant( aEvent.GetWindow() ) )
+        {
+            Close( true );
+            g_warning_list_closed_timer = wxGetLocalTimeMillis().GetValue();
+        }
+
+        aEvent.Skip();
+    }
+
+
+    void onCharHook( wxKeyEvent& aEvent )
+    {
+        if( aEvent.GetKeyCode() == WXK_ESCAPE )
+        {
+            Close( true );
+            g_warning_list_closed_timer = wxGetLocalTimeMillis().GetValue();
+            return;
+        }
+
+        aEvent.Skip();
+    }
+
+
+    void onClose( wxCloseEvent& aEvent )
+    {
+        if( m_statusBar )
+            m_statusBar->CloseWarningList();
+
+        aEvent.Skip();
+    }
+
+
     void onClearButtonClick( wxCommandEvent& aEvent )
     {
         if( m_statusBar )
             m_statusBar->ClearWarningMessages();
 
-        EndModal( wxID_CLEAR );
+        // ClearWarningMessages triggers updateWarningUI which will close the panel
     }
 
-private:
-    KISTATUSBAR* m_statusBar;
-    wxButton*    m_clearButton;
+    KISTATUSBAR*      m_statusBar;
+    wxScrolledWindow* m_scrolledWindow;
+    wxBoxSizer*       m_contentSizer;
 };
 
 
@@ -76,6 +294,7 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id, ST
         m_backgroundStopButton( nullptr ),
         m_notificationsButton( nullptr ),
         m_warningButton( nullptr ),
+        m_warningList( nullptr ),
         m_normalFieldsCount( aNumberFields ),
         m_styleFlags( aFlags )
 {
@@ -168,6 +387,8 @@ KISTATUSBAR::~KISTATUSBAR()
 
     if( m_warningButton )
         m_warningButton->Unbind( wxEVT_BUTTON, &KISTATUSBAR::onLoadWarningsIconClick, this );
+
+    CloseWarningList();
 
     Unbind( wxEVT_SIZE, &KISTATUSBAR::onSize, this );
     m_backgroundProgressBar->Unbind( wxEVT_LEFT_DOWN, &KISTATUSBAR::onBackgroundProgressClick,
@@ -501,6 +722,16 @@ size_t KISTATUSBAR::GetLoadWarningCount() const
 }
 
 
+std::map<wxString, std::vector<KI_ERROR>> KISTATUSBAR::GetWarningMessages() const
+{
+    std::lock_guard<std::mutex> lock( m_warningMutex );
+
+    // TODO(JE) this is NG, we should use a vector not an unordered map
+    // Copy into a std::map so sources are sorted by name for stable display order.
+    return { m_warningMessages.begin(), m_warningMessages.end() };
+}
+
+
 void KISTATUSBAR::updateWarningUI()
 {
     wxLogTrace( traceLibraries, "KISTATUSBAR::updateWarningUI: this=%p, m_warningButton=%p",
@@ -547,6 +778,14 @@ void KISTATUSBAR::updateWarningUI()
         m_warningButton->SetToolTip( _( "View messages" ) );
     }
 
+    if( m_warningList )
+    {
+        if( messageCount > 0 )
+            m_warningList->rebuildMessages();
+        else
+            CloseWarningList();
+    }
+
     Layout();
     Refresh();
 }
@@ -569,25 +808,63 @@ void KISTATUSBAR::ClearWarningMessages( const wxString& aSource )
 
 void KISTATUSBAR::onLoadWarningsIconClick( wxCommandEvent& aEvent )
 {
-    // Copy messages under lock to avoid holding lock during modal dialog
-    std::unordered_map<wxString, std::vector<KI_ERROR>> messages;
+    // Debounce clicking on the icon with a list already showing
+    if( wxGetLocalTimeMillis().GetValue() - g_warning_list_closed_timer < 300 )
     {
-        std::lock_guard<std::mutex> lock( m_warningMutex );
-        messages = m_warningMessages;
+        g_warning_list_closed_timer = 0;
+        return;
     }
 
-    if( messages.empty() )
+    if( m_warningList )
+    {
+        CloseWarningList();
+        return;
+    }
+
+    if( GetLoadWarningCount() == 0 )
         return;
 
-    STATUSBAR_WARNING_REPORTER_DIALOG dlg( GetParent(), this );
-
-    for( const std::vector<KI_ERROR>& source : std::views::values( messages ) )
-        for( const KI_ERROR& msg : source )
-            dlg.m_Reporter->Report( msg );
-
-    dlg.m_Reporter->Flush();
-    dlg.ShowModal();
+    openWarningList();
 }
+
+
+void KISTATUSBAR::openWarningList()
+{
+    wxCHECK( m_warningButton, /* void */ );
+
+    m_warningList = new STATUSBAR_WARNING_LIST( this, GetParent() );
+    PositionWarningPanel();
+    m_warningList->Show();
+    KIPLATFORM::UI::ForceFocus( m_warningList );
+}
+
+
+void KISTATUSBAR::PositionWarningPanel()
+{
+    if( !m_warningList || !m_warningButton )
+        return;
+
+    wxRect iconRect = m_warningButton->GetScreenRect();
+
+    wxSize windowSize = m_warningList->GetSize();
+    wxPoint pos;
+    pos.x = iconRect.GetRight() + 1 - windowSize.GetWidth();
+    pos.y = iconRect.GetTop() - windowSize.GetHeight();
+
+    m_warningList->SetPosition( pos );
+    m_warningList->Layout();
+}
+
+
+void KISTATUSBAR::CloseWarningList()
+{
+    if( !m_warningList )
+        return;
+
+    m_warningList->Destroy();
+    m_warningList = nullptr;
+}
+
 
 
 std::optional<int> KISTATUSBAR::fieldIndex( FIELD aField ) const

@@ -460,23 +460,10 @@ REPORTER& STATUSBAR_WARNING_REPORTER::Report( const wxString& aText, SEVERITY aS
 
 REPORTER& STATUSBAR_WARNING_REPORTER::Report( const KI_ERROR& aError )
 {
-    REPORTER::Report( aError );
+    REPORTER::Report( aError.AsString(), aError.GetSeverity() );
 
-    KISTATUSBAR* statusBar = m_impl ? m_impl->GetStatusBar() : nullptr;
-
-    // Preserve the structured payload: the dialog renders title/description/debug
-    // separately. Fall back to the flat string when no title is set so the badge is
-    // never empty.
-    if( statusBar )
-    {
-        KI_ERROR message;
-
-        if( !message.HasTitle() )
-            message.SetTitle( aError.AsString() );
-
-        std::vector<KI_ERROR> messages{ std::move( message ) };
-        statusBar->AddWarningMessages( m_impl->m_source, messages );
-    }
+    if( KISTATUSBAR* statusBar = m_impl ? m_impl->GetStatusBar() : nullptr )
+        statusBar->AddWarningMessages( m_impl->m_source, { aError } );
 
     return *this;
 }

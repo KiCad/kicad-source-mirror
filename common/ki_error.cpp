@@ -18,8 +18,10 @@
  */
 
 #include <ki_error.h>
+#include <ki_exception.h>
 
 #include <fmt/format.h>
+#include <wx/tokenzr.h>
 
 
 wxString KI_ERROR::AsString() const

@@ -651,23 +651,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             if( !aborted )
             {
                 // Collect library load errors for async reporting
-                wxString errors = adapter->GetLibraryLoadErrors();
-
-                wxLogTrace( traceLibraries, "eeschema PreloadLibraries: errors.IsEmpty()=%d, length=%zu",
-                            errors.IsEmpty(), errors.length() );
-
-                std::vector<KI_ERROR> messages = ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
-
-                if( !messages.empty() )
-                {
-                    wxLogTrace( traceLibraries, "  -> collected %zu messages, calling AddLibraryLoadMessages",
-                                messages.size() );
-                    Pgm().AddLibraryLoadMessages( messages );
-                }
-                else
-                {
-                    wxLogTrace( traceLibraries, "  -> no errors from symbol libraries" );
-                }
+                Pgm().AddLibraryLoadMessages( adapter->GetLibraryLoadErrors() );
             }
             else
             {

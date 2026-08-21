@@ -358,7 +358,7 @@ LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
     catch( IO_ERROR& e )
     {
         wxLogTrace( traceLibraries, "Exception while saving: %s", e.What() );
-        return tl::unexpected( LIBRARY_ERROR( e.What() ) );
+        return tl::unexpected( LIBRARY_ERROR( e.Problem(), e.Where() ) );
     }
 
     return LIBRARY_RESULT<void>();

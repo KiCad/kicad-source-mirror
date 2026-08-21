@@ -895,10 +895,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
         {
             FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
-            wxString errors = adapter->GetLibraryLoadErrors();
-
-            if( !errors.IsEmpty() )
-                statusBar->AddWarningMessages( "load", errors );
+            statusBar->AddWarningMessages( "load", adapter->GetLibraryLoadErrors() );
         }
 
         break;

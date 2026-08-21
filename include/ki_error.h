@@ -27,6 +27,7 @@
 #include <wx/string.h>
 #include <widgets/report_severity.h>
 
+class IO_ERROR;
 
 /**
  * Holds a structured error message.  Used to report errors in situations where you want
@@ -49,7 +50,7 @@ public:
 
     const wxString& GetTitle() const { return m_title; }
     const wxString& GetDescription() const { return m_description; }
-    const wxString& GetExtraText() const { return m_debugText; }
+    const wxString& GetDebugText() const { return m_debugText; }
     SEVERITY        GetSeverity() const { return m_severity; }
 
     std::chrono::system_clock::time_point GetTimestamp() const { return m_timestamp; }

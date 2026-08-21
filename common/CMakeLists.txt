@@ -265,6 +265,7 @@ set( KICOMMON_SRCS
     widgets/std_bitmap_button.cpp
     widgets/ui_common.cpp
     widgets/up_down_tree.cpp
+    widgets/wx_collapsible_pane.cpp
     widgets/wx_grid.cpp
     widgets/wx_data_view_hyperlink_renderer.cpp
     widgets/wx_html_report_panel.cpp
@@ -676,7 +677,6 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_aui_art_providers.cpp
     widgets/wx_aui_utils.cpp
     widgets/wx_busy_indicator.cpp
-    widgets/wx_collapsible_pane.cpp
     widgets/wx_combobox.cpp
     widgets/wx_dataviewctrl.cpp
     widgets/wx_ellipsized_static_text.cpp
@@ -1008,6 +1008,8 @@ target_include_directories( common
 
 # text markup support
 add_dependencies( common pegtl )
+
+target_compile_definitions( nanodbc PUBLIC NANODBC_THROW_NO_SOURCE_LOCATION )
 
 target_include_directories( common PUBLIC
     $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>

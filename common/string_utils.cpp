@@ -27,6 +27,7 @@
 #include <map>
 #include <core/map_helpers.h>
 #include <fmt/core.h>
+#include <ki_exception.h>
 #include <macros.h>
 #include <string_utils.h>
 #include <widgets/kistatusbar.h>
@@ -1977,20 +1978,17 @@ int SortVariantNames( const wxString& aLhs, const wxString& aRhs )
 }
 
 
-std::vector<KI_ERROR> ExtractLibraryLoadErrors( const wxString& aErrorString, int aSeverity )
+wxString ExtractLibraryLoadException( const IO_ERROR& aException )
 {
-    std::vector<KI_ERROR> messages;
-
-    if( aErrorString.IsEmpty() )
-        return messages;
+    wxString err;
 
     // Errors are separated by newlines. We want to keep:
     // - Lines starting with "Library '" (library-level errors)
     // - Lines containing "Expecting" (file error location)
     // And strip:
     // - Lines starting with "from " (internal code location info)
-    wxStringTokenizer tokenizer( aErrorString, wxS( "\n" ), wxTOKEN_STRTOK );
-
+    wxStringTokenizer tokenizer( aException.What(), wxS( "\n" ), wxTOKEN_STRTOK );
+#if 0
     while( tokenizer.HasMoreTokens() )
     {
         wxString line = tokenizer.GetNextToken();
@@ -2002,7 +2000,7 @@ std::vector<KI_ERROR> ExtractLibraryLoadErrors( const wxString& aErrorString, in
         if( line.StartsWith( wxS( "Library '" ) ) || line.Contains( wxS( "Expecting" ) ) )
         messages.push_back( KI_ERROR( static_cast<SEVERITY>( aSeverity ), line ) );
     }
-
-    return messages;
+#endif
+    return err;
 }
 

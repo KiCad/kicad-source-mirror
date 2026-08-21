@@ -27,6 +27,7 @@
 #include <shared_mutex>
 
 #include <kicommon.h>
+#include <ki_error.h>
 #include <libraries/library_table.h>
 #include <io/io_base.h>
 
@@ -174,7 +175,7 @@ public:
     std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatuses() const;
 
     /// Returns all library load errors as newline-separated strings for display
-    wxString GetLibraryLoadErrors() const;
+    std::vector<KI_ERROR> GetLibraryLoadErrors() const;
 
     void ReloadLibraryEntry( const wxString& aNickname,
                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );

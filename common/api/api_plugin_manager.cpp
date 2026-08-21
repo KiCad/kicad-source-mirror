@@ -892,9 +892,10 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             wxLogTrace( traceApi,
                         wxString::Format( "Manager: error: requirements.txt not found at %s",
                                           job.plugin_path ) );
+            wxString debug = wxString::Format( wxS( "Expected at %s" ), reqs.GetFullPath() );
 
             reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
-                                     _( "requirements.txt could not be read" ) );
+                                     _( "requirements.txt could not be read" ), debug );
         }
         else
         {

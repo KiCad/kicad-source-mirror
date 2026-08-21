@@ -1525,19 +1525,23 @@ std::vector<std::pair<wxString, LIB_STATUS>> LIBRARY_MANAGER_ADAPTER::GetLibrary
 }
 
 
-wxString LIBRARY_MANAGER_ADAPTER::GetLibraryLoadErrors() const
+std::vector<KI_ERROR> LIBRARY_MANAGER_ADAPTER::GetLibraryLoadErrors() const
 {
-    wxString errors;
+    std::vector<KI_ERROR> errors;
 
     for( const auto& [nickname, status] : GetLibraryStatuses() )
     {
         if( status.load_status == LOAD_STATUS::LOAD_ERROR && status.error )
         {
-            if( !errors.IsEmpty() )
-                errors += wxS( "\n" );
-
-            errors += wxString::Format( _( "Library '%s': %s" ),
-                                         nickname, status.error->message );
+            wxString title = status.error->message.BeforeFirst( '\n' );
+            title.StartsWith( wxS( "IO_ERROR: " ), &title );
+            errors.emplace_back(
+                    KI_ERROR( RPT_SEVERITY_ERROR, wxString::Format( _( "Error loading library '%s'" ), nickname ) )
+                            .SetDescription( title )
+#ifdef DEBUG
+                            .SetDebugText( status.error->details )
+#endif
+                            );
         }
     }
 
@@ -1969,7 +1973,7 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
                                                 ? globalLibsMutex()
                                                 : m_librariesMutex );
                                 lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-                                lib->status.error = LIBRARY_ERROR( { e.What() } );
+                                lib->status.error = LIBRARY_ERROR( e.Problem(), e.Where() );
                                 wxLogTrace( traceLibraries, "%s: plugin threw exception: %s",
                                             work.nickname, e.What() );
                             }

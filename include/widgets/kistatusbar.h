@@ -23,6 +23,7 @@
 
 #include <kicommon.h>
 #include <ki_error.h>
+#include <map>
 #include <optional>
 #include <mutex>
 #include <vector>
@@ -33,6 +34,7 @@ class wxGauge;
 class wxButton;
 class wxStaticText;
 class BITMAP_BUTTON;
+class STATUSBAR_WARNING_LIST;
 
 /**
  * KISTATUSBAR is a wxStatusBar suitable for Kicad manager.
@@ -117,6 +119,21 @@ public:
      */
     size_t GetLoadWarningCount() const;
 
+    /**
+     * Get a copy of all stored warning/error messages, grouped by source and sorted by
+     * source name for stable display order.  Thread-safe.
+     */
+    std::map<wxString, std::vector<KI_ERROR>> GetWarningMessages() const;
+
+    /**
+     * Close the warning message overlay panel, if it is shown.
+     */
+    void CloseWarningList();
+
+    /**
+     * Position the warning message overlay panel above the warning icon.
+     */
+    void PositionWarningPanel();
     virtual void SetStatusWidths( int aSize, const int* aWidths ) override;
 
 private:
@@ -124,6 +141,7 @@ private:
     void onBackgroundProgressClick( wxMouseEvent& aEvent );
     void onNotificationsIconClick( wxCommandEvent& aEvent );
     void onLoadWarningsIconClick( wxCommandEvent& aEvent );
+    void openWarningList();
     void updateWarningUI();  ///< Update warning button visibility and badge (main thread only)
     void updateAuxFieldWidths();
     void updateBackgroundText();
@@ -146,6 +164,7 @@ private:
     wxStaticText*  m_backgroundTxt;
     BITMAP_BUTTON* m_notificationsButton;
     BITMAP_BUTTON* m_warningButton;
+    STATUSBAR_WARNING_LIST* m_warningList;        ///< Overlay panel listing the warning messages
     mutable std::mutex m_warningMutex;  ///< Protects m_warningMessages
     std::unordered_map<wxString, std::vector<KI_ERROR>> m_warningMessages;
     int            m_normalFieldsCount;
