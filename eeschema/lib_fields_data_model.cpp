@@ -125,13 +125,10 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemIdentifier( int aCol )
 }
 
 
-bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::fieldIsAttribute( const wxString& aFieldName ) const
 {
-    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-
-    return FIELDS_TABLE_DATA_MODEL_BASE::ColIsAttribute( aCol )
-           || m_cols[aCol].m_fieldName == wxS( "${SYMBOL_IS_POWER}" )
-           || m_cols[aCol].m_fieldName == wxS( "${SYMBOL_IS_LOCAL_POWER}" );
+    return FIELDS_TABLE_DATA_MODEL_BASE::fieldIsAttribute( aFieldName ) || aFieldName == wxS( "${SYMBOL_IS_POWER}" )
+           || aFieldName == wxS( "${SYMBOL_IS_LOCAL_POWER}" );
 }
 
 

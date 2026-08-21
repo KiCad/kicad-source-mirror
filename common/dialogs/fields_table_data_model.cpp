@@ -279,7 +279,8 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsFootprint( int aCol )
 bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsAttribute( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return isAttribute( m_cols[aCol].m_fieldName );
+
+    return fieldIsAttribute( m_cols[aCol].m_fieldName );
 }
 
 
@@ -516,7 +517,7 @@ wxString FIELDS_TABLE_DATA_MODEL_BASE::Export( const BOM_FMT_PRESET& aSettings )
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::isAttribute( const wxString& aFieldName )
+bool FIELDS_TABLE_DATA_MODEL_BASE::fieldIsAttribute( const wxString& aFieldName ) const
 {
     return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )

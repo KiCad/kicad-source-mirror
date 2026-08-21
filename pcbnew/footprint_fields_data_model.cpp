@@ -359,7 +359,7 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldValueForVariant( const
 {
     const FOOTPRINT& footprint = aRef.GetFootprint();
 
-    if( isAttribute( aFieldName ) )
+    if( fieldIsAttribute( aFieldName ) )
         return getAttributeValue( aRef, aFieldName, aVariantName );
 
     if( aFieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
@@ -614,7 +614,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( BOARD_COMMIT& aCommit, 
         for( const auto& [srcName, srcValue] : fieldStore )
         {
             // Attributes bypass the field logic, so handle them first
-            if( isAttribute( srcName ) )
+            if( fieldIsAttribute( srcName ) )
             {
                 footprintModified |= setAttributeValue( ref, srcName, srcValue, aVariantName );
                 continue;

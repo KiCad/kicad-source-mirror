@@ -120,7 +120,7 @@ public:
     bool ColIsItemNumber( int aCol );
     bool ColIsValue( int aCol );
     bool ColIsFootprint( int aCol );
-    virtual bool ColIsAttribute( int aCol );
+    bool ColIsAttribute( int aCol );
 
     /**
      * Reference for symbol/fields tables,
@@ -200,9 +200,9 @@ public:
     virtual void ExpandCollapseRow( int aRow ) = 0;
 
 protected:
-    // Helper functions to deal with translating wxGrid values to and from
-    // named field values like ${DNP}
-    bool     isAttribute( const wxString& aFieldName );
+    virtual bool fieldIsAttribute( const wxString& aFieldName ) const;
+
+    // Helper function to translate named attribute values like ${DNP}.
     virtual wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
     wxString getDataStoreFieldValue( const KIID_PATH& aKey, const wxString& aFieldName ) const;
 

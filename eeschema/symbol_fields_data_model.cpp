@@ -425,7 +425,7 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldValueForVariant( const SC
     if( !symbol )
         return wxEmptyString;
 
-    if( isAttribute( aFieldName ) )
+    if( fieldIsAttribute( aFieldName ) )
         return getAttributeValue( aRef, aFieldName, aVariantName );
 
     if( const SCH_FIELD* field = symbol->GetField( aFieldName ) )
@@ -659,7 +659,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPL
         for( const auto& [srcName, srcValue] : fieldStore )
         {
             // Attributes bypass the field logic, so handle them first
-            if( isAttribute( srcName ) )
+            if( fieldIsAttribute( srcName ) )
             {
                 symbolModified |= setAttributeValue( m_symbolsList[i], srcName, srcValue, aVariantName );
                 continue;
