@@ -86,6 +86,8 @@ public:
     std::shared_ptr<REPORTER> GetReporter() { return m_reloadReporter; }
 
 private:
+    wxString pluginName( const wxString& aIdentifier ) const;
+
     void processPluginDependencies();
 
     void processNextJob( wxCommandEvent& aEvent );

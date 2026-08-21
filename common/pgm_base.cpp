@@ -1001,7 +1001,7 @@ void PGM_BASE::UnregisterLibraryLoadStatusBar( KISTATUSBAR* aStatusBar )
 }
 
 
-void PGM_BASE::AddLibraryLoadMessages( const std::vector<LOAD_MESSAGE>& aMessages )
+void PGM_BASE::AddLibraryLoadMessages( const std::vector<KI_ERROR>& aMessages )
 {
     wxLogTrace( traceLibraries, "AddLibraryLoadMessages: message_count=%zu", aMessages.size() );
 

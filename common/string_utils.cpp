@@ -1977,9 +1977,9 @@ int SortVariantNames( const wxString& aLhs, const wxString& aRhs )
 }
 
 
-std::vector<LOAD_MESSAGE> ExtractLibraryLoadErrors( const wxString& aErrorString, int aSeverity )
+std::vector<KI_ERROR> ExtractLibraryLoadErrors( const wxString& aErrorString, int aSeverity )
 {
-    std::vector<LOAD_MESSAGE> messages;
+    std::vector<KI_ERROR> messages;
 
     if( aErrorString.IsEmpty() )
         return messages;
@@ -2000,7 +2000,7 @@ std::vector<LOAD_MESSAGE> ExtractLibraryLoadErrors( const wxString& aErrorString
             continue;
 
         if( line.StartsWith( wxS( "Library '" ) ) || line.Contains( wxS( "Expecting" ) ) )
-            messages.push_back( { line, static_cast<SEVERITY>( aSeverity ) } );
+        messages.push_back( KI_ERROR( static_cast<SEVERITY>( aSeverity ), line ) );
     }
 
     return messages;

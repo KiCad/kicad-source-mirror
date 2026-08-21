@@ -583,7 +583,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                             (*table)->Save();
                         }
 
-                        std::vector<LOAD_MESSAGE> libErrors;
+                        std::vector<KI_ERROR> libErrors;
 
                         ReconcileLegacyCacheSymbols( *adapter, nickname, schematic, libErrors );
 

@@ -24,7 +24,7 @@
 
 #include <wx/string.h>
 
-struct LOAD_MESSAGE;
+class KI_ERROR;
 class SCH_SCREENS;
 class SYMBOL_LIBRARY_ADAPTER;
 
@@ -48,6 +48,6 @@ class SYMBOL_LIBRARY_ADAPTER;
  * @return the number of symbols pointed at the cache library.
  */
 int ReconcileLegacyCacheSymbols( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxString& aCacheNickname,
-                                 SCH_SCREENS& aScreens, std::vector<LOAD_MESSAGE>& aErrors );
+                                 SCH_SCREENS& aScreens, std::vector<KI_ERROR>& aErrors );
 
 #endif // LEGACY_CACHE_RECONCILE_H

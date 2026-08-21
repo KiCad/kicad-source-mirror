@@ -656,7 +656,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 wxLogTrace( traceLibraries, "eeschema PreloadLibraries: errors.IsEmpty()=%d, length=%zu",
                             errors.IsEmpty(), errors.length() );
 
-                std::vector<LOAD_MESSAGE> messages = ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
+                std::vector<KI_ERROR> messages = ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
 
                 if( !messages.empty() )
                 {

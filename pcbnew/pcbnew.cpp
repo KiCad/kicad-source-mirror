@@ -1183,8 +1183,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
                 if( !errors.IsEmpty() )
                 {
-                    std::vector<LOAD_MESSAGE> messages =
-                            ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
+                    std::vector<KI_ERROR> messages = ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
 
                     wxLogTrace( traceLibraries, "  -> adapter: collected %zu messages",
                                 messages.size() );

@@ -111,6 +111,25 @@ static void reportPluginLoadMessage( REPORTER* aReporter, const wxString& aPlugi
 }
 
 
+static void reportPluginLoadMessage( REPORTER* aReporter, const wxString& aPluginName,
+                                     const wxString& aDescription, const wxString& aDebugText )
+{
+    if( !aReporter || ( aDescription.IsEmpty() && aDebugText.IsEmpty() ) )
+        return;
+
+    KI_ERROR error( RPT_SEVERITY_ERROR );
+    error.SetTitle( wxString::Format( _( "Error loading plugin '%s'" ), aPluginName ) );
+
+    if( !aDescription.IsEmpty() )
+        error.SetDescription( aDescription );
+
+    if( !aDebugText.IsEmpty() )
+        error.SetDebugText( aDebugText );
+
+    aReporter->Report( error );
+}
+
+
 static void reportPluginActionResult( REPORTER* aReporter, const wxString& aActionName,
                                       int aRetVal, const wxString& aError )
 {
@@ -221,7 +240,7 @@ void API_PLUGIN_MANAGER::ReloadPlugins( std::optional<wxString> aDirectoryToScan
                 {
                     wxLogTrace( traceApi, "Manager: loading failed" );
 
-                    reportPluginLoadMessage( m_reloadReporter.get(), aFile.GetFullPath(),
+                    reportPluginLoadMessage( m_reloadReporter.get(), aFile.GetName(),
                                              plugin->ErrorMessage() );
                 }
             } );
@@ -620,6 +639,15 @@ std::vector<const PLUGIN_ACTION*> API_PLUGIN_MANAGER::GetActionsForScope( PLUGIN
 }
 
 
+wxString API_PLUGIN_MANAGER::pluginName( const wxString& aIdentifier ) const
+{
+    if( m_pluginsCache.contains( aIdentifier ) )
+        return m_pluginsCache.at( aIdentifier )->Name();
+
+    return aIdentifier;
+}
+
+
 void API_PLUGIN_MANAGER::processPluginDependencies()
 {
     bool addedAnyJobs = false;
@@ -748,13 +776,11 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                         if( error.IsEmpty() )
                             error = wxString::Format( _( "error code %d" ), aRetVal );
 
-                        error = wxString::Format( _( "could not create plugin environment: %s" ), error );
-
-                        reportPluginLoadMessage( m_reloadReporter.get(), job.identifier, error );
+                        reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
+                                                 _( "Could not create plugin environment" ), error );
                     }
 
-                    wxCommandEvent* evt =
-                            new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
+                    wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
                     QueueEvent( evt );
                 }, &env );
 
@@ -772,11 +798,11 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
         if( !python )
         {
-            wxLogTrace( traceApi, wxString::Format( "Manager: error: python not found at %s",
-                                                    job.env_path ) );
+            wxString debug = wxString::Format( wxS( "Python binary not found at %s" ), job.env_path );
+            wxLogTrace( traceApi, wxString::Format( "Manager: error: %s", debug ) );
 
-            reportPluginLoadMessage( m_reloadReporter.get(), job.identifier,
-                                     _( "missing plugin environment" ) );
+            reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
+                                     _( "Missing plugin environment" ), debug );
         }
         else
         {
@@ -830,9 +856,8 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                         if( error.IsEmpty() )
                             error = wxString::Format( _( "error code %d" ), aRetVal );
 
-                        error = wxString::Format( _( "could not create plugin environment: %s" ), error );
-
-                        reportPluginLoadMessage( m_reloadReporter.get(), job.identifier, error );
+                        reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
+                                                 _( "Could not create plugin environment" ), error );
                     }
 
                     wxCommandEvent* evt =
@@ -856,11 +881,11 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
         if( !python )
         {
-            wxLogTrace( traceApi, wxString::Format( "Manager: error: python not found at %s",
-                                                    job.env_path ) );
+            wxString debug = wxString::Format( wxS( "Python binary not found at %s" ), job.env_path );
+            wxLogTrace( traceApi, wxString::Format( "Manager: error: %s", debug ) );
 
-            reportPluginLoadMessage( m_reloadReporter.get(), job.identifier,
-                                     _( "missing plugin environment" ) );
+            reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
+                                     _( "Missing plugin environment" ), debug );
         }
         else if( !reqs.IsFileReadable() )
         {
@@ -868,7 +893,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                         wxString::Format( "Manager: error: requirements.txt not found at %s",
                                           job.plugin_path ) );
 
-            reportPluginLoadMessage( m_reloadReporter.get(), job.identifier,
+            reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
                                      _( "requirements.txt could not be read" ) );
         }
         else
@@ -920,9 +945,8 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                         if( error.IsEmpty() )
                             error = wxString::Format( _( "error code %d" ), aRetVal );
 
-                        error = wxString::Format( _( "could not create plugin environment: %s" ), error );
-
-                        reportPluginLoadMessage( m_reloadReporter.get(), job.identifier, error );
+                        reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
+                                                 _( "Could not create plugin environment" ), error );
                     }
 
                     if( aRetVal == 0 )

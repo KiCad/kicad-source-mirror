@@ -546,7 +546,7 @@ KICOMMON_API wxString GetDefaultVariantName();
 
 KICOMMON_API int SortVariantNames( const wxString& aLhs, const wxString& aRhs );
 
-struct LOAD_MESSAGE;
+class KI_ERROR;
 
 /**
  * Parse library load error messages, extracting user-facing information while
@@ -556,7 +556,6 @@ struct LOAD_MESSAGE;
  * @param aSeverity is the severity to assign to all extracted messages
  * @return vector of LOAD_MESSAGE with cleaned error text
  */
-KICOMMON_API std::vector<LOAD_MESSAGE> ExtractLibraryLoadErrors( const wxString& aErrorString,
-                                                                  int aSeverity );
+KICOMMON_API std::vector<KI_ERROR> ExtractLibraryLoadErrors( const wxString& aErrorString, int aSeverity );
 
 #endif  // STRING_UTILS_H

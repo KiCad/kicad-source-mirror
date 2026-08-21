@@ -22,11 +22,11 @@
 #define KISTATUSBAR_H
 
 #include <kicommon.h>
+#include <ki_error.h>
 #include <optional>
 #include <mutex>
 #include <vector>
 #include <unordered_map>
-#include <widgets/report_severity.h>
 #include <wx/statusbr.h>
 
 class wxGauge;
@@ -42,15 +42,6 @@ class BITMAP_BUTTON;
  * Background background stop button (FIELD_OFFSET_BGJOB_CANCEL offset id)
  * Background notifications button (FIELD_OFFSET_NOTIFICATION_BUTTON  offset id)
  */
-
-/**
- * Structure to store a load message with its severity.
- */
-struct LOAD_MESSAGE
-{
-    wxString  message;
-    SEVERITY  severity;
-};
 
 
 class KICOMMON_API KISTATUSBAR : public wxStatusBar
@@ -110,7 +101,7 @@ public:
     void ClearWarningMessages( const wxString& aSource = wxEmptyString );
 
     /**
-     * Add warning/error messages (not thread-safe, use the std::vector<LOAD_MESSAGE> variant
+     * Add warning/error messages (not thread-safe, use the std::vector<KI_ERROR> variant
      * from other threads)
      */
     void AddWarningMessages( const wxString& aSource, const wxString& aMessages );
@@ -119,7 +110,7 @@ public:
      * Add warning/error messages thread-safely.
      * Can be called from any thread. UI update is deferred to main thread.
      */
-    void AddWarningMessages( const wxString& aSource, const std::vector<LOAD_MESSAGE>& aMessages );
+    void AddWarningMessages( const wxString& aSource, const std::vector<KI_ERROR>& aMessages );
 
     /**
      * Get current message count (thread-safe).
@@ -156,7 +147,7 @@ private:
     BITMAP_BUTTON* m_notificationsButton;
     BITMAP_BUTTON* m_warningButton;
     mutable std::mutex m_warningMutex;  ///< Protects m_warningMessages
-    std::unordered_map<wxString, std::vector<LOAD_MESSAGE>> m_warningMessages;
+    std::unordered_map<wxString, std::vector<KI_ERROR>> m_warningMessages;
     int            m_normalFieldsCount;
     STYLE_FLAGS    m_styleFlags;
     wxString       m_savedStatusText;       ///< Saved text from adjacent field during background jobs

@@ -77,6 +77,12 @@ REPORTER& REPORTER::Report( const char* aText, SEVERITY aSeverity )
 }
 
 
+REPORTER& REPORTER::Report( const KI_ERROR& aError )
+{
+    return Report( aError.AsString(), aError.GetSeverity() );
+}
+
+
 REPORTER& WX_TEXT_CTRL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     REPORTER::Report( aText, aSeverity );
@@ -427,26 +433,50 @@ REPORTER& STATUSBAR_WARNING_REPORTER::Report( const wxString& aText, SEVERITY aS
     if( !statusBar || aText.IsEmpty() )
         return *this;
 
-    std::vector<LOAD_MESSAGE> messages;
+    std::vector<KI_ERROR> messages;
     wxStringTokenizer tokenizer( aText, wxS( "\n" ), wxTOKEN_STRTOK );
     SEVERITY severity = aSeverity == RPT_SEVERITY_UNDEFINED ? RPT_SEVERITY_WARNING : aSeverity;
 
     while( tokenizer.HasMoreTokens() )
     {
-        LOAD_MESSAGE message;
-        message.message = tokenizer.GetNextToken();
-        message.severity = severity;
+        KI_ERROR message;
+        message.SetTitle( tokenizer.GetNextToken() );
+        message.SetSeverity( severity );
         messages.emplace_back( std::move( message ) );
     }
 
     if( messages.empty() )
     {
-        LOAD_MESSAGE message;
-        message.message = aText;
-        message.severity = severity;
+        KI_ERROR message;
+        message.SetTitle( aText );
+        message.SetSeverity( severity );
         messages.emplace_back( std::move( message ) );
     }
 
     statusBar->AddWarningMessages( m_impl->m_source, messages );
+    return *this;
+}
+
+
+REPORTER& STATUSBAR_WARNING_REPORTER::Report( const KI_ERROR& aError )
+{
+    REPORTER::Report( aError );
+
+    KISTATUSBAR* statusBar = m_impl ? m_impl->GetStatusBar() : nullptr;
+
+    // Preserve the structured payload: the dialog renders title/description/debug
+    // separately. Fall back to the flat string when no title is set so the badge is
+    // never empty.
+    if( statusBar )
+    {
+        KI_ERROR message;
+
+        if( !message.HasTitle() )
+            message.SetTitle( aError.AsString() );
+
+        std::vector<KI_ERROR> messages{ std::move( message ) };
+        statusBar->AddWarningMessages( m_impl->m_source, messages );
+    }
+
     return *this;
 }

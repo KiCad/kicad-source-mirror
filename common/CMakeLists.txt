@@ -309,6 +309,7 @@ set( KICOMMON_SRCS
     json_schema_validator.cpp
     kidialog.cpp
     kiid.cpp
+    ki_error.cpp
     kiway.cpp
     kiway_mail.cpp
     kiway_holder.cpp

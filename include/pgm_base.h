@@ -45,7 +45,7 @@ class wxWindow;
 class wxSplashScreen;
 
 class KISTATUSBAR;
-struct LOAD_MESSAGE;
+class KI_ERROR;
 struct BACKGROUND_JOB;
 class BACKGROUND_JOBS_MONITOR;
 class NOTIFICATIONS_MANAGER;
@@ -371,7 +371,7 @@ public:
      * Add library load messages to all registered status bars.
      * Thread-safe - can be called from background threads.
      */
-    void AddLibraryLoadMessages( const std::vector<LOAD_MESSAGE>& aMessages );
+    void AddLibraryLoadMessages( const std::vector<KI_ERROR>& aMessages );
 
     /**
      * Clear library load messages from all registered status bars.

@@ -29,7 +29,7 @@
 
 
 static bool loadLibrary( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxString& aNickname,
-                         std::vector<LOAD_MESSAGE>& aErrors )
+                         std::vector<KI_ERROR>& aErrors )
 {
     // A library the preload already finished is fully loaded content-wise; forcing another
     // LoadOne() through LoadLibraryEntry() would just re-enumerate it on the UI thread
@@ -41,14 +41,14 @@ static bool loadLibrary( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxString& aNick
     if( status && status->load_status == LOAD_STATUS::LOADED )
         return true;
 
-    LOAD_MESSAGE message;
+    KI_ERROR message;
 
     if( status && status->error )
-        message.message = wxString::Format( _( "Library '%s': %s" ), aNickname, status->error->message );
+        message.SetTitle( wxString::Format( _( "Library '%s': %s" ), aNickname, status->error->message ) );
     else
-        message.message = wxString::Format( _( "Library '%s' could not be loaded." ), aNickname );
+        message.SetTitle( wxString::Format( _( "Library '%s' could not be loaded." ), aNickname ) );
 
-    message.severity = RPT_SEVERITY_ERROR;
+    message.SetSeverity( RPT_SEVERITY_ERROR );
     aErrors.emplace_back( std::move( message ) );
 
     return false;
@@ -56,7 +56,7 @@ static bool loadLibrary( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxString& aNick
 
 
 int ReconcileLegacyCacheSymbols( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxString& aCacheNickname,
-                                 SCH_SCREENS& aScreens, std::vector<LOAD_MESSAGE>& aErrors )
+                                 SCH_SCREENS& aScreens, std::vector<KI_ERROR>& aErrors )
 {
     // A startup preload worker can still be enumerating a library on another thread; joining it
     // here before touching any LIB_DATA keeps the synchronous loads below from racing it

@@ -26,6 +26,7 @@
 #include <mutex>
 
 #include <eda_units.h>
+#include <ki_error.h>
 #include <widgets/report_severity.h>
 #include <kicommon.h>
 
@@ -104,6 +105,15 @@ public:
         m_reportedSeverityMask |= aSeverity;
         return *this;
     }
+
+    /**
+     * Report a structured #KI_ERROR.
+     *
+     * The default implementation flattens the error onto #Report(const wxString&, SEVERITY).
+     * Reporters that want to render the title / description / debug hierarchy separately
+     * override this.
+     */
+    virtual REPORTER& Report( const KI_ERROR& aError );
 
     /**
      * Places the report at the end of the list, for objects that support report ordering
@@ -420,6 +430,7 @@ public:
     ~STATUSBAR_WARNING_REPORTER() override;
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const KI_ERROR& aError ) override;
 
 private:
     std::shared_ptr<STATUSBAR_WARNING_REPORTER_IMPL> m_impl;
