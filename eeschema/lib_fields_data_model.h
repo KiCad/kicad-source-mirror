@@ -60,7 +60,7 @@ public:
     wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) override;
 
     bool ColIsItemIdentifier( int aCol ) override;
-    bool ColIsCheck( int aCol ) override;
+    bool ColIsAttribute( int aCol ) override;
 
     const LIB_SYMBOL* GetSymbolForRow( int aRow )
     {
@@ -102,6 +102,7 @@ private:
 
     wxString getAttributeValue( const LIB_SYMBOL*, const wxString& aAttributeName );
     void setAttributeValue( LIB_SYMBOL* aSymbol, const wxString& aAttributeName, const wxString& aValue );
+    wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const override;
 
     wxString getFieldResolvedLiveValue( LIB_SYMBOL* const& aSymbol, const wxString& aFieldName ) override;
     wxString resolveTextVars( LIB_SYMBOL* const& aSymbol, const wxString& aText ) override;

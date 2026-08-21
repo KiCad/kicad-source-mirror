@@ -71,7 +71,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( LIB_SYMBOL* const& aS
     int col = GetFieldNameCol( aFieldName );
     aValue.clear();
 
-    if( col != -1 && ColIsCheck( col ) )
+    if( col != -1 && ColIsAttribute( col ) )
     {
         aValue = getAttributeValue( aSymbol, aFieldName );
         return true;
@@ -125,30 +125,13 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemIdentifier( int aCol )
 }
 
 
-// TODO: This is ugly, but it's going away
-bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsCheck( int aCol )
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
 {
-    wxString aAttributeName = m_cols[aCol].m_fieldName;
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
 
-    if( aAttributeName == wxS( "${DNP}" ) )
-        return true;
-
-    if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
-        return true;
-
-    if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
-        return true;
-
-    if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        return true;
-
-    if( aAttributeName == wxS( "Power" ) )
-        return true;
-
-    if( aAttributeName == wxS( "LocalPower" ) )
-        return true;
-
-    return false;
+    return FIELDS_TABLE_DATA_MODEL_BASE::ColIsAttribute( aCol )
+           || m_cols[aCol].m_fieldName == wxS( "${SYMBOL_IS_POWER}" )
+           || m_cols[aCol].m_fieldName == wxS( "${SYMBOL_IS_LOCAL_POWER}" );
 }
 
 
@@ -395,10 +378,10 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const LIB_SYMBOL*
     if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
         return aSymbol->GetExcludedFromSim() ? wxS( "1" ) : wxS( "0" );
 
-    if( aAttributeName == wxS( "Power" ) )
+    if( aAttributeName == wxS( "${SYMBOL_IS_POWER}" ) )
         return aSymbol->IsPower() ? wxS( "1" ) : wxS( "0" );
 
-    if( aAttributeName == wxS( "LocalPower" ) )
+    if( aAttributeName == wxS( "${SYMBOL_IS_LOCAL_POWER}" ) )
         return aSymbol->IsLocalPower() ? wxS( "1" ) : wxS( "0" );
 
 
@@ -417,7 +400,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( LIB_SYMBOL* aSymbol,
         aSymbol->SetExcludedFromBOM( aValue == wxS( "1" ) );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
         aSymbol->SetExcludedFromSim( aValue == wxS( "1" ) );
-    else if( aAttributeName == wxS( "LocalPower" ) )
+    else if( aAttributeName == wxS( "${SYMBOL_IS_LOCAL_POWER}" ) )
     {
         // Turning off local power still leaves the global flag set
         if( aValue == wxS( "0" ) )
@@ -425,7 +408,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( LIB_SYMBOL* aSymbol,
         else
             aSymbol->SetLocalPower();
     }
-    else if( aAttributeName == wxS( "Power" ) )
+    else if( aAttributeName == wxS( "${SYMBOL_IS_POWER}" ) )
     {
         if( aValue == wxS( "0" ) )
             aSymbol->SetNormal();
@@ -434,6 +417,20 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( LIB_SYMBOL* aSymbol,
     }
     else
         wxLogDebug( "Unknown attribute name: %s", aAttributeName );
+}
+
+
+wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const
+{
+    if( !aValue )
+        return wxEmptyString;
+
+    if( aFieldName == wxS( "${SYMBOL_IS_POWER}" ) )
+        return wxS( "Power Symbol" );
+    else if( aFieldName == wxS( "${SYMBOL_IS_LOCAL_POWER}" ) )
+        return wxS( "Local Power Symbol" );
+
+    return FIELDS_TABLE_DATA_MODEL_BASE::getAttributeResolvedValue( aFieldName, aValue );
 }
 
 
@@ -586,7 +583,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
                 continue;
 
             // Attributes bypass the field logic, so handle them first
-            if( ColIsCheck( static_cast<int>( i ) ) )
+            if( ColIsAttribute( static_cast<int>( i ) ) )
             {
                 wxString newValue = currentlyPresent ? srcValue : wxS( "0" );
 
@@ -705,7 +702,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
 
 wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetTypeName( int row, int col )
 {
-    if( ColIsCheck( col ) )
+    if( ColIsAttribute( col ) )
         return wxGRID_VALUE_BOOL;
 
     return wxGridTableBase::GetTypeName( row, col );
@@ -760,5 +757,5 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::isStripeableField( int aCol )
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
 
     // Don't apply stripes to checkbox fields
-    return !ColIsCheck( aCol );
+    return !ColIsAttribute( aCol );
 }

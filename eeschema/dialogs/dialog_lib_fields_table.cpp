@@ -537,8 +537,8 @@ void DIALOG_LIB_FIELDS_TABLE::loadFieldNames()
     AddField( wxS( "${EXCLUDE_FROM_BOM}" ), _( "Exclude From BOM" ), true, false );
     AddField( wxS( "${EXCLUDE_FROM_SIM}" ), _( "Exclude From Simulation" ), true, false );
     AddField( wxS( "${EXCLUDE_FROM_BOARD}" ), _( "Exclude From Board" ), true, false );
-    AddField( wxS( "Power" ), _( "Power Symbol" ), true, false );
-    AddField( wxS( "LocalPower" ), _( "Local Power Symbol" ), true, false );
+    AddField( wxS( "${SYMBOL_IS_POWER}" ), _( "Power Symbol" ), true, false );
+    AddField( wxS( "${SYMBOL_IS_LOCAL_POWER}" ), _( "Local Power Symbol" ), true, false );
 
     std::set<wxString> userFieldNames;
 
@@ -672,8 +672,8 @@ std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
                 { wxS( "${EXCLUDE_FROM_BOM}" ), wxS( "Exclude From BOM" ), true, false },
                 { wxS( "${EXCLUDE_FROM_SIM}" ), wxS( "Exclude From Simulation" ), true, false },
                 { wxS( "${EXCLUDE_FROM_BOARD}" ), wxS( "Exclude From Board" ), true, false },
-                { wxS( "Power" ), wxS( "Power Symbol" ), true, false },
-                { wxS( "LocalPower" ), wxS( "Local Power Symbol" ), true, false },
+                { wxS( "${SYMBOL_IS_POWER}" ), wxS( "Power Symbol" ), true, false },
+                { wxS( "${SYMBOL_IS_LOCAL_POWER}" ), wxS( "Local Power Symbol" ), true, false },
             };
         }
     }

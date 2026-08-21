@@ -466,7 +466,7 @@ void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
         attr->SetRenderer( new wxGridCellNumberRenderer() );
         getDataModel()->SetColAttr( attr, aCol );
     }
-    else if( getDataModel()->ColIsCheck( aCol ) )
+    else if( getDataModel()->ColIsAttribute( aCol ) )
     {
         attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
         attr->SetRenderer( new GRID_CELL_CHECKBOX_RENDERER() );

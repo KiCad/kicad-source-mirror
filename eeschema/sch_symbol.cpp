@@ -2295,6 +2295,8 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "SYMBOL_NAME" ) );
     aVars->push_back( wxT( "SYMBOL_DESCRIPTION" ) );
     aVars->push_back( wxT( "SYMBOL_KEYWORDS" ) );
+    aVars->push_back( wxT( "SYMBOL_IS_POWER" ) );
+    aVars->push_back( wxT( "SYMBOL_IS_LOCAL_POWER" ) );
     aVars->push_back( wxT( "EXCLUDE_FROM_BOM" ) );
     aVars->push_back( wxT( "EXCLUDE_FROM_BOARD" ) );
     aVars->push_back( wxT( "EXCLUDE_FROM_SIM" ) );
@@ -2530,6 +2532,16 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     else if( token->IsSameAs( wxT( "SYMBOL_KEYWORDS" ) ) )
     {
         *token = GetShownKeyWords( aDepth + 1 );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_IS_POWER" ) ) )
+    {
+        *token = this->IsPower() ? wxS( "Power Symbol" ) : wxString( "" );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_IS_LOCAL_POWER" ) ) )
+    {
+        *token = this->IsLocalPower() ? wxS( "Local Power Symbol" ) : wxString( "" );
         return true;
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )

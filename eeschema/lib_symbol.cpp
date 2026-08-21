@@ -954,6 +954,16 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
         *token = GetShownKeyWords( aDepth + 1 );
         return true;
     }
+    else if( token->IsSameAs( wxT( "SYMBOL_IS_POWER" ) ) )
+    {
+        *token = this->IsPower() ? wxS( "Power Symbol" ) : wxString( "" );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_IS_LOCAL_POWER" ) ) )
+    {
+        *token = this->IsLocalPower() ? wxS( "Local Power Symbol" ) : wxString( "" );
+        return true;
+    }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
     {
         *token = this->GetExcludedFromBOM() ? wxS( "Excluded from BOM" ) : wxEmptyString;
