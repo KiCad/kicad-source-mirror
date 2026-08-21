@@ -427,3 +427,34 @@ bool OleRenderWmf( const std::vector<uint8_t>& aWmf, int aMaxWidth, int aMaxHeig
     destroyApi();
     return true;
 }
+
+
+VECTOR2I OleWmfRenderSize( int aNaturalWidth, int aNaturalHeight, int aMaxWidth, int aMaxHeight,
+                             double aTargetAspect )
+{
+    if( aNaturalWidth <= 0 || aNaturalHeight <= 0 || aMaxWidth <= 0 || aMaxHeight <= 0 )
+        return VECTOR2I( 0, 0 );
+
+    if( !std::isfinite( aTargetAspect ) )
+        return VECTOR2I( 0, 0 );
+
+    if( aTargetAspect > 0.0 )
+    {
+        double width = aMaxWidth;
+        double height = width / aTargetAspect;
+
+        if( height > aMaxHeight )
+        {
+            height = aMaxHeight;
+            width = height * aTargetAspect;
+        }
+
+        return VECTOR2I( std::max( 1, KiROUND( width ) ), std::max( 1, KiROUND( height ) ) );
+    }
+
+    double scale = std::min( static_cast<double>( aMaxWidth ) / aNaturalWidth,
+                             static_cast<double>( aMaxHeight ) / aNaturalHeight );
+    scale = std::min( scale, 1.0 );
+    return VECTOR2I( std::max( 1, KiROUND( aNaturalWidth * scale ) ),
+                     std::max( 1, KiROUND( aNaturalHeight * scale ) ) );
+}

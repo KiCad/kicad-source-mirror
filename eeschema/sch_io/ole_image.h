@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <math/vector2d.h>
 
 class wxImage;
 class wxMemoryBuffer;
@@ -45,3 +46,10 @@ inline OLE_IMAGE_PAYLOAD ExtractOleImage( const std::vector<uint8_t>& aCfb )
 
 bool OleMakeBmpFromDib( const std::vector<uint8_t>& aDib, wxMemoryBuffer& aOut );
 bool OleRenderWmf( const std::vector<uint8_t>& aWmf, int aMaxWidth, int aMaxHeight, wxImage& aImage );
+
+
+bool OleRenderEmf( const std::vector<uint8_t>& aEmf, int aMaxWidth, int aMaxHeight, wxImage& aImage,
+                   double aTargetAspect = 0.0 );
+
+VECTOR2I OleWmfRenderSize( int aNaturalWidth, int aNaturalHeight, int aMaxWidth, int aMaxHeight,
+                          double aTargetAspect );

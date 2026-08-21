@@ -104,6 +104,7 @@ set( EESCHEMA_SCH_IO
     sch_io/pads/pads_sch_binary_parser.cpp
     sch_io/pads/pads_sch_sdb.cpp
     sch_io/ole_image.cpp
+    sch_io/ole_emf.cpp
 
     # DipTrace IO plugin
     sch_io/diptrace/sch_io_diptrace.cpp
@@ -677,6 +678,7 @@ target_link_libraries( eeschema_kiface_objects
     PUBLIC
         common
         libwmf_orcad
+        emf2svg
         pads_common
         pcm )
 
