@@ -813,6 +813,9 @@ void BOARD_COMMIT::Revert()
                 }
             }
 
+            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( boardItem ) )
+                group->RemoveAll();
+
             // Defer deletion until after OnItemsCompositeUpdate so that
             // board listeners do not receive dangling pointers.
             itemsToDelete.push_back( boardItem );
