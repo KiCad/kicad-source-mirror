@@ -24,6 +24,7 @@
 #ifndef RC_ITEM_H
 #define RC_ITEM_H
 
+#include <deque>
 #include <memory>
 #include <vector>
 
@@ -352,6 +353,19 @@ protected:
                               RC_TREE_NODE::NODE_TYPE aType );
     void          retireNodeTree( RC_TREE_NODE* aNode );
     void          deleteNodeTree( RC_TREE_NODE* aNode );
+
+    /**
+     * Retire and destroy every node in the tree.
+     *
+     * Retired handles are kept alive so that stale wxDataViewItems resolve to nullptr.
+     */
+    void          clearTree();
+
+    /**
+     * Repopulate the node tree from \a aProvider.  Touches no wxWidgets state.
+     */
+    void          rebuildTree( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
+
     void     rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
 
     EDA_DRAW_FRAME*                    m_editFrame;
@@ -359,7 +373,10 @@ protected:
     int                                m_severities;
     std::shared_ptr<RC_ITEMS_PROVIDER> m_rcItemsProvider;
 
-    std::vector<std::unique_ptr<RC_TREE_NODE::HANDLE>> m_handles;   // Stable wx item IDs
+    /// Stable wx item IDs.  Handles are retired but never freed before the model dies because
+    /// wxDataViewCtrl hands back item IDs long after the rows they named were destroyed; the
+    /// deque keeps existing handle addresses valid as more are appended.
+    std::deque<RC_TREE_NODE::HANDLE>   m_handles;
     std::vector<RC_TREE_NODE*>         m_tree;              // I own this
 };
 
