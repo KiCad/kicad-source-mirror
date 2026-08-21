@@ -25,10 +25,6 @@
 #include <netinfo.h>
 
 
-#define NO_NET _( "<no net>" )
-#define CREATE_NET _( "<create net>" )
-
-
 class NET_SELECTOR_COMBOPOPUP : public FILTER_COMBOPOPUP
 {
 public:

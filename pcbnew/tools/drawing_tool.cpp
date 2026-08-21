@@ -4193,16 +4193,17 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( int netcode : aNetcodeList )
             {
-                wxString menuText;
+                wxString menuText = netcode ? netInfo.GetNetItem( netcode )->GetNetname() : NO_NET;
+
                 if( menuID < 10 )
                 {
 #ifdef __WXMAC__
                     menuText = wxString::Format( "%s\t",
-                                                 netInfo.GetNetItem( netcode )->GetNetname() );
+                                                 menuText );
 #else
                     menuText = wxString::Format( "&%d  %s\t",
                                                  menuID,
-                                                 netInfo.GetNetItem( netcode )->GetNetname() );
+                                                 menuText );
 #endif
                 }
                 else

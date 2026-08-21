@@ -22,8 +22,7 @@
  *  Classes to handle info on nets
  */
 
-#ifndef CLASS_NETINFO_
-#define CLASS_NETINFO_
+#pragma once
 
 #include <netclass.h>
 #include <board_item.h>
@@ -37,6 +36,10 @@ class BOARD_ITEM;
 class BOARD_COMMIT;
 class MSG_PANEL_ITEM;
 class PCB_BASE_FRAME;
+
+
+#define NO_NET _( "<no net>" )
+#define CREATE_NET _( "<create net>" )
 
 
 /**
@@ -390,5 +393,3 @@ private:
 
     int          m_newNetCode;      ///< possible value for new net code assignment
 };
-
-#endif  // CLASS_NETINFO_
