@@ -1,0 +1,24 @@
+libemf2svg: https://github.com/kakwa/libemf2svg
+Revision: 658a718de180666d342a78fd4046ec1f41e65e17 (1.8.1)
+License: GPL-2.0; see LICENSE. libuemf and fmem retain their own license notices.
+
+This subset contains the static converter, its libuemf implementation, and fmem
+for Windows. Unix platforms use native open_memstream. PNG, FreeType, Fontconfig and iconv use existing dependencies.
+The converter does not use libxml2. CLI, argp, vcpkg, demos and build tools are omitted.
+EMF+ sources remain because the converter references their record handlers.
+
+KiCad supplies a target-scoped CMake build and disables DLL exports for static use.
+
+Local conversion patches accept a caller-owned Fontconfig configuration, map
+LOGFONT weights correctly, and retain Calibri's blank glyph when fonts substitute.
+Text output preserves character advances, vertical advances, and baseline rotation.
+Malformed text spans and unmapped glyphs fail conversion; glyph lookup and record
+headers are checked before reading. Reverse maps use bounded font glyph counts.
+The bundled libuemf record validator runs before record analysis and conversion.
+Local fixes check text offsets before dereferencing and retain wide count arithmetic.
+The upstream validator does not inspect payloads of record types marked unimplemented.
+
+Windows memory streams reject path/access errors instead of retrying forever.
+
+Bitmap validation checks full padded rows, declared metadata spans, and extended-header palettes. RLE
+bitmaps are rejected so callers can retain their WMF fallback.

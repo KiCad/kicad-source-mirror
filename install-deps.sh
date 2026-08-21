@@ -12,6 +12,7 @@ sudo apt-get update && sudo apt-get install -y \
   asciidoc \
   source-highlight \
   libcairo2-dev \
+  libpng-dev \
   libglu1-mesa-dev \
   libgl1-mesa-dev \
   libx11-dev \

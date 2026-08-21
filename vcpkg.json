@@ -32,6 +32,8 @@
       "host": true
     },
     "harfbuzz",
+    "libiconv",
+    "libpng",
     "glm",
     {
       "name": "opencascade",

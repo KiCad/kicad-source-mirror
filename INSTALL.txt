@@ -48,6 +48,9 @@ Installation from source code
 
   Current documentation for building from source can be found at: https://dev-docs.kicad.org/
 
+  The static EMF converter requires libpng and iconv development files. Linux
+  provides iconv through libc; Windows builds use the vcpkg libiconv dependency.
+
 
 Important parameters to CMake
 -----------------------------

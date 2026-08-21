@@ -1,0 +1,69 @@
+#ifndef FMEM_H_
+#define FMEM_H_
+
+#include <stdio.h>
+
+@EXPORT_MACROS@
+
+struct fmem_reserved {
+    char reserved[32];
+};
+
+typedef struct fmem_reserved fmem;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * Initializes an fmem structure.
+ *
+ * This function prepares the fmem structure for use. It must be called
+ * before any other fmem functions are used with this structure.
+ *
+ * @param file A pointer to an fmem structure.
+ */
+FMEM_API void fmem_init(fmem *file);
+
+/**
+ * Cleans up an fmem structure.
+ *
+ * This function releases any resources held by the fmem structure. 
+ * It should be called when you are finished with the structure to prevent memory leaks.
+ *
+ * @param file A pointer to an fmem structure.
+ */
+FMEM_API void fmem_term(fmem *file);
+
+/**
+ * Opens a memory-backed file stream.
+ *
+ * This function attempts to open a memory-backed file stream, trying various
+ * methods depending on platform support (e.g., open_memstream, fopencookie).
+ * The 'mode' parameter is currently ignored, and streams are always opened
+ * in write-only mode.
+ *
+ * @param file A pointer to an fmem structure.
+ * @param mode A string representing the file mode (ignored in current implementation).
+ * @return A FILE pointer to the memory-backed file stream, or NULL if the operation fails.
+ */
+FMEM_API FILE *fmem_open(fmem *file, const char *mode);
+
+/**
+ * Retrieves the memory buffer and size from an fmem structure.
+ *
+ * This function allows access to the underlying memory buffer used by the fmem structure.
+ * It is useful for reading data written to the memory-backed file stream.
+ *
+ * @param file A pointer to an fmem structure.
+ * @param mem A pointer to a pointer where the address of the memory buffer will be stored.
+ * @param size A pointer to a size_t where the size of the buffer will be stored.
+ */
+FMEM_API void fmem_mem(fmem *file, void **mem, size_t *size);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* !FMEM_H_ */
