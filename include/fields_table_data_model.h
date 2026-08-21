@@ -204,6 +204,7 @@ protected:
     // named field values like ${DNP}
     bool     isAttribute( const wxString& aFieldName );
     wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
+    wxString getDataStoreFieldValue( const KIID_PATH& aKey, const wxString& aFieldName ) const;
 
     virtual bool isCellReadOnly( int aRow, int aCol );
 
@@ -240,6 +241,14 @@ protected:
     //
     // m_rows and m_cols are just a generated view based on the data store,
     // and are rebuilt as the user changes grouping, sorting, filtering, etc.
+    //
+    // NOTE: be very careful about how you "read" this data store, you should generally
+    // use getDataStoreFieldValue() to read values from the data store.
+    //
+    // The map is used to distinguish between present-but-empty vs. not-present
+    // especially for the lib symbols table. When checking for empty, do not use
+    // [] operator, use find() instead, as otherwise [] will create a new entry
+    // in the map for the key, which is not what you want.
     std::map<KIID_PATH, std::map<wxString, wxString>> m_dataStore;
 };
 
@@ -395,10 +404,7 @@ public:
             {
                 KIID_PATH key = getDataStoreKey( item );
 
-                if( !m_dataStore.contains( key ) || !m_dataStore[key].contains( m_cols[aCol].m_fieldName ) )
-                    return INDETERMINATE_STATE;
-
-                wxString itemFieldValue = m_dataStore[key][m_cols[aCol].m_fieldName];
+                wxString itemFieldValue = getDataStoreFieldValue( key, m_cols[aCol].m_fieldName );
 
                 // Show the effective state when a sheet forces it on, but do not change
                 // the stored value so the symbol is never stamped on apply.
@@ -547,10 +553,6 @@ protected:
             return aMatcher.Find( aReference.Lower() );
 
         KIID_PATH key = getDataStoreKey( aItem );
-        auto      itemIt = m_dataStore.find( key );
-
-        if( itemIt == m_dataStore.end() )
-            return false;
 
         for( size_t i = 0; i < m_cols.size(); ++i )
         {
@@ -559,12 +561,7 @@ protected:
             if( m_filterScope == BOM_FILTER_SCOPE::VISIBLE && !col.m_show )
                 continue;
 
-            auto fieldIt = itemIt->second.find( col.m_fieldName );
-
-            if( fieldIt == itemIt->second.end() )
-                continue;
-
-            wxString value = fieldIt->second;
+            wxString value = getDataStoreFieldValue( key, col.m_fieldName );
 
             // We want to match on things like DNP and Excluded from BOM when the
             // checkbox is checked
@@ -706,8 +703,8 @@ protected:
 
             const wxString& fieldName = m_cols[i].m_fieldName;
 
-            wxString lh = m_dataStore[lhItemKey][fieldName];
-            wxString rh = m_dataStore[rhItemKey][fieldName];
+            wxString lh = getDataStoreFieldValue( lhItemKey, fieldName );
+            wxString rh = getDataStoreFieldValue( rhItemKey, fieldName );
 
             // If the field is generated (e.g. ${QUANTITY}), we need to resolve it through the
             // item to get the actual current value; otherwise we need to pull it out of the store
