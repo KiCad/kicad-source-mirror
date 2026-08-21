@@ -63,6 +63,9 @@ struct MDW_CLAIM_ACTION
 };
 
 
+/// Who holds aLock, by name where the backend gives one
+KICOMMON_API wxString MdwClaimHolder( const MDW_LOCK_INFO& aLock );
+
 /// Who holds aLock and since when, such as "Being edited by dave since 15/10/26 (30 days)". Empty when known free
 KICOMMON_API wxString MdwClaimLabel( const MDW_LOCK_INFO& aLock, const wxDateTime& aNow );
 

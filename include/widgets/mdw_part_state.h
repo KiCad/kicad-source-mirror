@@ -123,6 +123,9 @@ struct KICOMMON_API MDW_PART_STATE
      */
     std::vector<MDW_PART_ACTION> Actions() const;
 
+    /// Why an edit to the read-only part aName was not kept, naming whoever holds its claim
+    wxString EditRefusal( const wxString& aName ) const;
+
     /// The state's name, falling back to its category's when the definition does not name it
     wxString StateName() const;
 

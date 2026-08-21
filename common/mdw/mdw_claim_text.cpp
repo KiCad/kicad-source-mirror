@@ -32,10 +32,7 @@
 #include <wx/datetime.h>
 
 
-namespace
-{
-
-wxString holderOf( const MDW_LOCK_INFO& aLock )
+wxString MdwClaimHolder( const MDW_LOCK_INFO& aLock )
 {
     if( !aLock.owner_display_name.IsEmpty() )
         return aLock.owner_display_name;
@@ -43,15 +40,13 @@ wxString holderOf( const MDW_LOCK_INFO& aLock )
     return aLock.owner_id.IsEmpty() ? _( "another user" ) : aLock.owner_id;
 }
 
-} // namespace
-
 
 wxString MdwClaimLabel( const MDW_LOCK_INFO& aLock, const wxDateTime& aNow )
 {
     if( !aLock.is_locked )
         return aLock.known ? wxString() : _( "Editing claim unknown" );
 
-    wxString          who = aLock.locked_by_me ? _( "you" ) : holderOf( aLock );
+    wxString          who = aLock.locked_by_me ? _( "you" ) : MdwClaimHolder( aLock );
     const wxDateTime& since = aLock.lock_timestamp;
 
     if( !since.IsValid() )
@@ -70,7 +65,7 @@ wxString MdwClaimLabel( const MDW_LOCK_INFO& aLock, const wxDateTime& aNow )
 
 wxString MdwClaimSavePrompt( const MDW_LOCK_INFO& aLock, const wxString& aItem )
 {
-    wxString who = holderOf( aLock );
+    wxString who = MdwClaimHolder( aLock );
 
     if( aLock.advisory )
     {
@@ -119,11 +114,11 @@ wxString MdwClaimCommitWarning( const MDW_LOCK_INFO& aLock, const wxString& aIte
     {
         return wxString::Format( _( "%s has also marked %s for editing. Sharing these changes may require a "
                                     "merge." ),
-                                 holderOf( aLock ), aItem );
+                                 MdwClaimHolder( aLock ), aItem );
     }
 
     return wxString::Format( _( "%s has marked %s for editing. Sharing these changes may require a merge." ),
-                             holderOf( aLock ), aItem );
+                             MdwClaimHolder( aLock ), aItem );
 }
 
 
@@ -192,7 +187,7 @@ std::vector<MDW_CLAIM_ACTION> MdwClaimActions( const MDW_LOCK_INFO& aLock )
                    MDW_LOCK_INFO() } };
     }
 
-    const wxString who = holderOf( aLock );
+    const wxString who = MdwClaimHolder( aLock );
 
     MDW_CLAIM_ACTION start{ KIND::START, wxString::Format( _( "Start Editing (%s is editing)" ), who ), false,
                             wxEmptyString, MDW_LOCK_INFO() };

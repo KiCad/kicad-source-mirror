@@ -45,4 +45,22 @@ BOOST_AUTO_TEST_CASE( LongPartNameIsElidedBeforeTheStateText )
 }
 
 
+// Revise is not open to this user while a teammate holds the claim, so the refusal names the teammate instead
+BOOST_AUTO_TEST_CASE( EditRefusalNamesTheClaimHolder )
+{
+    MDW_PART_STATE part;
+    part.lifecycle = true;
+    part.known = true;
+    part.state.category = MDW_LIFECYCLE_CATEGORY::RELEASED;
+    part.lock.is_locked = true;
+    part.lock.advisory = true;
+    part.lock.owner_display_name = wxS( "Alice" );
+
+    const wxString refusal = part.EditRefusal( wxS( "R_TEST" ) );
+
+    BOOST_CHECK( refusal.Contains( wxS( "Alice" ) ) );
+    BOOST_CHECK( !refusal.Contains( wxS( "Revise" ) ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

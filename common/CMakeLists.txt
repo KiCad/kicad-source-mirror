@@ -255,6 +255,8 @@ set( KICOMMON_SRCS
     dialogs/dialog_restore_local_history.cpp
     dialogs/dialog_HTML_reporter_base.cpp
     dialogs/git/workspace_item_files.cpp
+    dialogs/dialog_mdw_release.cpp
+    dialogs/dialog_mdw_release_base.cpp
     dialogs/mdw_library_checkin_rows.cpp
     dialogs/git/workspace_search_query.cpp
     dialogs/panel_startwizard_libraries_base.cpp
@@ -437,6 +439,7 @@ set( KICOMMON_SRCS
     widgets/mdw_editing.cpp
     widgets/mdw_status_pill.cpp
     widgets/mdw_member_index.cpp
+    widgets/mdw_part_controller.cpp
     widgets/mdw_part_state.cpp
     mdw_part_link.cpp
 

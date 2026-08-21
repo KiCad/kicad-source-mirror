@@ -23,6 +23,8 @@
 
 #include <widgets/mdw_part_state.h>
 
+#include <mdw/mdw_claim_text.h>
+
 #include <wx/intl.h>
 
 #include <algorithm>
@@ -174,8 +176,8 @@ wxString MDW_PART_STATE::TreeCell( const wxString& aState, const MDW_LOCK_INFO& 
     }
     else if( aLock.is_locked )
     {
-        wxString holder = aLock.owner_display_name.IsEmpty() ? aLock.owner_id : aLock.owner_display_name;
-        cell += SEPARATOR + wxString::Format( _( "being edited by %s" ), holder );
+        // Short enough to fit beside the part name in a default editor pane
+        cell += SEPARATOR + wxString::Format( _( "%s editing" ), MdwClaimHolder( aLock ) );
     }
 
     if( aModified )
@@ -225,11 +227,33 @@ wxString MDW_PART_STATE::Describe( const wxString& aName ) const
     if( IsRevising() )
         line += SEPARATOR + _( "revising" );
 
-    if( lock.is_locked && !lock.locked_by_me )
-    {
-        wxString holder = lock.owner_display_name.IsEmpty() ? lock.owner_id : lock.owner_display_name;
-        line += SEPARATOR + wxString::Format( _( "%s is editing this part" ), holder );
-    }
+    if( IsClaimedByOther() )
+        line += SEPARATOR + wxString::Format( _( "%s is editing this part" ), MdwClaimHolder( lock ) );
 
     return line;
+}
+
+
+wxString MDW_PART_STATE::EditRefusal( const wxString& aName ) const
+{
+    if( pending || ( known && state.category == MDW_LIFECYCLE_CATEGORY::PENDING_REVIEW ) )
+        return wxString::Format( _( "%s is awaiting approval, so the change was not kept." ), aName );
+
+    if( IsClaimedByOther() )
+    {
+        return wxString::Format( _( "%s is being revised by %s, so the change was not kept." ), aName,
+                                 MdwClaimHolder( lock ) );
+    }
+
+    const bool mayRevise = std::ranges::any_of( Actions(),
+                                                []( const MDW_PART_ACTION& aAction )
+                                                {
+                                                    return aAction.id == MDW_PART_ACTION::ID::REVISE
+                                                           && aAction.Allowed();
+                                                } );
+
+    if( !mayRevise )
+        return wxString::Format( _( "%s is released, so the change was not kept." ), aName );
+
+    return wxString::Format( _( "%s is released, so the change was not kept. Choose Revise to change it." ), aName );
 }
