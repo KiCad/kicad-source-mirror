@@ -50,15 +50,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldN
     m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
 
     for( unsigned i = 0; i < m_footprintsList.size(); ++i )
-        updateDataStoreFootprintField( m_footprintsList[i], aFieldName );
-}
-
-
-void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreFootprintField( const FOOTPRINT_REF& aFootprintRef,
-                                                                             const wxString&      aFieldName )
-{
-    KIID_PATH key = getDataStoreKey( aFootprintRef );
-    m_dataStore[key][aFieldName] = getFieldValueForVariant( aFootprintRef, aFieldName, m_currentVariant );
+        updateDataStoreItemFieldFromLive( m_footprintsList[i], aFieldName );
 }
 
 
@@ -253,6 +245,21 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const FOOTPRINT_REF& lh
     // Footprints are just pointers and never have multiple units unlike symbols
     // so just compare
     return lhItem == rhItem;
+}
+
+
+bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( const FOOTPRINT_REF& aRef,
+                                                                 const wxString& aFieldName,
+                                                                 wxString& aValue )
+{
+    aValue = getFieldValueForVariant( aRef, aFieldName, m_currentVariant );
+    return true;
+}
+
+
+std::vector<FOOTPRINT_REF> FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getAllItems() const
+{
+    return m_footprintsList;
 }
 
 
@@ -772,7 +779,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const FOOTPRINT_
         // columns; we must have all fields in the footprint added to the data model at this point,
         // and some of the data model columns may be variables that are not present in the footprint
         for( const DATA_MODEL_COL& col : m_cols )
-            updateDataStoreFootprintField( ref, col.m_fieldName );
+            updateDataStoreItemFieldFromLive( ref, col.m_fieldName );
 
         if( !alg::contains( m_footprintsList, ref ) )
             m_footprintsList.push_back( ref );

@@ -146,10 +146,12 @@ private:
     bool setAttributeValue( const FOOTPRINT_REF& aRef, const wxString& aAttributeName, const wxString& aValue,
                             const wxString& aVariantName = wxEmptyString );
 
+    bool getLiveFieldValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName,
+                            wxString& aValue ) override;
+    std::vector<FOOTPRINT_REF> getAllItems() const override;
+
     wxString getFieldResolvedLiveValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName ) override;
     wxString resolveTextVars( const FOOTPRINT_REF& aRef, const wxString& aText ) override;
-
-    void updateDataStoreFootprintField( const FOOTPRINT_REF& aFootprintRef, const wxString& aFieldName );
 
     KIID_PATH getDataStoreKey( const FOOTPRINT_REF& aItem ) const override;
     wxString  getItemIdentifier( const FOOTPRINT_REF& aItem ) const override;

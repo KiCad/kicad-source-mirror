@@ -281,15 +281,94 @@ template <typename ITEM_TYPE>
 class FIELDS_TABLE_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL_BASE
 {
 public:
-    int GetNumberRows() override { return (int) m_rows.size(); }
+    /**
+     * Removes the entry from the data store, does not just set it to empty string.
+     */
+    void ClearCell( int aRow, int aCol )
+    {
+        wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), "Invalid Row Number" );
+        wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
 
+        const wxString& fieldName = m_cols[aCol].m_fieldName;
+
+        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        {
+            auto itemIt = m_dataStore.find( getDataStoreKey( item ) );
+
+            if( itemIt != m_dataStore.end() )
+                itemIt->second.erase( fieldName );
+        }
+
+        m_edited = true;
+    }
+
+
+    /**
+     * Returns true if the cell is not present in the data store, not just empty.
+     */
+    bool IsCellClear( int aRow, int aCol )
+    {
+        wxCHECK_MSG( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false, "Invalid Row Number" );
+        wxCHECK_MSG( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false, "Invalid Column Number" );
+
+        wxString unused;
+        return !getStoredFieldValue( m_rows[aRow].m_items[0], m_cols[aCol].m_fieldName, unused );
+    }
+
+
+    /**
+     * Returns true if the cell has been modified from the live value in the item (symbol/footprint/etc)
+     */
+    bool IsCellEdited( int aRow, int aCol )
+    {
+        wxCHECK_MSG( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false, "Invalid Row Number" );
+        wxCHECK_MSG( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false, "Invalid Column Number" );
+
+        return fieldIsModified( m_rows[aRow].m_items[0], m_cols[aCol].m_fieldName );
+    }
+
+
+    int       GetNumberRows() override { return (int) m_rows.size(); }
     ROW_STATE GetRowState( int aRow ) const override { return m_rows[aRow].m_state; }
+
 
     std::vector<ITEM_TYPE> GetRowReferences( int aRow ) const
     {
         wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), std::vector<ITEM_TYPE>() );
         return m_rows[aRow].m_items;
     }
+
+
+    /**
+     * Go through and revert all the fields in the row to their live values from the item (symbol/footprint/etc).
+     *
+     * Then recheck if any fields in the entire table are modified, and set edited state accordingly.
+     */
+    void RevertRow( int aRow )
+    {
+        wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), "Invalid Row Number" );
+
+        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        {
+            for( const DATA_MODEL_COL& col : m_cols )
+                updateDataStoreItemFieldFromLive( item, col.m_fieldName );
+        }
+
+        m_edited = false;
+
+        for( const ITEM_TYPE& item : getAllItems() )
+        {
+            for( const DATA_MODEL_COL& col : m_cols )
+            {
+                if( fieldIsModified( item, col.m_fieldName ) )
+                {
+                    m_edited = true;
+                    return;
+                }
+            }
+        }
+    }
+
 
     void ExpandRow( int aRow )
     {
@@ -765,6 +844,76 @@ protected:
         ExpandAfterSort();
     }
 
+
+    /**
+     * Returns the current value of the field from the live item, e.g. from the symbol on the schematic.
+     */
+    virtual bool getLiveFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName, wxString& aValue ) = 0;
+
+    /**
+     * Returns the stored value of the field from the data store, not from the live item, e.g from the symbol on the schematic.
+     */
+    bool getStoredFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName, wxString& aValue ) const
+    {
+        aValue.clear();
+
+        auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
+
+        if( itemIt == m_dataStore.end() )
+            return false;
+
+        auto fieldIt = itemIt->second.find( aFieldName );
+
+        if( fieldIt == itemIt->second.end() )
+            return false;
+
+        aValue = fieldIt->second;
+        return true;
+    }
+
+    /**
+     * Compares the live value of the field to the stored value in the data store.
+     *
+     * If they differ, then the field has been modified.
+     */
+    bool fieldIsModified( const ITEM_TYPE& aItem, const wxString& aFieldName )
+    {
+        wxString originalValue;
+        wxString currentValue;
+        bool     originallyPresent = getLiveFieldValue( aItem, aFieldName, originalValue );
+        bool     currentlyPresent = getStoredFieldValue( aItem, aFieldName, currentValue );
+
+        return originallyPresent != currentlyPresent || originalValue != currentValue;
+    }
+
+
+    /**
+     * Updates the data store with the current value of the field from the live item.
+     *
+     * If the field is not present on the item, it will be removed from the data store,
+     * e.g. cleared, not set to empty.
+     */
+    void updateDataStoreItemFieldFromLive( const ITEM_TYPE& aItem, const wxString& aFieldName )
+    {
+        wxString  value;
+        KIID_PATH key = getDataStoreKey( aItem );
+
+        if( getLiveFieldValue( aItem, aFieldName, value ) )
+        {
+            m_dataStore[key][aFieldName] = value;
+        }
+        else
+        {
+            auto itemIt = m_dataStore.find( key );
+
+            if( itemIt != m_dataStore.end() )
+                itemIt->second.erase( aFieldName );
+        }
+    }
+
+    virtual std::vector<ITEM_TYPE> getAllItems() const = 0;
+
+public:
     virtual KIID_PATH getDataStoreKey( const ITEM_TYPE& aItem ) const = 0;
     virtual wxString  getItemIdentifier( const ITEM_TYPE& aItem ) const = 0;
 

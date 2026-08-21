@@ -46,18 +46,10 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName
     m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
-        updateDataStoreSymbolField( m_symbolsList[i], aFieldName );
-}
-
-
-void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef,
-                                                                       const wxString&      aFieldName )
-{
-    if( !aSymbolRef.GetSymbol() )
-        return;
-
-    KIID_PATH key = getDataStoreKey( aSymbolRef );
-    m_dataStore[key][aFieldName] = getFieldValueForVariant( aSymbolRef, aFieldName, m_currentVariant );
+    {
+        if( m_symbolsList[i].GetSymbol() )
+            updateDataStoreItemFieldFromLive( m_symbolsList[i], aFieldName );
+    }
 }
 
 
@@ -291,6 +283,34 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhIte
         return false;
 
     return ( lhItem.GetRef() == rhItem.GetRef() && lhItem.GetRefNumber() == rhItem.GetRefNumber() );
+}
+
+
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( const SCH_REFERENCE& aRef,
+                                                              const wxString& aFieldName,
+                                                              wxString& aValue )
+{
+    aValue.clear();
+
+    if( !aRef.GetSymbol() )
+        return false;
+
+    aValue = getFieldValueForVariant( aRef, aFieldName, m_currentVariant );
+    return true;
+}
+
+
+std::vector<SCH_REFERENCE> SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getAllItems() const
+{
+    std::vector<SCH_REFERENCE> items;
+
+    for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
+    {
+        if( m_symbolsList[i].GetSymbol() )
+            items.push_back( m_symbolsList[i] );
+    }
+
+    return items;
 }
 
 
@@ -827,8 +847,11 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE
         // Update the fields of every reference. Do this by iterating through the data model
         // columns; we must have all fields in the symbol added to the data model at this point,
         // and some of the data model columns may be variables that are not present in the symbol
-        for( const DATA_MODEL_COL& col : m_cols )
-            updateDataStoreSymbolField( ref, col.m_fieldName );
+        if( ref.GetSymbol() )
+        {
+            for( const DATA_MODEL_COL& col : m_cols )
+                updateDataStoreItemFieldFromLive( ref, col.m_fieldName );
+        }
 
         if( SCH_REFERENCE* listRef = m_symbolsList.FindItem( ref ) )
         {

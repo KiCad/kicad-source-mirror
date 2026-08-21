@@ -139,10 +139,12 @@ private:
     bool setAttributeValue( SCH_REFERENCE& aRef, const wxString& aAttributeName, const wxString& aValue,
                             const wxString& aVariantName = wxEmptyString );
 
+    bool getLiveFieldValue( const SCH_REFERENCE& aRef, const wxString& aFieldName,
+                            wxString& aValue ) override;
+    std::vector<SCH_REFERENCE> getAllItems() const override;
+
     wxString getFieldResolvedLiveValue( const SCH_REFERENCE& aRef, const wxString& aFieldName ) override;
     wxString resolveTextVars( const SCH_REFERENCE& aRef, const wxString& aText ) override;
-
-    void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName );
 
     KIID_PATH getDataStoreKey( const SCH_REFERENCE& aItem ) const override;
     wxString  getItemIdentifier( const SCH_REFERENCE& aItem ) const override;
