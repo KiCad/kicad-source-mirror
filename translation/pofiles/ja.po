@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:52-0700\n"
-"PO-Revision-Date: 2026-08-22 17:51+0000\n"
+"PO-Revision-Date: 2026-08-23 16:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -36706,37 +36706,37 @@ msgstr "ユーザー定義"
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:62
 #: pcbnew/exporters/step/step_pcb_model.cpp:2435
 msgid "Green"
-msgstr "緑"
+msgstr "緑色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:63
 #: pcbnew/exporters/step/step_pcb_model.cpp:2436
 msgid "Red"
-msgstr "赤"
+msgstr "赤色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:64
 #: pcbnew/exporters/step/step_pcb_model.cpp:2437
 msgid "Blue"
-msgstr "青"
+msgstr "青色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
 #: pcbnew/exporters/step/step_pcb_model.cpp:2438
 msgid "Purple"
-msgstr "紫"
+msgstr "紫色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:66
 #: pcbnew/exporters/step/step_pcb_model.cpp:2439
 msgid "Black"
-msgstr "黒"
+msgstr "黒色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 #: pcbnew/exporters/step/step_pcb_model.cpp:2440
 msgid "White"
-msgstr "白"
+msgstr "白色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 #: pcbnew/exporters/step/step_pcb_model.cpp:2441
 msgid "Yellow"
-msgstr "黄"
+msgstr "黄色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
