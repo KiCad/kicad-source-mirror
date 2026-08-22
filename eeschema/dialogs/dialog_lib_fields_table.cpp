@@ -25,12 +25,15 @@
 #include <confirm.h>
 #include <dialog_lib_new_symbol.h>
 #include <eda_doc.h>
+#include <eeschema_settings.h>
 #include <fields_view_controls_grid_data_model.h>
 #include <grid_tricks.h>
 #include <kiface_base.h>
 #include <kiway_player.h>
+#include <pgm_base.h>
 #include <project.h>
 #include <project_sch.h>
+#include <settings/settings_manager.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
 #include <symbol_editor/lib_symbol_library_manager.h>
@@ -584,6 +587,21 @@ void DIALOG_LIB_FIELDS_TABLE::LoadFieldNames()
 
     for( const wxString& fieldName : userFieldNames )
         AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
+
+    // Add any global template field names which aren't already present.
+    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    {
+        TEMPLATES templateMgr;
+
+        if( !cfg->m_Drawing.field_names.IsEmpty() )
+            templateMgr.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+
+        for( const TEMPLATE_FIELDNAME& templateField : templateMgr.GetTemplateFieldNames() )
+        {
+            if( userFieldNames.count( templateField.m_Name ) == 0 )
+                AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );
+        }
+    }
 }
 
 
