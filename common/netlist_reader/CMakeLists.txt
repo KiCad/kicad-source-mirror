@@ -43,6 +43,9 @@ target_include_directories( netlist_reader_obj PRIVATE
 # The lexer files are generated as part of the kicommon target
 add_dependencies( netlist_reader_obj kicommon )
 
+# reporter.h pulls in ki_error.h, which needs fmt/format.h
+target_link_libraries( netlist_reader_obj PRIVATE fmt::fmt )
+
 target_include_directories( netlist_reader_obj PUBLIC
     ${CMAKE_SOURCE_DIR}/common  # So users can find netlist_reader/netlist.h
 )
