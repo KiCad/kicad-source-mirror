@@ -440,17 +440,15 @@ bool PGM_KICAD::OnPgmInit()
         // event loop is up before ShowModal spins its nested loop. The
         // wxWeakRef guards against the frame being destroyed (window-manager
         // close, fatal init) before the callback fires.
-        wxWeakRef<MERGETOOL_FRAME> f( mergetoolFrame );
+        wxWeakRef<MERGETOOL_FRAME> mergeToolFrameRef( mergetoolFrame );
 
         mergetoolFrame->CallAfter(
-                [f]() mutable
+                [mergeToolFrameRef]() mutable
                 {
-                    MERGETOOL_FRAME* frame = f.get();
-
-                    if( !frame || frame->IsBeingDeleted() )
+                    if( !mergeToolFrameRef || mergeToolFrameRef->IsBeingDeleted() )
                         return;
 
-                    int exitCode = frame->RunMerge();
+                    int exitCode = mergeToolFrameRef->RunMerge();
 
                     // Propagate the merge JOB's exit code to the kicad
                     // process exit status so `git mergetool` sees a non-zero
@@ -458,7 +456,7 @@ bool PGM_KICAD::OnPgmInit()
                     if( wxEventLoopBase* loop = wxTheApp->GetMainLoop() )
                         loop->ScheduleExit( exitCode );
 
-                    frame->Close( true );
+                    mergeToolFrameRef->Close( true );
                 } );
     }
     else
@@ -727,4 +725,3 @@ PROJECT& Prj()
 {
     return Kiway.Prj();
 }
-
