@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:53-0700\n"
-"PO-Revision-Date: 2026-08-19 12:53+0000\n"
+"PO-Revision-Date: 2026-08-22 17:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -6774,7 +6774,7 @@ msgstr "常時"
 
 #: common/dialogs/panel_snapping_base.cpp:17
 msgid "Grid Snapping"
-msgstr "グリッド スナッピング"
+msgstr "グリッド 吸着"
 
 #: common/dialogs/panel_snapping_base.cpp:29
 msgid "Snap to grid:"
@@ -6790,7 +6790,7 @@ msgstr "カーソルをアクティブなグリッドに対して吸着"
 
 #: common/dialogs/panel_snapping_base.cpp:47 pcbnew/tools/pcb_control.cpp:2399
 msgid "Object Snapping"
-msgstr "オブジェクトのスナッピング"
+msgstr "オブジェクト 吸着"
 
 #: common/dialogs/panel_snapping_base.cpp:61
 msgid "Snap to pads:"
@@ -7547,7 +7547,7 @@ msgstr "表示オプション"
 #: common/eda_base_frame.cpp:1649 common/eda_base_frame.cpp:1664
 #: common/eda_base_frame.cpp:1699 common/eda_base_frame.cpp:1719
 msgid "Snapping"
-msgstr "吸着させる"
+msgstr "吸着"
 
 #: common/eda_base_frame.cpp:1614 common/eda_base_frame.cpp:1625
 #: common/eda_base_frame.cpp:1651 common/eda_base_frame.cpp:1666
@@ -18707,7 +18707,7 @@ msgstr "パラメーター"
 #: pcbnew/widgets/search_handlers.cpp:314
 #: pcbnew/widgets/search_handlers.cpp:390 pcbnew/zone.cpp:1084
 msgid "Type"
-msgstr "タイプ"
+msgstr "タイプ／種類"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:863
 #: eeschema/dialogs/dialog_sim_model.cpp:900
@@ -45958,7 +45958,7 @@ msgstr "グリッドアイテムのプロパティを編集"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:98
 msgid "Grid type:"
-msgstr "グリッド タイプ:"
+msgstr "グリッドの種類:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:102
 #: pcbnew/pcb_griditem.cpp:498
@@ -57389,7 +57389,7 @@ msgstr "グリッド アイテム"
 
 #: pcbnew/pcb_griditem.cpp:530
 msgid "Grid Type"
-msgstr "グリッド タイプ"
+msgstr "グリッド種類"
 
 #: pcbnew/pcb_griditem.cpp:536
 msgid "Extent X"
@@ -57409,19 +57409,19 @@ msgstr "Y 間隔:"
 
 #: pcbnew/pcb_griditem.cpp:556
 msgid "Radius Extent"
-msgstr "半径範囲"
+msgstr "半径 範囲"
 
 #: pcbnew/pcb_griditem.cpp:561
 msgid "Radius Spacing"
-msgstr "半径間隔"
+msgstr "半径 間隔"
 
 #: pcbnew/pcb_griditem.cpp:567
 msgid "Phi Extent"
-msgstr "Φ 範囲"
+msgstr "角度 範囲"
 
 #: pcbnew/pcb_griditem.cpp:573
 msgid "Phi Spacing"
-msgstr "Φ 間隔"
+msgstr "角度 間隔"
 
 #: pcbnew/pcb_griditem.cpp:579 pcbnew/widgets/search_handlers.cpp:229
 #: pcbnew/zone.cpp:1122 pcbnew/zone.cpp:2311
@@ -63958,7 +63958,7 @@ msgstr "Specctra DSN 配線情報ファイル (*.dsn) へエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1531
 msgid "Bulk Edit Footprint Fields..."
-msgstr "フットプリントフィールドを一括編集..."
+msgstr "フットプリント フィールドを一括編集..."
 
 #: pcbnew/tools/pcb_actions.cpp:1532
 msgid "Edit a table of fields from all footprints in the board"
