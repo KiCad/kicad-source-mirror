@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:52-0700\n"
-"PO-Revision-Date: 2026-08-19 13:54+0000\n"
+"PO-Revision-Date: 2026-08-22 17:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -11917,18 +11917,18 @@ msgid "Restore Defaults"
 msgstr "デフォルト値を復元"
 
 #: common/widgets/widget_hotkey_list.cpp:510
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"'%s' はすでに '%s' のセクション '%s' へ割り当てられています。本当に現在の割り"
-"当てを変更してもよろしいですか？"
+"'%s' はすでに '%s' のセクション '%s' へ割り当てられています。 両方の"
+"キーバインドは保持されますが、 キーを押すたびに実行されるのは片方のみです。 "
+"続行しますか?"
 
 #: common/widgets/widget_hotkey_list.cpp:516
-#, fuzzy
 msgid "Hotkey conflict"
-msgstr "ホットキー リスト"
+msgstr "ホットキー 衝突"
 
 #: common/widgets/widget_hotkey_list.cpp:529
 msgid "Command"
@@ -17054,7 +17054,7 @@ msgstr "パラメーター"
 #: pcbnew/pcb_track.cpp:2451 pcbnew/widgets/search_handlers.cpp:314
 #: pcbnew/widgets/search_handlers.cpp:390 pcbnew/zone.cpp:956
 msgid "Type"
-msgstr "タイプ"
+msgstr "タイプ／種類"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:779
 #: eeschema/dialogs/dialog_sim_model.cpp:816
@@ -47394,14 +47394,13 @@ msgid "Netclass clearances apply only between copper items."
 msgstr "ネットクラスのクリアランスは導体のアイテム間でのみ適用されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1647 pcbnew/drc/drc_engine.cpp:1653
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Constraint ignored."
-msgstr "%s は導体を含みません。 ルールは無視されます。"
+msgstr "%s は導体を含みません。   ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1664
-#, fuzzy
 msgid "Keepout belongs to the footprint under test; constraint ignored."
-msgstr "選択したフットプリントをフットプリント エディターで開く"
+msgstr "禁止領域は評価中のフットプリントに属している; 制約は無視された。"
 
 #: pcbnew/drc/drc_engine.cpp:1719
 msgid "Keepout constraint not met."
@@ -55754,6 +55753,8 @@ msgid ""
 "%d session item(s) were skipped due to unresolved reference, layer, or "
 "padstack."
 msgstr ""
+"参照、 レイヤー、 あるいはパッド スタックが未解決のため、 %d 個のセッション "
+"アイテムがスキップされました。"
 
 #: pcbnew/toolbars_footprint_editor.cpp:125 pcbnew/toolbars_pcb_editor.cpp:284
 msgid "Dimension objects"
@@ -59211,7 +59212,7 @@ msgstr "すべてのレイヤー"
 
 #: pcbnew/tools/pcb_control.cpp:2372
 msgid "Object Snapping"
-msgstr "オブジェクトのスナッピング"
+msgstr "オブジェクト 吸着"
 
 #: pcbnew/tools/pcb_control.cpp:2449
 #, c-format
