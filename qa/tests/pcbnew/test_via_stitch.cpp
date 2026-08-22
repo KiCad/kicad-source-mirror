@@ -32,12 +32,16 @@
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
+#include <footprint.h>
 #include <generators/pcb_via_stitch.h>
+#include <geometry/shape_circle.h>
 #include <netinfo.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <zone.h>
+#include <zones.h>
 
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -771,6 +775,69 @@ BOOST_FIXTURE_TEST_CASE( PartialTopPourStillStitchesInnerPlanes, STITCH_BOARD_FI
 
         BOOST_CHECK_EQUAL( via->GetNetCode(), m_stitch->GetNetCode() );
         BOOST_CHECK( outline.Contains( via->GetPosition() ) );
+    }
+}
+
+// Pads have to be avoided in their own right, not just when they happen to be cross-net copper.
+// The GND pour on this board (issue 25265) connects to pads solidly instead of through thermal
+// reliefs, so it floods straight over its own pads -- and a stitch position sitting on one of
+// them looks like any other patch of same-net zone fill.  Vias used to land right on top.
+BOOST_FIXTURE_TEST_CASE( PadsBlockStitchingWithSolidZoneConnections, STITCH_BOARD_FIXTURE )
+{
+    loadBoard( wxT( "issue25265" ) );
+
+    // The saved board carries the generator but none of its vias
+    BOOST_REQUIRE( childViaPositions().empty() );
+
+    // Guard the premise: the pour has to be solid-connected, and it has to have pads of its own
+    // sitting under the stitch outline, or the case being tested isn't on the board any more.
+    for( ZONE* zone : m_board->Zones() )
+        BOOST_REQUIRE_EQUAL( (int) zone->GetPadConnection(), (int) ZONE_CONNECTION::FULL );
+
+    const std::vector<PAD*> pads = m_board->GetPads();
+    int                     sameNetPadsInside = 0;
+
+    for( PAD* pad : pads )
+    {
+        if( pad->GetNetCode() == m_stitch->GetNetCode()
+                && m_stitch->Outline().Contains( pad->GetPosition() ) )
+        {
+            sameNetPadsInside++;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( sameNetPadsInside > 0,
+                           "no pads on the stitch net sit inside the stitch outline" );
+
+    regenerate();
+
+    BOOST_REQUIRE_GT( childViaPositions().size(), 100 );
+
+    for( BOARD_ITEM* item : m_stitch->GetBoardItems() )
+    {
+        BOOST_REQUIRE_EQUAL( item->Type(), PCB_VIA_T );
+
+        PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+        for( PCB_LAYER_ID layer : { F_Cu, B_Cu } )
+        {
+            SHAPE_CIRCLE viaCopper( via->GetPosition(), via->GetWidth( layer ) / 2 );
+
+            for( PAD* pad : pads )
+            {
+                if( !pad->FlashLayer( layer ) )
+                    continue;
+
+                BOOST_CHECK_MESSAGE(
+                        !pad->GetEffectiveShape( layer )->Collide( &viaCopper ),
+                        wxString::Format( "Via at (%.3f, %.3f) sits on pad %s of %s (net %s)",
+                                          pcbIUScale.IUTomm( via->GetPosition().x ),
+                                          pcbIUScale.IUTomm( via->GetPosition().y ),
+                                          pad->GetNumber(),
+                                          pad->GetParentFootprint()->GetReferenceAsString(),
+                                          pad->GetNetname() ) );
+            }
+        }
     }
 }
 
