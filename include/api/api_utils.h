@@ -34,6 +34,7 @@
 #include <gal/color4d.h>
 
 class SHAPE_LINE_CHAIN;
+class STROKE_PARAMS;
 class KIID_PATH;
 
 /**
@@ -81,6 +82,10 @@ KICOMMON_API KIGFX::COLOR4D UnpackColor( const types::Color& aInput );
 KICOMMON_API void PackSheetPath( types::SheetPath& aOutput, const KIID_PATH& aInput );
 
 KICOMMON_API KIID_PATH UnpackSheetPath( const types::SheetPath& aInput );
+
+KICOMMON_API void PackStroke( kiapi::common::types::StrokeAttributes& aOutput, const STROKE_PARAMS& aInput );
+
+KICOMMON_API void UnpackStroke( STROKE_PARAMS& aOutput, const kiapi::common::types::StrokeAttributes& aInput );
 
 } // namespace kiapi::common
 
