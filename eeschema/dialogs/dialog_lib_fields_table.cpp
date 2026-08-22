@@ -34,7 +34,6 @@
 #include <project.h>
 #include <project_sch.h>
 #include <settings/settings_manager.h>
-#include <string_utils.h>
 #include <symbol_edit_frame.h>
 #include <symbol_editor/lib_symbol_library_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
@@ -382,35 +381,6 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
 wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createDatasheetEditor()
 {
     return new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) );
-}
-
-
-wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createFootprintEditor()
-{
-    wxString symbolNetlist;
-
-    if( !m_symbolsList.empty() )
-    {
-        LIB_SYMBOL* symbol = m_symbolsList.front();
-        wxArrayString pins;
-
-        for( SCH_PIN* pin : symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
-            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
-
-        if( !pins.IsEmpty() )
-            symbolNetlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
-
-        symbolNetlist << wxS( "\r" );
-
-        wxArrayString fpFilters = symbol->GetFPFilters();
-
-        if( !fpFilters.IsEmpty() )
-            symbolNetlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
-
-        symbolNetlist << wxS( "\r" );
-    }
-
-    return new GRID_CELL_FPID_EDITOR( this, symbolNetlist );
 }
 
 

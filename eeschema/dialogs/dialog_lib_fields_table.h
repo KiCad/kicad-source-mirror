@@ -42,7 +42,6 @@ private:
     void loadSymbols();
 
     wxGridCellEditor* createDatasheetEditor() override;
-    wxGridCellEditor* createFootprintEditor() override;
     void              onBomSettingsChanged() override {}
 
     void setScope( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
