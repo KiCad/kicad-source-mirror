@@ -141,6 +141,13 @@ void DIALOG_GIT_MR_REVIEW::populateFileList()
     m_changedFiles = KIGIT::CompareRefs( m_repo, base, head );
 
     lock.unlock();
+    showChanges();
+}
+
+
+void DIALOG_GIT_MR_REVIEW::showChanges()
+{
+    m_listFiles->DeleteAllItems();
 
     if( m_changedFiles.empty() )
     {

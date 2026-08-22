@@ -204,6 +204,18 @@ void KIGIT_QUERY::Cancel()
 }
 
 
+void KIGIT_QUERY::reportWait( bool aWaiting, uint64_t aGeneration )
+{
+    if( aWaiting == m_waitShown || ( aWaiting && aGeneration != m_generation ) )
+        return;
+
+    m_waitShown = aWaiting;
+
+    if( m_onWait )
+        m_onWait( aWaiting );
+}
+
+
 void KIGIT_QUERY::start( REQUEST aRequest )
 {
     auto error = std::make_shared<std::exception_ptr>();
@@ -249,15 +261,34 @@ void KIGIT_QUERY::start( REQUEST aRequest )
     {
         started = m_transfer.Start(
                 "read repository",
-                [error, session = std::move( aRequest.session ),
-                 work = std::move( aRequest.work )]( const KIGIT_COMMON::CANCEL_TOKEN& aCancel )
+                [error, session = std::move( aRequest.session ), work = std::move( aRequest.work ),
+                 alive = m_transfer.Alive(), self = this,
+                 generation = aRequest.generation]( const KIGIT_COMMON::CANCEL_TOKEN& aCancel )
                 {
                     try
                     {
                         if( !session || aCancel->load() || session->IsShuttingDown() )
                             return;
 
-                        KIGIT::ACTION_LOCK lock = session->LockAction();
+                        // Reads never wait for another process's action
+                        KIGIT::ACTION_LOCK lock = session->TryLockActionLocal();
+
+                        if( !lock.owns_lock() )
+                        {
+                            KIGIT::CallIfAlive( alive,
+                                                [self, generation]()
+                                                {
+                                                    self->reportWait( true, generation );
+                                                } );
+
+                            lock = session->LockActionLocal();
+
+                            KIGIT::CallIfAlive( alive,
+                                                [self, generation]()
+                                                {
+                                                    self->reportWait( false, generation );
+                                                } );
+                        }
 
                         if( aCancel->load() || session->IsShuttingDown() || !session->GetRepo() )
                             return;

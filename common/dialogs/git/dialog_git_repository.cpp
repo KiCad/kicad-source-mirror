@@ -24,6 +24,7 @@
 #include <git2.h>
 #include <git/kicad_git_memory.h>
 #include <git/kicad_git_common.h>
+#include <git/kigit_platform.h>
 #include <git/kigit_ssh_keys.h>
 #include <git/git_repo_mixin.h>
 #include <git/kigit_transport.h>
@@ -199,8 +200,25 @@ static wxString get_repo_name( const wxString& aRepoAddr )
 void DIALOG_GIT_REPOSITORY::OnLocationExit( wxFocusEvent& event )
 {
     updateURLData();
+    fillAccount();
     updateAuthControls();
     event.Skip();
+}
+
+
+void DIALOG_GIT_REPOSITORY::fillAccount()
+{
+    const wxString url = GetRepoURL();
+
+    // A partly typed address can name another server, so only a name filled for an earlier address is replaced
+    if( url.IsEmpty() || !KIGIT_COMMON::ParseRemoteURL( url ).username.IsEmpty()
+        || ( !m_txtUsername->IsEmpty() && m_txtUsername->GetValue() != m_filledAccount ) )
+    {
+        return;
+    }
+
+    m_filledAccount = KIGIT::PlatformServices().getAccount( KIGIT::CredentialRealm( url ) );
+    SetUsername( m_filledAccount );
 }
 
 
@@ -238,6 +256,8 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 
     if( wxString( url ).Trim().Trim( false ).IsEmpty() || reportUnusableKey() )
         return;
+
+    fillAccount();
 
     wxString    error;
     wxString    details;
@@ -298,8 +318,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
         context.operation = KIGIT_OPERATION::CONNECT;
         context.url = url;
 
-        KIGIT_FAILURE_REPORT report =
-                KIGIT::DescribeGitFailure( KIGIT::GetLastGitErrorInfo( result ), {}, context );
+        KIGIT_FAILURE_REPORT report = KIGIT::DescribeGitFailure( KIGIT::GetLastGitErrorInfo( result ), {}, context );
         error = report.summary;
         details = report.details;
     }
@@ -457,6 +476,7 @@ void DIALOG_GIT_REPOSITORY::OnOKClick( wxCommandEvent& event )
     if( reportUnusableKey() )
         return;
 
+    fillAccount();
     EndModal( wxID_OK );
 }
 
@@ -507,9 +527,14 @@ bool DIALOG_GIT_REPOSITORY::TransferDataToWindow()
         extractClipboardData();
 
     if( !m_txtURL->GetValue().IsEmpty() )
+    {
         updateURLData();
+        fillAccount();
+    }
     else
+    {
         m_ConnType->SetSelection( static_cast<int>( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL ) );
+    }
 
     updateAuthControls();
 

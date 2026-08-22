@@ -175,6 +175,7 @@ void PANEL_GIT_TAGS::fillTagDetail( const KIGIT_TAG_DETAIL& aDetail )
     m_tagAuthor->SetLabel( wxString::Format( _( "Author: %s <%s>" ), aDetail.author, aDetail.email ) );
     m_tagWhen->SetLabel( wxString::Format( _( "Date: %s" ), KIGIT::RelativeDate( aDetail.when ) ) );
     m_tagMessage->ChangeValue( aDetail.message );
+    m_deleteTagButton->Show( !KIGIT::IsKicadRecordRef( wxS( "refs/tags/" ) + aDetail.name ) );
 
     if( !m_tagsSplitter->IsSplit() )
         m_tagsSplitter->SplitVertically( m_tagListPanel, m_tagDetail, m_tagSashPos );
@@ -255,7 +256,7 @@ void PANEL_GIT_TAGS::onDeleteTag()
 
     wxString name = KIGIT::SelectedText( m_tagsList, 0 );
 
-    if( name.IsEmpty() )
+    if( name.IsEmpty() || KIGIT::IsKicadRecordRef( wxS( "refs/tags/" ) + name ) )
         return;
 
     if( !IsOK( this, wxString::Format( _( "Delete tag '%s'?" ), name ) ) )

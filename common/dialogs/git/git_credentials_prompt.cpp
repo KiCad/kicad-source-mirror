@@ -21,21 +21,25 @@
 #include <dialogs/git/dialog_git_credentials.h>
 #include <dialogs/git/dialog_git_identity.h>
 #include <dialogs/git/git_ui_utils.h>
-#include <wx/msgdlg.h>
 #include <confirm.h>
 #include <eda_base_frame.h>
 #include <wx/app.h>
 #include <wx/utils.h>
 #include <wx/weakref.h>
+#include <wx/intl.h>
+#include <wx/log.h>
+#include <wx/msgdlg.h>
 #include <mutex>
 #include <git/git_backend.h>
+#include <widgets/wx_progress_reporters.h>
+#include <git/git_clone_handler.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/kigit_platform.h>
 #include <git/kigit_ssh_keys.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <project/project_local_settings.h>
-#include <kiplatform/secrets.h>
 #include <trace_helpers.h>
 #include <widgets/kistatusbar.h>
 
@@ -48,7 +52,7 @@ static void resolveMissingRemote( KIGIT_COMMON* aCommon )
 
     // A status read holds the lock for moments at a time, so a short wait usually gets it
     wxBusyCursor                 busy;
-    KIGIT::ACTION_LOCK lock = aCommon->TryLockActionFor( KIGIT_COMMON::ACTION_LOCK_WAIT );
+    KIGIT::ACTION_LOCK           lock = aCommon->TryLockActionFor( KIGIT_COMMON::ACTION_LOCK_WAIT );
 
     if( !lock.owns_lock() )
     {
@@ -122,6 +126,9 @@ KIGIT::PROMPT_ANSWER KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMO
     if( shownUsername.IsEmpty() && aProject )
         shownUsername = aProject->GetLocalSettings().m_GitRepoUsername;
 
+    if( shownUsername.IsEmpty() )
+        shownUsername = PlatformServices().getAccount( CredentialRealm( identity.remote ) );
+
     wxWeakRef<wxWindow>    parent( aParent );
     DIALOG_GIT_CREDENTIALS dlg( aParent, identity.remote, aExplanation, identity.connType, shownUsername,
                                 initialSSHKey( aCommon, aProject ) );
@@ -152,26 +159,24 @@ KIGIT::PROMPT_ANSWER KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMO
         return refusal( parent, aParent != nullptr );
     }
 
-    wxString username = entered.username ? *entered.username : identity.username;
-
-    if( dlg.SaveCredentials() )
+    // Held by the transfer's worker, so it names no window; the prompt may be long gone when it runs
+    KIGIT_COMMON::CREDENTIAL_SAVER save =
+            []( const wxString& aUrl, const wxString& aUsername, const wxString& aPassword )
     {
-        // A locked keyring prompts to unlock, which must not hold the event loop
-        KIPLATFORM::SECRETS::StoreSecretAsync(
-                identity.remote, username, entered.password,
-                [parent]( bool aStored )
-                {
-                    if( !aStored && parent )
-                    {
-                        DisplayInfoMessage( parent, _( "The credentials could not be saved to the system keychain, "
-                                                       "so they are kept for this session only." ) );
-                    }
-                } );
+        SaveCredentialAsync( aUrl, aUsername, aPassword,
+                             []( bool aStored )
+                             {
+                                 if( !aStored )
+                                 {
+                                     DisplayInfoMessage( nullptr, _( "The credentials could not be saved to the "
+                                                                     "system keychain, so they are kept for this "
+                                                                     "session only." ) );
+                                 }
+                             } );
+    };
 
-        // Windows answers inline, so a failed save has already shown its message
-        if( askerGone( parent, aParent != nullptr ) )
-            return PROMPT_ANSWER::ABANDONED;
-    }
+    // A typo the server refuses never reaches the keychain
+    aCommon->SaveWhenAccepted( dlg.SaveCredentials() ? save : KIGIT_COMMON::CREDENTIAL_SAVER() );
 
     // A correction only in the session would be reverted by the next attach.
     if( aProject )
@@ -190,14 +195,21 @@ KIGIT::PROMPT_ANSWER KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMO
 }
 
 
-KIGIT::PROMPT_ANSWER KIGIT::PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure,
-                                               bool aRetriedAfterTrust )
+static wxString hostLabel( const KIGIT::HOST_KEY_FAILURE& aFailure )
 {
-    wxWeakRef<wxWindow> parent( aParent );
-    wxString            host = aFailure.host;
+    wxString host = aFailure.host;
 
     if( aFailure.port != 22 )
         host << wxS( ":" ) << aFailure.port;
+
+    return host;
+}
+
+
+KIGIT::PROMPT_ANSWER KIGIT::AskToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure,
+                                            bool aRetriedAfterTrust )
+{
+    wxWeakRef<wxWindow> parent( aParent );
 
     if( !MayOfferTrust( aFailure, aRetriedAfterTrust ) )
     {
@@ -219,24 +231,32 @@ KIGIT::PROMPT_ANSWER KIGIT::PromptToTrustHost( wxWindow* aParent, const HOST_KEY
     }
 
     // Enter must never trust a server
-    auto dlg = KICAD_MESSAGE_DIALOG( aParent, wxString::Format( question, host, aFailure.fingerprint ),
+    auto dlg = KICAD_MESSAGE_DIALOG( aParent, wxString::Format( question, hostLabel( aFailure ), aFailure.fingerprint ),
                                      _( "Verify Server" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetYesNoLabels( _( "&Connect" ), _( "Cancel" ) );
 
     if( dlg.ShowModal() != wxID_YES || askerGone( parent, aParent != nullptr ) )
         return refusal( parent, aParent != nullptr );
 
-    if( !AddKnownHost( aFailure ) )
-    {
-        DisplayErrorMessage( aParent,
-                             wxString::Format( _( "The key for %s could not be saved, so the connection was not "
-                                                  "made. Check that your .ssh folder can be written to." ),
-                                               host ),
-                             KnownHostsPath() );
-        return refusal( parent, aParent != nullptr );
-    }
-
     return PROMPT_ANSWER::ACCEPTED;
+}
+
+
+KIGIT::PROMPT_ANSWER KIGIT::PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure,
+                                               bool aRetriedAfterTrust )
+{
+    wxWeakRef<wxWindow> parent( aParent );
+    PROMPT_ANSWER       answer = AskToTrustHost( aParent, aFailure, aRetriedAfterTrust );
+
+    if( answer != PROMPT_ANSWER::ACCEPTED || AddKnownHost( aFailure ) )
+        return answer;
+
+    DisplayErrorMessage( aParent,
+                         wxString::Format( _( "The key for %s could not be saved, so the connection was not "
+                                              "made. Check that your .ssh folder can be written to." ),
+                                           hostLabel( aFailure ) ),
+                         KnownHostsPath() );
+    return refusal( parent, aParent != nullptr );
 }
 
 
@@ -293,6 +313,68 @@ KIGIT::TRANSFER_RETRY KIGIT::AnswerTransferFailure( wxWindow* aParent, const std
     }
 
     return TRANSFER_RETRY::RETRY;
+}
+
+
+KIGIT::CLONE_OUTCOME KIGIT::CloneWithPrompts( wxWindow* aParent, KIGIT_COMMON& aCommon, const wxString& aUrl,
+                                              const wxString& aPath, const wxString& aUsername,
+                                              const wxString& aPassword, const wxString& aSSHKey )
+{
+    bool retriedAfterTrust = false;
+
+    while( true )
+    {
+        bool     cloned = false;
+        bool     cancelled = false;
+        wxString error;
+        wxString details;
+
+        std::optional<KIGIT::HOST_KEY_FAILURE> hostKey;
+
+        // Scoped, so the progress window is gone before a prompt below
+        {
+            GIT_CLONE_HANDLER cloneHandler( &aCommon );
+
+            cloneHandler.SetRemote( aUrl );
+            cloneHandler.SetClonePath( aPath );
+            cloneHandler.SetUsername( aUsername );
+            cloneHandler.SetPassword( aPassword );
+            cloneHandler.SetSSHKey( aSSHKey );
+
+            cloneHandler.SetProgressReporter(
+                    std::make_unique<WX_PROGRESS_REPORTER>( aParent, _( "Clone Repository" ), 1, PR_CAN_ABORT ) );
+
+            cloned = cloneHandler.PerformClone();
+            cancelled = !cloned && cloneHandler.IsThisOperationCancelled();
+
+            if( !cloned )
+            {
+                KIGIT_ERROR_MESSAGE message = cloneHandler.PopError();
+                error = message.summary;
+                details = message.details;
+                hostKey = cloneHandler.GetHostKeyFailure();
+            }
+        }
+
+        if( cloned )
+            return CLONE_OUTCOME::CLONED;
+
+        // Cancelling from the progress dialog is not an error
+        if( cancelled )
+            return CLONE_OUTCOME::CANCELLED;
+
+        if( hostKey )
+        {
+            if( PromptToTrustHost( aParent, *hostKey, retriedAfterTrust ) != PROMPT_ANSWER::ACCEPTED )
+                return CLONE_OUTCOME::CANCELLED;
+
+            retriedAfterTrust = true;
+            continue;
+        }
+
+        DisplayErrorMessage( aParent, error, details );
+        return CLONE_OUTCOME::FAILED;
+    }
 }
 
 

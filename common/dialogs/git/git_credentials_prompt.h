@@ -24,6 +24,7 @@
 #include <git/kigit_known_hosts.h>
 #include <settings/common_settings.h>
 
+#include <functional>
 #include <memory>
 #include <optional>
 #include <wx/string.h>
@@ -57,6 +58,15 @@ enum class PROMPT_ANSWER
  */
 PROMPT_ANSWER PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject = nullptr,
                                     const wxString& aExplanation = wxEmptyString );
+
+/**
+ * Ask whether to trust a server seen for the first time, without remembering its key.
+ * A changed or revoked key is refused with an explanation and no way to accept it.
+ *
+ * @param aRetriedAfterTrust The operation already ran again after a trust, so it is refused instead.
+ * @return ACCEPTED when the user agreed to trust the key.
+ */
+PROMPT_ANSWER AskToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterTrust );
 
 /**
  * Ask whether to trust a server seen for the first time, and remember its key when the user agrees.
@@ -99,6 +109,21 @@ enum class TRANSFER_RETRY
 TRANSFER_RETRY AnswerTransferFailure( wxWindow* aParent, const std::weak_ptr<bool>& aAlive, KIGIT_COMMON* aCommon,
                                       PROJECT* aProject, const TRANSFER_FAILURE& aFailure, bool aRetriedAfterTrust,
                                       int& aPrompts );
+
+enum class CLONE_OUTCOME
+{
+    CLONED,
+    CANCELLED,
+    FAILED
+};
+
+/**
+ * Clone \a aUrl into \a aPath behind a cancellable progress window. A server seen for the first time is
+ * offered for trust and the clone retried once; any other failure is shown to the user before returning.
+ */
+CLONE_OUTCOME CloneWithPrompts( wxWindow* aParent, KIGIT_COMMON& aCommon, const wxString& aUrl,
+                                const wxString& aPath, const wxString& aUsername, const wxString& aPassword,
+                                const wxString& aSSHKey );
 
 /// The status bar source under which background fetch failures are listed.
 inline constexpr const wxChar* SYNC_WARNING_SOURCE = wxS( "git" );

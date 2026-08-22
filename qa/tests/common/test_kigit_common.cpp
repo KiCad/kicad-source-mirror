@@ -1604,6 +1604,27 @@ BOOST_AUTO_TEST_CASE( GitIdentityPrecedence )
 }
 
 
+// The preferences panel refills a default-mode author from git config, which must not restart every session
+BOOST_AUTO_TEST_CASE( DefaultAuthorRefillIsNoChange )
+{
+    COMMON_SETTINGS::GIT before{};
+    before.useDefaultAuthor = true;
+
+    COMMON_SETTINGS::GIT after = before;
+    after.authorName = wxS( "Host User" );
+    after.authorEmail = wxS( "host@example.com" );
+
+    BOOST_CHECK( !KIGIT::AuthorPreferenceChanged( before, after ) );
+
+    after.useDefaultAuthor = false;
+    BOOST_CHECK( KIGIT::AuthorPreferenceChanged( before, after ) );
+
+    before = after;
+    after.authorName = wxS( "Robert QA" );
+    BOOST_CHECK( KIGIT::AuthorPreferenceChanged( before, after ) );
+}
+
+
 // A preference chosen in KiCad beats the host's global git identity, and Set Author beats both
 BOOST_AUTO_TEST_CASE( PreferenceBeatsGlobalGitConfig )
 {

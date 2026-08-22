@@ -57,8 +57,11 @@
 #endif
 
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <future>
+#include <chrono>
+#include <clocale>
 #include <optional>
 #include <set>
 #include <thread>
@@ -276,7 +279,7 @@ struct GIT_BACKEND_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
 
     static std::vector<FILE_CHECKLIST_ENTRY> changeEntries( git_repository* aRepo, const wxString& aProjectPath )
     {
-        KIGIT_COMMON                 common( aRepo, aProjectPath );
+        KIGIT_COMMON       common( aRepo, aProjectPath );
         KIGIT::ACTION_LOCK lock = common.LockAction();
         return BuildGitChangeEntries( common, aProjectPath, false );
     }
@@ -685,6 +688,44 @@ BOOST_AUTO_TEST_CASE( PushProgressStopsWhenTheOperationIsCancelled )
     git_oid remoteHead;
     BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, bare, "refs/heads/master" ), GIT_OK );
     BOOST_CHECK( !git_oid_equal( &remoteHead, &local ) );
+}
+
+
+// A deletion sends no objects, so only the negotiation can stop it when the lease no longer holds
+BOOST_AUTO_TEST_CASE( PushRefsKeepsARefWhoseLeaseIsStale )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    BOOST_REQUIRE( addOrigin( repo ) );
+
+    git_oid stale = createCommit( repo, wxT( "stale.txt" ), wxT( "stale\n" ), wxT( "Never pushed" ) );
+
+    git_remote* remote = nullptr;
+    BOOST_REQUIRE_EQUAL( git_remote_lookup( &remote, repo, "origin" ), GIT_OK );
+    KIGIT::GitRemotePtr remotePtr( remote );
+
+    GIT_REF_UPDATE deletion;
+    deletion.remoteRef = wxS( "refs/heads/master" );
+    deletion.leased = true;
+    deletion.expectedOld = wxString::FromUTF8( git_oid_tostr_s( &stale ) );
+
+    KIGIT_COMMON                common( repo );
+    GIT_PUSH_HANDLER            handler( &common );
+    KIGIT::REMOTE_TRANSPORT     transport( &handler, remote );
+    std::vector<GIT_REF_RESULT> results;
+
+    BOOST_CHECK( transport.PushRefs( { deletion }, results ) == RefPushResult::LeaseBroken );
+
+    git_repository* bare = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &bare, remotePath().ToUTF8().data() ), GIT_OK );
+    KIGIT::GitRepositoryPtr barePtr( bare );
+
+    git_oid remoteHead;
+    BOOST_CHECK_EQUAL( git_reference_name_to_id( &remoteHead, bare, "refs/heads/master" ), GIT_OK );
 }
 
 
@@ -1249,6 +1290,44 @@ BOOST_AUTO_TEST_CASE( PerformPull_FastForwardRollsBackWhenBranchCannotMove )
                          "the rollback must not remove a file outside the paths the pull wrote" );
 
     git_repository_free( fresh );
+}
+
+
+// A teammate's commit left on disk under the old HEAD reads as the user's own edit, and the next check-in commits it
+BOOST_AUTO_TEST_CASE( CheckoutCommitUndoesTheTreeWhenHeadCannotMove )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    git_oid before;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &before, repo, "HEAD" ), GIT_OK );
+
+    const git_oid incoming =
+            createDetachedCommit( repo, before, CAMPAIGN_SCH, campaignFile( CAMPAIGN_SCH ), "Teammate's sheet" );
+
+    const wxString headLock = repoPath() + wxS( "/.git/HEAD.lock" );
+    {
+        wxFFile lock( headLock, wxT( "wb" ) );
+        BOOST_TEST_REQUIRE( lock.IsOpened() );
+    }
+
+    BOOST_CHECK_NE( GetGitBackend()->CheckoutCommit( repo, git_oid_tostr_s( &incoming ), "" ), GIT_OK );
+    wxRemoveFile( headLock );
+
+    git_status_options opts;
+    git_status_options_init( &opts, GIT_STATUS_OPTIONS_VERSION );
+    opts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+    opts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED;
+
+    git_status_list* list = nullptr;
+    BOOST_REQUIRE_EQUAL( git_status_list_new( &list, repo, &opts ), GIT_OK );
+    KIGIT::GitStatusListPtr listPtr( list );
+
+    BOOST_CHECK_EQUAL( git_status_list_entrycount( list ), 0u );
+    BOOST_CHECK( !wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + CAMPAIGN_SCH ) );
 }
 
 
@@ -2680,6 +2759,250 @@ BOOST_AUTO_TEST_CASE( Clone_CancelFromProgressReporterStopsTheClone )
 }
 
 
+// A clone from a local path transfers nothing, so only its checkout can see a cancel
+BOOST_AUTO_TEST_CASE( Clone_CancelStopsALocalPathCheckout )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString dest = tempBase() + wxFileName::GetPathSeparator() + wxT( "clone_local_cancelled" );
+
+    KIGIT_COMMON      common( nullptr );
+    GIT_CLONE_HANDLER handler( &common );
+
+    handler.SetRemote( remotePath() );
+    handler.SetClonePath( dest );
+
+    auto                   reporter = std::make_unique<CLONE_CANCEL_REPORTER>();
+    CLONE_CANCEL_REPORTER* watcher = reporter.get();
+
+    handler.SetProgressReporter( std::move( reporter ) );
+
+    bool cloned = handler.PerformClone();
+
+    BOOST_REQUIRE_MESSAGE( watcher->Ticks() > 0, "the checkout must report progress at least once" );
+    BOOST_CHECK_MESSAGE( !cloned, "a local clone cancelled during its checkout must not report success" );
+    BOOST_CHECK_MESSAGE( !wxDirExists( dest ), "a cancelled local clone must not leave a directory" );
+
+    if( common.GetRepo() )
+    {
+        git_repository_free( common.GetRepo() );
+        common.SetRepo( nullptr );
+    }
+}
+
+
+#ifdef __WINDOWS__
+// Folders of 48 characters that put the deep member well past 260 once the clone's own folder is added
+static const std::string DEEP_FOLDERS = "edcba";
+static const char*       DEEP_MEMBER = "R_0402_1005Metric.kicad_mod";
+
+
+/// Commit the footprint fixture at the top of aRepo, or under the deep folders when aDeep
+static git_oid commitDeepMember( git_repository* aRepo, const git_oid* aParent, bool aDeep, const char* aRef )
+{
+    const std::string footprint = readBytes( wxString::FromUTF8( KI_TEST::GetTestDataRootDir() )
+                                             + wxS( "libraries/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod" ) );
+
+    git_oid blob;
+    BOOST_REQUIRE_EQUAL( git_blob_create_from_buffer( &blob, aRepo, footprint.data(), footprint.size() ), GIT_OK );
+
+    auto wrap = [&]( const std::string& aName, git_filemode_t aMode, const git_oid& aChild )
+    {
+        git_treebuilder* builder = nullptr;
+        BOOST_REQUIRE_EQUAL( git_treebuilder_new( &builder, aRepo, nullptr ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_treebuilder_insert( nullptr, builder, aName.c_str(), &aChild, aMode ), GIT_OK );
+
+        git_oid out;
+        BOOST_REQUIRE_EQUAL( git_treebuilder_write( &out, builder ), GIT_OK );
+        git_treebuilder_free( builder );
+        return out;
+    };
+
+    git_oid root = wrap( DEEP_MEMBER, GIT_FILEMODE_BLOB, blob );
+
+    for( size_t i = 0; aDeep && i < DEEP_FOLDERS.size(); ++i )
+        root = wrap( std::string( 48, DEEP_FOLDERS[DEEP_FOLDERS.size() - 1 - i] ), GIT_FILEMODE_TREE, root );
+
+    git_tree* rootTree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_tree_lookup( &rootTree, aRepo, &root ), GIT_OK );
+    KIGIT::GitTreePtr treePtr( rootTree );
+
+    git_signature* sig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL ), GIT_OK );
+
+    git_commit* parent = nullptr;
+
+    if( aParent )
+        BOOST_REQUIRE_EQUAL( git_commit_lookup( &parent, aRepo, aParent ), GIT_OK );
+
+    const git_commit* parents[1] = { parent };
+    git_oid           commit;
+    BOOST_REQUIRE_EQUAL( git_commit_create( &commit, aRepo, aRef, sig, sig, nullptr, "deep member", rootTree,
+                                            parent ? 1 : 0, parents ),
+                         GIT_OK );
+    git_commit_free( parent );
+    git_signature_free( sig );
+    return commit;
+}
+
+
+/// Whether the deep member exists under aClone, by a path that needs no long path support from the process
+static bool deepMemberExists( const wxString& aClone )
+{
+    std::wstring path = L"\\\\?\\" + aClone.ToStdWstring();
+
+    for( char folder : DEEP_FOLDERS )
+        path += L"\\" + std::wstring( 48, static_cast<wchar_t>( folder ) );
+
+    path += L"\\" + wxString( DEEP_MEMBER ).ToStdWstring();
+    return std::filesystem::exists( path );
+}
+
+
+// A library member deeper than MAX_PATH must check out once the clone allows long paths
+BOOST_AUTO_TEST_CASE( CloneWithLongMemberPath )
+{
+    const wxString bareName = tempBase() + wxFileName::GetPathSeparator() + wxT( "long_remote.git" );
+
+    git_repository* bare = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_init( &bare, bareName.ToUTF8().data(), 1 ), GIT_OK );
+    KIGIT::GitRepositoryPtr barePtr( bare );
+
+    commitDeepMember( bare, nullptr, true, "refs/heads/master" );
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( bare, "refs/heads/master" ), GIT_OK );
+
+    wxString dest = tempBase() + wxFileName::GetPathSeparator() + wxT( "clone_long" );
+
+    KIGIT_COMMON      common( nullptr );
+    GIT_CLONE_HANDLER handler( &common );
+
+    handler.SetRemote( bareName );
+    handler.SetClonePath( dest );
+
+    BOOST_CHECK_MESSAGE( handler.PerformClone(), "a clone whose member path passes MAX_PATH must succeed" );
+    BOOST_CHECK_MESSAGE( deepMemberExists( dest ), "the deep member must be on disk after the clone" );
+
+    if( common.GetRepo() )
+    {
+        git_repository_free( common.GetRepo() );
+        common.SetRepo( nullptr );
+    }
+}
+
+
+// A copy cloned before long paths were allowed must still update to a commit with a deep member
+BOOST_AUTO_TEST_CASE( OpenedCloneChecksOutLongMemberPath )
+{
+    const wxString bareName = tempBase() + wxFileName::GetPathSeparator() + wxT( "short_remote.git" );
+
+    git_repository* bare = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_init( &bare, bareName.ToUTF8().data(), 1 ), GIT_OK );
+    KIGIT::GitRepositoryPtr barePtr( bare );
+
+    git_oid first = commitDeepMember( bare, nullptr, false, "refs/heads/master" );
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( bare, "refs/heads/master" ), GIT_OK );
+
+    wxString dest = tempBase() + wxFileName::GetPathSeparator() + wxT( "clone_old" );
+
+    {
+        KIGIT_COMMON      common( nullptr );
+        GIT_CLONE_HANDLER handler( &common );
+
+        handler.SetRemote( bareName );
+        handler.SetClonePath( dest );
+        BOOST_REQUIRE( handler.PerformClone() );
+
+        git_config* config = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_config( &config, common.GetRepo() ), GIT_OK );
+        KIGIT::GitConfigPtr configPtr( config );
+
+        // The copy as an older build made it
+        git_config_delete_entry( config, "core.longpaths" );
+
+        git_oid second = commitDeepMember( common.GetRepo(), &first, true, nullptr );
+
+        git_repository_free( common.GetRepo() );
+        common.SetRepo( nullptr );
+
+        git_repository* opened = GetGitBackend()->OpenRepositoryAt( dest.utf8_string() );
+        BOOST_REQUIRE( opened );
+        KIGIT::GitRepositoryPtr openedPtr( opened );
+
+        BOOST_CHECK_EQUAL( GetGitBackend()->CheckoutCommit( opened, git_oid_tostr_s( &second ), "" ), GIT_OK );
+        BOOST_CHECK_MESSAGE( deepMemberExists( dest ), "the deep member must be on disk after the checkout" );
+
+        // Opening a user's repository must not edit its own config
+        git_config* own = nullptr;
+        BOOST_REQUIRE_EQUAL( git_config_open_ondisk( &own, ( dest + wxS( "\\.git\\config" ) ).utf8_str() ), GIT_OK );
+        KIGIT::GitConfigPtr ownPtr( own );
+
+        int allowed = 0;
+        BOOST_CHECK_MESSAGE( git_config_get_bool( &allowed, own, "core.longpaths" ) == GIT_ENOTFOUND,
+                             "opening a copy must leave core.longpaths out of its own config" );
+    }
+}
+
+
+// A planted long path config must be replaced before it is attached
+BOOST_AUTO_TEST_CASE( TamperedLongPathConfigIsRestoredOnOpen )
+{
+    const wxString target = KIGIT::PROJECT_GIT_UTILS::LongPathsConfigPath();
+    wxFileName     dir( target );
+
+    BOOST_REQUIRE( dir.DirExists() || dir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    // The file is the user's own, so a failed check must not leave the tampered one behind
+    struct RESTORE
+    {
+        wxString                   path;
+        std::optional<std::string> bytes;
+
+        ~RESTORE()
+        {
+            if( bytes )
+                std::ofstream( path.fn_str(), std::ios::binary | std::ios::trunc ) << *bytes;
+            else
+                wxRemoveFile( path );
+        }
+    } restore{ target, wxFileExists( target ) ? std::optional<std::string>( readBytes( target ) ) : std::nullopt };
+
+    const std::string expected = "[core]\n\tlongpaths = true\n";
+
+    {
+        wxFile planted( target, wxFile::write );
+        const std::string tampered = expected + "[url \"x\"]\n\tinsteadOf = y\n";
+
+        BOOST_REQUIRE( planted.IsOpened() );
+        BOOST_REQUIRE_EQUAL( planted.Write( tampered.data(), tampered.size() ), tampered.size() );
+    }
+
+    wxString repoDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "tamper_repo" );
+    BOOST_REQUIRE( wxFileName::Mkdir( repoDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    git_repository* init = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_init( &init, repoDir.utf8_str(), 0 ), GIT_OK );
+    git_repository_free( init );
+
+    git_repository* opened = GetGitBackend()->OpenRepositoryAt( repoDir.utf8_string() );
+    BOOST_REQUIRE( opened );
+    KIGIT::GitRepositoryPtr openedPtr( opened );
+
+    BOOST_CHECK_EQUAL( readBytes( target ), expected );
+
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, opened ), GIT_OK );
+    KIGIT::GitConfigPtr configPtr( config );
+
+    git_config_entry* entry = nullptr;
+    BOOST_CHECK_MESSAGE( git_config_get_entry( &entry, config, "url.x.insteadof" ) == GIT_ENOTFOUND,
+                         "the opened handle must not see a planted url setting" );
+
+    if( entry )
+        git_config_entry_free( entry );
+}
+#endif
+
+
 // Cancel pressed while the task is still queued must stop it before any network work.
 BOOST_AUTO_TEST_CASE( CancelRequestedWhileQueuedAbortsTransfer )
 {
@@ -3418,9 +3741,9 @@ BOOST_AUTO_TEST_CASE( BuildGitChangeEntries_KeepsTrackedAndStagedTransientFiles 
 
     auto checkEntries = [&repo, &expected]( const wxString& aProjectPath )
     {
-        KIGIT_COMMON                 common( repo.get(), aProjectPath );
+        KIGIT_COMMON       common( repo.get(), aProjectPath );
         KIGIT::ACTION_LOCK lock = common.LockAction();
-        std::set<wxString>           paths;
+        std::set<wxString> paths;
 
         for( const FILE_CHECKLIST_ENTRY& entry : BuildGitChangeEntries( common, aProjectPath, false ) )
             paths.insert( entry.path );
@@ -5106,6 +5429,61 @@ BOOST_AUTO_TEST_CASE( WriteTreeToDir_LeavesIndexUntouched )
         wxFileName::Rmdir( dest, wxPATH_RMDIR_RECURSIVE );
 
     git_repository_free( repo );
+}
+
+
+BOOST_AUTO_TEST_CASE( GetCurrentBranchNameDecodesUtf8InAnyLocale )
+{
+    BOOST_TEST_REQUIRE( ready() );
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+
+    const char* name = "r\xc3\xa9view";
+    git_object* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &head, repo.get(), "HEAD" ), GIT_OK );
+    KIGIT::GitObjectPtr headPtr( head );
+
+    git_reference* branch = nullptr;
+    BOOST_REQUIRE_EQUAL( git_branch_create( &branch, repo.get(), name, (git_commit*) head, 0 ), GIT_OK );
+    KIGIT::GitReferencePtr branchPtr( branch );
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), git_reference_name( branch ) ), GIT_OK );
+
+    // The C locale cannot decode the name, which only an explicit UTF-8 decode survives
+    const std::string locale = setlocale( LC_CTYPE, nullptr );
+    setlocale( LC_CTYPE, "C" );
+    const wxString current = KIGIT_COMMON( repo.get() ).GetCurrentBranchName();
+    setlocale( LC_CTYPE, locale.c_str() );
+
+    BOOST_CHECK( current == wxString::FromUTF8( name ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( GetRemoteNameKeepsAConfiguredRemoteWithoutItsTrackingRef )
+{
+    BOOST_TEST_REQUIRE( ready() );
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+
+    for( const char* name : { "origin", "team" } )
+    {
+        git_remote* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_remote_create( &remote, repo.get(), name, remotePath().ToUTF8().data() ), GIT_OK );
+        git_remote_free( remote );
+    }
+
+    git_reference* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &head, repo.get() ), GIT_OK );
+    KIGIT::GitReferencePtr headPtr( head );
+    const std::string      branch = git_reference_shorthand( head );
+
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo.get() ), GIT_OK );
+    std::unique_ptr<git_config, decltype( &git_config_free )> configPtr( config, &git_config_free );
+    BOOST_REQUIRE_EQUAL( git_config_set_string( config, ( "branch." + branch + ".remote" ).c_str(), "team" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL(
+            git_config_set_string( config, ( "branch." + branch + ".merge" ).c_str(), git_reference_name( head ) ),
+            GIT_OK );
+
+    // No refs/remotes/team/<branch>, as after a prune
+    BOOST_CHECK( KIGIT_COMMON( repo.get() ).GetRemoteNameOrDefault() == wxS( "team" ) );
 }
 
 

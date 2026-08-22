@@ -59,6 +59,7 @@ protected:
 
 private:
     void populateFileList();
+    void showChanges();
     void openFileDiff( long aListIndex );
 
     KIGIT_COMMON*                    m_common;

@@ -96,10 +96,15 @@ private:
 
     void updateAuthControls();
     void updateURLData();
+
+    /// Fill in the account saved for the address once it is complete, unless the user typed a name
+    void fillAccount();
+
     bool extractClipboardData();
 
     git_repository* m_repository;
     wxString        m_incomeURL;
+    wxString        m_filledAccount; ///< The name fillAccount() last put in the username field
 
     bool            m_tempRepo;
     wxString        m_tempPath;

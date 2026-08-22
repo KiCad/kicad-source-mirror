@@ -135,6 +135,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
         relativePath.Replace( wxS( "\\" ), wxS( "/" ) );
 #endif
 
+        // Use the session prefix so a project opened through a symlink has the same paths
         if( KIGIT::PROJECT_GIT_UTILS::IsHiddenTransient( relativePath, *prefix, fileStatus.gitStatus,
                                                          fileStatus.isDirectory ) )
         {
@@ -707,15 +708,17 @@ std::vector<wxString> LibraryEditorsWithUnsavedChanges( KIWAY& aKiway )
 }
 
 
-std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, const wxString& aProjectPath )
+namespace
 {
-    std::vector<wxString> paths;
 
+/// Every tracked file with changes, as absolute paths; nullopt without a repository
+std::optional<std::vector<wxString>> changedTrackedFiles( KIGIT_COMMON& aCommon )
+{
     if( !aCommon.GetRepo() )
-        return paths;
+        return std::nullopt;
 
-    GIT_STATUS_HANDLER handler( &aCommon );
-    wxString           workDir = handler.GetWorkingDirectory();
+    GIT_STATUS_HANDLER    handler( &aCommon );
+    std::vector<wxString> paths;
 
     for( const auto& [path, fileStatus] : handler.GetFileStatus( wxEmptyString, /* changed only */ true ) )
     {
@@ -726,6 +729,21 @@ std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, 
             continue;
         }
 
+        paths.push_back( path );
+    }
+
+    return paths;
+}
+
+
+std::vector<wxString> outsideProject( KIGIT_COMMON& aCommon, const std::vector<wxString>& aChanged,
+                                      const wxString& aProjectPath )
+{
+    std::vector<wxString> paths;
+    wxString              workDir = GIT_STATUS_HANDLER( &aCommon ).GetWorkingDirectory();
+
+    for( const wxString& path : aChanged )
+    {
         if( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, aProjectPath ) )
             continue;
 
@@ -738,6 +756,16 @@ std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, 
     }
 
     return paths;
+}
+
+} // namespace
+
+
+std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, const wxString& aProjectPath )
+{
+    std::optional<std::vector<wxString>> changed = changedTrackedFiles( aCommon );
+
+    return changed ? outsideProject( aCommon, *changed, aProjectPath ) : std::vector<wxString>();
 }
 
 
@@ -753,7 +781,10 @@ GIT_WORKTREE_STATUS ReadGitWorktreeStatus( KIGIT_COMMON& aCommon, const wxString
 
     // A sibling project's tracked edits block the same repository-wide rewrite.
     if( status.hasTrackedChanges )
-        status.outsideProject = ChangedTrackedFilesOutsideProject( aCommon, aProjectPath );
+    {
+        if( std::optional<std::vector<wxString>> changed = changedTrackedFiles( aCommon ) )
+            status.outsideProject = outsideProject( aCommon, *changed, aProjectPath );
+    }
 
     return status;
 }
@@ -882,26 +913,34 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
 
     if( answer == wxID_YES )
     {
-        for( const GIT_EDITOR* editor : dirty )
-        {
-            std::string payload;
-            aFrame->Kiway().ExpressMail( editor->frameType, editor->saveMail, payload );
-
-            if( payload != "success" )
-            {
-                DisplayErrorMessage( aFrame,
-                                     wxString::Format( _( "Could not save %s." ), wxGetTranslation( editor->label ) ) );
-                return false;
-            }
-        }
-
         // Include project changes from saving editors only when the user chose to save.
-        aFrame->GetSettingsManager()->SaveProject();
+        if( !SaveDocumentEditors( aFrame ) )
+            return false;
 
         if( aSavedEditors )
             *aSavedEditors = true;
     }
 
+    return true;
+}
+
+
+bool SaveDocumentEditors( EDA_BASE_FRAME* aFrame )
+{
+    for( const GIT_EDITOR* editor : dirtyEditors( aFrame->Kiway(), EDITOR_SCOPE::DOCUMENTS ) )
+    {
+        std::string payload;
+        aFrame->Kiway().ExpressMail( editor->frameType, editor->saveMail, payload );
+
+        if( payload != "success" )
+        {
+            DisplayErrorMessage( aFrame,
+                                 wxString::Format( _( "Could not save %s." ), wxGetTranslation( editor->label ) ) );
+            return false;
+        }
+    }
+
+    aFrame->GetSettingsManager()->SaveProject();
     return true;
 }
 
@@ -1129,7 +1168,7 @@ void ChangeGitIgnore( EDA_BASE_FRAME* aFrame, wxWindow* aParent, GIT_IGNORE_CHAN
 
     {
         // Only to explain the result, so a busy repository is not worth waiting for.
-        KIGIT::ACTION_LOCK lock = common->TryLockAction();
+        KIGIT::ACTION_LOCK lock = common->TryLockActionLocal();
 
         if( !lock.owns_lock() )
             return;

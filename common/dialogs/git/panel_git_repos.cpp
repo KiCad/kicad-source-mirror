@@ -22,6 +22,7 @@
 #include <bitmaps.h>
 #include <dialogs/git/dialog_git_repository.h>
 #include <kiplatform/secrets.h>
+#include <mdw/mdw_framework.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <trace_helpers.h>
@@ -29,6 +30,7 @@
 #include <widgets/wx_grid.h>
 
 #include <git2.h>
+#include <git/git_config_handler.h>
 #include <git/kicad_git_memory.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
@@ -102,10 +104,30 @@ bool PANEL_GIT_REPOS::TransferDataFromWindow()
 
     settings->m_Git.enableGit = m_enableGit->GetValue();
     settings->m_Git.updatInterval = m_updateInterval->GetValue();
-    settings->m_Git.useDefaultAuthor = m_cbDefault->GetValue();
-    settings->m_Git.authorName = m_author->GetValue();
-    settings->m_Git.authorEmail = m_authorEmail->GetValue();
+
+    bool authorChanged = false;
+
+    // A backend handshake on a worker reads the author while this applies
+    {
+        std::lock_guard<std::mutex> lock( COMMON_SETTINGS::AccountsMutex() );
+
+        const COMMON_SETTINGS::GIT before = settings->m_Git;
+
+        settings->m_Git.useDefaultAuthor = m_cbDefault->GetValue();
+        settings->m_Git.authorName = m_author->GetValue();
+        settings->m_Git.authorEmail = m_authorEmail->GetValue();
+
+        authorChanged = KIGIT::AuthorPreferenceChanged( before, settings->m_Git );
+    }
+
     settings->m_Git.showContributorAvatars = m_cbShowAvatars->GetValue();
+
+    // A backend learns the author only as it starts, and a closed session opens again on its next use
+    if( MDW_FRAMEWORK* framework = Pgm().MdwFrameworkOrNull(); framework && authorChanged )
+    {
+        for( const wxString& path : framework->SessionPaths() )
+            framework->CloseSession( path, false );
+    }
 
     return true;
 }

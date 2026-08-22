@@ -20,8 +20,8 @@
 #ifndef GIT_UI_UTILS_H
 #define GIT_UI_UTILS_H
 
-#include <mutex>
 #include <git/kigit_action_lock.h>
+
 #include <vector>
 
 class KIGIT_COMMON;

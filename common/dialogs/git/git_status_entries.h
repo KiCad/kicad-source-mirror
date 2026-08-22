@@ -102,6 +102,10 @@ enum class GIT_EDITOR_PREP
  */
 bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPurpose, bool* aSavedEditors = nullptr );
 
+/// Save the schematic and board editors holding unsaved edits, and the project file, without asking. False when
+/// a save failed, which has been reported.
+bool SaveDocumentEditors( EDA_BASE_FRAME* aFrame );
+
 /// Unsaved schematic or board edits can be saved for a commit, even with no changes on disk.
 /// Library edits do not count. Call on the UI thread.
 bool DocumentEditorsDirty( KIWAY& aKiway );

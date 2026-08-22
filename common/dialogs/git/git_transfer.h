@@ -167,6 +167,13 @@ public:
     /// Suppress the running completion and discard pending work. Does not wait for a read.
     void Cancel();
 
+    /**
+     * Call aHandler on the UI thread with true when a read has to wait for the action lock, and with
+     * false once it holds it, before its completion. Lets the owner say what it waits for instead of
+     * sitting empty. A superseded read never starts a wait but always ends the one it started.
+     */
+    void OnWait( std::function<void( bool aWaiting )> aHandler ) { m_onWait = std::move( aHandler ); }
+
     /// Remains true until the running worker returns, including after Cancel().
     bool IsBusy() const { return m_transfer.IsBusy(); }
 
@@ -181,9 +188,13 @@ private:
 
     void start( REQUEST aRequest );
 
-    KIGIT_TRANSFER         m_transfer;
-    std::optional<REQUEST> m_pending;
-    uint64_t               m_generation = 0;
+    void reportWait( bool aWaiting, uint64_t aGeneration );
+
+    KIGIT_TRANSFER              m_transfer;
+    std::optional<REQUEST>      m_pending;
+    uint64_t                    m_generation = 0;
+    std::function<void( bool )> m_onWait;
+    bool                        m_waitShown = false;
 };
 
 #endif // GIT_TRANSFER_H

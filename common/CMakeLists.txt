@@ -698,6 +698,7 @@ set( COMMON_GIT_DLG_SRCS
     dialogs/git/git_status_entries.cpp
     dialogs/git/git_transfer.cpp
     dialogs/git/git_ui_utils.cpp
+    dialogs/git/merge_conflict_prompt.cpp
     dialogs/git/panel_git_branches.cpp
     dialogs/git/panel_git_branches_base.cpp
     dialogs/git/panel_git_history.cpp
@@ -713,6 +714,7 @@ set( COMMON_GIT_DLG_SRCS
     dialogs/git/panel_mdw_versions.cpp
     dialogs/git/panel_git_repos.cpp
     dialogs/git/panel_git_repos_base.cpp
+    dialogs/git/mdw_connection_prompt.cpp
 
     )
 
