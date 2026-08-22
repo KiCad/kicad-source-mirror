@@ -43,6 +43,9 @@ private:
 
     wxGridCellEditor* createDatasheetEditor() override;
     wxGridCellEditor* createFootprintEditor() override;
+
+    // Don't mark the frame modified for lib tables, we're not modifying the library,
+    // just the application settings for the library editor.
     void              onBomSettingsChanged() override {}
 
     void setScope( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
