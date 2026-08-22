@@ -858,6 +858,7 @@ set( COMMON_SRCS
     http_lib/http_lib_connection.cpp
     http_lib/http_lib_settings.cpp
 
+    api/api_text_attributes.cpp
     )
 
 # This needs to be in the common library until draw_panel_gal is moved to kicommon

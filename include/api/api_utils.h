@@ -35,6 +35,7 @@
 
 class SHAPE_LINE_CHAIN;
 class STROKE_PARAMS;
+class TEXT_ATTRIBUTES;
 class KIID_PATH;
 
 /**
@@ -86,6 +87,12 @@ KICOMMON_API KIID_PATH UnpackSheetPath( const types::SheetPath& aInput );
 KICOMMON_API void PackStroke( kiapi::common::types::StrokeAttributes& aOutput, const STROKE_PARAMS& aInput );
 
 KICOMMON_API void UnpackStroke( STROKE_PARAMS& aOutput, const kiapi::common::types::StrokeAttributes& aInput );
+
+// Not KICOMMON_API: depends on font stuff in GAL for now
+void PackTextAttributes( kiapi::common::types::TextAttributes& aOutput, const TEXT_ATTRIBUTES& aInput );
+
+// Not KICOMMON_API: depends on font stuff in GAL for now
+void UnpackTextAttributes( TEXT_ATTRIBUTES& aOutput, const kiapi::common::types::TextAttributes& aInput );
 
 } // namespace kiapi::common
 
