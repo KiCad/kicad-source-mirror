@@ -64,19 +64,18 @@ class LIB_FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
     LIB_FIELDS_EDITOR_GRID_TRICKS( DIALOG_LIB_FIELDS_TABLE* aParent, WX_GRID* aGrid,
-                                   VIEW_CONTROLS_GRID_DATA_MODEL* aViewFieldsData,
+                                   VIEW_CONTROLS_GRID_DATA_MODEL*     aViewFieldsData,
                                    LIB_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),
             m_viewControlsDataModel( aViewFieldsData ),
             m_dataModel( aDataModel )
-    {
-    }
+    {}
 
 protected:
     bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false ) override
     {
-        if( m_grid->IsReadOnly( aRow, aCol ) )
+        if( !m_grid->IsEditable() || m_dataModel->IsCellReadOnly( aRow, aCol ) )
             return false;
 
         return GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
@@ -127,7 +126,25 @@ protected:
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        if( aEvent.GetId() == MYID_REVERT_ROW )
+        if( aEvent.GetId() == MYID_SELECT_FOOTPRINT )
+        {
+            // pick a footprint using the footprint picker.
+            wxString fpid = m_grid->GetCellValue( row, col );
+
+            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
+            {
+                if( frame->ShowModal( &fpid, m_dlg ) )
+                    m_grid->SetCellValue( row, col, fpid );
+
+                frame->Destroy();
+            }
+        }
+        else if( aEvent.GetId() == MYID_SHOW_DATASHEET )
+        {
+            wxString datasheetUri = m_grid->GetCellValue( row, col );
+            GetAssociatedDocument( m_dlg, datasheetUri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ) );
+        }
+        else if( aEvent.GetId() == MYID_REVERT_ROW )
         {
             if( m_grid->CommitPendingChanges( false ) )
                 m_dataModel->RevertRow( row );
@@ -180,30 +197,14 @@ protected:
 
             m_grid->ForceRefresh();
         }
-        else if( aEvent.GetId() == MYID_SELECT_FOOTPRINT )
-        {
-            wxString fpid = m_grid->GetCellValue( row, col );
-
-            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
-            {
-                if( frame->ShowModal( &fpid, m_dlg ) )
-                    m_grid->SetCellValue( row, col, fpid );
-
-                frame->Destroy();
-            }
-        }
-        else if( aEvent.GetId() == MYID_SHOW_DATASHEET )
-        {
-            wxString datasheetUri = m_grid->GetCellValue( row, col );
-            GetAssociatedDocument( m_dlg, datasheetUri, &m_dlg->Prj(),
-                                   PROJECT_SCH::SchSearchS( &m_dlg->Prj() ) );
-        }
         else if( aEvent.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
         {
             if( !m_grid->CommitPendingChanges( false ) )
                 return;
 
+            // Pop-up column order is the order of the shown fields, not the viewControls order
             col = aEvent.GetId() - GRIDTRICKS_FIRST_SHOWHIDE;
+
             bool show = !m_dataModel->GetShowColumn( col );
 
             m_dlg->ShowHideColumn( col, show );
@@ -239,7 +240,9 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SC
         m_parent( aParent ),
         m_symbolScope( aScope )
 {
-    m_dataModel = new LIB_FIELDS_EDITOR_GRID_DATA_MODEL();
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetEditor( createDatasheetEditor() );
+    m_dataModel = new LIB_FIELDS_EDITOR_GRID_DATA_MODEL( attr );
 
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
@@ -248,7 +251,10 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SC
     // values onto the wrong field.
     ExcludeFromControlUndoRedo( m_viewControlsGrid );
 
+    // must be done after SetTable(), which appears to re-set it
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
+
+    // add Cut, Copy, and Paste to wxGrid
     m_grid->PushEventHandler( new LIB_FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_viewControlsDataModel,
                                                                  m_dataModel ) );
 
@@ -269,15 +275,20 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SC
     m_grid->ClearSelection();
 
     SetupStandardButtons();
+
     finishDialogSettings();
+
     SetSize( GetDefaultDialogSize() );
+
     RestorePanelLayout();
 
     OptOut( m_outputFileName );
+
     m_outputFileName->SetValue( m_cfgBomSettings.m_BomExportFileName );
 
     Center();
 
+    // Connect Events
     m_grid->Bind( wxEVT_GRID_COL_SORT, &DIALOG_LIB_FIELDS_TABLE::OnColSort, this );
     m_grid->Bind( wxEVT_GRID_COL_MOVE, &DIALOG_LIB_FIELDS_TABLE::OnColMove, this );
     m_grid->GetGridWindow()->Bind( wxEVT_MOTION, &DIALOG_LIB_FIELDS_TABLE::OnGridMouseMove, this );
@@ -292,13 +303,23 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
     SavePanelLayout();
     SaveColumnWidths();
 
+    // Disconnect Events
     m_grid->GetGridWindow()->Unbind( wxEVT_MOTION, &DIALOG_LIB_FIELDS_TABLE::OnGridMouseMove, this );
     m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_LIB_FIELDS_TABLE::OnColSort, this );
     m_grid->Unbind( wxEVT_GRID_COL_MOVE, &DIALOG_LIB_FIELDS_TABLE::OnColMove, this );
     m_cbBomPresets->Unbind( wxEVT_CHOICE, &DIALOG_LIB_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Unbind( wxEVT_CHOICE, &DIALOG_LIB_FIELDS_TABLE::onBomFmtPresetChanged, this );
 
+    // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
+
+    // we gave ownership of m_viewControlsDataModel & m_dataModel to the wxGrids...
+}
+
+
+wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createDatasheetEditor()
+{
+    return new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) );
 }
 
 
@@ -331,20 +352,16 @@ wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createFootprintEditor()
 }
 
 
-wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createDatasheetEditor()
-{
-    return new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) );
-}
-
-
 bool DIALOG_LIB_FIELDS_TABLE::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
     m_scope->SetSelection( static_cast<int>( m_symbolScope ) );
-    setScope( m_symbolScope );
+    setScope( static_cast<SCOPE>( m_scope->GetSelection() ) );
+    // setScope() loads rows into m_viewControlsDataModel and columns into m_dataModel
 
+    // Load our BOM view presets
     SetUserBomPresets( m_cfgBomSettings.m_BomPresets );
 
     BOM_PRESET preset = m_cfgBomSettings.m_BomSettings;
@@ -364,6 +381,7 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataToWindow()
     ApplyBomPreset( preset );
     syncBomPresetSelection();
 
+    // Load BOM export format presets
     SetUserBomFmtPresets( m_cfgBomSettings.m_BomFmtPresets );
     ApplyBomFmtPreset( m_cfgBomSettings.m_BomFmtSettings );
     syncBomFmtPresetSelection();
@@ -424,10 +442,10 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataFromWindow()
                     for( LIB_SYMBOL* symbol : symbolsToPreserve )
                     {
                         bool found = std::any_of( m_symbolsList.begin(), m_symbolsList.end(),
-                                [&]( LIB_SYMBOL* aExistingSymbol )
-                                {
-                                    return aExistingSymbol->m_Uuid == symbol->m_Uuid;
-                                } );
+                                                  [&]( LIB_SYMBOL* aExistingSymbol )
+                                                  {
+                                                      return aExistingSymbol->m_Uuid == symbol->m_Uuid;
+                                                  } );
 
                         if( !found )
                         {
@@ -456,6 +474,103 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataFromWindow()
 }
 
 
+void DIALOG_LIB_FIELDS_TABLE::LoadFieldNames()
+{
+    auto addMandatoryField =
+            [&]( FIELD_T aFieldId, bool aShow, bool aGroupBy )
+            {
+                wxString fieldName = GetCanonicalFieldName( aFieldId );
+                int      row = -1;
+
+                for( int i = 0; i < m_viewControlsDataModel->GetNumberRows(); ++i )
+                {
+                    if( m_viewControlsDataModel->GetCanonicalFieldName( i ) == fieldName )
+                    {
+                        row = i;
+                        break;
+                    }
+                }
+
+                if( row == -1 )
+                {
+                    row = m_viewControlsDataModel->GetNumberRows();
+                    AddField( fieldName, GetDefaultFieldName( aFieldId, DO_TRANSLATE ), aShow, aGroupBy );
+                }
+
+                m_mandatoryFieldListIndexes[aFieldId] = row;
+            };
+
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, _( "Symbol Name" ), true, false );
+
+    // Add mandatory fields first            show   groupBy
+    addMandatoryField( FIELD_T::REFERENCE,   false,  false  );
+    addMandatoryField( FIELD_T::VALUE,       true,   false  );
+    addMandatoryField( FIELD_T::FOOTPRINT,   true,   false  );
+    addMandatoryField( FIELD_T::DATASHEET,   true,   false  );
+    addMandatoryField( FIELD_T::DESCRIPTION, false,  false  );
+
+    // Generated fields present only in the fields table
+    AddField( wxS( "Keywords" ), _( "Keywords" ), true, false );
+    AddField( wxS( "${EXCLUDE_FROM_BOM}" ), _( "Exclude From BOM" ), true, false );
+    AddField( wxS( "${EXCLUDE_FROM_SIM}" ), _( "Exclude From Simulation" ), true, false );
+    AddField( wxS( "${EXCLUDE_FROM_BOARD}" ), _( "Exclude From Board" ), true, false );
+    AddField( wxS( "${EXCLUDE_FROM_POS_FILES}" ), _( "Exclude From Position Files" ), true, false );
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER, _( "Power Symbol" ), true, false );
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER, _( "Local Power Symbol" ), true, false );
+
+    // User field names are stored and matched case-sensitively (see issue #24021), so each
+    // distinct name gets its own column rather than collapsing case variants together.
+    std::set<wxString> userFieldNames;
+
+    for( LIB_SYMBOL* symbol : m_symbolsList )
+    {
+        std::vector<SCH_FIELD*> fields;
+        symbol->GetFields( fields );
+
+        for( SCH_FIELD* field : fields )
+        {
+            if( !field->IsMandatory() && !field->IsPrivate() )
+                userFieldNames.insert( field->GetName() );
+        }
+    }
+
+    for( const wxString& fieldName : userFieldNames )
+        AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
+}
+
+
+void DIALOG_LIB_FIELDS_TABLE::setScope( SCOPE aScope )
+{
+    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_parent->GetLibManager();
+    wxString                    targetLib = m_parent->GetTargetLibId().GetLibNickname();
+    wxString                    targetSymbol = m_parent->GetTargetLibId().GetLibItemName();
+    wxArrayString               symbolNames;
+
+    m_symbolScope = aScope;
+
+    if( aScope == SCOPE::SCOPE_RELATED_SYMBOLS )
+    {
+        const LIB_SYMBOL*           symbol = libMgr.GetBufferedSymbol( targetSymbol, targetLib );
+        std::shared_ptr<LIB_SYMBOL> root = symbol ? symbol->GetRootSymbol() : nullptr;
+
+        if( root )
+        {
+            symbolNames.Add( root->GetName() );
+            libMgr.GetDerivedSymbolNames( root->GetName(), targetLib, symbolNames );
+        }
+    }
+    else
+    {
+        libMgr.GetSymbolNames( targetLib, symbolNames );
+    }
+
+    loadSymbols( symbolNames );
+    LoadFieldNames();
+    m_dataModel->RebuildRows();
+    SetupAllColumnProperties();
+}
+
+
 void DIALOG_LIB_FIELDS_TABLE::loadSymbols( const wxArrayString& aSymbolNames )
 {
     m_symbolsList.clear();
@@ -464,7 +579,7 @@ void DIALOG_LIB_FIELDS_TABLE::loadSymbols( const wxArrayString& aSymbolNames )
 
     if( aSymbolNames.IsEmpty() )
     {
-        if( m_symbolScope == SCOPE_RELATED_SYMBOLS )
+        if( m_symbolScope == SCOPE::SCOPE_RELATED_SYMBOLS )
             wxMessageBox( wxString::Format( _( "No related symbols found in library '%s'." ), libName ) );
         else
             wxMessageBox( wxString::Format( _( "No symbols found in library '%s'." ), libName ) );
@@ -497,7 +612,7 @@ void DIALOG_LIB_FIELDS_TABLE::loadSymbols( const wxArrayString& aSymbolNames )
 
     if( m_symbolsList.empty() )
     {
-        if( m_symbolScope == SCOPE_RELATED_SYMBOLS )
+        if( m_symbolScope == SCOPE::SCOPE_RELATED_SYMBOLS )
             wxMessageBox( _( "No related symbols could be loaded from the library." ) );
         else
             wxMessageBox( _( "No symbols could be loaded from the library." ) );
@@ -507,122 +622,34 @@ void DIALOG_LIB_FIELDS_TABLE::loadSymbols( const wxArrayString& aSymbolNames )
 }
 
 
-void DIALOG_LIB_FIELDS_TABLE::loadFieldNames()
-{
-    auto addMandatoryField =
-            [&]( FIELD_T aFieldId, bool aShow, bool aGroupBy )
-            {
-                wxString fieldName = GetCanonicalFieldName( aFieldId );
-                int      row = -1;
-
-                for( int i = 0; i < m_viewControlsDataModel->GetNumberRows(); ++i )
-                {
-                    if( m_viewControlsDataModel->GetCanonicalFieldName( i ) == fieldName )
-                    {
-                        row = i;
-                        break;
-                    }
-                }
-
-                if( row == -1 )
-                {
-                    row = m_viewControlsDataModel->GetNumberRows();
-                    AddField( fieldName, GetDefaultFieldName( aFieldId, DO_TRANSLATE ), aShow, aGroupBy );
-                }
-
-                m_mandatoryFieldListIndexes[aFieldId] = row;
-            };
-
-    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, _( "Symbol Name" ), true, false );
-
-    addMandatoryField( FIELD_T::REFERENCE, false, false );
-    addMandatoryField( FIELD_T::VALUE, true, false );
-    addMandatoryField( FIELD_T::FOOTPRINT, true, false );
-    addMandatoryField( FIELD_T::DATASHEET, true, false );
-    addMandatoryField( FIELD_T::DESCRIPTION, false, false );
-
-    AddField( wxS( "Keywords" ), _( "Keywords" ), true, false );
-    AddField( wxS( "${EXCLUDE_FROM_BOM}" ), _( "Exclude From BOM" ), true, false );
-    AddField( wxS( "${EXCLUDE_FROM_SIM}" ), _( "Exclude From Simulation" ), true, false );
-    AddField( wxS( "${EXCLUDE_FROM_BOARD}" ), _( "Exclude From Board" ), true, false );
-    AddField( wxS( "${EXCLUDE_FROM_POS_FILES}" ), _( "Exclude From Position Files" ), true, false );
-    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER, _( "Power Symbol" ), true, false );
-    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER, _( "Local Power Symbol" ), true, false );
-
-    std::set<wxString> userFieldNames;
-
-    for( LIB_SYMBOL* symbol : m_symbolsList )
-    {
-        std::vector<SCH_FIELD*> fields;
-        symbol->GetFields( fields );
-
-        for( SCH_FIELD* field : fields )
-        {
-            if( !field->IsMandatory() && !field->IsPrivate() )
-                userFieldNames.insert( field->GetName() );
-        }
-    }
-
-    for( const wxString& fieldName : userFieldNames )
-        AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
-}
-
-
-void DIALOG_LIB_FIELDS_TABLE::setScope( SCOPE aScope )
-{
-    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_parent->GetLibManager();
-    wxString                    targetLib = m_parent->GetTargetLibId().GetLibNickname();
-    wxString                    targetSymbol = m_parent->GetTargetLibId().GetLibItemName();
-    wxArrayString               symbolNames;
-
-    m_symbolScope = aScope;
-
-    if( m_symbolScope == SCOPE_RELATED_SYMBOLS )
-    {
-        const LIB_SYMBOL*           symbol = libMgr.GetBufferedSymbol( targetSymbol, targetLib );
-        std::shared_ptr<LIB_SYMBOL> root = symbol ? symbol->GetRootSymbol() : nullptr;
-
-        if( root )
-        {
-            symbolNames.Add( root->GetName() );
-            libMgr.GetDerivedSymbolNames( root->GetName(), targetLib, symbolNames );
-        }
-    }
-    else
-    {
-        libMgr.GetSymbolNames( targetLib, symbolNames );
-    }
-
-    loadSymbols( symbolNames );
-    loadFieldNames();
-    m_dataModel->RebuildRows();
-    SetupAllColumnProperties();
-}
-
-
 void DIALOG_LIB_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
 {
     switch( aEvent.GetSelection() )
     {
-    case 0: setScope( SCOPE_LIBRARY );         break;
-    case 1: setScope( SCOPE_RELATED_SYMBOLS ); break;
+    case 0: setScope( SCOPE::SCOPE_LIBRARY );         break;
+    case 1: setScope( SCOPE::SCOPE_RELATED_SYMBOLS ); break;
     }
 }
 
 
 void DIALOG_LIB_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
 {
+    // Build a pop menu:
     wxMenu menu;
 
     menu.Append( MYID_INCLUDE_DNP, _( "Include 'DNP' Symbols" ),
-                 _( "Show symbols marked 'DNP' in the table and include them on export." ), wxITEM_CHECK );
+                 _( "Show symbols marked 'DNP' in the table.  This setting also controls whether or not 'DNP' "
+                    "symbols are included on export." ),
+                 wxITEM_CHECK );
     menu.Check( MYID_INCLUDE_DNP, !m_dataModel->GetExcludeDNP() );
 
     menu.Append( MYID_INCLUDE_EXCLUDED_FROM_BOM, _( "Include 'Exclude from BOM' Symbols" ),
-                 _( "Show symbols marked 'Exclude from BOM' in the table. They are never included on export." ),
+                 _( "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked 'Exclude from BOM' "
+                    "are never included on export." ),
                  wxITEM_CHECK );
     menu.Check( MYID_INCLUDE_EXCLUDED_FROM_BOM, m_dataModel->GetIncludeExcludedFromBOM() );
 
+    // menuId is the selected submenu id from the popup menu or wxID_NONE
     int menuId = m_bMenu->GetPopupMenuSelectionFromUser( menu );
 
     if( menuId == 0 || menuId == MYID_INCLUDE_DNP )
@@ -630,6 +657,7 @@ void DIALOG_LIB_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
         m_dataModel->SetExcludeDNP( !m_dataModel->GetExcludeDNP() );
         m_dataModel->RebuildRows();
         m_grid->ForceRefresh();
+
         syncBomPresetSelection();
     }
     else if( menuId == 1 || menuId == MYID_INCLUDE_EXCLUDED_FROM_BOM )
@@ -637,53 +665,9 @@ void DIALOG_LIB_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
         m_dataModel->SetIncludeExcludedFromBOM( !m_dataModel->GetIncludeExcludedFromBOM() );
         m_dataModel->RebuildRows();
         m_grid->ForceRefresh();
+
         syncBomPresetSelection();
     }
-}
-
-
-std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
-{
-    std::vector<BOM_PRESET> presets = BOM_PRESET::BuiltInPresets();
-
-    for( BOM_PRESET& preset : presets )
-    {
-        if( preset.sortField == GetDefaultFieldName( FIELD_T::REFERENCE, DO_TRANSLATE ) )
-            preset.sortField = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME;
-
-        for( BOM_FIELD& field : preset.fieldsOrdered )
-        {
-            if( field.name == GetCanonicalFieldName( FIELD_T::REFERENCE ) )
-            {
-                field.name = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME;
-                field.label = wxS( "Symbol Name" );
-                field.groupBy = false;
-            }
-        }
-
-        if( preset.name == BOM_PRESET::DefaultEditing().name )
-        {
-            preset.groupSymbols = false;
-            preset.fieldsOrdered = {
-                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, wxS( "Symbol Name" ), true, false },
-                { GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false, false },
-                { GetCanonicalFieldName( FIELD_T::VALUE ), wxS( "Value" ), true, false },
-                { GetCanonicalFieldName( FIELD_T::FOOTPRINT ), wxS( "Footprint" ), true, false },
-                { GetCanonicalFieldName( FIELD_T::DATASHEET ), wxS( "Datasheet" ), true, false },
-                { GetCanonicalFieldName( FIELD_T::DESCRIPTION ), wxS( "Description" ), false, false },
-                { wxS( "Keywords" ), wxS( "Keywords" ), true, false },
-                { wxS( "${EXCLUDE_FROM_BOM}" ), wxS( "Exclude From BOM" ), true, false },
-                { wxS( "${EXCLUDE_FROM_SIM}" ), wxS( "Exclude From Simulation" ), true, false },
-                { wxS( "${EXCLUDE_FROM_BOARD}" ), wxS( "Exclude From Board" ), true, false },
-                { wxS( "${EXCLUDE_FROM_POS_FILES}" ), wxS( "Exclude From Position Files" ), true, false },
-                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER, wxS( "Power Symbol" ), true, false },
-                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER,
-                  wxS( "Local Power Symbol" ), true, false },
-            };
-        }
-    }
-
-    return presets;
 }
 
 
@@ -745,6 +729,56 @@ void DIALOG_LIB_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
     }
 
     aEvent.Skip();
+}
+
+
+std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
+{
+    std::vector<BOM_PRESET> presets = BOM_PRESET::BuiltInPresets();
+
+    for( BOM_PRESET& preset : presets )
+    {
+        if( preset.sortField == GetDefaultFieldName( FIELD_T::REFERENCE, DO_TRANSLATE ) )
+            preset.sortField = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME;
+
+        for( BOM_FIELD& field : preset.fieldsOrdered )
+        {
+            if( field.name == GetCanonicalFieldName( FIELD_T::REFERENCE ) )
+            {
+                field.name = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME;
+                field.label = wxS( "Symbol Name" );
+                field.groupBy = false;
+            }
+        }
+
+        if( preset.name == BOM_PRESET::DefaultEditing().name )
+        {
+            preset.groupSymbols = false;
+            preset.fieldsOrdered = {
+                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, wxS( "Symbol Name" ), true, false },
+                { GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false, false },
+                { GetCanonicalFieldName( FIELD_T::VALUE ), wxS( "Value" ), true, false },
+                { GetCanonicalFieldName( FIELD_T::FOOTPRINT ), wxS( "Footprint" ), true, false },
+                { GetCanonicalFieldName( FIELD_T::DATASHEET ), wxS( "Datasheet" ), true, false },
+                { GetCanonicalFieldName( FIELD_T::DESCRIPTION ), wxS( "Description" ), false, false },
+                { wxS( "Keywords" ), wxS( "Keywords" ), true, false },
+                { wxS( "${EXCLUDE_FROM_BOM}" ), wxS( "Exclude From BOM" ), true, false },
+                { wxS( "${EXCLUDE_FROM_SIM}" ), wxS( "Exclude From Simulation" ), true, false },
+                { wxS( "${EXCLUDE_FROM_BOARD}" ), wxS( "Exclude From Board" ), true, false },
+                { wxS( "${EXCLUDE_FROM_POS_FILES}" ), wxS( "Exclude From Position Files" ), true, false },
+                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER, wxS( "Power Symbol" ), true, false },
+                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER, wxS( "Local Power Symbol" ), true, false },
+            };
+        }
+    }
+
+    return presets;
+}
+
+
+wxString DIALOG_LIB_FIELDS_TABLE::resolveVariant() const
+{
+    return wxEmptyString;
 }
 
 

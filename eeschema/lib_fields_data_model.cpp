@@ -198,9 +198,9 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::fieldIsAttribute( const wxString& aField
 }
 
 
-bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::isCellReadOnly( int aRow, int aCol )
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::IsCellReadOnly( int aRow, int aCol )
 {
-    if( FIELDS_TABLE_DATA_MODEL<LIB_SYMBOL*>::isCellReadOnly( aRow, aCol ) )
+    if( FIELDS_TABLE_DATA_MODEL<LIB_SYMBOL*>::IsCellReadOnly( aRow, aCol ) )
         return true;
 
     if( m_cols[aCol].m_fieldName == SYMBOL_IS_LOCAL_POWER )
@@ -260,7 +260,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
         attr = new wxGridCellAttr;
     }
 
-    if( isCellReadOnly( aRow, aCol ) )
+    if( IsCellReadOnly( aRow, aCol ) )
         attr->SetReadOnly();
 
     bool rowModified = false;

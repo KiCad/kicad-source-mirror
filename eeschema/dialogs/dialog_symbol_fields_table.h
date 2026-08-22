@@ -21,6 +21,7 @@
 #pragma once
 
 #include <set>
+#include <vector>
 
 #include <dialogs/dialog_fields_table.h>
 #include <fields_view_controls_grid_data_model.h>
@@ -38,7 +39,7 @@ class JOB_EXPORT_BOM;
 class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_FIELDS_TABLE, public SCHEMATIC_LISTENER
 {
 public:
-    DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob = nullptr );
+    DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* aParent, JOB_EXPORT_BOM* aJob = nullptr );
     ~DIALOG_SYMBOL_FIELDS_TABLE() override;
 
     bool TransferDataToWindow() override;
@@ -58,8 +59,8 @@ private:
 
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) override;
 
-    void OnScope( wxCommandEvent& event ) override;
-    void OnMenu( wxCommandEvent& event ) override;
+    void OnScope( wxCommandEvent& aEvent ) override;
+    void OnMenu( wxCommandEvent& aEvent ) override;
 
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;

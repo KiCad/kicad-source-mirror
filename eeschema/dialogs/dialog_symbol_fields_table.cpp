@@ -61,7 +61,11 @@ enum
     MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
     MYID_SHOW_DATASHEET,
     MYID_SET_VARIANT_SYMBOL,
-    MYID_CLEAR_VARIANT_SYMBOL
+    MYID_CLEAR_VARIANT_SYMBOL,
+    MYID_INCLUDE_DNP,
+    MYID_INCLUDE_EXCLUDED_FROM_BOM,
+    MYID_HIGHLIGHT_ON_CROSS_PROBE,
+    MYID_SELECT_ON_CROSS_PROBE
 };
 
 class SYMBOL_FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
@@ -78,51 +82,62 @@ public:
     {}
 
 protected:
-    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override
+    bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false ) override
     {
-        int col = m_grid->GetGridCursorCol();
+        if( !m_grid->IsEditable() || m_dataModel->IsCellReadOnly( aRow, aCol ) )
+            return false;
 
-        if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
-        {
-            menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
-            menu.AppendSeparator();
-        }
-        else if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
-        {
-            menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ), _( "Show datasheet in browser" ) );
-            menu.AppendSeparator();
-        }
-
-        SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_dlg->GetParent() );
-
-        if( frame && !frame->Schematic().GetCurrentVariant().IsEmpty() )
-        {
-            int row = m_grid->GetGridCursorRow();
-            std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( row );
-
-            if( refs.size() == 1 && refs[0].GetSymbol() )
-            {
-                menu.AppendSeparator();
-                menu.Append( MYID_SET_VARIANT_SYMBOL, _( "Set Variant Symbol..." ) );
-
-                const SCH_SYMBOL* sym = refs[0].GetSymbol();
-                wxString variantName = frame->Schematic().GetCurrentVariant();
-                auto variant = sym->GetVariant( refs[0].GetSheetPath(), variantName );
-
-                if( variant && variant->m_SymbolOverride )
-                    menu.Append( MYID_CLEAR_VARIANT_SYMBOL, _( "Clear Variant Symbol" ) );
-            }
-        }
-
-        GRID_TRICKS::showPopupMenu( menu, aEvent );
+        return GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
     }
 
-    void doPopupSelection( wxCommandEvent& event ) override
+    void showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent ) override
     {
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        if( event.GetId() == MYID_SELECT_FOOTPRINT )
+        if( row >= 0 && col >= 0 )
+        {
+            if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+            {
+                aMenu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
+                aMenu.AppendSeparator();
+            }
+            else if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+            {
+                aMenu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ), _( "Show datasheet in browser" ) );
+                aMenu.AppendSeparator();
+            }
+
+            SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_dlg->GetParent() );
+
+            if( frame && !frame->Schematic().GetCurrentVariant().IsEmpty() )
+            {
+                std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( row );
+
+                if( refs.size() == 1 && refs[0].GetSymbol() )
+                {
+                    aMenu.AppendSeparator();
+                    aMenu.Append( MYID_SET_VARIANT_SYMBOL, _( "Set Variant Symbol..." ) );
+
+                    const SCH_SYMBOL* symbol = refs[0].GetSymbol();
+                    wxString          variantName = frame->Schematic().GetCurrentVariant();
+                    auto              variant = symbol->GetVariant( refs[0].GetSheetPath(), variantName );
+
+                    if( variant && variant->m_SymbolOverride )
+                        aMenu.Append( MYID_CLEAR_VARIANT_SYMBOL, _( "Clear Variant Symbol" ) );
+                }
+            }
+        }
+
+        GRID_TRICKS::showPopupMenu( aMenu, aEvent );
+    }
+
+    void doPopupSelection( wxCommandEvent& aEvent ) override
+    {
+        int row = m_grid->GetGridCursorRow();
+        int col = m_grid->GetGridCursorCol();
+
+        if( aEvent.GetId() == MYID_SELECT_FOOTPRINT )
         {
             // pick a footprint using the footprint picker.
             wxString fpid = m_grid->GetCellValue( row, col );
@@ -135,14 +150,14 @@ protected:
                 frame->Destroy();
             }
         }
-        else if (event.GetId() == MYID_SHOW_DATASHEET )
+        else if( aEvent.GetId() == MYID_SHOW_DATASHEET )
         {
-            wxString datasheet_uri = m_grid->GetCellValue( row, col );
-            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ),
+            wxString datasheetUri = m_grid->GetCellValue( row, col );
+            GetAssociatedDocument( m_dlg, datasheetUri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ),
                                    { m_files } );
         }
-        else if( event.GetId() == MYID_SET_VARIANT_SYMBOL
-                 || event.GetId() == MYID_CLEAR_VARIANT_SYMBOL )
+        else if( aEvent.GetId() == MYID_SET_VARIANT_SYMBOL
+                 || aEvent.GetId() == MYID_CLEAR_VARIANT_SYMBOL )
         {
             SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_dlg->GetParent() );
 
@@ -154,23 +169,22 @@ protected:
             if( refs.size() != 1 || !refs[0].GetSymbol() )
                 return;
 
-            SCH_SELECTION_TOOL* selTool =
-                    frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+            SCH_SELECTION_TOOL*    selectionTool = frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
             std::vector<SCH_ITEM*> items = { refs[0].GetSymbol() };
-            selTool->SyncSelection( refs[0].GetSheetPath(), nullptr, items );
+            selectionTool->SyncSelection( refs[0].GetSheetPath(), nullptr, items );
 
-            if( event.GetId() == MYID_SET_VARIANT_SYMBOL )
+            if( aEvent.GetId() == MYID_SET_VARIANT_SYMBOL )
                 frame->GetToolManager()->RunAction( SCH_ACTIONS::setVariantSymbol );
             else
                 frame->GetToolManager()->RunAction( SCH_ACTIONS::clearVariantSymbol );
         }
-        else if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
+        else if( aEvent.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
         {
             if( !m_grid->CommitPendingChanges( false ) )
                 return;
 
             // Pop-up column order is the order of the shown fields, not the viewControls order
-            col = event.GetId() - GRIDTRICKS_FIRST_SHOWHIDE;
+            col = aEvent.GetId() - GRIDTRICKS_FIRST_SHOWHIDE;
 
             bool show = !m_dataModel->GetShowColumn( col );
 
@@ -189,7 +203,7 @@ protected:
         }
         else
         {
-            GRID_TRICKS::doPopupSelection( event );
+            GRID_TRICKS::doPopupSelection( aEvent );
         }
     }
 
@@ -201,10 +215,11 @@ private:
 };
 
 
-DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob ) :
-        DIALOG_FIELDS_TABLE( parent, parent->eeconfig()->m_FieldEditorPanel, parent->Schematic().Settings(), aJob ),
-        m_parent( parent ),
-        m_schSettings( parent->Schematic().Settings() )
+DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* aParent, JOB_EXPORT_BOM* aJob ) :
+        DIALOG_FIELDS_TABLE( aParent, aParent->eeconfig()->m_FieldEditorPanel,
+                             aParent->Schematic().Settings(), aJob ),
+        m_parent( aParent ),
+        m_schSettings( aParent->Schematic().Settings() )
 {
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, SYMBOL_FILTER_NON_POWER );
@@ -241,7 +256,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_grid->PushEventHandler( new SYMBOL_FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_viewControlsDataModel, m_dataModel,
                                                                     &m_parent->Schematic() ) );
 
-    m_variantListBox->Set( parent->Schematic().GetVariantNamesForUI() );
+    m_variantListBox->Set( m_parent->Schematic().GetVariantNamesForUI() );
 
     // A job keeps its own variant, otherwise follow the schematic.
     wxString variantToSelect;
@@ -385,8 +400,8 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     if( !m_job )
         m_outputFileName->SetValue( m_cfgBomSettings.m_BomExportFileName );
 
-    TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
-    SCH_SELECTION_TOOL* selectionTool = toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    TOOL_MANAGER*       toolManager = m_parent->GetToolManager();
+    SCH_SELECTION_TOOL* selectionTool = toolManager->GetTool<SCH_SELECTION_TOOL>();
     SCH_SELECTION&      selection = selectionTool->GetSelection();
     SCH_SYMBOL*         symbol = nullptr;
 
@@ -399,9 +414,9 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
         EDA_ITEM* item = selection.Front();
 
         if( item->Type() == SCH_SYMBOL_T )
-            symbol = (SCH_SYMBOL*) item;
+            symbol = static_cast<SCH_SYMBOL*>( item );
         else if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T )
-            symbol = (SCH_SYMBOL*) item->GetParent();
+            symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
     }
 
     if( symbol )
@@ -496,12 +511,12 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
 {
     auto addMandatoryField =
-            [&]( FIELD_T fieldId, bool show, bool groupBy )
+            [&]( FIELD_T aFieldId, bool aShow, bool aGroupBy )
             {
-                m_mandatoryFieldListIndexes[fieldId] = m_viewControlsDataModel->GetNumberRows();
+                m_mandatoryFieldListIndexes[aFieldId] = m_viewControlsDataModel->GetNumberRows();
 
-                AddField( GetCanonicalFieldName( fieldId ), GetDefaultFieldName( fieldId, DO_TRANSLATE ),
-                          show, groupBy );
+                AddField( GetCanonicalFieldName( aFieldId ), GetDefaultFieldName( aFieldId, DO_TRANSLATE ),
+                          aShow, aGroupBy );
             };
 
     // Add mandatory fields first            show   groupBy
@@ -519,9 +534,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     // distinct name gets its own column rather than collapsing case variants together.
     std::set<wxString> userFieldNames;
 
-    for( int ii = 0; ii < (int) m_symbolsList.GetCount(); ++ii )
+    for( const SCH_REFERENCE& ref : m_symbolsList )
     {
-        SCH_SYMBOL* symbol = m_symbolsList[ii].GetSymbol();
+        SCH_SYMBOL* symbol = ref.GetSymbol();
 
         for( const SCH_FIELD& field : symbol->GetFields() )
         {
@@ -534,10 +549,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
 
     // Add any templateFieldNames which aren't already present.
-    for( const TEMPLATE_FIELDNAME& tfn : m_schSettings.m_TemplateFieldNames.GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateField :
+         m_schSettings.m_TemplateFieldNames.GetTemplateFieldNames() )
     {
-        if( userFieldNames.count( tfn.m_Name ) == 0 )
-            AddField( tfn.m_Name, GetGeneratedFieldDisplayName( tfn.m_Name ), false, false );
+        if( userFieldNames.count( templateField.m_Name ) == 0 )
+            AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );
     }
 }
 
@@ -625,39 +641,39 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
 {
     // Build a pop menu:
     wxMenu menu;
 
-    menu.Append( 4204, _( "Include 'DNP' Symbols" ),
+    menu.Append( MYID_INCLUDE_DNP, _( "Include 'DNP' Symbols" ),
                  _( "Show symbols marked 'DNP' in the table.  This setting also controls whether or not 'DNP' "
                     "symbols are included on export." ),
                  wxITEM_CHECK );
-    menu.Check( 4204, !m_dataModel->GetExcludeDNP() );
+    menu.Check( MYID_INCLUDE_DNP, !m_dataModel->GetExcludeDNP() );
 
-    menu.Append( 4205, _( "Include 'Exclude from BOM' Symbols" ),
+    menu.Append( MYID_INCLUDE_EXCLUDED_FROM_BOM, _( "Include 'Exclude from BOM' Symbols" ),
                  _( "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked 'Exclude from BOM' "
                     "are never included on export." ),
                  wxITEM_CHECK );
-    menu.Check( 4205, m_dataModel->GetIncludeExcludedFromBOM() );
+    menu.Check( MYID_INCLUDE_EXCLUDED_FROM_BOM, m_dataModel->GetIncludeExcludedFromBOM() );
 
     menu.AppendSeparator();
 
-    menu.Append( 4206, _( "Highlight on Cross-probe" ),
+    menu.Append( MYID_HIGHLIGHT_ON_CROSS_PROBE, _( "Highlight on Cross-probe" ),
                  _( "Highlight corresponding item on canvas when it is selected in the table" ),
                  wxITEM_CHECK );
-    menu.Check( 4206, m_cfgDialogSettings.selection_mode == 0 );
+    menu.Check( MYID_HIGHLIGHT_ON_CROSS_PROBE, m_cfgDialogSettings.selection_mode == 0 );
 
-    menu.Append( 4207, _( "Select on Cross-probe" ),
+    menu.Append( MYID_SELECT_ON_CROSS_PROBE, _( "Select on Cross-probe" ),
                  _( "Select corresponding item on canvas when it is selected in the table" ),
                  wxITEM_CHECK );
-    menu.Check( 4207, m_cfgDialogSettings.selection_mode == 1 );
+    menu.Check( MYID_SELECT_ON_CROSS_PROBE, m_cfgDialogSettings.selection_mode == 1 );
 
-    // menu_id is the selected submenu id from the popup menu or wxID_NONE
-    int menu_id = m_bMenu->GetPopupMenuSelectionFromUser( menu );
+    // menuId is the selected submenu id from the popup menu or wxID_NONE
+    int menuId = m_bMenu->GetPopupMenuSelectionFromUser( menu );
 
-    if( menu_id == 0 || menu_id == 4204 )
+    if( menuId == 0 || menuId == MYID_INCLUDE_DNP )
     {
         m_dataModel->SetExcludeDNP( !m_dataModel->GetExcludeDNP() );
         m_dataModel->RebuildRows();
@@ -665,7 +681,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 
         syncBomPresetSelection();
     }
-    else if( menu_id == 1 || menu_id == 4205 )
+    else if( menuId == 1 || menuId == MYID_INCLUDE_EXCLUDED_FROM_BOM )
     {
         m_dataModel->SetIncludeExcludedFromBOM( !m_dataModel->GetIncludeExcludedFromBOM() );
         m_dataModel->RebuildRows();
@@ -673,14 +689,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 
         syncBomPresetSelection();
     }
-    else if( menu_id == 3 || menu_id == 4206 )
+    else if( menuId == 3 || menuId == MYID_HIGHLIGHT_ON_CROSS_PROBE )
     {
         if( m_cfgDialogSettings.selection_mode != 0 )
             m_cfgDialogSettings.selection_mode = 0;
         else
             m_cfgDialogSettings.selection_mode = 2;
     }
-    else if( menu_id == 4 || menu_id == 4207 )
+    else if( menuId == 4 || menuId == MYID_SELECT_ON_CROSS_PROBE )
     {
         if( m_cfgDialogSettings.selection_mode != 1 )
             m_cfgDialogSettings.selection_mode = 1;
@@ -727,10 +743,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
         {
             // Use of full path based on UUID allows select of not yet annotated or duplicated
             // symbols
-            wxString symbol_path = refs.begin()->GetFullPath();
+            wxString symbolPath = refs.begin()->GetFullPath();
 
             // Focus only handles one item at this time
-            editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL, wxEmptyString );
+            editor->FindSymbolAndItem( &symbolPath, nullptr, true, HIGHLIGHT_SYMBOL, wxEmptyString );
         }
         else
         {
@@ -739,13 +755,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
     }
     else if( m_cfgDialogSettings.selection_mode == 1 )
     {
-        SCH_SELECTION_TOOL*    selTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+        SCH_SELECTION_TOOL*    selectionTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
         std::vector<SCH_ITEM*> items( symbols.begin(), symbols.end() );
 
         if( refs.size() > 0 )
-            selTool->SyncSelection( refs.begin()->GetSheetPath(), nullptr, items );
+            selectionTool->SyncSelection( refs.begin()->GetSheetPath(), nullptr, items );
         else
-            selTool->ClearSelection();
+            selectionTool->ClearSelection();
     }
 }
 
@@ -826,10 +842,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
     m_parent->Schematic().RemoveListener( this );
     m_parent->ClearFocus();
 
-    wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxID_ANY );
+    wxCommandEvent* event = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxID_ANY );
 
-    if( wxWindow* parent = GetParent() )
-        wxQueueEvent( parent, evt );
+    if( wxWindow* parentWindow = GetParent() )
+        wxQueueEvent( parentWindow, event );
 }
 
 

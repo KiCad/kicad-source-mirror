@@ -77,7 +77,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
 {
     wxGridCellAttr* attr = nullptr;
     wxString        rawValue = GetGroupedValue( m_rows[aRow], aCol );
-    bool            needsReadOnly = isCellReadOnly( aRow, aCol );
+    bool            needsReadOnly = IsCellReadOnly( aRow, aCol );
     bool            needsUrlEditor = false;
     bool            needsVariantHighlight = false;
     bool            needsTextVarRenderer = false;

@@ -19,10 +19,10 @@
 
 #pragma once
 
+#include <vector>
+
 #include <dialogs/dialog_fields_table.h>
 #include <lib_fields_data_model.h>
-
-#include <vector>
 
 #include <wx/arrstr.h>
 
@@ -46,33 +46,41 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    wxGridCellEditor* createFootprintEditor() override;
     wxGridCellEditor* createDatasheetEditor() override;
+    wxGridCellEditor* createFootprintEditor() override;
     void              onBomSettingsChanged() override {}
 
-    FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
-
-    void loadFieldNames();
-    void loadSymbols( const wxArrayString& aSymbolNames );
     void setScope( SCOPE aScope );
+    void loadSymbols( const wxArrayString& aSymbolNames );
+
+    /**
+     * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
+     * field names in use.
+     */
+    void LoadFieldNames();
 
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) override {}
+
     void OnScope( wxCommandEvent& aEvent ) override;
     void OnMenu( wxCommandEvent& aEvent ) override;
-
-    std::vector<BOM_PRESET> getBuiltInBomPresets() const override;
 
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
     void OnOk( wxCommandEvent& aEvent ) override;
     void OnClose( wxCloseEvent& aEvent ) override;
 
-    wxString resolveVariant() const override { return wxEmptyString; }
+    FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
+
+private:
+    std::vector<BOM_PRESET> getBuiltInBomPresets() const override;
+
+    wxString resolveVariant() const override;
     bool     resolveTextVar( wxString* aToken ) const override;
 
 private:
     SYMBOL_EDIT_FRAME*                 m_parent;
-    SCOPE                              m_symbolScope;
-    LIB_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
     std::vector<LIB_SYMBOL*>           m_symbolsList;
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
+
+    SCOPE m_symbolScope;
 };

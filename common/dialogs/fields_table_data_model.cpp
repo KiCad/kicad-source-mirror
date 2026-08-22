@@ -297,7 +297,7 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::IsExpanderColumn( int aCol ) const
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::isCellReadOnly( int, int aCol )
+bool FIELDS_TABLE_DATA_MODEL_BASE::IsCellReadOnly( int, int aCol )
 {
     return IsExpanderColumn( aCol );
 }

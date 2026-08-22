@@ -38,7 +38,7 @@ class JOB_EXPORT_BOM;
 class DIALOG_FOOTPRINT_FIELDS_TABLE : public DIALOG_FIELDS_TABLE, public BOARD_LISTENER
 {
 public:
-    DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob = nullptr );
+    DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* aParent, JOB_EXPORT_BOM* aJob = nullptr );
     ~DIALOG_FOOTPRINT_FIELDS_TABLE() override;
 
     bool TransferDataToWindow() override;
@@ -58,19 +58,18 @@ private:
 
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) override;
 
-    void OnScope( wxCommandEvent& event ) override;
-    void OnMenu( wxCommandEvent& event ) override;
+    void OnScope( wxCommandEvent& aEvent ) override;
+    void OnMenu( wxCommandEvent& aEvent ) override;
 
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
     void OnOk( wxCommandEvent& aEvent ) override;
     void OnClose( wxCloseEvent& aEvent ) override;
 
-    // BOARD listener event handlers
+    // Board listener event handlers
     void OnBoardItemsAdded( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
     void OnBoardItemsRemoved( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
     void OnBoardItemsChanged( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
-    void OnBoardSelectionChanged( BOARD& aPcb ) override;
 
     void OnBoardItemAdded( BOARD& aPcb, BOARD_ITEM* aPcbItem ) override
     {
@@ -98,12 +97,18 @@ private:
         // the same UUID but a different pointer. Remove first so we get
         // rid of the old footprint/pointer from the data model and the fp ref list
         // before we add the new-same-UUID footprint.
-        if( !aRemoved.empty() ) OnBoardItemsRemoved( aPcb, aRemoved );
-        if( !aAdded.empty() ) OnBoardItemsAdded( aPcb, aAdded );
-        if( !aChanged.empty() ) OnBoardItemsChanged( aPcb, aChanged );
+        if( !aRemoved.empty() )
+            OnBoardItemsRemoved( aPcb, aRemoved );
+
+        if( !aAdded.empty() )
+            OnBoardItemsAdded( aPcb, aAdded );
+
+        if( !aChanged.empty() )
+            OnBoardItemsChanged( aPcb, aChanged );
     }
 
     void OnCurrentSchematicSheetChanged( wxCommandEvent& aEvent );
+    void OnBoardSelectionChanged( BOARD& aPcb ) override;
 
     /**
      * Saves the current grid selection as a set of footprint full paths for later restoration.
@@ -118,9 +123,9 @@ private:
     void rebuildRowsPreservingSelection();
     void rebuildRowsPreservingSelection( const std::set<KIID>& aSavedSelection );
 
-private:
     FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
 
+private:
     void onAddVariant( wxCommandEvent& aEvent ) override;
     void onDeleteVariant( wxCommandEvent& aEvent ) override;
     void onRenameVariant( wxCommandEvent& aEvent ) override;

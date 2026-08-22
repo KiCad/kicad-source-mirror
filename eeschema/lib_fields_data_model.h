@@ -34,7 +34,8 @@ using LIB_FIELDS_TABLE_DATA_MODEL_ROW = DATA_MODEL_ROW<LIB_SYMBOL*>;
 class LIB_FIELDS_EDITOR_GRID_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL<LIB_SYMBOL*>
 {
 public:
-    LIB_FIELDS_EDITOR_GRID_DATA_MODEL() :
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL( wxGridCellAttr* aURLEditor ) :
+            m_urlEditor( aURLEditor ),
             m_stripedStringRenderer( nullptr )
     {
         m_includeExcluded = true;
@@ -45,6 +46,7 @@ public:
         for( auto& pair : m_stripedRenderers )
             pair.second->DecRef();
 
+        wxSafeDecRef( m_urlEditor );
         m_stripedRenderers.clear();
     }
 
@@ -99,11 +101,12 @@ public:
                || m_rows[aRow].m_state == ROW_STATE::EXPANDED_CHILD;
     }
 
+    bool IsCellReadOnly( int aRow, int aCol ) override;
+
 private:
     bool unitMatch( LIB_SYMBOL* const& lhItem, LIB_SYMBOL* const& rhItem ) override;
 
     bool fieldIsAttribute( const wxString& aFieldName ) const override;
-    bool isCellReadOnly( int aRow, int aCol ) override;
 
     wxString getAttributeValue( const LIB_SYMBOL*, const wxString& aAttributeName );
     void setAttributeValue( LIB_SYMBOL* aSymbol, const wxString& aAttributeName, const wxString& aValue );
@@ -133,6 +136,8 @@ protected:
 
     // Track newly created derived symbols for library manager integration
     std::vector<std::pair<LIB_SYMBOL*, wxString>> m_createdDerivedSymbols; // symbol, library name
+
+    wxGridCellAttr* m_urlEditor;
 
     // stripe bitmap support
     mutable STRIPED_STRING_RENDERER* m_stripedStringRenderer;

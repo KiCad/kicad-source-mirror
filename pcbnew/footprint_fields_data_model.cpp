@@ -75,7 +75,7 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
 {
     wxGridCellAttr* attr = nullptr;
     wxString        rawValue = GetGroupedValue( m_rows[aRow], aCol );
-    bool            needsReadOnly = isCellReadOnly( aRow, aCol );
+    bool            needsReadOnly = IsCellReadOnly( aRow, aCol );
     bool            needsUrlEditor = false;
     bool            needsVariantHighlight = false;
     bool            needsTextVarRenderer = false;
@@ -208,7 +208,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, cons
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxS( "Invalid column number" ) );
 
-    if( isCellReadOnly( aRow, aCol ) )
+    if( IsCellReadOnly( aRow, aCol ) )
         return;
 
     // Can't modify references or generated fields (e.g. ${QUANTITY})
@@ -231,9 +231,9 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, cons
 }
 
 
-bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::isCellReadOnly( int aRow, int aCol )
+bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::IsCellReadOnly( int aRow, int aCol )
 {
-    return FIELDS_TABLE_DATA_MODEL<FOOTPRINT_REF>::isCellReadOnly( aRow, aCol )
+    return FIELDS_TABLE_DATA_MODEL<FOOTPRINT_REF>::IsCellReadOnly( aRow, aCol )
            || ColIsFootprint( aCol )
            || GetColFieldName( aCol ) == wxS( "${EXCLUDE_FROM_BOARD}" )
            || GetColFieldName( aCol ) == wxS( "${EXCLUDE_FROM_SIM}" );

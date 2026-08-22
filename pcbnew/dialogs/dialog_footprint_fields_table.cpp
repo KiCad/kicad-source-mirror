@@ -61,15 +61,20 @@ enum
     MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
     MYID_SHOW_DATASHEET,
     MYID_SET_VARIANT_FOOTPRINT,
-    MYID_CLEAR_VARIANT_FOOTPRINT
+    MYID_CLEAR_VARIANT_FOOTPRINT,
+    MYID_INCLUDE_DNP,
+    MYID_INCLUDE_EXCLUDED_FROM_BOM,
+    MYID_HIGHLIGHT_ON_CROSS_PROBE,
+    MYID_SELECT_ON_CROSS_PROBE
 };
 
-class FOOTPRINT_FIELD_EDITOR_GRID_TRICKS : public GRID_TRICKS
+class FOOTPRINT_FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FOOTPRINT_FIELD_EDITOR_GRID_TRICKS( DIALOG_FOOTPRINT_FIELDS_TABLE* aParent, WX_GRID* aGrid,
-                                        VIEW_CONTROLS_GRID_DATA_MODEL*           aViewFieldsData,
-                                        FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
+    FOOTPRINT_FIELDS_EDITOR_GRID_TRICKS( DIALOG_FOOTPRINT_FIELDS_TABLE* aParent, WX_GRID* aGrid,
+                                         VIEW_CONTROLS_GRID_DATA_MODEL*           aViewFieldsData,
+                                         FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel,
+                                         EMBEDDED_FILES* aFiles ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),
             m_viewControlsDataModel( aViewFieldsData ),
@@ -86,36 +91,40 @@ protected:
         return GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
     }
 
-    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override
-    {
-        int col = m_grid->GetGridCursorCol();
-
-        if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
-        {
-            menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ), _( "Show datasheet in browser" ) );
-            menu.AppendSeparator();
-        }
-
-        GRID_TRICKS::showPopupMenu( menu, aEvent );
-    }
-
-    void doPopupSelection( wxCommandEvent& event ) override
+    void showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent ) override
     {
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        if( event.GetId() == MYID_SHOW_DATASHEET )
+        if( row >= 0 && col >= 0 )
         {
-            wxString datasheet_uri = m_grid->GetCellValue( row, col );
-            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), nullptr, { m_files } );
+            if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+            {
+                aMenu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ), _( "Show datasheet in browser" ) );
+                aMenu.AppendSeparator();
+            }
         }
-        else if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
+
+        GRID_TRICKS::showPopupMenu( aMenu, aEvent );
+    }
+
+    void doPopupSelection( wxCommandEvent& aEvent ) override
+    {
+        int row = m_grid->GetGridCursorRow();
+        int col = m_grid->GetGridCursorCol();
+
+        if( aEvent.GetId() == MYID_SHOW_DATASHEET )
+        {
+            wxString datasheetUri = m_grid->GetCellValue( row, col );
+            GetAssociatedDocument( m_dlg, datasheetUri, &m_dlg->Prj(), nullptr, { m_files } );
+        }
+        else if( aEvent.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
         {
             if( !m_grid->CommitPendingChanges( false ) )
                 return;
 
             // Pop-up column order is the order of the shown fields, not the viewControls order
-            col = event.GetId() - GRIDTRICKS_FIRST_SHOWHIDE;
+            col = aEvent.GetId() - GRIDTRICKS_FIRST_SHOWHIDE;
 
             bool show = !m_dataModel->GetShowColumn( col );
 
@@ -134,7 +143,7 @@ protected:
         }
         else
         {
-            GRID_TRICKS::doPopupSelection( event );
+            GRID_TRICKS::doPopupSelection( aEvent );
         }
     }
 
@@ -146,16 +155,14 @@ private:
 };
 
 
-DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob ) :
-        DIALOG_FIELDS_TABLE( parent, parent->GetPcbNewSettings()->m_FieldEditorPanel,
-                             parent->GetBoard()->GetDesignSettings(), aJob ),
-        m_parent( parent )
+DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* aParent, JOB_EXPORT_BOM* aJob ) :
+        DIALOG_FIELDS_TABLE( aParent, aParent->GetPcbNewSettings()->m_FieldEditorPanel,
+                             aParent->GetBoard()->GetDesignSettings(), aJob ),
+        m_parent( aParent )
 {
     // Get all footprints from the list of board sheets
-    for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
-    {
-        m_footprintsList.emplace_back( *fp );
-    }
+    for( FOOTPRINT* footprint : m_parent->GetBoard()->Footprints() )
+        m_footprintsList.emplace_back( *footprint );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( createDatasheetEditor() );
@@ -172,10 +179,10 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new FOOTPRINT_FIELD_EDITOR_GRID_TRICKS(
+    m_grid->PushEventHandler( new FOOTPRINT_FIELDS_EDITOR_GRID_TRICKS(
             this, m_grid, m_viewControlsDataModel, m_dataModel, m_parent->GetBoard()->GetEmbeddedFiles() ) );
 
-    m_variantListBox->Set( parent->GetBoard()->GetVariantNamesForUI() );
+    m_variantListBox->Set( m_parent->GetBoard()->GetVariantNamesForUI() );
 
     // A job keeps its own variant, otherwise follow the board.
     wxString variantToSelect;
@@ -268,6 +275,9 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
 
 DIALOG_FOOTPRINT_FIELDS_TABLE::~DIALOG_FOOTPRINT_FIELDS_TABLE()
 {
+    if( m_aborted )
+        return;
+
     if( !m_job )
     {
         m_parent->Unbind( EDA_EVT_PCB_LAST_SCH_SHEET_CHANGED,
@@ -333,8 +343,8 @@ bool DIALOG_FOOTPRINT_FIELDS_TABLE::TransferDataToWindow()
     if( !m_job )
         m_outputFileName->SetValue( m_cfgBomSettings.m_BomExportFileName );
 
-    TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
-    PCB_SELECTION_TOOL* selectionTool = toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    TOOL_MANAGER*       toolManager = m_parent->GetToolManager();
+    PCB_SELECTION_TOOL* selectionTool = toolManager->GetTool<PCB_SELECTION_TOOL>();
     PCB_SELECTION&      selection = selectionTool->GetSelection();
     FOOTPRINT*          footprint = nullptr;
 
@@ -347,9 +357,9 @@ bool DIALOG_FOOTPRINT_FIELDS_TABLE::TransferDataToWindow()
         EDA_ITEM* item = selection.Front();
 
         if( item->Type() == PCB_FOOTPRINT_T )
-            footprint = (FOOTPRINT*) item;
+            footprint = static_cast<FOOTPRINT*>( item );
         else if( item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
-            footprint = (FOOTPRINT*) item->GetParent();
+            footprint = static_cast<FOOTPRINT*>( item->GetParent() );
     }
 
     if( footprint )
@@ -444,12 +454,12 @@ bool DIALOG_FOOTPRINT_FIELDS_TABLE::TransferDataFromWindow()
 void DIALOG_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
 {
     auto addMandatoryField =
-            [&]( FIELD_T fieldId, bool show, bool groupBy )
+            [&]( FIELD_T aFieldId, bool aShow, bool aGroupBy )
             {
-                m_mandatoryFieldListIndexes[fieldId] = m_viewControlsDataModel->GetNumberRows();
+                m_mandatoryFieldListIndexes[aFieldId] = m_viewControlsDataModel->GetNumberRows();
 
-                AddField( GetCanonicalFieldName( fieldId ), GetDefaultFieldName( fieldId, DO_TRANSLATE ),
-                          show, groupBy );
+                AddField( GetCanonicalFieldName( aFieldId ), GetDefaultFieldName( aFieldId, DO_TRANSLATE ),
+                          aShow, aGroupBy );
             };
 
     // Add mandatory fields first            show   groupBy
@@ -467,9 +477,9 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
     // distinct name gets its own column rather than collapsing case variants together.
     std::set<wxString> userFieldNames;
 
-    for( int ii = 0; ii < (int) m_footprintsList.size(); ++ii )
+    for( const FOOTPRINT_REF& ref : m_footprintsList )
     {
-        FOOTPRINT& footprint = m_footprintsList[ii].GetFootprint();
+        FOOTPRINT& footprint = ref.GetFootprint();
 
         for( const PCB_FIELD* field : footprint.GetFields() )
         {
@@ -484,10 +494,10 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
     // Add any templateFieldNames which aren't already present.
     // TODO: no template fieldnames in board settings
     TEMPLATES notImplemented;
-    for( const TEMPLATE_FIELDNAME& tfn : notImplemented.GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateField : notImplemented.GetTemplateFieldNames() )
     {
-        if( userFieldNames.count( tfn.m_Name ) == 0 )
-            AddField( tfn.m_Name, GetGeneratedFieldDisplayName( tfn.m_Name ), false, false );
+        if( userFieldNames.count( templateField.m_Name ) == 0 )
+            AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );
     }
 }
 
@@ -551,39 +561,39 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnScope( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
+void DIALOG_FOOTPRINT_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
 {
     // Build a pop menu:
     wxMenu menu;
 
-    menu.Append( 4204, _( "Include 'DNP' Footprints" ),
+    menu.Append( MYID_INCLUDE_DNP, _( "Include 'DNP' Footprints" ),
                  _( "Show footprints marked 'DNP' in the table.  This setting also controls whether or not 'DNP' "
                     "footprints are included on export." ),
                  wxITEM_CHECK );
-    menu.Check( 4204, !m_dataModel->GetExcludeDNP() );
+    menu.Check( MYID_INCLUDE_DNP, !m_dataModel->GetExcludeDNP() );
 
-    menu.Append( 4205, _( "Include 'Exclude from BOM' Footprints" ),
+    menu.Append( MYID_INCLUDE_EXCLUDED_FROM_BOM, _( "Include 'Exclude from BOM' Footprints" ),
                  _( "Show footprints marked 'Exclude from BOM' in the table.  Footprints marked 'Exclude from BOM' "
                     "are never included on export." ),
                  wxITEM_CHECK );
-    menu.Check( 4205, m_dataModel->GetIncludeExcludedFromBOM() );
+    menu.Check( MYID_INCLUDE_EXCLUDED_FROM_BOM, m_dataModel->GetIncludeExcludedFromBOM() );
 
     menu.AppendSeparator();
 
-    menu.Append( 4206, _( "Highlight on Cross-probe" ),
+    menu.Append( MYID_HIGHLIGHT_ON_CROSS_PROBE, _( "Highlight on Cross-probe" ),
                  _( "Highlight corresponding item on canvas when it is selected in the table" ),
                  wxITEM_CHECK );
-    menu.Check( 4206, m_cfgDialogSettings.selection_mode == 0 );
+    menu.Check( MYID_HIGHLIGHT_ON_CROSS_PROBE, m_cfgDialogSettings.selection_mode == 0 );
 
-    menu.Append( 4207, _( "Select on Cross-probe" ),
+    menu.Append( MYID_SELECT_ON_CROSS_PROBE, _( "Select on Cross-probe" ),
                  _( "Select corresponding item on canvas when it is selected in the table" ),
                  wxITEM_CHECK );
-    menu.Check( 4207, m_cfgDialogSettings.selection_mode == 1 );
+    menu.Check( MYID_SELECT_ON_CROSS_PROBE, m_cfgDialogSettings.selection_mode == 1 );
 
-    // menu_id is the selected submenu id from the popup menu or wxID_NONE
-    int menu_id = m_bMenu->GetPopupMenuSelectionFromUser( menu );
+    // menuId is the selected submenu id from the popup menu or wxID_NONE
+    int menuId = m_bMenu->GetPopupMenuSelectionFromUser( menu );
 
-    if( menu_id == 0 || menu_id == 4204 )
+    if( menuId == 0 || menuId == MYID_INCLUDE_DNP )
     {
         m_dataModel->SetExcludeDNP( !m_dataModel->GetExcludeDNP() );
         m_dataModel->RebuildRows();
@@ -591,7 +601,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 
         syncBomPresetSelection();
     }
-    else if( menu_id == 1 || menu_id == 4205 )
+    else if( menuId == 1 || menuId == MYID_INCLUDE_EXCLUDED_FROM_BOM )
     {
         m_dataModel->SetIncludeExcludedFromBOM( !m_dataModel->GetIncludeExcludedFromBOM() );
         m_dataModel->RebuildRows();
@@ -599,14 +609,14 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
 
         syncBomPresetSelection();
     }
-    else if( menu_id == 3 || menu_id == 4206 )
+    else if( menuId == 3 || menuId == MYID_HIGHLIGHT_ON_CROSS_PROBE )
     {
         if( m_cfgDialogSettings.selection_mode != 0 )
             m_cfgDialogSettings.selection_mode = 0;
         else
             m_cfgDialogSettings.selection_mode = 2;
     }
-    else if( menu_id == 4 || menu_id == 4207 )
+    else if( menuId == 4 || menuId == MYID_SELECT_ON_CROSS_PROBE )
     {
         if( m_cfgDialogSettings.selection_mode != 1 )
             m_cfgDialogSettings.selection_mode = 1;
@@ -730,10 +740,10 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
     m_parent->GetBoard()->RemoveListener( this );
     m_parent->ClearFocus();
 
-    wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_FOOTPRINT_FIELDS_TABLE, wxID_ANY );
+    wxCommandEvent* event = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_FOOTPRINT_FIELDS_TABLE, wxID_ANY );
 
-    if( wxWindow* parent = GetParent() )
-        wxQueueEvent( parent, evt );
+    if( wxWindow* parentWindow = GetParent() )
+        wxQueueEvent( parentWindow, event );
 }
 
 

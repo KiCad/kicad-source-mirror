@@ -129,6 +129,7 @@ public:
     virtual bool ColIsItemIdentifier( int aCol ) { return ColIsReference( aCol ); }
 
     bool IsExpanderColumn( int aCol ) const override;
+    virtual bool IsCellReadOnly( int aRow, int aCol );
 
     void SetSorting( int aCol, bool aAscending );
     int  GetSortCol() { return m_sortColumn; }
@@ -205,8 +206,6 @@ protected:
     // Helper function to translate named attribute values like ${DNP}.
     virtual wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
     wxString getDataStoreFieldValue( const KIID_PATH& aKey, const wxString& aFieldName ) const;
-
-    virtual bool isCellReadOnly( int aRow, int aCol );
 
 protected:
     bool             m_edited;
@@ -607,6 +606,12 @@ public:
         return GetGroupedValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true, true );
     }
 
+    bool IsCellReadOnly( int aRow, int aCol ) override
+    {
+        return FIELDS_TABLE_DATA_MODEL_BASE::IsCellReadOnly( aRow, aCol )
+               || allRowItemsHaveAttributeForcedOnBySheet( m_rows[aRow], aCol );
+    }
+
 
 protected:
     bool MatchesFilter( const ITEM_TYPE& aItem, const wxString& aReference,
@@ -696,13 +701,6 @@ protected:
 
         return true;
     }
-
-    bool isCellReadOnly( int aRow, int aCol ) override
-    {
-        return FIELDS_TABLE_DATA_MODEL_BASE::isCellReadOnly( aRow, aCol )
-               || allRowItemsHaveAttributeForcedOnBySheet( m_rows[aRow], aCol );
-    }
-
 
     bool cmpRows( const DATA_MODEL_ROW<ITEM_TYPE>& lhRow, const DATA_MODEL_ROW<ITEM_TYPE>& rhRow,
                   int aSortCol, bool aAscending )

@@ -83,8 +83,6 @@ public:
 
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
-    bool IsCellReadOnly( int aRow, int aCol ) { return isCellReadOnly( aRow, aCol ); }
-
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
     void RebuildRows() override;
@@ -106,9 +104,9 @@ public:
 
     const FOOTPRINT_REFERENCE_LIST& GetReferenceList() const { return m_footprintsList; }
 
-private:
-    bool isCellReadOnly( int aRow, int aCol ) override;
+    bool IsCellReadOnly( int aRow, int aCol ) override;
 
+private:
     bool unitMatch( const FOOTPRINT_REF& lhItem, const FOOTPRINT_REF& rhItem ) override;
 
     /**
