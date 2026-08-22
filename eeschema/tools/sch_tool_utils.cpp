@@ -138,6 +138,44 @@ wxString GetSelectedItemsAsText( const SELECTION& aSel )
 }
 
 
+template <typename T>
+static std::vector<SCH_ITEM*> flattenGroups( const T& aItems )
+{
+    std::vector<SCH_ITEM*> flattened;
+    std::vector<SCH_ITEM*> toVisit;
+
+    for( EDA_ITEM* item : aItems )
+        toVisit.push_back( static_cast<SCH_ITEM*>( item ) );
+
+    while( !toVisit.empty() )
+    {
+        SCH_ITEM* item = toVisit.back();
+        toVisit.pop_back();
+        flattened.push_back( item );
+
+        if( item->Type() == SCH_GROUP_T )
+        {
+            for( EDA_ITEM* child : static_cast<SCH_GROUP*>( item )->GetItems() )
+                toVisit.push_back( static_cast<SCH_ITEM*>( child ) );
+        }
+    }
+
+    return flattened;
+}
+
+
+std::vector<SCH_ITEM*> FlattenGroups( const EDA_ITEMS& aItems )
+{
+    return flattenGroups( aItems );
+}
+
+
+std::vector<SCH_ITEM*> FlattenGroups( const std::deque<EDA_ITEM*>& aItems )
+{
+    return flattenGroups( aItems );
+}
+
+
 bool IsUnannotatedUnitOccupied( const SCH_REFERENCE_LIST& aRefs, const wxString& aRef,
                                 const LIB_ID& aLibId, int aUnit )
 {

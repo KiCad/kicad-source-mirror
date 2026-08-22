@@ -745,6 +745,41 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
 }
 
 
+/**
+ * Pick the point a placed design block hangs from.
+ *
+ * A connection point keeps the pins on grid. Text does not, because it sits wherever it was
+ * dragged. Taking the topmost leftmost one rather than the nearest to the mouse gives the
+ * same anchor on every placement.
+ */
+static std::optional<VECTOR2I> designBlockAnchor( const std::vector<SCH_ITEM*>& aItems )
+{
+    std::optional<VECTOR2I> connectionAnchor;
+    std::optional<VECTOR2I> positionAnchor;
+
+    auto keepTopLeft = []( std::optional<VECTOR2I>& aBest, const VECTOR2I& aCandidate )
+    {
+        if( !aBest || aCandidate.y < aBest->y || ( aCandidate.y == aBest->y && aCandidate.x < aBest->x ) )
+        {
+            aBest = aCandidate;
+        }
+    };
+
+    for( SCH_ITEM* item : aItems )
+    {
+        if( item->Type() == SCH_GROUP_T )
+            continue;
+
+        for( const VECTOR2I& pt : item->GetConnectionPoints() )
+            keepTopLeft( connectionAnchor, pt );
+
+        keepTopLeft( positionAnchor, item->GetPosition() );
+    }
+
+    return connectionAnchor ? connectionAnchor : positionAnchor;
+}
+
+
 int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 {
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
@@ -911,10 +946,9 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                                         grid.GetSelectionGrid( selectionTool->GetSelection() ) );
                 controls->ForceCursorPosition( true, cursorPos );
 
-                // Move everything to our current mouse position now
-                // that we have a selection to get a reference point
-                VECTOR2I anchorPos = selectionTool->GetSelection().GetReferencePoint();
-                VECTOR2I delta = cursorPos - anchorPos;
+                std::vector<SCH_ITEM*>  blockItems = FlattenGroups( newItems );
+                std::optional<VECTOR2I> anchorPos = designBlockAnchor( blockItems );
+                VECTOR2I                delta = anchorPos ? cursorPos - *anchorPos : VECTOR2I( 0, 0 );
 
                 // Will all be SCH_ITEMs as these were pulled from the screen->Items()
                 for( EDA_ITEM* item : newItems )
@@ -962,6 +996,16 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                     else
                         selectionTool->AddItemsToSel( &newItems, true );
                 }
+
+                // IS_NEW is what makes the move tool use the reference point set below, and
+                // IS_MOVING stops the selection tool replacing it on the way there.
+                for( SCH_ITEM* item : blockItems )
+                    item->SetFlags( IS_NEW | IS_MOVING );
+
+                if( group )
+                    group->SetFlags( IS_NEW | IS_MOVING );
+
+                selectionTool->GetSelection().SetReferencePoint( cursorPos );
 
                 // Start moving selection, cancel undoes the insertion
                 bool placed = m_toolMgr->RunSynchronousAction( SCH_ACTIONS::move, &commit );

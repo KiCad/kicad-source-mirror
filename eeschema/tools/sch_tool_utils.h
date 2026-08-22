@@ -39,6 +39,15 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem );
 wxString GetSelectedItemsAsText( const SELECTION& aSel );
 
 /**
+ * Return the given items with the members of any group added, recursively.
+ *
+ * Anchor logic needs this. A group has no connection points, and its position is its
+ * bounding box centre, which is rarely on grid.
+ */
+std::vector<SCH_ITEM*> FlattenGroups( const EDA_ITEMS& aItems );
+std::vector<SCH_ITEM*> FlattenGroups( const std::deque<EDA_ITEM*>& aItems );
+
+/**
  * Get a list of unplaced (i.e. not in schamtic) unit numbers for a symbol.
  */
 std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym );
