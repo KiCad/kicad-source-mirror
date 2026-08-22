@@ -43,9 +43,12 @@ BOOST_AUTO_TEST_CASE( SwapsExtensionToCsv )
 BOOST_AUTO_TEST_CASE( PreservesDirectory )
 {
     // The default lands next to the schematic, not in the current working directory.
-    wxFileName result( DIALOG_SYMBOL_FIELDS_TABLE::GetDefaultBomFileName( wxS( "/tmp/project/design.kicad_sch" ) ) );
+    const wxString source( wxS( "/tmp/project/design.kicad_sch" ) );
 
-    BOOST_CHECK_EQUAL( result.GetPath(), wxS( "/tmp/project" ) );
+    wxFileName result( DIALOG_SYMBOL_FIELDS_TABLE::GetDefaultBomFileName( source ) );
+
+    // Compare both paths using wxFileName as it will change directory separators depending on platform
+    BOOST_CHECK_EQUAL( result.GetPath(), wxFileName( source ).GetPath() );
     BOOST_CHECK_EQUAL( result.GetExt(), wxS( "csv" ) );
 }
 
