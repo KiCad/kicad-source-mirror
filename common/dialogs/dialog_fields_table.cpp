@@ -426,7 +426,7 @@ void DIALOG_FIELDS_TABLE::SaveColumnWidths()
 
 wxGridCellEditor* DIALOG_FIELDS_TABLE::createFootprintEditor()
 {
-    return new GRID_CELL_FPID_EDITOR( this, wxEmptyString );
+    return new GRID_CELL_FPID_EDITOR( this );
 }
 
 

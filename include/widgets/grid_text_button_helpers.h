@@ -23,6 +23,7 @@
 
 #include <widgets/grid_icon_text_helpers.h>
 
+#include <functional>
 #include <memory>
 
 #include <wx/combo.h>
@@ -37,6 +38,10 @@ class wxGrid;
 class WX_GRID;
 class DIALOG_SHIM;
 class EMBEDDED_FILES;
+
+
+KICOMMON_API bool SelectFootprintFromChooser( DIALOG_SHIM* aDialog, wxString& aFootprint,
+                                              const wxString& aSymbolNetlist = wxEmptyString );
 
 
 class KICOMMON_API GRID_CELL_SYMBOL_ID_EDITOR : public GRID_CELL_TEXT_BUTTON
@@ -64,24 +69,19 @@ protected:
 class KICOMMON_API GRID_CELL_FPID_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
-    GRID_CELL_FPID_EDITOR( DIALOG_SHIM* aParent, const wxString& aSymbolNetlist,
-                           const wxString& aPreselect = wxEmptyString ) :
+    GRID_CELL_FPID_EDITOR( DIALOG_SHIM* aParent, const std::function<wxString( int )>& aSymbolNetlistProvider = {} ) :
             m_dlg( aParent ),
-            m_preselect( aPreselect ),
-            m_symbolNetlist( aSymbolNetlist )
+            m_symbolNetlistProvider( aSymbolNetlistProvider )
     { }
 
-    wxGridCellEditor* Clone() const override
-    {
-        return new GRID_CELL_FPID_EDITOR( m_dlg, m_symbolNetlist );
-    }
+    wxGridCellEditor* Clone() const override { return new GRID_CELL_FPID_EDITOR( m_dlg, m_symbolNetlistProvider ); }
 
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
 
 protected:
     DIALOG_SHIM* m_dlg;
-    wxString     m_preselect;
-    wxString     m_symbolNetlist;
+
+    std::function<wxString( int )> m_symbolNetlistProvider;
 };
 
 

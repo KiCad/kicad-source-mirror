@@ -26,10 +26,10 @@
 #include <dialog_lib_new_symbol.h>
 #include <eda_doc.h>
 #include <eeschema_settings.h>
+#include <fields_grid_table.h>
 #include <fields_view_controls_grid_data_model.h>
 #include <grid_tricks.h>
 #include <kiface_base.h>
-#include <kiway_player.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <project_sch.h>
@@ -49,8 +49,6 @@ using DIALOG_NEW_SYMBOL = DIALOG_LIB_NEW_SYMBOL;
 using SCOPE = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
 
 
-namespace
-{
 enum
 {
     MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
@@ -134,13 +132,11 @@ protected:
             // pick a footprint using the footprint picker.
             wxString fpid = m_grid->GetCellValue( row, col );
 
-            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
-            {
-                if( frame->ShowModal( &fpid, m_dlg ) )
-                    m_grid->SetCellValue( row, col, fpid );
+            wxString symbolNetlist =
+                    BuildFootprintChooserSymbolNetlist( m_dataModel->GetRowReferences( row ) );
 
-                frame->Destroy();
-            }
+            if( SelectFootprintFromChooser( m_dlg, fpid, symbolNetlist ) )
+                m_grid->SetCellValue( row, col, fpid );
         }
         else if( aEvent.GetId() == MYID_SHOW_DATASHEET )
         {
@@ -234,7 +230,6 @@ private:
     VIEW_CONTROLS_GRID_DATA_MODEL*     m_viewControlsDataModel;
     LIB_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
 };
-} // namespace
 
 
 DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SCOPE aScope ) :
@@ -381,6 +376,17 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
 wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createDatasheetEditor()
 {
     return new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) );
+}
+
+
+wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createFootprintEditor()
+{
+    return new GRID_CELL_FPID_EDITOR(
+            this,
+            [this]( int aRow )
+            {
+                return BuildFootprintChooserSymbolNetlist( m_dataModel->GetRowReferences( aRow ) );
+            } );
 }
 
 

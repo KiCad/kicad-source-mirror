@@ -24,6 +24,8 @@
 #include <wx/dirdlg.h>
 #include <wx/textctrl.h>
 
+#include <string>
+
 #include <bitmaps.h>
 #include <embedded_files.h>
 #include <kiplatform/ui.h>
@@ -43,6 +45,27 @@
 
 //-------- Renderer ---------------------------------------------------------------------
 // None required; just render as normal text.
+
+
+bool SelectFootprintFromChooser( DIALOG_SHIM* aDialog, wxString& aFootprint,
+                                 const wxString& aSymbolNetlist )
+{
+    KIWAY_PLAYER* frame = aDialog->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, aDialog );
+
+    if( !frame )
+        return false;
+
+    if( !aSymbolNetlist.IsEmpty() )
+    {
+        std::string      payload = aSymbolNetlist.ToStdString();
+        KIWAY_MAIL_EVENT event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, payload );
+        frame->KiwayMailIn( event );
+    }
+
+    bool selected = frame->ShowModal( &aFootprint, aDialog );
+    frame->Destroy();
+    return selected;
+}
 
 
 
@@ -112,12 +135,12 @@ class TEXT_BUTTON_FP_CHOOSER : public wxComboCtrl
 {
 public:
     TEXT_BUTTON_FP_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
-                            const wxString& aSymbolNetlist, const wxString& aPreselect ) :
+                            const std::function<wxString( int )>& aSymbolNetlistProvider, int& aRow ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
-            m_preselect( aPreselect ),
-            m_symbolNetlist( aSymbolNetlist.ToStdString() )
+            m_symbolNetlistProvider( aSymbolNetlistProvider ),
+            m_row( aRow )
     {
         m_buttonFpChooserLock = false;
         SetButtonBitmaps( KiBitmapBundle( BITMAPS::small_library ) );
@@ -146,30 +169,19 @@ protected:
         // pick a footprint using the footprint picker.
         wxString fpid = GetValue();
 
-        if( fpid.IsEmpty() )
-            fpid = m_preselect;
+        wxString symbolNetlist;
 
-        if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
-        {
-            if( !m_symbolNetlist.empty() )
-            {
-                KIWAY_MAIL_EVENT event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST,
-                                     m_symbolNetlist );
-                frame->KiwayMailIn( event );
-            }
+        if( m_symbolNetlistProvider )
+            symbolNetlist = m_symbolNetlistProvider( m_row );
 
-            if( frame->ShowModal( &fpid, m_dlg ) )
-                SetValue( fpid );
-
-            frame->Destroy();
-        }
+        if( SelectFootprintFromChooser( m_dlg, fpid, symbolNetlist ) )
+            SetValue( fpid );
 
         m_buttonFpChooserLock = false;
     }
 
 protected:
     DIALOG_SHIM* m_dlg;
-    wxString     m_preselect;
 
     // Lock flag to lock the button to show the FP chooser
     // true when the button is busy, waiting all footprints loaded to
@@ -181,14 +193,15 @@ protected:
      *   pinNumber pinName <tab> pinNumber pinName...
      *   fpFilter fpFilter...
      */
-    std::string  m_symbolNetlist;
+    std::function<wxString( int )> m_symbolNetlistProvider;
+    int&                           m_row;
 };
 
 
 void GRID_CELL_FPID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
-    m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg, m_symbolNetlist, m_preselect );
+    m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg, m_symbolNetlistProvider, m_row );
     WX_GRID::CellEditorSetMargins( Combo() );
 
 #if wxUSE_VALIDATORS

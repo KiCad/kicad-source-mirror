@@ -23,6 +23,7 @@
 #include <base_units.h>
 #include <confirm.h>
 #include <eda_doc.h>
+#include <fields_grid_table.h>
 #include <schematic_settings.h>
 #include <general.h>
 #include <grid_tricks.h>
@@ -54,6 +55,34 @@
 wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
 using SCOPE = SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
+
+
+// Used for the footprint chooser grid helper
+static wxString getFootprintChooserSymbolNetlist( const std::vector<SCH_REFERENCE>& aReferences,
+                                                  const wxString&                   aVariantName )
+{
+    std::vector<LIB_SYMBOL*> symbols;
+
+    for( const SCH_REFERENCE& reference : aReferences )
+    {
+        SCH_SYMBOL* symbol = reference.GetSymbol();
+
+        if( !symbol )
+            return wxEmptyString;
+
+        LIB_SYMBOL* libSymbol = symbol->GetLibSymbolRef().get();
+
+        if( LIB_SYMBOL* variantSymbol =
+                    symbol->GetVariantLibSymbol( aVariantName, reference.GetSheetPath() ) )
+        {
+            libSymbol = variantSymbol;
+        }
+
+        symbols.push_back( libSymbol );
+    }
+
+    return BuildFootprintChooserSymbolNetlist( symbols );
+}
 
 
 enum
@@ -142,13 +171,11 @@ protected:
             // pick a footprint using the footprint picker.
             wxString fpid = m_grid->GetCellValue( row, col );
 
-            if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
-            {
-                if( frame->ShowModal( &fpid, m_dlg ) )
-                    m_grid->SetCellValue( row, col, fpid );
+            wxString symbolNetlist = getFootprintChooserSymbolNetlist(
+                    m_dataModel->GetRowReferences( row ), m_dataModel->GetCurrentVariant() );
 
-                frame->Destroy();
-            }
+            if( SelectFootprintFromChooser( m_dlg, fpid, symbolNetlist ) )
+                m_grid->SetCellValue( row, col, fpid );
         }
         else if( aEvent.GetId() == MYID_SHOW_DATASHEET )
         {
@@ -366,6 +393,18 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 wxGridCellEditor* DIALOG_SYMBOL_FIELDS_TABLE::createDatasheetEditor()
 {
     return new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ), { &m_parent->Schematic() } );
+}
+
+
+wxGridCellEditor* DIALOG_SYMBOL_FIELDS_TABLE::createFootprintEditor()
+{
+    return new GRID_CELL_FPID_EDITOR(
+            this,
+            [this]( int aRow )
+            {
+                return getFootprintChooserSymbolNetlist( m_dataModel->GetRowReferences( aRow ),
+                                                         m_dataModel->GetCurrentVariant() );
+            } );
 }
 
 

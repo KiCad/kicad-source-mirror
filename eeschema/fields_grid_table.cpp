@@ -19,7 +19,6 @@
 
 #include <embedded_files.h>
 #include <kiway.h>
-#include <kiway_player.h>
 #include <dialog_shim.h>
 #include <fields_grid_table.h>
 #include <sch_base_frame.h>
@@ -56,33 +55,27 @@ enum
 #define DEFAULT_FONT_NAME _( "Default Font" )
 
 
-static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
+wxString BuildFootprintChooserSymbolNetlist( const LIB_SYMBOL* aSymbol )
 {
     /*
      * Symbol netlist format:
      *   pinNumber pinName <tab> pinNumber pinName...
      *   fpFilter fpFilter...
      */
-    wxString netlist;
-
-    // We need the list of pins of the lib symbol, not just the pins of the current
-    // sch symbol, that can be just an unit of a multi-unit symbol, to be able to
-    // select/filter right footprints
+    wxString      netlist;
     wxArrayString pins;
 
-    const std::unique_ptr< LIB_SYMBOL >& lib_symbol = aSymbol->GetLibSymbolRef();
-
-    if( lib_symbol )
+    if( aSymbol )
     {
-        for( SCH_PIN* pin : lib_symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+        for( const SCH_PIN* pin : aSymbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
         {
             bool                  valid = false;
             std::vector<wxString> expanded = pin->GetStackedPinNumbers( &valid );
 
             if( valid && !expanded.empty() )
             {
-                for( const wxString& num : expanded )
-                    pins.push_back( num + ' ' + pin->GetShownName() );
+                for( const wxString& number : expanded )
+                    pins.push_back( number + ' ' + pin->GetShownName() );
             }
             else
             {
@@ -93,16 +86,16 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 
     if( !pins.IsEmpty() )
     {
-        wxString dbg = wxJoin( pins, '\t' );
-        wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Chooser payload pins: %s" ), dbg );
-        netlist << EscapeString( dbg, CTX_LINE );
+        wxString pinList = wxJoin( pins, '\t' );
+        wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Chooser payload pins: %s" ), pinList );
+        netlist << EscapeString( pinList, CTX_LINE );
     }
 
     netlist << wxS( "\r" );
 
-    if( lib_symbol )
+    if( aSymbol )
     {
-        wxArrayString fpFilters = lib_symbol->GetFPFilters();
+        wxArrayString fpFilters = aSymbol->GetFPFilters();
 
         if( !fpFilters.IsEmpty() )
             netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
@@ -114,60 +107,33 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 }
 
 
-static wxString netList( LIB_SYMBOL* aSymbol )
+wxString BuildFootprintChooserSymbolNetlist( const std::vector<LIB_SYMBOL*>& aSymbols )
 {
-    /*
-     * Symbol netlist format:
-     *   pinNumber pinName <tab> pinNumber pinName...
-     *   fpFilter fpFilter...
-     */
-    wxString      netlist;
-    wxArrayString pins;
+    if( aSymbols.empty() || !aSymbols.front() )
+        return wxEmptyString;
 
-    for( SCH_PIN* pin : aSymbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+    wxString symbolNetlist = BuildFootprintChooserSymbolNetlist( aSymbols.front() );
+
+    for( size_t i = 1; i < aSymbols.size(); ++i )
     {
-        bool valid = false;
-        std::vector<wxString> expanded = pin->GetStackedPinNumbers( &valid );
-
-        if( valid && !expanded.empty() )
-        {
-            for( const wxString& num : expanded )
-                pins.push_back( num + ' ' + pin->GetShownName() );
-        }
-        else
-        {
-            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
-        }
+        // A grouped-row edit applies to every symbol in the row. Only provide chooser filters
+        // when they describe all of those symbols accurately.
+        if( !aSymbols[i] || BuildFootprintChooserSymbolNetlist( aSymbols[i] ) != symbolNetlist )
+            return wxEmptyString;
     }
 
-    if( !pins.IsEmpty() )
-    {
-        wxString dbg = wxJoin( pins, '\t' );
-        wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "Chooser payload pins: %s" ), dbg );
-        netlist << EscapeString( dbg, CTX_LINE );
-    }
-
-    netlist << wxS( "\r" );
-
-    wxArrayString fpFilters = aSymbol->GetFPFilters();
-
-    if( !fpFilters.IsEmpty() )
-        netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
-
-    netlist << wxS( "\r" );
-
-    return netlist;
+    return symbolNetlist;
 }
 
 
-FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
-                                      LIB_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*> aFilesStack ) :
+FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid, LIB_SYMBOL* aSymbol,
+                                      std::vector<EMBEDDED_FILES*> aFilesStack ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
         m_part( aSymbol ),
         m_filesStack( aFilesStack ),
-        m_symbolNetlist( netList( aSymbol ) ),
+        m_symbolNetlist( BuildFootprintChooserSymbolNetlist( aSymbol ) ),
         m_fieldNameValidator( FIELD_T::USER ),
         m_referenceValidator( FIELD_T::REFERENCE ),
         m_valueValidator( FIELD_T::VALUE ),
@@ -185,7 +151,7 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
         m_part( nullptr ),
-        m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
+        m_symbolNetlist( BuildFootprintChooserSymbolNetlist( aSymbol->GetLibSymbolRef().get() ) ),
         m_fieldNameValidator( FIELD_T::USER ),
         m_referenceValidator( FIELD_T::REFERENCE ),
         m_valueValidator( FIELD_T::VALUE ),
@@ -313,7 +279,12 @@ void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
     }
 
     m_footprintAttr = new wxGridCellAttr;
-    GRID_CELL_FPID_EDITOR* fpIdEditor = new GRID_CELL_FPID_EDITOR( m_dialog, m_symbolNetlist );
+    GRID_CELL_FPID_EDITOR* fpIdEditor = new GRID_CELL_FPID_EDITOR(
+            m_dialog,
+            [this]( int )
+            {
+                return m_symbolNetlist;
+            } );
     fpIdEditor->SetValidator( m_nonUrlValidator );
     m_footprintAttr->SetEditor( fpIdEditor );
 
@@ -1228,13 +1199,8 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         // pick a footprint using the footprint picker.
         wxString fpid = m_grid->GetCellValue( getFieldRow( FIELD_T::FOOTPRINT ), FDC_VALUE );
 
-        if( KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg ) )
-        {
-            if( frame->ShowModal( &fpid, m_dlg ) )
-                m_grid->SetCellValue( getFieldRow( FIELD_T::FOOTPRINT ), FDC_VALUE, fpid );
-
-            frame->Destroy();
-        }
+        if( SelectFootprintFromChooser( m_dlg, fpid ) )
+            m_grid->SetCellValue( getFieldRow( FIELD_T::FOOTPRINT ), FDC_VALUE, fpid );
     }
     else if (event.GetId() == MYID_SHOW_DATASHEET )
     {
@@ -1248,5 +1214,3 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         GRID_TRICKS::doPopupSelection( event );
     }
 }
-
-

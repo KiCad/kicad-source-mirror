@@ -266,7 +266,7 @@ void PANEL_SYMBOL_PIN_MAP::rebuildGrid()
         m_grid->SetCellValue( 0, FIXED_COLS + (int) col, footprint );
 
         if( dlg )
-            m_grid->SetCellEditor( 0, FIXED_COLS + (int) col, new GRID_CELL_FPID_EDITOR( dlg, wxEmptyString ) );
+            m_grid->SetCellEditor( 0, FIXED_COLS + (int) col, new GRID_CELL_FPID_EDITOR( dlg ) );
         else
             m_grid->SetReadOnly( 0, FIXED_COLS + (int) col );
     }

@@ -47,6 +47,7 @@ public:
 
 private:
     wxGridCellEditor* createDatasheetEditor() override;
+    wxGridCellEditor* createFootprintEditor() override;
 
     void setScope( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
     void updateSelectionItems();

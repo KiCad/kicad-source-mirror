@@ -32,6 +32,10 @@ class EMBEDDED_FILES;
 class SCH_LABEL_BASE;
 
 
+wxString BuildFootprintChooserSymbolNetlist( const LIB_SYMBOL* aSymbol );
+wxString BuildFootprintChooserSymbolNetlist( const std::vector<LIB_SYMBOL*>& aSymbols );
+
+
 class FIELDS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
