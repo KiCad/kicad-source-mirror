@@ -2640,6 +2640,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
                 layerCuProps->shape.shape = PAD_SHAPE::CUSTOM;
                 layerCuProps->shape.anchor_shape = PAD_SHAPE::CIRCLE;
+                layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
 
                 // Anchor size based on the shape's bounding box center
                 BOX2I bbox = outline.BBox();
