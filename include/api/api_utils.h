@@ -37,6 +37,7 @@
 
 class SHAPE_LINE_CHAIN;
 class STROKE_PARAMS;
+class TEXT_ATTRIBUTES;
 class KIID_PATH;
 class PROJECT;
 
@@ -103,6 +104,12 @@ extern const KICOMMON_API std::string KiwayClientName;
 extern const KICOMMON_API std::string StandaloneCrossProbeClientName;
 
 KICOMMON_API bool PackKiwayApiMessage( const google::protobuf::Message& aMessage, std::string& aBytes );
+
+// Not KICOMMON_API: depends on font stuff in GAL for now
+void PackTextAttributes( kiapi::common::types::TextAttributes& aOutput, const TEXT_ATTRIBUTES& aInput );
+
+// Not KICOMMON_API: depends on font stuff in GAL for now
+void UnpackTextAttributes( TEXT_ATTRIBUTES& aOutput, const kiapi::common::types::TextAttributes& aInput );
 
 } // namespace kiapi::common
 

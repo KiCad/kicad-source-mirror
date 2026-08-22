@@ -89,30 +89,12 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any& aContainer ) const
     text.set_text( GetText().ToStdString() );
     //text.set_hyperlink( GetHyperlink().ToStdString() );
 
-    TextAttributes* attrs = text.mutable_attributes();
-
-    if( GetFont() )
-        attrs->set_font_name( GetFont()->GetName().ToStdString() );
+    kiapi::common::PackTextAttributes( *text.mutable_attributes(), GetAttributes() );
 
     if( FOOTPRINT* parent = GetParentFootprint() )
         boardText.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
     else if( const BOARD* board = GetBoard() )
         boardText.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
-
-    attrs->set_horizontal_alignment( ToProtoEnum<GR_TEXT_H_ALIGN_T, HorizontalAlignment>( GetHorizJustify() ) );
-
-    attrs->set_vertical_alignment( ToProtoEnum<GR_TEXT_V_ALIGN_T, VerticalAlignment>( GetVertJustify() ) );
-
-    attrs->mutable_angle()->set_value_degrees( GetTextAngleDegrees() );
-    attrs->set_line_spacing( GetLineSpacing() );
-    attrs->mutable_stroke_width()->set_value_nm( GetTextThickness() );
-    attrs->set_italic( IsItalic() );
-    attrs->set_bold( IsBold() );
-    attrs->set_underlined( GetAttributes().m_Underlined );
-    attrs->set_mirrored( IsMirrored() );
-    attrs->set_multiline( IsMultilineAllowed() );
-    attrs->set_keep_upright( IsKeepUpright() );
-    kiapi::common::PackVector2( *attrs->mutable_size(), GetTextSize() );
 
     aContainer.PackFrom( boardText );
 }
@@ -140,30 +122,7 @@ bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any& aContainer )
     if( text.has_attributes() )
     {
         TEXT_ATTRIBUTES attrs = GetAttributes();
-
-        attrs.m_Bold = text.attributes().bold();
-        attrs.m_Italic = text.attributes().italic();
-        attrs.m_Underlined = text.attributes().underlined();
-        attrs.m_Mirrored = text.attributes().mirrored();
-        attrs.m_Multiline = text.attributes().multiline();
-        attrs.m_KeepUpright = text.attributes().keep_upright();
-        attrs.m_Size = kiapi::common::UnpackVector2( text.attributes().size() );
-
-        if( !text.attributes().font_name().empty() )
-        {
-            attrs.m_Font = KIFONT::FONT::GetFont( wxString( text.attributes().font_name().c_str(), wxConvUTF8 ),
-                                                  attrs.m_Bold, attrs.m_Italic );
-        }
-
-        attrs.m_Angle = EDA_ANGLE( text.attributes().angle().value_degrees(), DEGREES_T );
-        attrs.m_LineSpacing = text.attributes().line_spacing();
-        attrs.m_StrokeWidth = text.attributes().stroke_width().value_nm();
-        attrs.m_Halign = FromProtoEnum<GR_TEXT_H_ALIGN_T, kiapi::common::types::HorizontalAlignment>(
-                text.attributes().horizontal_alignment() );
-
-        attrs.m_Valign = FromProtoEnum<GR_TEXT_V_ALIGN_T, kiapi::common::types::VerticalAlignment>(
-                text.attributes().vertical_alignment() );
-
+        kiapi::common::UnpackTextAttributes( attrs, text.attributes() );
         SetAttributes( attrs );
     }
 
