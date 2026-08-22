@@ -128,6 +128,7 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
             &API_HANDLER_SCH::handleSaveDocument );
     registerHandler<SaveCopyOfDocument, google::protobuf::Empty>(
             &API_HANDLER_SCH::handleSaveCopyOfDocument );
+    registerHandler<RevertDocument, google::protobuf::Empty>( &API_HANDLER_SCH::handleRevertDocument );
 
     registerHandler<GetItems, GetItemsResponse>( &API_HANDLER_SCH::handleGetItems );
     registerHandler<GetItemsById, GetItemsResponse>( &API_HANDLER_SCH::handleGetItemsById );
@@ -357,6 +358,55 @@ API_HANDLER_SCH::handleSaveCopyOfDocument( const HANDLER_CONTEXT<SaveCopyOfDocum
         e.set_error_message( "failed to save schematic copy" );
         return tl::unexpected( e );
     }
+
+    return google::protobuf::Empty();
+}
+
+
+HANDLER_RESULT<google::protobuf::Empty>
+API_HANDLER_SCH::handleRevertDocument( const HANDLER_CONTEXT<RevertDocument>& aCtx )
+{
+    if( aCtx.Request.document().type() != DocumentType::DOCTYPE_SCHEMATIC )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( !m_commits.empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BUSY );
+        e.set_error_message( "cannot revert while a commit is open" );
+        return tl::unexpected( e );
+    }
+
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "RevertDocument" ) )
+        return tl::unexpected( *headless );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    wxFileName fn = project().AbsolutePath( schematic()->GetFileName() );
+
+    if( m_frame->GetCurrentSheet().Last() != &schematic()->Root() )
+    {
+        SCH_SHEET_PATH rootSheetPath = schematic()->Hierarchy().at( 0 );
+        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
+    }
+
+    SCH_SCREENS screenList( schematic()->Root() );
+
+    for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
+        screen->SetContentModified( false );
+
+    m_frame->ReleaseFile();
+    m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
 
     return google::protobuf::Empty();
 }

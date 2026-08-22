@@ -104,6 +104,9 @@ private:
     HANDLER_RESULT<google::protobuf::Empty> handleSaveCopyOfDocument(
             const HANDLER_CONTEXT<commands::SaveCopyOfDocument>& aCtx );
 
+    HANDLER_RESULT<google::protobuf::Empty>
+    handleRevertDocument( const HANDLER_CONTEXT<commands::RevertDocument>& aCtx );
+
     HANDLER_RESULT<commands::GetOpenDocumentsResponse>
     handleGetOpenDocuments( const HANDLER_CONTEXT<commands::GetOpenDocuments>& aCtx );
 
