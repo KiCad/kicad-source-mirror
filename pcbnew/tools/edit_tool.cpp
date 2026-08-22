@@ -193,18 +193,19 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
 
 static std::shared_ptr<CONDITIONAL_MENU> makeMirrorRotateMenu( TOOL_INTERACTIVE* aTool )
 {
-    auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
+    std::shared_ptr<CONDITIONAL_MENU> menu = std::make_shared<CONDITIONAL_MENU>( aTool );
 
     menu->SetIcon( BITMAPS::special_tools );
     menu->SetUntranslatedTitle( _HKI( "Mirror / Rotate" ) );
 
-    auto canMirror = []( const SELECTION& aSelection )
-    {
-        if( SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
-            return false;
+    auto canMirror =
+            []( const SELECTION& aSelection )
+            {
+                if( SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
+                    return false;
 
-        return selectionMirrorable( aSelection );
-    };
+                return selectionMirrorable( aSelection );
+            };
 
     menu->AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
     menu->AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
@@ -217,18 +218,20 @@ static std::shared_ptr<CONDITIONAL_MENU> makeMirrorRotateMenu( TOOL_INTERACTIVE*
 
 static std::shared_ptr<CONDITIONAL_MENU> makeRoutingToolsMenu( TOOL_INTERACTIVE* aTool )
 {
-    auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
+    std::shared_ptr<CONDITIONAL_MENU> menu = std::make_shared<CONDITIONAL_MENU>( aTool );
 
     menu->SetIcon( BITMAPS::special_tools );
     menu->SetUntranslatedTitle( _HKI( "Routing" ) );
 
-    auto notMovingCondition = []( const SELECTION& aSelection )
-    {
-        return aSelection.Empty() || !aSelection.Front()->IsMoving();
-    };
+    auto notMovingCondition =
+            []( const SELECTION& aSelection )
+            {
+                return aSelection.Empty() || !aSelection.Front()->IsMoving();
+            };
 
-    const SELECTION_CONDITION isRoutable =
-            SELECTION_CONDITIONS::NotEmpty && SELECTION_CONDITIONS::HasTypes( routableTypes ) && notMovingCondition;
+    const SELECTION_CONDITION isRoutable = SELECTION_CONDITIONS::NotEmpty
+                                                && SELECTION_CONDITIONS::HasTypes( routableTypes )
+                                                && notMovingCondition;
 
     menu->AddItem( PCB_ACTIONS::routerRouteSelected, isRoutable );
     menu->AddItem( PCB_ACTIONS::routerRouteSelectedFromEnd, isRoutable );
@@ -245,15 +248,16 @@ static std::shared_ptr<CONDITIONAL_MENU> makeRoutingToolsMenu( TOOL_INTERACTIVE*
 
 static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACTIVE* aTool )
 {
-    auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
+    std::shared_ptr<CONDITIONAL_MENU> menu = std::make_shared<CONDITIONAL_MENU>( aTool );
 
     menu->SetIcon( BITMAPS::special_tools );
     menu->SetUntranslatedTitle( _HKI( "Position" ) );
 
-    auto notMovingCondition = []( const SELECTION& aSelection )
-    {
-        return aSelection.Empty() || !aSelection.Front()->IsMoving();
-    };
+    auto notMovingCondition =
+            []( const SELECTION& aSelection )
+            {
+                return aSelection.Empty() || !aSelection.Front()->IsMoving();
+            };
 
     menu->AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
     menu->AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
@@ -266,7 +270,7 @@ static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACT
 
 static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERACTIVE* aTool )
 {
-    auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
+    std::shared_ptr<CONDITIONAL_MENU> menu = std::make_shared<CONDITIONAL_MENU>( aTool );
 
     menu->SetUntranslatedTitle( _HKI( "Shape Modification" ) );
 
@@ -283,40 +287,45 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
 
     static const std::vector<KICAD_T> polygonSimplifyTypes = { PCB_SHAPE_LOCATE_POLY_T, PCB_ZONE_T };
 
-    auto hasCornerCondition = [aTool]( const SELECTION& aSelection )
-    {
-        PCB_POINT_EDITOR* pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
+    auto hasCornerCondition =
+            [aTool]( const SELECTION& aSelection )
+            {
+                PCB_POINT_EDITOR* pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
 
-        return pt_tool && pt_tool->HasCorner();
-    };
+                return pt_tool && pt_tool->HasCorner();
+            };
 
-    auto hasMidpointCondition = [aTool]( const SELECTION& aSelection )
-    {
-        PCB_POINT_EDITOR* pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
+    auto hasMidpointCondition =
+            [aTool]( const SELECTION& aSelection )
+            {
+                PCB_POINT_EDITOR* pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
 
-        return pt_tool && pt_tool->HasMidpoint();
-    };
+                return pt_tool && pt_tool->HasMidpoint();
+            };
 
-    auto canAddCornerCondition = []( const SELECTION& aSelection )
-    {
-        const EDA_ITEM* item = aSelection.Front();
+    auto canAddCornerCondition =
+            []( const SELECTION& aSelection )
+            {
+                const EDA_ITEM* item = aSelection.Front();
 
-        return item && PCB_POINT_EDITOR::CanAddCorner( *item );
-    };
+                return item && PCB_POINT_EDITOR::CanAddCorner( *item );
+            };
 
-    auto canChamferCornerCondition = []( const SELECTION& aSelection )
-    {
-        const EDA_ITEM* item = aSelection.Front();
+    auto canChamferCornerCondition =
+            []( const SELECTION& aSelection )
+            {
+                const EDA_ITEM* item = aSelection.Front();
 
-        return item && PCB_POINT_EDITOR::CanChamferCorner( *item );
-    };
+                return item && PCB_POINT_EDITOR::CanChamferCorner( *item );
+            };
 
-    auto canRemoveCornerCondition = [aTool]( const SELECTION& aSelection )
-    {
-        PCB_POINT_EDITOR* pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
+    auto canRemoveCornerCondition =
+            [aTool]( const SELECTION& aSelection )
+            {
+                PCB_POINT_EDITOR* pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
 
-        return pt_tool && pt_tool->CanRemoveCorner( aSelection );
-    };
+                return pt_tool && pt_tool->CanRemoveCorner( aSelection );
+            };
 
     // clang-format off
 
@@ -388,7 +397,7 @@ public:
             if( !fp )
                 continue;
 
-            const auto& units = fp->GetUnitInfo();
+            const std::vector<FOOTPRINT::FP_UNIT_INFO>& units = fp->GetUnitInfo();
 
             if( units.size() < 2 )
                 continue;
@@ -396,9 +405,9 @@ public:
             const wxString& padNum = pad->GetNumber();
             bool            inAnyUnit = false;
 
-            for( const auto& u : units )
+            for( const FOOTPRINT::FP_UNIT_INFO& u : units )
             {
-                for( const auto& pnum : u.m_pins )
+                for( const wxString& pnum : u.m_pins )
                 {
                     if( pnum == padNum )
                     {
@@ -452,13 +461,13 @@ public:
     {
         std::vector<int> indices;
 
-        const auto& units = aFootprint->GetUnitInfo();
+        const std::vector<FOOTPRINT::FP_UNIT_INFO>& units = aFootprint->GetUnitInfo();
 
         for( size_t i = 0; i < units.size(); ++i )
         {
             bool hasAny = false;
 
-            for( const auto& pn : units[i].m_pins )
+            for( const wxString& pn : units[i].m_pins )
             {
                 if( aSelPadNums.count( pn ) )
                 {
@@ -481,7 +490,7 @@ public:
         if( aUnitIndices.empty() )
             return false;
 
-        const auto&  units = aFootprint->GetUnitInfo();
+        const std::vector<FOOTPRINT::FP_UNIT_INFO>& units = aFootprint->GetUnitInfo();
         const size_t cnt = units[static_cast<size_t>( aUnitIndices.front() )].m_pins.size();
 
         for( int idx : aUnitIndices )
@@ -499,7 +508,7 @@ public:
     {
         std::vector<int> targets;
 
-        const auto&  units = aFootprint->GetUnitInfo();
+        const std::vector<FOOTPRINT::FP_UNIT_INFO>& units = aFootprint->GetUnitInfo();
         const size_t pinCount = units[static_cast<size_t>( aSourceIdx )].m_pins.size();
 
         for( size_t i = 0; i < units.size(); ++i )
@@ -569,8 +578,8 @@ protected:
             if( !fp )
                 return OPT_TOOL_EVENT();
 
-            const auto& units = fp->GetUnitInfo();
-            const int   targetIdx = id - ID_POPUP_PCB_SWAP_UNIT_BASE;
+            const std::vector<FOOTPRINT::FP_UNIT_INFO>& units = fp->GetUnitInfo();
+            const int targetIdx = id - ID_POPUP_PCB_SWAP_UNIT_BASE;
 
             if( targetIdx < 0 || targetIdx >= static_cast<int>( units.size() ) )
                 return OPT_TOOL_EVENT();
@@ -588,7 +597,7 @@ protected:
 
 static std::shared_ptr<ACTION_MENU> makeGateSwapMenu( TOOL_INTERACTIVE* aTool )
 {
-    auto menu = std::make_shared<GATE_SWAP_MENU>();
+    std::shared_ptr<GATE_SWAP_MENU> menu = std::make_shared<GATE_SWAP_MENU>();
     menu->SetTool( aTool );
     return menu;
 };
@@ -614,199 +623,214 @@ bool EDIT_TOOL::Init()
     std::shared_ptr<ACTION_MENU> gateSwapSubMenu = makeGateSwapMenu( this );
     m_selectionTool->GetToolMenu().RegisterSubMenu( gateSwapSubMenu );
 
-    auto fpAttributesMenu = std::make_shared<CONDITIONAL_MENU>( this );
+    std::shared_ptr<CONDITIONAL_MENU> fpAttributesMenu = std::make_shared<CONDITIONAL_MENU>( this );
     fpAttributesMenu->SetUntranslatedTitle( _HKI( "Attributes" ) );
     fpAttributesMenu->AddCheckItem( PCB_ACTIONS::toggleExcludeFromBOM, SELECTION_CONDITIONS::ShowAlways );
     fpAttributesMenu->AddCheckItem( PCB_ACTIONS::toggleExcludeFromPosFiles, SELECTION_CONDITIONS::ShowAlways );
     m_selectionTool->GetToolMenu().RegisterSubMenu( fpAttributesMenu );
 
-    auto positioningToolsCondition = [this]( const SELECTION& aSel )
-    {
-        std::shared_ptr<CONDITIONAL_MENU> subMenu = makePositioningToolsMenu( this );
-        subMenu->Evaluate( aSel );
-        return subMenu->GetMenuItemCount() > 0;
-    };
+    auto positioningToolsCondition =
+            [this]( const SELECTION& aSel )
+            {
+                std::shared_ptr<CONDITIONAL_MENU> subMenu = makePositioningToolsMenu( this );
+                subMenu->Evaluate( aSel );
+                return subMenu->GetMenuItemCount() > 0;
+            };
 
-    auto shapeModificationCondition = [this]( const SELECTION& aSel )
-    {
-        std::shared_ptr<CONDITIONAL_MENU> subMenu = makeShapeModificationMenu( this );
-        subMenu->Evaluate( aSel );
-        return subMenu->GetMenuItemCount() > 0;
-    };
+    auto shapeModificationCondition =
+            [this]( const SELECTION& aSel )
+            {
+                std::shared_ptr<CONDITIONAL_MENU> subMenu = makeShapeModificationMenu( this );
+                subMenu->Evaluate( aSel );
+                return subMenu->GetMenuItemCount() > 0;
+            };
 
     // Does selection map to a single eligible footprint and exactly one unit?
-    auto gateSwapSingleUnitOnOneFootprint = []( const SELECTION& aSelection )
-    {
-        const FOOTPRINT* fp = GATE_SWAP_MENU::GetSingleEligibleFootprint( aSelection );
+    auto gateSwapSingleUnitOnOneFootprint =
+            []( const SELECTION& aSelection )
+            {
+                const FOOTPRINT* fp = GATE_SWAP_MENU::GetSingleEligibleFootprint( aSelection );
 
-        if( !fp )
-            return false;
+                if( !fp )
+                    return false;
 
-        std::unordered_set<wxString> selPadNums = GATE_SWAP_MENU::CollectSelectedPadNumbers( aSelection, fp );
+                std::unordered_set<wxString> selPadNums = GATE_SWAP_MENU::CollectSelectedPadNumbers( aSelection, fp );
 
-        std::vector<int> unitsHit = GATE_SWAP_MENU::GetUnitsHitIndices( fp, selPadNums );
+                std::vector<int> unitsHit = GATE_SWAP_MENU::GetUnitsHitIndices( fp, selPadNums );
 
-        if( unitsHit.size() != 1 )
-            return false;
+                if( unitsHit.size() != 1 )
+                    return false;
 
-        const int        sourceIdx = unitsHit.front();
-        std::vector<int> targets = GATE_SWAP_MENU::GetCompatibleTargets( fp, sourceIdx );
-        return !targets.empty();
-    };
+                const int        sourceIdx = unitsHit.front();
+                std::vector<int> targets = GATE_SWAP_MENU::GetCompatibleTargets( fp, sourceIdx );
+                return !targets.empty();
+            };
 
     // Does selection map to a single eligible footprint and more than one unit with equal pin counts?
-    auto gateSwapMultipleUnitsOnOneFootprint = []( const SELECTION& aSelection )
-    {
-        const FOOTPRINT* fp = GATE_SWAP_MENU::GetSingleEligibleFootprint( aSelection );
-
-        if( !fp )
-            return false;
-
-        std::unordered_set<wxString> selPadNums = GATE_SWAP_MENU::CollectSelectedPadNumbers( aSelection, fp );
-
-        std::vector<int> unitsHit = GATE_SWAP_MENU::GetUnitsHitIndices( fp, selPadNums );
-
-        if( unitsHit.size() < 2 )
-            return false;
-
-        return GATE_SWAP_MENU::EqualPinCounts( fp, unitsHit );
-    };
-
-    auto propertiesCondition = [this]( const SELECTION& aSel )
-    {
-        if( aSel.GetSize() == 0 )
-        {
-            if( getView()->IsLayerVisible( LAYER_SCHEMATIC_DRAWINGSHEET ) )
+    auto gateSwapMultipleUnitsOnOneFootprint =
+            []( const SELECTION& aSelection )
             {
-                DS_PROXY_VIEW_ITEM* ds = canvas()->GetDrawingSheet();
-                VECTOR2D            cursor = getViewControls()->GetCursorPosition( false );
+                const FOOTPRINT* fp = GATE_SWAP_MENU::GetSingleEligibleFootprint( aSelection );
 
-                if( ds && ds->HitTestDrawingSheetItems( getView(), cursor ) )
+                if( !fp )
+                    return false;
+
+                std::unordered_set<wxString> selPadNums = GATE_SWAP_MENU::CollectSelectedPadNumbers( aSelection, fp );
+
+                std::vector<int> unitsHit = GATE_SWAP_MENU::GetUnitsHitIndices( fp, selPadNums );
+
+                if( unitsHit.size() < 2 )
+                    return false;
+
+                return GATE_SWAP_MENU::EqualPinCounts( fp, unitsHit );
+            };
+
+    auto propertiesCondition =
+            [this]( const SELECTION& aSel )
+            {
+                if( aSel.GetSize() == 0 )
+                {
+                    if( getView()->IsLayerVisible( LAYER_SCHEMATIC_DRAWINGSHEET ) )
+                    {
+                        DS_PROXY_VIEW_ITEM* ds = canvas()->GetDrawingSheet();
+                        VECTOR2D            cursor = getViewControls()->GetCursorPosition( false );
+
+                        if( ds && ds->HitTestDrawingSheetItems( getView(), cursor ) )
+                            return true;
+                    }
+
+                    return false;
+                }
+
+                if( aSel.GetSize() == 1 )
                     return true;
-            }
 
-            return false;
-        }
+                for( EDA_ITEM* item : aSel )
+                {
+                    if( !dynamic_cast<PCB_TRACK*>( item ) )
+                        return false;
+                }
 
-        if( aSel.GetSize() == 1 )
-            return true;
+                return true;
+            };
 
-        for( EDA_ITEM* item : aSel )
-        {
-            if( !dynamic_cast<PCB_TRACK*>( item ) )
+    auto inFootprintEditor =
+            [this]( const SELECTION& aSelection )
+            {
+                return m_isFootprintEditor;
+            };
+
+    auto canMirror =
+            [this]( const SELECTION& aSelection )
+            {
+                if( !m_isFootprintEditor && SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
+                {
+                    return false;
+                }
+
+                // Gates the whole "Mirror / Rotate" submenu, so keep it open for any group. Rotate works
+                // on a group with footprints, only the mirror items inside disable (see makeMirrorRotateMenu).
+                if( SELECTION_CONDITIONS::HasTypes( groupTypes )( aSelection ) )
+                    return true;
+
+                return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
+            };
+
+    auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyTypes( footprintTypes )
+                                        && SELECTION_CONDITIONS::Count( 1 );
+
+    auto multipleFootprintsCondition =
+            []( const SELECTION& aSelection )
+            {
+                bool foundFirst = false;
+
+                for( EDA_ITEM* item : aSelection )
+                {
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                    {
+                        if( foundFirst )
+                            return true;
+                        else
+                            foundFirst = true;
+                    }
+                }
+
                 return false;
-        }
+            };
 
-        return true;
-    };
-
-    auto inFootprintEditor = [this]( const SELECTION& aSelection )
-    {
-        return m_isFootprintEditor;
-    };
-
-    auto canMirror = [this]( const SELECTION& aSelection )
-    {
-        if( !m_isFootprintEditor && SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
-        {
-            return false;
-        }
-
-        // Gates the whole "Mirror / Rotate" submenu, so keep it open for any group. Rotate works
-        // on a group with footprints, only the mirror items inside disable (see makeMirrorRotateMenu).
-        if( SELECTION_CONDITIONS::HasTypes( groupTypes )( aSelection ) )
-            return true;
-
-        return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
-    };
-
-    auto singleFootprintCondition =
-            SELECTION_CONDITIONS::OnlyTypes( footprintTypes ) && SELECTION_CONDITIONS::Count( 1 );
-
-    auto multipleFootprintsCondition = []( const SELECTION& aSelection )
-    {
-        bool foundFirst = false;
-
-        for( EDA_ITEM* item : aSelection )
-        {
-            if( item->Type() == PCB_FOOTPRINT_T )
+    auto excludeFromBOMCond =
+            [this]( const SELECTION& aSel )
             {
-                if( foundFirst )
-                    return true;
-                else
-                    foundFirst = true;
-            }
-        }
+                wxString variantName;
+                int      checked = 0, unchecked = 0;
 
-        return false;
-    };
+                if( BOARD* board = frame()->GetBoard() )
+                    variantName = board->GetCurrentVariant();
 
-    auto excludeFromBOMCond = [this]( const SELECTION& aSel )
-    {
-        wxString variantName;
-        int      checked = 0, unchecked = 0;
+                for( const EDA_ITEM* item : aSel )
+                {
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                    {
+                        if( static_cast<const FOOTPRINT*>( item )->GetExcludedFromBOMForVariant( variantName ) )
+                            checked++;
+                        else
+                            unchecked++;
+                    }
+                }
 
-        if( BOARD* board = frame()->GetBoard() )
-            variantName = board->GetCurrentVariant();
+                return checked > 0 && unchecked == 0;
+            };
 
-        for( const EDA_ITEM* item : aSel )
-        {
-            if( item->Type() == PCB_FOOTPRINT_T )
+    auto excludeFromPosFilesCond =
+            [this]( const SELECTION& aSel )
             {
-                if( static_cast<const FOOTPRINT*>( item )->GetExcludedFromBOMForVariant( variantName ) )
-                    checked++;
-                else
-                    unchecked++;
-            }
-        }
+                wxString variantName;
+                int      checked = 0, unchecked = 0;
 
-        return checked > 0 && unchecked == 0;
-    };
+                if( BOARD* board = frame()->GetBoard() )
+                    variantName = board->GetCurrentVariant();
 
-    auto excludeFromPosFilesCond = [this]( const SELECTION& aSel )
-    {
-        wxString variantName;
-        int      checked = 0, unchecked = 0;
+                for( const EDA_ITEM* item : aSel )
+                {
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                    {
+                        if( static_cast<const FOOTPRINT*>( item )->GetExcludedFromPosFilesForVariant( variantName ) )
+                            checked++;
+                        else
+                            unchecked++;
+                    }
+                }
 
-        if( BOARD* board = frame()->GetBoard() )
-            variantName = board->GetCurrentVariant();
+                return checked > 0 && unchecked == 0;
+            };
 
-        for( const EDA_ITEM* item : aSel )
-        {
-            if( item->Type() == PCB_FOOTPRINT_T )
+    auto noActiveToolCondition =
+            [this]( const SELECTION& aSelection )
             {
-                if( static_cast<const FOOTPRINT*>( item )->GetExcludedFromPosFilesForVariant( variantName ) )
-                    checked++;
-                else
-                    unchecked++;
-            }
-        }
+                return frame()->ToolStackIsEmpty();
+            };
 
-        return checked > 0 && unchecked == 0;
-    };
+    auto notMovingCondition =
+            []( const SELECTION& aSelection )
+            {
+                return aSelection.Empty() || !aSelection.Front()->IsMoving();
+            };
 
-    auto noActiveToolCondition = [this]( const SELECTION& aSelection )
-    {
-        return frame()->ToolStackIsEmpty();
-    };
+    auto noItemsCondition =
+            [this]( const SELECTION& aSelections ) -> bool
+            {
+                return frame()->GetBoard() && !frame()->GetBoard()->IsEmpty();
+            };
 
-    auto notMovingCondition = []( const SELECTION& aSelection )
-    {
-        return aSelection.Empty() || !aSelection.Front()->IsMoving();
-    };
+    auto isSkippable =
+            [this]( const SELECTION& aSelection )
+            {
+                return frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
+            };
 
-    auto noItemsCondition = [this]( const SELECTION& aSelections ) -> bool
-    {
-        return frame()->GetBoard() && !frame()->GetBoard()->IsEmpty();
-    };
-
-    auto isSkippable = [this]( const SELECTION& aSelection )
-    {
-        return frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
-    };
-
-    SELECTION_CONDITION isRoutable = SELECTION_CONDITIONS::NotEmpty && SELECTION_CONDITIONS::HasTypes( routableTypes )
-                                     && notMovingCondition && !inFootprintEditor;
+    SELECTION_CONDITION isRoutable = SELECTION_CONDITIONS::NotEmpty
+                                        && SELECTION_CONDITIONS::HasTypes( routableTypes )
+                                        && notMovingCondition && !inFootprintEditor;
 
     const auto canCopyAsText = SELECTION_CONDITIONS::NotEmpty
                                && SELECTION_CONDITIONS::OnlyTypes( {
@@ -831,7 +855,7 @@ bool EDIT_TOOL::Init()
     menu.AddSeparator();
 
     menu.AddItem( PCB_ACTIONS::skip,              isSkippable );
-    menu.AddItem( PCB_ACTIONS::move,                    SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
 
     menu.AddItem( PCB_ACTIONS::drag45Degree,      SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems ) );
@@ -1038,23 +1062,24 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 std::vector<FOOTPRINT*> footprints;
 
                 // Gather items from the collector into per-type vectors
-                const auto gatherItemsByType = [&]()
-                {
-                    for( EDA_ITEM* item : aCollector )
-                    {
-                        if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
+                const auto gatherItemsByType =
+                        [&]()
                         {
-                            if( track->Type() == PCB_VIA_T )
-                                vias.push_back( track );
-                            else
-                                tracks.push_back( track );
-                        }
-                        else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
-                        {
-                            footprints.push_back( footprint );
-                        }
-                    }
-                };
+                            for( EDA_ITEM* item : aCollector )
+                            {
+                                if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
+                                {
+                                    if( track->Type() == PCB_VIA_T )
+                                        vias.push_back( track );
+                                    else
+                                        tracks.push_back( track );
+                                }
+                                else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
+                                {
+                                    footprints.push_back( footprint );
+                                }
+                            }
+                        };
 
                 // Initial gathering of items
                 gatherItemsByType();
@@ -1090,10 +1115,11 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                      * then drop the selection to a single item.  We don't want a selection
                      * disambiguation menu when it doesn't matter which items is picked.
                      */
-                    auto connected = []( PCB_TRACK* track, const VECTOR2I& pt )
-                    {
-                        return track->GetStart() == pt || track->GetEnd() == pt;
-                    };
+                    auto connected =
+                            []( PCB_TRACK* track, const VECTOR2I& pt )
+                            {
+                                return track->GetStart() == pt || track->GetEnd() == pt;
+                            };
 
                     if( tracks.size() == 2 && vias.size() == 0 )
                     {
@@ -1389,40 +1415,41 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     bool                   didOneAttemptFail = false;
     std::set<PCB_TRACK*>   processedTracks;
 
-    auto processFilletOp = [&]( PCB_TRACK* aTrack, bool aStartPoint )
-    {
-        std::shared_ptr<CONNECTIVITY_DATA> c = board()->GetConnectivity();
-        VECTOR2I                           anchor = aStartPoint ? aTrack->GetStart() : aTrack->GetEnd();
-        std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
-
-        itemsOnAnchor = c->GetConnectedItemsAtAnchor( aTrack, anchor, baseConnectedTypes );
-
-        if( itemsOnAnchor.size() > 0 && selection.Contains( itemsOnAnchor.at( 0 ) )
-            && itemsOnAnchor.at( 0 )->Type() == PCB_TRACE_T )
-        {
-            PCB_TRACK* trackOther = static_cast<PCB_TRACK*>( itemsOnAnchor.at( 0 ) );
-
-            // Make sure we don't fillet the same pair of tracks twice
-            if( processedTracks.find( trackOther ) == processedTracks.end() )
+    auto processFilletOp =
+            [&]( PCB_TRACK* aTrack, bool aStartPoint )
             {
-                if( itemsOnAnchor.size() == 1 )
+                std::shared_ptr<CONNECTIVITY_DATA> c = board()->GetConnectivity();
+                VECTOR2I                           anchor = aStartPoint ? aTrack->GetStart() : aTrack->GetEnd();
+                std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
+
+                itemsOnAnchor = c->GetConnectedItemsAtAnchor( aTrack, anchor, baseConnectedTypes );
+
+                if( itemsOnAnchor.size() > 0 && selection.Contains( itemsOnAnchor.at( 0 ) )
+                    && itemsOnAnchor.at( 0 )->Type() == PCB_TRACE_T )
                 {
-                    FILLET_OP filletOp;
-                    filletOp.t1 = aTrack;
-                    filletOp.t2 = trackOther;
-                    filletOp.t1Start = aStartPoint;
-                    filletOp.t2Start = aTrack->IsPointOnEnds( filletOp.t2->GetStart() );
-                    filletOperations.push_back( filletOp );
+                    PCB_TRACK* trackOther = static_cast<PCB_TRACK*>( itemsOnAnchor.at( 0 ) );
+
+                    // Make sure we don't fillet the same pair of tracks twice
+                    if( processedTracks.find( trackOther ) == processedTracks.end() )
+                    {
+                        if( itemsOnAnchor.size() == 1 )
+                        {
+                            FILLET_OP filletOp;
+                            filletOp.t1 = aTrack;
+                            filletOp.t2 = trackOther;
+                            filletOp.t1Start = aStartPoint;
+                            filletOp.t2Start = aTrack->IsPointOnEnds( filletOp.t2->GetStart() );
+                            filletOperations.push_back( filletOp );
+                        }
+                        else
+                        {
+                            // User requested to fillet these two tracks but not possible as
+                            // there are other elements connected at that point
+                            didOneAttemptFail = true;
+                        }
+                    }
                 }
-                else
-                {
-                    // User requested to fillet these two tracks but not possible as
-                    // there are other elements connected at that point
-                    didOneAttemptFail = true;
-                }
-            }
-        }
-    };
+            };
 
     for( EDA_ITEM* item : selection )
     {
@@ -1465,20 +1492,21 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
             SHAPE_ARC sArc( t1Seg, t2Seg, filletRadius );
             VECTOR2I  t1newPoint, t2newPoint;
 
-            auto setIfPointOnSeg = []( VECTOR2I& aPointToSet, const SEG& aSegment, const VECTOR2I& aVecToTest )
-            {
-                VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
+            auto setIfPointOnSeg =
+                    []( VECTOR2I& aPointToSet, const SEG& aSegment, const VECTOR2I& aVecToTest )
+                    {
+                        VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
 
-                // Find out if we are on the segment (minimum precision)
-                if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
-                {
-                    aPointToSet.x = aVecToTest.x;
-                    aPointToSet.y = aVecToTest.y;
-                    return true;
-                }
+                        // Find out if we are on the segment (minimum precision)
+                        if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
+                        {
+                            aPointToSet.x = aVecToTest.x;
+                            aPointToSet.y = aVecToTest.y;
+                            return true;
+                        }
 
-                return false;
-            };
+                        return false;
+                    };
 
             //Do not draw a fillet if the end points of the arc are not within the track segments
             if( !setIfPointOnSeg( t1newPoint, t1Seg, sArc.GetP0() )
@@ -1759,32 +1787,35 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     // Handle modifications to existing items by the routine
     // How to deal with this depends on whether we're in the footprint editor or not
     // and whether the item was conjured up by decomposing a polygon or rectangle
-    auto item_modification_handler = [&]( BOARD_ITEM& aItem )
-    {
-        // If the item was "conjured up" it will be added later separately
-        if( !alg::contains( lines_to_add, &aItem ) )
-        {
-            commit.Modify( &aItem );
-            items_to_select_on_success.push_back( &aItem );
-        }
-    };
+    auto item_modification_handler =
+            [&]( BOARD_ITEM& aItem )
+            {
+                // If the item was "conjured up" it will be added later separately
+                if( !alg::contains( lines_to_add, &aItem ) )
+                {
+                    commit.Modify( &aItem );
+                    items_to_select_on_success.push_back( &aItem );
+                }
+            };
 
     bool any_items_created = !lines_to_add.empty();
-    auto item_creation_handler = [&]( std::unique_ptr<BOARD_ITEM> aItem )
-    {
-        any_items_created = true;
-        items_to_select_on_success.push_back( aItem.get() );
-        commit.Add( aItem.release() );
-    };
+    auto item_creation_handler =
+            [&]( std::unique_ptr<BOARD_ITEM> aItem )
+            {
+                any_items_created = true;
+                items_to_select_on_success.push_back( aItem.get() );
+                commit.Add( aItem.release() );
+            };
 
     bool any_items_removed = !items_to_remove.empty();
-    auto item_removal_handler = [&]( BOARD_ITEM& aItem )
-    {
-        aItem.SetFlags( STRUCT_DELETED );
-        any_items_removed = true;
-        items_to_deselect_on_success.push_back( &aItem );
-        commit.Remove( &aItem );
-    };
+    auto item_removal_handler =
+            [&]( BOARD_ITEM& aItem )
+            {
+                aItem.SetFlags( STRUCT_DELETED );
+                any_items_removed = true;
+                items_to_deselect_on_success.push_back( &aItem );
+                commit.Remove( &aItem );
+            };
 
     // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
     ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler( item_creation_handler, item_modification_handler,
@@ -1800,8 +1831,8 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
         if( filletRadiusIU.has_value() )
         {
-            pairwise_line_routine =
-                    std::make_unique<LINE_FILLET_ROUTINE>( frame()->GetModel(), change_handler, *filletRadiusIU );
+            pairwise_line_routine = std::make_unique<LINE_FILLET_ROUTINE>( frame()->GetModel(), change_handler,
+                                                                           *filletRadiusIU );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::dogboneCorners ) )
@@ -1810,8 +1841,8 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
         if( dogboneParams.has_value() )
         {
-            pairwise_line_routine =
-                    std::make_unique<DOGBONE_CORNER_ROUTINE>( frame()->GetModel(), change_handler, *dogboneParams );
+            pairwise_line_routine = std::make_unique<DOGBONE_CORNER_ROUTINE>( frame()->GetModel(), change_handler,
+                                                                              *dogboneParams );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::chamferLines ) )
@@ -1820,8 +1851,8 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
         if( chamfer_params.has_value() )
         {
-            pairwise_line_routine =
-                    std::make_unique<LINE_CHAMFER_ROUTINE>( frame()->GetModel(), change_handler, *chamfer_params );
+            pairwise_line_routine = std::make_unique<LINE_CHAMFER_ROUTINE>( frame()->GetModel(), change_handler,
+                                                                            *chamfer_params );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::extendLines ) )
@@ -1962,8 +1993,9 @@ int EDIT_TOOL::HealShapes( const TOOL_EVENT& aEvent )
 
                     // We've converted the polygon and rectangle to segments, so drop everything
                     // that isn't a segment at this point
-                    if( !item->IsType(
-                                { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_ARC_T, PCB_SHAPE_LOCATE_BEZIER_T } ) )
+                    if( !item->IsType( { PCB_SHAPE_LOCATE_SEGMENT_T,
+                                         PCB_SHAPE_LOCATE_ARC_T,
+                                         PCB_SHAPE_LOCATE_BEZIER_T } ) )
                     {
                         aCollector.Remove( item );
                     }
@@ -2055,23 +2087,26 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit{ this };
 
     // Handle modifications to existing items by the routine
-    auto item_modification_handler = [&]( BOARD_ITEM& aItem )
-    {
-        commit.Modify( &aItem );
-    };
+    auto item_modification_handler =
+            [&]( BOARD_ITEM& aItem )
+            {
+                commit.Modify( &aItem );
+            };
 
     std::vector<BOARD_ITEM*> items_to_select_on_success;
 
-    auto item_creation_handler = [&]( std::unique_ptr<BOARD_ITEM> aItem )
-    {
-        items_to_select_on_success.push_back( aItem.get() );
-        commit.Add( aItem.release() );
-    };
+    auto item_creation_handler =
+            [&]( std::unique_ptr<BOARD_ITEM> aItem )
+            {
+                items_to_select_on_success.push_back( aItem.get() );
+                commit.Add( aItem.release() );
+            };
 
-    auto item_removal_handler = [&]( BOARD_ITEM& aItem )
-    {
-        commit.Remove( &aItem );
-    };
+    auto item_removal_handler =
+            [&]( BOARD_ITEM& aItem )
+            {
+                commit.Remove( &aItem );
+            };
 
     // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
     ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler( item_creation_handler, item_modification_handler,
@@ -2080,38 +2115,40 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
     // Construct an appropriate routine
     std::unique_ptr<POLYGON_BOOLEAN_ROUTINE> boolean_routine;
 
-    const auto create_routine = [&]() -> std::unique_ptr<POLYGON_BOOLEAN_ROUTINE>
-    {
-        // (Re-)construct the boolean routine based on the action
-        // This is done here so that we can re-init the routine if we need to
-        // go again in the reverse order.
+    const auto create_routine =
+            [&]() -> std::unique_ptr<POLYGON_BOOLEAN_ROUTINE>
+            {
+                // (Re-)construct the boolean routine based on the action
+                // This is done here so that we can re-init the routine if we need to
+                // go again in the reverse order.
 
-        BOARD_ITEM_CONTAINER* const model = frame()->GetModel();
-        wxCHECK( model, nullptr );
+                BOARD_ITEM_CONTAINER* const model = frame()->GetModel();
+                wxCHECK( model, nullptr );
 
-        if( aEvent.IsAction( &PCB_ACTIONS::mergePolygons ) )
-        {
-            return std::make_unique<POLYGON_MERGE_ROUTINE>( model, change_handler );
-        }
-        else if( aEvent.IsAction( &PCB_ACTIONS::subtractPolygons ) )
-        {
-            return std::make_unique<POLYGON_SUBTRACT_ROUTINE>( model, change_handler );
-        }
-        else if( aEvent.IsAction( &PCB_ACTIONS::intersectPolygons ) )
-        {
-            return std::make_unique<POLYGON_INTERSECT_ROUTINE>( model, change_handler );
-        }
-        return nullptr;
-    };
+                if( aEvent.IsAction( &PCB_ACTIONS::mergePolygons ) )
+                {
+                    return std::make_unique<POLYGON_MERGE_ROUTINE>( model, change_handler );
+                }
+                else if( aEvent.IsAction( &PCB_ACTIONS::subtractPolygons ) )
+                {
+                    return std::make_unique<POLYGON_SUBTRACT_ROUTINE>( model, change_handler );
+                }
+                else if( aEvent.IsAction( &PCB_ACTIONS::intersectPolygons ) )
+                {
+                    return std::make_unique<POLYGON_INTERSECT_ROUTINE>( model, change_handler );
+                }
+                return nullptr;
+            };
 
-    const auto run_routine = [&]()
-    {
-        // Perform the operation on each polygon
-        for( PCB_SHAPE* shape : items_to_process )
-            boolean_routine->ProcessShape( *shape );
+    const auto run_routine =
+            [&]()
+            {
+                // Perform the operation on each polygon
+                for( PCB_SHAPE* shape : items_to_process )
+                    boolean_routine->ProcessShape( *shape );
 
-        boolean_routine->Finalize();
-    };
+                boolean_routine->Finalize();
+            };
 
     boolean_routine = create_routine();
 
@@ -2192,26 +2229,27 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     // Detector to reject attempting to edit generated items that may be selectable
     // but we don't want to remain read-only to outside-the-generator editing
-    auto containsReadOnlyGenChild = []( const SELECTION& aSel ) -> bool
-    {
-        for( EDA_ITEM* item : aSel )
-        {
-            if( !item->IsBOARD_ITEM() )
-                continue;
+    auto containsReadOnlyGenChild =
+            []( const SELECTION& aSel ) -> bool
+            {
+                for( EDA_ITEM* item : aSel )
+                {
+                    if( !item->IsBOARD_ITEM() )
+                        continue;
 
-            EDA_GROUP* parent = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
+                    EDA_GROUP* parent = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
 
-            if( !parent || parent->AsEdaItem()->Type() != PCB_GENERATOR_T )
-                continue;
+                    if( !parent || parent->AsEdaItem()->Type() != PCB_GENERATOR_T )
+                        continue;
 
-            PCB_GENERATOR* gen = static_cast<PCB_GENERATOR*>( parent->AsEdaItem() );
+                    PCB_GENERATOR* gen = static_cast<PCB_GENERATOR*>( parent->AsEdaItem() );
 
-            if( gen->ChildrenAreReadOnly() )
-                return true;
-        }
+                    if( gen->ChildrenAreReadOnly() )
+                        return true;
+                }
 
-        return false;
-    };
+                return false;
+            };
 
     if( containsReadOnlyGenChild( selection ) )
     {
@@ -2747,15 +2785,16 @@ int EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    auto setJustify = [&]( EDA_TEXT* aTextItem )
-    {
-        if( aEvent.Matches( ACTIONS::leftJustify.MakeEvent() ) )
-            aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        else if( aEvent.Matches( ACTIONS::centerJustify.MakeEvent() ) )
-            aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        else
-            aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-    };
+    auto setJustify =
+            [&]( EDA_TEXT* aTextItem )
+            {
+                if( aEvent.Matches( ACTIONS::leftJustify.MakeEvent() ) )
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                else if( aEvent.Matches( ACTIONS::centerJustify.MakeEvent() ) )
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+                else
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            };
 
     for( EDA_ITEM* item : selection )
     {
@@ -3807,60 +3846,61 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
         m_selectionTool->ClearSelection();
 
-    const auto getItemText = [&]( const BOARD_ITEM& aItem ) -> wxString
-    {
-        switch( aItem.Type() )
-        {
-        case PCB_TEXT_T:
-        case PCB_FIELD_T:
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_LEADER_T:
-        case PCB_DIM_CENTER_T:
-        case PCB_DIM_RADIAL_T:
-        case PCB_DIM_ORTHOGONAL_T:
-        {
-            // These can all go via the PCB_TEXT class
-            const PCB_TEXT& text = static_cast<const PCB_TEXT&>( aItem );
-            return text.GetShownText( true );
-        }
-        case PCB_TEXTBOX_T:
-        case PCB_TABLECELL_T:
-        {
-            // This one goes via EDA_TEXT
-            const PCB_TEXTBOX& textBox = static_cast<const PCB_TEXTBOX&>( aItem );
-            return textBox.GetShownText( true );
-        }
-        case PCB_TABLE_T:
-        {
-            const PCB_TABLE& table = static_cast<const PCB_TABLE&>( aItem );
-            wxString         s;
-
-            for( int row = 0; row < table.GetRowCount(); ++row )
+    const auto getItemText =
+            [&]( const BOARD_ITEM& aItem ) -> wxString
             {
-                for( int col = 0; col < table.GetColCount(); ++col )
+                switch( aItem.Type() )
                 {
-                    const PCB_TABLECELL* cell = table.GetCell( row, col );
-                    s << cell->GetShownText( true );
+                case PCB_TEXT_T:
+                case PCB_FIELD_T:
+                case PCB_DIM_ALIGNED_T:
+                case PCB_DIM_LEADER_T:
+                case PCB_DIM_CENTER_T:
+                case PCB_DIM_RADIAL_T:
+                case PCB_DIM_ORTHOGONAL_T:
+                {
+                    // These can all go via the PCB_TEXT class
+                    const PCB_TEXT& text = static_cast<const PCB_TEXT&>( aItem );
+                    return text.GetShownText( true );
+                }
+                case PCB_TEXTBOX_T:
+                case PCB_TABLECELL_T:
+                {
+                    // This one goes via EDA_TEXT
+                    const PCB_TEXTBOX& textBox = static_cast<const PCB_TEXTBOX&>( aItem );
+                    return textBox.GetShownText( true );
+                }
+                case PCB_TABLE_T:
+                {
+                    const PCB_TABLE& table = static_cast<const PCB_TABLE&>( aItem );
+                    wxString         s;
 
-                    if( col < table.GetColCount() - 1 )
+                    for( int row = 0; row < table.GetRowCount(); ++row )
                     {
-                        s << '\t';
-                    }
-                }
+                        for( int col = 0; col < table.GetColCount(); ++col )
+                        {
+                            const PCB_TABLECELL* cell = table.GetCell( row, col );
+                            s << cell->GetShownText( true );
 
-                if( row < table.GetRowCount() - 1 )
-                {
-                    s << '\n';
+                            if( col < table.GetColCount() - 1 )
+                            {
+                                s << '\t';
+                            }
+                        }
+
+                        if( row < table.GetRowCount() - 1 )
+                        {
+                            s << '\n';
+                        }
+                    }
+                    return s;
                 }
-            }
-            return s;
-        }
-        default:
-            // No string representation for this item type
-            break;
-        }
-        return wxEmptyString;
-    };
+                default:
+                    // No string representation for this item type
+                    break;
+                }
+                return wxEmptyString;
+            };
 
     wxArrayString itemTexts;
 
