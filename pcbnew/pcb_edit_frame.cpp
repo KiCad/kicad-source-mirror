@@ -2102,19 +2102,18 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
         // STEP sibling.  Leaves ambiguous cases for the infobar below.
         DIALOG_MIGRATE_3D_MODELS::AutoMigrateByFilename( this );
 
-        const int unresolved = DIALOG_MIGRATE_3D_MODELS::CountUnresolvedWrlReferences( this );
-
-        if( unresolved > 0 )
+        if( int unresolved = DIALOG_MIGRATE_3D_MODELS::CountUnresolvedWrlReferences( this ) )
         {
-            wxString msg = wxString::Format( wxPLURAL( "%d WRL 3D model could not be matched "
-                                                       "to an equivalent STEP model.",
-                                                       "%d WRL 3D models could not be matched "
-                                                       "to equivalent STEP models.",
-                                                       unresolved ),
-                                             unresolved );
+            wxString msg = _( "WRL 3D model could not be matched to equivalent STEP model." );
 
-            wxHyperlinkCtrl* link = new wxHyperlinkCtrl( m_loadNoticeInfoBar, wxID_ANY,
-                                                         _( "Show options" ), wxEmptyString );
+            if( unresolved > 1 )
+            {
+                msg = wxString::Format( _( "%d WRL 3D models could not be matched to equivalent STEP models." ),
+                                        unresolved );
+            }
+
+            wxHyperlinkCtrl* link = new wxHyperlinkCtrl( m_loadNoticeInfoBar, wxID_ANY, _( "Show options" ),
+                                                         wxEmptyString );
 
             link->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& )>(
                     [this]( wxHyperlinkEvent& )
