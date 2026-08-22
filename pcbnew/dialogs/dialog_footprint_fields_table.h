@@ -110,18 +110,8 @@ private:
     void OnCurrentSchematicSheetChanged( wxCommandEvent& aEvent );
     void OnBoardSelectionChanged( BOARD& aPcb ) override;
 
-    /**
-     * Saves the current grid selection as a set of footprint full paths for later restoration.
-     */
-    std::set<KIID> SaveGridSelection();
-
-    /**
-     * Restores the grid selection from a previously saved set of footprint full paths.
-     */
-    void RestoreGridSelection( const std::set<KIID>& aKIIDs );
-
     void rebuildRowsPreservingSelection();
-    void rebuildRowsPreservingSelection( const std::set<KIID>& aSavedSelection );
+    void rebuildRowsPreservingSelection( const std::set<KIID_PATH>& aSavedSelection );
 
     FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
 

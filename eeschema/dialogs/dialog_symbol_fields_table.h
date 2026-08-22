@@ -75,18 +75,8 @@ private:
     void OnSchSheetChanged( SCHEMATIC& aSch ) override;
     void OnSchSelectionChanged( SCHEMATIC& aSch ) override;
 
-    /**
-     * Saves the current grid selection as a set of symbol full paths for later restoration.
-     */
-    std::set<wxString> SaveGridSelection();
-
-    /**
-     * Restores the grid selection from a previously saved set of symbol full paths.
-     */
-    void RestoreGridSelection( const std::set<wxString>& aFullPaths );
-
     void rebuildRowsPreservingSelection();
-    void rebuildRowsPreservingSelection( const std::set<wxString>& aSavedSelection );
+    void rebuildRowsPreservingSelection( const std::set<KIID_PATH>& aSavedSelection );
 
     FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
 

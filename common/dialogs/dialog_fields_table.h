@@ -21,9 +21,11 @@
 #pragma once
 
 #include <map>
+#include <set>
 #include <vector>
 
 #include <dialog_fields_table_base.h>
+#include <kiid.h>
 #include <settings/bom_settings.h>
 
 struct FIELDS_TABLE_SETTINGS;
@@ -71,6 +73,12 @@ protected:
 
     void EnableSelectionEvents();
     void DisableSelectionEvents();
+
+    /// Save the grid selection by stable item identity so it can survive a row rebuild.
+    std::set<KIID_PATH> SaveGridSelection();
+
+    /// Restore a selection previously returned by SaveGridSelection().
+    void                RestoreGridSelection( const std::set<KIID_PATH>& aItemKeys );
 
     void AddField( const wxString& aFieldName, const wxString& aLabelValue, bool aShow, bool aGroupBy,
                    bool aAddedByUser = false );

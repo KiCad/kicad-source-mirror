@@ -762,7 +762,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsAdded( BOARD& aPcb, std::vector<
     if( addedRefs.empty() && !selectionScope )
         return;
 
-    std::set<KIID> savedSelection = SaveGridSelection();
+    std::set<KIID_PATH> savedSelection = SaveGridSelection();
 
     for( FOOTPRINT_REF& ref : addedRefs )
     {
@@ -782,7 +782,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsAdded( BOARD& aPcb, std::vector<
 
 void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsRemoved( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem )
 {
-    std::set<KIID> savedSelection = SaveGridSelection();
+    std::set<KIID_PATH> savedSelection = SaveGridSelection();
 
     for( BOARD_ITEM* item : aPcbItem )
     {
@@ -809,7 +809,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsChanged( BOARD& aPcb, std::vecto
     if( changedRefs.empty() && !selectionScope )
         return;
 
-    std::set<KIID> savedSelection = SaveGridSelection();
+    std::set<KIID_PATH> savedSelection = SaveGridSelection();
 
     for( FOOTPRINT_REF& ref : changedRefs )
     {
@@ -845,81 +845,13 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardSelectionChanged( BOARD& aPcb )
 }
 
 
-std::set<KIID> DIALOG_FOOTPRINT_FIELDS_TABLE::SaveGridSelection()
-{
-    std::set<KIID> selectedFullPaths;
-
-    wxGridCellCoordsArray topLeft = m_grid->GetSelectionBlockTopLeft();
-    wxGridCellCoordsArray bottomRight = m_grid->GetSelectionBlockBottomRight();
-
-    for( size_t i = 0; i < topLeft.size(); ++i )
-    {
-        for( int row = topLeft[i].GetRow(); row <= bottomRight[i].GetRow(); ++row )
-        {
-            for( const FOOTPRINT_REF& ref : m_dataModel->GetRowReferences( row ) )
-                selectedFullPaths.insert( ref.GetFootprint().m_Uuid );
-        }
-    }
-
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
-
-    for( int row : selectedRows )
-    {
-        for( const FOOTPRINT_REF& ref : m_dataModel->GetRowReferences( row ) )
-            selectedFullPaths.insert( ref.GetFootprint().m_Uuid );
-    }
-
-    int cursorRow = m_grid->GetGridCursorRow();
-
-    if( cursorRow >= 0 && selectedFullPaths.empty() )
-    {
-        for( const FOOTPRINT_REF& ref : m_dataModel->GetRowReferences( cursorRow ) )
-            selectedFullPaths.insert( ref.GetFootprint().m_Uuid );
-    }
-
-    return selectedFullPaths;
-}
-
-
-void DIALOG_FOOTPRINT_FIELDS_TABLE::RestoreGridSelection( const std::set<KIID>& aKIIDs )
-{
-    if( aKIIDs.empty() )
-        return;
-
-    m_grid->ClearSelection();
-
-    bool firstSelection = true;
-
-    for( int row = 0; row < m_dataModel->GetNumberRows(); ++row )
-    {
-        std::vector<FOOTPRINT_REF> refs = m_dataModel->GetRowReferences( row );
-
-        for( const FOOTPRINT_REF& ref : refs )
-        {
-            if( aKIIDs.count( ref.GetFootprint().m_Uuid ) )
-            {
-                m_grid->SelectRow( row, true );
-
-                if( firstSelection )
-                {
-                    m_grid->SetGridCursor( row, m_grid->GetGridCursorCol() );
-                    firstSelection = false;
-                }
-
-                break;
-            }
-        }
-    }
-}
-
-
 void DIALOG_FOOTPRINT_FIELDS_TABLE::rebuildRowsPreservingSelection()
 {
     rebuildRowsPreservingSelection( SaveGridSelection() );
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::rebuildRowsPreservingSelection( const std::set<KIID>& aSavedSelection )
+void DIALOG_FOOTPRINT_FIELDS_TABLE::rebuildRowsPreservingSelection( const std::set<KIID_PATH>& aSavedSelection )
 {
     DisableSelectionEvents();
 

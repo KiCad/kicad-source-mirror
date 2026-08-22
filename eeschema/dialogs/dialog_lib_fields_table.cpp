@@ -430,7 +430,8 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    bool updateCanvas = false;
+    std::set<KIID_PATH> savedSelection = SaveGridSelection();
+    bool                updateCanvas = false;
 
     m_dataModel->ApplyData(
             [&]( LIB_SYMBOL* aSymbol )
@@ -492,6 +493,7 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataFromWindow()
 
     ClearModify();
     m_dataModel->RebuildRows();
+    RestoreGridSelection( savedSelection );
     m_parent->RefreshLibraryTree();
 
     if( updateCanvas )

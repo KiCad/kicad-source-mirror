@@ -379,6 +379,72 @@ void DIALOG_FIELDS_TABLE::DisableSelectionEvents()
 }
 
 
+std::set<KIID_PATH> DIALOG_FIELDS_TABLE::SaveGridSelection()
+{
+    std::set<KIID_PATH> selectedItemKeys;
+
+    wxGridCellCoordsArray topLeft = m_grid->GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray bottomRight = m_grid->GetSelectionBlockBottomRight();
+
+    for( size_t i = 0; i < topLeft.size(); ++i )
+    {
+        for( int row = topLeft[i].GetRow(); row <= bottomRight[i].GetRow(); ++row )
+        {
+            for( const KIID_PATH& key : getDataModel()->GetRowItemKeys( row ) )
+                selectedItemKeys.insert( key );
+        }
+    }
+
+    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+
+    for( int row : selectedRows )
+    {
+        for( const KIID_PATH& key : getDataModel()->GetRowItemKeys( row ) )
+            selectedItemKeys.insert( key );
+    }
+
+    int cursorRow = m_grid->GetGridCursorRow();
+
+    if( cursorRow >= 0 && cursorRow < getDataModel()->GetNumberRows() && selectedItemKeys.empty() )
+    {
+        for( const KIID_PATH& key : getDataModel()->GetRowItemKeys( cursorRow ) )
+            selectedItemKeys.insert( key );
+    }
+
+    return selectedItemKeys;
+}
+
+
+void DIALOG_FIELDS_TABLE::RestoreGridSelection( const std::set<KIID_PATH>& aItemKeys )
+{
+    if( aItemKeys.empty() )
+        return;
+
+    m_grid->ClearSelection();
+
+    bool firstSelection = true;
+
+    for( int row = 0; row < getDataModel()->GetNumberRows(); ++row )
+    {
+        for( const KIID_PATH& key : getDataModel()->GetRowItemKeys( row ) )
+        {
+            if( aItemKeys.count( key ) )
+            {
+                m_grid->SelectRow( row, true );
+
+                if( firstSelection )
+                {
+                    m_grid->SetGridCursor( row, m_grid->GetGridCursorCol() );
+                    firstSelection = false;
+                }
+
+                break;
+            }
+        }
+    }
+}
+
+
 void DIALOG_FIELDS_TABLE::RestorePanelLayout()
 {
     bool sidebarCollapsed = m_cfgDialogSettings.sidebar_collapsed;

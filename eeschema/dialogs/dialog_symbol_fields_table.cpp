@@ -890,7 +890,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
-    std::set<wxString> savedSelection = SaveGridSelection();
+    std::set<KIID_PATH> savedSelection = SaveGridSelection();
 
     SCH_REFERENCE_LIST allRefs;
     m_parent->Schematic().Hierarchy().GetSymbols( allRefs, SYMBOL_FILTER_ALL );
@@ -942,7 +942,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
-    std::set<wxString> savedSelection = SaveGridSelection();
+    std::set<KIID_PATH> savedSelection = SaveGridSelection();
 
     for( SCH_ITEM* item : aSchItem )
     {
@@ -958,7 +958,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC& aSch, std::vector
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
-    std::set<wxString> savedSelection = SaveGridSelection();
+    std::set<KIID_PATH> savedSelection = SaveGridSelection();
 
     SCH_REFERENCE_LIST allRefs;
     m_parent->Schematic().Hierarchy().GetSymbols( allRefs, SYMBOL_FILTER_ALL );
@@ -1024,81 +1024,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSelectionChanged( SCHEMATIC& aSch )
 }
 
 
-std::set<wxString> DIALOG_SYMBOL_FIELDS_TABLE::SaveGridSelection()
-{
-    std::set<wxString> selectedFullPaths;
-
-    wxGridCellCoordsArray topLeft = m_grid->GetSelectionBlockTopLeft();
-    wxGridCellCoordsArray bottomRight = m_grid->GetSelectionBlockBottomRight();
-
-    for( size_t i = 0; i < topLeft.size(); ++i )
-    {
-        for( int row = topLeft[i].GetRow(); row <= bottomRight[i].GetRow(); ++row )
-        {
-            for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( row ) )
-                selectedFullPaths.insert( ref.GetFullPath() );
-        }
-    }
-
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
-
-    for( int row : selectedRows )
-    {
-        for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( row ) )
-            selectedFullPaths.insert( ref.GetFullPath() );
-    }
-
-    int cursorRow = m_grid->GetGridCursorRow();
-
-    if( cursorRow >= 0 && selectedFullPaths.empty() )
-    {
-        for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( cursorRow ) )
-            selectedFullPaths.insert( ref.GetFullPath() );
-    }
-
-    return selectedFullPaths;
-}
-
-
-void DIALOG_SYMBOL_FIELDS_TABLE::RestoreGridSelection( const std::set<wxString>& aFullPaths )
-{
-    if( aFullPaths.empty() )
-        return;
-
-    m_grid->ClearSelection();
-
-    bool firstSelection = true;
-
-    for( int row = 0; row < m_dataModel->GetNumberRows(); ++row )
-    {
-        std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( row );
-
-        for( const SCH_REFERENCE& ref : refs )
-        {
-            if( aFullPaths.count( ref.GetFullPath() ) )
-            {
-                m_grid->SelectRow( row, true );
-
-                if( firstSelection )
-                {
-                    m_grid->SetGridCursor( row, m_grid->GetGridCursorCol() );
-                    firstSelection = false;
-                }
-
-                break;
-            }
-        }
-    }
-}
-
-
 void DIALOG_SYMBOL_FIELDS_TABLE::rebuildRowsPreservingSelection()
 {
     rebuildRowsPreservingSelection( SaveGridSelection() );
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::rebuildRowsPreservingSelection( const std::set<wxString>& aSavedSelection )
+void DIALOG_SYMBOL_FIELDS_TABLE::rebuildRowsPreservingSelection( const std::set<KIID_PATH>& aSavedSelection )
 {
     DisableSelectionEvents();
 

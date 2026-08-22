@@ -193,6 +193,9 @@ public:
     virtual wxString GetExportValue( int aRow, int aCol, const wxString& aRefDelimiter,
                                      const wxString& aRefRangeDelimiter ) = 0;
 
+    /// Return the stable data-store keys of every item represented by a row.
+    virtual std::vector<KIID_PATH> GetRowItemKeys( int aRow ) const = 0;
+
     /**
      * Set the current variant name for highlighting purposes.
      *
@@ -346,6 +349,19 @@ public:
 
     int       GetNumberRows() override { return (int) m_rows.size(); }
     ROW_STATE GetRowState( int aRow ) const override { return m_rows[aRow].m_state; }
+
+
+    std::vector<KIID_PATH> GetRowItemKeys( int aRow ) const override
+    {
+        wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), std::vector<KIID_PATH>() );
+
+        std::vector<KIID_PATH> keys;
+
+        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+            keys.push_back( getDataStoreKey( item ) );
+
+        return keys;
+    }
 
 
     std::vector<ITEM_TYPE> GetRowReferences( int aRow ) const
