@@ -3149,8 +3149,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         }
                     };
 
+            std::vector<SCH_ITEM*> anchorCandidates = FlattenGroups( selection.Items() );
+
             // Prefer connection points (which should remain on grid)
-            for( EDA_ITEM* item : selection.Items() )
+            for( EDA_ITEM* item : anchorCandidates )
             {
                 SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
                 SCH_PIN*  pin = dynamic_cast<SCH_PIN*>( item );
@@ -3174,10 +3176,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             // Only process other points if we didn't find any connection points
             if( closest_dist == INT_MAX )
             {
-                for( EDA_ITEM* item : selection.Items() )
+                for( EDA_ITEM* item : anchorCandidates )
                 {
                     switch( item->Type() )
                     {
+                    // A group's position is its bounding box centre, which is off grid
+                    case SCH_GROUP_T: break;
+
                     case SCH_LINE_T:
                         processPt( static_cast<SCH_LINE*>( item )->GetStartPoint() );
                         processPt( static_cast<SCH_LINE*>( item )->GetEndPoint() );
