@@ -320,6 +320,7 @@ set( KICOMMON_SRCS
 
     api/serializable.cpp
     api/api_utils.cpp
+    api/api_enums.cpp
 
     startwizard/startwizard.cpp
     startwizard/startwizard_provider_libraries.cpp
@@ -857,7 +858,6 @@ set( COMMON_SRCS
     http_lib/http_lib_connection.cpp
     http_lib/http_lib_settings.cpp
 
-    api/api_enums.cpp
     )
 
 # This needs to be in the common library until draw_panel_gal is moved to kicommon

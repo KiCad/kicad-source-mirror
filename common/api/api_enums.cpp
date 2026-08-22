@@ -18,7 +18,7 @@
  */
 
 #include <api/api_enums.h>
-#include <import_export.h>
+#include <kicommon.h>
 #include <api/common/types/enums.pb.h>
 #include <api/board/board_types.pb.h>
 #include <api/board/board_commands.pb.h>
@@ -34,7 +34,7 @@
 using namespace kiapi;
 using namespace kiapi::common;
 
-template<>
+template<> KICOMMON_API
 KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
 {
     switch( aValue )
@@ -95,7 +95,7 @@ KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
 {
     switch( aValue )
@@ -154,7 +154,7 @@ types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 PCB_LAYER_ID FromProtoEnum( board::types::BoardLayer aValue )
 {
     switch( aValue )
@@ -266,7 +266,7 @@ PCB_LAYER_ID FromProtoEnum( board::types::BoardLayer aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 board::types::BoardLayer ToProtoEnum( PCB_LAYER_ID aValue )
 {
     switch( aValue )
@@ -376,7 +376,7 @@ board::types::BoardLayer ToProtoEnum( PCB_LAYER_ID aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 SCH_LAYER_ID FromProtoEnum( schematic::types::SchematicLayer aValue )
 {
     switch( aValue )
@@ -389,7 +389,7 @@ SCH_LAYER_ID FromProtoEnum( schematic::types::SchematicLayer aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 schematic::types::SchematicLayer ToProtoEnum( SCH_LAYER_ID aValue )
 {
     switch( aValue )
@@ -402,7 +402,7 @@ schematic::types::SchematicLayer ToProtoEnum( SCH_LAYER_ID aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 GR_TEXT_H_ALIGN_T FromProtoEnum( types::HorizontalAlignment aValue )
 {
     switch( aValue )
@@ -420,7 +420,7 @@ GR_TEXT_H_ALIGN_T FromProtoEnum( types::HorizontalAlignment aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::HorizontalAlignment ToProtoEnum( GR_TEXT_H_ALIGN_T aValue )
 {
     switch( aValue )
@@ -436,7 +436,7 @@ types::HorizontalAlignment ToProtoEnum( GR_TEXT_H_ALIGN_T aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 GR_TEXT_V_ALIGN_T FromProtoEnum( types::VerticalAlignment aValue )
 {
     switch( aValue )
@@ -454,7 +454,7 @@ GR_TEXT_V_ALIGN_T FromProtoEnum( types::VerticalAlignment aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::VerticalAlignment ToProtoEnum( GR_TEXT_V_ALIGN_T aValue )
 {
     switch( aValue )
@@ -470,7 +470,7 @@ types::VerticalAlignment ToProtoEnum( GR_TEXT_V_ALIGN_T aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 LINE_STYLE FromProtoEnum( types::StrokeLineStyle aValue )
 {
     switch( aValue )
@@ -489,7 +489,7 @@ LINE_STYLE FromProtoEnum( types::StrokeLineStyle aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::StrokeLineStyle ToProtoEnum( LINE_STYLE aValue )
 {
     switch( aValue )
@@ -507,7 +507,7 @@ types::StrokeLineStyle ToProtoEnum( LINE_STYLE aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 ELECTRICAL_PINTYPE FromProtoEnum( types::ElectricalPinType aValue )
 {
     switch( aValue )
@@ -532,7 +532,7 @@ ELECTRICAL_PINTYPE FromProtoEnum( types::ElectricalPinType aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::ElectricalPinType ToProtoEnum( ELECTRICAL_PINTYPE aValue )
 {
     switch( aValue )
@@ -558,7 +558,7 @@ types::ElectricalPinType ToProtoEnum( ELECTRICAL_PINTYPE aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 FLIP_DIRECTION FromProtoEnum( board::commands::BoardFlipDirection aValue )
 {
     switch( aValue )
@@ -572,7 +572,7 @@ FLIP_DIRECTION FromProtoEnum( board::commands::BoardFlipDirection aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 board::commands::BoardFlipDirection ToProtoEnum( FLIP_DIRECTION aValue )
 {
     switch( aValue )
