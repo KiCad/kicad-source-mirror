@@ -74,7 +74,7 @@ BOOST_FIXTURE_TEST_CASE( CreepagePathStartPointIssue23576, DRC_CREEPAGE_PATH_FIX
     {
         std::shared_ptr<DRC_ITEM> item;
         VECTOR2I                  pos;
-        std::vector<PCB_SHAPE>    pathShapes;
+        std::vector<PCB_SHAPE>    errorLegendShapes;
     };
 
     std::vector<ViolationInfo> violations;
@@ -102,7 +102,7 @@ BOOST_FIXTURE_TEST_CASE( CreepagePathStartPointIssue23576, DRC_CREEPAGE_PATH_FIX
                 {
                     PCB_MARKER marker( aItem, aPos, aLayer );
                     aPathGenerator( &marker );
-                    vi.pathShapes = marker.GetShapes();
+                    vi.errorLegendShapes = marker.GetErrorLegendShapes();
                 }
 
                 violations.push_back( vi );
@@ -136,11 +136,11 @@ BOOST_FIXTURE_TEST_CASE( CreepagePathStartPointIssue23576, DRC_CREEPAGE_PATH_FIX
                                               vi.item->GetErrorMessage( false ) ) );
         BOOST_TEST_MESSAGE( wxString::Format( "  Pos: (%.4f, %.4f) mm, shapes: %d",
                                               vi.pos.x / 1e6, vi.pos.y / 1e6,
-                                              (int) vi.pathShapes.size() ) );
+                                              (int) vi.errorLegendShapes.size() ) );
 
-        for( size_t j = 0; j < vi.pathShapes.size(); j++ )
+        for( size_t j = 0; j < vi.errorLegendShapes.size(); j++ )
         {
-            const PCB_SHAPE& s = vi.pathShapes[j];
+            const PCB_SHAPE& s = vi.errorLegendShapes[j];
 
             if( s.GetShape() == SHAPE_T::SEGMENT )
             {
@@ -159,7 +159,7 @@ BOOST_FIXTURE_TEST_CASE( CreepagePathStartPointIssue23576, DRC_CREEPAGE_PATH_FIX
             }
         }
 
-        if( vi.pathShapes.empty() )
+        if( vi.errorLegendShapes.empty() )
             continue;
 
         // Resolve the items from the violation
@@ -276,7 +276,7 @@ BOOST_FIXTURE_TEST_CASE( CreepagePathStartPointIssue23576, DRC_CREEPAGE_PATH_FIX
             int      bestDist = std::numeric_limits<int>::max();
             VECTOR2I endPt;
 
-            for( const PCB_SHAPE& s : vi.pathShapes )
+            for( const PCB_SHAPE& s : vi.errorLegendShapes )
             {
                 int d = segB.Distance( s.GetStart() );
 

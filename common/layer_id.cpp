@@ -140,7 +140,6 @@ wxString LayerName( int aLayer )
     case LAYER_RATSNEST:                return _( "Ratsnest" );
     case LAYER_DRC_WARNING:             return _( "DRC warnings" );
     case LAYER_DRC_ERROR:               return _( "DRC errors" );
-    case LAYER_DRC_SHAPES:              return _( "DRC shapes" );
     case LAYER_DRC_EXCLUSION:           return _( "DRC exclusions" );
     case LAYER_MARKER_SHADOWS:          return _( "DRC marker shadows" );
     case LAYER_DRC_HIGHLIGHTED:          return _( "DRC highlighted" );

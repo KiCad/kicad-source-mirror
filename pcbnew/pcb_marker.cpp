@@ -93,7 +93,6 @@ PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPositio
 }
 
 
-/* destructor */
 PCB_MARKER::~PCB_MARKER()
 {
     if( m_rcItem )
@@ -132,6 +131,7 @@ static void ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMarker )
     case DRCE_UNRESOLVED_VARIABLE:
         if( aMarker.GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
             storeLayer = true;
+
         break;
 
     default:
@@ -248,7 +248,8 @@ PCB_MARKER* PCB_MARKER::FromLegacyString( const wxString& aData )
             markerLayer = getMarkerLayer( props[5] );
     }
     else if( drcItem->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE
-            && props[3].IsEmpty() && props[4].IsEmpty() )
+                && props[3].IsEmpty()
+                && props[4].IsEmpty() )
     {
         // Note: caller must load our item pointer with the drawing sheet proxy item
         markerLayer = LAYER_DRAWINGSHEET;
@@ -277,17 +278,10 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
     switch( GetSeverity() )
     {
-    case RPT_SEVERITY_IGNORE:
-        aList.emplace_back( _( "Severity" ), _( "Ignore" ) );
-        break;
-    case RPT_SEVERITY_WARNING:
-        aList.emplace_back( _( "Severity" ), _( "Warning" ) );
-        break;
-    case RPT_SEVERITY_ERROR:
-        aList.emplace_back( _( "Severity" ), _( "Error" ) );
-        break;
-    default:
-        break;
+    case RPT_SEVERITY_IGNORE:  aList.emplace_back( _( "Severity" ), _( "Ignore" ) );  break;
+    case RPT_SEVERITY_WARNING: aList.emplace_back( _( "Severity" ), _( "Warning" ) ); break;
+    case RPT_SEVERITY_ERROR:   aList.emplace_back( _( "Severity" ), _( "Error" ) );   break;
+    default:                                                                          break;
     }
 
     if( GetMarkerType() == MARKER_DRAWING_SHEET )
@@ -380,7 +374,7 @@ std::vector<int> PCB_MARKER::ViewGetLayers() const
     if( GetMarkerType() == MARKER_RATSNEST )
         return {};
 
-    std::vector<int> layers{ 0, LAYER_MARKER_SHADOWS, LAYER_DRC_SHAPES, LAYER_DRC_HIGHLIGHTED };
+    std::vector<int> layers{ 0, LAYER_MARKER_SHADOWS, LAYER_DRC_HIGHLIGHTED };
 
     switch( GetSeverity() )
     {
@@ -418,7 +412,7 @@ void PCB_MARKER::SetZoom( double aZoomFactor ) const
 }
 
 
-std::vector<PCB_SHAPE> PCB_MARKER::GetShapes() const
+std::vector<PCB_SHAPE> PCB_MARKER::GetErrorLegendShapes() const
 {
     STROKE_PARAMS          hairline( 1.0 );     // Segments of width 1.0 will get drawn as lines by PCB_PAINTER
     std::vector<PCB_SHAPE> pathShapes;

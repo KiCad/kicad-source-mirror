@@ -314,7 +314,9 @@ void COLOR4D::ToHSL( double& aOutHue, double& aOutSaturation, double& aOutLightn
 
     aOutLightness = ( max + min ) / 2.0;
 
-    if( aOutLightness >= 1.0 )
+    if( aOutLightness == 0.0 )
+        aOutSaturation = 1.0;
+    else if( aOutLightness >= 1.0 )
         aOutSaturation = 0.0;
     else
         aOutSaturation = diff / ( 1.0 - std::abs( 2.0 * aOutLightness - 1.0 ) );

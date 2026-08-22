@@ -154,7 +154,7 @@ public:
         return wxT( "PCB_MARKER" );
     }
 
-    std::vector<PCB_SHAPE> GetShapes() const;
+    std::vector<PCB_SHAPE> GetErrorLegendShapes() const;
 
     void SetPath( const std::vector<PCB_SHAPE>& aShapes, const VECTOR2I& aStart, const VECTOR2I& aEnd )
     {

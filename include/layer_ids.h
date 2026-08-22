@@ -308,7 +308,7 @@ enum GAL_LAYER_ID: int
     /// Copper graphic shape opacity/visibility (color ignored).
     LAYER_FILLED_SHAPES      = GAL_LAYER_ID_START + 41,
 
-    LAYER_DRC_SHAPES         = GAL_LAYER_ID_START + 42,  ///< Custom shapes for DRC markers.
+//  LAYER_DRC_SHAPES         = GAL_LAYER_ID_START + 42,  ///< Deprecated since 11.0
 //  LAYER_DRC_SHAPE2         = GAL_LAYER_ID_START + 43,  ///< Deprecated since 10.0
 
     LAYER_BOARD_OUTLINE_AREA = GAL_LAYER_ID_START + 44, ///< PCB board outline
