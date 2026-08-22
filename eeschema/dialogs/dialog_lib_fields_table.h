@@ -24,8 +24,6 @@
 #include <dialogs/dialog_fields_table.h>
 #include <lib_fields_data_model.h>
 
-#include <wx/arrstr.h>
-
 class LIB_SYMBOL;
 class SYMBOL_EDIT_FRAME;
 
@@ -33,25 +31,21 @@ class SYMBOL_EDIT_FRAME;
 class DIALOG_LIB_FIELDS_TABLE : public DIALOG_FIELDS_TABLE
 {
 public:
-    enum SCOPE : int
-    {
-        SCOPE_LIBRARY = 0,
-        SCOPE_RELATED_SYMBOLS
-    };
-
-    DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SCOPE aScope );
+    DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent,
+                             LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
     ~DIALOG_LIB_FIELDS_TABLE() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
+    void loadSymbols();
+
     wxGridCellEditor* createDatasheetEditor() override;
     wxGridCellEditor* createFootprintEditor() override;
     void              onBomSettingsChanged() override {}
 
-    void setScope( SCOPE aScope );
-    void loadSymbols( const wxArrayString& aSymbolNames );
+    void setScope( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
@@ -81,6 +75,4 @@ private:
     SYMBOL_EDIT_FRAME*                 m_parent;
     std::vector<LIB_SYMBOL*>           m_symbolsList;
     LIB_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
-
-    SCOPE m_symbolScope;
 };

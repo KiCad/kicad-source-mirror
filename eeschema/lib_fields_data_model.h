@@ -34,7 +34,16 @@ using LIB_FIELDS_TABLE_DATA_MODEL_ROW = DATA_MODEL_ROW<LIB_SYMBOL*>;
 class LIB_FIELDS_EDITOR_GRID_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL<LIB_SYMBOL*>
 {
 public:
-    LIB_FIELDS_EDITOR_GRID_DATA_MODEL( wxGridCellAttr* aURLEditor ) :
+    enum SCOPE : int
+    {
+        SCOPE_LIBRARY = 0,
+        SCOPE_RELATED_SYMBOLS
+    };
+
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL( const std::vector<LIB_SYMBOL*>& aSymbolsList,
+                                       wxGridCellAttr*                 aURLEditor ) :
+            m_symbolsList( aSymbolsList ),
+            m_scope( SCOPE_LIBRARY ),
             m_urlEditor( aURLEditor ),
             m_stripedStringRenderer( nullptr )
     {
@@ -80,8 +89,12 @@ public:
             aList.Add( symbol->GetName() );
     }
 
-    void SetSymbols( const std::vector<LIB_SYMBOL*>& aSymbolsList );
     void RebuildRows() override;
+
+    void  SetScope( SCOPE aScope ) { m_scope = aScope; }
+    SCOPE GetScope() { return m_scope; }
+
+    void SetRelatedSymbolRoot( const wxString& aRootSymbolName ) { m_relatedSymbolRoot = aRootSymbolName; }
 
     void ApplyData( std::function<void( LIB_SYMBOL* )> symbolChangeHandler,
                     std::function<void()> postApplyHandler = nullptr );
@@ -133,6 +146,8 @@ private:
 
 protected:
     std::vector<LIB_SYMBOL*> m_symbolsList;
+    SCOPE                    m_scope;
+    wxString                 m_relatedSymbolRoot;
 
     // Track newly created derived symbols for library manager integration
     std::vector<std::pair<LIB_SYMBOL*, wxString>> m_createdDerivedSymbols; // symbol, library name

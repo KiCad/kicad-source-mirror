@@ -51,21 +51,6 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, c
 }
 
 
-void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetSymbols( const std::vector<LIB_SYMBOL*>& aSymbolsList )
-{
-    m_symbolsList = aSymbolsList;
-
-    for( LIB_SYMBOL* symbol : m_symbolsList )
-    {
-        if( m_dataStore.contains( getDataStoreKey( symbol ) ) )
-            continue;
-
-        for( const DATA_MODEL_COL& col : m_cols )
-            updateDataStoreItemFieldFromLive( symbol, col.m_fieldName );
-    }
-}
-
-
 bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( LIB_SYMBOL* const& aSymbol,
                                                            const wxString& aFieldName,
                                                            wxString& aValue )
@@ -585,6 +570,14 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     {
         wxLogTrace( traceLibFieldTable, "RebuildRows: Processing symbol '%s' (UUID: %s)",
                     symbol->GetName(), symbol->m_Uuid.AsString() );
+
+        if( m_scope == SCOPE::SCOPE_RELATED_SYMBOLS )
+        {
+            std::shared_ptr<LIB_SYMBOL> root = symbol->GetRootSymbol();
+
+            if( !root || root->GetName() != m_relatedSymbolRoot )
+                continue;
+        }
 
         if( !MatchesFilter( symbol, symbol->GetName(), matcher ) )
             continue;

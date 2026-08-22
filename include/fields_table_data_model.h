@@ -38,6 +38,23 @@
 
 
 /**
+ * The point of the data model classes is fundamentally to represent three things:
+ *
+ * 1. The list of live "items" (symbols, footprints, etc). These are often pointers to the actual item,
+ * or instances in the case of symbols. This is where we get live data from on initial load, and when
+ * schematic/board changes come in in real-time, and where we write data back to when the user is done
+ * editing.
+ *
+ * 2. The data store (m_dataStore), this is the map of the user's edited values. This lets us keep
+ * edits separate from the live values, especially since in some editors, this dialog is not modal,
+ * and the user can change the live items while the dialog is open and contains edits.
+ *
+ * 3. The wx grid view of the table, which is the actual row of grids and columns that we
+ * generate from the data store. This is what the user sees and interacts with. This changes
+ * with filtering/scoping/grouping, etc. and is rebuilt from the data store as needed.
+ */
+
+/**
  * DATA_MODEL_COL and DATA_MODEL_ROW are used together in vectors of both (m_cols and m_rows)
  * to represent the current view of the fields table.
  *

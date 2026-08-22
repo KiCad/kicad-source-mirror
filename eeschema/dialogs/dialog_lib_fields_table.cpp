@@ -44,6 +44,7 @@
 #include <wx/msgdlg.h>
 
 using DIALOG_NEW_SYMBOL = DIALOG_LIB_NEW_SYMBOL;
+using SCOPE = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
 
 
 namespace
@@ -237,12 +238,27 @@ private:
 DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SCOPE aScope ) :
         DIALOG_FIELDS_TABLE( aParent, aParent->libeditconfig()->m_LibFieldEditor,
                              aParent->libeditconfig()->m_LibFieldEditorBom, nullptr ),
-        m_parent( aParent ),
-        m_symbolScope( aScope )
+        m_parent( aParent )
 {
+    loadSymbols();
+
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( createDatasheetEditor() );
-    m_dataModel = new LIB_FIELDS_EDITOR_GRID_DATA_MODEL( attr );
+    m_dataModel = new LIB_FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
+    m_dataModel->SetScope( aScope );
+
+    const wxString& targetSymbolName = m_parent->GetTargetLibId().GetLibItemName();
+
+    for( LIB_SYMBOL* symbol : m_symbolsList )
+    {
+        if( symbol->GetName() == targetSymbolName )
+        {
+            if( std::shared_ptr<LIB_SYMBOL> root = symbol->GetRootSymbol() )
+                m_dataModel->SetRelatedSymbolRoot( root->GetName() );
+
+            break;
+        }
+    }
 
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
@@ -264,7 +280,7 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SC
     m_scope->Clear();
     m_scope->Append( _( "Whole Library" ) );
     m_scope->Append( _( "Related Symbols Only" ) );
-    m_scope->SetSelection( static_cast<int>( m_symbolScope ) );
+    m_scope->SetSelection( static_cast<int>( m_dataModel->GetScope() ) );
     m_filterScope->SetString( static_cast<int>( BOM_FILTER_SCOPE::REFERENCE ), _( "Symbol Names" ) );
 
     SetTitle( wxString::Format( _( "Symbol Fields Table ('%s' Library)" ),
@@ -294,6 +310,49 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SC
     m_grid->GetGridWindow()->Bind( wxEVT_MOTION, &DIALOG_LIB_FIELDS_TABLE::OnGridMouseMove, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_LIB_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_LIB_FIELDS_TABLE::onBomFmtPresetChanged, this );
+}
+
+
+void DIALOG_LIB_FIELDS_TABLE::loadSymbols()
+{
+    m_symbolsList.clear();
+
+    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_parent->GetLibManager();
+    wxString                    libName = m_parent->GetTargetLibId().GetLibNickname();
+    wxArrayString               symbolNames;
+
+    libMgr.GetSymbolNames( libName, symbolNames );
+
+    if( symbolNames.IsEmpty() )
+    {
+        wxMessageBox( wxString::Format( _( "No symbols found in library '%s'." ), libName ) );
+        return;
+    }
+
+    for( const wxString& symbolName : symbolNames )
+    {
+        LIB_SYMBOL* canvasSymbol = m_parent->GetCurSymbol();
+
+        if( canvasSymbol && canvasSymbol->GetLibraryName() == libName && canvasSymbol->GetName() == symbolName )
+        {
+            m_symbolsList.push_back( canvasSymbol );
+        }
+        else
+        {
+            try
+            {
+                if( LIB_SYMBOL* symbol = m_parent->GetLibManager().GetSymbol( symbolName, libName ) )
+                    m_symbolsList.push_back( symbol );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxLogWarning( wxString::Format( _( "Error loading symbol '%s': %s" ), symbolName, ioe.What() ) );
+            }
+        }
+    }
+
+    if( m_symbolsList.empty() )
+        wxMessageBox( _( "No symbols could be loaded from the library." ) );
 }
 
 
@@ -357,9 +416,9 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_scope->SetSelection( static_cast<int>( m_symbolScope ) );
-    setScope( static_cast<SCOPE>( m_scope->GetSelection() ) );
-    // setScope() loads rows into m_viewControlsDataModel and columns into m_dataModel
+    LoadFieldNames(); // loads rows into m_viewControlsDataModel and columns into m_dataModel
+
+    m_scope->SetSelection( static_cast<int>( m_dataModel->GetScope() ) );
 
     // Load our BOM view presets
     SetUserBomPresets( m_cfgBomSettings.m_BomPresets );
@@ -387,6 +446,10 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataToWindow()
     syncBomFmtPresetSelection();
 
     m_outputFileName->SetValue( m_cfgBomSettings.m_BomExportFileName );
+
+    m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
+
+    setScope( static_cast<SCOPE>( m_scope->GetSelection() ) );
 
     return true;
 }
@@ -479,25 +542,10 @@ void DIALOG_LIB_FIELDS_TABLE::LoadFieldNames()
     auto addMandatoryField =
             [&]( FIELD_T aFieldId, bool aShow, bool aGroupBy )
             {
-                wxString fieldName = GetCanonicalFieldName( aFieldId );
-                int      row = -1;
+                m_mandatoryFieldListIndexes[aFieldId] = m_viewControlsDataModel->GetNumberRows();
 
-                for( int i = 0; i < m_viewControlsDataModel->GetNumberRows(); ++i )
-                {
-                    if( m_viewControlsDataModel->GetCanonicalFieldName( i ) == fieldName )
-                    {
-                        row = i;
-                        break;
-                    }
-                }
-
-                if( row == -1 )
-                {
-                    row = m_viewControlsDataModel->GetNumberRows();
-                    AddField( fieldName, GetDefaultFieldName( aFieldId, DO_TRANSLATE ), aShow, aGroupBy );
-                }
-
-                m_mandatoryFieldListIndexes[aFieldId] = row;
+                AddField( GetCanonicalFieldName( aFieldId ), GetDefaultFieldName( aFieldId, DO_TRANSLATE ),
+                          aShow, aGroupBy );
             };
 
     AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, _( "Symbol Name" ), true, false );
@@ -541,84 +589,8 @@ void DIALOG_LIB_FIELDS_TABLE::LoadFieldNames()
 
 void DIALOG_LIB_FIELDS_TABLE::setScope( SCOPE aScope )
 {
-    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_parent->GetLibManager();
-    wxString                    targetLib = m_parent->GetTargetLibId().GetLibNickname();
-    wxString                    targetSymbol = m_parent->GetTargetLibId().GetLibItemName();
-    wxArrayString               symbolNames;
-
-    m_symbolScope = aScope;
-
-    if( aScope == SCOPE::SCOPE_RELATED_SYMBOLS )
-    {
-        const LIB_SYMBOL*           symbol = libMgr.GetBufferedSymbol( targetSymbol, targetLib );
-        std::shared_ptr<LIB_SYMBOL> root = symbol ? symbol->GetRootSymbol() : nullptr;
-
-        if( root )
-        {
-            symbolNames.Add( root->GetName() );
-            libMgr.GetDerivedSymbolNames( root->GetName(), targetLib, symbolNames );
-        }
-    }
-    else
-    {
-        libMgr.GetSymbolNames( targetLib, symbolNames );
-    }
-
-    loadSymbols( symbolNames );
-    LoadFieldNames();
+    m_dataModel->SetScope( aScope );
     m_dataModel->RebuildRows();
-    SetupAllColumnProperties();
-}
-
-
-void DIALOG_LIB_FIELDS_TABLE::loadSymbols( const wxArrayString& aSymbolNames )
-{
-    m_symbolsList.clear();
-
-    wxString libName = m_parent->GetTreeLIBID().GetLibNickname();
-
-    if( aSymbolNames.IsEmpty() )
-    {
-        if( m_symbolScope == SCOPE::SCOPE_RELATED_SYMBOLS )
-            wxMessageBox( wxString::Format( _( "No related symbols found in library '%s'." ), libName ) );
-        else
-            wxMessageBox( wxString::Format( _( "No symbols found in library '%s'." ), libName ) );
-
-        m_dataModel->SetSymbols( m_symbolsList );
-        return;
-    }
-
-    for( const wxString& symbolName : aSymbolNames )
-    {
-        LIB_SYMBOL* canvasSymbol = m_parent->GetCurSymbol();
-
-        if( canvasSymbol && canvasSymbol->GetLibraryName() == libName && canvasSymbol->GetName() == symbolName )
-        {
-            m_symbolsList.push_back( canvasSymbol );
-        }
-        else
-        {
-            try
-            {
-                if( LIB_SYMBOL* symbol = m_parent->GetLibManager().GetSymbol( symbolName, libName ) )
-                    m_symbolsList.push_back( symbol );
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                wxLogWarning( wxString::Format( _( "Error loading symbol '%s': %s" ), symbolName, ioe.What() ) );
-            }
-        }
-    }
-
-    if( m_symbolsList.empty() )
-    {
-        if( m_symbolScope == SCOPE::SCOPE_RELATED_SYMBOLS )
-            wxMessageBox( _( "No related symbols could be loaded from the library." ) );
-        else
-            wxMessageBox( _( "No symbols could be loaded from the library." ) );
-    }
-
-    m_dataModel->SetSymbols( m_symbolsList );
 }
 
 

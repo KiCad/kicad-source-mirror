@@ -1002,10 +1002,12 @@ int SYMBOL_EDITOR_CONTROL::NextSymbol( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 {
-    DIALOG_LIB_FIELDS_TABLE::SCOPE scope = DIALOG_LIB_FIELDS_TABLE::SCOPE_LIBRARY;
+    using SCOPE = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
+
+    SCOPE scope = SCOPE::SCOPE_LIBRARY;
 
     if( aEvent.IsAction( &SCH_ACTIONS::showRelatedLibFieldsTable ) )
-        scope = DIALOG_LIB_FIELDS_TABLE::SCOPE_RELATED_SYMBOLS;
+        scope = SCOPE::SCOPE_RELATED_SYMBOLS;
 
     DIALOG_LIB_FIELDS_TABLE dlg( getEditFrame<SYMBOL_EDIT_FRAME>(), scope );
 
