@@ -46,7 +46,8 @@
 #include <sch_textbox.h>
 #include <lib_symbol_library_manager.h>
 #include <widgets/lib_tree.h>
-#include <wx/textdlg.h>     // for wxTextEntryDialog
+#include <widgets/wx_infobar.h>
+#include <widgets/properties_panel.h>
 #include <math/util.h>      // for KiROUND
 #include <io/kicad/kicad_io_utils.h>
 #include <trace_helpers.h>
@@ -933,6 +934,30 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             wxFAIL_MSG( wxT( "Unhandled item <" ) + item->GetClass() + wxT( ">" ) );
             break;
         }
+    }
+    else if( selection.Size() > 1 )
+    {
+        WX_INFOBAR* infobar = frame()->GetInfoBar();
+
+        infobar->RemoveAllButtons();
+
+        if( !frame()->GetPropertiesPanel()->IsShownOnScreen() )
+        {
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show Properties panel" ),
+                                                           wxEmptyString );
+
+            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                    [this]( wxHyperlinkEvent& aEvent )
+                    {
+                        frame()->ToggleProperties();
+                    } ) );
+
+            infobar->AddButton( button );
+        }
+
+        infobar->AddCloseButton();
+        infobar->ShowMessageFor( _( "Use Properties panel to edit properties common to selected items." ),
+                                 8000, wxICON_INFORMATION );
     }
 
     if( selection.IsHover() )

@@ -50,6 +50,8 @@
 #include <sch_no_connect.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <eeschema_id.h>
+#include <widgets/wx_infobar.h>
+#include <widgets/properties_panel.h>
 #include <dialogs/dialog_change_symbols.h>
 #include <dialogs/dialog_image_properties.h>
 #include <dialogs/dialog_line_properties.h>
@@ -2893,6 +2895,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
         else
         {
+            frame()->ShowInfoBarMsg( _( "Use Properties panel to edit properties common to selected items." ) );
             return 0;
         }
 
@@ -2934,7 +2937,31 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     default:
         if( selection.Size() > 1 )
+        {
+            WX_INFOBAR* infobar = frame()->GetInfoBar();
+
+            infobar->RemoveAllButtons();
+
+            if( !frame()->GetPropertiesPanel()->IsShownOnScreen() )
+            {
+                wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show Properties panel" ),
+                                                               wxEmptyString );
+
+                button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                        [this]( wxHyperlinkEvent& aEvent )
+                        {
+                            frame()->ToggleProperties();
+                        } ) );
+
+                infobar->AddButton( button );
+            }
+
+            infobar->AddCloseButton();
+            infobar->ShowMessageFor( _( "Use Properties panel to edit properties common to selected items." ),
+                                     8000, wxICON_INFORMATION );
+
             return 0;
+        }
 
         EditProperties( curr_item );
     }

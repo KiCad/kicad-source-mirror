@@ -312,8 +312,7 @@ void PCB_CONTROL::unfilledZoneCheck()
         infobar->AddButton( button );
 
         wxString msg;
-        msg.Printf( _( "Not all zones are filled. Use Edit > Fill All Zones (%s) "
-                       "if you wish to see all fills." ),
+        msg.Printf( _( "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see all fills." ),
                     KeyNameFromKeyCode( PCB_ACTIONS::zoneFillAll.GetHotKey() ) );
 
         infobar->ShowMessageFor( msg, 5000, wxICON_WARNING );
@@ -2235,10 +2234,11 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
 
     if( brd->GetCopperLayerCount() != initialCopperLayerCount )
     {
-        editFrame->GetInfoBar()->ShowMessageFor(
-                wxString::Format( _( "Board changed from %d to %d copper layers, stackup updated." ),
-                                  initialCopperLayerCount, brd->GetCopperLayerCount() ),
-                6000, wxICON_INFORMATION );
+        WX_INFOBAR* infobar = editFrame->GetInfoBar();
+        wxString    msg = wxString::Format( _( "Board changed from %d to %d copper layers, stackup updated." ),
+                                            initialCopperLayerCount,
+                                            brd->GetCopperLayerCount() );
+        infobar->ShowMessageFor( msg, 6000, wxICON_INFORMATION );
     }
 
     int ret = 0;

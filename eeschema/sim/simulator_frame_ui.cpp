@@ -844,11 +844,11 @@ void SIMULATOR_FRAME_UI::InitWorkbook()
 
         if( !filename.FileExists() )
         {
-            m_simulatorFrame->GetInfoBar()->ShowMessageFor(
-                    wxString::Format( _( "Workbook file '%s' not found. "
-                                         "Loading simulation settings from schematic." ),
-                                      filename.GetFullPath() ),
-                    8000, wxICON_WARNING );
+            WX_INFOBAR* infobar = m_simulatorFrame->GetInfoBar();
+            wxString    msg = wxString::Format( _( "Workbook file '%s' not found. Loading simulation settings from "
+                                                    "schematic." ),
+                                                filename.GetFullPath() );
+            infobar->ShowMessageFor( msg, 8000, wxICON_WARNING );
 
             simulator()->Settings()->SetWorkbookFilename( wxEmptyString );
             loadFromSchematic = true;

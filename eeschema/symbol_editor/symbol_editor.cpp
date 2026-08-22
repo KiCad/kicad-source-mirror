@@ -1674,8 +1674,7 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
                     else
                     {
                         m_infoBar->Dismiss();
-                        m_infoBar->ShowMessageFor( msg + wxS( "  " ) + msg2,
-                                                   2000, wxICON_EXCLAMATION );
+                        m_infoBar->ShowMessageFor( msg + wxS( "  " ) + msg2, 5000, wxICON_EXCLAMATION );
 
                         while( m_infoBar->IsShownOnScreen() )
                             wxSafeYield();

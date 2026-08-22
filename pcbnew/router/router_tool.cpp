@@ -1404,8 +1404,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             if( currentLayer == targetLayer )
             {
                 WX_INFOBAR* infobar = frame()->GetInfoBar();
-                infobar->ShowMessageFor( _( "Via needs 2 different layers." ),
-                                         2000, wxICON_ERROR,
+                infobar->ShowMessageFor( _( "Via needs 2 different layers." ), 5000, wxICON_ERROR,
                                          WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
                 return 0;
             }

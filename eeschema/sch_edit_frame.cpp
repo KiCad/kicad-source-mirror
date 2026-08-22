@@ -3249,9 +3249,9 @@ bool SCH_EDIT_FRAME::validateNewVariantName( const wxString& aName, const wxStri
 
     if( aName.CmpNoCase( GetDefaultVariantName() ) == 0 )
     {
-        GetInfoBar()->ShowMessageFor(
-                wxString::Format( _( "'%s' is a reserved variant name." ), GetDefaultVariantName() ),
-                10000, wxICON_ERROR );
+        GetInfoBar()->ShowMessageFor( wxString::Format( _( "'%s' is a reserved variant name." ),
+                                                        GetDefaultVariantName() ),
+                                      10000, wxICON_ERROR );
         return false;
     }
 
@@ -3259,9 +3259,8 @@ bool SCH_EDIT_FRAME::validateNewVariantName( const wxString& aName, const wxStri
     {
         if( existingName.CmpNoCase( aName ) == 0 && existingName.CmpNoCase( aExcludeName ) != 0 )
         {
-            GetInfoBar()->ShowMessageFor(
-                    wxString::Format( _( "Variant '%s' already exists." ), existingName ),
-                    10000, wxICON_ERROR );
+            GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ), existingName ),
+                                          10000, wxICON_ERROR );
             return false;
         }
     }

@@ -70,6 +70,8 @@ using namespace std::placeholders;
 #include "kicad_clipboard.h"
 #include <wx/hyperlink.h>
 #include <router/router_tool.h>
+#include <widgets/properties_panel.h>
+#include <widgets/wx_infobar.h>
 #include <dialog_get_footprint_by_name.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
@@ -2301,6 +2303,30 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             m_toolMgr->PostAction( ACTIONS::pageSettings );
         else
             m_toolMgr->RunAction( PCB_ACTIONS::footprintProperties );
+    }
+    else if( selection.Size() > 1 )
+    {
+        WX_INFOBAR* infobar = frame()->GetInfoBar();
+
+        infobar->RemoveAllButtons();
+
+        if( !frame()->GetPropertiesPanel()->IsShownOnScreen() )
+        {
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show Properties panel" ),
+                                                           wxEmptyString );
+
+            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                    [this]( wxHyperlinkEvent& aEvent )
+                    {
+                        frame()->ToggleProperties();
+                    } ) );
+
+            infobar->AddButton( button );
+        }
+
+        infobar->AddCloseButton();
+        infobar->ShowMessageFor( _( "Use Properties panel to edit properties common to selected items." ),
+                                 8000, wxICON_INFORMATION );
     }
 
     // Position or geometry edit via these dialogs settles constraints as if item were dragged
