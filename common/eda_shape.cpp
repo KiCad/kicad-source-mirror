@@ -250,14 +250,9 @@ void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer, const EDA_IU_SCALE
     using namespace kiapi::common;
     types::GraphicShape shape;
 
-    types::StrokeAttributes* stroke = shape.mutable_attributes()->mutable_stroke();
     types::GraphicFillAttributes* fill = shape.mutable_attributes()->mutable_fill();
 
-    PackDistance( *stroke->mutable_width(), GetWidth(), aScale );
-    stroke->set_style( ToProtoEnum<LINE_STYLE, types::StrokeLineStyle>( m_stroke.GetLineStyle() ) );
-
-    if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
-        PackColor( *stroke->mutable_color(), m_stroke.GetColor() );
+    PackStroke( *shape.mutable_attributes()->mutable_stroke(), m_stroke );
 
     fill->set_fill_type( ToProtoEnum<FILL_T, types::GraphicFillType>( GetFillMode() ) );
 
@@ -376,19 +371,7 @@ bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer, const EDA_
     m_endsSwapped = false;
     m_fillColor = COLOR4D::UNSPECIFIED;
 
-    if( shape.attributes().stroke().has_color() )
-        m_stroke.SetColor( UnpackColor( shape.attributes().stroke().color() ) );
-    else
-        m_stroke.SetColor( COLOR4D::UNSPECIFIED );
-
-    if( shape.attributes().fill().has_color() )
-        SetFillColor( UnpackColor( shape.attributes().fill().color() ) );
-
-    if( shape.attributes().has_stroke() )
-    {
-        SetWidth( UnpackDistance( shape.attributes().stroke().width(), aScale ) );
-        SetLineStyle( FromProtoEnum<LINE_STYLE, types::StrokeLineStyle>( shape.attributes().stroke().style() ) );
-    }
+    UnpackStroke( m_stroke, shape.attributes().stroke() );
 
     if( shape.attributes().has_fill() )
         SetFillMode( FromProtoEnum<FILL_T, types::GraphicFillType>( shape.attributes().fill().fill_type() ) );
