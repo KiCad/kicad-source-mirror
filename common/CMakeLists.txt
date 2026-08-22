@@ -359,6 +359,7 @@ set( KICOMMON_SRCS
     io/io_utils.cpp
 
     api/api_client.cpp
+    api/api_enums.cpp
     api/api_handler.cpp
     api/api_plugin.cpp
     api/api_plugin_manager.cpp
@@ -920,7 +921,6 @@ set( COMMON_SRCS
     http_lib/http_lib_connection.cpp
     http_lib/http_lib_settings.cpp
 
-    api/api_enums.cpp
     )
 
 # This needs to be in the common library until draw_panel_gal is moved to kicommon

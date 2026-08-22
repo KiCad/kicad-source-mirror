@@ -17,11 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <kicommon.h>
 #include <api/api_enums.h>
 #include <core/mirror.h>
 #include "pad.h"
 
-#include <import_export.h>
 #include <api/common/types/base_types.pb.h>
 #include <api/board/board_commands.pb.h>
 #include <api/board/board.pb.h>
@@ -44,7 +44,7 @@
 using namespace kiapi;
 using namespace kiapi::common;
 
-template<>
+template<> KICOMMON_API
 KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
 {
     switch( aValue )
@@ -107,7 +107,7 @@ KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
 {
     switch( aValue )
@@ -168,7 +168,7 @@ types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 PCB_LAYER_ID FromProtoEnum( board::types::BoardLayer aValue )
 {
     switch( aValue )
@@ -280,7 +280,7 @@ PCB_LAYER_ID FromProtoEnum( board::types::BoardLayer aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 board::types::BoardLayer ToProtoEnum( PCB_LAYER_ID aValue )
 {
     switch( aValue )
@@ -390,7 +390,7 @@ board::types::BoardLayer ToProtoEnum( PCB_LAYER_ID aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 JOB_PAGE_SIZE FromProtoEnum( schematic::jobs::SchematicJobPageSize aValue )
 {
     switch( aValue )
@@ -406,7 +406,7 @@ JOB_PAGE_SIZE FromProtoEnum( schematic::jobs::SchematicJobPageSize aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 schematic::jobs::SchematicJobPageSize ToProtoEnum( JOB_PAGE_SIZE aValue )
 {
     switch( aValue )
@@ -421,7 +421,7 @@ schematic::jobs::SchematicJobPageSize ToProtoEnum( JOB_PAGE_SIZE aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 JOB_EXPORT_SCH_NETLIST::FORMAT FromProtoEnum( schematic::jobs::SchematicNetlistFormat aValue )
 {
     switch( aValue )
@@ -450,7 +450,7 @@ JOB_EXPORT_SCH_NETLIST::FORMAT FromProtoEnum( schematic::jobs::SchematicNetlistF
 }
 
 
-template<>
+template<> KICOMMON_API
 schematic::jobs::SchematicNetlistFormat ToProtoEnum( JOB_EXPORT_SCH_NETLIST::FORMAT aValue )
 {
     switch( aValue )
@@ -478,7 +478,7 @@ schematic::jobs::SchematicNetlistFormat ToProtoEnum( JOB_EXPORT_SCH_NETLIST::FOR
 }
 
 
-template<>
+template<> KICOMMON_API
 GR_TEXT_H_ALIGN_T FromProtoEnum( types::HorizontalAlignment aValue )
 {
     switch( aValue )
@@ -496,7 +496,7 @@ GR_TEXT_H_ALIGN_T FromProtoEnum( types::HorizontalAlignment aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::HorizontalAlignment ToProtoEnum( GR_TEXT_H_ALIGN_T aValue )
 {
     switch( aValue )
@@ -512,7 +512,7 @@ types::HorizontalAlignment ToProtoEnum( GR_TEXT_H_ALIGN_T aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 GR_TEXT_V_ALIGN_T FromProtoEnum( types::VerticalAlignment aValue )
 {
     switch( aValue )
@@ -530,7 +530,7 @@ GR_TEXT_V_ALIGN_T FromProtoEnum( types::VerticalAlignment aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::VerticalAlignment ToProtoEnum( GR_TEXT_V_ALIGN_T aValue )
 {
     switch( aValue )
@@ -546,7 +546,7 @@ types::VerticalAlignment ToProtoEnum( GR_TEXT_V_ALIGN_T aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 LINE_STYLE FromProtoEnum( types::StrokeLineStyle aValue )
 {
     switch( aValue )
@@ -566,7 +566,7 @@ LINE_STYLE FromProtoEnum( types::StrokeLineStyle aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::StrokeLineStyle ToProtoEnum( LINE_STYLE aValue )
 {
     switch( aValue )
@@ -584,7 +584,7 @@ types::StrokeLineStyle ToProtoEnum( LINE_STYLE aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 FILL_T FromProtoEnum( types::GraphicFillType aValue )
 {
     switch( aValue )
@@ -604,7 +604,7 @@ FILL_T FromProtoEnum( types::GraphicFillType aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::GraphicFillType ToProtoEnum( FILL_T aValue )
 {
     switch( aValue )
@@ -623,7 +623,7 @@ types::GraphicFillType ToProtoEnum( FILL_T aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 ELECTRICAL_PINTYPE FromProtoEnum( types::ElectricalPinType aValue )
 {
     switch( aValue )
@@ -648,7 +648,7 @@ ELECTRICAL_PINTYPE FromProtoEnum( types::ElectricalPinType aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::ElectricalPinType ToProtoEnum( ELECTRICAL_PINTYPE aValue )
 {
     switch( aValue )
@@ -674,7 +674,7 @@ types::ElectricalPinType ToProtoEnum( ELECTRICAL_PINTYPE aValue )
 }
 
 
-template <>
+template<> KICOMMON_API
 PAD_SIM_ELECTRICAL_TYPE FromProtoEnum( board::types::PadSimElectricalType aValue )
 {
     switch( aValue )
@@ -690,7 +690,7 @@ PAD_SIM_ELECTRICAL_TYPE FromProtoEnum( board::types::PadSimElectricalType aValue
 }
 
 
-template <>
+template<> KICOMMON_API
 board::types::PadSimElectricalType ToProtoEnum( PAD_SIM_ELECTRICAL_TYPE aValue )
 {
     switch( aValue )
@@ -706,7 +706,7 @@ board::types::PadSimElectricalType ToProtoEnum( PAD_SIM_ELECTRICAL_TYPE aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::RuleSeverity ToProtoEnum( SEVERITY aValue )
 {
     switch( aValue )
@@ -726,7 +726,7 @@ types::RuleSeverity ToProtoEnum( SEVERITY aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 SEVERITY FromProtoEnum( types::RuleSeverity aValue )
 {
     switch( aValue )
@@ -745,7 +745,7 @@ SEVERITY FromProtoEnum( types::RuleSeverity aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 PAGE_SIZE_TYPE FromProtoEnum( types::PageSize aValue )
 {
     switch( aValue )
@@ -775,7 +775,7 @@ PAGE_SIZE_TYPE FromProtoEnum( types::PageSize aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 types::PageSize ToProtoEnum( PAGE_SIZE_TYPE aValue )
 {
     switch( aValue )
@@ -803,7 +803,7 @@ types::PageSize ToProtoEnum( PAGE_SIZE_TYPE aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 FLIP_DIRECTION FromProtoEnum( board::commands::BoardFlipDirection aValue )
 {
     switch( aValue )
@@ -817,7 +817,7 @@ FLIP_DIRECTION FromProtoEnum( board::commands::BoardFlipDirection aValue )
 }
 
 
-template<>
+template<> KICOMMON_API
 board::commands::BoardFlipDirection ToProtoEnum( FLIP_DIRECTION aValue )
 {
     switch( aValue )
