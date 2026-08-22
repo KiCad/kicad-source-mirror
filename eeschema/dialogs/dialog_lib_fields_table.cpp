@@ -404,18 +404,6 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataToWindow()
 
     BOM_PRESET preset = m_cfgBomSettings.m_BomSettings;
 
-    if( preset.fieldsOrdered.empty() )
-    {
-        for( const BOM_PRESET& builtIn : getBuiltInBomPresets() )
-        {
-            if( builtIn.name == BOM_PRESET::DefaultEditing().name )
-            {
-                preset = builtIn;
-                break;
-            }
-        }
-    }
-
     ApplyBomPreset( preset );
     syncBomPresetSelection();
 

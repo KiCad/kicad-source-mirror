@@ -1236,8 +1236,22 @@ void DIALOG_FIELDS_TABLE::ApplyBomPreset( const wxString& aPresetName )
 
 void DIALOG_FIELDS_TABLE::ApplyBomPreset( const BOM_PRESET& aPreset )
 {
-    if( m_bomPresets.count( aPreset.name ) )
-        m_currentBomPreset = &m_bomPresets[aPreset.name];
+    BOM_PRESET preset = aPreset;
+
+    if( preset.fieldsOrdered.empty() )
+    {
+        for( const BOM_PRESET& builtIn : getBuiltInBomPresets() )
+        {
+            if( builtIn.name == BOM_PRESET::DefaultEditing().name )
+            {
+                preset = builtIn;
+                break;
+            }
+        }
+    }
+
+    if( m_bomPresets.count( preset.name ) )
+        m_currentBomPreset = &m_bomPresets[preset.name];
     else
         m_currentBomPreset = nullptr;
 
@@ -1246,8 +1260,8 @@ void DIALOG_FIELDS_TABLE::ApplyBomPreset( const BOM_PRESET& aPreset )
     else
         m_lastSelectedBomPreset = nullptr;
 
-    updateBomPresetSelection( aPreset.name );
-    doApplyBomPreset( aPreset );
+    updateBomPresetSelection( preset.name );
+    doApplyBomPreset( preset );
 }
 
 
