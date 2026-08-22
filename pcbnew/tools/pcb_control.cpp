@@ -298,18 +298,15 @@ void PCB_CONTROL::unfilledZoneCheck()
 
     if( unfilledZones )
     {
-        WX_INFOBAR*      infobar = m_frame->GetInfoBar();
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Don't show again" ), wxEmptyString );
+        WX_INFOBAR* infobar = m_frame->GetInfoBar();
 
-        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+        infobar->RemoveAllButtons();
+        infobar->AddLink( _( "Don't show again" ),
                 [&]( wxHyperlinkEvent& aEvent )
                 {
                     Pgm().GetCommonSettings()->m_DoNotShowAgain.zone_fill_warning = true;
                     m_frame->GetInfoBar()->Dismiss();
-                } ) );
-
-        infobar->RemoveAllButtons();
-        infobar->AddButton( button );
+                } );
 
         wxString msg;
         msg.Printf( _( "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see all fills." ),

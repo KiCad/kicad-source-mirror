@@ -299,21 +299,16 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
 
     if( m_frame->SynchronizePins() )
     {
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY, _( "Exit sync pins mode" ),
-                                                       wxEmptyString );
-
-        button->Bind( wxEVT_COMMAND_HYPERLINK,
-                      std::function<void( wxHyperlinkEvent& aEvent )>(
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->AddLink( _( "Exit sync pins mode" ),
                       [&]( wxHyperlinkEvent& aEvent )
                       {
                           if( SYMBOL_EDITOR_SETTINGS* cfg = m_frame->GetSettings() )
                               cfg->m_SyncPinEdit = !cfg->m_SyncPinEdit;
 
                           m_infoBar->Dismiss();
-                      } ) );
+                      } );
 
-        m_infoBar->RemoveAllButtons();
-        m_infoBar->AddButton( button );
         m_infoBar->ShowMessage( getSyncPinsMessage() );
 
         commonUnitsToolTip = _( "Synchronized pins mode is enabled.\n"

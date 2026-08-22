@@ -820,26 +820,20 @@ void FOOTPRINT_EDIT_FRAME::updateInfoBar()
                 }
 
                 wxString libName = fp->GetFPID().GetLibNickname();
-                wxString msg, link;
+                wxString msg;
 
                 if( notice == EDIT_NOTICE::FROM_BOARD )
                 {
                     msg.Printf( _( "Editing %s from board.  Saving will update the board only." ), fp->GetReference() );
-                    link.Printf( _( "Open in library %s" ), UnescapeString( libName ) );
-
-                    const auto openLibraryCopy =
-                            [this]( wxHyperlinkEvent& aEvent )
-                            {
-                                GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
-                            };
 
                     if( WX_INFOBAR* infobar = GetInfoBar() )
                     {
-                        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
-                        button->Bind( wxEVT_COMMAND_HYPERLINK, openLibraryCopy );
-
                         infobar->RemoveAllButtons();
-                        infobar->AddButton( button );
+                        infobar->AddLink( wxString::Format( _( "Open in library %s" ), UnescapeString( libName ) ),
+                                [this]( wxHyperlinkEvent& aEvent )
+                                {
+                                    GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
+                                } );
                         infobar->AddCloseButton();
                         infobar->ShowMessage( msg, wxICON_INFORMATION );
                     }
@@ -850,9 +844,8 @@ void FOOTPRINT_EDIT_FRAME::updateInfoBar()
 
                     if( WX_INFOBAR* infobar = GetInfoBar() )
                     {
-                        link = _( "Save as editable copy" );
-
-                        const auto saveAsEditableCopy =
+                        infobar->RemoveAllButtons();
+                        infobar->AddLink( _( "Save as editable copy" ),
                                 [this]( wxHyperlinkEvent& aEvent )
                                 {
                                     SaveFootprintAs( GetBoard()->GetFirstFootprint() );
@@ -867,13 +860,7 @@ void FOOTPRINT_EDIT_FRAME::updateInfoBar()
 
                                     GetCanvas()->ForceRefresh();
                                     SyncLibraryTree( true );
-                                };
-
-                        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
-                        button->Bind( wxEVT_COMMAND_HYPERLINK, saveAsEditableCopy );
-
-                        infobar->RemoveAllButtons();
-                        infobar->AddButton( button );
+                                } );
                         infobar->AddCloseButton();
                         infobar->ShowMessage( msg, wxICON_INFORMATION );
                     }

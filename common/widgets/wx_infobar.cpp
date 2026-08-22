@@ -398,13 +398,14 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
 }
 
 
-void WX_INFOBAR::AddButton( wxHyperlinkCtrl* aHypertextButton )
+void WX_INFOBAR::AddLink(const wxString& aLinkText, const std::function<void(wxHyperlinkEvent&)>& aFn )
 {
-    wxSizer* sizer = GetSizer();
+    wxSizer*         sizer = GetSizer();
+    wxHyperlinkCtrl* button = new wxHyperlinkCtrl( this, wxID_ANY, aLinkText, wxEmptyString );
 
-    wxASSERT( aHypertextButton );
+    button->Bind( wxEVT_COMMAND_HYPERLINK, aFn );
 
-    sizer->Add( aHypertextButton, wxSizerFlags().Centre().Border( wxRIGHT ).Shaped() );
+    sizer->Add( button, wxSizerFlags().Centre().Border( wxRIGHT ).Shaped() );
 
     if( IsShownOnScreen() )
     {

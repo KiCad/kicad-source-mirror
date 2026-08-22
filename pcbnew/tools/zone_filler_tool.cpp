@@ -205,17 +205,13 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     if( !aHeadless && !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
     {
         WX_INFOBAR* infobar = frame->GetInfoBar();
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show DRC rules" ), wxEmptyString );
 
-        button->Bind( wxEVT_COMMAND_HYPERLINK,
-                      std::function<void( wxHyperlinkEvent& aEvent )>(
+        infobar->RemoveAllButtons();
+        infobar->AddLink( _( "Show DRC rules" ),
                       [frame]( wxHyperlinkEvent& aEvent )
                       {
                           frame->ShowBoardSetupDialog( _( "Rules" ) );
-                      } ) );
-
-        infobar->RemoveAllButtons();
-        infobar->AddButton( button );
+                      } );
 
         infobar->ShowMessageFor( _( "Zone fills may be inaccurate.  DRC rules contain errors." ), 10000,
                                  wxICON_WARNING );
@@ -301,17 +297,14 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     if( !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
     {
         WX_INFOBAR* infobar = frame->GetInfoBar();
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show DRC rules" ), wxEmptyString );
 
-        button->Bind( wxEVT_COMMAND_HYPERLINK,
-                      std::function<void( wxHyperlinkEvent& aLocEvent )>(
+        infobar->RemoveAllButtons();
+
+        infobar->AddLink( _( "Show DRC rules" ),
                       [frame]( wxHyperlinkEvent& aLocEvent )
                       {
                           frame->ShowBoardSetupDialog( _( "Rules" ) );
-                      } ) );
-
-        infobar->RemoveAllButtons();
-        infobar->AddButton( button );
+                      } );
 
         infobar->ShowMessageFor( _( "Zone fills may be inaccurate.  DRC rules contain errors." ), 10000,
                                  wxICON_WARNING );
@@ -360,17 +353,13 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     {
         WX_INFOBAR* infobar = frame->GetInfoBar();
 
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Open Preferences" ),
-                                                       wxEmptyString );
-
-        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& )>(
+        infobar->RemoveAllButtons();
+        infobar->AddLink( _( "Open Preferences" ),
                 [this]( wxHyperlinkEvent& )
                 {
                     getEditFrame<PCB_EDIT_FRAME>()->ShowPreferences( _( "Editing Options" ), _( "PCB Editor" ) );
-                } ) );
+                } );
 
-        infobar->RemoveAllButtons();
-        infobar->AddButton( button );
         infobar->ShowMessageFor( _( "Automatic refill of zones can be turned off in Preferences if it becomes "
                                     "too slow." ),
                                  10000, wxICON_INFORMATION, WX_INFOBAR::MESSAGE_TYPE::GENERIC );

@@ -2112,10 +2112,8 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
                                         unresolved );
             }
 
-            wxHyperlinkCtrl* link = new wxHyperlinkCtrl( m_loadNoticeInfoBar, wxID_ANY, _( "Show options" ),
-                                                         wxEmptyString );
-
-            link->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& )>(
+            m_loadNoticeInfoBar->RemoveAllButtons();
+            m_loadNoticeInfoBar->AddLink( _( "Show options" ),
                     [this]( wxHyperlinkEvent& )
                     {
                         DIALOG_MIGRATE_3D_MODELS dlg( this );
@@ -2125,10 +2123,7 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
                         // otherwise leave it so the user can try again.
                         if( DIALOG_MIGRATE_3D_MODELS::CountUnresolvedWrlReferences( this ) == 0 )
                             m_loadNoticeInfoBar->Dismiss();
-                    } ) );
-
-            m_loadNoticeInfoBar->RemoveAllButtons();
-            m_loadNoticeInfoBar->AddButton( link );
+                    } );
             m_loadNoticeInfoBar->AddCloseButton();
             m_loadNoticeInfoBar->ShowMessageFor( msg, 10000, wxICON_INFORMATION );
         }
@@ -2677,16 +2672,12 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( int aFlags )
     }
     catch( PARSE_ERROR& )
     {
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Edit design rules" ), wxEmptyString );
-
-        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+        infobar->RemoveAllButtons();
+        infobar->AddLink( _( "Edit design rules" ),
                 [&]( wxHyperlinkEvent& aEvent )
                 {
                     ShowBoardSetupDialog( _( "Custom Rules" ) );
-                } ) );
-
-        infobar->RemoveAllButtons();
-        infobar->AddButton( button );
+                } );
         infobar->AddCloseButton();
         infobar->ShowMessage( _( "Could not compile custom design rules." ), wxICON_ERROR,
                               WX_INFOBAR::MESSAGE_TYPE::DRC_RULES_ERROR );

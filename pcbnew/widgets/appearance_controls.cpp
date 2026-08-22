@@ -3643,16 +3643,12 @@ void APPEARANCE_CONTROLS::onReadOnlySwatch()
 {
     WX_INFOBAR* infobar = m_frame->GetInfoBar();
 
-    wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Open Preferences" ), wxEmptyString );
-
-    button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+    infobar->RemoveAllButtons();
+    infobar->AddLink( _( "Open Preferences" ),
             [&]( wxHyperlinkEvent& aEvent )
             {
                  m_frame->ShowPreferences( wxEmptyString, wxEmptyString );
-            } ) );
-
-    infobar->RemoveAllButtons();
-    infobar->AddButton( button );
+            } );
     infobar->AddCloseButton();
 
     infobar->ShowMessageFor( _( "The current color theme is read-only.  Create a new theme in Preferences to "

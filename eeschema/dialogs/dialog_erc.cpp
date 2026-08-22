@@ -188,18 +188,14 @@ void DIALOG_ERC::UpdateAnnotationWarning()
     {
         if( !m_infoBar->IsShownOnScreen() )
         {
-            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY, _( "Show Annotation dialog" ),
-                                                           wxEmptyString );
-
-            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddLink( _( "Show Annotation dialog" ),
                           [&]( wxHyperlinkEvent& aEvent )
                           {
                               wxHtmlLinkEvent htmlEvent( aEvent.GetId(), wxHtmlLinkInfo( aEvent.GetURL() ) );
                               OnLinkClicked( htmlEvent );
-                          } ) );
+                          } );
 
-            m_infoBar->RemoveAllButtons();
-            m_infoBar->AddButton( button );
             m_infoBar->ShowMessage( _( "Schematic is not fully annotated. ERC results will be incomplete." ) );
         }
     }

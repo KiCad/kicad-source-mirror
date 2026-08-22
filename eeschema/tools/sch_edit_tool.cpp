@@ -2944,16 +2944,11 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             if( !frame()->GetPropertiesPanel()->IsShownOnScreen() )
             {
-                wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show Properties panel" ),
-                                                               wxEmptyString );
-
-                button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                infobar->AddLink( _( "Show Properties panel" ),
                         [this]( wxHyperlinkEvent& aEvent )
                         {
                             frame()->ToggleProperties();
-                        } ) );
-
-                infobar->AddButton( button );
+                        } );
             }
 
             infobar->AddCloseButton();

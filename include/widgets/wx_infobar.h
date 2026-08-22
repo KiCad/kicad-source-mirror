@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef INFOBAR_H_
-#define INFOBAR_H_
+#pragma once
 
 #include <functional>
 #include <optional>
@@ -30,6 +29,7 @@
 #include <wx/sizer.h>
 #include <reporter.h>
 #include <widgets/wx_infobar_message_type.h>
+#include <wx/hyperlink.h>
 
 
 class wxAuiManager;
@@ -119,12 +119,12 @@ public:
     void AddButton( wxButton* aButton );
 
     /**
-     * Add an already created hypertext link to the infobar.
-     * New buttons are added in the right-most position.
+     * Add a hypertext link to the infobar.  Link is added in the right-most position.
      *
-     * @param aHypertextButton is the button to add
+     * @param aLinkText is the text to show
+     * @param aFn is the function to execute if the link is clicked
      */
-    void AddButton( wxHyperlinkCtrl* aHypertextButton );
+    void AddLink( const wxString& aLinkText, const std::function<void( wxHyperlinkEvent& )>& aFn );
 
     /**
      * Add a button with the provided ID and text.
@@ -349,4 +349,3 @@ private:
     std::unique_ptr<wxString> m_message;
     SEVERITY                  m_severity;
 };
-#endif // INFOBAR_H_

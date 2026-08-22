@@ -993,33 +993,22 @@ void SYMBOL_EDIT_FRAME::updateInfoBar()
                                                          "update the schematic only." ),
                                                       m_reference ) );
 
-                    wxString         link = wxString::Format( _( "Open symbol from library %s" ),
-                                                              UnescapeString( libName ) );
-                    wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
-
-                    button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                    infobar.AddLink( wxString::Format( _( "Open symbol from library %s" ), UnescapeString( libName ) ),
                             [this]( wxHyperlinkEvent& aEvent )
                             {
                                 GetToolManager()->RunAction( SCH_ACTIONS::editLibSymbolWithLibEdit );
-                            } ) );
-
-                    infobar.AddButton( button );
+                            } );
                 }
                 else if( IsSymbolFromLegacyLibrary() )
                 {
                     msgs.push_back( _( "Symbols in legacy libraries are not editable.  Use Manage Symbol "
                                        "Libraries to migrate to current format." ) );
 
-                    wxString         link = _( "Manage symbol libraries" );
-                    wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
-
-                    button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                    infobar.AddLink( _( "Manage symbol libraries" ),
                             [this]( wxHyperlinkEvent& aEvent )
                             {
                                 InvokeSchEditSymbolLibTable( &Kiway(), this );
-                            } ) );
-
-                    infobar.AddButton( button );
+                            } );
                 }
                 else if( IsSymbolAlias() )
                 {
@@ -1033,17 +1022,12 @@ void SYMBOL_EDIT_FRAME::updateInfoBar()
                         int      unit = GetUnit();
                         int      bodyStyle = GetBodyStyle();
                         wxString rootSymbolName = rootSymbol->GetName();
-                        wxString link = wxString::Format( _( "Open %s" ), UnescapeString( rootSymbolName ) );
 
-                        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
-
-                        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                        infobar.AddLink( wxString::Format( _( "Open %s" ), UnescapeString( rootSymbolName ) ),
                                 [this, libName, rootSymbolName, unit, bodyStyle]( wxHyperlinkEvent& aEvent )
                                 {
                                     LoadSymbolFromLib( libName, rootSymbolName, unit, bodyStyle );
-                                } ) );
-
-                        infobar.AddButton( button );
+                                } );
                     }
                 }
 
@@ -1053,10 +1037,7 @@ void SYMBOL_EDIT_FRAME::updateInfoBar()
                 {
                     msgs.push_back( _( "Library is read-only.  Changes cannot be saved to this library." ) );
 
-                    wxString         link = wxString::Format( _( "Create an editable copy" ) );
-                    wxHyperlinkCtrl* button = new wxHyperlinkCtrl( &infobar, wxID_ANY, link, wxEmptyString );
-
-                    button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                    infobar.AddLink( _( "Create an editable copy" ),
                             [this, libName]( wxHyperlinkEvent& aEvent )
                             {
                                 wxString msg = wxString::Format( _( "Create an editable copy of the symbol or "
@@ -1082,9 +1063,7 @@ void SYMBOL_EDIT_FRAME::updateInfoBar()
                                     // Do nothing
                                     break;
                                 }
-                            } ) );
-
-                    infobar.AddButton( button );
+                            } );
                 }
 
                 if( msgs.empty() )
