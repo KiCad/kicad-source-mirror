@@ -35,6 +35,7 @@
 #include <generators/pcb_via_stitch.h>
 #include <netinfo.h>
 #include <pcb_track.h>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <zone.h>
 
@@ -324,37 +325,13 @@ BOOST_AUTO_TEST_CASE( NegativeGridCellsRoundTrip )
 }
 
 
-// Build a board with a GND pour on both outer layers, filled, plus a stitch generator
-// ready to Update()
-struct STITCH_UPDATE_FIXTURE
+// Shared plumbing for driving a stitch generator through Update().  Derived fixtures supply
+// the board and point m_stitch at the generator sitting on it.
+struct STITCH_FIXTURE_BASE
 {
-    STITCH_UPDATE_FIXTURE()
+    /// The BOARD_COMMITs in regenerate() need a tool to hang off.
+    void attachToolManager()
     {
-        m_board = std::make_unique<BOARD>();
-        m_board->Add( new NETINFO_ITEM( m_board.get(), wxT( "GND" ), 1 ) );
-
-        auto drcEngine =
-                std::make_shared<DRC_ENGINE>( m_board.get(), &m_board->GetDesignSettings() );
-        drcEngine->InitEngine( wxFileName() );
-        m_board->GetDesignSettings().m_DRCEngine = drcEngine;
-
-        ZONE* zone = new ZONE( m_board.get() );
-        zone->SetLayerSet( LSET( { F_Cu, B_Cu } ) );
-        zone->SetNetCode( 1 );
-        zone->Outline()->NewOutline();
-        zone->Outline()->Append( 0, 0 );
-        zone->Outline()->Append( pcbIUScale.mmToIU( 20 ), 0 );
-        zone->Outline()->Append( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) );
-        zone->Outline()->Append( 0, pcbIUScale.mmToIU( 20 ) );
-        m_board->Add( zone );
-
-        KI_TEST::FillZones( m_board.get() );
-
-        m_stitch = new PCB_VIA_STITCH();
-        m_board->Add( m_stitch );
-        configureStitch( m_stitch );
-        m_stitch->SetLayout( PCB_VIA_STITCH_LAYOUT::PLAIN );
-
         m_toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
         m_dummyTool = new KI_TEST::DUMMY_TOOL();
         m_toolMgr.RegisterTool( m_dummyTool );
@@ -401,6 +378,119 @@ struct STITCH_UPDATE_FIXTURE
     PCB_VIA_STITCH*         m_stitch = nullptr;
     TOOL_MANAGER            m_toolMgr;
     KI_TEST::DUMMY_TOOL*    m_dummyTool = nullptr;
+};
+
+
+// An empty board with a GND net and a live DRC engine.  Derived fixtures pour the copper they
+// need, then call finishSetup() to fill it and attach a stitch generator.
+struct STITCH_SYNTHETIC_FIXTURE : public STITCH_FIXTURE_BASE
+{
+    STITCH_SYNTHETIC_FIXTURE()
+    {
+        m_board = std::make_unique<BOARD>();
+        m_board->Add( new NETINFO_ITEM( m_board.get(), wxT( "GND" ), 1 ) );
+
+        auto drcEngine =
+                std::make_shared<DRC_ENGINE>( m_board.get(), &m_board->GetDesignSettings() );
+        drcEngine->InitEngine( wxFileName() );
+        m_board->GetDesignSettings().m_DRCEngine = drcEngine;
+    }
+
+    /// Add a full-height GND pour on aLayers, spanning x from aLeft to aRight.
+    void addGndZone( const LSET& aLayers, int aLeft, int aRight )
+    {
+        ZONE* zone = new ZONE( m_board.get() );
+        zone->SetLayerSet( aLayers );
+        zone->SetNetCode( 1 );
+        zone->Outline()->NewOutline();
+        zone->Outline()->Append( aLeft, 0 );
+        zone->Outline()->Append( aRight, 0 );
+        zone->Outline()->Append( aRight, pcbIUScale.mmToIU( 20 ) );
+        zone->Outline()->Append( aLeft, pcbIUScale.mmToIU( 20 ) );
+        m_board->Add( zone );
+    }
+
+    /// Fill the poured zones and attach a stitch generator ready to Update().
+    void finishSetup()
+    {
+        KI_TEST::FillZones( m_board.get() );
+
+        m_stitch = new PCB_VIA_STITCH();
+        m_board->Add( m_stitch );
+        configureStitch( m_stitch );
+        m_stitch->SetLayout( PCB_VIA_STITCH_LAYOUT::PLAIN );
+
+        attachToolManager();
+    }
+};
+
+
+// A GND pour on both outer layers, covering the whole board
+struct STITCH_UPDATE_FIXTURE : public STITCH_SYNTHETIC_FIXTURE
+{
+    STITCH_UPDATE_FIXTURE()
+    {
+        addGndZone( LSET( { F_Cu, B_Cu } ), 0, pcbIUScale.mmToIU( 20 ) );
+        finishSetup();
+    }
+};
+
+
+// A 4-layer board whose two inner planes cover everything, with an F_Cu pour that only
+// reaches the left half of them
+struct STITCH_PARTIAL_LAYER_FIXTURE : public STITCH_SYNTHETIC_FIXTURE
+{
+    STITCH_PARTIAL_LAYER_FIXTURE()
+    {
+        m_board->SetCopperLayerCount( 4 );
+        m_board->GetDesignSettings().SetCopperLayerCount( 4 );
+        m_board->SetEnabledLayers( m_board->GetEnabledLayers() | LSET::AllCuMask( 4 ) );
+
+        addGndZone( LSET( { In1_Cu, In2_Cu } ), 0, pcbIUScale.mmToIU( 20 ) );
+        addGndZone( LSET( { F_Cu } ), 0, pcbIUScale.mmToIU( 10 ) );
+
+        finishSetup();
+    }
+};
+
+
+// Loads a saved board out of qa/data/pcbnew and picks up the via-stitch generator on it, so a
+// real design's zones, netclasses and design settings drive the placement.
+struct STITCH_BOARD_FIXTURE : public STITCH_FIXTURE_BASE
+{
+    ~STITCH_BOARD_FIXTURE()
+    {
+        // The board borrows the project owned by m_settingsManager, which is destroyed right
+        // after this body runs.
+        if( m_board )
+        {
+            m_board->SetProject( nullptr );
+            m_board = nullptr;
+        }
+    }
+
+    void loadBoard( const wxString& aRelPath )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, aRelPath, m_board );
+        BOOST_REQUIRE( m_board );
+
+        KI_TEST::FillZones( m_board.get() );
+
+        for( PCB_GENERATOR* generator : m_board->Generators() )
+        {
+            if( PCB_VIA_STITCH* stitch = dynamic_cast<PCB_VIA_STITCH*>( generator ) )
+            {
+                BOOST_REQUIRE_MESSAGE( !m_stitch, "more than one stitch generator on the board" );
+                m_stitch = stitch;
+            }
+        }
+
+        BOOST_REQUIRE_MESSAGE( m_stitch, "no via-stitch generator on the board" );
+
+        attachToolManager();
+    }
+
+    SETTINGS_MANAGER m_settingsManager;
 };
 
 
@@ -601,6 +691,86 @@ BOOST_FIXTURE_TEST_CASE( ClearAllExclusionsRestoresEveryVia, STITCH_UPDATE_FIXTU
         }
 
         BOOST_CHECK( found );
+    }
+}
+
+// A via needs same-net copper on two of the layers it spans, not on every one of them.  The
+// two inner planes overlap across the whole stitch outline and must be stitched to each other
+// everywhere, including the right half that the F_Cu pour doesn't reach.
+BOOST_FIXTURE_TEST_CASE( PartialOuterPourStillStitchesInnerPlanes, STITCH_PARTIAL_LAYER_FIXTURE )
+{
+    regenerate();
+
+    std::set<VECTOR2I> positions = childViaPositions();
+    BOOST_REQUIRE_GT( positions.size(), 10 );
+
+    bool overThreeLayers = false;   // F_Cu plus both planes
+    bool overTwoLayers = false;     // the planes alone
+
+    for( const VECTOR2I& pos : positions )
+    {
+        if( pos.x < pcbIUScale.mmToIU( 8 ) )
+            overThreeLayers = true;
+        else if( pos.x > pcbIUScale.mmToIU( 12 ) )
+            overTwoLayers = true;
+    }
+
+    BOOST_CHECK( overThreeLayers );
+    BOOST_CHECK_MESSAGE( overTwoLayers,
+                         "no vias placed where only the two inner planes overlap" );
+}
+
+
+// The same partial-coverage case on a real board (issue 25303): GND on both inner planes
+// across the whole area, a small GND pour on F.Cu, and a stitch outline running well past the
+// right edge of that pour.  The stitching has to carry on across the inner planes alone.
+BOOST_FIXTURE_TEST_CASE( PartialTopPourStillStitchesInnerPlanes, STITCH_BOARD_FIXTURE )
+{
+    loadBoard( wxT( "issue25303" ) );
+
+    // The saved board carries the generator but none of its vias
+    BOOST_REQUIRE( childViaPositions().empty() );
+
+    regenerate();
+
+    std::set<VECTOR2I> positions = childViaPositions();
+    BOOST_REQUIRE_GT( positions.size(), 100 );
+
+    // The F.Cu pour runs stops at about x = 107mm; the inner planes and the stitch outline both
+    // carry on past x = 124mm.
+    const int pourEdge = pcbIUScale.mmToIU( 107 );
+
+    int underPour = 0;
+    int beyondPour = 0;
+    int maxX = INT_MIN;
+
+    for( const VECTOR2I& pos : positions )
+    {
+        if( pos.x < pourEdge )
+            underPour++;
+        else
+            beyondPour++;
+
+        maxX = std::max( maxX, pos.x );
+    }
+
+    BOOST_CHECK_GT( underPour, 20 );
+    BOOST_CHECK_MESSAGE( beyondPour > 20, "stitching stopped at the edge of the F.Cu pour" );
+
+    // ...and it has to reach the far side of the outline, not just spill over the pour edge
+    BOOST_CHECK_GT( maxX, pcbIUScale.mmToIU( 122 ) );
+
+    // Every via belongs to the stitch net and sits inside the outline
+    const SHAPE_POLY_SET& outline = m_stitch->Outline();
+
+    for( BOARD_ITEM* item : m_stitch->GetBoardItems() )
+    {
+        BOOST_REQUIRE_EQUAL( item->Type(), PCB_VIA_T );
+
+        PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+        BOOST_CHECK_EQUAL( via->GetNetCode(), m_stitch->GetNetCode() );
+        BOOST_CHECK( outline.Contains( via->GetPosition() ) );
     }
 }
 

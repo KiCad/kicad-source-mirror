@@ -890,11 +890,21 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
     if( viaLayerFills.size() < 2 )
         return cells;
 
-    // Now build an intersecting region where we can place vias that stitch more than 1 layer
-    SHAPE_POLY_SET allowedRegion = *viaLayerFills[0];
+    // Now build the region where a via would stitch at least two layers together. 
+    SHAPE_POLY_SET allowedRegion;
+    SHAPE_POLY_SET coveredSoFar = *viaLayerFills[0];
 
     for( size_t i = 1; i < viaLayerFills.size(); ++i )
-        allowedRegion.BooleanIntersection( *viaLayerFills[i] );
+    {
+        SHAPE_POLY_SET overlap = *viaLayerFills[i];
+        overlap.BooleanIntersection( coveredSoFar );
+
+        if( !overlap.IsEmpty() )
+            allowedRegion.BooleanAdd( overlap );
+
+        if( i + 1 < viaLayerFills.size() )
+            coveredSoFar.BooleanAdd( *viaLayerFills[i] );
+    }
 
     if( allowedRegion.OutlineCount() == 0 )
         return cells;
