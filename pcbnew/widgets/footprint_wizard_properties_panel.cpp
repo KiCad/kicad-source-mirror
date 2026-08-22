@@ -177,7 +177,20 @@ wxPGProperty* FOOTPRINT_WIZARD_PROPERTIES_PANEL::createPGProperty( WIZARD_PARAME
         ret = new PGPROPERTY_BOOL();
         break;
 
-    // TODO(JE) consider supporting enum properties
+    case kiapi::common::types::WPDT_ENUM:
+    {
+        if( auto param = dynamic_cast<const WIZARD_ENUM_PARAMETER*>( aParam ) )
+        {
+            wxPGChoices pgChoices;
+
+            for( size_t i = 0; i < param->choices.size(); ++i )
+                pgChoices.Add( wxGetTranslation( param->choices[i].second ), static_cast<int>( i ) );
+
+            ret = new wxEnumProperty( wxPG_LABEL, wxPG_LABEL, pgChoices );
+        }
+
+        break;
+    }
 
     case kiapi::common::types::WPDT_UNKNOWN:
     default:
@@ -199,6 +212,8 @@ wxPGProperty* FOOTPRINT_WIZARD_PROPERTIES_PANEL::createPGProperty( WIZARD_PARAME
             ret->SetValue( bp->value );
         else if( auto sp = dynamic_cast<const WIZARD_STRING_PARAMETER*>( aParam ) )
             ret->SetValue( sp->value );
+        else if( auto ep = dynamic_cast<const WIZARD_ENUM_PARAMETER*>( aParam ) )
+            ret->SetValue( ep->value );
     }
 
     return ret;
@@ -349,6 +364,10 @@ void FOOTPRINT_WIZARD_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEven
     else if( WIZARD_STRING_PARAMETER* sp = dynamic_cast<WIZARD_STRING_PARAMETER*>( param ) )
     {
         sp->value = newValue.As<wxString>();
+    }
+    else if( WIZARD_ENUM_PARAMETER* ep = dynamic_cast<WIZARD_ENUM_PARAMETER*>( param ) )
+    {
+        ep->value = newValue.As<int>();
     }
 
     m_frame->OnWizardParametersChanged();

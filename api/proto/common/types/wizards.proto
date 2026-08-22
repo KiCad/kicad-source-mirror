@@ -41,7 +41,7 @@ enum WizardParameterDataType
   WPDT_INTEGER = 7;   // int32 (quantity, etc)
   WPDT_REAL = 8;      // double value
   WPDT_BOOL = 9;      // boolean flag
-  // TODO(JE) consider supporting enums
+  WPDT_ENUM = 10;     // single choice from a list of options
 }
 
 enum WizardParameterCategory
@@ -86,6 +86,25 @@ message WizardStringParameter
   optional string validation_regex = 3;
 }
 
+message WizardEnumChoice
+{
+  // Internal identifier for this choice; must be unique within an enum
+  // TODO(JE) is this necessary?
+  string identifier = 1;
+
+  // The human-readable name for this enum choice (may be translated)
+  string label = 2;
+}
+
+message WizardEnumParameter
+{
+  // The currently selected choice (index into choices)
+  int32 value = 1;
+  int32 default = 2;
+
+  repeated WizardEnumChoice choices = 3;
+}
+
 message WizardParameterList
 {
   repeated WizardParameter parameters = 1;
@@ -109,6 +128,7 @@ message WizardParameter
     WizardRealParameter real = 7;
     WizardBoolParameter bool = 8;
     WizardStringParameter string = 9;
+    WizardEnumParameter enum = 10;
   }
 }
 

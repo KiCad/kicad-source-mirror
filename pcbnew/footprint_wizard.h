@@ -122,6 +122,21 @@ public:
     void FromProto( const kiapi::common::types::WizardStringParameter& aProto );
 };
 
+class WIZARD_ENUM_PARAMETER : public WIZARD_PARAMETER
+{
+public:
+    void Reset() override { value = default_value; }
+    kiapi::common::types::WizardParameter Pack( bool aCompact = true ) override;
+
+    int value = 0;
+    int default_value = 0;
+
+    /// pair<identifier, label>
+    std::vector<std::pair<wxString, wxString>> choices;
+
+    void FromProto( const kiapi::common::types::WizardEnumParameter& aProto );
+};
+
 // Wrapper for WizardInfo protobuf
 struct WIZARD_INFO
 {
