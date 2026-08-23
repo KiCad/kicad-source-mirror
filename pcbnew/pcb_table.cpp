@@ -25,6 +25,7 @@
 #include <footprint.h>
 #include <pcb_table.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
@@ -34,6 +35,10 @@
 #include <view/view.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/api_pcb_utils.h>
+#include <api/board/board_types.pb.h>
 
 
 PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
@@ -45,6 +50,12 @@ PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
         m_strokeColumns( true ),
         m_separatorsStroke( aLineWidth, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_colCount( 0 )
+{
+}
+
+
+PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent ) :
+        PCB_TABLE( aParent, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) )
 {
 }
 
@@ -73,6 +84,108 @@ PCB_TABLE::~PCB_TABLE()
     // We own our cells; delete them
     for( PCB_TABLECELL* cell : m_cells )
         delete cell;
+}
+
+
+void PCB_TABLE::Serialize( google::protobuf::Any& aContainer ) const
+{
+    using namespace kiapi::board;
+    types::Table table;
+
+    table.mutable_id()->set_value( m_Uuid.AsStdString() );
+    table.set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( GetLayer() ) );
+    table.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
+                                 : kiapi::common::types::LockedState::LS_UNLOCKED );
+
+    table.set_column_count( m_colCount );
+
+    for( int col = 0; col < m_colCount; ++col )
+        table.add_column_widths( GetColWidth( col ) );
+
+    for( int row = 0; row < GetRowCount(); ++row )
+        table.add_row_heights( GetRowHeight( row ) );
+
+    for( const PCB_TABLECELL* cell : m_cells )
+    {
+        google::protobuf::Any cellAny;
+        cell->Serialize( cellAny );
+
+        types::TableCell* tableCell = table.add_cells();
+        cellAny.UnpackTo( tableCell );
+    }
+
+    table.set_external_border( m_strokeExternal ? types::TSM_ENABLED : types::TSM_DISABLED );
+    table.set_header_separator( m_StrokeHeaderSeparator ? types::TSM_ENABLED : types::TSM_DISABLED );
+    kiapi::common::PackStroke( *table.mutable_border_stroke(), m_borderStroke );
+
+    table.set_row_separators( m_strokeRows ? types::TSM_ENABLED : types::TSM_DISABLED );
+    table.set_column_separators( m_strokeColumns ? types::TSM_ENABLED : types::TSM_DISABLED );
+    kiapi::common::PackStroke( *table.mutable_separators_stroke(), m_separatorsStroke );
+
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        table.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
+        table.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
+    aContainer.PackFrom( table );
+}
+
+
+bool PCB_TABLE::Deserialize( const google::protobuf::Any& aContainer )
+{
+    using namespace kiapi::board;
+    types::Table table;
+
+    if( !aContainer.UnpackTo( &table ) )
+        return false;
+
+    SetUuidDirect( KIID( table.id().value() ) );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( table.layer() ) );
+    SetLocked( table.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+
+    ClearCells();
+    m_colWidths.clear();
+    m_rowHeights.clear();
+
+    SetColCount( table.column_count() );
+
+    for( int i = 0; i < table.column_widths_size() && i < table.column_count(); ++i )
+        SetColWidth( i, table.column_widths( i ) );
+
+    for( const types::TableCell& protoCell : table.cells() )
+    {
+        PCB_TABLECELL* cell = new PCB_TABLECELL( this );
+
+        google::protobuf::Any cellAny;
+        cellAny.PackFrom( protoCell );
+
+        if( !cell->Deserialize( cellAny ) )
+        {
+            delete cell;
+            continue;
+        }
+
+        AddCell( cell );
+    }
+
+    int rowCount = m_colCount > 0 ? static_cast<int>( m_cells.size() ) / m_colCount : 0;
+
+    for( int i = 0; i < table.row_heights_size() && i < rowCount; ++i )
+        SetRowHeight( i, table.row_heights( i ) );
+
+    m_strokeExternal = table.external_border() == types::TSM_ENABLED;
+    m_StrokeHeaderSeparator = table.header_separator() == types::TSM_ENABLED;
+
+    if( table.has_border_stroke() )
+        kiapi::common::UnpackStroke( m_borderStroke, table.border_stroke() );
+
+    m_strokeRows = table.row_separators() == types::TSM_ENABLED;
+    m_strokeColumns = table.column_separators() == types::TSM_ENABLED;
+
+    if( table.has_separators_stroke() )
+        kiapi::common::UnpackStroke( m_separatorsStroke, table.separators_stroke() );
+
+    return true;
 }
 
 

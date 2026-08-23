@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20241229)
+	(version 20260206)
 	(generator "pcbnew")
 	(generator_version "10.0")
 	(general
@@ -41,7 +41,20 @@
 	(setup
 		(pad_to_mask_clearance 0)
 		(allow_soldermask_bridges_in_footprints no)
-		(tenting front back)
+		(tenting
+			(front yes)
+			(back yes)
+		)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front no)
+			(back no)
+		)
+		(capping no)
+		(filling no)
 		(pcbplotparams
 			(layerselection 0x00000000_00000000_000010fc_ffffffff)
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
@@ -50,15 +63,12 @@
 			(usegerberattributes yes)
 			(usegerberadvancedattributes yes)
 			(creategerberjobfile yes)
-			(dashed_line_dash_ratio 12.000000)
-			(dashed_line_gap_ratio 3.000000)
+			(dashed_line_dash_ratio 12)
+			(dashed_line_gap_ratio 3)
 			(svgprecision 4)
 			(plotframeref no)
 			(mode 1)
 			(useauxorigin no)
-			(hpglpennumber 1)
-			(hpglpenspeed 20)
-			(hpglpendiameter 15.000000)
 			(pdf_front_fp_property_popups yes)
 			(pdf_back_fp_property_popups yes)
 			(pdf_metadata yes)
@@ -82,8 +92,6 @@
 			(outputdirectory "")
 		)
 	)
-	(net 0 "")
-	(net 1 "A")
 	(footprint "Resistor_SMD:R_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "0b9cc5a8-6a75-47df-9617-9721c2785946")
@@ -137,6 +145,7 @@
 			)
 		)
 		(attr smd)
+		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start -0.237258 -0.5225)
 			(end 0.237258 -0.5225)
@@ -530,6 +539,7 @@
 			)
 		)
 		(attr through_hole)
+		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start -5.08 -1.27)
 			(end -5.08 0)
@@ -636,7 +646,7 @@
 			(drill 1.143)
 			(layers "*.Cu" "*.Mask" "F.SilkS")
 			(remove_unused_layers no)
-			(net 1 "A")
+			(net "A")
 			(uuid "af83e208-80d8-4838-9ffe-eaca56d969d0")
 		)
 		(pad "2" thru_hole rect
@@ -942,6 +952,7 @@
 			)
 		)
 		(attr through_hole)
+		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start -5.08 3.81)
 			(end 5.08 3.81)
@@ -998,7 +1009,7 @@
 			(drill 1.524)
 			(layers "*.Cu" "*.Mask" "F.SilkS")
 			(remove_unused_layers no)
-			(net 1 "A")
+			(net "A")
 			(uuid "afe67c4a-2148-455d-81b1-6bcc2a745c4d")
 		)
 		(pad "2" thru_hole circle
@@ -1544,7 +1555,7 @@
 			)
 		)
 		(stroke
-			(width 0)
+			(width 0.1)
 			(type solid)
 		)
 		(fill no)
@@ -1789,6 +1800,325 @@
 		)
 		(knockout no)
 	)
+	(table
+		(column_count 3)
+		(uuid "92ad191f-2e6f-469e-907b-17d31887e14d")
+		(layer "Dwgs.User")
+		(border
+			(external yes)
+			(header yes)
+			(stroke
+				(width 0.15)
+				(type dash)
+			)
+		)
+		(separators
+			(rows no)
+			(cols yes)
+			(stroke
+				(width 0.24)
+				(type dash_dot_dot)
+			)
+		)
+		(column_widths 16 16 16)
+		(row_heights 3.5 3.5 3.5 3.5 3.5 3.5 3.5)
+		(cells
+			(table_cell "Hello"
+				(start 25 24.5)
+				(end 41 28)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "95e17d58-f1c6-44df-9776-a2b31d18bfed")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "World"
+				(start 41 24.5)
+				(end 57 28)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "55638112-ab6e-4563-999a-6f5137f8b48b")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 24.5)
+				(end 73 28)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "7dd4c810-7010-4ca4-b5fe-98cfb2d18cab")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "tablecell"
+				(start 25 28)
+				(end 41 31.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "49111928-7c75-44bf-8f36-3279d5dc204a")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 41 28)
+				(end 57 31.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "26e191fb-bed1-46b5-9cb3-a04bf58a54c9")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 28)
+				(end 73 31.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "9150abb2-bf10-4c24-be7c-fca8c991af47")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 25 31.5)
+				(end 41 35)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "68ee71bf-e044-433c-acd0-b3e2eaf538a3")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "r"
+				(start 41 31.5)
+				(end 57 35)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "f19f1036-e939-48f9-b306-d14eb8e0a0cc")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 31.5)
+				(end 73 35)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "a309e3ba-b86e-4aba-89aa-1f2e3aa0f969")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 25 35)
+				(end 41 38.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "1842dce7-cac7-4871-84c8-a8a307aa5bc6")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 41 35)
+				(end 57 38.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "8feb96e3-51ea-4be0-b13c-01eab619052f")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "d"
+				(start 57 35)
+				(end 73 38.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "611544f9-c280-4d8e-b51b-823436ce809a")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 25 38.5)
+				(end 41 42)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "c0626908-8e35-46e4-9f44-0e1b4b8e54aa")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "4"
+				(start 41 38.5)
+				(end 57 42)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "92a70c5a-fb7c-4066-af44-949433d9d9ab")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 38.5)
+				(end 73 42)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "b70b5ec9-c81a-4bd5-94f4-6eb83241f9c7")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 25 42)
+				(end 41 45.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "e445472a-b299-45d9-a36a-12765b0f58e5")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "a"
+				(start 41 42)
+				(end 57 45.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "1fac2b36-7665-4d2e-b223-ddefb2804751")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 42)
+				(end 73 45.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "95918e49-ec4b-4bae-95b7-5a1ffdf63437")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "3"
+				(start 25 45.5)
+				(end 41 49)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "5413f6b3-a918-445d-9aee-98b8dc2cff62")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 41 45.5)
+				(end 57 49)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "2c4f3c81-8819-4c9b-a90d-9c30c8aa24ea")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "f"
+				(start 57 45.5)
+				(end 73 49)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "2e0dcbd8-a2e6-4f27-8fdc-a1567110f7cc")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+		)
+	)
 	(barcode
 		(at 258.5 141.5 90)
 		(layer "F.Cu")
@@ -2023,7 +2353,7 @@
 			(back no)
 		)
 		(filling no)
-		(net 0)
+		(net "")
 		(uuid "1960d56a-6a04-4e66-966f-9a4deaf28ebf")
 	)
 	(via
@@ -2045,7 +2375,7 @@
 			(back no)
 		)
 		(filling yes)
-		(net 0)
+		(net "")
 		(uuid "697fcc5c-9cf0-474e-bfab-8afc0fb18c62")
 	)
 	(via
@@ -2067,7 +2397,7 @@
 			(back no)
 		)
 		(filling no)
-		(net 0)
+		(net "")
 		(uuid "beec9209-4c19-4ad5-ac29-5a2a547cb37b")
 	)
 	(segment
@@ -2075,7 +2405,7 @@
 		(end 90.65 60.85)
 		(width 0.2)
 		(layer "B.Cu")
-		(net 1)
+		(net "A")
 		(uuid "314404ac-770d-48bd-95c0-61764c6aa3ed")
 	)
 	(segment
@@ -2083,7 +2413,7 @@
 		(end 95 60.85)
 		(width 0.2)
 		(layer "B.Cu")
-		(net 1)
+		(net "A")
 		(uuid "50e69c17-3b82-46ec-8e12-83615bba445c")
 	)
 	(segment
@@ -2091,7 +2421,7 @@
 		(end 88.3 63.2)
 		(width 0.2)
 		(layer "B.Cu")
-		(net 1)
+		(net "A")
 		(uuid "68c5bb53-edda-4916-9e13-61e1c3937aec")
 	)
 	(segment
@@ -2099,12 +2429,10 @@
 		(end 99.5 65.35)
 		(width 0.2)
 		(layer "B.Cu")
-		(net 1)
+		(net "A")
 		(uuid "fabfab7b-4ea2-487a-a340-e24bbc4c982e")
 	)
 	(zone
-		(net 0)
-		(net_name "")
 		(locked yes)
 		(layers "F.Cu" "B.Cu")
 		(uuid "0f5227b8-34f3-4302-949f-9de38b16fecf")
@@ -2114,7 +2442,6 @@
 			(clearance 0)
 		)
 		(min_thickness 0.25)
-		(filled_areas_thickness no)
 		(keepout
 			(tracks allowed)
 			(vias not_allowed)
@@ -2129,6 +2456,7 @@
 		(fill
 			(thermal_gap 0.5)
 			(thermal_bridge_width 0.5)
+			(island_removal_mode 0)
 		)
 		(polygon
 			(pts
@@ -2137,8 +2465,6 @@
 		)
 	)
 	(zone
-		(net 0)
-		(net_name "")
 		(layers "F.Cu" "B.Cu")
 		(uuid "9c3e186b-0f1d-48ef-8724-baad4fa44742")
 		(hatch edge 1)
@@ -2146,7 +2472,6 @@
 			(clearance 0)
 		)
 		(min_thickness 0.25)
-		(filled_areas_thickness no)
 		(keepout
 			(tracks allowed)
 			(vias allowed)
@@ -2161,6 +2486,7 @@
 		(fill
 			(thermal_gap 0.5)
 			(thermal_bridge_width 0.5)
+			(island_removal_mode 0)
 		)
 		(polygon
 			(pts
@@ -2174,8 +2500,6 @@
 		)
 	)
 	(zone
-		(net 0)
-		(net_name "")
 		(layers "F.Cu" "B.Cu")
 		(uuid "f52cce18-23b9-4645-b87a-21d0716548c2")
 		(hatch none 0.65)
@@ -2183,7 +2507,6 @@
 			(clearance 0)
 		)
 		(min_thickness 0.25)
-		(filled_areas_thickness no)
 		(keepout
 			(tracks allowed)
 			(vias allowed)
@@ -2198,6 +2521,7 @@
 		(fill
 			(thermal_gap 0.5)
 			(thermal_bridge_width 0.5)
+			(island_removal_mode 0)
 		)
 		(polygon
 			(pts
@@ -2206,8 +2530,6 @@
 		)
 	)
 	(zone
-		(net 0)
-		(net_name "")
 		(layer "B.Cu")
 		(uuid "6f75f268-7b12-4df8-b032-ef2b7e95c515")
 		(hatch edge 0.508)
@@ -2215,10 +2537,10 @@
 			(clearance 0.508)
 		)
 		(min_thickness 0.254)
-		(filled_areas_thickness no)
 		(fill yes
 			(thermal_gap 0.762)
 			(thermal_bridge_width 0.508)
+			(island_removal_mode 0)
 		)
 		(property
 			(layer "B.Cu")
@@ -2233,7 +2555,7 @@
 		)
 		(filled_polygon
 			(layer "B.Cu")
-			(island)
+			(island yes)
 			(pts
 				(xy 232.775121 38.456002) (xy 232.821614 38.509658) (xy 232.833 38.562) (xy 232.833 116.168359)
 				(xy 232.812998 116.23648) (xy 232.759342 116.282973) (xy 232.693829 116.293669) (xy 232.625623 116.2865)
@@ -5106,7 +5428,7 @@
 		)
 		(filled_polygon
 			(layer "B.Cu")
-			(island)
+			(island yes)
 			(pts
 				(xy 151.594412 102.769302) (xy 151.640485 102.822049) (xy 151.677829 102.902133) (xy 151.696431 102.942025)
 				(xy 151.800512 103.090669) (xy 151.826491 103.12777) (xy 151.98683 103.288109) (xy 152.172575 103.418169)
@@ -5164,7 +5486,7 @@
 		)
 		(filled_polygon
 			(layer "B.Cu")
-			(island)
+			(island yes)
 			(pts
 				(xy 168.461821 49.932222) (xy 168.508314 49.985878) (xy 168.5197 50.03822) (xy 168.5197 52.730151)
 				(xy 168.499698 52.798272) (xy 168.482796 52.819246) (xy 168.404847 52.897195) (xy 168.283715 53.070191)
