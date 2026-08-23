@@ -608,6 +608,9 @@ message BoardTextBox
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 5;
+
+  // Since: 10.0.7
+  bool knockout = 6;
 }
 
 // NOTE: There has been some discussion about what to do with pad attributes and properties.
