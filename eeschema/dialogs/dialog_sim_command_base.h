@@ -23,7 +23,9 @@
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/panel.h>
+#include <wx/statbox.h>
 #include <wx/checkbox.h>
+#include <wx/spinctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
@@ -50,6 +52,7 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxChoice* m_commandType;
 		wxNotebook* m_notebook1;
 		wxPanel* m_panelCommand;
+		wxStaticBoxSizer* m_analysisParamsSizer;
 		wxSimplebook* m_simPages;
 		wxPanel* m_pgAC;
 		wxRadioBox* m_acScale;
@@ -154,6 +157,7 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxChoice* m_pzOutputRef;
 		wxStaticText* m_pzAnalysesLabel;
 		wxChoice* m_pzAnalyses;
+		wxStaticBoxSizer* m_netlistOptionsSizer;
 		wxCheckBox* m_fixIncludePaths;
 		wxCheckBox* m_saveAllVoltages;
 		wxCheckBox* m_saveAllCurrents;
@@ -162,6 +166,7 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_compatibilityModeSizer;
 		wxChoice* m_compatibilityMode;
 		wxPanel* m_panelPlotSetup;
+		wxStaticBoxSizer* m_axisScalesSizer;
 		wxBoxSizer* m_bSizerY1;
 		wxCheckBox* m_lockY1;
 		wxStaticText* m_y1MinLabel;
@@ -183,10 +188,13 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxStaticText* m_y3MaxLabel;
 		wxTextCtrl* m_y3Max;
 		wxStaticText* m_y3Units;
+		wxStaticBoxSizer* m_appearanceSizer;
 		wxCheckBox* m_grid;
 		wxCheckBox* m_legend;
 		wxCheckBox* m_dottedSecondary;
-		wxStaticText* m_marginsLabel;
+		wxStaticText* m_lineWidthLabel;
+		wxSpinCtrl* m_lineWidth;
+		wxStaticBoxSizer* m_marginsSizer;
 		wxStaticText* m_marginLeftLabel;
 		wxTextCtrl* m_marginLeft;
 		wxStaticText* m_marginTopLabel;

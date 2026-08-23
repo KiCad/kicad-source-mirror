@@ -30,12 +30,14 @@
 
 #include <kiway_player.h>
 #include <dialogs/dialog_sim_command.h>
+#include <reporter.h>
 
 #include <wx/event.h>
 
 #include <list>
 #include <memory>
 #include <map>
+#include <vector>
 
 class SCH_EDIT_FRAME;
 class SCH_SYMBOL;
@@ -44,6 +46,17 @@ class SIM_CONSOLE_REPORTER;
 class SIM_FRAME_STATE_LISTENER;
 class ACTION_TOOLBAR;
 class SPICE_SIMULATOR;
+
+
+/**
+ * One line of simulator console output, tagged with the severity it was reported at so the
+ * console UI can filter by All / Warnings / Errors.
+ */
+struct SIM_CONSOLE_ENTRY
+{
+    SEVERITY severity;
+    wxString text;
+};
 
 
 /**
@@ -119,6 +132,11 @@ public:
      */
     const std::vector<wxString> Signals();
 
+    /**
+     * @return the schematic net names, with their exact capitalisation.
+     */
+    const std::vector<wxString>& Netnames();
+
     const std::map<int, wxString>& UserDefinedSignals();
 
     void SetUserDefinedSignals( const std::map<int, wxString>& aSignals );
@@ -189,11 +207,11 @@ public:
 
     wxString GetCurrentSimCommand() const;
     SIM_TYPE GetCurrentSimType() const;
-    int GetCurrentOptions() const;
+    int      GetCurrentOptions() const;
 
     bool SimFinished() const { return m_simFinished; }
 
-    wxString TakeSimReportMessages();
+    std::vector<SIM_CONSOLE_ENTRY> TakeSimReportEntries();
 
     // Simulator doesn't host a canvas
     wxWindow* GetToolCanvas() const override { return nullptr; }
@@ -228,17 +246,17 @@ private:
     void onExit( wxCommandEvent& event );
 
 private:
-    SCH_EDIT_FRAME*                      m_schematicFrame;
-    ACTION_TOOLBAR*                      m_toolBar;
-    SIMULATOR_FRAME_UI*                  m_ui;
+    SCH_EDIT_FRAME*     m_schematicFrame;
+    ACTION_TOOLBAR*     m_toolBar;
+    SIMULATOR_FRAME_UI* m_ui;
 
     std::shared_ptr<SPICE_SIMULATOR>     m_simulator;
     SIM_CONSOLE_REPORTER*                m_consoleReporter;
     SIM_FRAME_STATE_LISTENER*            m_stateListener;
     std::shared_ptr<SPICE_CIRCUIT_MODEL> m_circuitModel;
 
-    bool                                 m_simFinished;
-    bool                                 m_workbookModified;
+    bool m_simFinished;
+    bool m_workbookModified;
 };
 
 // Commands

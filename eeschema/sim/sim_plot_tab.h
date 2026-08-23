@@ -90,10 +90,7 @@ public:
         Move( wxPoint( aX, 0 ) );
     }
 
-    void Update()
-    {
-        m_updateRequired = true;
-    }
+    void Update() { m_updateRequired = true; }
 
     virtual void UpdateForNewData() { SetCoordX( m_coords.x ); }
 
@@ -105,10 +102,7 @@ public:
 
     bool OnDoubleClick( const wxPoint& aPoint, mpWindow& aWindow ) override;
 
-    const wxRealPoint& GetCoords() const
-    {
-        return m_coords;
-    }
+    const wxRealPoint& GetCoords() const { return m_coords; }
 
     virtual void SetCoordX( double aValue );
 
@@ -119,14 +113,14 @@ protected:
     wxString getID();
 
 protected:
-    TRACE*       m_trace;
-    bool         m_updateRequired;
-    bool         m_updateRef;
-    wxRealPoint  m_coords;
-    mpWindow*    m_window;
-    int          m_sweepIndex;
-    bool         m_snapToNearest;
-    double       m_snapTargetY;
+    TRACE*      m_trace;
+    bool        m_updateRequired;
+    bool        m_updateRef;
+    wxRealPoint m_coords;
+    mpWindow*   m_window;
+    int         m_sweepIndex;
+    bool        m_snapToNearest;
+    double      m_snapTargetY;
 
     static constexpr int DRAG_MARGIN = 10;
 };
@@ -149,7 +143,7 @@ public:
 
     void SetName( const wxString& aName ) override
     {
-        for( auto& [ idx, cursor ] : m_cursors )
+        for( auto& [idx, cursor] : m_cursors )
         {
             if( cursor )
                 cursor->SetName( aName );
@@ -173,7 +167,7 @@ public:
      */
     void SetData( const std::vector<double>& aX, const std::vector<double>& aY ) override
     {
-        for( auto& [ idx, cursor ] : m_cursors )
+        for( auto& [idx, cursor] : m_cursors )
         {
             if( cursor )
                 cursor->Update();
@@ -196,13 +190,13 @@ public:
 
     bool HasCursor( int aCursorId ) { return m_cursors[ aCursorId ] != nullptr; }
 
-    void SetCursor( int aCursorId, CURSOR* aCursor ) { m_cursors[ aCursorId ] = aCursor; }
-    CURSOR* GetCursor( int aCursorId ) { return m_cursors[ aCursorId ]; }
+    void                    SetCursor( int aCursorId, CURSOR* aCursor ) { m_cursors[aCursorId] = aCursor; }
+    CURSOR*                 GetCursor( int aCursorId ) { return m_cursors[aCursorId]; }
     std::map<int, CURSOR*>& GetCursors() { return m_cursors; }
 
     SIM_TRACE_TYPE GetType() const { return m_type; }
 
-    void SetTraceColour( const wxColour& aColour ) { m_traceColour = aColour; }
+    void     SetTraceColour( const wxColour& aColour ) { m_traceColour = aColour; }
     wxColour GetTraceColour() const { return m_traceColour; }
 
     void SetIsMultiRun( bool aIsMultiRun ) { m_isMultiRun = aIsMultiRun; }
@@ -233,7 +227,7 @@ public:
     }
 
 protected:
-    std::map<int, CURSOR*> m_cursors;       // No ownership; the mpWindow owns the CURSORs
+    std::map<int, CURSOR*> m_cursors; // No ownership; the mpWindow owns the CURSORs
     SIM_TRACE_TYPE         m_type;
     wxColour               m_traceColour;
     bool                   m_isMultiRun;
@@ -521,7 +515,24 @@ public:
 
     void UpdateAxisVisibility();
 
+    /// Re-derive the plot margins from which Y axes are currently visible (e.g. reclaim the
+    /// extra right-hand margin reserved for the Power axis once it has no traces left).
+    void UpdateMargins();
+
     void EnsureThirdYAxisExists();
+
+    /// Bottom margin tall enough for a tick row plus the X axis name below it, at the current font.
+    int calcBottomMargin() const;
+
+    /// Narrowest left margin used, and what a Y1 tick label needs on top of its own width
+    /// (mpScaleY::Plot() insets the labels by 4px, plus a little breathing room).
+    static constexpr int MIN_MARGIN_LEFT = 70;
+    static constexpr int LABEL_MARGIN_PADDING = 12;
+
+    /// Left margin wide enough for the Y1 tick labels of every view in the tab.  The views are
+    /// stacked under one shared X axis, so they all get the widest view's margin or their plot
+    /// areas stop lining up.
+    int calcLeftMargin() const;
 
     // ---- Smith chart --------------------------------------------------------------------
 
@@ -597,11 +608,20 @@ private:
 
     void onPlotMouseMove( wxMouseEvent& aEvent );
     void onPlotMouseLeave( wxMouseEvent& aEvent );
+    void onPaintFinished() override;
 
 private:
     SIM_PLOT_TAB* m_plotTab;
 
     TRACK_CURSOR* m_trackCursor;
+    /// Set while re-fitting purely because this view's own margins changed.  The X range is
+    /// unchanged in that case, and each view needs its own margin-dependent X scale, so the
+    /// range must not be mirrored onto the sibling views.
+    bool m_suppressXSync;
+
+    /// Set between asking for a margin re-check and it running, so a repaint triggered by the
+    /// re-check doesn't queue another one.
+    bool m_marginCheckPending;
 
     SMITH_GRID* m_smithGrid;
 
@@ -702,6 +722,22 @@ public:
 
     bool GetDottedSecondary() const { return m_dotted_cp; }
 
+    /**
+     * Set the pen width (in px) used to draw every trace on this tab.
+     */
+    void SetTraceWidth( int aWidth )
+    {
+        m_traceWidth = aWidth;
+
+        for( const auto& [name, trace] : m_traces )
+            UpdateTraceStyle( trace );
+
+        for( SIM_VIEW* view : m_views )
+            view->UpdateAll();
+    }
+
+    int GetTraceWidth() const { return m_traceWidth; }
+
     /// Smith mode is tab-wide: every view of the tab shows a Smith chart while it is on.
     void SetSmithMode( bool aEnable );
     bool IsSmithMode() const { return m_smithMode; }
@@ -780,6 +816,11 @@ public:
 public:
     wxPoint m_LastLegendPosition;
 
+    /// The plot window size the legend position above was observed at.  mpInfoLegend rescales
+    /// its position whenever the window changes size, so a move seen across a resize is layout
+    /// catching up rather than the user dragging the legend.
+    wxSize m_LastPlotWinSize;
+
 private:
     static mpWindow::MouseWheelActionSet convertMouseWheelActions( const SIM_MOUSE_WHEEL_ACTION_SET& s )
     {
@@ -807,21 +848,24 @@ private:
     bool getYScale( int aSlot, double* aMin, double* aMax ) const;
 
 private:
-    SIM_PLOT_COLORS               m_colors;
-    std::map<wxString, wxColour>  m_sessionTraceColors;
+    SIM_PLOT_COLORS              m_colors;
+    std::map<wxString, wxColour> m_sessionTraceColors;
 
-    wxBoxSizer*                   m_viewsSizer;      // Holds all the stacked SIM_VIEWs
+    wxBoxSizer* m_viewsSizer; // Holds all the stacked SIM_VIEWs
 
     // Stacked plot views (owned via wx parent-child, except when explicitly removed)
-    std::vector<SIM_VIEW*>        m_views;
+    std::vector<SIM_VIEW*> m_views;
 
     // Cached so newly-added views can be initialized with the current preferences
     mpWindow::MouseWheelActionSet m_mouseWheelActions;
 
     // Traces to be plotted; each knows which view (if any) it's currently plotted on
-    std::map<wxString, TRACE*>    m_traces;
+    std::map<wxString, TRACE*> m_traces;
 
     bool m_dotted_cp;
+
+    // Pen width (in px) used to draw every trace on this tab.
+    int m_traceWidth;
 
     // Re-entrancy guard for SyncXView()
     bool m_syncingXView;

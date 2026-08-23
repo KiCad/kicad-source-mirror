@@ -158,6 +158,7 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
     m_y3Min->SetMinSize( wxSize( minWidth, -1 ) );
     m_y3Max->SetMinSize( wxSize( minWidth, -1 ) );
 
+    m_axisScalesSizer->Show( false );
     m_bSizerY1->Show( false );
     m_bSizerY2->Show( false );
     m_bSizerY3->Show( false );
@@ -223,9 +224,18 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
 {
     if( const SIM_PLOT_TAB* plotTab = dynamic_cast<const SIM_PLOT_TAB*>( aSimTab ) )
     {
+        // Showing a sizer shows everything nested inside it, so the box has to be settled before
+        // the individual axes rather than after, or it un-hides the ones this analysis hasn't
+        // got.  A box with all three hidden is just a labelled void, so it goes too.
+        m_axisScalesSizer->Show( !plotTab->GetLabelY1().IsEmpty() || !plotTab->GetLabelY2().IsEmpty()
+                                 || !plotTab->GetLabelY3().IsEmpty() );
+
+        m_bSizerY1->Show( !plotTab->GetLabelY1().IsEmpty() );
+        m_bSizerY2->Show( !plotTab->GetLabelY2().IsEmpty() );
+        m_bSizerY3->Show( !plotTab->GetLabelY3().IsEmpty() );
+
         if( !plotTab->GetLabelY1().IsEmpty() )
         {
-            m_bSizerY1->Show( true );
             m_lockY1->SetLabel( wxString::Format( m_lockY1->GetLabel(), plotTab->GetLabelY1() ) );
             m_y1Units->SetLabel( plotTab->GetUnitsY1() );
 
@@ -242,7 +252,6 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
 
         if( !plotTab->GetLabelY2().IsEmpty() )
         {
-            m_bSizerY2->Show( true );
             m_lockY2->SetLabel( wxString::Format( m_lockY2->GetLabel(), plotTab->GetLabelY2() ) );
             m_y2Units->SetLabel( plotTab->GetUnitsY2() );
 
@@ -259,7 +268,6 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
 
         if( !plotTab->GetLabelY3().IsEmpty() )
         {
-            m_bSizerY3->Show( true );
             m_lockY3->SetLabel( wxString::Format( m_lockY3->GetLabel(), plotTab->GetLabelY3() ) );
             m_y3Units->SetLabel( plotTab->GetUnitsY3() );
 
@@ -277,6 +285,7 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
         m_grid->SetValue( plotTab->IsGridShown() );
         m_legend->SetValue( plotTab->IsLegendShown() );
         m_dottedSecondary->SetValue( plotTab->GetDottedSecondary() );
+        m_lineWidth->SetValue( plotTab->GetTraceWidth() );
 
 #define GET_STR( val ) EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED, \
                                                                  val, false /* no units */ )
@@ -626,6 +635,7 @@ void DIALOG_SIM_COMMAND::ApplySettings( SIM_TAB* aTab )
         plotTab->ShowGrid( m_grid->GetValue() );
         plotTab->ShowLegend( m_legend->GetValue() );
         plotTab->SetDottedSecondary( m_dottedSecondary->GetValue() );
+        plotTab->SetTraceWidth( m_lineWidth->GetValue() );
 
         plotTab->GetPlotWin()->SetMarginLeft( TO_INT( m_marginLeft ) );
         plotTab->GetPlotWin()->SetMarginRight( TO_INT( m_marginRight ) );
@@ -797,6 +807,20 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
             m_dcEnable2->SetValue( true );
         }
+
+        // updateDCUnits() only runs from the source-type handlers, and those don't fire when
+        // the choices are set programmatically above -- so reopening a ".dc R4 1k 100k 100"
+        // left the start/stop/step units reading "V" from the form designer's default.
+        auto refreshUnits = [&]( wxChoice* aTypeChoice, wxStaticText* aStart, wxStaticText* aEnd, wxStaticText* aStep )
+        {
+            wxString  type = getStringSelection( aTypeChoice ).Upper();
+            wxUniChar ch = type.IsEmpty() ? wxUniChar( '?' ) : type.GetChar( 0 );
+
+            updateDCUnits( ch, aStart, aEnd, aStep );
+        };
+
+        refreshUnits( m_dcSourceType1, m_src1DCStartValUnit, m_src1DCEndValUnit, m_src1DCStepUnit );
+        refreshUnits( m_dcSourceType2, m_src2DCStartValUnit, m_src2DCEndValUnit, m_src2DCStepUnit );
 
         break;
     }

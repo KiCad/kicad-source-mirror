@@ -39,6 +39,8 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bCommandSizer;
 	bCommandSizer = new wxBoxSizer( wxVERTICAL );
 
+	m_analysisParamsSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelCommand, wxID_ANY, _("Analysis Parameters") ), wxVERTICAL );
+
 	m_simPages = new wxSimplebook( m_panelCommand, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_pgAC = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer3;
@@ -248,11 +250,13 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer2->SetEmptyCellSize( wxSize( -1,8 ) );
 
-	m_timeLabel = new wxStaticText( m_pgTRAN, wxID_ANY, _("Time step:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_timeLabel = new wxStaticText( m_pgTRAN, wxID_ANY, _("Output time step:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_timeLabel->Wrap( -1 );
+	m_timeLabel->SetToolTip( _("How often results are recorded and plotted.  It does not limit the step size the solver takes internally.") );
 	gbSizer2->Add( m_timeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_transStep = new wxTextCtrl( m_pgTRAN, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_transStep->SetToolTip( _("How often results are recorded and plotted.  It does not limit the step size the solver takes internally.") );
 	m_transStep->SetMinSize( wxSize( 100,-1 ) );
 
 	gbSizer2->Add( m_transStep, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
@@ -261,7 +265,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_timeUnits->Wrap( -1 );
 	gbSizer2->Add( m_timeUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_transFinalLabel = new wxStaticText( m_pgTRAN, wxID_ANY, _("Final time:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_transFinalLabel = new wxStaticText( m_pgTRAN, wxID_ANY, _("Stop time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_transFinalLabel->Wrap( -1 );
 	gbSizer2->Add( m_transFinalLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -272,7 +276,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_transFinalUnits->Wrap( -1 );
 	gbSizer2->Add( m_transFinalUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_transInitialLabel = new wxStaticText( m_pgTRAN, wxID_ANY, _("Initial time:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_transInitialLabel = new wxStaticText( m_pgTRAN, wxID_ANY, _("Start time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_transInitialLabel->Wrap( -1 );
 	gbSizer2->Add( m_transInitialLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -287,18 +291,21 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_transInitialHelp->Wrap( -1 );
 	gbSizer2->Add( m_transInitialHelp, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_maxStepLabel = new wxStaticText( m_pgTRAN, wxID_ANY, _("Max time step:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxStepLabel = new wxStaticText( m_pgTRAN, wxID_ANY, _("Max solver time step:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxStepLabel->Wrap( -1 );
+	m_maxStepLabel->SetToolTip( _("Upper bound on the solver's own internal time step.  Lower it when a fast transient is being stepped over.  Defaults to whichever is smaller: the output time step, or 1/50 of the simulated time span.") );
 	gbSizer2->Add( m_maxStepLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_transMaxStep = new wxTextCtrl( m_pgTRAN, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_transMaxStep->SetToolTip( _("Upper bound on the solver's own internal time step.  Lower it when a fast transient is being stepped over.  Defaults to whichever is smaller: the output time step, or 1/50 of the simulated time span.") );
+
 	gbSizer2->Add( m_transMaxStep, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_transMaxStepUnit = new wxStaticText( m_pgTRAN, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_transMaxStepUnit->Wrap( -1 );
 	gbSizer2->Add( m_transMaxStepUnit, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_transMaxHelp = new wxStaticText( m_pgTRAN, wxID_ANY, _("(optional; default min{tstep, (tstop-tstart)/50})"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_transMaxHelp = new wxStaticText( m_pgTRAN, wxID_ANY, _("(optional; default: smaller of output step and 1/50 of time span)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_transMaxHelp->Wrap( -1 );
 	gbSizer2->Add( m_transMaxHelp, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -635,7 +642,12 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizer821->Fit( m_pgPZ );
 	m_simPages->AddPage( m_pgPZ, _("a page"), false );
 
-	bCommandSizer->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
+	m_analysisParamsSizer->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
+
+
+	bCommandSizer->Add( m_analysisParamsSizer, 1, wxEXPAND|wxALL, 5 );
+
+	m_netlistOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelCommand, wxID_ANY, _("Netlist Options") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer88;
 	bSizer88 = new wxBoxSizer( wxVERTICAL );
@@ -673,7 +685,10 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizer88->Add( m_compatibilityModeSizer, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bCommandSizer->Add( bSizer88, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
+	m_netlistOptionsSizer->Add( bSizer88, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
+
+
+	bCommandSizer->Add( m_netlistOptionsSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	m_panelCommand->SetSizer( bCommandSizer );
@@ -683,6 +698,8 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_panelPlotSetup = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPlotSetupSizer;
 	bPlotSetupSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_axisScalesSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelPlotSetup, wxID_ANY, _("Axis Scales") ), wxVERTICAL );
 
 	m_bSizerY1 = new wxBoxSizer( wxVERTICAL );
 
@@ -721,7 +738,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY1->Add( fgSizerY1, 0, wxBOTTOM, 8 );
 
 
-	bPlotSetupSizer->Add( m_bSizerY1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_axisScalesSizer->Add( m_bSizerY1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_bSizerY2 = new wxBoxSizer( wxVERTICAL );
 
@@ -758,7 +775,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY2->Add( fgSizerY2, 0, wxBOTTOM, 8 );
 
 
-	bPlotSetupSizer->Add( m_bSizerY2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_axisScalesSizer->Add( m_bSizerY2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_bSizerY3 = new wxBoxSizer( wxVERTICAL );
 
@@ -797,7 +814,12 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY3->Add( fgSizerY3, 0, wxBOTTOM, 8 );
 
 
-	bPlotSetupSizer->Add( m_bSizerY3, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_axisScalesSizer->Add( m_bSizerY3, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bPlotSetupSizer->Add( m_axisScalesSizer, 0, wxEXPAND|wxALL, 5 );
+
+	m_appearanceSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelPlotSetup, wxID_ANY, _("Appearance") ), wxVERTICAL );
 
 	wxBoxSizer* bSizerCheckboxes;
 	bSizerCheckboxes = new wxBoxSizer( wxVERTICAL );
@@ -813,15 +835,30 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_dottedSecondary->SetValue(true);
 	bSizerCheckboxes->Add( m_dottedSecondary, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
+	wxBoxSizer* bSizerLineWidth;
+	bSizerLineWidth = new wxBoxSizer( wxHORIZONTAL );
 
-	bPlotSetupSizer->Add( bSizerCheckboxes, 0, wxEXPAND|wxLEFT, 5 );
+	m_lineWidthLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthLabel->Wrap( -1 );
+	bSizerLineWidth->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_lineWidth = new wxSpinCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 4, 2 );
+
+	bSizerLineWidth->Add( m_lineWidth, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizerCheckboxes->Add( bSizerLineWidth, 0, wxALL|wxEXPAND, 8 );
+
+
+	m_appearanceSizer->Add( bSizerCheckboxes, 0, wxEXPAND|wxLEFT, 5 );
+
+
+	bPlotSetupSizer->Add( m_appearanceSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	bPlotSetupSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_marginsLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Margins:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_marginsLabel->Wrap( -1 );
-	bPlotSetupSizer->Add( m_marginsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
+	m_marginsSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelPlotSetup, wxID_ANY, _("Margins") ), wxVERTICAL );
 
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxHORIZONTAL );
@@ -883,7 +920,10 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizerMargins->Add( bSizerRight, 0, wxEXPAND, 5 );
 
 
-	bPlotSetupSizer->Add( bSizerMargins, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_marginsSizer->Add( bSizerMargins, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bPlotSetupSizer->Add( m_marginsSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	m_panelPlotSetup->SetSizer( bPlotSetupSizer );

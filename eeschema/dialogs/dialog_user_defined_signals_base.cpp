@@ -75,6 +75,11 @@ DIALOG_USER_DEFINED_SIGNALS_BASE::DIALOG_USER_DEFINED_SIGNALS_BASE( wxWindow* pa
 
 	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 
+	m_checkSyntax = new wxButton( this, wxID_ANY, _("Check Syntax"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkSyntax->SetToolTip( _("Check the signal expressions against the schematic's nets") );
+
+	bButtonSize->Add( m_checkSyntax, 0, wxTOP|wxRIGHT, 4 );
+
 	m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
 	m_syntaxHelp->SetToolTip( _("Show syntax help window") );
 
@@ -101,6 +106,7 @@ DIALOG_USER_DEFINED_SIGNALS_BASE::DIALOG_USER_DEFINED_SIGNALS_BASE( wxWindow* pa
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::onGridCellClick ), NULL, this );
 	m_addButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::onAddSignal ), NULL, this );
 	m_deleteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::onDeleteSignal ), NULL, this );
+	m_checkSyntax->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::onCheckSyntax ), NULL, this );
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::OnFormattingHelp ), NULL, this );
 }
 
@@ -110,6 +116,7 @@ DIALOG_USER_DEFINED_SIGNALS_BASE::~DIALOG_USER_DEFINED_SIGNALS_BASE()
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::onGridCellClick ), NULL, this );
 	m_addButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::onAddSignal ), NULL, this );
 	m_deleteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::onDeleteSignal ), NULL, this );
+	m_checkSyntax->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::onCheckSyntax ), NULL, this );
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_USER_DEFINED_SIGNALS_BASE::OnFormattingHelp ), NULL, this );
 
 }

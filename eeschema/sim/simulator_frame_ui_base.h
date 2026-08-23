@@ -20,9 +20,11 @@ class WX_GRID;
 #include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/tglbtn.h>
 #include <wx/textctrl.h>
 #include <wx/splitter.h>
 #include <wx/srchctrl.h>
+#include <wx/dataview.h>
 #include <wx/grid.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -32,85 +34,93 @@ class WX_GRID;
 ///////////////////////////////////////////////////////////////////////////////
 class SIMULATOR_FRAME_UI_BASE : public wxPanel
 {
-	private:
+private:
+protected:
+    wxSplitterWindow* m_splitterLeftRight;
+    wxPanel*          m_sidePanel;
+    wxBoxSizer*       m_sideSizer;
+    wxSplitterWindow* m_splitterSignals;
+    wxPanel*          m_panelSignals;
+    wxSearchCtrl*     m_filter;
+    wxDataViewCtrl*   m_signalsTree;
+    wxPanel*          m_panelTuners;
+    wxBoxSizer*       m_sizerTuners;
+    wxSplitterWindow* m_splitterCenterRight;
+    wxPanel*          m_panelLeft;
+    wxBoxSizer*       m_sizer11;
+    wxSplitterWindow* m_splitterPlotAndConsole;
+    wxPanel*          m_plotPanel;
+    wxBoxSizer*       m_sizerPlot;
+    wxAuiNotebook*    m_plotNotebook;
+    wxPanel*          m_panelConsole;
+    wxBoxSizer*       m_sizerConsole;
+    wxBoxSizer*       m_sizerConsoleFilters;
+    wxToggleButton*   m_consoleFilterAll;
+    wxToggleButton*   m_consoleFilterWarnings;
+    wxToggleButton*   m_consoleFilterErrors;
+    wxTextCtrl*       m_simConsole;
+    wxPanel*          m_panelCMT;
+    wxSplitterWindow* m_splitterCursors;
+    wxPanel*          m_panelCursors;
+    WX_GRID*          m_cursorsGrid;
+    wxPanel*          m_panelMeasurements;
+    wxDataViewCtrl*   m_measurementsTree;
 
-	protected:
-		wxSplitterWindow* m_splitterLeftRight;
-		wxPanel* m_panelLeft;
-		wxBoxSizer* m_sizer11;
-		wxSplitterWindow* m_splitterPlotAndConsole;
-		wxPanel* m_plotPanel;
-		wxBoxSizer* m_sizerPlot;
-		wxAuiNotebook* m_plotNotebook;
-		wxPanel* m_panelConsole;
-		wxBoxSizer* m_sizerConsole;
-		wxTextCtrl* m_simConsole;
-		wxPanel* m_sidePanel;
-		wxBoxSizer* m_sideSizer;
-		wxSplitterWindow* m_splitterSignals;
-		wxPanel* m_panelSignals;
-		wxSearchCtrl* m_filter;
-		WX_GRID* m_signalsGrid;
-		wxPanel* m_panelCMT;
-		wxSplitterWindow* m_splitterCursors;
-		wxPanel* m_panelCursors;
-		WX_GRID* m_cursorsGrid;
-		wxPanel* m_panelMT;
-		wxSplitterWindow* m_splitterMeasurements;
-		wxPanel* m_panelMeasurements;
-		WX_GRID* m_measurementsGrid;
-		wxPanel* m_panelTuners;
-		wxBoxSizer* m_sizerTuners;
-
-		// Virtual event handlers, override them in your derived class
-		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onPlotDragged( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void onPlotChanging( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void onPlotClosed( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onSignalsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
-		virtual void onCursorsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
-		virtual void onMeasurementsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
+    // Virtual event handlers, override them in your derived class
+    virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+    virtual void onPlotDragged( wxAuiNotebookEvent& event ) { event.Skip(); }
+    virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
+    virtual void onPlotChanging( wxAuiNotebookEvent& event ) { event.Skip(); }
+    virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
+    virtual void onPlotClosed( wxAuiNotebookEvent& event ) { event.Skip(); }
+    virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
+    virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
+    virtual void onSignalsTreeActivated( wxDataViewEvent& event ) { event.Skip(); }
+    virtual void onSignalsTreeContextMenu( wxDataViewEvent& event ) { event.Skip(); }
+    virtual void OnConsoleFilterChanged( wxCommandEvent& event ) { event.Skip(); }
+    virtual void onCursorsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
+    virtual void onMeasurementsTreeContextMenu( wxDataViewEvent& event ) { event.Skip(); }
 
 
-	public:
+public:
+    SIMULATOR_FRAME_UI_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+                             const wxSize& size = wxSize( -1, -1 ), long style = wxTAB_TRAVERSAL,
+                             const wxString& name = wxEmptyString );
 
-		SIMULATOR_FRAME_UI_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+    ~SIMULATOR_FRAME_UI_BASE();
 
-		~SIMULATOR_FRAME_UI_BASE();
+    void m_splitterLeftRightOnIdle( wxIdleEvent& )
+    {
+        m_splitterLeftRight->SetSashPosition( 300 );
+        m_splitterLeftRight->Disconnect(
+                wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterLeftRightOnIdle ), NULL, this );
+    }
 
-		void m_splitterLeftRightOnIdle( wxIdleEvent& )
-		{
-			m_splitterLeftRight->SetSashPosition( 700 );
-			m_splitterLeftRight->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterLeftRightOnIdle ), NULL, this );
-		}
+    void m_splitterSignalsOnIdle( wxIdleEvent& )
+    {
+        m_splitterSignals->SetSashPosition( 0 );
+        m_splitterSignals->Disconnect(
+                wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterSignalsOnIdle ), NULL, this );
+    }
 
-		void m_splitterPlotAndConsoleOnIdle( wxIdleEvent& )
-		{
-			m_splitterPlotAndConsole->SetSashPosition( 500 );
-			m_splitterPlotAndConsole->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterPlotAndConsoleOnIdle ), NULL, this );
-		}
+    void m_splitterCenterRightOnIdle( wxIdleEvent& )
+    {
+        m_splitterCenterRight->SetSashPosition( 700 );
+        m_splitterCenterRight->Disconnect(
+                wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterCenterRightOnIdle ), NULL, this );
+    }
 
-		void m_splitterSignalsOnIdle( wxIdleEvent& )
-		{
-			m_splitterSignals->SetSashPosition( 0 );
-			m_splitterSignals->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterSignalsOnIdle ), NULL, this );
-		}
+    void m_splitterPlotAndConsoleOnIdle( wxIdleEvent& )
+    {
+        m_splitterPlotAndConsole->SetSashPosition( 500 );
+        m_splitterPlotAndConsole->Disconnect(
+                wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterPlotAndConsoleOnIdle ), NULL, this );
+    }
 
-		void m_splitterCursorsOnIdle( wxIdleEvent& )
-		{
-			m_splitterCursors->SetSashPosition( 0 );
-			m_splitterCursors->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterCursorsOnIdle ), NULL, this );
-		}
-
-		void m_splitterMeasurementsOnIdle( wxIdleEvent& )
-		{
-			m_splitterMeasurements->SetSashPosition( 0 );
-			m_splitterMeasurements->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterMeasurementsOnIdle ), NULL, this );
-		}
-
+    void m_splitterCursorsOnIdle( wxIdleEvent& )
+    {
+        m_splitterCursors->SetSashPosition( 0 );
+        m_splitterCursors->Disconnect(
+                wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterCursorsOnIdle ), NULL, this );
+    }
 };
-

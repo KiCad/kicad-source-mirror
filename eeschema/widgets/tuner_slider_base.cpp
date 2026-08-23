@@ -87,42 +87,42 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	bSizer6->Add( bSizer7, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxBoxSizer* bSizerMiddle;
-	bSizerMiddle = new wxBoxSizer( wxHORIZONTAL );
+	bSizerMiddle = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizerSlider;
-	bSizerSlider = new wxBoxSizer( wxVERTICAL );
-
-	m_slider = new wxSlider( m_panel1, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LEFT|wxSL_VERTICAL );
-	m_slider->SetMinSize( wxSize( -1,200 ) );
-
-	bSizerSlider->Add( m_slider, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	bSizerMiddle->Add( bSizerSlider, 0, wxEXPAND, 5 );
-
-	wxGridSizer* gSizerTxtCtr;
-	gSizerTxtCtr = new wxGridSizer( 0, 1, 0, 0 );
-
-	m_maxText = new wxTextCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_maxText->SetMinSize( wxSize( 70,-1 ) );
-
-	gSizerTxtCtr->Add( m_maxText, 0, wxALIGN_TOP|wxALL, 5 );
-
-	m_valueText = new wxTextCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_valueText->SetMinSize( wxSize( 70,-1 ) );
-
-	gSizerTxtCtr->Add( m_valueText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	wxBoxSizer* bSizerValues;
+	bSizerValues = new wxBoxSizer( wxHORIZONTAL );
 
 	m_minText = new wxTextCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_minText->SetMinSize( wxSize( 70,-1 ) );
 
-	gSizerTxtCtr->Add( m_minText, 0, wxALIGN_BOTTOM|wxALL, 5 );
+	bSizerValues->Add( m_minText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bSizerMiddle->Add( gSizerTxtCtr, 1, wxEXPAND|wxBOTTOM, 5 );
+	bSizerValues->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_valueText = new wxTextCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_valueText->SetMinSize( wxSize( 70,-1 ) );
+
+	bSizerValues->Add( m_valueText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bSizer6->Add( bSizerMiddle, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizerValues->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_maxText = new wxTextCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_maxText->SetMinSize( wxSize( 70,-1 ) );
+
+	bSizerValues->Add( m_maxText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizerMiddle->Add( bSizerValues, 0, wxEXPAND, 5 );
+
+	m_slider = new wxSlider( m_panel1, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_BOTTOM|wxSL_HORIZONTAL );
+	m_slider->SetMinSize( wxSize( 200,-1 ) );
+
+	bSizerMiddle->Add( m_slider, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizer6->Add( bSizerMiddle, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );

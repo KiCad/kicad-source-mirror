@@ -46,6 +46,7 @@ class DIALOG_USER_DEFINED_SIGNALS_BASE : public DIALOG_SHIM
 		wxBoxSizer* bButtonSize;
 		STD_BITMAP_BUTTON* m_addButton;
 		STD_BITMAP_BUTTON* m_deleteButton;
+		wxButton* m_checkSyntax;
 		wxHyperlinkCtrl* m_syntaxHelp;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
@@ -55,6 +56,7 @@ class DIALOG_USER_DEFINED_SIGNALS_BASE : public DIALOG_SHIM
 		virtual void onGridCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void onAddSignal( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeleteSignal( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckSyntax( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 
 

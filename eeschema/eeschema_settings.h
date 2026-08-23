@@ -276,7 +276,7 @@ public:
             int  plot_panel_height;
             int  signal_panel_height;
             int  cursors_panel_height;
-            int  measurements_panel_height;
+            int  center_panel_width;
             bool white_background;
 
             wxString smith_cursor_columns;

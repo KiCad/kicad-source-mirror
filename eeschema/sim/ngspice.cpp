@@ -744,7 +744,23 @@ int NGSPICE::cbSendChar( char* aWhat, int aId, void* aUser )
             aWhat += 7;
         }
 
-        reporter->Report( aWhat );
+        // Everything ngspice says used to be reported as RPT_SEVERITY_UNDEFINED, so the console's
+        // severity filter had nothing to work with and its Warnings/Errors tabs stayed empty even
+        // while an error sat in plain sight under All.  ngspice prefixes its own diagnostics, so
+        // translate that prefix into a severity.
+        wxString text( aWhat, wxConvUTF8 );
+        wxString tag = text;
+        SEVERITY severity = RPT_SEVERITY_UNDEFINED;
+
+        tag.Trim( false );
+        tag.MakeUpper();
+
+        if( tag.StartsWith( wxS( "WARNING" ) ) )
+            severity = RPT_SEVERITY_WARNING;
+        else if( tag.StartsWith( wxS( "ERROR" ) ) || tag.StartsWith( wxS( "FATAL" ) ) )
+            severity = RPT_SEVERITY_ERROR;
+
+        reporter->Report( text, severity );
     }
 
     return 0;
