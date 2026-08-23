@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -53,8 +54,8 @@ class DIALOG_FP_EDIT_PAD_TABLE_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbAppendToExisiting;
 		wxButton* m_btnImportFromFile;
 		wxButton* m_btnImportFromClipboard;
-		wxBitmapButton* m_buttonAdd;
-		wxBitmapButton* m_buttonDelete;
+		STD_BITMAP_BUTTON* m_buttonAdd;
+		STD_BITMAP_BUTTON* m_buttonDelete;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

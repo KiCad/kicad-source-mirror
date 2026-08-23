@@ -29,6 +29,7 @@
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/grid_combobox.h>
+#include <widgets/std_bitmap_button.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <units_provider.h>
@@ -362,10 +363,10 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     // when long pin-number summaries (or duplicate lists) are produced.
     const int summaryW = m_pin_numbers_summary->GetCharWidth() * 30;
 
-    m_pin_numbers_summary->SetMinSize( wxSize( summaryW, -1 ) );
+    m_duplicate_pins->SetWindowStyleFlag( m_duplicate_pins->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
     m_pin_numbers_summary->SetMaxSize( wxSize( summaryW, -1 ) );
 
-    m_duplicate_pins->SetMinSize( wxSize( summaryW, -1 ) );
+    m_duplicate_pins->SetWindowStyleFlag( m_duplicate_pins->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
     m_duplicate_pins->SetMaxSize( wxSize( summaryW, -1 ) );
 
     wxGridCellAttr* attr = nullptr;

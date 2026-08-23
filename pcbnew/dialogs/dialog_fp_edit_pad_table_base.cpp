@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_fp_edit_pad_table_base.h"
@@ -58,7 +59,7 @@ DIALOG_FP_EDIT_PAD_TABLE_BASE::DIALOG_FP_EDIT_PAD_TABLE_BASE( wxWindow* parent, 
 	bSummarySizer->Add( m_duplicate_pins, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_dataSizer->Add( bSummarySizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_dataSizer->Add( bSummarySizer, 0, wxTOP|wxBOTTOM|wxEXPAND, 5 );
 
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxSize( 800,400 ), 0 );
 
@@ -114,6 +115,9 @@ DIALOG_FP_EDIT_PAD_TABLE_BASE::DIALOG_FP_EDIT_PAD_TABLE_BASE( wxWindow* parent, 
 	wxBoxSizer* m_sideBarSizer;
 	m_sideBarSizer = new wxBoxSizer( wxVERTICAL );
 
+
+	m_sideBarSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
 	wxStaticBoxSizer* m_exportSizer;
 	m_exportSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Export") ), wxVERTICAL );
 
@@ -121,49 +125,49 @@ DIALOG_FP_EDIT_PAD_TABLE_BASE::DIALOG_FP_EDIT_PAD_TABLE_BASE( wxWindow* parent, 
 	m_exportBtnSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_btnExportToFile = new wxButton( m_exportSizer->GetStaticBox(), wxID_ANY, _("To File..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_exportBtnSizer->Add( m_btnExportToFile, 0, wxALL, 5 );
+	m_exportBtnSizer->Add( m_btnExportToFile, 1, wxALL, 5 );
 
 
-	m_exportBtnSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_exportBtnSizer->Add( 5, 0, 0, wxEXPAND, 5 );
 
 	m_btnExportToClipboard = new wxButton( m_exportSizer->GetStaticBox(), wxID_ANY, _("To Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_exportBtnSizer->Add( m_btnExportToClipboard, 0, wxALL, 5 );
+	m_exportBtnSizer->Add( m_btnExportToClipboard, 1, wxALL, 5 );
 
 
 	m_exportSizer->Add( m_exportBtnSizer, 1, wxEXPAND, 5 );
 
 
-	m_sideBarSizer->Add( m_exportSizer, 0, wxEXPAND, 5 );
+	m_sideBarSizer->Add( m_exportSizer, 0, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* m_importSizer;
 	m_importSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Import") ), wxVERTICAL );
 
 	m_rbReplaceExisting = new wxRadioButton( m_importSizer->GetStaticBox(), wxID_ANY, _("Replace all existing pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_importSizer->Add( m_rbReplaceExisting, 0, wxALL, 5 );
+	m_importSizer->Add( m_rbReplaceExisting, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_rbAppendToExisiting = new wxRadioButton( m_importSizer->GetStaticBox(), wxID_ANY, _("Append to existing pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_importSizer->Add( m_rbAppendToExisiting, 0, wxALL, 5 );
+	m_importSizer->Add( m_rbAppendToExisiting, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* m_importBtnSizer;
 	m_importBtnSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_btnImportFromFile = new wxButton( m_importSizer->GetStaticBox(), wxID_ANY, _("From File..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_importBtnSizer->Add( m_btnImportFromFile, 0, wxALL, 5 );
+	m_importBtnSizer->Add( m_btnImportFromFile, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	m_importBtnSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_importBtnSizer->Add( 5, 0, 0, wxEXPAND, 5 );
 
 	m_btnImportFromClipboard = new wxButton( m_importSizer->GetStaticBox(), wxID_ANY, _("From Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_importBtnSizer->Add( m_btnImportFromClipboard, 0, wxALL, 5 );
+	m_importBtnSizer->Add( m_btnImportFromClipboard, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	m_importSizer->Add( m_importBtnSizer, 1, wxEXPAND, 5 );
+	m_importSizer->Add( m_importBtnSizer, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	m_sideBarSizer->Add( m_importSizer, 0, wxEXPAND, 5 );
+	m_sideBarSizer->Add( m_importSizer, 0, wxALL|wxEXPAND, 5 );
 
 
-	m_contentSizer->Add( m_sideBarSizer, 0, wxEXPAND, 5 );
+	m_contentSizer->Add( m_sideBarSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	topSizer->Add( m_contentSizer, 1, wxEXPAND, 5 );
@@ -174,14 +178,14 @@ DIALOG_FP_EDIT_PAD_TABLE_BASE::DIALOG_FP_EDIT_PAD_TABLE_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizer91;
 	bSizer91 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonAdd = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer91->Add( m_buttonAdd, 0, wxALL, 5 );
+	m_buttonAdd = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer91->Add( m_buttonAdd, 0, wxRIGHT|wxLEFT, 2 );
 
-	m_buttonDelete = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer91->Add( m_buttonDelete, 0, wxALL, 5 );
+	m_buttonDelete = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer91->Add( m_buttonDelete, 0, wxRIGHT|wxLEFT, 25 );
 
 
-	bSizer9->Add( bSizer91, 0, wxEXPAND, 5 );
+	bSizer9->Add( bSizer91, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer9->Add( 0, 0, 1, wxEXPAND, 5 );

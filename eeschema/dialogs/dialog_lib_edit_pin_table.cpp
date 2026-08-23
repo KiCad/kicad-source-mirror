@@ -918,11 +918,9 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     const int summaryW = m_pin_numbers_summary->GetCharWidth() * 30;
 
     m_pin_numbers_summary->SetWindowStyleFlag( m_pin_numbers_summary->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
-    m_pin_numbers_summary->SetMinSize( wxSize( summaryW, -1 ) );
     m_pin_numbers_summary->SetMaxSize( wxSize( summaryW, -1 ) );
 
     m_duplicate_pins->SetWindowStyleFlag( m_duplicate_pins->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
-    m_duplicate_pins->SetMinSize( wxSize( summaryW, -1 ) );
     m_duplicate_pins->SetMaxSize( wxSize( summaryW, -1 ) );
 
     GetSizer()->SetSizeHints(this);
