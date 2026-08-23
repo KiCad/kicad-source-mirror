@@ -1041,6 +1041,13 @@ message Group
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 4;
+
+  // Since: 10.0.7
+  kiapi.common.types.LockedState locked = 5;
+
+  // Optional design block identifier used for groups that have design block library links.
+  // Since: 10.0.7
+  kiapi.common.types.LibraryIdentifier lib_id = 6;
 }
 
 message FieldId
