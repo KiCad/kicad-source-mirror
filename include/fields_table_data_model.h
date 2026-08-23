@@ -197,6 +197,8 @@ public:
     bool         CanClearCell( int aRow, int aCol );
     virtual bool IsCellClear( int aRow, int aCol ) = 0;
     virtual bool IsCellEdited( int aRow, int aCol ) = 0;
+    /// Return true if any cell in the row has been edited.
+    bool         IsRowEdited( int aRow );
     virtual void RevertRow( int aRow ) = 0;
 
     /// Return the stable data-store keys of every item represented by a row.
@@ -332,27 +334,42 @@ public:
 
 
     /**
-     * Returns true if the cell is not present in the data store, not just empty.
+     * Returns true if the cell is not present in the data store for any item in the row,
+     * not just empty.
      */
     bool IsCellClear( int aRow, int aCol ) override
     {
         wxCHECK_MSG( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false, "Invalid Row Number" );
         wxCHECK_MSG( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false, "Invalid Column Number" );
 
-        wxString unused;
-        return !getStoredFieldValue( m_rows[aRow].m_items[0], m_cols[aCol].m_fieldName, unused );
+        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        {
+            wxString unused;
+
+            if( getStoredFieldValue( item, m_cols[aCol].m_fieldName, unused ) )
+                return false;
+        }
+
+        return true;
     }
 
 
     /**
-     * Returns true if the cell has been modified from the live value in the item (symbol/footprint/etc)
+     * Returns true if the cell has been modified from the live value in any item in the row
+     * (symbol/footprint/etc).
      */
     bool IsCellEdited( int aRow, int aCol ) override
     {
         wxCHECK_MSG( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false, "Invalid Row Number" );
         wxCHECK_MSG( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false, "Invalid Column Number" );
 
-        return fieldIsModified( m_rows[aRow].m_items[0], m_cols[aCol].m_fieldName );
+        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        {
+            if( fieldIsModified( item, m_cols[aCol].m_fieldName ) )
+                return true;
+        }
+
+        return false;
     }
 
 

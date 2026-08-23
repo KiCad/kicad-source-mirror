@@ -327,6 +327,20 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::CanClearCell( int aRow, int aCol )
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::IsRowEdited( int aRow )
+{
+    wxCHECK( aRow >= 0 && aRow < GetNumberRows(), false );
+
+    for( int col = 0; col < GetNumberCols(); ++col )
+    {
+        if( IsCellEdited( aRow, col ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 void FIELDS_TABLE_DATA_MODEL_BASE::SetSorting( int aCol, bool aAscending )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
