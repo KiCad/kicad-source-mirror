@@ -32,7 +32,10 @@
 #include <pcb_barcode.h>
 #include <pcb_dimension.h>
 #include <pcb_reference_image.h>
+#include <pcb_shape.h>
 #include <pcb_table.h>
+#include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <zone.h>
 
@@ -56,6 +59,9 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
     int barcodeCount = 0;
     int referenceImageCount = 0;
     int tableCount = 0;
+    int textCount = 0;
+    int textBoxCount = 0;
+    int shapeCount = 0;
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
@@ -135,16 +141,34 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
             ++tableCount;
             break;
 
+        case PCB_TEXT_T:
+            testProtoFromKiCadObject<kiapi::board::types::BoardText>(
+                    static_cast<PCB_TEXT*>( item ), m_board.get() );
+            ++textCount;
+            break;
+
+        case PCB_TEXTBOX_T:
+            testProtoFromKiCadObject<kiapi::board::types::BoardTextBox>(
+                    static_cast<PCB_TEXTBOX*>( item ), m_board.get() );
+            ++textBoxCount;
+            break;
+
+        case PCB_SHAPE_T:
+            testProtoFromKiCadObject<kiapi::board::types::BoardGraphicShape>(
+                    static_cast<PCB_SHAPE*>( item ), m_board.get() );
+            ++shapeCount;
+            break;
+
         default: break;
         }
-        // TODO(JE) Shapes
-
-        // TODO(JE) Text
     }
 
     BOOST_CHECK_GT( barcodeCount, 0 );
     BOOST_CHECK_GT( referenceImageCount, 0 );
     BOOST_CHECK_GT( tableCount, 0 );
+    BOOST_CHECK_GT( textCount, 0 );
+    BOOST_CHECK_GT( textBoxCount, 0 );
+    BOOST_CHECK_GT( shapeCount, 0 );
 }
 
 

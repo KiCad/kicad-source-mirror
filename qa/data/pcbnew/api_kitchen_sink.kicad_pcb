@@ -1767,6 +1767,19 @@
 		)
 		(uuid "b1308a10-16da-4d5b-9ca8-0d19372e7ae0")
 	)
+	(gr_text "Another sample text"
+		(at 140 50 45)
+		(layer "F.SilkS")
+		(uuid "9f73599c-1f33-4fe0-bdac-06da57c3e38b")
+		(effects
+			(font
+				(size 1.2 1.2)
+				(thickness 0.18)
+				(italic yes)
+			)
+			(justify right top mirror)
+		)
+	)
 	(gr_text "Text!"
 		(at 120.45 49.35 0)
 		(layer "B.Fab")
@@ -1778,6 +1791,28 @@
 			)
 			(justify left bottom mirror)
 		)
+	)
+	(gr_text_box "Multiline\nknockout\nbox"
+		(start 140 58)
+		(end 160 68)
+		(margins 1.27 1.27 1.27 1.27)
+		(layer "F.Cu")
+		(uuid "80002e37-e2ba-4173-86e4-0c0475983032")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.14)
+				(bold yes)
+				(italic yes)
+			)
+			(justify right bottom)
+		)
+		(border yes)
+		(stroke
+			(width 0.15)
+			(type dash)
+		)
+		(knockout yes)
 	)
 	(gr_text_box "Box\no\nCharacters"
 		(start 116.9 49.9)
