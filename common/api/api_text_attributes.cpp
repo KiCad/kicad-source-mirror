@@ -46,6 +46,9 @@ void PackTextAttributes( types::TextAttributes& aOutput, const TEXT_ATTRIBUTES& 
     aOutput.set_keep_upright( aInput.m_KeepUpright );
 
     PackVector2( *aOutput.mutable_size(), aInput.m_Size );
+
+    if( aInput.m_Color != KIGFX::COLOR4D::UNSPECIFIED )
+        PackColor( *aOutput.mutable_color(), aInput.m_Color );
 }
 
 
@@ -66,7 +69,12 @@ void UnpackTextAttributes( TEXT_ATTRIBUTES& aOutput, const types::TextAttributes
     }
 
     aOutput.m_Angle = EDA_ANGLE( aInput.angle().value_degrees(), DEGREES_T );
-    aOutput.m_LineSpacing = aInput.line_spacing();
+    aOutput.m_Valign = FromProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>( aInput.vertical_alignment() );
+
+    if( aInput.has_color() )
+        aOutput.m_Color = UnpackColor( aInput.color() );
+    else
+        aOutput.m_Color = KIGFX::COLOR4D::UNSPECIFIED;
     aOutput.m_StrokeWidth = aInput.stroke_width().value_nm();
     aOutput.m_Halign = FromProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>( aInput.horizontal_alignment() );
     aOutput.m_Valign = FromProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>( aInput.vertical_alignment() );
