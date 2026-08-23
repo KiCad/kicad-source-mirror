@@ -238,7 +238,14 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
     else if( const BOARD* board = GetBoard() )
         msg.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
-    // TODO m_hasSolderMask and m_solderMaskMargin
+    if( HasSolderMask() )
+    {
+        SolderMaskOverrides* sm = msg.mutable_solder_mask();
+        sm->set_expose_copper( true );
+
+        if( GetLocalSolderMaskMargin().has_value() )
+            sm->mutable_solder_mask_margin()->set_value_nm( GetLocalSolderMaskMargin().value() );
+    }
 
     aContainer.PackFrom( msg );
 }
@@ -275,7 +282,20 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
     any.PackFrom( msg.shape() );
     EDA_SHAPE::Deserialize( any );
 
-    // TODO m_hasSolderMask and m_solderMaskMargin
+    if( msg.has_solder_mask() )
+    {
+        SetHasSolderMask( msg.solder_mask().expose_copper() );
+
+        if( msg.solder_mask().has_solder_mask_margin() )
+            SetLocalSolderMaskMargin( msg.solder_mask().solder_mask_margin().value_nm() );
+        else
+            SetLocalSolderMaskMargin( {} );
+    }
+    else
+    {
+        SetHasSolderMask( false );
+        SetLocalSolderMaskMargin( {} );
+    }
 
     return true;
 }

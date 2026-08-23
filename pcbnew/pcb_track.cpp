@@ -414,7 +414,14 @@ void PCB_TRACK::Serialize( google::protobuf::Any &aContainer ) const
     if( const BOARD* board = GetBoard() )
         track.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
-    // TODO m_hasSolderMask and m_solderMaskMargin
+    if( HasSolderMask() )
+    {
+        kiapi::board::types::SolderMaskOverrides* sm = track.mutable_solder_mask();
+        sm->set_expose_copper( true );
+
+        if( GetLocalSolderMaskMargin().has_value() )
+            sm->mutable_solder_mask_margin()->set_value_nm( GetLocalSolderMaskMargin().value() );
+    }
 
     aContainer.PackFrom( track );
 }
@@ -434,7 +441,21 @@ bool PCB_TRACK::Deserialize( const google::protobuf::Any &aContainer )
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( track.layer() ) );
     UnpackNet( track.net() );
     SetLocked( track.locked() == kiapi::common::types::LockedState::LS_LOCKED );
-    // TODO m_hasSolderMask and m_solderMaskMargin
+
+    if( track.has_solder_mask() )
+    {
+        SetHasSolderMask( track.solder_mask().expose_copper() );
+
+        if( track.solder_mask().has_solder_mask_margin() )
+            SetLocalSolderMaskMargin( track.solder_mask().solder_mask_margin().value_nm() );
+        else
+            SetLocalSolderMaskMargin( {} );
+    }
+    else
+    {
+        SetHasSolderMask( false );
+        SetLocalSolderMaskMargin( {} );
+    }
 
     return true;
 }
@@ -460,7 +481,14 @@ void PCB_ARC::Serialize( google::protobuf::Any &aContainer ) const
     if( const BOARD* board = GetBoard() )
         arc.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
-    // TODO m_hasSolderMask and m_solderMaskMargin
+    if( HasSolderMask() )
+    {
+        kiapi::board::types::SolderMaskOverrides* sm = arc.mutable_solder_mask();
+        sm->set_expose_copper( true );
+
+        if( GetLocalSolderMaskMargin().has_value() )
+            sm->mutable_solder_mask_margin()->set_value_nm( GetLocalSolderMaskMargin().value() );
+    }
 
     aContainer.PackFrom( arc );
 }
@@ -481,7 +509,21 @@ bool PCB_ARC::Deserialize( const google::protobuf::Any &aContainer )
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( arc.layer() ) );
     UnpackNet( arc.net() );
     SetLocked( arc.locked() == kiapi::common::types::LockedState::LS_LOCKED );
-    // TODO m_hasSolderMask and m_solderMaskMargin
+
+    if( arc.has_solder_mask() )
+    {
+        SetHasSolderMask( arc.solder_mask().expose_copper() );
+
+        if( arc.solder_mask().has_solder_mask_margin() )
+            SetLocalSolderMaskMargin( arc.solder_mask().solder_mask_margin().value_nm() );
+        else
+            SetLocalSolderMaskMargin( {} );
+    }
+    else
+    {
+        SetHasSolderMask( false );
+        SetLocalSolderMaskMargin( {} );
+    }
 
     return true;
 }

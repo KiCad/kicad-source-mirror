@@ -158,6 +158,11 @@ message Track
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 8;
+
+  // Whether to show this shape on the solder mask layer and how much mask to expose if so.
+  // This field only applies to shapes on outer copper layers and is ignored otherwise.
+  // Since: 10.0.7
+  SolderMaskOverrides solder_mask = 9;
 }
 
 // Represents an arc track (not a PCB_SHAPE in arc shape)
@@ -178,6 +183,11 @@ message Arc
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 9;
+
+  // Whether to show this shape on the solder mask layer and how much mask to expose if so.
+  // This field only applies to shapes on outer copper layers and is ignored otherwise.
+  // Since: 10.0.7
+  SolderMaskOverrides solder_mask = 10;
 }
 
 // What copper layer shape mode the padstack uses
@@ -256,8 +266,14 @@ message ZoneConnectionSettings
 
 message SolderMaskOverrides
 {
-  // Solder mask expansion/contraction
+  // Solder mask expansion/contraction.  Absence of this field means the margin will be taken from this object's
+  // parent or the board design rules.
   kiapi.common.types.Distance solder_mask_margin = 1;
+
+  // When set to true, this shape will also appear on the solder mask layer, meaning the shape will be exposed
+  // copper.  This setting only has meaning for tracks and graphic shapes.  It is ignored for pads and footprints.
+  // Since: 10.0.7
+  bool expose_copper = 2;
 }
 
 message SolderPasteOverrides
@@ -511,6 +527,11 @@ message BoardGraphicShape
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 6;
+
+  // Whether to show this shape on the solder mask layer and how much mask to expose if so.
+  // This field only applies to shapes on outer copper layers and is ignored otherwise.
+  // Since: 10.0.7
+  SolderMaskOverrides solder_mask = 7;
 }
 
 enum BarcodeKind
