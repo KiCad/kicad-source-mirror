@@ -109,7 +109,7 @@ void FIELDS_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent
     if( row >= 0 && col >= 0 )
     {
         revertMenu->Enable( m_dataModel->IsCellEdited( row, col ) );
-        clearMenu->Enable( !m_grid->IsReadOnly( row, col ) && !m_dataModel->IsCellClear( row, col ) );
+        clearMenu->Enable( m_dataModel->CanClearCell( row, col ) );
     }
     else
     {

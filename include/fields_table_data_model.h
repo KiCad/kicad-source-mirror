@@ -194,6 +194,7 @@ public:
                                      const wxString& aRefRangeDelimiter ) = 0;
 
     virtual void ClearCell( int aRow, int aCol ) = 0;
+    bool         CanClearCell( int aRow, int aCol );
     virtual bool IsCellClear( int aRow, int aCol ) = 0;
     virtual bool IsCellEdited( int aRow, int aCol ) = 0;
     virtual void RevertRow( int aRow ) = 0;
@@ -312,6 +313,9 @@ public:
     {
         wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), "Invalid Row Number" );
         wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
+
+        if( !CanClearCell( aRow, aCol ) )
+            return;
 
         const wxString& fieldName = m_cols[aCol].m_fieldName;
 

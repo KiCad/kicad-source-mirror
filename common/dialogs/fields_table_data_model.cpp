@@ -303,6 +303,30 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::IsCellReadOnly( int, int aCol )
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::CanClearCell( int aRow, int aCol )
+{
+    wxCHECK( aRow >= 0 && aRow < GetNumberRows(), false );
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+
+    if( IsCellReadOnly( aRow, aCol ) || IsCellClear( aRow, aCol )
+        || IsGeneratedField( m_cols[aCol].m_fieldName ) )
+    {
+        return false;
+    }
+
+    for( FIELD_T fieldId : MANDATORY_FIELDS )
+    {
+        if( m_cols[aCol].m_fieldName == GetCanonicalFieldName( fieldId ) )
+            return false;
+    }
+
+    // Template fields are added by default to symbols, but it's unclear whether or not
+    // that means they should be mandatory. For now, allow them to be cleared.
+
+    return true;
+}
+
+
 void FIELDS_TABLE_DATA_MODEL_BASE::SetSorting( int aCol, bool aAscending )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
