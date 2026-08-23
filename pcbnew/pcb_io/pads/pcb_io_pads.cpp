@@ -688,12 +688,12 @@ void PCB_IO_PADS::loadFootprints()
                     const std::vector<PADS_IO::PAD_STACK_LAYER>& stack = stack_it->second;
 
                     double drill = 0.0;
-                    bool plated = true;
+                    bool   plated = true;
                     double slot_length = 0.0;
                     double slot_orientation = 0.0;
                     double pad_rotation = 0.0;
 
-                    for( const auto& layer_def : stack )
+                    for( const PADS_IO::PAD_STACK_LAYER& layer_def : stack )
                     {
                         if( layer_def.drill > 0 )
                         {
@@ -732,7 +732,7 @@ void PCB_IO_PADS::loadFootprints()
 
                     bool has_explicit_layers = false;
 
-                    for( const auto& layer_def : stack )
+                    for( const PADS_IO::PAD_STACK_LAYER& layer_def : stack )
                     {
                         if( layer_def.layer == -2 || layer_def.layer == -1
                             || layer_def.layer == 1
@@ -766,7 +766,7 @@ void PCB_IO_PADS::loadFootprints()
                     // and must suppress the SMD fallback for that layer.
                     LSET explicitly_seen_tech;
 
-                    for( const auto& layer_def : stack )
+                    for( const PADS_IO::PAD_STACK_LAYER& layer_def : stack )
                     {
                         if( layer_def.layer > 0 )
                         {
@@ -800,7 +800,7 @@ void PCB_IO_PADS::loadFootprints()
                         std::string front_shape;
                         std::string back_shape;
 
-                        for( const auto& layer_def : stack )
+                        for( const PADS_IO::PAD_STACK_LAYER& layer_def : stack )
                         {
                             if( layer_def.sizeA <= 0 )
                                 continue;
@@ -824,11 +824,8 @@ void PCB_IO_PADS::loadFootprints()
                         // (e.g. different annular ring diameters) are represented in
                         // NORMAL mode using the primary (front/component-side) shape, which
                         // keeps mirrored placements visually consistent with the original.
-                        if( !front_shape.empty() && !back_shape.empty()
-                            && front_shape != back_shape )
-                        {
+                        if( !front_shape.empty() && !back_shape.empty() && front_shape != back_shape )
                             pad->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
-                        }
                     }
 
                     // Tracks whether convertPadShape has already been called for a copper
@@ -837,7 +834,7 @@ void PCB_IO_PADS::loadFootprints()
                     // The primary (layer -2, component-side) entry must win.
                     bool normal_copper_set = false;
 
-                    for( const auto& layer_def : stack )
+                    for( const PADS_IO::PAD_STACK_LAYER& layer_def : stack )
                     {
                         if( layer_def.layer == 0 )
                         {
@@ -888,10 +885,7 @@ void PCB_IO_PADS::loadFootprints()
                             }
 
                             if( layer_def.thermal_spoke_orientation != 0.0 )
-                            {
-                                pad->SetThermalSpokeAngleDegrees(
-                                        layer_def.thermal_spoke_orientation );
-                            }
+                                pad->SetThermalSpokeAngleDegrees( layer_def.thermal_spoke_orientation );
 
                             continue;
                         }
@@ -1051,7 +1045,7 @@ void PCB_IO_PADS::loadFootprints()
                 }
             }
 
-            for( const auto& item : decal.items )
+            for( const PADS_IO::DECAL_ITEM& item : decal.items )
             {
                 if( item.points.empty() )
                     continue;
@@ -1274,10 +1268,10 @@ void PCB_IO_PADS::loadReuseBlockGroups()
 
 void PCB_IO_PADS::loadTestPoints()
 {
-    const auto& test_points = m_parser->GetTestPoints();
-    const auto& via_defs = m_parser->GetViaDefs();
+    const std::vector<PADS_IO::TEST_POINT>&        test_points = m_parser->GetTestPoints();
+    const std::map<std::string, PADS_IO::VIA_DEF>& via_defs = m_parser->GetViaDefs();
 
-    for( const auto& tp : test_points )
+    for( const PADS_IO::TEST_POINT& tp : test_points )
     {
         FOOTPRINT* footprint = new FOOTPRINT( m_loadBoard );
 
@@ -1310,7 +1304,7 @@ void PCB_IO_PADS::loadTestPoints()
             bool   hasMaskTop   = false;
             bool   hasMaskBot   = false;
 
-            for( const auto& stackLayer : def.stack )
+            for( const PADS_IO::PAD_STACK_LAYER& stackLayer : def.stack )
             {
                 if( def.size <= 0.0 && stackLayer.sizeA > stackSize )
                     stackSize = stackLayer.sizeA;
@@ -1383,9 +1377,9 @@ void PCB_IO_PADS::loadTestPoints()
 
 void PCB_IO_PADS::loadTexts()
 {
-    const auto& texts = m_parser->GetTexts();
+    const std::vector<PADS_IO::TEXT>& texts = m_parser->GetTexts();
 
-    for( const auto& pads_text : texts )
+    for( const PADS_IO::TEXT& pads_text : texts )
     {
         PCB_LAYER_ID textLayer = getMappedLayer( pads_text.layer );
 
@@ -1451,27 +1445,27 @@ void PCB_IO_PADS::loadTexts()
 
 void PCB_IO_PADS::loadTracksAndVias()
 {
-    const auto& routes = m_parser->GetRoutes();
-    std::set<std::pair<int, int>> placedThroughVias;
+    const std::vector<PADS_IO::ROUTE>& routes = m_parser->GetRoutes();
+    std::set<std::pair<int, int>>      placedThroughVias;
 
     // Build a position set for test-point vias so we don't also place a bare
     // PCB_VIA at those locations; loadTestPoints() already creates footprints.
     std::set<std::pair<int, int>> testPointPositions;
 
-    for( const auto& tp : m_parser->GetTestPoints() )
+    for( const PADS_IO::TEST_POINT& tp : m_parser->GetTestPoints() )
     {
         if( tp.type == "VIA" )
             testPointPositions.emplace( scaleCoord( tp.x, true ), scaleCoord( tp.y, false ) );
     }
 
-    for( const auto& route : routes )
+    for( const PADS_IO::ROUTE& route : routes )
     {
         NETINFO_ITEM* net = m_loadBoard->FindNet( PADS_COMMON::ConvertInvertedNetName( route.net_name ) );
 
         if( !net )
             continue;
 
-        for( const auto& track_def : route.tracks )
+        for( const PADS_IO::TRACK& track_def : route.tracks )
         {
             if( track_def.points.size() < 2 )
                 continue;
@@ -1529,7 +1523,7 @@ void PCB_IO_PADS::loadTracksAndVias()
             }
         }
 
-        for( const auto& via_def : route.vias )
+        for( const PADS_IO::VIA& via_def : route.vias )
         {
             VECTOR2I pos( scaleCoord( via_def.location.x, true ), scaleCoord( via_def.location.y, false ) );
 
@@ -1612,7 +1606,7 @@ void PCB_IO_PADS::loadTracksAndVias()
 
 void PCB_IO_PADS::loadCopperShapes()
 {
-    const auto& copperShapes = m_parser->GetCopperShapes();
+    const std::vector<PADS_IO::COPPER_SHAPE>& copperShapes = m_parser->GetCopperShapes();
 
     // Check if a COPPER_SHAPE is a non-copper straight-line segment suitable for
     // rectangle grouping (2 outline points, no arcs, not filled, not cutout).
@@ -1632,10 +1626,10 @@ void PCB_IO_PADS::loadCopperShapes()
                 if( idx + 3 >= copperShapes.size() )
                     return false;
 
-                const auto& c0 = copperShapes[idx];
-                const auto& c1 = copperShapes[idx + 1];
-                const auto& c2 = copperShapes[idx + 2];
-                const auto& c3 = copperShapes[idx + 3];
+                const PADS_IO::COPPER_SHAPE& c0 = copperShapes[idx];
+                const PADS_IO::COPPER_SHAPE& c1 = copperShapes[idx + 1];
+                const PADS_IO::COPPER_SHAPE& c2 = copperShapes[idx + 2];
+                const PADS_IO::COPPER_SHAPE& c3 = copperShapes[idx + 3];
 
                 if( !isRectCandidate( c0 ) || !isRectCandidate( c1 )
                     || !isRectCandidate( c2 ) || !isRectCandidate( c3 ) )
@@ -1701,7 +1695,7 @@ void PCB_IO_PADS::loadCopperShapes()
 
     for( size_t idx = 0; idx < copperShapes.size(); ++idx )
     {
-        const auto& copper = copperShapes[idx];
+        const PADS_IO::COPPER_SHAPE& copper = copperShapes[idx];
 
         if( copper.outline.size() < 2 )
             continue;
@@ -1749,8 +1743,8 @@ void PCB_IO_PADS::loadCopperShapes()
             // graphics on their actual layer rather than forcing them onto copper.
             for( size_t i = 0; i < copper.outline.size() - 1; ++i )
             {
-                const auto& p1 = copper.outline[i];
-                const auto& p2 = copper.outline[i + 1];
+                const PADS_IO::ARC_POINT& p1 = copper.outline[i];
+                const PADS_IO::ARC_POINT& p2 = copper.outline[i + 1];
 
                 VECTOR2I start( scaleCoord( p1.x, true ), scaleCoord( p1.y, false ) );
                 VECTOR2I end( scaleCoord( p2.x, true ), scaleCoord( p2.y, false ) );
@@ -1808,8 +1802,8 @@ void PCB_IO_PADS::loadCopperShapes()
         {
             for( size_t i = 0; i < copper.outline.size() - 1; ++i )
             {
-                const auto& p1 = copper.outline[i];
-                const auto& p2 = copper.outline[i + 1];
+                const PADS_IO::ARC_POINT& p1 = copper.outline[i];
+                const PADS_IO::ARC_POINT& p2 = copper.outline[i + 1];
 
                 VECTOR2I start( scaleCoord( p1.x, true ), scaleCoord( p1.y, false ) );
                 VECTOR2I end( scaleCoord( p2.x, true ), scaleCoord( p2.y, false ) );
@@ -1851,14 +1845,14 @@ void PCB_IO_PADS::loadCopperShapes()
 
 void PCB_IO_PADS::loadClusterGroups()
 {
-    const auto& clusters = m_parser->GetClusters();
+    const std::vector<PADS_IO::CLUSTER>& clusters = m_parser->GetClusters();
 
     if( clusters.empty() )
         return;
 
     std::map<std::string, const PADS_IO::CLUSTER*> netToClusterMap;
 
-    for( const auto& cluster : clusters )
+    for( const PADS_IO::CLUSTER& cluster : clusters )
     {
         for( const std::string& netName : cluster.net_names )
         {
@@ -1869,7 +1863,7 @@ void PCB_IO_PADS::loadClusterGroups()
 
     std::map<int, PCB_GROUP*> clusterGroups;
 
-    for( const auto& cluster : clusters )
+    for( const PADS_IO::CLUSTER& cluster : clusters )
     {
         PCB_GROUP* group = new PCB_GROUP( m_loadBoard );
         group->SetName( wxString::FromUTF8( cluster.name ) );
@@ -1901,8 +1895,8 @@ void PCB_IO_PADS::loadClusterGroups()
 
 void PCB_IO_PADS::loadZones()
 {
-    const auto& pours = m_parser->GetPours();
-    const auto& params = m_parser->GetParameters();
+    const std::vector<PADS_IO::POUR>& pours = m_parser->GetPours();
+    const PADS_IO::PARAMETERS&        params = m_parser->GetParameters();
 
     // Returns true if the points can produce a valid polygon (at least 3 vertices
     // for a regular polygon, or a single full-circle point).
@@ -1922,7 +1916,7 @@ void PCB_IO_PADS::loadZones()
     // while KiCad uses higher numbers = higher priority.
     int maxPriority = 0;
 
-    for( const auto& pour_def : pours )
+    for( const PADS_IO::POUR& pour_def : pours )
     {
         if( pour_def.priority > maxPriority )
             maxPriority = pour_def.priority;
@@ -1935,7 +1929,7 @@ void PCB_IO_PADS::loadZones()
     std::map<std::string, std::string> hatoutToParent;
 
     // First pass: create zones from POUROUT records and build lookup maps
-    for( const auto& pour_def : pours )
+    for( const PADS_IO::POUR& pour_def : pours )
     {
         if( pour_def.style == PADS_IO::POUR_STYLE::HATCHED )
         {
@@ -2004,7 +1998,7 @@ void PCB_IO_PADS::loadZones()
     }
 
     // Second pass: build fill polygons from HATOUT records with VOIDOUT holes
-    for( const auto& pour_def : pours )
+    for( const PADS_IO::POUR& pour_def : pours )
     {
         if( pour_def.style != PADS_IO::POUR_STYLE::HATCHED )
             continue;
@@ -2041,7 +2035,7 @@ void PCB_IO_PADS::loadZones()
         // from repeated sequential operations.
         SHAPE_POLY_SET allVoids;
 
-        for( const auto& void_def : pours )
+        for( const PADS_IO::POUR& void_def : pours )
         {
             if( void_def.style != PADS_IO::POUR_STYLE::VOIDOUT )
                 continue;
@@ -2225,10 +2219,10 @@ void PCB_IO_PADS::loadDimensions()
 
 void PCB_IO_PADS::loadKeepouts()
 {
-    const auto& keepouts = m_parser->GetKeepouts();
+    const std::vector<PADS_IO::KEEPOUT>& keepouts = m_parser->GetKeepouts();
     int keepoutIndex = 0;
 
-    for( const auto& ko : keepouts )
+    for( const PADS_IO::KEEPOUT& ko : keepouts )
     {
         if( ko.outline.size() < 3 )
             continue;
@@ -2292,10 +2286,10 @@ void PCB_IO_PADS::loadKeepouts()
 
         switch( ko.type )
         {
-        case PADS_IO::KEEPOUT_TYPE::ALL:       typeName = wxT( "Keepout" ); break;
-        case PADS_IO::KEEPOUT_TYPE::ROUTE:     typeName = wxT( "RouteKeepout" ); break;
-        case PADS_IO::KEEPOUT_TYPE::VIA:       typeName = wxT( "ViaKeepout" ); break;
-        case PADS_IO::KEEPOUT_TYPE::COPPER:    typeName = wxT( "CopperKeepout" ); break;
+        case PADS_IO::KEEPOUT_TYPE::ALL:       typeName = wxT( "Keepout" );          break;
+        case PADS_IO::KEEPOUT_TYPE::ROUTE:     typeName = wxT( "RouteKeepout" );     break;
+        case PADS_IO::KEEPOUT_TYPE::VIA:       typeName = wxT( "ViaKeepout" );       break;
+        case PADS_IO::KEEPOUT_TYPE::COPPER:    typeName = wxT( "CopperKeepout" );    break;
         case PADS_IO::KEEPOUT_TYPE::PLACEMENT: typeName = wxT( "PlacementKeepout" ); break;
         }
 
@@ -2307,8 +2301,8 @@ void PCB_IO_PADS::loadKeepouts()
         // Close the outline if first and last points don't match
         if( ko.outline.size() > 2 )
         {
-            const auto& first = ko.outline.front();
-            const auto& last = ko.outline.back();
+            const PADS_IO::ARC_POINT& first = ko.outline.front();
+            const PADS_IO::ARC_POINT& last = ko.outline.back();
 
             if( std::abs( first.x - last.x ) > 0.001 || std::abs( first.y - last.y ) > 0.001 )
                 koChain.Append( scaleCoord( first.x, true ), scaleCoord( first.y, false ) );
@@ -2327,7 +2321,7 @@ void PCB_IO_PADS::loadGraphicLines()
 {
     for( const PADS_IO::GRAPHIC_LINE& graphic : m_parser->GetGraphicLines() )
     {
-        const auto& pts = graphic.points;
+        const std::vector<PADS_IO::ARC_POINT>& pts = graphic.points;
 
         PCB_LAYER_ID graphicLayer = getMappedLayer( graphic.layer );
 
@@ -2528,7 +2522,7 @@ int PCB_IO_PADS::scaleCoord( double aVal, bool aIsX ) const
 
 PCB_LAYER_ID PCB_IO_PADS::getMappedLayer( int aPadsLayer ) const
 {
-    for( const auto& info : m_layerInfos )
+    for( const PADS_LAYER_INFO& info : m_layerInfos )
     {
         if( info.padsLayerNum == aPadsLayer )
         {
@@ -2621,8 +2615,7 @@ void PCB_IO_PADS::appendArcPoints( SHAPE_LINE_CHAIN& aChain, const std::vector<P
 }
 
 
-void PCB_IO_PADS::setPcbShapeArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev,
-                                  const PADS_IO::ARC_POINT& aCurr )
+void PCB_IO_PADS::setPcbShapeArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev, const PADS_IO::ARC_POINT& aCurr )
 {
     aShape->SetShape( SHAPE_T::ARC );
 
@@ -2640,8 +2633,7 @@ void PCB_IO_PADS::setPcbShapeArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& a
 }
 
 
-SHAPE_ARC PCB_IO_PADS::makeMidpointArc( const PADS_IO::ARC_POINT& aPrev,
-                                        const PADS_IO::ARC_POINT& aCurr, int aWidth )
+SHAPE_ARC PCB_IO_PADS::makeMidpointArc( const PADS_IO::ARC_POINT& aPrev, const PADS_IO::ARC_POINT& aCurr, int aWidth )
 {
     VECTOR2I start( scaleCoord( aPrev.x, true ), scaleCoord( aPrev.y, false ) );
     VECTOR2I end( scaleCoord( aCurr.x, true ), scaleCoord( aCurr.y, false ) );

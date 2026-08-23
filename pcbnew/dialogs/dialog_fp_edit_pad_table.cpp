@@ -515,10 +515,10 @@ void DIALOG_FP_EDIT_PAD_TABLE::fillGridRow( int aRowId, PAD* aPad )
     m_grid->SetCellValue( aRowId, COL_SHAPE, padShape );
     m_grid->SetCellValue( aRowId, COL_POS_X, m_unitsProvider->StringFromValue( aPad->GetPosition().x, true ) );
     m_grid->SetCellValue( aRowId, COL_POS_Y, m_unitsProvider->StringFromValue( aPad->GetPosition().y, true ) );
-    m_grid->SetCellValue( aRowId, COL_SIZE_X,
-                          size_x >= 0 ? m_unitsProvider->StringFromValue( size_x, true ) : INDETERMINATE_STATE );
-    m_grid->SetCellValue( aRowId, COL_SIZE_Y,
-                          size_y >= 0 ? m_unitsProvider->StringFromValue( size_y, true ) : INDETERMINATE_STATE );
+    m_grid->SetCellValue( aRowId, COL_SIZE_X, size_x >= 0 ? m_unitsProvider->StringFromValue( size_x, true )
+                                                          : INDETERMINATE_STATE );
+    m_grid->SetCellValue( aRowId, COL_SIZE_Y, size_y >= 0 ? m_unitsProvider->StringFromValue( size_y, true )
+                                                          : INDETERMINATE_STATE );
 
     // Drill values (only meaningful for PTH or NPTH). Leave empty otherwise.
     if( aPad->GetAttribute() == PAD_ATTRIB::PTH || aPad->GetAttribute() == PAD_ATTRIB::NPTH )
