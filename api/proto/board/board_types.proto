@@ -513,6 +513,9 @@ message Via
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 7;
+
+  // Since: 10.0.7
+  PadTeardropSettings teardrop = 8;
 }
 
 message BoardGraphicShape
@@ -692,6 +695,9 @@ message Pad
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 13;
+
+  // Since: 10.0.7
+  PadTeardropSettings teardrop = 14;
 }
 
 enum ZoneType
@@ -775,6 +781,46 @@ message ThievingFillSettings
 message ZoneTeardropSettings
 {
   ZoneTeardropType type = 1;
+}
+
+enum PadTeardropMode
+{
+  PTM_UNKNOWN = 0;
+  PTM_DISABLED = 1;
+  PTM_ENABLED = 2;
+}
+
+// Settings for teardrops applied to pads and vias
+// Since: 10.0.7
+message PadTeardropSettings
+{
+  // Whether to enable teardrops
+  PadTeardropMode mode = 1;
+
+  bool curved_edges = 2;
+
+  // True to allow a teardrop to extend over multiple (currently up to two) connected track segments if the first
+  // segment is too short to achieve the best teardrop length.
+  bool allow_multiple_track_segments = 3;
+
+  // True to prefer zone connections instead of teardrops for pads that are also connected to a copper zone.
+  bool prefer_zone_connection = 4;
+
+  // If absent, no maximum length constraint is applied
+  kiapi.common.types.Distance max_length = 5;
+
+  // If absent, no maximum width constraint is applied
+  kiapi.common.types.Distance max_width = 6;
+
+  // Preferred teardrop length as ratio of the pad/via size.
+  double best_length_ratio = 7;
+
+  // Preferred teardrop width as a ratio of the pad/via size.
+  double best_width_ratio = 8;
+
+  // Maximum ratio between the pad/via size and connected track width that will create a teardrop.
+  // 1.0 always creates a teardrop; 0.0 never does.
+  double max_track_width_ratio = 9;
 }
 
 message CopperZoneSettings

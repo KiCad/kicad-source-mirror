@@ -20,6 +20,7 @@
  */
 
 #include <base_units.h>
+#include <api/api_pcb_utils.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_draw_frame.h>
@@ -422,6 +423,8 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
     if( FOOTPRINT* parent = GetParentFootprint() )
         pad.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
 
+    kiapi::board::PackTeardropSettings( *pad.mutable_teardrop(), GetTeardropParams() );
+
     aContainer.PackFrom( pad );
 }
 
@@ -465,6 +468,11 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
         if( pad.symbol_pin().no_connect() )
             m_pinType += wxT( "+no_connect" );
     }
+
+    if( pad.has_teardrop() )
+        kiapi::board::UnpackTeardropSettings( GetTeardropParams(), pad.teardrop() );
+    else
+        SetTeardropsEnabled( false );
 
     return true;
 }

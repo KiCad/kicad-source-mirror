@@ -24,6 +24,7 @@
 #include <api/api_utils.h>
 #include <board.h>
 #include <google/protobuf/any.pb.h>
+#include <teardrop/teardrop_parameters.h>
 #include <board_item_container.h>
 #include <footprint.h>
 #include <lset.h>
@@ -154,6 +155,34 @@ void PackBoardStackup( const BOARD& aBoard, BoardStackup& aOut )
 
         layer.set_user_name( aBoard.GetLayerName( id ) );
     }
+}
+
+
+void PackTeardropSettings( types::PadTeardropSettings& aOutput, const TEARDROP_PARAMETERS& aParams )
+{
+    aOutput.set_mode( aParams.m_Enabled ? types::PadTeardropMode::PTM_ENABLED : types::PadTeardropMode::PTM_DISABLED );
+    aOutput.set_curved_edges( aParams.m_CurvedEdges );
+    aOutput.set_allow_multiple_track_segments( aParams.m_AllowUseTwoTracks );
+    aOutput.set_prefer_zone_connection( !aParams.m_TdOnPadsInZones );
+    aOutput.mutable_max_length()->set_value_nm( aParams.m_TdMaxLen );
+    aOutput.mutable_max_width()->set_value_nm( aParams.m_TdMaxWidth );
+    aOutput.set_best_length_ratio( aParams.m_BestLengthRatio );
+    aOutput.set_best_width_ratio( aParams.m_BestWidthRatio );
+    aOutput.set_max_track_width_ratio( aParams.m_WidthtoSizeFilterRatio );
+}
+
+
+void UnpackTeardropSettings( TEARDROP_PARAMETERS& aOutput, const types::PadTeardropSettings& aProto )
+{
+    aOutput.m_Enabled = ( aProto.mode() == types::PadTeardropMode::PTM_ENABLED );
+    aOutput.m_CurvedEdges = aProto.curved_edges();
+    aOutput.m_AllowUseTwoTracks = aProto.allow_multiple_track_segments();
+    aOutput.m_TdOnPadsInZones = !aProto.prefer_zone_connection();
+    aOutput.m_TdMaxLen = aProto.max_length().value_nm();
+    aOutput.m_TdMaxWidth = aProto.max_width().value_nm();
+    aOutput.m_BestLengthRatio = aProto.best_length_ratio();
+    aOutput.m_BestWidthRatio = aProto.best_width_ratio();
+    aOutput.m_WidthtoSizeFilterRatio = aProto.max_track_width_ratio();
 }
 
 }   // namespace kiapi::board
