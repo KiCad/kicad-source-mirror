@@ -90,9 +90,16 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any& aContainer ) const
     kiapi::common::PackVector2( *text.mutable_top_left(), GetPosition() );
     kiapi::common::PackVector2( *text.mutable_bottom_right(), GetEnd() );
     text.set_text( GetText().ToStdString() );
-    //text.set_hyperlink( GetHyperlink().ToStdString() );
 
     kiapi::common::PackTextAttributes( *text.mutable_attributes(), GetAttributes() );
+
+    text.set_border_enabled( IsBorderEnabled() );
+    text.mutable_margin_left()->set_value_nm( GetMarginLeft() );
+    text.mutable_margin_top()->set_value_nm( GetMarginTop() );
+    text.mutable_margin_right()->set_value_nm( GetMarginRight() );
+    text.mutable_margin_bottom()->set_value_nm( GetMarginBottom() );
+
+    boardText.set_knockout( IsKnockout() );
 
     if( FOOTPRINT* parent = GetParentFootprint() )
         boardText.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
@@ -120,14 +127,28 @@ bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any& aContainer )
     SetPosition( kiapi::common::UnpackVector2( text.top_left() ) );
     SetEnd( kiapi::common::UnpackVector2( text.bottom_right() ) );
     SetText( wxString( text.text().c_str(), wxConvUTF8 ) );
-    //SetHyperlink( wxString::FromUTF8( text.hyperlink() );
 
     if( text.has_attributes() )
     {
         TEXT_ATTRIBUTES attrs = GetAttributes();
         kiapi::common::UnpackTextAttributes( attrs, text.attributes() );
         SetAttributes( attrs );
+
+        // Handles setting shape to rectangle or polygon
+        SetTextAngle( attrs.m_Angle );
     }
+
+    if( text.has_margin_left() )
+        SetMarginLeft( text.margin_left().value_nm() );
+    if( text.has_margin_top() )
+        SetMarginTop( text.margin_top().value_nm() );
+    if( text.has_margin_right() )
+        SetMarginRight( text.margin_right().value_nm() );
+    if( text.has_margin_bottom() )
+        SetMarginBottom( text.margin_bottom().value_nm() );
+
+    SetBorderEnabled( text.border_enabled() );
+    SetIsKnockout( boardText.knockout() );
 
     return true;
 }

@@ -329,8 +329,28 @@ message TextBox
 
   // Reserved for future use; base objects don't support locking right now
   //kiapi.common.types.LockedState    locked       = 5;
+  reserved 5;
 
   string                            text         = 6;
+
+  // Reserved for future use; hyperlinks aren't currently supported but may be in the future
+  // string hyperlink = 7;
+  reserved 7;
+
+  // Since: 10.0.7
+  bool border_enabled = 8;
+
+  // Since: 10.0.7
+  kiapi.common.types.Distance margin_left   = 9;
+
+  // Since: 10.0.7
+  kiapi.common.types.Distance margin_top    = 10;
+
+  // Since: 10.0.7
+  kiapi.common.types.Distance margin_right  = 11;
+
+  // Since: 10.0.7
+  kiapi.common.types.Distance margin_bottom = 12;
 }
 
 message StrokeAttributes
