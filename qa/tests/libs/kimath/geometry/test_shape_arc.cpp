@@ -26,6 +26,7 @@
 #include <geometry/shape_arc.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
+#include <trigo.h>
 
 #include <qa_utils/geometry/geometry.h>
 #include <qa_utils/numeric.h>
@@ -1383,6 +1384,97 @@ BOOST_AUTO_TEST_CASE( CurvedArcsKeepTheirSweep )
                            VECTOR2I( 0, -1000000 ), 127000 );
 
     BOOST_CHECK_CLOSE( major.GetCentralAngle().AsDegrees(), 270.0, 0.01 );
+}
+
+
+// Coincident start/mid plus a distant end previously produced a center far off from the inputs
+BOOST_AUTO_TEST_CASE( CalcArcCenterTwoCoincidentStartMid )
+{
+    const VECTOR2D start( 0.0, 0.0 );
+    const VECTOR2D mid  ( 0.0, 0.0 );
+    const VECTOR2D end  ( 1000.0, 0.0 );
+
+    VECTOR2D center = CalcArcCenter( start, mid, end );
+
+    BOOST_CHECK_CLOSE( center.x, 500.0, 1e-9 );
+    BOOST_CHECK_SMALL( center.y, 1e-9 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CalcArcCenterTwoCoincidentMidEnd )
+{
+    const VECTOR2D start( -1000.0, 0.0 );
+    const VECTOR2D mid  ( 0.0, 0.0 );
+    const VECTOR2D end  ( 0.0, 0.0 );
+
+    VECTOR2D center = CalcArcCenter( start, mid, end );
+
+    BOOST_CHECK_CLOSE( center.x, -500.0, 1e-9 );
+    BOOST_CHECK_SMALL( center.y, 1e-9 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CalcArcCenterTwoCoincidentStartEnd )
+{
+    // Coincident start/end with a distinct mid is a 360-degree arc, center is midpoint to mid
+    const VECTOR2D start( 0.0, 0.0 );
+    const VECTOR2D mid  ( 1000.0, 0.0 );
+    const VECTOR2D end  ( 0.0, 0.0 );
+
+    VECTOR2D center = CalcArcCenter( start, mid, end );
+
+    BOOST_CHECK_CLOSE( center.x, 500.0, 1e-9 );
+    BOOST_CHECK_SMALL( center.y, 1e-9 );
+}
+
+
+// Three near-coincident points collapse to the centroid via the bbox guard, not the pairwise guard
+BOOST_AUTO_TEST_CASE( CalcArcCenterThreeNearCoincident )
+{
+    const VECTOR2D start( 100.0, 200.0 );
+    const VECTOR2D mid  ( 101.0, 200.0 );
+    const VECTOR2D end  ( 100.0, 201.0 );
+
+    VECTOR2D center = CalcArcCenter( start, mid, end );
+
+    BOOST_CHECK_CLOSE( center.x, ( start.x + mid.x + end.x ) / 3.0, 1e-9 );
+    BOOST_CHECK_CLOSE( center.y, ( start.y + mid.y + end.y ) / 3.0, 1e-9 );
+}
+
+
+// A thin arc must not trip the coincident-point guards despite its short chord and small sagitta
+BOOST_AUTO_TEST_CASE( CalcArcCenterThinArcNotDegenerate )
+{
+    const VECTOR2D start( 0.0, 0.0 );
+    const VECTOR2D mid  ( 10.0, 1.0 );
+    const VECTOR2D end  ( 20.0, 0.0 );
+
+    VECTOR2D center = CalcArcCenter( start, mid, end );
+
+    double rs = ( center - start ).EuclideanNorm();
+    double rm = ( center - mid ).EuclideanNorm();
+    double re = ( center - end ).EuclideanNorm();
+
+    BOOST_CHECK_CLOSE( rs, rm, 0.01 );
+    BOOST_CHECK_CLOSE( rm, re, 0.01 );
+
+    // True circumradius is 50.5 IU; a wrongly-triggered midpoint guard would give ~10 IU
+    BOOST_CHECK_GT( rs, 40.0 );
+}
+
+
+// A board-scale arc must not regress from the new pairwise coincidence guards
+BOOST_AUTO_TEST_CASE( CalcArcCenterBoardScaleSanity )
+{
+    const double R = 50000000.0;
+    const VECTOR2D start( R, 0.0 );
+    const VECTOR2D mid  ( 0.0, R );
+    const VECTOR2D end  ( -R, 0.0 );
+
+    VECTOR2D center = CalcArcCenter( start, mid, end );
+
+    BOOST_CHECK_SMALL( center.x, 1.0 );
+    BOOST_CHECK_SMALL( center.y, 1.0 );
 }
 
 
