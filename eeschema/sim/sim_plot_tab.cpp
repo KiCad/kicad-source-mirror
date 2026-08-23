@@ -384,7 +384,7 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
     gridPen.SetStyle( wxPENSTYLE_DOT );
 
     aDC.SetBrush( *wxTRANSPARENT_BRUSH );
-    aDC.SetFont( m_font );
+    aDC.SetFont( GetPlotFont() );
     aDC.SetTextForeground( m_pen.GetColour() );
     aDC.SetPen( gridPen );
 
@@ -931,7 +931,7 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     else
         lines.push_back( wxS( "VSWR = inf" ) );
 
-    aDC.SetFont( GetFont() );
+    aDC.SetFont( GetPlotFont() );
 
     int boxW = 0;
     int boxH = 0;

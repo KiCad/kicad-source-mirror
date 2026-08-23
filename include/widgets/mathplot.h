@@ -253,10 +253,26 @@ public:
         return m_displayName.IsEmpty() ? m_name : m_displayName;
     }
 
-    /** Get font set for this layer.
+    /** Get font set for this layer.  Invalid if none was set.
      *  @return Font
      */
     const wxFont& GetFont() const { return m_font; }
+
+    /** Get the font to draw this layer with, which is the default one when none was set.
+     *
+     * The stock fonts are built on first use from the running toolkit, so this must not be
+     * called before there is one; layers resolve their font when they plot, not when they are
+     * constructed.
+     *
+     *  @return Font
+     */
+    const wxFont& GetPlotFont() const
+    {
+        if( m_font.IsOk() )
+            return m_font;
+
+        return *wxSMALL_FONT;
+    }
 
     /** Get pen set for this layer.
      *  @return Pen

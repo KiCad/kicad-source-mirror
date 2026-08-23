@@ -209,14 +209,12 @@ wxSize mpInfoLayer::GetSize() const
 mpInfoLegend::mpInfoLegend() :
         mpInfoLayer()
 {
-    SetFont( (wxFont&) *wxSMALL_FONT );
 }
 
 
 mpInfoLegend::mpInfoLegend( wxRect rect, const wxBrush* brush ) :
         mpInfoLayer( rect, brush )
 {
-    SetFont( (wxFont&) *wxSMALL_FONT );
 }
 
 
@@ -250,7 +248,7 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
         }
 
         dc.SetBrush( m_brush );
-        dc.SetFont( m_font );
+        dc.SetFont( GetPlotFont() );
 
         const int baseWidth = mpLEGEND_MARGIN * 2 + mpLEGEND_LINEWIDTH;
         int       textX = baseWidth, textY = mpLEGEND_MARGIN;
@@ -369,7 +367,7 @@ void mpFX::Plot( wxDC& dc, mpWindow& w )
 
         if( !m_name.IsEmpty() && m_showName )
         {
-            dc.SetFont( m_font );
+            dc.SetFont( GetPlotFont() );
 
             wxCoord tx, ty;
             dc.GetTextExtent( m_name, &tx, &ty );
@@ -435,7 +433,7 @@ void mpFY::Plot( wxDC& dc, mpWindow& w )
 
         if( !m_name.IsEmpty() && m_showName )
         {
-            dc.SetFont( m_font );
+            dc.SetFont( GetPlotFont() );
 
             wxCoord tx, ty;
             dc.GetTextExtent( m_name, &tx, &ty );
@@ -750,7 +748,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
     if( !m_name.IsEmpty() && m_showName )
     {
-        dc.SetFont( m_font );
+        dc.SetFont( GetPlotFont() );
 
         wxCoord tx, ty;
         dc.GetTextExtent( m_name, &tx, &ty );
@@ -1123,7 +1121,6 @@ IMPLEMENT_DYNAMIC_CLASS( mpScaleXLog, mpScaleXBase )
 mpScaleXBase::mpScaleXBase( const wxString& name, int flags, bool ticks, unsigned int type )
 {
     SetName( name );
-    SetFont( (wxFont&) *wxSMALL_FONT );
     SetPen( (wxPen&) *wxGREY_PEN );
     m_flags = flags;
     m_ticks = ticks;
@@ -1155,7 +1152,7 @@ void mpScaleXBase::Plot( wxDC& dc, mpWindow& w )
     if( m_visible )
     {
         dc.SetPen( m_pen );
-        dc.SetFont( m_font );
+        dc.SetFont( GetPlotFont() );
         int orgy = 0;
 
         const int extend = w.GetScrX();    ///2;
@@ -1299,7 +1296,6 @@ IMPLEMENT_DYNAMIC_CLASS( mpScaleY, mpLayer )
 mpScaleY::mpScaleY( const wxString& name, int flags, bool ticks )
 {
     SetName( name );
-    SetFont( (wxFont&) *wxSMALL_FONT );
     SetPen( (wxPen&) *wxGREY_PEN );
     m_flags = flags;
     m_ticks = ticks;
@@ -1319,7 +1315,7 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
     if( m_visible )
     {
         dc.SetPen( m_pen );
-        dc.SetFont( m_font );
+        dc.SetFont( GetPlotFont() );
 
         int orgx = 0;
 

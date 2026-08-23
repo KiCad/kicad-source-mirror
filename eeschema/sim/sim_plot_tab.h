@@ -79,9 +79,6 @@ public:
             m_snapToNearest( false ),
             m_snapTargetY( 0.0 )
     {
-        // SMITH_CURSOR::Plot() explicitly sets this font on the DC before measuring text; an
-        // unset font trips a wxCairoContext assert the first time it is used.
-        SetFont( (wxFont&) *wxSMALL_FONT );
     }
 
     void Plot( wxDC& aDC, mpWindow& aWindow ) override;
