@@ -113,6 +113,12 @@
             "$ref": "#/definitions/AffectedItem"
           }
         },
+        "pos": {
+          "$ref": "#/definitions/Coordinate"
+        },
+        "layer": {
+          "type": "string"
+        },
         "excluded": {
           "type": "boolean",
           "default": false

@@ -22,6 +22,7 @@
 
 #include <json_common.h>
 #include <wx/string.h>
+#include <optional>
 #include <vector>
 #include <json_conversions.h>
 
@@ -58,6 +59,8 @@ struct VIOLATION
     wxString                   description;
     wxString                   severity;
     std::vector<AFFECTED_ITEM> items;
+    std::optional<COORDINATE>  pos;
+    wxString                   layer;
     bool                       excluded;
     wxString                   comment;     // exclusion comment; if any
 };
@@ -68,6 +71,12 @@ inline void to_json( nlohmann::json& aJson, const VIOLATION& aViolation )
     aJson["description"] = aViolation.description;
     aJson["severity"] = aViolation.severity;
     aJson["items"] = aViolation.items;
+
+    if( aViolation.pos )
+        aJson["pos"] = *aViolation.pos;
+
+    if( !aViolation.layer.IsEmpty() )
+        aJson["layer"] = aViolation.layer;
 
     if( aViolation.excluded )
     {
@@ -82,6 +91,17 @@ inline void from_json( const nlohmann::json& aJson, VIOLATION& aViolation )
     aJson.at( "description" ).get_to( aViolation.description );
     aJson.at( "severity" ).get_to( aViolation.severity );
     aJson.at( "items" ).get_to( aViolation.items );
+
+    if( aJson.contains( "pos" ) )
+        aViolation.pos = aJson.at( "pos" ).get<COORDINATE>();
+    else
+        aViolation.pos.reset();
+
+    if( aJson.contains( "layer" ) )
+        aJson.at( "layer" ).get_to( aViolation.layer );
+    else
+        aViolation.layer.clear();
+
     aJson.at( "excluded" ).get_to( aViolation.excluded );
     aJson.at( "comment" ).get_to( aViolation.comment );
 }

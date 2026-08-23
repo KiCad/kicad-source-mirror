@@ -32,6 +32,7 @@
 #include <widgets/wx_data_view_hyperlink_renderer.h>
 #include <macros.h>
 #include <json_common.h>
+#include <pcb_marker.h>
 #include <rc_json_schema.h>
 #include <string_utils.h>
 #include <widgets/report_severity.h>
@@ -167,6 +168,24 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     if( m_reportedSeverities & RPT_SEVERITY_EXCLUSION )
         reportHead.included_severities.push_back( wxS( "exclusion" ) );
 
+    auto setMarkerLocation = [&]( const std::shared_ptr<RC_ITEM>& aItem, RC_JSON::VIOLATION& aViolation )
+    {
+        const PCB_MARKER* marker = dynamic_cast<const PCB_MARKER*>( aItem->GetParent() );
+
+        if( !marker )
+            return;
+
+        RC_JSON::COORDINATE pos;
+        pos.x = EDA_UNIT_UTILS::UI::ToUserUnit( unitsProvider.GetIuScale(), unitsProvider.GetUserUnits(),
+                                                marker->GetPosition().x );
+        pos.y = EDA_UNIT_UTILS::UI::ToUserUnit( unitsProvider.GetIuScale(), unitsProvider.GetUserUnits(),
+                                                marker->GetPosition().y );
+        aViolation.pos = pos;
+
+        if( IsValidLayer( marker->GetLayer() ) )
+            aViolation.layer = m_board->GetLayerName( marker->GetLayer() );
+    };
+
     for( int i = 0; i < m_markersProvider->GetCount(); ++i )
     {
         const std::shared_ptr<RC_ITEM>& item = m_markersProvider->GetItem( i );
@@ -177,6 +196,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
         RC_JSON::VIOLATION violation;
         item->GetJsonViolation( violation, &unitsProvider, severity, itemResolver );
+        setMarkerLocation( item, violation );
 
         reportHead.violations.push_back( violation );
     }
@@ -188,6 +208,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
         RC_JSON::VIOLATION violation;
         item->GetJsonViolation( violation, &unitsProvider, severity, itemResolver );
+        setMarkerLocation( item, violation );
 
         reportHead.unconnected_items.push_back( violation );
     }
@@ -200,6 +221,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
         RC_JSON::VIOLATION violation;
         item->GetJsonViolation( violation, &unitsProvider, severity, itemResolver );
+        setMarkerLocation( item, violation );
 
         reportHead.schematic_parity.push_back( violation );
     }
