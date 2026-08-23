@@ -58,7 +58,7 @@ using SCOPE = FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
 
 enum
 {
-    MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
+    MYID_SELECT_FOOTPRINT = FIELDS_TABLE_GRID_TRICKS::FIRST_CLIENT_ID,
     MYID_SHOW_DATASHEET,
     MYID_SET_VARIANT_FOOTPRINT,
     MYID_CLEAR_VARIANT_FOOTPRINT,
@@ -68,14 +68,14 @@ enum
     MYID_SELECT_ON_CROSS_PROBE
 };
 
-class FOOTPRINT_FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
+class FOOTPRINT_FIELDS_EDITOR_GRID_TRICKS : public FIELDS_TABLE_GRID_TRICKS
 {
 public:
     FOOTPRINT_FIELDS_EDITOR_GRID_TRICKS( DIALOG_FOOTPRINT_FIELDS_TABLE* aParent, WX_GRID* aGrid,
                                          VIEW_CONTROLS_GRID_DATA_MODEL*           aViewFieldsData,
                                          FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel,
                                          EMBEDDED_FILES* aFiles ) :
-            GRID_TRICKS( aGrid ),
+            FIELDS_TABLE_GRID_TRICKS( aParent, aGrid, aDataModel ),
             m_dlg( aParent ),
             m_viewControlsDataModel( aViewFieldsData ),
             m_dataModel( aDataModel ),
@@ -91,7 +91,7 @@ protected:
         return GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
     }
 
-    void showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent ) override
+    void showFieldsTablePopupMenu( wxMenu& aMenu, wxGridEvent& aEvent ) override
     {
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
@@ -108,7 +108,7 @@ protected:
         GRID_TRICKS::showPopupMenu( aMenu, aEvent );
     }
 
-    void doPopupSelection( wxCommandEvent& aEvent ) override
+    void doFieldsTablePopupSelection( wxCommandEvent& aEvent ) override
     {
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();

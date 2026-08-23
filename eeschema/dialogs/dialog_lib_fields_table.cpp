@@ -69,23 +69,21 @@ static GRID_CELL_URL_EDITOR_CONTEXT getDatasheetContext( const std::vector<LIB_S
 
 enum
 {
-    MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
+    MYID_SELECT_FOOTPRINT = FIELDS_TABLE_GRID_TRICKS::FIRST_CLIENT_ID,
     MYID_SHOW_DATASHEET,
-    MYID_REVERT_ROW,
-    MYID_CLEAR_CELL,
     MYID_CREATE_DERIVED_SYMBOL,
     MYID_INCLUDE_DNP,
     MYID_INCLUDE_EXCLUDED_FROM_BOM
 };
 
 
-class LIB_FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
+class LIB_FIELDS_EDITOR_GRID_TRICKS : public FIELDS_TABLE_GRID_TRICKS
 {
 public:
     LIB_FIELDS_EDITOR_GRID_TRICKS( DIALOG_LIB_FIELDS_TABLE* aParent, WX_GRID* aGrid,
                                    VIEW_CONTROLS_GRID_DATA_MODEL*     aViewFieldsData,
                                    LIB_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel ) :
-            GRID_TRICKS( aGrid ),
+            FIELDS_TABLE_GRID_TRICKS( aParent, aGrid, aDataModel ),
             m_dlg( aParent ),
             m_viewControlsDataModel( aViewFieldsData ),
             m_dataModel( aDataModel )
@@ -100,23 +98,16 @@ protected:
         return GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
     }
 
-    void showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent ) override
+    void showFieldsTablePopupMenu( wxMenu& aMenu, wxGridEvent& aEvent ) override
     {
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        wxMenuItem* revertMenu = aMenu.Append( MYID_REVERT_ROW, _( "Revert symbol" ),
-                                               _( "Revert the symbol to its last saved state" ) );
-        wxMenuItem* clearMenu = aMenu.Append( MYID_CLEAR_CELL, _( "Clear cell" ),
-                                              _( "Clear the cell value" ) );
-        aMenu.AppendSeparator();
         wxMenuItem* deriveMenu = aMenu.Append( MYID_CREATE_DERIVED_SYMBOL, _( "Create Derived Symbol" ),
                                                _( "Create a new symbol derived from the selected one" ) );
 
         if( row >= 0 && col >= 0 )
         {
-            revertMenu->Enable( m_dataModel->IsCellEdited( row, col ) );
-            clearMenu->Enable( !m_grid->IsReadOnly( row, col ) && !m_dataModel->IsCellClear( row, col ) );
             deriveMenu->Enable( m_dataModel->IsRowSingleSymbol( row ) );
 
             if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
@@ -132,15 +123,13 @@ protected:
         }
         else
         {
-            revertMenu->Enable( false );
-            clearMenu->Enable( false );
             deriveMenu->Enable( false );
         }
 
         GRID_TRICKS::showPopupMenu( aMenu, aEvent );
     }
 
-    void doPopupSelection( wxCommandEvent& aEvent ) override
+    void doFieldsTablePopupSelection( wxCommandEvent& aEvent ) override
     {
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
@@ -163,30 +152,6 @@ protected:
 
             GetAssociatedDocument( m_dlg, datasheetUri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ),
                                    context.m_filesStack );
-        }
-        else if( aEvent.GetId() == MYID_REVERT_ROW )
-        {
-            if( m_grid->CommitPendingChanges( false ) )
-                m_dataModel->RevertRow( row );
-
-            if( m_dataModel->IsEdited() )
-                m_dlg->OnModify();
-            else
-                m_dlg->ClearModify();
-
-            m_grid->ForceRefresh();
-        }
-        else if( aEvent.GetId() == MYID_CLEAR_CELL )
-        {
-            if( m_grid->CommitPendingChanges( false ) )
-                m_dataModel->ClearCell( row, col );
-
-            if( m_dataModel->IsEdited() )
-                m_dlg->OnModify();
-            else
-                m_dlg->ClearModify();
-
-            m_grid->ForceRefresh();
         }
         else if( aEvent.GetId() == MYID_CREATE_DERIVED_SYMBOL )
         {

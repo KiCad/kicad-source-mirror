@@ -59,6 +59,13 @@
 
 namespace
 {
+enum
+{
+    MYID_REVERT_ROW = GRIDTRICKS_FIRST_CLIENT_ID,
+    MYID_CLEAR_CELL
+};
+
+
 class VIEW_CONTROLS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
@@ -77,6 +84,89 @@ protected:
     }
 };
 } // namespace
+
+
+FIELDS_TABLE_GRID_TRICKS::FIELDS_TABLE_GRID_TRICKS( DIALOG_FIELDS_TABLE* aDialog, WX_GRID* aGrid,
+                                                    FIELDS_TABLE_DATA_MODEL_BASE* aDataModel ) :
+        GRID_TRICKS( aGrid ),
+        m_dialog( aDialog ),
+        m_dataModel( aDataModel )
+{
+}
+
+
+void FIELDS_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent )
+{
+    int row = m_grid->GetGridCursorRow();
+    int col = m_grid->GetGridCursorCol();
+
+    wxMenuItem* revertMenu = aMenu.Append( MYID_REVERT_ROW, _( "Revert Row" ),
+                                           _( "Revert the fields in this row" ) );
+    wxMenuItem* clearMenu = aMenu.Append( MYID_CLEAR_CELL, _( "Clear Cell" ),
+                                          _( "Clear the cell value" ) );
+    aMenu.AppendSeparator();
+
+    if( row >= 0 && col >= 0 )
+    {
+        revertMenu->Enable( m_dataModel->IsCellEdited( row, col ) );
+        clearMenu->Enable( !m_grid->IsReadOnly( row, col ) && !m_dataModel->IsCellClear( row, col ) );
+    }
+    else
+    {
+        revertMenu->Enable( false );
+        clearMenu->Enable( false );
+    }
+
+    showFieldsTablePopupMenu( aMenu, aEvent );
+}
+
+
+void FIELDS_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& aEvent )
+{
+    int row = m_grid->GetGridCursorRow();
+    int col = m_grid->GetGridCursorCol();
+
+    if( aEvent.GetId() == MYID_REVERT_ROW )
+    {
+        if( m_grid->CommitPendingChanges( false ) )
+            m_dataModel->RevertRow( row );
+
+        if( m_dataModel->IsEdited() )
+            m_dialog->OnModify();
+        else
+            m_dialog->ClearModify();
+
+        m_grid->ForceRefresh();
+    }
+    else if( aEvent.GetId() == MYID_CLEAR_CELL )
+    {
+        if( m_grid->CommitPendingChanges( false ) )
+            m_dataModel->ClearCell( row, col );
+
+        if( m_dataModel->IsEdited() )
+            m_dialog->OnModify();
+        else
+            m_dialog->ClearModify();
+
+        m_grid->ForceRefresh();
+    }
+    else
+    {
+        doFieldsTablePopupSelection( aEvent );
+    }
+}
+
+
+void FIELDS_TABLE_GRID_TRICKS::showFieldsTablePopupMenu( wxMenu& aMenu, wxGridEvent& aEvent )
+{
+    GRID_TRICKS::showPopupMenu( aMenu, aEvent );
+}
+
+
+void FIELDS_TABLE_GRID_TRICKS::doFieldsTablePopupSelection( wxCommandEvent& aEvent )
+{
+    GRID_TRICKS::doPopupSelection( aEvent );
+}
 
 
 DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings,

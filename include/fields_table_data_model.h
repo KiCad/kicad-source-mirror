@@ -193,6 +193,11 @@ public:
     virtual wxString GetExportValue( int aRow, int aCol, const wxString& aRefDelimiter,
                                      const wxString& aRefRangeDelimiter ) = 0;
 
+    virtual void ClearCell( int aRow, int aCol ) = 0;
+    virtual bool IsCellClear( int aRow, int aCol ) = 0;
+    virtual bool IsCellEdited( int aRow, int aCol ) = 0;
+    virtual void RevertRow( int aRow ) = 0;
+
     /// Return the stable data-store keys of every item represented by a row.
     virtual std::vector<KIID_PATH> GetRowItemKeys( int aRow ) const = 0;
 
@@ -303,7 +308,7 @@ public:
     /**
      * Removes the entry from the data store, does not just set it to empty string.
      */
-    virtual void ClearCell( int aRow, int aCol )
+    void ClearCell( int aRow, int aCol ) override
     {
         wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), "Invalid Row Number" );
         wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
@@ -325,7 +330,7 @@ public:
     /**
      * Returns true if the cell is not present in the data store, not just empty.
      */
-    bool IsCellClear( int aRow, int aCol )
+    bool IsCellClear( int aRow, int aCol ) override
     {
         wxCHECK_MSG( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false, "Invalid Row Number" );
         wxCHECK_MSG( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false, "Invalid Column Number" );
@@ -338,7 +343,7 @@ public:
     /**
      * Returns true if the cell has been modified from the live value in the item (symbol/footprint/etc)
      */
-    bool IsCellEdited( int aRow, int aCol )
+    bool IsCellEdited( int aRow, int aCol ) override
     {
         wxCHECK_MSG( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false, "Invalid Row Number" );
         wxCHECK_MSG( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false, "Invalid Column Number" );
@@ -376,7 +381,7 @@ public:
      *
      * Then recheck if any fields in the entire table are modified, and set edited state accordingly.
      */
-    void RevertRow( int aRow )
+    void RevertRow( int aRow ) override
     {
         wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), "Invalid Row Number" );
 

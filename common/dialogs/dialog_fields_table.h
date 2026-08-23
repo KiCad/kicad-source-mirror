@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <dialog_fields_table_base.h>
+#include <grid_tricks.h>
 #include <kiid.h>
 #include <settings/bom_settings.h>
 
@@ -35,6 +36,31 @@ class FIELDS_TABLE_DATA_MODEL_BASE;
 class JOB_EXPORT_BOM;
 class VIEW_CONTROLS_GRID_DATA_MODEL;
 class wxGridCellEditor;
+
+
+class DIALOG_FIELDS_TABLE;
+
+
+class FIELDS_TABLE_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    static constexpr int FIRST_CLIENT_ID = GRIDTRICKS_FIRST_CLIENT_ID + 2;
+
+    FIELDS_TABLE_GRID_TRICKS( DIALOG_FIELDS_TABLE* aDialog, WX_GRID* aGrid,
+                              FIELDS_TABLE_DATA_MODEL_BASE* aDataModel );
+
+protected:
+    void showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent ) override;
+    void doPopupSelection( wxCommandEvent& aEvent ) override;
+
+    virtual void showFieldsTablePopupMenu( wxMenu& aMenu, wxGridEvent& aEvent );
+    virtual void doFieldsTablePopupSelection( wxCommandEvent& aEvent );
+
+private:
+    DIALOG_FIELDS_TABLE*          m_dialog;
+    FIELDS_TABLE_DATA_MODEL_BASE* m_dataModel;
+};
+
 
 class DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
 {
