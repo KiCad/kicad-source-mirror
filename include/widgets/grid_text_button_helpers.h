@@ -40,6 +40,25 @@ class DIALOG_SHIM;
 class EMBEDDED_FILES;
 
 
+struct GRID_CELL_URL_EDITOR_CONTEXT
+{
+    // Files searched when opening an embedded URI, in lookup order.
+    // For a lib symbol row, this is going to go up the parent symbol.
+    std::vector<EMBEDDED_FILES*> m_filesStack;
+
+    // All the things that are going to end up having the newly selected
+    // file embeddeded in them. E.g. you have a lib symbol table row
+    // with a collapsed bunch of symbols and you select a datasheet for one of them,
+    // it should be embedded in all of them.
+    std::vector<EMBEDDED_FILES*> m_embedTargets;
+};
+
+
+KICOMMON_API GRID_CELL_URL_EDITOR_CONTEXT
+MakeGridCellUrlEditorContext( const std::vector<EMBEDDED_FILES*>& aEmbedTargets,
+                              const std::vector<EMBEDDED_FILES*>& aAdditionalLookupFiles = {} );
+
+
 KICOMMON_API bool SelectFootprintFromChooser( DIALOG_SHIM* aDialog, wxString& aFootprint,
                                               const wxString& aSymbolNetlist = wxEmptyString );
 
@@ -92,20 +111,37 @@ public:
                           std::vector<EMBEDDED_FILES*> aFilesStack = {} ) :
             m_dlg( aParent ),
             m_searchStack( aSearchStack ),
-            m_filesStack( aFilesStack )
+            m_contextProvider(
+                    [aFilesStack]( int )
+                    {
+                        std::vector<EMBEDDED_FILES*> embedTargets;
+
+                        if( !aFilesStack.empty() )
+                            embedTargets.push_back( aFilesStack.front() );
+
+                        return MakeGridCellUrlEditorContext( embedTargets, aFilesStack );
+                    } )
+    { }
+
+    GRID_CELL_URL_EDITOR( DIALOG_SHIM* aParent, SEARCH_STACK* aSearchStack,
+                          const std::function<GRID_CELL_URL_EDITOR_CONTEXT( int )>& aContextProvider ) :
+            m_dlg( aParent ),
+            m_searchStack( aSearchStack ),
+            m_contextProvider( aContextProvider )
     { }
 
     wxGridCellEditor* Clone() const override
     {
-        return new GRID_CELL_URL_EDITOR( m_dlg );
+        return new GRID_CELL_URL_EDITOR( m_dlg, m_searchStack, m_contextProvider );
     }
 
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
 
 protected:
-    DIALOG_SHIM*                 m_dlg;
-    SEARCH_STACK*                m_searchStack;     // No ownership.
-    std::vector<EMBEDDED_FILES*> m_filesStack;      // No ownership.
+    DIALOG_SHIM*  m_dlg;
+    SEARCH_STACK* m_searchStack; // No ownership.
+
+    std::function<GRID_CELL_URL_EDITOR_CONTEXT( int )> m_contextProvider;
 };
 
 

@@ -49,6 +49,24 @@ using DIALOG_NEW_SYMBOL = DIALOG_LIB_NEW_SYMBOL;
 using SCOPE = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
 
 
+static GRID_CELL_URL_EDITOR_CONTEXT getDatasheetContext( const std::vector<LIB_SYMBOL*>& aSymbols )
+{
+    std::vector<EMBEDDED_FILES*> embedTargets;
+    std::vector<EMBEDDED_FILES*> inheritedFiles;
+
+    for( LIB_SYMBOL* symbol : aSymbols )
+    {
+        if( !symbol )
+            continue;
+
+        embedTargets.push_back( symbol->GetEmbeddedFiles() );
+        symbol->AppendParentEmbeddedFiles( inheritedFiles );
+    }
+
+    return MakeGridCellUrlEditorContext( embedTargets, inheritedFiles );
+}
+
+
 enum
 {
     MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
@@ -141,7 +159,10 @@ protected:
         else if( aEvent.GetId() == MYID_SHOW_DATASHEET )
         {
             wxString datasheetUri = m_grid->GetCellValue( row, col );
-            GetAssociatedDocument( m_dlg, datasheetUri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ) );
+            GRID_CELL_URL_EDITOR_CONTEXT context = getDatasheetContext( m_dataModel->GetRowReferences( row ) );
+
+            GetAssociatedDocument( m_dlg, datasheetUri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ),
+                                   context.m_filesStack );
         }
         else if( aEvent.GetId() == MYID_REVERT_ROW )
         {
@@ -375,7 +396,12 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
 
 wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createDatasheetEditor()
 {
-    return new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) );
+    return new GRID_CELL_URL_EDITOR(
+            this, PROJECT_SCH::SchSearchS( &Prj() ),
+            [this]( int aRow )
+            {
+                return getDatasheetContext( m_dataModel->GetRowReferences( aRow ) );
+            } );
 }
 
 
