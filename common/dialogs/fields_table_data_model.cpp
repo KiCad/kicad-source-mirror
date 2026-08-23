@@ -26,6 +26,7 @@
 #include <template_fieldnames.h>
 
 #include <nlohmann/json.hpp>
+#include <widgets/grid_striped_renderer.h>
 #include <widgets/ui_common.h>
 #include <wx/dc.h>
 
@@ -83,8 +84,36 @@ FIELDS_TABLE_DATA_MODEL_BASE::FIELDS_TABLE_DATA_MODEL_BASE() :
         m_groupingEnabled( false ),
         m_excludeDNP( false ),
         m_includeExcluded( false ),
-        m_rebuildsEnabled( true )
+        m_rebuildsEnabled( true ),
+        m_stripedRenderer( nullptr )
 {
+}
+
+
+FIELDS_TABLE_DATA_MODEL_BASE::~FIELDS_TABLE_DATA_MODEL_BASE()
+{
+    wxSafeDecRef( m_stripedRenderer );
+}
+
+
+wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol )
+{
+    if( !IsCellClear( aRow, aCol ) || ColIsAttribute( aCol ) )
+        return aAttr;
+
+    wxGridCellAttr* stripedAttr = aAttr ? aAttr->Clone() : new wxGridCellAttr;
+    wxSafeDecRef( aAttr );
+
+    if( !m_stripedRenderer )
+        m_stripedRenderer = new STRIPED_STRING_RENDERER;
+
+    m_stripedRenderer->IncRef();
+    stripedAttr->SetRenderer( m_stripedRenderer );
+
+    if( !stripedAttr->HasBackgroundColour() )
+        stripedAttr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+
+    return stripedAttr;
 }
 
 

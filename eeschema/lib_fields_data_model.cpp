@@ -259,49 +259,42 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
             break;
     }
 
-    // Apply striped renderer for appropriate empty cells
-    if( cellEmpty && isStripeableField( aCol ) )
+    if( cellEmpty && !ColIsAttribute( aCol ) )
     {
-        wxGridCellRenderer* stripedRenderer = getStripedRenderer( aCol );
+        attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-        if( stripedRenderer )
+        for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
         {
-            attr->SetRenderer( stripedRenderer );
-            attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+            wxString originalValue;
+            wxString currentValue;
+            bool     originallyEmpty = !getLiveFieldValue( symbol, fieldName, originalValue );
+            bool     currentlyEmpty = !getStoredFieldValue( symbol, fieldName, currentValue );
+            bool     modified = originallyEmpty != currentlyEmpty || originalValue != currentValue;
 
-            for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+            if( modified )
             {
-                wxString originalValue;
-                wxString currentValue;
-                bool     originallyEmpty = !getLiveFieldValue( symbol, fieldName, originalValue );
-                bool     currentlyEmpty = !getStoredFieldValue( symbol, fieldName, currentValue );
-                bool     modified = originallyEmpty != currentlyEmpty || originalValue != currentValue;
-
-                if( modified )
+                if( currentlyEmpty )
                 {
-                    if( currentlyEmpty )
+                    if( originallyEmpty )
                     {
-                        if( originallyEmpty )
-                        {
-                            attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-                        }
-                        else if( originalValue.empty() )
-                        {
-                            attr->SetBackgroundColour( wxColour( 180, 220, 180 ) );
-                        }
-                        else
-                        {
-                            attr->SetBackgroundColour( wxColour( 220, 180, 180 ) );
-                        }
+                        attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
                     }
-                    else if( currentValue.IsEmpty() )
+                    else if( originalValue.empty() )
                     {
-                        attr->SetBackgroundColour( wxColour( 180, 200, 180 ) );
+                        attr->SetBackgroundColour( wxColour( 180, 220, 180 ) );
                     }
                     else
                     {
-                        attr->SetBackgroundColour( wxColour( 200, 180, 180 ) );
+                        attr->SetBackgroundColour( wxColour( 220, 180, 180 ) );
                     }
+                }
+                else if( currentValue.IsEmpty() )
+                {
+                    attr->SetBackgroundColour( wxColour( 180, 200, 180 ) );
+                }
+                else
+                {
+                    attr->SetBackgroundColour( wxColour( 200, 180, 180 ) );
                 }
             }
         }
@@ -333,7 +326,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
         }
     }
 
-    return attr;
+    return applyFieldPresenceRenderer( attr, aRow, aCol );
 }
 
 
@@ -845,42 +838,4 @@ KIID_PATH LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getDataStoreKey( LIB_SYMBOL* const&
 wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getItemIdentifier( LIB_SYMBOL* const& aItem ) const
 {
     return aItem->GetName();
-}
-
-
-wxGridCellRenderer* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getStripedRenderer( int aCol ) const
-{
-    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), nullptr );
-
-    const wxString& fieldName = m_cols[aCol].m_fieldName;
-
-    // Check if we already have a striped renderer for this field type
-    auto it = m_stripedRenderers.find( fieldName );
-    if( it != m_stripedRenderers.end() )
-    {
-        it->second->IncRef();
-        return it->second;
-    }
-
-    wxGridCellRenderer* stripedRenderer = nullptr;
-    // Default to striped string renderer
-    stripedRenderer = new STRIPED_STRING_RENDERER();
-
-    // Cache the renderer for future use - the cache owns one reference
-    stripedRenderer->IncRef();
-    m_stripedRenderers[fieldName] = stripedRenderer;
-
-    // Return with IncRef for the caller (SetRenderer will consume this reference)
-    stripedRenderer->IncRef();
-    return stripedRenderer;
-}
-
-
-// lib_fields_data_model.cpp - Add the isStripeableField method
-bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::isStripeableField( int aCol )
-{
-    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-
-    // Don't apply stripes to checkbox fields
-    return !ColIsAttribute( aCol );
 }

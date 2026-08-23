@@ -22,7 +22,6 @@
 #include <sch_reference_list.h>
 #include <wx/grid.h>
 #include <wx/arrstr.h>
-#include <widgets/grid_striped_renderer.h>
 #include <widgets/wx_grid.h>
 
 #include <fields_table_data_model.h>
@@ -44,20 +43,12 @@ public:
                                        wxGridCellAttr*                 aURLEditor ) :
             m_symbolsList( aSymbolsList ),
             m_scope( SCOPE_LIBRARY ),
-            m_urlEditor( aURLEditor ),
-            m_stripedStringRenderer( nullptr )
+            m_urlEditor( aURLEditor )
     {
         m_includeExcluded = true;
     }
 
-    ~LIB_FIELDS_EDITOR_GRID_DATA_MODEL() override
-    {
-        for( auto& pair : m_stripedRenderers )
-            pair.second->DecRef();
-
-        wxSafeDecRef( m_urlEditor );
-        m_stripedRenderers.clear();
-    }
+    ~LIB_FIELDS_EDITOR_GRID_DATA_MODEL() override { wxSafeDecRef( m_urlEditor ); }
 
     static const wxString SYMBOL_NAME;
     static const wxString SYMBOL_KEYWORDS;
@@ -141,9 +132,6 @@ private:
     KIID_PATH getDataStoreKey( LIB_SYMBOL* const& aItem ) const override;
     wxString  getItemIdentifier( LIB_SYMBOL* const& aItem ) const override;
 
-    bool isStripeableField( int aCol );
-    wxGridCellRenderer* getStripedRenderer( int aCol ) const;
-
 protected:
     std::vector<LIB_SYMBOL*> m_symbolsList;
     SCOPE                    m_scope;
@@ -153,8 +141,4 @@ protected:
     std::vector<std::pair<LIB_SYMBOL*, wxString>> m_createdDerivedSymbols; // symbol, library name
 
     wxGridCellAttr* m_urlEditor;
-
-    // stripe bitmap support
-    mutable STRIPED_STRING_RENDERER* m_stripedStringRenderer;
-    mutable std::map<wxString, wxGridCellRenderer*> m_stripedRenderers;
 };

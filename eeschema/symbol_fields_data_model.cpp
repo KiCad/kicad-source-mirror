@@ -167,7 +167,8 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
 
     // If we don't need any custom attributes, use the base class behavior
     if( !needsReadOnly && !needsUrlEditor && !needsVariantHighlight && !needsTextVarRenderer )
-        return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
+        return applyFieldPresenceRenderer( WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind ),
+                                           aRow, aCol );
 
     // URL cells: use m_urlEditor as base, potentially with read-only or variant overlays
     if( needsUrlEditor )
@@ -189,7 +190,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
             attr = m_urlEditor;
         }
 
-        return enhanceAttr( attr, aRow, aCol, aKind );
+        return applyFieldPresenceRenderer( enhanceAttr( attr, aRow, aCol, aKind ), aRow, aCol );
     }
 
     // Non-URL cells: start with column attributes if they exist.
@@ -228,7 +229,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
         }
     }
 
-    return enhanceAttr( attr, aRow, aCol, aKind );
+    return applyFieldPresenceRenderer( enhanceAttr( attr, aRow, aCol, aKind ), aRow, aCol );
 }
 
 

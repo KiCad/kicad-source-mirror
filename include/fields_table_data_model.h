@@ -104,6 +104,7 @@ class FIELDS_TABLE_DATA_MODEL_BASE : public WX_GRID_TABLE_BASE
 {
 public:
     FIELDS_TABLE_DATA_MODEL_BASE();
+    ~FIELDS_TABLE_DATA_MODEL_BASE() override;
 
     static const wxString QUANTITY_VARIABLE;
     static const wxString ITEM_NUMBER_VARIABLE;
@@ -235,7 +236,11 @@ protected:
     virtual wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
     wxString getDataStoreFieldValue( const KIID_PATH& aKey, const wxString& aFieldName ) const;
 
+    wxGridCellAttr* applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol );
+
 protected:
+    wxGridCellRenderer* m_stripedRenderer;
+
     bool             m_edited;
     int              m_sortColumn;
     bool             m_sortAscending;
