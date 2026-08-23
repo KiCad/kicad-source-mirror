@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef PCB_TEXT_H
-#define PCB_TEXT_H
+#pragma once
 
 #include <memory>
 
@@ -60,7 +59,7 @@ public:
 
     void CopyFrom( const BOARD_ITEM* aOther ) override;
 
-    static inline bool ClassOf( const EDA_ITEM* aItem ) { return aItem && PCB_TEXT_T == aItem->Type(); }
+    static bool ClassOf( const EDA_ITEM* aItem ) { return aItem && PCB_TEXT_T == aItem->Type(); }
 
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override
     {
@@ -90,9 +89,9 @@ public:
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
-    virtual VECTOR2I GetPosition() const override { return GetTextPos(); }
+    VECTOR2I GetPosition() const override { return GetTextPos(); }
 
-    virtual void SetPosition( const VECTOR2I& aPos ) override { SetTextPos( aPos ); }
+    void SetPosition( const VECTOR2I& aPos ) override { SetTextPos( aPos ); }
 
     void Move( const VECTOR2I& aMoveVector ) override { Offset( aMoveVector ); }
 
@@ -118,7 +117,8 @@ public:
      * in a footprint.
      */
     const EDA_ANGLE& GetLibTextAngle() const { return m_libTextAngle; }
-    void             SetLibTextAngle( const EDA_ANGLE& aAngle )
+
+    void SetLibTextAngle( const EDA_ANGLE& aAngle )
     {
         m_libTextAngle = aAngle;
         m_libTextAngle.Normalize();
@@ -176,7 +176,8 @@ public:
                                               FLASHING aFlash = FLASHING::DEFAULT,
                                               DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const override;
 
-    const SHAPE_POLY_SET& GetKnockoutCache( const KIFONT::FONT* aFont, const wxString& forResolvedText, int aMaxError ) const;
+    const SHAPE_POLY_SET& GetKnockoutCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
+                                            int aMaxError ) const;
 
     virtual wxString GetTextTypeDescription() const;
 
@@ -192,8 +193,7 @@ public:
     static HTML_MESSAGE_BOX* ShowSyntaxHelp( wxWindow* aParentWindow );
 
     /**
-     * @return the text rotation for drawings and plotting the footprint rotation is taken
-     *         in account.
+     * @return the text rotation for drawings and plotting the footprint rotation is taken in account.
      */
     EDA_ANGLE GetDrawRotation() const override;
 
@@ -204,7 +204,6 @@ public:
     ///< @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
-    // Virtual function
     const BOX2I GetBoundingBox() const override;
 
     EDA_ITEM* Clone() const override;
@@ -215,7 +214,7 @@ public:
     bool operator==( const BOARD_ITEM& aBoardItem ) const override;
 
 #if defined( DEBUG )
-    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
 protected:
@@ -225,7 +224,7 @@ protected:
      */
     void buildBoundingHull( SHAPE_POLY_SET* aBuffer, const SHAPE_POLY_SET& aRenderedText, int aClearance ) const;
 
-    virtual void swapData( BOARD_ITEM* aImage ) override;
+    void swapData( BOARD_ITEM* aImage ) override;
 
     int getKnockoutMargin() const;
 
@@ -236,5 +235,3 @@ private:
 
     EDA_ANGLE m_libTextAngle; // Text angle in parent footprint's lib frame
 };
-
-#endif // #define PCB_TEXT_H
