@@ -162,9 +162,9 @@ BOOST_AUTO_TEST_CASE( PlacementRuleSourceType )
     testEnums<PLACEMENT_SOURCE_T, kiapi::board::types::PlacementRuleSourceType>();
 }
 
-BOOST_AUTO_TEST_CASE( TeardropType )
+BOOST_AUTO_TEST_CASE( ZoneTeardropType )
 {
-    testEnums<TEARDROP_TYPE, kiapi::board::types::TeardropType>();
+    testEnums<TEARDROP_TYPE, kiapi::board::types::ZoneTeardropType>();
 }
 
 BOOST_AUTO_TEST_CASE( TeardropTarget )

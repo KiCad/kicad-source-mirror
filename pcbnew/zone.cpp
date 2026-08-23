@@ -321,7 +321,7 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
 
         PackNet( cu->mutable_net() );
         cu->mutable_teardrop()->set_type(
-                ToProtoEnum<TEARDROP_TYPE, types::TeardropType>( m_teardropType ) );
+                ToProtoEnum<TEARDROP_TYPE, types::ZoneTeardropType>( m_teardropType ) );
 
         types::ThievingFillSettings* thieving = cu->mutable_thieving_settings();
         thieving->set_pattern(

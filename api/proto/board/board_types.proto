@@ -703,13 +703,13 @@ enum ZoneType
   ZT_TEARDROP = 4;
 }
 
-enum TeardropType
+enum ZoneTeardropType
 {
-  TDT_UNKNOWN = 0;
-  TDT_NONE = 1;
-  TDT_UNSPECIFIED = 2;
-  TDT_VIA_PAD = 3;
-  TDT_TRACK_END = 4;
+  ZTDT_UNKNOWN = 0;
+  ZTDT_NONE = 1;
+  ZTDT_UNSPECIFIED = 2;
+  ZTDT_VIA_PAD = 3;
+  ZTDT_TRACK_END = 4;
 }
 
 enum IslandRemovalMode
@@ -772,9 +772,9 @@ message ThievingFillSettings
   kiapi.common.types.Angle orientation = 6;
 }
 
-message TeardropSettings
+message ZoneTeardropSettings
 {
-  TeardropType type = 1;
+  ZoneTeardropType type = 1;
 }
 
 message CopperZoneSettings
@@ -795,7 +795,7 @@ message CopperZoneSettings
 
   Net net = 8;
 
-  TeardropSettings teardrop = 9;
+  ZoneTeardropSettings teardrop = 9;
 
   ThievingFillSettings thieving_settings = 10;
 }
