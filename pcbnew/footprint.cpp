@@ -412,6 +412,12 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         item->Serialize( *itemMsg );
     }
 
+    for( const PCB_POINT* item : Points() )
+    {
+        google::protobuf::Any* itemMsg = def->add_items();
+        item->Serialize( *itemMsg );
+    }
+
     for( const ZONE* item : Zones() )
     {
         google::protobuf::Any* itemMsg = def->add_items();

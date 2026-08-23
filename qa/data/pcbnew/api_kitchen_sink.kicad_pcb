@@ -273,6 +273,12 @@
 			(pintype "passive+no_connect")
 			(uuid "dae62be7-5b36-462f-8f68-44e6e11e6733")
 		)
+		(point
+			(at 0 0)
+			(size 1)
+			(layer "F.Cu")
+			(uuid "25abe82a-ea88-49ae-ac42-c5c2284fcc4f")
+		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step"
 			(offset

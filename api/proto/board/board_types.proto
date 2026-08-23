@@ -1228,3 +1228,17 @@ message Table
   // it will not change the object's parent
   kiapi.common.types.KIID parent = 14;
 }
+
+// Since: 10.0.7
+message ReferencePoint
+{
+  kiapi.common.types.KIID id = 1;
+  BoardLayer layer = 2;
+  kiapi.common.types.Vector2 position = 3;
+  kiapi.common.types.Distance size = 4;
+  kiapi.common.types.LockedState locked = 5;
+
+  // The ID of the parent container for this item (if any).  This is a read-only property;
+  // changing it will not change the object's parent
+  kiapi.common.types.KIID parent = 6;
+}

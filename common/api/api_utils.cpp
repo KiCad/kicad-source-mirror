@@ -49,6 +49,7 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
         { "type.googleapis.com/kiapi.board.types.Zone", PCB_ZONE_T },
         { "type.googleapis.com/kiapi.board.types.Dimension", PCB_DIMENSION_T },
         { "type.googleapis.com/kiapi.board.types.ReferenceImage", PCB_REFERENCE_IMAGE_T },
+        { "type.googleapis.com/kiapi.board.types.ReferencePoint", PCB_POINT_T },
         { "type.googleapis.com/kiapi.board.types.Group", PCB_GROUP_T },
         { "type.googleapis.com/kiapi.board.types.Field", PCB_FIELD_T },
         { "type.googleapis.com/kiapi.board.types.FootprintInstance", PCB_FOOTPRINT_T },

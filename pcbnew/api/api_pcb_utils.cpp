@@ -30,6 +30,7 @@
 #include <pcb_barcode.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
+#include <pcb_point.h>
 #include <pcb_track.h>
 #include <pcb_field.h>
 #include <pcb_text.h>
@@ -59,6 +60,7 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
         return std::make_unique<PCB_TABLECELL>( aContainer );
     }
     case PCB_SHAPE_T:   return std::make_unique<PCB_SHAPE>( aContainer );
+    case PCB_POINT_T:   return std::make_unique<PCB_POINT>( aContainer );
     case PCB_BARCODE_T: return std::make_unique<PCB_BARCODE>( aContainer );
     case PCB_ZONE_T:    return std::make_unique<ZONE>( aContainer );
     case PCB_GROUP_T:   return std::make_unique<PCB_GROUP>( aContainer );
