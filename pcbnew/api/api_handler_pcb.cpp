@@ -49,6 +49,7 @@
 #include <pcb_track.h>
 #include <pcbnew_id.h>
 #include <pcb_marker.h>
+#include <pcb_point.h>
 #include <kiway.h>
 #include <drc/drc_item.h>
 #include <jobs/job_export_pcb_3d.h>
@@ -487,6 +488,15 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
             typesInserted.insert( PCB_GROUP_T );
             break;
         }
+
+        case PCB_POINT_T:
+        {
+            handledAnything = true;
+            std::copy( board->Points().begin(), board->Points().end(), std::back_inserter( items ) );
+            typesInserted.insert( PCB_POINT_T );
+            break;
+        }
+
         default:
             break;
         }
