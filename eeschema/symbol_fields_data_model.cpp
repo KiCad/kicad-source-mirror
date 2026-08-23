@@ -276,6 +276,87 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const w
 }
 
 
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ClearCell( int aRow, int aCol )
+{
+    wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), wxS( "Invalid row number" ) );
+    wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxS( "Invalid column number" ) );
+
+    if( !CanClearCell( aRow, aCol ) )
+        return;
+
+    const wxString&             fieldName = m_cols[aCol].m_fieldName;
+    std::set<const SCH_SYMBOL*> clearedSymbols;
+
+    for( const SCH_REFERENCE& ref : m_rows[aRow].m_items )
+        clearedSymbols.insert( ref.GetSymbol() );
+
+    // Removing a field is a symbol-wide operation, even when the table is showing one variant
+    // or one instance of a shared sheet. Remove it from every data-store entry for the symbol so
+    // a later entry cannot recreate it while ApplyData() walks the other instances.
+    for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
+    {
+        const SCH_REFERENCE& ref = m_symbolsList[ii];
+
+        if( clearedSymbols.contains( ref.GetSymbol() ) )
+        {
+            auto itemIt = m_dataStore.find( getDataStoreKey( ref ) );
+
+            if( itemIt != m_dataStore.end() )
+                itemIt->second.erase( fieldName );
+        }
+    }
+
+    m_edited = true;
+}
+
+
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RevertRow( int aRow )
+{
+    wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), wxS( "Invalid row number" ) );
+
+    std::set<const SCH_SYMBOL*> rowSymbols;
+
+    for( const SCH_REFERENCE& ref : m_rows[aRow].m_items )
+        rowSymbols.insert( ref.GetSymbol() );
+
+    for( const DATA_MODEL_COL& col : m_cols )
+    {
+        bool revertAllPaths = storageIsSharedAcrossPaths( col.m_fieldName );
+
+        // ClearCell removes a field from every path that reaches the symbol, including paths
+        // hidden by the current scope. An edit can recreate the entry for the visible
+        // path, so check all of the symbol's entries rather than only IsCellClear()
+        if( !revertAllPaths )
+        {
+            for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
+            {
+                const SCH_REFERENCE& ref = m_symbolsList[ii];
+                wxString             unused;
+
+                if( rowSymbols.contains( ref.GetSymbol() ) && !getStoredFieldValue( ref, col.m_fieldName, unused ) )
+                {
+                    revertAllPaths = true;
+                    break;
+                }
+            }
+        }
+
+        if( !revertAllPaths )
+            continue;
+
+        for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
+        {
+            const SCH_REFERENCE& ref = m_symbolsList[ii];
+
+            if( rowSymbols.contains( ref.GetSymbol() ) )
+                updateDataStoreItemFieldFromLive( ref, col.m_fieldName );
+        }
+    }
+
+    FIELDS_TABLE_DATA_MODEL<SCH_REFERENCE>::RevertRow( aRow );
+}
+
+
 bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem )
 {
     // If items are unannotated then we can't tell if they're units of the same symbol or not

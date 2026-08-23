@@ -71,6 +71,8 @@ public:
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;
+    void ClearCell( int aRow, int aCol ) override;
+    void RevertRow( int aRow ) override;
 
     void RebuildRows() override;
 

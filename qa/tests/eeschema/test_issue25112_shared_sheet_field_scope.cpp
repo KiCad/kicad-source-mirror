@@ -22,6 +22,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <memory>
+#include <set>
 
 #include <eeschema_helpers.h>
 #include <symbol_fields_data_model.h>
@@ -70,8 +71,13 @@ struct ISSUE25112_FIXTURE
         model->AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
         model->AddColumn( aFieldName, aFieldName, false );
 
+        int referenceCol = model->GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
+        BOOST_REQUIRE( referenceCol >= 0 );
+        model->SetShowColumn( referenceCol, true );
+
         m_col = model->GetFieldNameCol( aFieldName );
         BOOST_REQUIRE( m_col >= 0 );
+        model->SetShowColumn( m_col, true );
 
         const SCH_REFERENCE_LIST& modelRefs = model->GetReferenceList();
         bool                      found = false;
@@ -151,6 +157,98 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedFieldEditSurvivesApply, ISSUE25112_FIXTURE )
     Apply( *model, wxEmptyString );
 
     BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText(), newFootprint );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( SheetScopedFieldClearCanBeReverted, ISSUE25112_FIXTURE )
+{
+    const wxString fieldName = wxS( "MPN" );
+    const wxString fieldValue = wxS( "ABC123" );
+
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model = MakeScopedModel( wxEmptyString, fieldName );
+
+    SCH_FIELD field( m_symbol, FIELD_T::USER, fieldName );
+    field.SetText( fieldValue );
+    m_symbol->AddField( field );
+    model->UpdateReferences( m_refs );
+
+    BOOST_REQUIRE( !model->IsCellClear( m_row, m_col ) );
+
+    model->ClearCell( m_row, m_col );
+    BOOST_REQUIRE( model->IsCellClear( m_row, m_col ) );
+
+    model->RevertRow( m_row );
+    BOOST_CHECK( !model->IsCellClear( m_row, m_col ) );
+    BOOST_CHECK( !model->IsEdited() );
+
+    Apply( *model, wxEmptyString );
+
+    const SCH_FIELD* appliedField = m_symbol->GetField( fieldName );
+    BOOST_REQUIRE( appliedField );
+    BOOST_CHECK_EQUAL( appliedField->GetText(), fieldValue );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( GroupedEditStateChecksEveryItem, ISSUE25112_FIXTURE )
+{
+    const wxString        fieldName = wxS( "GroupedState" );
+    const wxString        fieldValue = wxS( "Original" );
+    std::set<SCH_SYMBOL*> symbols;
+
+    for( const SCH_REFERENCE& ref : m_refs )
+    {
+        SCH_SYMBOL* symbol = ref.GetSymbol();
+
+        if( !symbols.insert( symbol ).second )
+            continue;
+
+        SCH_FIELD field( symbol, FIELD_T::USER, fieldName );
+        field.SetText( fieldValue );
+        symbol->AddField( field );
+    }
+
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL model( m_refs, nullptr );
+    model.AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
+    model.AddColumn( fieldName, fieldName, false );
+
+    int referenceCol = model.GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
+    int fieldCol = model.GetFieldNameCol( fieldName );
+    BOOST_REQUIRE( referenceCol >= 0 );
+    BOOST_REQUIRE( fieldCol >= 0 );
+
+    model.SetShowColumn( referenceCol, true );
+    model.SetShowColumn( fieldCol, true );
+    model.SetGroupingEnabled( true );
+    model.SetGroupColumn( fieldCol, true );
+    model.RebuildRows();
+
+    int         groupedRow = -1;
+    SCH_SYMBOL* symbolToModify = nullptr;
+
+    for( int row = 0; row < model.GetNumberRows() && groupedRow < 0; ++row )
+    {
+        const std::vector<SCH_REFERENCE> refs = model.GetRowReferences( row );
+
+        for( size_t ii = 1; ii < refs.size(); ++ii )
+        {
+            if( refs[ii].GetSymbol() != refs[0].GetSymbol() )
+            {
+                groupedRow = row;
+                symbolToModify = refs[ii].GetSymbol();
+                break;
+            }
+        }
+    }
+
+    BOOST_REQUIRE( groupedRow >= 0 );
+    BOOST_REQUIRE( symbolToModify );
+    BOOST_REQUIRE( !model.IsRowEdited( groupedRow ) );
+
+    symbolToModify->GetField( fieldName )->SetText( wxS( "Modified" ) );
+
+    BOOST_CHECK( !model.IsCellEdited( groupedRow, referenceCol ) );
+    BOOST_CHECK( model.IsCellEdited( groupedRow, fieldCol ) );
+    BOOST_CHECK( model.IsRowEdited( groupedRow ) );
 }
 
 
