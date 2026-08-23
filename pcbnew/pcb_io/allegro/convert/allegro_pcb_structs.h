@@ -141,6 +141,7 @@ enum class FMT_VER
     V_174, // Allegro 17.4, 0x00140900
     V_175, // Allegro 17.5, 0x00141500
     V_180, // Allegro 18.0, 0x00150000
+    V_181, // Allegro 18.1, 0x00150200
 };
 
 constexpr bool operator>=( FMT_VER lhs, FMT_VER rhs )
@@ -355,6 +356,9 @@ struct FILE_HEADER
     COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_6;
 
     COND_GE<FMT_VER::V_180, uint32_t> m_0x35_Start_V18;
+
+    COND_GE<FMT_VER::V_181, std::array<uint32_t, 8>> m_Unknown_V181;
+
     COND_GE<FMT_VER::V_180, uint32_t> m_0x35_End_V18;
 
     // Fixed length string field

@@ -169,6 +169,7 @@ FMT_VER HEADER_PARSER::FormatFromMagic( uint32_t aMagic )
     case 0x00140E00: return FMT_VER::V_174;
     case 0x00141500: return FMT_VER::V_175;
     case 0x00150000: return FMT_VER::V_180;
+    case 0x00150200: return FMT_VER::V_181;
     default: break;
     }
 
@@ -256,14 +257,17 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
 
     ReadCond( m_stream, m_fmtVer, header->m_LL_V18_6 );
     ReadCond( m_stream, m_fmtVer, header->m_0x35_Start_V18 );
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown_V181 );
     ReadCond( m_stream, m_fmtVer, header->m_0x35_End_V18 );
 
     // Quick check that the positions line up
     // (start of the m_AllegroVersion string is easy to find)
     if( m_fmtVer < FMT_VER::V_180 )
         wxASSERT( m_stream.Position() - headerStartPos == 0xF8 );
-    else
+    else if( m_fmtVer < FMT_VER::V_181 )
         wxASSERT( m_stream.Position() - headerStartPos == 0x124 );
+    else
+        wxASSERT( m_stream.Position() - headerStartPos == 0x144 );
 
     m_stream.ReadBytes( header->m_AllegroVersion.data(), header->m_AllegroVersion.size() );
     header->m_Unknown4 = m_stream.ReadU32();
@@ -309,7 +313,7 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
 
     header->m_UnitsDivisor = m_stream.ReadU32();
 
-    m_stream.SkipU32( 110 );
+    m_stream.SkipU32( m_fmtVer >= FMT_VER::V_181 ? 102 : 110 );
 
     for( size_t i = 0; i < header->m_LayerMap.size(); ++i )
     {
