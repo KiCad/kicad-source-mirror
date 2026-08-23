@@ -322,8 +322,7 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
         }
 
         PackNet( cu->mutable_net() );
-        cu->mutable_teardrop()->set_type(
-                ToProtoEnum<TEARDROP_TYPE, types::TeardropType>( m_teardropType ) );
+        cu->mutable_teardrop()->set_type( ToProtoEnum<TEARDROP_TYPE, types::ZoneTeardropType>( m_teardropType ) );
     }
 
     for( const auto& [layer, shape] : m_FilledPolysList )

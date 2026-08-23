@@ -446,36 +446,36 @@ PLACEMENT_SOURCE_T FromProtoEnum( types::PlacementRuleSourceType aValue )
 
 
 template<>
-types::TeardropType ToProtoEnum( TEARDROP_TYPE aValue )
+types::ZoneTeardropType ToProtoEnum( TEARDROP_TYPE aValue )
 {
     switch( aValue )
     {
-    case TEARDROP_TYPE::TD_NONE:        return types::TeardropType::TDT_NONE;
-    case TEARDROP_TYPE::TD_UNSPECIFIED: return types::TeardropType::TDT_UNSPECIFIED;
-    case TEARDROP_TYPE::TD_VIAPAD:      return types::TeardropType::TDT_VIA_PAD;
-    case TEARDROP_TYPE::TD_TRACKEND:    return types::TeardropType::TDT_TRACK_END;
+    case TEARDROP_TYPE::TD_NONE:        return types::ZoneTeardropType::ZTDT_NONE;
+    case TEARDROP_TYPE::TD_UNSPECIFIED: return types::ZoneTeardropType::ZTDT_UNSPECIFIED;
+    case TEARDROP_TYPE::TD_VIAPAD:      return types::ZoneTeardropType::ZTDT_VIA_PAD;
+    case TEARDROP_TYPE::TD_TRACKEND:    return types::ZoneTeardropType::ZTDT_TRACK_END;
 
     default:
-        wxCHECK_MSG( false, types::TeardropType::TDT_UNKNOWN,
+        wxCHECK_MSG( false, types::ZoneTeardropType::ZTDT_UNKNOWN,
                      "Unhandled case in ToProtoEnum<TEARDROP_TYPE>");
     }
 }
 
 
 template<>
-TEARDROP_TYPE FromProtoEnum( types::TeardropType aValue )
+TEARDROP_TYPE FromProtoEnum( types::ZoneTeardropType aValue )
 {
     switch( aValue )
     {
-    case types::TeardropType::TDT_UNKNOWN:
-    case types::TeardropType::TDT_NONE:         return TEARDROP_TYPE::TD_NONE;
-    case types::TeardropType::TDT_UNSPECIFIED:  return TEARDROP_TYPE::TD_UNSPECIFIED;
-    case types::TeardropType::TDT_VIA_PAD:      return TEARDROP_TYPE::TD_VIAPAD;
-    case types::TeardropType::TDT_TRACK_END:    return TEARDROP_TYPE::TD_TRACKEND;
+    case types::ZoneTeardropType::ZTDT_UNKNOWN:
+    case types::ZoneTeardropType::ZTDT_NONE:         return TEARDROP_TYPE::TD_NONE;
+    case types::ZoneTeardropType::ZTDT_UNSPECIFIED:  return TEARDROP_TYPE::TD_UNSPECIFIED;
+    case types::ZoneTeardropType::ZTDT_VIA_PAD:      return TEARDROP_TYPE::TD_VIAPAD;
+    case types::ZoneTeardropType::ZTDT_TRACK_END:    return TEARDROP_TYPE::TD_TRACKEND;
 
     default:
         wxCHECK_MSG( false, TEARDROP_TYPE::TD_NONE,
-                     "Unhandled case in FromProtoEnum<types::ZoneHatchBorderMode>" );
+                     "Unhandled case in FromProtoEnum<types::ZoneTeardropType>" );
     }
 }
 
