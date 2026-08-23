@@ -77,6 +77,7 @@ const wxString FIELDS_TABLE_DATA_MODEL_BASE::ITEM_NUMBER_VARIABLE = wxS( "${ITEM
 
 
 FIELDS_TABLE_DATA_MODEL_BASE::FIELDS_TABLE_DATA_MODEL_BASE() :
+        m_stripedRenderer( nullptr ),
         m_edited( false ),
         m_sortColumn( 0 ),
         m_sortAscending( false ),
@@ -84,8 +85,7 @@ FIELDS_TABLE_DATA_MODEL_BASE::FIELDS_TABLE_DATA_MODEL_BASE() :
         m_groupingEnabled( false ),
         m_excludeDNP( false ),
         m_includeExcluded( false ),
-        m_rebuildsEnabled( true ),
-        m_stripedRenderer( nullptr )
+        m_rebuildsEnabled( true )
 {
 }
 
