@@ -31,6 +31,7 @@
 
 class BOARD_ITEM;
 class BOARD_ITEM_CONTAINER;
+class TEARDROP_PARAMETERS;
 
 std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAINER* aContainer );
 
@@ -40,6 +41,10 @@ namespace kiapi::board
 void PackLayerSet( google::protobuf::RepeatedField<int>& aOutput, const LSET& aLayerSet );
 
 LSET UnpackLayerSet( const google::protobuf::RepeatedField<int>& aInput );
+
+void PackTeardropSettings( types::PadTeardropSettings& aOutput, const TEARDROP_PARAMETERS& aParams );
+
+void UnpackTeardropSettings( TEARDROP_PARAMETERS& aOutput, const types::PadTeardropSettings& aProto );
 
 }   // namespace kiapi::board
 

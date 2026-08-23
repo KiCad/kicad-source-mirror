@@ -559,6 +559,8 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
     if( const BOARD* board = GetBoard() )
         via.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
+    kiapi::board::PackTeardropSettings( *via.mutable_teardrop(), GetTeardropParams() );
+
     aContainer.PackFrom( via );
 }
 
@@ -586,6 +588,11 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     SetViaType( FromProtoEnum<VIATYPE>( via.type() ) );
     UnpackNet( via.net() );
     SetLocked( via.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+
+    if( via.has_teardrop() )
+        kiapi::board::UnpackTeardropSettings( GetTeardropParams(), via.teardrop() );
+    else
+        SetTeardropsEnabled( false );
 
     return true;
 }
