@@ -562,56 +562,6 @@ bool SYMBOL_EDIT_FRAME::hasDirtyInactiveInstanceTabs() const
 }
 
 
-bool SYMBOL_EDIT_FRAME::promptToSaveInactiveInstanceTabs()
-{
-    // Collect first; saving activates a tab, which mutates m_activeTab and m_tabContexts ordering.
-    std::vector<SYMBOL_EDITOR_TAB_CONTEXT*> dirty;
-
-    for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
-    {
-        // The active tab and library tabs are handled by the existing close checks.
-        if( ctx.get() != m_activeTab && ctx->IsTransient() && ctx->IsModified() )
-            dirty.push_back( ctx.get() );
-    }
-
-    // Saving activates each dirty tab in turn; restore the tab the user was on so a vetoed close leaves
-    // the editor where it was and a successful close persists the real active tab, not a discarded one.
-    SYMBOL_EDITOR_TAB_CONTEXT* originalActive = m_activeTab;
-
-    for( SYMBOL_EDITOR_TAB_CONTEXT* ctx : dirty )
-    {
-        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ), ctx->GetDisplayName() );
-
-        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
-        dlg.SetYesNoCancelLabels( _( "Save" ), _( "Discard Changes" ), _( "Cancel" ) );
-
-        const int answer = dlg.ShowModal();
-
-        if( answer == wxID_YES )
-        {
-            // saveCurrentSymbol saves the active tab via the mirrored frame state, so activate this
-            // one first; it clears the screen's modified flag on success.
-            activateSymbolTab( ctx );
-
-            if( !saveCurrentSymbol() )
-            {
-                activateSymbolTab( originalActive );
-                return false;
-            }
-        }
-        else if( answer != wxID_NO )
-        {
-            activateSymbolTab( originalActive );
-            return false;
-        }
-    }
-
-    activateSymbolTab( originalActive );
-
-    return true;
-}
-
-
 void SYMBOL_EDIT_FRAME::closeAllSymbolTabsSilently()
 {
     if( m_tabContexts.empty() )

@@ -143,10 +143,10 @@ bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage )
 
 static int g_lastUnsavedChangesResult = -1;
 
-bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
-                           const std::function<bool()>& aSaveFunction )
+bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage, const std::function<bool()>& aSaveFunction )
 {
     g_lastUnsavedChangesResult = UnsavedChangesDialog( aParent, aMessage );
+
     switch( g_lastUnsavedChangesResult )
     {
     case wxID_YES:    return aSaveFunction();
@@ -163,8 +163,8 @@ int GetLastUnsavedChangesResponse()
 
 
 int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
-                      const wxString& aDetailedMessage, const wxString& aOKLabel,
-                      const wxString& aCancelLabel, bool* aApplyToAll )
+                      const wxString& aDetailedMessage, const wxString& aOKLabel, const wxString& aCancelLabel,
+                      bool* aApplyToAll )
 {
     KICAD_RICH_MESSAGE_DIALOG_BASE dlg( aParent, aMessage, aWarning,
                                         wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );

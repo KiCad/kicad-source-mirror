@@ -838,7 +838,7 @@ public:
      * @param aSymbol is the new symbol data.
      * @param aSchematicSymbolUUID refers to the schematic symbol to update.
      */
-    void SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol, const KIID& aSchematicSymbolUUID );
+    bool SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol, const KIID& aSchematicSymbolUUID );
 
     /**
      * Update the schematic's page reference map for all global labels, and refresh the labels

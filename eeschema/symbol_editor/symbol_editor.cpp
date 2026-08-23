@@ -952,12 +952,13 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
     auto strategy = SYMBOL_SAVE_AS_HANDLER::CONFLICT_STRATEGY::OVERWRITE;
 
     std::vector<wxString> parentSymbolNames;
+
     if( symbol->IsDerived() )
     {
         // The parents are everything but the leaf symbol
         std::vector<std::shared_ptr<LIB_SYMBOL>> parentChain = GetParentChain( *symbol, false );
 
-        for( const auto& parent : parentChain )
+        for( const std::shared_ptr<LIB_SYMBOL>& parent : parentChain )
             parentSymbolNames.push_back( parent->GetName() );
     }
 

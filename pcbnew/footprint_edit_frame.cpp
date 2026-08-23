@@ -773,97 +773,68 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
 }
 
 
-FOOTPRINT_EDIT_FRAME::EDIT_NOTICE FOOTPRINT_EDIT_FRAME::editNoticeFor(
-        const FOOTPRINT* aFootprint, bool aIsFromBoard,
-        const std::function<bool( const wxString& )>& aIsLibWritable )
-{
-    if( !aFootprint )
-        return EDIT_NOTICE::NONE;
-
-    if( aIsFromBoard )
-        return EDIT_NOTICE::FROM_BOARD;
-
-    const wxString libName = aFootprint->GetFPID().GetLibNickname();
-
-    // An empty libname is OK - you get that when creating a new footprint from the main menu
-    // In that case. treat is as editable, and the user will be prompted for save-as when saving.
-    if( libName.empty() || aIsLibWritable( libName ) )
-        return EDIT_NOTICE::NONE;
-
-    return EDIT_NOTICE::READ_ONLY_LIB;
-}
-
-
 void FOOTPRINT_EDIT_FRAME::updateInfoBar()
 {
     // Use CallAfter so that we update the canvas before waiting for the infobar animation
     CallAfter(
             [this]()
             {
-                BOARD*     board = GetBoard();
-                FOOTPRINT* fp = board ? board->GetFirstFootprint() : nullptr;
+                WX_INFOBAR& infobar = *GetInfoBar();
+                infobar.RemoveAllButtons();
 
-                const EDIT_NOTICE notice = editNoticeFor( fp, IsCurrentFPFromBoard(),
-                        [this]( const wxString& aLib )
-                        {
-                            return PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( aLib );
-                        } );
+                wxArrayString msgs;
+                int           infobarFlags = wxICON_INFORMATION;
+                FOOTPRINT*    footprint = GetBoard() ? GetBoard()->GetFirstFootprint() : nullptr;
+                wxString      lib;
 
-                // Clear_Pcb() queues this against an empty board and then opens a modal dialog whose
-                // event loop runs it, so there may be no footprint left to describe
-                if( notice == EDIT_NOTICE::NONE )
+                if( footprint )
+                    lib = UnescapeString( footprint->GetFPID().GetLibNickname() );
+
+                if( IsCurrentFPFromBoard() )
                 {
-                    if( WX_INFOBAR* infobar = GetInfoBar() )
-                        infobar->Dismiss();
+                    msgs.push_back( wxString::Format( _( "Editing %s from board.  Saving will update the board only." ),
+                                                      footprint->GetReference() ) );
 
-                    return;
+                    infobar.AddLink( wxString::Format( _( "Open footprint from library %s" ), UnescapeString( lib ) ),
+                            [this]( wxHyperlinkEvent& aEvent )
+                            {
+                                GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
+                            } );
                 }
 
-                wxString libName = fp->GetFPID().GetLibNickname();
-                wxString msg;
-
-                if( notice == EDIT_NOTICE::FROM_BOARD )
+                if( footprint
+                        && !IsCurrentFPFromBoard()
+                        && !PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( lib ) )
                 {
-                    msg.Printf( _( "Editing %s from board.  Saving will update the board only." ), fp->GetReference() );
+                    msgs.push_back( _( "Library is read-only.  Changes cannot be saved to this library." ) );
 
-                    if( WX_INFOBAR* infobar = GetInfoBar() )
-                    {
-                        infobar->RemoveAllButtons();
-                        infobar->AddLink( wxString::Format( _( "Open in library %s" ), UnescapeString( libName ) ),
-                                [this]( wxHyperlinkEvent& aEvent )
-                                {
-                                    GetToolManager()->RunAction( PCB_ACTIONS::editLibFpInFpEditor );
-                                } );
-                        infobar->AddCloseButton();
-                        infobar->ShowMessage( msg, wxICON_INFORMATION );
-                    }
+                    infobar.AddLink( _( "Save as editable copy" ),
+                            [this]( wxHyperlinkEvent& aEvent )
+                            {
+                                SaveFootprintAs( GetBoard()->GetFirstFootprint() );
+                                GetCanvas()->GetView()->Update( GetBoard()->GetFirstFootprint() );
+                                ClearModify();
+
+                                // Get rid of the save-will-update-board-only (or any other dismissable warning)
+                                WX_INFOBAR* local_infobar = GetInfoBar();
+
+                                if( local_infobar->IsShownOnScreen() && local_infobar->HasCloseButton() )
+                                    local_infobar->Dismiss();
+
+                                GetCanvas()->ForceRefresh();
+                                SyncLibraryTree( true );
+                            } );
+                }
+
+                if( msgs.empty() )
+                {
+                    infobar.Dismiss();
                 }
                 else
                 {
-                    msg.Printf( _( "Editing footprint from read-only library %s." ), UnescapeString( libName ) );
-
-                    if( WX_INFOBAR* infobar = GetInfoBar() )
-                    {
-                        infobar->RemoveAllButtons();
-                        infobar->AddLink( _( "Save as editable copy" ),
-                                [this]( wxHyperlinkEvent& aEvent )
-                                {
-                                    SaveFootprintAs( GetBoard()->GetFirstFootprint() );
-                                    GetCanvas()->GetView()->Update( GetBoard()->GetFirstFootprint() );
-                                    ClearModify();
-
-                                    // Get rid of the save-will-update-board-only (or any other dismissable warning)
-                                    WX_INFOBAR* loc_infobar = GetInfoBar();
-
-                                    if( loc_infobar->IsShownOnScreen() && loc_infobar->HasCloseButton() )
-                                        loc_infobar->Dismiss();
-
-                                    GetCanvas()->ForceRefresh();
-                                    SyncLibraryTree( true );
-                                } );
-                        infobar->AddCloseButton();
-                        infobar->ShowMessage( msg, wxICON_INFORMATION );
-                    }
+                    wxString msg = wxJoin( msgs, '\n', '\0' );
+                    infobar.AddCloseButton();
+                    infobar.ShowMessage( msg, infobarFlags );
                 }
             } );
 }
@@ -1029,8 +1000,7 @@ void FOOTPRINT_EDIT_FRAME::activateFootprintTab( FOOTPRINT_EDITOR_TAB_CONTEXT* a
 }
 
 
-void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx,
-                                                     BOARD* aBoard )
+void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx, BOARD* aBoard )
 {
     // Install the successor board and tool environment before the caller frees the outgoing context
     // so no tool Reset() or repaint ever sees a freed or null m_pcb. Never calls the base SetBoard,
@@ -1061,8 +1031,8 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
     }
 
     m_originalFootprintCopy.reset( aCtx && aCtx->GetOriginalFootprintCopy()
-                                           ? static_cast<FOOTPRINT*>( aCtx->GetOriginalFootprintCopy()->Clone() )
-                                           : nullptr );
+                                               ? static_cast<FOOTPRINT*>( aCtx->GetOriginalFootprintCopy()->Clone() )
+                                               : nullptr );
     m_footprintNameWhenLoaded = aCtx ? aCtx->GetFootprintNameWhenLoaded() : wxString();
 
     // Mirror the incoming tab's board-uuid remap onto the frame so SaveFootprintToBoard saves an
@@ -1077,8 +1047,8 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
 
     // Point the tool environment at the incoming board before ResetTools so tools never dereference
     // a freed model.
-    m_toolManager->SetEnvironment( GetBoard(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), config(), this );
+    m_toolManager->SetEnvironment( GetBoard(), GetCanvas()->GetView(), GetCanvas()->GetViewControls(), config(),
+                                   this );
 
     GetCanvas()->DisplayBoard( GetBoard() );
     GetCanvas()->UpdateColors();
@@ -1186,8 +1156,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( co
         return placeReusedTabContext( m_tabContexts, reuseSlot, std::move( ctx ),
                 [&]( const FOOTPRINT_EDITOR_TAB_CONTEXT& aDisplaced )
                 {
-                    SCOPED_SET_RESET<BOARD*> protectedBoard( m_protectedBorrowedBoard,
-                                                             aDisplaced.GetBoard() );
+                    SCOPED_SET_RESET<BOARD*> protectedBoard( m_protectedBorrowedBoard, aDisplaced.GetBoard() );
                     m_tabsPanel->AddTab( key, name, aAsPreview );
                 } );
     }
@@ -1857,9 +1826,15 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible, before any modal prompt.
     // IsContentModified only sees the active tab, so also account for dirty inactive instance tabs.
-    if( ( IsContentModified() || hasDirtyInactiveTransientTabs() )
-            && KIPLATFORM::APP::SupportsShutdownBlockReason()
-            && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+    if( KIPLATFORM::APP::SupportsShutdownBlockReason()
+            && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && ( IsContentModified() || hasDirtyInactiveTransientTabs() ) )
+    {
+        aEvent.Veto();
+        return false;
+    }
+
+    if( IsCurrentFPFromBoard() && !CanCloseFPFromBoard( false ) )
     {
         aEvent.Veto();
         return false;
@@ -1868,10 +1843,6 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( IsContentModified() )
     {
         wxString footprintName = GetBoard()->GetFirstFootprint()->GetFPID().GetLibItemName();
-
-        if( IsCurrentFPFromBoard() )
-            footprintName = GetBoard()->GetFirstFootprint()->GetReference();
-
         wxString msg = _( "Save changes to '%s' before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, footprintName ),
@@ -2029,11 +2000,11 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( [[maybe_unused]] bool aProgress )
 {
     wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "FOOTPRINT_EDIT_FRAME::SyncLibraryTree enter" ) );
 
-    FOOTPRINT_LIBRARY_ADAPTER* footprints = PROJECT_PCB::FootprintLibAdapter( &Prj() );
-    auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
-    LIB_ID        target = GetTargetFPID();
-    bool          targetSelected = ( target == GetLibTree()->GetSelectedLibId() );
-    std::vector<LIB_ID>        expanded = GetLibTree()->GetExpandedLibraries();
+    FOOTPRINT_LIBRARY_ADAPTER*     footprints = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+    FP_TREE_SYNCHRONIZING_ADAPTER* adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
+    LIB_ID                         target = GetTargetFPID();
+    bool                           targetSelected = ( target == GetLibTree()->GetSelectedLibId() );
+    std::vector<LIB_ID>            expanded = GetLibTree()->GetExpandedLibraries();
 
     // Unselect before syncing to avoid null reference in the adapter
     // if a selected item is removed during the sync
@@ -2092,8 +2063,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetBoard(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), config(), this );
+    m_toolManager->SetEnvironment( GetBoard(), GetCanvas()->GetView(), GetCanvas()->GetViewControls(), config(), this );
     m_actions = new PCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
@@ -2310,7 +2280,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::placeImportedGraphics, ENABLE( haveFootprintCond ) );
 
     mgr->SetConditions( PCB_ACTIONS::footprintProperties,   ENABLE( footprintSelectedInTreeCond || haveFootprintCond ) );
-    mgr->SetConditions( PCB_ACTIONS::padTable,            ENABLE( haveFootprintCond ) );
+    mgr->SetConditions( PCB_ACTIONS::padTable,              ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::editTextAndGraphics,   ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::checkFootprint,        ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::repairFootprint,       ENABLE( haveFootprintCond ) );
@@ -2342,9 +2312,9 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     // clang-format on
 
 // Only enable a tool if the part is edtable
-#define CURRENT_EDIT_TOOL( action )                                                               \
-            mgr->SetConditions( action, ACTION_CONDITIONS().Enable( haveFootprintCond )           \
-                                                           .Check( cond.CurrentTool( action ) ) )
+#define CURRENT_EDIT_TOOL( action ) mgr->SetConditions( action, ACTION_CONDITIONS()    \
+                                                .Enable( haveFootprintCond )           \
+                                                .Check( cond.CurrentTool( action ) ) )
 
     CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
     CURRENT_EDIT_TOOL( ACTIONS::measureTool );
@@ -2460,8 +2430,8 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
 
     wxString projectPath = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Export View as PNG" ), projectPath, fn.GetFullName(),
-                      FILEEXT::PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, _( "Export View as PNG" ), projectPath, fn.GetFullName(), FILEEXT::PngFileWildcard(),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 

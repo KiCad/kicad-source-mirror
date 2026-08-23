@@ -2283,7 +2283,7 @@ void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 }
 
 
-void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
+bool SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                                             const KIID& aSchematicSymbolUUID )
 {
     SCH_SHEET_PATH principalPath;
@@ -2293,7 +2293,7 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
     SCH_COMMIT     commit( m_toolManager );
 
     if( !principalSymbol )
-        return;
+        return false;
 
     wxString principalRef;
 
@@ -2352,6 +2352,8 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
 
     if( !commit.Empty() )
         commit.Push( _( "Save Symbol to Schematic" ) );
+
+    return true;
 }
 
 

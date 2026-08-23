@@ -447,7 +447,7 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 APP_SETTINGS_BASE* SYMBOL_EDIT_FRAME::config() const
 {
-    return static_cast<APP_SETTINGS_BASE*>( GetSettings() );
+    return GetSettings();
 }
 
 
@@ -466,8 +466,8 @@ void SYMBOL_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), GetSettings(), this );
+    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(), GetCanvas()->GetViewControls(), GetSettings(),
+                                   this );
     m_actions = new SCH_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
 
@@ -597,27 +597,22 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( haveSymbolCond ) );
     mgr->SetConditions( ACTIONS::copyAsText,          ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( ACTIONS::paste,               ENABLE( isEditableCond &&
-                                                              SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::paste,               ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( ACTIONS::unselectAll,         ENABLE( haveSymbolCond ) );
 
     // These actions in symbol editor when editing alias field rotations are allowed.
-    mgr->SetConditions( SCH_ACTIONS::rotateCW,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableInAliasCond )
-                        .HotkeyEnable( isEditableInAliasCond ) );
-    mgr->SetConditions( SCH_ACTIONS::rotateCCW,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableInAliasCond )
-                        .HotkeyEnable( isEditableInAliasCond ) );
+    mgr->SetConditions( SCH_ACTIONS::rotateCW,        ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableInAliasCond )
+                                                          .HotkeyEnable( isEditableInAliasCond ) );
+    mgr->SetConditions( SCH_ACTIONS::rotateCCW,       ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableInAliasCond )
+                                                          .HotkeyEnable( isEditableInAliasCond ) );
 
-    mgr->SetConditions( SCH_ACTIONS::mirrorH,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableCond )
-                        .HotkeyEnable( isEditableCond ) );
-    mgr->SetConditions( SCH_ACTIONS::mirrorV,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableCond )
-                        .HotkeyEnable( isEditableCond ) );
+    mgr->SetConditions( SCH_ACTIONS::mirrorH,         ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableCond )
+                                                          .HotkeyEnable( isEditableCond ) );
+    mgr->SetConditions( SCH_ACTIONS::mirrorV,         ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableCond )
+                                                          .HotkeyEnable( isEditableCond ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
@@ -729,22 +724,20 @@ bool SYMBOL_EDIT_FRAME::CanCloseSymbolFromSchematic( bool doClose )
 {
     if( IsContentModified() )
     {
-        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
-        wxString        msg = _( "Save changes to '%s' before closing?" );
+        wxString msg = _( "Save changes to '%s' before closing?" );
 
-        switch( UnsavedChangesDialog( this, wxString::Format( msg, m_reference ), nullptr ) )
+        if( !HandleUnsavedChanges( this, wxString::Format( msg, m_reference ),
+                                   [&]() -> bool
+                                   {
+                                       SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+                                       LIB_SYMBOL*     symbol = GetCurSymbol();
+
+                                       if( schframe && symbol )  // Should be always the case
+                                           return schframe->SaveSymbolToSchematic( *symbol, m_schematicSymbolUUID );
+
+                                       return false;
+                                    } ) )
         {
-        case wxID_YES:
-            if( schframe && GetCurSymbol() )  // Should be always the case
-                schframe->SaveSymbolToSchematic( *GetCurSymbol(), m_schematicSymbolUUID );
-
-            break;
-
-        case wxID_NO:
-            break;
-
-        default:
-        case wxID_CANCEL:
             return false;
         }
     }
@@ -764,15 +757,19 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
             && aEvent.GetId() == wxEVT_QUERY_END_SESSION
             && ( IsContentModified() || hasDirtyInactiveInstanceTabs() ) )
     {
+        aEvent.Veto();
         return false;
     }
 
     if( m_isSymbolFromSchematic && !CanCloseSymbolFromSchematic( false ) )
+    {
+        aEvent.Veto();
         return false;
+    }
 
-    // Prompt for any dirty inactive instance tabs, which the active-tab checks above miss.
-    if( !promptToSaveInactiveInstanceTabs() )
-        return false;
+    // Saving in the symbol editor is by library (as multiple symbols might come from the same library
+    // and we can't save them independently).  There is therefore no distinction between active and
+    // inactive tabs.
 
     if( !saveAllLibraries( true ) )
         return false;
@@ -989,8 +986,8 @@ void SYMBOL_EDIT_FRAME::updateInfoBar()
 
                 if( IsSymbolFromSchematic() )
                 {
-                    msgs.push_back( wxString::Format( _( "Editing symbol %s from schematic.  Saving will "
-                                                         "update the schematic only." ),
+                    msgs.push_back( wxString::Format( _( "Editing %s from schematic.  Saving will update the "
+                                                         "schematic only." ),
                                                       m_reference ) );
 
                     infobar.AddLink( wxString::Format( _( "Open symbol from library %s" ), UnescapeString( libName ) ),
@@ -1053,16 +1050,18 @@ void SYMBOL_EDIT_FRAME::updateInfoBar()
 
                                 switch( choice )
                                 {
-                                case wxID_YES:
-                                    SaveSymbolCopyAs( true );
-                                    break;
-                                case wxID_CANCEL:
-                                    SaveLibraryAs();
-                                    break;
-                                default:
-                                    // Do nothing
-                                    break;
+                                case wxID_YES:    SaveSymbolCopyAs( true ); break;
+                                case wxID_CANCEL: SaveLibraryAs();          break;
+                                default:          return;
                                 }
+
+                                // Get rid of the save-will-update-schematic-only (or any other dismissable warning)
+                                WX_INFOBAR* local_infobar = GetInfoBar();
+
+                                if( local_infobar->IsShownOnScreen() && local_infobar->HasCloseButton() )
+                                    local_infobar->Dismiss();
+
+                                GetCanvas()->ForceRefresh();
                             } );
                 }
 
@@ -1073,6 +1072,7 @@ void SYMBOL_EDIT_FRAME::updateInfoBar()
                 else
                 {
                     wxString msg = wxJoin( msgs, '\n', '\0' );
+                    infobar.AddCloseButton();
                     infobar.ShowMessage( msg, infobarFlags );
                 }
             } );
@@ -1412,8 +1412,7 @@ wxString SYMBOL_EDIT_FRAME::getTargetLib() const
 }
 
 
-void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelled,
-                                       const wxString& aForceRefresh )
+void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelled, const wxString& aForceRefresh )
 {
     wxLogTrace( wxT( "KICAD_TABS_DBG" ),
                 wxT( "SYMBOL_EDIT_FRAME::SyncLibraries enter (progress=%d, forceRefresh='%s')" ),
@@ -1424,8 +1423,7 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelle
     // loading libraries).  A re-entrant call would corrupt the library tree mid-rebuild.
     if( m_syncLibrariesInProgress )
     {
-        wxLogTrace( wxT( "KICAD_TABS_DBG" ),
-                    wxT( "SYMBOL_EDIT_FRAME::SyncLibraries re-entrant; skipping" ) );
+        wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SYMBOL_EDIT_FRAME::SyncLibraries re-entrant; skipping" ) );
         return;
     }
 
@@ -1791,8 +1789,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
     const std::string& payload = mail.GetPayload();
 
-    wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SYMBOL_EDIT_FRAME::KiwayMailIn cmd=%d" ),
-                (int) mail.Command() );
+    wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SYMBOL_EDIT_FRAME::KiwayMailIn cmd=%d" ), (int) mail.Command() );
 
     switch( mail.Command() )
     {
@@ -1839,8 +1836,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
     case MAIL_RELOAD_LIB:
     {
-        wxLogTrace( wxT( "KICAD_TABS_DBG" ),
-                    wxT( "SYMBOL_EDIT_FRAME::KiwayMailIn MAIL_RELOAD_LIB -> SyncLibraries" ) );
+        wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SYMBOL_EDIT_FRAME::KiwayMailIn MAIL_RELOAD_LIB -> SyncLibraries" ) );
 
         FreezeLibraryTree();
 
