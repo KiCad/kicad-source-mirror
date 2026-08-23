@@ -750,8 +750,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
                 continue;
             }
 
-            // Add a not existing field if it has a value for this symbol
-            bool createField = !destField && ( !srcValue.IsEmpty() || col.m_userAdded );
+            // User-added columns are instantiated on every symbol.  For other columns, preserve
+            // an explicitly edited empty value as a present-but-empty field.
+            bool createField = !destField && ( currentlyPresent || col.m_userAdded );
 
             if( createField )
             {
