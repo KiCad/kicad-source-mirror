@@ -32,7 +32,8 @@
 #include "lib_fields_data_model.h"
 
 
-const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME = wxS( "Symbol Name" );
+const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME = wxS( "${SYMBOL_NAME}" );
+const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_KEYWORDS = wxS( "${SYMBOL_KEYWORDS}" );
 const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER = wxS( "${SYMBOL_IS_POWER}" );
 const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER = wxS( "${SYMBOL_IS_LOCAL_POWER}" );
 
@@ -68,7 +69,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( LIB_SYMBOL* const& aS
         aValue = field->GetText();
         return true;
     }
-    else if( aFieldName == wxS( "Keywords" ) )
+    else if( aFieldName == SYMBOL_KEYWORDS )
     {
         aValue = aSymbol->GetKeyWords();
         return true;
@@ -755,7 +756,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             if( IsGeneratedField( srcName ) )
                 continue;
 
-            if( srcName == wxS( "Keywords" ) )
+            if( srcName == SYMBOL_KEYWORDS )
             {
                 if( symbol->GetKeyWords() != srcValue )
                 {

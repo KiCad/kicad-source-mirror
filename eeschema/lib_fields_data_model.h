@@ -60,6 +60,7 @@ public:
     }
 
     static const wxString SYMBOL_NAME;
+    static const wxString SYMBOL_KEYWORDS;
     static const wxString SYMBOL_IS_POWER;
     static const wxString SYMBOL_IS_LOCAL_POWER;
 

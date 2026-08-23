@@ -518,7 +518,7 @@ void DIALOG_LIB_FIELDS_TABLE::LoadFieldNames()
     addMandatoryField( FIELD_T::DESCRIPTION, false,  false  );
 
     // Generated fields present only in the fields table
-    AddField( wxS( "Keywords" ), _( "Keywords" ), true, false );
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_KEYWORDS, _( "Keywords" ), true, false );
     AddField( wxS( "${EXCLUDE_FROM_BOM}" ), _( "Exclude From BOM" ), true, false );
     AddField( wxS( "${EXCLUDE_FROM_SIM}" ), _( "Exclude From Simulation" ), true, false );
     AddField( wxS( "${EXCLUDE_FROM_BOARD}" ), _( "Exclude From Board" ), true, false );
@@ -708,7 +708,7 @@ std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
                 { GetCanonicalFieldName( FIELD_T::FOOTPRINT ), wxS( "Footprint" ), true, false },
                 { GetCanonicalFieldName( FIELD_T::DATASHEET ), wxS( "Datasheet" ), true, false },
                 { GetCanonicalFieldName( FIELD_T::DESCRIPTION ), wxS( "Description" ), false, false },
-                { wxS( "Keywords" ), wxS( "Keywords" ), true, false },
+                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_KEYWORDS, wxS( "Keywords" ), true, false },
                 { wxS( "${EXCLUDE_FROM_BOM}" ), wxS( "Exclude From BOM" ), true, false },
                 { wxS( "${EXCLUDE_FROM_SIM}" ), wxS( "Exclude From Simulation" ), true, false },
                 { wxS( "${EXCLUDE_FROM_BOARD}" ), wxS( "Exclude From Board" ), true, false },
