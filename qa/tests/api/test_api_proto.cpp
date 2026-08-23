@@ -33,6 +33,7 @@
 #include <pcb_dimension.h>
 #include <pcb_griditem.h>
 #include <pcb_reference_image.h>
+#include <pcb_table.h>
 #include <pcb_track.h>
 #include <zone.h>
 
@@ -55,6 +56,7 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
 
     int barcodeCount = 0;
     int referenceImageCount = 0;
+    int tableCount = 0;
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
@@ -129,6 +131,11 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
             ++referenceImageCount;
             break;
 
+        case PCB_TABLE_T:
+            testProtoFromKiCadObject<kiapi::board::types::Table>( static_cast<PCB_TABLE*>( item ), m_board.get() );
+            ++tableCount;
+            break;
+
         default: break;
         }
         // TODO(JE) Shapes
@@ -138,6 +145,7 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
 
     BOOST_CHECK_GT( barcodeCount, 0 );
     BOOST_CHECK_GT( referenceImageCount, 0 );
+    BOOST_CHECK_GT( tableCount, 0 );
 }
 
 

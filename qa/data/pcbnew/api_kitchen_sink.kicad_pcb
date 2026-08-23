@@ -1800,6 +1800,325 @@
 		)
 		(knockout no)
 	)
+	(table
+		(column_count 3)
+		(uuid "92ad191f-2e6f-469e-907b-17d31887e14d")
+		(layer "Dwgs.User")
+		(border
+			(external yes)
+			(header yes)
+			(stroke
+				(width 0.15)
+				(type dash)
+			)
+		)
+		(separators
+			(rows no)
+			(cols yes)
+			(stroke
+				(width 0.24)
+				(type dash_dot_dot)
+			)
+		)
+		(column_widths 16 16 16)
+		(row_heights 3.5 3.5 3.5 3.5 3.5 3.5 3.5)
+		(cells
+			(table_cell "Hello"
+				(start 25 24.5)
+				(end 41 28)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "95e17d58-f1c6-44df-9776-a2b31d18bfed")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "World"
+				(start 41 24.5)
+				(end 57 28)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "55638112-ab6e-4563-999a-6f5137f8b48b")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 24.5)
+				(end 73 28)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "7dd4c810-7010-4ca4-b5fe-98cfb2d18cab")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "tablecell"
+				(start 25 28)
+				(end 41 31.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "49111928-7c75-44bf-8f36-3279d5dc204a")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 41 28)
+				(end 57 31.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "26e191fb-bed1-46b5-9cb3-a04bf58a54c9")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 28)
+				(end 73 31.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "9150abb2-bf10-4c24-be7c-fca8c991af47")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 25 31.5)
+				(end 41 35)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "68ee71bf-e044-433c-acd0-b3e2eaf538a3")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "r"
+				(start 41 31.5)
+				(end 57 35)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "f19f1036-e939-48f9-b306-d14eb8e0a0cc")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 31.5)
+				(end 73 35)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "a309e3ba-b86e-4aba-89aa-1f2e3aa0f969")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 25 35)
+				(end 41 38.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "1842dce7-cac7-4871-84c8-a8a307aa5bc6")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 41 35)
+				(end 57 38.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "8feb96e3-51ea-4be0-b13c-01eab619052f")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "d"
+				(start 57 35)
+				(end 73 38.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "611544f9-c280-4d8e-b51b-823436ce809a")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 25 38.5)
+				(end 41 42)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "c0626908-8e35-46e4-9f44-0e1b4b8e54aa")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "4"
+				(start 41 38.5)
+				(end 57 42)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "92a70c5a-fb7c-4066-af44-949433d9d9ab")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 38.5)
+				(end 73 42)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "b70b5ec9-c81a-4bd5-94f4-6eb83241f9c7")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 25 42)
+				(end 41 45.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "e445472a-b299-45d9-a36a-12765b0f58e5")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "a"
+				(start 41 42)
+				(end 57 45.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "1fac2b36-7665-4d2e-b223-ddefb2804751")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 57 42)
+				(end 73 45.5)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "95918e49-ec4b-4bae-95b7-5a1ffdf63437")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "3"
+				(start 25 45.5)
+				(end 41 49)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "5413f6b3-a918-445d-9aee-98b8dc2cff62")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell ""
+				(start 41 45.5)
+				(end 57 49)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "2c4f3c81-8819-4c9b-a90d-9c30c8aa24ea")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(table_cell "f"
+				(start 57 45.5)
+				(end 73 49)
+				(margins 1.0025 1.0025 1.0025 1.0025)
+				(span 1 1)
+				(layer "Dwgs.User")
+				(uuid "2e0dcbd8-a2e6-4f27-8fdc-a1567110f7cc")
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+		)
+	)
 	(barcode
 		(at 258.5 141.5 90)
 		(layer "F.Cu")

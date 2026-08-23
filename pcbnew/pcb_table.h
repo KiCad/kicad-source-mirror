@@ -37,6 +37,8 @@ class PCB_TABLE : public BOARD_ITEM_CONTAINER
 public:
     PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth );
 
+    PCB_TABLE( BOARD_ITEM* aParent );
+
     PCB_TABLE( const PCB_TABLE& aTable );
 
     ~PCB_TABLE();
@@ -281,6 +283,9 @@ public:
     {
         return new PCB_TABLE( *this );
     }
+
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

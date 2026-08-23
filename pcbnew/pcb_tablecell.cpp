@@ -18,6 +18,9 @@
  */
 
 #include <advanced_config.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/board/board_types.pb.h>
 #include <common.h>
 #include <pcb_edit_frame.h>
 #include <font/font.h>
@@ -50,6 +53,49 @@ void PCB_TABLECELL::swapData( BOARD_ITEM* aImage )
     wxASSERT( aImage->Type() == PCB_TABLECELL_T );
 
     std::swap( *( (PCB_TABLECELL*) this ), *( (PCB_TABLECELL*) aImage ) );
+}
+
+
+void PCB_TABLECELL::Serialize( google::protobuf::Any& aContainer ) const
+{
+    using namespace kiapi::board;
+    types::TableCell cell;
+
+    cell.set_column_span( m_colSpan );
+    cell.set_row_span( m_rowSpan );
+
+    google::protobuf::Any textBoxAny;
+    PCB_TEXTBOX::Serialize( textBoxAny );
+
+    std::ignore = textBoxAny.UnpackTo( cell.mutable_text_box() );
+
+    aContainer.PackFrom( cell );
+}
+
+
+bool PCB_TABLECELL::Deserialize( const google::protobuf::Any& aContainer )
+{
+    using namespace kiapi::board;
+    types::TableCell cell;
+
+    if( !aContainer.UnpackTo( &cell ) )
+        return false;
+
+    if( !cell.has_text_box() )
+        return false;
+
+    google::protobuf::Any textBoxAny;
+
+    if( !textBoxAny.PackFrom( cell.text_box() ) )
+        return false;
+
+    if( !PCB_TEXTBOX::Deserialize( textBoxAny ) )
+        return false;
+
+    SetColSpan( cell.column_span() );
+    SetRowSpan( cell.row_span() );
+
+    return true;
 }
 
 
