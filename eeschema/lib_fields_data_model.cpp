@@ -712,11 +712,6 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
                 continue;
             }
 
-            // Skip special fields with variables as names (e.g. ${QUANTITY}),
-            // they can't be edited
-            if( IsGeneratedField( srcName ) )
-                continue;
-
             if( srcName == SYMBOL_KEYWORDS )
             {
                 if( symbol->GetKeyWords() != srcValue )
@@ -727,6 +722,11 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
 
                 continue;
             }
+
+            // Skip special fields with variables as names (e.g. ${QUANTITY}),
+            // they can't be edited
+            if( IsGeneratedField( srcName ) )
+                continue;
 
             SCH_FIELD* destField = symbol->GetField( srcName );
 
