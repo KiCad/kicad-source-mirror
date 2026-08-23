@@ -51,12 +51,12 @@ PANEL_SYMBOL_PIN_MAP_BASE::PANEL_SYMBOL_PIN_MAP_BASE( wxWindow* parent, wxWindow
 	m_addMapButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_addMapButton->SetToolTip( _("Add pin map") );
 
-	bButtonSizer->Add( m_addMapButton, 0, wxALL, 5 );
+	bButtonSizer->Add( m_addMapButton, 0, wxRIGHT, 5 );
 
 	m_removeMapButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_removeMapButton->SetToolTip( _("Remove pin map") );
 
-	bButtonSizer->Add( m_removeMapButton, 0, wxALL, 5 );
+	bButtonSizer->Add( m_removeMapButton, 0, wxRIGHT|wxLEFT, 25 );
 
 
 	bPanelSizer->Add( bButtonSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
