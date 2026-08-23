@@ -138,38 +138,6 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
 }
 
 
-void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ClearCell( int aRow, int aCol )
-{
-    wxCHECK_RET( aRow >= 0 && aRow < (int) m_rows.size(), wxS( "Invalid row number" ) );
-    wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), wxS( "Invalid column number" ) );
-
-    const wxString& fieldName = m_cols[aCol].m_fieldName;
-
-    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
-    {
-        std::map<wxString, wxString>& fields = m_dataStore[getDataStoreKey( symbol )];
-
-        if( fieldName == SYMBOL_IS_POWER )
-        {
-            fields.erase( fieldName );
-        }
-        else if( getStoredPowerSymbolValue( symbol ) && isPowerSymbolControlledField( fieldName ) )
-        {
-            if( fieldName == GetCanonicalFieldName( FIELD_T::VALUE ) )
-                fields[fieldName] = symbol->GetName();
-            else
-                fields[fieldName] = wxS( "1" );
-        }
-        else
-        {
-            fields.erase( fieldName );
-        }
-    }
-
-    m_edited = true;
-}
-
-
 bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemIdentifier( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );

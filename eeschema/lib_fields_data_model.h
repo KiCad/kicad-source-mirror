@@ -70,7 +70,6 @@ public:
 
     wxString GetTypeName( int row, int col ) override;
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;
-    void     ClearCell( int aRow, int aCol ) override;
 
     wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) override;
 
