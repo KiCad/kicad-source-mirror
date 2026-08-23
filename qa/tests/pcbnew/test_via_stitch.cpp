@@ -20,6 +20,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <iterator>
@@ -96,6 +97,129 @@ BOOST_AUTO_TEST_CASE( BakedPatternConstantsLocked )
     BOOST_CHECK_EQUAL( PCB_VIA_STITCH::POISSON_TILE_SEED, 0x542c21fcu );
     BOOST_CHECK_EQUAL( PCB_VIA_STITCH::POISSON_TILE_PITCHES, 8 );
     BOOST_CHECK( !PCB_VIA_STITCH::bakedPoissonTile().empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( GuardEnvelopeSampling )
+{
+    // Guarding previously broke down at pitches > 1.7mm
+    const int pitch = pcbIUScale.mmToIU( 2 );
+
+    // 20mm x 10mm rectangle: a 60mm perimeter, so ~30 samples before the spacing filter.
+    SHAPE_POLY_SET envelope = makeRectPoly( 0, 0, pcbIUScale.mmToIU( 20 ),
+                                            pcbIUScale.mmToIU( 10 ) );
+
+    auto acceptAll = []( const VECTOR2I& ) { return true; };
+
+    // Nothing inside the rectangle to guard, so no pair is exempt from the spacing minimum.
+    SHAPE_POLY_SET noGuarded;
+
+    std::vector<VECTOR2I> samples =
+            PCB_VIA_STITCH::SampleGuardEnvelope( envelope, noGuarded, pitch, acceptAll );
+
+    // A 60mm perimeter walked every 2mm can't produce many fewer than 30 without the
+    // spacing filter having gone haywire; the corners are the only place it can bite.
+    BOOST_CHECK_GE( samples.size(), 26u );
+    BOOST_CHECK_LE( samples.size(), 30u );
+
+    // Every sample lands on the envelope boundary.
+    for( const VECTOR2I& pt : samples )
+    {
+        BOOST_CHECK_MESSAGE( envelope.Collide( pt, pcbIUScale.mmToIU( 0.001 ) ),
+                             "sample " << pt.x << "," << pt.y << " left the envelope" );
+    }
+
+    // No two vias end up closer than the 0.7 * pitch minimum.
+    const int64_t minDistSq = (int64_t) ( pitch * 0.7 ) * (int64_t) ( pitch * 0.7 );
+
+    for( size_t i = 0; i < samples.size(); ++i )
+    {
+        for( size_t j = i + 1; j < samples.size(); ++j )
+        {
+            VECTOR2I d = samples[i] - samples[j];
+            BOOST_CHECK_GE( (int64_t) d.x * d.x + (int64_t) d.y * d.y, minDistSq );
+        }
+    }
+
+    // Positions the caller rejects are dropped rather than nudged elsewhere.
+    const int midX = pcbIUScale.mmToIU( 10 );
+
+    std::vector<VECTOR2I> leftHalf = PCB_VIA_STITCH::SampleGuardEnvelope(
+            envelope, noGuarded, pitch,
+            [&]( const VECTOR2I& aPt )
+            {
+                return aPt.x < midX;
+            } );
+
+    BOOST_CHECK( !leftHalf.empty() );
+    BOOST_CHECK_LT( leftHalf.size(), samples.size() );
+
+    for( const VECTOR2I& pt : leftHalf )
+        BOOST_CHECK_LT( pt.x, midX );
+
+    // A degenerate pitch yields nothing instead of looping forever.
+    BOOST_CHECK(
+            PCB_VIA_STITCH::SampleGuardEnvelope( envelope, noGuarded, 0, acceptAll ).empty() );
+    BOOST_CHECK(
+            PCB_VIA_STITCH::SampleGuardEnvelope( envelope, noGuarded, -1, acceptAll ).empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( GuardEnvelopeCoversBothSidesAtCoarsePitch )
+{
+    // A guard envelope is a thin slab: the two rows of vias face each other across only
+    // (trackWidth + viaSize + 2 * clearance), which a coarse pitch's 0.7 * pitch spacing
+    // minimum swallows whole.  Culling on that alone leaves one side of the trace bare.
+    const int trackWidth = pcbIUScale.mmToIU( 0.2 );
+    const int envelopeOffset = pcbIUScale.mmToIU( 0.607 );   // via radius + clearance + slop
+    const int traceLen = pcbIUScale.mmToIU( 20 );
+    const int centreY = pcbIUScale.mmToIU( 10 );
+
+    // Horizontal trace, and the slab standing off it on both sides.
+    SHAPE_POLY_SET guarded = makeRectPoly( 0, centreY - trackWidth / 2, traceLen,
+                                           centreY + trackWidth / 2 );
+    SHAPE_POLY_SET envelope = makeRectPoly( -envelopeOffset, centreY - envelopeOffset,
+                                            traceLen + envelopeOffset,
+                                            centreY + envelopeOffset );
+
+    auto acceptAll = []( const VECTOR2I& ) { return true; };
+
+    // 2mm is the default pitch, and 0.7 * 2mm = 1.4mm overshoots the 1.214mm gap between
+    // the facing rows.
+    const int pitch = pcbIUScale.mmToIU( 2 );
+    BOOST_REQUIRE_GT( pitch * 0.7, 2.0 * envelopeOffset );
+
+    std::vector<VECTOR2I> samples =
+            PCB_VIA_STITCH::SampleGuardEnvelope( envelope, guarded, pitch, acceptAll );
+
+    int above = 0;
+    int below = 0;
+
+    for( const VECTOR2I& pt : samples )
+    {
+        if( pt.y < centreY )
+            above++;
+        else if( pt.y > centreY )
+            below++;
+    }
+
+    // Both sides of a 20mm trace should carry a full row at 2mm pitch, not a scattering.
+    BOOST_CHECK_GE( above, 8 );
+    BOOST_CHECK_GE( below, 8 );
+
+    // The exemption is for facing pairs only: along one side the pitch spacing still holds.
+    std::vector<int> aboveXs;
+
+    for( const VECTOR2I& pt : samples )
+    {
+        if( pt.y < centreY )
+            aboveXs.push_back( pt.x );
+    }
+
+    std::sort( aboveXs.begin(), aboveXs.end() );
+
+    for( size_t i = 1; i < aboveXs.size(); ++i )
+        BOOST_CHECK_GE( aboveXs[i] - aboveXs[i - 1], (int) ( pitch * 0.7 ) );
 }
 
 

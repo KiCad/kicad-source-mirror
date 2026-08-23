@@ -32,11 +32,13 @@
 #include <dialogs/dialog_track_via_properties.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <generators/pcb_via_stitch.h>
+#include <geometry/shape_poly_set.h>
 #include <origin_viewitem.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcb_track.h>
 #include <pgm_base.h>
+#include <project/net_settings.h>
 #include <settings/color_settings.h>
 #include <tools/generator_tool.h>
 #include <widgets/net_selector.h>
@@ -95,6 +97,9 @@ DIALOG_VIA_STITCH_PROPERTIES::~DIALOG_VIA_STITCH_PROPERTIES()
         for( std::unique_ptr<PCB_VIA>& via : m_previewVias )
             view->Remove( via.get() );
 
+        for( std::unique_ptr<PCB_TRACK>& track : m_previewTracks )
+            view->Remove( track.get() );
+
         if( m_axisOrigin )
             view->Remove( m_axisOrigin );
     }
@@ -116,6 +121,7 @@ bool DIALOG_VIA_STITCH_PROPERTIES::TransferDataToWindow()
 
     m_pitchBinder->SetValue( m_stitch->GetPitch() );
 
+    m_modeCombo->SetSelection( static_cast<int>( m_stitch->GetMode() ) );
     m_patternCombo->SetSelection( static_cast<int>( m_stitch->GetLayout() ) );
     m_seedCtrl->SetValue( wxString::Format( wxT( "%u" ), m_stitch->GetSeed() ) );
 
@@ -139,6 +145,7 @@ bool DIALOG_VIA_STITCH_PROPERTIES::TransferDataFromWindow()
         m_stitch->SetNetCode( newNetCode );
 
     m_stitch->SetPitch( m_pitchBinder->GetIntValue() );
+    m_stitch->SetMode( static_cast<PCB_VIA_STITCH_MODE>( m_modeCombo->GetSelection() ) );
     m_stitch->SetLayout(
             static_cast<PCB_VIA_STITCH_LAYOUT>( m_patternCombo->GetSelection() ) );
 
@@ -190,10 +197,16 @@ void DIALOG_VIA_STITCH_PROPERTIES::OnCancel( wxCommandEvent& event )
 
 void DIALOG_VIA_STITCH_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
+    PCB_VIA_STITCH_MODE mode = static_cast<PCB_VIA_STITCH_MODE>( m_modeCombo->GetSelection() );
+    bool                stitching = ( mode == PCB_VIA_STITCH_MODE::STITCH );
+
+    m_patternLabel->Enable( stitching );
+    m_patternCombo->Enable( stitching );
+
     // The seed control is only used for the Poisson layout.
     PCB_VIA_STITCH_LAYOUT layout =
             static_cast<PCB_VIA_STITCH_LAYOUT>( m_patternCombo->GetSelection() );
-    bool poisson = ( layout == PCB_VIA_STITCH_LAYOUT::POISSON );
+    bool poisson = stitching && ( layout == PCB_VIA_STITCH_LAYOUT::POISSON );
 
     m_seedLabel->Enable( poisson );
     m_seedCtrl->Enable( poisson );
@@ -210,6 +223,7 @@ void DIALOG_VIA_STITCH_PROPERTIES::updateWorkingCopyFromUI()
         m_workingCopy->SetNetCode( newNetCode );
 
     m_workingCopy->SetPitch( m_pitchBinder->GetIntValue() );
+    m_workingCopy->SetMode( static_cast<PCB_VIA_STITCH_MODE>( m_modeCombo->GetSelection() ) );
     m_workingCopy->SetLayout(
             static_cast<PCB_VIA_STITCH_LAYOUT>( m_patternCombo->GetSelection() ) );
 
@@ -269,29 +283,57 @@ void DIALOG_VIA_STITCH_PROPERTIES::redrawPreview()
 
     KIGFX::VIEW* view = m_panelShowPreview->GetView();
 
-    // Drop any preview vias from the previous render.
+    // Drop everything old
     for( std::unique_ptr<PCB_VIA>& via : m_previewVias )
         view->Remove( via.get() );
 
     m_previewVias.clear();
 
-    int pitch = m_workingCopy->GetPitch();
+    for( std::unique_ptr<PCB_TRACK>& track : m_previewTracks )
+        view->Remove( track.get() );
 
-    if( pitch <= 0 )
+    m_previewTracks.clear();
+
+    if( m_workingCopy->GetPitch() <= 0 )
     {
         m_previewExtent = 0;
         m_panelShowPreview->Refresh();
         return;
     }
 
-    int viaSize = m_workingCopy->ViaTemplate()->GetWidth( PADSTACK::ALL_LAYERS );
-
-    if( viaSize <= 0 )
-        viaSize = pcbIUScale.mmToIU( 0.6 );
-
-    PCB_VIA_STITCH_LAYOUT layout = m_workingCopy->GetLayout();
     std::vector<VECTOR2I> samples;
     int                   previewExtent;
+
+    if( m_workingCopy->GetMode() == PCB_VIA_STITCH_MODE::GUARD )
+        previewExtent = buildGuardPreview( samples );
+    else
+        previewExtent = buildStitchPreview( samples );
+
+    for( const VECTOR2I& pt : samples )
+    {
+        std::unique_ptr<PCB_VIA> via(
+                static_cast<PCB_VIA*>( m_workingCopy->ViaTemplate()->Clone() ) );
+        via->ResetUuidDirect();
+        via->SetParent( m_frame->GetBoard() );
+        via->SetPosition( pt );
+        via->SetIsFree( true );
+
+        view->Add( via.get() );
+        m_previewVias.push_back( std::move( via ) );
+    }
+
+    m_previewExtent = previewExtent;
+    fitPreview();
+
+    m_panelShowPreview->Refresh();
+}
+
+
+int DIALOG_VIA_STITCH_PROPERTIES::buildStitchPreview( std::vector<VECTOR2I>& aSamples )
+{
+    const int pitch = m_workingCopy->GetPitch();
+
+    PCB_VIA_STITCH_LAYOUT layout = m_workingCopy->GetLayout();
 
     if( layout == PCB_VIA_STITCH_LAYOUT::POISSON )
     {
@@ -302,8 +344,7 @@ void DIALOG_VIA_STITCH_PROPERTIES::redrawPreview()
         const std::vector<VECTOR2D>& tile     = PCB_VIA_STITCH::bakedPoissonTile();
         const int                    tileSize = pitch * PCB_VIA_STITCH::POISSON_TILE_PITCHES;
         const int                    numTiles = 2;
-
-        previewExtent = tileSize * numTiles;
+        const int                    previewExtent = tileSize * numTiles;
 
         boost::random::mt19937                           seedRng( m_workingCopy->GetSeed() );
         boost::random::uniform_real_distribution<double> uniform( 0.0, 1.0 );
@@ -332,43 +373,83 @@ void DIALOG_VIA_STITCH_PROPERTIES::redrawPreview()
                             || pt.y < 0 || pt.y > previewExtent )
                         continue;
 
-                    samples.push_back( pt );
+                    aSamples.push_back( pt );
                 }
             }
         }
+
+        return previewExtent;
     }
-    else
+
+    for( int row = 0; row < PREVIEW_TILE_PITCHES; ++row )
     {
-        previewExtent = pitch * PREVIEW_TILE_PITCHES;
+        int xShift = ( layout == PCB_VIA_STITCH_LAYOUT::STAGGERED && ( row % 2 ) ) ? pitch / 2
+                                                                                   : 0;
 
-        for( int row = 0; row < PREVIEW_TILE_PITCHES; ++row )
-        {
-            int xShift = ( layout == PCB_VIA_STITCH_LAYOUT::STAGGERED && ( row % 2 ) )
-                                 ? pitch / 2
-                                 : 0;
-
-            for( int col = 0; col < PREVIEW_TILE_PITCHES; ++col )
-                samples.emplace_back( col * pitch + xShift, row * pitch );
-        }
+        for( int col = 0; col < PREVIEW_TILE_PITCHES; ++col )
+            aSamples.emplace_back( col * pitch + xShift, row * pitch );
     }
 
-    for( const VECTOR2I& pt : samples )
+    return pitch * PREVIEW_TILE_PITCHES;
+}
+
+
+int DIALOG_VIA_STITCH_PROPERTIES::buildGuardPreview( std::vector<VECTOR2I>& aSamples )
+{
+    const int pitch  = m_workingCopy->GetPitch();
+    const int extent = pitch * PREVIEW_TILE_PITCHES;
+
+    int viaSize = m_workingCopy->ViaTemplate()->GetWidth( PADSTACK::ALL_LAYERS );
+
+    if( viaSize <= 0 )
+        viaSize = pcbIUScale.mmToIU( 0.6 );
+
+    BOARD*                 board = m_frame->GetBoard();
+    BOARD_DESIGN_SETTINGS& bds   = board->GetDesignSettings();
+
+    const int trackWidth = std::max( bds.GetCurrentTrackWidth(), pcbIUScale.mmToIU( 0.05 ) );
+    const int clearance  = bds.m_NetSettings->GetDefaultNetclass()->GetClearance();
+
+    const std::vector<VECTOR2I> corners = {
+        { extent * 12 / 100, extent * 78 / 100 },
+        { extent * 38 / 100, extent * 78 / 100 },
+        { extent * 62 / 100, extent * 22 / 100 },
+        { extent * 88 / 100, extent * 22 / 100 },
+    };
+
+    const int polyApproxError = bds.m_MaxError;
+    const int safetyMargin    = polyApproxError + pcbIUScale.mmToIU( 0.002 );
+    const int margin          = viaSize / 2 + clearance + safetyMargin;
+
+    KIGFX::VIEW*   view = m_panelShowPreview->GetView();
+    SHAPE_POLY_SET envelope;
+    SHAPE_POLY_SET guarded;
+
+    for( size_t ii = 1; ii < corners.size(); ++ii )
     {
-        std::unique_ptr<PCB_VIA> via(
-                static_cast<PCB_VIA*>( m_workingCopy->ViaTemplate()->Clone() ) );
-        via->ResetUuidDirect();
-        via->SetParent( m_frame->GetBoard() );
-        via->SetPosition( pt );
-        via->SetIsFree( true );
+        std::unique_ptr<PCB_TRACK> track = std::make_unique<PCB_TRACK>( board );
+        track->SetLayer( F_Cu );
+        track->SetWidth( trackWidth );
+        track->SetStart( corners[ii - 1] );
+        track->SetEnd( corners[ii] );
 
-        view->Add( via.get() );
-        m_previewVias.push_back( std::move( via ) );
+        track->TransformShapeToPolygon( envelope, F_Cu, margin, polyApproxError, ERROR_OUTSIDE );
+        track->TransformShapeToPolygon( guarded, F_Cu, 0, polyApproxError, ERROR_OUTSIDE );
+
+        view->Add( track.get() );
+        m_previewTracks.push_back( std::move( track ) );
     }
 
-    m_previewExtent = previewExtent;
-    fitPreview();
+    envelope.Simplify();
+    guarded.Simplify();
 
-    m_panelShowPreview->Refresh();
+    aSamples = PCB_VIA_STITCH::SampleGuardEnvelope( envelope, guarded, pitch,
+                                                    []( const VECTOR2I& )
+                                                    {
+                                                        return true;
+                                                    } );
+
+    return extent;
 }
 
 

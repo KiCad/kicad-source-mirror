@@ -30,6 +30,7 @@
 class PCB_BASE_EDIT_FRAME;
 class PCB_VIA_STITCH;
 class PCB_VIA;
+class PCB_TRACK;
 class UNIT_BINDER;
 
 namespace KIGFX
@@ -70,6 +71,22 @@ private:
     /// Push the GAL preview to reflect the current m_workingCopy state.
     void redrawPreview();
 
+    /**
+     * Builds a preview for stitch mode
+     *
+     * @param aSamples receives the via positions to draw.
+     * @return the side length of the drawn tile, in IU.
+     */
+    int buildStitchPreview( std::vector<VECTOR2I>& aSamples );
+
+    /**
+     * Builds a preview for guard mode
+     *
+     * @param aSamples receives the via positions to draw.
+     * @return the side length of the drawn tile, in IU.
+     */
+    int buildGuardPreview( std::vector<VECTOR2I>& aSamples );
+
     /// Autozoom the preview canvas onto the last-rendered tile
     void fitPreview();
 
@@ -91,10 +108,11 @@ private:
 
     KIGFX::ORIGIN_VIEWITEM*         m_axisOrigin = nullptr;
 
-    /// Vias currently in the preview canvas; owned by the dialog and torn down on the
-    /// next redraw.  Kept separate from m_workingCopy's group membership because
-    /// EDA_GROUP doesn't own its children.
+    /// Vias currently in the preview canvas, used for both Guard and Stitch mode previews
     std::vector<std::unique_ptr<PCB_VIA>> m_previewVias;
+
+    /// Tracks currently in the preview canvas, only used for Guard mode preview
+    std::vector<std::unique_ptr<PCB_TRACK>> m_previewTracks;
 
     bool                            m_canvasInitialized = false;
 

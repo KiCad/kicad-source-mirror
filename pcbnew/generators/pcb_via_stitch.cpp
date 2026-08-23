@@ -1172,57 +1172,10 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
         if( m_guardedNetCode == 0 )
             return cells;
 
-        std::vector<VECTOR2I> accepted;
-
-        // Allow opposite-side vias on narrow traces.  pitch * 0.7 keeps adjacent same-
-        // side vias from doubling up while letting two-sided coverage past in places
-        // where the trace itself is narrower than `pitch`.
-        const int64_t minDistSq = (int64_t) ( pitch * 0.7 ) * (int64_t) ( pitch * 0.7 );
-
-        auto farEnough =
-                [&]( const VECTOR2I& pt ) -> bool
-                {
-                    for( const VECTOR2I& other : accepted )
-                    {
-                        VECTOR2I d = other - pt;
-                        if( (int64_t) d.x * d.x + (int64_t) d.y * d.y < minDistSq )
-                            return false;
-                    }
-                    return true;
-                };
-
-        auto walkChain =
-                [&]( const SHAPE_LINE_CHAIN& chain )
-                {
-                    double cursor     = 0.0;
-                    double nextSample = pitch / 2.0;
-
-                    for( int i = 0; i < chain.SegmentCount(); ++i )
-                    {
-                        SEG    seg = chain.CSegment( i );
-                        double segLen = ( VECTOR2D( seg.B ) - VECTOR2D( seg.A ) ).EuclideanNorm();
-
-                        if( segLen < 1.0 )
-                            continue;
-
-                        while( nextSample <= cursor + segLen )
-                        {
-                            double t = ( nextSample - cursor ) / segLen;
-                            VECTOR2I pt( (int) std::round( seg.A.x + t * ( seg.B.x - seg.A.x ) ),
-                                         (int) std::round( seg.A.y + t * ( seg.B.y - seg.A.y ) ) );
-
-                            nextSample += pitch;
-
-                            if( isValid( pt ) && farEnough( pt ) )
-                                accepted.push_back( pt );
-                        }
-
-                        cursor += segLen;
-                    }
-                };
-
-        // Merge every guarded-net item's clearance envelope into one polygon
+        // Merge every guarded-net item's clearance envelope into one polygon, and their bare
+        // shapes into another so the sampler can tell facing vias from same-side ones.
         SHAPE_POLY_SET mergedEnvelope;
+        SHAPE_POLY_SET mergedGuarded;
 
         for( PCB_TRACK* track : aBoard->Tracks() )
         {
@@ -1251,15 +1204,19 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
                                             ERROR_OUTSIDE );
 
             mergedEnvelope.BooleanAdd( envelope );
+
+            track->TransformShapeToPolygon( mergedGuarded, layer, 0, polyApproxError,
+                                            ERROR_OUTSIDE );
         }
 
         mergedEnvelope.Simplify();
+        mergedGuarded.Simplify();
 
-        for( int o = 0; o < mergedEnvelope.OutlineCount(); ++o )
-            walkChain( mergedEnvelope.COutline( o ) );
-
-        for( const VECTOR2I& pt : accepted )
-            cells.insert( pt );  // GUARD "cell" == absolute position
+        for( const VECTOR2I& pt : SampleGuardEnvelope( mergedEnvelope, mergedGuarded, pitch,
+                                                       isValid ) )
+        {
+            cells.insert( pt );
+        }
 
         return cells;
     }
@@ -1524,6 +1481,76 @@ std::vector<ZONE*> PCB_VIA_STITCH::collectAllZones( const BOARD* aBoard )
     }
 
     return zones;
+}
+
+
+std::vector<VECTOR2I>
+PCB_VIA_STITCH::SampleGuardEnvelope( const SHAPE_POLY_SET& aEnvelope,
+                                     const SHAPE_POLY_SET& aGuarded, int aPitch,
+                                     const std::function<bool( const VECTOR2I& )>& aIsValid )
+{
+    std::vector<VECTOR2I> accepted;
+
+    if( aPitch <= 0 )
+        return accepted;
+
+    // Keeps adjacent same-side vias from doubling up where the walk rounds a corner or an
+    // end cap. Arc length will report back a larger than expected value in this case.
+    const int64_t minDistSq = (int64_t) ( aPitch * 0.7 ) * (int64_t) ( aPitch * 0.7 );
+
+    auto farEnough =
+            [&]( const VECTOR2I& pt ) -> bool
+            {
+                for( const VECTOR2I& other : accepted )
+                {
+                    VECTOR2I d = other - pt;
+
+                    if( (int64_t) d.x * d.x + (int64_t) d.y * d.y >= minDistSq )
+                        continue;
+
+                    if( aGuarded.Collide( SEG( pt, other ) ) )
+                        continue;
+
+                    return false;
+                }
+
+                return true;
+            };
+
+    auto walkChain =
+            [&]( const SHAPE_LINE_CHAIN& chain )
+            {
+                double cursor     = 0.0;
+                double nextSample = aPitch / 2.0;
+
+                for( int i = 0; i < chain.SegmentCount(); ++i )
+                {
+                    SEG    seg = chain.CSegment( i );
+                    double segLen = ( VECTOR2D( seg.B ) - VECTOR2D( seg.A ) ).EuclideanNorm();
+
+                    if( segLen < 1.0 )
+                        continue;
+
+                    while( nextSample <= cursor + segLen )
+                    {
+                        double t = ( nextSample - cursor ) / segLen;
+                        VECTOR2I pt( (int) std::round( seg.A.x + t * ( seg.B.x - seg.A.x ) ),
+                                     (int) std::round( seg.A.y + t * ( seg.B.y - seg.A.y ) ) );
+
+                        nextSample += aPitch;
+
+                        if( aIsValid( pt ) && farEnough( pt ) )
+                            accepted.push_back( pt );
+                    }
+
+                    cursor += segLen;
+                }
+            };
+
+    for( int o = 0; o < aEnvelope.OutlineCount(); ++o )
+        walkChain( aEnvelope.COutline( o ) );
+
+    return accepted;
 }
 
 

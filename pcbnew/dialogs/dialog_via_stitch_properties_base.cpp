@@ -38,62 +38,62 @@ DIALOG_VIA_STITCH_PROPERTIES_BASE::DIALOG_VIA_STITCH_PROPERTIES_BASE( wxWindow* 
 
 	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netLabel->Wrap( -1 );
-	gbSizer1->Add( m_netLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 6 );
+	gbSizer1->Add( m_netLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 6 );
 
 	m_netSelector = new NET_SELECTOR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_netSelector, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_netSelector, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_posXLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posXLabel->Wrap( -1 );
-	gbSizer1->Add( m_posXLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_posXLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_posXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_posXCtrl->SetMinSize( wxSize( 155,-1 ) );
 
-	gbSizer1->Add( m_posXCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_posXCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_posXUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posXUnits->Wrap( -1 );
-	gbSizer1->Add( m_posXUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer1->Add( m_posXUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_posYLabel = new wxStaticText( this, wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posYLabel->Wrap( -1 );
-	gbSizer1->Add( m_posYLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_posYLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_posYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_posYCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_posYCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_posYUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posYUnits->Wrap( -1 );
-	gbSizer1->Add( m_posYUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer1->Add( m_posYUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_patternLabel = new wxStaticText( this, wxID_ANY, _("Pattern:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_patternLabel->Wrap( -1 );
-	gbSizer1->Add( m_patternLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_patternLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_patternCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_patternCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_patternCombo->Append( _("Normal Grid") );
 	m_patternCombo->Append( _("Staggered Grid") );
 	m_patternCombo->Append( _("Poisson") );
-	gbSizer1->Add( m_patternCombo, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_patternCombo, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_pitchLabel = new wxStaticText( this, wxID_ANY, _("Pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pitchLabel->Wrap( -1 );
-	gbSizer1->Add( m_pitchLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_pitchLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_pitchCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_pitchCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_pitchCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
-	gbSizer1->Add( m_textSizeUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer1->Add( m_textSizeUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_seedLabel = new wxStaticText( this, wxID_ANY, _("Seed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_seedLabel->Wrap( -1 );
-	gbSizer1->Add( m_seedLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_seedLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_seedCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_seedCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_seedCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_pitchLabel1 = new wxStaticText( this, wxID_ANY, _("Via Properties:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pitchLabel1->Wrap( -1 );
@@ -101,6 +101,15 @@ DIALOG_VIA_STITCH_PROPERTIES_BASE::DIALOG_VIA_STITCH_PROPERTIES_BASE( wxWindow* 
 
 	m_viaProperties = new wxButton( this, wxID_ANY, _("Configure"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_viaProperties, wxGBPosition( 8, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_modeLabel = new wxStaticText( this, wxID_ANY, _("Mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_modeLabel->Wrap( -1 );
+	gbSizer1->Add( m_modeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 6 );
+
+	m_modeCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_modeCombo->Append( _("Stitch") );
+	m_modeCombo->Append( _("Guard") );
+	gbSizer1->Add( m_modeCombo, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_TOP|wxEXPAND, 6 );
 
 
 	gbSizer1->AddGrowableCol( 1 );
@@ -156,6 +165,8 @@ DIALOG_VIA_STITCH_PROPERTIES_BASE::DIALOG_VIA_STITCH_PROPERTIES_BASE( wxWindow* 
 	m_pitchCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_seedCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_viaProperties->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnViaConfigureClicked ), NULL, this );
+	m_modeCombo->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_modeCombo->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnCancel ), NULL, this );
 }
 
@@ -168,6 +179,8 @@ DIALOG_VIA_STITCH_PROPERTIES_BASE::~DIALOG_VIA_STITCH_PROPERTIES_BASE()
 	m_pitchCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_seedCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_viaProperties->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnViaConfigureClicked ), NULL, this );
+	m_modeCombo->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_modeCombo->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_VIA_STITCH_PROPERTIES_BASE::OnCancel ), NULL, this );
 
 }

@@ -28,6 +28,7 @@
 #include <i18n_utility.h>
 #include <geometry/shape_poly_set.h>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <set>
 #include <vector>
@@ -265,6 +266,18 @@ public:
       * Helper method to cache the poisson tile we pattern.
       */
     static const std::vector<VECTOR2D>& bakedPoissonTile();
+
+    /**
+     * Determine via positions around the perimeter of a guard envelope.
+     *
+     * @param aEnvelope guarded items' clearance envelopes, already merged and simplified.
+     * @param aGuarded  the same items' bare shapes, merged
+     * @param aPitch    arc-length spacing between samples, in IU.
+     * @param aIsValid  helper function to determine if location can be occucpied by via
+     */
+    static std::vector<VECTOR2I>
+    SampleGuardEnvelope( const SHAPE_POLY_SET& aEnvelope, const SHAPE_POLY_SET& aGuarded,
+                         int aPitch, const std::function<bool( const VECTOR2I& )>& aIsValid );
 
 private:
     int                   m_pitch  = 0;                   // center-to-center spacing
