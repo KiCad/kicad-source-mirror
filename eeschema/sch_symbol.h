@@ -464,7 +464,7 @@ public:
     SCH_FIELD* AddField( const SCH_FIELD& aField );
 
     /**
-     * Remove a user field from the symbol.
+     * Remove a user field from the symbol. This will remove it from all variants.
      *
      * @param aFieldName is the user fieldName to remove.
      */

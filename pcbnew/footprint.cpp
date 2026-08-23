@@ -1681,7 +1681,13 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
         {
             if( *it == aBoardItem )
             {
+                const wxString fieldName = ( *it )->GetCanonicalName();
+
                 m_fields.erase( it );
+
+                for( auto& variant : m_variants )
+                    variant.second.RemoveFieldValue( fieldName );
+
                 break;
             }
         }

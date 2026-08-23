@@ -1802,14 +1802,24 @@ SCH_FIELD* SCH_SYMBOL::AddField( const SCH_FIELD& aField )
 
 void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 {
+    // aFieldName may refer to the name owned by the field being removed.
+    wxString fieldName = aFieldName;
+
     for( unsigned ii = 0; ii < m_fields.size(); ++ii )
     {
         if( m_fields[ii].IsMandatory() )
             continue;
 
-        if( aFieldName == m_fields[ii].GetName( false ) )
+        if( fieldName == m_fields[ii].GetName( false ) )
         {
             m_fields.erase( m_fields.begin() + ii );
+
+            for( SCH_SYMBOL_INSTANCE& instance : m_instances )
+            {
+                for( auto& variant : instance.m_Variants )
+                    variant.second.m_Fields.erase( fieldName );
+            }
+
             return;
         }
     }
@@ -2005,7 +2015,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                         SCH_FIELD& otherField = otherUnit->GetFields()[ii];
 
                         if( !otherField.IsMandatory() && !GetField( otherField.GetName() ) )
-                            otherUnit->GetFields().erase( otherUnit->GetFields().begin() + ii );
+                            otherUnit->RemoveField( otherField.GetName() );
                     }
                 }
 

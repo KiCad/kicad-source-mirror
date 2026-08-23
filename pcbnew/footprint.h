@@ -268,6 +268,14 @@ public:
         m_fields[aFieldName] = aValue;
     }
 
+    /**
+     * Remove a field value override for this variant.
+     */
+    void RemoveFieldValue( const wxString& aFieldName )
+    {
+        m_fields.erase( aFieldName );
+    }
+
     bool HasFieldValue( const wxString& aFieldName ) const
     {
         return m_fields.find( aFieldName ) != m_fields.end();

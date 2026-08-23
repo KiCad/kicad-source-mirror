@@ -731,7 +731,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPL
 
             if( !stillTracked )
             {
-                symbol->GetFields().erase( symbol->GetFields().begin() + ii );
+                symbol->RemoveField( existingName );
                 symbolModified = true;
             }
         }

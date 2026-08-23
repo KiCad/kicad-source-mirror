@@ -887,7 +887,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         }
 
         if( !found )
-            m_symbol->GetFields().erase( m_symbol->GetFields().begin() + ii );
+            m_symbol->RemoveField( symbolField.GetName() );
     }
 
     std::stable_sort( m_symbol->GetFields().begin(), m_symbol->GetFields().end(),
