@@ -366,42 +366,42 @@ void FIELDS_TABLE_DATA_MODEL_BASE::SetFieldsOrder( const std::vector<wxString>& 
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsReference( int aCol )
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsReference( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::REFERENCE );
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsQuantity( int aCol )
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsQuantity( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == QUANTITY_VARIABLE;
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsItemNumber( int aCol )
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsItemNumber( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == ITEM_NUMBER_VARIABLE;
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsValue( int aCol )
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsValue( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsFootprint( int aCol )
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsFootprint( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT );
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsAttribute( int aCol )
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsAttribute( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
 

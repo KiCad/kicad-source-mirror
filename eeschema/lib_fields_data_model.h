@@ -58,7 +58,7 @@ public:
 
     wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) override;
 
-    bool ColIsItemIdentifier( int aCol ) override;
+    bool ColIsItemIdentifier( int aCol ) const override;
 
     const LIB_SYMBOL* GetSymbolForRow( int aRow )
     {

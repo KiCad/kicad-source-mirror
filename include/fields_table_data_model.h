@@ -151,18 +151,18 @@ public:
         return false; // don't allow adjacent cell overflow, even if we are actually empty
     }
 
-    bool ColIsReference( int aCol );
-    bool ColIsQuantity( int aCol );
-    bool ColIsItemNumber( int aCol );
-    bool ColIsValue( int aCol );
-    bool ColIsFootprint( int aCol );
-    bool ColIsAttribute( int aCol );
+    bool ColIsReference( int aCol ) const;
+    bool ColIsQuantity( int aCol ) const;
+    bool ColIsItemNumber( int aCol ) const;
+    bool ColIsValue( int aCol ) const;
+    bool ColIsFootprint( int aCol ) const;
+    bool ColIsAttribute( int aCol ) const;
 
     /**
      * Reference for symbol/fields tables,
      * lib_id for lib tables.
      */
-    virtual bool ColIsItemIdentifier( int aCol ) { return ColIsReference( aCol ); }
+    virtual bool ColIsItemIdentifier( int aCol ) const { return ColIsReference( aCol ); }
 
     bool IsExpanderColumn( int aCol ) const override;
     virtual bool IsCellReadOnly( int aRow, int aCol );
