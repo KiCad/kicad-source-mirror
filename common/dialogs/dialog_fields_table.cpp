@@ -194,8 +194,9 @@ DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTIN
 
     m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
 
-    // Do not OptOut the notebook. That would also exclude its child controls such as the
-    // scope selector from being persisted. The active page is forced by the opening tool.
+    // Don't save scope, we don't want users opening up the table for the first
+    // on program launch stuck with Selection scope and seeing a blank table
+    OptOut( m_scope );
 
     m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL( true );
 
