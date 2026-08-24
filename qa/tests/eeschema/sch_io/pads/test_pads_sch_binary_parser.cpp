@@ -1776,11 +1776,11 @@ BOOST_AUTO_TEST_CASE( VisibilityAndUnderlineOptionMatrix )
     PADS_SCH_MODEL model = PADS_SCH_BINARY_PARSER().Parse( loadBinaryFixture( "visibility_options.sch" ),
                                                            wxS( "visibility_options.sch" ) );
 
-    auto underlined = std::ranges::find( model.texts, wxS( "STYLE_UNDERLINE" ),
-                                        []( const MODEL_TEXT& aText )
-                                        {
-                                            return aText.text.text;
-                                        } );
+    auto underlined = std::ranges::find_if( model.texts,
+                                            []( const MODEL_TEXT& aText )
+                                            {
+                                                return aText.text.text == wxS( "STYLE_UNDERLINE" );
+                                            } );
     BOOST_REQUIRE( underlined != model.texts.end() );
     BOOST_CHECK( underlined->presentation.underline );
     BOOST_CHECK( !underlined->presentation.bold );
@@ -3367,11 +3367,11 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     BOOST_REQUIRE( titleText != model.worksheets[0].graphics.end() );
     BOOST_CHECK_EQUAL( titleText->presentation.height, 100 );
     BOOST_CHECK_EQUAL( titleText->presentation.width, 10 );
-    auto titleGroup = std::ranges::find( titleText->properties, wxS( "page_graphic_group" ),
-                                         []( const SOURCE_PROPERTY& aProperty )
-                                         {
-                                             return aProperty.name.text;
-                                         } );
+    auto titleGroup = std::ranges::find_if( titleText->properties,
+                                            []( const SOURCE_PROPERTY& aProperty )
+                                            {
+                                                return aProperty.name.text == wxS( "page_graphic_group" );
+                                            } );
     BOOST_REQUIRE( titleGroup != titleText->properties.end() );
     const uint16_t titleTextCount =
             readU16( loadBinaryFixture( "page_graphics.sch" ), titleGroup->source.absoluteOffset + 64 );

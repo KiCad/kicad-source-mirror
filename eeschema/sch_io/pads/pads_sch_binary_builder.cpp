@@ -1955,11 +1955,11 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
     if( !aAppendToMe && !aModel.worksheets.empty() )
     {
-        auto worksheet = std::ranges::find( aModel.worksheets, wxS( "DRW5982" ),
-                                            []( const MODEL_WORKSHEET& aWorksheet )
-                                            {
-                                                return aWorksheet.name.text;
-                                            } );
+        auto worksheet = std::ranges::find_if( aModel.worksheets,
+                                               []( const MODEL_WORKSHEET& aWorksheet )
+                                               {
+                                                   return aWorksheet.name.text == wxS( "DRW5982" );
+                                               } );
 
         if( worksheet == aModel.worksheets.end() )
             worksheet = aModel.worksheets.begin();

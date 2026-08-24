@@ -29,6 +29,7 @@
 #include <iterator>
 #include <map>
 #include <ranges>
+#include <set>
 #include <tuple>
 #include <unordered_map>
 #include <unordered_set>
@@ -2047,11 +2048,11 @@ namespace
             }
         }
 
-        auto canonicalWorksheet = std::ranges::find( aModel.worksheets, wxS( "DRW5982" ),
-                                                     []( const MODEL_WORKSHEET& aWorksheet )
-                                                     {
-                                                         return aWorksheet.name.text;
-                                                     } );
+        auto canonicalWorksheet = std::ranges::find_if( aModel.worksheets,
+                                                        []( const MODEL_WORKSHEET& aWorksheet )
+                                                        {
+                                                            return aWorksheet.name.text == wxS( "DRW5982" );
+                                                        } );
 
         if( canonicalWorksheet != aModel.worksheets.end() )
         {
@@ -2067,11 +2068,11 @@ namespace
 
             for( const MODEL_PAGE_GRAPHIC& pageGraphic : aModel.graphics )
             {
-                auto groupProperty = std::ranges::find( pageGraphic.graphic.properties, wxS( "worksheet_group" ),
-                                                        []( const SOURCE_PROPERTY& aProperty )
-                                                        {
-                                                            return aProperty.name.text;
-                                                        } );
+                auto groupProperty = std::ranges::find_if( pageGraphic.graphic.properties,
+                                                           []( const SOURCE_PROPERTY& aProperty )
+                                                           {
+                                                               return aProperty.name.text == wxS( "worksheet_group" );
+                                                           } );
 
                 if( groupProperty != pageGraphic.graphic.properties.end()
                     && pageGraphic.graphic.kind != MODEL_GRAPHIC_KIND::TEXT )
@@ -5141,8 +5142,8 @@ SOURCE_STRING PADS_SCH_BINARY_PARSER::DecodeString( const std::vector<uint8_t>& 
 {
     SOURCE_STRING result{ aBytes, {}, STRING_ENCODING_STATUS::UTF8, aSource };
     result.codePage = aCodePage;
-    const wxString defaultName = aCodePage == 65001  ? wxS( "UTF-8" )
-                                 : aCodePage == 1252 ? wxS( "windows-1252" )
+    const wxString defaultName = aCodePage == 65001  ? wxString( wxS( "UTF-8" ) )
+                                 : aCodePage == 1252 ? wxString( wxS( "windows-1252" ) )
                                                      : wxString::Format( wxS( "unknown-%u" ), aCodePage );
     result.codePageName = aRecordedCodePageName.empty() ? defaultName : aRecordedCodePageName;
 
