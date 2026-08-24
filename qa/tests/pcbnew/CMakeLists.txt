@@ -161,6 +161,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_courtyard_invalid.cpp
     drc/test_drc_courtyard_overlap.cpp
     drc/test_drc_error_limit.cpp
+    drc/test_footprint_courtyard_chaining.cpp
     drc/test_footprint_courtyard_index.cpp
     drc/test_drc_regressions.cpp
     drc/test_drc_issue23469.cpp

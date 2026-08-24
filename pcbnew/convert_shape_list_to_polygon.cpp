@@ -99,6 +99,23 @@ static bool closer_to_first( VECTOR2I aRef, VECTOR2I aFirst, VECTOR2I aSecond )
 }
 
 
+/**
+ * Return the end of @a aFirst that does not join @a aSecond.
+ */
+static VECTOR2I free_end( const PCB_SHAPE* aFirst, const PCB_SHAPE* aSecond )
+{
+    auto gap =
+            [aSecond]( const VECTOR2I& aPt )
+            {
+                return std::min( ( aPt - aSecond->GetStart() ).SquaredEuclideanNorm(),
+                                 ( aPt - aSecond->GetEnd() ).SquaredEuclideanNorm() );
+            };
+
+    return gap( aFirst->GetStart() ) <= gap( aFirst->GetEnd() ) ? aFirst->GetEnd()
+                                                                : aFirst->GetStart();
+}
+
+
 static bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape )
 {
     bool padOutside = false;
@@ -307,13 +324,14 @@ static void processShapeSegment( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
         VECTOR2I pmid = aShape->GetArcMid();
         VECTOR2I pend = aShape->GetEnd();
 
-        if( !close_enough( aPrevPt, pstart, aChainingEpsilon ) )
+        if( !close_enough( aPrevPt, pstart, aChainingEpsilon )
+                && !close_enough( aPrevPt, pend, aChainingEpsilon ) )
         {
-            if( !close_enough( aPrevPt, aShape->GetEnd(), aChainingEpsilon ) )
-                return;
-
-            std::swap( pstart, pend );
+            return;
         }
+
+        if( closer_to_first( aPrevPt, pend, pstart ) )
+            std::swap( pstart, pend );
 
         pstart = aPrevPt;
         SHAPE_ARC sarc( pstart, pmid, pend, 0 );
@@ -386,11 +404,15 @@ static void processShapeSegment( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
         VECTOR2I pend = aShape->GetEnd();
         bool     reverse = false;
 
-        if( !close_enough( aPrevPt, pstart, aChainingEpsilon ) )
+        if( !close_enough( aPrevPt, pstart, aChainingEpsilon )
+                && !close_enough( aPrevPt, pend, aChainingEpsilon ) )
         {
-            if( !close_enough( aPrevPt, pend, aChainingEpsilon ) )
-                return;
+            return;
+        }
 
+        // Same as the arc case above
+        if( closer_to_first( aPrevPt, pend, pstart ) )
+        {
             reverse = true;
             std::swap( pstart, pend );
         }
@@ -625,41 +647,62 @@ static bool checkSelfIntersections( SHAPE_POLY_SET& aPolygons,
     return !selfIntersecting;
 }
 
-// Helper function to find next shape using KD-tree
-static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint, const KDTree& kdTree,
-                            const PCB_SHAPE_ENDPOINTS_ADAPTOR& adaptor, double aChainingEpsilon )
+
+struct CHAIN_NEIGHBOURS
+{
+    PCB_SHAPE* available = nullptr;   ///< nearest unchained
+    PCB_SHAPE* consumed = nullptr;    ///< nearest already chained
+};
+
+
+static bool closerEndpoint( const nanoflann::ResultItem<uint32_t, double>& aLeft,
+                            const nanoflann::ResultItem<uint32_t, double>& aRight )
+{
+    if( aLeft.second != aRight.second )
+        return aLeft.second < aRight.second;
+
+    return aLeft.first < aRight.first;
+}
+
+
+/**
+ * Find the shapes that could continue a chain at @a aPoint. Exlcuding the existing
+ * chain elements
+ *
+ * @param aIsConsumed whether a shape is already chained.
+ */
+template <typename CONSUMED_FUNC>
+static CHAIN_NEIGHBOURS findNeighbours( PCB_SHAPE* aShape, const VECTOR2I& aPoint, const KDTree& aKdTree,
+                                        const PCB_SHAPE_ENDPOINTS_ADAPTOR& aAdaptor, double aChainingEpsilon,
+                                        CONSUMED_FUNC aIsConsumed )
 {
     const double query_pt[2] = { static_cast<double>( aPoint.x ), static_cast<double>( aPoint.y ) };
+    const double radius_sq = aChainingEpsilon * aChainingEpsilon;
 
-    uint32_t indices[2];
-    double distances[2];
-    kdTree.knnSearch( query_pt, 2, indices, distances );
+    std::vector<nanoflann::ResultItem<uint32_t, double>> matches;
+    aKdTree.radiusSearch( query_pt, radius_sq, matches );
 
-    if( distances[0] == std::numeric_limits<double>::max() )
-        return nullptr;
+    std::sort( matches.begin(), matches.end(), closerEndpoint );
 
-    // Find the closest valid candidate
-    PCB_SHAPE* closest_graphic = nullptr;
-    double closest_dist_sq = aChainingEpsilon * aChainingEpsilon;
+    CHAIN_NEIGHBOURS result;
 
-    for( size_t i = 0; i < 2; ++i )
+    for( const nanoflann::ResultItem<uint32_t, double>& match : matches )
     {
-        if( distances[i] == std::numeric_limits<double>::max() )
-            continue;
-
-        PCB_SHAPE* candidate = adaptor.endpoints[indices[i]].second;
+        PCB_SHAPE* candidate = aAdaptor.endpoints[match.first].second;
 
         if( candidate == aShape )
             continue;
 
-        if( distances[i] < closest_dist_sq )
-        {
-            closest_dist_sq = distances[i];
-            closest_graphic = candidate;
-        }
+        PCB_SHAPE*& slot = aIsConsumed( candidate ) ? result.consumed : result.available;
+
+        if( !slot )
+            slot = candidate;
+
+        if( result.available && result.consumed )
+            break;
     }
 
-    return closest_graphic;
+    return result;
 }
 
 
@@ -713,40 +756,42 @@ static bool buildChainedClosedContour( PCB_SHAPE* aStart, std::set<PCB_SHAPE*>& 
 
         for( ;; )
         {
-            PCB_SHAPE* next = findNext( curr, prev, aKdTree, aAdaptor, aChainingEpsilon );
-
             // The KD-tree spans the original openShapes set, so it still returns shapes
             // already consumed by an earlier chain. Filter against aRemaining to avoid
             // accidentally absorbing those into this chain.
-            if( next && aRemaining.find( next ) == aRemaining.end() )
-                next = nullptr;
+            auto isConsumed =
+                    [&]( PCB_SHAPE* aCandidate )
+                    {
+                        return aRemaining.find( aCandidate ) == aRemaining.end()
+                                || visited.find( aCandidate ) != visited.end();
+                    };
 
-            if( next && visited.find( next ) == visited.end() )
+            CHAIN_NEIGHBOURS next = findNeighbours( curr, prev, aKdTree, aAdaptor, aChainingEpsilon,
+                                                    isConsumed );
+
+            if( next.available )
             {
-                visited.insert( next );
+                visited.insert( next.available );
 
                 if( forward )
-                    chain.push_back( next );
+                    chain.push_back( next.available );
                 else
-                    chain.push_front( next );
+                    chain.push_front( next.available );
 
-                if( closer_to_first( prev, next->GetStart(), next->GetEnd() ) )
-                    prev = next->GetEnd();
+                if( closer_to_first( prev, next.available->GetStart(), next.available->GetEnd() ) )
+                    prev = next.available->GetEnd();
                 else
-                    prev = next->GetStart();
+                    prev = next.available->GetStart();
 
-                curr = next;
+                curr = next.available;
                 continue;
             }
 
-            if( next )
-            {
-                PCB_SHAPE* chainEnd = forward ? chain.front() : chain.back();
-                VECTOR2I   chainPt = forward ? frontPt : backPt;
+            // Match on position, not identity (see doConvertOutlineToPolygon)
+            VECTOR2I chainPt = forward ? frontPt : backPt;
 
-                if( next == chainEnd && close_enough( prev, chainPt, aChainingEpsilon ) )
-                    closed = true;
-            }
+            if( chain.size() > 1 && close_enough( prev, chainPt, aChainingEpsilon ) )
+                closed = true;
 
             if( forward )
                 backPt = prev;
@@ -774,11 +819,7 @@ static bool buildChainedClosedContour( PCB_SHAPE* aStart, std::set<PCB_SHAPE*>& 
     {
         PCB_SHAPE* second = *( std::next( chain.begin() ) );
 
-        if( close_enough( first->GetStart(), second->GetStart(), aChainingEpsilon )
-            || close_enough( first->GetStart(), second->GetEnd(), aChainingEpsilon ) )
-            startPt = first->GetEnd();
-        else
-            startPt = first->GetStart();
+        startPt = free_end( first, second );
     }
     else
     {
@@ -819,7 +860,9 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     bool       selfIntersecting = false;
     PCB_SHAPE* graphic = nullptr;
 
-    std::set<PCB_SHAPE*> startCandidates( aShapeList.begin(), aShapeList.end() );
+    // Seed in list order so the polygon does not depend on addresses
+    std::unordered_set<PCB_SHAPE*> remaining( aShapeList.begin(), aShapeList.end() );
+    size_t                         nextSeed = 0;
 
     // Pre-build KD-tree
     PCB_SHAPE_ENDPOINTS_ADAPTOR adaptor( aShapeList );
@@ -837,18 +880,24 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
 
     std::set<std::pair<PCB_SHAPE*, PCB_SHAPE*>> reportedGaps;
     std::vector<SHAPE_LINE_CHAIN> contours;
-    contours.reserve( startCandidates.size() );
+    contours.reserve( aShapeList.size() );
 
-    for( PCB_SHAPE* shape : startCandidates )
+    for( PCB_SHAPE* shape : aShapeList )
         shape->ClearFlags( SKIP_STRUCT );
 
     // Process each shape to build contours
-    while( startCandidates.size() )
+    while( !remaining.empty() )
     {
-        graphic = *startCandidates.begin();
+        while( nextSeed < aShapeList.size() && !remaining.count( aShapeList[nextSeed] ) )
+            nextSeed++;
+
+        if( nextSeed >= aShapeList.size() )
+            break;
+
+        graphic = aShapeList[nextSeed];
         graphic->SetFlags( SKIP_STRUCT );
         aCleaner.insert( graphic );
-        startCandidates.erase( startCandidates.begin() );
+        remaining.erase( graphic );
 
         contours.emplace_back();
         SHAPE_LINE_CHAIN& currContour = contours.back();
@@ -877,44 +926,44 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
 
                 for( ;; )
                 {
-                    PCB_SHAPE* next = findNext( curr, prev, kdTree, adaptor, aChainingEpsilon );
+                    CHAIN_NEIGHBOURS next = findNeighbours( curr, prev, kdTree, adaptor, aChainingEpsilon,
+                                                           []( PCB_SHAPE* aCandidate )
+                                                           {
+                                                               return ( aCandidate->GetFlags() & SKIP_STRUCT ) != 0;
+                                                           } );
 
-                    if( next && !( next->GetFlags() & SKIP_STRUCT ) )
+                    if( next.available )
                     {
-                        next->SetFlags( SKIP_STRUCT );
-                        aCleaner.insert( next );
-                        startCandidates.erase( next );
+                        next.available->SetFlags( SKIP_STRUCT );
+                        aCleaner.insert( next.available );
+                        remaining.erase( next.available );
 
                         if( forward )
-                            chain.push_back( next );
+                            chain.push_back( next.available );
                         else
-                            chain.push_front( next );
+                            chain.push_front( next.available );
 
-                        if( closer_to_first( prev, next->GetStart(), next->GetEnd() ) )
-                            prev = next->GetEnd();
+                        if( closer_to_first( prev, next.available->GetStart(), next.available->GetEnd() ) )
+                            prev = next.available->GetEnd();
                         else
-                            prev = next->GetStart();
+                            prev = next.available->GetStart();
 
-                        curr = next;
+                        curr = next.available;
                         continue;
                     }
 
-                    if( next )
+                    VECTOR2I chainPt = forward ? frontPt : backPt;
+
+                    if( chain.size() > 1 && close_enough( prev, chainPt, aChainingEpsilon ) )
                     {
-                        PCB_SHAPE* chainEnd = forward ? chain.front() : chain.back();
-                        VECTOR2I   chainPt = forward ? frontPt : backPt;
+                        closed = true;
+                    }
+                    else if( next.consumed )
+                    {
+                        if( aErrorHandler )
+                            ( *aErrorHandler )( _( "(self-intersecting)" ), curr, next.consumed, prev );
 
-                        if( next == chainEnd && close_enough( prev, chainPt, aChainingEpsilon ) )
-                        {
-                            closed = true;
-                        }
-                        else
-                        {
-                            if( aErrorHandler )
-                                ( *aErrorHandler )( _( "(self-intersecting)" ), curr, next, prev );
-
-                            selfIntersecting = true;
-                        }
+                        selfIntersecting = true;
                     }
 
                     if( forward )
@@ -939,11 +988,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
             {
                 PCB_SHAPE* second = *( std::next( chain.begin() ) );
 
-                if( close_enough( first->GetStart(), second->GetStart(), aChainingEpsilon )
-                        || close_enough( first->GetStart(), second->GetEnd(), aChainingEpsilon ) )
-                    startPt = first->GetEnd();
-                else
-                    startPt = first->GetStart();
+                startPt = free_end( first, second );
             }
             else
             {
@@ -1003,14 +1048,28 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                         return;
 
                     const double query_pt[2] = { static_cast<double>( pt.x ), static_cast<double>( pt.y ) };
-                    uint32_t    indices[2] = { 0, 0 };      // make gcc quiet
-                    double      dists[2];
 
-                    // Find the two closest items to the given point using kdtree
-                    kdTree.knnSearch( query_pt, 2, indices, dists );
+                    // Both endpoints are in the tree, so over-fetch for a second shape
+                    uint32_t indices[8] = { 0 };      // make gcc quiet
+                    double   dists[8];
+
+                    const size_t found = kdTree.knnSearch( query_pt, 8, indices, dists );
+
+                    if( found == 0 )
+                        return;
 
                     PCB_SHAPE* shapeA = adaptor.endpoints[indices[0]].second;
-                    PCB_SHAPE* shapeB = adaptor.endpoints[indices[1]].second;
+                    PCB_SHAPE* shapeB = shapeA;
+
+                    // A lone shape has no neighbour, so it pairs with itself
+                    for( size_t ii = 1; ii < found; ++ii )
+                    {
+                        if( adaptor.endpoints[indices[ii]].second != shapeA )
+                        {
+                            shapeB = adaptor.endpoints[indices[ii]].second;
+                            break;
+                        }
+                    }
 
                     // Avoid reporting the same pair twice
                     auto key = std::minmax( shapeA, shapeB );
