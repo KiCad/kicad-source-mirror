@@ -265,20 +265,20 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
                     }
                     else if( liveValue.empty() )
                     {
-                        attr->SetBackgroundColour( wxColour( 180, 220, 180 ) );
+                        attr->SetBackgroundColour( FIELDS_TABLE_COLOR::STRIPED_CLEARED_EMPTY_FIELD_LIGHT_GREEN );
                     }
                     else
                     {
-                        attr->SetBackgroundColour( wxColour( 220, 180, 180 ) );
+                        attr->SetBackgroundColour( FIELDS_TABLE_COLOR::STRIPED_CLEARED_NONEMPTY_FIELD_LIGHT_RED );
                     }
                 }
                 else if( storedValue.IsEmpty() )
                 {
-                    attr->SetBackgroundColour( wxColour( 180, 200, 180 ) );
+                    attr->SetBackgroundColour( FIELDS_TABLE_COLOR::STRIPED_EDITED_EMPTY_FIELD_MUTED_GREEN );
                 }
                 else
                 {
-                    attr->SetBackgroundColour( wxColour( 200, 180, 180 ) );
+                    attr->SetBackgroundColour( FIELDS_TABLE_COLOR::STRIPED_EDITED_NONEMPTY_FIELD_MUTED_RED );
                 }
             }
         }
@@ -289,7 +289,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
             attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWFRAME ) );
 
         if( blankModified )
-            attr->SetBackgroundColour( wxColour( 192, 255, 192 ) );
+            attr->SetBackgroundColour( FIELDS_TABLE_COLOR::EDITED_EMPTY_FIELD_BRIGHT_GREEN );
     }
 
     if( cellModified )

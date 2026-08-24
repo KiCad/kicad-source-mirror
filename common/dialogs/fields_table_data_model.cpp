@@ -105,7 +105,10 @@ wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::applyFieldPresenceRenderer( wxGrid
     wxSafeDecRef( aAttr );
 
     if( !m_stripedRenderer )
-        m_stripedRenderer = new STRIPED_STRING_RENDERER;
+    {
+        m_stripedRenderer = new STRIPED_STRING_RENDERER( FIELDS_TABLE_COLOR::CLEARED_FIELD_STRIPE_ON_DARK_LIGHT_RED,
+                                                         FIELDS_TABLE_COLOR::CLEARED_FIELD_STRIPE_ON_LIGHT_DARK_RED );
+    }
 
     m_stripedRenderer->IncRef();
     stripedAttr->SetRenderer( m_stripedRenderer );

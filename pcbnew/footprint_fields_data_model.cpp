@@ -111,8 +111,8 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
                     wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
                     bool     isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
 
-                    highlightColor = isDark ? wxColour( 80, 80, 40 )
-                                            : wxColour( 255, 255, 200 );
+                    highlightColor = isDark ? FIELDS_TABLE_COLOR::VARIANT_FIELD_OVERRIDE_DARK_YELLOW
+                                            : FIELDS_TABLE_COLOR::VARIANT_FIELD_OVERRIDE_LIGHT_YELLOW;
 
                     break;
                 }
@@ -178,8 +178,8 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
             wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
             bool     isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
 
-            attr->SetBackgroundColour( isDark ? wxColour( 80, 70, 30 )       // Dark amber
-                                              : wxColour( 255, 252, 200 ) ); // Light yellow
+            attr->SetBackgroundColour( isDark ? FIELDS_TABLE_COLOR::TEXT_VARIABLE_DARK_AMBER
+                                              : FIELDS_TABLE_COLOR::TEXT_VARIABLE_LIGHT_YELLOW );
         }
     }
 

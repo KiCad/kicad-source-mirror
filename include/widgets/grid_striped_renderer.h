@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include <wx/colour.h>
 #include <wx/grid.h>
 #include <wx/generic/gridctrl.h>
@@ -29,11 +31,14 @@ template<typename T = wxGridCellStringRenderer>
 class STRIPED_CELL_RENDERER : public T
 {
 public:
-    STRIPED_CELL_RENDERER() : T() {}
-
-    // Perfect forwarding constructor to handle any base renderer constructor arguments
-    template<typename... Args>
-    explicit STRIPED_CELL_RENDERER(Args&&... args) : T(std::forward<Args>(args)...) {}
+    template <typename... Args>
+    STRIPED_CELL_RENDERER( const wxColour& aStripeOnDarkBackground, const wxColour& aStripeOnLightBackground,
+                           Args&&... aArgs ) :
+            T( std::forward<Args>( aArgs )... ),
+            m_stripeOnDarkBackground( aStripeOnDarkBackground ),
+            m_stripeOnLightBackground( aStripeOnLightBackground )
+    {
+    }
 
     void Draw( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                const wxRect& rect, int row, int col, bool isSelected ) override
@@ -72,14 +77,8 @@ private:
         // Draw diagonal stripes
         const int stripeSpacing = 20;           // Distance between diagonal lines
 
-        wxColour stripeColor;
-
         int bgLuminance = bgColor.GetLuminance();
-
-        if( bgLuminance < 128 )
-            stripeColor = wxColour( 220, 180, 180 ); // Light red for stripes
-        else
-            stripeColor = wxColour( 100, 10, 10 ); // Dark red for stripes
+        wxColour stripeColor = bgLuminance < 128 ? m_stripeOnDarkBackground : m_stripeOnLightBackground;
 
         wxPen stripePen( stripeColor, 1, wxPENSTYLE_SOLID );
         dc.SetPen( stripePen );
@@ -118,6 +117,9 @@ private:
             }
         }
     }
+
+    wxColour m_stripeOnDarkBackground;
+    wxColour m_stripeOnLightBackground;
 };
 
 

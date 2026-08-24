@@ -37,6 +37,24 @@
 #include <wx/debug.h>
 
 
+namespace FIELDS_TABLE_COLOR
+{
+inline const wxColour VARIANT_SYMBOL_OVERRIDE_DARK_BLUE( 40, 60, 80 );
+inline const wxColour VARIANT_SYMBOL_OVERRIDE_LIGHT_BLUE( 220, 235, 255 );
+inline const wxColour VARIANT_FIELD_OVERRIDE_DARK_YELLOW( 80, 80, 40 );
+inline const wxColour VARIANT_FIELD_OVERRIDE_LIGHT_YELLOW( 255, 255, 200 );
+inline const wxColour TEXT_VARIABLE_DARK_AMBER( 80, 70, 30 );
+inline const wxColour TEXT_VARIABLE_LIGHT_YELLOW( 255, 252, 200 );
+inline const wxColour STRIPED_CLEARED_EMPTY_FIELD_LIGHT_GREEN( 180, 220, 180 );
+inline const wxColour STRIPED_CLEARED_NONEMPTY_FIELD_LIGHT_RED( 220, 180, 180 );
+inline const wxColour STRIPED_EDITED_EMPTY_FIELD_MUTED_GREEN( 180, 200, 180 );
+inline const wxColour STRIPED_EDITED_NONEMPTY_FIELD_MUTED_RED( 200, 180, 180 );
+inline const wxColour EDITED_EMPTY_FIELD_BRIGHT_GREEN( 192, 255, 192 );
+inline const wxColour CLEARED_FIELD_STRIPE_ON_DARK_LIGHT_RED( 220, 180, 180 );
+inline const wxColour CLEARED_FIELD_STRIPE_ON_LIGHT_DARK_RED( 100, 10, 10 );
+} // namespace FIELDS_TABLE_COLOR
+
+
 /**
  * The point of the data model classes is fundamentally to represent three things:
  *
