@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_PADSTACK_H
-#define KICAD_PADSTACK_H
+#pragma once
 
 #include <memory>
 #include <optional>
@@ -183,9 +182,9 @@ public:
     ///! The set of properties that define a pad's shape on a given layer
     struct SHAPE_PROPS
     {
-        PAD_SHAPE shape;    ///< Shape of the pad
-        PAD_SHAPE anchor_shape; ///< Shape of the anchor when shape == PAD_SHAPE::CUSTOM
-        VECTOR2I size;  ///< Size of the shape, or of the anchor pad for custom shape pads
+        PAD_SHAPE shape;          ///< Shape of the pad
+        PAD_SHAPE anchor_shape;   ///< Shape of the anchor when shape == PAD_SHAPE::CUSTOM
+        VECTOR2I  size;           ///< Size of the shape, or of the anchor pad for custom shape pads
 
         /*
          * Most of the time the hole is the center of the shape (m_Offset = 0). But some designers
@@ -194,17 +193,17 @@ public:
          * of the pad shape (ie: the copper area around the hole).
          * ShapePos() returns the board shape position according to the offset and the pad rotation.
          */
-        VECTOR2I offset; ///< Offset of the shape center from the pad center
+        VECTOR2I  offset; ///< Offset of the shape center from the pad center
 
-        double round_rect_radius_ratio;
-        double chamfered_rect_ratio;    ///< Size of chamfer: ratio of smallest of X,Y size
-        int chamfered_rect_positions;   ///< @see RECT_CHAMFER_POSITIONS
+        double    round_rect_radius_ratio;
+        double    chamfered_rect_ratio;        ///< Size of chamfer: ratio of smallest of X,Y size
+        int       chamfered_rect_positions;    ///< @see RECT_CHAMFER_POSITIONS
 
         /**
          *  Delta for PAD_SHAPE::TRAPEZOID; half the delta squeezes one end and half expands the
          *  other.  It is only valid to have a single axis be non-zero.
          */
-        VECTOR2I trapezoid_delta_size;
+        VECTOR2I  trapezoid_delta_size;
 
         SHAPE_PROPS();
         bool operator==( const SHAPE_PROPS& aOther ) const;
@@ -225,12 +224,12 @@ public:
      */
     struct COPPER_LAYER_PROPS
     {
-        SHAPE_PROPS shape;
-        std::optional<ZONE_CONNECTION> zone_connection;
-        std::optional<int> thermal_spoke_width;
-        std::optional<EDA_ANGLE> thermal_spoke_angle;
-        std::optional<int> thermal_gap;
-        std::optional<int> clearance;
+        SHAPE_PROPS                             shape;
+        std::optional<ZONE_CONNECTION>          zone_connection;
+        std::optional<int>                      thermal_spoke_width;
+        std::optional<EDA_ANGLE>                thermal_spoke_angle;
+        std::optional<int>                      thermal_gap;
+        std::optional<int>                      clearance;
 
         /*
          * Editing definitions of primitives for custom pad shapes.  In local coordinates relative
@@ -244,30 +243,34 @@ public:
         double Similarity( const COPPER_LAYER_PROPS& aOther ) const;
     };
 
-    ///! The features of a padstack that can vary on outer layers.
-    ///! All parameters are optional; leaving them un-set means "use parent/rule defaults"
+    /**
+     * The features of a padstack that can vary on outer layers.
+     * All parameters are optional; leaving them un-set means "use parent/rule defaults"
+     */
     struct MASK_LAYER_PROPS
     {
-        std::optional<int> solder_mask_margin;
-        std::optional<int> solder_paste_margin;
+        std::optional<int>    solder_mask_margin;
+        std::optional<int>    solder_paste_margin;
         std::optional<double> solder_paste_margin_ratio;
 
-        std::optional<bool> has_solder_mask;   ///< True if this outer layer has mask (is not tented)
-        std::optional<bool> has_solder_paste;  ///< True if this outer layer has solder paste
-        std::optional<bool> has_covering; ///< True if the pad on this side should have covering
-        std::optional<bool> has_plugging; ///< True if the drill hole should be plugged on this side
+        std::optional<bool>   has_solder_mask;   ///< True if this outer layer has mask (is not tented)
+        std::optional<bool>   has_solder_paste;  ///< True if this outer layer has solder paste
+        std::optional<bool>   has_covering;      ///< True if the pad on this side should have covering
+        std::optional<bool>   has_plugging;      ///< True if the drill hole should be plugged on this side
 
         bool operator==( const MASK_LAYER_PROPS& aOther ) const;
         int Compare( const MASK_LAYER_PROPS& aOther ) const;
     };
 
-    ///! The properties of a padstack drill.  Drill position is always the pad position (origin).
+    /**
+     * The properties of a padstack drill.  Drill position is always the pad position (origin).
+     */
     struct DRILL_PROPS
     {
-        VECTOR2I        size;                            ///< Drill diameter (x == y) or slot dimensions (x != y)
-        PAD_DRILL_SHAPE shape = PAD_DRILL_SHAPE::UNDEFINED;
-        PCB_LAYER_ID    start = UNDEFINED_LAYER;
-        PCB_LAYER_ID    end   = UNDEFINED_LAYER;
+        VECTOR2I            size;                            ///< Drill diameter (x == y) or slot dimensions (x != y)
+        PAD_DRILL_SHAPE     shape = PAD_DRILL_SHAPE::UNDEFINED;
+        PCB_LAYER_ID        start = UNDEFINED_LAYER;
+        PCB_LAYER_ID        end   = UNDEFINED_LAYER;
 
         std::optional<bool> is_filled; ///< True if the drill hole should be filled completely
         std::optional<bool> is_capped; ///< True if the drill hole should be capped
@@ -279,9 +282,9 @@ public:
     struct POST_MACHINING_PROPS
     {
         std::optional<PAD_DRILL_POST_MACHINING_MODE> mode;
-        int size = 0;
-        int depth = 0;
-        int angle = 0;
+        int                                          size = 0;
+        int                                          depth = 0;
+        int                                          angle = 0;
 
         bool operator==( const POST_MACHINING_PROPS& aOther ) const;
         int Compare( const POST_MACHINING_PROPS& aOther ) const;
@@ -342,6 +345,7 @@ public:
     void SetCustomName( const wxString& aCustomName );
 
     EDA_ANGLE GetOrientation() const { return m_orientation; }
+
     void SetOrientation( EDA_ANGLE aAngle )
     {
         m_orientation = aAngle;
@@ -498,8 +502,7 @@ public:
      * @param aPrimitivesList is a list of shapes to add copies of to this PADSTACK
      * @param aLayer is the padstack layer to add to.
      */
-    void AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
-                           PCB_LAYER_ID aLayer );
+    void AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList, PCB_LAYER_ID aLayer );
 
     /**
      * Clears the existing primitive list (freeing the owned shapes) and adds copies of the given
@@ -507,8 +510,7 @@ public:
      * @param aPrimitivesList is a list of shapes to add copies of to this PADSTACK
      * @param aLayer is the padstack layer to add to.
      */
-    void ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList,
-                            PCB_LAYER_ID aLayer );
+    void ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList, PCB_LAYER_ID aLayer );
 
     void ClearPrimitives( PCB_LAYER_ID aLayer );
 
@@ -539,34 +541,31 @@ private:
     /// padstack with the side duplicated across both slots is fully cleared.
     void clearBackdrillSide( bool aTop );
 
-    void packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadStack& aProto ) const;
-
     bool unpackCopperLayer( const kiapi::board::types::PadStackLayer& aProto );
 
+private:
     ///! The BOARD_ITEM this PADSTACK belongs to; will be used as the parent for owned shapes
-    BOARD_ITEM* m_parent;
+    BOARD_ITEM*               m_parent;
 
     ///! The copper layer variation mode this padstack is in
-    MODE m_mode;
+    MODE                      m_mode;
 
     ///! The board layers that this padstack is active on
-    LSET m_layerSet;
+    LSET                      m_layerSet;
 
     ///! An override for the IPC-7351 padstack name
     std::unique_ptr<wxString> m_customName;
 
     ///! The rotation of the pad relative to an outer reference frame
-    EDA_ANGLE m_orientation;
+    EDA_ANGLE                 m_orientation;
 
-    ///! The properties applied to copper layers if they aren't overridden
-    //COPPER_LAYER_PROPS m_defaultCopperProps;
     std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> m_copperProps;
 
     ///! The overrides applied to front outer technical layers
-    MASK_LAYER_PROPS m_frontMaskProps;
+    MASK_LAYER_PROPS                                     m_frontMaskProps;
 
     ///! The overrides applied to back outer technical layers
-    MASK_LAYER_PROPS m_backMaskProps;
+    MASK_LAYER_PROPS                                     m_backMaskProps;
 
     UNCONNECTED_LAYER_MODE m_unconnectedLayerMode;
 
@@ -579,21 +578,19 @@ private:
 
     ///! The primary drill parameters, which also define the start and end layers for through-hole
     ///! vias and pads (F_Cu to B_Cu for normal holes; a subset of layers for blind/buried vias)
-    DRILL_PROPS m_drill;
+    DRILL_PROPS            m_drill;
 
     ///! Secondary drill, used to define back-drilling starting from the bottom side
-    DRILL_PROPS m_secondaryDrill;
+    DRILL_PROPS            m_secondaryDrill;
 
     ///! Tertiary drill, used to define back-drilling starting from the top side
-    DRILL_PROPS m_tertiaryDrill;
+    DRILL_PROPS            m_tertiaryDrill;
 
-    POST_MACHINING_PROPS m_frontPostMachining;
-    POST_MACHINING_PROPS m_backPostMachining;
+    POST_MACHINING_PROPS   m_frontPostMachining;
+    POST_MACHINING_PROPS   m_backPostMachining;
 };
 
 DECLARE_ENUM_TO_WXANY( PAD_DRILL_POST_MACHINING_MODE );
 DECLARE_ENUM_TO_WXANY( UNCONNECTED_LAYER_MODE );
 DECLARE_ENUM_TO_WXANY( BACKDRILL_MODE );
 
-
-#endif //KICAD_PADSTACK_H

@@ -88,8 +88,8 @@ bool PAD_TOOL::Init()
         CONDITIONAL_MENU& menu = selTool->GetToolMenu().GetMenu();
 
         SELECTION_CONDITION padSel = SELECTION_CONDITIONS::HasType( PCB_PAD_T );
-        SELECTION_CONDITION singlePadSel = SELECTION_CONDITIONS::Count( 1 ) &&
-                                           SELECTION_CONDITIONS::OnlyTypes( padTypes );
+        SELECTION_CONDITION singlePadSel = SELECTION_CONDITIONS::Count( 1 )
+                                            && SELECTION_CONDITIONS::OnlyTypes( padTypes );
 
         auto explodeCondition =
                 [this]( const SELECTION& aSel )
@@ -653,10 +653,8 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
                 ignored_items.insert( ignored_items.end(), graphics.begin(), graphics.end() );
             }
 
-            VECTOR2I cursorPos =
-                    m_gridHelper.ResolveSnap( position, LSET::AllLayersMask(), GRID_CURRENT,
-                                              ignored_items )
-                            .position;
+            VECTOR2I cursorPos = m_gridHelper.ResolveSnap( position, LSET::AllLayersMask(),
+                                                           GRID_CURRENT, ignored_items      ).position;
             viewControls->ForceCursorPosition( true, cursorPos );
             aItem->SetPosition( cursorPos );
         }
@@ -880,6 +878,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun )
 
     return aPad->Recombine( aIsDryRun, maxError );
 }
+
 
 int PAD_TOOL::PadTable( const TOOL_EVENT& aEvent )
 {

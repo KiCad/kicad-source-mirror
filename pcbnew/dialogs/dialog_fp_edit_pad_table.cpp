@@ -236,11 +236,13 @@ public:
         case DIALOG_FP_EDIT_PAD_TABLE::COL_P2D_LENGTH:
             if( aPin.GetPadToDieLength() )
                 return m_unitsProvider.StringFromValue( aPin.GetPadToDieLength(), m_includeUnits );
+
             return wxEmptyString;
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_P2D_DELAY:
             if( aPin.GetPadToDieDelay() )
                 return m_unitsProvider.StringFromValue( aPin.GetPadToDieDelay(), m_includeUnits, EDA_DATA_TYPE::TIME );
+
             return wxEmptyString;
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_COUNT:
@@ -326,6 +328,7 @@ public:
                 aPad.SetPadToDieLength( 0 );
             else
                 aPad.SetPadToDieLength( m_unitsProvider.ValueFromString( aValue ) );
+
             break;
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_P2D_DELAY:
@@ -333,6 +336,7 @@ public:
                 aPad.SetPadToDieDelay( 0 );
             else
                 aPad.SetPadToDieDelay( m_unitsProvider.ValueFromString( aValue, EDA_DATA_TYPE::TIME ) );
+
             break;
 
         default:
@@ -683,7 +687,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::restoreOriginalPadData()
         return;
 
     const PCB_BASE_FRAME* base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
-    PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
+    PCB_DRAW_PANEL_GAL*   canvas = base ? base->GetCanvas() : nullptr;
 
     for( PAD* pad : m_footprint->Pads() )
     {
@@ -710,7 +714,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::RestoreOriginalPadState()
 
     PCB_BASE_FRAME*     base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
     PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
-    KIGFX::PCB_VIEW*    view = canvas ? static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() ) : nullptr;
+    KIGFX::PCB_VIEW*    view = canvas ? canvas->GetView() : nullptr;
 
     // Remove pads added during the session; they have no snapshot entry.
     std::vector<PAD*> livePads( m_footprint->Pads().begin(), m_footprint->Pads().end() );
@@ -901,7 +905,7 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
 
     PCB_BASE_FRAME*     base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
     PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
-    KIGFX::PCB_VIEW*    view = canvas ? static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() ) : nullptr;
+    KIGFX::PCB_VIEW*    view = canvas ? canvas->GetView() : nullptr;
 
     restoreOriginalPadData();
 
@@ -934,11 +938,12 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
 
     int row = 0;
 
-    const auto applyRowDataToPad = [&]( PAD& aPad, int aRowId )
-    {
-        for( int col = 0; col < m_grid->GetNumberCols(); ++col )
-            setPadFromGridCell( aPad, aRowId, static_cast<COLS>( col ) );
-    };
+    const auto applyRowDataToPad =
+            [&]( PAD& aPad, int aRowId )
+            {
+                for( int col = 0; col < m_grid->GetNumberCols(); ++col )
+                    setPadFromGridCell( aPad, aRowId, static_cast<COLS>( col ) );
+            };
 
     for( PAD* pad : m_rowPads )
     {
@@ -1077,8 +1082,8 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
     if( col == COL_TYPE )
     {
         // Toggle drill columns read-only state dynamically.
-        const bool drillsEditable =
-                ( target->GetAttribute() == PAD_ATTRIB::PTH || target->GetAttribute() == PAD_ATTRIB::NPTH );
+        const bool drillsEditable = ( target->GetAttribute() == PAD_ATTRIB::PTH
+                                    || target->GetAttribute() == PAD_ATTRIB::NPTH );
         m_grid->SetReadOnly( row, COL_DRILL_X, !drillsEditable );
         m_grid->SetReadOnly( row, COL_DRILL_Y, !drillsEditable );
     }
@@ -1098,7 +1103,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
     {
         if( PCB_BASE_FRAME* base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() ) )
         {
-            if( KIGFX::PCB_VIEW* view = static_cast<KIGFX::PCB_VIEW*>( base->GetCanvas()->GetView() ) )
+            if( KIGFX::PCB_VIEW* view = base->GetCanvas()->GetView() )
                 view->Update( target, KIGFX::REPAINT );
 
             base->GetCanvas()->ForceRefresh();
@@ -1114,7 +1119,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell( wxGridEvent& aEvent )
     if( !m_footprint )
         return;
 
-    PCB_BASE_FRAME* base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
+    PCB_BASE_FRAME*     base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
     PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
 
     // Clear existing pad selections
@@ -1310,7 +1315,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnImportButtonClick( wxCommandEvent& aEvent )
 
     PCB_BASE_FRAME*     base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
     PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
-    KIGFX::PCB_VIEW*    view = canvas ? static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() ) : nullptr;
+    KIGFX::PCB_VIEW*    view = canvas ? canvas->GetView() : nullptr;
 
     std::vector<std::unique_ptr<PAD>> createdPads;
 
@@ -1402,9 +1407,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnImportButtonClick( wxCommandEvent& aEvent )
                 view->Update( padToUpdate, KIGFX::REPAINT );
 
             if( newPad )
-            {
                 createdPads.push_back( std::move( newPad ) );
-            }
         }
 
         // Bulk-load the imported pads into the view.
@@ -1413,16 +1416,15 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnImportButtonClick( wxCommandEvent& aEvent )
             if( view )
             {
                 std::vector<KIGFX::VIEW_ITEM*> viewPads;
+
                 for( const auto& pad : createdPads )
                     viewPads.push_back( pad.get() );
 
                 view->AddBatch( viewPads );
             }
 
-            for( auto& pad : createdPads )
-            {
+            for( std::unique_ptr<PAD>& pad : createdPads )
                 m_footprint->Add( pad.release(), ADD_MODE::BULK_APPEND, true );
-            }
         }
 
         // Any pads not matched to an imported pad are removed from the footprint.
@@ -1481,7 +1483,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnAddRow( wxCommandEvent& aEvent )
 
     PCB_BASE_FRAME*     base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
     PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
-    KIGFX::PCB_VIEW*    view = canvas ? static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() ) : nullptr;
+    KIGFX::PCB_VIEW*    view = canvas ? canvas->GetView() : nullptr;
 
     m_grid->OnAddRow(
             [&]() -> std::pair<int, int>
@@ -1528,7 +1530,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnDeleteRow( wxCommandEvent& aEvent )
 
     PCB_BASE_FRAME*     base = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
     PCB_DRAW_PANEL_GAL* canvas = base ? base->GetCanvas() : nullptr;
-    KIGFX::PCB_VIEW*    view = canvas ? static_cast<KIGFX::PCB_VIEW*>( canvas->GetView() ) : nullptr;
+    KIGFX::PCB_VIEW*    view = canvas ? canvas->GetView() : nullptr;
 
     m_grid->OnDeleteRows(
             [&]( int row )
