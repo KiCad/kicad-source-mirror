@@ -122,7 +122,9 @@ public:
 
     int GetRowCount() const
     {
-        return m_cells.size() / m_colCount;
+        // Guarded because a hand-edited or third-party file can present a table with no
+        // columns, and dividing by it crashes the writer rather than failing the load
+        return m_colCount > 0 ? (int) m_cells.size() / m_colCount : 0;
     }
 
     void SetColWidth( int aCol, int aWidth ) { m_colWidths[aCol] = aWidth; }
@@ -173,6 +175,14 @@ public:
         aCell->SetLayer( GetLayer() );
         aCell->SetParent( this );
     }
+
+    /**
+     * Grow or shrink to aRows x aCols, keeping the cells that already exist.
+     *
+     * A regenerating table must not clear and repopulate. That would mint new UUIDs on every
+     * rebuild and break selection restore and file diffs.
+     */
+    void ResizeCells( int aRows, int aCols );
 
     void ClearCells()
     {
@@ -305,9 +315,13 @@ public:
 #endif
 
 protected:
+    /**
+     * Derived tables pass their own KICAD_T
+     */
+    PCB_TABLE( BOARD_ITEM* aParent, KICAD_T aType, int aLineWidth );
+
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
-protected:
     bool                        m_strokeExternal;
     bool                        m_StrokeHeaderSeparator;
     STROKE_PARAMS               m_borderStroke;

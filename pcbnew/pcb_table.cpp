@@ -39,8 +39,8 @@
 #include <eda_group.h>
 
 
-PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
-        BOARD_ITEM_CONTAINER( aParent, PCB_TABLE_T ),
+PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, KICAD_T aType, int aLineWidth ) :
+        BOARD_ITEM_CONTAINER( aParent, aType ),
         m_strokeExternal( true ),
         m_StrokeHeaderSeparator( true ),
         m_borderStroke( aLineWidth, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
@@ -48,6 +48,12 @@ PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
         m_strokeColumns( true ),
         m_separatorsStroke( aLineWidth, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_colCount( 0 )
+{
+}
+
+
+PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
+        PCB_TABLE( aParent, PCB_TABLE_T, aLineWidth )
 {
 }
 
@@ -237,7 +243,7 @@ bool PCB_TABLE::Deserialize( const google::protobuf::Any& aContainer )
 
 void PCB_TABLE::swapData( BOARD_ITEM* aImage )
 {
-    wxCHECK_RET( aImage != nullptr && aImage->Type() == PCB_TABLE_T, wxT( "Cannot swap data with invalid table." ) );
+    wxCHECK_RET( aImage != nullptr && aImage->Type() == Type(), wxT( "Cannot swap data with invalid table." ) );
 
     PCB_TABLE* table = static_cast<PCB_TABLE*>( aImage );
 
@@ -264,6 +270,23 @@ void PCB_TABLE::swapData( BOARD_ITEM* aImage )
         cell->SetParent( table );
 
     std::swap( m_customProperties, table->m_customProperties );
+}
+
+
+void PCB_TABLE::ResizeCells( int aRows, int aCols )
+{
+    const size_t wanted = static_cast<size_t>( aRows ) * static_cast<size_t>( aCols );
+
+    m_colCount = aCols;
+
+    while( m_cells.size() > wanted )
+    {
+        delete m_cells.back();
+        m_cells.pop_back();
+    }
+
+    while( m_cells.size() < wanted )
+        AddCell( new PCB_TABLECELL( this ) );
 }
 
 
