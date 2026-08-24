@@ -758,22 +758,22 @@ void PCB_SHAPE::Normalize()
                 && horizontal( outline.Segment( 2 ) )
                 && vertical( outline.Segment( 3 ) ) )
             {
-                m_shape = SHAPE_T::RECTANGLE;
-                m_start.x = std::min( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x );
-                m_start.y = std::min( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y );
-                m_end.x = std::max( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x );
-                m_end.y = std::max( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y );
+                SetShape( SHAPE_T::RECTANGLE );
+                SetStart( VECTOR2I( std::min( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x ),
+                                    std::min( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y ) ) );
+                SetEnd( VECTOR2I( std::max( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x ),
+                                  std::max( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y ) ) );
             }
             else if( vertical( outline.Segment( 0 ) )
                   && horizontal( outline.Segment( 1 ) )
                   && vertical( outline.Segment( 2 ) )
                   && horizontal( outline.Segment( 3 ) ) )
             {
-                m_shape = SHAPE_T::RECTANGLE;
-                m_start.x = std::min( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x );
-                m_start.y = std::min( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y );
-                m_end.x = std::max( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x );
-                m_end.y = std::max( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y );
+                SetShape( SHAPE_T::RECTANGLE );
+                SetStart( VECTOR2I( std::min( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x ),
+                                    std::min( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y ) ) );
+                SetEnd( VECTOR2I( std::max( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x ),
+                                  std::max( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y ) ) );
             }
         }
     }

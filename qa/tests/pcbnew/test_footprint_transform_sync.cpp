@@ -1543,6 +1543,63 @@ BOOST_AUTO_TEST_CASE( RectangleSurvivesIncrementalRotateAroundExternalCenter )
 }
 
 
+BOOST_AUTO_TEST_CASE( RectangleFoldedBackFromPolySavesAtItsBoardPosition )
+{
+    BOARD board;
+
+    PCB_SHAPE* rect = new PCB_SHAPE( &board, SHAPE_T::RECTANGLE );
+    rect->SetLayer( F_SilkS );
+    rect->SetWidth( 150000 );
+    rect->SetStart( VECTOR2I( 100000000, 80000000 ) );
+    rect->SetEnd( VECTOR2I( 120000000, 90000000 ) );
+    board.Add( rect, ADD_MODE::APPEND, true );
+
+    // Two 45 degree turns about this centre land every corner exactly on the axes,
+    // so Normalize folds the polygon back into a rectangle.
+    const VECTOR2I rotCenter( 105000000, 80000000 );
+
+    rect->Rotate( rotCenter, EDA_ANGLE( 45.0, DEGREES_T ) );
+    rect->Rotate( rotCenter, EDA_ANGLE( 45.0, DEGREES_T ) );
+    rect->Normalize();
+
+    BOOST_REQUIRE( rect->GetShape() == SHAPE_T::RECTANGLE );
+
+    rect->Rotate( rotCenter, EDA_ANGLE( 90.0, DEGREES_T ) );
+    rect->Normalize();
+
+    const BOX2I onBoard = rect->GetBoundingBox();
+
+    const std::filesystem::path savePath =
+            std::filesystem::temp_directory_path() / "normalized_rect_roundtrip.kicad_pcb";
+
+    KI_TEST::DumpBoardToFile( board, savePath.string() );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
+    BOOST_REQUIRE( reloaded );
+
+    PCB_SHAPE* loaded = nullptr;
+
+    for( BOARD_ITEM* item : reloaded->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T )
+        {
+            loaded = static_cast<PCB_SHAPE*>( item );
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( loaded );
+
+    const BOX2I onDisk = loaded->GetBoundingBox();
+
+    BOOST_CHECK_MESSAGE( onDisk == onBoard, "saved at ( " << onDisk.GetOrigin().x << ", " << onDisk.GetOrigin().y
+                                                          << " ) " << onDisk.GetWidth() << " x " << onDisk.GetHeight()
+                                                          << ", expected ( " << onBoard.GetOrigin().x << ", "
+                                                          << onBoard.GetOrigin().y << " ) " << onBoard.GetWidth()
+                                                          << " x " << onBoard.GetHeight() );
+}
+
+
 BOOST_FIXTURE_TEST_CASE( NativeEllipseFlipSurvivesNonUniformScale, BOARD_FIXTURE )
 {
     KI_TEST::LoadBoard( m_settingsManager, "issue18", m_board );
