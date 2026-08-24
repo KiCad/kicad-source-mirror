@@ -937,7 +937,8 @@ protected:
     /**
      * Gets the current value of the field from the live item, e.g. from the symbol on the schematic.
      *
-     * @return True if the field is present in the data store, false if it is not present (and aValue will be empty).
+     * @return True if the field is present in the live item, false if it is not present (and
+     *         aValue will be empty).
      */
     virtual bool getLiveFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName, wxString& aValue ) = 0;
 
@@ -1012,12 +1013,12 @@ protected:
      */
     bool fieldIsModified( const ITEM_TYPE& aItem, const wxString& aFieldName )
     {
-        wxString originalValue;
-        wxString currentValue;
-        bool     originallyPresent = getLiveFieldValue( aItem, aFieldName, originalValue );
-        bool     currentlyPresent = getStoredFieldValue( aItem, aFieldName, currentValue );
+        wxString liveValue;
+        wxString storedValue;
+        bool     liveFieldPresent = getLiveFieldValue( aItem, aFieldName, liveValue );
+        bool     storedFieldPresent = getStoredFieldValue( aItem, aFieldName, storedValue );
 
-        return originallyPresent != currentlyPresent || originalValue != currentValue;
+        return liveFieldPresent != storedFieldPresent || liveValue != storedValue;
     }
 
 

@@ -210,21 +210,21 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
 
     for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
     {
-        wxString originalValue;
-        wxString currentValue;
-        bool     originallyEmpty = !getLiveFieldValue( symbol, fieldName, originalValue );
-        bool     currentlyEmpty = !getStoredFieldValue( symbol, fieldName, currentValue );
-        bool     modified = originallyEmpty != currentlyEmpty || originalValue != currentValue;
+        wxString liveValue;
+        wxString storedValue;
+        bool     liveFieldPresent = getLiveFieldValue( symbol, fieldName, liveValue );
+        bool     storedFieldPresent = getStoredFieldValue( symbol, fieldName, storedValue );
+        bool     modified = liveFieldPresent != storedFieldPresent || liveValue != storedValue;
 
         if( modified )
             cellModified = true;
 
-        bool elementEmpty = currentlyEmpty || ( originallyEmpty && !modified );
+        bool elementEmpty = !storedFieldPresent || ( !liveFieldPresent && !modified );
 
         if( !elementEmpty )
             cellEmpty = false;
 
-        if( currentValue.IsEmpty() && modified )
+        if( storedValue.IsEmpty() && modified )
             blankModified = true;
 
         if( !rowModified )
@@ -249,21 +249,21 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
 
         for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
         {
-            wxString originalValue;
-            wxString currentValue;
-            bool     originallyEmpty = !getLiveFieldValue( symbol, fieldName, originalValue );
-            bool     currentlyEmpty = !getStoredFieldValue( symbol, fieldName, currentValue );
-            bool     modified = originallyEmpty != currentlyEmpty || originalValue != currentValue;
+            wxString liveValue;
+            wxString storedValue;
+            bool     liveFieldPresent = getLiveFieldValue( symbol, fieldName, liveValue );
+            bool     storedFieldPresent = getStoredFieldValue( symbol, fieldName, storedValue );
+            bool     modified = liveFieldPresent != storedFieldPresent || liveValue != storedValue;
 
             if( modified )
             {
-                if( currentlyEmpty )
+                if( !storedFieldPresent )
                 {
-                    if( originallyEmpty )
+                    if( !liveFieldPresent )
                     {
                         attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
                     }
-                    else if( originalValue.empty() )
+                    else if( liveValue.empty() )
                     {
                         attr->SetBackgroundColour( wxColour( 180, 220, 180 ) );
                     }
@@ -272,7 +272,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
                         attr->SetBackgroundColour( wxColour( 220, 180, 180 ) );
                     }
                 }
-                else if( currentValue.IsEmpty() )
+                else if( storedValue.IsEmpty() )
                 {
                     attr->SetBackgroundColour( wxColour( 180, 200, 180 ) );
                 }
