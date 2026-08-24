@@ -42,6 +42,7 @@ DRC_RE_CUSTOM_RULE_PANEL::DRC_RE_CUSTOM_RULE_PANEL(
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
     m_textCtrl = new wxStyledTextCtrl( this, wxID_ANY );
+    m_textCtrl->SetToolTip( _( "Complete rule text in the DRC rule language" ) );
     sizer->Add( m_textCtrl, 1, wxEXPAND | wxALL, 5 );
 
     m_checkSyntaxBtn = new wxButton( this, wxID_ANY, _( "Check Syntax" ) );

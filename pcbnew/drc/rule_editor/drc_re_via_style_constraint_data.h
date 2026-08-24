@@ -66,11 +66,16 @@ public:
         // Positions measured from constraint_via_style.png bitmap
         // Format: { xStart, xEnd, yCenter }
         return {
-            { 155, 210, 22, wxS( "mm" ), LABEL_POSITION::RIGHT },                // [0] min_via_diameter
-            { 265, 320, 22, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "–  " ) },  // [1] max_via_diameter
-            { 195, 250, 202, wxS( "mm" ), LABEL_POSITION::RIGHT },               // [2] min_via_hole
-            { 305, 360, 202, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "–  " ) }, // [3] max_via_hole
-            { 420, 525, 122, _( "Via type:" ), LABEL_POSITION::LEFT },           // [4] via_type dropdown
+            { 155, 210, 22, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Smallest allowed via diameter" ) }, // [0] min_via_diameter
+            { 265, 320, 22, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Largest allowed via diameter" ),
+              wxS( "–  " ) }, // [1] max_via_diameter
+            { 195, 250, 202, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Smallest allowed via hole diameter" ) }, // [2] min_via_hole
+            { 305, 360, 202, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Largest allowed via hole diameter" ),
+              wxS( "–  " ) }, // [3] max_via_hole
+            { 420, 525, 122, _( "Via type:" ), LABEL_POSITION::LEFT,
+              _( "Restrict this rule to a single via type" ) }, // [4] via_type dropdown
         };
     }
 

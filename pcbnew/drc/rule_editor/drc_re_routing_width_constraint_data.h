@@ -51,8 +51,9 @@ public:
         // Positions measured from constraint_routing_width.png bitmap
         // Format: { xStart, xEnd, yCenter }
         return {
-            { 30, 85, 27, wxS( "mm" ), LABEL_POSITION::RIGHT },                    // opt_width
-            { 135, 190, 27, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
+            { 30, 85, 27, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Optimum track width" ) }, // opt_width
+            { 135, 190, 27, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Allowed deviation above or below the optimum width" ), wxS( "\u00B1" ) }, // width_tolerance (±)
         };
     }
 

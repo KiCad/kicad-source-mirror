@@ -116,7 +116,11 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
     m_layerList = m_board->GetEnabledLayers().UIOrder();
     m_constraintHeaderTitle->SetLabelText( *aConstraintTitle + " Constraint" );
 
+    m_nameCtrl->SetToolTip( _( "Name of this rule, must be unique" ) );
+    m_commentCtrl->SetToolTip( _( "Optional comment stored with the rule" ) );
+
     m_layerListChoiceCtrl = new wxChoice( this, wxID_ANY );
+    m_layerListChoiceCtrl->SetToolTip( _( "Layers this rule applies to" ) );
     m_layerCategory = DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint( aConstraintType );
     populateLayerSelector( m_layerCategory );
     m_LayersComboBoxSizer->Add( m_layerListChoiceCtrl, 0, wxALL | wxEXPAND, 5 );

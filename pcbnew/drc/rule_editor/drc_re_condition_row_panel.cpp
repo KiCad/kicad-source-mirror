@@ -57,6 +57,7 @@ DRC_RE_CONDITION_ROW_PANEL::DRC_RE_CONDITION_ROW_PANEL( wxWindow* aParent, BOARD
 
     m_objectChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, objectChoices );
     m_objectChoice->SetSelection( 0 );
+    m_objectChoice->SetToolTip( _( "Which of the two compared objects this condition applies to" ) );
     m_rowSizer->Add( m_objectChoice, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2 );
 
     if( !aShowObjectSelector )
@@ -72,23 +73,27 @@ DRC_RE_CONDITION_ROW_PANEL::DRC_RE_CONDITION_ROW_PANEL( wxWindow* aParent, BOARD
 
     m_conditionChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, conditionChoices );
     m_conditionChoice->SetSelection( 0 );
+    m_conditionChoice->SetToolTip( _( "How items are matched by this condition" ) );
     m_rowSizer->Add( m_conditionChoice, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2 );
 
     // Net selector
     m_netSelector = new NET_SELECTOR( this, wxID_ANY );
     m_netSelector->SetNetInfo( &aBoard->GetNetInfo() );
+    m_netSelector->SetToolTip( _( "Net an item must belong to" ) );
     m_rowSizer->Add( m_netSelector, 1, wxALL | wxEXPAND, 2 );
     m_netSelector->Hide();
 
     // Netclass selector
     m_netclassSelector = new NETCLASS_SELECTOR( this, wxID_ANY );
     m_netclassSelector->SetBoard( aBoard );
+    m_netclassSelector->SetToolTip( _( "Net class an item must belong to" ) );
     m_rowSizer->Add( m_netclassSelector, 1, wxALL | wxEXPAND, 2 );
     m_netclassSelector->Hide();
 
     // Area selector
     m_areaSelector = new AREA_SELECTOR( this, wxID_ANY );
     m_areaSelector->SetBoard( aBoard );
+    m_areaSelector->SetToolTip( _( "Rule area an item must be inside" ) );
     m_rowSizer->Add( m_areaSelector, 1, wxALL | wxEXPAND, 2 );
     m_areaSelector->Hide();
 
@@ -96,6 +101,7 @@ DRC_RE_CONDITION_ROW_PANEL::DRC_RE_CONDITION_ROW_PANEL( wxWindow* aParent, BOARD
 
     // Custom query text control - shown only when Custom Query is selected
     m_customQueryCtrl = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1, 60 ) );
+    m_customQueryCtrl->SetToolTip( _( "Custom match expression in the DRC rule language" ) );
     m_customQueryCtrl->SetUseTabs( true );
     m_customQueryCtrl->SetTabWidth( 4 );
     m_customQueryCtrl->SetIndent( 4 );

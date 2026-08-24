@@ -56,11 +56,16 @@ public:
         // Format: { xStart, xEnd, yCenter }
         // TODO: measure actual positions from PNG
         return {
-            { 0, 55, 147, wxS( "mm" ), LABEL_POSITION::RIGHT },                     // opt_width
-            { 105, 160, 147, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
-            { 185, 240, 123, wxS( "mm" ), LABEL_POSITION::RIGHT },                  // opt_gap
-            { 290, 345, 123, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
-            { 85, 140, 20, wxS( "mm" ), LABEL_POSITION::RIGHT },                    // max_uncoupled
+            { 0, 55, 147, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Optimum width of each track in the pair" ) }, // opt_width
+            { 105, 160, 147, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Allowed deviation above or below the optimum width" ), wxS( "\u00B1" ) }, // width_tolerance (±)
+            { 185, 240, 123, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Optimum gap between the two tracks of the pair" ) }, // opt_gap
+            { 290, 345, 123, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Allowed deviation above or below the optimum gap" ), wxS( "\u00B1" ) }, // gap_tolerance (±)
+            { 85, 140, 20, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Maximum length over which the pair may run uncoupled" ) }, // max_uncoupled
         };
     }
 

@@ -192,6 +192,9 @@ DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddControl( const wxString&  
     // Set up styling
     SetupFieldStyling( aControl );
 
+    if( !aPosition.tooltipText.IsEmpty() )
+        aControl->SetToolTip( aPosition.tooltipText );
+
     // Position the field (yCenter is vertical mid-point of the control)
     int     height = aControl->GetBestSize().GetHeight();
     int     width = aPosition.xEnd - aPosition.xStart;

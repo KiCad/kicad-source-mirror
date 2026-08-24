@@ -51,8 +51,9 @@ public:
         // Format: { xStart, xEnd, yCenter }
         // Two fields side-by-side, opt_length and tolerance
         return {
-            { 80, 135, 127, wxS( "mm" ), LABEL_POSITION::RIGHT },                   // opt_length
-            { 185, 240, 127, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
+            { 80, 135, 127, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Optimum routed length" ) }, // opt_length
+            { 185, 240, 127, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Allowed deviation above or below the optimum length" ), wxS( "\u00B1" ) }, // tolerance (±)
         };
     }
 
@@ -138,10 +139,13 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 80, 135, 142, wxS( "mm" ), LABEL_POSITION::RIGHT },                   // opt_length
-            { 185, 240, 142, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
-            { 17, 72, 15, wxS( "mm" ), LABEL_POSITION::RIGHT },                     // max_skew
-            { 113, 313, 15, _( "Within diff pairs" ), LABEL_POSITION::RIGHT },      // checkbox (within_diff_pairs)
+            { 80, 135, 142, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Optimum routed length" ) }, // opt_length
+            { 185, 240, 142, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Allowed deviation above or below the optimum length" ), wxS( "\u00B1" ) }, // tolerance (±)
+            { 17, 72, 15, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Maximum length difference between matched tracks" ) }, // max_skew
+            { 113, 313, 15, _( "Within diff pairs" ), LABEL_POSITION::RIGHT,
+              _( "Limit skew between the two tracks of each differential pair" ) }, // checkbox (within_diff_pairs)
         };
     }
 

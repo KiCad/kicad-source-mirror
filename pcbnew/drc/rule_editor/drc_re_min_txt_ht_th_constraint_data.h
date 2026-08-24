@@ -53,8 +53,9 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 208, 263, 94, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_height
-            { 109, 164, 209, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_thickness
+            { 208, 263, 94, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Minimum text height" ) }, // min_text_height
+            { 109, 164, 209, wxS( "mm" ), LABEL_POSITION::RIGHT,
+              _( "Minimum text stroke thickness" ) }, // min_text_thickness
         };
     }
 

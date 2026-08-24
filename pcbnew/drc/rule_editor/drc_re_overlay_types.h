@@ -52,6 +52,7 @@ struct DRC_RE_FIELD_POSITION
 
     wxString       labelText;      ///< Optional label text (empty for no label)
     LABEL_POSITION labelPosition;  ///< Position of label relative to field
+    wxString       tooltipText;    ///< Optional tooltip shown on the control
     wxString       prefixText;     ///< Optional text placed on the left
 
     DRC_RE_FIELD_POSITION() :
@@ -60,19 +61,20 @@ struct DRC_RE_FIELD_POSITION
             yCenter( 0 ),
             labelText(),
             labelPosition( LABEL_POSITION::NONE ),
+            tooltipText(),
             prefixText()
     {
     }
 
-    DRC_RE_FIELD_POSITION( int aXStart, int aXEnd, int aYCenter,
-                           const wxString& aLabelText = wxEmptyString,
+    DRC_RE_FIELD_POSITION( int aXStart, int aXEnd, int aYCenter, const wxString& aLabelText = wxEmptyString,
                            LABEL_POSITION  aLabelPos = LABEL_POSITION::NONE,
-                           const wxString& aPrefixText = wxEmptyString ) :
+                           const wxString& aTooltipText = wxEmptyString, const wxString& aPrefixText = wxEmptyString ) :
             xStart( aXStart ),
             xEnd( aXEnd ),
             yCenter( aYCenter ),
             labelText( aLabelText ),
             labelPosition( aLabelPos ),
+            tooltipText( aTooltipText ),
             prefixText( aPrefixText )
     {
     }

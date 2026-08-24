@@ -53,10 +53,14 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 400, 615, 52, wxS( "Disallow Through Via" ), LABEL_POSITION::RIGHT },
-            { 400, 615, 92, wxS( "Disallow Micro Via" ), LABEL_POSITION::RIGHT },
-            { 400, 615, 132, wxS( "Disallow Blind Via" ), LABEL_POSITION::RIGHT },
-            { 400, 615, 172, wxS( "Disallow Buried Via" ), LABEL_POSITION::RIGHT },
+            { 400, 615, 52, wxS( "Disallow Through Via" ), LABEL_POSITION::RIGHT,
+              _( "Forbid through vias under surface mount pads" ) },
+            { 400, 615, 92, wxS( "Disallow Micro Via" ), LABEL_POSITION::RIGHT,
+              _( "Forbid micro vias under surface mount pads" ) },
+            { 400, 615, 132, wxS( "Disallow Blind Via" ), LABEL_POSITION::RIGHT,
+              _( "Forbid blind vias under surface mount pads" ) },
+            { 400, 615, 172, wxS( "Disallow Buried Via" ), LABEL_POSITION::RIGHT,
+              _( "Forbid buried vias under surface mount pads" ) },
         };
     }
 
