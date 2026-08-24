@@ -293,9 +293,6 @@ void DIALOG_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxString& 
 
     getDataModel()->AddColumn( aFieldName, aLabelValue, aAddedByUser );
 
-    wxGridTableMessage msg( getDataModel(), wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
-    m_grid->ProcessTableMessage( msg );
-
     m_viewControlsGrid->OnAddRow(
             [&]() -> std::pair<int, int>
             {

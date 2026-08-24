@@ -352,6 +352,12 @@ public:
 
         if( aAddedByUser )
             m_edited = true;
+
+        if( wxGrid* grid = GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
+            grid->ProcessTableMessage( msg );
+        }
     }
 
 
@@ -508,7 +514,7 @@ public:
         m_rows[aRow].m_state = ROW_STATE::EXPANDED_PARENT;
         m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
 
-        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, children.size() );
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow + 1, children.size() );
         GetView()->ProcessTableMessage( msg );
     }
 
