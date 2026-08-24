@@ -78,6 +78,7 @@ const wxString FIELDS_TABLE_DATA_MODEL_BASE::ITEM_NUMBER_VARIABLE = wxS( "${ITEM
 
 FIELDS_TABLE_DATA_MODEL_BASE::FIELDS_TABLE_DATA_MODEL_BASE() :
         m_stripedRenderer( nullptr ),
+        m_resolvedTextRenderer( nullptr ),
         m_edited( false ),
         m_sortColumn( 0 ),
         m_sortAscending( false ),
@@ -93,6 +94,38 @@ FIELDS_TABLE_DATA_MODEL_BASE::FIELDS_TABLE_DATA_MODEL_BASE() :
 FIELDS_TABLE_DATA_MODEL_BASE::~FIELDS_TABLE_DATA_MODEL_BASE()
 {
     wxSafeDecRef( m_stripedRenderer );
+    wxSafeDecRef( m_resolvedTextRenderer );
+}
+
+
+bool FIELDS_TABLE_DATA_MODEL_BASE::cellUsesResolvedTextRenderer( int aRow, int aCol )
+{
+    wxCHECK( aRow >= 0 && aRow < GetNumberRows(), false );
+    wxCHECK( aCol >= 0 && aCol < GetNumberCols(), false );
+
+    return !ColIsItemIdentifier( aCol ) && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol )
+           && IsGeneratedValue( GetValue( aRow, aCol ) );
+}
+
+
+void FIELDS_TABLE_DATA_MODEL_BASE::applyResolvedTextRenderer( wxGridCellAttr* aAttr, bool aApplyTint )
+{
+    wxCHECK_RET( aAttr, wxS( "Cannot apply a renderer to a null cell attribute" ) );
+
+    if( !m_resolvedTextRenderer )
+        m_resolvedTextRenderer = new GRID_CELL_RESOLVED_TEXT_RENDERER();
+
+    m_resolvedTextRenderer->IncRef();
+    aAttr->SetRenderer( m_resolvedTextRenderer );
+
+    if( aApplyTint )
+    {
+        wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+        bool     isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
+
+        aAttr->SetBackgroundColour( isDark ? FIELDS_TABLE_COLOR::TEXT_VARIABLE_DARK_AMBER
+                                           : FIELDS_TABLE_COLOR::TEXT_VARIABLE_LIGHT_YELLOW );
+    }
 }
 
 

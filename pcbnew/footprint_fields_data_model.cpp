@@ -64,7 +64,7 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
     bool            needsReadOnly = IsCellReadOnly( aRow, aCol );
     bool            needsUrlEditor = false;
     bool            needsVariantHighlight = false;
-    bool            needsTextVarRenderer = false;
+    bool            needsResolvedTextRenderer = cellUsesResolvedTextRenderer( aRow, aCol );
     wxColour        highlightColor;
 
     // Check if we need URL editor
@@ -73,14 +73,6 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
     {
         if( m_urlEditor )
             needsUrlEditor = true;
-    }
-
-    // Check if the raw value contains a text variable that should be resolved for display
-    if( aRow >= 0 && aRow < (int) m_rows.size() && aCol >= 0 && aCol < (int) m_cols.size() && !ColIsReference( aCol )
-        && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol ) )
-    {
-        if( IsGeneratedValue( rawValue ) )
-            needsTextVarRenderer = true;
     }
 
     // Check if we need variant highlighting
@@ -121,7 +113,7 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
     }
 
     // If we don't need any custom attributes, use the base class behavior
-    if( !needsReadOnly && !needsUrlEditor && !needsVariantHighlight && !needsTextVarRenderer )
+    if( !needsReadOnly && !needsUrlEditor && !needsVariantHighlight && !needsResolvedTextRenderer )
         return applyFieldPresenceRenderer( WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind ), aRow, aCol );
 
     // URL cells: use m_urlEditor as base, potentially with read-only or variant overlays
@@ -164,24 +156,8 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
     if( needsVariantHighlight )
         attr->SetBackgroundColour( highlightColor );
 
-    if( needsTextVarRenderer )
-    {
-        if( !m_textVarRenderer )
-            m_textVarRenderer = new GRID_CELL_RESOLVED_TEXT_RENDERER();
-
-        m_textVarRenderer->IncRef();
-        attr->SetRenderer( m_textVarRenderer );
-
-        // Tint text-var cells if not already highlighted by variant
-        if( !needsVariantHighlight )
-        {
-            wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-            bool     isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
-
-            attr->SetBackgroundColour( isDark ? FIELDS_TABLE_COLOR::TEXT_VARIABLE_DARK_AMBER
-                                              : FIELDS_TABLE_COLOR::TEXT_VARIABLE_LIGHT_YELLOW );
-        }
-    }
+    if( needsResolvedTextRenderer )
+        applyResolvedTextRenderer( attr, !needsVariantHighlight );
 
     return applyFieldPresenceRenderer( enhanceAttr( attr, aRow, aCol, aKind ), aRow, aCol );
 }

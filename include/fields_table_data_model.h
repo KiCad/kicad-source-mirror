@@ -253,10 +253,14 @@ protected:
     // Helper function to translate named attribute values like ${DNP}.
     virtual wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
 
+    bool cellUsesResolvedTextRenderer( int aRow, int aCol );
+    void applyResolvedTextRenderer( wxGridCellAttr* aAttr, bool aApplyTint );
+
     wxGridCellAttr* applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol );
 
 protected:
     wxGridCellRenderer* m_stripedRenderer;
+    wxGridCellRenderer* m_resolvedTextRenderer;
 
     bool             m_edited;
     int              m_sortColumn;

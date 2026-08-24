@@ -168,6 +168,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::IsCellReadOnly( int aRow, int aCol )
 wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     wxGridCellAttr* attr = wxGridTableBase::GetAttr( aRow, aCol, aKind );
+    bool            needsResolvedTextRenderer = cellUsesResolvedTextRenderer( aRow, aCol );
 
     // Check for column-specific attributes first
     if( m_colAttrs.find( aCol ) != m_colAttrs.end() && m_colAttrs[aCol] )
@@ -291,6 +292,9 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
         if( blankModified )
             attr->SetBackgroundColour( FIELDS_TABLE_COLOR::EDITED_EMPTY_FIELD_BRIGHT_GREEN );
     }
+
+    if( needsResolvedTextRenderer )
+        applyResolvedTextRenderer( attr, !rowModified );
 
     if( cellModified )
     {

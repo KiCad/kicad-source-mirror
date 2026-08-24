@@ -68,16 +68,11 @@ public:
                                              wxGridCellAttr*                 aURLEditor ) :
             m_footprintsList( aFootprintReferenceList ),
             m_scope( SCOPE_ALL ),
-            m_urlEditor( aURLEditor ),
-            m_textVarRenderer( nullptr )
+            m_urlEditor( aURLEditor )
     {
     }
 
-    ~FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL() override
-    {
-        wxSafeDecRef( m_urlEditor );
-        wxSafeDecRef( m_textVarRenderer );
-    }
+    ~FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL() override { wxSafeDecRef( m_urlEditor ); }
 
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
@@ -157,5 +152,4 @@ protected:
     SCOPE                    m_scope;
     KIID_PATH                m_path;
     wxGridCellAttr*          m_urlEditor;
-    wxGridCellRenderer*      m_textVarRenderer; ///< Renderer for cells with text variable references
 };

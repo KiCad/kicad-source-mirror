@@ -54,17 +54,12 @@ public:
     SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( const SCH_REFERENCE_LIST& aSymbolsList, wxGridCellAttr* aURLEditor ) :
             m_symbolsList( aSymbolsList ),
             m_scope( SCOPE_ALL ),
-            m_urlEditor( aURLEditor ),
-            m_textVarRenderer( nullptr )
+            m_urlEditor( aURLEditor )
     {
         m_symbolsList.SplitReferences();
     }
 
-    ~SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL() override
-    {
-        wxSafeDecRef( m_urlEditor );
-        wxSafeDecRef( m_textVarRenderer );
-    }
+    ~SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL() override { wxSafeDecRef( m_urlEditor ); }
 
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
@@ -160,5 +155,4 @@ protected:
     SCOPE                 m_scope;
     SCH_SHEET_PATH        m_path;
     wxGridCellAttr*       m_urlEditor;
-    wxGridCellRenderer*   m_textVarRenderer; ///< Renderer for cells with text variable references
 };
