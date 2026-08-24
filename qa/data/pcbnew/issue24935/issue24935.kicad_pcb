@@ -640,7 +640,7 @@
 		(hatch edge 0.5)
 		(priority 1)
 		(connect_pads
-			(clearance 0.5)
+			(clearance 1)
 		)
 		(min_thickness 0.25)
 		(fill yes
@@ -763,6 +763,14 @@
 				(xy 151.704 82.734) (xy 151.704 83.626) (xy 151.33 83.626) (xy 151.33 82.36) (xy 163.8 82.36)
 			)
 		)
+	)
+	(segment
+		(start 157.5 85)
+		(end 157.5 95)
+		(width 0.3)
+		(layer "F.Cu")
+		(net "A")
+		(uuid "5d1c7a4e-0b93-4a6a-9f2e-3c8e24935001")
 	)
 	(embedded_fonts no)
 )

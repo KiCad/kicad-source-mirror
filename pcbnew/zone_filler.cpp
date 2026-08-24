@@ -4185,29 +4185,15 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
 
                 if( otherZone->SameNet( aZone ) )
                 {
-                    if( otherZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
-                    {
-                        // A hatched fill leaves intentional windows, knock out the pre-hatch
-                        // solid extent so the lower zone cannot pour through them (issue 24935).
-                        SHAPE_POLY_SET solidExtent;
+                    // Equal priorities tie-break on UUID in HigherPriority(). The initial fill
+                    // only gives strictly-higher zones their outline.
+                    bool ownsOutline = otherZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN
+                                       && otherZone->GetAssignedPriority() > aZone->GetAssignedPriority();
 
-                        {
-                            std::lock_guard<std::mutex> lock( m_cacheMutex );
-                            auto                        sit = m_preHatchSolidFillCache.find( { otherZone, aLayer } );
-
-                            if( sit != m_preHatchSolidFillCache.end() )
-                                solidExtent = sit->second;
-                        }
-
-                        if( solidExtent.OutlineCount() > 0 )
-                            sameNetKnockouts.Append( solidExtent );
-                        else
-                            appendZoneOutlineWithoutArcs( otherZone, sameNetKnockouts );
-                    }
+                    if( ownsOutline )
+                        appendZoneOutlineWithoutArcs( otherZone, sameNetKnockouts );
                     else
-                    {
                         sameNetKnockouts.Append( *fillPtr );
-                    }
                 }
                 else
                 {
