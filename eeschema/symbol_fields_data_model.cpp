@@ -36,23 +36,6 @@
 #include <symbol_fields_data_model.h>
 
 
-void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
-                                                      bool aAddedByUser )
-{
-    // Don't add a field twice
-    if( GetFieldNameCol( aFieldName ) != -1 )
-        return;
-
-    m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
-
-    for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
-    {
-        if( m_symbolsList[i].GetSymbol() )
-            updateDataStoreItemFieldFromLive( m_symbolsList[i], aFieldName );
-    }
-}
-
-
 /**
  * Create a unique key for the data store by combining the #KIID_PATH from the
  * #SCH_SHEET_PATH with the symbol's UUID.

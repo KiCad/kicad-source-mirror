@@ -57,8 +57,6 @@ public:
 
     void CreateDerivedSymbolImmediate( int aRow, int aCol, wxString& aNewSymbolName );
 
-    void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser ) override;
-
     wxString GetTypeName( int row, int col ) override;
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;
 

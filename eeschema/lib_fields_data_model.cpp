@@ -38,20 +38,6 @@ const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_POWER = wxS( "${SYMB
 const wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_IS_LOCAL_POWER = wxS( "${SYMBOL_IS_LOCAL_POWER}" );
 
 
-void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
-                                                   bool aAddedByUser )
-{
-    // Don't add a field twice
-    if( GetFieldNameCol( aFieldName ) != -1 )
-        return;
-
-    m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
-
-    for( LIB_SYMBOL* symbol : m_symbolsList )
-        updateDataStoreItemFieldFromLive( symbol, aFieldName );
-}
-
-
 bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( LIB_SYMBOL* const& aSymbol,
                                                            const wxString& aFieldName,
                                                            wxString& aValue )

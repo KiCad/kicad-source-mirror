@@ -40,20 +40,6 @@
 #include <footprint_fields_data_model.h>
 
 
-void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
-                                                         bool aAddedByUser )
-{
-    // Don't add a field twice
-    if( GetFieldNameCol( aFieldName ) != -1 )
-        return;
-
-    m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
-
-    for( unsigned i = 0; i < m_footprintsList.size(); ++i )
-        updateDataStoreItemFieldFromLive( m_footprintsList[i], aFieldName );
-}
-
-
 /**
  * Data store UUID for a footprint is just the footprint's UUID, since footprints are unique across the board.
  */

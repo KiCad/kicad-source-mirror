@@ -79,8 +79,6 @@ public:
         wxSafeDecRef( m_textVarRenderer );
     }
 
-    void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser ) override;
-
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;

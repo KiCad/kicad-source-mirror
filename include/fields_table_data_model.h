@@ -313,6 +313,23 @@ template <typename ITEM_TYPE>
 class FIELDS_TABLE_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL_BASE
 {
 public:
+    void AddColumn( const wxString& aFieldName, const wxString& aLabel,
+                    bool aAddedByUser ) override
+    {
+        // Don't add a field twice
+        if( GetFieldNameCol( aFieldName ) != -1 )
+            return;
+
+        m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
+
+        for( const ITEM_TYPE& item : getAllItems() )
+            initializeDataStoreItemField( item, m_cols.back() );
+
+        if( aAddedByUser )
+            m_edited = true;
+    }
+
+
     /**
      * Clears the field from the data store, rather than setting its value to an empty string.
      */
