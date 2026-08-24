@@ -235,16 +235,7 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( const FOOTPRINT
                                                                  const wxString& aFieldName,
                                                                  wxString& aValue )
 {
-    aValue = getFieldValueForVariant( aRef, aFieldName, m_currentVariant );
-
-    if( fieldIsAttribute( aFieldName ) || aFieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT )
-        || IsGeneratedField( aFieldName ) )
-    {
-        return true;
-    }
-
-    const PCB_FIELD* field = aRef.GetFootprint().GetField( aFieldName );
-    return field && !field->IsPrivate();
+    return getLiveFieldValueForVariant( aRef, aFieldName, m_currentVariant, aValue );
 }
 
 
@@ -344,46 +335,60 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::attributeForcedOnBySheet( const FO
 }
 
 
-wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldValueForVariant( const FOOTPRINT_REF& aRef,
+bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValueForVariant( const FOOTPRINT_REF& aRef,
                                                                            const wxString&      aFieldName,
-                                                                           const wxString&      aVariantName )
+                                                                           const wxString&      aVariantName,
+                                                                           wxString&            aValue )
 {
+    aValue.clear();
+
     const FOOTPRINT& footprint = aRef.GetFootprint();
 
     if( fieldIsAttribute( aFieldName ) )
-        return getAttributeValue( aRef, aFieldName, aVariantName );
+    {
+        aValue = getAttributeValue( aRef, aFieldName, aVariantName );
+        return true;
+    }
 
     if( aFieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
-        return footprint.GetFPIDAsString();
+    {
+        aValue = footprint.GetFPIDAsString();
+        return true;
+    }
 
     if( const PCB_FIELD* field = footprint.GetField( aFieldName ) )
     {
         if( field->IsPrivate() )
-            return wxEmptyString;
+            return false;
 
-        wxString value = footprint.GetFieldValueForVariant( aVariantName, aFieldName );
+        aValue = footprint.GetFieldValueForVariant( aVariantName, aFieldName );
 
         if( footprint.GetBoard() )
             // Cross part references e.g. ${U2:MyField} stored in U1 are converted
             // to KIIDs transparently e.g. ${KIID:MyField} so reannotating U2->U3 doesn't
             // break the the variable resolution
-            value = footprint.GetBoard()->ConvertKIIDsToCrossReferences( value );
+            aValue = footprint.GetBoard()->ConvertKIIDsToCrossReferences( aValue );
 
-        return value;
+        return true;
     }
 
     // For generated fields, return the field name itself
     if( IsGeneratedField( aFieldName ) )
-        return aFieldName;
+    {
+        aValue = aFieldName;
+        return true;
+    }
 
-    return wxEmptyString;
+    return false;
 }
 
 
 wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const FOOTPRINT_REF& aRef,
                                                                         const wxString& aFieldName )
 {
-    return getFieldValueForVariant( aRef, aFieldName, wxEmptyString );
+    wxString value;
+    getLiveFieldValueForVariant( aRef, aFieldName, wxEmptyString, value );
+    return value;
 }
 
 

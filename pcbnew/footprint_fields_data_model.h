@@ -115,8 +115,8 @@ private:
 
     wxString getAttributeValue( const FOOTPRINT_REF& aRef, const wxString& aAttributeName,
                                 const wxString& aVariantNames );
-    wxString getFieldValueForVariant( const FOOTPRINT_REF& aRef, const wxString& aFieldName,
-                                      const wxString& aVariantName );
+    bool     getLiveFieldValueForVariant( const FOOTPRINT_REF& aRef, const wxString& aFieldName,
+                                          const wxString& aVariantName, wxString& aValue );
 
     /**
      * Get the default (non-variant) value for a field.

@@ -345,13 +345,7 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( const SCH_REFERENC
                                                               const wxString& aFieldName,
                                                               wxString& aValue )
 {
-    aValue.clear();
-
-    if( !aRef.GetSymbol() )
-        return false;
-
-    aValue = getFieldValueForVariant( aRef, aFieldName, m_currentVariant );
-    return true;
+    return getLiveFieldValueForVariant( aRef, aFieldName, m_currentVariant, aValue );
 }
 
 
@@ -471,38 +465,49 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::attributeForcedOnBySheet( const SCH_R
 }
 
 
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldValueForVariant( const SCH_REFERENCE& aRef,
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValueForVariant( const SCH_REFERENCE& aRef,
                                                                         const wxString&      aFieldName,
-                                                                        const wxString&      aVariantName )
+                                                                        const wxString& aVariantName, wxString& aValue )
 {
+    aValue.clear();
+
     const SCH_SYMBOL* symbol = aRef.GetSymbol();
 
     if( !symbol )
-        return wxEmptyString;
+        return false;
 
     if( fieldIsAttribute( aFieldName ) )
-        return getAttributeValue( aRef, aFieldName, aVariantName );
+    {
+        aValue = getAttributeValue( aRef, aFieldName, aVariantName );
+        return true;
+    }
 
     if( const SCH_FIELD* field = symbol->GetField( aFieldName ) )
     {
         if( field->IsPrivate() )
-            return wxEmptyString;
+            return false;
 
-        return symbol->Schematic()->ConvertKIIDsToRefs( field->GetText( &aRef.GetSheetPath(), aVariantName ) );
+        aValue = symbol->Schematic()->ConvertKIIDsToRefs( field->GetText( &aRef.GetSheetPath(), aVariantName ) );
+        return true;
     }
 
     // For generated fields, return the field name itself
     if( IsGeneratedField( aFieldName ) )
-        return aFieldName;
+    {
+        aValue = aFieldName;
+        return true;
+    }
 
-    return wxEmptyString;
+    return false;
 }
 
 
 wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_REFERENCE& aRef,
                                                                      const wxString&      aFieldName )
 {
-    return getFieldValueForVariant( aRef, aFieldName, wxEmptyString );
+    wxString value;
+    getLiveFieldValueForVariant( aRef, aFieldName, wxEmptyString, value );
+    return value;
 }
 
 

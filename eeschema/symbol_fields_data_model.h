@@ -112,8 +112,8 @@ private:
 
     wxString getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
                                 const wxString& aVariantNames );
-    wxString getFieldValueForVariant( const SCH_REFERENCE& aRef, const wxString& aFieldName,
-                                      const wxString& aVariantName );
+    bool     getLiveFieldValueForVariant( const SCH_REFERENCE& aRef, const wxString& aFieldName,
+                                          const wxString& aVariantName, wxString& aValue );
 
     /**
      * Get the default (non-variant) value for a field.
