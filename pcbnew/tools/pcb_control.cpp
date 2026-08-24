@@ -1560,7 +1560,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
         if( designBlock->GetBoardFile().IsEmpty() )
         {
-            outErr = _( "design block has no saved PCB layout" );
+            outErr = _( "the design block has no saved board layout" );
             return false;
         }
 
@@ -1591,7 +1591,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         if( !pi || AppendBoard( *pi, designBlock->GetBoardFile(), designBlock.get(), &tempCommit, true ) != 0 )
         {
             clearFlags();
-            outErr = _( "could not load the design block's layout" );
+            outErr = _( "the design block's board file could not be read" );
             return false;
         }
 
@@ -1618,7 +1618,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         {
             tempCommit.Revert();
             clearFlags();
-            outErr = _( "design block contains no items to apply" );
+            outErr = _( "the design block's board layout is empty" );
             return false;
         }
 
@@ -1638,6 +1638,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         }
 
         dbRA.m_zone = new ZONE( brd );
+        dbRA.m_zone->SetZoneName( group->GetDesignBlockLibId().GetUniStringLibId() );
         dbRA.m_zone->SetIsRuleArea( true );
         dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
         dbRA.m_zone->SetPlacementAreaEnabled( true );
@@ -1668,13 +1669,12 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
             tempCommit.Revert();
             clearFlags();
             delete dbRA.m_zone;
-            outErr = _( "group is empty" );
+            outErr = _( "the group has no items" );
             return false;
         }
 
         destRA.m_zone = new ZONE( brd );
-        destRA.m_zone->SetZoneName( wxString::Format( wxT( "design-block-dest-%s" ),
-                                                      group->GetDesignBlockLibId().GetUniStringLibId() ) );
+        destRA.m_zone->SetZoneName( group->GetName().IsEmpty() ? _( "(unnamed group)" ) : group->GetName() );
         destRA.m_zone->SetIsRuleArea( true );
         destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
         destRA.m_zone->SetPlacementAreaEnabled( true );
@@ -1720,7 +1720,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
         if( result != 0 )
         {
-            outErr = repeatErr.IsEmpty() ? _( "layout copy failed" ) : repeatErr;
+            outErr = repeatErr.IsEmpty() ? _( "the layout could not be copied onto the group" ) : repeatErr;
             return false;
         }
 
@@ -1802,7 +1802,10 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
             for( const Failure& f : failures )
             {
                 wxString name = f.group->GetName().IsEmpty() ? _( "(unnamed group)" ) : f.group->GetName();
-                html << wxString::Format( wxT( "<li><b>%s</b>: %s</li>" ), name, f.reason );
+                wxString reason = f.reason;
+
+                reason.Replace( wxT( "\n" ), wxT( "<br>" ) );
+                html << wxString::Format( wxT( "<li><b>%s</b>: %s</li>" ), name, reason );
             }
 
             html << wxT( "</ul>" );

@@ -115,24 +115,30 @@ static wxString FormatComponentList( const std::set<FOOTPRINT*>& aComponents )
 }
 
 
+static wxString JoinMismatchReasons( const std::vector<wxString>& aReasons )
+{
+    wxString text;
+
+    for( const wxString& reason : aReasons )
+    {
+        if( !text.IsEmpty() )
+            text += wxT( "\n" );
+
+        text += reason;
+    }
+
+    return text;
+}
+
+
 static void ShowTopologyMismatchReasons( wxWindow* aParent, const wxString& aSummary,
                                          const std::vector<wxString>& aReasons )
 {
     if( !aParent || aReasons.empty() )
         return;
 
-    wxString reasonText;
-
-    for( size_t idx = 0; idx < aReasons.size(); ++idx )
-    {
-        if( idx > 0 )
-            reasonText += wxT( "\n" );
-
-        reasonText += aReasons[idx];
-    }
-
     wxRichMessageDialog dlg( aParent, aSummary, _( "Topology mismatch" ), wxICON_ERROR | wxOK );
-    dlg.ShowDetailedText( reasonText );
+    dlg.ShowDetailedText( JoinMismatchReasons( aReasons ) );
     dlg.ShowModal();
 }
 
@@ -911,7 +917,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
     {
         if( silent )
         {
-            *aErrorOut = compat.m_errorMsg;
+            *aErrorOut = compat.m_mismatchReasons.empty() ? compat.m_errorMsg
+                                                          : JoinMismatchReasons( compat.m_mismatchReasons );
         }
         else if( Pgm().IsGUI() )
         {
@@ -940,7 +947,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 
     if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, aOptions, compat ) )
     {
-        auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
+        auto errMsg = wxString::Format( _( "Could not copy the layout from '%s' to '%s'." ),
                                         aRefArea.m_zone->GetZoneName(), aTargetArea.m_zone->GetZoneName() );
 
         if( !aExternalCommit )
@@ -1004,9 +1011,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 
         if( !copyRuleAreaContents( m_areas.m_refRA, targetArea, &commit, m_areas.m_options, compatData ) )
         {
-            auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
-                                            m_areas.m_refRA->m_zone->GetZoneName(),
-                                            targetArea->m_zone->GetZoneName() );
+            auto errMsg = wxString::Format( _( "Could not copy the layout from '%s' to '%s'." ),
+                                            m_areas.m_refRA->m_zone->GetZoneName(), targetArea->m_zone->GetZoneName() );
 
             commit.Revert();
 
@@ -2193,12 +2199,7 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
             continue;
 
         if( !reason.m_reference.IsEmpty() && !reason.m_candidate.IsEmpty() )
-        {
-            aMatches.m_mismatchReasons.push_back( wxString::Format( wxT( "%s -> %s: %s" ),
-                                                                    reason.m_reference,
-                                                                    reason.m_candidate,
-                                                                    reason.m_reason ) );
-        }
+            aMatches.m_mismatchReasons.push_back( reason.m_reason );
         else if( !reason.m_reference.IsEmpty() )
         {
             aMatches.m_mismatchReasons.push_back( wxString::Format( wxT( "%s: %s" ),
@@ -2210,17 +2211,15 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
     }
 
     if( aMatches.m_mismatchReasons.empty() )
-        aMatches.m_mismatchReasons.push_back( _( "Topology mismatch" ) );
+        aMatches.m_mismatchReasons.push_back( _( "The components in the two areas could not be paired up." ) );
 
-    // Component count mismatch
-    if( aRefArea->m_components.size() != aTargetArea->m_components.size() )
+    // The reason above already gives both totals. Only the lists add anything, and only when
+    // both sides have parts to compare.
+    if( aRefArea->m_components.size() != aTargetArea->m_components.size() && !aRefArea->m_components.empty()
+        && !aTargetArea->m_components.empty() )
     {
-        aMatches.m_mismatchReasons.push_back(
-                wxString::Format( _( "Reference area total components: %d" ), (int) aRefArea->m_components.size() ) );
         aMatches.m_mismatchReasons.push_back( wxString::Format( _( "Reference area components:\n%s" ),
                                                                 FormatComponentList( aRefArea->m_components ) ) );
-        aMatches.m_mismatchReasons.push_back(
-                wxString::Format( _( "Target area total components: %d" ), (int) aTargetArea->m_components.size() ) );
         aMatches.m_mismatchReasons.push_back( wxString::Format( _( "Target area components:\n%s" ),
                                                                 FormatComponentList( aTargetArea->m_components ) ) );
     }

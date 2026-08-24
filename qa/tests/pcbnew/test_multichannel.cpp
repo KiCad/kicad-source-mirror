@@ -1192,6 +1192,85 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchBoundarySignalNetNotExcluded, MULTICHANNEL_TES
 
 
 /**
+ * A part given a new footprint after its design block was saved still has candidates to pair
+ * with, so only the footprint counts show that no match exists. The search used to hit its
+ * iteration limit and report a timeout instead of naming the part.
+ */
+BOOST_FIXTURE_TEST_CASE( TopoMatchReportsRefootprintedPart, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    auto addNet = [&]( const wxString& aName ) -> int
+    {
+        NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), aName );
+        board->Add( net );
+        return net->GetNetCode();
+    };
+
+    const int netGnd = addNet( wxT( "GND" ) );
+    const int netVcc = addNet( wxT( "+3V3" ) );
+
+    const LIB_ID cap0201( wxT( "Capacitor_SMD" ), wxT( "C_0201_0603Metric" ) );
+    const LIB_ID cap0402( wxT( "Capacitor_SMD" ), wxT( "C_0402_1005Metric" ) );
+
+    auto makeCap = [&]( const wxString& aRef, const LIB_ID& aFpId ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( board.get() );
+        fp->SetFPID( aFpId );
+        fp->SetReference( aRef );
+        board->Add( fp );
+
+        for( const wxString& padNumber : { wxString( wxT( "1" ) ), wxString( wxT( "2" ) ) } )
+        {
+            PAD* pad = new PAD( fp );
+            pad->SetNumber( padNumber );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 0.3 ), pcbIUScale.mmToIU( 0.3 ) ) );
+            pad->SetLayerSet( LSET( { F_Cu } ) );
+            pad->SetNetCode( padNumber == wxT( "1" ) ? netVcc : netGnd );
+            fp->Add( pad );
+        }
+
+        return fp;
+    };
+
+    // Identical decoupling capacitors give the search more arrangements than it is allowed to
+    // try. That is what turned this into a timeout.
+    std::set<FOOTPRINT*> blockFps;
+    std::set<FOOTPRINT*> groupFps;
+
+    for( int i = 0; i < 8; i++ )
+    {
+        blockFps.insert( makeCap( wxString::Format( wxT( "C%d" ), 600 + i ), cap0201 ) );
+        groupFps.insert( makeCap( wxString::Format( wxT( "C%d" ), 600 + i ), cap0201 ) );
+    }
+
+    blockFps.insert( makeCap( wxT( "C619" ), cap0201 ) );
+    groupFps.insert( makeCap( wxT( "C619" ), cap0402 ) );
+
+    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( blockFps, groupFps );
+    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( groupFps, blockFps );
+
+    TMATCH::COMPONENT_MATCHES                     result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+
+    BOOST_CHECK( !cgRef->FindIsomorphism( cgTarget.get(), result, details ) );
+    BOOST_REQUIRE( !details.empty() );
+
+    for( const auto& reason : details )
+    {
+        BOOST_TEST_MESSAGE( wxString::Format( "Mismatch: %s <-> %s: %s", reason.m_reference, reason.m_candidate,
+                                              reason.m_reason ) );
+    }
+
+    BOOST_CHECK_EQUAL( details.front().m_reference, wxString( wxT( "C619" ) ) );
+    BOOST_CHECK_EQUAL( details.front().m_candidate, wxString( wxT( "C619" ) ) );
+}
+
+
+/**
  * Apply Design Block Layout must copy silkscreen graphics that are not associated with any
  * footprint from the design block source to the destination group (issue 24372).
  *
