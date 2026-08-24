@@ -204,12 +204,59 @@ std::vector<wxString> DESIGN_BLOCK_LIBRARY_ADAPTER::GetDesignBlockNames( const w
 }
 
 
+static wxString describeMissingLibrary( const wxString& aNickname, const std::vector<LIBRARY_TABLE_ROW*>& aRows )
+{
+    wxString message = wxString::Format( _( "Design block library '%s' is not in the design block "
+                                            "library table." ),
+                                         aNickname );
+
+    // If one name sits inside the other, it can be the same library after a rename.
+    if( !aNickname.IsEmpty() )
+    {
+        const wxString wanted = aNickname.Lower();
+
+        for( const LIBRARY_TABLE_ROW* row : aRows )
+        {
+            const wxString candidate = row->Nickname().Lower();
+
+            if( candidate.IsEmpty() || ( !candidate.Contains( wanted ) && !wanted.Contains( candidate ) ) )
+                continue;
+
+            message += wxString::Format( _( " Did you mean '%s'?" ), row->Nickname() );
+            break;
+        }
+    }
+
+    if( aRows.empty() )
+        return message + wxS( "\n\n" ) + _( "No design block libraries are configured." );
+
+    message += wxS( "\n\n" ) + _( "Configured design block libraries:" );
+
+    const size_t maxListed = 20;
+
+    for( size_t ii = 0; ii < aRows.size(); ii++ )
+    {
+        if( ii == maxListed )
+        {
+            message += wxT( "\n" ) + wxString::Format( _( "and %d more" ), (int) ( aRows.size() - maxListed ) );
+            break;
+        }
+
+        message +=
+                wxString::Format( wxT( "\n  %s (%s)" ), aRows[ii]->Nickname(),
+                                  aRows[ii]->Scope() == LIBRARY_TABLE_SCOPE::PROJECT ? _( "project" ) : _( "global" ) );
+    }
+
+    return message;
+}
+
+
 wxString DESIGN_BLOCK_LIBRARY_ADAPTER::libraryUnavailableMessage( const wxString& aNickname ) const
 {
     std::optional<LIBRARY_TABLE_ROW*> row = GetRow( aNickname );
 
     if( !row )
-        return wxString::Format( _( "Design block library '%s' not found in the library table." ), aNickname );
+        return describeMissingLibrary( aNickname, Rows() );
 
     if( ( *row )->Disabled() )
         return wxString::Format( _( "Design block library '%s' is disabled in the library table." ), aNickname );
