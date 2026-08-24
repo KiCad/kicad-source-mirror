@@ -194,10 +194,20 @@ void FIELDS_TABLE_DATA_MODEL_BASE::MoveColumn( int aCol, int aNewPos )
     }
     else if( aCol < aNewPos )
     {
+        if( m_sortColumn == aCol )
+            m_sortColumn = aNewPos;
+        else if( m_sortColumn > aCol && m_sortColumn <= aNewPos )
+            m_sortColumn--;
+
         std::rotate( std::begin( m_cols ) + aCol, std::begin( m_cols ) + aCol + 1, std::begin( m_cols ) + aNewPos + 1 );
     }
     else
     {
+        if( m_sortColumn == aCol )
+            m_sortColumn = aNewPos;
+        else if( m_sortColumn >= aNewPos && m_sortColumn < aCol )
+            m_sortColumn++;
+
         std::rotate( std::begin( m_cols ) + aNewPos, std::begin( m_cols ) + aCol, std::begin( m_cols ) + aCol + 1 );
     }
 }
