@@ -185,4 +185,49 @@ void UnpackTeardropSettings( TEARDROP_PARAMETERS& aOutput, const types::PadTeard
     aOutput.m_WidthtoSizeFilterRatio = aProto.max_track_width_ratio();
 }
 
+
+void PackZoneLayerOverrides( google::protobuf::RepeatedPtrField<types::ZoneLayerOverrideEntry>* aOutput,
+                             const std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE>& aInput )
+{
+    aOutput->Clear();
+
+    for( const auto& [layer, overrideVal] : aInput )
+    {
+        types::ZoneLayerOverride protoOverride = types::ZLO_NONE;
+
+        switch( overrideVal )
+        {
+        case ZLO_FORCE_FLASHED:             protoOverride = types::ZLO_FORCE_FLASHED;              break;
+        case ZLO_FORCE_NO_ZONE_CONNECTION:  protoOverride = types::ZLO_FORCE_NO_ZONE_CONNECTION;   break;
+        default: break;
+        }
+
+        if( protoOverride != types::ZLO_NONE )
+        {
+            types::ZoneLayerOverrideEntry* entry = aOutput->Add();
+            entry->set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
+            entry->set_override( protoOverride );
+        }
+    }
+}
+
+
+void UnpackZoneLayerOverrides( std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE>& aOutput,
+                               const google::protobuf::RepeatedPtrField<types::ZoneLayerOverrideEntry>& aInput )
+{
+    for( const types::ZoneLayerOverrideEntry& entry : aInput )
+    {
+        ZONE_LAYER_OVERRIDE overrideVal = ZLO_NONE;
+
+        switch( entry.override() )
+        {
+        case types::ZLO_FORCE_FLASHED:             overrideVal = ZLO_FORCE_FLASHED;            break;
+        case types::ZLO_FORCE_NO_ZONE_CONNECTION:  overrideVal = ZLO_FORCE_NO_ZONE_CONNECTION; break;
+        default: break;
+        }
+
+        aOutput[FromProtoEnum<PCB_LAYER_ID>( entry.layer() )] = overrideVal;
+    }
+}
+
 }   // namespace kiapi::board

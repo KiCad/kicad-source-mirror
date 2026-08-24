@@ -21,9 +21,11 @@
 #ifndef KICAD_API_PCB_UTLIS_H
 #define KICAD_API_PCB_UTLIS_H
 
+#include <map>
 #include <memory>
 #include <core/typeinfo.h>
 #include <import_export.h>
+#include <board_item.h>
 #include <layer_ids.h>
 #include <lset.h>
 #include <api/common/types/base_types.pb.h>
@@ -50,6 +52,12 @@ void PackBoardStackup( const BOARD& aBoard, BoardStackup& aOut );
 void PackTeardropSettings( types::PadTeardropSettings& aOutput, const TEARDROP_PARAMETERS& aParams );
 
 void UnpackTeardropSettings( TEARDROP_PARAMETERS& aOutput, const types::PadTeardropSettings& aProto );
+
+void PackZoneLayerOverrides( google::protobuf::RepeatedPtrField<types::ZoneLayerOverrideEntry>* aOutput,
+                             const std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE>& aInput );
+
+void UnpackZoneLayerOverrides( std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE>& aOutput,
+                               const google::protobuf::RepeatedPtrField<types::ZoneLayerOverrideEntry>& aInput );
 
 }   // namespace kiapi::board
 

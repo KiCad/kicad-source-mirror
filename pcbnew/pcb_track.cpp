@@ -557,6 +557,13 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
 
     kiapi::board::PackTeardropSettings( *via.mutable_teardrop(), GetTeardropParams() );
 
+    via.set_is_free( GetIsFree() );
+
+    {
+        std::unique_lock lock( m_zoneLayerOverridesMutex );
+        kiapi::board::PackZoneLayerOverrides( via.mutable_zone_layer_overrides(), m_zoneLayerOverrides );
+    }
+
     aContainer.PackFrom( via );
 }
 
@@ -589,6 +596,15 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
         kiapi::board::UnpackTeardropSettings( GetTeardropParams(), via.teardrop() );
     else
         SetTeardropsEnabled( false );
+
+    SetIsFree( via.is_free() );
+
+    ClearZoneLayerOverrides();
+
+    {
+        std::unique_lock lock( m_zoneLayerOverridesMutex );
+        kiapi::board::UnpackZoneLayerOverrides( m_zoneLayerOverrides, via.zone_layer_overrides() );
+    }
 
     return true;
 }
