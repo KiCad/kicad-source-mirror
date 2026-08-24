@@ -99,6 +99,10 @@ protected:
 
     void EnableSelectionEvents();
     void DisableSelectionEvents();
+    void OnTableRangeSelectionChanged( wxGridRangeSelectEvent& aEvent );
+
+    /// Return the explicitly selected grid rows, or the cursor row if the selection is empty.
+    std::set<int> GetSelectedGridRows() const;
 
     /// Save the grid selection by stable item identity so it can survive a row rebuild.
     std::set<KIID_PATH> SaveGridSelection();
@@ -133,7 +137,7 @@ protected:
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
-    virtual void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) = 0;
+    virtual void OnTableSelectionChanged( const std::set<int>& aRows ) = 0;
     void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
     void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
 

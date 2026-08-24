@@ -624,7 +624,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
+void DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableSelectionChanged( const std::set<int>& aRows )
 {
     // Cross-probing should only work in Edit page
     if( m_nbPages->GetSelection() != 0 )
@@ -639,14 +639,10 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent
     // containing the list of all child refs. Make sure we add refs/footprints uniquely
     std::set<BOARD_ITEM*> footprints;
 
-    // This handler handles selecting and deselecting
-    if( aEvent.Selecting() )
+    for( int row : aRows )
     {
-        for( int i = aEvent.GetTopRow(); i <= aEvent.GetBottomRow(); i++ )
-        {
-            for( const FOOTPRINT_REF& ref : m_dataModel->GetRowReferences( i ) )
-                footprints.insert( &ref.GetFootprint() );
-        }
+        for( const FOOTPRINT_REF& ref : m_dataModel->GetRowReferences( row ) )
+            footprints.insert( &ref.GetFootprint() );
     }
 
     std::vector<BOARD_ITEM*> focusItems( footprints.begin(), footprints.end() );

@@ -743,7 +743,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnTableSelectionChanged( const std::set<int>& aRows )
 {
     // Cross-probing should only work in Edit page
     if( m_nbPages->GetSelection() != 0 )
@@ -759,18 +759,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
     std::set<SCH_REFERENCE> refs;
     std::set<SCH_ITEM*>     symbols;
 
-    // This handler handles selecting and deselecting
-    if( aEvent.Selecting() )
+    for( int row : aRows )
     {
-        for( int i = aEvent.GetTopRow(); i <= aEvent.GetBottomRow(); i++ )
-        {
-            for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( i ) )
-                refs.insert( ref );
-        }
-
-        for( const SCH_REFERENCE& ref : refs )
-            symbols.insert( ref.GetSymbol() );
+        for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( row ) )
+            refs.insert( ref );
     }
+
+    for( const SCH_REFERENCE& ref : refs )
+        symbols.insert( ref.GetSymbol() );
 
     if( m_cfgDialogSettings.selection_mode == 0 )
     {

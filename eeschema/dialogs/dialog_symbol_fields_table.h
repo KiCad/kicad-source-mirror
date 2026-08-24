@@ -58,7 +58,7 @@ private:
      */
     void LoadFieldNames();
 
-    void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent ) override;
+    void OnTableSelectionChanged( const std::set<int>& aRows ) override;
 
     void OnScope( wxCommandEvent& aEvent ) override;
     void OnMenu( wxCommandEvent& aEvent ) override;

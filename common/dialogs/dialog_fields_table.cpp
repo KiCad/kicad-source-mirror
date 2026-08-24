@@ -455,20 +455,28 @@ wxSize DIALOG_FIELDS_TABLE::GetDefaultDialogSize() const
 void DIALOG_FIELDS_TABLE::EnableSelectionEvents()
 {
     m_grid->Connect( wxEVT_GRID_RANGE_SELECTED,
-                     wxGridRangeSelectEventHandler( DIALOG_FIELDS_TABLE::OnTableRangeSelected ), nullptr, this );
+                     wxGridRangeSelectEventHandler( DIALOG_FIELDS_TABLE::OnTableRangeSelectionChanged ), nullptr,
+                     this );
 }
 
 
 void DIALOG_FIELDS_TABLE::DisableSelectionEvents()
 {
     m_grid->Disconnect( wxEVT_GRID_RANGE_SELECTED,
-                        wxGridRangeSelectEventHandler( DIALOG_FIELDS_TABLE::OnTableRangeSelected ), nullptr, this );
+                        wxGridRangeSelectEventHandler( DIALOG_FIELDS_TABLE::OnTableRangeSelectionChanged ), nullptr,
+                        this );
 }
 
 
-std::set<KIID_PATH> DIALOG_FIELDS_TABLE::SaveGridSelection()
+void DIALOG_FIELDS_TABLE::OnTableRangeSelectionChanged( wxGridRangeSelectEvent& aEvent )
 {
-    std::set<KIID_PATH> selectedItemKeys;
+    OnTableSelectionChanged( GetSelectedGridRows() );
+}
+
+
+std::set<int> DIALOG_FIELDS_TABLE::GetSelectedGridRows() const
+{
+    std::set<int> selectedRows;
 
     wxGridCellCoordsArray topLeft = m_grid->GetSelectionBlockTopLeft();
     wxGridCellCoordsArray bottomRight = m_grid->GetSelectionBlockBottomRight();
@@ -476,25 +484,33 @@ std::set<KIID_PATH> DIALOG_FIELDS_TABLE::SaveGridSelection()
     for( size_t i = 0; i < topLeft.size(); ++i )
     {
         for( int row = topLeft[i].GetRow(); row <= bottomRight[i].GetRow(); ++row )
-        {
-            for( const KIID_PATH& key : getDataModel()->GetRowItemKeys( row ) )
-                selectedItemKeys.insert( key );
-        }
+            selectedRows.insert( row );
     }
 
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+    wxGridCellCoordsArray selectedCells = m_grid->GetSelectedCells();
 
-    for( int row : selectedRows )
-    {
-        for( const KIID_PATH& key : getDataModel()->GetRowItemKeys( row ) )
-            selectedItemKeys.insert( key );
-    }
+    for( size_t i = 0; i < selectedCells.size(); ++i )
+        selectedRows.insert( selectedCells[i].GetRow() );
+
+    for( int row : m_grid->GetSelectedRows() )
+        selectedRows.insert( row );
 
     int cursorRow = m_grid->GetGridCursorRow();
 
-    if( cursorRow >= 0 && cursorRow < getDataModel()->GetNumberRows() && selectedItemKeys.empty() )
+    if( selectedRows.empty() && cursorRow >= 0 && cursorRow < getDataModel()->GetNumberRows() )
+        selectedRows.insert( cursorRow );
+
+    return selectedRows;
+}
+
+
+std::set<KIID_PATH> DIALOG_FIELDS_TABLE::SaveGridSelection()
+{
+    std::set<KIID_PATH> selectedItemKeys;
+
+    for( int row : GetSelectedGridRows() )
     {
-        for( const KIID_PATH& key : getDataModel()->GetRowItemKeys( cursorRow ) )
+        for( const KIID_PATH& key : getDataModel()->GetRowItemKeys( row ) )
             selectedItemKeys.insert( key );
     }
 
