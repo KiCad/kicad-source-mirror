@@ -207,6 +207,10 @@ public:
 
     bool UpdatePoints( EDIT_POINTS& aPoints ) override
     {
+        // Normalize can fold the polygon into a rectangle, which needs a different editor
+        if( m_shape.GetShape() != SHAPE_T::POLY )
+            return false;
+
         POLYGON_POINT_EDIT_BEHAVIOR::UpdatePointsFromOutline( m_shape.GetPolyShape(), aPoints );
         return true;
     }

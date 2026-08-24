@@ -291,6 +291,31 @@ BOOST_AUTO_TEST_CASE( PolygonBehaviorSurvivesAssignment )
 }
 
 
+BOOST_AUTO_TEST_CASE( PolygonBehaviorSignalsRebuildWhenShapeMorphs )
+{
+    EDA_SHAPE_MOCK shape( SHAPE_T::POLY );
+
+    SHAPE_POLY_SET& poly = shape.GetPolyShape();
+    poly.NewOutline();
+    poly.Append( { 0, 0 } );
+    poly.Append( { 1000000, 0 } );
+    poly.Append( { 1000000, 1000000 } );
+    poly.Append( { 0, 1000000 } );
+
+    EDA_POLYGON_POINT_EDIT_BEHAVIOR behavior( shape );
+
+    EDIT_POINTS points( nullptr );
+    behavior.MakePoints( points );
+    BOOST_CHECK( behavior.UpdatePoints( points ) );
+
+    shape.SetShape( SHAPE_T::RECTANGLE );
+    shape.SetStart( { 0, 0 } );
+    shape.SetEnd( { 1000000, 1000000 } );
+
+    BOOST_CHECK( !behavior.UpdatePoints( points ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( GetPolyPointsPreservesOrderAcrossOutlines )
 {
     // GetPolyPoints flattens every outline of the poly shape into a single
