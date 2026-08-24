@@ -78,16 +78,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_posYUnits->Wrap( -1 );
 	gbSizerCommon->Add( m_posYUnits, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_simElectricalTypeLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Simulation\nElectrical type:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_simElectricalTypeLabel->Wrap( -1 );
-	gbSizerCommon->Add( m_simElectricalTypeLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	wxString m_simElectricalTypeCtrlChoices[] = { _("None"), _("Source"), _("Sink") };
-	int m_simElectricalTypeCtrlNChoices = sizeof( m_simElectricalTypeCtrlChoices ) / sizeof( wxString );
-	m_simElectricalTypeCtrl = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_simElectricalTypeCtrlNChoices, m_simElectricalTypeCtrlChoices, 0 );
-	m_simElectricalTypeCtrl->SetSelection( 0 );
-	gbSizerCommon->Add( m_simElectricalTypeCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
-
 
 	gbSizerCommon->AddGrowableCol( 1 );
 	gbSizerCommon->AddGrowableCol( 4 );
@@ -537,6 +527,9 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	bGeneralSizer->Add( m_LeftBoxSizer, 0, wxEXPAND|wxALL, 5 );
 
+
+	bGeneralSizer->Add( 5, 0, 0, wxEXPAND, 5 );
+
 	m_middleBoxSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* m_LayersSizer;
@@ -551,7 +544,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_staticText86 = new wxStaticText( m_LayersSizer->GetStaticBox(), wxID_ANY, _("Parent footprint on board is flipped.\nLayers will be reversed."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText86->Wrap( 150 );
-	m_FlippedWarningSizer->Add( m_staticText86, 1, wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT, 8 );
+	m_FlippedWarningSizer->Add( m_staticText86, 1, wxALIGN_TOP|wxBOTTOM|wxLEFT, 8 );
 
 
 	m_LayersSizer->Add( m_FlippedWarningSizer, 0, wxEXPAND|wxBOTTOM, 10 );
@@ -563,6 +556,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxArrayString m_rbCopperLayersSelChoices;
 	m_rbCopperLayersSel = new wxChoice( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_rbCopperLayersSelChoices, 0 );
 	m_rbCopperLayersSel->SetSelection( 0 );
+	m_rbCopperLayersSel->SetMinSize( wxSize( 200,-1 ) );
+
 	m_LayersSizer->Add( m_rbCopperLayersSel, 1, wxALL|wxEXPAND|wxTOP, 4 );
 
 	wxBoxSizer* bSizer444;
@@ -629,6 +624,19 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_choiceFabProperty->SetSelection( 0 );
 	m_middleBoxSizer->Add( m_choiceFabProperty, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_simElectricalTypeLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Simulation electrical type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_simElectricalTypeLabel->Wrap( -1 );
+	m_middleBoxSizer->Add( m_simElectricalTypeLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	m_middleBoxSizer->Add( 0, 2, 0, wxEXPAND, 5 );
+
+	wxString m_simElectricalTypeCtrlChoices[] = { _("None"), _("Source"), _("Sink") };
+	int m_simElectricalTypeCtrlNChoices = sizeof( m_simElectricalTypeCtrlChoices ) / sizeof( wxString );
+	m_simElectricalTypeCtrl = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_simElectricalTypeCtrlNChoices, m_simElectricalTypeCtrlChoices, 0 );
+	m_simElectricalTypeCtrl->SetSelection( 0 );
+	m_middleBoxSizer->Add( m_simElectricalTypeCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 
 	bGeneralSizer->Add( m_middleBoxSizer, 0, wxEXPAND|wxALL, 3 );
 
@@ -636,7 +644,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_panelGeneral->SetSizer( bGeneralSizer );
 	m_panelGeneral->Layout();
 	bGeneralSizer->Fit( m_panelGeneral );
-	m_notebook->AddPage( m_panelGeneral, _("General"), true );
+	m_notebook->AddPage( m_panelGeneral, _("General"), false );
 	m_connectionsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelConnections;
 	bSizerPanelConnections = new wxBoxSizer( wxVERTICAL );
@@ -694,7 +702,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerCols11->Add( bSizerLeftCol11, 1, wxEXPAND|wxTOP, 3 );
 
 
-	bSizerCols11->Add( 15, 0, 0, wxEXPAND, 5 );
+	bSizerCols11->Add( 5, 0, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerRightCol11;
 	bSizerRightCol11 = new wxBoxSizer( wxVERTICAL );
@@ -729,16 +737,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizer39->Add( m_staticText87, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerRightCol11->Add( bSizer39, 0, 0, 3 );
+	bSizerRightCol11->Add( bSizer39, 0, wxLEFT, 5 );
 
 
-	bSizerCols11->Add( bSizerRightCol11, 1, wxEXPAND|wxLEFT, 10 );
+	bSizerCols11->Add( bSizerRightCol11, 1, wxEXPAND, 10 );
 
 
-	bSizerTeardrops->Add( bSizerCols11, 0, wxEXPAND, 5 );
-
-
-	bSizerTeardrops->Add( 0, 5, 0, wxEXPAND, 5 );
+	bSizerTeardrops->Add( bSizerCols11, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	m_teardropShapeLabel = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Teardrop Shape"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_teardropShapeLabel->Wrap( -1 );
@@ -754,16 +759,16 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerLeftCol = new wxBoxSizer( wxVERTICAL );
 
 	m_bitmapTeardrop = new wxStaticBitmap( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLeftCol->Add( m_bitmapTeardrop, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
+	bSizerLeftCol->Add( m_bitmapTeardrop, 1, wxTOP|wxLEFT, 5 );
 
 
-	bSizerShapeColumns->Add( bSizerLeftCol, 1, wxEXPAND|wxRIGHT, 10 );
+	bSizerShapeColumns->Add( bSizerLeftCol, 1, wxEXPAND, 10 );
 
 
-	bSizerShapeColumns->Add( 10, 0, 0, wxEXPAND, 5 );
+	bSizerShapeColumns->Add( 5, 0, 0, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer43;
-	bSizer43 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerRightCol;
+	bSizerRightCol = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerRightCol;
 	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 2, 0 );
@@ -859,7 +864,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerRightCol->Add( m_stMaxHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer43->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bSizerRightCol->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
 
 	wxBoxSizer* bSizer44;
 	bSizer44 = new wxBoxSizer( wxHORIZONTAL );
@@ -868,16 +873,16 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizer44->Add( m_curvedEdges, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizer43->Add( bSizer44, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+	bSizerRightCol->Add( bSizer44, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
 
 
-	bSizerShapeColumns->Add( bSizer43, 1, wxEXPAND, 5 );
+	bSizerShapeColumns->Add( bSizerRightCol, 1, wxEXPAND, 5 );
 
 
 	bSizerTeardrops->Add( bSizerShapeColumns, 1, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizerConnectionsMargins->Add( bSizerTeardrops, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerConnectionsMargins->Add( bSizerTeardrops, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerConnectionsLower;
 	bSizerConnectionsLower = new wxBoxSizer( wxHORIZONTAL );
@@ -898,7 +903,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	int m_ZoneConnectionChoiceNChoices = sizeof( m_ZoneConnectionChoiceChoices ) / sizeof( wxString );
 	m_ZoneConnectionChoice = new wxChoice( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneConnectionChoiceNChoices, m_ZoneConnectionChoiceChoices, 0 );
 	m_ZoneConnectionChoice->SetSelection( 0 );
-	fgSizerCopperZonesOpts->Add( m_ZoneConnectionChoice, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerCopperZonesOpts->Add( m_ZoneConnectionChoice, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
 	m_zoneKnockoutLabel = new wxStaticText( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, _("Zone knockout:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_zoneKnockoutLabel->Wrap( -1 );
@@ -911,7 +916,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerCopperZonesOpts->Add( m_ZoneCustomPadShape, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
 
 
-	m_sbSizerZonesSettings->Add( fgSizerCopperZonesOpts, 0, 0, 5 );
+	m_sbSizerZonesSettings->Add( fgSizerCopperZonesOpts, 0, wxEXPAND, 5 );
 
 
 	bSizerConnectionsLower->Add( m_sbSizerZonesSettings, 1, wxALL|wxEXPAND, 5 );
@@ -962,13 +967,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	sbSizerThermalReliefs->Add( fgSizerThermalReliefs, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
-	bSizerConnectionsLower->Add( sbSizerThermalReliefs, 1, wxEXPAND|wxALL, 5 );
+	bSizerConnectionsLower->Add( sbSizerThermalReliefs, 1, wxALL, 5 );
 
 
-	bSizerConnectionsMargins->Add( bSizerConnectionsLower, 0, wxEXPAND|wxTOP, 10 );
+	bSizerConnectionsMargins->Add( bSizerConnectionsLower, 0, wxTOP|wxEXPAND, 10 );
 
 
-	bSizerPanelConnections->Add( bSizerConnectionsMargins, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerPanelConnections->Add( bSizerConnectionsMargins, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_connectionsPanel->SetSizer( bSizerPanelConnections );
@@ -978,9 +983,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_localSettingsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearance;
 	bSizerPanelClearance = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizerClearance;
-	bSizerClearance = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbClearancesSizer;
 	sbClearancesSizer = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Clearance Overrides") ), wxVERTICAL );
@@ -1091,10 +1093,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	sbClearancesSizer->Add( m_nonCopperWarningBook, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizerClearance->Add( sbClearancesSizer, 0, wxALL|wxEXPAND, 5 );
-
-
-	bSizerPanelClearance->Add( bSizerClearance, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerPanelClearance->Add( sbClearancesSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_localSettingsPanel->SetSizer( bSizerPanelClearance );
@@ -1102,11 +1101,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bSizerPanelClearance->Fit( m_localSettingsPanel );
 	m_notebook->AddPage( m_localSettingsPanel, _("Clearance Overrides"), false );
 	m_backDrillPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer45;
-	bSizer45 = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizer46;
-	bSizer46 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bPanelSizer;
+	bPanelSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbPostMachining;
 	sbPostMachining = new wxStaticBoxSizer( new wxStaticBox( m_backDrillPanel, wxID_ANY, _("Hole Post Machining") ), wxVERTICAL );
@@ -1131,10 +1127,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_topPostMachineSize1Label = new wxStaticText( sbPostMachining->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineSize1Label->Wrap( -1 );
-	gbPostMachiningLeftCol->Add( m_topPostMachineSize1Label, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbPostMachiningLeftCol->Add( m_topPostMachineSize1Label, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_topPostmachineSize1 = new wxTextCtrl( sbPostMachining->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbPostMachiningLeftCol->Add( m_topPostmachineSize1, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbPostMachiningLeftCol->Add( m_topPostmachineSize1, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_topPostMachineSize1Units = new wxStaticText( sbPostMachining->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineSize1Units->Wrap( -1 );
@@ -1142,10 +1138,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_topPostMachineSize2Label = new wxStaticText( sbPostMachining->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineSize2Label->Wrap( -1 );
-	gbPostMachiningLeftCol->Add( m_topPostMachineSize2Label, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbPostMachiningLeftCol->Add( m_topPostMachineSize2Label, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_topPostMachineSize2 = new wxTextCtrl( sbPostMachining->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbPostMachiningLeftCol->Add( m_topPostMachineSize2, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbPostMachiningLeftCol->Add( m_topPostMachineSize2, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_topPostMachineSize2Units = new wxStaticText( sbPostMachining->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineSize2Units->Wrap( -1 );
@@ -1174,10 +1170,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_bottomPostMachineSize1Label = new wxStaticText( sbPostMachining->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineSize1Label->Wrap( -1 );
-	gbPostMachiningRightCol->Add( m_bottomPostMachineSize1Label, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbPostMachiningRightCol->Add( m_bottomPostMachineSize1Label, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_bottomPostMachineSize1 = new wxTextCtrl( sbPostMachining->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbPostMachiningRightCol->Add( m_bottomPostMachineSize1, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbPostMachiningRightCol->Add( m_bottomPostMachineSize1, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_bottomPostMachineSize1Units = new wxStaticText( sbPostMachining->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineSize1Units->Wrap( -1 );
@@ -1185,10 +1181,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_bottomPostMachineSize2Label = new wxStaticText( sbPostMachining->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineSize2Label->Wrap( -1 );
-	gbPostMachiningRightCol->Add( m_bottomPostMachineSize2Label, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbPostMachiningRightCol->Add( m_bottomPostMachineSize2Label, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_bottomPostMachineSize2 = new wxTextCtrl( sbPostMachining->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbPostMachiningRightCol->Add( m_bottomPostMachineSize2, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbPostMachiningRightCol->Add( m_bottomPostMachineSize2, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 	m_bottomPostMachineSize2Units = new wxStaticText( sbPostMachining->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineSize2Units->Wrap( -1 );
@@ -1201,10 +1197,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	sbPostMachining->Add( bPostMachiningColumns, 1, wxEXPAND, 5 );
 
 
-	bSizer46->Add( sbPostMachining, 0, wxEXPAND|wxBOTTOM, 5 );
+	bPanelSizer->Add( sbPostMachining, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbBackdrill;
-	sbBackdrill = new wxStaticBoxSizer( new wxStaticBox( m_backDrillPanel, wxID_ANY, _("Backdrill") ), wxVERTICAL );
+	sbBackdrill = new wxStaticBoxSizer( new wxStaticBox( m_backDrillPanel, wxID_ANY, _("Backdrilling") ), wxVERTICAL );
 
 	wxString m_backDrillChoiceChoices[] = { _("None"), _("Top"), _("Bottom"), _("Top & bottom") };
 	int m_backDrillChoiceNChoices = sizeof( m_backDrillChoiceChoices ) / sizeof( wxString );
@@ -1220,7 +1216,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	gbBackdrillLeftCol->SetFlexibleDirection( wxBOTH );
 	gbBackdrillLeftCol->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_backDrillTopLayerLabel = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("Front backdrill must-cut:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillTopLayerLabel = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("Must-cut layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillTopLayerLabel->Wrap( -1 );
 	m_backDrillTopLayerLabel->SetToolTip( _("The backdrill must pass through this layer") );
 
@@ -1243,7 +1239,9 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	gbBackdrillLeftCol->Add( m_backDrillTopSizeUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bBackdrillColumns->Add( gbBackdrillLeftCol, 1, wxEXPAND|wxLEFT, 15 );
+	gbBackdrillLeftCol->AddGrowableRow( 1 );
+
+	bBackdrillColumns->Add( gbBackdrillLeftCol, 1, wxEXPAND|wxLEFT, 10 );
 
 
 	bBackdrillColumns->Add( 15, 0, 0, wxEXPAND, 5 );
@@ -1253,7 +1251,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	gbBackdrillRightCol->SetFlexibleDirection( wxBOTH );
 	gbBackdrillRightCol->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_backDrillBottomLayerLabel = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("Back backdrill must-cut:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillBottomLayerLabel = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("Must-cut layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillBottomLayerLabel->Wrap( -1 );
 	m_backDrillBottomLayerLabel->SetToolTip( _("The backdrill must pass through this layer") );
 
@@ -1276,22 +1274,21 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	gbBackdrillRightCol->Add( m_backDrillBottomSizeUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
+	gbBackdrillRightCol->AddGrowableRow( 1 );
+
 	bBackdrillColumns->Add( gbBackdrillRightCol, 1, wxEXPAND, 5 );
 
 
-	sbBackdrill->Add( bBackdrillColumns, 1, wxEXPAND|wxTOP, 3 );
+	sbBackdrill->Add( bBackdrillColumns, 0, wxEXPAND|wxTOP, 3 );
 
 
-	bSizer46->Add( sbBackdrill, 0, wxEXPAND|wxTOP, 5 );
+	bPanelSizer->Add( sbBackdrill, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer45->Add( bSizer46, 1, wxALL|wxEXPAND, 5 );
-
-
-	m_backDrillPanel->SetSizer( bSizer45 );
+	m_backDrillPanel->SetSizer( bPanelSizer );
 	m_backDrillPanel->Layout();
-	bSizer45->Fit( m_backDrillPanel );
-	m_notebook->AddPage( m_backDrillPanel, _("Backdrill"), false );
+	bPanelSizer->Fit( m_backDrillPanel );
+	m_notebook->AddPage( m_backDrillPanel, _("Backdrill"), true );
 
 	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
 
@@ -1429,10 +1426,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bottomSizer->Add( 20, 0, 1, wxEXPAND, 5 );
 
 	m_cbShowPadOutline = new wxCheckBox( this, wxID_ANY, _("Preview pad in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	bottomSizer->Add( m_cbShowPadOutline, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-
-	bottomSizer->Add( 40, 0, 0, wxEXPAND, 5 );
+	bottomSizer->Add( m_cbShowPadOutline, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 40 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -1449,6 +1443,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	this->SetSizer( m_MainSizer );
 	this->Layout();
+	m_MainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 
@@ -1457,7 +1452,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_panelGeneral->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnUpdateUI ), NULL, this );
 	m_padType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadTypeSelected ), NULL, this );
 	m_padNumCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_simElectricalTypeCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnElectricalTypeChaged ), NULL, this );
 	m_cbPadstackMode->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadstackModeChanged ), NULL, this );
 	m_cbEditLayer->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnEditLayerChanged ), NULL, this );
 	m_PadShapeSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadShapeSelection ), NULL, this );
@@ -1500,6 +1494,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_layerUserDwgs->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerECO1->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerECO2->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
+	m_simElectricalTypeCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnElectricalTypeChaged ), NULL, this );
 	m_cbTeardrops->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onModify ), NULL, this );
 	m_cbTeardrops->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_cbPreferZoneConnection->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onModify ), NULL, this );
@@ -1548,7 +1543,6 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_panelGeneral->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnUpdateUI ), NULL, this );
 	m_padType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadTypeSelected ), NULL, this );
 	m_padNumCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_simElectricalTypeCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnElectricalTypeChaged ), NULL, this );
 	m_cbPadstackMode->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadstackModeChanged ), NULL, this );
 	m_cbEditLayer->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnEditLayerChanged ), NULL, this );
 	m_PadShapeSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadShapeSelection ), NULL, this );
@@ -1591,6 +1585,7 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_layerUserDwgs->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerECO1->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
 	m_layerECO2->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
+	m_simElectricalTypeCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnElectricalTypeChaged ), NULL, this );
 	m_cbTeardrops->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onModify ), NULL, this );
 	m_cbTeardrops->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_cbPreferZoneConnection->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onModify ), NULL, this );
