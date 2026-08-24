@@ -74,7 +74,7 @@ BOOST_FIXTURE_TEST_CASE( SheetDNPEffectiveInSymbolFields, ISSUE24663_FIXTURE )
     // The fix: the symbol fields data model reports that effective state. The same code
     // path serves the on screen checkbox and the BOM export. The exclude_from_board,
     // exclude_from_bom and exclude_from_sim attributes share it.
-    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL model( refs, nullptr );
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL model( refs );
     model.AddColumn( wxS( "${DNP}" ), wxS( "DNP" ), false );
 
     int dnpCol = model.GetFieldNameCol( wxS( "${DNP}" ) );

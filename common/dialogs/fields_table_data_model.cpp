@@ -129,6 +129,37 @@ void FIELDS_TABLE_DATA_MODEL_BASE::applyResolvedTextRenderer( wxGridCellAttr* aA
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::cellUsesUrlEditor( int aRow, int aCol )
+{
+    wxCHECK( aRow >= 0 && aRow < GetNumberRows(), false );
+    wxCHECK( aCol >= 0 && aCol < GetNumberCols(), false );
+
+    int datasheetCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::DATASHEET ) );
+
+    if( datasheetCol < 0 )
+        return false;
+
+    auto attrIt = m_colAttrs.find( datasheetCol );
+
+    if( attrIt == m_colAttrs.end() || !attrIt->second )
+        return false;
+
+    return aCol == datasheetCol || IsURL( GetValue( aRow, aCol ) );
+}
+
+
+wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::cloneUrlEditorAttr()
+{
+    int datasheetCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::DATASHEET ) );
+    wxCHECK( datasheetCol >= 0, nullptr );
+
+    auto attrIt = m_colAttrs.find( datasheetCol );
+    wxCHECK( attrIt != m_colAttrs.end() && attrIt->second, nullptr );
+
+    return attrIt->second->Clone();
+}
+
+
 wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol )
 {
     if( !IsCellClear( aRow, aCol ) || ColIsAttribute( aCol ) )

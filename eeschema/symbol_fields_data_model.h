@@ -51,15 +51,12 @@ public:
         SCOPE_SELECTION
     };
 
-    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( const SCH_REFERENCE_LIST& aSymbolsList, wxGridCellAttr* aURLEditor ) :
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( const SCH_REFERENCE_LIST& aSymbolsList ) :
             m_symbolsList( aSymbolsList ),
-            m_scope( SCOPE_ALL ),
-            m_urlEditor( aURLEditor )
+            m_scope( SCOPE_ALL )
     {
         m_symbolsList.SplitReferences();
     }
-
-    ~SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL() override { wxSafeDecRef( m_urlEditor ); }
 
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
@@ -154,5 +151,4 @@ protected:
     SCH_REFERENCE_LIST    m_symbolsList;
     SCOPE                 m_scope;
     SCH_SHEET_PATH        m_path;
-    wxGridCellAttr*       m_urlEditor;
 };

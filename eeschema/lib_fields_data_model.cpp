@@ -168,31 +168,32 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::IsCellReadOnly( int aRow, int aCol )
 wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     wxGridCellAttr* attr = wxGridTableBase::GetAttr( aRow, aCol, aKind );
+    bool            needsUrlEditor = cellUsesUrlEditor( aRow, aCol );
     bool            needsResolvedTextRenderer = cellUsesResolvedTextRenderer( aRow, aCol );
 
-    // Check for column-specific attributes first
-    if( m_colAttrs.find( aCol ) != m_colAttrs.end() && m_colAttrs[aCol] )
+    wxGridCellAttr* modelAttr = nullptr;
+
+    if( needsUrlEditor )
+        modelAttr = cloneUrlEditorAttr();
+    else if( m_colAttrs.find( aCol ) != m_colAttrs.end() && m_colAttrs[aCol] )
+        modelAttr = m_colAttrs[aCol]->Clone();
+
+    if( modelAttr )
     {
         if( attr )
         {
-            // Merge with existing attributes
-            wxGridCellAttr* newAttr = m_colAttrs[aCol]->Clone();
-
             // Copy any existing attributes that aren't overridden
-            if( attr->HasBackgroundColour() && !newAttr->HasBackgroundColour() )
-                newAttr->SetBackgroundColour( attr->GetBackgroundColour() );
-            if( attr->HasTextColour() && !newAttr->HasTextColour() )
-                newAttr->SetTextColour( attr->GetTextColour() );
-            if( attr->HasFont() && !newAttr->HasFont() )
-                newAttr->SetFont( attr->GetFont() );
+            if( attr->HasBackgroundColour() && !modelAttr->HasBackgroundColour() )
+                modelAttr->SetBackgroundColour( attr->GetBackgroundColour() );
+            if( attr->HasTextColour() && !modelAttr->HasTextColour() )
+                modelAttr->SetTextColour( attr->GetTextColour() );
+            if( attr->HasFont() && !modelAttr->HasFont() )
+                modelAttr->SetFont( attr->GetFont() );
 
             attr->DecRef();
-            attr = newAttr;
         }
-        else
-        {
-            attr = m_colAttrs[aCol]->Clone();
-        }
+
+        attr = modelAttr;
     }
     else if( !attr )
     {

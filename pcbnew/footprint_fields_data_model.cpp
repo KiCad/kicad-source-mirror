@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 <author>
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -60,20 +59,11 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getItemIdentifier( const FOOTP
 wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     wxGridCellAttr* attr = nullptr;
-    wxString        rawValue = GetGroupedValue( m_rows[aRow], aCol );
     bool            needsReadOnly = IsCellReadOnly( aRow, aCol );
-    bool            needsUrlEditor = false;
+    bool            needsUrlEditor = cellUsesUrlEditor( aRow, aCol );
     bool            needsVariantHighlight = false;
     bool            needsResolvedTextRenderer = cellUsesResolvedTextRenderer( aRow, aCol );
     wxColour        highlightColor;
-
-    // Check if we need URL editor
-    if( GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET )
-        || IsURL( rawValue ) )
-    {
-        if( m_urlEditor )
-            needsUrlEditor = true;
-    }
 
     // Check if we need variant highlighting
     if( !m_currentVariant.IsEmpty() && aRow >= 0 && aRow < (int) m_rows.size() && aCol >= 0
@@ -116,32 +106,12 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
     if( !needsReadOnly && !needsUrlEditor && !needsVariantHighlight && !needsResolvedTextRenderer )
         return applyFieldPresenceRenderer( WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind ), aRow, aCol );
 
-    // URL cells: use m_urlEditor as base, potentially with read-only or variant overlays
+    // URL cells use the Datasheet column's editor.  Other cells use their own column attributes.
     if( needsUrlEditor )
     {
-        if( needsReadOnly || needsVariantHighlight )
-        {
-            attr = m_urlEditor->Clone();
-
-            if( needsReadOnly )
-                attr->SetReadOnly();
-
-            if( needsVariantHighlight )
-                attr->SetBackgroundColour( highlightColor );
-        }
-        else
-        {
-            // Just use the URL editor attribute directly
-            m_urlEditor->IncRef();
-            attr = m_urlEditor;
-        }
-
-        return applyFieldPresenceRenderer( enhanceAttr( attr, aRow, aCol, aKind ), aRow, aCol );
+        attr = cloneUrlEditorAttr();
     }
-
-    // Non-URL cells: start with column attributes if they exist.
-    // This preserves checkbox renderers and other column-specific settings.
-    if( m_colAttrs.find( aCol ) != m_colAttrs.end() && m_colAttrs[aCol] )
+    else if( m_colAttrs.find( aCol ) != m_colAttrs.end() && m_colAttrs[aCol] )
     {
         attr = m_colAttrs[aCol]->Clone();
     }

@@ -39,16 +39,12 @@ public:
         SCOPE_RELATED_SYMBOLS
     };
 
-    LIB_FIELDS_EDITOR_GRID_DATA_MODEL( const std::vector<LIB_SYMBOL*>& aSymbolsList,
-                                       wxGridCellAttr*                 aURLEditor ) :
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL( const std::vector<LIB_SYMBOL*>& aSymbolsList ) :
             m_symbolsList( aSymbolsList ),
-            m_scope( SCOPE_LIBRARY ),
-            m_urlEditor( aURLEditor )
+            m_scope( SCOPE_LIBRARY )
     {
         m_includeExcluded = true;
     }
-
-    ~LIB_FIELDS_EDITOR_GRID_DATA_MODEL() override { wxSafeDecRef( m_urlEditor ); }
 
     static const wxString SYMBOL_NAME;
     static const wxString SYMBOL_KEYWORDS;
@@ -137,6 +133,4 @@ protected:
 
     // Track newly created derived symbols for library manager integration
     std::vector<std::pair<LIB_SYMBOL*, wxString>> m_createdDerivedSymbols; // symbol, library name
-
-    wxGridCellAttr* m_urlEditor;
 };

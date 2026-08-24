@@ -691,7 +691,7 @@ int PCBNEW_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
 
     // Build our data model
-    FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList, nullptr );
+    FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList );
     dataModel.SetCurrentVariant( currentVariant );
 
     // Mandatory fields first

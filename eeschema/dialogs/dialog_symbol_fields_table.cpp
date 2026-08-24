@@ -265,9 +265,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* aParent,
         m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, SYMBOL_FILTER_NON_POWER );
     }
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( createDatasheetEditor() );
-    m_dataModel = new SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
+    m_dataModel = new SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList );
 
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );

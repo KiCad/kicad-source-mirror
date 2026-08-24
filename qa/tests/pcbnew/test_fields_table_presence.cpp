@@ -32,7 +32,7 @@ struct FOOTPRINT_FIELDS_TABLE_PRESENCE_FIXTURE
 {
     FOOTPRINT_FIELDS_TABLE_PRESENCE_FIXTURE() :
             m_footprint( new FOOTPRINT( &m_board ) ),
-            m_model( FOOTPRINT_REFERENCE_LIST{ FOOTPRINT_REF( *m_footprint ) }, nullptr )
+            m_model( FOOTPRINT_REFERENCE_LIST{ FOOTPRINT_REF( *m_footprint ) } )
     {
         m_footprint->SetReference( wxS( "U1" ) );
         m_board.Add( m_footprint );

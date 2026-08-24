@@ -164,9 +164,7 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* aP
     for( FOOTPRINT* footprint : m_parent->GetBoard()->Footprints() )
         m_footprintsList.emplace_back( *footprint );
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( createDatasheetEditor() );
-    m_dataModel = new FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( m_footprintsList, attr );
+    m_dataModel = new FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( m_footprintsList );
 
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );

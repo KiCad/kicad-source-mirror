@@ -225,9 +225,7 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SC
 {
     loadSymbols();
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( createDatasheetEditor() );
-    m_dataModel = new LIB_FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
+    m_dataModel = new LIB_FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList );
     m_dataModel->SetScope( aScope );
 
     const wxString& targetSymbolName = m_parent->GetTargetLibId().GetLibItemName();

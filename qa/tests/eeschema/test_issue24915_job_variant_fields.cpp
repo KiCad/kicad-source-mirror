@@ -109,7 +109,7 @@ BOOST_FIXTURE_TEST_CASE( JobVariantDrivesFieldsDataStore, ISSUE24915_FIXTURE )
     // while the reopened job carries its own saved variant.
     m_schematic->SetCurrentVariant( wxEmptyString );
 
-    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL jobModel( m_refs, nullptr );
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL jobModel( m_refs );
     jobModel.SetCurrentVariant( wxS( "H0" ) );
     jobModel.AddColumn( wxS( "Value" ), wxS( "Value" ), false );
     jobModel.AddColumn( wxS( "${DNP}" ), wxS( "DNP" ), false );
@@ -134,7 +134,7 @@ BOOST_FIXTURE_TEST_CASE( SchematicVariantDoesNotLeakIntoDataStore, ISSUE24915_FI
     // schematic, a store populated for the default variant must show base values.
     m_schematic->SetCurrentVariant( wxS( "H0" ) );
 
-    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL baseModel( m_refs, nullptr );
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL baseModel( m_refs );
     baseModel.AddColumn( wxS( "Value" ), wxS( "Value" ), false );
     baseModel.AddColumn( wxS( "${DNP}" ), wxS( "DNP" ), false );
 

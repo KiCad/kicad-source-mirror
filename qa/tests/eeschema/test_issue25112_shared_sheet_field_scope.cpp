@@ -66,7 +66,7 @@ struct ISSUE25112_FIXTURE
                                                                            const wxString& aFieldName,
                                                                            bool aAddedByUser = false )
     {
-        auto model = std::make_unique<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL>( m_refs, nullptr );
+        auto model = std::make_unique<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL>( m_refs );
 
         model->SetCurrentVariant( aVariantName );
         model->AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
@@ -208,7 +208,7 @@ BOOST_FIXTURE_TEST_CASE( GroupedEditStateChecksEveryItem, ISSUE25112_FIXTURE )
         symbol->AddField( field );
     }
 
-    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL model( m_refs, nullptr );
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL model( m_refs );
     model.AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
     model.AddColumn( fieldName, fieldName, false );
 

@@ -618,7 +618,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
 
     // Build our data model
-    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList, nullptr );
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList );
     dataModel.SetCurrentVariant( currentVariant );
 
     // Mandatory fields first

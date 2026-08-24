@@ -256,6 +256,9 @@ protected:
     bool cellUsesResolvedTextRenderer( int aRow, int aCol );
     void applyResolvedTextRenderer( wxGridCellAttr* aAttr, bool aApplyTint );
 
+    bool            cellUsesUrlEditor( int aRow, int aCol );
+    wxGridCellAttr* cloneUrlEditorAttr();
+
     wxGridCellAttr* applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol );
 
 protected:

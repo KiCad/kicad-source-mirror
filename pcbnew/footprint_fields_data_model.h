@@ -64,15 +64,11 @@ public:
         SCOPE_SELECTION
     };
 
-    FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( const FOOTPRINT_REFERENCE_LIST& aFootprintReferenceList,
-                                             wxGridCellAttr*                 aURLEditor ) :
+    FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( const FOOTPRINT_REFERENCE_LIST& aFootprintReferenceList ) :
             m_footprintsList( aFootprintReferenceList ),
-            m_scope( SCOPE_ALL ),
-            m_urlEditor( aURLEditor )
+            m_scope( SCOPE_ALL )
     {
     }
-
-    ~FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL() override { wxSafeDecRef( m_urlEditor ); }
 
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
@@ -151,5 +147,4 @@ protected:
     FOOTPRINT_REFERENCE_LIST m_footprintsList;
     SCOPE                    m_scope;
     KIID_PATH                m_path;
-    wxGridCellAttr*          m_urlEditor;
 };
