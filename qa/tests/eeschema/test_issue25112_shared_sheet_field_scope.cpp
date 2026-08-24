@@ -63,13 +63,14 @@ struct ISSUE25112_FIXTURE
      * stale entry follows the edited one.
      */
     std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> MakeScopedModel( const wxString& aVariantName,
-                                                                           const wxString& aFieldName )
+                                                                           const wxString& aFieldName,
+                                                                           bool aAddedByUser = false )
     {
         auto model = std::make_unique<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL>( m_refs, nullptr );
 
         model->SetCurrentVariant( aVariantName );
         model->AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
-        model->AddColumn( aFieldName, aFieldName, false );
+        model->AddColumn( aFieldName, aFieldName, aAddedByUser );
 
         int referenceCol = model->GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
         BOOST_REQUIRE( referenceCol >= 0 );
@@ -290,4 +291,104 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedBoardExclusionSurvivesApply, ISSUE25112_FIXT
     Apply( *model, variant );
 
     BOOST_CHECK( m_symbol->GetExcludedFromBoard() );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( UntouchedMissingPresetFieldRemainsAbsent, ISSUE25112_FIXTURE )
+{
+    const wxString fieldName = wxS( "UninstantiatedPresetField" );
+
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
+            MakeScopedModel( wxEmptyString, fieldName );
+
+    BOOST_REQUIRE( model->IsCellClear( m_row, m_col ) );
+
+    Apply( *model, wxEmptyString );
+
+    BOOST_CHECK( m_symbol->GetField( fieldName ) == nullptr );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( ExplicitEmptyValueCreatesField, ISSUE25112_FIXTURE )
+{
+    const wxString fieldName = wxS( "ExplicitlyEmptyField" );
+
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
+            MakeScopedModel( wxEmptyString, fieldName );
+
+    BOOST_REQUIRE( model->IsCellClear( m_row, m_col ) );
+
+    model->SetValue( m_row, m_col, wxEmptyString );
+
+    BOOST_REQUIRE( !model->IsCellClear( m_row, m_col ) );
+    BOOST_REQUIRE( model->IsCellEdited( m_row, m_col ) );
+
+    Apply( *model, wxEmptyString );
+
+    const SCH_FIELD* field = m_symbol->GetField( fieldName );
+    BOOST_REQUIRE( field );
+    BOOST_CHECK( field->GetText().IsEmpty() );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( ExistingEmptyFieldCanBeCleared, ISSUE25112_FIXTURE )
+{
+    const wxString fieldName = wxS( "ExistingEmptyField" );
+
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
+            MakeScopedModel( wxEmptyString, fieldName );
+
+    m_symbol->AddField( SCH_FIELD( m_symbol, FIELD_T::USER, fieldName ) );
+    model->UpdateReferences( m_refs );
+
+    BOOST_REQUIRE( !model->IsCellClear( m_row, m_col ) );
+    BOOST_REQUIRE( !model->IsCellEdited( m_row, m_col ) );
+
+    model->ClearCell( m_row, m_col );
+
+    BOOST_REQUIRE( model->IsCellClear( m_row, m_col ) );
+    BOOST_REQUIRE( model->IsCellEdited( m_row, m_col ) );
+
+    Apply( *model, wxEmptyString );
+
+    BOOST_CHECK( m_symbol->GetField( fieldName ) == nullptr );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( UserAddedColumnCreatesEmptyField, ISSUE25112_FIXTURE )
+{
+    const wxString fieldName = wxS( "UserAddedEmptyField" );
+
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
+            MakeScopedModel( wxEmptyString, fieldName, true );
+
+    BOOST_REQUIRE( !model->IsCellClear( m_row, m_col ) );
+    BOOST_REQUIRE( model->IsCellEdited( m_row, m_col ) );
+
+    Apply( *model, wxEmptyString );
+
+    const SCH_FIELD* field = m_symbol->GetField( fieldName );
+    BOOST_REQUIRE( field );
+    BOOST_CHECK( field->GetText().IsEmpty() );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( RevertingVariantFieldCreationRestoresAbsence, ISSUE25112_FIXTURE )
+{
+    const wxString fieldName = wxS( "RevertedVariantField" );
+
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
+            MakeScopedModel( wxS( "Assembly" ), fieldName );
+
+    model->SetValue( m_row, m_col, wxEmptyString );
+    BOOST_REQUIRE( !model->IsCellClear( m_row, m_col ) );
+
+    model->RevertRow( m_row );
+
+    BOOST_REQUIRE( model->IsCellClear( m_row, m_col ) );
+    BOOST_REQUIRE( !model->IsEdited() );
+
+    Apply( *model, wxS( "Assembly" ) );
+
+    BOOST_CHECK( m_symbol->GetField( fieldName ) == nullptr );
 }

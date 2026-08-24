@@ -231,10 +231,31 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const w
     std::set<const SCH_SYMBOL*> editedSymbols;
 
     for( const SCH_REFERENCE& ref : row.m_items )
-    {
         editedSymbols.insert( ref.GetSymbol() );
-        m_dataStore[getDataStoreKey( ref )][fieldName] = aValue;
+
+    // Field presence is on the symbol object and applies to all instances.
+    // Before editing one path, ensure every instance for that symbol has this field
+    // marked present at least.
+    for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
+    {
+        const SCH_REFERENCE& ref = m_symbolsList[ii];
+
+        if( !editedSymbols.contains( ref.GetSymbol() ) )
+            continue;
+
+        wxString unused;
+
+        if( !getStoredFieldValue( ref, fieldName, unused ) )
+        {
+            updateDataStoreItemFieldFromLive( ref, fieldName );
+
+            if( !getStoredFieldValue( ref, fieldName, unused ) )
+                ensureStoredFieldPresent( ref, fieldName );
+        }
     }
+
+    for( const SCH_REFERENCE& ref : row.m_items )
+        setStoredFieldValue( ref, fieldName, aValue );
 
     // ApplyData walks every path a symbol is reachable through, so an edit to storage those
     // paths have in common must also reach the ones the current scope and filter hide
@@ -297,17 +318,24 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RevertRow( int aRow )
     {
         bool revertAllPaths = storageIsSharedAcrossPaths( col.m_fieldName );
 
-        // ClearCell removes a field from every path that reaches the symbol, including paths
-        // hidden by the current scope. An edit can recreate the entry for the visible
-        // path, so check all of the symbol's entries rather than only IsCellClear()
+        // Field presence belongs to the symbol rather than an individual path. If an edit added
+        // or removed the field, restore every path so a hidden path cannot recreate it or retain
+        // a pending creation when ApplyData() walks the symbol's other instances.
         if( !revertAllPaths )
         {
             for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
             {
                 const SCH_REFERENCE& ref = m_symbolsList[ii];
-                wxString             unused;
 
-                if( rowSymbols.contains( ref.GetSymbol() ) && !getStoredFieldValue( ref, col.m_fieldName, unused ) )
+                if( !rowSymbols.contains( ref.GetSymbol() ) )
+                    continue;
+
+                wxString liveValue;
+                wxString storedValue;
+                bool     liveFieldPresent = getLiveFieldValue( ref, col.m_fieldName, liveValue );
+                bool     storedFieldPresent = getStoredFieldValue( ref, col.m_fieldName, storedValue );
+
+                if( liveFieldPresent != storedFieldPresent )
                 {
                     revertAllPaths = true;
                     break;
@@ -739,11 +767,9 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPL
                     destField->SetPrivate( false );
             }
 
-            int  col = GetFieldNameCol( srcName );
-            bool userAdded = ( col != -1 && m_cols[col].m_userAdded );
-
-            // Add a not existing field if it has a value for this symbol
-            bool createField = !destField && ( !srcValue.IsEmpty() || userAdded );
+            // Reaching this point means the data store field is at least marked present,
+            // so add the field to the symbol even when its stored value is empty.
+            bool createField = !destField;
 
             if( createField )
             {
@@ -822,26 +848,49 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LI
     {
         if( !m_symbolsList.Contains( ref ) )
         {
-            SCH_SYMBOL* symbol = ref.GetSymbol();
+            const SCH_REFERENCE* existingRef = nullptr;
 
-            m_symbolsList.AddItem( ref );
-
-            KIID_PATH key = getDataStoreKey( ref );
-
-            // Update the fields of every reference
-            for( const SCH_FIELD& field : symbol->GetFields() )
+            // A field belongs to the symbol object not reference, so an additional sheet path must have
+            // the same field presence as the paths which already reach that symbol. Field values may
+            // still differ by path when editing a variant.
+            for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
             {
-                if( !field.IsPrivate() )
+                if( m_symbolsList[ii].GetSymbol() == ref.GetSymbol() )
                 {
-                    wxString name = field.GetCanonicalName();
-                    wxString value = symbol->Schematic()->ConvertKIIDsToRefs( field.GetText() );
-
-                    m_dataStore[key][name] = value;
+                    existingRef = &m_symbolsList[ii];
+                    break;
                 }
             }
 
-            for( const DATA_MODEL_COL& col : m_cols )
-                m_dataStore[key].try_emplace( col.m_fieldName, wxEmptyString );
+            if( existingRef )
+            {
+                for( const DATA_MODEL_COL& col : m_cols )
+                {
+                    wxString existingValue;
+
+                    if( !getStoredFieldValue( *existingRef, col.m_fieldName, existingValue ) )
+                        continue;
+
+                    wxString value;
+
+                    if( storageIsSharedAcrossPaths( col.m_fieldName ) )
+                    {
+                        value = existingValue;
+                    }
+                    else if( !getLiveFieldValue( ref, col.m_fieldName, value ) )
+                    {
+                        value.clear();
+                    }
+
+                    setStoredFieldValue( ref, col.m_fieldName, value );
+                }
+            }
+            else
+            {
+                initializeDataStoreItem( ref );
+            }
+
+            m_symbolsList.AddItem( ref );
 
             refListChanged = true;
         }
@@ -899,32 +948,44 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE
 
 void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& aRefs )
 {
-    bool refListChanged = false;
+    bool                  refListChanged = false;
+    std::set<SCH_SYMBOL*> updatedSymbols;
 
-    for( const SCH_REFERENCE& ref : aRefs )
+    for( const SCH_REFERENCE& incomingRef : aRefs )
     {
-        // Update the fields of every reference. Do this by iterating through the data model
-        // columns; we must have all fields in the symbol added to the data model at this point,
-        // and some of the data model columns may be variables that are not present in the symbol
-        if( ref.GetSymbol() )
-        {
-            for( const DATA_MODEL_COL& col : m_cols )
-                updateDataStoreItemFieldFromLive( ref, col.m_fieldName );
-        }
+        if( incomingRef.GetSymbol() )
+            updatedSymbols.insert( incomingRef.GetSymbol() );
 
-        if( SCH_REFERENCE* listRef = m_symbolsList.FindItem( ref ) )
+        SCH_REFERENCE* cachedRef = m_symbolsList.FindItem( incomingRef );
+
+        // This looks like it might be assigning to itself because it often is
+        if( cachedRef )
         {
-            *listRef = ref;
+            // When these things don't happen to be the same pointer, this will update our
+            // cached reference's stuff like reference/unit/etc, but not the pointer to the symbol itself
+            *cachedRef = incomingRef;
         }
         else
         {
-            m_symbolsList.AddItem( ref );
+            m_symbolsList.AddItem( incomingRef );
             refListChanged = true;
         }
     }
 
     if( refListChanged )
         m_symbolsList.SortBySymbolPtr();
+
+    // Field presence is on the symbol object, so refresh every path/instance which reaches a
+    // changed symbol even if the event supplied only one path.
+    for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
+    {
+        const SCH_REFERENCE& ref = m_symbolsList[ii];
+
+        if( !updatedSymbols.contains( ref.GetSymbol() ) )
+            continue;
+
+        initializeDataStoreItem( ref );
+    }
 }
 
 
