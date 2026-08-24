@@ -163,14 +163,12 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     configureToolbars();
     RecreateToolbars();
 
-    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
+    m_infoBar = new WX_INFOBAR( m_canvas, wxID_ANY, true );
 
     m_auimgr.SetManagedWindow( this );
 
     m_auimgr.AddPane( m_tbTopMain, EDA_PANE().HToolbar().Name( wxS( "TopMainToolbar" ) )
                       .Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( wxS( "InfoBar" ) )
-                      .Top().Layer( 1 ) );
     m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" )
                       .Right().Layer( 3 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
@@ -186,12 +184,6 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     if( cfg )
         layersManager.Show( cfg->m_AuiPanels.show_layer_manager );
 
-    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
-    // hiding it.
-    m_auimgr.Update();
-
-    // We don't want the infobar displayed right away
-    m_auimgr.GetPane( wxS( "InfoBar" ) ).Hide();
     m_auimgr.Update();
 
     m_canvas->SetInfoBar( m_infoBar );

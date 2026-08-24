@@ -470,7 +470,6 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
 
     KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
     wxSize                    clientSize = GetClientSize();
-    WX_INFOBAR* infobar = GetParentEDAFrame() ? GetParentEDAFrame()->GetInfoBar() : nullptr;
 
     if( !aForce && ToVECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
         return;
@@ -479,24 +478,33 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
     clientSize.x = std::max( 10, clientSize.x + 1 );
     clientSize.y = std::max( 10, clientSize.y + 1 );
 
-    VECTOR2D bottom( 0, 0 );
-
-    if( m_view )
-        bottom = m_view->ToWorld( m_gal->GetScreenPixelSize(), true );
-
     m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
 
     if( m_view )
     {
-        if( infobar && infobar->IsLocked() )
-        {
-            VECTOR2D halfScreen( std::ceil( 0.5 * clientSize.x ), std::ceil( 0.5 * clientSize.y ) );
-            m_view->SetCenter( bottom - m_view->ToWorld( halfScreen, false ) );
-        }
-
         // ResizeScreen reallocates every compositor buffer, so nothing survives the resize
         m_view->MarkDirty();
     }
+}
+
+
+void EDA_DRAW_PANEL_GAL::UpdateOverlayExclusions()
+{
+    KIGFX::CAIRO_GAL* cairoGal = dynamic_cast<KIGFX::CAIRO_GAL*>( m_gal );
+
+    // Only the Cairo backend presents frames outside the paint cycle
+    if( !cairoGal )
+        return;
+
+    std::vector<wxRect> rects;
+
+    for( wxWindow* child : GetChildren() )
+    {
+        if( dynamic_cast<WX_INFOBAR*>( child ) && child->IsShown() )
+            rects.push_back( child->GetRect() );
+    }
+
+    cairoGal->SetOverlayExclusions( rects );
 }
 
 
@@ -726,6 +734,15 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     }
 
     m_backend = aGalType;
+
+    // A shown backend window raises itself, which would bury an infobar overlaid on this canvas
+    for( wxWindow* child : GetChildren() )
+    {
+        if( dynamic_cast<WX_INFOBAR*>( child ) )
+            child->Raise();
+    }
+
+    UpdateOverlayExclusions();
 
     return result;
 }

@@ -1556,6 +1556,27 @@ void CAIRO_GAL::EndDrawing()
     wxMemoryDC mdc( bmp );
     wxClientDC clientDC( this );
 
+    // This blit runs outside the paint cycle, so it ignores windows stacked over the canvas
+    // and would erase them on every frame
+    if( !m_overlayExclusions.empty() )
+    {
+        wxPoint  origin = GetPosition();
+        wxRegion visible( 0, 0, clientDC.LogicalToDeviceXRel( m_screenSize.x ),
+                          clientDC.LogicalToDeviceYRel( m_screenSize.y ) );
+
+        for( wxRect rect : m_overlayExclusions )
+        {
+            rect.Offset( -origin.x, -origin.y );
+
+            visible.Subtract( wxRect( clientDC.LogicalToDeviceX( rect.x ),
+                                      clientDC.LogicalToDeviceY( rect.y ),
+                                      clientDC.LogicalToDeviceXRel( rect.width ),
+                                      clientDC.LogicalToDeviceYRel( rect.height ) ) );
+        }
+
+        clientDC.SetDeviceClippingRegion( visible );
+    }
+
     // Now it is the time to blit the mouse cursor
     blitCursor( mdc );
     clientDC.Blit( 0, 0, m_screenSize.x, m_screenSize.y, &mdc, 0, 0, wxCOPY );

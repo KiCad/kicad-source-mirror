@@ -18,11 +18,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <class_draw_panel_gal.h>
 #include <id.h>
 #include <kiplatform/ui.h>
 #include <widgets/wx_infobar.h>
 #include "wx/artprov.h"
-#include <wx/aui/framemanager.h>
 #include <wx/bmpbuttn.h>
 #include <wx/debug.h>
 #include <wx/hyperlink.h>
@@ -31,7 +31,6 @@
 #include <wx/stattext.h>
 #include <wx/timer.h>
 #include <wx/dcclient.h>
-#include <eda_base_frame.h>
 
 #ifdef __WXMSW__
 #include <dpi_scaling_common.h>
@@ -51,12 +50,12 @@ BEGIN_EVENT_TABLE( WX_INFOBAR, wxInfoBarGeneric )
 END_EVENT_TABLE()
 
 
-WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid )
+WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid, bool aOverlay )
         : wxInfoBarGeneric( aParent, aWinid ),
           m_showTime( 0 ),
           m_updateLock( false ),
+          m_overlay( aOverlay ),
           m_showTimer( nullptr ),
-          m_auiManager( aMgr ),
           m_type( MESSAGE_TYPE::GENERIC )
 {
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
@@ -169,9 +168,7 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 
     // Force infoBar to full-width.  Yes, this should happen automatically, and it does -- sometimes.
     FixSize();
-
-    if( m_auiManager )
-        updateAuiLayout( true );
+    stackOverlays();
 
     if( m_showTime > 0 )
         m_showTimer->StartOnce( m_showTime );
@@ -206,8 +203,8 @@ void WX_INFOBAR::Dismiss()
 
     wxInfoBarGeneric::Dismiss();
 
-    if( m_auiManager )
-        updateAuiLayout( false );
+    stackOverlays();
+    refreshParent();
 
     if( m_callback )
         (*m_callback)();
@@ -268,6 +265,7 @@ void WX_INFOBAR::FixSize()
 void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
 {
     doSize();
+    stackOverlays();
 
     aEvent.Skip();
 }
@@ -306,15 +304,7 @@ void WX_INFOBAR::doSize()
             textCtrl->SetLabelText( m_message );
     }
 
-    // Calculate the horizontal size: because the infobar is shown on top of the draw canvas
-    // it is adjusted to the canvas width.
-    // On Mac, the canvas is the parent
-    // On other OS the parent is EDA_BASE_FRAME that contains the canvas
     int parentWidth = m_parent->GetClientSize().GetWidth();
-    EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_parent );
-
-    if( frame && frame->GetToolCanvas() )
-        parentWidth = frame->GetToolCanvas()->GetSize().GetWidth();
 
     if( barWidth != parentWidth )
         SetSize( parentWidth, GetSize().GetHeight() );
@@ -346,23 +336,53 @@ void WX_INFOBAR::doSize()
 }
 
 
-void WX_INFOBAR::updateAuiLayout( bool aShow )
+void WX_INFOBAR::stackOverlays()
 {
-    wxASSERT( m_auiManager );
+    if( !m_overlay )
+        return;
 
-    wxAuiPaneInfo& pane = m_auiManager->GetPane( this );
+    int width = m_parent->GetClientSize().GetWidth();
+    int y = 0;
 
-    // If the infobar is in a pane, then show/hide the pane
-    if( pane.IsOk() )
+    for( wxWindow* child : m_parent->GetChildren() )
     {
-        if( aShow )
-            pane.Show();
-        else
-            pane.Hide();
+        WX_INFOBAR* bar = dynamic_cast<WX_INFOBAR*>( child );
+
+        if( !bar || !bar->IsShown() )
+            continue;
+
+        int height = bar->GetEffectiveMinSize().GetHeight();
+
+        bar->SetSize( 0, y, width, height );
+
+        // The GAL backend window is a sibling that raises itself whenever it is shown
+        bar->Raise();
+
+        y += height;
     }
 
-    // Update the AUI manager regardless
-    m_auiManager->Update();
+    if( EDA_DRAW_PANEL_GAL* canvas = dynamic_cast<EDA_DRAW_PANEL_GAL*>( m_parent ) )
+        canvas->UpdateOverlayExclusions();
+}
+
+
+void WX_INFOBAR::refreshParent()
+{
+    if( !m_overlay )
+        return;
+
+    // A GAL canvas skips repaints when no target is dirty, leaving the uncovered strip stale
+    if( EDA_DRAW_PANEL_GAL* canvas = dynamic_cast<EDA_DRAW_PANEL_GAL*>( m_parent ) )
+    {
+        canvas->ForceRefresh();
+
+        // ForceRefresh() gives up silently if the context is busy, so queue a backstop
+        canvas->RequestRefresh();
+    }
+    else
+    {
+        m_parent->Refresh();
+    }
 }
 
 

@@ -430,6 +430,16 @@ public:
 
     void ResizeScreen( int aWidth, int aHeight ) override;
 
+    /**
+     * Set areas, in canvas coordinates, that the frame blit must leave alone.
+     *
+     * The blit happens outside the paint cycle, so it would otherwise erase any window
+     * stacked over the canvas.
+     *
+     * @param aRects are the areas to preserve
+     */
+    void SetOverlayExclusions( const std::vector<wxRect>& aRects ) { m_overlayExclusions = aRects; }
+
     bool Show( bool aShow ) override;
 
     int BeginGroup() override;
@@ -553,6 +563,8 @@ protected:
     COLOR4D             m_backgroundColor;     ///< Background color
 
     WX_CURSOR_TYPE      m_currentwxCursor;     ///< wx cursor showing the current native cursor
+
+    std::vector<wxRect> m_overlayExclusions;   ///< Areas the frame blit must leave alone
 };
 
 } // namespace KIGFX

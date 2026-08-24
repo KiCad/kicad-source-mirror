@@ -158,6 +158,13 @@ public:
     void RequestRefresh();
 
     /**
+     * Tell the backend which areas of this panel are covered by an overlaid infobar.
+     *
+     * Must be called whenever an infobar is shown, hidden or moved.
+     */
+    void UpdateOverlayExclusions();
+
+    /**
      * Resize the GAL to the current client size of this panel.
      *
      * This must be used in preference to calling GAL::ResizeScreen() directly: it holds the

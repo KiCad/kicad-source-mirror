@@ -316,14 +316,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Secondary infobar stacked above the main one.  Load-time notices (such as
     // the WRL -> STEP migration prompt) belong here so they aren't clobbered by
     // the main infobar's read-only warnings, DRC rule errors, etc.
-#if defined( __WXOSX_MAC__ )
-    m_loadNoticeInfoBar = new WX_INFOBAR( GetToolCanvas() );
-#else
-    m_loadNoticeInfoBar = new WX_INFOBAR( this, &m_auimgr );
-    m_auimgr.AddPane( m_loadNoticeInfoBar,
-                      EDA_PANE().InfoBar().Name( wxS( "LoadNoticeInfoBar" ) ).Top().Layer( 1 )
-                              .Row( 1 ) );
-#endif
+    m_loadNoticeInfoBar = new WX_INFOBAR( GetToolCanvas(), wxID_ANY, true );
 
     unsigned int auiFlags = wxAUI_MGR_DEFAULT;
 #if !defined( _WIN32 )
@@ -437,16 +430,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
     FinishAUIInitialization();
-
-    // FinishAUIInitialization only hides the primary "InfoBar" pane; the
-    // stacked load-notice bar has to be hidden explicitly.
-#if !defined( __WXOSX_MAC__ )
-    if( wxAuiPaneInfo& pane = m_auimgr.GetPane( wxS( "LoadNoticeInfoBar" ) ); pane.IsOk() )
-    {
-        pane.Hide();
-        m_auimgr.Update();
-    }
-#endif
 
     if( aui_cfg.right_panel_width > 0 )
     {

@@ -1328,29 +1328,17 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 
 void EDA_BASE_FRAME::CreateInfoBar()
 {
-#if defined( __WXOSX_MAC__ )
-    m_infoBar = new WX_INFOBAR( GetToolCanvas() );
-#else
-    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
+    wxWindow* canvas = GetToolCanvas();
 
-    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( wxS( "InfoBar" ) ).Top().Layer(1) );
-#endif
+    wxCHECK( canvas, /* void */ );
+
+    m_infoBar = new WX_INFOBAR( canvas, wxID_ANY, true );
 }
 
 
 void EDA_BASE_FRAME::FinishAUIInitialization()
 {
-#if defined( __WXOSX_MAC__ )
     m_auimgr.Update();
-#else
-    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
-    // hiding it.
-    m_auimgr.Update();
-
-    // We don't want the infobar displayed right away
-    m_auimgr.GetPane( wxS( "InfoBar" ) ).Hide();
-    m_auimgr.Update();
-#endif
 }
 
 
