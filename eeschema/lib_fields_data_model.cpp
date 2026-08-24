@@ -370,10 +370,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::createActualDerivedSymbol( const LIB_SYM
                     m_symbolsList.size() );
 
         // Initialize field data for the new symbol in the data store
-        for( const auto& col : m_cols )
-        {
-            updateDataStoreItemFieldFromLive( newSymbol, col.m_fieldName );
-        }
+        initializeDataStoreItem( newSymbol );
 
         wxLogTrace( traceLibFieldTable, "createActualDerivedSymbol: Initialized field data for new symbol" );
     }
@@ -732,9 +729,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
                 continue;
             }
 
-            // User-added columns are instantiated on every symbol.  For other columns, preserve
-            // an explicitly edited empty value as a present-but-empty field.
-            bool createField = !destField && ( currentlyPresent || col.m_userAdded );
+            // Every present data-store entry represents a field that should exist,
+            // including entries with an explicitly empty value
+            bool createField = !destField && currentlyPresent;
 
             if( createField )
             {
