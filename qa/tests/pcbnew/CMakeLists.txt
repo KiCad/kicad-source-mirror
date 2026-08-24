@@ -59,6 +59,7 @@ set( QA_PCBNEW_SRCS
     test_group_save_perf.cpp
     test_headless_pcb_context.cpp
     test_history_autosave.cpp
+    test_fields_table_presence.cpp
     test_footprint.cpp
     test_footprint_editor_tabs.cpp
     test_footprint_import_reconciler.cpp

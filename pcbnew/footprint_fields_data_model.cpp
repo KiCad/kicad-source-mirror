@@ -236,7 +236,15 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( const FOOTPRINT
                                                                  wxString& aValue )
 {
     aValue = getFieldValueForVariant( aRef, aFieldName, m_currentVariant );
-    return true;
+
+    if( fieldIsAttribute( aFieldName ) || aFieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT )
+        || IsGeneratedField( aFieldName ) )
+    {
+        return true;
+    }
+
+    const PCB_FIELD* field = aRef.GetFootprint().GetField( aFieldName );
+    return field && !field->IsPrivate();
 }
 
 
@@ -624,11 +632,9 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( BOARD_COMMIT& aCommit, 
                 }
             }
 
-            int  col = GetFieldNameCol( srcName );
-            bool userAdded = ( col != -1 && m_cols[col].m_userAdded );
-
-            // Add a not existing field if it has a value for this footprint
-            bool createField = !destField && ( !srcValue.IsEmpty() || userAdded );
+            // Reaching this point means the data store field is at least marked present,
+            // so add the field to the footprint even when its stored value is empty.
+            bool createField = !destField;
 
             if( createField )
             {
@@ -709,24 +715,9 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const FOOTPRINT_REF
     {
         if( !alg::contains( m_footprintsList, ref ) )
         {
-            FOOTPRINT& footprint = ref.GetFootprint();
             m_footprintsList.push_back( ref );
 
-            KIID_PATH key = getDataStoreKey( ref );
-
-            // Update the fields of every reference
-            for( const PCB_FIELD* field : footprint.GetFields() )
-            {
-                if( !field->IsPrivate() )
-                {
-                    wxString name = field->GetCanonicalName();
-                    wxString value = getFieldValueForVariant( ref, name, m_currentVariant );
-                    m_dataStore[key][name] = value;
-                }
-            }
-
-            for( const DATA_MODEL_COL& col : m_cols )
-                m_dataStore[key].try_emplace( col.m_fieldName, wxEmptyString );
+            initializeDataStoreItem( ref );
         }
     }
 }
@@ -759,8 +750,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const FOOTPRINT_
         // Update the fields of every reference. Do this by iterating through the data model
         // columns; we must have all fields in the footprint added to the data model at this point,
         // and some of the data model columns may be variables that are not present in the footprint
-        for( const DATA_MODEL_COL& col : m_cols )
-            updateDataStoreItemFieldFromLive( ref, col.m_fieldName );
+        initializeDataStoreItem( ref );
 
         if( !alg::contains( m_footprintsList, ref ) )
             m_footprintsList.push_back( ref );
