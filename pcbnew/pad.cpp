@@ -217,6 +217,11 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
 
     kiapi::board::PackTeardropSettings( *pad.mutable_teardrop(), GetTeardropParams() );
 
+    {
+        std::unique_lock lock( m_dataMutex );
+        kiapi::board::PackZoneLayerOverrides( pad.mutable_zone_layer_overrides(), m_zoneLayerOverrides );
+    }
+
     aContainer.PackFrom( pad );
 }
 
@@ -264,6 +269,13 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
         kiapi::board::UnpackTeardropSettings( GetTeardropParams(), pad.teardrop() );
     else
         SetTeardropsEnabled( false );
+
+    ClearZoneLayerOverrides();
+
+    {
+        std::unique_lock lock( m_dataMutex );
+        kiapi::board::UnpackZoneLayerOverrides( m_zoneLayerOverrides, pad.zone_layer_overrides() );
+    }
 
     return true;
 }

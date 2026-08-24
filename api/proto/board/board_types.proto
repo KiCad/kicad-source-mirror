@@ -491,6 +491,22 @@ enum ViaType
   VT_BURIED = 5;  // Since V10
 }
 
+// Internal: this enum is not subject to API stability.
+enum ZoneLayerOverride
+{
+  ZLO_UNKNOWN = 0;
+  ZLO_NONE = 1;
+  ZLO_FORCE_FLASHED = 2;
+  ZLO_FORCE_NO_ZONE_CONNECTION = 3;
+}
+
+// Internal: this message is not subject to API stability.
+message ZoneLayerOverrideEntry
+{
+  BoardLayer layer = 1;
+  ZoneLayerOverride override = 2;
+}
+
 // Represents a via
 message Via
 {
@@ -516,6 +532,17 @@ message Via
 
   // Since: 10.0.7
   PadTeardropSettings teardrop = 8;
+
+  // Layer-specific overrides for zone connection behavior
+  // Unstable: zone layer overrides are a KiCad implementation detail and the contents of this field are not
+  // subject to API stability guarantees.  API clients should not depend on the contents of this field.  It
+  // is exposed here to allow for full round-tripping of objects.
+  // Since: 10.0.7
+  repeated ZoneLayerOverrideEntry zone_layer_overrides = 9;
+
+  // True if this is a "free" via that is not automatically updated by netlist changes
+  // Since: 10.0.7
+  bool is_free = 10;
 }
 
 message BoardGraphicShape
@@ -690,6 +717,13 @@ message Pad
 
   // Since: 10.0.7
   PadTeardropSettings teardrop = 14;
+
+  // Layer-specific overrides for zone connection behavior
+  // Unstable: zone layer overrides are a KiCad implementation detail and the contents of this field are not
+  // subject to API stability guarantees.  API clients should not depend on the contents of this field.  It
+  // is exposed here to allow for full round-tripping of objects.
+  // Since: 10.0.7
+  repeated ZoneLayerOverrideEntry zone_layer_overrides = 15;
 }
 
 enum ZoneType
