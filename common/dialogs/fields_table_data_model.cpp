@@ -612,23 +612,6 @@ wxString FIELDS_TABLE_DATA_MODEL_BASE::getAttributeResolvedValue( const wxString
 }
 
 
-wxString FIELDS_TABLE_DATA_MODEL_BASE::getDataStoreFieldValue( const KIID_PATH& aKey,
-                                                               const wxString& aFieldName ) const
-{
-    auto itemIt = m_dataStore.find( aKey );
-
-    if( itemIt == m_dataStore.end() )
-        return wxEmptyString;
-
-    auto fieldIt = itemIt->second.find( aFieldName );
-
-    if( fieldIt == itemIt->second.end() )
-        return wxEmptyString;
-
-    return fieldIt->second;
-}
-
-
 wxString FIELDS_TABLE_DATA_MODEL_BASE::SerializeUndoState() const
 {
     // Serialize the un-applied edit store keyed by symbol identity (sheet path + UUID), so that

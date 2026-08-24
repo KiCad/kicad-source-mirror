@@ -103,11 +103,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
 
     for( LIB_SYMBOL* symbol : rowGroup.m_items )
     {
-        std::map<wxString, wxString>& fields = m_dataStore[getDataStoreKey( symbol )];
-
         if( fieldName == SYMBOL_IS_POWER )
         {
-            fields[fieldName] = aValue;
+            setStoredFieldValue( symbol, fieldName, aValue );
 
             if( aValue == wxS( "1" ) )
                 setPowerSymbolDefaults( symbol );
@@ -117,20 +115,20 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
             // Local Power is disabled in the symbol properties dialog until Power is enabled.
             if( getStoredPowerSymbolValue( symbol ) )
             {
-                fields[fieldName] = aValue;
+                setStoredFieldValue( symbol, fieldName, aValue );
                 setPowerSymbolDefaults( symbol );
             }
         }
         else if( getStoredPowerSymbolValue( symbol ) && isPowerSymbolControlledField( fieldName ) )
         {
             if( fieldName == GetCanonicalFieldName( FIELD_T::VALUE ) )
-                fields[fieldName] = symbol->GetName();
+                setStoredFieldValue( symbol, fieldName, symbol->GetName() );
             else
-                fields[fieldName] = wxS( "1" );
+                setStoredFieldValue( symbol, fieldName, wxS( "1" ) );
         }
         else
         {
-            fields[fieldName] = aValue;
+            setStoredFieldValue( symbol, fieldName, aValue );
         }
     }
 
@@ -472,9 +470,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getStoredPowerSymbolValue( LIB_SYMBOL* a
 
 void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setPowerSymbolDefaults( LIB_SYMBOL* aSymbol )
 {
-    std::map<wxString, wxString>& fields = m_dataStore[getDataStoreKey( aSymbol )];
-
-    fields[GetCanonicalFieldName( FIELD_T::VALUE )] = aSymbol->GetName();
+    setStoredFieldValue( aSymbol, GetCanonicalFieldName( FIELD_T::VALUE ), aSymbol->GetName() );
 
     static const std::vector<wxString> exclusionFields = {
         wxS( "${EXCLUDE_FROM_BOARD}" ),
@@ -486,7 +482,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setPowerSymbolDefaults( LIB_SYMBOL* aSym
     for( const wxString& fieldName : exclusionFields )
     {
         if( GetFieldNameCol( fieldName ) != -1 )
-            fields[fieldName] = wxS( "1" );
+            setStoredFieldValue( aSymbol, fieldName, wxS( "1" ) );
     }
 }
 

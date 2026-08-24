@@ -234,7 +234,6 @@ protected:
 
     // Helper function to translate named attribute values like ${DNP}.
     virtual wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
-    wxString getDataStoreFieldValue( const KIID_PATH& aKey, const wxString& aFieldName ) const;
 
     wxGridCellAttr* applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol );
 
@@ -274,13 +273,14 @@ protected:
     // m_rows and m_cols are just a generated view based on the data store,
     // and are rebuilt as the user changes grouping, sorting, filtering, etc.
     //
-    // NOTE: be very careful about how you "read" this data store, you should generally
+    // NOTE: be very careful about how you "read" this data store, you should
     // use getDataStoreFieldValue() to read values from the data store.
     //
-    // The map is used to distinguish between present-but-empty vs. not-present
-    // especially for the lib symbols table. When checking for empty, do not use
-    // [] operator, use find() instead, as otherwise [] will create a new entry
-    // in the map for the key, which is not what you want.
+    // The map is used to distinguish between present-but-empty vs. not-present.
+    //
+    // Use the get/set/clear/update/initialize functions to access the data store,
+    // rather than accessing it directly, as using [] can unintentionally create
+    // a present-but-empty field when you just want to check if it is present.
     std::map<KIID_PATH, std::map<wxString, wxString>> m_dataStore;
 };
 
@@ -314,7 +314,7 @@ class FIELDS_TABLE_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL_BASE
 {
 public:
     /**
-     * Removes the entry from the data store, does not just set it to empty string.
+     * Clears the field from the data store, rather than setting its value to an empty string.
      */
     void ClearCell( int aRow, int aCol ) override
     {
@@ -327,12 +327,7 @@ public:
         const wxString& fieldName = m_cols[aCol].m_fieldName;
 
         for( const ITEM_TYPE& item : m_rows[aRow].m_items )
-        {
-            auto itemIt = m_dataStore.find( getDataStoreKey( item ) );
-
-            if( itemIt != m_dataStore.end() )
-                itemIt->second.erase( fieldName );
-        }
+            clearStoredField( item, fieldName );
 
         m_edited = true;
     }
@@ -544,9 +539,8 @@ public:
             }
             else // Other columns are either a single value or ROW_MULTI_ITEMS
             {
-                KIID_PATH key = getDataStoreKey( item );
-
-                wxString itemFieldValue = getDataStoreFieldValue( key, m_cols[aCol].m_fieldName );
+                wxString itemFieldValue;
+                getStoredFieldValue( item, m_cols[aCol].m_fieldName, itemFieldValue );
 
                 // Show the effective state when a sheet forces it on, but do not change
                 // the stored value so the symbol is never stamped on apply.
@@ -700,8 +694,6 @@ protected:
         if( m_filterScope == BOM_FILTER_SCOPE::REFERENCE )
             return aMatcher.Find( aReference.Lower() );
 
-        KIID_PATH key = getDataStoreKey( aItem );
-
         for( size_t i = 0; i < m_cols.size(); ++i )
         {
             const DATA_MODEL_COL& col = m_cols[i];
@@ -709,7 +701,8 @@ protected:
             if( m_filterScope == BOM_FILTER_SCOPE::VISIBLE && !col.m_show )
                 continue;
 
-            wxString value = getDataStoreFieldValue( key, col.m_fieldName );
+            wxString value;
+            getStoredFieldValue( aItem, col.m_fieldName, value );
 
             // We want to match on things like DNP and Excluded from BOM when the
             // checkbox is checked
@@ -822,9 +815,6 @@ protected:
     {
         bool matchFound = false;
 
-        KIID_PATH lhItemKey = getDataStoreKey( lhItem );
-        KIID_PATH rhItemKey = getDataStoreKey( rhItem );
-
         for( size_t i = 0; i < m_cols.size(); ++i )
         {
             if( !m_cols[i].m_group )
@@ -848,8 +838,10 @@ protected:
 
             const wxString& fieldName = m_cols[i].m_fieldName;
 
-            wxString lh = getDataStoreFieldValue( lhItemKey, fieldName );
-            wxString rh = getDataStoreFieldValue( rhItemKey, fieldName );
+            wxString lh;
+            wxString rh;
+            getStoredFieldValue( lhItem, fieldName, lh );
+            getStoredFieldValue( rhItem, fieldName, rh );
 
             // Normalize attributes so absent and explicitly false values group together, while
             // still honoring edits in the data store and effective values inherited from sheets.
@@ -926,25 +918,41 @@ protected:
 
 
     /**
-     * Returns the current value of the field from the live item, e.g. from the symbol on the schematic.
+     * Gets the current value of the field from the live item, e.g. from the symbol on the schematic.
+     *
+     * @return True if the field is present in the data store, false if it is not present (and aValue will be empty).
      */
     virtual bool getLiveFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName, wxString& aValue ) = 0;
 
     /**
-     * Returns the stored value of the field from the data store, not from the live item, e.g from the symbol on the schematic.
+     * Returns all stored fields for an item without creating a data-store entry.
+     */
+    const std::map<wxString, wxString>& getStoredFields( const ITEM_TYPE& aItem ) const
+    {
+        static const std::map<wxString, wxString> emptyFields;
+
+        auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
+
+        if( itemIt == m_dataStore.end() )
+            return emptyFields;
+
+        return itemIt->second;
+    }
+
+    /**
+     * Gets the stored value of the field from the data store, not from the live item,
+     * e.g. from the symbol on the schematic.
+     *
+     * @return True if the field is present in the data store, false if it is not present (and aValue will be empty).
      */
     bool getStoredFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName, wxString& aValue ) const
     {
         aValue.clear();
 
-        auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
+        const std::map<wxString, wxString>& fields = getStoredFields( aItem );
+        auto                                fieldIt = fields.find( aFieldName );
 
-        if( itemIt == m_dataStore.end() )
-            return false;
-
-        auto fieldIt = itemIt->second.find( aFieldName );
-
-        if( fieldIt == itemIt->second.end() )
+        if( fieldIt == fields.end() )
             return false;
 
         aValue = fieldIt->second;
@@ -952,9 +960,38 @@ protected:
     }
 
     /**
+     * Creates or updates a field in the data store. Always marks the field present as a result.
+     */
+    void setStoredFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName,
+                              const wxString& aValue )
+    {
+        m_dataStore[getDataStoreKey( aItem )][aFieldName] = aValue;
+    }
+
+    /**
+     * Makes sure a field is at least marked present-but-empty without changing its value
+     * if it has one already
+     */
+    void ensureStoredFieldPresent( const ITEM_TYPE& aItem, const wxString& aFieldName )
+    {
+        m_dataStore[getDataStoreKey( aItem )].try_emplace( aFieldName, wxEmptyString );
+    }
+
+    /**
+     * Clears a field, e.g. marks in not-present (as opposed to an empty string)
+     */
+    void clearStoredField( const ITEM_TYPE& aItem, const wxString& aFieldName )
+    {
+        auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
+
+        if( itemIt != m_dataStore.end() )
+            itemIt->second.erase( aFieldName );
+    }
+
+    /**
      * Compares the live value of the field to the stored value in the data store.
      *
-     * If they differ, then the field has been modified.
+     * If they differ in presence or value then the field has been modified
      */
     bool fieldIsModified( const ITEM_TYPE& aItem, const wxString& aFieldName )
     {
@@ -970,25 +1007,42 @@ protected:
     /**
      * Updates the data store with the current value of the field from the live item.
      *
-     * If the field is not present on the item, it will be removed from the data store,
-     * e.g. cleared, not set to empty.
+     * If the field is not present on the item, it will be cleared from the data store rather than
+     * set to empty.
      */
     void updateDataStoreItemFieldFromLive( const ITEM_TYPE& aItem, const wxString& aFieldName )
     {
-        wxString  value;
-        KIID_PATH key = getDataStoreKey( aItem );
+        wxString value;
 
         if( getLiveFieldValue( aItem, aFieldName, value ) )
-        {
-            m_dataStore[key][aFieldName] = value;
-        }
+            setStoredFieldValue( aItem, aFieldName, value );
         else
-        {
-            auto itemIt = m_dataStore.find( key );
+            clearStoredField( aItem, aFieldName );
+    }
 
-            if( itemIt != m_dataStore.end() )
-                itemIt->second.erase( aFieldName );
-        }
+    /**
+     * Puts the live value of the field in the data store, correctly handling a missing
+     * field in the souce item as empty or not-present based on whether the col was added
+     * by the user
+     */
+    void initializeDataStoreItemField( const ITEM_TYPE& aItem, const DATA_MODEL_COL& aCol )
+    {
+        updateDataStoreItemFieldFromLive( aItem, aCol.m_fieldName );
+
+        if( aCol.m_userAdded )
+            ensureStoredFieldPresent( aItem, aCol.m_fieldName );
+    }
+
+    /**
+     * Initializes every column in the data store for a newly added (or refreshed) item.
+     *
+     * Like the field initializer, this will correctly handle missing fields in the source item
+     * as empty or not-present based on the column user-added status
+     */
+    void initializeDataStoreItem( const ITEM_TYPE& aItem )
+    {
+        for( const DATA_MODEL_COL& col : m_cols )
+            initializeDataStoreItemField( aItem, col );
     }
 
     virtual std::vector<ITEM_TYPE> getAllItems() const = 0;

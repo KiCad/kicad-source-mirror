@@ -116,10 +116,7 @@ wxGridCellAttr* FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int 
                 // Get the current value from the data store
                 wxString currentValue;
 
-                KIID_PATH key = getDataStoreKey( ref );
-
-                if( m_dataStore.contains( key ) && m_dataStore[key].contains( fieldName ) )
-                    currentValue = m_dataStore[key][fieldName];
+                getStoredFieldValue( ref, fieldName, currentValue );
 
                 if( currentValue != defaultValue )
                 {
@@ -225,7 +222,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, cons
     const wxString&                              fieldName = m_cols[aCol].m_fieldName;
 
     for( const FOOTPRINT_REF& ref : row.m_items )
-        m_dataStore[getDataStoreKey( ref )][fieldName] = aValue;
+        setStoredFieldValue( ref, fieldName, aValue );
 
     m_edited = true;
 }
@@ -608,8 +605,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( BOARD_COMMIT& aCommit, 
         std::unique_ptr<FOOTPRINT> footprintCopy = std::make_unique<FOOTPRINT>( footprint );
         footprintCopy->SetParentGroup( nullptr );
 
-        KIID_PATH                           key = getDataStoreKey( ref );
-        const std::map<wxString, wxString>& fieldStore = m_dataStore[key];
+        const std::map<wxString, wxString>& fieldStore = getStoredFields( ref );
 
         for( const auto& [srcName, srcValue] : fieldStore )
         {

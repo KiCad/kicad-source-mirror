@@ -119,12 +119,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
                 wxString currentValue;
 
                 if( ref.GetSymbol() )
-                {
-                    KIID_PATH key = getDataStoreKey( ref );
-
-                    if( m_dataStore.contains( key ) && m_dataStore[key].contains( fieldName ) )
-                        currentValue = m_dataStore[key][fieldName];
-                }
+                    getStoredFieldValue( ref, fieldName, currentValue );
 
                 if( currentValue != defaultValue )
                 {
@@ -269,7 +264,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const w
             if( !editedSymbols.contains( ref.GetSymbol() ) )
                 continue;
 
-            m_dataStore[getDataStoreKey( ref )][fieldName] = aValue;
+            setStoredFieldValue( ref, fieldName, aValue );
         }
     }
 
@@ -291,20 +286,15 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ClearCell( int aRow, int aCol )
     for( const SCH_REFERENCE& ref : m_rows[aRow].m_items )
         clearedSymbols.insert( ref.GetSymbol() );
 
-    // Removing a field is a symbol-wide operation, even when the table is showing one variant
-    // or one instance of a shared sheet. Remove it from every data-store entry for the symbol so
+    // Clearing a field is a symbol-wide operation, even when the table is showing one variant
+    // or one instance of a shared sheet. Clear it from every data-store entry for the symbol so
     // a later entry cannot recreate it while ApplyData() walks the other instances.
     for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
     {
         const SCH_REFERENCE& ref = m_symbolsList[ii];
 
         if( clearedSymbols.contains( ref.GetSymbol() ) )
-        {
-            auto itemIt = m_dataStore.find( getDataStoreKey( ref ) );
-
-            if( itemIt != m_dataStore.end() )
-                itemIt->second.erase( fieldName );
-        }
+            clearStoredField( ref, fieldName );
     }
 
     m_edited = true;
@@ -735,8 +725,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPL
         if( i == 0 )
             symbolCopy = std::make_unique<SCH_SYMBOL>( *symbol );
 
-        KIID_PATH                           key = getDataStoreKey( m_symbolsList[i] );
-        const std::map<wxString, wxString>& fieldStore = m_dataStore[key];
+        const std::map<wxString, wxString>& fieldStore = getStoredFields( m_symbolsList[i] );
 
         for( const auto& [srcName, srcValue] : fieldStore )
         {
