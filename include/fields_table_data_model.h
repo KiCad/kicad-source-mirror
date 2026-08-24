@@ -261,6 +261,9 @@ protected:
 
     wxGridCellAttr* applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol );
 
+    // Column mutations invalidate the position-based coordinates held by an open wxGrid editor.
+    void            commitPendingGridChanges();
+
 protected:
     wxGridCellRenderer* m_stripedRenderer;
     wxGridCellRenderer* m_resolvedTextRenderer;
@@ -344,6 +347,8 @@ public:
         // Don't add a field twice
         if( GetFieldNameCol( aFieldName ) != -1 )
             return;
+
+        commitPendingGridChanges();
 
         m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
 
@@ -698,6 +703,9 @@ public:
 
     wxString GetValue( int aRow, int aCol ) override
     {
+        wxCHECK( aRow >= 0 && aRow < GetNumberRows(), wxEmptyString );
+        wxCHECK( aCol >= 0 && aCol < GetNumberCols(), wxEmptyString );
+
         return GetGroupedValue( m_rows[aRow], aCol );
     }
 

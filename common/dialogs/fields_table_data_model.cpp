@@ -184,15 +184,26 @@ wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::applyFieldPresenceRenderer( wxGrid
 }
 
 
+void FIELDS_TABLE_DATA_MODEL_BASE::commitPendingGridChanges()
+{
+    if( wxGrid* grid = GetView() )
+        static_cast<WX_GRID*>( grid )->CommitPendingChanges( true );
+}
+
+
 void FIELDS_TABLE_DATA_MODEL_BASE::MoveColumn( int aCol, int aNewPos )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
+    wxCHECK_RET( aNewPos >= 0 && aNewPos < static_cast<int>( m_cols.size() ), "Invalid New Column Position" );
 
     if( aCol == aNewPos )
     {
         return;
     }
-    else if( aCol < aNewPos )
+
+    commitPendingGridChanges();
+
+    if( aCol < aNewPos )
     {
         if( m_sortColumn == aCol )
             m_sortColumn = aNewPos;
@@ -216,6 +227,8 @@ void FIELDS_TABLE_DATA_MODEL_BASE::MoveColumn( int aCol, int aNewPos )
 void FIELDS_TABLE_DATA_MODEL_BASE::RemoveColumn( int aCol )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
+
+    commitPendingGridChanges();
 
     for( auto& [unused, fieldsStore] : m_dataStore )
     {
@@ -254,6 +267,10 @@ void FIELDS_TABLE_DATA_MODEL_BASE::RemoveColumn( int aCol )
 
 void FIELDS_TABLE_DATA_MODEL_BASE::RenameColumn( int aCol, const wxString& newName )
 {
+    wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
+
+    commitPendingGridChanges();
+
     for( auto& [unused, fieldsStore] : m_dataStore )
     {
         auto node = fieldsStore.extract( m_cols[aCol].m_fieldName );
@@ -327,6 +344,8 @@ std::vector<BOM_FIELD> FIELDS_TABLE_DATA_MODEL_BASE::GetFieldsOrdered()
 
 void FIELDS_TABLE_DATA_MODEL_BASE::SetFieldsOrder( const std::vector<wxString>& aNewOrder )
 {
+    commitPendingGridChanges();
+
     size_t foundCount = 0;
 
     for( const wxString& newField : aNewOrder )
@@ -403,8 +422,11 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::IsExpanderColumn( int aCol ) const
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::IsCellReadOnly( int, int aCol )
+bool FIELDS_TABLE_DATA_MODEL_BASE::IsCellReadOnly( int aRow, int aCol )
 {
+    wxCHECK( aRow >= 0 && aRow < GetNumberRows(), true );
+    wxCHECK( aCol >= 0 && aCol < GetNumberCols(), true );
+
     return IsExpanderColumn( aCol );
 }
 
