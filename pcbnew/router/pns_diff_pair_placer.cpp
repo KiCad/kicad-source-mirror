@@ -285,7 +285,7 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
 
         LINE postShove( preShove );
 
-        shove.ForceClearance( true, cur.Gap() - 2 * PNS_HULL_MARGIN );
+        shove.ForceClearance( true, cur.Dimensions().Gap() - 2 * PNS_HULL_MARGIN );
 
         bool sh1;
 
@@ -1024,8 +1024,8 @@ void DIFF_PAIR_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
         if( !m_sizes.TrackWidthIsExplicit() && m_hasFixedAnything )
             m_sizes.SetDiffPairWidth( prevDiffPairWidth );
 
-        m_currentTrace.SetWidth( m_sizes.DiffPairWidth() );
-        m_currentTrace.SetGap( m_sizes.DiffPairGap() );
+        DP_DIMENSIONS dims( m_sizes.DiffPairWidth(), m_sizes.DiffPairGap(), viaGap(), m_sizes.ViaDiameter(), 0 );
+        m_currentTrace.SetDimensions( dims );
 
         if( m_currentTrace.EndsWithVias() )
         {
