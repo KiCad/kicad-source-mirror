@@ -19,6 +19,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <memory>
 #include <import_export.h>
 #include <qa_utils/api_test_utils.h>
 #include <qa_utils/wx_utils/wx_assert.h>
@@ -26,8 +27,10 @@
 #include <settings/settings_manager.h>
 
 #include <api/board/board_types.pb.h>
+#include <api/common/types/embedded_files.pb.h>
 
 #include <board.h>
+#include <embedded_files.h>
 #include <footprint.h>
 #include <pcb_barcode.h>
 #include <pcb_dimension.h>
@@ -190,6 +193,45 @@ BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
     for( FOOTPRINT* footprint : m_board->Footprints() )
         testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get() );
 }
+
+
+BOOST_FIXTURE_TEST_CASE( EmbeddedFiles, PROTO_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "api_kitchen_sink", m_board );
+
+    for( const FOOTPRINT* fp : m_board->Footprints() )
+    {
+        if( fp->EmbeddedFileMap().empty() )
+            continue;
+
+        BOOST_TEST_CONTEXT( wxString::Format( wxS( "Footprint %s embedded files" ), fp->m_Uuid.AsStdString() ) )
+        {
+            google::protobuf::Any any;
+            fp->Serialize( any );
+
+            kiapi::board::types::FootprintInstance proto;
+            BOOST_CHECK( any.UnpackTo( &proto ) );
+
+            BOOST_CHECK_GT( proto.embedded_files().files_size(), 0 );
+
+            const kiapi::common::types::EmbeddedFile& file = proto.embedded_files().files( 0 );
+            BOOST_CHECK( !file.data().empty() );
+
+            std::unique_ptr<FOOTPRINT> roundTripped = std::make_unique<FOOTPRINT>( m_board.get() );
+            BOOST_CHECK( roundTripped->Deserialize( any ) );
+
+            for( const auto& [name, expected] : fp->EmbeddedFileMap() )
+            {
+                const EMBEDDED_FILES::EMBEDDED_FILE* actual = roundTripped->GetEmbeddedFile( name );
+                BOOST_CHECK_MESSAGE( actual, wxString::Format( wxS( "Embedded file '%s' missing after round-trip" ), name ).c_str() );
+                BOOST_CHECK_EQUAL( magic_enum::enum_name( expected->type ), magic_enum::enum_name( actual->type ) );
+                BOOST_CHECK_EQUAL( expected->data_hash, actual->data_hash );
+                BOOST_CHECK_EQUAL( expected->compressedEncodedData, actual->compressedEncodedData );
+            }
+        }
+    }
+}
+
 
 /**
  * Round-trip a copper-thieving zone through the protobuf API.  The shared

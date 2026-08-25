@@ -42,6 +42,8 @@
 #include <api/board/board_commands.pb.h>
 #include <api/board/board_jobs.pb.h>
 #include <api/schematic/schematic_jobs.pb.h>
+#include <api/common/types/embedded_files.pb.h>
+#include <embedded_files.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <constraints/pcb_constraint.h>
 #include <jobs/job_export_sch_netlist.h>
@@ -235,6 +237,11 @@ BOOST_AUTO_TEST_CASE( DielectricModel )
 BOOST_AUTO_TEST_CASE( BoardEdgeConnectorType )
 {
     testEnums<BS_EDGE_CONNECTOR_CONSTRAINTS, kiapi::board::BoardEdgeConnectorType>();
+}
+
+BOOST_AUTO_TEST_CASE( EmbeddedFileType )
+{
+    testEnums<EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE, kiapi::common::types::EmbeddedFileType>();
 }
 
 BOOST_AUTO_TEST_CASE( DrcSeverity )

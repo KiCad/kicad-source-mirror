@@ -74,6 +74,15 @@ private:
     HANDLER_RESULT<CustomRulesResponse> handleSetCustomDesignRules(
             const HANDLER_CONTEXT<SetCustomDesignRules>& aCtx );
 
+    HANDLER_RESULT<common::types::EmbeddedFiles> handleGetEmbeddedFiles(
+            const HANDLER_CONTEXT<GetEmbeddedFiles>& aCtx );
+
+    HANDLER_RESULT<google::protobuf::Empty> handleAddEmbeddedFiles(
+            const HANDLER_CONTEXT<AddEmbeddedFiles>& aCtx );
+
+    HANDLER_RESULT<google::protobuf::Empty> handleSetEmbeddedFiles(
+            const HANDLER_CONTEXT<SetEmbeddedFiles>& aCtx );
+
     HANDLER_RESULT<types::Vector2> handleGetBoardOrigin(
             const HANDLER_CONTEXT<GetBoardOrigin>& aCtx );
 
