@@ -133,8 +133,11 @@ private:
     bool setAttributeValue( const FOOTPRINT_REF& aRef, const wxString& aAttributeName, const wxString& aValue,
                             const wxString& aVariantName = wxEmptyString );
 
+protected:
     bool getLiveFieldValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName,
                             wxString& aValue ) override;
+
+private:
     std::vector<FOOTPRINT_REF> getAllItems() const override;
 
     wxString getFieldResolvedLiveValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName ) override;
@@ -147,4 +150,27 @@ protected:
     FOOTPRINT_REFERENCE_LIST m_footprintsList;
     SCOPE                    m_scope;
     KIID_PATH                m_path;
+};
+
+
+class LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL : public FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL
+{
+public:
+    static const wxString FOOTPRINT_NAME;
+    static const wxString FOOTPRINT_KEYWORDS;
+    static const wxString FOOTPRINT_LIBRARY_DESCRIPTION;
+
+    explicit LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( const FOOTPRINT_REFERENCE_LIST& aFootprints );
+
+    bool ColIsItemIdentifier( int aCol ) const override;
+
+    bool ApplyData( std::function<bool( FOOTPRINT& )> aChangeHandler );
+
+private:
+    bool fieldIsItemProperty( const wxString& aFieldName ) const override;
+
+    bool getLiveFieldValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName,
+                            wxString& aValue ) override;
+
+    wxString getItemIdentifier( const FOOTPRINT_REF& aRef ) const override;
 };

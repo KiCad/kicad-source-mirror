@@ -39,6 +39,12 @@
 #include <footprint_fields_data_model.h>
 
 
+const wxString LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::FOOTPRINT_NAME = wxS( "${FOOTPRINT_NAME}" );
+const wxString LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::FOOTPRINT_KEYWORDS = wxS( "${FOOTPRINT_KEYWORDS}" );
+const wxString LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::FOOTPRINT_LIBRARY_DESCRIPTION =
+        wxS( "${FOOTPRINT_LIBRARY_DESCRIPTION}" );
+
+
 /**
  * Data store UUID for a footprint is just the footprint's UUID, since footprints are unique across the board.
  */
@@ -422,7 +428,7 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
             continue;
         }
 
-        if( !MatchesFilter( ref, footprint.GetReferenceAsString(), matcher ) )
+        if( !MatchesFilter( ref, getItemIdentifier( ref ), matcher ) )
             continue;
 
         if( m_excludeDNP )
@@ -753,4 +759,58 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows( size_t aPosition, size
     }
 
     return true;
+}
+
+
+LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL(
+        const FOOTPRINT_REFERENCE_LIST& aFootprints ) :
+        FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( aFootprints )
+{
+    m_includeExcluded = true;
+}
+
+
+bool LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemIdentifier( int aCol ) const
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+    return m_cols[aCol].m_fieldName == FOOTPRINT_NAME;
+}
+
+
+bool LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::fieldIsItemProperty( const wxString& aFieldName ) const
+{
+    return aFieldName == FOOTPRINT_NAME || aFieldName == FOOTPRINT_KEYWORDS
+           || aFieldName == FOOTPRINT_LIBRARY_DESCRIPTION
+           || FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::fieldIsItemProperty( aFieldName );
+}
+
+
+bool LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( const FOOTPRINT_REF& aRef,
+                                                                     const wxString& aFieldName, wxString& aValue )
+{
+    const FOOTPRINT& footprint = aRef.GetFootprint();
+
+    if( aFieldName == FOOTPRINT_NAME )
+    {
+        aValue = footprint.GetName();
+        return true;
+    }
+    else if( aFieldName == FOOTPRINT_KEYWORDS )
+    {
+        aValue = footprint.GetKeywords();
+        return true;
+    }
+    else if( aFieldName == FOOTPRINT_LIBRARY_DESCRIPTION )
+    {
+        aValue = footprint.GetLibDescription();
+        return true;
+    }
+
+    return FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( aRef, aFieldName, aValue );
+}
+
+
+wxString LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getItemIdentifier( const FOOTPRINT_REF& aRef ) const
+{
+    return aRef.GetFootprint().GetName();
 }
