@@ -29,6 +29,7 @@
 #include <layer_ids.h>
 #include <lset.h>
 #include <api/common/types/base_types.pb.h>
+#include <api/common/types/embedded_files.pb.h>
 #include <api/board/board_types.pb.h>
 
 class BOARD_ITEM;
@@ -53,6 +54,10 @@ void PackZoneLayerOverrides( google::protobuf::RepeatedPtrField<types::ZoneLayer
 
 void UnpackZoneLayerOverrides( std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE>& aOutput,
                                const google::protobuf::RepeatedPtrField<types::ZoneLayerOverrideEntry>& aInput );
+
+void PackEmbeddedFiles( kiapi::common::types::EmbeddedFiles& aOutput, const EMBEDDED_FILES& aFiles );
+
+bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const kiapi::common::types::EmbeddedFiles& aProto );
 
 }   // namespace kiapi::board
 

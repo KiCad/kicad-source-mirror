@@ -23,6 +23,7 @@ package kiapi.board.types;
 
 import "google/protobuf/any.proto";
 import "common/types/base_types.proto";
+import "common/types/embedded_files.proto";
 
 enum BoardLayer
 {
@@ -1273,6 +1274,9 @@ message FootprintInstance
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 17;
+
+  // Since: 10.0.7
+  kiapi.common.types.EmbeddedFiles embedded_files = 18;
 }
 
 // Since: 10.0.7

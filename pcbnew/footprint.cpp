@@ -443,6 +443,8 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     footprint.set_symbol_sheet_filename( m_sheetfile.ToUTF8() );
     footprint.set_symbol_footprint_filters( m_filters.ToUTF8() );
 
+    kiapi::board::PackEmbeddedFiles( *footprint.mutable_embedded_files(), *this );
+
     aContainer.PackFrom( footprint );
 }
 
@@ -655,6 +657,9 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
         if( item && item->Deserialize( itemMsg ) )
             Add( item.release(), ADD_MODE::APPEND );
     }
+
+    if( !kiapi::board::UnpackEmbeddedFiles( *this, footprint.embedded_files() ) )
+        return false;
 
     return true;
 }

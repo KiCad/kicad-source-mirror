@@ -98,6 +98,15 @@ private:
     HANDLER_RESULT<BoardEnabledLayersResponse> handleSetBoardEnabledLayers(
             const HANDLER_CONTEXT<SetBoardEnabledLayers>& aCtx );
 
+    HANDLER_RESULT<common::types::EmbeddedFiles> handleGetEmbeddedFiles(
+            const HANDLER_CONTEXT<GetEmbeddedFiles>& aCtx );
+
+    HANDLER_RESULT<google::protobuf::Empty> handleAddEmbeddedFiles(
+            const HANDLER_CONTEXT<AddEmbeddedFiles>& aCtx );
+
+    HANDLER_RESULT<google::protobuf::Empty> handleSetEmbeddedFiles(
+            const HANDLER_CONTEXT<SetEmbeddedFiles>& aCtx );
+
     HANDLER_RESULT<GraphicsDefaultsResponse> handleGetGraphicsDefaults(
             const HANDLER_CONTEXT<GetGraphicsDefaults>& aCtx );
 

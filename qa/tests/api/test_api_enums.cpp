@@ -37,6 +37,8 @@
 // Board-specific
 #include <api/board/board_types.pb.h>
 #include <api/board/board_commands.pb.h>
+#include <api/common/types/embedded_files.pb.h>
+#include <embedded_files.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <padstack.h>
 #include <pcb_dimension.h>
@@ -203,6 +205,11 @@ BOOST_AUTO_TEST_CASE( BoardEdgeConnectorType )
 BOOST_AUTO_TEST_CASE( DrcSeverity )
 {
     testEnums<SEVERITY, kiapi::board::commands::DrcSeverity>();
+}
+
+BOOST_AUTO_TEST_CASE( EmbeddedFileType )
+{
+    testEnums<EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE, kiapi::common::types::EmbeddedFileType>();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

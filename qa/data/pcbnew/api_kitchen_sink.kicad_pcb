@@ -257,6 +257,12 @@
 				)
 			)
 		)
+		(point
+			(at 0 0)
+			(size 1)
+			(layer "F.Cu")
+			(uuid "25abe82a-ea88-49ae-ac42-c5c2284fcc4f")
+		)
 		(pad "1" smd roundrect
 			(at -0.825 0)
 			(size 0.8 0.95)
@@ -272,12 +278,6 @@
 			(roundrect_rratio 0.25)
 			(pintype "passive+no_connect")
 			(uuid "dae62be7-5b36-462f-8f68-44e6e11e6733")
-		)
-		(point
-			(at 0 0)
-			(size 1)
-			(layer "F.Cu")
-			(uuid "25abe82a-ea88-49ae-ac42-c5c2284fcc4f")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step"
@@ -477,6 +477,13 @@
 			(uuid "e4c3da09-b528-46c0-994c-2d6a13e53a11")
 		)
 		(embedded_fonts no)
+		(embedded_files
+			(file
+				(name "icon_pcbnew_48.png")
+				(type other)
+				(checksum "9AB164C455965EC6CA9F3928F341F0B3")
+			)
+		)
 		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step"
 			(offset
 				(xyz 0 0 0)
@@ -1537,6 +1544,18 @@
 			)
 		)
 	)
+	(gr_rect
+		(start 170 55)
+		(end 174 58)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.5)
+		(uuid "0c07eb2c-c5db-4f8e-8275-48f152e9e126")
+	)
 	(gr_poly
 		(pts
 			(arc
@@ -2375,6 +2394,15 @@
 			)
 		)
 	)
+	(segment
+		(start 170 50)
+		(end 172 50)
+		(width 0.2)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.6)
+		(net "")
+		(uuid "f0d13343-ad3f-4a47-aba7-e70711c71e3f")
+	)
 	(via
 		(at 120 102)
 		(size 0.6)
@@ -2440,6 +2468,16 @@
 		(filling no)
 		(net "")
 		(uuid "beec9209-4c19-4ad5-ac29-5a2a547cb37b")
+	)
+	(arc
+		(start 170 52)
+		(mid 171 53)
+		(end 172 52)
+		(width 0.2)
+		(layers "F.Cu" "F.Mask")
+		(solder_mask_margin 0.7)
+		(net "")
+		(uuid "a5054360-9a44-42b3-8994-84b572b6d18c")
 	)
 	(segment
 		(start 88.3 63.2)
@@ -5811,29 +5849,35 @@
 			)
 		)
 	)
-	(gr_rect
-		(start 170 55)
-		(end 174 58)
-		(layers "F.Cu" "F.Mask")
-		(solder_mask_margin 0.5)
-		(uuid "0c07eb2c-c5db-4f8e-8275-48f152e9e126")
-	)
-	(segment
-		(start 170 50)
-		(end 172 50)
-		(width 0.2)
-		(layers "F.Cu" "F.Mask")
-		(solder_mask_margin 0.6)
-		(uuid "f0d13343-ad3f-4a47-aba7-e70711c71e3f")
-	)
-	(arc
-		(start 170 52)
-		(mid 171 53)
-		(end 172 52)
-		(width 0.2)
-		(layers "F.Cu" "F.Mask")
-		(solder_mask_margin 0.7)
-		(uuid "a5054360-9a44-42b3-8994-84b572b6d18c")
-	)
 	(embedded_fonts no)
+	(embedded_files
+		(file
+			(name "icon_pcbnew_48.png")
+			(type other)
+			(data |KLUv/WDaA9EmAIlQTkcNChoKAAAADUlIRFIAAAAwAAAAMAgGAAAAVwL5hwAABKFJREFUaN7Vml9M
+				FEccx0dOgeSAhuAJgv9ieJBA0NQ3DixEz4MXmj60ffCteCiRFsIBQohpBZsoeuDJ3RlFm2hMUdRU
+				fTdpEzX+jdiQ2ERIjA9KrCFmo0eaiL/Ob5aF29vZu9m9PQ42+WZvZpe772fmNzO/nYWQ6GMvqSIe
+				cr42VDtJNUPLgKKfmfTK0fV613n3xNHMnJdztcHaSqJ77CE5pIFcEzW8iADRGq07VZejNb+XPOP9
+				yBIEQI2pISJafpkAAA2nKwsxH+NHliwAVd3pOicC/LZcAaiGEWByGQO8QIDwMgYIE94PJBtgc89m
+				yyBSAoAqPlTMNbRjcAds+WUL5LfnQ25rLtib7eyMZazH64sKsLZjrTDEpp5NuvdGKq8tD6pPVicH
+				wB1yq0xhORaEWWU0ZTAIywEK2gu0EEE3FHYWWg6xum114gDp+9NTCmEaoNJXycp4thpilYdASzeB
+				J/0E3gwSuH+MQCstr7QCQDGLZ+eAk9VVDVSxmLQCIo3qah8Bya/VjSMEbB6TALwWF4HAARwNEUu9
+				gW2y4dNfgDR+GaTpKZCeXwcplMPqv283CBDPrNUQfwytlwH+bAdJkhb010FWP3xYEMBIi5sNJ55u
+				DhXNAXSoARCI1g/9LAhg1KxVEL2BrTIAhsz4CA2hN3IoBe2s/huvIECyIOJpBR2ko0f4g/j3Pvm6
+				MIBZiMjwMzO32+amUZw+Xw0QeNwvlzUzkAiAWYh4yVzSFzIjELwWXwyAmKlEhke78hlpcR6AXgqN
+				Wte1zpD5zKZMqPZzkrnv6ELxgMbcezpopudWv7JmNYRIi/MAYs0+RnIlbHk0r0mnD3RFjPpABj2v
+				YJ+naD5SHgVhJlsVWciUB5qCjgLIbcmFrB+z2BnL3Aca5cO3oZ3wzm9jhv97cgLg8yf4HH4L4Rtu
+				Vnfr18TTbQufhbUAPcEvmdEPl8og8pid/ofVYzhFTmNLDqA7sF0GuFBMW392AeDfMVb/elC9iFgF
+				gLHsaHNAWmNa3OdqvMfhdczHvwrg65ALpvwrmdmZ2/tgVnoJn6YewscRGexib3JCCM0b3RhACO5D
+				fb1XDpXoJfz5CQIbmpIDoLR8TWs63DuWB5M+B1d36bXq1vT5ntDdldj+E4FLtLX/Pk7gEZ1O+w8R
+				WLNffU9Wc5ZlAMq1uzHMK7pzNE/7/UZXv6LOInAFXJavA/HMKxLe2NImWDYo7S2d/8PyvnKwNdqE
+				eySlALg7pqQQrqALNnZvNNwjKQuhSIOY/2Q3Z5vqkXiDGAdoLAg0/1WLwCAWCRkzPaI7jXotnEZ5
+				z8RoBk0l0iPYYiWHS/QXMq+xhazGXyO+uYvhkEiP2A/YocJXkZQ0QgEIG9kXEu0RFG6J7xralTTz
+				yguOCSM7cyI9EitkLBZ7xXQukb3R6B5h4eRzCpvgJXO6247aZO4MIY2kMpHdaaVHUIUHC+fDSVS8
+				ZC6elFlod3B3hfyu2ENGrXg/YCYMzCZz7pD7svpfDTxkLBUAJlfip/Xn67PV/y/xA8mmF66kCkA0
+				FyINZIR51T0aiJN+4TD98gk2TaUeIEz1YsK35ixVRbTd/wHFfB3XY5ywdgAAAABJRU5ErkJggg==|
+			)
+			(checksum "9AB164C455965EC6CA9F3928F341F0B3")
+		)
+	)
 )

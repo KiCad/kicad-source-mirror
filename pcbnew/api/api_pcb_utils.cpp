@@ -22,6 +22,7 @@
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <board.h>
+#include <embedded_files.h>
 #include <teardrop/teardrop_parameters.h>
 #include <board_item_container.h>
 #include <footprint.h>
@@ -206,6 +207,48 @@ void UnpackZoneLayerOverrides( std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE>& aOut
 
         aOutput[FromProtoEnum<PCB_LAYER_ID>( entry.layer() )] = overrideVal;
     }
+}
+
+
+void PackEmbeddedFiles( common::types::EmbeddedFiles& aOutput, const EMBEDDED_FILES& aFiles )
+{
+    for( const auto& [name, file] : aFiles.EmbeddedFileMap() )
+    {
+        if( file->compressedEncodedData.empty() )
+            continue;
+
+        common::types::EmbeddedFile* proto = aOutput.add_files();
+        proto->set_name( name.ToUTF8() );
+        proto->set_type(
+                ToProtoEnum<EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE, common::types::EmbeddedFileType>( file->type ) );
+        proto->set_data( file->compressedEncodedData );
+        proto->set_data_hash( file->data_hash );
+    }
+}
+
+
+bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const common::types::EmbeddedFiles& aProto )
+{
+    aOutput.ClearEmbeddedFiles();
+
+    for( const common::types::EmbeddedFile& protoFile : aProto.files() )
+    {
+        auto file = std::make_shared<EMBEDDED_FILES::EMBEDDED_FILE>();
+        file->name = wxString::FromUTF8( protoFile.name() );
+        file->type = FromProtoEnum<EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE>( protoFile.type() );
+        file->compressedEncodedData = protoFile.data();
+        file->data_hash = protoFile.data_hash();
+
+        if( EMBEDDED_FILES::DecompressAndDecode( *file ) != EMBEDDED_FILES::RETURN_CODE::OK )
+            return false;
+
+        if( !file->Validate() )
+            return false;
+
+        aOutput.AddFile( file );
+    }
+
+    return true;
 }
 
 }   // namespace kiapi::board

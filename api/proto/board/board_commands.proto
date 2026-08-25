@@ -23,6 +23,7 @@ syntax = "proto3";
 package kiapi.board.commands;
 
 import "common/types/base_types.proto";
+import "common/types/embedded_files.proto";
 import "google/protobuf/any.proto";
 import "common/types/enums.proto";
 import "common/types/project_settings.proto";
@@ -80,6 +81,26 @@ message SetBoardEnabledLayers
   // by setting copper_layer_count.  Note that the F/B.Courtyard, Edge.Cuts, and Margin layers cannot be disabled and
   // will be present in the board even if they are omitted from this list.
   repeated kiapi.board.types.BoardLayer layers = 3;
+}
+
+// Returns kiapi.common.types.EmbeddedFiles
+message GetEmbeddedFiles
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+}
+
+// Appends embedded files to the board.  Returns Empty.
+message AddEmbeddedFiles
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+  kiapi.common.types.EmbeddedFiles files = 2;
+}
+
+// Replaces all embedded files in the board.  Returns Empty.
+message SetEmbeddedFiles
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+  kiapi.common.types.EmbeddedFiles files = 2;
 }
 
 message GetGraphicsDefaults

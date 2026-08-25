@@ -20,6 +20,7 @@
 #include <api/api_enums.h>
 #include <kicommon.h>
 #include <api/common/types/enums.pb.h>
+#include <api/common/types/embedded_files.pb.h>
 #include <api/board/board_types.pb.h>
 #include <api/board/board_commands.pb.h>
 #include <api/schematic/schematic_types.pb.h>
@@ -30,6 +31,7 @@
 #include <layer_ids.h>
 #include <pin_type.h>
 #include <stroke_params.h>
+#include <embedded_files.h>
 
 using namespace kiapi;
 using namespace kiapi::common;
@@ -583,4 +585,37 @@ board::commands::BoardFlipDirection ToProtoEnum( FLIP_DIRECTION aValue )
 
     wxCHECK_MSG( false, board::commands::BoardFlipDirection::BFD_UNKNOWN,
                  "Unhandled case in ToProtoEnum<FLIP_DIRECTION>" );
+}
+
+
+template<> KICOMMON_API
+EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE FromProtoEnum( common::types::EmbeddedFileType aValue )
+{
+    switch( aValue )
+    {
+    case common::types::EFT_FONT:      return EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
+    case common::types::EFT_MODEL:     return EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL;
+    case common::types::EFT_WORKSHEET: return EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::WORKSHEET;
+    case common::types::EFT_DATASHEET: return EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::DATASHEET;
+    default:
+    case common::types::EFT_UNKNOWN:
+    case common::types::EFT_OTHER:     return EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::OTHER;
+    }
+}
+
+
+template<> KICOMMON_API
+common::types::EmbeddedFileType ToProtoEnum( EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE aValue )
+{
+    switch( aValue )
+    {
+    case EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT:      return common::types::EFT_FONT;
+    case EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL:     return common::types::EFT_MODEL;
+    case EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::WORKSHEET: return common::types::EFT_WORKSHEET;
+    case EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::DATASHEET: return common::types::EFT_DATASHEET;
+    case EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::OTHER:     return common::types::EFT_OTHER;
+    }
+
+    wxCHECK_MSG( false, common::types::EFT_UNKNOWN,
+                 "Unhandled case in ToProtoEnum<EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE>" );
 }
