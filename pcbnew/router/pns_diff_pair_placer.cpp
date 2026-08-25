@@ -116,8 +116,18 @@ bool DIFF_PAIR_PLACER::rhMarkObstacles( const VECTOR2I& aP )
     if( !routeHead( aP ) )
         return false;
 
-    bool collP = static_cast<bool>( m_currentNode->CheckColliding( &m_currentTrace.PLine() ) );
-    bool collN = static_cast<bool>( m_currentNode->CheckColliding( &m_currentTrace.NLine() ) );
+
+    COLLISION_SEARCH_OPTIONS ctxOpts;
+    ctxOpts.m_filter = [&] ( const PNS::ITEM* aTestItem, const PNS::ITEM* aRefItem ) -> bool { 
+        if( aTestItem->Net() == m_currentTrace.NetP() || aTestItem->Net() == m_currentTrace.NetN() )
+        {
+            return false;
+        }
+        return true;
+    };
+
+    bool collP = (m_currentNode->CheckColliding( &m_currentTrace.PLine(), ctxOpts ) );
+    bool collN = (m_currentNode->CheckColliding( &m_currentTrace.NLine(), ctxOpts ) );
 
     m_fitOk = !( collP || collN ) ;
 
@@ -211,10 +221,24 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
                                     bool aPFirst, bool aWindCw, bool aSolidsOnly )
 {
     WALKAROUND walkaround( aNode, Router() );
+    WALKAROUND::STATUS wf1;
+    COLLISION_SEARCH_OPTIONS opts;
+
+    auto excludeHeadDp = [aCurrent] ( const ITEM* aTestItem, const ITEM *aRefItem ) -> bool
+    {
+        if( aTestItem->Net() == aCurrent->NetN() || aTestItem->Net() == aCurrent->NetP() )
+        {
+            return false;
+        }
+        return true;
+    };
 
     walkaround.SetSolidsOnly( aSolidsOnly );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
     walkaround.SetAllowedPolicies( { WALKAROUND::WP_SHORTEST } );
+    walkaround.SetCollisionFilter( excludeHeadDp );
+    walkaround.SetDebugDecorator( Dbg() );
+
 
     SHOVE shove( aNode, Router() );
     LINE walkP, walkN;
@@ -229,21 +253,26 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
 
     int mask = aSolidsOnly ? ITEM::SOLID_T : ITEM::ANY_T;
 
+    opts.m_kindMask = mask;
+    opts.m_filter = excludeHeadDp;
+
     do
     {
         LINE preWalk = ( currentIsP ? cur.PLine() : cur.NLine() );
         LINE preShove = ( currentIsP ? cur.NLine() : cur.PLine() );
         LINE postWalk;
 
-        if( !aNode->CheckColliding ( &preWalk, mask ) )
+        if( !aNode->CheckColliding ( &preWalk, opts ) )
         {
             currentIsP = !currentIsP;
 
-            if( !aNode->CheckColliding( &preShove, mask ) )
+            if( !aNode->CheckColliding( &preShove, opts ) )
                 break;
             else
                 continue;
         }
+
+        PNS_DBG( Dbg(), AddItem, &preWalk, GREEN, 100000, wxString::Format("preWalk") );
 
         auto wf1 = walkaround.Route( preWalk );
 
@@ -251,6 +280,8 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
             return false;
 
         postWalk = wf1.lines[ WALKAROUND::WP_SHORTEST ];
+
+        PNS_DBG( Dbg(), AddItem, &postWalk, BLUE, 100000, wxString::Format("postWalk") );
 
         LINE postShove( preShove );
 
@@ -270,14 +301,14 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
 
         currentIsP = !currentIsP;
 
-        if( !aNode->CheckColliding( &postShove, mask ) )
+        if( !aNode->CheckColliding( &postShove, opts ) )
             break;
 
         iter++;
     }
-    while( iter < 3 );
+    while( iter < 2 );
 
-    if( iter == 3 )
+    if( iter == 2 )
         return false;
 
     aWalk.SetShape( cur.CP(), cur.CN() );
