@@ -289,10 +289,13 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
             }
             else if( actual == 0 && otherNet && testShorting )
             {
+                int itemNetCode = itemNet ? itemNet->GetNetCode() : 0;
+                int otherNetCode = otherNet ? otherNet->GetNetCode() : 0;
+
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
-                                                           itemNet ? itemNet->GetNetname() : _( "<no net>" ),
-                                                           otherNet ? otherNet->GetNetname() : _( "<no net>" ) ) );
+                                                           itemNetCode ? itemNet->GetNetname() : _( "<no net>" ),
+                                                           otherNetCode ? otherNet->GetNetname() : _( "<no net>" ) ) );
                 drcItem->SetItems( item, other );
                 reportTwoPointGeometry( drcItem, pos, pos, pos, layer );
                 has_error = true;
@@ -580,10 +583,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testKnockoutTextAgainstZone( BOARD_ITEM
 
             if( testShorts && actual == 0 && *aInheritedNet )
             {
+                int             inheritedNetCode = ( *aInheritedNet )->GetNetCode();
+                const wxString& inheritedNetname = ( *aInheritedNet )->GetNetname();
+                int             zoneNetCode = aZone->GetNetCode();
+
                 drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                 drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
-                                                           ( *aInheritedNet )->GetNetname(),
-                                                           aZone->GetNetname() ) );
+                                                           inheritedNetCode ? inheritedNetname : _( "<no net>" ),
+                                                           zoneNetCode ? aZone->GetNetname() : _( "<no net>" ) ) );
             }
             else
             {
@@ -821,8 +828,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
             drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
-                                                       pad->GetNetname(),
-                                                       otherPad->GetNetname() ) );
+                                                       padNet ? pad->GetNetname() : _( "<no net>" ),
+                                                       otherNet ? otherPad->GetNetname() : _( "<no net>" ) ) );
+
             drcItem->SetItems( pad, otherPad );
             reportViolation( drcItem, otherPad->GetPosition(), aLayer );
             has_error = true;
@@ -849,8 +857,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
                     drcItem->SetErrorDetail( wxString::Format( _( "(nets %s and %s)" ),
-                                                               pad->GetNetname(),
-                                                               otherCItem->GetNetname() ) );
+                                                               padNet ? pad->GetNetname() : _( "<no net>" ),
+                                                               otherNet ? otherPad->GetNetname() : _( "<no net>" ) ) );
                     drcItem->SetItems( pad, other );
                     reportTwoPointGeometry( drcItem, pos, pos, pos, aLayer );
                     has_error = true;

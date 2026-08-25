@@ -76,60 +76,97 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-                // TODO: once we have padstacks this will need to run per-layer...
-                auto constraint = m_drcEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, item, nullptr,
-                                                          UNDEFINED_LAYER );
-                bool fail_min = false;
-                bool fail_max = false;
-                int  constraintDiameter = 0;
-                // TODO(JE) padstacks
-                int  actual = via->GetWidth( PADSTACK::ALL_LAYERS );
+                via->Padstack().ForEachUniqueLayer(
+                        [&]( PCB_LAYER_ID aLayer )
+                        {
+                            DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, item,
+                                                                                nullptr, aLayer );
+                            bool fail_min = false;
+                            bool fail_max = false;
+                            int  constraintDiameter = 0;
+                            int  actual = via->GetWidth( aLayer );
 
-                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
-                {
-                    if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
-                    {
-                        fail_min = true;
-                        constraintDiameter = constraint.Value().Min();
-                    }
+                            auto layerDesc =
+                                    [&]() -> wxString
+                                    {
+                                        if( aLayer == F_Cu )
+                                            return m_drcEngine->GetBoard()->GetLayerName( F_Cu );
+                                        else if( aLayer == B_Cu )
+                                            return m_drcEngine->GetBoard()->GetLayerName( B_Cu );
+                                        else if( via->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK )
+                                            return _( "Inner Layers" );
+                                        else
+                                            return m_drcEngine->GetBoard()->GetLayerName( aLayer );
+                                    };
 
-                    if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
-                    {
-                        fail_max = true;
-                        constraintDiameter = constraint.Value().Max();
-                    }
-                }
+                            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+                            {
+                                if( constraint.Value().HasMin() && actual < constraint.Value().Min() )
+                                {
+                                    fail_min = true;
+                                    constraintDiameter = constraint.Value().Min();
+                                }
 
-                if( fail_min || fail_max )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_DIAMETER );
-                    wxString constraintName = constraint.GetName();
-                    wxString msg;
+                                if( constraint.Value().HasMax() && actual > constraint.Value().Max() )
+                                {
+                                    fail_max = true;
+                                    constraintDiameter = constraint.Value().Max();
+                                }
+                            }
 
-                    if( fail_min )
-                    {
-                        if( constraint.m_ImplicitMin )
-                            constraintName = _( "board setup constraints" );
+                            if( fail_min || fail_max )
+                            {
+                                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_VIA_DIAMETER );
+                                wxString constraintName = constraint.GetName();
+                                wxString msg;
 
-                        msg = formatMsg( _( "(%s min diameter %s; actual %s)" ),
-                                         constraintName,
-                                         constraintDiameter,
-                                         actual );
-                    }
-                    else if( fail_max )
-                    {
-                        msg = formatMsg( _( "(%s max diameter %s; actual %s)" ),
-                                         constraintName,
-                                         constraintDiameter,
-                                         actual );
-                    }
+                                if( fail_min )
+                                {
+                                    if( constraint.m_ImplicitMin )
+                                        constraintName = _( "board setup constraints" );
 
-                    drcItem->SetErrorDetail( msg );
-                    drcItem->SetItems( item );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+                                    if( via->Padstack().Mode() == PADSTACK::MODE::NORMAL )
+                                    {
+                                        msg = formatMsg( _( "(%s min diameter %s; actual %s)" ),
+                                                         constraintName,
+                                                         constraintDiameter,
+                                                         actual );
+                                    }
+                                    else
+                                    {
+                                        msg = formatMsg( _( "(%s min diameter %s; actual %s on %s)" ),
+                                                         constraintName,
+                                                         constraintDiameter,
+                                                         actual,
+                                                         layerDesc() );
+                                    }
+                                }
+                                else if( fail_max )
+                                {
+                                    if( via->Padstack().Mode() == PADSTACK::MODE::NORMAL )
+                                    {
+                                        msg = formatMsg( _( "(%s max diameter %s; actual %s)" ),
+                                                         constraintName,
+                                                         constraintDiameter,
+                                                         actual );
+                                    }
+                                    else
+                                    {
+                                        msg = formatMsg( _( "(%s max diameter %s; actual %s on %s)" ),
+                                                         constraintName,
+                                                         constraintDiameter,
+                                                         actual,
+                                                         layerDesc() );
+                                    }
+                                }
 
-                    reportViolation( drcItem, via->GetPosition(), via->GetLayer() );
-                }
+                                drcItem->SetErrorDetail( msg );
+                                drcItem->SetItems( item );
+                                drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                                reportViolation( drcItem, via->GetPosition(), via->GetLayer() );
+                            }
+                        } );
 
                 return true;
             };

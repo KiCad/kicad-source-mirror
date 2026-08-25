@@ -401,6 +401,26 @@ wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxSt
     return wxString::Format( aFormatString, aSource, std::move( constraint_str ), std::move( actual_str ) );
 }
 
+
+wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource,
+                                       double aConstraint, double aActual, const wxString& aAdditionalParam,
+                                       EDA_DATA_TYPE aType )
+{
+    wxString constraint_str = MessageTextFromValue( aConstraint, true, aType );
+    wxString actual_str = MessageTextFromValue( aActual, true, aType );
+
+    if( constraint_str == actual_str )
+    {
+        // Use more precise formatting if the message-text strings were equal.
+        constraint_str = StringFromValue( aConstraint, true, aType );
+        actual_str = StringFromValue( aActual, true, aType );
+    }
+
+    return wxString::Format( aFormatString, aSource, std::move( constraint_str ), std::move( actual_str ),
+                             aAdditionalParam );
+}
+
+
 wxString DRC_TEST_PROVIDER::formatMsg( const wxString& aFormatString, const wxString& aSource,
                                        const EDA_ANGLE& aConstraint, const EDA_ANGLE& aActual )
 {
