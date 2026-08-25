@@ -60,6 +60,7 @@
 #include <dialogs/panel_grid_settings.h>
 #include <panel_display_options.h>
 #include <panel_edit_options.h>
+#include <panel_project_defaults.h>
 #include <dialogs/panel_snapping.h>
 #include <panel_fp_editor_field_defaults.h>
 #include <panel_fp_editor_graphics_defaults.h>
@@ -560,6 +561,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_PCB_ACTION_PLUGINS:
             return new PANEL_PCBNEW_ACTION_PLUGINS( aParent );
+
+        case PANEL_PCB_PROJECT_DEFAULTS:
+            return new PANEL_PROJECT_DEFAULTS( aParent, GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) );
 
         case PANEL_3DV_DISPLAY_OPTIONS:
             return new PANEL_3D_DISPLAY_OPTIONS( aParent );

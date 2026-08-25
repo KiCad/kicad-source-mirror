@@ -207,6 +207,16 @@ public:
         bool m_ShowConstraints; ///< Keep the geometric-constraint overlay shown.
     };
 
+    struct PROJECT_DEFAULT_SETTINGS
+    {
+        double m_TrackOpacity{ 1.0 };
+        double m_ViaOpacity{ 1.0 };
+        double m_PadOpacity{ 1.0 };
+        double m_ZoneOpacity{ 0.6 };
+        double m_FilledShapeOpacity{ 1.0 };
+        double m_ImageOpacity{ 0.6 };
+    };
+
     struct DIFF_PHASE_SKEW_SETTINGS
     {
         KIGFX::COLOR4D m_ZeroSkewColor{ 1.0, 1.0, 1.0, 1.0 };
@@ -235,6 +245,8 @@ public:
     WINDOW_SETTINGS    m_FootprintWizard;
 
     DISPLAY_OPTIONS    m_Display;
+
+    PROJECT_DEFAULT_SETTINGS m_ProjectDefaults;
 
     FIELDS_TABLE_SETTINGS m_FieldEditorPanel;
 

@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "pcbnew_settings.h"
 #include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
@@ -84,6 +85,27 @@ void PCB_EDIT_FRAME::ApplyProjectFileSettings()
 bool PCB_EDIT_FRAME::LoadProjectSettings()
 {
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+
+    // Construct the path to the project's .kicad_prl file
+    wxFileName prlPath( Prj().GetProjectPath(), Prj().GetProjectName(), FILEEXT::ProjectLocalSettingsFileExtension );
+
+    // If the project is new (no .kicad_prl file is create yet),
+    // Load opacity defaults.
+
+    if( !prlPath.FileExists() )
+    {
+        PCBNEW_SETTINGS* appSettings = GetPcbNewSettings();
+
+        if( appSettings )
+        {
+            localSettings.m_TrackOpacity = appSettings->m_ProjectDefaults.m_TrackOpacity;
+            localSettings.m_ViaOpacity = appSettings->m_ProjectDefaults.m_ViaOpacity;
+            localSettings.m_PadOpacity = appSettings->m_ProjectDefaults.m_PadOpacity;
+            localSettings.m_ZoneOpacity = appSettings->m_ProjectDefaults.m_ZoneOpacity;
+            localSettings.m_ImageOpacity = appSettings->m_ProjectDefaults.m_ImageOpacity;
+            localSettings.m_ShapeOpacity = appSettings->m_ProjectDefaults.m_FilledShapeOpacity;
+        }
+    }
 
     ApplyProjectFileSettings();
 
