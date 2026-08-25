@@ -105,6 +105,7 @@ private:
     bool unitMatch( LIB_SYMBOL* const& lhItem, LIB_SYMBOL* const& rhItem ) override;
 
     bool fieldIsAttribute( const wxString& aFieldName ) const override;
+    bool fieldIsItemProperty( const wxString& aFieldName ) const override;
 
     wxString getAttributeValue( const LIB_SYMBOL*, const wxString& aAttributeName );
     void setAttributeValue( LIB_SYMBOL* aSymbol, const wxString& aAttributeName, const wxString& aValue );

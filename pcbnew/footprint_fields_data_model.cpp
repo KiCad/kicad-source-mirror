@@ -140,13 +140,6 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, cons
     if( IsCellReadOnly( aRow, aCol ) )
         return;
 
-    // Can't modify references or generated fields (e.g. ${QUANTITY})
-    if( ColIsReference( aCol )
-        || ( IsGeneratedField( m_cols[aCol].m_fieldName ) && !ColIsAttribute( aCol ) ) )
-    {
-        return;
-    }
-
     if( aValue == INDETERMINATE_STATE )
         return;
 
@@ -160,12 +153,12 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, cons
 }
 
 
-bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::IsCellReadOnly( int aRow, int aCol )
+bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReadOnly( int aCol ) const
 {
-    return FIELDS_TABLE_DATA_MODEL<FOOTPRINT_REF>::IsCellReadOnly( aRow, aCol )
+    return FIELDS_TABLE_DATA_MODEL<FOOTPRINT_REF>::ColIsReadOnly( aCol )
            || ColIsFootprint( aCol )
-           || GetColFieldName( aCol ) == wxS( "${EXCLUDE_FROM_BOARD}" )
-           || GetColFieldName( aCol ) == wxS( "${EXCLUDE_FROM_SIM}" );
+           || m_cols[aCol].m_fieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
+           || m_cols[aCol].m_fieldName == wxS( "${EXCLUDE_FROM_SIM}" );
 }
 
 

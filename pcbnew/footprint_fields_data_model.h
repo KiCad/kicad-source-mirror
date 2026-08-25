@@ -93,7 +93,7 @@ public:
 
     const FOOTPRINT_REFERENCE_LIST& GetReferenceList() const { return m_footprintsList; }
 
-    bool IsCellReadOnly( int aRow, int aCol ) override;
+    bool ColIsReadOnly( int aCol ) const override;
 
 private:
     bool unitMatch( const FOOTPRINT_REF& lhItem, const FOOTPRINT_REF& rhItem ) override;

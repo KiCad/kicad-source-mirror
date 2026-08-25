@@ -81,7 +81,10 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
     wxCHECK_RET( aRow >= 0 && aRow < (int) m_rows.size(), wxS( "Invalid row number" ) );
     wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), wxS( "Invalid column number" ) );
 
-    if( ColIsItemIdentifier( aCol ) )
+    if( IsCellReadOnly( aRow, aCol ) )
+        return;
+
+    if( aValue == INDETERMINATE_STATE )
         return;
 
     LIB_FIELDS_TABLE_DATA_MODEL_ROW& rowGroup = m_rows[aRow];
@@ -133,6 +136,13 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::fieldIsAttribute( const wxString& aField
 {
     return FIELDS_TABLE_DATA_MODEL_BASE::fieldIsAttribute( aFieldName ) || aFieldName == SYMBOL_IS_POWER
            || aFieldName == SYMBOL_IS_LOCAL_POWER;
+}
+
+
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::fieldIsItemProperty( const wxString& aFieldName ) const
+{
+    return aFieldName == SYMBOL_NAME || aFieldName == SYMBOL_KEYWORDS
+           || FIELDS_TABLE_DATA_MODEL_BASE::fieldIsItemProperty( aFieldName );
 }
 
 

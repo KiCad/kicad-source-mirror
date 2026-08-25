@@ -409,6 +409,22 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsAttribute( int aCol ) const
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsItemProperty( int aCol ) const
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+
+    return fieldIsItemProperty( m_cols[aCol].m_fieldName );
+}
+
+
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsComputed( int aCol ) const
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+
+    return IsGeneratedField( m_cols[aCol].m_fieldName ) && !ColIsItemProperty( aCol );
+}
+
+
 bool FIELDS_TABLE_DATA_MODEL_BASE::IsExpanderColumn( int aCol ) const
 {
     // Check if aCol is the first visible column
@@ -422,12 +438,20 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::IsExpanderColumn( int aCol ) const
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsReadOnly( int aCol ) const
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), true );
+
+    return ColIsItemIdentifier( aCol ) || IsExpanderColumn( aCol ) || ColIsComputed( aCol );
+}
+
+
 bool FIELDS_TABLE_DATA_MODEL_BASE::IsCellReadOnly( int aRow, int aCol )
 {
     wxCHECK( aRow >= 0 && aRow < GetNumberRows(), true );
     wxCHECK( aCol >= 0 && aCol < GetNumberCols(), true );
 
-    return IsExpanderColumn( aCol );
+    return ColIsReadOnly( aCol );
 }
 
 
@@ -688,6 +712,12 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::fieldIsAttribute( const wxString& aFieldName 
     return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
+}
+
+
+bool FIELDS_TABLE_DATA_MODEL_BASE::fieldIsItemProperty( const wxString& aFieldName ) const
+{
+    return fieldIsAttribute( aFieldName );
 }
 
 

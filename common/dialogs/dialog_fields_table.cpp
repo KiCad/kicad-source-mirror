@@ -643,7 +643,7 @@ void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
         attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
         getDataModel()->SetColAttr( attr, aCol );
     }
-    else if( IsGeneratedField( getDataModel()->GetColFieldName( aCol ) ) )
+    else if( getDataModel()->ColIsReadOnly( aCol ) )
     {
         attr->SetReadOnly();
         getDataModel()->SetColAttr( attr, aCol );

@@ -161,12 +161,8 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const w
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxS( "Invalid column number" ) );
 
-    // Can't modify references or generated fields (e.g. ${QUANTITY})
-    if( ColIsReference( aCol )
-        || ( IsGeneratedField( m_cols[aCol].m_fieldName ) && !ColIsAttribute( aCol ) ) )
-    {
+    if( IsCellReadOnly( aRow, aCol ) )
         return;
-    }
 
     if( aValue == INDETERMINATE_STATE )
         return;

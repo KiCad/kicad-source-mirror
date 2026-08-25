@@ -156,7 +156,15 @@ public:
     bool ColIsItemNumber( int aCol ) const;
     bool ColIsValue( int aCol ) const;
     bool ColIsFootprint( int aCol ) const;
+    // Whether a column is something like DNP, e.g. one of the checkboxes in the Attributes section
+    // of symbols/footprints
     bool ColIsAttribute( int aCol ) const;
+    // Whether a column is an attribute, or a special property like ${SYMBOL_NAME}
+    bool ColIsItemProperty( int aCol ) const;
+    // Whether a column is magic variable that is calculated or resolved, e.g. ${QUANTITY}, ${ITEM_NUMBER},
+    // but not something like ${SYMBOL_NAME}.
+    // The important part is that the column’s value is derived at read time rather than staged as stored data
+    bool ColIsComputed( int aCol ) const;
 
     /**
      * Reference for symbol/fields tables,
@@ -164,6 +172,7 @@ public:
      */
     virtual bool ColIsItemIdentifier( int aCol ) const { return ColIsReference( aCol ); }
 
+    virtual bool ColIsReadOnly( int aCol ) const;
     bool IsExpanderColumn( int aCol ) const override;
     virtual bool IsCellReadOnly( int aRow, int aCol );
 
@@ -248,7 +257,13 @@ public:
     virtual void ExpandCollapseRow( int aRow ) = 0;
 
 protected:
+    // One of the special field names like ${DNP} that refer to the Attributes in symbols/footprints
     virtual bool fieldIsAttribute( const wxString& aFieldName ) const;
+    // One of the special field names like ${SYMBOL_KEYWORDS} that refer to sometimes-editable
+    // properties in the symbol/footprint itself. Especially used for lib symbols/footprints,
+    // that have properties that overlap with mandatory fields, like lib footprints having
+    // a library description property as well as a mandatory description field
+    virtual bool fieldIsItemProperty( const wxString& aFieldName ) const;
 
     // Helper function to translate named attribute values like ${DNP}.
     virtual wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
@@ -607,9 +622,9 @@ public:
                         itemFieldValue =
                                 getAttributeResolvedValue( m_cols[aCol].m_fieldName, itemFieldValue == wxS( "1" ) );
                     }
-                    // Generated fields (e.g. ${FOOTPRINT_LIBRARY}) can't have un-applied values as they're
-                    // read-only.  Resolve them against the field.
-                    else if( IsGeneratedField( m_cols[aCol].m_fieldName ) )
+                    // Computed fields (e.g. ${FOOTPRINT_LIBRARY}) can't have un-applied values.
+                    // Resolve them against the item.
+                    else if( ColIsComputed( aCol ) )
                     {
                         itemFieldValue = getFieldResolvedLiveValue( item, m_cols[aCol].m_fieldName );
                     }
@@ -767,9 +782,8 @@ protected:
                 bool effectiveValue = value == wxS( "1" ) || attributeForcedOnBySheet( aItem, col.m_fieldName );
                 value = getAttributeResolvedValue( col.m_fieldName, effectiveValue );
             }
-            // For generated fields, we always want to match on the resolved value,
-            // not the stored variable
-            else if( IsGeneratedField( col.m_fieldName ) )
+            // Match computed fields on their resolved value rather than the stored variable.
+            else if( ColIsComputed( static_cast<int>( i ) ) )
             {
                 value = getFieldResolvedLiveValue( aItem, col.m_fieldName );
             }
@@ -913,10 +927,9 @@ protected:
                 matchFound = true;
                 continue;
             }
-            // If the field is generated (e.g. ${QUANTITY}), we need to resolve it through the
-            // item to get the actual current value; otherwise we need to pull it out of the store
-            // so the refresh can regroup based on values that haven't been applied yet.
-            else if( IsGeneratedField( fieldName ) )
+            // Computed fields (e.g. ${QUANTITY}) are resolved through the item. Property-backed
+            // fields use the store so regrouping includes changes that haven't been applied yet.
+            else if( ColIsComputed( col ) )
             {
                 lh = getFieldResolvedLiveValue( lhItem, fieldName );
                 rh = getFieldResolvedLiveValue( rhItem, fieldName );
