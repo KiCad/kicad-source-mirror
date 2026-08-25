@@ -1701,7 +1701,14 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 {
     int errors = 0;
 
-    std::unordered_map<wxString, std::pair<wxString, SCH_PIN*>> pinToNetMap;
+    struct PIN_ON_NET
+    {
+        wxString       m_netName;
+        SCH_PIN*       m_pin;
+        SCH_SHEET_PATH m_sheet;
+    };
+
+    std::unordered_map<wxString, std::vector<PIN_ON_NET>> pinToNetMap;
 
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
     {
@@ -1713,37 +1720,73 @@ int ERC_TESTER::TestMultUnitPinConflicts()
             {
                 if( item->Type() == SCH_PIN_T )
                 {
-                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+                    SCH_PIN*              pin = static_cast<SCH_PIN*>( item );
                     const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
 
                     if( !pin->GetParentSymbol()->IsMultiUnit() )
                         continue;
 
-                    wxString name = pin->GetParentSymbol()->GetRef( &sheet ) + ":" + pin->GetShownNumber();
+                    wxString name = pin->GetParentSymbol()->GetRef( &sheet ) + ":"
+                                    + pin->GetShownNumber();
 
-                    if( !pinToNetMap.count( name ) )
-                    {
-                        pinToNetMap[name] = std::make_pair( netName, pin );
-                    }
-                    else if( pinToNetMap[name].first != netName )
-                    {
-                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_NET );
-
-                        ercItem->SetErrorMessage( wxString::Format( _( "Pin %s is connected to both %s and %s" ),
-                                                                    pin->GetShownNumber(),
-                                                                    netName,
-                                                                    pinToNetMap[name].first ) );
-
-                        ercItem->SetItems( pin, pinToNetMap[name].second );
-                        ercItem->SetSheetSpecificPath( sheet );
-                        ercItem->SetItemsSheetPaths( sheet, sheet );
-
-                        SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pin->GetPosition() );
-                        sheet.LastScreen()->Append( marker );
-                        errors += 1;
-                    }
+                    pinToNetMap[name].push_back( { netName, pin, sheet } );
                 }
             }
+        }
+    }
+
+    // Pick the reference net/pin deterministically, so the same conflict yields the same marker on every ERC run.
+    std::vector<wxString> conflicted;
+
+    for( const auto& [name, pins] : pinToNetMap )
+    {
+        for( const PIN_ON_NET& candidate : pins )
+        {
+            if( candidate.m_netName != pins.front().m_netName )
+            {
+                conflicted.push_back( name );
+                break;
+            }
+        }
+    }
+
+    std::sort( conflicted.begin(), conflicted.end() );
+
+    for( const wxString& name : conflicted )
+    {
+        std::vector<PIN_ON_NET> pins = pinToNetMap[name];
+
+        std::sort( pins.begin(), pins.end(),
+                   []( const PIN_ON_NET& a, const PIN_ON_NET& b )
+                   {
+                       if( a.m_netName != b.m_netName )
+                           return a.m_netName < b.m_netName;
+
+                       return a.m_pin->m_Uuid < b.m_pin->m_Uuid;
+                   } );
+
+        const PIN_ON_NET& first = pins.front();
+
+        for( const PIN_ON_NET& other : pins )
+        {
+            if( other.m_netName == first.m_netName )
+                continue;
+
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DIFFERENT_UNIT_NET );
+
+            ercItem->SetErrorMessage( wxString::Format( _( "Pin %s is connected to both %s and %s" ),
+                                                        other.m_pin->GetShownNumber(),
+                                                        other.m_netName,
+                                                        first.m_netName ) );
+
+            ercItem->SetItems( other.m_pin, first.m_pin );
+            ercItem->SetSheetSpecificPath( other.m_sheet );
+            ercItem->SetItemsSheetPaths( other.m_sheet, first.m_sheet );
+
+            SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), other.m_pin->GetPosition() );
+            other.m_sheet.LastScreen()->Append( marker );
+            errors += 1;
+            break;
         }
     }
 
