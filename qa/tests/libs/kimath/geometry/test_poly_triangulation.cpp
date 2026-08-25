@@ -698,6 +698,41 @@ BOOST_AUTO_TEST_CASE( Issue18083_SelfIntersectingPolygonArea )
                 "Triangulated area should match expected area of 49 mm²" );
 }
 
+BOOST_AUTO_TEST_CASE( Issue25141_FractureCorridorIsNotAPinchPoint )
+{
+    // Vertex 6 sits 1nm off vertex 1 and the corridor runs just under 45 degrees, so it rounds
+    // onto segment 1-2.  The folded lobe makes the direct pass over-cover, which is what routes
+    // this through splitSelfTouchingOutlines() at all.
+    SHAPE_LINE_CHAIN outline( { 0, 0,
+                                20000, 0,          // corridor mouth
+                                60001, 40000,      // hole ring
+                                60001, 60000,
+                                80000, 50000,
+                                60001, 40000,
+                                20001, 0,          // corridor return
+                                100000, 0,
+                                100000, 100000,
+                                30000, 20000,      // fold
+                                90000, 90000,
+                                0, 100000 } );
+    outline.SetClosed( true );
+
+    SHAPE_POLY_SET polySet;
+    polySet.AddOutline( outline );
+
+    polySet.CacheTriangulation( false );
+    BOOST_TEST( polySet.IsTriangulationUpToDate() );
+
+    const VECTOR2I inHole( 64000, 50000 );
+    std::vector<const SHAPE*> triangles;
+
+    polySet.GetIndexableSubshapes( triangles );
+    BOOST_TEST( !polySet.Contains( inHole, -1, 0, false ) );
+
+    for( const SHAPE* tri : triangles )
+        BOOST_TEST( !tri->Collide( inHole, 0 ) );
+}
+
 BOOST_AUTO_TEST_CASE( NearlyCollinearVertices )
 {
     TRIANGULATION_TEST_FIXTURE fixture;
