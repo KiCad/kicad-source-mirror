@@ -30,7 +30,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/filename.h>
 
 

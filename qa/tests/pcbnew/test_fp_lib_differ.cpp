@@ -31,7 +31,7 @@
 
 #include <footprint.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <wx/filename.h>
 

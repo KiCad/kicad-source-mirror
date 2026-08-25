@@ -19,7 +19,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <jobs/job_export_bom.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <settings/bom_settings.h>
 
 

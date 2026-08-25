@@ -25,7 +25,7 @@
 
 #include <diff_merge/kicad_diff_types.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <cstdio>
 

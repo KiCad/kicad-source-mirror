@@ -41,7 +41,7 @@
 #include <project.h>
 #include <project/project_file.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 
 using namespace KICAD_DIFF;

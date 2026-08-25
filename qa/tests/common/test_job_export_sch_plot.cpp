@@ -19,7 +19,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <jobs/job_export_sch_plot.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 
 BOOST_AUTO_TEST_SUITE( JobExportSchPlot )

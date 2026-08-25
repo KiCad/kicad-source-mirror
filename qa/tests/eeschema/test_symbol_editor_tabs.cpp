@@ -33,7 +33,7 @@
 
 #include <settings/json_settings_internals.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 
 /// A LIB_SYMBOL that bumps a counter when destroyed, to prove the undo free path deletes its copies

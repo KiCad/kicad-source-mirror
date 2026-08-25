@@ -25,7 +25,7 @@
 
 #include <wx/image.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <algorithm>
 #include <fstream>

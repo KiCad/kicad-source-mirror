@@ -34,7 +34,7 @@
 #include <footprint.h>
 #include <settings/settings_manager.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <map>
 

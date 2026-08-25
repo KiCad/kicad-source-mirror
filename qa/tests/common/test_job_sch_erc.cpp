@@ -19,7 +19,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <jobs/job_sch_erc.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 
 BOOST_AUTO_TEST_SUITE( JobSchErc )

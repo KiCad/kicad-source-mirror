@@ -25,7 +25,7 @@
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
 #include <jobs/job_pcb_render.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 
 // Regression coverage for issue #24092: variant fields on JOBSET-resident jobs

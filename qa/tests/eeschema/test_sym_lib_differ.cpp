@@ -33,7 +33,7 @@
 #include <sch_pin.h>
 #include <sch_shape.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <wx/filename.h>
 

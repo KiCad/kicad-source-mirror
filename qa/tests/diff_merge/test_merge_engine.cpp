@@ -26,7 +26,7 @@
 #include <diff_merge/kicad_merge_engine.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 
 using namespace KICAD_DIFF;
