@@ -1180,6 +1180,13 @@ DP_PRIMITIVE_PAIR DIFF_PAIR::EndingPrimitives()
         SEGMENT sN( lN, lN.CSegment( -1 ) );
 
         DP_PRIMITIVE_PAIR dpair( &sP, &sN );
+
+        if( PLine().IsLinked() )
+        {
+            auto lp = PLine().GetLink( PLine().LinkCount() - 1 );
+            auto ln = NLine().GetLink( NLine().LinkCount() - 1 );
+            dpair.SetPrimitives( lp, ln );
+        }
         dpair.SetAnchors( sP.Seg().B, sN.Seg().B );
 
         return dpair;
