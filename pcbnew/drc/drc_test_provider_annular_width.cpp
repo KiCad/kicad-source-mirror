@@ -291,6 +291,30 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                 bool fail_max = false;
                 int  width = ( ptA - ptB ).EuclideanNorm();
 
+                auto padstackMode =
+                        [&]()
+                        {
+                            if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( item ) )
+                                return via->Padstack().Mode();
+                            else if( PAD* pad = dynamic_cast<PAD*>( item ) )
+                                return pad->Padstack().Mode();
+                            else
+                                return PADSTACK::MODE::NORMAL;
+                        };
+
+                auto layerDesc =
+                        [&]() -> wxString
+                        {
+                            if( aLayer == F_Cu )
+                                return m_drcEngine->GetBoard()->GetLayerName( F_Cu );
+                            else if( aLayer == B_Cu )
+                                return m_drcEngine->GetBoard()->GetLayerName( B_Cu );
+                            else if( padstackMode() == PADSTACK::MODE::FRONT_INNER_BACK )
+                                return _( "Inner Layers" );
+                            else
+                                return m_drcEngine->GetBoard()->GetLayerName( aLayer );
+                        };
+
                 if( constraint.Value().HasMin() )
                 {
                     v_min = constraint.Value().Min();
@@ -309,10 +333,21 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
                     if( fail_min )
                     {
-                        drcItem->SetErrorDetail( formatMsg( _( "(%s min annular width %s; actual %s)" ),
-                                                            constraint.GetName(),
-                                                            v_min,
-                                                            width ) );
+                        if( padstackMode() == PADSTACK::MODE::NORMAL )
+                        {
+                            drcItem->SetErrorDetail( formatMsg( _( "(%s min annular width %s; actual %s)" ),
+                                                                constraint.GetName(),
+                                                                v_min,
+                                                                width ) );
+                        }
+                        else
+                        {
+                            drcItem->SetErrorDetail( formatMsg( _( "(%s min annular width %s; actual %s on %s)" ),
+                                                                constraint.GetName(),
+                                                                v_min,
+                                                                width,
+                                                                layerDesc() ) );
+                        }
                     }
 
                     if( fail_max )
