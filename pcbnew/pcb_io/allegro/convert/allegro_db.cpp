@@ -92,6 +92,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x39: return static_cast<const BLOCK<BLK_0x39_FILM_LAYER_LIST>&>( block ).GetData().m_Key;
     case 0x3A: return static_cast<const BLOCK<BLK_0x3A_FILM_LIST_NODE>&>( block ).GetData().m_Key;
     case 0x3C: return static_cast<const BLOCK<BLK_0x3C_KEY_LIST>&>( block ).GetData().m_Key;
+    case 0x3E: return static_cast<const BLOCK<BLK_0x3E>&>( block ).GetData().m_Key;
     default: break;
     }
     // clang-format off
