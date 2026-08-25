@@ -2040,6 +2040,60 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
             if( count < 4 )
                 break;
 
+            // Prefix trapezoid terms (SHAPE_LINE_CHAIN::Area()) to sign a candidate's halves
+            // in O(1).  Built on demand; most outlines never produce a candidate.
+            std::vector<double> prefix;
+
+            auto ringTerm =
+                    [&]( int aFrom, int aTo ) -> double
+                    {
+                        if( prefix.empty() )
+                        {
+                            prefix.resize( count + 1, 0.0 );
+
+                            for( int ii = 0; ii < count; ++ii )
+                            {
+                                const VECTOR2I& a = outline.CPoint( ii );
+                                const VECTOR2I& b = outline.CPoint( ( ii + 1 ) % count );
+
+                                prefix[ii + 1] = prefix[ii]
+                                                 + ( (double) a.x + b.x ) * ( (double) a.y - b.y );
+                            }
+                        }
+
+                        double term = aFrom <= aTo ? prefix[aTo] - prefix[aFrom]
+                                                   : prefix[count] - prefix[aFrom] + prefix[aTo];
+
+                        const VECTOR2I& last = outline.CPoint( aTo );
+                        const VECTOR2I& first = outline.CPoint( aFrom );
+
+                        return term + ( (double) last.x + first.x ) * ( (double) last.y - first.y );
+                    };
+
+            auto ringSize =
+                    [&]( int aFrom, int aTo )
+                    {
+                        return aFrom <= aTo ? aTo - aFrom + 1 : count - aFrom + aTo + 1;
+                    };
+
+            // Both halves of a real self-touch keep the parent winding.  An inverted half is a
+            // Fracture() corridor; splitting there returns the hole ring as an outline.
+            auto splittable =
+                    [&]( int aVertIdx, int aSegIdx )
+                    {
+                        const int start = ( aSegIdx + 1 ) % count;
+
+                        if( ringSize( start, aVertIdx ) < 3 || ringSize( aVertIdx, aSegIdx ) < 3 )
+                            return false;
+
+                        const bool   sign = ringTerm( 0, count - 1 ) > 0;
+                        const double term1 = ringTerm( start, aVertIdx );
+                        const double term2 = ringTerm( aVertIdx, aSegIdx );
+
+                        return term1 != 0.0 && term2 != 0.0 && ( term1 > 0 ) == sign
+                               && ( term2 > 0 ) == sign;
+                    };
+
             int insertSegIdx = -1;
             int insertVertIdx = -1;
 
@@ -2066,7 +2120,8 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
                         // segment.  Clipper2 rounds corridor-cut vertices to integer
                         // coordinates; they can land within 1nm of an endpoint but are
                         // not true pinch points.
-                        if( pt != a && pt != b && SEG( a, b ).SquaredDistance( pt ) == 0 )
+                        if( pt != a && pt != b && SEG( a, b ).SquaredDistance( pt ) == 0
+                            && splittable( vertIdx, segIdx ) )
                         {
                             insertSegIdx = segIdx;
                             insertVertIdx = vertIdx;
@@ -2108,7 +2163,8 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
                             // segment.  Clipper2 rounds corridor-cut vertices to integer
                             // coordinates; they can land within 1nm of an endpoint but
                             // are not true pinch points.
-                            if( pt != a && pt != b && SEG( a, b ).SquaredDistance( pt ) == 0 )
+                            if( pt != a && pt != b && SEG( a, b ).SquaredDistance( pt ) == 0
+                                && splittable( vertIdx, static_cast<int>( segIdx ) ) )
                             {
                                 insertSegIdx = segIdx;
                                 insertVertIdx = vertIdx;
@@ -2128,22 +2184,8 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
             // Polygon 2: vertices from insertVertIdx to insertSegIdx
 
             const int splitStart1 = ( insertSegIdx + 1 ) % count;
-
-            // Calculate sizes for each polygon
-            int size1, size2;
-
-            if( insertVertIdx >= splitStart1 )
-                size1 = insertVertIdx - splitStart1 + 1;
-            else
-                size1 = count - splitStart1 + insertVertIdx + 1;
-
-            if( insertSegIdx >= insertVertIdx )
-                size2 = insertSegIdx - insertVertIdx + 1;
-            else
-                size2 = count - insertVertIdx + insertSegIdx + 1;
-
-            if( size1 < 3 || size2 < 3 )
-                break;
+            const int size1 = ringSize( splitStart1, insertVertIdx );
+            const int size2 = ringSize( insertVertIdx, insertSegIdx );
 
             SHAPE_LINE_CHAIN poly1;
             SHAPE_LINE_CHAIN poly2;
