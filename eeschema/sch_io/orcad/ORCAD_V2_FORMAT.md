@@ -67,16 +67,24 @@ its nested graphic, so it is a general version 2 idiom rather than a quirk of th
 The `typeId` values observed as cache entries are all existing `ORCAD_STRUCTURE_TYPE`
 members:
 
-| typeId | name | body |
-|--------|------|------|
-| 24 | `ORCAD_ST_LIBRARY_PART` | symbol definition; a part's drawn body |
-| 31 | `ORCAD_ST_PACKAGE` | pin map, no graphics |
-| 33 | `ORCAD_ST_GLOBAL_SYMBOL` | power symbol; tail carries the net name |
-| 34 | `ORCAD_ST_PORT_SYMBOL` | hierarchical port shape |
-| 35 | `ORCAD_ST_OFFPAGE_SYMBOL` | off-page connector shape |
-| 64 | `ORCAD_ST_TITLEBLOCK_SYMBOL` | title block |
-| 75 | `ORCAD_ST_ERC_SYMBOL` | ERC marker shape |
-| 76 | `ORCAD_ST_BOOKMARK_SYMBOL` | bookmark shape |
+| typeId | name | body | files |
+|--------|------|------|-------|
+| 24 | `ORCAD_ST_LIBRARY_PART` | symbol definition; a part's drawn body | 187 |
+| 31 | `ORCAD_ST_PACKAGE` | pin map, no graphics | 182 |
+| 33 | `ORCAD_ST_GLOBAL_SYMBOL` | power symbol; tail carries the net name | 174 |
+| 64 | `ORCAD_ST_TITLEBLOCK_SYMBOL` | title block | 159 |
+| 26 | `ORCAD_ST_SYMBOL_PIN_SCALAR` | pin shape | 121 |
+| 75 | `ORCAD_ST_ERC_SYMBOL` | ERC marker shape | 83 |
+| 35 | `ORCAD_ST_OFFPAGE_SYMBOL` | off-page connector shape | 55 |
+| 49 | `ORCAD_ST_ALIAS` | net alias | 23 |
+| 48 | `ORCAD_ST_SYMBOL_VECTOR` | nested vector graphic | 18 |
+| 76 | `ORCAD_ST_BOOKMARK_SYMBOL` | bookmark shape | 12 |
+| 34 | `ORCAD_ST_PORT_SYMBOL` | hierarchical port shape | 10 |
+
+The "files" column counts how many of the 188 legacy designs in the corpus contain at
+least one entry of that type.  Every value that appears is an existing
+`ORCAD_STRUCTURE_TYPE` member, which is the strongest evidence that the structure
+numbering did not change between the two format families.
 
 For every symbol-bearing type the body is **byte-identical to what `v2SymbolDef` already
 reads** for `.OLB` `Symbols/<name>` streams:
@@ -108,6 +116,17 @@ six `u32` fields before its display-property list.
 The tail is the one part not yet fully pinned down, and it is the reason a walk cannot
 yet run end to end.  It is a bounded problem: the tails belong to the structure types, not
 to the container, and several of those types already have readers in the page path.
+
+## What the corpus proves
+
+A scanner that recognises symbol definitions by their decoded fields, rather than by any
+byte pattern, was run over all 188 legacy designs.  Every file yielded definitions, and
+together they hold **10,934 symbol definitions carrying 120,861 graphic primitives** — all
+of which the importer currently discards in favour of a placeholder box.
+
+Median coverage is 56% of `Cache` bytes.  The unclaimed remainder is the per-entry headers
+and tails, not unrecognised graphics: the primitive grammar never needed a version 2
+variant.
 
 ## Not yet examined
 
