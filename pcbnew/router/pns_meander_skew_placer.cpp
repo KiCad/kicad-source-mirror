@@ -82,7 +82,7 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         return false;
     }
 
-    if( m_originPair.Gap() < 0 )
+    if( m_originPair.Dimensions().Gap() < 0 )
         m_originPair.SetGap( Router()->Sizes().DiffPairGap() );
 
     if( !m_originPair.PLine().SegmentCount() ||
@@ -257,7 +257,7 @@ void MEANDER_SKEW_PLACER::calculateTimeDomainTargets()
         const int64_t skewDelayDifference = targetSkewDelay - curSkewDelay;
 
         int64_t skewLengthDiff = m_router->GetInterface()->CalculateLengthForDelay(
-                std::abs( skewDelayDifference ), m_originPair.Width(), true, m_originPair.Gap(),
+                std::abs( skewDelayDifference ), m_originPair.Dimensions().Width(), true, m_originPair.Dimensions().Gap(),
                 m_router->GetCurrentLayer(), m_netClass );
 
         const int64_t curSkew = CurrentSkew();

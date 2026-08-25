@@ -1176,8 +1176,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
         gap = (int) std::abs( refArc->CArc().GetRadius() - coupledArc->CArc().GetRadius() ) - lp.Width();
     }
 
-    aPair = DIFF_PAIR( lp, ln );
-    aPair.SetWidth( lp.Width() );
+    aPair = DIFF_PAIR( lp, ln, DP_DIMENSIONS( lp.Width(), gap ) );
     aPair.SetLayers( lp.Layers() );
     aPair.SetGap( gap );
 
