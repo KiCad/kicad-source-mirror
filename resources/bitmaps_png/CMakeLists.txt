@@ -1049,16 +1049,24 @@ if( NOT ALL_PNGS )
     file( GLOB_RECURSE ALL_PNGS ${CMAKE_CURRENT_SOURCE_DIR}/png/*.png )
 endif()
 
-if( MINGW )
-    # This seems like a huge hack, but I can't find a better way.  If anyone else does, please
-    # feel free to replace this with it...
-    file( TO_CMAKE_PATH "${BITMAP_ARCHIVE_PATH}" TAR_OUTPUT_FILE )
-    string( REGEX REPLACE "^([a-zA-Z]):/" "/\\1/" TAR_OUTPUT_FILE "${TAR_OUTPUT_FILE}" )
-else()
-    set( TAR_OUTPUT_FILE "${BITMAP_ARCHIVE_PATH}" )
+set( TAR_OUTPUT_FILE "${BITMAP_ARCHIVE_PATH}" )
+
+if( WIN32 )
+    # GNU tar reads a leading drive letter as a remote "host:path" spec and dies with
+    # "Cannot connect to C: resolve failed".  FindUnixCommands picks up an MSYS or
+    # Git-for-Windows GNU tar for MSVC builds just as readily as for MinGW ones, so probe
+    # the selected binary rather than the toolchain.  bsdtar handles drive paths natively
+    # and rejects --force-local, hence the gate.
+    execute_process( COMMAND ${TAR} --version
+                     OUTPUT_VARIABLE TAR_VERSION_STRING
+                     ERROR_QUIET )
+
+    if( TAR_VERSION_STRING MATCHES "GNU tar" )
+        set( TAR_LOCAL_FLAG --force-local )
+    endif()
 endif()
 
-set( TARFLAGS cfz )
+set( TARFLAGS -czf )
 if( DEFINED ENV{SOURCE_DATE_EPOCH} )
     set( TARFLAGS --sort=name --mtime=@$ENV{SOURCE_DATE_EPOCH} --clamp-mtime --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime -czf )
 endif()
@@ -1071,7 +1079,7 @@ add_custom_target( bitmap_archive_bundle ALL )
 # on every cmake build if there are no depends changes
 add_custom_command(
     OUTPUT ${BITMAP_ARCHIVE_PATH}
-    COMMAND ${TAR} ${TARFLAGS} "${TAR_OUTPUT_FILE}" .
+    COMMAND ${TAR} ${TAR_LOCAL_FLAG} ${TARFLAGS} "${TAR_OUTPUT_FILE}" .
     DEPENDS bitmap_archive_bundle ${ALL_PNGS}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/png
     COMMENT "Creating image archive ${TAR_OUTPUT_FILE}"
