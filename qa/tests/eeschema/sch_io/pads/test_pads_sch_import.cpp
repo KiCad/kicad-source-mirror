@@ -25,6 +25,7 @@
 #include <sch_io/pads/sch_io_pads.h>
 #include <sch_io/sch_io_mgr.h>
 #include <sch_line.h>
+#include <sch_reference_list.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
@@ -327,6 +328,67 @@ BOOST_AUTO_TEST_CASE( Issue24284_TextItemsPlacedOnCorrectSheet )
                                 bodyText ) != textBySheet[sheetName].end() );
         BOOST_CHECK_EQUAL( lineCountBySheet[sheetName], 1 );
     }
+}
+
+
+static size_t countPowerSymbols( SCH_SHEET* aRoot )
+{
+    size_t count = 0;
+
+    for( const SCH_SHEET_PATH& path : SCH_SHEET_LIST( aRoot ) )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            if( static_cast<SCH_SYMBOL*>( item )->GetRef( &path ).StartsWith( wxS( "#PWR" ) ) )
+                count++;
+        }
+    }
+
+    return count;
+}
+
+
+// The same check eeschema runs before "Update PCB from Schematic"; a duplicated reference
+// surfaces here as "Duplicate items <ref>"
+static int checkAnnotation( const std::vector<SCH_SHEET*>& aRoots, std::vector<wxString>& aMessages )
+{
+    SCH_REFERENCE_LIST references;
+
+    for( SCH_SHEET* root : aRoots )
+    {
+        SCH_SHEET_LIST sheets( root );
+
+        for( SCH_SHEET_PATH& sheet : sheets )
+            sheet.GetSymbols( references, SYMBOL_FILTER_ALL, true );
+    }
+
+    return references.CheckAnnotation(
+            [&]( ERCE_T, const wxString& aMessage, SCH_REFERENCE*, SCH_REFERENCE* )
+            {
+                aMessages.push_back( aMessage );
+            } );
+}
+
+
+// PADS off-page power ports carry no reference designator, so the importer invents one
+// A per-sheet counter restarts at #PWR0001 on sheet two and every power symbol on it
+// reports as a duplicate item, blocking annotation and Update PCB from Schematic
+BOOST_AUTO_TEST_CASE( MultiSheetPowerReferencesAreUnique )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir()
+                                            + "/plugins/pads/multisheet_connectivity.txt" );
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
+    BOOST_REQUIRE( rootSheet );
+
+    // Both sheets carry a $PWR_SYMS +5V and a $GND_SYMS GND anchor
+    BOOST_REQUIRE_EQUAL( countPowerSymbols( rootSheet ), 4u );
+
+    std::vector<wxString> messages;
+    BOOST_CHECK_EQUAL( checkAnnotation( { rootSheet }, messages ), 0 );
+    BOOST_CHECK( messages.empty() );
 }
 
 
