@@ -685,7 +685,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             // Attributes bypass the field logic, so handle them first
             if( ColIsAttribute( static_cast<int>( i ) ) )
             {
-                wxString newValue = currentlyPresent ? srcValue : wxS( "0" );
+                wxString newValue = currentlyPresent ? srcValue : wxString( wxS( "0" ) );
 
                 if( getAttributeValue( symbol, srcName ) != newValue )
                 {
