@@ -348,7 +348,7 @@ public:
 
     const std::vector<DP_GATEWAY>& CGateways() const { return m_gateways; }
 
-    void FilterByOrientation( int aAngleMask, DIRECTION_45 aRefOrientation );
+    void FilterByOrientation( int aDirectionMask );
 
     void SetDimensions( const DP_DIMENSIONS& aDims ) { 
         m_dims = aDims; 

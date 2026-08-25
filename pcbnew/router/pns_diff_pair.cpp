@@ -727,13 +727,12 @@ bool DP_GATEWAYS::checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I& b )
 }
 
 
-void DP_GATEWAYS::FilterByOrientation( int aAngleMask, DIRECTION_45 aRefOrientation )
+void DP_GATEWAYS::FilterByOrientation( int aDirectionMask )
 {
     std::erase_if( m_gateways,
-                    [aAngleMask, aRefOrientation]( const DP_GATEWAY& dp )
+                    [ aDirectionMask ]( const DP_GATEWAY& dp )
                     {
-                        DIRECTION_45 orient( dp.AnchorP() - dp.AnchorN() );
-                        return ( orient.Angle( aRefOrientation ) & aAngleMask );
+                        return ( ! ( !dp.HasPrimaryDirection() || (dp.PrimaryDirectionMask() & aDirectionMask)  ) );
                     } );
 }
 
