@@ -3722,8 +3722,15 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
 void PARSER::parseSectionPARTTYPE( std::ifstream& aStream )
 {
     std::string line;
-    PART_TYPE* currentPartType = nullptr;
-    GATE_DEF* currentGate = nullptr;
+    PART_TYPE*  currentPartType = nullptr;
+    GATE_DEF*   currentGate = nullptr;
+
+    // Records carry no terminator and a part type name can look exactly like pin data, so the
+    // header counts are the only reliable way to find where a record ends
+    int pendingGates = 0;
+    int pendingGatePins = 0;
+    int pendingSigPins = 0;
+    int pendingUnusedPins = 0;
 
     // Helper to parse pin electrical type character
     auto parsePinElecType = []( char c ) -> PIN_ELEC_TYPE {
@@ -3741,6 +3748,23 @@ void PARSER::parseSectionPARTTYPE( std::ifstream& aStream )
         }
     };
 
+    auto isInteger = []( const std::string& aToken ) -> bool
+    {
+        return !aToken.empty() && aToken.find_first_not_of( "0123456789" ) == std::string::npos;
+    };
+
+    auto tokenize = []( const std::string& aLine ) -> std::vector<std::string>
+    {
+        std::istringstream       lss( aLine );
+        std::vector<std::string> tokens;
+        std::string              token;
+
+        while( lss >> token )
+            tokens.push_back( token );
+
+        return tokens;
+    };
+
     while( readLine( aStream, line ) )
     {
         if( line[0] == '*' )
@@ -3749,129 +3773,12 @@ void PARSER::parseSectionPARTTYPE( std::ifstream& aStream )
             break;
         }
 
-        if( line.empty() )
-            continue;
-
-        // Gate line: G gateswap pins
-        if( line.rfind( "G ", 0 ) == 0 && currentPartType )
-        {
-            std::istringstream gss( line );
-            std::string g_keyword;
-            int gateSwap = 0, pinCount = 0;
-            gss >> g_keyword >> gateSwap >> pinCount;
-
-            GATE_DEF gate;
-            gate.gate_swap_type = gateSwap;
-            currentPartType->gates.push_back( gate );
-            currentGate = &currentPartType->gates.back();
-            continue;
-        }
-
-        // SIGPIN pinno width signm
-        if( line.rfind( "SIGPIN", 0 ) == 0 && currentPartType )
-        {
-            std::istringstream sss( line );
-            std::string keyword;
-            SIGPIN sigpin;
-
-            sss >> keyword >> sigpin.pin_number >> sigpin.width >> sigpin.signal_name;
-
-            if( !sigpin.pin_number.empty() )
-                currentPartType->signal_pins.push_back( sigpin );
-
-            continue;
-        }
-
-        // Check if this line contains pin definitions (format: pinnumber.swptyp.pintyp[.funcname])
-        // These follow a gate definition. Pin definition tokens have at least 3 dot-separated parts.
-        // Part type header lines may also contain dots in the name (e.g., "CAPSMT0.1UF0402X7R50V")
-        // but their first token won't have 3+ parts, so we check for that.
-        if( line.find( '.' ) != std::string::npos && currentPartType )
-        {
-            // First check if this could be a part type header line with a dot in the name.
-            // Part type headers have format: NAME DECAL CLASS ATTRS ... where NAME may contain dots
-            // but the first dot-separated segment will have <3 parts.
-            std::stringstream check_ss( line );
-            std::string first_token;
-            check_ss >> first_token;
-
-            int dot_count = 0;
-
-            for( char c : first_token )
-            {
-                if( c == '.' )
-                    dot_count++;
-            }
-
-            // If first token has <2 dots, this could be a part type header, not a pin definition
-            if( dot_count < 2 )
-            {
-                // Fall through to part type header parsing below
-            }
-            else
-            {
-            std::stringstream ss( line );
-            std::string token;
-
-            while( ss >> token )
-            {
-                // Parse pin format: PINNAME.SWAPTYPE.PINTYPE[.FUNCNAME] or PINNAME.PADINDEX.TYPE.NET
-                std::vector<std::string> parts;
-                size_t start = 0;
-                size_t pos = 0;
-
-                while( ( pos = token.find( '.', start ) ) != std::string::npos )
-                {
-                    parts.push_back( token.substr( start, pos - start ) );
-                    start = pos + 1;
-                }
-
-                parts.push_back( token.substr( start ) );
-
-                if( parts.size() >= 3 )
-                {
-                    // Check if this is a gate pin definition or pad stack mapping
-                    // Gate pin: pinnumber.swaptype.pintype[.funcname]
-                    // Pad map: pinname.padindex.type.netname
-
-                    bool isNumericSecond = !parts[1].empty() &&
-                        std::all_of( parts[1].begin(), parts[1].end(), ::isdigit );
-
-                    if( currentGate && parts[2].size() == 1 && !isNumericSecond )
-                    {
-                        // This looks like a gate pin definition
-                        GATE_PIN gpin;
-                        gpin.pin_number = parts[0];
-                        gpin.swap_type = PADS_COMMON::ParseInt( parts[1], 0, "gate pin swap" );
-
-                        if( !parts[2].empty() )
-                            gpin.elec_type = parsePinElecType( parts[2][0] );
-
-                        if( parts.size() >= 4 )
-                            gpin.func_name = parts[3];
-
-                        currentGate->pins.push_back( gpin );
-                    }
-                    else if( isNumericSecond )
-                    {
-                        int padIdx = PADS_COMMON::ParseInt( parts[1], -1, "pad index" );
-
-                        if( padIdx >= 0 )
-                            currentPartType->pin_pad_map[parts[0]] = padIdx;
-                    }
-                }
-            }
-
-            continue;
-            }
-        }
-
         // Attribute block enclosed in braces
         if( line[0] == '{' && currentPartType )
         {
             while( readLine( aStream, line ) )
             {
-                if( line.empty() || line[0] == '}' )
+                if( line[0] == '}' )
                     break;
 
                 if( line[0] == '*' )
@@ -3912,19 +3819,142 @@ void PARSER::parseSectionPARTTYPE( std::ifstream& aStream )
         if( line[0] == '{' || line[0] == '}' )
             continue;
 
-        // Part type definition line: NAME DECAL CLASS ATTRS GATES SIGS PINSEQ STATE
-        std::stringstream ss( line );
-        std::string name, decal;
-        ss >> name >> decal;
+        std::vector<std::string> tokens = tokenize( line );
 
-        if( !name.empty() && name[0] != 'G' )
+        if( tokens.empty() )
+            continue;
+
+        // Pin tokens wrap freely across lines, so the gate's declared count marks the end
+        if( pendingGatePins > 0 )
         {
-            PART_TYPE pt;
-            pt.name = name;
-            pt.decal_name = decal;
-            m_part_types[name] = pt;
-            currentPartType = &m_part_types[name];
-            currentGate = nullptr;
+            for( const std::string& token : tokens )
+            {
+                if( pendingGatePins == 0 )
+                    break;
+
+                pendingGatePins--;
+
+                // Parse pin format: PINNAME.SWAPTYPE.PINTYPE[.FUNCNAME] or PINNAME.PADINDEX.TYPE.NET
+                std::vector<std::string> parts;
+                size_t                   start = 0;
+                size_t                   pos = 0;
+
+                while( ( pos = token.find( '.', start ) ) != std::string::npos )
+                {
+                    parts.push_back( token.substr( start, pos - start ) );
+                    start = pos + 1;
+                }
+
+                parts.push_back( token.substr( start ) );
+
+                if( parts.size() < 3 )
+                    continue;
+
+                // Check if this is a gate pin definition or pad stack mapping
+                // Gate pin: pinnumber.swaptype.pintype[.funcname]
+                // Pad map: pinname.padindex.type.netname
+                bool isNumericSecond = isInteger( parts[1] );
+
+                if( currentGate && parts[2].size() == 1 && !isNumericSecond )
+                {
+                    GATE_PIN gpin;
+                    gpin.pin_number = parts[0];
+                    gpin.swap_type = PADS_COMMON::ParseInt( parts[1], 0, "gate pin swap" );
+
+                    if( !parts[2].empty() )
+                        gpin.elec_type = parsePinElecType( parts[2][0] );
+
+                    if( parts.size() >= 4 )
+                        gpin.func_name = parts[3];
+
+                    currentGate->pins.push_back( gpin );
+                }
+                else if( isNumericSecond )
+                {
+                    int padIdx = PADS_COMMON::ParseInt( parts[1], -1, "pad index" );
+
+                    if( padIdx >= 0 )
+                        currentPartType->pin_pad_map[parts[0]] = padIdx;
+                }
+            }
+
+            continue;
+        }
+
+        // Unused pin names are discarded, but still have to be counted off so a run of bare
+        // pin numbers is not read as the next header
+        if( pendingGates == 0 && pendingSigPins == 0 && pendingUnusedPins > 0 )
+        {
+            pendingUnusedPins -= std::min<int>( pendingUnusedPins, tokens.size() );
+            continue;
+        }
+
+        // Gate line: G gateswap pins
+        if( currentPartType && tokens.size() >= 3 && tokens[0] == "G" && isInteger( tokens[1] )
+            && isInteger( tokens[2] ) )
+        {
+            GATE_DEF gate;
+            gate.gate_swap_type = PADS_COMMON::ParseInt( tokens[1], 0, "gate swap" );
+            currentPartType->gates.push_back( gate );
+            currentGate = &currentPartType->gates.back();
+
+            pendingGatePins = PADS_COMMON::ParseInt( tokens[2], 0, "gate pin count" );
+
+            if( pendingGates > 0 )
+                pendingGates--;
+
+            continue;
+        }
+
+        // SIGPIN pinno width signm
+        if( currentPartType && tokens[0] == "SIGPIN" )
+        {
+            std::istringstream sss( line );
+            std::string        keyword;
+            SIGPIN             sigpin;
+
+            sss >> keyword >> sigpin.pin_number >> sigpin.width >> sigpin.signal_name;
+
+            if( !sigpin.pin_number.empty() )
+                currentPartType->signal_pins.push_back( sigpin );
+
+            if( pendingSigPins > 0 )
+                pendingSigPins--;
+
+            continue;
+        }
+
+        // Header is NAME DECALNM [UNITS] TYPE GATES SIGPINS UNUSEDPINNMS FLAGS ECO, and V5.0
+        // and V2005.0 insert UNITS, so the counts start at the first numeric column past the decal
+        PART_TYPE pt;
+        pt.name = tokens[0];
+
+        if( tokens.size() > 1 )
+            pt.decal_name = tokens[1];
+
+        m_part_types[pt.name] = pt;
+        currentPartType = &m_part_types[pt.name];
+        currentGate = nullptr;
+
+        pendingGates = 0;
+        pendingGatePins = 0;
+        pendingSigPins = 0;
+        pendingUnusedPins = 0;
+
+        for( size_t ii = 2; ii < tokens.size(); ++ii )
+        {
+            if( !isInteger( tokens[ii] ) )
+                continue;
+
+            pendingGates = PADS_COMMON::ParseInt( tokens[ii], 0, "part type gates" );
+
+            if( ii + 1 < tokens.size() && isInteger( tokens[ii + 1] ) )
+                pendingSigPins = PADS_COMMON::ParseInt( tokens[ii + 1], 0, "part type sigpins" );
+
+            if( ii + 2 < tokens.size() && isInteger( tokens[ii + 2] ) )
+                pendingUnusedPins = PADS_COMMON::ParseInt( tokens[ii + 2], 0, "part type unused pins" );
+
+            break;
         }
     }
 }
