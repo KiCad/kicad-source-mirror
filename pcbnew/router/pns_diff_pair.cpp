@@ -1397,9 +1397,9 @@ double DIFF_PAIR::TotalLength() const
 int DIFF_PAIR::CoupledLength ( const SEG& aP, const SEG& aN ) const
 {
     SEG p_clip, n_clip;
-    int64_t dist = std::abs( aP.Distance( aN ) - m_width );
+    int64_t dist = std::abs( aP.Distance( aN ) - m_dims.Width() );
 
-    if( aP.ApproxParallel( aN ) && m_gapConstraint.Matches( dist )
+    if( aP.ApproxParallel( aN ) && m_dims.GapConstraint().Matches( dist )
             && commonParallelProjection ( aP, aN, p_clip, n_clip ) )
     {
         return p_clip.Length();
