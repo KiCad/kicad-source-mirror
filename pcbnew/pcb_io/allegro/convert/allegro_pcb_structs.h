@@ -142,6 +142,7 @@ enum class FMT_VER
     V_175, // Allegro 17.5, 0x00141500
     V_180, // Allegro 18.0, 0x00150000
     V_181, // Allegro 18.1, 0x00150200
+    V_190, // Allegro 19.0, 0x00160100
 };
 
 constexpr bool operator>=( FMT_VER lhs, FMT_VER rhs )
@@ -981,6 +982,8 @@ struct BLK_0x0F_FUNCTION_SLOT
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
 
     std::array<char, 32> m_CompDeviceType;
+
+    COND_GE<FMT_VER::V_190, uint32_t> m_CompDeviceTypePtr;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Next;
 
@@ -2310,7 +2313,7 @@ struct BLK_0x36_DEF_TABLE
         uint32_t m_CharHeight;
         uint32_t m_CharWidth;
 
-        COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
+        COND_GE_LT<FMT_VER::V_174, FMT_VER::V_190, uint32_t> m_Unknown2;
 
         uint32_t m_CharacterSpace;
         uint32_t m_LineSpace;
@@ -2469,6 +2472,15 @@ struct BLK_0x3B_PROPERTY
  * Ordered list of block keys. Context-dependent usage; appears alongside other
  * block types for grouping related objects.
  */
+struct BLK_0x3E
+{
+    static constexpr uint8_t BLOCK_TYPE_CODE = 0x3E;
+
+    uint32_t                m_Key;
+    std::array<uint32_t, 9> m_Unknown;
+};
+
+
 struct BLK_0x3C_KEY_LIST
 {
     static constexpr uint8_t BLOCK_TYPE_CODE = 0x3C;

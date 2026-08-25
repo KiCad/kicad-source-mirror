@@ -170,6 +170,7 @@ FMT_VER HEADER_PARSER::FormatFromMagic( uint32_t aMagic )
     case 0x00141500: return FMT_VER::V_175;
     case 0x00150000: return FMT_VER::V_180;
     case 0x00150200: return FMT_VER::V_181;
+    case 0x00160100: return FMT_VER::V_190;
     default: break;
     }
 
@@ -861,7 +862,10 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0F( FILE_STREAM& stream, FMT_VER
 
     ReadCond( stream, aVer, data.m_Unknown1 );
 
-    stream.ReadBytes( data.m_CompDeviceType.data(), data.m_CompDeviceType.size() );
+    if( aVer < FMT_VER::V_190 )
+        stream.ReadBytes( data.m_CompDeviceType.data(), data.m_CompDeviceType.size() );
+
+    ReadCond( stream, aVer, data.m_CompDeviceTypePtr );
 
     ReadCond( stream, aVer, data.m_Next );
     block->SetNext( data.m_Next.value_or( 0 ) );
@@ -2332,6 +2336,24 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3B( FILE_STREAM& aStream, FMT_VE
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3E( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x3E>>( aStream.Position() );
+
+    auto& data = block->GetData();
+
+    aStream.Skip( 3 );
+
+    data.m_Key = aStream.ReadU32();
+    block->SetKey( data.m_Key );
+
+    for( uint32_t& word : data.m_Unknown )
+        word = aStream.ReadU32();
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x3C_KEY_LIST>>( aStream.Position() );
@@ -2641,6 +2663,11 @@ std::unique_ptr<BLOCK_BASE> ALLEGRO::BLOCK_PARSER::ParseBlock( bool& aEndOfObjec
         block = ParseBlock_0x3C( m_stream, m_ver );
         break;
     }
+    case 0x3E:
+    {
+        block = ParseBlock_0x3E( m_stream, m_ver );
+        break;
+    }
     case 0x00:
     {
         // Block type 0x00 marks the end of the objects section
@@ -2700,7 +2727,7 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
                 while( m_stream.GetU8( nextByte ) && nextByte == 0x00 )
                     scanPos = m_stream.Position();
 
-                if( nextByte > 0x00 && nextByte <= 0x3C )
+                if( nextByte > 0x00 && nextByte <= 0x3E )
                 {
                     size_t blockStart = scanPos;
 
@@ -2715,7 +2742,7 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
                     m_stream.GetU8( alignedByte );
                     m_stream.Seek( blockStart );
 
-                    if( alignedByte == 0x00 || alignedByte > 0x3C )
+                    if( alignedByte == 0x00 || alignedByte > 0x3E )
                         break;
 
                     wxLogTrace( traceAllegroParser,

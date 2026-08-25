@@ -54,10 +54,11 @@ static bool checkFileHeader( const wxString& aFileName )
     // database version string (e.g. "dbd..."), so the "all" check above fails.
     // Detect these by checking the magic number at offset 0. The upper two bytes
     // of the little-endian magic identify the major Allegro format family:
-    //   0x0013 = v16.x, 0x0014 = v17.x, 0x0015 = v18+
+    //   0x0013 = v16.x, 0x0014 = v17.x, 0x0015 = v18.x, 0x0016 = revision 19
     static const std::vector<uint8_t> v16Magic = { 0x13, 0x00 };
     static const std::vector<uint8_t> v17Magic = { 0x14, 0x00 };
     static const std::vector<uint8_t> v18Magic = { 0x15, 0x00 };
+    static const std::vector<uint8_t> v19Magic = { 0x16, 0x00 };
     static const size_t               magicMajorOffset = 2;
 
     if( IO_UTILS::fileHasBinaryHeader( aFileName, v16Magic, magicMajorOffset ) )
@@ -66,7 +67,10 @@ static bool checkFileHeader( const wxString& aFileName )
     if( IO_UTILS::fileHasBinaryHeader( aFileName, v17Magic, magicMajorOffset ) )
         return true;
 
-    return IO_UTILS::fileHasBinaryHeader( aFileName, v18Magic, magicMajorOffset );
+    if( IO_UTILS::fileHasBinaryHeader( aFileName, v18Magic, magicMajorOffset ) )
+        return true;
+
+    return IO_UTILS::fileHasBinaryHeader( aFileName, v19Magic, magicMajorOffset );
 }
 
 
