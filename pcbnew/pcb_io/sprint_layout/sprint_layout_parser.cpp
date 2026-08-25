@@ -1275,37 +1275,37 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         default: break;
         }
 
-        pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
+        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, padSize );
         pad->SetDrillSize( drillSize );
 
         switch( aObj.tht_shape )
         {
         case SPRINT_LAYOUT::THT_SHAPE_CIRCLE:
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CIRCLE );
             break;
 
         case SPRINT_LAYOUT::THT_SHAPE_H_ROUND:
         case SPRINT_LAYOUT::THT_SHAPE_V_ROUND:
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
+            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::OVAL );
             break;
 
         case SPRINT_LAYOUT::THT_SHAPE_OCT:
         case SPRINT_LAYOUT::THT_SHAPE_H_CHAMFER:
         case SPRINT_LAYOUT::THT_SHAPE_V_CHAMFER:
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
-            pad->SetChamferRectRatio( PADSTACK::ALL_LAYERS, 0.25 );
-            pad->SetChamferPositions( PADSTACK::ALL_LAYERS,
+            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
+            pad->SetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS, 0.25 );
+            pad->SetChamferPositions( PADSTACK::TEMP_ALL_LAYERS,
                                       RECT_CHAMFER_ALL );
             break;
 
         case SPRINT_LAYOUT::THT_SHAPE_SQUARE:
         case SPRINT_LAYOUT::THT_SHAPE_H_RECT:
         case SPRINT_LAYOUT::THT_SHAPE_V_RECT:
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::RECTANGLE );
             break;
 
         default:
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CIRCLE );
             break;
         }
 
@@ -1326,7 +1326,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         if( standaloneFp && IsBackLayer( padLayer ) )
             fp->SetLayer( B_Cu );
 
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::RECTANGLE );
 
         int width = sprintToKicadCoord( aObj.outer );
         int height = sprintToKicadCoord( aObj.inner );
@@ -1337,7 +1337,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         if( !aObj.points.empty() )
             padPos = ptsCenter;
 
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( width, height ) );
+        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, VECTOR2I( width, height ) );
         pad->SetPosition( padPos );
         pad->Rotate( padPos, -ptsAngle );
     }

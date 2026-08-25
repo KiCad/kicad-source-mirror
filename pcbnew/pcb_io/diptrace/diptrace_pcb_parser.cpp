@@ -5013,6 +5013,7 @@ void PCB_PARSER::CreateFootprint( const DT_COMPONENT& aComp )
         VECTOR2I padLocal( ToKiCadCoord( dtPad.x ), ToKiCadCoord( dtPad.y ) );
         pad->SetPosition( padLocal );
         pad->SetNumber( dtPad.number );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );    // diptrace doesn't have complex padstacks
 
         VECTOR2I padSize( ToKiCadCoord( dtPad.width ), ToKiCadCoord( dtPad.height ) );
         pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
@@ -5111,18 +5112,15 @@ void PCB_PARSER::CreateFootprint( const DT_COMPONENT& aComp )
         int holeOuter = std::max( dtHole.outerDiameter, dtHole.drillDiameter );
         int holeDrill = dtHole.drillDiameter;
 
-        holePad->SetPosition( VECTOR2I( ToKiCadCoord( dtHole.x ),
-                                        ToKiCadCoord( dtHole.y ) ) );
+        holePad->SetPosition( VECTOR2I( ToKiCadCoord( dtHole.x ), ToKiCadCoord( dtHole.y ) ) );
         holePad->SetNumber( wxString() );
+        holePad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // diptrace doesn't have complex padstacks
         holePad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        holePad->SetSize( PADSTACK::ALL_LAYERS,
-                          VECTOR2I( ToKiCadCoord( holeOuter ),
-                                    ToKiCadCoord( holeOuter ) ) );
+        holePad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( ToKiCadCoord( holeOuter ), ToKiCadCoord( holeOuter ) ) );
         holePad->SetAttribute( PAD_ATTRIB::NPTH );
         holePad->SetLayerSet( PAD::UnplatedHoleMask() );
         holePad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
-        holePad->SetDrillSize( VECTOR2I( ToKiCadCoord( holeDrill ),
-                                         ToKiCadCoord( holeDrill ) ) );
+        holePad->SetDrillSize( VECTOR2I( ToKiCadCoord( holeDrill ), ToKiCadCoord( holeDrill ) ) );
         footprint->Add( holePad, ADD_MODE::APPEND );
     }
 
@@ -5555,9 +5553,9 @@ void PCB_PARSER::CreateStandaloneVias()
             continue;
         }
 
-        VECTOR2I viaPos( ToKiCadCoord( viaX ), ToKiCadCoord( viaY ) );
+        VECTOR2I      viaPos( ToKiCadCoord( viaX ), ToKiCadCoord( viaY ) );
         NETINFO_ITEM* net = ResolveNetByIndex( netIndex );
-        int netCode = net ? net->GetNetCode() : -1;
+        int           netCode = net ? net->GetNetCode() : -1;
         std::tuple<int, int, int> key( viaPos.x, viaPos.y, netCode );
 
         if( createdKeys.find( key ) != createdKeys.end() || hasBoardViaAt( viaPos, netCode ) )
@@ -5567,8 +5565,10 @@ void PCB_PARSER::CreateStandaloneVias()
         }
 
         PCB_VIA* via = new PCB_VIA( m_board );
+        via->SetPadstackMode( PADSTACK::MODE::NORMAL );
         via->SetPosition( viaPos );
-        via->SetWidth( ToKiCadCoord( viaOuter ) );
+        via->Padstack().SetShape( PAD_SHAPE::CIRCLE, PADSTACK::ALL_LAYERS );
+        via->SetWidth( PADSTACK::ALL_LAYERS, ToKiCadCoord( viaOuter ) );
         via->SetDrill( ToKiCadCoord( viaDrill ) );
         via->SetLayerPair( F_Cu, B_Cu );
         via->SetViaType( VIATYPE::THROUGH );
@@ -5811,56 +5811,59 @@ void PCB_PARSER::CreateTracksAndVias()
                 viaWidthIU = pcbIUScale.mmToIU( 0.6 );
 
             PCB_VIA* via = new PCB_VIA( m_board );
-
             via->SetPosition( VECTOR2I( ToKiCadCoord( node.x ), ToKiCadCoord( node.y ) ) );
-            via->SetWidth( viaWidthIU );
+            via->SetPadstackMode( PADSTACK::MODE::NORMAL );
+            via->Padstack().SetShape( PAD_SHAPE::CIRCLE, PADSTACK::ALL_LAYERS );
+            via->SetWidth( PADSTACK::ALL_LAYERS, viaWidthIU );
 
             if( viaDrillIU > 0 )
                 via->SetDrill( viaDrillIU );
 
-            auto ordinalToLayer = [&]( size_t aOrdinal ) -> PCB_LAYER_ID
-            {
-                int copperCount = m_board->GetCopperLayerCount();
+            auto ordinalToLayer =
+                    [&]( size_t aOrdinal ) -> PCB_LAYER_ID
+                    {
+                        int copperCount = m_board->GetCopperLayerCount();
 
-                if( aOrdinal == 0 )
-                    return F_Cu;
+                        if( aOrdinal == 0 )
+                            return F_Cu;
 
-                if( aOrdinal >= static_cast<size_t>( copperCount - 1 ) )
-                    return B_Cu;
+                        if( aOrdinal >= static_cast<size_t>( copperCount - 1 ) )
+                            return B_Cu;
 
-                int innerIdx = static_cast<int>( aOrdinal ) - 1;
+                        int innerIdx = static_cast<int>( aOrdinal ) - 1;
 
-                if( innerIdx < 0 || innerIdx > 29 )
-                    return UNDEFINED_LAYER;
+                        if( innerIdx < 0 || innerIdx > 29 )
+                            return UNDEFINED_LAYER;
 
-                return static_cast<PCB_LAYER_ID>( In1_Cu + innerIdx * 2 );
-            };
+                        return static_cast<PCB_LAYER_ID>( In1_Cu + innerIdx * 2 );
+                    };
 
             bool haveLayerRange = false;
             size_t minOrd = 0;
             size_t maxOrd = 0;
 
-            auto accumulateDipLayer = [&]( int aDipLayer )
-            {
-                PCB_LAYER_ID layer = resolveCopperLayer( aDipLayer );
+            auto accumulateDipLayer =
+                    [&]( int aDipLayer )
+                    {
+                        PCB_LAYER_ID layer = resolveCopperLayer( aDipLayer );
 
-                if( layer == UNDEFINED_LAYER )
-                    return;
+                        if( layer == UNDEFINED_LAYER )
+                            return;
 
-                size_t ord = CopperLayerToOrdinal( layer );
+                        size_t ord = CopperLayerToOrdinal( layer );
 
-                if( !haveLayerRange )
-                {
-                    minOrd = ord;
-                    maxOrd = ord;
-                    haveLayerRange = true;
-                }
-                else
-                {
-                    minOrd = std::min( minOrd, ord );
-                    maxOrd = std::max( maxOrd, ord );
-                }
-            };
+                        if( !haveLayerRange )
+                        {
+                            minOrd = ord;
+                            maxOrd = ord;
+                            haveLayerRange = true;
+                        }
+                        else
+                        {
+                            minOrd = std::min( minOrd, ord );
+                            maxOrd = std::max( maxOrd, ord );
+                        }
+                    };
 
             accumulateDipLayer( node.layer );
 

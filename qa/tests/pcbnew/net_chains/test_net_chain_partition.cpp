@@ -36,6 +36,7 @@ constexpr int PAD_SIZE_NM = 500'000;
 PAD* addPad( FOOTPRINT* aFp, NETINFO_ITEM* aNet, const VECTOR2I& aPos )
 {
     PAD* pad = new PAD( aFp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( PAD_SIZE_NM, PAD_SIZE_NM ) );
     pad->SetPosition( aPos );
@@ -84,8 +85,7 @@ BOOST_AUTO_TEST_CASE( LinearChainSplitsCleanly )
     PAD* endPad = addPad( r2, nB, VECTOR2I( 1'000'000, 0 ) );
     addPad( r2, nC, VECTOR2I( 2'000'000, 0 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nB->GetNetCode(),
-                                                       startPad, endPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nB->GetNetCode(), startPad, endPad );
 
     BOOST_REQUIRE( p.status == NET_CHAIN_PARTITION_STATUS::OK );
     BOOST_CHECK_EQUAL( p.beforeStart.size(), 1u );
@@ -111,8 +111,7 @@ BOOST_AUTO_TEST_CASE( TerminalQueryNetLeavesOneSideEmpty )
     FOOTPRINT* loose = addFootprint( &board );
     PAD* endPad = addPad( loose, nA, VECTOR2I( -10'000'000, 0 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nA->GetNetCode(),
-                                                       startPad, endPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nA->GetNetCode(), startPad, endPad );
 
     BOOST_REQUIRE( p.status == NET_CHAIN_PARTITION_STATUS::OK );
     BOOST_CHECK_EQUAL( p.beforeStart.size(), 1u );
@@ -143,8 +142,7 @@ BOOST_AUTO_TEST_CASE( MultiBridgePadSeedsAllNeighbors )
     PAD* endPad = addPad( r, nQ, VECTOR2I( 5'000'000, 0 ) );
     addPad( r, nE, VECTOR2I( 6'000'000, 0 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nQ->GetNetCode(),
-                                                       startPad, endPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nQ->GetNetCode(), startPad, endPad );
 
     BOOST_REQUIRE( p.status == NET_CHAIN_PARTITION_STATUS::OK );
     BOOST_CHECK_EQUAL( p.beforeStart.size(), 2u );
@@ -180,8 +178,7 @@ BOOST_AUTO_TEST_CASE( CycleNotThroughQueryIsAmbiguous )
     addPad( r3, nA, VECTOR2I( -2'000'000, 5'000'000 ) );
     addPad( r3, nC, VECTOR2I( 2'000'000, 5'000'000 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nB->GetNetCode(),
-                                                       startPad, endPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nB->GetNetCode(), startPad, endPad );
 
     BOOST_REQUIRE( p.status == NET_CHAIN_PARTITION_STATUS::AMBIGUOUS_OVERLAP );
 
@@ -203,8 +200,7 @@ BOOST_AUTO_TEST_CASE( StartPadOnDifferentNetReportsError )
     PAD* aPad = addPad( r1, nA, VECTOR2I( -1'000'000, 0 ) );
     PAD* bPad = addPad( r1, nB, VECTOR2I(  1'000'000, 0 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nA->GetNetCode(),
-                                                       bPad, aPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nA->GetNetCode(), bPad, aPad );
 
     BOOST_CHECK( p.status == NET_CHAIN_PARTITION_STATUS::START_PAD_NOT_ON_QUERY );
     BOOST_CHECK( p.beforeStart.empty() );
@@ -224,8 +220,7 @@ BOOST_AUTO_TEST_CASE( EqualStartEndPadsAreInvalid )
     PAD* startPad = addPad( r1, nA, VECTOR2I( -1'000'000, 0 ) );
     addPad( r1, nB, VECTOR2I( 1'000'000, 0 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nA->GetNetCode(),
-                                                       startPad, startPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nA->GetNetCode(), startPad, startPad );
 
     BOOST_CHECK( p.status == NET_CHAIN_PARTITION_STATUS::INVALID_INPUT );
 }
@@ -291,8 +286,7 @@ BOOST_AUTO_TEST_CASE( QueryNetWithoutOwnBridgeReportsNoBridges )
     FOOTPRINT* fp2 = addFootprint( &board );
     PAD* endPad = addPad( fp2, nQ, VECTOR2I( 20'000'000, 0 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nQ->GetNetCode(),
-                                                       startPad, endPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nQ->GetNetCode(), startPad, endPad );
 
     BOOST_CHECK( p.status == NET_CHAIN_PARTITION_STATUS::NO_CHAIN_BRIDGES );
     BOOST_CHECK( p.beforeStart.empty() );
@@ -318,8 +312,7 @@ BOOST_AUTO_TEST_CASE( CrossBoardPadIsInvalidInput )
     FOOTPRINT* r_b = addFootprint( &boardB );
     PAD* foreignPad = addPad( r_b, nA_b, VECTOR2I( 0, 0 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &boardA, nA->GetNetCode(),
-                                                       startPad, foreignPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &boardA, nA->GetNetCode(), startPad, foreignPad );
 
     BOOST_CHECK( p.status == NET_CHAIN_PARTITION_STATUS::INVALID_INPUT );
 }
@@ -342,8 +335,7 @@ BOOST_AUTO_TEST_CASE( PrePopulatedCallerStateIsIgnored )
     PAD* endPad = addPad( r2, nB, VECTOR2I( 1'000'000, 0 ) );
     addPad( r2, nC, VECTOR2I( 2'000'000, 0 ) );
 
-    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nB->GetNetCode(),
-                                                       startPad, endPad );
+    NET_CHAIN_PARTITION p = PartitionNetChainAroundNet( &board, nB->GetNetCode(), startPad, endPad );
 
     BOOST_REQUIRE( p.status == NET_CHAIN_PARTITION_STATUS::OK );
 

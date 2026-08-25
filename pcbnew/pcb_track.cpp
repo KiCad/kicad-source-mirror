@@ -374,13 +374,15 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
 void PCB_VIA::SetWidth( int aWidth )
 {
     m_padStack.SetSize( { aWidth, aWidth }, PADSTACK::ALL_LAYERS );
+    wxFAIL_MSG( wxT( "Warning: PCB_VIA::SetWidth() called without a layer argument" ) );
 }
 
 
 int PCB_VIA::GetWidth() const
 {
     // This is present because of the parent class.  It should never be actually called on a via.
-    wxCHECK_MSG( false, m_padStack.Size( PADSTACK::ALL_LAYERS ).x, "Warning: PCB_VIA::GetWidth called without a layer argument" );
+    wxCHECK_MSG( false, m_padStack.Size( PADSTACK::ALL_LAYERS ).x,
+                 wxT( "Warning: PCB_VIA::GetWidth() called without a layer argument" ) );
 }
 
 
@@ -2501,8 +2503,19 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     aList.emplace_back( _( "Layer" ), LayerMaskDescribe() );
-    // TODO(JE) padstacks
-    aList.emplace_back( _( "Diameter" ), aFrame->MessageTextFromValue( GetWidth( PADSTACK::ALL_LAYERS ) ) );
+
+    std::set<int> widths;
+    m_padStack.ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                widths.insert( GetWidth( aLayer ) );
+            } );
+
+    if( widths.size() == 1 )
+        aList.emplace_back( _( "Diameter" ), aFrame->MessageTextFromValue( *widths.begin() ) );
+    else
+        aList.emplace_back( _( "Diameter" ), _( "(mixed)" ) );
+
     aList.emplace_back( _( "Hole" ), aFrame->MessageTextFromValue( GetDrillValue() ) );
 
     wxString  source;

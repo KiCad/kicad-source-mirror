@@ -38,7 +38,8 @@ struct CLIP_LINE_TO_PAD_FIXTURE
 
     std::unique_ptr<PAD> MakePad()
     {
-        auto pad = std::make_unique<PAD>( &m_footprint );
+        std::unique_ptr<PAD> pad = std::make_unique<PAD>( &m_footprint );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
         pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 2540000, 1270000 ) );

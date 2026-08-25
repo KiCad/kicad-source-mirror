@@ -198,6 +198,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperGraphicLineEndingAgainstTrack, DRC_COPPER_GRAP
         m_board->Add( fp );
 
         PAD* pad = new PAD( fp );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
         pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 0.4 ), pcbIUScale.mmToIU( 0.4 ) ) );

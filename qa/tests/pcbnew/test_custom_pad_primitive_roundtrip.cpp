@@ -112,8 +112,8 @@ void checkPoly( const SHAPE_POLY_SET& aExpected, const SHAPE_POLY_SET& aGot )
  */
 BOOST_AUTO_TEST_CASE( BezierAndPolyOnTransformedFootprint )
 {
-    auto board = std::make_unique<BOARD>();
-    auto fp = std::make_unique<FOOTPRINT>( board.get() );
+    std::unique_ptr<BOARD>     board = std::make_unique<BOARD>();
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( board.get() );
 
     fp->SetReference( "U1" );
 
@@ -123,7 +123,8 @@ BOOST_AUTO_TEST_CASE( BezierAndPolyOnTransformedFootprint )
     fp->SetOrientation( EDA_ANGLE( 30.0, DEGREES_T ) );
     fp->SetTransformScale( 2.0, 1.5 );
 
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( fp.get() );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetNumber( "1" );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( LSET( { F_Cu } ) );
@@ -132,7 +133,7 @@ BOOST_AUTO_TEST_CASE( BezierAndPolyOnTransformedFootprint )
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
 
     // Bezier primitive with deliberately asymmetric control points.
-    auto* bezier = new PCB_SHAPE( pad.get() );
+    PCB_SHAPE* bezier = new PCB_SHAPE( pad.get() );
     bezier->SetShape( SHAPE_T::BEZIER );
     bezier->SetStart( VECTOR2I( mm( 0.0 ), mm( 0.0 ) ) );
     bezier->SetBezierC1( VECTOR2I( mm( 1.0 ), mm( 2.0 ) ) );
@@ -152,7 +153,7 @@ BOOST_AUTO_TEST_CASE( BezierAndPolyOnTransformedFootprint )
     SHAPE_POLY_SET polySet;
     polySet.AddOutline( chain );
 
-    auto* poly = new PCB_SHAPE( pad.get() );
+    PCB_SHAPE* poly = new PCB_SHAPE( pad.get() );
     poly->SetShape( SHAPE_T::POLY );
     poly->SetPolyShape( polySet );
     poly->SetWidth( mm( 0.1 ) );
@@ -206,13 +207,14 @@ BOOST_AUTO_TEST_CASE( BezierAndPolyOnTransformedFootprint )
 
 BOOST_AUTO_TEST_CASE( ScaledFootprintRoundTripStable )
 {
-    auto board = std::make_unique<BOARD>();
-    auto fp = std::make_unique<FOOTPRINT>( board.get() );
+    std::unique_ptr<BOARD>     board = std::make_unique<BOARD>();
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( board.get() );
     fp->SetReference( "U1" );
     fp->SetPosition( VECTOR2I( mm( 50.0 ), mm( 50.0 ) ) );
     fp->SetTransformScale( 2.0, 1.5 );
 
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( fp.get() );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetNumber( "1" );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( LSET( { F_Cu } ) );
@@ -233,14 +235,14 @@ BOOST_AUTO_TEST_CASE( ScaledFootprintRoundTripStable )
 
 BOOST_AUTO_TEST_CASE( PadPositionAndOrientationRoundTripStable )
 {
-    auto board = std::make_unique<BOARD>();
-    auto fp = std::make_unique<FOOTPRINT>( board.get() );
+    std::unique_ptr<BOARD>     board = std::make_unique<BOARD>();
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( board.get() );
     fp->SetReference( "U1" );
     fp->SetPosition( VECTOR2I( mm( 50.0 ), mm( 50.0 ) ) );
     fp->SetOrientation( EDA_ANGLE( 30.0, DEGREES_T ) );
     fp->SetTransformScale( 2.0, 1.5 );
 
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( fp.get() );
     pad->SetNumber( "1" );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( LSET( { F_Cu } ) );
@@ -269,13 +271,13 @@ BOOST_AUTO_TEST_CASE( PadPositionAndOrientationRoundTripStable )
 
 BOOST_AUTO_TEST_CASE( PadDeltaRoundTripStable )
 {
-    auto board = std::make_unique<BOARD>();
-    auto fp = std::make_unique<FOOTPRINT>( board.get() );
+    std::unique_ptr<BOARD>     board = std::make_unique<BOARD>();
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( board.get() );
     fp->SetReference( "U1" );
     fp->SetPosition( VECTOR2I( mm( 50.0 ), mm( 50.0 ) ) );
     fp->SetTransformScale( 2.0, 1.5 );
 
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( fp.get() );
     pad->SetNumber( "1" );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( LSET( { F_Cu } ) );
@@ -304,13 +306,14 @@ BOOST_AUTO_TEST_CASE( PadDeltaRoundTripStable )
 
 BOOST_AUTO_TEST_CASE( PadOffsetRoundTripStable )
 {
-    auto board = std::make_unique<BOARD>();
-    auto fp = std::make_unique<FOOTPRINT>( board.get() );
+    std::unique_ptr<BOARD>     board = std::make_unique<BOARD>();
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( board.get() );
     fp->SetReference( "U1" );
     fp->SetPosition( VECTOR2I( mm( 50.0 ), mm( 50.0 ) ) );
     fp->SetTransformScale( 2.0, 1.5 );
 
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( fp.get() );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetNumber( "1" );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( LSET( { F_Cu } ) );
@@ -339,14 +342,14 @@ BOOST_AUTO_TEST_CASE( PadOffsetRoundTripStable )
 
 BOOST_AUTO_TEST_CASE( FootprintPointRoundTripStable )
 {
-    auto board = std::make_unique<BOARD>();
-    auto fp = std::make_unique<FOOTPRINT>( board.get() );
+    std::unique_ptr<BOARD>     board = std::make_unique<BOARD>();
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( board.get() );
     fp->SetReference( "U1" );
     fp->SetPosition( VECTOR2I( mm( 50.0 ), mm( 50.0 ) ) );
     fp->SetOrientation( EDA_ANGLE( 30.0, DEGREES_T ) );
     fp->SetTransformScale( 2.0, 1.5 );
 
-    auto pt = std::make_unique<PCB_POINT>( fp.get() );
+    std::unique_ptr<PCB_POINT> pt = std::make_unique<PCB_POINT>( fp.get() );
     pt->SetLayer( F_Cu );
     pt->SetPosition( VECTOR2I( mm( 55.0 ), mm( 52.0 ) ) );
     PCB_POINT* ptPtr = pt.get();
@@ -372,13 +375,14 @@ BOOST_AUTO_TEST_CASE( FootprintPointRoundTripStable )
 
 BOOST_AUTO_TEST_CASE( RotatedPadSizeRoundTripStable )
 {
-    auto board = std::make_unique<BOARD>();
-    auto fp = std::make_unique<FOOTPRINT>( board.get() );
+    std::unique_ptr<BOARD>     board = std::make_unique<BOARD>();
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( board.get() );
     fp->SetReference( "U1" );
     fp->SetPosition( VECTOR2I( mm( 50.0 ), mm( 50.0 ) ) );
     fp->SetTransformScale( 2.0, 1.5 );
 
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( fp.get() );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetNumber( "1" );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( LSET( { F_Cu } ) );
@@ -412,17 +416,19 @@ BOOST_AUTO_TEST_CASE( PadSizeScalesAlongFootprintAxisRegardlessOfPadOrientation 
     fp->SetOrientation( ANGLE_0 );
     board.Add( fp );
 
-    auto makePad = [&]( const EDA_ANGLE& aRelOrient )
-    {
-        PAD* pad = new PAD( fp );
-        pad->SetAttribute( PAD_ATTRIB::SMD );
-        pad->SetLayerSet( LSET( { F_Cu } ) );
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( mm( 1.0 ), mm( 0.5 ) ) );
-        pad->SetOrientation( aRelOrient );
-        fp->Add( pad );
-        return pad;
-    };
+    auto makePad =
+            [&]( const EDA_ANGLE& aRelOrient )
+            {
+                PAD* pad = new PAD( fp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                pad->SetAttribute( PAD_ATTRIB::SMD );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( mm( 1.0 ), mm( 0.5 ) ) );
+                pad->SetOrientation( aRelOrient );
+                fp->Add( pad );
+                return pad;
+            };
 
     PAD* pad0 = makePad( ANGLE_0 );
     PAD* pad90 = makePad( EDA_ANGLE( 90.0, DEGREES_T ) );

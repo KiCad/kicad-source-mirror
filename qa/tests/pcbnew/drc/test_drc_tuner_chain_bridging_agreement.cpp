@@ -59,6 +59,7 @@ constexpr int    PAD_SIZE_NM = 500'000;  // 0.5 mm in nm
 PAD* addPad( FOOTPRINT* aFp, NETINFO_ITEM* aNet, const VECTOR2I& aPos )
 {
     PAD* pad = new PAD( aFp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( PAD_SIZE_NM, PAD_SIZE_NM ) );
     pad->SetPosition( aPos );

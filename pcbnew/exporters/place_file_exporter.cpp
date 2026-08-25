@@ -401,7 +401,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
             // TODO(JE) padstacks
             static const char* layer_name[4] = { "nocopper", "back", "front", "both" };
             buffer += fmt::format( "Shape {} Layer {}\n",
-                      TO_UTF8( pad->ShowLegacyPadShape( PADSTACK::ALL_LAYERS ) ),
+                      TO_UTF8( pad->ShowLegacyPadShape( PADSTACK::TEMP_ALL_LAYERS ) ),
                       layer_name[layer] );
 
             VECTOR2I padPos = pad->GetFPRelativePosition();
@@ -409,15 +409,15 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
             buffer += fmt::format( "position {:9.6f} {:9.6f} size {:9.6f} {:9.6f} orientation {:.2f}\n",
                       padPos.x * conv_unit,
                       padPos.y * conv_unit,
-                      pad->GetSize( PADSTACK::ALL_LAYERS ).x * conv_unit,
-                      pad->GetSize( PADSTACK::ALL_LAYERS ).y * conv_unit,
+                      pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x * conv_unit,
+                      pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y * conv_unit,
                       pad->GetOrientation().AsDegrees() );
 
             buffer += fmt::format( "drill {:9.6f}\n", pad->GetDrillSize().x * conv_unit );
 
             buffer += fmt::format( "shape_offset {:9.6f} {:9.6f}\n",
-                      pad->GetOffset( PADSTACK::ALL_LAYERS ).x * conv_unit,
-                      pad->GetOffset( PADSTACK::ALL_LAYERS ).y * conv_unit );
+                      pad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ).x * conv_unit,
+                      pad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ).y * conv_unit );
 
             buffer += "$EndPAD\n";
         }

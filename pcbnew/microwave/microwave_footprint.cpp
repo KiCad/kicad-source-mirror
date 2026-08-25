@@ -138,8 +138,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         offsetY = -( gap_size + pad->GetSize( PADSTACK::ALL_LAYERS ).y ) / 2;
 
         pad = *( it + 1 );
-        pad->SetSize( PADSTACK::ALL_LAYERS,
-                      VECTOR2I( pad->GetSize( PADSTACK::ALL_LAYERS ).x, gap_size ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pad->GetSize( PADSTACK::ALL_LAYERS ).x, gap_size ) );
         pad->SetY( pad->GetPosition().y + offsetY );
         break;
 
@@ -210,6 +209,7 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
     while( aPadCount-- )
     {
         PAD* pad = new PAD( footprint );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
 
         footprint->Add( pad, ADD_MODE::INSERT );
 

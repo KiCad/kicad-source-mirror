@@ -260,36 +260,38 @@ BOOST_AUTO_TEST_CASE( LoadV3FootprintRotationRing )
  */
 BOOST_AUTO_TEST_CASE( LoadDropsUnmappedLayers )
 {
-    auto invalidLayerItems = []( BOARD* board )
-    {
-        auto bad = []( PCB_LAYER_ID l ) { return (int) l < 0 || (int) l >= PCB_LAYER_ID_COUNT; };
+    auto invalidLayerItems =
+            []( BOARD* board )
+            {
+                auto bad = []( PCB_LAYER_ID l ) { return (int) l < 0 || (int) l >= PCB_LAYER_ID_COUNT; };
 
-        int count = 0;
+                int count = 0;
 
-        for( BOARD_ITEM* item : board->Drawings() )
-            count += bad( item->GetLayer() );
+                for( BOARD_ITEM* item : board->Drawings() )
+                    count += bad( item->GetLayer() );
 
-        for( PCB_TRACK* track : board->Tracks() )
-            count += bad( track->GetLayer() );
+                for( PCB_TRACK* track : board->Tracks() )
+                    count += bad( track->GetLayer() );
 
-        for( FOOTPRINT* fp : board->Footprints() )
-        {
-            for( BOARD_ITEM* item : fp->GraphicalItems() )
-                count += bad( item->GetLayer() );
-        }
+                for( FOOTPRINT* fp : board->Footprints() )
+                {
+                    for( BOARD_ITEM* item : fp->GraphicalItems() )
+                        count += bad( item->GetLayer() );
+                }
 
-        return count;
-    };
+                return count;
+            };
 
-    auto ruleAreas = []( BOARD* board )
-    {
-        int count = 0;
+    auto ruleAreas =
+            []( BOARD* board )
+            {
+                int count = 0;
 
-        for( ZONE* zone : board->Zones() )
-            count += zone->GetIsRuleArea();
+                for( ZONE* zone : board->Zones() )
+                    count += zone->GetIsRuleArea();
 
-        return count;
-    };
+                return count;
+            };
 
     for( const char* relPath : { "plugins/eagle_binary/boomchak.brd",
                                  "plugins/eagle_binary/turnemoff.brd" } )
@@ -324,26 +326,29 @@ BOOST_AUTO_TEST_CASE( LoadRoutesSmashedValueText )
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/blink1_b1a.brd" ) );
     BOOST_REQUIRE( board );
 
-    auto footprintTexts = [&]()
-    {
-        std::set<wxString> texts;
-
-        for( FOOTPRINT* fp : board->Footprints() )
-        {
-            texts.insert( fp->Value().GetText() );
-
-            for( BOARD_ITEM* item : fp->GraphicalItems() )
+    auto footprintTexts =
+            [&]()
             {
-                if( PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( item ) )
-                    texts.insert( text->GetText() );
-            }
-        }
+                std::set<wxString> texts;
 
-        return texts;
-    }();
+                for( FOOTPRINT* fp : board->Footprints() )
+                {
+                    texts.insert( fp->Value().GetText() );
 
-    BOOST_CHECK( !footprintTexts.count( wxS( "${VALU}" ) ) );
-    BOOST_CHECK( !footprintTexts.count( wxS( ">VALU" ) ) );
+                    for( BOARD_ITEM* item : fp->GraphicalItems() )
+                    {
+                        if( PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( item ) )
+                            texts.insert( text->GetText() );
+                    }
+                }
+
+                return texts;
+            };
+
+    std::set<wxString> fpTexts = footprintTexts();
+
+    BOOST_CHECK( !fpTexts.contains( wxS( "${VALU}" ) ) );
+    BOOST_CHECK( !fpTexts.contains( wxS( ">VALU" ) ) );
 }
 
 
@@ -442,16 +447,17 @@ BOOST_AUTO_TEST_CASE( LoadIssue24827PadShapes )
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24827_brenner57e.brd" ) );
     BOOST_REQUIRE( board );
 
-    auto shapeOf = [&]( const wxString& aRef ) -> PAD_SHAPE
-    {
-        for( FOOTPRINT* fp : board->Footprints() )
-        {
-            if( fp->GetReference() == aRef && !fp->Pads().empty() )
-                return fp->Pads().front()->GetShape( PADSTACK::ALL_LAYERS );
-        }
+    auto shapeOf =
+            [&]( const wxString& aRef ) -> PAD_SHAPE
+            {
+                for( FOOTPRINT* fp : board->Footprints() )
+                {
+                    if( fp->GetReference() == aRef && !fp->Pads().empty() )
+                        return fp->Pads().front()->GetShape( PADSTACK::ALL_LAYERS );
+                }
 
-        return PAD_SHAPE::CIRCLE;
-    };
+                return PAD_SHAPE::CIRCLE;
+            };
 
     // R10 is an 0207 resistor (Eagle octagon pads); Q2 is a TO-92 transistor (oblong).
     // Both decoded to circles while the shape ordinal was ignored, and swapping the
@@ -476,26 +482,27 @@ BOOST_AUTO_TEST_CASE( LoadIssue24827CurvedWireArcs )
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24827_brenner57e.brd" ) );
     BOOST_REQUIRE( board );
 
-    auto bodyArcs = [&]( const wxString& aRef )
-    {
-        std::vector<PCB_SHAPE*> arcs;
-
-        for( FOOTPRINT* fp : board->Footprints() )
-        {
-            if( fp->GetReference() != aRef )
-                continue;
-
-            for( BOARD_ITEM* item : fp->GraphicalItems() )
+    auto bodyArcs =
+            [&]( const wxString& aRef )
             {
-                PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+                std::vector<PCB_SHAPE*> arcs;
 
-                if( shape && shape->GetShape() == SHAPE_T::ARC && shape->GetLayer() == F_SilkS )
-                    arcs.push_back( shape );
-            }
-        }
+                for( FOOTPRINT* fp : board->Footprints() )
+                {
+                    if( fp->GetReference() != aRef )
+                        continue;
 
-        return arcs;
-    };
+                    for( BOARD_ITEM* item : fp->GraphicalItems() )
+                    {
+                        PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+
+                        if( shape && shape->GetShape() == SHAPE_T::ARC && shape->GetLayer() == F_SilkS )
+                            arcs.push_back( shape );
+                    }
+                }
+
+                return arcs;
+            };
 
     // A scattered center is exactly the flattened/indented arc symptom, so require the
     // body arcs of each transistor to stay concentric to a fraction of the body radius.

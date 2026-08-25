@@ -356,6 +356,7 @@ void PCB_IO_AUTOTRAX::emitVia( const VIA& aVia, FOOTPRINT* aFootprint )
     }
 
     PCB_VIA* via = new PCB_VIA( m_board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );     // AutoTrax doesn't have complex padstacks
     via->SetPosition( toBoard( aVia.x, aVia.y ) );
     via->SetDrill( drill );
     via->SetWidth( PADSTACK::ALL_LAYERS, diameter );
@@ -399,6 +400,7 @@ void PCB_IO_AUTOTRAX::emitPad( const AUTOTRAX::PAD& aPad, FOOTPRINT* aFootprint 
     ::PAD* pad = new ::PAD( owner );
     pad->SetNumber( aPad.name );
     pad->SetPosition( toBoard( aPad.x, aPad.y ) );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // AutoTrax doesn't have complex padstacks
 
     VECTOR2I size( std::max( 1, toIU( aPad.xSize ) ), std::max( 1, toIU( aPad.ySize ) ) );
     pad->SetSize( PADSTACK::ALL_LAYERS, size );

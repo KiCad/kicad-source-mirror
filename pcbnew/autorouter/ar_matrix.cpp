@@ -44,7 +44,7 @@ AR_MATRIX::AR_MATRIX()
     m_GridRouting        = 0;
     m_RouteCount         = 0;
     m_routeLayerBottom   = B_Cu;
-    m_routeLayerTop      = PADSTACK::ALL_LAYERS;
+    m_routeLayerTop      = F_Cu;
 }
 
 
@@ -903,25 +903,25 @@ void AR_MATRIX::CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int 
 void AR_MATRIX::PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op_logic )
 {
     int     dx, dy;
-    VECTOR2I shape_pos = aPad->ShapePos( PADSTACK::ALL_LAYERS );
+    VECTOR2I shape_pos = aPad->ShapePos( PADSTACK::TEMP_ALL_LAYERS );
 
     // TODO(JE) padstacks
-    dx = aPad->GetSize( PADSTACK::ALL_LAYERS ).x / 2;
+    dx = aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x / 2;
     dx += marge;
 
-    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+    if( aPad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
     {
         traceFilledCircle( shape_pos.x, shape_pos.y, dx, aPad->GetLayerSet(), color, op_logic );
         return;
     }
 
-    dy = aPad->GetSize( PADSTACK::ALL_LAYERS ).y / 2;
+    dy = aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y / 2;
     dy += marge;
 
-    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::TRAPEZOID )
+    if( aPad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::TRAPEZOID )
     {
-        dx += abs( aPad->GetDelta( PADSTACK::ALL_LAYERS ).y ) / 2;
-        dy += abs( aPad->GetDelta( PADSTACK::ALL_LAYERS ).x ) / 2;
+        dx += abs( aPad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ).y ) / 2;
+        dy += abs( aPad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ).x ) / 2;
     }
 
     // The pad is a rectangle ( horizontal or vertical )

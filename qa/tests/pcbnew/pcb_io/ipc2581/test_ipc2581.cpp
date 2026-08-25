@@ -66,11 +66,11 @@ BOOST_AUTO_TEST_CASE( Issue18013_FlippedFootprintRotation )
                 board.Add( fp );
 
                 PAD* pad = new PAD( fp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
                 pad->SetNumber( wxT( "1" ) );
                 pad->SetAttribute( PAD_ATTRIB::SMD );
                 pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-                pad->SetSize( PADSTACK::ALL_LAYERS,
-                              VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
                 pad->SetLayerSet( LSET( { F_Cu, F_Mask } ) );
                 fp->Add( pad );
 
@@ -84,12 +84,9 @@ BOOST_AUTO_TEST_CASE( Issue18013_FlippedFootprintRotation )
                 return fp;
             };
 
-    FOOTPRINT* flipped = addFootprint( wxT( "U1" ),
-                                       VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ),
+    FOOTPRINT* flipped = addFootprint( wxT( "U1" ), VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ),
                                        true );
-    FOOTPRINT* top = addFootprint( wxT( "U2" ),
-                                   VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 60 ) ),
-                                   false );
+    FOOTPRINT* top = addFootprint( wxT( "U2" ), VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 60 ) ), false );
 
     BOOST_REQUIRE( flipped->IsFlipped() );
     BOOST_REQUIRE( !top->IsFlipped() );
@@ -126,7 +123,7 @@ BOOST_AUTO_TEST_CASE( Issue18013_FlippedFootprintRotation )
                 size_t end = xml.find( "</Component>", start );
 
                 return xml.substr( start, end == std::string::npos ? std::string::npos
-                                                                    : end - start );
+                                                                   : end - start );
             };
 
     std::string u1 = componentRegion( "U1" );
@@ -135,15 +132,13 @@ BOOST_AUTO_TEST_CASE( Issue18013_FlippedFootprintRotation )
     BOOST_CHECK_MESSAGE( u1.find( "mirror=\"true\"" ) != std::string::npos,
                          "Flipped component must carry mirror=\"true\". Region: " + u1 );
     BOOST_CHECK_MESSAGE( u1.find( "rotation=\"150.0\"" ) != std::string::npos,
-                         "Flipped 30 degree component must export rotation=\"150.0\". Region: "
-                                 + u1 );
+                         "Flipped 30 degree component must export rotation=\"150.0\". Region: " + u1 );
 
     // Guard against the two known incorrect formulas so the test fails on regression.
     BOOST_CHECK_MESSAGE( u1.find( "rotation=\"330.0\"" ) == std::string::npos,
                          "Flipped rotation must not be a bare Invert() (330.0). Region: " + u1 );
     BOOST_CHECK_MESSAGE( u1.find( "rotation=\"30.0\"" ) == std::string::npos,
-                         "Flipped rotation must not be the unadjusted orientation (30.0). Region: "
-                                 + u1 );
+                         "Flipped rotation must not be the unadjusted orientation (30.0). Region: " + u1 );
 
     std::string u2 = componentRegion( "U2" );
     BOOST_REQUIRE_MESSAGE( !u2.empty(), "Top component U2 should be exported" );

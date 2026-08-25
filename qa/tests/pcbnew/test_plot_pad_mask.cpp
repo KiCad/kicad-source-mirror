@@ -66,6 +66,7 @@ BOOST_AUTO_TEST_CASE( RoundRectMaskMatchesInflatedOutline )
     auto footprint = std::make_unique<FOOTPRINT>( &board );
 
     auto pad = new PAD( footprint.get() );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( padW, padH ) );
@@ -81,8 +82,7 @@ BOOST_AUTO_TEST_CASE( RoundRectMaskMatchesInflatedOutline )
 
     // Replicate the fixed plot-path mutation: grow the pad to padPlotsSize and
     // grow the corner radius by mask_clearance.
-    pad->SetSize( PADSTACK::ALL_LAYERS,
-                  VECTOR2I( padW + 2 * maskClearance, padH + 2 * maskClearance ) );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( padW + 2 * maskClearance, padH + 2 * maskClearance ) );
     pad->SetRoundRectCornerRadius( PADSTACK::ALL_LAYERS, originalRadius + maskClearance );
 
     SHAPE_POLY_SET produced;
@@ -122,11 +122,11 @@ BOOST_AUTO_TEST_CASE( RoundRectGerberMaskApertureHasCorrectRadius )
     BOARD board;
     board.GetDesignSettings().m_SolderMaskExpansion = 0;
 
-    auto footprint = std::make_unique<FOOTPRINT>( &board );
-    footprint->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50.0 ),
-                                      pcbIUScale.mmToIU( 50.0 ) ) );
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( &board );
+    footprint->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50.0 ), pcbIUScale.mmToIU( 50.0 ) ) );
 
-    auto pad = new PAD( footprint.get() );
+    PAD* pad = new PAD( footprint.get() );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( padW, padH ) );
@@ -210,8 +210,7 @@ BOOST_AUTO_TEST_CASE( RoundRectGerberMaskApertureHasCorrectRadius )
     const double expectedRadiusRatio = static_cast<double>( originalRadius + maskClearance )
                                        / static_cast<double>( padW + 2 * maskClearance );
     const double buggyRadiusRatio    = radiusRatio;
-    BOOST_TEST_MESSAGE( "Expected r/bbox " << expectedRadiusRatio
-                                           << " buggy " << buggyRadiusRatio );
+    BOOST_TEST_MESSAGE( "Expected r/bbox " << expectedRadiusRatio << " buggy " << buggyRadiusRatio );
 
     std::regex arcRe( R"(X(-?\d+)Y(-?\d+)I(-?\d+)J(-?\d+)D01\*)" );
     auto arcBegin = std::sregex_iterator( buffer.begin(), buffer.end(), arcRe );
@@ -227,11 +226,8 @@ BOOST_AUTO_TEST_CASE( RoundRectGerberMaskApertureHasCorrectRadius )
         double ratio = r / static_cast<double>( bboxExtent );
 
         BOOST_CHECK_MESSAGE( std::abs( ratio - expectedRadiusRatio ) < 1e-3,
-                             "Arc radius/bbox ratio " << ratio
-                                                      << " does not match expected "
-                                                      << expectedRadiusRatio
-                                                      << " (buggy value would be "
-                                                      << buggyRadiusRatio << ")" );
+                             "Arc radius/bbox ratio " << ratio << " does not match expected "  << expectedRadiusRatio
+                                                      << " (buggy value would be " << buggyRadiusRatio << ")" );
         arcCount++;
     }
 

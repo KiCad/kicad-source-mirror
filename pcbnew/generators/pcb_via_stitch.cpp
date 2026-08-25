@@ -144,7 +144,7 @@ int PCB_VIA_STITCH::GetViaSize() const
 
 void PCB_VIA_STITCH::SetViaSize( int aVal )
 {
-    m_viaTemplate->SetWidth( aVal );
+    m_viaTemplate->SetWidth( PADSTACK::ALL_LAYERS, aVal );
     MarkDirty();
 }
 
@@ -169,8 +169,7 @@ std::vector<std::pair<wxString, const BOARD_ITEM*>> PCB_VIA_STITCH::GetTemplateI
 }
 
 
-void PCB_VIA_STITCH::SetTemplateItem( const wxString& aName,
-                                      std::unique_ptr<BOARD_ITEM> aItem )
+void PCB_VIA_STITCH::SetTemplateItem( const wxString& aName, std::unique_ptr<BOARD_ITEM> aItem )
 {
     if( aName != wxS( "via" ) || !aItem || aItem->Type() != PCB_VIA_T )
         return;
@@ -269,7 +268,7 @@ VECTOR2I PCB_VIA_STITCH::GetPosition() const
 void PCB_VIA_STITCH::InitializeDefaults( BOARD* aBoard )
 {
     if( m_viaTemplate->GetWidth( PADSTACK::ALL_LAYERS ) <= 0 )
-        m_viaTemplate->SetWidth( defaultViaSize( aBoard ) );
+        m_viaTemplate->SetWidth( PADSTACK::ALL_LAYERS, defaultViaSize( aBoard ) );
 
     if( m_viaTemplate->GetDrillValue() <= 0 )
         m_viaTemplate->SetDrill( defaultViaDrill( aBoard ) );
@@ -316,7 +315,7 @@ void PCB_VIA_STITCH::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMM
 int PCB_VIA_STITCH::defaultPitch( BOARD* aBoard ) const
 {
     int mm2 = pcbIUScale.mmToIU( 2.0 );
-    int viaSize = m_viaTemplate->GetWidth( PADSTACK::ALL_LAYERS ) > 0 ? m_viaTemplate->GetWidth( PADSTACK::ALL_LAYERS )
+    int viaSize = m_viaTemplate->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) > 0 ? m_viaTemplate->GetWidth( PADSTACK::TEMP_ALL_LAYERS )
                                                 : defaultViaSize( aBoard );
     int pitch = std::max( mm2, viaSize * 2 );
     return pitch;
@@ -443,7 +442,7 @@ bool PCB_VIA_STITCH::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT*
     int pitch = m_pitch > 0 ? m_pitch : defaultPitch( aBoard );
 
     if( m_viaTemplate->GetWidth( PADSTACK::ALL_LAYERS ) <= 0 )
-        m_viaTemplate->SetWidth( defaultViaSize( aBoard ) );
+        m_viaTemplate->SetWidth( PADSTACK::ALL_LAYERS, defaultViaSize( aBoard ) );
     if( m_viaTemplate->GetDrillValue() <= 0 )
         m_viaTemplate->SetDrill( defaultViaDrill( aBoard ) );
 
@@ -803,7 +802,8 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
         return cells;
 
     int pitch = m_pitch > 0 ? m_pitch : defaultPitch( aBoard );
-    int viaSize = m_viaTemplate->GetWidth( PADSTACK::ALL_LAYERS ) > 0 ? m_viaTemplate->GetWidth( PADSTACK::ALL_LAYERS ) : defaultViaSize( aBoard );
+    int viaSize = m_viaTemplate->GetWidth( PADSTACK::ALL_LAYERS ) > 0 ? m_viaTemplate->GetWidth( PADSTACK::ALL_LAYERS )
+                                                                      : defaultViaSize( aBoard );
 
     if( GetNetCode() == 0 )
         return cells;

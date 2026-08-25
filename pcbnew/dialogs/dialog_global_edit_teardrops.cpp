@@ -337,7 +337,7 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit, BOARD_CONNE
     if( m_roundPadsFilter->GetValue() )
     {
         // TODO(JE) padstacks -- teardrops needs to support per-layer pad handling
-        if( !TEARDROP_MANAGER::IsRound( aItem, PADSTACK::ALL_LAYERS ) )
+        if( !TEARDROP_MANAGER::IsRound( aItem, PADSTACK::TEMP_ALL_LAYERS ) )
             return;
     }
 

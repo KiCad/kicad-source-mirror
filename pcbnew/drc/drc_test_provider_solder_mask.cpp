@@ -748,7 +748,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
                     // Test for aperture-to-zone collisions
                     testMaskItemAgainstZones( item, itemBBox, F_Mask, F_Cu );
                 }
-                else if( item->IsOnLayer( PADSTACK::ALL_LAYERS ) )
+                else if( item->IsOnLayer( F_Cu ) )
                 {
                     // Test for copper-item-to-aperture collisions
                     testItemAgainstItems( item, itemBBox, F_Cu, F_Mask );
@@ -1027,7 +1027,13 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
-            updateLargestClearance( pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS ) );
+        {
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        updateLargestClearance( pad->GetSolderMaskExpansion( aLayer ) );
+                    } );
+        }
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {

@@ -48,8 +48,7 @@ namespace
 wxFileName MakeTempDir()
 {
     wxFileName tempDir( wxFileName::GetTempDir(), wxEmptyString );
-    tempDir.AppendDir( wxString::Format( "kicad-backdrill-%llu",
-                                         static_cast<unsigned long long>( wxGetUTCTime() ) ) );
+    tempDir.AppendDir( wxString::Format( "kicad-backdrill-%llu", static_cast<unsigned long long>( wxGetUTCTime() ) ) );
     BOOST_REQUIRE( tempDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
     return tempDir;
@@ -66,11 +65,12 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     board.SetCopperLayerCount( 6 );
     board.SetFileName( boardFile.GetFullPath() );
 
-    auto via = new PCB_VIA( &board );
+    PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetPosition( VECTOR2I( 0, 0 ) );
     via->SetLayerPair( F_Cu, B_Cu );
     via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
-    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.60 ) );
     via->SetSecondaryDrillSize( pcbIUScale.mmToIU( 0.20 ) );
     via->SetSecondaryDrillStartLayer( F_Cu );
     via->SetSecondaryDrillEndLayer( In3_Cu );
@@ -196,21 +196,23 @@ BOOST_AUTO_TEST_CASE( FrontAndBackBackdrillCamOutputs )
     board.SetCopperLayerCount( 6 );
     board.SetFileName( boardFile.GetFullPath() );
 
-    auto topVia = new PCB_VIA( &board );
+    PCB_VIA* topVia = new PCB_VIA( &board );
+    topVia->SetPadstackMode( PADSTACK::MODE::NORMAL );
     topVia->SetPosition( VECTOR2I( 0, 0 ) );
     topVia->SetLayerPair( F_Cu, B_Cu );
     topVia->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
-    topVia->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    topVia->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.60 ) );
     topVia->SetSecondaryDrillSize( pcbIUScale.mmToIU( 0.40 ) );
     topVia->SetSecondaryDrillStartLayer( F_Cu );
     topVia->SetSecondaryDrillEndLayer( In1_Cu );
     board.Add( topVia );
 
-    auto bottomVia = new PCB_VIA( &board );
+    PCB_VIA* bottomVia = new PCB_VIA( &board );
+    bottomVia->SetPadstackMode( PADSTACK::MODE::NORMAL );
     bottomVia->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 5.0 ), 0 ) );
     bottomVia->SetLayerPair( F_Cu, B_Cu );
     bottomVia->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
-    bottomVia->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    bottomVia->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.60 ) );
     bottomVia->SetTertiaryDrillSize( pcbIUScale.mmToIU( 0.40 ) );
     bottomVia->SetTertiaryDrillStartLayer( B_Cu );
     bottomVia->SetTertiaryDrillEndLayer( In3_Cu );
@@ -219,8 +221,7 @@ BOOST_AUTO_TEST_CASE( FrontAndBackBackdrillCamOutputs )
     EXCELLON_WRITER excellon( &board );
     excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
     excellon.SetFormat( true );
-    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false,
-                                                       nullptr ) );
+    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, nullptr ) );
 
     wxFileName topBackdrillFile( tempDir.GetFullPath(),
                                  wxT( "backdrill_pair_board_Backdrills_Drill_1_2.drl" ) );
@@ -258,11 +259,12 @@ BOOST_AUTO_TEST_CASE( DualBackdrillSameViaCamOutputs )
     board.SetCopperLayerCount( 6 );
     board.SetFileName( boardFile.GetFullPath() );
 
-    auto via = new PCB_VIA( &board );
+    PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetPosition( VECTOR2I( 0, 0 ) );
     via->SetLayerPair( F_Cu, B_Cu );
     via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
-    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.60 ) );
     via->SetSecondaryDrillSize( pcbIUScale.mmToIU( 0.40 ) );
     via->SetSecondaryDrillStartLayer( F_Cu );
     via->SetSecondaryDrillEndLayer( In1_Cu );
@@ -300,11 +302,12 @@ BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
     board.SetCopperLayerCount( 2 );
     board.SetFileName( boardFile.GetFullPath() );
 
-    auto via = new PCB_VIA( &board );
+    PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetPosition( VECTOR2I( 0, 0 ) );
     via->SetLayerPair( F_Cu, B_Cu );
     via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
-    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.60 ) );
     board.Add( via );
 
     // Verify precision 5 produces "Fmt 4.5" in the file header
@@ -355,12 +358,13 @@ BOOST_AUTO_TEST_CASE( DrillFileLayerOrderInFilename )
     board.SetFileName( boardFile.GetFullPath() );
 
     // Via spanning In2 (bottom inner) to B_Cu: file must be named "in2-back", not "back-in2".
-    auto via = new PCB_VIA( &board );
+    PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetPosition( VECTOR2I( 0, 0 ) );
     via->SetViaType( VIATYPE::BURIED );
     via->SetLayerPair( In2_Cu, B_Cu );
     via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
-    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.60 ) );
     board.Add( via );
 
     EXCELLON_WRITER excellon( &board );
@@ -422,11 +426,12 @@ BOOST_AUTO_TEST_CASE( DrillReportWithTools )
     board.SetCopperLayerCount( 2 );
     board.SetFileName( boardFile.GetFullPath() );
 
-    auto via = new PCB_VIA( &board );
+    PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetPosition( VECTOR2I( 0, 0 ) );
     via->SetLayerPair( F_Cu, B_Cu );
     via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
-    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.60 ) );
     board.Add( via );
 
     wxFileName reportFile( tempDir.GetFullPath(), wxT( "test_board_with_drills-drl.rpt" ) );
@@ -630,13 +635,13 @@ namespace
 PAD* AddSlotPad( FOOTPRINT* aFootprint, const VECTOR2I& aPos, PAD_ATTRIB aAttribute )
 {
     PAD* pad = new PAD( aFootprint );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetAttribute( aAttribute );
     pad->SetLayerSet( aAttribute == PAD_ATTRIB::NPTH ? PAD::UnplatedHoleMask()
                                                      : PAD::PTHMask() );
     pad->SetPosition( aPos );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
-    pad->SetSize( PADSTACK::ALL_LAYERS,
-                  VECTOR2I( pcbIUScale.mmToIU( 2.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 2.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
     pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
     pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 1.7 ), pcbIUScale.mmToIU( 0.6 ) ) );
     aFootprint->Add( pad );

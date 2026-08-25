@@ -36,9 +36,10 @@ BOOST_AUTO_TEST_CASE( SetSizeXOnCirclePadUpdatesY )
     BOARD board;
     board.SetBoardUse( BOARD_USE::FPHOLDER );
 
-    auto fp = std::make_unique<FOOTPRINT>( &board );
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( &board );
+    std::unique_ptr<PAD>       pad = std::make_unique<PAD>( fp.get() );
 
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetAttribute( PAD_ATTRIB::PTH );
     pad->SetLayerSet( PAD::PTHMask() );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
@@ -58,8 +59,8 @@ BOOST_AUTO_TEST_CASE( SetSizeYOnCirclePadUpdatesX )
     BOARD board;
     board.SetBoardUse( BOARD_USE::FPHOLDER );
 
-    auto fp = std::make_unique<FOOTPRINT>( &board );
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( &board );
+    std::unique_ptr<PAD>       pad = std::make_unique<PAD>( fp.get() );
 
     pad->SetAttribute( PAD_ATTRIB::PTH );
     pad->SetLayerSet( PAD::PTHMask() );
@@ -80,8 +81,8 @@ BOOST_AUTO_TEST_CASE( SetSizeXOnRectPadLeavesYAlone )
     BOARD board;
     board.SetBoardUse( BOARD_USE::FPHOLDER );
 
-    auto fp = std::make_unique<FOOTPRINT>( &board );
-    auto pad = std::make_unique<PAD>( fp.get() );
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( &board );
+    std::unique_ptr<PAD>       pad = std::make_unique<PAD>( fp.get() );
 
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( LSET( { F_Cu } ) );

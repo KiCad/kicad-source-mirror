@@ -70,6 +70,7 @@ BOOST_AUTO_TEST_CASE( AllConnectedItems_IncludesFootprintShapes )
     m_board->Add( fp );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
     fp->Add( pad );
@@ -146,6 +147,7 @@ BOOST_AUTO_TEST_CASE( MapNets_RemapsFootprintShapes )
     srcBoard->Add( fp );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
     pad->SetNet( srcNet );
@@ -166,10 +168,8 @@ BOOST_AUTO_TEST_CASE( MapNets_RemapsFootprintShapes )
     srcBoard->MapNets( m_board.get() );
 
     // After MapNets, all connected items should point to destination board nets
-    BOOST_CHECK_MESSAGE( pad->GetNet() != srcNet,
-                         "Pad net should be remapped away from source net" );
-    BOOST_CHECK_MESSAGE( shape->GetNet() != srcNet,
-                         "Footprint shape net should be remapped away from source net" );
+    BOOST_CHECK_MESSAGE( pad->GetNet() != srcNet, "Pad net should be remapped away from source net" );
+    BOOST_CHECK_MESSAGE( shape->GetNet() != srcNet, "Footprint shape net should be remapped away from source net" );
     BOOST_CHECK( pad->GetNetname() == wxT( "TestNet" ) );
     BOOST_CHECK( shape->GetNetname() == wxT( "TestNet" ) );
 }
@@ -194,9 +194,9 @@ BOOST_AUTO_TEST_CASE( MapNets_FootprintShapeSurvivesSourceBoardDeletion )
         srcBoard->Add( fp );
 
         PAD* pad = new PAD( fp );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetSize( PADSTACK::ALL_LAYERS,
-                      VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
         pad->SetNet( srcNet );
         fp->Add( pad );
 

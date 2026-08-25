@@ -1090,6 +1090,7 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
             BIU x = biuParse( line + SZ( "PadSize" ), &data );
             BIU y = biuParse( data );
 
+            bds.m_Pad_Master->SetPadstackMode( PADSTACK::MODE::NORMAL );
             bds.m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( x, y ) );
         }
         else if( TESTLINE( "PadDrill" ) )
@@ -1442,6 +1443,7 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             // chances are both were ASCII, but why take chances?
 
             pad->SetNumber( padNumber );
+            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
             pad->SetShape( PADSTACK::ALL_LAYERS, static_cast<PAD_SHAPE>( padshape ) );
             pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( size_x, size_y ) );
             pad->SetDelta( PADSTACK::ALL_LAYERS, VECTOR2I( delta_x, delta_y ) );
@@ -1474,6 +1476,7 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             }
 
             pad->SetDrillShape( drShape );
+            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
             pad->SetOffset( PADSTACK::ALL_LAYERS, VECTOR2I( offs_x, offs_y ) );
             pad->SetDrillSize( VECTOR2I( drill_x, drill_y ) );
         }
@@ -2279,6 +2282,7 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
                 viatype = VIATYPE::BLIND;
 
             newVia->SetViaType( viatype );
+            newVia->SetPadstackMode( PADSTACK::MODE::NORMAL );
             newVia->SetWidth( PADSTACK::ALL_LAYERS, width );
 
             newVia->SetUuidDirect( KIID( uuid ) );

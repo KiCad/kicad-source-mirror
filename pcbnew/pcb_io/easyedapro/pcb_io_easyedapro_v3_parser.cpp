@@ -92,6 +92,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
     pad->SetNumber( padNumber );
     pad->SetPosition( PCB_IO_EASYEDAPRO_PARSER::ScalePos( center ) );
     pad->SetOrientationDegrees( orientation );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
 
     // Process hole
     bool hasHole = false;
@@ -153,8 +154,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
             double radius = V3GetDouble( padDef, "radius" );
             double radiusRatio = std::clamp( radius, 0.0, 100.0 ) / 100 / 2;
 
-            pad->SetSize( PADSTACK::ALL_LAYERS,
-                          PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size ) );
+            pad->SetSize( PADSTACK::ALL_LAYERS, PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size ) );
 
             if( radiusRatio == 0 )
                 pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
@@ -170,10 +170,9 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
             size.x = V3GetDouble( padDef, "width", 1.0 );
             size.y = V3GetDouble( padDef, "height", 1.0 );
 
-            pad->SetSize( PADSTACK::ALL_LAYERS,
-                          PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size ) );
-            pad->SetShape( PADSTACK::ALL_LAYERS,
-                           size.x == size.y ? PAD_SHAPE::CIRCLE : PAD_SHAPE::OVAL );
+            pad->SetSize( PADSTACK::ALL_LAYERS, PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size ) );
+            pad->SetShape( PADSTACK::ALL_LAYERS, size.x == size.y ? PAD_SHAPE::CIRCLE
+                                                                  : PAD_SHAPE::OVAL );
         }
         else if( padType == wxS( "OVAL" ) )
         {
@@ -181,8 +180,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
             size.x = V3GetDouble( padDef, "width", 1.0 );
             size.y = V3GetDouble( padDef, "height", 1.0 );
 
-            pad->SetSize( PADSTACK::ALL_LAYERS,
-                          PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size ) );
+            pad->SetSize( PADSTACK::ALL_LAYERS, PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size ) );
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
         }
         else if( padType == wxS( "POLY" ) || padType == wxS( "POLYGON" ) )
@@ -207,8 +205,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
     }
     else
     {
-        pad->SetSize( PADSTACK::ALL_LAYERS,
-                      PCB_IO_EASYEDAPRO_PARSER::ScaleSize( VECTOR2D( 1.0, 1.0 ) ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, PCB_IO_EASYEDAPRO_PARSER::ScaleSize( VECTOR2D( 1.0, 1.0 ) ) );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
     }
 
@@ -897,10 +894,10 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
 
             std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( aBoard );
 
+            via->SetPadstackMode( PADSTACK::MODE::NORMAL );
             via->SetPosition( PCB_IO_EASYEDAPRO_PARSER::ScalePos( center ) );
             via->SetDrill( PCB_IO_EASYEDAPRO_PARSER::ScaleSize( drill ) );
-            via->SetWidth( PADSTACK::ALL_LAYERS,
-                           PCB_IO_EASYEDAPRO_PARSER::ScaleSize( dia ) );
+            via->SetWidth( PADSTACK::ALL_LAYERS, PCB_IO_EASYEDAPRO_PARSER::ScaleSize( dia ) );
             via->SetNet( aBoard->FindNet( netname ) );
 
             aBoard->Add( via.release(), ADD_MODE::APPEND );

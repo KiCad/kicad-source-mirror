@@ -203,11 +203,12 @@ BOOST_AUTO_TEST_CASE( BlindViaHoleKeepsLayerPairColours )
     board.SetCopperLayerCount( 4 );
 
     PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetViaType( VIATYPE::BLIND );
     via->SetLayerPair( F_Cu, In1_Cu );
     via->SetStart( { 0, 0 } );
     via->SetEnd( { 0, 0 } );
-    via->SetWidth( pcbIUScale.mmToIU( 0.8 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.8 ) );
     via->SetDrill( pcbIUScale.mmToIU( 0.4 ) );
     board.Add( via );
 
@@ -248,10 +249,11 @@ BOOST_AUTO_TEST_CASE( BackdrilledViaKeepsIndicatorColours )
     board.SetCopperLayerCount( 4 );
 
     PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetLayerPair( F_Cu, B_Cu );
     via->SetStart( { 0, 0 } );
     via->SetEnd( { 0, 0 } );
-    via->SetWidth( pcbIUScale.mmToIU( 0.8 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.8 ) );
     via->SetDrill( pcbIUScale.mmToIU( 0.4 ) );
     via->SetSecondaryDrillSize( std::optional<int>( pcbIUScale.mmToIU( 0.6 ) ) );
     via->SetSecondaryDrillStartLayer( F_Cu );

@@ -2642,41 +2642,41 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             {
                 // Show "Type: N" for homogeneous selections
                 wxString typeName = selection.Front()->GetFriendlyName();
-                msgItems.emplace_back( typeName,
-                                       wxString::Format( wxT( "%d" ), selection.GetSize() ) );
+                msgItems.emplace_back( typeName, wxString::Format( wxT( "%d" ), selection.GetSize() ) );
 
                 // For pads, show common properties
                 if( commonType == PCB_PAD_T )
                 {
-                    std::set<wxString> layers;
+                    std::set<wxString>  layers;
                     std::set<PAD_SHAPE> shapes;
                     std::set<VECTOR2I>  sizes;
 
                     for( EDA_ITEM* item : selection )
                     {
                         PAD* pad = static_cast<PAD*>( item );
+
                         layers.insert( pad->LayerMaskDescribe() );
-                        shapes.insert( pad->GetShape( PADSTACK::ALL_LAYERS ) );
-                        sizes.insert( pad->GetSize( PADSTACK::ALL_LAYERS ) );
+
+                        pad->Padstack().ForEachUniqueLayer(
+                                [&]( PCB_LAYER_ID aLayer )
+                                {
+                                    shapes.insert( pad->GetShape( aLayer ) );
+                                    sizes.insert( pad->GetSize( aLayer ) );
+                                } );
                     }
 
                     if( layers.size() == 1 )
                         msgItems.emplace_back( _( "Layer" ), *layers.begin() );
 
                     if( shapes.size() == 1 )
-                    {
-                        PAD* firstPad = static_cast<PAD*>( selection.Front() );
-                        msgItems.emplace_back( _( "Pad Shape" ),
-                                               firstPad->ShowPadShape( PADSTACK::ALL_LAYERS ) );
-                    }
+                        msgItems.emplace_back( _( "Pad Shape" ), PAD::ShowPadShape( *shapes.begin() ) );
 
                     if( sizes.size() == 1 )
                     {
-                        VECTOR2I size = *sizes.begin();
                         msgItems.emplace_back( _( "Pad Size" ),
-                            wxString::Format( wxT( "%s x %s" ),
-                                              m_frame->MessageTextFromValue( size.x ),
-                                              m_frame->MessageTextFromValue( size.y ) ) );
+                                               wxString::Format( wxT( "%s x %s" ),
+                                                                 m_frame->MessageTextFromValue( sizes.begin()->x ),
+                                                                 m_frame->MessageTextFromValue( sizes.begin()->y ) ) );
                     }
                 }
             }
@@ -2706,8 +2706,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 }
 
                 msgItems.emplace_back( _( "Selected Items" ),
-                                       wxString::Format( wxT( "%d (%s)" ),
-                                                         selection.GetSize(), breakdown ) );
+                                       wxString::Format( wxT( "%d (%s)" ), selection.GetSize(), breakdown ) );
             }
 
             if( m_isBoardEditor )

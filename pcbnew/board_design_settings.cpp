@@ -1020,13 +1020,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             },
             [&]( const nlohmann::json& aJson )
             {
-                if( aJson.contains( "width" ) && aJson.contains( "height" )
-                        && aJson.contains( "drill" ) )
+                if( aJson.contains( "width" ) && aJson.contains( "height" ) && aJson.contains( "drill" ) )
                 {
                     VECTOR2I sz;
                     sz.x = pcbIUScale.mmToIU( aJson["width"].get<double>() );
                     sz.y = pcbIUScale.mmToIU( aJson["height"].get<double>() );
 
+                    m_Pad_Master->SetPadstackMode( PADSTACK::MODE::NORMAL );
                     m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, sz );
 
                     int drill = pcbIUScale.mmToIU( aJson["drill"].get<double>() );
@@ -1983,6 +1983,7 @@ bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
 
 void BOARD_DESIGN_SETTINGS::SetDefaultMasterPad()
 {
+    m_Pad_Master->SetPadstackMode( PADSTACK::MODE::NORMAL );
     m_Pad_Master->SetSizeX( pcbIUScale.mmToIU( DEFAULT_PAD_WIDTH_MM ) );
     m_Pad_Master->SetSizeY( pcbIUScale.mmToIU( DEFAULT_PAD_HEIGTH_MM ) );
     m_Pad_Master->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );

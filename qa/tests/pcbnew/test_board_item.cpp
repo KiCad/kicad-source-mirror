@@ -598,6 +598,7 @@ BOOST_AUTO_TEST_CASE( Issue23234_CustomPadstackFlip )
 
     // Set up a circular SMD pad on F_Cu (NORMAL padstack mode)
     pad.SetAttribute( PAD_ATTRIB::SMD );
+    pad.SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad.SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );
     LSET smd_layers;

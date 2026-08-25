@@ -431,6 +431,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
 
     pad->SetNumber( wxT( "1" ) );
     pad->SetPosition( aInductorPattern.m_End );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
 
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
 

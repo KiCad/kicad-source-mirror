@@ -629,6 +629,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
     pad->SetNumber( padNumber );
     pad->SetPosition( ScalePos( center ) );
     pad->SetOrientationDegrees( orientation );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
 
     // Check if this pad has a real drill hole
     // JLCEDA may use ["ROUND",0,0] to indicate SMD pads
@@ -687,6 +688,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
     }
 
     wxString padSh = padShape.at( 0 );
+
     if( padSh == wxS( "RECT" ) )
     {
         VECTOR2D size;
@@ -1161,6 +1163,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                 std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( aBoard );
 
                 via->SetPosition( ScalePos( center ) );
+                via->SetPadstackMode( PADSTACK::MODE::NORMAL );
                 via->SetDrill( ScaleSize( drill ) );
                 via->SetWidth( PADSTACK::ALL_LAYERS, ScaleSize( dia ) );
 

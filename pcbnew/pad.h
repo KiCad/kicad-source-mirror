@@ -187,6 +187,9 @@ public:
      */
     bool IsFreePad() const;
 
+    void SetPadstackMode( PADSTACK::MODE aMode ) { m_padStack.SetMode( aMode ); }
+    PADSTACK::MODE GetPadstackMode() const { return m_padStack.Mode(); }
+
     /**
      * Set the new shape of this pad.
      */

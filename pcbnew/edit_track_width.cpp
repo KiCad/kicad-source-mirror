@@ -80,7 +80,10 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* 
         picker.SetLink( aItem->Clone() );
         aItemsListPicker->PushItem( picker );
 
-        aItem->SetWidth( new_width );
+        if( via )
+            via->SetWidth( PADSTACK::ALL_LAYERS, new_width );
+        else
+            aItem->SetWidth( new_width );
 
         if( via && new_drill > 0 )
             via->SetDrill( new_drill );

@@ -2363,7 +2363,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         if( m_isFootprintEditor )
         {
             PAD& pad = static_cast<PAD&>( *aItem );
-            PCB_LAYER_ID activeLayer = m_frame ? m_frame->GetActiveLayer() : PADSTACK::ALL_LAYERS;
+            PCB_LAYER_ID activeLayer = m_frame ? m_frame->GetActiveLayer() : PADSTACK::TEMP_ALL_LAYERS;
 
             // Point editor only handles copper shape changes
             if( !IsCopperLayer( activeLayer ) )

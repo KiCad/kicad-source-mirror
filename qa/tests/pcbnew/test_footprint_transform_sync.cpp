@@ -99,6 +99,7 @@ BOOST_AUTO_TEST_CASE( PadEffectiveShapeFollowsFootprintScale )
     fp.SetPosition( VECTOR2I( 0, 0 ) );
 
     PAD* pad = new PAD( &fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
     pad->SetPosition( VECTOR2I( 5000000, 0 ) );
@@ -131,6 +132,7 @@ BOOST_AUTO_TEST_CASE( PadBBoxFollowsFootprintMove )
     fp.SetPosition( VECTOR2I( 0, 0 ) );
 
     PAD* pad = new PAD( &fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 500000 ) );
     pad->SetPosition( VECTOR2I( 5000000, 0 ) );
     fp.Add( pad, ADD_MODE::APPEND );
@@ -151,6 +153,7 @@ BOOST_AUTO_TEST_CASE( PadBBoxFollowsFootprintRotation )
     fp.SetPosition( VECTOR2I( 0, 0 ) );
 
     PAD* pad = new PAD( &fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 500000 ) );
     pad->SetPosition( VECTOR2I( 5000000, 0 ) );
     fp.Add( pad, ADD_MODE::APPEND );
@@ -603,6 +606,7 @@ BOOST_FIXTURE_TEST_CASE( SetTransformScaleScalesPadAndDrillSize, BOARD_FIXTURE )
 
     std::map<wxString, VECTOR2I> origSizes;
     std::map<wxString, VECTOR2I> origDrills;
+
     for( const PAD* pad : fp->Pads() )
     {
         origSizes[pad->GetNumber()] = pad->GetSize( PADSTACK::ALL_LAYERS );
@@ -894,8 +898,8 @@ BOOST_FIXTURE_TEST_CASE( RatsnestFollowsScaledPads, BOARD_FIXTURE )
     targetFp->SetTransformScale( 2.0, 2.0 );
     conn->RecalculateRatsnest();
 
-    VECTOR2I newPadPos = targetPad->GetPosition();
-    auto     edges = conn->GetRatsnestForPad( targetPad );
+    VECTOR2I             newPadPos = targetPad->GetPosition();
+    std::vector<CN_EDGE> edges = conn->GetRatsnestForPad( targetPad );
     BOOST_REQUIRE( !edges.empty() );
 
     // At least one edge must touch the new pad position.
@@ -1058,16 +1062,17 @@ BOOST_AUTO_TEST_CASE( MultiFootprintScaleAroundSelectionCenter )
 
     VECTOR2I center( ( 0 + 1000 ) / 2, ( 0 + 500 ) / 2 );
 
-    auto applyOnSelection = [&]( double sx, double sy )
-    {
-        double relSxA = sx / a.GetScaleX();
-        double relSyA = sy / a.GetScaleY();
-        a.RescaleAroundPoint( center, relSxA, relSyA );
+    auto applyOnSelection =
+            [&]( double sx, double sy )
+            {
+                double relSxA = sx / a.GetScaleX();
+                double relSyA = sy / a.GetScaleY();
+                a.RescaleAroundPoint( center, relSxA, relSyA );
 
-        double relSxB = sx / b.GetScaleX();
-        double relSyB = sy / b.GetScaleY();
-        b.RescaleAroundPoint( center, relSxB, relSyB );
-    };
+                double relSxB = sx / b.GetScaleX();
+                double relSyB = sy / b.GetScaleY();
+                b.RescaleAroundPoint( center, relSxB, relSyB );
+            };
 
     applyOnSelection( 2.0, 2.0 );
 
@@ -1250,8 +1255,7 @@ BOOST_FIXTURE_TEST_CASE( NativeEllipseRoundTripsThroughRotatedFootprint, BOARD_F
     BOOST_CHECK_EQUAL( ellipse->GetLibraryEllipseCenter().y, libCenter.y );
     BOOST_CHECK_EQUAL( ellipse->GetLibraryEllipseMajorRadius(), libMajor );
     BOOST_CHECK_EQUAL( ellipse->GetLibraryEllipseMinorRadius(), libMinor );
-    BOOST_CHECK_CLOSE( ellipse->GetLibraryEllipseRotation().AsDegrees(),
-                       libRotation.AsDegrees(), 0.01 );
+    BOOST_CHECK_CLOSE( ellipse->GetLibraryEllipseRotation().AsDegrees(), libRotation.AsDegrees(), 0.01 );
 
     const std::filesystem::path savePath =
             std::filesystem::temp_directory_path() / "native_ellipse_rotated_roundtrip.kicad_pcb";
@@ -1286,8 +1290,7 @@ BOOST_FIXTURE_TEST_CASE( NativeEllipseRoundTripsThroughRotatedFootprint, BOARD_F
     BOOST_CHECK_EQUAL( ellipse2->GetLibraryEllipseCenter().y, libCenter.y );
     BOOST_CHECK_EQUAL( ellipse2->GetLibraryEllipseMajorRadius(), libMajor );
     BOOST_CHECK_EQUAL( ellipse2->GetLibraryEllipseMinorRadius(), libMinor );
-    BOOST_CHECK_CLOSE( ellipse2->GetLibraryEllipseRotation().AsDegrees(),
-                       libRotation.AsDegrees(), 0.01 );
+    BOOST_CHECK_CLOSE( ellipse2->GetLibraryEllipseRotation().AsDegrees(), libRotation.AsDegrees(), 0.01 );
 }
 
 
@@ -1754,8 +1757,7 @@ BOOST_AUTO_TEST_CASE( NativeEllipseTessellatesUnderNonUniformScaleRotated )
     fp.SetTransformScale( 2.0, 1.0 );
 
     BOOST_CHECK_EQUAL( static_cast<int>( ellipse->GetShape() ), static_cast<int>( SHAPE_T::POLY ) );
-    BOOST_CHECK_EQUAL( static_cast<int>( ellipse->GetLibraryShape() ),
-                       static_cast<int>( SHAPE_T::ELLIPSE ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( ellipse->GetLibraryShape() ), static_cast<int>( SHAPE_T::ELLIPSE ) );
     BOOST_REQUIRE( ellipse->IsPolyShapeValid() );
     BOOST_CHECK( ellipse->GetPolyShape().OutlineCount() == 1 );
     BOOST_CHECK( ellipse->GetPolyShape().Outline( 0 ).PointCount() > 8 );
@@ -1783,6 +1785,7 @@ BOOST_AUTO_TEST_CASE( PadPrimitiveScalesRuntimeKeepsLibPadLocal )
     fp.SetPosition( VECTOR2I( 0, 0 ) );
 
     PAD* pad = new PAD( &fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetPosition( VECTOR2I( 0, 0 ) );
     fp.Add( pad, ADD_MODE::APPEND );
 
@@ -1807,6 +1810,7 @@ BOOST_AUTO_TEST_CASE( PadPrimitiveCircleBecomesEllipseUnderNonUniformScale )
     fp.SetPosition( VECTOR2I( 0, 0 ) );
 
     PAD* pad = new PAD( &fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetPosition( VECTOR2I( 0, 0 ) );
     fp.Add( pad, ADD_MODE::APPEND );
 
@@ -1832,6 +1836,7 @@ BOOST_AUTO_TEST_CASE( PadPrimitiveFlipStaysPadLocal )
     board.Add( fp );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
     pad->SetPosition( fp->GetPosition() );
     fp->Add( pad, ADD_MODE::APPEND );
@@ -1861,6 +1866,7 @@ BOOST_AUTO_TEST_CASE( CirclePadStaysCircularUnderNonUniformScale )
     fp.SetPosition( VECTOR2I( 0, 0 ) );
 
     PAD* pad = new PAD( &fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
     pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
@@ -1890,6 +1896,7 @@ BOOST_FIXTURE_TEST_CASE( CirclePadRoundTripsAcrossSaveLoad, BOARD_FIXTURE )
     fp->SetTransformScale( 1.0, 1.0 );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
     pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
@@ -1948,6 +1955,7 @@ BOOST_FIXTURE_TEST_CASE( PadPrimitiveRoundTripsAcrossSaveLoad, BOARD_FIXTURE )
     fp->SetTransformScale( 1.0, 1.0 );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
     pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );
@@ -2015,6 +2023,7 @@ BOOST_AUTO_TEST_CASE( PadPrimitiveSyncKeepsLibUnscaled )
     fp->SetPosition( VECTOR2I( 0, 0 ) );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
     pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );
@@ -2054,6 +2063,7 @@ BOOST_FIXTURE_TEST_CASE( PadPolyPrimitiveRoundTripsAcrossSaveLoad, BOARD_FIXTURE
     fp->SetTransformScale( 1.0, 1.0 );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
     pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );
@@ -3211,19 +3221,20 @@ BOOST_FIXTURE_TEST_CASE( PCBTextInRotatedFootprintSurvivesSaveLoad, BOARD_FIXTUR
     VECTOR2I  posBefore = text->GetTextPos();
     EDA_ANGLE angleBefore = text->GetTextAngle();
 
-    auto findProbe = []( BOARD& aBoard ) -> PCB_TEXT*
-    {
-        FOOTPRINT* fp = *aBoard.Footprints().begin();
-        for( BOARD_ITEM* item : fp->GraphicalItems() )
-        {
-            if( PCB_TEXT* t = dynamic_cast<PCB_TEXT*>( item ) )
+    auto findProbe =
+            []( BOARD& aBoard ) -> PCB_TEXT*
             {
-                if( t->GetText() == wxT( "drift probe" ) )
-                    return t;
-            }
-        }
-        return nullptr;
-    };
+                FOOTPRINT* fp = *aBoard.Footprints().begin();
+                for( BOARD_ITEM* item : fp->GraphicalItems() )
+                {
+                    if( PCB_TEXT* t = dynamic_cast<PCB_TEXT*>( item ) )
+                    {
+                        if( t->GetText() == wxT( "drift probe" ) )
+                            return t;
+                    }
+                }
+                return nullptr;
+            };
 
     BOARD*                      currentBoard = m_board.get();
     std::unique_ptr<BOARD>      reloadedHolder;
@@ -3776,13 +3787,14 @@ BOOST_AUTO_TEST_CASE( BezierFromParserHasCorrectBoardCoords )
 
     const TRANSFORM_TRS& xf = fp->GetTransform();
 
-    auto checkBoard = [&]( const char* name, const VECTOR2I& lib, const VECTOR2I& board )
-    {
-        VECTOR2I expected = xf.Apply( lib );
-        BOOST_CHECK_MESSAGE( std::abs( expected.x - board.x ) <= 1 && std::abs( expected.y - board.y ) <= 1,
-                             name << " expected ( " << expected.x << ", " << expected.y << " ) actual ( " << board.x
-                                  << ", " << board.y << " )" );
-    };
+    auto checkBoard =
+            [&]( const char* name, const VECTOR2I& lib, const VECTOR2I& board )
+            {
+                VECTOR2I expected = xf.Apply( lib );
+                BOOST_CHECK_MESSAGE( std::abs( expected.x - board.x ) <= 1 && std::abs( expected.y - board.y ) <= 1,
+                                     name << " expected ( " << expected.x << ", " << expected.y << " ) actual ( "
+                                         << board.x << ", " << board.y << " )" );
+            };
 
     checkBoard( "start", libStart, bezier->GetStart() );
     checkBoard( "C1", libC1, bezier->GetBezierC1() );
@@ -3936,6 +3948,7 @@ BOOST_AUTO_TEST_CASE( PadOrientationLibFrameFollowsFootprintRotate )
     board.Add( fp );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
     pad->SetPosition( VECTOR2I( 5000000, 0 ) );
@@ -4171,29 +4184,30 @@ BOOST_AUTO_TEST_CASE( BarcodeFlipPreservesBoardAngleDelta )
 {
     // Single flip should change the visible angle by +180 for TOP_BOTTOM,
     // 0 for LEFT_RIGHT, regardless of FP rotation.
-    auto checkFlip = [&]( double aFpOrientDeg, FLIP_DIRECTION aDir, double aExpectedDelta )
-    {
-        BOARD      board;
-        FOOTPRINT* fp = new FOOTPRINT( &board );
-        fp->SetPosition( VECTOR2I( 10000000, 5000000 ) );
-        fp->SetOrientation( EDA_ANGLE( aFpOrientDeg, DEGREES_T ) );
-        board.Add( fp );
+    auto checkFlip =
+            [&]( double aFpOrientDeg, FLIP_DIRECTION aDir, double aExpectedDelta )
+            {
+                BOARD      board;
+                FOOTPRINT* fp = new FOOTPRINT( &board );
+                fp->SetPosition( VECTOR2I( 10000000, 5000000 ) );
+                fp->SetOrientation( EDA_ANGLE( aFpOrientDeg, DEGREES_T ) );
+                board.Add( fp );
 
-        PCB_BARCODE* bc = new PCB_BARCODE( fp );
-        bc->SetPosition( fp->GetPosition() + VECTOR2I( 2000000, 1000000 ) );
-        bc->SetOrientation( 0.0 );
-        fp->Add( bc, ADD_MODE::APPEND );
+                PCB_BARCODE* bc = new PCB_BARCODE( fp );
+                bc->SetPosition( fp->GetPosition() + VECTOR2I( 2000000, 1000000 ) );
+                bc->SetOrientation( 0.0 );
+                fp->Add( bc, ADD_MODE::APPEND );
 
-        EDA_ANGLE before = bc->GetAngle();
+                EDA_ANGLE before = bc->GetAngle();
 
-        fp->Flip( fp->GetPosition(), aDir );
+                fp->Flip( fp->GetPosition(), aDir );
 
-        EDA_ANGLE after = bc->GetAngle();
-        EDA_ANGLE expected = ( before + EDA_ANGLE( aExpectedDelta, DEGREES_T ) ).Normalize();
-        EDA_ANGLE actual = after.Normalize();
+                EDA_ANGLE after = bc->GetAngle();
+                EDA_ANGLE expected = ( before + EDA_ANGLE( aExpectedDelta, DEGREES_T ) ).Normalize();
+                EDA_ANGLE actual = after.Normalize();
 
-        BOOST_CHECK_CLOSE( actual.AsDegrees(), expected.AsDegrees(), 1e-6 );
-    };
+                BOOST_CHECK_CLOSE( actual.AsDegrees(), expected.AsDegrees(), 1e-6 );
+            };
 
     checkFlip( 0.0, FLIP_DIRECTION::TOP_BOTTOM, 180.0 );
     checkFlip( 30.0, FLIP_DIRECTION::TOP_BOTTOM, 180.0 );
@@ -4325,7 +4339,7 @@ BOOST_FIXTURE_TEST_CASE( StandaloneRectangleNonCardinalRotationSurvivesSaveLoad,
     BOOST_REQUIRE( reloadedRect );
     BOOST_REQUIRE_EQUAL( reloadedRect->GetPolyShape().OutlineCount(), 1 );
 
-    const auto& reloadedPoints = reloadedRect->GetPolyShape().Outline( 0 ).CPoints();
+    const std::vector<VECTOR2I>& reloadedPoints = reloadedRect->GetPolyShape().Outline( 0 ).CPoints();
     BOOST_REQUIRE_EQUAL( (int) reloadedPoints.size(), (int) savedCorners.size() );
 
     for( size_t i = 0; i < savedCorners.size(); ++i )
@@ -4343,6 +4357,7 @@ BOOST_AUTO_TEST_CASE( MoveAnchorMovesPointsLikeOtherChildren )
     board.Add( fp );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( PAD::SMDMask() );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
@@ -4376,6 +4391,7 @@ BOOST_AUTO_TEST_CASE( FlipNonCardinalKeepsPadAndShapeCoincident )
     const VECTOR2I coincident( 53000000, 51000000 );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetLayerSet( PAD::SMDMask() );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
@@ -4469,6 +4485,7 @@ static FOOTPRINT* buildCoincidentFootprint( BOARD& aBoard, const EDA_ANGLE& aOri
     aBoard.Add( fp );
 
     aPad = new PAD( fp );
+    aPad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     aPad->SetAttribute( PAD_ATTRIB::SMD );
     aPad->SetLayerSet( PAD::SMDMask() );
     aPad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
@@ -4506,11 +4523,11 @@ static void CHECK_ALL_COINCIDENT( PAD* aPad, PCB_SHAPE* aSeg, PCB_TEXT* aTxt, PC
 
 BOOST_AUTO_TEST_CASE( RoundTripPreservesChildGeometryScaledRotated )
 {
-    auto       board = std::make_unique<BOARD>();
-    PAD*       pad;
-    PCB_SHAPE* seg;
-    PCB_TEXT*  txt;
-    PCB_POINT* pt;
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    PAD*                   pad;
+    PCB_SHAPE*             seg;
+    PCB_TEXT*              txt;
+    PCB_POINT*             pt;
     buildCoincidentFootprint( *board, EDA_ANGLE( 30.0, DEGREES_T ), 2.0, 1.5, VECTOR2I( 53000000, 51000000 ), pad, seg,
                               txt, pt );
 
@@ -4652,13 +4669,13 @@ BOOST_AUTO_TEST_CASE( DoubleFlipIsIdentityScaledRotated )
 // Stroke width and text size must survive save/reload under a footprint scale.
 BOOST_AUTO_TEST_CASE( ScalarAttributesStableAcrossSaveLoadUnderScale )
 {
-    auto       board = std::make_unique<BOARD>();
-    PAD*       pad;
-    PCB_SHAPE* seg;
-    PCB_TEXT*  txt;
-    PCB_POINT* pt;
-    FOOTPRINT* fp =
-            buildCoincidentFootprint( *board, ANGLE_0, 2.0, 2.0, VECTOR2I( 53000000, 51000000 ), pad, seg, txt, pt );
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    PAD*                   pad;
+    PCB_SHAPE*             seg;
+    PCB_TEXT*              txt;
+    PCB_POINT*             pt;
+    FOOTPRINT*             fp = buildCoincidentFootprint( *board, ANGLE_0, 2.0, 2.0, VECTOR2I( 53000000, 51000000 ),
+                                                          pad, seg, txt, pt );
 
     // Author board frame attributes while the 2x scale is active.
     seg->SetWidth( 400000 );
@@ -4697,31 +4714,32 @@ BOOST_AUTO_TEST_CASE( ScalarAttributesStableAcrossSaveLoadUnderScale )
 // Ellipse radii must survive a rebake under non-uniform scale. Uniform is the control.
 BOOST_AUTO_TEST_CASE( EllipseRadiusEditSurvivesRebakeUnderNonUniformScale )
 {
-    auto runCase = []( double aScaleX, double aScaleY )
-    {
-        BOARD      board;
-        FOOTPRINT* fp = new FOOTPRINT( &board );
-        fp->SetPosition( VECTOR2I( 50000000, 50000000 ) );
-        fp->SetTransformScale( aScaleX, aScaleY );
-        board.Add( fp );
+    auto runCase =
+            []( double aScaleX, double aScaleY )
+            {
+                BOARD      board;
+                FOOTPRINT* fp = new FOOTPRINT( &board );
+                fp->SetPosition( VECTOR2I( 50000000, 50000000 ) );
+                fp->SetTransformScale( aScaleX, aScaleY );
+                board.Add( fp );
 
-        PCB_SHAPE* ell = new PCB_SHAPE( fp, SHAPE_T::ELLIPSE );
-        ell->SetLayer( F_SilkS );
-        fp->Add( ell );
+                PCB_SHAPE* ell = new PCB_SHAPE( fp, SHAPE_T::ELLIPSE );
+                ell->SetLayer( F_SilkS );
+                fp->Add( ell );
 
-        ell->SetEllipseCenter( VECTOR2I( 50000000, 50000000 ) );
-        ell->SetEllipseMajorRadius( 4000000 );
-        ell->SetEllipseMinorRadius( 1500000 );
+                ell->SetEllipseCenter( VECTOR2I( 50000000, 50000000 ) );
+                ell->SetEllipseMajorRadius( 4000000 );
+                ell->SetEllipseMinorRadius( 1500000 );
 
-        const int majorBefore = ell->GetEllipseMajorRadius();
-        const int minorBefore = ell->GetEllipseMinorRadius();
+                const int majorBefore = ell->GetEllipseMajorRadius();
+                const int minorBefore = ell->GetEllipseMinorRadius();
 
-        // Any transform refresh rebakes children from the lib mirror.
-        fp->SetPosition( fp->GetPosition() + VECTOR2I( 1000000, 0 ) );
+                // Any transform refresh rebakes children from the lib mirror.
+                fp->SetPosition( fp->GetPosition() + VECTOR2I( 1000000, 0 ) );
 
-        BOOST_CHECK_EQUAL( ell->GetEllipseMajorRadius(), majorBefore );
-        BOOST_CHECK_EQUAL( ell->GetEllipseMinorRadius(), minorBefore );
-    };
+                BOOST_CHECK_EQUAL( ell->GetEllipseMajorRadius(), majorBefore );
+                BOOST_CHECK_EQUAL( ell->GetEllipseMinorRadius(), minorBefore );
+            };
 
     runCase( 2.0, 2.0 ); // control: uniform scale keeps the radii
     runCase( 2.0, 1.0 ); // non-uniform: radii are lost on rebake
@@ -4762,8 +4780,8 @@ BOOST_AUTO_TEST_CASE( ScaledTextGlyphShapeFollowsScale )
 // Text box size, thickness, and border stroke must survive save/reload under scale.
 BOOST_AUTO_TEST_CASE( TextBoxScalarAttributesStableAcrossSaveLoadUnderScale )
 {
-    auto       board = std::make_unique<BOARD>();
-    FOOTPRINT* fp = new FOOTPRINT( board.get() );
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    FOOTPRINT*             fp = new FOOTPRINT( board.get() );
     fp->SetPosition( VECTOR2I( 50000000, 50000000 ) );
     fp->SetTransformScale( 2.0, 2.0 );
     board->Add( fp );
@@ -5053,6 +5071,7 @@ BOOST_AUTO_TEST_CASE( CustomPadShapeScalesWithFootprint )
     fp->SetPosition( VECTOR2I( 0, 0 ) );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
     pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );

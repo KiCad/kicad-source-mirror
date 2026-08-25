@@ -584,8 +584,9 @@ void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, const PAD& aPad, bool aR
     else
         pos = aPad.GetPosition();
 
-    if( aPad.GetOffset( PADSTACK::ALL_LAYERS ).x != 0 || aPad.GetOffset( PADSTACK::ALL_LAYERS ).y != 0 )
-        pos += aPad.GetOffset( PADSTACK::ALL_LAYERS );
+    // TODO padstacks
+    if( aPad.GetOffset( PADSTACK::TEMP_ALL_LAYERS ).x != 0 || aPad.GetOffset( PADSTACK::TEMP_ALL_LAYERS ).y != 0 )
+        pos += aPad.GetOffset( PADSTACK::TEMP_ALL_LAYERS );
 
     addLocationNode( aNode, pos.x, pos.y );
 }
@@ -2488,6 +2489,8 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
     if( !success )
         return;
 
+    // TODO padstacks
+
     wxXmlNode* padStackDefNode = new wxXmlNode( wxXML_ELEMENT_NODE, "PadStackDef" );
     addAttribute( padStackDefNode,  "name", name );
     ensureBackdrillSpecs( name, aPad->Padstack() );
@@ -2514,7 +2517,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
                       aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
         addAttribute( padStackHoleNode,  "plusTol", "0.0" );
         addAttribute( padStackHoleNode,  "minusTol", "0.0" );
-        addXY( padStackHoleNode, aPad->GetOffset( PADSTACK::ALL_LAYERS ) );
+        addXY( padStackHoleNode, aPad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ) );
     }
 
     LSEQ layer_seq = aPad->GetLayerSet().Seq();
@@ -2527,12 +2530,12 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         wxXmlNode* padStackPadDefNode = appendNode( padStackDefNode, "PadstackPadDef" );
         addAttribute( padStackPadDefNode,  "layerRef", m_layer_name_map[layer] );
         addAttribute( padStackPadDefNode,  "padUse", "REGULAR" );
-        addLocationNode( padStackPadDefNode, aPad->GetOffset( PADSTACK::ALL_LAYERS ).x, aPad->GetOffset( PADSTACK::ALL_LAYERS ).y );
+        addLocationNode( padStackPadDefNode, aPad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ).x, aPad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ).y );
 
         if( aPad->HasHole() || !aPad->FlashLayer( layer ) )
         {
             PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
-            shape.SetStart( aPad->GetOffset( PADSTACK::ALL_LAYERS ) );
+            shape.SetStart( aPad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ) );
             shape.SetEnd( shape.GetStart() + aPad->GetDrillSize() / 2 );
             addShape( padStackPadDefNode, shape );
         }

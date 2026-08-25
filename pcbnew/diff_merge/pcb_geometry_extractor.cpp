@@ -201,7 +201,7 @@ namespace
 
             DOCUMENT_CIRCLE c;
             c.center = via.GetPosition();
-            c.radius = via.GetWidth( PADSTACK::ALL_LAYERS ) / 2;
+            c.radius = via.GetWidth( PADSTACK::TEMP_ALL_LAYERS ) / 2;
             c.filled = true;
             c.lineWidth = 0;
             c.color = aColor;

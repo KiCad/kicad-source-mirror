@@ -173,6 +173,9 @@ public:
     };
 
     ///! Temporary layer identifier to identify code that is not padstack-aware
+    static constexpr PCB_LAYER_ID TEMP_ALL_LAYERS = F_Cu;
+
+    ///! The layer identifier to use for the single defintion on normal padstacks
     static constexpr PCB_LAYER_ID ALL_LAYERS = F_Cu;
 
     ///! The layer identifier to use for "inner layers" on top/inner/bottom padstacks
@@ -442,6 +445,7 @@ public:
 
     VECTOR2I& Offset( PCB_LAYER_ID aLayer );
     const VECTOR2I& Offset( PCB_LAYER_ID aLayer ) const;
+    void SetOffset( const VECTOR2I& aOffset, PCB_LAYER_ID aLayer );
 
     PAD_SHAPE AnchorShape( PCB_LAYER_ID aLayer ) const;
     void SetAnchorShape( PAD_SHAPE aShape, PCB_LAYER_ID aLayer );

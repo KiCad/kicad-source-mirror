@@ -893,6 +893,12 @@ const VECTOR2I& PADSTACK::Offset( PCB_LAYER_ID aLayer ) const
 }
 
 
+void PADSTACK::SetOffset( const VECTOR2I& aOffset, PCB_LAYER_ID aLayer )
+{
+    CopperLayer( aLayer ).shape.offset = aOffset;
+}
+
+
 PAD_SHAPE PADSTACK::AnchorShape( PCB_LAYER_ID aLayer ) const
 {
     return CopperLayer( aLayer ).shape.anchor_shape;

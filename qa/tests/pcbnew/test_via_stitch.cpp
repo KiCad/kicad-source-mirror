@@ -70,7 +70,7 @@ static void configureStitch( PCB_VIA_STITCH* aStitch )
     aStitch->SetLayout( PCB_VIA_STITCH_LAYOUT::STAGGERED );
     aStitch->SetMode( PCB_VIA_STITCH_MODE::STITCH );
     aStitch->SetSeed( 1234 );
-    aStitch->ViaTemplate()->SetWidth( pcbIUScale.mmToIU( 0.6 ) );
+    aStitch->ViaTemplate()->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.6 ) );
     aStitch->ViaTemplate()->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
     aStitch->SetNetCode( 1 );
 }
@@ -158,10 +158,8 @@ BOOST_AUTO_TEST_CASE( GuardEnvelopeSampling )
         BOOST_CHECK_LT( pt.x, midX );
 
     // A degenerate pitch yields nothing instead of looping forever.
-    BOOST_CHECK(
-            PCB_VIA_STITCH::SampleGuardEnvelope( envelope, noGuarded, 0, acceptAll ).empty() );
-    BOOST_CHECK(
-            PCB_VIA_STITCH::SampleGuardEnvelope( envelope, noGuarded, -1, acceptAll ).empty() );
+    BOOST_CHECK( PCB_VIA_STITCH::SampleGuardEnvelope( envelope, noGuarded, 0, acceptAll ).empty() );
+    BOOST_CHECK( PCB_VIA_STITCH::SampleGuardEnvelope( envelope, noGuarded, -1, acceptAll ).empty() );
 }
 
 
@@ -304,10 +302,8 @@ BOOST_AUTO_TEST_CASE( SexprSaveLoad )
 
     checkOutlinesEqual( stitch->Outline(), loaded->Outline() );
 
-    auto savedCells =
-            stitch->GetProperties().get_opt<std::vector<VECTOR2I>>( "excluded_grid_cells" );
-    auto loadedCells =
-            loaded->GetProperties().get_opt<std::vector<VECTOR2I>>( "excluded_grid_cells" );
+    auto savedCells = stitch->GetProperties().get_opt<std::vector<VECTOR2I>>( "excluded_grid_cells" );
+    auto loadedCells = loaded->GetProperties().get_opt<std::vector<VECTOR2I>>( "excluded_grid_cells" );
 
     BOOST_REQUIRE( savedCells.has_value() );
     BOOST_REQUIRE( loadedCells.has_value() );

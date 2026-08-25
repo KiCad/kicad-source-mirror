@@ -4533,6 +4533,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             via->SetNetCode( 0 );
             via->SetViaType( bds.m_CurrentViaType );
+            via->SetPadstackMode( PADSTACK::MODE::NORMAL );
 
             if( via->GetViaType() == VIATYPE::THROUGH )
             {
@@ -4554,8 +4555,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( via->GetViaType() == VIATYPE::MICROVIA )
             {
-                via->SetWidth( PADSTACK::ALL_LAYERS,
-                               via->GetEffectiveNetClass()->GetuViaDiameter() );
+                via->SetWidth( PADSTACK::ALL_LAYERS, via->GetEffectiveNetClass()->GetuViaDiameter() );
                 via->SetDrill( via->GetEffectiveNetClass()->GetuViaDrill() );
             }
             else

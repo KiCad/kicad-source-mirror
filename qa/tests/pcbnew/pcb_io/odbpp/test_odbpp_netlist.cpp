@@ -53,8 +53,7 @@ namespace
 
 wxFileName MakeTempDir( const wxString& aPrefix )
 {
-    wxFileName tempDir(
-            wxFileName::CreateTempFileName( wxString::Format( wxT( "kicad-%s-" ), aPrefix ) ) );
+    wxFileName tempDir( wxFileName::CreateTempFileName( wxString::Format( wxT( "kicad-%s-" ), aPrefix ) ) );
 
     BOOST_REQUIRE( tempDir.FileExists() );
     BOOST_REQUIRE( wxRemoveFile( tempDir.GetFullPath() ) );
@@ -122,6 +121,7 @@ BOOST_AUTO_TEST_CASE( ODBNetlistCoordinatesMatchFeatures )
     fp->SetReference( wxT( "U1" ) );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 0.5 ) ) );
@@ -138,10 +138,11 @@ BOOST_AUTO_TEST_CASE( ODBNetlistCoordinatesMatchFeatures )
 
     // Add a via at a known position
     PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 120.0 ), pcbIUScale.mmToIU( 60.0 ) ) );
     via->SetLayerPair( F_Cu, B_Cu );
     via->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
-    via->SetWidth( pcbIUScale.mmToIU( 0.6 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.6 ) );
     via->SetNet( net1 );
     board.Add( via );
 

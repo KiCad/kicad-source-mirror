@@ -75,7 +75,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_teardropMaxWidth( aParent, m_stMaxWidthLabel, m_tcMaxWidth, m_stMaxWidthUnits ),
         m_tracks( false ),
         m_vias( false ),
-        m_editLayer( PADSTACK::ALL_LAYERS ),
+        m_editLayer( F_Cu ),
         m_padstackDirty( false )
 {
     commonInit( aParent );
@@ -114,7 +114,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_teardropMaxWidth( aParent, m_stMaxWidthLabel, m_tcMaxWidth, m_stMaxWidthUnits ),
         m_tracks( false ),
         m_vias( false ),
-        m_editLayer( PADSTACK::ALL_LAYERS ),
+        m_editLayer( F_Cu ),
         m_padstackDirty( false )
 {
     wxASSERT( aStandaloneVia );
@@ -1817,10 +1817,10 @@ void DIALOG_TRACK_VIA_PROPERTIES::onEditLayerChanged( wxCommandEvent& aEvent )
     case PADSTACK::MODE::FRONT_INNER_BACK:
         switch( m_cbEditLayer->GetSelection() )
         {
-    default:
-    case 0: m_editLayer = F_Cu;                   break;
-    case 1: m_editLayer = PADSTACK::INNER_LAYERS; break;
-    case 2: m_editLayer = B_Cu;                   break;
+        default:
+        case 0: m_editLayer = F_Cu;                   break;
+        case 1: m_editLayer = PADSTACK::INNER_LAYERS; break;
+        case 2: m_editLayer = B_Cu;                   break;
         }
         break;
 

@@ -2611,8 +2611,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     case GR_SHAPE_RECTANGLE:
                     {
-                        const GRAPHIC_RECTANGLE *lsrc =
-                                static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
+                        const GRAPHIC_RECTANGLE *lsrc = static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
 
                         PCB_SHAPE* rect = new PCB_SHAPE( fp, SHAPE_T::RECTANGLE );
 
@@ -2730,8 +2729,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             if( layer_it == layers.end() || !layer_it->second.conductive )
                                 continue;
 
-                            PCB_LAYER_ID kicad_layer =
-                                    static_cast<PCB_LAYER_ID>( layer_it->second.layerid );
+                            PCB_LAYER_ID kicad_layer = static_cast<PCB_LAYER_ID>( layer_it->second.layerid );
 
                             if( kicad_layer == F_Cu )
                                 front_layer = &layer_data;
@@ -2741,16 +2739,17 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 inner_layer = &layer_data;
                         }
 
-                        auto layersDiffer = []( const FM_PAD_LAYER& aA, const FM_PAD_LAYER& aB )
-                        {
-                            return aA.shape != aB.shape
-                                   || aA.width != aB.width
-                                   || aA.height != aB.height
-                                   || aA.x_offset != aB.x_offset
-                                   || aA.y_offset != aB.y_offset
-                                   || aA.is_octogon != aB.is_octogon
-                                   || aA.custom_name != aB.custom_name;
-                        };
+                        auto layersDiffer =
+                                []( const FM_PAD_LAYER& aA, const FM_PAD_LAYER& aB )
+                                {
+                                    return aA.shape != aB.shape
+                                           || aA.width != aB.width
+                                           || aA.height != aB.height
+                                           || aA.x_offset != aB.x_offset
+                                           || aA.y_offset != aB.y_offset
+                                           || aA.is_octogon != aB.is_octogon
+                                           || aA.custom_name != aB.custom_name;
+                                };
 
                         std::vector<const FM_PAD_LAYER*> copper_defs;
 
@@ -2774,25 +2773,18 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         if( needs_padstack )
                             newpad->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
 
-                        auto applyLayerShape = [&]( PCB_LAYER_ID aLayer,
-                                                    const FM_PAD_LAYER& aLayerData )
-                        {
-                            newpad->SetShape( aLayer, aLayerData.shape );
+                        auto applyLayerShape =
+                                [&]( PCB_LAYER_ID aLayer, const FM_PAD_LAYER& aLayerData )
+                                {
+                                    newpad->SetShape( aLayer, aLayerData.shape );
 
-                            if( aLayerData.shape == PAD_SHAPE::CIRCLE )
-                            {
-                                newpad->SetSize( aLayer,
-                                                 VECTOR2I( aLayerData.width, aLayerData.width ) );
-                            }
-                            else
-                            {
-                                newpad->SetSize( aLayer,
-                                                 VECTOR2I( aLayerData.width, aLayerData.height ) );
-                            }
+                                    if( aLayerData.shape == PAD_SHAPE::CIRCLE )
+                                        newpad->SetSize( aLayer, VECTOR2I( aLayerData.width, aLayerData.width ) );
+                                    else
+                                        newpad->SetSize( aLayer, VECTOR2I( aLayerData.width, aLayerData.height ) );
 
-                            newpad->SetOffset( aLayer,
-                                               VECTOR2I( aLayerData.x_offset, aLayerData.y_offset ) );
-                        };
+                                    newpad->SetOffset( aLayer, VECTOR2I( aLayerData.x_offset, aLayerData.y_offset ) );
+                                };
 
                         if( needs_padstack )
                         {
@@ -2809,25 +2801,23 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                             if( pad.shape == PAD_SHAPE::CUSTOM )
                             {
-                                reportWarning( _( "Pad '%s' has custom shape with per-layer "
-                                                  "geometry; custom primitives not supported "
-                                                  "in padstack mode." ),
+                                reportWarning( _( "Pad '%s' has custom shape with per-layer geometry; "
+                                                  "custom primitives not supported in padstack mode." ),
                                                pad.name );
                             }
                         }
                         else if( pad.shape == PAD_SHAPE::CUSTOM )
                         {
+                            newpad->SetPadstackMode( PADSTACK::MODE::NORMAL );
                             newpad->SetShape( PADSTACK::ALL_LAYERS, pad.shape );
 
                             // Choose the smaller dimension to ensure the base pad
                             // is fully hidden by the custom pad
                             int pad_size = std::min( pad.width, pad.height );
 
-                            newpad->SetSize( PADSTACK::ALL_LAYERS,
-                                             VECTOR2I( pad_size / 2, pad_size / 2 ) );
+                            newpad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pad_size / 2, pad_size / 2 ) );
 
-                            std::string custom_name = pad.custom_name + "_" + pin->refdes + "_" +
-                                                      pin->pin_number;
+                            std::string custom_name = pad.custom_name + "_" + pin->refdes + "_" + pin->pin_number;
                             auto custom_it = pad_shapes.find( custom_name );
 
                             if( custom_it != pad_shapes.end() )
@@ -2860,14 +2850,12 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                                         if( seg->shape == GR_SHAPE_LINE )
                                         {
-                                            const GRAPHIC_LINE* line_seg = static_cast<const GRAPHIC_LINE*>( seg.get() );
+                                            const GRAPHIC_LINE* line = static_cast<const GRAPHIC_LINE*>( seg.get() );
 
                                             if( poly_outline.VertexCount( 0, hole_idx ) == 0 )
-                                                poly_outline.Append( line_seg->start_x, line_seg->start_y,
-                                                                     0, hole_idx );
+                                                poly_outline.Append( line->start_x, line->start_y, 0, hole_idx );
 
-                                            poly_outline.Append( line_seg->end_x, line_seg->end_y, 0,
-                                                                 hole_idx );
+                                            poly_outline.Append( line->end_x, line->end_y, 0, hole_idx );
                                         }
                                         else if( seg->shape == GR_SHAPE_ARC )
                                         {
@@ -2882,8 +2870,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 if( poly_outline.OutlineCount() < 1
                                         || poly_outline.Outline( 0 ).PointCount() < 3 )
                                 {
-                                    reportError( _( "Invalid custom pad '%s'. Replacing with "
-                                                    "circular pad." ),
+                                    reportError( _( "Invalid custom pad '%s'. Replacing with circular pad." ),
                                                  custom_name.c_str() );
                                     newpad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
                                 }
@@ -2897,13 +2884,11 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                     {
                                         poly_outline.Mirror( VECTOR2I( 0, ( pin->pin_y - src->y ) ),
                                                              FLIP_DIRECTION::TOP_BOTTOM );
-                                        poly_outline.Rotate( EDA_ANGLE( src->rotate - pin->rotation,
-                                                                        DEGREES_T ) );
+                                        poly_outline.Rotate( EDA_ANGLE( src->rotate - pin->rotation, DEGREES_T ) );
                                     }
                                     else
                                     {
-                                        poly_outline.Rotate( EDA_ANGLE( -src->rotate + pin->rotation,
-                                                                        DEGREES_T ) );
+                                        poly_outline.Rotate( EDA_ANGLE( -src->rotate + pin->rotation, DEGREES_T ) );
                                     }
 
                                     newpad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, poly_outline, 0, true );
@@ -2914,30 +2899,25 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                                 if( mergedPolygon.OutlineCount() > 1 )
                                 {
-                                    reportError( _( "Invalid custom pad '%s'. Replacing with "
-                                                    "circular pad." ),
+                                    reportError( _( "Invalid custom pad '%s'. Replacing with circular pad." ),
                                                  custom_name.c_str() );
                                     newpad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
                                 }
                             }
                             else
                             {
-                                reportError( _( "Could not find custom pad '%s'." ),
-                                             custom_name.c_str() );
+                                reportError( _( "Could not find custom pad '%s'." ), custom_name.c_str() );
                             }
                         }
                         else
                         {
+                            newpad->SetPadstackMode( PADSTACK::MODE::NORMAL );
                             newpad->SetShape( PADSTACK::ALL_LAYERS, pad.shape );
-                            newpad->SetSize( PADSTACK::ALL_LAYERS,
-                                             VECTOR2I( pad.width, pad.height ) );
+                            newpad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pad.width, pad.height ) );
                         }
 
                         if( !needs_padstack && ( pad.x_offset || pad.y_offset ) )
-                        {
-                            newpad->SetOffset( PADSTACK::ALL_LAYERS,
-                                               VECTOR2I( pad.x_offset, pad.y_offset ) );
-                        }
+                            newpad->SetOffset( PADSTACK::ALL_LAYERS, VECTOR2I( pad.x_offset, pad.y_offset ) );
 
                         if( pad.drill )
                         {
@@ -2971,11 +2951,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     }
 
                     if( src->mirror )
-                        newpad->SetOrientation( EDA_ANGLE( -src->rotate + pin->rotation,
-                                                           DEGREES_T ) );
+                        newpad->SetOrientation( EDA_ANGLE( -src->rotate + pin->rotation, DEGREES_T ) );
                     else
-                        newpad->SetOrientation( EDA_ANGLE( src->rotate - pin->rotation,
-                                                           DEGREES_T ) );
+                        newpad->SetOrientation( EDA_ANGLE( src->rotate - pin->rotation, DEGREES_T ) );
 
                     if( newpad->GetSizeX() > 0 || newpad->GetSizeY() > 0 )
                     {
@@ -3059,6 +3037,7 @@ bool FABMASTER::loadVias( BOARD* aBoard )
         PCB_VIA* new_via = new PCB_VIA( aBoard );
 
         new_via->SetPosition( VECTOR2I( via->x, via->y ) );
+        new_via->SetPadstackMode( PADSTACK::MODE::NORMAL );
 
         if( net_it != netinfo.end() )
             new_via->SetNet( net_it->second );

@@ -87,16 +87,16 @@ void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
     VECTOR2I padsize = padBBox.GetSize();
 
     // TODO(JE) padstacks
-    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM )
+    if( aPad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::CUSTOM )
     {
         // See if we have a number box
-        for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( PADSTACK::ALL_LAYERS ) )
+        for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( PADSTACK::TEMP_ALL_LAYERS ) )
         {
             if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::RECTANGLE )
             {
                 position = primitive->GetCenter();
                 RotatePoint( position, aPad->GetOrientation() );
-                position += aPad->ShapePos( PADSTACK::ALL_LAYERS );
+                position += aPad->ShapePos( PADSTACK::TEMP_ALL_LAYERS );
 
                 padsize.x = abs( primitive->GetBotRight().x - primitive->GetTopLeft().x );
                 padsize.y = abs( primitive->GetBotRight().y - primitive->GetTopLeft().y );
@@ -106,11 +106,11 @@ void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
         }
     }
 
-    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) != PAD_SHAPE::CUSTOM )
+    if( aPad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) != PAD_SHAPE::CUSTOM )
     {
         // Don't allow a 45° rotation to bloat a pad's bounding box unnecessarily
-        int limit = KiROUND( std::min( aPad->GetSize( PADSTACK::ALL_LAYERS ).x,
-                                       aPad->GetSize( PADSTACK::ALL_LAYERS ).y ) * 1.1 );
+        int limit = KiROUND( std::min( aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x,
+                                       aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y ) * 1.1 );
 
         if( padsize.x > limit && padsize.y > limit )
         {
@@ -308,7 +308,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
         }
 
         default:
-            UNIMPLEMENTED_FOR( aPad->ShowPadShape( PADSTACK::ALL_LAYERS ) );
+            UNIMPLEMENTED_FOR( aPad->ShowPadShape( PADSTACK::TEMP_ALL_LAYERS ) );
         }
 
         return;
@@ -1414,7 +1414,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 
             plotOneDrillMark( PAD_DRILL_SHAPE::CIRCLE, via->GetStart(),
                               VECTOR2I( via->GetDrillValue(), 0 ),
-                              VECTOR2I( via->GetWidth( PADSTACK::ALL_LAYERS ), 0 ),
+                              VECTOR2I( via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ), 0 ),
                               ANGLE_0, smallDrill );
         }
     }
@@ -1452,7 +1452,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
             }
 
             plotOneDrillMark( pad->GetDrillShape(), pad->GetPosition(), pad->GetDrillSize(),
-                              pad->GetSize( PADSTACK::ALL_LAYERS ), pad->GetOrientation(), smallDrill );
+                              pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ), pad->GetOrientation(), smallDrill );
         }
     }
 

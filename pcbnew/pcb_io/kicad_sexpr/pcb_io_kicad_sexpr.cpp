@@ -1909,36 +1909,32 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     switch( aPad->GetSimElectricalType() )
     {
     case PAD_SIM_ELECTRICAL_TYPE::SOURCE: simElectricalType = "source"; break;
-    case PAD_SIM_ELECTRICAL_TYPE::SINK: simElectricalType = "sink"; break;
-    default: simElectricalType = nullptr; break;
+    case PAD_SIM_ELECTRICAL_TYPE::SINK:   simElectricalType = "sink";   break;
+    default:                              simElectricalType = nullptr;  break;
     }
 
     m_out->Print( "(pad %s %s %s",
                   m_out->Quotew( aPad->GetNumber() ).c_str(),
                   type,
-                  shapeName( PADSTACK::ALL_LAYERS ) );
+                  shapeName( F_Cu ) );
 
     m_out->Print( "(at %s %s)",
                   formatInternalUnits( aPad->GetFPRelativePosition() ).c_str(),
-                  aPad->GetOrientation().IsZero()
-                        ? ""
-                        : EDA_UNIT_UTILS::FormatAngle( aPad->GetOrientation() ).c_str() );
+                  aPad->GetOrientation().IsZero() ? ""
+                                                  : EDA_UNIT_UTILS::FormatAngle( aPad->GetOrientation() ).c_str() );
 
     // Write the stored library size directly: it is the footprint-frame value the parser
     // reads back, and avoids a bake/unbake that is not the inverse of GetSize() for a
     // pad rotated within the footprint.
-    m_out->Print( "(size %s)", formatInternalUnits( aPad->Padstack().Size( PADSTACK::ALL_LAYERS ) ).c_str() );
+    m_out->Print( "(size %s)", formatInternalUnits( aPad->Padstack().Size( F_Cu ) ).c_str() );
 
-    if( aPad->GetDelta( PADSTACK::ALL_LAYERS ).x != 0
-        || aPad->GetDelta( PADSTACK::ALL_LAYERS ).y != 0 )
-    {
-        m_out->Print( "(rect_delta %s)", formatInternalUnits( aPad->GetDelta( PADSTACK::ALL_LAYERS ) ).c_str() );
-    }
+    if( aPad->GetDelta( F_Cu ).x != 0 || aPad->GetDelta( F_Cu ).y != 0 )
+        m_out->Print( "(rect_delta %s)", formatInternalUnits( aPad->GetDelta( F_Cu ) ).c_str() );
 
     const VECTOR2I  drill = aPad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE
-                                    ? unbakeSizeUniform( aPad->GetDrillSize(), parentFP )
-                                    : unbakeSize( aPad->GetDrillSize(), parentFP );
-    VECTOR2I        shapeoffset = aPad->GetOffset( PADSTACK::ALL_LAYERS );
+                                                                ? unbakeSizeUniform( aPad->GetDrillSize(), parentFP )
+                                                                : unbakeSize( aPad->GetDrillSize(), parentFP );
+    VECTOR2I        shapeoffset = aPad->GetOffset( F_Cu );
     bool            forceShapeOffsetOutput = false;
 
     aPad->Padstack().ForEachUniqueLayer(
@@ -1966,8 +1962,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
         // changes, but note that the other padstack layers (if present) will have an offset stored
         // separately.
         if( shapeoffset.x != 0 || shapeoffset.y != 0 || forceShapeOffsetOutput )
-            m_out->Print( "(offset %s)",
-                          formatInternalUnits( aPad->Padstack().Offset( PADSTACK::ALL_LAYERS ) ).c_str() );
+            m_out->Print( "(offset %s)", formatInternalUnits( aPad->Padstack().Offset( F_Cu ) ).c_str() );
 
         m_out->Print( ")" );
     }
@@ -2084,7 +2079,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
 
     // For normal padstacks, this is the one and only set of properties.  For complex ones, this
     // will represent the front layer properties, and other layers will be formatted below
-    formatCornerProperties( PADSTACK::ALL_LAYERS );
+    formatCornerProperties( F_Cu );
 
     // Unconnected pad is default net so don't save it.
     if( !( m_ctl & CTL_OMIT_PAD_NETS ) && aPad->GetNetCode() > 0 )
@@ -2151,9 +2146,10 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
 
     EDA_ANGLE defaultThermalSpokeAngle = ANGLE_90;
 
-    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE
-        || ( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM
-             && aPad->GetAnchorPadShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE ) )
+    if( aPad->GetPadstackMode() == PADSTACK::MODE::NORMAL
+            && ( aPad->GetShape( F_Cu ) == PAD_SHAPE::CIRCLE
+                || ( aPad->GetShape( F_Cu ) == PAD_SHAPE::CUSTOM
+                    && aPad->GetAnchorPadShape( F_Cu ) == PAD_SHAPE::CIRCLE ) ) )
     {
         defaultThermalSpokeAngle = ANGLE_45;
     }
@@ -2283,7 +2279,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                 m_out->Print( ")" );   // end of (primitives
             };
 
-    if( aPad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM )
+    if( aPad->GetShape( F_Cu ) == PAD_SHAPE::CUSTOM )
     {
         m_out->Print( "(options" );
 
@@ -2293,12 +2289,12 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
             m_out->Print( "(clearance outline)" );
 
         // Output the anchor pad shape (circle/rect)
-        m_out->Print( "(anchor %s)", anchorShape( PADSTACK::ALL_LAYERS ) );
+        m_out->Print( "(anchor %s)", anchorShape( F_Cu ) );
 
         m_out->Print( ")");  // end of (options ...
 
         // Output graphic primitive of the pad shape
-        formatPrimitives( PADSTACK::ALL_LAYERS );
+        formatPrimitives( F_Cu );
     }
 
     if( !isDefaultTeardropParameters( aPad->GetTeardropParams() ) )
@@ -2327,7 +2323,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
 
                 m_out->Print( "(size %s)", formatInternalUnits( padstack.Size( aLayer ) ).c_str() );
 
-                const VECTOR2I delta = aPad->GetDelta( aLayer );
+                const VECTOR2I& delta = aPad->GetDelta( aLayer );
 
                 if( delta.x != 0 || delta.y != 0 )
                     m_out->Print( "(rect_delta %s)", formatInternalUnits( delta ).c_str() );

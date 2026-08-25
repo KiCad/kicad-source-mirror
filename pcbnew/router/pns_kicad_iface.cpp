@@ -1824,7 +1824,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
     switch( aVia->Padstack().Mode() )
     {
     case PADSTACK::MODE::NORMAL:
-        via->SetDiameter( 0, aVia->GetWidth( PADSTACK::ALL_LAYERS ) );
+        via->SetDiameter( 0, aVia->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) );
         break;
 
     case PADSTACK::MODE::FRONT_INNER_BACK:
@@ -2690,7 +2690,7 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         m_commit->Modify( via_board );
 
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
-        via_board->SetWidth( PADSTACK::ALL_LAYERS, via->Diameter( 0 ) );
+        via_board->SetWidth( PADSTACK::TEMP_ALL_LAYERS, via->Diameter( 0 ) );
         via_board->SetDrill( via->Drill() );
         via_board->SetNet( static_cast<NETINFO_ITEM*>( via->Net() ) );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
@@ -2807,7 +2807,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         PCB_VIA*  via_board = new PCB_VIA( m_board );
         PNS::VIA* via = static_cast<PNS::VIA*>( aItem );
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
-        via_board->SetWidth( PADSTACK::ALL_LAYERS, via->Diameter( 0 ) );
+        via_board->SetWidth( PADSTACK::TEMP_ALL_LAYERS, via->Diameter( 0 ) );
         via_board->SetDrill( via->Drill() );
         via_board->SetNet( net );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()

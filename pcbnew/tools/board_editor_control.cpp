@@ -1207,6 +1207,8 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
     if( m_frame->ToolStackIsEmpty()
         && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } )( selection ) )
     {
+        int          complexPadstacks = 0;
+        int          incremented = 0;
         BOARD_COMMIT commit( this );
 
         for( EDA_ITEM* item : selection )
@@ -1214,6 +1216,12 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
             if( item->Type() == PCB_VIA_T )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+                if( via->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+                {
+                    complexPadstacks++;
+                    continue;
+                }
 
                 for( int i = 0; i < (int) bds.m_ViasDimensionsList.size(); ++i )
                 {
@@ -1223,19 +1231,25 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
                     if( i> 0 )
                         dims = bds.m_ViasDimensionsList[ i ];
 
-                    // TODO(JE) padstacks
                     if( dims.m_Diameter > via->GetWidth( PADSTACK::ALL_LAYERS ) )
                     {
                         commit.Modify( via );
                         via->SetWidth( PADSTACK::ALL_LAYERS, dims.m_Diameter );
                         via->SetDrill( dims.m_Drill );
+                        incremented++;
                         break;
                     }
                 }
             }
         }
 
-        commit.Push( _( "Increase Via Size" ) );
+        if( incremented == 0 && complexPadstacks > 0 )
+        {
+            m_frame->ShowInfoBarError( wxString::Format( _( "%s not supported on complex padstacks." ),
+                                                         PCB_ACTIONS::viaSizeInc.GetFriendlyName() ) );
+        }
+
+        commit.Push( PCB_ACTIONS::viaSizeInc.GetFriendlyName() );
     }
     else
     {
@@ -1259,6 +1273,8 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
     if( m_frame->ToolStackIsEmpty()
         && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } )( selection ) )
     {
+        int          complexPadstacks = 0;
+        int          decremented = 0;
         BOARD_COMMIT commit( this );
 
         for( EDA_ITEM* item : selection )
@@ -1266,6 +1282,12 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
             if( item->Type() == PCB_VIA_T )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+                if( via->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+                {
+                    complexPadstacks++;
+                    continue;
+                }
 
                 for( int i = (int) bds.m_ViasDimensionsList.size() - 1; i >= 0; --i )
                 {
@@ -1276,18 +1298,25 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
                         dims = bds.m_ViasDimensionsList[ i ];
 
                     // TODO(JE) padstacks
-                    if( dims.m_Diameter < via->GetWidth( PADSTACK::ALL_LAYERS ) )
+                    if( dims.m_Diameter < via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) )
                     {
                         commit.Modify( via );
-                        via->SetWidth( PADSTACK::ALL_LAYERS, dims.m_Diameter );
+                        via->SetWidth( PADSTACK::TEMP_ALL_LAYERS, dims.m_Diameter );
                         via->SetDrill( dims.m_Drill );
+                        decremented++;
                         break;
                     }
                 }
             }
         }
 
-        commit.Push( "Decrease Via Size" );
+        if( decremented == 0 && complexPadstacks > 0 )
+        {
+            m_frame->ShowInfoBarError( wxString::Format( _( "%s not supported on complex padstacks." ),
+                                                         PCB_ACTIONS::viaSizeDec.GetFriendlyName() ) );
+        }
+
+        commit.Push( PCB_ACTIONS::viaSizeDec.GetFriendlyName() );
     }
     else
     {
@@ -1386,19 +1415,20 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     bool     ignorePrimePosition = false;
     bool     reselect = false;
 
-    auto applyPlacementFrameOrientation = [&]()
-    {
-        if( !fp )
-            return;
+    auto applyPlacementFrameOrientation =
+            [&]()
+            {
+                if( !fp )
+                    return;
 
-        EDA_ANGLE newAngle = GridFrameAngleAt( *board, fp->GetPosition(), PCB_GRIDITEM_ROLE::PLACEMENT );
-        EDA_ANGLE delta = GridFrameRotationDelta( prevFrameAngle, newAngle, m_frame->GetRotationAngle() );
+                EDA_ANGLE newAngle = GridFrameAngleAt( *board, fp->GetPosition(), PCB_GRIDITEM_ROLE::PLACEMENT );
+                EDA_ANGLE delta = GridFrameRotationDelta( prevFrameAngle, newAngle, m_frame->GetRotationAngle() );
 
-        prevFrameAngle = newAngle;
+                prevFrameAngle = newAngle;
 
-        if( !delta.IsZero() )
-            fp->Rotate( fp->GetPosition(), delta );
-    };
+                if( !delta.IsZero() )
+                    fp->Rotate( fp->GetPosition(), delta );
+            };
 
     // Prime the pump
     if( fp )

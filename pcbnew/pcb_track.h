@@ -469,6 +469,8 @@ public:
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( PCB_LAYER_ID aLayer ) const;
 
+    void SetPadstackMode( PADSTACK::MODE aMode ) { m_padStack.SetMode( aMode ); }
+
     void SetWidth( int aWidth ) override;
     int GetWidth() const override;
 

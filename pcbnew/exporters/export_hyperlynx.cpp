@@ -218,8 +218,8 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
 {
     // TODO(JE) padstacks
     m_board = aBoard;
-    m_sx    = aPad->GetSize( PADSTACK::ALL_LAYERS ).x;
-    m_sy    = aPad->GetSize( PADSTACK::ALL_LAYERS ).y;
+    m_sx    = aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x;
+    m_sy    = aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y;
     m_angle = 180.0 - aPad->GetOrientation().AsDegrees();
 
     if( m_angle < 0.0 )
@@ -227,7 +227,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
 
     m_layers = aPad->GetLayerSet();
     m_drill  = aPad->GetDrillSize().x;
-    m_shape  = aPad->GetShape( PADSTACK::ALL_LAYERS );
+    m_shape  = aPad->GetShape( PADSTACK::TEMP_ALL_LAYERS );
     m_type   = PAD_ATTRIB::PTH;
     m_id     = 0;
 }
@@ -237,7 +237,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PCB_VIA* aVia )
 {
     m_board  = aBoard;
     // TODO(JE) padstacks
-    m_sx = m_sy = aVia->GetWidth( PADSTACK::ALL_LAYERS );
+    m_sx = m_sy = aVia->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
     m_angle  = 0;
     m_layers = aVia->GetLayerSet();
     m_drill  = aVia->GetDrillValue();

@@ -820,7 +820,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
         const PAD& pad = static_cast<const PAD&>( aItem );
 
         // TODO(JE) padstacks
-        const PAD_SHAPE pad_shape = pad.GetShape( PADSTACK::ALL_LAYERS );
+        const PAD_SHAPE pad_shape = pad.GetShape( PADSTACK::TEMP_ALL_LAYERS );
 
         switch( pad_shape )
         {
@@ -828,7 +828,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::OVAL:
         {
-            const VECTOR2I pad_size = pad.GetSize( PADSTACK::ALL_LAYERS );
+            const VECTOR2I pad_size = pad.GetSize( PADSTACK::TEMP_ALL_LAYERS );
 
             BOX2I box{ pad.GetPosition() - pad_size / 2, pad_size };
             box.Inflate( m_params.outsetDistance );
@@ -842,7 +842,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             int radius = m_params.outsetDistance;
 
             if( pad_shape == PAD_SHAPE::ROUNDRECT )
-                radius += pad.GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS );
+                radius += pad.GetRoundRectCornerRadius( PADSTACK::TEMP_ALL_LAYERS );
             else if( pad_shape == PAD_SHAPE::OVAL )
                 radius += std::min( pad_size.x, pad_size.y ) / 2;
 
@@ -861,7 +861,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
 
         case PAD_SHAPE::CIRCLE:
         {
-            const int radius = pad.GetSize( PADSTACK::ALL_LAYERS ).x / 2 + m_params.outsetDistance;
+            const int radius = pad.GetSize( PADSTACK::TEMP_ALL_LAYERS ).x / 2 + m_params.outsetDistance;
 
             if( radius <= 0 )
             {

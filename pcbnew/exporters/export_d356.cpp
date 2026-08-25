@@ -198,10 +198,12 @@ static void build_via_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             D356_RECORD rk;
             rk.smd = false;
             rk.hole = true;
+
             if( net )
                 rk.netname = net->GetNetname();
             else
                 rk.netname = wxEmptyString;
+
             rk.refdes = wxT("VIA");
             rk.pin = wxT("");
             rk.midpoint = true; // Vias are always midpoints
@@ -220,7 +222,7 @@ static void build_via_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             if( via->Padstack().Mode() != PADSTACK::MODE::NORMAL )
                 rk.x_size = std::min( via->GetWidth( F_Cu ), via->GetWidth( B_Cu ) );
             else
-                rk.x_size = via->GetWidth( PADSTACK::ALL_LAYERS );
+                rk.x_size = via->GetWidth( F_Cu );
 
             rk.y_size = 0; // Round so height = 0
             rk.rotation = 0;

@@ -87,6 +87,7 @@ struct BACKDRILL_TEST_FIXTURE
                                    int aSecondaryDrillSize )
     {
         PCB_VIA* via = new PCB_VIA( m_board.get() );
+        via->SetPadstackMode( PADSTACK::MODE::NORMAL );
         via->SetPosition( aPos );
         via->SetLayerPair( aPrimaryStart, aPrimaryEnd );
         via->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
@@ -112,6 +113,7 @@ struct BACKDRILL_TEST_FIXTURE
                                     int aFrontSize, int aFrontDepth )
     {
         PCB_VIA* via = new PCB_VIA( m_board.get() );
+        via->SetPadstackMode( PADSTACK::MODE::NORMAL );
         via->SetPosition( aPos );
         via->SetLayerPair( F_Cu, B_Cu );
         via->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
@@ -151,6 +153,7 @@ struct BACKDRILL_TEST_FIXTURE
         fp->SetReference( "U1" );
 
         PAD* pad = new PAD( fp );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
         pad->SetPosition( aPos );
         pad->SetNumber( aPadNumber );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
@@ -695,6 +698,7 @@ BOOST_FIXTURE_TEST_CASE( CountersinkAngleDecidegrees, BACKDRILL_TEST_FIXTURE )
     int netCode = GetNetCode( "TestNet" );
 
     PCB_VIA* via = new PCB_VIA( m_board.get() );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 130 ), pcbIUScale.mmToIU( 10 ) ) );
     via->SetLayerPair( F_Cu, B_Cu );
     via->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
@@ -807,6 +811,7 @@ BOOST_FIXTURE_TEST_CASE( ViaHoleShapeUsesNetclassDrill, BACKDRILL_TEST_FIXTURE )
             [&]( const VECTOR2I& aPos ) -> PCB_VIA*
             {
                 PCB_VIA* via = new PCB_VIA( m_board.get() );
+                via->SetPadstackMode( PADSTACK::MODE::NORMAL );
                 via->SetPosition( aPos );
                 via->SetLayerPair( F_Cu, B_Cu );
                 via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.6 ) );

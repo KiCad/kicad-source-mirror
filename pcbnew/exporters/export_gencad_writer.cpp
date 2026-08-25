@@ -238,8 +238,9 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
 /// Sort vias for uniqueness.
 static bool viaSort( const PCB_VIA* aPadref, const PCB_VIA* aPadcmp )
 {
-    if( aPadref->GetWidth( PADSTACK::ALL_LAYERS ) != aPadcmp->GetWidth( PADSTACK::ALL_LAYERS ) )
-        return aPadref->GetWidth( PADSTACK::ALL_LAYERS ) < aPadcmp->GetWidth( PADSTACK::ALL_LAYERS );
+    // TODO padstacks
+    if( aPadref->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) != aPadcmp->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) )
+        return aPadref->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) < aPadcmp->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
 
     if( aPadref->GetDrillValue() != aPadcmp->GetDrillValue() )
         return aPadref->GetDrillValue() < aPadcmp->GetDrillValue();
@@ -301,25 +302,27 @@ void GENCAD_EXPORTER::createPadsShapesSection()
                              vias.end() );
 
     // Emit vias pads
+    // TODO padstacks
     for( PCB_VIA* via : vias )
     {
         viastacks.push_back( via );
         fmt::print( m_file, "PAD V{}.{}.{} ROUND {}\nCIRCLE 0 0 {}\n",
-                    via->GetWidth( PADSTACK::ALL_LAYERS ),
+                    via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ),
                     via->GetDrillValue(),
                     fmt_mask( via->GetLayerSet() & master_layermask ).c_str(),
                     via->GetDrillValue() / SCALE_FACTOR,
-                    via->GetWidth( PADSTACK::ALL_LAYERS ) / (SCALE_FACTOR * 2) );
+                    via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) / (SCALE_FACTOR * 2) );
     }
 
     // Emit component pads
+    // TODO padstacks
     PAD* old_pad = nullptr;
     int  pad_name_number = 0;
 
     for( unsigned i = 0; i<pads.size(); ++i )
     {
         PAD* pad = pads[i];
-        const VECTOR2I& off = pad->GetOffset( PADSTACK::ALL_LAYERS );
+        const VECTOR2I& off = pad->GetOffset( PADSTACK::TEMP_ALL_LAYERS );
 
         pad->SetSubRatsnest( pad_name_number );
 
@@ -336,13 +339,13 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         fmt::print( m_file, "PAD P{}", pad->GetSubRatsnest() );
 
         padstacks.push_back( pad ); // Will have its own padstack later
-        int dx = pad->GetSize( PADSTACK::ALL_LAYERS ).x / 2;
-        int dy = pad->GetSize( PADSTACK::ALL_LAYERS ).y / 2;
+        int dx = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x / 2;
+        int dy = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y / 2;
 
-        switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
+        switch( pad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) )
         {
         default:
-            UNIMPLEMENTED_FOR( pad->ShowPadShape( PADSTACK::ALL_LAYERS ) );
+            UNIMPLEMENTED_FOR( pad->ShowPadShape( PADSTACK::TEMP_ALL_LAYERS ) );
             KI_FALLTHROUGH;
 
         case PAD_SHAPE::CIRCLE:
@@ -353,7 +356,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             fmt::print( m_file, "CIRCLE {} {} {}\n",
                         off.x / SCALE_FACTOR,
                         -off.y / SCALE_FACTOR,
-                        pad->GetSize( PADSTACK::ALL_LAYERS ).x / (SCALE_FACTOR * 2) );
+                        pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x / (SCALE_FACTOR * 2) );
             break;
 
         case PAD_SHAPE::RECTANGLE:
@@ -370,12 +373,12 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::OVAL:
         {
-            const VECTOR2I& size = pad->GetSize( PADSTACK::ALL_LAYERS );
+            const VECTOR2I& size = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS );
             int radius = std::min( size.x, size.y ) / 2;
 
-            if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::ROUNDRECT )
+            if( pad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::ROUNDRECT )
             {
-                radius = pad->GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS );
+                radius = pad->GetRoundRectCornerRadius( PADSTACK::TEMP_ALL_LAYERS );
             }
 
             int lineX = size.x / 2 - radius;
@@ -466,8 +469,8 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         {
             fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
-            int  ddx = pad->GetDelta( PADSTACK::ALL_LAYERS ).x / 2;
-            int  ddy = pad->GetDelta( PADSTACK::ALL_LAYERS ).y / 2;
+            int  ddx = pad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ).x / 2;
+            int  ddy = pad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ).y / 2;
 
             VECTOR2I poly[4];
             poly[0] = VECTOR2I( -dx + ddy, dy + ddx );
@@ -496,11 +499,11 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             VECTOR2I       padOffset( 0, 0 );
 
             TransformRoundChamferedRectToPolygon( outline, padOffset,
-                                                  pad->GetSize( PADSTACK::ALL_LAYERS ),
+                                                  pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ),
                                                   pad->GetOrientation(),
-                                                  pad->GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS ),
-                                                  pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
-                                                  pad->GetChamferPositions( PADSTACK::ALL_LAYERS ),
+                                                  pad->GetRoundRectCornerRadius( PADSTACK::TEMP_ALL_LAYERS ),
+                                                  pad->GetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS ),
+                                                  pad->GetChamferPositions( PADSTACK::TEMP_ALL_LAYERS ),
                                                   0, pad->GetMaxError(), ERROR_INSIDE );
 
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
@@ -563,7 +566,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         LSET mask = via->GetLayerSet() & master_layermask;
 
         fmt::print( m_file, "PADSTACK VIA{}.{}.{} {}\n",
-                    via->GetWidth( PADSTACK::ALL_LAYERS ),
+                    via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ),
                     via->GetDrillValue(),
                     fmt_mask( mask ).c_str(),
                     via->GetDrillValue() / SCALE_FACTOR );
@@ -571,7 +574,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         for( PCB_LAYER_ID layer : mask.Seq( gc_seq ) )
         {
             fmt::print( m_file, "PAD V{}.{}.{} {} 0 0\n",
-                        via->GetWidth( PADSTACK::ALL_LAYERS ),
+                        via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ),
                         via->GetDrillValue(),
                         fmt_mask( mask ).c_str(),
                         genCADLayerName( cu_count, layer ).c_str() );
@@ -915,6 +918,8 @@ void GENCAD_EXPORTER::createRoutesSection()
     int     cu_count = m_board->GetCopperLayerCount();
     TRACKS  tracks( m_board->Tracks() );
 
+    // TODO padstacks
+
     std::sort( tracks.begin(), tracks.end(),
                []( const PCB_TRACK* a, const PCB_TRACK* b )
                {
@@ -922,12 +927,12 @@ void GENCAD_EXPORTER::createRoutesSection()
                    int widthB = 0;
 
                    if( a->Type() == PCB_VIA_T )
-                       widthA = static_cast<const PCB_VIA*>( a )->GetWidth( PADSTACK::ALL_LAYERS );
+                       widthA = static_cast<const PCB_VIA*>( a )->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
                    else
                        widthA = a->GetWidth();
 
                    if( b->Type() == PCB_VIA_T )
-                       widthB = static_cast<const PCB_VIA*>( b )->GetWidth( PADSTACK::ALL_LAYERS );
+                       widthB = static_cast<const PCB_VIA*>( b )->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
                    else
                        widthB = b->GetWidth();
 
@@ -967,7 +972,7 @@ void GENCAD_EXPORTER::createRoutesSection()
         int currentWidth = 0;
 
         if( track->Type() == PCB_VIA_T )
-            currentWidth = static_cast<const PCB_VIA*>( track )->GetWidth( PADSTACK::ALL_LAYERS );
+            currentWidth = static_cast<const PCB_VIA*>( track )->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
         else
             currentWidth = track->GetWidth();
 
@@ -1022,7 +1027,7 @@ void GENCAD_EXPORTER::createRoutesSection()
             LSET vset = via->GetLayerSet() & master_layermask;
 
             fmt::print( m_file, "VIA VIA{}.{}.{} {} {} ALL {} via{}\n",
-                        via->GetWidth( PADSTACK::ALL_LAYERS ),
+                        via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ),
                         via->GetDrillValue(),
                         fmt_mask( vset ).c_str(),
                         mapXTo( via->GetStart().x ), mapYTo( via->GetStart().y ),

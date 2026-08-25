@@ -2199,7 +2199,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
         if( GetAttribute() == PAD_ATTRIB::SMD )
         {
             // TOOD(JE) padstacks
-            const std::shared_ptr<SHAPE_POLY_SET>& poly = GetEffectivePolygon( PADSTACK::ALL_LAYERS );
+            const std::shared_ptr<SHAPE_POLY_SET>& poly = GetEffectivePolygon( PADSTACK::TEMP_ALL_LAYERS );
             double area = poly->Area();
 
             aList.emplace_back( _( "Area" ), aFrame->MessageTextFromValue( area, true, EDA_DATA_TYPE::AREA ) );
@@ -2225,21 +2225,36 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     case PAD_PROP::PRESSFIT:       props += _( "Press-fit" );       break;
     }
 
-    // TODO(JE) How to show complex padstack info in the message panel
-    aList.emplace_back( ShowPadShape( PADSTACK::ALL_LAYERS ), props );
+    std::set<bool>      circles;
+    std::set<PAD_SHAPE> shapes;
+    std::set<int>       widths;
+    std::set<int>       heights;
 
-    PAD_SHAPE padShape = GetShape( PADSTACK::ALL_LAYERS );
-    VECTOR2I  padSize = GetSize( PADSTACK::ALL_LAYERS );
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                PAD_SHAPE shape = GetShape( aLayer );
+                VECTOR2I  size = GetSize( aLayer );
 
-    if( ( padShape == PAD_SHAPE::CIRCLE || padShape == PAD_SHAPE::OVAL )
-            && padSize.x == padSize.y )
+                circles.insert( shape == PAD_SHAPE::CIRCLE || ( shape == PAD_SHAPE::OVAL && size.x == size.y ) );
+                shapes.insert( shape );
+                widths.insert( size.x );
+                heights.insert( size.y );
+            } );
+
+    aList.emplace_back( shapes.size() == 1 ? ShowPadShape( *shapes.begin() ) : _( "(mixed shapes)" ), props );
+
+    if( circles.size() == 1 && *circles.begin() )
     {
-        aList.emplace_back( _( "Diameter" ), aFrame->MessageTextFromValue( padSize.x ) );
+        aList.emplace_back( _( "Diameter" ), widths.size() == 1 ? aFrame->MessageTextFromValue( *widths.begin() )
+                                                                : _( "(mixed)" ) );
     }
     else
     {
-        aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( padSize.x ) );
-        aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( padSize.y ) );
+        aList.emplace_back( _( "Width" ), widths.size() == 1 ? aFrame->MessageTextFromValue( *widths.begin() )
+                                                             : _( "(mixed)" ) );
+        aList.emplace_back( _( "Height" ), heights.size() == 1 ? aFrame->MessageTextFromValue( *heights.begin() )
+                                                               : _( "(mixed)" ) );
     }
 
     EDA_ANGLE fp_orient = parentFootprint ? parentFootprint->GetOrientation() : ANGLE_0;
@@ -2254,10 +2269,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     aList.emplace_back( _( "Rotation" ), msg );
 
     if( GetPadToDieLength() )
-    {
-        aList.emplace_back( _( "Length in Package" ),
-                            aFrame->MessageTextFromValue( GetPadToDieLength() ) );
-    }
+        aList.emplace_back( _( "Length in Package" ), aFrame->MessageTextFromValue( GetPadToDieLength() ) );
 
     const VECTOR2I drill = GetDrillSize();
 

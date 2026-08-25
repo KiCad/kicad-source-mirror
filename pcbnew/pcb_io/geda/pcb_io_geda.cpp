@@ -510,6 +510,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             static const LSET pad_front( { F_Cu, F_Mask, F_Paste } );
             static const LSET pad_back( { B_Cu, B_Mask, B_Paste } );
 
+            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // gEDA doesn't have complex padstacks
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
             pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( pad_front );
@@ -603,6 +604,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             PAD* pad = new PAD( footprint.get() );
 
+            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // gEDA doesn't have complex padstacks
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
 
             static const LSET pad_set = LSET::AllCuMask() | LSET( { F_SilkS, F_Mask, B_Mask } );
@@ -1283,6 +1285,7 @@ void PCB_IO_GEDA::parseVia( wxArrayString& aParameters, double aConvUnit )
     int drill     = static_cast<int>( parseInt( aParameters[7], aConvUnit ) );
 
     via->SetPosition( VECTOR2I( x, y ) );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );     // gEDA doesn't have complex padstacks
     via->SetWidth( PADSTACK::ALL_LAYERS, thickness );
     via->SetDrill( drill );
     via->SetViaType( VIATYPE::THROUGH );
@@ -1443,6 +1446,7 @@ FOOTPRINT* PCB_IO_GEDA::parseElement( wxArrayString& aParameters, LINE_READER* a
             static const LSET pad_front( { F_Cu, F_Mask, F_Paste } );
             static const LSET pad_back( { B_Cu, B_Mask, B_Paste } );
 
+            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // gEDA doesn't have complex padstacks
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
             pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( pad_front );
@@ -1502,6 +1506,7 @@ FOOTPRINT* PCB_IO_GEDA::parseElement( wxArrayString& aParameters, LINE_READER* a
 
             PAD* pad = new PAD( footprint.get() );
 
+            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // gEDA doesn't have complex padstacks
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
 
             static const LSET pad_set = LSET::AllCuMask() | LSET( { F_SilkS, F_Mask, B_Mask } );

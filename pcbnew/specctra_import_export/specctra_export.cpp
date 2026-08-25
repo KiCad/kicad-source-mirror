@@ -204,9 +204,9 @@ static POINT mapPt( const VECTOR2I& pt, FOOTPRINT* aFootprint )
 static bool isRoundKeepout( PAD* aPad )
 {
     // TODO(JE) padstacks
-    if( aPad->GetShape( ::PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+    if( aPad->GetShape( ::PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
     {
-        if( aPad->GetDrillSize().x >= aPad->GetSize( ::PADSTACK::ALL_LAYERS ).x )
+        if( aPad->GetDrillSize().x >= aPad->GetSize( ::PADSTACK::TEMP_ALL_LAYERS ).x )
             return true;
 
         if( !( aPad->GetLayerSet() & LSET::AllCuMask() ).any() )
@@ -283,8 +283,8 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
     POINT   dsnOffset;
 
     // TODO(JE) padstacks
-    const VECTOR2I& padSize = aPad->GetSize( ::PADSTACK::ALL_LAYERS );
-    const VECTOR2I& offset = aPad->GetOffset( ::PADSTACK::ALL_LAYERS );
+    const VECTOR2I& padSize = aPad->GetSize( ::PADSTACK::TEMP_ALL_LAYERS );
+    const VECTOR2I& offset = aPad->GetOffset( ::PADSTACK::TEMP_ALL_LAYERS );
 
     if( offset.x || offset.y )
     {
@@ -297,7 +297,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         uniqifier += oss.str();
     }
 
-    switch( aPad->GetShape( ::PADSTACK::ALL_LAYERS ) )
+    switch( aPad->GetShape( ::PADSTACK::TEMP_ALL_LAYERS ) )
     {
     case PAD_SHAPE::CIRCLE:
     {
@@ -414,7 +414,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         double dx = scale( padSize.x ) / 2.0;
         double dy = scale( padSize.y ) / 2.0;
 
-        const VECTOR2I& delta = aPad->GetDelta( ::PADSTACK::ALL_LAYERS );
+        const VECTOR2I& delta = aPad->GetDelta( ::PADSTACK::TEMP_ALL_LAYERS );
 
         double ddx = scale( delta.x ) / 2.0;
         double ddy = scale( delta.y ) / 2.0;
@@ -465,7 +465,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
     {
         // Export the shape as as polygon, round rect does not exist as primitive
         const int      circleToSegmentsCount = 36;
-        int            rradius = aPad->GetRoundRectCornerRadius( ::PADSTACK::ALL_LAYERS );
+        int            rradius = aPad->GetRoundRectCornerRadius( ::PADSTACK::TEMP_ALL_LAYERS );
         SHAPE_POLY_SET cornerBuffer;
 
         // Use a slightly bigger shape because the round corners are approximated by
@@ -482,11 +482,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         psize.x += extra_clearance * 2;
         psize.y += extra_clearance * 2;
         rradius += extra_clearance;
-        bool doChamfer = aPad->GetShape( ::PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CHAMFERED_RECT;
+        bool doChamfer = aPad->GetShape( ::PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::CHAMFERED_RECT;
 
         TransformRoundChamferedRectToPolygon( cornerBuffer, VECTOR2I( 0, 0 ), psize, ANGLE_0,
-                rradius, aPad->GetChamferRectRatio( ::PADSTACK::ALL_LAYERS ),
-                doChamfer ? aPad->GetChamferPositions( ::PADSTACK::ALL_LAYERS ) : 0,
+                rradius, aPad->GetChamferRectRatio( ::PADSTACK::TEMP_ALL_LAYERS ),
+                doChamfer ? aPad->GetChamferPositions( ::PADSTACK::TEMP_ALL_LAYERS ) : 0,
                 0, aPad->GetMaxError(), ERROR_INSIDE );
 
         SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
@@ -528,9 +528,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             << IU2um( padSize.x ) << 'x'
             << IU2um( padSize.y ) << '_'
             << IU2um( rradius ) << "_um_"
-            << ( doChamfer ? aPad->GetChamferRectRatio( ::PADSTACK::ALL_LAYERS ) : 0.0 ) << '_'
+            << ( doChamfer ? aPad->GetChamferRectRatio( ::PADSTACK::TEMP_ALL_LAYERS ) : 0.0 ) << '_'
             << std::hex << std::uppercase
-            << ( doChamfer ? aPad->GetChamferPositions( ::PADSTACK::ALL_LAYERS ) : 0 );
+            << ( doChamfer ? aPad->GetChamferPositions( ::PADSTACK::TEMP_ALL_LAYERS ) : 0 );
 
         padstack->SetPadstackId( oss.str().c_str() );
         break;
@@ -540,7 +540,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
     {
         std::vector<VECTOR2I> polygonal_shape;
         SHAPE_POLY_SET       pad_shape;
-        aPad->MergePrimitivesAsPolygon( ::PADSTACK::ALL_LAYERS, &pad_shape );
+        aPad->MergePrimitivesAsPolygon( ::PADSTACK::TEMP_ALL_LAYERS, &pad_shape );
 
 #ifdef EXPORT_CUSTOM_PADS_CONVEX_HULL
         BuildConvexHull( polygonal_shape, pad_shape );
@@ -1007,7 +1007,7 @@ PADSTACK* SPECCTRA_DB::makeVia( const PCB_VIA* aVia )
         std::swap( topLayer, botLayer );
 
     // TODO(JE) padstacks
-    return makeVia( aVia->GetWidth( ::PADSTACK::ALL_LAYERS ), aVia->GetDrillValue(),
+    return makeVia( aVia->GetWidth( ::PADSTACK::TEMP_ALL_LAYERS ), aVia->GetDrillValue(),
                     topLayer, botLayer );
 }
 

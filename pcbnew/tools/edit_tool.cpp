@@ -1271,7 +1271,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
             }
 
             via->SetDrill( new_drill );
-            // TODO(JE) padstacks - is this correct behavior already?  If so, also change stack mode
+            via->SetPadstackMode( PADSTACK::MODE::NORMAL );
             via->SetWidth( PADSTACK::ALL_LAYERS, new_width );
         }
         else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
@@ -2614,21 +2614,28 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
  */
 static void mirrorPad( PAD& aPad, const VECTOR2I& aMirrorPoint, FLIP_DIRECTION aFlipDirection )
 {
-    // TODO(JE) padstacks
-    if( aPad.GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM )
-        aPad.FlipPrimitives( aFlipDirection );
+    aPad.Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                if( aPad.GetShape( layer ) == PAD_SHAPE::CUSTOM )
+                    aPad.FlipPrimitives( aFlipDirection );
+            } );
 
     VECTOR2I tmpPt = aPad.GetPosition();
     MIRROR( tmpPt, aMirrorPoint, aFlipDirection );
     aPad.SetPosition( tmpPt );
 
-    tmpPt = aPad.GetOffset( PADSTACK::ALL_LAYERS );
-    MIRROR( tmpPt, VECTOR2I{ 0, 0 }, aFlipDirection );
-    aPad.SetOffset( PADSTACK::ALL_LAYERS, tmpPt );
+    aPad.Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                tmpPt = aPad.GetOffset( layer );
+                MIRROR( tmpPt, VECTOR2I{ 0, 0 }, aFlipDirection );
+                aPad.SetOffset( layer, tmpPt );
 
-    VECTOR2I tmpz = aPad.GetDelta( PADSTACK::ALL_LAYERS );
-    MIRROR( tmpz, VECTOR2I{ 0, 0 }, aFlipDirection );
-    aPad.SetDelta( PADSTACK::ALL_LAYERS, tmpz );
+                VECTOR2I tmpz = aPad.GetDelta( layer );
+                MIRROR( tmpz, VECTOR2I{ 0, 0 }, aFlipDirection );
+                aPad.SetDelta( layer, tmpz );
+            } );
 
     aPad.SetOrientation( -aPad.GetOrientation() );
 }

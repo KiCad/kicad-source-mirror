@@ -51,9 +51,9 @@ static FOOTPRINT* addFootprint( BOARD& aBoard, const wxString& aReference )
 
     PAD* pad = new PAD( fp );
     pad->SetNumber( wxS( "1" ) );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-    pad->SetSize( PADSTACK::ALL_LAYERS,
-                  VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
     pad->SetLayerSet( LSET( { F_Cu } ) );
     fp->Add( pad );
 

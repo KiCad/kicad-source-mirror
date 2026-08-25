@@ -1341,6 +1341,7 @@ void PCB_IO_PADS::loadTestPoints()
         footprint->SetLayer( layer );
 
         PAD* pad = new PAD( footprint );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
         pad->SetNumber( wxT( "1" ) );
         pad->SetPosition( pos );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
@@ -1488,12 +1489,14 @@ void PCB_IO_PADS::loadTracksAndVias()
             PCB_VIA* via = new PCB_VIA( m_loadBoard );
             via->SetNet( net );
             via->SetPosition( pos );
+            via->SetPadstackMode( PADSTACK::MODE::NORMAL );
+            via->Padstack().SetShape( PAD_SHAPE::CIRCLE, PADSTACK::ALL_LAYERS );
 
             if( it != m_parser->GetViaDefs().end() )
             {
                 const PADS_IO::VIA_DEF& def = it->second;
 
-                via->SetWidth( std::max( scaleSize( def.size ), m_minObjectSize ) );
+                via->SetWidth( PADSTACK::ALL_LAYERS, std::max( scaleSize( def.size ), m_minObjectSize ) );
                 via->SetDrill( std::max( scaleSize( def.drill ), m_minObjectSize ) );
 
                 PCB_LAYER_ID startLayer = ( def.start_layer > 0 ) ? getMappedLayer( def.start_layer )
@@ -1520,7 +1523,7 @@ void PCB_IO_PADS::loadTracksAndVias()
             }
             else
             {
-                via->SetWidth( std::max( scaleSize( 20.0 ), m_minObjectSize ) );
+                via->SetWidth( PADSTACK::ALL_LAYERS, std::max( scaleSize( 20.0 ), m_minObjectSize ) );
                 via->SetDrill( std::max( scaleSize( 10.0 ), m_minObjectSize ) );
                 via->SetLayerPair( F_Cu, B_Cu );
                 via->SetViaType( VIATYPE::THROUGH );

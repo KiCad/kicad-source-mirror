@@ -2918,7 +2918,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
             VECTOR2I sz;
             sz.x = parseBoardUnits( "master pad width" );
             sz.y = parseBoardUnits( "master pad height" );
-            bds.m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, sz );
+            bds.m_Pad_Master->SetSize( F_Cu, sz );
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
@@ -6483,6 +6483,10 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
 
     T token = NextTok();
 
+    // NB: all pre-padstack tokens are stored into the F_Cu layer.  For PADSTACK::MODE::NORMAL
+    // this will be all there is.  For complex padstacks, the other values will get loaded from the
+    // T_padstack record.
+
     switch( token )
     {
     case T_thru_hole:
@@ -6523,29 +6527,29 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
     switch( token )
     {
     case T_circle:
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
         break;
 
     case T_rect:
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+        pad->SetShape( F_Cu, PAD_SHAPE::RECTANGLE );
         break;
 
     case T_oval:
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
+        pad->SetShape( F_Cu, PAD_SHAPE::OVAL );
         break;
 
     case T_trapezoid:
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::TRAPEZOID );
+        pad->SetShape( F_Cu, PAD_SHAPE::TRAPEZOID );
         break;
 
     case T_roundrect:
         // Note: the shape can be PAD_SHAPE::ROUNDRECT or PAD_SHAPE::CHAMFERED_RECT
         // (if chamfer parameters are found later in pad descr.)
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
+        pad->SetShape( F_Cu, PAD_SHAPE::ROUNDRECT );
         break;
 
     case T_custom:
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+        pad->SetShape( F_Cu, PAD_SHAPE::CUSTOM );
         break;
 
     default:
@@ -6572,7 +6576,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_size:
             sz.x = parseBoardUnits( "width value" );
             sz.y = parseBoardUnits( "height value" );
-            pad->SetLibSize( PADSTACK::ALL_LAYERS, sz );
+            pad->SetLibSize( F_Cu, sz );
             NeedRIGHT();
             break;
 
@@ -6606,7 +6610,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             VECTOR2I delta;
             delta.x = parseBoardUnits( "rectangle delta width" );
             delta.y = parseBoardUnits( "rectangle delta height" );
-            pad->SetDelta( PADSTACK::ALL_LAYERS, delta );
+            pad->SetDelta( F_Cu, delta );
             NeedRIGHT();
             break;
         }
@@ -6646,7 +6650,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_offset:
                     pt.x = parseBoardUnits( "drill offset x" );
                     pt.y = parseBoardUnits( "drill offset y" );
-                    pad->SetLibOffset( PADSTACK::ALL_LAYERS, pt );
+                    pad->SetLibOffset( F_Cu, pt );
                     NeedRIGHT();
                     break;
 
@@ -6927,15 +6931,15 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_roundrect_rratio:
-            pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, parseDouble( "roundrect radius ratio" ) );
+            pad->SetRoundRectRadiusRatio( F_Cu, parseDouble( "roundrect radius ratio" ) );
             NeedRIGHT();
             break;
 
         case T_chamfer_ratio:
-            pad->SetChamferRectRatio( PADSTACK::ALL_LAYERS, parseDouble( "chamfer ratio" ) );
+            pad->SetChamferRectRatio( F_Cu, parseDouble( "chamfer ratio" ) );
 
-            if( pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ) > 0 )
-                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
+            if( pad->GetChamferRectRatio( F_Cu ) > 0 )
+                pad->SetShape( F_Cu, PAD_SHAPE::CHAMFERED_RECT );
 
             NeedRIGHT();
             break;
@@ -6968,7 +6972,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                     break;
 
                 case T_RIGHT:
-                    pad->SetChamferPositions( PADSTACK::ALL_LAYERS, chamfers );
+                    pad->SetChamferPositions( F_Cu, chamfers );
                     end_list = true;
                     break;
 
@@ -6977,8 +6981,8 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 }
             }
 
-            if( pad->GetChamferPositions( PADSTACK::ALL_LAYERS ) != RECT_NO_CHAMFER )
-                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
+            if( pad->GetChamferPositions( F_Cu ) != RECT_NO_CHAMFER )
+                pad->SetShape( F_Cu, PAD_SHAPE::CHAMFERED_RECT );
 
             break;
         }
@@ -7034,14 +7038,14 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_gr_rect:
                 case T_gr_poly:
                 case T_gr_curve:
-                    pad->AddPrimitive( PADSTACK::ALL_LAYERS, parsePCB_SHAPE( nullptr ) );
+                    pad->AddPrimitive( F_Cu, parsePCB_SHAPE( nullptr ) );
                     break;
 
                 case T_gr_bbox:
                 {
                     PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
                     numberBox->SetIsProxyItem();
-                    pad->AddPrimitive( PADSTACK::ALL_LAYERS, numberBox );
+                    pad->AddPrimitive( F_Cu, numberBox );
                     break;
                 }
 
@@ -7049,7 +7053,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 {
                     PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
                     spokeTemplate->SetIsProxyItem();
-                    pad->AddPrimitive( PADSTACK::ALL_LAYERS, spokeTemplate );
+                    pad->AddPrimitive( F_Cu, spokeTemplate );
                     break;
                 }
 
@@ -7146,12 +7150,11 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
     else
     {
         // This is here because custom pad anchor shape isn't known before reading (options
-        if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+        if( pad->GetShape( F_Cu ) == PAD_SHAPE::CIRCLE )
         {
             pad->SetThermalSpokeAngle( ANGLE_45 );
         }
-        else if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CUSTOM
-                 && pad->GetAnchorPadShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+        else if( pad->GetShape( F_Cu ) == PAD_SHAPE::CUSTOM && pad->GetAnchorPadShape( F_Cu ) == PAD_SHAPE::CIRCLE )
         {
             if( m_requiredVersion <= 20211014 ) // 6.0
                 pad->SetThermalSpokeAngle( ANGLE_90 );
@@ -7174,11 +7177,13 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
     // Zero-sized pads are likely algorithmically unsafe.
     if( pad->GetSizeX() <= 0 || pad->GetSizeY() <= 0 )
     {
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 0.001 ), pcbIUScale.mmToIU( 0.001 ) ) );
+        pad->SetSize( F_Cu, VECTOR2I( pcbIUScale.mmToIU( 0.001 ), pcbIUScale.mmToIU( 0.001 ) ) );
 
-        m_parseWarnings.push_back(
-                wxString::Format( _( "Invalid zero-sized pad pinned to %s in\nfile: %s\nline: %d\noffset: %d" ),
-                                  wxT( "1µm" ), CurSource(), CurLineNumber(), CurOffset() ) );
+        m_parseWarnings.push_back( wxString::Format( _( "Invalid zero-sized pad pinned to %s in\n"
+                                                        "file: %s\n"
+                                                        "line: %d\n"
+                                                        "offset: %d" ),
+                                                     wxT( "1µm" ), CurSource(), CurLineNumber(), CurOffset() ) );
     }
 
     return pad.release();
@@ -7204,8 +7209,8 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
             // Because this is an anchor, only the 2 very basic shapes are managed: circle and rect.
             switch( token )
             {
-                case T_circle: aPad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );    break;
-                case T_rect:   aPad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE ); break;
+                case T_circle: aPad->SetAnchorPadShape( F_Cu, PAD_SHAPE::CIRCLE );    break;
+                case T_rect:   aPad->SetAnchorPadShape( F_Cu, PAD_SHAPE::RECTANGLE ); break;
                 default:       Expecting( "circle or rect" );
             }
 
@@ -8340,6 +8345,10 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
     VECTOR2I                 pt;
     std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
+    // NB: all pre-padstack tokens are stored into the F_Cu layer.  For PADSTACK::MODE::NORMAL
+    // this will be all there is.  For complex padstacks, the other values will get loaded from the
+    // T_padstack record.
+
     // File format default is no-token == no-feature.
     via->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::KEEP_ALL );
 
@@ -8390,7 +8399,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
             break;
 
         case T_size:
-            via->SetWidth( PADSTACK::ALL_LAYERS, parseBoardUnits( "via width" ) );
+            via->SetWidth( F_Cu, parseBoardUnits( "via width" ) );
             NeedRIGHT();
             break;
 

@@ -39,21 +39,26 @@ BOX2I CalcPlaceholderLocalBox( const FOOTPRINT* aFootprint )
     for( PAD* pad : aFootprint->Pads() )
     {
         VECTOR2I padPos = pad->GetFPRelativePosition();
-        VECTOR2I padSize = pad->GetSize( PADSTACK::ALL_LAYERS );
 
-        BOX2I padBox;
-        padBox.SetOrigin( padPos - padSize / 2 );
-        padBox.SetSize( padSize );
+        pad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID aLayer )
+                {
+                    VECTOR2I padSize = pad->GetSize( aLayer );
 
-        if( !hasLocalBounds )
-        {
-            localBox = padBox;
-            hasLocalBounds = true;
-        }
-        else
-        {
-            localBox.Merge( padBox );
-        }
+                    BOX2I padBox;
+                    padBox.SetOrigin( padPos - padSize / 2 );
+                    padBox.SetSize( padSize );
+
+                    if( !hasLocalBounds )
+                    {
+                        localBox = padBox;
+                        hasLocalBounds = true;
+                    }
+                    else
+                    {
+                        localBox.Merge( padBox );
+                    }
+                } );
     }
 
     if( !hasLocalBounds )

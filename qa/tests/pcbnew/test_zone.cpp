@@ -42,13 +42,14 @@ struct ZONE_TEST_FIXTURE
 };
 
 
-static std::unique_ptr<ZONE> CreateSquareZone( BOARD_ITEM_CONTAINER& aParent, BOX2I aBox, PCB_LAYER_ID aLayer )
+static std::unique_ptr<ZONE> CreateSquareZone( BOARD_ITEM_CONTAINER& aParent, PCB_LAYER_ID aLayer,
+                                               const VECTOR2I& aOrigin, const VECTOR2I& aSize )
 {
-    auto zone = std::make_unique<ZONE>( &aParent );
+    std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( &aParent );
     zone->SetLayer( aLayer );
 
-    auto outline = std::make_unique<SHAPE_POLY_SET>();
-    outline->AddOutline( KIGEOM::BoxToLineChain( aBox ) );
+    std::unique_ptr<SHAPE_POLY_SET> outline = std::make_unique<SHAPE_POLY_SET>();
+    outline->AddOutline( KIGEOM::BoxToLineChain( BOX2I( aOrigin, aSize ) ) );
 
     zone->SetOutline( outline.release() );
 
@@ -59,7 +60,7 @@ static std::unique_ptr<ZONE> CreateSquareZone( BOARD_ITEM_CONTAINER& aParent, BO
 /**
  * Create a similar zone (same outline) on a different layer
  */
-static std::unique_ptr<ZONE> CreateSimilarZone( BOARD_ITEM_CONTAINER& aParent, const ZONE& aOther, PCB_LAYER_ID aLayer )
+static std::unique_ptr<ZONE> CreateSimilarZone( BOARD_ITEM_CONTAINER& aParent, PCB_LAYER_ID aLayer, const ZONE& aOther )
 {
     auto zone = std::make_unique<ZONE>( &aParent );
     zone->SetLayer( aLayer );
@@ -218,8 +219,8 @@ BOOST_AUTO_TEST_CASE( ZoneMergeNonNullNoMerge )
 {
     std::vector<std::unique_ptr<ZONE>> zones;
 
-    zones.emplace_back( CreateSquareZone( m_board, BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ), F_Cu ) );
-    zones.emplace_back( CreateSquareZone( m_board, BOX2I( VECTOR2I( 200, 200 ), VECTOR2I( 300, 300 ) ), B_Cu ) );
+    zones.emplace_back( CreateSquareZone( m_board, F_Cu, VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) );
+    zones.emplace_back( CreateSquareZone( m_board, B_Cu, VECTOR2I( 200, 200 ), VECTOR2I( 300, 300 ) ) );
 
     std::vector<std::unique_ptr<ZONE>> merged = MergeZonesWithSameOutline( std::move( zones ) );
 
@@ -232,8 +233,8 @@ BOOST_AUTO_TEST_CASE( ZoneMergeNonNullMerge )
 {
     std::vector<std::unique_ptr<ZONE>> zones;
 
-    zones.emplace_back( CreateSquareZone( m_board, BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ), F_Cu ) );
-    zones.emplace_back( CreateSimilarZone( m_board, *zones.back(), B_Cu ) );
+    zones.emplace_back( CreateSquareZone( m_board, F_Cu, VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) );
+    zones.emplace_back( CreateSimilarZone( m_board, B_Cu, *zones.back() ) );
 
     std::vector<std::unique_ptr<ZONE>> merged = MergeZonesWithSameOutline( std::move( zones ) );
 
@@ -249,8 +250,8 @@ BOOST_AUTO_TEST_CASE( ZoneMergeMergeSameGeomDifferentOrder )
 {
     std::vector<std::unique_ptr<ZONE>> zones;
 
-    zones.emplace_back( CreateSquareZone( m_board, BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ), F_Cu ) );
-    zones.emplace_back( CreateSimilarZone( m_board, *zones.back(), B_Cu ) );
+    zones.emplace_back( CreateSquareZone( m_board, F_Cu, VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ) );
+    zones.emplace_back( CreateSimilarZone( m_board, B_Cu, *zones.back() ) );
 
     // Reverse the outline of one of them
     // Don't go overboard here - detailed tests of CompareGeometry
@@ -272,6 +273,7 @@ static PCB_VIA* AddVia( BOARD& aBoard, const VECTOR2I& aPos, int aNetCode,
                         PCB_LAYER_ID aTopLayer = F_Cu, PCB_LAYER_ID aBotLayer = B_Cu )
 {
     PCB_VIA* via = new PCB_VIA( &aBoard );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetPosition( aPos );
     via->SetLayerPair( aTopLayer, aBotLayer );
     via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.6 ) );
@@ -282,17 +284,16 @@ static PCB_VIA* AddVia( BOARD& aBoard, const VECTOR2I& aPos, int aNetCode,
 }
 
 
-static PAD* AddPadToBoard( BOARD& aBoard, const VECTOR2I& aPos, int aNetCode,
-                           PCB_LAYER_ID aLayer = F_Cu )
+static PAD* AddPadToBoard( BOARD& aBoard, const VECTOR2I& aPos, int aNetCode, PCB_LAYER_ID aLayer = F_Cu )
 {
     FOOTPRINT* fp = new FOOTPRINT( &aBoard );
     fp->SetPosition( aPos );
     aBoard.Add( fp );
 
     PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetPosition( aPos );
-    pad->SetSize( PADSTACK::ALL_LAYERS,
-                  VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetLayerSet( LSET( { aLayer } ) );
     pad->SetNetCode( aNetCode );
@@ -308,17 +309,15 @@ BOOST_AUTO_TEST_CASE( AutoPriority_NonOverlapping )
     NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
     m_board.Add( netB );
 
-    auto zoneA = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneA = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
     zoneA->SetNetCode( netA->GetNetCode() );
     zoneA->SetAssignedPriority( 5 );
 
-    auto zoneB = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneB = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
     zoneB->SetNetCode( netB->GetNetCode() );
     zoneB->SetAssignedPriority( 10 );
 
@@ -340,16 +339,14 @@ BOOST_AUTO_TEST_CASE( AutoPriority_ItemCountWins )
     NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
     m_board.Add( netB );
 
-    auto zoneA = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneA = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) );
     zoneA->SetNetCode( netA->GetNetCode() );
 
-    auto zoneB = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
-                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneB = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
     zoneB->SetNetCode( netB->GetNetCode() );
 
     ZONE* ptrA = zoneA.get();
@@ -358,15 +355,9 @@ BOOST_AUTO_TEST_CASE( AutoPriority_ItemCountWins )
     m_board.Add( zoneB.release() );
 
     for( int i = 0; i < 5; i++ )
-    {
-        AddVia( m_board,
-                VECTOR2I( pcbIUScale.mmToIU( 7 + i ), pcbIUScale.mmToIU( 10 ) ),
-                netA->GetNetCode() );
-    }
+        AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 7 + i ), pcbIUScale.mmToIU( 10 ) ), netA->GetNetCode() );
 
-    AddVia( m_board,
-            VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 7 ) ),
-            netB->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 7 ) ), netB->GetNetCode() );
 
     AutoAssignZonePriorities( &m_board );
 
@@ -381,16 +372,14 @@ BOOST_AUTO_TEST_CASE( AutoPriority_SimilarCountsSmallerWins )
     NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
     m_board.Add( netB );
 
-    auto zoneA = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 30 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneA = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 30 ) ) );
     zoneA->SetNetCode( netA->GetNetCode() );
 
-    auto zoneB = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
-                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneB = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
     zoneB->SetNetCode( netB->GetNetCode() );
 
     ZONE* ptrA = zoneA.get();
@@ -398,14 +387,10 @@ BOOST_AUTO_TEST_CASE( AutoPriority_SimilarCountsSmallerWins )
     m_board.Add( zoneA.release() );
     m_board.Add( zoneB.release() );
 
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ),
-            netA->GetNetCode() );
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 8 ) ),
-            netA->GetNetCode() );
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 12 ) ),
-            netB->GetNetCode() );
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ),
-            netB->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ), netA->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 8 ) ), netA->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 12 ) ), netB->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ), netB->GetNetCode() );
 
     AutoAssignZonePriorities( &m_board );
 
@@ -422,17 +407,15 @@ BOOST_AUTO_TEST_CASE( AutoPriority_MultiLayerAggregate )
     NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
     m_board.Add( netB );
 
-    auto zoneA = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneA = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) );
     zoneA->SetLayerSet( LSET( { F_Cu, B_Cu } ) );
     zoneA->SetNetCode( netA->GetNetCode() );
 
-    auto zoneB = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
-                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneB = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
     zoneB->SetLayerSet( LSET( { F_Cu, B_Cu } ) );
     zoneB->SetNetCode( netB->GetNetCode() );
 
@@ -441,17 +424,12 @@ BOOST_AUTO_TEST_CASE( AutoPriority_MultiLayerAggregate )
     m_board.Add( zoneA.release() );
     m_board.Add( zoneB.release() );
 
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ),
-            netA->GetNetCode(), F_Cu, B_Cu );
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 8 ) ),
-            netA->GetNetCode(), F_Cu, B_Cu );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ), netA->GetNetCode(), F_Cu, B_Cu );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 8 ) ), netA->GetNetCode(), F_Cu, B_Cu );
 
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 12 ) ),
-            netB->GetNetCode(), F_Cu, B_Cu );
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ),
-            netB->GetNetCode(), F_Cu, B_Cu );
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ),
-            netB->GetNetCode(), F_Cu, B_Cu );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 12 ) ), netB->GetNetCode(), F_Cu, B_Cu );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ), netB->GetNetCode(), F_Cu, B_Cu );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ), netB->GetNetCode(), F_Cu, B_Cu );
 
     AutoAssignZonePriorities( &m_board );
 
@@ -464,16 +442,14 @@ BOOST_AUTO_TEST_CASE( AutoPriority_SameNetEqualPriority )
     NETINFO_ITEM* net = new NETINFO_ITEM( &m_board, wxT( "SharedNet" ) );
     m_board.Add( net );
 
-    auto zoneA = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 30 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneA = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 30 ) ) );
     zoneA->SetNetCode( net->GetNetCode() );
 
-    auto zoneB = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
-                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneB = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
     zoneB->SetNetCode( net->GetNetCode() );
 
     ZONE* ptrA = zoneA.get();
@@ -481,10 +457,8 @@ BOOST_AUTO_TEST_CASE( AutoPriority_SameNetEqualPriority )
     m_board.Add( zoneA.release() );
     m_board.Add( zoneB.release() );
 
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ),
-            net->GetNetCode() );
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ),
-            net->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ), net->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ), net->GetNetCode() );
 
     AutoAssignZonePriorities( &m_board );
 
@@ -501,17 +475,15 @@ BOOST_AUTO_TEST_CASE( AutoPriority_EqualAreaNoChange )
     m_board.Add( netB );
 
     // Two identical-sized overlapping zones with no items in the overlap
-    auto zoneA = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneA = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) );
     zoneA->SetNetCode( netA->GetNetCode() );
     zoneA->SetAssignedPriority( 50 );
 
-    auto zoneB = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneB = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) );
     zoneB->SetNetCode( netB->GetNetCode() );
     zoneB->SetAssignedPriority( 50 );
 
@@ -539,22 +511,19 @@ BOOST_AUTO_TEST_CASE( AutoPriority_SameNetGroupInheritsEdge )
     // Large GND zone (A) overlaps with small VCC zone (C).
     // Small GND zone (B) overlaps with A but NOT with C.
     // A should beat C (more items), and B should inherit A's priority.
-    auto zoneA = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneA = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ) );
     zoneA->SetNetCode( netGND->GetNetCode() );
 
-    auto zoneB = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 25 ), pcbIUScale.mmToIU( 25 ) ),
-                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneB = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( pcbIUScale.mmToIU( 25 ), pcbIUScale.mmToIU( 25 ) ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
     zoneB->SetNetCode( netGND->GetNetCode() );
 
-    auto zoneC = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
-                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zoneC = CreateSquareZone( m_board, F_Cu,
+                                                    VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
     zoneC->SetNetCode( netVCC->GetNetCode() );
 
     ZONE* ptrA = zoneA.get();
@@ -566,14 +535,9 @@ BOOST_AUTO_TEST_CASE( AutoPriority_SameNetGroupInheritsEdge )
 
     // GND items in the A/C overlap region
     for( int i = 0; i < 4; i++ )
-    {
-        AddVia( m_board,
-                VECTOR2I( pcbIUScale.mmToIU( 8 + i * 2 ), pcbIUScale.mmToIU( 10 ) ),
-                netGND->GetNetCode() );
-    }
+        AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 + i * 2 ), pcbIUScale.mmToIU( 10 ) ), netGND->GetNetCode() );
 
-    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 8 ) ),
-            netVCC->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 8 ) ), netVCC->GetNetCode() );
 
     AutoAssignZonePriorities( &m_board );
 
@@ -628,10 +592,9 @@ BOOST_AUTO_TEST_CASE( RuleAreaCoverageAreaNotZero )
     GENERAL_COLLECTOR     collector;
     collector.SetGuide( &guide );
 
-    auto ruleArea = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> ruleArea = CreateSquareZone( m_board, F_Cu,
+                                                       VECTOR2I( 0, 0 ),
+                                                       VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) );
     ruleArea->SetIsRuleArea( true );
 
     double zoneArea = FOOTPRINT::GetCoverageArea( ruleArea.get(), collector );
@@ -644,8 +607,7 @@ BOOST_AUTO_TEST_CASE( RuleAreaCoverageAreaNotZero )
 
     // A small pad enclosed by the rule area must read as much smaller, so the disambiguation
     // heuristic in GuessSelectionCandidates() will prefer it over the enclosing rule area.
-    PAD* pad = AddPadToBoard( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ),
-                              0, F_Cu );
+    PAD* pad = AddPadToBoard( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ), 0, F_Cu );
 
     double padArea = FOOTPRINT::GetCoverageArea( pad, collector );
 
@@ -664,16 +626,14 @@ BOOST_AUTO_TEST_CASE( FilledZoneCoverageUsesFilledPolygons )
     GENERAL_COLLECTOR     collector;
     collector.SetGuide( &guide );
 
-    auto zone = CreateSquareZone( m_board,
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
-            F_Cu );
+    std::unique_ptr<ZONE> zone = CreateSquareZone( m_board, F_Cu,
+                                                   VECTOR2I( 0, 0 ),
+                                                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) );
 
     // Fill only a small 2 mm x 2 mm island, far smaller than the 20 mm x 20 mm outline.
     SHAPE_POLY_SET fill;
-    fill.AddOutline( KIGEOM::BoxToLineChain(
-            BOX2I( VECTOR2I( 0, 0 ),
-                   VECTOR2I( pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 2 ) ) ) ) );
+    fill.AddOutline( KIGEOM::BoxToLineChain( BOX2I( VECTOR2I( 0, 0 ),
+                                                    VECTOR2I( pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 2 ) ) ) ) );
     zone->SetFilledPolysList( F_Cu, fill );
 
     double expected = (double) pcbIUScale.mmToIU( 2 ) * pcbIUScale.mmToIU( 2 );

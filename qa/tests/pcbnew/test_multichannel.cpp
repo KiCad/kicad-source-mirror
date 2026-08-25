@@ -1126,32 +1126,35 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchBoundarySignalNetNotExcluded, MULTICHANNEL_TES
     LIB_ID ledId( wxT( "TestLib" ), wxT( "WS2812" ) );
 
     // Four-pad addressable LED: pad 1 = DOUT, pad 2 = GND, pad 3 = DIN, pad 4 = VCC.
-    auto makeLed = [&]( const wxString& aRef, int aDout, int aDin ) -> FOOTPRINT*
-    {
-        FOOTPRINT* fp = new FOOTPRINT( board.get() );
-        fp->SetFPID( ledId );
-        fp->SetReference( aRef );
-        board->Add( fp );
+    auto makeLed =
+            [&]( const wxString& aRef, int aDout, int aDin ) -> FOOTPRINT*
+            {
+                FOOTPRINT* fp = new FOOTPRINT( board.get() );
+                fp->SetFPID( ledId );
+                fp->SetReference( aRef );
+                board->Add( fp );
 
-        auto addPad = [&]( const wxString& aNumber, int aNetCode )
-        {
-            PAD* pad = new PAD( fp );
-            pad->SetNumber( aNumber );
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-            pad->SetSize( PADSTACK::ALL_LAYERS,
-                          VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-            pad->SetLayerSet( LSET( { F_Cu } ) );
-            pad->SetNetCode( aNetCode );
-            fp->Add( pad );
-        };
+                auto addPad =
+                        [&]( const wxString& aNumber, int aNetCode )
+                        {
+                            PAD* pad = new PAD( fp );
+                            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                            pad->SetNumber( aNumber );
+                            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ),
+                                                                          pcbIUScale.mmToIU( 1 ) ) );
+                            pad->SetLayerSet( LSET( { F_Cu } ) );
+                            pad->SetNetCode( aNetCode );
+                            fp->Add( pad );
+                        };
 
-        addPad( wxT( "1" ), aDout );
-        addPad( wxT( "2" ), netGnd );
-        addPad( wxT( "3" ), aDin );
-        addPad( wxT( "4" ), netVcc );
+                addPad( wxT( "1" ), aDout );
+                addPad( wxT( "2" ), netGnd );
+                addPad( wxT( "3" ), aDin );
+                addPad( wxT( "4" ), netVcc );
 
-        return fp;
-    };
+                return fp;
+            };
 
     // Reference area (design block source instance): three LEDs share the DIN rail; only the
     // representative LED drives the chain output (the bridge net), the other two are unconnected.
@@ -1588,33 +1591,35 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutMatchesBySymbolPathWhenTopologyDi
     NETINFO_ITEM* shared = new NETINFO_ITEM( m_board.get(), wxT( "Net-(J1-Pin_1)" ) );
     m_board->Add( shared );
 
-    auto makeFootprint = [&]( const wxString& aRef, const VECTOR2I& aPos, const KIID& aSymbolUuid,
-                              NETINFO_ITEM* aNet ) -> FOOTPRINT*
-    {
-        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
-        fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "Receptacle" ) ) );
-        fp->SetReference( aRef );
-        fp->SetPosition( aPos );
+    auto makeFootprint =
+            [&]( const wxString& aRef, const VECTOR2I& aPos, const KIID& aSymbolUuid,
+                 NETINFO_ITEM* aNet ) -> FOOTPRINT*
+            {
+                FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+                fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "Receptacle" ) ) );
+                fp->SetReference( aRef );
+                fp->SetPosition( aPos );
 
-        // Symbol instance UUID, the link between a block footprint and its placed instance
-        KIID_PATH path;
-        path.push_back( aSymbolUuid );
-        fp->SetPath( path );
+                // Symbol instance UUID, the link between a block footprint and its placed instance
+                KIID_PATH path;
+                path.push_back( aSymbolUuid );
+                fp->SetPath( path );
 
-        PAD* pad = new PAD( fp );
-        pad->SetNumber( wxT( "1" ) );
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetPosition( aPos );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-        pad->SetLayerSet( LSET( { F_Cu } ) );
+                PAD* pad = new PAD( fp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                pad->SetNumber( wxT( "1" ) );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetPosition( aPos );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
 
-        if( aNet )
-            pad->SetNet( aNet );
+                if( aNet )
+                    pad->SetNet( aNet );
 
-        fp->Add( pad );
-        m_board->Add( fp );
-        return fp;
-    };
+                fp->Add( pad );
+                m_board->Add( fp );
+                return fp;
+            };
 
     KIID symA, symB;
 
@@ -1623,10 +1628,10 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutMatchesBySymbolPathWhenTopologyDi
     FOOTPRINT* refFpB = makeFootprint( wxT( "J6" ), VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ), symB, nullptr );
 
     // Board instance: same symbol instances, but a board wire ties both pads onto one net
-    FOOTPRINT* destFpA =
-            makeFootprint( wxT( "J1" ), VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ), symA, shared );
-    FOOTPRINT* destFpB =
-            makeFootprint( wxT( "J2" ), VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 80 ) ), symB, shared );
+    FOOTPRINT* destFpA = makeFootprint( wxT( "J1" ), VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ),
+                                        symA, shared );
+    FOOTPRINT* destFpB = makeFootprint( wxT( "J2" ), VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 80 ) ),
+                                        symB, shared );
 
     // Precondition: topology matching fails, so the symbol path fallback is what rescues the apply
     {
@@ -2706,12 +2711,13 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchCollidingAutoNetName, MULTICHANNEL_TEST_FIXTUR
 
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
 
-    auto addNet = [&]( const wxString& aName ) -> int
-    {
-        NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), aName );
-        board->Add( net );
-        return net->GetNetCode();
-    };
+    auto addNet =
+            [&]( const wxString& aName ) -> int
+            {
+                NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), aName );
+                board->Add( net );
+                return net->GetNetCode();
+            };
 
     const int netGnd = addNet( wxT( "GND" ) );
     const int netP3V3 = addNet( wxT( "+3V3" ) );
@@ -2723,40 +2729,44 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchCollidingAutoNetName, MULTICHANNEL_TEST_FIXTUR
     LIB_ID ledBId( wxT( "TestLib" ), wxT( "LED_B" ) );
     LIB_ID resId( wxT( "TestLib" ), wxT( "R" ) );
 
-    auto addPad = [&]( FOOTPRINT* fp, const wxString& aNum, int aNet )
-    {
-        PAD* pad = new PAD( fp );
-        pad->SetNumber( aNum );
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-        pad->SetLayerSet( LSET( { F_Cu } ) );
-        pad->SetNetCode( aNet );
-        fp->Add( pad );
-    };
+    auto addPad =
+            [&]( FOOTPRINT* fp, const wxString& aNum, int aNet )
+            {
+                PAD* pad = new PAD( fp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                pad->SetNumber( aNum );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
+                pad->SetNetCode( aNet );
+                fp->Add( pad );
+            };
 
-    auto addFp = [&]( const LIB_ID& aId, const wxString& aRef ) -> FOOTPRINT*
-    {
-        FOOTPRINT* fp = new FOOTPRINT( board.get() );
-        fp->SetFPID( aId );
-        fp->SetReference( aRef );
-        board->Add( fp );
-        return fp;
-    };
+    auto addFp =
+            [&]( const LIB_ID& aId, const wxString& aRef ) -> FOOTPRINT*
+            {
+                FOOTPRINT* fp = new FOOTPRINT( board.get() );
+                fp->SetFPID( aId );
+                fp->SetReference( aRef );
+                board->Add( fp );
+                return fp;
+            };
 
     // One LED plus its series resistor. The LED anode net is the one that can clash.
-    auto addLedAndRes = [&]( const LIB_ID& aLedId, const wxString& aLedRef, const wxString& aResRef, int aAnodeNet,
-                             std::set<FOOTPRINT*>& aSet )
-    {
-        FOOTPRINT* led = addFp( aLedId, aLedRef );
-        addPad( led, wxT( "1" ), netGnd );
-        addPad( led, wxT( "2" ), aAnodeNet );
-        aSet.insert( led );
+    auto addLedAndRes =
+            [&]( const LIB_ID& aLedId, const wxString& aLedRef, const wxString& aResRef, int aAnodeNet,
+                 std::set<FOOTPRINT*>& aSet )
+            {
+                FOOTPRINT* led = addFp( aLedId, aLedRef );
+                addPad( led, wxT( "1" ), netGnd );
+                addPad( led, wxT( "2" ), aAnodeNet );
+                aSet.insert( led );
 
-        FOOTPRINT* res = addFp( resId, aResRef );
-        addPad( res, wxT( "1" ), aAnodeNet );
-        addPad( res, wxT( "2" ), netP3V3 );
-        aSet.insert( res );
-    };
+                FOOTPRINT* res = addFp( resId, aResRef );
+                addPad( res, wxT( "1" ), aAnodeNet );
+                addPad( res, wxT( "2" ), netP3V3 );
+                aSet.insert( res );
+            };
 
     // The block: LED_A is D3 on the clashing net, LED_B is D4 on its own net.
     std::set<FOOTPRINT*> refFps;
@@ -2788,8 +2798,7 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchCollidingAutoNetName, MULTICHANNEL_TEST_FIXTUR
         }
     }
 
-    BOOST_CHECK_MESSAGE( status, "Topology match failed even after isolating the block's auto nets "
-                                 "(issue 24767)" );
+    BOOST_CHECK_MESSAGE( status, "Topology match failed even after isolating the block's auto nets (issue 24767)" );
     BOOST_CHECK_EQUAL( result.size(), refFps.size() );
 }
 
@@ -2808,34 +2817,36 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchTieBreaksIdenticalPartsByValue, MULTICHANNEL_T
     const LIB_ID receptacleId( wxT( "Don-Con" ), wxT( "Mill-Max-Pin_Receptacle" ) );
 
     // Unique net per footprint, so the four are a topological tie and only the value differs.
-    auto makeReceptacle = [&]( const wxString& aRef, const wxString& aValue, bool aWithSymbolPath ) -> FOOTPRINT*
-    {
-        FOOTPRINT* fp = new FOOTPRINT( board.get() );
-        fp->SetFPID( receptacleId );
-        fp->SetReference( aRef );
-        fp->SetValue( aValue );
+    auto makeReceptacle =
+            [&]( const wxString& aRef, const wxString& aValue, bool aWithSymbolPath ) -> FOOTPRINT*
+            {
+                FOOTPRINT* fp = new FOOTPRINT( board.get() );
+                fp->SetFPID( receptacleId );
+                fp->SetReference( aRef );
+                fp->SetValue( aValue );
 
-        if( aWithSymbolPath )
-        {
-            KIID_PATH path;
-            path.push_back( KIID() );
-            fp->SetPath( path );
-        }
+                if( aWithSymbolPath )
+                {
+                    KIID_PATH path;
+                    path.push_back( KIID() );
+                    fp->SetPath( path );
+                }
 
-        NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), wxString::Format( "net_%s", aRef ) );
-        board->Add( net );
+                NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), wxString::Format( "net_%s", aRef ) );
+                board->Add( net );
 
-        PAD* pad = new PAD( fp );
-        pad->SetNumber( wxT( "1" ) );
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-        pad->SetLayerSet( LSET( { F_Cu } ) );
-        pad->SetNet( net );
-        fp->Add( pad );
+                PAD* pad = new PAD( fp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                pad->SetNumber( wxT( "1" ) );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
+                pad->SetNet( net );
+                fp->Add( pad );
 
-        board->Add( fp );
-        return fp;
-    };
+                board->Add( fp );
+                return fp;
+            };
 
     // Block source: no symbol path (as after AppendBoard). Fixed order keeps the test deterministic.
     FOOTPRINT* refNC0 = makeReceptacle( wxT( "J3" ), wxT( "NC_0" ), false );
@@ -2890,48 +2901,52 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutUnmirrorsIdenticalReceptacles, MU
     m_board = std::make_unique<BOARD>();
     m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
 
-    auto makeReceptacle = [&]( const wxString& aRef, const wxString& aValue, const VECTOR2I& aPos,
-                               bool aWithSymbolPath ) -> FOOTPRINT*
-    {
-        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
-        fp->SetFPID( LIB_ID( wxT( "Don-Con" ), wxT( "Mill-Max-Pin_Receptacle" ) ) );
-        fp->SetReference( aRef );
-        fp->SetValue( aValue );
-        fp->SetPosition( aPos );
+    auto makeReceptacle =
+            [&]( const wxString& aRef, const wxString& aValue, const VECTOR2I& aPos,
+                 bool aWithSymbolPath ) -> FOOTPRINT*
+            {
+                FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+                fp->SetFPID( LIB_ID( wxT( "Don-Con" ), wxT( "Mill-Max-Pin_Receptacle" ) ) );
+                fp->SetReference( aRef );
+                fp->SetValue( aValue );
+                fp->SetPosition( aPos );
 
-        if( aWithSymbolPath )
-        {
-            KIID_PATH path;
-            path.push_back( KIID() );
-            fp->SetPath( path );
-        }
+                if( aWithSymbolPath )
+                {
+                    KIID_PATH path;
+                    path.push_back( KIID() );
+                    fp->SetPath( path );
+                }
 
-        NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxString::Format( "net_%s", aRef ) );
-        m_board->Add( net );
+                NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxString::Format( "net_%s", aRef ) );
+                m_board->Add( net );
 
-        PAD* pad = new PAD( fp );
-        pad->SetNumber( wxT( "1" ) );
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-        pad->SetLayerSet( LSET( { F_Cu } ) );
-        pad->SetNet( net );
-        pad->SetPosition( aPos );
-        fp->Add( pad );
+                PAD* pad = new PAD( fp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                pad->SetNumber( wxT( "1" ) );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
+                pad->SetNet( net );
+                pad->SetPosition( aPos );
+                fp->Add( pad );
 
-        m_board->Add( fp );
-        return fp;
-    };
+                m_board->Add( fp );
+                return fp;
+            };
 
-    auto mm = []( double a, double b )
-    {
-        return VECTOR2I( pcbIUScale.mmToIU( a ), pcbIUScale.mmToIU( b ) );
-    };
+    auto mm =
+            []( double a, double b )
+            {
+                return VECTOR2I( pcbIUScale.mmToIU( a ), pcbIUScale.mmToIU( b ) );
+            };
 
     // Signed area of NC_0, NC_1, NO_0. Same sign as the block is correct, opposite sign is a mirror.
-    auto chirality = []( const VECTOR2I& aNC0, const VECTOR2I& aNC1, const VECTOR2I& aNO0 ) -> double
-    {
-        return (double) ( aNC1.x - aNC0.x ) * ( aNO0.y - aNC0.y ) - (double) ( aNC1.y - aNC0.y ) * ( aNO0.x - aNC0.x );
-    };
+    auto chirality =
+            []( const VECTOR2I& aNC0, const VECTOR2I& aNC1, const VECTOR2I& aNO0 ) -> double
+            {
+                return (double) ( aNC1.x - aNC0.x ) * ( aNO0.y - aNC0.y ) - (double) ( aNC1.y - aNC0.y ) * ( aNO0.x - aNC0.x );
+            };
 
     // Block source: the reference arrangement, no symbol path (as after AppendBoard).
     FOOTPRINT* srcNC0 = makeReceptacle( wxT( "J3" ), wxT( "NC_0" ), mm( 0, 0 ), false );
@@ -3005,8 +3020,8 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutUnmirrorsIdenticalReceptacles, MU
 
     const double dstChir = chirality( dstNC0->GetPosition(), dstNC1->GetPosition(), dstNO0->GetPosition() );
 
-    BOOST_TEST_MESSAGE(
-            wxString::Format( "block chirality %.0f, destination chirality after apply %.0f", srcChir, dstChir ) );
+    BOOST_TEST_MESSAGE( wxString::Format( wxT( "block chirality %.0f, destination chirality after apply %.0f" ),
+                                          srcChir, dstChir ) );
 
     BOOST_CHECK_MESSAGE( srcChir * dstChir > 0.0, "Applied layout left the receptacles mirrored (NC/NO swapped)" );
 }
@@ -3023,12 +3038,13 @@ BOOST_FIXTURE_TEST_CASE( CheckRACompatGlobalRailAcrossChannels, MULTICHANNEL_TES
     m_board = std::make_unique<BOARD>();
     m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
 
-    auto addNet = [&]( const wxString& aName ) -> int
-    {
-        NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), aName );
-        m_board->Add( net );
-        return net->GetNetCode();
-    };
+    auto addNet =
+            [&]( const wxString& aName ) -> int
+            {
+                NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), aName );
+                m_board->Add( net );
+                return net->GetNetCode();
+            };
 
     const int netGnd = addNet( wxT( "GND" ) );
     const int netVcc = addNet( wxT( "+3V3" ) );
@@ -3038,42 +3054,45 @@ BOOST_FIXTURE_TEST_CASE( CheckRACompatGlobalRailAcrossChannels, MULTICHANNEL_TES
 
     // Each channel is an IC (OUT + GND) and a config resistor strapped to a rail: GND in channels
     // 1 and 2, +3V3 in channel 3.  That strap difference is intentional and must not defeat the match.
-    auto makeChannel = [&]( int aIdx, int aStrapNet ) -> ZONE*
-    {
-        const int netOut = addNet( wxString::Format( wxT( "Net-(U%d-OUT)" ), aIdx ) );
-        const int netCfg = addNet( wxString::Format( wxT( "Net-(U%d-CFG)" ), aIdx ) );
+    auto makeChannel =
+            [&]( int aIdx, int aStrapNet ) -> ZONE*
+            {
+                const int netOut = addNet( wxString::Format( wxT( "Net-(U%d-OUT)" ), aIdx ) );
+                const int netCfg = addNet( wxString::Format( wxT( "Net-(U%d-CFG)" ), aIdx ) );
 
-        auto addPad = [&]( FOOTPRINT* aFp, const wxString& aNumber, int aNetCode )
-        {
-            PAD* pad = new PAD( aFp );
-            pad->SetNumber( aNumber );
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-            pad->SetSize( PADSTACK::ALL_LAYERS,
-                          VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-            pad->SetLayerSet( LSET( { F_Cu } ) );
-            pad->SetNetCode( aNetCode );
-            aFp->Add( pad );
-        };
+                auto addPad =
+                        [&]( FOOTPRINT* aFp, const wxString& aNumber, int aNetCode )
+                        {
+                            PAD* pad = new PAD( aFp );
+                            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                            pad->SetNumber( aNumber );
+                            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ),
+                                                                          pcbIUScale.mmToIU( 1 ) ) );
+                            pad->SetLayerSet( LSET( { F_Cu } ) );
+                            pad->SetNetCode( aNetCode );
+                            aFp->Add( pad );
+                        };
 
-        FOOTPRINT* ic = new FOOTPRINT( m_board.get() );
-        ic->SetFPID( icId );
-        ic->SetReference( wxString::Format( wxT( "U%d" ), aIdx ) );
-        m_board->Add( ic );
-        addPad( ic, wxT( "1" ), netOut );
-        addPad( ic, wxT( "2" ), netGnd );
+                FOOTPRINT* ic = new FOOTPRINT( m_board.get() );
+                ic->SetFPID( icId );
+                ic->SetReference( wxString::Format( wxT( "U%d" ), aIdx ) );
+                m_board->Add( ic );
+                addPad( ic, wxT( "1" ), netOut );
+                addPad( ic, wxT( "2" ), netGnd );
 
-        FOOTPRINT* r = new FOOTPRINT( m_board.get() );
-        r->SetFPID( rId );
-        r->SetReference( wxString::Format( wxT( "R%d" ), aIdx ) );
-        m_board->Add( r );
-        addPad( r, wxT( "1" ), netCfg );
-        addPad( r, wxT( "2" ), aStrapNet );
+                FOOTPRINT* r = new FOOTPRINT( m_board.get() );
+                r->SetFPID( rId );
+                r->SetReference( wxString::Format( wxT( "R%d" ), aIdx ) );
+                m_board->Add( r );
+                addPad( r, wxT( "1" ), netCfg );
+                addPad( r, wxT( "2" ), aStrapNet );
 
-        ZONE* zone = new ZONE( m_board.get() );
-        m_board->Add( zone );
+                ZONE* zone = new ZONE( m_board.get() );
+                m_board->Add( zone );
 
-        return zone;
-    };
+                return zone;
+            };
 
     std::vector<std::pair<int, int>> channelStraps = { { 1, netGnd }, { 2, netGnd }, { 3, netVcc } };
     std::vector<ZONE*>               zones;
@@ -3140,37 +3159,41 @@ BOOST_FIXTURE_TEST_CASE( CheckRACompatOverlappingAreaKeepsLocalNet, MULTICHANNEL
     m_board = std::make_unique<BOARD>();
     m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
 
-    auto addNet = [&]( const wxString& aName ) -> int
-    {
-        NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), aName );
-        m_board->Add( net );
-        return net->GetNetCode();
-    };
+    auto addNet =
+            [&]( const wxString& aName ) -> int
+            {
+                NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), aName );
+                m_board->Add( net );
+                return net->GetNetCode();
+            };
 
     const int netGnd = addNet( wxT( "GND" ) );
 
     const LIB_ID icId( wxT( "TestLib" ), wxT( "SOT-23-6" ) );
     const LIB_ID rId( wxT( "TestLib" ), wxT( "R_0402" ) );
 
-    auto addPad = [&]( FOOTPRINT* aFp, const wxString& aNumber, int aNetCode )
-    {
-        PAD* pad = new PAD( aFp );
-        pad->SetNumber( aNumber );
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-        pad->SetLayerSet( LSET( { F_Cu } ) );
-        pad->SetNetCode( aNetCode );
-        aFp->Add( pad );
-    };
+    auto addPad =
+            [&]( FOOTPRINT* aFp, const wxString& aNumber, int aNetCode )
+            {
+                PAD* pad = new PAD( aFp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                pad->SetNumber( aNumber );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
+                pad->SetNetCode( aNetCode );
+                aFp->Add( pad );
+            };
 
-    auto makeFp = [&]( const LIB_ID& aFpId, const wxString& aRef ) -> FOOTPRINT*
-    {
-        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
-        fp->SetFPID( aFpId );
-        fp->SetReference( aRef );
-        m_board->Add( fp );
-        return fp;
-    };
+    auto makeFp =
+            [&]( const LIB_ID& aFpId, const wxString& aRef ) -> FOOTPRINT*
+            {
+                FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+                fp->SetFPID( aFpId );
+                fp->SetReference( aRef );
+                m_board->Add( fp );
+                return fp;
+            };
 
     // Channel 1: U1 pad 1 and R1 pad 1 share a per-channel net, giving that net two internal pads.
     const int netLocal1 = addNet( wxT( "Net-(U1-SIG)" ) );
@@ -3339,7 +3362,9 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutSheetCopiesMeandersWhole, MULTICHANNEL_TEST
     {
         if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME
             && ( ra.m_sheetPath == wxT( "/FirstChannel/" ) || ra.m_sheetPath == wxT( "/SecondChannel/" ) ) )
+        {
             ra.m_generateEnabled = true;
+        }
     }
 
     TOOL_EVENT dummy;
@@ -3413,7 +3438,9 @@ BOOST_FIXTURE_TEST_CASE( SheetRuleAreaOutlineCoversMeanders, MULTICHANNEL_TEST_F
     {
         if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME
             && ( ra.m_sheetPath == wxT( "/FirstChannel/" ) || ra.m_sheetPath == wxT( "/SecondChannel/" ) ) )
+        {
             ra.m_generateEnabled = true;
+            }
     }
 
     TOOL_EVENT dummy;
@@ -3473,7 +3500,9 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutSheetCopiesBlockZones, MULTICHANNEL_TEST_FI
     {
         if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME
             && ( ra.m_sheetPath == wxT( "/FirstChannel/" ) || ra.m_sheetPath == wxT( "/SecondChannel/" ) ) )
+        {
             ra.m_generateEnabled = true;
+        }
     }
 
     TOOL_EVENT dummy;
@@ -3569,26 +3598,28 @@ BOOST_FIXTURE_TEST_CASE( GenerateSheetRAIncludesLooseInterBlockRouting, MULTICHA
 
     board->Add( new NETINFO_ITEM( board, wxT( "N1" ), 1 ) );
 
-    auto addFootprint = [&]( const wxString& aRef, const VECTOR2I& aPos )
-    {
-        FOOTPRINT* fp = new FOOTPRINT( board );
-        fp->SetReference( aRef );
-        fp->SetFPID( LIB_ID( wxT( "lib" ), wxT( "R_0402" ) ) );
-        fp->SetSheetname( wxT( "/ChannelA/" ) );
-        fp->SetSheetfile( wxT( "channelA.kicad_sch" ) );
+    auto addFootprint =
+            [&]( const wxString& aRef, const VECTOR2I& aPos )
+            {
+                FOOTPRINT* fp = new FOOTPRINT( board );
+                fp->SetReference( aRef );
+                fp->SetFPID( LIB_ID( wxT( "lib" ), wxT( "R_0402" ) ) );
+                fp->SetSheetname( wxT( "/ChannelA/" ) );
+                fp->SetSheetfile( wxT( "channelA.kicad_sch" ) );
 
-        PAD* pad = new PAD( fp );
-        pad->SetNumber( wxT( "1" ) );
-        pad->SetAttribute( PAD_ATTRIB::SMD );
-        pad->SetLayerSet( LSET( { F_Cu } ) );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
-        fp->Add( pad );
+                PAD* pad = new PAD( fp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                pad->SetNumber( wxT( "1" ) );
+                pad->SetAttribute( PAD_ATTRIB::SMD );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+                fp->Add( pad );
 
-        fp->SetPosition( aPos );
-        board->Add( fp );
+                fp->SetPosition( aPos );
+                board->Add( fp );
 
-        pad->SetNetCode( 1 );
-    };
+                pad->SetNetCode( 1 );
+            };
 
     addFootprint( wxT( "R1" ), VECTOR2I( 0, 0 ) );
     addFootprint( wxT( "R2" ), VECTOR2I( pcbIUScale.mmToIU( 10.0 ), 0 ) );

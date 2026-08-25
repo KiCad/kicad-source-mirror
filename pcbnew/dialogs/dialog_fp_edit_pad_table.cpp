@@ -183,7 +183,7 @@ static COLS GetColTypeForString( const wxString& aStr )
 
 
 /**
- * Class that handles conversion of various pin data fields into strings for display in the
+ * Class that handles conversion of various pad data fields into strings for display in the
  * UI or serialisation to formats like CSV.
  *
  * This is the footprint editor partner to @ref PIN_INFO_FORMATTER
@@ -272,7 +272,11 @@ public:
             break;
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_SHAPE:
-            aPad.SetShape( PADSTACK::ALL_LAYERS, ShapeFromString( aValue ) );
+            aPad.Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        aPad.SetShape( aLayer, ShapeFromString( aValue ) );
+                    } );
             break;
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_POS_X:
@@ -292,20 +296,24 @@ public:
         }
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_SIZE_X:
-        {
-            VECTOR2I size = aPad.GetSize( PADSTACK::ALL_LAYERS );
-            size.x = m_unitsProvider.ValueFromString( aValue );
-            aPad.SetSize( PADSTACK::ALL_LAYERS, size );
+            aPad.Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        VECTOR2I size = aPad.GetSize( aLayer );
+                        size.x = m_unitsProvider.ValueFromString( aValue );
+                        aPad.SetSize( aLayer, size );
+                    } );
             break;
-        }
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_SIZE_Y:
-        {
-            VECTOR2I size = aPad.GetSize( PADSTACK::ALL_LAYERS );
-            size.y = m_unitsProvider.ValueFromString( aValue );
-            aPad.SetSize( PADSTACK::ALL_LAYERS, size );
+            aPad.Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        VECTOR2I size = aPad.GetSize( aLayer );
+                        size.y = m_unitsProvider.ValueFromString( aValue );
+                        aPad.SetSize( aLayer, size );
+                    } );
             break;
-        }
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_DRILL_X:
         {
@@ -498,9 +506,9 @@ void DIALOG_FP_EDIT_PAD_TABLE::fillGridRow( int aRowId, PAD* aPad )
     m_grid->SetCellValue( aRowId, COL_NUMBER, aPad->GetNumber() );
 
     wxString attrStr = GetPadTypeString( *aPad );
-    int      size_x = aPad->GetSize( PADSTACK::ALL_LAYERS ).x;
-    int      size_y = aPad->GetSize( PADSTACK::ALL_LAYERS ).y;
-    wxString padShape = aPad->ShowPadShape( PADSTACK::ALL_LAYERS );
+    int      size_x = aPad->GetSize( F_Cu ).x;
+    int      size_y = aPad->GetSize( F_Cu ).y;
+    wxString padShape = aPad->ShowPadShape( F_Cu );
 
     aPad->Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
@@ -1241,9 +1249,27 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnExportButtonClick( wxCommandEvent& aEvent )
     }
 
     std::vector<PAD*> padsToExport;
+    bool              complexPadstacks = false;
 
     for( PAD* pad : m_rowPads )
+    {
+        if( pad->GetPadstackMode() != PADSTACK::MODE::NORMAL )
+        {
+            complexPadstacks = true;
+            continue;
+        }
+
         padsToExport.push_back( pad );
+    }
+
+    if( complexPadstacks )
+    {
+        if( wxMessageBox( _( "Complex padstacks cannot be exported via CSV.\n\nThey will be skipped." ),
+                          _( "Export Pad Table" ), wxOK | wxCANCEL | wxICON_WARNING, this ) != wxOK )
+        {
+            return;
+        }
+    }
 
     static const std::vector<COLS> exportCols {
         COLS::COL_NUMBER,
@@ -1260,7 +1286,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnExportButtonClick( wxCommandEvent& aEvent )
     };
 
     NULL_REPORTER      reporter;
-    PAD_INFO_FORMATTER fmt( *m_unitsProvider, false, COLUMN_FORMATTER::BOOL_FORMAT::TRUE_FALSE, reporter );
+    PAD_INFO_FORMATTER formatter( *m_unitsProvider, false, COLUMN_FORMATTER::BOOL_FORMAT::TRUE_FALSE, reporter );
 
     std::vector<std::vector<wxString>> table;
     table.reserve( padsToExport.size() + 1 );
@@ -1279,7 +1305,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnExportButtonClick( wxCommandEvent& aEvent )
         row.reserve( exportCols.size() );
 
         for( COLS col : exportCols )
-            row.emplace_back( fmt.Format( *pad, col ) );
+            row.emplace_back( formatter.Format( *pad, col ) );
     }
 
     WriteTableToFileOrClipboard( filePath, table );

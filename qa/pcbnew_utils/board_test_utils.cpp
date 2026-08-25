@@ -478,19 +478,19 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
         BOOST_CHECK_EQUAL( expected->GetNumber(), pad->GetNumber() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetAttribute(), pad->GetAttribute() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetProperty(), pad->GetProperty() );
-        CHECK_ENUM_CLASS_EQUAL( expected->GetShape( PADSTACK::ALL_LAYERS ),
-                                pad->GetShape( PADSTACK::ALL_LAYERS ) );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetShape( PADSTACK::TEMP_ALL_LAYERS ),
+                                pad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) );
 
         BOOST_CHECK_EQUAL( expected->IsLocked(), pad->IsLocked() );
 
         BOOST_CHECK_EQUAL( expected->GetPosition(), pad->GetPosition() );
-        BOOST_CHECK_EQUAL( expected->GetSize( PADSTACK::ALL_LAYERS ),
-                           pad->GetSize( PADSTACK::ALL_LAYERS ) );
+        BOOST_CHECK_EQUAL( expected->GetSize( PADSTACK::TEMP_ALL_LAYERS ),
+                           pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ) );
         BOOST_CHECK_EQUAL( expected->GetOrientation(), pad->GetOrientation() );
-        BOOST_CHECK_EQUAL( expected->GetDelta( PADSTACK::ALL_LAYERS ),
-                           pad->GetDelta( PADSTACK::ALL_LAYERS ) );
-        BOOST_CHECK_EQUAL( expected->GetOffset( PADSTACK::ALL_LAYERS ),
-                           pad->GetOffset( PADSTACK::ALL_LAYERS ) );
+        BOOST_CHECK_EQUAL( expected->GetDelta( PADSTACK::TEMP_ALL_LAYERS ),
+                           pad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ) );
+        BOOST_CHECK_EQUAL( expected->GetOffset( PADSTACK::TEMP_ALL_LAYERS ),
+                           pad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ) );
         BOOST_CHECK_EQUAL( expected->GetDrillSize(), pad->GetDrillSize() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetDrillShape(), pad->GetDrillShape() );
 
@@ -514,31 +514,31 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
                            pad->GetLocalThermalSpokeWidthOverride().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetThermalSpokeAngle(), pad->GetThermalSpokeAngle() );
         BOOST_CHECK_EQUAL( expected->GetThermalGap(), pad->GetThermalGap() );
-        BOOST_CHECK_EQUAL( expected->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS ),
-                           pad->GetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS ) );
-        BOOST_CHECK_EQUAL( expected->GetChamferRectRatio( PADSTACK::ALL_LAYERS ),
-                           pad->GetChamferRectRatio( PADSTACK::ALL_LAYERS ) );
-        BOOST_CHECK_EQUAL( expected->GetChamferPositions( PADSTACK::ALL_LAYERS ),
-                           pad->GetChamferPositions( PADSTACK::ALL_LAYERS ) );
+        BOOST_CHECK_EQUAL( expected->GetRoundRectRadiusRatio( PADSTACK::TEMP_ALL_LAYERS ),
+                           pad->GetRoundRectRadiusRatio( PADSTACK::TEMP_ALL_LAYERS ) );
+        BOOST_CHECK_EQUAL( expected->GetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS ),
+                           pad->GetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS ) );
+        BOOST_CHECK_EQUAL( expected->GetChamferPositions( PADSTACK::TEMP_ALL_LAYERS ),
+                           pad->GetChamferPositions( PADSTACK::TEMP_ALL_LAYERS ) );
         BOOST_CHECK_EQUAL( expected->GetRemoveUnconnected(), pad->GetRemoveUnconnected() );
         BOOST_CHECK_EQUAL( expected->GetKeepTopBottom(), pad->GetKeepTopBottom() );
 
         // TODO: did we check everything for complex pad shapes?
-        CHECK_ENUM_CLASS_EQUAL( expected->GetAnchorPadShape( PADSTACK::ALL_LAYERS ),
-                                pad->GetAnchorPadShape( PADSTACK::ALL_LAYERS ) );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetAnchorPadShape( PADSTACK::TEMP_ALL_LAYERS ),
+                                pad->GetAnchorPadShape( PADSTACK::TEMP_ALL_LAYERS ) );
         CHECK_ENUM_CLASS_EQUAL( expected->GetCustomShapeInZoneOpt(),
                                 pad->GetCustomShapeInZoneOpt() );
 
-        BOOST_CHECK_EQUAL( expected->GetPrimitives( PADSTACK::ALL_LAYERS ).size(),
-                           pad->GetPrimitives( PADSTACK::ALL_LAYERS ).size() );
+        BOOST_CHECK_EQUAL( expected->GetPrimitives( PADSTACK::TEMP_ALL_LAYERS ).size(),
+                           pad->GetPrimitives( PADSTACK::TEMP_ALL_LAYERS ).size() );
 
-        if( expected->GetPrimitives( PADSTACK::ALL_LAYERS ).size()
-            == pad->GetPrimitives( PADSTACK::ALL_LAYERS ).size() )
+        if( expected->GetPrimitives( PADSTACK::TEMP_ALL_LAYERS ).size()
+            == pad->GetPrimitives( PADSTACK::TEMP_ALL_LAYERS ).size() )
         {
-            for( size_t i = 0; i < expected->GetPrimitives( PADSTACK::ALL_LAYERS ).size(); ++i )
+            for( size_t i = 0; i < expected->GetPrimitives( PADSTACK::TEMP_ALL_LAYERS ).size(); ++i )
             {
-                CheckFpShape( expected->GetPrimitives( PADSTACK::ALL_LAYERS ).at( i ).get(),
-                              pad->GetPrimitives( PADSTACK::ALL_LAYERS ).at( i ).get() );
+                CheckFpShape( expected->GetPrimitives( PADSTACK::TEMP_ALL_LAYERS ).at( i ).get(),
+                              pad->GetPrimitives( PADSTACK::TEMP_ALL_LAYERS ).at( i ).get() );
             }
         }
     }

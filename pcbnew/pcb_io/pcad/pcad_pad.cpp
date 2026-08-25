@@ -188,20 +188,21 @@ void PCAD_PAD::Flip()
 
 
 void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation,
-                              bool aEncapsulatedPad )
+                               bool aEncapsulatedPad )
 {
     PCAD_PAD_SHAPE*  padShape;
-    wxString        padShapeName = wxT( "Ellipse" );
-    PAD_ATTRIB      padType;
-    int             i;
-    int             width = 0;
-    int             height = 0;
+    wxString         padShapeName = wxT( "Ellipse" );
+    PAD_ATTRIB       padType;
+    int              i;
+    int              width = 0;
+    int              height = 0;
 
     PAD* pad = new PAD( aFootprint );
 
     if( !m_IsHolePlated && m_Hole )
     {
         // mechanical hole
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // PCAD doesn't have complex padstacks
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
         pad->SetAttribute( PAD_ATTRIB::NPTH );
 
@@ -260,6 +261,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
             pad->SetLayerSet( LSET::AllCuMask() | LSET( { B_Mask, F_Mask } ) );
 
         pad->SetNumber( m_Name.text );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // PCAD doesn't have complex padstacks
 
         if( padShapeName.IsSameAs( wxT( "Oval" ), false )
             || padShapeName.IsSameAs( wxT( "Ellipse" ), false )
@@ -355,6 +357,7 @@ void PCAD_PAD::AddToBoard( FOOTPRINT* aFootprint )
             via->SetPosition( VECTOR2I( m_PositionX, m_PositionY ) );
             via->SetEnd( VECTOR2I( m_PositionX, m_PositionY ) );
 
+            via->SetPadstackMode( PADSTACK::MODE::NORMAL );     // PCAD doesn't have complex padstacks
             via->SetWidth( PADSTACK::ALL_LAYERS, height );
             via->SetViaType( VIATYPE::THROUGH );
             via->SetLayerPair( F_Cu, B_Cu );
