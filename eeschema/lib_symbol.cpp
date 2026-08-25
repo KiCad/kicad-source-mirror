@@ -956,12 +956,12 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "SYMBOL_IS_POWER" ) ) )
     {
-        *token = this->IsPower() ? wxS( "Power Symbol" ) : wxString( "" );
+        *token = this->IsPower() ? wxString( wxS( "Power Symbol" ) ) : wxString( "" );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_IS_LOCAL_POWER" ) ) )
     {
-        *token = this->IsLocalPower() ? wxS( "Local Power Symbol" ) : wxString( "" );
+        *token = this->IsLocalPower() ? wxString( wxS( "Local Power Symbol" ) ) : wxString( "" );
         return true;
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
