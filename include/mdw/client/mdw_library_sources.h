@@ -402,6 +402,9 @@ public:
     static bool Record( std::vector<MDW_LIBRARY_REQUIREMENT>&       aRecorded,
                         const std::vector<MDW_LIBRARY_REQUIREMENT>& aNeeded );
 
+    /// Set on the GUI thread while a library sync or any of its dialogs is up, kept here so every kiface shares it
+    bool& LibrarySyncRunning() { return m_librarySyncRunning; }
+
 private:
     /// A file's identity on disk, so a write by another process within the same second is still seen
     struct STAMP
@@ -459,6 +462,8 @@ private:
 
     /// Copy indexes by index path, each with the stamp it was read at
     mutable std::map<wxString, std::pair<STAMP, std::shared_ptr<const INDEXED_COPY>>> m_copies;
+
+    bool m_librarySyncRunning = false;
 };
 
 

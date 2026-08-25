@@ -864,6 +864,7 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::TransferDataFromWindow()
             return false;
 
         m_parent->m_GlobalTableChanged = true;
+        manager.AbortAsyncLoads( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
         *globalTable.value() = get_model( 0 )->Table();
 
         globalTable.value()->Save( true ).map_error(
@@ -888,6 +889,7 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::TransferDataFromWindow()
                 return false;
 
             m_parent->m_ProjectTableChanged = true;
+            manager.AbortAsyncLoads( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
             *projectTable.value() = get_model( 1 )->Table();
 
             projectTable.value()->Save( true ).map_error(

@@ -20,6 +20,9 @@
 #include <dialogs/git/git_ui_utils.h>
 
 #include <algorithm>
+#include <cerrno>
+#include <cstring>
+#include <fstream>
 
 #include <wx/button.h>
 #include <wx/datetime.h>
@@ -33,6 +36,7 @@
 #include <confirm.h>
 #include <diff_merge/diff_scene.h>
 #include <git/kicad_git_common.h>
+#include <git/kigit_ssh_keys.h>
 #include <kiplatform/ui.h>
 #include <widgets/wx_splitter_window.h>
 
@@ -208,4 +212,40 @@ wxString KIGIT::SelectedText( wxListCtrl* aList, int aColumn )
         return wxEmptyString;
 
     return aList->GetItemText( sel, aColumn );
+}
+
+
+bool KIGIT::CheckSSHKey( wxString aPath, wxString& aError, wxString& aDetails, bool& aEncrypted )
+{
+    if( aPath.ends_with( wxS( ".pub" ) ) )
+        aPath = aPath.Left( aPath.size() - 4 );
+
+    std::ifstream ifs( aPath.fn_str() );
+
+    if( !ifs.good() || !ifs.is_open() )
+    {
+        aError = wxString::Format( _( "Could not open private key '%s'" ), aPath );
+        aDetails = wxString::Format( "%s: %d", std::strerror( errno ), errno );
+        return false;
+    }
+
+    std::string keyText( ( std::istreambuf_iterator<char>( ifs ) ), std::istreambuf_iterator<char>() );
+    wxString    key = wxString::FromUTF8( keyText );
+
+    if( !key.BeforeFirst( '\n' ).Contains( wxS( "PRIVATE KEY" ) ) )
+    {
+        aError = _( "Invalid SSH Key" );
+        aDetails = _( "The selected file is not a valid SSH private key" );
+        return false;
+    }
+
+    if( KIGIT::EnsurePublicKeyFile( aPath ).IsEmpty() )
+    {
+        aError = wxString::Format( _( "Could not open public key '%s'" ), aPath + wxS( ".pub" ) );
+        aDetails = _( "Put the key's .pub file beside it, or pick a key in OpenSSH format" );
+        return false;
+    }
+
+    aEncrypted = KIGIT::IsPrivateKeyEncrypted( key );
+    return true;
 }
