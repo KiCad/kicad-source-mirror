@@ -2660,14 +2660,18 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
     m_schematic.Reset();
     PADS_SCH_MODEL connectivity = parseBinaryFixture( wxS( "connectivity_topology" ) );
     const PADS_SCH_MODEL connectivityOracle = connectivity;
-    auto groundTemplate = std::ranges::find( connectivity.labels, MODEL_LABEL_KIND::GROUND, &MODEL_LABEL::kind );
-    auto powerTemplate = std::ranges::find( connectivity.labels, MODEL_LABEL_KIND::POWER, &MODEL_LABEL::kind );
-    BOOST_REQUIRE( groundTemplate != connectivity.labels.end() );
-    BOOST_REQUIRE( powerTemplate != connectivity.labels.end() );
+    auto foundGround = std::ranges::find( connectivity.labels, MODEL_LABEL_KIND::GROUND, &MODEL_LABEL::kind );
+    auto foundPower = std::ranges::find( connectivity.labels, MODEL_LABEL_KIND::POWER, &MODEL_LABEL::kind );
+    BOOST_REQUIRE( foundGround != connectivity.labels.end() );
+    BOOST_REQUIRE( foundPower != connectivity.labels.end() );
+
+    // Copy the templates out before growing the vector; the loops below invalidate both iterators
+    const MODEL_LABEL groundTemplate = *foundGround;
+    const MODEL_LABEL powerTemplate = *foundPower;
 
     for( uint8_t variant = 0; variant < 3; ++variant )
     {
-        MODEL_LABEL label = *groundTemplate;
+        MODEL_LABEL label = groundTemplate;
         label.position = { 1000 + 500 * variant, 1000 };
         label.symbolVariant = variant;
         label.text.text = wxString::Format( wxS( "TEST_GND_%u" ), variant );
@@ -2676,7 +2680,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
 
     for( uint8_t variant = 0; variant < 5; ++variant )
     {
-        MODEL_LABEL label = *powerTemplate;
+        MODEL_LABEL label = powerTemplate;
         label.position = { 1000 + 500 * variant, 2000 };
         label.symbolVariant = variant;
         label.text.text = wxString::Format( wxS( "TEST_PWR_%u" ), variant );
