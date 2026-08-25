@@ -494,6 +494,9 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
         }
     }
 
+    if( GetAttribute() == PAD_ATTRIB::PTH && ( layer == F_Mask || layer == B_Mask ) )
+        return true;
+
     if( LSET::FrontBoardTechMask().test( aLayer ) )
         aLayer = F_Cu;
     else if( LSET::BackBoardTechMask().test( aLayer ) )

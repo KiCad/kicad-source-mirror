@@ -27,6 +27,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_track.h>
 #include <pcbplot.h>
 #include <plotters/plotter_gerber.h>
 #include <pcb_plot_params.h>
@@ -243,6 +244,47 @@ BOOST_AUTO_TEST_CASE( RoundRectGerberMaskApertureHasCorrectRadius )
 
     if( wxFileExists( gbrPath ) )
         wxRemoveFile( gbrPath );
+}
+
+
+BOOST_AUTO_TEST_CASE( PthPadKeepsMaskOpeningWhenCopperRemoved )
+{
+    BOARD board;
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( &board, "N1", 1 );
+    board.Add( net );
+
+    const VECTOR2I padPos( pcbIUScale.mmToIU( 50.0 ), pcbIUScale.mmToIU( 50.0 ) );
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    footprint->SetPosition( padPos );
+
+    PAD* pad = new PAD( footprint );
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+    pad->SetLayerSet( PAD::PTHMask() );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 2.0 ), pcbIUScale.mmToIU( 2.0 ) ) );
+    pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    pad->SetPosition( padPos );
+    pad->SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+    pad->SetNet( net );
+    footprint->Add( pad );
+    board.Add( footprint );
+
+    PCB_TRACK* track = new PCB_TRACK( &board );
+    track->SetStart( padPos );
+    track->SetEnd( padPos + VECTOR2I( pcbIUScale.mmToIU( 5.0 ), 0 ) );
+    track->SetLayer( B_Cu );
+    track->SetWidth( pcbIUScale.mmToIU( 0.5 ) );
+    track->SetNet( net );
+    board.Add( track );
+
+    board.BuildConnectivity();
+
+    BOOST_REQUIRE( !pad->FlashLayer( F_Cu ) );
+    BOOST_REQUIRE( pad->FlashLayer( B_Cu ) );
+
+    BOOST_CHECK( pad->FlashLayer( F_Mask ) );
+    BOOST_CHECK( pad->FlashLayer( B_Mask ) );
 }
 
 
