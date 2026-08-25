@@ -66,7 +66,13 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
 }
 
 DIFF_PAIR_PLACER::~DIFF_PAIR_PLACER()
-{}
+{
+    if(  m_target )
+        m_target->Unlink();
+    if(  m_prevPair )
+        m_prevPair->Unlink();
+}
+
 
 
 void DIFF_PAIR_PLACER::setWorld( NODE* aWorld )
@@ -515,6 +521,128 @@ OPT_VECTOR2I getDanglingAnchor( NODE* aNode, ITEM* aItem )
 }
 
 
+bool DIFF_PAIR_PLACER::findDpEndingPrimitives( NODE* aWorld, const VECTOR2I& aP, ITEM* aStartItem,
+                                            DP_PRIMITIVE_PAIR& aPair, wxString* aErrorMsg )
+{
+    NET_HANDLE netP, netN;
+
+    bool result = aWorld->GetRuleResolver()->DpNetPair( aStartItem, netP, netN );
+
+    NET_HANDLE refNet = aStartItem->Net();
+    NET_HANDLE coupledNet = ( refNet == netP ) ? netN : netP;
+
+    OPT_VECTOR2I refAnchor = getDanglingAnchor( aWorld, aStartItem );
+    ITEM* primRef = aStartItem;
+
+    double distThreshold = 10000000;
+
+    if( auto seg = dyn_cast<SEGMENT*>( aStartItem ) )
+    {
+        distThreshold = seg->Width() / 2;
+    }
+    else if( auto arc = dyn_cast<ARC*>( aStartItem ) )
+        {
+        distThreshold = arc->Width() / 2;
+    }
+
+    if( !refAnchor || ( refAnchor->Distance( aP ) > distThreshold ) )
+    {
+        if( aErrorMsg )
+        {
+            *aErrorMsg = _( "Can't find a suitable starting point.  If starting "
+                            "from an existing differential pair make sure you are "
+                            "at the end." );
+        }
+
+        return false;
+    }
+
+
+
+    std::set<ITEM*> coupledItems;
+
+    aWorld->AllItemsInNet( coupledNet, coupledItems );
+    double bestDist = std::numeric_limits<double>::max();
+    bool found = false;
+
+    for( ITEM* item : coupledItems )
+    {
+        if( item->Kind() == aStartItem->Kind() )
+        {
+            OPT_VECTOR2I anchor = getDanglingAnchor( aWorld, item );
+
+            if( !anchor )
+                continue;
+
+            double dist = ( *anchor - *refAnchor ).EuclideanNorm();
+
+            bool shapeMatches = true;
+
+            if( item->OfKind( ITEM::SOLID_T | ITEM::VIA_T ) && item->Layers() != aStartItem->Layers() )
+            {
+                shapeMatches = false;
+            }
+
+            if( dist < bestDist && shapeMatches )
+            {
+                found = true;
+                bestDist = dist;
+
+                if( refNet != netP )
+                {
+                    aPair = DP_PRIMITIVE_PAIR ( item, primRef );
+                    aPair.SetIsMidtrace( false );
+                    aPair.SetAnchors( *anchor, *refAnchor );
+                }
+                else
+                {
+                    aPair = DP_PRIMITIVE_PAIR( primRef, item );
+                    aPair.SetIsMidtrace( false );
+                    aPair.SetAnchors( *refAnchor, *anchor );
+                }
+            }
+        }
+    }
+
+    return found;
+}
+
+bool DIFF_PAIR_PLACER::findDpMidtraceIntersection( NODE* aWorld, const VECTOR2I& aP,
+                                                   ITEM* aStartItem, DP_PRIMITIVE_PAIR& aPair,
+                                                   wxString* aErrorMsg )
+{
+    PNS::TOPOLOGY topo( aWorld );
+
+
+    bool           existingDp = false;
+    PNS::DIFF_PAIR originPair;
+    auto           startSeg = dyn_cast<PNS::SEGMENT*>( aStartItem );
+
+    if( !startSeg )
+    {
+        return false;
+    }
+
+    if( aStartItem && aStartItem->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T ) )
+    {
+        if( !topo.AssembleDiffPair( aStartItem, originPair ) )
+            return false;
+
+        auto ppair = originPair.BuildMidpairIntersection( startSeg, aP );
+
+        
+        if( ppair )
+        {
+            ppair->SetIsMidtrace( true );
+
+            aPair = *ppair;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, ITEM* aItem,
                                             DP_PRIMITIVE_PAIR& aPair, wxString* aErrorMsg )
@@ -534,66 +662,28 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
         return false;
     }
 
-    NET_HANDLE refNet = aItem->Net();
-    NET_HANDLE coupledNet = ( refNet == netP ) ? netN : netP;
+    bool found = findDpEndingPrimitives( aWorld, aP, aItem, aPair, aErrorMsg );
 
-    OPT_VECTOR2I refAnchor = getDanglingAnchor( aWorld, aItem );
-    ITEM* primRef = aItem;
-
-    if( !refAnchor )
+    PNS_DBG( Dbg(), Message, wxString::Format("EP=%d target-p [%d,%d] target-n [%d,%d]", 
+            found?1:0,
+            m_target->AnchorP().x, m_target->AnchorP().y, 
+            m_target->AnchorN().x, m_target->AnchorN().y, 
+            aP.x, aP.y 
+        ) );
+    
+    if( !found )
     {
-        if( aErrorMsg )
-        {
-            *aErrorMsg = _( "Can't find a suitable starting point.  If starting "
-                            "from an existing differential pair make sure you are "
-                            "at the end." );
-        }
+        found = findDpMidtraceIntersection( aWorld, aP, aItem, aPair, aErrorMsg );
 
-        return false;
+            PNS_DBG( Dbg(), Message, wxString::Format("MT=%d target-p [%d,%d] target-n [%d,%d]", 
+            found?1:0,
+            m_target->AnchorP().x, m_target->AnchorP().y, 
+            m_target->AnchorN().x, m_target->AnchorN().y, 
+            aP.x, aP.y 
+        ) );
+
     }
 
-    std::set<ITEM*> coupledItems;
-
-    aWorld->AllItemsInNet( coupledNet, coupledItems );
-    double bestDist = std::numeric_limits<double>::max();
-    bool found = false;
-
-    for( ITEM* item : coupledItems )
-    {
-        if( item->Kind() == aItem->Kind() )
-        {
-            OPT_VECTOR2I anchor = getDanglingAnchor( aWorld, item );
-
-            if( !anchor )
-                continue;
-
-            double dist = ( *anchor - *refAnchor ).EuclideanNorm();
-
-            bool shapeMatches = true;
-
-            if( item->OfKind( ITEM::SOLID_T | ITEM::VIA_T ) && item->Layers() != aItem->Layers() )
-            {
-                shapeMatches = false;
-            }
-
-            if( dist < bestDist && shapeMatches )
-            {
-                found = true;
-                bestDist = dist;
-
-                if( refNet != netP )
-                {
-                    aPair = DP_PRIMITIVE_PAIR ( item, primRef );
-                    aPair.SetAnchors( *anchor, *refAnchor );
-                }
-                else
-                {
-                    aPair = DP_PRIMITIVE_PAIR( primRef, item );
-                    aPair.SetAnchors( *refAnchor, *anchor );
-                }
-            }
-        }
-    }
 
     if( !found )
     {
@@ -668,6 +758,14 @@ void DIFF_PAIR_PLACER::initPlacement()
 
     world->KillChildren();
     NODE* rootNode = world->Branch();
+
+    PNS_DBG( Dbg(), Message, wxString::Format("Start-is-mid %d wd %d rd %d", m_start.IsMidtrace()?1:0, (int) world->Depth(), (int) rootNode->Depth() ) );
+
+    if( m_start.IsMidtrace() )
+    {
+        SplitAdjacentSegments( rootNode, m_start.PrimP(), m_start.AnchorP() );
+        SplitAdjacentSegments( rootNode, m_start.PrimN(), m_start.AnchorN() );
+    }
 
     setWorld( rootNode );
 
@@ -804,6 +902,30 @@ bool DIFF_PAIR_PLACER::Move( const VECTOR2I& aP , ITEM* aEndItem )
     assert( m_lastNode != nullptr );
     m_currentEnd = aP;
 
+    PNS_DBG( Dbg(), Message, wxString::Format("target %d, p-sc %d n-sc %d", m_target?1:0,   m_currentTrace.PLine().SegmentCount() && m_currentTrace.NLine().SegmentCount() ) );
+    
+    
+    if( m_target )
+    {
+        if( m_currentTrace.PLine().SegmentCount() && m_currentTrace.NLine().SegmentCount() )
+    {
+            if ( m_target->PrimN()->Net() == m_currentTrace.NLine().Net() )
+                SplitAdjacentSegments( m_lastNode, m_target->PrimN(), m_currentTrace.NLine().CLastPoint() );
+            if ( m_target->PrimP()->Net() == m_currentTrace.PLine().Net() )
+                SplitAdjacentSegments( m_lastNode, m_target->PrimP(), m_currentTrace.PLine().CLastPoint() );
+
+            if( Settings().RemoveLoops() )
+            {
+                removeLoops( m_lastNode, m_currentTrace.PLine() );
+                removeLoops( m_lastNode, m_currentTrace.NLine() );
+            }
+        }
+    }
+
+
+    PNS_DBG( Dbg(), AddPoint, m_start.AnchorP(), RED, 100000, wxT("start-p") );
+    PNS_DBG( Dbg(), AddPoint, m_start.AnchorN(), BLUE, 100000, wxT("start-n") );
+
     updateLeadingRatLine();
 
     return retval;
@@ -922,16 +1044,23 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForce
         m_chainedPlacement = !m_snapOnTarget && !aForceFinish;
     }
 
-    LINE lineP( m_currentTrace.PLine() );
-    LINE lineN( m_currentTrace.NLine() );
+    LINE &lineP = m_currentTrace.PLine();
+    LINE &lineN = m_currentTrace.NLine();
+
+    printf("lc-p %d lc-n %d\n", lineP.LinkCount(), lineN.LinkCount());
 
     m_lastNode->Add( lineP );
     m_lastNode->Add( lineN );
 
-    topo.SimplifyLine( &lineP );
-    topo.SimplifyLine( &lineN );
+    //topo.SimplifyLine( &lineP );
+    //topo.SimplifyLine( &lineN );
+
+    m_currentTrace.SetLines( lineP, lineN );
 
     m_prevPair = m_currentTrace.EndingPrimitives();
+
+    PNS_DBG( Dbg(), Message, wxString::Format("Fix-RT pp-p %p pp-n %p snapon=%d ff=%d", m_prevPair?m_prevPair->PrimP():0, m_prevPair?m_prevPair->PrimN():0, m_snapOnTarget?1:0, aForceFinish?1:0 ) );
+
     m_lastFixNode = m_lastNode;
 
     // avoid an use-after-free error (CommitPlacement calls NODE::Commit which will invalidate the shove heads state. Need to rethink the memory management).
@@ -939,17 +1068,29 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForce
         m_shove = std::make_unique<SHOVE>( m_world, Router() );
 
     CommitPlacement();
+
+    m_currentTrace.Clear();
+    m_currentTrace.ClearLinks();
+
     m_placingVia = false;
     m_lastFixNode = nullptr;
 
     if( m_snapOnTarget || aForceFinish )
     {
         m_idle = true;
+        if( m_prevPair )
+            m_prevPair->Unlink();
+        
+        m_target->Unlink();
         return true;
     }
     else
     {
         m_hasFixedAnything = true;
+        m_start = *m_prevPair;
+
+        PNS_DBG( Dbg(), Message, wxString::Format("Fix-RT2 pp-p %p pp-n %p snapon=%d ff=%d", m_prevPair?m_prevPair->PrimP():0, m_prevPair?m_prevPair->PrimN():0, m_snapOnTarget?1:0, aForceFinish?1:0 ) );
+
         initPlacement();
         return false;
     }
@@ -972,8 +1113,13 @@ bool DIFF_PAIR_PLACER::HasPlacedAnything() const
 
 bool DIFF_PAIR_PLACER::CommitPlacement()
 {
+    m_target->Unlink();
+    m_start = DP_PRIMITIVE_PAIR();
+
     if( m_lastFixNode )
         Router()->CommitRouting( m_lastFixNode );
+    else if( m_prevPair )
+        m_prevPair->Unlink();
 
     m_lastFixNode = nullptr;
     m_lastNode = nullptr;

@@ -1422,6 +1422,154 @@ int DIFF_PAIR::CoupledLength ( const SEG& aP, const SEG& aN ) const
 }
 
 
+std::optional<DP_PRIMITIVE_PAIR> DIFF_PAIR::BuildMidpairIntersection( PNS::SEGMENT*   aStartSeg,
+                                                                      const VECTOR2I& aP )
+{
+    bool             nHasStart = NLine().ContainsLink( aStartSeg );
+    const PNS::LINE& refLine = nHasStart ? NLine() : PLine();
+    const PNS::LINE& coupledLine = nHasStart ? PLine() : NLine();
+
+    PNS::DIFF_PAIR::COUPLED_SEGMENTS_VEC csVec;
+    CoupledSegmentPairs( csVec );
+    std::optional<PNS::DP_PRIMITIVE_PAIR> prims;
+
+    VECTOR2I pproj = refLine.CLine().NearestPoint( aP );
+
+    // coupled segments take priority
+    for( auto& cpair : csVec )
+    {
+        if( cpair.coupledN.Contains( pproj ) )
+        {
+            auto cproj = cpair.coupledP.LineProject( pproj );
+            prims = PNS::DP_PRIMITIVE_PAIR( cproj, pproj );
+            prims->SetPrimitives( cpair.linkP, cpair.linkN );
+            printf("linkP %p linkN %p\n",cpair.linkP, cpair.linkN );
+            prims->SetName( wxT( "prim-coupled-p" ) );
+            break;
+        }
+        else if( cpair.coupledP.Contains( pproj ) )
+        {
+            auto cproj = cpair.coupledN.LineProject( pproj );
+            prims = PNS::DP_PRIMITIVE_PAIR( pproj, cproj );
+            prims->SetPrimitives( cpair.linkP, cpair.linkN );
+            prims->SetName( wxT( "prim-coupled-n" ) );
+            break;
+        }
+    }
+
+    // parallel segments, but noncoupled parts (bends, corner, etc) go second
+    if( !prims )
+    {
+        for( auto& cpair : csVec )
+        {
+            auto origP = PLine().CSegment( cpair.indexP );
+            auto origN = NLine().CSegment( cpair.indexN );
+
+            auto dirP = DIRECTION_45( origP );
+            auto dirN = DIRECTION_45( origN );
+
+            if( dirP != dirN )
+                continue;
+
+
+            if( origN.Contains( pproj ) )
+            {
+                auto cproj = origP.LineProject( pproj );
+                cproj = origP.NearestPoint( cproj );
+                prims = PNS::DP_PRIMITIVE_PAIR( cproj, pproj );
+                prims->SetPrimitives( cpair.linkP, cpair.linkN );
+                prims->SetName( wxT( "prim-extend-n" ) );
+                break;
+            }
+            else if( origP.Contains( pproj ) )
+            {
+                auto cproj = origN.LineProject( pproj );
+                cproj = origN.NearestPoint( cproj );
+                prims = PNS::DP_PRIMITIVE_PAIR( pproj, cproj );
+                prims->SetPrimitives( cpair.linkP, cpair.linkN );
+                prims->SetName( wxT( "prim-extend-p" ) );
+                break;
+            }
+        }
+    }
+
+    // still nothing? take the nearest vertex of the complement track
+    if( !prims )
+    {
+        auto nearest = coupledLine.CLine().NearestPoint( pproj );
+        ITEM* nearestLink = nullptr;
+        ITEM* refLink = nullptr;
+
+        
+
+        if( nHasStart )
+        {
+            prims = PNS::DP_PRIMITIVE_PAIR( nearest, pproj );
+            prims->SetPrimitives( coupledLine.FindLinkContainingVertex( nearest ),
+                                  refLine.FindLinkContainingVertex( pproj ) );
+        }
+        else
+        {
+            prims = PNS::DP_PRIMITIVE_PAIR( pproj, nearest );
+            prims->SetPrimitives(  refLine.FindLinkContainingVertex( pproj ),
+                                    coupledLine.FindLinkContainingVertex( nearest )
+                                   );
+        }
+
+        prims->SetName( wxT("nearest-fallback") );
+    }
+
+    return prims;
+}
+
+int DIFF_PAIR::GuessMostLikelyGap() const
+{
+    const int gapTollerance = 100;
+    PNS::DIFF_PAIR::COUPLED_SEGMENTS_VEC csVec;
+
+    CoupledSegmentPairs( csVec );
+
+    std::map<int, int> gapMap;
+
+    for ( auto& cs : csVec )
+    {
+        auto segP = dyn_cast<SEGMENT*>( cs.linkP );
+        auto segN = dyn_cast<SEGMENT*>( cs.linkN );
+
+        if( !segN || !segP )
+            continue;
+
+        int gap = cs.coupledN.LineDistance( cs.coupledP.A ) - (segP->Width() + segN->Width() ) / 2;
+
+        auto iter = gapMap.lower_bound( gap - gapTollerance );
+        for( ; iter != gapMap.end(); ++ iter )
+        {
+            if( iter->first < gap + gapTollerance )
+            {
+                iter->second += cs.coupledN.Length();
+                break;
+            }
+        }
+
+        if( iter == gapMap.end() )
+            gapMap[ gap ] = cs.coupledN.Length();
+    }
+
+    int bestGapLen = 0;
+    int bestGap;
+
+    for( auto iter : gapMap )
+    {
+        if( bestGapLen < iter.second )
+        {
+            bestGapLen = iter.second;
+            bestGap = iter.first;
+        }
+    }
+
+    return bestGap;
+}
+
 const wxString DP_DIMENSIONS::Format() const
 {
     wxString ret = wxString::Format("w:%d gap:%d vgap:%d vdiam:%d mincl:%d gap:[%s]",
