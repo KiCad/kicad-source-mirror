@@ -1695,6 +1695,31 @@ void STEP_PCB_MODEL::getCopperLayerZPlacement( const PCB_LAYER_ID aLayer, double
 }
 
 
+double STEP_PCB_MODEL::getStackupBodyThickness() const
+{
+    int thickness = 0;
+
+    for( const BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
+    {
+        if( !item->IsEnabled() )
+            continue;
+
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+        {
+            for( int sublayer = 0; sublayer < item->GetSublayersCount(); sublayer++ )
+                thickness += item->GetThickness( sublayer );
+        }
+        else if( item->GetType() == BS_ITEM_TYPE_COPPER
+                 && IsInnerCopperLayer( item->GetBrdLayerId() ) )
+        {
+            thickness += item->GetThickness();
+        }
+    }
+
+    return pcbIUScale.IUTomm( thickness );
+}
+
+
 void STEP_PCB_MODEL::getBoardBodyZPlacement( double& aZPos, double& aThickness )
 {
     double f_pos, f_thickness;
@@ -1706,6 +1731,23 @@ void STEP_PCB_MODEL::getBoardBodyZPlacement( double& aZPos, double& aThickness )
 
     aThickness = ( top - bottom );
     aZPos = bottom;
+
+    if( aThickness < BOARD_THICKNESS_MIN_MM )
+    {
+        // The copper walk keys off list position, so a truncated or reordered stackup collapses
+        // the body and MakeShapes() emits a flat face; summing the layers ignores the order
+        aThickness = getStackupBodyThickness();
+
+        if( aThickness < BOARD_THICKNESS_MIN_MM )
+            aThickness = BOARD_THICKNESS_DEFAULT_MM;
+
+        aZPos = 0.0;
+
+        m_reporter->Report( wxString::Format( _( "Board stackup does not define a board thickness; "
+                                                 "exporting a %.3f mm board body." ),
+                                              aThickness ),
+                            RPT_SEVERITY_WARNING );
+    }
 
     wxASSERT( aZPos == 0.0 );
 }

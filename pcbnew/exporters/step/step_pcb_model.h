@@ -326,6 +326,12 @@ private:
     void getBoardBodyZPlacement( double& aZPos, double& aThickness );
 
     /**
+     * @return the board body thickness in mm, summed from the stackup dielectric and inner
+     * copper layers so the result does not depend on the order of the stackup items.
+     */
+    double getStackupBodyThickness() const;
+
+    /**
      * Load a 3D model data.
      *
      * @param aBaseName is the model name to set.
