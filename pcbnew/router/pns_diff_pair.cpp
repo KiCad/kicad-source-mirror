@@ -217,6 +217,19 @@ void DP_GATEWAY::Reverse()
 }
 
 
+DIRECTION_45 DIFF_PAIR::getDirection( bool aIsP, bool aEnd ) const
+{
+    const SHAPE_LINE_CHAIN& l = aIsP ? m_p : m_n;
+
+    if( !l.SegmentCount() )
+        return DIRECTION_45();
+    
+    const SEG s = aEnd ? l.CSegment( l.SegmentCount() -1 ) : l.CSegment( 0 );
+
+    return DIRECTION_45( s );
+}
+
+
 bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarget,
                               bool aPrefDiagonal, bool aFitVias, float& aBestCouplingRatio, float& aAspectRatio  )
 {
@@ -1406,6 +1419,21 @@ int DIFF_PAIR::CoupledLength ( const SEG& aP, const SEG& aN ) const
     }
 
     return 0;
+}
+
+
+const wxString DP_DIMENSIONS::Format() const
+{
+    wxString ret = wxString::Format("w:%d gap:%d vgap:%d vdiam:%d mincl:%d gap:[%s]",
+        m_width,
+        m_gap,
+        m_viaGap,
+        m_viaDiameter,
+        m_minClearance,
+        ::PNS::Format( m_gapConstraint )
+    );
+
+    return ret;
 }
 
 }

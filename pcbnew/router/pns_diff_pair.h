@@ -667,13 +667,15 @@ public:
 
     std::optional<DP_PRIMITIVE_PAIR> BuildMidpairIntersection( PNS::SEGMENT* aStartSeg, const VECTOR2I& aP );
 
-    int GuessMostLikelyGap() const;
     const DP_DIMENSIONS& Dimensions() const { return m_dims; }
 
     DIRECTION_45 DirP( bool aEnd ) const { return getDirection( true, aEnd ); }
     DIRECTION_45 DirN( bool aEnd ) const { return getDirection( false, aEnd ); }
 
 private:
+
+    DIRECTION_45 getDirection( bool aIsP, bool aEnd ) const;
+
     void updateLine( LINE &aLine, const SHAPE_LINE_CHAIN& aShape, NET_HANDLE aNet, const VIA& aVia )
     {
         aLine.SetShape( aShape );
