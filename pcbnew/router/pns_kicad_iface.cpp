@@ -2734,6 +2734,7 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
         if( EDA_GROUP* group = parent->GetParentGroup() )
             m_itemGroups[parent] = group;
 
+        m_removedItems.insert( parent );
         m_commit->Remove( parent );
     }
 }
@@ -2967,18 +2968,23 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         if( aItem->IsLocked() )
             newBoardItem->SetLocked( true );
 
-        if( BOARD_ITEM* src = aItem->GetSourceItem() )
-        {
-            if( !m_itemGroups.contains( src ) )
-            {
-                if( EDA_GROUP* group = src->GetParentGroup() )
-                    m_itemGroups[src] = group;
-            }
+        BOARD_ITEM* src = aItem->GetSourceItem();
 
-            if( m_itemGroups.contains( src ) )
-                m_replacementMap[src].push_back( newBoardItem );
+        // A new route may borrow its start track as source for solder mask only, which does not
+        // make it a piece of that track
+        const bool isReplacement = src && ( aItem->Parent() || m_removedItems.contains( src ) );
+
+        if( isReplacement && !m_itemGroups.contains( src ) )
+        {
+            if( EDA_GROUP* group = src->GetParentGroup() )
+                m_itemGroups[src] = group;
         }
-        else
+
+        if( isReplacement && m_itemGroups.contains( src ) )
+        {
+            m_replacementMap[src].push_back( newBoardItem );
+        }
+        else if( !isReplacement )
         {
             // This is a new item, which goes in the entered group (if any)
             m_replacementMap[ENTERED_GROUP_MAGIC_NUMBER].push_back( newBoardItem );
@@ -3055,6 +3061,7 @@ void PNS_KICAD_IFACE::Commit()
     }
 
     m_itemGroups.clear();
+    m_removedItems.clear();
     m_replacementMap.clear();
 
     m_commit->Push( _( "Routing" ), m_commitFlags | SKIP_ENTERED_GROUP );

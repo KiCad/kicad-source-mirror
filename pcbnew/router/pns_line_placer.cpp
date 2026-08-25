@@ -1401,6 +1401,16 @@ void LINE_PLACER::initPlacement()
     m_head.RemoveVia();
     m_tail.RemoveVia();
 
+    // Solder mask overrides live on the board item, so a rework carries its start track to the
+    // write back; the tail too, since splitHeadTail() rebuilds both halves from it
+    BOARD_ITEM* source = nullptr;
+
+    if( m_startItem && m_startItem->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+        source = m_startItem->GetSourceItem();
+
+    m_head.SetSourceItem( source );
+    m_tail.SetSourceItem( source );
+
     m_last_p_end.reset();
     m_p_start = m_currentStart;
     m_direction = m_initial_direction;
@@ -1614,6 +1624,8 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     LINKED_ITEM* lastItem = nullptr;
     int          lastArc  = -1;
 
+    // Copied by hand, as the SEGMENT( LINE, SEG ) and ARC( LINE, SHAPE_ARC ) constructors would
+    // also carry the head's marker into the fixed items
     for( int i = 0; i < lastV; i++ )
     {
         ssize_t arcIndex = l.ArcIndex( i );
@@ -1623,6 +1635,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             seg = SEGMENT( pl.CSegment( i ), m_currentNet );
             seg.SetWidth( pl.Width() );
             seg.SetLayer( m_currentLayer );
+            seg.SetSourceItem( pl.GetSourceItem() );
 
             std::unique_ptr<SEGMENT> sp = std::make_unique<SEGMENT>( seg );
             lastItem = sp.get();
@@ -1638,6 +1651,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             arc = ARC( l.Arc( arcIndex ), m_currentNet );
             arc.SetWidth( pl.Width() );
             arc.SetLayer( m_currentLayer );
+            arc.SetSourceItem( pl.GetSourceItem() );
 
             std::unique_ptr<ARC> ap = std::make_unique<ARC>( arc );
             lastItem = ap.get();

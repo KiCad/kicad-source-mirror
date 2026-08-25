@@ -212,6 +212,7 @@ protected:
     std::unordered_set<BOARD_ITEM*> m_hiddenItems;
 
     std::unordered_map<BOARD_ITEM*, EDA_GROUP*>               m_itemGroups;
+    std::unordered_set<BOARD_ITEM*>                           m_removedItems;
     std::unordered_map<BOARD_ITEM*, std::vector<BOARD_ITEM*>> m_replacementMap;
 
     PCB_TOOL_BASE*                  m_tool;
