@@ -1352,6 +1352,79 @@ BOOST_FIXTURE_TEST_CASE( RegressionTeardropCustomPadAnchor, ZONE_FILL_TEST_FIXTU
 }
 
 
+BOOST_FIXTURE_TEST_CASE( RegressionTeardropArcAnchor, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "teardrop_arc_anchor", m_board );
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    BOARD_COMMIT     commit( dummyTool );
+    TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    BOOST_REQUIRE( !m_board->Footprints().empty() );
+    BOOST_REQUIRE( !m_board->Footprints().front()->Pads().empty() );
+
+    PAD* pad = m_board->Footprints().front()->Pads().front();
+
+    const int minEdgeLen = 2 * m_board->GetDesignSettings().m_MaxError;
+
+    int teardropCount = 0;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        teardropCount++;
+
+        const SHAPE_LINE_CHAIN& chain = zone->Outline()->COutline( 0 );
+
+        SEG         throat;
+        SEG::ecoord bestSq = -1;
+
+        for( int ii = 0; ii < chain.SegmentCount(); ii++ )
+        {
+            SEG seg = chain.CSegment( ii );
+
+            if( seg.Length() < minEdgeLen )
+                continue;
+
+            SEG::ecoord distSq = ( seg.Center() - pad->GetPosition() ).SquaredEuclideanNorm();
+
+            if( distSq > bestSq )
+            {
+                bestSq = distSq;
+                throat = seg;
+            }
+        }
+
+        BOOST_REQUIRE( bestSq >= 0 );
+
+        for( const VECTOR2I& pt : { throat.A, throat.B } )
+        {
+            bool onTrack = false;
+
+            for( PCB_TRACK* track : m_board->Tracks() )
+                onTrack |= track->HitTest( pt, 0 );
+
+            BOOST_CHECK_MESSAGE( onTrack, wxString::Format( "Teardrop anchor (%.6f, %.6f) mm is off the "
+                                                            "track copper",
+                                                            pcbIUScale.IUTomm( pt.x ), pcbIUScale.IUTomm( pt.y ) ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( teardropCount == 1, wxString::Format( "Expected 1 teardrop zone, found %d", teardropCount ) );
+}
+
+
 /**
  * Test that teardrops connecting to oval pads at their curved ends have proper tangent curves.
  *

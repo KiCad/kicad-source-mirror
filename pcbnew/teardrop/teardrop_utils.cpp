@@ -1020,6 +1020,11 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
 
         SHAPE_LINE_CHAIN poly = arc.ConvertToPolyline( maxError );
 
+        // The conversion places its corner points slightly outside the arc. Move them
+        // onto the arc so they can be used as points on the track centerline.
+        for( int ii = 0; ii < poly.PointCount(); ++ii )
+            poly.SetPoint( ii, arc.NearestPoint( poly.CPoint( ii ) ) );
+
         // Now, find the segment of the arc at a distance < actualTdLen from ref_lenght_point.
         // We just search for the first segment (starting from the farest segment) with its
         // start point at a distance < actualTdLen dist
@@ -1119,6 +1124,16 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
 
     // find the 2 points on the track, sharp end of the teardrop
     int track_halfwidth = aTrack->GetWidth() / 2;
+
+    // The canvas draws an arc track as short straight lines that can sit up to the max
+    // deviation inside the true edge. Keep the corners inside the track by that amount
+    // so they cannot show past the drawn edge.
+    if( aTrack->Type() == PCB_ARC_T )
+    {
+        int maxError = m_board->GetDesignSettings().m_MaxError;
+        track_halfwidth = std::max( aTrack->GetWidth() / 4, aTrack->GetWidth() / 2 - maxError );
+    }
+
     VECTOR2I pointB = start + VECTOR2I( vecT.x * track_stub_len + vecT.y * track_halfwidth,
                                         vecT.y * track_stub_len - vecT.x * track_halfwidth );
     VECTOR2I pointA = start + VECTOR2I( vecT.x * track_stub_len - vecT.y * track_halfwidth,
