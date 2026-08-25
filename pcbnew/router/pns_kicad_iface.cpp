@@ -983,12 +983,27 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 }
 
 
-bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth,
-                                              const VECTOR2I& aStartPosition )
+bool PNS_KICAD_IFACE_BASE::inheritTrackWidthAndDpGap( PNS::ITEM* aItem, const VECTOR2I& aStartPosition, int* aInheritedWidth, int *aInheritedGap )
 {
     VECTOR2I p;
 
     assert( aItem->Owner() != nullptr );
+
+    PNS::NET_HANDLE coupledNet = GetRuleResolver()->DpCoupledNet( aItem->Net() );
+
+    if( coupledNet && aInheritedGap )
+    {
+        PNS::TOPOLOGY topo( m_world );
+        PNS::DIFF_PAIR dp;
+        if( topo.AssembleDiffPair( static_cast<PNS::SEGMENT*>( aItem ), dp ) )
+        {
+            *aInheritedGap = dp.GuessMostLikelyGap();
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     auto tryGetTrackWidth =
             []( PNS::ITEM* aPnsItem ) -> int
@@ -1149,7 +1164,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     if( bds.m_UseConnectedTrackWidth && !bds.m_TempOverrideTrackWidth && aStartItem != nullptr )
     {
-        found = inheritTrackWidth( aStartItem, &trackWidth, startPosInt );
+        found = inheritTrackWidthAndDpGap( aStartItem, aStartPosition, &trackWidth, nullptr );
 
         if( found )
             aSizes.SetWidthSource( _( "existing track" ) );
@@ -1232,8 +1247,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     // First try to pick up diff pair width from starting track, if enabled
     if( bds.m_UseConnectedTrackWidth && aStartItem )
-        found = inheritTrackWidth( aStartItem, &diffPairWidth, startPosInt );
-
+        found = inheritTrackWidthAndDpGap( aStartItem, aStartPosition, &diffPairWidth, &diffPairGap );
+ 
     // Next, pick up gap from netclass, and width also if we didn't get a starting width above
     if( bds.UseNetClassDiffPair() && aStartItem )
     {

@@ -667,6 +667,7 @@ public:
 
     std::optional<DP_PRIMITIVE_PAIR> BuildMidpairIntersection( PNS::SEGMENT* aStartSeg, const VECTOR2I& aP );
 
+    int GuessMostLikelyGap() const;
     const DP_DIMENSIONS& Dimensions() const { return m_dims; }
 
     DIRECTION_45 DirP( bool aEnd ) const { return getDirection( true, aEnd ); }
