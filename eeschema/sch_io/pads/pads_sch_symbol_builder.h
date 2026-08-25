@@ -30,6 +30,7 @@
 class LIB_SYMBOL;
 class SCH_SHAPE;
 class SCH_PIN;
+class SCH_SHEET;
 class SCH_TEXT;
 class SCHEMATIC;
 
@@ -79,6 +80,15 @@ public:
      */
     static std::string GetPowerStyleFromVariant( const std::string& aDecalName,
                                                  const std::string& aPinType );
+
+    /**
+     * Return the first 1-based ordinal that no "#PWRnnnn" reference under @a aSheet uses.
+     *
+     * PADS has no reference designator for a power port, so the importer invents one. When
+     * appending into an existing schematic the invented references must start past whatever
+     * the destination already carries, or annotation reports them as duplicates.
+     */
+    static int NextFreePowerOrdinal( SCH_SHEET* aSheet );
 
     /**
      * Build a composite multi-unit symbol from a multi-gate PARTTYPE. Pin numbers, names and

@@ -999,6 +999,10 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
             netNameLabels[nn.anchor_ref] = nn;
     }
 
+    // PADS power ports carry no reference designator, so the importer invents one
+    // A per-sheet counter restarts at #PWR0001 on sheet two and collides
+    int pwrIndex = aAppendToMe ? PADS_SCH::PADS_SCH_SYMBOL_BUILDER::NextFreePowerOrdinal( aAppendToMe ) : 1;
+
     // Create wires and connectivity on each sheet
     for( auto& [sheetNum, ctx] : sheetContexts )
     {
@@ -1122,8 +1126,6 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
 
         // Place off-page connectors: power/ground types become SCH_SYMBOL with
         // KiCad standard power graphics; signal types become SCH_GLOBALLABEL.
-        int pwrIndex = 1;
-
         for( const PADS_SCH::OFF_PAGE_CONNECTOR& opc : parser.GetOffPageConnectors() )
         {
             if( opc.source_sheet != sheetNum )
@@ -1185,7 +1187,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
                     symbol->GetField( FIELD_T::VALUE )->SetText( netName );
                     symbol->GetField( FIELD_T::VALUE )->SetVisible( true );
 
-                    wxString pwrRef = wxString::Format( wxT( "#PWR%03d" ), pwrIndex++ );
+                    wxString pwrRef = wxString::Format( wxT( "#PWR%04d" ), pwrIndex++ );
                     symbol->SetRef( &ctx.path, pwrRef );
                     symbol->GetField( FIELD_T::REFERENCE )->SetVisible( false );
 

@@ -31,6 +31,7 @@
 #include <netlist_exporter_pads.h>
 #include <reporter.h>
 #include <sch_field.h>
+#include <sch_reference_list.h>
 #include <sch_bus_entry.h>
 #include <sch_bitmap.h>
 #include <sch_connection.h>
@@ -148,6 +149,45 @@ static OBJECT_GRAPH_SNAPSHOT objectGraphSnapshot( const SCHEMATIC& aSchematic, c
     }
 
     return snapshot;
+}
+
+
+static size_t countPowerSymbols( SCH_SHEET* aRoot )
+{
+    size_t count = 0;
+
+    for( const SCH_SHEET_PATH& path : SCH_SHEET_LIST( aRoot ) )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            if( static_cast<SCH_SYMBOL*>( item )->GetRef( &path ).StartsWith( wxS( "#PWR" ) ) )
+                count++;
+        }
+    }
+
+    return count;
+}
+
+
+// The same check eeschema runs before "Update PCB from Schematic"; a duplicated reference
+// surfaces here as "Duplicate items <ref>"
+static int checkAnnotation( const std::vector<SCH_SHEET*>& aRoots, std::vector<wxString>& aMessages )
+{
+    SCH_REFERENCE_LIST references;
+
+    for( SCH_SHEET* root : aRoots )
+    {
+        SCH_SHEET_LIST sheets( root );
+
+        for( SCH_SHEET_PATH& sheet : sheets )
+            sheet.GetSymbols( references, SYMBOL_FILTER_ALL, true );
+    }
+
+    return references.CheckAnnotation(
+            [&]( ERCE_T, const wxString& aMessage, SCH_REFERENCE*, SCH_REFERENCE* )
+            {
+                aMessages.push_back( aMessage );
+            } );
 }
 
 
@@ -3779,6 +3819,76 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
                                        {
                                            return aDiagnostic.property && aDiagnostic.property->name == exact.name.text
                                                   && aDiagnostic.property->disposition == exact.disposition;
+                                       } ) );
+}
+
+
+// PADS off-page power ports carry no reference designator, so the importer invents one
+// A per-sheet counter restarts at #PWR0001 on sheet two and every power symbol on it
+// reports as a duplicate item, blocking annotation and Update PCB from Schematic
+BOOST_AUTO_TEST_CASE( MultiSheetPowerReferencesAreUnique )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir()
+                                            + "/plugins/pads/binary/multisheet_connectivity.txt" );
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
+    BOOST_REQUIRE( rootSheet );
+
+    // Both sheets carry a $PWR_SYMS +5V and a $GND_SYMS GND anchor
+    BOOST_REQUIRE_EQUAL( countPowerSymbols( rootSheet ), 4u );
+
+    std::vector<wxString> messages;
+    BOOST_CHECK_EQUAL( checkAnnotation( { rootSheet }, messages ), 0 );
+    BOOST_CHECK( messages.empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryMultiSheetPowerReferencesAreUnique )
+{
+    const PADS_SCH_BINARY::PADS_SCH_MODEL    model = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
+    PADS_SCH_BINARY::PADS_SCH_BINARY_BUILDER builder;
+
+    builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+
+    std::vector<SCH_SHEET*> roots = m_schematic.GetTopLevelSheets();
+    size_t                  powerCount = 0;
+
+    for( SCH_SHEET* sheet : roots )
+        powerCount += countPowerSymbols( sheet );
+
+    BOOST_REQUIRE_EQUAL( powerCount, 4u );
+
+    std::vector<wxString> messages;
+    BOOST_CHECK_EQUAL( checkAnnotation( roots, messages ), 0 );
+    BOOST_CHECK( messages.empty() );
+}
+
+
+// Appending a PADS schematic must not reuse a reference the destination already carries
+BOOST_AUTO_TEST_CASE( BinaryAppendPowerReferencesSkipExisting )
+{
+    const PADS_SCH_BINARY::PADS_SCH_MODEL    model = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
+    PADS_SCH_BINARY::PADS_SCH_BINARY_BUILDER builder;
+    SCH_SHEET*                               destination = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( destination );
+
+    builder.Build( model, &m_schematic, destination, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+    BOOST_REQUIRE_EQUAL( countPowerSymbols( destination ), 4u );
+
+    builder.Build( model, &m_schematic, destination, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+    BOOST_REQUIRE_EQUAL( countPowerSymbols( destination ), 8u );
+
+    // Appending a design onto itself duplicates its ordinary parts, which is the user's
+    // to resolve; no power reference may be among them
+    std::vector<wxString> messages;
+    checkAnnotation( { destination }, messages );
+
+    BOOST_CHECK( std::ranges::none_of( messages,
+                                       []( const wxString& aMessage )
+                                       {
+                                           return aMessage.Contains( wxS( "#PWR" ) );
                                        } ) );
 }
 

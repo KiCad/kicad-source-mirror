@@ -35,6 +35,7 @@
 #include <schematic.h>
 #include <schematic_settings.h>
 #include <sch_io/ole_image.h>
+#include <sch_io/pads/pads_sch_symbol_builder.h>
 #include <stroke_params.h>
 #include <title_block.h>
 
@@ -549,7 +550,7 @@ namespace
 
 
     std::unique_ptr<SCH_SYMBOL> makePowerSymbol( const MODEL_LABEL& aLabel, const SCH_SHEET_PATH& aPath,
-                                                 int aPageHeight, size_t aOrdinal,
+                                                 int aPageHeight, int aOrdinal,
                                                  std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
         int orientation = SYM_ORIENT_180;
@@ -572,7 +573,7 @@ namespace
         symbol->SetLibSymbol( library.release() );
         symbol->SetPosition( pagePoint( aLabel.position, aPageHeight ) );
         symbol->SetOrientation( orientation );
-        const wxString reference = wxString::Format( wxS( "#PWR%04zu" ), aOrdinal + 1 );
+        const wxString reference = wxString::Format( wxS( "#PWR%04d" ), aOrdinal );
         symbol->SetRef( &aPath, reference );
         symbol->AddHierarchicalReference( aPath.Path(), reference, 1 );
         symbol->SetValueFieldText( aLabel.text.text, &aPath );
@@ -1276,6 +1277,9 @@ namespace
         wxString                                replacementDrawingSheet;
         BUILD_RESULT                            result;
 
+        // Runs across every sheet because a per-sheet restart collides on sheet two
+        int nextPowerOrdinal = 1;
+
         static void ValidateScreen( const SCH_SCREEN* aScreen )
         {
             if( !aScreen )
@@ -1815,8 +1819,6 @@ namespace
             ++aStaged.result.counts.junctions;
         }
 
-        size_t powerOrdinal = 0;
-
         for( const MODEL_LABEL* labelPointer : MODEL_INDEX::ForSheet( aIndex.labelsBySheet, aSourceSheet.id ) )
         {
             const MODEL_LABEL& label = *labelPointer;
@@ -1840,7 +1842,8 @@ namespace
 
             case MODEL_LABEL_KIND::GROUND:
             case MODEL_LABEL_KIND::POWER:
-                item = makePowerSymbol( label, aPath, pageHeight, powerOrdinal++, aStaged.result.diagnostics );
+                item = makePowerSymbol( label, aPath, pageHeight, aStaged.nextPowerOrdinal++,
+                                        aStaged.result.diagnostics );
                 ++aStaged.result.counts.symbols;
                 break;
 
@@ -1951,6 +1954,10 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
     STAGED_SCHEMATIC staged;
     staged.result.counts.sheets = aModel.sheets.size();
     staged.connectionGraph = std::make_unique<CONNECTION_GRAPH>( aSchematic );
+
+    if( aAppendToMe )
+        staged.nextPowerOrdinal = PADS_SCH::PADS_SCH_SYMBOL_BUILDER::NextFreePowerOrdinal( aAppendToMe );
+
     validatePropertyDispositions( aModel, staged.result.diagnostics );
 
     if( !aAppendToMe && !aModel.worksheets.empty() )

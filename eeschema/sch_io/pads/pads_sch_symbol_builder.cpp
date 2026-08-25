@@ -26,6 +26,8 @@
 #include <pin_type.h>
 #include <layer_ids.h>
 #include <sch_screen.h>
+#include <sch_sheet_path.h>
+#include <sch_symbol.h>
 #include <stroke_params.h>
 
 #include <advanced_config.h>
@@ -932,6 +934,39 @@ std::string PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant( const std::string
         return "VCC";
 
     return "VEE";
+}
+
+
+int PADS_SCH_SYMBOL_BUILDER::NextFreePowerOrdinal( SCH_SHEET* aSheet )
+{
+    int next = 1;
+
+    if( !aSheet )
+        return next;
+
+    // Walk the destination directly; SCHEMATIC::Hierarchy() is a cache the importer has
+    // no reason to have refreshed mid-load
+    for( const SCH_SHEET_PATH& path : SCH_SHEET_LIST( aSheet ) )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            wxString digits;
+            long     ordinal = 0;
+
+            if( static_cast<SCH_SYMBOL*>( item )->GetRef( &path ).StartsWith( wxS( "#PWR" ), &digits )
+                && digits.ToLong( &ordinal ) )
+            {
+                next = std::max( next, static_cast<int>( ordinal ) + 1 );
+            }
+        }
+    }
+
+    return next;
 }
 
 
