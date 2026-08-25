@@ -21,9 +21,13 @@
 
 #include <utility>
 
+#include <wx/brush.h>
 #include <wx/colour.h>
+#include <wx/dc.h>
 #include <wx/grid.h>
 #include <wx/generic/gridctrl.h>
+#include <wx/pen.h>
+#include <wx/settings.h>
 
 class wxGrid;
 
