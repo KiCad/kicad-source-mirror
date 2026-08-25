@@ -31,6 +31,10 @@
 
 namespace PNS {
 
+
+static void drawGateways( PNS::DEBUG_DECORATOR *dbg, PNS::DP_PRIMITIVE_PAIR& prims, PNS::DP_GATEWAYS& gws, VECTOR2D offset, VECTOR2D step );
+
+
 DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     PLACEMENT_ALGO( aRouter )
 {
@@ -674,6 +678,33 @@ void DIFF_PAIR_PLACER::initPlacement()
 }
 
 
+static void drawSingleGateway( DEBUG_DECORATOR* dbg, DP_GATEWAY gw, wxString grpName )
+{
+    PNS_DBG( dbg, BeginGroup, grpName, 0 );
+
+    SHAPE_CIRCLE gwp( gw.AnchorP(), 30000 );
+    PNS_DBG( dbg, AddShape, &gwp, LIGHTRED, 20000, "gw-entry-p" );
+
+    if( gw.EntryP().SegmentCount() )
+    {
+        PNS_DBG( dbg, AddShape, &gw.EntryP(), LIGHTRED, 20000, "gwp" );
+    }
+
+    SHAPE_CIRCLE gwn( gw.AnchorN(), 30000 );
+    PNS_DBG( dbg, AddShape, &gwn, LIGHTBLUE, 30000, "gw-entry-n" );
+
+    if( gw.EntryN().SegmentCount() )
+    {
+        PNS_DBG( dbg, AddShape, &gw.EntryN(), LIGHTBLUE, 10000, "gwn" );
+    }
+
+    SHAPE_LINE_CHAIN link( { gw.AnchorN(), gw.AnchorP() } );
+    PNS_DBG( dbg, AddShape, &link, LIGHTGRAY, 10000, "link" );
+
+    PNS_DBGN( dbg, EndGroup );
+}
+
+
 bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 {
     m_fitOk = false;
@@ -777,6 +808,53 @@ bool DIFF_PAIR_PLACER::Move( const VECTOR2I& aP , ITEM* aEndItem )
 
     return retval;
 }
+
+
+static void drawGateways( PNS::DEBUG_DECORATOR *dbg, PNS::DP_PRIMITIVE_PAIR& prims, PNS::DP_GATEWAYS& gws, VECTOR2D offset, VECTOR2D step )
+{
+    for( auto gw : gws.Gateways() )
+    {
+        PNS_DBG( dbg, BeginGroup, wxString::Format( wxT("gw-%s"), gw.GetName() ), 0 );
+
+        SHAPE_CIRCLE gwp( gw.AnchorP(), 30000 );
+        PNS_DBG( dbg, AddShape, &gwp, LIGHTRED, 20000, "gwp");
+        
+        if( gw.EntryP().SegmentCount() )
+        {
+            PNS_DBG( dbg, AddShape, &gw.EntryP(), LIGHTRED, 20000, "gwp");
+        }
+
+        SHAPE_CIRCLE gwn( gw.AnchorN(), 30000 );
+        PNS_DBG( dbg, AddShape, &gwn, LIGHTBLUE, 30000, "gwn");
+
+        if( gw.EntryN().SegmentCount() )
+        {
+            PNS_DBG( dbg, AddShape, &gw.EntryN(), LIGHTBLUE, 10000, "gwn");
+        }
+
+        SHAPE_LINE_CHAIN link( { gw.AnchorN(), gw.AnchorP() } );
+        PNS_DBG( dbg, AddShape, &link, LIGHTGRAY, 10000, "link" );
+
+        auto midpoint = (gw.AnchorN() + gw.AnchorP() ) / 2;
+
+        if( gw.HasPrimaryDirection() )
+        {
+            for ( int dir = 0; dir < 8; dir++ )
+            {
+                DIRECTION_45 dirV( (DIRECTION_45::Directions)dir );
+                if (dirV.Mask() & gw.PrimaryDirectionMask() )
+                {
+                    auto dv = dirV.ToVector().Resize( 1000000 );
+                    SHAPE_LINE_CHAIN ds( { midpoint ,midpoint + dv } );
+                    PNS_DBG( dbg, AddShape, &ds, LIGHTYELLOW, 10000, wxString::Format("pdir-%s", dirV.Format() ) );
+                }
+            }
+        }
+
+        PNS_DBGN( dbg, EndGroup );
+    }
+}
+
 
 
 void DIFF_PAIR_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
