@@ -234,17 +234,6 @@ public:
 
     void GetModifiedNets( std::vector<NET_HANDLE>& aNets ) const override;
 
-    /**
-     * Snaps the point \a aP to segment \a aSeg. Splits the segment in two, forming a
-     * joint at \a aP and stores updated topology in node \a aNode.
-     */
-    bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
-
-    /**
-     * Snaps the point \a aP to arc \a aArc. Splits the arc in two, forming a
-     * joint at \a aP and stores updated topology in node \a aNode.
-     */
-    bool SplitAdjacentArcs( NODE* aNode, ITEM* aArc, const VECTOR2I& aP );
 
 private:
     /**
@@ -278,19 +267,6 @@ private:
      * Used by posture switching mechanism.
      */
     void setInitialDirection( const DIRECTION_45& aDirection );
-
-    /**
-     * Searches aNode for traces concurrent to aLatest and removes them. Updated
-     * topology is stored in aNode.
-     */
-    void removeLoops( NODE* aNode, LINE& aLatest );
-
-    /**
-     * Assemble a line starting from segment or arc aLatest, removes collinear segments
-     * and redundant vertices.  If a simplification has been found, replaces the old line
-     * with the simplified one in \a aNode.
-     */
-    void simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest );
 
     /**
      * Check if the head of the track intersects its tail. If so, cuts the tail up to the

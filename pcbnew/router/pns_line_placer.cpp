@@ -36,6 +36,7 @@
 #include "pns_topology.h"
 #include "pns_walkaround.h"
 #include "pns_mouse_trail_tracer.h"
+#include "pns_utils.h"
 
 
 namespace PNS {
@@ -1284,66 +1285,6 @@ NODE* LINE_PLACER::CurrentNode( bool aLoopsRemoved ) const
 }
 
 
-bool LINE_PLACER::SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP )
-{
-    if( !aSeg )
-        return false;
-
-    if( !aSeg->OfKind( ITEM::SEGMENT_T ) )
-        return false;
-
-    const JOINT* jt = aNode->FindJoint( aP, aSeg );
-
-    if( jt && jt->LinkCount() >= 1 )
-        return false;
-
-    SEGMENT* s_old = static_cast<SEGMENT*>( aSeg );
-
-    std::unique_ptr<SEGMENT> s_new[2] = { Clone( *s_old ), Clone( *s_old ) };
-
-    s_new[0]->SetEnds( s_old->Seg().A, aP );
-    s_new[1]->SetEnds( aP, s_old->Seg().B );
-
-    aNode->Remove( s_old );
-    aNode->Add( std::move( s_new[0] ), true );
-    aNode->Add( std::move( s_new[1] ), true );
-
-    return true;
-}
-
-
-bool LINE_PLACER::SplitAdjacentArcs( NODE* aNode, ITEM* aArc, const VECTOR2I& aP )
-{
-    if( !aArc )
-        return false;
-
-    if( !aArc->OfKind( ITEM::ARC_T ) )
-        return false;
-
-    const JOINT* jt = aNode->FindJoint( aP, aArc );
-
-    if( jt && jt->LinkCount() >= 1 )
-        return false;
-
-    ARC*             a_old = static_cast<ARC*>( aArc );
-    const SHAPE_ARC& o_arc = a_old->Arc();
-
-    std::unique_ptr<ARC> a_new[2] = { Clone( *a_old ), Clone( *a_old ) };
-
-    a_new[0]->Arc().ConstructFromStartEndCenter( o_arc.GetP0(), aP, o_arc.GetCenter(),
-                                                 o_arc.IsClockwise(), o_arc.GetWidth() );
-
-    a_new[1]->Arc().ConstructFromStartEndCenter( aP, o_arc.GetP1(), o_arc.GetCenter(),
-                                                 o_arc.IsClockwise(), o_arc.GetWidth() );
-
-    aNode->Remove( a_old );
-    aNode->Add( std::move( a_new[0] ), true );
-    aNode->Add( std::move( a_new[1] ), true );
-
-    return true;
-}
-
-
 bool LINE_PLACER::SetLayer( int aLayer )
 {
     if( m_idle )
@@ -1825,73 +1766,7 @@ bool LINE_PLACER::CommitPlacement()
 }
 
 
-void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
-{
-    if( !aLatest.SegmentCount() )
-        return;
-
-    if( aLatest.CLine().CPoint( 0 ) == aLatest.CLine().CLastPoint() )
-        return;
-
-    std::set<LINKED_ITEM *> toErase;
-    aLatest.ClearLinks();
-    aNode->Add( aLatest, true );
-
-    for( int s = 0; s < aLatest.LinkCount(); s++ )
-    {
-        LINKED_ITEM* seg = aLatest.GetLink(s);
-        LINE ourLine = aNode->AssembleLine( seg );
-        JOINT a, b;
-        std::vector<LINE> lines;
-
-        aNode->FindLineEnds( ourLine, a, b );
-
-        if( a == b )
-            aNode->FindLineEnds( aLatest, a, b );
-
-        aNode->FindLinesBetweenJoints( a, b, lines );
-
-        int removedCount = 0;
-        int total = 0;
-
-        for( LINE& line : lines )
-        {
-            total++;
-
-            if( !( line.ContainsLink( seg ) ) && line.SegmentCount() )
-            {
-                // Don't remove locked tracks
-                bool hasLockedSegment = false;
-                for( LINKED_ITEM* ss : line.Links() )
-                {
-                    if( ss->IsLocked() )
-                    {
-                        hasLockedSegment = true;
-                        break;
-                    }
-                }
-
-                if( !hasLockedSegment )
-                {
-                    for( LINKED_ITEM* ss : line.Links() )
-                        toErase.insert( ss );
-
-                    removedCount++;
-                }
-            }
-        }
-
-        PNS_DBG( Dbg(), Message, wxString::Format( "total segs removed: %d/%d", removedCount, total ) );
-    }
-
-    for( LINKED_ITEM* s : toErase )
-        aNode->Remove( s );
-
-    aNode->Remove( aLatest );
-}
-
-
-void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
+bool PLACEMENT_ALGO::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 {
     wxASSERT( aLatest->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) );
 
@@ -1989,6 +1864,8 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
         aNode->Add( l );
         PNS_DBG( Dbg(), AddItem, &l, RED, 100000, wxT("simplified"));
     }
+
+    return true;
 }
 
 
@@ -2210,4 +2087,76 @@ int FIXED_TAIL::StageCount() const
     return m_stages.size();
 }
 
+
+bool PLACEMENT_ALGO::removeLoops( NODE* aNode, LINE& aLatest )
+{
+      if( !aLatest.SegmentCount() )
+        return false;
+
+    if( aLatest.CLine().CPoint( 0 ) == aLatest.CLine().CLastPoint() )
+        return false;
+
+    std::set<LINKED_ITEM *> toErase;
+    aLatest.ClearLinks();
+    aNode->Add( aLatest, true );
+
+    for( int s = 0; s < aLatest.LinkCount(); s++ )
+    {
+        LINKED_ITEM* seg = aLatest.GetLink(s);
+        LINE ourLine = aNode->AssembleLine( seg );
+        JOINT a, b;
+        std::vector<LINE> lines;
+
+        aNode->FindLineEnds( ourLine, a, b );
+
+        if( a == b )
+            aNode->FindLineEnds( aLatest, a, b );
+
+        aNode->FindLinesBetweenJoints( a, b, lines );
+
+        int removedCount = 0;
+        int total = 0;
+
+        for( LINE& line : lines )
+        {
+            total++;
+
+            if( !( line.ContainsLink( seg ) ) && line.SegmentCount() )
+            {
+                // Don't remove locked tracks
+                bool hasLockedSegment = false;
+                for( LINKED_ITEM* ss : line.Links() )
+                {
+                    if( ss->IsLocked() )
+                    {
+                        hasLockedSegment = true;
+                        break;
 }
+                }
+
+                if( !hasLockedSegment )
+                {
+                    for( LINKED_ITEM* ss : line.Links() )
+                        toErase.insert( ss );
+
+                    removedCount++;
+                }
+            }
+        }
+
+        PNS_DBG( Dbg(), Message, wxString::Format( "total segs removed: %d/%d", removedCount, total ) );
+    }
+
+    for( LINKED_ITEM* s : toErase )
+        aNode->Remove( s );
+
+    aNode->Remove( aLatest );
+
+
+    return true;
+}
+
+
+}
+
+

@@ -198,6 +198,17 @@ public:
     virtual void GetModifiedNets( std::vector<NET_HANDLE> &aNets ) const
     {
     }
+
+protected:
+    virtual bool removeLoops( NODE* aNode, LINE& aLatest );
+
+    /**
+     * Assemble a line starting from segment or arc aLatest, removes collinear segments
+     * and redundant vertices.  If a simplification has been found, replaces the old line
+     * with the simplified one in \a aNode.
+     */
+    virtual bool simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest );
+
 };
 
 }
