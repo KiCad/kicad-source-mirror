@@ -75,6 +75,8 @@ public:
      */
     void SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCancelledFlag = nullptr );
 
+    int SelectAll( const TOOL_EVENT& aEvent );
+
     int ClearSelection( const TOOL_EVENT& aEvent );
     void ClearSelection();
 

@@ -97,6 +97,10 @@ void PL_EDITOR_FRAME::doReCreateMenuBar()
     editMenu->Add( ACTIONS::paste );
     editMenu->Add( ACTIONS::doDelete );
 
+    editMenu->AppendSeparator();
+    editMenu->Add( ACTIONS::selectAll );
+    editMenu->Add( ACTIONS::unselectAll );
+
     //-- View menu -------------------------------------------------------
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
