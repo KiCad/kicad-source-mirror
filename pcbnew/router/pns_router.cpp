@@ -49,6 +49,7 @@
 #include "pns_meander_placer.h"
 #include "pns_meander_skew_placer.h"
 #include "pns_dp_meander_placer.h"
+#include "pns_utils.h"
 #include "router_preview_item.h"
 
 namespace PNS {
@@ -129,6 +130,71 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, int aSlopRadius )
     PNS::ITEM_SET ret;
 
     wxCHECK( node, ret );
+
+    if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR && m_state == ROUTE_TRACK )
+    {
+        NODE::OBSTACLES          obs;
+        SEGMENT                  test( SEG( aP, aP ), nullptr );
+        COLLISION_SEARCH_OPTIONS opts;
+
+        test.SetWidth( Sizes().DiffPairGap() + 2 * Sizes().DiffPairWidth() );
+        test.SetLayers( PNS_LAYER_RANGE::All() );
+
+        opts.m_differentNetsOnly = false;
+        node->QueryColliding( &test, obs, opts );
+
+        DIFF_PAIR_PLACER *dpPlacer = static_cast<DIFF_PAIR_PLACER*>( Placer() );
+        auto currentDP = dpPlacer->CurrentTrace();
+
+        int distP = std::numeric_limits<int>::max();
+        int distN = std::numeric_limits<int>::max();
+
+        ITEM* best = nullptr;
+
+        for( const OBSTACLE& obstacle : obs )
+        {
+            NET_HANDLE netP, netN;
+            
+            if( m_iface->GetRuleResolver()->DpNetPair( obstacle.m_item, netP, netN ) )
+            {
+                    int dist = obstacle.m_item->Shape( obstacle.m_item->Layer() )->Distance( aP );
+
+                    if( dist <= 0 )
+                    {
+                        ret.Add( obstacle.m_item, false );
+                    }
+
+                    int polarity = m_iface->GetRuleResolver()->DpNetPolarity( obstacle.m_item->Net() );
+
+                    if( polarity > 0 )
+                    {
+                        if( dist < distP )
+                        {
+                            distP = dist;
+                            best = obstacle.m_item;
+                        }
+                    }
+                    else
+                    {
+                        if( dist < distN )
+                        {
+                            distN = dist;
+                            if( distN <= distP )
+                                best = obstacle.m_item;
+                        }        
+                    }
+            }
+        }
+
+        if( distP < Sizes().DiffPairGap() && distN < Sizes().DiffPairGap() )
+        {
+            ret.Add(best, false );
+            return ret;
+        }
+
+        return ret;
+
+    }
 
     if( aSlopRadius > 0 )
     {
@@ -347,84 +413,17 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
         }
 
         DP_PRIMITIVE_PAIR dpPair;
+        DIFF_PAIR_PLACER  dpPlacer( this );
         wxString          errorMsg;
 
-        if( !DIFF_PAIR_PLACER::FindDpPrimitivePair( m_world.get(), startPoint, aStartItem, dpPair,
+        
+        if( !dpPlacer.FindDpPrimitivePair( m_world.get(), startPoint, aStartItem, dpPair,
                                                     &errorMsg ) )
         {
             SetFailureReason( errorMsg );
             return false;
         }
 
-        // Check if the gap at the start point is compatible with the configured diff pair settings.
-        // This only applies when starting from track segments, where the gap between existing
-        // tracks should match the configured diff pair gap. When starting from pads or vias,
-        // the anchor-to-anchor distance is determined by pad/via placement, not routing rules.
-        if( aStartItem->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
-        {
-            int actualGap = ( dpPair.AnchorP() - dpPair.AnchorN() ).EuclideanNorm();
-            int configuredGap = m_sizes.DiffPairGap() + m_sizes.DiffPairWidth();
-
-            // Allow some tolerance (10%) for minor differences, but warn about significant mismatches
-            int tolerance = configuredGap / 10;
-
-            if( std::abs( actualGap - configuredGap ) > tolerance )
-            {
-                SetFailureReason(
-                        _( "The differential pair gap at the start point does not match "
-                           "the configured gap. This can occur in neckdown areas where tracks "
-                           "have narrower width and spacing. Adjust the differential pair "
-                           "settings or start from a location with the correct gap." ) );
-                return false;
-            }
-        }
-
-        SHAPE_LINE_CHAIN dummyStartSegA;
-        SHAPE_LINE_CHAIN dummyStartSegB;
-        LINE             dummyStartLineA;
-        LINE             dummyStartLineB;
-
-        dummyStartSegA.Append( dpPair.AnchorN() );
-        dummyStartSegA.Append( dpPair.AnchorN(), true );
-
-        dummyStartSegB.Append( dpPair.AnchorP() );
-        dummyStartSegB.Append( dpPair.AnchorP(), true );
-
-        dummyStartLineA.SetShape( dummyStartSegA );
-        dummyStartLineA.SetLayer( aLayer );
-        dummyStartLineA.SetNet( dpPair.PrimN()->Net() );
-        dummyStartLineA.SetWidth( m_sizes.DiffPairWidth() );
-
-        dummyStartLineB.SetShape( dummyStartSegB );
-        dummyStartLineB.SetLayer( aLayer );
-        dummyStartLineB.SetNet( dpPair.PrimP()->Net() );
-        dummyStartLineB.SetWidth( m_sizes.DiffPairWidth() );
-
-        if( m_world->CheckColliding( &dummyStartLineA, ITEM::ANY_T )
-                || m_world->CheckColliding( &dummyStartLineB, ITEM::ANY_T ) )
-        {
-            // If the only reason we collide is track width; it's better to allow the user to start
-            // anyway and just highlight the resulting collisions, so they can change width later.
-            dummyStartLineA.SetWidth( m_sizes.BoardMinTrackWidth() );
-            dummyStartLineB.SetWidth( m_sizes.BoardMinTrackWidth() );
-
-            if( m_world->CheckColliding( &dummyStartLineA, ITEM::ANY_T )
-                || m_world->CheckColliding( &dummyStartLineB, ITEM::ANY_T ) )
-            {
-                ITEM_SET          dummyStartSet;
-                NODE::ITEM_VECTOR highlightedItems;
-
-                dummyStartSet.Add( dummyStartLineA );
-                dummyStartSet.Add( dummyStartLineB );
-                markViolations( m_world.get(), dummyStartSet, highlightedItems );
-
-                for( ITEM* item : highlightedItems )
-                    m_iface->HideItem( item );
-
-                SetFailureReason( _( "The routing start point violates DRC." ) );
-                return false;
-            }
-        }
     }
 
     return true;
@@ -1107,14 +1106,12 @@ void ROUTER::BreakSegmentOrArc( ITEM *aItem, const VECTOR2I& aP )
 {
     NODE *node = m_world->Branch();
 
-    LINE_PLACER placer( this );
-
     bool ret = false;
 
     if( aItem->OfKind( ITEM::SEGMENT_T ) )
-        ret = placer.SplitAdjacentSegments( node, aItem, aP );
+        ret = SplitAdjacentSegments( node, aItem, aP );
     else if( aItem->OfKind( ITEM::ARC_T ) )
-        ret = placer.SplitAdjacentArcs( node, aItem, aP );
+        ret = SplitAdjacentArcs( node, aItem, aP );
 
     if( ret )
     {
@@ -1124,6 +1121,13 @@ void ROUTER::BreakSegmentOrArc( ITEM *aItem, const VECTOR2I& aP )
     {
         delete node;
     }
+}
+
+
+void ROUTER::AbortPlacement()
+{
+    if( m_placer )
+        m_placer->AbortPlacement();
 }
 
 }

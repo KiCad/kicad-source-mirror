@@ -193,6 +193,7 @@ public:
     void GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded,
                           std::vector<PNS::ITEM*>& aHeads );
 
+    void AbortPlacement();
     void StopRouting();
     void ClearViewDecorations();
 
