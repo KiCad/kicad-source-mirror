@@ -235,10 +235,9 @@ bool PADSTACK::unpackCopperLayer( const kiapi::board::types::PadStackLayer& aPro
 }
 
 
-bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
+bool PADSTACK::Deserialize( const kiapi::board::types::PadStack& padstack )
 {
     using namespace kiapi::board::types;
-    PadStack padstack;
 
     auto unpackOptional = []<typename ProtoEnum>( const ProtoEnum&     aProto,
                                                   std::optional<bool>& aDest, ProtoEnum aTrueValue,
@@ -268,8 +267,6 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
         aDest.angle = aProto.angle();
     };
 
-    if( !aContainer.UnpackTo( &padstack ) )
-        return false;
 
     m_mode = FromProtoEnum<MODE>( padstack.type() );
     SetLayerSet( kiapi::board::UnpackLayerSet( padstack.layers() ) );
@@ -464,6 +461,17 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
 }
 
 
+bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
+{
+    kiapi::board::types::PadStack padstack;
+
+    if( !aContainer.UnpackTo( &padstack ) )
+        return false;
+
+    return Deserialize( padstack );
+}
+
+
 // A backdrill's side is identified by its start layer (F_Cu = top, B_Cu = bottom), not by which
 // drill slot it occupies. Reads scan both slots so a board written by KiCad 10.0 - which stored the
 // top backdrill in the tertiary slot - is understood, and writes always stamp the start layer so a
@@ -610,10 +618,9 @@ void PADSTACK::SetBackdrillEndLayer( bool aTop, PCB_LAYER_ID aLayer )
     target.start = aTop ? F_Cu : B_Cu;
 }
 
-void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
+void PADSTACK::Serialize( kiapi::board::types::PadStack& padstack ) const
 {
     using namespace kiapi::board::types;
-    PadStack padstack;
 
     padstack.set_type( ToProtoEnum<MODE, PadStackType>( m_mode ) );
     kiapi::board::PackLayerSet( *padstack.mutable_layers(), m_layerSet );
@@ -833,6 +840,13 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
                 BackOuterLayers().solder_paste_margin_ratio.value() );
     }
 
+}
+
+
+void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::board::types::PadStack padstack;
+    Serialize( padstack );
     aContainer.PackFrom( padstack );
 }
 

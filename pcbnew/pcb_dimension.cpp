@@ -341,9 +341,7 @@ void PCB_DIMENSION_BASE::Serialize( google::protobuf::Any &aContainer ) const
     dimension.set_locked( IsLocked() ? types::LockedState::LS_LOCKED
                                      : types::LockedState::LS_UNLOCKED );
 
-    google::protobuf::Any any;
-    EDA_TEXT::Serialize( any );
-    any.UnpackTo( dimension.mutable_text() );
+    EDA_TEXT::Serialize( *dimension.mutable_text(), pcbIUScale );
 
     types::Text* text = dimension.mutable_text();
     text->set_text( GetValueText() );
@@ -389,9 +387,7 @@ bool PCB_DIMENSION_BASE::Deserialize( const google::protobuf::Any &aContainer )
     SetUuidDirect( KIID( dimension.id().value() ) );
     SetLocked( dimension.locked() == types::LockedState::LS_LOCKED );
 
-    google::protobuf::Any any;
-    any.PackFrom( dimension.text() );
-    EDA_TEXT::Deserialize( any );
+    EDA_TEXT::Deserialize( dimension.text(), pcbIUScale );
 
     SetOverrideTextEnabled( dimension.override_text_enabled() );
     SetOverrideText( wxString::FromUTF8( dimension.override_text() ) );

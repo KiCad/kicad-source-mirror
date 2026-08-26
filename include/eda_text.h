@@ -37,6 +37,11 @@ class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
 struct EDA_IU_SCALE;
 
+namespace kiapi::common::types
+{
+    class Text;
+}
+
 
 struct EDA_TEXT_RENDER_CACHE_DATA
 {
@@ -101,6 +106,9 @@ public:
 
     void Serialize( google::protobuf::Any &aContainer, const EDA_IU_SCALE& aScale ) const;
     bool Deserialize( const google::protobuf::Any &aContainer, const EDA_IU_SCALE& aScale );
+
+    void Serialize( kiapi::common::types::Text& aOutput, const EDA_IU_SCALE& aScale ) const;
+    bool Deserialize( const kiapi::common::types::Text& aInput, const EDA_IU_SCALE& aScale );
 
     /**
      * Return the string associated with the text object.

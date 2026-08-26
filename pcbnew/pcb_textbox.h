@@ -28,6 +28,11 @@
 class LINE_READER;
 class MSG_PANEL_ITEM;
 
+namespace kiapi::board::types
+{
+    class BoardTextBox;
+}
+
 
 class PCB_TEXTBOX : public PCB_SHAPE, public EDA_TEXT
 {
@@ -62,6 +67,9 @@ public:
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
+    void Serialize( kiapi::board::types::BoardTextBox& aOutput ) const;
+    bool Deserialize( const kiapi::board::types::BoardTextBox& aInput );
 
     wxString GetFriendlyName() const override { return _( "Text Box" ); }
 

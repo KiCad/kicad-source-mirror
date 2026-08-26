@@ -83,9 +83,7 @@ void SCH_TEXT::Serialize( google::protobuf::Any& aContainer ) const
     text.set_locked( IsLocked() ? types::LockedState::LS_LOCKED : types::LockedState::LS_UNLOCKED );
     text.set_exclude_from_sim( GetExcludedFromSim() );
 
-    google::protobuf::Any any;
-    EDA_TEXT::Serialize( any, schIUScale );
-    any.UnpackTo( text.mutable_text() );
+    EDA_TEXT::Serialize( *text.mutable_text(), schIUScale );
 
     PackVector2( *text.mutable_text()->mutable_position(), GetPosition(), schIUScale );
 
@@ -106,10 +104,7 @@ bool SCH_TEXT::Deserialize( const google::protobuf::Any& aContainer )
     SetLocked( text.locked() == types::LockedState::LS_LOCKED );
     SetExcludedFromSim( text.exclude_from_sim() );
 
-    google::protobuf::Any any;
-    any.PackFrom( text.text() );
-
-    if( !EDA_TEXT::Deserialize( any, schIUScale ) )
+    if( !EDA_TEXT::Deserialize( text.text(), schIUScale ) )
         return false;
 
     SetPosition( UnpackVector2( text.text().position(), schIUScale ) );

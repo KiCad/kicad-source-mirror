@@ -229,9 +229,7 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
     msg.mutable_id()->set_value( m_Uuid.AsStdString() );
     msg.set_locked( IsLocked() ? types::LockedState::LS_LOCKED : types::LockedState::LS_UNLOCKED );
 
-    google::protobuf::Any any;
-    EDA_SHAPE::Serialize( any );
-    any.UnpackTo( msg.mutable_shape() );
+    EDA_SHAPE::Serialize( *msg.mutable_shape(), pcbIUScale );
 
     if( FOOTPRINT* parent = GetParentFootprint() )
         msg.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
@@ -278,9 +276,7 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
     SetLayer( FromProtoEnum<PCB_LAYER_ID, BoardLayer>( msg.layer() ) );
     UnpackNet( msg.net() );
 
-    google::protobuf::Any any;
-    any.PackFrom( msg.shape() );
-    EDA_SHAPE::Deserialize( any );
+    EDA_SHAPE::Deserialize( msg.shape(), pcbIUScale );
 
     if( msg.has_solder_mask() )
     {

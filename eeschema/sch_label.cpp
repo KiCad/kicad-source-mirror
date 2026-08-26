@@ -1621,9 +1621,7 @@ void packLabel( LabelProto& aOutput, const SCH_LABEL_BASE& aLabel )
     aOutput.set_locked( aLabel.IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                           : kiapi::common::types::LockedState::LS_UNLOCKED );
 
-    google::protobuf::Any any;
-    aLabel.EDA_TEXT::Serialize( any, schIUScale );
-    any.UnpackTo( aOutput.mutable_text() );
+    aLabel.EDA_TEXT::Serialize( *aOutput.mutable_text(), schIUScale );
     kiapi::common::PackVector2( *aOutput.mutable_position(), aLabel.GetPosition(), schIUScale );
 
     for( const SCH_FIELD& field : aLabel.GetFields() )
@@ -1631,8 +1629,7 @@ void packLabel( LabelProto& aOutput, const SCH_LABEL_BASE& aLabel )
         if( field.IsMandatory() )
             continue;
 
-        field.Serialize( any );
-        any.UnpackTo( aOutput.mutable_fields()->Add() );
+        field.Serialize( *aOutput.add_fields(), schIUScale );
     }
 }
 
@@ -1646,10 +1643,7 @@ bool unpackLabel( const LabelProto& aInput, SCH_LABEL_BASE& aLabel )
     aLabel.SetSpinStyle( FromProtoEnum<SPIN_STYLE::SPIN, types::SchematicLabelSpinStyle>( aInput.spin_style() ) );
     aLabel.SetLocked( aInput.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
-    google::protobuf::Any any;
-    any.PackFrom( aInput.text() );
-
-    if( !aLabel.EDA_TEXT::Deserialize( any, schIUScale ) )
+    if( !aLabel.EDA_TEXT::Deserialize( aInput.text(), schIUScale ) )
         return false;
 
     aLabel.SetPosition( kiapi::common::UnpackVector2( aInput.position(), schIUScale ) );
@@ -1658,8 +1652,7 @@ bool unpackLabel( const LabelProto& aInput, SCH_LABEL_BASE& aLabel )
     for( const types::SchematicField& field : aInput.fields() )
     {
         aLabel.GetFields().emplace_back( &aLabel, FIELD_T::USER );
-        any.PackFrom( field );
-        aLabel.GetFields().back().Deserialize( any );
+        aLabel.GetFields().back().Deserialize( field, schIUScale );
     }
 
     return true;
@@ -2132,9 +2125,7 @@ void SCH_GLOBALLABEL::Serialize( google::protobuf::Any& aContainer ) const
     label.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                  : kiapi::common::types::LockedState::LS_UNLOCKED );
 
-    google::protobuf::Any any;
-    EDA_TEXT::Serialize( any, schIUScale );
-    any.UnpackTo( label.mutable_text() );
+    EDA_TEXT::Serialize( *label.mutable_text(), schIUScale );
     kiapi::common::PackVector2( *label.mutable_position(), GetPosition(), schIUScale );
 
     label.set_shape( ToProtoEnum<LABEL_FLAG_SHAPE, types::SchematicLabelShape>( GetShape() ) );
@@ -2144,16 +2135,11 @@ void SCH_GLOBALLABEL::Serialize( google::protobuf::Any& aContainer ) const
         if( field.IsMandatory() )
             continue;
 
-        field.Serialize( any );
-        any.UnpackTo( label.mutable_fields()->Add() );
+        field.Serialize( *label.add_fields(), schIUScale );
     }
 
     if( const SCH_FIELD* field = GetField( FIELD_T::INTERSHEET_REFS ) )
-    {
-        google::protobuf::Any fieldAny;
-        field->Serialize( fieldAny );
-        fieldAny.UnpackTo( label.mutable_intersheet_refs_field() );
-    }
+        field->Serialize( *label.mutable_intersheet_refs_field(), schIUScale );
 
     aContainer.PackFrom( label );
 }
@@ -2173,11 +2159,7 @@ bool SCH_GLOBALLABEL::Deserialize( const google::protobuf::Any& aContainer )
             label.shape() ) );
 
     if( label.has_intersheet_refs_field() )
-    {
-        google::protobuf::Any any;
-        any.PackFrom( label.intersheet_refs_field() );
-        GetField( FIELD_T::INTERSHEET_REFS )->Deserialize( any );
-    }
+        GetField( FIELD_T::INTERSHEET_REFS )->Deserialize( label.intersheet_refs_field(), schIUScale );
 
     return true;
 }

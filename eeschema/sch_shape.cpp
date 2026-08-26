@@ -58,13 +58,11 @@ void SCH_SHAPE::Serialize( google::protobuf::Any& aContainer ) const
     using namespace kiapi::common;
 
     kiapi::schematic::types::SchematicGraphicShape msg;
-    google::protobuf::Any any;
 
     msg.mutable_id()->set_value( m_Uuid.AsStdString() );
     msg.set_locked( IsLocked() ? types::LockedState::LS_LOCKED : types::LockedState::LS_UNLOCKED );
 
-    EDA_SHAPE::Serialize( any, schIUScale );
-    any.UnpackTo( msg.mutable_shape() );
+    EDA_SHAPE::Serialize( *msg.mutable_shape(), schIUScale );
 
     aContainer.PackFrom( msg );
 }
@@ -82,9 +80,7 @@ bool SCH_SHAPE::Deserialize( const google::protobuf::Any& aContainer )
     const_cast<KIID&>( m_Uuid ) = KIID( msg.id().value() );
     SetLocked( msg.locked() == types::LockedState::LS_LOCKED );
 
-    google::protobuf::Any any;
-    any.PackFrom( msg.shape() );
-    return EDA_SHAPE::Deserialize( any, schIUScale );
+    return EDA_SHAPE::Deserialize( msg.shape(), schIUScale );
 }
 
 

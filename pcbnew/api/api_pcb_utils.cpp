@@ -143,10 +143,7 @@ LSET UnpackLayerSet( const google::protobuf::RepeatedField<int>& aProtoLayerSet 
 
 void PackBoardStackup( const BOARD& aBoard, BoardStackup& aOut )
 {
-    google::protobuf::Any any;
-
-    aBoard.GetStackupOrDefault().Serialize( any );
-    any.UnpackTo( &aOut );
+    aBoard.GetStackupOrDefault().Serialize( aOut );
 
     for( BoardStackupLayer& layer : *aOut.mutable_layers() )
     {

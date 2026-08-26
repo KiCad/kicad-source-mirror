@@ -245,10 +245,9 @@ void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 }
 
 
-void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer, const EDA_IU_SCALE &aScale ) const
+void EDA_SHAPE::Serialize( kiapi::common::types::GraphicShape& shape, const EDA_IU_SCALE &aScale ) const
 {
     using namespace kiapi::common;
-    types::GraphicShape shape;
 
     types::GraphicFillAttributes* fill = shape.mutable_attributes()->mutable_fill();
 
@@ -339,6 +338,13 @@ void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer, const EDA_IU_SCALE
 
     // TODO m_hasSolderMask and m_solderMaskMargin
 
+}
+
+
+void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer, const EDA_IU_SCALE &aScale ) const
+{
+    kiapi::common::types::GraphicShape shape;
+    Serialize( shape, aScale );
     aContainer.PackFrom( shape );
 }
 
@@ -349,14 +355,9 @@ bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
 }
 
 
-bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer, const EDA_IU_SCALE &aScale )
+bool EDA_SHAPE::Deserialize( const kiapi::common::types::GraphicShape& shape, const EDA_IU_SCALE &aScale )
 {
     using namespace kiapi::common;
-
-    types::GraphicShape shape;
-
-    if( !aContainer.UnpackTo( &shape ) )
-        return false;
 
     // Initialize everything to a known state that doesn't get touched by every
     // codepath below, to make sure the equality operator is consistent
@@ -441,6 +442,16 @@ bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer, const EDA_
     }
 
     return true;
+}
+
+bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer, const EDA_IU_SCALE &aScale )
+{
+    kiapi::common::types::GraphicShape shape;
+
+    if( !aContainer.UnpackTo( &shape ) )
+        return false;
+
+    return Deserialize( shape, aScale );
 }
 
 

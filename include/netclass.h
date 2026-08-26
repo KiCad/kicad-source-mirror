@@ -31,6 +31,11 @@
 
 using KIGFX::COLOR4D;
 
+namespace kiapi::common::project
+{
+    class NetClass;
+}
+
 /**
  * A collection of nets and the parameters used to route or test these nets.
  */
@@ -74,6 +79,9 @@ public:
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
+    void Serialize( kiapi::common::project::NetClass& aOutput ) const;
+    bool Deserialize( const kiapi::common::project::NetClass& aInput );
 
     /// @brief Resets all parent fields to point to this netclass
     void ResetParents();

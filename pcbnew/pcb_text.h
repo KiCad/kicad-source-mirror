@@ -31,6 +31,11 @@ class MSG_PANEL_ITEM;
 class FOOTPRINT;
 class HTML_MESSAGE_BOX;
 
+namespace kiapi::board::types
+{
+    class BoardText;
+}
+
 
 struct PCB_TEXT_KNOCKOUT_CACHE_DATA
 {
@@ -77,6 +82,9 @@ public:
 
     void Serialize( google::protobuf::Any& aContainer ) const override;
     bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
+    void Serialize( kiapi::board::types::BoardText& aOutput ) const;
+    bool Deserialize( const kiapi::board::types::BoardText& aInput );
 
     void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) override;
 

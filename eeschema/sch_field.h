@@ -33,6 +33,11 @@
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
 
+namespace kiapi::schematic::types
+{
+    class SchematicField;
+}
+
 
 struct SCH_FIELD_RENDER_CACHE_DATA
 {
@@ -54,6 +59,11 @@ public:
 
     void Serialize( google::protobuf::Any& aContainer ) const override;
     bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
+    void Serialize( kiapi::schematic::types::SchematicField& aOutput,
+                    const EDA_IU_SCALE& aScale ) const;
+    bool Deserialize( const kiapi::schematic::types::SchematicField& aInput,
+                      const EDA_IU_SCALE& aScale );
 
     ~SCH_FIELD() override
     { }

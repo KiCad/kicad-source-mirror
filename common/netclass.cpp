@@ -159,10 +159,9 @@ bool NETCLASS::EqualsByPersistedFields( const NETCLASS& aOther ) const
 }
 
 
-void NETCLASS::Serialize( google::protobuf::Any &aContainer ) const
+void NETCLASS::Serialize( kiapi::common::project::NetClass& nc ) const
 {
     using namespace kiapi::common;
-    project::NetClass nc;
 
     nc.set_name( m_Name.ToUTF8() );
     nc.set_priority( m_Priority );
@@ -227,17 +226,21 @@ void NETCLASS::Serialize( google::protobuf::Any &aContainer ) const
         //         static_cast<LINE_STYLE>( *m_lineStyle ) ) );
     }
 
+}
+
+
+void NETCLASS::Serialize( google::protobuf::Any &aContainer ) const
+{
+    kiapi::common::project::NetClass nc;
+    Serialize( nc );
     aContainer.PackFrom( nc );
 }
 
 
-bool NETCLASS::Deserialize( const google::protobuf::Any &aContainer )
+bool NETCLASS::Deserialize( const kiapi::common::project::NetClass& nc )
 {
     using namespace kiapi::common;
-    project::NetClass nc;
 
-    if( !aContainer.UnpackTo( &nc ) )
-        return false;
 
     m_Name = wxString::FromUTF8( nc.name() );
     m_Priority = nc.priority();
@@ -292,6 +295,17 @@ bool NETCLASS::Deserialize( const google::protobuf::Any &aContainer )
     //     m_lineStyle = static_cast<int>( FromProtoEnum<LINE_STYLE>( nc.schematic().line_style() ) );
 
     return true;
+}
+
+
+bool NETCLASS::Deserialize( const google::protobuf::Any &aContainer )
+{
+    kiapi::common::project::NetClass nc;
+
+    if( !aContainer.UnpackTo( &nc ) )
+        return false;
+
+    return Deserialize( nc );
 }
 
 

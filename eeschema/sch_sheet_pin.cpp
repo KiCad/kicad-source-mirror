@@ -60,11 +60,11 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const VECTOR2I& pos, const wxSt
 }
 
 
-void SCH_SHEET_PIN::Serialize( google::protobuf::Any& aContainer ) const
+void SCH_SHEET_PIN::Serialize( kiapi::schematic::types::SheetPin& pin,
+                               const EDA_IU_SCALE& aScale ) const
 {
     using namespace kiapi::schematic::types;
 
-    SheetPin pin;
 
     pin.mutable_id()->set_value( m_Uuid.AsStdString() );
     kiapi::common::PackVector2( *pin.mutable_position(), GetPosition(), schIUScale );
@@ -76,29 +76,28 @@ void SCH_SHEET_PIN::Serialize( google::protobuf::Any& aContainer ) const
     pin.set_locked( SCH_ITEM::IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                          : kiapi::common::types::LockedState::LS_UNLOCKED );
 
-    google::protobuf::Any any;
-    EDA_TEXT::Serialize( any, schIUScale );
-    any.UnpackTo( pin.mutable_text() );
+    EDA_TEXT::Serialize( *pin.mutable_text(), aScale );
 
+}
+
+void SCH_SHEET_PIN::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::schematic::types::SheetPin pin;
+    Serialize( pin, schIUScale );
     aContainer.PackFrom( pin );
 }
 
 
-bool SCH_SHEET_PIN::Deserialize( const google::protobuf::Any& aContainer )
+bool SCH_SHEET_PIN::Deserialize( const kiapi::schematic::types::SheetPin& pin,
+                                 const EDA_IU_SCALE& aScale )
 {
     using namespace kiapi::schematic::types;
 
-    SheetPin pin;
 
-    if( !aContainer.UnpackTo( &pin ) )
-        return false;
 
     const_cast<KIID&>( m_Uuid ) = KIID( pin.id().value() );
 
-    google::protobuf::Any any;
-    any.PackFrom( pin.text() );
-
-    if( !EDA_TEXT::Deserialize( any, schIUScale ) )
+    if( !EDA_TEXT::Deserialize( pin.text(), aScale ) )
         return false;
 
     SetPosition( kiapi::common::UnpackVector2( pin.position(), schIUScale ) );
@@ -107,6 +106,16 @@ bool SCH_SHEET_PIN::Deserialize( const google::protobuf::Any& aContainer )
     SetShape( FromProtoEnum<LABEL_FLAG_SHAPE, SchematicLabelShape>( pin.shape() ) );
     SetLocked( pin.locked() == kiapi::common::types::LockedState::LS_LOCKED );
     return true;
+}
+
+bool SCH_SHEET_PIN::Deserialize( const google::protobuf::Any& aContainer )
+{
+    kiapi::schematic::types::SheetPin pin;
+
+    if( !aContainer.UnpackTo( &pin ) )
+        return false;
+
+    return Deserialize( pin, schIUScale );
 }
 
 

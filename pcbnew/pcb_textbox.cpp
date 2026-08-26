@@ -73,11 +73,10 @@ void PCB_TEXTBOX::CopyFrom( const BOARD_ITEM* aOther )
 }
 
 
-void PCB_TEXTBOX::Serialize( google::protobuf::Any& aContainer ) const
+void PCB_TEXTBOX::Serialize( kiapi::board::types::BoardTextBox& boardText ) const
 {
     using namespace kiapi::common::types;
     using namespace kiapi::board;
-    types::BoardTextBox boardText;
     boardText.set_layer( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( GetLayer() ) );
     boardText.mutable_id()->set_value( m_Uuid.AsStdString() );
     boardText.set_locked( IsLocked() ? LockedState::LS_LOCKED : LockedState::LS_UNLOCKED );
@@ -96,17 +95,21 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any& aContainer ) const
     else if( const BOARD* board = GetBoard() )
         boardText.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
+}
+
+
+void PCB_TEXTBOX::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::board::types::BoardTextBox boardText;
+    Serialize( boardText );
     aContainer.PackFrom( boardText );
 }
 
 
-bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any& aContainer )
+bool PCB_TEXTBOX::Deserialize( const kiapi::board::types::BoardTextBox& boardText )
 {
     using namespace kiapi::board;
-    types::BoardTextBox boardText;
 
-    if( !aContainer.UnpackTo( &boardText ) )
-        return false;
 
     SetUuidDirect( KIID( boardText.id().value() ) );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( boardText.layer() ) );
@@ -127,6 +130,17 @@ bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any& aContainer )
     }
 
     return true;
+}
+
+
+bool PCB_TEXTBOX::Deserialize( const google::protobuf::Any& aContainer )
+{
+    kiapi::board::types::BoardTextBox boardText;
+
+    if( !aContainer.UnpackTo( &boardText ) )
+        return false;
+
+    return Deserialize( boardText );
 }
 
 

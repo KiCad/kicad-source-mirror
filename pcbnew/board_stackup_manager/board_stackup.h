@@ -37,6 +37,11 @@ class BOARD;
 class BOARD_DESIGN_SETTINGS;
 class OUTPUTFORMATTER;
 
+namespace kiapi::board
+{
+    class BoardStackup;
+}
+
 // A enum to manage the different layers inside the stackup layers.
 // Note the stackup layers include both dielectric and some layers handled by the board editor
 // Therefore a stackup layer item is not exactly like a board layer
@@ -245,6 +250,9 @@ public:
     void Serialize( google::protobuf::Any &aContainer ) const override;
 
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
+    void Serialize( kiapi::board::BoardStackup& aOutput ) const;
+    bool Deserialize( const kiapi::board::BoardStackup& aInput );
 
     const std::vector<BOARD_STACKUP_ITEM*>& GetList() const { return m_list; }
 

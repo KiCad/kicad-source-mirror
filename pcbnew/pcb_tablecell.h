@@ -25,6 +25,11 @@
 #include <board_item_container.h>
 
 
+namespace kiapi::board::types
+{
+    class TableCell;
+}
+
 class PCB_TABLECELL : public PCB_TEXTBOX
 {
 public:
@@ -40,6 +45,9 @@ public:
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
+    void Serialize( kiapi::board::types::TableCell& aOutput ) const;
+    bool Deserialize( const kiapi::board::types::TableCell& aInput );
 
     EDA_GROUP* GetParentGroup() const override
     {

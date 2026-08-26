@@ -1541,8 +1541,6 @@ HANDLER_RESULT<NetClassForNetsResponse> API_HANDLER_PCB::handleGetNetClassForNet
 
     BOARD* board = this->board();
     const NETINFO_LIST& nets = board->GetNetInfo();
-    google::protobuf::Any any;
-
     for( const board::types::Net& net : aCtx.Request.net() )
     {
         NETINFO_ITEM* netInfo = nets.GetNetItem( wxString::FromUTF8( net.name() ) );
@@ -1550,9 +1548,8 @@ HANDLER_RESULT<NetClassForNetsResponse> API_HANDLER_PCB::handleGetNetClassForNet
         if( !netInfo )
             continue;
 
-        netInfo->GetNetClass()->Serialize( any );
         auto [pair, rc] = response.mutable_classes()->insert( { net.name(), {} } );
-        any.UnpackTo( &pair->second );
+        netInfo->GetNetClass()->Serialize( pair->second );
     }
 
     return response;

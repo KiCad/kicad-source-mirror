@@ -404,9 +404,7 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
     pad.mutable_pad_to_die_length()->set_value_nm( GetPadToDieLength() );
     pad.mutable_pad_to_die_delay()->set_value_as( GetPadToDieDelay() );
 
-    google::protobuf::Any padStackMsg;
-    m_padStack.Serialize( padStackMsg );
-    padStackMsg.UnpackTo( pad.mutable_pad_stack() );
+    m_padStack.Serialize( *pad.mutable_pad_stack() );
 
     if( GetLocalClearance().has_value() )
         pad.mutable_copper_clearance_override()->set_value_nm( *GetLocalClearance() );

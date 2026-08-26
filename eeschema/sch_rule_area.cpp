@@ -83,9 +83,7 @@ void SCH_RULE_AREA::Serialize( google::protobuf::Any& aContainer ) const
     ruleArea.set_exclude_from_board( m_excludedFromBoard );
     ruleArea.set_dnp( m_DNP );
 
-    google::protobuf::Any any;
-    EDA_SHAPE::Serialize( any, schIUScale );
-    any.UnpackTo( ruleArea.mutable_shape() );
+    EDA_SHAPE::Serialize( *ruleArea.mutable_shape(), schIUScale );
 
     aContainer.PackFrom( ruleArea );
 }
@@ -105,10 +103,7 @@ bool SCH_RULE_AREA::Deserialize( const google::protobuf::Any& aContainer )
     SetExcludedFromBoard( ruleArea.exclude_from_board() );
     SetDNP( ruleArea.dnp() );
 
-    google::protobuf::Any any;
-    any.PackFrom( ruleArea.shape() );
-
-    if( !EDA_SHAPE::Deserialize( any, schIUScale ) )
+    if( !EDA_SHAPE::Deserialize( ruleArea.shape(), schIUScale ) )
         return false;
 
     if( GetShape() != SHAPE_T::POLY )

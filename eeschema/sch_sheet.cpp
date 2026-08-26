@@ -110,28 +110,19 @@ void SCH_SHEET::Serialize( google::protobuf::Any& aContainer ) const
     if( GetBackgroundColor() != COLOR4D::UNSPECIFIED )
         PackColor( *fill->mutable_color(), GetBackgroundColor() );
 
-    google::protobuf::Any any;
-
-    GetField( FIELD_T::SHEET_NAME )->Serialize( any );
-    any.UnpackTo( sheet.mutable_name_field() );
-
-    GetField( FIELD_T::SHEET_FILENAME )->Serialize( any );
-    any.UnpackTo( sheet.mutable_filename_field() );
+    GetField( FIELD_T::SHEET_NAME )->Serialize( *sheet.mutable_name_field(), schIUScale );
+    GetField( FIELD_T::SHEET_FILENAME )->Serialize( *sheet.mutable_filename_field(), schIUScale );
 
     for( const SCH_FIELD& field : GetFields() )
     {
         if( field.IsMandatory() )
             continue;
 
-        field.Serialize( any );
-        any.UnpackTo( sheet.add_user_fields() );
+        field.Serialize( *sheet.add_user_fields(), schIUScale );
     }
 
     for( const SCH_SHEET_PIN* pin : GetPins() )
-    {
-        pin->Serialize( any );
-        any.UnpackTo( sheet.add_pins() );
-    }
+        pin->Serialize( *sheet.add_pins(), schIUScale );
 
     aContainer.PackFrom( sheet );
 }
@@ -177,28 +168,20 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
     m_fields.emplace_back( this, FIELD_T::SHEET_FILENAME,
                            GetDefaultFieldName( FIELD_T::SHEET_FILENAME, DO_TRANSLATE ) );
 
-    google::protobuf::Any any;
-
-    any.PackFrom( sheet.name_field() );
-    GetField( FIELD_T::SHEET_NAME )->Deserialize( any );
-
-    any.PackFrom( sheet.filename_field() );
-    GetField( FIELD_T::SHEET_FILENAME )->Deserialize( any );
+    GetField( FIELD_T::SHEET_NAME )->Deserialize( sheet.name_field(), schIUScale );
+    GetField( FIELD_T::SHEET_FILENAME )->Deserialize( sheet.filename_field(), schIUScale );
 
     for( const auto& field : sheet.user_fields() )
     {
         m_fields.emplace_back( this, FIELD_T::SHEET_USER );
-
-        any.PackFrom( field );
-        m_fields.back().Deserialize( any );
+        m_fields.back().Deserialize( field, schIUScale );
     }
 
     for( const auto& pinProto : sheet.pins() )
     {
         auto pin = std::make_unique<SCH_SHEET_PIN>( this );
-        any.PackFrom( pinProto );
 
-        if( !pin->Deserialize( any ) )
+        if( !pin->Deserialize( pinProto, schIUScale ) )
             return false;
 
         AddPin( pin.release() );

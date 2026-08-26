@@ -56,46 +56,52 @@ void PCB_TABLECELL::swapData( BOARD_ITEM* aImage )
 }
 
 
-void PCB_TABLECELL::Serialize( google::protobuf::Any& aContainer ) const
+void PCB_TABLECELL::Serialize( kiapi::board::types::TableCell& cell ) const
 {
     using namespace kiapi::board;
-    types::TableCell cell;
 
     cell.set_column_span( m_colSpan );
     cell.set_row_span( m_rowSpan );
 
-    google::protobuf::Any textBoxAny;
-    PCB_TEXTBOX::Serialize( textBoxAny );
+    PCB_TEXTBOX::Serialize( *cell.mutable_text_box() );
 
-    std::ignore = textBoxAny.UnpackTo( cell.mutable_text_box() );
+}
 
+
+void PCB_TABLECELL::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::board::types::TableCell cell;
+    Serialize( cell );
     aContainer.PackFrom( cell );
 }
 
 
-bool PCB_TABLECELL::Deserialize( const google::protobuf::Any& aContainer )
+bool PCB_TABLECELL::Deserialize( const kiapi::board::types::TableCell& cell )
 {
     using namespace kiapi::board;
-    types::TableCell cell;
 
-    if( !aContainer.UnpackTo( &cell ) )
-        return false;
 
     if( !cell.has_text_box() )
         return false;
 
-    google::protobuf::Any textBoxAny;
-
-    if( !textBoxAny.PackFrom( cell.text_box() ) )
-        return false;
-
-    if( !PCB_TEXTBOX::Deserialize( textBoxAny ) )
+    if( !PCB_TEXTBOX::Deserialize( cell.text_box() ) )
         return false;
 
     SetColSpan( cell.column_span() );
     SetRowSpan( cell.row_span() );
 
     return true;
+}
+
+
+bool PCB_TABLECELL::Deserialize( const google::protobuf::Any& aContainer )
+{
+    kiapi::board::types::TableCell cell;
+
+    if( !aContainer.UnpackTo( &cell ) )
+        return false;
+
+    return Deserialize( cell );
 }
 
 

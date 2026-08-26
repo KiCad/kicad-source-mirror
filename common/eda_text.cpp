@@ -168,10 +168,9 @@ void EDA_TEXT::Serialize( google::protobuf::Any& aContainer ) const
 }
 
 
-void EDA_TEXT::Serialize( google::protobuf::Any& aContainer, const EDA_IU_SCALE& aScale ) const
+void EDA_TEXT::Serialize( kiapi::common::types::Text& text, const EDA_IU_SCALE& aScale ) const
 {
     using namespace kiapi::common;
-    types::Text text;
 
     text.set_text( GetText().ToUTF8() );
     text.set_hyperlink( GetHyperlink().ToUTF8() );
@@ -182,6 +181,13 @@ void EDA_TEXT::Serialize( google::protobuf::Any& aContainer, const EDA_IU_SCALE&
     PackTextAttributes( *attrs, GetAttributes() );
     attrs->set_visible( true );
 
+}
+
+
+void EDA_TEXT::Serialize( google::protobuf::Any& aContainer, const EDA_IU_SCALE& aScale ) const
+{
+    kiapi::common::types::Text text;
+    Serialize( text, aScale );
     aContainer.PackFrom( text );
 }
 
@@ -192,13 +198,9 @@ bool EDA_TEXT::Deserialize( const google::protobuf::Any& aContainer )
 }
 
 
-bool EDA_TEXT::Deserialize( const google::protobuf::Any& aContainer, const EDA_IU_SCALE& aScale )
+bool EDA_TEXT::Deserialize( const kiapi::common::types::Text& text, const EDA_IU_SCALE& aScale )
 {
     using namespace kiapi::common;
-    types::Text text;
-
-    if( !aContainer.UnpackTo( &text ) )
-        return false;
 
     SetText( wxString( text.text().c_str(), wxConvUTF8 ) );
     SetHyperlink( wxString( text.hyperlink().c_str(), wxConvUTF8 ) );
@@ -212,6 +214,17 @@ bool EDA_TEXT::Deserialize( const google::protobuf::Any& aContainer, const EDA_I
     }
 
     return true;
+}
+
+
+bool EDA_TEXT::Deserialize( const google::protobuf::Any& aContainer, const EDA_IU_SCALE& aScale )
+{
+    kiapi::common::types::Text text;
+
+    if( !aContainer.UnpackTo( &text ) )
+        return false;
+
+    return Deserialize( text, aScale );
 }
 
 

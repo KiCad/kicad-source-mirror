@@ -331,15 +331,10 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     if( const BOARD* board = GetBoard() )
         footprint.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
-    google::protobuf::Any buf;
-    GetField( FIELD_T::REFERENCE )->Serialize( buf );
-    buf.UnpackTo( footprint.mutable_reference_field() );
-    GetField( FIELD_T::VALUE )->Serialize( buf );
-    buf.UnpackTo( footprint.mutable_value_field() );
-    GetField( FIELD_T::DATASHEET )->Serialize( buf );
-    buf.UnpackTo( footprint.mutable_datasheet_field() );
-    GetField( FIELD_T::DESCRIPTION )->Serialize( buf );
-    buf.UnpackTo( footprint.mutable_description_field() );
+    GetField( FIELD_T::REFERENCE )->Serialize( *footprint.mutable_reference_field() );
+    GetField( FIELD_T::VALUE )->Serialize( *footprint.mutable_value_field() );
+    GetField( FIELD_T::DATASHEET )->Serialize( *footprint.mutable_datasheet_field() );
+    GetField( FIELD_T::DESCRIPTION )->Serialize( *footprint.mutable_description_field() );
 
     types::FootprintAttributes* attrs = footprint.mutable_attributes();
 
