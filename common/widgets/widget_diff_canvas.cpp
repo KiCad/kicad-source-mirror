@@ -62,6 +62,11 @@ WIDGET_DIFF_CANVAS::WIDGET_DIFF_CANVAS( wxWindow* aParent, wxWindowID aId,
     m_view = new KIGFX::VIEW();
     m_view->SetGAL( m_gal );
 
+    auto target = m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
+
+    for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
+        m_view->SetLayerTarget( i, target );
+
     // Until a module installs a native context painter, the canvas renders only
     // VIEW_OVERLAY commands, which bypass the painter. Reuse the drawing-sheet
     // pair (also used by PL_DRAW_PANEL_GAL) rather than a private stub. Force
