@@ -120,6 +120,9 @@ private:
      */
     wxString getDefaultFieldValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName );
 
+    bool applyDataToFootprint( const FOOTPRINT_REF& aRef, BOARD_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames,
+                               const wxString& aVariantName );
+
     /**
      * Set the attribute value.
      *

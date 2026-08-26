@@ -535,123 +535,132 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 }
 
 
-void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( BOARD_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames,
-                                                         const wxString& aVariantName )
+bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPRINT_REF& aRef, BOARD_COMMIT& aCommit,
+                                                                    TEMPLATES&      aTemplateFieldnames,
+                                                                    const wxString& aVariantName )
 {
     bool defaultVariant = aVariantName.IsEmpty()
                           || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0;
+    FOOTPRINT& footprint = aRef.GetFootprint();
+    bool       footprintModified = false;
 
+    const std::map<wxString, wxString>& fieldStore = getStoredFields( aRef );
+
+    for( const auto& [srcName, srcValue] : fieldStore )
+    {
+        // Attributes bypass the field logic, so handle them first
+        if( fieldIsAttribute( srcName ) )
+        {
+            footprintModified |= setAttributeValue( aRef, srcName, srcValue, aVariantName );
+            continue;
+        }
+
+        // Skip generated fields with variables as names (e.g. ${QUANTITY});
+        // they can't be edited
+        if( IsGeneratedField( srcName ) )
+            continue;
+
+        // Don't apply footprint fields to footprints
+        if( srcName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+            continue;
+
+        PCB_FIELD* destField = footprint.GetField( srcName );
+
+        if( destField && destField->IsPrivate() )
+        {
+            if( srcValue.IsEmpty() )
+                continue;
+            else
+            {
+                destField->SetPrivate( false );
+                footprintModified = true;
+            }
+        }
+
+        // Reaching this point means the data store field is at least marked present,
+        // so add the field to the footprint even when its stored value is empty.
+        bool createField = !destField;
+
+        if( createField )
+        {
+            destField = new PCB_FIELD( &footprint, FIELD_T::USER, srcName );
+            destField->SetLayer( footprint.GetLayer() == F_Cu ? F_Fab : B_Fab );
+            destField->SetFPRelativePosition( { 0, 0 } );
+
+            if( BOARD* board = footprint.GetBoard() )
+                destField->StyleFromSettings( board->GetDesignSettings(), true );
+
+            if( const TEMPLATE_FIELDNAME* srcTemplate = aTemplateFieldnames.GetFieldName( srcName ) )
+                destField->SetVisible( srcTemplate->m_Visible );
+            else
+                destField->SetVisible( false );
+
+            footprint.Add( destField );
+            footprintModified = true;
+        }
+
+        if( !destField )
+            continue;
+
+        // Reference is not editable from this dialog
+        if( destField->GetId() == FIELD_T::REFERENCE )
+            continue;
+
+        wxString previousValue = footprint.GetFieldValueForVariant( aVariantName, srcName );
+        wxString newValue = aCommit.GetBoard()->ConvertCrossReferencesToKIIDs( srcValue );
+
+        if( previousValue != newValue )
+        {
+            if( defaultVariant )
+            {
+                destField->SetText( newValue );
+                footprintModified = true;
+            }
+            else if( FOOTPRINT_VARIANT* variant = footprint.AddVariant( aVariantName ) )
+            {
+                variant->SetFieldValue( srcName, newValue );
+                footprintModified = true;
+            }
+        }
+    }
+
+    for( int ii = static_cast<int>( footprint.GetFields().size() ) - 1; ii >= 0; ii-- )
+    {
+        PCB_FIELD* field = footprint.GetFields()[ii];
+
+        if( field->IsMandatory() || field->IsPrivate() )
+            continue;
+
+        if( !fieldStore.contains( field->GetCanonicalName() ) )
+        {
+            // TODO: unlike symbols/SCH_FIELD, footprint PCB_FIELD
+            // can be grouped so we need to remove it from the group before deleting it
+            // In general, I'm not sure letting PCB_FIELDs associated with a footprint
+            // be grouped separately from the footprint is a good idea.
+            if( EDA_GROUP* parentGroup = field->GetParentGroup() )
+                parentGroup->RemoveItem( field );
+
+            footprint.Remove( field );
+            delete field;
+            footprintModified = true;
+        }
+    }
+
+    return footprintModified;
+}
+
+
+void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( BOARD_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames,
+                                                         const wxString& aVariantName )
+{
     for( const FOOTPRINT_REF& ref : m_footprintsList )
     {
         FOOTPRINT& footprint = ref.GetFootprint();
-        bool       footprintModified = false;
 
         std::unique_ptr<FOOTPRINT> footprintCopy = std::make_unique<FOOTPRINT>( footprint );
         footprintCopy->SetParentGroup( nullptr );
 
-        const std::map<wxString, wxString>& fieldStore = getStoredFields( ref );
-
-        for( const auto& [srcName, srcValue] : fieldStore )
-        {
-            // Attributes bypass the field logic, so handle them first
-            if( fieldIsAttribute( srcName ) )
-            {
-                footprintModified |= setAttributeValue( ref, srcName, srcValue, aVariantName );
-                continue;
-            }
-
-            // Skip generated fields with variables as names (e.g. ${QUANTITY});
-            // they can't be edited
-            if( IsGeneratedField( srcName ) )
-                continue;
-
-            // Don't apply footprint fields to footprints
-            if( srcName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
-                continue;
-
-            PCB_FIELD* destField = footprint.GetField( srcName );
-
-            if( destField && destField->IsPrivate() )
-            {
-                if( srcValue.IsEmpty() )
-                    continue;
-                else
-                {
-                    destField->SetPrivate( false );
-                    footprintModified = true;
-                }
-            }
-
-            // Reaching this point means the data store field is at least marked present,
-            // so add the field to the footprint even when its stored value is empty.
-            bool createField = !destField;
-
-            if( createField )
-            {
-                destField = new PCB_FIELD( &footprint, FIELD_T::USER, srcName );
-                destField->SetLayer( footprint.GetLayer() == F_Cu ? F_Fab : B_Fab );
-                destField->SetFPRelativePosition( { 0, 0 } );
-
-                if( BOARD* board = footprint.GetBoard() )
-                    destField->StyleFromSettings( board->GetDesignSettings(), true );
-
-                if( const TEMPLATE_FIELDNAME* srcTemplate = aTemplateFieldnames.GetFieldName( srcName ) )
-                    destField->SetVisible( srcTemplate->m_Visible );
-                else
-                    destField->SetVisible( false );
-
-                footprint.Add( destField );
-                footprintModified = true;
-            }
-
-            if( !destField )
-                continue;
-
-            // Reference is not editable from this dialog
-            if( destField->GetId() == FIELD_T::REFERENCE )
-                continue;
-
-            wxString previousValue = footprint.GetFieldValueForVariant( aVariantName, srcName );
-            wxString newValue = aCommit.GetBoard()->ConvertCrossReferencesToKIIDs( srcValue );
-
-            if( previousValue != newValue )
-            {
-                if( defaultVariant )
-                {
-                    destField->SetText( newValue );
-                    footprintModified = true;
-                }
-                else if( FOOTPRINT_VARIANT* variant = footprint.AddVariant( aVariantName ) )
-                {
-                    variant->SetFieldValue( srcName, newValue );
-                    footprintModified = true;
-                }
-            }
-        }
-
-        for( int ii = static_cast<int>( footprint.GetFields().size() ) - 1; ii >= 0; ii-- )
-        {
-            PCB_FIELD* field = footprint.GetFields()[ii];
-
-            if( field->IsMandatory() || field->IsPrivate() )
-                continue;
-
-            if( !fieldStore.contains( field->GetCanonicalName() ) )
-            {
-                // TODO: unlike symbols/SCH_FIELD, footprint PCB_FIELD
-                // can be grouped so we need to remove it from the group before deleting it
-                // In general, I'm not sure letting PCB_FIELDs associated with a footprint
-                // be grouped separately from the footprint is a good idea.
-                if( EDA_GROUP* parentGroup = field->GetParentGroup() )
-                    parentGroup->RemoveItem( field );
-
-                footprint.Remove( field );
-                delete field;
-                footprintModified = true;
-            }
-        }
-
-        if( footprintModified )
+        if( applyDataToFootprint( ref, aCommit, aTemplateFieldnames, aVariantName ) )
             aCommit.Modified( &footprint, footprintCopy.release() );
     }
 
