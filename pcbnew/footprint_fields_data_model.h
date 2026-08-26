@@ -120,8 +120,12 @@ private:
      */
     wxString getDefaultFieldValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName );
 
-    bool applyDataToFootprint( const FOOTPRINT_REF& aRef, BOARD_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames,
-                               const wxString& aVariantName );
+protected:
+    /**
+     * Returns whether or the the aDestFootprint was changed by applying the data from aSourceRef.
+     */
+    bool applyDataToFootprint( const FOOTPRINT_REF& aSourceRef, FOOTPRINT& aDestFootprint,
+                               TEMPLATES* aTemplateFieldnames, const wxString& aVariantName );
 
     /**
      * Set the attribute value.
@@ -136,7 +140,6 @@ private:
     bool setAttributeValue( const FOOTPRINT_REF& aRef, const wxString& aAttributeName, const wxString& aValue,
                             const wxString& aVariantName = wxEmptyString );
 
-protected:
     bool getLiveFieldValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName,
                             wxString& aValue ) override;
 
@@ -176,4 +179,6 @@ private:
                             wxString& aValue ) override;
 
     wxString getItemIdentifier( const FOOTPRINT_REF& aRef ) const override;
+
+    bool applyDataToFootprint( const FOOTPRINT_REF& aRef, FOOTPRINT& aFootprint );
 };

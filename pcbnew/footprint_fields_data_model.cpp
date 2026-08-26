@@ -535,25 +535,32 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 }
 
 
-bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPRINT_REF& aRef, BOARD_COMMIT& aCommit,
-                                                                    TEMPLATES&      aTemplateFieldnames,
-                                                                    const wxString& aVariantName )
+bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPRINT_REF& aSourceRef,
+                                                                    FOOTPRINT&           aDestFootprint,
+                                                                    TEMPLATES*           aTemplateFieldnames,
+                                                                    const wxString&      aVariantName )
 {
     bool defaultVariant = aVariantName.IsEmpty()
                           || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0;
-    FOOTPRINT& footprint = aRef.GetFootprint();
-    bool       footprintModified = false;
+    bool footprintModified = false;
 
-    const std::map<wxString, wxString>& fieldStore = getStoredFields( aRef );
+    FOOTPRINT_REF destRef( aDestFootprint );
+
+    const std::map<wxString, wxString>& fieldStore = getStoredFields( aSourceRef );
 
     for( const auto& [srcName, srcValue] : fieldStore )
     {
         // Attributes bypass the field logic, so handle them first
         if( fieldIsAttribute( srcName ) )
         {
-            footprintModified |= setAttributeValue( aRef, srcName, srcValue, aVariantName );
+            footprintModified |= setAttributeValue( destRef, srcName, srcValue, aVariantName );
             continue;
         }
+
+        // Lib footprint fields models exposes extra footprint properties like lib description
+        // that aren't fields
+        if( fieldIsItemProperty( srcName ) )
+            continue;
 
         // Skip generated fields with variables as names (e.g. ${QUANTITY});
         // they can't be edited
@@ -564,7 +571,13 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPR
         if( srcName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
             continue;
 
-        PCB_FIELD* destField = footprint.GetField( srcName );
+        int col = GetFieldNameCol( srcName );
+
+        // Footprint names are not editable (from the fields table dialogs)
+        if( col != -1 && ColIsItemIdentifier( col ) )
+            continue;
+
+        PCB_FIELD* destField = aDestFootprint.GetField( srcName );
 
         if( destField && destField->IsPrivate() )
         {
@@ -583,40 +596,47 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPR
 
         if( createField )
         {
-            destField = new PCB_FIELD( &footprint, FIELD_T::USER, srcName );
-            destField->SetLayer( footprint.GetLayer() == F_Cu ? F_Fab : B_Fab );
+            destField = new PCB_FIELD( &aDestFootprint, FIELD_T::USER, srcName );
+            destField->SetLayer( aDestFootprint.GetLayer() == F_Cu ? F_Fab : B_Fab );
             destField->SetFPRelativePosition( { 0, 0 } );
 
-            if( BOARD* board = footprint.GetBoard() )
+            if( BOARD* board = aDestFootprint.GetBoard() )
                 destField->StyleFromSettings( board->GetDesignSettings(), true );
 
-            if( const TEMPLATE_FIELDNAME* srcTemplate = aTemplateFieldnames.GetFieldName( srcName ) )
-                destField->SetVisible( srcTemplate->m_Visible );
+            // TODO: Fixup when this is implemented on the PCB side of things
+            if( aTemplateFieldnames )
+            {
+                if( const TEMPLATE_FIELDNAME* srcTemplate = aTemplateFieldnames->GetFieldName( srcName ) )
+                    destField->SetVisible( srcTemplate->m_Visible );
+                else
+                    destField->SetVisible( false );
+            }
             else
                 destField->SetVisible( false );
 
-            footprint.Add( destField );
+            aDestFootprint.Add( destField );
             footprintModified = true;
         }
 
         if( !destField )
             continue;
 
-        // Reference is not editable from this dialog
-        if( destField->GetId() == FIELD_T::REFERENCE )
-            continue;
+        wxString previousValue = aDestFootprint.GetFieldValueForVariant( aVariantName, srcName );
+        wxString newValue = srcValue;
 
-        wxString previousValue = footprint.GetFieldValueForVariant( aVariantName, srcName );
-        wxString newValue = aCommit.GetBoard()->ConvertCrossReferencesToKIIDs( srcValue );
+        // Board work is optional, not preset for lib fp fields table
+        if( BOARD* board = aDestFootprint.GetBoard() )
+            newValue = board->ConvertCrossReferencesToKIIDs( srcValue );
 
         if( previousValue != newValue )
         {
+            // Lib footprints pass a wxEmptyString variant and always apply straight to the field
             if( defaultVariant )
             {
                 destField->SetText( newValue );
                 footprintModified = true;
             }
-            else if( FOOTPRINT_VARIANT* variant = footprint.AddVariant( aVariantName ) )
+            else if( FOOTPRINT_VARIANT* variant = aDestFootprint.AddVariant( aVariantName ) )
             {
                 variant->SetFieldValue( srcName, newValue );
                 footprintModified = true;
@@ -624,9 +644,9 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPR
         }
     }
 
-    for( int ii = static_cast<int>( footprint.GetFields().size() ) - 1; ii >= 0; ii-- )
+    for( int ii = static_cast<int>( aDestFootprint.GetFields().size() ) - 1; ii >= 0; ii-- )
     {
-        PCB_FIELD* field = footprint.GetFields()[ii];
+        PCB_FIELD* field = aDestFootprint.GetFields()[ii];
 
         if( field->IsMandatory() || field->IsPrivate() )
             continue;
@@ -640,7 +660,7 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPR
             if( EDA_GROUP* parentGroup = field->GetParentGroup() )
                 parentGroup->RemoveItem( field );
 
-            footprint.Remove( field );
+            aDestFootprint.Remove( field );
             delete field;
             footprintModified = true;
         }
@@ -657,10 +677,13 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( BOARD_COMMIT& aCommit, 
     {
         FOOTPRINT& footprint = ref.GetFootprint();
 
+        // commit will delete the copy properly as needed, and we will delete it when
+        // we go out of scope if we fail to apply the data
         std::unique_ptr<FOOTPRINT> footprintCopy = std::make_unique<FOOTPRINT>( footprint );
         footprintCopy->SetParentGroup( nullptr );
 
-        if( applyDataToFootprint( ref, aCommit, aTemplateFieldnames, aVariantName ) )
+        // Only commit if the footprint was actually modified
+        if( applyDataToFootprint( ref, footprint, &aTemplateFieldnames, aVariantName ) )
             aCommit.Modified( &footprint, footprintCopy.release() );
     }
 
@@ -822,4 +845,87 @@ bool LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( const FOOTP
 wxString LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getItemIdentifier( const FOOTPRINT_REF& aRef ) const
 {
     return aRef.GetFootprint().GetName();
+}
+
+
+bool LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPRINT_REF& aRef,
+                                                                        FOOTPRINT&           aFootprint )
+{
+    bool     footprintModified = false;
+    wxString value;
+
+    if( getStoredFieldValue( aRef, FOOTPRINT_KEYWORDS, value )
+        && aFootprint.GetKeywords() != value )
+    {
+        aFootprint.SetKeywords( value );
+        footprintModified = true;
+    }
+
+    if( getStoredFieldValue( aRef, FOOTPRINT_LIBRARY_DESCRIPTION, value )
+        && aFootprint.GetLibDescription() != value )
+    {
+        aFootprint.SetLibDescription( value );
+        footprintModified = true;
+    }
+
+    footprintModified |= FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint(
+            aRef, aFootprint, nullptr, wxEmptyString );
+
+    return footprintModified;
+}
+
+
+bool LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<bool( FOOTPRINT& )> aChangeHandler )
+{
+    bool allChangesApplied = true;
+
+    for( const FOOTPRINT_REF& ref : m_footprintsList )
+    {
+        // This works the opposite of the non-lib footprint fields table,
+        // here we just make a copy on the stack and let it pop off regardless of what
+        // happens; the actual footprint in source ref gets overwritten when we've
+        // determined that the change were applied
+        FOOTPRINT changedFootprint( ref.GetFootprint() );
+
+        if( !applyDataToFootprint( ref, changedFootprint ) )
+        {
+            // An empty staged public field may collide with an existing private field and
+            // be ignored. Re-sync from live so the no-op does not leave the model edited.
+            // A non-empty public field that collides with a private field is taken to be
+            // an explicit request to make it non-private, so that case isn't what we're
+            // checking for here, only the empty public/existing private mismatch.
+            for( const DATA_MODEL_COL& col : m_cols )
+                updateDataStoreItemFieldFromLive( ref, col.m_fieldName );
+
+            continue;
+        }
+
+        if( !aChangeHandler( changedFootprint ) )
+        {
+            allChangesApplied = false;
+            break;
+        }
+
+        ref.GetFootprint() = changedFootprint;
+
+        // Update the data store with the new live values after applying changes
+        for( const DATA_MODEL_COL& col : m_cols )
+            updateDataStoreItemFieldFromLive( ref, col.m_fieldName );
+    }
+
+    m_edited = false;
+
+    for( const FOOTPRINT_REF& ref : m_footprintsList )
+    {
+        for( const DATA_MODEL_COL& col : m_cols )
+        {
+            if( fieldIsModified( ref, col.m_fieldName ) )
+            {
+                m_edited = true;
+                return allChangesApplied;
+            }
+        }
+    }
+
+    return allChangesApplied;
 }
