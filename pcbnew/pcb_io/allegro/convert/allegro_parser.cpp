@@ -1190,8 +1190,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
 
         ReadCond( aStream, aVer, comp.m_Z1 );
 
-        comp.m_X3 = aStream.ReadS32();
-        comp.m_X4 = aStream.ReadS32();
+        comp.m_OffsetX = aStream.ReadS32();
+        comp.m_OffsetY = aStream.ReadS32();
 
         if( aVer >= FMT_VER::V_172 )
         {

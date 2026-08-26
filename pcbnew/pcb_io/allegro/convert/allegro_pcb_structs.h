@@ -1212,8 +1212,8 @@ struct PADSTACK_COMPONENT
     COND_GE<FMT_VER::V_172, int32_t> m_Z1;
 
     // This is the pad component offset
-    int32_t m_X3;
-    int32_t m_X4;
+    int32_t m_OffsetX;
+    int32_t m_OffsetY;
 
     /**
      * Seems to point to various things:

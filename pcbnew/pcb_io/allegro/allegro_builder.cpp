@@ -2559,29 +2559,29 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         case PADSTACK_COMPONENT::TYPE_RECTANGLE:
             layerCuProps->shape.shape = PAD_SHAPE::RECTANGLE;
             layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
-            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
             break;
         case PADSTACK_COMPONENT::TYPE_SQUARE:
             layerCuProps->shape.shape = PAD_SHAPE::RECTANGLE;
             layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_W } );
-            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
             break;
         case PADSTACK_COMPONENT::TYPE_CIRCLE:
             layerCuProps->shape.shape = PAD_SHAPE::CIRCLE;
             layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
-            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
             break;
         case PADSTACK_COMPONENT::TYPE_OBLONG_X:
         case PADSTACK_COMPONENT::TYPE_OBLONG_Y:
             layerCuProps->shape.shape = PAD_SHAPE::OVAL;
             layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
-            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
             break;
         case PADSTACK_COMPONENT::TYPE_ROUNDED_RECTANGLE:
         {
             layerCuProps->shape.shape = PAD_SHAPE::ROUNDRECT;
             layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
-            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
 
             int minDim = std::min( std::abs( padComp.m_W ), std::abs( padComp.m_H ) );
 
@@ -2596,7 +2596,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         {
             layerCuProps->shape.shape = PAD_SHAPE::CHAMFERED_RECT;
             layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
-            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
 
             int minDim = std::min( std::abs( padComp.m_W ), std::abs( padComp.m_H ) );
 
@@ -2614,7 +2614,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             // (tan(22.5°) ≈ 0.414, half of that as ratio ≈ 0.207, but visually 0.293 is closer)
             layerCuProps->shape.shape = PAD_SHAPE::CHAMFERED_RECT;
             layerCuProps->shape.size = scaleSize( VECTOR2I{ padComp.m_W, padComp.m_H } );
-            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
             layerCuProps->shape.chamfered_rect_ratio = 1.0 - 1.0 / sqrt( 2.0 );
             layerCuProps->shape.chamfered_rect_positions = RECT_CHAMFER_ALL;
             break;
@@ -2640,7 +2640,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
                 layerCuProps->shape.shape = PAD_SHAPE::CUSTOM;
                 layerCuProps->shape.anchor_shape = PAD_SHAPE::CIRCLE;
-                layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+                layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
 
                 // Anchor size based on the shape's bounding box center
                 BOX2I bbox = outline.BBox();
@@ -2670,7 +2670,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         {
             layerCuProps->shape.shape = PAD_SHAPE::CUSTOM;
             layerCuProps->shape.anchor_shape = PAD_SHAPE::CIRCLE;
-            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_OffsetX, padComp.m_OffsetY } );
 
             const int w = std::max( padComp.m_W, 300 );
             const int h = std::max( padComp.m_H, 220 );
@@ -2732,10 +2732,10 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
                             padStackName, i, clearanceX, clearanceY );
             }
 
-            if( antiPadComp.m_X3 != 0 || antiPadComp.m_X4 != 0 )
+            if( antiPadComp.m_OffsetX != 0 || antiPadComp.m_OffsetY != 0 )
             {
-                wxLogTrace( traceAllegroBuilder, "Padstack %s: copper layer %zu antipad offset %d, %d",
-                            padStackName, i, antiPadComp.m_X3, antiPadComp.m_X4 );
+                wxLogTrace( traceAllegroBuilder, "Padstack %s: copper layer %zu antipad offset %d, %d", padStackName, i,
+                            antiPadComp.m_OffsetX, antiPadComp.m_OffsetY );
             }
 
             layerCuProps->clearance = clearanceX;
