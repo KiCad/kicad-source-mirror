@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <unordered_map>
 
 #include <wx/gauge.h>
@@ -55,7 +56,7 @@ public:
                                    wxEmptyString ) );
         mainSizer->Add( m_stName, 0, wxALL | wxEXPAND, 1 );
 
-        m_stStatus = new wxStaticText( this, wxID_ANY, aJob->m_status, wxDefaultPosition,
+        m_stStatus = new wxStaticText( this, wxID_ANY, aJob->GetStatus(), wxDefaultPosition,
                                        wxDefaultSize, 0 );
         m_stStatus->Wrap( -1 );
         mainSizer->Add( m_stStatus, 0, wxALL | wxEXPAND, 1 );
@@ -74,7 +75,7 @@ public:
 
     void UpdateFromJob()
     {
-        m_stStatus->SetLabelText( m_job->m_status );
+        m_stStatus->SetLabelText( m_job->GetStatus() );
         m_progress->SetValue( m_job->m_currentProgress );
         m_progress->SetRange( m_job->m_maxProgress );
     }
@@ -186,7 +187,7 @@ bool BACKGROUND_JOB_REPORTER::updateUI()
 
 void BACKGROUND_JOB_REPORTER::Report( const wxString& aMessage )
 {
-    m_job->m_status = aMessage;
+    m_job->SetStatus( aMessage );
     m_monitor->jobUpdated( m_job );
 }
 
@@ -232,17 +233,14 @@ std::shared_ptr<BACKGROUND_JOB> BACKGROUND_JOBS_MONITOR::Create( const wxString&
     std::lock_guard<std::shared_mutex> lock( m_mutex );
     m_jobs.push_back( job );
 
-    if( m_shownDialogs.size() > 0 )
+    // Keep the lock during CallAfter or a dialog can close and free the pointer
+    for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
     {
-        // update dialogs
-        for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
-        {
-            list->CallAfter(
-                    [=]()
-                    {
-                        list->Add( job );
-                    } );
-        }
+        list->CallAfter(
+                [=]()
+                {
+                    list->Add( job );
+                } );
     }
 
     return job;
@@ -251,9 +249,12 @@ std::shared_ptr<BACKGROUND_JOB> BACKGROUND_JOBS_MONITOR::Create( const wxString&
 
 void BACKGROUND_JOBS_MONITOR::Remove( std::shared_ptr<BACKGROUND_JOB> aJob )
 {
-    if( m_shownDialogs.size() > 0 )
+    std::shared_ptr<BACKGROUND_JOB> frontJob;
+
     {
-        // update dialogs
+        std::lock_guard<std::shared_mutex> lock( m_mutex );
+
+        m_jobs.erase( std::remove( m_jobs.begin(), m_jobs.end(), aJob ), m_jobs.end() );
 
         for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
         {
@@ -263,45 +264,58 @@ void BACKGROUND_JOBS_MONITOR::Remove( std::shared_ptr<BACKGROUND_JOB> aJob )
                         list->Remove( aJob );
                     } );
         }
-    }
 
-    std::lock_guard<std::shared_mutex> lock( m_mutex );
-    m_jobs.erase( std::remove_if( m_jobs.begin(), m_jobs.end(),
-                                  [&]( std::shared_ptr<BACKGROUND_JOB> job )
-                                  {
-                                      return job == aJob;
-                                  } ) );
-
-    if( m_jobs.size() > 0 )
-    {
-        jobUpdated( m_jobs.front() );
-    }
-    else
-    {
-        for( KISTATUSBAR* statusBar : m_statusBars )
+        if( m_jobs.empty() )
         {
-            statusBar->CallAfter(
-                    [=]()
-                    {
-                        statusBar->HideBackgroundProgressBar();
-                        statusBar->SetBackgroundStatusText( wxT( "" ) );
-                    } );
+            for( KISTATUSBAR* statusBar : m_statusBars )
+            {
+                statusBar->CallAfter(
+                        [=]()
+                        {
+                            statusBar->HideBackgroundProgressBar();
+                            statusBar->SetBackgroundStatusText( wxT( "" ) );
+                        } );
+            }
+        }
+        else
+        {
+            frontJob = m_jobs.front();
         }
     }
+
+    // jobUpdated takes the mutex so call it after we release ours
+    if( frontJob )
+        jobUpdated( frontJob );
 }
 
 
 void BACKGROUND_JOBS_MONITOR::onListWindowClosed( wxCloseEvent& aEvent )
 {
-    BACKGROUND_JOB_LIST* evtWindow = dynamic_cast<BACKGROUND_JOB_LIST*>( aEvent.GetEventObject() );
+    removeShownDialog( aEvent.GetEventObject() );
 
+    aEvent.Skip();
+}
+
+
+void BACKGROUND_JOBS_MONITOR::onListWindowDestroyed( wxWindowDestroyEvent& aEvent )
+{
+    removeShownDialog( aEvent.GetEventObject() );
+
+    aEvent.Skip();
+}
+
+
+void BACKGROUND_JOBS_MONITOR::removeShownDialog( wxObject* aWindow )
+{
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
+
+    // dynamic_cast fails during base destruction so compare the upcast address
     m_shownDialogs.erase( std::remove_if( m_shownDialogs.begin(), m_shownDialogs.end(),
                                           [&]( BACKGROUND_JOB_LIST* dialog )
                                           {
-                                              return dialog == evtWindow;
-                                          } ) );
-
-    aEvent.Skip();
+                                              return static_cast<wxObject*>( dialog ) == aWindow;
+                                          } ),
+                          m_shownDialogs.end() );
 }
 
 
@@ -309,16 +323,17 @@ void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
 {
     BACKGROUND_JOB_LIST* list = new BACKGROUND_JOB_LIST( aParent, aPos );
 
-    std::shared_lock<std::shared_mutex> lock( m_mutex, std::try_to_lock );
+    {
+        std::lock_guard<std::shared_mutex> lock( m_mutex );
 
-    for( const std::shared_ptr<BACKGROUND_JOB>& job : m_jobs )
-        list->Add( job );
+        for( const std::shared_ptr<BACKGROUND_JOB>& job : m_jobs )
+            list->Add( job );
 
-    lock.unlock();
-
-    m_shownDialogs.push_back( list );
+        m_shownDialogs.push_back( list );
+    }
 
     list->Bind( wxEVT_CLOSE_WINDOW, &BACKGROUND_JOBS_MONITOR::onListWindowClosed, this );
+    list->Bind( wxEVT_DESTROY, &BACKGROUND_JOBS_MONITOR::onListWindowDestroyed, this );
 
     // correct the position
     wxSize windowSize = list->GetSize();
@@ -330,30 +345,26 @@ void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
 
 void BACKGROUND_JOBS_MONITOR::jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob )
 {
-    std::shared_lock<std::shared_mutex> lock( m_mutex, std::try_to_lock );
+    // Reporters call this from other threads so all UI work goes through CallAfter
+    // Keep the lock during those calls or a status bar can close and free the pointer
+    std::shared_lock<std::shared_mutex> lock( m_mutex );
 
-    // this method is called from the reporters from potentially other threads
-    // we have to guard ui calls with CallAfter
-    if( m_jobs.size() > 0 )
+    //for now, we go and update the status bar if its the first job in the vector
+    if( !m_jobs.empty() && m_jobs.front() == aJob )
     {
-        //for now, we go and update the status bar if its the first job in the vector
-        if( m_jobs.front() == aJob )
+        // update all status bar entries
+        for( KISTATUSBAR* statusBar : m_statusBars )
         {
-            // update all status bar entries
-            for( KISTATUSBAR* statusBar : m_statusBars )
-            {
-                statusBar->CallAfter(
-                        [=]()
-                        {
-                            statusBar->ShowBackgroundProgressBar();
-                            statusBar->SetBackgroundProgressMax( aJob->m_maxProgress );
-                            statusBar->SetBackgroundProgress( aJob->m_currentProgress );
-                            statusBar->SetBackgroundStatusText( aJob->m_status );
-                        } );
-            }
+            statusBar->CallAfter(
+                    [=]()
+                    {
+                        statusBar->ShowBackgroundProgressBar();
+                        statusBar->SetBackgroundProgressMax( aJob->m_maxProgress );
+                        statusBar->SetBackgroundProgress( aJob->m_currentProgress );
+                        statusBar->SetBackgroundStatusText( aJob->GetStatus() );
+                    } );
         }
     }
-
 
     for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
     {

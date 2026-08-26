@@ -26,6 +26,7 @@
 #include <atomic>
 #include <functional>
 #include <memory>
+#include <mutex>
 #include <shared_mutex>
 #include <vector>
 
@@ -38,6 +39,7 @@ class BACKGROUND_JOB_LIST;
 class BACKGROUND_JOBS_MONITOR;
 class wxWindow;
 class wxCloseEvent;
+class wxWindowDestroyEvent;
 
 class KICOMMON_API BACKGROUND_JOB_REPORTER : public PROGRESS_REPORTER_BASE
 {
@@ -72,12 +74,30 @@ private:
 struct KICOMMON_API BACKGROUND_JOB
 {
 public:
+    /**
+     * Worker threads write the status and the UI reads it so it needs a lock
+     */
+    wxString GetStatus() const
+    {
+        std::lock_guard<std::mutex> lock( m_statusMutex );
+        return m_status;
+    }
+
+    void SetStatus( const wxString& aStatus )
+    {
+        std::lock_guard<std::mutex> lock( m_statusMutex );
+        m_status = aStatus;
+    }
+
     wxString m_name;
-    wxString m_status;
     std::shared_ptr<BACKGROUND_JOB_REPORTER> m_reporter;
 
     std::atomic<int> m_maxProgress;
     std::atomic<int> m_currentProgress;
+
+private:
+    mutable std::mutex m_statusMutex;
+    wxString           m_status;
 };
 
 
@@ -123,6 +143,18 @@ private:
     void onListWindowClosed( wxCloseEvent& aEvent );
 
     /**
+     * Handles a list window that its parent destroys without a close event
+     */
+    void onListWindowDestroyed( wxWindowDestroyEvent& aEvent );
+
+    /**
+     * Removes a list window from m_shownDialogs
+     *
+     * @param aWindow can be partly destroyed so only its address is used
+     */
+    void removeShownDialog( wxObject* aWindow );
+
+    /**
      * Handles job status updates, intended to be called by BACKGROUND_JOB_REPORTER only
      */
     void jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob );
@@ -137,7 +169,7 @@ private:
 
     std::vector<KISTATUSBAR*> m_statusBars;
 
-    /// Mutex to protect access to the m_jobs vector
+    /// Mutex to protect access to m_jobs, m_shownDialogs and m_statusBars
     mutable std::shared_mutex m_mutex;
 };
 
