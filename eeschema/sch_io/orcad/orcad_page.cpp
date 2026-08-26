@@ -733,8 +733,31 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType )
         prim.text = aStream.ReadLzt();
         break;
 
+    case ORCAD_PRIM_BITMAP:
+    {
+        prim.kind = ORCAD_PRIM_KIND::IMAGE;
+        prim.x1 = aStream.ReadI32();
+        prim.y1 = aStream.ReadI32();
+        prim.x2 = aStream.ReadI32();
+        prim.y2 = aStream.ReadI32();
+        aStream.Skip( 8 );                      // duplicate corner
+        aStream.Skip( 8 );                      // pixel width/height
+
+        uint32_t dataSize = aStream.ReadU32();
+
+        if( dataSize > aStream.Remaining() )
+        {
+            THROW_IO_ERRORF( wxS( "v2 bitmap: payload %u exceeds the %zu bytes left" ), dataSize,
+                             aStream.Remaining() );
+        }
+
+        prim.data = aStream.ReadBytes( dataSize );
+        break;
+    }
+
     default:
-        THROW_IO_ERRORF( wxS( "v2 primitive: unhandled type %d" ), (int) type );
+        THROW_IO_ERRORF( wxS( "v2 primitive: unhandled type %d at 0x%zx" ), (int) type,
+                         aStream.GetOffset() - 1 );
     }
 
     return prim;

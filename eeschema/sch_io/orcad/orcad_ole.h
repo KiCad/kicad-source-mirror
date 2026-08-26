@@ -13,11 +13,17 @@
 #define ORCAD_OLE_H_
 
 #include <sch_io/ole_image.h>
+#include <wx/string.h>
+
+class wxImage;
 
 using ORCAD_OLE_PREVIEW_TYPE = OLE_IMAGE_TYPE;
 using ORCAD_OLE_PREVIEW = OLE_IMAGE_PAYLOAD;
 
 ORCAD_OLE_PREVIEW OrcadExtractOlePreview( const std::vector<uint8_t>& aPayload );
+
+// Include leading bytes when the payload format is unknown.
+wxString OrcadDescribeImagePayload( const std::vector<uint8_t>& aPayload );
 
 bool OrcadRenderWmf( const std::vector<uint8_t>& aWmf, int aMaxWidth, int aMaxHeight, wxImage& aImage );
 

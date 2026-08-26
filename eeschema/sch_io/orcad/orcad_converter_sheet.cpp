@@ -1657,7 +1657,9 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
 
     if( !readOk )
     {
-        warn( _( "An embedded picture could not be decoded and was skipped." ) );
+        warn( wxString::Format( _( "An embedded picture could not be decoded and was skipped "
+                                   "(%s)." ),
+                                OrcadDescribeImagePayload( aPrim.data ) ) );
         return;
     }
 
