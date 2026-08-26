@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:53-0700\n"
-"PO-Revision-Date: 2026-08-20 08:29+0000\n"
+"PO-Revision-Date: 2026-08-26 19:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -69,7 +69,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:339
 msgid "Create tracks and vias"
-msgstr "Pridať cesty a prekovy"
+msgstr "Pridať spoje a prekovy"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1237
 msgid "Create zones"
@@ -5967,7 +5967,7 @@ msgstr "Text:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:154
 msgid "Graphics:"
-msgstr "Grafiky:"
+msgstr "Grafika:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:71
 #: common/dialogs/rule_editor_dialog_base.cpp:107
@@ -6215,7 +6215,7 @@ msgstr "Ťahať vybrané objekty; inak kresliť štvoruholník výberu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag any object (selected or not)"
-msgstr "Presunúť ľubovolný objekt (vybraný aj nie)"
+msgstr "Presunúť ľubovoľný objekt (vybraný aj nie)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "Middle button drag:"
@@ -9439,7 +9439,7 @@ msgstr "Šrafovanie DXF momentálne nie je podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:526
 msgid "DXF traces not currently supported."
-msgstr "Trasy DXF momentálne nie sú podporované."
+msgstr "Trasovanie DXF momentálne nie je podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:531
 msgid "DXF 3dfaces not currently supported."
@@ -10323,7 +10323,7 @@ msgstr "Výplň tvarov"
 #: common/layer_id.cpp:90
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
 msgid "Schematic text && graphics"
-msgstr "Schematické texty a grafiky"
+msgstr "Schematické texty a grafika"
 
 #: common/layer_id.cpp:91
 msgid "Symbol private text && graphics"
@@ -10559,9 +10559,8 @@ msgid "Grid items"
 msgstr "Grafické prvky"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Via stitching"
-msgstr "Zodpovedajúce"
+msgstr "Prešitie prekovmi"
 
 #: common/layer_id.cpp:156
 msgid "Grid axes"
@@ -14122,16 +14121,16 @@ msgid ""
 "Net chain rebuild failed: %s.  The schematic may have stale chain data; "
 "reload to recover."
 msgstr ""
-"Prerobenie reťazenia spoja zlyhalo: %s. Schéma môže obsahovať zastarané dáta "
-"reťazenia; načítajte ju znova pre obnovenie."
+"Prerobenie zreťazeného spoja zlyhalo: %s. Schéma môže obsahovať zastarané "
+"dáta reťazenia; načítajte ju znova pre obnovenie."
 
 #: eeschema/connection_graph.cpp:3823
 msgid ""
 "Net chain rebuild failed with an unknown error.  The schematic may have "
 "stale chain data; reload to recover."
 msgstr ""
-"Prerobenie sieťového reťazca zlyhalo z dôvodu neznámej chyby.  Schéma môže "
-"obsahovať zastarané dáta reťazca; načítajte ju znova pre obnovenie."
+"Prerobenie zreťazeného spoja zlyhalo z dôvodu neznámej chyby.  Schéma môže "
+"obsahovať zastarané dáta reťazenia; načítajte ju znova pre obnovenie."
 
 #: eeschema/connection_graph.cpp:5238
 #, c-format
@@ -14803,7 +14802,7 @@ msgstr "Aktualizovať symboly z knižnice"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:63
 msgid "Filter chains by name or net..."
-msgstr "Filtrovať reťazce podľa názvu alebo spoja..."
+msgstr "Filtrovať zreťazené spoje podľa názvu alebo spoja..."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:77
 msgid "Create"
@@ -14828,11 +14827,11 @@ msgstr "Prosím, vyberte aspoň jedno reťazenie zo zoznamu."
 #: eeschema/dialogs/dialog_create_net_chain_base.h:79
 #: eeschema/tools/sch_editor_control.cpp:1932
 msgid "Create Net Chain"
-msgstr "Vytvoriť nové reťazenie spoja"
+msgstr "Vytvoriť zreťazený spoj"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
 msgid "Please enter a name for the net chain."
-msgstr "Prosím, zadajte názov reťazenia spoja."
+msgstr "Prosím, zadajte názov zreťazeného spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
@@ -14849,11 +14848,11 @@ msgstr "Reťazenie spoja s názvom '%s' už existuje."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:197
 msgid "Failed to create the net chain."
-msgstr "Nepodarilo sa vytvoriť reťazenie spoja."
+msgstr "Nepodarilo sa vytvoriť zreťazený spoj."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
 msgid "Failed to create the manual net chain."
-msgstr "Nepodarilo sa vytvoriť manuálne reťazenie spoja."
+msgstr "Nepodarilo sa vytvoriť manuálne zreťazenie spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 msgid "Please select both a From and To component."
@@ -14884,10 +14883,10 @@ msgid ""
 "\n"
 "Would you like to force-create a manual chain link between these components?"
 msgstr ""
-"Nenašla sa žiadna cesta reťazca spoja medzi %s a %s cez prechádzajúce "
+"Nenašla sa žiadna cesta zreťazeného spoja medzi %s a %s prechádzajúce cez "
 "komponenty.\n"
 "\n"
-"Chcete vynútiť manuálne vytvorenie reťazenia spoja medzi týmito komponentmi?"
+"Chcete vynútiť manuálne vytvorenie zreťazenie spoja medzi týmito komponentmi?"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:438
 msgid "Selected components have no connected pins to anchor a manual chain."
@@ -14908,8 +14907,8 @@ msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
 msgstr ""
-"Všetky cesty reťazenia spoja %zu medzi %s a %s sú už potvrdené ako reťazenie "
-"spoja."
+"Všetky cesty zreťazenia spoja %zu medzi %s a %s sú už potvrdené ako "
+"zreťazený spoj."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:546
 #, c-format
@@ -14961,8 +14960,8 @@ msgstr ""
 msgid ""
 " Select a detected net chain path and assign a name to create a net chain."
 msgstr ""
-" Vybrať detegovanú cestu reťazenia spoja a priradiť jej názov pre vytvorené "
-"reťazenie spoja."
+" Vybrať detegovanú cestu zreťazenia spoja a priradiť jej názov pre "
+"vytvorenie zreťazenia spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
 msgid "Suggested Name"
@@ -14997,9 +14996,8 @@ msgid "To:"
 msgstr "Hore:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:121
-#, fuzzy
 msgid "Find net chain path between the two components"
-msgstr "Generovať len dosku bez súčiastok"
+msgstr "Nájsť cestu zreťazenia spoja medzi týmito dvoma komponentmi"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:131
 #, fuzzy
@@ -15007,9 +15005,8 @@ msgid "Chain Name:"
 msgstr "Názov vývodu"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
-#, fuzzy
 msgid "Re-detect potential net chains from the schematic"
-msgstr "Odstrániť existujúci variant návrhu zo schémy."
+msgstr "Znovu detegovať možné zreťazenia spoja zo schémy"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:123
 msgid "Connected to database successfully"
@@ -15939,7 +15936,7 @@ msgstr "Farba spoju:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:124
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:112
 msgid "Edit Text and Graphic Properties"
-msgstr "Upraviť vlastnosti textu a grafiky"
+msgstr "Upraviť vlastnosti textu a grafiku"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:27
 msgid "Ibis parser log"
@@ -18001,9 +17998,8 @@ msgstr "Definície aliasu zbernice"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:349
 #: eeschema/dialogs/panel_setup_net_chains.cpp:356
 #: eeschema/dialogs/panel_setup_net_chains.cpp:363
-#, fuzzy
 msgid "Net Chains"
-msgstr "Triedy spojov"
+msgstr "Zreťazenie spojov"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:150
 #: pcbnew/dialogs/dialog_board_setup.cpp:152
@@ -20342,9 +20338,9 @@ msgid "Name '%s' contains invalid characters."
 msgstr "Symbol %s obsahuje neplatný znak '%c'"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "%d net chain(s)"
-msgstr ": (žiadne zmeny)"
+msgstr "%d zreťazených spojov"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:243
 #, c-format
@@ -20354,17 +20350,17 @@ msgstr "%zu spojov"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:348
 #, c-format
 msgid "Net chain on row %zu cannot have an empty name."
-msgstr "Názov reťazenia spoja v riadku %zu nemôže byť prázdny."
+msgstr "Názov zreťazenia spoja v riadku %zu nemôže byť prázdny."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain name '%s' contains invalid characters."
-msgstr "Symbol %s obsahuje neplatný znak '%c'"
+msgstr "Názov zreťazeného spoja '%s' obsahuje neplatné znaky."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate net chain name '%s' on row %zu."
-msgstr "Duplikovaný názov netclass „%s“"
+msgstr "Duplicitný názov zreťazeného spoja '%s' na riadku %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:378
 #, c-format
@@ -20374,9 +20370,8 @@ msgstr "Trieda v riadku %zu nemôže mať prázdny názov."
 #: eeschema/dialogs/panel_setup_net_chains.cpp:379
 #: eeschema/dialogs/panel_setup_net_chains.cpp:386
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:202
-#, fuzzy
 msgid "Net Chain Classes"
-msgstr "Triedy spojov"
+msgstr "Triedy zreťazených spojov"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:385
 #, fuzzy, c-format
@@ -20384,14 +20379,13 @@ msgid "Duplicate class name '%s' on row %zu."
 msgstr "Duplikovaný názov netclass „%s“"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:612
-#, fuzzy, c-format
+#, c-format
 msgid "Delete net chain '%s'?"
-msgstr "Odstrániť všetky spoje v skupine '%s'?"
+msgstr "Odstrániť zreťazený spoj '%s'?"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:613
-#, fuzzy
 msgid "Delete Net Chain"
-msgstr "Odstrániť sieť"
+msgstr "Odstrániť zreťazený spoj"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:647
 #, fuzzy, c-format
@@ -20399,9 +20393,8 @@ msgid "Member Nets (%zu)"
 msgstr "Meno člena"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:668
-#, fuzzy
 msgid "New net chain class name:"
-msgstr "Nová trieda siete:"
+msgstr "Nový názov triedy zreťazeného spoja:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:668
 #: eeschema/dialogs/panel_setup_net_chains.cpp:677
@@ -20416,9 +20409,8 @@ msgid "That class name is empty or already in use."
 msgstr "Názov triedy spojov sa už používa."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:701
-#, fuzzy
 msgid "Rename net chain class:"
-msgstr "Nová trieda siete:"
+msgstr "Premenovať triedu zreťazeného spoja:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:701
 #: eeschema/dialogs/panel_setup_net_chains.cpp:710
@@ -20431,8 +20423,8 @@ msgstr "Premenovať súbory"
 msgid ""
 "Delete net chain class '%s'?  Chains assigned to it will become unclassified."
 msgstr ""
-"Odstrániť triedu reťazenia spoja '%s'? Reťazce, ktoré sú k nej priradené, "
-"budú nezaradené."
+"Odstrániť triedu zreťazeného spoja: '%s'?  Priradené zreťazené spoje nebudú "
+"nijak dotknuté."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:742
 #, fuzzy
@@ -20446,9 +20438,8 @@ msgid "Members"
 msgstr "Členovia"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:60
-#, fuzzy
 msgid "Net Chain Class"
-msgstr "Triedy spojov"
+msgstr "Triedy zreťazených spojov"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:62
 #, fuzzy
@@ -20456,27 +20447,24 @@ msgid "Colour"
 msgstr "Farba"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:105
-#, fuzzy
 msgid "Delete the selected committed net chain"
-msgstr "Odstrániť vybraté asociácie stopy"
+msgstr "Odstrániť vybraté potvrdený zreťazený spoj"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:116
 msgid "Chains"
 msgstr "Reťazenia"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:124
-#, fuzzy
 msgid ""
 "Group net chains under a class label so DRC rules can target the whole group "
 "via "
 msgstr ""
-"Zoskupiť reťazenia spojov do triedy s názvom, aby pravidlá DRC mohli cieliť "
-"na celú skupinu prostredníctvom inNetChainClass('name')."
+"Zoskupiť zreťazené spoje pod označením triedy, aby pravidlá DRC mohli cieliť "
+"na celú skupinu "
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:128
-#, fuzzy
 msgid "inNetChainClass('name')"
-msgstr "Triedy spojov"
+msgstr "inNetChainClass('name')"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:132
 #, fuzzy
@@ -20489,9 +20477,8 @@ msgid "Class Name"
 msgstr "Názov aliasu"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:178
-#, fuzzy
 msgid "Add a new net chain class"
-msgstr "Nová trieda siete:"
+msgstr "Pridať novú triedu zreťazených spojov"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:183
 msgid "Rename the selected class (updates every chain that uses it)"
@@ -20679,7 +20666,7 @@ msgstr "Pre&dvolená veľkosť názvu vývodu:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:116
 msgid "&Pitch of repeated pins:"
-msgstr "&Rozstup opakovania vývodov:"
+msgstr "&Rozostup opakovania vývodov:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:146
 msgid "General Editing"
@@ -21329,9 +21316,9 @@ msgid "Pins of type %s and %s are connected"
 msgstr "Vývody typu %s a %s sú spojené"
 
 #: eeschema/erc/erc.cpp:1681
-#, fuzzy, c-format
+#, c-format
 msgid "Pins of type %s and %s are connected via net chain %s"
-msgstr "Vývody typu %s a %s sú spojené"
+msgstr "Vývody typu %s a %s sú prepojené cez zreťazený spoj %s"
 
 #: eeschema/erc/erc.cpp:1730
 #, c-format
@@ -22378,7 +22365,7 @@ msgstr "Priradenia puzdier..."
 #: eeschema/menubar.cpp:104 eeschema/symbol_editor/menubar_symbol_editor.cpp:67
 #: pcbnew/menubar_footprint_editor.cpp:65 pcbnew/menubar_pcb_editor.cpp:122
 msgid "Graphics..."
-msgstr "Grafiky..."
+msgstr "Grafika..."
 
 #: eeschema/menubar.cpp:113
 msgid "Drawing to Clipboard"
@@ -23141,9 +23128,9 @@ msgid "[no schematic loaded]"
 msgstr "[žiadna schéma nenačítaná]"
 
 #: eeschema/sch_edit_frame.cpp:2140
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain members: %s"
-msgstr "Príslušnosť k triede sietí"
+msgstr "Členovia zreťazeného spoja: %s"
 
 #: eeschema/sch_edit_frame.cpp:2148
 #, c-format
@@ -25006,9 +24993,8 @@ msgstr "z triedy spojov"
 #: eeschema/sch_line.cpp:1109 pcbnew/generators/pcb_tuning_pattern.cpp:2213
 #: pcbnew/pad.cpp:2184 pcbnew/pcb_track.cpp:2488
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:118
-#, fuzzy
 msgid "Net Chain"
-msgstr "Triedy spojov"
+msgstr "Zreťazený spoj"
 
 #: eeschema/sch_marker.cpp:480 pcbnew/pcb_marker.cpp:276
 msgid "Violation"
@@ -27263,7 +27249,7 @@ msgstr "očakáva sa typ karty simulácie"
 
 #: eeschema/sim/legacy_workbook.cpp:208
 msgid "expecting trace count"
-msgstr "očakáva sa počet stôp"
+msgstr "očakávaný je počet spojov"
 
 #: eeschema/sim/legacy_workbook.cpp:224
 msgid "expecting trace type"
@@ -27849,7 +27835,7 @@ msgstr "Stratový výkon:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3992
 msgid "Refl. Coeff."
-msgstr ""
+msgstr "Refl. Coeff."
 
 #: eeschema/sim/simulator_frame_ui.cpp:4271
 #: eeschema/sim/simulator_frame_ui.cpp:4388
@@ -29946,27 +29932,24 @@ msgid "Highlight wires and pins of a net"
 msgstr "Zvýrazniť spoje a vývody spojov"
 
 #: eeschema/tools/sch_actions.cpp:1162 pcbnew/tools/pcb_actions.cpp:1873
-#, fuzzy
 msgid "Highlight Net Chain"
-msgstr "Zvýrazniť spoje v %s"
+msgstr "Zvýrazniť zreťazený spoj"
 
 #: eeschema/tools/sch_actions.cpp:1163
-#, fuzzy
 msgid "Highlight the net chain under the cursor"
-msgstr "Zvýrazniť spoj pod kurzorom"
+msgstr "Zvýrazniť zreťazený spoj pod kurzorom"
 
 #: eeschema/tools/sch_actions.cpp:1169
-#, fuzzy
 msgid "Remove from Net Chain"
-msgstr "Odstrániť z výberu"
+msgstr "Odstrániť zo zreťazeného spoja"
 
 #: eeschema/tools/sch_actions.cpp:1170
 msgid ""
 "Remove the selected net from its net chain by disabling propagation on the "
 "bridging component(s)"
 msgstr ""
-"Odstrániť vybraný spoj z reťazenia vypnutím šírenia na premosťovacom "
-"komponente (komponentoch)"
+"Odstrániť vybraný spoj zo zreťazeného spoja vypnutím priechodu cez "
+"premostenie komponentu (komponentov)"
 
 #: eeschema/tools/sch_actions.cpp:1175
 #, fuzzy
@@ -29976,26 +29959,23 @@ msgstr "Nahradiť všetky existujúce vývody"
 #: eeschema/tools/sch_actions.cpp:1180
 #: eeschema/tools/sch_editor_control.cpp:1850
 msgid "Name Net Chain"
-msgstr "Názov reťazeného spoja"
+msgstr "Názov zreťazeného spoja"
 
 #: eeschema/tools/sch_actions.cpp:1181
-#, fuzzy
 msgid "Assign a name to the net chain"
-msgstr "Priradiť triedu spojov ku spojom zodpovedajúcim vzoru"
+msgstr "Priradiť názov zreťazenému spoju"
 
 #: eeschema/tools/sch_actions.cpp:1186
 msgid "Create Net Chain Between Pins"
-msgstr "Vytvoriť reťazenie spoja medzi vývodmi"
+msgstr "Vytvoriť zreťazený spoj medzi vývodmi"
 
 #: eeschema/tools/sch_actions.cpp:1187
-#, fuzzy
 msgid "Create a new net chain connecting the two selected pins"
-msgstr "Vytvoriť priesečník vybraných mnohouholníkov"
+msgstr "Vytvoriť nový zreťazený spoj prepojením dvoch vybraných vývodov"
 
 #: eeschema/tools/sch_actions.cpp:1192
-#, fuzzy
 msgid "Create Net Chain..."
-msgstr "Vytvoriť prehľad..."
+msgstr "Vytvoriť zreťazený spoj..."
 
 #: eeschema/tools/sch_actions.cpp:1193
 msgid "Detect net chain paths through passives and create a named net chain"
@@ -30604,11 +30584,11 @@ msgstr "Kresliť sekundárny signál (prúdový alebo fázový) bodkovanou čiar
 
 #: eeschema/tools/sch_actions.cpp:1860
 msgid "Smith Chart"
-msgstr ""
+msgstr "Smithov diagram"
 
 #: eeschema/tools/sch_actions.cpp:1861
 msgid "Show S-parameter results on a Smith chart"
-msgstr ""
+msgstr "Zobraziť výsledky S-parametrov v Smithovom diagrame"
 
 #: eeschema/tools/sch_actions.cpp:1866
 msgid "Dark Mode Plots"
@@ -31000,6 +30980,8 @@ msgid ""
 "Change Symbol is not available when a design variant is active. Use Set "
 "Variant Symbol or switch to the default variant first."
 msgstr ""
+"Zmena symbolu nie je k dispozícii, keď je aktívny variant návrhu. Použite "
+"možnosť Nastaviť symbol variantu, alebo prepnite na predvolený variant."
 
 #: eeschema/tools/sch_edit_tool.cpp:2700
 #, fuzzy, c-format
@@ -31012,14 +30994,16 @@ msgid ""
 "The selected symbol '%s' is not pin-compatible with the base symbol '%s'.\n"
 "\n"
 msgstr ""
+"Vybraný symbol '%s' nie je pinovo kompatibilný so základným symbolom '%s'.\n"
+"\n"
 
 #: eeschema/tools/sch_edit_tool.cpp:2725
 msgid "Choose a symbol with equivalent pins and pin positions."
-msgstr ""
+msgstr "Vyberte symbol s rovnakými vývodmi a polohami vývodov."
 
 #: eeschema/tools/sch_edit_tool.cpp:2726
 msgid "Variant Symbol Compatibility"
-msgstr ""
+msgstr "Kompatibilita variantných symbolov"
 
 #: eeschema/tools/sch_edit_tool.cpp:2739
 #, fuzzy
@@ -31110,9 +31094,8 @@ msgid "No connected net selected."
 msgstr "Nie je vybraný žiadny pripojený spoj."
 
 #: eeschema/tools/sch_editor_control.cpp:1850
-#, fuzzy
 msgid "Net chain name:"
-msgstr "Názov spoja:"
+msgstr "Názov zreťazeného spoja:"
 
 #: eeschema/tools/sch_editor_control.cpp:1886
 #, fuzzy
@@ -31163,6 +31146,8 @@ msgid ""
 "Bulk Edit Symbol Library Links is not available when a design variant is "
 "active. Switch to the default variant first."
 msgstr ""
+"Hromadná úprava odkazov na knižnicu symbolov nie je k dispozícii, keď je "
+"aktívny variant návrhu. Prepnite najskôr na predvolený variant."
 
 #: eeschema/tools/sch_editor_control.cpp:3862
 #, c-format
@@ -31319,9 +31304,8 @@ msgstr "Žiadne snímky z lokálnej histórie túto schému nemenia."
 #: eeschema/tools/sch_inspection_tool.cpp:1232
 #: pcbnew/tools/board_inspection_tool.cpp:2360
 #: pcbnew/tools/board_inspection_tool.cpp:2399
-#, fuzzy
 msgid "Could not compare against the selected snapshot."
-msgstr "Nebolo možné otvoriť cestu šablóny '%s'"
+msgstr "Nepodarilo sa porovnať s vybraným snímkom."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1212
 #, fuzzy
@@ -31609,22 +31593,23 @@ msgstr "Opakovať vývod"
 #: eeschema/variant_symbol_utils.cpp:54
 #, c-format
 msgid "Candidate has %d unit(s), base requires %d"
-msgstr ""
+msgstr "Kandidát má %d jednotiek, základ vyžaduje %d"
 
 #: eeschema/variant_symbol_utils.cpp:65
 #, c-format
 msgid "Candidate has %d body style(s), base requires %d"
-msgstr ""
+msgstr "Kandidát má %d štýlov tela, základ vyžaduje %d"
 
 #: eeschema/variant_symbol_utils.cpp:118
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' not found in candidate"
-msgstr ""
+msgstr "Jednotka %d, štýl tela %d: vývod '%s' sa v kandidátovi nenašiel"
 
 #: eeschema/variant_symbol_utils.cpp:135
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' position mismatch (%d,%d) vs (%d,%d)"
 msgstr ""
+"Jednotka %d, štýl tela %d: vývod '%s' - nezhoda polohy (%d,%d) oproti (%d,%d)"
 
 #: eeschema/variant_symbol_utils.cpp:151
 #, fuzzy, c-format
@@ -31635,7 +31620,7 @@ msgstr ""
 #: eeschema/variant_symbol_utils.cpp:170
 #, c-format
 msgid "Unit %d, body style %d: candidate has extra pin '%s'"
-msgstr ""
+msgstr "Jednotka %d, štýl tela %d: kandidát má navyše vývod '%s'"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:36
 msgid "Create a new project for this schematic"
@@ -31908,7 +31893,7 @@ msgstr "Povoliť výber uzamknutých položiek"
 #: pcbnew/widgets/panel_selection_filter.cpp:232
 #: pcbnew/widgets/panel_selection_filter_base.cpp:49
 msgid "Graphics"
-msgstr "Grafiky"
+msgstr "Grafika"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:234
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:48
@@ -41626,43 +41611,51 @@ msgstr "Plôšky komponentov sa líšia medzi %s a %s."
 #: pcbnew/constraints/constraint_builder.cpp:277
 #, c-format
 msgid "%s needs two line segments.  Click them to constrain."
-msgstr ""
+msgstr "%s vyžaduje dva segmenty čiary.  Kliknutím na ne vytvoríte väzbu."
 
 #: pcbnew/constraints/constraint_builder.cpp:282
 #, c-format
 msgid "%s needs two line segments of nonzero length.  Click them to constrain."
 msgstr ""
+"%s vyžaduje dva segmenty čiar s nenulovou dĺžkou.  Kliknutím na ne vytvoríte "
+"väzbu."
 
 #: pcbnew/constraints/constraint_builder.cpp:287
 #, c-format
 msgid ""
 "%s needs one line segment, or two anchor points.  Click them to constrain."
 msgstr ""
+"%s vyžaduje jeden segment čiary, alebo dva body ukotvenia.  Kliknutím na ne "
+"vytvoríte väzbu."
 
 #: pcbnew/constraints/constraint_builder.cpp:291
 #, c-format
 msgid "%s needs one line segment.  Click it to constrain."
-msgstr ""
+msgstr "%s vyžaduje jeden segment čiary.  Kliknutím naň vytvoríte väzbu."
 
 #: pcbnew/constraints/constraint_builder.cpp:296
 #, c-format
 msgid "%s needs two arcs, circles or ellipses.  Click them to constrain."
 msgstr ""
+"%s vyžaduje dva oblúky, kružnice alebo elipsy.  Kliknutím na ne vytvoríte "
+"väzbu."
 
 #: pcbnew/constraints/constraint_builder.cpp:300
 #, c-format
 msgid "%s needs two arcs or circles.  Click them to constrain."
 msgstr ""
+"%s vyžaduje dva oblúky alebo kružnice.  Kliknutím na ne vytvoríte väzbu."
 
 #: pcbnew/constraints/constraint_builder.cpp:304
 #, c-format
 msgid "%s needs one arc or circle.  Click it to constrain."
 msgstr ""
+"%s vyžaduje jeden oblúk alebo kružnicu.  Kliknutím na ňu vytvoríte väzbu."
 
 #: pcbnew/constraints/constraint_builder.cpp:308
 #, c-format
 msgid "%s needs one arc.  Click it to constrain."
-msgstr ""
+msgstr "%s vyžaduje jeden oblúk.  Kliknutím naň vytvoríte väzbu."
 
 #: pcbnew/constraints/constraint_builder.cpp:313
 #, c-format
@@ -41670,6 +41663,8 @@ msgid ""
 "%s needs a line and a curve, or two arcs or circles.  Click them to "
 "constrain."
 msgstr ""
+"%s vyžaduje čiaru a krivku, alebo dva oblúky alebo kružnice.  Kliknutím na "
+"ne vytvoríte väzbu."
 
 #: pcbnew/constraints/pcb_constraint.cpp:191
 msgid "start"
@@ -41700,15 +41695,15 @@ msgstr "Vrchol"
 
 #: pcbnew/constraints/pcb_constraint.cpp:207
 msgid "Coincident"
-msgstr ""
+msgstr "Zhodnosť"
 
 #: pcbnew/constraints/pcb_constraint.cpp:210 pcbnew/tools/pcb_actions.cpp:67
 msgid "Parallel"
-msgstr ""
+msgstr "Paralelne"
 
 #: pcbnew/constraints/pcb_constraint.cpp:211 pcbnew/tools/pcb_actions.cpp:77
 msgid "Perpendicular"
-msgstr ""
+msgstr "Kolmo"
 
 #: pcbnew/constraints/pcb_constraint.cpp:212 pcbnew/tools/pcb_actions.cpp:97
 #, fuzzy
@@ -41805,7 +41800,7 @@ msgstr "Vlastnosti puzdra"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2104
 msgid "Driving"
-msgstr ""
+msgstr "Riadiaca"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:480
 msgid "(multiple board outlines not supported)"
@@ -42621,7 +42616,7 @@ msgstr "Relatívne dielektrické konštanty"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.cpp:36
 msgid "Driving (locks the geometry)"
-msgstr ""
+msgstr "Riadiaca (uzamkne geometriu)"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.h:46
 #, fuzzy
@@ -43100,7 +43095,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:358
 msgid "Enter a positive length for a driving dimension."
-msgstr ""
+msgstr "Zadajte kladnú dĺžku pre riadiacu kótu."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:359
 #, fuzzy
@@ -43115,13 +43110,13 @@ msgstr "Upraviť vlastnosti kóty"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2103
 msgid "Driven"
-msgstr ""
+msgstr "Odvodená"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:421
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2105
 msgid "Arbitrary"
-msgstr "Ľubovoľný"
+msgstr "Ľubovoľná"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:528
 #: pcbnew/widgets/pcb_properties_panel.cpp:1110
@@ -43157,6 +43152,8 @@ msgid ""
 "Driven follows the measured geometry; Driving forces the geometry to the "
 "entered length; Arbitrary shows custom text"
 msgstr ""
+"Odvodená kóta sleduje meranú geometriu; Riadiaca kóta upravuje geometriu na "
+"zadanú rozmer; Ľubovoľná kóta zobrazuje vlastný text"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:127
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
@@ -48079,6 +48076,8 @@ msgid ""
 "When enabled, dragged traces will be optimized to avoid creating 90-degree "
 "or acute corners in most situations."
 msgstr ""
+"Keď je táto funkcia povolená, ťahané spoje budú optimalizované tak, aby sa "
+"vo väčšine situácií predišlo vytváraniu 90-stupňových alebo ostrých rohov."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
@@ -49001,32 +49000,28 @@ msgid "Update PCB from Schematic"
 msgstr "Aktualizovať DPS zo schémy"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties.cpp:61
-#, fuzzy
 msgid "Via Stitching Properties"
-msgstr "Vlastnosti prekovu"
+msgstr "Vlastnosti prešitia prekovmi"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
-#, fuzzy
 msgid "Normal Grid"
-msgstr "Normálne"
+msgstr "Obyčajná mriežka"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:76
-#, fuzzy
 msgid "Staggered Grid"
-msgstr "Krokovanie:"
+msgstr "Posunutá mriežka"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:77
 msgid "Poisson"
-msgstr "jed"
+msgstr "Poisson"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:80
-#, fuzzy
 msgid "Pitch:"
-msgstr "Prepínač"
+msgstr "Rozostup:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:91
 msgid "Seed:"
-msgstr ""
+msgstr "Počiatočná hodnota:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:98
 #, fuzzy
@@ -49039,9 +49034,8 @@ msgid "Configure"
 msgstr "Konfigurovať cesty..."
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:81
-#, fuzzy
 msgid "Via Stitch Properties"
-msgstr "Vlastnosti prekovu"
+msgstr "Vlastnosti prešitia prekovmi"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:189
 #, c-format
@@ -52047,7 +52041,7 @@ msgstr "Spoje podobnej veľkosti teardropy nepotrebujú."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:20
 msgid "Default Properties for New Graphics and Text"
-msgstr "Predvolené vlastnosti pre nové grafiky a text"
+msgstr "Predvolené vlastnosti pre novú grafiku a text"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:97 pcbnew/pad.cpp:2268
 #: pcbnew/pcb_track.cpp:2464 pcbnew/pcb_track.cpp:3186
@@ -52286,7 +52280,7 @@ msgstr "Posuny šrafovanej výplne zóny"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:61
 msgid "Use solid fills for hatched zones"
-msgstr ""
+msgstr "Pre šrafované zóny použiť plné výplne"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:62
 msgid ""
@@ -52294,6 +52288,9 @@ msgid ""
 "on large boards. This local setting takes effect the next time zones are "
 "filled."
 msgstr ""
+"Režim výplne prototypových zón, vyplní šrafované zóny ako plné, aby sa "
+"zlepšil výkon na veľkých doskách. Toto lokálne nastavenie sa prejaví pri "
+"ďalšom vyplnení zón."
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
 msgid "Default Properties for New Zones"
@@ -53038,7 +53035,7 @@ msgstr "Pole puzdra sa nezhoduje s poľom symbolu"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Via-stitching zones overlap for same net"
-msgstr ""
+msgstr "Zóny prešitia prekovmi prekrývajú rovnaký spoj"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Footprint not found in libraries"
@@ -54210,9 +54207,8 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maximálny priemer %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_via_stitch.cpp:56
-#, fuzzy
 msgid "Checking via-stitch zone overlaps..."
-msgstr "Kontrolujú sa otvory prekovov..."
+msgstr "Kontroluje sa prekrývanie zón prešitia prekovmi..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:195
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
@@ -54375,7 +54371,7 @@ msgstr "Objekt B"
 #: pcbnew/drc/rule_editor/drc_re_via_style_overlay_panel.cpp:56
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1075
 msgid "Any"
-msgstr "Ľubovoľný"
+msgstr "Ľubovoľné"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:69
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:28
@@ -55955,14 +55951,12 @@ msgstr "Ladenie"
 #: pcbnew/generators/pcb_via_stitch.h:72 pcbnew/generators/pcb_via_stitch.h:75
 #: pcbnew/generators/pcb_via_stitch.h:77
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Via Stitching"
-msgstr "Zodpovedajúce"
+msgstr "Prešitie prekovmi"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1399
-#, fuzzy
 msgid "Edit Via Stitching"
-msgstr "Rýchle prepínanie mriežky"
+msgstr "Upraviť prešitie prekovmi"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1536
 #, fuzzy
@@ -55970,9 +55964,8 @@ msgid "Drill"
 msgstr "Vrtáky"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1540
-#, fuzzy
 msgid "Pitch"
-msgstr "Prepínač"
+msgstr "Rozostup"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1546
 #, fuzzy
@@ -55980,19 +55973,16 @@ msgid "Plain grid"
 msgstr "Čistý text"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1547
-#, fuzzy
 msgid "Staggered grid"
-msgstr "Krokovanie:"
+msgstr "Posunutá mriežka"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1548
-#, fuzzy
 msgid "Poisson disk"
-msgstr "jed"
+msgstr "Poissonova"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1573
-#, fuzzy
 msgid "Stitch"
-msgstr "Prepínač"
+msgstr "Prešiť"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1574
 msgid "Guard"
@@ -56009,18 +55999,16 @@ msgid "Guarded Net"
 msgstr "Pridať text"
 
 #: pcbnew/generators/pcb_via_stitch.h:123
-#, fuzzy
 msgid "Stitching Update"
-msgstr "Existujúca cesta:"
+msgstr "Aktualizovať prešitie"
 
 #: pcbnew/generators/via_stitch_tool.cpp:106
-#, fuzzy
 msgid "Exclude Via From Stitching"
-msgstr "Vylúčiť zo simulácie"
+msgstr "Vylúčiť z prešitia prekovmi"
 
 #: pcbnew/generators/via_stitch_tool.cpp:146 pcbnew/tools/pcb_actions.cpp:3143
 msgid "Clear Via Stitching Exclusions"
-msgstr ""
+msgstr "Vymazať vylúčenia z prešitia prekovmi"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:227
 msgid "Please select a file to import."
@@ -63413,14 +63401,12 @@ msgid "Create outset lines from the selected item"
 msgstr "Vytvorí odsadené čiary z vybranej položky"
 
 #: pcbnew/tools/pcb_actions.cpp:353
-#, fuzzy
 msgid "Draw Via Stitch area"
-msgstr "Nakreslite oblúk"
+msgstr "Kresliť oblasť prešitia prekovmi"
 
 #: pcbnew/tools/pcb_actions.cpp:354
-#, fuzzy
 msgid "Draw a via stitch area"
-msgstr "Nakreslite oblúk"
+msgstr "Kresliť oblasť prešitia prekovmi"
 
 #: pcbnew/tools/pcb_actions.cpp:381
 #, fuzzy
@@ -63462,7 +63448,7 @@ msgstr "Umiestniť bod"
 
 #: pcbnew/tools/pcb_actions.cpp:446
 msgid "Add reference/snap points"
-msgstr "Pridať referenčné/prihlasovacie body"
+msgstr "Pridať referenčné/prichytávacie body"
 
 #: pcbnew/tools/pcb_actions.cpp:454
 msgid "Place Reference Images"
@@ -65406,20 +65392,23 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Zobraziť dialóg správcu pre objekty generátorov"
 
 #: pcbnew/tools/pcb_actions.cpp:3136
-#, fuzzy
 msgid "Exclude From Stitching"
-msgstr "Vylúčiť zo simulácie"
+msgstr "Vylúčiť z prešitia"
 
 #: pcbnew/tools/pcb_actions.cpp:3137
 msgid ""
 "Remove the selected via from its via-stitch generator and prevent it from "
 "being regenerated"
 msgstr ""
+"Odstrániť vybraný prechod z generátora prešitia prekovmi a zabrániť jeho "
+"opätovnému vygenerovaniu"
 
 #: pcbnew/tools/pcb_actions.cpp:3144
 msgid ""
 "Restore all vias previously excluded from the selected via-stitch generators"
 msgstr ""
+"Obnoviť všetky prechody predtým vylúčené z vybraných generátorov prešitia "
+"prekovmi"
 
 #: pcbnew/tools/pcb_actions.cpp:3157
 msgid "Length Tuning Settings"
@@ -65799,9 +65788,8 @@ msgid "Draw Zone"
 msgstr "Kresliť zónu"
 
 #: pcbnew/tools/zone_create_helper.cpp:289
-#, fuzzy
 msgid "Create Via Stitch"
-msgstr "Vytvoriť schému"
+msgstr "Vytvoriť prešitie prekovmi"
 
 #: pcbnew/tools/zone_create_helper.cpp:311
 msgid "Draw Polygon"
@@ -66075,9 +66063,8 @@ msgid "Show custom routing/placement grids"
 msgstr "Povoliť automatické umiestnenie"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Show via stitching generator outlines"
-msgstr "Zobraziť prekovy v režime obrysov"
+msgstr "Zobraziť obrys generátora prešitia prekovmi"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Locked Item Shadow"
