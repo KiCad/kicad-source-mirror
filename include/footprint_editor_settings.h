@@ -23,6 +23,7 @@
 
 #include <board_design_settings.h>
 #include <settings/app_settings.h>
+#include <settings/bom_settings.h>
 #include <settings/snap_settings.h>
 #include <pcbnew_settings.h>
 #include <project/board_project_settings.h>
@@ -84,6 +85,9 @@ public:
     ARC_EDIT_MODE m_ArcEditMode;
 
     int m_LibWidth;
+
+    FIELDS_TABLE_SETTINGS     m_LibFieldEditor;
+    FIELDS_TABLE_BOM_SETTINGS m_LibFieldEditorBom;
 
     wxString m_LastExportPath;
 
