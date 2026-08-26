@@ -159,11 +159,16 @@ class STATUSBAR_WARNING_LIST : public wxFrame
 {
 public:
     STATUSBAR_WARNING_LIST( KISTATUSBAR* aStatusBar, wxWindow* aParent ) :
-            wxFrame( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, FromDIP( wxSize( 600, 200 ) ),
+            wxFrame( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                      wxFRAME_NO_TASKBAR | wxBORDER_STATIC ),
             m_statusBar( aStatusBar )
     {
-        SetSizeHints( FromDIP( wxSize( 600, 200 ) ), wxDefaultSize );
+        // FromDIP() dispatches through the window vtable, so it may not be used until the
+        // wxFrame base is constructed
+        const wxSize panelSize = FromDIP( wxSize( 600, 200 ) );
+
+        SetSize( panelSize );
+        SetSizeHints( panelSize, wxDefaultSize );
 
         wxColour fg, bg;
         KIPLATFORM::UI::GetInfoBarColours( fg, bg );
