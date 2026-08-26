@@ -69,6 +69,7 @@ KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
     case types::KiCadObjectType::KOT_PCB_ZONE:              return PCB_ZONE_T;
     case types::KiCadObjectType::KOT_PCB_GROUP:             return PCB_GROUP_T;
     case types::KiCadObjectType::KOT_PCB_CONSTRAINT:        return PCB_CONSTRAINT_T;
+    case types::KiCadObjectType::KOT_SCH_RULE_AREA:          return SCH_RULE_AREA_T;
     case types::KiCadObjectType::KOT_SCH_GROUP:             return SCH_GROUP_T;
     case types::KiCadObjectType::KOT_SCH_MARKER:            return SCH_MARKER_T;
     case types::KiCadObjectType::KOT_SCH_JUNCTION:          return SCH_JUNCTION_T;
@@ -147,6 +148,7 @@ types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
     case SCH_GLOBAL_LABEL_T:     return types::KiCadObjectType::KOT_SCH_GLOBAL_LABEL;
     case SCH_GROUP_T:            return types::KiCadObjectType::KOT_SCH_GROUP;
     case SCH_HIER_LABEL_T:       return types::KiCadObjectType::KOT_SCH_HIER_LABEL;
+    case SCH_RULE_AREA_T:        return types::KiCadObjectType::KOT_SCH_RULE_AREA;
     case SCH_DIRECTIVE_LABEL_T:  return types::KiCadObjectType::KOT_SCH_DIRECTIVE_LABEL;
     case SCH_FIELD_T:            return types::KiCadObjectType::KOT_SCH_FIELD;
     case SCH_SYMBOL_T:           return types::KiCadObjectType::KOT_SCH_SYMBOL;
