@@ -38,8 +38,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:53-0700\n"
-"PO-Revision-Date: 2026-08-22 17:51+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-08-26 19:51+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -202,14 +202,13 @@ msgid "Loading 3D models..."
 msgstr "Lade 3D-Modelle ..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid "Load completed in %.3f s"
-msgstr "In %s fertiggestellt"
+msgstr "In %.3f s geladen"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1172
-#, fuzzy
 msgid "Stopping background load..."
-msgstr "Hintergrundfarbe drucken"
+msgstr "Laden um Hintergrund wird angehalten..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1891
 #: eeschema/libraries/legacy_symbol_library.cpp:535
@@ -9873,9 +9872,8 @@ msgid "Schematic: Generate Bill of Materials"
 msgstr "Schaltplan: Stückliste erzeuge"
 
 #: common/jobs/job_export_bom.cpp:137
-#, fuzzy
 msgid "PCB: Generate Bill of Materials"
-msgstr "Stückliste (BoM) erstellen ..."
+msgstr "PCB: Stückliste (BoM) erstellen"
 
 #: common/jobs/job_export_pcb_3d.cpp:185
 msgid "3D model export"
@@ -11378,9 +11376,9 @@ msgid "Failed to archive file '%s'."
 msgstr "Konnte kein Archiv der Datei \"%s\" erstellen."
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "Konnte kein Archiv der Datei \"%s\" erstellen."
+msgstr "Konnte kein Archiv der Datei \"%s\" erstellen: %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
@@ -20125,9 +20123,8 @@ msgid "Sheet background:"
 msgstr "Blatthintergrund:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:119
-#, fuzzy
 msgid "Power symbols:"
-msgstr "Spannungssymbole"
+msgstr "Spannungssymbole:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:123
 #: eeschema/widgets/search_handlers.cpp:479
@@ -20696,13 +20693,12 @@ msgid "Chains"
 msgstr "Ketten"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:124
-#, fuzzy
 msgid ""
 "Group net chains under a class label so DRC rules can target the whole group "
 "via "
 msgstr ""
-"Netzketten unter einem Klassenlabel gruppieren, damit DRC-Regeln die ganze "
-"Gruppe über inNetChainClass(\"name\") ansprechen können."
+"Netzketten unter einem Klassenlabel gruppieren, damit die Adressierung der "
+"ganze Gruppe durch DRC-Regeln über "
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:128
 #, fuzzy
@@ -20748,9 +20744,8 @@ msgid "Generate error"
 msgstr "Erzeuge Fehler"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:32
-#, fuzzy
 msgid "Check for missing fields"
-msgstr "Prüfe auf fehlende Abstimmungsprofile ..."
+msgstr "Auf fehlende Felder prüfen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:36
 #, fuzzy
@@ -21640,14 +21635,14 @@ msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
 msgstr "Zugewiesener Footprint (%s) passt nicht zum Footprintfilter (%s)"
 
 #: eeschema/erc/erc.cpp:2629
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s': symbol '%s' not found in libraries"
-msgstr "Symbol \"%s\" nicht in gEDA-Bibliotheken gefunden."
+msgstr "Variante \"%s\": Symbol \"%s\" nicht in Bibliotheken gefunden"
 
 #: eeschema/erc/erc.cpp:2651
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s', alternate '%s': %s"
-msgstr "Variante \"%s\" existiert bereits."
+msgstr "Variante \"%s\", Alternative \"%s\": %s"
 
 #: eeschema/erc/erc.cpp:2675
 msgid "Checking sheet names..."
@@ -21873,9 +21868,8 @@ msgid "Field name has leading or trailing whitespace"
 msgstr "Der Feldname beginnt oder endet mit Leerzeichen"
 
 #: eeschema/erc/erc_item.cpp:174
-#, fuzzy
 msgid "Label has an empty name"
-msgstr "Bezeichner darf nicht leer sein."
+msgstr "Bezeichner hat keinen Namen"
 
 #: eeschema/erc/erc_item.cpp:178
 msgid "Pin map references a pad that does not exist on the footprint"
