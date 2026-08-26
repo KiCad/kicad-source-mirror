@@ -424,6 +424,9 @@ void WX_GRID::onGridCellSelect( wxGridEvent& aEvent )
         {
             SelectBlock( 0, col, GetNumberRows() - 1, col, false );
         }
+
+        if( m_cursorRowColumnHighlight )
+            ForceRefresh();
     }
 }
 

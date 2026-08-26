@@ -230,6 +230,7 @@ DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTIN
 
     m_filter->SetDescriptiveText( _( "Filter" ) );
 
+    m_grid->EnableCursorRowColumnHighlight();
     m_grid->GetGridWindow()->Bind( wxEVT_MOUSEWHEEL, &DIALOG_FIELDS_TABLE::OnGridMouseWheel, this );
 }
 

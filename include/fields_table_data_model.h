@@ -274,6 +274,7 @@ protected:
     bool            cellUsesUrlEditor( int aRow, int aCol );
     wxGridCellAttr* cloneUrlEditorAttr();
 
+    wxGridCellAttr* applyCellDecorations( wxGridCellAttr* aAttr, int aRow, int aCol );
     wxGridCellAttr* applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol );
 
     // Column mutations invalidate the position-based coordinates held by an open wxGrid editor.

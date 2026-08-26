@@ -127,8 +127,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
 
     // If we don't need any custom attributes, use the base class behavior
     if( !needsReadOnly && !needsUrlEditor && !needsVariantHighlight && !needsResolvedTextRenderer )
-        return applyFieldPresenceRenderer( WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind ),
-                                           aRow, aCol );
+        return applyCellDecorations( WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind ), aRow, aCol );
 
     // URL cells use the Datasheet column's editor.  Other cells use their own column attributes.
     if( needsUrlEditor )
@@ -153,7 +152,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
     if( needsResolvedTextRenderer )
         applyResolvedTextRenderer( attr, !needsVariantHighlight );
 
-    return applyFieldPresenceRenderer( enhanceAttr( attr, aRow, aCol, aKind ), aRow, aCol );
+    return applyCellDecorations( enhanceAttr( attr, aRow, aCol, aKind ), aRow, aCol );
 }
 
 

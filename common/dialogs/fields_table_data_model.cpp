@@ -29,6 +29,7 @@
 #include <widgets/grid_striped_renderer.h>
 #include <widgets/ui_common.h>
 #include <wx/dc.h>
+#include <wx/settings.h>
 
 
 GRID_CELL_RESOLVED_TEXT_RENDERER::GRID_CELL_RESOLVED_TEXT_RENDERER() :
@@ -181,6 +182,38 @@ wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::applyFieldPresenceRenderer( wxGrid
         stripedAttr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
     return stripedAttr;
+}
+
+
+wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::applyCellDecorations( wxGridCellAttr* aAttr, int aRow, int aCol )
+{
+    constexpr double ROW_HINT_OPACITY = 0.1;
+    constexpr double COLUMN_HINT_OPACITY = 0.05;
+
+    aAttr = applyFieldPresenceRenderer( aAttr, aRow, aCol );
+
+    WX_GRID* grid = dynamic_cast<WX_GRID*>( GetView() );
+
+    if( !grid || !grid->IsCursorRowColumnHighlightEnabled()
+        || ( aRow != grid->GetGridCursorRow() && aCol != grid->GetGridCursorCol() ) )
+    {
+        return aAttr;
+    }
+
+    wxColour background = aAttr && aAttr->HasBackgroundColour() ? aAttr->GetBackgroundColour()
+                                                                : grid->GetDefaultCellBackgroundColour();
+    wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+    double   hintOpacity = aRow == grid->GetGridCursorRow() ? ROW_HINT_OPACITY : COLUMN_HINT_OPACITY;
+
+    wxColour hintedBackground( wxColour::AlphaBlend( highlight.Red(), background.Red(), hintOpacity ),
+                               wxColour::AlphaBlend( highlight.Green(), background.Green(), hintOpacity ),
+                               wxColour::AlphaBlend( highlight.Blue(), background.Blue(), hintOpacity ) );
+
+    wxGridCellAttr* hintedAttr = aAttr ? aAttr->Clone() : new wxGridCellAttr;
+    wxSafeDecRef( aAttr );
+    hintedAttr->SetBackgroundColour( hintedBackground );
+
+    return hintedAttr;
 }
 
 

@@ -325,7 +325,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
         }
     }
 
-    return applyFieldPresenceRenderer( attr, aRow, aCol );
+    return applyCellDecorations( attr, aRow, aCol );
 }
 
 

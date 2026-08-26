@@ -142,6 +142,13 @@ public:
     void EnableAlternateRowColors( bool aEnable = true );
 
     /**
+     * Enable repainting for grids whose table uses the cursor row and column when rendering cells.
+     */
+    void EnableCursorRowColumnHighlight( bool aEnable = true ) { m_cursorRowColumnHighlight = aEnable; }
+
+    bool IsCursorRowColumnHighlightEnabled() const { return m_cursorRowColumnHighlight; }
+
+    /**
      * Get a tokenized string containing the shown column indexes.
      *
      * Tokens are separated by spaces.
@@ -395,6 +402,7 @@ private:
 
 protected:
     bool                       m_weOwnTable;
+    bool                       m_cursorRowColumnHighlight = false;
 
     std::map<int, UNITS_PROVIDER*>                                 m_unitsProviders;
     std::unique_ptr<NUMERIC_EVALUATOR>                             m_eval;
