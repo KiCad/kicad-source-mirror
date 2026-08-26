@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:52-0700\n"
-"PO-Revision-Date: 2026-08-22 17:51+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-08-26 20:51+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -10034,9 +10034,9 @@ msgid "Failed to archive file '%s'."
 msgstr "Konnte kein Archiv der Datei \"%s\" erstellen."
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "Konnte kein Archiv der Datei \"%s\" erstellen."
+msgstr "Konnte kein Archiv der Datei \"%s\" erstellen: %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
