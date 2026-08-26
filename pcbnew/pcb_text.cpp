@@ -910,21 +910,22 @@ static struct PCB_TEXT_DESC
 
         propMgr.Mask( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, BOARD_ITEM>( _HKI( "Knockout" ), &BOARD_ITEM::SetIsKnockout,
-                                                                       &BOARD_ITEM::IsKnockout ),
-                             _HKI( "Text Properties" ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, BOARD_ITEM>( _HKI( "Knockout" ),
+                    &BOARD_ITEM::SetIsKnockout, &BOARD_ITEM::IsKnockout ),
+                    _HKI( "Text Properties" ) );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, EDA_TEXT>( _HKI( "Keep Upright" ), &PCB_TEXT::SetKeepUpright,
-                                                                     &PCB_TEXT::IsKeepUpright ),
-                             _HKI( "Text Properties" ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, EDA_TEXT>( _HKI( "Keep Upright" ),
+                    &PCB_TEXT::SetKeepUpright, &PCB_TEXT::IsKeepUpright ),
+                    _HKI( "Text Properties" ) );
 
-        auto isFootprintText = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( aItem ) )
-                return text->GetParentFootprint();
+        auto isFootprintText =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( aItem ) )
+                        return text->GetParentFootprint();
 
-            return false;
-        };
+                    return false;
+                };
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Keep Upright" ),
                                       isFootprintText );

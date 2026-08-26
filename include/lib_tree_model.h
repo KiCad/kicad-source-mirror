@@ -118,38 +118,35 @@ public:
         INVALID
     };
 
-    typedef std::vector<std::unique_ptr<LIB_TREE_NODE>> PTR_VECTOR;
-
-    LIB_TREE_NODE*  m_Parent;     // Parent node or null
-    PTR_VECTOR      m_Children;   // List of child nodes
-    enum TYPE       m_Type;       // Node type
+    LIB_TREE_NODE*                               m_Parent;     // Parent node or null
+    std::vector<std::unique_ptr<LIB_TREE_NODE>>  m_Children;   // List of child nodes
+    enum TYPE                                    m_Type;       // Node type
 
     /**
-     * The rank of the item before any search terms are applied. This is
-     * a fairly expensive sort (involving string compares) so it helps to
-     * store the result of that sort.
+     * The rank of the item before any search terms are applied. This is a fairly expensive sort (involving
+     * string compares) so it helps to store the result of that sort.
      */
-    int         m_IntrinsicRank;
+    int                          m_IntrinsicRank;
 
-    int         m_Score;       // The score of an item resulting from the search algorithm.
-    bool        m_ExactMatch;  // True if a search term exactly matched one of this node's fields.
-    bool        m_Pinned;      // Item should appear at top when there is no search string
+    int                          m_Score;       // The score of an item resulting from the search algorithm.
+    bool                         m_ExactMatch;  // True if a search term exactly matched one of this node's fields.
+    bool                         m_Pinned;      // Item should appear at top when there is no search string
 
-    wxString    m_Name;        // Actual name of the part
-    wxString    m_Desc;        // Description to be displayed
-    wxString    m_Footprint;   // Footprint ID as a string (ie: the footprint field text)
-    int         m_PinCount;    // Pin count from symbol, or unique pad count from footprint
+    wxString                     m_Name;        // Actual name of the part
+    wxString                     m_Desc;        // Description to be displayed
+    wxString                     m_Footprint;   // Footprint ID as a string (ie: the footprint field text)
+    int                          m_PinCount;    // Pin count from symbol, or unique pad count from footprint
 
     std::vector<SEARCH_TERM>     m_SearchTerms;    /// List of weighted search terms
     std::map<wxString, wxString> m_Fields;         /// @see LIB_TREE_ITEMS::GetChooserFields
 
-    LIB_ID      m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
-    int         m_Unit;        // Actual unit, or zero
-    bool        m_IsRoot;      // Indicates if the symbol is a root symbol instead of an alias.
-    bool        m_IsPower;     // Indicates if the symbol is a local or global power symbol
+    LIB_ID                       m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
+    int                          m_Unit;        // Actual unit, or zero
+    bool                         m_IsRoot;      // Indicates if the symbol is a root symbol instead of an alias.
+    bool                         m_IsPower;     // Indicates if the symbol is a local or global power symbol
 
-    bool        m_IsRecentlyUsedGroup;
-    bool        m_IsAlreadyPlacedGroup;
+    bool                         m_IsRecentlyUsedGroup;
+    bool                         m_IsAlreadyPlacedGroup;
 
 protected:
     std::vector<SEARCH_TERM> m_sourceSearchTerms;

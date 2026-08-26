@@ -176,11 +176,12 @@ static struct CLASS_D_DESC
         propMgr.InheritsAfter( TYPE_HASH( D ), TYPE_HASH( A ) );
         propMgr.InheritsAfter( TYPE_HASH( D ), TYPE_HASH( C ) );
 
-        auto cond = new PROPERTY<D, int>( "cond", &D::setCond, &D::getCond );
-        cond->SetAvailableFunc( [=](INSPECTABLE* aItem)->bool {
-                return *aItem->Get<enum_glob>( "enumGlob" ) == enum_glob::TEST1;
-        } );
-        propMgr.AddProperty( cond );
+        propMgr.AddProperty( new PROPERTY<D, int>( "cond",
+                    &D::setCond, &D::getCond ) )
+                .SetAvailableFunc( [=]( INSPECTABLE* aItem )->bool
+                                   {
+                                       return *aItem->Get<enum_glob>( "enumGlob" ) == enum_glob::TEST1;
+                                   } );
     }
 } _CLASS_D_DESC;
 
@@ -425,8 +426,7 @@ BOOST_AUTO_TEST_CASE( DuplicateProperty )
     b.setC( origValue );
 
     // Attempt to register a duplicate property with the same name and owner
-    PROPERTY_BASE& returned = propMgr.AddProperty(
-            new PROPERTY<B, int>( "C", &B::setC, &B::getC ) );
+    PROPERTY_BASE& returned = propMgr.AddProperty( new PROPERTY<B, int>( "C", &B::setC, &B::getC ) );
 
     // AddProperty should return the existing property, not the new one
     BOOST_CHECK_EQUAL( &returned, original );

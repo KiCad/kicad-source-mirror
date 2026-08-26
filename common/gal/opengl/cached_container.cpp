@@ -203,7 +203,7 @@ void CACHED_CONTAINER::Clear()
 
     // Set the size of all the stored VERTEX_ITEMs to 0, so it is clear that they are not held
     // in the container anymore
-    for( ITEMS::iterator it = m_items.begin(); it != m_items.end(); ++it )
+    for( std::set<VERTEX_ITEM*>::iterator it = m_items.begin(); it != m_items.end(); ++it )
         ( *it )->setSize( 0 );
 
     m_items.clear();
@@ -288,8 +288,8 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
 void CACHED_CONTAINER::defragment( VERTEX* aTarget )
 {
     // Defragmentation
-    ITEMS::iterator it, it_end;
-    int             newOffset = 0;
+    std::set<VERTEX_ITEM*>::iterator it, it_end;
+    int                              newOffset = 0;
 
     [&]()
     {
@@ -320,8 +320,7 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
             // Move the current item and place it at the end
             if( m_item->GetSize() > 0 )
             {
-                memcpy( &aTarget[newOffset], &m_vertices[m_item->GetOffset()],
-                        m_item->GetSize() * VERTEX_SIZE );
+                memcpy( &aTarget[newOffset], &m_vertices[m_item->GetOffset()], m_item->GetSize() * VERTEX_SIZE );
                 m_item->setOffset( newOffset );
                 m_chunkOffset = newOffset;
             }
@@ -434,8 +433,8 @@ void CACHED_CONTAINER::test()
     assert( freeSpace == m_freeSpace );
 
     // Used space check
-    unsigned int    used_space = 0;
-    ITEMS::iterator itr;
+    unsigned int                     used_space = 0;
+    std::set<VERTEX_ITEM*>::iterator itr;
 
     for( itr = m_items.begin(); itr != m_items.end(); ++itr )
         used_space += ( *itr )->GetSize();

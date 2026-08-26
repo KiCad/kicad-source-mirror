@@ -510,7 +510,7 @@ static struct EDA_ITEM_DESC
         REGISTER_TYPE( EDA_ITEM );
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_ITEM, KICAD_T>( wxS( "Type" ),
-                             NO_SETTER( EDA_ITEM, KICAD_T ), &EDA_ITEM::Type ) )
+                    NO_SETTER( EDA_ITEM, KICAD_T ), &EDA_ITEM::Type ) )
                 .SetIsHiddenFromPropertiesManager();
     }
 } _EDA_ITEM_DESC;

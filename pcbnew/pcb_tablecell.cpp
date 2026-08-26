@@ -351,14 +351,12 @@ static struct PCB_TABLECELL_DESC
 
         const wxString tableProps = _( "Table" );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLECELL, int>( _HKI( "Column Width" ), &PCB_TABLECELL::SetColumnWidth,
-                                                               &PCB_TABLECELL::GetColumnWidth,
-                                                               PROPERTY_DISPLAY::PT_SIZE ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLECELL, int>( _HKI( "Column Width" ),
+                    &PCB_TABLECELL::SetColumnWidth, &PCB_TABLECELL::GetColumnWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                    tableProps );
 
-        propMgr.AddProperty( new PROPERTY<PCB_TABLECELL, int>( _HKI( "Row Height" ), &PCB_TABLECELL::SetRowHeight,
-                                                               &PCB_TABLECELL::GetRowHeight,
-                                                               PROPERTY_DISPLAY::PT_SIZE ),
-                             tableProps );
+        propMgr.AddProperty( new PROPERTY<PCB_TABLECELL, int>( _HKI( "Row Height" ),
+                    &PCB_TABLECELL::SetRowHeight, &PCB_TABLECELL::GetRowHeight, PROPERTY_DISPLAY::PT_SIZE ),
+                    tableProps );
     }
 } _PCB_TABLECELL_DESC;

@@ -862,7 +862,7 @@ static struct SCH_ITEM_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_ITEM ), TYPE_HASH( EDA_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_ITEM, bool>( _HKI( "Locked" ),
-                &SCH_ITEM::SetLocked, &SCH_ITEM::IsLocked ) )
+                    &SCH_ITEM::SetLocked, &SCH_ITEM::IsLocked ) )
                 .SetIsHiddenFromLibraryEditors();
 
         auto multiUnit =

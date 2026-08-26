@@ -213,9 +213,8 @@ static struct PCB_GENERATOR_DESC
         const wxString groupTab = _HKI( "Generator Properties" );
 
         propMgr.AddProperty( new PROPERTY<PCB_GENERATOR, int>( _HKI( "Update Order" ),
-                                                               &PCB_GENERATOR::SetUpdateOrder,
-                                                               &PCB_GENERATOR::GetUpdateOrder ),
-                             groupTab );
+                    &PCB_GENERATOR::SetUpdateOrder, &PCB_GENERATOR::GetUpdateOrder ),
+                    groupTab );
     }
 } _PCB_GENERATOR_DESC;
 #endif

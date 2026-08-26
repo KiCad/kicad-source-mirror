@@ -485,7 +485,7 @@ static struct PCB_CONSTRAINT_DESC
         // Driving vs reference is the one freely-editable property (the "convert to reference"
         // toggle); type and members are intrinsic and set at creation.
         propMgr.AddProperty( new PROPERTY<PCB_CONSTRAINT, bool>( _HKI( "Driving" ),
-                             &PCB_CONSTRAINT::SetDriving, &PCB_CONSTRAINT::IsDriving ),
-                             constraintTab );
+                    &PCB_CONSTRAINT::SetDriving, &PCB_CONSTRAINT::IsDriving ),
+                    constraintTab );
     }
 } _PCB_CONSTRAINT_DESC;

@@ -567,8 +567,8 @@ static struct PCB_GROUP_DESC
 
         const wxString groupTab = _HKI( "Group Properties" );
 
-        propMgr.AddProperty(
-                new PROPERTY<EDA_GROUP, wxString>( _HKI( "Name" ), &PCB_GROUP::SetName, &PCB_GROUP::GetName ),
-                groupTab );
+        propMgr.AddProperty( new PROPERTY<EDA_GROUP, wxString>( _HKI( "Name" ),
+                    &PCB_GROUP::SetName, &PCB_GROUP::GetName ),
+                    groupTab );
     }
 } _PCB_GROUP_DESC;

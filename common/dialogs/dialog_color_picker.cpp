@@ -44,10 +44,8 @@ void configureSpinCtrl( wxSpinCtrl* aCtrl )
 }
 
 
-DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, const COLOR4D& aCurrentColor,
-                                          bool aAllowOpacityControl,
-                                          CUSTOM_COLORS_LIST* aUserColors,
-                                          const COLOR4D& aDefaultColor ) :
+DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, const COLOR4D& aCurrentColor, bool aAllowOpacityControl,
+                                          std::vector<CUSTOM_COLOR_ITEM>* aUserColors, const COLOR4D& aDefaultColor ) :
 	DIALOG_COLOR_PICKER_BASE( aParent )
 {
     m_allowMouseEvents = false;
@@ -164,7 +162,7 @@ bool DIALOG_COLOR_PICKER::TransferDataToWindow()
 }
 
 
-void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColors )
+void DIALOG_COLOR_PICKER::initDefinedColors( std::vector<CUSTOM_COLOR_ITEM>* aPredefinedColors )
 {
     #define ID_COLOR_BLACK 2000 // colors_id = ID_COLOR_BLACK a ID_COLOR_BLACK + NBCOLORS-1
 

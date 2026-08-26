@@ -246,10 +246,9 @@ static struct PCB_TARGET_DESC
         propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Width" ),
                     &PCB_TARGET::SetWidth, &PCB_TARGET::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
-        auto shape = new PROPERTY<PCB_TARGET, int>( _HKI( "Shape" ),
-                &PCB_TARGET::SetShape, &PCB_TARGET::GetShape );
         // TODO change the integer to an enum?
         //shape->SetValues( { { 0, _HKI( "Cross" ) }, { 1, ( "Plus" ) } } );
-        propMgr.AddProperty( shape );
+        propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Shape" ),
+                &PCB_TARGET::SetShape, &PCB_TARGET::GetShape ) );
     }
 } _PCB_TARGET_DESC;

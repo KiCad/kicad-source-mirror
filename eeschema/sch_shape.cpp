@@ -778,27 +778,32 @@ static struct SCH_SHAPE_DESC
 
         // Polygons and ellipses have meaningful Position properties (first vertex / center).
         // On other shapes, Position duplicates the Start properties.
-        auto isPolygonOrEllipse = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
-            {
-                const SHAPE_T t = shape->GetShape();
-                return t == SHAPE_T::POLY || t == SHAPE_T::ELLIPSE || t == SHAPE_T::ELLIPSE_ARC;
-            }
-            return false;
-        };
+        auto isPolygonOrEllipse =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
+                    {
+                        const SHAPE_T t = shape->GetShape();
+                        return t == SHAPE_T::POLY || t == SHAPE_T::ELLIPSE || t == SHAPE_T::ELLIPSE_ARC;
+                    }
+                    return false;
+                };
 
         // Hide Start/End for shapes that don't use them directly
         // (polygon uses first vertex via Position; circle uses Center; ellipse uses Center + radii).
-        auto isNotPolygonOrCircleOrEllipse = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
-            {
-                const SHAPE_T t = shape->GetShape();
-                return t != SHAPE_T::POLY && t != SHAPE_T::CIRCLE && t != SHAPE_T::ELLIPSE && t != SHAPE_T::ELLIPSE_ARC;
-            }
-            return true;
-        };
+        auto isNotPolygonOrCircleOrEllipse =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
+                    {
+                        const SHAPE_T t = shape->GetShape();
+                        return t != SHAPE_T::POLY
+                                && t != SHAPE_T::CIRCLE
+                                && t != SHAPE_T::ELLIPSE 
+                                && t != SHAPE_T::ELLIPSE_ARC;
+                    }
+                    return true;
+                };
 
         auto isSymbolItem =
                 []( INSPECTABLE* aItem ) -> bool
@@ -834,16 +839,16 @@ static struct SCH_SHAPE_DESC
 
         const wxString shapeProps = _HKI( "Shape Properties" );
 
-        propMgr.AddProperty( new PROPERTY<SCH_SHAPE, int>( _HKI( "Position X" ), &SCH_SHAPE::SetPositionX,
-                                                           &SCH_SHAPE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
-                                                           ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<SCH_SHAPE, int>( _HKI( "Position X" ),
+                    &SCH_SHAPE::SetPositionX, &SCH_SHAPE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isPolygonOrEllipse );
 
-        propMgr.AddProperty( new PROPERTY<SCH_SHAPE, int>( _HKI( "Position Y" ), &SCH_SHAPE::SetPositionY,
-                                                           &SCH_SHAPE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
-                                                           ORIGIN_TRANSFORMS::ABS_Y_COORD ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<SCH_SHAPE, int>( _HKI( "Position Y" ),
+                    &SCH_SHAPE::SetPositionY, &SCH_SHAPE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isPolygonOrEllipse );
 
         propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Start X" ),
@@ -855,18 +860,18 @@ static struct SCH_SHAPE_DESC
         propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "End Y" ),
                                       isNotPolygonOrCircleOrEllipse );
 
-        propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "Filled" ), isSchematicItem );
+        propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Filled" ),
+                                      isSchematicItem );
 
-        propMgr.OverrideWriteability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "Fill Color" ), isFillColorEditable );
+        propMgr.OverrideWriteability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill Color" ),
+                                      isFillColorEditable );
 
         void ( SCH_SHAPE::*fillModeSetter )( FILL_T ) = &SCH_SHAPE::SetFillMode;
         FILL_T ( SCH_SHAPE::*fillModeGetter )() const = &SCH_SHAPE::GetFillMode;
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_SHAPE, FILL_T>( _HKI( "Fill Mode" ),
-                        fillModeSetter, fillModeGetter ),
-                        _HKI( "Shape Properties" ) )
+                    fillModeSetter, fillModeGetter ),
+                    _HKI( "Shape Properties" ) )
                 .SetAvailableFunc( isSymbolItem );
     }
 } _SCH_SHAPE_DESC;

@@ -818,9 +818,9 @@ static struct SCH_TEXT_DESC
         propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
         propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
 
-        propMgr.AddProperty( new PROPERTY<SCH_TEXT, int>( _HKI( "Text Size" ), &SCH_TEXT::SetSchTextSize,
-                                                          &SCH_TEXT::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
-                             _HKI( "Text Properties" ) );
+        propMgr.AddProperty( new PROPERTY<SCH_TEXT, int>( _HKI( "Text Size" ),
+                    &SCH_TEXT::SetSchTextSize, &SCH_TEXT::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    _HKI( "Text Properties" ) );
 
         // Orientation is exposed differently in schematic; mask the base for now
         propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );

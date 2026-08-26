@@ -144,23 +144,24 @@ private:
      */
     void onMouseEvent( wxEvent& aEvent );
 
-    KIGFX::COLOR4D        m_color;
-    KIGFX::COLOR4D        m_background;
-    KIGFX::COLOR4D        m_default;
-    CUSTOM_COLORS_LIST*   m_userColors;
+private:
+    KIGFX::COLOR4D                  m_color;
+    KIGFX::COLOR4D                  m_background;
+    KIGFX::COLOR4D                  m_default;
+    std::vector<CUSTOM_COLOR_ITEM>* m_userColors;
 
-    wxStaticBitmap*       m_swatch;
+    wxStaticBitmap*                 m_swatch;
 
-    wxSize                m_size;
-    wxSize                m_checkerboardSize;
-    KIGFX::COLOR4D        m_checkerboardBg;
+    wxSize                          m_size;
+    wxSize                          m_checkerboardSize;
+    KIGFX::COLOR4D                  m_checkerboardBg;
 
     /// A read-only swatch won't show the color chooser dialog but otherwise works normally
-    bool                  m_readOnly;
-    std::function<void()> m_readOnlyCallback;
+    bool                            m_readOnly;
+    std::function<void()>           m_readOnlyCallback;
 
     /// If opacity is not supported the color chooser dialog will be displayed without it
-    bool                  m_supportsOpacity;
+    bool                            m_supportsOpacity;
 };
 
 

@@ -1849,20 +1849,21 @@ static struct PCB_SHAPE_DESC
         void ( PCB_SHAPE::*shapeLayerSetter )( PCB_LAYER_ID ) = &PCB_SHAPE::SetLayer;
         PCB_LAYER_ID ( PCB_SHAPE::*shapeLayerGetter )() const = &PCB_SHAPE::GetLayer;
 
-        auto layerProperty = new PROPERTY_ENUM<PCB_SHAPE, PCB_LAYER_ID>(
-                _HKI( "Layer" ), shapeLayerSetter, shapeLayerGetter );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
+                    new PROPERTY_ENUM<PCB_SHAPE, PCB_LAYER_ID>( _HKI( "Layer" ),
+                                shapeLayerSetter, shapeLayerGetter ) );
 
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ), layerProperty );
+        auto isPolygonOrEllipse =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                    {
+                        const SHAPE_T t = shape->GetShape();
+                        return t == SHAPE_T::POLY || t == SHAPE_T::ELLIPSE || t == SHAPE_T::ELLIPSE_ARC;
+                    }
 
-        auto isPolygonOrEllipse = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
-            {
-                const SHAPE_T t = shape->GetShape();
-                return t == SHAPE_T::POLY || t == SHAPE_T::ELLIPSE || t == SHAPE_T::ELLIPSE_ARC;
-            }
-            return false;
-        };
+                    return false;
+                };
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
                                       isPolygonOrEllipse );
@@ -1872,15 +1873,17 @@ static struct PCB_SHAPE_DESC
         propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Color" ) );
         propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill Color" ) );
 
-        auto isNotBezierOrEllipseArc = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
-            {
-                const SHAPE_T t = shape->GetShape();
-                return t != SHAPE_T::BEZIER && t != SHAPE_T::ELLIPSE_ARC;
-            }
-            return true;
-        };
+        auto isNotBezierOrEllipseArc =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                    {
+                        const SHAPE_T t = shape->GetShape();
+                        return t != SHAPE_T::BEZIER && t != SHAPE_T::ELLIPSE_ARC;
+                    }
+
+                    return true;
+                };
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill" ),
                                       isNotBezierOrEllipseArc );
@@ -1894,30 +1897,32 @@ static struct PCB_SHAPE_DESC
                     return false;
                 };
 
-        auto isNotCircleOrEllipse = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
-            {
-                const SHAPE_T t = shape->GetShape();
-                return t != SHAPE_T::CIRCLE && t != SHAPE_T::ELLIPSE && t != SHAPE_T::ELLIPSE_ARC;
-            }
-            return true;
-        };
+        auto isNotCircleOrEllipse =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                    {
+                        const SHAPE_T t = shape->GetShape();
+                        return t != SHAPE_T::CIRCLE && t != SHAPE_T::ELLIPSE && t != SHAPE_T::ELLIPSE_ARC;
+                    }
+
+                    return true;
+                };
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Start X" ),
-                                      isNotCircleOrEllipse );
+                    isNotCircleOrEllipse );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Start Y" ),
-                                      isNotCircleOrEllipse );
+                    isNotCircleOrEllipse );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "End X" ),
-                                      isNotCircleOrEllipse );
+                    isNotCircleOrEllipse );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "End Y" ),
-                                      isNotCircleOrEllipse );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "Center X" ), isCircle );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "Center Y" ), isCircle );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "Radius" ), isCircle );
+                    isNotCircleOrEllipse );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Center X" ),
+                    isCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Center Y" ),
+                    isCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Radius" ),
+                    isCircle );
 
         auto isCopper =
                 []( INSPECTABLE* aItem ) -> bool
@@ -1928,8 +1933,8 @@ static struct PCB_SHAPE_DESC
                     return false;
                 };
 
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
-                                      _HKI( "Net" ), isCopper );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ),
+                    isCopper );
 
         auto isPadEditMode =
                 []( BOARD* aBoard ) -> bool
@@ -1976,9 +1981,8 @@ static struct PCB_SHAPE_DESC
         const wxString groupPadPrimitives = _HKI( "Pad Primitives" );
 
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Number Box" ),
-                                                            &PCB_SHAPE::SetIsProxyItem,
-                                                            &PCB_SHAPE::IsProxyItem ),
-                             groupPadPrimitives )
+                    &PCB_SHAPE::SetIsProxyItem, &PCB_SHAPE::IsProxyItem ),
+                    groupPadPrimitives )
                 .SetAvailableFunc( showNumberBoxProperty )
                 .SetIsHiddenFromRulesEditor();
 

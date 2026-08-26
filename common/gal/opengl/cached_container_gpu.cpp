@@ -145,12 +145,10 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     const size_t oldBytes = static_cast<size_t>( m_currentSize ) * VERTEX_SIZE;
     const size_t newBytes = static_cast<size_t>( aNewSize ) * VERTEX_SIZE;
 
-    switch( KIGFX::chooseResizeStrategy( KIGFX::queryFreeVideoMemoryBytes(), oldBytes, newBytes,
-                                         0.15 ) )
+    switch( KIGFX::chooseResizeStrategy( KIGFX::queryFreeVideoMemoryBytes(), oldBytes, newBytes, 0.15 ) )
     {
     case KIGFX::VRAM_RESIZE_STRATEGY::REFUSE:
-        throw KIGFX::GPU_OOM_ERROR( "Insufficient GPU memory to render this board; "
-                                    "switching to software rendering." );
+        throw KIGFX::GPU_OOM_ERROR( "Insufficient GPU memory to render this board; switching to software rendering." );
 
     case KIGFX::VRAM_RESIZE_STRATEGY::RAM_STAGE:
         return defragmentResizeStaged( aNewSize );
@@ -195,8 +193,8 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
     checkGlError( "creating buffer during defragmentation", __FILE__, __LINE__ );
 
-    ITEMS::iterator it, it_end;
-    int             newOffset = 0;
+    std::set<VERTEX_ITEM*>::iterator it, it_end;
+    int                              newOffset = 0;
 
     // Defragmentation
     for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )

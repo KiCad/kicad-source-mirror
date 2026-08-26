@@ -205,13 +205,12 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNo
 }
 
 
-LIB_TREE_NODE::PTR_VECTOR::iterator
-FP_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
+std::vector<std::unique_ptr<LIB_TREE_NODE>>::iterator
+FP_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( std::vector<std::unique_ptr<LIB_TREE_NODE>>::iterator& aLibNodeIt )
 {
     LIB_TREE_NODE* node = aLibNodeIt->get();
     m_libMap.erase( node->m_Name );
-    auto it = m_tree.m_Children.erase( aLibNodeIt );
-    return it;
+    return m_tree.m_Children.erase( aLibNodeIt );
 }
 
 

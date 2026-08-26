@@ -416,37 +416,32 @@ static struct PCB_REFERENCE_IMAGE_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_REFERENCE_IMAGE ), TYPE_HASH( BOARD_ITEM ) );
 
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
-            new PROPERTY_ENUM<PCB_REFERENCE_IMAGE, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Associated Layer" ),
-            &PCB_REFERENCE_IMAGE::SetLayer, &PCB_REFERENCE_IMAGE::GetLayer ) );
+                    new PROPERTY_ENUM<PCB_REFERENCE_IMAGE, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Associated Layer" ),
+                                &PCB_REFERENCE_IMAGE::SetLayer, &PCB_REFERENCE_IMAGE::GetLayer ) );
 
         const wxString groupImage = _HKI( "Image Properties" );
 
         propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, double>( _HKI( "Scale" ),
-                             &PCB_REFERENCE_IMAGE::SetImageScale,
-                             &PCB_REFERENCE_IMAGE::GetImageScale ),
-                             groupImage );
+                    &PCB_REFERENCE_IMAGE::SetImageScale, &PCB_REFERENCE_IMAGE::GetImageScale ),
+                    groupImage );
 
         propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>( _HKI( "Transform Offset X" ),
-                                     &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetX,
-                                     &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetX,
-                                     PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupImage );
+                    &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetX, &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetX,
+                    PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    groupImage );
 
         propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>( _HKI( "Transform Offset Y" ),
-                                     &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetY,
-                                     &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetY,
-                                     PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
-                             groupImage );
+                    &PCB_REFERENCE_IMAGE::SetTransformOriginOffsetY, &PCB_REFERENCE_IMAGE::GetTransformOriginOffsetY,
+                    PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    groupImage );
 
         propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>( _HKI( "Width" ),
-                                     &PCB_REFERENCE_IMAGE::SetWidth, &PCB_REFERENCE_IMAGE::GetWidth,
-                                     PROPERTY_DISPLAY::PT_COORD ),
-                             groupImage );
+                    &PCB_REFERENCE_IMAGE::SetWidth, &PCB_REFERENCE_IMAGE::GetWidth, PROPERTY_DISPLAY::PT_COORD ),
+                    groupImage );
 
         propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, int>( _HKI( "Height" ),
-                                     &PCB_REFERENCE_IMAGE::SetHeight, &PCB_REFERENCE_IMAGE::GetHeight,
-                                     PROPERTY_DISPLAY::PT_COORD ),
-                             groupImage );
+                    &PCB_REFERENCE_IMAGE::SetHeight, &PCB_REFERENCE_IMAGE::GetHeight, PROPERTY_DISPLAY::PT_COORD ),
+                    groupImage );
 
         // For future use
         const wxString greyscale = _HKI( "Greyscale" );

@@ -4650,74 +4650,75 @@ static struct SCH_SYMBOL_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_SYMBOL ), TYPE_HASH( SYMBOL ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_SYMBOL ), TYPE_HASH( SCH_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Position X" ), &SCH_SYMBOL::SetX, &SCH_SYMBOL::GetX,
-                                                            PROPERTY_DISPLAY::PT_COORD,
-                                                            ORIGIN_TRANSFORMS::ABS_X_COORD ) );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Position Y" ), &SCH_SYMBOL::SetY, &SCH_SYMBOL::GetY,
-                                                            PROPERTY_DISPLAY::PT_COORD,
-                                                            ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Position X" ),
+                    &SCH_SYMBOL::SetX, &SCH_SYMBOL::GetX, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Position Y" ),
+                    &SCH_SYMBOL::SetY, &SCH_SYMBOL::GetY, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_SYMBOL, SYMBOL_ORIENTATION_PROP>(
-                _HKI( "Orientation" ), &SCH_SYMBOL::SetOrientationProp, &SCH_SYMBOL::GetOrientationProp ) );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Mirror X" ), &SCH_SYMBOL::SetMirrorX,
-                                                             &SCH_SYMBOL::GetMirrorX ) );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Mirror Y" ), &SCH_SYMBOL::SetMirrorY,
-                                                             &SCH_SYMBOL::GetMirrorY ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_SYMBOL, SYMBOL_ORIENTATION_PROP>( _HKI( "Orientation" ),
+                    &SCH_SYMBOL::SetOrientationProp, &SCH_SYMBOL::GetOrientationProp ) );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Mirror X" ),
+                    &SCH_SYMBOL::SetMirrorX, &SCH_SYMBOL::GetMirrorX ) );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Mirror Y" ),
+                    &SCH_SYMBOL::SetMirrorY, &SCH_SYMBOL::GetMirrorY ) );
 
-        auto hasLibPart = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
-                return symbol->GetLibSymbolRef() != nullptr;
+        auto hasLibPart =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                        return symbol->GetLibSymbolRef() != nullptr;
 
-            return false;
-        };
+                    return false;
+                };
 
-        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin numbers" ), &SYMBOL::SetShowPinNumbers,
-                                                         &SYMBOL::GetShowPinNumbers ) )
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin numbers" ),
+                    &SYMBOL::SetShowPinNumbers, &SYMBOL::GetShowPinNumbers ) )
                 .SetAvailableFunc( hasLibPart );
 
-         propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin names" ), &SYMBOL::SetShowPinNames,
-                                                         &SYMBOL::GetShowPinNames ) )
+         propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin names" ),
+                    &SYMBOL::SetShowPinNames, &SYMBOL::GetShowPinNames ) )
                 .SetAvailableFunc( hasLibPart );
 
         const wxString groupFields = _HKI( "Fields" );
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Reference" ), &SCH_SYMBOL::SetRefProp,
-                                                                 &SCH_SYMBOL::GetRefProp ),
-                             groupFields );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Value" ), &SCH_SYMBOL::SetValueProp,
-                                                                 &SCH_SYMBOL::GetValueProp ),
-                             groupFields );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Reference" ),
+                    &SCH_SYMBOL::SetRefProp, &SCH_SYMBOL::GetRefProp ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Value" ),
+                    &SCH_SYMBOL::SetValueProp, &SCH_SYMBOL::GetValueProp ),
+                    groupFields );
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Library Link" ),
-                                                                 NO_SETTER( SCH_SYMBOL, wxString ),
-                                                                 &SCH_SYMBOL::GetSymbolIDAsString ),
-                             groupFields );
+                    NO_SETTER( SCH_SYMBOL, wxString ), &SCH_SYMBOL::GetSymbolIDAsString ),
+                    groupFields );
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Library Description" ),
-                                                                 NO_SETTER( SCH_SYMBOL, wxString ),
-                                                                 &SCH_SYMBOL::GetDescription ),
-                             groupFields );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Keywords" ), NO_SETTER( SCH_SYMBOL, wxString ),
-                                                                 &SCH_SYMBOL::GetKeyWords ),
-                             groupFields );
+                    NO_SETTER( SCH_SYMBOL, wxString ), &SCH_SYMBOL::GetDescription ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Keywords" ),
+                    NO_SETTER( SCH_SYMBOL, wxString ), &SCH_SYMBOL::GetKeyWords ),
+                    groupFields );
 
-        auto multiUnit = [=]( INSPECTABLE* aItem ) -> bool
-        {
-            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
-                return symbol->IsMultiUnit();
+        auto multiUnit =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                        return symbol->IsMultiUnit();
 
-            return false;
-        };
+                    return false;
+                };
 
-        auto multiBodyStyle = [=]( INSPECTABLE* aItem ) -> bool
-        {
-            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
-                return symbol->IsMultiBodyStyle();
+        auto multiBodyStyle =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                        return symbol->IsMultiBodyStyle();
 
-            return false;
-        };
+                    return false;
+                };
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Unit" ), &SCH_SYMBOL::SetUnitProp,
-                                                            &SCH_SYMBOL::GetUnitProp ) )
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Unit" ),
+                    &SCH_SYMBOL::SetUnitProp, &SCH_SYMBOL::GetUnitProp ) )
                 .SetAvailableFunc( multiUnit )
                 .SetChoicesFunc(
                         []( INSPECTABLE* aItem )
@@ -4733,8 +4734,8 @@ static struct SCH_SYMBOL_DESC
                             return choices;
                         } );
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Body Style" ), &SCH_SYMBOL::SetBodyStyleProp,
-                                                                 &SCH_SYMBOL::GetBodyStyleProp ) )
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Body Style" ),
+                    &SCH_SYMBOL::SetBodyStyleProp, &SCH_SYMBOL::GetBodyStyleProp ) )
                 .SetAvailableFunc( multiBodyStyle )
                 .SetChoicesFunc(
                         []( INSPECTABLE* aItem )
@@ -4753,25 +4754,20 @@ static struct SCH_SYMBOL_DESC
         const wxString groupAttributes = _HKI( "Attributes" );
 
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Simulation" ),
-                                                             &SCH_SYMBOL::SetExcludedFromSimProp,
-                                                             &SCH_SYMBOL::GetExcludedFromSimProp ),
-                             groupAttributes );
+                    &SCH_SYMBOL::SetExcludedFromSimProp, &SCH_SYMBOL::GetExcludedFromSimProp ),
+                    groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Bill of Materials" ),
-                                                             &SCH_SYMBOL::SetExcludedFromBOMProp,
-                                                             &SCH_SYMBOL::GetExcludedFromBOMProp ),
-                             groupAttributes );
+                    &SCH_SYMBOL::SetExcludedFromBOMProp, &SCH_SYMBOL::GetExcludedFromBOMProp ),
+                    groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Board" ),
-                                                             &SCH_SYMBOL::SetExcludedFromBoardProp,
-                                                             &SCH_SYMBOL::GetExcludedFromBoardProp ),
-                             groupAttributes );
+                    &SCH_SYMBOL::SetExcludedFromBoardProp, &SCH_SYMBOL::GetExcludedFromBoardProp ),
+                    groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Position Files" ),
-                                                             &SCH_SYMBOL::SetExcludedFromPosFilesProp,
-                                                             &SCH_SYMBOL::GetExcludedFromPosFilesProp ),
-                             groupAttributes );
+                    &SCH_SYMBOL::SetExcludedFromPosFilesProp, &SCH_SYMBOL::GetExcludedFromPosFilesProp ),
+                    groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do not Populate" ),
-                                                             &SCH_SYMBOL::SetDNPProp,
-                                                             &SCH_SYMBOL::GetDNPProp ),
-                             groupAttributes );
+                    &SCH_SYMBOL::SetDNPProp, &SCH_SYMBOL::GetDNPProp ),
+                    groupAttributes );
     }
 } _SCH_SYMBOL_DESC;
 

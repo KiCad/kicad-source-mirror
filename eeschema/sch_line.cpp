@@ -1436,8 +1436,8 @@ static struct SCH_LINE_DESC
                     &SCH_LINE::SetLineStyle, &SCH_LINE::GetLineStyle ) )
                 .SetAvailableFunc( isGraphicLine );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, WIRE_STYLE>( _HKI( "Wire Style" ), &SCH_LINE::SetWireStyle,
-                                                                      &SCH_LINE::GetWireStyle ) )
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, WIRE_STYLE>( _HKI( "Wire Style" ),
+                    &SCH_LINE::SetWireStyle, &SCH_LINE::GetWireStyle ) )
                 .SetAvailableFunc( isWireOrBus );
 
         propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Line Width" ),
@@ -1447,38 +1447,37 @@ static struct SCH_LINE_DESC
                     &SCH_LINE::SetLineColor, &SCH_LINE::GetLineColor ) );
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, LINE_ENDING_STYLE>( _HKI( "Start Shape" ),
-                                                                             &SCH_LINE::SetStartEndingStyle,
-                                                                             &SCH_LINE::GetStartEndingStyle ) )
+                     &SCH_LINE::SetStartEndingStyle, &SCH_LINE::GetStartEndingStyle ) )
                 .SetAvailableFunc( isGraphicLine );
 
-        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start Length" ), &SCH_LINE::SetStartEndingLength,
-                                                          &SCH_LINE::GetStartEndingLength, PROPERTY_DISPLAY::PT_SIZE ) )
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start Length" ),
+                    &SCH_LINE::SetStartEndingLength, &SCH_LINE::GetStartEndingLength, PROPERTY_DISPLAY::PT_SIZE ) )
                 .SetAvailableFunc( isGraphicLine );
 
-        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start Width" ), &SCH_LINE::SetStartEndingWidth,
-                                                          &SCH_LINE::GetStartEndingWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start Width" ),
+                    &SCH_LINE::SetStartEndingWidth,  &SCH_LINE::GetStartEndingWidth, PROPERTY_DISPLAY::PT_SIZE ) )
                 .SetAvailableFunc( isGraphicLine );
 
-        propMgr.AddProperty(
-                       new PROPERTY<SCH_LINE, int>( _HKI( "Start Stroke Width" ), &SCH_LINE::SetStartEndingStrokeWidth,
-                                                    &SCH_LINE::GetStartEndingStrokeWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Start Stroke Width" ),
+                    &SCH_LINE::SetStartEndingStrokeWidth, &SCH_LINE::GetStartEndingStrokeWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ) )
                 .SetAvailableFunc( isGraphicLine );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, LINE_ENDING_STYLE>(
-                                     _HKI( "End Shape" ), &SCH_LINE::SetEndEndingStyle, &SCH_LINE::GetEndEndingStyle ) )
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, LINE_ENDING_STYLE>( _HKI( "End Shape" ),
+                    &SCH_LINE::SetEndEndingStyle, &SCH_LINE::GetEndEndingStyle ) )
                 .SetAvailableFunc( isGraphicLine );
 
-        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End Length" ), &SCH_LINE::SetEndEndingLength,
-                                                          &SCH_LINE::GetEndEndingLength, PROPERTY_DISPLAY::PT_SIZE ) )
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End Length" ),
+                    &SCH_LINE::SetEndEndingLength, &SCH_LINE::GetEndEndingLength, PROPERTY_DISPLAY::PT_SIZE ) )
                 .SetAvailableFunc( isGraphicLine );
 
-        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End Width" ), &SCH_LINE::SetEndEndingWidth,
-                                                          &SCH_LINE::GetEndEndingWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End Width" ),
+                    &SCH_LINE::SetEndEndingWidth, &SCH_LINE::GetEndEndingWidth, PROPERTY_DISPLAY::PT_SIZE ) )
                 .SetAvailableFunc( isGraphicLine );
 
-        propMgr.AddProperty(
-                       new PROPERTY<SCH_LINE, int>( _HKI( "End Stroke Width" ), &SCH_LINE::SetEndEndingStrokeWidth,
-                                                    &SCH_LINE::GetEndEndingStrokeWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "End Stroke Width" ),
+                    &SCH_LINE::SetEndEndingStrokeWidth, &SCH_LINE::GetEndEndingStrokeWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ) )
                 .SetAvailableFunc( isGraphicLine );
     }
 } _SCH_LINE_DESC;

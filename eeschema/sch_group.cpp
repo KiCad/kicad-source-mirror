@@ -510,8 +510,8 @@ static struct SCH_GROUP_DESC
 
         const wxString groupTab = _HKI( "Group Properties" );
 
-        propMgr.AddProperty(
-                new PROPERTY<EDA_GROUP, wxString>( _HKI( "Name" ), &SCH_GROUP::SetName, &SCH_GROUP::GetName ),
-                groupTab );
+        propMgr.AddProperty( new PROPERTY<EDA_GROUP, wxString>( _HKI( "Name" ),
+                    &SCH_GROUP::SetName, &SCH_GROUP::GetName ),
+                    groupTab );
     }
 } _SCH_GROUP_DESC;

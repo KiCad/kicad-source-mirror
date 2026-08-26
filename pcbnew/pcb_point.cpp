@@ -340,8 +340,7 @@ static struct PCB_POINT_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_POINT ), TYPE_HASH( BOARD_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_POINT, int>( _HKI( "Size" ),
-                &PCB_POINT::SetSize, &PCB_POINT::GetSize,
-                PROPERTY_DISPLAY::PT_SIZE ) );
+                    &PCB_POINT::SetSize, &PCB_POINT::GetSize, PROPERTY_DISPLAY::PT_SIZE ) );
     }
     // clang-format on
 } _PCB_POINT_DESC;

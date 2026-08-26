@@ -4533,29 +4533,31 @@ static struct EDA_SHAPE_DESC
                     return false;
                 };
 
-        auto isEllipseOrEllipseArc = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-            {
-                return shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC;
-            }
+        auto isEllipseOrEllipseArc =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                    {
+                        return shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC;
+                    }
 
-            return false;
-        };
+                    return false;
+                };
 
-        auto isEllipseArc = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-                return shape->GetShape() == SHAPE_T::ELLIPSE_ARC;
+        auto isEllipseArc =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                        return shape->GetShape() == SHAPE_T::ELLIPSE_ARC;
 
-            return false;
-        };
+                    return false;
+                };
 
         const wxString shapeProps = _HKI( "Shape Properties" );
 
-        auto shape = new PROPERTY_ENUM<EDA_SHAPE, SHAPE_T>( _HKI( "Shape" ),
-                     NO_SETTER( EDA_SHAPE, SHAPE_T ), &EDA_SHAPE::GetShape );
-        propMgr.AddProperty( shape, shapeProps );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, SHAPE_T>( _HKI( "Shape" ),
+                    NO_SETTER( EDA_SHAPE, SHAPE_T ), &EDA_SHAPE::GetShape ),
+                    shapeProps );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start X" ),
                     &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
@@ -4638,34 +4640,32 @@ static struct EDA_SHAPE_DESC
                                    return std::nullopt;
                                } );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Major Radius" ), &EDA_SHAPE::SetEllipseMajorRadius,
-                                                           &EDA_SHAPE::GetEllipseMajorRadius, PROPERTY_DISPLAY::PT_SIZE,
-                                                           ORIGIN_TRANSFORMS::NOT_A_COORD ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Major Radius" ),
+                    &EDA_SHAPE::SetEllipseMajorRadius, &EDA_SHAPE::GetEllipseMajorRadius, PROPERTY_DISPLAY::PT_SIZE,
+                    ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isEllipseOrEllipseArc );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Minor Radius" ), &EDA_SHAPE::SetEllipseMinorRadius,
-                                                           &EDA_SHAPE::GetEllipseMinorRadius, PROPERTY_DISPLAY::PT_SIZE,
-                                                           ORIGIN_TRANSFORMS::NOT_A_COORD ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Minor Radius" ),
+                    &EDA_SHAPE::SetEllipseMinorRadius, &EDA_SHAPE::GetEllipseMinorRadius, PROPERTY_DISPLAY::PT_SIZE,
+                    ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isEllipseOrEllipseArc );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>(
-                                     _HKI( "Ellipse Rotation" ), &EDA_SHAPE::SetEllipseRotation,
-                                     &EDA_SHAPE::GetEllipseRotation, PROPERTY_DISPLAY::PT_DECIDEGREE ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Ellipse Rotation" ),
+                    &EDA_SHAPE::SetEllipseRotation, &EDA_SHAPE::GetEllipseRotation, PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                    shapeProps )
                 .SetAvailableFunc( isEllipseOrEllipseArc );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>(
-                                     _HKI( "Arc Start Angle" ), &EDA_SHAPE::SetEllipseStartAngle,
-                                     &EDA_SHAPE::GetEllipseStartAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Arc Start Angle" ),
+                    &EDA_SHAPE::SetEllipseStartAngle, &EDA_SHAPE::GetEllipseStartAngle,
+                    PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                    shapeProps )
                 .SetAvailableFunc( isEllipseArc );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>(
-                                     _HKI( "Arc End Angle" ), &EDA_SHAPE::SetEllipseEndAngle,
-                                     &EDA_SHAPE::GetEllipseEndAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Arc End Angle" ),
+                    &EDA_SHAPE::SetEllipseEndAngle, &EDA_SHAPE::GetEllipseEndAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                    shapeProps )
                 .SetAvailableFunc( isEllipseArc );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
@@ -4681,18 +4681,16 @@ static struct EDA_SHAPE_DESC
                     shapeProps )
                 .SetIsHiddenFromRulesEditor();
 
-        auto angle = new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
-                    NO_SETTER( EDA_SHAPE, EDA_ANGLE ), &EDA_SHAPE::GetArcAngle,
-                    PROPERTY_DISPLAY::PT_DECIDEGREE );
-        angle->SetAvailableFunc(
-                [=]( INSPECTABLE* aItem ) -> bool
-                {
-                    if( EDA_SHAPE* curr_shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-                        return curr_shape->GetShape() == SHAPE_T::ARC;
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
+                    NO_SETTER( EDA_SHAPE, EDA_ANGLE ), &EDA_SHAPE::GetArcAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                    shapeProps )
+                .SetAvailableFunc( [=]( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( EDA_SHAPE* curr_shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                                           return curr_shape->GetShape() == SHAPE_T::ARC;
 
-                    return false;
-                } );
-        propMgr.AddProperty( angle, shapeProps );
+                                       return false;
+                                   } );
 
         auto fillAvailable =
                 [=]( INSPECTABLE* aItem ) -> bool
@@ -4734,13 +4732,14 @@ static struct EDA_SHAPE_DESC
                 .SetAvailableFunc( fillAvailable )
                 .SetIsHiddenFromRulesEditor();
 
-        auto isOpenShape = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-                return !shape->IsClosed();
+        auto isOpenShape =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                        return !shape->IsClosed();
 
-            return false;
-        };
+                    return false;
+                };
 
         ENUM_MAP<LINE_ENDING_STYLE>& endingStyleEnum = ENUM_MAP<LINE_ENDING_STYLE>::Instance();
 
@@ -4754,48 +4753,45 @@ static struct EDA_SHAPE_DESC
         }
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_ENDING_STYLE>( _HKI( "Start Shape" ),
-                                                                              &EDA_SHAPE::SetStartEndingStyle,
-                                                                              &EDA_SHAPE::GetStartEndingStyle ),
-                             shapeProps )
+                    &EDA_SHAPE::SetStartEndingStyle, &EDA_SHAPE::GetStartEndingStyle ),
+                    shapeProps )
                 .SetAvailableFunc( isOpenShape );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Length" ), &EDA_SHAPE::SetStartEndingLength,
-                                                           &EDA_SHAPE::GetStartEndingLength,
-                                                           PROPERTY_DISPLAY::PT_SIZE ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Length" ),
+                    &EDA_SHAPE::SetStartEndingLength, &EDA_SHAPE::GetStartEndingLength, PROPERTY_DISPLAY::PT_SIZE ),
+                    shapeProps )
                 .SetAvailableFunc( isOpenShape );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Width" ), &EDA_SHAPE::SetStartEndingWidth,
-                                                           &EDA_SHAPE::GetStartEndingWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Width" ),
+                    &EDA_SHAPE::SetStartEndingWidth, &EDA_SHAPE::GetStartEndingWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                    shapeProps )
                 .SetAvailableFunc( isOpenShape );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>(
-                                     _HKI( "Start Stroke Width" ), &EDA_SHAPE::SetStartEndingStrokeWidth,
-                                     &EDA_SHAPE::GetStartEndingStrokeWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Stroke Width" ),
+                    &EDA_SHAPE::SetStartEndingStrokeWidth, &EDA_SHAPE::GetStartEndingStrokeWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    shapeProps )
                 .SetAvailableFunc( isOpenShape );
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_ENDING_STYLE>( _HKI( "End Shape" ),
-                                                                              &EDA_SHAPE::SetEndEndingStyle,
-                                                                              &EDA_SHAPE::GetEndEndingStyle ),
-                             shapeProps )
+                    &EDA_SHAPE::SetEndEndingStyle, &EDA_SHAPE::GetEndEndingStyle ),
+                    shapeProps )
                 .SetAvailableFunc( isOpenShape );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Length" ), &EDA_SHAPE::SetEndEndingLength,
-                                                           &EDA_SHAPE::GetEndEndingLength, PROPERTY_DISPLAY::PT_SIZE ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Length" ),
+                    &EDA_SHAPE::SetEndEndingLength, &EDA_SHAPE::GetEndEndingLength, PROPERTY_DISPLAY::PT_SIZE ),
+                    shapeProps )
                 .SetAvailableFunc( isOpenShape );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Width" ), &EDA_SHAPE::SetEndEndingWidth,
-                                                           &EDA_SHAPE::GetEndEndingWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                             shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Width" ),
+                    &EDA_SHAPE::SetEndEndingWidth, &EDA_SHAPE::GetEndEndingWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                    shapeProps )
                 .SetAvailableFunc( isOpenShape );
 
-        propMgr.AddProperty(
-                       new PROPERTY<EDA_SHAPE, int>( _HKI( "End Stroke Width" ), &EDA_SHAPE::SetEndEndingStrokeWidth,
-                                                     &EDA_SHAPE::GetEndEndingStrokeWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                       shapeProps )
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Stroke Width" ),
+                    &EDA_SHAPE::SetEndEndingStrokeWidth, &EDA_SHAPE::GetEndEndingStrokeWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    shapeProps )
                 .SetAvailableFunc( isOpenShape );
     }
 } _EDA_SHAPE_DESC;

@@ -5333,23 +5333,23 @@ static struct FOOTPRINT_DESC
                     return true;
                 };
 
-        auto layer = new PROPERTY_ENUM<FOOTPRINT, PCB_LAYER_ID>( _HKI( "Layer" ),
-                    &FOOTPRINT::SetLayerAndFlip, &FOOTPRINT::GetLayer );
-        layer->SetChoices( fpLayers );
-        layer->SetAvailableFunc( isNotFootprintHolder );
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
+                    new PROPERTY_ENUM<FOOTPRINT, PCB_LAYER_ID>( _HKI( "Layer" ),
+                                &FOOTPRINT::SetLayerAndFlip, &FOOTPRINT::GetLayer ) )
+                            .SetAvailableFunc( isNotFootprintHolder )
+                            .SetChoices( fpLayers );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Orientation" ),
                     &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ) )
                .SetAvailableFunc( isNotFootprintHolder );
 
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Scale X" ), &FOOTPRINT::SetScaleX,
-                                                              &FOOTPRINT::GetScaleX ) )
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Scale X" ),
+                    &FOOTPRINT::SetScaleX, &FOOTPRINT::GetScaleX ) )
                 .SetAvailableFunc( isNotFootprintHolder );
 
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Scale Y" ), &FOOTPRINT::SetScaleY,
-                                                              &FOOTPRINT::GetScaleY ) )
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Scale Y" ),
+                    &FOOTPRINT::SetScaleY, &FOOTPRINT::GetScaleY ) )
                 .SetAvailableFunc( isNotFootprintHolder );
 
         const wxString groupFields = _HKI( "Fields" );
@@ -5378,9 +5378,9 @@ static struct FOOTPRINT_DESC
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, FOOTPRINT_TYPE>(
-                    _HKI( "Footprint Type" ), &FOOTPRINT::SetFootprintType,
-                    &FOOTPRINT::GetFootprintType ), groupAttributes );
+        propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, FOOTPRINT_TYPE>( _HKI( "Footprint Type" ),
+                    &FOOTPRINT::SetFootprintType, &FOOTPRINT::GetFootprintType ),
+                    groupAttributes );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Not in Schematic" ),
                     &FOOTPRINT::SetBoardOnly, &FOOTPRINT::IsBoardOnly ), groupAttributes );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude From Position Files" ),
@@ -5399,16 +5399,14 @@ static struct FOOTPRINT_DESC
                     &FOOTPRINT::SetAllowMissingCourtyard, &FOOTPRINT::AllowMissingCourtyard ),
                     groupOverrides );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>( _HKI( "Clearance Override" ),
-                    &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance,
-                    PROPERTY_DISPLAY::PT_SIZE ),
+                    &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<double>>( _HKI( "Solderpaste Margin Ratio Override" ),
-                    &FOOTPRINT::SetLocalSolderPasteMarginRatio,
-                    &FOOTPRINT::GetLocalSolderPasteMarginRatio,
+                    &FOOTPRINT::SetLocalSolderPasteMarginRatio, &FOOTPRINT::GetLocalSolderPasteMarginRatio,
                     PROPERTY_DISPLAY::PT_RATIO ),
                     groupOverrides );
         propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, ZONE_CONNECTION>( _HKI( "Zone Connection Style" ),

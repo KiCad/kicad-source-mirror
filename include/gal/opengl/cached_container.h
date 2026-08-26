@@ -97,9 +97,6 @@ protected:
     typedef std::pair<unsigned int, unsigned int> CHUNK;
     typedef std::multimap<unsigned int, unsigned int> FREE_CHUNK_MAP;
 
-    /// List of all the stored items
-    typedef std::set<VERTEX_ITEM*> ITEMS;
-
     /**
      * Resize the chunk that stores the current item to the given size. The current item has
      * its offset adjusted after the call, and the new chunk parameters are stored
@@ -140,7 +137,7 @@ protected:
      *
      * @param aChunk is the chunk.
      */
-    inline int getChunkSize( const CHUNK& aChunk ) const
+    int getChunkSize( const CHUNK& aChunk ) const
     {
         return aChunk.first;
     }
@@ -150,7 +147,7 @@ protected:
      *
      * @param aChunk is the chunk.
      */
-    inline unsigned int getChunkOffset( const CHUNK& aChunk ) const
+    unsigned int getChunkOffset( const CHUNK& aChunk ) const
     {
         return aChunk.second;
     }
@@ -160,21 +157,17 @@ protected:
      */
     void addFreeChunk( unsigned int aOffset, unsigned int aSize );
 
-    ///< Store size & offset of free chunks.
-    FREE_CHUNK_MAP  m_freeChunks;
-
-    ///< Stored VERTEX_ITEMs
-    ITEMS m_items;
-
-    ///< Currently modified item
-    VERTEX_ITEM* m_item;
+protected:
+    FREE_CHUNK_MAP         m_freeChunks;    ///< Store size & offset of free chunks.
+    std::set<VERTEX_ITEM*> m_items;         ///< Stored VERTEX_ITEMs
+    VERTEX_ITEM*           m_item;          ///< Currently modified item
 
     ///< Properties of currently modified chunk & item
-    unsigned int m_chunkSize;
-    unsigned int m_chunkOffset;
+    unsigned int           m_chunkSize;
+    unsigned int           m_chunkOffset;
 
     ///< Maximal vertex index number stored in the container
-    unsigned int m_maxIndex;
+    unsigned int           m_maxIndex;
 
 private:
     /// Debug & test functions

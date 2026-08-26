@@ -1048,42 +1048,46 @@ static struct PCB_BARCODE_DESC
                 };
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, wxString>( _HKI( "Text" ),
-                                    &PCB_BARCODE::SetBarcodeText, &PCB_BARCODE::GetText ), groupBarcode );
+                    &PCB_BARCODE::SetBarcodeText, &PCB_BARCODE::GetText ),
+                    groupBarcode );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, bool>( _HKI( "Show Text" ),
-                                    &PCB_BARCODE::SetShowText, &PCB_BARCODE::GetShowText ), groupBarcode );
+                    &PCB_BARCODE::SetShowText, &PCB_BARCODE::GetShowText ),
+                    groupBarcode );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Text Size" ),
-                                    &PCB_BARCODE::SetTextSize, &PCB_BARCODE::GetTextSize,
-                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode );
+                    &PCB_BARCODE::SetTextSize, &PCB_BARCODE::GetTextSize, PROPERTY_DISPLAY::PT_COORD ),
+                    groupBarcode );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Width" ),
-                                    &PCB_BARCODE::SetBarcodeWidth, &PCB_BARCODE::GetWidth,
-                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode );
+                    &PCB_BARCODE::SetBarcodeWidth, &PCB_BARCODE::GetWidth, PROPERTY_DISPLAY::PT_COORD ),
+                    groupBarcode );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Height" ),
-                                    &PCB_BARCODE::SetBarcodeHeight, &PCB_BARCODE::GetHeight,
-                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode );
+                    &PCB_BARCODE::SetBarcodeHeight, &PCB_BARCODE::GetHeight, PROPERTY_DISPLAY::PT_COORD ),
+                    groupBarcode );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, double>( _HKI( "Orientation" ),
-                                    &PCB_BARCODE::SetOrientation, &PCB_BARCODE::GetOrientation ), groupBarcode );
+                    &PCB_BARCODE::SetOrientation, &PCB_BARCODE::GetOrientation ),
+                    groupBarcode );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_BARCODE, BARCODE_T>( _HKI( "Barcode Type" ),
-                                    &PCB_BARCODE::SetBarcodeKind, &PCB_BARCODE::GetKind ), groupBarcode );
-
-        auto isQRCode =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
-                        return bc->GetKind() == BARCODE_T::QR_CODE || bc->GetKind() == BARCODE_T::MICRO_QR_CODE;
-
-                    return false;
-                };
+                    &PCB_BARCODE::SetBarcodeKind, &PCB_BARCODE::GetKind ),
+                    groupBarcode );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_BARCODE, BARCODE_ECC_T>( _HKI( "Error Correction" ),
-                                    &PCB_BARCODE::SetBarcodeErrorCorrection, &PCB_BARCODE::GetErrorCorrection ),
-                             groupBarcode )
-                .SetAvailableFunc( isQRCode )
+                     &PCB_BARCODE::SetBarcodeErrorCorrection, &PCB_BARCODE::GetErrorCorrection ),
+                     groupBarcode )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+                                       {
+                                           return bc->GetKind() == BARCODE_T::QR_CODE
+                                                    || bc->GetKind() == BARCODE_T::MICRO_QR_CODE;
+                                       }
+
+                                       return false;
+                                   } )
                 .SetChoicesFunc( []( INSPECTABLE* aItem )
                                  {
                                      PCB_BARCODE* barcode = static_cast<PCB_BARCODE*>( aItem );
@@ -1101,15 +1105,18 @@ static struct PCB_BARCODE_DESC
                                  } );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, bool>( _HKI( "Knockout" ),
-                                    &PCB_BARCODE::SetIsKnockout, &PCB_BARCODE::IsKnockout ), groupBarcode );
+                    &PCB_BARCODE::SetIsKnockout, &PCB_BARCODE::IsKnockout ),
+                    groupBarcode );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Margin X" ),
-                                    &PCB_BARCODE::SetMarginX, &PCB_BARCODE::GetMarginX,
-                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode ).SetAvailableFunc( hasKnockout );
+                    &PCB_BARCODE::SetMarginX, &PCB_BARCODE::GetMarginX, PROPERTY_DISPLAY::PT_COORD ),
+                    groupBarcode )
+                .SetAvailableFunc( hasKnockout );
 
         propMgr.AddProperty( new PROPERTY<PCB_BARCODE, int>( _HKI( "Margin Y" ),
-                                    &PCB_BARCODE::SetMarginY, &PCB_BARCODE::GetMarginY,
-                                    PROPERTY_DISPLAY::PT_COORD ), groupBarcode ).SetAvailableFunc( hasKnockout );
+                    &PCB_BARCODE::SetMarginY, &PCB_BARCODE::GetMarginY, PROPERTY_DISPLAY::PT_COORD ),
+                    groupBarcode )
+                .SetAvailableFunc( hasKnockout );
     }
 } _PCB_BARCODE_DESC;
 

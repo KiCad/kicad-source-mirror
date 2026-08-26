@@ -58,18 +58,13 @@ EXPORTER_VRML::EXPORTER_VRML( BOARD* aBoard )
 }
 
 
-bool EXPORTER_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
-                              const wxString& aFullFileName, double aMMtoWRMLunit,
-                              bool aIncludeUnspecified, bool aIncludeDNP,
-                              bool aExport3DFiles, bool aUseRelativePaths,
-                              const wxString& a3D_Subdir,
-                              double aXRef, double aYRef )
+bool EXPORTER_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages, const wxString& aFullFileName,
+                                     double aMMtoWRMLunit, bool aIncludeUnspecified, bool aIncludeDNP,
+                                     bool aExport3DFiles, bool aUseRelativePaths, const wxString& a3D_Subdir,
+                                     double aXRef, double aYRef )
 {
-    return pcb_exporter->ExportVRML_File( aProject, aMessages,
-                                          aFullFileName, aMMtoWRMLunit,
-                                          aIncludeUnspecified, aIncludeDNP,
-                                          aExport3DFiles, aUseRelativePaths,
-                                          a3D_Subdir, aXRef, aYRef );
+    return pcb_exporter->ExportVRML_File( aProject, aMessages, aFullFileName, aMMtoWRMLunit, aIncludeUnspecified,
+                                          aIncludeDNP, aExport3DFiles, aUseRelativePaths, a3D_Subdir, aXRef, aYRef );
 }
 
 
@@ -83,19 +78,19 @@ EXPORTER_VRML::~EXPORTER_VRML()
 #define ERR_APPROX_MAX_MM 0.005
 
 
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_SilkscreenColors;
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_MaskColors;
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_PasteColors;
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_FinishColors;
-CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::m_BoardColors;
+std::vector<CUSTOM_COLOR_ITEM> EXPORTER_PCB_VRML::m_SilkscreenColors;
+std::vector<CUSTOM_COLOR_ITEM> EXPORTER_PCB_VRML::m_MaskColors;
+std::vector<CUSTOM_COLOR_ITEM> EXPORTER_PCB_VRML::m_PasteColors;
+std::vector<CUSTOM_COLOR_ITEM> EXPORTER_PCB_VRML::m_FinishColors;
+std::vector<CUSTOM_COLOR_ITEM> EXPORTER_PCB_VRML::m_BoardColors;
 
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultSilkscreen;
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultSolderMask;
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultSolderPaste;
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultSurfaceFinish;
-KIGFX::COLOR4D       EXPORTER_PCB_VRML::m_DefaultBoardBody;
+KIGFX::COLOR4D                 EXPORTER_PCB_VRML::m_DefaultSilkscreen;
+KIGFX::COLOR4D                 EXPORTER_PCB_VRML::m_DefaultSolderMask;
+KIGFX::COLOR4D                 EXPORTER_PCB_VRML::m_DefaultSolderPaste;
+KIGFX::COLOR4D                 EXPORTER_PCB_VRML::m_DefaultSurfaceFinish;
+KIGFX::COLOR4D                 EXPORTER_PCB_VRML::m_DefaultBoardBody;
 
-static bool          g_ColorsLoaded = false;
+static bool                    g_ColorsLoaded = false;
 
 
 EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aBoard ) :
@@ -133,7 +128,7 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aBoard ) :
 
     // Can't do a const KIGFX::COLOR4D& return type here because there are temporary variables
     auto findColor =
-            []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet ) -> const KIGFX::COLOR4D
+            []( const wxString& aColorName, const std::vector<CUSTOM_COLOR_ITEM>& aColorSet ) -> const KIGFX::COLOR4D
             {
                 if( aColorName.StartsWith( wxT( "#" ) ) )
                 {

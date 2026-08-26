@@ -2197,21 +2197,17 @@ static struct ZONE_DESC
         REGISTER_TYPE( ZONE );
         propMgr.InheritsAfter( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
-        // Mask layer and position properties; they aren't useful in current form
-        auto posX = new PROPERTY<ZONE, int>( _HKI( "Position X" ), NO_SETTER( ZONE, int ),
-                                             static_cast<int ( ZONE::* )() const>( &ZONE::GetX ),
-                                             PROPERTY_DISPLAY::PT_COORD,
-                                             ORIGIN_TRANSFORMS::ABS_X_COORD );
-        posX->SetIsHiddenFromPropertiesManager();
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
+                    new PROPERTY<ZONE, int>( _HKI( "Position X" ),
+                                NO_SETTER( ZONE, int ), static_cast<int ( ZONE::* )() const>( &ZONE::GetX ),
+                                PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_X_COORD ) )
+                            .SetIsHiddenFromPropertiesManager();
 
-        auto posY = new PROPERTY<ZONE, int>( _HKI( "Position Y" ), NO_SETTER( ZONE, int ),
-                                             static_cast<int ( ZONE::* )() const>( &ZONE::GetY ),
-                                             PROPERTY_DISPLAY::PT_COORD,
-                                             ORIGIN_TRANSFORMS::ABS_Y_COORD );
-        posY->SetIsHiddenFromPropertiesManager();
-
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ), posX );
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ), posY );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
+                    new PROPERTY<ZONE, int>( _HKI( "Position Y" ),
+                                NO_SETTER( ZONE, int ), static_cast<int ( ZONE::* )() const>( &ZONE::GetY ),
+                                PROPERTY_DISPLAY::PT_COORD, ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
+                            .SetIsHiddenFromPropertiesManager();
 
         auto isCopperZone =
                 []( INSPECTABLE* aItem ) -> bool
@@ -2229,9 +2225,8 @@ static struct ZONE_DESC
                 {
                     if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
                     {
-                        return !zone->GetIsRuleArea()
-                                && IsCopperLayer( zone->GetFirstLayer() )
-                                && !zone->IsCopperThieving();
+                        return !zone->GetIsRuleArea() && IsCopperLayer( zone->GetFirstLayer() )
+                                                      && !zone->IsCopperThieving();
                     }
 
                     return false;
@@ -2268,10 +2263,7 @@ static struct ZONE_DESC
                 []( INSPECTABLE* aItem ) -> bool
                 {
                     if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
-                    {
-                        return zone->IsCopperThieving()
-                                && zone->GetThievingPattern() == THIEVING_PATTERN::HATCH;
-                    }
+                        return zone->IsCopperThieving() && zone->GetThievingPattern() == THIEVING_PATTERN::HATCH;
 
                     return false;
                 };
@@ -2280,10 +2272,7 @@ static struct ZONE_DESC
                 []( INSPECTABLE* aItem ) -> bool
                 {
                     if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
-                    {
-                        return zone->IsCopperThieving()
-                                && zone->GetThievingPattern() != THIEVING_PATTERN::HATCH;
-                    }
+                        return zone->IsCopperThieving() && zone->GetThievingPattern() != THIEVING_PATTERN::HATCH;
 
                     return false;
                 };
@@ -2299,17 +2288,17 @@ static struct ZONE_DESC
 
         // Visible for thieving zones only; ordinary zones use a layer set, not a single layer.
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
-                                 new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
-                                                                        &ZONE::SetLayer, &ZONE::GetLayer ) )
-                .SetAvailableFunc( isThievingFill );
+                    new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
+                                &ZONE::SetLayer, &ZONE::GetLayer ) )
+                            .SetAvailableFunc( isThievingFill );
 
         propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ),
                                       isNonThievingCopperZone );
         propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net Class" ),
                                       isNonThievingCopperZone );
 
-        propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ), &ZONE::SetAssignedPriority,
-                                                           &ZONE::GetAssignedPriority ) )
+        propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
+                    &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority ) )
                 .SetAvailableFunc( isCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
@@ -2369,8 +2358,7 @@ static struct ZONE_DESC
                 .SetAvailableFunc( isCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Hatch Orientation" ),
-                    &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation,
-                    PROPERTY_DISPLAY::PT_DEGREE ),
+                    &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation, PROPERTY_DISPLAY::PT_DEGREE ),
                     groupFill )
                 .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill );
@@ -2475,40 +2463,41 @@ static struct ZONE_DESC
 
         const wxString groupElectrical = _HKI( "Electrical" );
 
-        auto clearance = new PROPERTY<ZONE, std::optional<int>>( _HKI( "Clearance" ),
-                    &ZONE::SetLocalClearance, &ZONE::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE );
-        clearance->SetAvailableFunc( isCopperZone );
         constexpr int maxClearance = pcbIUScale.mmToIU( ZONE_CLEARANCE_MAX_VALUE_MM );
-        clearance->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<0, maxClearance> );
-
-        auto minWidth = new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
-                    &ZONE::SetMinThickness, &ZONE::GetMinThickness, PROPERTY_DISPLAY::PT_SIZE );
-        minWidth->SetAvailableFunc( isCopperZone );
         constexpr int minMinWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
-        minWidth->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth, INT_MAX> );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, std::optional<int>>( _HKI( "Clearance" ),
+                    &ZONE::SetLocalClearance, &ZONE::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupElectrical )
+                .SetAvailableFunc( isCopperZone )
+                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<0, maxClearance> );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Minimum Width" ),
+                    &ZONE::SetMinThickness, &ZONE::GetMinThickness, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupElectrical )
+                .SetAvailableFunc( isCopperZone )
+                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth, INT_MAX> );
 
         // Pad connections and thermal-relief controls require a net to act on.
         // Thieving zones are netless and explicitly use ZONE_CONNECTION::NONE,
         // so hide these for them while keeping them visible for solid + hatched zones.
-        auto padConnections = new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
-                    &ZONE::SetPadConnection, &ZONE::GetPadConnection );
-        padConnections->SetAvailableFunc( isNonThievingCopperZone );
 
-        auto thermalGap = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Gap" ),
-                    &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap, PROPERTY_DISPLAY::PT_SIZE );
-        thermalGap->SetAvailableFunc( isNonThievingCopperZone );
-        thermalGap->SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
+                    &ZONE::SetPadConnection, &ZONE::GetPadConnection ),
+                    groupElectrical )
+                .SetAvailableFunc( isNonThievingCopperZone );
 
-        auto thermalSpokeWidth = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
-                    &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth, PROPERTY_DISPLAY::PT_SIZE );
-        thermalSpokeWidth->SetAvailableFunc( isNonThievingCopperZone );
-        thermalSpokeWidth->SetValidator( atLeastMinWidthValidator );
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Gap" ),
+                    &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupElectrical )
+                .SetAvailableFunc( isNonThievingCopperZone )
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
-        propMgr.AddProperty( clearance, groupElectrical );
-        propMgr.AddProperty( minWidth, groupElectrical );
-        propMgr.AddProperty( padConnections, groupElectrical );
-        propMgr.AddProperty( thermalGap, groupElectrical );
-        propMgr.AddProperty( thermalSpokeWidth, groupElectrical );
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
+                    &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupElectrical )
+                .SetAvailableFunc( isNonThievingCopperZone )
+                .SetValidator( atLeastMinWidthValidator );
     }
 } _ZONE_DESC;
 

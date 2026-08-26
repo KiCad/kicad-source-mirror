@@ -50,7 +50,8 @@ public:
 protected:
     void updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNode );
 
-    LIB_TREE_NODE::PTR_VECTOR::iterator deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
+    std::vector<std::unique_ptr<LIB_TREE_NODE>>::iterator
+    deleteLibrary( std::vector<std::unique_ptr<LIB_TREE_NODE>>::iterator& aLibNodeIt );
 
     void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem, unsigned int aCol ) const override;
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol, wxDataViewItemAttr& aAttr ) const override;

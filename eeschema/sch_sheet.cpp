@@ -2268,7 +2268,7 @@ static struct SCH_SHEET_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_SHEET ), TYPE_HASH( SCH_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, wxString>( _HKI( "Sheet Name" ),
-                             &SCH_SHEET::SetName, &SCH_SHEET::GetName ) )
+                    &SCH_SHEET::SetName, &SCH_SHEET::GetName ) )
                 .SetValidator( []( const wxAny&& aValue, EDA_ITEM* ) -> VALIDATOR_RESULT
                                 {
                                     wxString value;
@@ -2285,14 +2285,13 @@ static struct SCH_SHEET_DESC
                                 } );
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, int>( _HKI( "Border Width" ),
-                             &SCH_SHEET::SetBorderWidth, &SCH_SHEET::GetBorderWidth,
-                             PROPERTY_DISPLAY::PT_SIZE ) );
+                    &SCH_SHEET::SetBorderWidth, &SCH_SHEET::GetBorderWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, COLOR4D>( _HKI( "Border Color" ),
-                             &SCH_SHEET::SetBorderColor, &SCH_SHEET::GetBorderColor ) );
+                    &SCH_SHEET::SetBorderColor, &SCH_SHEET::GetBorderColor ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, COLOR4D>( _HKI( "Background Color" ),
-                             &SCH_SHEET::SetBackgroundColor, &SCH_SHEET::GetBackgroundColor ) );
+                    &SCH_SHEET::SetBackgroundColor, &SCH_SHEET::GetBackgroundColor ) );
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
@@ -2302,10 +2301,8 @@ static struct SCH_SHEET_DESC
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Simulation" ),
                     &SCH_SHEET::SetExcludedFromSimProp, &SCH_SHEET::GetExcludedFromSimProp ),
                     groupAttributes );
-        propMgr.AddProperty(
-                new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Bill of Materials" ),
-                                               &SCH_SHEET::SetExcludedFromBOMProp,
-                                               &SCH_SHEET::GetExcludedFromBOMProp ),
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Bill of Materials" ),
+                    &SCH_SHEET::SetExcludedFromBOMProp, &SCH_SHEET::GetExcludedFromBOMProp ),
                 groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Do not Populate" ),
                     &SCH_SHEET::SetDNPProp, &SCH_SHEET::GetDNPProp ),

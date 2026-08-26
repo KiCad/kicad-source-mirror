@@ -1791,23 +1791,21 @@ static struct SCH_FIELD_DESC
 
         const wxString textProps = _HKI( "Text Properties" );
 
-        auto horiz = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
-                                                                      &SCH_FIELD::SetEffectiveHorizJustify,
-                                                                      &SCH_FIELD::GetEffectiveHorizJustify );
+        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Horizontal Justification" ),
+                    new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
+                                &SCH_FIELD::SetEffectiveHorizJustify, &SCH_FIELD::GetEffectiveHorizJustify ),
+                                textProps );
 
-        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Horizontal Justification" ), horiz, textProps );
+        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Vertical Justification" ),
+                    new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
+                                &SCH_FIELD::SetEffectiveVertJustify, &SCH_FIELD::GetEffectiveVertJustify ),
+                                textProps );
 
-        auto vert = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
-                                                                     &SCH_FIELD::SetEffectiveVertJustify,
-                                                                     &SCH_FIELD::GetEffectiveVertJustify );
+        propMgr.AddProperty( new PROPERTY<SCH_FIELD, bool>( _HKI( "Show Field Name" ),
+                    &SCH_FIELD::SetNameShown, &SCH_FIELD::IsNameShown ) );
 
-        propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Vertical Justification" ), vert, textProps );
-
-        propMgr.AddProperty( new PROPERTY<SCH_FIELD, bool>( _HKI( "Show Field Name" ), &SCH_FIELD::SetNameShown,
-                                                            &SCH_FIELD::IsNameShown ) );
-
-        propMgr.AddProperty( new PROPERTY<SCH_FIELD, bool>( _HKI( "Allow Autoplacement" ), &SCH_FIELD::SetCanAutoplace,
-                                                            &SCH_FIELD::CanAutoplace ) );
+        propMgr.AddProperty( new PROPERTY<SCH_FIELD, bool>( _HKI( "Allow Autoplacement" ),
+                    &SCH_FIELD::SetCanAutoplace, &SCH_FIELD::CanAutoplace ) );
 
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
@@ -1816,34 +1814,30 @@ static struct SCH_FIELD_DESC
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
 
 
-        propMgr.AddProperty( new PROPERTY<SCH_FIELD, int>( _HKI( "Text Size" ), &SCH_FIELD::SetSchTextSize,
-                                                           &SCH_FIELD::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
-                             _HKI( "Text Properties" ) );
+        propMgr.AddProperty( new PROPERTY<SCH_FIELD, int>( _HKI( "Text Size" ),
+                    &SCH_FIELD::SetSchTextSize, &SCH_FIELD::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    _HKI( "Text Properties" ) );
 
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
 
-        auto isNotGeneratedField = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( aItem ) )
-                return !field->IsGeneratedField();
-
-            return true;
-        };
-
         propMgr.OverrideWriteability( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ),
-                                      isNotGeneratedField );
+                                      []( INSPECTABLE* aItem ) -> bool
+                                      {
+                                          if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( aItem ) )
+                                              return !field->IsGeneratedField();
 
+                                          return true;
+                                      } );
 
-        auto isNonMandatoryField = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( aItem ) )
-                return !field->IsMandatory();
-
-            return false;
-        };
 
         propMgr.OverrideAvailability( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ), _HKI( "Private" ),
-                                      isNonMandatoryField );
+                                      []( INSPECTABLE* aItem ) -> bool
+                                      {
+                                          if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( aItem ) )
+                                              return !field->IsMandatory();
+
+                                          return false;
+                                      } );
     }
 } _SCH_FIELD_DESC;
 

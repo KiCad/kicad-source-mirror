@@ -448,22 +448,19 @@ static struct SCH_RULE_AREA_DESC
         const wxString groupAttributes = _HKI( "Attributes" );
 
         propMgr.AddProperty( new PROPERTY<SCH_RULE_AREA, bool>( _HKI( "Exclude From Board" ),
-                                                                &SCH_RULE_AREA::SetExcludedFromBoardProp,
-                                                                &SCH_RULE_AREA::GetExcludedFromBoardProp ),
-                             groupAttributes );
+                    &SCH_RULE_AREA::SetExcludedFromBoardProp, &SCH_RULE_AREA::GetExcludedFromBoardProp ),
+                    groupAttributes );
 
         propMgr.AddProperty( new PROPERTY<SCH_RULE_AREA, bool>( _HKI( "Exclude From Simulation" ),
-                                                                &SCH_RULE_AREA::SetExcludedFromSimProp,
-                                                                &SCH_RULE_AREA::GetExcludedFromSimProp ),
-                             groupAttributes );
+                    &SCH_RULE_AREA::SetExcludedFromSimProp, &SCH_RULE_AREA::GetExcludedFromSimProp ),
+                    groupAttributes );
 
         propMgr.AddProperty( new PROPERTY<SCH_RULE_AREA, bool>( _HKI( "Exclude From Bill of Materials" ),
-                                                                &SCH_RULE_AREA::SetExcludedFromBOMProp,
-                                                                &SCH_RULE_AREA::GetExcludedFromBOMProp ),
-                             groupAttributes );
+                    &SCH_RULE_AREA::SetExcludedFromBOMProp, &SCH_RULE_AREA::GetExcludedFromBOMProp ),
+                    groupAttributes );
 
-        propMgr.AddProperty( new PROPERTY<SCH_RULE_AREA, bool>( _HKI( "Do not Populate" ), &SCH_RULE_AREA::SetDNPProp,
-                                                                &SCH_RULE_AREA::GetDNPProp ),
-                             groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_RULE_AREA, bool>( _HKI( "Do not Populate" ),
+                    &SCH_RULE_AREA::SetDNPProp, &SCH_RULE_AREA::GetDNPProp ),
+                    groupAttributes );
     }
 } _SCH_RULE_AREA_DESC;

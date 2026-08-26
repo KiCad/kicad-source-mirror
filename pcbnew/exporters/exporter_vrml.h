@@ -201,19 +201,19 @@ private:
 
     SGNODE* getSGColor( VRML_COLOR_INDEX colorIdx );
 
-    static CUSTOM_COLORS_LIST   m_SilkscreenColors;
-    static CUSTOM_COLORS_LIST   m_MaskColors;
-    static CUSTOM_COLORS_LIST   m_PasteColors;
-    static CUSTOM_COLORS_LIST   m_FinishColors;
-    static CUSTOM_COLORS_LIST   m_BoardColors;
+    static std::vector<CUSTOM_COLOR_ITEM> m_SilkscreenColors;
+    static std::vector<CUSTOM_COLOR_ITEM> m_MaskColors;
+    static std::vector<CUSTOM_COLOR_ITEM> m_PasteColors;
+    static std::vector<CUSTOM_COLOR_ITEM> m_FinishColors;
+    static std::vector<CUSTOM_COLOR_ITEM> m_BoardColors;
 
-    static KIGFX::COLOR4D       m_DefaultBackgroundTop;
-    static KIGFX::COLOR4D       m_DefaultBackgroundBot;
-    static KIGFX::COLOR4D       m_DefaultSilkscreen;
-    static KIGFX::COLOR4D       m_DefaultSolderMask;
-    static KIGFX::COLOR4D       m_DefaultSolderPaste;
-    static KIGFX::COLOR4D       m_DefaultSurfaceFinish;
-    static KIGFX::COLOR4D       m_DefaultBoardBody;
+    static KIGFX::COLOR4D                 m_DefaultBackgroundTop;
+    static KIGFX::COLOR4D                 m_DefaultBackgroundBot;
+    static KIGFX::COLOR4D                 m_DefaultSilkscreen;
+    static KIGFX::COLOR4D                 m_DefaultSolderMask;
+    static KIGFX::COLOR4D                 m_DefaultSolderPaste;
+    static KIGFX::COLOR4D                 m_DefaultSurfaceFinish;
+    static KIGFX::COLOR4D                 m_DefaultBoardBody;
 
     IFSG_TRANSFORM     m_OutputPCB;
     VRML_LAYER         m_holes;

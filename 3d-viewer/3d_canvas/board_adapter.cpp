@@ -53,26 +53,26 @@
 #define SOLDERPASTE_LAYER_THICKNESS pcbIUScale.mmToIU( 0.04 )
 
 
-CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_SilkColors;
-CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_MaskColors;
-CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_PasteColors;
-CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_FinishColors;
-CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_BoardColors;
+std::vector<CUSTOM_COLOR_ITEM>   BOARD_ADAPTER::g_SilkColors;
+std::vector<CUSTOM_COLOR_ITEM>   BOARD_ADAPTER::g_MaskColors;
+std::vector<CUSTOM_COLOR_ITEM>   BOARD_ADAPTER::g_PasteColors;
+std::vector<CUSTOM_COLOR_ITEM>   BOARD_ADAPTER::g_FinishColors;
+std::vector<CUSTOM_COLOR_ITEM>   BOARD_ADAPTER::g_BoardColors;
 
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultBackgroundTop;
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultBackgroundBot;
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSilkscreen;
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSolderMask;
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSolderPaste;
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSurfaceFinish;
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultBoardBody;
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultComments;
-KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultECOs;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultBackgroundTop;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultBackgroundBot;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSilkscreen;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSolderMask;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSolderPaste;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSurfaceFinish;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultBoardBody;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultComments;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultECOs;
 
 // To be used in Raytracing render to create bevels on layer items
-float                g_BevelThickness3DU = 0.0f;
+float            g_BevelThickness3DU = 0.0f;
 
-static bool          g_ColorsLoaded = false;
+static bool      g_ColorsLoaded = false;
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.
@@ -659,18 +659,17 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
 
         // Can't do a const KIGFX::COLOR4D& return type here because there are temporary variables
         auto findColor =
-                []( const wxString& aColorName,
-                    const CUSTOM_COLORS_LIST& aColorSet ) -> const KIGFX::COLOR4D
+                []( const wxString& aName, const std::vector<CUSTOM_COLOR_ITEM>& aColorSet ) -> const KIGFX::COLOR4D
                 {
-                    if( aColorName.StartsWith( wxT( "#" ) ) )
+                    if( aName.StartsWith( wxT( "#" ) ) )
                     {
-                        return KIGFX::COLOR4D( aColorName );
+                        return KIGFX::COLOR4D( aName );
                     }
                     else
                     {
                         for( const CUSTOM_COLOR_ITEM& color : aColorSet )
                         {
-                            if( color.m_ColorName == aColorName )
+                            if( color.m_ColorName == aName )
                                 return color.m_Color;
                         }
                     }

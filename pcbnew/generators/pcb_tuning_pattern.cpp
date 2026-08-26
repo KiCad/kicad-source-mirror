@@ -2806,71 +2806,67 @@ static struct PCB_TUNING_PATTERN_DESC
                 layerEnum.Map( layer, LSET::Name( layer ) );
         }
 
-        auto layer = new PROPERTY_ENUM<PCB_TUNING_PATTERN, PCB_LAYER_ID>(
-                _HKI( "Layer" ), &PCB_TUNING_PATTERN::SetLayer, &PCB_TUNING_PATTERN::GetLayer );
-        layer->SetChoices( layerEnum.Choices() );
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
+                    new PROPERTY_ENUM<PCB_TUNING_PATTERN, PCB_LAYER_ID>( _HKI( "Layer" ),
+                                &PCB_TUNING_PATTERN::SetLayer, &PCB_TUNING_PATTERN::GetLayer ) )
+                            .SetChoices( layerEnum.Choices() );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "Width" ),
-                                     &PCB_TUNING_PATTERN::SetWidth, &PCB_TUNING_PATTERN::GetWidth,
-                                     PROPERTY_DISPLAY::PT_SIZE ) );
+                    &PCB_TUNING_PATTERN::SetWidth, &PCB_TUNING_PATTERN::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, int>( _HKI( "Net" ),
-                                     &PCB_TUNING_PATTERN::SetNetCode, &PCB_TUNING_PATTERN::GetNetCode, PT_NET ) );
+                    &PCB_TUNING_PATTERN::SetNetCode, &PCB_TUNING_PATTERN::GetNetCode, PT_NET ) );
 
         const wxString groupTechLayers = _HKI( "Technical Layers" );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>( _HKI( "Soldermask" ),
-                                     &PCB_TUNING_PATTERN::SetHasSolderMask, &PCB_TUNING_PATTERN::HasSolderMask ),
-                             groupTechLayers );
+                    &PCB_TUNING_PATTERN::SetHasSolderMask, &PCB_TUNING_PATTERN::HasSolderMask ),
+                    groupTechLayers );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
-                                     &PCB_TUNING_PATTERN::SetLocalSolderMaskMargin,
-                                     &PCB_TUNING_PATTERN::GetLocalSolderMaskMargin,
-                                     PROPERTY_DISPLAY::PT_SIZE ),
-                             groupTechLayers );
+                    &PCB_TUNING_PATTERN::SetLocalSolderMaskMargin, &PCB_TUNING_PATTERN::GetLocalSolderMaskMargin,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupTechLayers );
 
         const wxString groupTab = _HKI( "Pattern Properties" );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "End X" ),
-                                     &PCB_TUNING_PATTERN::SetEndX, &PCB_TUNING_PATTERN::GetEndX,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetEndX, &PCB_TUNING_PATTERN::GetEndX, PROPERTY_DISPLAY::PT_SIZE,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "End Y" ),
-                                     &PCB_TUNING_PATTERN::SetEndY, &PCB_TUNING_PATTERN::GetEndY,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_Y_COORD ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetEndY, &PCB_TUNING_PATTERN::GetEndY, PROPERTY_DISPLAY::PT_SIZE,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, LENGTH_TUNING_MODE>( _HKI( "Tuning Mode" ),
-                                     NO_SETTER( PCB_TUNING_PATTERN, LENGTH_TUNING_MODE ),
-                                     &PCB_TUNING_PATTERN::GetTuningMode ),
-                             groupTab );
+                    NO_SETTER( PCB_TUNING_PATTERN, LENGTH_TUNING_MODE ), &PCB_TUNING_PATTERN::GetTuningMode ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "Min Amplitude" ),
-                                     &PCB_TUNING_PATTERN::SetMinAmplitude, &PCB_TUNING_PATTERN::GetMinAmplitude,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetMinAmplitude, &PCB_TUNING_PATTERN::GetMinAmplitude,
+                    PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "Max Amplitude" ),
-                                     &PCB_TUNING_PATTERN::SetMaxAmplitude, &PCB_TUNING_PATTERN::GetMaxAmplitude,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetMaxAmplitude, &PCB_TUNING_PATTERN::GetMaxAmplitude,
+                    PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, PNS::MEANDER_SIDE>( _HKI( "Initial Side" ),
-                                     &PCB_TUNING_PATTERN::SetInitialSide, &PCB_TUNING_PATTERN::GetInitialSide ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetInitialSide, &PCB_TUNING_PATTERN::GetInitialSide ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "Min Spacing" ),
-                                     &PCB_TUNING_PATTERN::SetSpacing, &PCB_TUNING_PATTERN::GetSpacing,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetSpacing, &PCB_TUNING_PATTERN::GetSpacing, PROPERTY_DISPLAY::PT_SIZE,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "Corner Radius %" ),
-                                     &PCB_TUNING_PATTERN::SetCornerRadiusPercentage,
-                                     &PCB_TUNING_PATTERN::GetCornerRadiusPercentage,
-                                     PROPERTY_DISPLAY::PT_DEFAULT, ORIGIN_TRANSFORMS::NOT_A_COORD ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetCornerRadiusPercentage, &PCB_TUNING_PATTERN::GetCornerRadiusPercentage,
+                    PROPERTY_DISPLAY::PT_DEFAULT, ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                    groupTab );
 
         auto isSkew =
                 []( INSPECTABLE* aItem ) -> bool
@@ -2881,70 +2877,74 @@ static struct PCB_TUNING_PATTERN_DESC
                     return false;
                 };
 
-        auto isTimeDomain = []( INSPECTABLE* aItem ) -> bool
-        {
-            if( PCB_TUNING_PATTERN* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( aItem ) )
-                return pattern->GetSettings().m_isTimeDomain;
+        auto isTimeDomain =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_TUNING_PATTERN* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( aItem ) )
+                        return pattern->GetSettings().m_isTimeDomain;
 
-            return false;
-        };
+                    return false;
+                };
 
-        auto isLengthIsSpaceDomain = [&]( INSPECTABLE* aItem ) -> bool
-        {
-            return !isSkew( aItem ) && !isTimeDomain( aItem );
-        };
+        auto isLengthIsSpaceDomain =
+                [&]( INSPECTABLE* aItem ) -> bool
+                {
+                    return !isSkew( aItem ) && !isTimeDomain( aItem );
+                };
 
-        auto isLengthIsTimeDomain = [&]( INSPECTABLE* aItem ) -> bool
-        {
-            return !isSkew( aItem ) && isTimeDomain( aItem );
-        };
+        auto isLengthIsTimeDomain =
+                [&]( INSPECTABLE* aItem ) -> bool
+                {
+                    return !isSkew( aItem ) && isTimeDomain( aItem );
+                };
 
-        auto isSkewIsSpaceDomain = [&]( INSPECTABLE* aItem ) -> bool
-        {
-            return isSkew( aItem ) && !isTimeDomain( aItem );
-        };
+        auto isSkewIsSpaceDomain =
+                [&]( INSPECTABLE* aItem ) -> bool
+                {
+                    return isSkew( aItem ) && !isTimeDomain( aItem );
+                };
 
-        auto isSkewIsTimeDomain = [&]( INSPECTABLE* aItem ) -> bool
-        {
-            return isSkew( aItem ) && isTimeDomain( aItem );
-        };
+        auto isSkewIsTimeDomain =
+                [&]( INSPECTABLE* aItem ) -> bool
+                {
+                    return isSkew( aItem ) && isTimeDomain( aItem );
+                };
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>( _HKI( "Target Length" ),
-                                     &PCB_TUNING_PATTERN::SetTargetLength, &PCB_TUNING_PATTERN::GetTargetLength,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupTab )
+                    &PCB_TUNING_PATTERN::SetTargetLength, &PCB_TUNING_PATTERN::GetTargetLength,
+                    PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    groupTab )
                 .SetAvailableFunc( isLengthIsSpaceDomain );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>( _HKI( "Target Delay" ),
-                                     &PCB_TUNING_PATTERN::SetTargetDelay, &PCB_TUNING_PATTERN::GetTargetDelay,
-                                     PROPERTY_DISPLAY::PT_TIME, ORIGIN_TRANSFORMS::NOT_A_COORD ),
-                             groupTab )
+                    &PCB_TUNING_PATTERN::SetTargetDelay, &PCB_TUNING_PATTERN::GetTargetDelay,
+                    PROPERTY_DISPLAY::PT_TIME, ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                    groupTab )
                 .SetAvailableFunc( isLengthIsTimeDomain );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "Target Skew" ),
-                                     &PCB_TUNING_PATTERN::SetTargetSkew, &PCB_TUNING_PATTERN::GetTargetSkew,
-                                     PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupTab )
+                    &PCB_TUNING_PATTERN::SetTargetSkew, &PCB_TUNING_PATTERN::GetTargetSkew,
+                    PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    groupTab )
                 .SetAvailableFunc( isSkewIsSpaceDomain );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>( _HKI( "Target Skew Delay" ),
-                                     &PCB_TUNING_PATTERN::SetTargetSkewDelay, &PCB_TUNING_PATTERN::GetTargetSkewDelay,
-                                     PROPERTY_DISPLAY::PT_TIME, ORIGIN_TRANSFORMS::NOT_A_COORD ),
-                             groupTab )
+                    &PCB_TUNING_PATTERN::SetTargetSkewDelay, &PCB_TUNING_PATTERN::GetTargetSkewDelay,
+                    PROPERTY_DISPLAY::PT_TIME, ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                    groupTab )
                 .SetAvailableFunc( isSkewIsTimeDomain );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>( _HKI( "Override Custom Rules" ),
-                                     &PCB_TUNING_PATTERN::SetOverrideCustomRules,
-                                     &PCB_TUNING_PATTERN::GetOverrideCustomRules ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetOverrideCustomRules, &PCB_TUNING_PATTERN::GetOverrideCustomRules ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>( _HKI( "Single-sided" ),
-                                     &PCB_TUNING_PATTERN::SetSingleSided, &PCB_TUNING_PATTERN::IsSingleSided ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetSingleSided, &PCB_TUNING_PATTERN::IsSingleSided ),
+                    groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>( _HKI( "Rounded" ),
-                                     &PCB_TUNING_PATTERN::SetRounded, &PCB_TUNING_PATTERN::IsRounded ),
-                             groupTab );
+                    &PCB_TUNING_PATTERN::SetRounded, &PCB_TUNING_PATTERN::IsRounded ),
+                    groupTab );
     }
 } _PCB_TUNING_PATTERN_DESC;
 

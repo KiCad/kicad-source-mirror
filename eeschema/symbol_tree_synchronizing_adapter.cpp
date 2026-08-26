@@ -232,8 +232,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aL
 }
 
 
-LIB_TREE_NODE::PTR_VECTOR::iterator
-SYMBOL_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
+std::vector<std::unique_ptr<LIB_TREE_NODE>>::iterator
+SYMBOL_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( std::vector<std::unique_ptr<LIB_TREE_NODE>>::iterator& aLibNodeIt )
 {
     LIB_TREE_NODE* node = aLibNodeIt->get();
     m_libHashes.erase( node->m_Name );

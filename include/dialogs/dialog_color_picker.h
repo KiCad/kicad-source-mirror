@@ -17,9 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef DIALOG_COLOR_PICKER_H
-#define DIALOG_COLOR_PICKER_H
-
+#pragma once
 
 #include <gal/color4d.h>
 #include "../../common/dialogs/dialog_color_picker_base.h"
@@ -52,13 +50,11 @@ struct CUSTOM_COLOR_ITEM
         m_ColorName = aName;
     }
 
-    CUSTOM_COLOR_ITEM( const KIGFX::COLOR4D& aColor, const wxString& aName )
-        : m_Color( aColor ), m_ColorName( aName)
+    CUSTOM_COLOR_ITEM( const KIGFX::COLOR4D& aColor, const wxString& aName ) :
+            m_Color( aColor ),
+            m_ColorName( aName)
     {}
 };
-
-
-typedef std::vector<CUSTOM_COLOR_ITEM> CUSTOM_COLORS_LIST;
 
 
 enum CHANGED_COLOR
@@ -87,8 +83,8 @@ public:
      * @param aUserColors if not null is a list of defined colors replacing the dialog
      *                    predefined colors
      */
-	DIALOG_COLOR_PICKER( wxWindow* aParent, const KIGFX::COLOR4D& aCurrentColor,
-                         bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors = nullptr,
+	DIALOG_COLOR_PICKER( wxWindow* aParent, const KIGFX::COLOR4D& aCurrentColor, bool aAllowOpacityControl,
+	                     std::vector<CUSTOM_COLOR_ITEM>* aUserColors = nullptr,
                          const KIGFX::COLOR4D& aDefaultColor = KIGFX::COLOR4D::UNSPECIFIED );
 	~DIALOG_COLOR_PICKER();
 
@@ -104,31 +100,31 @@ private:
      * m_allowMouseEvents is first set to false, and then set to true on the first left mouse
      * clicking inside this dialog to prevent not wanted mouse drag event
      */
-    bool m_allowMouseEvents;
-    bool m_allowOpacityCtrl;            ///< true to show the widget,
-                                        ///< false to keep alpha channel = 1.0
-    KIGFX::COLOR4D m_previousColor4D;   ///< the initial color4d
-    KIGFX::COLOR4D m_newColor4D;        ///< the current color4d
-    KIGFX::COLOR4D m_defaultColor;      ///< The default color4d
+    bool                         m_allowMouseEvents;
+    bool                         m_allowOpacityCtrl;    ///< true to show the widget,
+                                                        ///< false to keep alpha channel = 1.0
+    KIGFX::COLOR4D               m_previousColor4D;     ///< the initial color4d
+    KIGFX::COLOR4D               m_newColor4D;          ///< the current color4d
+    KIGFX::COLOR4D               m_defaultColor;        ///< The default color4d
 
     /// the list of color4d ordered by button ID, for predefined colors
-    std::vector<KIGFX::COLOR4D> m_Color4DList;
-    int m_cursorsSize;
+    std::vector<KIGFX::COLOR4D>  m_Color4DList;
+    int                          m_cursorsSize;
 
-    wxPoint m_cursorBitmapRed;          ///< the red cursor on the RGB bitmap palette.
-    wxPoint m_cursorBitmapGreen;        ///< the green cursor on the RGB bitmap palette.
-    wxPoint m_cursorBitmapBlue;         ///< the blue cursor on the RGB bitmap palette.
-    wxPoint m_cursorBitmapHSV;          ///< the cursor on the HSV bitmap palette.
-    wxPoint* m_selectedCursor;          ///< the ref cursor to the selected cursor, if any, or null.
+    wxPoint                      m_cursorBitmapRed;     ///< the red cursor on the RGB bitmap palette.
+    wxPoint                      m_cursorBitmapGreen;   ///< the green cursor on the RGB bitmap palette.
+    wxPoint                      m_cursorBitmapBlue;    ///< the blue cursor on the RGB bitmap palette.
+    wxPoint                      m_cursorBitmapHSV;     ///< the cursor on the HSV bitmap palette.
+    wxPoint*                     m_selectedCursor;      ///< the ref cursor to the selected cursor, if any, or null.
 
-    double m_hue;                       ///< the current hue, in degrees (0 ... 360)
-    double m_sat;                       ///< the current saturation (0 ... 1.0)
-    double m_val;                       ///< the current value (0 ... 1.0)
+    double                       m_hue;                 ///< the current hue, in degrees (0 ... 360)
+    double                       m_sat;                 ///< the current saturation (0 ... 1.0)
+    double                       m_val;                 ///< the current value (0 ... 1.0)
 
-    wxBitmap* m_bitmapRGB;              ///< the basic RGB palette
-    wxBitmap* m_bitmapHSV;              ///< the basic HUV palette
+    wxBitmap*                    m_bitmapRGB;           ///< the basic RGB palette
+    wxBitmap*                    m_bitmapHSV;           ///< the basic HUV palette
 
-    std::vector<wxStaticBitmap*> m_colorSwatches;    ///< list of defined colors buttons
+    std::vector<wxStaticBitmap*> m_colorSwatches;      ///< list of defined colors buttons
 
     void SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransparency );
 	void drawAll();
@@ -191,7 +187,7 @@ private:
      *
      * If aPredefinedColors is nullptr, a internal predefined list will be used.
      */
-    void initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColors );
+    void initDefinedColors( std::vector<CUSTOM_COLOR_ITEM>* aPredefinedColors );
 
     void updateHandleSize();
 
@@ -203,4 +199,3 @@ private:
 
 };
 
-#endif  // #define DIALOG_COLOR_PICKER_H

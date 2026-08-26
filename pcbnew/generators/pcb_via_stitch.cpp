@@ -1565,18 +1565,14 @@ static struct PCB_VIA_STITCH_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_VIA_STITCH ), TYPE_HASH( PCB_GENERATOR ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_VIA_STITCH ), TYPE_HASH( BOARD_ITEM ) );
 
-
         propMgr.AddProperty( new PROPERTY<PCB_VIA_STITCH, int>( _HKI( "Size" ),
-                                     &PCB_VIA_STITCH::SetViaSize, &PCB_VIA_STITCH::GetViaSize,
-                                     PROPERTY_DISPLAY::PT_SIZE ) );
+                    &PCB_VIA_STITCH::SetViaSize, &PCB_VIA_STITCH::GetViaSize, PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_VIA_STITCH, int>( _HKI( "Drill" ),
-                                     &PCB_VIA_STITCH::SetViaDrill, &PCB_VIA_STITCH::GetViaDrill,
-                                     PROPERTY_DISPLAY::PT_SIZE ) );
+                    &PCB_VIA_STITCH::SetViaDrill, &PCB_VIA_STITCH::GetViaDrill, PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_VIA_STITCH, int>( _HKI( "Pitch" ),
-                                     &PCB_VIA_STITCH::SetPitch, &PCB_VIA_STITCH::GetPitch,
-                                     PROPERTY_DISPLAY::PT_SIZE ) );
+                    &PCB_VIA_STITCH::SetPitch, &PCB_VIA_STITCH::GetPitch, PROPERTY_DISPLAY::PT_SIZE ) );
 
         ENUM_MAP<PCB_VIA_STITCH_LAYOUT>::Instance()
                 .Undefined( PCB_VIA_STITCH_LAYOUT::PLAIN )
@@ -1584,26 +1580,15 @@ static struct PCB_VIA_STITCH_DESC
                 .Map( PCB_VIA_STITCH_LAYOUT::STAGGERED, _HKI( "Staggered grid" ) )
                 .Map( PCB_VIA_STITCH_LAYOUT::POISSON,   _HKI( "Poisson disk" ) );
 
-        auto inStitchMode =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( PCB_VIA_STITCH* stitch = dynamic_cast<PCB_VIA_STITCH*>( aItem ) )
-                        return stitch->GetMode() == PCB_VIA_STITCH_MODE::STITCH;
-                    return true;
-                };
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA_STITCH, PCB_VIA_STITCH_LAYOUT>( _HKI( "Layout" ),
+                     &PCB_VIA_STITCH::SetLayout, &PCB_VIA_STITCH::GetLayout ) )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PCB_VIA_STITCH* stitch = dynamic_cast<PCB_VIA_STITCH*>( aItem ) )
+                                           return stitch->GetMode() == PCB_VIA_STITCH_MODE::STITCH;
 
-        auto inGuardMode =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( PCB_VIA_STITCH* stitch = dynamic_cast<PCB_VIA_STITCH*>( aItem ) )
-                        return stitch->GetMode() == PCB_VIA_STITCH_MODE::GUARD;
-                    return true;
-                };
-
-        auto layoutProp = new PROPERTY_ENUM<PCB_VIA_STITCH, PCB_VIA_STITCH_LAYOUT>( _HKI( "Layout" ),
-                                     &PCB_VIA_STITCH::SetLayout, &PCB_VIA_STITCH::GetLayout );
-        layoutProp->SetAvailableFunc( inStitchMode );
-        propMgr.AddProperty( layoutProp );
+                                       return true;
+                                   } );
 
         ENUM_MAP<PCB_VIA_STITCH_MODE>::Instance()
                 .Undefined( PCB_VIA_STITCH_MODE::STITCH )
@@ -1611,30 +1596,32 @@ static struct PCB_VIA_STITCH_DESC
                 .Map( PCB_VIA_STITCH_MODE::GUARD,  _HKI( "Guard" ) );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA_STITCH, PCB_VIA_STITCH_MODE>( _HKI( "Mode" ),
-                                     &PCB_VIA_STITCH::SetMode, &PCB_VIA_STITCH::GetMode ) );
+                    &PCB_VIA_STITCH::SetMode, &PCB_VIA_STITCH::GetMode ) );
 
-        auto seedProp = new PROPERTY<PCB_VIA_STITCH, uint32_t>( _HKI( "Seed" ),
-                                     &PCB_VIA_STITCH::SetSeed, &PCB_VIA_STITCH::GetSeed );
-        seedProp->SetAvailableFunc(
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( PCB_VIA_STITCH* stitch = dynamic_cast<PCB_VIA_STITCH*>( aItem ) )
-                    {
-                        return stitch->GetMode() == PCB_VIA_STITCH_MODE::STITCH
-                                && stitch->GetLayout() == PCB_VIA_STITCH_LAYOUT::POISSON;
-                    }
-                    return true;
-                } );
-        propMgr.AddProperty( seedProp );
+        propMgr.AddProperty( new PROPERTY<PCB_VIA_STITCH, uint32_t>( _HKI( "Seed" ),
+                    &PCB_VIA_STITCH::SetSeed, &PCB_VIA_STITCH::GetSeed ) )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PCB_VIA_STITCH* stitch = dynamic_cast<PCB_VIA_STITCH*>( aItem ) )
+                                       {
+                                           return stitch->GetMode() == PCB_VIA_STITCH_MODE::STITCH
+                                                   && stitch->GetLayout() == PCB_VIA_STITCH_LAYOUT::POISSON;
+                                       }
+                                       return true;
+                                   } );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA_STITCH, int>( _HKI( "Net" ),
-                                     &PCB_VIA_STITCH::SetNetCode, &PCB_VIA_STITCH::GetNetCode, PT_NET ) );
+                    &PCB_VIA_STITCH::SetNetCode, &PCB_VIA_STITCH::GetNetCode, PT_NET ) );
 
-        auto guardedNetProp = new PROPERTY_ENUM<PCB_VIA_STITCH, int>( _HKI( "Guarded Net" ),
-                                     &PCB_VIA_STITCH::SetGuardedNetCode,
-                                     &PCB_VIA_STITCH::GetGuardedNetCode, PT_NET );
-        guardedNetProp->SetAvailableFunc( inGuardMode );
-        propMgr.AddProperty( guardedNetProp );
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA_STITCH, int>( _HKI( "Guarded Net" ),
+                    &PCB_VIA_STITCH::SetGuardedNetCode, &PCB_VIA_STITCH::GetGuardedNetCode, PT_NET ) )
+                .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
+                                   {
+                                       if( PCB_VIA_STITCH* stitch = dynamic_cast<PCB_VIA_STITCH*>( aItem ) )
+                                           return stitch->GetMode() == PCB_VIA_STITCH_MODE::GUARD;
+
+                                       return true;
+                                   } );
 
         // The stitch lives on its own GAL layer and the vias are multi-layer configured separately
         propMgr.Mask( TYPE_HASH( PCB_VIA_STITCH ), TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) );
