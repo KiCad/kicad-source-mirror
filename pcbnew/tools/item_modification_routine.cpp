@@ -819,70 +819,73 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
     {
         const PAD& pad = static_cast<const PAD&>( aItem );
 
-        // TODO(JE) padstacks
-        const PAD_SHAPE pad_shape = pad.GetShape( PADSTACK::TEMP_ALL_LAYERS );
+        pad.Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID aLayer )
+                {
+                    const PAD_SHAPE pad_shape = pad.GetShape( aLayer );
 
-        switch( pad_shape )
-        {
-        case PAD_SHAPE::RECTANGLE:
-        case PAD_SHAPE::ROUNDRECT:
-        case PAD_SHAPE::OVAL:
-        {
-            const VECTOR2I pad_size = pad.GetSize( PADSTACK::TEMP_ALL_LAYERS );
+                    switch( pad_shape )
+                    {
+                    case PAD_SHAPE::RECTANGLE:
+                    case PAD_SHAPE::ROUNDRECT:
+                    case PAD_SHAPE::OVAL:
+                    {
+                        const VECTOR2I pad_size = pad.GetSize( aLayer );
 
-            BOX2I box{ pad.GetPosition() - pad_size / 2, pad_size };
-            box.Inflate( m_params.outsetDistance );
+                        BOX2I box{ pad.GetPosition() - pad_size / 2, pad_size };
+                        box.Inflate( m_params.outsetDistance );
 
-            if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
-            {
-                AddFailure();
-                break;
-            }
+                        if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
+                        {
+                            AddFailure();
+                            break;
+                        }
 
-            int radius = m_params.outsetDistance;
+                        int radius = m_params.outsetDistance;
 
-            if( pad_shape == PAD_SHAPE::ROUNDRECT )
-                radius += pad.GetRoundRectCornerRadius( PADSTACK::TEMP_ALL_LAYERS );
-            else if( pad_shape == PAD_SHAPE::OVAL )
-                radius += std::min( pad_size.x, pad_size.y ) / 2;
+                        if( pad_shape == PAD_SHAPE::ROUNDRECT )
+                            radius += pad.GetRoundRectCornerRadius( aLayer );
+                        else if( pad_shape == PAD_SHAPE::OVAL )
+                            radius += std::min( pad_size.x, pad_size.y ) / 2;
 
-            radius = m_params.roundCorners ? std::max( radius, 0 ) : 0;
+                        radius = m_params.roundCorners ? std::max( radius, 0 ) : 0;
 
-            // No point doing a SHAPE_RECT as we may need to rotate it
-            ROUNDRECT      rrect( box, radius );
-            SHAPE_POLY_SET poly;
-            rrect.TransformToPolygon( poly, pad.GetMaxError() );
+                        // No point doing a SHAPE_RECT as we may need to rotate it
+                        ROUNDRECT      rrect( box, radius );
+                        SHAPE_POLY_SET poly;
+                        rrect.TransformToPolygon( poly, pad.GetMaxError() );
 
-            poly.Rotate( pad.GetOrientation(), pad.GetPosition() );
-            addPoly( poly );
-            AddSuccess();
-            break;
-        }
+                        poly.Rotate( pad.GetOrientation(), pad.GetPosition() );
+                        addPoly( poly );
+                        AddSuccess();
+                        break;
+                    }
 
-        case PAD_SHAPE::CIRCLE:
-        {
-            const int radius = pad.GetSize( PADSTACK::TEMP_ALL_LAYERS ).x / 2 + m_params.outsetDistance;
+                    case PAD_SHAPE::CIRCLE:
+                    {
+                        const int radius = pad.GetSize( aLayer ).x / 2 + m_params.outsetDistance;
 
-            if( radius <= 0 )
-            {
-                AddFailure();
-                break;
-            }
+                        if( radius <= 0 )
+                        {
+                            AddFailure();
+                            break;
+                        }
 
-            const CIRCLE circle( pad.GetPosition(), radius );
-            addCircleOrRect( circle );
-            AddSuccess();
-            break;
-        }
+                        const CIRCLE circle( pad.GetPosition(), radius );
+                        addCircleOrRect( circle );
+                        AddSuccess();
+                        break;
+                    }
 
-        case PAD_SHAPE::TRAPEZOID:
-            // Not handled yet, but could use a generic convex polygon outset method.
-            break;
+                    case PAD_SHAPE::TRAPEZOID:
+                        // Not handled yet, but could use a generic convex polygon outset method.
+                        break;
 
-        default:
-            // Other pad shapes are not supported with exact outsets
-            break;
-        }
+                    default:
+                        // Other pad shapes are not supported with exact outsets
+                        break;
+                    }
+                } );
         break;
     }
     case PCB_SHAPE_T:
