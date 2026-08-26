@@ -35,14 +35,22 @@ enum class HTTP_LIB_SOURCE_TYPE
 };
 
 
+/**
+ * Connection parameters for one HTTP library.
+ *
+ * HTTP_LIB_CONNECTION copies the whole struct, so every field has to be meaningful even on a
+ * source assembled in code rather than loaded from a .kicad_httplib.  type stays INVALID until
+ * SCH_IO_HTTP_LIB resolves it, and the timeouts mirror the PARAM defaults in HTTP_LIB_SETTINGS
+ * so an unloaded source does not cache with a zero interval.
+ */
 struct HTTP_LIB_SOURCE
 {
-    HTTP_LIB_SOURCE_TYPE type;
+    HTTP_LIB_SOURCE_TYPE type = HTTP_LIB_SOURCE_TYPE::INVALID;
     std::string          root_url;
     std::string          api_version;
     std::string          token;
-    int                  timeout_parts;
-    int                  timeout_categories;
+    int                  timeout_parts = 30;
+    int                  timeout_categories = 600;
 };
 
 

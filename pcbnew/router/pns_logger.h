@@ -95,7 +95,7 @@ public:
     {
         LOG_DATA() {};
         ~LOG_DATA() {};
-        ROUTER_MODE m_Mode;
+        ROUTER_MODE m_Mode = PNS_MODE_ROUTE_SINGLE;
         std::optional<wxString> m_BoardHash;
         std::vector<ITEM*> m_AddedItems;
         std::set<KIID> m_RemovedItems;

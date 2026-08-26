@@ -279,12 +279,15 @@ struct KICOMMON_API PROPERTY_DELTA
  * The id is a KIID_PATH so that hierarchical context (sheet path for schematics,
  * footprint path for child pads) is preserved across the diff/merge pipeline.
  * The refdes field is presentation only and is not used to key items in the engine.
+ *
+ * kind defaults to MODIFIED because that is the only kind an applier can act on without
+ * materializing or deleting an item, so a record whose kind was never set stays inert.
  */
 struct KICOMMON_API ITEM_CHANGE
 {
     KIID_PATH                   id;
     wxString                    typeName;
-    CHANGE_KIND                 kind;
+    CHANGE_KIND                 kind = CHANGE_KIND::MODIFIED;
     std::vector<PROPERTY_DELTA> properties;
     BOX2I                       bbox;
     std::optional<wxString>     refdes;

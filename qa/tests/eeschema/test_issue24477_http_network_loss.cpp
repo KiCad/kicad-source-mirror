@@ -116,6 +116,18 @@ BOOST_AUTO_TEST_CASE( SubLibraryQueriesSurviveNetworkLoss )
 }
 
 
+// A source assembled in code carries only the fields the caller sets, and the connection
+// copies it wholesale.  Zero timeouts would expire the part cache on every lookup
+BOOST_AUTO_TEST_CASE( SourceDefaultsMatchSettingsDefaults )
+{
+    HTTP_LIB_SOURCE source{};
+
+    BOOST_CHECK( source.type == HTTP_LIB_SOURCE_TYPE::INVALID );
+    BOOST_CHECK_EQUAL( source.timeout_parts, 30 );
+    BOOST_CHECK_EQUAL( source.timeout_categories, 600 );
+}
+
+
 /// The connection object itself must report an invalid endpoint (and not crash) when it
 /// cannot reach the server.
 BOOST_AUTO_TEST_CASE( ConnectionReportsInvalidEndpointOnNetworkLoss )

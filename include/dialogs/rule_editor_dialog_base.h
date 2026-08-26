@@ -53,10 +53,10 @@ enum RULE_EDITOR_TREE_CONTEXT_OPT
  */
 struct RULE_TREE_NODE
 {
-    int                                    m_nodeId;
+    int                                    m_nodeId = 0;
     wxString                               m_nodeName;
-    int                                    m_nodeType;
-    int                                    m_nodeLevel;
+    int                                    m_nodeType = 0;
+    int                                    m_nodeLevel = -1;
     std::optional<int>                     m_nodeTypeMap;
     std::vector<RULE_TREE_NODE>            m_childNodes;
     std::shared_ptr<RULE_EDITOR_DATA_BASE> m_nodeData;

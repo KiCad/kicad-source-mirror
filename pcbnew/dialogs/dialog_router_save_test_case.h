@@ -40,6 +40,9 @@ public:
 private:
     wxString m_testCaseDir;
     wxString m_testCaseName;
-    PNS::LOGGER::TEST_CASE_TYPE m_testCaseType;
+
+    /// Matches the initial selection of m_rbType, so the value is meaningful even if the
+    /// dialog closes without TransferDataFromWindow() running.
+    PNS::LOGGER::TEST_CASE_TYPE m_testCaseType = PNS::LOGGER::TCT_STRICT_GEOMETRY;
 };
 
