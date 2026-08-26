@@ -52,6 +52,8 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_optimizeEntireDraggedTrack = false;
     m_cornerMode = DIRECTION_45::CORNER_MODE::MITERED_45;
     m_walkaroundHugLengthThreshold = 1.5;
+    m_diffPairGapPickupRatioThreshold = 2.5;
+    m_diffPairGapCouplingRecognitionThreshold = 0.05;
     m_autoPosture = true;
     m_fixAllSegments = true;
     m_restrictAngles = false;
