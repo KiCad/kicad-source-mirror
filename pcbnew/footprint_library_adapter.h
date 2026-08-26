@@ -130,6 +130,15 @@ public:
      */
     FOOTPRINT* LoadFootprintWithOptionalNickname( const LIB_ID& aFootprintId, bool aKeepUUID );
 
+    /**
+     * Read @a aName from the files of library @a aNickname as they are now, bypassing every cache, to tell
+     * whether something else, such as a git pull, changed it since it was loaded.
+     *
+     * @return the footprint, or nullptr if the library or the footprint does not exist.
+     * @throw IO_ERROR if the library cannot be read.
+     */
+    std::unique_ptr<FOOTPRINT> FootprintOnDisk( const wxString& aNickname, const wxString& aName );
+
     // TODO(JE) library tables - hoist out?
     /**
      * The set of return values from SaveSymbol() below.
@@ -199,14 +208,19 @@ private:
     // even when they run during static teardown.
     static LEAK_AT_EXIT<std::shared_mutex> GlobalLibraryMutex;
 
-    /// Storage for preloaded footprints, indexed by library nickname.
+    /// A project library may shadow a global one of the same nickname, so each scope has its own entry
+    using PRELOAD_KEY = std::pair<wxString, LIBRARY_TABLE_SCOPE>;
+
+    static PRELOAD_KEY preloadKey( const LIBRARY_TABLE_ROW* aRow ) { return { aRow->Nickname(), aRow->Scope() }; }
+
+    /// Storage for preloaded footprints, indexed by the library's nickname and table scope.
     /// These are cloned during library enumeration so GetFootprints() returns instantly.
-    static LEAK_AT_EXIT<std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>>> PreloadedFootprints;
+    static LEAK_AT_EXIT<std::map<PRELOAD_KEY, std::vector<std::unique_ptr<FOOTPRINT>>>> PreloadedFootprints;
     static std::shared_mutex PreloadedFootprintsMutex;
 
     /// Filesystem timestamps from when PreloadedFootprints was last populated, guarded by
     /// PreloadedFootprintsMutex.  Static so it shares the lifetime of the cache it describes.
-    static LEAK_AT_EXIT<std::map<wxString, long long>> PreloadedTimestamps;
+    static LEAK_AT_EXIT<std::map<PRELOAD_KEY, long long>> PreloadedTimestamps;
 };
 
 #endif //FOOTPRINT_LIBRARY_ADAPTER_H

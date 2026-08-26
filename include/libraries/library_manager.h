@@ -21,11 +21,14 @@
 #ifndef LIBRARY_MANAGER_H
 #define LIBRARY_MANAGER_H
 
+#include <functional>
 #include <future>
 #include <memory>
 #include <mutex>
 #include <set>
 #include <shared_mutex>
+#include <unordered_map>
+#include <vector>
 
 #include <kicommon.h>
 #include <ki_error.h>
@@ -56,6 +59,18 @@ struct KICOMMON_API LIB_STATUS
 };
 
 
+/// The table row fields a library's plugin was created from
+struct LIB_SOURCE
+{
+    wxString uri;
+    wxString type;
+    wxString options;
+    bool     disabled = false;
+
+    bool operator==( const LIB_SOURCE& aOther ) const = default;
+};
+
+
 /// Storage for an actual loaded library (including library content owned by the plugin)
 struct KICOMMON_API LIB_DATA
 {
@@ -68,6 +83,15 @@ struct KICOMMON_API LIB_DATA
     // the lifetime of row. Its destructor evicts the entry; identity is by adapter, not by the
     // reusable row pointer.
     const LIBRARY_MANAGER_ADAPTER* global_owner = nullptr;
+
+    /// The row's URI as expanded for the content this entry last loaded, against the project of that time
+    wxString uri;
+
+    /// Copied when the plugin is created, since a table edit can assign over the row in place
+    LIB_SOURCE loaded_from;
+
+    /// The size and exact modification time of the library's files when the plugin was created
+    size_t file_stamp = 0;
 
     int                   modify_hash = -1;
     std::vector<wxString> available_fields_cache;
@@ -137,8 +161,16 @@ public:
     /// Notify the adapter that the active project has changed
     virtual void ProjectChanged();
 
-    /// Notify the adapter that the global library tables have changed
+    /// Notify the adapter that the global library tables are about to be rebuilt. Aborts any in-progress loads and
+    /// takes every entry out of globalLibs(), since their raw LIBRARY_TABLE_ROW pointers die with the old tables.
+    /// The loaded libraries this adapter owns are held for GlobalTablesReloaded() rather than destroyed.
     void GlobalTablesChanged( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables = {} );
+
+    /// Complements GlobalTablesChanged once the rebuilt global tables are final. A held library whose new row
+    /// matches the one it loaded from, in raw and expanded URI, type, options and disabled state, and whose files
+    /// are unchanged since, returns to globalLibs() on that row, so a table edit reloads only the libraries it
+    /// touched. The rest are destroyed and load again on demand.
+    void GlobalTablesReloaded( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables = {} );
 
     /// Notify the adapter that the project library tables are about to be rebuilt.
     /// Mirrors GlobalTablesChanged: aborts any in-progress loads and invalidates
@@ -177,7 +209,8 @@ public:
     void BlockUntilLoaded();
 
     /**
-     * Starts AsyncLoad() and waits for it on the calling thread, reporting progress to @a aReporter.
+     * Starts a load like AsyncLoad(), but waits for a load lock held elsewhere instead of dropping the load, then
+     * waits for it on the calling thread, reporting progress to @a aReporter.
      * Setting @a aAbort asks the plugins to cancel, but the call still waits for the workers, so one blocked in
      * I/O that cannot be cancelled delays the return.
      *
@@ -204,6 +237,10 @@ public:
 
     /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
     std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const;
+
+    /// The LIBRARY_MANAGER::FileStamp() taken before the loaded plugin of aNickname read the library, or 0 when it
+    /// has none, as for a library that is not loaded or not global
+    size_t LoadedFileStamp( const wxString& aNickname ) const;
 
     /// Returns a list of all library nicknames and their status (even if they failed to load)
     std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatuses() const;
@@ -259,17 +296,26 @@ protected:
 
     wxString getUri( const LIBRARY_TABLE_ROW* aRow ) const;
 
+    /// Set the status of aLib under the lock a queued load of it checks the status under
+    LIB_STATUS setStatus( LIB_DATA* aLib, const LIB_STATUS& aStatus );
+
     std::optional<const LIB_DATA*> fetchIfLoaded( const wxString& aNickname ) const;
 
     std::optional<LIB_DATA*> fetchIfLoaded( const wxString& aNickname );
 
     /// Fetches a loaded library, triggering a load of that library if it isn't loaded yet
-    LIBRARY_RESULT<LIB_DATA*> loadIfNeeded( const wxString& aNickname );
+    /// @param aUri is the row's URI already expanded, for callers off the main thread; else it is expanded here
+    LIBRARY_RESULT<LIB_DATA*> loadIfNeeded( const wxString& aNickname, const wxString* aUri = nullptr );
 
-    LIBRARY_RESULT<LIB_DATA*> loadFromScope( const wxString& aNickname,
-                                             LIBRARY_TABLE_SCOPE aScope,
-                                             std::map<wxString, LIB_DATA>& aTarget,
-                                             std::shared_mutex& aMutex );
+    LIBRARY_RESULT<LIB_DATA*> loadFromScope( const wxString& aNickname, LIBRARY_TABLE_SCOPE aScope,
+                                             std::map<wxString, LIB_DATA>& aTarget, std::shared_mutex& aMutex,
+                                             const wxString* aUri = nullptr );
+
+    using GLOBAL_ENTRY = std::map<wxString, LIB_DATA>::node_type;
+
+    /// Takes the globalLibs() entries matching aPredicate out of the map. The caller destroys them once the lock is
+    /// released, since a plugin's worker thread may be blocked on it.
+    std::vector<GLOBAL_ENTRY> extractGlobalEntries( const std::function<bool( const LIB_DATA& )>& aPredicate );
 
     /// Erases this adapter's own entries (LIB_DATA::global_owner == this) from the process-wide
     /// globalLibs() cache. The cached LIB_DATA::row pointers reference this manager's tables, so
@@ -338,6 +384,9 @@ protected:
     // The actual library content is held in an associated IO plugin
     std::map<wxString, LIB_DATA> m_libraries;
 
+    /// Loaded global libraries held between GlobalTablesChanged() and GlobalTablesReloaded()
+    std::vector<GLOBAL_ENTRY> m_heldGlobalLibs;
+
     mutable std::shared_mutex m_librariesMutex;
 
     /// Libraries an async worker is enumerating, so a cancel reaches exactly those plugins
@@ -364,6 +413,9 @@ protected:
     std::mutex          m_loadMutex;
 
 private:
+    /// True when aTables is empty, meaning every table, or names this adapter's type
+    bool handles( std::initializer_list<LIBRARY_TABLE_TYPE> aTables ) const;
+
     /// A library queued by AsyncLoad(), with its URI resolved on the calling thread
     struct LOAD_WORK
     {
@@ -439,6 +491,16 @@ public:
     /// (Re)loads the global library tables in the given list, or all tables if no list is given
     void LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
+    /// Held by LoadGlobalTables() from cancelling the loads until the new rows are in place, so a load started
+    /// meanwhile cannot queue rows about to be freed. Recursive, so the reloading thread can restart its own loads.
+    std::unique_lock<std::recursive_mutex> LockGlobalTables() const
+    {
+        return std::unique_lock( m_globalTablesMutex );
+    }
+
+    /// Counts the global table reloads that have started
+    uint64_t GlobalTablesGeneration() const { return m_globalTablesGeneration.load(); }
+
     /// (Re)loads the project library tables in the given list, or all tables if no list is given
     void LoadProjectTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
@@ -456,6 +518,11 @@ public:
     /// Only a caller that discards the libraries, or calls RestartAsyncLoads() once every table and cache has been
     /// replaced, passes true to end the in-flight loads early.
     void AbortAsyncLoads( bool aCancelPlugins = false );
+
+    /// Aborts and cancels the async load of the aType adapter alone. A caller assigning over a table of that type
+    /// calls this first, since the loads read its rows. LoadGlobalTables() or the next AsyncLoad() queues the
+    /// cancelled libraries again.
+    void AbortAsyncLoads( LIBRARY_TABLE_TYPE aType );
 
     /// Queues again the libraries that any cancelling abort left INVALID, for every registered adapter
     void RestartAsyncLoads();
@@ -537,6 +604,10 @@ public:
 
     static wxString ExpandURI( const wxString& aShortURI, const PROJECT& aProject );
 
+    /// A value that changes whenever the library file at aUri, or a file in the library folder at aUri, is
+    /// rewritten, even within the second a plugin's own timestamp check resolves
+    static size_t FileStamp( const wxString& aUri );
+
     static bool UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 );
 
     /**
@@ -575,10 +646,11 @@ private:
     void loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope,
                      std::vector<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
-    void loadNestedTables( LIBRARY_TABLE& aTable );
+    /// Loads the tables aTable nests, by URI, into aChildren
+    void loadNestedTables( LIBRARY_TABLE& aTable, std::map<wxString, std::unique_ptr<LIBRARY_TABLE>>& aChildren );
 
-    /// Loads the global tables without the PCM maintenance that LoadGlobalTables() adds, which can save them
-    void loadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad );
+    /// Reloads the global tables, with the PCM maintenance that can save them only when aMaintainPcm is set
+    void loadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad, bool aMaintainPcm );
 
     void maintainPcmLibraries();
 
@@ -587,7 +659,12 @@ private:
 
     static wxString tableFileName( LIBRARY_TABLE_TYPE aType );
 
+    /// Caller holds m_tablesMutex exclusively
     void createEmptyTable( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope );
+
+    /// Rows() for a caller that already holds m_tablesMutex
+    std::vector<LIBRARY_TABLE_ROW*> listRows( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope,
+                                              bool aIncludeInvalid ) const;
 
     const PROJECT* const m_project;
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> m_tables;
@@ -598,14 +675,35 @@ private:
     // TODO: support multiple projects
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> m_projectTables;
 
+    /**
+     * Guards the three table maps and the life of the tables in them. Reloading one type stops only that type's
+     * workers, so another type's readers still walk these maps. Taken before m_rowCacheMutex.
+     */
+    mutable std::shared_mutex m_tablesMutex;
+
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_MANAGER_ADAPTER>> m_adapters;
 
     mutable std::mutex m_adaptersMutex;
 
-    typedef std::tuple<LIBRARY_TABLE_TYPE, LIBRARY_TABLE_SCOPE, wxString> ROW_CACHE_KEY;
+    /**
+     * Changes when the aType table that Rows() reads for aScope is replaced, or gains or loses rows in place.
+     * Reads no other type's table, since reloading another type does not stop this type's workers.
+     * Caller holds m_tablesMutex.
+     */
+    size_t tableShape( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope ) const;
 
-    std::map<ROW_CACHE_KEY, LIBRARY_TABLE_ROW*> m_rowCache;
-    mutable std::mutex                          m_rowCacheMutex;
+    mutable std::recursive_mutex m_globalTablesMutex;
+    std::atomic<uint64_t>        m_globalTablesGeneration = 0;
+
+    /// Every row of one type and scope by nickname, as Rows() resolves them for that table shape
+    struct ROW_INDEX
+    {
+        size_t                                           shape = 0;
+        std::unordered_map<wxString, LIBRARY_TABLE_ROW*> rows;
+    };
+
+    std::map<std::pair<LIBRARY_TABLE_TYPE, LIBRARY_TABLE_SCOPE>, ROW_INDEX> m_rowCache;
+    mutable std::mutex                                                      m_rowCacheMutex;
 };
 
 #endif //LIBRARY_MANAGER_H

@@ -23,6 +23,7 @@
 
 #include <kicommon.h>
 #include <widgets/progress_reporter_base.h>
+#include <wx/gdicmn.h>
 #include <atomic>
 #include <functional>
 #include <memory>

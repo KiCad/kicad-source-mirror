@@ -163,6 +163,15 @@ void FP_CACHE::Load()
 
         do
         {
+            // A library of thousands of files would otherwise hold up an abort, such as on quit
+            if( m_owner->m_loadCancelled.load() )
+            {
+                // Left empty and dirty so the next validation reads the whole library again
+                m_footprints.clear();
+                m_cache_dirty = true;
+                THROW_IO_ERRORF( _( "Loading footprint library '%s' was cancelled." ), m_lib_raw_path );
+            }
+
             fn.SetFullName( fullName );
 
             // Queue I/O errors so only files that fail to parse don't get loaded.
@@ -352,7 +361,7 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR::Parse( const wxString& aClipboardSourceInput )
 }
 
 
-void PCB_IO_KICAD_SEXPR::FormatFootprintLibFile( FOOTPRINT* aFootprint ) const
+void PCB_IO_KICAD_SEXPR::SyncEmbeddedFonts( FOOTPRINT* aFootprint )
 {
     // If we've requested to embed the fonts in the footprint, do so.  Otherwise, clear the
     // embedded fonts from the footprint.  Embedded fonts will be used if available.
@@ -360,6 +369,12 @@ void PCB_IO_KICAD_SEXPR::FormatFootprintLibFile( FOOTPRINT* aFootprint ) const
         aFootprint->EmbedFonts();
     else
         aFootprint->GetEmbeddedFiles()->ClearEmbeddedFonts();
+}
+
+
+void PCB_IO_KICAD_SEXPR::FormatFootprintLibFile( FOOTPRINT* aFootprint ) const
+{
+    SyncEmbeddedFonts( aFootprint );
 
     formatInitialComments( aFootprint );
 

@@ -26,6 +26,7 @@
 #include <ctl_flags.h>
 
 #include <richio.h>
+#include <atomic>
 #include <string>
 #include <optional>
 #include <layer_ids.h>
@@ -415,6 +416,11 @@ public:
 
     void LeakCacheAtExit() override { m_leakCacheAtExit = true; }
 
+    /// Stops a library load between footprint files, and drops what it had read so the next load reads it all
+    void CancelLoad() override { m_loadCancelled.store( true ); }
+
+    void ResumeLoad() noexcept override { m_loadCancelled.store( false ); }
+
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
@@ -461,6 +467,10 @@ public:
      * @param aFootprint has its embedded fonts updated to match its settings, so pass a copy of a live footprint.
      */
     void FormatFootprintLibFile( FOOTPRINT* aFootprint ) const;
+
+    /// Embed the fonts \a aFootprint asks to embed, or drop its embedded fonts when it does not, as a library
+    /// save does
+    static void SyncEmbeddedFonts( FOOTPRINT* aFootprint );
 
     std::string GetStringOutput( bool doClear )
     {
@@ -579,6 +589,7 @@ protected:
 
     FP_CACHE*              m_cache;      ///< Footprint library cache
     bool                   m_leakCacheAtExit = false;
+    std::atomic<bool>      m_loadCancelled = false;
 
     LINE_READER*           m_reader;     ///< no ownership
     wxString               m_filename;   ///< for saves only, name is in m_reader for loads

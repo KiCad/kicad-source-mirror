@@ -18,16 +18,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <atomic>
 #include <chrono>
 #include <common.h>
+#include <core/profile.h>
 #include <env_vars.h>
+#include <filesystem>
+#include <future>
+#include <gestfich.h>
+#include <hash.h>
 #include <list>
 #include <magic_enum.hpp>
 #include <thread_pool.h>
 #include <ranges>
 #include <set>
+#include <system_error>
 #include <thread>
 #include <unordered_set>
+#include <utility>
 
 #include <paths.h>
 #include <pgm_base.h>
@@ -38,6 +47,8 @@
 #include <wildcards_and_files_ext.h>
 
 #include <libraries/library_manager.h>
+
+#include <wx/thread.h>
 
 using namespace std::chrono_literals;
 #include <settings/common_settings.h>
@@ -50,6 +61,47 @@ struct LIBRARY_MANAGER_INTERNALS
 {
     std::vector<LIBRARY_TABLE> tables;
 };
+
+
+static LIB_SOURCE sourceOf( const LIBRARY_TABLE_ROW& aRow )
+{
+    return { aRow.URI(), aRow.Type(), aRow.Options(), aRow.Disabled() };
+}
+
+
+size_t LIBRARY_MANAGER::FileStamp( const wxString& aUri )
+{
+    namespace fs = std::filesystem;
+
+    // On Windows a listed entry already holds the size and time, which a path would reopen the file for
+    auto stampOf = []( const fs::directory_entry& aFile )
+    {
+        std::error_code ec;
+        size_t          stamp = 0;
+
+        // libc++ counts file time in a 128-bit integer, and nanoseconds fit 64 bits until 2262
+        hash_combine( stamp, fs::hash_value( aFile.path().filename() ), aFile.file_size( ec ),
+                      static_cast<int64_t>( aFile.last_write_time( ec ).time_since_epoch().count() ) );
+
+        return stamp;
+    };
+
+    std::error_code           ec;
+    const fs::directory_entry entry( ToFsPath( aUri ), ec );
+    size_t                    stamp = 0;
+
+    if( entry.is_regular_file( ec ) )
+        return stampOf( entry );
+
+    // Summed so the order the folder lists its files in does not matter
+    for( fs::directory_iterator it( entry.path(), ec ), end; !ec && it != end; it.increment( ec ) )
+    {
+        if( it->is_regular_file( ec ) )
+            stamp += stampOf( *it );
+    }
+
+    return stamp;
+}
 
 
 std::recursive_mutex& LIBRARY_MANAGER_ADAPTER::pluginMutex( const wxString& aNickname )
@@ -96,11 +148,6 @@ const PROJECT& LIBRARY_MANAGER::Project() const
 void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope,
                                   std::vector<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
-    {
-        std::lock_guard lock( m_rowCacheMutex );
-        m_rowCache.clear();
-    }
-
     auto getTarget =
             [&]() -> std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>&
             {
@@ -122,10 +169,14 @@ void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOP
     if( aTablesToLoad.size() == 0 )
         aTablesToLoad = { LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_TYPE::DESIGN_BLOCK };
 
-    for( LIBRARY_TABLE_TYPE type : aTablesToLoad )
-    {
-        aTarget.erase( type );
+    // A repeated type would extract the table its first pass just installed
+    const std::set<LIBRARY_TABLE_TYPE> types( aTablesToLoad.begin(), aTablesToLoad.end() );
 
+    std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> loaded;
+    std::map<wxString, std::unique_ptr<LIBRARY_TABLE>>           children;
+
+    for( LIBRARY_TABLE_TYPE type : types )
+    {
         wxFileName fn( aTablePath, tableFileName( type ) );
 
         if( fn.IsFileReadable() )
@@ -143,18 +194,40 @@ void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOP
                 continue;
             }
 
-            aTarget[type] = std::move( table );
-            loadNestedTables( *aTarget[type] );
+            loadNestedTables( *table, children );
+            loaded[type] = std::move( table );
         }
         else
         {
             wxLogTrace( traceLibraries, "No library table found at %s", fn.GetFullPath() );
         }
     }
+
+    // Declared before the lock so the replaced tables are destroyed after it is released
+    std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> retired;
+    std::unique_lock                                             lock( m_tablesMutex );
+
+    {
+        std::lock_guard cacheLock( m_rowCacheMutex );
+        m_rowCache.clear();
+    }
+
+    for( LIBRARY_TABLE_TYPE type : types )
+    {
+        if( auto old = aTarget.extract( type ) )
+            retired.insert( std::move( old ) );
+
+        if( auto table = loaded.find( type ); table != loaded.end() )
+            aTarget[type] = std::move( table->second );
+    }
+
+    for( auto& [uri, child] : children )
+        std::swap( m_childTables[uri], child );
 }
 
 
-void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
+void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE&                                       aRootTable,
+                                         std::map<wxString, std::unique_ptr<LIBRARY_TABLE>>& aChildren )
 {
     std::unordered_set<wxString> seenTables;
 
@@ -198,7 +271,7 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
 
                         applyLibOverrides( *child );
 
-                        m_childTables.insert_or_assign( row.URI(), std::move( child ) );
+                        aChildren.insert_or_assign( row.URI(), std::move( child ) );
                     }
                 }
             };
@@ -592,16 +665,18 @@ bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulat
 
 void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
-    loadGlobalTables( aTablesToLoad );
-
     // A passive load must not maintain or save the active user's library tables.
-    if( !IsProjectScoped() )
-        maintainPcmLibraries();
+    loadGlobalTables( aTablesToLoad, !IsProjectScoped() );
 }
 
 
-void LIBRARY_MANAGER::loadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
+void LIBRARY_MANAGER::loadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad, bool aMaintainPcm )
 {
+    PROF_TIMER timer;
+
+    std::unique_lock globalTablesLock = LockGlobalTables();
+    m_globalTablesGeneration.fetch_add( 1 );
+
     // Cancel any in-progress load
     {
         std::scoped_lock lock( m_adaptersMutex );
@@ -610,7 +685,22 @@ void LIBRARY_MANAGER::loadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
             adapter->GlobalTablesChanged( aTablesToLoad );
     }
 
+    const double cancelMs = timer.msecs( true );
+
     loadTables( PATHS::GetUserSettingsPath(), LIBRARY_TABLE_SCOPE::GLOBAL, aTablesToLoad );
+
+    if( aMaintainPcm )
+        maintainPcmLibraries();
+
+    const double parseMs = timer.msecs( true );
+
+    std::scoped_lock lock( m_adaptersMutex );
+
+    for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+        adapter->GlobalTablesReloaded( aTablesToLoad );
+
+    wxLogTrace( traceLibraries, "LoadGlobalTables: cancel %.0f ms, parse %.0f ms, keep %.0f ms", cancelMs, parseMs,
+                timer.msecs( true ) );
 }
 
 
@@ -715,8 +805,30 @@ void LIBRARY_MANAGER::AbortAsyncLoads( bool aCancelPlugins )
 {
     std::scoped_lock lock( m_adaptersMutex );
 
+    // An adapter's queued workers can wait for pool threads that another adapter's workers hold until that one
+    // stops too, so every adapter aborts at once. The pool may be full, so these are not pool threads
+    std::vector<std::future<void>> aborts;
+
     for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
-        adapter->AbortAsyncLoad( aCancelPlugins );
+    {
+        aborts.push_back( std::async( std::launch::async,
+                                      [&adapter, aCancelPlugins]()
+                                      {
+                                          adapter->AbortAsyncLoad( aCancelPlugins );
+                                      } ) );
+    }
+
+    for( std::future<void>& abort : aborts )
+        abort.get();
+}
+
+
+void LIBRARY_MANAGER::AbortAsyncLoads( LIBRARY_TABLE_TYPE aType )
+{
+    std::scoped_lock lock( m_adaptersMutex );
+
+    if( auto it = m_adapters.find( aType ); it != m_adapters.end() )
+        it->second->AbortAsyncLoad( true );
 }
 
 
@@ -788,6 +900,8 @@ std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER::Table( LIBRARY_TABLE_TYPE aType,
 
     case LIBRARY_TABLE_SCOPE::GLOBAL:
     {
+        std::shared_lock lock( m_tablesMutex );
+
         if( !m_tables.contains( aType ) )
         {
             wxLogTrace( traceLibraries, "WARNING: missing global table (%s)",
@@ -800,13 +914,21 @@ std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER::Table( LIBRARY_TABLE_TYPE aType,
 
     case LIBRARY_TABLE_SCOPE::PROJECT:
     {
-        if( !m_projectTables.contains( aType ) )
         {
-            if( !Project().IsNullProject() )
-                createEmptyTable( aType, LIBRARY_TABLE_SCOPE::PROJECT );
-            else
-                return std::nullopt;
+            std::shared_lock lock( m_tablesMutex );
+
+            if( m_projectTables.contains( aType ) )
+                return m_projectTables.at( aType ).get();
         }
+
+        if( Project().IsNullProject() )
+            return std::nullopt;
+
+        std::unique_lock lock( m_tablesMutex );
+
+        // Another thread may have created it between the locks
+        if( !m_projectTables.contains( aType ) )
+            createEmptyTable( aType, LIBRARY_TABLE_SCOPE::PROJECT );
 
         return m_projectTables.at( aType ).get();
     }
@@ -818,6 +940,14 @@ std::optional<LIBRARY_TABLE*> LIBRARY_MANAGER::Table( LIBRARY_TABLE_TYPE aType,
 
 std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope,
                                                        bool aIncludeInvalid ) const
+{
+    std::shared_lock lock( m_tablesMutex );
+    return listRows( aType, aScope, aIncludeInvalid );
+}
+
+
+std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::listRows( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope,
+                                                           bool aIncludeInvalid ) const
 {
     std::map<wxString, LIBRARY_TABLE_ROW*> rows;
     std::vector<wxString> rowOrder;
@@ -896,26 +1026,48 @@ std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
 }
 
 
+size_t LIBRARY_MANAGER::tableShape( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_SCOPE aScope ) const
+{
+    size_t shape = 0;
+
+    // Nested tables are left out because only loadTables() changes them, and it replaces their root too
+    auto addTable =
+            [&]( const std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>& aTables )
+            {
+                if( auto it = aTables.find( aType ); it != aTables.end() )
+                    hash_combine( shape, it->second.get(), it->second->Rows().size() );
+            };
+
+    if( aScope != LIBRARY_TABLE_SCOPE::PROJECT )
+        addTable( m_tables );
+
+    if( aScope != LIBRARY_TABLE_SCOPE::GLOBAL )
+        addTable( m_projectTables );
+
+    return shape;
+}
+
+
 std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::GetRow( LIBRARY_TABLE_TYPE  aType, const wxString& aNickname,
                                                            LIBRARY_TABLE_SCOPE aScope )
 {
-    {
-        std::lock_guard lock( m_rowCacheMutex );
-        auto            key = std::make_tuple( aType, aScope, aNickname );
+    std::shared_lock tablesLock( m_tablesMutex );
+    const size_t     shape = tableShape( aType, aScope );
+    std::lock_guard  lock( m_rowCacheMutex );
+    ROW_INDEX&       index = m_rowCache[{ aType, aScope }];
 
-        if( auto it = m_rowCache.find( key ); it != m_rowCache.end() )
-            return it->second;
+    // Index all rows at once so a caller walking every library does not rebuild the list per lookup or miss
+    if( index.rows.empty() || index.shape != shape )
+    {
+        index.shape = shape;
+        index.rows.clear();
+
+        for( LIBRARY_TABLE_ROW* row : listRows( aType, aScope, true ) )
+            index.rows[row->Nickname()] = row;
     }
 
-    for( LIBRARY_TABLE_ROW* row : Rows( aType, aScope, true ) )
-    {
-        if( row->Nickname() == aNickname )
-        {
-            std::lock_guard lock( m_rowCacheMutex );
-            m_rowCache[std::make_tuple( aType, aScope, aNickname )] = row;
-            return row;
-        }
-    }
+    if( auto it = index.rows.find( aNickname ); it != index.rows.end() )
+        return it->second;
 
     return std::nullopt;
 }
@@ -973,22 +1125,29 @@ void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath,
     }
     else
     {
+        // Declared before the lock so the dropped tables are destroyed after it is released
+        std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>> retired;
+        std::unique_lock                                             lock( m_tablesMutex );
+
         // loadTables() would have cleared m_rowCache before rebuilding the new
         // table; do the same here so cached entries don't point into the
         // project tables we are about to destroy.
         {
-            std::lock_guard lock( m_rowCacheMutex );
+            std::lock_guard cacheLock( m_rowCacheMutex );
             m_rowCache.clear();
         }
 
         if( aTablesToLoad.size() == 0 )
         {
-            m_projectTables.clear();
+            retired.swap( m_projectTables );
         }
         else
         {
             for( LIBRARY_TABLE_TYPE type : aTablesToLoad )
-                m_projectTables.erase( type );
+            {
+                if( auto old = m_projectTables.extract( type ) )
+                    retired.insert( std::move( old ) );
+            }
         }
 
         wxLogTrace( traceLibraries, "New project path %s is not readable, not loading project tables", aProjectPath );
@@ -1022,11 +1181,17 @@ void LIBRARY_MANAGER::ReloadChangedTables( LIBRARY_TABLE_TYPE aType )
 
     // Opening a dialog must never save, so this skips the PCM maintenance that can
     if( changed( m_tables ) )
-        loadGlobalTables( { aType } );
+        loadGlobalTables( { aType }, false );
 
-    // The dialogs always need a global table to edit, even when its file is missing
-    if( !m_tables.contains( aType ) )
-        createEmptyTable( aType, LIBRARY_TABLE_SCOPE::GLOBAL );
+    // The dialogs always need a global table to edit, even when its file is missing. Locked in the order
+    // loadGlobalTables takes, since a pool thread's Rows() may be walking the map
+    {
+        std::unique_lock globalTablesLock = LockGlobalTables();
+        std::unique_lock tablesLock( m_tablesMutex );
+
+        if( !m_tables.contains( aType ) )
+            createEmptyTable( aType, LIBRARY_TABLE_SCOPE::GLOBAL );
+    }
 
     if( changed( m_projectTables ) )
         ReloadTables( LIBRARY_TABLE_SCOPE::PROJECT, { aType } );
@@ -1202,6 +1367,13 @@ LIBRARY_MANAGER& LIBRARY_MANAGER_ADAPTER::Manager() const
 void LIBRARY_MANAGER_ADAPTER::ProjectChanged()
 {
     resetProjectCache();
+
+    // A global row may resolve per project, through ${KIPRJMOD} or a text variable, so load it again where it moved
+    extractGlobalEntries(
+            [this]( const LIB_DATA& aLib )
+            {
+                return aLib.global_owner == this && aLib.row && aLib.uri != getUri( aLib.row );
+            } );
 }
 
 
@@ -1260,6 +1432,13 @@ void LIBRARY_MANAGER_ADAPTER::LeakCachesAtExit()
         }
     }
 
+    // Still held only when a global table reload threw part way
+    for( GLOBAL_ENTRY& entry : m_heldGlobalLibs )
+    {
+        if( entry.mapped().plugin )
+            entry.mapped().plugin->LeakCacheAtExit();
+    }
+
     std::shared_lock lock( globalLibsMutex() );
 
     for( LIB_DATA& lib : globalLibs() | std::views::values )
@@ -1270,33 +1449,150 @@ void LIBRARY_MANAGER_ADAPTER::LeakCachesAtExit()
 }
 
 
+bool LIBRARY_MANAGER_ADAPTER::handles( std::initializer_list<LIBRARY_TABLE_TYPE> aTables ) const
+{
+    return aTables.size() == 0 || std::ranges::find( aTables, Type() ) != aTables.end();
+}
+
+
 void LIBRARY_MANAGER_ADAPTER::GlobalTablesChanged( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables )
 {
-    bool me = aChangedTables.size() == 0;
-
-    for( LIBRARY_TABLE_TYPE type : aChangedTables )
-    {
-        if( type == Type() )
-        {
-            me = true;
-            break;
-        }
-    }
-
-    if( !me )
+    if( !handles( aChangedTables ) )
         return;
 
-    abortLoad();
+    // A cancelled load is queued again by GlobalTablesReloaded()
+    abortLoad( true );
 
     stopRefreshThreads( globalLibs(), globalLibsMutex() );
 
-    // Plugins die after unlocking; their worker threads may need the mutex
-    std::map<wxString, LIB_DATA> retired;
+    std::vector<GLOBAL_ENTRY> retired = extractGlobalEntries(
+            []( const LIB_DATA& )
+            {
+                return true;
+            } );
+
+    for( GLOBAL_ENTRY& entry : retired )
+    {
+        const LIB_DATA& lib = entry.mapped();
+
+        // A table dialog may have assigned over lib.row already, so it is not read. A library built from other
+        // libraries is never held, since they may change under it
+        if( lib.global_owner == this && lib.status.load_status == LOAD_STATUS::LOADED && lib.plugin
+            && !lib.plugin->UsesOtherLibraries() )
+        {
+            m_heldGlobalLibs.push_back( std::move( entry ) );
+        }
+    }
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::GlobalTablesReloaded( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables )
+{
+    // URI expansion below reads project data that only the main thread may touch
+    wxASSERT( wxIsMainThread() );
+
+    if( !handles( aChangedTables ) )
+        return;
+
+    PROF_TIMER timer;
+
+    std::map<wxString, LIBRARY_TABLE_ROW*> rows;
+
+    for( LIBRARY_TABLE_ROW* row : Rows( LIBRARY_TABLE_SCOPE::GLOBAL, true ) )
+        rows[row->Nickname()] = row;
+
+    // Declared before the lock so the entries left in it die after it is released
+    std::vector<GLOBAL_ENTRY> held = std::exchange( m_heldGlobalLibs, {} );
+    std::vector<GLOBAL_ENTRY> kept;
+
+    std::vector<std::pair<size_t, LIBRARY_TABLE_ROW*>> candidates;
+
+    for( size_t ii = 0; ii < held.size(); ++ii )
+    {
+        const LIB_DATA& lib = held[ii].mapped();
+        auto            it = rows.find( held[ii].key() );
+
+        // A changed path variable moves a library without touching its row
+        if( it != rows.end() && sourceOf( *it->second ) == lib.loaded_from && getUri( it->second ) == lib.uri )
+            candidates.emplace_back( ii, it->second );
+    }
+
+    // Stamping reads every file of every held library, which takes many seconds one library at a time. Not the
+    // pool, whose loading workers free up only once the whole preload is done
+    std::vector<char>   unchanged( candidates.size(), 0 );
+    std::atomic<size_t> next = 0;
+
+    auto stamp = [&]()
+    {
+        for( size_t ii = next++; ii < candidates.size(); ii = next++ )
+        {
+            const LIB_DATA& lib = held[candidates[ii].first].mapped();
+            unchanged[ii] = LIBRARY_MANAGER::FileStamp( lib.uri ) == lib.file_stamp;
+        }
+    };
+
+    {
+        std::vector<std::future<void>> stampers;
+        size_t count = std::min<size_t>( std::max( 1u, std::thread::hardware_concurrency() ), candidates.size() );
+
+        try
+        {
+            for( size_t ii = 0; ii < count; ++ii )
+                stampers.push_back( std::async( std::launch::async, stamp ) );
+        }
+        catch( const std::system_error& )
+        {
+            // Out of threads, so this one takes whatever the started workers leave
+            stamp();
+        }
+
+        for( std::future<void>& stamper : stampers )
+            stamper.get();
+    }
+
+    for( size_t ii = 0; ii < candidates.size(); ++ii )
+    {
+        if( !unchanged[ii] )
+            continue;
+
+        GLOBAL_ENTRY& entry = held[candidates[ii].first];
+        entry.mapped().row = candidates[ii].second;
+        kept.push_back( std::move( entry ) );
+    }
+
+    wxLogTrace( traceLibraries, "GlobalTablesReloaded: kept %zu of %zu held libraries, stamped in %.0f ms", kept.size(),
+                held.size(), timer.msecs() );
 
     {
         std::unique_lock lock( globalLibsMutex() );
-        retired.swap( globalLibs() );
+
+        for( GLOBAL_ENTRY& entry : kept )
+        {
+            // Another manager's adapter may have loaded the library again in the meantime
+            if( auto result = globalLibs().insert( std::move( entry ) ); !result.inserted )
+                held.push_back( std::move( result.node ) );
+        }
     }
+
+    RestartAsyncLoad();
+}
+
+
+std::vector<LIBRARY_MANAGER_ADAPTER::GLOBAL_ENTRY>
+LIBRARY_MANAGER_ADAPTER::extractGlobalEntries( const std::function<bool( const LIB_DATA& )>& aPredicate )
+{
+    std::vector<GLOBAL_ENTRY> extracted;
+    std::unique_lock          lock( globalLibsMutex() );
+
+    for( auto it = globalLibs().begin(); it != globalLibs().end(); )
+    {
+        if( aPredicate( it->second ) )
+            extracted.push_back( globalLibs().extract( it++ ) );
+        else
+            ++it;
+    }
+
+    return extracted;
 }
 
 
@@ -1310,19 +1606,13 @@ void LIBRARY_MANAGER_ADAPTER::evictOwnedGlobalEntries()
                             return aLib.global_owner == this;
                         } );
 
-    // Declared before the lock so plugins die after it is released
-    std::vector<std::map<wxString, LIB_DATA>::node_type> retired;
-    std::unique_lock                                     lock( globalLibsMutex() );
-
     // Drop entries this adapter owns, identified by global_owner rather than the row pointer,
     // which another manager could reuse at the same address after this manager frees its tables.
-    for( auto it = globalLibs().begin(); it != globalLibs().end(); )
-    {
-        if( it->second.global_owner == this )
-            retired.push_back( globalLibs().extract( it++ ) );
-        else
-            ++it;
-    }
+    extractGlobalEntries(
+            [this]( const LIB_DATA& aLib )
+            {
+                return aLib.global_owner == this;
+            } );
 }
 
 
@@ -1367,18 +1657,7 @@ void LIBRARY_MANAGER_ADAPTER::stopRefreshThreads(
 
 void LIBRARY_MANAGER_ADAPTER::ProjectTablesChanged( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables )
 {
-    bool me = aChangedTables.size() == 0;
-
-    for( LIBRARY_TABLE_TYPE type : aChangedTables )
-    {
-        if( type == Type() )
-        {
-            me = true;
-            break;
-        }
-    }
-
-    if( !me )
+    if( !handles( aChangedTables ) )
         return;
 
     resetProjectCache();
@@ -1388,18 +1667,7 @@ void LIBRARY_MANAGER_ADAPTER::ProjectTablesChanged( std::initializer_list<LIBRAR
 void LIBRARY_MANAGER_ADAPTER::ProjectTablesReloaded(
         std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables )
 {
-    bool me = aChangedTables.size() == 0;
-
-    for( LIBRARY_TABLE_TYPE type : aChangedTables )
-    {
-        if( type == Type() )
-        {
-            me = true;
-            break;
-        }
-    }
-
-    if( !me )
+    if( !handles( aChangedTables ) )
         return;
 
     // Erase sentinels installed by resetProjectCache() for nicknames that no
@@ -1727,7 +1995,20 @@ bool LIBRARY_MANAGER_ADAPTER::RunPreload( PROGRESS_REPORTER& aReporter, std::ato
 {
     constexpr std::chrono::milliseconds interval( 150 );
 
-    AsyncLoad();
+    uint64_t generation = 0;
+
+    // Waits for the load lock, since a dropped try-lock would read as a finished load
+    auto queue =
+            [&]()
+            {
+                std::unique_lock globalTablesLock = m_manager.LockGlobalTables();
+                std::lock_guard  loadLock( m_loadMutex );
+
+                generation = m_manager.GlobalTablesGeneration();
+                asyncLoadLocked();
+            };
+
+    queue();
 
     while( !aAbort.load() )
     {
@@ -1736,12 +2017,19 @@ bool LIBRARY_MANAGER_ADAPTER::RunPreload( PROGRESS_REPORTER& aReporter, std::ato
         std::optional<float> progress = AsyncLoadProgress();
         aReporter.SetCurrentProgress( progress.value_or( 1 ) );
 
-        if( progress.value_or( 1 ) >= 1 )
+        if( progress.value_or( 1 ) < 1 )
+            continue;
+
+        // A global reload resets the count when it cancels the load, so queue the new rows instead of finishing
+        if( m_manager.GlobalTablesGeneration() != generation )
         {
-            // Workers can still be retiring once the count reaches the total
-            BlockUntilLoaded();
-            return true;
+            queue();
+            continue;
         }
+
+        // Workers can still be retiring once the count reaches the total
+        BlockUntilLoaded();
+        return true;
     }
 
     aAbort.store( false );
@@ -2061,10 +2349,9 @@ std::optional<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded( const wxString&
 }
 
 
-LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString& aNickname,
-                                                                  LIBRARY_TABLE_SCOPE aScope,
+LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString& aNickname, LIBRARY_TABLE_SCOPE aScope,
                                                                   std::map<wxString, LIB_DATA>& aTarget,
-                                                                  std::shared_mutex& aMutex )
+                                                                  std::shared_mutex& aMutex, const wxString* aUri )
 {
     bool present = false;
 
@@ -2083,6 +2370,12 @@ LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString
 
             if( LIBRARY_RESULT<IO_BASE*> plugin = createPlugin( row ); plugin.has_value() )
             {
+                wxString uri = aUri ? *aUri : getUri( row );
+
+                // Taken before the plugin reads anything, so a rewrite in between only costs a reload. Only a global
+                // library is held across reloads
+                size_t stamp = aScope == LIBRARY_TABLE_SCOPE::GLOBAL ? LIBRARY_MANAGER::FileStamp( uri ) : 0;
+
                 // Declared before the lock so a losing candidate dies unlocked; its worker may need the mutex
                 std::unique_ptr<IO_BASE> candidate( *plugin );
                 std::unique_lock         lock( aMutex );
@@ -2093,6 +2386,9 @@ LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString
                 {
                     slot.status.load_status = LOAD_STATUS::LOADING;
                     slot.row = row;
+                    slot.uri = uri;
+                    slot.loaded_from = sourceOf( *row );
+                    slot.file_stamp = stamp;
                     slot.plugin = std::move( candidate );
 
                     if( aScope == LIBRARY_TABLE_SCOPE::GLOBAL )
@@ -2115,21 +2411,39 @@ LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString
 }
 
 
-LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString& aNickname )
+LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadIfNeeded( const wxString& aNickname, const wxString* aUri )
 {
-    LIBRARY_RESULT<LIB_DATA*> result = loadFromScope( aNickname, LIBRARY_TABLE_SCOPE::PROJECT,
-                                                      m_libraries, m_librariesMutex );
+    LIBRARY_RESULT<LIB_DATA*> result =
+            loadFromScope( aNickname, LIBRARY_TABLE_SCOPE::PROJECT, m_libraries, m_librariesMutex, aUri );
 
     if( !result.has_value() || *result )
         return result;
 
-    result = loadFromScope( aNickname, LIBRARY_TABLE_SCOPE::GLOBAL, globalLibs(), globalLibsMutex() );
+    result = loadFromScope( aNickname, LIBRARY_TABLE_SCOPE::GLOBAL, globalLibs(), globalLibsMutex(), aUri );
 
     if( !result.has_value() || *result )
         return result;
 
     wxString msg = wxString::Format( _( "Library %s not found" ), aNickname );
     return tl::unexpected( LIBRARY_ERROR( msg ) );
+}
+
+
+size_t LIBRARY_MANAGER_ADAPTER::LoadedFileStamp( const wxString& aNickname ) const
+{
+    {
+        std::shared_lock lock( m_librariesMutex );
+
+        if( auto it = m_libraries.find( aNickname ); it != m_libraries.end() )
+            return it->second.file_stamp;
+    }
+
+    std::shared_lock lock( globalLibsMutex() );
+
+    if( auto it = globalLibs().find( aNickname ); it != globalLibs().end() )
+        return it->second.file_stamp;
+
+    return 0;
 }
 
 
@@ -2155,6 +2469,8 @@ std::optional<LIB_STATUS> LIBRARY_MANAGER_ADAPTER::GetLibraryStatus( const wxStr
 
 void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
 {
+    // Waits out a global reload on another thread, which frees the rows this would queue
+    std::unique_lock globalTablesLock = m_manager.LockGlobalTables();
     std::unique_lock<std::mutex> asyncLock( m_loadMutex, std::try_to_lock );
 
     if( !asyncLock )
@@ -2317,7 +2633,8 @@ void LIBRARY_MANAGER_ADAPTER::asyncLoadLocked()
 
 bool LIBRARY_MANAGER_ADAPTER::loadQueuedRow( const LOAD_WORK& aWork )
 {
-    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aWork.nickname );
+    // URI expansion reads project data that is not thread-safe, so the queue resolved it already
+    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aWork.nickname, &aWork.uri );
 
     if( result.has_value() )
     {
@@ -2353,6 +2670,10 @@ bool LIBRARY_MANAGER_ADAPTER::loadQueuedRow( const LOAD_WORK& aWork )
                     lib->status.load_status = LOAD_STATUS::INVALID;
                     return false;
                 }
+
+                // A caller that needed the library at once loaded it already, and reading it again would hide it
+                if( lib->status.load_status == LOAD_STATUS::LOADED )
+                    return true;
 
                 lib->status.load_status = LOAD_STATUS::LOADING;
             }
@@ -2390,6 +2711,15 @@ bool LIBRARY_MANAGER_ADAPTER::loadQueuedRow( const LOAD_WORK& aWork )
     }
 
     return true;
+}
+
+
+LIB_STATUS LIBRARY_MANAGER_ADAPTER::setStatus( LIB_DATA* aLib, const LIB_STATUS& aStatus )
+{
+    std::unique_lock lock( scopeMutex( aLib->row->Scope() ) );
+
+    aLib->status = aStatus;
+    return aStatus;
 }
 
 

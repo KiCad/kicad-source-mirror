@@ -98,6 +98,8 @@ public:
         m_adapter = aAdapter;
     }
 
+    bool UsesOtherLibraries() const override { return true; }
+
     bool SupportsConfigurationDialog() const override { return true; }
 
     DIALOG_SHIM* CreateConfigurationDialog( wxWindow* aParent, const wxString& aLibraryPath ) override;

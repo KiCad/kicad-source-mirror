@@ -88,6 +88,7 @@
 #include <wx/base64.h>
 #include <wx/log.h>
 #include <wx/mstream.h>
+#include <wx/window.h>
 
 // We currently represent board units as integers.  Any values that are
 // larger or smaller than those board units represent undefined behavior for

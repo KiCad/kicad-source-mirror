@@ -94,6 +94,8 @@ public:
         m_adapter = aAdapter;
     }
 
+    bool UsesOtherLibraries() const override { return true; }
+
     HTTP_LIB_SETTINGS* Settings() const { return m_settings.get(); }
 
     using CONNECTION_BUILDER = std::function<std::unique_ptr<HTTP_LIB_CONNECTION>( const HTTP_LIB_SOURCE& )>;
