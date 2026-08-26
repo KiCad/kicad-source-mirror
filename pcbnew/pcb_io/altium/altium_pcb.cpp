@@ -99,6 +99,61 @@ FOOTPRINT* ALTIUM_PCB::HelperGetFootprint( uint16_t aComponent ) const
 }
 
 
+std::shared_ptr<EMBEDDED_FILES::EMBEDDED_FILE>
+ALTIUM_PCB::HelperEmbedModel( FOOTPRINT* aFootprint, const wxString& aModelName,
+                              const std::vector<char>& aCompressedData, bool& aIsNew )
+{
+    EMBEDDED_FILES* embeddedFiles = aFootprint->GetEmbeddedFiles();
+    const auto&     files = embeddedFiles->EmbeddedFileMap();
+    auto            it = files.find( aModelName );
+
+    aIsNew = it == files.end();
+
+    // Several bodies of one component routinely share a model, and inflating it per body would
+    // cost a full STEP decompression each time
+    if( !aIsNew )
+        return it->second;
+
+    auto file = std::make_shared<EMBEDDED_FILES::EMBEDDED_FILE>();
+    file->name = aModelName;
+    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL;
+
+    wxMemoryInputStream compressedStream( aCompressedData.data(), aCompressedData.size() );
+    wxZlibInputStream   zlibStream( compressedStream );
+
+    // Altium compresses STEP at roughly 5:1, so guess high and double rather than reallocate
+    // on every read
+    file->decompressedData.resize( aCompressedData.size() * 6 );
+    size_t offset = 0;
+
+    while( !zlibStream.Eof() )
+    {
+        zlibStream.Read( file->decompressedData.data() + offset,
+                         file->decompressedData.size() - offset );
+
+        size_t bytesRead = zlibStream.LastRead();
+
+        if( !bytesRead )
+            break;
+
+        offset += bytesRead;
+
+        if( offset >= file->decompressedData.size() )
+            file->decompressedData.resize( 2 * file->decompressedData.size() );
+    }
+
+    file->decompressedData.resize( offset );
+
+    // The guess above overshoots by up to 6x and resize() keeps the capacity, which the board
+    // would then hold for as long as it is open
+    file->decompressedData.shrink_to_fit();
+
+    embeddedFiles->AddFile( file );
+
+    return file;
+}
+
+
 void HelperShapeLineChainFromAltiumVertices( SHAPE_LINE_CHAIN& aLine,
                                              const std::vector<ALTIUM_VERTICE>& aVertices )
 {
@@ -1635,47 +1690,18 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
         return;
     }
 
-    EMBEDDED_FILES::EMBEDDED_FILE* file = new EMBEDDED_FILES::EMBEDDED_FILE();
-    file->name = aElem.modelName;
+    wxString modelName = aElem.modelName.IsEmpty() ? model->first.name : aElem.modelName;
+    bool     isNew = false;
 
-    if( file->name.IsEmpty() )
-        file->name = model->first.name;
+    std::shared_ptr<EMBEDDED_FILES::EMBEDDED_FILE> file =
+            HelperEmbedModel( aFootprint, modelName, model->second, isNew );
 
-    // Decompress the model data before assigning
-    std::vector<char>   decompressedData;
-    wxMemoryInputStream compressedStream( model->second.data(), model->second.size() );
-    wxZlibInputStream   zlibStream( compressedStream );
-
-    // Reserve some space, assuming decompressed data is larger -- STEP file
-    // compression is typically 5:1 using zlib like Altium does
-    decompressedData.resize( model->second.size() * 6 );
-    size_t offset = 0;
-
-    while( !zlibStream.Eof() )
-    {
-        zlibStream.Read( decompressedData.data() + offset, decompressedData.size() - offset );
-        size_t bytesRead = zlibStream.LastRead();
-
-        if( !bytesRead )
-            break;
-
-        offset += bytesRead;
-
-        if( offset >= decompressedData.size() )
-            decompressedData.resize( 2 * decompressedData.size() ); // Resizing is expensive, avoid if we can
-    }
-
-    decompressedData.resize( offset );
-
-    file->decompressedData = std::move( decompressedData );
-    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL;
-
-    EMBEDDED_FILES::CompressAndEncode( *file );
-    aFootprint->GetEmbeddedFiles()->AddFile( file );
+    if( isNew )
+        EMBEDDED_FILES::CompressAndEncode( *file );
 
     FP_3DMODEL modelSettings;
 
-    modelSettings.m_Filename = aFootprint->GetEmbeddedFiles()->GetEmbeddedFileLink( *file );
+    modelSettings.m_Filename = file->GetLink();
 
     modelSettings.m_Offset.x = pcbIUScale.IUTomm( (int) aElem.modelPosition.x );
     modelSettings.m_Offset.y = -pcbIUScale.IUTomm( (int) aElem.modelPosition.y );
@@ -1764,29 +1790,25 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&    
 
         const ALTIUM_EMBEDDED_MODEL_DATA& modelData = modelTuple->second;
         FOOTPRINT*                        footprint = m_components.at( elem.component );
+        bool                              isNew = false;
 
-        EMBEDDED_FILES::EMBEDDED_FILE* file = new EMBEDDED_FILES::EMBEDDED_FILE();
-        file->name = modelData.m_modelname;
+        std::shared_ptr<EMBEDDED_FILES::EMBEDDED_FILE> file =
+                HelperEmbedModel( footprint, modelData.m_modelname, modelData.m_data, isNew );
 
-        wxMemoryInputStream  compressedStream( modelData.m_data.data(), modelData.m_data.size() );
-        wxZlibInputStream    zlibStream( compressedStream );
-        wxMemoryOutputStream decompressedStream;
-
-        zlibStream.Read( decompressedStream );
-        file->decompressedData.resize( decompressedStream.GetSize() );
-        decompressedStream.CopyTo( file->decompressedData.data(), file->decompressedData.size() );
-
-        footprint->GetEmbeddedFiles()->AddFile( file );
-
-        embeddedFutures.push_back( tp.submit_task(
-                [file]()
-                {
-                    EMBEDDED_FILES::CompressAndEncode( *file );
-                } ) );
+        if( isNew )
+        {
+            // The task has to own the payload too; a throw further down the stream skips the
+            // wait below and multi_future abandons whatever is still running
+            embeddedFutures.push_back( tp.submit_task(
+                    [file]()
+                    {
+                        EMBEDDED_FILES::CompressAndEncode( *file );
+                    } ) );
+        }
 
         FP_3DMODEL modelSettings;
 
-        modelSettings.m_Filename = footprint->GetEmbeddedFiles()->GetEmbeddedFileLink( *file );
+        modelSettings.m_Filename = file->GetLink();
         VECTOR2I fpPosition = footprint->GetPosition();
 
         modelSettings.m_Offset.x =

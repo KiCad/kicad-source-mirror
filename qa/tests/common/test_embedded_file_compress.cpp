@@ -347,4 +347,35 @@ BOOST_AUTO_TEST_CASE( AssignSharedFromIsIdempotent )
 }
 
 
+// AddFile() destroys a name-duplicate, so it must hand back the entry the collection holds;
+// callers that kept using their own pointer were reading freed memory (issue 25362)
+BOOST_AUTO_TEST_CASE( AddFileReturnsTheStoredEntry )
+{
+    EMBEDDED_FILES files;
+
+    auto* first = new EMBEDDED_FILES::EMBEDDED_FILE();
+    first->name = wxS( "duplicate.step" );
+    first->decompressedData.assign( { 'k', 'e', 'p', 't' } );
+
+    BOOST_REQUIRE_EQUAL( files.AddFile( first ), first );
+
+    auto* duplicate = new EMBEDDED_FILES::EMBEDDED_FILE();
+    duplicate->name = wxS( "duplicate.step" );
+    duplicate->decompressedData.assign( { 'd', 'r', 'o', 'p', 'p', 'e', 'd' } );
+
+    EMBEDDED_FILES::EMBEDDED_FILE* stored = files.AddFile( duplicate );
+
+    BOOST_REQUIRE_EQUAL( stored, first );
+    BOOST_CHECK_EQUAL( files.EmbeddedFileMap().size(), 1 );
+
+    // The returned pointer must stay usable; the caller's own is already gone
+    BOOST_REQUIRE_EQUAL( EMBEDDED_FILES::CompressAndEncode( *stored ),
+                         EMBEDDED_FILES::RETURN_CODE::OK );
+    BOOST_CHECK( stored->Validate() );
+    BOOST_CHECK_EQUAL( std::string( stored->decompressedData.begin(),
+                                    stored->decompressedData.end() ),
+                       std::string( "kept" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
