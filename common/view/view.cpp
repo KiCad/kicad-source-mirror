@@ -1262,21 +1262,16 @@ void VIEW::clearGroupCache()
 
 void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
+    // updateLayers updates geometry too, so we do not have to update both of them at the
+    // same time
+    if( aUpdateFlags & LAYERS )
+        updateLayers( aItem );
+    else if( aUpdateFlags & GEOMETRY )
+        updateBbox( aItem );
+
+    // Now that we have initialized, set flags to ALL for the code below
     if( aUpdateFlags & INITIAL_ADD )
-    {
-        // Don't update layers or bbox, since it was done in VIEW::Add()
-        // Now that we have initialized, set flags to ALL for the code below
         aUpdateFlags = ALL;
-    }
-    else
-    {
-        // updateLayers updates geometry too, so we do not have to update both of them at the
-        // same time
-        if( aUpdateFlags & LAYERS )
-            updateLayers( aItem );
-        else if( aUpdateFlags & GEOMETRY )
-            updateBbox( aItem );
-    }
 
     std::vector<int> layers = aItem->ViewGetLayers();
 

@@ -566,7 +566,7 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     {
         if( dataItem->GetDrawItems().empty() )
         {
-            dataItem->SyncDrawItems( nullptr, getView() );
+            m_frame->SyncDataItem( dataItem );
             dataItem->GetDrawItems().front()->SetSelected();
         }
     }
