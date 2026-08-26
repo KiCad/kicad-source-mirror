@@ -30,7 +30,7 @@ template <class T> class RANGED_NUM {
             m_toleranceMinus( aToleranceMinus )
         {}
 
-        operator T()
+        operator T() const
         {
             return m_value;
         }
@@ -45,6 +45,8 @@ template <class T> class RANGED_NUM {
         {
             return ( aOther >= m_value - m_toleranceMinus && aOther <= m_value + m_tolerancePlus );
         }
+
+        const T Value() const { return m_value; }
 
     private:
         T m_value, m_tolerancePlus, m_toleranceMinus;
