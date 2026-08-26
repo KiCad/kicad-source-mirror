@@ -247,7 +247,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         if( m_item == aCandidate )
             return true;
 
-        if( m_ctx->options.m_filter && !m_ctx->options.m_filter( aCandidate ) )
+        if( m_ctx->options.m_filter && !m_ctx->options.m_filter( aCandidate, m_item ) )
             return true;
 
         if( visit( aCandidate ) )

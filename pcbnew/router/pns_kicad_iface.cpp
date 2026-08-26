@@ -82,6 +82,8 @@
 #include "pns_node.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
+#include "pns_diff_pair.h"
+#include "pns_topology.h"
 #include "router_preview_item.h"
 
 typedef VECTOR2I::extended_type ecoord;

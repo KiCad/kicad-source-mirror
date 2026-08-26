@@ -110,6 +110,7 @@ struct OBSTACLE
     }
 };
 
+typedef std::function<bool(const ITEM* aTestItem, const ITEM* aRefItem)> COLLISION_FILTER_FUNC;
 
 struct COLLISION_SEARCH_OPTIONS
 {
@@ -118,7 +119,7 @@ struct COLLISION_SEARCH_OPTIONS
     int m_limitCount = -1;
     int m_kindMask = -1;
     bool m_useClearanceEpsilon = true;
-    std::function<bool(const ITEM*)> m_filter = nullptr;
+    COLLISION_FILTER_FUNC m_filter = nullptr;
     int m_layer = -1;
 };
 
