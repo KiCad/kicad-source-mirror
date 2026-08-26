@@ -210,6 +210,16 @@ public:
     void RenameFootprintTab( const LIB_ID& aOldId, const LIB_ID& aNewId );
 
     /**
+     * Return true if any footprint editor tab has unsaved changes.
+     */
+    bool HasModifiedFootprintTabs() const;
+
+    /**
+     * Replace the clean open editor tab matching aFootprint, if any, with the saved footprint.
+     */
+    void RefreshLibraryFootprintTab( const FOOTPRINT& aFootprint );
+
+    /**
      * Return the adapter object that provides the stored data.
      */
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& GetLibTreeAdapter() { return m_adapter; }

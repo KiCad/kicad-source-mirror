@@ -1464,6 +1464,68 @@ void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_I
 }
 
 
+bool FOOTPRINT_EDIT_FRAME::HasModifiedFootprintTabs() const
+{
+    for( const std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+    {
+        if( ctx.get() == m_activeTab )
+        {
+            if( GetScreen() && GetScreen()->IsContentModified() )
+                return true;
+        }
+        else if( ctx->IsModified() )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+void FOOTPRINT_EDIT_FRAME::RefreshLibraryFootprintTab( const FOOTPRINT& aFootprint )
+{
+    if( !m_tabsPanel )
+        return;
+
+    const LIB_ID&  footprintId = aFootprint.GetFPID();
+    const wxString key = footprintId.GetLibNickname() + wxT( ":" ) + footprintId.GetLibItemName();
+    const int      idx = m_tabsPanel->FindTab( key );
+
+    if( idx < 0 || idx >= static_cast<int>( m_tabContexts.size() ) )
+        return;
+
+    FOOTPRINT_EDITOR_TAB_CONTEXT* ctx = m_tabContexts[idx].get();
+    FOOTPRINT_EDITOR_TAB_CONTEXT* originalActive = m_activeTab;
+
+    activateFootprintTab( ctx );
+
+    // The old history contains pointers into the footprint ReloadFootprint is about to delete.
+    freeUndoRedoCommandsWithItems( m_undoList, m_redoList );
+    ctx->SavedSelection().clear();
+
+    FOOTPRINT* replacement = static_cast<FOOTPRINT*>( aFootprint.Clone() );
+    replacement->SetParent( nullptr );
+    installFootprintOnActiveBoard( replacement );
+    replacement->ClearFlags();
+    ClearModify();
+
+    if( originalActive && originalActive != ctx )
+        activateFootprintTab( originalActive );
+
+    FOOTPRINT* activeFootprint = GetBoard()->GetFirstFootprint();
+
+    if( IsCurrentFPFromBoard() )
+        setFPWatcher( nullptr );
+    else
+        setFPWatcher( activeFootprint );
+
+    UpdateView();
+    GetCanvas()->ForceRefresh();
+    Update3DView( true, true );
+}
+
+
 bool FOOTPRINT_EDIT_FRAME::hasDirtyInactiveTransientTabs() const
 {
     for( const std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
