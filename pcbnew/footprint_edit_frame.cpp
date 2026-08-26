@@ -1489,7 +1489,7 @@ void FOOTPRINT_EDIT_FRAME::RefreshLibraryFootprintTab( const FOOTPRINT& aFootpri
         return;
 
     const LIB_ID&  footprintId = aFootprint.GetFPID();
-    const wxString key = footprintId.GetLibNickname() + wxT( ":" ) + footprintId.GetLibItemName();
+    const wxString key = footprintId.GetLibNickname().wx_str() + wxT( ':' ) + footprintId.GetLibItemName().wx_str();
     const int      idx = m_tabsPanel->FindTab( key );
 
     if( idx < 0 || idx >= static_cast<int>( m_tabContexts.size() ) )
