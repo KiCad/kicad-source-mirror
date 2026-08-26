@@ -205,6 +205,12 @@ public:
     DS_DATA_ITEM* AddDrawingSheetItem( int aType );
 
     /**
+     * Rebuild a data item's draw items in the live view, with the same text expansion
+     * context a full rebuild uses.
+     */
+    void SyncDataItem( DS_DATA_ITEM* aItem );
+
+    /**
      * Must be called after a change in order to set the "modify" flag.
      */
     void OnModify() override;
