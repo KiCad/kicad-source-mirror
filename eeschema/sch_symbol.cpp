@@ -424,6 +424,37 @@ bool SCH_SYMBOL::Deserialize( const google::protobuf::Any& aContainer )
         libSymbol->SetFPFilters( filters );
     }
 
+    if( def.has_pin_maps() )
+    {
+        PIN_MAP_SET pinMapSet;
+
+        for( const PinMap& map : def.pin_maps().pin_maps() )
+        {
+            PIN_MAP pinMap( wxString::FromUTF8( map.name() ) );
+
+            for( const PinMapEntry& entry : map.entries() )
+            {
+                pinMap.SetEntry( wxString::FromUTF8( entry.pin_number() ),
+                                 wxString::FromUTF8( entry.pad_number() ) );
+            }
+
+            pinMapSet.AddOrReplace( std::move( pinMap ) );
+        }
+
+        std::vector<ASSOCIATED_FOOTPRINT> associatedFootprints;
+
+        for( const AssociatedFootprint& footprint : def.pin_maps().associated_footprints() )
+        {
+            ASSOCIATED_FOOTPRINT assoc;
+            assoc.m_FootprintLibId = UnpackLibId( footprint.footprint() );
+            assoc.m_MapName        = wxString::FromUTF8( footprint.map_name() );
+            associatedFootprints.push_back( std::move( assoc ) );
+        }
+
+        libSymbol->SetPinMaps( pinMapSet );
+        libSymbol->SetAssociatedFootprints( std::move( associatedFootprints ) );
+    }
+
     SetLibSymbol( libSymbol );
 
     if( symbol.has_body_style() )

@@ -196,7 +196,6 @@ set( QA_EESCHEMA_SRCS
     test_pin_map_instance_override.cpp
     test_pin_map_resolver.cpp
     test_pin_map_erc.cpp
-    test_pin_map_api.cpp
     test_pin_map_netlist.cpp
     test_sch_netclass.cpp
     test_sch_pin.cpp

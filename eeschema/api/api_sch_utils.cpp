@@ -178,11 +178,9 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
         pin->Serialize( *item->mutable_item() );
     }
 
-    // Pin-to-pad maps (issue #2282): report the library symbol's effective bundle and, on the
-    // instance, the active override.
     if( const LIB_SYMBOL* lib = aInput->GetLibSymbolRef().get() )
     {
-        kiapi::schematic::types::LibSymbolPinMaps* pinMaps = def->mutable_pin_maps();
+        kiapi::schematic::types::SymbolPinMaps* pinMaps = def->mutable_pin_maps();
 
         for( const ASSOCIATED_FOOTPRINT& assoc : lib->GetEffectiveAssociatedFootprints() )
         {

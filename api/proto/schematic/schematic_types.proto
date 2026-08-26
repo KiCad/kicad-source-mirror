@@ -375,7 +375,6 @@ message SchematicSymbolVariant
   map<string, string> fields = 4;
 }
 
-// One symbol-pin to footprint-pad mapping (issue #2282).
 message PinMapEntry
 {
   string pin_number = 1;
@@ -393,11 +392,11 @@ message PinMap
 message AssociatedFootprint
 {
   kiapi.common.types.LibraryIdentifier footprint = 1;
-  string map_name                                 = 2;
+  string map_name = 2;
 }
 
 // The pin-map bundle owned by a library symbol.
-message LibSymbolPinMaps
+message SymbolPinMaps
 {
   repeated AssociatedFootprint associated_footprints = 1;
   repeated PinMap pin_maps                           = 2;
@@ -412,7 +411,7 @@ enum PinMapOverrideMode
   PMOM_DELEGATE_TO_UNIT_1  = 4;
 }
 
-// A per-instance override of the active pin map (issue #2282).
+// A per-instance override of the active pin map
 message PinMapInstanceOverride
 {
   PinMapOverrideMode mode      = 1;
@@ -442,7 +441,7 @@ message SchematicSymbol
   string keywords = 12;
   repeated string footprint_filters = 13;
 
-  LibSymbolPinMaps pin_maps = 14;
+  SymbolPinMaps pin_maps = 14;
 }
 
 message SchematicSymbolTransform
