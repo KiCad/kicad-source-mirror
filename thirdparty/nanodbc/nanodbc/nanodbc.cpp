@@ -157,7 +157,7 @@ using nanodbc::wide_string;
  *
  * KICAD-SPECIFIC ADDITION
  *
- * If we are compiling on Apple with Clang >= 17, the version of LLVM no longer includes a generic template for
+ * If we are compiling against libc++ >= 19, the version of LLVM no longer includes a generic template for
  * char_traits for char types which are not specified in the C++ standard. We define our own here for types required by
  * the database library.
  *
@@ -169,8 +169,8 @@ using nanodbc::wide_string;
  *
  **********************************************************************************************************************/
 
-#ifdef __APPLE__
-#if __clang_major__ >= 17
+#if defined( _LIBCPP_VERSION )
+#if _LIBCPP_VERSION >= 190102
 
 template <>
 struct std::char_traits<NANODBC_SQLCHAR>
