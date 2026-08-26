@@ -57,19 +57,44 @@ PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, FIELD_T aFieldId, const wxString& a
 }
 
 
-void PCB_FIELD::Serialize( google::protobuf::Any &aContainer ) const
+void PCB_FIELD::Serialize( kiapi::board::types::Field& field ) const
 {
-    kiapi::board::types::Field field;
-
-    google::protobuf::Any anyText;
-    PCB_TEXT::Serialize( anyText );
-    anyText.UnpackTo( field.mutable_text() );
+    PCB_TEXT::Serialize( *field.mutable_text() );
 
     field.set_name( GetCanonicalName().ToStdString() );
     field.mutable_id()->set_id( (int) GetId() );
     field.set_visible( IsVisible() );
+}
 
+
+void PCB_FIELD::Serialize( google::protobuf::Any &aContainer ) const
+{
+    kiapi::board::types::Field field;
+    Serialize( field );
     aContainer.PackFrom( field );
+}
+
+
+bool PCB_FIELD::Deserialize( const kiapi::board::types::Field& field )
+{
+    if( field.has_id() )
+        setId( (FIELD_T) field.id().id() );
+
+    // Mandatory fields have a blank Name in the KiCad object
+    if( !IsMandatory() )
+        SetName( wxString( field.name().c_str(), wxConvUTF8 ) );
+
+    if( field.has_text() )
+    {
+        PCB_TEXT::Deserialize( field.text() );
+    }
+
+    SetVisible( field.visible() );
+
+    if( field.text().layer() == kiapi::board::types::BoardLayer::BL_UNKNOWN )
+        SetLayer( F_SilkS );
+
+    return true;
 }
 
 
@@ -80,26 +105,7 @@ bool PCB_FIELD::Deserialize( const google::protobuf::Any &aContainer )
     if( !aContainer.UnpackTo( &field ) )
         return false;
 
-    if( field.has_id() )
-        setId( (FIELD_T) field.id().id() );
-
-    // Mandatory fields have a blank Name in the KiCad object
-    if( !IsMandatory() )
-        SetName( wxString( field.name().c_str(), wxConvUTF8 ) );
-
-    if( field.has_text() )
-    {
-        google::protobuf::Any anyText;
-        anyText.PackFrom( field.text() );
-        PCB_TEXT::Deserialize( anyText );
-    }
-
-    SetVisible( field.visible() );
-
-    if( field.text().layer() == kiapi::board::types::BoardLayer::BL_UNKNOWN )
-        SetLayer( F_SilkS );
-
-    return true;
+    return Deserialize( field );
 }
 
 

@@ -39,6 +39,11 @@ class EDA_DRAW_FRAME;
 class FOOTPRINT;
 class MSG_PANEL_ITEM;
 
+namespace kiapi::common::types
+{
+    class GraphicShape;
+}
+
 using KIGFX::COLOR4D;
 
 enum class SHAPE_T : int
@@ -113,6 +118,9 @@ public:
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
+    void Serialize( kiapi::common::types::GraphicShape& aOutput ) const;
+    bool Deserialize( const kiapi::common::types::GraphicShape& aInput );
 
     wxString ShowShape() const;
 

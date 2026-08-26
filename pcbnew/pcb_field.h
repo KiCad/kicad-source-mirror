@@ -30,6 +30,11 @@
 
 class BOARD_DESIGN_SETTINGS;
 
+namespace kiapi::board::types
+{
+    class Field;
+}
+
 class PCB_FIELD : public PCB_TEXT
 {
 public:
@@ -39,6 +44,9 @@ public:
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
+    void Serialize( kiapi::board::types::Field& aOutput ) const;
+    bool Deserialize( const kiapi::board::types::Field& aInput );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {

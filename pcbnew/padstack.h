@@ -299,6 +299,9 @@ public:
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
+    void Serialize( kiapi::board::types::PadStack& aOutput ) const;
+    bool Deserialize( const kiapi::board::types::PadStack& aInput );
+
     /**
        * Compare two padstacks and return 0 if they are equal.
        *

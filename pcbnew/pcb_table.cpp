@@ -107,11 +107,7 @@ void PCB_TABLE::Serialize( google::protobuf::Any& aContainer ) const
 
     for( const PCB_TABLECELL* cell : m_cells )
     {
-        google::protobuf::Any cellAny;
-        cell->Serialize( cellAny );
-
-        types::TableCell* tableCell = table.add_cells();
-        cellAny.UnpackTo( tableCell );
+        cell->Serialize( *table.add_cells() );
     }
 
     table.set_external_border( m_strokeExternal ? types::TSM_ENABLED : types::TSM_DISABLED );
@@ -156,10 +152,7 @@ bool PCB_TABLE::Deserialize( const google::protobuf::Any& aContainer )
     {
         PCB_TABLECELL* cell = new PCB_TABLECELL( this );
 
-        google::protobuf::Any cellAny;
-        cellAny.PackFrom( protoCell );
-
-        if( !cell->Deserialize( cellAny ) )
+        if( !cell->Deserialize( protoCell ) )
         {
             delete cell;
             continue;

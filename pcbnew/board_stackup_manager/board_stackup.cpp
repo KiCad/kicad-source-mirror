@@ -420,10 +420,9 @@ bool BOARD_STACKUP::operator==( const BOARD_STACKUP& aOther ) const
 }
 
 
-void BOARD_STACKUP::Serialize( google::protobuf::Any& aContainer ) const
+void BOARD_STACKUP::Serialize( kiapi::board::BoardStackup& stackup ) const
 {
     using namespace kiapi::board;
-    BoardStackup stackup;
 
     for( const BOARD_STACKUP_ITEM* item : m_list )
     {
@@ -511,11 +510,30 @@ void BOARD_STACKUP::Serialize( google::protobuf::Any& aContainer ) const
             ToProtoEnum<BS_EDGE_CONNECTOR_CONSTRAINTS, BoardEdgeConnectorType>( m_EdgeConnectorConstraints ) );
     edge->mutable_plating()->set_has_edge_plating( m_EdgePlating );
 
+}
+
+
+void BOARD_STACKUP::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::board::BoardStackup stackup;
+    Serialize( stackup );
     aContainer.PackFrom( stackup );
 }
 
 
 bool BOARD_STACKUP::Deserialize( const google::protobuf::Any& aContainer )
+{
+    // Read-only for now
+    kiapi::board::BoardStackup stackup;
+
+    if( !aContainer.UnpackTo( &stackup ) )
+        return false;
+
+    return Deserialize( stackup );
+}
+
+
+bool BOARD_STACKUP::Deserialize( const kiapi::board::BoardStackup& aInput )
 {
     // Read-only for now
     return false;

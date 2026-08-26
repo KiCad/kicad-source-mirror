@@ -171,10 +171,9 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
 }
 
 
-void EDA_TEXT::Serialize( google::protobuf::Any& aContainer ) const
+void EDA_TEXT::Serialize( kiapi::common::types::Text& text ) const
 {
     using namespace kiapi::common;
-    types::Text text;
 
     text.set_text( GetText().ToUTF8() );
     text.set_hyperlink( GetHyperlink().ToUTF8() );
@@ -185,17 +184,21 @@ void EDA_TEXT::Serialize( google::protobuf::Any& aContainer ) const
     PackTextAttributes( *attrs, GetAttributes() );
     attrs->set_visible( true );
 
+}
+
+
+void EDA_TEXT::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::common::types::Text text;
+    Serialize( text );
     aContainer.PackFrom( text );
 }
 
 
-bool EDA_TEXT::Deserialize( const google::protobuf::Any& aContainer )
+bool EDA_TEXT::Deserialize( const kiapi::common::types::Text& text )
 {
     using namespace kiapi::common;
-    types::Text text;
 
-    if( !aContainer.UnpackTo( &text ) )
-        return false;
 
     SetText( wxString( text.text().c_str(), wxConvUTF8 ) );
     SetHyperlink( wxString( text.hyperlink().c_str(), wxConvUTF8 ) );
@@ -209,6 +212,17 @@ bool EDA_TEXT::Deserialize( const google::protobuf::Any& aContainer )
     }
 
     return true;
+}
+
+
+bool EDA_TEXT::Deserialize( const google::protobuf::Any& aContainer )
+{
+    kiapi::common::types::Text text;
+
+    if( !aContainer.UnpackTo( &text ) )
+        return false;
+
+    return Deserialize( text );
 }
 
 

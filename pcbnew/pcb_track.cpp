@@ -543,9 +543,7 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
 
     PADSTACK padstack = Padstack();
 
-    google::protobuf::Any padStackWrapper;
-    padstack.Serialize( padStackWrapper );
-    padStackWrapper.UnpackTo( via.mutable_pad_stack() );
+    padstack.Serialize( *via.mutable_pad_stack() );
 
     // PADSTACK::m_layerSet is not used by vias
     via.mutable_pad_stack()->clear_layers();

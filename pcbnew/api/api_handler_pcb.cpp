@@ -951,11 +951,8 @@ HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup(
         return tl::unexpected( documentValidation.error() );
 
     BoardStackupResponse  response;
-    google::protobuf::Any any;
 
-    frame()->GetBoard()->GetStackupOrDefault().Serialize( any );
-
-    any.UnpackTo( response.mutable_stackup() );
+    frame()->GetBoard()->GetStackupOrDefault().Serialize( *response.mutable_stackup() );
 
     // User-settable layer names are not stored in BOARD_STACKUP at the moment
     for( board::BoardStackupLayer& layer : *response.mutable_stackup()->mutable_layers() )
@@ -1984,7 +1981,6 @@ HANDLER_RESULT<NetClassForNetsResponse> API_HANDLER_PCB::handleGetNetClassForNet
 
     BOARD* board = frame()->GetBoard();
     const NETINFO_LIST& nets = board->GetNetInfo();
-    google::protobuf::Any any;
 
     for( const board::types::Net& net : aCtx.Request.net() )
     {
@@ -1993,9 +1989,8 @@ HANDLER_RESULT<NetClassForNetsResponse> API_HANDLER_PCB::handleGetNetClassForNet
         if( !netInfo )
             continue;
 
-        netInfo->GetNetClass()->Serialize( any );
         auto [pair, rc] = response.mutable_classes()->insert( { net.name(), {} } );
-        any.UnpackTo( &pair->second );
+        netInfo->GetNetClass()->Serialize( pair->second );
     }
 
     return response;
