@@ -21,9 +21,11 @@
 #ifndef ALTIUM_PCB_H
 #define ALTIUM_PCB_H
 
+#include <embedded_files.h>
 #include <functional>
 #include <layer_ids.h>
 #include <map>
+#include <memory>
 #include <vector>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
@@ -316,6 +318,17 @@ private:
                                            const ALTIUM_LAYER aAltiumLayer );
 
     FOOTPRINT* HelperGetFootprint( uint16_t aComponent ) const;
+
+    /**
+     * Return the 3D model @p aModelName embedded in @p aFootprint, inflating and embedding
+     * @p aCompressedData first if it is not there yet.
+     *
+     * @param aIsNew is set when the model was embedded by this call and so still owes a
+     *               CompressAndEncode(), which the caller may run inline or on the pool.
+     */
+    std::shared_ptr<EMBEDDED_FILES::EMBEDDED_FILE>
+    HelperEmbedModel( FOOTPRINT* aFootprint, const wxString& aModelName,
+                      const std::vector<char>& aCompressedData, bool& aIsNew );
 
     void remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup );
 

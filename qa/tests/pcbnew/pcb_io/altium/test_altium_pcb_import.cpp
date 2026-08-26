@@ -41,6 +41,7 @@
 #include <common.h>
 #include <core/utf8.h>
 #include <eda_text.h>
+#include <embedded_files.h>
 #include <ki_exception.h>
 #include <netinfo.h>
 #include <netclass.h>
@@ -1561,6 +1562,51 @@ BOOST_AUTO_TEST_CASE( RelativeOriginNotSheetCorner )
     // Origin sits on the left edge; the sheet corner would land 51.308/50.165 mm away
     checkImportedOriginOffset( m_altiumPlugin, "plugins/altium/issue24847/PCB1.PcbDoc", 0.000,
                                15.000 );
+}
+
+
+// https://gitlab.com/kicad/code/kicad/-/issues/25362
+// FB36 has two component bodies naming one model; the importer used to hash and link the
+// freed duplicate that AddFile() had already dropped
+BOOST_AUTO_TEST_CASE( SharedComponentBodyModelEmbeddedOnce )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/altium/issue25362/OpenRex_V1I1_PCB_reduced.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE_EQUAL( board->Footprints().size(), 1 );
+
+    FOOTPRINT*            footprint = board->Footprints().front();
+    const EMBEDDED_FILES* files = footprint->GetEmbeddedFiles();
+
+    BOOST_REQUIRE_EQUAL( files->EmbeddedFileMap().size(), 1 );
+
+    const std::shared_ptr<EMBEDDED_FILES::EMBEDDED_FILE>& file =
+            files->EmbeddedFileMap().begin()->second;
+
+    BOOST_CHECK_EQUAL( file->name, wxString( wxS( "C0603.step" ) ) );
+    BOOST_CHECK( file->type == EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL );
+
+    // A freed file yields garbage here rather than the STEP payload, and the exact length plus
+    // the closing tag pin the inflate loop against silently truncating a model
+    const std::string step( file->decompressedData.begin(), file->decompressedData.end() );
+
+    BOOST_REQUIRE_EQUAL( step.size(), 126391u );
+    BOOST_CHECK( step.starts_with( "ISO-10303-21;" ) );
+    BOOST_CHECK( step.ends_with( "END-ISO-10303-21;\r\n" ) );
+
+    // CompressAndEncode runs on a worker thread against the file AddFile() handed back, so an
+    // empty payload means that thread wrote into freed memory instead
+    BOOST_CHECK_GT( file->compressedEncodedData.size(), 0 );
+    BOOST_CHECK( file->Validate() );
+
+    // Both bodies keep their own placement but must resolve to the one embedded model
+    BOOST_REQUIRE_EQUAL( footprint->Models().size(), 2 );
+
+    for( const FP_3DMODEL& model : footprint->Models() )
+        BOOST_CHECK_EQUAL( model.m_Filename, file->GetLink() );
 }
 
 

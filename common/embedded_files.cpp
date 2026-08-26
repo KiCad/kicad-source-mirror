@@ -138,16 +138,16 @@ EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( const wxFileName& aName,
 }
 
 
-void EMBEDDED_FILES::AddFile( EMBEDDED_FILE* aFile )
+EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( EMBEDDED_FILE* aFile )
 {
-    AddFile( std::shared_ptr<EMBEDDED_FILE>( aFile ) );
+    return AddFile( std::shared_ptr<EMBEDDED_FILE>( aFile ) );
 }
 
 
-void EMBEDDED_FILES::AddFile( std::shared_ptr<EMBEDDED_FILE> aFile )
+EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( std::shared_ptr<EMBEDDED_FILE> aFile )
 {
     if( !aFile )
-        return;
+        return nullptr;
 
     wxString name = aFile->name;
     auto [it, inserted] = m_files.emplace( std::move( name ), std::move( aFile ) );
@@ -157,6 +157,8 @@ void EMBEDDED_FILES::AddFile( std::shared_ptr<EMBEDDED_FILE> aFile )
     // the collection holds.
     if( inserted && m_fileAddedCallback )
         m_fileAddedCallback( it->second.get() );
+
+    return it->second.get();
 }
 
 
