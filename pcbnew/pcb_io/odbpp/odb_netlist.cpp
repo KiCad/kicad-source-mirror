@@ -73,8 +73,6 @@ void ODB_NET_LIST::InitPadNetPoints( BOARD*                                     
     {
         for( PAD* pad : footprint->Pads() )
         {
-            // TODO padstacks
-
             ODB_NET_RECORD net_point;
             net_point.side = ComputePadAccessSide( aBoard, pad->GetLayerSet() );
 
@@ -101,13 +99,6 @@ void ODB_NET_LIST::InitPadNetPoints( BOARD*                                     
                 net_point.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
                 net_point.x_location = pad->GetPosition().x;
                 net_point.y_location = -pad->GetPosition().y;
-                net_point.x_size = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x;
-
-                // Rule: round pads have y = 0
-                if( pad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
-                    net_point.y_size = net_point.x_size;
-                else
-                    net_point.y_size = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y;
 
                 // net_point.rotation = ( ANGLE_360 - pad->GetOrientation() ).Normalize().AsDegrees();
 
@@ -125,6 +116,19 @@ void ODB_NET_LIST::InitPadNetPoints( BOARD*                                     
 
                 if( pad->GetLayerSet()[B_Mask] )
                     net_point.soldermask &= ~2;
+
+                // The land size is written only for undrilled pads, which are single-sided, so
+                // the access side gives the copper to report
+                PCB_LAYER_ID sideLayer = pad->Padstack().EffectiveLayerFor(
+                        net_point.side == "D" ? B_Cu : F_Cu );
+
+                net_point.x_size = pad->GetSize( sideLayer ).x;
+
+                // Rule: round pads have y = 0
+                if( pad->GetShape( sideLayer ) == PAD_SHAPE::CIRCLE )
+                    net_point.y_size = net_point.x_size;
+                else
+                    net_point.y_size = pad->GetSize( sideLayer ).y;
 
                 aRecords[pad->GetNetCode()].push_back( net_point );
             }

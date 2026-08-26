@@ -990,6 +990,111 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent,
 }
 
 
+VECTOR2I CADSTAR_PCB_ARCHIVE_LOADER::applyPadShape( PAD* aPad, PCB_LAYER_ID aPadLayer,
+                                                    const CADSTAR_PAD_SHAPE& aShape )
+{
+    // CADSTAR grows some shapes by a left and a right length, moving the centre off the pad origin
+    VECTOR2I offset = { 0, 0 };
+
+    auto elongatedSize =
+            [&]() -> VECTOR2I
+            {
+                return { getKiCadLength( (long long) aShape.Size + (long long) aShape.LeftLength
+                                         + (long long) aShape.RightLength ),
+                         getKiCadLength( aShape.Size ) };
+            };
+
+    auto elongationOffset =
+            [&]()
+            {
+                offset.x = getKiCadLength( ( (long long) aShape.LeftLength / 2 )
+                                           - ( (long long) aShape.RightLength / 2 ) );
+            };
+
+    switch( aShape.ShapeType )
+    {
+    case PAD_SHAPE_TYPE::ANNULUS:
+        //todo fix: use custom shape instead (Donught shape, i.e. a circle with a hole)
+        aPad->SetShape( aPadLayer, PAD_SHAPE::CIRCLE );
+        aPad->SetSize( aPadLayer, { getKiCadLength( aShape.Size ),
+                                    getKiCadLength( aShape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::BULLET:
+        aPad->SetShape( aPadLayer, PAD_SHAPE::CHAMFERED_RECT );
+        aPad->SetSize( aPadLayer, elongatedSize() );
+        aPad->SetChamferPositions( aPadLayer,
+                                   RECT_CHAMFER_POSITIONS::RECT_CHAMFER_BOTTOM_LEFT
+                                           | RECT_CHAMFER_POSITIONS::RECT_CHAMFER_TOP_LEFT );
+        aPad->SetRoundRectRadiusRatio( aPadLayer, 0.5 );
+        aPad->SetChamferRectRatio( aPadLayer, 0.0 );
+
+        elongationOffset();
+        break;
+
+    case PAD_SHAPE_TYPE::CIRCLE:
+        aPad->SetShape( aPadLayer, PAD_SHAPE::CIRCLE );
+        aPad->SetSize( aPadLayer, { getKiCadLength( aShape.Size ),
+                                    getKiCadLength( aShape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::DIAMOND:
+    {
+        // Cadstar diamond shape is a square rotated 45 degrees
+        // We convert it in KiCad to a square with chamfered edges
+        int sizeOfSquare = (double) getKiCadLength( aShape.Size ) * sqrt(2.0);
+        aPad->SetShape( aPadLayer, PAD_SHAPE::RECTANGLE );
+        aPad->SetChamferRectRatio( aPadLayer, 0.5 );
+        aPad->SetSize( aPadLayer, { sizeOfSquare, sizeOfSquare } );
+
+        elongationOffset();
+        break;
+    }
+
+    case PAD_SHAPE_TYPE::FINGER:
+        aPad->SetShape( aPadLayer, PAD_SHAPE::OVAL );
+        aPad->SetSize( aPadLayer, elongatedSize() );
+
+        elongationOffset();
+        break;
+
+    case PAD_SHAPE_TYPE::OCTAGON:
+        aPad->SetShape( aPadLayer, PAD_SHAPE::CHAMFERED_RECT );
+        aPad->SetChamferPositions( aPadLayer, RECT_CHAMFER_POSITIONS::RECT_CHAMFER_ALL );
+        aPad->SetChamferRectRatio( aPadLayer, 0.25 );
+        aPad->SetSize( aPadLayer, { getKiCadLength( aShape.Size ),
+                                    getKiCadLength( aShape.Size ) } );
+        break;
+
+    case PAD_SHAPE_TYPE::RECTANGLE:
+        aPad->SetShape( aPadLayer, PAD_SHAPE::RECTANGLE );
+        aPad->SetSize( aPadLayer, elongatedSize() );
+
+        elongationOffset();
+        break;
+
+    case PAD_SHAPE_TYPE::ROUNDED_RECT:
+        aPad->SetShape( aPadLayer, PAD_SHAPE::ROUNDRECT );
+        aPad->SetRoundRectCornerRadius( aPadLayer, getKiCadLength( aShape.InternalFeature ) );
+        aPad->SetSize( aPadLayer, elongatedSize() );
+
+        elongationOffset();
+        break;
+
+    case PAD_SHAPE_TYPE::SQUARE:
+        aPad->SetShape( aPadLayer, PAD_SHAPE::RECTANGLE );
+        aPad->SetSize( aPadLayer, { getKiCadLength( aShape.Size ),
+                                    getKiCadLength( aShape.Size ) } );
+        break;
+
+    default:
+        wxFAIL_MSG( wxT( "Unknown Pad Shape" ) );
+    }
+
+    return offset;
+}
+
+
 PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, FOOTPRINT* aParent )
 {
     PADCODE csPadcode = getPadCode( aCadstarPad.PadCodeID );
@@ -1020,7 +1125,8 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     pad->SetLocalSolderMaskMargin( 0 );
     pad->SetLocalSolderPasteMargin( 0 );
     pad->SetLocalSolderPasteMarginRatio( 0.0 );
-    bool complexPadErrorLogged = false;
+
+    std::map<PCB_LAYER_ID, CADSTAR_PAD_SHAPE> copperReassigns;
 
     for( auto& [layer, shape] : csPadcode.Reassigns )
     {
@@ -1053,19 +1159,9 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
                 else if( std::abs( localMargin.value() ) < std::abs( newMargin ) )
                     pad->SetLocalSolderPasteMargin( newMargin );
             }
-            else
+            else if( IsCopperLayer( kiLayer ) )
             {
-                // TODO padstacks
-
-                if( !complexPadErrorLogged )
-                {
-                    complexPadErrorLogged = true;
-                    errorMSG += wxT( "\n - " )
-                                + wxString::Format( _( "The CADSTAR pad definition '%s' is a complex pad stack, "
-                                                       "which is not supported in KiCad. Please review the "
-                                                       "imported pads as they may require manual correction." ),
-                                                    csPadcode.Name );
-                }
+                copperReassigns[kiLayer] = shape;
             }
         }
     }
@@ -1100,113 +1196,20 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         csPadcode.Shape.Size = 1;
     }
 
-    VECTOR2I padOffset = { 0, 0 };   // offset of the pad origin (before rotating)
+    VECTOR2I padOffset = applyPadShape( pad.get(), PADSTACK::ALL_LAYERS, csPadcode.Shape );
     VECTOR2I drillOffset = { 0, 0 }; // offset of the drill origin w.r.t. the pad (before rotating)
 
-    // TODO padstacks
-    // If we get here, do we know that we're dealing with the F_Cu layer (and that all other layers
-    // will be done through a Reassign?
-    switch( csPadcode.Shape.ShapeType )
+    // A layer reassign needs a full-custom padstack.  The shape centre can move per layer, so
+    // the delta from the base shape becomes that layer's offset
+    if( !copperReassigns.empty() )
     {
-    case PAD_SHAPE_TYPE::ANNULUS:
-        //todo fix: use custom shape instead (Donught shape, i.e. a circle with a hole)
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, { getKiCadLength( csPadcode.Shape.Size ),
-                                              getKiCadLength( csPadcode.Shape.Size ) } );
-        break;
+        pad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
 
-    case PAD_SHAPE_TYPE::BULLET:
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS,
-                      { getKiCadLength( (long long) csPadcode.Shape.Size
-                                        + (long long) csPadcode.Shape.LeftLength
-                                        + (long long) csPadcode.Shape.RightLength ),
-                        getKiCadLength( csPadcode.Shape.Size ) } );
-        pad->SetChamferPositions( PADSTACK::TEMP_ALL_LAYERS,
-                                  RECT_CHAMFER_POSITIONS::RECT_CHAMFER_BOTTOM_LEFT
-                                          | RECT_CHAMFER_POSITIONS::RECT_CHAMFER_TOP_LEFT );
-        pad->SetRoundRectRadiusRatio( PADSTACK::TEMP_ALL_LAYERS, 0.5 );
-        pad->SetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS, 0.0 );
-
-        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
-                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
-        break;
-
-    case PAD_SHAPE_TYPE::CIRCLE:
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, { getKiCadLength( csPadcode.Shape.Size ),
-                                              getKiCadLength( csPadcode.Shape.Size ) } );
-        break;
-
-    case PAD_SHAPE_TYPE::DIAMOND:
-    {
-        // Cadstar diamond shape is a square rotated 45 degrees
-        // We convert it in KiCad to a square with chamfered edges
-        int sizeOfSquare = (double) getKiCadLength( csPadcode.Shape.Size ) * sqrt(2.0);
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-        pad->SetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS, 0.5 );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, { sizeOfSquare, sizeOfSquare } );
-
-        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
-                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
-    }
-        break;
-
-    case PAD_SHAPE_TYPE::FINGER:
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::OVAL );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS,
-                      { getKiCadLength( (long long) csPadcode.Shape.Size
-                                        + (long long) csPadcode.Shape.LeftLength
-                                        + (long long) csPadcode.Shape.RightLength ),
-                        getKiCadLength( csPadcode.Shape.Size ) } );
-
-        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
-                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
-        break;
-
-    case PAD_SHAPE_TYPE::OCTAGON:
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
-        pad->SetChamferPositions( PADSTACK::TEMP_ALL_LAYERS, RECT_CHAMFER_POSITIONS::RECT_CHAMFER_ALL );
-        pad->SetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS, 0.25 );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, { getKiCadLength( csPadcode.Shape.Size ),
-                                              getKiCadLength( csPadcode.Shape.Size ) } );
-        break;
-
-    case PAD_SHAPE_TYPE::RECTANGLE:
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS,
-                      { getKiCadLength( (long long) csPadcode.Shape.Size
-                                        + (long long) csPadcode.Shape.LeftLength
-                                        + (long long) csPadcode.Shape.RightLength ),
-                        getKiCadLength( csPadcode.Shape.Size ) } );
-
-        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
-                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
-        break;
-
-    case PAD_SHAPE_TYPE::ROUNDED_RECT:
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
-        pad->SetRoundRectCornerRadius( PADSTACK::TEMP_ALL_LAYERS,
-                                       getKiCadLength( csPadcode.Shape.InternalFeature ) );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS,
-                      { getKiCadLength( (long long) csPadcode.Shape.Size
-                                        + (long long) csPadcode.Shape.LeftLength
-                                        + (long long) csPadcode.Shape.RightLength ),
-                        getKiCadLength( csPadcode.Shape.Size ) } );
-
-        padOffset.x = getKiCadLength( ( (long long) csPadcode.Shape.LeftLength / 2 ) -
-                                      ( (long long) csPadcode.Shape.RightLength / 2 ) );
-        break;
-
-
-    case PAD_SHAPE_TYPE::SQUARE:
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, { getKiCadLength( csPadcode.Shape.Size ),
-                                              getKiCadLength( csPadcode.Shape.Size ) } );
-        break;
-
-    default:
-        wxFAIL_MSG( wxT( "Unknown Pad Shape" ) );
+        for( const auto& [kiLayer, shape] : copperReassigns )
+        {
+            VECTOR2I layerOffset = applyPadShape( pad.get(), kiLayer, shape );
+            pad->SetOffset( kiLayer, padOffset - layerOffset );
+        }
     }
 
     if( csPadcode.ReliefClearance != UNDEFINED_VALUE )
@@ -1251,32 +1254,48 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
         if( lset.size() > 0 )
         {
-            SHAPE_POLY_SET padOutline;
-            PCB_LAYER_ID   layer = lset.Seq().at( 0 );
-            int            maxError = m_board->GetDesignSettings().m_MaxError;
+            int       maxError = m_board->GetDesignSettings().m_MaxError;
+            EDA_ANGLE slotAngle = ANGLE_180 - getAngle( csPadcode.SlotOrientation );
+            bool      holeInsidePad = true;
 
             pad->SetPosition( { 0, 0 } );
-            pad->TransformShapeToPolygon( padOutline, layer, 0, maxError, ERROR_INSIDE );
 
-            PCB_SHAPE* padShape = new PCB_SHAPE;
-            padShape->SetShape( SHAPE_T::POLY );
-            padShape->SetFilled( true );
-            padShape->SetPolyShape( padOutline );
-            padShape->SetStroke( STROKE_PARAMS( 0 ) );
-            padShape->Move( padOffset - drillOffset );
-            padShape->Rotate( VECTOR2I( 0, 0 ), ANGLE_180 - getAngle( csPadcode.SlotOrientation ) );
+            // Rotating the slot bakes the copper into a custom primitive, so each padstack
+            // layer needs its own
+            std::map<PCB_LAYER_ID, std::unique_ptr<PCB_SHAPE>> slotShapes;
 
-            SHAPE_POLY_SET editedPadOutline = padShape->GetPolyShape();
-
-            if( editedPadOutline.Contains( { 0, 0 } ) )
+            for( PCB_LAYER_ID padLayer : pad->Padstack().UniqueLayers() )
             {
-                // TODO padstacks
-                // If we get here, do we know that we're dealing with the F_Cu layer (and that all other layers
-                // will be done through a Reassign?
-                pad->SetAnchorPadShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-                pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, VECTOR2I( { 4, 4 } ) );
-                pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CUSTOM );
-                pad->AddPrimitive( PADSTACK::TEMP_ALL_LAYERS, padShape );
+                SHAPE_POLY_SET padOutline;
+                pad->TransformShapeToPolygon( padOutline, padLayer, 0, maxError, ERROR_INSIDE );
+
+                auto padShape = std::make_unique<PCB_SHAPE>();
+                padShape->SetShape( SHAPE_T::POLY );
+                padShape->SetFilled( true );
+                padShape->SetPolyShape( padOutline );
+                padShape->SetStroke( STROKE_PARAMS( 0 ) );
+                padShape->Move( padOffset - drillOffset );
+                padShape->Rotate( VECTOR2I( 0, 0 ), slotAngle );
+
+                if( !padShape->GetPolyShape().Contains( { 0, 0 } ) )
+                    holeInsidePad = false;
+
+                slotShapes[padLayer] = std::move( padShape );
+            }
+
+            if( holeInsidePad )
+            {
+                for( auto& [padLayer, padShape] : slotShapes )
+                {
+                    pad->SetAnchorPadShape( padLayer, PAD_SHAPE::RECTANGLE );
+                    pad->SetSize( padLayer, VECTOR2I( { 4, 4 } ) );
+                    pad->SetShape( padLayer, PAD_SHAPE::CUSTOM );
+
+                    // The outline already includes the layer offset; leaving it set shifts twice
+                    pad->SetOffset( padLayer, { 0, 0 } );
+                    pad->AddPrimitive( padLayer, padShape.release() );
+                }
+
                 padOffset   = { 0, 0 };
             }
             else
@@ -1296,12 +1315,14 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         {
             wxFAIL_MSG( wxT( "No copper layers defined in the pad?" ) );
             csPadcode.SlotOrientation = 0;
-            pad->SetOffset( PADSTACK::TEMP_ALL_LAYERS, drillOffset );
+            pad->SetOffset( PADSTACK::ALL_LAYERS, drillOffset );
         }
     }
     else
     {
-        pad->SetOffset( PADSTACK::TEMP_ALL_LAYERS, drillOffset );
+        // The reassigned layers already carry the offset that centres their own copper
+        for( PCB_LAYER_ID padLayer : pad->Padstack().UniqueLayers() )
+            pad->SetOffset( padLayer, pad->GetOffset( padLayer ) + drillOffset );
     }
 
     EDA_ANGLE padOrientation = getAngle( aCadstarPad.OrientAngle )
@@ -1311,8 +1332,6 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     RotatePoint( drillOffset, padOrientation );
     pad->SetPosition( getKiCadPoint( aCadstarPad.Position ) - padOffset - drillOffset );
     pad->SetOrientation( padOrientation + getAngle( csPadcode.SlotOrientation ) );
-
-    //TODO handle csPadcode.Reassigns
 
     //log warnings:
     if( m_padcodesTested.find( csPadcode.ID ) == m_padcodesTested.end() && !errorMSG.IsEmpty() )
@@ -2583,6 +2602,18 @@ int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia( const NET_ID& aCadstarNetID, const N
     }
 
     via->SetWidth( PADSTACK::ALL_LAYERS, getKiCadLength( csViaCode.Shape.Size ) );
+
+    // A via code can reassign copper per layer, which KiCad holds as a full-custom padstack
+    for( const auto& [layer, shape] : csViaCode.Reassigns )
+    {
+        PCB_LAYER_ID kiLayer = getKiCadLayer( layer );
+
+        if( !IsCopperLayer( kiLayer ) || shape.Size <= 0 )
+            continue;
+
+        via->SetPadstackMode( PADSTACK::MODE::CUSTOM );
+        via->SetWidth( kiLayer, getKiCadLength( shape.Size ) );
+    }
 
     bool start_layer_outside = csLayerPair.PhysicalLayerStart == 1
                                || csLayerPair.PhysicalLayerStart == Assignments.Technology.MaxPhysicalLayer;

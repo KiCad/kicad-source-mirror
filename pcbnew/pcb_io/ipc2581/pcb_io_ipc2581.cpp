@@ -575,7 +575,8 @@ void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, double aX, double aY )
 }
 
 
-void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, const PAD& aPad, bool aRelative )
+void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, const PAD& aPad, bool aRelative,
+                                     PCB_LAYER_ID aLayer )
 {
     VECTOR2D pos{};
 
@@ -584,9 +585,10 @@ void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, const PAD& aPad, bool aR
     else
         pos = aPad.GetPosition();
 
-    // TODO padstacks
-    if( aPad.GetOffset( PADSTACK::TEMP_ALL_LAYERS ).x != 0 || aPad.GetOffset( PADSTACK::TEMP_ALL_LAYERS ).y != 0 )
-        pos += aPad.GetOffset( PADSTACK::TEMP_ALL_LAYERS );
+    const VECTOR2I& offset = aPad.GetOffset( aPad.Padstack().EffectiveLayerFor( aLayer ) );
+
+    if( offset.x != 0 || offset.y != 0 )
+        pos += offset;
 
     addLocationNode( aNode, pos.x, pos.y );
 }
@@ -1555,7 +1557,7 @@ void PCB_IO_IPC2581::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxS
     addAttribute( slotNode, "minusTol", "0.0" );
 
     if( m_version > 'B' )
-        addLocationNode( slotNode, aPad, false );
+        addLocationNode( slotNode, aPad, false, aPad.GetLayer() );
 
     // Normally only oblong drill shapes should reach this code path since m_slot_holes
     // is filtered to pads where DrillSizeX != DrillSizeY. However, use a fallback to
@@ -2443,7 +2445,7 @@ void PCB_IO_IPC2581::addPad( wxXmlNode* aContentNode, const PAD* aPad, PCB_LAYER
         xformNode->AddAttribute( "rotation", floatVal( angle.AsDegrees() ) );
     }
 
-    addLocationNode( padNode, *aPad, false );
+    addLocationNode( padNode, *aPad, false, aLayer );
     addShape( padNode, *aPad, aLayer );
 
     if( fp )
@@ -2489,8 +2491,6 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
     if( !success )
         return;
 
-    // TODO padstacks
-
     wxXmlNode* padStackDefNode = new wxXmlNode( wxXML_ELEMENT_NODE, "PadStackDef" );
     addAttribute( padStackDefNode,  "name", name );
     ensureBackdrillSpecs( name, aPad->Padstack() );
@@ -2517,7 +2517,8 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
                       aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
         addAttribute( padStackHoleNode,  "plusTol", "0.0" );
         addAttribute( padStackHoleNode,  "minusTol", "0.0" );
-        addXY( padStackHoleNode, aPad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ) );
+        // A padstack has one hole, so it takes the front-side offset
+        addXY( padStackHoleNode, aPad->GetOffset( aPad->Padstack().EffectiveLayerFor( F_Cu ) ) );
     }
 
     LSEQ layer_seq = aPad->GetLayerSet().Seq();
@@ -2527,15 +2528,17 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         if( !m_board->IsLayerEnabled( layer ) )
             continue;
 
+        const VECTOR2I& offset = aPad->GetOffset( aPad->Padstack().EffectiveLayerFor( layer ) );
+
         wxXmlNode* padStackPadDefNode = appendNode( padStackDefNode, "PadstackPadDef" );
         addAttribute( padStackPadDefNode,  "layerRef", m_layer_name_map[layer] );
         addAttribute( padStackPadDefNode,  "padUse", "REGULAR" );
-        addLocationNode( padStackPadDefNode, aPad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ).x, aPad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ).y );
+        addLocationNode( padStackPadDefNode, offset.x, offset.y );
 
         if( aPad->HasHole() || !aPad->FlashLayer( layer ) )
         {
             PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
-            shape.SetStart( aPad->GetOffset( PADSTACK::TEMP_ALL_LAYERS ) );
+            shape.SetStart( offset );
             shape.SetEnd( shape.GetStart() + aPad->GetDrillSize() / 2 );
             addShape( padStackPadDefNode, shape );
         }
@@ -3426,7 +3429,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                     xformNode->AddAttribute( "rotation", floatVal( pad_angle.AsDegrees() ) );
             }
 
-            addLocationNode( pinNode, *pad, true );
+            addLocationNode( pinNode, *pad, true, pad->GetLayer() );
             addShape( pinNode, *pad, pad->GetLayer() );
         }
 

@@ -1502,20 +1502,21 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
         {
             VECTOR2I margin;
 
-            // TODO padstacks
             for( PCB_LAYER_ID layer : pad->GetLayerSet() )
             {
+                PCB_LAYER_ID padLayer = pad->Padstack().EffectiveLayerFor( layer );
+
                 bool onCopperLayer = LSET::AllCuMask().test( layer );
                 bool onSolderMaskLayer = LSET( { F_Mask, B_Mask } ).test( layer );
                 bool onSolderPasteLayer = LSET( { F_Paste, B_Paste } ).test( layer );
 
                 if( onSolderMaskLayer )
-                    margin.x = margin.y = pad->GetSolderMaskExpansion( PADSTACK::TEMP_ALL_LAYERS );
+                    margin.x = margin.y = pad->GetSolderMaskExpansion( padLayer );
 
                 if( onSolderPasteLayer )
-                    margin = pad->GetSolderPasteMargin( PADSTACK::TEMP_ALL_LAYERS );
+                    margin = pad->GetSolderPasteMargin( padLayer );
 
-                VECTOR2I padPlotsSize = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ) + margin * 2;
+                VECTOR2I padPlotsSize = pad->GetSize( padLayer ) + margin * 2;
 
                 if( onCopperLayer && !pad->IsOnCopperLayer() )
                     continue;
@@ -1523,7 +1524,7 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
                 if( onCopperLayer && !pad->FlashLayer( layer ) )
                     continue;
 
-                if( pad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) != PAD_SHAPE::CUSTOM
+                if( pad->GetShape( padLayer ) != PAD_SHAPE::CUSTOM
                     && ( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 ) )
                 {
                     continue;

@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include <stdio.h> // for FILE
 
 #include <wx/string.h>
@@ -120,6 +122,12 @@ private:
      */
     void createShapesSection();
     void createPadsShapesSection();
+
+    /**
+     * Write one "PAD" entry for the copper @p aPad carries on @p aPadLayer, named @p aName as
+     * referenced from a PADSTACK entry.
+     */
+    void writePadShape( const std::string& aName, PAD* aPad, PCB_LAYER_ID aPadLayer );
 
     /**
      * Create the shape of a footprint (SHAPE section)

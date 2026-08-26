@@ -225,7 +225,8 @@ private:
 
     void addLocationNode( wxXmlNode* aContentNode, double aX, double aY );
 
-    void addLocationNode( wxXmlNode* aContentNode, const PAD& aPad, bool aRelative );
+    void addLocationNode( wxXmlNode* aContentNode, const PAD& aPad, bool aRelative,
+                          PCB_LAYER_ID aLayer );
 
     void addLocationNode( wxXmlNode* aContentNode, const PCB_SHAPE& aShape );
 

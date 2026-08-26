@@ -30,6 +30,7 @@
 #include <string_utils.h>
 #include <macros.h>
 #include <hash_eda.h>
+#include <set>
 #include <fmt.h>
 
 
@@ -42,10 +43,8 @@ static std::string genCADLayerName( int aCuCount, PCB_LAYER_ID aId )
             return "TOP";
         else if( aId == B_Cu )
             return "BOTTOM";
-        else if( aId <= 14 )
-            return fmt::format( "INNER{}", aCuCount - aId - 1 );
         else
-            return fmt::format( "LAYER{}", static_cast<int>( aId ) );
+            return fmt::format( "INNER{}", CopperLayerToOrdinal( aId ) );
     }
 
     else
@@ -89,11 +88,12 @@ static std::string genCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 }
 
 
-/// The flipped layer name for GenCAD export (to make CAM350 imports correct).
+/// The flipped layer name for GenCAD export (to make CAM350 imports correct).  Flipping reverses
+/// the stackup, so INNER1 becomes INNER4 on a six layer board.
 static std::string genCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
 {
-    if( 1<= aId && aId <= 14 )
-        return fmt::format(  "INNER{}", 14 - aId );
+    if( IsInnerCopperLayer( aId ) )
+        return fmt::format( "INNER{}", aCuCount - 1 - CopperLayerToOrdinal( aId ) );
 
     return genCADLayerName( aCuCount, aId );
 }
@@ -238,17 +238,74 @@ bool GENCAD_EXPORTER::WriteFile( const wxString& aFullFileName )
 /// Sort vias for uniqueness.
 static bool viaSort( const PCB_VIA* aPadref, const PCB_VIA* aPadcmp )
 {
-    // TODO padstacks
-    if( aPadref->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) != aPadcmp->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) )
-        return aPadref->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) < aPadcmp->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
-
     if( aPadref->GetDrillValue() != aPadcmp->GetDrillValue() )
         return aPadref->GetDrillValue() < aPadcmp->GetDrillValue();
 
     if( aPadref->GetLayerSet() != aPadcmp->GetLayerSet() )
         return aPadref->GetLayerSet().FmtBin().compare( aPadcmp->GetLayerSet().FmtBin() ) < 0;
 
+    // Two vias share a padstack only when their copper matches on every layer that defines it
+    std::vector<PCB_LAYER_ID> refLayers = aPadref->Padstack().UniqueLayers();
+    std::vector<PCB_LAYER_ID> cmpLayers = aPadcmp->Padstack().UniqueLayers();
+
+    if( refLayers != cmpLayers )
+        return refLayers < cmpLayers;
+
+    for( PCB_LAYER_ID layer : refLayers )
+    {
+        if( aPadref->GetWidth( layer ) != aPadcmp->GetWidth( layer ) )
+            return aPadref->GetWidth( layer ) < aPadcmp->GetWidth( layer );
+    }
+
     return false;
+}
+
+
+/// A uniform padstack keeps the bare name, so it still reads as one shape and not as a stack.
+static std::string padShapeName( const std::string& aStem, const PADSTACK& aPadstack,
+                                 PCB_LAYER_ID aPadLayer )
+{
+    if( aPadstack.Mode() == PADSTACK::MODE::NORMAL )
+        return aStem;
+
+    return fmt::format( "{}_{}", aStem, TO_UTF8( LSET::Name( aPadLayer ) ) );
+}
+
+
+static std::string viaShapeStem( const PCB_VIA* aVia, PCB_LAYER_ID aViaLayer, const LSET& aMask )
+{
+    return fmt::format( "V{}.{}.{}", aVia->GetWidth( aViaLayer ), aVia->GetDrillValue(),
+                        fmt_mask( aMask ) );
+}
+
+
+/// The name carries every distinct diameter, or two vias that differ on one inner layer collide.
+static std::string viaStackName( const PCB_VIA* aVia, const LSET& aMask )
+{
+    std::string name = "VIA";
+
+    aVia->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aViaLayer )
+            {
+                name += fmt::format( "{}.", aVia->GetWidth( aViaLayer ) );
+            } );
+
+    return name + fmt::format( "{}.{}", aVia->GetDrillValue(), fmt_mask( aMask ) );
+}
+
+
+/// The padstack describes the copper, so the one width a route entry holds is the widest.
+static int viaNominalWidth( const PCB_VIA* aVia )
+{
+    int width = 0;
+
+    aVia->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aViaLayer )
+            {
+                width = std::max( width, aVia->GetWidth( aViaLayer ) );
+            } );
+
+    return width;
 }
 
 
@@ -257,6 +314,225 @@ void GENCAD_EXPORTER::createArtworksSection()
     // The ARTWORKS section is empty but (officially) mandatory
     fmt::print( m_file, "$ARTWORKS\n" );
     fmt::print( m_file, "$ENDARTWORKS\n\n" );
+}
+
+
+void GENCAD_EXPORTER::writePadShape( const std::string& aName, PAD* aPad, PCB_LAYER_ID aPadLayer )
+{
+    const VECTOR2I& off = aPad->GetOffset( aPadLayer );
+
+    int dx = aPad->GetSize( aPadLayer ).x / 2;
+    int dy = aPad->GetSize( aPadLayer ).y / 2;
+
+    fmt::print( m_file, "PAD {}", aName );
+
+    switch( aPad->GetShape( aPadLayer ) )
+    {
+    default:
+        UNIMPLEMENTED_FOR( aPad->ShowPadShape( aPadLayer ) );
+        KI_FALLTHROUGH;
+
+    case PAD_SHAPE::CIRCLE:
+        fmt::print( m_file, " ROUND {}\n",
+                    aPad->GetDrillSize().x / SCALE_FACTOR );
+
+        /* Circle is center, radius */
+        fmt::print( m_file, "CIRCLE {} {} {}\n",
+                    off.x / SCALE_FACTOR,
+                    -off.y / SCALE_FACTOR,
+                    aPad->GetSize( aPadLayer ).x / (SCALE_FACTOR * 2) );
+        break;
+
+    case PAD_SHAPE::RECTANGLE:
+        fmt::print( m_file, " RECTANGULAR {}\n",
+                    aPad->GetDrillSize().x / SCALE_FACTOR );
+
+        // Rectangle is begin, size *not* begin, end!
+        fmt::print( m_file, "RECTANGLE {} {} {} {}\n",
+                    (-dx + off.x ) / SCALE_FACTOR,
+                    (-dy - off.y ) / SCALE_FACTOR,
+                    dx / (SCALE_FACTOR / 2), dy / (SCALE_FACTOR / 2) );
+        break;
+
+    case PAD_SHAPE::ROUNDRECT:
+    case PAD_SHAPE::OVAL:
+    {
+        const VECTOR2I& size = aPad->GetSize( aPadLayer );
+        int radius = std::min( size.x, size.y ) / 2;
+
+        if( aPad->GetShape( aPadLayer ) == PAD_SHAPE::ROUNDRECT )
+            radius = aPad->GetRoundRectCornerRadius( aPadLayer );
+
+        int lineX = size.x / 2 - radius;
+        int lineY = size.y / 2 - radius;
+
+        fmt::print( m_file, " POLYGON {}\n", aPad->GetDrillSize().x / SCALE_FACTOR );
+
+        // bottom left arc
+        fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                    ( off.x - lineX - radius ) / SCALE_FACTOR,
+                    ( -off.y - lineY ) / SCALE_FACTOR,
+                    ( off.x - lineX ) / SCALE_FACTOR,
+                    ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                    ( off.x - lineX ) / SCALE_FACTOR,
+                    ( -off.y - lineY ) / SCALE_FACTOR );
+
+        // bottom line
+        if( lineX > 0 )
+        {
+            fmt::print( m_file, "LINE {} {} {} {}\n",
+                        ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                        ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY - radius ) / SCALE_FACTOR );
+        }
+
+        // bottom right arc
+        fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                    ( off.x + lineX ) / SCALE_FACTOR,
+                    ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                    ( off.x + lineX + radius ) / SCALE_FACTOR,
+                    ( -off.y - lineY ) / SCALE_FACTOR,
+                    ( off.x + lineX ) / SCALE_FACTOR,
+                    ( -off.y - lineY ) / SCALE_FACTOR );
+
+        // right line
+        if( lineY > 0 )
+        {
+            fmt::print( m_file, "LINE {} {} {} {}\n",
+                        ( off.x + lineX + radius ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR,
+                        ( off.x + lineX + radius ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR );
+        }
+
+        // top right arc
+        fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                    ( off.x + lineX + radius ) / SCALE_FACTOR,
+                    ( -off.y + lineY ) / SCALE_FACTOR,
+                    ( off.x + lineX ) / SCALE_FACTOR,
+                    ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                    ( off.x + lineX ) / SCALE_FACTOR,
+                    ( -off.y + lineY ) / SCALE_FACTOR );
+
+        // top line
+        if( lineX > 0 )
+        {
+            fmt::print( m_file, "LINE {} {} {} {}\n",
+                        ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                        ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY + radius ) / SCALE_FACTOR );
+        }
+
+        // top left arc
+        fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
+                    ( off.x - lineX ) / SCALE_FACTOR,
+                    ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                    ( off.x - lineX - radius ) / SCALE_FACTOR,
+                    ( -off.y + lineY ) / SCALE_FACTOR,
+                    ( off.x - lineX ) / SCALE_FACTOR,
+                    ( -off.y + lineY ) / SCALE_FACTOR );
+
+        // left line
+        if( lineY > 0 )
+        {
+            fmt::print( m_file, "LINE {} {} {} {}\n",
+                        ( off.x - lineX - radius ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR,
+                        ( off.x - lineX - radius ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR );
+        }
+
+        break;
+    }
+
+    case PAD_SHAPE::TRAPEZOID:
+    {
+        fmt::print( m_file, " POLYGON {}\n", aPad->GetDrillSize().x / SCALE_FACTOR );
+
+        int  ddx = aPad->GetDelta( aPadLayer ).x / 2;
+        int  ddy = aPad->GetDelta( aPadLayer ).y / 2;
+
+        VECTOR2I poly[4];
+        poly[0] = VECTOR2I( -dx + ddy, dy + ddx );
+        poly[1] = VECTOR2I( dx - ddy, dy - ddx );
+        poly[2] = VECTOR2I( dx + ddy, -dy + ddx );
+        poly[3] = VECTOR2I( -dx - ddy, -dy - ddx );
+
+        for( int cur = 0; cur < 4; ++cur )
+        {
+            int next = ( cur + 1 ) % 4;
+            fmt::print( m_file, "LINE {} {} {} {}\n",
+                        ( off.x + poly[cur].x ) / SCALE_FACTOR,
+                        ( -off.y - poly[cur].y ) / SCALE_FACTOR,
+                        ( off.x + poly[next].x ) / SCALE_FACTOR,
+                        ( -off.y - poly[next].y ) / SCALE_FACTOR );
+        }
+
+        break;
+    }
+
+    case PAD_SHAPE::CHAMFERED_RECT:
+    {
+        fmt::print( m_file, " POLYGON {}\n", aPad->GetDrillSize().x / SCALE_FACTOR );
+
+        SHAPE_POLY_SET outline;
+        VECTOR2I       padOffset( 0, 0 );
+
+        TransformRoundChamferedRectToPolygon( outline, padOffset,
+                                              aPad->GetSize( aPadLayer ),
+                                              aPad->GetOrientation(),
+                                              aPad->GetRoundRectCornerRadius( aPadLayer ),
+                                              aPad->GetChamferRectRatio( aPadLayer ),
+                                              aPad->GetChamferPositions( aPadLayer ),
+                                              0, aPad->GetMaxError(), ERROR_INSIDE );
+
+        for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+        {
+            const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
+            int pointCount = poly.PointCount();
+
+            for( int ii = 0; ii < pointCount; ii++ )
+            {
+                int next = ( ii + 1 ) % pointCount;
+                fmt::print( m_file, "LINE {} {} {} {}\n",
+                            poly.CPoint( ii ).x / SCALE_FACTOR,
+                            -poly.CPoint( ii ).y / SCALE_FACTOR,
+                            poly.CPoint( next ).x / SCALE_FACTOR,
+                            -poly.CPoint( next ).y / SCALE_FACTOR );
+            }
+        }
+
+        break;
+    }
+
+    case PAD_SHAPE::CUSTOM:
+    {
+        fmt::print( m_file, " POLYGON {}\n", aPad->GetDrillSize().x / SCALE_FACTOR );
+
+        SHAPE_POLY_SET outline;
+        aPad->MergePrimitivesAsPolygon( aPadLayer, &outline );
+
+        for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+        {
+            const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
+            int pointCount = poly.PointCount();
+
+            for( int ii = 0; ii < pointCount; ii++ )
+            {
+                int next = ( ii + 1 ) % pointCount;
+                fmt::print( m_file, "LINE {} {} {} {}\n",
+                            ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
+                            ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
+                            ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
+                            ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
+            }
+        }
+
+        break;
+    }
+    }
 }
 
 
@@ -302,27 +578,38 @@ void GENCAD_EXPORTER::createPadsShapesSection()
                              vias.end() );
 
     // Emit vias pads
-    // TODO padstacks
     for( PCB_VIA* via : vias )
     {
+        LSET mask = via->GetLayerSet() & master_layermask;
+
         viastacks.push_back( via );
-        fmt::print( m_file, "PAD V{}.{}.{} ROUND {}\nCIRCLE 0 0 {}\n",
-                    via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ),
-                    via->GetDrillValue(),
-                    fmt_mask( via->GetLayerSet() & master_layermask ).c_str(),
-                    via->GetDrillValue() / SCALE_FACTOR,
-                    via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) / (SCALE_FACTOR * 2) );
+
+        // One shape per distinct diameter.  The name already separates them, so layers of
+        // equal width share an entry
+        std::set<std::string> emitted;
+
+        via->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID aViaLayer )
+                {
+                    std::string stem = viaShapeStem( via, aViaLayer, mask );
+
+                    if( !emitted.insert( stem ).second )
+                        return;
+
+                    fmt::print( m_file, "PAD {} ROUND {}\nCIRCLE 0 0 {}\n",
+                                stem,
+                                via->GetDrillValue() / SCALE_FACTOR,
+                                via->GetWidth( aViaLayer ) / (SCALE_FACTOR * 2) );
+                } );
     }
 
     // Emit component pads
-    // TODO padstacks
     PAD* old_pad = nullptr;
     int  pad_name_number = 0;
 
     for( unsigned i = 0; i<pads.size(); ++i )
     {
         PAD* pad = pads[i];
-        const VECTOR2I& off = pad->GetOffset( PADSTACK::TEMP_ALL_LAYERS );
 
         pad->SetSubRatsnest( pad_name_number );
 
@@ -336,221 +623,17 @@ void GENCAD_EXPORTER::createPadsShapesSection()
         pad_name_number++;
         pad->SetSubRatsnest( pad_name_number );
 
-        fmt::print( m_file, "PAD P{}", pad->GetSubRatsnest() );
-
         padstacks.push_back( pad ); // Will have its own padstack later
-        int dx = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x / 2;
-        int dy = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y / 2;
 
-        switch( pad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) )
-        {
-        default:
-            UNIMPLEMENTED_FOR( pad->ShowPadShape( PADSTACK::TEMP_ALL_LAYERS ) );
-            KI_FALLTHROUGH;
+        // One shape per unique layer, which the PADSTACK entry then references layer by layer
+        std::string stem = fmt::format( "P{}", pad->GetSubRatsnest() );
 
-        case PAD_SHAPE::CIRCLE:
-            fmt::print( m_file, " ROUND {}\n",
-                        pad->GetDrillSize().x / SCALE_FACTOR );
-
-            /* Circle is center, radius */
-            fmt::print( m_file, "CIRCLE {} {} {}\n",
-                        off.x / SCALE_FACTOR,
-                        -off.y / SCALE_FACTOR,
-                        pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x / (SCALE_FACTOR * 2) );
-            break;
-
-        case PAD_SHAPE::RECTANGLE:
-            fmt::print( m_file, " RECTANGULAR {}\n",
-                        pad->GetDrillSize().x / SCALE_FACTOR );
-
-            // Rectangle is begin, size *not* begin, end!
-            fmt::print( m_file, "RECTANGLE {} {} {} {}\n",
-                        (-dx + off.x ) / SCALE_FACTOR,
-                        (-dy - off.y ) / SCALE_FACTOR,
-                        dx / (SCALE_FACTOR / 2), dy / (SCALE_FACTOR / 2) );
-            break;
-
-        case PAD_SHAPE::ROUNDRECT:
-        case PAD_SHAPE::OVAL:
-        {
-            const VECTOR2I& size = pad->GetSize( PADSTACK::TEMP_ALL_LAYERS );
-            int radius = std::min( size.x, size.y ) / 2;
-
-            if( pad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::ROUNDRECT )
-            {
-                radius = pad->GetRoundRectCornerRadius( PADSTACK::TEMP_ALL_LAYERS );
-            }
-
-            int lineX = size.x / 2 - radius;
-            int lineY = size.y / 2 - radius;
-
-            fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
-
-            // bottom left arc
-            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
-                        ( off.x - lineX - radius ) / SCALE_FACTOR,
-                        ( -off.y - lineY ) / SCALE_FACTOR,
-                        ( off.x - lineX ) / SCALE_FACTOR,
-                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                        ( off.x - lineX ) / SCALE_FACTOR,
-                        ( -off.y - lineY ) / SCALE_FACTOR );
-
-            // bottom line
-            if( lineX > 0 )
-            {
-                fmt::print( m_file, "LINE {} {} {} {}\n",
-                            ( off.x - lineX ) / SCALE_FACTOR,
-                            ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                            ( off.x + lineX ) / SCALE_FACTOR,
-                            ( -off.y - lineY - radius ) / SCALE_FACTOR );
-            }
-
-            // bottom right arc
-            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
-                        ( off.x + lineX ) / SCALE_FACTOR,
-                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                        ( off.x + lineX + radius ) / SCALE_FACTOR,
-                        ( -off.y - lineY ) / SCALE_FACTOR,
-                        ( off.x + lineX ) / SCALE_FACTOR,
-                        ( -off.y - lineY ) / SCALE_FACTOR );
-
-            // right line
-            if( lineY > 0 )
-            {
-                fmt::print( m_file, "LINE {} {} {} {}\n",
-                            ( off.x + lineX + radius ) / SCALE_FACTOR,
-                            ( -off.y + lineY ) / SCALE_FACTOR,
-                            ( off.x + lineX + radius ) / SCALE_FACTOR,
-                            ( -off.y - lineY ) / SCALE_FACTOR );
-            }
-
-            // top right arc
-            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
-                        ( off.x + lineX + radius ) / SCALE_FACTOR,
-                        ( -off.y + lineY ) / SCALE_FACTOR,
-                        ( off.x + lineX ) / SCALE_FACTOR,
-                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                        ( off.x + lineX ) / SCALE_FACTOR,
-                        ( -off.y + lineY ) / SCALE_FACTOR );
-
-            // top line
-            if( lineX > 0 )
-            {
-                fmt::print( m_file, "LINE {} {} {} {}\n",
-                            ( off.x - lineX ) / SCALE_FACTOR,
-                            ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                            ( off.x + lineX ) / SCALE_FACTOR,
-                            ( -off.y + lineY + radius ) / SCALE_FACTOR );
-            }
-
-            // top left arc
-            fmt::print( m_file, "ARC {} {} {} {} {} {}\n",
-                        ( off.x - lineX ) / SCALE_FACTOR,
-                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                        ( off.x - lineX - radius ) / SCALE_FACTOR,
-                        ( -off.y + lineY ) / SCALE_FACTOR,
-                        ( off.x - lineX ) / SCALE_FACTOR,
-                        ( -off.y + lineY ) / SCALE_FACTOR );
-
-            // left line
-            if( lineY > 0 )
-            {
-                fmt::print( m_file, "LINE {} {} {} {}\n",
-                            ( off.x - lineX - radius ) / SCALE_FACTOR,
-                            ( -off.y - lineY ) / SCALE_FACTOR,
-                            ( off.x - lineX - radius ) / SCALE_FACTOR,
-                            ( -off.y + lineY ) / SCALE_FACTOR );
-            }
-
-            break;
-        }
-
-        case PAD_SHAPE::TRAPEZOID:
-        {
-            fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
-
-            int  ddx = pad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ).x / 2;
-            int  ddy = pad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ).y / 2;
-
-            VECTOR2I poly[4];
-            poly[0] = VECTOR2I( -dx + ddy, dy + ddx );
-            poly[1] = VECTOR2I( dx - ddy, dy - ddx );
-            poly[2] = VECTOR2I( dx + ddy, -dy + ddx );
-            poly[3] = VECTOR2I( -dx - ddy, -dy - ddx );
-
-            for( int cur = 0; cur < 4; ++cur )
-            {
-                int next = ( cur + 1 ) % 4;
-                fmt::print( m_file, "LINE {} {} {} {}\n",
-                            ( off.x + poly[cur].x ) / SCALE_FACTOR,
-                            ( -off.y - poly[cur].y ) / SCALE_FACTOR,
-                            ( off.x + poly[next].x ) / SCALE_FACTOR,
-                            ( -off.y - poly[next].y ) / SCALE_FACTOR );
-            }
-
-            break;
-        }
-
-        case PAD_SHAPE::CHAMFERED_RECT:
-        {
-            fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
-
-            SHAPE_POLY_SET outline;
-            VECTOR2I       padOffset( 0, 0 );
-
-            TransformRoundChamferedRectToPolygon( outline, padOffset,
-                                                  pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ),
-                                                  pad->GetOrientation(),
-                                                  pad->GetRoundRectCornerRadius( PADSTACK::TEMP_ALL_LAYERS ),
-                                                  pad->GetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS ),
-                                                  pad->GetChamferPositions( PADSTACK::TEMP_ALL_LAYERS ),
-                                                  0, pad->GetMaxError(), ERROR_INSIDE );
-
-            for( int jj = 0; jj < outline.OutlineCount(); ++jj )
-            {
-                const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
-                int pointCount = poly.PointCount();
-
-                for( int ii = 0; ii < pointCount; ii++ )
+        pad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID aPadLayer )
                 {
-                    int next = ( ii + 1 ) % pointCount;
-                    fmt::print( m_file, "LINE {} {} {} {}\n",
-                                poly.CPoint( ii ).x / SCALE_FACTOR,
-                                -poly.CPoint( ii ).y / SCALE_FACTOR,
-                                poly.CPoint( next ).x / SCALE_FACTOR,
-                                -poly.CPoint( next ).y / SCALE_FACTOR );
-                }
-            }
-
-            break;
-        }
-
-        case PAD_SHAPE::CUSTOM:
-        {
-            fmt::print( m_file, " POLYGON {}\n", pad->GetDrillSize().x / SCALE_FACTOR );
-
-            SHAPE_POLY_SET outline;
-            pad->MergePrimitivesAsPolygon( F_Cu, &outline );
-
-            for( int jj = 0; jj < outline.OutlineCount(); ++jj )
-            {
-                const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
-                int pointCount = poly.PointCount();
-
-                for( int ii = 0; ii < pointCount; ii++ )
-                {
-                    int next = ( ii + 1 ) % pointCount;
-                    fmt::print( m_file, "LINE {} {} {} {}\n",
-                                ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
-                                ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
-                                ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
-                                ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
-                }
-            }
-
-            break;
-        }
-        }
+                    writePadShape( padShapeName( stem, pad->Padstack(), aPadLayer ), pad,
+                                   aPadLayer );
+                } );
     }
 
     fmt::print( m_file, "\n$ENDPADS\n\n" );
@@ -565,18 +648,14 @@ void GENCAD_EXPORTER::createPadsShapesSection()
 
         LSET mask = via->GetLayerSet() & master_layermask;
 
-        fmt::print( m_file, "PADSTACK VIA{}.{}.{} {}\n",
-                    via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ),
-                    via->GetDrillValue(),
-                    fmt_mask( mask ).c_str(),
+        fmt::print( m_file, "PADSTACK {} {}\n",
+                    viaStackName( via, mask ),
                     via->GetDrillValue() / SCALE_FACTOR );
 
         for( PCB_LAYER_ID layer : mask.Seq( gc_seq ) )
         {
-            fmt::print( m_file, "PAD V{}.{}.{} {} 0 0\n",
-                        via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ),
-                        via->GetDrillValue(),
-                        fmt_mask( mask ).c_str(),
+            fmt::print( m_file, "PAD {} {} 0 0\n",
+                        viaShapeStem( via, via->Padstack().EffectiveLayerFor( layer ), mask ),
                         genCADLayerName( cu_count, layer ).c_str() );
         }
     }
@@ -595,13 +674,15 @@ void GENCAD_EXPORTER::createPadsShapesSection()
                     i,
                     pad->GetDrillSize().x / SCALE_FACTOR );
 
-        LSET pad_set = pad->GetLayerSet() & master_layermask;
+        LSET        pad_set = pad->GetLayerSet() & master_layermask;
+        std::string stem = fmt::format( "P{}", i );
 
         // the special gc_seq
         for( PCB_LAYER_ID layer : pad_set.Seq( gc_seq ) )
         {
-            fmt::print( m_file, "PAD P{} {} 0 0\n",
-                        i,
+            fmt::print( m_file, "PAD {} {} 0 0\n",
+                        padShapeName( stem, pad->Padstack(),
+                                      pad->Padstack().EffectiveLayerFor( layer ) ),
                         genCADLayerName( cu_count, layer ).c_str() );
         }
 
@@ -615,8 +696,9 @@ void GENCAD_EXPORTER::createPadsShapesSection()
             // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
             for( PCB_LAYER_ID layer : pad_set.Seq() )
             {
-                fmt::print( m_file, "PAD P{} {} 0 0\n",
-                            i,
+                fmt::print( m_file, "PAD {} {} 0 0\n",
+                            padShapeName( stem, pad->Padstack(),
+                                          pad->Padstack().EffectiveLayerFor( layer ) ),
                             genCADLayerNameFlipped( cu_count, layer ).c_str() );
             }
         }
@@ -918,8 +1000,6 @@ void GENCAD_EXPORTER::createRoutesSection()
     int     cu_count = m_board->GetCopperLayerCount();
     TRACKS  tracks( m_board->Tracks() );
 
-    // TODO padstacks
-
     std::sort( tracks.begin(), tracks.end(),
                []( const PCB_TRACK* a, const PCB_TRACK* b )
                {
@@ -927,12 +1007,12 @@ void GENCAD_EXPORTER::createRoutesSection()
                    int widthB = 0;
 
                    if( a->Type() == PCB_VIA_T )
-                       widthA = static_cast<const PCB_VIA*>( a )->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
+                       widthA = viaNominalWidth( static_cast<const PCB_VIA*>( a ) );
                    else
                        widthA = a->GetWidth();
 
                    if( b->Type() == PCB_VIA_T )
-                       widthB = static_cast<const PCB_VIA*>( b )->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
+                       widthB = viaNominalWidth( static_cast<const PCB_VIA*>( b ) );
                    else
                        widthB = b->GetWidth();
 
@@ -972,7 +1052,7 @@ void GENCAD_EXPORTER::createRoutesSection()
         int currentWidth = 0;
 
         if( track->Type() == PCB_VIA_T )
-            currentWidth = static_cast<const PCB_VIA*>( track )->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
+            currentWidth = viaNominalWidth( static_cast<const PCB_VIA*>( track ) );
         else
             currentWidth = track->GetWidth();
 
@@ -1026,10 +1106,8 @@ void GENCAD_EXPORTER::createRoutesSection()
 
             LSET vset = via->GetLayerSet() & master_layermask;
 
-            fmt::print( m_file, "VIA VIA{}.{}.{} {} {} ALL {} via{}\n",
-                        via->GetWidth( PADSTACK::TEMP_ALL_LAYERS ),
-                        via->GetDrillValue(),
-                        fmt_mask( vset ).c_str(),
+            fmt::print( m_file, "VIA {} {} {} ALL {} via{}\n",
+                        viaStackName( via, vset ),
                         mapXTo( via->GetStart().x ), mapYTo( via->GetStart().y ),
                         via->GetDrillValue() / SCALE_FACTOR,
                         vianum++ );

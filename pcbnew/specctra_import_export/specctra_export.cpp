@@ -56,6 +56,7 @@
 #include <geometry/convex_hull.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
+#include <mmh3_hash.h>
 #include <pcbnew_settings.h>
 
 
@@ -203,17 +204,26 @@ static POINT mapPt( const VECTOR2I& pt, FOOTPRINT* aFootprint )
  */
 static bool isRoundKeepout( PAD* aPad )
 {
-    // TODO(JE) padstacks
-    if( aPad->GetShape( ::PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
-    {
-        if( aPad->GetDrillSize().x >= aPad->GetSize( ::PADSTACK::TEMP_ALL_LAYERS ).x )
-            return true;
+    std::vector<PCB_LAYER_ID> layers = aPad->Padstack().UniqueLayers();
 
-        if( !( aPad->GetLayerSet() & LSET::AllCuMask() ).any() )
-            return true;
+    // Any layer with real copper makes this a pad, not a keepout.  An empty padstack passes
+    // that test vacuously, so it does not count.
+    bool swallowedByHole = !layers.empty();
+
+    for( PCB_LAYER_ID layer : layers )
+    {
+        if( aPad->GetShape( layer ) != PAD_SHAPE::CIRCLE
+            || aPad->GetDrillSize().x < aPad->GetSize( layer ).x )
+        {
+            swallowedByHole = false;
+        }
     }
 
-    return false;
+    if( swallowedByHole )
+        return true;
+
+    return aPad->GetShape( aPad->Padstack().EffectiveLayerFor( F_Cu ) ) == PAD_SHAPE::CIRCLE
+           && !( aPad->GetLayerSet() & LSET::AllCuMask() ).any();
 }
 
 
@@ -237,92 +247,68 @@ bool SPECCTRA_DB::BuiltBoardOutlines( BOARD* aBoard  )
 }
 
 
-PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
+/**
+ * The identity of the copper on one padstack layer.  Two padstacks whose identities differ on
+ * any layer must not share a padstack id.
+ */
+struct SPECCTRA_SHAPE_ID
 {
-    std::string uniqifier;
+    std::string m_family;   ///< Shape family, eg "Round"
+    std::string m_dims;     ///< Dimensions, unique within a family
+    std::string m_offset;   ///< Hole-to-copper offset, empty when centred
 
-    // caller must do these checks before calling here.
-    wxASSERT( !isRoundKeepout( aPad ) );
+    bool operator==( const SPECCTRA_SHAPE_ID& aOther ) const = default;
+};
 
-    PADSTACK*   padstack = new PADSTACK();
 
-    uniqifier = '[';
-
-    const int                copperCount = aBoard->GetCopperLayerCount();
-    static const LSET        all_cu = LSET::AllCuMask( copperCount );
-    int                      reportedLayers = 0;
-    std::vector<std::string> layerName( copperCount );
-
-    bool onAllCopperLayers = ( (aPad->GetLayerSet() & all_cu) == all_cu );
-
-    if( onAllCopperLayers )
-        uniqifier += 'A'; // A for all layers
-
-    for( int layer=0; layer < copperCount; ++layer )
-    {
-        PCB_LAYER_ID kilayer = m_pcbLayer2kicad[layer];
-
-        if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
-        {
-            layerName[reportedLayers++] = m_layerIds[layer];
-
-            if( !onAllCopperLayers )
-            {
-                if( layer == 0 )
-                    uniqifier += 'T';
-                else if( layer == copperCount - 1 )
-                    uniqifier += 'B';
-                else
-                    uniqifier += char('0' + layer); // layer index char
-            }
-        }
-    }
-
-    uniqifier += ']';
-
-    POINT   dsnOffset;
-
-    // TODO(JE) padstacks
-    const VECTOR2I& padSize = aPad->GetSize( ::PADSTACK::TEMP_ALL_LAYERS );
-    const VECTOR2I& offset = aPad->GetOffset( ::PADSTACK::TEMP_ALL_LAYERS );
+/**
+ * Append the copper @p aPad carries on @p aPadLayer to @p aPadstack, one shape per Specctra
+ * layer id in @p aLayerNames, and return the identity of that copper.
+ */
+static SPECCTRA_SHAPE_ID appendPadstackShape( PADSTACK* aPadstack, PAD* aPad, PCB_LAYER_ID aPadLayer,
+                                              const std::vector<std::string>& aLayerNames )
+{
+    SPECCTRA_SHAPE_ID  id;
+    const VECTOR2I&    padSize = aPad->GetSize( aPadLayer );
+    const VECTOR2I&    offset = aPad->GetOffset( aPadLayer );
+    POINT              dsnOffset;
 
     if( offset.x || offset.y )
     {
         dsnOffset = mapPt( offset );
+
         // Using () would cause padstack name to be quoted, and {} locks freerouter, so use [].
         std::ostringstream oss;
         oss.imbue( std::locale::classic() );
         oss << std::fixed << std::setprecision( 6 )
             << '[' << dsnOffset.x << ',' << dsnOffset.y << ']';
-        uniqifier += oss.str();
+        id.m_offset = oss.str();
     }
 
-    switch( aPad->GetShape( ::PADSTACK::TEMP_ALL_LAYERS ) )
+    std::ostringstream dims;
+    dims << std::fixed << std::setprecision( 6 );
+
+    switch( aPad->GetShape( aPadLayer ) )
     {
     case PAD_SHAPE::CIRCLE:
     {
-        double diameter = scale( padSize.x );
-
-        for( int ndx = 0; ndx < reportedLayers; ++ndx )
+        for( const std::string& layerName : aLayerNames )
         {
-            SHAPE* shape = new SHAPE( padstack );
+            SHAPE* shape = new SHAPE( aPadstack );
 
-            padstack->Append( shape );
+            aPadstack->Append( shape );
 
             CIRCLE* circle = new CIRCLE( shape );
 
             shape->SetShape( circle );
 
-            circle->SetLayerId( layerName[ndx] );
-            circle->SetDiameter( diameter );
+            circle->SetLayerId( layerName );
+            circle->SetDiameter( scale( padSize.x ) );
             circle->SetVertex( dsnOffset );
         }
 
-        std::ostringstream oss;
-        oss << "Round" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
-            << IU2um( padSize.x ) << "_um";
-
-        padstack->SetPadstackId( oss.str().c_str() );
+        id.m_family = "Round";
+        dims << IU2um( padSize.x ) << "_um";
         break;
     }
 
@@ -337,25 +323,22 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         lowerLeft += dsnOffset;
         upperRight += dsnOffset;
 
-        for( int ndx = 0; ndx < reportedLayers; ++ndx )
+        for( const std::string& layerName : aLayerNames )
         {
-            SHAPE* shape = new SHAPE( padstack );
+            SHAPE* shape = new SHAPE( aPadstack );
 
-            padstack->Append( shape );
+            aPadstack->Append( shape );
 
             RECTANGLE* rect = new RECTANGLE( shape );
 
             shape->SetShape( rect );
 
-            rect->SetLayerId( layerName[ndx] );
+            rect->SetLayerId( layerName );
             rect->SetCorners( lowerLeft, upperRight );
         }
 
-        std::ostringstream oss;
-        oss << "Rect" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
-            << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_um";
-
-        padstack->SetPadstackId( oss.str().c_str() );
+        id.m_family = "Rect";
+        dims << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_um";
         break;
     }
 
@@ -387,25 +370,21 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         pstart += dsnOffset;
         pstop += dsnOffset;
 
-        for( int ndx = 0; ndx < reportedLayers; ++ndx )
+        for( const std::string& layerName : aLayerNames )
         {
-            SHAPE* shape;
-            PATH*  path;
-
             // see http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
-            shape = new SHAPE( padstack );
+            SHAPE* shape = new SHAPE( aPadstack );
 
-            padstack->Append( shape );
-            path = makePath( pstart, pstop, layerName[ndx] );
+            aPadstack->Append( shape );
+
+            PATH* path = makePath( pstart, pstop, layerName );
+
             shape->SetShape( path );
-            path->aperture_width = 2.0 * radius;
+            path->SetAperture( 2.0 * radius );
         }
 
-        std::ostringstream oss;
-        oss << "Oval" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
-            << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_um";
-
-        padstack->SetPadstackId( oss.str().c_str() );
+        id.m_family = "Oval";
+        dims << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_um";
         break;
     }
 
@@ -414,7 +393,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         double dx = scale( padSize.x ) / 2.0;
         double dy = scale( padSize.y ) / 2.0;
 
-        const VECTOR2I& delta = aPad->GetDelta( ::PADSTACK::TEMP_ALL_LAYERS );
+        const VECTOR2I& delta = aPad->GetDelta( aPadLayer );
 
         double ddx = scale( delta.x ) / 2.0;
         double ddy = scale( delta.y ) / 2.0;
@@ -430,18 +409,18 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         upperRight += dsnOffset;
         lowerRight += dsnOffset;
 
-        for( int ndx = 0; ndx < reportedLayers; ++ndx )
+        for( const std::string& layerName : aLayerNames )
         {
-            SHAPE* shape = new SHAPE( padstack );
+            SHAPE* shape = new SHAPE( aPadstack );
 
-            padstack->Append( shape );
+            aPadstack->Append( shape );
 
             // a T_polygon exists as a PATH
             PATH* polygon = new PATH( shape, T_polygon );
 
             shape->SetShape( polygon );
 
-            polygon->SetLayerId( layerName[ndx] );
+            polygon->SetLayerId( layerName );
 
             polygon->AppendPoint( lowerLeft );
             polygon->AppendPoint( upperLeft );
@@ -449,14 +428,10 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             polygon->AppendPoint( lowerRight );
         }
 
-        // this string _must_ be unique for a given physical shape
-        std::ostringstream oss;
-        oss << "Trapz" << uniqifier << "Pad_" << std::fixed << std::setprecision(6)
-            << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_"
-            << ( delta.x < 0 ? "n" : "p") << std::abs( IU2um( delta.x ) ) << "x"
-            << ( delta.y < 0 ? "n" : "p") << std::abs( IU2um( delta.y ) ) << "_um";
-
-        padstack->SetPadstackId( oss.str().c_str() );
+        id.m_family = "Trapz";
+        dims << IU2um( padSize.x ) << "x" << IU2um( padSize.y ) << "_"
+             << ( delta.x < 0 ? "n" : "p" ) << std::abs( IU2um( delta.x ) ) << "x"
+             << ( delta.y < 0 ? "n" : "p" ) << std::abs( IU2um( delta.y ) ) << "_um";
         break;
     }
 
@@ -465,7 +440,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
     {
         // Export the shape as as polygon, round rect does not exist as primitive
         const int      circleToSegmentsCount = 36;
-        int            rradius = aPad->GetRoundRectCornerRadius( ::PADSTACK::TEMP_ALL_LAYERS );
+        int            rradius = aPad->GetRoundRectCornerRadius( aPadLayer );
         SHAPE_POLY_SET cornerBuffer;
 
         // Use a slightly bigger shape because the round corners are approximated by
@@ -482,27 +457,27 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         psize.x += extra_clearance * 2;
         psize.y += extra_clearance * 2;
         rradius += extra_clearance;
-        bool doChamfer = aPad->GetShape( ::PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::CHAMFERED_RECT;
+        bool doChamfer = aPad->GetShape( aPadLayer ) == PAD_SHAPE::CHAMFERED_RECT;
 
         TransformRoundChamferedRectToPolygon( cornerBuffer, VECTOR2I( 0, 0 ), psize, ANGLE_0,
-                rradius, aPad->GetChamferRectRatio( ::PADSTACK::TEMP_ALL_LAYERS ),
-                doChamfer ? aPad->GetChamferPositions( ::PADSTACK::TEMP_ALL_LAYERS ) : 0,
+                rradius, aPad->GetChamferRectRatio( aPadLayer ),
+                doChamfer ? aPad->GetChamferPositions( aPadLayer ) : 0,
                 0, aPad->GetMaxError(), ERROR_INSIDE );
 
         SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
 
-        for( int ndx = 0; ndx < reportedLayers; ++ndx )
+        for( const std::string& layerName : aLayerNames )
         {
-            SHAPE* shape = new SHAPE( padstack );
+            SHAPE* shape = new SHAPE( aPadstack );
 
-            padstack->Append( shape );
+            aPadstack->Append( shape );
 
             // a T_polygon exists as a PATH
             PATH* polygon = new PATH( shape, T_polygon );
 
             shape->SetShape( polygon );
 
-            polygon->SetLayerId( layerName[ndx] );
+            polygon->SetLayerId( layerName );
 
             // append a closed polygon
             POINT first_corner;
@@ -521,26 +496,21 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             polygon->AppendPoint( first_corner ); // Close polygon
         }
 
-        // this string _must_ be unique for a given physical shape
-        std::ostringstream oss;
-        oss << "RoundRect" << uniqifier << "Pad_"
-            << std::fixed << std::setprecision(6)
-            << IU2um( padSize.x ) << 'x'
-            << IU2um( padSize.y ) << '_'
-            << IU2um( rradius ) << "_um_"
-            << ( doChamfer ? aPad->GetChamferRectRatio( ::PADSTACK::TEMP_ALL_LAYERS ) : 0.0 ) << '_'
-            << std::hex << std::uppercase
-            << ( doChamfer ? aPad->GetChamferPositions( ::PADSTACK::TEMP_ALL_LAYERS ) : 0 );
-
-        padstack->SetPadstackId( oss.str().c_str() );
+        id.m_family = "RoundRect";
+        dims << IU2um( padSize.x ) << 'x'
+             << IU2um( padSize.y ) << '_'
+             << IU2um( rradius ) << "_um_"
+             << ( doChamfer ? aPad->GetChamferRectRatio( aPadLayer ) : 0.0 ) << '_'
+             << std::hex << std::uppercase
+             << ( doChamfer ? aPad->GetChamferPositions( aPadLayer ) : 0 );
         break;
     }
 
     case PAD_SHAPE::CUSTOM:
     {
         std::vector<VECTOR2I> polygonal_shape;
-        SHAPE_POLY_SET       pad_shape;
-        aPad->MergePrimitivesAsPolygon( ::PADSTACK::TEMP_ALL_LAYERS, &pad_shape );
+        SHAPE_POLY_SET        pad_shape;
+        aPad->MergePrimitivesAsPolygon( aPadLayer, &pad_shape );
 
 #ifdef EXPORT_CUSTOM_PADS_CONVEX_HULL
         BuildConvexHull( polygonal_shape, pad_shape );
@@ -555,18 +525,18 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         if( polygonal_shape.front() != polygonal_shape.back() )
             polygonal_shape.push_back( polygonal_shape.front() );
 
-        for( int ndx = 0; ndx < reportedLayers; ++ndx )
+        for( const std::string& layerName : aLayerNames )
         {
-            SHAPE* shape = new SHAPE( padstack );
+            SHAPE* shape = new SHAPE( aPadstack );
 
-            padstack->Append( shape );
+            aPadstack->Append( shape );
 
             // a T_polygon exists as a PATH
             PATH* polygon = new PATH( shape, T_polygon );
 
             shape->SetShape( polygon );
 
-            polygon->SetLayerId( layerName[ndx] );
+            polygon->SetLayerId( layerName );
 
             for( const VECTOR2I& pt : polygonal_shape )
             {
@@ -576,22 +546,127 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             }
         }
 
-        // this string _must_ be unique for a given physical shape, so try to make it unique
         const HASH_128 hash = pad_shape.GetHash();
-        const BOX2I rect = aPad->GetBoundingBox();
+        const BOX2I    rect = aPad->GetBoundingBox();
 
-        std::ostringstream oss;
-        oss << "Cust" << uniqifier << "Pad_"
-            << std::fixed << std::setprecision(6)
-            << IU2um( padSize.x ) << 'x' << IU2um( padSize.y ) << '_'
-            << IU2um( rect.GetWidth() ) << 'x' << IU2um( rect.GetHeight() ) << '_'
-            << polygonal_shape.size() << "_um_"
-            << hash.ToString();
-
-        padstack->SetPadstackId( oss.str().c_str() );
+        id.m_family = "Cust";
+        dims << IU2um( padSize.x ) << 'x' << IU2um( padSize.y ) << '_'
+             << IU2um( rect.GetWidth() ) << 'x' << IU2um( rect.GetHeight() ) << '_'
+             << polygonal_shape.size() << "_um_"
+             << hash.ToString();
         break;
     }
     }
+
+    id.m_dims = dims.str();
+
+    return id;
+}
+
+
+PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
+{
+    std::string uniqifier;
+
+    // caller must do these checks before calling here.
+    wxASSERT( !isRoundKeepout( aPad ) );
+
+    PADSTACK*   padstack = new PADSTACK();
+
+    uniqifier = '[';
+
+    const int copperCount = aBoard->GetCopperLayerCount();
+    const LSET all_cu = LSET::AllCuMask( copperCount );
+
+    // Board layers grouped by the padstack layer they resolve to, so one geometry build serves
+    // every layer that shares it
+    std::vector<std::pair<PCB_LAYER_ID, std::vector<std::string>>> layerGroups;
+
+    bool onAllCopperLayers = ( (aPad->GetLayerSet() & all_cu) == all_cu );
+
+    if( onAllCopperLayers )
+        uniqifier += 'A'; // A for all layers
+
+    for( int layer=0; layer < copperCount; ++layer )
+    {
+        PCB_LAYER_ID kilayer = m_pcbLayer2kicad[layer];
+
+        if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
+        {
+            PCB_LAYER_ID padLayer = aPad->Padstack().EffectiveLayerFor( kilayer );
+            auto         group = std::find_if( layerGroups.begin(), layerGroups.end(),
+                                               [&]( const auto& aGroup )
+                                               {
+                                                   return aGroup.first == padLayer;
+                                               } );
+
+            if( group == layerGroups.end() )
+                layerGroups.emplace_back( padLayer, std::vector<std::string>{ m_layerIds[layer] } );
+            else
+                group->second.push_back( m_layerIds[layer] );
+
+            if( !onAllCopperLayers )
+            {
+                if( layer == 0 )
+                    uniqifier += 'T';
+                else if( layer == copperCount - 1 )
+                    uniqifier += 'B';
+                else
+                    uniqifier += char('0' + layer); // layer index char
+            }
+        }
+    }
+
+    uniqifier += ']';
+
+    if( layerGroups.empty() )
+    {
+        padstack->SetPadstackId( ( "Empty" + uniqifier + "Pad" ).c_str() );
+        return padstack;
+    }
+
+    // Every Specctra shape carries its own layer id, so emit each group's geometry in turn
+    std::vector<SPECCTRA_SHAPE_ID> shapeIds;
+
+    for( const auto& [padLayer, names] : layerGroups )
+        shapeIds.push_back( appendPadstackShape( padstack, aPad, padLayer, names ) );
+
+    bool uniform = std::all_of( shapeIds.begin(), shapeIds.end(),
+                                [&]( const SPECCTRA_SHAPE_ID& aId )
+                                {
+                                    return aId == shapeIds.front();
+                                } );
+
+    // This string _must_ be unique for a given physical shape
+    std::ostringstream oss;
+
+    if( uniform )
+    {
+        oss << shapeIds.front().m_family << uniqifier << shapeIds.front().m_offset << "Pad_"
+            << shapeIds.front().m_dims;
+    }
+    else
+    {
+        // Spelling out every layer grows the id without bound on a deep stackup, so fold the
+        // layers past the first into a digest
+        MMH3_HASH hash( 0 );
+
+        for( size_t ndx = 0; ndx < shapeIds.size(); ++ndx )
+        {
+            for( const std::string& name : layerGroups[ndx].second )
+                hash.add( name );
+
+            hash.add( shapeIds[ndx].m_family );
+            hash.add( shapeIds[ndx].m_offset );
+            hash.add( shapeIds[ndx].m_dims );
+        }
+
+        oss << "Complex" << uniqifier << shapeIds.front().m_offset << "Pad_"
+            << shapeIds.front().m_family << '_' << shapeIds.front().m_dims << '_'
+            << hash.digest().ToString();
+    }
+
+    padstack->SetPadstackId( oss.str().c_str() );
 
     return padstack;
 }
@@ -1006,9 +1081,42 @@ PADSTACK* SPECCTRA_DB::makeVia( const PCB_VIA* aVia )
     if( topLayer > botLayer )
         std::swap( topLayer, botLayer );
 
-    // TODO(JE) padstacks
-    return makeVia( aVia->GetWidth( ::PADSTACK::TEMP_ALL_LAYERS ), aVia->GetDrillValue(),
-                    topLayer, botLayer );
+    if( aVia->Padstack().Mode() == ::PADSTACK::MODE::NORMAL )
+    {
+        return makeVia( aVia->GetWidth( ::PADSTACK::ALL_LAYERS ), aVia->GetDrillValue(), topLayer,
+                        botLayer );
+    }
+
+    PADSTACK*          padstack = new PADSTACK();
+    std::ostringstream oss;
+
+    oss << "Via[" << topLayer << '-' << botLayer << ']' << std::fixed << std::setprecision( 6 );
+
+    for( int layer = topLayer; layer <= botLayer; ++layer )
+    {
+        ::PCB_LAYER_ID viaLayer = aVia->Padstack().EffectiveLayerFor( m_pcbLayer2kicad[layer] );
+        double         dsnDiameter = scale( aVia->GetWidth( viaLayer ) );
+
+        SHAPE* shape = new SHAPE( padstack );
+
+        padstack->Append( shape );
+
+        CIRCLE* circle = new CIRCLE( shape );
+
+        shape->SetShape( circle );
+
+        circle->SetDiameter( dsnDiameter );
+        circle->SetLayerId( m_layerIds[layer] );
+
+        oss << '_' << dsnDiameter;
+    }
+
+    // encode the drill value into the name for later import
+    oss << ':' << IU2um( aVia->GetDrillValue() ) << "_um";
+
+    padstack->SetPadstackId( oss.str().c_str() );
+
+    return padstack;
 }
 
 

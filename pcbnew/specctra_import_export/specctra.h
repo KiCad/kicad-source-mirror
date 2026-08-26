@@ -444,7 +444,7 @@ public:
     {
     }
 
-    void SetLayerId( std::string& aLayerId )
+    void SetLayerId( const std::string& aLayerId )
     {
         layer_id = aLayerId;
     }
@@ -796,7 +796,7 @@ public:
         out->Print( 0, ")%s", newline );
     }
 
-    void SetLayerId( std::string& aLayerId )
+    void SetLayerId( const std::string& aLayerId )
     {
         layer_id = aLayerId;
     }

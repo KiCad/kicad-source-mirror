@@ -42,6 +42,7 @@
 #include <string_utils.h>
 #include <tools/board_editor_control.h>
 #include <exporters/board_exporter_base.h>
+#include <exporters/export_hyperlynx.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
 
 
@@ -52,6 +53,17 @@ static double iu2hyp( double iu )
 
 
 class HYPERLYNX_EXPORTER;
+
+/// The copper geometry of one padstack layer, as Hyperlynx describes it in a PADSTACK entry
+struct HYPERLYNX_PAD_SHAPE
+{
+    PAD_SHAPE m_shape;
+    int       m_sx;
+    int       m_sy;
+
+    bool operator==( const HYPERLYNX_PAD_SHAPE& aOther ) const = default;
+};
+
 
 class HYPERLYNX_PAD_STACK
 {
@@ -69,19 +81,13 @@ public:
 
     bool operator==( const HYPERLYNX_PAD_STACK& other ) const
     {
-        if( m_shape != other.m_shape )
-            return false;
-
         if( m_type != other.m_type )
             return false;
 
         if( IsThrough() && other.IsThrough() && m_drill != other.m_drill )
             return false;
 
-        if( m_sx != other.m_sx )
-            return false;
-
-        if( m_sy != other.m_sy )
+        if( m_shapes != other.m_shapes )
             return false;
 
         if( m_layers != other.m_layers )
@@ -114,11 +120,12 @@ private:
     BOARD*      m_board;
     int         m_id;
     int         m_drill;
-    PAD_SHAPE   m_shape;
-    int         m_sx, m_sy;
     double      m_angle;
     LSET        m_layers;
     PAD_ATTRIB  m_type;
+
+    /// Copper geometry per board copper layer this padstack is present on
+    std::map<PCB_LAYER_ID, HYPERLYNX_PAD_SHAPE> m_shapes;
 };
 
 
@@ -148,12 +155,12 @@ private:
         return m_padStacks.back();
     }
 
-    const std::string formatPadShape( const HYPERLYNX_PAD_STACK& aStack )
+    const std::string formatPadShape( const HYPERLYNX_PAD_SHAPE& aShape, double aAngle )
     {
         int  shapeId = 0;
         char buf[1024];
 
-        switch( aStack.m_shape )
+        switch( aShape.m_shape )
         {
         case PAD_SHAPE::CIRCLE:
         case PAD_SHAPE::OVAL:
@@ -185,9 +192,9 @@ private:
 
         snprintf( buf, sizeof( buf ), "%d, %.9f, %.9f, %.1f, M",
                   shapeId,
-                  iu2hyp( aStack.m_sx ),
-                  iu2hyp( aStack.m_sy ),
-                  aStack.m_angle );
+                  iu2hyp( aShape.m_sx ),
+                  iu2hyp( aShape.m_sy ),
+                  aAngle );
 
         return buf;
     }
@@ -216,10 +223,7 @@ private:
 
 HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
 {
-    // TODO(JE) padstacks
     m_board = aBoard;
-    m_sx    = aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x;
-    m_sy    = aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y;
     m_angle = 180.0 - aPad->GetOrientation().AsDegrees();
 
     if( m_angle < 0.0 )
@@ -227,23 +231,38 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
 
     m_layers = aPad->GetLayerSet();
     m_drill  = aPad->GetDrillSize().x;
-    m_shape  = aPad->GetShape( PADSTACK::TEMP_ALL_LAYERS );
     m_type   = PAD_ATTRIB::PTH;
     m_id     = 0;
+
+    LSET copperLayers = m_layers & LSET::AllCuMask( aBoard->GetCopperLayerCount() );
+
+    for( PCB_LAYER_ID layer : copperLayers.Seq() )
+    {
+        PCB_LAYER_ID padLayer = aPad->Padstack().EffectiveLayerFor( layer );
+
+        m_shapes[layer] = { aPad->GetShape( padLayer ), aPad->GetSize( padLayer ).x,
+                            aPad->GetSize( padLayer ).y };
+    }
 }
 
 
 HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PCB_VIA* aVia )
 {
     m_board  = aBoard;
-    // TODO(JE) padstacks
-    m_sx = m_sy = aVia->GetWidth( PADSTACK::TEMP_ALL_LAYERS );
     m_angle  = 0;
     m_layers = aVia->GetLayerSet();
     m_drill  = aVia->GetDrillValue();
-    m_shape  = PAD_SHAPE::CIRCLE;
     m_type   = PAD_ATTRIB::PTH;
     m_id     = 0;
+
+    LSET copperLayers = m_layers & LSET::AllCuMask( aBoard->GetCopperLayerCount() );
+
+    for( PCB_LAYER_ID layer : copperLayers.Seq() )
+    {
+        int width = aVia->GetWidth( aVia->Padstack().EffectiveLayerFor( layer ) );
+
+        m_shapes[layer] = { PAD_SHAPE::CIRCLE, width, width };
+    }
 }
 
 
@@ -263,11 +282,23 @@ void HYPERLYNX_EXPORTER::writeSinglePadStack( HYPERLYNX_PAD_STACK& aStack )
     if( outLayers.none() )
         return;
 
-    m_out->Print( 0, "{PADSTACK=%d, %.9f\n", aStack.m_id, iu2hyp( aStack.m_drill ) );
+    const HYPERLYNX_PAD_SHAPE& firstShape = aStack.m_shapes.begin()->second;
 
-    if( outLayers == layerMask )
+    bool uniform = std::all_of( aStack.m_shapes.begin(), aStack.m_shapes.end(),
+                                [&]( const auto& aEntry )
+                                {
+                                    return aEntry.second == firstShape;
+                                } );
+
+    // The spec requires the drill parameter to be absent, not zero, on a padstack with no hole
+    if( aStack.m_drill > 0 )
+        m_out->Print( 0, "{PADSTACK=%d, %.9f\n", aStack.m_id, iu2hyp( aStack.m_drill ) );
+    else
+        m_out->Print( 0, "{PADSTACK=%d\n", aStack.m_id );
+
+    if( outLayers == layerMask && uniform )
     {
-        m_out->Print( 1, "(\"MDEF\", %s)\n", formatPadShape( aStack ).c_str() );
+        m_out->Print( 1, "(\"MDEF\", %s)\n", formatPadShape( firstShape, aStack.m_angle ).c_str() );
     }
     else
     {
@@ -275,7 +306,7 @@ void HYPERLYNX_EXPORTER::writeSinglePadStack( HYPERLYNX_PAD_STACK& aStack )
         {
             m_out->Print( 1, "(\"%s\", %s)\n",
                           (const char*) m_board->GetLayerName( l ).c_str(),
-                          formatPadShape( aStack ).c_str() );
+                          formatPadShape( aStack.m_shapes.at( l ), aStack.m_angle ).c_str() );
         }
     }
 
@@ -683,6 +714,16 @@ bool HYPERLYNX_EXPORTER::Run()
 }
 
 
+bool ExportBoardToHyperlynxFile( BOARD* aBoard, const wxString& aFullFilename )
+{
+    HYPERLYNX_EXPORTER exporter;
+    exporter.SetBoard( aBoard );
+    exporter.SetOutputFilename( wxFileName( aFullFilename ) );
+
+    return exporter.Run();
+}
+
+
 int BOARD_EDITOR_CONTROL::ExportHyperlynx( const TOOL_EVENT& aEvent )
 {
     wxString    wildcard =  wxT( "*.hyp" );
@@ -704,10 +745,7 @@ int BOARD_EDITOR_CONTROL::ExportHyperlynx( const TOOL_EVENT& aEvent )
     // always enforce filename extension, user may not have entered it.
     fn.SetExt( wxT( "hyp" ) );
 
-    HYPERLYNX_EXPORTER exporter;
-    exporter.SetBoard( board );
-    exporter.SetOutputFilename( fn );
-    exporter.Run();
+    ExportBoardToHyperlynxFile( board, fn.GetFullPath() );
 
     return 0;
 }
