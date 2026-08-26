@@ -902,44 +902,57 @@ void AR_MATRIX::CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int 
 
 void AR_MATRIX::PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op_logic )
 {
-    int     dx, dy;
-    VECTOR2I shape_pos = aPad->ShapePos( PADSTACK::TEMP_ALL_LAYERS );
+    auto tracePad =
+            [&]( PCB_LAYER_ID aSourceLayer, const LSET& aLayerMask )
+            {
+                VECTOR2I shape_pos = aPad->ShapePos( aSourceLayer );
 
-    // TODO(JE) padstacks
-    dx = aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x / 2;
-    dx += marge;
+                int dx = aPad->GetSize( aSourceLayer ).x / 2;
+                dx += marge;
 
-    if( aPad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+                if( aPad->GetShape( aSourceLayer ) == PAD_SHAPE::CIRCLE )
+                {
+                    traceFilledCircle( shape_pos.x, shape_pos.y, dx, aLayerMask, color, op_logic );
+                    return;
+                }
+
+                int dy = aPad->GetSize( aSourceLayer ).y / 2;
+                dy += marge;
+
+                if( aPad->GetShape( aSourceLayer ) == PAD_SHAPE::TRAPEZOID )
+                {
+                    dx += abs( aPad->GetDelta( aSourceLayer ).y ) / 2;
+                    dy += abs( aPad->GetDelta( aSourceLayer ).x ) / 2;
+                }
+
+                // The pad is a rectangle ( horizontal or vertical )
+                if( aPad->GetOrientation().IsCardinal() )
+                {
+                    // Orientation turned 90 deg.
+                    if( aPad->GetOrientation() == ANGLE_90 || aPad->GetOrientation() == ANGLE_270 )
+                        std::swap( dx, dy );
+
+                    TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy, shape_pos.x + dx,
+                                          shape_pos.y + dy, aLayerMask, color, op_logic );
+                }
+                else
+                {
+                    TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy, shape_pos.x + dx,
+                                          shape_pos.y + dy, aPad->GetOrientation().AsTenthsOfADegree(),
+                                          aLayerMask, color, op_logic );
+                }
+            };
+
+    if( aPad->GetPadstackMode() == PADSTACK::MODE::NORMAL )
     {
-        traceFilledCircle( shape_pos.x, shape_pos.y, dx, aPad->GetLayerSet(), color, op_logic );
-        return;
-    }
-
-    dy = aPad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y / 2;
-    dy += marge;
-
-    if( aPad->GetShape( PADSTACK::TEMP_ALL_LAYERS ) == PAD_SHAPE::TRAPEZOID )
-    {
-        dx += abs( aPad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ).y ) / 2;
-        dy += abs( aPad->GetDelta( PADSTACK::TEMP_ALL_LAYERS ).x ) / 2;
-    }
-
-    // The pad is a rectangle ( horizontal or vertical )
-    if( aPad->GetOrientation().IsCardinal() )
-    {
-        // Orientation turned 90 deg.
-        if( aPad->GetOrientation() == ANGLE_90 || aPad->GetOrientation() == ANGLE_270 )
-        {
-            std::swap( dx, dy );
-        }
-
-        TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy, shape_pos.x + dx,
-                shape_pos.y + dy, aPad->GetLayerSet(), color, op_logic );
+        tracePad( PADSTACK::ALL_LAYERS, aPad->GetLayerSet() );
     }
     else
     {
-        TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy, shape_pos.x + dx,
-                              shape_pos.y + dy, aPad->GetOrientation().AsTenthsOfADegree(),
-                              aPad->GetLayerSet(), color, op_logic );
+        if( aPad->GetLayerSet()[m_routeLayerBottom] )
+            tracePad( m_routeLayerBottom, { m_routeLayerBottom } );
+
+        if( m_RoutingLayersCount > 1 && aPad->GetLayerSet()[m_routeLayerTop] )
+            tracePad( m_routeLayerTop, { m_routeLayerTop } );
     }
 }
