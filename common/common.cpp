@@ -970,6 +970,10 @@ bool WarnUserIfOperatingSystemUnsupported()
     if( !KIPLATFORM::APP::IsOperatingSystemUnsupported() )
         return false;
 
+    // wxLogGui shows queued messages when a modal opens
+    // A second modal inside this dialog makes GTK fail
+    wxLog::FlushActive();
+
     KICAD_MESSAGE_DIALOG dialog( nullptr,
                                  _( "This operating system is not supported "
                                     "by KiCad and its dependencies." ),
