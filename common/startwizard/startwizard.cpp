@@ -24,6 +24,7 @@
 #include <kiface_base.h>
 #include <pgm_base.h>
 #include <wx/display.h>
+#include <wx/log.h>
 #include <wx/statline.h>
 #include <wx/wx.h>
 #include <wx/wizard.h>
@@ -178,6 +179,10 @@ void STARTWIZARD::CheckAndRun( wxWindow* aParent )
         return;
 
     Pgm().HideSplash();
+
+    // wxLogGui shows queued messages when a modal opens
+    // A second modal inside RunWizard makes GTK fail
+    wxLog::FlushActive();
 
     m_wizard = new wxWizard( aParent, wxID_ANY, _( "KiCad Setup" ) );
     m_wizard->SetWindowStyleFlag( wxRESIZE_BORDER );
