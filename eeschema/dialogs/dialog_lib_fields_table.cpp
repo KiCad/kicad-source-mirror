@@ -108,11 +108,13 @@ protected:
 
         if( row >= 0 && col >= 0 )
         {
-            deriveMenu->Enable( m_dataModel->IsRowSingleSymbol( row ) );
+            deriveMenu->Enable( m_grid->IsEditable() && m_dataModel->IsRowSingleSymbol( row ) );
 
             if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
             {
-                aMenu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
+                wxMenuItem* selectFootprint =
+                        aMenu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
+                selectFootprint->Enable( m_grid->IsEditable() );
                 aMenu.AppendSeparator();
             }
             else if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
@@ -136,6 +138,9 @@ protected:
 
         if( aEvent.GetId() == MYID_SELECT_FOOTPRINT )
         {
+            if( !m_grid->IsEditable() )
+                return;
+
             // pick a footprint using the footprint picker.
             wxString fpid = m_grid->GetCellValue( row, col );
 
@@ -155,6 +160,9 @@ protected:
         }
         else if( aEvent.GetId() == MYID_CREATE_DERIVED_SYMBOL )
         {
+            if( !m_grid->IsEditable() )
+                return;
+
             EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( m_dlg->GetParent() );
             wxCHECK( frame, /* void */ );
 
@@ -225,6 +233,9 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SC
 {
     loadSymbols();
 
+    const wxString& libName = m_parent->GetTargetLibId().GetLibNickname();
+    const bool      readOnly = m_parent->GetLibManager().IsLibraryReadOnly( libName );
+
     m_dataModel = new LIB_FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList );
     m_dataModel->SetScope( aScope );
 
@@ -264,14 +275,19 @@ DIALOG_LIB_FIELDS_TABLE::DIALOG_LIB_FIELDS_TABLE( SYMBOL_EDIT_FRAME* aParent, SC
     m_scope->SetSelection( static_cast<int>( m_dataModel->GetScope() ) );
     m_filterScope->SetString( static_cast<int>( BOM_FILTER_SCOPE::REFERENCE ), _( "Symbol Names" ) );
 
-    SetTitle( wxString::Format( _( "Symbol Fields Table ('%s' Library)" ),
-                                wxString::FromUTF8( m_parent->GetTargetLibId().GetLibNickname() ) ) );
+    wxString title = wxString::Format( _( "Symbol Fields Table ('%s' Library)" ), libName );
+
+    if( readOnly )
+        title += wxS( " " ) + _( "[Read Only]" );
+
+    SetTitle( title );
     m_buttonApply->SetLabel( _( "Apply" ) );
 
     SetInitialFocus( m_grid );
     m_grid->ClearSelection();
 
     SetupStandardButtons();
+    SetReadOnly( readOnly );
 
     finishDialogSettings();
 

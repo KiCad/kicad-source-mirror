@@ -108,8 +108,8 @@ void FIELDS_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent
 
     if( row >= 0 && col >= 0 )
     {
-        revertMenu->Enable( m_dataModel->IsRowEdited( row ) );
-        clearMenu->Enable( m_dataModel->CanClearCell( row, col ) );
+        revertMenu->Enable( m_grid->IsEditable() && m_dataModel->IsRowEdited( row ) );
+        clearMenu->Enable( m_grid->IsEditable() && m_dataModel->CanClearCell( row, col ) );
     }
     else
     {
@@ -597,6 +597,16 @@ void DIALOG_FIELDS_TABLE::SaveColumnWidths()
 wxGridCellEditor* DIALOG_FIELDS_TABLE::createFootprintEditor()
 {
     return new GRID_CELL_FPID_EDITOR( this );
+}
+
+
+void DIALOG_FIELDS_TABLE::SetReadOnly( bool aReadOnly )
+{
+    m_grid->EnableEditing( !aReadOnly );
+    m_addFieldButton->Enable( !aReadOnly );
+    m_renameFieldButton->Enable( !aReadOnly );
+    m_removeFieldButton->Enable( !aReadOnly );
+    m_buttonApply->Enable( !aReadOnly );
 }
 
 

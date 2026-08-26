@@ -159,6 +159,9 @@ DIALOG_LIB_FOOTPRINT_FIELDS_TABLE::DIALOG_LIB_FOOTPRINT_FIELDS_TABLE( FOOTPRINT_
 {
     loadFootprints();
 
+    const wxString& libName = m_parent->GetTargetFPID().GetLibNickname();
+    const bool      readOnly = !PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( libName );
+
     m_dataModel = new LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( m_footprintsList );
     m_dataModel->SetScope( aScope );
 
@@ -185,14 +188,19 @@ DIALOG_LIB_FOOTPRINT_FIELDS_TABLE::DIALOG_LIB_FOOTPRINT_FIELDS_TABLE( FOOTPRINT_
     m_scope->SetSelection( static_cast<int>( m_dataModel->GetScope() ) );
     m_filterScope->SetString( static_cast<int>( BOM_FILTER_SCOPE::REFERENCE ), _( "Footprint Names" ) );
 
-    SetTitle( wxString::Format( _( "Footprint Fields Table ('%s' Library)" ),
-                                wxString::FromUTF8( m_parent->GetTargetFPID().GetLibNickname() ) ) );
-    m_buttonApply->SetLabel( _( "Apply" ) );
+    wxString title = wxString::Format( _( "Footprint Fields Table ('%s' Library)" ), libName );
+
+    if( readOnly )
+        title += wxS( " " ) + _( "[Read Only]" );
+
+    SetTitle( title );
+    m_buttonApply->SetLabel( _( "Save" ) );
 
     SetInitialFocus( m_grid );
     m_grid->ClearSelection();
 
     SetupStandardButtons();
+    SetReadOnly( readOnly );
 
     finishDialogSettings();
 

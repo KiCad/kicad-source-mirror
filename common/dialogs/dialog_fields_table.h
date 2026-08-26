@@ -113,6 +113,8 @@ protected:
     void AddField( const wxString& aFieldName, const wxString& aLabelValue, bool aShow, bool aGroupBy,
                    bool aAddedByUser = false );
 
+    void SetReadOnly( bool aReadOnly );
+
     static void loadJobBomPreset( const JOB_EXPORT_BOM& aJob, BOM_PRESET& aPreset );
     static void loadJobBomFmtPreset( const JOB_EXPORT_BOM& aJob, BOM_FMT_PRESET& aPreset );
     void        saveJobSettings( JOB_EXPORT_BOM& aJob );
