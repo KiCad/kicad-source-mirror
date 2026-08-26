@@ -31,6 +31,16 @@ import shutil
 from conftest import KiTestFixture
 
 
+def count_items( content: str, token: str ) -> int:
+    """Count board items of a given s-expression type.
+
+    A bare substring search is not enough: "(footprint" also matches the "(footprints allowed)"
+    of every rule area, and "(via" matches their "(vias not_allowed)".  Require the token to be
+    followed by a delimiter so only real items count.
+    """
+    return len( re.findall( r"\(" + re.escape( token ) + r"[\s(]", content ) )
+
+
 def get_output_path( kitest: KiTestFixture, test_name: str, filename: str ) -> Path:
     """Generate an output path for a test file."""
     output_dir = kitest.get_output_path( f"cli/pcb_import/{test_name}/" )
@@ -196,10 +206,16 @@ class TestPcbImportPadsBinary:
         assert output_path.exists()
 
         # A board with no footprints is the empty-stub failure this guards against, so assert
-        # real content rather than merely a non-zero file size.
+        # real content rather than merely a non-zero file size.  Counts match the *PART* and
+        # KEEPOUT records of the LCORE_4.asc export of the same board.
         content = output_path.read_text()
-        assert content.count( "(footprint" ) == 30
-        assert content.count( "(via" ) == 16
+        assert count_items( content, "footprint" ) == 30
+        assert count_items( content, "via" ) == 16
+
+        # Two copper pours plus the two KEEPOUT records, whose "(footprints allowed)" is what
+        # a bare substring count mistakes for footprints
+        assert count_items( content, "zone" ) == 4
+        assert count_items( content, "keepout" ) == 2
 
     def test_import_binary_matches_auto_detect( self, kitest: KiTestFixture ):
         """Naming the format explicitly gives the same board as content auto-detection"""
@@ -217,8 +233,8 @@ class TestPcbImportPadsBinary:
         explicit = explicit_path.read_text()
         auto = auto_path.read_text()
 
-        assert explicit.count( "(footprint" ) == auto.count( "(footprint" )
-        assert explicit.count( "(via" ) == auto.count( "(via" )
+        assert count_items( explicit, "footprint" ) == count_items( auto, "footprint" )
+        assert count_items( explicit, "via" ) == count_items( auto, "via" )
 
 
 @pytest.mark.skipif( get_pads_test_file() is None,

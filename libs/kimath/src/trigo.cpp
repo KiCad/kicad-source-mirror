@@ -372,13 +372,18 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
 {
     // No unique circumcircle exists if any two of the three points coincide
     // Bbox below catches all three; pairwise checks below catch just one pair
-    constexpr double kCoincidentRadius        = 5.0;
+    constexpr double kClusterExtent = 5.0;
+
+    // A pair separated by more than integer rounding is a real, if small, arc.  This is not the
+    // cluster extent above: three points inside a 5 IU box are all noise, but two points 4 IU
+    // apart with a distant third still span a healthy triangle
+    constexpr double kCoincidentRadius        = 2.0;
     constexpr double kCoincidentRadiusSquared = kCoincidentRadius * kCoincidentRadius;
 
     auto [minX, maxX] = std::minmax( { aStart.x, aMid.x, aEnd.x } );
     auto [minY, maxY] = std::minmax( { aStart.y, aMid.y, aEnd.y } );
 
-    if( maxX - minX < kCoincidentRadius && maxY - minY < kCoincidentRadius )
+    if( maxX - minX < kClusterExtent && maxY - minY < kClusterExtent )
     {
         return VECTOR2D( ( aStart.x + aMid.x + aEnd.x ) / 3.0,
                         ( aStart.y + aMid.y + aEnd.y ) / 3.0 );

@@ -1356,8 +1356,8 @@ BOOST_AUTO_TEST_CASE( DegenerateArcCoincidentPoints )
 }
 
 
-// Collinear points from the reported board.  The 6 nm span is more than the coincident-point
-// guard in CalcArcCenter(), thus the centre still runs out to the coordinate limit
+// Collinear points from the reported board.  The coincident start/mid sends CalcArcCenter() to
+// the chord midpoint, which makes start and end antipodal and the raw sweep a clean half turn
 BOOST_AUTO_TEST_CASE( CollinearArcSweepIsNotAFullTurn )
 {
     const SHAPE_ARC arc( VECTOR2I( 2275000, 3123714 ),
@@ -1367,8 +1367,12 @@ BOOST_AUTO_TEST_CASE( CollinearArcSweepIsNotAFullTurn )
 
     BOOST_CHECK_LT( std::abs( arc.GetCentralAngle().AsDegrees() ), 1.0 );
 
-    // Length is radius times sweep, thus a spurious turn is worth metres here
-    BOOST_CHECK_LT( arc.GetLength(), 1000.0 );
+    // The 6 nm chord is the whole run; a fabricated sweep inflates this without bound
+    BOOST_CHECK_CLOSE( arc.GetLength(), 6.0, 1.0 );
+
+    const SHAPE_LINE_CHAIN poly = arc.ConvertToPolyline();
+    BOOST_CHECK_LT( poly.BBox().GetWidth(), 10 );
+    BOOST_CHECK_LT( poly.BBox().GetHeight(), 10 );
 }
 
 
@@ -1460,6 +1464,20 @@ BOOST_AUTO_TEST_CASE( CalcArcCenterThinArcNotDegenerate )
 
     // True circumradius is 50.5 IU; a wrongly-triggered midpoint guard would give ~10 IU
     BOOST_CHECK_GT( rs, 40.0 );
+}
+
+
+// A few-IU arc rounds its own mid point off the true circle, but the three points still span a
+// healthy triangle.  Reading that as a coincident pair collapses the centre onto the chord and
+// turns a quarter turn into a reflex sweep
+BOOST_AUTO_TEST_CASE( CalcArcCenterFewUnitArcKeepsItsCircumcircle )
+{
+    const SHAPE_ARC arc( VECTOR2I( 0, 0 ), VECTOR2I( 5, 0 ), ANGLE_90 );
+
+    BOOST_CHECK_LT( std::abs( arc.GetCentralAngle().AsDegrees() ), 180.0 );
+
+    // The chord midpoint fallback sits at (3, 3), inside the arc it is supposed to circumscribe
+    BOOST_CHECK_GT( ( arc.GetCenter() - arc.GetArcMid() ).EuclideanNorm(), arc.GetRadius() / 2.0 );
 }
 
 
