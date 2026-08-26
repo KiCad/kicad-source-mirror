@@ -124,6 +124,7 @@ public:
 
     static int GetWidth( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
     static bool IsRound( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
+    static bool IsUniformlyRound( BOARD_ITEM* aItem );
 
     void BuildTrackCaches();
 
