@@ -65,6 +65,7 @@ public:
     int OpenDirectory( const TOOL_EVENT& aEvent );
     int OpenWithTextEditor( const TOOL_EVENT& aEvent );
     int ShowDatasheet( const TOOL_EVENT& aEvent );
+    int ShowLibraryFieldsTable( const TOOL_EVENT& aEvent );
 
     int ToggleLayersManager( const TOOL_EVENT& aEvent );
     int ToggleProperties( const TOOL_EVENT& aEvent );

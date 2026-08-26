@@ -47,6 +47,7 @@
 #include <dialogs/dialog_cleanup_graphics.h>
 #include <dialogs/dialog_footprint_checker.h>
 #include <dialogs/dialog_footprint_properties_fp_editor.h>
+#include <dialogs/dialog_lib_footprint_fields_table.h>
 #include <footprint_wizard_frame.h>
 #include <kiway.h>
 #include <project_pcb.h>
@@ -160,6 +161,9 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
         ctxMenu.AddSeparator( 200 );
         ctxMenu.AddItem( ACTIONS::openDirectory,  canOpenExternally && ( libSelectedCondition || fpSelectedCondition ), 200 );
     }
+
+    ctxMenu.AddSeparator( 300 );
+    ctxMenu.AddItem( PCB_ACTIONS::showLibFootprintFieldsTable, libInferredCondition, 300 );
 // clang-format on
 
     libraryTreeTool->AddContextMenuItems( &ctxMenu );
@@ -1152,6 +1156,25 @@ int FOOTPRINT_EDITOR_CONTROL::CloseTab( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::ShowLibraryFieldsTable( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->GetTargetFPID().GetLibNickname().empty() )
+        return 0;
+
+    if( m_frame->HasModifiedFootprintTabs() )
+    {
+        DisplayInfoMessage( m_frame, _( "Save or discard the changes in all modified footprint tabs before opening "
+                                        "the Footprint Fields Table." ) );
+        return 0;
+    }
+
+    DIALOG_LIB_FOOTPRINT_FIELDS_TABLE dlg( m_frame, LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE_ALL );
+
+    dlg.ShowModal();
+    return 0;
+}
+
+
 void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 {
     // clang-format off
@@ -1174,6 +1197,8 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CompareLibraryWithFile,
         PCB_ACTIONS::compareFpLibraryWithFile.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ShowLibraryFieldsTable,
+        PCB_ACTIONS::showLibFootprintFieldsTable.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor,   ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::OpenDirectory,        ACTIONS::openDirectory.MakeEvent() );

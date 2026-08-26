@@ -1199,6 +1199,13 @@ TOOL_ACTION PCB_ACTIONS::compareFpLibraryWithFile( TOOL_ACTION_ARGS()
         .Tooltip( _( "Diff the current footprint library against another .pretty directory" ) )
         .Icon( BITMAPS::library ) );
 
+TOOL_ACTION PCB_ACTIONS::showLibFootprintFieldsTable( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.showLibraryFootprintFieldsTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Bulk Edit Footprint Fields..." ) )
+        .Tooltip( _( "Edit a table of fields from all footprints in the library" ) )
+        .Icon( BITMAPS::table ) );
+
 TOOL_ACTION PCB_ACTIONS::footprintProperties( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.footprintProperties" )
         .Scope( AS_GLOBAL )
