@@ -195,14 +195,15 @@ public:
     void HardRedraw() override;
 
     /**
-     * Add a new item to the drawing sheet item list.
+     * Create a new item and build its draw items in the view. The caller is responsible
+     * for adding the item to the model.
      *
      * @param aType is the type of item:
      *  DS_TEXT, DS_SEGMENT, DS_RECT, DS_POLYPOLYGON
-     * @param aIdx is the position in list to insert the new item.
-     * @return a reference to the new item.
+     * @return the new item, owned by the caller until it is added to the model, or nullptr
+     *         if the creation was cancelled.
      */
-    DS_DATA_ITEM* AddDrawingSheetItem( int aType );
+    DS_DATA_ITEM* CreateDrawingSheetItem( int aType );
 
     /**
      * Rebuild a data item's draw items in the live view, with the same text expansion

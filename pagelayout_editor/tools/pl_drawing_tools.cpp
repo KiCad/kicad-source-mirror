@@ -25,6 +25,7 @@
 #include <bitmaps.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
 
 #include "pl_editor_frame.h"
 #include "tools/pl_actions.h"
@@ -36,6 +37,11 @@ PL_DRAWING_TOOLS::PL_DRAWING_TOOLS() :
         TOOL_INTERACTIVE( "plEditor.InteractiveDrawing" ),
         m_frame( nullptr ),
         m_selectionTool( nullptr )
+{
+}
+
+
+PL_DRAWING_TOOLS::~PL_DRAWING_TOOLS()
 {
 }
 
@@ -60,6 +66,9 @@ bool PL_DRAWING_TOOLS::Init()
 
 void PL_DRAWING_TOOLS::Reset( RESET_REASON aReason )
 {
+    if( aReason != REDRAW )
+        m_pendingItem.reset();
+
     if( aReason == MODEL_RELOAD )
         m_frame = getEditFrame<PL_EDITOR_FRAME>();
 }
@@ -69,8 +78,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 {
     DS_DATA_ITEM::DS_ITEM_TYPE type = aEvent.Parameter<DS_DATA_ITEM::DS_ITEM_TYPE>();
     VECTOR2I                   cursorPos;
-    DS_DRAW_ITEM_BASE*         item   = nullptr;
     bool                       isText = aEvent.IsAction( &PL_ACTIONS::placeText );
+    DS_DATA_ITEM*              item = nullptr;
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -95,22 +104,39 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 }
             };
 
-    auto cleanup =
-            [&] ()
-            {
-                m_toolMgr->RunAction( ACTIONS::selectionClear );
-                item = nullptr;
+    auto cleanup = [&]()
+    {
+        getView()->Remove( item->GetDrawItems()[0] );
+        item = nullptr;
+        m_pendingItem.reset();
+    };
 
-                // There's nothing to roll-back, but we still need to pop the undo stack
-                // This also deletes the item being placed.
-                m_frame->RollbackFromUndo();
-            };
+    auto createPending = [&]() -> bool
+    {
+        m_pendingItem.reset( m_frame->CreateDrawingSheetItem( type ) );
+        item = m_pendingItem.get();
+
+        if( !item )
+            return false;
+
+        item->MoveToIU( getViewControls()->GetCursorPosition() );
+
+        DS_DRAW_ITEM_BASE* drawItem = item->GetDrawItems()[0];
+        drawItem->SetFlags( IS_NEW | IS_MOVING );
+        getView()->Update( drawItem );
+
+        setCursor();
+        return true;
+    };
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
     // Set initial cursor
     setCursor();
+
+    if( isText )
+        createPending();
 
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
@@ -121,13 +147,14 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         setCursor();
         cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
-        if( evt->IsCancelInteractive() || ( item && evt->IsAction( &ACTIONS::undo ) )  )
+        if( evt->IsCancelInteractive() || ( !isText && item && evt->IsAction( &ACTIONS::undo ) ) )
         {
-            if( item )
-            {
+            bool wasPending = item != nullptr;
+
+            if( wasPending )
                 cleanup();
-            }
-            else
+
+            if( isText || !wasPending )
             {
                 m_frame->PopTool( aEvent );
                 break;
@@ -151,49 +178,47 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            bool placeItem = true;
+            bool placeItem = item != nullptr;
 
             if( !item )
             {
-                DS_DATA_ITEM* dataItem = m_frame->AddDrawingSheetItem( type );
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-                if( dataItem )  // dataItem = nullptr can happens if the command was cancelled
+                if( createPending() )
                 {
-                    m_frame->SaveCopyInUndoList();
-
-                    m_toolMgr->RunAction( ACTIONS::selectionClear );
-
-                    item = dataItem->GetDrawItems()[0];
-                    item->SetFlags( IS_NEW | IS_MOVING );
-
-                    // Select the item but don't inform other tools (to prevent the Properties
-                    // panel from updating the item before it has been placed)
-                    m_selectionTool->AddItemToSel( item, true );
-
-                    // update the cursor so it looks correct before another event
-                    setCursor();
-
-                    // Text is a single-click-place; all others are first-click-creates,
+                    // Text is a single-click-place. All others are first-click-creates,
                     // second-click-places.
-                    placeItem = dataItem->GetType() == DS_DATA_ITEM::DS_TEXT;
+                    placeItem = isText;
                 }
             }
 
             if( item && placeItem )
             {
-                item->GetPeer()->MoveStartPointToIU( cursorPos );
-                item->SetPosition( item->GetPeer()->GetStartPosIU( 0 ) );
-                item->ClearEditFlags();
-                getView()->Update( item );
+                m_frame->SaveCopyInUndoList();
+                DS_DATA_MODEL::GetTheInstance().Append( m_pendingItem.release() );
 
-                // Now we re-select and inform other tools, so that the Properties panel
+                item->MoveStartPointToIU( cursorPos );
+
+                DS_DRAW_ITEM_BASE* drawItem = item->GetDrawItems()[0];
+                drawItem->SetPosition( item->GetStartPosIU( 0 ) );
+                drawItem->ClearEditFlags();
+
+                // A full canvas rebuild drops the pending item from the view, so a plain
+                // view update is not enough to bring it back
+                getView()->Remove( drawItem );
+                getView()->Add( drawItem );
+
+                // Now we select and inform other tools, so that the Properties panel
                 // is updated.
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
-                m_selectionTool->AddItemToSel( item, false );
+                m_selectionTool->AddItemToSel( drawItem, false );
 
                 item = nullptr;
 
                 m_frame->OnModify();
+
+                if( isText )
+                    createPending();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -206,18 +231,22 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            item->GetPeer()->MoveStartPointToIU( cursorPos );
-            item->SetPosition( item->GetPeer()->GetStartPosIU( 0 ) );
-            getView()->Update( item );
+            item->MoveStartPointToIU( cursorPos );
+
+            DS_DRAW_ITEM_BASE* drawItem = item->GetDrawItems()[0];
+            drawItem->SetPosition( item->GetStartPosIU( 0 ) );
+
+            getView()->Remove( drawItem );
+            getView()->Add( drawItem );
         }
         else
         {
             evt->SetPassEvent();
         }
 
-        // Enable autopanning and cursor capture only when there is an item to be placed
-        getViewControls()->SetAutoPan( item != nullptr );
-        getViewControls()->CaptureCursor( item != nullptr );
+        // Enable autopanning and cursor capture only for two click placements
+        getViewControls()->SetAutoPan( !isText && item != nullptr );
+        getViewControls()->CaptureCursor( !isText && item != nullptr );
     }
 
     getViewControls()->SetAutoPan( false );
@@ -301,7 +330,8 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_frame->SaveCopyInUndoList();
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-                DS_DATA_ITEM* dataItem = m_frame->AddDrawingSheetItem( type );
+                DS_DATA_ITEM* dataItem = m_frame->CreateDrawingSheetItem( type );
+                DS_DATA_MODEL::GetTheInstance().Append( dataItem );
                 dataItem->MoveToIU( cursorPos );
 
                 item = dataItem->GetDrawItems()[0];

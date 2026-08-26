@@ -21,10 +21,13 @@
 #ifndef PL_DRAWING_TOOLS_H
 #define PL_DRAWING_TOOLS_H
 
+#include <memory>
+
 #include <tool/tool_interactive.h>
 #include <tool/tool_menu.h>
 #include <view/view.h>
 
+class DS_DATA_ITEM;
 class PL_EDITOR_FRAME;
 class PL_SELECTION_TOOL;
 
@@ -37,7 +40,7 @@ class PL_DRAWING_TOOLS : public TOOL_INTERACTIVE
 {
 public:
     PL_DRAWING_TOOLS();
-    ~PL_DRAWING_TOOLS() {}
+    ~PL_DRAWING_TOOLS();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -55,6 +58,8 @@ private:
 private:
     PL_EDITOR_FRAME*   m_frame;
     PL_SELECTION_TOOL* m_selectionTool;
+
+    std::unique_ptr<DS_DATA_ITEM> m_pendingItem;
 };
 
 #endif /* PL_DRAWING_TOOLS_H */

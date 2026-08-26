@@ -832,7 +832,7 @@ void PL_EDITOR_FRAME::HardRedraw()
 }
 
 
-DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
+DS_DATA_ITEM* PL_EDITOR_FRAME::CreateDrawingSheetItem( int aType )
 {
     DS_DATA_ITEM * item = nullptr;
 
@@ -892,7 +892,6 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
     if( item == nullptr )
         return nullptr;
 
-    DS_DATA_MODEL::GetTheInstance().Append( item );
     SyncDataItem( item );
 
     return item;
