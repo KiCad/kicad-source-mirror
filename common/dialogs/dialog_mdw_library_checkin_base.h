@@ -1,0 +1,53 @@
+///////////////////////////////////////////////////////////////////////////
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// http://www.wxformbuilder.org/
+//
+// PLEASE DO *NOT* EDIT THIS FILE!
+///////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
+#include "dialog_shim.h"
+#include <wx/string.h>
+#include <wx/stattext.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
+#include <wx/colour.h>
+#include <wx/settings.h>
+#include <wx/dataview.h>
+#include <wx/textctrl.h>
+#include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/dialog.h>
+
+///////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_MDW_LIBRARY_CHECKIN_BASE
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_MDW_LIBRARY_CHECKIN_BASE : public DIALOG_SHIM
+{
+	private:
+
+	protected:
+		wxStaticText* m_intro;
+		wxDataViewListCtrl* m_changesList;
+		wxStaticText* m_note;
+		wxStaticText* m_commentLabel;
+		wxTextCtrl* m_comment;
+		wxStaticText* m_status;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
+
+	public:
+
+		DIALOG_MDW_LIBRARY_CHECKIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Check In to Team Library"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
+		~DIALOG_MDW_LIBRARY_CHECKIN_BASE();
+
+};
+

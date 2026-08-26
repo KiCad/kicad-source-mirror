@@ -211,3 +211,15 @@ std::vector<MDW_CLAIM_ACTION> MdwClaimActions( const MDW_LOCK_INFO& aLock )
 
     return { start, release };
 }
+
+
+std::optional<MDW_CLAIM_ACTION> MdwClaimRelease( const MDW_LOCK_INFO& aLock )
+{
+    for( const MDW_CLAIM_ACTION& action : MdwClaimActions( aLock ) )
+    {
+        if( action.kind == MDW_CLAIM_ACTION::KIND::RELEASE )
+            return action;
+    }
+
+    return std::nullopt;
+}

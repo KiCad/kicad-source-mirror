@@ -344,6 +344,9 @@ public:
      */
     void CancelRevision();
 
+    /// Remove another user's claim on the part, after asking for the reason its holder is told
+    void ReleaseClaim();
+
     /**
      * Move the part's latest revision to the state aTargetStateId, asking for the comment it requires. With no
      * state, offer the part's transitions to choose from once they are read.

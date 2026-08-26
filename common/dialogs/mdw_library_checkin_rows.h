@@ -61,4 +61,9 @@ KICOMMON_API wxString MdwChangeText( MDW_CHANGE_TYPE aChange );
 /// What a check-in did with one member, for the report
 KICOMMON_API wxString MdwMemberOutcome( const MDW_MEMBER_RESULT& aResult );
 
+/// The files aSent checked in whole for their format alone that aCheckIn committed. They name no member, so no
+/// member result reports them
+KICOMMON_API std::vector<wxString> MdwAdoptedFiles( const std::vector<MDW_LOCAL_CHANGE>& aSent,
+                                                    const MDW_LIBRARY_CHECKIN&           aCheckIn );
+
 #endif // MDW_LIBRARY_CHECKIN_ROWS_H

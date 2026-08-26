@@ -89,4 +89,7 @@ KICOMMON_API std::optional<wxString> MdwClaimNotice( const MDW_EVENT& aEvent );
 /// The claim commands aLock allows, in menu order
 KICOMMON_API std::vector<MDW_CLAIM_ACTION> MdwClaimActions( const MDW_LOCK_INFO& aLock );
 
+/// The RELEASE command of MdwClaimActions(), which only another user's claim offers
+KICOMMON_API std::optional<MDW_CLAIM_ACTION> MdwClaimRelease( const MDW_LOCK_INFO& aLock );
+
 #endif // MDW_CLAIM_TEXT_H

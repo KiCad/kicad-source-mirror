@@ -165,3 +165,25 @@ wxString MdwMemberOutcome( const MDW_MEMBER_RESULT& aResult )
 
     return wxString::Format( _( "Checked in as %s" ), revision );
 }
+
+
+std::vector<wxString> MdwAdoptedFiles( const std::vector<MDW_LOCAL_CHANGE>& aSent, const MDW_LIBRARY_CHECKIN& aCheckIn )
+{
+    std::vector<wxString> adopted;
+
+    if( aCheckIn.snapshot.token.IsEmpty() && aCheckIn.copy_snapshot.token.IsEmpty() )
+        return adopted;
+
+    for( const MDW_LOCAL_CHANGE& change : aSent )
+    {
+        auto skipped = [&]( const MDW_SKIPPED_FILE& aSkipped )
+        {
+            return aSkipped.path == change.relative_path;
+        };
+
+        if( !change.format_digest.IsEmpty() && std::ranges::none_of( aCheckIn.skipped_files, skipped ) )
+            adopted.push_back( change.relative_path );
+    }
+
+    return adopted;
+}

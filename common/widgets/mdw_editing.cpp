@@ -94,12 +94,15 @@ void MdwReportFailure( wxWindow* aOwner, const wxString& aWhat, const wxString& 
 
 void MdwReportFailure( wxWindow* aOwner, const wxString& aWhat, const MDW_RESULT& aResult )
 {
+    wxWeakRef<wxWindow> owner( aOwner );
+
     MdwReportFailure( aOwner, aWhat, MdwErrorMessage( aResult ) );
 
     if( aResult.detail.IsEmpty() )
         return;
 
-    KISTATUSBAR* statusBar = statusBarOf( aOwner );
+    // The report may have been a modal error box, and the owner can close under it
+    KISTATUSBAR* statusBar = owner ? statusBarOf( owner.get() ) : nullptr;
 
     if( statusBar )
         statusBar->AddWarningMessages( wxS( "mdw" ), aResult.detail );
@@ -133,7 +136,8 @@ void MdwSetEditing( wxWindow* aOwner, const std::shared_ptr<MDW_SOURCE>& aSource
             MdwReportFailure( owner->get(), what, aResult );
         }
 
-        if( aDone )
+        // A modal error box above may have outlived the owner that aDone works on
+        if( aDone && *owner )
             aDone();
     };
 
@@ -172,26 +176,39 @@ void MdwSetEditing( wxWindow* aOwner, const std::shared_ptr<MDW_SOURCE>& aSource
 }
 
 
+std::optional<wxString> MdwAskClaimReason( wxWindow* aOwner, const MDW_CLAIM_ACTION& aAction )
+{
+    wxString caption;
+
+    if( !aAction.label.EndsWith( wxS( "..." ), &caption ) )
+        caption = aAction.label;
+
+    wxTextEntryDialog dlg( aOwner, aAction.confirm, caption );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return std::nullopt;
+
+    return dlg.GetValue();
+}
+
+
 void MdwRunClaimAction( wxWindow* aOwner, const std::shared_ptr<MDW_SOURCE>& aSource, const MDW_ITEM_REF& aItem,
                         const MDW_CLAIM_ACTION& aAction, std::function<void()> aDone )
 {
     using KIND = MDW_CLAIM_ACTION::KIND;
 
-    wxString reason;
+    wxString            reason;
+    wxWeakRef<wxWindow> owner( aOwner );
 
     if( aAction.kind == KIND::RELEASE )
     {
-        wxString caption;
+        std::optional<wxString> asked = MdwAskClaimReason( aOwner, aAction );
 
-        if( !aAction.label.EndsWith( wxS( "..." ), &caption ) )
-            caption = aAction.label;
-
-        wxTextEntryDialog dlg( aOwner, aAction.confirm, caption );
-
-        if( dlg.ShowModal() != wxID_OK )
+        // The owner can close while the question is up
+        if( !asked || ( aOwner && !owner ) )
             return;
 
-        reason = dlg.GetValue();
+        reason = *asked;
     }
 
     // The claim may change hands while the reason is asked, and only the one the user confirmed may go

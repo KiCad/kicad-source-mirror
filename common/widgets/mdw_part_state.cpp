@@ -115,6 +115,13 @@ std::vector<MDW_PART_ACTION> MDW_PART_STATE::Actions() const
     if( IsRevising() && !pending && ( MatchesRelease() || ( release && !release->revision_id.IsEmpty() ) ) )
         actions.emplace_back( ID::CANCEL_REVISION );
 
+    if( std::optional<MDW_CLAIM_ACTION> claim = MdwClaimRelease( lock ); claim && locking )
+    {
+        MDW_PART_ACTION releaseClaim = permitted( ID::RELEASE_CLAIM, Permission( "force_unlock" ) );
+        releaseClaim.label = claim->label;
+        actions.push_back( releaseClaim );
+    }
+
     const kiapi::workspace::Permission mayRelease = Permission( "release" );
 
     // The source's refusal holds whatever the state, so a released part still says why it cannot be released
@@ -239,20 +246,35 @@ wxString MDW_PART_STATE::EditRefusal( const wxString& aName ) const
     if( pending || ( known && state.category == MDW_LIFECYCLE_CATEGORY::PENDING_REVIEW ) )
         return wxString::Format( _( "%s is awaiting approval, so the change was not kept." ), aName );
 
+    const std::vector<MDW_PART_ACTION> offered = Actions();
+
+    auto allowed = [&]( MDW_PART_ACTION::ID aId )
+    {
+        return std::ranges::find_if( offered,
+                                     [aId]( const MDW_PART_ACTION& aAction )
+                                     {
+                                         return aAction.id == aId && aAction.Allowed();
+                                     } );
+    };
+
     if( IsClaimedByOther() )
     {
-        return wxString::Format( _( "%s is being revised by %s, so the change was not kept." ), aName,
-                                 MdwClaimHolder( lock ) );
+        const wxString holder = MdwClaimHolder( lock );
+        auto           releaseClaim = allowed( MDW_PART_ACTION::ID::RELEASE_CLAIM );
+        wxString       command;
+
+        if( releaseClaim == offered.end() )
+            return wxString::Format( _( "%s is being revised by %s, so the change was not kept." ), aName, holder );
+
+        if( !releaseClaim->label.EndsWith( wxS( "..." ), &command ) )
+            command = releaseClaim->label;
+
+        return wxString::Format( _( "%s is being revised by %s, so the change was not kept. To change it, choose %s, "
+                                    "then Revise." ),
+                                 aName, holder, command );
     }
 
-    const bool mayRevise = std::ranges::any_of( Actions(),
-                                                []( const MDW_PART_ACTION& aAction )
-                                                {
-                                                    return aAction.id == MDW_PART_ACTION::ID::REVISE
-                                                           && aAction.Allowed();
-                                                } );
-
-    if( !mayRevise )
+    if( allowed( MDW_PART_ACTION::ID::REVISE ) == offered.end() )
         return wxString::Format( _( "%s is released, so the change was not kept." ), aName );
 
     return wxString::Format( _( "%s is released, so the change was not kept. Choose Revise to change it." ), aName );

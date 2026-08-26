@@ -43,6 +43,7 @@
 #include <kidialog.h>
 #include <lib_id.h>
 #include <pgm_base.h>
+#include <mdw/mdw_claim_text.h>
 #include <widgets/mdw_editing.h>
 
 #include <wx/choicdlg.h>
@@ -270,6 +271,7 @@ MDW_PART_STATE MDW_PART_TARGET::ListedState() const
 {
     MDW_PART_STATE state;
     state.lifecycle = source && source->Has( MDW_CAPABILITY_GROUP::LIFECYCLE );
+    state.locking = source && source->Has( MDW_CAPABILITY_GROUP::LOCKING );
     state.listed = listed.has_value();
 
     if( !listed )
@@ -516,6 +518,7 @@ void MDW_PART_CONTROLLER::Refresh()
 
     m_reads.clear();
     m_state.lifecycle = m_target->source->Has( MDW_CAPABILITY_GROUP::LIFECYCLE );
+    m_state.locking = m_target->source->Has( MDW_CAPABILITY_GROUP::LOCKING );
     read();
 }
 
@@ -1009,6 +1012,8 @@ wxString MDW_PART_CONTROLLER::Label( const MDW_PART_ACTION& aAction )
     case MDW_PART_ACTION::ID::REVISE:          return _( "Revise" );
     case MDW_PART_ACTION::ID::CANCEL_REVISION: return _( "Cancel Revision" );
     case MDW_PART_ACTION::ID::RELEASE:         return _( "Release..." );
+    case MDW_PART_ACTION::ID::RELEASE_CLAIM:
+        return aAction.label.IsEmpty() ? wxString( _( "Release Editing Claim..." ) ) : aAction.label;
     case MDW_PART_ACTION::ID::HISTORY:         return _( "History..." );
     case MDW_PART_ACTION::ID::TRANSITION:
         return aAction.label.IsEmpty() ? wxString( _( "Change State..." ) ) : aAction.label;
@@ -1030,6 +1035,9 @@ wxString MDW_PART_CONTROLLER::Refusal( const MDW_PART_ACTION& aAction )
 
     case MDW_PART_ACTION::ID::RELEASE:
         return wxString::Format( _( "You may not release it: %s" ), aAction.reason );
+
+    case MDW_PART_ACTION::ID::RELEASE_CLAIM:
+        return wxString::Format( _( "You may not release the editing claim: %s" ), aAction.reason );
 
     default:
         return wxString::Format( _( "%s is not allowed: %s" ), Label( aAction ), aAction.reason );
@@ -1315,6 +1323,57 @@ void MDW_PART_CONTROLLER::giveUpClaim()
                 Refresh();
                 changed();
             } );
+}
+
+
+void MDW_PART_CONTROLLER::ReleaseClaim()
+{
+    if( !m_target || !Allows( MDW_PART_ACTION::ID::RELEASE_CLAIM ) || busy( partKey() ) )
+        return;
+
+    const PART_KEY                  key = partKey();
+    const MDW_LOCK_INFO             held = m_state.lock;
+    std::optional<MDW_CLAIM_ACTION> claim = MdwClaimRelease( held );
+    std::optional<wxString>         reason;
+
+    if( claim )
+        reason = MdwAskClaimReason( dynamic_cast<wxWindow*>( m_owner ), *claim );
+
+    // Events still run under the modal prompt and may have moved the editor to another part
+    if( !reason || !m_target || partKey() != key || busy( key ) )
+        return;
+
+    const wxString holder = MdwClaimHolder( held );
+
+    m_outcome.clear();
+    m_partOps[key] = m_target->source->Unlock(
+            m_target->item, true,
+            [this, alive = std::weak_ptr<bool>( m_lifetime ), key, holder, advisory = held.advisory,
+             name = m_name]( const MDW_RESULT& aResult, const MDW_LOCK_INFO& aLock )
+            {
+                if( alive.expired() )
+                    return;
+
+                if( !aResult.IsOk() )
+                {
+                    failed( key, wxString::Format( _( "Could not release %s's claim on %s: %s" ), holder, name,
+                                                   MdwErrorText( aResult ) ) );
+                }
+
+                if( !m_target || partKey() != key )
+                    return;
+
+                if( aResult.IsOk() )
+                {
+                    m_state.lock = aLock;
+                    setOutcome( advisory ? wxString::Format( _( "Released %s's claim on %s." ), holder, name )
+                                         : wxString::Format( _( "Broke %s's lock on %s." ), holder, name ) );
+                }
+
+                Refresh();
+                changed();
+            },
+            *reason, held );
 }
 
 

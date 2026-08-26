@@ -57,6 +57,7 @@ struct KICOMMON_API MDW_PART_ACTION
         REVISE,
         CANCEL_REVISION,
         RELEASE,
+        RELEASE_CLAIM, ///< Remove another user's claim, telling them why
         TRANSITION,
         HISTORY
     };
@@ -78,7 +79,7 @@ struct KICOMMON_API MDW_PART_ACTION
     STATE    state;
     wxString reason; ///< Why DENIED, from the source, or a warning to show beside an ALLOWED action
     wxString target; ///< The state a TRANSITION moves to
-    wxString label;  ///< A TRANSITION's name, as the source gives it
+    wxString label;  ///< A TRANSITION's name as the source gives it, or the RELEASE_CLAIM command naming the holder
 
     bool Allowed() const { return state == STATE::ALLOWED; }
 };
@@ -87,6 +88,7 @@ struct KICOMMON_API MDW_PART_ACTION
 struct KICOMMON_API MDW_PART_STATE
 {
     bool                              lifecycle = false;    ///< The source advertises LIFECYCLE
+    bool                              locking = false;      ///< The source advertises LOCKING
     bool                              known = false;        ///< state was read
     MDW_LIFECYCLE_STATE               state;
     wxString                          stateName;            ///< From the item's lifecycle definition

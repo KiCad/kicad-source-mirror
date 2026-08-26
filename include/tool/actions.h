@@ -63,6 +63,7 @@ public:
     static TOOL_ACTION teamPartCheckIn;
     static TOOL_ACTION teamPartRevise;
     static TOOL_ACTION teamPartCancelRevision;
+    static TOOL_ACTION teamPartReleaseClaim;
     static TOOL_ACTION teamPartRelease;
     static TOOL_ACTION teamPartTransition; ///< Parameter is the state id; empty offers the part's states
     static TOOL_ACTION teamPartHistory;

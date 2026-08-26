@@ -189,6 +189,8 @@ set( QA_COMMON_SRCS
     test_mdw_file_lock.cpp
     test_mdw_item_locator.cpp
     test_mdw_listed_facts.cpp
+    test_mdw_paged_read.cpp
+    test_mdw_part_actions.cpp
     test_mdw_part_description.cpp
     test_mdw_release_prompt.cpp
     test_mdw_release_readiness.cpp

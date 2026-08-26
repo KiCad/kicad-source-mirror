@@ -22,6 +22,7 @@
 
 #include <functional>
 #include <optional>
+#include <utility>
 #include <vector>
 #include <wx/event.h>
 #include <wx/infobar.h>
@@ -77,6 +78,9 @@ wxDECLARE_EVENT( KIEVT_DISMISS_INFOBAR, wxCommandEvent );
 class WX_INFOBAR : public wxInfoBarGeneric
 {
 public:
+    /// A menu entry's label and the function to execute if it is chosen
+    using MENU_LINK_ITEM = std::pair<wxString, std::function<void()>>;
+
     /**
      * Construct an infobar.
      *
@@ -133,6 +137,14 @@ public:
      * @param aFn is the function to execute if the link is clicked
      */
     void AddLink( const wxString& aLinkText, const std::function<void( wxHyperlinkEvent& )>& aFn );
+
+    /**
+     * Add a link that opens a menu below it.  Link is added in the right-most position.
+     *
+     * @param aLinkText is the text to show, which gains a drop-down arrow
+     * @param aItems are the menu's entries, in order
+     */
+    void AddMenuLink( const wxString& aLinkText, const std::vector<MENU_LINK_ITEM>& aItems );
 
     /**
      * Add a button with the provided ID and text.

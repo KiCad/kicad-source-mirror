@@ -30,6 +30,7 @@
 
 #include <functional>
 #include <memory>
+#include <optional>
 
 #include <wx/string.h>
 
@@ -65,6 +66,9 @@ KICOMMON_API void MdwSetEditing( wxWindow* aOwner, const std::shared_ptr<MDW_SOU
                                  const MDW_ITEM_REF& aItem, bool aStart, bool aForce, const wxString& aReason,
                                  std::function<void()> aDone = nullptr,
                                  const std::optional<MDW_LOCK_INFO>& aExpected = std::nullopt );
+
+/// Ask over aOwner for the reason the holder is told when aAction, a RELEASE, removes their claim. Nothing on cancel
+KICOMMON_API std::optional<wxString> MdwAskClaimReason( wxWindow* aOwner, const MDW_CLAIM_ACTION& aAction );
 
 /**
  * Run aAction, one of MdwClaimActions(), on aItem through MdwSetEditing(). A RELEASE first asks the user

@@ -152,6 +152,12 @@ TOOL_ACTION ACTIONS::teamPartCancelRevision( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Cancel Revision" ) )
         .Tooltip( _( "Give up the claim on a revised part, discarding any change since its release" ) ) );
 
+TOOL_ACTION ACTIONS::teamPartReleaseClaim( TOOL_ACTION_ARGS()
+        .Name( "common.Control.teamPartReleaseClaim" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Release Editing Claim..." ) )
+        .Tooltip( _( "Remove a teammate's editing claim on the part, telling them why" ) ) );
+
 TOOL_ACTION ACTIONS::teamPartRelease( TOOL_ACTION_ARGS()
         .Name( "common.Control.teamPartRelease" )
         .Scope( AS_GLOBAL )

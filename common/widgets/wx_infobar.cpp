@@ -27,6 +27,7 @@
 #include <wx/debug.h>
 #include <wx/hyperlink.h>
 #include <wx/infobar.h>
+#include <wx/menu.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/timer.h>
@@ -541,8 +542,8 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
     aButton->SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 #endif // __WXMAC__
 
-    // Shaped without alignment keeps each button at its own aspect at the top of the bar
-    m_buttonArea->Add( aButton, 0, wxSTRETCH_MASK );
+    // Centred like the links, so the close button sits level with the message
+    m_buttonArea->Add( aButton, wxSizerFlags().CentreVertical() );
 
     if( IsShownOnScreen() )
     {
@@ -559,13 +560,42 @@ void WX_INFOBAR::AddLink(const wxString& aLinkText, const std::function<void(wxH
 
     button->Bind( wxEVT_COMMAND_HYPERLINK, aFn );
 
-    m_buttonArea->Add( button, wxSizerFlags().Centre().Border( wxRIGHT ).Shaped() );
+    // The default border is too narrow to tell neighbouring links apart
+    m_buttonArea->Add( button, wxSizerFlags().CentreVertical().Border( wxRIGHT, FromDIP( 12 ) ) );
 
     if( IsShownOnScreen() )
     {
         Layout();
         sizer->Fit( this );
     }
+}
+
+
+void WX_INFOBAR::AddMenuLink( const wxString& aLinkText, const std::vector<MENU_LINK_ITEM>& aItems )
+{
+    AddLink( aLinkText + wxS( " \u25BC" ),
+             [aItems]( wxHyperlinkEvent& aEvent )
+             {
+                 constexpr int firstId = wxID_HIGHEST + 1;
+                 wxWindow*     link = dynamic_cast<wxWindow*>( aEvent.GetEventObject() );
+
+                 if( !link )
+                     return;
+
+                 wxMenu menu;
+
+                 for( size_t ii = 0; ii < aItems.size(); ++ii )
+                     menu.Append( firstId + static_cast<int>( ii ), aItems[ii].first );
+
+                 const int chosen = link->GetPopupMenuSelectionFromUser( menu, wxPoint( 0, link->GetSize().y ) );
+
+                 if( chosen < firstId || chosen >= firstId + static_cast<int>( aItems.size() ) )
+                     return;
+
+                 // Copied, since the entry may rebuild the infobar and free this handler
+                 std::function<void()> run = aItems[chosen - firstId].second;
+                 run();
+             } );
 }
 
 
