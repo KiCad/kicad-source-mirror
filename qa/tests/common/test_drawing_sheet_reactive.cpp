@@ -200,6 +200,47 @@ BOOST_AUTO_TEST_CASE( RepeatedTextKeepsAllInstancesWithNegativeStep )
 }
 
 
+static int repeatCountAtY( double aY )
+{
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
+    model.ClearList();
+
+    DS_DATA_ITEM_TEXT* text = new DS_DATA_ITEM_TEXT( wxT( "1" ) );
+    text->SetStart( 25.0, aY, LT_CORNER );
+    text->m_RepeatCount = 100;
+    text->m_IncrementLabel = 1;
+    text->m_IncrementVector = VECTOR2D( 50.0, 0.0 );
+    model.Append( text );
+
+    PAGE_INFO   page;
+    TITLE_BLOCK tb;
+
+    DS_DRAW_ITEM_LIST drawList( unityScale );
+    drawList.BuildDrawItemsList( page, tb );
+
+    int count = 0;
+
+    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    {
+        if( item->Type() == WSG_TEXT_T )
+            count++;
+    }
+
+    return count;
+}
+
+
+BOOST_AUTO_TEST_CASE( RepeatedTextAnchoredInPageMarginKeepsItsRepeats )
+{
+    int insideCount = repeatCountAtY( 1.0 );
+
+    BOOST_REQUIRE_GT( insideCount, 1 );
+
+    // A run anchored in the page margin must not lose its repeats. See #24309.
+    BOOST_CHECK_EQUAL( repeatCountAtY( -2.5 ), insideCount );
+}
+
+
 static std::vector<wxString> repeatTexts( const wxString& aBase, int aCount, int aLabelStep )
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
