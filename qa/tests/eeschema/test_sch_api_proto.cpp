@@ -35,6 +35,7 @@
 #include <sch_label.h>
 #include <sch_line.h>
 #include <sch_no_connect.h>
+#include <sch_rule_area.h>
 #include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_symbol.h>
@@ -106,6 +107,15 @@ BOOST_AUTO_TEST_CASE( KitchenSink )
                     []()
                     {
                         return std::make_unique<SCH_SHAPE>();
+                    } );
+            break;
+
+        case SCH_RULE_AREA_T:
+            testProtoFromKiCadObject<kiapi::schematic::types::SchematicRuleArea>(
+                    static_cast<SCH_RULE_AREA*>( item ),
+                    []()
+                    {
+                        return std::make_unique<SCH_RULE_AREA>();
                     } );
             break;
 

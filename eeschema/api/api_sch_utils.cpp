@@ -32,6 +32,7 @@
 #include <sch_label.h>
 #include <sch_line.h>
 #include <sch_no_connect.h>
+#include <sch_rule_area.h>
 #include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_screen.h>
@@ -71,6 +72,7 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
     case SCH_GLOBAL_LABEL_T:    return std::make_unique<SCH_GLOBALLABEL>();
     case SCH_HIER_LABEL_T:      return std::make_unique<SCH_HIERLABEL>();
     case SCH_DIRECTIVE_LABEL_T: return std::make_unique<SCH_DIRECTIVE_LABEL>();
+    case SCH_RULE_AREA_T:       return std::make_unique<SCH_RULE_AREA>();
     case SCH_FIELD_T:           return std::make_unique<SCH_FIELD>( parentSchItem );
     case SCH_GROUP_T:           return std::make_unique<SCH_GROUP>();
     case SCH_SYMBOL_T:          return std::make_unique<SCH_SYMBOL>();

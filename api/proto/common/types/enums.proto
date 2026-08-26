@@ -89,6 +89,7 @@ enum KiCadObjectType
   KOT_PCB_BARCODE = 52;
   KOT_PCB_CONSTRAINT = 53;
   KOT_PCB_GRIDITEM = 54;
+  KOT_SCH_RULE_AREA = 55;
 }
 
 // Mapped to GR_TEXT_H_ALIGN_T

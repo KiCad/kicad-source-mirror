@@ -205,6 +205,18 @@ message Group
   kiapi.common.types.LockedState locked = 4;
 }
 
+message SchematicRuleArea
+{
+  kiapi.common.types.KIID id = 1;
+  kiapi.common.types.GraphicShape shape = 2;
+  kiapi.common.types.LockedState locked = 3;
+
+  bool exclude_from_sim = 4;
+  bool exclude_from_bom = 5;
+  bool exclude_from_board = 6;
+  bool dnp = 7;
+}
+
 enum SheetSide
 {
   SHS_UNKNOWN = 0;

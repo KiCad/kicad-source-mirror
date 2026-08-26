@@ -92,6 +92,7 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
         { "type.googleapis.com/kiapi.schematic.types.SheetSymbol", SCH_SHEET_T },
         { "type.googleapis.com/kiapi.schematic.types.SchematicSymbolInstance", SCH_SYMBOL_T },
         { "type.googleapis.com/kiapi.schematic.types.SchematicPin", SCH_PIN_T },
+        { "type.googleapis.com/kiapi.schematic.types.SchematicRuleArea", SCH_RULE_AREA_T },
     };
 
     auto it = s_types.find( aMessage.type_url() );

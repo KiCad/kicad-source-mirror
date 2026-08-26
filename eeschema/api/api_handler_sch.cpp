@@ -62,13 +62,13 @@ using kiapi::common::types::ItemRequestStatus;
 
 
 std::set<KICAD_T> API_HANDLER_SCH::s_allowedTypes = {
-    // SCH_MARKER_T,
     SCH_JUNCTION_T,
     SCH_NO_CONNECT_T,
     SCH_BUS_WIRE_ENTRY_T,
     SCH_BUS_BUS_ENTRY_T,
     SCH_LINE_T,
     SCH_SHAPE_T,
+    SCH_RULE_AREA_T,
     SCH_BITMAP_T,
     SCH_TEXTBOX_T,
     SCH_TEXT_T,
