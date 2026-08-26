@@ -91,6 +91,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_find_by_properties.cpp
     dialogs/dialog_find_by_properties_base.cpp
     dialogs/dialog_footprint_fields_table.cpp
+    dialogs/dialog_lib_footprint_fields_table.cpp
     dialogs/dialog_footprint_wizard_list.cpp
     dialogs/dialog_footprint_wizard_list_base.cpp
     dialogs/dialog_gen_footprint_position.cpp
