@@ -159,8 +159,11 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	sbAttributesSizer->Add( bPartTypeSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
+	m_cbExcludeFromSim = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Exclude from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbAttributesSizer->Add( m_cbExcludeFromSim, 0, wxALL, 5 );
+
 	m_boardOnly = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Not in schematic"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbAttributesSizer->Add( m_boardOnly, 0, wxALL, 5 );
+	sbAttributesSizer->Add( m_boardOnly, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_cbDNP = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Do not populate"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAttributesSizer->Add( m_cbDNP, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -181,7 +184,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
 	m_LayersPanel = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
@@ -581,7 +584,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelPadConnections->SetSizer( bSizer19 );
 	m_PanelPadConnections->Layout();
 	bSizer19->Fit( m_PanelPadConnections );
-	m_NoteBook->AddPage( m_PanelPadConnections, _("Pad Connections"), true );
+	m_NoteBook->AddPage( m_PanelPadConnections, _("Pad Connections"), false );
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
@@ -615,6 +618,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_DocCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_KeywordCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_componentType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnChoice ), NULL, this );
+	m_cbExcludeFromSim->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_boardOnly->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_cbDNP->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBOM->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
@@ -643,6 +647,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDIT
 	m_DocCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_KeywordCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_componentType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnChoice ), NULL, this );
+	m_cbExcludeFromSim->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_boardOnly->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_cbDNP->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBOM->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );

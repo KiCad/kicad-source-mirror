@@ -845,6 +845,10 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
                    wxString::Format( _( "'%s' settings differ." ),
                                      _( "Exclude from bill of materials" ) ) );
 
+        TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_EXCLUDE_FROM_SIM,
+                   wxString::Format( _( "'%s' settings differ." ),
+                                     _( "Exclude from simulation" ) ) );
+
         TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_DNP,
                    wxString::Format( _( "'%s' settings differ." ),
                                      _( "Do not populate" ) ) );

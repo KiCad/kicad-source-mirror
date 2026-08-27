@@ -197,8 +197,11 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 
 	sbAttributesSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
+	m_cbExcludeFromSim = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Exclude from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbAttributesSizer->Add( m_cbExcludeFromSim, 0, wxALL, 5 );
+
 	m_boardOnly = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Not in schematic"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbAttributesSizer->Add( m_boardOnly, 0, wxALL, 5 );
+	sbAttributesSizer->Add( m_boardOnly, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_cbDNP = new wxCheckBox( sbAttributesSizer->GetStaticBox(), wxID_ANY, _("Do not populate"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAttributesSizer->Add( m_cbDNP, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -423,6 +426,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_BoardSideCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_cbLocked->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_componentType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnChoice ), NULL, this );
+	m_cbExcludeFromSim->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_boardOnly->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbDNP->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBOM->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
@@ -453,6 +457,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::~DIALOG_FOOTPRINT_PROPERTIES_BASE()
 	m_BoardSideCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_cbLocked->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_componentType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnChoice ), NULL, this );
+	m_cbExcludeFromSim->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_boardOnly->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbDNP->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_excludeFromBOM->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );

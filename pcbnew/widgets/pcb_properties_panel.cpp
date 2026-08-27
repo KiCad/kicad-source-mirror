@@ -979,6 +979,7 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             {
                 if( propName == _HKI( "Do not Populate" )
                     || propName == _HKI( "Exclude From Bill of Materials" )
+                    || propName == _HKI( "Exclude From Simulation" )
                     || propName == _HKI( "Exclude From Position Files" ) )
                 {
                     FOOTPRINT_VARIANT* variant = footprint->GetVariant( variantName );
@@ -994,6 +995,8 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
                             variant->SetDNP( boolValue );
                         else if( propName == _HKI( "Exclude From Bill of Materials" ) )
                             variant->SetExcludedFromBOM( boolValue );
+                        else if( propName == _HKI( "Exclude From Simulation" ) )
+                            variant->SetExcludedFromSim( boolValue );
                         else if( propName == _HKI( "Exclude From Position Files" ) )
                             variant->SetExcludedFromPosFiles( boolValue );
 
@@ -1201,6 +1204,11 @@ bool PCB_PROPERTIES_PANEL::getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProper
         else if( propName == _HKI( "Exclude From Bill of Materials" ) )
         {
             aValue = wxVariant( footprint->GetExcludedFromBOMForVariant( variantName ) );
+            return true;
+        }
+        else if( propName == _HKI( "Exclude From Simulation" ) )
+        {
+            aValue = wxVariant( footprint->GetExcludedFromSimForVariant( variantName ) );
             return true;
         }
         else if( propName == _HKI( "Exclude From Position Files" ) )

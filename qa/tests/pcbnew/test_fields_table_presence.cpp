@@ -55,7 +55,7 @@ struct FOOTPRINT_FIELDS_TABLE_PRESENCE_FIXTURE
         BOOST_REQUIRE_EQUAL( m_model.GetNumberRows(), 1 );
     }
 
-    void Apply()
+    void Apply( const wxString& aVariant = wxEmptyString )
     {
         TOOL_MANAGER toolMgr;
         toolMgr.SetEnvironment( &m_board, nullptr, nullptr, nullptr, nullptr );
@@ -63,7 +63,7 @@ struct FOOTPRINT_FIELDS_TABLE_PRESENCE_FIXTURE
         BOARD_COMMIT commit( &toolMgr, true, false );
         TEMPLATES    templates;
 
-        m_model.ApplyData( commit, templates, wxEmptyString );
+        m_model.ApplyData( commit, templates, aVariant );
     }
 
     BOARD                                   m_board;
@@ -145,6 +145,39 @@ BOOST_AUTO_TEST_CASE( UserAddedColumnCreatesEmptyField )
     const PCB_FIELD* field = m_footprint->GetField( fieldName );
     BOOST_REQUIRE( field );
     BOOST_CHECK( field->GetText().IsEmpty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ExcludeFromSimulationAttributeIsEditable )
+{
+    const wxString fieldName = wxS( "${EXCLUDE_FROM_SIM}" );
+
+    AddTestColumn( fieldName );
+
+    BOOST_CHECK( !m_model.ColIsReadOnly( m_col ) );
+    BOOST_CHECK_EQUAL( m_model.GetValue( 0, m_col ), wxString( wxS( "0" ) ) );
+
+    m_model.SetValue( 0, m_col, wxS( "1" ) );
+    Apply();
+
+    BOOST_CHECK( m_footprint->IsExcludedFromSim() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ExcludeFromSimulationAttributeIsVariantAware )
+{
+    const wxString fieldName = wxS( "${EXCLUDE_FROM_SIM}" );
+    const wxString variantName = wxS( "Production" );
+
+    m_board.AddVariant( variantName );
+    m_model.SetCurrentVariant( variantName );
+    AddTestColumn( fieldName );
+
+    m_model.SetValue( 0, m_col, wxS( "1" ) );
+    Apply( variantName );
+
+    BOOST_CHECK( !m_footprint->IsExcludedFromSim() );
+    BOOST_CHECK( m_footprint->GetExcludedFromSimForVariant( variantName ) );
 }
 
 

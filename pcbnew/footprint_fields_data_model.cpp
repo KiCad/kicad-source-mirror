@@ -163,8 +163,7 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReadOnly( int aCol ) const
 {
     return FIELDS_TABLE_DATA_MODEL<FOOTPRINT_REF>::ColIsReadOnly( aCol )
            || ColIsFootprint( aCol )
-           || m_cols[aCol].m_fieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
-           || m_cols[aCol].m_fieldName == wxS( "${EXCLUDE_FROM_SIM}" );
+           || m_cols[aCol].m_fieldName == wxS( "${EXCLUDE_FROM_BOARD}" );
 }
 
 
@@ -254,7 +253,7 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const FOOTP
         return aRef.GetFootprint().GetExcludedFromBOMForVariant( aVariantName ) ? wxS( "1" ) : wxS( "0" );
 
     if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        return wxS( "0" );
+        return aRef.GetFootprint().GetExcludedFromSimForVariant( aVariantName ) ? wxS( "1" ) : wxS( "0" );
 
     if( aAttributeName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
         return aRef.GetFootprint().GetExcludedFromPosFilesForVariant( aVariantName ) ? wxS( "1" ) : wxS( "0" );
@@ -379,7 +378,16 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( const FOOTPRINT
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
     {
-        attrChanged = false;
+        attrChanged = aRef.GetFootprint().GetExcludedFromSimForVariant( aVariantName ) != newValue;
+
+        if( attrChanged )
+        {
+            // TODO: fix footprint API to match symbol
+            if( defaultVariant )
+                aRef.GetFootprint().SetExcludedFromSim( newValue );
+            else if( FOOTPRINT_VARIANT* variant = aRef.GetFootprint().AddVariant( aVariantName ) )
+                variant->SetExcludedFromSim( newValue );
+        }
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
     {

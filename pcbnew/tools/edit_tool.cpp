@@ -628,6 +628,7 @@ bool EDIT_TOOL::Init()
     std::shared_ptr<CONDITIONAL_MENU> fpAttributesMenu = std::make_shared<CONDITIONAL_MENU>( this );
     fpAttributesMenu->SetUntranslatedTitle( _HKI( "Attributes" ) );
     fpAttributesMenu->AddCheckItem( PCB_ACTIONS::toggleExcludeFromBOM, SELECTION_CONDITIONS::ShowAlways );
+    fpAttributesMenu->AddCheckItem( PCB_ACTIONS::toggleExcludeFromSim, SELECTION_CONDITIONS::ShowAlways );
     fpAttributesMenu->AddCheckItem( PCB_ACTIONS::toggleExcludeFromPosFiles, SELECTION_CONDITIONS::ShowAlways );
     m_selectionTool->GetToolMenu().RegisterSubMenu( fpAttributesMenu );
 
@@ -806,6 +807,29 @@ bool EDIT_TOOL::Init()
                 return checked > 0 && unchecked == 0;
             };
 
+    auto excludeFromSimCond =
+            [this]( const SELECTION& aSel )
+            {
+                wxString variantName;
+                int      checked = 0, unchecked = 0;
+
+                if( BOARD* board = frame()->GetBoard() )
+                    variantName = board->GetCurrentVariant();
+
+                for( const EDA_ITEM* item : aSel )
+                {
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                    {
+                        if( static_cast<const FOOTPRINT*>( item )->GetExcludedFromSimForVariant( variantName ) )
+                            checked++;
+                        else
+                            unchecked++;
+                    }
+                }
+
+                return checked > 0 && unchecked == 0;
+            };
+
     auto noActiveToolCondition =
             [this]( const SELECTION& aSelection )
             {
@@ -923,6 +947,7 @@ bool EDIT_TOOL::Init()
 
     ACTION_MANAGER* mgr = m_toolMgr->GetActionManager();
     mgr->SetConditions( PCB_ACTIONS::toggleExcludeFromBOM, ACTION_CONDITIONS().Check( excludeFromBOMCond ) );
+    mgr->SetConditions( PCB_ACTIONS::toggleExcludeFromSim, ACTION_CONDITIONS().Check( excludeFromSimCond ) );
     mgr->SetConditions( PCB_ACTIONS::toggleExcludeFromPosFiles, ACTION_CONDITIONS().Check( excludeFromPosFilesCond ) );
 
     return true;
@@ -1176,6 +1201,8 @@ int EDIT_TOOL::ToggleFootprintAttribute( const TOOL_EVENT& aEvent )
 
         if( ( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromBOM )
               && !fp->GetExcludedFromBOMForVariant( variantName ) )
+            || ( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromSim )
+                 && !fp->GetExcludedFromSimForVariant( variantName ) )
             || ( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromPosFiles )
                  && !fp->GetExcludedFromPosFilesForVariant( variantName ) ) )
         {
@@ -1202,6 +1229,8 @@ int EDIT_TOOL::ToggleFootprintAttribute( const TOOL_EVENT& aEvent )
             {
                 if( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromBOM ) )
                     variant->SetExcludedFromBOM( new_state );
+                else if( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromSim ) )
+                    variant->SetExcludedFromSim( new_state );
                 else if( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromPosFiles ) )
                     variant->SetExcludedFromPosFiles( new_state );
 
@@ -1211,6 +1240,8 @@ int EDIT_TOOL::ToggleFootprintAttribute( const TOOL_EVENT& aEvent )
 
         if( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromBOM ) )
             fp->SetExcludedFromBOM( new_state );
+        else if( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromSim ) )
+            fp->SetExcludedFromSim( new_state );
         else if( aEvent.IsAction( &PCB_ACTIONS::toggleExcludeFromPosFiles ) )
             fp->SetExcludedFromPosFiles( new_state );
     }
@@ -3994,6 +4025,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::SwapGateNets,             PCB_ACTIONS::swapGateNets.MakeEvent() );
     Go( &EDIT_TOOL::PackAndMoveFootprints,    PCB_ACTIONS::packAndMoveFootprints.MakeEvent() );
     Go( &EDIT_TOOL::ToggleFootprintAttribute, PCB_ACTIONS::toggleExcludeFromBOM.MakeEvent() );
+    Go( &EDIT_TOOL::ToggleFootprintAttribute, PCB_ACTIONS::toggleExcludeFromSim.MakeEvent() );
     Go( &EDIT_TOOL::ToggleFootprintAttribute, PCB_ACTIONS::toggleExcludeFromPosFiles.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,         PCB_ACTIONS::changeTrackWidth.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackLayer,         PCB_ACTIONS::changeTrackLayerNext.MakeEvent() );

@@ -564,13 +564,16 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseVariants()
 
 void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintVariant( FOOTPRINT* aFootprint )
 {
-    // (variant (name "VariantA") (dnp yes) (exclude_from_bom yes) (exclude_from_pos_files yes)
+    // (variant (name "VariantA") (dnp yes) (exclude_from_bom yes) (exclude_from_sim yes)
+    //   (exclude_from_pos_files yes)
     //   (field (name "Value") (value "100nF")))
     wxString variantName;
     bool     hasDnp = false;
     bool     dnp = false;
     bool     hasExcludeFromBOM = false;
     bool     excludeFromBOM = false;
+    bool     hasExcludeFromSim = false;
+    bool     excludeFromSim = false;
     bool     hasExcludeFromPosFiles = false;
     bool     excludeFromPosFiles = false;
     std::vector<std::pair<wxString, wxString>> fields;
@@ -596,6 +599,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintVariant( FOOTPRINT* aFootprint )
         case T_exclude_from_bom:
             excludeFromBOM = parseMaybeAbsentBool( true );
             hasExcludeFromBOM = true;
+            break;
+
+        case T_exclude_from_sim:
+            excludeFromSim = parseMaybeAbsentBool( true );
+            hasExcludeFromSim = true;
             break;
 
         case T_exclude_from_pos_files:
@@ -638,7 +646,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintVariant( FOOTPRINT* aFootprint )
         }
 
         default:
-            Expecting( "name, dnp, exclude_from_bom, exclude_from_pos_files, or field" );
+            Expecting( "name, dnp, exclude_from_bom, exclude_from_sim, exclude_from_pos_files, or field" );
         }
     }
 
@@ -655,6 +663,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseFootprintVariant( FOOTPRINT* aFootprint )
 
     if( hasExcludeFromBOM )
         variant->SetExcludedFromBOM( excludeFromBOM );
+
+    if( hasExcludeFromSim )
+        variant->SetExcludedFromSim( excludeFromSim );
 
     if( hasExcludeFromPosFiles )
         variant->SetExcludedFromPosFiles( excludeFromPosFiles );
@@ -5968,6 +5979,10 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                     attributes |= FP_EXCLUDE_FROM_BOM;
                     break;
 
+                case T_exclude_from_sim:
+                    attributes |= FP_EXCLUDE_FROM_SIM;
+                    break;
+
                 case T_allow_missing_courtyard:
                     footprint->SetAllowMissingCourtyard( true );
                     break;
@@ -5982,7 +5997,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
                 default:
                     Expecting( "through_hole, smd, virtual, board_only, exclude_from_pos_files, "
-                               "exclude_from_bom or allow_solder_mask_bridges" );
+                               "exclude_from_bom, exclude_from_sim or allow_solder_mask_bridges" );
                 }
             }
             footprint->SetAttributes( attributes );

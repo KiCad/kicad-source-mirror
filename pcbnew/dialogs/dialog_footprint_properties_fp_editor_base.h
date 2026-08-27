@@ -60,6 +60,7 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_KeywordCtrl;
 		wxStaticText* m_componentTypeLabel;
 		wxChoice* m_componentType;
+		wxCheckBox* m_cbExcludeFromSim;
 		wxCheckBox* m_boardOnly;
 		wxCheckBox* m_cbDNP;
 		wxCheckBox* m_excludeFromBOM;

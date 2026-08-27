@@ -344,6 +344,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     attrs->set_not_in_schematic( IsBoardOnly() );
     attrs->set_exclude_from_position_files( IsExcludedFromPosFiles() );
     attrs->set_exclude_from_bill_of_materials( IsExcludedFromBOM() );
+    attrs->set_exclude_from_simulation( IsExcludedFromSim() );
     attrs->set_exempt_from_courtyard_requirement( AllowMissingCourtyard() );
     attrs->set_do_not_populate( IsDNP() );
     attrs->set_allow_soldermask_bridges( AllowSolderMaskBridges() );
@@ -529,6 +530,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
     SetBoardOnly( footprint.attributes().not_in_schematic() );
     SetExcludedFromBOM( footprint.attributes().exclude_from_bill_of_materials() );
+    SetExcludedFromSim( footprint.attributes().exclude_from_simulation() );
     SetExcludedFromPosFiles( footprint.attributes().exclude_from_position_files() );
     SetAllowMissingCourtyard( footprint.attributes().exempt_from_courtyard_requirement() );
     SetDNP( footprint.attributes().do_not_populate() );
@@ -1342,8 +1344,11 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_SIM" ) ) )
     {
-        // Footprints are never excluded from sim at this time
         *token = wxEmptyString;
+
+        if( GetExcludedFromSimForVariant( variant ) )
+            *token = wxS( "Excluded from simulation" );
+
         return true;
     }
     else if( token->IsSameAs( wxT( "DNP" ) ) )
@@ -1452,6 +1457,7 @@ FOOTPRINT_VARIANT* FOOTPRINT::AddVariant( const wxString& aVariantName )
     FOOTPRINT_VARIANT variant( aVariantName );
     variant.SetDNP( IsDNP() );
     variant.SetExcludedFromBOM( IsExcludedFromBOM() );
+    variant.SetExcludedFromSim( IsExcludedFromSim() );
     variant.SetExcludedFromPosFiles( IsExcludedFromPosFiles() );
 
     auto inserted = m_variants.emplace( aVariantName, std::move( variant ) );
@@ -1528,6 +1534,22 @@ bool FOOTPRINT::GetExcludedFromBOMForVariant( const wxString& aVariantName ) con
 
     // Fall back to default if variant doesn't exist
     return IsExcludedFromBOM();
+}
+
+
+bool FOOTPRINT::GetExcludedFromSimForVariant( const wxString& aVariantName ) const
+{
+    // Empty variant name means default
+    if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return IsExcludedFromSim();
+
+    const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
+
+    if( variant )
+        return variant->GetExcludedFromSim();
+
+    // Fall back to default if variant doesn't exist
+    return IsExcludedFromSim();
 }
 
 
@@ -2408,6 +2430,9 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     if( GetExcludedFromBOMForVariant( variant ) )
         addToken( &attrs, _( "exclude from BOM" ) );
+
+    if( GetExcludedFromSimForVariant( variant ) )
+        addToken( &attrs, _( "exclude from simulation" ) );
 
     if( GetDNPForVariant( variant ) )
         addToken( &attrs, _( "DNP" ) );
@@ -5391,6 +5416,9 @@ static struct FOOTPRINT_DESC
                     groupAttributes );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude From Bill of Materials" ),
                     &FOOTPRINT::SetExcludedFromBOM, &FOOTPRINT::IsExcludedFromBOM ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude From Simulation" ),
+                    &FOOTPRINT::SetExcludedFromSim, &FOOTPRINT::IsExcludedFromSim ),
                     groupAttributes );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Do not Populate" ),
                     &FOOTPRINT::SetDNP, &FOOTPRINT::IsDNP ),

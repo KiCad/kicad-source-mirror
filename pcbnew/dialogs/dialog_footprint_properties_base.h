@@ -67,6 +67,7 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbLocked;
 		wxStaticText* m_componentTypeLabel;
 		wxChoice* m_componentType;
+		wxCheckBox* m_cbExcludeFromSim;
 		wxCheckBox* m_boardOnly;
 		wxCheckBox* m_cbDNP;
 		wxCheckBox* m_excludeFromBOM;

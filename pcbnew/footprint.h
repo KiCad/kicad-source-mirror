@@ -86,7 +86,8 @@ enum FOOTPRINT_ATTR_T
     FP_EXCLUDE_FROM_BOM         = 0x0008,
     FP_BOARD_ONLY               = 0x0010,   // Footprint has no corresponding symbol
     FP_JUST_ADDED               = 0x0020,   // Footprint just added by netlist update
-    FP_DNP                      = 0x0040
+    FP_DNP                      = 0x0040,
+    FP_EXCLUDE_FROM_SIM         = 0x0080
 };
 
 
@@ -227,6 +228,7 @@ public:
             m_name( aName ),
             m_dnp( false ),
             m_excludedFromBOM( false ),
+            m_excludedFromSim( false ),
             m_excludedFromPosFiles( false )
     {
     }
@@ -239,6 +241,9 @@ public:
 
     bool GetExcludedFromBOM() const { return m_excludedFromBOM; }
     void SetExcludedFromBOM( bool aExclude ) { m_excludedFromBOM = aExclude; }
+
+    bool GetExcludedFromSim() const { return m_excludedFromSim; }
+    void SetExcludedFromSim( bool aExclude ) { m_excludedFromSim = aExclude; }
 
     bool GetExcludedFromPosFiles() const { return m_excludedFromPosFiles; }
     void SetExcludedFromPosFiles( bool aExclude ) { m_excludedFromPosFiles = aExclude; }
@@ -288,6 +293,7 @@ public:
         return m_name == aOther.m_name
                 && m_dnp == aOther.m_dnp
                 && m_excludedFromBOM == aOther.m_excludedFromBOM
+                && m_excludedFromSim == aOther.m_excludedFromSim
                 && m_excludedFromPosFiles == aOther.m_excludedFromPosFiles
                 && m_fields == aOther.m_fields;
     }
@@ -296,6 +302,7 @@ private:
     wxString                     m_name;
     bool                         m_dnp;
     bool                         m_excludedFromBOM;
+    bool                         m_excludedFromSim;
     bool                         m_excludedFromPosFiles;
     std::map<wxString, wxString> m_fields;  ///< Field value overrides for this variant
 };
@@ -1020,6 +1027,15 @@ public:
             m_attributes &= ~FP_EXCLUDE_FROM_BOM;
     }
 
+    bool IsExcludedFromSim() const { return m_attributes & FP_EXCLUDE_FROM_SIM; }
+    void SetExcludedFromSim( bool aExclude = true )
+    {
+        if( aExclude )
+            m_attributes |= FP_EXCLUDE_FROM_SIM;
+        else
+            m_attributes &= ~FP_EXCLUDE_FROM_SIM;
+    }
+
     bool IsDNP() const { return m_attributes & FP_DNP; }
     void SetDNP( bool aDNP = true )
     {
@@ -1105,6 +1121,16 @@ public:
      * @return true if excluded from BOM for the specified variant.
      */
     bool GetExcludedFromBOMForVariant( const wxString& aVariantName ) const;
+
+    /**
+     * Get the exclude-from-simulation status for a specific variant.
+     *
+     * If the variant doesn't exist, returns the default exclude-from-simulation status.
+     *
+     * @param aVariantName The variant name (empty for default).
+     * @return true if excluded from simulation for the specified variant.
+     */
+    bool GetExcludedFromSimForVariant( const wxString& aVariantName ) const;
 
     /**
      * Get the exclude-from-position-files status for a specific variant.

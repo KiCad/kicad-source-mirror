@@ -1523,6 +1523,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
         if( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
             m_out->Print( " exclude_from_bom" );
 
+        if( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_SIM )
+            m_out->Print( " exclude_from_sim" );
+
         if( aFootprint->AllowMissingCourtyard() )
             m_out->Print( " allow_missing_courtyard" );
 
@@ -1640,6 +1643,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     // Save variants.
     const bool baseDnp = aFootprint->IsDNP();
     const bool baseExcludedFromBOM = aFootprint->IsExcludedFromBOM();
+    const bool baseExcludedFromSim = aFootprint->IsExcludedFromSim();
     const bool baseExcludedFromPosFiles = aFootprint->IsExcludedFromPosFiles();
 
     for( const auto& [variantName, variant] : aFootprint->GetVariants() )
@@ -1651,6 +1655,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
 
         if( variant.GetExcludedFromBOM() != baseExcludedFromBOM )
             KICAD_FORMAT::FormatBool( m_out, "exclude_from_bom", variant.GetExcludedFromBOM() );
+
+        if( variant.GetExcludedFromSim() != baseExcludedFromSim )
+            KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", variant.GetExcludedFromSim() );
 
         if( variant.GetExcludedFromPosFiles() != baseExcludedFromPosFiles )
         {

@@ -411,11 +411,19 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             }
 
             const bool baseExcludedFromBOM = symbol->ResolveExcludedFromBOM( &sheet ) || sheet.GetExcludedFromBOM();
+            const bool baseExcludedFromSim = symbol->ResolveExcludedFromSim( &sheet ) || sheet.GetExcludedFromSim();
 
             if( symbol->ResolveExcludedFromBOM( &sheet, currentVariant ) || sheet.GetExcludedFromBOM( currentVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
+            }
+
+            if( symbol->ResolveExcludedFromSim( &sheet, currentVariant )
+                || sheet.GetExcludedFromSim( currentVariant ) )
+            {
+                xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
+                xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_sim" ) );
             }
 
             if( symbol->ResolveExcludedFromBoard( &sheet, currentVariant )
@@ -448,8 +456,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             // Differences against the base design, which only the board netlist still reports.
             if( ( aCtl & GNL_OPT_KICAD ) && !variantNames.empty() )
             {
-                const bool baseExcludedFromSim = symbol->ResolveExcludedFromSim( &sheet ) || sheet.GetExcludedFromSim();
-                XNODE*     xvariants = nullptr;
+                XNODE* xvariants = nullptr;
 
                 for( const auto& variantName : variantNames )
                 {

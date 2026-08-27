@@ -401,6 +401,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     }
 
     m_boardOnly->SetValue( m_footprint->GetAttributes() & FP_BOARD_ONLY );
+    m_cbExcludeFromSim->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_SIM );
     m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES );
     m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM );
     m_cbDNP->SetValue( m_footprint->GetAttributes() & FP_DNP );
@@ -795,6 +796,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
     if( m_boardOnly->GetValue() )
         attributes |= FP_BOARD_ONLY;
+
+    if( m_cbExcludeFromSim->GetValue() )
+        attributes |= FP_EXCLUDE_FROM_SIM;
 
     if( m_excludeFromPosFiles->GetValue() )
         attributes |= FP_EXCLUDE_FROM_POS_FILES;

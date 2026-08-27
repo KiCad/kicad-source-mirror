@@ -154,6 +154,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_BoardSideCtrl,
         m_cbLocked,
         m_componentType,
+        m_cbExcludeFromSim,
         m_boardOnly,
         m_cbDNP,
         m_excludeFromBOM,
@@ -294,6 +295,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     m_boardOnly->SetValue( m_footprint->GetAttributes() & FP_BOARD_ONLY );
 
+    m_cbExcludeFromSim->SetValue( m_footprint->GetExcludedFromSimForVariant( variantName ) );
     m_excludeFromPosFiles->SetValue( m_footprint->GetExcludedFromPosFilesForVariant( variantName ) );
     m_excludeFromBOM->SetValue( m_footprint->GetExcludedFromBOMForVariant( variantName ) );
     m_cbDNP->SetValue( m_footprint->GetDNPForVariant( variantName ) );
@@ -686,12 +688,16 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
         if( variant )
         {
+            variant->SetExcludedFromSim( m_cbExcludeFromSim->GetValue() );
             variant->SetExcludedFromPosFiles( m_excludeFromPosFiles->GetValue() );
             variant->SetExcludedFromBOM( m_excludeFromBOM->GetValue() );
             variant->SetDNP( m_cbDNP->GetValue() );
         }
 
-        // Preserve base attribute flags for these three properties
+        // Preserve base attribute flags for these four properties
+        if( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_SIM )
+            attributes |= FP_EXCLUDE_FROM_SIM;
+
         if( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
             attributes |= FP_EXCLUDE_FROM_POS_FILES;
 
@@ -703,6 +709,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     }
     else
     {
+        if( m_cbExcludeFromSim->GetValue() )
+            attributes |= FP_EXCLUDE_FROM_SIM;
+
         if( m_excludeFromPosFiles->GetValue() )
             attributes |= FP_EXCLUDE_FROM_POS_FILES;
 

@@ -1337,6 +1337,9 @@ message FootprintAttributes
 
   // Since: 9.0.7
   bool allow_soldermask_bridges = 9;
+
+  // Since: 11.0.0
+  bool exclude_from_simulation = 10;
 }
 
 message NetTieDefinition

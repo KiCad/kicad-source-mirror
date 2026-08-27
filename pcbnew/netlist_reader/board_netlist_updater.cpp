@@ -822,6 +822,43 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
+    bool netlistExcludeFromSim = aNetlistComponent->GetProperties().count( wxT( "exclude_from_sim" ) ) > 0;
+
+    if( firstAssociatedVariant != nullptr && firstAssociatedVariant->m_hasExcludedFromSim )
+        netlistExcludeFromSim = firstAssociatedVariant->m_excludedFromSim;
+
+    if( m_updateFields
+        && netlistExcludeFromSim != ( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_SIM ) > 0 ) )
+    {
+        if( m_isDryRun )
+        {
+            if( netlistExcludeFromSim )
+                msg.Printf( _( "Add %s 'exclude from simulation' attribute." ), aFootprint->GetReference() );
+            else
+                msg.Printf( _( "Remove %s 'exclude from simulation' attribute." ), aFootprint->GetReference() );
+        }
+        else
+        {
+            int attributes = aFootprint->GetAttributes();
+
+            if( netlistExcludeFromSim )
+            {
+                attributes |= FP_EXCLUDE_FROM_SIM;
+                msg.Printf( _( "Added %s 'exclude from simulation' attribute." ), aFootprint->GetReference() );
+            }
+            else
+            {
+                attributes &= ~FP_EXCLUDE_FROM_SIM;
+                msg.Printf( _( "Removed %s 'exclude from simulation' attribute." ), aFootprint->GetReference() );
+            }
+
+            changed = true;
+            aFootprint->SetAttributes( attributes );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
     bool netlistDNP = aNetlistComponent->GetProperties().count( wxT( "dnp" ) ) > 0;
 
     if( firstAssociatedVariant != nullptr && firstAssociatedVariant->m_hasDnp )
@@ -1601,6 +1638,25 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                 {
                     if( FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name ) )
                         fpVariant->SetExcludedFromBOM( targetExcludedFromBOM );
+                }
+
+                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                changed = true;
+            }
+
+            bool targetExcludedFromSim = variant.m_hasExcludedFromSim ? variant.m_excludedFromSim
+                                                                      : footprint->IsExcludedFromSim();
+            bool currentExcludedFromSim = currentVariant ? currentVariant->GetExcludedFromSim()
+                                                         : footprint->IsExcludedFromSim();
+
+            if( currentExcludedFromSim != targetExcludedFromSim )
+            {
+                printAttributeMessage( targetExcludedFromSim, _( "exclude from simulation" ), info.name );
+
+                if( !m_isDryRun )
+                {
+                    if( FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name ) )
+                        fpVariant->SetExcludedFromSim( targetExcludedFromSim );
                 }
 
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );

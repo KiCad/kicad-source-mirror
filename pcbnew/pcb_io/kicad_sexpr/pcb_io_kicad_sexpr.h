@@ -213,7 +213,7 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20260728  // Grid items
 //#define SEXPR_BOARD_FILE_VERSION    20260816  // Via stitching and guarding
 //#define SEXPR_BOARD_FILE_VERSION    20260818  // Line ending shapes
-#define SEXPR_BOARD_FILE_VERSION      20260826  // Bold is a stroke-width multiplier; thickness stores the base width
+#define SEXPR_BOARD_FILE_VERSION      20260828  // Exclude-from-simulation footprint attribute
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

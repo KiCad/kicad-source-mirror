@@ -173,6 +173,17 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
 }
 
 
+BOOST_AUTO_TEST_CASE( FootprintExcludeFromSimulationRoundTrip )
+{
+    BOARD     board;
+    FOOTPRINT footprint( &board );
+
+    footprint.SetExcludedFromSim( true );
+
+    testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( &footprint, &board );
+}
+
+
 BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
 {
     KI_TEST::LoadBoard( m_settingsManager, "padstacks", m_board );

@@ -284,7 +284,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
     for( const std::pair<const std::string, PTREE>& item : tree )
     {
         wxString path, value, footprint;
-        bool                         dnp = false, exBOM = false, exPosFiles = false;
+        bool                         dnp = false, exBOM = false, exSim = false, exPosFiles = false;
         std::map<wxString, wxString> pinNetMap, fieldsMap;
         wxASSERT( item.first == "ref" );
         wxString ref = getStr( item.second );
@@ -329,8 +329,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
             }
 
 
-            // Get DNP, Exclude from BOM, and Exclude from Position Files out of the
-            // properties if they exist
+            // Get DNP and exclusion attributes out of the properties if they exist
             for( const auto& child : item.second )
             {
                 if( child.first != "property" )
@@ -346,6 +345,8 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
                     dnp = true;
                 else if( name.get().front().first == "exclude_from_bom" )
                     exBOM = true;
+                else if( name.get().front().first == "exclude_from_sim" )
+                    exSim = true;
                 else if( name.get().front().first == "exclude_from_pos_files" )
                     exPosFiles = true;
             }
@@ -382,8 +383,8 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         else
         {
             // Add footprint to the map
-            std::shared_ptr<PCB_FP_DATA> data = std::make_shared<PCB_FP_DATA>( ref, footprint, value, dnp, exBOM,
-                                                                               exPosFiles, pinNetMap, fieldsMap );
+            std::shared_ptr<PCB_FP_DATA> data = std::make_shared<PCB_FP_DATA>(
+                    ref, footprint, value, dnp, exBOM, exSim, exPosFiles, pinNetMap, fieldsMap );
             m_pcbFootprints.insert( nearestItem, std::make_pair( path, data ) );
         }
     }
@@ -801,6 +802,7 @@ void BACK_ANNOTATE::applyChangelist()
         wxString       oldValue = ref.GetValue();
         bool           oldDNP = ref.GetSymbol()->GetDNP();
         bool           oldExBOM = ref.GetSymbol()->GetExcludedFromBOM();
+        bool           oldExSim = ref.GetSymbol()->GetExcludedFromSim();
         bool           oldExPosFiles = ref.GetSymbol()->GetExcludedFromPosFiles();
         // Skip prevents us from re-applying label/field changes to units we just swapped
         bool skip = ( ref.GetSymbol()->GetFlags() & SKIP_STRUCT ) > 0 || unitSwapItems.count( &item ) > 0;
@@ -882,6 +884,20 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
                 symbol->SetExcludedFromBOM( fpData.m_excludeFromBOM );
+
+            m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+        }
+
+        if( m_processAttributes && oldExSim != fpData.m_excludeFromSim && !skip )
+        {
+            ++m_changesCount;
+            msg.Printf( _( "Change %s 'Exclude from simulation' from '%s' to '%s'." ),
+                        DescribeRef( ref.GetRef() ),
+                        boolString( oldExSim ),
+                        boolString( fpData.m_excludeFromSim ) );
+
+            if( !m_dryRun )
+                symbol->SetExcludedFromSim( fpData.m_excludeFromSim );
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }

@@ -169,6 +169,8 @@ wxVariant DIALOG_FIND_BY_PROPERTIES::getVariantAwareValue( EDA_ITEM* aItem, PROP
                 return wxVariant( footprint->GetDNPForVariant( variantName ) );
             else if( propName == _HKI( "Exclude From Bill of Materials" ) )
                 return wxVariant( footprint->GetExcludedFromBOMForVariant( variantName ) );
+            else if( propName == _HKI( "Exclude From Simulation" ) )
+                return wxVariant( footprint->GetExcludedFromSimForVariant( variantName ) );
             else if( propName == _HKI( "Exclude From Position Files" ) )
                 return wxVariant( footprint->GetExcludedFromPosFilesForVariant( variantName ) );
         }

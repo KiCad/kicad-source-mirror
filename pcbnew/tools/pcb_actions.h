@@ -485,6 +485,7 @@ public:
     static TOOL_ACTION editLibFpInFpEditor;
 
     static TOOL_ACTION toggleExcludeFromBOM;
+    static TOOL_ACTION toggleExcludeFromSim;
     static TOOL_ACTION toggleExcludeFromPosFiles;
 
     static TOOL_ACTION showLayersManager;

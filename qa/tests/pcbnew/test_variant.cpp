@@ -56,17 +56,20 @@ BOOST_AUTO_TEST_CASE( FootprintVariantBasics )
     BOOST_CHECK_EQUAL( variant.GetName(), "TestVariant" );
     BOOST_CHECK( !variant.GetDNP() );
     BOOST_CHECK( !variant.GetExcludedFromBOM() );
+    BOOST_CHECK( !variant.GetExcludedFromSim() );
     BOOST_CHECK( !variant.GetExcludedFromPosFiles() );
     BOOST_CHECK( variant.GetFields().empty() );
 
     // Test setting values
     variant.SetDNP( true );
     variant.SetExcludedFromBOM( true );
+    variant.SetExcludedFromSim( true );
     variant.SetExcludedFromPosFiles( true );
     variant.SetFieldValue( "Value", "100R" );
 
     BOOST_CHECK( variant.GetDNP() );
     BOOST_CHECK( variant.GetExcludedFromBOM() );
+    BOOST_CHECK( variant.GetExcludedFromSim() );
     BOOST_CHECK( variant.GetExcludedFromPosFiles() );
     BOOST_CHECK( variant.HasFieldValue( "Value" ) );
     BOOST_CHECK_EQUAL( variant.GetFieldValue( "Value" ), "100R" );
@@ -171,6 +174,7 @@ BOOST_AUTO_TEST_CASE( FootprintVariantTextVarResolution )
 
     FOOTPRINT_VARIANT prodVariant( "Production" );
     prodVariant.SetDNP( true );
+    prodVariant.SetExcludedFromSim( true );
     fp.SetVariant( prodVariant );
 
     wxString token = wxS( "DNP" );
@@ -178,6 +182,14 @@ BOOST_AUTO_TEST_CASE( FootprintVariantTextVarResolution )
     BOOST_CHECK_EQUAL( token, wxS( "DNP" ) );
 
     token = wxS( "DNP" );
+    BOOST_CHECK( fp.ResolveTextVar( &token, wxEmptyString ) );
+    BOOST_CHECK_EQUAL( token, wxEmptyString );
+
+    token = wxS( "EXCLUDE_FROM_SIM" );
+    BOOST_CHECK( fp.ResolveTextVar( &token ) );
+    BOOST_CHECK_EQUAL( token, wxS( "Excluded from simulation" ) );
+
+    token = wxS( "EXCLUDE_FROM_SIM" );
     BOOST_CHECK( fp.ResolveTextVar( &token, wxEmptyString ) );
     BOOST_CHECK_EQUAL( token, wxEmptyString );
 }
@@ -210,6 +222,36 @@ BOOST_AUTO_TEST_CASE( FootprintBOMExclusionForVariant )
 
     BOOST_CHECK( fp.GetExcludedFromBOMForVariant( wxEmptyString ) );
     BOOST_CHECK( !fp.GetExcludedFromBOMForVariant( "Production" ) );
+}
+
+
+/**
+ * Test footprint simulation exclusion for variant
+ */
+BOOST_AUTO_TEST_CASE( FootprintSimExclusionForVariant )
+{
+    BOARD     board;
+    FOOTPRINT fp( &board );
+
+    board.AddVariant( "Production" );
+
+    // Set base exclude from simulation to false
+    fp.SetAttributes( 0 );
+    BOOST_CHECK( !fp.GetExcludedFromSimForVariant( wxEmptyString ) );
+    BOOST_CHECK( !fp.GetExcludedFromSimForVariant( "Production" ) );
+
+    // Set base exclude from simulation to true
+    fp.SetAttributes( FP_EXCLUDE_FROM_SIM );
+    BOOST_CHECK( fp.GetExcludedFromSimForVariant( wxEmptyString ) );
+    BOOST_CHECK( fp.GetExcludedFromSimForVariant( "Production" ) );
+
+    // Override for Production variant
+    FOOTPRINT_VARIANT prodVariant( "Production" );
+    prodVariant.SetExcludedFromSim( false );
+    fp.SetVariant( prodVariant );
+
+    BOOST_CHECK( fp.GetExcludedFromSimForVariant( wxEmptyString ) );
+    BOOST_CHECK( !fp.GetExcludedFromSimForVariant( "Production" ) );
 }
 
 
@@ -331,6 +373,7 @@ BOOST_AUTO_TEST_CASE( FootprintVariantCopyAssignment )
     FOOTPRINT_VARIANT prodVariant( "Production" );
     prodVariant.SetDNP( true );
     prodVariant.SetExcludedFromBOM( true );
+    prodVariant.SetExcludedFromSim( true );
     prodVariant.SetFieldValue( original.Value().GetName(), "22K" );
     original.SetVariant( prodVariant );
 
@@ -339,6 +382,7 @@ BOOST_AUTO_TEST_CASE( FootprintVariantCopyAssignment )
     BOOST_REQUIRE( copyVariant );
     BOOST_CHECK( copyVariant->GetDNP() );
     BOOST_CHECK( copyVariant->GetExcludedFromBOM() );
+    BOOST_CHECK( copyVariant->GetExcludedFromSim() );
     BOOST_CHECK_EQUAL( copyVariant->GetFieldValue( original.Value().GetName() ), "22K" );
 
     FOOTPRINT assigned( &board );
@@ -348,6 +392,7 @@ BOOST_AUTO_TEST_CASE( FootprintVariantCopyAssignment )
     BOOST_REQUIRE( assignedVariant );
     BOOST_CHECK( assignedVariant->GetDNP() );
     BOOST_CHECK( assignedVariant->GetExcludedFromBOM() );
+    BOOST_CHECK( assignedVariant->GetExcludedFromSim() );
     BOOST_CHECK_EQUAL( assignedVariant->GetFieldValue( original.Value().GetName() ), "22K" );
 }
 
@@ -409,6 +454,7 @@ BOOST_AUTO_TEST_CASE( NetlistComponentVariantsParsing )
             "        (variant (name Alt)\n"
             "          (property (name dnp) (value 1))\n"
             "          (property (name exclude_from_bom) (value 0))\n"
+            "          (property (name exclude_from_sim) (value 1))\n"
             "          (fields\n"
             "            (field (name Value) \"22K\")\n"
             "            (field (name Footprint) \"Resistor_SMD:R_0805_2012Metric\")\n"
@@ -435,6 +481,8 @@ BOOST_AUTO_TEST_CASE( NetlistComponentVariantsParsing )
     BOOST_CHECK( variant->m_dnp );
     BOOST_CHECK( variant->m_hasExcludedFromBOM );
     BOOST_CHECK( !variant->m_excludedFromBOM );
+    BOOST_CHECK( variant->m_hasExcludedFromSim );
+    BOOST_CHECK( variant->m_excludedFromSim );
 
     auto valueIt = variant->m_fields.find( "Value" );
     BOOST_CHECK( valueIt != variant->m_fields.end() );
@@ -643,42 +691,50 @@ BOOST_AUTO_TEST_CASE( VariantMultipleFlagsCombinations )
     FOOTPRINT_VARIANT dnpOnly( "DNPOnly" );
     dnpOnly.SetDNP( true );
     dnpOnly.SetExcludedFromBOM( false );
+    dnpOnly.SetExcludedFromSim( false );
     dnpOnly.SetExcludedFromPosFiles( false );
     fp.SetVariant( dnpOnly );
 
     FOOTPRINT_VARIANT bomOnly( "BOMOnly" );
     bomOnly.SetDNP( false );
     bomOnly.SetExcludedFromBOM( true );
+    bomOnly.SetExcludedFromSim( false );
     bomOnly.SetExcludedFromPosFiles( false );
     fp.SetVariant( bomOnly );
 
     FOOTPRINT_VARIANT allFlags( "AllFlags" );
     allFlags.SetDNP( true );
     allFlags.SetExcludedFromBOM( true );
+    allFlags.SetExcludedFromSim( true );
     allFlags.SetExcludedFromPosFiles( true );
     fp.SetVariant( allFlags );
 
     FOOTPRINT_VARIANT noFlags( "NoFlags" );
     noFlags.SetDNP( false );
     noFlags.SetExcludedFromBOM( false );
+    noFlags.SetExcludedFromSim( false );
     noFlags.SetExcludedFromPosFiles( false );
     fp.SetVariant( noFlags );
 
     // Verify each variant has correct flags
     BOOST_CHECK( fp.GetDNPForVariant( "DNPOnly" ) );
     BOOST_CHECK( !fp.GetExcludedFromBOMForVariant( "DNPOnly" ) );
+    BOOST_CHECK( !fp.GetExcludedFromSimForVariant( "DNPOnly" ) );
     BOOST_CHECK( !fp.GetExcludedFromPosFilesForVariant( "DNPOnly" ) );
 
     BOOST_CHECK( !fp.GetDNPForVariant( "BOMOnly" ) );
     BOOST_CHECK( fp.GetExcludedFromBOMForVariant( "BOMOnly" ) );
+    BOOST_CHECK( !fp.GetExcludedFromSimForVariant( "BOMOnly" ) );
     BOOST_CHECK( !fp.GetExcludedFromPosFilesForVariant( "BOMOnly" ) );
 
     BOOST_CHECK( fp.GetDNPForVariant( "AllFlags" ) );
     BOOST_CHECK( fp.GetExcludedFromBOMForVariant( "AllFlags" ) );
+    BOOST_CHECK( fp.GetExcludedFromSimForVariant( "AllFlags" ) );
     BOOST_CHECK( fp.GetExcludedFromPosFilesForVariant( "AllFlags" ) );
 
     BOOST_CHECK( !fp.GetDNPForVariant( "NoFlags" ) );
     BOOST_CHECK( !fp.GetExcludedFromBOMForVariant( "NoFlags" ) );
+    BOOST_CHECK( !fp.GetExcludedFromSimForVariant( "NoFlags" ) );
     BOOST_CHECK( !fp.GetExcludedFromPosFilesForVariant( "NoFlags" ) );
 }
 
@@ -714,6 +770,8 @@ BOOST_AUTO_TEST_CASE( ComponentVariantToFootprintTransfer )
     variantA.m_hasDnp = true;
     variantA.m_excludedFromBOM = false;
     variantA.m_hasExcludedFromBOM = true;
+    variantA.m_excludedFromSim = true;
+    variantA.m_hasExcludedFromSim = true;
     variantA.m_excludedFromPosFiles = true;
     variantA.m_hasExcludedFromPosFiles = true;
     variantA.m_fields[wxT( "Datasheet" )] = wxT( "https://example.com/datasheet.pdf" );
@@ -725,6 +783,8 @@ BOOST_AUTO_TEST_CASE( ComponentVariantToFootprintTransfer )
     variantB.m_hasDnp = true;
     variantB.m_excludedFromBOM = true;
     variantB.m_hasExcludedFromBOM = true;
+    variantB.m_excludedFromSim = false;
+    variantB.m_hasExcludedFromSim = true;
     variantB.m_excludedFromPosFiles = false;
     variantB.m_hasExcludedFromPosFiles = true;
     variantB.m_fields[wxT( "Value" )] = wxT( "22K" );
@@ -742,6 +802,9 @@ BOOST_AUTO_TEST_CASE( ComponentVariantToFootprintTransfer )
         if( componentVariant.m_hasExcludedFromBOM )
             fpVariant->SetExcludedFromBOM( componentVariant.m_excludedFromBOM );
 
+        if( componentVariant.m_hasExcludedFromSim )
+            fpVariant->SetExcludedFromSim( componentVariant.m_excludedFromSim );
+
         if( componentVariant.m_hasExcludedFromPosFiles )
             fpVariant->SetExcludedFromPosFiles( componentVariant.m_excludedFromPosFiles );
 
@@ -754,6 +817,7 @@ BOOST_AUTO_TEST_CASE( ComponentVariantToFootprintTransfer )
     BOOST_REQUIRE( fpVariantA );
     BOOST_CHECK( fpVariantA->GetDNP() );
     BOOST_CHECK( !fpVariantA->GetExcludedFromBOM() );
+    BOOST_CHECK( fpVariantA->GetExcludedFromSim() );
     BOOST_CHECK( fpVariantA->GetExcludedFromPosFiles() );
     BOOST_CHECK( fpVariantA->HasFieldValue( wxT( "Datasheet" ) ) );
     BOOST_CHECK_EQUAL( fpVariantA->GetFieldValue( wxT( "Datasheet" ) ),
@@ -764,6 +828,7 @@ BOOST_AUTO_TEST_CASE( ComponentVariantToFootprintTransfer )
     BOOST_REQUIRE( fpVariantB );
     BOOST_CHECK( !fpVariantB->GetDNP() );
     BOOST_CHECK( fpVariantB->GetExcludedFromBOM() );
+    BOOST_CHECK( !fpVariantB->GetExcludedFromSim() );
     BOOST_CHECK( !fpVariantB->GetExcludedFromPosFiles() );
     BOOST_CHECK( fpVariantB->HasFieldValue( wxT( "Value" ) ) );
     BOOST_CHECK_EQUAL( fpVariantB->GetFieldValue( wxT( "Value" ) ), wxT( "22K" ) );
@@ -773,6 +838,8 @@ BOOST_AUTO_TEST_CASE( ComponentVariantToFootprintTransfer )
     BOOST_CHECK( !fp.GetDNPForVariant( "Variant B" ) );
     BOOST_CHECK( !fp.GetExcludedFromBOMForVariant( "Variant A" ) );
     BOOST_CHECK( fp.GetExcludedFromBOMForVariant( "Variant B" ) );
+    BOOST_CHECK( fp.GetExcludedFromSimForVariant( "Variant A" ) );
+    BOOST_CHECK( !fp.GetExcludedFromSimForVariant( "Variant B" ) );
     BOOST_CHECK( fp.GetExcludedFromPosFilesForVariant( "Variant A" ) );
     BOOST_CHECK( !fp.GetExcludedFromPosFilesForVariant( "Variant B" ) );
 }
@@ -793,6 +860,7 @@ BOOST_AUTO_TEST_CASE( ComponentVariantPartialOverride )
     // Set base footprint to have all attributes false
     fp.SetDNP( false );
     fp.SetExcludedFromBOM( false );
+    fp.SetExcludedFromSim( false );
     fp.SetExcludedFromPosFiles( false );
 
     board.AddVariant( "TestVariant" );
@@ -801,6 +869,7 @@ BOOST_AUTO_TEST_CASE( ComponentVariantPartialOverride )
     FOOTPRINT_VARIANT initialVariant( "TestVariant" );
     initialVariant.SetDNP( true );
     initialVariant.SetExcludedFromBOM( true );
+    initialVariant.SetExcludedFromSim( true );
     initialVariant.SetExcludedFromPosFiles( true );
     fp.SetVariant( initialVariant );
 
@@ -813,7 +882,7 @@ BOOST_AUTO_TEST_CASE( ComponentVariantPartialOverride )
     COMPONENT_VARIANT partialVariant( "TestVariant" );
     partialVariant.m_dnp = true;
     partialVariant.m_hasDnp = true;
-    // m_hasExcludedFromBOM and m_hasExcludedFromPosFiles are false (no explicit override)
+    // The remaining m_has* flags are false (no explicit override)
     component.AddVariant( partialVariant );
 
     // Transfer properties, resetting non-overridden ones to base footprint values
@@ -831,6 +900,11 @@ BOOST_AUTO_TEST_CASE( ComponentVariantPartialOverride )
                                  : fp.IsExcludedFromBOM();
         fpVariant->SetExcludedFromBOM( targetBOM );
 
+        bool targetSim = componentVariant.m_hasExcludedFromSim
+                                 ? componentVariant.m_excludedFromSim
+                                 : fp.IsExcludedFromSim();
+        fpVariant->SetExcludedFromSim( targetSim );
+
         bool targetPos = componentVariant.m_hasExcludedFromPosFiles
                                  ? componentVariant.m_excludedFromPosFiles
                                  : fp.IsExcludedFromPosFiles();
@@ -842,6 +916,9 @@ BOOST_AUTO_TEST_CASE( ComponentVariantPartialOverride )
 
     // Verify: ExcludedFromBOM should be reset to base (false)
     BOOST_CHECK( !fp.GetExcludedFromBOMForVariant( "TestVariant" ) );
+
+    // Verify: ExcludedFromSim should be reset to base (false)
+    BOOST_CHECK( !fp.GetExcludedFromSimForVariant( "TestVariant" ) );
 
     // Verify: ExcludedFromPosFiles should be reset to base (false)
     BOOST_CHECK( !fp.GetExcludedFromPosFilesForVariant( "TestVariant" ) );
@@ -862,6 +939,7 @@ BOOST_AUTO_TEST_CASE( VariantAttributeTransferWithReset )
     // Base footprint has no flags set
     fp.SetDNP( false );
     fp.SetExcludedFromBOM( false );
+    fp.SetExcludedFromSim( false );
     fp.SetExcludedFromPosFiles( false );
 
     board.AddVariant( "Variant A" );
@@ -871,11 +949,13 @@ BOOST_AUTO_TEST_CASE( VariantAttributeTransferWithReset )
     BOOST_REQUIRE( fpVariant );
     fpVariant->SetDNP( true );
     fpVariant->SetExcludedFromBOM( true );
+    fpVariant->SetExcludedFromSim( true );
     fpVariant->SetExcludedFromPosFiles( true );
 
     // Verify initial state
     BOOST_CHECK( fp.GetDNPForVariant( "Variant A" ) );
     BOOST_CHECK( fp.GetExcludedFromBOMForVariant( "Variant A" ) );
+    BOOST_CHECK( fp.GetExcludedFromSimForVariant( "Variant A" ) );
     BOOST_CHECK( fp.GetExcludedFromPosFilesForVariant( "Variant A" ) );
 
     // Step 2: New netlist has variant with NO explicit attribute overrides
@@ -888,12 +968,15 @@ BOOST_AUTO_TEST_CASE( VariantAttributeTransferWithReset )
     bool targetDnp = componentVariant.m_hasDnp ? componentVariant.m_dnp : fp.IsDNP();
     bool targetBOM = componentVariant.m_hasExcludedFromBOM ? componentVariant.m_excludedFromBOM
                                                           : fp.IsExcludedFromBOM();
+    bool targetSim = componentVariant.m_hasExcludedFromSim ? componentVariant.m_excludedFromSim
+                                                          : fp.IsExcludedFromSim();
     bool targetPos = componentVariant.m_hasExcludedFromPosFiles
                              ? componentVariant.m_excludedFromPosFiles
                              : fp.IsExcludedFromPosFiles();
 
     fpVariant->SetDNP( targetDnp );
     fpVariant->SetExcludedFromBOM( targetBOM );
+    fpVariant->SetExcludedFromSim( targetSim );
     fpVariant->SetExcludedFromPosFiles( targetPos );
 
     // Step 4: Verify all attributes were reset to base footprint values (false)
@@ -901,6 +984,8 @@ BOOST_AUTO_TEST_CASE( VariantAttributeTransferWithReset )
                          "DNP should be reset to base value (false) when no explicit override" );
     BOOST_CHECK_MESSAGE( !fp.GetExcludedFromBOMForVariant( "Variant A" ),
                          "ExcludedFromBOM should be reset to base value (false) when no override" );
+    BOOST_CHECK_MESSAGE( !fp.GetExcludedFromSimForVariant( "Variant A" ),
+                         "ExcludedFromSim should be reset to base value (false) when no override" );
     BOOST_CHECK_MESSAGE( !fp.GetExcludedFromPosFilesForVariant( "Variant A" ),
                          "ExcludedFromPosFiles should be reset to base (false) when no override" );
 }

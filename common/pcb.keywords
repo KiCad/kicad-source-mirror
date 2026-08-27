@@ -138,6 +138,7 @@ end_shape
 epsilon_r
 exclude_from_pos_files
 exclude_from_bom
+exclude_from_sim
 extension_height
 extension_offset
 extent

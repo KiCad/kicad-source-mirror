@@ -819,6 +819,12 @@ TOOL_ACTION PCB_ACTIONS::toggleExcludeFromBOM( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Exclude from Bill of Materials" ) )
         .Tooltip( _( "Toggle the exclude from bill of materials attribute" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::toggleExcludeFromSim( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.toggleExcludeFromSim" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Exclude from Simulation" ) )
+        .Tooltip( _( "Toggle the exclude from simulation attribute" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::toggleExcludeFromPosFiles( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.toggleExcludeFromPosFiles" )
         .Scope( AS_GLOBAL )

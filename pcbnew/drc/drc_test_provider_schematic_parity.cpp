@@ -198,6 +198,19 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
             }
 
+            if( ( component->GetProperties().count( "exclude_from_sim" ) > 0 )
+                != ( ( footprint->GetAttributes() & FP_EXCLUDE_FROM_SIM ) > 0 )
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
+            {
+                wxString msg;
+                msg.Printf( _( "'%s' settings differ" ), _( "Exclude from simulation" ) );
+
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
+                drcItem->SetErrorMessage( drcItem->GetErrorMessage( true ) + wxS( ": " ) + msg );
+                drcItem->SetItems( footprint );
+                reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
+            }
+
             // Compare custom fields between schematic component and PCB footprint
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_FIELDS_PARITY ) )
             {
