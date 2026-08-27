@@ -105,7 +105,7 @@ private:
     const PADS_IO::BINARY_PARSER*       m_parser = nullptr;
     std::unique_ptr<PADS_PCB_CONVERTER> m_converter;
     int                                 m_minObjectSize = 1000;
-    std::map<std::string, std::string>  m_pinToNetMap;
+    std::map<wxString, std::string>     m_pinToNetMap;   ///< "<refdes>.<pin>" to PADS net name
 
     // One footprint per parser part index, so loadClusterGroups() can resolve the
     // part-index-keyed cluster membership to a footprint.

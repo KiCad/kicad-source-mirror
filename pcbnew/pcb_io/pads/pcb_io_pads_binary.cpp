@@ -221,10 +221,16 @@ void PCB_IO_PADS_BINARY::loadNets()
     for( const auto& padsNet : nets )
         m_converter->EnsureNet( padsNet.name );
 
+    // Key on the decoded text so buildPad() can match against the reference it already built.
+    // ToStdString() would re-encode through the locale, which LOCALE_IO has pinned to "C"
     for( const auto& padsNet : nets )
     {
         for( const PADS_IO::NET_PIN& pin : padsNet.pins )
-            m_pinToNetMap[pin.ref_des + "." + pin.pin_name] = padsNet.name;
+        {
+            wxString key = PADS_COMMON::ConvertText( pin.ref_des ) + wxT( "." )
+                           + PADS_COMMON::ConvertText( pin.pin_name );
+            m_pinToNetMap[key] = padsNet.name;
+        }
     }
 
     // One KiCad NETCLASS per PADS net class, with its member nets. Empty on boards with no
@@ -658,7 +664,8 @@ void PCB_IO_PADS_BINARY::buildPad( FOOTPRINT* aFootprint, const PADS_IO::PART_DE
         pad->SetLayerSet( LSET::AllCuMask() );
     }
 
-    auto netIt = m_pinToNetMap.find( aFootprint->GetReference().ToStdString() + "." + term.name );
+    auto netIt = m_pinToNetMap.find( aFootprint->GetReference() + wxT( "." )
+                                     + PADS_COMMON::ConvertText( term.name ) );
 
     if( netIt != m_pinToNetMap.end() )
     {
