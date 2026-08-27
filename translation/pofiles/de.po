@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:53-0700\n"
 "PO-Revision-Date: 2026-08-27 13:43+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -208,7 +208,7 @@ msgstr "In %.3f s geladen"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1172
 msgid "Stopping background load..."
-msgstr "Laden um Hintergrund wird angehalten..."
+msgstr "Laden im Hintergrund wird angehalten..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1891
 #: eeschema/libraries/legacy_symbol_library.cpp:535
@@ -262,7 +262,7 @@ msgstr "Lade 3D-Modelle der Bauteile ..."
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1113
 #, c-format
 msgid "Hit-test scene ready in %.3f s"
-msgstr ""
+msgstr "Hit-Test-Szene in %.3f s bereit"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1117
 #, c-format
@@ -3593,6 +3593,9 @@ msgid ""
 "Can increase compatibility with older software that does not import UTF-8 "
 "correctly, such as Excel. Can worsen compatibility in some cases."
 msgstr ""
+"Kann Kompatibilität mit älterer Software, die UTF-8 nicht korrekt "
+"importiert, verbessernm (beispielsweise Excel). Kann in manchen Fällen die "
+"Kompatibilität beeinträchtigen."
 
 #: common/dialogs/dialog_fields_table_base.cpp:338
 msgid "Format presets:"
@@ -4220,7 +4223,7 @@ msgstr ""
 #: common/dialogs/dialog_page_settings.cpp:809
 #, c-format
 msgid "Remove the previously embedded drawing sheet file '%s'?"
-msgstr ""
+msgstr "Zuvor eingebettetes Zeichnungsblatt-Datei \"%s\" entfernen?"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -6955,6 +6958,7 @@ msgstr "Objekt A"
 #: common/dialogs/panel_snapping_base.cpp:118
 msgid "Snap to endpoints, midpoints, centres and edges of existing objects"
 msgstr ""
+"Auf Endpunkte, Mittelpunkte, Zentren und Kanten bestehender Objekte einrasten"
 
 #: common/dialogs/panel_snapping_base.cpp:122
 #, fuzzy
@@ -6963,11 +6967,11 @@ msgstr "Erstelle Caches"
 
 #: common/dialogs/panel_snapping_base.cpp:123
 msgid "Snap to virtual extensions of lines and arcs"
-msgstr ""
+msgstr "Auf virtuelle Verlängerungen von Geraden und Bögen einrasten"
 
 #: common/dialogs/panel_snapping_base.cpp:127
 msgid "Tangent and normal contacts"
-msgstr ""
+msgstr "Tangential- und Normalkontakte"
 
 #: common/dialogs/panel_snapping_base.cpp:128
 msgid "Snap where the dragged geometry meets an arc tangentially or normally"
@@ -20443,7 +20447,7 @@ msgstr "Strichlänge:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:269
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:39
 msgid "Gap length:"
-msgstr "Abstand:"
+msgstr "Lückenlänge:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:282
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:49
@@ -22025,9 +22029,9 @@ msgstr ""
 " Verwenden Sie Datei -> Importieren für Nicht-KiCad-Schaltplan."
 
 #: eeschema/files-io.cpp:288
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a recognised schematic format."
-msgstr " wird nicht als Matrix-Typ erkannt."
+msgstr "\"%s\" ist kein bekanntes Schaltplanformat."
 
 #: eeschema/files-io.cpp:402
 msgid ""
@@ -22375,9 +22379,8 @@ msgid "Name differs."
 msgstr "%s Name weicht ab."
 
 #: eeschema/lib_symbol.cpp:2198
-#, fuzzy
 msgid "Library ID differs."
-msgstr "Bibliothek-ID"
+msgstr "Bibliothek-ID weicht ab."
 
 #: eeschema/lib_symbol.cpp:2211
 #, fuzzy
@@ -22428,9 +22431,9 @@ msgid "Field '%s' differs: %s; %s."
 msgstr "Feld \"%s\" weicht ab: %s; %s."
 
 #: eeschema/lib_symbol.cpp:2372
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' fonts differ."
-msgstr "Feld \"%s\" weicht ab: %s; %s."
+msgstr "Schriftart des Feldes \"%s\" weicht ab."
 
 #: eeschema/lib_symbol.cpp:2385
 #, fuzzy, c-format
@@ -22453,9 +22456,9 @@ msgid "Field '%s' name shown flags differ."
 msgstr "\"%s\" Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:2425
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' privacy flags differ."
-msgstr "Feld \"%s\" weicht ab: %s; %s."
+msgstr "Sichtbarkeit des Feldes \"%s\" weicht ab."
 
 #: eeschema/lib_symbol.cpp:2441
 #, fuzzy, c-format
@@ -23540,9 +23543,10 @@ msgid "Show Field Name"
 msgstr "Feldname anzeigen"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "Ändere %s Footprint-Zuordnung von \"%s\" in \"%s\"."
+msgstr ""
+"%d importierte Footprint-Zuordnungen erneut mit Bibliothek \"%s\" verknüpft."
 
 #: eeschema/sch_group.cpp:399 pcbnew/pcb_group.cpp:450
 #, c-format
@@ -23566,14 +23570,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:140
-#, fuzzy
 msgid "Storage stream was not parsed correctly"
-msgstr "\"%s\" wurde nicht korrekt geparst."
+msgstr "Datenstrom wurde nicht korrekt geparst"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:152
-#, fuzzy
 msgid "Additional stream was not parsed correctly"
-msgstr "\"%s\" wurde nicht korrekt geparst."
+msgstr "Zusätzlicher Datenstrom wurde nicht korrekt geparst"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1345
 #, c-format
@@ -23707,9 +23709,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5610
-#, fuzzy, c-format
+#, c-format
 msgid "Converting symbol '%s'"
-msgstr "Installiere Paket \"%s\"."
+msgstr "Wandle Symbol \"%s\" um"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5873
 #, c-format
@@ -24304,14 +24306,14 @@ msgstr ""
 "Fehlers übersprungen: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from '%s': %s"
-msgstr "Kann Symbol \"%s\" nicht aus Bibliothek \"%s\" laden."
+msgstr "Kann Symbol \"%s\" nicht aus Bibliothek \"%s\" laden: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic document '%s' not found in '%s'"
-msgstr "Schaltplandatei \"%s\" nicht gefunden."
+msgstr "Schaltplandatei \"%s\" nicht in \"%s\" gefunden"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:344
 #, c-format
@@ -24731,9 +24733,9 @@ msgid "Invalid property value"
 msgstr "Ungültiger Eigenschaftswert"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1353
-#, fuzzy, c-format
+#, c-format
 msgid "Variant symbol override contains invalid character '%c'"
-msgstr "Symbol %s enthält ungültiges Zeichen \"%c\""
+msgstr "Varianten Symbolüberschreibung enthält ungültiges Zeichen \"%c\""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1359
 #, fuzzy
@@ -24965,9 +24967,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Package stream '%s' could not be parsed: %s"
-msgstr "Zeichnungsblatt \"%s\" konnte nicht geöffnet werden."
+msgstr "Paketdatenstrom \"%s\" konnte nicht geparst werden: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:293
 msgid ""
@@ -24988,9 +24990,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' could not be parsed and was skipped: %s"
-msgstr "Lage \"%s\" konnte nicht zugeordnet werden und wird übersprungen."
+msgstr "Seite \"%s\" konnte nicht geparst werden und wurde übersprungen: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:465
 #, fuzzy
@@ -25014,9 +25016,9 @@ msgid "OrCAD Capture symbol library files"
 msgstr "KiCad Symbolbibliothekdateien"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS file: %s"
-msgstr "Fehler beim Parsen der PADS Logic-Datei \"%s\"."
+msgstr "Fehler beim Parsen der PADS-Datei: %s"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1398
 #, c-format
@@ -25076,9 +25078,9 @@ msgid "Unrecognized library type"
 msgstr "Unbekannte Lage \"%s\""
 
 #: eeschema/sch_io/sch_io_mgr.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Loading symbol library '%s'"
-msgstr "Fehler beim Laden der Symbolbibliothek \"%s\"."
+msgstr "Lade Symbolbibliothek \"%s\""
 
 #: eeschema/sch_io/sch_io_mgr.cpp:318
 #, fuzzy, c-format
@@ -25086,9 +25088,9 @@ msgid "Library '%s' Convert err: \"%s\""
 msgstr "Bibliothek \"%s\": %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s': %s"
-msgstr "Fehler beim Laden der Bibliothek \"%s\""
+msgstr "Fehler beim Laden der Bibliothek \"%s\": %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:329
 #, fuzzy, c-format
@@ -25101,9 +25103,9 @@ msgid "Error saving symbol '%s': %s"
 msgstr "Fehler beim Einlesen des Symbols \"%s\": %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol '%s': unknown error"
-msgstr "Fehler beim Einlesen des Symbols \"%s\": %s"
+msgstr "Fehler beim Speichern des Symbols \"%s\": Unbekannter Fehler"
 
 #: eeschema/sch_item.cpp:194 eeschema/sch_item.cpp:215
 #: eeschema/sch_item.cpp:899
@@ -28135,9 +28137,8 @@ msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Fehler: Simulationstyp unterstützt kein Plotten.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3869
-#, fuzzy
 msgid "Return loss"
-msgstr "Verlustleistung:"
+msgstr "Reflexionsdämpfung"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3992
 msgid "Refl. Coeff."
@@ -28936,9 +28937,9 @@ msgstr ""
 "Unbenutzter Footprint %s kann nicht entfernt werden (Footprint ist gesperrt)."
 
 #: eeschema/symbol_import_reconciler.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported symbol cache '%s': %s"
-msgstr "Fehler beim Schreiben der Bohrprotokoll-Datei \"%s\""
+msgstr "Fehler beim Schreiben des importierten Symbolcache \"%s\": %s"
 
 #: eeschema/symbol_import_reconciler.cpp:492
 #, c-format
@@ -28946,27 +28947,28 @@ msgid "A library already exists at '%s'; leaving imported symbols unresolved."
 msgstr ""
 
 #: eeschema/symbol_import_reconciler.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported symbol cache to '%s'."
-msgstr "Konnte den Footprintassistent \"%s\" nicht starten"
+msgstr ""
+"Importierter Symbolcache konnte nicht nach \"%s\" veröffentlicht werden."
 
 #: eeschema/symbol_import_reconciler.cpp:524
-#, fuzzy
 msgid "Cannot register imported symbol cache: no project library table."
-msgstr "Projektspezifische Symbol-Bibliothekstabelle erstellt.\n"
+msgstr ""
+"Importierter Symbolcache kann nicht registriert werden: Keine "
+"Projektbibliothekstabelle vorhanden."
 
 #: eeschema/symbol_import_reconciler.cpp:549
-#, fuzzy
 msgid ""
 "Error saving project symbol library table; imported symbols left unresolved."
 msgstr ""
-"Fehler beim Schreiben der Projektsymbolbibliothekstabelle.\n"
-"  %s"
+"Fehler beim Speichern der Projektsymbolbibliotheks-Tabelle; importierte "
+"Symbole bleiben unaufgelöst."
 
 #: eeschema/symbol_import_reconciler.cpp:610
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported symbol libraries: %s"
-msgstr "Konnte zusammengeführte Footprintbibliothek nicht speichern: %s\"\n"
+msgstr "Importierte Symbolbibliotheken konnten nicht abgeglichen werden: %s"
 
 #: eeschema/symbol_library_manager.cpp:200
 #, c-format
@@ -31366,9 +31368,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:2700
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load symbol '%s' from library."
-msgstr "Kann Symbol \"%s\" nicht aus Bibliothek \"%s\" laden."
+msgstr "Konnte Symbol \"%s\" nicht aus Bibliothek laden."
 
 #: eeschema/tools/sch_edit_tool.cpp:2717
 #, c-format
@@ -35825,9 +35827,9 @@ msgid "Select all jobs"
 msgstr "Alle Aufträge auswählen"
 
 #: kicad/dialogs/panel_jobset.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid "This version of KiCad does not support the '%s' job type."
-msgstr "Diese KiCad-Installation hat die API-Unterstützung nicht aktiviert."
+msgstr "Diese Version von KiCad unterstützt den Jobtyp \"%s\" nicht."
 
 #: kicad/dialogs/panel_jobset.cpp:754
 msgid "Job Types"
@@ -36105,9 +36107,8 @@ msgid "Import the associated Allegro board '%s'?"
 msgstr ""
 
 #: kicad/import_proj.cpp:710
-#, fuzzy
 msgid "Import an associated Allegro board file?"
-msgstr "Importiere Nicht Kicad Platinendatei"
+msgstr "Zugehörige Allegro-Platinendatei importieren?"
 
 #: kicad/import_proj.cpp:712
 msgid "Import Allegro Board"
@@ -42214,9 +42215,8 @@ msgid "Concentric"
 msgstr "Zentrum"
 
 #: pcbnew/constraints/pcb_constraint.cpp:221
-#, fuzzy
 msgid "Fixed radius"
-msgstr "Abrundungsradius:"
+msgstr "Fester Radius"
 
 #: pcbnew/constraints/pcb_constraint.cpp:222
 #, fuzzy
@@ -42244,14 +42244,14 @@ msgid "Constraint: %s (%zu members)"
 msgstr "Gruppe \"%s\", %zu Mitglieder"
 
 #: pcbnew/constraints/pcb_constraint.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "corner %lld"
-msgstr "Ecke %d"
+msgstr "Ecke %lld"
 
 #: pcbnew/constraints/pcb_constraint.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "vertex %lld"
-msgstr "Invertiert"
+msgstr "Eckpunkt %lld"
 
 #: pcbnew/constraints/pcb_constraint.cpp:483
 #, fuzzy
@@ -43061,9 +43061,8 @@ msgid "Geometric Constraints"
 msgstr "Einschränkungen"
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:105
-#, fuzzy
 msgid "Enter an arc angle between 0 and 360 degrees."
-msgstr "Kleines Fadenkreuz mit Ausrichtung 0 und 90 Grad verwenden"
+msgstr "Einen Bogenwinkel zwischen 0 und 360 eingeben."
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:120
 #, fuzzy
@@ -43080,9 +43079,8 @@ msgid "Driving (locks the geometry)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_constraint_value_base.h:46
-#, fuzzy
 msgid "Constraint Value"
-msgstr "Einschränkung angewandt."
+msgstr "Einschränkungwert"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:131
 msgid "Legacy Teardrop Properties"
@@ -43561,9 +43559,8 @@ msgid "Enter a positive length for a driving dimension."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:359
-#, fuzzy
 msgid "Invalid Value"
-msgstr "Ungültiger Wert für Vinh."
+msgstr "Ungültiger Wert"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:387
 msgid "Edit Dimension Properties"
@@ -45160,9 +45157,8 @@ msgid "Footprint Checker"
 msgstr "Footprint-Prüfer"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:207
-#, fuzzy
 msgid "Footprint Fields Table"
-msgstr "Footprintfeld:"
+msgstr "Footprintfelder-Tabelle"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:209
 #, fuzzy
@@ -46730,9 +46726,8 @@ msgid "lines"
 msgstr "Linien"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:160
-#, fuzzy
 msgid "Priority:"
-msgstr "Priorität"
+msgstr "Priorität:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:169
 #, fuzzy
@@ -49538,32 +49533,28 @@ msgid "Normal Grid"
 msgstr "Normal"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:76
-#, fuzzy
 msgid "Staggered Grid"
-msgstr "Staffelung:"
+msgstr "Versetztes Raster"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:77
 msgid "Poisson"
 msgstr "Poisson"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:80
-#, fuzzy
 msgid "Pitch:"
-msgstr "Wechseln"
+msgstr "Abstand:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:91
 msgid "Seed:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:98
-#, fuzzy
 msgid "Via Properties:"
-msgstr "Via-Eigenschaften"
+msgstr "Via-Eigenschaften:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:102
-#, fuzzy
 msgid "Configure"
-msgstr "Konfigurieren..."
+msgstr "Konfigurieren"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:81
 #, fuzzy
@@ -56176,9 +56167,9 @@ msgstr ""
 "Unbenutzter Footprint %s kann nicht entfernt werden (Footprint ist gesperrt)."
 
 #: pcbnew/footprint_import_reconciler.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr "Fehler beim Schreiben der Bohrprotokoll-Datei \"%s\""
+msgstr "Fehler beim Schreiben des importierten Footprintcache \"%s\": %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:448
 #, c-format
@@ -56187,9 +56178,10 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_import_reconciler.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported footprint cache to '%s'."
-msgstr "Konnte den Footprintassistent \"%s\" nicht starten"
+msgstr ""
+"Importierter Footprintcache konnte nicht nach \"%s\" veröffentlicht werden."
 
 #: pcbnew/footprint_import_reconciler.cpp:481
 msgid "Cannot register imported footprint cache: no project library table."
@@ -56203,9 +56195,9 @@ msgid ""
 msgstr "Fehler beim Laden der Footprint-Bibliothekstabelle des Projekts."
 
 #: pcbnew/footprint_import_reconciler.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported footprint libraries: %s"
-msgstr "Konnte zusammengeführte Footprintbibliothek nicht speichern: %s\"\n"
+msgstr "Importierte Footprint-Bibliotheken konnten nicht abgeglichen werden: %s"
 
 #: pcbnew/footprint_info_impl.cpp:199
 msgid "Loading footprints..."
@@ -56659,9 +56651,8 @@ msgid "Plain grid"
 msgstr "Klartext"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1547
-#, fuzzy
 msgid "Staggered grid"
-msgstr "Staffelung:"
+msgstr "Versetztes Raster"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1548
 #, fuzzy
@@ -56688,9 +56679,8 @@ msgid "Guarded Net"
 msgstr "Netz verbergen"
 
 #: pcbnew/generators/pcb_via_stitch.h:123
-#, fuzzy
 msgid "Stitching Update"
-msgstr "Bestehender Pfad:"
+msgstr "Stitching Aktualisierung"
 
 #: pcbnew/generators/via_stitch_tool.cpp:106
 #, fuzzy
@@ -56751,9 +56741,8 @@ msgid "Map layers"
 msgstr "Lagen zuordnen"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:161
-#, fuzzy
 msgid "Single layer:"
-msgstr "Einzige Lage"
+msgstr "Einzellage:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Group imported items"
@@ -58355,14 +58344,12 @@ msgid "Extent Y"
 msgstr ""
 
 #: pcbnew/pcb_griditem.cpp:546
-#, fuzzy
 msgid "Spacing X"
-msgstr "Zwischenraum (s):"
+msgstr "X-Abstand"
 
 #: pcbnew/pcb_griditem.cpp:551
-#, fuzzy
 msgid "Spacing Y"
-msgstr "Zwischenraum (s):"
+msgstr "Y-Abstand"
 
 #: pcbnew/pcb_griditem.cpp:556
 #, fuzzy
@@ -58429,9 +58416,9 @@ msgid "Unknown Allegro file version %#010x (rev %d)"
 msgstr ""
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown board units %d"
-msgstr "Unbekannte Record-ID: %d."
+msgstr "Unbekannte Platineneinheiten: %d"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2660
 msgid "Parsing Allegro objects"
@@ -58454,9 +58441,9 @@ msgstr ""
 "resultierende Datei."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "File is empty: %s"
-msgstr "Die Datei \"%s\" ist leer."
+msgstr "Datei ist leer: \"%s\""
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:177
 msgid "Failed to build board from Allegro data"
@@ -58851,9 +58838,9 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Altium Circuit Studio PCB Dateien"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Component name not found: '%s'"
-msgstr "Bauteil %s nicht gefunden."
+msgstr "Bauteilname nicht gefunden: \"%s\""
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:431
 #, c-format
@@ -59068,9 +59055,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Die CADSTAR-Paddefinition \"%s\" hat Importfehler: %s"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1329
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%ld' in footprint '%s'."
-msgstr "Padindex \"%d\" kann in Footprint \"%s\" nicht gefunden werden."
+msgstr "Kann Padindex \"%ld\" in Footprint \"%s\" nicht finden."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1361
 #, c-format
@@ -59265,13 +59252,13 @@ msgstr ""
 "wurde ignoriert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2256
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%ld' in component '%s'. This "
 "has been ignored."
 msgstr ""
-"Das Netz \"%s\" verweist auf den nicht vorhandenen Pad-Index \"%d\" im "
-"Bauteil \"%s\". Dies wurde ignoriert."
+"Netz \"%s\" verweist auf nicht vorhandenen Padindex \"%ld\" im Bauteil "
+"\"%s\". Ignoriert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2455
 msgid "Text Variables could not be set as there is no project loaded."
@@ -59642,9 +59629,9 @@ msgid "EasyEDA (JLCEDA) Pro project"
 msgstr "EasyEDA (JLCEDA) Pro-Project"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load footprint '%s' from '%s': %s"
-msgstr "Footprint \"%s\" kann nicht aus \"%s\" geladen werden"
+msgstr "Kann Footprint \"%s\" nicht aus \"%s\" laden: %s"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:305
 #, c-format
@@ -61881,12 +61868,11 @@ msgid "Cannot create output directory %s\n"
 msgstr "Kann Ausgabeverzeichnis \"%s\" nicht erstellen\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4586
-#, fuzzy
 msgid ""
 "Single-file fp merge produced multiple footprints; refusing to collapse into "
 "one .kicad_mod\n"
 msgstr ""
-"Zusammenführung in eine einzige FP-Datei erzeugte mehrere Footprints; "
+"Zusammenführung in eine einzige Footprintdatei erzeugte mehrere Footprints; "
 "Zusammenschluss in eine .kicad_mod-Datei verweigert\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4660
@@ -62384,9 +62370,8 @@ msgstr ""
 "Bitte Problem beheben und erneut versuchen"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:77
-#, fuzzy
 msgid "Import Specctra Session"
-msgstr "Specctra-Session importieren ..."
+msgstr "Specctra-Session importieren"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:79
 msgid "Session file imported and merged OK."
@@ -62431,9 +62416,9 @@ msgid "Session file is missing the \"library_out\" section"
 msgstr "Der Sitzungsdatei fehlt der Abschnitt \"library_out\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported wire shape: '%s' for net: '%s'"
-msgstr "Nicht unterstützte Via-Form: %s"
+msgstr "Nicht unterstützte Verbindungsform: \"%s\" für Netz: \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:534
 #, c-format
@@ -63171,9 +63156,8 @@ msgstr "Footprintbibliotheken verwalten"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:214
 #: pcbnew/widgets/constraint_list_view.cpp:85
-#, fuzzy
 msgid "Error (missing item)"
-msgstr "Fehlermeldungen:"
+msgstr "Fehler (fehlendes Element)"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:216
 #: pcbnew/widgets/constraint_list_view.cpp:87
@@ -63238,9 +63222,9 @@ msgid "An identical geometric constraint already exists."
 msgstr "Eine Element mit Aliasname \"%s\" existiert bereits."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot form a %s constraint from those items."
-msgstr "Routing kann nicht von einem Textelement gestartet werden."
+msgstr "Kann keine %s-Einschränkung aus diesen Elementen erzeugen."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1640 pcbnew/tools/pcb_actions.cpp:270
 #, fuzzy
@@ -64066,9 +64050,8 @@ msgid "Constrain the two selected circles or arcs to be of equal radius"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:177
-#, fuzzy
 msgid "Fixed Radius"
-msgstr "Abrundungsradius:"
+msgstr "Fester Radius"
 
 #: pcbnew/tools/pcb_actions.cpp:178
 msgid "Lock the selected circle or arc to its current radius"
@@ -64094,18 +64077,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:207
-#, fuzzy
 msgid "Coincident..."
-msgstr "Umwandeln"
+msgstr "Koinzidenz..."
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Click two shape endpoints to make them coincide"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Point on Line..."
-msgstr "Kreispunkt"
+msgstr "Punkt auf Linie..."
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Click an endpoint, then a segment or circle, to put the point on it"
@@ -64121,9 +64102,8 @@ msgid "Click an endpoint, then a segment, to put the point at its midpoint"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:237
-#, fuzzy
 msgid "Symmetric..."
-msgstr "Symmetrisch"
+msgstr "Symmetrisch..."
 
 #: pcbnew/tools/pcb_actions.cpp:238
 msgid "Click two endpoints, then a segment axis, to mirror them across it"
