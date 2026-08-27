@@ -273,6 +273,7 @@ bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, con
     {
         manager.ReloadTables( aScope, { LIBRARY_TABLE_TYPE::DESIGN_BLOCK } );
         adapter->LoadOne( libName );
+        Pgm().PreloadDesignBlockLibraries( &m_frame->Kiway() );
 
         LIB_ID libID( libName, wxEmptyString );
         RefreshLibs();
