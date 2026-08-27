@@ -506,22 +506,56 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
         return false;
     }
 
-    // If we have a single group, we want to strip the group and select the children
-    PCB_GROUP* group = nullptr;
+    // If the selection is a single group, or contains this block's linked group plus extra items,
+    // we want to strip the group and select the children
+    PCB_GROUP*               group = nullptr;
+    std::vector<BOARD_ITEM*> extraItems;
 
     if( selection.Size() == 1 )
     {
         EDA_ITEM* item = selection.Front();
 
         if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-        {
             group = static_cast<PCB_GROUP*>( item );
+    }
+    else
+    {
+        std::vector<PCB_GROUP*> linkedGroups;
 
-            selection.Remove( item );
-
-            // Don't recurse; if we have a group of groups the user probably intends the inner groups to be saved
-            group->RunOnChildren( [&]( EDA_ITEM* aItem ) { selection.Add( aItem ); }, RECURSE_MODE::NO_RECURSE );
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == PCB_GROUP_T && static_cast<PCB_GROUP*>( item )->GetDesignBlockLibId() == aLibId )
+                linkedGroups.push_back( static_cast<PCB_GROUP*>( item ) );
         }
+
+        if( linkedGroups.size() > 1 )
+        {
+            DisplayErrorMessage( this, _( "The selection contains more than one group linked to "
+                                          "this design block." ) );
+            return false;
+        }
+
+        if( !linkedGroups.empty() )
+            group = linkedGroups.front();
+    }
+
+    if( group )
+    {
+        for( EDA_ITEM* item : selection )
+        {
+            if( item != group && item->IsBOARD_ITEM() )
+                extraItems.push_back( static_cast<BOARD_ITEM*>( item ) );
+        }
+
+        selection.Remove( group );
+
+        // Don't recurse. If we have a group of groups the user probably intends the inner groups to be saved.
+        group->RunOnChildren(
+                [&]( EDA_ITEM* aItem )
+                {
+                    selection.Add( aItem );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     wxString                      error;
@@ -542,22 +576,44 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     if( !saveSelectionToDesignBlock( aLibId.GetLibNickname(), selection, *blk ) )
         return false;
 
-    // If we had a group, we need to reselect it
+    // If we had a group, extend it with the extra items and reselect it
     if( group )
     {
         selection.Clear();
         selection.Add( group );
 
+        BOARD_COMMIT commit( m_toolManager );
+        bool         changed = false;
+
+        for( BOARD_ITEM* item : extraItems )
+        {
+            if( item->GetParentFootprint() || !item->IsGroupableType() )
+                continue;
+
+            if( item->GetParentGroup() == group )
+                continue;
+
+            if( EDA_GROUP* existingGroup = item->GetParentGroup() )
+                commit.Modify( existingGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+
+            if( !changed )
+                commit.Modify( group, nullptr, RECURSE_MODE::NO_RECURSE );
+
+            commit.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
+            group->AddItem( item );
+            changed = true;
+        }
+
         // If we didn't have a design block link before, add one for convenience
         if( !group->HasDesignBlockLink() )
         {
-            BOARD_COMMIT commit( m_toolManager );
-
             commit.Modify( group, nullptr, RECURSE_MODE::NO_RECURSE );
             group->SetDesignBlockLibId( aLibId );
-
-            commit.Push( _( "Set Group Design Block Link" ) );
+            changed = true;
         }
+
+        if( changed )
+            commit.Push( _( "Update Design Block Group" ) );
     }
     else
     {
