@@ -1307,6 +1307,7 @@ namespace
                                   std::vector<MODEL_SYMBOL_DEFINITION*>& aDefinitionsByRecord,
                                   std::vector<size_t>& aPageGraphicRecords, PADS_SCH_MODEL& aModel )
     {
+        // Definitions must not reallocate; aDefinitionsByRecord holds pointers into them
         aModel.definitions.reserve( aModel.definitions.size() + aControllers.pools[2].count );
 
         for( size_t record = 0; record < aControllers.pools[2].count; ++record )
@@ -3155,7 +3156,9 @@ namespace
                                                   PADS_SCH_MODEL&                     aModel )
     {
         std::vector<MODEL_NET*> sheetNets( aDecode.globals.nets.size(), nullptr );
-        aModel.nets.reserve( aModel.nets.size() + aDecode.globals.nets.size() );
+        // sheetNets holds pointers into nets, and one global record can own several memberships on
+        // this sheet, so bound the reserve by the disjoint membership slices
+        aModel.nets.reserve( aModel.nets.size() + aDecode.globals.membershipCount );
 
         for( size_t globalRecord = 0; globalRecord < aDecode.globals.nets.size(); ++globalRecord )
         {
