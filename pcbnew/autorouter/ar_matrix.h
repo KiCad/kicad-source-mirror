@@ -22,10 +22,8 @@
  */
 
 
-#ifndef __AR_MATRIX_H
-#define __AR_MATRIX_H
+#pragma once
 
-#include <layer_ids.h>
 #include <math/box2.h>
 
 class PCB_SHAPE;
@@ -57,7 +55,7 @@ public:
     };
 
     AR_MATRIX();
-    ~AR_MATRIX();
+    ~AR_MATRIX() {}
 
     void WriteCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell )
     {
@@ -76,10 +74,6 @@ public:
     /**
      * Calculate the number of rows and columns of dimensions of \a aPcb for routing and
      * automatic calculation of area.
-     *
-     * @param aPcb is the physical board.
-     * @param aUseBoardEdgesOnly set to true to use board edges only or false to use the full
-     *                           board bounding box (default).
      */
     bool ComputeMatrixSize( const BOX2I& aBoundingBox );
 
@@ -107,29 +101,26 @@ public:
 
     void TracePcbShape( PCB_SHAPE* aShape, int aColor, int aMargin, AR_MATRIX::CELL_OP op_logic );
 
-    void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int marge, int aKeepOut,
-                                 const LSET& aLayerMask );
+    void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int margin, int aKeepOut, const LSET& aLayerMask );
 
-    void PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op_logic );
+    void PlacePad( PAD* aPad, int color, int margin, AR_MATRIX::CELL_OP op_logic );
 
-    void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double angle, const LSET& aLayerMask,
+    void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& angle, const LSET& aLayerMask,
                                int color, AR_MATRIX::CELL_OP op_logic );
 
     void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, const LSET& aLayerMask, int color,
                                AR_MATRIX::CELL_OP op_logic );
 
 private:
-    void drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color,
-                         CELL_OP op_logic );
+    void drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color, CELL_OP op_logic );
 
-    void traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color,
-                      AR_MATRIX::CELL_OP op_logic );
+    void traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color, AR_MATRIX::CELL_OP op_logic );
 
     void traceFilledCircle( int cx, int cy, int radius, const LSET& aLayerMask, int color,
                             AR_MATRIX::CELL_OP op_logic );
 
-    void traceArc( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& arcAngle, int lg,
-                   int layer, int color, AR_MATRIX::CELL_OP op_logic );
+    void traceArc( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& arcAngle, int lg, int layer, int color,
+                   AR_MATRIX::CELL_OP op_logic );
 
 public:
     MATRIX_CELL* m_BoardSide[AR_MAX_ROUTING_LAYERS_COUNT]; // the image map of 2 board sides
@@ -142,12 +133,8 @@ public:
     int          m_MemSize;            // Memory requirement, just for statistics
     int          m_RouteCount;         // Number of routes
 
-    PCB_LAYER_ID m_routeLayerTop;
-    PCB_LAYER_ID m_routeLayerBottom;
-
 private:
     // a pointer to the current selected cell operation
     void ( AR_MATRIX::*m_opWriteCell )( int aRow, int aCol, int aSide, MATRIX_CELL aCell );
 };
 
-#endif

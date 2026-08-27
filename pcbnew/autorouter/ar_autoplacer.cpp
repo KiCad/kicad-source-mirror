@@ -68,8 +68,7 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
 }
 
 
-void AR_AUTOPLACER::placeFootprint( FOOTPRINT* aFootprint, bool aDoNotRecreateRatsnest,
-                                    const VECTOR2I& aPos )
+void AR_AUTOPLACER::placeFootprint( FOOTPRINT* aFootprint, bool aDoNotRecreateRatsnest, const VECTOR2I& aPos )
 {
     if( !aFootprint )
         return;
@@ -99,8 +98,6 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
     // Choose the number of board sides.
     m_matrix.m_RoutingLayersCount = 2;
     m_matrix.InitRoutingMatrix();
-    m_matrix.m_routeLayerBottom = B_Cu;
-    m_matrix.m_routeLayerTop = F_Cu;
 
     // Fill (mark) the cells inside the board:
     fillMatrix();
@@ -113,8 +110,8 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
         case PCB_SHAPE_T:
             if( drawing->GetLayer() != Edge_Cuts )
             {
-                m_matrix.TracePcbShape( (PCB_SHAPE*) drawing, CELL_IS_HOLE | CELL_IS_EDGE,
-                                        m_matrix.m_GridRouting, AR_MATRIX::WRITE_CELL );
+                m_matrix.TracePcbShape( (PCB_SHAPE*) drawing, CELL_IS_HOLE | CELL_IS_EDGE, m_matrix.m_GridRouting,
+                                        AR_MATRIX::WRITE_CELL );
             }
 
             break;
@@ -137,16 +134,16 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
 
 bool AR_AUTOPLACER::fillMatrix()
 {
-    std::vector <int> x_coordinates;
-    bool success = true;
-    int step = m_matrix.m_GridRouting;
-    VECTOR2I coord_orgin = m_matrix.GetBrdCoordOrigin(); // Board coordinate of matruix cell (0,0)
+    std::vector<int> x_coordinates;
+    bool             success = true;
+    int              step = m_matrix.m_GridRouting;
+    VECTOR2I         coord_orgin = m_matrix.GetBrdCoordOrigin(); // Board coordinate of matruix cell (0,0)
 
     // Create a single board outline:
     SHAPE_POLY_SET brd_shape = m_boardShape.CloneDropTriangulation();
     brd_shape.Fracture();
-    const SHAPE_LINE_CHAIN& outline = brd_shape.Outline(0);
-    const BOX2I& rect = outline.BBox();
+    const          SHAPE_LINE_CHAIN& outline = brd_shape.Outline(0);
+    const          BOX2I& rect = outline.BBox();
 
     // Creates the horizontal segments
     // Calculate the y limits of the area
@@ -190,7 +187,7 @@ bool AR_AUTOPLACER::fillMatrix()
 
             seg_endX -= seg_startX;
             seg_endY -= seg_startY;
-            double newrefy = (double) ( refy - seg_startY );
+            double newrefy = refy - seg_startY;
             double intersec_x;
 
             if ( seg_endY == 0 )    // horizontal segment on the same line: skip
@@ -333,39 +330,20 @@ void AR_AUTOPLACER::buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance )
 
 void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* aFootprint )
 {
-    int   ox, oy, fx, fy;
-    LSET  layerMask;
     BOX2I fpBBox = aFootprint->GetBoundingBox( false );
-
     fpBBox.Inflate( m_matrix.m_GridRouting / 2 );
-    ox  = fpBBox.GetX();
-    fx  = fpBBox.GetRight();
-    oy  = fpBBox.GetY();
-    fy  = fpBBox.GetBottom();
 
-    if( ox < m_matrix.m_BrdBox.GetX() )
-        ox = m_matrix.m_BrdBox.GetX();
+    int ox  = fpBBox.GetX();
+    int fx  = fpBBox.GetRight();
+    int oy  = fpBBox.GetY();
+    int fy  = fpBBox.GetBottom();
 
-    if( ox > m_matrix.m_BrdBox.GetRight() )
-        ox = m_matrix.m_BrdBox.GetRight();
+    ox = std::max( m_matrix.m_BrdBox.GetX(), std::min( ox, m_matrix.m_BrdBox.GetRight() ) );
+    fx = std::max( m_matrix.m_BrdBox.GetX(), std::min( fx, m_matrix.m_BrdBox.GetRight() ) );
+    oy = std::max( m_matrix.m_BrdBox.GetY(), std::min( oy, m_matrix.m_BrdBox.GetBottom() ) );
+    fy = std::max( m_matrix.m_BrdBox.GetY(), std::min( fy, m_matrix.m_BrdBox.GetBottom() ) );
 
-    if( fx < m_matrix.m_BrdBox.GetX() )
-        fx = m_matrix.m_BrdBox.GetX();
-
-    if( fx > m_matrix.m_BrdBox.GetRight() )
-        fx = m_matrix.m_BrdBox.GetRight();
-
-    if( oy < m_matrix.m_BrdBox.GetY() )
-        oy = m_matrix.m_BrdBox.GetY();
-
-    if( oy > m_matrix.m_BrdBox.GetBottom() )
-        oy = m_matrix.m_BrdBox.GetBottom();
-
-    if( fy < m_matrix.m_BrdBox.GetY() )
-        fy = m_matrix.m_BrdBox.GetY();
-
-    if( fy > m_matrix.m_BrdBox.GetBottom() )
-        fy = m_matrix.m_BrdBox.GetBottom();
+    LSET  layerMask;
 
     if( aFootprint->GetLayer() == F_Cu )
         layerMask.set( F_Cu );
@@ -373,8 +351,7 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* aFootprint )
     if( aFootprint->GetLayer() == B_Cu )
         layerMask.set( B_Cu );
 
-    m_matrix.TraceFilledRectangle( ox, oy, fx, fy, layerMask,
-                                   CELL_IS_MODULE, AR_MATRIX::WRITE_OR_CELL );
+    m_matrix.TraceFilledRectangle( ox, oy, fx, fy, layerMask, CELL_IS_MODULE, AR_MATRIX::WRITE_OR_CELL );
 
     // Trace pads + clearance areas.
     for( PAD* pad : aFootprint->Pads() )
@@ -384,7 +361,7 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* aFootprint )
     }
 
     // Trace clearance.
-    int margin = ( m_matrix.m_GridRouting * aFootprint->GetPadCount() ) / AR_GAIN;
+    int margin = KiROUND( ( m_matrix.m_GridRouting * aFootprint->GetPadCount() ) / AR_GAIN );
     m_matrix.CreateKeepOutRectangle( ox, oy, fx, fy, margin, AR_KEEPOUT_MARGIN , layerMask );
 
     // Build the footprint courtyard
@@ -399,14 +376,10 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* aFootprint )
 int AR_AUTOPLACER::testRectangle( const BOX2I& aRect, int side )
 {
     BOX2I rect = aRect;
-
     rect.Inflate( m_matrix.m_GridRouting / 2 );
 
-    VECTOR2I start = rect.GetOrigin();
-    VECTOR2I end     = rect.GetEnd();
-
-    start   -= m_matrix.m_BrdBox.GetOrigin();
-    end     -= m_matrix.m_BrdBox.GetOrigin();
+    VECTOR2I start = rect.GetOrigin() - m_matrix.m_BrdBox.GetOrigin();
+    VECTOR2I end   = rect.GetEnd() - m_matrix.m_BrdBox.GetOrigin();
 
     int row_min = start.y / m_matrix.m_GridRouting;
     int row_max = end.y / m_matrix.m_GridRouting;
@@ -419,17 +392,10 @@ int AR_AUTOPLACER::testRectangle( const BOX2I& aRect, int side )
     if( start.x > col_min * m_matrix.m_GridRouting )
         col_min++;
 
-    if( row_min < 0 )
-        row_min = 0;
-
-    if( row_max >= ( m_matrix.m_Nrows - 1 ) )
-        row_max = m_matrix.m_Nrows - 1;
-
-    if( col_min < 0 )
-        col_min = 0;
-
-    if( col_max >= ( m_matrix.m_Ncols - 1 ) )
-        col_max = m_matrix.m_Ncols - 1;
+    row_min = std::max( 0, row_min );
+    row_max = std::min( row_max, m_matrix.m_Nrows - 1 );
+    col_min = std::max( 0, col_min );
+    col_max = std::min( col_max, m_matrix.m_Ncols - 1 );
 
     for( int row = row_min; row <= row_max; row++ )
     {
@@ -451,11 +417,8 @@ int AR_AUTOPLACER::testRectangle( const BOX2I& aRect, int side )
 
 unsigned int AR_AUTOPLACER::calculateKeepOutArea( const BOX2I& aRect, int side )
 {
-    VECTOR2I start = aRect.GetOrigin();
-    VECTOR2I end = aRect.GetEnd();
-
-    start   -= m_matrix.m_BrdBox.GetOrigin();
-    end     -= m_matrix.m_BrdBox.GetOrigin();
+    VECTOR2I start = aRect.GetOrigin() - m_matrix.m_BrdBox.GetOrigin();
+    VECTOR2I end = aRect.GetEnd() - m_matrix.m_BrdBox.GetOrigin();
 
     int row_min = start.y / m_matrix.m_GridRouting;
     int row_max = end.y / m_matrix.m_GridRouting;
@@ -468,17 +431,10 @@ unsigned int AR_AUTOPLACER::calculateKeepOutArea( const BOX2I& aRect, int side )
     if( start.x > col_min * m_matrix.m_GridRouting )
         col_min++;
 
-    if( row_min < 0 )
-        row_min = 0;
-
-    if( row_max >= ( m_matrix.m_Nrows - 1 ) )
-        row_max = m_matrix.m_Nrows - 1;
-
-    if( col_min < 0 )
-        col_min = 0;
-
-    if( col_max >= ( m_matrix.m_Ncols - 1 ) )
-        col_max = m_matrix.m_Ncols - 1;
+    row_min = std::max( 0, row_min );
+    row_max = std::min( row_max, m_matrix.m_Nrows - 1 );
+    col_min = std::max( 0, col_min );
+    col_max = std::min( col_max, m_matrix.m_Ncols - 1 );
 
     unsigned int keepOutCost = 0;
 
@@ -498,15 +454,15 @@ unsigned int AR_AUTOPLACER::calculateKeepOutArea( const BOX2I& aRect, int side )
 }
 
 
-int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide,
-                                         const VECTOR2I& aOffset )
+int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide, const VECTOR2I& aOffset )
 {
     int side = AR_SIDE_TOP;
     int otherside = AR_SIDE_BOTTOM;
 
     if( aFootprint->GetLayer() == B_Cu )
     {
-        side = AR_SIDE_BOTTOM; otherside = AR_SIDE_TOP;
+        side = AR_SIDE_BOTTOM;
+        otherside = AR_SIDE_TOP;
     }
 
     BOX2I fpBBox = aFootprint->GetBoundingBox( false );
@@ -525,7 +481,7 @@ int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSid
             return diag;
     }
 
-    int marge = ( m_matrix.m_GridRouting * aFootprint->GetPadCount() ) / AR_GAIN;
+    int marge = KiROUND( ( m_matrix.m_GridRouting * aFootprint->GetPadCount() ) / AR_GAIN );
 
     fpBBox.Inflate( marge );
     return calculateKeepOutArea( fpBBox, side );
@@ -534,12 +490,11 @@ int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSid
 
 int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
 {
-    int     error = 1;
-    VECTOR2I lastPosOK;
-    double  min_cost, curr_cost, Score;
-    bool    testOtherSide;
+    int      error = 1;
+    double   min_cost, curr_cost, Score;
+    bool     testOtherSide;
 
-    lastPosOK = m_matrix.m_BrdBox.GetOrigin();
+    VECTOR2I lastPosOK = m_matrix.m_BrdBox.GetOrigin();
 
     VECTOR2I fpPos = aFootprint->GetPosition();
     BOX2I    fpBBox = aFootprint->GetBoundingBox( false );
@@ -605,13 +560,6 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
                 {
                     lastPosOK   = m_curPosition;
                     min_cost    = Score;
-/*
-                    wxString msg;
-                    msg.Printf( wxT( "Score %g, pos %s, %s" ),
-                                min_cost,
-                                ::CoordinateToString( LastPosOK.x ),
-                                ::CoordinateToString( LastPosOK.y ) );
-                    m_frame->SetStatusText( msg );*/
                 }
             }
         }
@@ -660,12 +608,7 @@ const PAD* AR_AUTOPLACER::nearestPad( FOOTPRINT* aRefFP, PAD* aRefPad, const VEC
 
 double AR_AUTOPLACER::computePlacementRatsnestCost( FOOTPRINT* aFootprint, const VECTOR2I& aOffset )
 {
-    double  curr_cost;
-    VECTOR2I start;      // start point of a ratsnest
-    VECTOR2I end;        // end point of a ratsnest
-    int     dx, dy;
-
-    curr_cost = 0;
+    double curr_cost = 0;
 
     for( PAD* pad : aFootprint->Pads() )
     {
@@ -674,21 +617,18 @@ double AR_AUTOPLACER::computePlacementRatsnestCost( FOOTPRINT* aFootprint, const
         if( !nearest )
             continue;
 
-        start   = VECTOR2I( pad->GetPosition() ) - VECTOR2I(aOffset);
-        end     = VECTOR2I( nearest->GetPosition() );
+        VECTOR2I start   = VECTOR2I( pad->GetPosition() ) - VECTOR2I(aOffset);
+        VECTOR2I end     = VECTOR2I( nearest->GetPosition() );
 
         //m_overlay->SetIsStroke( true );
         //m_overlay->SetStrokeColor( COLOR4D(0.0, 1.0, 0.0, 1.0) );
         //m_overlay->Line( start, end );
 
         // Cost of the ratsnest.
-        dx  = end.x - start.x;
-        dy  = end.y - start.y;
+        int dx = abs( end.x - start.x );
+        int dy = abs( end.y - start.y );
 
-        dx  = abs( dx );
-        dy  = abs( dy );
-
-        // ttry to have always dx >= dy to calculate the cost of the ratsnest
+        // try to have always dx >= dy to calculate the cost of the ratsnest
         if( dx < dy )
             std::swap( dx, dy );
 
@@ -708,21 +648,16 @@ double AR_AUTOPLACER::computePlacementRatsnestCost( FOOTPRINT* aFootprint, const
 // Sort routines
 static bool sortFootprintsByComplexity( FOOTPRINT* ref, FOOTPRINT* compare )
 {
-    double ff1, ff2;
-
-    ff1 = ref->GetArea() * ref->GetPadCount();
-    ff2 = compare->GetArea() * compare->GetPadCount();
-
+    double ff1 = ref->GetArea() * ref->GetPadCount();
+    double ff2 = compare->GetArea() * compare->GetPadCount();
     return ff2 < ff1;
 }
 
 
 static bool sortFootprintsByRatsnestSize( FOOTPRINT* ref, FOOTPRINT* compare )
 {
-    double ff1, ff2;
-
-    ff1 = ref->GetArea() * ref->GetFlag();
-    ff2 = compare->GetArea() * compare->GetFlag();
+    double ff1 = ref->GetArea() * ref->GetFlag();
+    double ff2 = compare->GetArea() * compare->GetFlag();
     return ff2 < ff1;
 }
 
@@ -731,15 +666,13 @@ FOOTPRINT* AR_AUTOPLACER::pickFootprint()
 {
     std::vector<FOOTPRINT*> fpList;
 
-
     for( FOOTPRINT* footprint : m_board->Footprints() )
         fpList.push_back( footprint );
 
     sort( fpList.begin(), fpList.end(), sortFootprintsByComplexity );
 
-    for( unsigned kk = 0; kk < fpList.size(); kk++ )
+    for( FOOTPRINT* footprint : fpList )
     {
-        FOOTPRINT* footprint = fpList[kk];
         footprint->SetFlag( 0 );
 
         if( !footprint->NeedsPlaced() )
@@ -750,10 +683,8 @@ FOOTPRINT* AR_AUTOPLACER::pickFootprint()
 
     m_connectivity->RecalculateRatsnest();
 
-    for( unsigned kk = 0; kk < fpList.size(); kk++ )
+    for( FOOTPRINT* footprint : fpList )
     {
-        FOOTPRINT* footprint = fpList[kk];
-
         auto edges = m_connectivity->GetRatsnestForComponent( footprint, true );
 
         footprint->SetFlag( edges.size() ) ;
@@ -765,10 +696,8 @@ FOOTPRINT* AR_AUTOPLACER::pickFootprint()
     FOOTPRINT* bestFootprint  = nullptr;
     FOOTPRINT* altFootprint   = nullptr;
 
-    for( unsigned ii = 0; ii < fpList.size(); ii++ )
+    for( FOOTPRINT* footprint : fpList )
     {
-        FOOTPRINT* footprint = fpList[ii];
-
         if( !footprint->NeedsPlaced() )
             continue;
 

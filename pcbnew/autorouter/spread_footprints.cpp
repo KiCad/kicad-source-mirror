@@ -24,10 +24,8 @@
 /**
  * @file spread_footprints.cpp
  * @brief functions to spread footprints on free areas outside a board.
- * this is useful after reading a netlist, when new footprints are loaded
- * and stacked at 0,0 coordinate.
- * Often, spread them on a free area near the board being edited make more easy
- * their selection.
+ * this is useful after reading a netlist, when new footprints are loaded and stacked at 0,0 coordinate.
+ * Often, spread them on a free area near the board being edited make more easy their selection.
  */
 
 #include "spread_footprints.h"
@@ -38,18 +36,14 @@
 #include <footprint.h>
 #include <refdes_utils.h>
 #include <string_utils.h>
-#include <confirm.h>
 #include <pcb_edit_frame.h>
-#include <board.h>
 #include <rectpack2d/finders_interface.h>
 
 
 constexpr bool allow_flip = true;
 
-using spaces_type = rectpack2D::empty_spaces<allow_flip, rectpack2D::default_empty_spaces>;
-using rect_type = rectpack2D::output_rect_t<spaces_type>;
-using rect_ptr = rect_type*;
-using rect_vector = std::vector<rect_type>;
+using SPACES_T = rectpack2D::empty_spaces<allow_flip, rectpack2D::default_empty_spaces>;
+using RECT_T = rectpack2D::output_rect_t<SPACES_T>;
 
 // Use 0.01 mm units to calculate placement, to avoid long calculation time
 const int scale = (int) ( 0.01 * pcbIUScale.IU_PER_MM );
@@ -77,8 +71,7 @@ static bool compareFootprintsbyRef( FOOTPRINT* ref, FOOTPRINT* compare )
 
 
 // Spread a list of rectangles inside a placement area
-std::optional<rectpack2D::rect_wh> spreadRectangles( rect_vector& vecSubRects, int areaSizeX,
-                                                     int areaSizeY )
+std::optional<rectpack2D::rect_wh> spreadRectangles( std::vector<RECT_T>& vecSubRects, int areaSizeX, int areaSizeY )
 {
     areaSizeX /= scale;
     areaSizeY /= scale;
@@ -92,21 +85,23 @@ std::optional<rectpack2D::rect_wh> spreadRectangles( rect_vector& vecSubRects, i
         bool      anyUnsuccessful = false;
         const int discard_step = 1;
 
-        auto report_successful = [&]( rect_type& )
-        {
-            return rectpack2D::callback_result::CONTINUE_PACKING;
-        };
+        auto report_successful =
+                [&]( RECT_T& )
+                {
+                    return rectpack2D::callback_result::CONTINUE_PACKING;
+                };
 
-        auto report_unsuccessful = [&]( rect_type& r )
-        {
-            anyUnsuccessful = true;
-            return rectpack2D::callback_result::ABORT_PACKING;
-        };
+        auto report_unsuccessful =
+                [&]( RECT_T& r )
+                {
+                    anyUnsuccessful = true;
+                    return rectpack2D::callback_result::ABORT_PACKING;
+                };
 
-        result = rectpack2D::find_best_packing<spaces_type>(
-                vecSubRects,
-                make_finder_input( max_side, discard_step, report_successful, report_unsuccessful,
-                                   rectpack2D::flipping_option::DISABLED ) );
+        result = rectpack2D::find_best_packing<SPACES_T>( vecSubRects,
+                                                          make_finder_input( max_side, discard_step,
+                                                                             report_successful, report_unsuccessful,
+                                                                             rectpack2D::flipping_option::DISABLED ) );
 
         if( !result || anyUnsuccessful )
         {
@@ -121,20 +116,18 @@ std::optional<rectpack2D::rect_wh> spreadRectangles( rect_vector& vecSubRects, i
 }
 
 
-void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBoxPosition,
-                       bool aGroupBySheet, int aComponentGap, int aGroupGap )
+void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, const VECTOR2I& aTargetBoxPosition, bool aGroupBySheet,
+                       int aComponentGap, int aGroupGap )
 {
     using FpBBoxToFootprintsPair = std::pair<BOX2I, std::vector<FOOTPRINT*>>;
-    using SheetBBoxToFootprintsMapPair =
-            std::pair<BOX2I, std::map<VECTOR2I, FpBBoxToFootprintsPair>>;
+    using SheetBBoxToFootprintsMapPair = std::pair<BOX2I, std::map<VECTOR2I, FpBBoxToFootprintsPair>>;
 
     std::map<wxString, SheetBBoxToFootprintsMapPair> sheetsMap;
 
     // Fill in the maps
     for( FOOTPRINT* footprint : *aFootprints )
     {
-        wxString path =
-                aGroupBySheet ? footprint->GetPath().AsString().BeforeLast( '/' ) : wxString( wxS( "" ) );
+        wxString path = aGroupBySheet ? footprint->GetPath().AsString().BeforeLast( '/' ) : wxString( wxS( "" ) );
 
         VECTOR2I size = footprint->GetBoundingBox( false ).GetSize();
         size.x += aComponentGap;
@@ -220,22 +213,21 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
             }
         }
 
-        rect_vector vecSubRects;
-        long long   blocksArea = 0;
+        std::vector<RECT_T> vecSubRects;
+        long long           blocksArea = 0;
 
         // Fill in arrays for packing of blocks
         for( auto& [fpSize, fpPair] : sizeToFpMap )
         {
             auto& [block_bbox, footprints] = fpPair;
 
-            vecSubRects.emplace_back( 0, 0, block_bbox.GetWidth() / scale,
-                                      block_bbox.GetHeight() / scale, false );
+            vecSubRects.emplace_back( 0, 0, block_bbox.GetWidth() / scale, block_bbox.GetHeight() / scale, false );
 
             blocksArea += block_bbox.GetArea();
         }
 
         // Pack the blocks
-        int areaSide = std::sqrt( blocksArea );
+        int areaSide = KiROUND( std::sqrt( blocksArea ) );
         spreadRectangles( vecSubRects, areaSide, areaSide );
 
         unsigned block_i = 0;
@@ -245,7 +237,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
         {
             auto& [src_bbox, footprints] = pair;
 
-            rect_type srect = vecSubRects[block_i];
+            RECT_T srect = vecSubRects[block_i];
 
             VECTOR2I target_pos( srect.x * scale, srect.y * scale );
             VECTOR2I target_size( srect.w * scale, srect.h * scale );
@@ -268,8 +260,8 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
         }
     }
 
-    rect_vector vecSubRects;
-    long long   sheetsArea = 0;
+    std::vector<RECT_T> vecSubRects;
+    long long           sheetsArea = 0;
 
     // Fill in arrays for packing of hierarchical sheet groups
     for( auto& [sheetPath, sheetPair] : sheetsMap )
@@ -296,10 +288,9 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
     {
         auto& [src_bbox, sizeToFpMap] = sheetPair;
 
-        rect_type srect = vecSubRects[srect_i];
+        RECT_T srect = vecSubRects[srect_i];
 
-        VECTOR2I target_pos( srect.x * scale + aTargetBoxPosition.x,
-                             srect.y * scale + aTargetBoxPosition.y );
+        VECTOR2I target_pos( srect.x * scale + aTargetBoxPosition.x, srect.y * scale + aTargetBoxPosition.y );
         VECTOR2I target_size( srect.w * scale, srect.h * scale );
 
         // Avoid too large coordinates: Overlapping components
@@ -313,10 +304,9 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBox
         for( auto& [fpSize, fpPair] : sizeToFpMap )
         {
             auto& [block_bbox, footprints] = fpPair;
+
             for( FOOTPRINT* footprint : footprints )
-            {
                 footprint->Move( target_pos - src_bbox.GetPosition() );
-            }
         }
 
         srect_i++;

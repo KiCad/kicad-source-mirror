@@ -43,17 +43,8 @@ AR_MATRIX::AR_MATRIX()
     m_RoutingLayersCount = 1;
     m_GridRouting        = 0;
     m_RouteCount         = 0;
-    m_routeLayerBottom   = B_Cu;
-    m_routeLayerTop      = F_Cu;
 }
 
-
-AR_MATRIX::~AR_MATRIX()
-{
-}
-
-// was: bool AR_MATRIX::ComputeMatrixSize(  BOARD* aPcb, bool aUseBoardEdgesOnly )
-// aUseBoardEdgesOnly ? aPcb->GetBoardEdgesBoundingBox() : aPcb->GetBoundingBox();
 
 bool AR_MATRIX::ComputeMatrixSize( const BOX2I& aBoundingBox )
 {
@@ -74,8 +65,8 @@ bool AR_MATRIX::ComputeMatrixSize( const BOX2I& aBoundingBox )
 
     m_BrdBox.SetEnd( end );
 
-    m_Nrows = m_BrdBox.GetHeight() / m_GridRouting;
-    m_Ncols = m_BrdBox.GetWidth() / m_GridRouting;
+    m_Nrows = KiROUND( m_BrdBox.GetHeight() / m_GridRouting );
+    m_Ncols = KiROUND( m_BrdBox.GetWidth() / m_GridRouting );
 
     // gives a small margin
     m_Ncols += 1;
@@ -124,9 +115,7 @@ int AR_MATRIX::InitRoutingMatrix()
 
 void AR_MATRIX::UnInitRoutingMatrix()
 {
-    int ii;
-
-    for( ii = 0; ii < AR_MAX_ROUTING_LAYERS_COUNT; ii++ )
+    for( int ii = 0; ii < AR_MAX_ROUTING_LAYERS_COUNT; ii++ )
     {
         // de-allocate Distances matrix
         if( m_DistSide[ii] )
@@ -165,9 +154,7 @@ void AR_MATRIX::SetCellOperation( AR_MATRIX::CELL_OP aLogicOp )
  */
 AR_MATRIX::MATRIX_CELL AR_MATRIX::GetCell( int aRow, int aCol, int aSide )
 {
-    MATRIX_CELL* p;
-
-    p = m_BoardSide[aSide];
+    MATRIX_CELL* p = m_BoardSide[aSide];
     return p[aRow * m_Ncols + aCol];
 }
 
@@ -176,9 +163,7 @@ AR_MATRIX::MATRIX_CELL AR_MATRIX::GetCell( int aRow, int aCol, int aSide )
  */
 void AR_MATRIX::SetCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
-    MATRIX_CELL* p;
-
-    p = m_BoardSide[aSide];
+    MATRIX_CELL* p = m_BoardSide[aSide];
     p[aRow * m_Ncols + aCol] = x;
 }
 
@@ -187,9 +172,7 @@ void AR_MATRIX::SetCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
  */
 void AR_MATRIX::OrCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
-    MATRIX_CELL* p;
-
-    p = m_BoardSide[aSide];
+    MATRIX_CELL* p = m_BoardSide[aSide];
     p[aRow * m_Ncols + aCol] |= x;
 }
 
@@ -198,9 +181,7 @@ void AR_MATRIX::OrCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
  */
 void AR_MATRIX::XorCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
-    MATRIX_CELL* p;
-
-    p = m_BoardSide[aSide];
+    MATRIX_CELL* p = m_BoardSide[aSide];
     p[aRow * m_Ncols + aCol] ^= x;
 }
 
@@ -209,9 +190,7 @@ void AR_MATRIX::XorCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
  */
 void AR_MATRIX::AndCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
-    MATRIX_CELL* p;
-
-    p = m_BoardSide[aSide];
+    MATRIX_CELL* p = m_BoardSide[aSide];
     p[aRow * m_Ncols + aCol] &= x;
 }
 
@@ -220,9 +199,7 @@ void AR_MATRIX::AndCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
  */
 void AR_MATRIX::AddCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
-    MATRIX_CELL* p;
-
-    p = m_BoardSide[aSide];
+    MATRIX_CELL* p = m_BoardSide[aSide];
     p[aRow * m_Ncols + aCol] += x;
 }
 
@@ -230,9 +207,7 @@ void AR_MATRIX::AddCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 // fetch distance cell
 AR_MATRIX::DIST_CELL AR_MATRIX::GetDist( int aRow, int aCol, int aSide ) // fetch distance cell
 {
-    DIST_CELL* p;
-
-    p = m_DistSide[aSide];
+    DIST_CELL* p = m_DistSide[aSide];
     return p[aRow * m_Ncols + aCol];
 }
 
@@ -240,9 +215,7 @@ AR_MATRIX::DIST_CELL AR_MATRIX::GetDist( int aRow, int aCol, int aSide ) // fetc
 // store distance cell
 void AR_MATRIX::SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
 {
-    DIST_CELL* p;
-
-    p = m_DistSide[aSide];
+    DIST_CELL* p = m_DistSide[aSide];
     p[aRow * m_Ncols + aCol] = x;
 }
 
@@ -257,22 +230,16 @@ void AR_MATRIX::SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
 */
 
 
-#define OP_CELL( layer, dy, dx )                             \
-    {                                                        \
-        if( layer == UNDEFINED_LAYER )                       \
-        {                                                    \
-            WriteCell( dy, dx, AR_SIDE_BOTTOM, color );      \
-            if( m_RoutingLayersCount > 1 )                   \
-                WriteCell( dy, dx, AR_SIDE_TOP, color );     \
-        }                                                    \
-        else                                                 \
-        {                                                    \
-            if( layer == m_routeLayerBottom )                \
-                WriteCell( dy, dx, AR_SIDE_BOTTOM, color );  \
-            if( m_RoutingLayersCount > 1 )                   \
-                if( layer == m_routeLayerTop )               \
-                    WriteCell( dy, dx, AR_SIDE_TOP, color ); \
-        }                                                    \
+#define OP_CELL( layer, dy, dx )                               \
+    {                                                          \
+        if( layer == UNDEFINED_LAYER || layer == B_Cu )        \
+            WriteCell( dy, dx, AR_SIDE_BOTTOM, color );        \
+                                                               \
+        if( m_RoutingLayersCount > 1 )                         \
+        {                                                      \
+            if( layer == UNDEFINED_LAYER || layer == F_Cu )    \
+                WriteCell( dy, dx, AR_SIDE_TOP, color );       \
+        }                                                      \
     }
 
 /* Fills all cells inside a segment
@@ -282,13 +249,6 @@ void AR_MATRIX::SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
 void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color,
                                 AR_MATRIX::CELL_OP op_logic )
 {
-    int64_t row, col;
-    int64_t inc;
-    int64_t row_max, col_max, row_min, col_min;
-    int64_t demi_pas;
-
-    int cx, cy, dx, dy;
-
     SetCellOperation( op_logic );
 
     // Make coordinate ux1 tj > ux0 to simplify calculations
@@ -299,91 +259,65 @@ void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int 
     }
 
     // Calculating the incrementing the Y axis
-    inc = 1;
+    int64_t inc = 1;
 
     if( uy1 < uy0 )
         inc = -1;
 
-    demi_pas = m_GridRouting / 2;
+    int64_t demi_pas = m_GridRouting / 2;
 
-    col_min = ( ux0 - lg ) / m_GridRouting;
+    int col_min = ( ux0 - lg ) / m_GridRouting;
 
     if( col_min < 0 )
         col_min = 0;
 
-    col_max = ( ux1 + lg + demi_pas ) / m_GridRouting;
+    int col_max = KiROUND( ( ux1 + lg + demi_pas ) / m_GridRouting );
 
     if( col_max > ( m_Ncols - 1 ) )
         col_max = m_Ncols - 1;
 
-    if( inc > 0 )
-    {
-        row_min = ( uy0 - lg ) / m_GridRouting;
-        row_max = ( uy1 + lg + demi_pas ) / m_GridRouting;
-    }
-    else
-    {
-        row_min = ( uy1 - lg ) / m_GridRouting;
-        row_max = ( uy0 + lg + demi_pas ) / m_GridRouting;
-    }
+    int row_min = KiROUND( ( ( inc > 0 ? uy0 : uy1 ) - lg ) / m_GridRouting );
+    int row_max = KiROUND( ( ( inc > 0 ? uy1 : uy0 ) + lg + demi_pas ) / m_GridRouting );
 
-    if( row_min < 0 )
-        row_min = 0;
+    row_min = std::max( 0, std::min( row_min, m_Nrows - 1 ) );
+    row_max = std::max( 0, std::min( row_max, m_Nrows - 1 ) );
 
-    if( row_min > ( m_Nrows - 1 ) )
-        row_min = m_Nrows - 1;
-
-    if( row_max < 0 )
-        row_max = 0;
-
-    if( row_max > ( m_Nrows - 1 ) )
-        row_max = m_Nrows - 1;
-
-    dx = ux1 - ux0;
-    dy = uy1 - uy0;
+    int dx = ux1 - ux0;
+    int dy = uy1 - uy0;
 
     EDA_ANGLE angle( VECTOR2I( dx, dy ) );
 
     RotatePoint( &dx, &dy, angle ); // dx = length, dy = 0
 
-    for( col = col_min; col <= col_max; col++ )
+    for( int col = col_min; col <= col_max; col++ )
     {
-        int64_t cxr;
-        cxr = ( col * m_GridRouting ) - ux0;
+        int64_t cxr = ( col * m_GridRouting ) - ux0;
 
-        for( row = row_min; row <= row_max; row++ )
+        for( int row = row_min; row <= row_max; row++ )
         {
-            cy = ( row * m_GridRouting ) - uy0;
-            cx = cxr;
+            int cy = ( row * m_GridRouting ) - uy0;
+            int cx = cxr;
             RotatePoint( &cx, &cy, angle );
 
             if( abs( cy ) > lg )
-                continue; // The point is too far on the Y axis.
-
-            /* This point a test is close to the segment: the position
-             * along the X axis must be tested.
-             */
-            if( ( cx >= 0 ) && ( cx <= dx ) )
+            {
+                // The point is too far on the Y axis.
+            }
+            // This point a test is close to the segment: the position along the X axis must be tested.
+            else if( ( cx >= 0 ) && ( cx <= dx ) )
             {
                 OP_CELL( layer, row, col );
-                continue;
             }
-
             // Examination of extremities are rounded.
-            if( ( cx < 0 ) && ( cx >= -lg ) )
+            else if( ( cx < 0 ) && ( cx >= -lg ) )
             {
                 if( ( ( cx * cx ) + ( cy * cy ) ) <= ( lg * lg ) )
                     OP_CELL( layer, row, col );
-
-                continue;
             }
-
-            if( ( cx > dx ) && ( cx <= ( dx + lg ) ) )
+            else if( ( cx > dx ) && ( cx <= ( dx + lg ) ) )
             {
                 if( ( ( ( cx - dx ) * ( cx - dx ) ) + ( cy * cy ) ) <= ( lg * lg ) )
                     OP_CELL( layer, row, col );
-
-                continue;
             }
         }
     }
@@ -397,63 +331,40 @@ void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int 
 void AR_MATRIX::traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer, int color,
                              AR_MATRIX::CELL_OP op_logic )
 {
-    int radius, nb_segm;
-    int x0, y0;     // Starting point of the current segment trace.
-    int x1, y1;     // End point.
-    int ii;
-
     VECTOR2I pt1( ux0, uy0 );
     VECTOR2I pt2( ux1, uy1 );
+    int      radius = KiROUND( pt1.Distance( pt2 ) );
 
-    radius = pt1.Distance( pt2 );
+    int x0 = radius;   // Starting point of the current segment
+    int y0 = 0;
 
-    x0 = x1 = radius;
-    y0 = y1 = 0;
+    lg = std::max( 1, lg );
 
-    if( lg < 1 )
-        lg = 1;
+    int nb_segm = ( 2 * radius ) / lg;
 
-    nb_segm = ( 2 * radius ) / lg;
+    nb_segm = std::max( 5, std::min( nb_segm, 100 ) );
 
-    if( nb_segm < 5 )
-        nb_segm = 5;
-
-    if( nb_segm > 100 )
-        nb_segm = 100;
-
-    for( ii = 1; ii < nb_segm; ii++ )
+    for( int ii = 1; ii < nb_segm; ii++ )
     {
         EDA_ANGLE angle = ( ANGLE_360 * ii ) / nb_segm;
-        x1 = KiROUND( radius * angle.Cos() );
-        y1 = KiROUND( radius * angle.Sin() );
+        int       x1 = KiROUND( radius * angle.Cos() );   // End point of the current segment
+        int       y1 = KiROUND( radius * angle.Sin() );
+
         drawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg, layer, color, op_logic );
         x0 = x1;
         y0 = y1;
     }
 
-    drawSegmentQcq( x1 + ux0, y1 + uy0, ux0 + radius, uy0, lg, layer, color, op_logic );
+    drawSegmentQcq( x0 + ux0, y0 + uy0, ux0 + radius, uy0, lg, layer, color, op_logic );
 }
 
 
 void AR_MATRIX::traceFilledCircle( int cx, int cy, int radius, const LSET& aLayerMask, int color,
                                    AR_MATRIX::CELL_OP op_logic )
 {
-    int    row, col;
-    int    ux0, uy0, ux1, uy1;
-    int    row_max, col_max, row_min, col_min;
-    int    trace = 0;
-    double fdistmin, fdistx, fdisty;
-    int    tstwrite = 0;
-    int    distmin;
+    int tstwrite = 0;
 
-    if( aLayerMask[m_routeLayerBottom] )
-        trace = 1; // Trace on BOTTOM
-
-    if( aLayerMask[m_routeLayerTop] )
-        if( m_RoutingLayersCount > 1 )
-            trace |= 2; // Trace on TOP
-
-    if( trace == 0 )
+    if( !aLayerMask[B_Cu] && !( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 ) )
         return;
 
     SetCellOperation( op_logic );
@@ -461,31 +372,24 @@ void AR_MATRIX::traceFilledCircle( int cx, int cy, int radius, const LSET& aLaye
     cx -= GetBrdCoordOrigin().x;
     cy -= GetBrdCoordOrigin().y;
 
-    distmin = radius;
+    int distmin = radius;
 
     // Calculate the bounding rectangle of the circle.
-    ux0 = cx - radius;
-    uy0 = cy - radius;
-    ux1 = cx + radius;
-    uy1 = cy + radius;
+    int ux0 = cx - radius;
+    int uy0 = cy - radius;
+    int ux1 = cx + radius;
+    int uy1 = cy + radius;
 
     // Calculate limit coordinates of cells belonging to the rectangle.
-    row_max = uy1 / m_GridRouting;
-    col_max = ux1 / m_GridRouting;
-    row_min = uy0 / m_GridRouting; // if (uy0 > row_min*Board.m_GridRouting) row_min++;
-    col_min = ux0 / m_GridRouting; // if (ux0 > col_min*Board.m_GridRouting) col_min++;
+    int row_max = uy1 / m_GridRouting;
+    int col_max = ux1 / m_GridRouting;
+    int row_min = uy0 / m_GridRouting; // if (uy0 > row_min*Board.m_GridRouting) row_min++;
+    int col_min = ux0 / m_GridRouting; // if (ux0 > col_min*Board.m_GridRouting) col_min++;
 
-    if( row_min < 0 )
-        row_min = 0;
-
-    if( row_max >= ( m_Nrows - 1 ) )
-        row_max = m_Nrows - 1;
-
-    if( col_min < 0 )
-        col_min = 0;
-
-    if( col_max >= ( m_Ncols - 1 ) )
-        col_max = m_Ncols - 1;
+    row_min = std::max( 0, row_min );
+    row_max = std::min( row_max, m_Nrows - 1 );
+    col_min = std::max( 0, col_min );
+    col_max = std::min( col_max, m_Ncols - 1 );
 
     // Calculate coordinate limits of cell belonging to the rectangle.
     if( row_min > row_max )
@@ -494,25 +398,25 @@ void AR_MATRIX::traceFilledCircle( int cx, int cy, int radius, const LSET& aLaye
     if( col_min > col_max )
         col_max = col_min;
 
-    fdistmin = (double) distmin * distmin;
+    double fdistmin = (double) distmin * distmin;
 
-    for( row = row_min; row <= row_max; row++ )
+    for( int row = row_min; row <= row_max; row++ )
     {
-        fdisty = (double) ( cy - ( row * m_GridRouting ) );
+        double fdisty = cy - ( row * m_GridRouting );
         fdisty *= fdisty;
 
-        for( col = col_min; col <= col_max; col++ )
+        for( int col = col_min; col <= col_max; col++ )
         {
-            fdistx = (double) ( cx - ( col * m_GridRouting ) );
+            double fdistx = cx - ( col * m_GridRouting );
             fdistx *= fdistx;
 
             if( fdistmin <= ( fdistx + fdisty ) )
                 continue;
 
-            if( trace & 1 )
+            if( aLayerMask[B_Cu] )
                 WriteCell( row, col, AR_SIDE_BOTTOM, color );
 
-            if( trace & 2 )
+            if( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 )
                 WriteCell( row, col, AR_SIDE_TOP, color );
 
             tstwrite = 1;
@@ -528,23 +432,23 @@ void AR_MATRIX::traceFilledCircle( int cx, int cy, int radius, const LSET& aLaye
     distmin = m_GridRouting / 2 + 1;
     fdistmin = ( (double) distmin * distmin ) * 2; // Distance to center point diagonally
 
-    for( row = row_min; row <= row_max; row++ )
+    for( int row = row_min; row <= row_max; row++ )
     {
-        fdisty = (double) ( cy - ( row * m_GridRouting ) );
+        double fdisty = cy - ( row * m_GridRouting );
         fdisty *= fdisty;
 
-        for( col = col_min; col <= col_max; col++ )
+        for( int col = col_min; col <= col_max; col++ )
         {
-            fdistx = (double) ( cx - ( col * m_GridRouting ) );
+            double fdistx = cx - ( col * m_GridRouting );
             fdistx *= fdistx;
 
             if( fdistmin <= ( fdistx + fdisty ) )
                 continue;
 
-            if( trace & 1 )
+            if( aLayerMask[B_Cu] )
                 WriteCell( row, col, AR_SIDE_BOTTOM, color );
 
-            if( trace & 2 )
+            if( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 )
                 WriteCell( row, col, AR_SIDE_TOP, color );
         }
     }
@@ -556,45 +460,33 @@ void AR_MATRIX::traceFilledCircle( int cx, int cy, int radius, const LSET& aLaye
  * center = ux0,uy0, starting at ux1, uy1.  Coordinates are in
  * PCB units.
  */
-void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& arcAngle, int lg,
-                          int layer, int color, AR_MATRIX::CELL_OP op_logic )
+void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& arcAngle, int lg, int layer,
+                          int color, AR_MATRIX::CELL_OP op_logic )
 {
-    int       radius, nb_segm;
-    int       x0, y0;     // Starting point of the current segment trace
-    int       x1, y1;     // End point
-    int       ii;
-    EDA_ANGLE angle, startAngle;
+    VECTOR2I  pt1( ux0, uy0 );
+    VECTOR2I  pt2( ux1, uy1 );
+    int       radius = KiROUND( pt1.Distance( pt2 ) );
 
-    VECTOR2I pt1( ux0, uy0 );
-    VECTOR2I pt2( ux1, uy1 );
-
-    radius = pt1.Distance( pt2 );
-
-    x0 = ux1 - ux0;
-    y0 = uy1 - uy0;
-    startAngle = EDA_ANGLE( VECTOR2I( ux1, uy1 ) - VECTOR2I( ux0, uy0 ) );
+    int       x0 = ux1 - ux0;   // Starting point of current segment
+    int       y0 = uy1 - uy0;
+    EDA_ANGLE startAngle = EDA_ANGLE( VECTOR2I( ux1, uy1 ) - VECTOR2I( ux0, uy0 ) );
 
     if( lg < 1 )
         lg = 1;
 
-    nb_segm = ( 2 * radius ) / lg;
-    nb_segm = nb_segm * std::abs( arcAngle.AsDegrees() ) / 360.0;
+    int nb_segm = ( 2 * radius ) / lg;
+    nb_segm = KiROUND( nb_segm * std::abs( arcAngle.AsDegrees() ) / 360.0 );
+    nb_segm = std::max( 5, std::min( nb_segm, 100 ) );
 
-    if( nb_segm < 5 )
-        nb_segm = 5;
-
-    if( nb_segm > 100 )
-        nb_segm = 100;
-
-    for( ii = 1; ii <= nb_segm; ii++ )
+    for( int ii = 1; ii <= nb_segm; ii++ )
     {
-        angle = arcAngle * ii / nb_segm;
+        EDA_ANGLE angle = arcAngle * ii / nb_segm;
         angle += startAngle;
 
         angle.Normalize();
 
-        x1 = KiROUND( radius * angle.Cos() );
-        y1 = KiROUND( radius * angle.Cos() );
+        int x1 = KiROUND( radius * angle.Cos() );   // Ending point of current segment
+        int y1 = KiROUND( radius * angle.Cos() );
         drawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg, layer, color, op_logic );
         x0 = x1;
         y0 = y1;
@@ -602,26 +494,10 @@ void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& a
 }
 
 
-void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double angle,
+void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& angle,
                                       const LSET& aLayerMask, int color, AR_MATRIX::CELL_OP op_logic )
 {
-    int row, col;
-    int cx, cy; // Center of rectangle
-    int radius; // Radius of the circle
-    int row_min, row_max, col_min, col_max;
-    int rotrow, rotcol;
-    int trace = 0;
-
-    if( aLayerMask[m_routeLayerBottom] )
-        trace = 1; // Trace on BOTTOM
-
-    if( aLayerMask[m_routeLayerTop] )
-    {
-        if( m_RoutingLayersCount > 1 )
-            trace |= 2; // Trace on TOP
-    }
-
-    if( trace == 0 )
+    if( !aLayerMask[B_Cu] && !( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 ) )
         return;
 
     SetCellOperation( op_logic );
@@ -631,44 +507,35 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double
     ux1 -= GetBrdCoordOrigin().x;
     uy1 -= GetBrdCoordOrigin().y;
 
-    cx = ( ux0 + ux1 ) / 2;
-    cy = ( uy0 + uy1 ) / 2;
     VECTOR2I pt1( ux0, uy0 );
-    VECTOR2I pt2( cx, cy );
-    radius = pt1.Distance( pt2 );
+    VECTOR2I center( ( ux0 + ux1 ) / 2, ( uy0 + uy1 ) / 2 );
+    int      radius = KiROUND( pt1.Distance( center ) );
 
     // Calculating coordinate limits belonging to the rectangle.
-    row_max = ( cy + radius ) / m_GridRouting;
-    col_max = ( cx + radius ) / m_GridRouting;
-    row_min = ( cy - radius ) / m_GridRouting;
+    int row_max = ( center.y + radius ) / m_GridRouting;
+    int col_max = ( center.x + radius ) / m_GridRouting;
+    int row_min = ( center.y - radius ) / m_GridRouting;
 
     if( uy0 > row_min * m_GridRouting )
         row_min++;
 
-    col_min = ( cx - radius ) / m_GridRouting;
+    int col_min = ( center.x - radius ) / m_GridRouting;
 
     if( ux0 > col_min * m_GridRouting )
         col_min++;
 
-    if( row_min < 0 )
-        row_min = 0;
+    row_min = std::max( 0, row_min );
+    row_max = std::min( row_max, m_Nrows - 1 );
+    col_min = std::max( 0, col_min );
+    col_max = std::min( col_max, m_Ncols - 1 );
 
-    if( row_max >= ( m_Nrows - 1 ) )
-        row_max = m_Nrows - 1;
-
-    if( col_min < 0 )
-        col_min = 0;
-
-    if( col_max >= ( m_Ncols - 1 ) )
-        col_max = m_Ncols - 1;
-
-    for( row = row_min; row <= row_max; row++ )
+    for( int row = row_min; row <= row_max; row++ )
     {
-        for( col = col_min; col <= col_max; col++ )
+        for( int col = col_min; col <= col_max; col++ )
         {
-            rotrow = row * m_GridRouting;
-            rotcol = col * m_GridRouting;
-            RotatePoint( &rotcol, &rotrow, cx, cy, -EDA_ANGLE( angle, TENTHS_OF_A_DEGREE_T ) );
+            int rotrow = row * m_GridRouting;
+            int rotcol = col * m_GridRouting;
+            RotatePoint( &rotcol, &rotrow, center.x, center.y, -angle );
 
             if( rotrow <= uy0 )
                 continue;
@@ -682,10 +549,10 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double
             if( rotcol >= ux1 )
                 continue;
 
-            if( trace & 1 )
+            if( aLayerMask[B_Cu] )
                 WriteCell( row, col, AR_SIDE_BOTTOM, color );
 
-            if( trace & 2 )
+            if( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 )
                 WriteCell( row, col, AR_SIDE_TOP, color );
         }
     }
@@ -695,17 +562,7 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double
 void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, const LSET& aLayerMask,
                                       int color, AR_MATRIX::CELL_OP op_logic )
 {
-    int row, col;
-    int row_min, row_max, col_min, col_max;
-    int trace = 0;
-
-    if( aLayerMask[m_routeLayerBottom] )
-        trace = 1; // Trace on BOTTOM
-
-    if( aLayerMask[m_routeLayerTop] && m_RoutingLayersCount > 1 )
-        trace |= 2; // Trace on TOP
-
-    if( trace == 0 )
+    if( !aLayerMask[B_Cu] && !( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 ) )
         return;
 
     SetCellOperation( op_logic );
@@ -716,38 +573,31 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, const 
     uy1 -= GetBrdCoordOrigin().y;
 
     // Calculating limits coord cells belonging to the rectangle.
-    row_max = uy1 / m_GridRouting;
-    col_max = ux1 / m_GridRouting;
-    row_min = uy0 / m_GridRouting;
+    int row_max = uy1 / m_GridRouting;
+    int col_max = ux1 / m_GridRouting;
+    int row_min = uy0 / m_GridRouting;
 
     if( uy0 > row_min * m_GridRouting )
         row_min++;
 
-    col_min = ux0 / m_GridRouting;
+    int col_min = ux0 / m_GridRouting;
 
     if( ux0 > col_min * m_GridRouting )
         col_min++;
 
-    if( row_min < 0 )
-        row_min = 0;
+    row_min = std::max( 0, row_min );
+    row_max = std::min( row_max, m_Nrows - 1 );
+    col_min = std::max( 0, col_min );
+    col_max = std::min( col_max, m_Ncols - 1 );
 
-    if( row_max >= ( m_Nrows - 1 ) )
-        row_max = m_Nrows - 1;
-
-    if( col_min < 0 )
-        col_min = 0;
-
-    if( col_max >= ( m_Ncols - 1 ) )
-        col_max = m_Ncols - 1;
-
-    for( row = row_min; row <= row_max; row++ )
+    for( int row = row_min; row <= row_max; row++ )
     {
-        for( col = col_min; col <= col_max; col++ )
+        for( int col = col_min; col <= col_max; col++ )
         {
-            if( trace & 1 )
+            if( aLayerMask[B_Cu] )
                 WriteCell( row, col, AR_SIDE_BOTTOM, color );
 
-            if( trace & 2 )
+            if( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 )
                 WriteCell( row, col, AR_SIDE_TOP, color );
         }
     }
@@ -791,26 +641,16 @@ void AR_MATRIX::TracePcbShape( PCB_SHAPE* aShape, int aColor, int aMargin, AR_MA
  * Cells ( in Dist map ) inside the rect x0,y0 a x1,y1 are
  *  incremented by value aKeepOut
  *  Cell outside this rectangle, but inside the rectangle
- *  x0,y0 -marge to x1,y1 + marge are incremented by a decreasing value
+ *  x0,y0 -margin to x1,y1 + margin are incremented by a decreasing value
  *  (aKeepOut ... 0). The decreasing value depends on the distance to the first rectangle
  *  Therefore the cost is high in rect x0,y0 to x1,y1, and decrease outside this rectangle
  */
-void AR_MATRIX::CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int marge,
-                                        int aKeepOut, const LSET& aLayerMask )
+void AR_MATRIX::CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int margin, int aKeepOut,
+                                        const LSET& aLayerMask )
 {
-    int       row, col;
-    int       row_min, row_max, col_min, col_max, pmarge;
-    int       trace = 0;
     DIST_CELL data, LocalKeepOut;
-    int       lgain, cgain;
 
-    if( aLayerMask[m_routeLayerBottom] )
-        trace = 1; // Trace on bottom layer.
-
-    if( aLayerMask[m_routeLayerTop] && m_RoutingLayersCount )
-        trace |= 2; // Trace on top layer.
-
-    if( trace == 0 )
+    if( !aLayerMask[B_Cu] && !( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 ) )
         return;
 
     ux0 -= m_BrdBox.GetX();
@@ -818,81 +658,67 @@ void AR_MATRIX::CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int 
     ux1 -= m_BrdBox.GetX();
     uy1 -= m_BrdBox.GetY();
 
-    ux0 -= marge;
-    ux1 += marge;
-    uy0 -= marge;
-    uy1 += marge;
+    ux0 -= margin;
+    ux1 += margin;
+    uy0 -= margin;
+    uy1 += margin;
 
-    pmarge = marge / m_GridRouting;
-
-    if( pmarge < 1 )
-        pmarge = 1;
+    int cell_margin = std::max( 1, margin / m_GridRouting );
 
     // Calculate the coordinate limits of the rectangle.
-    row_max = uy1 / m_GridRouting;
-    col_max = ux1 / m_GridRouting;
-    row_min = uy0 / m_GridRouting;
+    int row_max = uy1 / m_GridRouting;
+    int col_max = ux1 / m_GridRouting;
+    int row_min = uy0 / m_GridRouting;
 
     if( uy0 > row_min * m_GridRouting )
         row_min++;
 
-    col_min = ux0 / m_GridRouting;
+    int col_min = ux0 / m_GridRouting;
 
     if( ux0 > col_min * m_GridRouting )
         col_min++;
 
-    if( row_min < 0 )
-        row_min = 0;
+    row_min = std::max( 0, row_min );
+    row_max = std::min( row_max, m_Nrows - 1 );
+    col_min = std::max( 0, col_min );
+    col_max = std::min( col_max, m_Ncols - 1 );
 
-    if( row_max >= ( m_Nrows - 1 ) )
-        row_max = m_Nrows - 1;
-
-    if( col_min < 0 )
-        col_min = 0;
-
-    if( col_max >= ( m_Ncols - 1 ) )
-        col_max = m_Ncols - 1;
-
-    for( row = row_min; row <= row_max; row++ )
+    for( int row = row_min; row <= row_max; row++ )
     {
-        lgain = 256;
+        int lgain = 256;
 
-        if( row < pmarge )
-            lgain = ( 256 * row ) / pmarge;
-        else if( row > row_max - pmarge )
-            lgain = ( 256 * ( row_max - row ) ) / pmarge;
+        if( row < cell_margin )
+            lgain = ( 256 * row ) / cell_margin;
+        else if( row > row_max - cell_margin )
+            lgain = ( 256 * ( row_max - row ) ) / cell_margin;
 
-        for( col = col_min; col <= col_max; col++ )
+        for( int col = col_min; col <= col_max; col++ )
         {
-            // RoutingMatrix Dist map contained the "cost" of the cell
-            // at position (row, col)
-            // in autoplace this is the cost of the cell, when
-            // a footprint overlaps it, near a "master" footprint
-            // this cost is high near the "master" footprint
-            // and decrease with the distance
-            cgain = 256;
+            // RoutingMatrix Dist map contained the "cost" of the cell at position (row, col)
+            // in autoplace this is the cost of the cell, when a footprint overlaps it, near a "master" footprint
+            // this cost is high near the "master" footprint and decrease with the distance
+            int cgain = 256;
             LocalKeepOut = aKeepOut;
 
-            if( col < pmarge )
-                cgain = ( 256 * col ) / pmarge;
-            else if( col > col_max - pmarge )
-                cgain = ( 256 * ( col_max - col ) ) / pmarge;
+            if( col < cell_margin )
+                cgain = ( 256 * col ) / cell_margin;
+            else if( col > col_max - cell_margin )
+                cgain = ( 256 * ( col_max - col ) ) / cell_margin;
 
             cgain = ( cgain * lgain ) / 256;
 
             if( cgain != 256 )
                 LocalKeepOut = ( LocalKeepOut * cgain ) / 256;
 
-            if( trace & 1 )
+            if( aLayerMask[B_Cu] )
             {
                 data = GetDist( row, col, AR_SIDE_BOTTOM ) + LocalKeepOut;
                 SetDist( row, col, AR_SIDE_BOTTOM, data );
             }
 
-            if( trace & 2 )
+            if( aLayerMask[F_Cu] && m_RoutingLayersCount > 1 )
             {
-                data = GetDist( row, col, AR_SIDE_TOP );
-                data = std::max( data, LocalKeepOut );
+                data = std::max( GetDist( row, col, AR_SIDE_TOP ), LocalKeepOut );
                 SetDist( row, col, AR_SIDE_TOP, data );
             }
         }
@@ -900,59 +726,51 @@ void AR_MATRIX::CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int 
 }
 
 
-void AR_MATRIX::PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op_logic )
+void AR_MATRIX::PlacePad( PAD* aPad, int color, int margin, AR_MATRIX::CELL_OP op_logic )
 {
     auto tracePad =
-            [&]( PCB_LAYER_ID aSourceLayer, const LSET& aLayerMask )
+            [&]( PCB_LAYER_ID aOutputLayer )
             {
-                VECTOR2I shape_pos = aPad->ShapePos( aSourceLayer );
+                PCB_LAYER_ID effectivePadLayer = aPad->Padstack().EffectiveLayerFor( aOutputLayer );
 
-                int dx = aPad->GetSize( aSourceLayer ).x / 2;
-                dx += marge;
+                VECTOR2I shape_pos = aPad->ShapePos( effectivePadLayer );
+                int      x = ( aPad->GetSize( effectivePadLayer ).x / 2 ) + margin;
+                int      y = ( aPad->GetSize( effectivePadLayer ).y / 2 ) + margin;
 
-                if( aPad->GetShape( aSourceLayer ) == PAD_SHAPE::CIRCLE )
+                if( aPad->GetShape( effectivePadLayer ) == PAD_SHAPE::CIRCLE )
                 {
-                    traceFilledCircle( shape_pos.x, shape_pos.y, dx, aLayerMask, color, op_logic );
-                    return;
-                }
-
-                int dy = aPad->GetSize( aSourceLayer ).y / 2;
-                dy += marge;
-
-                if( aPad->GetShape( aSourceLayer ) == PAD_SHAPE::TRAPEZOID )
-                {
-                    dx += abs( aPad->GetDelta( aSourceLayer ).y ) / 2;
-                    dy += abs( aPad->GetDelta( aSourceLayer ).x ) / 2;
-                }
-
-                // The pad is a rectangle ( horizontal or vertical )
-                if( aPad->GetOrientation().IsCardinal() )
-                {
-                    // Orientation turned 90 deg.
-                    if( aPad->GetOrientation() == ANGLE_90 || aPad->GetOrientation() == ANGLE_270 )
-                        std::swap( dx, dy );
-
-                    TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy, shape_pos.x + dx,
-                                          shape_pos.y + dy, aLayerMask, color, op_logic );
+                    traceFilledCircle( shape_pos.x, shape_pos.y, x, { aOutputLayer }, color, op_logic );
                 }
                 else
                 {
-                    TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy, shape_pos.x + dx,
-                                          shape_pos.y + dy, aPad->GetOrientation().AsTenthsOfADegree(),
-                                          aLayerMask, color, op_logic );
+                    // approximate pad as a rectangle
+
+                    if( aPad->GetShape( effectivePadLayer ) == PAD_SHAPE::TRAPEZOID )
+                    {
+                        x += abs( aPad->GetDelta( effectivePadLayer ).y ) / 2;
+                        y += abs( aPad->GetDelta( effectivePadLayer ).x ) / 2;
+                    }
+
+                    if( aPad->GetOrientation().IsCardinal() )
+                    {
+                        // Orientation turned 90 deg.
+                        if( aPad->GetOrientation() == ANGLE_90 || aPad->GetOrientation() == ANGLE_270 )
+                            std::swap( x, y );
+
+                        TraceFilledRectangle( shape_pos.x - x, shape_pos.y - y, shape_pos.x + x, shape_pos.y + y,
+                                              { aOutputLayer }, color, op_logic );
+                    }
+                    else
+                    {
+                        TraceFilledRectangle( shape_pos.x - x, shape_pos.y - y, shape_pos.x + x, shape_pos.y + y,
+                                              aPad->GetOrientation(), { aOutputLayer }, color, op_logic );
+                    }
                 }
             };
 
-    if( aPad->GetPadstackMode() == PADSTACK::MODE::NORMAL )
-    {
-        tracePad( PADSTACK::ALL_LAYERS, aPad->GetLayerSet() );
-    }
-    else
-    {
-        if( aPad->GetLayerSet()[m_routeLayerBottom] )
-            tracePad( m_routeLayerBottom, { m_routeLayerBottom } );
+    if( aPad->GetLayerSet()[B_Cu] )
+        tracePad( B_Cu );
 
-        if( m_RoutingLayersCount > 1 && aPad->GetLayerSet()[m_routeLayerTop] )
-            tracePad( m_routeLayerTop, { m_routeLayerTop } );
-    }
+    if( aPad->GetLayerSet()[F_Cu] && m_RoutingLayersCount > 1 )
+        tracePad( F_Cu );
 }
