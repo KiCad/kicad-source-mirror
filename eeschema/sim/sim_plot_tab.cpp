@@ -2261,6 +2261,25 @@ SIM_VIEW* SIM_PLOT_TAB::AddView()
     view->EnableDoubleBuffer( true );
     view->SetSmithChart( m_smithMode );
 
+    // Fixed Y axis ranges apply across all views in the tab, so a newly added view must
+    // pick up whatever locks are already in effect on the existing ones.
+    if( SIM_VIEW* firstView = m_views.empty() ? nullptr : m_views[0] )
+    {
+        double min, max;
+
+        if( firstView->GetY1Scale( &min, &max ) )
+            view->SetY1Scale( true, min, max );
+
+        if( firstView->GetY2Scale( &min, &max ) )
+            view->SetY2Scale( true, min, max );
+
+        if( firstView->GetY3Scale( &min, &max ) )
+        {
+            view->EnsureThirdYAxisExists();
+            view->SetY3Scale( true, min, max );
+        }
+    }
+
     m_views.push_back( view );
     m_viewsSizer->Add( view, 1, wxALL | wxEXPAND, 1 );
 
@@ -2470,51 +2489,102 @@ wxString SIM_PLOT_TAB::GetUnitsY3() const
 }
 
 
+bool SIM_PLOT_TAB::getYScale( int aSlot, double* aMin, double* aMax ) const
+{
+    SIM_VIEW* defaultView = GetDefaultView();
+
+    if( !defaultView )
+        return false;
+
+    // A fixed range is applied to every view at once, so the default view's locked state (and
+    // value) speaks for the whole tab.
+    if( mpScaleY* axis = defaultView->GetAxisBySlot( aSlot ) )
+    {
+        if( axis->GetAxisMinMax( aMin, aMax ) )
+            return true;
+    }
+
+    // Not locked: propose a default range that covers the data in *every* view sharing this
+    // axis slot, not just the first view (which might not have any traces of this kind at all,
+    // e.g. no Current trace in view 1 even though later views plot one).
+    bool   haveRange = false;
+    double min = 0.0, max = 0.0;
+
+    for( SIM_VIEW* view : m_views )
+    {
+        mpScaleY* axis = view->GetAxisBySlot( aSlot );
+
+        if( !axis || !axis->IsRangeSet() )
+            continue;
+
+        double viewMin, viewMax;
+        axis->GetDataRange( viewMin, viewMax );
+
+        if( !haveRange )
+        {
+            min = viewMin;
+            max = viewMax;
+            haveRange = true;
+        }
+        else
+        {
+            min = std::min( min, viewMin );
+            max = std::max( max, viewMax );
+        }
+    }
+
+    if( haveRange )
+    {
+        *aMin = min;
+        *aMax = max;
+    }
+
+    return false;
+}
+
+
 bool SIM_PLOT_TAB::GetY1Scale( double* aMin, double* aMax ) const
 {
-    SIM_VIEW* view = GetDefaultView();
-    return view && view->GetY1Scale( aMin, aMax );
+    return getYScale( 1, aMin, aMax );
 }
 
 
 bool SIM_PLOT_TAB::GetY2Scale( double* aMin, double* aMax ) const
 {
-    SIM_VIEW* view = GetDefaultView();
-    return view && view->GetY2Scale( aMin, aMax );
+    return getYScale( 2, aMin, aMax );
 }
 
 
 bool SIM_PLOT_TAB::GetY3Scale( double* aMin, double* aMax ) const
 {
-    SIM_VIEW* view = GetDefaultView();
-    return view && view->GetY3Scale( aMin, aMax );
+    return getYScale( 3, aMin, aMax );
 }
 
 
 void SIM_PLOT_TAB::SetY1Scale( bool aLock, double aMin, double aMax )
 {
-    if( SIM_VIEW* view = GetDefaultView() )
+    for( SIM_VIEW* view : m_views )
         view->SetY1Scale( aLock, aMin, aMax );
 }
 
 
 void SIM_PLOT_TAB::SetY2Scale( bool aLock, double aMin, double aMax )
 {
-    if( SIM_VIEW* view = GetDefaultView() )
+    for( SIM_VIEW* view : m_views )
         view->SetY2Scale( aLock, aMin, aMax );
 }
 
 
 void SIM_PLOT_TAB::SetY3Scale( bool aLock, double aMin, double aMax )
 {
-    if( SIM_VIEW* view = GetDefaultView() )
+    for( SIM_VIEW* view : m_views )
         view->SetY3Scale( aLock, aMin, aMax );
 }
 
 
 void SIM_PLOT_TAB::EnsureThirdYAxisExists()
 {
-    if( SIM_VIEW* view = GetDefaultView() )
+    for( SIM_VIEW* view : m_views )
         view->EnsureThirdYAxisExists();
 }
 

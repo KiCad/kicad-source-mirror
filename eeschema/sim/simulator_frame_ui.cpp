@@ -2901,10 +2901,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                             double max = max_js.get<double>();
 
                             if( min < max )
-                            {
                                 aSetter( min, max );
-                                plotTab->GetPlotWin()->LockY( true );
-                            }
                         };
 
                 loadScale( "fixedY1scale",

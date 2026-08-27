@@ -725,6 +725,9 @@ public:
         m_rangeSet = false;
     }
 
+    ///< True once ExtendDataRange()/SetDataRange() has established a real data range.
+    bool IsRangeSet() const { return m_rangeSet; }
+
     double AbsMaxValue() const
     {
         return std::max( std::abs( m_maxV ), std::abs( m_minV ) );

@@ -723,6 +723,9 @@ private:
         return wxString::Format( wxS( "%s%d" ), aVectorName, aType & SPT_Y_AXIS_MASK );
     }
 
+    ///< Shared implementation of GetY1Scale/GetY2Scale/GetY3Scale for axis slot 1/2/3.
+    bool getYScale( int aSlot, double* aMin, double* aMax ) const;
+
 private:
     SIM_PLOT_COLORS               m_colors;
     std::map<wxString, wxColour>  m_sessionTraceColors;
