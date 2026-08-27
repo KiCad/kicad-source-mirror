@@ -593,6 +593,7 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
                 if( !filename.EndsWith( ".kicad_sch" ) )
                     filename += ".kicad_sch";
 
+                newSheet->SetFileName( filename );
                 newScreen->SetFileName( filename );
 
                 // Find the lowest unused page number
