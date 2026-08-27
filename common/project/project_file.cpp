@@ -206,6 +206,18 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.sch_revision",
             &m_IP2581Bom.schRevision, wxEmptyString ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.mode",
+            &m_IP2581Bom.mode, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.sections",
+            &m_IP2581Bom.sections, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.net_names",
+            &m_IP2581Bom.netNames, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.ref_des",
+            &m_IP2581Bom.refDes, wxEmptyString ) );
+
 
     registerMigration( 1, 2, std::bind( &PROJECT_FILE::migrateSchema1To2, this ) );
     registerMigration( 2, 3, std::bind( &PROJECT_FILE::migrateSchema2To3, this ) );

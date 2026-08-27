@@ -60,18 +60,16 @@ class DIALOG_EXPORT_2581_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbCompress;
 		wxStaticText* m_columnsLabel;
 		wxStaticLine* m_staticline2;
-		wxStaticText* m_lblBomRev;
-		wxTextCtrl* m_textBomRev;
-		wxStaticText* m_lblOEM;
-		wxChoice* m_oemRef;
-		wxStaticText* m_staticText6;
-		wxChoice* m_choiceMPN;
-		wxStaticText* m_staticText7;
-		wxChoice* m_choiceMfg;
-		wxStaticText* m_staticText8;
-		wxChoice* m_choiceDistPN;
-		wxStaticText* m_staticText9;
-		wxTextCtrl* m_textDistributor;
+		wxStaticText* m_lblDataSet;
+		wxChoice* m_choiceDataSet;
+		wxStaticText* m_lblNetNames;
+		wxChoice* m_choiceNetNames;
+		wxStaticText* m_lblRefDes;
+		wxChoice* m_choiceRefDes;
+		wxStaticText* m_lblIncludes;
+		wxBoxSizer* bSizerContentButtons;
+		wxButton* m_btnCustomize;
+		wxButton* m_btnBomFields;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
@@ -80,8 +78,9 @@ class DIALOG_EXPORT_2581_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCompressCheck( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onMfgPNChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onDistPNChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDataSetChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCustomizeClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBomFieldsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOKClick( wxCommandEvent& event ) { event.Skip(); }
 
 

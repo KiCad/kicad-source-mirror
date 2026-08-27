@@ -19,7 +19,12 @@
 
 #ifndef IPC2581_EXPORT_DIALOG_H
 #define IPC2581_EXPORT_DIALOG_H
+#include <optional>
+#include <vector>
+
 #include "dialog_export_2581_base.h"
+#include "dialog_export_2581_bom.h"
+#include <pcb_io/ipc2581/ipc2581_function_mode.h>
 
 class BOARD;
 class PCB_EDIT_FRAME;
@@ -60,65 +65,54 @@ public:
         return m_versionChoice->GetSelection() == 0 ? 'B' : 'C';
     }
 
-    wxString GetOEM() const
-    {
-        if( m_oemRef->GetSelection() == 0 )
-            return wxEmptyString;
-        else
-            return m_oemRef->GetStringSelection();
-    }
-
     bool GetCompress() const
     {
         return m_cbCompress->GetValue();
     }
 
-    wxString GetMPN() const
+    IPC2581::MODE GetDataSet() const
     {
-        if( !m_choiceMPN->IsEnabled() || m_choiceMPN->GetSelection() == 0 )
-            return wxEmptyString;
-        else
-            return m_choiceMPN->GetStringSelection();
+        return static_cast<IPC2581::MODE>( m_choiceDataSet->GetSelection() );
     }
 
-    wxString GetMfg() const
+    wxString GetNetNamePolicy() const
     {
-        if( !m_choiceMfg->IsEnabled() || m_choiceMfg->GetSelection() == 0 )
-            return wxEmptyString;
-        else
-            return m_choiceMfg->GetStringSelection();
+        return m_choiceNetNames->GetSelection() == 1 ? wxT( "anonymize" ) : wxT( "include" );
     }
 
-    wxString GetDistPN() const
+    wxString GetRefDesPolicy() const
     {
-        if( !m_choiceDistPN->IsEnabled() || m_choiceDistPN->GetSelection() == 0 )
-            return wxEmptyString;
-        else
-            return m_choiceDistPN->GetStringSelection();
-    }
-
-    wxString GetDist() const
-    {
-        if( !m_textDistributor->IsEnabled() || m_textDistributor->GetValue() == _( "N/A" ) )
-            return wxEmptyString;
-        else
-            return m_textDistributor->GetValue();
+        return m_choiceRefDes->GetSelection() == 1 ? wxT( "omit" ) : wxT( "include" );
     }
 
 private:
     void onBrowseClicked( wxCommandEvent& event ) override;
     void onCompressCheck( wxCommandEvent& event ) override;
-    void onMfgPNChange( wxCommandEvent& event ) override;
-    void onDistPNChange( wxCommandEvent& event ) override;
+    void onDataSetChange( wxCommandEvent& event ) override;
+    void onCustomizeClick( wxCommandEvent& event ) override;
+    void onBomFieldsClick( wxCommandEvent& event ) override;
     void onOKClick( wxCommandEvent& event ) override;
+
+    /// Set the includes line and the BOM Fields button from the function mode
+    void updateContentSummary();
+
+    IPC2581::SECTION_SET resolvedSections() const;
+
+    static std::vector<std::pair<IPC2581::SECTION, wxString>> sectionLabels();
+
+    /// Keep the dialog selections  A job keeps them on the job
+    void saveToProject();
 
     void init();
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    PCB_EDIT_FRAME* m_parent;
+    PCB_EDIT_FRAME*         m_parent;
     JOB_EXPORT_PCB_IPC2581* m_job;
+    IPC2581_BOM_FIELDS      m_bomFields;
+    /// Set when the user selects the sections  An empty value is then a true selection
+    std::optional<wxString> m_sectionKey;
 };
 
 #endif // IPC2581_EXPORT_DIALOG_H

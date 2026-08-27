@@ -23,6 +23,7 @@
 #include <map>
 #include <vector>
 
+#include <wx/choicdlg.h>
 #include <wx/filedlg.h>
 #include <wx/filefn.h>
 #include <kiplatform/ui.h>
@@ -36,6 +37,7 @@
 #include <pgm_base.h>
 #include <project.h>
 #include <project/project_file.h>
+#include <pcb_io/ipc2581/pcb_io_ipc2581.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/wx_progress_reporters.h>
@@ -161,98 +163,6 @@ void DIALOG_EXPORT_2581::onCompressCheck( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXPORT_2581::onMfgPNChange( wxCommandEvent& event )
-{
-    if( event.GetSelection() == 0 )
-    {
-        m_choiceMfg->Enable( false );
-    }
-    else
-    {
-        m_choiceMfg->Enable( true );
-
-        // Don't try to guess the manufacturer if the user has already selected one
-        if( m_choiceMfg->GetSelection() > 0 )
-            return;
-
-        int it = 0;
-
-        if( it = m_choiceMfg->FindString( wxT( "manufacturer" ) ); it != wxNOT_FOUND )
-            m_choiceMfg->Select( it );
-        else if( it = m_choiceMfg->FindString( _( "manufacturer" ) ); it != wxNOT_FOUND )
-            m_choiceMfg->Select( it );
-        else if( it = m_choiceMfg->FindString( wxT( "mfg" ) ); it != wxNOT_FOUND )
-            m_choiceMfg->Select( it );
-        else if( it = m_choiceMfg->FindString( _( "mfg" ) ); it != wxNOT_FOUND )
-            m_choiceMfg->Select( it );
-    }
-}
-
-
-void DIALOG_EXPORT_2581::onDistPNChange( wxCommandEvent& event )
-{
-    if( event.GetSelection() == 0 )
-    {
-        m_textDistributor->Enable( false );
-        m_textDistributor->SetValue( _( "N/A" ) );
-    }
-    else
-    {
-        m_textDistributor->Enable( true );
-
-        // Don't try to guess the distributor if the user has already selected one
-        if( m_textDistributor->GetValue() != _( "N/A" ) )
-            return;
-
-        wxString dist = m_choiceDistPN->GetStringSelection();
-        dist.MakeUpper();
-
-        // Try to guess the distributor from the part number column
-
-        if( dist.Contains( wxT( "DIGIKEY" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "Digi-Key" ) );
-        }
-        else if( dist.Contains( wxT( "DIGI-KEY" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "Digi-Key" ) );
-        }
-        else if( dist.Contains( wxT( "MOUSER" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "Mouser" ) );
-        }
-        else if( dist.Contains( wxT( "NEWARK" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "Newark" ) );
-        }
-        else if( dist.Contains( wxT( "RS COMPONENTS" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "RS Components" ) );
-        }
-        else if( dist.Contains( wxT( "FARNELL" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "Farnell" ) );
-        }
-        else if( dist.Contains( wxT( "ARROW" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "Arrow" ) );
-        }
-        else if( dist.Contains( wxT( "AVNET" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "Avnet" ) );
-        }
-        else if( dist.Contains( wxT( "TME" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "TME" ) );
-        }
-        else if( dist.Contains( wxT( "LCSC" ) ) )
-        {
-            m_textDistributor->SetValue( wxT( "LCSC" ) );
-        }
-    }
-}
-
-
 void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
 {
     if( m_job )
@@ -262,6 +172,8 @@ void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
 
         return;
     }
+
+    saveToProject();
 
     JOB_EXPORT_PCB_IPC2581 job;
     m_job = &job;
@@ -292,7 +204,8 @@ void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
         return;
     }
 
-    WX_PROGRESS_REPORTER progress( this, _( "Generate IPC-2581 File" ), 5, PR_CAN_ABORT );
+    WX_PROGRESS_REPORTER progress( this, _( "Generate IPC-2581 File" ),
+                                   PCB_IO_IPC2581::EXPORT_PHASES, PR_CAN_ABORT );
 
     if( !GenerateFile( job, m_parent->GetBoard(), &progress, &reporter ) )
         return;
@@ -324,6 +237,18 @@ bool DIALOG_EXPORT_2581::GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoa
     props["mfg"] = aJob.m_colMfg;
     props["dist"] = aJob.m_colDist;
     props["distpn"] = aJob.m_colDistPn;
+
+    if( !aJob.m_mode.IsEmpty() )
+        props["mode"] = aJob.m_mode;
+
+    if( !aJob.m_sections.IsEmpty() )
+        props["sections"] = aJob.m_sections;
+
+    if( !aJob.m_netNamePolicy.IsEmpty() )
+        props["netnames"] = aJob.m_netNamePolicy;
+
+    if( !aJob.m_refDesPolicy.IsEmpty() )
+        props["refdes"] = aJob.m_refDesPolicy;
 
     wxString bomRev = aJob.m_bomRev;
 
@@ -411,25 +336,135 @@ bool DIALOG_EXPORT_2581::GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoa
 
 void DIALOG_EXPORT_2581::init()
 {
-    m_textDistributor->SetSize( m_choiceDistPN->GetSize() );
+    updateContentSummary();
+}
 
-    std::set<wxString> options;
 
-    for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
+IPC2581::SECTION_SET DIALOG_EXPORT_2581::resolvedSections() const
+{
+    IPC2581::MODE mode = GetDataSet();
+    IPC2581::SECTION_SET requested;
+
+    if( !m_sectionKey || !IPC2581::SectionSetFromKeyString( *m_sectionKey, requested ) )
+        requested = IPC2581::RecommendedOptionalSections( mode );
+
+    // Table 4 by itself only gives the schema sections
+    return IPC2581::ResolveSections( IPC2581::REVISION::C, mode, requested ).m_included;
+}
+
+
+std::vector<std::pair<IPC2581::SECTION, wxString>> DIALOG_EXPORT_2581::sectionLabels()
+{
+    return {
+        { IPC2581::SECTION::BOM_AVL, _( "BOM" ) },
+        { IPC2581::SECTION::PACKAGES, _( "packages" ) },
+        { IPC2581::SECTION::COMPONENTS, _( "components" ) },
+        { IPC2581::SECTION::PADSTACKS, _( "padstacks" ) },
+        { IPC2581::SECTION::STACKUP, _( "stackup" ) },
+        { IPC2581::SECTION::PROFILE, _( "board profile" ) },
+        { IPC2581::SECTION::SOLDERMASK, _( "solder mask" ) },
+        { IPC2581::SECTION::SOLDERPASTE, _( "solder paste" ) },
+        { IPC2581::SECTION::SILKSCREEN, _( "silkscreen" ) },
+        { IPC2581::SECTION::DRILL_ROUT, _( "drill and router" ) },
+        { IPC2581::SECTION::DOCUMENTATION, _( "documentation" ) },
+        { IPC2581::SECTION::OUTER_COPPER, _( "outer copper" ) },
+        { IPC2581::SECTION::INNER_COPPER, _( "inner copper" ) },
+        { IPC2581::SECTION::DIELECTRIC, _( "dielectric" ) },
+        { IPC2581::SECTION::MISC_FAB, _( "misc fab layers" ) },
+        { IPC2581::SECTION::LOGICAL_NET, _( "logical netlist" ) },
+        { IPC2581::SECTION::PHYSICAL_NET, _( "physical netlist" ) },
+    };
+}
+
+
+void DIALOG_EXPORT_2581::updateContentSummary()
+{
+    IPC2581::SECTION_SET sections = resolvedSections();
+
+    wxString summary;
+
+    for( const auto& [section, label] : sectionLabels() )
     {
-        for( PCB_FIELD* field : fp->GetFields() )
-        {
-            wxCHECK2( field, continue );
+        if( !sections.Contains( section ) )
+            continue;
 
-            options.insert( field->GetName() );
-        }
+        if( !summary.IsEmpty() )
+            summary << wxT( ", " );
+
+        summary << label;
     }
 
-    std::vector<wxString> items( options.begin(), options.end() );
-    m_oemRef->Append( items );
-    m_choiceMPN->Append( items );
-    m_choiceMfg->Append( items );
-    m_choiceDistPN->Append( items );
+    m_lblIncludes->SetLabel( wxString::Format( _( "Includes: %s" ), summary ) );
+    m_lblIncludes->Wrap( 280 );
+
+    m_btnBomFields->Enable( sections.Contains( IPC2581::SECTION::BOM_AVL ) );
+
+    Layout();
+}
+
+
+void DIALOG_EXPORT_2581::onDataSetChange( wxCommandEvent& event )
+{
+    // A new function mode removes the section key of the previous function mode
+    m_sectionKey.reset();
+    updateContentSummary();
+}
+
+
+void DIALOG_EXPORT_2581::onCustomizeClick( wxCommandEvent& event )
+{
+    IPC2581::MODE mode = GetDataSet();
+    IPC2581::SECTION_SET optional = IPC2581::OptionalSections( mode );
+    IPC2581::SECTION_SET current = resolvedSections();
+
+    // Some pre-sets have 'optional' items.  If you've chosen a preset, then
+    // you can only change the optional ones, not the required or forbidden ones
+    std::vector<IPC2581::SECTION> offered;
+    wxArrayString                 labels;
+    wxArrayInt                    selected;
+
+    for( const auto& [section, label] : sectionLabels() )
+    {
+        if( !optional.Contains( section ) )
+            continue;
+
+        if( current.Contains( section ) )
+            selected.Add( static_cast<int>( offered.size() ) );
+
+        offered.push_back( section );
+        labels.Add( label );
+    }
+
+    if( offered.empty() )
+    {
+        wxMessageBox( _( "This data set has no optional sections to choose from." ),
+                      _( "Customize Content" ), wxOK | wxICON_INFORMATION, this );
+        return;
+    }
+
+    wxMultiChoiceDialog dlg( this, _( "Choose the optional sections to include." ),
+                             _( "Customize Content" ), labels );
+    dlg.SetSelections( selected );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    IPC2581::SECTION_SET chosen;
+
+    for( int index : dlg.GetSelections() )
+        chosen.Set( offered[index] );
+
+    m_sectionKey = IPC2581::SectionKeyString( chosen );
+    updateContentSummary();
+}
+
+
+void DIALOG_EXPORT_2581::onBomFieldsClick( wxCommandEvent& event )
+{
+    DIALOG_EXPORT_2581_BOM dlg( this, m_parent->GetBoard(), m_bomFields );
+
+    if( dlg.ShowModal() == wxID_OK )
+        m_bomFields = dlg.GetFields();
 }
 
 
@@ -461,102 +496,79 @@ bool DIALOG_EXPORT_2581::TransferDataToWindow()
 
     PROJECT_FILE& prj = Prj().GetProjectFile();
 
-    wxString internalIdCol;
-    wxString mpnCol;
-    wxString distPnCol;
-    wxString mfgCol;
-    wxString distCol;
-
     if( !m_job )
     {
-        internalIdCol = prj.m_IP2581Bom.id;
-        mpnCol = prj.m_IP2581Bom.MPN;
-        distPnCol = prj.m_IP2581Bom.distPN;
-        mfgCol = prj.m_IP2581Bom.mfg;
-        distCol = prj.m_IP2581Bom.dist;
-        wxString bomRev = prj.m_IP2581Bom.bomRev;
+        m_bomFields.m_internalId = prj.m_IP2581Bom.id;
+        m_bomFields.m_mfgPn = prj.m_IP2581Bom.MPN;
+        m_bomFields.m_mfg = prj.m_IP2581Bom.mfg;
+        m_bomFields.m_distPn = prj.m_IP2581Bom.distPN;
+        m_bomFields.m_dist = prj.m_IP2581Bom.dist;
+        m_bomFields.m_revision = prj.m_IP2581Bom.bomRev.IsEmpty() ? prj.m_IP2581Bom.schRevision
+                                                                  : prj.m_IP2581Bom.bomRev;
 
-        if( bomRev.IsEmpty() )
-            bomRev = prj.m_IP2581Bom.schRevision;
+        if( std::optional<IPC2581::MODE> mode = IPC2581::ModeFromToken( prj.m_IP2581Bom.mode ) )
+            m_choiceDataSet->SetSelection( static_cast<int>( *mode ) );
 
-        m_textBomRev->SetValue( bomRev );
+        if( !prj.m_IP2581Bom.sections.IsEmpty() )
+            m_sectionKey = prj.m_IP2581Bom.sections;
+
+        m_choiceNetNames->SetSelection( prj.m_IP2581Bom.netNames == wxT( "anonymize" ) ? 1 : 0 );
+        m_choiceRefDes->SetSelection( prj.m_IP2581Bom.refDes == wxT( "omit" ) ? 1 : 0 );
     }
     else
     {
-        internalIdCol = m_job->m_colInternalId;
-        mpnCol = m_job->m_colMfgPn;
-        distPnCol = m_job->m_colDistPn;
-        mfgCol = m_job->m_colMfg;
-        distCol = m_job->m_colDist;
-        m_textBomRev->SetValue( m_job->m_bomRev );
+        m_bomFields.m_internalId = m_job->m_colInternalId;
+        m_bomFields.m_mfgPn = m_job->m_colMfgPn;
+        m_bomFields.m_mfg = m_job->m_colMfg;
+        m_bomFields.m_distPn = m_job->m_colDistPn;
+        m_bomFields.m_dist = m_job->m_colDist;
+        m_bomFields.m_revision = m_job->m_bomRev;
+
+        if( std::optional<IPC2581::MODE> mode = IPC2581::ModeFromToken( m_job->m_mode ) )
+            m_choiceDataSet->SetSelection( static_cast<int>( *mode ) );
+
+        if( !m_job->m_sections.IsEmpty() )
+            m_sectionKey = m_job->m_sections;
+
+        m_choiceNetNames->SetSelection( m_job->m_netNamePolicy == wxT( "anonymize" ) ? 1 : 0 );
+        m_choiceRefDes->SetSelection( m_job->m_refDesPolicy == wxT( "omit" ) ? 1 : 0 );
     }
 
-    if( !m_choiceMPN->SetStringSelection( internalIdCol ) )
-        m_choiceMPN->SetSelection( 0 );
-
-    if( m_choiceMPN->SetStringSelection( mpnCol ) )
-    {
-        m_choiceMfg->Enable( true );
-
-        if( !m_choiceMfg->SetStringSelection( mfgCol ) )
-            m_choiceMfg->SetSelection( 0 );
-    }
-    else
-    {
-        m_choiceMPN->SetSelection( 0 );
-        m_choiceMfg->SetSelection( 0 );
-        m_choiceMfg->Enable( false );
-    }
-
-    if( m_choiceDistPN->SetStringSelection( distPnCol ) )
-    {
-        m_textDistributor->Enable( true );
-
-        // The combo box selection can be fixed, so any value can be entered
-        if( !prj.m_IP2581Bom.distPN.empty() )
-        {
-            m_textDistributor->SetValue( distCol );
-        }
-        else
-        {
-            wxCommandEvent evt;
-            onDistPNChange( evt );
-        }
-    }
-    else
-    {
-        m_choiceDistPN->SetSelection( 0 );
-        m_textDistributor->SetValue( _( "N/A" ) );
-        m_textDistributor->Enable( false );
-    }
+    updateContentSummary();
 
     return true;
 }
 
 
+void DIALOG_EXPORT_2581::saveToProject()
+{
+    PROJECT_FILE& prj = Prj().GetProjectFile();
+
+    prj.m_IP2581Bom.id = m_bomFields.m_internalId;
+    prj.m_IP2581Bom.mfg = m_bomFields.m_mfg;
+    prj.m_IP2581Bom.MPN = m_bomFields.m_mfgPn;
+    prj.m_IP2581Bom.distPN = m_bomFields.m_distPn;
+    prj.m_IP2581Bom.dist = m_bomFields.m_dist;
+    prj.m_IP2581Bom.bomRev = m_bomFields.m_revision;
+    prj.m_IP2581Bom.mode = IPC2581::ModeToken( GetDataSet() );
+    prj.m_IP2581Bom.sections = m_sectionKey.value_or( wxString() );
+    prj.m_IP2581Bom.netNames = GetNetNamePolicy();
+    prj.m_IP2581Bom.refDes = GetRefDesPolicy();
+}
+
+
 bool DIALOG_EXPORT_2581::TransferDataFromWindow()
 {
-    if( !m_job )
-    {
-        PROJECT_FILE& prj = Prj().GetProjectFile();
-
-        prj.m_IP2581Bom.id = GetOEM();
-        prj.m_IP2581Bom.mfg = GetMfg();
-        prj.m_IP2581Bom.MPN = GetMPN();
-        prj.m_IP2581Bom.distPN = GetDistPN();
-        prj.m_IP2581Bom.dist = GetDist();
-        prj.m_IP2581Bom.bomRev = m_textBomRev->GetValue();
-    }
-    else
+    if( m_job )
     {
         m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
 
-        m_job->m_colInternalId = GetOEM();
-        m_job->m_colDist = GetDist();
-        m_job->m_colDistPn = GetDistPN();
-        m_job->m_colMfg = GetMfg();
-        m_job->m_colMfgPn = GetMPN();
-        m_job->m_bomRev = m_textBomRev->GetValue();
+        m_job->m_colInternalId = m_bomFields.m_internalId;
+        m_job->m_colDist = m_bomFields.m_dist;
+        m_job->m_colDistPn = m_bomFields.m_distPn;
+        m_job->m_colMfg = m_bomFields.m_mfg;
+        m_job->m_colMfgPn = m_bomFields.m_mfgPn;
+        m_job->m_bomRev = m_bomFields.m_revision;
 
         m_job->m_version = GetVersion() == 'B' ? JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B
 											   : JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C;
@@ -564,6 +576,11 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
 														 : JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH;
         m_job->m_precision = m_precision->GetValue();
         m_job->m_compress = GetCompress();
+        m_job->m_mode = IPC2581::ModeToken( GetDataSet() );
+        m_job->m_netNamePolicy = GetNetNamePolicy();
+        m_job->m_refDesPolicy = GetRefDesPolicy();
+
+        m_job->m_sections = m_sectionKey.value_or( wxString() );
     }
 
     return true;

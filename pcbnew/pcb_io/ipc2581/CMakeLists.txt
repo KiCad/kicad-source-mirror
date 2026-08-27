@@ -5,6 +5,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 
 set( IPC2581_SRCS
+    ipc2581_function_mode.cpp
     pcb_io_ipc2581.cpp
     )
 

@@ -67,6 +67,12 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.dist", &m_colDist, m_colDist ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "bom_rev", &m_bomRev, m_bomRev ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "mode", &m_mode, m_mode ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "sections", &m_sections, m_sections ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "net_names", &m_netNamePolicy,
+                                                    m_netNamePolicy ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "ref_des", &m_refDesPolicy,
+                                                    m_refDesPolicy ) );
 }
 
 

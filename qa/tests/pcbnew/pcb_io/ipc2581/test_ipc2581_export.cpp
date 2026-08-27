@@ -180,7 +180,10 @@ struct IPC2581_EXPORT_FIXTURE
         return board;
     }
 
-    bool ExportAndValidate( BOARD* aBoard, char aVersion, wxString& aErrorMsg )
+    bool ExportAndValidate( BOARD* aBoard, char aVersion, wxString& aErrorMsg,
+                           const std::string& aMode = std::string(),
+                           const std::string& aRefDes = std::string(),
+                           const std::string& aSections = std::string() )
     {
         wxString tempPath = CreateTempFile();
 
@@ -188,6 +191,18 @@ struct IPC2581_EXPORT_FIXTURE
         props["units"] = "mm";
         props["version"] = std::string( 1, aVersion );
         props["sigfig"] = "3";
+
+        if( !aMode.empty() )
+            props["mode"] = aMode;
+
+        if( !aRefDes.empty() )
+        {
+            props["refdes"] = aRefDes;
+            props["netnames"] = "anonymize";
+        }
+
+        if( !aSections.empty() )
+            props["sections"] = aSections;
 
         try
         {
@@ -414,6 +429,105 @@ BOOST_AUTO_TEST_CASE( SchemaValidationVersionC )
  * Tests boards with zones, custom pads, and other features that may
  * exercise edge cases in the IPC-2581 exporter.
  */
+/**
+ * Every IPC-2581 data set must produce a schema-valid file in both revisions, including
+ * with net names and reference designators withheld.
+ */
+BOOST_AUTO_TEST_CASE( FunctionModeSchemaValidation )
+{
+    if( !m_xmllintAvailable )
+    {
+        BOOST_WARN_MESSAGE( false, "xmllint not available, skipping schema validation tests" );
+        return;
+    }
+
+    static const std::vector<std::string> modes = { "userdef",  "bom",  "stackup", "fabrication",
+                                                    "assembly", "test", "stencil" };
+
+    // Boards chosen for differing content: inner copper, custom pad shapes, and vias
+    static const std::vector<std::string> boards = { "padstacks_complex.kicad_pcb",
+                                                     "custom_pads.kicad_pcb",
+                                                     "tracks_arcs_vias.kicad_pcb" };
+
+    for( const std::string& boardFile : boards )
+    {
+        std::unique_ptr<BOARD> board = LoadBoard( boardFile );
+
+        if( !board )
+        {
+            BOOST_WARN_MESSAGE( false, "Could not load board: " + boardFile );
+            continue;
+        }
+
+        for( const std::string& mode : modes )
+        {
+            for( char version : { 'B', 'C' } )
+            {
+                if( !wxFileExists( GetXsdPath( version ) ) )
+                    continue;
+
+                for( const std::string& refdes : { std::string(), std::string( "omit" ) } )
+                {
+                    BOOST_TEST_CONTEXT( "Board: " << boardFile << " Mode: " << mode
+                                        << " Version: " << version
+                                        << " RefDes: " << ( refdes.empty() ? "include" : refdes ) )
+                    {
+                        wxString errorMsg;
+                        bool     valid = ExportAndValidate( board.get(), version, errorMsg, mode,
+                                                            refdes );
+
+                        BOOST_CHECK_MESSAGE( valid, "validation failed: " + errorMsg );
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * Section keys the Table 4 data sets never produce on their own, where a referring
+ * attribute has to be suppressed rather than its section dragged back in.
+ */
+BOOST_AUTO_TEST_CASE( FunctionModeSuppressedReferences )
+{
+    if( !m_xmllintAvailable )
+    {
+        BOOST_WARN_MESSAGE( false, "xmllint not available, skipping schema validation tests" );
+        return;
+    }
+
+    // Components without packages, without a BOM, and without padstacks respectively
+    static const std::vector<std::string> sectionKeys = { "AOU", "ACOU", "KACOU", "ABOU" };
+
+    std::unique_ptr<BOARD> board = LoadBoard( "padstacks_complex.kicad_pcb" );
+
+    BOOST_REQUIRE( board );
+
+    for( const std::string& sections : sectionKeys )
+    {
+        for( char version : { 'B', 'C' } )
+        {
+            if( !wxFileExists( GetXsdPath( version ) ) )
+                continue;
+
+            BOOST_TEST_CONTEXT( "Sections: " << sections << " Version: " << version )
+            {
+                wxString errorMsg;
+                bool     valid = ExportAndValidate( board.get(), version, errorMsg, "userdef",
+                                                    std::string(), sections );
+
+                // Revision B cannot express components without packages and must say so
+                if( version == 'B' && sections.find( 'C' ) == std::string::npos )
+                    BOOST_CHECK_MESSAGE( !valid, "IPC-2581B accepted components with no package" );
+                else
+                    BOOST_CHECK_MESSAGE( valid, "validation failed: " + errorMsg );
+            }
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( ComplexBoardExport )
 {
     // Test boards with specific complex features

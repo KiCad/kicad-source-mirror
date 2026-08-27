@@ -152,6 +152,11 @@ struct KICOMMON_API IP2581_BOM
     wxString id;        ///< Internal ID column
     wxString bomRev;       ///< Explicit BOM revision override set by user
     wxString schRevision;  ///< Auto-propagated schematic title block revision
+
+    wxString mode;         ///< Table 4 function mode token
+    wxString sections;     ///< Table 4 section key for the optional sections
+    wxString netNames;     ///< Set to include or to anonymize
+    wxString refDes;       ///< Set to include or to omit
 };
 
 /**
