@@ -490,26 +490,56 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
         return false;
     }
 
-    // If we have a single group, we want to strip the group and select the children
-    SCH_GROUP* group = nullptr;
+    // If the selection is a single group, or contains this block's linked group plus extra items,
+    // we want to strip the group and select the children
+    SCH_GROUP*             group = nullptr;
+    std::vector<SCH_ITEM*> extraItems;
 
     if( selection.Size() == 1 )
     {
         EDA_ITEM* item = selection.Front();
 
         if( item->Type() == SCH_GROUP_T )
-        {
             group = static_cast<SCH_GROUP*>( item );
+    }
+    else
+    {
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() != SCH_GROUP_T )
+                continue;
 
-            selection.Remove( group );
+            if( static_cast<SCH_GROUP*>( item )->GetDesignBlockLibId() != aLibId )
+                continue;
 
-            // Don't recurse; if we have a group of groups the user probably intends the inner groups to be saved
-            group->RunOnChildren( [&]( EDA_ITEM* aItem )
-                                  {
-                                      selection.Add( aItem );
-                                  },
-                                  RECURSE_MODE::NO_RECURSE );
+            if( group )
+            {
+                DisplayErrorMessage( this, _( "The selection contains more than one group linked to "
+                                              "this design block." ) );
+                return false;
+            }
+
+            group = static_cast<SCH_GROUP*>( item );
         }
+    }
+
+    if( group )
+    {
+        for( EDA_ITEM* item : selection )
+        {
+            if( item != group && item->IsSCH_ITEM() )
+                extraItems.push_back( static_cast<SCH_ITEM*>( item ) );
+        }
+
+        selection.Remove( group );
+
+        // Don't recurse; if we have a group of groups the user probably intends the inner groups to be saved
+        group->RunOnChildren(
+                [&]( EDA_ITEM* aItem )
+                {
+                    selection.Add( aItem );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     std::unique_ptr<DESIGN_BLOCK> blk;
@@ -587,22 +617,45 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
         success = Prj().DesignBlockLibs()->SaveDesignBlock( aLibId.GetLibNickname(), blk.get() )
                   == DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_OK;
 
-        // If we had a group, we need to reselect it
+        // If we had a group, extend it with the extra items and reselect it
         if( group )
         {
             selection.Clear();
             selection.Add( group );
 
+            SCH_COMMIT  commit( m_toolManager );
+            SCH_SCREEN* screen = GetScreen();
+            bool        changed = false;
+
+            for( SCH_ITEM* item : extraItems )
+            {
+                if( item->GetParentSymbol() || !item->IsGroupableType() )
+                    continue;
+
+                if( item->GetParentGroup() == group )
+                    continue;
+
+                if( EDA_GROUP* existingGroup = item->GetParentGroup() )
+                    commit.Modify( existingGroup->AsEdaItem(), screen, RECURSE_MODE::NO_RECURSE );
+
+                if( !changed )
+                    commit.Modify( group, screen, RECURSE_MODE::NO_RECURSE );
+
+                commit.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+                group->AddItem( item );
+                changed = true;
+            }
+
             // If we didn't have a design block link before, add one for convenience
             if( !group->HasDesignBlockLink() )
             {
-                SCH_COMMIT commit( m_toolManager );
-
-                commit.Modify( group, GetScreen() );
+                commit.Modify( group, screen, RECURSE_MODE::NO_RECURSE );
                 group->SetDesignBlockLibId( aLibId );
-
-                commit.Push( _( "Set Group Design Block Link" ) );
+                changed = true;
             }
+
+            if( changed )
+                commit.Push( _( "Update Design Block Group" ) );
         }
     }
     catch( const IO_ERROR& ioe )
