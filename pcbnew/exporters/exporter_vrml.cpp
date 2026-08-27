@@ -1214,23 +1214,24 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 		continue;
 	    }
 
-            IFSG_TRANSFORM* modelShape = new IFSG_TRANSFORM( m_OutputPCB.GetRawPtr() );
+            // The wrapper is only a handle; the node it creates stays owned by m_OutputPCB
+            IFSG_TRANSFORM modelShape( m_OutputPCB.GetRawPtr() );
 
             // only write a rotation if it is >= 0.1 deg
             if( std::abs( rot[3] ) > 0.0001745 )
-                modelShape->SetRotation( SGVECTOR( rot[0], rot[1], rot[2] ), rot[3] );
+                modelShape.SetRotation( SGVECTOR( rot[0], rot[1], rot[2] ), rot[3] );
 
-            modelShape->SetTranslation( trans );
-            modelShape->SetScale( SGPOINT( sM->m_Scale.x, sM->m_Scale.y, sM->m_Scale.z ) );
+            modelShape.SetTranslation( trans );
+            modelShape.SetScale( SGPOINT( sM->m_Scale.x, sM->m_Scale.y, sM->m_Scale.z ) );
 
             if( nullptr == S3D::GetSGNodeParent( mod3d ) )
             {
                 m_components.push_back( mod3d );
-                modelShape->AddChildNode( mod3d );
+                modelShape.AddChildNode( mod3d );
             }
             else
             {
-                modelShape->AddRefNode( mod3d );
+                modelShape.AddRefNode( mod3d );
             }
 
         }

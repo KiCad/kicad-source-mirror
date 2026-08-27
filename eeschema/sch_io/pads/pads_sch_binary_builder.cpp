@@ -2098,11 +2098,10 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
         {
             std::unique_ptr<SCH_ITEM> itemOwner( item );
 
+            // remove() falls back to a full-tree search, so a failure means the screen no longer
+            // holds the item and itemOwner is the only thing left that can free it
             if( !temporaryScreen->Items().remove( item ) )
-            {
-                itemOwner.release();
                 THROW_IO_ERROR( wxS( "staged append item is missing from its spatial index" ) );
-            }
 
             item->SetParent( aAppendToMe->GetScreen() );
             staged.appendItems.emplace_back( std::move( itemOwner ) );

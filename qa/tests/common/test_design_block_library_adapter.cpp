@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE( LoadNamesTheBlockNotThePath )
 
     try
     {
-        io.DesignBlockLoad( lib.path.string(), wxS( "Missing" ) );
+        std::unique_ptr<DESIGN_BLOCK> loaded( io.DesignBlockLoad( lib.path.string(), wxS( "Missing" ) ) );
         BOOST_FAIL( "loading a design block that does not exist must throw" );
     }
     catch( const IO_ERROR& ioe )

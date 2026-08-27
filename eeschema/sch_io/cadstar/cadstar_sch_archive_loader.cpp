@@ -713,21 +713,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
             // the part name, which is important to load
         }
 
-        auto [partIt, inserted] = m_partMap.insert( { partID, kiSym.get() } );
+        // The loader owns the symbol for the rest of the load; the maps below only hold aliases
+        LIB_SYMBOL* symbol = kiSym.get();
+        m_ownedSymbols.push_back( std::move( kiSym ) );
+
+        bool inserted = m_partMap.insert( { partID, symbol } ).second;
         wxCHECK2( inserted, continue );
 
-        try
-        {
-            if( saveInLibrary )
-                m_loadedSymbols.push_back( kiSym.get() );
-        }
-        catch( ... )
-        {
-            m_partMap.erase( partIt );
-            throw;
-        }
-
-        kiSym.release();
+        if( saveInLibrary )
+            m_loadedSymbols.push_back( symbol );
 
         checkPoint();
     }
@@ -891,7 +885,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     const LIB_SYMBOL* templatePart = loadSymdef( symID );
                     wxCHECK( templatePart, /*void*/ );
 
-                    kiPart = new LIB_SYMBOL( *templatePart );
+                    auto ownedPart = std::make_unique<LIB_SYMBOL>( *templatePart );
+                    kiPart = ownedPart.get();
+                    m_ownedSymbols.push_back( std::move( ownedPart ) );
+
                     kiPart->SetGlobalPower();
                     kiPart->SetName( libPartName );
                     kiPart->GetValueField().SetText( symbolInstanceNetName );
@@ -931,14 +928,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     wxASSERT( kiPart->GetValueField().GetText() == symbolInstanceNetName );
                 }
 
-                LIB_SYMBOL* scaledPart = getScaledLibPart( kiPart, sym.ScaleRatioNumerator,
-                                                           sym.ScaleRatioDenominator );
+                std::unique_ptr<LIB_SYMBOL> scaledPart(
+                        getScaledLibPart( kiPart, sym.ScaleRatioNumerator, sym.ScaleRatioDenominator ) );
 
                 EDA_ANGLE   returnedOrient = ANGLE_0;
                 SCH_SYMBOL* symbol = loadSchematicSymbol( sym, *scaledPart, returnedOrient );
                 m_powerSymMap.insert( { sym.ID, symbol } );
-
-                delete scaledPart;
             }
             else if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::SIGNALREF )
             {
