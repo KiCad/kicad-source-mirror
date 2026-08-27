@@ -120,6 +120,7 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
 {
     using namespace kiapi::schematic::jobs;
     using namespace kiapi::schematic::types;
+    using namespace kiapi::schematic::commands;
 
     registerHandler<GetOpenDocuments, GetOpenDocumentsResponse>(
             &API_HANDLER_SCH::handleGetOpenDocuments );
@@ -1500,15 +1501,15 @@ void API_HANDLER_SCH::packSheetInstance( kiapi::schematic::types::SheetInstance*
 }
 
 
-HANDLER_RESULT<kiapi::schematic::types::SchematicHierarchyResponse> API_HANDLER_SCH::handleGetSchematicHierarchy(
-        const HANDLER_CONTEXT<kiapi::schematic::types::GetSchematicHierarchy>& aCtx )
+HANDLER_RESULT<kiapi::schematic::commands::SchematicHierarchyResponse> API_HANDLER_SCH::handleGetSchematicHierarchy(
+        const HANDLER_CONTEXT<kiapi::schematic::commands::GetSchematicHierarchy>& aCtx )
 {
     HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
 
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    kiapi::schematic::types::SchematicHierarchyResponse response;
+    kiapi::schematic::commands::SchematicHierarchyResponse response;
     response.mutable_document()->CopyFrom( aCtx.Request.document() );
 
     if( !schematic()->HasHierarchy() )
@@ -1539,8 +1540,8 @@ HANDLER_RESULT<kiapi::schematic::types::SchematicHierarchyResponse> API_HANDLER_
 }
 
 
-HANDLER_RESULT<kiapi::schematic::types::SchematicNetlistResponse>
-API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schematic::types::GetSchematicNetlist>& aCtx )
+HANDLER_RESULT<kiapi::schematic::commands::SchematicNetlistResponse>
+API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schematic::commands::GetSchematicNetlist>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
@@ -1573,7 +1574,7 @@ API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schemat
         return tl::unexpected( e );
     }
 
-    kiapi::schematic::types::SchematicNetlistResponse response;
+    kiapi::schematic::commands::SchematicNetlistResponse response;
     response.mutable_document()->CopyFrom( aCtx.Request.document() );
 
     for( const auto& [key, subgraphList] : connectionGraph->GetNetMap() )

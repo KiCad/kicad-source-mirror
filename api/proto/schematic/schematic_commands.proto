@@ -19,7 +19,7 @@
 
 syntax = "proto3";
 
-package kiapi.schematic.types;
+package kiapi.schematic.commands;
 
 import "common/types/base_types.proto";
 import "common/types/enums.proto";
@@ -36,7 +36,7 @@ message SchematicHierarchyResponse
 {
   kiapi.common.types.DocumentSpecifier document = 1;
 
-  repeated SheetInstance top_level_sheets = 2;
+  repeated kiapi.schematic.types.SheetInstance top_level_sheets = 2;
 }
 
 // Returns SchematicNetlistResponse
@@ -55,5 +55,5 @@ message SchematicNetlistResponse
 {
   kiapi.common.types.DocumentSpecifier document = 1;
 
-  repeated SchematicNet nets = 2;
+  repeated kiapi.schematic.types.SchematicNet nets = 2;
 }
