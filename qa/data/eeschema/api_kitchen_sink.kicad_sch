@@ -375,6 +375,299 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:R_US"
+			(body_styles "Normal" "Reversed")
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(jumper_pin_groups
+				("1" "2")
+			)
+			(property "Reference" "R2"
+				(at 6.35 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "JUMPER"
+				(at 3.81 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.016 -0.254 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor, US symbol"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_US_0_1"
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 1.016 1.905) (xy 0 1.524) (xy -1.016 1.143) (xy 0 0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0.762) (xy 1.016 0.381) (xy 0 0) (xy -1.016 -0.381) (xy 0 -0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy 1.016 -1.143) (xy 0 -1.524) (xy -1.016 -1.905) (xy 0 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.286) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_US_0_2"
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.286) (xy -1.016 1.905) (xy 0 1.524) (xy 1.016 1.143) (xy 0 0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0.762) (xy -1.016 0.381) (xy 0 0) (xy 1.016 -0.381) (xy 0 -0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy -1.016 -1.143) (xy 0 -1.524) (xy 1.016 -1.905) (xy 0 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.286) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_US_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "R_US_1_2"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "MCU_ST_STM32C0:STM32C011J_4-6_Mx"
 			(pin_numbers
 				(hide yes)
@@ -988,6 +1281,28 @@
 		)
 		(uuid "85cae2cc-b1ba-46e5-b84e-5eac8e25d82a")
 	)
+	(text_box "Borderless\nTextbox"
+		(exclude_from_sim no)
+		(at 140.97 15.24 0)
+		(size 17.78 12.7)
+		(margins 0.9525 0.9525 0.9525 0.9525)
+		(stroke
+			(width -0.0001)
+			(type dash_dot)
+			(color 255 50 55 1)
+		)
+		(fill
+			(type color)
+			(color 224 234 255 0.7490196078)
+		)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 10 9 37 1)
+			)
+		)
+		(uuid "ca1d0f68-2704-4db2-bd62-9d5611f6b5a7")
+	)
 	(text_box "Bigger\nMultiline\nText"
 		(exclude_from_sim no)
 		(at 138.43 31.75 0)
@@ -1062,6 +1377,16 @@
 	)
 	(wire
 		(pts
+			(xy 85.09 100.33) (xy 85.09 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "066db22d-82bd-4de8-9071-c63592ba2e79")
+	)
+	(wire
+		(pts
 			(xy 59.69 40.64) (xy 59.69 53.34)
 		)
 		(stroke
@@ -1126,6 +1451,16 @@
 	)
 	(wire
 		(pts
+			(xy 52.07 100.33) (xy 52.07 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3bef8a94-2407-4c6d-bff1-905c35f3fb82")
+	)
+	(wire
+		(pts
 			(xy 90.17 77.47) (xy 90.17 63.5)
 		)
 		(stroke
@@ -1133,6 +1468,26 @@
 			(type default)
 		)
 		(uuid "3f4007a7-3cac-4e50-95a6-cddccb773152")
+	)
+	(wire
+		(pts
+			(xy 87.63 76.2) (xy 77.47 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4182eca5-7822-4dce-9940-89121edc648b")
+	)
+	(wire
+		(pts
+			(xy 74.93 118.11) (xy 87.63 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42a9e9f7-ebd5-45a5-92eb-1a78fa74634f")
 	)
 	(bus
 		(pts
@@ -1154,6 +1509,16 @@
 		)
 		(uuid "56f67bf2-9493-4189-ab4b-56cc919b4aa1")
 	)
+	(wire
+		(pts
+			(xy 87.63 118.11) (xy 87.63 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5d7e56b4-0f80-4fe1-9cea-501b4e36149b")
+	)
 	(polyline
 		(pts
 			(xy 175.26 25.4) (xy 181.61 25.4)
@@ -1163,6 +1528,26 @@
 			(type dash_dot)
 		)
 		(uuid "5fff3eb0-3d4d-424f-8985-853c10a31669")
+	)
+	(wire
+		(pts
+			(xy 85.09 78.74) (xy 78.74 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "61cd91b5-d57a-4dee-826f-5df7d318cfd5")
+	)
+	(wire
+		(pts
+			(xy 52.07 113.03) (xy 52.07 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7458d7a3-9bc0-4f75-b765-db6d898fab6c")
 	)
 	(polyline
 		(pts
@@ -1195,6 +1580,16 @@
 		)
 		(uuid "829e26bb-ebca-4fa5-b366-5eab3344f1a9")
 	)
+	(wire
+		(pts
+			(xy 67.31 100.33) (xy 52.07 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87ce5a94-7a9e-4640-914c-120fff295bb8")
+	)
 	(polyline
 		(pts
 			(xy 161.29 25.4) (xy 165.1 25.4)
@@ -1214,6 +1609,16 @@
 			(type default)
 		)
 		(uuid "a675312a-b809-422d-a298-4a2751f26462")
+	)
+	(wire
+		(pts
+			(xy 52.07 118.11) (xy 67.31 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a777e0f9-b111-4dee-96a3-fc6e87b4b35e")
 	)
 	(bus
 		(pts
@@ -1264,6 +1669,16 @@
 			(type default)
 		)
 		(uuid "ba6e712a-cdbc-4906-bdae-33e2328a3338")
+	)
+	(wire
+		(pts
+			(xy 74.93 100.33) (xy 85.09 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c05e86c3-90b7-4fe2-a9c3-dcfbf247fa54")
 	)
 	(bus
 		(pts
@@ -1629,6 +2044,86 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_US")
+		(at 71.12 100.33 90)
+		(unit 1)
+		(body_style 2)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0725f351-5329-468a-a7f0-e4cbff5d18cf")
+		(property "Reference" "R2"
+			(at 71.12 93.98 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "JUMPER"
+			(at 71.12 96.52 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 71.374 99.314 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 71.12 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 71.12 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "157cd73d-527a-44e4-ad7c-ee1661a5a8be")
+		)
+		(pin "1"
+			(uuid "460b5af0-4727-404f-afa3-9c931ec8d1bb")
+		)
+		(instances
+			(project "api_kitchen_sink"
+				(path "/d6ee7e6a-6570-43fd-93e6-b98f9cea3e37"
+					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "MCU_ST_STM32C0:STM32C011J_4-6_Mx")
 		(at 52.07 73.66 0)
 		(unit 1)
@@ -1819,6 +2314,87 @@
 			(project "api_kitchen_sink"
 				(path "/d6ee7e6a-6570-43fd-93e6-b98f9cea3e37"
 					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 71.12 118.11 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(passthrough force)
+		(fields_autoplaced yes)
+		(uuid "b53255bf-9c1b-4b73-b785-1ae28f140a32")
+		(property "Reference" "R3"
+			(at 71.12 111.76 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PASSTHROUGH"
+			(at 71.12 114.3 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 71.12 119.888 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 71.12 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 71.12 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "1cec96c7-f67a-423e-9748-72c7ccfcefa9")
+		)
+		(pin "2"
+			(uuid "4c0a4a37-a19a-4754-b9aa-14ae42276c47")
+		)
+		(instances
+			(project "api_kitchen_sink"
+				(path "/d6ee7e6a-6570-43fd-93e6-b98f9cea3e37"
+					(reference "R3")
 					(unit 1)
 				)
 			)

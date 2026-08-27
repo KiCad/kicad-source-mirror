@@ -26,6 +26,7 @@
 #include <layer_ids.h>
 #include <lib_symbol.h>
 #include <pin_type.h>
+#include <sch_symbol.h>
 #include <sch_label.h>
 #include <sch_sheet_pin.h>
 #include <symbol.h>
@@ -325,6 +326,39 @@ PIN_MAP_OVERRIDE_MODE FromProtoEnum( types::PinMapOverrideMode aValue )
     default:
         wxCHECK_MSG( false, PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT,
                      "Unhandled case in FromProtoEnum<types::PinMapOverrideMode>" );
+    }
+}
+
+
+template<>
+types::SchematicPassthroughMode ToProtoEnum( SCH_SYMBOL::PASSTHROUGH_MODE aValue )
+{
+    switch( aValue )
+    {
+    case SCH_SYMBOL::PASSTHROUGH_MODE::DEFAULT: return types::SchematicPassthroughMode::SPM_DEFAULT;
+    case SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK:   return types::SchematicPassthroughMode::SPM_BLOCK;
+    case SCH_SYMBOL::PASSTHROUGH_MODE::FORCE:   return types::SchematicPassthroughMode::SPM_FORCE;
+
+    default:
+        wxCHECK_MSG( false, types::SchematicPassthroughMode::SPM_DEFAULT,
+                     "Unhandled case in ToProtoEnum<SCH_SYMBOL::PASSTHROUGH_MODE>" );
+    }
+}
+
+
+template<>
+SCH_SYMBOL::PASSTHROUGH_MODE FromProtoEnum( types::SchematicPassthroughMode aValue )
+{
+    switch( aValue )
+    {
+    case types::SchematicPassthroughMode::SPM_UNKNOWN:
+    case types::SchematicPassthroughMode::SPM_DEFAULT: return SCH_SYMBOL::PASSTHROUGH_MODE::DEFAULT;
+    case types::SchematicPassthroughMode::SPM_BLOCK:   return SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK;
+    case types::SchematicPassthroughMode::SPM_FORCE:   return SCH_SYMBOL::PASSTHROUGH_MODE::FORCE;
+
+    default:
+        wxCHECK_MSG( false, SCH_SYMBOL::PASSTHROUGH_MODE::DEFAULT,
+                     "Unhandled case in FromProtoEnum<types::SchematicPassthroughMode>" );
     }
 }
 

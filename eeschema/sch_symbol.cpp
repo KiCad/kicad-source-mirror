@@ -235,6 +235,11 @@ void SCH_SYMBOL::Serialize( google::protobuf::Any& aContainer ) const
     symbol.set_locked( IsLocked() ? types::LockedState::LS_LOCKED : types::LockedState::LS_UNLOCKED );
     symbol.set_fields_autoplaced( GetFieldsAutoplaced() != AUTOPLACE_NONE );
 
+    if( !UseLibIdLookup() )
+        symbol.set_lib_name( GetSchSymbolLibraryName().ToUTF8() );
+
+    symbol.set_passthrough( ToProtoEnum<PASSTHROUGH_MODE, SchematicPassthroughMode>( GetPassthroughMode() ) );
+
     SchematicSymbolTransform* transform = symbol.mutable_transform();
     transform->set_orientation(
             ToProtoEnum<SYMBOL_ORIENTATION_PROP, SchematicSymbolOrientation>( GetOrientationProp() ) );
@@ -287,11 +292,38 @@ void SCH_SYMBOL::Serialize( google::protobuf::Any& aContainer ) const
         }
 
         def->set_unit_count( m_part->GetUnitCount() );
-        def->set_body_style_count( m_part->GetBodyStyleCount() );
+
+        for( int bodyStyle = BODY_STYLE::BASE; bodyStyle <= m_part->GetBodyStyleCount(); ++bodyStyle )
+        {
+            def->add_body_style()->set_name(
+                    m_part->GetBodyStyleDescription( bodyStyle, false ).ToUTF8() );
+        }
+
         def->set_keywords( m_part->GetKeyWords().ToUTF8() );
 
         for( const wxString& filter : m_part->GetFPFilters() )
             def->add_footprint_filters( filter.ToUTF8() );
+
+        JumperSettings* jumpers = def->mutable_jumpers();
+        jumpers->set_duplicate_names_are_jumpered( m_part->GetDuplicatePinNumbersAreJumpers() );
+
+        for( const std::set<wxString>& group : m_part->JumperPinGroups() )
+        {
+            JumperGroup* jumperGroup = jumpers->add_groups();
+
+            for( const wxString& pinNumber : group )
+                jumperGroup->add_pin_numbers( pinNumber.ToUTF8() );
+        }
+
+        def->set_units_locked( m_part->UnitsLocked() );
+        def->set_embedded_fonts( m_part->GetAreFontsEmbedded() );
+
+        for( const auto& [unit, displayName] : m_part->GetUnitDisplayNames() )
+        {
+            SchematicUnitDisplayName* protoName = def->add_unit_display_names();
+            protoName->set_unit( unit );
+            protoName->set_name( displayName.ToUTF8() );
+        }
     }
 
     symbol.set_show_pin_names( GetShowPinNames() );
@@ -319,6 +351,10 @@ bool SCH_SYMBOL::Deserialize( const google::protobuf::Any& aContainer )
     SetLocked( symbol.locked() == LockedState::LS_LOCKED );
     SetFieldsAutoplaced( symbol.fields_autoplaced() ? AUTOPLACE_AUTO : AUTOPLACE_NONE );
 
+    if( !symbol.lib_name().empty() )
+        SetSchSymbolLibraryName( wxString::FromUTF8( symbol.lib_name() ) );
+
+    SetPassthroughMode( FromProtoEnum<SCH_SYMBOL::PASSTHROUGH_MODE>( symbol.passthrough() ) );
     SetOrientationProp( FromProtoEnum<SYMBOL_ORIENTATION_PROP>( symbol.transform().orientation() ) );
     SetMirrorX( symbol.transform().mirror_x() );
     SetMirrorY( symbol.transform().mirror_y() );
@@ -379,8 +415,16 @@ bool SCH_SYMBOL::Deserialize( const google::protobuf::Any& aContainer )
     if( def.unit_count() > 0 )
         libSymbol->SetUnitCount( def.unit_count(), false );
 
-    if( def.body_style_count() > 0 )
-        libSymbol->SetBodyStyleCount( def.body_style_count(), false, false );
+    if( def.body_style_size() > 0 )
+    {
+        std::vector<wxString> bodyStyleNames;
+
+        for( const SchematicBodyStyle& bodyStyle : def.body_style() )
+            bodyStyleNames.emplace_back( wxString::FromUTF8( bodyStyle.name() ) );
+
+        libSymbol->SetBodyStyleNames( bodyStyleNames );
+        libSymbol->SetBodyStyleCount( static_cast<int>( bodyStyleNames.size() ), false, false );
+    }
 
     if( !def.keywords().empty() )
         libSymbol->SetKeyWords( wxString::FromUTF8( def.keywords() ) );
@@ -394,6 +438,25 @@ bool SCH_SYMBOL::Deserialize( const google::protobuf::Any& aContainer )
 
         libSymbol->SetFPFilters( filters );
     }
+
+    libSymbol->SetDuplicatePinNumbersAreJumpers( def.jumpers().duplicate_names_are_jumpered() );
+
+    for( const JumperGroup& group : def.jumpers().groups() )
+    {
+        std::set<wxString> pinNumbers;
+
+        for( const std::string& pinNumber : group.pin_numbers() )
+            pinNumbers.insert( wxString::FromUTF8( pinNumber ) );
+
+        if( !pinNumbers.empty() )
+            libSymbol->JumperPinGroups().push_back( std::move( pinNumbers ) );
+    }
+
+    libSymbol->LockUnits( def.units_locked() );
+    libSymbol->SetAreFontsEmbedded( def.embedded_fonts() );
+
+    for( const SchematicUnitDisplayName& displayName : def.unit_display_names() )
+        libSymbol->GetUnitDisplayNames()[displayName.unit()] = wxString::FromUTF8( displayName.name() );
 
     if( def.has_pin_maps() )
     {

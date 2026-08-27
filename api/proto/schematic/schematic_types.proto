@@ -426,6 +426,39 @@ message PinMapInstanceOverride
   repeated PinMapEntry edits   = 3;
 }
 
+enum SchematicPassthroughMode
+{
+  SPM_UNKNOWN = 0;
+  SPM_DEFAULT = 1;
+  SPM_BLOCK   = 2;
+  SPM_FORCE   = 3;
+}
+
+// A group of pin numbers that should be treated as internally connected
+message JumperGroup
+{
+  repeated string pin_numbers = 1;
+}
+
+message JumperSettings
+{
+  /// If true, duplicate pin numbers in this symbol are jumpered together
+  bool duplicate_names_are_jumpered = 1;
+
+  repeated JumperGroup groups = 2;
+}
+
+message SchematicUnitDisplayName
+{
+  int32  unit = 1;
+  string name = 2;
+}
+
+message SchematicBodyStyle
+{
+  string name = 1;
+}
+
 message SchematicSymbol
 {
   kiapi.common.types.LibraryIdentifier id = 1;
@@ -443,12 +476,18 @@ message SchematicSymbol
   repeated SchematicSymbolChild items = 9;
 
   uint32 unit_count = 10;
-  uint32 body_style_count = 11;
+  repeated SchematicBodyStyle body_style = 11;
 
   string keywords = 12;
   repeated string footprint_filters = 13;
 
   SymbolPinMaps pin_maps = 14;
+
+  JumperSettings jumpers = 15;
+
+  bool units_locked = 16;
+  repeated SchematicUnitDisplayName unit_display_names = 17;
+  bool embedded_fonts = 18;
 }
 
 message SchematicSymbolTransform
@@ -491,9 +530,13 @@ message SchematicSymbolInstance
   repeated SchematicSymbolVariant variants = 18;
 
   repeated SchematicField user_fields = 19;
-
   PinMapInstanceOverride pin_map_override = 20;
   bool fields_autoplaced = 21;
+
+  // Symbol library name override; empty means use the definition lib id
+  string lib_name = 22;
+
+  SchematicPassthroughMode passthrough = 23;
 }
 
 message SheetInstance

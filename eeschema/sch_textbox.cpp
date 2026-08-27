@@ -94,6 +94,7 @@ void SCH_TEXTBOX::Serialize( kiapi::schematic::types::SchematicTextBox& aOutput,
     PackVector2( *text.mutable_top_left(), GetPosition(), aScale );
     PackVector2( *text.mutable_bottom_right(), GetEnd(), aScale );
     text.set_text( GetText().ToUTF8() );
+    text.set_border_enabled( GetStroke().GetWidth() >= 0 );
 
     types::TextAttributes* attrs = text.mutable_attributes();
 
@@ -209,6 +210,12 @@ bool SCH_TEXTBOX::Deserialize( const kiapi::schematic::types::SchematicTextBox& 
             SetFillColor( COLOR4D::UNSPECIFIED );
 
         SetWidth( UnpackDistance( aInput.graphic_attributes().stroke().width(), aScale ) );
+
+        if( !aInput.textbox().border_enabled() )
+            SetWidth( -1 );
+        else
+            SetWidth( std::max( 0, GetStroke().GetWidth() ) );
+
         SetLineStyle(
                 FromProtoEnum<LINE_STYLE, types::StrokeLineStyle>( aInput.graphic_attributes().stroke().style() ) );
         SetFillMode( FromProtoEnum<FILL_T, types::GraphicFillType>( aInput.graphic_attributes().fill().fill_type() ) );
