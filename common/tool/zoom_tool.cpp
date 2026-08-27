@@ -62,7 +62,7 @@ void ZOOM_TOOL::Reset( RESET_REASON aReason )
 
 int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    m_frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
 
     auto setCursor =
         [&]()
@@ -99,7 +99,6 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Exit zoom tool
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    m_frame->PopTool( aEvent );
     return 0;
 }
 

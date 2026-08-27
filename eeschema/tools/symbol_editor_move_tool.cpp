@@ -135,7 +135,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
         return true;
     }
 
-    m_frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -415,8 +415,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 catch( const boost::bad_pointer& e )
                 {
                     restore_state = true;
-                    wxFAIL_MSG( wxString::Format( wxT( "Boost pointer exception occurred: %s" ),
-                                                  e.what() ) );
+                    wxFAIL_MSG( wxString::Format( wxT( "Boost pointer exception occurred: %s" ), e.what() ) );
                 }
             }
 
@@ -442,7 +441,6 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
         m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     m_moveInProgress = false;
-    m_frame->PopTool( aEvent );
 
     return !restore_state;
 }

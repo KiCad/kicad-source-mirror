@@ -178,7 +178,8 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    frame()->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;
+    SCOPED_TOOL_PUSHER raii( frame(), originalEvent );
 
     auto setCursor =
             [&]()
@@ -223,14 +224,9 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() || ( item && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( item )
-            {
                 cleanup();
-            }
             else
-            {
-                frame()->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() && !isSyntheticClick )
         {
@@ -250,12 +246,12 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
             }
             else if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
+                // Make sure we come back after the move tool runs
+                frame()->PushTool( originalEvent );
                 break;
             }
             else
             {
-                frame()->PopTool( aEvent );
                 break;
             }
         }
@@ -378,7 +374,6 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
             }
 
             // Exit.  The duplicate/repeat/paste will run in its own loop.
-            frame()->PopTool( aEvent );
             evt->SetPassEvent();
             break;
         }
@@ -457,7 +452,8 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     arc->SetFlags( IS_NEW );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
     Activate();
 
     if( aEvent.HasPosition() )
@@ -465,7 +461,7 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     ARC_DRAW_BEHAVIOR arcBehavior( schIUScale, frame()->GetUserUnits() );
 
-    while( drawManagedShape( aEvent, arc, arcBehavior, initialPts ) )
+    while( drawManagedShape( originalEvent, arc, arcBehavior, initialPts ) )
     {
         if( arc )
         {
@@ -508,8 +504,8 @@ int EE_GRAPHIC_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
     const auto makeNewEllipseArc =
             [&]()
             {
-                std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>(
-                    SHAPE_T::ELLIPSE_ARC, shapeLayer, 0, m_lastFillStyle );
+                std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ELLIPSE_ARC, shapeLayer,
+                                                                              0, m_lastFillStyle );
                 arc->SetStroke( m_lastStroke );
                 arc->SetFillColor( m_lastFillColor );
                 arc->SetParent( parent );
@@ -522,7 +518,8 @@ int EE_GRAPHIC_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
 
     std::unique_ptr<SCH_SHAPE> arc = makeNewEllipseArc();
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
     Activate();
 
     if( aEvent.HasPosition() )
@@ -530,7 +527,7 @@ int EE_GRAPHIC_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
 
     ELLIPSE_ARC_DRAW_BEHAVIOR ellipseBehavior( schIUScale, frame()->GetUserUnits() );
 
-    while( drawManagedShape( aEvent, arc, ellipseBehavior, initialPts ) )
+    while( drawManagedShape( originalEvent, arc, ellipseBehavior, initialPts ) )
     {
         if( arc )
         {
@@ -587,7 +584,8 @@ int EE_GRAPHIC_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 
     std::unique_ptr<SCH_SHAPE> bezier = makeNewBezier();
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
     Activate();
 
     if( aEvent.HasPosition() )
@@ -595,7 +593,7 @@ int EE_GRAPHIC_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 
     BEZIER_DRAW_BEHAVIOR bezierBehavior( schIUScale, frame()->GetUserUnits() );
 
-    while( drawManagedShape( aEvent, bezier, bezierBehavior, initialPts ) )
+    while( drawManagedShape( originalEvent, bezier, bezierBehavior, initialPts ) )
     {
         if( bezier )
         {
@@ -634,8 +632,7 @@ int EE_GRAPHIC_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 
 
 bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aShape,
-                                        SHAPE_DRAW_BEHAVIOR& aBehavior,
-                                        const std::vector<VECTOR2D>& aInitialPts )
+                                        SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts )
 {
     if( !aShape )
         return false;
@@ -710,7 +707,6 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
             if( !started )
             {
                 evt->SetPassEvent( false );
-                m_frame->PopTool( aTool );
                 cancelled = true;
             }
 
@@ -729,6 +725,9 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
             }
             else if( evt->IsMoveTool() )
             {
+                // Make sure we come back after the move tool runs
+                m_frame->PushTool( aTool );
+
                 cleanup();
                 cancelled = true;
                 break;
@@ -736,7 +735,6 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
             else
             {
                 cleanup();
-                m_frame->PopTool( aTool );
                 cancelled = true;
                 break;
             }
@@ -920,7 +918,7 @@ int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
     EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
     m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &selItems );
 
-    frame()->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( frame(), aEvent );
 
     auto setCursor =
             [&]()
@@ -996,7 +994,6 @@ int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
 
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls->ForceCursorPosition( false );
-    frame()->PopTool( aEvent );
 
     return 0;
 }

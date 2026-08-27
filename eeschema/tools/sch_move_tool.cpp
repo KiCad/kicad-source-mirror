@@ -740,15 +740,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
 
-    m_frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
 
+    // Note that it's important to go through push/pop even when the selection is empty.
+    // This keeps other tools from having to special-case an empty move.
     if( selection.Empty() )
-    {
-        // Note that it's important to go through push/pop even when the selection is empty.
-        // This keeps other tools from having to special-case an empty move.
-        m_frame->PopTool( aEvent );
         return false;
-    }
 
     bool        restore_state = false;
     TOOL_EVENT  copy = aEvent;
@@ -1013,7 +1010,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             if( m_mode != BREAK )
+            {
                 break; // Finish
+            }
             else
             {
                 didAtLeastOneBreak = true;
@@ -1112,7 +1111,6 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     m_hiddenJunctions.clear();
     m_view->ClearPreview();
-    m_frame->PopTool( aEvent );
 
     return !restore_state;
 }

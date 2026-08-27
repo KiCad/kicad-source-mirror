@@ -17,10 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef  TOOL_HOLDER_H
-#define  TOOL_HOLDER_H
+#pragma once
 
 #include <vector>
+#include <tool/tool_event.h>
 #include <tool/selection.h>
 #include <mouse_drag_action.h>
 
@@ -59,8 +59,7 @@ public:
      * @param aAction is the action to register.
      * @param aConditions are the UI conditions to use for the control states.
      */
-    virtual void RegisterUIUpdateHandler( const TOOL_ACTION& aAction,
-                                          const ACTION_CONDITIONS& aConditions );
+    virtual void RegisterUIUpdateHandler( const TOOL_ACTION& aAction, const ACTION_CONDITIONS& aConditions );
 
     /**
      * Register a UI update handler for the control with ID @c aID.
@@ -186,4 +185,24 @@ protected:
     bool              m_moveWarpsCursor;    // cursor is warped to move/drag origin
 };
 
-#endif  // TOOL_HOLDER_H
+
+class SCOPED_TOOL_PUSHER
+{
+public:
+    SCOPED_TOOL_PUSHER( TOOLS_HOLDER* aHolder, const TOOL_EVENT& aEvent ) :
+            m_holder( aHolder ),
+            m_event( aEvent )
+    {
+        m_holder->PushTool( m_event );
+    }
+
+    ~SCOPED_TOOL_PUSHER()
+    {
+        m_holder->PopTool( m_event );
+    }
+
+private:
+    TOOLS_HOLDER* m_holder;
+    TOOL_EVENT    m_event;
+};
+
