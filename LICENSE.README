@@ -11,7 +11,6 @@ You are free to use the *sources* under the terms of their respective licenses.
 Licensed under Apache License, Version 2.0
  - portions of code in libs/kimath/include/math/util.h
 Licensed under BOOSTv1:
-- clipper in thirdparty/clipper
 - clipper2 in thirdparty/clipper2
 - libcontext [https://github.com/boostorg/context] in thirdparty/libcontext
 - pegtl in thirdparty/pegtl
@@ -23,6 +22,8 @@ Licensed under MIT:
 - argparse in thirdparty/argparse
 - compoundfilereader in thirdparty/compoundfilereader
 - delaunator in thirdparty/delaunator
+- dynamic_bitset in thirdparty/dynamic_bitset
+- fast_float in thirdparty/fast_float
 - fmt in thirdparty/fmt
 - glad in thirdparty/glad
 - json_schema_validator in thirdparty/json_schema_validator
@@ -38,11 +39,19 @@ Licensed under MIT:
 - tinyspline_lib in thirdparty/tinyspline_lib
 Licensed under BSD2:
 - gzip-hpp in thirdparty/gzip-hpp
+- libpopcnt in thirdparty/libpopcnt
+- nanoflann in thirdparty/nanoflann
 Licensed under GPLv2 (or later):
 - dxflib in thirdparty/dxflib_qcad
 - math_for_graphics in thirdparty/other_math
 - potrace in thirdparty/potrace
 - SutherlandHodgmanClipPoly in thirdparty/other_math
+Licensed under LGPLv2 (or later):
+- libwmf in thirdparty/libwmf
+Licensed under LGPLv2.1 (or later):
+- planegcs in thirdparty/planegcs
+Licensed under MPL 2.0:
+- eigen in thirdparty/eigen
 Licensed under ZLib:
 - nanosvg in thirdparty/nanosvg
 Licensed in the public domain:
@@ -51,7 +60,11 @@ Licensed under CC BY-SA 4.0:
 - All the demo files provided in demos/*
 Licensed under clause-3 BSD:
 - ibis / kibis files in eeschema/sim/kibis
+- rapidcsv in thirdparty/rapidcsv
 Licensed under CC0:
+- expected in thirdparty/expected
 - uopamp.lib.spice in some directories in qa/data/eeschema/spice_netlists/
 Licensed under GPLv3 (or later):
+- 3dxware_sdk [Copyright 3Dconnexion] in thirdparty/3dxware_sdk
+- zint (fork of https://github.com/zint/zint) in thirdparty/zint
 - All remaining code not listed above
