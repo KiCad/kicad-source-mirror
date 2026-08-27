@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:52-0700\n"
 "PO-Revision-Date: 2026-08-27 13:42+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -18817,7 +18817,7 @@ msgstr "Strichlänge:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:249
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:39
 msgid "Gap length:"
-msgstr "Abstand:"
+msgstr "Lückenlänge:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:259
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:49
@@ -21297,9 +21297,10 @@ msgid "Show Field Name"
 msgstr "Feldname anzeigen"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "Ändere %s Footprint-Zuordnung von \"%s\" in \"%s\"."
+msgstr ""
+"%d importierte Footprint-Zuordnungen erneut mit Bibliothek \"%s\" verknüpft."
 
 #: eeschema/sch_group.cpp:349 pcbnew/pcb_group.cpp:419
 #, c-format
@@ -50447,9 +50448,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1234
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported footprint libraries: %s"
-msgstr "Die Footprintbibliothek \"%s\" konnte nicht erstellen werden."
+msgstr "Importierte Footprint-Bibliotheken konnten nicht abgeglichen werden: %s"
 
 #: pcbnew/files.cpp:1277
 msgid "Generate ODB++ Files"
@@ -50706,9 +50707,9 @@ msgstr ""
 "Unbenutzter Footprint %s kann nicht entfernt werden (Footprint ist gesperrt)."
 
 #: pcbnew/footprint_import_reconciler.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr "Fehler beim Schreiben der Bohrprotokoll-Datei \"%s\""
+msgstr "Fehler beim Schreiben des importierten Footprintcache \"%s\": %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:335
 #, c-format
@@ -50717,9 +50718,10 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_import_reconciler.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported footprint cache to '%s'."
-msgstr "Konnte die Plotdateien nicht im Ordner \"%s\" anlegen."
+msgstr ""
+"Importierter Footprintcache konnte nicht nach \"%s\" veröffentlicht werden."
 
 #: pcbnew/footprint_import_reconciler.cpp:369
 msgid "Cannot register imported footprint cache: no project library table."
