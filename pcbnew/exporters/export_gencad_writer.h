@@ -19,11 +19,13 @@
 
 #pragma once
 
-#include <stdio.h> // for FILE
+#include <cstdio> // for FILE
 
 #include <wx/string.h>
 
 #include <math/vector2d.h>
+
+#include <pad.h>
 
 class BOARD;
 class FOOTPRINT;
