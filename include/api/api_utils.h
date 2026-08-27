@@ -94,9 +94,11 @@ KICOMMON_API void PackSheetPath( types::SheetPath& aOutput, const KIID_PATH& aIn
 
 KICOMMON_API KIID_PATH UnpackSheetPath( const types::SheetPath& aInput );
 
-KICOMMON_API void PackStroke( kiapi::common::types::StrokeAttributes& aOutput, const STROKE_PARAMS& aInput );
+KICOMMON_API void PackStroke( kiapi::common::types::StrokeAttributes& aOutput, const STROKE_PARAMS& aInput,
+                              const EDA_IU_SCALE& aScale = pcbIUScale );
 
-KICOMMON_API void UnpackStroke( STROKE_PARAMS& aOutput, const kiapi::common::types::StrokeAttributes& aInput );
+KICOMMON_API void UnpackStroke( STROKE_PARAMS& aOutput, const kiapi::common::types::StrokeAttributes& aInput,
+                                const EDA_IU_SCALE& aScale = pcbIUScale );
 
 KICOMMON_API void PackProject( types::ProjectSpecifier& aOutput, const PROJECT& aInput );
 

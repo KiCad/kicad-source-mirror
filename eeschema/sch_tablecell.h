@@ -23,6 +23,11 @@
 
 #include <sch_textbox.h>
 
+namespace kiapi::schematic::types
+{
+    class SchematicTableCell;
+}
+
 
 class SCH_TABLECELL : public SCH_TEXTBOX
 {
@@ -32,6 +37,12 @@ public:
     static inline bool ClassOf( const EDA_ITEM* aItem ) { return aItem && SCH_TABLECELL_T == aItem->Type(); }
 
     virtual wxString GetClass() const override { return wxT( "SCH_TABLECELL" ); }
+
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
+    void Serialize( kiapi::schematic::types::SchematicTableCell& cell ) const;
+    bool Deserialize( const kiapi::schematic::types::SchematicTableCell& cell );
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 

@@ -83,7 +83,8 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
         { "type.googleapis.com/kiapi.schematic.types.SchematicImage", SCH_BITMAP_T },
         { "type.googleapis.com/kiapi.schematic.types.SchematicTextBox", SCH_TEXTBOX_T },
         { "type.googleapis.com/kiapi.schematic.types.SchematicText", SCH_TEXT_T },
-        { "type.googleapis.com/kiapi.schematic.types.Table", SCH_TABLE_T },
+        { "type.googleapis.com/kiapi.schematic.types.SchematicTableCell", SCH_TABLECELL_T },
+        { "type.googleapis.com/kiapi.schematic.types.SchematicTable", SCH_TABLE_T },
         { "type.googleapis.com/kiapi.schematic.types.LocalLabel", SCH_LABEL_T },
         { "type.googleapis.com/kiapi.schematic.types.GlobalLabel", SCH_GLOBAL_LABEL_T },
         { "type.googleapis.com/kiapi.schematic.types.HierarchicalLabel", SCH_HIER_LABEL_T },
@@ -302,9 +303,10 @@ KICOMMON_API KIID_PATH UnpackSheetPath( const types::SheetPath& aInput )
 }
 
 
-KICOMMON_API void PackStroke( types::StrokeAttributes& aOutput, const STROKE_PARAMS& aInput )
+KICOMMON_API void PackStroke( types::StrokeAttributes& aOutput, const STROKE_PARAMS& aInput,
+                              const EDA_IU_SCALE& aScale )
 {
-    aOutput.mutable_width()->set_value_nm( aInput.GetWidth() );
+    PackDistance( *aOutput.mutable_width(), aInput.GetWidth(), aScale );
     aOutput.set_style( ToProtoEnum<LINE_STYLE, types::StrokeLineStyle>( aInput.GetLineStyle() ) );
 
     if( aInput.GetColor() != KIGFX::COLOR4D::UNSPECIFIED )
@@ -312,9 +314,10 @@ KICOMMON_API void PackStroke( types::StrokeAttributes& aOutput, const STROKE_PAR
 }
 
 
-KICOMMON_API void UnpackStroke( STROKE_PARAMS& aOutput, const types::StrokeAttributes& aInput )
+KICOMMON_API void UnpackStroke( STROKE_PARAMS& aOutput, const types::StrokeAttributes& aInput,
+                                const EDA_IU_SCALE& aScale )
 {
-    aOutput.SetWidth( aInput.width().value_nm() );
+    aOutput.SetWidth( UnpackDistance( aInput.width(), aScale ) );
     aOutput.SetLineStyle( FromProtoEnum<LINE_STYLE, types::StrokeLineStyle>( aInput.style() ) );
 
     if( aInput.has_color() )

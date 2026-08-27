@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20260818)
+	(version 20260826)
 	(generator "eeschema")
 	(generator_version "10.99")
 	(uuid "d6ee7e6a-6570-43fd-93e6-b98f9cea3e37")
@@ -1337,6 +1337,101 @@
 			"BodjLIlnyb9RjcTKHDB1jbCaUwUjKRZ4fOwktKdlQ3GGehsazLy19f7o3h/dtP2c3vbEHEvU+n1q"
 			"wLPUc70ICOGfSX7sgVci2umkpgBmE0deUmDvc5uxJLyxsTpFWmLVEMAMWG3cDFGFcz4w7z9KpizQ"
 			"fnAidAAAAABJRU5ErkJggg=="
+		)
+	)
+	(table
+		(column_count 2)
+		(border
+			(external yes)
+			(header yes)
+			(stroke
+				(width 0.2032)
+				(type solid)
+				(color 120 26 24 1)
+			)
+		)
+		(separators
+			(rows yes)
+			(cols yes)
+			(stroke
+				(width 0.127)
+				(type dot)
+			)
+		)
+		(column_widths 12.7 12.7)
+		(row_heights 5.08 5.08)
+		(uuid "8af02e7b-5ac3-4814-bbeb-04f56528ba22")
+		(cells
+			(table_cell "TL"
+				(exclude_from_sim no)
+				(at 167.64 74.93 0)
+				(size 12.7 5.08)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+				(uuid "a6032230-74ba-4bc5-890f-12f61ecc5055")
+			)
+			(table_cell "TR"
+				(exclude_from_sim no)
+				(at 180.34 74.93 0)
+				(size 12.7 5.08)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.9304 1.9304)
+					)
+					(justify left top)
+				)
+				(uuid "173ff0ec-8136-4573-9763-1cba19b82f62")
+			)
+			(table_cell "BL"
+				(exclude_from_sim no)
+				(at 167.64 80.01 0)
+				(size 12.7 5.08)
+				(margins 0.9525 0.635 0.9525 0.635)
+				(span 1 1)
+				(fill
+					(type color)
+					(color 205 208 255 1)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(color 65 215 255 1)
+					)
+					(justify right)
+				)
+				(uuid "6c0ae5be-8e6b-45c5-a5d3-d1b8201131c6")
+			)
+			(table_cell "BR"
+				(exclude_from_sim no)
+				(at 180.34 80.01 0)
+				(size 12.7 5.08)
+				(margins 0.9525 0.9525 0.9525 0.9525)
+				(span 1 1)
+				(fill
+					(type none)
+				)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+				(uuid "5f0fa393-7d93-44ea-abd1-ef215695b05e")
+			)
 		)
 	)
 	(label "B0"

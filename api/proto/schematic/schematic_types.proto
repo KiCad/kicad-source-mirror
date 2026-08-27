@@ -511,3 +511,38 @@ message SchematicNet
 
   repeated SchematicNetSheetContents sheets = 2;
 }
+
+message SchematicTableCell
+{
+  SchematicTextBox text_box = 1;
+  int32 column_span = 2;
+  int32 row_span = 3;
+}
+
+enum TableStrokeMode
+{
+  TSM_UNKNOWN = 0;
+  TSM_DISABLED = 1;
+  TSM_ENABLED = 2;
+}
+
+message SchematicTable
+{
+  kiapi.common.types.KIID id = 1;
+
+  int32 column_count = 2;
+  repeated kiapi.common.types.Distance column_widths = 3;
+  repeated kiapi.common.types.Distance row_heights = 4;
+
+  kiapi.common.types.LockedState locked = 5;
+
+  repeated SchematicTableCell cells = 6;
+
+  TableStrokeMode external_border = 7;
+  TableStrokeMode header_separator = 8;
+  kiapi.common.types.StrokeAttributes border_stroke = 9;
+
+  TableStrokeMode row_separators = 10;
+  TableStrokeMode column_separators = 11;
+  kiapi.common.types.StrokeAttributes separators_stroke = 12;
+}

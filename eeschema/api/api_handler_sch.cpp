@@ -72,7 +72,7 @@ std::set<KICAD_T> API_HANDLER_SCH::s_allowedTypes = {
     SCH_BITMAP_T,
     SCH_TEXTBOX_T,
     SCH_TEXT_T,
-    // SCH_TABLE_T,
+    SCH_TABLE_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_GROUP_T,

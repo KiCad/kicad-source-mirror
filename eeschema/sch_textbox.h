@@ -28,6 +28,11 @@
 
 class HTML_MESSAGE_BOX;
 
+namespace kiapi::schematic::types
+{
+    class SchematicTextBox;
+}
+
 class SCH_TEXTBOX : public SCH_SHAPE, public EDA_TEXT
 {
 public:
@@ -41,6 +46,11 @@ public:
 
     void Serialize( google::protobuf::Any& aContainer ) const override;
     bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
+    void Serialize( kiapi::schematic::types::SchematicTextBox& aOutput,
+                    const EDA_IU_SCALE& aScale ) const;
+    bool Deserialize( const kiapi::schematic::types::SchematicTextBox& aInput,
+                      const EDA_IU_SCALE& aScale );
 
     static bool ClassOf( const EDA_ITEM* aItem )
     {

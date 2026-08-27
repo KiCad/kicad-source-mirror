@@ -27,6 +27,8 @@
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
+#include <api/schematic/schematic_types.pb.h>
+
 
 SCH_TABLECELL::SCH_TABLECELL( int aLineWidth, FILL_T aFillType ) :
         SCH_TEXTBOX( LAYER_NOTES, aLineWidth, aFillType, wxEmptyString, SCH_TABLECELL_T ),
@@ -34,6 +36,50 @@ SCH_TABLECELL::SCH_TABLECELL( int aLineWidth, FILL_T aFillType ) :
         m_rowSpan( 1 )
 {
 }
+
+void SCH_TABLECELL::Serialize( kiapi::schematic::types::SchematicTableCell& aCell ) const
+{
+    aCell.set_column_span( m_colSpan );
+    aCell.set_row_span( m_rowSpan );
+
+    SCH_TEXTBOX::Serialize( *aCell.mutable_text_box(), schIUScale );
+}
+
+
+void SCH_TABLECELL::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::schematic::types::SchematicTableCell cell;
+    Serialize( cell );
+    aContainer.PackFrom( cell );
+}
+
+
+bool SCH_TABLECELL::Deserialize( const kiapi::schematic::types::SchematicTableCell& aCell )
+{
+    if( !aCell.has_text_box() )
+        return false;
+
+    if( !SCH_TEXTBOX::Deserialize( aCell.text_box(), schIUScale ) )
+        return false;
+
+    SetColSpan( aCell.column_span() );
+    SetRowSpan( aCell.row_span() );
+
+    return true;
+}
+
+
+bool SCH_TABLECELL::Deserialize( const google::protobuf::Any& aContainer )
+{
+    kiapi::schematic::types::SchematicTableCell cell;
+
+    if( !aContainer.UnpackTo( &cell ) )
+        return false;
+
+    return Deserialize( cell );
+}
+
+
 
 
 void SCH_TABLECELL::swapData( SCH_ITEM* aItem )
