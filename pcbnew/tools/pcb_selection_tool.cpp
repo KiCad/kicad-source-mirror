@@ -1003,36 +1003,26 @@ bool PCB_SELECTION_TOOL::ctrlClickHighlights()
 bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag, bool* aSelectionCancelledFlag,
                                       CLIENT_SELECTION_FILTER aClientFilter )
 {
-    GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
-    GENERAL_COLLECTOR          collector;
-    const PCB_DISPLAY_OPTIONS& displayOpts = m_frame->GetDisplayOptions();
+    GENERAL_COLLECTOR            collector;
+    PCB_SELECTION_FILTER_OPTIONS rejected;
+    POINT_COLLECT                options;
 
-    guide.SetIgnoreZoneFills( displayOpts.m_ZoneDisplayMode != ZONE_DISPLAY_MODE::SHOW_FILLED );
+    rejected.SetAll( false );
+    options.m_OnDrag = aOnDrag;
+    options.m_SelectedOnly = m_subtractive;
+    options.m_Rejected = &rejected;
 
     if( m_enteredGroup && !m_enteredGroup->GetBoundingBox().Contains( aWhere ) )
         ExitGroup();
 
-    collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
-                                                    : GENERAL_COLLECTOR::AllBoardItems,
-                       aWhere, guide );
-
-    // Remove unselectable items
-    for( int i = collector.GetCount() - 1; i >= 0; --i )
-    {
-        if( !Selectable( collector[ i ] ) || ( aOnDrag && collector[i]->IsLocked() ) )
-            collector.Remove( i );
-    }
-
     m_selection.ClearReferencePoint();
 
-    size_t preFilterCount = collector.GetCount();
-    PCB_SELECTION_FILTER_OPTIONS rejected;
-    rejected.SetAll( false );
+    if( !collectAtPoint( aWhere, collector, options, aClientFilter ) )
+        return false;
 
-    // Apply the stateful filter (remove items disabled by the Selection Filter)
-    FilterCollectedItems( collector, false, &rejected );
-
-    if( collector.GetCount() == 0 && preFilterCount > 0 )
+    // Nothing survived a filter that had something to take.  Every step after it leaves an
+    // empty collector alone, so this reads the same here as it did before them.
+    if( collector.GetCount() == 0 && options.m_PreFilterCount > 0 )
     {
         if( PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame ) )
             editFrame->HighlightSelectionFilter( rejected );
@@ -1041,44 +1031,9 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag, bool
         {
             ClearSelection( true /*quiet mode*/ );
             m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-            return false;
         }
 
         return false;
-    }
-
-    // Allow the client to do tool- or action-specific filtering to see if we can get down
-    // to a single item
-    if( aClientFilter )
-        aClientFilter( aWhere, collector, this );
-
-    FilterCollectorForHierarchy( collector, false );
-
-    FilterCollectorForFootprints( collector, aWhere );
-
-    // For subtracting, we only want items that are selected
-    if( m_subtractive )
-    {
-        for( int i = collector.GetCount() - 1; i >= 0; --i )
-        {
-            if( !collector[i]->IsSelected() )
-                collector.Remove( i );
-        }
-    }
-
-    // Apply some ugly heuristics to avoid disambiguation menus whenever possible
-    if( collector.GetCount() > 1 && !m_skip_heuristics )
-    {
-        try
-        {
-            GuessSelectionCandidates( collector, aWhere );
-        }
-        catch( const std::exception& exc )
-        {
-            wxLogWarning( wxS( "Exception '%s' occurred attempting to guess selection candidates." ),
-                          exc.what() );
-            return false;
-        }
     }
 
     // If still more than one item we're going to have to ask the user.
@@ -1675,6 +1630,84 @@ int PCB_SELECTION_TOOL::SelectPolyArea( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( EVENTS::UninhibitSelectionEditing );
 
     return cancelled;
+}
+
+
+bool PCB_SELECTION_TOOL::collectAtPoint( const VECTOR2I& aWhere, GENERAL_COLLECTOR& aCollector,
+                                        POINT_COLLECT& aOptions, CLIENT_SELECTION_FILTER aClientFilter )
+{
+    GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
+    const PCB_DISPLAY_OPTIONS& displayOpts = m_frame->GetDisplayOptions();
+
+    // Without this a zone's fill answers for every point inside it, and nothing on top of a
+    // zone can ever be picked.
+    guide.SetIgnoreZoneFills( displayOpts.m_ZoneDisplayMode != ZONE_DISPLAY_MODE::SHOW_FILLED );
+
+    aCollector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
+                                                     : GENERAL_COLLECTOR::AllBoardItems,
+                        aWhere, guide );
+
+    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+    {
+        if( !Selectable( aCollector[i] ) || ( aOptions.m_OnDrag && aCollector[i]->IsLocked() ) )
+            aCollector.Remove( i );
+    }
+
+    aOptions.m_PreFilterCount = aCollector.GetCount();
+
+    FilterCollectedItems( aCollector, false, aOptions.m_Rejected );
+
+    // Narrow to what the caller can use before the heuristics run, so that they choose among
+    // usable items rather than picking one the caller then has to throw away.
+    if( aClientFilter )
+        aClientFilter( aWhere, aCollector, this );
+
+    FilterCollectorForHierarchy( aCollector, false );
+    FilterCollectorForFootprints( aCollector, aWhere );
+
+    if( aOptions.m_SelectedOnly )
+    {
+        for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+        {
+            if( !aCollector[i]->IsSelected() )
+                aCollector.Remove( i );
+        }
+    }
+
+    // Apply some ugly heuristics to avoid disambiguation menus whenever possible
+    if( aCollector.GetCount() > 1 && !m_skip_heuristics )
+    {
+        try
+        {
+            GuessSelectionCandidates( aCollector, aWhere );
+        }
+        catch( const std::exception& exc )
+        {
+            wxLogWarning( wxS( "Exception '%s' occurred attempting to guess selection candidates." ),
+                          exc.what() );
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+std::vector<BOARD_ITEM*> PCB_SELECTION_TOOL::CollectPoint( const VECTOR2I&         aWhere,
+                                                           CLIENT_SELECTION_FILTER aClientFilter )
+{
+    GENERAL_COLLECTOR collector;
+    POINT_COLLECT     options;
+
+    // A hover shows what it can even when the heuristics gave up narrowing.
+    collectAtPoint( aWhere, collector, options, aClientFilter );
+
+    std::vector<BOARD_ITEM*> items;
+
+    for( int i = 0; i < collector.GetCount(); ++i )
+        items.push_back( collector[i] );
+
+    return items;
 }
 
 

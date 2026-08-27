@@ -134,6 +134,18 @@ public:
     int SelectPolyArea( const TOOL_EVENT& aEvent );
 
     /**
+     * The items a click at aWhere would consider, best first.
+     *
+     * Runs the same guide, filters and heuristics as selectPoint() but changes nothing, so a
+     * tool that shows what a click would take cannot drift from what it does.
+     *
+     * @param aWhere is the point to test, in board coordinates.
+     * @param aClientFilter narrows the candidates before the heuristics run.
+     */
+    std::vector<BOARD_ITEM*> CollectPoint( const VECTOR2I& aWhere,
+                                           CLIENT_SELECTION_FILTER aClientFilter = nullptr );
+
+    /**
      * Selects multiple PCB items within a specified area.
      */
     void SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, bool aSubtractive = false,
@@ -351,6 +363,30 @@ private:
     bool selectPoint( const VECTOR2I& aWhere, bool aOnDrag = false,
                       bool* aSelectionCancelledFlag = nullptr,
                       CLIENT_SELECTION_FILTER aClientFilter = nullptr );
+
+    /// What one point collection needs beyond the point, and the one count it reports back.
+    struct POINT_COLLECT
+    {
+        bool                          m_OnDrag = false;        ///< Locked items cannot be dragged.
+        bool                          m_SelectedOnly = false;  ///< Subtracting takes only selected.
+        PCB_SELECTION_FILTER_OPTIONS* m_Rejected = nullptr;    ///< What the Selection Filter took.
+        size_t                        m_PreFilterCount = 0;    ///< Count before that filter, out.
+    };
+
+    /**
+     * Collect the items at aWhere and narrow them the way a click does.
+     *
+     * Shared by selectPoint() and CollectPoint() so that what a hover shows and what a click
+     * takes cannot drift apart.
+     *
+     * @param aWhere is the point to test, in board coordinates.
+     * @param aCollector receives the surviving candidates, best first.
+     * @param aOptions carries the caller's variations and returns the pre-filter count.
+     * @param aClientFilter narrows the candidates before the heuristics run.
+     * @return false if the disambiguation heuristics threw.
+     */
+    bool collectAtPoint( const VECTOR2I& aWhere, GENERAL_COLLECTOR& aCollector,
+                         POINT_COLLECT& aOptions, CLIENT_SELECTION_FILTER aClientFilter );
 
     /**
      * Select an item under the cursor unless there is something already selected.
