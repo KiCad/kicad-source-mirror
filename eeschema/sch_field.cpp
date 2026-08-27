@@ -198,6 +198,7 @@ void SCH_FIELD::Serialize( kiapi::schematic::types::SchematicField& field, const
     field.set_visible( IsVisible() );
     field.set_show_name( IsNameShown() );
     field.set_allow_auto_place( CanAutoplace() );
+    field.set_is_private( IsPrivate() );
 
     EDA_TEXT::Serialize( *field.mutable_text(), aScale );
 }
@@ -217,6 +218,7 @@ bool SCH_FIELD::Deserialize( const kiapi::schematic::types::SchematicField& fiel
     SetVisible( field.visible() );
     SetNameShown( field.show_name() );
     SetCanAutoplace( field.allow_auto_place() );
+    SetPrivate( field.is_private() );
 
     return EDA_TEXT::Deserialize( field.text(), aScale );
 }

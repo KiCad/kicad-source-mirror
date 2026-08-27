@@ -440,6 +440,17 @@
 					)
 				)
 			)
+			(property private "Secret" "Internal library data"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
 			(property "ki_keywords" "Arm Cortex-M0+ STM32C0 STM32C0x1"
 				(at 0 0 0)
 				(show_name no)
@@ -1661,6 +1672,17 @@
 			)
 		)
 		(property "Description" "STMicroelectronics Arm Cortex-M0+ MCU, 16-32KB flash, 6KB RAM, 48 MHz, 2.0-3.6V, 6 GPIO, SO8N"
+			(at 52.07 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property private "Secret" "Internal library data"
 			(at 52.07 73.66 0)
 			(hide yes)
 			(show_name no)

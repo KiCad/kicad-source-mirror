@@ -83,6 +83,7 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
         { "type.googleapis.com/kiapi.schematic.types.SchematicImage", SCH_BITMAP_T },
         { "type.googleapis.com/kiapi.schematic.types.SchematicTextBox", SCH_TEXTBOX_T },
         { "type.googleapis.com/kiapi.schematic.types.SchematicText", SCH_TEXT_T },
+        { "type.googleapis.com/kiapi.schematic.types.SchematicField", SCH_FIELD_T },
         { "type.googleapis.com/kiapi.schematic.types.SchematicTableCell", SCH_TABLECELL_T },
         { "type.googleapis.com/kiapi.schematic.types.SchematicTable", SCH_TABLE_T },
         { "type.googleapis.com/kiapi.schematic.types.LocalLabel", SCH_LABEL_T },
