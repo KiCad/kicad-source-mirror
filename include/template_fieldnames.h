@@ -22,6 +22,7 @@
 
 #include <initializer_list>
 
+#include <kicommon.h>
 #include <wx/string.h>
 
 class OUTPUTFORMATTER;
@@ -76,8 +77,8 @@ enum class FIELD_T : int
  * @param aTranslateForHI If true, return the translated field name,
  * else get the canonical name (defualt). Translation is intended only for dialogs
  */
-wxString GetDefaultFieldName( FIELD_T aFieldId, bool aTranslateForHI );
-wxString GetUserFieldName( int aFieldNdx, bool aTranslateForHI );
+KICOMMON_API wxString GetDefaultFieldName( FIELD_T aFieldId, bool aTranslateForHI );
+KICOMMON_API wxString GetUserFieldName( int aFieldNdx, bool aTranslateForHI );
 
 
 inline wxString GetCanonicalFieldName( FIELD_T aFieldType )
@@ -99,14 +100,14 @@ inline wxString GetCanonicalFieldName( FIELD_T aFieldType )
  * GLOBALLABEL_MANDATORY_FIELDS for global labels.  Each parent has its own canonical
  * folding domain in the parser.
  */
-bool FieldNamesAreDuplicates( const wxString& aLhs, const wxString& aRhs,
-                              std::initializer_list<FIELD_T> aMandatoryFields );
+KICOMMON_API bool FieldNamesAreDuplicates( const wxString& aLhs, const wxString& aRhs,
+                                           std::initializer_list<FIELD_T> aMandatoryFields );
 
 
 /**
  * Convenience overload defaulting to symbol mandatory fields.
  */
-bool FieldNamesAreDuplicates( const wxString& aLhs, const wxString& aRhs );
+KICOMMON_API bool FieldNamesAreDuplicates( const wxString& aLhs, const wxString& aRhs );
 
 
 /**
@@ -114,7 +115,7 @@ bool FieldNamesAreDuplicates( const wxString& aLhs, const wxString& aRhs );
  *
  * Template fieldnames are wanted field names for use in the symbol property editors.
  */
-struct TEMPLATE_FIELDNAME
+struct KICOMMON_API TEMPLATE_FIELDNAME
 {
     TEMPLATE_FIELDNAME() :
             m_Visible( false ),
@@ -161,7 +162,7 @@ struct TEMPLATE_FIELDNAME
 };
 
 
-class TEMPLATES
+class KICOMMON_API TEMPLATES
 {
 public:
     TEMPLATES() :

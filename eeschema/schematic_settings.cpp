@@ -88,6 +88,14 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 {
     EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
+    if( PROJECT_FILE* project = dynamic_cast<PROJECT_FILE*>( aParent ) )
+    {
+        project->m_TemplateFieldNames.DeleteAllFieldNameTemplates( true );
+
+        if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
+            project->m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+    }
+
     int defaultLineThickness = cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
     int defaultTextSize = cfg ? cfg->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize = cfg ? cfg->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;
@@ -166,48 +174,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<int>( "drawing.hop_over_size_choice",
             &m_HopOverSizeChoice, defaultHopOverSizeChoice ) );
-
-    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "drawing.field_names",
-            [&]() -> nlohmann::json
-            {
-                nlohmann::json ret = nlohmann::json::array();
-
-                for( const TEMPLATE_FIELDNAME& field : m_TemplateFieldNames.GetTemplateFieldNames( false ) )
-                {
-                    ret.push_back( nlohmann::json( {
-                                { "name",    field.m_Name },
-                                { "visible", field.m_Visible },
-                                { "url",     field.m_URL }
-                            } ) );
-                }
-
-                return ret;
-            },
-            [&]( const nlohmann::json& aJson )
-            {
-                if( !aJson.empty() && aJson.is_array() )
-                {
-                    m_TemplateFieldNames.DeleteAllFieldNameTemplates( false );
-
-                    for( const nlohmann::json& entry : aJson )
-                    {
-                        if( entry.contains( "name" ) && entry.contains( "url" ) && entry.contains( "visible" ) )
-                        {
-                            TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
-                            field.m_URL     = entry["url"].get<bool>();
-                            field.m_Visible = entry["visible"].get<bool>();
-                            m_TemplateFieldNames.AddTemplateFieldName( field, false );
-                        }
-                    }
-                }
-
-                // Read global fieldname templates
-                if( EESCHEMA_SETTINGS* curr_cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-                {
-                    if( !curr_cfg->m_Drawing.field_names.IsEmpty() )
-                        m_TemplateFieldNames.AddTemplateFieldNames( curr_cfg->m_Drawing.field_names );
-                }
-            }, {} ) );
 
     m_params.emplace_back( new PARAM<bool>( "compare_symbols.missing_fields",
             &m_SymbolParity.m_MissingFields, true ) );

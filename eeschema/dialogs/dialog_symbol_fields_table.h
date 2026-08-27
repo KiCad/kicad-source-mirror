@@ -31,9 +31,9 @@
 
 wxDECLARE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
-class SCHEMATIC_SETTINGS;
 class SCH_EDIT_FRAME;
 class JOB_EXPORT_BOM;
+class TEMPLATES;
 
 
 class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_FIELDS_TABLE, public SCHEMATIC_LISTENER
@@ -102,7 +102,7 @@ private:
     SCH_REFERENCE_LIST                 m_symbolsList;
     SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
 
-    SCHEMATIC_SETTINGS&                m_schSettings;
+    TEMPLATES&                         m_templateFieldNames;
 
     bool m_aborted = false;
 

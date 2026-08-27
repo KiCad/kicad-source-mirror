@@ -2039,10 +2039,11 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 
         RefreshOperatingPointDisplay();
 
-        settings.m_TemplateFieldNames.DeleteAllFieldNameTemplates( true /* global */ );
+        PROJECT_FILE& project = Prj().GetProjectFile();
+        project.m_TemplateFieldNames.DeleteAllFieldNameTemplates( true /* global */ );
 
         if( !cfg->m_Drawing.field_names.IsEmpty() )
-            settings.m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+            project.m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
     }
 
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();

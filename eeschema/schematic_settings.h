@@ -23,7 +23,6 @@
 #include <default_values.h>
 #include <settings/nested_settings.h>
 #include <settings/bom_settings.h>
-#include <template_fieldnames.h>
 #include <font/font_metrics.h>
 
 class NGSPICE_SETTINGS;
@@ -126,8 +125,6 @@ public:
 
     wxString  m_SchDrawingSheetFileName;
     wxString  m_PlotDirectoryName;
-
-    TEMPLATES m_TemplateFieldNames;
 
     KIFONT::METRICS             m_FontMetrics;
 

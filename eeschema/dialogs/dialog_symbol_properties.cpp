@@ -36,6 +36,7 @@
 #include <widgets/grid_combobox.h>
 #include <widgets/std_bitmap_button.h>
 #include <settings/settings_manager.h>
+#include <project/project_file.h>
 #include <sch_collectors.h>
 #include <fields_grid_table.h>
 #include <sch_edit_frame.h>
@@ -502,7 +503,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     // Add in any template fieldnames not yet defined:
     for( const TEMPLATE_FIELDNAME& templateFieldname :
-         schematic.Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
+         schematic.Project().GetProjectFile().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {

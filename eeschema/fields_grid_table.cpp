@@ -632,10 +632,8 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
         {
             wxString fn = GetValue( aRow, FDC_NAME );
 
-            SCHEMATIC_SETTINGS* settings = m_frame->Prj().GetProjectFile().m_SchematicSettings;
-
             const TEMPLATE_FIELDNAME* templateFn =
-                    settings ? settings->m_TemplateFieldNames.GetFieldName( fn ) : nullptr;
+                    m_frame->Prj().GetProjectFile().m_TemplateFieldNames.GetFieldName( fn );
 
             if( ( templateFn && templateFn->m_URL ) || field.HasHypertext() )
             {

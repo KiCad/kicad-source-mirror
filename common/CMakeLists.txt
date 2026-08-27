@@ -230,6 +230,8 @@ set( KICOMMON_SRCS
     project/project_local_settings.cpp
     project/tuning_profiles.cpp
 
+    template_fieldnames.cpp
+
     text_eval/text_eval_wrapper.cpp
     text_eval/text_eval_parser.cpp
     text_eval/text_eval_vcs.cpp
@@ -855,7 +857,6 @@ set( COMMON_SRCS
     line_ending.cpp
     stroke_params.cpp
     table_io.cpp
-    template_fieldnames.cpp
     textentry_tricks.cpp
     undo_redo_container.cpp
     validators.cpp

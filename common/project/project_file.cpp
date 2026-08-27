@@ -63,6 +63,43 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM_WXSTRING_MAP( "text_variables",
             &m_TextVars, {}, false, true /* array behavior, even though stored as a map */ ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "schematic.drawing.field_names",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( const TEMPLATE_FIELDNAME& field :
+                     m_TemplateFieldNames.GetTemplateFieldNames( false ) )
+                {
+                    ret.push_back( nlohmann::json( {
+                                { "name",    field.m_Name },
+                                { "visible", field.m_Visible },
+                                { "url",     field.m_URL }
+                            } ) );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.empty() && aJson.is_array() )
+                {
+                    m_TemplateFieldNames.DeleteAllFieldNameTemplates( false );
+
+                    for( const nlohmann::json& entry : aJson )
+                    {
+                        if( entry.contains( "name" ) && entry.contains( "url" )
+                                && entry.contains( "visible" ) )
+                        {
+                            TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
+                            field.m_URL     = entry["url"].get<bool>();
+                            field.m_Visible = entry["visible"].get<bool>();
+                            m_TemplateFieldNames.AddTemplateFieldName( field, false );
+                        }
+                    }
+                }
+            }, {} ) );
+
     m_params.emplace_back( new PARAM_LIST<wxString>( "libraries.pinned_symbol_libs",
             &m_PinnedSymbolLibs, {} ) );
 

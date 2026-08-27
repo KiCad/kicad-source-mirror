@@ -47,6 +47,7 @@
 #include "dialog_resolve_field_case_conflicts.h"
 #include <symbol_fields_data_model.h>
 #include <project_sch.h>
+#include <project/project_file.h>
 #include <jobs/job_export_bom.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
@@ -246,7 +247,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* aParent,
         DIALOG_FIELDS_TABLE( aParent, aParent->eeconfig()->m_FieldEditorPanel,
                              aParent->Schematic().Settings(), aJob ),
         m_parent( aParent ),
-        m_schSettings( aParent->Schematic().Settings() )
+        m_templateFieldNames( aParent->Prj().GetProjectFile().m_TemplateFieldNames )
 {
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, SYMBOL_FILTER_NON_POWER );
@@ -528,7 +529,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
     wxString       currentVariant = m_parent->Schematic().GetCurrentVariant();
 
-    m_dataModel->ApplyData( commit, m_schSettings.m_TemplateFieldNames, currentVariant );
+    m_dataModel->ApplyData( commit, m_templateFieldNames, currentVariant );
 
     if( !commit.Empty() )
     {
@@ -586,8 +587,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
 
     // Add any templateFieldNames which aren't already present.
-    for( const TEMPLATE_FIELDNAME& templateField :
-         m_schSettings.m_TemplateFieldNames.GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateField : m_templateFieldNames.GetTemplateFieldNames() )
     {
         if( userFieldNames.count( templateField.m_Name ) == 0 )
             AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );
@@ -1385,7 +1385,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
 
         SCH_COMMIT     commit( m_parent );
 
-        m_dataModel->ApplyData( commit, m_schSettings.m_TemplateFieldNames, currentVariant );
+        m_dataModel->ApplyData( commit, m_templateFieldNames, currentVariant );
 
         if( !commit.Empty() )
         {

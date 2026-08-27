@@ -79,8 +79,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
-                return new PANEL_TEMPLATE_FIELDNAMES( aParent, &settings.m_TemplateFieldNames );
+                PROJECT_FILE& project = m_frame->Prj().GetProjectFile();
+                return new PANEL_TEMPLATE_FIELDNAMES( aParent, &project.m_TemplateFieldNames );
             }, _( "Field Name Templates" ) );
 
     m_bomPresetsPage = m_treebook->GetPageCount();
@@ -226,7 +226,7 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     if( importDlg.m_FieldNameTemplatesOpt->GetValue() )
     {
         static_cast<PANEL_TEMPLATE_FIELDNAMES*>( m_treebook->ResolvePage( m_fieldNameTemplatesPage ) )
-                ->ImportSettingsFrom( &otherSch.Settings().m_TemplateFieldNames );
+                ->ImportSettingsFrom( &file.m_TemplateFieldNames );
     }
 
     if( importDlg.m_SymbolParityOpt->GetValue() )

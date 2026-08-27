@@ -27,6 +27,7 @@
 #include <project/board_project_settings.h>
 #include <settings/json_settings.h>
 #include <settings/nested_settings.h>
+#include <template_fieldnames.h>
 
 class BOARD_DESIGN_SETTINGS;
 class ERC_SETTINGS;
@@ -35,7 +36,6 @@ class COMPONENT_CLASS_SETTINGS;
 class TUNING_PROFILES;
 class LAYER_PAIR_SETTINGS;
 class SCHEMATIC_SETTINGS;
-class TEMPLATES;
 
 /**
  * For files like sheets and boards, a pair of that object KIID and display name
@@ -180,6 +180,9 @@ public:
     std::vector<wxString> m_PinnedDesignBlockLibs;
 
     std::map<wxString, wxString> m_TextVars;
+
+    /// Project and global field name templates shared by project editors.
+    TEMPLATES m_TemplateFieldNames;
 
     /**
      * Eeschema params

@@ -45,6 +45,7 @@
 #include <api/api_sch_utils.h>
 #include <api/schematic/schematic_types.pb.h>
 #include <project_sch.h>
+#include <project/project_file.h>
 #include <libraries/symbol_library_adapter.h>
 #include <variant_symbol_utils.h>
 #include <diff_merge/property_value_converter.h>
@@ -2531,7 +2532,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     }
 
     for( const TEMPLATE_FIELDNAME& templateFieldname :
-         schematic->Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
+         schematic->Project().GetProjectFile().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( token->IsSameAs( templateFieldname.m_Name ) || token->IsSameAs( templateFieldname.m_Name.Upper() ) )
         {
