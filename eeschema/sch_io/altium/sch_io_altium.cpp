@@ -4722,7 +4722,12 @@ void SCH_IO_ALTIUM::ParseSheet( const std::map<wxString, wxString>& aProperties 
 
     screen->SetPageSettings( pageInfo );
 
-    m_sheetOffset = { 0, pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) };
+    // Altium anchors its snap grid at the sheet origin, which the Y flip maps to the page bottom
+    // ISO heights are not whole mils, so truncate to a grid step rather than flip past the page
+    const int gridPitch = m_schematic->Settings().m_ConnectionGridSize;
+    const int pageHeight = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS );
+
+    m_sheetOffset = { 0, ( pageHeight / gridPitch ) * gridPitch };
 }
 
 
