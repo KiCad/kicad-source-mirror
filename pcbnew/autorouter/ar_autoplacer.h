@@ -26,8 +26,7 @@
  */
 
 
-#ifndef __AR_AUTOPLACER_H
-#define __AR_AUTOPLACER_H
+#pragma once
 
 #include "ar_matrix.h"
 
@@ -64,23 +63,14 @@ public:
     /**
      * Set a VIEW overlay to draw items during a autoplace session.
      */
-    void SetOverlay( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOverlay )
-    {
-        m_overlay = aOverlay;
-    }
+    void SetOverlay( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOverlay ) { m_overlay = aOverlay; }
 
     /**
      * Callback to redraw on screen the view after changes, for instance after moving a footprint.
      */
-    void SetRefreshCallback( std::function<int( FOOTPRINT* aFootprint )> aCallback )
-    {
-        m_refreshCallback = aCallback;
-    }
+    void SetRefreshCallback( std::function<int( FOOTPRINT* aFootprint )> aCallback ) { m_refreshCallback = aCallback; }
 
-    void SetProgressReporter( PROGRESS_REPORTER* aReporter )
-    {
-        m_progressReporter = aReporter;
-    }
+    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) { m_progressReporter = aReporter; }
 
 private:
     void drawPlacementRoutingMatrix();  // draw the working area (shows free and occupied areas)
@@ -121,7 +111,8 @@ private:
     // aFpClearance is a mechanical clearance.
     void buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance );
 
-    AR_MATRIX m_matrix;
+private:
+    AR_MATRIX      m_matrix;
     SHAPE_POLY_SET m_topFreeArea;       // The polygonal description of the top side free areas;
     SHAPE_POLY_SET m_bottomFreeArea;    // The polygonal description of the bottom side free areas;
     SHAPE_POLY_SET m_boardShape;        // The polygonal description of the board;
@@ -130,16 +121,14 @@ private:
     SHAPE_POLY_SET m_fpAreaBottom;      // The polygonal description of the footprint to place,
                                         // bottom side;
 
-    BOARD* m_board;
+    BOARD*         m_board;
 
-    VECTOR2I m_curPosition;
-    double   m_minCost;
-    int      m_gridSize;
+    VECTOR2I       m_curPosition;
+    double         m_minCost;
+    int            m_gridSize;
 
     std::shared_ptr<KIGFX::VIEW_OVERLAY>        m_overlay;
     std::unique_ptr<CONNECTIVITY_DATA>          m_connectivity;
     std::function<int( FOOTPRINT* aFootprint )> m_refreshCallback;
     PROGRESS_REPORTER*                          m_progressReporter;
 };
-
-#endif

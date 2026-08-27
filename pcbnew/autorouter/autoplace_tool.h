@@ -21,21 +21,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef TOOLS_AUTOPLACE_TOOL_H
-#define TOOLS_AUTOPLACE_TOOL_H
+#pragma once
 
 #include <tools/pcb_tool_base.h>
 
 
 /**
- * Tool responsible for automagic placement of components.
+ * Tool responsible for automagic placement of footprints.
  */
 class AUTOPLACE_TOOL : public PCB_TOOL_BASE
 {
 public:
     AUTOPLACE_TOOL();
-    ~AUTOPLACE_TOOL();
+    ~AUTOPLACE_TOOL() {}
 
+protected:
     ///< Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
@@ -45,6 +45,3 @@ private:
     int autoplaceSelected( const TOOL_EVENT& aEvent );
     int autoplaceOffboard( const TOOL_EVENT& aEvent );
 };
-
-
-#endif // TOOLS_AUTOPLACE_TOOL_H

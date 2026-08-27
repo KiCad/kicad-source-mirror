@@ -34,12 +34,8 @@
 #include "autoplace_tool.h"
 
 
-AUTOPLACE_TOOL::AUTOPLACE_TOOL() : PCB_TOOL_BASE( "pcbnew.Autoplacer" )
-{
-}
-
-
-AUTOPLACE_TOOL::~AUTOPLACE_TOOL()
+AUTOPLACE_TOOL::AUTOPLACE_TOOL() :
+        PCB_TOOL_BASE( "pcbnew.Autoplacer" )
 {
 }
 
@@ -68,8 +64,7 @@ int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints )
 
     if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
     {
-        wxString msg = wxString::Format( _( "Board edges must be defined on the %s layer." ),
-                                         LayerName( Edge_Cuts ) );
+        wxString msg = wxString::Format( _( "Board edges must be defined on the %s layer." ), LayerName( Edge_Cuts ) );
 
         frame()->GetInfoBar()->RemoveAllButtons();
         frame()->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_ERROR );

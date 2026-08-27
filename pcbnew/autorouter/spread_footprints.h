@@ -21,9 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#ifndef __SPREAD_FOOTPRINTS_H
-#define __SPREAD_FOOTPRINTS_H
+#pragma once
 
 #include <vector>
 
@@ -32,18 +30,14 @@
 
 class FOOTPRINT;
 
-
 /**
  * Footprints (after loaded by reading a netlist for instance) are moved
  * to be in a small free area (outside the current board) without overlapping.
- * @param aBoard is the board to edit.
  * @param aFootprints: a list of footprints to be spread out.
  * @param aTargetBoxPosition the position of the upper left corner of the
  *        area allowed to spread footprints
  */
-void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aTargetBoxPosition,
+void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, const VECTOR2I& aTargetBoxPosition,
                        bool aGroupBySheet = true, int aComponentGap = pcbIUScale.mmToIU( 1 ),
                        int aGroupGap = pcbIUScale.mmToIU( 1.5 ) );
 
-
-#endif
