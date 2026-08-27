@@ -91,6 +91,7 @@ void SCH_SHEET::Serialize( google::protobuf::Any& aContainer ) const
     PackVector2( *sheet.mutable_position(), GetPosition(), schIUScale );
     PackVector2( *sheet.mutable_size(), GetSize(), schIUScale );
     sheet.set_locked( IsLocked() ? LockedState::LS_LOCKED : LockedState::LS_UNLOCKED );
+    sheet.set_fields_autoplaced( GetFieldsAutoplaced() != AUTOPLACE_NONE );
     sheet.set_exclude_from_sim( GetExcludedFromSim() );
     sheet.set_exclude_from_bom( GetExcludedFromBOM() );
     sheet.set_exclude_from_board( GetExcludedFromBoard() );
@@ -143,6 +144,7 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
     SetPosition( UnpackVector2( sheet.position(), schIUScale ) );
     SetSize( UnpackVector2( sheet.size(), schIUScale ) );
     SetLocked( sheet.locked() == LockedState::LS_LOCKED );
+    SetFieldsAutoplaced( sheet.fields_autoplaced() ? AUTOPLACE_AUTO : AUTOPLACE_NONE );
     SetExcludedFromSim( sheet.exclude_from_sim() );
     SetExcludedFromBOM( sheet.exclude_from_bom() );
     SetExcludedFromBoard( sheet.exclude_from_board() );

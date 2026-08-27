@@ -1623,6 +1623,7 @@ void packLabel( LabelProto& aOutput, const SCH_LABEL_BASE& aLabel )
 
     aLabel.EDA_TEXT::Serialize( *aOutput.mutable_text(), schIUScale );
     kiapi::common::PackVector2( *aOutput.mutable_position(), aLabel.GetPosition(), schIUScale );
+    aOutput.set_fields_autoplaced( aLabel.GetFieldsAutoplaced() != AUTOPLACE_NONE );
 
     for( const SCH_FIELD& field : aLabel.GetFields() )
     {
@@ -1647,6 +1648,7 @@ bool unpackLabel( const LabelProto& aInput, SCH_LABEL_BASE& aLabel )
         return false;
 
     aLabel.SetPosition( kiapi::common::UnpackVector2( aInput.position(), schIUScale ) );
+    aLabel.SetFieldsAutoplaced( aInput.fields_autoplaced() ? AUTOPLACE_AUTO : AUTOPLACE_NONE );
     aLabel.GetFields().clear();
 
     for( const types::SchematicField& field : aInput.fields() )
@@ -2127,6 +2129,7 @@ void SCH_GLOBALLABEL::Serialize( google::protobuf::Any& aContainer ) const
 
     EDA_TEXT::Serialize( *label.mutable_text(), schIUScale );
     kiapi::common::PackVector2( *label.mutable_position(), GetPosition(), schIUScale );
+    label.set_fields_autoplaced( GetFieldsAutoplaced() != AUTOPLACE_NONE );
 
     label.set_shape( ToProtoEnum<LABEL_FLAG_SHAPE, types::SchematicLabelShape>( GetShape() ) );
 

@@ -233,6 +233,7 @@ void SCH_SYMBOL::Serialize( google::protobuf::Any& aContainer ) const
     symbol.mutable_id()->set_value( m_Uuid.AsStdString() );
     PackVector2( *symbol.mutable_position(), GetPosition(), schIUScale );
     symbol.set_locked( IsLocked() ? types::LockedState::LS_LOCKED : types::LockedState::LS_UNLOCKED );
+    symbol.set_fields_autoplaced( GetFieldsAutoplaced() != AUTOPLACE_NONE );
 
     SchematicSymbolTransform* transform = symbol.mutable_transform();
     transform->set_orientation(
@@ -316,6 +317,7 @@ bool SCH_SYMBOL::Deserialize( const google::protobuf::Any& aContainer )
     const_cast<::KIID&>( m_Uuid ) = ::KIID( symbol.id().value() );
     SetPosition( UnpackVector2( symbol.position(), schIUScale ) );
     SetLocked( symbol.locked() == LockedState::LS_LOCKED );
+    SetFieldsAutoplaced( symbol.fields_autoplaced() ? AUTOPLACE_AUTO : AUTOPLACE_NONE );
 
     SetOrientationProp( FromProtoEnum<SYMBOL_ORIENTATION_PROP>( symbol.transform().orientation() ) );
     SetMirrorX( symbol.transform().mirror_x() );

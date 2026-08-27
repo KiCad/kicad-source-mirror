@@ -159,6 +159,7 @@ message LocalLabel
   SchematicLabelSpinStyle spin_style = 4;
   repeated SchematicField fields = 5;
   kiapi.common.types.LockedState locked = 6;
+  bool fields_autoplaced = 7;
 }
 
 message GlobalLabel
@@ -171,6 +172,7 @@ message GlobalLabel
   repeated SchematicField fields = 6;
   kiapi.common.types.LockedState locked = 7;
   SchematicField intersheet_refs_field = 8;
+  bool fields_autoplaced = 9;
 }
 
 message HierarchicalLabel
@@ -182,6 +184,7 @@ message HierarchicalLabel
   SchematicLabelShape shape = 5;
   repeated SchematicField fields = 6;
   kiapi.common.types.LockedState locked = 7;
+  bool fields_autoplaced = 8;
 }
 
 message DirectiveLabel
@@ -195,6 +198,7 @@ message DirectiveLabel
   kiapi.common.types.LockedState locked = 7;
   kiapi.common.types.Distance pin_length = 8;
   kiapi.common.types.Distance symbol_size = 9;
+  bool fields_autoplaced = 10;
 }
 
 message Group
@@ -259,6 +263,7 @@ message SheetSymbol
 
   // Page numbers in KiCad are arbitrary user data and don't have to be numeric
   string page_number = 16;
+  bool fields_autoplaced = 17;
 }
 
 enum SchematicSymbolType
@@ -486,6 +491,7 @@ message SchematicSymbolInstance
   repeated SchematicField user_fields = 19;
 
   PinMapInstanceOverride pin_map_override = 20;
+  bool fields_autoplaced = 21;
 }
 
 message SheetInstance
