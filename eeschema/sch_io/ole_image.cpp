@@ -20,9 +20,11 @@
 #include <wx/buffer.h>
 #include <wx/filename.h>
 #include <wx/image.h>
+#include <wx/log.h>
 
 #include <compoundfilereader.h>
 #include <paths.h>
+#include <trace_helpers.h>
 
 #include <libwmf/api.h>
 #include <libwmf/gd.h>
@@ -142,6 +144,9 @@ wxString wmfFontDirectory()
 
         buildDir.RemoveLastDir();
     }
+
+    wxLogTrace( traceSchPlugin, wxS( "libwmf fonts missing (looked for %s); WMF rendering will fail" ),
+                fontDir.GetPath() );
 
     return fontDir.GetPath();
 }
