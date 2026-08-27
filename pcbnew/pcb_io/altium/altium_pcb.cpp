@@ -1285,6 +1285,14 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
         }
     }
 
+    if( elem.discardedVertices > 0 && m_reporter )
+    {
+        m_reporter->Report( wxString::Format( _( "Board outline has %d vertices outside the "
+                                                 "coordinate range; they were dropped." ),
+                                              elem.discardedVertices ),
+                            RPT_SEVERITY_ERROR );
+    }
+
     HelperCreateBoardOutline( elem.board_vertices );
     m_board->GetDesignSettings().SetBoardThickness( stackup.BuildBoardThicknessFromStackup() );
     designSettings.m_HasStackup = true;
@@ -2524,6 +2532,16 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltium
     {
         checkpoint();
         APOLYGON6 elem( reader );
+
+        if( elem.discardedVertices > 0 && m_reporter )
+        {
+            m_reporter->Report( wxString::Format( _( "Polygon on layer '%s' has %d vertices "
+                                                     "outside the coordinate range; they were "
+                                                     "dropped." ),
+                                                  LayerName( GetKicadLayer( elem.layer ) ),
+                                                  elem.discardedVertices ),
+                                RPT_SEVERITY_ERROR );
+        }
 
         SHAPE_LINE_CHAIN linechain;
         HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );

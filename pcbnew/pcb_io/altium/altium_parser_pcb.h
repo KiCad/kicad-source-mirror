@@ -260,6 +260,18 @@ struct ALTIUM_VERTICE
     }
 };
 
+
+/**
+ * Read the VX/VY/KIND/R/SA/EA/CX/CY vertex series out of a polygon or board outline record.
+ *
+ * @param aDiscarded, when given, counts the vertices dropped because a coordinate did not fit
+ *                    the KiCad int range.  Those are clamps rather than places, and an outline
+ *                    built from one spans the whole coordinate space.
+ */
+void altium_parse_polygons( std::map<wxString, wxString>& aProps,
+                            std::vector<ALTIUM_VERTICE>& aVertices, int* aDiscarded = nullptr );
+
+
 enum class ALTIUM_LAYER : uint32_t
 {
     UNKNOWN = 0,
@@ -511,6 +523,9 @@ struct ABOARD6
 
     std::vector<ALTIUM_VERTICE> board_vertices;
 
+    // Vertices the file placed outside the representable coordinate range
+    int discardedVertices = 0;
+
     explicit ABOARD6( ALTIUM_BINARY_PARSER& aReader );
 };
 
@@ -621,6 +636,9 @@ struct APOLYGON6
     int32_t pourindex;
 
     std::vector<ALTIUM_VERTICE> vertices;
+
+    // Vertices the file placed outside the representable coordinate range
+    int discardedVertices = 0;
 
     explicit APOLYGON6( ALTIUM_BINARY_PARSER& aReader );
 };

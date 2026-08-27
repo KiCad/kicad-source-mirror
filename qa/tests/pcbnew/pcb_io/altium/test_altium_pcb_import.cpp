@@ -1610,4 +1610,52 @@ BOOST_AUTO_TEST_CASE( SharedComponentBodyModelEmbeddedOnce )
 }
 
 
+// The MID6 copper polygon of TI's TIDA-00204_revE3_PCB.PcbDoc, whose third vertex reads
+// -111339.9634mil.  That is 2.8 m, past the int range, so it used to clamp to INT_MIN + 8 and
+// stretch the zone across the whole coordinate space
+BOOST_AUTO_TEST_CASE( PolygonVertexOutsideCoordinateRangeIsDiscarded )
+{
+    std::map<wxString, wxString> props = {
+        { wxT( "VX0" ), wxT( "3481.9999mil" ) },   { wxT( "VY0" ), wxT( "2818.9999mil" ) },
+        { wxT( "VX1" ), wxT( "3506.9999mil" ) },   { wxT( "VY1" ), wxT( "2843.9999mil" ) },
+        { wxT( "VX2" ), wxT( "-111339.9634mil" ) }, { wxT( "VY2" ), wxT( "2834mil" ) },
+        { wxT( "VX3" ), wxT( "3756.9998mil" ) },   { wxT( "VY3" ), wxT( "2834mil" ) },
+        { wxT( "VX4" ), wxT( "3771.9999mil" ) },   { wxT( "VY4" ), wxT( "2818.9999mil" ) },
+        { wxT( "VX5" ), wxT( "3772mil" ) },        { wxT( "VY5" ), wxT( "2634mil" ) },
+        { wxT( "VX6" ), wxT( "3757mil" ) },        { wxT( "VY6" ), wxT( "2619mil" ) },
+        { wxT( "VX7" ), wxT( "3614.5mil" ) },      { wxT( "VY7" ), wxT( "2619.0001mil" ) },
+        { wxT( "VX8" ), wxT( "3583.0001mil" ) },   { wxT( "VY8" ), wxT( "2587.5mil" ) },
+        { wxT( "VX9" ), wxT( "3573.9998mil" ) },   { wxT( "VY9" ), wxT( "2587.4999mil" ) },
+        { wxT( "VX10" ), wxT( "3542.5005mil" ) },  { wxT( "VY10" ), wxT( "2619.0001mil" ) },
+        { wxT( "VX11" ), wxT( "3522mil" ) },       { wxT( "VY11" ), wxT( "2619mil" ) },
+        { wxT( "VX12" ), wxT( "3497mil" ) },       { wxT( "VY12" ), wxT( "2619mil" ) },
+        { wxT( "VX13" ), wxT( "3482mil" ) },       { wxT( "VY13" ), wxT( "2634mil" ) },
+        { wxT( "VX14" ), wxT( "3481.9999mil" ) },  { wxT( "VY14" ), wxT( "2818.9999mil" ) },
+    };
+
+    std::vector<ALTIUM_VERTICE> vertices;
+    int                         discarded = 0;
+
+    altium_parse_polygons( props, vertices, &discarded );
+
+    BOOST_CHECK_EQUAL( discarded, 1 );
+    BOOST_REQUIRE_EQUAL( vertices.size(), 14 );
+
+    BOX2I bbox;
+
+    for( const ALTIUM_VERTICE& vertex : vertices )
+        bbox.Merge( vertex.position );
+
+    // The representable vertices span 7.366 x 6.5151 mm around x = 88.4 mm; keeping the clamped
+    // one put the left edge at INT_MIN + 8 and overflowed the width itself
+    BOOST_CHECK_EQUAL( bbox.GetLeft(), 88442800 );
+    BOOST_CHECK_EQUAL( bbox.GetWidth(), 7366000 );
+    BOOST_CHECK_EQUAL( bbox.GetHeight(), 6515100 );
+
+    // Every survivor keeps its own coordinates, so nothing was renumbered or shifted
+    BOOST_CHECK_EQUAL( vertices[1].position, VECTOR2I( 89077800, -72237600 ) );
+    BOOST_CHECK_EQUAL( vertices[2].position, VECTOR2I( 95427800, -71983600 ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

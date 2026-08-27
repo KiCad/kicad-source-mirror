@@ -461,15 +461,15 @@ bool SEG::IntersectsLine( double aSlope, double aOffset, VECTOR2I& aIntersection
     {
         // Vertical segment: x = A.x, find y on the line
         const double intersect_y = aSlope * A.x + aOffset;
-        const int intersect_y_int = KiROUND( intersect_y );
 
-        // Check if intersection is within segment's y-range
+        // Compare before rounding.  The line is unbounded, so a miss lands anywhere, and
+        // narrowing it first would fault on a value this is about to discard
         const int seg_min_y = std::min( A.y, B.y );
         const int seg_max_y = std::max( A.y, B.y );
 
-        if( intersect_y_int >= seg_min_y && intersect_y_int <= seg_max_y )
+        if( intersect_y >= seg_min_y && intersect_y <= seg_max_y )
         {
-            aIntersection = VECTOR2I( A.x, intersect_y_int );
+            aIntersection = VECTOR2I( A.x, KiROUND( intersect_y ) );
             return true;
         }
         return false;

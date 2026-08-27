@@ -1595,6 +1595,34 @@ BOOST_AUTO_TEST_CASE( IntersectLineVerticalSegmentsCorrection )
     BOOST_CHECK_EQUAL( intersection, VECTOR2I( 5, 5 ) );  // At x=5: y = 0.5*5 + 2 = 4.5 ≈ 5 (round up)
 }
 
+// The hatch generator sweeps unbounded lines past every segment, so most offsets miss by a wide
+// margin.  Rounding the miss into an int before rejecting it faulted on a discarded value, and
+// qa_kimath installs no assert thrower, so arm one here or the checks below still pass
+BOOST_AUTO_TEST_CASE( IntersectLineVerticalSegmentMissBeyondIntRange )
+{
+    SEG      verticalSeg( { 95808800, -71602600 }, { 95808800, -66903600 } );
+    VECTOR2I intersection;
+    bool     hit = true;
+
+    wxAssertHandler_t prevHandler = wxSetAssertHandler( &KI_TEST::wxAssertThrower );
+
+    // At x = 95808800 this line sits at y = -2315308800, past the bottom of the int range
+    BOOST_CHECK_NO_THROW( hit = verticalSeg.IntersectsLine( -1.0, -2219500000.0, intersection ) );
+    BOOST_CHECK( !hit );
+
+    // ...and the same going the other way
+    BOOST_CHECK_NO_THROW( hit = verticalSeg.IntersectsLine( 1.0, 2219500000.0, intersection ) );
+    BOOST_CHECK( !hit );
+
+    // A hit still lands, so the reordered range check did not simply reject everything
+    BOOST_CHECK_NO_THROW( hit = verticalSeg.IntersectsLine( -1.0, 26000000.0, intersection ) );
+
+    wxSetAssertHandler( prevHandler );
+
+    BOOST_CHECK( hit );
+    BOOST_CHECK_EQUAL( intersection, VECTOR2I( 95808800, -69808800 ) );
+}
+
 BOOST_AUTO_TEST_CASE( IntersectLineParallelDetection )
 {
     // Test parallel line detection using cross products

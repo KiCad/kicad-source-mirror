@@ -303,7 +303,7 @@ ALTIUM_MECHKIND altium_mechkind_from_name( const wxString& aName )
 
 
 void altium_parse_polygons( std::map<wxString, wxString>& aProps,
-                            std::vector<ALTIUM_VERTICE>& aVertices )
+                            std::vector<ALTIUM_VERTICE>& aVertices, int* aDiscarded )
 {
     for( size_t i = 0; i < std::numeric_limits<size_t>::max(); i++ )
     {
@@ -315,14 +315,36 @@ void altium_parse_polygons( std::map<wxString, wxString>& aProps,
         if( aProps.find( vxi ) == aProps.end() || aProps.find( vyi ) == aProps.end() )
             break; // it doesn't seem like we know beforehand how many vertices are inside a polygon
 
+        bool clamped = false;
+        bool anyClamped = false;
+
+        auto readUnit =
+                [&]( const wxString& aKey ) -> int32_t
+                {
+                    int32_t v = ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, aKey, wxT( "0mil" ),
+                                                                   &clamped );
+                    anyClamped |= clamped;
+
+                    return v;
+                };
+
         const bool     isRound = ALTIUM_PROPS_UTILS::ReadInt( aProps, wxT( "KIND" ) + si, 0 ) != 0;
-        const int32_t  radius = ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, wxT( "R" ) + si, wxT( "0mil" ) );
+        const int32_t  radius = readUnit( wxT( "R" ) + si );
         const double   sa = ALTIUM_PROPS_UTILS::ReadDouble( aProps, wxT( "SA" ) + si, 0. );
         const double   ea = ALTIUM_PROPS_UTILS::ReadDouble( aProps, wxT( "EA" ) + si, 0. );
-        const VECTOR2I vp = VECTOR2I( ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, vxi, wxT( "0mil" ) ),
-                                     -ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, vyi, wxT( "0mil" ) ) );
-        const VECTOR2I cp = VECTOR2I( ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, wxT( "CX" ) + si, wxT( "0mil" ) ),
-                                     -ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, wxT( "CY" ) + si, wxT( "0mil" ) ) );
+        const VECTOR2I vp = VECTOR2I( readUnit( vxi ), -readUnit( vyi ) );
+        const VECTOR2I cp = VECTOR2I( readUnit( wxT( "CX" ) + si ),
+                                      -readUnit( wxT( "CY" ) + si ) );
+
+        // A clamped coordinate sits at the edge of the int range, so keeping it would stretch
+        // the outline across metres and overflow everything that later measures the shape
+        if( anyClamped )
+        {
+            if( aDiscarded )
+                ( *aDiscarded )++;
+
+            continue;
+        }
 
         aVertices.emplace_back( isRound, radius, sa, ea, vp, cp );
     }
@@ -627,7 +649,7 @@ ABOARD6::ABOARD6( ALTIUM_BINARY_PARSER& aReader )
             l.name = wxString::Format( wxT( "%s %d" ), originalName, ii );
     }
 
-    altium_parse_polygons( props, board_vertices );
+    altium_parse_polygons( props, board_vertices, &discardedVertices );
 
     if( aReader.HasParsingError() )
         THROW_IO_ERROR( wxT( "Board6 stream was not parsed correctly!" ) );
@@ -835,7 +857,7 @@ APOLYGON6::APOLYGON6( ALTIUM_BINARY_PARSER& aReader )
     else if( hatchstyleraw == wxT( "None" ) )       hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::NONE;
     else                                            hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::UNKNOWN;
 
-    altium_parse_polygons( properties, vertices );
+    altium_parse_polygons( properties, vertices, &discardedVertices );
 
     layer = altium_versioned_layer( layer_v6, layer_v7 );
 

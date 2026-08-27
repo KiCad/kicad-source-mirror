@@ -26,6 +26,7 @@
 #include <boost/test/data/test_case.hpp>
 
 #include <common/io/altium/altium_parser_utils.h>
+#include <common/io/altium/altium_props_utils.h>
 
 struct ALTIUM_PARSER_UTILS_FIXTURE
 {
@@ -256,6 +257,64 @@ BOOST_DATA_TEST_CASE( AltiumPinDesignatorToKiCadProperties,
                       data )
 {
     BOOST_CHECK_EQUAL( AltiumPinDesignatorToKiCad( data.input ), data.expected );
+}
+
+
+// A value too large for an int is clamped, which turns a bogus dimension into a coordinate at
+// the edge of the board.  Callers that place geometry need to know the difference
+BOOST_AUTO_TEST_CASE( ConvertToKicadUnitFlagsClampedValues )
+{
+    bool outOfRange = true;
+
+    BOOST_CHECK_EQUAL( ALTIUM_PROPS_UTILS::ConvertToKicadUnit( 10000., &outOfRange ), 25400 );
+    BOOST_CHECK( !outOfRange );
+
+    BOOST_CHECK_EQUAL( ALTIUM_PROPS_UTILS::ConvertToKicadUnit( -10000., &outOfRange ), -25400 );
+    BOOST_CHECK( !outOfRange );
+
+    // -111339.9634mil, the vertex TIDA-00204_revE3_PCB.PcbDoc carries in a copper polygon
+    const int32_t clamped = ALTIUM_PROPS_UTILS::ConvertToKicadUnit( -1113399634., &outOfRange );
+
+    BOOST_CHECK( outOfRange );
+    BOOST_CHECK_LT( clamped, -2000000000 );
+
+    BOOST_CHECK_EQUAL( ALTIUM_PROPS_UTILS::ConvertToKicadUnit( 1113399634., &outOfRange ),
+                       -clamped );
+    BOOST_CHECK( outOfRange );
+
+    // The flag is optional and the clamp still happens without it
+    BOOST_CHECK_EQUAL( ALTIUM_PROPS_UTILS::ConvertToKicadUnit( -1113399634. ), clamped );
+}
+
+
+BOOST_AUTO_TEST_CASE( ReadKicadUnitFlagsClampedValues )
+{
+    const std::map<wxString, wxString> props = {
+        { wxT( "SANE" ), wxT( "1000mil" ) },
+        { wxT( "HUGE" ), wxT( "-111339.9634mil" ) },
+        { wxT( "JUNK" ), wxT( "not a number" ) },
+    };
+
+    bool outOfRange = true;
+
+    BOOST_CHECK_EQUAL( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "SANE" ), wxT( "0mil" ),
+                                                          &outOfRange ),
+                       25400000 );
+    BOOST_CHECK( !outOfRange );
+
+    ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "HUGE" ), wxT( "0mil" ), &outOfRange );
+    BOOST_CHECK( outOfRange );
+
+    // An unparseable or absent property yields zero, which is in range rather than clamped
+    BOOST_CHECK_EQUAL( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "JUNK" ), wxT( "0mil" ),
+                                                          &outOfRange ),
+                       0 );
+    BOOST_CHECK( !outOfRange );
+
+    BOOST_CHECK_EQUAL( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "ABSENT" ), wxT( "0mil" ),
+                                                          &outOfRange ),
+                       0 );
+    BOOST_CHECK( !outOfRange );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

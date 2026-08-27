@@ -30,7 +30,16 @@
 class ALTIUM_PROPS_UTILS
 {
 public:
-    static int32_t ConvertToKicadUnit( const double aValue );
+    /**
+     * Convert a value in Altium's internal unit (0.1 uinch) to KiCad IU, clamped to the
+     * representable range.
+     *
+     * @param aOutOfRange, when given, is set true if @p aValue did not fit and the result is a
+     *                     clamp rather than a conversion.  A clamped coordinate names the edge
+     *                     of the int range, not a place on the board, so callers that position
+     *                     geometry must reject it instead of using it.
+     */
+    static int32_t ConvertToKicadUnit( const double aValue, bool* aOutOfRange = nullptr );
 
     static int ReadInt( const std::map<wxString, wxString>& aProps, const wxString& aKey,
                         int aDefault );
@@ -41,8 +50,12 @@ public:
     static bool ReadBool( const std::map<wxString, wxString>& aProps, const wxString& aKey,
                           bool aDefault );
 
+    /**
+     * @param aOutOfRange is forwarded to ConvertToKicadUnit(); it stays false for a missing or
+     *                    unparseable property, which yields zero rather than a clamp.
+     */
     static int32_t ReadKicadUnit( const std::map<wxString, wxString>& aProps, const wxString& aKey,
-                                  const wxString& aDefault );
+                                  const wxString& aDefault, bool* aOutOfRange = nullptr );
 
     static wxString ReadString( const std::map<wxString, wxString>& aProps, const wxString& aKey,
                                 const wxString& aDefault );

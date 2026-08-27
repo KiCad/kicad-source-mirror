@@ -29,9 +29,12 @@
 #include <wx/translation.h>
 
 
-int32_t ALTIUM_PROPS_UTILS::ConvertToKicadUnit( const double aValue )
+int32_t ALTIUM_PROPS_UTILS::ConvertToKicadUnit( const double aValue, bool* aOutOfRange )
 {
     constexpr double int_limit = ( std::numeric_limits<int>::max() - 10 ) / 2.54;
+
+    if( aOutOfRange )
+        *aOutOfRange = !( aValue >= -int_limit && aValue <= int_limit );
 
     int32_t iu = KiROUND( std::clamp( aValue, -int_limit, int_limit ) * 2.54 );
 
@@ -81,8 +84,12 @@ bool ALTIUM_PROPS_UTILS::ReadBool( const std::map<wxString, wxString>& aProps, c
 
 
 int32_t ALTIUM_PROPS_UTILS::ReadKicadUnit( const std::map<wxString, wxString>& aProps,
-                                           const wxString& aKey, const wxString& aDefault )
+                                           const wxString& aKey, const wxString& aDefault,
+                                           bool* aOutOfRange )
 {
+    if( aOutOfRange )
+        *aOutOfRange = false;
+
     const wxString& value = ReadString( aProps, aKey, aDefault );
 
     wxString prefix;
@@ -103,7 +110,7 @@ int32_t ALTIUM_PROPS_UTILS::ReadKicadUnit( const std::map<wxString, wxString>& a
         return 0;
     }
 
-    return ConvertToKicadUnit( mils * 10000 );
+    return ConvertToKicadUnit( mils * 10000, aOutOfRange );
 }
 
 
