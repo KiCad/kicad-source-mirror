@@ -129,6 +129,11 @@ ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
                                  const std::vector<std::string>& aStrings,
                                  const ORCAD_WARN_FN& aWarn );
 
+// Skip unreadable entries; warn if the cache yields no symbols.
+void OrcadParseCacheV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
+                        const ORCAD_WARN_FN& aWarn,
+                        std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols );
+
 /**
  * Parse one v2.0 .OLB 'Symbols/<name>' stream (a single special symbol: power,
  * port, off-page, title block or ERC) into aSymbols, keyed by symbol name.

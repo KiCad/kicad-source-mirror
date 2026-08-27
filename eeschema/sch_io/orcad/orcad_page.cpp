@@ -27,6 +27,7 @@
 #include <utility>
 
 #include <ki_exception.h>
+#include <wx/translation.h>
 
 #include <sch_io/orcad/orcad_cache.h>
 #include <sch_io/orcad/orcad_library.h>
@@ -1166,6 +1167,112 @@ void OrcadParseOlbSymbolStreamV2( const std::vector<char>& aData,
             }
         }
     }
+}
+
+
+static bool v2IsCacheEntryType( uint8_t aType )
+{
+    switch( aType )
+    {
+    case ORCAD_ST_LIBRARY_PART:
+    case ORCAD_ST_SYMBOL_PIN_SCALAR:
+    case ORCAD_ST_PACKAGE:
+    case ORCAD_ST_GLOBAL_SYMBOL:
+    case ORCAD_ST_PORT_SYMBOL:
+    case ORCAD_ST_OFFPAGE_SYMBOL:
+    case ORCAD_ST_SYMBOL_VECTOR:
+    case ORCAD_ST_ALIAS:
+    case ORCAD_ST_TITLEBLOCK_SYMBOL:
+    case ORCAD_ST_ERC_SYMBOL:
+    case ORCAD_ST_BOOKMARK_SYMBOL:
+        return true;
+    default:
+        return false;
+    }
+}
+
+
+// Windows-1252 names can contain bytes above 0x7F. Reject only control characters.
+static bool v2PlausibleCacheString( const std::string& aStr, bool aAllowEmpty )
+{
+    if( aStr.empty() )
+        return aAllowEmpty;
+
+    if( aStr.size() >= 260 )
+        return false;
+
+    for( unsigned char c : aStr )
+    {
+        if( c < 0x20 || c == 0x7F )
+            return false;
+    }
+
+    return true;
+}
+
+
+void OrcadParseCacheV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
+                        const ORCAD_WARN_FN& aWarn,
+                        std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols )
+{
+    // Entry tails have unknown lengths. Validate each header before reading its symbol.
+    size_t recovered = 0;
+    size_t offset = 0;
+
+    while( offset + 12 < aData.size() )
+    {
+        ORCAD_STREAM probe( aData );
+        uint8_t      typeId = 0;
+
+        try
+        {
+            probe.Seek( offset );
+
+            std::string name = probe.ReadLzt();
+            probe.ReadU16();                                // flag
+            std::string sourceLib = probe.ReadLzt();
+            probe.ReadU32();                                // created
+            probe.ReadU32();                                // modified
+            typeId = probe.ReadU8();
+
+            if( probe.ReadU8() != 0x00 || !v2IsCacheEntryType( typeId )
+                || !v2PlausibleCacheString( name, false )
+                || !v2PlausibleCacheString( sourceLib, true )
+                || probe.PeekU8() != typeId )
+            {
+                offset++;
+                continue;
+            }
+        }
+        catch( const IO_ERROR& )
+        {
+            offset++;
+            continue;
+        }
+
+        try
+        {
+            uint8_t           bodyType = v2Prefix( probe, aStrings );
+            ORCAD_SYMBOL_DEF  def = v2LibSymbolDef( probe, aStrings, bodyType );
+
+            if( !def.name.empty() )
+            {
+                aSymbols.emplace( def.name, std::move( def ) );
+                recovered++;
+            }
+
+            offset = probe.GetOffset();
+            continue;
+        }
+        catch( const IO_ERROR& )
+        {
+            // A package has no symbol body. Resume the header search.
+            offset++;
+        }
+    }
+
+    if( recovered == 0 )
+        aWarn( _( "No symbol definitions could be read from the legacy design cache." ) );
 }
 
 

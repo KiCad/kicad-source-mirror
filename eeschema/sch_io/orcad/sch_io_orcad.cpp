@@ -235,21 +235,24 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
         design.library = OrcadParseLibrary( readStream( cfbFile, libraryEntry ) );
 
-        // Pre-2003 designs use pre-preamble framing; pages via v2 reader, symbol bodies
-        // (v2 cache framing undecoded) synthesized as placeholders
+        // Pre-2003 designs use pre-preamble framing; pages and the symbol cache each need
+        // their own reader
         bool isV2 = design.library.versionMajor < 3;
 
         // 'Cache' stream: symbol defs and package pin maps
-        if( isV2 )
-        {
-            warnFn( _( "This is a pre-2003 OrCAD design; symbol graphics are synthesized as "
-                       "placeholders (the legacy symbol cache format is not decoded)." ) );
-        }
-        else if( const CFB::COMPOUND_FILE_ENTRY* cacheEntry =
+        if( const CFB::COMPOUND_FILE_ENTRY* cacheEntry =
                     cfbFile.FindStreamSingleLevel( root, "Cache", true ) )
         {
-            OrcadParseCache( readStream( cfbFile, cacheEntry ), design.library.strings, warnFn,
-                             design.symbols, design.packages );
+            if( isV2 )
+            {
+                OrcadParseCacheV2( readStream( cfbFile, cacheEntry ), design.library.strings,
+                                   warnFn, design.symbols );
+            }
+            else
+            {
+                OrcadParseCache( readStream( cfbFile, cacheEntry ), design.library.strings, warnFn,
+                                 design.symbols, design.packages );
+            }
         }
         else
         {
