@@ -31,6 +31,7 @@
 #include <font/font.h>
 #include <footprint.h>
 #include <hash_eda.h>
+#include <drill/drill_enumerator.h>
 #include <pad.h>
 #include <padstack.h>
 #include <pcb_dimension.h>
@@ -356,7 +357,9 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
             if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
                 has_npth_layer = true;
 
-            if( pad->HasHole() && pad->GetDrillSizeX() != pad->GetDrillSizeY() )
+            // Shared with the drill writers and IPC-2581, which each used to decide this
+            // separately and disagreed on a circular drill shape with unequal sizes
+            if( IsDrillSlot( *pad ) )
                 slot_holes[std::make_pair( F_Cu, B_Cu )].push_back( pad );
             else if( pad->HasHole() )
             {

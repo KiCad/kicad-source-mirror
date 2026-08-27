@@ -40,6 +40,8 @@
 
 #include <set>
 
+#include <drill/drill_enumerator.h>
+#include <drill_legacy_adapter.h>
 #include <gendrill_writer_base.h>
 
 
@@ -75,229 +77,15 @@ static bool cmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
 
 void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenerateNPTH_list )
 {
-    HOLE_INFO new_hole;
-
     m_holeListBuffer.clear();
     m_toolListBuffer.clear();
 
-    wxASSERT( IsCopperLayerLowerThan( aSpan.BottomLayer(), aSpan.TopLayer() ) );  // fix the caller
+    DRILL_QUERY query;
+    query.m_Span = aSpan;
+    query.m_NonPlatedOnly = aGenerateNPTH_list;
+    query.m_MergePTHNPTH = m_merge_PTH_NPTH;
 
-    auto computeStubLength = [&]( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer )
-    {
-        if( aStartLayer == UNDEFINED_LAYER || aEndLayer == UNDEFINED_LAYER )
-            return std::optional<int>();
-
-        BOARD_STACKUP& stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
-        return std::optional<int>( stackup.GetLayerDistance( aStartLayer, aEndLayer ) );
-    };
-
-    if( !aGenerateNPTH_list )
-    {
-        for( PCB_TRACK* track : m_pcb->Tracks() )
-        {
-            if( track->Type() != PCB_VIA_T )
-                continue;
-
-            PCB_VIA* via = static_cast<PCB_VIA*>( track );
-
-            if( aSpan.m_IsBackdrill )
-            {
-                auto tryEmitBackdrill = [&]( const PADSTACK::DRILL_PROPS& aDrill ) -> bool
-                {
-                    if( aDrill.start == UNDEFINED_LAYER || aDrill.end == UNDEFINED_LAYER )
-                        return false;
-
-                    DRILL_SPAN drillSpan( aDrill.start, aDrill.end, true, false );
-
-                    if( drillSpan.Pair() != aSpan.Pair() )
-                        return false;
-
-                    if( aDrill.start != aSpan.DrillStartLayer()
-                            || aDrill.end != aSpan.DrillEndLayer() )
-                    {
-                        return false;
-                    }
-
-                    if( aDrill.size.x <= 0 && aDrill.size.y <= 0 )
-                        return false;
-
-                    HOLE_INFO hole;
-                    hole.m_ItemParent = via;
-                    hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA_BACKDRILL;
-                    hole.m_Tool_Reference = -1;
-                    hole.m_Hole_Orient = ANGLE_0;
-                    hole.m_Hole_NotPlated = true;
-                    hole.m_Hole_Shape = 0;
-                    hole.m_Hole_Pos = via->GetStart();
-                    hole.m_Hole_Top_Layer = aSpan.TopLayer();
-                    hole.m_Hole_Bottom_Layer = aSpan.BottomLayer();
-
-                    int diameter = aDrill.size.x;
-
-                    if( aDrill.size.y > 0 )
-                        diameter = ( diameter > 0 ) ? std::min( diameter, aDrill.size.y )
-                                                    : aDrill.size.y;
-
-                    hole.m_Hole_Diameter = diameter;
-                    hole.m_Hole_Size = aDrill.size;
-
-                    if( aDrill.shape != PAD_DRILL_SHAPE::CIRCLE
-                            && aDrill.size.x != aDrill.size.y )
-                    {
-                        hole.m_Hole_Shape = 1;
-                    }
-
-                    hole.m_Hole_Filled = aDrill.is_filled.value_or( false );
-                    hole.m_Hole_Capped = aDrill.is_capped.value_or( false );
-                    hole.m_Hole_Top_Covered = via->Padstack().IsCovered( hole.m_Hole_Top_Layer )
-                                                     .value_or( false );
-                    hole.m_Hole_Bot_Covered = via->Padstack().IsCovered( hole.m_Hole_Bottom_Layer )
-                                                     .value_or( false );
-                    hole.m_Hole_Top_Plugged = via->Padstack().IsPlugged( hole.m_Hole_Top_Layer )
-                                                     .value_or( false );
-                    hole.m_Hole_Bot_Plugged = via->Padstack().IsPlugged( hole.m_Hole_Bottom_Layer )
-                                                     .value_or( false );
-                    hole.m_Hole_Top_Tented = via->Padstack().IsTented( hole.m_Hole_Top_Layer )
-                                                     .value_or( false );
-                    hole.m_Hole_Bot_Tented = via->Padstack().IsTented( hole.m_Hole_Bottom_Layer )
-                                                     .value_or( false );
-                    hole.m_IsBackdrill = true;
-                    hole.m_FrontPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
-                    hole.m_FrontPostMachiningSize = 0;
-                    hole.m_FrontPostMachiningDepth = 0;
-                    hole.m_FrontPostMachiningAngle = 0;
-                    hole.m_BackPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
-                    hole.m_BackPostMachiningSize = 0;
-                    hole.m_BackPostMachiningDepth = 0;
-                    hole.m_BackPostMachiningAngle = 0;
-                    hole.m_DrillStart = aDrill.start;
-                    hole.m_DrillEnd = aDrill.end;
-                    hole.m_StubLength = computeStubLength( aDrill.start, aDrill.end );
-
-                    m_holeListBuffer.push_back( hole );
-                    return true;
-                };
-
-                // A via may carry two independent backdrill operations (front-side and
-                // back-side), stored as secondary and tertiary drill props. Emit whichever
-                // one matches this span.
-                tryEmitBackdrill( via->Padstack().SecondaryDrill() );
-                tryEmitBackdrill( via->Padstack().TertiaryDrill() );
-                continue;
-            }
-
-            int hole_sz = via->GetDrillValue();
-
-            if( hole_sz == 0 )
-                continue;
-
-            PCB_LAYER_ID top_layer;
-            PCB_LAYER_ID bottom_layer;
-            via->LayerPair( &top_layer, &bottom_layer );
-
-            // Skip vias not starting and ending on current layer pair
-            // (layer order has not matter)
-            if( DRILL_LAYER_PAIR( top_layer, bottom_layer ) != aSpan.Pair()
-                && DRILL_LAYER_PAIR( bottom_layer, top_layer ) != aSpan.Pair() )
-            {
-                continue;
-            }
-
-            new_hole = HOLE_INFO();
-            new_hole.m_ItemParent = via;
-
-            if( aSpan.Pair() == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
-                new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA_THROUGH;
-            else
-                new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA_BURIED;
-
-            new_hole.m_Tool_Reference = -1;
-            new_hole.m_Hole_Orient = ANGLE_0;
-            new_hole.m_Hole_Diameter = hole_sz;
-            new_hole.m_Hole_NotPlated = false;
-            new_hole.m_Hole_Size.x = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
-            new_hole.m_Hole_Shape = 0;
-            new_hole.m_Hole_Pos = via->GetStart();
-            new_hole.m_Hole_Top_Layer = top_layer;
-            new_hole.m_Hole_Bottom_Layer = bottom_layer;
-            new_hole.m_Hole_Filled = via->Padstack().IsFilled().value_or( false );
-            new_hole.m_Hole_Capped = via->Padstack().IsCapped().value_or( false );
-            new_hole.m_Hole_Top_Covered = via->Padstack().IsCovered( top_layer ).value_or( false );
-            new_hole.m_Hole_Bot_Covered = via->Padstack().IsCovered( bottom_layer ).value_or( false );
-            new_hole.m_Hole_Top_Plugged = via->Padstack().IsPlugged( top_layer ).value_or( false );
-            new_hole.m_Hole_Bot_Plugged = via->Padstack().IsPlugged( bottom_layer ).value_or( false );
-            new_hole.m_Hole_Top_Tented = via->Padstack().IsTented( top_layer ).value_or( false );
-            new_hole.m_Hole_Bot_Tented = via->Padstack().IsTented( bottom_layer ).value_or( false );
-            new_hole.m_IsBackdrill = false;
-            new_hole.m_FrontPostMachining = via->Padstack().FrontPostMachining().mode.value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
-            new_hole.m_FrontPostMachiningSize = via->Padstack().FrontPostMachining().size;
-            new_hole.m_FrontPostMachiningDepth = via->Padstack().FrontPostMachining().depth;
-            new_hole.m_FrontPostMachiningAngle = via->Padstack().FrontPostMachining().angle;
-            new_hole.m_BackPostMachining = via->Padstack().BackPostMachining().mode.value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
-            new_hole.m_BackPostMachiningSize = via->Padstack().BackPostMachining().size;
-            new_hole.m_BackPostMachiningDepth = via->Padstack().BackPostMachining().depth;
-            new_hole.m_BackPostMachiningAngle = via->Padstack().BackPostMachining().angle;
-            new_hole.m_DrillStart = via->Padstack().Drill().start;
-            new_hole.m_DrillEnd = bottom_layer;
-
-            m_holeListBuffer.push_back( new_hole );
-        }
-    }
-
-    if( !aSpan.m_IsBackdrill && aSpan.Pair() == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
-    {
-        for( FOOTPRINT* footprint : m_pcb->Footprints() )
-        {
-            for( PAD* pad : footprint->Pads() )
-            {
-                if( !m_merge_PTH_NPTH )
-                {
-                    if( !aGenerateNPTH_list && pad->GetAttribute() == PAD_ATTRIB::NPTH )
-                        continue;
-
-                    if( aGenerateNPTH_list && pad->GetAttribute() != PAD_ATTRIB::NPTH )
-                        continue;
-                }
-
-                if( pad->GetDrillSize().x == 0 )
-                    continue;
-
-                new_hole = HOLE_INFO();
-                new_hole.m_ItemParent = pad;
-                new_hole.m_Hole_NotPlated = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
-
-                if( new_hole.m_Hole_NotPlated )
-                    new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_MECHANICAL;
-                else
-                {
-                    if( pad->GetProperty() == PAD_PROP::CASTELLATED )
-                        new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_PAD_CASTELLATED;
-                    else if( pad->GetProperty() == PAD_PROP::PRESSFIT )
-                        new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_PAD_PRESSFIT;
-                    else
-                        new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_PAD;
-                }
-
-                new_hole.m_Tool_Reference = -1;
-                new_hole.m_Hole_Orient = pad->GetOrientation();
-                new_hole.m_Hole_Shape = 0;
-                new_hole.m_Hole_Diameter = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
-                new_hole.m_Hole_Size.x = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
-
-                if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE
-                        && pad->GetDrillSizeX() != pad->GetDrillSizeY() )
-                {
-                    new_hole.m_Hole_Shape = 1;
-                }
-
-                new_hole.m_Hole_Size = pad->GetDrillSize();
-                new_hole.m_Hole_Pos = pad->GetPosition();
-                new_hole.m_Hole_Bottom_Layer = B_Cu;
-                new_hole.m_Hole_Top_Layer = F_Cu;
-                m_holeListBuffer.push_back( new_hole );
-            }
-        }
-    }
+    m_holeListBuffer = ToLegacyHoleList( EnumerateDrillOperations( *m_pcb, query ) );
 
     // Sort holes per increasing diameter value (and for each dimater, by position)
     sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), cmpHoleSorting );

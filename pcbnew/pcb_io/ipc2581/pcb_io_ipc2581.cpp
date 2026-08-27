@@ -36,6 +36,7 @@
 #include <hash_eda.h>
 #include <padstack.h>
 #include <pad.h>
+#include <drill/drill_enumerator.h>
 #include <pcb_dimension.h>
 #include <pcb_field.h>
 #include <pcb_shape.h>
@@ -2509,10 +2510,12 @@ void PCB_IO_IPC2581::generateDrillLayers( wxXmlNode* aCadLayerNode )
     {
         for( PAD* pad : fp->Pads() )
         {
-            if( pad->HasDrilledHole() )
-                m_drill_layers[std::make_pair( F_Cu, B_Cu )].push_back( pad );
-            else if( pad->HasHole() )
+            // Shared with the drill writers and ODB++, which each used to decide this
+            // separately and disagreed on a circular drill shape with unequal sizes
+            if( IsDrillSlot( *pad ) )
                 m_slot_holes[std::make_pair( F_Cu, B_Cu )].push_back( pad );
+            else if( pad->HasHole() )
+                m_drill_layers[std::make_pair( F_Cu, B_Cu )].push_back( pad );
         }
     }
 

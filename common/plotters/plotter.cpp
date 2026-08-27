@@ -34,6 +34,7 @@
 
 #include <trigo.h>
 #include <eda_shape.h>
+#include <plotters/drill_markers.h>
 #include <plotters/plotter.h>
 #include <text_eval/text_eval_wrapper.h>
 #include <geometry/shape_line_chain.h>
@@ -361,122 +362,25 @@ void PLOTTER::markerVBar( const VECTOR2I& pos, int radius )
 
 void PLOTTER::Marker( const VECTOR2I& position, int diametre, unsigned aShapeId )
 {
-    int radius = diametre / 2;
+    const int radius = diametre / 2;
 
-    /* Marker are composed by a series of 'parts' superimposed; not every
-       combination make sense, obviously. Since they are used in order I
-       tried to keep the uglier/more complex constructions at the end.
-       Also I avoided the |/ |\ -/ -\ construction because they're *very*
-       ugly... if needed they could be added anyway... I'd like to see
-       a board with more than 58 drilling/slotting tools!
-       If Visual C++ supported the 0b literals they would be optimally
-       and easily encoded as an integer array. We have to do with octal */
-    static const unsigned char marker_patterns[MARKER_COUNT] = {
-
-        // Bit order:  O Square Lozenge - | \ /
-        // First choice: simple shapes
-        0003,  // X
-        0100,  // O
-        0014,  // +
-        0040,  // Sq
-        0020,  // Lz
-
-        // Two simple shapes
-        0103,  // X O
-        0017,  // X +
-        0043,  // X Sq
-        0023,  // X Lz
-        0114,  // O +
-        0140,  // O Sq
-        0120,  // O Lz
-        0054,  // + Sq
-        0034,  // + Lz
-        0060,  // Sq Lz
-
-        // Three simple shapes
-        0117,  // X O +
-        0143,  // X O Sq
-        0123,  // X O Lz
-        0057,  // X + Sq
-        0037,  // X + Lz
-        0063,  // X Sq Lz
-        0154,  // O + Sq
-        0134,  // O + Lz
-        0074,  // + Sq Lz
-
-        // Four simple shapes
-        0174,  // O Sq Lz +
-        0163,  // X O Sq Lz
-        0157,  // X O Sq +
-        0137,  // X O Lz +
-        0077,  // X Sq Lz +
-
-        // This draws *everything *
-        0177,  // X O Sq Lz +
-
-        // Here we use the single bars... so the cross is forbidden
-        0110,  // O -
-        0104,  // O |
-        0101,  // O /
-        0050,  // Sq -
-        0044,  // Sq |
-        0041,  // Sq /
-        0030,  // Lz -
-        0024,  // Lz |
-        0021,  // Lz /
-        0150,  // O Sq -
-        0144,  // O Sq |
-        0141,  // O Sq /
-        0130,  // O Lz -
-        0124,  // O Lz |
-        0121,  // O Lz /
-        0070,  // Sq Lz -
-        0064,  // Sq Lz |
-        0061,  // Sq Lz /
-        0170,  // O Sq Lz -
-        0164,  // O Sq Lz |
-        0161,  // O Sq Lz /
-
-        // Last resort: the backlash component (easy to confound)
-        0102,  // \ O
-        0042,  // \ Sq
-        0022,  // \ Lz
-        0142,  // \ O Sq
-        0122,  // \ O Lz
-        0062,  // \ Sq Lz
-        0162   // \ O Sq Lz
-    };
-
-    if( aShapeId >= MARKER_COUNT )
+    for( const DRILL_MARKERS::MARKER_PART& part : DRILL_MARKERS::BuildMarker( position, radius, aShapeId ) )
     {
-        // Fallback shape
-        markerCircle( position, radius );
-    }
-    else
-    {
-        // Decode the pattern and draw the corresponding parts
-        unsigned char pat = marker_patterns[aShapeId];
+        switch( part.m_Type )
+        {
+        case DRILL_MARKERS::MARKER_PART::SEGMENT:
+            MoveTo( part.m_Points.front() );
+            FinishTo( part.m_Points.back() );
+            break;
 
-        if( pat & 0001 )
-            markerSlash( position, radius );
+        case DRILL_MARKERS::MARKER_PART::POLYLINE:
+            PlotPoly( part.m_Points, FILL_T::NO_FILL, GetCurrentLineWidth(), nullptr );
+            break;
 
-        if( pat & 0002 )
-            markerBackSlash( position, radius );
-
-        if( pat & 0004 )
-            markerVBar( position, radius );
-
-        if( pat & 0010 )
-            markerHBar( position, radius );
-
-        if( pat & 0020 )
-            markerLozenge( position, radius );
-
-        if( pat & 0040 )
-            markerSquare( position, radius );
-
-        if( pat & 0100 )
-            markerCircle( position, radius );
+        case DRILL_MARKERS::MARKER_PART::CIRCLE:
+            Circle( position, part.m_Radius * 2, FILL_T::NO_FILL, GetCurrentLineWidth() );
+            break;
+        }
     }
 }
 

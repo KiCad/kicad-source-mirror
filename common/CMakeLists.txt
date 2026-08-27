@@ -727,6 +727,7 @@ set( COMMON_PREVIEW_ITEMS_SRCS
     )
 
 set( PLOTTERS_CONTROL_SRCS
+    plotters/drill_markers.cpp
     plotters/plotter.cpp
     plotters/DXF_plotter.cpp
     plotters/GERBER_plotter.cpp
@@ -1033,6 +1034,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_parameters.cpp     #needed by board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/router/pns_meander.cpp               #needed by board_design_settings.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_enumerator.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_exchange_footprint.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_text_var_adapter.cpp
