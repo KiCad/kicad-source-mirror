@@ -166,6 +166,12 @@ void SCH_LINE::Serialize( google::protobuf::Any &aContainer ) const
         break;
     }
 
+    if( GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
+        PackLineEnding( *line.mutable_start_ending(), GetStartEnding(), schIUScale );
+
+    if( GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
+        PackLineEnding( *line.mutable_end_ending(), GetEndEnding(), schIUScale );
+
     aContainer.PackFrom( line );
 }
 
@@ -207,6 +213,12 @@ bool SCH_LINE::Deserialize( const google::protobuf::Any &aContainer )
         SetLayer( LAYER_NOTES );
         break;
     }
+
+    SetStartEnding( line.has_start_ending() ? UnpackLineEnding( line.start_ending(), schIUScale )
+                                            : LINE_ENDING() );
+
+    SetEndEnding( line.has_end_ending() ? UnpackLineEnding( line.end_ending(), schIUScale )
+                                        : LINE_ENDING() );
 
     return true;
 }

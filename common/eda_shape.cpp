@@ -336,6 +336,12 @@ void EDA_SHAPE::Serialize( kiapi::common::types::GraphicShape& shape, const EDA_
         wxASSERT_MSG( false, "Unhandled shape in EDA_SHAPE::Serialize" );
     }
 
+    if( m_startEnding.GetStyle() != LINE_ENDING_STYLE::NONE )
+        PackLineEnding( *shape.mutable_start_ending(), m_startEnding, aScale );
+
+    if( m_endEnding.GetStyle() != LINE_ENDING_STYLE::NONE )
+        PackLineEnding( *shape.mutable_end_ending(), m_endEnding, aScale );
+
     // TODO m_hasSolderMask and m_solderMaskMargin
 
 }
@@ -365,6 +371,8 @@ bool EDA_SHAPE::Deserialize( const kiapi::common::types::GraphicShape& shape, co
     m_end = {};
     m_arcCenter = {};
     m_arcMidData = {};
+    m_startEnding = {};
+    m_endEnding = {};
     m_bezierC1 = {};
     m_bezierC2 = {};
     m_editState = 0;
@@ -440,6 +448,12 @@ bool EDA_SHAPE::Deserialize( const kiapi::common::types::GraphicShape& shape, co
         SetEllipseStartAngle( EDA_ANGLE( shape.ellipse_arc().start_angle().value_degrees(), DEGREES_T ) );
         SetEllipseEndAngle( EDA_ANGLE( shape.ellipse_arc().end_angle().value_degrees(), DEGREES_T ) );
     }
+
+    if( shape.has_start_ending() )
+        m_startEnding = UnpackLineEnding( shape.start_ending(), aScale );
+
+    if( shape.has_end_ending() )
+        m_endEnding = UnpackLineEnding( shape.end_ending(), aScale );
 
     return true;
 }

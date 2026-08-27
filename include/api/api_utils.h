@@ -35,6 +35,7 @@
 #include <math/vector3.h>
 #include <gal/color4d.h>
 
+class LINE_ENDING;
 class SHAPE_LINE_CHAIN;
 class STROKE_PARAMS;
 class TEXT_ATTRIBUTES;
@@ -99,6 +100,12 @@ KICOMMON_API void PackStroke( kiapi::common::types::StrokeAttributes& aOutput, c
 
 KICOMMON_API void UnpackStroke( STROKE_PARAMS& aOutput, const kiapi::common::types::StrokeAttributes& aInput,
                                 const EDA_IU_SCALE& aScale = pcbIUScale );
+
+KICOMMON_API void PackLineEnding( kiapi::common::types::LineEnding& aOutput, const LINE_ENDING& aInput,
+                                  const EDA_IU_SCALE& aScale = pcbIUScale );
+
+KICOMMON_API LINE_ENDING UnpackLineEnding( const kiapi::common::types::LineEnding& aInput,
+                                           const EDA_IU_SCALE& aScale = pcbIUScale );
 
 KICOMMON_API void PackProject( types::ProjectSpecifier& aOutput, const PROJECT& aInput );
 

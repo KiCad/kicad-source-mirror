@@ -22,6 +22,7 @@
 #include <api/api_utils.h>
 #include <api/api_enums.h>
 #include <api/schematic/schematic_types.pb.h>
+#include <line_ending.h>
 #include <geometry/shape_poly_set.h>
 #include <kiid.h>
 #include <project.h>
@@ -325,6 +326,44 @@ KICOMMON_API void UnpackStroke( STROKE_PARAMS& aOutput, const types::StrokeAttri
         aOutput.SetColor( UnpackColor( aInput.color() ) );
     else
         aOutput.SetColor( KIGFX::COLOR4D::UNSPECIFIED );
+}
+
+
+KICOMMON_API void PackLineEnding( types::LineEnding& aOutput, const LINE_ENDING& aInput, const EDA_IU_SCALE& aScale )
+{
+    aOutput.set_style( ToProtoEnum<LINE_ENDING_STYLE, types::LineEndingStyle>( aInput.GetStyle() ) );
+
+    if( aInput.GetLength() > 0 )
+        PackDistance( *aOutput.mutable_length(), aInput.GetLength(), aScale );
+
+    if( aInput.GetWidth() > 0 )
+        PackDistance( *aOutput.mutable_width(), aInput.GetWidth(), aScale );
+
+    if( aInput.GetStrokeWidth() > 0 )
+        PackStroke( *aOutput.mutable_stroke(), aInput.GetStroke(), aScale );
+}
+
+
+KICOMMON_API LINE_ENDING UnpackLineEnding( const types::LineEnding& aInput, const EDA_IU_SCALE& aScale )
+{
+    LINE_ENDING ending;
+
+    ending.SetStyle( FromProtoEnum<LINE_ENDING_STYLE, types::LineEndingStyle>( aInput.style() ) );
+
+    if( aInput.has_length() )
+        ending.SetLength( UnpackDistance( aInput.length(), aScale ) );
+
+    if( aInput.has_width() )
+        ending.SetWidth( UnpackDistance( aInput.width(), aScale ) );
+
+    if( aInput.has_stroke() )
+    {
+        STROKE_PARAMS stroke;
+        UnpackStroke( stroke, aInput.stroke(), aScale );
+        ending.SetStroke( stroke );
+    }
+
+    return ending;
 }
 
 

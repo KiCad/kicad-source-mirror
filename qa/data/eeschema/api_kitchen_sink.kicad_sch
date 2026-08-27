@@ -869,6 +869,16 @@
 			(width 0)
 			(type solid)
 		)
+		(start_shape arrow
+			(length 2.54)
+			(width 1.27)
+		)
+		(end_shape square
+			(stroke
+				(width 0.5)
+				(type solid)
+			)
+		)
 		(fill
 			(type color)
 			(color 45 208 203 1)
@@ -1098,6 +1108,10 @@
 			(width 0)
 			(type default)
 		)
+		(start_shape arrow_open
+			(length 1.905)
+		)
+		(end_shape circle)
 		(uuid "330d8202-ad94-44f0-a151-f6bec1cc52b2")
 	)
 	(bus

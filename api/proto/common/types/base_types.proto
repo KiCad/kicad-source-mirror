@@ -445,6 +445,29 @@ message GraphicEllipseArcAttributes
   kiapi.common.types.Angle    end_angle    = 6;
 }
 
+enum LineEndingStyle
+{
+  LES_UNKNOWN    = 0;
+  LES_NONE       = 1;
+  LES_ARROW      = 2;
+  LES_CIRCLE     = 3;
+  LES_SQUARE     = 4;
+  LES_ARROW_OPEN = 5;
+}
+
+message LineEnding
+{
+  LineEndingStyle style = 1;
+
+  // Size in the same direction as the line.  If omitted, auto width (5x line width)
+  optional kiapi.common.types.Distance length = 2;
+
+  // Perpendicular size.  If omitted, auto width (matches length, or 5x line width)
+  optional kiapi.common.types.Distance width = 3;
+
+  optional kiapi.common.types.StrokeAttributes stroke = 4;
+}
+
 message GraphicShape
 {
   // Reserved for future use; base EDA_SHAPE doesn't have an ID or locked state right now
@@ -462,6 +485,10 @@ message GraphicShape
     GraphicEllipseAttributes     ellipse      = 10;
     GraphicEllipseArcAttributes  ellipse_arc  = 11;
   }
+
+  // Since 11.0
+  optional LineEnding start_ending = 12;
+  optional LineEnding end_ending   = 13;
 }
 
 // A SHAPE_COMPOUND in KiCad

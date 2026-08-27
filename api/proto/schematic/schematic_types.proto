@@ -54,6 +54,8 @@ message SchematicLine
   SchematicLineType type = 4;
   kiapi.common.types.StrokeAttributes stroke = 5;
   kiapi.common.types.LockedState locked = 6;
+  kiapi.common.types.LineEnding start_ending = 7;
+  kiapi.common.types.LineEnding end_ending   = 8;
 }
 
 message Junction

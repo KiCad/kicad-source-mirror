@@ -33,6 +33,7 @@
 #include <api/schematic/schematic_types.pb.h>
 
 #include <core/typeinfo.h>
+#include <line_ending.h>
 #include <eda_shape.h>
 #include <font/text_attributes.h>
 #include <jobs/job_export_sch_netlist.h>
@@ -624,6 +625,41 @@ types::GraphicFillType ToProtoEnum( FILL_T aValue )
     default:
         wxCHECK_MSG( false, types::GraphicFillType::GFT_UNKNOWN,
                      "Unhandled case in ToProtoEnum<FILL_T>" );
+    }
+}
+
+
+template<> KICOMMON_API
+types::LineEndingStyle ToProtoEnum( LINE_ENDING_STYLE aValue )
+{
+    switch( aValue )
+    {
+    case LINE_ENDING_STYLE::NONE:       return types::LineEndingStyle::LES_NONE;
+    case LINE_ENDING_STYLE::ARROW:      return types::LineEndingStyle::LES_ARROW;
+    case LINE_ENDING_STYLE::CIRCLE:     return types::LineEndingStyle::LES_CIRCLE;
+    case LINE_ENDING_STYLE::SQUARE:     return types::LineEndingStyle::LES_SQUARE;
+    case LINE_ENDING_STYLE::ARROW_OPEN: return types::LineEndingStyle::LES_ARROW_OPEN;
+    default:
+        wxCHECK_MSG( false, types::LineEndingStyle::LES_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<LINE_ENDING_STYLE>" );
+    }
+}
+
+
+template<> KICOMMON_API
+LINE_ENDING_STYLE FromProtoEnum( types::LineEndingStyle aValue )
+{
+    switch( aValue )
+    {
+    case types::LineEndingStyle::LES_NONE:       return LINE_ENDING_STYLE::NONE;
+    case types::LineEndingStyle::LES_ARROW:      return LINE_ENDING_STYLE::ARROW;
+    case types::LineEndingStyle::LES_CIRCLE:     return LINE_ENDING_STYLE::CIRCLE;
+    case types::LineEndingStyle::LES_SQUARE:     return LINE_ENDING_STYLE::SQUARE;
+    case types::LineEndingStyle::LES_ARROW_OPEN: return LINE_ENDING_STYLE::ARROW_OPEN;
+    case types::LineEndingStyle::LES_UNKNOWN:
+    default:
+        wxCHECK_MSG( false, LINE_ENDING_STYLE::NONE,
+                     "Unhandled case in FromProtoEnum<types::LineEndingStyle>" );
     }
 }
 
