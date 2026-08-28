@@ -205,6 +205,8 @@ set( QA_PCBNEW_SRCS
 
     pcb_io/odbpp/test_odbpp_netlist.cpp
 
+    router/test_pns_walkaround_arcs.cpp
+
     group_saveload.cpp
 )
 
