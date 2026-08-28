@@ -79,7 +79,7 @@ enum class MODE
 enum class SECTION_RULE
 {
     EXCLUDED,
-    OPTIONAL,
+    RULE_OPTIONAL,
     REQUIRED
 };
 

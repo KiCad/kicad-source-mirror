@@ -34,7 +34,7 @@ constexpr size_t SECTION_COUNT = static_cast<size_t>( SECTION::COUNT );
 constexpr size_t MODE_COUNT = static_cast<size_t>( MODE::COUNT );
 
 constexpr SECTION_RULE N = SECTION_RULE::EXCLUDED;
-constexpr SECTION_RULE O = SECTION_RULE::OPTIONAL;
+constexpr SECTION_RULE O = SECTION_RULE::RULE_OPTIONAL;
 constexpr SECTION_RULE Y = SECTION_RULE::REQUIRED;
 
 // IPC-2581C Table 4 p 80
@@ -157,7 +157,7 @@ SECTION_SET RequiredSections( MODE aMode )
 
 SECTION_SET OptionalSections( MODE aMode )
 {
-    return sectionsWithRule( aMode, SECTION_RULE::OPTIONAL );
+    return sectionsWithRule( aMode, SECTION_RULE::RULE_OPTIONAL );
 }
 
 
@@ -344,7 +344,7 @@ std::optional<SECTION> SectionForLayerFunction( const wxString& aLayerFunction,
     if( aLayerFunction.StartsWith( wxT( "DIEL" ) ) )
         return SECTION::DIELECTRIC;
 
-    // Revision B writes EMBEDDED_COMPONENT and revision C writes COMPONENT_EMBEDDED 
+    // Revision B writes EMBEDDED_COMPONENT and revision C writes COMPONENT_EMBEDDED
     // because why not?
     if( aLayerFunction.StartsWith( wxT( "COMPONENT" ) )
         || aLayerFunction == wxT( "EMBEDDED_COMPONENT" ) )
