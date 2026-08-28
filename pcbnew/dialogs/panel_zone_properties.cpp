@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <magic_enum.hpp>
 #include "panel_zone_properties.h"
 
 #include <widgets/wx_infobar.h>
@@ -147,7 +148,7 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
         m_netSelector->SetSelectedNetcode( std::max( 0, m_settings->m_Netcode ) );
 
     m_cbLocked->SetValue( m_settings->m_Locked );
-    m_cornerSmoothingChoice->SetSelection( m_settings->GetCornerSmoothingType() );
+    m_cornerSmoothingChoice->SetSelection( static_cast<int>( m_settings->GetCornerSmoothingType() ) );
     m_cornerRadius.SetValue( m_settings->GetCornerRadius() );
 
     if( m_isTeardrop ) // outlines are never smoothed: they have already the right shape
@@ -242,10 +243,12 @@ void PANEL_ZONE_PROPERTIES::OnRemoveIslandsSelection( wxCommandEvent& aEvent )
 
 void PANEL_ZONE_PROPERTIES::OnCornerSmoothingSelection( wxCommandEvent& event )
 {
-    int selection = m_cornerSmoothingChoice->GetSelection();
+    ZONE_SETTINGS::CORNER_SMOOTHING selection =
+            magic_enum::enum_cast<ZONE_SETTINGS::CORNER_SMOOTHING>( m_cornerSmoothingChoice->GetSelection() )
+                    .value_or( ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING );
 
-    if( selection == ZONE_SETTINGS::SMOOTHING_CHAMFER
-            || selection == ZONE_SETTINGS::SMOOTHING_FILLET )
+    if( selection == ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER
+            || selection == ZONE_SETTINGS::CORNER_SMOOTHING::FILLET )
     {
         m_cornerRadius.Show( true );
     }
@@ -394,9 +397,13 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
     m_settings->m_ZoneClearance = m_clearance.GetIntValue();
     m_settings->m_ZoneMinThickness = m_minWidth.GetIntValue();
 
-    m_settings->SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
+    ZONE_SETTINGS::CORNER_SMOOTHING smoothing =
+            magic_enum::enum_cast<ZONE_SETTINGS::CORNER_SMOOTHING>( m_cornerSmoothingChoice->GetSelection() )
+                    .value_or( ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING );
 
-    if( m_settings->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_NONE )
+    m_settings->SetCornerSmoothingType( smoothing );
+
+    if( m_settings->GetCornerSmoothingType() == ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING )
         m_settings->SetCornerRadius( 0 );
     else
         m_settings->SetCornerRadius( m_cornerRadius.GetIntValue() );

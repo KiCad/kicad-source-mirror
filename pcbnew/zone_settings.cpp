@@ -75,7 +75,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 
     m_Locked = false;
 
-    m_cornerSmoothingType = SMOOTHING_NONE;
+    m_cornerSmoothingType = CORNER_SMOOTHING::NO_SMOOTHING;
     m_cornerRadius = 0;
 
     m_removeIslands = ISLAND_REMOVAL_MODE::ALWAYS;

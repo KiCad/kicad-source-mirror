@@ -415,8 +415,8 @@ bool ZONE_FILLER::zoneKnockoutMayInteract( const ZONE* aZone, const ZONE* aKnock
     {
         for( const ZONE* zone : { aZone, aKnockout } )
         {
-            if( zone->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_CHAMFER
-                    || zone->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_FILLET )
+            if( zone->GetCornerSmoothingType() == ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER
+                    || zone->GetCornerSmoothingType() == ZONE_SETTINGS::CORNER_SMOOTHING::FILLET )
             {
                 reach += (int) zone->GetCornerRadius();
             }

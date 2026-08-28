@@ -8101,18 +8101,18 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     switch( NextTok() )
                     {
                     case T_none:
-                        zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_NONE );
+                        zone->SetCornerSmoothingType( ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING );
                         break;
 
                     case T_chamfer:
                         if( !zone->GetIsRuleArea() ) // smoothing has meaning only for filled zones
-                            zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_CHAMFER );
+                            zone->SetCornerSmoothingType( ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER );
 
                         break;
 
                     case T_fillet:
                         if( !zone->GetIsRuleArea() ) // smoothing has meaning only for filled zones
-                            zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_FILLET );
+                            zone->SetCornerSmoothingType( ZONE_SETTINGS::CORNER_SMOOTHING::FILLET );
 
                         break;
 

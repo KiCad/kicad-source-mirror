@@ -407,6 +407,39 @@ ZONE_FILL_MODE FromProtoEnum( types::ZoneFillMode aValue )
 
 
 template<>
+types::ZoneCornerSmoothingMode ToProtoEnum( ZONE_SETTINGS::CORNER_SMOOTHING aValue )
+{
+    switch( aValue )
+    {
+    case ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING:    return types::ZoneCornerSmoothingMode::ZCSM_NONE;
+    case ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER: return types::ZoneCornerSmoothingMode::ZCSM_CHAMFER;
+    case ZONE_SETTINGS::CORNER_SMOOTHING::FILLET:  return types::ZoneCornerSmoothingMode::ZCSM_FILLET;
+
+    default:
+        wxCHECK_MSG( false, types::ZoneCornerSmoothingMode::ZCSM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<ZONE_SETTINGS::CORNER_SMOOTHING>" );
+    }
+}
+
+
+template<>
+ZONE_SETTINGS::CORNER_SMOOTHING FromProtoEnum( types::ZoneCornerSmoothingMode aValue )
+{
+    switch( aValue )
+    {
+    case types::ZoneCornerSmoothingMode::ZCSM_UNKNOWN:
+    case types::ZoneCornerSmoothingMode::ZCSM_NONE:     return ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING;
+    case types::ZoneCornerSmoothingMode::ZCSM_CHAMFER:  return ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER;
+    case types::ZoneCornerSmoothingMode::ZCSM_FILLET:   return ZONE_SETTINGS::CORNER_SMOOTHING::FILLET;
+
+    default:
+        wxCHECK_MSG( false, ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING,
+                     "Unhandled case in FromProtoEnum<ZoneCornerSmoothingMode>" );
+    }
+}
+
+
+template<>
 types::ZoneBorderStyle ToProtoEnum( ZONE_BORDER_DISPLAY_STYLE aValue )
 {
     switch( aValue )

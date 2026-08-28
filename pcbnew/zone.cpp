@@ -307,6 +307,12 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
         cu->set_min_island_area( m_minIslandArea );
         cu->set_fill_mode( ToProtoEnum<ZONE_FILL_MODE, types::ZoneFillMode>( m_fillMode ) );
 
+        cu->set_corner_smoothing(
+                ToProtoEnum<ZONE_SETTINGS::CORNER_SMOOTHING, types::ZoneCornerSmoothingMode>( m_cornerSmoothingType ) );
+
+        if( m_cornerRadius != 0 )
+            cu->mutable_corner_radius()->set_value_nm( m_cornerRadius );
+
         types::HatchFillSettings* hatch = cu->mutable_hatch_settings();
         hatch->mutable_thickness()->set_value_nm( m_hatchThickness );
         hatch->mutable_gap()->set_value_nm( m_hatchGap );
@@ -401,6 +407,13 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
         m_islandRemovalMode = FromProtoEnum<ISLAND_REMOVAL_MODE>( cu.island_mode() );
         m_minIslandArea = cu.min_island_area();
         m_fillMode = FromProtoEnum<ZONE_FILL_MODE>( cu.fill_mode() );
+
+        m_cornerSmoothingType = FromProtoEnum<ZONE_SETTINGS::CORNER_SMOOTHING>( cu.corner_smoothing() );
+
+        if( cu.has_corner_radius() )
+            SetCornerRadius( cu.corner_radius().value_nm() );
+        else
+            SetCornerRadius( 0 );
 
         m_hatchThickness = cu.hatch_settings().thickness().value_nm();
         m_hatchGap = cu.hatch_settings().gap().value_nm();
@@ -1514,8 +1527,9 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
     const BOARD* board = GetBoard();
     bool         keepExternalFillets = false;
-    bool         smooth_requested = m_cornerSmoothingType == ZONE_SETTINGS::SMOOTHING_CHAMFER
-                                    || m_cornerSmoothingType == ZONE_SETTINGS::SMOOTHING_FILLET;
+
+    bool smooth_requested = m_cornerSmoothingType == ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER
+                            || m_cornerSmoothingType == ZONE_SETTINGS::CORNER_SMOOTHING::FILLET;
 
     if( IsTeardropArea() )
     {
@@ -1534,11 +1548,11 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
                 switch( m_cornerSmoothingType )
                 {
-                case ZONE_SETTINGS::SMOOTHING_CHAMFER:
+                case ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER:
                     aPoly = aPoly.Chamfer( (int) m_cornerRadius );
                     break;
 
-                case ZONE_SETTINGS::SMOOTHING_FILLET:
+                case ZONE_SETTINGS::CORNER_SMOOTHING::FILLET:
                     aPoly = aPoly.Fillet( (int) m_cornerRadius, GetMaxError() );
                     break;
 

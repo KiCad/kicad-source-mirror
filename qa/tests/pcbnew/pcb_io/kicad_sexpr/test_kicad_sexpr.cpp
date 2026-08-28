@@ -44,6 +44,10 @@
 #include <zone.h>
 
 
+#define CHECK_ENUM_CLASS_EQUAL( L, R )                                                      \
+    BOOST_CHECK_EQUAL( static_cast<int>( L ), static_cast<int>( R ) )
+
+
 struct KICAD_SEXPR_FIXTURE
 {
     KICAD_SEXPR_FIXTURE() {}
