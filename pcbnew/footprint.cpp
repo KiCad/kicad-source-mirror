@@ -185,6 +185,9 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
             PCB_FIELD* existingField = GetField( field->GetId() );
             ptrMap[field] = existingField;
             *existingField = *field;
+
+            // Assignment retains the constructor-generated KIID because m_Uuid is const
+            existingField->SetUuidDirect( field->m_Uuid );
             existingField->SetParent( this );
         }
         else

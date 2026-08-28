@@ -96,8 +96,10 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString
             if( !cached )
                 continue;
 
-            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( cached->Duplicate( IGNORE_PARENT_GROUP ) );
+            // Preserve disk UUIDs in the cache that serves keep-UUID loads
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( cached->Clone() );
             footprint->SetParent( nullptr );
+            footprint->SetParentGroup( nullptr );
 
             // For non-caching plugins, delete the allocated footprint now that we've cloned it
             if( !pluginCaches )
@@ -455,8 +457,10 @@ FOOTPRINT_LIBRARY_ADAPTER::SAVE_T FOOTPRINT_LIBRARY_ADAPTER::SaveFootprint( cons
                                       footprints.end() );
                 }
 
-                FOOTPRINT* clone = static_cast<FOOTPRINT*>( aFootprint->Duplicate( IGNORE_PARENT_GROUP ) );
+                // Must match what FootprintSave() just wrote, UUIDs included
+                FOOTPRINT* clone = static_cast<FOOTPRINT*>( aFootprint->Clone() );
                 clone->SetParent( nullptr );
+                clone->SetParentGroup( nullptr );
 
                 LIB_ID id = clone->GetFPID();
                 id.SetLibNickname( aNickname );
