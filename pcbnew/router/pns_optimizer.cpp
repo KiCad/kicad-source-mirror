@@ -1319,7 +1319,7 @@ bool OPTIMIZER::fanoutCleanup( LINE* aLine )
     return false;
 }
 
-
+#if 0
 int findCoupledVertices( const VECTOR2I& aVertex, const SEG& aOrigSeg,
                          const SHAPE_LINE_CHAIN& aCoupled, DIFF_PAIR* aPair, int* aIndices )
 {
@@ -1466,8 +1466,8 @@ bool OPTIMIZER::mergeDpStep( DIFF_PAIR* aPair, bool aTryP, int step )
 
             newRef = currentPath;
             newRef.Replace( s1.Index(), s2.Index(), bypass );
-            bool tmp;
-            std::tie(deltaUni, tmp) = aPair->CoupledLength ( newRef, coupledPath );
+            bool tmp2;
+            std::tie(deltaUni, tmp2) = aPair->CoupledLength ( newRef, coupledPath );
             deltaUni += (- clenPre + budget);
 
             if( coupledBypass( m_world, aPair, aTryP, newRef, bypass, coupledPath, newCoup ) )
@@ -1664,7 +1664,6 @@ bool tightenSegment( bool dir, NODE *aNode, const LINE& cur, const SHAPE_LINE_CH
     return true;
 }
 
-#if 0
 void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLine,
               LINE& aOptimized )
 {

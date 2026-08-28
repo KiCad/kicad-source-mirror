@@ -221,7 +221,6 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
                                     bool aPFirst, bool aWindCw, bool aSolidsOnly )
 {
     WALKAROUND walkaround( aNode, Router() );
-    WALKAROUND::STATUS wf1;
     COLLISION_SEARCH_OPTIONS opts;
 
     auto excludeHeadDp = [aCurrent] ( const ITEM* aTestItem, const ITEM *aRefItem ) -> bool
@@ -274,7 +273,7 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
 
         PNS_DBG( Dbg(), AddItem, &preWalk, GREEN, 100000, wxString::Format("preWalk") );
 
-        auto wf1 = walkaround.Route( preWalk );
+        WALKAROUND::RESULT wf1 = walkaround.Route( preWalk );
 
         if( wf1.status[ WALKAROUND::WP_SHORTEST ] != WALKAROUND::ST_DONE )
             return false;
@@ -557,7 +556,7 @@ bool DIFF_PAIR_PLACER::findDpEndingPrimitives( NODE* aWorld, const VECTOR2I& aP,
 {
     NET_HANDLE netP, netN;
 
-    bool result = aWorld->GetRuleResolver()->DpNetPair( aStartItem, netP, netN );
+    (void) aWorld->GetRuleResolver()->DpNetPair( aStartItem, netP, netN );
 
     NET_HANDLE refNet = aStartItem->Net();
     NET_HANDLE coupledNet = ( refNet == netP ) ? netN : netP;
@@ -643,9 +642,6 @@ bool DIFF_PAIR_PLACER::findDpMidtraceIntersection( NODE* aWorld, const VECTOR2I&
                                                    wxString* aErrorMsg )
 {
     PNS::TOPOLOGY topo( aWorld );
-
-
-    bool           existingDp = false;
     PNS::DIFF_PAIR originPair;
     auto           startSeg = dyn_cast<PNS::SEGMENT*>( aStartItem );
 
@@ -920,11 +916,11 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
                     minClearance = clearance;
             }
 
-            DP_DIMENSIONS dims2( m_sizes.DiffPairWidth(), m_sizes.DiffPairGap(), viaGap(), m_sizes.ViaDiameter(), minClearance.value() );
+            DP_DIMENSIONS dimsTarget( m_sizes.DiffPairWidth(), m_sizes.DiffPairGap(), viaGap(), m_sizes.ViaDiameter(), minClearance.value() );
 
-            gwsTarget.SetDimensions( dims2 );
-        gwsTarget.BuildFromPrimitivePair( target, m_startDiagonal );
-        m_snapOnTarget = true;
+            gwsTarget.SetDimensions( dimsTarget );
+            gwsTarget.BuildFromPrimitivePair( target, m_startDiagonal );
+            m_snapOnTarget = true;
             m_target = target;
 
             PNS_DBG( Dbg(), Message, wxString::Format("target-p [%d,%d] target-n [%d,%d], cursor [%d,%d]", 

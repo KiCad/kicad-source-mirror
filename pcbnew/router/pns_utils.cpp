@@ -585,9 +585,7 @@ bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP )
     if( s_old->Seg().Distance( aP ) > 100 )
         return false; 
 
-    //std::unique_ptr<SEGMENT> s_new[2];
-
-        aNode->Remove( s_old );
+    aNode->Remove( s_old );
 
     if( s_old->Seg().B != aP )
     {
