@@ -23,6 +23,7 @@
 #include <any>
 #include <boost/algorithm/string.hpp>
 #include <json_common.h>
+#include <mutex>
 
 #include "http_lib/http_lib_settings.h"
 #include <kicad_curl/kicad_curl_easy.h>
@@ -70,19 +71,62 @@ public:
      */
     bool SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::vector<HTTP_LIB_PART>& aParts );
 
-    std::string GetLastError() const { return m_lastError; }
+    std::string GetLastError() const
+    {
+        std::lock_guard lock( m_queryMutex );
+        return m_lastError;
+    }
 
-    std::vector<HTTP_LIB_CATEGORY> getCategories() const { return m_categories; }
+    std::vector<HTTP_LIB_CATEGORY> getCategories() const
+    {
+        std::lock_guard lock( m_queryMutex );
+        return m_categories;
+    }
 
     std::string getCategoryDescription( const std::string& aCategoryName ) const
     {
+        std::lock_guard lock( m_queryMutex );
+
         if( m_categoryDescriptions.contains( aCategoryName ) )
-           return m_categoryDescriptions.at( aCategoryName );
-        else
-           return "";
+            return m_categoryDescriptions.at( aCategoryName );
+
+        return "";
     }
 
-    auto& GetCachedParts() { return m_cache; }
+    bool HasCachedParts() const
+    {
+        std::lock_guard lock( m_queryMutex );
+        return !m_cache.empty();
+    }
+
+    /**
+     * Resolve a cached part name to its part ID and category ID.
+     *
+     * @param aPartName the name to look up
+     * @param aPartId receives the part ID on a hit
+     * @param aCategoryId receives the category ID on a hit
+     * @return true if the name was found; false otherwise
+     */
+    bool GetCachedPartRelation( const std::string& aPartName, std::string& aPartId, std::string& aCategoryId ) const
+    {
+        std::lock_guard lock( m_queryMutex );
+
+        auto it = m_cache.find( aPartName );
+
+        if( it == m_cache.end() )
+            return false;
+
+        aPartId = std::get<0>( it->second );
+        aCategoryId = std::get<1>( it->second );
+        return true;
+    }
+
+    void ClearPartCache()
+    {
+        std::lock_guard lock( m_queryMutex );
+        m_cachedParts.clear();
+        m_cache.clear();
+    }
 
 private:
     // This is clunky but at the moment the only way to free the pointer after use without
@@ -122,6 +166,8 @@ private:
     wxString httpErrorCodeDescription( uint16_t aHttpCode );
 
 private:
+    mutable std::mutex m_queryMutex;
+
     HTTP_LIB_SOURCE m_source;
     bool            m_endpointValid = false;
     std::string     m_lastError;

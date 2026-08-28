@@ -124,11 +124,19 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxS
 
     std::vector<HTTP_LIB_CATEGORY> categories = m_conn->getCategories();
 
-    if( m_conn->GetCachedParts().empty() )
-        syncCache();
+    std::string associatedCatID;
 
-    std::tuple  relations = m_conn->GetCachedParts()[partName];
-    std::string associatedCatID = std::get<1>( relations );
+    if( !m_conn->GetCachedPartRelation( partName, part_id, associatedCatID ) )
+    {
+        if( !m_conn->HasCachedParts() )
+            syncCache();
+
+        if( !m_conn->GetCachedPartRelation( partName, part_id, associatedCatID ) )
+        {
+            wxLogTrace( traceHTTPLib, wxT( "loadSymbol: no cached part found for %s" ), partName );
+            return nullptr;
+        }
+    }
 
     // get the matching category
     for( const HTTP_LIB_CATEGORY& categoryIter : categories )
@@ -145,16 +153,6 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxS
     {
         wxLogTrace( traceHTTPLib, wxT( "loadSymbol: no category found for %s" ), partName );
         return nullptr;
-    }
-
-    // get the matching query ID
-    for( const HTTP_LIB_PART& part : m_cachedCategories[foundCategory->id].cachedParts )
-    {
-        if( part.id == std::get<0>( relations ) )
-        {
-            part_id = part.id;
-            break;
-        }
     }
 
     if( m_conn->SelectOne( part_id, result ) )
