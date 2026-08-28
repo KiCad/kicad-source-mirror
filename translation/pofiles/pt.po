@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 09:52-0700\n"
+"POT-Creation-Date: 2026-08-28 10:54-0700\n"
 "PO-Revision-Date: 2026-04-24 16:01+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v10/pt/"
@@ -2208,15 +2208,15 @@ msgstr "Pasta de saída '%s' criada."
 msgid "Cannot create output directory '%s'."
 msgstr "Não foi possível criar a pasta de saída '%s'."
 
-#: common/common.cpp:821
+#: common/common.cpp:825
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr "O sistema operacional não é suportado pelo KiCad e suas dependências."
 
-#: common/common.cpp:823
+#: common/common.cpp:827
 msgid "Unsupported Operating System"
 msgstr "O sistema operacional não compatível"
 
-#: common/common.cpp:825
+#: common/common.cpp:829
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -3418,7 +3418,7 @@ msgstr "Largura customizada."
 msgid "Export to other sheets"
 msgstr "Copiar nas outras folhas"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:523
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:529
 #: eeschema/erc/erc_item.cpp:448 eeschema/sch_marker.cpp:379
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -8978,12 +8978,12 @@ msgstr "Arquivo"
 msgid "Folder"
 msgstr "Pasta"
 
-#: common/json_schema_validator.cpp:48
+#: common/json_schema_validator.cpp:42
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "o ficheiro do esquema '%s' não foi encontrado"
 
-#: common/json_schema_validator.cpp:53
+#: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "Houve um erro ao carregar o esquema: %s"
@@ -10025,20 +10025,20 @@ msgstr "Arquivo Zip '%s' foi criado (%s descompactado, %s compactado)."
 msgid "Open file"
 msgstr "Abrir o ficheiro"
 
-#: common/rc_item.cpp:504 eeschema/erc/erc_item.cpp:428
+#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:428
 msgid "Excluded warning: "
 msgstr "Avisos que foram excluídos: "
 
-#: common/rc_item.cpp:506 eeschema/erc/erc_item.cpp:430
+#: common/rc_item.cpp:512 eeschema/erc/erc_item.cpp:430
 msgid "Excluded error: "
 msgstr "Erro que foi excluído: "
 
-#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:434
+#: common/rc_item.cpp:516 eeschema/erc/erc_item.cpp:434
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1587
 msgid "Warning: "
 msgstr "Atenção: "
 
-#: common/rc_item.cpp:514 eeschema/erc/erc_item.cpp:438
+#: common/rc_item.cpp:520 eeschema/erc/erc_item.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1585
 msgid "Error: "
 msgstr "Erro: "
@@ -10261,12 +10261,12 @@ msgstr "Predefinição do KiCad"
 msgid "KiCad Classic"
 msgstr "KiCad clássico"
 
-#: common/startwizard/startwizard.cpp:96
+#: common/startwizard/startwizard.cpp:97
 #, c-format
 msgid "Welcome to KiCad %s"
 msgstr "Bem-vindo ao KiCad %s"
 
-#: common/startwizard/startwizard.cpp:106
+#: common/startwizard/startwizard.cpp:107
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -10280,15 +10280,15 @@ msgstr ""
 "Vamos configurar algumas definições básicas. Pode sempre modificar estas "
 "definições mais tarde abrindo o diálogo de Preferências."
 
-#: common/startwizard/startwizard.cpp:112
+#: common/startwizard/startwizard.cpp:113
 msgid "For help, please visit "
 msgstr "Para ajuda, visite "
 
-#: common/startwizard/startwizard.cpp:182
+#: common/startwizard/startwizard.cpp:187
 msgid "KiCad Setup"
 msgstr "Configuração do KiCad"
 
-#: common/startwizard/startwizard.cpp:245
+#: common/startwizard/startwizard.cpp:250
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
@@ -33761,35 +33761,35 @@ msgstr "Ocorreu um erro ao tentar imprimir a folha do desenho."
 msgid "Printing"
 msgstr "A imprimir"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:680
+#: pagelayout_editor/dialogs/properties_frame.cpp:683
 msgid "Predefined Keywords"
 msgstr "Palavras-chave predefinidas"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:683
+#: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "Texts can include keywords."
 msgstr "Os textos podem incluir palavras-chave."
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:684
+#: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "Keyword notation is ${keyword}"
 msgstr "A notação de palavra-chave é ${keyword}"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:685
+#: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "Each keyword is replaced by its value"
 msgstr "Cada palavra-chave é substituída pelo seu valor"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:686
+#: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "These build-in keywords are always available:"
 msgstr "Essas palavras-chave integradas estão sempre disponíveis:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:690
+#: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(sheet number)"
 msgstr "(número da folha)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:691
+#: pagelayout_editor/dialogs/properties_frame.cpp:694
 msgid "(sheet count)"
 msgstr "(contagem da folha)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:697
+#: pagelayout_editor/dialogs/properties_frame.cpp:700
 msgid "(paper size)"
 msgstr "(tamanho do papel)"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 09:52-0700\n"
+"POT-Creation-Date: 2026-08-28 10:54-0700\n"
 "PO-Revision-Date: 2026-08-09 14:51+0000\n"
 "Last-Translator: Naveenkumar SEKAR <naveenatmit@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v10/ta/>\n"
@@ -2163,15 +2163,15 @@ msgstr "வெளியீட்டு அடைவு '%s' உருவாக�
 msgid "Cannot create output directory '%s'."
 msgstr "வெளியீட்டு கோப்பகத்தை '%s' உருவாக்க முடியாது."
 
-#: common/common.cpp:821
+#: common/common.cpp:825
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr "இந்த இயக்க முறைமை கிகாட் மற்றும் அதன் சார்புநிலைகளால் ஆதரிக்கப்படவில்லை."
 
-#: common/common.cpp:823
+#: common/common.cpp:827
 msgid "Unsupported Operating System"
 msgstr "ஆதரிக்கப்படாத இயக்க முறைமை"
 
-#: common/common.cpp:825
+#: common/common.cpp:829
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -3371,7 +3371,7 @@ msgstr "தனிப்பயன் காகித அகலம்."
 msgid "Export to other sheets"
 msgstr "மற்ற தாள்களுக்கு ஏற்றுமதி செய்யுங்கள்"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:523
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:529
 #: eeschema/erc/erc_item.cpp:448 eeschema/sch_marker.cpp:379
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -8883,12 +8883,12 @@ msgstr "காப்பகம்"
 msgid "Folder"
 msgstr "கோப்புறை"
 
-#: common/json_schema_validator.cpp:48
+#: common/json_schema_validator.cpp:42
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "ச்கீமா கோப்பு '%s' காணப்படவில்லை"
 
-#: common/json_schema_validator.cpp:53
+#: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "பிழை ஏற்றுதல் ச்கீமா: %s"
@@ -9915,20 +9915,20 @@ msgstr "சிப் காப்பகம் '%s' உருவாக்கப�
 msgid "Open file"
 msgstr "கோப்பை திற"
 
-#: common/rc_item.cpp:504 eeschema/erc/erc_item.cpp:428
+#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:428
 msgid "Excluded warning: "
 msgstr "விலக்கப்பட்ட எச்சரிக்கை: "
 
-#: common/rc_item.cpp:506 eeschema/erc/erc_item.cpp:430
+#: common/rc_item.cpp:512 eeschema/erc/erc_item.cpp:430
 msgid "Excluded error: "
 msgstr "விலக்கப்பட்ட பிழை: "
 
-#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:434
+#: common/rc_item.cpp:516 eeschema/erc/erc_item.cpp:434
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1587
 msgid "Warning: "
 msgstr "எச்சரிக்கை: "
 
-#: common/rc_item.cpp:514 eeschema/erc/erc_item.cpp:438
+#: common/rc_item.cpp:520 eeschema/erc/erc_item.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1585
 msgid "Error: "
 msgstr "பிழை: "
@@ -10146,12 +10146,12 @@ msgstr "கிகாட் இயல்புநிலை"
 msgid "KiCad Classic"
 msgstr "கிகாட் கிளாசிக்"
 
-#: common/startwizard/startwizard.cpp:96
+#: common/startwizard/startwizard.cpp:97
 #, c-format
 msgid "Welcome to KiCad %s"
 msgstr "KiCad %s க்கு வரவேற்கிறோம்"
 
-#: common/startwizard/startwizard.cpp:106
+#: common/startwizard/startwizard.cpp:107
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -10164,15 +10164,15 @@ msgstr ""
 "சில அடிப்படை அமைப்புகளை உள்ளமைக்க ஒரு தருணம் எடுத்துக்கொள்வோம். விருப்பத்தேர்வுகள் "
 "உரையாடலை திறப்பதன் மூலம் இந்த அமைப்புகளை எப்போதும் மாற்றலாம்."
 
-#: common/startwizard/startwizard.cpp:112
+#: common/startwizard/startwizard.cpp:113
 msgid "For help, please visit "
 msgstr "உதவிக்கு, தயவுசெய்து பார்வையிடவும் "
 
-#: common/startwizard/startwizard.cpp:182
+#: common/startwizard/startwizard.cpp:187
 msgid "KiCad Setup"
 msgstr "கிகாட் அமைப்பு"
 
-#: common/startwizard/startwizard.cpp:245
+#: common/startwizard/startwizard.cpp:250
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
@@ -33353,35 +33353,35 @@ msgstr "வரைதல் தாளை அச்சிட முயற்சி
 msgid "Printing"
 msgstr "அச்சிடுதல்"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:680
+#: pagelayout_editor/dialogs/properties_frame.cpp:683
 msgid "Predefined Keywords"
 msgstr "முன் வரையறுக்கப்பட்ட முக்கிய வார்த்தைகள்"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:683
+#: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "Texts can include keywords."
 msgstr "உரைகளில் முக்கிய வார்த்தைகள் இருக்கலாம்."
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:684
+#: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "Keyword notation is ${keyword}"
 msgstr "முக்கிய குறியீடு $ {keyword}"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:685
+#: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "Each keyword is replaced by its value"
 msgstr "ஒவ்வொரு முக்கிய சொற்களும் அதன் மதிப்பால் மாற்றப்படுகின்றன"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:686
+#: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "These build-in keywords are always available:"
 msgstr "இந்த உருவாக்கும் முக்கிய வார்த்தைகள் எப்போதும் கிடைக்கின்றன:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:690
+#: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(sheet number)"
 msgstr "(தாள் எண்)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:691
+#: pagelayout_editor/dialogs/properties_frame.cpp:694
 msgid "(sheet count)"
 msgstr "(தாள் எண்ணிக்கை)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:697
+#: pagelayout_editor/dialogs/properties_frame.cpp:700
 msgid "(paper size)"
 msgstr "(காகித அளவு)"
 

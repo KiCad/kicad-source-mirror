@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 09:52-0700\n"
+"POT-Creation-Date: 2026-08-28 10:54-0700\n"
 "PO-Revision-Date: 2026-08-23 16:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
@@ -2169,17 +2169,17 @@ msgstr "出力ディレクトリ '%s' を作成しました。"
 msgid "Cannot create output directory '%s'."
 msgstr "出力ディレクトリ '%s' を作成できませんでした。"
 
-#: common/common.cpp:821
+#: common/common.cpp:825
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 "このオペレーティングシステムは、KiCad とその依存関係でサポートされていませ"
 "ん。"
 
-#: common/common.cpp:823
+#: common/common.cpp:827
 msgid "Unsupported Operating System"
 msgstr "サポートされていないオペレーティングシステム"
 
-#: common/common.cpp:825
+#: common/common.cpp:829
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -3376,7 +3376,7 @@ msgstr "カスタム用紙の幅."
 msgid "Export to other sheets"
 msgstr "他のシートへエクスポート"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:523
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:529
 #: eeschema/erc/erc_item.cpp:448 eeschema/sch_marker.cpp:379
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -8896,12 +8896,12 @@ msgstr "アーカイブ"
 msgid "Folder"
 msgstr "フォルダ"
 
-#: common/json_schema_validator.cpp:48
+#: common/json_schema_validator.cpp:42
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "スキーマ ファイル '%s' が見つかりません"
 
-#: common/json_schema_validator.cpp:53
+#: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "スキーマの読み込み中にエラー: %s"
@@ -9934,20 +9934,20 @@ msgstr "Zip アーカイブ '%s' を作成しました (%s 未圧縮, %s 圧縮�
 msgid "Open file"
 msgstr "ファイルを開く"
 
-#: common/rc_item.cpp:504 eeschema/erc/erc_item.cpp:428
+#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:428
 msgid "Excluded warning: "
 msgstr "除外した警告: "
 
-#: common/rc_item.cpp:506 eeschema/erc/erc_item.cpp:430
+#: common/rc_item.cpp:512 eeschema/erc/erc_item.cpp:430
 msgid "Excluded error: "
 msgstr "除外したエラー: "
 
-#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:434
+#: common/rc_item.cpp:516 eeschema/erc/erc_item.cpp:434
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1587
 msgid "Warning: "
 msgstr "警告: "
 
-#: common/rc_item.cpp:514 eeschema/erc/erc_item.cpp:438
+#: common/rc_item.cpp:520 eeschema/erc/erc_item.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1585
 msgid "Error: "
 msgstr "エラー: "
@@ -10174,12 +10174,12 @@ msgstr "KiCad 標準"
 msgid "KiCad Classic"
 msgstr "KiCad クラシック"
 
-#: common/startwizard/startwizard.cpp:96
+#: common/startwizard/startwizard.cpp:97
 #, c-format
 msgid "Welcome to KiCad %s"
 msgstr "KiCad %s へようこそ"
 
-#: common/startwizard/startwizard.cpp:106
+#: common/startwizard/startwizard.cpp:107
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -10192,15 +10192,15 @@ msgstr ""
 "少し時間を使って、基本的な設定を構成してみましょう。   これらの設定は、いつで"
 "も「環境設定」ダイアログを開いて変更できます。"
 
-#: common/startwizard/startwizard.cpp:112
+#: common/startwizard/startwizard.cpp:113
 msgid "For help, please visit "
 msgstr "ヘルプです、ぜひご覧ください "
 
-#: common/startwizard/startwizard.cpp:182
+#: common/startwizard/startwizard.cpp:187
 msgid "KiCad Setup"
 msgstr "KiCadのセットアップ"
 
-#: common/startwizard/startwizard.cpp:245
+#: common/startwizard/startwizard.cpp:250
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
@@ -11922,9 +11922,9 @@ msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"'%s' はすでに '%s' のセクション '%s' へ割り当てられています。 両方の"
-"キーバインドは保持されますが、 キーを押すたびに実行されるのは片方のみです。 "
-"続行しますか?"
+"'%s' はすでに '%s' のセクション '%s' へ割り当てられています。 両方のキーバイ"
+"ンドは保持されますが、 キーを押すたびに実行されるのは片方のみです。 続行しま"
+"すか?"
 
 #: common/widgets/widget_hotkey_list.cpp:516
 msgid "Hotkey conflict"
@@ -33408,35 +33408,35 @@ msgstr "図面用紙の印刷中にエラーが発生しました。"
 msgid "Printing"
 msgstr "印刷中"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:680
+#: pagelayout_editor/dialogs/properties_frame.cpp:683
 msgid "Predefined Keywords"
 msgstr "定義済みのキーワード"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:683
+#: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "Texts can include keywords."
 msgstr "テキストにはキーワードを含めることができます。"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:684
+#: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "Keyword notation is ${keyword}"
 msgstr "キーワードの表記は${keyword}です"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:685
+#: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "Each keyword is replaced by its value"
 msgstr "それぞれのキーワードはその値に置き換えられます"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:686
+#: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "These build-in keywords are always available:"
 msgstr "これらの組み込みキーワードは常に使用可能です:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:690
+#: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(sheet number)"
 msgstr "(シート番号)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:691
+#: pagelayout_editor/dialogs/properties_frame.cpp:694
 msgid "(sheet count)"
 msgstr "(シート数)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:697
+#: pagelayout_editor/dialogs/properties_frame.cpp:700
 msgid "(paper size)"
 msgstr "(用紙サイズ)"
 

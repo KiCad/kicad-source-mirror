@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 09:52-0700\n"
+"POT-Creation-Date: 2026-08-28 10:54-0700\n"
 "PO-Revision-Date: 2026-08-06 05:27+0000\n"
 "Last-Translator: Che-Hsien Su <jonassu1101@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -2174,15 +2174,15 @@ msgstr "已建立輸出目錄 '%s'。"
 msgid "Cannot create output directory '%s'."
 msgstr "無法建立輸出目錄 '%s'。"
 
-#: common/common.cpp:821
+#: common/common.cpp:825
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr "KiCad 及其相依函式庫不支援此作業系統。"
 
-#: common/common.cpp:823
+#: common/common.cpp:827
 msgid "Unsupported Operating System"
 msgstr "不支援的作業系統"
 
-#: common/common.cpp:825
+#: common/common.cpp:829
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -3370,7 +3370,7 @@ msgstr "自定義紙張寬度。"
 msgid "Export to other sheets"
 msgstr "匯出到其他圖紙"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:523
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:529
 #: eeschema/erc/erc_item.cpp:448 eeschema/sch_marker.cpp:379
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -8871,12 +8871,12 @@ msgstr "存檔"
 msgid "Folder"
 msgstr "資料夾"
 
-#: common/json_schema_validator.cpp:48
+#: common/json_schema_validator.cpp:42
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "找不到原理圖檔案 '%s'"
 
-#: common/json_schema_validator.cpp:53
+#: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "載入原理圖時出錯: %s"
@@ -9937,20 +9937,20 @@ msgstr "已建立 Zip 壓縮包 '%s'(%s 未壓縮, %s 已壓縮)。"
 msgid "Open file"
 msgstr "開啟檔案"
 
-#: common/rc_item.cpp:504 eeschema/erc/erc_item.cpp:428
+#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:428
 msgid "Excluded warning: "
 msgstr "已排除的警告: "
 
-#: common/rc_item.cpp:506 eeschema/erc/erc_item.cpp:430
+#: common/rc_item.cpp:512 eeschema/erc/erc_item.cpp:430
 msgid "Excluded error: "
 msgstr "已排除的錯誤: "
 
-#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:434
+#: common/rc_item.cpp:516 eeschema/erc/erc_item.cpp:434
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1587
 msgid "Warning: "
 msgstr "警告: "
 
-#: common/rc_item.cpp:514 eeschema/erc/erc_item.cpp:438
+#: common/rc_item.cpp:520 eeschema/erc/erc_item.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1585
 msgid "Error: "
 msgstr "錯誤: "
@@ -10172,12 +10172,12 @@ msgstr "KiCad 預設"
 msgid "KiCad Classic"
 msgstr "KiCad 經典"
 
-#: common/startwizard/startwizard.cpp:96
+#: common/startwizard/startwizard.cpp:97
 #, fuzzy, c-format
 msgid "Welcome to KiCad %s"
 msgstr "歡迎來到 KiCad %s!"
 
-#: common/startwizard/startwizard.cpp:106
+#: common/startwizard/startwizard.cpp:107
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -10189,15 +10189,15 @@ msgstr ""
 "請讓我們花一點時間設定一些基本參數。您隨時可以透過開啟「偏好設定」對話框來修"
 "改這些設定。"
 
-#: common/startwizard/startwizard.cpp:112
+#: common/startwizard/startwizard.cpp:113
 msgid "For help, please visit "
 msgstr "如需協助，請參閱 "
 
-#: common/startwizard/startwizard.cpp:182
+#: common/startwizard/startwizard.cpp:187
 msgid "KiCad Setup"
 msgstr "KiCad 設定"
 
-#: common/startwizard/startwizard.cpp:245
+#: common/startwizard/startwizard.cpp:250
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
@@ -33399,35 +33399,35 @@ msgstr "嘗試列印圖紙時出現錯誤。"
 msgid "Printing"
 msgstr "列印"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:680
+#: pagelayout_editor/dialogs/properties_frame.cpp:683
 msgid "Predefined Keywords"
 msgstr "預設關鍵字"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:683
+#: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "Texts can include keywords."
 msgstr "文字可以包含關鍵字。"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:684
+#: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "Keyword notation is ${keyword}"
 msgstr "關鍵字符號為 ${keyword}"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:685
+#: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "Each keyword is replaced by its value"
 msgstr "每個關鍵字被其值取代"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:686
+#: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "These build-in keywords are always available:"
 msgstr "這些內置的關鍵字總是可用的:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:690
+#: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(sheet number)"
 msgstr "(圖紙頁碼)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:691
+#: pagelayout_editor/dialogs/properties_frame.cpp:694
 msgid "(sheet count)"
 msgstr "(圖紙數量)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:697
+#: pagelayout_editor/dialogs/properties_frame.cpp:700
 msgid "(paper size)"
 msgstr "(紙張尺寸)"
 

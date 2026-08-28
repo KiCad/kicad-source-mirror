@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 09:52-0700\n"
+"POT-Creation-Date: 2026-08-28 10:54-0700\n"
 "PO-Revision-Date: 2026-04-24 16:49+0000\n"
 "Last-Translator: Mojca Miklavec Groenhuis <mojca@macports.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/v10/sl/"
@@ -2433,16 +2433,16 @@ msgstr "Izhodni imenik \"%s\" je ustvarjen.\n"
 msgid "Cannot create output directory '%s'."
 msgstr "Izhodnega imenika \"%s\" ni mogoče ustvariti.\n"
 
-#: common/common.cpp:821
+#: common/common.cpp:825
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 
-#: common/common.cpp:823
+#: common/common.cpp:827
 #, fuzzy
 msgid "Unsupported Operating System"
 msgstr "Nepodprto prek oblike: %s"
 
-#: common/common.cpp:825
+#: common/common.cpp:829
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -3773,7 +3773,7 @@ msgstr "Širina papirja po meri."
 msgid "Export to other sheets"
 msgstr "Izvozi na druge liste"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:523
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:529
 #: eeschema/erc/erc_item.cpp:448 eeschema/sch_marker.cpp:379
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -9898,12 +9898,12 @@ msgstr "&Razpakiraj arhiv ..."
 msgid "Folder"
 msgstr "Mapa:"
 
-#: common/json_schema_validator.cpp:48
+#: common/json_schema_validator.cpp:42
 #, fuzzy, c-format
 msgid "schema file '%s' not found"
 msgstr "Shematske datoteke \"%s\" ni mogoče najti."
 
-#: common/json_schema_validator.cpp:53
+#: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, fuzzy, c-format
 msgid "Error loading schema: %s"
 msgstr ""
@@ -11087,23 +11087,23 @@ msgstr "Ustvarjen je ZIP arhiv \"%s\" (%s stisnjen, %s stisnjen)\n"
 msgid "Open file"
 msgstr "Odpri datoteko"
 
-#: common/rc_item.cpp:504 eeschema/erc/erc_item.cpp:428
+#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:428
 #, fuzzy
 msgid "Excluded warning: "
 msgstr "Scale"
 
-#: common/rc_item.cpp:506 eeschema/erc/erc_item.cpp:430
+#: common/rc_item.cpp:512 eeschema/erc/erc_item.cpp:430
 #, fuzzy
 msgid "Excluded error: "
 msgstr "Izključeno "
 
-#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:434
+#: common/rc_item.cpp:516 eeschema/erc/erc_item.cpp:434
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1587
 #, fuzzy
 msgid "Warning: "
 msgstr "Opozorilo: "
 
-#: common/rc_item.cpp:514 eeschema/erc/erc_item.cpp:438
+#: common/rc_item.cpp:520 eeschema/erc/erc_item.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1585
 #, fuzzy
 msgid "Error: "
@@ -11331,12 +11331,12 @@ msgstr "Privzeto KiCad"
 msgid "KiCad Classic"
 msgstr "KiCad Classic"
 
-#: common/startwizard/startwizard.cpp:96
+#: common/startwizard/startwizard.cpp:97
 #, fuzzy, c-format
 msgid "Welcome to KiCad %s"
 msgstr "Dobrodošli v KiCad %s!"
 
-#: common/startwizard/startwizard.cpp:106
+#: common/startwizard/startwizard.cpp:107
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -11345,16 +11345,16 @@ msgid ""
 "these settings later by opening the Preferences dialog."
 msgstr ""
 
-#: common/startwizard/startwizard.cpp:112
+#: common/startwizard/startwizard.cpp:113
 msgid "For help, please visit "
 msgstr ""
 
-#: common/startwizard/startwizard.cpp:182
+#: common/startwizard/startwizard.cpp:187
 #, fuzzy
 msgid "KiCad Setup"
 msgstr "&Beri nastavitve..."
 
-#: common/startwizard/startwizard.cpp:245
+#: common/startwizard/startwizard.cpp:250
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
@@ -37035,39 +37035,39 @@ msgstr "Pri poskusu tiskanja sheme je prišlo do napake."
 msgid "Printing"
 msgstr "Tiskanje"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:680
+#: pagelayout_editor/dialogs/properties_frame.cpp:683
 #, fuzzy
 msgid "Predefined Keywords"
 msgstr "Vnaprej določene širine:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:683
+#: pagelayout_editor/dialogs/properties_frame.cpp:686
 #, fuzzy
 msgid "Texts can include keywords."
 msgstr "Ime omrežja ne sme biti prazno."
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:684
+#: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "Keyword notation is ${keyword}"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:685
+#: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "Each keyword is replaced by its value"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:686
+#: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "These build-in keywords are always available:"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:690
+#: pagelayout_editor/dialogs/properties_frame.cpp:693
 #, fuzzy
 msgid "(sheet number)"
 msgstr "Stran: %d"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:691
+#: pagelayout_editor/dialogs/properties_frame.cpp:694
 #, fuzzy
 msgid "(sheet count)"
 msgstr "Število ponovitev:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:697
+#: pagelayout_editor/dialogs/properties_frame.cpp:700
 #, fuzzy
 msgid "(paper size)"
 msgstr "Velikost papirja po meri:"

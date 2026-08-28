@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 09:52-0700\n"
+"POT-Creation-Date: 2026-08-28 10:54-0700\n"
 "PO-Revision-Date: 2026-04-24 15:47+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v10/ro/>\n"
@@ -2182,16 +2182,16 @@ msgstr "Director de ieșire '%s' creat."
 msgid "Cannot create output directory '%s'."
 msgstr "Nu se poate crea directorul de ieșire '%s'."
 
-#: common/common.cpp:821
+#: common/common.cpp:825
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 "Acest sistem de operare nu este suportat de KiCad și de dependențele sale."
 
-#: common/common.cpp:823
+#: common/common.cpp:827
 msgid "Unsupported Operating System"
 msgstr "Sistem de operare neacceptat"
 
-#: common/common.cpp:825
+#: common/common.cpp:829
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -3387,7 +3387,7 @@ msgstr "Lățimea foii personalizate."
 msgid "Export to other sheets"
 msgstr "Exportați în alte foii"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:523
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:529
 #: eeschema/erc/erc_item.cpp:448 eeschema/sch_marker.cpp:379
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -8942,12 +8942,12 @@ msgstr "Arhivare"
 msgid "Folder"
 msgstr "Dosar"
 
-#: common/json_schema_validator.cpp:48
+#: common/json_schema_validator.cpp:42
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "fișier schema '%s' nu a fost găsit"
 
-#: common/json_schema_validator.cpp:53
+#: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "Eroare la încărcarea schemei '%s'"
@@ -9978,20 +9978,20 @@ msgstr "Arhiva Zip \"%s\" creată (%s necomprimată, %s comprimată)."
 msgid "Open file"
 msgstr "Deschidere fișier"
 
-#: common/rc_item.cpp:504 eeschema/erc/erc_item.cpp:428
+#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:428
 msgid "Excluded warning: "
 msgstr "Avertisment exclus "
 
-#: common/rc_item.cpp:506 eeschema/erc/erc_item.cpp:430
+#: common/rc_item.cpp:512 eeschema/erc/erc_item.cpp:430
 msgid "Excluded error: "
 msgstr "Eroare exclusă: "
 
-#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:434
+#: common/rc_item.cpp:516 eeschema/erc/erc_item.cpp:434
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1587
 msgid "Warning: "
 msgstr "Atenție: "
 
-#: common/rc_item.cpp:514 eeschema/erc/erc_item.cpp:438
+#: common/rc_item.cpp:520 eeschema/erc/erc_item.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1585
 msgid "Error: "
 msgstr "Eroare: "
@@ -10214,12 +10214,12 @@ msgstr "KiCad Predefinit"
 msgid "KiCad Classic"
 msgstr "KiCad Clasic"
 
-#: common/startwizard/startwizard.cpp:96
+#: common/startwizard/startwizard.cpp:97
 #, c-format
 msgid "Welcome to KiCad %s"
 msgstr "Bine ați venit la KiCad %s"
 
-#: common/startwizard/startwizard.cpp:106
+#: common/startwizard/startwizard.cpp:107
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -10233,15 +10233,15 @@ msgstr ""
 "Să luăm un moment pentru a configura câteva setări de bază. Puteți modifica "
 "aceste setări oricând prin deschiderea dialogului Preferințe."
 
-#: common/startwizard/startwizard.cpp:112
+#: common/startwizard/startwizard.cpp:113
 msgid "For help, please visit "
 msgstr "Pentru ajutor, vă rugăm vizitați "
 
-#: common/startwizard/startwizard.cpp:182
+#: common/startwizard/startwizard.cpp:187
 msgid "KiCad Setup"
 msgstr "Configurare KiCad"
 
-#: common/startwizard/startwizard.cpp:245
+#: common/startwizard/startwizard.cpp:250
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
@@ -33253,35 +33253,35 @@ msgstr "A apărut o eroare la încercarea de a imprima foaia de desen."
 msgid "Printing"
 msgstr "Imprimari"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:680
+#: pagelayout_editor/dialogs/properties_frame.cpp:683
 msgid "Predefined Keywords"
 msgstr "Cuvinte cheie predefinite"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:683
+#: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "Texts can include keywords."
 msgstr "Textele pot include cuvinte cheie."
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:684
+#: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "Keyword notation is ${keyword}"
 msgstr "Notația cuvântului cheie este ${keyword}"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:685
+#: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "Each keyword is replaced by its value"
 msgstr "Fiecare cuvânt cheie este înlocuit cu valoarea sa"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:686
+#: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "These build-in keywords are always available:"
 msgstr "Aceste cuvinte cheie integrate sunt întotdeauna disponibile:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:690
+#: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(sheet number)"
 msgstr "(număr foaie)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:691
+#: pagelayout_editor/dialogs/properties_frame.cpp:694
 msgid "(sheet count)"
 msgstr "(număr total de foi)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:697
+#: pagelayout_editor/dialogs/properties_frame.cpp:700
 msgid "(paper size)"
 msgstr "(dimensiunea foii)"
 

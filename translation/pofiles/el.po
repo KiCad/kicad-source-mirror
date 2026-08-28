@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 09:52-0700\n"
+"POT-Creation-Date: 2026-08-28 10:54-0700\n"
 "PO-Revision-Date: 2026-04-24 16:15+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v10/el/>\n"
@@ -2196,17 +2196,17 @@ msgstr "Δημιουργήθηκε ο φάκελος εξόδου '%s'."
 msgid "Cannot create output directory '%s'."
 msgstr "Αδυναμία δημιουργίας φακέλου εξόδου '%s'."
 
-#: common/common.cpp:821
+#: common/common.cpp:825
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 "Αυτό το λειτουργικό δεν υποστηρίζεται πλέον από το KiCad και τις εξαρτήσεις "
 "του."
 
-#: common/common.cpp:823
+#: common/common.cpp:827
 msgid "Unsupported Operating System"
 msgstr "Μη Υποστηριζόμενο Λειτουργικό Σύστημα"
 
-#: common/common.cpp:825
+#: common/common.cpp:829
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -3411,7 +3411,7 @@ msgstr "Προσαρμοσμένο πλάτος χαρτιού."
 msgid "Export to other sheets"
 msgstr "Εξαγωγή σε άλλα φύλλα"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:523
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:529
 #: eeschema/erc/erc_item.cpp:448 eeschema/sch_marker.cpp:379
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -8985,12 +8985,12 @@ msgstr "Αρχείο"
 msgid "Folder"
 msgstr "Φάκελος"
 
-#: common/json_schema_validator.cpp:48
+#: common/json_schema_validator.cpp:42
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "Δεν βρέθηκε το σχηματικό αρχείο '%s'"
 
-#: common/json_schema_validator.cpp:53
+#: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "Σφάλμα κατά τη φόρτωση σχηματικού: %s"
@@ -10027,20 +10027,20 @@ msgstr "Αρχείο zip '%s' δημιουργήθηκε (%s ασυμπίεστ�
 msgid "Open file"
 msgstr "Άνοιγμα αρχείου"
 
-#: common/rc_item.cpp:504 eeschema/erc/erc_item.cpp:428
+#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:428
 msgid "Excluded warning: "
 msgstr "Εξαιρεμένες προειδοποιήσεις: "
 
-#: common/rc_item.cpp:506 eeschema/erc/erc_item.cpp:430
+#: common/rc_item.cpp:512 eeschema/erc/erc_item.cpp:430
 msgid "Excluded error: "
 msgstr "Αποκλεισμένο σφάλμα: "
 
-#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:434
+#: common/rc_item.cpp:516 eeschema/erc/erc_item.cpp:434
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1587
 msgid "Warning: "
 msgstr "Προειδοποίηση: "
 
-#: common/rc_item.cpp:514 eeschema/erc/erc_item.cpp:438
+#: common/rc_item.cpp:520 eeschema/erc/erc_item.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1585
 msgid "Error: "
 msgstr "Σφάλμα: "
@@ -10272,12 +10272,12 @@ msgstr "Προκαθορισμένο"
 msgid "KiCad Classic"
 msgstr "Classic"
 
-#: common/startwizard/startwizard.cpp:96
+#: common/startwizard/startwizard.cpp:97
 #, c-format
 msgid "Welcome to KiCad %s"
 msgstr "Καλώς ορίσατε στο KiCad %s"
 
-#: common/startwizard/startwizard.cpp:106
+#: common/startwizard/startwizard.cpp:107
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -10291,15 +10291,15 @@ msgstr ""
 "Μπορείτε πάντα να τροποποιήσετε αυτές τις ρυθμίσεις αργότερα ανοίγοντας τον "
 "διάλογο Προτιμήσεις."
 
-#: common/startwizard/startwizard.cpp:112
+#: common/startwizard/startwizard.cpp:113
 msgid "For help, please visit "
 msgstr "Για βοήθεια, επισκεφθείτε "
 
-#: common/startwizard/startwizard.cpp:182
+#: common/startwizard/startwizard.cpp:187
 msgid "KiCad Setup"
 msgstr "Ρύθμιση KiCad"
 
-#: common/startwizard/startwizard.cpp:245
+#: common/startwizard/startwizard.cpp:250
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
@@ -33825,35 +33825,35 @@ msgstr "Συνέβη ένα σφάλμα κατά την προσπάθεια ε
 msgid "Printing"
 msgstr "Εκτύπωση"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:680
+#: pagelayout_editor/dialogs/properties_frame.cpp:683
 msgid "Predefined Keywords"
 msgstr "Προκαθορισμένες Λέξεις Κλειδιά"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:683
+#: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "Texts can include keywords."
 msgstr "Τα κείμενα μπορούν να περιλαμβάνουν λέξεις-κλειδιά."
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:684
+#: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "Keyword notation is ${keyword}"
 msgstr "Ο συμβολισμός λέξης-κλειδιού είναι ${keyword}"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:685
+#: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "Each keyword is replaced by its value"
 msgstr "Κάθε λέξη-κλειδί αντικαθίσταται από την αξία της"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:686
+#: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "These build-in keywords are always available:"
 msgstr "Αυτές οι ενσωματωμένες λέξεις-κλειδιά είναι πάντα διαθέσιμες:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:690
+#: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(sheet number)"
 msgstr "(αριθμός φύλλου)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:691
+#: pagelayout_editor/dialogs/properties_frame.cpp:694
 msgid "(sheet count)"
 msgstr "(μέτρηση φύλλων)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:697
+#: pagelayout_editor/dialogs/properties_frame.cpp:700
 msgid "(paper size)"
 msgstr "(μέγεθος χαρτιού)"
 

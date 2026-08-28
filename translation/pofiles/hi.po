@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 09:52-0700\n"
+"POT-Creation-Date: 2026-08-28 10:54-0700\n"
 "PO-Revision-Date: 2026-04-24 16:42+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/kicad/v10/hi/>\n"
@@ -2150,15 +2150,15 @@ msgstr "आउटपुट डायरेक्टरी '%s' बनाई ग�
 msgid "Cannot create output directory '%s'."
 msgstr "आउटपुट निर्देशिका '%s' नहीं बनाई जा सकती।"
 
-#: common/common.cpp:821
+#: common/common.cpp:825
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr "यह ऑपरेटिंग सिस्टम KiCad और उसकी निर्भरताओं द्वारा समर्थित नहीं है।"
 
-#: common/common.cpp:823
+#: common/common.cpp:827
 msgid "Unsupported Operating System"
 msgstr "असमर्थित ऑपरेटिंग सिस्टम"
 
-#: common/common.cpp:825
+#: common/common.cpp:829
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -3344,7 +3344,7 @@ msgstr "कस्टम पेपर चौड़ाई।"
 msgid "Export to other sheets"
 msgstr "अन्य शीटों में निर्यात करें"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:523
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:529
 #: eeschema/erc/erc_item.cpp:448 eeschema/sch_marker.cpp:379
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -8812,12 +8812,12 @@ msgstr "आर्काइव"
 msgid "Folder"
 msgstr "फ़ोल्डर"
 
-#: common/json_schema_validator.cpp:48
+#: common/json_schema_validator.cpp:42
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "स्कीमा फ़ाइल '%s' नहीं मिली"
 
-#: common/json_schema_validator.cpp:53
+#: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "स्कीमा लोड करने में त्रुटि: %s"
@@ -9841,20 +9841,20 @@ msgstr "Zip संग्रह '%s' बनाया गया (%s असंप�
 msgid "Open file"
 msgstr "फ़ाइल खोलें"
 
-#: common/rc_item.cpp:504 eeschema/erc/erc_item.cpp:428
+#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:428
 msgid "Excluded warning: "
 msgstr "बाहर रखी गई चेतावनी: "
 
-#: common/rc_item.cpp:506 eeschema/erc/erc_item.cpp:430
+#: common/rc_item.cpp:512 eeschema/erc/erc_item.cpp:430
 msgid "Excluded error: "
 msgstr "बाहर रखी गई त्रुटि: "
 
-#: common/rc_item.cpp:510 eeschema/erc/erc_item.cpp:434
+#: common/rc_item.cpp:516 eeschema/erc/erc_item.cpp:434
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1587
 msgid "Warning: "
 msgstr "चेतावनी: "
 
-#: common/rc_item.cpp:514 eeschema/erc/erc_item.cpp:438
+#: common/rc_item.cpp:520 eeschema/erc/erc_item.cpp:438
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1585
 msgid "Error: "
 msgstr "त्रुटि: "
@@ -10075,12 +10075,12 @@ msgstr "KiCad डिफ़ॉल्ट"
 msgid "KiCad Classic"
 msgstr "KiCad क्लासिक"
 
-#: common/startwizard/startwizard.cpp:96
+#: common/startwizard/startwizard.cpp:97
 #, c-format
 msgid "Welcome to KiCad %s"
 msgstr "KiCad %s में आपका स्वागत है"
 
-#: common/startwizard/startwizard.cpp:106
+#: common/startwizard/startwizard.cpp:107
 msgid ""
 "KiCad is starting for the first time, or some of its configuration files are "
 "missing.\n"
@@ -10093,15 +10093,15 @@ msgstr ""
 "कुछ बुनियादी सेटिंग्स कॉन्फ़िगर करने में एक पल लगाएँ। आप Preferences संवाद खोलकर इन "
 "सेटिंग्स को बाद में भी बदल सकते हैं।"
 
-#: common/startwizard/startwizard.cpp:112
+#: common/startwizard/startwizard.cpp:113
 msgid "For help, please visit "
 msgstr "मदद के लिए, कृपया यहाँ जाएँ "
 
-#: common/startwizard/startwizard.cpp:182
+#: common/startwizard/startwizard.cpp:187
 msgid "KiCad Setup"
 msgstr "KiCad सेटअप"
 
-#: common/startwizard/startwizard.cpp:245
+#: common/startwizard/startwizard.cpp:250
 msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
@@ -33076,35 +33076,35 @@ msgstr "ड्रॉइंग शीट प्रिंट करने का �
 msgid "Printing"
 msgstr "प्रिंट हो रहा है"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:680
+#: pagelayout_editor/dialogs/properties_frame.cpp:683
 msgid "Predefined Keywords"
 msgstr "पूर्वनिर्धारित कीवर्ड"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:683
+#: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "Texts can include keywords."
 msgstr "पाठ में कीवर्ड शामिल हो सकते हैं।"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:684
+#: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "Keyword notation is ${keyword}"
 msgstr "कीवर्ड नोटेशन ${keyword} है"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:685
+#: pagelayout_editor/dialogs/properties_frame.cpp:688
 msgid "Each keyword is replaced by its value"
 msgstr "प्रत्येक कीवर्ड को उसके मान से बदला जाता है"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:686
+#: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "These build-in keywords are always available:"
 msgstr "ये अंतर्निर्मित कीवर्ड हमेशा उपलब्ध हैं:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:690
+#: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(sheet number)"
 msgstr "(शीट संख्या)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:691
+#: pagelayout_editor/dialogs/properties_frame.cpp:694
 msgid "(sheet count)"
 msgstr "(शीट गणना)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:697
+#: pagelayout_editor/dialogs/properties_frame.cpp:700
 msgid "(paper size)"
 msgstr "(कागज़ आकार)"
 
