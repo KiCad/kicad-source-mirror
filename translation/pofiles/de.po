@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:53-0700\n"
-"PO-Revision-Date: 2026-08-27 13:43+0000\n"
+"PO-Revision-Date: 2026-08-28 13:51+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -6971,19 +6971,21 @@ msgstr "Auf virtuelle Verlängerungen von Geraden und Bögen einrasten"
 
 #: common/dialogs/panel_snapping_base.cpp:127
 msgid "Tangent and normal contacts"
-msgstr "Tangential- und Normalkontakte"
+msgstr "Tangential- und Normalberührung"
 
 #: common/dialogs/panel_snapping_base.cpp:128
 msgid "Snap where the dragged geometry meets an arc tangentially or normally"
 msgstr ""
+"An der Stelle einrasten, an der verschobene Geometrie tangential oder normal "
+"auf Bogen trifft"
 
 #: common/dialogs/panel_snapping_base.cpp:132
 msgid "Alignment and equal spacing"
-msgstr ""
+msgstr "Ausrichtung und gleiche Abstände"
 
 #: common/dialogs/panel_snapping_base.cpp:133
 msgid "Snap to alignment with, and equal spacing between, nearby objects"
-msgstr ""
+msgstr "An benachbarten Objekten und gleichmäßigen Abstand zu diesen ausrichten"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
 msgid "Pan and Rotate"
@@ -9677,7 +9679,7 @@ msgstr "Kann Länge der Datei \"%s\" nicht bestimmen."
 #: common/io/diptrace/diptrace_binary_reader.cpp:60
 #, c-format
 msgid "DipTrace file '%s' is too large (%ld bytes)."
-msgstr ""
+msgstr "DipTrace-Datei \"%s\" ist zu groß (%ld Bytes)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:80
 #, c-format
@@ -11016,7 +11018,7 @@ msgstr "Wiederherstellung fehlgeschlagen"
 #: common/local_history.cpp:2330
 #, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Das Projekt auf Version von %s zurücksetzen?"
+msgstr "Projekt auf die Version vom %s zurücksetzen?"
 
 #: common/local_history.cpp:2332
 msgid "Restore Version"
@@ -11645,6 +11647,9 @@ msgid ""
 "One backup of this project is larger than the total backup size limit.  "
 "KiCad kept the new backup; increase the limit in Preferences."
 msgstr ""
+"Eine Sicherungskopie dieses Projekts ist größer als der gesamte "
+"Speicherplatz für Sicherungskopien. KiCad hat die neue Sicherung dennoch "
+"gespeichert; erhöhen Sie das Limit in den Einstellungen."
 
 #: common/startwizard/startwizard.cpp:96
 #, c-format
@@ -12265,6 +12270,8 @@ msgstr "Bogenstellung wechseln"
 #: common/tool/actions.cpp:609
 msgid "Switch arc posture between clockwise and counter-clockwise"
 msgstr ""
+"Bogenrichtung zwischen im Uhrzeigersinn und gegen den Uhrzeigersinn "
+"umschalten"
 
 #: common/tool/actions.cpp:615
 msgid "Delete Last Point"
@@ -21005,7 +21012,7 @@ msgstr "%s auf 1:1 zurücksetzen"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:95
 msgid "Copy From..."
-msgstr ""
+msgstr "Kopieren von..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:479
 #, fuzzy
@@ -21036,6 +21043,8 @@ msgstr ""
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:703
 msgid "Click a pin map column to choose which map to remove."
 msgstr ""
+"Auf eine Spalte der Pinkarte klicken, um auszuwählen, welche Karte entfernt "
+"werden soll."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:703
 #, fuzzy
@@ -21283,7 +21292,7 @@ msgstr "Das Dateiformat von \"%s\" wird von keinem Schaltplanimport erkannt.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1548 pcbnew/pcbnew_jobs_handler.cpp:3509
 msgid "Could not establish a project for the import\n"
-msgstr ""
+msgstr "Konnte kein Projekt für den Import anlegen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1582 pcbnew/pcbnew_jobs_handler.cpp:3551
 #, c-format
@@ -21334,7 +21343,7 @@ msgstr "Konnte %s nicht laden: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2102 pcbnew/pcbnew_jobs_handler.cpp:4421
 msgid "Unsupported document kind for this dispatcher.\n"
-msgstr ""
+msgstr "Dispatcher unterstützt diesen Dokumenttyp nicht.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2153
 #, fuzzy
@@ -21392,6 +21401,7 @@ msgstr "Konnte zusammengeführte Projektdatei nicht speichern: %s\n"
 #, c-format
 msgid "Merge completed with %zu unresolved conflict(s) in %s\n"
 msgstr ""
+"Zusammenführung mit %zu ungelöstem/.n Konflikt/-en in %s abgeschlossen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2419 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:4448
@@ -21483,7 +21493,7 @@ msgstr "Keine Verbindung"
 #: eeschema/erc/erc.cpp:264
 #, c-format
 msgid "Pin map '%s' references unknown symbol pin '%s'"
-msgstr ""
+msgstr "Pinkarte \"%s\" verweist auf unbekannten Symbolpin \"%s\""
 
 #: eeschema/erc/erc.cpp:292
 #, c-format
@@ -21494,6 +21504,8 @@ msgstr "Symbolpins \"%s\" und \"%s\" sind beide Pad \"%s\" zugeordnet"
 #, c-format
 msgid "Pin map '%s' references pad '%s' not present on footprint '%s'"
 msgstr ""
+"Pinkarte \"%s\" verweist auf nicht existierendes Pad \"%s\" in Footprint "
+"\"%s\""
 
 #: eeschema/erc/erc.cpp:376
 #, c-format
@@ -21880,15 +21892,16 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:182
 msgid "Connected pin is not mapped to any footprint pad"
-msgstr ""
+msgstr "Verbundener Pin ist keinem Pad im Footprint zugeordnet"
 
 #: eeschema/erc/erc_item.cpp:186
 msgid "Two symbol pins are mapped to the same footprint pad"
-msgstr ""
+msgstr "Zwei Symbolpins sind demselben Pad im Footprint zugeordnet"
 
 #: eeschema/erc/erc_item.cpp:190
 msgid "Pin map references a pin number that no longer exists on the symbol"
 msgstr ""
+"Pinkarte verweist auf eine Pinnummer, die im Symbol nicht mehr existiert"
 
 #: eeschema/erc/erc_item.cpp:194 pcbnew/drc/drc_item.cpp:217
 #: pcbnew/drc/drc_rule_parser.cpp:99
