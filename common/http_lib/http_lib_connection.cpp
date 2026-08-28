@@ -47,6 +47,8 @@ HTTP_LIB_CONNECTION::HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool a
 
 bool HTTP_LIB_CONNECTION::validateHttpLibraryEndpoints()
 {
+    std::lock_guard lock( m_queryMutex );
+
     m_endpointValid = false;
     std::string res = "";
 
@@ -95,6 +97,7 @@ bool HTTP_LIB_CONNECTION::validateHttpLibraryEndpoints()
 
 bool HTTP_LIB_CONNECTION::syncCategories()
 {
+    // Caller should already hold m_queryMutex.
     if( !IsValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "syncCategories: without valid connection!" ) );
@@ -277,6 +280,8 @@ bool setPartExtendedData( const nlohmann::json& aPartJson, HTTP_LIB_PART& aPart 
 
 bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& aFetchedPart )
 {
+    std::lock_guard lock( m_queryMutex );
+
     if( !IsValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "SelectOne: without valid connection!" ) );
@@ -349,6 +354,8 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
 
 bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::vector<HTTP_LIB_PART>& aParts )
 {
+    std::lock_guard lock( m_queryMutex );
+
     if( !IsValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "SelectAll: without valid connection!" ) );
