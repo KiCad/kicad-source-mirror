@@ -38,6 +38,14 @@
 #include <drc/drc_engine.h>
 #include <settings/settings_manager.h>
 #include <widgets/report_severity.h>
+#include <base_units.h>
+#include <netinfo.h>
+#include <pcb_shape.h>
+#include <pcb_track.h>
+#include <zone.h>
+
+#include <filesystem>
+#include <fstream>
 
 
 struct DRC_CREEPAGE_TEST_FIXTURE
@@ -144,4 +152,128 @@ BOOST_FIXTURE_TEST_CASE( CreepageMalformedEdge, DRC_CREEPAGE_TEST_FIXTURE )
     // Same board geometry as CreepageHVvsGND but with an extra malformed Edge.Cuts line.
     // The creepage DRC must still detect violations even when the board outline is invalid.
     BOOST_CHECK_GE( violations.size(), 1 );
+}
+
+
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25165
+ *
+ * A rule area has no net, so it lands on netcode 0 and used to be collected as copper.
+ * The netless corner tracks give netcode 0 a bounding box wide enough to get past the
+ * early reject in testCreepage. They sit too far from the HV track to violate anything.
+ */
+BOOST_FIXTURE_TEST_CASE( CreepageIgnoresRuleAreas, DRC_CREEPAGE_TEST_FIXTURE )
+{
+    KI_TEST::TEMPORARY_DIRECTORY tmpDir( "kicad_creepage_rule_area", "" );
+
+    const std::filesystem::path rulePath = tmpDir.GetPath() / "creepage_rule_area.kicad_dru";
+
+    {
+        std::ofstream ruleFile( rulePath );
+        ruleFile << "(version 1)\n"
+                 << "(rule OVC_3_Reinforced (constraint creepage (min 5.5mm)))\n";
+    }
+
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 2 );
+
+    PCB_SHAPE* edge = new PCB_SHAPE( m_board.get(), SHAPE_T::RECTANGLE );
+    edge->SetLayer( Edge_Cuts );
+    edge->SetStart( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 80 ) ) );
+    edge->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 170 ), pcbIUScale.mmToIU( 130 ) ) );
+    m_board->Add( edge );
+
+    // Restricts nothing and spans every copper layer, like the areas the Multi-Channel tool
+    // generates.
+    ZONE* ruleArea = new ZONE( m_board.get() );
+    ruleArea->SetIsRuleArea( true );
+    ruleArea->SetLayerSet( LSET( { F_Cu, B_Cu } ) );
+    ruleArea->SetDoNotAllowZoneFills( false );
+    ruleArea->SetDoNotAllowVias( false );
+    ruleArea->SetDoNotAllowTracks( false );
+    ruleArea->SetDoNotAllowPads( false );
+    ruleArea->SetDoNotAllowFootprints( false );
+    ruleArea->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 117 ), pcbIUScale.mmToIU( 97 ) ), -1 );
+    ruleArea->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 153 ), pcbIUScale.mmToIU( 97 ) ), -1 );
+    ruleArea->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 153 ), pcbIUScale.mmToIU( 103 ) ), -1 );
+    ruleArea->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 117 ), pcbIUScale.mmToIU( 103 ) ), -1 );
+    m_board->Add( ruleArea );
+
+    NETINFO_ITEM* hvNet = new NETINFO_ITEM( m_board.get(), wxT( "HV" ), 1 );
+    m_board->Add( hvNet );
+
+    auto addTrack = [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd, NETINFO_ITEM* aNet )
+    {
+        PCB_TRACK* track = new PCB_TRACK( m_board.get() );
+        track->SetLayer( F_Cu );
+        track->SetWidth( pcbIUScale.mmToIU( 0.2 ) );
+        track->SetStart( aStart );
+        track->SetEnd( aEnd );
+
+        if( aNet )
+            track->SetNet( aNet );
+
+        m_board->Add( track );
+    };
+
+    addTrack( VECTOR2I( pcbIUScale.mmToIU( 120 ), pcbIUScale.mmToIU( 100 ) ),
+              VECTOR2I( pcbIUScale.mmToIU( 150 ), pcbIUScale.mmToIU( 100 ) ), hvNet );
+
+    // Netless, and at right angles so netcode 0's bounding box spans the HV track. Two parallel
+    // segments would give a flat box that the reject still throws out.
+    addTrack( VECTOR2I( pcbIUScale.mmToIU( 103 ), pcbIUScale.mmToIU( 127 ) ),
+              VECTOR2I( pcbIUScale.mmToIU( 167 ), pcbIUScale.mmToIU( 127 ) ), nullptr );
+    addTrack( VECTOR2I( pcbIUScale.mmToIU( 167 ), pcbIUScale.mmToIU( 127 ) ),
+              VECTOR2I( pcbIUScale.mmToIU( 167 ), pcbIUScale.mmToIU( 83 ) ), nullptr );
+
+    m_board->BuildConnectivity();
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
+    bds.m_DRCEngine->InitEngine( wxFileName( rulePath.string() ) );
+
+    for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
+        bds.m_DRCSeverities[ii] = SEVERITY::RPT_SEVERITY_IGNORE;
+
+    bds.m_DRCSeverities[DRCE_CREEPAGE] = SEVERITY::RPT_SEVERITY_ERROR;
+
+    std::vector<std::shared_ptr<DRC_ITEM>> violations;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
+            {
+                if( aItem->GetErrorCode() == DRCE_CREEPAGE )
+                    violations.push_back( aItem );
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    bds.m_DRCEngine->ClearViolationHandler();
+
+    int ruleAreaHits = 0;
+
+    for( const std::shared_ptr<DRC_ITEM>& item : violations )
+    {
+        BOOST_TEST_MESSAGE( wxString::Format( "  Violation: %s", item->GetErrorMessage( false ) ) );
+
+        for( const KIID& id : { item->GetMainItemID(), item->GetAuxItemID() } )
+        {
+            BOARD_ITEM* boardItem = m_board->ResolveItem( id, true );
+
+            if( boardItem && boardItem->Type() == PCB_ZONE_T && static_cast<ZONE*>( boardItem )->GetIsRuleArea() )
+            {
+                ++ruleAreaHits;
+            }
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( ruleAreaHits == 0,
+                         wxString::Format( "%d creepage violations name the rule area as a violating item. A "
+                                           "rule area is a boundary, not copper.",
+                                           ruleAreaHits ) );
+
+    BOOST_CHECK_MESSAGE( violations.empty(),
+                         wxString::Format( "Expected no creepage violations, got %d.", (int) violations.size() ) );
 }
