@@ -1306,8 +1306,8 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     {
         if( PNS::DP_MEANDER_PLACER* dpPlacer = dynamic_cast<PNS::DP_MEANDER_PLACER*>( placer ) )
         {
-            m_trackWidth = dpPlacer->GetOriginPair().Width();
-            m_diffPairGap = dpPlacer->GetOriginPair().Gap();
+        m_trackWidth = dpPlacer->GetOriginPair().Dimensions().Width();
+        m_diffPairGap = dpPlacer->GetOriginPair().Dimensions().Gap();
         }
         else
         {

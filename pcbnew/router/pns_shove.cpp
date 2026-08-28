@@ -1651,7 +1651,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     {
         COLLISION_SEARCH_OPTIONS opts;
         opts.m_kindMask = search_order;
-        opts.m_filter = [ this ] ( const ITEM* item ) -> bool
+        opts.m_filter = [ this ] ( const ITEM* item, const ITEM* aRefItem ) -> bool
         {
             bool rv = true;
 

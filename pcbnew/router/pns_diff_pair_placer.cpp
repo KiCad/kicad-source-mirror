@@ -126,8 +126,8 @@ bool DIFF_PAIR_PLACER::rhMarkObstacles( const VECTOR2I& aP )
         return true;
     };
 
-    bool collP = (m_currentNode->CheckColliding( &m_currentTrace.PLine(), ctxOpts ) );
-    bool collN = (m_currentNode->CheckColliding( &m_currentTrace.NLine(), ctxOpts ) );
+    bool collP = (m_currentNode->CheckColliding( &m_currentTrace.PLine(), ctxOpts ) ).has_value();
+    bool collN = (m_currentNode->CheckColliding( &m_currentTrace.NLine(), ctxOpts ) ).has_value();
 
     m_fitOk = !( collP || collN ) ;
 
@@ -720,9 +720,7 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
     {
         if( aErrorMsg )
         {
-            *aErrorMsg = wxString::Format( _( "Can't find a suitable starting point "
-                                              "for coupled net \"%s\"." ),
-                                           aWorld->GetRuleResolver()->NetName( coupledNet ) );
+            *aErrorMsg = wxString::Format( _( "Can't find a suitable starting point for the diff pair" ) );
         }
 
         return false;

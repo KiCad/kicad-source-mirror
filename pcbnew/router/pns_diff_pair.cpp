@@ -655,6 +655,7 @@ void DP_GATEWAYS::addGateway( DP_GATEWAY& aGw, const wxString&name, bool aAddTur
 void DP_GATEWAYS::BuildOrthoProjections( DP_GATEWAYS& aEntries, const VECTOR2I& aCursorPos,
                                          int aOrthoScore )
 {
+    int cnt = 0;
     for( const DP_GATEWAY& g : aEntries.Gateways() )
     {
         VECTOR2I midpoint( ( g.AnchorP() + g.AnchorN() ) / 2 );
@@ -679,6 +680,7 @@ void DP_GATEWAYS::BuildOrthoProjections( DP_GATEWAYS& aEntries, const VECTOR2I& 
             t.SetPriority( aOrthoScore );
             t.SetName( wxString::Format("ortho-%d", cnt).ToStdString() );
             m_gateways.push_back( t );
+            cnt++;
         }
     }
 }
@@ -1308,7 +1310,6 @@ void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs,
             SEG p_clip, n_clip;
 
             int64_t dist = std::abs( sp.Distance( sn ) ) - m_dims.Width();
-            commonParallelProjection( sp, sn, p_clip, n_clip ) ? 1 :0 );
 
             if( sp.ApproxParallel( sn, DIFF_PAIR::DP_PARALLELITY_THRESHOLD ) && gapConstraint.Matches( dist ) &&
                 commonParallelProjection( sp, sn, p_clip, n_clip ) )

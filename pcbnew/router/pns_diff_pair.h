@@ -107,6 +107,11 @@ public:
         m_hasEntryLines = false;
     }
 
+    DP_GATEWAY()
+    {
+        
+    }
+
     ~DP_GATEWAY()
     {
     }
