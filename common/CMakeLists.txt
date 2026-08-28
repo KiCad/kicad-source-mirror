@@ -711,8 +711,11 @@ set( COMMON_GIT_DLG_SRCS
     dialogs/git/panel_git_stashes_base.cpp
     dialogs/git/panel_git_tags.cpp
     dialogs/git/panel_git_tags_base.cpp
+    dialogs/git/dialog_design_workspace.cpp
+    dialogs/git/panel_git_workspace.cpp
     dialogs/git/dialog_mdw_part_history.cpp
     dialogs/git/panel_mdw_versions.cpp
+    dialogs/git/panel_git_workspace_base.cpp
     dialogs/git/panel_git_repos.cpp
     dialogs/git/panel_git_repos_base.cpp
     dialogs/git/mdw_connection_prompt.cpp
