@@ -858,7 +858,7 @@ if( NOT OCC_FOUND )
                          " OpenCASCADE was not found!\n"
                          "================================================================\n")
 endif()
-if( OCC_VERSION_STRING VERSION_LESS 7.6.0 )
+if( OCC_VERSION_STRING VERSION_LESS 7.5.0 )
     MESSAGE( FATAL_ERROR "================================================================\n"
                          "OpenCASCADE version ${OCC_VERSION_STRING} was found.\n"
                          "  KiCad requires a minimum version of 7.6.0\n"

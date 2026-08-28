@@ -190,8 +190,15 @@ public:
         return m_hasEntryLines;
     }
 
+    std::optional<DP_GATEWAY> Extend( int aLength );
+    std::optional<DP_GATEWAY> AddTurns( bool aSide, bool a90Deg, bool aLeft, bool aWiggle );
+
+    DIRECTION_45 DirP() const { return m_dirP; };
+    DIRECTION_45 DirN() const { return m_dirN; };
+
 private:
     DP_DIMENSIONS m_dims;
+    DIRECTION_45 m_dirP, m_dirN;
     SHAPE_LINE_CHAIN m_entryP, m_entryN;
     bool m_hasEntryLines;
     VECTOR2I m_anchorP, m_anchorN;
@@ -337,6 +344,10 @@ public:
     }
 
 private:
+
+    bool isGatewayConcave( const DP_GATEWAY& gw, const DIFF_PAIR& dp ) const;
+    void addGateway( DP_GATEWAY& aGw, const wxString&name = wxT(""), bool aAddTurns = false );
+
     struct DP_CANDIDATE
     {
         SHAPE_LINE_CHAIN p, n;
@@ -346,7 +357,9 @@ private:
 
     bool checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I& b ) const;
     void buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsDiagonal );
-    void buildEntries( const VECTOR2I& p0_p, const VECTOR2I& p0_n );
+    
+    void buildEntries( DP_GATEWAY& aGw, const VECTOR2I& p0_p, const VECTOR2I& p0_n );
+    void buildFromPads( const DP_PRIMITIVE_PAIR& aPair );
 
     DP_DIMENSIONS m_dims;
     bool m_fitVias;
@@ -595,10 +608,12 @@ public:
 
     double CoupledLength() const;
     double TotalLength() const;
-    double CoupledLengthFactor() const;
     double Skew() const;
 
-    void CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const;
+    
+    void CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs, 
+        bool aUseGapConstraint = true,
+        const std::optional<DP_GAP_CONSTRAINT>& aOverrideGapConstraint = std::optional<DP_GAP_CONSTRAINT>() ) const;
 
     void Clear()
     {
@@ -624,14 +639,26 @@ public:
     bool CheckConnectionAngle( const DIFF_PAIR &aOther, int allowedAngles ) const;
     int CoupledLength( const SEG& aP, const SEG& aN ) const;
 
-    int64_t CoupledLength( const SHAPE_LINE_CHAIN& aP, const SHAPE_LINE_CHAIN& aN ) const;
+    std::pair<int64_t, bool> CoupledLength( const SHAPE_LINE_CHAIN& aP, const SHAPE_LINE_CHAIN& aN ) const;
 
     const DP_GAP_CONSTRAINT GapConstraint() const
     {
         return m_dims.GapConstraint();
     }
 
+    void SetLines( const LINE& aP, const LINE& aN )
+    {
+        m_line_p = aP;
+        m_line_n = aN;
+    }
+
+    std::optional<DP_PRIMITIVE_PAIR> BuildMidpairIntersection( PNS::SEGMENT* aStartSeg, const VECTOR2I& aP );
+
+    int GuessMostLikelyGap() const;
     const DP_DIMENSIONS& Dimensions() const { return m_dims; }
+
+    DIRECTION_45 DirP( bool aEnd ) const { return getDirection( true, aEnd ); }
+    DIRECTION_45 DirN( bool aEnd ) const { return getDirection( false, aEnd ); }
 
 private:
     void updateLine( LINE &aLine, const SHAPE_LINE_CHAIN& aShape, NET_HANDLE aNet, const VIA& aVia )
