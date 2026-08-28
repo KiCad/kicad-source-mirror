@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 09:52-0700\n"
-"PO-Revision-Date: 2026-08-27 13:42+0000\n"
+"PO-Revision-Date: 2026-08-28 17:53+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -9669,9 +9669,9 @@ msgid "Restore Failed"
 msgstr "Wiederherstellung fehlgeschlagen"
 
 #: common/local_history.cpp:2313
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Auf die Remote-Version zurücksetzen."
+msgstr "Projekt auf die Version vom %s zurücksetzen?"
 
 #: common/local_history.cpp:2315
 msgid "Restore Version"
@@ -53171,9 +53171,9 @@ msgid "Loading unicode strings..."
 msgstr "Lade Unicode-Strings ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4676
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Längenabstimmungsmuster"
+msgstr "%d Längenabstimmungsmuster importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4687
 msgid "Loading text..."
