@@ -262,7 +262,8 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     auto& view     = *getView();
     auto& controls = *getViewControls();
 
-    frame()->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( frame(), originalEvent );
 
     bool invertXAxis = displayOptions().m_DisplayInvertXAxis;
     bool invertYAxis = displayOptions().m_DisplayInvertYAxis;
@@ -329,18 +330,11 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() )
         {
             if( originSet )
-            {
                 cleanup();
-            }
             else if( m_isDefaultTool )
-            {
                 view.SetVisible( &ruler, false );
-            }
             else
-            {
-                frame()->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() )
         {
@@ -349,14 +343,11 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 
             if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                frame()->PushTool( originalEvent );
             }
-            else
-            {
-                frame()->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         // click or drag starts
         else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )

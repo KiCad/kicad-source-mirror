@@ -3165,7 +3165,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         }
     }
 
-    editFrame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( editFrame, aEvent );
 
     std::vector<BOARD_ITEM*> lockedItems;
     Activate();
@@ -3219,7 +3219,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         {
             wxBell();
             canvas()->Refresh();
-            editFrame->PopTool( aEvent );
             return 0;
         }
 
@@ -3230,16 +3229,11 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         selectionCopy = m_selectionTool->GetSelection();
 
         if( selectionCopy.Empty() )
-        {
-            editFrame->PopTool( aEvent );
             return 0;
-        }
     }
 
     DeleteItems( selectionCopy, isCut );
     canvas()->Refresh();
-
-    editFrame->PopTool( aEvent );
     return 0;
 }
 
@@ -3304,9 +3298,15 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
             switch( rotationAnchor )
             {
-            case ROTATE_AROUND_ITEM_ANCHOR: boardItem->Rotate( boardItem->GetPosition(), angle ); break;
-            case ROTATE_AROUND_SEL_CENTER: boardItem->Rotate( selCenter, angle ); break;
-            case ROTATE_AROUND_USER_ORIGIN: boardItem->Rotate( frame()->GetScreen()->m_LocalOrigin, angle ); break;
+            case ROTATE_AROUND_ITEM_ANCHOR:
+                boardItem->Rotate( boardItem->GetPosition(), angle );
+                break;
+            case ROTATE_AROUND_SEL_CENTER:
+                boardItem->Rotate( selCenter, angle );
+                break;
+            case ROTATE_AROUND_USER_ORIGIN:
+                boardItem->Rotate( frame()->GetScreen()->m_LocalOrigin, angle );
+                break;
             case ROTATE_AROUND_AUX_ORIGIN:
                 boardItem->Rotate( board()->GetDesignSettings().GetAuxOrigin(), angle );
                 break;
@@ -3426,9 +3426,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 dupe_item->ClearSelected();
 
                 if( dupe_item->Type() == PCB_SHAPE_T && static_cast<PCB_SHAPE*>( dupe_item )->IsHatchedFill() )
-                {
                     dupe_item->SetFlags( IS_NEW );
-                }
 
                 idMap[orig_item->m_Uuid] = dupe_item->m_Uuid;
                 new_items.push_back( dupe_item );
@@ -3806,7 +3804,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     TOOL_EVENT selectReferencePoint( aEvent.Category(), aEvent.Action(), "pcbnew.InteractiveEdit.selectReferencePoint",
                                      TOOL_ACTION_SCOPE::AS_GLOBAL );
 
-    frame()->PushTool( selectReferencePoint );
+    SCOPED_TOOL_PUSHER raii( frame(), selectReferencePoint );
     Activate();
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
@@ -3838,7 +3836,6 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
             if( !pickReferencePoint( _( "Select reference point for the copy..." ), _( "Selection copied" ),
                                      _( "Copy canceled" ), refPoint ) )
             {
-                frame()->PopTool( selectReferencePoint );
                 return 0;
             }
         }
@@ -3853,8 +3850,6 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         io.SaveSelection( selection, m_isFootprintEditor );
         frame()->SetStatusText( _( "Selection copied" ) );
     }
-
-    frame()->PopTool( selectReferencePoint );
 
     if( selection.IsHover() )
         m_selectionTool->ClearSelection();
@@ -3911,15 +3906,11 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
                             s << cell->GetShownText( true );
 
                             if( col < table.GetColCount() - 1 )
-                            {
                                 s << '\t';
-                            }
                         }
 
                         if( row < table.GetRowCount() - 1 )
-                        {
                             s << '\n';
-                        }
                     }
                     return s;
                 }
@@ -3927,6 +3918,7 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
                     // No string representation for this item type
                     break;
                 }
+
                 return wxEmptyString;
             };
 
@@ -3942,17 +3934,13 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
             itemText.Trim( false ).Trim( true );
 
             if( !itemText.IsEmpty() )
-            {
                 itemTexts.Add( std::move( itemText ) );
-            }
         }
     }
 
     // Send the text to the clipboard
     if( !itemTexts.empty() )
-    {
         SaveClipboard( wxJoin( itemTexts, '\n', '\0' ).ToStdString() );
-    }
 
     return 0;
 }
@@ -3985,58 +3973,58 @@ void EDIT_TOOL::rebuildConnectivity()
 // clang-format off
 void EDIT_TOOL::setTransitions()
 {
-    Go( &EDIT_TOOL::GetAndPlace,           PCB_ACTIONS::getAndPlace.MakeEvent() );
-    Go( &EDIT_TOOL::Move,                  PCB_ACTIONS::move.MakeEvent() );
-    Go( &EDIT_TOOL::Move,                  PCB_ACTIONS::moveIndividually.MakeEvent() );
-    Go( &EDIT_TOOL::Drag,                  PCB_ACTIONS::drag45Degree.MakeEvent() );
-    Go( &EDIT_TOOL::Drag,                  PCB_ACTIONS::dragFreeAngle.MakeEvent() );
-    Go( &EDIT_TOOL::Rotate,                PCB_ACTIONS::rotateCw.MakeEvent() );
-    Go( &EDIT_TOOL::Rotate,                PCB_ACTIONS::rotateCcw.MakeEvent() );
-    Go( &EDIT_TOOL::Flip,                  PCB_ACTIONS::flip.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,                ACTIONS::doDelete.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,                PCB_ACTIONS::deleteFull.MakeEvent() );
-    Go( &EDIT_TOOL::Properties,            PCB_ACTIONS::properties.MakeEvent() );
-    Go( &EDIT_TOOL::MoveExact,             PCB_ACTIONS::moveExact.MakeEvent() );
-    Go( &EDIT_TOOL::Move,                  PCB_ACTIONS::moveWithReference.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,             ACTIONS::duplicate.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,             PCB_ACTIONS::duplicateIncrement.MakeEvent() );
-    Go( &EDIT_TOOL::Mirror,                PCB_ACTIONS::mirrorH.MakeEvent() );
-    Go( &EDIT_TOOL::Mirror,                PCB_ACTIONS::mirrorV.MakeEvent() );
-    Go( &EDIT_TOOL::Swap,                  PCB_ACTIONS::swap.MakeEvent() );
-    Go( &EDIT_TOOL::SwapPadNets,           PCB_ACTIONS::swapPadNets.MakeEvent() );
-    Go( &EDIT_TOOL::SwapGateNets,          PCB_ACTIONS::swapGateNets.MakeEvent() );
+    Go( &EDIT_TOOL::GetAndPlace,              PCB_ACTIONS::getAndPlace.MakeEvent() );
+    Go( &EDIT_TOOL::Move,                     PCB_ACTIONS::move.MakeEvent() );
+    Go( &EDIT_TOOL::Move,                     PCB_ACTIONS::moveIndividually.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,                     PCB_ACTIONS::drag45Degree.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,                     PCB_ACTIONS::dragFreeAngle.MakeEvent() );
+    Go( &EDIT_TOOL::Rotate,                   PCB_ACTIONS::rotateCw.MakeEvent() );
+    Go( &EDIT_TOOL::Rotate,                   PCB_ACTIONS::rotateCcw.MakeEvent() );
+    Go( &EDIT_TOOL::Flip,                     PCB_ACTIONS::flip.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,                   ACTIONS::doDelete.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,                   PCB_ACTIONS::deleteFull.MakeEvent() );
+    Go( &EDIT_TOOL::Properties,               PCB_ACTIONS::properties.MakeEvent() );
+    Go( &EDIT_TOOL::MoveExact,                PCB_ACTIONS::moveExact.MakeEvent() );
+    Go( &EDIT_TOOL::Move,                     PCB_ACTIONS::moveWithReference.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,                ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,                PCB_ACTIONS::duplicateIncrement.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,                   PCB_ACTIONS::mirrorH.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,                   PCB_ACTIONS::mirrorV.MakeEvent() );
+    Go( &EDIT_TOOL::Swap,                     PCB_ACTIONS::swap.MakeEvent() );
+    Go( &EDIT_TOOL::SwapPadNets,              PCB_ACTIONS::swapPadNets.MakeEvent() );
+    Go( &EDIT_TOOL::SwapGateNets,             PCB_ACTIONS::swapGateNets.MakeEvent() );
     Go( &EDIT_TOOL::PackAndMoveFootprints,    PCB_ACTIONS::packAndMoveFootprints.MakeEvent() );
     Go( &EDIT_TOOL::ToggleFootprintAttribute, PCB_ACTIONS::toggleExcludeFromBOM.MakeEvent() );
     Go( &EDIT_TOOL::ToggleFootprintAttribute, PCB_ACTIONS::toggleExcludeFromPosFiles.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,         PCB_ACTIONS::changeTrackWidth.MakeEvent() );
-    Go( &EDIT_TOOL::ChangeTrackLayer,      PCB_ACTIONS::changeTrackLayerNext.MakeEvent() );
-    Go( &EDIT_TOOL::ChangeTrackLayer,      PCB_ACTIONS::changeTrackLayerPrev.MakeEvent() );
-    Go( &EDIT_TOOL::FilletTracks,          PCB_ACTIONS::filletTracks.MakeEvent() );
-    Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::filletLines.MakeEvent() );
-    Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::chamferLines.MakeEvent() );
-    Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::dogboneCorners.MakeEvent() );
-    Go( &EDIT_TOOL::SimplifyPolygons,      PCB_ACTIONS::simplifyPolygons.MakeEvent() );
-    Go( &EDIT_TOOL::EditVertices,          PCB_ACTIONS::editVertices.MakeEvent() );
-    Go( &EDIT_TOOL::HealShapes,            PCB_ACTIONS::healShapes.MakeEvent() );
-    Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
+    Go( &EDIT_TOOL::ChangeTrackLayer,         PCB_ACTIONS::changeTrackLayerNext.MakeEvent() );
+    Go( &EDIT_TOOL::ChangeTrackLayer,         PCB_ACTIONS::changeTrackLayerPrev.MakeEvent() );
+    Go( &EDIT_TOOL::FilletTracks,             PCB_ACTIONS::filletTracks.MakeEvent() );
+    Go( &EDIT_TOOL::ModifyLines,              PCB_ACTIONS::filletLines.MakeEvent() );
+    Go( &EDIT_TOOL::ModifyLines,              PCB_ACTIONS::chamferLines.MakeEvent() );
+    Go( &EDIT_TOOL::ModifyLines,              PCB_ACTIONS::dogboneCorners.MakeEvent() );
+    Go( &EDIT_TOOL::SimplifyPolygons,         PCB_ACTIONS::simplifyPolygons.MakeEvent() );
+    Go( &EDIT_TOOL::EditVertices,             PCB_ACTIONS::editVertices.MakeEvent() );
+    Go( &EDIT_TOOL::HealShapes,               PCB_ACTIONS::healShapes.MakeEvent() );
+    Go( &EDIT_TOOL::ModifyLines,              PCB_ACTIONS::extendLines.MakeEvent() );
 
-    Go( &EDIT_TOOL::Increment,             ACTIONS::increment.MakeEvent() );
-    Go( &EDIT_TOOL::Increment,             ACTIONS::incrementPrimary.MakeEvent() );
-    Go( &EDIT_TOOL::Increment,             ACTIONS::decrementPrimary.MakeEvent() );
-    Go( &EDIT_TOOL::Increment,             ACTIONS::incrementSecondary.MakeEvent() );
-    Go( &EDIT_TOOL::Increment,             ACTIONS::decrementSecondary.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,                ACTIONS::increment.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,                ACTIONS::incrementPrimary.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,                ACTIONS::decrementPrimary.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,                ACTIONS::incrementSecondary.MakeEvent() );
+    Go( &EDIT_TOOL::Increment,                ACTIONS::decrementSecondary.MakeEvent() );
 
-    Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::mergePolygons.MakeEvent() );
-    Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::subtractPolygons.MakeEvent() );
-    Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::intersectPolygons.MakeEvent() );
+    Go( &EDIT_TOOL::BooleanPolygons,          PCB_ACTIONS::mergePolygons.MakeEvent() );
+    Go( &EDIT_TOOL::BooleanPolygons,          PCB_ACTIONS::subtractPolygons.MakeEvent() );
+    Go( &EDIT_TOOL::BooleanPolygons,          PCB_ACTIONS::intersectPolygons.MakeEvent() );
 
-    Go( &EDIT_TOOL::JustifyText,           ACTIONS::leftJustify.MakeEvent() );
-    Go( &EDIT_TOOL::JustifyText,           ACTIONS::centerJustify.MakeEvent() );
-    Go( &EDIT_TOOL::JustifyText,           ACTIONS::rightJustify.MakeEvent() );
+    Go( &EDIT_TOOL::JustifyText,              ACTIONS::leftJustify.MakeEvent() );
+    Go( &EDIT_TOOL::JustifyText,              ACTIONS::centerJustify.MakeEvent() );
+    Go( &EDIT_TOOL::JustifyText,              ACTIONS::rightJustify.MakeEvent() );
 
-    Go( &EDIT_TOOL::copyToClipboard,       ACTIONS::copy.MakeEvent() );
-    Go( &EDIT_TOOL::copyToClipboard,       PCB_ACTIONS::copyWithReference.MakeEvent() );
-    Go( &EDIT_TOOL::copyToClipboardAsText, ACTIONS::copyAsText.MakeEvent() );
-    Go( &EDIT_TOOL::cutToClipboard,        ACTIONS::cut.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboard,          ACTIONS::copy.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboard,          PCB_ACTIONS::copyWithReference.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboardAsText,    ACTIONS::copyAsText.MakeEvent() );
+    Go( &EDIT_TOOL::cutToClipboard,           ACTIONS::cut.MakeEvent() );
 }
 // clang-format on

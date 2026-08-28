@@ -342,7 +342,9 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
     const DRAW_SEGMENT_EVENT_PARAMS* params = aEvent.Parameter<const DRAW_SEGMENT_EVENT_PARAMS*>();
     SCH_COMMIT                       commit( m_toolMgr );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;      // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     if( aEvent.HasPosition() )
@@ -357,7 +359,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
         startSegments( commit, params->layer, cursorPos, params->sourceSegment );
     }
 
-    return doDrawSegments( aEvent, commit, params->layer, params->quitOnDraw );
+    return doDrawSegments( originalEvent, commit, params->layer, params->quitOnDraw );
 }
 
 
@@ -373,7 +375,8 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     wxString   net;
     SCH_LINE*  segment = nullptr;
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
     Activate();
 
     if( netPtr )
@@ -383,10 +386,12 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     }
     else
     {
-        const auto busGetter = [this]()
+        const auto busGetter =
+                [this]()
                 {
                     return getBusForUnfolding();
                 };
+
         BUS_UNFOLD_MENU unfoldMenu( busGetter );
         unfoldMenu.SetTool( this );
         unfoldMenu.SetShowTitle();
@@ -421,14 +426,9 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
     // If we have an unfolded wire to draw, then draw it
     if( segment )
-    {
-        return doDrawSegments( aEvent, commit, LAYER_WIRE, false );
-    }
-    else
-    {
-        m_frame->PopTool( aEvent );
-        return 0;
-    }
+        return doDrawSegments( originalEvent, commit, LAYER_WIRE, false );
+
+    return 0;
 }
 
 
@@ -791,14 +791,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
                 cleanup();
 
                 if( aQuitOnDraw )
-                {
-                    m_frame->PopTool( aTool );
                     break;
-                }
             }
             else
             {
-                m_frame->PopTool( aTool );
                 break;
             }
         }
@@ -813,14 +809,11 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
 
             if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool runs
+                m_frame->PushTool( aTool );
             }
-            else
-            {
-                m_frame->PopTool( aTool );
-                break;
-            }
+
+            break;
         }
         //------------------------------------------------------------------------
         // Handle finish:
@@ -835,10 +828,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
                 aCommit.Push( _( "Draw Wires" ) );
 
                 if( aQuitOnDraw )
-                {
-                    m_frame->PopTool( aTool );
                     break;
-                }
             }
         }
         //------------------------------------------------------------------------
@@ -876,10 +866,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
                     aCommit.Push( _( "Draw Wires" ) );
 
                     if( aQuitOnDraw )
-                    {
-                        m_frame->PopTool( aTool );
                         break;
-                    }
                 }
                 else
                 {
@@ -909,10 +896,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
             if( evt->IsDblClick( BUT_LEFT ) && segment )
             {
                 if( twoSegments && m_wires.size() >= 2 )
-                {
-                    computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos,
-                                       currentMode, posture );
-                }
+                    computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos, currentMode, posture );
 
                 finishSegments( aCommit );
                 segment = nullptr;
@@ -920,10 +904,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
                 aCommit.Push( _( "Draw Wires" ) );
 
                 if( aQuitOnDraw )
-                {
-                    m_frame->PopTool( aTool );
                     break;
-                }
             }
         }
         //------------------------------------------------------------------------
@@ -973,14 +954,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
             {
                 // Coerce the line to vertical/horizontal/45 as necessary
                 if( twoSegments && m_wires.size() >= 2 )
-                {
-                    computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos,
-                                       currentMode, posture );
-                }
+                    computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos, currentMode, posture );
                 else
-                {
                     segment->SetEndPoint( cursorPos );
-                }
             }
 
             for( SCH_LINE* wire : m_wires )
@@ -1000,11 +976,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
             if( m_busUnfold.entry )
                 previewItems.push_back( m_busUnfold.entry );
 
-            for( SCH_JUNCTION* jct : JUNCTION_HELPERS::PreviewJunctions( m_frame->GetScreen(),
-                                                                          previewItems ) )
-            {
+            for( SCH_JUNCTION* jct : JUNCTION_HELPERS::PreviewJunctions( m_frame->GetScreen(), previewItems ) )
                 m_view->AddToPreview( jct, true );
-            }
         }
         else if( evt->IsAction( &SCH_ACTIONS::undoLastSegment )
                  || evt->IsAction( &ACTIONS::doDelete )
@@ -1025,14 +998,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
 
                 // Find new bend point for current mode
                 if( twoSegments && m_wires.size() >= 2 )
-                {
-                    computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos,
-                                       currentMode, posture );
-                }
+                    computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos, currentMode, posture );
                 else
-                {
                     segment->SetEndPoint( cursorPos );
-                }
 
                 for( SCH_LINE* wire : m_wires )
                 {
@@ -1078,8 +1046,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
             }
             else
             {
-                computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos, currentMode,
-                                   posture );
+                computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos, currentMode, posture );
 
                 m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }

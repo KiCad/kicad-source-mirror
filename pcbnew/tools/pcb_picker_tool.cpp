@@ -260,7 +260,7 @@ int PCB_PICKER_TOOL::SelectPointInteractively( const TOOL_EVENT& aEvent )
 
     // By pushing this tool, we stop the Selection tool popping a disambiuation menu
     // in cases like returning to the Position Relative dialog after the selection.
-    frame()->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( frame(), aEvent );
     Activate();
 
     statusPopup.SetText( wxGetTranslation( params.m_Prompt ) );
@@ -314,7 +314,6 @@ int PCB_PICKER_TOOL::SelectPointInteractively( const TOOL_EVENT& aEvent )
 
     ClearHandlers();
     canvas()->SetStatusPopup( nullptr );
-    frame()->PopTool( aEvent );
     return 0;
 }
 
@@ -327,8 +326,7 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
     EDA_ITEM*          anchor_item = nullptr;
 
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-
-    frame()->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER  raii( frame(), aEvent );
     Activate();
 
     statusPopup.SetText( wxGetTranslation( params.m_Prompt ) );
@@ -393,7 +391,6 @@ int PCB_PICKER_TOOL::SelectItemInteractively( const TOOL_EVENT& aEvent )
 
     ClearHandlers();
     canvas()->SetStatusPopup( nullptr );
-    frame()->PopTool( aEvent );
     return 0;
 }
 

@@ -334,7 +334,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    frame()->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( frame(), aEvent );
 
     VECTOR2I          oldMousePos;  // store the previous mouse cursor position, during mouse drag
     std::list<PAD*>   selectedPads;
@@ -429,15 +429,11 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         {
             m_toolMgr->RunAction( ACTIONS::selectionClear );
             commit.Revert();
-
-            frame()->PopTool( aEvent );
             break;
         }
         else if( evt->IsActivate() )
         {
             commit.Push( _( "Renumber Pads" ) );
-
-            frame()->PopTool( aEvent );
             break;
         }
         else if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -539,7 +535,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
             commit.Push( _( "Renumber Pads" ) );
-            frame()->PopTool( aEvent );
             break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )

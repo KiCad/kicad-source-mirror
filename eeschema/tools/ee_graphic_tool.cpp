@@ -243,17 +243,16 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
                 // Make sure we come back after the move tool runs
                 frame()->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( !item && (   evt->IsClick( BUT_LEFT )
                            || evt->IsAction( &ACTIONS::cursorClick ) ) )
@@ -722,22 +721,18 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
                 // Make sure we come back after the move tool runs
                 m_frame->PushTool( aTool );
+            }
 
-                cleanup();
-                cancelled = true;
-                break;
-            }
-            else
-            {
-                cleanup();
-                cancelled = true;
-                break;
-            }
+            cleanup();
+            cancelled = true;
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {

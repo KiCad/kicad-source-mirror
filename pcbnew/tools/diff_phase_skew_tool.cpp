@@ -124,8 +124,8 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDiffPhaseSkewTool );
 
-    TOOL_EVENT pushedEvent = aEvent;
-    m_frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
     Activate();
 
     // Must be done after Activate() so that it gets set into the correct context
@@ -246,9 +246,6 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
 
     updateNetHighlights( false );
     m_frame->GetCanvas()->Refresh();
-
-    // Done
-    m_frame->PopTool( aEvent );
 
     return 0;
 }

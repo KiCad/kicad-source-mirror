@@ -110,7 +110,8 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS& controls = *getViewControls();
     PCB_EDIT_FRAME&       frame = *getEditFrame<PCB_EDIT_FRAME>();
 
-    frame.PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( &frame, originalEvent );
 
     auto setCursor =
             [&]()
@@ -155,11 +156,8 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             if( originSet )
                 cleanup();
             else
-            {
-                frame.PopTool( aEvent );
                 break;
-            }
-        }
+    }
         else if( evt->IsActivate() )
         {
             if( originSet )
@@ -167,14 +165,11 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 
             if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                frame.PushTool( originalEvent );
             }
-            else
-            {
-                frame.PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         // A click or drag starts
         else if( !originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) ) )

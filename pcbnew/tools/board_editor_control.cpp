@@ -1369,8 +1369,8 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    TOOL_EVENT pushedEvent = aEvent;
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     // Frame angle already applied to fp; recaptured whenever fp is (re)acquired, so
     // stale state can never leak into the next placement.
@@ -1464,14 +1464,9 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() || ( fp && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( fp )
-            {
                 cleanup();
-            }
             else
-            {
-                m_frame->PopTool( pushedEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() )
         {
@@ -1480,14 +1475,11 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
             if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( originalEvent );
             }
-            else
-            {
-                frame()->PopTool( pushedEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {

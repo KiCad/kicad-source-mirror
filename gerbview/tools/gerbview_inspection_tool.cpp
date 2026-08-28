@@ -253,12 +253,9 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             {
                 // Make sure we come back after the move tool runs
                 m_frame->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {

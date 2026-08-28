@@ -870,8 +870,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     if( selection.Empty() )
         return false;
 
-    TOOL_EVENT pushedEvent = aEvent;
-    editFrame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( editFrame, originalEvent );
     Activate();
 
     // Must be done after Activate() so that it gets set into the correct context
@@ -977,7 +977,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         if( selection.IsHover() )
             m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-        editFrame->PopTool( pushedEvent );
         return false;
     }
 
@@ -1029,42 +1028,44 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     // A single footprint (plus, at most, its own pads) rotates about its own position;
     // any other selection containing footprints rotates as a whole about the pick-up
     // point, just like manual rotation during a move.
-    auto findSingleFp = [&]() -> FOOTPRINT*
-    {
-        FOOTPRINT* singleFp = nullptr;
-
-        for( BOARD_ITEM* it : sel_items )
-        {
-            if( it->Type() == PCB_FOOTPRINT_T )
+    auto findSingleFp =
+            [&]() -> FOOTPRINT*
             {
-                if( singleFp )
-                    return nullptr; // more than one footprint
+                FOOTPRINT* singleFp = nullptr;
 
-                singleFp = static_cast<FOOTPRINT*>( it );
-            }
-            else if( it->Type() != PCB_PAD_T )
+                for( BOARD_ITEM* it : sel_items )
+                {
+                    if( it->Type() == PCB_FOOTPRINT_T )
+                    {
+                        if( singleFp )
+                            return nullptr; // more than one footprint
+
+                        singleFp = static_cast<FOOTPRINT*>( it );
+                    }
+                    else if( it->Type() != PCB_PAD_T )
+                    {
+                        return nullptr; // mixed selection
+                    }
+                }
+
+                for( BOARD_ITEM* it : sel_items )
+                {
+                    if( it->Type() == PCB_PAD_T && it->GetParentFootprint() != singleFp )
+                        return nullptr; // free pad of another footprint
+                }
+
+                return singleFp;
+            };
+
+    auto selectionHasFp =
+            [&]()
             {
-                return nullptr; // mixed selection
-            }
-        }
-
-        for( BOARD_ITEM* it : sel_items )
-        {
-            if( it->Type() == PCB_PAD_T && it->GetParentFootprint() != singleFp )
-                return nullptr; // free pad of another footprint
-        }
-
-        return singleFp;
-    };
-
-    auto selectionHasFp = [&]()
-    {
-        return std::any_of( sel_items.begin(), sel_items.end(),
-                            []( BOARD_ITEM* it )
-                            {
-                                return it->Type() == PCB_FOOTPRINT_T;
-                            } );
-    };
+                return std::any_of( sel_items.begin(), sel_items.end(),
+                                    []( BOARD_ITEM* it )
+                                    {
+                                        return it->Type() == PCB_FOOTPRINT_T;
+                                    } );
+            };
 
     // Capture the frame angle at the PICK-UP position: a footprint inside a rotated/polar
     // grid already carries that frame's orientation, so the first cursor move must
@@ -1080,35 +1081,36 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                                            PCB_GRIDITEM_ROLE::PLACEMENT );
     }
 
-    auto applyMoveFrameOrientation = [&]()
-    {
-        if( !frameRotate )
-            return;
-
-        // m_cursor is the pick-up point dragged along with the selection.
-        VECTOR2I  pivot = frameFp ? frameFp->GetPosition() : m_cursor;
-        EDA_ANGLE newAngle = GridFrameAngleAt( *board, pivot, PCB_GRIDITEM_ROLE::PLACEMENT );
-        EDA_ANGLE delta = GridFrameRotationDelta( prevFrameAngle, newAngle, editFrame->GetRotationAngle() );
-
-        prevFrameAngle = newAngle;
-
-        if( delta.IsZero() )
-            return;
-
-        if( frameFp )
-        {
-            frameFp->Rotate( pivot, delta );
-        }
-        else
-        {
-            for( BOARD_ITEM* item : sel_items )
+    auto applyMoveFrameOrientation =
+            [&]()
             {
-                // Don't double rotate child items.
-                if( !item->GetParent() || !moved_items.count( item->GetParent() ) )
-                    item->Rotate( pivot, delta );
-            }
-        }
-    };
+                if( !frameRotate )
+                    return;
+
+                // m_cursor is the pick-up point dragged along with the selection.
+                VECTOR2I  pivot = frameFp ? frameFp->GetPosition() : m_cursor;
+                EDA_ANGLE newAngle = GridFrameAngleAt( *board, pivot, PCB_GRIDITEM_ROLE::PLACEMENT );
+                EDA_ANGLE delta = GridFrameRotationDelta( prevFrameAngle, newAngle, editFrame->GetRotationAngle() );
+
+                prevFrameAngle = newAngle;
+
+                if( delta.IsZero() )
+                    return;
+
+                if( frameFp )
+                {
+                    frameFp->Rotate( pivot, delta );
+                }
+                else
+                {
+                    for( BOARD_ITEM* item : sel_items )
+                    {
+                        // Don't double rotate child items.
+                        if( !item->GetParent() || !moved_items.count( item->GetParent() ) )
+                            item->Rotate( pivot, delta );
+                    }
+                }
+            };
 
     LEADER_MODE angleSnapMode = GetAngleSnapMode();
     bool eatFirstMouseUp = true;
@@ -1160,8 +1162,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     }
 
     // No-op unless RealtimeCreepage is set and the board has creepage constraints
-    std::unique_ptr<CREEPAGE_OVERLAY> creepage_on_move =
-            std::make_unique<CREEPAGE_OVERLAY>( board, drcEngine, m_toolMgr->GetView() );
+    std::unique_ptr<CREEPAGE_OVERLAY> creepage_on_move = std::make_unique<CREEPAGE_OVERLAY>( board, drcEngine,
+                                                                                             m_toolMgr->GetView() );
 
     auto configureAngleSnap =
             [&]( LEADER_MODE aMode )
@@ -1185,13 +1187,9 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 grid.SetSnapLineDirections( directions );
 
                 if( directions.empty() )
-                {
                     grid.ClearSnapLine();
-                }
                 else
-                {
                     grid.SetSnapLineOrigin( originalPos );
-                }
             };
 
     configureAngleSnap( angleSnapMode );
@@ -1370,11 +1368,9 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                     bool solvedConstraints =
                             constraintMoveSession
-                                    ? constraintMoveSession->Solve(
-                                              m_cursor, &solved, beforeConstraintModify )
-                                    : ReSolveShapeClustersHoldingEdited(
-                                              board, *aConstraintShapes, &solved,
-                                              beforeConstraintModify );
+                                    ? constraintMoveSession->Solve( m_cursor, &solved, beforeConstraintModify )
+                                    : ReSolveShapeClustersHoldingEdited( board, *aConstraintShapes, &solved,
+                                                                         beforeConstraintModify );
 
                     if( solvedConstraints )
                     {
@@ -1781,9 +1777,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     // Remove the dynamic ratsnest from the screen
     m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest );
 
-    editFrame->PopTool( pushedEvent );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-
     m_inMoveWithReference = false;
     return !restore_state;
 }

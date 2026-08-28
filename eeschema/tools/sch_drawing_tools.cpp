@@ -341,12 +341,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             {
                 // Make sure we come back after the move tool runs
                 frame()->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                 || isSyntheticClick
@@ -1268,12 +1265,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 // Make sure we come back after the move tool is done
                 m_frame->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                 || isSyntheticClick
@@ -1522,12 +1516,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             {
                 // Make sure we come back after the move tool runs
                 frame()->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
@@ -2069,17 +2060,16 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
                 // Make sure we come back after the move tool runs
                 frame()->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                 || isSyntheticClick
@@ -2149,8 +2139,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     {
                         m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
                         m_statusPopup->SetText( _( "Click over a sheet." ) );
-                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
-                                             + wxPoint( 20, 20 ) );
+                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
                         m_statusPopup->PopupFor( 2000 );
                         item = nullptr;
                     }
@@ -2470,17 +2459,16 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
                 // Make sure we come back after the move tool runs
                 frame()->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -2653,17 +2641,16 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
                 // Make sure we come back after the move tool runs
                 frame()->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( !table && (   evt->IsClick( BUT_LEFT )
                             || evt->IsAction( &ACTIONS::cursorClick ) ) )
@@ -2922,17 +2909,16 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
                 // Make sure we come back after the move tool runs
                 frame()->PushTool( originalEvent );
-                break;
             }
-            else
-            {
-                break;
-            }
+
+            break;
         }
         else if( !sheet && (   evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                             || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick )

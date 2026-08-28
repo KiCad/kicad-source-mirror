@@ -94,7 +94,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     auto setCursor =
             [&]()
@@ -153,14 +154,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             m_frame->GetInfoBar()->Dismiss();
 
             if( item )
-            {
                 cleanup();
-            }
             else
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() && !isSyntheticClick )
         {
@@ -181,16 +177,16 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
-                break;
+                // Make sure we come back after the move tool runs
+                frame()->PushTool( originalEvent );
             }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) || isSyntheticClick )
         {
@@ -352,9 +348,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     if( m_inPlaceAnchor )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inPlaceAnchor );
-
-    m_frame->PushTool( aEvent );
+    REENTRANCY_GUARD   guard( &m_inPlaceAnchor );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
 
     auto setCursor =
             [&]()
@@ -373,14 +368,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            m_frame->PopTool( aEvent );
-            break;
-        }
-        else if( evt->IsActivate() )
-        {
-            m_frame->PopTool( aEvent );
             break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )

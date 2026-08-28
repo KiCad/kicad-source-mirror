@@ -496,10 +496,12 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;      // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
     Activate();
 
-    while( drawShape( aEvent, &line, startingPoint, &committedLines ) )
+    while( drawShape( originalEvent, &line, startingPoint, &committedLines ) )
     {
         if( line )
         {
@@ -557,10 +559,12 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;      // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
     Activate();
 
-    while( drawShape( aEvent, &rect, startingPoint, nullptr ) )
+    while( drawShape( originalEvent, &rect, startingPoint, nullptr ) )
     {
         if( rect )
         {
@@ -634,7 +638,9 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     arc->SetShape( SHAPE_T::ARC );
     arc->SetFlags( IS_NEW );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;      // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
     Activate();
 
     if( aEvent.HasPosition() )
@@ -642,7 +648,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     ARC_DRAW_BEHAVIOR arcBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
-    while( drawManagedShape( aEvent, arc, arcBehavior, initialPts ) )
+    while( drawManagedShape( originalEvent, arc, arcBehavior, initialPts ) )
     {
         if( arc )
         {
@@ -689,7 +695,9 @@ int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
     arc->SetShape( SHAPE_T::ELLIPSE_ARC );
     arc->SetFlags( IS_NEW );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;      // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
     Activate();
 
     if( aEvent.HasPosition() )
@@ -697,7 +705,7 @@ int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
 
     ELLIPSE_ARC_DRAW_BEHAVIOR ellipseBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
-    while( drawManagedShape( aEvent, arc, ellipseBehavior, initialPts ) )
+    while( drawManagedShape( originalEvent, arc, ellipseBehavior, initialPts ) )
     {
         if( arc )
         {
@@ -745,7 +753,9 @@ int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
     bezier->SetShape( SHAPE_T::BEZIER );
     bezier->SetFlags( IS_NEW );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;      // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
     Activate();
 
     if( aEvent.HasPosition() )
@@ -753,7 +763,7 @@ int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 
     BEZIER_DRAW_BEHAVIOR bezierBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
-    while( drawManagedShape( aEvent, bezier, bezierBehavior, initialPts ) )
+    while( drawManagedShape( originalEvent, bezier, bezierBehavior, initialPts ) )
     {
         if( bezier )
         {
@@ -806,6 +816,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     PCB_REFERENCE_IMAGE* image = aEvent.Parameter<PCB_REFERENCE_IMAGE*>();
     bool                 immediateMode = image != nullptr;
     PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    LSET                 snapLayers = { m_frame->GetActiveLayer() };
     bool                 ignorePrimePosition = false;
     COMMON_SETTINGS*     common_settings = Pgm().GetCommonSettings();
 
@@ -813,6 +824,9 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     PCB_SELECTION_TOOL*  selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     BOARD_COMMIT         commit( m_frame );
     SCOPED_DRAW_MODE     scopedDrawMode( m_mode, MODE::IMAGE );
+    TOOL_EVENT           originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER   raii( m_frame, originalEvent );
+
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -823,8 +837,6 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
         m_view->ClearPreview();
         m_view->AddToPreview( image, false );   // Add, but not give ownership
     }
-
-    m_frame->PushTool( aEvent );
 
     auto setCursor =
             [&]()
@@ -875,29 +887,20 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(),
-                                                        { m_frame->GetActiveLayer() }, GRID_GRAPHICS )
-                                              .position,
+        cursorPos = m_controls->GetMousePosition();
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, snapLayers, GRID_GRAPHICS ).position,
                                       COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() || ( image && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( image )
-            {
                 cleanup();
-            }
             else
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
 
             if( immediateMode )
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() )
         {
@@ -917,14 +920,11 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
 
             if( evt->IsMoveTool() )
             {
-                // Leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( originalEvent );
             }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
@@ -937,7 +937,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
 
                 KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
-                bool         cancelled = false;
+                bool cancelled = false;
 
                 RunMainStack(
                         [&]()
@@ -1002,10 +1002,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
 
                 if( immediateMode )
-                {
-                    m_frame->PopTool( aEvent );
                     break;
-                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1076,9 +1073,8 @@ struct POINT_PLACER : public INTERACTIVE_PLACER_BASE
 
         KIGFX::VIEW_CONTROLS& viewControls = *m_drawingTool.GetManager()->GetViewControls();
         const VECTOR2I        position = viewControls.GetMousePosition();
+        VECTOR2I              cursorPos = m_gridHelper.ResolveSnap( position, aItem->GetLayerSet() ).position;
 
-        VECTOR2I cursorPos =
-                m_gridHelper.ResolveSnap( position, aItem->GetLayerSet() ).position;
         viewControls.ForceCursorPosition( true, cursorPos );
         aItem->SetPosition( cursorPos );
     }
@@ -1125,6 +1121,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     BOARD_COMMIT                 commit( m_frame );
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TEXT );
     PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    LSET                         snapLayers = { m_frame->GetActiveLayer() };
 
     auto setCursor =
             [&]()
@@ -1149,7 +1146,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -1176,10 +1174,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(),
-                                                                 { m_frame->GetActiveLayer() }, GRID_TEXT )
-                                                       .position,
-                                               COORDS_PADDING );
+        VECTOR2I cursorPos = m_controls->GetMousePosition();
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, snapLayers, GRID_TEXT ).position, COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsDrag() )
@@ -1189,14 +1185,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         else if( evt->IsCancelInteractive() || ( text && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( text )
-            {
                 cleanup();
-            }
             else
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() )
         {
@@ -1205,14 +1196,11 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
             if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( originalEvent );
             }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -1373,6 +1361,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
     BOARD_COMMIT                 commit( m_frame );
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TABLE );
     PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    LSET                         snapLayers = { m_frame->GetActiveLayer() };
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -1401,7 +1390,9 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -1419,10 +1410,8 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
         setCursor();
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(),
-                                                                 { m_frame->GetActiveLayer() }, GRID_TEXT )
-                                                       .position,
-                                               COORDS_PADDING );
+        VECTOR2I cursorPos = m_controls->GetMousePosition();
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, snapLayers, GRID_TEXT ).position, COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsDrag() )
@@ -1432,14 +1421,9 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
         else if( evt->IsCancelInteractive() || ( table && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( table )
-            {
                 cleanup();
-            }
             else
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() )
         {
@@ -1448,14 +1432,11 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
 
             if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( originalEvent );
             }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -1613,6 +1594,7 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::BARCODE );
     PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
+    LSET                         snapLayers = { m_frame->GetActiveLayer() };
 
     auto setCursor =
             [&]()
@@ -1637,7 +1619,8 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -1654,10 +1637,8 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(),
-                                                                 { m_frame->GetActiveLayer() }, GRID_TEXT )
-                                                       .position,
-                                               COORDS_PADDING );
+        VECTOR2I cursorPos = m_controls->GetMousePosition();
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, snapLayers, GRID_TEXT ).position, COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsDrag() )
@@ -1667,14 +1648,9 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
         else if( evt->IsCancelInteractive() || ( barcode && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( barcode )
-            {
                 cleanup();
-            }
             else
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() )
         {
@@ -1683,14 +1659,11 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
 
             if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( originalEvent );
             }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -1775,7 +1748,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         FINISHED
     };
 
-    TOOL_EVENT             originalEvent = aEvent;
     PCB_DIMENSION_BASE*    dimension     = nullptr;
     BOARD_COMMIT           commit( m_frame );
     PCB_GRID_HELPER        grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
@@ -1814,7 +1786,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -1837,9 +1810,11 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        auto angleSnap = GetAngleSnapMode();
+        LEADER_MODE angleSnap = GetAngleSnapMode();
+
         if( evt->Modifier( MD_CTRL ) )
             angleSnap = LEADER_MODE::DIRECT;
+
         bool constrained = angleSnap != LEADER_MODE::DIRECT;
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
@@ -1854,8 +1829,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         }
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
-        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, nullptr, GRID_GRAPHICS ).position,
-                                      COORDS_PADDING );
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, nullptr, GRID_GRAPHICS ).position, COORDS_PADDING );
 
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1864,14 +1838,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             m_controls->SetAutoPan( false );
 
             if( step != SET_ORIGIN )    // start from the beginning
-            {
                 cleanup();
-            }
             else
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() )
         {
@@ -1881,17 +1850,16 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( originalEvent );
             }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
@@ -2348,7 +2316,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     m_view->Add( &preview );
 
-    m_frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
 
     auto setCursor =
             [&]()
@@ -2382,10 +2350,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(), { layer },
-                                                        GRID_GRAPHICS )
-                                              .position,
-                                      COORDS_PADDING );
+        cursorPos = m_controls->GetMousePosition();
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, { layer }, GRID_GRAPHICS ).position, COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
@@ -2402,7 +2368,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMotion() )
         {
-            delta = cursorPos - static_cast<BOARD_ITEM*>( preview.GetTopLeftItem() )->GetPosition();
+            delta = cursorPos - preview.GetTopLeftItem()->GetPosition();
 
             for( BOARD_ITEM* item : selectedItems )
                 item->Move( delta );
@@ -2439,8 +2405,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_controls->ForceCursorPosition( false );
 
-    m_frame->PopTool( aEvent );
-
     return 0;
 }
 
@@ -2464,7 +2428,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
 
     auto setCursor =
             [&]()
@@ -2487,8 +2451,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos =
-                grid.ResolveSnap( m_controls->GetMousePosition(), LSET::AllLayersMask() ).position;
+        VECTOR2I cursorPos = grid.ResolveSnap( m_controls->GetMousePosition(), LSET::AllLayersMask() ).position;
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
@@ -2503,9 +2466,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
             commit.Push( _( "Move Footprint Anchor" ) );
 
-            // Usually, we do not need to change twice the anchor position,
-            // so deselect the active tool
-            m_frame->PopTool( aEvent );
+            // Usually, we do not need to change twice the anchor position, so exit the tool
             break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -2514,7 +2475,6 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            m_frame->PopTool( aEvent );
             break;
         }
         else
@@ -2556,12 +2516,13 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
     // completion
     m_frame->SetObjectVisible( LAYER_GRIDITEMS );
 
-    m_frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER( m_frame, aEvent );
 
-    auto setCursor = [&]()
-    {
-        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
-    };
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+            };
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -2575,14 +2536,15 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
     BOARD*        board = getModel<BOARD>();
     PCB_GRIDITEM* griditem = nullptr;
 
-    auto sizeToCursor = [&]( const VECTOR2I& aCursor )
-    {
-        VECTOR2I  v = aCursor - griditem->GetPosition();
-        const int len = KiROUND( v.EuclideanNorm() );
+    auto sizeToCursor =
+            [&]( const VECTOR2I& aCursor )
+            {
+                VECTOR2I  v = aCursor - griditem->GetPosition();
+                const int len = KiROUND( v.EuclideanNorm() );
 
-        griditem->SetOrientation( -EDA_ANGLE( VECTOR2D( v ) ) );
-        griditem->SetExtent( VECTOR2I( len, len ) );
-    };
+                griditem->SetOrientation( -EDA_ANGLE( VECTOR2D( v ) ) );
+                griditem->SetExtent( VECTOR2I( len, len ) );
+            };
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -2590,8 +2552,7 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos =
-                grid.ResolveSnap( m_controls->GetMousePosition(), LSET::AllLayersMask() ).position;
+        VECTOR2I cursorPos = grid.ResolveSnap( m_controls->GetMousePosition(), LSET::AllLayersMask() ).position;
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
@@ -2644,14 +2605,9 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
             }
 
             if( restart )
-            {
                 step = SET_CENTER;
-            }
             else
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
         }
         else if( griditem && evt->IsMotion() )
         {
@@ -2743,8 +2699,7 @@ static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMET
 }
 
 
-bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
-                              std::optional<VECTOR2D> aStartingPoint,
+bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std::optional<VECTOR2D> aStartingPoint,
                               std::stack<PCB_SHAPE*>* aCommittedGraphics )
 {
     SHAPE_T shape = ( *aGraphic )->GetShape();
@@ -2857,9 +2812,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
 
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(), { m_layer },
-                                                        GRID_GRAPHICS )
-                                              .position,
+        cursorPos = m_controls->GetMousePosition();
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, { m_layer }, GRID_GRAPHICS ).position,
                                       COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -2871,7 +2825,6 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             {
                 // We've handled the cancel event.  Don't cancel other tools
                 evt->SetPassEvent( false );
-                m_frame->PopTool( aTool );
                 cancelled = true;
             }
 
@@ -2882,21 +2835,18 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
-                cleanup();
-                // leave ourselves on the stack so we come back after the move
-                cancelled = true;
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( aTool );
             }
-            else
-            {
-                cleanup();
-                m_frame->PopTool( aTool );
-                cancelled = true;
-                break;
-            }
+
+            cleanup();
+            cancelled = true;
+            break;
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
@@ -3231,8 +3181,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
 
 bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
-                                     SHAPE_DRAW_BEHAVIOR& aBehavior,
-                                     const std::vector<VECTOR2D>& aInitialPts )
+                                     SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts )
 {
     if( !aGraphic )
         return false;
@@ -3325,10 +3274,8 @@ bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PC
             angleSnap = LEADER_MODE::DIRECT;
 
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(), graphic,
-                                                                 GRID_GRAPHICS )
-                                                       .position,
-                                               COORDS_PADDING );
+        VECTOR2I cursorPos = m_controls->GetMousePosition();
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, graphic, GRID_GRAPHICS ).position, COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -3339,7 +3286,6 @@ bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PC
             {
                 // We've handled the cancel event.  Don't cancel other tools
                 evt->SetPassEvent( false );
-                m_frame->PopTool( aTool );
                 cancelled = true;
             }
 
@@ -3355,21 +3301,18 @@ bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PC
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
-                cleanup();
-                // leave ourselves on the stack so we come back after the move
-                cancelled = true;
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( aTool );
             }
-            else
-            {
-                cleanup();
-                m_frame->PopTool( aTool );
-                cancelled = true;
-                break;
-            }
+
+            cleanup();
+            cancelled = true;
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -3634,8 +3577,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     POLYGON_GEOM_MANAGER polyGeomMgr( zoneTool );
     bool                 started     = false;
     PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT           originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER   raii( m_frame, originalEvent );
 
     auto setCursor =
             [&]()
@@ -3683,8 +3626,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
-        cursorPos = GetClampedCoords(
-                grid.ResolveSnap( cursorPos, layers, GRID_GRAPHICS ).position, COORDS_PADDING );
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, layers, GRID_GRAPHICS ).position, COORDS_PADDING );
 
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -3698,8 +3640,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool( aEvent );
-
                 // We've handled the cancel event.  Don't cancel other tools
                 evt->SetPassEvent( false );
                 break;
@@ -3713,17 +3653,16 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
+                continue;
             }
-            else if( evt->IsMoveTool() )
+
+            if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( originalEvent );
             }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
@@ -3759,7 +3698,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 polyGeomMgr.Reset();
 
                 cleanup();
-                m_frame->PopTool( aEvent );
                 break;
             }
             // adding a corner
@@ -4574,9 +4512,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::runSimpleShapeDraw(
-        const TOOL_EVENT& aEvent, SHAPE_T aShapeType, MODE aMode, const wxString& aCommitLabel,
-        std::function<bool( const TOOL_EVENT&, PCB_SHAPE**, std::optional<VECTOR2D> )> aDrawer )
+int DRAWING_TOOL::runSimpleShapeDraw( const TOOL_EVENT& aEvent, SHAPE_T aShapeType, MODE aMode,
+                                      const wxString& aCommitLabel,
+                                      std::function<bool( const TOOL_EVENT&, PCB_SHAPE**, std::optional<VECTOR2D> )> aDrawer )
 {
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
@@ -4591,21 +4529,24 @@ int DRAWING_TOOL::runSimpleShapeDraw(
     SCOPED_DRAW_MODE        scopedDrawMode( m_mode, aMode );
     std::optional<VECTOR2D> startingPoint;
 
-    auto makeShape = [&]()
-    {
-        PCB_SHAPE* s = new PCB_SHAPE( parent );
-        s->SetShape( aShapeType );
-        s->SetFilled( false );
-        s->SetFlags( IS_NEW );
-        return s;
-    };
+    auto makeShape =
+            [&]()
+            {
+                PCB_SHAPE* s = new PCB_SHAPE( parent );
+                s->SetShape( aShapeType );
+                s->SetFilled( false );
+                s->SetFlags( IS_NEW );
+                return s;
+            };
 
     PCB_SHAPE* shape = makeShape();
 
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;     // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
     Activate();
 
     while( aDrawer( aEvent, &shape, startingPoint ) )

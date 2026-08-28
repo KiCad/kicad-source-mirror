@@ -219,23 +219,6 @@ public:
     int PlaceImportedGraphics( const TOOL_EVENT& aEvent );
 
     /**
-     * Interactively place a set of @ref BOARD_ITEM.
-     * As a list of BOARD_ITEMs can be resource intesive to move around,
-     * we can use a reduced set of BOARD_ITEMs for preview purpose only.
-     *
-     * @param aEvent
-     * @param aItems BOARD_ITEMs to add to the board.
-     * @param aPreview BOARD_ITEMs only used during placement / preview.
-     * @param aLayers   Set of allowed destination when asking the user.
-     *                  If set to NULL, the user is not asked and all BOARD_ITEMs remain on
-     *                  their layers.
-     */
-    int InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
-                                     std::vector<BOARD_ITEM*>& aItems,
-                                     std::vector<BOARD_ITEM*>& aPreview, LSET* aLayers );
-
-
-    /**
      * Place the footprint anchor (only in footprint editor).
      */
     int SetAnchor( const TOOL_EVENT& aEvent );
@@ -260,46 +243,30 @@ private:
     /**
      * Start drawing a selected shape (i.e. PCB_SHAPE).
      *
-     * @param aGraphic is an object that is going to be used by the tool for drawing. Must be
-     *                 already created. The tool deletes the object if it is not added to a BOARD.
-     * @param aStartingPoint is a starting point for this new PCB_SHAPE. If it exists the new
-     *                       item has its start point set to aStartingPoint, and its settings
-     *                       (width, layer) set to the current default values.
-     * @return False if the tool was canceled before the origin was set or origin and end are
-     *         the same point.
+     * @param aGraphic is an object that is going to be used by the tool for drawing. Must be already created.
+     *                 The tool deletes the object if it is not added to a BOARD.
+     * @param aStartingPoint is a starting point for this new PCB_SHAPE. If it exists the new item has its
+     *                       start point set to aStartingPoint, and its settings (width, layer) set to the
+     *                       current default values.
+     * @return False if the tool was canceled before the origin was set or origin and end are the same point.
      */
-    bool drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
-                    std::optional<VECTOR2D> aStartingPoint,
+    bool drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std::optional<VECTOR2D> aStartingPoint,
                     std::stack<PCB_SHAPE*>* aCommittedGraphics );
 
     int runSimpleShapeDraw( const TOOL_EVENT& aEvent, SHAPE_T aShapeType, MODE aMode, const wxString& aCommitLabel,
                             std::function<bool( const TOOL_EVENT&, PCB_SHAPE**, std::optional<VECTOR2D> )> aDrawer );
 
     /**
-     * Run the interactive drawing event loop for a shape, driven by a
-     * SHAPE_DRAW_BEHAVIOR.
+     * Run the interactive drawing event loop for a shape, driven by a SHAPE_DRAW_BEHAVIOR.
      *
-     * @param aGraphic  the shape being drawn; must already be created.  On
-     *                  cancel the unique_ptr is reset; on completion the
-     *                  caller can take ownership (e.g. to release into a COMMIT).
-     * @param aInitialPts  points to pre-load into the behaviour before the first
-     *                     user click, e.g. start point and mirrored control point
-     *                     for tangent-continuous bezier chaining.
+     * @param aGraphic  the shape being drawn; must already be created.  On cancel the unique_ptr is reset;
+     *                  on completion the caller can take ownership (e.g. to release into a COMMIT).
+     * @param aInitialPts  points to pre-load into the behaviour before the first user click, e.g. start
+     *                     point and mirrored control point for tangent-continuous bezier chaining.
      * @return true if the shape was completed, false if cancelled.
      */
     bool drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
-                           SHAPE_DRAW_BEHAVIOR& aBehavior,
-                           const std::vector<VECTOR2D>& aInitialPts );
-
-    /**
-     * Draw a polygon, that is added as a zone or a keepout area.
-     *
-     * @param aKeepout dictates if the drawn polygon is a zone or a keepout area.
-     * @param aMode dictates the mode of the zone tool:
-     *  - ADD      add a new zone/keepout with fresh settings
-     *  - CUTOUT   add a cutout to an existing zone
-     *  - SIMILAR  add a new zone with the same settings as an existing one
-     */
+                           SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts );
 
     /**
      * Get a source zone item for an action that takes an existing zone into account (for
@@ -318,7 +285,7 @@ private:
     /**
      * Force the dimension lime to be drawn on multiple of 45 degrees.
      *
-     * @param aDimension is the dimension element currently being drawn.
+     * @param aDim is the dimension element currently being drawn.
      */
     void constrainDimension( PCB_DIMENSION_BASE* aDim );
 

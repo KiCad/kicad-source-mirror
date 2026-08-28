@@ -2426,7 +2426,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
     Activate();
 
     BOARD*                       board = m_frame->GetBoard();
@@ -2457,25 +2457,26 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     m_preview.Clear();
     m_view->Add( &m_preview );
 
-    auto applyCommonSettings = [&]( PCB_TUNING_PATTERN* aPattern )
-    {
-        const auto origTargetLength = aPattern->GetSettings().m_targetLength;
-        const auto origTargetLengthDelay = aPattern->GetSettings().m_targetLengthDelay;
-        const auto origTargetSignalLength = aPattern->GetSettings().m_targetSignalLength;
-        const auto origTargetSignalLengthDelay = aPattern->GetSettings().m_targetSignalLengthDelay;
-        const auto origTargetSkew = aPattern->GetSettings().m_targetSkew;
-        const bool origIsTimeDomain = aPattern->GetSettings().m_isTimeDomain;
+    auto applyCommonSettings =
+            [&]( PCB_TUNING_PATTERN* aPattern )
+            {
+                const auto origTargetLength = aPattern->GetSettings().m_targetLength;
+                const auto origTargetLengthDelay = aPattern->GetSettings().m_targetLengthDelay;
+                const auto origTargetSignalLength = aPattern->GetSettings().m_targetSignalLength;
+                const auto origTargetSignalLengthDelay = aPattern->GetSettings().m_targetSignalLengthDelay;
+                const auto origTargetSkew = aPattern->GetSettings().m_targetSkew;
+                const bool origIsTimeDomain = aPattern->GetSettings().m_isTimeDomain;
 
-        aPattern->GetSettings() = meanderSettings;
+                aPattern->GetSettings() = meanderSettings;
 
-        // Always preserve DRC-evaluated targets
-        aPattern->GetSettings().m_targetLength = origTargetLength;
-        aPattern->GetSettings().m_targetLengthDelay = origTargetLengthDelay;
-        aPattern->GetSettings().m_targetSignalLength = origTargetSignalLength;
-        aPattern->GetSettings().m_targetSignalLengthDelay = origTargetSignalLengthDelay;
-        aPattern->GetSettings().m_targetSkew = origTargetSkew;
-        aPattern->GetSettings().m_isTimeDomain = origIsTimeDomain;
-    };
+                // Always preserve DRC-evaluated targets
+                aPattern->GetSettings().m_targetLength = origTargetLength;
+                aPattern->GetSettings().m_targetLengthDelay = origTargetLengthDelay;
+                aPattern->GetSettings().m_targetSignalLength = origTargetSignalLength;
+                aPattern->GetSettings().m_targetSignalLengthDelay = origTargetSignalLengthDelay;
+                aPattern->GetSettings().m_targetSkew = origTargetSkew;
+                aPattern->GetSettings().m_isTimeDomain = origIsTimeDomain;
+            };
 
     auto updateHoverStatus =
             [&]()
@@ -2621,16 +2622,14 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 if( dynamic_cast<PCB_TUNING_PATTERN*>( m_pickerItem->GetParentGroup() ) )
                 {
-                    m_frame->ShowInfoBarWarning( _( "Unable to tune segments inside other "
-                                                    "tuning patterns." ) );
+                    m_frame->ShowInfoBarWarning( _( "Unable to tune segments inside other tuning patterns." ) );
                 }
                 else
                 {
                     m_preview.FreeItems();
 
                     m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-                    m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
-                                                                     m_pickerItem, mode );
+                    m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame, m_pickerItem, mode );
 
                     m_tuningPattern->GetSettings().m_signalExtraLength = 0;
                     m_tuningPattern->GetSettings().m_signalExtraDelay = 0;
@@ -2643,8 +2642,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                     // With an artificially-large clearance this can't *not* collide, but the
                     // if stmt keeps Coverity happy....
-                    if( m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
-                                                                    &dummyDist, &closestPt ) )
+                    if( m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance, &dummyDist,
+                                                                    &closestPt ) )
                     {
                         m_tuningPattern->SetPosition( closestPt );
                         m_tuningPattern->SetEnd( closestPt );
@@ -2770,7 +2769,6 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     if( m_tuningPattern )
         selectionTool->AddItemToSel( m_tuningPattern );
 
-    m_frame->PopTool( aEvent );
     return 0;
 }
 

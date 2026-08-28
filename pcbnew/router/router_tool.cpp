@@ -1888,8 +1888,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    TOOL_EVENT pushedEvent = aEvent;
-    frame->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( frame, aEvent );
 
     auto setCursor =
             [&]()
@@ -2004,7 +2003,6 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
     }
 
     m_iface->SetCommitFlags( 0 );
-    frame->PopTool( pushedEvent );
     m_inRouteSelected = false;
     return 0;
 }
@@ -2129,8 +2127,8 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    TOOL_EVENT pushedEvent = aEvent;
-    frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( frame, originalEvent );
 
     auto setCursor =
             [&]()
@@ -2160,21 +2158,17 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            frame->PopTool( pushedEvent );
             break;
         }
         else if( evt->IsActivate() )
         {
             if( evt->IsMoveTool() || evt->IsEditorTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool runs
+                frame->PushTool( originalEvent );
             }
-            else
-            {
-                frame->PopTool( pushedEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
@@ -2241,10 +2235,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         }
 
         if( m_cancelled )
-        {
-            frame->PopTool( pushedEvent );
             break;
-        }
     }
 
     // Store routing settings till the next invocation
@@ -2566,8 +2557,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    TOOL_EVENT pushedEvent = aEvent;
-    frame()->PushTool( aEvent );
+    SCOPED_TOOL_PUSHER raii( frame(), aEvent );
     Activate();
 
     m_startItem = nullptr;
@@ -2635,8 +2625,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 courtyardClearanceDRC.m_FpInMove.push_back( footprint );
         }
 
-        dynamicData = std::make_unique<CONNECTIVITY_DATA>( board()->GetConnectivity(),
-                                                           dynamicItems, true );
+        dynamicData = std::make_unique<CONNECTIVITY_DATA>( board()->GetConnectivity(), dynamicItems, true );
         connectivityData->BlockRatsnestItems( dynamicItems );
     }
     else
@@ -2748,7 +2737,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         restoreSelection( selection );
         controls()->ForceCursorPosition( false );
-        frame()->PopTool( pushedEvent );
         highlightNets( false );
         return 0;
     }
@@ -2786,7 +2774,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
-        if( evt->IsCancelInteractive() || evt->IsAction( &PCB_ACTIONS::cancelCurrentItem )
+        if( evt->IsCancelInteractive()
+                || evt->IsAction( &PCB_ACTIONS::cancelCurrentItem )
                 || evt->IsActivate() )
         {
             if( wasLocked )
@@ -2876,8 +2865,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                     if( !dragStatus )
                     {
                         wxString hint;
-                        hint.Printf( _( "(%s to commit anyway.)" ),
-                                    KeyNameFromKeyCode( MD_CTRL + PSEUDO_WXK_CLICK ) );
+                        hint.Printf( _( "(%s to commit anyway.)" ), KeyNameFromKeyCode( MD_CTRL + PSEUDO_WXK_CLICK ) );
 
                         ROUTER_STATUS_VIEW_ITEM* statusItem = new ROUTER_STATUS_VIEW_ITEM();
                         statusItem->SetMessage( _( "Track violates DRC." ) );
@@ -2973,7 +2961,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         std::vector<EDA_ITEM*> newItems;
 
-        for( auto lseg : leaderSegments )
+        for( PNS::ITEM* lseg : leaderSegments )
             newItems.push_back( lseg->Parent() );
 
         m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &newItems );
@@ -2983,7 +2971,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->UndoRedoBlock( false );
-    frame()->PopTool( pushedEvent );
     highlightNets( false );
     view()->ClearPreview();
     view()->ShowPreview( false );

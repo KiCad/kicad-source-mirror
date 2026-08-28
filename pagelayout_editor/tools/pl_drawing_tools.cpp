@@ -83,7 +83,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     auto setCursor =
             [&]()
@@ -104,30 +105,32 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 }
             };
 
-    auto cleanup = [&]()
-    {
-        getView()->Remove( item->GetDrawItems()[0] );
-        item = nullptr;
-        m_pendingItem.reset();
-    };
+    auto cleanup =
+            [&]()
+            {
+                getView()->Remove( item->GetDrawItems()[0] );
+                item = nullptr;
+                m_pendingItem.reset();
+            };
 
-    auto createPending = [&]() -> bool
-    {
-        m_pendingItem.reset( m_frame->CreateDrawingSheetItem( type ) );
-        item = m_pendingItem.get();
+    auto createPending =
+            [&]() -> bool
+            {
+                m_pendingItem.reset( m_frame->CreateDrawingSheetItem( type ) );
+                item = m_pendingItem.get();
 
-        if( !item )
-            return false;
+                if( !item )
+                    return false;
 
-        item->MoveToIU( getViewControls()->GetCursorPosition() );
+                item->MoveToIU( getViewControls()->GetCursorPosition() );
 
-        DS_DRAW_ITEM_BASE* drawItem = item->GetDrawItems()[0];
-        drawItem->SetFlags( IS_NEW | IS_MOVING );
-        getView()->Update( drawItem );
+                DS_DRAW_ITEM_BASE* drawItem = item->GetDrawItems()[0];
+                drawItem->SetFlags( IS_NEW | IS_MOVING );
+                getView()->Update( drawItem );
 
-        setCursor();
-        return true;
-    };
+                setCursor();
+                return true;
+            };
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -155,10 +158,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 cleanup();
 
             if( isText || !wasPending )
-            {
-                m_frame->PopTool( aEvent );
                 break;
-            }
         }
         else if( evt->IsActivate() )
         {
@@ -167,14 +167,11 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
             if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
-                break;
+                // Make sure we come back after the move tool runs
+                m_frame->PushTool( originalEvent );
             }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -267,7 +264,8 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
-    m_frame->PushTool( aEvent );
+    TOOL_EVENT         originalEvent = aEvent;          // This can change out from under us when the event loop runs
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     auto setCursor =
             [&]()
@@ -315,11 +313,13 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 // Pop the undo stack and delete the item being placed
                 m_frame->RollbackFromUndo();
+                continue;
             }
 
             if( evt->IsPointEditor() || evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
+                // Make sure we come back after the move tool is done
+                m_frame->PushTool( originalEvent );
                 break;
             }
         }
@@ -387,7 +387,6 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     getViewControls()->SetAutoPan( false );
     getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    m_frame->PopTool( aEvent );
     return 0;
 }
 
