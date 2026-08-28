@@ -503,7 +503,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     // Add in any template fieldnames not yet defined:
     for( const TEMPLATE_FIELDNAME& templateFieldname :
-         schematic.Project().GetProjectFile().m_TemplateFieldNames.GetTemplateFieldNames() )
+         schematic.Project().GetProjectFile().m_TemplateFieldNames.GetResolvedTemplateFieldNames() )
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {

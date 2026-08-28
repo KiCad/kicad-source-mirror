@@ -587,7 +587,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
 
     // Add any templateFieldNames which aren't already present.
-    for( const TEMPLATE_FIELDNAME& templateField : m_templateFieldNames.GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateField : m_templateFieldNames.GetResolvedTemplateFieldNames() )
     {
         if( userFieldNames.count( templateField.m_Name ) == 0 )
             AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );

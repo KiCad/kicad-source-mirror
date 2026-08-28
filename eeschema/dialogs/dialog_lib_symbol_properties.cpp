@@ -284,9 +284,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
         TEMPLATES templateMgr;
 
         if( !cfg->m_Drawing.field_names.IsEmpty() )
-            templateMgr.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+            templateMgr.AddTemplateFieldNames( cfg->m_Drawing.field_names, TEMPLATES::SCOPE::GLOBAL );
 
-        for( const TEMPLATE_FIELDNAME& templateFieldname : templateMgr.GetTemplateFieldNames() )
+        for( const TEMPLATE_FIELDNAME& templateFieldname : templateMgr.GetResolvedTemplateFieldNames() )
         {
             if( defined.count( templateFieldname.m_Name ) <= 0 )
             {
@@ -1437,5 +1437,3 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnRemoveJumperGroup( wxCommandEvent& event )
 
     OnModify();
 }
-
-

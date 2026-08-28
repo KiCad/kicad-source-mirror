@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE( EmptyMandatorySetIsAlwaysCaseSensitive )
 
 static bool hasTemplate( TEMPLATES& aTemplates, const wxString& aName )
 {
-    for( const TEMPLATE_FIELDNAME& tfn : aTemplates.GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& tfn : aTemplates.GetResolvedTemplateFieldNames() )
     {
         if( tfn.m_Name == aName )
             return true;
@@ -155,8 +155,8 @@ BOOST_AUTO_TEST_CASE( TemplateRejectsMandatoryCaseVariant )
 {
     TEMPLATES templates;
 
-    templates.AddTemplateFieldName( TEMPLATE_FIELDNAME( wxS( "VALUE" ) ), false );
-    templates.AddTemplateFieldName( TEMPLATE_FIELDNAME( wxS( "reference" ) ), false );
+    templates.AddTemplateFieldName( TEMPLATE_FIELDNAME( wxS( "VALUE" ) ), TEMPLATES::SCOPE::PROJECT );
+    templates.AddTemplateFieldName( TEMPLATE_FIELDNAME( wxS( "reference" ) ), TEMPLATES::SCOPE::PROJECT );
 
     BOOST_CHECK( !hasTemplate( templates, wxS( "VALUE" ) ) );
     BOOST_CHECK( !hasTemplate( templates, wxS( "reference" ) ) );
@@ -171,12 +171,12 @@ BOOST_AUTO_TEST_CASE( TemplateKeepsUserCaseVariantsDistinct )
 {
     TEMPLATES templates;
 
-    templates.AddTemplateFieldName( TEMPLATE_FIELDNAME( wxS( "Manufacturer" ) ), false );
-    templates.AddTemplateFieldName( TEMPLATE_FIELDNAME( wxS( "MANUFACTURER" ) ), false );
+    templates.AddTemplateFieldName( TEMPLATE_FIELDNAME( wxS( "Manufacturer" ) ), TEMPLATES::SCOPE::PROJECT );
+    templates.AddTemplateFieldName( TEMPLATE_FIELDNAME( wxS( "MANUFACTURER" ) ), TEMPLATES::SCOPE::PROJECT );
 
     BOOST_CHECK( hasTemplate( templates, wxS( "Manufacturer" ) ) );
     BOOST_CHECK( hasTemplate( templates, wxS( "MANUFACTURER" ) ) );
-    BOOST_CHECK_EQUAL( templates.GetTemplateFieldNames().size(), 2 );
+    BOOST_CHECK_EQUAL( templates.GetResolvedTemplateFieldNames().size(), 2 );
 }
 
 

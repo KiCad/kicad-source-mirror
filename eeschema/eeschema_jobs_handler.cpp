@@ -661,7 +661,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
     for( const TEMPLATE_FIELDNAME& templateFieldname :
-         sch->Project().GetProjectFile().m_TemplateFieldNames.GetTemplateFieldNames() )
+         sch->Project().GetProjectFile().m_TemplateFieldNames.GetResolvedTemplateFieldNames() )
     {
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
         {

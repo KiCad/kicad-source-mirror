@@ -69,7 +69,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
                 nlohmann::json ret = nlohmann::json::array();
 
                 for( const TEMPLATE_FIELDNAME& field :
-                     m_TemplateFieldNames.GetTemplateFieldNames( false ) )
+                     m_TemplateFieldNames.GetTemplateFieldNames( TEMPLATES::SCOPE::PROJECT ) )
                 {
                     ret.push_back( nlohmann::json( {
                                 { "name",    field.m_Name },
@@ -84,7 +84,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
             {
                 if( !aJson.empty() && aJson.is_array() )
                 {
-                    m_TemplateFieldNames.DeleteAllFieldNameTemplates( false );
+                    m_TemplateFieldNames.DeleteFieldNameTemplates( TEMPLATES::SCOPE::PROJECT );
 
                     for( const nlohmann::json& entry : aJson )
                     {
@@ -94,7 +94,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
                             TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
                             field.m_URL     = entry["url"].get<bool>();
                             field.m_Visible = entry["visible"].get<bool>();
-                            m_TemplateFieldNames.AddTemplateFieldName( field, false );
+                            m_TemplateFieldNames.AddTemplateFieldName( field, TEMPLATES::SCOPE::PROJECT );
                         }
                     }
                 }

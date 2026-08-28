@@ -492,7 +492,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
     // Add any templateFieldNames which aren't already present.
     // TODO: no template fieldnames in board settings
     TEMPLATES notImplemented;
-    for( const TEMPLATE_FIELDNAME& templateField : notImplemented.GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateField : notImplemented.GetResolvedTemplateFieldNames() )
     {
         if( userFieldNames.count( templateField.m_Name ) == 0 )
             AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );

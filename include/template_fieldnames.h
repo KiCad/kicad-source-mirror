@@ -165,6 +165,12 @@ struct KICOMMON_API TEMPLATE_FIELDNAME
 class KICOMMON_API TEMPLATES
 {
 public:
+    enum class SCOPE
+    {
+        PROJECT,
+        GLOBAL
+    };
+
     TEMPLATES() :
             m_resolvedDirty( true )
     { }
@@ -172,7 +178,7 @@ public:
     /**
      * Serialize this object out as text into the given #OUTPUTFORMATTER.
      */
-    void Format( OUTPUTFORMATTER* out, bool aGlobal ) const ;
+    void Format( OUTPUTFORMATTER* out, SCOPE aScope ) const;
 
     /**
      * Insert or append a wanted symbol field name into the field names template.
@@ -182,29 +188,29 @@ public:
      *
      * @param aFieldName is a full description of the wanted field, and it must not match
      *                   any of the default field names.
-     * @param aGlobal indicates whether to add to the global or project table.
+     * @param aScope indicates whether to add to the global or project table.
      */
-    void AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal );
+    void AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, SCOPE aScope );
 
     /**
      * Add a serialized list of template field names.
      */
-    void AddTemplateFieldNames( const wxString& aSerializedFieldNames );
+    void AddTemplateFieldNames( const wxString& aSerializedFieldNames, SCOPE aScope );
 
     /**
-     * Delete the entire contents.
+     * Delete the contents of a scope.
      */
-    void DeleteAllFieldNameTemplates( bool aGlobal );
+    void DeleteFieldNameTemplates( SCOPE aScope );
 
     /**
-     * Return a template field name list for read only access.
+     * Return the resolved project and global template field name list for read only access.
      */
-    const std::vector<TEMPLATE_FIELDNAME>& GetTemplateFieldNames();
+    const std::vector<TEMPLATE_FIELDNAME>& GetResolvedTemplateFieldNames();
 
     /**
      * Return a specific list (global or project) for read only access.
      */
-    const std::vector<TEMPLATE_FIELDNAME>& GetTemplateFieldNames( bool aGlobal );
+    const std::vector<TEMPLATE_FIELDNAME>& GetTemplateFieldNames( SCOPE aScope );
 
     /**
      * Search for \a aName in the template field name list.
@@ -217,7 +223,7 @@ public:
 protected:
     void resolveTemplates();
 
-    void parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal );
+    void parse( TEMPLATE_FIELDNAMES_LEXER* in, SCOPE aScope );
 
 private:
     std::vector<TEMPLATE_FIELDNAME> m_globals;

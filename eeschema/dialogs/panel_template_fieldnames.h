@@ -68,7 +68,7 @@ private:
 protected:
     TEMPLATES*                      m_templateMgr;
     std::vector<TEMPLATE_FIELDNAME> m_fields;
-    bool                            m_global;        // Editing global (vs. project) fieldname templates
+    TEMPLATES::SCOPE                m_scope;
 
     TEMPLATES                       m_templateMgrInstance;
 };

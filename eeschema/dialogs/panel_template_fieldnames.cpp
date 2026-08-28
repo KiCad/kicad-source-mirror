@@ -40,19 +40,19 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
     if( aProjectTemplateMgr )
     {
         m_title->SetLabel( _( "Project Field Name Templates" ) );
-        m_global = false;
+        m_scope = TEMPLATES::SCOPE::PROJECT;
         m_templateMgr = aProjectTemplateMgr;
     }
     else
     {
         m_title->SetLabel( _( "Global Field Name Templates" ) );
-        m_global = true;
+        m_scope = TEMPLATES::SCOPE::GLOBAL;
         m_templateMgr = &m_templateMgrInstance;
 
         if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
         {
             if( !cfg->m_Drawing.field_names.IsEmpty() )
-                m_templateMgr->AddTemplateFieldNames( cfg->m_Drawing.field_names );
+                m_templateMgr->AddTemplateFieldNames( cfg->m_Drawing.field_names, TEMPLATES::SCOPE::GLOBAL );
         }
     }
 
@@ -81,7 +81,7 @@ PANEL_TEMPLATE_FIELDNAMES::~PANEL_TEMPLATE_FIELDNAMES()
 
 bool PANEL_TEMPLATE_FIELDNAMES::TransferDataToWindow()
 {
-    m_fields = m_templateMgr->GetTemplateFieldNames( m_global );
+    m_fields = m_templateMgr->GetTemplateFieldNames( m_scope );
 
     return TransferDataToGrid();
 }
@@ -191,7 +191,7 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
     if( !TransferDataFromGrid() )
         return false;
 
-    m_templateMgr->DeleteAllFieldNameTemplates( m_global );
+    m_templateMgr->DeleteFieldNameTemplates( m_scope );
 
     for( TEMPLATE_FIELDNAME& field : m_fields )
     {
@@ -225,17 +225,17 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
                     field.m_Name = trimmedName;
             }
 
-            m_templateMgr->AddTemplateFieldName( field, m_global );
+            m_templateMgr->AddTemplateFieldName( field, m_scope );
         }
     }
 
-    if( m_global )
+    if( m_scope == TEMPLATES::SCOPE::GLOBAL )
     {
         if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
         {
             // Save global fieldname templates
             STRING_FORMATTER sf;
-            m_templateMgr->Format( &sf, true );
+            m_templateMgr->Format( &sf, TEMPLATES::SCOPE::GLOBAL );
 
             wxString record = From_UTF8( sf.GetString().c_str() );
             record.Replace( wxT( "  " ), wxT( " " ), true );  // double space to single
@@ -250,8 +250,6 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
 
 void PANEL_TEMPLATE_FIELDNAMES::ImportSettingsFrom( TEMPLATES* templateMgr )
 {
-    m_fields = templateMgr->GetTemplateFieldNames( m_global );
+    m_fields = templateMgr->GetTemplateFieldNames( m_scope );
     TransferDataToGrid();
 }
-
-

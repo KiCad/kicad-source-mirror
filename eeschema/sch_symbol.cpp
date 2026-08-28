@@ -2532,7 +2532,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     }
 
     for( const TEMPLATE_FIELDNAME& templateFieldname :
-         schematic->Project().GetProjectFile().m_TemplateFieldNames.GetTemplateFieldNames() )
+         schematic->Project().GetProjectFile().m_TemplateFieldNames.GetResolvedTemplateFieldNames() )
     {
         if( token->IsSameAs( templateFieldname.m_Name ) || token->IsSameAs( templateFieldname.m_Name.Upper() ) )
         {

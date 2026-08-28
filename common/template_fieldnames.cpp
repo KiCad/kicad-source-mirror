@@ -180,13 +180,13 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in )
 }
 
 
-void TEMPLATES::Format( OUTPUTFORMATTER* out, bool aGlobal ) const
+void TEMPLATES::Format( OUTPUTFORMATTER* out, SCOPE aScope ) const
 {
     // We'll keep this general, and include the \n, even though the only known
     // use at this time will not want the newlines or the indentation.
     out->Print( "(templatefields" );
 
-    const std::vector<TEMPLATE_FIELDNAME>& source = aGlobal ? m_globals : m_project;
+    const std::vector<TEMPLATE_FIELDNAME>& source = aScope == SCOPE::GLOBAL ? m_globals : m_project;
 
     for( const TEMPLATE_FIELDNAME& temp : source )
     {
@@ -198,7 +198,7 @@ void TEMPLATES::Format( OUTPUTFORMATTER* out, bool aGlobal ) const
 }
 
 
-void TEMPLATES::parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal )
+void TEMPLATES::parse( TEMPLATE_FIELDNAMES_LEXER* in, SCOPE aScope )
 {
     T  tok;
 
@@ -226,7 +226,7 @@ void TEMPLATES::parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal )
 
                 // add the field
                 if( !field.m_Name.IsEmpty() )
-                    AddTemplateFieldName( field, aGlobal );
+                    AddTemplateFieldName( field, aScope );
             }
             break;
 
@@ -270,7 +270,7 @@ void TEMPLATES::resolveTemplates()
 }
 
 
-void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal )
+void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, SCOPE aScope )
 {
     // Reject any case variant of a mandatory fieldname; the s-expression parser folds those
     // onto the canonical mandatory field, so they can never become a distinct user field.
@@ -280,7 +280,7 @@ void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool
             return;
     }
 
-    std::vector<TEMPLATE_FIELDNAME>& target = aGlobal ? m_globals : m_project;
+    std::vector<TEMPLATE_FIELDNAME>& target = aScope == SCOPE::GLOBAL ? m_globals : m_project;
 
     // ensure uniqueness, overwrite any template fieldname by the same name.
     for( TEMPLATE_FIELDNAME& temp : target )
@@ -300,13 +300,13 @@ void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool
 }
 
 
-void TEMPLATES::AddTemplateFieldNames( const wxString& aSerializedFieldNames )
+void TEMPLATES::AddTemplateFieldNames( const wxString& aSerializedFieldNames, SCOPE aScope )
 {
     TEMPLATE_FIELDNAMES_LEXER field_lexer( TO_UTF8( aSerializedFieldNames ) );
 
     try
     {
-        parse( &field_lexer, true );
+        parse( &field_lexer, aScope );
     }
     catch( const IO_ERROR& )
     {
@@ -314,9 +314,9 @@ void TEMPLATES::AddTemplateFieldNames( const wxString& aSerializedFieldNames )
 }
 
 
-void TEMPLATES::DeleteAllFieldNameTemplates( bool aGlobal )
+void TEMPLATES::DeleteFieldNameTemplates( SCOPE aScope )
 {
-    if( aGlobal )
+    if( aScope == SCOPE::GLOBAL )
     {
         m_globals.clear();
         m_resolved = m_project;
@@ -331,7 +331,7 @@ void TEMPLATES::DeleteAllFieldNameTemplates( bool aGlobal )
 }
 
 
-const std::vector<TEMPLATE_FIELDNAME>& TEMPLATES::GetTemplateFieldNames()
+const std::vector<TEMPLATE_FIELDNAME>& TEMPLATES::GetResolvedTemplateFieldNames()
 {
     if( m_resolvedDirty )
         resolveTemplates();
@@ -340,9 +340,9 @@ const std::vector<TEMPLATE_FIELDNAME>& TEMPLATES::GetTemplateFieldNames()
 }
 
 
-const std::vector<TEMPLATE_FIELDNAME>& TEMPLATES::GetTemplateFieldNames( bool aGlobal )
+const std::vector<TEMPLATE_FIELDNAME>& TEMPLATES::GetTemplateFieldNames( SCOPE aScope )
 {
-    if( aGlobal )
+    if( aScope == SCOPE::GLOBAL )
         return m_globals;
     else
         return m_project;
@@ -362,4 +362,3 @@ const TEMPLATE_FIELDNAME* TEMPLATES::GetFieldName( const wxString& aName )
 
     return nullptr;
 }
-

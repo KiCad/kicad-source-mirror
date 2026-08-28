@@ -90,10 +90,10 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     if( PROJECT_FILE* project = dynamic_cast<PROJECT_FILE*>( aParent ) )
     {
-        project->m_TemplateFieldNames.DeleteAllFieldNameTemplates( true );
+        project->m_TemplateFieldNames.DeleteFieldNameTemplates( TEMPLATES::SCOPE::GLOBAL );
 
         if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
-            project->m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
+            project->m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names, TEMPLATES::SCOPE::GLOBAL );
     }
 
     int defaultLineThickness = cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
