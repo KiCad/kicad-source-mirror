@@ -298,11 +298,9 @@ private:
     void        parseFootprintStackup( FOOTPRINT& aFootprint );
 
     PAD*        parsePAD( FOOTPRINT* aParent = nullptr );
-
-    // Parse only the (option ...) inside a pad description
-    bool        parsePAD_option( PAD* aPad );
+    void        parsePAD_primitives( PAD* aPad, PCB_LAYER_ID aLayer );
+    void        parsePAD_option( PAD* aPad, PCB_LAYER_ID aLayer );
     void        parsePostMachining( PADSTACK::POST_MACHINING_PROPS& aProps );
-
     void        parsePadstack( PAD* aPad );
 
     PCB_ARC*      parseARC();

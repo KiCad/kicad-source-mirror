@@ -35,6 +35,8 @@
 #include <api/api_utils.h>
 #include <api/api_pcb_utils.h>
 #include <api/board/board_types.pb.h>
+#include <board_commit.h>
+#include <eda_group.h>
 
 
 PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
@@ -80,6 +82,32 @@ PCB_TABLE::~PCB_TABLE()
     // We own our cells; delete them
     for( PCB_TABLECELL* cell : m_cells )
         delete cell;
+}
+
+
+BOARD_ITEM* PCB_TABLE::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit ) const
+{
+    BOARD_ITEM* dupe = static_cast<BOARD_ITEM*>( Clone() );
+    dupe->ResetUuid();
+
+    RunOnChildren( []( BOARD_ITEM* aChild )
+                   {
+                       aChild->ResetUuid();
+                   },
+                   RECURSE_MODE::NO_RECURSE );
+
+    if( addToParentGroup )
+    {
+        wxCHECK_MSG( aCommit, dupe, "Must supply a commit to update parent group" );
+
+        if( EDA_GROUP* group = dupe->GetParentGroup() )
+        {
+            aCommit->Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+            group->AddItem( dupe );
+        }
+    }
+
+    return dupe;
 }
 
 

@@ -4084,7 +4084,6 @@ void SCH_SYMBOL::PlotLocalPowerIconShape( PLOTTER* aPlotter ) const
         pos = VECTOR2D( bbox.GetLeft() - bbox.GetHeight() / 2.0, bbox.GetBottom() - bbox.GetHeight() / 6.0 );
     }
 
-    // TODO: build and plot icon shape
     plotLocalPowerIcon( aPlotter, pos, size, rotated );
 }
 

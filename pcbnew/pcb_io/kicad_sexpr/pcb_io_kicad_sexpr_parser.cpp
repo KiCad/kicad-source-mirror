@@ -7020,7 +7020,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_options:
-            parsePAD_option( pad.get() );
+            parsePAD_option( pad.get(), F_Cu );
             break;
 
         case T_padstack:
@@ -7028,44 +7028,9 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_primitives:
-            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-            {
-                if( token == T_LEFT )
-                    token = NextTok();
-
-                switch( token )
-                {
-                case T_gr_arc:
-                case T_gr_line:
-                case T_gr_circle:
-                case T_gr_rect:
-                case T_gr_poly:
-                case T_gr_curve:
-                    pad->AddPrimitive( F_Cu, parsePCB_SHAPE( nullptr ) );
-                    break;
-
-                case T_gr_bbox:
-                {
-                    PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
-                    numberBox->SetIsProxyItem();
-                    pad->AddPrimitive( F_Cu, numberBox );
-                    break;
-                }
-
-                case T_gr_vector:
-                {
-                    PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
-                    spokeTemplate->SetIsProxyItem();
-                    pad->AddPrimitive( F_Cu, spokeTemplate );
-                    break;
-                }
-
-                default:
-                    Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect, gr_bbox or gr_poly" );
-                    break;
-                }
-            }
-
+            // Primitives at the top level are put in the padstack's F_Cu; other layers will be parsed
+            // in parsePadstack().
+            parsePAD_primitives( pad.get(), F_Cu );
             break;
 
         case T_remove_unused_layers:
@@ -7193,7 +7158,49 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
 }
 
 
-bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
+void PCB_IO_KICAD_SEXPR_PARSER::parsePAD_primitives( PAD* aPad, PCB_LAYER_ID aLayer )
+{
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_gr_arc:
+        case T_gr_line:
+        case T_gr_circle:
+        case T_gr_rect:
+        case T_gr_poly:
+        case T_gr_curve:
+            aPad->Padstack().AddPrimitive( parsePCB_SHAPE( nullptr ), aLayer );
+            break;
+
+        case T_gr_bbox:
+            {
+                PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
+                numberBox->SetIsProxyItem();
+                aPad->Padstack().AddPrimitive( numberBox, aLayer );
+                break;
+            }
+
+        case T_gr_vector:
+            {
+                PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
+                spokeTemplate->SetIsProxyItem();
+                aPad->Padstack().AddPrimitive( spokeTemplate, aLayer );
+                break;
+            }
+
+        default:
+            Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect, gr_bbox or gr_poly" );
+            break;
+        }
+    }
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad, PCB_LAYER_ID aLayer )
 {
     // Parse only the (option ...) inside a pad description
     for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -7212,8 +7219,8 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
             // Because this is an anchor, only the 2 very basic shapes are managed: circle and rect.
             switch( token )
             {
-                case T_circle: aPad->SetAnchorPadShape( F_Cu, PAD_SHAPE::CIRCLE );    break;
-                case T_rect:   aPad->SetAnchorPadShape( F_Cu, PAD_SHAPE::RECTANGLE ); break;
+                case T_circle: aPad->Padstack().SetAnchorShape( PAD_SHAPE::CIRCLE, aLayer );    break;
+                case T_rect:   aPad->Padstack().SetAnchorShape( PAD_SHAPE::RECTANGLE, aLayer ); break;
                 default:       Expecting( "circle or rect" );
             }
 
@@ -7222,6 +7229,10 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
 
         case T_clearance:
             token = NextTok();
+
+            // TODO: m_customShapeInZoneMode is not per-layer at the moment
+            if( aLayer != F_Cu )
+                break;
 
             // Custom shaped pads have a clearance area that is the pad shape (like usual pads) or the
             // convex hull of the pad shape.
@@ -7240,8 +7251,6 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
             break;
         }
     }
-
-    return true;
 }
 
 
@@ -7526,102 +7535,12 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                     break;
                 }
 
-                // TODO: refactor parsePAD_options to work on padstacks too
                 case T_options:
-                {
-                     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-                     {
-                         if( token != T_LEFT )
-                            Expecting( T_LEFT );
+                    parsePAD_option( aPad, curLayer );
+                    break;
 
-                         token = NextTok();
-
-                         switch( token )
-                         {
-                         case T_anchor:
-                             token = NextTok();
-                             // Custom shaped pads have a "anchor pad", which is the reference
-                             // for connection calculations.
-                             // Because this is an anchor, only the 2 very basic shapes are managed:
-                             // circle and rect.
-                             switch( token )
-                             {
-                             case T_circle:
-                                 padstack.SetAnchorShape( PAD_SHAPE::CIRCLE, curLayer );
-                                 break;
-
-                             case T_rect:
-                                 padstack.SetAnchorShape( PAD_SHAPE::RECTANGLE, curLayer );
-                                 break;
-
-                             default:
-                                 // Currently, because pad options is a moving target
-                                 // just skip unknown keywords
-                                 break;
-                             }
-                             NeedRIGHT();
-                             break;
-
-                         case T_clearance:
-                             token = NextTok();
-                             // TODO: m_customShapeInZoneMode is not per-layer at the moment
-                             NeedRIGHT();
-                             break;
-
-                         default:
-                             // Currently, because pad options is a moving target
-                             // just skip unknown keywords
-                             while( ( token = NextTok() ) != T_RIGHT )
-                             {
-                             }
-
-                             break;
-                         }
-                     }
-
-                     break;
-                }
-
-                // TODO: deduplicate with non-padstack parser
                 case T_primitives:
-                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-                    {
-                        if( token == T_LEFT )
-                            token = NextTok();
-
-                        switch( token )
-                        {
-                        case T_gr_arc:
-                        case T_gr_line:
-                        case T_gr_circle:
-                        case T_gr_rect:
-                        case T_gr_poly:
-                        case T_gr_curve:
-                            padstack.AddPrimitive( parsePCB_SHAPE( nullptr ), curLayer );
-                            break;
-
-                        case T_gr_bbox:
-                        {
-                            PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
-                            numberBox->SetIsProxyItem();
-                            padstack.AddPrimitive( numberBox, curLayer );
-                            break;
-                        }
-
-                        case T_gr_vector:
-                        {
-                            PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
-                            spokeTemplate->SetIsProxyItem();
-                            padstack.AddPrimitive( spokeTemplate, curLayer );
-                            break;
-                        }
-
-                        default:
-                            Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect, gr_bbox or gr_poly" );
-                            break;
-                        }
-                    }
-
+                    parsePAD_primitives( aPad, curLayer );
                     break;
 
                 default:
@@ -7922,8 +7841,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveConstraints( BOARD_ITEM* aParent )
 
     for( const CONSTRAINT_INFO& info : m_constraintInfos )
     {
-        std::unique_ptr<PCB_CONSTRAINT> constraint =
-                std::make_unique<PCB_CONSTRAINT>( info.parent, info.type );
+        std::unique_ptr<PCB_CONSTRAINT> constraint = std::make_unique<PCB_CONSTRAINT>( info.parent, info.type );
 
         constraint->SetUuidDirect( info.uuid );
         constraint->SetValue( info.value );

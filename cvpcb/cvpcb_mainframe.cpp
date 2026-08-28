@@ -1213,15 +1213,10 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     switch( mail.Command() )
     {
     case MAIL_EESCHEMA_NETLIST:
-        // Disable Close events during readNetListAndFpFiles() to avoid crash when updating
-        // widgets:
+        // Disable Close events during readNetListAndFpFiles() to avoid crash when updating widgets:
         m_cannotClose = true;
         readNetListAndFpFiles( payload );
         m_cannotClose = false;
-
-        /* @todo
-        Go into SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event ) and trim GNL_ALL down.
-        */
         break;
 
     case MAIL_RELOAD_LIB:

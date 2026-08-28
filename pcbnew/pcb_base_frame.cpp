@@ -21,13 +21,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/// @todo The Boost entropy exception does not exist prior to 1.67. Once the minimum Boost
-///       version is raise to 1.67 or greater, this version check can be removed.
 #include <boost/version.hpp>
-
-#if BOOST_VERSION >= 106700
 #include <boost/uuid/entropy_error.hpp>
-#endif
 
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <advanced_config.h>
