@@ -367,8 +367,11 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
             {
                 try
                 {
+                    std::vector<char> orderData = readStream( cfbFile, orderEntry );
+
                     for( const std::string& pageName :
-                         OrcadParsePageOrder( readStream( cfbFile, orderEntry ) ) )
+                         isV2 ? OrcadParsePageOrderV2( orderData, design.library.strings )
+                              : OrcadParsePageOrder( orderData ) )
                     {
                         if( pageEntries.count( pageName )
                             && std::find( ordered.begin(), ordered.end(), pageName )

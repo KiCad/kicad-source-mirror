@@ -153,6 +153,26 @@ ORCAD_RAW_PAGE OrcadParsePage( const std::vector<char>& aData,
 }
 
 
+static std::vector<std::string> pageOrderBody( ORCAD_STREAM& aStream )
+{
+    aStream.ReadLzt();          // schematic folder name
+    aStream.Skip( 4 );
+
+    uint16_t count = aStream.ReadU16();
+
+    std::vector<std::string> names;
+    names.reserve( count );
+
+    for( uint16_t i = 0; i < count; i++ )
+        names.push_back( aStream.ReadLzt() );
+
+    // Page names stored last-first; reverse to display order.
+    std::reverse( names.begin(), names.end() );
+
+    return names;
+}
+
+
 std::vector<std::string> OrcadParsePageOrder( const std::vector<char>& aData )
 {
     ORCAD_STREAM        stream( aData );
@@ -160,21 +180,7 @@ std::vector<std::string> OrcadParsePageOrder( const std::vector<char>& aData )
 
     reader.ReadPrefixes();
 
-    stream.ReadLzt();           // schematic folder name
-    stream.Skip( 4 );
-
-    uint16_t count = stream.ReadU16();
-
-    std::vector<std::string> names;
-    names.reserve( count );
-
-    for( uint16_t i = 0; i < count; i++ )
-        names.push_back( stream.ReadLzt() );
-
-    // Page names stored last-first; reverse to display order.
-    std::reverse( names.begin(), names.end() );
-
-    return names;
+    return pageOrderBody( stream );
 }
 
 
@@ -1208,6 +1214,17 @@ static bool v2PlausibleCacheString( const std::string& aStr, bool aAllowEmpty )
     }
 
     return true;
+}
+
+
+std::vector<std::string> OrcadParsePageOrderV2( const std::vector<char>& aData,
+                                                const std::vector<std::string>& aStrings )
+{
+    ORCAD_STREAM stream( aData );
+
+    v2Prefix( stream, aStrings );
+
+    return pageOrderBody( stream );
 }
 
 

@@ -84,6 +84,10 @@ ORCAD_RAW_PAGE OrcadParsePage( const std::vector<char>& aData,
  */
 std::vector<std::string> OrcadParsePageOrder( const std::vector<char>& aData );
 
+// Throws IO_ERROR if the legacy page-order stream has invalid framing.
+std::vector<std::string> OrcadParsePageOrderV2( const std::vector<char>& aData,
+                                                const std::vector<std::string>& aStrings );
+
 /**
  * Parse a 'Views/<folder>/Hierarchy/Hierarchy' stream into block-instance links:
  * block db id -> child folder name.  Used to name skipped child folders in
