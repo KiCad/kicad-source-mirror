@@ -1665,35 +1665,48 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numInfo = cache.GetPinNumberInfo( shadowWidth ) )
     {
-        drawTextInfo( *numInfo, getColorForLayer( LAYER_PINNUM ) );
+        std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> origInfo;
 
-        // Pin-to-pad mapping (issue #2282): when the effective pad differs from the symbol pin
-        // number and the preference is on, draw the original number as a dimmed secondary label
-        // ("effective / original") one font size smaller, in the pin-number colour at 50% alpha.
-        // The secondary label is positioned just past the primary number's bounding box along the
-        // number's writing axis so the slash reads naturally after the effective pad.
+        // Vertical numbers read bottom to top. Shift the pair back when the label
+        // would otherwise run into the symbol body.
         if( !drawingShadows && !aPin->GetRemappedFromNumber().IsEmpty() )
         {
-            PIN_LAYOUT_CACHE::TEXT_INFO origInfo = *numInfo;
-            origInfo.m_Text = wxT( "/" ) + aPin->GetRemappedFromNumber();
-            origInfo.m_TextSize = std::max( 1, ( numInfo->m_TextSize * 4 ) / 5 );
-
             if( OPT_BOX2I numBox = cache.GetPinNumberBBox() )
             {
-                const bool vertical = numInfo->m_Angle == ANGLE_VERTICAL;
+                origInfo = *numInfo;
+                origInfo->m_Text = wxT( "/" ) + aPin->GetRemappedFromNumber();
+                origInfo->m_TextSize = std::max( 1, ( numInfo->m_TextSize * 4 ) / 5 );
+                origInfo->m_HAlign = GR_TEXT_H_ALIGN_LEFT;
 
-                if( vertical )
-                    origInfo.m_TextPosition.y = numBox->GetBottom();
+                KIFONT::FONT* font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
+                int labelLen = font->StringBoundaryLimits( origInfo->m_Text,
+                                                           VECTOR2I( origInfo->m_TextSize, origInfo->m_TextSize ),
+                                                           origInfo->m_Thickness, false, false, aPin->GetFontMetrics() )
+                                       .x;
+
+                if( numInfo->m_Angle == ANGLE_VERTICAL )
+                {
+                    int shift = dir.y > 0 ? labelLen : 0;
+                    numInfo->m_TextPosition.y += shift;
+                    origInfo->m_TextPosition.y = numBox->GetTop() + shift;
+                }
                 else
-                    origInfo.m_TextPosition.x = numBox->GetRight();
-
-                origInfo.m_HAlign = GR_TEXT_H_ALIGN_LEFT;
+                {
+                    int shift = dir.x < 0 ? labelLen : 0;
+                    numInfo->m_TextPosition.x -= shift;
+                    origInfo->m_TextPosition.x = numBox->GetRight() - shift;
+                }
             }
+        }
 
+        drawTextInfo( *numInfo, getColorForLayer( LAYER_PINNUM ) );
+
+        if( origInfo )
+        {
             COLOR4D dimmed = getColorForLayer( LAYER_PINNUM );
             dimmed.a *= 0.5;
 
-            drawTextInfo( origInfo, dimmed );
+            drawTextInfo( *origInfo, dimmed );
         }
     }
 
