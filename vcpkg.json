@@ -61,21 +61,12 @@
       "$comment": "Pinned due to bad vcpkg port updating to a non-real version"
     },
     {
-      "name": "python3",
-      "version": "3.11.5#0"
-    },
-    {
       "name": "wxwidgets-33",
       "version": "3.3.1#4"
     },
     {
       "name": "ngspice",
       "version": "46#0"
-    },
-    {
-      "name": "protobuf",
-      "version": "3.21.12#4",
-      "$comment": "Pinned until compat in kicad is improved"
     }
   ]
 }

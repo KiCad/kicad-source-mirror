@@ -3,7 +3,7 @@
   "default-registry": {
     "kind": "git",
     "repository": "https://github.com/microsoft/vcpkg",
-    "baseline": "01e159b519b7e791cc5bb3548663a26d9c0922a3"
+    "baseline": "7e43e0768a5af180a9cf75d87d692dce1b9da34f"
   },
   "registries": [
     {
@@ -11,7 +11,6 @@
       "repository": "https://gitlab.com/kicad/packaging/kicad-vcpkg-registry.git",
       "baseline": "9b23c206291914d106d4e9ca486453f676c9b561",
       "packages": [
-        "python3",
         "opencascade",
         "wxwidgets-33",
         "ngspice"
