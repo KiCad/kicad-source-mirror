@@ -2381,6 +2381,8 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
         startIndex++;
     }
 
+    int shownIndex = startIndex;
+
     auto dlgDiff = std::make_unique<DIALOG_KICAD_DIFF>( m_frame, liveBoard->GetFileName(), labels[startIndex],
                                                         view.result, KICAD_DIFF::DOCUMENT_GEOMETRY{},
                                                         KICAD_DIFF::DOCUMENT_GEOMETRY{}, view.switcher );
@@ -2389,6 +2391,9 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
             labels, startIndex,
             [&]( int aIndex )
             {
+                if( aIndex == shownIndex )
+                    return;
+
                 std::unique_ptr<BOARD> newBoard;
                 PROJECT*               newPrj = nullptr;
                 wxString               newTempDir;
@@ -2409,6 +2414,7 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
                 curBoard = std::move( newBoard );
                 curPrj = newPrj;
                 curTempDir = newTempDir;
+                shownIndex = aIndex;
             } );
 
     dlgDiff->ShowModal();
