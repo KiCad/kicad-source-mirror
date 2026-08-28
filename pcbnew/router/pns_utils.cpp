@@ -24,7 +24,10 @@
 #include "pns_via.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
+#include "pns_arc.h"
 #include "pns_node.h"
+
+#include <core/minoptmax.h>
 
 #include <geometry/shape_arc.h>
 #include <geometry/shape_segment.h>
@@ -555,6 +558,102 @@ void NodeStats( DEBUG_DECORATOR* dbg, wxString label, PNS::NODE *node )
         PNS_DBG( dbg, AddItem, item, RED, 10000, wxString::Format("removed-item") );
 
     PNS_DBGN( dbg, EndGroup );
+}
+
+
+bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP )
+{
+    if( !aSeg )
+        return false;
+
+    if( !aSeg->OfKind( ITEM::SEGMENT_T ) )
+        return false;
+
+    const JOINT* jt = aNode->FindJoint( aP, aSeg );
+    if( jt )
+    {
+        printf("jt %d %d lc %d\n", jt->Pos().x, jt->Pos().y, jt->LinkCount() );
+    }
+
+    if( jt && jt->LinkCount() >= 1 )
+    {
+        return false;
+    }
+
+    SEGMENT* s_old = static_cast<SEGMENT*>( aSeg );
+
+    if( s_old->Seg().Distance( aP ) > 100 )
+        return false; 
+
+    //std::unique_ptr<SEGMENT> s_new[2];
+
+        aNode->Remove( s_old );
+
+    if( s_old->Seg().B != aP )
+    {
+        std::unique_ptr<SEGMENT> s_new ( Clone( *s_old ) );
+        s_new->SetEnds( s_old->Seg().A, aP );
+        s_new->Unmark();
+        aNode->Add( std::move( s_new ), true );
+    }
+
+    if( s_old->Seg().A != aP )
+    {
+        std::unique_ptr<SEGMENT> s_new ( Clone( *s_old ) );
+        s_new->SetEnds( aP, s_old->Seg().B );
+        s_new->Unmark();
+        aNode->Add( std::move( s_new ), true );
+    }
+
+    return true;
+}
+
+
+bool SplitAdjacentArcs( NODE* aNode, ITEM* aArc, const VECTOR2I& aP )
+{
+    if( !aArc )
+        return false;
+
+    if( !aArc->OfKind( ITEM::ARC_T ) )
+        return false;
+
+    const JOINT* jt = aNode->FindJoint( aP, aArc );
+
+    if( jt && jt->LinkCount() >= 1 )
+        return false;
+
+    ARC*             a_old = static_cast<ARC*>( aArc );
+    const SHAPE_ARC& o_arc = a_old->Arc();
+
+    std::unique_ptr<ARC> a_new[2] = { Clone( *a_old ), Clone( *a_old ) };
+
+    a_new[0]->Arc().ConstructFromStartEndCenter( o_arc.GetP0(), aP, o_arc.GetCenter(),
+                                                 o_arc.IsClockwise(), o_arc.GetWidth() );
+
+    a_new[1]->Arc().ConstructFromStartEndCenter( aP, o_arc.GetP1(), o_arc.GetCenter(),
+                                                 o_arc.IsClockwise(), o_arc.GetWidth() );
+
+    aNode->Remove( a_old );
+    aNode->Add( std::move( a_new[0] ), true );
+    aNode->Add( std::move( a_new[1] ), true );
+
+    return true;
+}
+
+const wxString Format( const MINOPTMAX<int> x )
+{
+    wxString ret;
+
+
+
+    ret = wxT("min:");
+    ret.Append(x.HasMin() ? wxString::Format( wxT("%d"), x.Min() ): wxT("none") );
+    ret.Append(wxT(" max:"));
+    ret.Append(x.HasMax() ? wxString::Format( wxT("%d"), x.Max() ): wxT("none") );
+    ret.Append( wxT(" opt:"));
+    ret.Append( x.HasOpt() ? wxString::Format( wxT("%d"), x.Opt() ): wxT("none") );
+    
+    return ret;
 }
 
 

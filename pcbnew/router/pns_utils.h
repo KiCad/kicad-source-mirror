@@ -37,6 +37,7 @@ class ITEM;
 class LINE;
 class DEBUG_DECORATOR;
 class NODE;
+
 /** Various utility functions */
 
 const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalkaroundThickness );
@@ -69,6 +70,20 @@ const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aCle
                                                           int aWalkaroundThickness );
 
 void NodeStats( DEBUG_DECORATOR* aDbg, wxString aLabel, NODE *aNode );
+
+/**
+     * Snaps the point \a aP to segment \a aSeg. Splits the segment in two, forming a
+     * joint at \a aP and stores updated topology in node \a aNode.
+     */
+bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
+
+/**
+     * Snaps the point \a aP to arc \a aArc. Splits the arc in two, forming a
+     * joint at \a aP and stores updated topology in node \a aNode.
+     */
+bool SplitAdjacentArcs( NODE* aNode, ITEM* aArc, const VECTOR2I& aP );
+
+const wxString Format( const MINOPTMAX<int> x );
 
 }
 
