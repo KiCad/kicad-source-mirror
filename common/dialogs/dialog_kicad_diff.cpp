@@ -26,9 +26,11 @@
 #include <diff_merge/diff_tree_grouping.h>
 #include <widgets/widget_diff_canvas.h>
 
+#include <bitmaps.h>
 #include <layer_ids.h>
 #include <lseq.h>
 #include <set>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
@@ -116,7 +118,7 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
         const LSET geometryLayers = KICAD_DIFF::GeometryLayerSet( scene.referenceGeometry )
                                     | KICAD_DIFF::GeometryLayerSet( scene.comparisonGeometry );
 
-        wxBoxSizer* filterSizer = new wxBoxSizer( wxHORIZONTAL );
+        m_filterSizer = new wxBoxSizer( wxHORIZONTAL );
 
         const std::array<std::pair<KICAD_DIFF::CATEGORY, wxString>, 4> categories{ {
                 { KICAD_DIFF::CATEGORY::ADDED, _( "Added" ) },
@@ -135,13 +137,13 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
                           m_canvas->SetCategoryVisible( cat, aEvent.IsChecked() );
                           buildTree();
                       } );
-            filterSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
+            m_filterSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
         }
 
         if( geometryLayers.any() )
         {
-            filterSizer->Add( new wxStaticText( m_panelDetail, wxID_ANY, _( "Layers:" ) ),
-                              wxSizerFlags().Border( wxLEFT | wxRIGHT, 4 ).Centre() );
+            m_filterSizer->Add( new wxStaticText( m_panelDetail, wxID_ANY, _( "Layers:" ) ),
+                                wxSizerFlags().Border( wxLEFT | wxRIGHT, 4 ).Centre() );
 
             for( PCB_LAYER_ID layer : geometryLayers.UIOrder() )
             {
@@ -152,12 +154,12 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
                           {
                               m_canvas->SetLayerVisible( layer, aEvent.IsChecked() );
                           } );
-                filterSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
+                m_filterSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
             }
         }
 
         // Toggle the property list so the board can use the full detail panel.
-        filterSizer->AddStretchSpacer();
+        m_filterSizer->AddStretchSpacer();
 
         wxCheckBox* propsToggle = new wxCheckBox( m_panelDetail, wxID_ANY, _( "Properties" ) );
         propsToggle->SetValue( true );
@@ -169,7 +171,7 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
                                else if( !aEvent.IsChecked() && detailSplitter->IsSplit() )
                                    detailSplitter->Unsplit( m_listProperties );
                            } );
-        filterSizer->Add( propsToggle, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
+        m_filterSizer->Add( propsToggle, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
 
         // Move the property list out of the detail sizer and under the splitter
         // so the sash can resize it. A small min height lets it shrink freely.
@@ -181,7 +183,7 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
         propsToggle->SetValue( detailSplitter->IsSplit() );
 
         size_t insertAt = std::min<size_t>( 1, detailSizer->GetItemCount() );
-        detailSizer->Insert( insertAt++, filterSizer, wxSizerFlags().Expand().Border( wxLEFT | wxRIGHT | wxTOP, 4 ) );
+        detailSizer->Insert( insertAt++, m_filterSizer, wxSizerFlags().Expand().Border( wxLEFT | wxRIGHT | wxTOP, 4 ) );
         detailSizer->Insert( insertAt, detailSplitter, wxSizerFlags( 1 ).Expand().Border( wxALL, 4 ) );
         m_panelDetail->Layout();
 
@@ -458,6 +460,36 @@ void DIALOG_KICAD_DIFF::SetRevisionChooser( const std::vector<wxString>& aLabels
 
     top->Insert( 0, row, wxSizerFlags().Expand().Border( wxALL, 4 ) );
     Layout();
+}
+
+
+void DIALOG_KICAD_DIFF::SetUpHandler( UP_HANDLER aHandler )
+{
+    m_upHandler = std::move( aHandler );
+
+    if( !m_filterSizer || m_btnUp )
+        return;
+
+    m_btnUp = new wxBitmapButton( m_panelDetail, wxID_ANY, KiBitmapBundle( BITMAPS::up ) );
+    m_btnUp->SetToolTip( _( "Navigate up one sheet in the hierarchy" ) );
+    m_btnUp->Enable( false );
+
+    m_btnUp->Bind( wxEVT_BUTTON,
+                   [this]( wxCommandEvent& )
+                   {
+                       if( m_upHandler )
+                           m_upHandler();
+                   } );
+
+    m_filterSizer->Insert( 0, m_btnUp, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
+    m_panelDetail->Layout();
+}
+
+
+void DIALOG_KICAD_DIFF::EnableUp( bool aEnable )
+{
+    if( m_btnUp )
+        m_btnUp->Enable( aEnable );
 }
 
 

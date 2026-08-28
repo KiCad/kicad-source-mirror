@@ -32,6 +32,8 @@
 
 
 class WIDGET_DIFF_CANVAS;
+class wxBoxSizer;
+class wxButton;
 class wxChoice;
 
 
@@ -79,6 +81,12 @@ public:
 
     void SetChangeSelectedHandler( CHANGE_SELECTED_FN aFn ) { m_changeSelectedFn = std::move( aFn ); }
 
+    using UP_HANDLER = std::function<void()>;
+
+    void SetUpHandler( UP_HANDLER aHandler );
+
+    void EnableUp( bool aEnable );
+
 protected:
     void OnClose( wxCloseEvent& aEvent ) override;
     void OnTreeSelectionChanged( wxTreeEvent& aEvent ) override;
@@ -113,6 +121,10 @@ private:
 
     REVISION_HANDLER m_revisionHandler;
     wxChoice*        m_revisionChoice = nullptr;
+
+    UP_HANDLER  m_upHandler;
+    wxButton*   m_btnUp = nullptr;
+    wxBoxSizer* m_filterSizer = nullptr;
 
     /// Maps tree item IDs to the underlying change record so selection can
     /// find the data without walking the diff again. Group nodes have no
