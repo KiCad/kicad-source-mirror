@@ -161,6 +161,7 @@ private:
     NODE::OPT_OBSTACLE m_currentObstacle[ MaxWalkPolicies ];
     TOPOLOGY::CLUSTER m_currentCluster[ MaxWalkPolicies ];
     std::set<ITEM*> m_processedItems;
+    COLLISION_FILTER_FUNC m_collisionFilter;
     RESULT m_currentResult;
     double m_initialLength;
 };

@@ -648,7 +648,7 @@ public:
     const SHAPE_LINE_CHAIN& CP() const { return m_p; }
     const SHAPE_LINE_CHAIN& CN() const { return m_n; }
 
-    bool BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarget, bool aPrefDiagonal );
+    bool BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarget, bool aPrefDiagonal, bool aFitVias, float& aBestCouplingRatio, float& aAspectRatio );
     bool CheckConnectionAngle( const DIFF_PAIR &aOther, int allowedAngles ) const;
     int CoupledLength( const SEG& aP, const SEG& aN ) const;
 

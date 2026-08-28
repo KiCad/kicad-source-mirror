@@ -263,6 +263,8 @@ public:
         return m_snapThreshhold;
     }
 
+    SEGMENT* FindLinkContainingVertex( const VECTOR2I& aP ) const;
+
 private:
     void dragSegment45( const VECTOR2I& aP, int aIndex );
     void dragCorner45( const VECTOR2I& aP, int aIndex, DIRECTION_45 aPreferredEndingDirection );
