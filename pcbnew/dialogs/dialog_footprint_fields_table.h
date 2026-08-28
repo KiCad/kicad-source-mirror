@@ -33,6 +33,7 @@ wxDECLARE_EVENT( EDA_EVT_CLOSE_DIALOG_FOOTPRINT_FIELDS_TABLE, wxCommandEvent );
 class PCBNEW_SETTINGS;
 class PCB_EDIT_FRAME;
 class JOB_EXPORT_BOM;
+class TEMPLATES;
 
 
 class DIALOG_FOOTPRINT_FIELDS_TABLE : public DIALOG_FIELDS_TABLE, public BOARD_LISTENER
@@ -133,6 +134,8 @@ private:
 
     FOOTPRINT_REFERENCE_LIST                 m_footprintsList;
     FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
+
+    TEMPLATES&                               m_templateFieldNames;
 
     bool m_aborted = false;
 

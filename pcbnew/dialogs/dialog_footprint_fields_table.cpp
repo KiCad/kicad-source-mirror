@@ -46,6 +46,7 @@
 #include <footprint_fields_data_model.h>
 #include <board_commit.h>
 #include <project_pcb.h>
+#include <project/project_file.h>
 #include <jobs/job_export_bom.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -158,7 +159,8 @@ private:
 DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* aParent, JOB_EXPORT_BOM* aJob ) :
         DIALOG_FIELDS_TABLE( aParent, aParent->GetPcbNewSettings()->m_FieldEditorPanel,
                              aParent->GetBoard()->GetDesignSettings(), aJob ),
-        m_parent( aParent )
+        m_parent( aParent ),
+        m_templateFieldNames( aParent->Prj().GetProjectFile().m_TemplateFieldNames )
 {
     // Get all footprints from the list of board sheets
     for( FOOTPRINT* footprint : m_parent->GetBoard()->Footprints() )
@@ -431,10 +433,7 @@ bool DIALOG_FOOTPRINT_FIELDS_TABLE::TransferDataFromWindow()
     BOARD_COMMIT commit( m_parent );
     wxString     currentVariant = m_parent->GetBoard()->GetCurrentVariant();
 
-    // TODO: board settings don't have template field names, ideally we would sync these from schematic
-    // or more likely move them up the project level since they should be the same for symbols/footprints.
-    TEMPLATES notImplemented;
-    m_dataModel->ApplyData( commit, notImplemented, currentVariant );
+    m_dataModel->ApplyData( commit, m_templateFieldNames, currentVariant );
 
     if( !commit.Empty() )
     {
@@ -490,9 +489,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
         AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
 
     // Add any templateFieldNames which aren't already present.
-    // TODO: no template fieldnames in board settings
-    TEMPLATES notImplemented;
-    for( const TEMPLATE_FIELDNAME& templateField : notImplemented.GetResolvedTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateField : m_templateFieldNames.GetResolvedTemplateFieldNames() )
     {
         if( userFieldNames.count( templateField.m_Name ) == 0 )
             AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );
@@ -934,8 +931,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aE
 
         BOARD_COMMIT commit( m_parent );
 
-        TEMPLATES notImplemented;
-        m_dataModel->ApplyData( commit, notImplemented, currentVariant );
+        m_dataModel->ApplyData( commit, m_templateFieldNames, currentVariant );
 
         if( !commit.Empty() )
         {

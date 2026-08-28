@@ -33,7 +33,7 @@
 #include <pgm_base.h>
 #include <project.h>
 #include <project_pcb.h>
-#include <settings/settings_manager.h>
+#include <settings/common_settings.h>
 #include <footprint_edit_frame.h>
 #include <footprint_library_adapter.h>
 #include <template_fieldnames.h>
@@ -409,7 +409,13 @@ void DIALOG_LIB_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
     for( const wxString& fieldName : userFieldNames )
         AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
 
-    // TODO: template fieldnames aren't implement for boards/footprints
+    // Add any global template field names which aren't already present.
+    for( const TEMPLATE_FIELDNAME& templateField :
+         Pgm().GetCommonSettings()->m_FieldNameTemplates.GetTemplateFieldNames( TEMPLATES::SCOPE::GLOBAL ) )
+    {
+        if( userFieldNames.count( templateField.m_Name ) == 0 )
+            AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );
+    }
 }
 
 

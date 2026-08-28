@@ -611,7 +611,6 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPR
             if( BOARD* board = aDestFootprint.GetBoard() )
                 destField->StyleFromSettings( board->GetDesignSettings(), true );
 
-            // TODO: Fixup when this is implemented on the PCB side of things
             if( aTemplateFieldnames )
             {
                 if( const TEMPLATE_FIELDNAME* srcTemplate = aTemplateFieldnames->GetFieldName( srcName ) )
