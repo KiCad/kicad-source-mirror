@@ -2460,7 +2460,7 @@ BOOST_AUTO_TEST_CASE( ZoneSmoothedPolyForFPRuleAreaIsBoardFrame )
     fp.Add( zone, ADD_MODE::APPEND );
 
     SHAPE_POLY_SET smoothed;
-    zone->TransformSmoothedOutlineToPolygon( smoothed, 0, ARC_HIGH_DEF, ERROR_OUTSIDE, nullptr );
+    zone->TransformSmoothedOutlineToPolygon( smoothed, zone->GetFirstLayer(), 0, ARC_HIGH_DEF, ERROR_OUTSIDE, nullptr );
 
     BOX2I bbox = smoothed.BBox();
     BOOST_CHECK_MESSAGE( bbox.GetCenter().x > 49000000 && bbox.GetCenter().x < 51000000 && bbox.GetCenter().y > 29000000

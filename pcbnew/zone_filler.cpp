@@ -2541,7 +2541,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                             && aKnockout->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
                     {
                         // Keepouts use outline with no clearance
-                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError, ERROR_OUTSIDE, nullptr );
+                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, aLayer, 0, m_maxError, ERROR_OUTSIDE,
+                                                                      nullptr );
                     }
                 }
                 else if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone )
@@ -2898,8 +2899,8 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
                     if( !isZoneFillKeepout( candidate, aLayer, zone_boundingbox ) )
                         return;
 
-                    candidate->TransformSmoothedOutlineToPolygon( clearanceHoles, 0, m_maxError,
-                                                                  ERROR_OUTSIDE, nullptr );
+                    candidate->TransformSmoothedOutlineToPolygon( clearanceHoles, aLayer, 0, m_maxError, ERROR_OUTSIDE,
+                                                                  nullptr );
                     addedKeepoutHoles = true;
                 };
 

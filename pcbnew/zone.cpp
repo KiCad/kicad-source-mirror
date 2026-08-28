@@ -913,8 +913,7 @@ bool ZONE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool ZONE::HitTestForCorner( const VECTOR2I& refPos, int aAccuracy,
-                             SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit ) const
+bool ZONE::HitTestForCorner( const VECTOR2I& refPos, int aAccuracy, SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit ) const
 {
     VECTOR2I libPos = refPos;
 
@@ -925,8 +924,7 @@ bool ZONE::HitTestForCorner( const VECTOR2I& refPos, int aAccuracy,
 }
 
 
-bool ZONE::HitTestForEdge( const VECTOR2I& refPos, int aAccuracy,
-                           SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit ) const
+bool ZONE::HitTestForEdge( const VECTOR2I& refPos, int aAccuracy, SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit ) const
 {
     VECTOR2I libPos = refPos;
 
@@ -962,8 +960,8 @@ bool ZONE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 
         for( int ii = 0; ii < count; ii++ )
         {
-            VECTOR2I vertex = boardOutline.CVertex( ii );
-            VECTOR2I vertexNext = boardOutline.CVertex( ( ii + 1 ) % count );
+            const VECTOR2I& vertex = boardOutline.CVertex( ii );
+            const VECTOR2I& vertexNext = boardOutline.CVertex( ( ii + 1 ) % count );
 
             // Test if the point is within the rect
             if( arect.Contains( vertex ) )
@@ -985,23 +983,25 @@ bool ZONE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
 
     if( aContained )
     {
-        auto outlineIntersectingSelection = [&]()
-        {
-            for( auto segment = boardOutline.IterateSegments(); segment; segment++ )
-            {
-                if( aPoly.Intersects( *segment ) )
-                    return true;
-            }
+        auto outlineIntersectingSelection =
+                [&]()
+                {
+                    for( auto segment = boardOutline.IterateSegments(); segment; segment++ )
+                    {
+                        if( aPoly.Intersects( *segment ) )
+                            return true;
+                    }
 
-            return false;
-        };
+                    return false;
+                };
 
         // In the case of contained selection, all vertices of the zone outline must be inside
         // the selection polygon, so we can check only the first vertex.
-        auto vertexInsideSelection = [&]()
-        {
-            return aPoly.PointInside( boardOutline.CVertex( 0 ) );
-        };
+        auto vertexInsideSelection =
+                [&]()
+                {
+                    return aPoly.PointInside( boardOutline.CVertex( 0 ) );
+                };
 
         return vertexInsideSelection() && !outlineIntersectingSelection();
     }
@@ -1423,7 +1423,7 @@ void ZONE::AddPolygon( std::vector<VECTOR2I>& aPolygon )
 }
 
 
-bool ZONE::AppendCorner( VECTOR2I aPosition, int aHoleIdx, bool aAllowDuplication )
+bool ZONE::AppendCorner( const VECTOR2I& aPosition, int aHoleIdx, bool aAllowDuplication )
 {
     // Ensure the main outline exists:
     if( m_Poly->OutlineCount() == 0 )
@@ -1449,13 +1449,13 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) 
     wxString layerDesc;
 
     auto layerName =
-        [this]( PCB_LAYER_ID aLayer ) -> wxString
-        {
-            if( const BOARD* board = GetBoard() )
-                return board->GetLayerName( aLayer );
+            [this]( PCB_LAYER_ID aLayer ) -> wxString
+            {
+                if( const BOARD* board = GetBoard() )
+                    return board->GetLayerName( aLayer );
 
-            return BOARD::GetStandardLayerName( aLayer );
-        };
+                return BOARD::GetStandardLayerName( aLayer );
+            };
 
     if( layers.size() == 1 )
     {
@@ -1463,16 +1463,22 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) 
     }
     else if (layers.size() == 2 )
     {
-        layerDesc.Printf( _( "on %s and %s" ), layerName( layers[0] ), layerName( layers[1] ) );
+        layerDesc.Printf( _( "on %s and %s" ),
+                          layerName( layers[0] ),
+                          layerName( layers[1] ) );
     }
     else if (layers.size() == 3 )
     {
-        layerDesc.Printf( _( "on %s, %s and %s" ), layerName( layers[0] ), layerName( layers[1] ),
+        layerDesc.Printf( _( "on %s, %s and %s" ),
+                          layerName( layers[0] ),
+                          layerName( layers[1] ),
                           layerName( layers[2] ) );
     }
     else if( layers.size() > 3 )
     {
-        layerDesc.Printf( _( "on %s, %s and %zu more" ), layerName( layers[0] ), layerName( layers[1] ),
+        layerDesc.Printf( _( "on %s, %s and %zu more" ),
+                          layerName( layers[0] ),
+                          layerName( layers[1] ),
                           layers.size() - 2 );
     }
 
@@ -1480,8 +1486,7 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) 
     {
         if( GetZoneName().IsEmpty() )
         {
-            return wxString::Format( _( "Rule Area %s" ),
-                                     layerDesc );
+            return wxString::Format( _( "Rule Area %s" ), layerDesc );
         }
         else
         {
@@ -1517,8 +1522,8 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) 
 }
 
 
-void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle,
-                                  int aBorderHatchPitch, bool aRebuildBorderHatch )
+void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle, int aBorderHatchPitch,
+                                  bool aRebuildBorderHatch )
 {
     aBorderHatchPitch = std::max( aBorderHatchPitch, pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ) );
     aBorderHatchPitch = std::min( aBorderHatchPitch, pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) );
@@ -1697,8 +1702,7 @@ void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aSameNe
 }
 
 
-bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer,
-                              SHAPE_POLY_SET* aBoardOutline,
+bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aBoardOutline,
                               SHAPE_POLY_SET* aSmoothedPolyWithApron ) const
 {
     if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations will not like it ...
@@ -1876,15 +1880,13 @@ double ZONE::CalculateOutlineArea()
 }
 
 
-void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance,
-                                              int aMaxError, ERROR_LOC aErrorLoc,
-                                              SHAPE_POLY_SET* aBoardOutline ) const
+void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                              int aMaxError, ERROR_LOC aErrorLoc, SHAPE_POLY_SET* aBoardOutline ) const
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
 
-    // TODO: using GetFirstLayer() means it only works for single-layer zones....
-    BuildSmoothedPoly( polybuffer, GetFirstLayer(), aBoardOutline );
+    BuildSmoothedPoly( polybuffer, aLayer, aBoardOutline );
 
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.

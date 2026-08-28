@@ -3249,7 +3249,6 @@ static struct TRACK_VIA_DESC
         REGISTER_TYPE( PCB_VIA );
         propMgr.InheritsAfter( TYPE_HASH( PCB_VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
-        // TODO test drill, use getdrillvalue?
         const wxString groupVia = _HKI( "Via Properties" );
         const wxString groupBackdrill = _HKI( "Backdrill" );
         const wxString groupPostMachining = _HKI( "Post-machining" );

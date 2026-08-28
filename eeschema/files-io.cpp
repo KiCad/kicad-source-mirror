@@ -922,7 +922,7 @@ void SCH_EDIT_FRAME::OnImportProject()
                      + fileFiltersStr;
 
     wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFiltersStr,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     FILEDLG_IMPORT_NON_KICAD importOptions( eeconfig()->m_System.show_import_issues );
     dlg.SetCustomizeHook( importOptions );

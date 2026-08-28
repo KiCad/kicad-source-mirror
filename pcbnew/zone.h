@@ -455,8 +455,7 @@ public:
      * @param aHoleIdx is the index of the hole
      * @return true if aRefPos is inside a zone cutout
      */
-    bool HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx = nullptr,
-                        int* aHoleIdx = nullptr ) const;
+    bool HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx = nullptr, int* aHoleIdx = nullptr ) const;
 
     /**
      * Some intersecting zones, despite being on the same layer with the same net, cannot be
@@ -489,9 +488,8 @@ public:
      * @param aClearance is the min clearance around outlines
      * @param aBoardOutline is the board outline (if a valid one exists; nullptr otherwise)
      */
-    void TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance,
-                                            int aError, ERROR_LOC aErrorLoc,
-                                            SHAPE_POLY_SET* aBoardOutline ) const;
+    void TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                            int aError, ERROR_LOC aErrorLoc, SHAPE_POLY_SET* aBoardOutline ) const;
 
     /**
      * Convert the zone shape to a closed polygon
@@ -505,9 +503,8 @@ public:
      * @param ignoreLineWidth is used for edge cut items where the line width is only for
      *                        visualization
      */
-    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                  int aClearance, int aError, ERROR_LOC aErrorLoc,
-                                  bool ignoreLineWidth = false ) const override;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                  int aError, ERROR_LOC aErrorLoc, bool ignoreLineWidth = false ) const override;
 
     /**
      * Test if the given VECTOR2I is near a corner.
@@ -516,8 +513,7 @@ public:
      * @param  aAccuracy  increase the item bounding box by this amount.
      * @param  aCornerHit [out, optional] is the index of the closest vertex found when return
      *                    value is true
-     * @return true if some corner was found to be closer to refPos than aClearance; false
-     *         otherwise.
+     * @return true if some corner was found to be closer to refPos than aClearance; false otherwise.
      */
     bool HitTestForCorner( const VECTOR2I& refPos, int aAccuracy,
                            SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit = nullptr ) const;
@@ -527,8 +523,7 @@ public:
      *
      * @param  refPos     is the VECTOR2I to test.
      * @param  aAccuracy  increase the item bounding box by this amount.
-     * @param  aCornerHit [out, optional] is the index of the closest vertex found when return
-     *                    value is true.
+     * @param  aCornerHit [out, optional] is the index of the closest vertex found when return value is true.
      * @return true if some edge was found to be closer to refPos than aClearance.
      */
     bool HitTestForEdge( const VECTOR2I& refPos, int aAccuracy,
@@ -680,7 +675,7 @@ public:
      *                          even if it is duplicated.
      * @return true if the corner was added, false if error (aHoleIdx > hole count -1)
      */
-    bool AppendCorner( VECTOR2I aPosition, int aHoleIdx, bool aAllowDuplication = false );
+    bool AppendCorner( const VECTOR2I& aPosition, int aHoleIdx, bool aAllowDuplication = false );
 
     ZONE_BORDER_DISPLAY_STYLE GetHatchStyle() const { return m_borderStyle; }
     void SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE aStyle ) { m_borderStyle = aStyle; }
@@ -743,8 +738,7 @@ public:
         m_insulatedIslands[aLayer].insert( aPolyIdx );
     }
 
-    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer,
-                            SHAPE_POLY_SET* aBoardOutline,
+    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer, SHAPE_POLY_SET* aBoardOutline,
                             SHAPE_POLY_SET* aSmoothedPolyWithApron = nullptr ) const;
 
     void SetCornerSmoothingType( ZONE_SETTINGS::CORNER_SMOOTHING aType ) { m_cornerSmoothingType = aType; };
@@ -860,10 +854,10 @@ public:
                                    possible values.
      * @param  aBorderHatchPitch   is the hatch pitch in iu.
      * @param  aRebuildBorderHatch is a flag to indicate whether to re-hatch after having set the
-     *                       previous parameters.
+     *                             previous parameters.
      */
     void SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle, int aBorderHatchPitch,
-                                bool aRebuilBorderdHatch );
+                                bool aRebuilBorderHatch );
 
     /**
      * Clear the zone's hatch.
