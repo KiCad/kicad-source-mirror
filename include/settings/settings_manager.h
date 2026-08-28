@@ -357,6 +357,11 @@ public:
     std::vector<wxString> GetOpenProjects() const;
 
     /**
+     * Synchronize the global field name templates into every loaded project.
+     */
+    void SyncGlobalFieldNameTemplatesToProjects();
+
+    /**
      * Save a loaded project.
      *
      * @param aFullPath is the project name to save.  If empty, will save the first loaded project.

@@ -161,7 +161,6 @@ public:
         COLOR4D             default_sheet_border_color;
         COLOR4D             default_sheet_background_color;
         POWER_SYMBOLS       new_power_symbols;
-        wxString            field_names;
         int                 line_mode;
         ARC_EDIT_MODE       arc_edit_mode;
         int                 repeat_label_increment;
@@ -311,6 +310,7 @@ protected:
 
 private:
     bool migrateBomSettings();
+    bool migrateFieldNameTemplates();
 
     nlohmann::json bomSettingsToJson() const;
 

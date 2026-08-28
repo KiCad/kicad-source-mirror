@@ -69,8 +69,6 @@ protected:
     TEMPLATES*                      m_templateMgr;
     std::vector<TEMPLATE_FIELDNAME> m_fields;
     TEMPLATES::SCOPE                m_scope;
-
-    TEMPLATES                       m_templateMgrInstance;
 };
 
 

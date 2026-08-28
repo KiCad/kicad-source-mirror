@@ -579,6 +579,10 @@ void KIWAY::SetLanguage( int aLanguage )
 
 void KIWAY::CommonSettingsChanged( int aFlags )
 {
+    // Fieldname templates have both a project and a global half, so we need to update the global templates
+    // and then re-resolve the calculated templates (meaning figure out who's visibility settings win)
+    Pgm().GetSettingsManager().SyncGlobalFieldNameTemplatesToProjects();
+
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
     {
         // A dynamic_cast could be better, but creates link issues

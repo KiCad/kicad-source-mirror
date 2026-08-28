@@ -1231,6 +1231,26 @@ bool SETTINGS_MANAGER::IsProjectOpenNotDummy() const
 }
 
 
+void SETTINGS_MANAGER::SyncGlobalFieldNameTemplatesToProjects()
+{
+    // We don't technically support multiple projects, but hit them all for when we do
+    for( const auto& projectFileEntry : m_project_files )
+    {
+        PROJECT_FILE* projectFile = projectFileEntry.second;
+
+        projectFile->m_TemplateFieldNames.DeleteFieldNameTemplates( TEMPLATES::SCOPE::GLOBAL );
+
+        for( const TEMPLATE_FIELDNAME& fieldName :
+             m_common_settings->m_FieldNameTemplates.GetTemplateFieldNames(
+                     TEMPLATES::SCOPE::GLOBAL ) )
+        {
+            projectFile->m_TemplateFieldNames.AddTemplateFieldName(
+                    fieldName, TEMPLATES::SCOPE::GLOBAL );
+        }
+    }
+}
+
+
 PROJECT* SETTINGS_MANAGER::GetProject( const wxString& aFullPath ) const
 {
     if( m_projects.count( aFullPath ) )
@@ -1366,7 +1386,11 @@ bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
 
     wxString path( fullFn.GetPath() );
 
-    return file->LoadFromFile( path );
+    bool success = file->LoadFromFile( path );
+
+    SyncGlobalFieldNameTemplatesToProjects();
+
+    return success;
 }
 
 

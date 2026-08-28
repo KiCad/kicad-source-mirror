@@ -88,14 +88,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 {
     EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
 
-    if( PROJECT_FILE* project = dynamic_cast<PROJECT_FILE*>( aParent ) )
-    {
-        project->m_TemplateFieldNames.DeleteFieldNameTemplates( TEMPLATES::SCOPE::GLOBAL );
-
-        if( cfg && !cfg->m_Drawing.field_names.IsEmpty() )
-            project->m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names, TEMPLATES::SCOPE::GLOBAL );
-    }
-
     int defaultLineThickness = cfg ? cfg->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
     int defaultTextSize = cfg ? cfg->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize = cfg ? cfg->m_Drawing.pin_symbol_size : DEFAULT_TEXT_SIZE / 2;

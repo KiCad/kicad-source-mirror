@@ -23,14 +23,11 @@
 #include <wx/msgdlg.h>
 
 #include <pgm_base.h>
-#include <settings/settings_manager.h>
-#include <eeschema_settings.h>
+#include <settings/common_settings.h>
 #include <widgets/std_bitmap_button.h>
 #include <template_fieldnames.h>
 #include <grid_tricks.h>
 #include <bitmaps.h>
-#include <richio.h>
-#include <string_utils.h>
 #include <confirm.h>
 
 PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
@@ -47,13 +44,7 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
     {
         m_title->SetLabel( _( "Global Field Name Templates" ) );
         m_scope = TEMPLATES::SCOPE::GLOBAL;
-        m_templateMgr = &m_templateMgrInstance;
-
-        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-        {
-            if( !cfg->m_Drawing.field_names.IsEmpty() )
-                m_templateMgr->AddTemplateFieldNames( cfg->m_Drawing.field_names, TEMPLATES::SCOPE::GLOBAL );
-        }
+        m_templateMgr = &Pgm().GetCommonSettings()->m_FieldNameTemplates;
     }
 
     m_addFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -226,21 +217,6 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
             }
 
             m_templateMgr->AddTemplateFieldName( field, m_scope );
-        }
-    }
-
-    if( m_scope == TEMPLATES::SCOPE::GLOBAL )
-    {
-        if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-        {
-            // Save global fieldname templates
-            STRING_FORMATTER sf;
-            m_templateMgr->Format( &sf, TEMPLATES::SCOPE::GLOBAL );
-
-            wxString record = From_UTF8( sf.GetString().c_str() );
-            record.Replace( wxT( "  " ), wxT( " " ), true );  // double space to single
-
-            cfg->m_Drawing.field_names = record.ToStdString();
         }
     }
 

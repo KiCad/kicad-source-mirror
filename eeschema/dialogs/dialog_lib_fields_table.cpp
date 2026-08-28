@@ -25,7 +25,6 @@
 #include <confirm.h>
 #include <dialog_lib_new_symbol.h>
 #include <eda_doc.h>
-#include <eeschema_settings.h>
 #include <fields_grid_table.h>
 #include <fields_view_controls_grid_data_model.h>
 #include <grid_tricks.h>
@@ -33,7 +32,7 @@
 #include <pgm_base.h>
 #include <project.h>
 #include <project_sch.h>
-#include <settings/settings_manager.h>
+#include <settings/common_settings.h>
 #include <symbol_edit_frame.h>
 #include <symbol_editor/lib_symbol_library_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
@@ -560,18 +559,12 @@ void DIALOG_LIB_FIELDS_TABLE::LoadFieldNames()
         AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
 
     // Add any global template field names which aren't already present.
-    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    for( const TEMPLATE_FIELDNAME& templateField :
+         Pgm().GetCommonSettings()->m_FieldNameTemplates.GetTemplateFieldNames(
+                 TEMPLATES::SCOPE::GLOBAL ) )
     {
-        TEMPLATES templateMgr;
-
-        if( !cfg->m_Drawing.field_names.IsEmpty() )
-            templateMgr.AddTemplateFieldNames( cfg->m_Drawing.field_names, TEMPLATES::SCOPE::GLOBAL );
-
-        for( const TEMPLATE_FIELDNAME& templateField : templateMgr.GetResolvedTemplateFieldNames() )
-        {
-            if( userFieldNames.count( templateField.m_Name ) == 0 )
-                AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );
-        }
+        if( userFieldNames.count( templateField.m_Name ) == 0 )
+            AddField( templateField.m_Name, GetGeneratedFieldDisplayName( templateField.m_Name ), false, false );
     }
 }
 

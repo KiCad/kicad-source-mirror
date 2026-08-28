@@ -20,7 +20,6 @@
 #include "dialog_lib_symbol_properties.h"
 
 #include <pgm_base.h>
-#include <eeschema_settings.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <dialogs/dialog_text_entry.h>
@@ -42,7 +41,7 @@
 
 #include <panel_embedded_files.h>
 #include <panel_symbol_pin_map.h>
-#include <settings/settings_manager.h>
+#include <settings/common_settings.h>
 #include <symbol_editor_settings.h>
 #include <widgets/listbox_tricks.h>
 
@@ -277,24 +276,17 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     for( SCH_FIELD& field : *m_fields )
         defined.insert( field.GetName() );
 
-    // Add in any template fieldnames not yet defined:
-    // Read global fieldname templates
-    if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
+    // Add in any global template field names not yet defined.
+    for( const TEMPLATE_FIELDNAME& templateFieldname :
+         Pgm().GetCommonSettings()->m_FieldNameTemplates.GetTemplateFieldNames(
+                 TEMPLATES::SCOPE::GLOBAL ) )
     {
-        TEMPLATES templateMgr;
-
-        if( !cfg->m_Drawing.field_names.IsEmpty() )
-            templateMgr.AddTemplateFieldNames( cfg->m_Drawing.field_names, TEMPLATES::SCOPE::GLOBAL );
-
-        for( const TEMPLATE_FIELDNAME& templateFieldname : templateMgr.GetResolvedTemplateFieldNames() )
+        if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
-            if( defined.count( templateFieldname.m_Name ) <= 0 )
-            {
-                SCH_FIELD field( m_libEntry, FIELD_T::USER, templateFieldname.m_Name );
-                field.SetVisible( templateFieldname.m_Visible );
-                m_fields->push_back( field );
-                m_addedTemplateFields.insert( templateFieldname.m_Name );
-            }
+            SCH_FIELD field( m_libEntry, FIELD_T::USER, templateFieldname.m_Name );
+            field.SetVisible( templateFieldname.m_Visible );
+            m_fields->push_back( field );
+            m_addedTemplateFields.insert( templateFieldname.m_Name );
         }
     }
 
