@@ -21,6 +21,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <cstring>
 #include <plotters/plotter_dxf.h>
 #include <macros.h>
 #include <string_utils.h>
