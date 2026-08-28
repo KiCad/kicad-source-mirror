@@ -1999,6 +1999,8 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             if( evt->IsActivate() && !evt->IsMoveTool() )
                 m_cancelled = true;
 
+            m_router->AbortPlacement();
+
             break;
         }
         else if( evt->IsUndoRedo() )
