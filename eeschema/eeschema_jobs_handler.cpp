@@ -1686,6 +1686,41 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
             if( sheet && !sheet->IsVirtualRootSheet() )
                 projectSheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
         }
+
+        // Reload uses the top-level sheet list, not the UUID-to-name map.
+        const std::vector<SCH_SHEET*>& topLevelSheets = schematic->GetTopLevelSheets();
+
+        if( !topLevelSheets.empty() )
+        {
+            std::vector<TOP_LEVEL_SHEET_INFO>& infos = project.GetProjectFile().GetTopLevelSheets();
+            infos.clear();
+
+            wxString projectPath = project.GetProjectPath();
+
+            for( SCH_SHEET* sheet : topLevelSheets )
+            {
+                if( !sheet || !sheet->GetScreen() )
+                    continue;
+
+                wxFileName sheetFn( sheet->GetScreen()->GetFileName() );
+
+                if( sheetFn.IsAbsolute() )
+                    sheetFn.MakeRelativeTo( projectPath );
+
+                infos.emplace_back( sheet->m_Uuid, sheet->GetName(), sheetFn.GetFullPath() );
+            }
+        }
+    }
+
+    // Extra top-level sheets need a project file to remain reachable.
+    if( createdTransientProject && schematic->GetTopLevelSheets().size() > 1 )
+    {
+        m_reporter->Report( wxString::Format( _( "%zu sheets were written, but only '%s' is "
+                                                 "reachable: top-level sheets are recorded in a "
+                                                 "project file. Use 'kicad-cli import' to create "
+                                                 "one.\n" ),
+                                              sheetCount, outputFn.GetFullName() ),
+                            RPT_SEVERITY_WARNING );
     }
 
     if( job->m_reportFormat != IMPORT_REPORT_FORMAT::NONE )
