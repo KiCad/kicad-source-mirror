@@ -921,10 +921,13 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
     // Don't open context menus if we're inside a yielding event loop such as a progress dialog.
     // Opening a popup menu during YieldFor creates a nested modal situation that can leave the
     // menu stuck and unresponsive, potentially locking up the entire UI on some platforms.
-    if( wxEventLoopBase* loop = wxEventLoopBase::GetActive() )
+    if( !aEvent.IsClick( BUT_RIGHT ) )
     {
-        if( loop->IsYielding() )
-            return;
+        if( wxEventLoopBase* loop = wxEventLoopBase::GetActive() )
+        {
+            if( loop->IsYielding() )
+                return;
+        }
     }
 
     for( TOOL_ID toolId : m_activeTools )
