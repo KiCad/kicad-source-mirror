@@ -500,6 +500,17 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
             break;
         }
 
+        case PCB_CONSTRAINT_T:
+        {
+            handledAnything = true;
+
+            std::copy( board->Constraints().begin(), board->Constraints().end(),
+                       std::back_inserter( items ) );
+
+            typesInserted.insert( PCB_CONSTRAINT_T );
+            break;
+        }
+
         default:
             break;
         }

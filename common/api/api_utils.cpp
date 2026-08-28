@@ -74,6 +74,7 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
         { "type.googleapis.com/kiapi.board.types.ReferencePoint", PCB_POINT_T },
         { "type.googleapis.com/kiapi.board.types.GridItem", PCB_GRIDITEM_T },
         { "type.googleapis.com/kiapi.board.types.Group", PCB_GROUP_T },
+        { "type.googleapis.com/kiapi.board.types.Constraint", PCB_CONSTRAINT_T },
         { "type.googleapis.com/kiapi.board.types.Field", PCB_FIELD_T },
         { "type.googleapis.com/kiapi.board.types.FootprintInstance", PCB_FOOTPRINT_T },
         { "type.googleapis.com/kiapi.schematic.types.Junction", SCH_JUNCTION_T },
