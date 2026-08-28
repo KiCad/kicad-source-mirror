@@ -27,6 +27,7 @@
 #include <widgets/widget_diff_canvas.h>
 
 #include <bitmaps.h>
+#include <eda_draw_frame.h>
 #include <layer_ids.h>
 #include <lseq.h>
 #include <set>
@@ -103,7 +104,15 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
         detailSplitter->SetSashGravity( 1.0 );
         detailSplitter->SetMinimumPaneSize( 40 );
 
-        m_canvas = new WIDGET_DIFF_CANVAS( detailSplitter );
+        EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
+
+        if( EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( aParent ) )
+        {
+            if( frame->GetCanvas() )
+                backend = frame->GetCanvas()->GetBackend();
+        }
+
+        m_canvas = new WIDGET_DIFF_CANVAS( detailSplitter, backend );
 
         if( m_sheetSwitcher )
             m_sheetSwitcher( *m_canvas, m_currentCanvasSheet );

@@ -68,14 +68,15 @@ class VIEW_OVERLAY;
 class WIDGET_DIFF_CANVAS : public EDA_DRAW_PANEL_GAL
 {
 public:
-    WIDGET_DIFF_CANVAS( wxWindow* aParent, wxWindowID aId = wxID_ANY );
+    WIDGET_DIFF_CANVAS( wxWindow* aParent, GAL_TYPE aBackend = GAL_FALLBACK, wxWindowID aId = wxID_ANY );
 
     ~WIDGET_DIFF_CANVAS() override;
 
 private:
     /// Delegating ctor target — keeps the GAL options unique_ptr alive across
     /// the base-class initialization that needs to deref it.
-    WIDGET_DIFF_CANVAS( wxWindow* aParent, wxWindowID aId, std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aGalOptions );
+    WIDGET_DIFF_CANVAS( wxWindow* aParent, GAL_TYPE aBackend, wxWindowID aId,
+                        std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aGalOptions );
 
 public:
     /// Replace the displayed scene. Pass an empty scene to clear the canvas.
