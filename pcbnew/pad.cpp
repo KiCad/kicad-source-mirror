@@ -419,6 +419,7 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
     }
 
     pad.set_sim_electrical_type( ToProtoEnum<PAD_SIM_ELECTRICAL_TYPE, PadSimElectricalType>( GetSimElectricalType() ) );
+    pad.set_fab_property( ToProtoEnum<PAD_PROP, PadFabricationProperty>( GetProperty() ) );
 
     if( FOOTPRINT* parent = GetParentFootprint() )
         pad.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
@@ -450,6 +451,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     SetPadToDieLength( pad.pad_to_die_length().value_nm() );
     SetPadToDieDelay( pad.pad_to_die_delay().value_as() );
     SetSimElectricalType( FromProtoEnum<PAD_SIM_ELECTRICAL_TYPE>( pad.sim_electrical_type() ) );
+    SetProperty( FromProtoEnum<PAD_PROP>( pad.fab_property() ) );
 
     google::protobuf::Any padStackWrapper;
     padStackWrapper.PackFrom( pad.pad_stack() );

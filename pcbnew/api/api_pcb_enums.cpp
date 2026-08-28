@@ -196,6 +196,51 @@ PADSTACK::MODE FromProtoEnum( types::PadStackType aValue )
 
 
 template<>
+PAD_PROP FromProtoEnum( types::PadFabricationProperty aValue )
+{
+    switch( aValue )
+    {
+    case types::PadFabricationProperty::PFP_UNKNOWN:
+    case types::PadFabricationProperty::PFP_NONE:            return PAD_PROP::NONE;
+    case types::PadFabricationProperty::PFP_BGA:             return PAD_PROP::BGA;
+    case types::PadFabricationProperty::PFP_FIDUCIAL_GLOBAL: return PAD_PROP::FIDUCIAL_GLBL;
+    case types::PadFabricationProperty::PFP_FIDUCIAL_LOCAL:  return PAD_PROP::FIDUCIAL_LOCAL;
+    case types::PadFabricationProperty::PFP_TESTPOINT:       return PAD_PROP::TESTPOINT;
+    case types::PadFabricationProperty::PFP_HEATSINK:        return PAD_PROP::HEATSINK;
+    case types::PadFabricationProperty::PFP_CASTELLATED:     return PAD_PROP::CASTELLATED;
+    case types::PadFabricationProperty::PFP_MECHANICAL:      return PAD_PROP::MECHANICAL;
+    case types::PadFabricationProperty::PFP_PRESSFIT:        return PAD_PROP::PRESSFIT;
+
+    default:
+        wxCHECK_MSG( false, PAD_PROP::NONE,
+                     "Unhandled case in FromProtoEnum<types::PadFabricationProperty>" );
+    }
+}
+
+
+template<>
+types::PadFabricationProperty ToProtoEnum( PAD_PROP aValue )
+{
+    switch( aValue )
+    {
+    case PAD_PROP::NONE:           return types::PadFabricationProperty::PFP_NONE;
+    case PAD_PROP::BGA:            return types::PadFabricationProperty::PFP_BGA;
+    case PAD_PROP::FIDUCIAL_GLBL:  return types::PadFabricationProperty::PFP_FIDUCIAL_GLOBAL;
+    case PAD_PROP::FIDUCIAL_LOCAL: return types::PadFabricationProperty::PFP_FIDUCIAL_LOCAL;
+    case PAD_PROP::TESTPOINT:      return types::PadFabricationProperty::PFP_TESTPOINT;
+    case PAD_PROP::HEATSINK:       return types::PadFabricationProperty::PFP_HEATSINK;
+    case PAD_PROP::CASTELLATED:    return types::PadFabricationProperty::PFP_CASTELLATED;
+    case PAD_PROP::MECHANICAL:     return types::PadFabricationProperty::PFP_MECHANICAL;
+    case PAD_PROP::PRESSFIT:       return types::PadFabricationProperty::PFP_PRESSFIT;
+
+    default:
+        wxCHECK_MSG( false, types::PadFabricationProperty::PFP_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PAD_PROP>" );
+    }
+}
+
+
+template<>
 types::ViaType ToProtoEnum( VIATYPE aValue )
 {
     switch( aValue )
