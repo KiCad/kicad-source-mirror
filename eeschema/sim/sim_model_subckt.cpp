@@ -21,7 +21,7 @@
 #include "sim/sim_model_subckt.h"
 
 #include <ki_exception.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 #include <sim/spice_grammar.h>

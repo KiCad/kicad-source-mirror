@@ -22,7 +22,7 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/trim.hpp>
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 
 std::string SPICE_GENERATOR::ModelName( const SPICE_ITEM& aItem ) const

@@ -23,7 +23,7 @@
 #include <iomanip>
 #include <sstream>
 #include <wx/debug.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 namespace SEXPR
 {

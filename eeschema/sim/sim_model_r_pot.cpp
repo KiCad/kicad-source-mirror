@@ -19,7 +19,7 @@
  */
 
 #include <sim/sim_model_r_pot.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 
 std::string SPICE_GENERATOR_R_POT::ModelLine( const SPICE_ITEM& aItem ) const

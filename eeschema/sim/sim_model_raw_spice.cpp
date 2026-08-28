@@ -22,7 +22,7 @@
 #include <sim/sim_model_serializer.h>
 
 #include <boost/algorithm/string/predicate.hpp>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <pegtl/contrib/parse_tree.hpp>
 
 

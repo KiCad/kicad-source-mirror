@@ -21,7 +21,7 @@
 #include "sim/sim_model_ngspice.h"
 
 #include <boost/algorithm/string.hpp>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <ki_exception.h>
 
 

@@ -19,7 +19,7 @@
 
 #include <sim/sim_model_switch.h>
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 
 std::string SPICE_GENERATOR_SWITCH::ItemLine( const SPICE_ITEM& aItem ) const

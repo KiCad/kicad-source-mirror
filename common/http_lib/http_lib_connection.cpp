@@ -19,7 +19,7 @@
  */
 
 #include <wx/log.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <wx/translation.h>
 #include <ctime>
 

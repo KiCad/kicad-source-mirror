@@ -27,7 +27,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_rect.h>
 #include <trigo.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <algorithm>
 
 /**

@@ -21,7 +21,7 @@
 #include <sim/sim_model_ideal.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <wx/regex.h>
 
 std::string SPICE_GENERATOR_IDEAL::ModelLine( const SPICE_ITEM& aItem ) const

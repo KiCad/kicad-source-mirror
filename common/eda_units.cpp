@@ -18,7 +18,7 @@
  */
 
 #include <eda_units.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 #include <charconv>

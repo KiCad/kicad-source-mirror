@@ -19,8 +19,7 @@
  */
 
 #include <sim/sim_model_tline.h>
-
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 using SIMPARAM = SIM_MODEL::PARAM;
 

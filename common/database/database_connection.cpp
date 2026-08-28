@@ -20,7 +20,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/locale.hpp>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <nanodbc/nanodbc.h>
 
 // Some outdated definitions are used in sql.h

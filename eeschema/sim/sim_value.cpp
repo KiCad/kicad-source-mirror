@@ -24,7 +24,7 @@
 #include <ki_exception.h>
 #include <locale_io.h>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <math/util.h>
 #include <wx/regex.h>
 

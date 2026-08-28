@@ -23,7 +23,7 @@
 #include <map>
 #include <set>
 #include <utility>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <ki_exception.h>
 #include <wx/intl.h>
 #include <wx/tokenzr.h>
