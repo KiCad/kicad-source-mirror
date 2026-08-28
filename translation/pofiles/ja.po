@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-08-23 16:02+0000\n"
+"PO-Revision-Date: 2026-08-29 23:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -15512,11 +15512,11 @@ msgstr "ライブラリ シンボルのプロパティ"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
 msgid "Edit Line"
-msgstr "ラインを編集"
+msgstr "線を編集"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
 msgid "Edit Lines"
-msgstr "ラインを編集"
+msgstr "線を編集"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:66
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:120
