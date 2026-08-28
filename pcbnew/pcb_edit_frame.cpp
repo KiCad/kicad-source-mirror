@@ -2212,7 +2212,7 @@ void PCB_EDIT_FRAME::ShowFindDialog()
 
     PCB_SELECTION& selection = m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    if( selection.Size() == 1 )
+    if( selection.Size() == 1 && selection.Front() != m_findDialog->GetItem() )
     {
         EDA_ITEM* front = selection.Front();
 

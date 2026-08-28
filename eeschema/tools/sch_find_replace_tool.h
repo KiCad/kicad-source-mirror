@@ -47,6 +47,9 @@ public:
 
     int FindNext( const TOOL_EVENT& aEvent );
     bool HasMatch();
+
+    SCH_ITEM* GetLastFoundItem() const { return m_afterItem; }
+
     int ReplaceAndFindNext( const TOOL_EVENT& aEvent );
     int ReplaceAll( const TOOL_EVENT& aEvent );
 

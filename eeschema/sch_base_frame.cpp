@@ -62,6 +62,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/sch_selection_tool.h>
+#include <tools/sch_find_replace_tool.h>
 #include <trace_helpers.h>
 #include <view/view_controls.h>
 #include <widgets/kistatusbar.h>
@@ -524,8 +525,9 @@ void SCH_BASE_FRAME::ShowFindReplaceDialog( bool aReplace )
     wxString findString;
 
     SCH_SELECTION& selection = m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
+    SCH_FIND_REPLACE_TOOL* findTool = m_toolManager->GetTool<SCH_FIND_REPLACE_TOOL>();
 
-    if( selection.Size() == 1 )
+    if( selection.Size() == 1 && selection.Front() != findTool->GetLastFoundItem() )
     {
         EDA_ITEM* front = selection.Front();
 
