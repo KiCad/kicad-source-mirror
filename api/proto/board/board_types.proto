@@ -658,6 +658,20 @@ enum PadType
   PT_NPTH = 4;
 }
 
+enum PadFabricationProperty
+{
+  PFP_UNKNOWN = 0;
+  PFP_NONE = 1;
+  PFP_BGA = 2;
+  PFP_FIDUCIAL_GLOBAL = 3;
+  PFP_FIDUCIAL_LOCAL = 4;
+  PFP_TESTPOINT = 5;
+  PFP_HEATSINK = 6;
+  PFP_CASTELLATED = 7;
+  PFP_MECHANICAL = 8;
+  PFP_PRESSFIT = 9;
+}
+
 enum CustomPadShapeZoneFillStrategy
 {
   CPSZ_UNKNOWN = 0;
@@ -725,6 +739,9 @@ message Pad
   // is exposed here to allow for full round-tripping of objects.
   // Since: 10.0.7
   repeated ZoneLayerOverrideEntry zone_layer_overrides = 15;
+
+  // Since: 10.0.7
+  PadFabricationProperty fab_property = 16;
 }
 
 enum ZoneType

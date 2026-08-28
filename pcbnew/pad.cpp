@@ -210,6 +210,8 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
         pad.mutable_symbol_pin()->set_no_connect( pt->second );
     }
 
+    pad.set_fab_property( ToProtoEnum<PAD_PROP, PadFabricationProperty>( GetProperty() ) );
+
     if( FOOTPRINT* parent = GetParentFootprint() )
         pad.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
 
@@ -239,6 +241,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     SetNumber( wxString::FromUTF8( pad.number() ) );
     SetPadToDieLength( pad.pad_to_die_length().value_nm() );
     SetPadToDieDelay( pad.pad_to_die_delay().value_as() );
+    SetProperty( FromProtoEnum<PAD_PROP>( pad.fab_property() ) );
 
     google::protobuf::Any padStackWrapper;
     padStackWrapper.PackFrom( pad.pad_stack() );

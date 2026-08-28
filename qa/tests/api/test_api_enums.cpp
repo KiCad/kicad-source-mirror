@@ -101,6 +101,11 @@ BOOST_AUTO_TEST_CASE( PadStackType )
     testEnums<PADSTACK::MODE, kiapi::board::types::PadStackType>();
 }
 
+BOOST_AUTO_TEST_CASE( PadFabricationProperty )
+{
+    testEnums<PAD_PROP, kiapi::board::types::PadFabricationProperty>();
+}
+
 BOOST_AUTO_TEST_CASE( DrillShape )
 {
     testEnums<PAD_DRILL_SHAPE, kiapi::board::types::DrillShape>();
