@@ -88,6 +88,7 @@
 #include <pcb_plot_params_parser.h>
 #include <trigo.h>
 #include <confirm.h>
+#include <magic_enum.hpp>
 #include <math/util.h>      // for KiROUND
 #include <progress_reporter.h>
 
@@ -2528,17 +2529,19 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
         else if( TESTLINE( "ZSmoothing" ) )
         {
             // e.g. "ZSmoothing 0 0"
-            int     smoothing    = intParse( line + SZ( "ZSmoothing" ), &data );
+            int     smoothingRaw = intParse( line + SZ( "ZSmoothing" ), &data );
             BIU     cornerRadius = biuParse( data );
+            std::optional<ZONE_SETTINGS::CORNER_SMOOTHING> smoothing =
+                magic_enum::enum_cast<ZONE_SETTINGS::CORNER_SMOOTHING>( smoothingRaw );
 
-            if( smoothing >= ZONE_SETTINGS::SMOOTHING_LAST || smoothing < 0 )
+            if( !smoothing.has_value() )
             {
                 m_error.Printf( _( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ),
                                 zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
-            zc->SetCornerSmoothingType( smoothing );
+            zc->SetCornerSmoothingType( *smoothing );
             zc->SetCornerRadius( cornerRadius );
         }
         else if( TESTLINE( "ZKeepout" ) )

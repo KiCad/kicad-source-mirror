@@ -3343,15 +3343,15 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
                       formatInternalUnits( aZone->GetThermalReliefSpokeWidth() ).c_str() );
     }
 
-    if( aZone->GetCornerSmoothingType() != ZONE_SETTINGS::SMOOTHING_NONE )
+    if( aZone->GetCornerSmoothingType() != ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING )
     {
         switch( aZone->GetCornerSmoothingType() )
         {
-        case ZONE_SETTINGS::SMOOTHING_CHAMFER:
+        case ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER:
             m_out->Print( "(smoothing chamfer)" );
             break;
 
-        case ZONE_SETTINGS::SMOOTHING_FILLET:
+        case ZONE_SETTINGS::CORNER_SMOOTHING::FILLET:
             m_out->Print( "(smoothing fillet)" );
             break;
 

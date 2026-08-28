@@ -124,12 +124,11 @@ class ZONE_SETTINGS
 {
 public:
     // the actual zone outline shape can be slightly modified (smoothed):
-    enum {
-        SMOOTHING_UNDEFINED = -1,
-        SMOOTHING_NONE = 0,         // Zone outline is used without change
-        SMOOTHING_CHAMFER,          // Zone outline is used after chamfering corners
-        SMOOTHING_FILLET,           // Zone outline is used after rounding corners
-        SMOOTHING_LAST              // sentinel
+    enum class CORNER_SMOOTHING
+    {
+        NO_SMOOTHING = 0,  // Zone outline is used without change
+        CHAMFER,           // Zone outline is used after chamfering corners
+        FILLET             // Zone outline is used after rounding corners
     };
 
     unsigned        m_ZonePriority;          // Priority (0 ... N) of the zone
@@ -171,7 +170,7 @@ public:
     std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES> m_LayerProperties;
 
 private:
-    int             m_cornerSmoothingType;   // Corner smoothing type
+    CORNER_SMOOTHING m_cornerSmoothingType;   // Corner smoothing type
     unsigned int    m_cornerRadius;          // Corner chamfer distance / fillet radius
     ZONE_CONNECTION m_padConnection;
 
@@ -234,8 +233,8 @@ public:
      */
     void ExportSetting( ZONE& aTarget, bool aFullExport = true ) const;
 
-    void SetCornerSmoothingType( int aType) { m_cornerSmoothingType = aType; }
-    int GetCornerSmoothingType() const { return m_cornerSmoothingType; }
+    void SetCornerSmoothingType( CORNER_SMOOTHING aType) { m_cornerSmoothingType = aType; }
+    CORNER_SMOOTHING GetCornerSmoothingType() const { return m_cornerSmoothingType; }
 
     void SetCornerRadius( int aRadius );
     unsigned int GetCornerRadius() const { return m_cornerRadius; }

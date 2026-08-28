@@ -31,6 +31,8 @@
 #include <zones.h>
 
 #include <dialog_non_copper_zones_properties_base.h>
+#include <magic_enum.hpp>
+#include <zone_settings.h>
 
 
 class DIALOG_NON_COPPER_ZONES_EDITOR : public DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE
@@ -59,7 +61,7 @@ private:
     UNIT_BINDER       m_hatchRotation;
     UNIT_BINDER       m_hatchWidth;
     UNIT_BINDER       m_hatchGap;
-    int               m_cornerSmoothingType;
+    ZONE_SETTINGS::CORNER_SMOOTHING m_cornerSmoothingType;
     UNIT_BINDER       m_cornerRadius;
     wxStaticText*     m_gapLabel;
     wxTextCtrl*       m_gapCtrl;
@@ -94,7 +96,7 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
     m_hatchRotation( aParent, m_hatchOrientLabel, m_hatchOrientCtrl, m_hatchOrientUnits ),
     m_hatchWidth( aParent, m_hatchWidthLabel, m_hatchWidthCtrl, m_hatchWidthUnits),
     m_hatchGap( aParent, m_hatchGapLabel, m_hatchGapCtrl, m_hatchGapUnits ),
-    m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
+    m_cornerSmoothingType( ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING ),
     m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
     m_convertSettings( aConvertSettings ),
     m_rbCenterline( nullptr ),
@@ -164,17 +166,21 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
 
 void DIALOG_NON_COPPER_ZONES_EDITOR::OnUpdateUI( wxUpdateUIEvent& )
 {
-    if( m_cornerSmoothingType != m_cornerSmoothingChoice->GetSelection() )
-    {
-        m_cornerSmoothingType = m_cornerSmoothingChoice->GetSelection();
+    ZONE_SETTINGS::CORNER_SMOOTHING current =
+            magic_enum::enum_cast<ZONE_SETTINGS::CORNER_SMOOTHING>( m_cornerSmoothingChoice->GetSelection() )
+                    .value_or( ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING );
 
-        if( m_cornerSmoothingChoice->GetSelection() == ZONE_SETTINGS::SMOOTHING_CHAMFER )
+    if( m_cornerSmoothingType != current )
+    {
+        m_cornerSmoothingType = current;
+
+        if( current == ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER )
             m_cornerRadiusLabel->SetLabel( _( "Chamfer distance:" ) );
         else
             m_cornerRadiusLabel->SetLabel( _( "Fillet radius:" ) );
     }
 
-    m_cornerRadiusCtrl->Enable(m_cornerSmoothingType > ZONE_SETTINGS::SMOOTHING_NONE );
+    m_cornerRadiusCtrl->Enable(m_cornerSmoothingType > ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING );
 
     if( m_gap )
         m_gap->Enable( m_rbEnvelope->GetValue() );
@@ -195,7 +201,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
         m_gap->Enable( m_rbEnvelope->GetValue() );
     }
 
-    m_cornerSmoothingChoice->SetSelection( m_settings.GetCornerSmoothingType() );
+    m_cornerSmoothingChoice->SetSelection( static_cast<int>( m_settings.GetCornerSmoothingType() ) );
     m_cornerRadius.SetValue( m_settings.GetCornerRadius() );
 
     m_minWidth.SetValue( m_settings.m_ZoneMinThickness );
@@ -293,9 +299,13 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
         m_convertSettings->m_Gap = m_gap->GetIntValue();
     }
 
-    m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
+    ZONE_SETTINGS::CORNER_SMOOTHING smoothing =
+            magic_enum::enum_cast<ZONE_SETTINGS::CORNER_SMOOTHING>( m_cornerSmoothingChoice->GetSelection() )
+                    .value_or( ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING );
 
-    m_settings.SetCornerRadius( m_settings.GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_NONE
+    m_settings.SetCornerSmoothingType( smoothing );
+
+    m_settings.SetCornerRadius( m_settings.GetCornerSmoothingType() == ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING
                                 ? 0 : m_cornerRadius.GetValue() );
 
     m_settings.m_ZoneMinThickness = m_minWidth.GetValue();

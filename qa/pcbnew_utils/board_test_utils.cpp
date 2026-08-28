@@ -650,7 +650,7 @@ void CheckFpZone( const ZONE* expected, const ZONE* zone )
         BOOST_CHECK_EQUAL( expected->GetThermalReliefGap(), zone->GetThermalReliefGap() );
         BOOST_CHECK_EQUAL( expected->GetThermalReliefSpokeWidth(),
                            zone->GetThermalReliefSpokeWidth() );
-        BOOST_CHECK_EQUAL( expected->GetCornerSmoothingType(), zone->GetCornerSmoothingType() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetCornerSmoothingType(), zone->GetCornerSmoothingType() );
         BOOST_CHECK_EQUAL( expected->GetCornerRadius(), zone->GetCornerRadius() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetIslandRemovalMode(), zone->GetIslandRemovalMode() );
         BOOST_CHECK_EQUAL( expected->GetMinIslandArea(), zone->GetMinIslandArea() );

@@ -875,6 +875,14 @@ message PadTeardropSettings
   double max_track_width_ratio = 9;
 }
 
+enum ZoneCornerSmoothingMode
+{
+  ZCSM_UNKNOWN = 0;
+  ZCSM_NONE = 1;
+  ZCSM_CHAMFER = 2;
+  ZCSM_FILLET = 3;
+}
+
 message CopperZoneSettings
 {
   ZoneConnectionSettings connection = 1;
@@ -896,6 +904,12 @@ message CopperZoneSettings
   ZoneTeardropSettings teardrop = 9;
 
   ThievingFillSettings thieving_settings = 10;
+
+  // Since: 10.0.7
+  ZoneCornerSmoothingMode corner_smoothing = 11;
+
+  // Since: 10.0.7
+  kiapi.common.types.Distance corner_radius = 12;
 }
 
 enum PlacementRuleSourceType

@@ -47,6 +47,10 @@
 #include <zone.h>
 
 
+#define CHECK_ENUM_CLASS_EQUAL( L, R )                                                      \
+    BOOST_CHECK_EQUAL( static_cast<int>( L ), static_cast<int>( R ) )
+
+
 struct KICAD_SEXPR_FIXTURE
 {
     KICAD_SEXPR_FIXTURE() {}
@@ -871,7 +875,7 @@ BOOST_AUTO_TEST_CASE( Issue24955_AppendDoesNotInheritSessionZoneDefaults )
     ZONE_SETTINGS settings = board->GetDesignSettings().GetDefaultZoneSettings();
     settings.SetPadConnection( ZONE_CONNECTION::FULL );
     settings.m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
-    settings.SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_FILLET );
+    settings.SetCornerSmoothingType( ZONE_SETTINGS::CORNER_SMOOTHING::FILLET );
     settings.SetCornerRadius( pcbIUScale.mmToIU( 1 ) );
     settings.m_HatchSmoothingLevel = 2;
     settings.m_Locked = true;
@@ -885,7 +889,7 @@ BOOST_AUTO_TEST_CASE( Issue24955_AppendDoesNotInheritSessionZoneDefaults )
     ZONE* omitted = board->Zones()[0];
     BOOST_CHECK( omitted->GetPadConnection() == ZONE_CONNECTION::THERMAL );
     BOOST_CHECK( omitted->GetFillMode() == ZONE_FILL_MODE::POLYGONS );
-    BOOST_CHECK_EQUAL( omitted->GetCornerSmoothingType(), ZONE_SETTINGS::SMOOTHING_NONE );
+    CHECK_ENUM_CLASS_EQUAL( omitted->GetCornerSmoothingType(), ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING );
     BOOST_CHECK_EQUAL( omitted->GetCornerRadius(), 0 );
     BOOST_CHECK_EQUAL( omitted->GetHatchSmoothingLevel(), 0 );
     BOOST_CHECK( !omitted->IsLocked() );
@@ -893,7 +897,7 @@ BOOST_AUTO_TEST_CASE( Issue24955_AppendDoesNotInheritSessionZoneDefaults )
     // Explicit tokens still win
     ZONE* explicitZone = board->Zones()[1];
     BOOST_CHECK( explicitZone->GetPadConnection() == ZONE_CONNECTION::FULL );
-    BOOST_CHECK_EQUAL( explicitZone->GetCornerSmoothingType(), ZONE_SETTINGS::SMOOTHING_FILLET );
+    CHECK_ENUM_CLASS_EQUAL( explicitZone->GetCornerSmoothingType(), ZONE_SETTINGS::CORNER_SMOOTHING::FILLET );
     BOOST_CHECK_EQUAL( explicitZone->GetCornerRadius(), pcbIUScale.mmToIU( 1 ) );
     BOOST_CHECK( explicitZone->IsLocked() );
 }

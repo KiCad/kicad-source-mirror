@@ -747,9 +747,9 @@ public:
                             SHAPE_POLY_SET* aBoardOutline,
                             SHAPE_POLY_SET* aSmoothedPolyWithApron = nullptr ) const;
 
-    void SetCornerSmoothingType( int aType ) { m_cornerSmoothingType = aType; };
+    void SetCornerSmoothingType( ZONE_SETTINGS::CORNER_SMOOTHING aType ) { m_cornerSmoothingType = aType; };
 
-    int  GetCornerSmoothingType() const { return m_cornerSmoothingType; }
+    ZONE_SETTINGS::CORNER_SMOOTHING GetCornerSmoothingType() const { return m_cornerSmoothingType; }
 
     void SetCornerRadius( unsigned int aRadius );
 
@@ -922,7 +922,7 @@ protected:
 
 protected:
     SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.
-    int                   m_cornerSmoothingType;
+    ZONE_SETTINGS::CORNER_SMOOTHING m_cornerSmoothingType;
     unsigned int          m_cornerRadius;
 
     /// An optional unique name for this zone, used for identifying it in DRC checking

@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <magic_enum.hpp>
 #include <pcb_dimension.h>
 #include <pcb_track.h>
 #include <algorithm>
@@ -960,13 +961,15 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             "defaults.zones.corner_smoothing",
             [&]() -> int
             {
-                return m_defaultZoneSettings.GetCornerSmoothingType();
+                return static_cast<int>( m_defaultZoneSettings.GetCornerSmoothingType() );
             },
             [&]( int aVal )
             {
-                m_defaultZoneSettings.SetCornerSmoothingType( aVal );
+                m_defaultZoneSettings.SetCornerSmoothingType(
+                        magic_enum::enum_cast<ZONE_SETTINGS::CORNER_SMOOTHING>( aVal ).value_or(
+                                ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING ) );
             },
-            ZONE_SETTINGS::SMOOTHING_NONE ) );
+            static_cast<int>( ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING ) ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<double>(
             "defaults.zones.corner_radius",
