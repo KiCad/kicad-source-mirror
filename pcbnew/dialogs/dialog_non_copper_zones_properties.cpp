@@ -42,12 +42,14 @@ public:
                                     CONVERT_SETTINGS* aConvertSettings );
 
     ~DIALOG_NON_COPPER_ZONES_EDITOR()
-    { delete m_gap; }
+    {
+        delete m_gap;
+    }
 
-private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+protected:
     void OnStyleSelection( wxCommandEvent& event ) override;
     void OnLayerSelection( wxDataViewEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& ) override;
@@ -75,23 +77,19 @@ private:
 };
 
 
-int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings,
-                                CONVERT_SETTINGS* aConvertSettings )
+int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings, CONVERT_SETTINGS* aConvertSettings )
 {
     DIALOG_NON_COPPER_ZONES_EDITOR  dlg( aParent, aSettings, aConvertSettings );
 
-    // TODO: why does this require QuasiModal?
-    return dlg.ShowQuasiModal();
+    return dlg.ShowModal();
 }
 
 #define MIN_THICKNESS 10*pcbIUScale.IU_PER_MILS
 
-DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
-                                                                ZONE_SETTINGS* aSettings,
+DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings,
                                                                 CONVERT_SETTINGS* aConvertSettings ) :
     DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( aParent ),
-    m_outlineHatchPitch( aParent, m_stBorderHatchPitchText,
-                         m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
+    m_outlineHatchPitch( aParent, m_stBorderHatchPitchText, m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
     m_minWidth( aParent, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits ),
     m_hatchRotation( aParent, m_hatchOrientLabel, m_hatchOrientCtrl, m_hatchOrientUnits ),
     m_hatchWidth( aParent, m_hatchWidthLabel, m_hatchWidthCtrl, m_hatchWidthUnits),
@@ -134,14 +132,12 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
         bConvertSizer->Add( hullParamsSizer, 0, wxLEFT, 26 );
 
         bConvertSizer->AddSpacer( 6 );
-        m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY,
-                                              _( "Delete source objects after conversion" ) );
+        m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY, _( "Delete source objects after conversion" ) );
         bConvertSizer->Add( m_cbDeleteOriginals, 0, wxALL, 5 );
 
         GetSizer()->Insert( 0, bConvertSizer, 0, wxALL|wxEXPAND, 10 );
 
-        wxStaticLine* line =  new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                                wxLI_HORIZONTAL );
+        wxStaticLine* line =  new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
         GetSizer()->Insert( 1, line, 0, wxLEFT|wxRIGHT|wxEXPAND, 10 );
 
         SetTitle( _( "Convert to Non Copper Zone" ) );
@@ -209,10 +205,10 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
 
     switch( m_settings.m_ZoneBorderDisplayStyle )
     {
-    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:      m_OutlineDisplayCtrl->SetSelection( 0 ); break;
-    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
-    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;
-    case ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER: break;    // Not used for standard zones
+    case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:         m_OutlineDisplayCtrl->SetSelection( 0 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE:    m_OutlineDisplayCtrl->SetSelection( 1 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL:    m_OutlineDisplayCtrl->SetSelection( 2 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER:                                          break;  // Not used
     }
 
     m_outlineHatchPitch.SetValue( m_settings.m_BorderHatchPitch );
@@ -306,9 +302,9 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     m_settings.SetCornerSmoothingType( smoothing );
 
     m_settings.SetCornerRadius( m_settings.GetCornerSmoothingType() == ZONE_SETTINGS::CORNER_SMOOTHING::NO_SMOOTHING
-                                ? 0 : m_cornerRadius.GetValue() );
+                                ? 0 : m_cornerRadius.GetIntValue() );
 
-    m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
+    m_settings.m_ZoneMinThickness = m_minWidth.GetIntValue();
 
     switch( m_OutlineDisplayCtrl->GetSelection() )
     {
@@ -319,9 +315,11 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 
     if( !m_outlineHatchPitch.Validate( pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ),
                                        pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
+    {
         return false;
+    }
 
-    m_settings.m_BorderHatchPitch = m_outlineHatchPitch.GetValue();
+    m_settings.m_BorderHatchPitch = m_outlineHatchPitch.GetIntValue();
 
     if( m_GridStyleCtrl->GetSelection() > 0 )
         m_settings.m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
@@ -331,7 +329,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 
     if( m_settings.m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN )
     {
-        int minThickness = m_minWidth.GetValue();
+        int minThickness = m_minWidth.GetIntValue();
 
         if( !m_hatchWidth.Validate( minThickness, INT_MAX ) )
             return false;
@@ -342,8 +340,8 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 
 
     m_settings.m_HatchOrientation = m_hatchRotation.GetAngleValue();
-    m_settings.m_HatchThickness = m_hatchWidth.GetValue();
-    m_settings.m_HatchGap = m_hatchGap.GetValue();
+    m_settings.m_HatchThickness = m_hatchWidth.GetIntValue();
+    m_settings.m_HatchGap = m_hatchGap.GetIntValue();
     m_settings.m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
     m_settings.m_HatchSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
@@ -351,6 +349,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 
     // Get the layer selection for this zone
     int layer = -1;
+
     for( int ii = 0; ii < m_layers->GetItemCount(); ++ii )
     {
         if( m_layers->GetToggleValue( (unsigned) ii, 0 ) )
