@@ -758,7 +758,7 @@ void SCH_LABEL_BASE::GetContextualTextVars( wxArrayString* aVars ) const
     for( const SCH_FIELD& field : m_fields )
     {
         if( field.IsMandatory() )
-            aVars->push_back( field.GetCanonicalName().Upper() );
+            aVars->push_back( field.GetUntranslatedName().Upper() );
         else
             aVars->push_back( field.GetName() );
     }
@@ -1368,13 +1368,13 @@ bool SCH_LABEL_BASE::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SH
 
     for( const SCH_FIELD& field : m_fields )
     {
-        if( field.GetCanonicalName() == wxT( "Netclass" ) )
+        if( field.GetUntranslatedName() == wxT( "Netclass" ) )
             netclasses.push_back( field.GetText() );
     }
 
     for( const SCH_FIELD& field : label->m_fields )
     {
-        if( field.GetCanonicalName() == wxT( "Netclass" ) )
+        if( field.GetUntranslatedName() == wxT( "Netclass" ) )
             otherNetclasses.push_back( field.GetText() );
     }
 
@@ -2077,7 +2077,7 @@ bool SCH_DIRECTIVE_LABEL::IncrementLabel( int aIncrement )
 {
     for( SCH_FIELD& field : m_fields )
     {
-        if( field.GetCanonicalName() == wxT( "Netclass" ) || field.GetCanonicalName() == wxT( "Component Class" ) )
+        if( field.GetUntranslatedName() == wxT( "Netclass" ) || field.GetUntranslatedName() == wxT( "Component Class" ) )
         {
             wxString text = field.GetText();
 
@@ -2102,7 +2102,8 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const VECTOR2I& pos, const wxString& text ) :
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 
     m_fields.emplace_back(
-            SCH_FIELD( this, FIELD_T::INTERSHEET_REFS, ::GetDefaultFieldName( FIELD_T::INTERSHEET_REFS, false ) ) );
+            SCH_FIELD( this, FIELD_T::INTERSHEET_REFS,
+                       ::GetDefaultFieldName( FIELD_T::INTERSHEET_REFS, UNTRANSLATED ) ) );
     m_fields.back().SetText( wxT( "${INTERSHEET_REFS}" ) );
     m_fields.back().SetVisible( false );
     m_fields.back().SetVertJustify( GR_TEXT_V_ALIGN_CENTER );

@@ -104,11 +104,11 @@ BOOST_AUTO_TEST_CASE( RespectsSelectedFieldSubset )
 
 
 /**
- * A mandatory field is selected by its canonical name.  The dialog populates the listbox
- * with translated mandatory names, so it must feed canonical names into m_updateFields; a
+ * A mandatory field is selected by its untranslated name.  The dialog populates the listbox
+ * with translated mandatory names, so it must feed untranslated names into m_updateFields; a
  * non-English UI would otherwise never update mandatory fields (e.g. Value).
  */
-BOOST_AUTO_TEST_CASE( MandatoryFieldSelectedByCanonicalName )
+BOOST_AUTO_TEST_CASE( MandatoryFieldSelectedByUntranslatedName )
 {
     std::unique_ptr<LIB_SYMBOL> parent = std::make_unique<LIB_SYMBOL>( "parent" );
     parent->GetValueField().SetText( "10k" );
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE( MandatoryFieldSelectedByCanonicalName )
     LIB_FIELD_SYNC_OPTIONS options;
     options.m_resetText = true;
     options.m_updateAllFields = false;
-    options.m_updateFields = { GetCanonicalFieldName( FIELD_T::VALUE ) };
+    options.m_updateFields = { GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) };
 
     child->SyncFieldsFromParent( options );
 

@@ -663,7 +663,7 @@ void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aRawSelection )
         {
             wxCHECK2( field, continue );
 
-            m_currentFieldNames.insert( field->GetCanonicalName() );
+            m_currentFieldNames.insert( field->GetUntranslatedName() );
         }
     }
 
@@ -728,9 +728,9 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
 
     wxPGProperty* prop = PGPropertyFactory( aProperty, m_frame );
 
-    if( aProperty->Name() == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+    if( aProperty->Name() == GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) )
         prop->SetEditor( PG_FPID_EDITOR::BuildEditorName( m_frame ) );
-    else if( aProperty->Name() == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+    else if( aProperty->Name() == GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED ) )
         prop->SetEditor( PG_URL_EDITOR::BuildEditorName( m_frame ) );
     // OwnerHash is the class that registered the property.  Routed PCB_ARC items inherit
     // PCB_TRACK::Width, so this catches track arcs without changing unrelated "Width" properties.

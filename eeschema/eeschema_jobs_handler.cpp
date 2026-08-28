@@ -623,7 +623,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     // Mandatory fields first
     for( FIELD_T fieldId : MANDATORY_FIELDS )
-        dataModel.AddColumn( GetCanonicalFieldName( fieldId ), GetDefaultFieldName( fieldId, DO_TRANSLATE ), false );
+        dataModel.AddColumn( GetDefaultFieldName( fieldId, UNTRANSLATED ),
+                             GetDefaultFieldName( fieldId, TRANSLATED ), false );
 
     // Generated/virtual fields (e.g. ${QUANTITY}, ${ITEM_NUMBER}) present only in the fields table
     dataModel.AddColumn( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE,

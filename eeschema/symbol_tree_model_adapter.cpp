@@ -52,11 +52,11 @@ SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( SCH_BASE_FRAME* aParent, S
         m_adapter( aLibs ),
         m_check_pending_libraries_timer( nullptr )
 {
-    m_colWidths[ GetDefaultFieldName( FIELD_T::VALUE, false ) ] = 300;
-    m_colWidths[ GetDefaultFieldName( FIELD_T::FOOTPRINT, false ) ] = 600;
+    m_colWidths[GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED )] = 300;
+    m_colWidths[GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED )] = 600;
 
-    m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::VALUE, false ) );
-    m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::FOOTPRINT, false ) );
+    m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
+    m_availableColumns.emplace_back( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );
 }
 
 
@@ -72,7 +72,10 @@ void SYMBOL_TREE_MODEL_ADAPTER::loadColumnConfig()
     m_shownColumns = m_cfg.columns;
 
     if( m_shownColumns.empty() )
-        m_shownColumns = {  _HKI( "Item" ), _HKI( "Description" ), GetDefaultFieldName( FIELD_T::VALUE, false ) };
+    {
+        m_shownColumns = { _HKI( "Item" ), _HKI( "Description" ),
+                           GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) };
+    }
 
     if( m_shownColumns[0] != _HKI( "Item" ) )
         m_shownColumns.insert( m_shownColumns.begin(), _HKI( "Item" ) );

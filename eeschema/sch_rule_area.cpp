@@ -409,7 +409,7 @@ SCH_RULE_AREA::GetResolvedNetclasses( const SCH_SHEET_PATH* aSheetPath ) const
                     {
                         SCH_FIELD* field = static_cast<SCH_FIELD*>( aChild );
 
-                        if( field->GetCanonicalName() == wxT( "Netclass" ) )
+                        if( field->GetUntranslatedName() == wxT( "Netclass" ) )
                         {
                             wxString netclass = field->GetShownText( aSheetPath, false );
 

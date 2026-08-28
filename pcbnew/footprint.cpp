@@ -1706,7 +1706,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
         {
             if( *it == aBoardItem )
             {
-                const wxString fieldName = ( *it )->GetCanonicalName();
+                const wxString fieldName = ( *it )->GetUntranslatedName();
 
                 m_fields.erase( it );
 
@@ -2374,7 +2374,8 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     // Don't use GetShownText(); we want to see the variable references here
     aList.emplace_back( UnescapeString( Reference().GetText() ),
-                        UnescapeString( GetFieldValueForVariant( variant, GetCanonicalFieldName( FIELD_T::VALUE ) ) ) );
+                        UnescapeString( GetFieldValueForVariant(
+                                variant, GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) ) ) );
 
     if( aFrame->IsType( FRAME_FOOTPRINT_VIEWER )
         || aFrame->IsType( FRAME_FOOTPRINT_CHOOSER )

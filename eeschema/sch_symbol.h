@@ -433,7 +433,7 @@ public:
     /**
      * Return a field in this symbol.
      *
-     * @param aFieldName is the canonical name of the field.
+     * @param aFieldName is the untranslated name of the field.
      *
      * @return Both non-const and const versions return nullptr if the field is not found.
      */

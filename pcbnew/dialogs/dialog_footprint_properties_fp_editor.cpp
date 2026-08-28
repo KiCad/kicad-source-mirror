@@ -902,7 +902,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
             {
                 const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
 
-                PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
+                PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->size(), TRANSLATED ) );
 
                 // Set active layer if legal; otherwise copy layer from previous text item
                 if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )

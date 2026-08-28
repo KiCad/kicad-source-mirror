@@ -1402,10 +1402,10 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
                            CurOffset() );
     }
 
-    // Correctly set the ID based on canonical (untranslated) field name
+    // Correctly set the ID based on the untranslated field name
     for( FIELD_T id : MANDATORY_FIELDS )
     {
-        if( name.CmpNoCase( GetCanonicalFieldName( id ) ) == 0 )
+        if( name.CmpNoCase( GetDefaultFieldName( id, UNTRANSLATED ) ) == 0 )
         {
             fieldId = id;
             break;
@@ -1528,7 +1528,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
     else
     {
         // At this point, a user field is read.
-        existingField = aSymbol->GetField( field->GetCanonicalName() );
+        existingField = aSymbol->GetField( field->GetUntranslatedName() );
 
 #if 1   // Enable it to modify the name of the field to add if already existing
         // Disable it to skip the field having the same name as previous field
@@ -1536,7 +1536,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
         {
             // We cannot handle 2 fields with the same name, so because the field name
             // is already in use, try to build a new name (oldname_x)
-            wxString base_name = field->GetCanonicalName();
+            wxString base_name = field->GetUntranslatedName();
 
             // Arbitrary limit 10 attempts to find a new name
             for( int ii = 1; ii < 10 && existingField; ii++ )
@@ -2729,9 +2729,9 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
                            CurOffset() );
     }
 
-    // Normalise legacy/cross-locale directive-label net class field names to the canonical
+    // Normalise legacy/cross-locale directive-label net class field names to the untranslated
     // "Netclass" token as early as possible so every downstream consumer (including ones that
-    // call GetName() directly instead of GetCanonicalName()) sees a consistent in-memory model.
+    // call GetName() directly instead of GetUntranslatedName()) sees a consistent in-memory model.
     // See issue #24403.
     if( dynamic_cast<SCH_LABEL_BASE*>( aParent ) && SCH_FIELD::IsNetclassLabelFieldName( name ) )
         name = wxT( "Netclass" );
@@ -2754,12 +2754,12 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
 
     FIELD_T fieldId = FIELD_T::USER;
 
-    // Correctly set the ID based on canonical (untranslated) field name
+    // Correctly set the ID based on the untranslated field name
     if( aParent->Type() == SCH_SYMBOL_T )
     {
         for( FIELD_T id : MANDATORY_FIELDS )
         {
-            if( name.CmpNoCase( GetCanonicalFieldName( id ) ) == 0 )
+            if( name.CmpNoCase( GetDefaultFieldName( id, UNTRANSLATED ) ) == 0 )
             {
                 fieldId = id;
                 break;
@@ -2772,7 +2772,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
 
         for( FIELD_T id : SHEET_MANDATORY_FIELDS )
         {
-            if( name.CmpNoCase( GetCanonicalFieldName( id ) ) == 0 )
+            if( name.CmpNoCase( GetDefaultFieldName( id, UNTRANSLATED ) ) == 0 )
             {
                 fieldId = id;
                 break;
@@ -2789,7 +2789,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     {
         for( FIELD_T id : GLOBALLABEL_MANDATORY_FIELDS )
         {
-            if( name.CmpNoCase( GetCanonicalFieldName( id ) ) == 0 )
+            if( name.CmpNoCase( GetDefaultFieldName( id, UNTRANSLATED ) ) == 0 )
             {
                 fieldId = id;
                 break;
@@ -3987,7 +3987,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
 
             // Exclude from simulation used to be managed by a Sim.Enable field set to "0" when
             // simulation was disabled.
-            if( field->GetCanonicalName() == SIM_LEGACY_ENABLE_FIELD_V7 )
+            if( field->GetUntranslatedName() == SIM_LEGACY_ENABLE_FIELD_V7 )
             {
                 symbol->SetExcludedFromSim( field->GetText() == wxS( "0" ) );
                 delete field;
@@ -3995,7 +3995,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             }
 
             // Even longer ago, we had a "Spice_Netlist_Enabled" field
-            if( field->GetCanonicalName() == SIM_LEGACY_ENABLE_FIELD )
+            if( field->GetUntranslatedName() == SIM_LEGACY_ENABLE_FIELD )
             {
                 symbol->SetExcludedFromSim( field->GetText() == wxS( "N" ) );
                 delete field;

@@ -135,7 +135,7 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::cellUsesUrlEditor( int aRow, int aCol )
     wxCHECK( aRow >= 0 && aRow < GetNumberRows(), false );
     wxCHECK( aCol >= 0 && aCol < GetNumberCols(), false );
 
-    int datasheetCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::DATASHEET ) );
+    int datasheetCol = GetFieldNameCol( GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED ) );
 
     if( datasheetCol < 0 )
         return false;
@@ -151,7 +151,7 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::cellUsesUrlEditor( int aRow, int aCol )
 
 wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::cloneUrlEditorAttr()
 {
-    int datasheetCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::DATASHEET ) );
+    int datasheetCol = GetFieldNameCol( GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED ) );
     wxCHECK( datasheetCol >= 0, nullptr );
 
     auto attrIt = m_colAttrs.find( datasheetCol );
@@ -402,7 +402,7 @@ void FIELDS_TABLE_DATA_MODEL_BASE::SetFieldsOrder( const std::vector<wxString>& 
 bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsReference( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::REFERENCE );
+    return m_cols[aCol].m_fieldName == GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED );
 }
 
 
@@ -423,14 +423,14 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsItemNumber( int aCol ) const
 bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsValue( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
+    return m_cols[aCol].m_fieldName == GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
 }
 
 
 bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsFootprint( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT );
+    return m_cols[aCol].m_fieldName == GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED );
 }
 
 
@@ -501,7 +501,7 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::CanClearCell( int aRow, int aCol )
 
     for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
-        if( m_cols[aCol].m_fieldName == GetCanonicalFieldName( fieldId ) )
+        if( m_cols[aCol].m_fieldName == GetDefaultFieldName( fieldId, UNTRANSLATED ) )
             return false;
     }
 

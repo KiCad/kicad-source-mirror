@@ -127,12 +127,12 @@ protected:
 
         if( row >= 0 && col >= 0 )
         {
-            if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+            if( m_dataModel->GetColFieldName( col ) == GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) )
             {
                 aMenu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
                 aMenu.AppendSeparator();
             }
-            else if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+            else if( m_dataModel->GetColFieldName( col ) == GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED ) )
             {
                 aMenu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ), _( "Show datasheet in browser" ) );
                 aMenu.AppendSeparator();
@@ -222,7 +222,7 @@ protected:
 
             for( row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
             {
-                if( m_viewControlsDataModel->GetCanonicalFieldName( row ) == fieldName )
+                if( m_viewControlsDataModel->GetUntranslatedFieldName( row ) == fieldName )
                     m_viewControlsDataModel->SetValueAsBool( row, SHOW_FIELD_COLUMN, show );
             }
 
@@ -553,7 +553,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
             {
                 m_mandatoryFieldListIndexes[aFieldId] = m_viewControlsDataModel->GetNumberRows();
 
-                AddField( GetCanonicalFieldName( aFieldId ), GetDefaultFieldName( aFieldId, DO_TRANSLATE ),
+                AddField( GetDefaultFieldName( aFieldId, UNTRANSLATED ), GetDefaultFieldName( aFieldId, TRANSLATED ),
                           aShow, aGroupBy );
             };
 
@@ -903,7 +903,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
             for( SCH_FIELD& field : symbol->GetFields() )
             {
                 if( !field.IsMandatory() && !field.IsPrivate() )
-                    AddField( field.GetCanonicalName(), field.GetName(), true, false, false );
+                    AddField( field.GetUntranslatedName(), field.GetName(), true, false, false );
             }
 
             m_dataModel->AddReferences( getSymbolReferences( symbol, allRefs ) );
@@ -922,7 +922,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
                 for( SCH_FIELD& field : symbol->GetFields() )
                 {
                     if( !field.IsMandatory() && !field.IsPrivate() )
-                        AddField( field.GetCanonicalName(), field.GetName(), true, false, false );
+                        AddField( field.GetUntranslatedName(), field.GetName(), true, false, false );
                 }
             }
 
@@ -971,7 +971,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
             for( SCH_FIELD& field : symbol->GetFields() )
             {
                 if( !field.IsMandatory() && !field.IsPrivate() )
-                    AddField( field.GetCanonicalName(), field.GetName(), true, false, false );
+                    AddField( field.GetUntranslatedName(), field.GetName(), true, false, false );
             }
 
             m_dataModel->UpdateReferences( getSymbolReferences( symbol, allRefs ) );
@@ -990,7 +990,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
                 for( SCH_FIELD& field : symbol->GetFields() )
                 {
                     if( !field.IsMandatory() && !field.IsPrivate() )
-                        AddField( field.GetCanonicalName(), field.GetName(), true, false, false );
+                        AddField( field.GetUntranslatedName(), field.GetName(), true, false, false );
                 }
             }
 

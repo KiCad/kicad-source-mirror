@@ -64,9 +64,12 @@ enum class FIELD_T : int
 #define SHEET_MANDATORY_FIELDS { FIELD_T::SHEET_NAME,        \
                                  FIELD_T::SHEET_FILENAME }
 
-// A helper to call GetDefaultFieldName with or without translation.
 // Translation should be used only to display field names in dialogs
-#define DO_TRANSLATE true
+enum TRANSLATION
+{
+    UNTRANSLATED,
+    TRANSLATED
+};
 
 
 /**
@@ -74,17 +77,10 @@ enum class FIELD_T : int
  *
  * These field names are not modifiable but template field names are.
  *
- * @param aTranslateForHI If true, return the translated field name,
- * else get the canonical name (defualt). Translation is intended only for dialogs
+ * @param aTranslation determines whether the field name is translated for display in dialogs.
  */
-KICOMMON_API wxString GetDefaultFieldName( FIELD_T aFieldId, bool aTranslateForHI );
-KICOMMON_API wxString GetUserFieldName( int aFieldNdx, bool aTranslateForHI );
-
-
-inline wxString GetCanonicalFieldName( FIELD_T aFieldType )
-{
-    return GetDefaultFieldName( aFieldType, !DO_TRANSLATE );
-}
+KICOMMON_API wxString GetDefaultFieldName( FIELD_T aFieldId, TRANSLATION aTranslation );
+KICOMMON_API wxString GetUserFieldName( int aFieldNdx, TRANSLATION aTranslation );
 
 
 /**
@@ -92,13 +88,14 @@ inline wxString GetCanonicalFieldName( FIELD_T aFieldType )
  * name uniqueness within a given parent (symbol, sheet, or global label).
  *
  * Mandatory field names in the supplied set are matched case-insensitively because the
- * s-expression parser folds case variants onto the canonical mandatory field on load.
+ * s-expression parser folds case variants onto the mandatory field with the matching
+ * untranslated name on load.
  * User-defined field names retain their original case in storage, so two user fields that
  * differ only in case (e.g. "Manufacturer" vs "MANUFACTURER") are considered distinct.
  *
  * Pass MANDATORY_FIELDS for symbol contexts, SHEET_MANDATORY_FIELDS for sheets, or
- * GLOBALLABEL_MANDATORY_FIELDS for global labels.  Each parent has its own canonical
- * folding domain in the parser.
+ * GLOBALLABEL_MANDATORY_FIELDS for global labels.  Each parent has its own set of untranslated
+ * mandatory field names used for case-insensitive matching in the parser.
  */
 KICOMMON_API bool FieldNamesAreDuplicates( const wxString& aLhs, const wxString& aRhs,
                                            std::initializer_list<FIELD_T> aMandatoryFields );

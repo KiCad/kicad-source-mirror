@@ -767,7 +767,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
     m_itemsGrid->OnAddRow(
             [&]() -> std::pair<int, int>
             {
-                PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
+                PCB_FIELD newField( m_footprint, FIELD_T::USER, GetUserFieldName( m_fields->size(), TRANSLATED ) );
 
                 newField.SetVisible( false );
                 newField.SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );

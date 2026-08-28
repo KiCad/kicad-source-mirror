@@ -199,7 +199,7 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
 
     auto addField = [&]( FIELD_T id, SCH_LAYER_ID layer )
     {
-        m_fields.emplace_back( this, id, GetCanonicalFieldName( id ) );
+        m_fields.emplace_back( this, id, GetDefaultFieldName( id, UNTRANSLATED ) );
         m_fields.back().SetTextPos( pos );
         m_fields.back().SetLayer( layer );
     };
@@ -1925,11 +1925,11 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
             }
             else
             {
-                schField = GetField( libField->GetCanonicalName() );
+                schField = GetField( libField->GetUntranslatedName() );
 
                 if( !schField )
                 {
-                    schField = AddField( SCH_FIELD( this, FIELD_T::USER, libField->GetCanonicalName() ) );
+                    schField = AddField( SCH_FIELD( this, FIELD_T::USER, libField->GetUntranslatedName() ) );
                     schField->ImportValues( *libField );
                     schField->SetTextPos( m_pos + libField->GetTextPos() );
                 }
@@ -2346,7 +2346,7 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
             continue;
 
         if( field.IsMandatory() )
-            aVars->push_back( field.GetCanonicalName().Upper() );
+            aVars->push_back( field.GetUntranslatedName().Upper() );
         else
             aVars->push_back( field.GetName() );
     }
@@ -2487,7 +2487,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
 
     for( const SCH_FIELD& field : m_fields )
     {
-        wxString fieldName = field.IsMandatory() ? field.GetCanonicalName() : field.GetName();
+        wxString fieldName = field.IsMandatory() ? field.GetUntranslatedName() : field.GetName();
 
         wxString textToken = field.GetText();
         textToken.Replace( " ", wxEmptyString );
@@ -4277,7 +4277,7 @@ std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET
     {
         for( const SCH_FIELD& field : fields )
         {
-            if( field.GetCanonicalName() == wxT( "Component Class" ) )
+            if( field.GetUntranslatedName() == wxT( "Component Class" ) )
             {
                 if( field.GetShownText( aPath, false ) != wxEmptyString )
                     componentClass.insert( field.GetShownText( aPath, false ) );

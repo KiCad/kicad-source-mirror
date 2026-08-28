@@ -118,14 +118,14 @@ public:
     wxString GetName( bool aUseDefaultName = true ) const;
 
     /**
-     * Get a non-language-specific name for a field which can be used for storage, variable look-up, etc.
+     * Get the untranslated field name for storage, variable look-up, etc.
      */
-    wxString GetCanonicalName() const;
+    wxString GetUntranslatedName() const;
 
     /**
      * Test whether @a aName is one of the known translations of the directive-label net class
      * field name (used to recognise legacy/cross-locale files where the field name was saved as
-     * a translated string instead of the canonical "Netclass" token).
+     * a translated string instead of the untranslated "Netclass" token).
      */
     static bool IsNetclassLabelFieldName( const wxString& aName );
 

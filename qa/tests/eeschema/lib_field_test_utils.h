@@ -33,7 +33,7 @@
 
 std::ostream& boost_test_print_type( std::ostream& os, SCH_FIELD const& f )
 {
-    os << "SCH_FIELD[ " << f.GetCanonicalName() << " ]";
+    os << "SCH_FIELD[ " << f.GetUntranslatedName() << " ]";
     return os;
 }
 
@@ -57,7 +57,7 @@ namespace KI_TEST
 bool FieldNameIdMatches( const SCH_FIELD& aField, const std::string& aExpectedName, int aExpectedId )
 {
     bool       ok = true;
-    const auto gotName = aField.GetCanonicalName();
+    const auto gotName = aField.GetUntranslatedName();
 
     if( gotName != aExpectedName )
     {

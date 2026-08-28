@@ -738,7 +738,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
     wxString fieldName = aField->GetName();
 
     if( aField->IsMandatory() )
-        fieldName = GetCanonicalFieldName( aField->GetId() );
+        fieldName = GetDefaultFieldName( aField->GetId(), UNTRANSLATED );
 
     aFormatter.Print( "(property %s %s %s (at %s %s %s)",
                       aField->IsPrivate() ? "private" : "",

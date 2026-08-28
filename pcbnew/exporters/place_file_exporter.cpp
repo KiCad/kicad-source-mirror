@@ -157,7 +157,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         item.m_Footprint = footprint;
         item.m_Reference = footprint->Reference().GetShownText( false );
         item.m_Value     = UnescapeString( footprint->GetFieldValueForVariant( m_variant,
-                                                               GetCanonicalFieldName( FIELD_T::VALUE ) ) );
+                                                               GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) ) );
         item.m_Layer     = footprint->GetLayer();
 
         lenRefText = std::max( lenRefText, (int) item.m_Reference.length() );
@@ -339,7 +339,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
         wxString ref = footprint->Reference().GetShownText( false );
         wxString value = UnescapeString(
                 footprint->GetFieldValueForVariant( m_variant,
-                                                    GetCanonicalFieldName( FIELD_T::VALUE ) ) );
+                                                    GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) ) );
 
         buffer += fmt::format( "$MODULE {}\n", TO_UTF8( ref ) );
 

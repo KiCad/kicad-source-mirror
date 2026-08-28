@@ -69,10 +69,10 @@ struct ISSUE25112_FIXTURE
         auto model = std::make_unique<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL>( m_refs );
 
         model->SetCurrentVariant( aVariantName );
-        model->AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
+        model->AddColumn( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ), wxS( "Reference" ), false );
         model->AddColumn( aFieldName, aFieldName, aAddedByUser );
 
-        int referenceCol = model->GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
+        int referenceCol = model->GetFieldNameCol( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) );
         BOOST_REQUIRE( referenceCol >= 0 );
         model->SetShowColumn( referenceCol, true );
 
@@ -150,7 +150,7 @@ struct ISSUE25112_FIXTURE
 BOOST_FIXTURE_TEST_CASE( SheetScopedFieldEditSurvivesApply, ISSUE25112_FIXTURE )
 {
     std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
-            MakeScopedModel( wxEmptyString, GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
+            MakeScopedModel( wxEmptyString, GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );
 
     const wxString newFootprint = wxS( "Resistor_SMD:R_0603_1608Metric" );
 
@@ -209,10 +209,10 @@ BOOST_FIXTURE_TEST_CASE( GroupedEditStateChecksEveryItem, ISSUE25112_FIXTURE )
     }
 
     SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL model( m_refs );
-    model.AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
+    model.AddColumn( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ), wxS( "Reference" ), false );
     model.AddColumn( fieldName, fieldName, false );
 
-    int referenceCol = model.GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
+    int referenceCol = model.GetFieldNameCol( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) );
     int fieldCol = model.GetFieldNameCol( fieldName );
     BOOST_REQUIRE( referenceCol >= 0 );
     BOOST_REQUIRE( fieldCol >= 0 );
@@ -260,7 +260,7 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedVariantEditStaysOnItsPath, ISSUE25112_FIXTUR
     const wxString variant = wxS( "Assembly" );
 
     std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
-            MakeScopedModel( variant, GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
+            MakeScopedModel( variant, GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );
 
     const wxString baseFootprint = m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText();
     const wxString newFootprint = wxS( "Resistor_SMD:R_0603_1608Metric" );

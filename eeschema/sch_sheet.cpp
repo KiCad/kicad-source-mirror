@@ -70,10 +70,10 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) 
     m_fieldsAutoplaced = AUTOPLACE_AUTO;
 
     m_fields.emplace_back( this, FIELD_T::SHEET_NAME,
-                           GetDefaultFieldName( FIELD_T::SHEET_NAME, DO_TRANSLATE ) );
+                           GetDefaultFieldName( FIELD_T::SHEET_NAME, TRANSLATED ) );
 
     m_fields.emplace_back( this, FIELD_T::SHEET_FILENAME,
-                           GetDefaultFieldName( FIELD_T::SHEET_FILENAME, DO_TRANSLATE ) );
+                           GetDefaultFieldName( FIELD_T::SHEET_FILENAME, TRANSLATED ) );
 
     AutoplaceFields( nullptr, m_fieldsAutoplaced );
 }
@@ -166,9 +166,9 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
 
     m_fields.clear();
     m_fields.emplace_back( this, FIELD_T::SHEET_NAME,
-                           GetDefaultFieldName( FIELD_T::SHEET_NAME, DO_TRANSLATE ) );
+                           GetDefaultFieldName( FIELD_T::SHEET_NAME, TRANSLATED ) );
     m_fields.emplace_back( this, FIELD_T::SHEET_FILENAME,
-                           GetDefaultFieldName( FIELD_T::SHEET_FILENAME, DO_TRANSLATE ) );
+                           GetDefaultFieldName( FIELD_T::SHEET_FILENAME, TRANSLATED ) );
 
     GetField( FIELD_T::SHEET_NAME )->Deserialize( sheet.name_field(), schIUScale );
     GetField( FIELD_T::SHEET_FILENAME )->Deserialize( sheet.filename_field(), schIUScale );
@@ -322,7 +322,7 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
     for( const SCH_FIELD& field : m_fields )
     {
         if( field.IsMandatory() )
-            add( field.GetCanonicalName().Upper() );
+            add( field.GetUntranslatedName().Upper() );
         else
             add( field.GetName() );
     }
@@ -370,7 +370,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
 
     for( const SCH_FIELD& field : m_fields )
     {
-        wxString fieldName = field.IsMandatory() ? field.GetCanonicalName().Upper()
+        wxString fieldName = field.IsMandatory() ? field.GetUntranslatedName().Upper()
                                                  : field.GetName();
 
         if( token->IsSameAs( fieldName ) )

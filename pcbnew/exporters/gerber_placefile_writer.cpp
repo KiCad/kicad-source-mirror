@@ -168,7 +168,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( const wxString& aFullFilename, PCB
         // Add component value info:
         wxString fpValue = UnescapeString(
                 footprint->GetFieldValueForVariant( m_variant,
-                                                    GetCanonicalFieldName( FIELD_T::VALUE ) ) );
+                                                    GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) ) );
         pnpAttrib.m_Value = ConvertNotAllowedCharsInGerber( fpValue, allowUtf8, quoteOption );
 
         // Add component footprint info:

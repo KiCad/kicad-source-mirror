@@ -2149,7 +2149,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
             symbolVariant.m_DNP = true;
 
         if( variant->value )
-            symbolVariant.m_Fields[GetCanonicalFieldName( FIELD_T::VALUE )] = *variant->value;
+            symbolVariant.m_Fields[GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED )] = *variant->value;
 
         if( variant->technology.has_value() )
         {

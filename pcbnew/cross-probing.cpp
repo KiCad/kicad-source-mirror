@@ -660,7 +660,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             {
                 wxCHECK2( field, continue );
 
-                fields[field->GetCanonicalName()] = field->GetText();
+                fields[field->GetUntranslatedName()] = field->GetText();
             }
 
             component->SetFields( fields );

@@ -78,8 +78,8 @@ public:
     void AppendRow( const wxString& aFieldName, const wxString& aBOMName, bool aShow, bool aGroupBy );
     void DeleteRow( int aRow );
 
-    wxString GetCanonicalFieldName( int aRow );
-    void     SetCanonicalFieldName( int aRow, const wxString& aName );
+    wxString GetUntranslatedFieldName( int aRow );
+    void     SetUntranslatedFieldName( int aRow, const wxString& aName );
 
 protected:
     bool                   m_forBOM;

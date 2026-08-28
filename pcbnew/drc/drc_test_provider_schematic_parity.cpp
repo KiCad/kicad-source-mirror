@@ -228,9 +228,9 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
 
                 // Remove the extra component fields we don't want to evaluate here
                 nlohmann::ordered_map<wxString, wxString> compFields = component->GetFields();
-                compFields.erase( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
-                compFields.erase( GetCanonicalFieldName( FIELD_T::VALUE ) );
-                compFields.erase( GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
+                compFields.erase( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) );
+                compFields.erase( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
+                compFields.erase( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );
                 compFields.erase( wxT( "Component Class" ) );
 
                 bool fieldsMatch = true;

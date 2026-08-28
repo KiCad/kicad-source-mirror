@@ -1620,12 +1620,12 @@ static void swapFieldPositionsWithMatching( std::vector<SCH_FIELD>& aAFields, st
 
     for( SCH_FIELD& aField : aAFields )
     {
-        const wxString name = aField.GetCanonicalName();
+        const wxString name = aField.GetUntranslatedName();
 
         auto it = std::find_if( aBFields.begin(), aBFields.end(),
                                 [name]( const SCH_FIELD& bField )
                                 {
-                                    return bField.GetCanonicalName() == name;
+                                    return bField.GetUntranslatedName() == name;
                                 } );
 
         if( it != aBFields.end() )
@@ -1651,7 +1651,7 @@ static void swapFieldPositionsWithMatching( std::vector<SCH_FIELD>& aAFields, st
     // in reverse
     for( SCH_FIELD& bField : aBFields )
     {
-        const wxString bName = bField.GetCanonicalName();
+        const wxString bName = bField.GetUntranslatedName();
         if( handledKeys.find( bName ) == handledKeys.end() )
         {
             for( unsigned ii = 0; ii < aFallbackRotationsCCW; ii++ )
@@ -2423,7 +2423,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     // Use title caps for mandatory fields.  "Edit Sheet name Field" looks dorky.
     if( aField->IsMandatory() )
     {
-        wxString fieldName = GetDefaultFieldName( aField->GetId(), DO_TRANSLATE );
+        wxString fieldName = GetDefaultFieldName( aField->GetId(), TRANSLATED );
         caption.Printf( _( "Edit %s Field" ), TitleCaps( fieldName ) );
     }
     else

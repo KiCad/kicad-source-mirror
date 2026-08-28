@@ -1002,7 +1002,7 @@ int ERC_TESTER::TestMissingNetclasses()
                         {
                             SCH_FIELD* field = static_cast<SCH_FIELD*>( aChild );
 
-                            if( field->GetCanonicalName() == wxT( "Netclass" ) )
+                            if( field->GetUntranslatedName() == wxT( "Netclass" ) )
                             {
                                 wxString netclass = field->GetShownText( &sheet, false );
 

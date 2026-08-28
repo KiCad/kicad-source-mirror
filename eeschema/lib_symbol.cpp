@@ -895,7 +895,7 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
             if( field.GetId() == FIELD_T::FOOTPRINT )
                 footprint = field.GetShownText( nullptr, false, aDepth + 1 );
 
-            if( token->IsSameAs( field.GetCanonicalName().Upper() ) || token->IsSameAs( field.GetName(), false ) )
+            if( token->IsSameAs( field.GetUntranslatedName().Upper() ) || token->IsSameAs( field.GetName(), false ) )
             {
                 *token = field.GetShownText( nullptr, false, aDepth + 1 );
                 return true;
@@ -1696,7 +1696,7 @@ void LIB_SYMBOL::SyncFieldsFromParent( const LIB_FIELD_SYNC_OPTIONS& aOptions )
             result.emplace_back( this, FIELD_T::USER );
             SCH_FIELD* newField = &result.back();
 
-            newField->SetName( parentField->GetCanonicalName() );
+            newField->SetName( parentField->GetUntranslatedName() );
             newField->SetText( parentField->GetText() );
             newField->SetAttributes( *parentField );   // Includes visible bit and position
         }
@@ -1779,7 +1779,7 @@ SCH_FIELD* LIB_SYMBOL::FindFieldCaseInsensitive( const wxString& aFieldName )
     {
         SCH_FIELD& field = static_cast<SCH_FIELD&>( item );
 
-        if( field.GetCanonicalName().IsSameAs( aFieldName, false ) )
+        if( field.GetUntranslatedName().IsSameAs( aFieldName, false ) )
             return &field;
     }
 
@@ -1793,7 +1793,7 @@ const SCH_FIELD* LIB_SYMBOL::FindFieldCaseInsensitive( const wxString& aFieldNam
     {
         const SCH_FIELD& field = static_cast<const SCH_FIELD&>( item );
 
-        if( field.GetCanonicalName().IsSameAs( aFieldName, false ) )
+        if( field.GetUntranslatedName().IsSameAs( aFieldName, false ) )
             return &field;
     }
 

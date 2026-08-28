@@ -228,7 +228,7 @@ std::set<wxString> getCommonFootprintFieldNames( const PCB_SELECTION& aSelection
         for( PCB_FIELD* field : footprint->GetFields() )
         {
             if( field )
-                fieldNames.insert( field->GetCanonicalName() );
+                fieldNames.insert( field->GetUntranslatedName() );
         }
 
         if( firstFootprint )

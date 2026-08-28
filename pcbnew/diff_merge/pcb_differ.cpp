@@ -286,7 +286,7 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
         d.id.push_back( aFp->m_Uuid );
 
         if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( aChild ) )
-            d.id.push_back( KIID::FromDeterministicString( field->GetCanonicalName() ) );
+            d.id.push_back( KIID::FromDeterministicString( field->GetUntranslatedName() ) );
         else
             d.id.push_back( aChild->m_Uuid );
 

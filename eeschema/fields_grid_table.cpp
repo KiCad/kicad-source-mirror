@@ -623,7 +623,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
             attr = m_filepathAttr;
         }
         else if( ( m_parentType == SCH_LABEL_LOCATE_ANY_T )
-                && field.GetCanonicalName() == wxT( "Netclass" ) )
+                && field.GetUntranslatedName() == wxT( "Netclass" ) )
         {
             m_netclassAttr->IncRef();
             attr = m_netclassAttr;
@@ -746,12 +746,12 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
         // according to the current locale
         if( m_parentType == SCH_LABEL_LOCATE_ANY_T )
         {
-            return SCH_LABEL_BASE::GetDefaultFieldName( field.GetCanonicalName(), false );
+            return SCH_LABEL_BASE::GetDefaultFieldName( field.GetUntranslatedName(), false );
         }
         else
         {
             if( field.IsMandatory() )
-                return GetDefaultFieldName( field.GetId(), DO_TRANSLATE );
+                return GetDefaultFieldName( field.GetId(), TRANSLATED );
             else
                 return field.GetName( false );
         }

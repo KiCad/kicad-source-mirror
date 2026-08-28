@@ -49,9 +49,9 @@ static const std::vector<KICAD_T> labelTypes = { SCH_LABEL_LOCATE_ANY_T };
  *
  * The directive-label net class field used to be saved as `_( "Net Class" )` which embedded the
  * UI-language translation into the .kicad_sch file. Files written by a non-English UI lost the
- * canonical token when re-opened in another language, so the rule resolver could no longer locate
- * the field. We now save the canonical name, but we still need to recognise the translated form
- * when migrating older / cross-locale files.
+ * untranslated "Netclass" token when re-opened in another language, so the rule resolver could no
+ * longer locate the field. We now save the untranslated name, but we still need to recognise the
+ * translated form when migrating older / cross-locale files.
  */
 static const std::vector<wxString>& GetKnownNetclassFieldTranslations()
 {
@@ -72,7 +72,7 @@ static const std::vector<wxString>& GetKnownNetclassFieldTranslations()
             wxString::FromUTF8( "नेट क्लास" ),            // hi
             wxString::FromUTF8( "Hálózatosztály" ),    // hu
             wxString::FromUTF8( "Kelas Net" ),         // id
-            wxString::FromUTF8( "Netclass" ),          // it, ro (same as canonical)
+            wxString::FromUTF8( "Netclass" ),          // it, ro (same as untranslated)
             wxString::FromUTF8( "ネットクラス" ),          // ja
             wxString::FromUTF8( "ქსელის კლასი" ),      // ka
             wxString::FromUTF8( "네트 클래스" ),           // ko
@@ -139,7 +139,7 @@ SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId, const wxString& aName
     if( !aName.IsEmpty() )
         SetName( aName );
     else
-        SetName( GetDefaultFieldName( aFieldId, DO_TRANSLATE ) );
+        SetName( GetDefaultFieldName( aFieldId, TRANSLATED ) );
 
     setId( aFieldId ); // will also set the layer
     SetVisible( true );
@@ -472,7 +472,7 @@ SCH_LAYER_ID SCH_FIELD::GetDefaultLayer() const
 {
     if( m_parent && m_parent->Type() == SCH_LABEL_T )
     {
-        if( GetCanonicalName() == wxT( "Netclass" ) || GetCanonicalName() == wxT( "Component Class" ) )
+        if( GetUntranslatedName() == wxT( "Netclass" ) || GetUntranslatedName() == wxT( "Component Class" ) )
         {
             return LAYER_NETCLASS_REFS;
         }
@@ -1203,26 +1203,26 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
         return SCH_LABEL_BASE::GetDefaultFieldName( m_name, aUseDefaultName );
 
     if( IsMandatory() )
-        return GetCanonicalFieldName( m_id );
+        return GetDefaultFieldName( m_id, UNTRANSLATED );
     else if( m_name.IsEmpty() && aUseDefaultName )
-        return GetDefaultFieldName( m_id, !DO_TRANSLATE );
+        return GetDefaultFieldName( m_id, UNTRANSLATED );
     else
         return m_name;
 }
 
 
-wxString SCH_FIELD::GetCanonicalName() const
+wxString SCH_FIELD::GetUntranslatedName() const
 {
     if( m_parent && m_parent->IsType( labelTypes ) )
     {
-        // These should be stored in canonical format, but recover translated forms written by
+        // These should be stored untranslated, but recover translated forms written by
         // older versions or by cross-language collaboration via Git.
         if( IsNetclassLabelFieldName( m_name ) )
             return wxT( "Netclass" );
     }
 
     if( IsMandatory() )
-        return GetCanonicalFieldName( m_id );
+        return GetDefaultFieldName( m_id, UNTRANSLATED );
 
     return m_name;
 }
@@ -1572,7 +1572,7 @@ bool SCH_FIELD::operator==( const SCH_FIELD& aOther ) const
 
 bool SCH_FIELD::HasSameContent( const SCH_FIELD& aOther ) const
 {
-    if( GetCanonicalName() != aOther.GetCanonicalName() )
+    if( GetUntranslatedName() != aOther.GetUntranslatedName() )
         return false;
 
     if( GetPosition() != aOther.GetPosition() )

@@ -252,7 +252,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::addInheritedFields( const std::shared_ptr<LIB
             if( field.IsMandatory() )
                 continue; // Don't inherit mandatory fields
 
-            if( field.GetCanonicalName() == parentField->GetCanonicalName() )
+            if( field.GetUntranslatedName() == parentField->GetUntranslatedName() )
             {
                 m_fields->SetFieldInherited( ii, *parentField );
                 found = true;
@@ -658,7 +658,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         if( !field.IsMandatory() )
             field.SetOrdinal( ordinal++ );
 
-        wxString fieldName = field.GetCanonicalName();
+        wxString fieldName = field.GetUntranslatedName();
 
         // Writing an unmodified inherited row into the derived symbol would stop it from
         // tracking the parent field.  Fields the symbol already owns (transferred user
@@ -933,7 +933,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
             [&]() -> std::pair<int, int>
             {
                 SYMBOL_EDITOR_SETTINGS* settings = m_Parent->GetSettings();
-                SCH_FIELD newField( m_libEntry, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
+                SCH_FIELD newField( m_libEntry, FIELD_T::USER, GetUserFieldName( m_fields->size(), TRANSLATED ) );
 
                 newField.SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
                                                 schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );

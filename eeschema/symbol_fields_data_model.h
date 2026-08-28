@@ -93,7 +93,7 @@ private:
      * common must be recorded against all of those paths, while variant overrides belong to
      * a single symbol instance.
      *
-     * @param aFieldName is the canonical field or attribute name.
+     * @param aFieldName is the untranslated field or attribute name.
      * @retval true if the field is stored on the symbol.
      * @retval false if the field is stored on the symbol instance.
      */

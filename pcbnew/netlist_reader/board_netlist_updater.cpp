@@ -460,8 +460,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
     {
         for( const auto& [_, test] : aNetlistComponent->GetVariants() )
         {
-            if( test.m_fields.count( GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
-                && aFootprint->GetFPIDAsString() == test.m_fields.at( GetCanonicalFieldName( FIELD_T::FOOTPRINT ) ) )
+            if( test.m_fields.count( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) )
+                && aFootprint->GetFPIDAsString()
+                           == test.m_fields.at( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) ) )
             {
                 firstAssociatedVariant = &test;
                 break;
@@ -506,9 +507,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
     wxString netlistValue = aNetlistComponent->GetValue();
 
     if( firstAssociatedVariant != nullptr
-        && firstAssociatedVariant->m_fields.count( GetCanonicalFieldName( FIELD_T::VALUE ) ) )
+        && firstAssociatedVariant->m_fields.count( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) ) )
     {
-        netlistValue = firstAssociatedVariant->m_fields.at( GetCanonicalFieldName( FIELD_T::VALUE ) );
+        netlistValue = firstAssociatedVariant->m_fields.at( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
     }
 
     if( aFootprint->GetValue() != netlistValue )
@@ -578,9 +579,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
 
     // Remove the ref/value/footprint fields that are individually handled
     nlohmann::ordered_map<wxString, wxString> compFields = aNetlistComponent->GetFields();
-    compFields.erase( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
-    compFields.erase( GetCanonicalFieldName( FIELD_T::VALUE ) );
-    compFields.erase( GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
+    compFields.erase( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) );
+    compFields.erase( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
+    compFields.erase( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );
 
     // Remove any component class fields - these are not editable in the pcb editor
     compFields.erase( wxT( "Component Class" ) );
@@ -1433,7 +1434,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
     if( aBaseFpid.empty() )
         return;
 
-    const wxString footprintFieldName = GetCanonicalFieldName( FIELD_T::FOOTPRINT );
+    const wxString footprintFieldName = GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED );
 
     struct VARIANT_INFO
     {
@@ -2279,7 +2280,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         addExpectedFpid( baseFpid );
 
-        const wxString footprintFieldName = GetCanonicalFieldName( FIELD_T::FOOTPRINT );
+        const wxString footprintFieldName = GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED );
 
         for( const auto& [variantName, variant] : component->GetVariants() )
         {

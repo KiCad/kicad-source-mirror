@@ -100,7 +100,7 @@ bool SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_S
         if( field.GetId() == FIELD_T::SHEET_NAME || field.GetId() == FIELD_T::SHEET_FILENAME )
             continue;
 
-        blk.GetFields()[field.GetCanonicalName()] = field.GetText();
+        blk.GetFields()[field.GetUntranslatedName()] = field.GetText();
     }
 
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, &blk );
@@ -190,7 +190,7 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSheet( const LIB_ID& aLibId, SCH_SHEET
         if( field.GetId() == FIELD_T::SHEET_NAME || field.GetId() == FIELD_T::SHEET_FILENAME )
             continue;
 
-        blk->GetFields()[field.GetCanonicalName()] = field.GetText();
+        blk->GetFields()[field.GetUntranslatedName()] = field.GetText();
     }
 
     DIALOG_DESIGN_BLOCK_PROPERTIES dlg( this, blk.get(), true );

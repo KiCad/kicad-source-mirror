@@ -833,7 +833,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     for( SCH_FIELD& field : *m_fields )
     {
-        const wxString& fieldName = field.GetCanonicalName();
+        const wxString& fieldName = field.GetUntranslatedName();
 
         if( fieldName.IsEmpty() && field.GetText().IsEmpty() )
             continue;
@@ -1006,7 +1006,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     m_fieldsGrid->OnAddRow(
             [&]() -> std::pair<int, int>
             {
-                SCH_FIELD newField( m_symbol, FIELD_T::USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
+                SCH_FIELD newField( m_symbol, FIELD_T::USER, GetUserFieldName( m_fields->size(), TRANSLATED ) );
 
                 newField.SetTextAngle( m_fields->GetField( FIELD_T::REFERENCE )->GetTextAngle() );
                 newField.SetVisible( false );

@@ -550,7 +550,7 @@ CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem ) const
                 {
                     SCH_FIELD* field = static_cast<SCH_FIELD*>( aChild );
 
-                    if( field->GetCanonicalName() == wxT( "Netclass" ) )
+                    if( field->GetUntranslatedName() == wxT( "Netclass" ) )
                     {
                         wxString netclass = field->GetShownText( &m_sheet, false );
 

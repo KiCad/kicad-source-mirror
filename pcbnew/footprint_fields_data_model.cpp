@@ -294,7 +294,7 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValueForVariant( const
         return true;
     }
 
-    if( aFieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+    if( aFieldName == GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) )
     {
         aValue = footprint.GetFPIDAsString();
         return true;
@@ -576,7 +576,7 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPR
             continue;
 
         // Don't apply footprint fields to footprints
-        if( srcName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+        if( srcName == GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) )
             continue;
 
         int col = GetFieldNameCol( srcName );
@@ -659,7 +659,7 @@ bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::applyDataToFootprint( const FOOTPR
         if( field->IsMandatory() || field->IsPrivate() )
             continue;
 
-        if( !fieldStore.contains( field->GetCanonicalName() ) )
+        if( !fieldStore.contains( field->GetUntranslatedName() ) )
         {
             // TODO: unlike symbols/SCH_FIELD, footprint PCB_FIELD
             // can be grouped so we need to remove it from the group before deleting it

@@ -24,9 +24,9 @@
  *
  * A KiCad UI in German (or any non-English language) used to write the directive-label net class
  * field name as the translated form (e.g. "Netzklasse" in German). When the same file was opened
- * with an English UI the canonical token "Netclass" was no longer present, so the directive label
- * lost its association with the project's net class settings. Cross-language collaboration over
- * Git therefore destroyed all directive-label net class bindings.
+ * with an English UI the untranslated token "Netclass" was no longer present, so the directive
+ * label lost its association with the project's net class settings. Cross-language collaboration
+ * over Git therefore destroyed all directive-label net class bindings.
  *
  * These tests pin the contract on both the writer and the migration paths.
  */
@@ -115,11 +115,11 @@ BOOST_FIXTURE_TEST_SUITE( Issue24403DirectiveLabelI18n, DIRECTIVE_LABEL_I18N_FIX
 
 
 /**
- * The serializer must always emit the canonical "Netclass" token for the directive-label net
+ * The serializer must always emit the untranslated "Netclass" token for the directive-label net
  * class field, even when the in-memory field name happens to be a translated string (which can
  * happen with files written by older KiCad versions).
  */
-BOOST_AUTO_TEST_CASE( CanonicalNetclassEmittedForTranslatedFieldName )
+BOOST_AUTO_TEST_CASE( UntranslatedNetclassEmittedForTranslatedFieldName )
 {
     m_schematic->CreateDefaultScreens();
 
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE( CanonicalNetclassEmittedForTranslatedFieldName )
     BOOST_REQUIRE( read.IsOpened() && read.ReadAll( &contents ) );
 
     BOOST_CHECK_MESSAGE( contents.Contains( wxT( "\"Netclass\"" ) ),
-                         "Saved schematic must contain canonical \"Netclass\" token" );
+                         "Saved schematic must contain untranslated \"Netclass\" token" );
     BOOST_CHECK_MESSAGE( !contents.Contains( wxT( "\"Netzklasse\"" ) ),
                          "Saved schematic must not contain translated \"Netzklasse\" token" );
     BOOST_CHECK_MESSAGE( contents.Contains( wxT( "HighSpeed" ) ),
@@ -148,10 +148,10 @@ BOOST_AUTO_TEST_CASE( CanonicalNetclassEmittedForTranslatedFieldName )
 
 /**
  * Round-trip: a file written by a non-English UI (here we simulate German "Netzklasse") must be
- * recognised as a directive net class binding when reloaded, so that GetCanonicalName() returns
- * the canonical token used by the rest of the code base.
+ * recognised as a directive net class binding when reloaded, so that GetUntranslatedName()
+ * returns the untranslated token used by the rest of the code base.
  */
-BOOST_AUTO_TEST_CASE( TranslatedFieldNameRoundTripsAsCanonical )
+BOOST_AUTO_TEST_CASE( TranslatedFieldNameRoundTripsAsUntranslated )
 {
     m_schematic->CreateDefaultScreens();
 
@@ -186,7 +186,7 @@ BOOST_AUTO_TEST_CASE( TranslatedFieldNameRoundTripsAsCanonical )
 
         for( const SCH_FIELD& field : directive->GetFields() )
         {
-            if( field.GetCanonicalName() == wxT( "Netclass" ) )
+            if( field.GetUntranslatedName() == wxT( "Netclass" ) )
             {
                 netclassFieldCount++;
                 BOOST_CHECK_EQUAL( field.GetText().ToStdString(), std::string( "HighSpeed" ) );
@@ -197,8 +197,8 @@ BOOST_AUTO_TEST_CASE( TranslatedFieldNameRoundTripsAsCanonical )
     BOOST_CHECK_EQUAL( directiveCount, 1 );
     BOOST_CHECK_EQUAL( netclassFieldCount, 1 );
 
-    // After re-saving, the file must converge on the canonical token regardless of the form it
-    // was loaded with.
+    // After re-saving, the file must use the untranslated token regardless of the form it was
+    // loaded with.
     wxString                resaved = MakeTempSchematicPath( "issue24403_legacy_de_resave" );
     std::vector<SCH_SHEET*> topSheets = m_schematic->GetTopLevelSheets();
     BOOST_REQUIRE( !topSheets.empty() );
@@ -210,7 +210,7 @@ BOOST_AUTO_TEST_CASE( TranslatedFieldNameRoundTripsAsCanonical )
     BOOST_REQUIRE( resavedFile.IsOpened() && resavedFile.ReadAll( &resavedContents ) );
 
     BOOST_CHECK_MESSAGE( resavedContents.Contains( wxT( "\"Netclass\"" ) ),
-                         "Re-saved schematic must use canonical \"Netclass\" token" );
+                         "Re-saved schematic must use untranslated \"Netclass\" token" );
     BOOST_CHECK_MESSAGE( !resavedContents.Contains( wxT( "\"Netzklasse\"" ) ),
                          "Re-saved schematic must drop the translated form" );
 }

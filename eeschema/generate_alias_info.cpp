@@ -163,7 +163,7 @@ protected:
 
     wxString GetHtmlFieldRow( const SCH_FIELD& aField ) const
     {
-        wxString name = aField.GetCanonicalName();
+        wxString name = aField.GetUntranslatedName();
         wxString text;
         wxString fieldhtml = FieldFormat;
 
@@ -250,7 +250,7 @@ protected:
 
                 for( const SCH_FIELD* parentField : parentFields )
                 {
-                    if( m_symbol->GetField( parentField->GetCanonicalName() ) )
+                    if( m_symbol->GetField( parentField->GetUntranslatedName() ) )
                         continue;
 
                     fieldtable += GetHtmlFieldRow( *parentField );

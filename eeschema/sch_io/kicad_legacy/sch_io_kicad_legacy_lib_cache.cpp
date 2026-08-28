@@ -666,7 +666,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
         // Fields in RAM must always have names, because we are trying to get
         // less dependent on field ids and more dependent on names.
         // Plus assumptions are made in the field editors.
-        field->SetName( GetCanonicalFieldName( field->GetId() ) );
+        field->SetName( GetDefaultFieldName( field->GetId(), UNTRANSLATED ) );
 
         // Ensure the VALUE field = the symbol name (can be not the case
         // with malformed libraries: edited by hand, or converted from other tools)
@@ -1718,11 +1718,11 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const SCH_FIELD* aField, int aLeg
                       aField->IsItalic() ? 'I' : 'N',
                       aField->IsBold() ? 'B' : 'N' );
 
-    // Translated names were stored in legacy files, so it's important not to save the
-    // default names as they weren't yet canonical.
+    // Translated names were stored in legacy files, so preserve the stored name instead of
+    // replacing it with the untranslated default name.
     if( !aField->IsMandatory()
             && !aField->GetName().IsEmpty()
-            && aField->GetName() != GetUserFieldName( aLegacyFieldIdx, !DO_TRANSLATE ) )
+            && aField->GetName() != GetUserFieldName( aLegacyFieldIdx, UNTRANSLATED ) )
     {
         aFormatter.Print( 0, " %s", EscapedUTF8( aField->GetName() ).c_str() );
     }

@@ -110,10 +110,9 @@ public:
     wxString GetName( bool aUseDefaultName = true ) const;
 
     /**
-     * Get a non-language-specific name for a field which can be used for storage, variable
-     * look-up, etc.
+     * Get the untranslated field name for storage, variable look-up, etc.
      */
-    wxString GetCanonicalName() const;
+    wxString GetUntranslatedName() const;
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 

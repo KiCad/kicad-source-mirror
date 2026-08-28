@@ -64,7 +64,7 @@ void PCB_FIELD::Serialize( kiapi::board::types::Field& field ) const
 {
     PCB_TEXT::Serialize( *field.mutable_text() );
 
-    field.set_name( GetCanonicalName().ToStdString() );
+    field.set_name( GetUntranslatedName().ToStdString() );
     field.mutable_id()->set_id( (int) GetId() );
     field.set_visible( IsVisible() );
 }
@@ -115,15 +115,15 @@ bool PCB_FIELD::Deserialize( const google::protobuf::Any &aContainer )
 wxString PCB_FIELD::GetName( bool aUseDefaultName ) const
 {
     if( IsMandatory() )
-        return GetCanonicalFieldName( m_id );
+        return GetDefaultFieldName( m_id, UNTRANSLATED );
     else if( m_name.IsEmpty() && aUseDefaultName )
-        return GetUserFieldName( m_ordinal, !DO_TRANSLATE );
+        return GetUserFieldName( m_ordinal, UNTRANSLATED );
     else
         return m_name;
 }
 
 
-wxString PCB_FIELD::GetCanonicalName() const
+wxString PCB_FIELD::GetUntranslatedName() const
 {
     return GetName( true );
 }
@@ -205,7 +205,7 @@ bool PCB_FIELD::HasHypertext() const
 wxString PCB_FIELD::GetTextTypeDescription() const
 {
     if( IsMandatory() )
-        return GetCanonicalFieldName( m_id );
+        return GetDefaultFieldName( m_id, UNTRANSLATED );
     else
         return _( "User Field" );
 }
@@ -363,7 +363,7 @@ static struct PCB_FIELD_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_FIELD, wxString>( _HKI( "Name" ),
-                     NO_SETTER( PCB_FIELD, wxString ), &PCB_FIELD::GetCanonicalName ) )
+                     NO_SETTER( PCB_FIELD, wxString ), &PCB_FIELD::GetUntranslatedName ) )
                 .SetIsHiddenFromLibraryEditors()
                 .SetIsHiddenFromPropertiesManager();
 

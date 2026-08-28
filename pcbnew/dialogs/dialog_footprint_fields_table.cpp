@@ -98,7 +98,7 @@ protected:
 
         if( row >= 0 && col >= 0 )
         {
-            if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+            if( m_dataModel->GetColFieldName( col ) == GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED ) )
             {
                 aMenu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ), _( "Show datasheet in browser" ) );
                 aMenu.AppendSeparator();
@@ -134,7 +134,7 @@ protected:
 
             for( row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
             {
-                if( m_viewControlsDataModel->GetCanonicalFieldName( row ) == fieldName )
+                if( m_viewControlsDataModel->GetUntranslatedFieldName( row ) == fieldName )
                     m_viewControlsDataModel->SetValueAsBool( row, SHOW_FIELD_COLUMN, show );
             }
 
@@ -456,7 +456,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::LoadFieldNames()
             {
                 m_mandatoryFieldListIndexes[aFieldId] = m_viewControlsDataModel->GetNumberRows();
 
-                AddField( GetCanonicalFieldName( aFieldId ), GetDefaultFieldName( aFieldId, DO_TRANSLATE ),
+                AddField( GetDefaultFieldName( aFieldId, UNTRANSLATED ), GetDefaultFieldName( aFieldId, TRANSLATED ),
                           aShow, aGroupBy );
             };
 
@@ -764,7 +764,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsAdded( BOARD& aPcb, std::vector<
         for( PCB_FIELD* field : ref.GetFootprint().GetFields() )
         {
             if( !field->IsMandatory() && !field->IsPrivate() )
-                AddField( field->GetCanonicalName(), field->GetName(), true, false, true );
+                AddField( field->GetUntranslatedName(), field->GetName(), true, false, true );
         }
     }
 
@@ -811,7 +811,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsChanged( BOARD& aPcb, std::vecto
         for( PCB_FIELD* field : ref.GetFootprint().GetFields() )
         {
             if( !field->IsMandatory() && !field->IsPrivate() )
-                AddField( field->GetCanonicalName(), field->GetName(), true, false, true );
+                AddField( field->GetUntranslatedName(), field->GetName(), true, false, true );
         }
     }
 

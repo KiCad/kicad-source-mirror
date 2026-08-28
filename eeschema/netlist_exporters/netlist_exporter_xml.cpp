@@ -236,9 +236,9 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, c
         }
     }
 
-    fields[GetCanonicalFieldName( FIELD_T::FOOTPRINT )] = footprint;
-    fields[GetCanonicalFieldName( FIELD_T::DATASHEET )] = datasheet;
-    fields[GetCanonicalFieldName( FIELD_T::DESCRIPTION )] = description;
+    fields[GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED )] = footprint;
+    fields[GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED )] = datasheet;
+    fields[GetDefaultFieldName( FIELD_T::DESCRIPTION, UNTRANSLATED )] = description;
 
     // Do not output field values blank in netlist:
     if( value.size() )
@@ -389,7 +389,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     continue;
 
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
-                xproperty->AddAttribute( wxT( "name" ), field.GetCanonicalName() );
+                xproperty->AddAttribute( wxT( "name" ), field.GetUntranslatedName() );
 
                 if( m_resolveTextVars )
                     xproperty->AddAttribute( wxT( "value" ), field.GetShownText( &sheet, false, 0, currentVariant ) );
@@ -400,7 +400,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             for( const SCH_FIELD& sheetField : sheet.Last()->GetFields() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
-                xproperty->AddAttribute( wxT( "name" ), sheetField.GetCanonicalName() );
+                xproperty->AddAttribute( wxT( "name" ), sheetField.GetUntranslatedName() );
 
                 if( m_resolveTextVars )
                     // do not allow GetShownText() to add any prefix useful only when displaying
@@ -572,7 +572,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                                 XNODE* xfield =
                                         node( wxT( "field" ), UnescapeString( resolvedValue ) );
                                 xfield->AddAttribute( wxT( "name" ),
-                                                      UnescapeString( baseField.GetCanonicalName() ) );
+                                                      UnescapeString( baseField.GetUntranslatedName() ) );
                                 xfields->AddChild( xfield );
                             }
 
@@ -1140,7 +1140,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
         {
             XNODE* xfield;
             xfields->AddChild( xfield = node( wxT( "field" ), field->GetText() ) );
-            xfield->AddAttribute( wxT( "name" ), field->GetCanonicalName() );
+            xfield->AddAttribute( wxT( "name" ), field->GetUntranslatedName() );
         }
 
     //----- show the pins here ------------------------------------
@@ -1566,7 +1566,7 @@ void NETLIST_EXPORTER_XML::getSheetComponentClasses()
 
         for( const SCH_FIELD& field : fields )
         {
-            if( field.GetCanonicalName() == wxT( "Component Class" ) )
+            if( field.GetUntranslatedName() == wxT( "Component Class" ) )
             {
                 if( field.GetShownText( sheetPath, false ) != wxEmptyString )
                     componentClasses.insert( field.GetShownText( sheetPath, false ) );

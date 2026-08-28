@@ -804,7 +804,7 @@ void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
                 if( field.IsPrivate() )
                     continue;
 
-                m_currentSymbolFieldNames.insert( field.GetCanonicalName() );
+                m_currentSymbolFieldNames.insert( field.GetUntranslatedName() );
             }
         }
         else if( item->Type() == SCH_SHEET_T )
@@ -816,7 +816,7 @@ void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
                 if( field.IsPrivate() )
                     continue;
 
-                m_currentSheetFieldNames.insert( field.GetCanonicalName() );
+                m_currentSheetFieldNames.insert( field.GetUntranslatedName() );
             }
         }
         else if( item->Type() == SCH_JUNCTION_T )
@@ -1013,9 +1013,9 @@ wxPGProperty* SCH_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
         colorProp->SetBackgroundColor( bg );
     }
 
-    if( aProperty->Name() == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+    if( aProperty->Name() == GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) )
         prop->SetEditor( PG_FPID_EDITOR::BuildEditorName( m_frame ) );
-    else if( aProperty->Name() == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+    else if( aProperty->Name() == GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED ) )
         prop->SetEditor( PG_URL_EDITOR::BuildEditorName( m_frame ) );
 
     return prop;

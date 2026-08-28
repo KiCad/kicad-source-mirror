@@ -99,7 +99,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     {
         int listIdx = (int) m_fieldsBox->GetCount();
 
-        m_fieldsBox->Append( GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
+        m_fieldsBox->Append( GetDefaultFieldName( fieldId, TRANSLATED ) );
 
         // List boxes aren't currently handled in DIALOG_SHIM's control-state-save/restore
         if( fieldId == FIELD_T::REFERENCE )
@@ -441,8 +441,7 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
     m_messagePanel->Clear();
     m_messagePanel->Flush( false );
 
-    // Create the set of fields to be updated. Use non translated (canonical) names
-    // for mandatory fields
+    // Create the set of fields to be updated. Use untranslated names for mandatory fields.
     m_updateFields.clear();
 
     for( unsigned ii = 0; ii < m_fieldsBox->GetCount(); ++ii )
@@ -454,7 +453,7 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
     for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
         if( m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[fieldId] ) )
-            m_updateFields.insert( GetCanonicalFieldName( fieldId ) );
+            m_updateFields.insert( GetDefaultFieldName( fieldId, UNTRANSLATED ) );
     }
 
     if( processMatchingSymbols( &commit) )
@@ -705,9 +704,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
             SCH_FIELD* libField = nullptr;
             bool       doUpdate = field.IsPrivate();
 
-            // Mandatory fields always exist in m_updateFields, but these names can be translated.
-            // so use GetCanonicalName().
-            doUpdate |= alg::contains( m_updateFields, field.GetCanonicalName() );
+            // Mandatory fields always exist in m_updateFields, but these names can be translated,
+            // so use GetUntranslatedName().
+            doUpdate |= alg::contains( m_updateFields, field.GetUntranslatedName() );
 
             if( !doUpdate )
                 continue;
@@ -788,7 +787,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
             if( libField->IsMandatory() )
                 continue;
 
-            if( !alg::contains( m_updateFields, libField->GetCanonicalName() ) )
+            if( !alg::contains( m_updateFields, libField->GetUntranslatedName() ) )
                 continue;
 
             if( !symbol->GetField( libField->GetName() ) )

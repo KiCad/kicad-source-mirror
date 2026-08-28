@@ -1386,9 +1386,9 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
             if( name.IsEmpty() )
             {
                 if( field->IsMandatory() )
-                    name = GetCanonicalFieldName( field->GetId() );
+                    name = GetDefaultFieldName( field->GetId(), UNTRANSLATED );
                 else
-                    name = GetUserFieldName( legacy_field_id, !DO_TRANSLATE );
+                    name = GetUserFieldName( legacy_field_id, UNTRANSLATED );
             }
 
             field->SetName( name );

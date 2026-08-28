@@ -109,14 +109,14 @@ protected:
         {
             deriveMenu->Enable( m_grid->IsEditable() && m_dataModel->IsRowSingleSymbol( row ) );
 
-            if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+            if( m_dataModel->GetColFieldName( col ) == GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) )
             {
                 wxMenuItem* selectFootprint =
                         aMenu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
                 selectFootprint->Enable( m_grid->IsEditable() );
                 aMenu.AppendSeparator();
             }
-            else if( m_dataModel->GetColFieldName( col ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
+            else if( m_dataModel->GetColFieldName( col ) == GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED ) )
             {
                 aMenu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ), _( "Show datasheet in browser" ) );
                 aMenu.AppendSeparator();
@@ -205,7 +205,7 @@ protected:
 
             for( row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
             {
-                if( m_viewControlsDataModel->GetCanonicalFieldName( row ) == fieldName )
+                if( m_viewControlsDataModel->GetUntranslatedFieldName( row ) == fieldName )
                     m_viewControlsDataModel->SetValueAsBool( row, SHOW_FIELD_COLUMN, show );
             }
 
@@ -517,7 +517,7 @@ void DIALOG_LIB_FIELDS_TABLE::LoadFieldNames()
             {
                 m_mandatoryFieldListIndexes[aFieldId] = m_viewControlsDataModel->GetNumberRows();
 
-                AddField( GetCanonicalFieldName( aFieldId ), GetDefaultFieldName( aFieldId, DO_TRANSLATE ),
+                AddField( GetDefaultFieldName( aFieldId, UNTRANSLATED ), GetDefaultFieldName( aFieldId, TRANSLATED ),
                           aShow, aGroupBy );
             };
 
@@ -692,12 +692,12 @@ std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
 
     for( BOM_PRESET& preset : presets )
     {
-        if( preset.sortField == GetDefaultFieldName( FIELD_T::REFERENCE, DO_TRANSLATE ) )
+        if( preset.sortField == GetDefaultFieldName( FIELD_T::REFERENCE, TRANSLATED ) )
             preset.sortField = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME;
 
         for( BOM_FIELD& field : preset.fieldsOrdered )
         {
-            if( field.name == GetCanonicalFieldName( FIELD_T::REFERENCE ) )
+            if( field.name == GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) )
             {
                 field.name = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME;
                 field.label = wxS( "Symbol Name" );
@@ -710,11 +710,11 @@ std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
             preset.groupSymbols = false;
             preset.fieldsOrdered = {
                 { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, wxS( "Symbol Name" ), true, false },
-                { GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false, false },
-                { GetCanonicalFieldName( FIELD_T::VALUE ), wxS( "Value" ), true, false },
-                { GetCanonicalFieldName( FIELD_T::FOOTPRINT ), wxS( "Footprint" ), true, false },
-                { GetCanonicalFieldName( FIELD_T::DATASHEET ), wxS( "Datasheet" ), true, false },
-                { GetCanonicalFieldName( FIELD_T::DESCRIPTION ), wxS( "Description" ), false, false },
+                { GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ), wxS( "Reference" ), false, false },
+                { GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ), wxS( "Value" ), true, false },
+                { GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ), wxS( "Footprint" ), true, false },
+                { GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED ), wxS( "Datasheet" ), true, false },
+                { GetDefaultFieldName( FIELD_T::DESCRIPTION, UNTRANSLATED ), wxS( "Description" ), false, false },
                 { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_KEYWORDS, wxS( "Keywords" ), true, false },
                 { wxS( "${EXCLUDE_FROM_BOM}" ), wxS( "Exclude From BOM" ), true, false },
                 { wxS( "${EXCLUDE_FROM_SIM}" ), wxS( "Exclude From Simulation" ), true, false },

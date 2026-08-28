@@ -754,7 +754,7 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
         {
             wxCHECK2( field, continue );
 
-            fields[field->GetCanonicalName()] = field->GetText();
+            fields[field->GetUntranslatedName()] = field->GetText();
         }
 
         component->SetFields( fields );

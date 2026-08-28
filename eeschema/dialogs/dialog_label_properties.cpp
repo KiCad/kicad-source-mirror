@@ -517,7 +517,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     {
         field.Offset( m_currentLabel->GetPosition() );
 
-        if( field.GetCanonicalName() == wxT( "Netclass" ) )
+        if( field.GetUntranslatedName() == wxT( "Netclass" ) )
         {
             field.SetLayer( LAYER_NETCLASS_REFS );
         }
@@ -543,7 +543,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
     {
         SCH_FIELD&      field = m_fields->at( ii );
-        const wxString& fieldName = field.GetCanonicalName();
+        const wxString& fieldName = field.GetUntranslatedName();
         const wxString& fieldText = field.GetText();
 
         if( fieldName.IsEmpty() && fieldText.IsEmpty() )
@@ -558,7 +558,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
             for( int jj = 0; jj < m_fields->GetNumberRows(); ++jj )
             {
-                if( m_fields->at( jj ).GetCanonicalName() == wxT( "Netclass" ) )
+                if( m_fields->at( jj ).GetUntranslatedName() == wxT( "Netclass" ) )
                     netclassFieldCount++;
             }
 

@@ -45,8 +45,8 @@ wxString VIEW_CONTROLS_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
     case DISPLAY_NAME_COLUMN:
         for( FIELD_T fieldId : MANDATORY_FIELDS )
         {
-            if( GetDefaultFieldName( fieldId, !DO_TRANSLATE ) == rowData.name )
-                return GetDefaultFieldName( fieldId, DO_TRANSLATE );
+            if( GetDefaultFieldName( fieldId, UNTRANSLATED ) == rowData.name )
+                return GetDefaultFieldName( fieldId, TRANSLATED );
         }
 
         return rowData.name;
@@ -148,7 +148,7 @@ void VIEW_CONTROLS_GRID_DATA_MODEL::DeleteRow( int aRow )
 }
 
 
-wxString VIEW_CONTROLS_GRID_DATA_MODEL::GetCanonicalFieldName( int aRow )
+wxString VIEW_CONTROLS_GRID_DATA_MODEL::GetUntranslatedFieldName( int aRow )
 {
     wxCHECK( aRow >= 0 && aRow < GetNumberRows(), wxEmptyString );
 
@@ -158,7 +158,7 @@ wxString VIEW_CONTROLS_GRID_DATA_MODEL::GetCanonicalFieldName( int aRow )
 }
 
 
-void VIEW_CONTROLS_GRID_DATA_MODEL::SetCanonicalFieldName( int aRow, const wxString& aName )
+void VIEW_CONTROLS_GRID_DATA_MODEL::SetUntranslatedFieldName( int aRow, const wxString& aName )
 {
     wxCHECK( aRow >= 0 && aRow < GetNumberRows(), /* void */ );
 

@@ -962,8 +962,8 @@ void BACK_ANNOTATE::applyChangelist()
                 SCH_FIELD*      symField = symbol->GetField( fpFieldName );
 
                 // Skip fields that are individually controlled
-                if( fpFieldName == GetCanonicalFieldName( FIELD_T::REFERENCE )
-                    || fpFieldName == GetCanonicalFieldName( FIELD_T::VALUE ) )
+                if( fpFieldName == GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED )
+                    || fpFieldName == GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) )
                 {
                     continue;
                 }
@@ -979,7 +979,7 @@ void BACK_ANNOTATE::applyChangelist()
                     m_changesCount++;
                     msg.Printf( _( "Change %s field '%s' value to '%s'." ),
                                 DescribeRef( ref.GetRef() ),
-                                EscapeHTML( symField->GetCanonicalName() ),
+                                EscapeHTML( symField->GetUntranslatedName() ),
                                 EscapeHTML( fpFieldValue ) );
 
                     if( !m_dryRun )
@@ -1020,7 +1020,7 @@ void BACK_ANNOTATE::applyChangelist()
                 if( field.IsMandatory() )
                     continue;
 
-                if( fpData.m_fieldsMap.find( field.GetCanonicalName() ) == fpData.m_fieldsMap.end() )
+                if( fpData.m_fieldsMap.find( field.GetUntranslatedName() ) == fpData.m_fieldsMap.end() )
                 {
                     m_changesCount++;
                     msg.Printf( _( "Delete %s field '%s.'" ),

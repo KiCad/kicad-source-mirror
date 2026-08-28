@@ -413,7 +413,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     for( SCH_FIELD& field : *m_fields )
     {
-        const wxString& fieldName = field.GetCanonicalName();
+        const wxString& fieldName = field.GetUntranslatedName();
 
         if( field.IsEmpty() )
             continue;
@@ -573,7 +573,7 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
     m_grid->OnAddRow(
             [&]() -> std::pair<int, int>
             {
-                SCH_FIELD newField( m_sheet, FIELD_T::SHEET_USER, GetUserFieldName( m_fields->size(), DO_TRANSLATE ) );
+                SCH_FIELD newField( m_sheet, FIELD_T::SHEET_USER, GetUserFieldName( m_fields->size(), TRANSLATED ) );
 
                 newField.SetTextAngle( m_fields->GetField( FIELD_T::SHEET_NAME )->GetTextAngle() );
                 newField.SetVisible( false );

@@ -37,9 +37,9 @@ struct FOOTPRINT_FIELDS_TABLE_PRESENCE_FIXTURE
         m_footprint->SetReference( wxS( "U1" ) );
         m_board.Add( m_footprint );
 
-        m_model.AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
+        m_model.AddColumn( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ), wxS( "Reference" ), false );
 
-        int referenceCol = m_model.GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
+        int referenceCol = m_model.GetFieldNameCol( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) );
         BOOST_REQUIRE( referenceCol >= 0 );
         m_model.SetShowColumn( referenceCol, true );
     }

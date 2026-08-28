@@ -241,7 +241,7 @@ std::vector<TEXT_VAR_REF_KEY> SCHEMATIC_TEXT_VAR_ADAPTER::ExtractSourceKeys( EDA
             TEXT_VAR_REF_KEY key;
             key.kind      = TEXT_VAR_REF_KEY::KIND::CROSS_REF;
             key.primary   = refdes;
-            key.secondary = field.GetCanonicalName();
+            key.secondary = field.GetUntranslatedName();
             out.push_back( key );
         }
     }
