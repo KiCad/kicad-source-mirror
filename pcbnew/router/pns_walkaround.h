@@ -135,6 +135,8 @@ public:
 
     void SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies);
 
+    void SetCollisionFilter( COLLISION_FILTER_FUNC aFilter );
+
 private:
     void start( const LINE& aInitialPath );
     bool singleStep();
