@@ -164,7 +164,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aL
             {
                 continue;
             }
-            else if( m_router->GetInterface()->GetNetCode( aNet) <= 0 || item->Net() == aNet )
+            else if( m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR || m_router->GetInterface()->GetNetCode( aNet) <= 0 || item->Net() == aNet )
             {
                 if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
                 {
@@ -406,7 +406,8 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     for( NET_HANDLE net : nets )
     {
-        endItem = pickSingleItem( mousePos, net, layer, false, { m_startItem } );
+        
+        endItem = pickSingleItem( mousePos, net, layer, false, {} ); //{ m_startItem } );
 
         if( endItem )
             break;
