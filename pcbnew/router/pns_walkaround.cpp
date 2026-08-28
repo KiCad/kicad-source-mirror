@@ -91,6 +91,17 @@ void WALKAROUND::RestrictToCluster( bool aEnabled, const TOPOLOGY::CLUSTER& aClu
     }
 }
 
+static wxString policy2string ( WALKAROUND::WALK_POLICY policy )
+{
+    switch(policy)
+    {
+        case WALKAROUND::WP_CCW: return wxT("ccw");
+        case WALKAROUND::WP_CW: return wxT("cw");
+        case WALKAROUND::WP_SHORTEST: return wxT("shortest");
+    }
+    return wxT("?");
+}
+
 bool WALKAROUND::singleStep()
 {
     TOPOLOGY topo( m_world );
@@ -121,8 +132,10 @@ bool WALKAROUND::singleStep()
         }
 
 
-        pendingClusters[ i ] = topo.AssembleCluster( obstacle->m_item, line.Layer(), 0.0, line.Net() );
-        PNS_DBG( Dbg(), AddItem, obstacle->m_item, BLUE, 10000, wxString::Format( "col-item owner-depth %d cl-items=%d", static_cast<const NODE*>( obstacle->m_item->Owner() )->Depth(), (int) pendingClusters[i].m_items.size() ) );
+        int clusterMargin = 2 * obstacle->m_clearance + line.Width() ;
+
+        pendingClusters[ i ] = topo.AssembleCluster( obstacle->m_item, line.Layer(), 0.0, line.Net(), clusterMargin );
+        PNS_DBG( Dbg(), AddItem, obstacle->m_item, BLUE, 10000, wxString::Format( "col-item owner-depth %d cl-items=%d cl-margin=%d", static_cast<const NODE*>( obstacle->m_item->Owner() )->Depth(), (int) pendingClusters[i].m_items.size(), clusterMargin ) );
 
     }
 

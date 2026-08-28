@@ -1182,7 +1182,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
     return true;
 }
 
-const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit, NET_HANDLE aExcludedNet )
+const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit, NET_HANDLE aExcludedNet, int aOverrideClearance )
 {
     CLUSTER cluster;
     std::deque<ITEM*> pending;
@@ -1190,7 +1190,7 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
     COLLISION_SEARCH_OPTIONS opts;
 
     opts.m_differentNetsOnly = false;
-    opts.m_overrideClearance = 0;
+    opts.m_overrideClearance = aOverrideClearance;
 
     pending.push_back( aStart );
 

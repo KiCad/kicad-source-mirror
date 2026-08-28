@@ -100,11 +100,9 @@ public:
 
     bool AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair );
 
-    const CLUSTER AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit = 0.0, NET_HANDLE aExcludedNet = nullptr );
+    const CLUSTER AssembleCluster( ITEM* aStart, int aLayer, double aAreaExpansionLimit = 0.0, NET_HANDLE aExcludedNet = nullptr, int aOverrideClearance = 0 );
 
 private:
-    const int DP_PARALLELITY_THRESHOLD = 5;
-
     struct PATH_RESULT
     {
         ITEM_SET    m_items;
