@@ -1131,6 +1131,8 @@ int SCH_INSPECTION_TOOL::CompareSchematicWithHistory( const TOOL_EVENT& aEvent )
     drillCurrent = { schEditorFrame->GetCurrentSheet(), curSch.get(), curTempDir + wxS( "/" ) + rootRel,
                      view.compScope };
 
+    int shownIndex = startIndex;
+
     SCH_SCREEN* curScreen = schEditorFrame->GetCurrentSheet().LastScreen();
     wxString    referenceLabel = curScreen ? curScreen->GetFileName() : mySch->GetFileName();
 
@@ -1240,9 +1242,13 @@ int SCH_INSPECTION_TOOL::CompareSchematicWithHistory( const TOOL_EVENT& aEvent )
                 } );
     }
 
-    dlgDiff->SetRevisionChooser( labels, startIndex,
+    dlgDiff->SetRevisionChooser(
+            labels, startIndex,
             [&]( int aIndex )
             {
+                if( aIndex == shownIndex )
+                    return;
+
                 std::unique_ptr<SCHEMATIC> newSch;
                 PROJECT*                   newPrj = nullptr;
                 wxString                   newTempDir;
@@ -1262,6 +1268,7 @@ int SCH_INSPECTION_TOOL::CompareSchematicWithHistory( const TOOL_EVENT& aEvent )
                 curSch = std::move( newSch );
                 curPrj = newPrj;
                 curTempDir = newTempDir;
+                shownIndex = aIndex;
 
                 // Restart drilling from the new revision's root.
                 drillBack.clear();
