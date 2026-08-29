@@ -115,10 +115,12 @@ extern const KICOMMON_API std::string StandaloneCrossProbeClientName;
 KICOMMON_API bool PackKiwayApiMessage( const google::protobuf::Message& aMessage, std::string& aBytes );
 
 // Not KICOMMON_API: depends on font stuff in GAL for now
-void PackTextAttributes( kiapi::common::types::TextAttributes& aOutput, const TEXT_ATTRIBUTES& aInput );
+void PackTextAttributes( kiapi::common::types::TextAttributes& aOutput, const TEXT_ATTRIBUTES& aInput,
+                         const EDA_IU_SCALE& aScale = pcbIUScale );
 
 // Not KICOMMON_API: depends on font stuff in GAL for now
-void UnpackTextAttributes( TEXT_ATTRIBUTES& aOutput, const kiapi::common::types::TextAttributes& aInput );
+void UnpackTextAttributes( TEXT_ATTRIBUTES& aOutput, const kiapi::common::types::TextAttributes& aInput,
+                           const EDA_IU_SCALE& aScale = pcbIUScale );
 
 } // namespace kiapi::common
 

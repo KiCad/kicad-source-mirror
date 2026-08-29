@@ -178,7 +178,7 @@ void EDA_TEXT::Serialize( kiapi::common::types::Text& text, const EDA_IU_SCALE& 
 
     types::TextAttributes* attrs = text.mutable_attributes();
 
-    PackTextAttributes( *attrs, GetAttributes() );
+    PackTextAttributes( *attrs, GetAttributes(), aScale );
     attrs->set_visible( true );
 
 }
@@ -209,7 +209,7 @@ bool EDA_TEXT::Deserialize( const kiapi::common::types::Text& text, const EDA_IU
     if( text.has_attributes() )
     {
         TEXT_ATTRIBUTES attrs = GetAttributes();
-        UnpackTextAttributes( attrs, text.attributes() );
+        UnpackTextAttributes( attrs, text.attributes(), aScale );
         SetAttributes( attrs );
     }
 

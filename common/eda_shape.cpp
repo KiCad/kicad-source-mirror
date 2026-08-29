@@ -251,7 +251,7 @@ void EDA_SHAPE::Serialize( kiapi::common::types::GraphicShape& shape, const EDA_
 
     types::GraphicFillAttributes* fill = shape.mutable_attributes()->mutable_fill();
 
-    PackStroke( *shape.mutable_attributes()->mutable_stroke(), m_stroke );
+    PackStroke( *shape.mutable_attributes()->mutable_stroke(), m_stroke, aScale );
 
     fill->set_fill_type( ToProtoEnum<FILL_T, types::GraphicFillType>( GetFillMode() ) );
 
@@ -380,7 +380,7 @@ bool EDA_SHAPE::Deserialize( const kiapi::common::types::GraphicShape& shape, co
     m_endsSwapped = false;
     m_fillColor = COLOR4D::UNSPECIFIED;
 
-    UnpackStroke( m_stroke, shape.attributes().stroke() );
+    UnpackStroke( m_stroke, shape.attributes().stroke(), aScale );
 
     if( shape.attributes().has_fill() )
     {
