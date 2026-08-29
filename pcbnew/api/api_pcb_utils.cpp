@@ -250,7 +250,7 @@ void PackEmbeddedFiles( common::types::EmbeddedFiles& aOutput, const EMBEDDED_FI
 
 bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const common::types::EmbeddedFiles& aProto )
 {
-    aOutput.ClearEmbeddedFiles();
+    EMBEDDED_FILES files;
 
     for( const common::types::EmbeddedFile& protoFile : aProto.files() )
     {
@@ -266,8 +266,11 @@ bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const common::types::Embedded
         if( !file->Validate() )
             return false;
 
-        aOutput.AddFile( file );
+        files.AddFile( file );
     }
+
+    aOutput.ClearEmbeddedFiles();
+    aOutput = files;
 
     return true;
 }
