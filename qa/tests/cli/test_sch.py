@@ -346,7 +346,8 @@ def test_sch_export_erc( kitest: KiTestFixture,
 
     # some of our netlist formats are not cross platform so skip for now
     if not skip_compare:
-        assert utils.textdiff_files( compare_filepath, output_filepath, line_skip_count )
+        assert utils.textdiff_files( compare_filepath, output_filepath, line_skip_count,
+                                     skip_line_regexes=[ r'^\s*"kicad_version":' ] )
 
     kitest.add_attachment( output_filepath )
 
