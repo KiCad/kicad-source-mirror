@@ -24,6 +24,7 @@ import difflib
 import os
 import pathlib
 import json
+import re
 
 import cairosvg
 import logging
@@ -120,13 +121,20 @@ def run_and_capture( command: list[str], cwd: Optional[Path] = None ) -> Tuple[ 
 
     return out, err, proc.returncode
 
-
-def textdiff_files( golden_filepath: Path, new_filepath: Path, skip: int = 0 ) -> bool:
+def textdiff_files( golden_filepath: Path, new_filepath: Path, skip: int = 0,
+                    skip_line_regexes: Optional[list[str]] = None ) -> bool:
     with open( golden_filepath, 'r' ) as f:
         golden_lines = f.readlines()[skip:]
 
     with open( new_filepath, 'r' ) as f:
         new_lines = f.readlines()[skip:]
+
+    if skip_line_regexes:
+        patterns = [ re.compile( pattern ) for pattern in skip_line_regexes ]
+        golden_lines = [ line for line in golden_lines
+                         if not any( pattern.search( line ) for pattern in patterns ) ]
+        new_lines = [ line for line in new_lines
+                      if not any( pattern.search( line ) for pattern in patterns ) ]
 
     diff = difflib.unified_diff(
         golden_lines, new_lines, fromfile=str(golden_filepath), tofile=str(new_filepath)
