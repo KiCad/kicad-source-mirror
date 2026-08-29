@@ -1,9 +1,9 @@
 /*
  * libpopcnt.h - C/C++ library for counting the number of 1 bits (bit
  * population count) in an array as quickly as possible using
- * specialized CPU instructions i.e. POPCNT, AVX2, AVX512, NEON.
+ * specialized CPU instructions i.e. POPCNT, AVX2, AVX512, ARM NEON, ARM SVE.
  *
- * Copyright (c) 2016 - 2024, Kim Walisch
+ * Copyright (c) 2016 - 2026, Kim Walisch
  * Copyright (c) 2016 - 2018, Wojciech Muła
  *
  * All rights reserved.
@@ -33,6 +33,7 @@
 #define LIBPOPCNT_H
 
 #include <stdint.h>
+#include <string.h>
 
 #ifndef __has_builtin
   #define __has_builtin(x) 0
@@ -118,20 +119,26 @@
 #if defined(LIBPOPCNT_X86_OR_X64) && \
     defined(_MSC_VER)
   /*
-   * There is an LLVM/Clang bug on Windows where function targets
-   * for AVX2 and AVX512 fail to compile unless the user compiles
+   * There was an LLVM/Clang bug on Windows where function targets
+   * for AVX2 and AVX512 failed to compile unless the user compiled
    * using the options /arch:AVX2 and /arch:AVX512.
-   * All Clang versions <= 18.0 (from 2024) are affected by this bug.
-   * However, I expect this bug will be fixed in near future:
+   * All Clang versions <= 18.0 (from 2024) were affected by this bug,
+   * it has been fixed in Clang 19. Hence for Clang >= 22 we enable
+   * AVX2 & AVX512 function multi-versioning on Windows.
    * https://github.com/llvm/llvm-project/issues/53520
    */
   #if defined(__clang__)
-    #if defined(__AVX2__)
-      #define LIBPOPCNT_HAVE_AVX2
-    #endif
-    #if defined(__AVX512__)
+    #if LIBPOPCNT_CLANG_PREREQ(22, 0)
       #define LIBPOPCNT_HAVE_AVX2
       #define LIBPOPCNT_HAVE_AVX512
+    #else
+      #if defined(__AVX2__)
+        #define LIBPOPCNT_HAVE_AVX2
+      #endif
+      #if defined(__AVX512__)
+        #define LIBPOPCNT_HAVE_AVX2
+        #define LIBPOPCNT_HAVE_AVX512
+      #endif
     #endif
   /* MSVC 2017 or later does not require
   * /arch:AVX2 or /arch:AVX512 */
@@ -139,6 +146,40 @@
     #define LIBPOPCNT_HAVE_AVX2
     #define LIBPOPCNT_HAVE_AVX512
   #endif
+#endif
+
+/*
+ * Enable ARM SVE runtime dispatch when:
+ *   1) We are on AArch64 but SVE is NOT already enabled by the user
+ *      (e.g. -march=armv8-a+sve). If SVE is statically enabled the
+ *      dedicated SVE popcnt() branch above is used instead.
+ *   2) The compiler fully supports __attribute__((target("+sve")))
+ *      and <arm_sve.h> SVE ACLE intrinsics. The minimum versions are:
+ *        GCC >= 14: On GCC 13 and earlier __attribute__((target("+sve")))
+ *          leaks the SVE target state into the rest of the translation
+ *          unit, which breaks inlining of always_inline C++ standard
+ *          library functions with "target specific option mismatch"
+ *          errors (verified: fails on GCC 13, fixed in GCC 14).
+ *        Clang >= 16.0: Clang's target attribute parsing for AArch64
+ *          was X86-shaped before Clang 16. The "+sve" format was only
+ *          properly supported starting with Clang 16 (LLVM patch D133848,
+ *          committed October 2022). On Clang 11-15 the attribute is
+ *          silently ignored, causing SVE intrinsics to fail at compile time.
+ *   3) The OS provides a reliable SVE detection API:
+ *       * Linux/Android: getauxval(AT_HWCAP) via <sys/auxv.h>
+ *       * Windows ARM64: IsProcessorFeaturePresent() via <windows.h>
+ */
+#if (defined(__aarch64__) || defined(_M_ARM64)) && \
+    !defined(__ARM_FEATURE_SVE) && \
+    __has_attribute(target) && \
+    __has_include(<arm_sve.h>) && \
+    (LIBPOPCNT_GNUC_PREREQ(14, 0) || LIBPOPCNT_CLANG_PREREQ(16, 0)) && \
+    (defined(_WIN32) || \
+     ((defined(__linux__) || \
+       defined(__gnu_linux__) || \
+       defined(__ANDROID__)) && \
+      __has_include(<sys/auxv.h>)))
+  #define LIBPOPCNT_HAVE_ARM_SVE_MULTIARCH
 #endif
 
 /*
@@ -158,6 +199,94 @@
     (defined(LIBPOPCNT_HAVE_AVX2) && !defined(__AVX2__)) || \
     (defined(LIBPOPCNT_HAVE_POPCNT) && !defined(__POPCNT__)))
   #define LIBPOPCNT_HAVE_CPUID
+#endif
+
+#if defined(LIBPOPCNT_HAVE_CPUID)
+  #if defined(__cplusplus)
+    #include <atomic>
+    static std::atomic<int> libpopcnt_cpuid(-1);
+  #elif defined(__STDC_VERSION__) && \
+        __STDC_VERSION__ >= 201112L && \
+       !defined(__STDC_NO_ATOMICS__) && \
+        __has_include(<stdatomic.h>)
+    #include <stdatomic.h>
+    #define LIBPOPCNT_HAVE_C11_ATOMIC
+    static atomic_int libpopcnt_cpuid = -1;
+  #else
+    static long libpopcnt_cpuid = -1;
+  #endif
+#endif
+
+#if defined(LIBPOPCNT_HAVE_ARM_SVE_MULTIARCH)
+  #if defined(__cplusplus)
+    #include <atomic>
+    static std::atomic<int> libpopcnt_arm_sve(-1);
+  #elif defined(__STDC_VERSION__) && \
+        __STDC_VERSION__ >= 201112L && \
+       !defined(__STDC_NO_ATOMICS__) && \
+        __has_include(<stdatomic.h>)
+    #include <stdatomic.h>
+    #define LIBPOPCNT_HAVE_C11_ATOMIC_ARM_SVE
+    static atomic_int libpopcnt_arm_sve = -1;
+  #else
+    static int libpopcnt_arm_sve = -1;
+  #endif
+#endif
+
+/*
+ * ARM SVE detection helper for the runtime dispatch. The OS
+ * detection headers (<windows.h>, <sys/auxv.h>) are included
+ * here, outside the extern "C" block below, so that we never
+ * pull a large OS header into a C linkage scope.
+ */
+#if defined(LIBPOPCNT_HAVE_ARM_SVE_MULTIARCH)
+  #if defined(_WIN32)
+    /*
+     * Prevent any issues with std::min() and std::max()
+     * in the user's code when including <windows.h>.
+     */
+    #ifndef NOMINMAX
+      #define LIBPOPCNT_NOMINMAX
+      #define NOMINMAX
+    #endif
+
+    #include <windows.h>
+
+    #ifdef LIBPOPCNT_NOMINMAX
+      #undef LIBPOPCNT_NOMINMAX
+      #undef NOMINMAX
+    #endif
+
+    /*
+     * PF_ARM_SVE_INSTRUCTIONS_AVAILABLE was added in
+     * the Windows 11 SDK. Define the value (39)
+     * ourselves so we also work with older SDKs.
+     */
+    #ifndef PF_ARM_SVE_INSTRUCTIONS_AVAILABLE
+      #define PF_ARM_SVE_INSTRUCTIONS_AVAILABLE 39
+    #endif
+  #elif __has_include(<sys/auxv.h>)
+    #include <sys/auxv.h>
+  #endif
+
+  /*
+   * HWCAP_SVE bit for AArch64. We define this ourselves
+   * instead of including <asm/hwcap.h> which is not
+   * installed by default on some Linux distros.
+   */
+  #ifndef LIBPOPCNT_HWCAP_SVE
+    #define LIBPOPCNT_HWCAP_SVE (1 << 22)
+  #endif
+
+  static inline int libpopcnt_has_arm_sve(void)
+  {
+  #if defined(_WIN32)
+    return IsProcessorFeaturePresent(PF_ARM_SVE_INSTRUCTIONS_AVAILABLE) ? 1 : 0;
+  #else
+    unsigned long hwcaps = getauxval(AT_HWCAP);
+    return (hwcaps & LIBPOPCNT_HWCAP_SVE) ? 1 : 0;
+  #endif
+  }
 #endif
 
 #ifdef __cplusplus
@@ -225,7 +354,7 @@ static inline uint64_t popcnt64(uint64_t x)
 
 static inline uint64_t popcnt64(uint64_t x)
 {
-  return __popcnt((uint32_t) x) +
+  return __popcnt((uint32_t) x) + 
          __popcnt((uint32_t)(x >> 32));
 }
 
@@ -436,7 +565,6 @@ static inline uint64_t popcnt_avx2(const __m256i* ptr, uint64_t size)
 
   uint64_t i = 0;
   uint64_t limit = size - size % 16;
-  uint64_t* cnt64;
 
   for(; i < limit; i += 16)
   {
@@ -468,7 +596,31 @@ static inline uint64_t popcnt_avx2(const __m256i* ptr, uint64_t size)
   for(; i < size; i++)
     cnt = _mm256_add_epi64(cnt, popcnt256(_mm256_loadu_si256(ptr + i)));
 
-  cnt64 = (uint64_t*) &cnt;
+  uint64_t* cnt64 = (uint64_t*) &cnt;
+
+  return cnt64[0] +
+         cnt64[1] +
+         cnt64[2] +
+         cnt64[3];
+}
+
+/*
+ * Plain popcnt256 loop for medium arrays (>= 96 && < 1024 bytes).
+ * For small arrays the AVX2 Harley-Seal reduction overhead
+ * does not pay off. Hence, this simpler AVX2 algorithm runs
+ * faster for these medium array sizes.
+ */
+#if __has_attribute(target)
+  __attribute__ ((target ("avx2")))
+#endif
+static inline uint64_t popcnt_avx2_medium(const __m256i* ptr, uint64_t size)
+{
+  __m256i cnt = _mm256_setzero_si256();
+
+  for (uint64_t i = 0; i < size; i++)
+    cnt = _mm256_add_epi64(cnt, popcnt256(_mm256_loadu_si256(ptr + i)));
+
+  uint64_t* cnt64 = (uint64_t*) &cnt;
 
   return cnt64[0] +
          cnt64[1] +
@@ -486,50 +638,130 @@ static inline uint64_t popcnt_avx2(const __m256i* ptr, uint64_t size)
 #if __has_attribute(target)
   __attribute__ ((target ("avx512f,avx512bw,avx512vpopcntdq")))
 #endif
-static inline uint64_t popcnt_avx512(const uint8_t* ptr8, uint64_t size)
+static inline uint64_t popcnt_avx512(const uint8_t* ptr, uint64_t size)
 {
-    __m512i cnt = _mm512_setzero_si512();
-    const uint64_t* ptr64 = (const uint64_t*) ptr8;
-    uint64_t size64 = size / sizeof(uint64_t);
     uint64_t i = 0;
+    __m512i cnt0 = _mm512_setzero_si512();
 
-    for (; i + 32 <= size64; i += 32)
+    if (i + 256 <= size)
     {
-      __m512i vec0 = _mm512_loadu_epi64(&ptr64[i + 0]);
-      __m512i vec1 = _mm512_loadu_epi64(&ptr64[i + 8]);
-      __m512i vec2 = _mm512_loadu_epi64(&ptr64[i + 16]);
-      __m512i vec3 = _mm512_loadu_epi64(&ptr64[i + 24]);
+      __m512i cnt1 = _mm512_setzero_si512();
+      __m512i cnt2 = _mm512_setzero_si512();
+      __m512i cnt3 = _mm512_setzero_si512();
 
-      vec0 = _mm512_popcnt_epi64(vec0);
-      vec1 = _mm512_popcnt_epi64(vec1);
-      vec2 = _mm512_popcnt_epi64(vec2);
-      vec3 = _mm512_popcnt_epi64(vec3);
+      do
+      {
+        __m512i vec0 = _mm512_loadu_epi64(&ptr[i + 0]);
+        __m512i vec1 = _mm512_loadu_epi64(&ptr[i + 64]);
+        __m512i vec2 = _mm512_loadu_epi64(&ptr[i + 128]);
+        __m512i vec3 = _mm512_loadu_epi64(&ptr[i + 192]);
 
-      cnt = _mm512_add_epi64(cnt, vec0);
-      cnt = _mm512_add_epi64(cnt, vec1);
-      cnt = _mm512_add_epi64(cnt, vec2);
-      cnt = _mm512_add_epi64(cnt, vec3);
+        vec0 = _mm512_popcnt_epi64(vec0);
+        vec1 = _mm512_popcnt_epi64(vec1);
+        vec2 = _mm512_popcnt_epi64(vec2);
+        vec3 = _mm512_popcnt_epi64(vec3);
+
+        cnt0 = _mm512_add_epi64(cnt0, vec0);
+        cnt1 = _mm512_add_epi64(cnt1, vec1);
+        cnt2 = _mm512_add_epi64(cnt2, vec2);
+        cnt3 = _mm512_add_epi64(cnt3, vec3);
+        i += 256;
+      }
+      while (i + 256 <= size);
+
+      cnt0 = _mm512_add_epi64(cnt0, cnt1);
+      cnt2 = _mm512_add_epi64(cnt2, cnt3);
+      cnt0 = _mm512_add_epi64(cnt0, cnt2);
     }
 
-    for (; i + 8 <= size64; i += 8)
+    for (; i + 64 <= size; i += 64)
     {
-      __m512i vec = _mm512_loadu_epi64(&ptr64[i]);
+      __m512i vec = _mm512_loadu_epi64(&ptr[i]);
       vec = _mm512_popcnt_epi64(vec);
-      cnt = _mm512_add_epi64(cnt, vec);
+      cnt0 = _mm512_add_epi64(cnt0, vec);
     }
-
-    i *= sizeof(uint64_t);
 
     /* Process last 63 bytes */
     if (i < size)
     {
       __mmask64 mask = (__mmask64) (0xffffffffffffffffull >> (i + 64 - size));
-      __m512i vec = _mm512_maskz_loadu_epi8(mask, &ptr8[i]);
+      __m512i vec = _mm512_maskz_loadu_epi8(mask, &ptr[i]);
       vec = _mm512_popcnt_epi64(vec);
-      cnt = _mm512_add_epi64(cnt, vec);
+      cnt0 = _mm512_add_epi64(cnt0, vec);
     }
 
-    return _mm512_reduce_add_epi64(cnt);
+    return _mm512_reduce_add_epi64(cnt0);
+}
+
+#endif
+
+/*
+ * ARM SVE popcount kernel, shared by two popcnt() code paths:
+ *   1) SVE statically enabled (e.g. -march=armv8-a+sve).
+ *   2) ARM SVE runtime dispatch from the NEON popcnt() (multiarch),
+ *      in which case it is compiled using
+ *      __attribute__((target("+sve"))) so that it works
+ *      even without -march=armv8-a+sve.
+ */
+#if (defined(__ARM_FEATURE_SVE) || \
+     defined(LIBPOPCNT_HAVE_ARM_SVE_MULTIARCH)) && \
+    __has_include(<arm_sve.h>)
+
+#include <arm_sve.h>
+
+#if defined(LIBPOPCNT_HAVE_ARM_SVE_MULTIARCH) && \
+    __has_attribute(target)
+  __attribute__((target("+sve")))
+#endif
+static inline uint64_t popcnt_arm_sve(const void* data, uint64_t size)
+{
+  uint64_t i = 0;
+  const uint8_t* ptr = (const uint8_t*) data;
+  svuint64_t vcnt0 = svdup_u64(0);
+
+  if (i + svcntb() * 4 <= size)
+  {
+    svuint64_t vcnt1 = svdup_u64(0);
+    svuint64_t vcnt2 = svdup_u64(0);
+    svuint64_t vcnt3 = svdup_u64(0);
+
+    do
+    {
+      svuint64_t vec0 = svreinterpret_u64_u8(svld1_u8(svptrue_b8(), &ptr[i + svcntb() * 0]));
+      svuint64_t vec1 = svreinterpret_u64_u8(svld1_u8(svptrue_b8(), &ptr[i + svcntb() * 1]));
+      svuint64_t vec2 = svreinterpret_u64_u8(svld1_u8(svptrue_b8(), &ptr[i + svcntb() * 2]));
+      svuint64_t vec3 = svreinterpret_u64_u8(svld1_u8(svptrue_b8(), &ptr[i + svcntb() * 3]));
+
+      vec0 = svcnt_u64_x(svptrue_b64(), vec0);
+      vec1 = svcnt_u64_x(svptrue_b64(), vec1);
+      vec2 = svcnt_u64_x(svptrue_b64(), vec2);
+      vec3 = svcnt_u64_x(svptrue_b64(), vec3);
+
+      vcnt0 = svadd_u64_x(svptrue_b64(), vcnt0, vec0);
+      vcnt1 = svadd_u64_x(svptrue_b64(), vcnt1, vec1);
+      vcnt2 = svadd_u64_x(svptrue_b64(), vcnt2, vec2);
+      vcnt3 = svadd_u64_x(svptrue_b64(), vcnt3, vec3);
+      i += svcntb() * 4;
+    }
+    while (i + svcntb() * 4 <= size);
+
+    vcnt0 = svadd_u64_x(svptrue_b64(), vcnt0, vcnt1);
+    vcnt2 = svadd_u64_x(svptrue_b64(), vcnt2, vcnt3);
+    vcnt0 = svadd_u64_x(svptrue_b64(), vcnt0, vcnt2);
+  }
+
+  svbool_t pg = svwhilelt_b8(i, size);
+
+  while (svptest_any(svptrue_b8(), pg))
+  {
+    svuint64_t vec = svreinterpret_u64_u8(svld1_u8(pg, &ptr[i]));
+    vec = svcnt_u64_x(svptrue_b64(), vec);
+    vcnt0 = svadd_u64_x(svptrue_b64(), vcnt0, vec);
+    i += svcntb();
+    pg = svwhilelt_b8(i, size);
+  }
+
+  return svaddv_u64(svptrue_b64(), vcnt0);
 }
 
 #endif
@@ -542,7 +774,7 @@ static inline uint64_t popcnt_avx512(const uint8_t* ptr8, uint64_t size)
  * @data: An array
  * @size: Size of data in bytes
  */
-[[maybe_unused]] static uint64_t popcnt(const void* data, uint64_t size)
+static uint64_t popcnt(const void* data, uint64_t size)
 {
 /*
  * CPUID runtime checks are only enabled if this is needed.
@@ -551,19 +783,29 @@ static inline uint64_t popcnt_avx512(const uint8_t* ptr8, uint64_t size)
  */
 #if defined(LIBPOPCNT_HAVE_CPUID)
   #if defined(__cplusplus)
-    /* C++11 thread-safe singleton */
-    static const int cpuid = get_cpuid();
+    int cpuid = libpopcnt_cpuid.load(std::memory_order_relaxed);
+    if (cpuid == -1)
+    {
+      cpuid = get_cpuid();
+      libpopcnt_cpuid.store(cpuid, std::memory_order_relaxed);
+    }
+  #elif defined(LIBPOPCNT_HAVE_C11_ATOMIC)
+    int cpuid = atomic_load_explicit(&libpopcnt_cpuid, memory_order_relaxed);
+    if (cpuid == -1)
+    {
+      cpuid = get_cpuid();
+      atomic_store_explicit(&libpopcnt_cpuid, cpuid, memory_order_relaxed);
+    }
   #else
-    static int cpuid_ = -1;
-    int cpuid = cpuid_;
+    long cpuid = libpopcnt_cpuid;
     if (cpuid == -1)
     {
       cpuid = get_cpuid();
 
       #if defined(_MSC_VER)
-        _InterlockedCompareExchange(&cpuid_, cpuid, -1);
+        _InterlockedCompareExchange(&libpopcnt_cpuid, cpuid, -1);
       #else
-        __sync_val_compare_and_swap(&cpuid_, -1, cpuid);
+        __sync_val_compare_and_swap(&libpopcnt_cpuid, -1, cpuid);
       #endif
     }
   #endif
@@ -579,31 +821,36 @@ static inline uint64_t popcnt_avx512(const uint8_t* ptr8, uint64_t size)
       defined(__AVX512BW__) && \
       defined(__AVX512VPOPCNTDQ__))
     /* For tiny arrays AVX512 is not worth it */
-    if (i + 40 <= size)
+    if (size >= 40)
   #else
     if ((cpuid & LIBPOPCNT_BIT_AVX512_VPOPCNTDQ) &&
-        i + 40 <= size)
+        size >= 40)
   #endif
       return popcnt_avx512(ptr, size);
 #endif
 
 #if defined(LIBPOPCNT_HAVE_AVX2)
   #if defined(__AVX2__)
-    /* AVX2 requires arrays >= 512 bytes */
-    if (i + 512 <= size)
+    /* AVX2 is faster than scalar POPCNT from ~96 bytes */
+    if (size >= 96)
   #else
     if ((cpuid & LIBPOPCNT_BIT_AVX2) &&
-        i + 512 <= size)
+        size >= 96)
   #endif
     {
       const __m256i* ptr256 = (const __m256i*)(ptr + i);
-      cnt += popcnt_avx2(ptr256, (size - i) / 32);
+
+      if (size >= 1024)
+        cnt += popcnt_avx2(ptr256, size / 32);
+      else
+        cnt += popcnt_avx2_medium(ptr256, size / 32);
+
       i = size - size % 32;
     }
 #endif
 
 #if defined(LIBPOPCNT_HAVE_POPCNT)
-  /*
+  /* 
    * The user has compiled without -mpopcnt.
    * Unfortunately the MSVC compiler does not have
    * a POPCNT macro so we cannot get rid of the
@@ -613,33 +860,32 @@ static inline uint64_t popcnt_avx512(const uint8_t* ptr8, uint64_t size)
     if (cpuid & LIBPOPCNT_BIT_POPCNT)
   #endif
     {
-      if (i + 8 <= size)
-      {
-        uintptr_t rem = ((uintptr_t) &ptr[i]) % 8;
-
-        /* Align &ptr[i] to an 8 byte boundary */
-        if (rem != 0)
-        {
-          uint64_t val = 0;
-          uint64_t bytes = (uint64_t) (8 - rem % 8);
-          bytes = (bytes <= 7) ? bytes : 7;
-          for (uint64_t j = 0; j < bytes; j++)
-            val |= ((uint64_t) ptr[i + j]) << (j * 8);
-          cnt += popcnt64(val);
-          i += bytes;
-        }
-      }
-
       for (; i + 8 <= size; i += 8)
-        cnt += popcnt64(*(const uint64_t*)(ptr + i));
+      {
+        uint64_t bits;
+        memcpy(&bits, ptr + i, sizeof(bits));
+        cnt += popcnt64(bits);
+      }
 
       if (i < size)
       {
-        uint64_t val = 0;
         uint64_t bytes = (uint64_t) (size - i);
-        bytes = (bytes <= 7) ? bytes : 7;
-        for (uint64_t j = 0; j < bytes; j++)
-          val |= ((uint64_t) ptr[i + j]) << (j * 8);
+
+        uint64_t val = ptr[i + 0];
+        if (bytes == 1) goto tail_popcnt64;
+        val |= ((uint64_t) ptr[i + 1]) << 8;
+        if (bytes == 2) goto tail_popcnt64;
+        val |= ((uint64_t) ptr[i + 2]) << 16;
+        if (bytes == 3) goto tail_popcnt64;
+        val |= ((uint64_t) ptr[i + 3]) << 24;
+        if (bytes == 4) goto tail_popcnt64;
+        val |= ((uint64_t) ptr[i + 4]) << 32;
+        if (bytes == 5) goto tail_popcnt64;
+        val |= ((uint64_t) ptr[i + 5]) << 40;
+        if (bytes == 6) goto tail_popcnt64;
+        val |= ((uint64_t) ptr[i + 6]) << 48;
+
+        tail_popcnt64:
         cnt += popcnt64(val);
       }
 
@@ -655,33 +901,32 @@ static inline uint64_t popcnt_avx512(const uint8_t* ptr8, uint64_t size)
 #if !defined(LIBPOPCNT_HAVE_POPCNT) || \
     !defined(__POPCNT__)
 
-  if (i + 8 <= size)
-  {
-    uintptr_t rem = ((uintptr_t) &ptr[i]) % 8;
-
-    /* Align &ptr[i] to an 8 byte boundary */
-    if (rem != 0)
-    {
-      uint64_t val = 0;
-      uint64_t bytes = (uint64_t) (8 - rem % 8);
-      bytes = (bytes <= 7) ? bytes : 7;
-      for (uint64_t j = 0; j < bytes; j++)
-        val |= ((uint64_t) ptr[i + j]) << (j * 8);
-      cnt += popcnt64_bitwise(val);
-      i += bytes;
-    }
-  }
-
   for (; i + 8 <= size; i += 8)
-    cnt += popcnt64_bitwise(*(const uint64_t*)(ptr + i));
+  {
+    uint64_t bits;
+    memcpy(&bits, ptr + i, sizeof(bits));
+    cnt += popcnt64_bitwise(bits);
+  }
 
   if (i < size)
   {
-    uint64_t val = 0;
     uint64_t bytes = (uint64_t) (size - i);
-    bytes = (bytes <= 7) ? bytes : 7;
-    for (uint64_t j = 0; j < bytes; j++)
-      val |= ((uint64_t) ptr[i + j]) << (j * 8);
+
+    uint64_t val = ptr[i + 0];
+    if (bytes == 1) goto tail_popcnt64_bitwise;
+    val |= ((uint64_t) ptr[i + 1]) << 8;
+    if (bytes == 2) goto tail_popcnt64_bitwise;
+    val |= ((uint64_t) ptr[i + 2]) << 16;
+    if (bytes == 3) goto tail_popcnt64_bitwise;
+    val |= ((uint64_t) ptr[i + 3]) << 24;
+    if (bytes == 4) goto tail_popcnt64_bitwise;
+    val |= ((uint64_t) ptr[i + 4]) << 32;
+    if (bytes == 5) goto tail_popcnt64_bitwise;
+    val |= ((uint64_t) ptr[i + 5]) << 40;
+    if (bytes == 6) goto tail_popcnt64_bitwise;
+    val |= ((uint64_t) ptr[i + 6]) << 48;
+
+    tail_popcnt64_bitwise:
     cnt += popcnt64_bitwise(val);
   }
 
@@ -693,63 +938,14 @@ static inline uint64_t popcnt_avx512(const uint8_t* ptr8, uint64_t size)
 #elif defined(__ARM_FEATURE_SVE) && \
       __has_include(<arm_sve.h>)
 
-#include <arm_sve.h>
-
 /*
  * Count the number of 1 bits in the data array
  * @data: An array
  * @size: Size of data in bytes
  */
-[[maybe_unused]] static inline uint64_t popcnt(const void* data, uint64_t size)
+static inline uint64_t popcnt(const void* data, uint64_t size)
 {
-  uint64_t i = 0;
-  const uint64_t* ptr64 = (const uint64_t*) data;
-  uint64_t size64 = size / sizeof(uint64_t);
-  svuint64_t vcnt = svdup_u64(0);
-
-  for (; i + svcntd() * 4 <= size64; i += svcntd() * 4)
-  {
-    svuint64_t vec0 = svld1_u64(svptrue_b64(), &ptr64[i + svcntd() * 0]);
-    svuint64_t vec1 = svld1_u64(svptrue_b64(), &ptr64[i + svcntd() * 1]);
-    svuint64_t vec2 = svld1_u64(svptrue_b64(), &ptr64[i + svcntd() * 2]);
-    svuint64_t vec3 = svld1_u64(svptrue_b64(), &ptr64[i + svcntd() * 3]);
-
-    vec0 = svcnt_u64_x(svptrue_b64(), vec0);
-    vec1 = svcnt_u64_x(svptrue_b64(), vec1);
-    vec2 = svcnt_u64_x(svptrue_b64(), vec2);
-    vec3 = svcnt_u64_x(svptrue_b64(), vec3);
-
-    vcnt = svadd_u64_x(svptrue_b64(), vcnt, vec0);
-    vcnt = svadd_u64_x(svptrue_b64(), vcnt, vec1);
-    vcnt = svadd_u64_x(svptrue_b64(), vcnt, vec2);
-    vcnt = svadd_u64_x(svptrue_b64(), vcnt, vec3);
-  }
-
-  svbool_t pg = svwhilelt_b64(i, size64);
-
-  while (svptest_any(svptrue_b64(), pg))
-  {
-    svuint64_t vec = svld1_u64(pg, &ptr64[i]);
-    vec = svcnt_u64_z(pg, vec);
-    vcnt = svadd_u64_x(svptrue_b64(), vcnt, vec);
-    i += svcntd();
-    pg = svwhilelt_b64(i, size64);
-  }
-
-  uint64_t cnt = svaddv_u64(svptrue_b64(), vcnt);
-  uint64_t bytes = size % sizeof(uint64_t);
-
-  if (bytes != 0)
-  {
-    i = size - bytes;
-    const uint8_t* ptr8 = (const uint8_t*) data;
-    svbool_t pg8 = svwhilelt_b8(i, size);
-    svuint8_t vec = svld1_u8(pg8, &ptr8[i]);
-    svuint8_t vcnt8 = svcnt_u8_z(pg8, vec);
-    cnt += svaddv_u8(pg8, vcnt8);
-  }
-
-  return cnt;
+  return popcnt_arm_sve(data, size);
 }
 
 #elif (defined(__ARM_NEON) || \
@@ -769,8 +965,43 @@ static inline uint64x2_t vpadalq(uint64x2_t sum, uint8x16_t t)
  * @data: An array
  * @size: Size of data in bytes
  */
-[[maybe_unused]] static inline uint64_t popcnt(const void* data, uint64_t size)
+static inline uint64_t popcnt(const void* data, uint64_t size)
 {
+/*
+ * ARM SVE runtime dispatch. We check once whether the
+ * CPU and OS support SVE and cache the result, mirroring
+ * the CPUID approach used for x86. If SVE is available
+ * we delegate to popcnt_arm_sve() which is compiled with
+ * __attribute__((target("+sve"))).
+ */
+#if defined(LIBPOPCNT_HAVE_ARM_SVE_MULTIARCH)
+  #if defined(__cplusplus)
+    int arm_sve = libpopcnt_arm_sve.load(std::memory_order_relaxed);
+    if (arm_sve == -1)
+    {
+      arm_sve = libpopcnt_has_arm_sve();
+      libpopcnt_arm_sve.store(arm_sve, std::memory_order_relaxed);
+    }
+  #elif defined(LIBPOPCNT_HAVE_C11_ATOMIC_ARM_SVE)
+    int arm_sve = atomic_load_explicit(&libpopcnt_arm_sve, memory_order_relaxed);
+    if (arm_sve == -1)
+    {
+      arm_sve = libpopcnt_has_arm_sve();
+      atomic_store_explicit(&libpopcnt_arm_sve, arm_sve, memory_order_relaxed);
+    }
+  #else
+    int arm_sve = libpopcnt_arm_sve;
+    if (arm_sve == -1)
+    {
+      arm_sve = libpopcnt_has_arm_sve();
+      __sync_val_compare_and_swap(&libpopcnt_arm_sve, -1, arm_sve);
+    }
+  #endif
+
+  if (arm_sve)
+    return popcnt_arm_sve(data, size);
+#endif
+
   uint64_t i = 0;
   uint64_t cnt = 0;
   uint64_t chunk_size = 64;
@@ -796,11 +1027,11 @@ static inline uint64x2_t vpadalq(uint64x2_t sum, uint8x16_t t)
        * and 31 * 8 bits = 248 which is OK.
        */
       uint64_t limit = (i + 31 < iters) ? i + 31 : iters;
-
+  
       /* Each iteration processes 64 bytes */
       for (; i < limit; i++)
       {
-        uint8x16x4_t input = vld4q_u8(ptr);
+        uint8x16x4_t input = vld1q_u8_x4(ptr);
         ptr += chunk_size;
 
         t0 = vaddq_u8(t0, vcntq_u8(input.val[0]));
@@ -825,33 +1056,32 @@ static inline uint64x2_t vpadalq(uint64x2_t sum, uint8x16_t t)
     cnt += tmp[1];
   }
 
-  if (i + 8 <= size)
-  {
-    uintptr_t rem = ((uintptr_t) &ptr[i]) % 8;
-
-    /* Align &ptr[i] to an 8 byte boundary */
-    if (rem != 0)
-    {
-      uint64_t val = 0;
-      uint64_t bytes = (uint64_t) (8 - rem % 8);
-      bytes = (bytes <= 7) ? bytes : 7;
-      for (uint64_t j = 0; j < bytes; j++)
-        val |= ((uint64_t) ptr[i + j]) << (j * 8);
-      cnt += popcnt64(val);
-      i += bytes;
-    }
-  }
-
   for (; i + 8 <= size; i += 8)
-    cnt += popcnt64(*(const uint64_t*)(ptr + i));
+  {
+    uint64_t bits;
+    memcpy(&bits, ptr + i, sizeof(bits));
+    cnt += popcnt64(bits);
+  }
 
   if (i < size)
   {
-    uint64_t val = 0;
     uint64_t bytes = (uint64_t) (size - i);
-    bytes = (bytes <= 7) ? bytes : 7;
-    for (uint64_t j = 0; j < bytes; j++)
-      val |= ((uint64_t) ptr[i + j]) << (j * 8);
+
+    uint64_t val = ptr[i + 0];
+    if (bytes == 1) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 1]) << 8;
+    if (bytes == 2) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 2]) << 16;
+    if (bytes == 3) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 3]) << 24;
+    if (bytes == 4) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 4]) << 32;
+    if (bytes == 5) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 5]) << 40;
+    if (bytes == 6) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 6]) << 48;
+
+    tail_popcnt64:
     cnt += popcnt64(val);
   }
 
@@ -866,39 +1096,38 @@ static inline uint64x2_t vpadalq(uint64x2_t sum, uint8x16_t t)
  * @data: An array
  * @size: Size of data in bytes
  */
-[[maybe_unused]] static inline uint64_t popcnt(const void* data, uint64_t size)
+static inline uint64_t popcnt(const void* data, uint64_t size)
 {
   uint64_t i = 0;
   uint64_t cnt = 0;
   const uint8_t* ptr = (const uint8_t*) data;
 
-  if (i + 8 <= size)
-  {
-    uintptr_t rem = ((uintptr_t) &ptr[i]) % 8;
-
-    /* Align &ptr[i] to an 8 byte boundary */
-    if (rem != 0)
-    {
-      uint64_t val = 0;
-      uint64_t bytes = (uint64_t) (8 - rem % 8);
-      bytes = (bytes <= 7) ? bytes : 7;
-      for (uint64_t j = 0; j < bytes; j++)
-        val |= ((uint64_t) ptr[i + j]) << (j * 8);
-      cnt += popcnt64(val);
-      i += bytes;
-    }
-  }
-
   for (; i + 8 <= size; i += 8)
-    cnt += popcnt64(*(const uint64_t*)(ptr + i));
+  {
+    uint64_t bits;
+    memcpy(&bits, ptr + i, sizeof(bits));
+    cnt += popcnt64(bits);
+  }
 
   if (i < size)
   {
-    uint64_t val = 0;
     uint64_t bytes = (uint64_t) (size - i);
-    bytes = (bytes <= 7) ? bytes : 7;
-    for (uint64_t j = 0; j < bytes; j++)
-      val |= ((uint64_t) ptr[i + j]) << (j * 8);
+
+    uint64_t val = ptr[i + 0];
+    if (bytes == 1) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 1]) << 8;
+    if (bytes == 2) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 2]) << 16;
+    if (bytes == 3) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 3]) << 24;
+    if (bytes == 4) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 4]) << 32;
+    if (bytes == 5) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 5]) << 40;
+    if (bytes == 6) goto tail_popcnt64;
+    val |= ((uint64_t) ptr[i + 6]) << 48;
+
+    tail_popcnt64:
     cnt += popcnt64(val);
   }
 
