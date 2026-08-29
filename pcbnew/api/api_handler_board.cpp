@@ -36,6 +36,9 @@
 #include <pcb_field.h>
 #include <pcb_group.h>
 #include <pcb_track.h>
+#include <pcb_table.h>
+#include <pcb_tablecell.h>
+
 #include <layer_ids.h>
 #include <project.h>
 #include <tool/tool_manager.h>
@@ -47,6 +50,7 @@
 
 using namespace kiapi::common::commands;
 using types::CommandStatus;
+
 using types::DocumentType;
 using types::ItemRequestStatus;
 
@@ -375,20 +379,40 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
 
         if( aCreate )
         {
-            if( item->Type() == PCB_FOOTPRINT_T )
+            if( item->Type() == PCB_TABLECELL_T )
             {
-                // Ensure children have unique identifiers; in case the API client created this new
-                // footprint by cloning an existing one and only changing the parent UUID.
-                item->RunOnChildren(
-                        []( BOARD_ITEM* aChild )
-                        {
-                            aChild->ResetUuid();
-                        },
-                        RECURSE );
-            }
+                PCB_TABLE* table = dynamic_cast<PCB_TABLE*>( container );
 
-            item->Serialize( newItem );
-            commit->Add( item.release() );
+                if( !table )
+                {
+                    status.set_code( ItemStatusCode::ISC_INVALID_DATA );
+                    status.set_error_message( "a table cell must target a table container" );
+                    aItemHandler( status, anyItem );
+                    continue;
+                }
+
+                PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( item.release() );
+                commit->Modify( table );
+                table->AddCell( cell );
+                cell->Serialize( newItem );
+            }
+            else
+            {
+                if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_TABLE_T )
+                {
+                    // Ensure children have unique identifiers; in case the API client created
+                    // this new item by cloning an existing one and only changing the parent UUID.
+                    item->RunOnChildren(
+                            []( BOARD_ITEM* aChild )
+                            {
+                                aChild->ResetUuid();
+                            },
+                            RECURSE );
+                }
+
+                item->Serialize( newItem );
+                commit->Add( item.release() );
+            }
         }
         else
         {
@@ -1014,7 +1038,6 @@ HANDLER_RESULT<FlipItemsResponse> API_HANDLER_BOARD::handleFlipItems(
             PCB_TEXT_T,
             PCB_TEXTBOX_T,
             PCB_TABLE_T,
-            PCB_TABLECELL_T,
             PCB_TRACE_T,
             PCB_VIA_T,
             PCB_ARC_T,

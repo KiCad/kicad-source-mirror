@@ -85,6 +85,32 @@ PCB_TABLE::~PCB_TABLE()
 }
 
 
+void PCB_TABLE::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_TABLE_T, /* void */ );
+
+    const PCB_TABLE* other = static_cast<const PCB_TABLE*>( aOther );
+
+    BOARD_ITEM::CopyFrom( aOther );
+
+    m_strokeExternal = other->m_strokeExternal;
+    m_StrokeHeaderSeparator = other->m_StrokeHeaderSeparator;
+    m_borderStroke = other->m_borderStroke;
+    m_strokeRows = other->m_strokeRows;
+    m_strokeColumns = other->m_strokeColumns;
+    m_separatorsStroke = other->m_separatorsStroke;
+
+    m_colCount = other->m_colCount;
+    m_colWidths = other->m_colWidths;
+    m_rowHeights = other->m_rowHeights;
+
+    ClearCells();
+
+    for( PCB_TABLECELL* cell : other->m_cells )
+        AddCell( new PCB_TABLECELL( *cell ) );
+}
+
+
 BOARD_ITEM* PCB_TABLE::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit ) const
 {
     BOARD_ITEM* dupe = static_cast<BOARD_ITEM*>( Clone() );

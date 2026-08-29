@@ -286,6 +286,8 @@ public:
 
     BOARD_ITEM* Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit = nullptr ) const override;
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
