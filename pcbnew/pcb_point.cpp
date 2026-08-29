@@ -32,6 +32,7 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <eda_draw_frame.h>
+#include <footprint.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
