@@ -105,6 +105,10 @@ void SCH_IO_HTTP_LIB::backgroundRefreshWorker()
         if( maxAge <= 0 )
             maxAge = 1;
 
+        // Hold a shared lock on m_cacheMutex while accessing m_conn so connect() (which takes a
+        // unique lock to reset/replace m_conn) can't destroy the object out from under us.
+        std::shared_lock connGuard( m_cacheMutex );
+
         if( m_conn && m_cachePopulated.load() )
         {
             wxLogTrace( traceHTTPLib, wxT( "Initiating background refresh" ) );
@@ -137,6 +141,7 @@ void SCH_IO_HTTP_LIB::backgroundRefreshWorker()
                     bool   dataChanged = false;
 
                     {
+                        connGuard.unlock();
                         std::unique_lock lock( m_cacheMutex );
 
                         if( signature != m_cacheSignature )
@@ -377,7 +382,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     for( const std::unique_ptr<LIB_SYMBOL>& symbol : m_symbolCache | std::views::values )
     {
         if( !powerSymbolsOnly || symbol->IsPower() )
-            aSymbolList.emplace_back( symbol.get() );
+            aSymbolList.emplace_back( symbol->Duplicate() );
     }
 }
 
@@ -611,21 +616,23 @@ void SCH_IO_HTTP_LIB::connect()
 {
     wxCHECK_RET( m_settings, "Call ensureSettings before connect()!" );
 
-    if( !m_conn )
     {
-        if( m_connectionFactory )
-            m_conn = m_connectionFactory( m_settings->m_Source );
-        else
-            m_conn = std::make_unique<HTTP_LIB_CONNECTION>( m_settings->m_Source, true );
+        std::unique_lock connLock( m_cacheMutex );
 
-        if( !m_conn->IsValidEndpoint() )
+        if( !m_conn )
         {
-            m_lastError = m_conn->GetLastError();
+            if( m_connectionFactory )
+                m_conn = m_connectionFactory( m_settings->m_Source );
+            else
+                m_conn = std::make_unique<HTTP_LIB_CONNECTION>( m_settings->m_Source, true );
 
-            // Make sure we release pointer so we are able to query API again next time
-            m_conn.reset();
+            if( !m_conn->IsValidEndpoint() )
+            {
+                m_lastError = m_conn->GetLastError();
 
-            return;
+                // Make sure we release pointer so we are able to query API again next time
+                m_conn.reset();
+            }
         }
     }
 }
@@ -637,7 +644,6 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
                                                  const HTTP_LIB_PART& aPart,
                                                  std::set<wxString>& aCustomFields )
 {
-    std::lock_guard lock( m_symbolLoadMutex );
     LIB_SYMBOL* symbol = nullptr;
     LIB_SYMBOL* originalSymbol = nullptr;
     LIB_ID      symbolId;
@@ -722,6 +728,8 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
                                            "will create empty symbol" ), symbolIdStr );
         }
     }
+
+    std::lock_guard lock( m_symbolLoadMutex );
 
     if( !symbol )
     {
