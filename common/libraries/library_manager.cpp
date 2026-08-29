@@ -1242,7 +1242,7 @@ void LIBRARY_MANAGER_ADAPTER::CheckTableRow( LIBRARY_TABLE_ROW& aRow )
         lib.row = &aRow;
         lib.plugin.reset( *plugin );
 
-        std::optional<LIB_STATUS> status = LoadOne( &lib );
+        std::optional<LIB_STATUS> status = CheckLibrary( &lib );
 
         if( status.has_value() )
         {

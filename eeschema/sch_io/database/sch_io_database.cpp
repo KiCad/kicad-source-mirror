@@ -98,6 +98,14 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 }
 
 
+void SCH_IO_DATABASE::CheckLibrary( const wxString& aLibraryPath,
+                                    const std::map<std::string, UTF8>* aProperties )
+{
+    ensureSettings( aLibraryPath );
+    ensureConnection();
+}
+
+
 LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
                                          const wxString&   aAliasName,
                                          const std::map<std::string, UTF8>* aProperties )

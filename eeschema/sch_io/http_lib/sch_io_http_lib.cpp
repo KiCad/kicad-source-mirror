@@ -382,6 +382,14 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 }
 
 
+void SCH_IO_HTTP_LIB::CheckLibrary( const wxString& aLibraryPath,
+                                    const std::map<std::string, UTF8>* aProperties )
+{
+    ensureSettings( aLibraryPath );
+    ensureConnection();
+}
+
+
 LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                                          const std::map<std::string, UTF8>* aProperties )
 {

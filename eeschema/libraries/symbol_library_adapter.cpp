@@ -100,6 +100,28 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 }
 
 
+std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::CheckLibrary( LIB_DATA* aLib )
+{
+    aLib->status.load_status = LOAD_STATUS::LOADING;
+
+    std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
+
+    try
+    {
+        schplugin( aLib )->CheckLibrary( getUri( aLib->row ), &options );
+        aLib->status.load_status = LOAD_STATUS::LOADED;
+    }
+    catch( IO_ERROR& e )
+    {
+        aLib->status.load_status = LOAD_STATUS::LOAD_ERROR;
+        aLib->status.error = LIBRARY_ERROR( e.Problem(), e.Where() );
+        wxLogTrace( traceLibraries, "Sym: %s: library check failed: %s", aLib->row->Nickname(), e.What() );
+    }
+
+    return aLib->status;
+}
+
+
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( const wxString& nickname )
 {
     LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
