@@ -73,12 +73,19 @@ BOOST_AUTO_TEST_CASE( UnchangedDataReusesCache )
 
     BOOST_REQUIRE_EQUAL( first.size(), second.size() );
 
-    // Identical data must yield the same materialized symbols. Pointer identity proves the cache
-    // was reused; a rebuild would hand back freshly allocated LIB_SYMBOLs.
-    std::set<LIB_SYMBOL*> firstSet( first.begin(), first.end() );
+    std::set<wxString> firstNames;
+
+    for( LIB_SYMBOL* symbol : first )
+    {
+        firstNames.insert( symbol->GetName() );
+        delete symbol;
+    }
 
     for( LIB_SYMBOL* symbol : second )
-        BOOST_CHECK( firstSet.count( symbol ) );
+    {
+        BOOST_CHECK( firstNames.count( symbol->GetName() ) );
+        delete symbol;
+    }
 }
 
 

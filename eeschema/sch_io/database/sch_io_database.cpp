@@ -70,7 +70,10 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
     EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
 
     for( LIB_SYMBOL* symbol : symbols )
+    {
         aSymbolNameList.Add( symbol->GetName() );
+        delete symbol;
+    }
 }
 
 
@@ -95,7 +98,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
         LIB_SYMBOL* symbol = pair.second.get();
 
         if( !powerSymbolsOnly || symbol->IsPower() )
-            aSymbolList.emplace_back( symbol );
+            aSymbolList.emplace_back( symbol->Duplicate() );
     }
 }
 
@@ -441,6 +444,8 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
         if( maxAge <= 0 )
             maxAge = 1;
 
+        std::shared_lock connGuard( m_cacheMutex );
+
         if( m_conn && m_cachePopulated.load() )
         {
             wxLogTrace( traceDatabase, wxT( "Initiating background refresh" ) );
@@ -474,6 +479,8 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
                     bool dataChanged = false;
 
                     {
+                        // Upgrade to unique lock for cache mutation
+                        connGuard.unlock();
                         std::unique_lock lock( m_cacheMutex );
 
                         if( signature == m_cacheSignature )
@@ -584,19 +591,23 @@ void SCH_IO_DATABASE::ensureConnection()
 
 void SCH_IO_DATABASE::connect()
 {
-    wxCHECK_RET( m_settings, "Call ensureSettings before connect()!" );
+    {
+        std::unique_lock connLock( m_cacheMutex );
 
-    if( m_conn && !m_conn->IsConnected() )
-        m_conn.reset();
+        if( m_conn && !m_conn->IsConnected() )
+            m_conn.reset();
+    }
 
     if( !m_conn )
     {
+        std::unique_ptr<DATABASE_CONNECTION> newConn;
+
         if( m_settings->m_Source.connection_string.empty() )
         {
-            m_conn = std::make_unique<DATABASE_CONNECTION>( m_settings->m_Source.dsn,
-                                                            m_settings->m_Source.username,
-                                                            m_settings->m_Source.password,
-                                                            m_settings->m_Source.timeout );
+            newConn = std::make_unique<DATABASE_CONNECTION>( m_settings->m_Source.dsn,
+                                                             m_settings->m_Source.username,
+                                                             m_settings->m_Source.password,
+                                                             m_settings->m_Source.timeout );
         }
         else
         {
@@ -607,13 +618,12 @@ void SCH_IO_DATABASE::connect()
             // for specifying on-disk databases that live next to the kicad_dbl file
             boost::replace_all( cs, "${CWD}", basePath );
 
-            m_conn = std::make_unique<DATABASE_CONNECTION>( cs, m_settings->m_Source.timeout );
+            newConn = std::make_unique<DATABASE_CONNECTION>( cs, m_settings->m_Source.timeout );
         }
 
-        if( !m_conn->IsConnected() )
+        if( !newConn->IsConnected() )
         {
-            m_lastError = m_conn->GetLastError();
-            m_conn.reset();
+            m_lastError = newConn->GetLastError();
             return;
         }
 
@@ -627,6 +637,9 @@ void SCH_IO_DATABASE::connect()
             for( const DATABASE_FIELD_MAPPING& field : tableIter.fields )
                 requiredColumns.insert( field.column );
 
+            if( !tableIter.pins_col.empty() )
+                requiredColumns.insert( tableIter.pins_col );
+
             // Only used if confirmed present, so a misconfigured mapping can't break the table (#23532)
             std::set<std::string> optionalColumns{ tableIter.properties.description,
                                                    tableIter.properties.footprint_filters,
@@ -635,10 +648,13 @@ void SCH_IO_DATABASE::connect()
                                                    tableIter.properties.exclude_from_bom,
                                                    tableIter.properties.exclude_from_board };
 
-            m_conn->CacheTableInfo( tableIter.table, requiredColumns, optionalColumns );
+            newConn->CacheTableInfo( tableIter.table, requiredColumns, optionalColumns );
         }
 
-        m_conn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );
+        newConn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );
+
+        std::unique_lock connLock( m_cacheMutex );
+        m_conn = std::move( newConn );
     }
 }
 
@@ -696,7 +712,6 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
                                                 const DATABASE_LIB_TABLE& aTable,
                                                 const DATABASE_CONNECTION::ROW& aRow )
 {
-    std::lock_guard lock( m_symbolLoadMutex );
     std::unique_ptr<LIB_SYMBOL> symbol = nullptr;
 
     if( aRow.contains( aTable.symbols_col ) )
@@ -736,8 +751,19 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
                 continue;
             }
 
-            LIB_SYMBOL* src = m_adapter->LoadSymbol( symbolId );
-            m_inProgressLoads.erase( symbolIdStr );
+            struct CYCLE_GUARD
+            {
+                std::unordered_set<wxString>* set;
+                wxString                      key;
+                ~CYCLE_GUARD() { set->erase( key ); }
+            } guard{ &m_inProgressLoads, symbolIdStr };
+
+            LIB_SYMBOL* src = nullptr;
+
+            {
+                std::lock_guard lock( m_symbolLoadMutex );
+                src = m_adapter->LoadSymbol( symbolId );
+            }
 
             if( src )
             {
@@ -772,6 +798,8 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
             symbol.reset( new LIB_SYMBOL( aSymbolName ) );
             symbol->SetSourceLibId( symbolIds[0] );
 
+            symbol->SetUnitCount( sourceSymbols[0]->GetUnitCount(), false );
+            symbol->SetPowerSymbolProp( sourceSymbols[0]->IsPower() );
             symbol->SetShowPinNames( sourceSymbols[0]->GetShowPinNames() );
             symbol->SetShowPinNumbers( sourceSymbols[0]->GetShowPinNumbers() );
             symbol->SetPinNameOffset( sourceSymbols[0]->GetPinNameOffset() );
@@ -823,7 +851,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 
             for( size_t i = 0; i < sourceSymbols.size(); ++i )
             {
-                std::unique_ptr<LIB_SYMBOL> srcSymbol( sourceSymbols[i]->Duplicate() );
+                std::unique_ptr<LIB_SYMBOL> srcSymbol = sourceSymbols[i]->Flatten();
                 int srcCount = sourceBodyStyleCounts[i];
                 int base = compositeBodyStyleBase[i];
 
