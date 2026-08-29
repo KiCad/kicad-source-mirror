@@ -228,6 +228,13 @@ EDA_ITEM* PCB_POINT::Clone() const
 }
 
 
+void PCB_POINT::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_POINT_T, /* void */ );
+    *this = *static_cast<const PCB_POINT*>( aOther );
+}
+
+
 void PCB_POINT::swapData( BOARD_ITEM* aOther )
 {
     assert( aOther->Type() == PCB_POINT_T );
