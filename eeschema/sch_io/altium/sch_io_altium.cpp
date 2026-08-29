@@ -5911,6 +5911,9 @@ void SCH_IO_ALTIUM::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile,
             {
                 int ind = wxAtoi( remaining );
 
+                if( ind < 1 )
+                    continue;
+
                 if( static_cast<int>( aFontSizes.size() ) < ind )
                     aFontSizes.resize( ind );
 
