@@ -82,8 +82,18 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_FOOTPRINT::validateDocumentInt
     }
 
     LIB_ID target_fp = footprintContext()->GetLoadedFPID();
+
+    if( !target_fp.IsValid() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "no footprint is currently open" );
+        return tl::unexpected( e );
+    }
+
     std::string actual_lib  = target_fp.GetUniStringLibNickname().ToStdString();                                                                            
     std::string actual_name = target_fp.GetUniStringLibItemName().ToStdString();
+
     if( 0 != aDocument.lib_id().library_nickname().compare( actual_lib ) )
     {
         ApiResponseStatus e;
