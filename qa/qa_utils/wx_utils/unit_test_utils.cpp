@@ -23,6 +23,7 @@
 #include <filesystem>
 #include <fstream>
 
+#include <wx/filename.h>
 #include <wx/utils.h>
 
 std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aPt )
@@ -120,5 +121,12 @@ void KI_TEST::SetMockConfigDir()
         path += wxT( "/config/" );
         wxSetEnv( wxT( "KICAD_CONFIG_HOME" ), path );
         wxSetEnv( wxT( "KICAD_CONFIG_HOME_IS_QA" ), wxT( "1" ) );
+
+        if( wxFileName fn( path ); fn.DirExists() )
+        {
+            // Under normal circumstances, don't let QA test runs write back to the config dir
+            // to avoid churn.  Disable this if you want to update the QA schema.
+            wxSetEnv( wxT( "KICAD_INHIBIT_SETTINGS_WRITES" ), wxT( "1" ) );
+        }
     }
 }
