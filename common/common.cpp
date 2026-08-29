@@ -476,11 +476,12 @@ std::vector<TEXT_VAR_REF_KEY> ExtractTextVarReferences( const wxString& aSource 
 
 wxString GetGeneratedFieldDisplayName( const wxString& aSource )
 {
-    std::function<bool( wxString* )> tokenExtractor = [&]( wxString* token ) -> bool
-    {
-        *token = *token; // token value is the token name
-        return true;
-    };
+    std::function<bool( wxString* )> tokenExtractor =
+            [&]( wxString* token ) -> bool
+            {
+                *token = *token; // token value is the token name
+                return true;
+            };
 
     return ExpandTextVars( aSource, &tokenExtractor );
 }
@@ -788,7 +789,8 @@ bool EnsureFileDirectoryExists( wxFileName* aTargetFullFileName, const wxString&
     {
         if( aReporter )
         {
-            msg.Printf( _( "Cannot make path '%s' absolute with respect to '%s'." ), aTargetFullFileName->GetPath(),
+            msg.Printf( _( "Cannot make path '%s' absolute with respect to '%s'." ),
+                        aTargetFullFileName->GetPath(),
                         baseFilePath );
             aReporter->Report( msg, RPT_SEVERITY_ERROR );
         }
