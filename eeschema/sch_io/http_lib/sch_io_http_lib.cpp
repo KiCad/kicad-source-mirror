@@ -19,10 +19,16 @@
  */
 
 
+#include <algorithm>
+#include <chrono>
+#include <string_view>
+
+#include <bs_thread_pool.hpp>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 
 #include <fmt.h>
+#include <hash.h>
 #include <lib_symbol.h>
 
 #include <libraries/symbol_library_adapter.h>
@@ -31,10 +37,300 @@
 #include <ki_exception.h>
 
 
+static bool fetchCategoryParts( HTTP_LIB_CONNECTION& aConn, const HTTP_LIB_CATEGORY& aCategory,
+                                std::vector<HTTP_LIB_PART>& aParts )
+{
+    if( !aConn.SelectAll( aCategory, aParts ) )
+        return false;
+
+    for( HTTP_LIB_PART& part : aParts )
+    {
+        if( part.detailsLoaded )
+            continue;
+
+        if( HTTP_LIB_PART fullPart; aConn.SelectOne( part.id, fullPart ) )
+        {
+            fullPart.id = part.id;
+            fullPart.name = part.name;
+            part = std::move( fullPart );
+        }
+    }
+
+    return true;
+}
+
+
 SCH_IO_HTTP_LIB::SCH_IO_HTTP_LIB() :
         SCH_IO( wxS( "HTTP library" ) ),
         m_adapter( nullptr )
 {
+}
+
+
+void SCH_IO_HTTP_LIB::stopBackgroundRefresh()
+{
+    m_refreshRunning = false;
+    m_refreshCV.notify_all();
+
+    if( m_refreshThread.joinable() )
+        m_refreshThread.join();
+}
+
+
+void SCH_IO_HTTP_LIB::startBackgroundRefresh()
+{
+    if( m_refreshRunning.exchange( true ) )
+        return;
+
+    wxLogTrace( traceHTTPLib, wxT( "Starting background refresh thread" ) );
+    m_refreshThread = std::thread( &SCH_IO_HTTP_LIB::backgroundRefreshWorker, this );
+}
+
+
+void SCH_IO_HTTP_LIB::backgroundRefreshWorker()
+{
+    BS::this_thread::set_os_thread_name( "httplib bg" );
+
+    while( m_refreshRunning.load() )
+    {
+        long long maxAge = 0;
+
+        {
+            std::shared_lock lock( m_cacheMutex );
+
+            if( m_settings )
+                maxAge = std::max( m_settings->m_Source.timeout_categories, m_settings->m_Source.timeout_parts );
+        }
+
+        if( maxAge <= 0 )
+            maxAge = 1;
+
+        if( m_conn && m_cachePopulated.load() )
+        {
+            wxLogTrace( traceHTTPLib, wxT( "Initiating background refresh" ) );
+
+            try
+            {
+                std::map<std::string, HTTP_LIB_CATEGORY> categoryData;
+                bool                                     fetchSuccess = true;
+
+                for( const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
+                {
+                    std::vector<HTTP_LIB_PART> foundParts;
+
+                    if( !fetchCategoryParts( *m_conn, category, foundParts ) )
+                    {
+                        wxLogTrace( traceHTTPLib, wxT( "Background refresh: fetch failed for category %s" ),
+                                    category.name );
+                        fetchSuccess = false;
+                        break;
+                    }
+
+                    HTTP_LIB_CATEGORY cached = category;
+                    cached.cachedParts = std::move( foundParts );
+                    categoryData[category.id] = std::move( cached );
+                }
+
+                if( fetchSuccess )
+                {
+                    size_t signature = computeSignature( categoryData );
+                    bool   dataChanged = false;
+
+                    {
+                        std::unique_lock lock( m_cacheMutex );
+
+                        if( signature != m_cacheSignature )
+                            dataChanged = true;
+                    }
+
+                    if( dataChanged )
+                    {
+                        wxLogTrace( traceHTTPLib, wxT( "Background refresh: new data" ) );
+
+                        materializeCache( m_libraryPath, categoryData );
+
+                        {
+                            std::unique_lock lock( m_cacheMutex );
+                            m_cacheSignature = signature;
+                        }
+                    }
+                    else
+                    {
+                        wxLogTrace( traceHTTPLib, wxT( "Background refresh: no new data" ) );
+                    }
+                }
+            }
+            catch( const IO_ERROR& e )
+            {
+                wxLogTrace( traceHTTPLib, wxT( "Background refresh failed: %s" ), e.What() );
+            }
+            catch( const std::exception& e )
+            {
+                wxLogTrace( traceHTTPLib, wxT( "Background refresh failed: %s" ), e.what() );
+            }
+        }
+
+        {
+            std::unique_lock lock( m_refreshMutex );
+
+            m_refreshCV.wait_for( lock, std::chrono::seconds( maxAge ),
+                                  [this]()
+                                  {
+                                      return !m_refreshRunning.load();
+                                  } );
+        }
+    }
+}
+
+
+size_t SCH_IO_HTTP_LIB::computeSignature( const std::map<std::string, HTTP_LIB_CATEGORY>& aCategoryData ) const
+{
+    size_t signature = 0;
+
+    for( const auto& [catId, category] : aCategoryData )
+    {
+        hash_combine( signature, std::string_view( catId ) );
+        hash_combine( signature, std::string_view( category.name ) );
+
+        for( const HTTP_LIB_PART& part : category.cachedParts )
+        {
+            hash_combine( signature, std::string_view( part.id ) );
+            hash_combine( signature, std::string_view( part.name ) );
+            hash_combine( signature, std::string_view( part.symbolIdStr ) );
+            hash_combine( signature, part.exclude_from_bom );
+            hash_combine( signature, part.exclude_from_board );
+            hash_combine( signature, part.exclude_from_sim );
+            hash_combine( signature, std::string_view( part.desc ) );
+            hash_combine( signature, std::string_view( part.keywords ) );
+
+            for( const auto& [fieldName, fieldProps] : part.fields )
+            {
+                hash_combine( signature, std::string_view( fieldName ) );
+                hash_combine( signature, std::string_view( std::get<0>( fieldProps ) ) );
+                hash_combine( signature, std::get<1>( fieldProps ) );
+            }
+
+            for( const std::string& filter : part.fp_filters )
+                hash_combine( signature, std::string_view( filter ) );
+
+            if( !part.symbolIdStr.empty() )
+            {
+                LIB_ID symbolId;
+                symbolId.Parse( part.symbolIdStr );
+
+                if( symbolId.IsValid() && m_adapter )
+                {
+                    const UTF8& nickname = symbolId.GetLibNickname();
+                    hash_combine( signature, std::string_view( nickname.c_str() ) );
+
+                    if( std::optional<int> libHash = m_adapter->GetLibraryModifyHash( nickname ) )
+                        hash_combine( signature, *libHash );
+                }
+            }
+        }
+    }
+
+    return signature;
+}
+
+
+void SCH_IO_HTTP_LIB::materializeCache( const wxString& aLibraryPath,
+                                        const std::map<std::string, HTTP_LIB_CATEGORY>& aCategoryData )
+{
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>>         newSymbolCache;
+    std::map<wxString, std::pair<std::string, std::string>> newPartIdMap;
+    std::set<wxString>                                      newCustomFields;
+
+    for( const HTTP_LIB_CATEGORY& category : aCategoryData | std::views::values )
+    {
+        for( const HTTP_LIB_PART& part : category.cachedParts )
+        {
+            wxString symbolName( part.name );
+            newPartIdMap[symbolName] = { part.id, category.id };
+
+            LIB_SYMBOL* symbol = loadSymbolFromPart( aLibraryPath, symbolName, category, part, newCustomFields );
+
+            if( symbol )
+                newSymbolCache[symbolName] = std::unique_ptr<LIB_SYMBOL>( symbol );
+        }
+    }
+
+    {
+        std::unique_lock lock( m_cacheMutex );
+
+        m_symbolCache = std::move( newSymbolCache );
+        m_partIdMap = std::move( newPartIdMap );
+        m_customFields = std::move( newCustomFields );
+
+        m_cachePopulated = true;
+        m_modifyHash++;
+    }
+}
+
+
+void SCH_IO_HTTP_LIB::cacheLib( const wxString& aLibraryPath )
+{
+    if( m_inCacheLib )
+        return;
+
+    // After the initial load the background refresh thread handles all cache updates.
+    {
+        std::shared_lock lock( m_cacheMutex );
+
+        if( m_cachePopulated )
+            return;
+    }
+
+    m_inCacheLib = true;
+
+    struct CACHE_LIB_GUARD
+    {
+        bool* flag;
+        ~CACHE_LIB_GUARD() { *flag = false; }
+    } cacheLibGuard{ &m_inCacheLib };
+
+    m_libraryPath = aLibraryPath;
+
+    std::map<std::string, HTTP_LIB_CATEGORY> categoryData;
+
+    for( const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
+    {
+        std::vector<HTTP_LIB_PART> foundParts;
+
+        if( !fetchCategoryParts( *m_conn, category, foundParts ) )
+        {
+            if( !m_conn->GetLastError().empty() )
+            {
+                THROW_IO_ERROR( wxString::Format( _( "Error retrieving data from HTTP library %s: %s" ), category.name,
+                                                  m_conn->GetLastError() ) );
+            }
+
+            continue;
+        }
+
+        HTTP_LIB_CATEGORY cached = category;
+        cached.cachedParts = std::move( foundParts );
+        categoryData[category.id] = std::move( cached );
+    }
+
+    size_t signature = computeSignature( categoryData );
+
+    {
+        std::unique_lock lock( m_cacheMutex );
+
+        if( m_cachePopulated && signature == m_cacheSignature )
+            return;
+    }
+
+    materializeCache( aLibraryPath, categoryData );
+
+    {
+        std::unique_lock lock( m_cacheMutex );
+        m_cacheSignature = signature;
+    }
+
+    if( !m_refreshRunning.load() )
+        startBackgroundRefresh();
 }
 
 
@@ -48,14 +344,16 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( wxArrayString& aSymbolNameList, const 
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
 
-    // The name list drives the library tree and only needs part names, which the category
-    // listing already provides.  Avoid the per-part detail fetch done by the full enumeration.
-    for( const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
-    {
-        syncCacheIfStale( category );
+    cacheLib( aLibraryPath );
 
-        for( const HTTP_LIB_PART& part : m_cachedCategories[category.id].cachedParts )
-            aSymbolNameList.Add( part.name );
+    bool powerSymbolsOnly = aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
+
+    std::shared_lock lock( m_cacheMutex );
+
+    for( const auto& [name, symbol] : m_symbolCache )
+    {
+        if( !powerSymbolsOnly || symbol->IsPower() )
+            aSymbolNameList.Add( name );
     }
 }
 
@@ -70,37 +368,16 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
 
-    bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly ) );
+    cacheLib( aLibraryPath );
 
-    for( const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
+    bool powerSymbolsOnly = aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
+
+    std::shared_lock lock( m_cacheMutex );
+
+    for( const std::unique_ptr<LIB_SYMBOL>& symbol : m_symbolCache | std::views::values )
     {
-        syncCacheIfStale( category );
-
-        for( HTTP_LIB_PART& part : m_cachedCategories[category.id].cachedParts )
-        {
-            // The category listing may omit fields, so the chooser would show blank columns
-            // until each part is selected individually.  Back-fill from the per-part endpoint.
-            if( !part.detailsLoaded )
-            {
-                HTTP_LIB_PART fullPart;
-
-                if( m_conn->SelectOne( part.id, fullPart ) )
-                {
-                    // The listing name keys m_cache for LoadSymbol; keep it even if the detail
-                    // record reports a different (or missing) name.
-                    fullPart.id = part.id;
-                    fullPart.name = part.name;
-                    part = std::move( fullPart );
-                }
-            }
-
-            wxString libIDString( part.name );
-
-            LIB_SYMBOL* symbol = loadSymbolFromPart( aLibraryPath, libIDString, category, part );
-
-            if( symbol && ( !powerSymbolsOnly || symbol->IsPower() ) )
-                aSymbolList.emplace_back( symbol );
-        }
+        if( !powerSymbolsOnly || symbol->IsPower() )
+            aSymbolList.emplace_back( symbol.get() );
     }
 }
 
@@ -115,61 +392,71 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxS
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
 
-    std::string part_id = "";
+    cacheLib( aLibraryPath );
 
-    std::string partName( aAliasName.ToUTF8() );
-
-    const HTTP_LIB_CATEGORY* foundCategory = nullptr;
-    HTTP_LIB_PART            result;
-
-    std::vector<HTTP_LIB_CATEGORY> categories = m_conn->getCategories();
-
-    std::string associatedCatID;
-
-    if( !m_conn->GetCachedPartRelation( partName, part_id, associatedCatID ) )
     {
-        if( !m_conn->HasCachedParts() )
-            syncCache();
+        std::shared_lock lock( m_cacheMutex );
 
-        if( !m_conn->GetCachedPartRelation( partName, part_id, associatedCatID ) )
+        if( auto it = m_symbolCache.find( aAliasName ); it != m_symbolCache.end() )
+            return it->second->Duplicate();
+    }
+
+    // Cache miss: fall back to a direct per-part fetch.  In the steady state every known part
+    // is materialized, so this path only serves an uncached-but-known part.
+    std::string partId;
+    std::string categoryId;
+
+    {
+        std::shared_lock lock( m_cacheMutex );
+
+        if( auto it = m_partIdMap.find( aAliasName ); it != m_partIdMap.end() )
         {
-            wxLogTrace( traceHTTPLib, wxT( "loadSymbol: no cached part found for %s" ), partName );
-            return nullptr;
+            partId = it->second.first;
+            categoryId = it->second.second;
         }
     }
 
-    // get the matching category
-    for( const HTTP_LIB_CATEGORY& categoryIter : categories )
+    if( partId.empty() )
     {
-        if( categoryIter.id == associatedCatID )
+        wxLogTrace( traceHTTPLib, wxT( "LoadSymbol: no cached part found for %s" ), aAliasName );
+        return nullptr;
+    }
+
+    const HTTP_LIB_CATEGORY* foundCategory = nullptr;
+
+    for( const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
+    {
+        if( category.id == categoryId )
         {
-            foundCategory = &categoryIter;
+            foundCategory = &category;
             break;
         }
     }
 
-    // return Null if no category was found. This should never happen
-    if( foundCategory == nullptr )
+    if( !foundCategory )
     {
-        wxLogTrace( traceHTTPLib, wxT( "loadSymbol: no category found for %s" ), partName );
+        wxLogTrace( traceHTTPLib, wxT( "LoadSymbol: no category found for %s" ), aAliasName );
         return nullptr;
     }
 
-    if( m_conn->SelectOne( part_id, result ) )
-    {
-        wxLogTrace( traceHTTPLib, wxT( "LoadSymbol: SelectOne (%s) found in %s" ), part_id, foundCategory->name );
-    }
-    else
-    {
-        wxLogTrace( traceHTTPLib, wxT( "LoadSymbol: SelectOne (%s) failed for category %s" ), part_id,
-                    foundCategory->name );
+    HTTP_LIB_PART result;
 
-        THROW_IO_ERROR( m_lastError );
+    if( !m_conn->SelectOne( partId, result ) )
+    {
+        wxLogTrace( traceHTTPLib, wxT( "LoadSymbol: SelectOne (%s) failed for category %s" ),
+                    partId, foundCategory->name );
+        THROW_IO_ERROR( wxString::Format( _( "Error retrieving part %s from HTTP library: %s" ),
+                                          partId, m_conn->GetLastError() ) );
     }
 
-    wxCHECK( foundCategory, nullptr );
+    wxLogTrace( traceHTTPLib, wxT( "LoadSymbol: SelectOne (%s) found in %s" ),
+                partId, foundCategory->name );
 
-    return loadSymbolFromPart( aLibraryPath, aAliasName, *foundCategory, result );
+    // This transient symbol is not placed in the shared cache; collect its custom fields into a
+    // local set so the background materializer's m_customFields is never mutated off-thread.
+    std::set<wxString> transientFields;
+
+    return loadSymbolFromPart( aLibraryPath, aAliasName, *foundCategory, result, transientFields );
 }
 
 
@@ -213,6 +500,7 @@ wxString SCH_IO_HTTP_LIB::GetSubLibraryDescription( const wxString& aName )
 void SCH_IO_HTTP_LIB::GetAvailableSymbolFields( std::vector<wxString>& aNames )
 {
     // TODO: Implement this sometime; This is currently broken...
+    std::shared_lock lock( m_cacheMutex );
     std::copy( m_customFields.begin(), m_customFields.end(), std::back_inserter( aNames ) );
 }
 
@@ -272,7 +560,7 @@ void SCH_IO_HTTP_LIB::ensureSettings( const wxString& aSettingsPath )
 
         tryLoad();
     }
-    else if( m_settings )
+    else if( !m_conn && m_settings )
     {
         // If we have valid settings but no connection yet; reload settings in case user is editing
         tryLoad();
@@ -316,55 +604,13 @@ void SCH_IO_HTTP_LIB::connect()
 }
 
 
-void SCH_IO_HTTP_LIB::syncCache()
+LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
+                                                 const wxString& aSymbolName,
+                                                 const HTTP_LIB_CATEGORY& aCategory,
+                                                 const HTTP_LIB_PART& aPart,
+                                                 std::set<wxString>& aCustomFields )
 {
-    for( const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
-        syncCache( category );
-}
-
-
-void SCH_IO_HTTP_LIB::syncCacheIfStale( const HTTP_LIB_CATEGORY& category )
-{
-    auto it = m_cachedCategories.find( category.id );
-
-    if( it != m_cachedCategories.end()
-        && std::difftime( std::time( nullptr ), it->second.lastCached )
-                   < m_settings->m_Source.timeout_categories )
-    {
-        return;
-    }
-
-    syncCache( category );
-}
-
-
-void SCH_IO_HTTP_LIB::syncCache( const HTTP_LIB_CATEGORY& category )
-{
-    std::vector<HTTP_LIB_PART> found_parts;
-
-    if( !m_conn->SelectAll( category, found_parts ) )
-    {
-        if( !m_conn->GetLastError().empty() )
-        {
-            THROW_IO_ERRORF( _( "Error retrieving data from HTTP library %s: %s" ),
-                             category.name, m_conn->GetLastError() );
-        }
-
-        return;
-    }
-
-    // remove cached parts
-    m_cachedCategories[category.id].cachedParts.clear();
-
-    // Copy newly cached data across
-    m_cachedCategories[category.id].cachedParts = found_parts;
-    m_cachedCategories[category.id].lastCached = std::time( nullptr );
-}
-
-
-LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                                 const HTTP_LIB_CATEGORY& aCategory, const HTTP_LIB_PART& aPart )
-{
+    std::lock_guard lock( m_symbolLoadMutex );
     LIB_SYMBOL* symbol = nullptr;
     LIB_SYMBOL* originalSymbol = nullptr;
     LIB_ID      symbolId;
@@ -380,12 +626,48 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath, c
     {
         symbolId.Parse( symbolIdStr );
 
+        // A part's symbolIdStr may resolve back into this same HTTP library (issue #24249,
+        // e.g. a mistyped library nickname).  The adapter routes that lookup back into
+        // SCH_IO_HTTP_LIB::LoadSymbol, which would re-enter loadSymbolFromPart until the stack
+        // overflows.  Track in-flight LIB_IDs and skip the recursive load on re-entry.
+        struct CYCLE_GUARD
+        {
+            std::unordered_set<wxString>* set;
+            wxString                      key;
+            bool                          owns = false;
+
+            ~CYCLE_GUARD()
+            {
+                if( owns )
+                    set->erase( key );
+            }
+        } guard{ &m_inProgressLoads, {}, false };
+
+        bool cycle = false;
+
         if( symbolId.IsValid() )
-            originalSymbol = m_adapter->LoadSymbol( symbolId );
+        {
+            guard.key = symbolId.Format().wx_str();
+            guard.owns = m_inProgressLoads.insert( guard.key ).second;
+            cycle = !guard.owns;
+
+            if( cycle )
+            {
+                wxLogTrace( traceHTTPLib,
+                            wxT( "loadSymbolFromPart: cycle detected resolving '%s' "
+                                 "(part '%s'); skipping recursive load" ),
+                            symbolIdStr, aSymbolName );
+            }
+            else
+            {
+                originalSymbol = m_adapter->LoadSymbol( symbolId );
+            }
+        }
 
         if( originalSymbol )
         {
-            wxLogTrace( traceHTTPLib, wxT( "loadSymbolFromPart: found original symbol '%s'" ), symbolIdStr );
+            wxLogTrace( traceHTTPLib, wxT( "loadSymbolFromPart: found original symbol '%s'" ),
+                        symbolIdStr );
 
             symbol = originalSymbol->Duplicate();
             symbol->SetSourceLibId( symbolId );
@@ -395,6 +677,12 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath, c
             libId.SetLibNickname( libNickname );
             libId.SetSubLibraryName( aCategory.name );
             symbol->SetLibId( libId );
+        }
+        else if( cycle )
+        {
+            wxLogTrace( traceHTTPLib, wxT( "loadSymbolFromPart: source symbol '%s' is a "
+                                           "self-reference, will create empty symbol" ),
+                        symbolIdStr );
         }
         else if( !symbolId.IsValid() )
         {
@@ -496,7 +784,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath, c
                 field->SetVisible( std::get<1>( fieldProperties ) );
                 symbol->AddField( field );
 
-                m_customFields.insert( fieldName );
+                aCustomFields.insert( fieldName );
             }
         }
     }
