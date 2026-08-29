@@ -28,6 +28,7 @@
 #include <math/util.h>      // for KiROUND
 #include <geometry/shape_rect.h>
 #include <string_utils.h>
+#include <text_eval/text_eval_wrapper.h>
 #include <trigo.h>
 #include <fmt/format.h>
 
@@ -906,15 +907,23 @@ void PS_PLOTTER::Text( const VECTOR2I&        aPos,
     SetCurrentLineWidth( aWidth );
     SetColor( aColor );
 
+    wxString text( aText );
+
+    if( text.Contains( wxS( "@{" ) ) )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        text = evaluator.Evaluate( text );
+    }
+
     // Draw the hidden postscript text (if requested)
     if( m_textMode == PLOT_TEXT_MODE::PHANTOM )
     {
-        std::string ps_test = encodeStringForPlotter( aText );
+        std::string ps_test = encodeStringForPlotter( text );
         VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
         fmt::print( m_outputFile, "{} {:g} {:g} phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
     }
 
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, GetCurrentLineWidth(),
+    PLOTTER::Text( aPos, aColor, text, aOrient, aSize, aH_justify, aV_justify, GetCurrentLineWidth(),
                    aItalic, aBold, aMultilineAllowed, aFont, aFontMetrics, aData );
 }
 
@@ -930,10 +939,18 @@ void PS_PLOTTER::PlotText( const VECTOR2I&        aPos,
     SetCurrentLineWidth( aAttributes.m_StrokeWidth );
     SetColor( aColor );
 
+    wxString text( aText );
+
+    if( text.Contains( wxS( "@{" ) ) )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        text = evaluator.Evaluate( text );
+    }
+
     // Draw the hidden postscript text (if requested)
     if( m_textMode == PLOT_TEXT_MODE::PHANTOM )
     {
-        std::string ps_test = encodeStringForPlotter( aText );
+        std::string ps_test = encodeStringForPlotter( text );
         VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
         fmt::print( m_outputFile, "{} {:g} {:g} phantomshow\n",
                     ps_test,
@@ -941,7 +958,7 @@ void PS_PLOTTER::PlotText( const VECTOR2I&        aPos,
                     pos_dev.y );
     }
 
-    PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aFontMetrics, aData );
+    PLOTTER::PlotText( aPos, aColor, text, aAttributes, aFont, aFontMetrics, aData );
 }
 
 

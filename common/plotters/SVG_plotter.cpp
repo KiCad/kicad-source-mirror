@@ -85,6 +85,7 @@
 #include <core/base64.h>
 #include <eda_shape.h>
 #include <string_utils.h>
+#include <text_eval/text_eval_wrapper.h>
 #include <font/font.h>
 #include <macros.h>
 #include <trigo.h>
@@ -884,6 +885,14 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
     SetColor( aColor );
     SetCurrentLineWidth( aWidth );
 
+    wxString text( aText );
+
+    if( text.Contains( wxS( "@{" ) ) )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        text = evaluator.Evaluate( text );
+    }
+
     if( m_graphics_changed )
         setSVGPlotStyle( GetCurrentLineWidth() );
 
@@ -914,7 +923,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
 
     // aSize.x or aSize.y is < 0 for mirrored texts.
     // The actual text size value is the absolute value
-    text_size.x = std::abs( GRTextWidth( aText, aFont, aSize, GetCurrentLineWidth(), aBold, aItalic,
+    text_size.x = std::abs( GRTextWidth( text, aFont, aSize, GetCurrentLineWidth(), aBold, aItalic,
                                          aFontMetrics ) );
     text_size.y = std::abs( aSize.x * 4/3 ); // Hershey font height to em size conversion
     VECTOR2D anchor_pos_dev = userToDeviceCoordinates( aPos );
@@ -956,7 +965,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
                     sz_dev.y,
                     m_precision,
                     hjust,
-                    TO_UTF8( XmlEsc( aText ) ) );
+                    TO_UTF8( XmlEsc( text ) ) );
 
         if( !aOrient.IsZero() )
             fmt::print( m_outputFile, "</g>\n" );
@@ -967,9 +976,9 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
     {
         fmt::print( m_outputFile,
                     "<g class=\"stroked-text\"><desc>{}</desc>\n",
-                    TO_UTF8( XmlEsc( aText ) ) );
+                    TO_UTF8( XmlEsc( text ) ) );
 
-        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, GetCurrentLineWidth(),
+        PLOTTER::Text( aPos, aColor, text, aOrient, aSize, aH_justify, aV_justify, GetCurrentLineWidth(),
                        aItalic, aBold, aMultilineAllowed, aFont, aFontMetrics );
 
         fmt::print( m_outputFile, "</g>" );

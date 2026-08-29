@@ -1190,6 +1190,7 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
     m_hyperlinkMenuHandles.clear();
     m_bookmarksInPage.clear();
     m_totalOutlineNodes = 0;
+    m_usedBase14Fonts = false;
 
     m_outlineRoot = std::make_unique<OUTLINE_NODE>();
 
@@ -1535,8 +1536,44 @@ void PDF_PLOTTER::endPlotEmitResources()
     emitOutlineFonts();
     emitStrokeFonts();
 
+    // The non-embeddable font fallback writes Tf against these names, so they must be declared
+    // or the invisible searchable layer is an undefined resource
+    struct
+    {
+        const char* psname;
+        const char* rsname;
+        int         handle;
+    } base14[4] = {
+        { "/Helvetica",             "/KicadFont",   0 },
+        { "/Helvetica-Oblique",     "/KicadFontI",  0 },
+        { "/Helvetica-Bold",        "/KicadFontB",  0 },
+        { "/Helvetica-BoldOblique", "/KicadFontBI", 0 }
+    };
+
+    if( m_usedBase14Fonts )
+    {
+        for( auto& font : base14 )
+        {
+            font.handle = startPdfObject();
+            fmt::println( m_outputFile,
+                          "<< /BaseFont {}\n"
+                          "   /Type /Font\n"
+                          "   /Subtype /Type1\n"
+                          "   /Encoding /WinAnsiEncoding\n"
+                          ">>",
+                          font.psname );
+            closePdfObject();
+        }
+    }
+
     startPdfObject( m_fontResDictHandle );
     fmt::println( m_outputFile, "<<" );
+
+    if( m_usedBase14Fonts )
+    {
+        for( const auto& font : base14 )
+            fmt::println( m_outputFile, "    {} {} 0 R", font.rsname, font.handle );
+    }
 
     if( m_outlineFontManager )
     {
@@ -2130,6 +2167,8 @@ void PDF_PLOTTER::Text( const VECTOR2I& aPos, const COLOR4D& aColor, const wxStr
             const char *fontname = aItalic ? ( aBold ? "/KicadFontBI" : "/KicadFontI" )
                                            : ( aBold ? "/KicadFontB"  : "/KicadFont"  );
 
+            m_usedBase14Fonts = true;
+
             // Compute the copious transformation parameters of the Current Transform Matrix
             double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
             double wideningFactor, heightFactor;
@@ -2137,16 +2176,16 @@ void PDF_PLOTTER::Text( const VECTOR2I& aPos, const COLOR4D& aColor, const wxStr
             VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
             bool     textMirrored = aSize.x < 0;
 
-            computeTextParameters( aPos, aText, aOrient, t_size, textMirrored, aH_justify, aV_justify, aWidth,
+            computeTextParameters( aPos, text, aOrient, t_size, textMirrored, aH_justify, aV_justify, aWidth,
                                    aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f,
                                    &heightFactor );
 
             SetColor( aColor );
             SetCurrentLineWidth( aWidth, aData );
 
-            wxStringTokenizer str_tok( aText, " ", wxTOKEN_RET_DELIMS );
+            wxStringTokenizer str_tok( text, " ", wxTOKEN_RET_DELIMS );
 
-            VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic, aFontMetrics ) );
+            VECTOR2I full_box( aFont->StringBoundaryLimits( text, t_size, aWidth, aBold, aItalic, aFontMetrics ) );
 
             if( textMirrored )
                 full_box.x *= -1;
@@ -2207,7 +2246,7 @@ void PDF_PLOTTER::Text( const VECTOR2I& aPos, const COLOR4D& aColor, const wxStr
             }
 
             // Plot the text
-            PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
+            PLOTTER::Text( aPos, aColor, text, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
                            aBold, aMultilineAllowed, aFont, aFontMetrics, aData );
 
             return;
