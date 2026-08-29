@@ -119,7 +119,7 @@ bool TEARDROP_MANAGER::IsUniformlyRound(BOARD_ITEM* aItem)
                 } );
     }
 
-    return nonRound;
+    return !nonRound;
 }
 
 
