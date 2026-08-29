@@ -66,7 +66,9 @@ void PCB_GROUP::Serialize( google::protobuf::Any &aContainer ) const
         itemId->set_value( item->m_Uuid.AsStdString() );
     }
 
-    if( const BOARD* board = GetBoard() )
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        group.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
         group.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
     if( HasDesignBlockLink() )
