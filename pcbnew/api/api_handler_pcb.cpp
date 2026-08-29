@@ -620,7 +620,7 @@ API_HANDLER_PCB::handleGetEmbeddedFiles( const HANDLER_CONTEXT<GetEmbeddedFiles>
         return tl::unexpected( documentValidation.error() );
 
     common::types::EmbeddedFiles response;
-    board::PackEmbeddedFiles( response, *frame()->GetBoard() );
+    board::PackEmbeddedFiles( response, *board()->GetEmbeddedFiles() );
     return response;
 }
 
@@ -653,7 +653,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleAddEmbeddedFiles( const HANDLER_CON
     if( !result.has_value() )
         return result;
 
-    EMBEDDED_FILES* boardFiles = frame()->GetBoard()->GetEmbeddedFiles();
+    EMBEDDED_FILES* boardFiles = board()->GetEmbeddedFiles();
 
     for( const std::shared_ptr<EMBEDDED_FILES::EMBEDDED_FILE>& file : files.EmbeddedFileMap() | std::views::values )
     {
@@ -661,7 +661,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleAddEmbeddedFiles( const HANDLER_CON
         boardFiles->AddFile( copy );
     }
 
-    frame()->OnModify();
+    onModified();
     return result;
 }
 
@@ -674,13 +674,13 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetEmbeddedFiles( const HANDLER_CON
     if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() ); !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    HANDLER_RESULT<Empty> result = unpackEmbeddedFiles( *frame()->GetBoard()->GetEmbeddedFiles(),
+    HANDLER_RESULT<Empty> result = unpackEmbeddedFiles( *board()->GetEmbeddedFiles(),
                                                         aCtx.Request.files() );
 
     if( !result.has_value() )
         return result;
 
-    frame()->OnModify();
+    onModified();
     return result;
 }
 
