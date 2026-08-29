@@ -2847,10 +2847,21 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         {
             std::optional<BEZIER<double>> curve = aShape->ShortenedBezierCurve( thickness );
 
-            if( curve )
+            if( !curve )
+                break;
+
+            if( outline_mode )
             {
-                m_gal->SetIsFill( false );
-                m_gal->SetIsStroke( true );
+                std::vector<VECTOR2D> output;
+                BEZIER_POLY converter( std::vector<VECTOR2D>{ curve->Start, curve->C1, curve->C2, curve->End } );
+
+                converter.GetPoly( output, m_maxError );
+                m_gal->DrawSegmentChain( output, thickness );
+            }
+            else
+            {
+                m_gal->SetIsFill( aShape->IsSolidFill() );
+                m_gal->SetIsStroke( lineStyle == LINE_STYLE::SOLID && thickness > 0 );
                 m_gal->SetLineWidth( thickness );
                 m_gal->DrawCurve( curve->Start, curve->C1, curve->C2, curve->End, m_maxError );
             }
