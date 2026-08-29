@@ -36,10 +36,45 @@
 const char* const traceHTTPLib = "KICAD_HTTP_LIB";
 
 
-HTTP_LIB_CONNECTION::HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool aTestConnectionNow )
+static HTTP_LIB_CONNECTION::RETRIEVER makeDefaultRetriever( const HTTP_LIB_SOURCE& aSource )
 {
-    m_source = aSource;
+    return  [aSource]( const std::string& aUrl, int& aStatusCode, std::string& aBody, std::string& aError )
+            {
+                KICAD_CURL_EASY curl;
+                curl.SetHeader( "Accept", "application/json" );
+                curl.SetHeader( "Authorization", "Token " + aSource.token );
+                curl.SetFollowRedirects( true );
 
+                if( !curl.SetURL( aUrl ) )
+                {
+                    aError = "Unable to set request URL.";
+                    return false;
+                }
+
+                if( const int result = curl.Perform(); result != CURLE_OK )
+                {
+                    aError = curl.GetErrorText( result );
+                    return false;
+                }
+
+                aStatusCode = curl.GetResponseStatusCode();
+                aBody = curl.GetBuffer();
+                return true;
+            };
+}
+
+
+HTTP_LIB_CONNECTION::HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool aTestConnectionNow ) :
+        HTTP_LIB_CONNECTION( aSource, aTestConnectionNow, makeDefaultRetriever( aSource ) )
+{
+}
+
+
+HTTP_LIB_CONNECTION::HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool aTestConnectionNow,
+                                          RETRIEVER aRetriever ) :
+        m_source( aSource ),
+        m_retriever( std::move( aRetriever ) )
+{
     if( aTestConnectionNow )
         validateHttpLibraryEndpoints();
 }
@@ -52,16 +87,14 @@ bool HTTP_LIB_CONNECTION::validateHttpLibraryEndpoints()
     m_endpointValid = false;
     std::string res = "";
 
-    std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    curl->SetURL( m_source.root_url );
-
     try
     {
-        curl->Perform();
+        int statusCode = 0;
 
-        res = curl->GetBuffer();
+        if( !retrieve( m_source.root_url, statusCode, res ) )
+            return false;
 
-        if( !checkServerResponse( curl ) )
+        if( !checkServerResponse( statusCode ) )
             return false;
 
         if( res.length() == 0 )
@@ -106,16 +139,14 @@ bool HTTP_LIB_CONNECTION::syncCategories()
 
     std::string res = "";
 
-    std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    curl->SetURL( m_source.root_url + "categories.json" );
-
     try
     {
-        curl->Perform();
+        int statusCode = 0;
 
-        res = curl->GetBuffer();
+        if( !retrieve( m_source.root_url + "categories.json", statusCode, res ) )
+            return false;
 
-        if( !checkServerResponse( curl ) )
+        if( !checkServerResponse( statusCode ) )
             return false;
 
         nlohmann::json response = nlohmann::json::parse( res );
@@ -300,18 +331,16 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
     }
 
     std::string res = "";
-
-    std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
     std::string url = m_source.root_url + fmt::format( "parts/{}.json", aPartID );
-    curl->SetURL( url );
 
     try
     {
-        curl->Perform();
+        int statusCode = 0;
 
-        res = curl->GetBuffer();
+        if( !retrieve( url, statusCode, res ) )
+            return false;
 
-        if( !checkServerResponse( curl ) )
+        if( !checkServerResponse( statusCode ) )
             return false;
 
         nlohmann::ordered_json response = nlohmann::ordered_json::parse( res );
@@ -353,16 +382,14 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::ve
     }
 
     std::string res = "";
-
-    std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-
-    curl->SetURL( m_source.root_url + fmt::format( "parts/category/{}.json", aCategory.id ) );
+    std::string url = m_source.root_url + fmt::format( "parts/category/{}.json", aCategory.id );
 
     try
     {
-        curl->Perform();
+        int statusCode = 0;
 
-        res = curl->GetBuffer();
+        if( !retrieve( url, statusCode, res ) )
+            return false;
 
         nlohmann::json response = nlohmann::json::parse( res );
 
@@ -401,14 +428,26 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::ve
 }
 
 
-bool HTTP_LIB_CONNECTION::checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& aCurl )
+bool HTTP_LIB_CONNECTION::retrieve( const std::string& aUrl, int& aStatusCode, std::string& aBody )
 {
-    int statusCode = aCurl->GetResponseStatusCode();
+    std::string error;
 
-    if( statusCode != 200 )
+    if( !m_retriever( aUrl, aStatusCode, aBody, error ) )
+    {
+        m_lastError += error;
+        return false;
+    }
+
+    return true;
+}
+
+
+bool HTTP_LIB_CONNECTION::checkServerResponse( int aStatusCode )
+{
+    if( aStatusCode != 200 )
     {
         m_lastError += wxString::Format( _( "API responded with error code: %s" ) + "\n",
-                                         httpErrorCodeDescription( statusCode ) );
+                                         httpErrorCodeDescription( aStatusCode ) );
         return false;
     }
 

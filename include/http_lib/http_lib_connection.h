@@ -22,6 +22,7 @@
 
 #include <any>
 #include <boost/algorithm/string.hpp>
+#include <functional>
 #include <json_common.h>
 #include <mutex>
 
@@ -46,9 +47,23 @@ bool setPartExtendedData( const nlohmann::json& aPartJson, HTTP_LIB_PART& aPart 
 class HTTP_LIB_CONNECTION
 {
 public:
-    static const long DEFAULT_TIMEOUT = 10;
+    /**
+     * Allows replacing CURL fetches with a mock for testing
+     *
+     * @param aUrl the URL to retrieve
+     * @param aStatusCode receives the HTTP status (0 when no response was received)
+     * @param aBody receives the response body
+     * @param aError receives a failure reason when the request could not be completed
+     * @return true when a response was obtained (regardless of status code); false when the
+     *         request could not be completed at the transport level
+     */
+    using RETRIEVER = std::function<bool( const std::string& aUrl, int& aStatusCode,
+                                          std::string& aBody, std::string& aError )>;
 
     HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool aTestConnectionNow );
+
+    HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool aTestConnectionNow, RETRIEVER aRetriever );
+
     virtual ~HTTP_LIB_CONNECTION() = default;
 
     bool IsValidEndpoint() const { return m_endpointValid; }
@@ -129,26 +144,19 @@ public:
     }
 
 private:
-    // This is clunky but at the moment the only way to free the pointer after use without
-    // KiCad crashing.  At this point we can't use smart pointers as there is a problem with
-    // the order of how things are deleted/freed
-    std::unique_ptr<KICAD_CURL_EASY> createCurlEasyObject()
-    {
-        std::unique_ptr<KICAD_CURL_EASY> aCurl( new KICAD_CURL_EASY() );
-
-        // prepare curl
-        aCurl->SetHeader( "Accept", "application/json" );
-        aCurl->SetHeader( "Authorization", "Token " + m_source.token );
-        aCurl->SetFollowRedirects( true );
-
-        return aCurl;
-    }
-
     bool validateHttpLibraryEndpoints();
 
     bool syncCategories();
 
-    bool checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& aCurl );
+    /**
+     * Fetch @p aUrl through the transport.
+     *
+     * @return false (with m_lastError populated) when the transport could not complete the
+     *         request; true otherwise, even when @p aStatusCode is not 200.
+     */
+    bool retrieve( const std::string& aUrl, int& aStatusCode, std::string& aBody );
+
+    bool checkServerResponse( int aStatusCode );
 
     /**
      * HTTP response status codes indicate whether a specific HTTP request has been
@@ -169,6 +177,7 @@ private:
     mutable std::mutex m_queryMutex;
 
     HTTP_LIB_SOURCE m_source;
+    RETRIEVER       m_retriever;
     bool            m_endpointValid = false;
     std::string     m_lastError;
 

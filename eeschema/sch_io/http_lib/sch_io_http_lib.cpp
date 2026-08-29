@@ -566,6 +566,9 @@ void SCH_IO_HTTP_LIB::ensureSettings( const wxString& aSettingsPath )
 
                 // Append api version to root URL
                 m_settings->m_Source.root_url += m_settings->m_Source.api_version + "/";
+
+                if( m_sourcePatcher )
+                    m_sourcePatcher( m_settings->m_Source );
             };
 
     if( !m_settings && !aSettingsPath.IsEmpty() )
@@ -610,7 +613,10 @@ void SCH_IO_HTTP_LIB::connect()
 
     if( !m_conn )
     {
-        m_conn = std::make_unique<HTTP_LIB_CONNECTION>( m_settings->m_Source, true );
+        if( m_connectionFactory )
+            m_conn = m_connectionFactory( m_settings->m_Source );
+        else
+            m_conn = std::make_unique<HTTP_LIB_CONNECTION>( m_settings->m_Source, true );
 
         if( !m_conn->IsValidEndpoint() )
         {

@@ -114,7 +114,7 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::CheckLibrary( LIB_DATA* aLib )
     catch( IO_ERROR& e )
     {
         aLib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-        aLib->status.error = LIBRARY_ERROR( e.Problem(), e.Where() );
+        aLib->status.error = LIBRARY_ERROR( e.What() );
         wxLogTrace( traceLibraries, "Sym: %s: library check failed: %s", aLib->row->Nickname(), e.What() );
     }
 

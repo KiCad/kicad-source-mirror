@@ -1,0 +1,15 @@
+{
+    "meta": {
+        "version": 1.0
+    },
+    "name": "Fake HTTP Library",
+    "description": "Offline HTTP library fixture exercising the in-process fake REST server",
+    "source": {
+        "type": "REST_API",
+        "api_version": "v1",
+        "root_url": "http://fake.test/",
+        "token": "",
+        "timeout_parts_seconds": 30,
+        "timeout_categories_seconds": 600
+    }
+}
