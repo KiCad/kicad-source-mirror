@@ -307,6 +307,12 @@ bool PCB_CONSTRAINT::Deserialize( const google::protobuf::Any& aContainer )
     return true;
 }
 
+void PCB_CONSTRAINT::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_CONSTRAINT_T, /* void */ );
+    *this = *static_cast<const PCB_CONSTRAINT*>( aOther );
+}
+
 
 EDA_ITEM* PCB_CONSTRAINT::Clone() const
 {
