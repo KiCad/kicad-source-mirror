@@ -108,11 +108,22 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     {
         for( const OPEN_DOCUMENT& doc : openDocuments )
         {
+            // The project has no document face; it is released by UnloadProject below.
+            if( doc.type == types::DOCTYPE_PROJECT )
+                continue;
+
             wxString error;
             aKiway.ProcessApiCloseDocument( faceForDocument( doc.type ), doc.fileName, server.get(), &error );
         }
 
         openDocuments.clear();
+
+        if( openProjectPath )
+        {
+            PROJECT& project = Pgm().GetSettingsManager().Prj();
+            Pgm().GetSettingsManager().UnloadProject( &project, false );
+        }
+
         openProjectPath.reset();
 
         return google::protobuf::Empty();
@@ -176,6 +187,18 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
                 }
 
                 openProjectPath = projectPath;
+            }
+
+            if( std::ranges::find_if( openDocuments,
+                                      []( const OPEN_DOCUMENT& d )
+                                      {
+                                          return d.type == types::DOCTYPE_PROJECT;
+                                      } ) == openDocuments.end() )
+            {
+                OPEN_DOCUMENT doc;
+                doc.type = types::DOCTYPE_PROJECT;
+                doc.fileName = projectPath.GetFullName();
+                openDocuments.push_back( doc );
             }
 
             commands::OpenDocumentResponse response;
@@ -292,7 +315,8 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
                 return tl::unexpected( e );
             }
 
-            if( typeToClose == types::DOCTYPE_SCHEMATIC && aRequest.document().has_project()
+            if( ( typeToClose == types::DOCTYPE_SCHEMATIC || typeToClose == types::DOCTYPE_PROJECT )
+                && aRequest.document().has_project()
                 && openProjectPath
                 && aRequest.document().project().name() != openProjectPath->GetName().ToStdString() )
             {
@@ -308,19 +332,28 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             it = openDocuments.begin();
         }
 
-        wxString error;
-
-        if( !aKiway.ProcessApiCloseDocument( faceForDocument( it->type ), it->fileName, server.get(), &error ) )
+        if( it->type == types::DOCTYPE_PROJECT )
         {
-            ApiResponseStatus e;
-            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-            e.set_error_message( error.ToStdString() );
-            return tl::unexpected( e );
+            PROJECT& project = Pgm().GetSettingsManager().Prj();
+            Pgm().GetSettingsManager().UnloadProject( &project, false );
+            openProjectPath.reset();
+        }
+        else
+        {
+            wxString error;
+
+            if( !aKiway.ProcessApiCloseDocument( faceForDocument( it->type ), it->fileName, server.get(), &error ) )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( error.ToStdString() );
+                return tl::unexpected( e );
+            }
         }
 
         openDocuments.erase( it );
 
-        if( openDocuments.empty() )
+        if( openDocuments.empty() && openProjectPath )
         {
             PROJECT& project = Pgm().GetSettingsManager().Prj();
             Pgm().GetSettingsManager().UnloadProject( &project, false );
