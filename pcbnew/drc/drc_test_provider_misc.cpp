@@ -462,8 +462,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                                 {
                                     wxString drcText = aExpr.GetMatch( remaining, 2 );
 
-                                    std::shared_ptr<DRC_ITEM> drcItem =
-                                            DRC_ITEM::Create( aErrorCode );
+                                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( aErrorCode );
 
                                     if( item )
                                         drcItem->SetItems( item );
@@ -521,7 +520,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     else if( varRefRegEx.Matches( ExpandEnvVarSubstitutions( textItem->GetShownText( false ),
                                                                              nullptr /*project already done*/ ) ) )
                     {
-                        auto drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                         drcItem->SetItems( item );
 
                         reportViolation( drcItem, item->GetPosition(), item->GetLayer() );

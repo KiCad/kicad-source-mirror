@@ -114,6 +114,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             {
                 if( m_drcEngine->IsCancelled() )
                     return 0;
+
                 const auto& areaZonePair = toCache[idx];
                 ZONE* ruleArea = areaZonePair.first;
                 ZONE* copperZone = areaZonePair.second;
@@ -201,8 +202,11 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     {
         // Items that plot geometry onto Edge.Cuts corrupt the board outline.
         // Reference images are excluded on purpose because they are never plotted.
-        if( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T
-            || item->Type() == PCB_TABLE_T || item->Type() == PCB_BARCODE_T
+        if( item->Type() == PCB_FIELD_T
+            || item->Type() == PCB_TEXT_T
+            || item->Type() == PCB_TEXTBOX_T
+            || item->Type() == PCB_TABLE_T
+            || item->Type() == PCB_BARCODE_T
             || BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
             return item->GetLayer() == Edge_Cuts;
@@ -273,11 +277,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                                     if( zoneOutline.Collide( shape.get(), 0, &dummyActual, &pos ) )
                                     {
-                                        std::shared_ptr<DRC_ITEM> drcItem =
-                                                DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+                                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
                                         drcItem->SetItems( track );
-                                        reportViolation( drcItem, pos,
-                                                         track->GetLayerSet().ExtractLayer() );
+                                        reportViolation( drcItem, pos, track->GetLayerSet().ExtractLayer() );
                                     }
 
                                     return !m_drcEngine->IsCancelled();
@@ -303,10 +305,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                 if( isTrackOrArc && rule->IsImplicit() )
                                     return;
 
-                                std::shared_ptr<DRC_ITEM> drcItem =
-                                        DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
-                                PCB_LAYER_ID layer = item->GetLayerSet().ExtractLayer();
-                                VECTOR2I     pos = item->GetPosition();
+                                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+                                PCB_LAYER_ID              layer = item->GetLayerSet().ExtractLayer();
+                                VECTOR2I                  pos = item->GetPosition();
 
                                 // Provide a better location for keepout area collisions by
                                 // snapping to where the item actually crosses the keepout outline.
@@ -317,8 +318,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                 {
                                     if( ZONE* keepout = dynamic_cast<ZONE*>( rule->m_ImplicitItem ) )
                                     {
-                                        std::shared_ptr<SHAPE> shape =
-                                                item->GetEffectiveShape( layer );
+                                        std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( layer );
                                         int dummyActual;
 
                                         SHAPE_POLY_SET keepoutOutline = keepout->GetBoardOutline();
@@ -326,15 +326,13 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                     }
                                 }
 
-                                drcItem->SetErrorDetail(
-                                        wxString::Format( wxS( "(%s)" ), aConstraint.GetName() ) );
+                                drcItem->SetErrorDetail( wxString::Format( wxS( "(%s)" ), aConstraint.GetName() ) );
                                 drcItem->SetItems( item );
                                 drcItem->SetViolatingRule( rule );
                                 reportViolation( drcItem, pos, layer );
                             };
 
-                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT,
-                                                                        item, nullptr,
+                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item, nullptr,
                                                                         UNDEFINED_LAYER );
 
                     if( constraint.m_DisallowFlags
@@ -352,8 +350,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     {
                         item->SetFlags( HOLE_PROXY );
 
-                        constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item,
-                                                             nullptr, UNDEFINED_LAYER );
+                        constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item, nullptr, UNDEFINED_LAYER );
 
                         if( constraint.m_DisallowFlags
                             && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )

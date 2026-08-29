@@ -91,8 +91,8 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
             if( track->Type() == PCB_VIA_T )
             {
-                auto constraint = m_drcEngine->EvalRules( VIA_DANGLING_CONSTRAINT, track, nullptr,
-                                                         track->GetLayer() );
+                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( VIA_DANGLING_CONSTRAINT, track, nullptr,
+                                                                    track->GetLayer() );
 
                 if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                     continue;

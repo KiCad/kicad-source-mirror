@@ -769,12 +769,10 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkStubLengths(
             if( !outOfRange( measured ) )
                 continue;
 
-            std::shared_ptr<DRC_ITEM> item =
-                    DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
-            item->SetErrorMessage( wxString::Format(
-                    _( "Stub length (%s) out of range for net chain '%s'." ),
-                    MessageTextFromValue( measured, true, dataType ),
-                    chainName ) );
+            std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
+            item->SetErrorMessage( wxString::Format( _( "Stub length (%s) out of range for net chain '%s'." ),
+                                                     MessageTextFromValue( measured, true, dataType ),
+                                                     chainName ) );
             item->SetViolatingRule( aRule );
 
             for( BOARD_CONNECTED_ITEM* it : stub.items )
@@ -812,13 +810,11 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkStubLengths(
         if( !outOfRange( measured ) )
             continue;
 
-        std::shared_ptr<DRC_ITEM> item =
-                DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
-        item->SetErrorMessage( wxString::Format(
-                _( "Stub length (%s) out of range for net chain '%s' on net '%s'." ),
-                MessageTextFromValue( measured, true, dataType ),
-                netInfo->GetNetChain(),
-                netInfo->GetNetname() ) );
+        std::shared_ptr<DRC_ITEM> item = DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
+        item->SetErrorMessage( wxString::Format( _( "Stub length (%s) out of range for net chain '%s' on net '%s'." ),
+                                                 MessageTextFromValue( measured, true, dataType ),
+                                                 netInfo->GetNetChain(),
+                                                 netInfo->GetNetname() ) );
         item->SetViolatingRule( aRule );
 
         for( BOARD_CONNECTED_ITEM* connItem : conn.items )
@@ -1006,8 +1002,7 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkReturnPath(
                                                    ? items.front()->GetPosition()
                                                    : VECTOR2I() );
 
-            std::shared_ptr<DRC_ITEM> drcItem =
-                    DRC_ITEM::Create( DRCE_NET_CHAIN_RETURN_PATH_BREAK );
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CHAIN_RETURN_PATH_BREAK );
 
             wxString msg = wxString::Format(
                     _( "Net chain '%s' has no copper return path on reference layer '%s'." ),

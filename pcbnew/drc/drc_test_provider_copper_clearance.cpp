@@ -1240,9 +1240,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
             [this]( ZONE* zoneA, ZONE* zoneB, VECTOR2I& pt, int actual, const DRC_CONSTRAINT& constraint,
                     PCB_LAYER_ID layer ) -> void
             {
-                std::shared_ptr<DRC_ITEM> drcItem;
-
-                drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
                 drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
                                                     constraint.GetName(),
                                                     constraint.GetValue().Min(),
