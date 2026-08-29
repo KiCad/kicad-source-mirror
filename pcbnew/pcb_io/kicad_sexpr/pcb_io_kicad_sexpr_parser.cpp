@@ -7188,14 +7188,14 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePAD_primitives( PAD* aPad, PCB_LAYER_ID aLa
         case T_gr_rect:
         case T_gr_poly:
         case T_gr_curve:
-            aPad->Padstack().AddPrimitive( parsePCB_SHAPE( nullptr ), aLayer );
+            aPad->AddPrimitive( aLayer, parsePCB_SHAPE( nullptr ) );
             break;
 
         case T_gr_bbox:
             {
                 PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
                 numberBox->SetIsProxyItem();
-                aPad->Padstack().AddPrimitive( numberBox, aLayer );
+                aPad->AddPrimitive( aLayer, numberBox );
                 break;
             }
 
@@ -7203,7 +7203,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePAD_primitives( PAD* aPad, PCB_LAYER_ID aLa
             {
                 PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
                 spokeTemplate->SetIsProxyItem();
-                aPad->Padstack().AddPrimitive( spokeTemplate, aLayer );
+                aPad->AddPrimitive( aLayer, spokeTemplate );
                 break;
             }
 
@@ -7234,8 +7234,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad, PCB_LAYER_ID aLayer 
             // Because this is an anchor, only the 2 very basic shapes are managed: circle and rect.
             switch( token )
             {
-                case T_circle: aPad->Padstack().SetAnchorShape( PAD_SHAPE::CIRCLE, aLayer );    break;
-                case T_rect:   aPad->Padstack().SetAnchorShape( PAD_SHAPE::RECTANGLE, aLayer ); break;
+                case T_circle: aPad->SetAnchorPadShape( aLayer, PAD_SHAPE::CIRCLE );    break;
+                case T_rect:   aPad->SetAnchorPadShape( aLayer, PAD_SHAPE::RECTANGLE ); break;
                 default:       Expecting( "circle or rect" );
             }
 
