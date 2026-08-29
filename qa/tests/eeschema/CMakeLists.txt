@@ -153,6 +153,9 @@ set( QA_EESCHEMA_SRCS
     test_issue24297_http_migrate.cpp
     test_issue24477_http_network_loss.cpp
     test_issue23023_http_fields.cpp
+    test_http_lib_connection.cpp
+    test_http_lib_plugin.cpp
+    http_lib_fake_server.cpp
     test_issue24403_directive_label_i18n.cpp
     test_issue24606_derived_symbol_fields.cpp
     test_issue23687_sim_value_field.cpp

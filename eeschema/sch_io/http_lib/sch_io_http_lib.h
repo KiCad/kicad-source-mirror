@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -93,6 +94,21 @@ public:
 
     HTTP_LIB_SETTINGS* Settings() const { return m_settings.get(); }
 
+    using CONNECTION_BUILDER = std::function<std::unique_ptr<HTTP_LIB_CONNECTION>( const HTTP_LIB_SOURCE& )>;
+
+    void SetConnectionBuilder( CONNECTION_BUILDER aFactory )
+    {
+        m_connectionFactory = std::move( aFactory );
+    }
+
+    using SOURCE_PATCHER = std::function<void( HTTP_LIB_SOURCE& )>;
+
+    /// Allows updating a source after initial load; used for QA testing
+    void SetSourcePatcher( SOURCE_PATCHER aOverride )
+    {
+        m_sourcePatcher = std::move( aOverride );
+    }
+
     void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                      const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
@@ -122,6 +138,11 @@ private:
 
 private:
     SYMBOL_LIBRARY_ADAPTER*              m_adapter;
+
+    /// Allows replacing actual HTTP connection for QA tests
+    CONNECTION_BUILDER                   m_connectionFactory;
+
+    SOURCE_PATCHER                       m_sourcePatcher;
 
     /// Generally will be null if no valid connection is established
     std::unique_ptr<HTTP_LIB_CONNECTION> m_conn;
