@@ -160,28 +160,29 @@ wxString PCB_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
 
     text = UnescapeString( text );
 
-    std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
-    {
-        if( token->IsSameAs( wxT( "LAYER" ) ) )
-        {
-            *token = GetLayerName();
-            return true;
-        }
+    std::function<bool( wxString* )> resolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( token->IsSameAs( wxT( "LAYER" ) ) )
+                {
+                    *token = GetLayerName();
+                    return true;
+                }
 
-        if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
-            return true;
+                if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
+                    return true;
 
-        if( board && board->ResolveTextVar( token, aDepth + 1 ) )
-            return true;
+                if( board && board->ResolveTextVar( token, aDepth + 1 ) )
+                    return true;
 
-        return false;
-    };
+                return false;
+            };
 
     if( text.Contains( wxT( "${" ) ) || text.Contains( wxT( "@{" ) ) )
+    {
         text = ResolveTextVars( text, &resolver, aDepth );
-
-    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
-    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+        FinalizeTextVarExpansion( text, aAllowExtraText );
+    }
 
     return text;
 }

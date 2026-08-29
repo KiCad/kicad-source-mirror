@@ -94,6 +94,8 @@ KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString, 
  */
 #define FOR_ERC_DRC 1
 
+KICOMMON_API void FinalizeTextVarExpansion( wxString& aText, bool aForCanvasDisplay );
+
 KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxString* )>* aResolver,
                                       int aFlags = 0, int aDepth = 0 );
 

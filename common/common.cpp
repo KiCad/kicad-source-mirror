@@ -58,10 +58,11 @@ enum Bracket
 
 wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int aFlags )
 {
-    std::function<bool( wxString* )> projectResolver = [&]( wxString* token ) -> bool
-    {
-        return aProject->TextVarResolver( token );
-    };
+    std::function<bool( wxString* )> projectResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return aProject->TextVarResolver( token );
+            };
 
     return ExpandTextVars( aSource, &projectResolver, aFlags );
 }
@@ -78,6 +79,23 @@ wxString NormalizeFilePathForTextVars( const wxString& aPath )
     path.Replace( wxT( "\\@{" ), wxT( "/@{" ) );
 
     return path;
+}
+
+
+// Convert escape markers back to literal \${ and \@{.
+// Strip '\' for canvas display.
+void FinalizeTextVarExpansion( wxString& aText, bool aForCanvasDisplay )
+{
+    if( aForCanvasDisplay )
+    {
+        aText.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
+        aText.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+    }
+    else
+    {
+        aText.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "\\${" ) );
+        aText.Replace( wxT( "<<<ESC_AT:" ), wxT( "\\@{" ) );
+    }
 }
 
 
@@ -280,9 +298,10 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
                     }
                 }
 
-                if( ( aFlags & FOR_ERC_DRC ) == 0
-                    && ( token.StartsWith( wxS( "ERC_WARNING" ) ) || token.StartsWith( wxS( "ERC_ERROR" ) )
-                         || token.StartsWith( wxS( "DRC_WARNING" ) ) || token.StartsWith( wxS( "DRC_ERROR" ) ) ) )
+                if( ( aFlags & FOR_ERC_DRC ) == 0 && (   token.StartsWith( wxS( "ERC_WARNING" ) )
+                                                      || token.StartsWith( wxS( "ERC_ERROR" ) )
+                                                      || token.StartsWith( wxS( "DRC_WARNING" ) )
+                                                      || token.StartsWith( wxS( "DRC_ERROR" ) ) ) )
                 {
                     // Only show user-defined warnings/errors during ERC/DRC
                 }
@@ -589,19 +608,16 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
 
             wxString strVarName( str.c_str() + n + 1, m - n - 1 );
 
-            if( strVarName == wxT( "DRC_WARNING" )
-                    || strVarName == wxT( "DRC_ERROR" )
-                    || strVarName == wxT( "ERC_WARNING" )
-                    || strVarName == wxT( "ERC_ERROR" ) )
+            if( str_n == '$' && bracket == Bracket_Curly && (   strVarName == wxT( "DRC_WARNING" )
+                                                             || strVarName == wxT( "DRC_ERROR" )
+                                                             || strVarName == wxT( "ERC_WARNING" )
+                                                             || strVarName == wxT( "ERC_ERROR" ) ) )
             {
-                strResult << '$';
-                strResult << str[n];        // bracket
-                strResult += strVarName;
-                n = m - 1;                  // skip variable name
-                str_n = str[n];
+                // These aren't environment variables; pass them through unchanged
+                strResult << str_n << bracket << strVarName << str_m;
+                n = m;
                 break;
             }
-
 
             // NB: use wxGetEnv instead of wxGetenv as otherwise variables
             //     set through wxSetEnv may not be read correctly!
@@ -709,7 +725,6 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
             }
 
             n = m - 1; // skip variable name
-            str_n = str[n];
         }
         break;
 

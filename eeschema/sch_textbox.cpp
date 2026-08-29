@@ -445,22 +445,24 @@ wxString SCH_TEXTBOX::GetShownText( const RENDER_SETTINGS* aSettings, const SCH_
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
 
     if( HasTextVars() )
+    {
         text = ResolveTextVars( text, &textResolver, depth );
+        FinalizeTextVarExpansion( text, aAllowExtraText );
+    }
 
-    VECTOR2I size = GetEnd() - GetStart();
-    int      colWidth;
+    if( aDepth == 0 )
+    {
+        VECTOR2I size = GetEnd() - GetStart();
+        int      colWidth;
 
-    if( GetTextAngle().IsVertical() )
-        colWidth = abs( size.y ) - ( GetMarginTop() + GetMarginBottom() );
-    else
-        colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
+        if( GetTextAngle().IsVertical() )
+            colWidth = abs( size.y ) - ( GetMarginTop() + GetMarginBottom() );
+        else
+            colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
 
-    GetDrawFont( aSettings )
-            ->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(), IsBold(), IsItalic() );
-
-    // Convert escape markers back to literals for final display
-    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
-    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+        GetDrawFont( aSettings )->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(),
+                                                 IsBold(), IsItalic() );
+    }
 
     return text;
 }

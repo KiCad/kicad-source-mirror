@@ -427,7 +427,9 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         PCB_DIMENSION_T
     };
 
-    static wxRegEx varRefRegEx( wxT( ".*^\\${.*}.*" ) );
+    // The leading "(^|[^\\\\])" group requires the marker to start the string or follow a non-backslash,
+    // so `\${ERC_ERROR ...}` stays inert.  (The group is just to make it easier for a human to parse.)
+    static wxRegEx varRefRegEx( wxT( "(^|[^\\\\])\\$\\{.*\\}.*" ) );
 
     auto testAssertion =
             [&]( BOARD_ITEM* item, const wxString& text, const VECTOR2I& pos, int layer )
@@ -516,7 +518,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     {
                         // Don't run unresolved test
                     }
-                    else if( varRefRegEx.Matches( ExpandEnvVarSubstitutions( textItem->GetShownText( true ),
+                    else if( varRefRegEx.Matches( ExpandEnvVarSubstitutions( textItem->GetShownText( false ),
                                                                              nullptr /*project already done*/ ) ) )
                     {
                         auto drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
@@ -557,7 +559,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
             {
                 // Don't run unresolved test
             }
-            else if( varRefRegEx.Matches( text->GetShownText( true ) ) )
+            else if( varRefRegEx.Matches( text->GetShownText( false ) ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                 drcItem->SetItems( drawingSheet );

@@ -329,25 +329,27 @@ wxString SCH_TABLECELL::GetShownText( const RENDER_SETTINGS* aSettings, const SC
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
 
     if( HasTextVars() )
+    {
         text = ResolveTextVars( text, &tableCellResolver, depth );
 
-    VECTOR2I size = GetEnd() - GetStart();
-    int      colWidth;
+        // Only do this at the top level (aDepth == 0) to avoid premature unescaping in nested CELL() calls
+        if( aDepth == 0 )
+            FinalizeTextVarExpansion( text, aAllowExtraText );
+    }
 
-    if( GetTextAngle().IsVertical() )
-        colWidth = abs( size.y ) - ( GetMarginTop() + GetMarginBottom() );
-    else
-        colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
-
-    GetDrawFont( aSettings )
-            ->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(), IsBold(), IsItalic() );
-
-    // Convert escape markers back to literal ${} and @{} for final display
-    // Only do this at the top level (aDepth == 0) to avoid premature unescaping in nested CELL() calls
+    // Only linebreak when at top level
     if( aDepth == 0 )
     {
-        text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
-        text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
+        VECTOR2I size = GetEnd() - GetStart();
+        int      colWidth;
+
+        if( GetTextAngle().IsVertical() )
+            colWidth = abs( size.y ) - ( GetMarginTop() + GetMarginBottom() );
+        else
+            colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
+
+        GetDrawFont( aSettings )->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(),
+                                                 IsBold(), IsItalic() );
     }
 
     return text;

@@ -288,14 +288,13 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
         text = GetShownName() << wxS( ": " ) << text;
 
     if( HasTextVars() || ( !aVariantName.IsEmpty() && text.Contains( wxT( "${" ) ) ) )
+    {
         text = ResolveText( text, aPath, aDepth );
+        FinalizeTextVarExpansion( text, aAllowExtraText );
+    }
 
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )
         text = _( "File:" ) + wxS( " " ) + text;
-
-    // Convert escape markers back to literals for final display
-    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
-    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
 
     return text;
 }

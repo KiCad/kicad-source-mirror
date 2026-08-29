@@ -191,7 +191,10 @@ wxString PCB_TABLECELL::GetShownText( bool aAllowExtraText, int aDepth ) const
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( HasTextVars() )
+    {
         text = ResolveTextVars( text, &tableCellResolver, aDepth );
+        FinalizeTextVarExpansion( text, aAllowExtraText );
+    }
 
     KIFONT::FONT*         font = GetDrawFont( nullptr );
     EDA_ANGLE             drawAngle = GetDrawRotation();
@@ -204,10 +207,6 @@ wxString PCB_TABLECELL::GetShownText( bool aAllowExtraText, int aDepth ) const
         colWidth -= ( GetMarginTop() + GetMarginBottom() );
 
     font->LinebreakText( text, colWidth, GetTextSize(), GetEffectiveTextPenWidth(), IsBold(), IsItalic() );
-
-    // Convert escape markers back to literal ${} and @{} for final display
-    text.Replace( wxT( "<<<ESC_DOLLAR:" ), wxT( "${" ) );
-    text.Replace( wxT( "<<<ESC_AT:" ), wxT( "@{" ) );
 
     return text;
 }

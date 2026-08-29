@@ -60,8 +60,7 @@ public:
 
     KIFONT::FONT* GetDrawFont( const RENDER_SETTINGS* aSettings ) const override;
 
-    virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
-                                   int aDepth = 0 ) const;
+    virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth = 0 ) const;
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
     {

@@ -390,7 +390,9 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 {
     DS_DRAW_ITEM_LIST wsItems( schIUScale, FOR_ERC_DRC );
 
-    static wxRegEx varRefRegEx( wxT( ".*^\\${.*}.*" ) );
+    // The leading "(^|[^\\\\])" group requires the marker to start the string or follow a non-backslash,
+    // so `\${ERC_ERROR ...}` stays inert.  (The group is just to make it easier for a human to parse.)
+    static wxRegEx varRefRegEx( wxT( "(^|[^\\\\])\\$\\{.*\\}.*" ) );
 
     auto unresolved =
             [&]( const wxString& str )
@@ -514,7 +516,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                                     {
                                         // Don't run unresolved test
                                     }
-                                    else if( unresolved( textItem->GetShownText( &sheet, true ) ) )
+                                    else if( unresolved( textItem->GetShownText( &sheet, false ) ) )
                                     {
                                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                                         ercItem->SetItems( symbol );
@@ -600,7 +602,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
                 for( SCH_SHEET_PIN* pin : subSheet->GetPins() )
                 {
-                    if( varRefRegEx.Matches( pin->GetShownText( &subSheetPath, true ) ) )
+                    if( varRefRegEx.Matches( pin->GetShownText( &subSheetPath, false ) ) )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( pin );
@@ -617,7 +619,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     // Don't run unresolved test
                 }
-                else if( varRefRegEx.Matches( text->GetShownText( &sheet, true ) ) )
+                else if( varRefRegEx.Matches( text->GetShownText( &sheet, false ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( text );
@@ -653,7 +655,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     // Don't run unresolved test
                 }
-                else if( varRefRegEx.Matches( text->GetShownText( true ) ) )
+                else if( varRefRegEx.Matches( text->GetShownText( false ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
