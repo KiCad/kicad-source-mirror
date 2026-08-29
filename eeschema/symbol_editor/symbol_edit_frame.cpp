@@ -767,9 +767,10 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         return false;
     }
 
-    // Saving in the symbol editor is by library (as multiple symbols might come from the same library
-    // and we can't save them independently).  There is therefore no distinction between active and
-    // inactive tabs.
+    // Prompt for any dirty inactive instance (symbols from the schematic) tabs, which the active-tab
+    // checks above miss.
+    if( !promptToSaveInactiveInstanceTabs() )
+        return false;
 
     if( !saveAllLibraries( true ) )
         return false;

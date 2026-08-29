@@ -612,6 +612,13 @@ private:
     bool promptAndCloseSymbolTab( int aIdx );
 
     /**
+     * Prompt to save each dirty instance (symbol from schematic) tab that is not the active one, since
+     * the active tab's unsaved state is handled by CanCloseSymbolFromSchematic. Returns false if the
+     * user cancels so the window close can be vetoed.
+     */
+    bool promptToSaveInactiveInstanceTabs();
+
+    /**
      * True if any non-active instance (schematic) tab has unsaved edits. Used to veto a session-end
      * query early, since those tabs are invisible to IsContentModified (which sees only the active tab).
      */
