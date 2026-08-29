@@ -38,27 +38,27 @@ const char* const traceHTTPLib = "KICAD_HTTP_LIB";
 
 static HTTP_LIB_CONNECTION::RETRIEVER makeDefaultRetriever( const HTTP_LIB_SOURCE& aSource )
 {
-    return  [aSource]( const std::string& aUrl, int& aStatusCode, std::string& aBody, std::string& aError )
-            {
-                KICAD_CURL_EASY curl;
-                curl.SetHeader( "Accept", "application/json" );
-                curl.SetHeader( "Authorization", "Token " + aSource.token );
-                curl.SetFollowRedirects( true );
+    auto curl = std::make_shared<KICAD_CURL_EASY>();
+    curl->SetHeader( "Accept", "application/json" );
+    curl->SetHeader( "Authorization", "Token " + aSource.token );
+    curl->SetFollowRedirects( true );
 
-                if( !curl.SetURL( aUrl ) )
+    return  [curl]( const std::string& aUrl, int& aStatusCode, std::string& aBody, std::string& aError )
+            {
+                if( !curl->SetURL( aUrl ) )
                 {
                     aError = "Unable to set request URL.";
                     return false;
                 }
 
-                if( const int result = curl.Perform(); result != CURLE_OK )
+                if( const int result = curl->Perform(); result != CURLE_OK )
                 {
-                    aError = curl.GetErrorText( result );
+                    aError = curl->GetErrorText( result );
                     return false;
                 }
 
-                aStatusCode = curl.GetResponseStatusCode();
-                aBody = curl.GetBuffer();
+                aStatusCode = curl->GetResponseStatusCode();
+                aBody = curl->GetBuffer();
                 return true;
             };
 }
