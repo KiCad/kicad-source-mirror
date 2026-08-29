@@ -2871,6 +2871,12 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
 
         if( BOARD_ITEM* src = aItem->GetSourceItem() )
         {
+            if( !m_itemGroups.contains( src ) )
+            {
+                if( EDA_GROUP* group = src->GetParentGroup() )
+                    m_itemGroups[src] = group;
+            }
+
             if( m_itemGroups.contains( src ) )
                 m_replacementMap[src].push_back( newBoardItem );
         }
