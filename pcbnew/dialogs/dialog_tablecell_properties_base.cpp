@@ -27,15 +27,32 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 
 	bMainSizer->Add( m_infoBar, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bTopSizer;
+	bTopSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bLeftCol;
+	bLeftCol = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bHeader;
+	bHeader = new wxBoxSizer( wxHORIZONTAL );
 
 	m_cellTextLabel = new wxStaticText( this, wxID_ANY, _("Cell contents:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cellTextLabel->Wrap( -1 );
-	bSizer8->Add( m_cellTextLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bHeader->Add( m_cellTextLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	bHeader->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_syntaxHelp->SetToolTip( _("Show syntax help window") );
+
+	bHeader->Add( m_syntaxHelp, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
+
+
+	bLeftCol->Add( bHeader, 0, wxEXPAND|wxTOP, 5 );
+
+
+	bLeftCol->Add( 0, 2, 0, wxEXPAND, 5 );
 
 	m_cellTextCtrl = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN, wxEmptyString );
 	m_cellTextCtrl->SetUseTabs( false );
@@ -67,13 +84,13 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_cellTextCtrl->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 	m_cellTextCtrl->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 	m_cellTextCtrl->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-	bSizer8->Add( m_cellTextCtrl, 1, wxEXPAND | wxALL, 2 );
+	bLeftCol->Add( m_cellTextCtrl, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer7->Add( bSizer8, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	bTopSizer->Add( bLeftCol, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bRightCl;
+	bRightCl = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
@@ -97,7 +114,7 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 
 	gbFontSizer->AddGrowableCol( 1 );
 
-	bMargins->Add( gbFontSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+	bMargins->Add( gbFontSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxFlexGridSizer* fgTextStyleSizer;
 	fgTextStyleSizer = new wxFlexGridSizer( 0, 2, 5, 5 );
@@ -249,16 +266,19 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	gMarginsSizer->Add( m_marginBottomCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bMargins->Add( gMarginsSizer, 0, wxEXPAND, 5 );
+	bMargins->Add( gMarginsSizer, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bSizer9->Add( bMargins, 1, wxEXPAND|wxALL, 10 );
+	bRightCl->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
-	bSizer7->Add( bSizer9, 1, wxEXPAND, 5 );
+	bTopSizer->Add( bRightCl, 1, wxEXPAND, 5 );
 
 
-	bMainSizer->Add( bSizer7, 1, wxEXPAND|wxLEFT, 5 );
+	bMainSizer->Add( bTopSizer, 1, wxEXPAND|wxLEFT, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtons;
 	bButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -283,35 +303,30 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 
 	bMainSizer->Add( bButtons, 0, wxEXPAND, 5 );
 
-	m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
-	m_syntaxHelp->SetToolTip( _("Show syntax help window") );
-
-	bMainSizer->Add( m_syntaxHelp, 0, wxLEFT, 10 );
-
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
 
 	// Connect Events
+	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onSyntaxHelp ), NULL, this );
 	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onTextSize ), NULL, this );
 	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onTextSize ), NULL, this );
 	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_autoTextThickness->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onAutoTextThickness ), NULL, this );
 	m_editTable->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onEditTable ), NULL, this );
-	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onSyntaxHelp ), NULL, this );
 }
 
 DIALOG_TABLECELL_PROPERTIES_BASE::~DIALOG_TABLECELL_PROPERTIES_BASE()
 {
 	// Disconnect Events
+	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onSyntaxHelp ), NULL, this );
 	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onTextSize ), NULL, this );
 	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onTextSize ), NULL, this );
 	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_autoTextThickness->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onAutoTextThickness ), NULL, this );
 	m_editTable->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onEditTable ), NULL, this );
-	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onSyntaxHelp ), NULL, this );
 
 }

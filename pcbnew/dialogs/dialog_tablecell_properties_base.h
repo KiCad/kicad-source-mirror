@@ -22,8 +22,9 @@ class WX_INFOBAR;
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/stattext.h>
-#include <wx/stc/stc.h>
+#include <wx/hyperlink.h>
 #include <wx/sizer.h>
+#include <wx/stc/stc.h>
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/bmpbuttn.h>
@@ -33,7 +34,7 @@ class WX_INFOBAR;
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
-#include <wx/hyperlink.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -48,6 +49,7 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		WX_INFOBAR* m_infoBar;
 		wxStaticText* m_cellTextLabel;
+		wxHyperlinkCtrl* m_syntaxHelp;
 		wxStyledTextCtrl* m_cellTextCtrl;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
@@ -77,18 +79,18 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_marginLeftCtrl;
 		wxTextCtrl* m_marginRightCtrl;
 		wxTextCtrl* m_marginBottomCtrl;
+		wxStaticLine* m_staticline1;
 		wxButton* m_editTable;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
-		wxHyperlinkCtrl* m_syntaxHelp;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onTextSize( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAutoTextThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onEditTable( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 
 
 	public:
