@@ -287,7 +287,6 @@ void SCH_LABEL_BASE::swapData( SCH_ITEM* aItem )
     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
 
     m_fields.swap( label->m_fields );
-    std::swap( m_fieldsAutoplaced, label->m_fieldsAutoplaced );
 
     for( SCH_FIELD& field : m_fields )
         field.SetParent( this );

@@ -473,7 +473,6 @@ void SCH_SHEET::swapData( SCH_ITEM* aItem )
     std::swap( m_pos, sheet->m_pos );
     std::swap( m_size, sheet->m_size );
     m_fields.swap( sheet->m_fields );
-    std::swap( m_fieldsAutoplaced, sheet->m_fieldsAutoplaced );
     m_pins.swap( sheet->m_pins );
 
     // Update parent pointers after swapping.
