@@ -101,6 +101,7 @@
 #include <frame_type.h>
 #include <mail_type.h>
 #include <ki_exception.h>
+#include <lib_id.h>
 
 class KICAD_API_SERVER;
 
@@ -150,6 +151,19 @@ class LOCAL_HISTORY;
  */
 struct KIFACE
 {
+    struct DOCUMENT_SPEC
+    {
+        enum class KIND
+        {
+            FILE,   ///< Open the file at #path.
+            FPID,   ///< Open the library element named by #libId
+        };
+
+        KIND     kind = KIND::FILE;
+        wxString path;               ///< File path (KIND::FILE) or project path (KIND::FPID).
+        LIB_ID   libId;              ///< Library identifier; valid when kind == KIND::FPID.
+    };
+
     // The order of functions establishes the vtable sequence, do not change the
     // order of functions in this listing unless you recompile all clients of
     // this interface.
@@ -252,7 +266,7 @@ struct KIFACE
         return 0;
     }
 
-    virtual bool HandleApiOpenDocument( const wxString& aPath,
+    virtual bool HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
                                         KICAD_API_SERVER* aServer,
                                         wxString* aError )
     {
@@ -474,7 +488,7 @@ public:
                      PROGRESS_REPORTER* aProgressReporter = nullptr );
     bool ProcessJobConfigDialog( KIWAY::FACE_T aFace, JOB* aJob, wxWindow* aWindow );
 
-    bool ProcessApiOpenDocument( KIWAY::FACE_T aFace, const wxString& aPath,
+    bool ProcessApiOpenDocument( KIWAY::FACE_T aFace, const KIFACE::DOCUMENT_SPEC& aSpec,
                                  KICAD_API_SERVER* aServer,
                                  wxString* aError = nullptr );
 

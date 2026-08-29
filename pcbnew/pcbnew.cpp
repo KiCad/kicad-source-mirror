@@ -593,7 +593,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
-    bool HandleApiOpenDocument( const wxString& aPath,
+    bool HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
                                 KICAD_API_SERVER* aServer,
                                 wxString* aError ) override;
 
@@ -879,11 +879,14 @@ void IFACE::closeCurrentDocument( KICAD_API_SERVER* aServer )
 }
 
 
-bool IFACE::HandleApiOpenDocument( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError )
+bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec, KICAD_API_SERVER* aServer, wxString* aError )
 {
     wxCHECK( aServer, false );
 
-    if( aPath.IsEmpty() )
+    if( aSpec.kind == DOCUMENT_SPEC::KIND::FPID )
+        return handleOpenFootprint( aSpec.path, aSpec.libId.GetUniStringLibId(), aServer, aError );
+
+    if( aSpec.path.IsEmpty() )
     {
         if( aError )
             *aError = wxS( "No path specified to open" );
@@ -891,7 +894,7 @@ bool IFACE::HandleApiOpenDocument( const wxString& aPath, KICAD_API_SERVER* aSer
         return false;
     }
 
-    return handleOpenPcb( aPath, aServer, aError );
+    return handleOpenPcb( aSpec.path, aServer, aError );
 }
 
 

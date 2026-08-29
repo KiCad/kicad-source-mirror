@@ -88,6 +88,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     {
         types::DocumentType type;
         wxString            fileName;
+        LIB_ID              libId;
     };
 
     std::vector<OPEN_DOCUMENT> openDocuments;
@@ -151,6 +152,50 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
             e.set_error_message( "OpenDocument requires a non-empty path" );
             return tl::unexpected( e );
+        }
+
+        if( requestType == types::DOCTYPE_FOOTPRINT )
+        {
+            LIB_ID fpid;
+
+            if( fpid.Parse( inputPath ) >= 0 )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( wxString::Format( wxS( "Invalid footprint LIB_ID: %s" ),
+                                                       inputPath ).ToStdString() );
+                return tl::unexpected( e );
+            }
+
+            KIFACE::DOCUMENT_SPEC spec;
+            spec.kind = KIFACE::DOCUMENT_SPEC::KIND::FPID;
+            spec.libId = fpid;
+
+            if( openProjectPath )
+                spec.path = openProjectPath->GetFullPath();
+
+            wxString error;
+
+            if( !aKiway.ProcessApiOpenDocument( KIWAY::FACE_PCB, spec, server.get(), &error ) )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( error.ToStdString() );
+                return tl::unexpected( e );
+            }
+
+            OPEN_DOCUMENT doc;
+            doc.type = requestType;
+            doc.libId = fpid;
+            openDocuments.push_back( doc );
+
+            commands::OpenDocumentResponse response;
+            types::DocumentSpecifier* docSpec = response.mutable_document();
+            docSpec->set_type( requestType );
+            docSpec->mutable_lib_id()->set_library_nickname( fpid.GetUniStringLibNickname() );
+            docSpec->mutable_lib_id()->set_entry_name( fpid.GetUniStringLibItemName() );
+
+            return response;
         }
 
         wxFileName projectPath( inputPath );
@@ -239,9 +284,13 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             }
         }
 
+        KIFACE::DOCUMENT_SPEC spec;
+        spec.kind = KIFACE::DOCUMENT_SPEC::KIND::FILE;
+        spec.path = projectPath.GetFullPath();
+
         wxString error;
 
-        if( !aKiway.ProcessApiOpenDocument( face, projectPath.GetFullPath(), server.get(), &error ) )
+        if( !aKiway.ProcessApiOpenDocument( face, spec, server.get(), &error ) )
         {
             ApiResponseStatus e;
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -324,6 +373,28 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
                 e.set_status( ApiStatusCode::AS_BAD_REQUEST );
                 e.set_error_message( "Requested document does not match the open project" );
                 return tl::unexpected( e );
+            }
+
+            if( typeToClose == types::DOCTYPE_FOOTPRINT && aRequest.document().has_lib_id() )
+            {
+                LIB_ID fpid = UnpackLibId( aRequest.document().lib_id() );
+
+                if( !fpid.IsValid() )
+                {
+                    ApiResponseStatus e;
+                    e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                    e.set_error_message( wxString::Format( wxS( "Invalid footprint LIB_ID: %s" ),
+                                                           fpid.GetUniStringLibId() ).ToStdString() );
+                    return tl::unexpected( e );
+                }
+
+                if( it->libId != fpid )
+                {
+                    ApiResponseStatus e;
+                    e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                    e.set_error_message( "Requested document does not match the open document" );
+                    return tl::unexpected( e );
+                }
             }
         }
         else
