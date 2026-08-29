@@ -2332,6 +2332,7 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     std::swap( m_instances, symbol->m_instances );
     std::swap( m_instancePathIndex, symbol->m_instancePathIndex );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
+    std::swap( m_passthroughMode, symbol->m_passthroughMode );
 
     m_variantSymbolCache.clear();
     symbol->m_variantSymbolCache.clear();
