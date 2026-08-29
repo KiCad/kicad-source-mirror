@@ -64,6 +64,7 @@ void SCH_SHAPE::Serialize( google::protobuf::Any& aContainer ) const
 
     EDA_SHAPE::Serialize( *msg.mutable_shape(), schIUScale );
 
+    kiapi::common::PackCustomProperties( msg.mutable_custom_properties(), *this );
     aContainer.PackFrom( msg );
 }
 
@@ -79,6 +80,7 @@ bool SCH_SHAPE::Deserialize( const google::protobuf::Any& aContainer )
 
     const_cast<KIID&>( m_Uuid ) = KIID( msg.id().value() );
     SetLocked( msg.locked() == types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( msg.custom_properties(), *this );
 
     return EDA_SHAPE::Deserialize( msg.shape(), schIUScale );
 }

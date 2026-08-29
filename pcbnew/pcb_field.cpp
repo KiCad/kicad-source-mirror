@@ -25,6 +25,7 @@
 #include <board_design_settings.h>
 #include <i18n_utility.h>
 #include <pcb_painter.h>
+#include <api/api_utils.h>
 #include <api/board/board_types.pb.h>
 #include <string_utils.h>
 #include <board.h>
@@ -67,6 +68,7 @@ void PCB_FIELD::Serialize( kiapi::board::types::Field& field ) const
     field.set_name( GetUntranslatedName().ToStdString() );
     field.mutable_id()->set_id( (int) GetId() );
     field.set_visible( IsVisible() );
+    kiapi::common::PackCustomProperties( field.mutable_custom_properties(), *this );
 }
 
 
@@ -96,6 +98,8 @@ bool PCB_FIELD::Deserialize( const kiapi::board::types::Field& field )
 
     if( field.text().layer() == kiapi::board::types::BoardLayer::BL_UNKNOWN )
         SetLayer( F_SilkS );
+
+    kiapi::common::UnpackCustomProperties( field.custom_properties(), *this );
 
     return true;
 }

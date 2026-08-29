@@ -259,6 +259,7 @@ void PCB_POINT::Serialize( google::protobuf::Any& aContainer ) const
     else if( const BOARD* board = GetBoard() )
         point.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
+    kiapi::common::PackCustomProperties( point.mutable_custom_properties(), *this );
     aContainer.PackFrom( point );
 }
 
@@ -275,6 +276,7 @@ bool PCB_POINT::Deserialize( const google::protobuf::Any& aContainer )
     SetPosition( kiapi::common::UnpackVector2( point.position() ) );
     SetSize( point.size().value_nm() );
     SetLocked( point.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( point.custom_properties(), *this );
 
     return true;
 }

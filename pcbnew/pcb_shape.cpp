@@ -245,6 +245,7 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
             sm->mutable_solder_mask_margin()->set_value_nm( GetLocalSolderMaskMargin().value() );
     }
 
+    kiapi::common::PackCustomProperties( msg.mutable_custom_properties(), *this );
     aContainer.PackFrom( msg );
 }
 
@@ -275,6 +276,7 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
     SetLocked( msg.locked() == types::LS_LOCKED );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, BoardLayer>( msg.layer() ) );
     UnpackNet( msg.net() );
+    kiapi::common::UnpackCustomProperties( msg.custom_properties(), *this );
 
     EDA_SHAPE::Deserialize( msg.shape(), pcbIUScale );
 

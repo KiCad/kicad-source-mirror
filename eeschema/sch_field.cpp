@@ -39,6 +39,7 @@
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 #include <google/protobuf/any.pb.h>
+#include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
 
 static const std::vector<KICAD_T> labelTypes = { SCH_LABEL_LOCATE_ANY_T };
@@ -201,6 +202,7 @@ void SCH_FIELD::Serialize( kiapi::schematic::types::SchematicField& field, const
     field.set_is_private( IsPrivate() );
 
     EDA_TEXT::Serialize( *field.mutable_text(), aScale );
+    kiapi::common::PackCustomProperties( field.mutable_custom_properties(), *this );
 }
 
 

@@ -65,6 +65,7 @@ void PCB_TABLECELL::Serialize( kiapi::board::types::TableCell& cell ) const
 
     PCB_TEXTBOX::Serialize( *cell.mutable_text_box() );
 
+    kiapi::common::PackCustomProperties( cell.mutable_custom_properties(), *this );
 }
 
 
@@ -89,6 +90,8 @@ bool PCB_TABLECELL::Deserialize( const kiapi::board::types::TableCell& cell )
 
     SetColSpan( cell.column_span() );
     SetRowSpan( cell.row_span() );
+
+    kiapi::common::UnpackCustomProperties( cell.custom_properties(), *this );
 
     return true;
 }

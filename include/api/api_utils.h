@@ -23,6 +23,7 @@
 
 #include <optional>
 #include <google/protobuf/any.pb.h>
+#include <google/protobuf/repeated_field.h>
 
 #include <base_units.h>
 #include <core/typeinfo.h>
@@ -40,6 +41,7 @@ class SHAPE_LINE_CHAIN;
 class STROKE_PARAMS;
 class TEXT_ATTRIBUTES;
 class KIID_PATH;
+class EDA_ITEM;
 class PROJECT;
 
 /**
@@ -106,6 +108,12 @@ KICOMMON_API void PackLineEnding( kiapi::common::types::LineEnding& aOutput, con
 
 KICOMMON_API LINE_ENDING UnpackLineEnding( const kiapi::common::types::LineEnding& aInput,
                                            const EDA_IU_SCALE& aScale = pcbIUScale );
+
+KICOMMON_API void PackCustomProperties( google::protobuf::RepeatedPtrField<types::CustomProperty>* aOutput,
+                                        const EDA_ITEM& aItem );
+
+KICOMMON_API void UnpackCustomProperties( const google::protobuf::RepeatedPtrField<types::CustomProperty>& aInput,
+                                          EDA_ITEM& aItem );
 
 KICOMMON_API void PackProject( types::ProjectSpecifier& aOutput, const PROJECT& aInput );
 

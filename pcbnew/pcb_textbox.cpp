@@ -102,6 +102,7 @@ void PCB_TEXTBOX::Serialize( kiapi::board::types::BoardTextBox& boardText ) cons
     else if( const BOARD* board = GetBoard() )
         boardText.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
+    kiapi::common::PackCustomProperties( boardText.mutable_custom_properties(), *this );
 }
 
 
@@ -149,6 +150,8 @@ bool PCB_TEXTBOX::Deserialize( const kiapi::board::types::BoardTextBox& boardTex
 
     SetBorderEnabled( text.border_enabled() );
     SetIsKnockout( boardText.knockout() );
+
+    kiapi::common::UnpackCustomProperties( boardText.custom_properties(), *this );
 
     return true;
 }

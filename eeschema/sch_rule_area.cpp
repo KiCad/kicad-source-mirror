@@ -85,6 +85,7 @@ void SCH_RULE_AREA::Serialize( google::protobuf::Any& aContainer ) const
 
     EDA_SHAPE::Serialize( *ruleArea.mutable_shape(), schIUScale );
 
+    kiapi::common::PackCustomProperties( ruleArea.mutable_custom_properties(), *this );
     aContainer.PackFrom( ruleArea );
 }
 
@@ -102,6 +103,7 @@ bool SCH_RULE_AREA::Deserialize( const google::protobuf::Any& aContainer )
     SetExcludedFromBOM( ruleArea.exclude_from_bom() );
     SetExcludedFromBoard( ruleArea.exclude_from_board() );
     SetDNP( ruleArea.dnp() );
+    kiapi::common::UnpackCustomProperties( ruleArea.custom_properties(), *this );
 
     if( !EDA_SHAPE::Deserialize( ruleArea.shape(), schIUScale ) )
         return false;

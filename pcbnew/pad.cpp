@@ -431,6 +431,7 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
         kiapi::board::PackZoneLayerOverrides( pad.mutable_zone_layer_overrides(), m_zoneLayerOverrides );
     }
 
+    kiapi::common::PackCustomProperties( pad.mutable_custom_properties(), *this );
     aContainer.PackFrom( pad );
 }
 
@@ -487,6 +488,8 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
         std::unique_lock lock( m_dataMutex );
         kiapi::board::UnpackZoneLayerOverrides( m_zoneLayerOverrides, pad.zone_layer_overrides() );
     }
+
+    kiapi::common::UnpackCustomProperties( pad.custom_properties(), *this );
 
     return true;
 }

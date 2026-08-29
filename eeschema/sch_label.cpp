@@ -1665,6 +1665,7 @@ void SCH_LABEL::Serialize( google::protobuf::Any& aContainer ) const
 
     packLabel( label, *this );
 
+    kiapi::common::PackCustomProperties( label.mutable_custom_properties(), *this );
     aContainer.PackFrom( label );
 }
 
@@ -1675,6 +1676,8 @@ bool SCH_LABEL::Deserialize( const google::protobuf::Any& aContainer )
 
     if( !aContainer.UnpackTo( &label ) )
         return false;
+
+    kiapi::common::UnpackCustomProperties( label.custom_properties(), *this );
 
     return unpackLabel( label, *this );
 }
@@ -1767,6 +1770,7 @@ void SCH_DIRECTIVE_LABEL::Serialize( google::protobuf::Any& aContainer ) const
     kiapi::common::PackDistance( *label.mutable_pin_length(), m_pinLength, schIUScale );
     kiapi::common::PackDistance( *label.mutable_symbol_size(), m_symbolSize, schIUScale );
 
+    kiapi::common::PackCustomProperties( label.mutable_custom_properties(), *this );
     aContainer.PackFrom( label );
 }
 
@@ -1777,6 +1781,8 @@ bool SCH_DIRECTIVE_LABEL::Deserialize( const google::protobuf::Any& aContainer )
 
     if( !aContainer.UnpackTo( &label ) )
         return false;
+
+    kiapi::common::UnpackCustomProperties( label.custom_properties(), *this );
 
     if( !unpackLabel( label, *this ) )
         return false;
@@ -2154,6 +2160,8 @@ bool SCH_GLOBALLABEL::Deserialize( const google::protobuf::Any& aContainer )
     if( !aContainer.UnpackTo( &label ) )
         return false;
 
+    kiapi::common::UnpackCustomProperties( label.custom_properties(), *this );
+
     if( !unpackLabel( label, *this ) )
         return false;
 
@@ -2378,6 +2386,7 @@ void SCH_HIERLABEL::Serialize( google::protobuf::Any& aContainer ) const
     packLabel( label, *this );
     label.set_shape( ToProtoEnum<LABEL_FLAG_SHAPE, kiapi::schematic::types::SchematicLabelShape>( GetShape() ) );
 
+    kiapi::common::PackCustomProperties( label.mutable_custom_properties(), *this );
     aContainer.PackFrom( label );
 }
 
@@ -2388,6 +2397,8 @@ bool SCH_HIERLABEL::Deserialize( const google::protobuf::Any& aContainer )
 
     if( !aContainer.UnpackTo( &label ) )
         return false;
+
+    kiapi::common::UnpackCustomProperties( label.custom_properties(), *this );
 
     if( !unpackLabel( label, *this ) )
         return false;

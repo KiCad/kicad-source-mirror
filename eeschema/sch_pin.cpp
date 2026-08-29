@@ -300,6 +300,7 @@ void SCH_PIN::Serialize( google::protobuf::Any& aContainer ) const
     if( !m_alt.IsEmpty() && m_alt != GetBaseName() )
         pin.set_active_alternate( m_alt.ToUTF8() );
 
+    kiapi::common::PackCustomProperties( pin.mutable_custom_properties(), *this );
     aContainer.PackFrom( pin );
 }
 
@@ -339,6 +340,8 @@ bool SCH_PIN::Deserialize( const google::protobuf::Any& aContainer )
         alt.m_Type = FromProtoEnum<ELECTRICAL_PINTYPE>( altProto.electrical_type() );
         alts.emplace( alt.m_Name, alt );
     }
+
+    kiapi::common::UnpackCustomProperties( pin.custom_properties(), *this );
 
     if( m_layoutCache )
         m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::ALL );

@@ -131,6 +131,7 @@ void PCB_GRIDITEM::Serialize( google::protobuf::Any& aContainer ) const
     grid.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                 : kiapi::common::types::LockedState::LS_UNLOCKED );
 
+    kiapi::common::PackCustomProperties( grid.mutable_custom_properties(), *this );
     aContainer.PackFrom( grid );
 }
 
@@ -176,6 +177,7 @@ bool PCB_GRIDITEM::Deserialize( const google::protobuf::Any& aContainer )
     }
 
     SetLocked( grid.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( grid.custom_properties(), *this );
 
     return true;
 }

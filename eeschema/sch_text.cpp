@@ -87,6 +87,7 @@ void SCH_TEXT::Serialize( google::protobuf::Any& aContainer ) const
 
     PackVector2( *text.mutable_text()->mutable_position(), GetPosition(), schIUScale );
 
+    PackCustomProperties( text.mutable_custom_properties(), *this );
     aContainer.PackFrom( text );
 }
 
@@ -103,6 +104,7 @@ bool SCH_TEXT::Deserialize( const google::protobuf::Any& aContainer )
     const_cast<KIID&>( m_Uuid ) = KIID( text.id().value() );
     SetLocked( text.locked() == types::LockedState::LS_LOCKED );
     SetExcludedFromSim( text.exclude_from_sim() );
+    UnpackCustomProperties( text.custom_properties(), *this );
 
     if( !EDA_TEXT::Deserialize( text.text(), schIUScale ) )
         return false;

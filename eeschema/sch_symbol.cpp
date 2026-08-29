@@ -333,6 +333,7 @@ void SCH_SYMBOL::Serialize( google::protobuf::Any& aContainer ) const
 
     PackDistance( *symbol.mutable_pin_name_offset(), GetPinNameOffset(), schIUScale );
 
+    kiapi::common::PackCustomProperties( symbol.mutable_custom_properties(), *this );
     aContainer.PackFrom( symbol );
 }
 
@@ -352,6 +353,7 @@ bool SCH_SYMBOL::Deserialize( const google::protobuf::Any& aContainer )
     SetPosition( UnpackVector2( symbol.position(), schIUScale ) );
     SetLocked( symbol.locked() == LockedState::LS_LOCKED );
     SetFieldsAutoplaced( symbol.fields_autoplaced() ? AUTOPLACE_AUTO : AUTOPLACE_NONE );
+    kiapi::common::UnpackCustomProperties( symbol.custom_properties(), *this );
 
     if( !symbol.lib_name().empty() )
         SetSchSymbolLibraryName( wxString::FromUTF8( symbol.lib_name() ) );

@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <bitmaps.h>
+#include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
 #include <google/protobuf/any.pb.h>
 #include <eda_draw_frame.h>
@@ -67,6 +68,7 @@ void SCH_GROUP::Serialize( google::protobuf::Any& aContainer ) const
     for( EDA_ITEM* member : sortedItems )
         group.add_items()->set_value( member->m_Uuid.AsStdString() );
 
+    kiapi::common::PackCustomProperties( group.mutable_custom_properties(), *this );
     aContainer.PackFrom( group );
 }
 
@@ -83,6 +85,7 @@ bool SCH_GROUP::Deserialize( const google::protobuf::Any& aContainer )
     const_cast<KIID&>( m_Uuid ) = KIID( group.id().value() );
     SetName( wxString::FromUTF8( group.name() ) );
     SetLocked( group.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( group.custom_properties(), *this );
 
     m_items.clear();
 

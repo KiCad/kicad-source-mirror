@@ -171,6 +171,7 @@ void PCB_TABLE::Serialize( google::protobuf::Any& aContainer ) const
     else if( const BOARD* board = GetBoard() )
         table.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
+    kiapi::common::PackCustomProperties( table.mutable_custom_properties(), *this );
     aContainer.PackFrom( table );
 }
 
@@ -189,6 +190,7 @@ bool PCB_TABLE::Deserialize( const google::protobuf::Any& aContainer )
     SetUuidDirect( KIID( table.id().value() ) );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( table.layer() ) );
     SetLocked( table.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( table.custom_properties(), *this );
 
     ClearCells();
     m_colWidths.clear();

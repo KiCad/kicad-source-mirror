@@ -27,6 +27,7 @@
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
+#include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
 
 
@@ -43,6 +44,7 @@ void SCH_TABLECELL::Serialize( kiapi::schematic::types::SchematicTableCell& aCel
     aCell.set_row_span( m_rowSpan );
 
     SCH_TEXTBOX::Serialize( *aCell.mutable_text_box(), schIUScale );
+    kiapi::common::PackCustomProperties( aCell.mutable_custom_properties(), *this );
 }
 
 
@@ -64,6 +66,8 @@ bool SCH_TABLECELL::Deserialize( const kiapi::schematic::types::SchematicTableCe
 
     SetColSpan( aCell.column_span() );
     SetRowSpan( aCell.row_span() );
+
+    kiapi::common::UnpackCustomProperties( aCell.custom_properties(), *this );
 
     return true;
 }

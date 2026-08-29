@@ -66,6 +66,7 @@ void SCH_NO_CONNECT::Serialize( google::protobuf::Any& aContainer ) const
     marker.set_locked( IsLocked() ? types::LockedState::LS_LOCKED
                                   : types::LockedState::LS_UNLOCKED );
 
+    kiapi::common::PackCustomProperties( marker.mutable_custom_properties(), *this );
     aContainer.PackFrom( marker );
 }
 
@@ -83,6 +84,7 @@ bool SCH_NO_CONNECT::Deserialize( const google::protobuf::Any& aContainer )
     m_pos = UnpackVector2( marker.position(), schIUScale );
     m_size = UnpackDistance( marker.size(), schIUScale );
     SetLocked( marker.locked() == types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( marker.custom_properties(), *this );
     return true;
 }
 

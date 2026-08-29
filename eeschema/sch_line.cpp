@@ -172,6 +172,7 @@ void SCH_LINE::Serialize( google::protobuf::Any &aContainer ) const
     if( GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
         PackLineEnding( *line.mutable_end_ending(), GetEndEnding(), schIUScale );
 
+    kiapi::common::PackCustomProperties( line.mutable_custom_properties(), *this );
     aContainer.PackFrom( line );
 }
 
@@ -189,6 +190,7 @@ bool SCH_LINE::Deserialize( const google::protobuf::Any &aContainer )
     SetStartPoint( UnpackVector2( line.start(), schIUScale ) );
     SetEndPoint( UnpackVector2( line.end(), schIUScale ) );
     SetLocked( line.locked() == types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( line.custom_properties(), *this );
 
     m_stroke.SetWidth( UnpackDistance( line.stroke().width(), schIUScale ) );
     m_stroke.SetLineStyle( FromProtoEnum<LINE_STYLE, types::StrokeLineStyle>( line.stroke().style() ) );

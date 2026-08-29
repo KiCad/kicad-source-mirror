@@ -110,6 +110,7 @@ void SCH_TABLE::Serialize( google::protobuf::Any& aContainer ) const
 
     PackStroke( *table.mutable_separators_stroke(), m_separatorsStroke, schIUScale );
 
+    kiapi::common::PackCustomProperties( table.mutable_custom_properties(), *this );
     aContainer.PackFrom( table );
 }
 
@@ -122,6 +123,8 @@ bool SCH_TABLE::Deserialize( const google::protobuf::Any& aContainer )
 
     if( !aContainer.UnpackTo( &table ) )
         return false;
+
+    kiapi::common::UnpackCustomProperties( table.custom_properties(), *this );
 
     if( table.column_count() < 1 )
         return false;

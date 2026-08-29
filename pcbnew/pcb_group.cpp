@@ -74,6 +74,7 @@ void PCB_GROUP::Serialize( google::protobuf::Any &aContainer ) const
     if( HasDesignBlockLink() )
         kiapi::common::PackLibId( group.mutable_lib_id(), GetDesignBlockLibId() );
 
+    kiapi::common::PackCustomProperties( group.mutable_custom_properties(), *this );
     aContainer.PackFrom( group );
 }
 
@@ -104,6 +105,8 @@ bool PCB_GROUP::Deserialize( const google::protobuf::Any &aContainer )
 
     if( group.has_lib_id() )
         SetDesignBlockLibId( kiapi::common::UnpackLibId( group.lib_id() ) );
+
+    kiapi::common::UnpackCustomProperties( group.custom_properties(), *this );
 
     return true;
 }

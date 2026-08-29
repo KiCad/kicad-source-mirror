@@ -24,6 +24,7 @@
 #include <api/schematic/schematic_types.pb.h>
 #include <line_ending.h>
 #include <geometry/shape_poly_set.h>
+#include <eda_item.h>
 #include <kiid.h>
 #include <project.h>
 #include <stroke_params.h>
@@ -389,6 +390,30 @@ KICOMMON_API bool PackKiwayApiMessage( const google::protobuf::Message& aMessage
 
     aBytes = request.SerializeAsString();
     return true;
+}
+
+
+KICOMMON_API void PackCustomProperties( google::protobuf::RepeatedPtrField<types::CustomProperty>* aOutput,
+                                        const EDA_ITEM& aItem )
+{
+    for( const auto& [key, value] : aItem.GetCustomProperties() )
+    {
+        types::CustomProperty* entry = aOutput->Add();
+        entry->set_key( key.ToUTF8() );
+        entry->set_value( value.ToUTF8() );
+    }
+}
+
+
+KICOMMON_API void UnpackCustomProperties( const google::protobuf::RepeatedPtrField<types::CustomProperty>& aInput,
+                                          EDA_ITEM& aItem )
+{
+    std::map<wxString, wxString> props;
+
+    for( const types::CustomProperty& prop : aInput )
+        props[wxString::FromUTF8( prop.key() )] = wxString::FromUTF8( prop.value() );
+
+    aItem.SetCustomProperties( props );
 }
 
 } // namespace kiapi::common

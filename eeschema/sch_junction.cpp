@@ -75,6 +75,7 @@ void SCH_JUNCTION::Serialize( google::protobuf::Any& aContainer ) const
     junction.set_locked( IsLocked() ? types::LockedState::LS_LOCKED
                                     : types::LockedState::LS_UNLOCKED );
 
+    kiapi::common::PackCustomProperties( junction.mutable_custom_properties(), *this );
     aContainer.PackFrom( junction );
 }
 
@@ -98,6 +99,7 @@ bool SCH_JUNCTION::Deserialize( const google::protobuf::Any& aContainer )
         m_color = COLOR4D::UNSPECIFIED;
 
     SetLocked( junction.locked() == types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( junction.custom_properties(), *this );
     return true;
 }
 

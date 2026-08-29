@@ -132,6 +132,7 @@ void SCH_BITMAP::Serialize( google::protobuf::Any& aContainer ) const
 
     m_referenceImage.PackToBytes( *image.mutable_image_data() );
 
+    kiapi::common::PackCustomProperties( image.mutable_custom_properties(), *this );
     aContainer.PackFrom( image );
 }
 
@@ -160,6 +161,7 @@ bool SCH_BITMAP::Deserialize( const google::protobuf::Any& aContainer )
     m_referenceImage.SetTransformOriginOffset( UnpackVector2( image.transform_origin_offset(), schIUScale ) );
 
     SetLocked( image.locked() == types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( image.custom_properties(), *this );
     return true;
 }
 

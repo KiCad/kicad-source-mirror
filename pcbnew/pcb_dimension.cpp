@@ -371,6 +371,7 @@ void PCB_DIMENSION_BASE::Serialize( google::protobuf::Any &aContainer ) const
             ToProtoEnum<DIM_TEXT_POSITION, DimensionTextPosition>( m_textPosition ) );
     dimension.set_keep_text_aligned( m_keepTextAligned );
 
+    kiapi::common::PackCustomProperties( dimension.mutable_custom_properties(), *this );
     aContainer.PackFrom( dimension );
 }
 
@@ -405,6 +406,8 @@ bool PCB_DIMENSION_BASE::Deserialize( const google::protobuf::Any &aContainer )
     SetExtensionOffset( dimension.extension_offset().value_nm() );
     SetTextPositionMode( FromProtoEnum<DIM_TEXT_POSITION>( dimension.text_position() ) );
     SetKeepTextAligned( dimension.keep_text_aligned() );
+
+    kiapi::common::UnpackCustomProperties( dimension.custom_properties(), *this );
 
     Update();
 

@@ -125,6 +125,7 @@ void SCH_SHEET::Serialize( google::protobuf::Any& aContainer ) const
     for( const SCH_SHEET_PIN* pin : GetPins() )
         pin->Serialize( *sheet.add_pins(), schIUScale );
 
+    kiapi::common::PackCustomProperties( sheet.mutable_custom_properties(), *this );
     aContainer.PackFrom( sheet );
 }
 
@@ -149,6 +150,7 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
     SetExcludedFromBOM( sheet.exclude_from_bom() );
     SetExcludedFromBoard( sheet.exclude_from_board() );
     SetDNP( sheet.dnp() );
+    kiapi::common::UnpackCustomProperties( sheet.custom_properties(), *this );
 
     SetBorderWidth( UnpackDistance( sheet.border_stroke().width(), schIUScale ) );
     SetBorderColor( sheet.border_stroke().has_color() ? UnpackColor( sheet.border_stroke().color() )

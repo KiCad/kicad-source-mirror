@@ -129,6 +129,8 @@ void SCH_TEXTBOX::Serialize( kiapi::schematic::types::SchematicTextBox& aOutput,
 
     if( GetFillColor() != COLOR4D::UNSPECIFIED )
         PackColor( *fill->mutable_color(), GetFillColor() );
+
+    PackCustomProperties( aOutput.mutable_custom_properties(), *this );
 }
 
 
@@ -150,6 +152,7 @@ bool SCH_TEXTBOX::Deserialize( const kiapi::schematic::types::SchematicTextBox& 
     SetPosition( UnpackVector2( aInput.textbox().top_left(), aScale ) );
     SetEnd( UnpackVector2( aInput.textbox().bottom_right(), aScale ) );
     SetText( wxString::FromUTF8( aInput.textbox().text() ) );
+    UnpackCustomProperties( aInput.custom_properties(), *this );
 
     if( aInput.has_margin_left() )
         SetMarginLeft( UnpackDistance( aInput.margin_left(), aScale ) );

@@ -459,6 +459,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
     kiapi::board::PackEmbeddedFiles( *footprint.mutable_embedded_files(), *this );
 
+    kiapi::common::PackCustomProperties( footprint.mutable_custom_properties(), *this );
     aContainer.PackFrom( footprint );
 }
 
@@ -675,6 +676,8 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
         if( item && item->Deserialize( itemMsg ) )
             Add( item.release(), ADD_MODE::APPEND );
     }
+
+    kiapi::common::UnpackCustomProperties( footprint.custom_properties(), *this );
 
     if( !kiapi::board::UnpackEmbeddedFiles( *this, footprint.embedded_files() ) )
         return false;

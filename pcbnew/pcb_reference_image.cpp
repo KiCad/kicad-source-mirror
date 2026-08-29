@@ -194,6 +194,7 @@ void PCB_REFERENCE_IMAGE::Serialize( google::protobuf::Any& aContainer ) const
 
     m_referenceImage.PackToBytes( *refImage.mutable_image_data() );
 
+    kiapi::common::PackCustomProperties( refImage.mutable_custom_properties(), *this );
     aContainer.PackFrom( refImage );
 }
 
@@ -222,6 +223,7 @@ bool PCB_REFERENCE_IMAGE::Deserialize( const google::protobuf::Any& aContainer )
         m_referenceImage.SetImageScale( refImage.image_scale().value() );
 
     SetLocked( refImage.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( refImage.custom_properties(), *this );
     return true;
 }
 
