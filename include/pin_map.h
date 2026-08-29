@@ -27,6 +27,7 @@
 #include <unordered_map>
 #include <vector>
 #include <wx/string.h>
+#include <wx/arrstr.h> // gives std::vector<wxString> dllimport attribution on MSVC
 
 
 /**
