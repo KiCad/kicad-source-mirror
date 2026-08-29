@@ -103,6 +103,14 @@ void SCH_IO::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 }
 
 
+void SCH_IO::CheckLibrary( const wxString& aLibraryPath,
+                           const std::map<std::string, UTF8>* aProperties )
+{
+    wxArrayString symbolNames;
+    EnumerateSymbolLib( symbolNames, aLibraryPath, aProperties );
+}
+
+
 LIB_SYMBOL* SCH_IO::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                                 const std::map<std::string, UTF8>* aProperties )
 {

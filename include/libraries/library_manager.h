@@ -157,6 +157,9 @@ public:
 
     virtual std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) = 0;
 
+    /// Validates that a library is loadable.  May not necessarily load the library!
+    virtual std::optional<LIB_STATUS> CheckLibrary( LIB_DATA* aLib ) { return LoadOne( aLib ); }
+
     /// Returns async load progress between 0.0 and 1.0, or nullopt if load is not in progress
     std::optional<float> AsyncLoadProgress() const;
 

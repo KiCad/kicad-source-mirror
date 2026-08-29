@@ -66,6 +66,8 @@ public:
     /// Loads or reloads the given library, if it exists
     std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) override;
 
+    std::optional<LIB_STATUS> CheckLibrary( LIB_DATA* aLib ) override;
+
     /// Loads or reloads the given library, if it exists
     std::optional<LIB_STATUS> LoadOne( const wxString& aNickname );
 

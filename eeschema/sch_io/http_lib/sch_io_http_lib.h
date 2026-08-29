@@ -68,6 +68,9 @@ public:
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList, const wxString& aLibraryPath,
                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    void CheckLibrary( const wxString& aLibraryPath,
+                       const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
