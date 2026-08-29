@@ -157,6 +157,9 @@ bool PCB_TABLE::Deserialize( const google::protobuf::Any& aContainer )
     if( !aContainer.UnpackTo( &table ) )
         return false;
 
+    if( table.column_count() < 1 )
+        return false;
+
     SetUuidDirect( KIID( table.id().value() ) );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( table.layer() ) );
     SetLocked( table.locked() == kiapi::common::types::LockedState::LS_LOCKED );

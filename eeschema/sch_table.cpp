@@ -123,6 +123,9 @@ bool SCH_TABLE::Deserialize( const google::protobuf::Any& aContainer )
     if( !aContainer.UnpackTo( &table ) )
         return false;
 
+    if( table.column_count() < 1 )
+        return false;
+
     const_cast<KIID&>( m_Uuid ) = KIID( table.id().value() );
     SetLocked( table.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
