@@ -283,17 +283,23 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             }
 
             if( typeToClose == types::DOCTYPE_PCB
-                && !aRequest.document().board_filename().empty() )
+                && !aRequest.document().board_filename().empty()
+                && it->fileName != wxString::FromUTF8( aRequest.document().board_filename() ) )
             {
-                wxString requestedName = wxString::FromUTF8( aRequest.document().board_filename() );
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( "Requested document does not match the open document" );
+                return tl::unexpected( e );
+            }
 
-                if( it->fileName != requestedName )
-                {
-                    ApiResponseStatus e;
-                    e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-                    e.set_error_message( "Requested document does not match the open document" );
-                    return tl::unexpected( e );
-                }
+            if( typeToClose == types::DOCTYPE_SCHEMATIC && aRequest.document().has_project()
+                && openProjectPath
+                && aRequest.document().project().name() != openProjectPath->GetName().ToStdString() )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( "Requested document does not match the open project" );
+                return tl::unexpected( e );
             }
         }
         else
