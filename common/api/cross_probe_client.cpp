@@ -132,6 +132,5 @@ bool CROSS_PROBE_CLIENT::IsOnStandardSocketPath()
     if( !server.Running() )
         return false;
 
-    std::string currentUrl = fmt::format( "ipc://{}", server.SocketPath() );
-    return currentUrl == KICAD_API_SERVER::StandardSocketUrl();
+    return server.SocketPath() == KICAD_API_SERVER::StandardSocketUrl();
 }
