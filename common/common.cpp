@@ -732,9 +732,9 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
             // backslash can be used to suppress special meaning of % and $
             if( n < strlen - 1 && ( str[n + 1] == wxT( '%' ) || str[n + 1] == wxT( '$' ) ) )
             {
+                strResult += str_n;
                 str_n = str[++n];
                 strResult += str_n;
-
                 break;
             }
 
@@ -746,8 +746,8 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
     }
 
     std::set<wxString> loop_check;
-    auto               first_pos = strResult.find_first_of( wxS( "{(%" ) );
-    auto               last_pos = strResult.find_last_of( wxS( "})%" ) );
+    size_t             first_pos = strResult.find_first_of( wxS( "{(%" ) );
+    size_t             last_pos = strResult.find_last_of( wxS( "})%" ) );
 
     if( first_pos != strResult.npos && last_pos != strResult.npos && first_pos != last_pos )
         strResult = KIwxExpandEnvVars( strResult, aProject, aSet ? aSet : &loop_check );
