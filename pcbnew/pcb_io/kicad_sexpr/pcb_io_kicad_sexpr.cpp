@@ -2151,17 +2151,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                       formatInternalUnits( aPad->GetLocalThermalSpokeWidthOverride().value() ).c_str() );
     }
 
-    EDA_ANGLE defaultThermalSpokeAngle = ANGLE_90;
-
-    if( aPad->GetPadstackMode() == PADSTACK::MODE::NORMAL
-            && ( aPad->GetShape( F_Cu ) == PAD_SHAPE::CIRCLE
-                || ( aPad->GetShape( F_Cu ) == PAD_SHAPE::CUSTOM
-                    && aPad->GetAnchorPadShape( F_Cu ) == PAD_SHAPE::CIRCLE ) ) )
-    {
-        defaultThermalSpokeAngle = ANGLE_45;
-    }
-
-    if( aPad->GetThermalSpokeAngle() != defaultThermalSpokeAngle )
+    if( aPad->GetThermalSpokeAngle() != aPad->Padstack().DefaultThermalSpokeAngleForShape() )
     {
         m_out->Print( "(thermal_bridge_angle %s)",
                       EDA_UNIT_UTILS::FormatAngle( aPad->GetThermalSpokeAngle() ).c_str() );
