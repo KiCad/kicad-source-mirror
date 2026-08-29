@@ -24,6 +24,7 @@
 #define EDA_ITEM_H
 
 #include <deque>
+#include <map>
 #include <set>
 
 #include <api/serializable.h>
@@ -219,6 +220,24 @@ public:
      */
     void SetForceVisible( bool aEnable ) { m_forceVisible = aEnable; }
     bool IsForceVisible() const { return m_forceVisible; }
+
+    /**
+     * Custom user-defined string key/value properties attached to this item.
+     *
+     * Keys and values are arbitrary strings; their meaning is defined by the user.
+     */
+    const std::map<wxString, wxString>& GetCustomProperties() const
+    {
+        return m_customProperties;
+    }
+
+    void SetCustomProperties( const std::map<wxString, wxString>& aProps )
+    {
+        m_customProperties = aProps;
+    }
+
+    bool HasCustomProperties() const { return !m_customProperties.empty(); }
+    void ClearCustomProperties() { m_customProperties.clear(); }
 
     /**
      * Populate \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
@@ -544,6 +563,8 @@ protected:
     VECTOR2I m_rolloverPos;
     bool     m_isRollover;
     bool     m_forceVisible;
+
+    std::map<wxString, wxString> m_customProperties;
 };
 
 

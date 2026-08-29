@@ -260,6 +260,8 @@ void PCB_TABLE::swapData( BOARD_ITEM* aImage )
 
     for( PCB_TABLECELL* cell : table->m_cells )
         cell->SetParent( table );
+
+    std::swap( m_customProperties, table->m_customProperties );
 }
 
 

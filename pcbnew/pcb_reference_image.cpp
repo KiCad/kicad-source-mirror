@@ -110,6 +110,7 @@ void PCB_REFERENCE_IMAGE::swapData( BOARD_ITEM* aItem )
     std::swap( m_flags, item->m_flags );
     std::swap( m_parent, item->m_parent );
     std::swap( m_forceVisible, item->m_forceVisible );
+    std::swap( m_customProperties, item->m_customProperties );
     m_referenceImage.SwapData( item->m_referenceImage );
 }
 

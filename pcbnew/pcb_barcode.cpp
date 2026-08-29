@@ -924,6 +924,7 @@ void PCB_BARCODE::swapData( BOARD_ITEM* aImage )
     std::swap( m_libAngle, other->m_libAngle );
     std::swap( m_errorCorrection, other->m_errorCorrection );
     std::swap( m_cache, other->m_cache );
+    std::swap( m_customProperties, other->m_customProperties );
 
     m_text.SetParent( this );
     other->m_text.SetParent( other );

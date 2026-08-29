@@ -63,6 +63,7 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
         m_flags( base.m_flags ),
         m_parent( base.m_parent ),
         m_group( base.m_group ),
+        m_customProperties( base.m_customProperties ),
         m_isRollover( false ),
         m_forceVisible( base.m_forceVisible )
 {
@@ -362,6 +363,7 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
     m_group        = aItem.m_group;
     m_forceVisible = aItem.m_forceVisible;
     m_isRollover   = aItem.m_isRollover;
+    m_customProperties = aItem.m_customProperties;
 
     SetForcedTransparency( aItem.GetForcedTransparency() );
 

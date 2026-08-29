@@ -1693,6 +1693,7 @@ void PCB_SHAPE::swapData( BOARD_ITEM* aImage )
     std::swap( m_netinfo, image->m_netinfo );
     std::swap( m_hasSolderMask, image->m_hasSolderMask );
     std::swap( m_solderMaskMargin, image->m_solderMaskMargin );
+    std::swap( m_customProperties, image->m_customProperties );
 }
 
 
