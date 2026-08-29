@@ -35,6 +35,8 @@ message SchematicField
   bool show_name = 5;
   bool allow_auto_place = 6;
   bool is_private = 7;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 8;
 }
 
 enum SchematicLineType
@@ -56,6 +58,8 @@ message SchematicLine
   kiapi.common.types.LockedState locked = 6;
   kiapi.common.types.LineEnding start_ending = 7;
   kiapi.common.types.LineEnding end_ending   = 8;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 9;
 }
 
 message Junction
@@ -65,6 +69,8 @@ message Junction
   kiapi.common.types.Distance diameter = 3;
   kiapi.common.types.Color color = 4;
   kiapi.common.types.LockedState locked = 5;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 6;
 }
 
 message NoConnectMarker
@@ -73,6 +79,8 @@ message NoConnectMarker
   kiapi.common.types.Vector2 position = 2;
   kiapi.common.types.Distance size = 3;
   kiapi.common.types.LockedState locked = 4;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 5;
 }
 
 enum BusEntryType
@@ -90,6 +98,8 @@ message BusEntry
   kiapi.common.types.StrokeAttributes stroke = 4;
   kiapi.common.types.LockedState locked = 5;
   BusEntryType type = 6;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 7;
 }
 
 message SchematicText
@@ -98,6 +108,8 @@ message SchematicText
   kiapi.common.types.Text text = 2;
   kiapi.common.types.LockedState locked = 3;
   bool exclude_from_sim = 4;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 5;
 }
 
 message SchematicTextBox
@@ -111,6 +123,8 @@ message SchematicTextBox
   kiapi.common.types.Distance margin_top = 7;
   kiapi.common.types.Distance margin_right = 8;
   kiapi.common.types.Distance margin_bottom = 9;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 10;
 }
 
 message SchematicGraphicShape
@@ -118,6 +132,8 @@ message SchematicGraphicShape
   kiapi.common.types.GraphicShape shape = 1;
   kiapi.common.types.KIID id = 2;
   kiapi.common.types.LockedState locked = 3;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 4;
 }
 
 message SchematicImage
@@ -128,6 +144,8 @@ message SchematicImage
   kiapi.common.types.Ratio image_scale = 4;
   bytes image_data = 5;
   kiapi.common.types.LockedState locked = 6;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 7;
 }
 
 enum SchematicLabelShape
@@ -162,6 +180,8 @@ message LocalLabel
   repeated SchematicField fields = 5;
   kiapi.common.types.LockedState locked = 6;
   bool fields_autoplaced = 7;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 8;
 }
 
 message GlobalLabel
@@ -175,6 +195,8 @@ message GlobalLabel
   kiapi.common.types.LockedState locked = 7;
   SchematicField intersheet_refs_field = 8;
   bool fields_autoplaced = 9;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 10;
 }
 
 message HierarchicalLabel
@@ -187,6 +209,8 @@ message HierarchicalLabel
   repeated SchematicField fields = 6;
   kiapi.common.types.LockedState locked = 7;
   bool fields_autoplaced = 8;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 9;
 }
 
 message DirectiveLabel
@@ -201,6 +225,8 @@ message DirectiveLabel
   kiapi.common.types.Distance pin_length = 8;
   kiapi.common.types.Distance symbol_size = 9;
   bool fields_autoplaced = 10;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 11;
 }
 
 message Group
@@ -209,6 +235,8 @@ message Group
   string name = 2;
   repeated kiapi.common.types.KIID items = 3;
   kiapi.common.types.LockedState locked = 4;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 5;
 }
 
 message SchematicRuleArea
@@ -221,6 +249,8 @@ message SchematicRuleArea
   bool exclude_from_bom = 5;
   bool exclude_from_board = 6;
   bool dnp = 7;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 8;
 }
 
 enum SheetSide
@@ -266,6 +296,8 @@ message SheetSymbol
   // Page numbers in KiCad are arbitrary user data and don't have to be numeric
   string page_number = 16;
   bool fields_autoplaced = 17;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 18;
 }
 
 enum SchematicSymbolType
@@ -335,6 +367,8 @@ message SchematicPin
 
   repeated SchematicPinAlternate alternates = 12;
   optional string active_alternate = 13;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 14;
 }
 
 message SchematicSymbolUnit
@@ -537,6 +571,8 @@ message SchematicSymbolInstance
   string lib_name = 22;
 
   SchematicPassthroughMode passthrough = 23;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 24;
 }
 
 message SheetInstance
@@ -568,6 +604,8 @@ message SchematicTableCell
   SchematicTextBox text_box = 1;
   int32 column_span = 2;
   int32 row_span = 3;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 4;
 }
 
 enum TableStrokeMode
@@ -596,4 +634,6 @@ message SchematicTable
   TableStrokeMode row_separators = 10;
   TableStrokeMode column_separators = 11;
   kiapi.common.types.StrokeAttributes separators_stroke = 12;
+
+  repeated kiapi.common.types.CustomProperty custom_properties = 13;
 }

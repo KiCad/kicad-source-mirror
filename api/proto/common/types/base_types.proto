@@ -618,3 +618,12 @@ message PageSettings
   // Empty string means the default (built-in) drawing sheet is used.
   string drawing_sheet = 5;
 }
+
+// A single arbitrary user-defined string property attached to an item.
+// Keys and values are free-form strings whose meanings are defined by the user.
+// Since: 11.0
+message CustomProperty
+{
+  string key = 1;
+  string value = 2;
+}

@@ -164,6 +164,9 @@ message Track
   // This field only applies to shapes on outer copper layers and is ignored otherwise.
   // Since: 10.0.7
   SolderMaskOverrides solder_mask = 9;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 10;
 }
 
 // Represents an arc track (not a PCB_SHAPE in arc shape)
@@ -189,6 +192,9 @@ message Arc
   // This field only applies to shapes on outer copper layers and is ignored otherwise.
   // Since: 10.0.7
   SolderMaskOverrides solder_mask = 10;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 11;
 }
 
 // What copper layer shape mode the padstack uses
@@ -544,6 +550,9 @@ message Via
   // True if this is a "free" via that is not automatically updated by netlist changes
   // Since: 10.0.7
   bool is_free = 10;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 11;
 }
 
 message BoardGraphicShape
@@ -563,6 +572,9 @@ message BoardGraphicShape
   // This field only applies to shapes on outer copper layers and is ignored otherwise.
   // Since: 10.0.7
   SolderMaskOverrides solder_mask = 7;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 8;
 }
 
 enum BarcodeKind
@@ -610,6 +622,9 @@ message Barcode
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 15;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 16;
 }
 
 // A board-specific text object, existing on a board layer
@@ -625,6 +640,9 @@ message BoardText
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 6;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 7;
 }
 
 // A board-specific textbox, existing on a board layer
@@ -642,6 +660,9 @@ message BoardTextBox
 
   // Since: 10.0.7
   bool knockout = 6;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 7;
 }
 
 // NOTE: There has been some discussion about what to do with pad attributes and properties.
@@ -750,6 +771,9 @@ message Pad
 
   // Since: 10.0.7
   PadFabricationProperty fab_property = 16;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 17;
 }
 
 enum ZoneType
@@ -998,6 +1022,9 @@ message Zone
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 14;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 15;
 }
 
 // An aligned dimension is drawn parallel to the line segment between the start and end points
@@ -1151,6 +1178,9 @@ message Dimension
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 24;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 25;
 }
 
 message ReferenceImage
@@ -1170,6 +1200,9 @@ message ReferenceImage
   // it will not change the object's parent
   // Since: 10.0.6
   kiapi.common.types.KIID parent = 8;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 9;
 }
 
 message GridItemAffects
@@ -1226,6 +1259,9 @@ message GridItem
   GridItemAffects affects = 8;
 
   kiapi.common.types.LockedState locked = 9;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 10;
 }
 
 message Group
@@ -1245,6 +1281,9 @@ message Group
   // Optional design block identifier used for groups that have design block library links.
   // Since: 10.0.7
   kiapi.common.types.LibraryIdentifier lib_id = 6;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 7;
 }
 
 // A geometric constraint between board items (issue #2329).
@@ -1299,6 +1338,9 @@ message Constraint
   repeated ConstraintMember members = 3;
   optional double value = 4;
   bool driving = 5;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 6;
 }
 
 message FieldId
@@ -1314,6 +1356,9 @@ message Field
 
   // Since 9.0.1
   bool visible = 4;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 5;
 }
 
 enum FootprintMountingStyle
@@ -1450,6 +1495,9 @@ message FootprintInstance
 
   // Since: 10.0.7
   kiapi.common.types.EmbeddedFiles embedded_files = 18;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 19;
 }
 
 // Since: 10.0.7
@@ -1458,6 +1506,9 @@ message TableCell
   BoardTextBox text_box = 1;
   int32 column_span = 2;
   int32 row_span = 3;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 4;
 }
 
 // Since: 10.0.7
@@ -1494,6 +1545,9 @@ message Table
   // The ID of the parent container for this item (if any).  This is a read-only property; changing
   // it will not change the object's parent
   kiapi.common.types.KIID parent = 14;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 15;
 }
 
 // Since: 10.0.7
@@ -1508,4 +1562,7 @@ message ReferencePoint
   // The ID of the parent container for this item (if any).  This is a read-only property;
   // changing it will not change the object's parent
   kiapi.common.types.KIID parent = 6;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 7;
 }
