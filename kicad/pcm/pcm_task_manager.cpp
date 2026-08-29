@@ -461,14 +461,19 @@ PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::InstallFromFile( wxWindow*       aPar
         deletePackageDirectories( package.identifier, keep_on_update );
     }
 
-    if( extract( aFilePath, package.identifier, false ) )
+    const bool extracted = extract( aFilePath, package.identifier, false );
+
+    if( extracted )
         m_pcm->MarkInstalled( package, package.versions[0].version, "" );
     else
         deletePackageDirectories( package.identifier );   // Cleanup partial extraction
 
     m_reporter->SetFinished();
     m_pcm->ShowApiEnablePromptIfNeeded();
-    m_reporter->KeepRefreshing( false );
+
+    // Keep the reporting dialog open if we failed extraction
+    m_reporter->KeepRefreshing( !extracted && !m_reporter->IsCancelled() );
+
     m_reporter->Destroy();
     m_reporter.reset();
 
