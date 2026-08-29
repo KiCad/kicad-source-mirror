@@ -36,7 +36,7 @@ DIALOG_VIA_STITCH_PROPERTIES_BASE::DIALOG_VIA_STITCH_PROPERTIES_BASE( wxWindow* 
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer1->SetEmptyCellSize( wxSize( 20,10 ) );
 
-	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_netLabel = new wxStaticText( this, wxID_ANY, _("Stitch Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netLabel->Wrap( -1 );
 	gbSizer1->Add( m_netLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 6 );
 
@@ -110,6 +110,13 @@ DIALOG_VIA_STITCH_PROPERTIES_BASE::DIALOG_VIA_STITCH_PROPERTIES_BASE( wxWindow* 
 	m_modeCombo->Append( _("Stitch") );
 	m_modeCombo->Append( _("Guard") );
 	gbSizer1->Add( m_modeCombo, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_TOP|wxEXPAND, 6 );
+
+	m_guardNet = new wxStaticText( this, wxID_ANY, _("Guard Net:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_guardNet->Wrap( -1 );
+	gbSizer1->Add( m_guardNet, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_guardNetSelector = new NET_SELECTOR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_guardNetSelector, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	gbSizer1->AddGrowableCol( 1 );

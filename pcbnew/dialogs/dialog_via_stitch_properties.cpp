@@ -69,14 +69,19 @@ DIALOG_VIA_STITCH_PROPERTIES::DIALOG_VIA_STITCH_PROPERTIES( PCB_BASE_EDIT_FRAME*
     m_posYBinder  = std::make_unique<UNIT_BINDER>( m_frame, m_posYLabel, m_posYCtrl,
                                                    m_posYUnits );
 
+    auto onNetChanged =
+            [this]( wxCommandEvent& aEvt )
+            {
+                updateWorkingCopyFromUI();
+                redrawPreview();
+                aEvt.Skip();
+            };
+
     m_netSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
-    m_netSelector->Bind( FILTERED_ITEM_SELECTED,
-                         [this]( wxCommandEvent& aEvt )
-                         {
-                             updateWorkingCopyFromUI();
-                             redrawPreview();
-                             aEvt.Skip();
-                         } );
+    m_netSelector->Bind( FILTERED_ITEM_SELECTED, onNetChanged );
+
+    m_guardNetSelector->SetNetInfo( &m_frame->GetBoard()->GetNetInfo() );
+    m_guardNetSelector->Bind( FILTERED_ITEM_SELECTED, onNetChanged );
 
     // Work on a detached clone so changes don't touch the live stitch until OK.
     m_workingCopy.reset( static_cast<PCB_VIA_STITCH*>( m_stitch->Clone() ) );
@@ -114,6 +119,7 @@ bool DIALOG_VIA_STITCH_PROPERTIES::TransferDataToWindow()
         return false;
 
     m_netSelector->SetSelectedNetcode( m_stitch->GetNetCode() );
+    m_guardNetSelector->SetSelectedNetcode( m_stitch->GetGuardedNetCode() );
 
     VECTOR2I pos = m_stitch->GetPosition();
     m_posXBinder->SetValue( pos.x );
@@ -143,6 +149,10 @@ bool DIALOG_VIA_STITCH_PROPERTIES::TransferDataFromWindow()
     int newNetCode = m_netSelector->GetSelectedNetcode();
     if( newNetCode >= 0 )
         m_stitch->SetNetCode( newNetCode );
+
+    int newGuardedNetCode = m_guardNetSelector->GetSelectedNetcode();
+    if( newGuardedNetCode >= 0 )
+        m_stitch->SetGuardedNetCode( newGuardedNetCode );
 
     m_stitch->SetPitch( m_pitchBinder->GetIntValue() );
     m_stitch->SetMode( static_cast<PCB_VIA_STITCH_MODE>( m_modeCombo->GetSelection() ) );
@@ -203,6 +213,10 @@ void DIALOG_VIA_STITCH_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     m_patternLabel->Enable( stitching );
     m_patternCombo->Enable( stitching );
 
+    // ...and the net being guarded means nothing outside of guard mode.
+    m_guardNet->Enable( !stitching );
+    m_guardNetSelector->Enable( !stitching );
+
     // The seed control is only used for the Poisson layout.
     PCB_VIA_STITCH_LAYOUT layout =
             static_cast<PCB_VIA_STITCH_LAYOUT>( m_patternCombo->GetSelection() );
@@ -221,6 +235,10 @@ void DIALOG_VIA_STITCH_PROPERTIES::updateWorkingCopyFromUI()
     int newNetCode = m_netSelector->GetSelectedNetcode();
     if( newNetCode >= 0 )
         m_workingCopy->SetNetCode( newNetCode );
+
+    int newGuardedNetCode = m_guardNetSelector->GetSelectedNetcode();
+    if( newGuardedNetCode >= 0 )
+        m_workingCopy->SetGuardedNetCode( newGuardedNetCode );
 
     m_workingCopy->SetPitch( m_pitchBinder->GetIntValue() );
     m_workingCopy->SetMode( static_cast<PCB_VIA_STITCH_MODE>( m_modeCombo->GetSelection() ) );
@@ -408,7 +426,16 @@ int DIALOG_VIA_STITCH_PROPERTIES::buildGuardPreview( std::vector<VECTOR2I>& aSam
     BOARD_DESIGN_SETTINGS& bds   = board->GetDesignSettings();
 
     const int trackWidth = std::max( bds.GetCurrentTrackWidth(), pcbIUScale.mmToIU( 0.05 ) );
-    const int clearance  = bds.m_NetSettings->GetDefaultNetclass()->GetClearance();
+    // Determine the clearance for a semi-accurate preview
+    int clearance = bds.m_NetSettings->GetDefaultNetclass()->GetClearance();
+
+    for( NET_SELECTOR* selector : { m_netSelector, m_guardNetSelector } )
+    {
+        NETINFO_ITEM* net = board->FindNet( selector->GetSelectedNetcode() );
+
+        if( net && net->GetNetClass() )
+            clearance = std::max( clearance, net->GetNetClass()->GetClearance() );
+    }
 
     const std::vector<VECTOR2I> corners = {
         { extent * 12 / 100, extent * 78 / 100 },

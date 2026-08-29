@@ -65,6 +65,8 @@ class DIALOG_VIA_STITCH_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_viaProperties;
 		wxStaticText* m_modeLabel;
 		wxComboBox* m_modeCombo;
+		wxStaticText* m_guardNet;
+		NET_SELECTOR* m_guardNetSelector;
 		PCB_DRAW_PANEL_GAL* m_panelShowPreview;
 		KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;
 		wxStdDialogButtonSizer* m_sdbSizer;
