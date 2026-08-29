@@ -18,7 +18,7 @@
 * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <boost/test/unit_test.hpp>
 
 #include <database/database_connection.h>
