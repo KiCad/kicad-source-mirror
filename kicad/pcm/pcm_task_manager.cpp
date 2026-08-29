@@ -25,6 +25,7 @@
 #include <paths.h>
 #include "pcm_task_manager.h"
 #include <reporter.h>
+#include <wx_filename.h>
 #include <wxstream_helper.h>
 
 #include <fstream>
@@ -258,26 +259,44 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
 
     for( ; entry; entry = zip.GetNextEntry() )
     {
-        wxArrayString path_parts =
-                wxSplit( entry->GetName(), wxFileName::GetPathSeparator(), (wxChar) 0 );
+        wxArrayString path_parts;
 
-        if( path_parts.size() < 2
-            || PCM_PACKAGE_DIRECTORIES.find( path_parts[0] ) == PCM_PACKAGE_DIRECTORIES.end()
-            || path_parts[path_parts.size() - 1].IsEmpty() )
+        if( !WX_FILENAME::SplitArchiveEntryName( entry->GetName(), path_parts ) )
         {
-            // Ignore files in the root of the archive and files outside of package dirs.
-            continue;
+            m_reporter->PCMReport( wxString::Format( _( "Package archive entry '%s' would be extracted outside "
+                                                        "of the package directory." ),
+                                                     entry->GetName() ),
+                                   RPT_SEVERITY_ERROR );
+            return false;
         }
 
+        if( entry->IsDir() || path_parts.size() < 2
+            || PCM_PACKAGE_DIRECTORIES.find( path_parts[0] ) == PCM_PACKAGE_DIRECTORIES.end() )
+        {
+            // Ignore directory entries, files in the root of the archive and files outside of
+            // package dirs.
+            continue;
+        }
 
         // Transform paths from
         // <PackageRoot>/$folder/$contents
         // To
         // $KICAD7_3RD_PARTY/$folder/$package_id/$contents
         path_parts.Insert( clean_package_id, 1 );
-        path_parts.Insert( m_pcm->Get3rdPartyPath(), 0 );
 
-        wxString fullname = wxJoin( path_parts, wxFileName::GetPathSeparator(), (wxChar) 0 );
+        wxFileName target;
+
+        if( !WX_FILENAME::ResolveArchiveEntryPath( m_pcm->Get3rdPartyPath(), wxJoin( path_parts, '/', (wxChar) 0 ),
+                                                   target ) )
+        {
+            m_reporter->PCMReport( wxString::Format( _( "Package archive entry '%s' would be extracted outside "
+                                                        "of the package directory." ),
+                                                     entry->GetName() ),
+                                   RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        wxString fullname = target.GetFullPath();
 
         // Ensure the target directory exists and create it if not.
         wxString t_path = wxPathOnly( fullname );
@@ -444,6 +463,8 @@ PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::InstallFromFile( wxWindow*       aPar
 
     if( extract( aFilePath, package.identifier, false ) )
         m_pcm->MarkInstalled( package, package.versions[0].version, "" );
+    else
+        deletePackageDirectories( package.identifier );   // Cleanup partial extraction
 
     m_reporter->SetFinished();
     m_pcm->ShowApiEnablePromptIfNeeded();
