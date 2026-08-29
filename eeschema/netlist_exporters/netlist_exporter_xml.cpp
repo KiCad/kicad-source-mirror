@@ -283,7 +283,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
 
     // pcbnew resolves variants itself from the base design.
-    const wxString currentVariant = ( aCtl & GNL_OPT_KICAD ) ? wxString() : m_schematic->GetCurrentVariant();
+    const wxString exportVariant = ( aCtl & GNL_OPT_KICAD ) ? wxString() : m_schematic->GetCurrentVariant();
 
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
@@ -333,15 +333,20 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             if( !symbol )
                 continue;
 
-            if( forBOM
-                && ( sheet.GetExcludedFromBOM( currentVariant )
-                     || symbol->ResolveExcludedFromBOM( &sheet, currentVariant ) ) )
+            // Do not use exportVariant for determininig whether or not to output a symbol.  It
+            // will be blank when exporting to PCBNew.
+
+            if( forBOM && ( sheet.GetExcludedFromBOM( m_schematic->GetCurrentVariant() )
+                           || symbol->ResolveExcludedFromBOM( &sheet, m_schematic->GetCurrentVariant() ) ) )
             {
                 continue;
             }
 
-            if( forBoard && ( sheet.GetExcludedFromBoard() || symbol->ResolveExcludedFromBoard() ) )
+            if( forBoard && ( sheet.GetExcludedFromBoard( m_schematic->GetCurrentVariant() )
+                             || symbol->ResolveExcludedFromBoard( &sheet, m_schematic->GetCurrentVariant() ) ) )
+            {
                 continue;
+            }
 
             // Output the symbol's elements in order of expected access frequency. This may
             // not always look best, but it will allow faster execution under XSL processing
@@ -351,7 +356,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             xcomps->AddChild( xcomp = node( wxT( "comp" ) ) );
 
             xcomp->AddAttribute( wxT( "ref" ), symbol->GetRef( &sheet ) );
-            addSymbolFields( xcomp, symbol, sheet, sheetList, currentVariant );
+            addSymbolFields( xcomp, symbol, sheet, sheetList, exportVariant );
 
             XNODE*  xlibsource;
             xcomp->AddChild( xlibsource = node( wxT( "libsource" ) ) );
@@ -396,7 +401,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), field.GetUntranslatedName() );
 
                 if( m_resolveTextVars )
-                    xproperty->AddAttribute( wxT( "value" ), field.GetShownText( &sheet, false, 0, currentVariant ) );
+                    xproperty->AddAttribute( wxT( "value" ), field.GetShownText( &sheet, false, 0, exportVariant ) );
                 else
                     xproperty->AddAttribute( wxT( "value" ), field.GetText() );
             }
@@ -417,21 +422,21 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             const bool baseExcludedFromBOM = symbol->ResolveExcludedFromBOM( &sheet ) || sheet.GetExcludedFromBOM();
             const bool baseExcludedFromSim = symbol->ResolveExcludedFromSim( &sheet ) || sheet.GetExcludedFromSim();
 
-            if( symbol->ResolveExcludedFromBOM( &sheet, currentVariant ) || sheet.GetExcludedFromBOM( currentVariant ) )
+            if( symbol->ResolveExcludedFromBOM( &sheet, exportVariant ) || sheet.GetExcludedFromBOM( exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
             }
 
-            if( symbol->ResolveExcludedFromSim( &sheet, currentVariant )
-                || sheet.GetExcludedFromSim( currentVariant ) )
+            if( symbol->ResolveExcludedFromSim( &sheet, exportVariant )
+                || sheet.GetExcludedFromSim( exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_sim" ) );
             }
 
-            if( symbol->ResolveExcludedFromBoard( &sheet, currentVariant )
-                || sheet.GetExcludedFromBoard( currentVariant ) )
+            if( symbol->ResolveExcludedFromBoard( &sheet, exportVariant )
+                || sheet.GetExcludedFromBoard( exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
@@ -439,7 +444,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             const bool baseExcludedFromPosFiles = symbol->ResolveExcludedFromPosFiles( &sheet );
 
-            if( symbol->ResolveExcludedFromPosFiles( &sheet, currentVariant ) )
+            if( symbol->ResolveExcludedFromPosFiles( &sheet, exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_pos_files" ) );
@@ -447,7 +452,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             const bool baseDnp = symbol->ResolveDNP( &sheet ) || sheet.GetDNP();
 
-            if( symbol->ResolveDNP( &sheet, currentVariant ) || sheet.GetDNP( currentVariant ) )
+            if( symbol->ResolveDNP( &sheet, exportVariant ) || sheet.GetDNP( exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
@@ -1308,15 +1313,17 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                     if( !symbol )
                         continue;
 
-                    if( forBOM
-                        && ( sheet.GetExcludedFromBOM( currentVariant )
-                             || symbol->ResolveExcludedFromBOM( &sheet, currentVariant ) ) )
+                    if( forBOM && ( sheet.GetExcludedFromBOM( currentVariant )
+                                   || symbol->ResolveExcludedFromBOM( &sheet, currentVariant ) ) )
                     {
                         continue;
                     }
 
-                    if( forBoard && ( sheet.GetExcludedFromBoard() || symbol->ResolveExcludedFromBoard() ) )
+                    if( forBoard && ( sheet.GetExcludedFromBoard( currentVariant )
+                                     || symbol->ResolveExcludedFromBoard( &sheet, currentVariant ) ) )
+                    {
                         continue;
+                    }
 
                     net_record->m_Nodes.emplace_back( pin, sheet );
                 }
