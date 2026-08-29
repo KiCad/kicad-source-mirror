@@ -65,6 +65,33 @@ public:
     // Resolve possible symlink(s) to absolute path
     static void ResolvePossibleSymlinks( wxFileName& aFilename );
 
+    /**
+     * Split an untrusted archive entry name into its path components.
+     *
+     * Rejects rather than sanitizes: an absolute or volume qualified name, or a ".."
+     * component anywhere, fails.
+     *
+     * @param aEntryName is the raw, untrusted name read from the archive.
+     * @param aParts is filled with the path components on success.
+     * @return true if the name is safe to append to an extraction directory.
+     */
+    static bool SplitArchiveEntryName( const wxString& aEntryName, wxArrayString& aParts );
+
+    /**
+     * Resolve an untrusted archive entry name against the directory it is extracted into.
+     * 
+     * If this function returns false, don't attempt to extract the given entry.
+     * Use the aResult parameter for the final destination to extract to otherwise.
+     *
+     * @param aDestDir is the directory the archive is being extracted into.
+     * @param aEntryName is the raw, untrusted name read from the archive.
+     * @param aResult is set to the full path to write to when the call succeeds.
+     *
+     * @return true if the entry resolves to a path inside @a aDestDir.
+     */
+    static bool ResolveArchiveEntryPath( const wxString& aDestDir, const wxString& aEntryName,
+                                         wxFileName& aResult );
+
 private:
     // Write cached values to the wrapped wxFileName.  MUST be called before using m_fn.
     void resolve();

@@ -24,6 +24,8 @@
 #include <wx_filename.h>
 #include <string_utils.h>
 
+#include <wx/arrstr.h>
+
 
 WX_FILENAME::WX_FILENAME( const wxString& aPath, const wxString& aFilename )
         : m_fn( aPath, aFilename ), m_path( aPath ), m_fullName( aFilename )
@@ -100,4 +102,96 @@ void WX_FILENAME::ResolvePossibleSymlinks( wxFileName& aFilename )
             aFilename.Assign( wxString::FromUTF8( realPath ) );
     }
 #endif
+}
+
+
+bool WX_FILENAME::SplitArchiveEntryName( const wxString& aEntryName, wxArrayString& aParts )
+{
+    aParts.Clear();
+
+    if( aEntryName.IsEmpty() )
+        return false;
+
+    // A NUL is truncated by the OS: what gets validated would not be what gets written.
+    if( aEntryName.find( wxUniChar( 0 ) ) != wxString::npos )
+        return false;
+
+    // A ZIP written on Windows can carry backslashes, normalize
+    wxString name = aEntryName;
+    name.Replace( wxT( "\\" ), wxT( "/" ) );
+
+    // Archive members are relative.  Check DOS volumes everywhere so POSIX rejects "C:/evil".
+    if( name.StartsWith( wxT( "/" ) ) )
+        return false;
+
+    wxString volume;
+
+    wxFileName::SplitVolume( name, &volume, nullptr, wxPATH_DOS );
+
+    if( !volume.IsEmpty() )
+        return false;
+
+    for( const wxString& part : wxSplit( name, '/', (wxChar) 0 ) )
+    {
+        // Doubled or trailing separators and "." do not change where the entry lands.
+        if( part.IsEmpty() || part == wxT( "." ) )
+            continue;
+
+        if( part == wxT( ".." ) )
+            return false;
+
+#ifdef _WIN32
+        // ':' opens an alternate data stream, and Win32 folds "evil. " onto "evil".
+        if( part.Contains( wxT( ":" ) ) || part.EndsWith( wxT( "." ) ) || part.EndsWith( wxT( " " ) ) )
+        {
+            return false;
+        }
+#endif
+
+        aParts.Add( part );
+    }
+
+    return !aParts.IsEmpty();
+}
+
+
+bool WX_FILENAME::ResolveArchiveEntryPath( const wxString& aDestDir, const wxString& aEntryName, wxFileName& aResult )
+{
+    wxArrayString parts;
+
+    if( !SplitArchiveEntryName( aEntryName, parts ) )
+        return false;
+
+    wxFileName dest = wxFileName::DirName( aDestDir );
+
+    // Not FN_NORMALIZE_FLAGS: expanding "~" or shell shortcuts here would reopen the escape.
+    dest.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE );
+
+    wxFileName target = dest;
+
+    for( size_t ii = 0; ii + 1 < parts.GetCount(); ++ii )
+        target.AppendDir( parts[ii] );
+
+    target.SetFullName( parts.Last() );
+    target.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE );
+
+    // ".." is already rejected, but double check the path is below the dest dir
+    const wxString destPath = dest.GetPathWithSep();
+    const wxString fullPath = target.GetFullPath();
+
+    if( fullPath.length() <= destPath.length() )
+        return false;
+
+    if( wxFileName::IsCaseSensitive() )
+    {
+        if( !fullPath.StartsWith( destPath ) )
+            return false;
+    }
+    else if( !fullPath.Lower().StartsWith( destPath.Lower() ) )
+    {
+        return false;
+    }
+
+    aResult = target;
+    return true;
 }

@@ -32,6 +32,7 @@
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <wxstream_helper.h>
+#include <wx_filename.h>
 #include <wx/log.h>
 #include <kiplatform/io.h>
 
@@ -140,10 +141,24 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
         fileStatus.Printf( _( "Extracting file '%s'." ), entry->GetName() );
         aReporter.Report( fileStatus, RPT_SEVERITY_INFO );
 
-        wxString fullname = aDestDir + entry->GetName();
+        // Now validate the entry name in the archive isn't trying to escape our destination path
+        wxFileName target;
 
-        // Ensure the target directory exists and create it if not
-        wxString t_path = wxPathOnly( fullname );
+        if( !WX_FILENAME::ResolveArchiveEntryPath( aDestDir, entry->GetName(), target ) )
+        {
+            aReporter.Report( wxString::Format( _( "Refusing to extract file '%s': the archive "
+                                                   "entry points outside of the destination "
+                                                   "directory." ),
+                                                entry->GetName() ),
+                              RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        wxString   fullname = target.GetFullPath();
+        const bool isDir = entry->IsDir();
+
+        // Ensure the target directory exists and create it if not.
+        wxString t_path = isDir ? fullname : wxPathOnly( fullname );
 
         if( !wxDirExists( t_path ) )
         {
@@ -151,9 +166,8 @@ bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDes
         }
 
         // Directory entries need only be created, not extracted (0 size)
-        if( entry->IsDir() )
+        if( isDir )
             continue;
-
 
         wxTempFileOutputStream outputFileStream( fullname );
 
