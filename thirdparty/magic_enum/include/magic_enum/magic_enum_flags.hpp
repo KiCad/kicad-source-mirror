@@ -5,7 +5,7 @@
 // | |  | | (_| | (_| | | (__  | |____| | | | |_| | | | | | | | |____|_|   |_|
 // |_|  |_|\__,_|\__, |_|\___| |______|_| |_|\__,_|_| |_| |_|  \_____|
 //                __/ | https://github.com/Neargye/magic_enum
-//               |___/  version 0.9.7
+//               |___/  version 0.9.8
 //
 // Licensed under the MIT License <http://opensource.org/licenses/MIT>.
 // SPDX-License-Identifier: MIT
@@ -92,7 +92,7 @@ template <typename E>
   return {}; // Invalid value or out of range.
 }
 
-// Obtains enum-flags value from integer value.
+// Returns enum-flags value from integer value.
 // Returns optional with enum-flags value.
 template <typename E>
 [[nodiscard]] constexpr auto enum_flags_cast(underlying_type_t<E> value) noexcept -> detail::enable_if_t<E, optional<std::decay_t<E>>> {
@@ -128,10 +128,10 @@ template <typename E>
   }
 }
 
-// Obtains enum-flags value from name.
+// Returns enum-flags value from name.
 // Returns optional with enum-flags value.
 template <typename E, typename BinaryPredicate = std::equal_to<>>
-[[nodiscard]] constexpr auto enum_flags_cast(string_view value, [[maybe_unused]] BinaryPredicate p = {}) noexcept(detail::is_nothrow_invocable<BinaryPredicate>()) -> detail::enable_if_t<E, optional<std::decay_t<E>>, BinaryPredicate> {
+[[nodiscard]] constexpr auto enum_flags_cast(string_view value, [[maybe_unused]] char_type sep = static_cast<char_type>('|'), [[maybe_unused]] BinaryPredicate p = {}) noexcept(detail::is_nothrow_invocable_v<BinaryPredicate>) -> detail::enable_if_t<E, optional<std::decay_t<E>>, BinaryPredicate> {
   using D = std::decay_t<E>;
   using U = underlying_type_t<D>;
   constexpr auto S = detail::enum_subtype::flags;
@@ -143,7 +143,7 @@ template <typename E, typename BinaryPredicate = std::equal_to<>>
   } else {
     auto result = U{0};
     while (!value.empty()) {
-      const auto d = detail::find(value, '|');
+      const auto d = detail::find(value, sep);
       const auto s = (d == string_view::npos) ? value : value.substr(0, d);
       auto f = U{0};
       for (std::size_t i = 0; i < detail::count_v<D, S>; ++i) {
@@ -166,7 +166,7 @@ template <typename E, typename BinaryPredicate = std::equal_to<>>
   }
 }
 
-// Checks whether enum-flags contains value with such value.
+// Returns true if enum-flags contains value with such value.
 template <typename E>
 [[nodiscard]] constexpr auto enum_flags_contains(E value) noexcept -> detail::enable_if_t<E, bool> {
   using D = std::decay_t<E>;
@@ -175,7 +175,7 @@ template <typename E>
   return static_cast<bool>(enum_flags_cast<D>(static_cast<U>(value)));
 }
 
-// Checks whether enum-flags contains value with such integer value.
+// Returns true if enum-flags contains value with such integer value.
 template <typename E>
 [[nodiscard]] constexpr auto enum_flags_contains(underlying_type_t<E> value) noexcept -> detail::enable_if_t<E, bool> {
   using D = std::decay_t<E>;
@@ -183,15 +183,15 @@ template <typename E>
   return static_cast<bool>(enum_flags_cast<D>(value));
 }
 
-// Checks whether enum-flags contains enumerator with such name.
+// Returns true if enum-flags contains enumerator with such name.
 template <typename E, typename BinaryPredicate = std::equal_to<>>
-[[nodiscard]] constexpr auto enum_flags_contains(string_view value, BinaryPredicate p = {}) noexcept(detail::is_nothrow_invocable<BinaryPredicate>()) -> detail::enable_if_t<E, bool, BinaryPredicate> {
+[[nodiscard]] constexpr auto enum_flags_contains(string_view value, char_type sep = static_cast<char_type>('|'), BinaryPredicate p = {}) noexcept(detail::is_nothrow_invocable_v<BinaryPredicate>) -> detail::enable_if_t<E, bool, BinaryPredicate> {
   using D = std::decay_t<E>;
 
-  return static_cast<bool>(enum_flags_cast<D>(value, std::move(p)));
+  return static_cast<bool>(enum_flags_cast<D>(value, sep, std::move(p)));
 }
 
-// Checks whether `flags set` contains `flag`.
+// Returns true if `flags set` contains `flag`.
 // Note: If `flag` equals 0, it returns false, as 0 is not a flag.
 template <typename E>
 constexpr auto enum_flags_test(E flags, E flag) noexcept -> detail::enable_if_t<E, bool> {
@@ -200,7 +200,7 @@ constexpr auto enum_flags_test(E flags, E flag) noexcept -> detail::enable_if_t<
   return static_cast<U>(flag) && ((static_cast<U>(flags) & static_cast<U>(flag)) == static_cast<U>(flag));
 }
 
-// Checks whether `lhs flags set` and `rhs flags set` have common flags.
+// Returns true if `lhs flags set` and `rhs flags set` have common flags.
 // Note: If `lhs flags set` or `rhs flags set` equals 0, it returns false, as 0 is not a flag, and therfore cannot have any matching flag.
 template <typename E>
 constexpr auto enum_flags_test_any(E lhs, E rhs) noexcept -> detail::enable_if_t<E, bool> {
