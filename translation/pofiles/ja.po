@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-23 16:03+0000\n"
+"PO-Revision-Date: 2026-08-29 20:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -2518,14 +2518,13 @@ msgid "No design block libraries are configured."
 msgstr "シンボル ライブラリがロードされていません。"
 
 #: common/design_block_library_adapter.cpp:233
-#, fuzzy
 msgid "Configured design block libraries:"
-msgstr "デザインブロック ライブラリの読み込み"
+msgstr "設定済みのデザインブロック ライブラリ:"
 
 #: common/design_block_library_adapter.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "and %d more"
-msgstr "%s と %s と %d ほか"
+msgstr "と %d ほか"
 
 #: common/design_block_library_adapter.cpp:247
 msgid "project"
@@ -8310,7 +8309,7 @@ msgstr "塗りつぶしの色"
 #: eeschema/dialogs/dialog_shape_properties.cpp:124 eeschema/sch_line.cpp:1377
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1111
 msgid "Arrow"
-msgstr ""
+msgstr "矢印"
 
 #: common/eda_shape.cpp:4776 eeschema/dialogs/dialog_line_properties.cpp:117
 #: eeschema/dialogs/dialog_shape_properties.cpp:127 eeschema/sch_line.cpp:1379
@@ -13120,9 +13119,8 @@ msgid "Additional information"
 msgstr "情報がありません"
 
 #: common/widgets/kistatusbar.cpp:193
-#, fuzzy
 msgid "Clear Warnings"
-msgstr "DRC 警告"
+msgstr "警告をクリア"
 
 #: common/widgets/kistatusbar.cpp:360
 msgid "View load messages"
@@ -17083,73 +17081,65 @@ msgstr "ライブラリ シンボルのプロパティ"
 #: eeschema/dialogs/dialog_line_properties.cpp:45
 #: eeschema/dialogs/dialog_shape_properties.cpp:55
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1042
-#, fuzzy
 msgid "Start Shape:"
-msgstr "シンプルに始めよう:"
+msgstr "始点線形状:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:55
 #: eeschema/dialogs/dialog_shape_properties.cpp:65
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1052
-#, fuzzy
 msgid "End Shape:"
-msgstr "形状:"
+msgstr "終点線形状:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:84
 #: eeschema/dialogs/dialog_shape_properties.cpp:94
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1081
-#, fuzzy
 msgid "Start Length:"
-msgstr "目標の長さ:"
+msgstr "始点線長:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:85
 #: eeschema/dialogs/dialog_shape_properties.cpp:95
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1082
-#, fuzzy
 msgid "End Length:"
-msgstr "長さ:"
+msgstr "終点線長:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:86
 #: eeschema/dialogs/dialog_shape_properties.cpp:96
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1083
-#, fuzzy
 msgid "Start Width:"
-msgstr "始点:"
+msgstr "始点線幅:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:87
 #: eeschema/dialogs/dialog_shape_properties.cpp:97
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1084
-#, fuzzy
 msgid "End Width:"
-msgstr "線幅:"
+msgstr "終点線幅:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:88
 #: eeschema/dialogs/dialog_shape_properties.cpp:98
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1085
-#, fuzzy
 msgid "Start Stroke Width:"
-msgstr "開始トラック幅を使用"
+msgstr "始点線ストローク幅:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:90
 #: eeschema/dialogs/dialog_shape_properties.cpp:100
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1087
-#, fuzzy
 msgid "End Stroke Width:"
-msgstr "スポーク幅:"
+msgstr "終点線ストローク幅:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:162
 #: eeschema/dialogs/dialog_shape_properties.cpp:173
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1377
 #, c-format
 msgid "Shape sizes of 0 = auto (%g× line width)."
-msgstr ""
+msgstr "形状サイズが0の場合は自動 (%g x 線幅)。"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
-msgstr "ラインを編集"
+msgstr "線を編集"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Lines"
-msgstr "ラインを編集"
+msgstr "線を編集"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:66
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:120
@@ -24690,6 +24680,8 @@ msgstr "OrCAD Capture シンボル ライブラリ ファイル"
 #, c-format
 msgid "BUSSES line %llu: unsupported record, %s. The bus was skipped."
 msgstr ""
+"PADSのBUSSES ライン %llu: サポートされていないレコード %s 。 このバスは"
+"スキップされました。"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:416
 #, c-format
@@ -24702,16 +24694,19 @@ msgid ""
 "'%s' contains a complete PADS Logic binary schematic and cannot be loaded as "
 "a hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
+"'%s' に PADS Logicバイナリ回路図が含まれているため階層シートとして読み込むこ"
+"とができません。かわりに [ファイル] -> [インポート] -> [KiCad以外の回路図] を"
+"使用してください。"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid PADS Logic binary schematic."
-msgstr "ファイル '%s' は有効な gEDA 回路図ではありません。"
+msgstr "'%s' は有効な PADS Logic バイナリ 回路図ではありません。"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1337
 #, c-format
 msgid " (%zu occurrences)"
-msgstr ""
+msgstr " (%zu 個変換)"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1428
 #, c-format
@@ -27800,9 +27795,9 @@ msgstr ""
 
 #: eeschema/sim/simulator_frame_ui.cpp:1124
 #: eeschema/sim/simulator_frame_ui.cpp:1138
-#, fuzzy, c-format
+#, c-format
 msgid "View %d"
-msgstr "表示"
+msgstr "ビュー %d"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1656
 #: eeschema/sim/simulator_frame_ui.cpp:4083
@@ -34535,31 +34530,31 @@ msgstr "レポート単位;有効なオプション:in,mm"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:53
 msgid "Omit color from the CSV export"
-msgstr ""
+msgstr "CSVエクスポートから色を省略する"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:56
 msgid "Omit material from the CSV export"
-msgstr ""
+msgstr "CSVエクスポートから材料を省略する"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:60
 msgid "Omit thickness from the CSV export"
-msgstr ""
+msgstr "CSVエクスポートから厚さを省略する"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:64
 msgid "Omit Epsilon R from the CSV export"
-msgstr ""
+msgstr "CSVエクスポートからεRを省略する"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:68
 msgid "Omit loss tangent from the CSV export"
-msgstr ""
+msgstr "CSVエクスポートから損失正接を省略する"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:72
 msgid "Omit board finish from the CSV export"
-msgstr ""
+msgstr "CSVエクスポートから基板表面仕上げを省略する"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:76
 msgid "Omit board options from the CSV export"
-msgstr ""
+msgstr "CSVエクスポートから基板オプションを省略する"
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
 msgid "Generate a board statistics report"
@@ -41471,10 +41466,12 @@ msgid "(no library ID)"
 msgstr "(ライブラリID無し)"
 
 #: pcbnew/connectivity/topo_match.cpp:693
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s uses footprint '%s' in the reference area but '%s' in the target area."
-msgstr "リファレンスルール領域外のフットプリントを含める"
+msgstr ""
+"%s はリファレンス 領域では '%s' ですがターゲット 領域では '%s' の"
+"フットプリント を使っています。"
 
 #: pcbnew/connectivity/topo_match.cpp:744
 #, c-format
@@ -41518,9 +41515,9 @@ msgid "The target area has no footprints to match."
 msgstr "選択したグループには配置するフットプリントが含まれていません。"
 
 #: pcbnew/connectivity/topo_match.cpp:850
-#, fuzzy, c-format
+#, c-format
 msgid "The reference area has %d components and the target area has %d."
-msgstr "対象 領域には互換性のあるコンポーネントが見つかりません。"
+msgstr "リファレンス 領域 %d 個、ターゲット 領域 %d 個のコンポーネント。"
 
 #: pcbnew/connectivity/topo_match.cpp:966
 #, c-format
@@ -43767,9 +43764,9 @@ msgid "physical netlist"
 msgstr "Eeschema ネットリスト"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Includes: %s"
-msgstr "含む:"
+msgstr "含む: %s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:440
 msgid "This data set has no optional sections to choose from."
@@ -43829,17 +43826,14 @@ msgid "Content"
 msgstr "セルの内容:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
-#, fuzzy
 msgid "Data set:"
-msgstr "データシート"
+msgstr "データセット:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "All data (user-defined)"
-msgstr "データシートが定義されていません。"
+msgstr "全データ(ユーザー定義)"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Bill of materials"
 msgstr "部品表(BOM)"
 
@@ -43884,9 +43878,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
-#, fuzzy
 msgid "Reference designators:"
-msgstr "リファレンス指定子"
+msgstr "リファレンス指定子:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 #: pcbnew/dialogs/dialog_export_2581_bom_base.cpp:56
@@ -45378,9 +45371,8 @@ msgid "Export Pad Table"
 msgstr "パッド テーブル"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1369
-#, fuzzy
 msgid "Imported pad data must include pad numbers."
-msgstr "パッド番号を含める"
+msgstr "インポートされたパッドデータにはパッド番号を含める必要がある。"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1370
 #, fuzzy
@@ -46561,14 +46553,14 @@ msgid "Footprint Fields Table ('%s' Library)"
 msgstr "シンボル フィールド テーブル (ライブラリ '%s')"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints found in library '%s'."
-msgstr "ライブラリ '%s' にフットプリントがありません"
+msgstr "ライブラリ '%s' にフットプリントが見つかりません。"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint '%s': %s"
-msgstr "フットプリントの読み込み中にエラー: %s"
+msgstr "フットプリント '%s' の読み込み中にエラー: %s"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:263
 #, fuzzy
@@ -47428,11 +47420,8 @@ msgid "Press-fit (round TH only)"
 msgstr "プレスフィット (ラウンド スルーホールのみ)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:627
-#, fuzzy
 msgid "Simulation electrical type:"
-msgstr ""
-"Simulation\n"
-"エレクトリカル タイプ:"
+msgstr "シミュレーション エレクトリカル タイプ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:634 pcbnew/pad.cpp:3739
 msgid "Sink"
@@ -53482,9 +53471,9 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s 最小アニュラー幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
-msgstr "(%s 最小アニュラー幅 %s; 現状 %s)"
+msgstr "(%s 最小アニュラー幅 %s; 現状 %s、%s 上 )"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:355
 #, c-format
@@ -54361,9 +54350,9 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s 最小直径 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
-msgstr "(%s 最小直径 %s; 現状 %s)"
+msgstr "(%s 最小直径 %s; 現状 %s、%s 上)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:144
 #, c-format
@@ -54371,9 +54360,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s 最大直径 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
-msgstr "(%s 最大直径 %s; 現状 %s)"
+msgstr "(%s 最大直径 %s; 現状 %s、%s 上)"
 
 #: pcbnew/drc/drc_test_provider_via_stitch.cpp:56
 msgid "Checking via-stitch zone overlaps..."
@@ -54627,9 +54616,8 @@ msgid "Net class an item must belong to"
 msgstr "一つ以上のビア タイプを選択する必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:96
-#, fuzzy
 msgid "Rule area an item must be inside"
-msgstr "ルール名は重複せず一意である必要があります。"
+msgstr "ルール 領域内にアイテムを配置する必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:104
 msgid "Custom match expression in the DRC rule language"
@@ -54689,14 +54677,12 @@ msgid "Minimum clearance between copper items and the board edge"
 msgstr "別の点として扱う点間の最小距離"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:47
-#, fuzzy
 msgid "Minimum clearance between copper items and hole edges"
-msgstr "同一ネット内のパッドと塗りつぶし領域のクリアランス。"
+msgstr "導体アイテムとスルーホールの縁との間の最小クリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:60
-#, fuzzy
 msgid "Minimum clearance between footprint courtyards"
-msgstr "フットプリントのコートヤードを収集..."
+msgstr "フットプリントとコートヤードの間の最小クリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:73
 #, fuzzy
@@ -54709,9 +54695,8 @@ msgid "Minimum creepage distance between conductors along the board surface"
 msgstr "別の点として扱う点間の最小距離"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:98
-#, fuzzy
 msgid "Minimum hole diameter"
-msgstr "最小穴径: "
+msgstr "最小スルーホール直径"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:110
 #, fuzzy
@@ -54791,9 +54776,8 @@ msgid "Allow bottom Layer"
 msgstr "裏面レイヤーを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:56
-#, fuzzy
 msgid "Allow matched items on the back copper layer"
-msgstr "配列中のアイテム数。"
+msgstr "裏面導体レイヤーに一致したアイテムを許可する"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:89
 msgid "At least one layer must be selected"
@@ -54872,9 +54856,8 @@ msgid "Largest allowed via hole diameter"
 msgstr "ビアのメッキ穴直径"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:78
-#, fuzzy
 msgid "Restrict this rule to a single via type"
-msgstr "この値を元の値にリセットします。"
+msgstr "このルールをシングルのビアタイプに制限する"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:92
 msgid "Minimum Via Diameter must be greater than 0"
@@ -54983,9 +54966,8 @@ msgid "Rule Name"
 msgstr "ルール名"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:119
-#, fuzzy
 msgid "Name of this rule, must be unique"
-msgstr "ルール名は重複せず一意である必要があります。"
+msgstr "ルール名は重複せず一意である必要があります"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:120
 msgid "Optional comment stored with the rule"
@@ -55835,9 +55817,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "基板の %s を編集します。 保存するとボードのみが更新されます。"
 
 #: pcbnew/footprint_edit_frame.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Open footprint from library %s"
-msgstr "ライブラリー から フットプリント を開く"
+msgstr "ライブラリー %s から フットプリント を開く"
 
 #: pcbnew/footprint_edit_frame.cpp:811
 msgid "Save as editable copy"
@@ -59725,9 +59707,9 @@ msgid "Unknown IPC-2581 data set '%s'."
 msgstr "未知のモード名: '%s'."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4949
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IPC-2581 section key '%s'."
-msgstr "'%s' は無効なIBISコンポーネントです"
+msgstr "不正なIPC-2581 セクションキー '%s'。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5005
 msgid "Generating logistic section"
@@ -60207,9 +60189,9 @@ msgid "Part '%s': decal '%s' not found, no pads created"
 msgstr "バリアント'%s': シンボル'%s' がライブラリーに見つかりません"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:942
-#, fuzzy, c-format
+#, c-format
 msgid "Route net '%s' not found, skipping"
-msgstr "PCBドキュメント '%s' が '%s' に見つかりません"
+msgstr "ルール ネット '%s' が見つかりませんのでスキップします"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:963
 #, fuzzy, c-format
