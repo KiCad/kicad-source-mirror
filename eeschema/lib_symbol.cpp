@@ -2379,7 +2379,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( !aReporter )
                 return retv;
         }
-        else if( int tmp = aPin->SCH_ITEM::compare( *bPin, aCompareFlags ) )
+        else if( int tmp = static_cast<const SCH_ITEM*>( aPin )->compare( *bPin, aCompareFlags ) )
         {
             retv = tmp;
             REPORT( wxString::Format( _( "Pin %s differs: %s; %s" ),
@@ -2394,7 +2394,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
     for( const SCH_PIN* bPin : bPins )
     {
-        const SCH_PIN* aPin = aRhs.GetPin( bPin->GetNumber(), bPin->GetUnit(), bPin->GetBodyStyle() );
+        const SCH_PIN* aPin = GetPin( bPin->GetNumber(), bPin->GetUnit(), bPin->GetBodyStyle() );
 
         if( !aPin )
         {
