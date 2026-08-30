@@ -310,4 +310,10 @@ BOOST_FIXTURE_TEST_CASE( ReferenceImageRotateTransformOrigin, REFERENCE_IMAGE_BO
 
     BOOST_CHECK_EQUAL( refImage.GetPosition(), pos );
     BOOST_CHECK_EQUAL( refImage.GetTransformOriginOffset(), VECTOR2I( -100, -300 ) );
+
+    // Now mirror it and make sure that the transform origin follows the content
+    refImage.Flip( pos, FLIP_DIRECTION::LEFT_RIGHT );
+
+    BOOST_CHECK_EQUAL( refImage.GetPosition(), pos );
+    BOOST_CHECK_EQUAL( refImage.GetTransformOriginOffset(), VECTOR2I( 100, -300 ) );
 }

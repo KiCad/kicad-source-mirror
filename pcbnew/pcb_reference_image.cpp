@@ -242,6 +242,13 @@ void PCB_REFERENCE_IMAGE::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAng
 }
 
 
+void PCB_REFERENCE_IMAGE::Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection )
+{
+    // Mirror the content about the axis through aMirrorRef without changing layers.
+    m_referenceImage.Flip( aMirrorRef, aFlipDirection );
+}
+
+
 #if defined( DEBUG )
 void PCB_REFERENCE_IMAGE::Show( int nestLevel, std::ostream& os ) const
 {
