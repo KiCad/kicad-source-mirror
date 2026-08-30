@@ -135,10 +135,11 @@ wxString LIB_SYMBOL::GetShownKeyWords( int aDepth ) const
 {
     wxString text = GetKeyWords();
 
-    std::function<bool( wxString* )> libSymbolResolver = [&]( wxString* token ) -> bool
-    {
-        return ResolveTextVar( token, aDepth + 1 );
-    };
+    std::function<bool( wxString* )> libSymbolResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return ResolveTextVar( token, aDepth + 1 );
+            };
 
     text = ResolveTextVars( text, &libSymbolResolver, aDepth );
 
@@ -172,6 +173,9 @@ void LIB_SYMBOL::cacheSearchTerms()
     // Also include keywords as one long string, just in case
     m_searchTermsCache.emplace_back( SEARCH_TERM( GetShownKeyWords(), 1 ) );
     m_searchTermsCache.emplace_back( SEARCH_TERM( GetShownDescription(), 1 ) );
+
+    // Add relational term for unit count
+    m_searchTermsCache.emplace_back( SEARCH_TERM( wxString::Format( wxT( "units=%d" ), GetUnitCount() ), 1 ) );
 
     wxString footprint = GetFootprint();
 
