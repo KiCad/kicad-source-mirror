@@ -432,7 +432,7 @@ void RENDER_3D_RAYTRACE_BASE::Reload( bool aOnlyLoadCopperAndShapes, std::stop_t
     m_extrusionMaterials.clear();
 
     setupMaterials();
-    
+
     if( aStop.stop_requested() )
         return;
 
@@ -740,11 +740,19 @@ void RENDER_3D_RAYTRACE_BASE::Reload( bool aOnlyLoadCopperAndShapes, std::stop_t
             break;
 
         case B_CrtYd:
+            layerColor = m_boardAdapter.m_BCourtyardColor;
+            break;
+
         case F_CrtYd:
+            layerColor = m_boardAdapter.m_FCourtyardColor;
             break;
 
         case B_Fab:
+            layerColor = m_boardAdapter.m_BFabColor;
+            break;
+
         case F_Fab:
+            layerColor = m_boardAdapter.m_FFabColor;
             break;
 
         default:

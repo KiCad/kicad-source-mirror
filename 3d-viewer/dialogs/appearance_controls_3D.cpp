@@ -69,6 +69,10 @@ const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_la
     RR(  wxS( "User.Comments" ), LAYER_3D_USER_COMMENTS,     _HKI( "Show user comments layer" ) ),
     RR(  wxS( "User.Eco1" ),     LAYER_3D_USER_ECO1,         _HKI( "Show user ECO1 layer" ) ),
     RR(  wxS( "User.Eco2" ),     LAYER_3D_USER_ECO2,         _HKI( "Show user ECO2 layer" ) ),
+    RR(  wxS( "F.Fab" ),         LAYER_3D_F_FAB,             _HKI( "Show front fabrication layer" ) ),
+    RR(  wxS( "B.Fab" ),         LAYER_3D_B_FAB,             _HKI( "Show back fabrication layer" ) ),
+    RR(  wxS( "F.Courtyard" ),   LAYER_3D_F_COURTYARD,       _HKI( "Show front courtyard layer" ) ),
+    RR(  wxS( "B.Courtyard" ),   LAYER_3D_B_COURTYARD,       _HKI( "Show back courtyard layer" ) ),
     RR(  wxS( "User.1" ),        LAYER_3D_USER_1,            _HKI( "Show user defined layer 1" ) ),
     RR(  wxS( "User.2" ),        LAYER_3D_USER_2,            _HKI( "Show user defined layer 2" ) ),
     RR(  wxS( "User.3" ),        LAYER_3D_USER_3,            _HKI( "Show user defined layer 3" ) ),
@@ -444,6 +448,10 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
     case LAYER_3D_USER_DRAWINGS:
     case LAYER_3D_USER_ECO1:
     case LAYER_3D_USER_ECO2:
+    case LAYER_3D_F_FAB:
+    case LAYER_3D_B_FAB:
+    case LAYER_3D_F_COURTYARD:
+    case LAYER_3D_B_COURTYARD:
         visibleLayers.set( aLayer, isVisible );
         killFollow = true;
         break;

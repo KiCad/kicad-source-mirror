@@ -68,6 +68,8 @@ KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSurfaceFinish;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultBoardBody;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultComments;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultECOs;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultFabColor;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultCourtyardColor;
 
 // To be used in Raytracing render to create bevels on layer items
 float            g_BevelThickness3DU = 0.0f;
@@ -138,6 +140,11 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_UserCommentsColor  = SFVEC4F( 0.85, 0.85, 0.85,  1.0 );
     m_ECO1Color          = SFVEC4F( 0.70, 0.10, 0.10,  1.0 );
     m_ECO2Color          = SFVEC4F( 0.70, 0.10, 0.10,  1.0 );
+    m_FFabColor           = SFVEC4F( 0.60, 0.60, 0.60, 1.0 );
+    m_BFabColor           = SFVEC4F( 0.60, 0.60, 0.60, 1.0 );
+    // Based on default board colourscheme for F.CrtYd and B.CrtYd
+    m_FCourtyardColor     = SFVEC4F( 1.000, 0.149, 0.886, 1.0 );
+    m_BCourtyardColor     = SFVEC4F( 1.000, 0.149, 0.886, 1.0 );
 
     for( int ii = 0; ii < 45; ++ii )
         m_UserDefinedLayerColor[ii] = SFVEC4F( 0.70, 0.10, 0.10, 1.0 );
@@ -214,6 +221,9 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
         g_DefaultComments =      COLOR4D( 0.85, 0.85, 0.85,  1.0 );
         g_DefaultECOs =          COLOR4D( 0.70, 0.10, 0.10,  1.0 );
 
+        g_DefaultFabColor =      COLOR4D( 0.60, 0.60, 0.60, 1.0 );
+        g_DefaultCourtyardColor = COLOR4D( 1.000, 0.149, 0.886, 1.0 );
+
         g_ColorsLoaded = true;
     }
 #undef ADD_COLOR
@@ -260,6 +270,10 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer,
     case Cmts_User: return aVisibilityFlags.test( LAYER_3D_USER_COMMENTS );
     case Eco1_User: return aVisibilityFlags.test( LAYER_3D_USER_ECO1 );
     case Eco2_User: return aVisibilityFlags.test( LAYER_3D_USER_ECO2 );
+    case F_Fab:     return aVisibilityFlags.test( LAYER_3D_F_FAB );
+    case B_Fab:     return aVisibilityFlags.test( LAYER_3D_B_FAB );
+    case F_CrtYd:   return aVisibilityFlags.test( LAYER_3D_F_COURTYARD );
+    case B_CrtYd:   return aVisibilityFlags.test( LAYER_3D_B_COURTYARD );
     default:
     {
         int layer3D = MapPCBLayerTo3DLayer( aLayer );
@@ -602,6 +616,10 @@ void BOARD_ADAPTER::CreateLayers( std::shared_ptr<REPORTER> aStatusReporter, std
     m_UserCommentsColor  = to_SFVEC4F( colors[ LAYER_3D_USER_COMMENTS ] );
     m_ECO1Color          = to_SFVEC4F( colors[ LAYER_3D_USER_ECO1 ] );
     m_ECO2Color          = to_SFVEC4F( colors[ LAYER_3D_USER_ECO2 ] );
+    m_FFabColor          = to_SFVEC4F( colors[ LAYER_3D_F_FAB ] );
+    m_BFabColor          = to_SFVEC4F( colors[ LAYER_3D_B_FAB ] );
+    m_FCourtyardColor    = to_SFVEC4F( colors[ LAYER_3D_F_COURTYARD ] );
+    m_BCourtyardColor    = to_SFVEC4F( colors[ LAYER_3D_B_COURTYARD ] );
 
     for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
         m_UserDefinedLayerColor[ layer - LAYER_3D_USER_1 ] = to_SFVEC4F( colors[ layer ] );
@@ -626,6 +644,10 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetDefaultColors() const
     colors[ LAYER_3D_USER_COMMENTS ]     = BOARD_ADAPTER::g_DefaultComments;
     colors[ LAYER_3D_USER_ECO1 ]         = BOARD_ADAPTER::g_DefaultECOs;
     colors[ LAYER_3D_USER_ECO2 ]         = BOARD_ADAPTER::g_DefaultECOs;
+    colors[ LAYER_3D_F_FAB ]             = BOARD_ADAPTER::g_DefaultFabColor;
+    colors[ LAYER_3D_B_FAB ]             = BOARD_ADAPTER::g_DefaultFabColor;
+    colors[ LAYER_3D_F_COURTYARD ]       = BOARD_ADAPTER::g_DefaultCourtyardColor;
+    colors[ LAYER_3D_B_COURTYARD ]       = BOARD_ADAPTER::g_DefaultCourtyardColor;
 
     COLOR_SETTINGS* settings = ::GetColorSettings( DEFAULT_THEME );
 
@@ -785,6 +807,10 @@ void BOARD_ADAPTER::SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers )
     m_Cfg->m_Render.show_drawings                  = aLayers.test( LAYER_3D_USER_DRAWINGS );
     m_Cfg->m_Render.show_eco1                      = aLayers.test( LAYER_3D_USER_ECO1 );
     m_Cfg->m_Render.show_eco2                      = aLayers.test( LAYER_3D_USER_ECO2 );
+    m_Cfg->m_Render.show_f_fab                     = aLayers.test( LAYER_3D_F_FAB );
+    m_Cfg->m_Render.show_b_fab                     = aLayers.test( LAYER_3D_B_FAB );
+    m_Cfg->m_Render.show_f_courtyard               = aLayers.test( LAYER_3D_F_COURTYARD );
+    m_Cfg->m_Render.show_b_courtyard               = aLayers.test( LAYER_3D_B_COURTYARD );
 
     for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
         m_Cfg->m_Render.show_user[ layer - LAYER_3D_USER_1 ] = aLayers.test( layer );
@@ -829,6 +855,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         ret.set( LAYER_3D_USER_DRAWINGS,     true );
         ret.set( LAYER_3D_USER_ECO1,         true );
         ret.set( LAYER_3D_USER_ECO2,         true );
+        ret.set( LAYER_3D_F_FAB,             true );
+        ret.set( LAYER_3D_B_FAB,             true );
+        ret.set( LAYER_3D_F_COURTYARD,       true );
+        ret.set( LAYER_3D_B_COURTYARD,       true );
 
         for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
             ret.set( layer, true );
@@ -864,6 +894,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
     ret.set( LAYER_3D_USER_DRAWINGS,     m_Cfg->m_Render.show_drawings );
     ret.set( LAYER_3D_USER_ECO1,         m_Cfg->m_Render.show_eco1 );
     ret.set( LAYER_3D_USER_ECO2,         m_Cfg->m_Render.show_eco2 );
+    ret.set( LAYER_3D_F_FAB,             m_Cfg->m_Render.show_f_fab );
+    ret.set( LAYER_3D_B_FAB,             m_Cfg->m_Render.show_b_fab );
+    ret.set( LAYER_3D_F_COURTYARD,       m_Cfg->m_Render.show_f_courtyard );
+    ret.set( LAYER_3D_B_COURTYARD,       m_Cfg->m_Render.show_b_courtyard );
 
     for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
         ret.set( layer, m_Cfg->m_Render.show_user[ layer - LAYER_3D_USER_1 ] );
@@ -900,6 +934,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         ret.set( LAYER_3D_USER_DRAWINGS,     m_board->IsLayerVisible( Dwgs_User ) );
         ret.set( LAYER_3D_USER_ECO1,         m_board->IsLayerVisible( Eco1_User ) );
         ret.set( LAYER_3D_USER_ECO2,         m_board->IsLayerVisible( Eco2_User ) );
+        ret.set( LAYER_3D_F_FAB,             m_board->IsLayerVisible( F_Fab ) );
+        ret.set( LAYER_3D_B_FAB,             m_board->IsLayerVisible( B_Fab ) );
+        ret.set( LAYER_3D_F_COURTYARD,       m_board->IsLayerVisible( F_CrtYd ) );
+        ret.set( LAYER_3D_B_COURTYARD,       m_board->IsLayerVisible( B_CrtYd ) );
 
         for( GAL_LAYER_ID layer : { LAYER_FP_REFERENCES, LAYER_FP_VALUES, LAYER_FP_TEXT } )
             ret.set( layer, m_board->IsElementVisible( layer ) );
@@ -928,6 +966,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         ret.set( LAYER_3D_USER_DRAWINGS,     layers.test( Dwgs_User ) );
         ret.set( LAYER_3D_USER_ECO1,         layers.test( Eco1_User ) );
         ret.set( LAYER_3D_USER_ECO2,         layers.test( Eco2_User ) );
+        ret.set( LAYER_3D_F_FAB,             layers.test( F_Fab ) );
+        ret.set( LAYER_3D_B_FAB,             layers.test( B_Fab ) );
+        ret.set( LAYER_3D_F_COURTYARD,       layers.test( F_CrtYd ) );
+        ret.set( LAYER_3D_B_COURTYARD,       layers.test( B_CrtYd ) );
 
         for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
             ret.set( layer, layers.test( Map3DLayerToPCBLayer( layer ) ) );
@@ -963,6 +1005,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetDefaultVisibleLayers() const
     ret.set( LAYER_3D_USER_DRAWINGS,     false );
     ret.set( LAYER_3D_USER_ECO1,         false );
     ret.set( LAYER_3D_USER_ECO2,         false );
+    ret.set( LAYER_3D_F_FAB,             false );
+    ret.set( LAYER_3D_B_FAB,             false );
+    ret.set( LAYER_3D_F_COURTYARD,       false );
+    ret.set( LAYER_3D_B_COURTYARD,       false );
 
     for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
         ret.set( layer, false );

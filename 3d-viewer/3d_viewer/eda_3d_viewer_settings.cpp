@@ -72,6 +72,10 @@ LAYER_PRESET_3D::LAYER_PRESET_3D( const wxString& aName ) :
     colors[ LAYER_3D_USER_COMMENTS ]     = BOARD_ADAPTER::g_DefaultComments;
     colors[ LAYER_3D_USER_ECO1 ]         = BOARD_ADAPTER::g_DefaultECOs;
     colors[ LAYER_3D_USER_ECO2 ]         = BOARD_ADAPTER::g_DefaultECOs;
+    colors[ LAYER_3D_F_FAB ]             = BOARD_ADAPTER::g_DefaultFabColor;
+    colors[ LAYER_3D_B_FAB ]             = BOARD_ADAPTER::g_DefaultFabColor;
+    colors[ LAYER_3D_F_COURTYARD ]       = BOARD_ADAPTER::g_DefaultCourtyardColor;
+    colors[ LAYER_3D_B_COURTYARD ]       = BOARD_ADAPTER::g_DefaultCourtyardColor;
 }
 
 
@@ -106,6 +110,10 @@ PARAM_LAYER_PRESET_3D::PARAM_LAYER_PRESET_3D( const std::string& aPath,
     LAYER( "user_drawings",       LAYER_3D_USER_DRAWINGS     );
     LAYER( "user_eco1",           LAYER_3D_USER_ECO1         );
     LAYER( "user_eco2",           LAYER_3D_USER_ECO2         );
+    LAYER( "f_fab",               LAYER_3D_F_FAB             );
+    LAYER( "b_fab",               LAYER_3D_B_FAB             );
+    LAYER( "f_courtyard",         LAYER_3D_F_COURTYARD       );
+    LAYER( "b_courtyard",         LAYER_3D_B_COURTYARD       );
     LAYER( "3d_navigator",        LAYER_3D_NAVIGATOR         );
     LAYER( "th_models",           LAYER_3D_TH_MODELS         );
     LAYER( "smd_models",          LAYER_3D_SMD_MODELS        );
@@ -379,6 +387,14 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                                             &m_Render.show_eco1, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_eco2",
                                             &m_Render.show_eco2, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_f_fab",
+                                            &m_Render.show_f_fab, false ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_b_fab",
+                                            &m_Render.show_b_fab, false ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_f_courtyard",
+                                            &m_Render.show_f_courtyard, false ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_b_courtyard",
+                                            &m_Render.show_b_courtyard, false ) );
 
     for( int layer = 0; layer < 45; ++layer )
     {

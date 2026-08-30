@@ -352,6 +352,10 @@ void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
         case Eco2_User: m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_ECO2Color;         break;
         case Edge_Cuts: m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_UserDrawingsColor; break;
         case Margin:    m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_UserDrawingsColor; break;
+        case F_Fab:     m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_FFabColor;         break;
+        case B_Fab:     m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_BFabColor;         break;
+        case F_CrtYd:   m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_FCourtyardColor;   break;
+        case B_CrtYd:   m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_BCourtyardColor;   break;
         default:
             m_materials.m_Plastic.m_Diffuse = m_boardAdapter.GetLayerColor( aLayerID );
             break;

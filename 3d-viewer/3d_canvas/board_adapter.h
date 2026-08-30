@@ -513,6 +513,8 @@ public:
     static KIGFX::COLOR4D                 g_DefaultBoardBody;
     static KIGFX::COLOR4D                 g_DefaultComments;
     static KIGFX::COLOR4D                 g_DefaultECOs;
+    static KIGFX::COLOR4D                 g_DefaultFabColor;
+    static KIGFX::COLOR4D                 g_DefaultCourtyardColor;
 
 public:
     EDA_3D_VIEWER_SETTINGS* m_Cfg;
@@ -535,6 +537,10 @@ public:
     SFVEC4F                 m_UserCommentsColor;
     SFVEC4F                 m_ECO1Color;
     SFVEC4F                 m_ECO2Color;
+    SFVEC4F                 m_FFabColor;
+    SFVEC4F                 m_BFabColor;
+    SFVEC4F                 m_FCourtyardColor;
+    SFVEC4F                 m_BCourtyardColor;
     SFVEC4F                 m_UserDefinedLayerColor[45];
 
     std::map<int, COLOR4D>  m_ColorOverrides;  ///< allows to override color scheme colors

@@ -133,6 +133,10 @@ public:
         bool show_drawings;
         bool show_eco1;
         bool show_eco2;
+        bool show_f_fab;
+        bool show_b_fab;
+        bool show_f_courtyard;
+        bool show_b_courtyard;
         bool show_user[45];
         bool show_footprints_insert;
         bool show_footprints_normal;
