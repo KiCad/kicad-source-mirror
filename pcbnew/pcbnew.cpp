@@ -883,7 +883,7 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec, KICAD_API_SERVER*
 {
     wxCHECK( aServer, false );
 
-    if( aSpec.kind == DOCUMENT_SPEC::KIND::FPID )
+    if( aSpec.kind == DOCUMENT_SPEC::KIND::FPID_KIND )
         return handleOpenFootprint( aSpec.path, aSpec.libId.GetUniStringLibId(), aServer, aError );
 
     if( aSpec.path.IsEmpty() )

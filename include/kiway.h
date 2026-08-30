@@ -155,13 +155,13 @@ struct KIFACE
     {
         enum class KIND
         {
-            FILE,   ///< Open the file at #path.
-            FPID,   ///< Open the library element named by #libId
+            FILE_KIND,   ///< Open the file at #path.
+            FPID_KIND,   ///< Open the library element named by #libId
         };
 
-        KIND     kind = KIND::FILE;
-        wxString path;               ///< File path (KIND::FILE) or project path (KIND::FPID).
-        LIB_ID   libId;              ///< Library identifier; valid when kind == KIND::FPID.
+        KIND     kind = KIND::FILE_KIND;
+        wxString path;               ///< File path (KIND::FILE_KIND) or project path (KIND::FPID_KIND).
+        LIB_ID   libId;              ///< Library identifier; valid when kind == KIND::FPID_KIND.
     };
 
     // The order of functions establishes the vtable sequence, do not change the

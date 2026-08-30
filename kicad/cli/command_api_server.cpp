@@ -168,7 +168,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             }
 
             KIFACE::DOCUMENT_SPEC spec;
-            spec.kind = KIFACE::DOCUMENT_SPEC::KIND::FPID;
+            spec.kind = KIFACE::DOCUMENT_SPEC::KIND::FPID_KIND;
             spec.libId = fpid;
 
             if( openProjectPath )
@@ -285,7 +285,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         }
 
         KIFACE::DOCUMENT_SPEC spec;
-        spec.kind = KIFACE::DOCUMENT_SPEC::KIND::FILE;
+        spec.kind = KIFACE::DOCUMENT_SPEC::KIND::FILE_KIND;
         spec.path = projectPath.GetFullPath();
 
         wxString error;
