@@ -31,6 +31,7 @@ class DIALOG_LIB_NEW_SYMBOL : public DIALOG_LIB_NEW_SYMBOL_BASE
 {
 public:
     DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxArrayString& aSymbolNames,
+                           const std::function<int( const wxString& aItem )>& aDisplayStyleCallback,
                            const wxString& aInheritFromSymbolName,
                            std::function<bool( const wxString& newName )> aValidator );
 

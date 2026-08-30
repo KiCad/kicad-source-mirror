@@ -168,7 +168,9 @@ protected:
             const LIB_SYMBOL* parentSymbol = m_dataModel->GetSymbolForRow( row );
 
             wxArrayString symbolNames;
-            m_dataModel->GetSymbolNames( symbolNames );
+            wxArrayString derivedSymbols;
+            m_dataModel->GetSymbolNames( symbolNames, SYMBOL_NAME_FILTER::ALL );
+            m_dataModel->GetSymbolNames( derivedSymbols, SYMBOL_NAME_FILTER::DERIVED_ONLY );
 
             auto validator =
                     [&]( const wxString& aNewName ) -> bool
@@ -176,7 +178,19 @@ protected:
                         return symbolNames.Index( aNewName ) == wxNOT_FOUND;
                     };
 
-            DIALOG_NEW_SYMBOL dlg( frame, symbolNames, parentSymbol->GetName(), validator );
+            const auto styler =
+                    [&]( const wxString& aItem ) -> int
+                    {
+                        for( wxString& candidate : derivedSymbols )
+                        {
+                            if( candidate.CmpNoCase( aItem ) == 0 )
+                                return ITALIC;
+                        }
+
+                        return 0;
+                    };
+
+            DIALOG_NEW_SYMBOL dlg( frame, symbolNames, styler, parentSymbol->GetName(), validator );
 
             if( dlg.ShowModal() != wxID_OK )
                 return;

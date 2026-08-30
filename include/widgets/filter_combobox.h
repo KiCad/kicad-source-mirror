@@ -25,12 +25,80 @@
 
 #include <wx/panel.h>
 #include <wx/combo.h>
-#include <wx/listbox.h>
+#include <wx/vlbox.h>
+
+#include <font/font.h>
 
 
 class wxTextValidator;
 class wxTextCtrl;
 class wxListBox;
+
+
+class FILTER_COMBOPOPUP_LISTBOX : public wxVListBox
+{
+public:
+    FILTER_COMBOPOPUP_LISTBOX( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize& aSize,
+                               int aFlags ) :
+            wxVListBox( aParent, aId, aPos, aSize, aFlags | wxLB_OWNERDRAW )
+    {
+        m_displayStyleCallback =
+                []( const wxString& aItem ) -> int
+                {
+                    return 0;
+                };
+    }
+
+    void Set( const wxArrayString& aChoices )
+    {
+        m_choices = aChoices;
+        SetItemCount( m_choices.size() );
+
+        RefreshAll();
+    }
+
+    void SetDisplayStyleCallback( const std::function<int( const wxString& aItem )>& aCallback );
+
+    size_t GetCount() const
+    {
+        return m_choices.size();
+    }
+
+    wxString GetString( size_t aIdx ) const
+    {
+        if( aIdx < m_choices.size() )
+            return m_choices[aIdx];
+        else
+            return wxEmptyString;
+    }
+
+    void SetStringSelection( const wxString& aString )
+    {
+        for( int ii = 0; ii < (int) m_choices.size(); ++ii )
+        {
+            if( m_choices[ii] == aString )
+            {
+                SetSelection( ii );
+                return;
+            }
+        }
+
+        SetSelection( -1 );
+    }
+
+    int HitTest( const wxPoint& aPoint ) const;
+
+protected:
+    wxCoord OnMeasureItem( size_t aItem ) const override;
+
+    void OnDrawItem( wxDC& aDC, const wxRect& aRect, size_t aItem ) const override;
+
+    void OnDrawBackground( wxDC& aDC, const wxRect& aRect, size_t aItem ) const override;
+
+private:
+    wxArrayString                               m_choices;
+    std::function<int( const wxString& aItem )> m_displayStyleCallback;
+};
 
 
 class FILTER_COMBOPOPUP : public wxPanel, public wxComboPopup
@@ -48,6 +116,8 @@ public:
     void SetStringValue( const wxString& aNetName ) override;
 
     void SetSelectedString( const wxString& aString );
+
+    void SetDisplayStyleCallback( const std::function<int( const wxString& aItem )>& aCallback );
 
     void OnPopup() override;
 
@@ -93,16 +163,16 @@ private:
     void doSetFocus( wxWindow* aWindow );
 
 protected:
-    wxTextValidator* m_filterValidator;
-    wxTextCtrl*      m_filterCtrl;
-    wxListBox*       m_listBox;
-    int              m_minPopupWidth;
-    int              m_maxPopupHeight;
+    wxTextValidator*           m_filterValidator;
+    wxTextCtrl*                m_filterCtrl;
+    FILTER_COMBOPOPUP_LISTBOX* m_listBox;
+    int                        m_minPopupWidth;
+    int                        m_maxPopupHeight;
 
-    wxEvtHandler*    m_focusHandler;
+    wxEvtHandler*              m_focusHandler;
 
-    wxString         m_selectedString;
-    wxArrayString    m_stringList;
+    wxString                   m_selectedString;
+    wxArrayString              m_stringList;
 };
 
 
@@ -130,6 +200,8 @@ public:
 
     virtual void SetStringList( const wxArrayString& aStringList );
 
+    void SetDisplayStyleCallback( const std::function<int( const wxString& aItem )>& aCallback );
+
     virtual void SetSelectedString( const wxString& aString );
 
 protected:
@@ -137,5 +209,6 @@ protected:
 
     void onKeyDown( wxKeyEvent& aEvt );
 
+protected:
     FILTER_COMBOPOPUP* m_filterPopup;
 };

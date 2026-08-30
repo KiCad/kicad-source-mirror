@@ -21,7 +21,7 @@
 #include "widgets/filter_combobox.h"
 
 #include <wx/textctrl.h>
-#include <wx/listbox.h>
+#include <wx/vlbox.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -45,6 +45,89 @@ wxDEFINE_EVENT( FILTERED_ITEM_SELECTED, wxCommandEvent );
     #define LIST_ITEM_PADDING 6
     #define LIST_PADDING 5
 #endif
+
+
+void FILTER_COMBOPOPUP_LISTBOX::SetDisplayStyleCallback( const std::function<int( const wxString& aItem )>& aCallback )
+{
+    m_displayStyleCallback = aCallback;
+}
+
+
+wxCoord FILTER_COMBOPOPUP_LISTBOX::OnMeasureItem( size_t aItem ) const
+{
+    return GetFont().GetPixelSize().GetHeight() + 4;
+}
+
+
+void FILTER_COMBOPOPUP_LISTBOX::OnDrawItem( wxDC& aDC, const wxRect& aRect, size_t aItem ) const
+{
+    wxFont   font = aDC.GetFont();
+    wxString item = GetString( aItem );
+
+    font.SetStyle( wxFONTSTYLE_NORMAL );
+    font.SetWeight( wxFONTWEIGHT_NORMAL );
+
+    if( int style = m_displayStyleCallback( item ) )
+    {
+        if( style & ITALIC )
+            font.SetStyle( wxFONTSTYLE_ITALIC );
+
+        if( style & BOLD )
+            font.SetWeight( wxFONTWEIGHT_BOLD );
+    }
+
+    aDC.SetFont(font);
+
+    if( IsSelected( aItem ) )
+    {
+        aDC.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT ) );
+    }
+    else
+    {
+        wxListBox dummy( GetParent(), wxID_ANY );
+        aDC.SetTextForeground( dummy.GetForegroundColour() );
+    }
+
+    // Draw the text inside the item bounds
+    aDC.DrawText( item, aRect.x + 2, aRect.y + 2);
+}
+
+
+void FILTER_COMBOPOPUP_LISTBOX::OnDrawBackground( wxDC& aDC, const wxRect& aRect, size_t aItem ) const
+{
+    // Letting wxVList do this itself results in a darker highlight (at least on OSX) than our other
+    // listboxes use.  wxSYS_COLOUR_HIGHLIGHT, on the other hand, uses a much lighter colour --
+    // which matches the OSX native look -- just not any of the other dropdowns in KiCad.  If other
+    // platforms need something different than wxSYS_COLOUR_HOTLIGHT, please if-def it.
+
+    wxColour background;
+
+    if( IsSelected( aItem ) )
+    {
+        background = wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT );
+    }
+    else
+    {
+        wxListBox dummy( GetParent(), wxID_ANY );
+        background = dummy.GetBackgroundColour();
+    }
+
+    aDC.SetBrush( wxBrush( background ) );
+    aDC.SetPen( wxPen( background ) );
+    aDC.DrawRectangle( aRect );
+}
+
+
+int FILTER_COMBOPOPUP_LISTBOX::HitTest(const wxPoint& aPoint) const
+{
+    for( size_t ii = 0; ii < m_choices.size(); ++ii )
+    {
+        if( GetItemRect( ii ).Contains( aPoint ) )
+            return (int) ii;
+    }
+
+    return -1;
+}
 
 
 FILTER_COMBOPOPUP::FILTER_COMBOPOPUP() :
@@ -75,8 +158,8 @@ bool FILTER_COMBOPOPUP::Create( wxWindow* aParent )
     m_filterCtrl->SetValidator( *m_filterValidator );
     mainSizer->Add( m_filterCtrl, 0, wxEXPAND, 0 );
 
-    m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                               wxLB_SINGLE | wxLB_NEEDED_SB );
+    m_listBox = new FILTER_COMBOPOPUP_LISTBOX( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                               wxLB_SINGLE | wxLB_NEEDED_SB );
     mainSizer->Add( m_listBox, 1, wxEXPAND | wxTOP, 2 );
 
     SetSizer( mainSizer );
@@ -124,6 +207,12 @@ void FILTER_COMBOPOPUP::SetSelectedString( const wxString& aString )
 {
     m_selectedString = aString;
     GetComboCtrl()->SetValue( m_selectedString );
+}
+
+
+void FILTER_COMBOPOPUP::SetDisplayStyleCallback( const std::function<int( const wxString& aItem )>& aCallback )
+{
+    m_listBox->SetDisplayStyleCallback( aCallback );
 }
 
 
@@ -485,6 +574,13 @@ void FILTER_COMBOBOX::SetStringList( const wxArrayString& aList )
 void FILTER_COMBOBOX::SetSelectedString( const wxString& aString )
 {
     m_filterPopup->SetSelectedString( aString );
+}
+
+
+void FILTER_COMBOBOX::SetDisplayStyleCallback( const std::function<int( const wxString& aItem )>& aCallback )
+{
+    if( m_filterPopup )
+        m_filterPopup->SetDisplayStyleCallback( aCallback );
 }
 
 

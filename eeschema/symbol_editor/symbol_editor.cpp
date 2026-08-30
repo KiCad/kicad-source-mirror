@@ -299,6 +299,11 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
             return;
     }
 
+    wxArrayString symbolNamesInLib;
+    wxArrayString derivedSymbols;
+    m_libMgr->GetSymbolNames( lib, symbolNamesInLib, SYMBOL_NAME_FILTER::ALL );
+    m_libMgr->GetSymbolNames( lib, derivedSymbols, SYMBOL_NAME_FILTER::DERIVED_ONLY );
+
     const auto validator =
             [&]( wxString newName ) -> bool
             {
@@ -327,10 +332,19 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
                 return true;
             };
 
-    wxArrayString symbolNamesInLib;
-    m_libMgr->GetSymbolNames( lib, symbolNamesInLib );
+    const auto styler =
+            [&]( const wxString& aItem ) -> int
+            {
+                for( wxString& candidate : derivedSymbols )
+                {
+                    if( candidate.CmpNoCase( aItem ) == 0 )
+                        return ITALIC;
+                }
 
-    DIALOG_LIB_NEW_SYMBOL dlg( this, symbolNamesInLib, aInheritFrom, validator );
+                return 0;
+            };
+
+    DIALOG_LIB_NEW_SYMBOL dlg( this, symbolNamesInLib, styler, aInheritFrom, validator );
 
     dlg.SetMinSize( dlg.GetSize() );
 

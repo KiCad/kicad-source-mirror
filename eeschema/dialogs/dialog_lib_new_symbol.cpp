@@ -33,9 +33,10 @@ static wxString getDerivativeName( const wxString& aParentName )
 }
 
 
-DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
-                                              const wxArrayString& aSymbolNames,
-                                              const wxString&      aInheritFromSymbolName,
+
+DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxArrayString& aSymbolNames,
+                                              const std::function<int( const wxString& aItem )>& aDisplayStyleCallback,
+                                              const wxString& aInheritFromSymbolName,
                                               std::function<bool( const wxString& newName )> aValidator ) :
         DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
         m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
@@ -44,15 +45,8 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
         m_inheritFromSymbolName( aInheritFromSymbolName ),
         m_nameIsDefaulted( true )
 {
-    if( aSymbolNames.GetCount() )
-    {
-        wxArrayString unescapedNames;
-
-        for( const wxString& name : aSymbolNames )
-            unescapedNames.Add( UnescapeString( name ) );
-
-        m_comboInheritanceSelect->SetStringList( unescapedNames );
-    }
+    m_comboInheritanceSelect->SetStringList( aSymbolNames );
+    m_comboInheritanceSelect->SetDisplayStyleCallback( aDisplayStyleCallback );
 
     m_textName->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
     m_textReference->SetValidator( FIELD_VALIDATOR( FIELD_T::REFERENCE ) );

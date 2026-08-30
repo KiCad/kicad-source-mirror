@@ -26,6 +26,8 @@
 
 #include <fields_table_data_model.h>
 
+#include <symbol_library_manager.h>
+
 
 using LIB_FIELDS_TABLE_DATA_MODEL_ROW = DATA_MODEL_ROW<LIB_SYMBOL*>;
 
@@ -66,12 +68,20 @@ public:
         return m_rows[aRow].m_items[0];
     }
 
-    void GetSymbolNames( wxArrayString& aList )
+    void GetSymbolNames( wxArrayString& aList, SYMBOL_NAME_FILTER aFilter )
     {
         aList.Clear();
 
         for( const LIB_SYMBOL* symbol : m_symbolsList )
-            aList.Add( symbol->GetName() );
+        {
+            if( ( symbol->IsDerived() && ( aFilter == SYMBOL_NAME_FILTER::ROOT_ONLY ) )
+                || ( symbol->IsRoot() && ( aFilter == SYMBOL_NAME_FILTER::DERIVED_ONLY ) ) )
+            {
+                continue;
+            }
+
+            aList.Add( UnescapeString( symbol->GetName() ) );
+        }
     }
 
     void RebuildRows() override;
