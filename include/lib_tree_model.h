@@ -103,8 +103,7 @@ public:
     /**
      * Compare two nodes. Returns true if aNode1 < aNode2.
      */
-    static bool Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2,
-                         bool aUseScores );
+    static bool Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2, bool aUseScores );
 
     LIB_TREE_NODE();
     virtual ~LIB_TREE_NODE() {}

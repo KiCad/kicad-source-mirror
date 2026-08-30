@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,6 +23,7 @@ class WX_INFOBAR;
 #include <wx/textctrl.h>
 #include <widgets/symbol_filter_combobox.h>
 #include <wx/spinctrl.h>
+#include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
@@ -47,8 +48,9 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 		WX_INFOBAR* m_infoBar;
 		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textName;
-		wxStaticText* m_staticText5;
+		wxStaticText* m_deriveLabel;
 		SYMBOL_FILTER_COMBOBOX* m_comboInheritanceSelect;
+		wxStaticText* m_hint;
 		wxStaticText* m_staticTextDes;
 		wxTextCtrl* m_textReference;
 		wxStaticText* m_staticTextUnits;

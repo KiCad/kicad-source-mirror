@@ -48,6 +48,8 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxA
     m_comboInheritanceSelect->SetStringList( aSymbolNames );
     m_comboInheritanceSelect->SetDisplayStyleCallback( aDisplayStyleCallback );
 
+    m_hint->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
+
     m_textName->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
     m_textReference->SetValidator( FIELD_VALIDATOR( FIELD_T::REFERENCE ) );
 

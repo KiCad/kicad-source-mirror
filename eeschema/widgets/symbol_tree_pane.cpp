@@ -26,24 +26,32 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 
-SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent,
-                                    LIB_SYMBOL_LIBRARY_MANAGER* aLibMgr )
-        : wxPanel( aParent ),
-          m_symbolEditFrame( aParent ),
-          m_tree( nullptr ),
-          m_libMgr( aLibMgr )
+SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, LIB_SYMBOL_LIBRARY_MANAGER* aLibMgr ) :
+        wxPanel( aParent ),
+        m_symbolEditFrame( aParent ),
+        m_tree( nullptr ),
+        m_libMgr( aLibMgr )
 {
     // Create widgets
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
-    m_tree = new LIB_TREE( this, wxT( "symbols" ),
-                           m_libMgr->GetAdapter(), LIB_TREE::SEARCH | LIB_TREE::MULTISELECT );
+    m_tree = new LIB_TREE( this, wxT( "symbols" ), m_libMgr->GetAdapter(), LIB_TREE::SEARCH | LIB_TREE::MULTISELECT );
     boxSizer->Add( m_tree, 1, wxEXPAND, 5 );
 
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
     Layout();
     boxSizer->Fit( this );
 
+    static std::function<bool( LIB_TREE_NODE& )> filter =
+            [&]( LIB_TREE_NODE& aNode ) -> bool
+            {
+                if( m_tree->GetSearchString().StartsWith( "::" ) )
+                    return aNode.m_IsRoot;
+                else
+                    return true;
+            };
+
     m_libMgr->GetAdapter()->FinishTreeInitialization();
+    m_libMgr->GetAdapter()->SetFilter( &filter );
 
     // Event handlers
     Bind( EVT_LIBITEM_CHOSEN, &SYMBOL_TREE_PANE::onSymbolSelected, this );

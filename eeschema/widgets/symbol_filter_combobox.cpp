@@ -34,7 +34,10 @@ private:
     {
         FILTER_COMBOPOPUP::getListContent( aListContent );
 
-        const wxString filterString = getFilterValue();
+        wxString filterString = getFilterValue();
+
+        if( filterString.StartsWith( wxT( "::" ) ) )
+            filterString = filterString.Mid( 2 );
 
         // Special handling for <do not derive>
         if( filterString.IsEmpty() || kNoParentSymbol.Lower().Matches( filterString ) )

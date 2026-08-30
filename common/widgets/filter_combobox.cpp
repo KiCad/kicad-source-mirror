@@ -138,6 +138,11 @@ FILTER_COMBOPOPUP::FILTER_COMBOPOPUP() :
         m_maxPopupHeight( 1000 ),
         m_focusHandler( nullptr )
 {
+    m_displayStyleCallback =
+            []( const wxString& aItem ) -> int
+            {
+                return 0;
+            };
 }
 
 
@@ -212,6 +217,7 @@ void FILTER_COMBOPOPUP::SetSelectedString( const wxString& aString )
 
 void FILTER_COMBOPOPUP::SetDisplayStyleCallback( const std::function<int( const wxString& aItem )>& aCallback )
 {
+    m_displayStyleCallback = aCallback;
     m_listBox->SetDisplayStyleCallback( aCallback );
 }
 
@@ -269,11 +275,21 @@ wxSize FILTER_COMBOPOPUP::GetAdjustedSize( int aMinWidth, int aPrefHeight, int a
 
 void FILTER_COMBOPOPUP::getListContent( wxArrayString& aListContent )
 {
-    const wxString filterString = getFilterValue();
+    wxString filterString = getFilterValue();
+    bool     excludeItalicItems = false;
+
+    if( filterString.StartsWith( wxT( "::" ) ) )
+    {
+        excludeItalicItems = true;
+        filterString = filterString.Mid( 2 );
+    }
 
     // Simple substring, case-insensitive search
     for( const wxString& str : m_stringList )
     {
+        if( excludeItalicItems && ( m_displayStyleCallback( str ) & ITALIC ) != 0 )
+            continue;
+
         if( filterString.IsEmpty() || str.Lower().Contains( filterString.Lower() ) )
             aListContent.push_back( str );
     }

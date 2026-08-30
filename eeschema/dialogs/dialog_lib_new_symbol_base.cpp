@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,41 +33,55 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerTop;
 	bSizerTop = new wxBoxSizer( wxVERTICAL );
 
-	wxFlexGridSizer* fgSizer31;
-	fgSizer31 = new wxFlexGridSizer( 0, 2, 6, 6 );
-	fgSizer31->AddGrowableCol( 1 );
-	fgSizer31->SetFlexibleDirection( wxBOTH );
-	fgSizer31->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 0, 5 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextName = new wxStaticText( this, wxID_ANY, _("Symbol name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextName->Wrap( -1 );
 	m_staticTextName->SetToolTip( _("The symbol name in library and also the default\nsymbol value when loaded in the schematic.") );
 
-	fgSizer31->Add( m_staticTextName, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_staticTextName, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	fgSizer31->Add( m_textName, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_textName, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Derive from existing symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	fgSizer31->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_deriveLabel = new wxStaticText( this, wxID_ANY, _("Derive from existing symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deriveLabel->Wrap( -1 );
+	gbSizer1->Add( m_deriveLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_comboInheritanceSelect = new SYMBOL_FILTER_COMBOBOX( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer31->Add( m_comboInheritanceSelect, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_comboInheritanceSelect, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_hint = new wxStaticText( this, wxID_ANY, _("(Preface filter with ‘::’ to include only base symbols in list.)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hint->Wrap( -1 );
+	gbSizer1->Add( m_hint, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 15 );
 
 	m_staticTextDes = new wxStaticText( this, wxID_ANY, _("Default reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDes->Wrap( -1 );
-	fgSizer31->Add( m_staticTextDes, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_staticTextDes, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	m_textReference = new wxTextCtrl( this, wxID_ANY, _("U"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer31->Add( m_textReference, 0, wxEXPAND, 5 );
+	gbSizer1->Add( m_textReference, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	m_staticTextUnits = new wxStaticText( this, wxID_ANY, _("Number of units per package:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnits->Wrap( -1 );
-	fgSizer31->Add( m_staticTextUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_staticTextUnits, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spinPartCount = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 64, 0 );
-	fgSizer31->Add( m_spinPartCount, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_spinPartCount, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	gbSizer1->AddGrowableCol( 1 );
+
+	bSizerTop->Add( gbSizer1, 0, wxEXPAND|wxALL, 5 );
+
+	wxFlexGridSizer* fgSizer31;
+	fgSizer31 = new wxFlexGridSizer( 0, 2, 6, 6 );
+	fgSizer31->AddGrowableCol( 1 );
+	fgSizer31->SetFlexibleDirection( wxBOTH );
+	fgSizer31->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
 	bSizerTop->Add( fgSizer31, 1, wxALL|wxEXPAND, 5 );

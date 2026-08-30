@@ -173,6 +173,8 @@ protected:
 
     wxString                   m_selectedString;
     wxArrayString              m_stringList;
+
+    std::function<int( const wxString& aItem )> m_displayStyleCallback;
 };
 
 
