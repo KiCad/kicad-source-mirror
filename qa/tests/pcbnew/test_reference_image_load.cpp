@@ -91,6 +91,19 @@ const std::vector<REFERENCE_IMAGE_LOAD_BOARD_TEST_CASE> ReferenceImageLoading_te
     },
 };
 
+
+// Minimal 1x1 RGB PNG with a pHYs chunk of 3780 pixels/meter in both axes.
+// 3780 PPM -> 37.8 px/cm -> 37.8 * 2.54 = 96.012 -> 96 PPI, but the pre-fix code truncated
+// "37.8" to 37 -> 94 PPI.
+const std::vector<unsigned char> png_3780_ppm = {
+    0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52,
+    0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53,
+    0xDE, 0x00, 0x00, 0x00, 0x09, 0x70, 0x48, 0x59, 0x73, 0x00, 0x00, 0x0E, 0xC4, 0x00, 0x00, 0x0E,
+    0xC4, 0x01, 0x95, 0x2B, 0x0E, 0x1B, 0x00, 0x00, 0x00, 0x0C, 0x49, 0x44, 0x41, 0x54, 0x78, 0xDA,
+    0x63, 0xF8, 0xCF, 0xC0, 0x00, 0x00, 0x03, 0x01, 0x01, 0x00, 0xF7, 0x03, 0x41, 0x43, 0x00, 0x00,
+    0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+};
+
 } // namespace
 
 
@@ -171,4 +184,57 @@ BOOST_FIXTURE_TEST_CASE( ReferenceImageFlipLayer, REFERENCE_IMAGE_LOAD_TEST_FIXT
     };
 
     KI_TEST::LoadAndTestBoardFile( "reference_images_load_save", true, doBoardTest );
+}
+
+
+class REFERENCE_IMAGE_BOARD_FIXTURE
+{
+public:
+    REFERENCE_IMAGE_BOARD_FIXTURE()
+    {
+        m_board = std::make_unique<BOARD>();
+        m_image = new PCB_REFERENCE_IMAGE( m_board.get() );
+        m_board->Add( m_image );
+    }
+
+    BOARD&               GetBoard() { return *m_board; }
+    PCB_REFERENCE_IMAGE& GetImage() { return *m_image; }
+
+    template <typename T>
+    void SetImageData( const T& aData )
+    {
+        wxMemoryBuffer buffer;
+        buffer.AppendData( aData.data(), aData.size() );
+        BOOST_REQUIRE( m_image->GetReferenceImage().ReadImageFile( buffer ) );
+    }
+
+private:
+    std::unique_ptr<BOARD> m_board;
+    PCB_REFERENCE_IMAGE*   m_image;
+};
+
+
+/**
+ * Rotating a reference image must rotate the transform origin with the image
+ * content, so the origin keeps pointing at the same pixel of the image.
+ */
+BOOST_FIXTURE_TEST_CASE( ReferenceImageRotateTransformOrigin, REFERENCE_IMAGE_BOARD_FIXTURE )
+{
+    BOARD&               board = GetBoard();
+    PCB_REFERENCE_IMAGE& image = GetImage();
+
+    SetImageData( png_3780_ppm );
+
+    REFERENCE_IMAGE& refImage = image.GetReferenceImage();
+    refImage.SetPosition( VECTOR2I( 1000, 2000 ) );
+    refImage.SetTransformOriginOffset( VECTOR2I( 300, -100 ) );
+
+    const VECTOR2I pos = refImage.GetPosition();
+
+    // Rotating about the image position leaves the position unchanged; the offset
+    // must follow the content.
+    refImage.Rotate( pos, ANGLE_90 );
+
+    BOOST_CHECK_EQUAL( refImage.GetPosition(), pos );
+    BOOST_CHECK_EQUAL( refImage.GetTransformOriginOffset(), VECTOR2I( -100, -300 ) );
 }
