@@ -28,6 +28,7 @@
 #include <vector>
 
 #include <pin_type.h>
+#include <pin_comparison.h>
 #include <sch_item.h>
 
 class LIB_SYMBOL;
@@ -57,12 +58,9 @@ wxString FormatStackedPinForDisplay( const wxString& aPinNumber, int aPinLength,
 class SCH_PIN : public SCH_ITEM
 {
 public:
-    struct ALT
-    {
-        wxString            m_Name;
-        GRAPHIC_PINSHAPE    m_Shape;         // Shape drawn around pin
-        ELECTRICAL_PINTYPE  m_Type;          // Electrical type of the pin.
-    };
+    using ALT = PIN_ALTERNATE;
+
+    PIN_COMPARISON_DATA ComparisonData() const;
 
     SCH_PIN( LIB_SYMBOL* aParentSymbol );
 
