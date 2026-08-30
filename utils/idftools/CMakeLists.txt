@@ -32,15 +32,12 @@ target_link_libraries( dxf2idf
     dxflib_qcad
     idf3
     kimath
-    common
-    ${OPENGL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     )
 
 target_link_libraries( idf2vrml
     idf3
     kimath
-    common
     ${OPENGL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     )
