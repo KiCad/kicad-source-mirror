@@ -4396,7 +4396,15 @@ namespace
                 {
                     definitionColors[aDefinition] = 1;
 
-                    for( const DEFINITION_EDGE& edge : definitionEdges[aDefinition] )
+                    auto edges = definitionEdges.find( aDefinition );
+
+                    if( edges == definitionEdges.end() )
+                    {
+                        definitionColors[aDefinition] = 2;
+                        return;
+                    }
+
+                    for( const DEFINITION_EDGE& edge : edges->second )
                     {
                         if( definitionColors[edge.target] == 1 )
                             throwValidationError( edge.source, wxS( "cyclic symbol definition reference" ) );
