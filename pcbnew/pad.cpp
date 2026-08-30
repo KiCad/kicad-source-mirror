@@ -3137,85 +3137,81 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
                 return matching;
             };
 
-    PCB_LAYER_ID            layer;
     std::vector<PCB_SHAPE*> mergedShapes;
 
-    if( IsOnLayer( F_Cu ) )
-        layer = F_Cu;
-    else if( IsOnLayer( B_Cu ) )
-        layer = B_Cu;
-    else
-        layer = GetLayerSet().UIOrder().front();
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                PAD_SHAPE origShape = GetShape( aLayer );
 
-    PAD_SHAPE origShape = GetShape( layer );
+                // If there are intersecting items to combine, we need to first make sure the pad is a
+                // custom-shape pad.
+                if( !aIsDryRun && findNext( aLayer ) && origShape != PAD_SHAPE::CUSTOM )
+                {
+                    if( origShape == PAD_SHAPE::CIRCLE || origShape == PAD_SHAPE::RECTANGLE )
+                    {
+                        // Use the existing pad as an anchor
+                        SetAnchorPadShape( aLayer, origShape );
+                        SetShape( aLayer, PAD_SHAPE::CUSTOM );
+                    }
+                    else
+                    {
+                        // Create a new circular anchor and convert existing pad to a polygon primitive
+                        SHAPE_POLY_SET existingOutline;
+                        TransformShapeToPolygon( existingOutline, aLayer, 0, maxError, ERROR_INSIDE );
 
-    // If there are intersecting items to combine, we need to first make sure the pad is a
-    // custom-shape pad.
-    if( !aIsDryRun && findNext( layer ) && origShape != PAD_SHAPE::CUSTOM )
-    {
-        if( origShape == PAD_SHAPE::CIRCLE || origShape == PAD_SHAPE::RECTANGLE )
-        {
-            // Use the existing pad as an anchor
-            SetAnchorPadShape( layer, origShape );
-            SetShape( layer, PAD_SHAPE::CUSTOM );
-        }
-        else
-        {
-            // Create a new circular anchor and convert existing pad to a polygon primitive
-            SHAPE_POLY_SET existingOutline;
-            TransformShapeToPolygon( existingOutline, layer, 0, maxError, ERROR_INSIDE );
+                        int minExtent = std::min( GetSize( aLayer ).x, GetSize( aLayer ).y );
+                        SetAnchorPadShape( aLayer, PAD_SHAPE::CIRCLE );
+                        SetSize( aLayer, VECTOR2I( minExtent, minExtent ) );
+                        SetShape( aLayer, PAD_SHAPE::CUSTOM );
 
-            int minExtent = std::min( GetSize( layer ).x, GetSize( layer ).y );
-            SetAnchorPadShape( layer, PAD_SHAPE::CIRCLE );
-            SetSize( layer, VECTOR2I( minExtent, minExtent ) );
-            SetShape( layer, PAD_SHAPE::CUSTOM );
+                        PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
+                        shape->SetFilled( true );
+                        shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+                        shape->SetPolyShape( existingOutline );
+                        shape->Move( - ShapePos( aLayer ) );
+                        shape->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
+                        AddPrimitive( aLayer, shape );
+                    }
+                }
 
-            PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
-            shape->SetFilled( true );
-            shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-            shape->SetPolyShape( existingOutline );
-            shape->Move( - ShapePos( layer ) );
-            shape->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
-            AddPrimitive( layer, shape );
-        }
-    }
+                while( PCB_SHAPE* fpShape = findNext( aLayer ) )
+                {
+                    fpShape->SetFlags( SKIP_STRUCT );
 
-    while( PCB_SHAPE* fpShape = findNext( layer ) )
-    {
-        fpShape->SetFlags( SKIP_STRUCT );
+                    mergedShapes.push_back( fpShape );
 
-        mergedShapes.push_back( fpShape );
+                    if( !aIsDryRun )
+                    {
+                        // If the editor was inside a group when the pad was exploded, the added exploded shapes
+                        // will be part of the group.  Remove them here before duplicating; we don't want the
+                        // primitives to wind up in a group.
+                        if( EDA_GROUP* group = fpShape->GetParentGroup(); group )
+                            group->RemoveItem( fpShape );
 
-        if( !aIsDryRun )
-        {
-            // If the editor was inside a group when the pad was exploded, the added exploded shapes
-            // will be part of the group.  Remove them here before duplicating; we don't want the
-            // primitives to wind up in a group.
-            if( EDA_GROUP* group = fpShape->GetParentGroup(); group )
-                group->RemoveItem( fpShape );
+                        PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate( IGNORE_PARENT_GROUP ) );
 
-            PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate( IGNORE_PARENT_GROUP ) );
+                        primitive->SetParent( nullptr );
 
-            primitive->SetParent( nullptr );
+                        // Convert any hatched fills to solid
+                        if( primitive->IsAnyFill() )
+                            primitive->SetFillMode( FILL_T::FILLED_SHAPE );
 
-            // Convert any hatched fills to solid
-            if( primitive->IsAnyFill() )
-                primitive->SetFillMode( FILL_T::FILLED_SHAPE );
+                        primitive->Move( - ShapePos( aLayer ) );
+                        primitive->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
 
-            primitive->Move( - ShapePos( layer ) );
-            primitive->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
+                        AddPrimitive( aLayer, primitive );
+                    }
 
-            AddPrimitive( layer, primitive );
-        }
-
-        // See if there are other shapes that match and mark them for delete.  (KiCad won't
-        // produce these, but old footprints from other vendors have them.)
-        for( PCB_SHAPE* other : findMatching( fpShape ) )
-        {
-            other->SetFlags( SKIP_STRUCT );
-            mergedShapes.push_back( other );
-        }
-    }
+                    // See if there are other shapes that match and mark them for delete.  (KiCad won't
+                    // produce these, but old footprints from other vendors have them.)
+                    for( PCB_SHAPE* other : findMatching( fpShape ) )
+                    {
+                        other->SetFlags( SKIP_STRUCT );
+                        mergedShapes.push_back( other );
+                    }
+                }
+            } );
 
     for( BOARD_ITEM* item : footprint->GraphicalItems() )
         item->ClearFlags( SKIP_STRUCT );
