@@ -268,8 +268,10 @@ void PCB_IO_PADS_BINARY::loadNets()
             netSettings->SetNetclass( className, kicadClass );
         }
 
+        // Label assignments are rebuilt from schematic labels on every connectivity pass, so a
+        // board-side membership has to be a pattern assignment to survive
         for( const std::string& net : nc.nets )
-            netSettings->SetNetclassLabelAssignment( PADS_COMMON::ConvertInvertedNetName( net ), { className } );
+            netSettings->SetNetclassPatternAssignment( PADS_COMMON::ConvertInvertedNetName( net ), className );
     }
 
     // Each differential pair becomes one DiffPair_<name> net class.
