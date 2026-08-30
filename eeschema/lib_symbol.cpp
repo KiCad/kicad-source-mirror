@@ -2533,9 +2533,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             const SCH_FIELD* aField = nullptr;
 
             if( bField->IsMandatory() )
-                aField = aRhs.GetField( bField->GetId() );
+                aField = GetField( bField->GetId() );
             else
-                aField = aRhs.GetField( bField->GetName() );
+                aField = GetField( bField->GetName() );
 
             if( !aField )
             {
