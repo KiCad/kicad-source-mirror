@@ -2030,7 +2030,7 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         if( m_type != tmp->m_type )
             return static_cast<int>( m_type ) - static_cast<int>( tmp->m_type );
 
-        if( m_hidden != tmp->m_hidden )
+        if( ( aCompareFlags & COMPARE_FLAGS::PIN_VISIBILITIES ) && m_hidden != tmp->m_hidden )
             return m_hidden.value_or( false ) - tmp->m_hidden.value_or( false );
 
         if( m_numTextSize != tmp->m_numTextSize )

@@ -31,6 +31,7 @@
 #include <sch_file_versions.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
+#include <locale_io.h>
 
 #include <wx/file.h>
 #include <wx/filename.h>
@@ -989,6 +990,90 @@ BOOST_AUTO_TEST_CASE( OrphanedBodyStyleItemsAreNotLoaded )
     // The standard body style must survive the pruning
     BOOST_CHECK( !reloaded->GetUnitDrawItems( 1, BODY_STYLE::BASE ).empty() );
     BOOST_CHECK_EQUAL( reloaded->GetUnitCount(), symbol->GetUnitCount() );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeComparisonDetectsPinTypeChanges )
+{
+    LOCALE_IO locale;
+    const auto original = loadDeMorganSymbol();
+    BOOST_REQUIRE( original );
+    LIB_SYMBOL changed( *original );
+    const int flags = ~( SCH_ITEM::COMPARE_FLAGS::UUID | SCH_ITEM::COMPARE_FLAGS::UNIT
+                        | SCH_ITEM::COMPARE_FLAGS::IDENTITY );
+    BOOST_REQUIRE_EQUAL( original->Compare( changed, flags ), 0 );
+    BOOST_REQUIRE_EQUAL( changed.Compare( *original, flags ), 0 );
+    SCH_PIN* pin = changed.GetGraphicalPins( 0, 0 ).front();
+    BOOST_REQUIRE( pin );
+    const auto previous = pin->GetType();
+    pin->SetType( previous == ELECTRICAL_PINTYPE::PT_INPUT ? ELECTRICAL_PINTYPE::PT_OUTPUT
+                                                         : ELECTRICAL_PINTYPE::PT_INPUT );
+    BOOST_REQUIRE( pin->GetType() != previous );
+    BOOST_CHECK_NE( original->Compare( changed, flags ), 0 );
+    BOOST_CHECK_NE( changed.Compare( *original, flags ), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeComparisonDetectsAddedPins )
+{
+    LOCALE_IO locale;
+    const auto original = loadDeMorganSymbol();
+    BOOST_REQUIRE( original );
+    LIB_SYMBOL changed( *original );
+    const int flags = ~( SCH_ITEM::COMPARE_FLAGS::UUID | SCH_ITEM::COMPARE_FLAGS::UNIT
+                        | SCH_ITEM::COMPARE_FLAGS::IDENTITY );
+    BOOST_REQUIRE_EQUAL( original->Compare( changed, flags ), 0 );
+    BOOST_REQUIRE_EQUAL( changed.Compare( *original, flags ), 0 );
+    const auto pins = original->GetGraphicalPins( 0, 0 );
+    BOOST_REQUIRE( !pins.empty() );
+    auto* extra = static_cast<SCH_PIN*>( pins.front()->Clone() );
+    extra->SetNumber( "NativeExtra" );
+    changed.AddDrawItem( extra );
+    BOOST_REQUIRE_EQUAL( changed.GetGraphicalPins( 0, 0 ).size(), pins.size() + 1 );
+    BOOST_CHECK_NE( original->Compare( changed, flags ), 0 );
+    BOOST_CHECK_NE( changed.Compare( *original, flags ), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeComparisonHonorsMissingAndExtraFieldFlags )
+{
+    LOCALE_IO locale;
+    const auto original = loadDeMorganSymbol();
+    BOOST_REQUIRE( original );
+    LIB_SYMBOL changed( *original );
+    const int flags = ~( SCH_ITEM::COMPARE_FLAGS::UUID | SCH_ITEM::COMPARE_FLAGS::UNIT
+                        | SCH_ITEM::COMPARE_FLAGS::IDENTITY );
+    BOOST_REQUIRE_EQUAL( original->Compare( changed, flags ), 0 );
+    BOOST_REQUIRE_EQUAL( changed.Compare( *original, flags ), 0 );
+    const wxString name( "Native comparison field" );
+    BOOST_REQUIRE( !original->GetField( name ) );
+    changed.AddField( new SCH_FIELD( &changed, FIELD_T::USER, name ) );
+    BOOST_REQUIRE( changed.GetField( name ) );
+    BOOST_CHECK_EQUAL( original->Compare( changed, flags & ~SCH_ITEM::COMPARE_FLAGS::MISSING_FIELDS ), 0 );
+    BOOST_CHECK_EQUAL( changed.Compare( *original, flags & ~SCH_ITEM::COMPARE_FLAGS::EXTRA_FIELDS ), 0 );
+    BOOST_CHECK_NE( original->Compare( changed, flags ), 0 );
+    BOOST_CHECK_NE( changed.Compare( *original, flags ), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeComparisonHonorsPinVisibilityFlag )
+{
+    LOCALE_IO locale;
+    const auto original = loadDeMorganSymbol();
+    BOOST_REQUIRE( original );
+    LIB_SYMBOL changed( *original );
+    const int flags = ~( SCH_ITEM::COMPARE_FLAGS::UUID | SCH_ITEM::COMPARE_FLAGS::UNIT
+                        | SCH_ITEM::COMPARE_FLAGS::IDENTITY );
+    BOOST_REQUIRE_EQUAL( original->Compare( changed, flags ), 0 );
+    BOOST_REQUIRE_EQUAL( changed.Compare( *original, flags ), 0 );
+    const auto pins = changed.GetGraphicalPins( 0, 0 );
+    BOOST_REQUIRE( !pins.empty() );
+    SCH_PIN* pin = pins.front();
+    pin->SetVisible( !pin->IsVisible() );
+    BOOST_CHECK_EQUAL( original->Compare( changed, flags & ~SCH_ITEM::COMPARE_FLAGS::PIN_VISIBILITIES ), 0 );
+    BOOST_CHECK_EQUAL( changed.Compare( *original, flags & ~SCH_ITEM::COMPARE_FLAGS::PIN_VISIBILITIES ), 0 );
+    BOOST_CHECK_NE( original->Compare( changed, flags ), 0 );
+    BOOST_CHECK_NE( changed.Compare( *original, flags ), 0 );
 }
 
 
