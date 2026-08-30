@@ -775,7 +775,7 @@ int SCH_INSPECTION_TOOL::showSchematicComparison( const wxString& aOtherPath, co
 
                     // Prefer resolving inside the current comparison schematic so
                     // shared-sheet instance context is preserved on both sides.
-                    DRILL_FRAME next{ *newEditorSheet, drillCurrent.compSch, drillCurrent.compFile };
+                    DRILL_FRAME next{ *newEditorSheet, drillCurrent.compSch, drillCurrent.compFile, KIID_PATH() };
 
                     if( auto compMatch = next.compSch->Hierarchy().GetSheetPathByKIIDPath( newEditorKiid, true ) )
                     {
@@ -1161,7 +1161,7 @@ int SCH_INSPECTION_TOOL::CompareSchematicWithHistory( const TOOL_EVENT& aEvent )
                     if( !newEditorSheet )
                         return;
 
-                    DRILL_FRAME next{ *newEditorSheet, drillCurrent.compSch, drillCurrent.compFile };
+                    DRILL_FRAME next{ *newEditorSheet, drillCurrent.compSch, drillCurrent.compFile, KIID_PATH() };
 
                     if( auto compMatch = next.compSch->Hierarchy().GetSheetPathByKIIDPath( newEditorKiid, true ) )
                     {

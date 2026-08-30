@@ -944,7 +944,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         if( !frame()->GetPropertiesPanel()->IsShownOnScreen() )
         {
             infobar->AddLink( _( "Show Properties panel" ),
-                    [this]( wxHyperlinkEvent& aEvent )
+                    [this]( wxHyperlinkEvent& )
                     {
                         frame()->ToggleProperties();
                     } );
