@@ -756,6 +756,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
         KICAD_FORMAT::FormatBool( &aFormatter, "hide", true );
 
     aField->Format( &aFormatter, 0 );
+    KICAD_FORMAT::FormatCustomProperties( &aFormatter, *aField );
     aFormatter.Print( ")" );
 }
 
@@ -803,6 +804,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( SCH_PIN* aPin, OUTPUTFORMATTER& aFor
                           getPinShapeToken( alt.second.m_Shape ) );
     }
 
+    KICAD_FORMAT::FormatCustomProperties( &aFormatter, *aPin );
     aFormatter.Print( ")" );
 }
 
@@ -819,6 +821,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveText( SCH_TEXT* aText, OUTPUTFORMATTER& a
                       aText->GetTextAngle().AsTenthsOfADegree() );
 
     aText->EDA_TEXT::Format( &aFormatter, 0 );
+    KICAD_FORMAT::FormatCustomProperties( &aFormatter, *aText );
     aFormatter.Print( ")" );
 }
 
@@ -848,6 +851,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveTextBox( SCH_TEXTBOX* aTextBox, OUTPUTFOR
     aTextBox->GetStroke().Format( &aFormatter, schIUScale );
     formatFill( &aFormatter, aTextBox->GetFillMode(), aTextBox->GetFillColor() );
     aTextBox->EDA_TEXT::Format( &aFormatter, 0 );
+    KICAD_FORMAT::FormatCustomProperties( &aFormatter, *aTextBox );
     aFormatter.Print( ")" );
 }
 

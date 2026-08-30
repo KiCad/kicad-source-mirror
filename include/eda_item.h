@@ -236,6 +236,11 @@ public:
         m_customProperties = aProps;
     }
 
+    void SetCustomProperty( const wxString& aKey, const wxString& aValue )
+    {
+        m_customProperties[aKey] = aValue;
+    }
+
     bool HasCustomProperties() const { return !m_customProperties.empty(); }
     void ClearCustomProperties() { m_customProperties.clear(); }
 

@@ -299,6 +299,7 @@ padstack
 padvia
 prefer_zone_connections
 private_layers
+custom_property
 property
 page
 paper

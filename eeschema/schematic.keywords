@@ -155,6 +155,7 @@ power_in
 power_out
 private
 project
+custom_property
 property
 property_del
 pts

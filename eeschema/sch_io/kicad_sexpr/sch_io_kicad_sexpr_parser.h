@@ -164,6 +164,7 @@ private:
         LIB_ID            libId;
         std::vector<KIID> memberUuids;
         bool              locked = false;
+        std::map<wxString, wxString> customProperties;
     };
 
     void checkpoint();
@@ -210,6 +211,9 @@ private:
     }
 
     bool parseBool();
+
+    void parseCustomProperty( EDA_ITEM* aItem );
+    void parseCustomProperty( std::map<wxString, wxString>& aProps );
 
     /**
      * Parses a boolean flag inside a list that existed before boolean normalization.

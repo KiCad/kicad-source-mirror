@@ -27,6 +27,7 @@
 #include <kicommon.h>
 
 class OUTPUTFORMATTER;
+class EDA_ITEM;
 class KIID;
 
 namespace KICAD_FORMAT {
@@ -53,6 +54,14 @@ KICOMMON_API void FormatOptBool( OUTPUTFORMATTER* aOut, const wxString& aKey,
                                  std::optional<bool> aValue );
 
 KICOMMON_API void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid );
+
+/**
+ * Writes the item's custom properties as a series of `(custom_property "key" "value")`
+ *
+ * @param aOut is the output formatter to write to
+ * @param aItem is the item to write properties of
+ */
+KICOMMON_API void FormatCustomProperties( OUTPUTFORMATTER* aOut, const EDA_ITEM& aItem );
 
 /**
  * Write binary data to the formatter as base 64 encoded string.

@@ -143,6 +143,28 @@ bool SCH_IO_KICAD_SEXPR_PARSER::parseBool()
 }
 
 
+void SCH_IO_KICAD_SEXPR_PARSER::parseCustomProperty( EDA_ITEM* aItem )
+{
+    NeedSYMBOL();
+    wxString key = FromUTF8();
+    NeedSYMBOL();
+    wxString value = FromUTF8();
+    aItem->SetCustomProperty( key, value );
+    NeedRIGHT();
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::parseCustomProperty( std::map<wxString, wxString>& aProps )
+{
+    NeedSYMBOL();
+    wxString key = FromUTF8();
+    NeedSYMBOL();
+    wxString value = FromUTF8();
+    aProps[key] = value;
+    NeedRIGHT();
+}
+
+
 /*
  * e.g. "hide", "hide)", "(hide yes)"
  */
@@ -1478,6 +1500,10 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
             break;
         }
 
+        case T_custom_property:
+            parseCustomProperty( field.get() );
+            break;
+
         default:
             Expecting( "id, at, hide, show_name, do_not_autoplace, or effects" );
         }
@@ -2195,6 +2221,10 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
             break;
         }
 
+        case T_custom_property:
+            parseCustomProperty( pin.get() );
+            break;
+
         default:
             Expecting( "at, name, number, hide, length, or alternate" );
         }
@@ -2409,6 +2439,10 @@ SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolText()
             parseEDA_TEXT( text.get(), true );
             break;
 
+        case T_custom_property:
+            parseCustomProperty( text.get() );
+            break;
+
         default:
             Expecting( "at or effects" );
         }
@@ -2516,6 +2550,10 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolTextBox()
 
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( textBox.get() ), false );
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( textBox.get() );
             break;
 
         default:
@@ -2851,6 +2889,10 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             field->SetCanAutoplace( !doNotAutoplace );
             break;
         }
+
+        case T_custom_property:
+            parseCustomProperty( field.get() );
+            break;
 
         default:
             Expecting( "id, at, hide, show_name, do_not_autoplace or effects" );
@@ -4093,6 +4135,10 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             break;
         }
 
+        case T_custom_property:
+            parseCustomProperty( symbol.get() );
+            break;
+
         default:
             Expecting( "lib_id, lib_name, at, mirror, uuid, exclude_from_sim, on_board, in_bom, dnp, passthrough, "
                        "default_instance, property, pin, or instances" );
@@ -4176,6 +4222,10 @@ SCH_BITMAP* SCH_IO_KICAD_SEXPR_PARSER::parseImage()
         case T_locked:
             bitmap->SetLocked( parseBool() );
             NeedRIGHT();
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( bitmap.get() );
             break;
 
         default:
@@ -4500,6 +4550,10 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
             break;
         }
 
+        case T_custom_property:
+            parseCustomProperty( sheet.get() );
+            break;
+
         default:
             Expecting( "at, size, stroke, background, instances, uuid, property, or pin" );
         }
@@ -4575,6 +4629,10 @@ SCH_JUNCTION* SCH_IO_KICAD_SEXPR_PARSER::parseJunction()
             NeedRIGHT();
             break;
 
+        case T_custom_property:
+            parseCustomProperty( junction.get() );
+            break;
+
         default:
             Expecting( "at, diameter, color, uuid or locked" );
         }
@@ -4615,6 +4673,10 @@ SCH_NO_CONNECT* SCH_IO_KICAD_SEXPR_PARSER::parseNoConnect()
         case T_locked:
             no_connect->SetLocked( parseBool() );
             NeedRIGHT();
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( no_connect.get() );
             break;
 
         default:
@@ -4674,6 +4736,10 @@ SCH_BUS_WIRE_ENTRY* SCH_IO_KICAD_SEXPR_PARSER::parseBusEntry()
         case T_locked:
             busEntry->SetLocked( parseBool() );
             NeedRIGHT();
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( busEntry.get() );
             break;
 
         default:
@@ -4870,6 +4936,10 @@ SCH_LINE* SCH_IO_KICAD_SEXPR_PARSER::parseLine()
         case T_locked:
             line->SetLocked( parseBool() );
             NeedRIGHT();
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( line.get() );
             break;
 
         default: Expecting( "pts, uuid, stroke, locked, start_shape, or end_shape" );
@@ -5159,6 +5229,10 @@ SCH_RULE_AREA* SCH_IO_KICAD_SEXPR_PARSER::parseSchRuleArea()
         case T_locked:
             ruleArea->SetLocked( parseBool() );
             NeedRIGHT();
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( ruleArea.get() );
             break;
 
         default:
@@ -5551,6 +5625,10 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSchText()
             NeedRIGHT();
             break;
 
+        case T_custom_property:
+            parseCustomProperty( text.get() );
+            break;
+
         default:
             Expecting( "at, shape, iref, uuid, effects or locked" );
         }
@@ -5697,6 +5775,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBoxContent( SCH_TEXTBOX* aTextBox )
         case T_locked:
             aTextBox->SetLocked( parseBool() );
             NeedRIGHT();
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( aTextBox );
             break;
 
         default:
@@ -5863,6 +5945,10 @@ SCH_TABLE* SCH_IO_KICAD_SEXPR_PARSER::parseSchTable()
         case T_locked:
             table->SetLocked( parseBool() );
             NeedRIGHT();
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( table.get() );
             break;
 
         default:
@@ -6115,6 +6201,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseGroup()
             NeedRIGHT();
             break;
 
+        case T_custom_property:
+            parseCustomProperty( groupInfo.customProperties );
+            break;
+
         default:
             Expecting( "uuid, lib_id, members, locked" );
         }
@@ -6161,6 +6251,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::resolveGroups( SCH_SCREEN* aParent )
             group->SetDesignBlockLibId( groupInfo.libId );
 
         group->SetLocked( groupInfo.locked );
+        group->SetCustomProperties( groupInfo.customProperties );
 
         aParent->Append( group );
     }

@@ -1093,6 +1093,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DIMENSION_BASE* aDimension ) const
     if( !center )
         format( static_cast<const PCB_TEXT*>( aDimension ) );
 
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aDimension );
     m_out->Print( ")" );
 }
 
@@ -1242,6 +1243,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
         m_out->Print( "(net %s)", m_out->Quotew( aShape->GetNetname() ).c_str() );
 
     KICAD_FORMAT::FormatUuid( m_out, aShape->m_Uuid );
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aShape );
     m_out->Print( ")" );
 }
 
@@ -1274,6 +1276,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_REFERENCE_IMAGE* aBitmap ) const
     KICAD_FORMAT::FormatStreamData( *m_out, *ostream.GetOutputStreamBuffer() );
 
     KICAD_FORMAT::FormatUuid( m_out, aBitmap->m_Uuid );
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aBitmap );
     m_out->Print( ")" );      // Closes image token.
 }
 
@@ -1286,6 +1289,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_POINT* aPoint ) const
     formatLayer( aPoint->GetLayer() );
 
     KICAD_FORMAT::FormatUuid( m_out, aPoint->m_Uuid );
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aPoint );
     m_out->Print( ")" );
 }
 
@@ -1302,6 +1306,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TARGET* aTarget ) const
 
     formatLayer( aTarget->GetLayer() );
     KICAD_FORMAT::FormatUuid( m_out, aTarget->m_Uuid );
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aTarget );
     m_out->Print( ")" );
 }
 
@@ -1348,6 +1353,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GRIDITEM* aGridItem ) const
         KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
     KICAD_FORMAT::FormatUuid( m_out, aGridItem->m_Uuid );
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aGridItem );
     m_out->Print( ")\n" );
 }
 
@@ -1768,6 +1774,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
         ++bs3D;
     }
 
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aFootprint );
     m_out->Print( ")" );
 }
 
@@ -2421,6 +2428,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
         m_out->Print( ")" );
     }
 
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aPad );
     m_out->Print( ")" );
 }
 
@@ -2487,6 +2495,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_BARCODE* aBarcode ) const
 
     KICAD_FORMAT::FormatUuid( m_out, aBarcode->m_Uuid );
 
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aBarcode );
     m_out->Print( ")" );
 }
 
@@ -2575,7 +2584,10 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
         formatRenderCache( aText );
 
     if( !field )
+    {
+        KICAD_FORMAT::FormatCustomProperties( m_out, *aText );
         m_out->Print( ")" );
+    }
 }
 
 
@@ -2653,6 +2665,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox ) const
     if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
         formatRenderCache( aTextBox );
 
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aTextBox );
     m_out->Print( ")" );
 }
 
@@ -2708,6 +2721,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable ) const
         format( static_cast<PCB_TEXTBOX*>( cell ) );
 
     m_out->Print( ")" );        // Close `cells` token.
+
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aTable );
     m_out->Print( ")" );        // Close `table` token.
 }
 
@@ -2758,6 +2773,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
         m_out->Print( " %s", m_out->Quotew( memberId ).c_str() );
 
     m_out->Print( ")" );        // Close `members` token.
+
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aGroup );
     m_out->Print( ")" );        // Close `group` token.
 }
 
@@ -2810,6 +2827,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_CONSTRAINT* aConstraint ) const
     if( !aConstraint->IsDriving() )
         KICAD_FORMAT::FormatBool( m_out, "driving", false );
 
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aConstraint );
     m_out->Print( ")" );        // Close `constraint` token.
 }
 
@@ -2943,6 +2961,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATOR* aGenerator ) const
         m_out->Print( " %s", m_out->Quotew( memberId ).c_str() );
 
     m_out->Print( ")" );        // Close `members` token.
+
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aGenerator );
     m_out->Print( ")" );        // Close `generated` token.
 }
 
@@ -3200,6 +3220,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
         m_out->Print( "(net %s)", m_out->Quotew( aTrack->GetNetname() ).c_str() );
 
     KICAD_FORMAT::FormatUuid( m_out, aTrack->m_Uuid );
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aTrack );
     m_out->Print( ")" );
 }
 
@@ -3455,6 +3476,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
         }
     }
 
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aZone );
     m_out->Print( ")" );
 }
 

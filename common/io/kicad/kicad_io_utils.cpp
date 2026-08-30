@@ -26,6 +26,7 @@
 
 #include <fmt/format.h>
 
+#include <eda_item.h>
 #include <kiid.h>
 #include <richio.h>
 #include <string_utils.h>
@@ -49,6 +50,16 @@ void FormatOptBool( OUTPUTFORMATTER* aOut, const wxString& aKey, std::optional<b
 void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid )
 {
     aOut->Print( "(uuid %s)", aOut->Quotew( aUuid.AsString() ).c_str() );
+}
+
+
+void FormatCustomProperties( OUTPUTFORMATTER* aOut, const EDA_ITEM& aItem )
+{
+    if( !aItem.HasCustomProperties() )
+        return;
+
+    for( const auto& [key, value] : aItem.GetCustomProperties() )
+        aOut->Print( "(custom_property %s %s)", aOut->Quotew( key ).c_str(), aOut->Quotew( value ).c_str() );
 }
 
 

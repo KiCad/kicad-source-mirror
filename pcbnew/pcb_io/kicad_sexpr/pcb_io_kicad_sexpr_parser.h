@@ -167,6 +167,7 @@ private:
         KIID              uuid;
         LIB_ID            libId;
         std::vector<KIID> memberUuids;
+        std::map<wxString, wxString> customProperties;
     };
 
     struct GENERATOR_INFO : GROUP_INFO
@@ -202,6 +203,7 @@ private:
         std::vector<CONSTRAINT_MEMBER> members;
         std::optional<double>          value;
         bool                           driving = true;
+        std::map<wxString, wxString>   customProperties;
     };
 
     ///< Convert net code using the mapping table if available,
@@ -381,6 +383,9 @@ private:
     void parseZoneLayerProperty( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties );
 
     std::pair<wxString, wxString> parseBoardProperty();
+
+    void parseCustomProperty( EDA_ITEM* aItem );
+    void parseCustomProperty( std::map<wxString, wxString>& aProps );
 
     void parseVariants();
     void parseFootprintVariant( FOOTPRINT* aFootprint );
