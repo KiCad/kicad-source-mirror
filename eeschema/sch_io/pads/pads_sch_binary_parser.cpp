@@ -4391,21 +4391,22 @@ namespace
         }
 
         std::unordered_map<uint32_t, uint8_t> definitionColors;
-        std::function<void( uint32_t )>       visitDefinition = [&]( uint32_t aDefinition )
-        {
-            definitionColors[aDefinition] = 1;
+        std::function<void( uint32_t )>       visitDefinition =
+                [&]( uint32_t aDefinition )
+                {
+                    definitionColors[aDefinition] = 1;
 
-            for( const DEFINITION_EDGE& edge : definitionEdges[aDefinition] )
-            {
-                if( definitionColors[edge.target] == 1 )
-                    throwValidationError( edge.source, wxS( "cyclic symbol definition reference" ) );
+                    for( const DEFINITION_EDGE& edge : definitionEdges[aDefinition] )
+                    {
+                        if( definitionColors[edge.target] == 1 )
+                            throwValidationError( edge.source, wxS( "cyclic symbol definition reference" ) );
 
-                if( definitionColors[edge.target] == 0 )
-                    visitDefinition( edge.target );
-            }
+                        if( definitionColors[edge.target] == 0 )
+                            visitDefinition( edge.target );
+                    }
 
-            definitionColors[aDefinition] = 2;
-        };
+                    definitionColors[aDefinition] = 2;
+                };
 
         for( const auto& [definition, edges] : definitionEdges )
         {

@@ -352,10 +352,11 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( const 
         int                   depth = 0;
         const SCH_SHEET_PATH& path = aRef.GetSheetPath();
 
-        std::function<bool( wxString* )> symbolResolver = [&]( wxString* token ) -> bool
-        {
-            return aRef.GetSymbol()->ResolveTextVar( &path, token, m_currentVariant, depth + 1 );
-        };
+        std::function<bool( wxString* )> symbolResolver =
+                [&]( wxString* token ) -> bool
+                {
+                    return aRef.GetSymbol()->ResolveTextVar( &path, token, m_currentVariant, depth + 1 );
+                };
 
         return ResolveTextVars( aFieldName, &symbolResolver, depth );
     }
@@ -372,10 +373,11 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( const SCH_REFERE
     // For instance, if you have "My value is ${VALUE}" in the description field,
     // ${VALUE} will be resolved against the symbol's live value, not the Value field
     // stored in the data store.
-    std::function<bool( wxString* )> symbolResolver = [&]( wxString* token ) -> bool
-    {
-        return aRef.GetSymbol()->ResolveTextVar( &aRef.GetSheetPath(), token, m_currentVariant );
-    };
+    std::function<bool( wxString* )> symbolResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return aRef.GetSymbol()->ResolveTextVar( &aRef.GetSheetPath(), token, m_currentVariant );
+            };
 
     int depth = 0;
     return ResolveTextVars( aText, &symbolResolver, depth );

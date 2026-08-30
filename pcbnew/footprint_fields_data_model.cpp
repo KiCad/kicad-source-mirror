@@ -209,10 +209,11 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( con
     {
         int depth = 0;
 
-        std::function<bool( wxString* )> footprintResolver = [&]( wxString* token ) -> bool
-        {
-            return footprint.ResolveTextVar( token, m_currentVariant, depth + 1 );
-        };
+        std::function<bool( wxString* )> footprintResolver =
+                [&]( wxString* token ) -> bool
+                {
+                    return footprint.ResolveTextVar( token, m_currentVariant, depth + 1 );
+                };
 
         return ResolveTextVars( aFieldName, &footprintResolver, depth );
     }
@@ -229,10 +230,11 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( const FOOTPRI
     // For instance, if you have "My value is ${VALUE}" in the description field,
     // ${VALUE} will be resolved against the footprint's live value, not the Value field
     // stored in the data store.
-    std::function<bool( wxString* )> footprintResolver = [&]( wxString* token ) -> bool
-    {
-        return aRef.GetFootprint().ResolveTextVar( token, m_currentVariant );
-    };
+    std::function<bool( wxString* )> footprintResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return aRef.GetFootprint().ResolveTextVar( token, m_currentVariant );
+            };
 
     int depth = 0;
     return ResolveTextVars( aText, &footprintResolver, depth );

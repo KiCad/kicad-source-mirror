@@ -87,8 +87,7 @@ void LIB_TREE_NODE::SortNodes( bool aUseScores )
 }
 
 
-bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2,
-                             bool aUseScores )
+bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2, bool aUseScores )
 {
     if( aNode1.m_Type != aNode2.m_Type )
         return aNode1.m_Type < aNode2.m_Type;
@@ -275,8 +274,7 @@ void LIB_TREE_NODE_ITEM::UpdateScore( const std::vector<std::unique_ptr<EDA_COMB
 }
 
 
-LIB_TREE_NODE_LIBRARY::LIB_TREE_NODE_LIBRARY( LIB_TREE_NODE* aParent, wxString const& aName,
-                                              wxString const& aDesc )
+LIB_TREE_NODE_LIBRARY::LIB_TREE_NODE_LIBRARY( LIB_TREE_NODE* aParent, wxString const& aName, wxString const& aDesc )
 {
     m_Type = TYPE::LIBRARY;
     m_Name = aName;

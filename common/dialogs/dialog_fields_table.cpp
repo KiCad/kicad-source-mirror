@@ -1275,10 +1275,11 @@ void DIALOG_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     // Create output directory if it does not exist (also transform it in absolute form).
     // Bail if it fails.
 
-    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
-    {
-        return resolveTextVar( token );
-    };
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return resolveTextVar( token );
+            };
 
     wxString sourceFileName = m_parentFrame->GetCurrentFileName();
     wxString path = m_outputFileName->GetValue();

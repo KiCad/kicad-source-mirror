@@ -1213,28 +1213,29 @@ void DIALOG_DRC_RULE_EDITOR::selectRuleNode( int aNodeId )
     wxTreeItemIdValue cookie;
     wxTreeItemId root = m_ruleTreeCtrl->GetRootItem();
 
-    std::function<wxTreeItemId( wxTreeItemId )> findItem = [&]( wxTreeItemId parent ) -> wxTreeItemId
-    {
-        wxTreeItemId item = m_ruleTreeCtrl->GetFirstChild( parent, cookie );
+    std::function<wxTreeItemId( wxTreeItemId )> findItem =
+            [&]( wxTreeItemId parent ) -> wxTreeItemId
+            {
+                wxTreeItemId item = m_ruleTreeCtrl->GetFirstChild( parent, cookie );
 
-        while( item.IsOk() )
-        {
-            RULE_TREE_ITEM_DATA* data =
-                    dynamic_cast<RULE_TREE_ITEM_DATA*>( m_ruleTreeCtrl->GetItemData( item ) );
+                while( item.IsOk() )
+                {
+                    RULE_TREE_ITEM_DATA* data =
+                            dynamic_cast<RULE_TREE_ITEM_DATA*>( m_ruleTreeCtrl->GetItemData( item ) );
 
-            if( data && data->GetNodeId() == aNodeId )
-                return item;
+                    if( data && data->GetNodeId() == aNodeId )
+                        return item;
 
-            wxTreeItemId found = findItem( item );
+                    wxTreeItemId found = findItem( item );
 
-            if( found.IsOk() )
-                return found;
+                    if( found.IsOk() )
+                        return found;
 
-            item = m_ruleTreeCtrl->GetNextSibling( item );
-        }
+                    item = m_ruleTreeCtrl->GetNextSibling( item );
+                }
 
-        return wxTreeItemId();
-    };
+                return wxTreeItemId();
+            };
 
     wxTreeItemId itemId = findItem( root );
 

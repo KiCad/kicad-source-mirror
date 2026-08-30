@@ -66,11 +66,12 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
                         std::optional<wxString> aSheetName, std::optional<wxString> aSheetPath,
                         std::vector<wxString>* aOutputFiles )
 {
-    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
-    {
-        // Handles board->GetTitleBlock() *and* board->GetProject()
-        return m_board->ResolveTextVar( token, 0 );
-    };
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles board->GetTitleBlock() *and* board->GetProject()
+                return m_board->ResolveTextVar( token, 0 );
+            };
 
     // sanity, ensure one layer to print
     if( aLayersToPlot.size() < 1 )

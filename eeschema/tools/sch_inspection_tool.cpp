@@ -458,34 +458,35 @@ void buildSchOverrides( const KICAD_DIFF::DOCUMENT_DIFF& aDiff, const KICAD_DIFF
     aCompO.clear();
     aCats.clear();
 
-    std::function<void( const KICAD_DIFF::ITEM_CHANGE& )> visit = [&]( const KICAD_DIFF::ITEM_CHANGE& aChange )
-    {
-        if( !aChange.id.empty() )
-        {
-            const KIID& kiid = aChange.id.back();
-            aCats[kiid] = KICAD_DIFF::CategoryFor( aChange.kind );
-
-            switch( aChange.kind )
+    std::function<void( const KICAD_DIFF::ITEM_CHANGE& )> visit =
+            [&]( const KICAD_DIFF::ITEM_CHANGE& aChange )
             {
-            case KICAD_DIFF::CHANGE_KIND::ADDED: aCompO[kiid] = aTheme.added; break;
-            case KICAD_DIFF::CHANGE_KIND::REMOVED:
-                aRefO[kiid] = aTheme.removed;
-                aCompO[kiid] = aTheme.removed;
-                break;
-            case KICAD_DIFF::CHANGE_KIND::MODIFIED:
-                aRefO[kiid] = aTheme.modified;
-                aCompO[kiid] = aTheme.modified;
-                break;
-            default:
-                aRefO[kiid] = aTheme.conflict;
-                aCompO[kiid] = aTheme.conflict;
-                break;
-            }
-        }
+                if( !aChange.id.empty() )
+                {
+                    const KIID& kiid = aChange.id.back();
+                    aCats[kiid] = KICAD_DIFF::CategoryFor( aChange.kind );
 
-        for( const KICAD_DIFF::ITEM_CHANGE& child : aChange.children )
-            visit( child );
-    };
+                    switch( aChange.kind )
+                    {
+                    case KICAD_DIFF::CHANGE_KIND::ADDED: aCompO[kiid] = aTheme.added; break;
+                    case KICAD_DIFF::CHANGE_KIND::REMOVED:
+                        aRefO[kiid] = aTheme.removed;
+                        aCompO[kiid] = aTheme.removed;
+                        break;
+                    case KICAD_DIFF::CHANGE_KIND::MODIFIED:
+                        aRefO[kiid] = aTheme.modified;
+                        aCompO[kiid] = aTheme.modified;
+                        break;
+                    default:
+                        aRefO[kiid] = aTheme.conflict;
+                        aCompO[kiid] = aTheme.conflict;
+                        break;
+                    }
+                }
+
+                for( const KICAD_DIFF::ITEM_CHANGE& child : aChange.children )
+                    visit( child );
+            };
 
     for( const KICAD_DIFF::ITEM_CHANGE& change : aDiff.changes )
         visit( change );

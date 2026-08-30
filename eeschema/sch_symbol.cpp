@@ -1717,10 +1717,11 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInsta
             if( !aResolve )
                 return aText;
 
-            std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
-            {
-                return ResolveTextVar( aInstance, token, aVariantName, 1 );
-            };
+            std::function<bool( wxString* )> resolver =
+                    [&]( wxString* token ) -> bool
+                    {
+                        return ResolveTextVar( aInstance, token, aVariantName, 1 );
+                    };
 
             return ExpandTextVars( aText, &resolver );
         };
