@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,6 +48,9 @@ PANEL_IMAGE_EDITOR_BASE::PANEL_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID i
 	m_buttonGrey = new wxButton( this, wxID_ANY, _("Convert to Greyscale"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_buttonGrey, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
+	m_buttonInvert = new wxButton( this, wxID_ANY, _("Invert Colors"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_buttonInvert, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+
 
 	gbSizer1->AddGrowableCol( 1 );
 
@@ -67,6 +70,7 @@ PANEL_IMAGE_EDITOR_BASE::PANEL_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID i
 	// Connect Events
 	m_panelDraw->Connect( wxEVT_PAINT, wxPaintEventHandler( PANEL_IMAGE_EDITOR_BASE::OnRedrawPanel ), NULL, this );
 	m_buttonGrey->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnGreyScaleConvert ), NULL, this );
+	m_buttonInvert->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnInvert ), NULL, this );
 }
 
 PANEL_IMAGE_EDITOR_BASE::~PANEL_IMAGE_EDITOR_BASE()
@@ -74,5 +78,6 @@ PANEL_IMAGE_EDITOR_BASE::~PANEL_IMAGE_EDITOR_BASE()
 	// Disconnect Events
 	m_panelDraw->Disconnect( wxEVT_PAINT, wxPaintEventHandler( PANEL_IMAGE_EDITOR_BASE::OnRedrawPanel ), NULL, this );
 	m_buttonGrey->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnGreyScaleConvert ), NULL, this );
+	m_buttonInvert->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnInvert ), NULL, this );
 
 }

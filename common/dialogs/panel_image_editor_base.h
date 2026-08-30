@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,7 +27,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_IMAGE_EDITOR_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,10 +41,12 @@ class PANEL_IMAGE_EDITOR_BASE : public wxPanel
 		wxStaticText* m_staticTextPPI;
 		wxStaticText* m_stPPI_Value;
 		wxButton* m_buttonGrey;
+		wxButton* m_buttonInvert;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnRedrawPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnGreyScaleConvert( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnInvert( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
@@ -55,4 +56,3 @@ class PANEL_IMAGE_EDITOR_BASE : public wxPanel
 		~PANEL_IMAGE_EDITOR_BASE();
 
 };
-

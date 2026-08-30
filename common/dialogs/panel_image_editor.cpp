@@ -56,6 +56,13 @@ void PANEL_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
 }
 
 
+void PANEL_IMAGE_EDITOR::OnInvert( wxCommandEvent& event )
+{
+    m_workingImage->InvertColors();
+    m_panelDraw->Refresh();
+}
+
+
 /*
  * Test params values correctness
  * Currently scale value must give an actual image > MIN_SIZE pixels (mandatory to be able to

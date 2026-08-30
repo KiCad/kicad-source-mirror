@@ -219,6 +219,13 @@ public:
 
     void ConvertToGreyscale();
 
+    /**
+     * Invert the colours of the image (e.g. white becomes black).
+     *
+     * The alpha channel is not modified.
+     */
+    void InvertColors();
+
     bool IsMirroredX() const { return m_isMirroredX; }
     bool IsMirroredY() const { return m_isMirroredY; }
     EDA_ANGLE Rotation() const { return m_rotation; }
@@ -273,6 +280,13 @@ private:
      * Mirror the wxImage pixel data in-place without allocating a new image.
      */
     static void mirrorImageInPlace( wxImage& aImage, FLIP_DIRECTION aFlipDirection );
+
+    /**
+     * Invert the colour of every pixel of the wxImage in-place without allocating a new image.
+     *
+     * The alpha channel is not modified.
+     */
+    static void invertImageInPlace( wxImage& aImage );
 
     double    m_scale;              ///< The scaling factor of the bitmap
                                     ///< with #m_pixelSizeIu, controls the actual draw size.

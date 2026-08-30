@@ -522,6 +522,23 @@ void BITMAP_BASE::mirrorImageInPlace( wxImage& aImage, FLIP_DIRECTION aFlipDirec
 }
 
 
+void BITMAP_BASE::invertImageInPlace( wxImage& aImage )
+{
+    const int w = aImage.GetWidth();
+    const int h = aImage.GetHeight();
+
+    if( w == 0 || h == 0 )
+        return;
+
+    aImage.UnShare();
+
+    unsigned char* rgb = aImage.GetData();
+
+    for( int i = 0; i < w * h * 3; ++i )
+        rgb[i] = 255 - rgb[i];
+}
+
+
 void BITMAP_BASE::Mirror( FLIP_DIRECTION aFlipDirection )
 {
     if( m_image )
@@ -569,6 +586,19 @@ void BITMAP_BASE::ConvertToGreyscale()
     {
         *m_image  = m_image->ConvertToGreyscale();
         *m_originalImage = m_originalImage->ConvertToGreyscale();
+        m_bitmapDirty = true;
+        m_imageData.Clear();
+        m_imageId = KIID();
+    }
+}
+
+
+void BITMAP_BASE::InvertColors()
+{
+    if( m_image )
+    {
+        invertImageInPlace( *m_image );
+        invertImageInPlace( *m_originalImage );
         m_bitmapDirty = true;
         m_imageData.Clear();
         m_imageId = KIID();
