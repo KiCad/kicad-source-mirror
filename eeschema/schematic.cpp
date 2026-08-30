@@ -1371,6 +1371,49 @@ void SCHEMATIC::RecomputeIntersheetRefs()
 }
 
 
+void SCHEMATIC::SyncLibSymbolPinMaps( const wxString& aSchLibSymbolName, const LIB_SYMBOL& aSource,
+                                      SCH_COMMIT* aCommit )
+{
+    SCH_SCREENS screens( Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        auto it = screen->GetLibSymbols().find( aSchLibSymbolName );
+
+        if( it != screen->GetLibSymbols().end() && it->second && it->second != &aSource )
+        {
+            it->second->SetPinMaps( aSource.GetPinMaps() );
+            it->second->SetAssociatedFootprints( aSource.GetAssociatedFootprints() );
+        }
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( symbol->GetSchSymbolLibraryName() != aSchLibSymbolName )
+                continue;
+
+            LIB_SYMBOL* copy = symbol->GetLibSymbolRef().get();
+
+            if( !copy || copy == &aSource )
+                continue;
+
+            if( copy->GetPinMaps() == aSource.GetPinMaps()
+                && copy->GetAssociatedFootprints() == aSource.GetAssociatedFootprints() )
+            {
+                continue;
+            }
+
+            if( aCommit )
+                aCommit->Modify( symbol, screen );
+
+            copy->SetPinMaps( aSource.GetPinMaps() );
+            copy->SetAssociatedFootprints( aSource.GetAssociatedFootprints() );
+        }
+    }
+}
+
+
 wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision, const wxString& aRange )
 {
     wxString spiceNetName( aNetName.Lower() );

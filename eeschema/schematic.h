@@ -39,6 +39,7 @@ class BUS_ALIAS;
 class CONNECTION_GRAPH;
 class EDA_BASE_FRAME;
 class ERC_SETTINGS;
+class LIB_SYMBOL;
 class PROJECT;
 class SCH_COMMIT;
 class SCH_LINE;
@@ -383,6 +384,8 @@ public:
      * so that they are redrawn with up-to-date references.
      */
     void RecomputeIntersheetRefs();
+
+    void SyncLibSymbolPinMaps( const wxString& aSchLibSymbolName, const LIB_SYMBOL& aSource, SCH_COMMIT* aCommit );
 
     /**
      * Clear operating points from a .op simulation.

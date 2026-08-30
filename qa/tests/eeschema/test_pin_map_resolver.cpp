@@ -27,6 +27,9 @@
 #include <sch_pin.h>
 #include <sch_symbol.h>
 #include <sch_sheet_path.h>
+#include <sch_sheet.h>
+#include <sch_screen.h>
+#include <schematic.h>
 
 
 using PAD_RESOLUTION = SCH_PIN::PAD_RESOLUTION;
@@ -211,6 +214,44 @@ BOOST_AUTO_TEST_CASE( NamedMapOverride )
                                                                 nullptr, &state ),
                        wxS( "8" ) );
     BOOST_CHECK( state == PAD_RESOLUTION::MAPPED );
+}
+
+
+BOOST_AUTO_TEST_CASE( SyncSharedLibSymbolCopies )
+{
+    SCHEMATIC schematic( nullptr );
+
+    SCH_SHEET*  sheet = new SCH_SHEET( &schematic );
+    SCH_SCREEN* screen = new SCH_SCREEN( &schematic );
+
+    const_cast<KIID&>( sheet->m_Uuid ) = screen->GetUuid();
+    sheet->SetScreen( screen );
+    schematic.SetTopLevelSheets( { sheet } );
+
+    SCH_SYMBOL* unitA = new SCH_SYMBOL( *m_lib, m_lib->GetLibId(), nullptr, 1, 0, VECTOR2I( 0, 0 ) );
+    SCH_SYMBOL* unitB = new SCH_SYMBOL( *m_lib, m_lib->GetLibId(), nullptr, 2, 0, VECTOR2I( 0, 0 ) );
+
+    screen->Append( unitA );
+    screen->Append( unitB );
+
+    PIN_MAP edited( wxS( "EDITED" ) );
+    edited.SetEntry( wxS( "1" ), wxS( "X1" ) );
+    unitA->GetLibSymbolRef()->PinMaps().AddOrReplace( edited );
+    unitA->GetLibSymbolRef()->SetAssociatedFootprints( { { m_dfn, wxS( "EDITED" ) } } );
+
+    BOOST_REQUIRE( unitB->GetLibSymbolRef() );
+    BOOST_REQUIRE( !( unitB->GetLibSymbolRef()->GetPinMaps() == unitA->GetLibSymbolRef()->GetPinMaps() ) );
+
+    schematic.SyncLibSymbolPinMaps( unitA->GetSchSymbolLibraryName(), *unitA->GetLibSymbolRef(), nullptr );
+
+    BOOST_CHECK( unitB->GetLibSymbolRef()->GetPinMaps() == unitA->GetLibSymbolRef()->GetPinMaps() );
+    BOOST_CHECK( unitB->GetLibSymbolRef()->GetAssociatedFootprints()
+                 == unitA->GetLibSymbolRef()->GetAssociatedFootprints() );
+
+    auto it = screen->GetLibSymbols().find( unitA->GetSchSymbolLibraryName() );
+    BOOST_REQUIRE( it != screen->GetLibSymbols().end() );
+    BOOST_CHECK( it->second->GetPinMaps() == unitA->GetLibSymbolRef()->GetPinMaps() );
+    BOOST_CHECK( it->second->GetAssociatedFootprints() == unitA->GetLibSymbolRef()->GetAssociatedFootprints() );
 }
 
 

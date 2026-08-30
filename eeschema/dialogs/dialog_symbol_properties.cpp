@@ -790,7 +790,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // Apply pin-map edits after the undo snapshot so undo restores them (issue #2282).
     if( m_part )
+    {
         m_pinMapPanel->ApplyToSymbol( m_part );
+        GetParent()->Schematic().SyncLibSymbolPinMaps( m_symbol->GetSchSymbolLibraryName(), *m_part, &commit );
+    }
 
     // Save current flags which could be modified by next change settings
     EDA_ITEM_FLAGS flags = m_symbol->GetFlags();
