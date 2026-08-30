@@ -600,9 +600,7 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
 
     // Pre-v6 schematics are a binary stream identified by a two-byte magic. Decode
     // them into an XML-compatible DOM and adopt that tree, mirroring PCB_IO_EAGLE.
-    // IsBinaryEagle consumes the two-byte magic, so rewind before reading on.
     bool isBinary = EAGLE_BIN_PARSER::IsBinaryEagle( stream );
-    stream.SeekI( 0 );
 
     if( isBinary )
     {
@@ -3091,6 +3089,10 @@ bool SCH_IO_EAGLE::checkHeader( const wxString& aFileName ) const
 
     if( !input.IsOk() )
         return false;
+
+    // Pre-v6 schematics are a binary stream identified by a two-byte magic.
+    if( EAGLE_BIN_PARSER::IsBinaryEagle( input ) )
+        return true;
 
     wxTextInputStream text( input );
 

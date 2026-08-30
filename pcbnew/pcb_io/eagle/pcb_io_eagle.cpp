@@ -289,8 +289,6 @@ bool PCB_IO_EAGLE::checkHeader(const wxString& aFileName) const
     if( EAGLE_BIN_PARSER::IsBinaryEagle( input ) )
         return true;
 
-    input.SeekI( 0 );
-
     wxTextInputStream text( input );
 
     for( int i = 0; i < 8; i++ )
@@ -376,9 +374,7 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
         wxXmlDocument                  xmlDocument;
         std::unique_ptr<wxXmlDocument> binDocument;
 
-        // IsBinaryEagle consumes the two-byte magic, so rewind before reading on.
         bool isBinary = EAGLE_BIN_PARSER::IsBinaryEagle( stream );
-        stream.SeekI( 0 );
 
         if( isBinary )
         {

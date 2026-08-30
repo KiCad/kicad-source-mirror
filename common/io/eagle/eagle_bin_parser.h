@@ -59,9 +59,9 @@ class EAGLE_BIN_PARSER
 {
 public:
     /**
-     * Probe the first two bytes for the binary magic.
+     * Probe the first two bytes for the binary magic without changing the stream position.
      *
-     * @return true for v4/v5 (0x10 0x00) or v3 (0x10 0x80) binary boards.
+     * @return true for v4/v5 (0x10 0x00) or v3 (0x10 0x80) binary Eagle files.
      */
     static bool IsBinaryEagle( wxInputStream& aStream );
 

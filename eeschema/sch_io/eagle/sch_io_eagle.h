@@ -72,7 +72,7 @@ struct EAGLE_LIBRARY
 
 
 /**
- * A #SCH_IO derivation for loading 6.x+ Eagle schematic files.
+ * A #SCH_IO derivation for loading Eagle schematic files.
  *
  * As with all #SCH_IO objects there are no UI dependencies i.e. windowing calls allowed.
  */
@@ -86,7 +86,7 @@ public:
 
     const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle XML schematic files" ), { "sch" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle schematic files" ), { "sch" } );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override

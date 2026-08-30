@@ -893,9 +893,15 @@ bool EAGLE_BIN_PARSER::IsBinaryEagle( wxInputStream& aStream )
     if( !aStream.IsOk() )
         return false;
 
-    aStream.Read( buf, 2 );
+    const wxFileOffset originalPos = aStream.TellI();
 
-    if( aStream.LastRead() != 2 )
+    if( originalPos == wxInvalidOffset || aStream.SeekI( 0 ) == wxInvalidOffset )
+        return false;
+
+    aStream.Read( buf, 2 );
+    const size_t bytesRead = aStream.LastRead();
+
+    if( aStream.SeekI( originalPos ) == wxInvalidOffset || bytesRead != 2 )
         return false;
 
     if( buf[0] == 0x10 && ( buf[1] == 0x00 || buf[1] == 0x80 ) )
