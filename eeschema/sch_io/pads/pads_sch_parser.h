@@ -273,7 +273,8 @@ struct PART_ATTRIBUTE
 struct PART_PLACEMENT
 {
     std::string reference;
-    std::string symbol_name;
+    std::string symbol_name;   ///< The part type, which is also the power symbol's net name
+    std::string decal_name;    ///< CAEDECAL the placed gate draws, empty when unresolved
     std::string part_type;
     POINT       position;
     double      rotation = 0.0;

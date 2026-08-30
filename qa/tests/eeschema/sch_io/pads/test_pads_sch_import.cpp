@@ -4011,7 +4011,6 @@ BOOST_AUTO_TEST_CASE( BinaryLongBusEntryStaysOnTheWire )
 }
 
 
-
 // PADS gives the stroke width it renders. KiCad multiplies a stored thickness by the bold factor,
 // so importing the PADS width verbatim onto a bold text renders it 1.6x too thick.
 BOOST_AUTO_TEST_CASE( BinaryBoldTextKeepsTheRenderedStrokeWidth )
@@ -4124,6 +4123,28 @@ BOOST_AUTO_TEST_CASE( BinaryHiddenFreeTextIsReportedNotImported )
                                       {
                                           return aDiagnostic.message.Contains( wxS( "hidden PADS text" ) );
                                       } ) );
+}
+
+
+// The gate decal name is a lookup key, not the part's identity. Overwriting the part type with it
+// renames every power symbol whose decal is named differently.
+BOOST_AUTO_TEST_CASE( AsciiPowerSymbolValueIsThePartType )
+{
+    SCH_IO_PADS plugin;
+    wxString    path = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
+                    + wxS( "/plugins/pads/power_gate_decal.txt" );
+
+    SCH_SHEET* root = plugin.LoadSchematicFile( path, &m_schematic, nullptr, nullptr );
+    BOOST_REQUIRE( root );
+    BOOST_REQUIRE( root->GetScreen() );
+
+    SCH_SYMBOL* symbol = nullptr;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        symbol = static_cast<SCH_SYMBOL*>( item );
+
+    BOOST_REQUIRE( symbol );
+    BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetText(), wxS( "+5V" ) );
 }
 
 

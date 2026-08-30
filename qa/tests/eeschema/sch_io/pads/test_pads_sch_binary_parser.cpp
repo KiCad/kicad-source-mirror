@@ -3150,7 +3150,7 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                                                         return aDefinition.id == binaryPlacement.definition.id;
                                                     } );
             BOOST_REQUIRE( definition != binary.definitions.end() );
-            BOOST_CHECK_EQUAL( definition->name.text, wxString::FromUTF8( asciiPlacement.symbol_name ) );
+            BOOST_CHECK_EQUAL( definition->name.text, wxString::FromUTF8( asciiPlacement.decal_name ) );
             BOOST_CHECK( !propertyValue( binaryPlacement.properties, wxS( "decal_handle" ) ).empty() );
             BOOST_REQUIRE_GE( binaryPlacement.fields.size(), asciiPlacement.attributes.size() );
 

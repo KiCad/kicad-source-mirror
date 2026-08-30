@@ -2593,5 +2593,23 @@ BOOST_AUTO_TEST_CASE( Issue23855_NetNamesAndRotatedAttributes )
     BOOST_CHECK( foundPartType );
 }
 
+// The gate decal is a lookup key. symbol_name is what the power-symbol and CAEDECAL-fallback
+// consumers read as the part's identity, so it has to stay the part type.
+BOOST_AUTO_TEST_CASE( PartPlacementKeepsPartTypeAndDecalApart )
+{
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/power_gate_decal.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    const PADS_SCH::PART_PLACEMENT* vcc = parser.GetPartPlacement( "VCC1" );
+    BOOST_REQUIRE( vcc != nullptr );
+
+    BOOST_CHECK_EQUAL( vcc->part_type, "+5V" );
+    BOOST_CHECK_EQUAL( vcc->symbol_name, "+5V" );
+    BOOST_CHECK_EQUAL( vcc->decal_name, "RES_0805" );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
