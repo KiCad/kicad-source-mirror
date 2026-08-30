@@ -289,6 +289,22 @@ struct PAD_STACK_LAYER
     int thermal_spoke_count = 0;
 };
 
+/**
+ * RT and ST rows carry a plane's thermal-relief spoke pattern rather than the pad's own copper.
+ */
+bool IsThermalReliefPadRow( const PAD_STACK_LAYER& aLayer );
+
+/**
+ * RA and SA rows carry a plane's anti-pad clearance rather than the pad's own copper.
+ */
+bool IsAntiPadRow( const PAD_STACK_LAYER& aLayer );
+
+/**
+ * True when the row describes pad or via copper. Relief and anti-pad rows share the layer
+ * ordinals of the copper rows they qualify, so every consumer of a padstack has to skip them.
+ */
+bool IsCopperPadRow( const PAD_STACK_LAYER& aLayer );
+
 enum class VIA_TYPE
 {
     THROUGH,    ///< Spans all copper layers

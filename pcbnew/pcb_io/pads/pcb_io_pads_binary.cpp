@@ -459,8 +459,13 @@ void PCB_IO_PADS_BINARY::buildPad( FOOTPRINT* aFootprint, const PADS_IO::PART_DE
         std::set<int> serializedLayers;
         bool          ambiguousLayers = false;
 
+        // A relief or anti-pad row repeats the layer ordinal of the copper row it qualifies, so
+        // counting it here would read every plane-relief padstack as ambiguous
         for( auto it = std::next( stack.begin() ); it != stack.end(); ++it )
-            ambiguousLayers |= !serializedLayers.insert( it->layer ).second;
+        {
+            if( PADS_IO::IsCopperPadRow( *it ) )
+                ambiguousLayers |= !serializedLayers.insert( it->layer ).second;
+        }
 
         bool modernZeroDefaultSmd = m_parser->GetVersion() == 0x2024 && layerDef.drill == 0 && layerDef.sizeA <= 0;
         bool legacyZeroDefaultSmd = m_parser->GetVersion() == 0x2022 && layerDef.drill == 0
@@ -496,13 +501,13 @@ void PCB_IO_PADS_BINARY::buildPad( FOOTPRINT* aFootprint, const PADS_IO::PART_DE
                 // clearances. Neither is pad copper, so they must not reach the shape below.
                 // KiCad derives the relief geometry from the zone, so an RT/ST row only says
                 // that this pad connects through spokes rather than solid copper.
-                if( stackLayer.shape == "RT" || stackLayer.shape == "ST" )
+                if( PADS_IO::IsThermalReliefPadRow( stackLayer ) )
                 {
                     pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
                     continue;
                 }
 
-                if( stackLayer.shape == "RA" || stackLayer.shape == "SA" )
+                if( PADS_IO::IsAntiPadRow( stackLayer ) )
                     continue;
 
                 if( modernZeroDefaultSmd && stackLayer.layer == 0 )
@@ -1050,7 +1055,7 @@ void PCB_IO_PADS_BINARY::loadTracksAndVias()
 
             for( const PADS_IO::PAD_STACK_LAYER& layer : via_def.stack )
             {
-                if( layer.sizeA <= 0 )
+                if( layer.sizeA <= 0 || !PADS_IO::IsCopperPadRow( layer ) )
                     continue;
 
                 int width = scaleSize( layer.sizeA );

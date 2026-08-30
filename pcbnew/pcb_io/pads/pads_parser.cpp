@@ -33,6 +33,24 @@
 namespace PADS_IO
 {
 
+bool IsThermalReliefPadRow( const PAD_STACK_LAYER& aLayer )
+{
+    return aLayer.shape == "RT" || aLayer.shape == "ST";
+}
+
+
+bool IsAntiPadRow( const PAD_STACK_LAYER& aLayer )
+{
+    return aLayer.shape == "RA" || aLayer.shape == "SA";
+}
+
+
+bool IsCopperPadRow( const PAD_STACK_LAYER& aLayer )
+{
+    return !IsThermalReliefPadRow( aLayer ) && !IsAntiPadRow( aLayer );
+}
+
+
 /**
  * Expand a shortcut format string like "PRE{n1-n2}" into individual names.
  *

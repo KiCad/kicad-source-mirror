@@ -3200,3 +3200,49 @@ BOOST_AUTO_TEST_CASE( PadstackRowsMatchAsciiAcross2022And2027 )
     BOOST_CHECK_EQUAL_COLLECTIONS( thermalBinaryTuples.begin(), thermalBinaryTuples.end(), thermalAsciiTuples.begin(),
                                    thermalAsciiTuples.end() );
 }
+
+
+/**
+ * RT/ST rows say the pad connects to a plane through relief spokes and RA/SA rows are anti-pad
+ * clearances. The ASCII reader drops both from the copper geometry; the binary reader must reach
+ * the same conclusion on the same design.
+ */
+BOOST_AUTO_TEST_CASE( ThermalReliefRowsReachBinaryPads )
+{
+    const wxString root = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/padstack_rows/";
+
+    std::shared_ptr<BOARD> binary = LoadBinaryPath( root + "padstack-thermal-v2027.pcb", "padstack-thermal-v2027" );
+    std::shared_ptr<BOARD> ascii = LoadAscPath( root + "padstack-thermal-v2027.asc", "padstack-thermal-v2027" );
+
+    BOOST_REQUIRE( binary != nullptr );
+    BOOST_REQUIRE( ascii != nullptr );
+
+    auto thermalPadKeys = []( const std::shared_ptr<BOARD>& aBoard )
+    {
+        std::set<std::string> keys;
+
+        for( FOOTPRINT* footprint : aBoard->Footprints() )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                if( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL )
+                    keys.insert( footprint->GetReference().ToStdString() + "." + pad->GetNumber().ToStdString() );
+            }
+        }
+
+        return keys;
+    };
+
+    const std::set<std::string> binKeys = thermalPadKeys( binary );
+    const std::set<std::string> ascKeys = thermalPadKeys( ascii );
+
+    BOOST_REQUIRE_GT( ascKeys.size(), 0u );
+
+    std::vector<std::string> missing;
+    std::set_difference( ascKeys.begin(), ascKeys.end(), binKeys.begin(), binKeys.end(),
+                         std::back_inserter( missing ) );
+
+    BOOST_CHECK_MESSAGE( missing.empty(), "binary import lost the plane relief on "
+                                                  << missing.size() << " pad(s), first "
+                                                  << ( missing.empty() ? std::string( "-" ) : missing.front() ) );
+}

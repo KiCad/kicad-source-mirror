@@ -801,11 +801,8 @@ void PCB_IO_PADS::loadFootprints()
                             if( layer_def.sizeA <= 0 )
                                 continue;
 
-                            if( layer_def.shape == "RT" || layer_def.shape == "ST"
-                                || layer_def.shape == "RA" || layer_def.shape == "SA" )
-                            {
+                            if( !PADS_IO::IsCopperPadRow( layer_def ) )
                                 continue;
-                            }
 
                             PCB_LAYER_ID mapped = mapPadsLayer( layer_def.layer );
 
@@ -862,7 +859,7 @@ void PCB_IO_PADS::loadFootprints()
                         // these to avoid overwriting the actual pad shape.  However,
                         // the presence of RT/ST indicates this pad should have thermal
                         // relief rather than a solid connection to copper pours.
-                        if( layer_def.shape == "RT" || layer_def.shape == "ST" )
+                        if( PADS_IO::IsThermalReliefPadRow( layer_def ) )
                         {
                             pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
 
@@ -886,7 +883,7 @@ void PCB_IO_PADS::loadFootprints()
                             continue;
                         }
 
-                        if( layer_def.shape == "RA" || layer_def.shape == "SA" )
+                        if( PADS_IO::IsAntiPadRow( layer_def ) )
                             continue;
 
                         PCB_LAYER_ID kicad_layer = mapPadsLayer( layer_def.layer );
