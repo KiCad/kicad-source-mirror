@@ -656,7 +656,9 @@ void PADS_PCB_CONVERTER::LoadDimensions( const std::vector<PADS_IO::DIMENSION>& 
             dimension->SetOverrideText( PADS_COMMON::ConvertText( dim.text ) );
         }
 
-        dimension->SetLineThickness( ScaleSize( 5.0 ) );
+        // Both dialects share this converter, so a file-unit constant would be a 3 nm hairline in
+        // the binary reader's BASIC mode
+        dimension->SetLineThickness( pcbIUScale.mmToIU( 0.127 ) );
 
         if( dim.rotation != 0.0 )
             dimension->SetTextAngle( EDA_ANGLE( dim.rotation, DEGREES_T ) );

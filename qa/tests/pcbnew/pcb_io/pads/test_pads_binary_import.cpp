@@ -25,6 +25,8 @@
 #include <pcb_io/pads/pcb_io_pads.h>
 #include <pcb_io/pads/pads_binary_parser.h>
 #include <pcb_io/pads/pads_parser.h>
+#include <pcb_io/pads/pads_pcb_converter.h>
+#include <io/pads/pads_unit_converter.h>
 #include <pcb_io/pads/pads_sdb.h>
 #include <io/pads/pads_binary_utils.h>
 #include <io/pads/pads_common.h>
@@ -3295,4 +3297,43 @@ BOOST_AUTO_TEST_CASE( ThermalReliefRowsReachBinaryPads )
     BOOST_CHECK_MESSAGE( missing.empty(), "binary import lost the plane relief on "
                                                   << missing.size() << " pad(s), first "
                                                   << ( missing.empty() ? std::string( "-" ) : missing.front() ) );
+}
+
+
+/**
+ * A dimension leader is a real line on the board. Its default width must not depend on which unit
+ * mode the shared converter happens to be in: the binary reader runs it in BASIC units, where a
+ * mils-valued constant scales down to a few nanometres.
+ */
+BOOST_AUTO_TEST_CASE( DimensionLeaderWidthIsUnitModeIndependent )
+{
+    PADS_IO::DIMENSION dimension;
+    dimension.is_horizontal = true;
+    dimension.points = { { 0.0, 0.0 }, { 1000.0, 0.0 } };
+    dimension.crossbar_pos = 500.0;
+
+    for( bool basicUnits : { false, true } )
+    {
+        BOOST_TEST_CONTEXT( std::string( basicUnits ? "BASIC units" : "mils" ) )
+        {
+            BOARD              board;
+            PADS_PCB_CONVERTER converter( &board, nullptr );
+
+            converter.UnitConverter().SetBasicUnitsMode( basicUnits );
+            converter.SetScaleFactor( basicUnits ? PADS_UNIT_CONVERTER::BASIC_TO_NM
+                                                 : PADS_UNIT_CONVERTER::MILS_TO_NM );
+            converter.LoadDimensions( { dimension } );
+
+            PCB_DIMENSION_BASE* built = nullptr;
+
+            for( BOARD_ITEM* item : board.Drawings() )
+            {
+                if( auto* candidate = dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
+                    built = candidate;
+            }
+
+            BOOST_REQUIRE( built );
+            BOOST_CHECK_EQUAL( built->GetLineThickness(), pcbIUScale.mmToIU( 0.127 ) );
+        }
+    }
 }
