@@ -38,6 +38,7 @@
 #include <pcb_shape.h>
 #include <pcb_group.h>
 #include <pcb_point.h>
+#include <pcb_reference_image.h>
 #include <pcb_target.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -133,7 +134,7 @@ static const std::vector<KICAD_T> routableTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_
 // Types with no Mirror() override, which would fall through to the warning-dialog
 // BOARD_ITEM::Mirror. Free pads are handled specially by the tool but not by PCB_GROUP::Mirror.
 static const std::vector<KICAD_T> nonMirrorableTypes = {
-    PCB_FOOTPRINT_T, PCB_PAD_T, PCB_TARGET_T, PCB_REFERENCE_IMAGE_T,
+    PCB_FOOTPRINT_T, PCB_PAD_T, PCB_TARGET_T,
 };
 
 
@@ -2416,7 +2417,7 @@ static void mirrorPad( PAD& aPad, const VECTOR2I& aMirrorPoint, FLIP_DIRECTION a
 
 const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
     PCB_SHAPE_T, PCB_FIELD_T, PCB_TEXT_T,  PCB_TEXTBOX_T,   PCB_ZONE_T,  PCB_PAD_T,   PCB_TRACE_T,
-    PCB_ARC_T,   PCB_VIA_T,   PCB_GROUP_T, PCB_GENERATOR_T, PCB_POINT_T, PCB_TABLE_T,
+    PCB_ARC_T,   PCB_VIA_T,   PCB_GROUP_T, PCB_GENERATOR_T, PCB_POINT_T, PCB_TABLE_T, PCB_REFERENCE_IMAGE_T,
 };
 
 
@@ -2519,6 +2520,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case PCB_POINT_T:
 
             static_cast<PCB_POINT*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+
+        case PCB_REFERENCE_IMAGE_T:
+            static_cast<PCB_REFERENCE_IMAGE*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
         default:
             // it's likely the commit object is wrong if you get here

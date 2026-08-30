@@ -277,6 +277,8 @@ void REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirecti
 
     m_pos = newPos;
     m_bitmapBase->Mirror( aFlipDirection );
+
+    MIRROR( m_transformOriginOffset, VECTOR2I( 0, 0 ), aFlipDirection );
 }
 
 
