@@ -270,4 +270,38 @@ BOOST_AUTO_TEST_CASE( DynamicPropertyLookupCaseInsensitive )
 }
 
 
+BOOST_AUTO_TEST_CASE( CustomPropertiesExposedAsDynamic )
+{
+    BOARD     board;
+    FOOTPRINT fp( &board );
+
+    fp.SetCustomProperty( wxS( "MPN" ), wxS( "12345" ) );
+    fp.SetCustomProperty( wxS( "Supplier" ), wxS( "ACME" ) );
+
+    PROPERTY_BASE* mpn      = nullptr;
+    PROPERTY_BASE* supplier = nullptr;
+
+    for( PROPERTY_BASE* p : fp.GetDynamicProperties() )
+    {
+        if( p->Name() == wxS( "MPN" ) )
+            mpn = p;
+        else if( p->Name() == wxS( "Supplier" ) )
+            supplier = p;
+    }
+
+    BOOST_REQUIRE( mpn );
+    BOOST_REQUIRE( supplier );
+
+    wxAny v = fp.Get( mpn );
+    wxString text;
+
+    BOOST_REQUIRE( v.GetAs( &text ) );
+    BOOST_CHECK_EQUAL( text, wxS( "12345" ) );
+
+    wxAny newVal( wxString( wxS( "99999" ) ) );
+    BOOST_CHECK( fp.Set( supplier, newVal ) );
+    BOOST_CHECK_EQUAL( fp.GetCustomProperties().at( wxS( "Supplier" ) ), wxS( "99999" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

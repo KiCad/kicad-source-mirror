@@ -25,6 +25,7 @@
 
 #include <deque>
 #include <map>
+#include <memory>
 #include <set>
 
 #include <api/serializable.h>
@@ -96,7 +97,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;
 class EDA_ITEM : public KIGFX::VIEW_ITEM, public SERIALIZABLE
 {
 public:
-    virtual ~EDA_ITEM() = default;
+    virtual ~EDA_ITEM();
 
     /**
      * Returns the type of object.
@@ -243,6 +244,15 @@ public:
 
     bool HasCustomProperties() const { return !m_customProperties.empty(); }
     void ClearCustomProperties() { m_customProperties.clear(); }
+
+    /**
+     * @return true if \a aKey is present and \a aValue was filled
+     */
+    bool GetCustomProperty( const wxString& aKey, wxString& aValue ) const;
+
+    std::vector<PROPERTY_BASE*> GetCustomPropertiesAsInspectables() const;
+
+    std::vector<PROPERTY_BASE*> GetDynamicProperties() const override;
 
     /**
      * Populate \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
@@ -570,6 +580,12 @@ protected:
     bool     m_forceVisible;
 
     std::map<wxString, wxString> m_customProperties;
+
+    /// Per-key cache of dynamic property descriptors for m_customProperties,
+    /// owned by this object. Mirrors the per-object field-property caches used
+    /// by FOOTPRINT / SCH_SYMBOL / SCH_SHEET; entries linger after a key is
+    /// removed but are simply not enumerated.
+    mutable std::map<wxString, std::unique_ptr<PROPERTY_BASE>> m_dynamicCustomPropsCache;
 };
 
 

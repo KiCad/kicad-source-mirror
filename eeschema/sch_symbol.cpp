@@ -683,6 +683,9 @@ std::vector<PROPERTY_BASE*> SCH_SYMBOL::GetDynamicProperties() const
         props.push_back( getOrCreate( name, std::make_unique<SCH_SYMBOL_FIELD_PROPERTY>( name ) ) );
     }
 
+    for( PROPERTY_BASE* prop : GetCustomPropertiesAsInspectables() )
+        props.push_back( prop );
+
     // Pin Map group: only meaningful when the symbol carries at least one effective associated footprint.
     if( HasEffectiveAssociatedFootprint() )
     {

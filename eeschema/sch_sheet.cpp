@@ -387,6 +387,9 @@ std::vector<PROPERTY_BASE*> SCH_SHEET::GetDynamicProperties() const
         props.push_back( getOrCreate( name ) );
     }
 
+    for( PROPERTY_BASE* prop : GetCustomPropertiesAsInspectables() )
+        props.push_back( prop );
+
     return props;
 }
 

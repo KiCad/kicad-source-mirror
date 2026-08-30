@@ -313,4 +313,32 @@ BOOST_AUTO_TEST_CASE( AddedFieldSurfacesAsDelta )
 }
 
 
+BOOST_AUTO_TEST_CASE( CustomPropertiesExposedAsDynamic )
+{
+    SCH_SYMBOL symbol;
+
+    symbol.SetCustomProperty( wxS( "MPN" ), wxS( "12345" ) );
+
+    PROPERTY_BASE* mpn = nullptr;
+
+    for( PROPERTY_BASE* p : symbol.GetDynamicProperties() )
+    {
+        if( p->Name() == wxS( "MPN" ) )
+            mpn = p;
+    }
+
+    BOOST_REQUIRE( mpn );
+
+    wxAny v = symbol.Get( mpn );
+    wxString text;
+
+    BOOST_REQUIRE( v.GetAs( &text ) );
+    BOOST_CHECK_EQUAL( text, wxS( "12345" ) );
+
+    wxAny newVal( wxString( wxS( "99999" ) ) );
+    BOOST_CHECK( symbol.Set( mpn, newVal ) );
+    BOOST_CHECK_EQUAL( symbol.GetCustomProperties().at( wxS( "MPN" ) ), wxS( "99999" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
