@@ -558,7 +558,9 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
 #endif // __WINDOWS__
         case wxT( '$' ):
         {
+            char    controlChar = str_n.GetValue();
             Bracket bracket;
+
 #ifdef __WINDOWS__
             if( str_n == wxT( '%' ) )
             {
@@ -609,10 +611,10 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
 
             wxString strVarName( str.c_str() + n + 1, m - n - 1 );
 
-            if( str_n == '$' && bracket == Bracket_Curly && (   strVarName == wxT( "DRC_WARNING" )
-                                                             || strVarName == wxT( "DRC_ERROR" )
-                                                             || strVarName == wxT( "ERC_WARNING" )
-                                                             || strVarName == wxT( "ERC_ERROR" ) ) )
+            if( controlChar == '$' && bracket == Bracket_Curly && (   strVarName == wxT( "DRC_WARNING" )
+                                                                   || strVarName == wxT( "DRC_ERROR" )
+                                                                   || strVarName == wxT( "ERC_WARNING" )
+                                                                   || strVarName == wxT( "ERC_ERROR" ) ) )
             {
                 // These aren't environment variables; pass them through unchanged
                 strResult << str_n << bracket << strVarName << str_m;
