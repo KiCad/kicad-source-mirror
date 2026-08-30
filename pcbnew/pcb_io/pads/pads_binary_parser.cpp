@@ -593,14 +593,22 @@ void BINARY_PARSER::parsePadStacks()
                                                    : layerStart + layerIdx;
 
                 // v0x2022's table is a ring, so its successor wraps; without the modulo the last
-                // geometry row read past the table. v0x2027's base is rotated back four bytes, so
-                // its row-count successor still lands on selector and shape inside the section.
+                // geometry row read past the table. v0x2027's successor is not a ring, and for the
+                // last row of the last padstack it lands on the section's exclusive end, which the
+                // framing check does not validate. Fall back to the row's own metadata there
+                // rather than read whatever section follows.
                 uint32_t metadataIndex = geometryIndex;
 
                 if( successorMetadata )
                 {
                     metadataIndex = endCursor ? ( geometryIndex + 1 ) % layerSection->count
                                               : geometryIndex + 1;
+
+                    if( metadataIndex >= layerSection->count
+                        && !m_cursor.InBounds( layerTableStart + metadataIndex * layerRecordSize, layerRecordSize ) )
+                    {
+                        metadataIndex = geometryIndex;
+                    }
                 }
                 uint32_t geometryBase = layerTableStart + geometryIndex * layerRecordSize;
                 uint32_t metadataBase = layerTableStart + metadataIndex * layerRecordSize;
