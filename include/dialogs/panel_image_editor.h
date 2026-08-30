@@ -57,6 +57,7 @@ public:
 private:
     void OnGreyScaleConvert( wxCommandEvent& event ) override;
     void OnInvert( wxCommandEvent& event ) override;
+    void OnRemoveBackground( wxCommandEvent& event ) override;
     void OnRedrawPanel( wxPaintEvent& event ) override;
 
     bool CheckValues();

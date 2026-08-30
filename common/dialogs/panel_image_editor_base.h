@@ -42,11 +42,13 @@ class PANEL_IMAGE_EDITOR_BASE : public wxPanel
 		wxStaticText* m_stPPI_Value;
 		wxButton* m_buttonGrey;
 		wxButton* m_buttonInvert;
+		wxButton* m_buttonRemoveBackground;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnRedrawPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnGreyScaleConvert( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInvert( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveBackground( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

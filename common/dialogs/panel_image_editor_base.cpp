@@ -51,6 +51,9 @@ PANEL_IMAGE_EDITOR_BASE::PANEL_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID i
 	m_buttonInvert = new wxButton( this, wxID_ANY, _("Invert Colors"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_buttonInvert, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
+	m_buttonRemoveBackground = new wxButton( this, wxID_ANY, _("Remove Background"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_buttonRemoveBackground, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+
 
 	gbSizer1->AddGrowableCol( 1 );
 
@@ -71,6 +74,7 @@ PANEL_IMAGE_EDITOR_BASE::PANEL_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID i
 	m_panelDraw->Connect( wxEVT_PAINT, wxPaintEventHandler( PANEL_IMAGE_EDITOR_BASE::OnRedrawPanel ), NULL, this );
 	m_buttonGrey->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnGreyScaleConvert ), NULL, this );
 	m_buttonInvert->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnInvert ), NULL, this );
+	m_buttonRemoveBackground->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnRemoveBackground ), NULL, this );
 }
 
 PANEL_IMAGE_EDITOR_BASE::~PANEL_IMAGE_EDITOR_BASE()
@@ -79,5 +83,6 @@ PANEL_IMAGE_EDITOR_BASE::~PANEL_IMAGE_EDITOR_BASE()
 	m_panelDraw->Disconnect( wxEVT_PAINT, wxPaintEventHandler( PANEL_IMAGE_EDITOR_BASE::OnRedrawPanel ), NULL, this );
 	m_buttonGrey->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnGreyScaleConvert ), NULL, this );
 	m_buttonInvert->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnInvert ), NULL, this );
+	m_buttonRemoveBackground->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_IMAGE_EDITOR_BASE::OnRemoveBackground ), NULL, this );
 
 }

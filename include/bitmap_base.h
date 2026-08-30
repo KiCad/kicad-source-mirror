@@ -226,6 +226,16 @@ public:
      */
     void InvertColors();
 
+    /**
+     * Convert \a aColour to transparent in the image, proportionally to the 'distance'
+     * of each pixel from \a aColour.
+     *
+     * Pixels matching \a aColour exactly become fully transparent. Pixels further
+     * away from it keep proportionally more opacity. The alpha channel is added
+     * if the image does not have one.
+     */
+    void ConvertColourToAlpha( const wxColour& aColour );
+
     bool IsMirroredX() const { return m_isMirroredX; }
     bool IsMirroredY() const { return m_isMirroredY; }
     EDA_ANGLE Rotation() const { return m_rotation; }
@@ -287,6 +297,14 @@ private:
      * The alpha channel is not modified.
      */
     static void invertImageInPlace( wxImage& aImage );
+
+    /**
+     * Apply the "Color to Alpha" algorithm in place, converting \a aColour to transparent.
+     *
+     * @param aImage the image to modify.
+     * @param aColour the colour to make transparent.
+     */
+    static void convertColourToAlphaInPlace( wxImage& aImage, const wxColour& aColour );
 
     double    m_scale;              ///< The scaling factor of the bitmap
                                     ///< with #m_pixelSizeIu, controls the actual draw size.

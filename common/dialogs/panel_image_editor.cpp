@@ -25,6 +25,7 @@
 #include <tool/actions.h>
 #include <confirm.h>
 #include <units_provider.h>
+#include <dialogs/dialog_color_picker.h>
 #include <dialogs/panel_image_editor.h>
 
 #include <algorithm>
@@ -60,6 +61,24 @@ void PANEL_IMAGE_EDITOR::OnInvert( wxCommandEvent& event )
 {
     m_workingImage->InvertColors();
     m_panelDraw->Refresh();
+}
+
+
+void PANEL_IMAGE_EDITOR::OnRemoveBackground( wxCommandEvent& event )
+{
+    // Nearly all images are white background (probably crops from documents)
+    // So that seems a good default on startup.
+    static KIGFX::COLOR4D s_defaultColor = KIGFX::COLOR4D::WHITE;
+
+    DIALOG_COLOR_PICKER dialog( this, s_defaultColor, false );
+
+    if( dialog.ShowModal() == wxID_OK )
+    {
+        m_workingImage->ConvertColourToAlpha( dialog.GetColor().ToColour() );
+        m_panelDraw->Refresh();
+
+        s_defaultColor = dialog.GetColor();
+    }
 }
 
 

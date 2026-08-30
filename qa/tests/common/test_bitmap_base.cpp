@@ -342,6 +342,33 @@ BOOST_AUTO_TEST_CASE( InvertImage )
 
 
 /**
+ * Basic test of ConvertColourToAlpha()
+ */
+BOOST_AUTO_TEST_CASE( ConvertColourToAlpha )
+{
+    BITMAP_BASE bitmap;
+    wxImage     img( 3, 1 );
+    img.SetRGB( 0, 0, 255, 255, 255 ); // closest to the background -> transparent
+    img.SetRGB( 1, 0, 42, 42, 42 );    // in between -> semi-transparent
+    img.SetRGB( 2, 0, 0, 0, 0 );       // farthest from the background
+
+    const wxColour bgColour( 255, 255, 255 );
+
+    bitmap.SetImage( img );
+    bitmap.ConvertColourToAlpha( bgColour );
+
+    const wxImage* result = bitmap.GetImageData();
+    BOOST_REQUIRE_NE( result, nullptr );
+    BOOST_CHECK( result->HasAlpha() );
+
+    // white is now fully transparent, black stays fully opaque
+    BOOST_CHECK_EQUAL( result->GetAlpha( 0, 0 ), 0 );
+    BOOST_CHECK_EQUAL( result->GetAlpha( 1, 0 ), 255 - 42 );
+    BOOST_CHECK_EQUAL( result->GetAlpha( 2, 0 ), 255 );
+}
+
+
+/**
  * Check setting image data by SetImage produces saveable data
  * via SaveImageData.
  *
