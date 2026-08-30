@@ -212,26 +212,52 @@ BOOST_FIXTURE_TEST_CASE( ReferenceImageFlipLayer, REFERENCE_IMAGE_LOAD_TEST_FIXT
 }
 
 
+class REFERENCE_IMAGE_BOARD_FIXTURE
+{
+public:
+    REFERENCE_IMAGE_BOARD_FIXTURE()
+    {
+        m_board = std::make_unique<BOARD>();
+        m_image = new PCB_REFERENCE_IMAGE( m_board.get() );
+        m_board->Add( m_image );
+    }
+
+    BOARD&               GetBoard() { return *m_board; }
+    PCB_REFERENCE_IMAGE& GetImage() { return *m_image; }
+
+    template <typename T>
+    void SetImageData( const T& aData )
+    {
+        wxMemoryBuffer buffer;
+        buffer.AppendData( aData.data(), aData.size() );
+        BOOST_REQUIRE( m_image->GetReferenceImage().ReadImageFile( buffer ) );
+    }
+
+private:
+    std::unique_ptr<BOARD> m_board;
+    PCB_REFERENCE_IMAGE*   m_image;
+};
+
+
 /**
  * A board predating the PNG pixel-density fix stored an image scale that compensated for the
  * truncated PPI. Loading it must re-scale by the corrected/truncated PPI ratio so the rendered
  * size is preserved, while a current-version board is loaded verbatim.
  */
-BOOST_FIXTURE_TEST_CASE( ReferenceImagePpiScaleMigration, REFERENCE_IMAGE_LOAD_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( ReferenceImagePpiScaleMigration, REFERENCE_IMAGE_BOARD_FIXTURE )
 {
-    BOARD board;
-    auto  image = std::make_unique<PCB_REFERENCE_IMAGE>( &board );
+    BOARD&               board = GetBoard();
+    PCB_REFERENCE_IMAGE& image = GetImage();
 
-    wxMemoryBuffer buffer;
-    buffer.AppendData( png_3780_ppm.data(), png_3780_ppm.size() );
-    BOOST_REQUIRE( image->GetReferenceImage().ReadImageFile( buffer ) );
+    SetImageData( png_3780_ppm );
 
-    BOOST_REQUIRE_EQUAL( image->GetReferenceImage().GetImage().GetPPI(), 96 );
-    BOOST_REQUIRE_EQUAL( image->GetReferenceImage().GetImage().GetLegacyPPI(), 94 );
+    REFERENCE_IMAGE& refImage = image.GetReferenceImage();
 
-    image->GetReferenceImage().SetImageScale( 2.0 );
-    image->SetLayer( F_Cu );
-    board.Add( image.release() );
+    BOOST_REQUIRE_EQUAL( refImage.GetImage().GetPPI(), 96 );
+    BOOST_REQUIRE_EQUAL( refImage.GetImage().GetLegacyPPI(), 94 );
+
+    refImage.SetImageScale( 2.0 );
+    image.SetLayer( F_Cu );
 
     const std::string path = ( std::filesystem::temp_directory_path()
                                / "issue23575_ppi_migration.kicad_pcb" ).string();
@@ -258,4 +284,30 @@ BOOST_FIXTURE_TEST_CASE( ReferenceImagePpiScaleMigration, REFERENCE_IMAGE_LOAD_T
     std::unique_ptr<BOARD> migrated = parseBoardString( legacy );
     BOOST_REQUIRE( migrated );
     BOOST_CHECK_CLOSE( firstImageScale( *migrated ), 2.0 * 96.0 / 94.0, 1e-3 );
+}
+
+
+/**
+ * Rotating a reference image must rotate the transform origin with the image
+ * content, so the origin keeps pointing at the same pixel of the image.
+ */
+BOOST_FIXTURE_TEST_CASE( ReferenceImageRotateTransformOrigin, REFERENCE_IMAGE_BOARD_FIXTURE )
+{
+    BOARD&               board = GetBoard();
+    PCB_REFERENCE_IMAGE& image = GetImage();
+
+    SetImageData( png_3780_ppm );
+
+    REFERENCE_IMAGE& refImage = image.GetReferenceImage();
+    refImage.SetPosition( VECTOR2I( 1000, 2000 ) );
+    refImage.SetTransformOriginOffset( VECTOR2I( 300, -100 ) );
+
+    const VECTOR2I pos = refImage.GetPosition();
+
+    // Rotating about the image position leaves the position unchanged; the offset
+    // must follow the content.
+    refImage.Rotate( pos, ANGLE_90 );
+
+    BOOST_CHECK_EQUAL( refImage.GetPosition(), pos );
+    BOOST_CHECK_EQUAL( refImage.GetTransformOriginOffset(), VECTOR2I( -100, -300 ) );
 }
