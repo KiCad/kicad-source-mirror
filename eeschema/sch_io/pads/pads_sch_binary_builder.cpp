@@ -401,7 +401,17 @@ namespace
     {
         auto text = std::make_unique<SCH_TEXT>( pagePoint( aPosition, aPageHeight ), aText.text, LAYER_NOTES );
         text->SetTextAngle( EDA_ANGLE( aAngle, TENTHS_OF_A_DEGREE_T ) );
-        applyTextPresentation( text.get(), aPresentation, aPresentation.visible, aDiagnostics );
+
+        // The s-expression writer emits no visibility for a plain text and the reader forces it
+        // visible, so importing hidden would disagree with the first save
+        if( !aPresentation.visible )
+        {
+            aDiagnostics.push_back( MakePropertyDiagnostic( RPT_SEVERITY_WARNING, aPresentation.source,
+                                                            wxS( "display_flags" ), PROPERTY_DISPOSITION::UNSUPPORTED,
+                                                            wxS( "hidden PADS text is unsupported" ) ) );
+        }
+
+        applyTextPresentation( text.get(), aPresentation, true, aDiagnostics );
         return text;
     }
 

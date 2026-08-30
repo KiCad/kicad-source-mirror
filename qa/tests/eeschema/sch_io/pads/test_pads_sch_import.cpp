@@ -4095,4 +4095,36 @@ BOOST_AUTO_TEST_CASE( BinaryPlacementVariantsGetDistinctLibIds )
 }
 
 
+// KiCad's schematic format carries no visibility for a plain text and the reader forces every one
+// visible, so a hidden PADS note has to be reported rather than imported into a state the first
+// save discards.
+BOOST_AUTO_TEST_CASE( BinaryHiddenFreeTextIsReportedNotImported )
+{
+    using namespace PADS_SCH_BINARY;
+
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "text_encoding" ) );
+    BOOST_REQUIRE_EQUAL( model.texts.size(), 1u );
+    model.texts.front().presentation.visible = false;
+
+    PADS_SCH_BINARY_BUILDER builder;
+    BUILD_RESULT result = builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "text_encoding" ) ) );
+
+    SCH_SHEET* root = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( root );
+    SCH_TEXT* built = nullptr;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_TEXT_T ) )
+        built = static_cast<SCH_TEXT*>( item );
+
+    BOOST_REQUIRE( built );
+    BOOST_CHECK( built->IsVisible() );
+
+    BOOST_CHECK( std::ranges::any_of( result.diagnostics,
+                                      []( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                      {
+                                          return aDiagnostic.message.Contains( wxS( "hidden PADS text" ) );
+                                      } ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
