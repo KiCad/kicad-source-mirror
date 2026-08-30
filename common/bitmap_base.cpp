@@ -459,6 +459,10 @@ void BITMAP_BASE::mirrorImageInPlace( wxImage& aImage, FLIP_DIRECTION aFlipDirec
     if( w == 0 || h == 0 )
         return;
 
+    // wxImage is reference-counted, so detach the data from other users
+    // before modifying it in place.
+    aImage.UnShare();
+
     unsigned char* rgb = aImage.GetData();
     unsigned char* alpha = aImage.HasAlpha() ? aImage.GetAlpha() : nullptr;
     const int      bpp = 3;
