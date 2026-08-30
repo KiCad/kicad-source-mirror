@@ -67,6 +67,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_hsplitter( nullptr ),
         m_vsplitter( nullptr ),
         m_fp_sel_ctrl( nullptr ),
+        m_fp_preview( nullptr ),
         m_tree( nullptr ),
         m_details( nullptr ),
         m_acceptHandler( std::move( aAcceptHandler ) ),
