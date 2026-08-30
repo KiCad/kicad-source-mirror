@@ -2005,7 +2005,7 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         if( ( m_libPin == nullptr ) || ( tmp->m_libPin == nullptr ) )
             return -1;
 
-        retv = m_libPin->compare( *tmp->m_libPin );
+        retv = m_libPin->compare( *tmp->m_libPin, aCompareFlags );
 
         if( retv )
             return retv;
