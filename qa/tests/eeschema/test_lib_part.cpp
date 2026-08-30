@@ -1077,4 +1077,28 @@ BOOST_AUTO_TEST_CASE( NativeComparisonHonorsPinVisibilityFlag )
 }
 
 
+BOOST_AUTO_TEST_CASE( NativeComparisonHonorsAlternateDefinitionFlag )
+{
+    LOCALE_IO locale;
+    const auto original = loadDeMorganSymbol();
+    BOOST_REQUIRE( original );
+    LIB_SYMBOL changed( *original );
+    const int flags = ~( SCH_ITEM::COMPARE_FLAGS::UUID | SCH_ITEM::COMPARE_FLAGS::UNIT
+                        | SCH_ITEM::COMPARE_FLAGS::IDENTITY );
+    BOOST_REQUIRE_EQUAL( original->Compare( changed, flags ), 0 );
+    BOOST_REQUIRE_EQUAL( changed.Compare( *original, flags ), 0 );
+    const auto pins = changed.GetGraphicalPins( 0, 0 );
+    BOOST_REQUIRE( !pins.empty() );
+    SCH_PIN* pin = pins.front();
+    const wxString name( "Native alternate" );
+    BOOST_REQUIRE( !pin->GetAlternates().contains( name ) );
+    pin->GetAlternates().emplace( name, SCH_PIN::ALT{ name, GRAPHIC_PINSHAPE::LINE,
+                                                     ELECTRICAL_PINTYPE::PT_INPUT } );
+    BOOST_CHECK_EQUAL( original->Compare( changed, flags & ~SCH_ITEM::COMPARE_FLAGS::PIN_ALT_DEFS ), 0 );
+    BOOST_CHECK_EQUAL( changed.Compare( *original, flags & ~SCH_ITEM::COMPARE_FLAGS::PIN_ALT_DEFS ), 0 );
+    BOOST_CHECK_NE( original->Compare( changed, flags ), 0 );
+    BOOST_CHECK_NE( changed.Compare( *original, flags ), 0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

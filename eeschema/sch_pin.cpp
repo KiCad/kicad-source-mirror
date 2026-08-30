@@ -2039,6 +2039,9 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         if( m_nameTextSize != tmp->m_nameTextSize )
             return m_nameTextSize.value_or( 0 ) - tmp->m_nameTextSize.value_or( 0 );
 
+        if( !( aCompareFlags & COMPARE_FLAGS::PIN_ALT_DEFS ) )
+            return 0;
+
         if( m_alternates.size() != tmp->m_alternates.size() )
             return static_cast<int>( m_alternates.size() - tmp->m_alternates.size() );
 
