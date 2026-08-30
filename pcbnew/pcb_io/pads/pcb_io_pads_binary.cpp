@@ -422,7 +422,7 @@ void PCB_IO_PADS_BINARY::loadFootprints()
             {
                 if( pad->GetAttribute() == PAD_ATTRIB::PTH && pad->Padstack().Mode() == PADSTACK::MODE::NORMAL )
                 {
-                    pad->SetLayerSet( LSET::AllCuMask() );
+                    pad->SetLayerSet( PAD::PTHMask() | ( pad->GetLayerSet() & LSET( { F_Paste, B_Paste } ) ) );
                 }
             }
         }
@@ -642,20 +642,22 @@ void PCB_IO_PADS_BINARY::buildPad( FOOTPRINT* aFootprint, const PADS_IO::PART_DE
         }
         else
         {
+            // Keep whatever mask and paste rows the stack carried, the way the ASCII path does
+            LSET maskPasteBits = layerSet & LSET( { F_Mask, B_Mask, F_Paste, B_Paste } );
+
+            pad->Padstack().SetMode( PADSTACK::MODE::NORMAL );
+            applyPadShape( pad, layerDef, F_Cu );
+
             if( layerDef.plated )
             {
                 pad->SetAttribute( PAD_ATTRIB::PTH );
-                pad->Padstack().SetMode( PADSTACK::MODE::NORMAL );
-                applyPadShape( pad, layerDef, F_Cu );
-                pad->SetLayerSet( LSET::AllCuMask() );
+                pad->SetLayerSet( PAD::PTHMask() | maskPasteBits );
             }
             else
             {
                 pad->SetAttribute( PAD_ATTRIB::NPTH );
                 pad->SetNumber( wxString() );
-                pad->Padstack().SetMode( PADSTACK::MODE::NORMAL );
-                applyPadShape( pad, layerDef, F_Cu );
-                pad->SetLayerSet( LSET::AllCuMask() );
+                pad->SetLayerSet( PAD::UnplatedHoleMask() | maskPasteBits );
             }
         }
     }
@@ -666,8 +668,12 @@ void PCB_IO_PADS_BINARY::buildPad( FOOTPRINT* aFootprint, const PADS_IO::PART_DE
         pad->SetSize( F_Cu, VECTOR2I( defaultPad, defaultPad ) );
         pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
         pad->SetAttribute( PAD_ATTRIB::PTH );
-        pad->SetLayerSet( LSET::AllCuMask() );
+        pad->SetLayerSet( PAD::PTHMask() );
     }
+
+    // An unplated hole is mechanical; joining it to a net pulls ratsnest to a mounting hole
+    if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+        return;
 
     auto netIt = m_pinToNetMap.find( aFootprint->GetReference() + wxT( "." )
                                      + PADS_COMMON::ConvertText( term.name ) );

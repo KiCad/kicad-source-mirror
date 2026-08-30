@@ -3203,6 +3203,56 @@ BOOST_AUTO_TEST_CASE( PadstackRowsMatchAsciiAcross2022And2027 )
 
 
 /**
+ * A PADS through-hole pad opens the soldermask on both outer layers. Importing it with a copper-only
+ * layer set tents every hole, so the fabrication output is wrong until the user repairs each
+ * footprint by hand. An unplated hole is mechanical: it carries no inner copper and no net.
+ */
+BOOST_AUTO_TEST_CASE( ThroughHolePadsAreNotTented )
+{
+    size_t plated = 0;
+    size_t unplated = 0;
+
+    auto check = [&]( const std::shared_ptr<BOARD>& aBoard, const std::string& aLabel )
+    {
+        for( FOOTPRINT* footprint : aBoard->Footprints() )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                const std::string key =
+                        aLabel + " " + footprint->GetReference().ToStdString() + "." + pad->GetNumber().ToStdString();
+
+                if( pad->GetAttribute() == PAD_ATTRIB::PTH )
+                {
+                    ++plated;
+                    BOOST_CHECK_MESSAGE( pad->GetLayerSet().test( F_Mask ) && pad->GetLayerSet().test( B_Mask ),
+                                         "plated hole imported tented: " << key );
+                }
+                else if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+                {
+                    ++unplated;
+                    BOOST_CHECK_MESSAGE( ( pad->GetLayerSet() & LSET::InternalCuMask() ).none(),
+                                         "unplated hole given inner copper: " << key );
+                    BOOST_CHECK_MESSAGE( pad->GetNetCode() == 0, "unplated hole joined a net: " << key );
+                }
+            }
+        }
+    };
+
+    for( const PADS_BINARY_BOARD_INFO& board : PADS_BINARY_BOARDS )
+    {
+        BOOST_TEST_CONTEXT( board.dir )
+        {
+            check( LoadBinary( board ), board.dir + " binary" );
+            check( LoadAsc( board ), board.dir + " ASC" );
+        }
+    }
+
+    BOOST_CHECK_GT( plated, 0u );
+    BOOST_CHECK_GT( unplated, 0u );
+}
+
+
+/**
  * RT/ST rows say the pad connects to a plane through relief spokes and RA/SA rows are anti-pad
  * clearances. The ASCII reader drops both from the copper geometry; the binary reader must reach
  * the same conclusion on the same design.

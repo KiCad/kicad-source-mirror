@@ -1004,15 +1004,22 @@ void PCB_IO_PADS::loadFootprints()
                     }
                     else
                     {
-                        if( plated )
-                            pad->SetAttribute( PAD_ATTRIB::PTH );
-                        else
-                            pad->SetAttribute( PAD_ATTRIB::NPTH );
-
                         // Preserve any explicit mask/paste layer bits accumulated
                         // during stack iteration before expanding to all copper layers.
                         LSET mask_paste_bits = layer_set & LSET( { F_Mask, B_Mask, F_Paste, B_Paste } );
-                        layer_set = LSET::AllCuMask() | mask_paste_bits;
+
+                        // A stack with no mask row still opens the mask; only an unplated hole
+                        // is mechanical, and it carries no inner copper
+                        if( plated )
+                        {
+                            pad->SetAttribute( PAD_ATTRIB::PTH );
+                            layer_set = PAD::PTHMask() | mask_paste_bits;
+                        }
+                        else
+                        {
+                            pad->SetAttribute( PAD_ATTRIB::NPTH );
+                            layer_set = PAD::UnplatedHoleMask() | mask_paste_bits;
+                        }
                     }
 
                     pad->SetLayerSet( layer_set );
@@ -1023,18 +1030,24 @@ void PCB_IO_PADS::loadFootprints()
                     pad->SetSize( F_Cu, VECTOR2I( fallbackSize, fallbackSize ) );
                     pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
                     pad->SetAttribute( PAD_ATTRIB::PTH );
-                    pad->SetLayerSet( LSET::AllCuMask() );
+                    pad->SetLayerSet( PAD::PTHMask() );
                 }
 
-                std::string pinKey = pads_part.name + "." + term.name;
-                auto netIt = m_pinToNetMap.find( pinKey );
-
-                if( netIt != m_pinToNetMap.end() )
+                // An unplated hole is mechanical; joining it to a net pulls ratsnest to a
+                // mounting hole
+                if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
                 {
-                    NETINFO_ITEM* net = m_loadBoard->FindNet( PADS_COMMON::ConvertInvertedNetName( netIt->second ) );
+                    std::string pinKey = pads_part.name + "." + term.name;
+                    auto        netIt = m_pinToNetMap.find( pinKey );
 
-                    if( net )
-                        pad->SetNet( net );
+                    if( netIt != m_pinToNetMap.end() )
+                    {
+                        NETINFO_ITEM* net =
+                                m_loadBoard->FindNet( PADS_COMMON::ConvertInvertedNetName( netIt->second ) );
+
+                        if( net )
+                            pad->SetNet( net );
+                    }
                 }
             }
 
