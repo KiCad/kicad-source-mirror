@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-29 20:51+0000\n"
+"PO-Revision-Date: 2026-08-30 09:53+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -20056,7 +20056,7 @@ msgstr "'%s' のメンバー:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
 msgid "Net or Nested Bus Name"
-msgstr "ネットまたはネストされたバス名"
+msgstr "ネットまたは入れ子になったバス名"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:37
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:51
@@ -22976,7 +22976,7 @@ msgstr "デザイン ブロックを保存するライブラリを選択して�
 #: eeschema/sch_design_block_utils.cpp:265
 #: eeschema/sch_design_block_utils.cpp:476
 msgid "Design blocks with nested sheets are not supported."
-msgstr "ネストされたシートを含むデザイン ブロックはサポートされていません。"
+msgstr "入れ子になったシートを含むデザイン ブロックはサポートされていません。"
 
 #: eeschema/sch_design_block_utils.cpp:122
 #: eeschema/sch_design_block_utils.cpp:205
@@ -25834,8 +25834,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{上線}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp></td>\n"
+"        <td> &nbsp;<br><samp>~{上線}</samp><br> &nbsp;<br><samp>~{CLK}</samp>"
+"</td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp</u></samp><br> <samp>上線</"
 "samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>CLK</samp></td>\n"
@@ -25859,8 +25859,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${リファレンス:フィルド}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>シンボル リファレンスのフィールド値</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>シンボル リファレンスのフィールド値</i></samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -25922,21 +25922,21 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>条件付きテキスト表示</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"トップ \"ボトム"
-"\")}</samp></td>\n"
+"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"トップ "
+"\"ボトム\")}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>トップ</samp> (フロントレイヤならば) さもなくば "
 "<samp>ボトム</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>数値比較も可能</samp></td>\n"
 "    </tr>\n"
@@ -25960,8 +25960,8 @@ msgstr ""
 "の場合)</td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${リファレンス:SHORT_REFERENCE(pin)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>${リファレンス:SHORT_REFERENCE(pin)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>ピンの所属するユニット文字の無いリファレンス名</"
 "samp></td>\n"
@@ -26005,8 +26005,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${リファレンス:PIN_BASE_NAME(pin)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>ベース ピン名 (代替ピン名は無視する)</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>ベース ピン名 (代替ピン名は無視する)</samp></td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:PIN_BASE_NAME(5)}</samp></td>\n"
@@ -26016,8 +26016,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${リファレンス:PIN_ALT_LIST(pin)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>すべての代替ピン機能 (ベース ピン名を除く)</"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp>すべての代替ピン機能 (ベース ピン名を除く)</samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>\n"
@@ -26071,7 +26071,7 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <th>ネストされた変数</th>\n"
+"        <th>入れ子になった変数</th>\n"
 "        <th></th>\n"
 "        <th></th>\n"
 "    </tr>\n"
@@ -26122,8 +26122,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>バス定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>結果ネット</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -26187,23 +26188,23 @@ msgstr ""
 "<i>マークアップはバス定義よりも優先されることに注意してください。</i>\n"
 "<p></p>\n"
 "<p><b>ピンの機能:</b>正しいユニットの配置を自動的に検出します。 複数ユニット"
-"のシンボルの場合、ピンのユニットが現在のシートのユニットと異なっていても"
-"<samp>NET_NAME(pin)</samp>などの関数は機能します。</p>\n"
+"のシンボルの場合、ピンのユニットが現在のシートのユニットと異なっていて"
+"も<samp>NET_NAME(pin)</samp>などの関数は機能します。</p>\n"
 "<p><b>テーブルセル参照:</b> <samp>CELL()</samp> 関数は表セル内でのみ機能しま"
 "す。同じテーブル内の他のセルを参照するには、<samp>${CELL(\"A0\")}</samp> ある"
 "いは <samp>${CELL(row, col)}</samp> を使用します。行番号と列番号は 0 から始ま"
 "ります（A0 は最初の行の最初の列です）。CELL は、セルの生のテキストではなく、"
 "評価/表示された値を返します。</p>\n"
-"<p><b>ネストされた変数:</b> 変数は他の変数を含むことができます。内側の変数が"
-"最初に展開されます。最大ネスト深度：6 レベル。</p>\n"
+"<p><b>入れ子になった変数:</b> 変数は他の変数を含むことができます。内側の変数"
+"が最初に展開されます。最大入れ子深度：6 レベル。</p>\n"
 "<p><b>エラーメッセージ:</b></p>\n"
 "<ul>\n"
 "<li><samp>&lt;UNRESOLVED: token&gt;</samp> - 変数または関数を解決できません</"
 "li>\n"
 "<li><samp>&lt;Unit X not placed&gt;</samp> - ピンがどのシートにも配置されてい"
 "ないユニットにあります</li>\n"
-"<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - セルアドレスがテーブ"
-"ルの範囲外です</li>\n"
+"<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - セルアドレスが"
+"テーブルの範囲外です</li>\n"
 "</ul>\n"
 "\n"
 
@@ -43694,9 +43695,8 @@ msgid "components"
 msgstr "コンポーネント %s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:362
-#, fuzzy
 msgid "padstacks"
-msgstr "配線"
+msgstr "パッド スタック"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:363
 #, fuzzy
@@ -47153,7 +47153,7 @@ msgstr "ネット名:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:288
 msgid "Padstack mode:"
-msgstr "パッドスタックモード:"
+msgstr "パッド スタック モード:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292
@@ -51633,8 +51633,8 @@ msgid ""
 msgstr ""
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカード (`*` と `?`)をサポートしま"
-"す。\n"
+"全ての関数のパラメーターは単純なワイルドカード (`*` と `?`)をサポートします"
+"。\n"
 "\n"
 "\n"
 "```\n"
@@ -51679,8 +51679,8 @@ msgstr ""
 "```\n"
 "    A.hasComponentClass('<component_class_name>')\n"
 "```\n"
-"> `A` に割り当てられたコンポーネント クラスのセットに、名前付きコンポーネン"
-"ト\n"
+"> `A` に割り当てられたコンポーネント クラスのセットに、名前付き"
+"コンポーネント\n"
 "クラスが含まれている場合は True になります。\n"
 "\n"
 "\n"
@@ -51706,8 +51706,8 @@ msgstr ""
 "```\n"
 "> `A` のネットが指定されたチェーンのメンバーであれば True になります。\n"
 "`<chain_name>` はワイルドカードを受け入れます。\n"
-" `inNetChain('DDR_*')` は名前が `DDR_` で始まるすべてのチェーンに一致しま"
-"す。\n"
+" `inNetChain('DDR_*')` は名前が `DDR_` で始まるすべてのチェーンに一致します"
+"。\n"
 "\n"
 "\n"
 "\n"
@@ -51758,8 +51758,8 @@ msgstr ""
 "\n"
 "> 上記の `footprint_identifier` は、次のいずれかになります。\n"
 "\n"
-"> 1. リファレンス指定子。ワイルドカード `*` および `?` を含む場合がありま"
-"す。\n"
+"> 1. リファレンス指定子。ワイルドカード `*` および `?` を含む場合があります"
+"。\n"
 "> 2. `LibName:FootprintName` のようなフットプリント ライブラリ識別子。\n"
 "  この場合、ライブラリ識別子には、ライブラリ名とフットプリント名を区切るため"
 "の `:` 文字が含まれている必要があり、\n"
@@ -51804,7 +51804,7 @@ msgstr ""
 "```\n"
 "> `A` が指定されたグループのメンバーである場合は True になります。\n"
 "名前にはワイルドカードを含めることができます。\n"
-"ネストされたメンバーシップも含まれます。\n"
+"入れ子になったメンバーシップも含まれます。\n"
 "\n"
 "\n"
 "```\n"
@@ -53109,11 +53109,11 @@ msgstr "ビア直径"
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Padstack is questionable"
-msgstr "パッドスタックがおかしい"
+msgstr "パッド スタックがおかしい"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Padstack is not valid"
-msgstr "パッドスタックが無効"
+msgstr "パッド スタックが無効"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "Micro via hole size out of range"
@@ -58518,8 +58518,7 @@ msgstr "非銅箔パッド '%s' には穴があります。これはサポート
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4239
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr ""
-"非銅箔パッド '%s' は複合パッドスタックを使用しています。(未サポートです)."
+msgstr "非導体パッド '%s' は複雑なパッド スタックを使用しています。(未サポートです)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4385
 #, c-format
@@ -59411,7 +59410,7 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1056
 #, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
-msgstr "図形アイテム %d をパッドスタック \"%s\" に挿入できませんでした。"
+msgstr "図形アイテム %d をパッド スタック \"%s\" に挿入できませんでした。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1063
 #, c-format
@@ -59459,7 +59458,7 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2711
 #, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "パッドスタック %s が見つかりません（ファイル %s 内）\n"
+msgstr "パッド スタック %s が見つかりません（ファイル %s 内）\n"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2804
 #, c-format
@@ -59679,14 +59678,14 @@ msgstr "レイヤー %s, ネット %s をエクスポート"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4232
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
-"ビアがサポートされていないパッドスタックを使用しているため、ドリル データでは"
-"省きます。"
+"ビアがサポートされていないパッド スタックを使用しているため、ドリル データで"
+"は省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4259
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
-"パッドがサポートされていないパッドスタックを使用しているため、穴はドリル デー"
-"タでは省きます。"
+"パッドがサポートされていないパッド スタックを使用しているため、穴はドリル "
+"データでは省きます。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4431
 msgid ""
@@ -60048,7 +60047,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"不正な パッドスタックレイヤー \n"
+"不正な パッド スタック レイヤー \n"
 "ファイル: %s\n"
 "行: %d\n"
 "オフセット: %d."
@@ -60057,8 +60056,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8751
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"不正なパッドスタックレイヤー '%s'、ファイル '%s'、行 %d、オフセット %d."
+msgstr "不正なパッド スタック レイヤー '%s'、ファイル '%s'、行 %d、オフセット %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:9513
 msgid ""
@@ -60194,9 +60192,11 @@ msgid "Route net '%s' not found, skipping"
 msgstr "ルール ネット '%s' が見つかりませんのでスキップします"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:963
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped a route on non-copper or unmapped PADS layer %d."
-msgstr "マッピングされていないレイヤー %d 上のdecal をスキップ"
+msgstr ""
+"導体以外のレイヤーまたはマッピングされていない PADSレイヤー %d で配線を"
+"スキップしました。"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:978
 #, c-format
@@ -62174,7 +62174,7 @@ msgstr "セッション ファイルで不正なレイヤーID '%s' を使用し
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:224
 msgid "Session via padstack has no shapes"
-msgstr "セッション ビアのパッドスタックは形状がありません"
+msgstr "セッション ビアのパッド スタックは形状がありません"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:232
 #, c-format
@@ -62212,7 +62212,7 @@ msgstr "サポートされていない配線形状: '%s' ネット: '%s'"
 #: pcbnew/specctra_import_export/specctra_import.cpp:534
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "wire_via が失われたパッドスタック '%s' を参照しています。"
+msgstr "wire_via が失われたパッド スタック '%s' を参照しています。"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:552
 #, c-format
@@ -62379,9 +62379,9 @@ msgstr "配線幅を狭める"
 
 #: pcbnew/tools/board_editor_control.cpp:1248
 #: pcbnew/tools/board_editor_control.cpp:1314
-#, fuzzy, c-format
+#, c-format
 msgid "%s not supported on complex padstacks."
-msgstr " (レガシー ツールセットでは未サポート)"
+msgstr "複雑なパッド スタック %s はサポートされていません。"
 
 #: pcbnew/tools/board_editor_control.cpp:1544
 msgid "Place Footprint"
@@ -63609,9 +63609,9 @@ msgstr "ルール 領域のトポロジーが一致しません: %s"
 
 #: pcbnew/tools/multichannel_tool.cpp:950
 #: pcbnew/tools/multichannel_tool.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy the layout from '%s' to '%s'."
-msgstr "%s から %s にディレクトリをコピーできません"
+msgstr "'%s' から '%s' にレイアウトをコピーできませんでした。"
 
 #: pcbnew/tools/multichannel_tool.cpp:973
 msgid "Target group does not have a group."
