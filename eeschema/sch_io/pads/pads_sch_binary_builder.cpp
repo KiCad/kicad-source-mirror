@@ -297,6 +297,10 @@ namespace
             aText->SetFont(
                     KIFONT::FONT::GetFont( aPresentation.font.text, aPresentation.bold, aPresentation.italic ) );
 
+        // PADS gives the rendered stroke; run it back through the bold factor once the face is
+        // resolved, since only a stroke font applies that factor
+        aText->MigrateLegacyBoldStrokeWidth();
+
         if( aPresentation.underline )
         {
             aDiagnostics.push_back( MakePropertyDiagnostic( RPT_SEVERITY_WARNING, aPresentation.source,

@@ -59,6 +59,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdlib>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
@@ -1165,7 +1166,16 @@ static void checkTextPresentation( const EDA_TEXT&                              
     }
 
     if( aPresentation.width > 0 )
-        BOOST_CHECK_EQUAL( aText.GetTextThickness(), schIUScale.MilsToIU( aPresentation.width / 2.0 ) );
+    {
+        // PADS gives the stroke it renders. Bold is an independent flag in KiCad that multiplies
+        // the stored thickness, so the import has to store the pre-multiplied value.
+        const int imported = schIUScale.MilsToIU( aPresentation.width / 2.0 );
+        const int rendered = aText.GetEffectiveTextPenWidth();
+        const int expected = ClampTextPenSize( imported, aText.GetTextSize() );
+
+        BOOST_CHECK_MESSAGE( std::abs( rendered - expected ) <= 2,
+                             "rendered stroke " << rendered << " does not match the imported " << expected );
+    }
 
     BOOST_CHECK( aText.GetHorizJustify() == horizontalJustification( aPresentation.horizontalJustification ) );
     BOOST_CHECK( aText.GetVertJustify() == verticalJustification( aPresentation.verticalJustification ) );
@@ -3998,6 +4008,34 @@ BOOST_AUTO_TEST_CASE( BinaryLongBusEntryStaysOnTheWire )
     }
 
     BOOST_REQUIRE_GT( checked, 0u );
+}
+
+
+
+// PADS gives the stroke width it renders. KiCad multiplies a stored thickness by the bold factor,
+// so importing the PADS width verbatim onto a bold text renders it 1.6x too thick.
+BOOST_AUTO_TEST_CASE( BinaryBoldTextKeepsTheRenderedStrokeWidth )
+{
+    using namespace PADS_SCH_BINARY;
+
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "text_encoding" ) );
+    BOOST_REQUIRE_EQUAL( model.texts.size(), 1u );
+    BOOST_REQUIRE_GT( model.texts.front().presentation.width, 0 );
+    model.texts.front().presentation.bold = true;
+
+    PADS_SCH_BINARY_BUILDER builder;
+    builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "text_encoding" ) ) );
+
+    SCH_SHEET* root = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( root );
+    SCH_TEXT* built = nullptr;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_TEXT_T ) )
+        built = static_cast<SCH_TEXT*>( item );
+
+    BOOST_REQUIRE( built );
+    BOOST_REQUIRE( built->IsBold() );
+    checkTextPresentation( *built, model.texts.front().presentation );
 }
 
 
