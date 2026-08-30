@@ -338,7 +338,7 @@ public:
     bool HasMessage() const override;
 
     /**
-     * Update the infobar with the reported text.
+     * Update the infobar with the reported text. Consumes the pending report.
      */
     void Finalize() override;
 

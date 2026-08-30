@@ -588,6 +588,9 @@ void INFOBAR_REPORTER::Finalize()
     if( !m_infoBar || !m_messageSet )
         return;
 
+    // Consume the pending report
+    m_messageSet = false;
+
     // Short circuit if the message is empty and it is already hidden
     if( !HasMessage() && !m_infoBar->IsShownOnScreen() )
         return;
