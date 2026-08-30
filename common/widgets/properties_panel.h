@@ -81,6 +81,13 @@ protected:
 
     virtual void OnLanguageChanged( wxCommandEvent& aEvent );
 
+    virtual bool isKeyEditable( const wxPGProperty* aPGProp ) const { return false; }
+    virtual bool isKeyNameInUse( const wxString& aName ) const { return false; }
+    virtual void onKeyRenamed( const wxString& aOldName, const wxString& aNewName ) {}
+
+    virtual void onLabelEditBegin( wxPropertyGridEvent& aEvent );
+    virtual void onLabelEditEnding( wxPropertyGridEvent& aEvent );
+
     /**
      * Utility to fetch a property value and convert to wxVariant
      * Precondition: aItem is known to have property aProperty
@@ -111,6 +118,8 @@ protected:
 
     /// Proportion of the grid column splitter that is used for the key column (0.0 - 1.0)
     float m_splitter_key_proportion;
+
+    wxString m_editingOriginalLabel;
 };
 
 class SUPPRESS_GRID_CHANGED_EVENTS

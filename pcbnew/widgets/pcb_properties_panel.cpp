@@ -527,6 +527,64 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
 }
 
 
+bool PCB_PROPERTIES_PANEL::isKeyEditable( const wxPGProperty* aPGProp ) const
+{
+    PROPERTY_BASE* prop = static_cast<PROPERTY_BASE*>( aPGProp->GetClientData() );
+
+    if( !prop )
+        return false;
+
+    EDA_ITEM* item = const_cast<PCB_PROPERTIES_PANEL*>( this )->getFrontItem();
+
+    if( !item || item->Type() != PCB_FOOTPRINT_T )
+        return false;
+
+    PCB_FIELD* field = static_cast<FOOTPRINT*>( item )->GetField( prop->Name() );
+
+    return field && !field->IsMandatory() && !field->IsPrivate();
+}
+
+
+bool PCB_PROPERTIES_PANEL::isKeyNameInUse( const wxString& aName ) const
+{
+    EDA_ITEM* item = const_cast<PCB_PROPERTIES_PANEL*>( this )->getFrontItem();
+
+    if( !item || item->Type() != PCB_FOOTPRINT_T )
+        return false;
+
+    return static_cast<FOOTPRINT*>( item )->HasField( aName );
+}
+
+
+void PCB_PROPERTIES_PANEL::onKeyRenamed( const wxString& aOldName, const wxString& aNewName )
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    BOARD_COMMIT changes( m_frame );
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( !item->IsBOARD_ITEM() || item->Type() != PCB_FOOTPRINT_T )
+            continue;
+
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+        PCB_FIELD* field     = footprint->GetField( aOldName );
+
+        if( field && !field->IsMandatory() )
+        {
+            changes.Modify( footprint, nullptr, RECURSE_MODE::NO_RECURSE );
+            field->SetName( aNewName );
+        }
+    }
+
+    changes.Push( _( "Rename Field" ) );
+
+    AfterCommit();
+}
+
+
 SELECTION PCB_PROPERTIES_PANEL::filterOutReadOnlyGenChildren( const SELECTION& aSelection )
 {
     SELECTION filtered;

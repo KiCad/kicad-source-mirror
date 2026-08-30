@@ -560,6 +560,95 @@ bool SCH_PROPERTIES_PANEL::handleSheetFilenameChange( SCH_EDIT_FRAME* aFrame, SC
 }
 
 
+bool SCH_PROPERTIES_PANEL::isKeyEditable( const wxPGProperty* aPGProp ) const
+{
+    PROPERTY_BASE* prop = static_cast<PROPERTY_BASE*>( aPGProp->GetClientData() );
+
+    if( !prop )
+        return false;
+
+    EDA_ITEM* item = const_cast<SCH_PROPERTIES_PANEL*>( this )->getFrontItem();
+
+    if( !item )
+        return false;
+
+    if( item->Type() == SCH_SYMBOL_T )
+    {
+        SCH_FIELD* field = static_cast<SCH_SYMBOL*>( item )->GetField( prop->Name() );
+        return field && !field->IsMandatory();
+    }
+    else if( item->Type() == SCH_SHEET_T )
+    {
+        SCH_FIELD* field = static_cast<SCH_SHEET*>( item )->GetField( prop->Name() );
+        return field && !field->IsMandatory();
+    }
+
+    return false;
+}
+
+
+bool SCH_PROPERTIES_PANEL::isKeyNameInUse( const wxString& aName ) const
+{
+    EDA_ITEM* item = const_cast<SCH_PROPERTIES_PANEL*>( this )->getFrontItem();
+
+    if( !item )
+        return false;
+
+    if( item->Type() == SCH_SYMBOL_T )
+        return static_cast<SCH_SYMBOL*>( item )->GetField( aName ) != nullptr;
+    else if( item->Type() == SCH_SHEET_T )
+        return static_cast<SCH_SHEET*>( item )->GetField( aName ) != nullptr;
+
+    return false;
+}
+
+
+void SCH_PROPERTIES_PANEL::onKeyRenamed( const wxString& aOldName, const wxString& aNewName )
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    SCH_COMMIT  changes( m_frame );
+    SCH_SCREEN* screen = m_frame->GetScreen();
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* edaItem : selection )
+    {
+        if( !edaItem->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            SCH_FIELD*  field  = symbol->GetField( aOldName );
+
+            if( field && !field->IsMandatory() )
+            {
+                changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
+                field->SetName( aNewName );
+            }
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+            SCH_FIELD* field = sheet->GetField( aOldName );
+
+            if( field && !field->IsMandatory() )
+            {
+                changes.Modify( sheet, screen, RECURSE_MODE::NO_RECURSE );
+                field->SetName( aNewName );
+            }
+        }
+    }
+
+    changes.Push( _( "Rename Field" ) );
+
+    AfterCommit();
+}
+
+
 void SCH_PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
 {
     PROPERTIES_PANEL::OnLanguageChanged( aEvent );

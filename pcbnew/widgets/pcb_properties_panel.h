@@ -60,6 +60,10 @@ protected:
     void valueChanging( wxPropertyGridEvent& aEvent ) override;
     void valueChanged( wxPropertyGridEvent& aEvent ) override;
 
+    bool isKeyEditable( const wxPGProperty* aPGProp ) const override;
+    bool isKeyNameInUse( const wxString& aName ) const override;
+    void onKeyRenamed( const wxString& aOldName, const wxString& aNewName ) override;
+
     void applyConfirmedScale( const wxString& aPropName, const wxVariant& aValue );
 
     ///< Regenerates caches storing layer and net names

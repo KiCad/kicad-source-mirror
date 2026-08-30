@@ -142,6 +142,13 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 
     m_grid->CenterSplitter();
 
+    // Actual edits are allowed or vetoed per-property based on whether or not it's
+    // something where the label/key should be editable (user fields, custom properties, ...)
+    m_grid->MakeColumnEditable( 0 );
+
+    Bind( wxEVT_PG_LABEL_EDIT_BEGIN, &PROPERTIES_PANEL::onLabelEditBegin, this );
+    Bind( wxEVT_PG_LABEL_EDIT_ENDING, &PROPERTIES_PANEL::onLabelEditEnding, this );
+
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PROPERTIES_PANEL::onCharHook ), nullptr, this );
     Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ), nullptr, this );
     Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanging ), nullptr, this );
@@ -550,6 +557,70 @@ void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
         UpdateData();
 
     aEvent.Skip();
+}
+
+
+void PROPERTIES_PANEL::onLabelEditBegin( wxPropertyGridEvent& aEvent )
+{
+    wxPGProperty* pgProp = aEvent.GetProperty();
+
+    if( !pgProp || !isKeyEditable( pgProp ) )
+    {
+        aEvent.Veto();
+        return;
+    }
+
+    // Remember the original label so an invalid rename can be undone.
+    m_editingOriginalLabel = pgProp->GetLabel();
+}
+
+
+void PROPERTIES_PANEL::onLabelEditEnding( wxPropertyGridEvent& aEvent )
+{
+    wxPGProperty* pgProp = aEvent.GetProperty();
+
+    if( !pgProp || !isKeyEditable( pgProp ) )
+        return;
+
+    const wxString oldName = pgProp->GetBaseName();
+
+    wxTextCtrl* labelEditor = m_grid->GetLabelEditor();
+    wxString    newName;
+
+    if( labelEditor )
+        newName = labelEditor->GetValue();
+
+    if( newName == oldName )
+        return;
+
+    if( newName.IsEmpty() || isKeyNameInUse( newName ) )
+    {
+        const wxString originalLabel = m_editingOriginalLabel;
+
+        CallAfter(
+                [this, oldName, originalLabel, newName]()
+                {
+                    for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
+                    {
+                        wxPGProperty* p = it.GetProperty();
+
+                        if( p->GetBaseName() == oldName && p->GetLabel() == newName )
+                        {
+                            p->SetLabel( originalLabel );
+                            m_grid->Refresh();
+                            break;
+                        }
+                    }
+                } );
+
+        return;
+    }
+
+    CallAfter(
+            [this, oldName, newName]()
+            {
+                onKeyRenamed( oldName, newName );
+            } );
 }
 
 
