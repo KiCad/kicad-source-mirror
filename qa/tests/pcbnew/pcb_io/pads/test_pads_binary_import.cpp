@@ -3337,3 +3337,29 @@ BOOST_AUTO_TEST_CASE( DimensionLeaderWidthIsUnitModeIndependent )
         }
     }
 }
+
+
+/**
+ * PADS ASCII is an 8-bit codepage file. wxString::FromUTF8 returns an empty string on the first
+ * high byte, so a net class named in CP1252 imports under a blank key and swallows its nets.
+ */
+BOOST_AUTO_TEST_CASE( AsciiCodePageNetclassNamesSurvive )
+{
+    const wxString path = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_constraints_cp1252.asc";
+
+    std::shared_ptr<BOARD> board = LoadAscPath( path, "synthetic_constraints_cp1252" );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    BOOST_REQUIRE( netSettings );
+
+    for( const auto& [name, netclass] : netSettings->GetNetclasses() )
+        BOOST_CHECK_MESSAGE( !name.IsEmpty(), "a net class imported under a blank name" );
+
+    BOOST_CHECK_MESSAGE( netSettings->HasNetclass( wxString::FromUTF8( "HAUTE_VITESSÉ" ) ),
+                         "the CP1252 net class name was lost" );
+    BOOST_CHECK_MESSAGE( netSettings->HasNetclass( wxString::FromUTF8( "DiffPair_PAIRE_DIFFÉ" ) ),
+                         "the CP1252 differential pair name was lost" );
+}

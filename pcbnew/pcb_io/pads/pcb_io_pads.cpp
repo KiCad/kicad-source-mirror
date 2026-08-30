@@ -314,7 +314,7 @@ void PCB_IO_PADS::loadFootprints()
         }
 
         LIB_ID fpid;
-        fpid.SetLibItemName( wxString::FromUTF8( decal_name ) );
+        fpid.SetLibItemName( PADS_COMMON::ConvertText( decal_name ) );
         footprint->SetFPID( fpid );
 
         footprint->SetValue( pads_part.decal );
@@ -328,7 +328,7 @@ void PCB_IO_PADS::loadFootprints()
                 if( i > 0 )
                     alternates += wxT( ", " );
 
-                alternates += wxString::FromUTF8( pads_part.alternate_decals[i] );
+                alternates += PADS_COMMON::ConvertText( pads_part.alternate_decals[i] );
             }
 
             PCB_FIELD* field = new PCB_FIELD( footprint, FIELD_T::USER, wxT( "PADS_Alternate_Decals" ) );
@@ -430,8 +430,8 @@ void PCB_IO_PADS::loadFootprints()
                             if( !attrValue.empty() )
                             {
                                 field = new PCB_FIELD( footprint, FIELD_T::USER,
-                                                       wxString::FromUTF8( attr.name ) );
-                                field->SetText( wxString::FromUTF8( attrValue ) );
+                                                       PADS_COMMON::ConvertText( attr.name ) );
+                                field->SetText( PADS_COMMON::ConvertText( attrValue ) );
 
                                 // Footprint text fields on copper layers are almost always documentation
                                 // labels. Redirect to the corresponding silkscreen layer.
@@ -552,7 +552,7 @@ void PCB_IO_PADS::loadFootprints()
             PCB_FIELD* blockField = new PCB_FIELD( footprint, FIELD_T::USER, wxT( "PADS_Reuse_Block" ) );
             blockField->SetLayer( Cmts_User );
             blockField->SetVisible( false );
-            blockField->SetText( wxString::FromUTF8( blockIt->second ) );
+            blockField->SetText( PADS_COMMON::ConvertText( blockIt->second ) );
             footprint->Add( blockField );
         }
 
@@ -1247,7 +1247,7 @@ void PCB_IO_PADS::loadReuseBlockGroups()
         if( !block.instances.empty() || !block.part_names.empty() )
         {
             PCB_GROUP* group = new PCB_GROUP( m_loadBoard );
-            group->SetName( wxString::FromUTF8( blockName ) );
+            group->SetName( PADS_COMMON::ConvertText( blockName ) );
             m_loadBoard->Add( group );
             blockGroups[blockName] = group;
         }
@@ -1283,7 +1283,7 @@ void PCB_IO_PADS::loadTestPoints()
 
         wxString refDes = wxString::Format( wxT( "TP%d" ), m_testPointIndex++ );
         footprint->SetReference( refDes );
-        footprint->SetValue( wxString::FromUTF8( tp.symbol_name ) );
+        footprint->SetValue( PADS_COMMON::ConvertText( tp.symbol_name ) );
 
         VECTOR2I pos( scaleCoord( tp.x, true ), scaleCoord( tp.y, false ) );
         footprint->SetPosition( pos );
@@ -1374,7 +1374,7 @@ void PCB_IO_PADS::loadTestPoints()
         PCB_FIELD* tpField = new PCB_FIELD( footprint, FIELD_T::USER, wxT( "Test_Point" ) );
         tpField->SetLayer( Cmts_User );
         tpField->SetVisible( false );
-        tpField->SetText( wxString::FromUTF8( tp.type ) );
+        tpField->SetText( PADS_COMMON::ConvertText( tp.type ) );
         footprint->Add( tpField );
 
         m_loadBoard->Add( footprint );
@@ -1807,7 +1807,7 @@ void PCB_IO_PADS::loadClusterGroups()
     for( const PADS_IO::CLUSTER& cluster : clusters )
     {
         PCB_GROUP* group = new PCB_GROUP( m_loadBoard );
-        group->SetName( wxString::FromUTF8( cluster.name ) );
+        group->SetName( PADS_COMMON::ConvertText( cluster.name ) );
         m_loadBoard->Add( group );
         clusterGroups[cluster.id] = group;
     }
@@ -2297,7 +2297,7 @@ void PCB_IO_PADS::loadBoardSetup()
         if( nc.name.empty() )
             continue;
 
-        wxString ncName = wxString::FromUTF8( nc.name );
+        wxString ncName = PADS_COMMON::ConvertText( nc.name );
         std::shared_ptr<NETCLASS> netclass = std::make_shared<NETCLASS>( ncName );
 
         if( nc.clearance > 0 )
@@ -2334,7 +2334,7 @@ void PCB_IO_PADS::loadBoardSetup()
         if( dp.name.empty() )
             continue;
 
-        wxString dpClassName = wxString::Format( wxT( "DiffPair_%s" ), wxString::FromUTF8( dp.name ) );
+        wxString dpClassName = wxString::Format( wxT( "DiffPair_%s" ), PADS_COMMON::ConvertText( dp.name ) );
         std::shared_ptr<NETCLASS> dpNetclass = std::make_shared<NETCLASS>( dpClassName );
 
         if( dp.gap > 0 )
