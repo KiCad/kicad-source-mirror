@@ -82,6 +82,17 @@ PADS_LAYER_MAPPER::PADS_LAYER_MAPPER() :
     m_layerNameMap["outline"] = PADS_LAYER_TYPE::BOARD_OUTLINE;
     m_layerNameMap["board geometry"] = PADS_LAYER_TYPE::BOARD_OUTLINE;
 
+    m_layerNameMap["top copper"] = PADS_LAYER_TYPE::COPPER_TOP;
+    m_layerNameMap["top layer"] = PADS_LAYER_TYPE::COPPER_TOP;
+    m_layerNameMap["top cu"] = PADS_LAYER_TYPE::COPPER_TOP;
+
+    m_layerNameMap["bottom copper"] = PADS_LAYER_TYPE::COPPER_BOTTOM;
+    m_layerNameMap["bottom layer"] = PADS_LAYER_TYPE::COPPER_BOTTOM;
+    m_layerNameMap["bottom cu"] = PADS_LAYER_TYPE::COPPER_BOTTOM;
+    m_layerNameMap["bot copper"] = PADS_LAYER_TYPE::COPPER_BOTTOM;
+    m_layerNameMap["bot layer"] = PADS_LAYER_TYPE::COPPER_BOTTOM;
+    m_layerNameMap["bot cu"] = PADS_LAYER_TYPE::COPPER_BOTTOM;
+
     m_layerNameMap["documentation"] = PADS_LAYER_TYPE::DOCUMENTATION;
     m_layerNameMap["doc"] = PADS_LAYER_TYPE::DOCUMENTATION;
     m_layerNameMap["drill drawing"] = PADS_LAYER_TYPE::DRILL_DRAWING;
@@ -184,8 +195,24 @@ PADS_LAYER_TYPE PADS_LAYER_MAPPER::ParseLayerName( const std::string& aLayerName
     if( normalized == "bottom" || normalized == "bot" )
         return PADS_LAYER_TYPE::COPPER_BOTTOM;
 
-    if( normalized == "internal" || normalized.starts_with( "inner " )
-        || normalized.starts_with( "mid " ) )
+    // An inner layer is the ordinal word alone or followed by its number. Requiring the boundary
+    // keeps "Internally Routed" and "Middle East Notes" out.
+    auto isOrdinalWord = []( const std::string& aName, const std::string& aWord )
+    {
+        if( !aName.starts_with( aWord ) )
+            return false;
+
+        if( aName.size() == aWord.size() )
+            return true;
+
+        char next = aName[aWord.size()];
+
+        return next == ' ' || next == '_' || next == '-'
+               || std::isdigit( static_cast<unsigned char>( next ) ) != 0;
+    };
+
+    if( isOrdinalWord( normalized, "internal" ) || isOrdinalWord( normalized, "inner" )
+        || isOrdinalWord( normalized, "mid" ) )
     {
         return PADS_LAYER_TYPE::COPPER_INNER;
     }
