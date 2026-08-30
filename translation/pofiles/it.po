@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-17 12:35+0000\n"
+"PO-Revision-Date: 2026-08-31 12:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -3704,6 +3704,9 @@ msgid ""
 "Can increase compatibility with older software that does not import UTF-8 "
 "correctly, such as Excel. Can worsen compatibility in some cases."
 msgstr ""
+"Può migliorare la compatibilità con software meno recenti che non importano "
+"correttamente i dati UTF-8, come Excel. In alcuni casi, tuttavia, può "
+"peggiorare la compatibilità."
 
 #: common/dialogs/dialog_fields_table_base.cpp:338
 msgid "Format presets:"
@@ -7094,6 +7097,7 @@ msgstr "Oggetto A"
 #: common/dialogs/panel_snapping_base.cpp:118
 msgid "Snap to endpoints, midpoints, centres and edges of existing objects"
 msgstr ""
+"Aggancia a punti finali, punti medi, centri e bordi di oggetti esistenti"
 
 #: common/dialogs/panel_snapping_base.cpp:122
 #, fuzzy
@@ -7102,23 +7106,27 @@ msgstr "Creazione cache"
 
 #: common/dialogs/panel_snapping_base.cpp:123
 msgid "Snap to virtual extensions of lines and arcs"
-msgstr ""
+msgstr "Aggancia alle estensioni virtuali di linee e archi"
 
 #: common/dialogs/panel_snapping_base.cpp:127
 msgid "Tangent and normal contacts"
-msgstr ""
+msgstr "Contatti tangenziali e normali"
 
 #: common/dialogs/panel_snapping_base.cpp:128
 msgid "Snap where the dragged geometry meets an arc tangentially or normally"
 msgstr ""
+"Aggancia nel punto in cui la geometria trascinata incontra un arco "
+"tangenzialmente o normalmente"
 
 #: common/dialogs/panel_snapping_base.cpp:132
 msgid "Alignment and equal spacing"
-msgstr ""
+msgstr "Allineamento e spaziatura uniforme"
 
 #: common/dialogs/panel_snapping_base.cpp:133
 msgid "Snap to alignment with, and equal spacing between, nearby objects"
 msgstr ""
+"Allineamento automatico con gli oggetti vicini e spaziatura uniforme tra di "
+"essi"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
 msgid "Pan and Rotate"
@@ -8538,13 +8546,13 @@ msgstr "Colore riempimento"
 #: eeschema/dialogs/dialog_shape_properties.cpp:124 eeschema/sch_line.cpp:1377
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1111
 msgid "Arrow"
-msgstr ""
+msgstr "Freccia"
 
 #: common/eda_shape.cpp:4776 eeschema/dialogs/dialog_line_properties.cpp:117
 #: eeschema/dialogs/dialog_shape_properties.cpp:127 eeschema/sch_line.cpp:1379
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1114
 msgid "Square"
-msgstr ""
+msgstr "Quadrato"
 
 #: common/eda_shape.cpp:4777 eeschema/dialogs/dialog_line_properties.cpp:115
 #: eeschema/dialogs/dialog_shape_properties.cpp:125 eeschema/sch_line.cpp:1380
@@ -11804,6 +11812,9 @@ msgid ""
 "One backup of this project is larger than the total backup size limit.  "
 "KiCad kept the new backup; increase the limit in Preferences."
 msgstr ""
+"Una delle copie di backup di questo progetto è più grande del limite totale "
+"di dimensione dei backup.  KiCad ha mantenuto il nuovo backup; aumentare il "
+"limite nelle Preferenze."
 
 #: common/startwizard/startwizard.cpp:97
 #, c-format
@@ -15218,11 +15229,15 @@ msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
 msgstr ""
+"Tutti i percorsi della net chain %zu tra %s e %s sono già stati confermati "
+"come net chain."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:546
 #, c-format
 msgid "Showing %zu path(s) between %s and %s. Use Refresh to restore all."
 msgstr ""
+"Visualizzazione dei percorsi %zu tra %s e %s. Usare Aggiorna per "
+"ripristinare tutto."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:767
 #: eeschema/dialogs/dialog_create_net_chain.cpp:784
