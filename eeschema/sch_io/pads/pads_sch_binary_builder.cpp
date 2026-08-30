@@ -1730,8 +1730,13 @@ namespace
                 const VECTOR2I delta = end - start;
                 const int      span = std::max( std::abs( delta.x ), std::abs( delta.y ) );
                 const int      entrySpan = std::min( span, schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) );
-                const VECTOR2I entryEnd =
-                        span == 0 ? end : start + VECTOR2I( delta.x * entrySpan / span, delta.y * entrySpan / span );
+                // A stub longer than a third of an inch overflows this product in 32 bits
+                auto clamped = [&]( int aDelta )
+                {
+                    return static_cast<int>( static_cast<int64_t>( aDelta ) * entrySpan / span );
+                };
+
+                const VECTOR2I entryEnd = span == 0 ? end : start + VECTOR2I( clamped( delta.x ), clamped( delta.y ) );
                 auto entryItem = std::make_unique<SCH_BUS_WIRE_ENTRY>( start );
                 entryItem->SetSize( entryEnd - start );
                 aScreen->Append( entryItem.get() );

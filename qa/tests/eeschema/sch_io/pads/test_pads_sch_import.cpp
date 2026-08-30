@@ -25,8 +25,10 @@
 #include <base_units.h>
 #include <bitmap_base.h>
 #include <connection_graph.h>
+#include <default_values.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <embedded_files.h>
+#include <gr_text.h>
 #include <lib_symbol.h>
 #include <netlist_exporter_pads.h>
 #include <reporter.h>
@@ -3098,10 +3100,11 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
     const VECTOR2I entryDelta = entryEnd - entryStart;
     const int      entrySpan = std::max( std::abs( entryDelta.x ), std::abs( entryDelta.y ) );
     const int      shortSpan = std::min( entrySpan, schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) );
-    const VECTOR2I shortEntryEnd = entrySpan == 0 ? entryEnd
-                                                  : entryStart
-                                                            + VECTOR2I( entryDelta.x * shortSpan / entrySpan,
-                                                                        entryDelta.y * shortSpan / entrySpan );
+    const VECTOR2I shortEntryEnd =
+            entrySpan == 0 ? entryEnd
+                           : entryStart
+                                     + VECTOR2I( int64_t( entryDelta.x ) * shortSpan / entrySpan,
+                                                 int64_t( entryDelta.y ) * shortSpan / entrySpan );
     size_t         coincidentWireSegments = 0;
     bool           exactEntry = false;
 
@@ -3890,6 +3893,111 @@ BOOST_AUTO_TEST_CASE( BinaryAppendPowerReferencesSkipExisting )
                                        {
                                            return aMessage.Contains( wxS( "#PWR" ) );
                                        } ) );
+}
+
+
+// The clamp that shortens a bus-entry stub to the KiCad default entry size scales the direction
+// vector. In 32-bit that product overflows once the stub passes a third of an inch, and the entry
+// plus its compensating wire are drawn from the wrapped result.
+BOOST_AUTO_TEST_CASE( BinaryLongBusEntryStaysOnTheWire )
+{
+    using namespace PADS_SCH_BINARY;
+
+    auto samePoint = []( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
+    {
+        return aLeft.x == aRight.x && aLeft.y == aRight.y;
+    };
+
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    BOOST_REQUIRE( !model.buses.empty() );
+
+    // 4000 half-mils is a two inch stub, ordinary on a real sheet and well past the clamp
+    const int stub = 4000;
+    size_t    stretched = 0;
+
+    for( const MODEL_BUS& bus : model.buses )
+    {
+        for( const MODEL_BUS_ENTRY& entry : bus.entries )
+        {
+            auto net = std::ranges::find( model.nets, entry.memberNet.id, &MODEL_NET::id );
+            BOOST_REQUIRE( net != model.nets.end() );
+
+            for( MODEL_CONNECTION& connection : net->connections )
+            {
+                if( connection.vertices.size() < 2 )
+                    continue;
+
+                SOURCE_POINT* far = nullptr;
+
+                if( samePoint( connection.vertices.front(), entry.position ) )
+                    far = &connection.vertices[1];
+                else if( samePoint( connection.vertices.back(), entry.position ) )
+                    far = &connection.vertices[connection.vertices.size() - 2];
+
+                if( !far )
+                    continue;
+
+                far->x = entry.position.x + stub;
+                far->y = entry.position.y + stub;
+                ++stretched;
+            }
+        }
+    }
+
+    BOOST_REQUIRE_GT( stretched, 0u );
+
+    PADS_SCH_BINARY_BUILDER builder;
+    builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "connectivity_topology" ) ) );
+
+    SCH_SHEET* root = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( root );
+    const int pageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+    size_t    checked = 0;
+
+    for( const MODEL_BUS& bus : model.buses )
+    {
+        for( const MODEL_BUS_ENTRY& entry : bus.entries )
+        {
+            auto net = std::ranges::find( model.nets, entry.memberNet.id, &MODEL_NET::id );
+            BOOST_REQUIRE( net != model.nets.end() );
+            std::vector<SOURCE_POINT> adjacent;
+
+            for( const MODEL_CONNECTION& connection : net->connections )
+            {
+                if( connection.vertices.size() < 2 )
+                    continue;
+
+                if( samePoint( connection.vertices.front(), entry.position ) )
+                    adjacent.push_back( connection.vertices[1] );
+                else if( samePoint( connection.vertices.back(), entry.position ) )
+                    adjacent.push_back( connection.vertices[connection.vertices.size() - 2] );
+            }
+
+            BOOST_REQUIRE_EQUAL( adjacent.size(), 1u );
+
+            const VECTOR2I start = pagePoint( entry.position, pageHeight );
+            const VECTOR2I end = pagePoint( adjacent.front(), pageHeight );
+            const VECTOR2I run = end - start;
+            const int64_t  span = std::max( std::abs( run.x ), std::abs( run.y ) );
+            const int64_t  entrySpan = std::min<int64_t>( span, schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) );
+
+            for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
+            {
+                if( item->GetPosition() != start )
+                    continue;
+
+                const VECTOR2I size = static_cast<SCH_BUS_WIRE_ENTRY*>( item )->GetSize();
+
+                BOOST_CHECK_MESSAGE( std::abs( size.x - int64_t( run.x ) * entrySpan / span ) <= 1,
+                                     "bus entry " << entry.source.recordIndex << " x is " << size.x );
+                BOOST_CHECK_MESSAGE( std::abs( size.y - int64_t( run.y ) * entrySpan / span ) <= 1,
+                                     "bus entry " << entry.source.recordIndex << " y is " << size.y );
+                ++checked;
+            }
+        }
+    }
+
+    BOOST_REQUIRE_GT( checked, 0u );
 }
 
 
