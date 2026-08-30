@@ -25,6 +25,8 @@
 #include <sch_io/pads/pads_sch_sdb.h>
 #include <sch_io/pads/pads_sch_parser.h>
 
+#include <io/pads/pads_common.h>
+
 #include <ki_exception.h>
 #include <algorithm>
 #include <cmath>
@@ -1557,7 +1559,7 @@ BOOST_AUTO_TEST_CASE( FreeText )
     BOOST_CHECK_EQUAL( text.presentation.height, 97 );
     BOOST_CHECK_EQUAL( text.presentation.width, 10 );
     BOOST_CHECK( text.presentation.horizontalJustification == MODEL_JUSTIFICATION::LEFT );
-    BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::CENTER );
+    BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT );
     BOOST_CHECK( !text.presentation.bold );
     BOOST_CHECK( !text.presentation.italic );
     BOOST_CHECK( !text.presentation.underline );
@@ -1671,13 +1673,13 @@ BOOST_AUTO_TEST_CASE( FreeText )
     };
 
     for( const JUSTIFICATION_CASE& expected :
-         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::CENTER },
-           { 7, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::CENTER },
+         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::LEFT },
+           { 7, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::LEFT },
            { 15, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::CENTER },
-           { 6, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
+           { 6, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT },
            { 12, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
-           { 0xFF04, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
-           { 0x0306, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER } } )
+           { 0xFF04, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT },
+           { 0x0306, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT } } )
     {
         std::vector<uint8_t> changedJustification = loadBinaryFixture( "text_encoding.sch" );
         writeU16( changedJustification, text.source.absoluteOffset + 18, expected.raw );
@@ -1746,9 +1748,14 @@ BOOST_AUTO_TEST_CASE( TextOptionMatrix )
 
     for( size_t ii = 0; ii < horizontal.size(); ++ii )
     {
-        const MODEL_TEXT& text = textByName( wxString::Format( wxS( "JUST_%02zu" ), ii ) );
+        // The vertical half of the code splits at 2 and 8, the way PADS_COMMON::DecodeJustification
+        // splits it for the ASCII importer
+        const MODEL_JUSTIFICATION vertical = ii >= 8   ? MODEL_JUSTIFICATION::CENTER
+                                             : ii >= 2 ? MODEL_JUSTIFICATION::LEFT
+                                                       : MODEL_JUSTIFICATION::RIGHT;
+        const MODEL_TEXT&         text = textByName( wxString::Format( wxS( "JUST_%02zu" ), ii ) );
         BOOST_CHECK( text.presentation.horizontalJustification == horizontal[ii] );
-        BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::CENTER );
+        BOOST_CHECK( text.presentation.verticalJustification == vertical );
     }
 
     for( const auto& [name, angle] : { std::pair{ wxS( "ANGLE_000" ), 0 }, std::pair{ wxS( "ANGLE_090" ), 900 },
@@ -4494,6 +4501,40 @@ BOOST_AUTO_TEST_CASE( TerminalJustificationCodes )
                                asciiDefinition->pins[pin].pl_angle * 10 );
             BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameJustification, asciiDefinition->pins[pin].pn_just );
             BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberJustification, asciiDefinition->pins[pin].pl_just );
+        }
+    }
+}
+
+// The free-text justification word is the same code space every other PADS record uses, so the
+// vertical half must decode the same way PADS_COMMON::DecodeJustification splits it.
+BOOST_AUTO_TEST_CASE( FreeTextVerticalJustification )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model = parser.Parse( loadBinaryFixture( "text_encoding.sch" ), wxS( "text_encoding.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.texts.size(), 1 );
+    const size_t justificationOffset = model.texts.front().source.absoluteOffset + 18;
+
+    for( uint16_t code : { 0, 1, 2, 3, 4, 6, 8, 9, 12 } )
+    {
+        BOOST_TEST_CONTEXT( "justification " << code )
+        {
+            std::vector<uint8_t> bytes = loadBinaryFixture( "text_encoding.sch" );
+            writeU16( bytes, justificationOffset, code );
+
+            PADS_SCH_MODEL patched = parser.Parse( bytes, wxS( "text_encoding.sch" ) );
+            BOOST_REQUIRE_EQUAL( patched.texts.size(), 1 );
+
+            GR_TEXT_H_ALIGN_T expectedHorizontal = GR_TEXT_H_ALIGN_LEFT;
+            GR_TEXT_V_ALIGN_T expectedVertical = GR_TEXT_V_ALIGN_CENTER;
+            PADS_COMMON::DecodeJustification( code, expectedHorizontal, expectedVertical );
+
+            MODEL_JUSTIFICATION vertical = patched.texts.front().presentation.verticalJustification;
+            MODEL_JUSTIFICATION expected = expectedVertical == GR_TEXT_V_ALIGN_CENTER ? MODEL_JUSTIFICATION::CENTER
+                                           : expectedVertical == GR_TEXT_V_ALIGN_TOP  ? MODEL_JUSTIFICATION::LEFT
+                                                                                      : MODEL_JUSTIFICATION::RIGHT;
+
+            BOOST_CHECK( vertical == expected );
         }
     }
 }

@@ -4898,7 +4898,7 @@ namespace
             const uint8_t displayFlags = aCursor.U8At( recordOffset + 31 );
             text.presentation.visible = ( displayFlags & 1 ) == 0;
             text.presentation.horizontalJustification = freeTextHorizontalJustification( justification );
-            text.presentation.verticalJustification = MODEL_JUSTIFICATION::CENTER;
+            text.presentation.verticalJustification = verticalJustification( justification );
 
             SOURCE_PROVENANCE fontHandleSource = textSource;
             fontHandleSource.length = 2;
