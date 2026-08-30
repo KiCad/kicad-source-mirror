@@ -144,14 +144,14 @@ BOOST_AUTO_TEST_CASE( Issue24409CliHierarchicalInstances )
     // number (Untitled Sheet, page 2, annotated R1/R2) so that kicad-cli
     // matches the GUI.  Without the fix this is R5/R6 because the unordered
     // iteration of m_connection_map surfaces the last sheet first.
-    for( const wxString& ref : { wxS( "R1" ), wxS( "R2" ) } )
+    for( const wxString ref : { wxS( "R1" ), wxS( "R2" ) } )
     {
         BOOST_CHECK_MESSAGE( markedRefs.count( ref ),
                              "Missing pin_not_connected marker for " << ref
                              << " on the first sheet instance" );
     }
 
-    for( const wxString& ref : { wxS( "R3" ), wxS( "R4" ), wxS( "R5" ), wxS( "R6" ) } )
+    for( const wxString ref : { wxS( "R3" ), wxS( "R4" ), wxS( "R5" ), wxS( "R6" ) } )
     {
         BOOST_CHECK_MESSAGE( !markedRefs.count( ref ),
                              "Unexpected pin_not_connected marker for " << ref
@@ -169,14 +169,14 @@ BOOST_AUTO_TEST_CASE( Issue24409CliHierarchicalInstances )
     ERC_REPORT reportWriter( sch.get(), EDA_UNITS::MM, markersProvider );
     wxString   report = reportWriter.GetTextReport();
 
-    for( const wxString& ref : { wxS( "R1" ), wxS( "R2" ) } )
+    for( const wxString ref : { wxS( "R1" ), wxS( "R2" ) } )
     {
         BOOST_CHECK_MESSAGE( report.Contains( wxS( "Symbol " ) + ref + wxS( " " ) ),
                              "ERC text report missing pin_not_connected for "
                              << ref << "\n" << report );
     }
 
-    for( const wxString& ref : { wxS( "R3" ), wxS( "R4" ), wxS( "R5" ), wxS( "R6" ) } )
+    for( const wxString ref : { wxS( "R3" ), wxS( "R4" ), wxS( "R5" ), wxS( "R6" ) } )
     {
         BOOST_CHECK_MESSAGE( !report.Contains( wxS( "Symbol " ) + ref + wxS( " " ) ),
                              "ERC text report unexpectedly mentions "

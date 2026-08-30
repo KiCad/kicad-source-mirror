@@ -1674,8 +1674,8 @@ BOOST_AUTO_TEST_CASE( ComponentDetailImport )
     BOOST_CHECK( fb8Ref->GetDrawRotation() == ANGLE_HORIZONTAL );
 
     // References render horizontal even on rotated symbols (ferrites, vertical R/C).
-    for( const wxString& ref : { wxS( "R3186" ), wxS( "C2517" ), wxS( "R3189" ),
-                                 wxS( "FB13" ), wxS( "FB9" ) } )
+    for( const wxString ref : { wxS( "R3186" ), wxS( "C2517" ), wxS( "R3189" ),
+                                wxS( "FB13" ), wxS( "FB9" ) } )
     {
         BOOST_REQUIRE_MESSAGE( symbols.count( ref ), ref );
         BOOST_CHECK( symbols[ref]->GetField( FIELD_T::REFERENCE )->GetDrawRotation()

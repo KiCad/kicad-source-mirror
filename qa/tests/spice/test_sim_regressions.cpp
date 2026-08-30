@@ -220,8 +220,8 @@ BOOST_FIXTURE_TEST_CASE( IbisModelSuppliesCacheInclude, TEST_SIM_REGRESSIONS_FIX
 
     // The fixture carries six IBIS symbols; asserting the exact names pins the per-reference
     // cache naming.
-    for( const wxString& ref : { wxS( "U1" ), wxS( "U2" ), wxS( "U3" ),
-                                 wxS( "U4" ), wxS( "U5" ), wxS( "U6" ) } )
+    for( const wxString ref : { wxS( "U1" ), wxS( "U2" ), wxS( "U3" ),
+                                wxS( "U4" ), wxS( "U5" ), wxS( "U6" ) } )
     {
         wxString cacheName = ref + wxS( ".cache" );
 

@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_SUITE( JsonSchemaValidator )
  */
 BOOST_AUTO_TEST_CASE( PcmSchemasLoadWithoutThrowing )
 {
-    for( const wxString& name : { wxS( "pcm.v1.schema.json" ), wxS( "pcm.v2.schema.json" ) } )
+    for( const wxString& name : { wxString( "pcm.v1.schema.json" ), wxString( "pcm.v2.schema.json" ) } )
     {
         wxFileName schema = schemaPath( name );
         BOOST_REQUIRE_MESSAGE( schema.FileExists(), schema.GetFullPath() );

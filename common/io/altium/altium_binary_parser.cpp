@@ -450,7 +450,7 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
 
     if( recordIt == kv.end() || recordIt->second != wxT( "4" ) )
     {
-        for( const wxString& key : { wxT( "DESIGNATOR" ), wxT( "NAME" ), wxT( "TEXT" ) } )
+        for( const wxString key : { wxT( "DESIGNATOR" ), wxT( "NAME" ), wxT( "TEXT" ) } )
         {
             auto valueIt = kv.find( key );
 

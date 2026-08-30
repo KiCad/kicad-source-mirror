@@ -203,7 +203,7 @@ int OrcadPageOrder( wxString& aName )
     size_t   digitStart = 0;
     wxString upper = aName.Upper();
 
-    for( const wxString& prefix : { wxS( "PAGE" ), wxS( "SCH" ), wxS( "PAG" ) } )
+    for( const wxString& prefix : { wxString( "PAGE" ), wxString( "SCH" ), wxString( "PAG" ) } )
     {
         if( upper.StartsWith( prefix )
             && ( aName.length() == prefix.length() || wxIsdigit( aName[prefix.length()] )

@@ -506,7 +506,7 @@ BOOST_AUTO_TEST_CASE( LoadIssue24827CurvedWireArcs )
 
     // A scattered center is exactly the flattened/indented arc symptom, so require the
     // body arcs of each transistor to stay concentric to a fraction of the body radius.
-    for( const wxString& ref : { wxS( "Q2" ), wxS( "IC3" ) } )
+    for( const wxString& ref : { wxString( "Q2" ), wxString( "IC3" ) } )
     {
         std::vector<PCB_SHAPE*> arcs = bodyArcs( ref );
         BOOST_REQUIRE_GT( arcs.size(), 1u );

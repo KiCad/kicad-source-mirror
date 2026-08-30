@@ -182,7 +182,7 @@ BOOST_AUTO_TEST_CASE( SingleLetterSearchMatchesDeviceNameOverKeywordCollision )
         lib->AssignIntrinsicRanks( {} );
 
     for( const wxString& letter : { wxString( wxT( "r" ) ), wxString( wxT( "l" ) ),
-                                     wxString( wxT( "c" ) ), wxString( wxT( "d" ) ) } )
+                                    wxString( wxT( "c" ) ), wxString( wxT( "d" ) ) } )
     {
         std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>> matchers;
         matchers.emplace_back( std::make_unique<EDA_COMBINED_MATCHER>( letter, CTX_LIBITEM ) );

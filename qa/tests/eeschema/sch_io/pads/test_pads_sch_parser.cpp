@@ -95,8 +95,8 @@ BOOST_AUTO_TEST_CASE( ParseBussesSkipsMalformedRecords )
 {
     const std::string root = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/";
 
-    for( const std::string& fixture : { "buses_bad_header.txt", "buses_bad_point.txt",
-                                        "buses_negative_count.txt", "buses_excessive_count.txt" } )
+    for( const std::string fixture : { "buses_bad_header.txt", "buses_bad_point.txt",
+                                       "buses_negative_count.txt", "buses_excessive_count.txt" } )
     {
         BOOST_TEST_CONTEXT( fixture )
         {

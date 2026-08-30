@@ -284,7 +284,7 @@ void SCH_IO_LTSPICE_PARSER::Parse( SCH_SHEET_PATH* aSheet,
         outDir.AppendDir( wxS( "ltspice_cmp" ) );
         outDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
-        for( const wxString& name :
+        for( const wxString name :
              { wxS( "standard.dio" ), wxS( "standard.bjt" ), wxS( "standard.jft" ), wxS( "standard.mos" ) } )
         {
             includeText << wxS( ".include ltspice_cmp/" ) << name << wxS( "\n" );
