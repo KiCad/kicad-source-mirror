@@ -367,6 +367,16 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
 
     LOCALE_IO setlocale;
 
+    // Adopting a whole document cannot satisfy the hierarchical-sheet loader's contract that the
+    // caller owns the returned sheet, and both branches below replace the live top-level sheets
+    if( aProperties && aProperties->count( "hierarchical_sheet_load" ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "'%s' contains a complete PADS Logic schematic and "
+                                             "cannot be loaded as a hierarchical sheet. Use File > Import > "
+                                             "Non-KiCad Schematic... instead." ),
+                                          aFileName ) );
+    }
+
     // The proprietary binary .sch is read by a separate structural path; the
     // ASCII export remains the route for net-label and free-text bindings.
     if( isBinarySchematicFile( aFileName ) )
@@ -1285,16 +1295,6 @@ SCH_SHEET* SCH_IO_PADS::loadBinarySchematicFile( const wxString& aFileName, SCHE
                                                  SCH_SHEET*                         aAppendToMe,
                                                  const std::map<std::string, UTF8>* aProperties )
 {
-    // Adopting a whole document cannot satisfy the hierarchical-sheet loader's contract that the
-    // caller owns the returned sheet
-    if( aProperties && aProperties->count( "hierarchical_sheet_load" ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' contains a complete PADS Logic binary schematic and "
-                                             "cannot be loaded as a hierarchical sheet. Use File > Import > "
-                                             "Non-KiCad Schematic... instead." ),
-                                          aFileName ) );
-    }
-
     std::vector<uint8_t> data;
 
     if( !PADS_SCH_BINARY::PADS_SCH_BINARY_READER::ReadFile( aFileName, data ) )

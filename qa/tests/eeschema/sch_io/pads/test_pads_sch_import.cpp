@@ -4148,4 +4148,23 @@ BOOST_AUTO_TEST_CASE( AsciiPowerSymbolValueIsThePartType )
 }
 
 
+
+// Adopting a whole document cannot satisfy the hierarchical-sheet loader's ownership contract, and
+// the ASCII branch replaces the live schematic's top-level sheets before it can find that out.
+BOOST_AUTO_TEST_CASE( AsciiHierarchicalSheetLoadIsRefused )
+{
+    SCH_IO_PADS                 plugin;
+    std::map<std::string, UTF8> properties;
+    properties["hierarchical_sheet_load"] = "1";
+
+    wxString path = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "/plugins/pads/parts_schematic.txt" );
+
+    SCH_SHEET* existing = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( existing );
+
+    BOOST_CHECK_THROW( plugin.LoadSchematicFile( path, &m_schematic, nullptr, &properties ), IO_ERROR );
+    BOOST_CHECK_EQUAL( m_schematic.GetTopLevelSheet(), existing );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
