@@ -961,4 +961,57 @@ BOOST_FIXTURE_TEST_CASE( PadsBlockStitchingWithSolidZoneConnections, STITCH_BOAR
     }
 }
 
+// Validate that footprints containing no via rule areas are accounted for.
+BOOST_FIXTURE_TEST_CASE( FootprintRuleAreaBlocksStitchVias, STITCH_BOARD_FIXTURE )
+{
+    loadBoard( wxT( "stitch_fp_rulearea" ) );
+
+    ZONE* ruleArea = nullptr;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( ZONE* zone : footprint->Zones() )
+        {
+            if( zone->GetIsRuleArea() && zone->GetDoNotAllowVias() )
+            {
+                BOOST_REQUIRE_MESSAGE( !ruleArea, "more than one via keepout on the board" );
+                ruleArea = zone;
+            }
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( ruleArea, "no footprint via keepout on the board" );
+
+    SHAPE_POLY_SET keepout = ruleArea->GetBoardOutline();
+    keepout.BuildBBoxCaches();
+
+    // Sanity: The keepout has to sit wholly inside the stitch outline, so a via
+    // missing from it can only be the keepout's doing...
+    SHAPE_POLY_SET outsideStitch = keepout;
+    outsideStitch.BooleanSubtract( m_stitch->Outline() );
+
+    BOOST_REQUIRE_MESSAGE( outsideStitch.IsEmpty(),
+                           "keepout is not wholly inside the stitch outline" );
+
+    // Sanity: The footprint-frame outline has to land somewhere else entirely, or reading the
+    // wrong frame would happen to give the right answer and the test would prove nothing.
+    BOOST_REQUIRE_MESSAGE(
+            !keepout.BBox().Intersects( ruleArea->GetLibraryOutline().BBox() ),
+            "footprint frame and board frame overlap; test can't discriminate" );
+
+    regenerate();
+
+    const std::set<VECTOR2I> positions = childViaPositions();
+
+    BOOST_REQUIRE_GT( positions.size(), 20 );
+
+    for( const VECTOR2I& pos : positions )
+    {
+        BOOST_CHECK_MESSAGE(
+                !keepout.Contains( pos, -1, 0, true ),
+                wxString::Format( "Via at (%.3f, %.3f) sits inside the footprint via keepout",
+                                  pcbIUScale.IUTomm( pos.x ), pcbIUScale.IUTomm( pos.y ) ) );
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -846,8 +846,7 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
 
             if( m_mode == PCB_VIA_STITCH_MODE::GUARD )
             {
-                if( const SHAPE_POLY_SET* outline = zone->Outline() )
-                    clipped = *outline;
+                clipped = zone->GetBoardOutline();
             }
             else
             {
@@ -1096,17 +1095,14 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
             if( !zone->GetDoNotAllowVias() || !( zone->GetLayerSet() & viaCopperLayers ).any() )
                 continue;
 
-            if( const SHAPE_POLY_SET* keepout = zone->Outline() )
-            {
-                SHAPE_POLY_SET area = *keepout;
-                area.BooleanIntersection( queryClip );
+            SHAPE_POLY_SET area = zone->GetBoardOutline();
+            area.BooleanIntersection( queryClip );
 
-                if( !area.IsEmpty() )
-                {
-                    area.Inflate( viaSize / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                  polyApproxError );
-                    obstacles.BooleanAdd( area );
-                }
+            if( !area.IsEmpty() )
+            {
+                area.Inflate( viaSize / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                              polyApproxError );
+                obstacles.BooleanAdd( area );
             }
 
             continue;
@@ -1136,12 +1132,9 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
 
             nearFill.Inflate( zoneMargin, CORNER_STRATEGY::ROUND_ALL_CORNERS, polyApproxError );
 
-            if( const SHAPE_POLY_SET* outline = zone->Outline() )
-            {
-                SHAPE_POLY_SET interior = *outline;
-                interior.BooleanIntersection( queryClip );
-                nearFill.BooleanSubtract( interior );
-            }
+            SHAPE_POLY_SET interior = zone->GetBoardOutline();
+            interior.BooleanIntersection( queryClip );
+            nearFill.BooleanSubtract( interior );
 
             if( !nearFill.IsEmpty() )
                 obstacles.BooleanAdd( nearFill );
