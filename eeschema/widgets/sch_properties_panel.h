@@ -22,7 +22,6 @@
 #pragma once
 
 #include <widgets/properties_panel.h>
-#include <set>
 
 class wxButton;
 class wxCommandEvent;
@@ -104,11 +103,6 @@ protected:
     static bool               m_selContainsJunctions;
     static bool               m_selContainsWiresOrBuses;
 
-    static std::set<wxString> m_currentSymbolFieldNames;
-    static std::set<wxString> m_currentSheetFieldNames;
-
-    /// Distinct pin numbers of the selected pin-mapped symbol, gating the per-pin table rows.
-    static std::set<wxString> m_currentPinMapPinNumbers;
     wxPGChoices               m_nets;
 
     wxButton* m_editPinMapButton;

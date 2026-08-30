@@ -24,7 +24,6 @@
 #define PCB_PROPERTIES_PANEL_H
 
 #include <widgets/properties_panel.h>
-#include <set>
 
 class SELECTION;
 class BOARD;
@@ -102,7 +101,6 @@ protected:
     PG_FPID_EDITOR*      m_fpEditorInstance;
     PG_URL_EDITOR*       m_urlEditorInstance;
 
-    static std::set<wxString> m_currentFieldNames;
     wxPGChoices m_nets;
 
     bool m_scaleConfirmPending;

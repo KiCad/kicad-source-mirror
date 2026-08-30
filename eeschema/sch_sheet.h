@@ -21,6 +21,9 @@
 #ifndef SCH_SHEEET_H
 #define SCH_SHEEET_H
 
+#include <map>
+#include <memory>
+
 #include <sch_field.h>
 
 class KIID_PATH;
@@ -31,6 +34,7 @@ class SCH_SHEET_PIN;
 class SCH_SHEET_PATH;
 class EDA_DRAW_FRAME;
 class SCH_NO_CONNECT;
+class SCH_SHEET_FIELD_PROPERTY;
 
 
 #define MIN_SHEET_WIDTH  500    // Units are mils.
@@ -103,6 +107,8 @@ public:
      */
     SCH_FIELD* GetField( const wxString& aFieldName );
     const SCH_FIELD* GetField( const wxString& aFieldName ) const;
+
+    std::vector<PROPERTY_BASE*> GetDynamicProperties() const override;
 
     /**
      * Return the next ordinal for a user field for this sheet
@@ -685,6 +691,8 @@ private:
     KIGFX::COLOR4D              m_backgroundColor;
 
     std::vector<SCH_SHEET_INSTANCE> m_instances;
+
+    mutable std::map<wxString, std::unique_ptr<SCH_SHEET_FIELD_PROPERTY>> m_dynamicPropertyCache;
 };
 
 

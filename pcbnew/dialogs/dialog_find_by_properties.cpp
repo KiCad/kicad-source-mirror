@@ -560,7 +560,7 @@ void DIALOG_FIND_BY_PROPERTIES::rebuildPropertyGrid()
 
         for( EDA_ITEM* item : selection )
         {
-            PROPERTY_BASE* itemProp = propMgr.GetProperty( TYPE_HASH( *item ), name );
+            PROPERTY_BASE* itemProp = propMgr.GetProperty( item, name );
 
             if( !itemProp )
             {
@@ -856,7 +856,7 @@ bool DIALOG_FIND_BY_PROPERTIES::itemMatchesPropertyCriteria( BOARD_ITEM* aItem )
         }
         else
         {
-            PROPERTY_BASE* prop = propMgr.GetProperty( TYPE_HASH( *aItem ), row.propertyName );
+            PROPERTY_BASE* prop = propMgr.GetProperty( aItem, row.propertyName );
 
             if( !prop )
                 return false;

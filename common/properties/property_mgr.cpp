@@ -68,6 +68,21 @@ PROPERTY_BASE* PROPERTY_MANAGER::GetProperty( TYPE_ID aType, const wxString& aPr
 }
 
 
+PROPERTY_BASE* PROPERTY_MANAGER::GetProperty( const INSPECTABLE* aObject, const wxString& aProperty ) const
+{
+    if( PROPERTY_BASE* prop = GetProperty( TYPE_HASH( *aObject ), aProperty ) )
+        return prop;
+
+    for( PROPERTY_BASE* dynamicProp : aObject->GetDynamicProperties() )
+    {
+        if( !aProperty.CmpNoCase( dynamicProp->Name() ) )
+            return dynamicProp;
+    }
+
+    return nullptr;
+}
+
+
 const std::vector<PROPERTY_BASE*>& PROPERTY_MANAGER::GetProperties( TYPE_ID aType ) const
 {
     if( m_dirty )
@@ -79,6 +94,17 @@ const std::vector<PROPERTY_BASE*>& PROPERTY_MANAGER::GetProperties( TYPE_ID aTyp
         return EMPTY_PROP_LIST;
 
     return it->second.m_allProperties;
+}
+
+
+std::vector<PROPERTY_BASE*> PROPERTY_MANAGER::GetProperties( const INSPECTABLE* aObject ) const
+{
+    std::vector<PROPERTY_BASE*> result = GetProperties( TYPE_HASH( *aObject ) );
+
+    for( PROPERTY_BASE* prop : aObject->GetDynamicProperties() )
+        result.push_back( prop );
+
+    return result;
 }
 
 

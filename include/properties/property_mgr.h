@@ -104,12 +104,29 @@ public:
     PROPERTY_BASE* GetProperty( TYPE_ID aType, const wxString& aProperty ) const;
 
     /**
+     * Return a property for a specific object instance, checking its static
+     * (class-level) properties first and its dynamic (per-object) properties
+     * second.
+     *
+     * @param aObject is the object to look up the property on.
+     * @param aProperty is the property name.
+     * @return Requested property or null pointer if requested property does not exist.
+     */
+    PROPERTY_BASE* GetProperty( const INSPECTABLE* aObject, const wxString& aProperty ) const;
+
+    /**
      * Return all properties for a specific type.
      *
      * @param aType is the type identifier (obtained using TYPE_HASH()).
      * @return Vector storing all properties of the requested type.
      */
     const std::vector<PROPERTY_BASE*>& GetProperties( TYPE_ID aType ) const;
+
+    /**
+     * Return all properties applicable to a specific object instance,
+     * including both static (class-level) and dynamic (per-object) properties.
+     */
+    std::vector<PROPERTY_BASE*> GetProperties( const INSPECTABLE* aObject ) const;
 
     const std::map<PROPERTY_BASE*, int>& GetDisplayOrder( TYPE_ID aType ) const;
 

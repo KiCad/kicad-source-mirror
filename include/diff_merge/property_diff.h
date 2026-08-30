@@ -69,8 +69,20 @@ inline std::vector<PROPERTY_DELTA> DiffItemProperties( const INSPECTABLE* aBefor
     if( !aBefore || !aAfter || typeid( *aBefore ) != typeid( *aAfter ) )
         return deltas;
 
-    PROPERTY_MANAGER& pm    = PROPERTY_MANAGER::Instance();
-    const auto&       props = pm.GetProperties( TYPE_HASH( *aBefore ) );
+    PROPERTY_MANAGER&           pm = PROPERTY_MANAGER::Instance();
+    std::vector<PROPERTY_BASE*> props = pm.GetProperties( aBefore );
+
+    for( PROPERTY_BASE* dynAfter : aAfter->GetDynamicProperties() )
+    {
+        if( std::ranges::none_of( props,
+                                  [&]( PROPERTY_BASE* p )
+                                  {
+                                      return p->Name() == dynAfter->Name();
+                                  } ) )
+        {
+            props.push_back( dynAfter );
+        }
+    }
 
     // IsAvailableFor and Get take a non-const INSPECTABLE*; we treat both items
     // as read-only inspections.
@@ -136,7 +148,7 @@ inline std::vector<PROPERTY_DELTA> ItemProperties( const INSPECTABLE* aItem, boo
         return deltas;
 
     PROPERTY_MANAGER& pm = PROPERTY_MANAGER::Instance();
-    const auto&       props = pm.GetProperties( TYPE_HASH( *aItem ) );
+    std::vector<PROPERTY_BASE*> props = pm.GetProperties( aItem );
 
     INSPECTABLE* mutItem = const_cast<INSPECTABLE*>( aItem );
 
@@ -212,11 +224,11 @@ inline PROPERTY_APPLY_COUNTS ApplyPropertyResolutions(
 
     for( const PROPERTY_RESOLUTION& res : aProps )
     {
-        PROPERTY_BASE* prop = pm.GetProperty( TYPE_HASH( *aTarget ), res.name );
+        PROPERTY_BASE* prop = pm.GetProperty( aTarget, res.name );
 
         if( !prop )
         {
-            wxLogTrace( traceDiffMerge, wxT( "applier: property '%s' not found on target type" ),
+            wxLogTrace( traceDiffMerge, wxT( "applier: property '%s' not found on target" ),
                         res.name );
             ++counts.failed;
             continue;

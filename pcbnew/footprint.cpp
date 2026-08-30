@@ -83,6 +83,82 @@
 #include <properties/property_mgr.h>
 
 
+class PCB_FOOTPRINT_FIELD_PROPERTY : public PROPERTY_BASE
+{
+public:
+    PCB_FOOTPRINT_FIELD_PROPERTY( const wxString& aName ) :
+            PROPERTY_BASE( aName ),
+            m_name( aName )
+    {
+        SetGroup( _HKI( "Fields" ) );
+    }
+
+    size_t OwnerHash() const override { return TYPE_HASH( FOOTPRINT ); }
+    size_t BaseHash() const override { return TYPE_HASH( FOOTPRINT ); }
+    size_t TypeHash() const override { return TYPE_HASH( wxString ); }
+
+    void setter( void* obj, wxAny& v ) override
+    {
+        wxString value;
+
+        if( !v.GetAs( &value ) )
+            return;
+
+        FOOTPRINT* footprint = reinterpret_cast<FOOTPRINT*>( obj );
+        PCB_FIELD* field = footprint->GetField( m_name );
+
+        wxString variantName;
+
+        if( footprint->GetBoard() )
+            variantName = footprint->GetBoard()->GetCurrentVariant();
+
+        if( !variantName.IsEmpty() )
+        {
+            FOOTPRINT_VARIANT* variant = footprint->AddVariant( variantName );
+
+            if( variant )
+                variant->SetFieldValue( m_name, value );
+        }
+        else if( !field )
+        {
+            PCB_FIELD* newField = new PCB_FIELD( footprint, FIELD_T::USER, m_name );
+            newField->SetText( value );
+            footprint->Add( newField );
+        }
+        else
+        {
+            field->SetText( value );
+        }
+    }
+
+    wxAny getter( const void* obj ) const override
+    {
+        const FOOTPRINT* footprint = reinterpret_cast<const FOOTPRINT*>( obj );
+        PCB_FIELD* field = footprint->GetField( m_name );
+
+        if( !field )
+            return wxAny();
+
+        wxString variantName;
+
+        if( footprint->GetBoard() )
+            variantName = footprint->GetBoard()->GetCurrentVariant();
+
+        wxString text;
+
+        if( !variantName.IsEmpty() )
+            text = footprint->GetFieldValueForVariant( variantName, m_name );
+        else
+            text = field->GetText();
+
+        return wxAny( text );
+    }
+
+private:
+    wxString m_name;
+};
+
+
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
         m_attributes( 0 ),
@@ -315,6 +391,67 @@ FOOTPRINT::~FOOTPRINT()
         delete d;
 
     m_drawings.clear();
+}
+
+
+std::vector<PROPERTY_BASE*> FOOTPRINT::GetDynamicProperties() const
+{
+    std::vector<PROPERTY_BASE*> props;
+    const BOARD* board = GetBoard();
+    bool isFPedit = board && board->IsFootprintHolder();
+
+    auto getOrCreate = [&]( const wxString& aName )
+    {
+        auto it = m_dynamicPropertyCache.find( aName );
+
+        if( it == m_dynamicPropertyCache.end() )
+        {
+            auto prop = std::make_unique<PCB_FOOTPRINT_FIELD_PROPERTY>( aName );
+            it = m_dynamicPropertyCache.emplace( aName, std::move( prop ) ).first;
+        }
+
+        return it->second.get();
+    };
+
+    for( PCB_FIELD* field : GetFields() )
+    {
+        if( !field->IsMandatory() )
+            continue;
+
+        if( !isFPedit && field->IsPrivate() )
+            continue;
+
+        const wxString& name = field->GetUntranslatedName();
+
+        if( PROPERTY_MANAGER::Instance().GetProperty( TYPE_HASH( FOOTPRINT ), name ) )
+            continue;
+
+        props.push_back( getOrCreate( name ) );
+    }
+
+    std::vector<PCB_FIELD*> userFields;
+
+    for( PCB_FIELD* field : GetFields() )
+    {
+        if( field->IsMandatory() || ( !isFPedit && field->IsPrivate() ) )
+            continue;
+
+        userFields.push_back( field );
+    }
+
+    std::ranges::sort( userFields,
+                       []( const PCB_FIELD* a, const PCB_FIELD* b )
+                       {
+                           return a->GetUntranslatedName().CmpNoCase( b->GetUntranslatedName() ) < 0;
+                       } );
+
+    for( PCB_FIELD* field : userFields )
+    {
+        const wxString& name = field->GetUntranslatedName();
+        props.push_back( getOrCreate( name ) );
+    }
+
+    return props;
 }
 
 
@@ -1388,7 +1525,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
 
         // Check if the property manager knows this property
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        PROPERTY_BASE*    property = propMgr.GetProperty( TYPE_HASH( *this ), propertyName );
+        PROPERTY_BASE*    property = propMgr.GetProperty( this, propertyName );
 
         if( !property || property->IsHiddenFromPropertiesManager() )
             return false;

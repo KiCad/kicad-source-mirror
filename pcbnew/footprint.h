@@ -22,6 +22,8 @@
 #define FOOTPRINT_H
 
 #include <deque>
+#include <map>
+#include <memory>
 #include <mutex>
 #include <optional>
 #include <unordered_set>
@@ -57,6 +59,7 @@ class MSG_PANEL_ITEM;
 class SHAPE;
 class REPORTER;
 class COMPONENT_CLASS_CACHE_PROXY;
+class PCB_FOOTPRINT_FIELD_PROPERTY;
 class PCB_POINT;
 
 namespace KIGFX {
@@ -1167,6 +1170,8 @@ public:
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad() const { return m_fileFormatVersionAtLoad; }
 
+    std::vector<PROPERTY_BASE*> GetDynamicProperties() const override;
+
     /**
      * Return a #PAD with a matching number.
      *
@@ -1522,6 +1527,8 @@ private:
     // fragile.
     mutable std::mutex                                     m_geometry_cache_mutex;
     mutable std::unique_ptr<FOOTPRINT_GEOMETRY_CACHE_DATA> m_geometry_cache;
+
+    mutable std::map<wxString, std::unique_ptr<PCB_FOOTPRINT_FIELD_PROPERTY>> m_dynamicPropertyCache;
 
     // A list of pad groups, each of which is allowed to short nets within their group.
     // A pad group is a comma-separated list of pad numbers.

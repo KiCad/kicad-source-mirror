@@ -71,98 +71,6 @@
 
 #include <cmath>
 
-static const wxString MISSING_FIELD_SENTINEL = wxS( "\uE000" );
-
-class PCB_FOOTPRINT_FIELD_PROPERTY : public PROPERTY_BASE
-{
-public:
-    PCB_FOOTPRINT_FIELD_PROPERTY( const wxString& aName ) :
-            PROPERTY_BASE( aName ),
-            m_name( aName )
-    {
-    }
-
-    size_t OwnerHash() const override { return TYPE_HASH( FOOTPRINT ); }
-    size_t BaseHash() const override { return TYPE_HASH( FOOTPRINT ); }
-    size_t TypeHash() const override { return TYPE_HASH( wxString ); }
-
-    bool Writeable( INSPECTABLE* aObject ) const override
-    {
-        return PROPERTY_BASE::Writeable( aObject );
-    }
-
-    void setter( void* obj, wxAny& v ) override
-    {
-        wxString value;
-
-        if( !v.GetAs( &value ) )
-            return;
-
-        FOOTPRINT* footprint = reinterpret_cast<FOOTPRINT*>( obj );
-        PCB_FIELD* field = footprint->GetField( m_name );
-
-        wxString variantName;
-
-        if( footprint->GetBoard() )
-            variantName = footprint->GetBoard()->GetCurrentVariant();
-
-        if( !variantName.IsEmpty() )
-        {
-            // Store the value as a variant override
-            FOOTPRINT_VARIANT* variant = footprint->AddVariant( variantName );
-
-            if( variant )
-                variant->SetFieldValue( m_name, value );
-        }
-        else
-        {
-            // Set the base field value
-            if( !field )
-            {
-                PCB_FIELD* newField = new PCB_FIELD( footprint, FIELD_T::USER, m_name );
-                newField->SetText( value );
-                footprint->Add( newField );
-            }
-            else
-            {
-                field->SetText( value );
-            }
-        }
-    }
-
-    wxAny getter( const void* obj ) const override
-    {
-        const FOOTPRINT* footprint = reinterpret_cast<const FOOTPRINT*>( obj );
-        PCB_FIELD* field = footprint->GetField( m_name );
-
-        if( field )
-        {
-            wxString variantName;
-
-            if( footprint->GetBoard() )
-                variantName = footprint->GetBoard()->GetCurrentVariant();
-
-            wxString text;
-
-            if( !variantName.IsEmpty() )
-                text = footprint->GetFieldValueForVariant( variantName, m_name );
-            else
-                text = field->GetText();
-
-            return wxAny( text );
-        }
-        else
-        {
-            return wxAny( MISSING_FIELD_SENTINEL );
-        }
-    }
-
-private:
-    wxString m_name;
-};
-
-std::set<wxString> PCB_PROPERTIES_PANEL::m_currentFieldNames;
-
 
 class PG_NET_SELECTOR_EDITOR : public wxPGEditor
 {
@@ -650,44 +558,6 @@ void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aRawSelection )
     SELECTION        editableSelection = filterOutReadOnlyGenChildren( aRawSelection );
     const SELECTION& aSelection = editableSelection;
 
-    m_currentFieldNames.clear();
-
-    for( EDA_ITEM* item : aSelection )
-    {
-        if( item->Type() != PCB_FOOTPRINT_T )
-            continue;
-
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
-
-        for( PCB_FIELD* field : footprint->GetFields() )
-        {
-            wxCHECK2( field, continue );
-
-            m_currentFieldNames.insert( field->GetUntranslatedName() );
-        }
-    }
-
-    const wxString groupFields = _HKI( "Fields" );
-
-    // Make sure value comes immediately after reference.  (Reference is invariant, so was added by
-    // FOOTPRINT_DESC().  We *could* still add it here, but then the whole Fields section comes at
-    // the end, which isn't ideal.)
-    if( !m_propMgr.GetProperty( TYPE_HASH( FOOTPRINT ), _HKI( "Value" ) ) )
-        m_propMgr.AddProperty( new PCB_FOOTPRINT_FIELD_PROPERTY( _HKI( "Value" ) ), groupFields );
-
-    for( const wxString& name : m_currentFieldNames )
-    {
-        if( !m_propMgr.GetProperty( TYPE_HASH( FOOTPRINT ), name ) )
-        {
-            m_propMgr.AddProperty( new PCB_FOOTPRINT_FIELD_PROPERTY( name ), groupFields )
-                    .SetAvailableFunc(
-                            [name]( INSPECTABLE* )
-                            {
-                                return PCB_PROPERTIES_PANEL::m_currentFieldNames.count( name );
-                            } );
-        }
-    }
-
     PROPERTIES_PANEL::rebuildProperties( aSelection );
 }
 
@@ -752,7 +622,7 @@ PROPERTY_BASE* PCB_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridE
 
     wxCHECK_MSG( firstItem, nullptr, wxT( "getPropertyFromEvent for a property with nothing selected!") );
 
-    PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ), aEvent.GetPropertyName() );
+    PROPERTY_BASE* property = m_propMgr.GetProperty( firstItem, aEvent.GetPropertyName() );
     wxCHECK_MSG( property, nullptr, wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
 
     return property;
@@ -924,7 +794,7 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
 
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
-        PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *item ), aEvent.GetPropertyName() );
+        PROPERTY_BASE* property = m_propMgr.GetProperty( item, aEvent.GetPropertyName() );
         wxCHECK( property, /* void */ );
 
         if( item->Type() == PCB_TABLECELL_T )

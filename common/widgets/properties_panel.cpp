@@ -282,6 +282,48 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         }
     }
 
+    for( const EDA_ITEM* item : aSelection )
+    {
+        for( PROPERTY_BASE* prop : item->GetDynamicProperties() )
+        {
+            bool commonToAll = true;
+
+            for( const EDA_ITEM* other : aSelection )
+            {
+                std::vector<PROPERTY_BASE*> otherProps = other->GetDynamicProperties();
+
+                if( std::ranges::none_of( otherProps,
+                                          [&]( PROPERTY_BASE* p )
+                                          {
+                                              return p->Name() == prop->Name();
+                                          } ) )
+                {
+                    commonToAll = false;
+                    break;
+                }
+            }
+
+            if( !commonToAll || commonProps.contains( prop->Name() ) )
+                continue;
+
+            commonProps.emplace( prop->Name(), prop );
+
+            auto maxOrderIt = std::ranges::max_element( displayOrder,
+                                                        []( const auto& aL, const auto& aR )
+                                                        {
+                                                            return aL.second < aR.second;
+                                                        } );
+            int  nextOrder = maxOrderIt == displayOrder.end() ? 0 : maxOrderIt->second + 1;
+            displayOrder.emplace( prop->Name(), nextOrder );
+
+            if( const wxString& dynGroup = prop->Group(); !dynGroup.IsEmpty() && !groups.contains( dynGroup ) )
+            {
+                groupDisplayOrder.emplace_back( dynGroup );
+                groups.insert( dynGroup );
+            }
+        }
+    }
+
     bool isLibraryEditor = m_frame->IsType( FRAME_FOOTPRINT_EDITOR )
                         || m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
@@ -442,7 +484,7 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, 
 
     for( EDA_ITEM* item : aSelection )
     {
-        PROPERTY_BASE* property = propMgr.GetProperty( TYPE_HASH( *item ), aPropName );
+        PROPERTY_BASE* property = propMgr.GetProperty( item, aPropName );
 
         if( !property )
             return false;
