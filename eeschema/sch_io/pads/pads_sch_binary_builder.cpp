@@ -75,6 +75,12 @@ namespace
     }
 
 
+    // A saved schematic keys its library on the LIB_ID, so two placements of one part type that
+    // build different symbols have to be told apart. Keyed by part-type name, valued by the
+    // distinct symbols seen under it and the unique name each was given.
+    using LIBRARY_SYMBOL_VARIANTS = std::map<wxString, std::vector<std::pair<std::unique_ptr<LIB_SYMBOL>, wxString>>>;
+
+
     VECTOR2I pagePoint( const SOURCE_POINT& aPoint, int aPageHeight )
     {
         return { toIU( aPoint.x ), aPageHeight - toIU( aPoint.y ) };
@@ -934,17 +940,46 @@ namespace
     }
 
 
-    std::unique_ptr<SCH_SYMBOL> makeSymbol( const MODEL_INDEX& aIndex, const MODEL_PLACEMENT& aPlacement,
-                                            const SCH_SHEET_PATH& aPath, int aPageHeight,
-                                            std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    /**
+     * Give the symbol a name no other content shares, and return that name. Placements of one part
+     * type that differ - a hidden pin number, a different gate's pins - are different symbols.
+     */
+    wxString resolveLibrarySymbolName( LIBRARY_SYMBOL_VARIANTS& aVariantsByName, LIB_SYMBOL* aSymbol )
+    {
+        const int compareFlags = ~( LIB_SYMBOL::COMPARE_FLAGS::UNIT | LIB_SYMBOL::COMPARE_FLAGS::UUID );
+        auto&     variants = aVariantsByName[aSymbol->GetName()];
+
+        for( const auto& [candidate, resolvedName] : variants )
+        {
+            if( candidate->Compare( *aSymbol, compareFlags ) == 0 )
+                return resolvedName;
+        }
+
+        wxString resolved = aSymbol->GetName();
+
+        if( !variants.empty() )
+            resolved = wxString::Format( wxS( "%s_%zu" ), resolved, variants.size() );
+
+        variants.emplace_back( std::make_unique<LIB_SYMBOL>( *aSymbol ), resolved );
+        return resolved;
+    }
+
+
+    std::unique_ptr<SCH_SYMBOL> makeSymbol( LIBRARY_SYMBOL_VARIANTS& aVariantsByName, const MODEL_INDEX& aIndex,
+                                            const MODEL_PLACEMENT& aPlacement, const SCH_SHEET_PATH& aPath,
+                                            int aPageHeight, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
         wxString                    reference = aPlacement.reference.text;
         int                         unit = static_cast<int>( aPlacement.unit );
         std::unique_ptr<LIB_SYMBOL> library = makeLibrarySymbol( aIndex, aPlacement, aDiagnostics, reference, unit );
-        auto                        symbol = std::make_unique<SCH_SYMBOL>();
-        LIB_ID                      libId;
+        const wxString              libraryName = resolveLibrarySymbolName( aVariantsByName, library.get() );
+
+        library->SetName( libraryName );
+
+        auto   symbol = std::make_unique<SCH_SYMBOL>();
+        LIB_ID libId;
         libId.SetLibNickname( wxS( "pads_import" ) );
-        libId.SetLibItemName( library->GetName() );
+        libId.SetLibItemName( libraryName );
         symbol->SetLibId( libId );
         symbol->SetExcludedFromBoard( library->GetPins().empty() );
         symbol->SetLibSymbol( library.release() );
@@ -1283,6 +1318,8 @@ namespace
 
         // Runs across every sheet because a per-sheet restart collides on sheet two
         int nextPowerOrdinal = 1;
+
+        LIBRARY_SYMBOL_VARIANTS librarySymbolVariants;
 
         static void ValidateScreen( const SCH_SCREEN* aScreen )
         {
@@ -1645,7 +1682,8 @@ namespace
         for( const MODEL_PLACEMENT* placement : MODEL_INDEX::ForSheet( aIndex.placementsBySheet, aSourceSheet.id ) )
         {
             std::unique_ptr<SCH_SYMBOL> symbol =
-                    makeSymbol( aIndex, *placement, aPath, pageHeight, aStaged.result.diagnostics );
+                    makeSymbol( aStaged.librarySymbolVariants, aIndex, *placement, aPath, pageHeight,
+                                aStaged.result.diagnostics );
             aScreen->Append( symbol.get() );
             symbol.release();
             ++aStaged.result.counts.symbols;

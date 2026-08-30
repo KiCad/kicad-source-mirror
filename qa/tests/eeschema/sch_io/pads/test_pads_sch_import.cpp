@@ -4039,4 +4039,60 @@ BOOST_AUTO_TEST_CASE( BinaryBoldTextKeepsTheRenderedStrokeWidth )
 }
 
 
+// A LIB_ID is what the saved file keys lib_symbols on. Two placements of one part type that build
+// different symbols must not share it, or one variant wins the save and the reload differs from
+// the import.
+BOOST_AUTO_TEST_CASE( BinaryPlacementVariantsGetDistinctLibIds )
+{
+    using namespace PADS_SCH_BINARY;
+
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    BOOST_REQUIRE( !model.placements.empty() );
+
+    // A second placement of the same part type that hides its pin numbers is a different symbol
+    uint32_t nextId = 0;
+
+    for( const MODEL_PLACEMENT& placement : model.placements )
+        nextId = std::max( nextId, placement.id.Value() + 1 );
+
+    MODEL_PLACEMENT copy = model.placements.front();
+    copy.id = PLACEMENT_ID( nextId );
+    copy.fields.clear();
+    copy.reference.text = model.placements.front().reference.text + wxS( "X" );
+    copy.pinNumbersVisible = !model.placements.front().pinNumbersVisible;
+    copy.position.x += 4000;
+    model.placements.push_back( copy );
+
+    const MODEL_PLACEMENT* first = &model.placements.front();
+    const MODEL_PLACEMENT* second = &model.placements.back();
+
+    PADS_SCH_BINARY_BUILDER builder;
+    builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "connectivity_topology" ) ) );
+
+    SCH_SHEET* root = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( root );
+    SCH_SHEET_PATH path = m_schematic.CurrentSheet();
+
+    auto libIdFor = [&]( const wxString& aReference ) -> wxString
+    {
+        for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( symbol->GetRef( &path ) == aReference )
+                return symbol->GetLibId().GetLibItemName();
+        }
+
+        return wxString();
+    };
+
+    const wxString firstId = libIdFor( first->reference.text );
+    const wxString secondId = libIdFor( second->reference.text );
+
+    BOOST_REQUIRE( !firstId.IsEmpty() );
+    BOOST_REQUIRE( !secondId.IsEmpty() );
+    BOOST_CHECK_MESSAGE( firstId != secondId, "both placements resolved to " << firstId );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
