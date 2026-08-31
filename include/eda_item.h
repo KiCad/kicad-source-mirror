@@ -245,6 +245,8 @@ public:
     bool HasCustomProperties() const { return !m_customProperties.empty(); }
     void ClearCustomProperties() { m_customProperties.clear(); }
 
+    void RemoveCustomProperty( const wxString& aKey );
+
     /**
      * @return true if \a aKey is present and \a aValue was filled
      */

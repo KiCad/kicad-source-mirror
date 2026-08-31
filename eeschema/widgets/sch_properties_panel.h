@@ -64,6 +64,15 @@ protected:
     bool isKeyNameInUse( const wxString& aName ) const override;
     void onKeyRenamed( const wxString& aOldName, const wxString& aNewName ) override;
 
+    bool buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp ) override;
+    void onNewItemLeftBlank( const wxString& aKey ) override;
+
+    void addBlankField();
+    void addBlankCustomProperty();
+    void removeField( const wxString& aName );
+    void removeCustomProperty( const wxString& aName );
+    void onContextMenu( wxCommandEvent& aEvent );
+
     bool handleSheetFilenameChange( SCH_EDIT_FRAME* aFrame, SCH_SHEET* aSheet,
                                     SCH_COMMIT& aChanges, const wxString& aNewFilename );
 
@@ -110,4 +119,5 @@ protected:
     wxPGChoices               m_nets;
 
     wxButton* m_editPinMapButton;
+    wxButton* m_addCustomPropertyButton;
 };

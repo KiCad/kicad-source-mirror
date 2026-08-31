@@ -38,6 +38,8 @@
 #include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/propgrid/advprops.h>
+#include <wx/menu.h>
+#include <wx/utils.h>
 
 
 // This is provided by wx >3.3.0
@@ -148,6 +150,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 
     Bind( wxEVT_PG_LABEL_EDIT_BEGIN, &PROPERTIES_PANEL::onLabelEditBegin, this );
     Bind( wxEVT_PG_LABEL_EDIT_ENDING, &PROPERTIES_PANEL::onLabelEditEnding, this );
+    Bind( wxEVT_PG_RIGHT_CLICK, &PROPERTIES_PANEL::onRightClick, this );
 
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PROPERTIES_PANEL::onCharHook ), nullptr, this );
     Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ), nullptr, this );
@@ -590,6 +593,32 @@ void PROPERTIES_PANEL::onLabelEditEnding( wxPropertyGridEvent& aEvent )
     if( labelEditor )
         newName = labelEditor->GetValue();
 
+    if( !m_pendingNewKey.IsEmpty() && oldName == m_pendingNewKey )
+    {
+        const wxString pendingKey = m_pendingNewKey;
+
+        m_pendingNewKey.Clear();
+
+        if( newName.IsEmpty() || isKeyNameInUse( newName ) )
+        {
+            CallAfter(
+                    [this, pendingKey]()
+                    {
+                        onNewItemLeftBlank( pendingKey );
+                    } );
+        }
+        else
+        {
+            CallAfter(
+                    [this, oldName, newName]()
+                    {
+                        onKeyRenamed( oldName, newName );
+                    } );
+        }
+
+        return;
+    }
+
     if( newName == oldName )
         return;
 
@@ -621,6 +650,56 @@ void PROPERTIES_PANEL::onLabelEditEnding( wxPropertyGridEvent& aEvent )
             {
                 onKeyRenamed( oldName, newName );
             } );
+}
+
+
+void PROPERTIES_PANEL::onRightClick( wxPropertyGridEvent& aEvent )
+{
+    wxPGProperty* pgProp = aEvent.GetProperty();
+
+    if( !pgProp )
+        return;
+
+    m_contextMenuPropertyName = pgProp->GetBaseName();
+
+    wxMenu menu;
+
+    if( !buildContextMenu( menu, pgProp ) )
+        return;
+
+    PopupMenu( &menu, ScreenToClient( wxGetMousePosition() ) );
+}
+
+
+void PROPERTIES_PANEL::beginLabelEdit( const wxString& aKey, bool aStartBlank )
+{
+    for( wxPropertyGridIterator it = m_grid->GetIterator(); !it.AtEnd(); it.Next() )
+    {
+        wxPGProperty* p = it.GetProperty();
+
+        if( !p->IsCategory() && p->GetBaseName() == aKey )
+        {
+            m_grid->SelectProperty( p );
+            m_grid->BeginLabelEdit( 0 );
+
+            if( aStartBlank && m_grid->GetLabelEditor() )
+                m_grid->GetLabelEditor()->SetValue( wxEmptyString );
+
+            break;
+        }
+    }
+}
+
+
+bool PROPERTIES_PANEL::hasCustomPropertySection() const
+{
+    for( PROPERTY_BASE* prop : m_displayed )
+    {
+        if( prop->Group() == wxS( "Custom Properties" ) )
+            return true;
+    }
+
+    return false;
 }
 
 

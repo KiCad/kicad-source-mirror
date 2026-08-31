@@ -66,7 +66,8 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
         m_colorEditorInstance( nullptr ),
         m_fpEditorInstance( nullptr ),
         m_urlEditorInstance( nullptr ),
-        m_editPinMapButton( nullptr )
+        m_editPinMapButton( nullptr ),
+        m_addCustomPropertyButton( nullptr )
 {
     // Pin Map editor launcher (issue #2282).  The button lives below the property grid and is only
     // shown when a single symbol with an effective associated footprint is selected.
@@ -74,6 +75,16 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
     m_editPinMapButton->Hide();
     GetSizer()->Add( m_editPinMapButton, 0, wxALL | wxEXPAND, 5 );
     m_editPinMapButton->Bind( wxEVT_BUTTON, &SCH_PROPERTIES_PANEL::onEditPinMap, this );
+
+    m_addCustomPropertyButton = new wxButton( this, wxID_ANY, _( "Add Custom Property" ) );
+    m_addCustomPropertyButton->Hide();
+    GetSizer()->Add( m_addCustomPropertyButton, 0, wxALL | wxEXPAND, 5 );
+
+    m_addCustomPropertyButton->Bind( wxEVT_BUTTON,
+            [this]( wxCommandEvent& )
+            {
+                addBlankCustomProperty();
+            } );
 
     m_propMgr.Rebuild();
     bool found = false;
@@ -189,6 +200,11 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
         PG_URL_EDITOR* urlEditor = new PG_URL_EDITOR( m_frame );
         m_urlEditorInstance = static_cast<PG_URL_EDITOR*>( wxPropertyGrid::RegisterEditorClass( urlEditor ) );
     }
+
+    Bind( wxEVT_MENU, &SCH_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_ADD_FIELD );
+    Bind( wxEVT_MENU, &SCH_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_ADD_CUSTOM_PROPERTY );
+    Bind( wxEVT_MENU, &SCH_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_FIELD );
+    Bind( wxEVT_MENU, &SCH_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_CUSTOM_PROPERTY );
 }
 
 
@@ -299,6 +315,14 @@ void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     if( m_editPinMapButton && m_editPinMapButton->IsShown() != showEditButton )
     {
         m_editPinMapButton->Show( showEditButton );
+        Layout();
+    }
+
+    bool showAddCustomProps = !aSelection.Empty() && !hasCustomPropertySection();
+
+    if( m_addCustomPropertyButton && m_addCustomPropertyButton->IsShown() != showAddCustomProps )
+    {
+        m_addCustomPropertyButton->Show( showAddCustomProps );
         Layout();
     }
 }
@@ -572,6 +596,9 @@ bool SCH_PROPERTIES_PANEL::isKeyEditable( const wxPGProperty* aPGProp ) const
     if( !item )
         return false;
 
+    if( prop->Group() == _HKI( "Custom Properties" ) )
+        return true;
+
     if( item->Type() == SCH_SYMBOL_T )
     {
         SCH_FIELD* field = static_cast<SCH_SYMBOL*>( item )->GetField( prop->Name() );
@@ -593,6 +620,9 @@ bool SCH_PROPERTIES_PANEL::isKeyNameInUse( const wxString& aName ) const
 
     if( !item )
         return false;
+
+    if( wxString dummy; item->GetCustomProperty( aName, dummy ) )
+        return true;
 
     if( item->Type() == SCH_SYMBOL_T )
         return static_cast<SCH_SYMBOL*>( item )->GetField( aName ) != nullptr;
@@ -618,6 +648,7 @@ void SCH_PROPERTIES_PANEL::onKeyRenamed( const wxString& aOldName, const wxStrin
             continue;
 
         SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+        bool      renamed = false;
 
         if( item->Type() == SCH_SYMBOL_T )
         {
@@ -628,6 +659,7 @@ void SCH_PROPERTIES_PANEL::onKeyRenamed( const wxString& aOldName, const wxStrin
             {
                 changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
                 field->SetName( aNewName );
+                renamed = true;
             }
         }
         else if( item->Type() == SCH_SHEET_T )
@@ -639,13 +671,280 @@ void SCH_PROPERTIES_PANEL::onKeyRenamed( const wxString& aOldName, const wxStrin
             {
                 changes.Modify( sheet, screen, RECURSE_MODE::NO_RECURSE );
                 field->SetName( aNewName );
+                renamed = true;
+            }
+        }
+
+        if( !renamed )
+        {
+            if( wxString value; item->GetCustomProperty( aOldName, value ) )
+            {
+                changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+                item->RemoveCustomProperty( aOldName );
+                item->SetCustomProperty( aNewName, value );
             }
         }
     }
 
-    changes.Push( _( "Rename Field" ) );
+    changes.Push( _( "Rename Property" ) );
 
     AfterCommit();
+}
+
+
+bool SCH_PROPERTIES_PANEL::buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp )
+{
+    if( aPGProp->IsCategory() )
+    {
+        if( aPGProp->GetLabel() == wxGetTranslation( _HKI( "Fields" ) ) )
+            aMenu.Append( ID_CTX_ADD_FIELD, _( "Add Field" ) );
+        else if( aPGProp->GetLabel() == wxGetTranslation( _HKI( "Custom Properties" ) ) )
+            aMenu.Append( ID_CTX_ADD_CUSTOM_PROPERTY, _( "Add Custom Property" ) );
+    }
+    else
+    {
+        PROPERTY_BASE* prop = static_cast<PROPERTY_BASE*>( aPGProp->GetClientData() );
+
+        if( !prop )
+            return false;
+
+        if( prop->Group() == _HKI( "Fields" ) )
+        {
+            if( isKeyEditable( aPGProp ) )
+                aMenu.Append( ID_CTX_REMOVE_FIELD, _( "Remove Field" ) );
+
+            aMenu.Append( ID_CTX_ADD_FIELD, _( "Add Field" ) );
+        }
+        else if( prop->Group() == _HKI( "Custom Properties" ) )
+        {
+            aMenu.Append( ID_CTX_REMOVE_CUSTOM_PROPERTY, _( "Remove Custom Property" ) );
+            aMenu.Append( ID_CTX_ADD_CUSTOM_PROPERTY, _( "Add Custom Property" ) );
+        }
+    }
+
+    return aMenu.GetMenuItemCount() > 0;
+}
+
+
+void SCH_PROPERTIES_PANEL::onContextMenu( wxCommandEvent& aEvent )
+{
+    switch( aEvent.GetId() )
+    {
+    case ID_CTX_ADD_FIELD:             addBlankField();                           break;
+    case ID_CTX_ADD_CUSTOM_PROPERTY:   addBlankCustomProperty();                 break;
+    case ID_CTX_REMOVE_FIELD:          removeField( m_contextMenuPropertyName ); break;
+    case ID_CTX_REMOVE_CUSTOM_PROPERTY: removeCustomProperty( m_contextMenuPropertyName ); break;
+    default:                                                                     break;
+    }
+}
+
+
+void SCH_PROPERTIES_PANEL::addBlankField()
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    if( selection.Empty() )
+        return;
+
+    wxString name;
+
+    for( int n = 0; ; ++n )
+    {
+        name   = GetUserFieldName( n, UNTRANSLATED );
+        bool used = false;
+
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == SCH_SYMBOL_T && static_cast<SCH_SYMBOL*>( item )->GetField( name ) )
+                used = true;
+            else if( item->Type() == SCH_SHEET_T && static_cast<SCH_SHEET*>( item )->GetField( name ) )
+                used = true;
+        }
+
+        if( !used )
+            break;
+    }
+
+    SCH_COMMIT  changes( m_frame );
+    SCH_SCREEN* screen = m_frame->GetScreen();
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* edaItem : selection )
+    {
+        if( !edaItem->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* symbol   = static_cast<SCH_SYMBOL*>( item );
+            SCH_FIELD   newField( symbol, FIELD_T::USER, name );
+
+            newField.SetVisible( false );
+            changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
+            symbol->AddField( newField );
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet    = static_cast<SCH_SHEET*>( item );
+            SCH_FIELD  newField( sheet, FIELD_T::USER, name );
+
+            newField.SetVisible( false );
+            changes.Modify( sheet, screen, RECURSE_MODE::NO_RECURSE );
+            sheet->AddField( newField );
+        }
+    }
+
+    changes.Push( _( "Add Field" ) );
+    AfterCommit();
+
+    m_pendingNewKey = name;
+
+    beginLabelEdit( name, true );
+}
+
+
+void SCH_PROPERTIES_PANEL::addBlankCustomProperty()
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    if( selection.Empty() )
+        return;
+
+    wxString name;
+
+    for( int n = 0; ; ++n )
+    {
+        name   = wxString::Format( wxS( "Property%d" ), n );
+        bool used = false;
+
+        for( EDA_ITEM* item : selection )
+        {
+            if( wxString dummy; item->GetCustomProperty( name, dummy ) )
+            {
+                used = true;
+                break;
+            }
+        }
+
+        if( !used )
+            break;
+    }
+
+    SCH_COMMIT  changes( m_frame );
+    SCH_SCREEN* screen = m_frame->GetScreen();
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* edaItem : selection )
+    {
+        if( !edaItem->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+
+        changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+        item->SetCustomProperty( name, wxEmptyString );
+    }
+
+    changes.Push( _( "Add Custom Property" ) );
+    AfterCommit();
+
+    m_pendingNewKey = name;
+
+    beginLabelEdit( name, true );
+}
+
+
+void SCH_PROPERTIES_PANEL::removeField( const wxString& aName )
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    SCH_COMMIT  changes( m_frame );
+    SCH_SCREEN* screen = m_frame->GetScreen();
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* edaItem : selection )
+    {
+        if( !edaItem->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            SCH_FIELD*  field  = symbol->GetField( aName );
+
+            if( field && !field->IsMandatory() )
+            {
+                changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
+                symbol->RemoveField( aName );
+            }
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+            auto&      fields = sheet->GetFields();
+
+            for( auto it = fields.begin(); it != fields.end(); ++it )
+            {
+                if( !it->IsMandatory() && it->GetName() == aName )
+                {
+                    changes.Modify( sheet, screen, RECURSE_MODE::NO_RECURSE );
+                    fields.erase( it );
+                    break;
+                }
+            }
+        }
+    }
+
+    changes.Push( _( "Remove Field" ) );
+    AfterCommit();
+}
+
+
+void SCH_PROPERTIES_PANEL::removeCustomProperty( const wxString& aName )
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    SCH_COMMIT  changes( m_frame );
+    SCH_SCREEN* screen = m_frame->GetScreen();
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* edaItem : selection )
+    {
+        if( !edaItem->IsSCH_ITEM() )
+            continue;
+
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
+
+        changes.Modify( item, screen, RECURSE_MODE::NO_RECURSE );
+        item->RemoveCustomProperty( aName );
+    }
+
+    changes.Push( _( "Remove Custom Property" ) );
+    AfterCommit();
+}
+
+
+void SCH_PROPERTIES_PANEL::onNewItemLeftBlank( const wxString& aKey )
+{
+    // Note: currently assuming that any newly-created item from the panel is either a field or
+    // a custom property because those are the types we currently support.
+    if( EDA_ITEM* item = getFrontItem() )
+    {
+        if( item->Type() == SCH_SYMBOL_T && static_cast<SCH_SYMBOL*>( item )->GetField( aKey ) )
+            removeField( aKey );
+        else if( item->Type() == SCH_SHEET_T && static_cast<SCH_SHEET*>( item )->GetField( aKey ) )
+            removeField( aKey );
+        else
+            removeCustomProperty( aKey );
+    }
 }
 
 

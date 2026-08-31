@@ -347,7 +347,8 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
         PROPERTIES_PANEL( aParent, aFrame ),
         m_frame( aFrame ),
         m_propMgr( PROPERTY_MANAGER::Instance() ),
-        m_scaleConfirmPending( false )
+        m_scaleConfirmPending( false ),
+        m_addCustomPropertyButton( nullptr )
 {
     m_propMgr.Rebuild();
     bool found = false;
@@ -450,6 +451,21 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
         PG_URL_EDITOR* urlEditor = new PG_URL_EDITOR( m_frame );
         m_urlEditorInstance = static_cast<PG_URL_EDITOR*>( wxPropertyGrid::RegisterEditorClass( urlEditor ) );
     }
+
+    Bind( wxEVT_MENU, &PCB_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_ADD_FIELD );
+    Bind( wxEVT_MENU, &PCB_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_ADD_CUSTOM_PROPERTY );
+    Bind( wxEVT_MENU, &PCB_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_FIELD );
+    Bind( wxEVT_MENU, &PCB_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_CUSTOM_PROPERTY );
+
+    m_addCustomPropertyButton = new wxButton( this, wxID_ANY, _( "Add Custom Property" ) );
+    m_addCustomPropertyButton->Hide();
+    GetSizer()->Add( m_addCustomPropertyButton, 0, wxALL | wxEXPAND, 5 );
+
+    m_addCustomPropertyButton->Bind( wxEVT_BUTTON,
+                                     [this]( wxCommandEvent& )
+                                     {
+                                         addBlankCustomProperty();
+                                     } );
 }
 
 
@@ -536,7 +552,13 @@ bool PCB_PROPERTIES_PANEL::isKeyEditable( const wxPGProperty* aPGProp ) const
 
     EDA_ITEM* item = const_cast<PCB_PROPERTIES_PANEL*>( this )->getFrontItem();
 
-    if( !item || item->Type() != PCB_FOOTPRINT_T )
+    if( !item )
+        return false;
+
+    if( prop->Group() == _HKI( "Custom Properties" ) )
+        return true;
+
+    if( item->Type() != PCB_FOOTPRINT_T )
         return false;
 
     PCB_FIELD* field = static_cast<FOOTPRINT*>( item )->GetField( prop->Name() );
@@ -549,10 +571,14 @@ bool PCB_PROPERTIES_PANEL::isKeyNameInUse( const wxString& aName ) const
 {
     EDA_ITEM* item = const_cast<PCB_PROPERTIES_PANEL*>( this )->getFrontItem();
 
-    if( !item || item->Type() != PCB_FOOTPRINT_T )
+    if( !item )
         return false;
 
-    return static_cast<FOOTPRINT*>( item )->HasField( aName );
+    if( item->Type() == PCB_FOOTPRINT_T && static_cast<FOOTPRINT*>( item )->HasField( aName ) )
+        return true;
+
+    wxString dummy;
+    return item->GetCustomProperty( aName, dummy );
 }
 
 
@@ -566,22 +592,254 @@ void PCB_PROPERTIES_PANEL::onKeyRenamed( const wxString& aOldName, const wxStrin
 
     for( EDA_ITEM* item : selection )
     {
-        if( !item->IsBOARD_ITEM() || item->Type() != PCB_FOOTPRINT_T )
+        if( !item->IsBOARD_ITEM() )
             continue;
 
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
-        PCB_FIELD* field     = footprint->GetField( aOldName );
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-        if( field && !field->IsMandatory() )
+        if( boardItem->Type() == PCB_FOOTPRINT_T )
         {
-            changes.Modify( footprint, nullptr, RECURSE_MODE::NO_RECURSE );
-            field->SetName( aNewName );
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
+            PCB_FIELD* field     = footprint->GetField( aOldName );
+
+            if( field && !field->IsMandatory() )
+            {
+                changes.Modify( footprint, nullptr, RECURSE_MODE::NO_RECURSE );
+                field->SetName( aNewName );
+                continue;
+            }
+        }
+
+        wxString value;
+
+        if( boardItem->GetCustomProperty( aOldName, value ) )
+        {
+            changes.Modify( boardItem, nullptr, RECURSE_MODE::NO_RECURSE );
+            boardItem->RemoveCustomProperty( aOldName );
+            boardItem->SetCustomProperty( aNewName, value );
         }
     }
 
-    changes.Push( _( "Rename Field" ) );
+    changes.Push( _( "Rename Property" ) );
 
     AfterCommit();
+}
+
+
+bool PCB_PROPERTIES_PANEL::buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp )
+{
+    if( aPGProp->IsCategory() )
+    {
+        if( aPGProp->GetLabel() == wxGetTranslation( _HKI( "Fields" ) ) )
+            aMenu.Append( ID_CTX_ADD_FIELD, _( "Add Field" ) );
+        else if( aPGProp->GetLabel() == wxGetTranslation( _HKI( "Custom Properties" ) ) )
+            aMenu.Append( ID_CTX_ADD_CUSTOM_PROPERTY, _( "Add Custom Property" ) );
+    }
+    else
+    {
+        PROPERTY_BASE* prop = static_cast<PROPERTY_BASE*>( aPGProp->GetClientData() );
+
+        if( !prop )
+            return false;
+
+        if( prop->Group() == _HKI( "Fields" ) )
+        {
+            if( isKeyEditable( aPGProp ) )
+                aMenu.Append( ID_CTX_REMOVE_FIELD, _( "Remove Field" ) );
+
+            aMenu.Append( ID_CTX_ADD_FIELD, _( "Add Field" ) );
+        }
+        else if( prop->Group() == _HKI( "Custom Properties" ) )
+        {
+            aMenu.Append( ID_CTX_REMOVE_CUSTOM_PROPERTY, _( "Remove Custom Property" ) );
+            aMenu.Append( ID_CTX_ADD_CUSTOM_PROPERTY, _( "Add Custom Property" ) );
+        }
+    }
+
+    return aMenu.GetMenuItemCount() > 0;
+}
+
+
+void PCB_PROPERTIES_PANEL::onContextMenu( wxCommandEvent& aEvent )
+{
+    switch( aEvent.GetId() )
+    {
+    case ID_CTX_ADD_FIELD:              addBlankField();                                    break;
+    case ID_CTX_ADD_CUSTOM_PROPERTY:    addBlankCustomProperty();                           break;
+    case ID_CTX_REMOVE_FIELD:           removeField( m_contextMenuPropertyName );           break;
+    case ID_CTX_REMOVE_CUSTOM_PROPERTY: removeCustomProperty( m_contextMenuPropertyName );  break;
+    default:
+        break;
+    }
+}
+
+
+void PCB_PROPERTIES_PANEL::addBlankField()
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    if( selection.Empty() )
+        return;
+
+    // Pick a unique untranslated placeholder name that doesn't collide with an existing field.
+    wxString name;
+
+    for( int n = 0; ; ++n )
+    {
+        name   = GetUserFieldName( n, UNTRANSLATED );
+        bool used = false;
+
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == PCB_FOOTPRINT_T && static_cast<FOOTPRINT*>( item )->HasField( name ) )
+            {
+                used = true;
+                break;
+            }
+        }
+
+        if( !used )
+            break;
+    }
+
+    BOARD_COMMIT changes( m_frame );
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() != PCB_FOOTPRINT_T )
+            continue;
+
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+        PCB_FIELD* field     = new PCB_FIELD( footprint, FIELD_T::USER, name );
+
+        field->SetText( wxEmptyString );
+        field->SetVisible( false );
+        changes.Modify( footprint, nullptr, RECURSE_MODE::NO_RECURSE );
+        footprint->Add( field );
+    }
+
+    changes.Push( _( "Add Field" ) );
+    AfterCommit();
+
+    m_pendingNewKey = name;
+
+    beginLabelEdit( name, true );
+}
+
+
+void PCB_PROPERTIES_PANEL::addBlankCustomProperty()
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    if( selection.Empty() )
+        return;
+
+    wxString name;
+
+    for( int n = 0; ; ++n )
+    {
+        name   = wxString::Format( wxS( "Property%d" ), n );
+        bool used = false;
+
+        for( EDA_ITEM* item : selection )
+        {
+            wxString dummy;
+
+            if( item->GetCustomProperty( name, dummy ) )
+            {
+                used = true;
+                break;
+            }
+        }
+
+        if( !used )
+            break;
+    }
+
+    BOARD_COMMIT changes( m_frame );
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->IsBOARD_ITEM() )
+        {
+            changes.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
+            item->SetCustomProperty( name, wxEmptyString );
+        }
+    }
+
+    changes.Push( _( "Add Custom Property" ) );
+    AfterCommit();
+
+    m_pendingNewKey = name;
+
+    beginLabelEdit( name, true );
+}
+
+
+void PCB_PROPERTIES_PANEL::removeField( const wxString& aName )
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    BOARD_COMMIT changes( m_frame );
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() != PCB_FOOTPRINT_T )
+            continue;
+
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+        PCB_FIELD* field     = footprint->GetField( aName );
+
+        if( field && !field->IsMandatory() )
+            changes.Remove( field );
+    }
+
+    changes.Push( _( "Remove Field" ) );
+    AfterCommit();
+}
+
+
+void PCB_PROPERTIES_PANEL::removeCustomProperty( const wxString& aName )
+{
+    SELECTION fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    BOARD_COMMIT changes( m_frame );
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->IsBOARD_ITEM() )
+        {
+            changes.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
+            item->RemoveCustomProperty( aName );
+        }
+    }
+
+    changes.Push( _( "Remove Custom Property" ) );
+    AfterCommit();
+}
+
+
+void PCB_PROPERTIES_PANEL::onNewItemLeftBlank( const wxString& aKey )
+{
+    // Note: currently assuming that any newly-created item from the panel is either a field or
+    // a custom property because those are the types we currently support.
+    if( EDA_ITEM* item = getFrontItem();
+        item && item->Type() == PCB_FOOTPRINT_T && static_cast<FOOTPRINT*>( item )->HasField( aKey ) )
+    {
+        removeField( aKey );
+    }
+    else
+    {
+        removeCustomProperty( aKey );
+    }
 }
 
 
@@ -617,6 +875,14 @@ void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aRawSelection )
     const SELECTION& aSelection = editableSelection;
 
     PROPERTIES_PANEL::rebuildProperties( aSelection );
+
+    bool showAddCustomProps = !aSelection.Empty() && !hasCustomPropertySection();
+
+    if( m_addCustomPropertyButton && m_addCustomPropertyButton->IsShown() != showAddCustomProps )
+    {
+        m_addCustomPropertyButton->Show( showAddCustomProps );
+        Layout();
+    }
 }
 
 

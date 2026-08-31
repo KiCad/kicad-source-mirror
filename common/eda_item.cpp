@@ -144,6 +144,13 @@ void EDA_ITEM::SetParent( EDA_ITEM* aParent )
 }
 
 
+void EDA_ITEM::RemoveCustomProperty( const wxString& aKey )
+{
+    m_customProperties.erase( aKey );
+    m_dynamicCustomPropsCache.erase( aKey );
+}
+
+
 bool EDA_ITEM::GetCustomProperty( const wxString& aKey, wxString& aValue ) const
 {
     auto it = m_customProperties.find( aKey );

@@ -36,6 +36,7 @@ class PG_NET_SELECTOR_EDITOR;
 class PG_TRACK_WIDTH_EDITOR;
 class PG_FPID_EDITOR;
 class PG_URL_EDITOR;
+class wxButton;
 
 class PCB_PROPERTIES_PANEL : public PROPERTIES_PANEL
 {
@@ -63,6 +64,15 @@ protected:
     bool isKeyEditable( const wxPGProperty* aPGProp ) const override;
     bool isKeyNameInUse( const wxString& aName ) const override;
     void onKeyRenamed( const wxString& aOldName, const wxString& aNewName ) override;
+
+    bool buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp ) override;
+    void onNewItemLeftBlank( const wxString& aKey ) override;
+
+    void addBlankField();
+    void addBlankCustomProperty();
+    void removeField( const wxString& aName );
+    void removeCustomProperty( const wxString& aName );
+    void onContextMenu( wxCommandEvent& aEvent );
 
     void applyConfirmedScale( const wxString& aPropName, const wxVariant& aValue );
 
@@ -104,6 +114,7 @@ protected:
     PG_TRACK_WIDTH_EDITOR*  m_trackWidthEditorInstance;
     PG_FPID_EDITOR*      m_fpEditorInstance;
     PG_URL_EDITOR*       m_urlEditorInstance;
+    wxButton*            m_addCustomPropertyButton;
 
     wxPGChoices m_nets;
 
