@@ -135,7 +135,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
-                if( aJson.empty() || !aJson.is_object() )
+                if( !aJson.is_object() )
                     return;
 
                 m_BusAliases.clear();
@@ -166,6 +166,9 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
                         m_BusAliases.emplace( name, std::move( members ) );
                 }
             }, {} ) );
+
+    // Let the save drop deleted aliases instead of merging them back in
+    m_params.back()->SetClearUnknownKeys();
 
     m_NetSettings = std::make_shared<NET_SETTINGS>( this, "net_settings" );
 
