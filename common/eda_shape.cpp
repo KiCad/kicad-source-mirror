@@ -1252,7 +1252,7 @@ void EDA_SHAPE::SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeA
 }
 
 
-wxString EDA_SHAPE::getFriendlyName() const
+wxString EDA_SHAPE::getFriendlyName( FRAME_T aFrameType ) const
 {
     if( IsProxyItem() )
     {
@@ -1262,6 +1262,10 @@ wxString EDA_SHAPE::getFriendlyName() const
         case SHAPE_T::SEGMENT:   return _( "Thermal Spoke Template" );
         default:                 return _( "Unrecognized" );
         }
+    }
+    else if( aFrameType == FRAME_SCH_SYMBOL_EDITOR && m_shape == SHAPE_T::POLY )
+    {
+        return _( "Connected Lines" );
     }
     else
     {
@@ -1284,7 +1288,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     wxString msg;
 
     wxString shape = _( "Shape" );
-    aList.emplace_back( shape, getFriendlyName() );
+    aList.emplace_back( shape, getFriendlyName( aFrame->GetFrameType() ) );
 
     switch( m_shape )
     {

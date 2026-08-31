@@ -32,6 +32,7 @@
 #include <properties/property.h>
 #include <stroke_params.h>
 #include <trigo.h>
+#include <frame_type.h>
 #include <api/serializable.h>
 
 class LINE_READER;
@@ -447,12 +448,10 @@ public:
      * @param aClearance is the clearance around the pad.
      * @param aError is the maximum deviation from a true arc.
      * @param aErrorLoc whether any approximation error should be placed inside or outside
-     * @param ignoreLineWidth is used for edge cut items where the line width is only for
-     *                        visualization
+     * @param ignoreLineWidth is used for edge cut items where the line width is only for visualization
      */
-    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
-                                  ERROR_LOC aErrorLoc, bool ignoreLineWidth = false,
-                                  bool includeFill = false ) const;
+    void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                  bool ignoreLineWidth = false, bool includeFill = false ) const;
 
     int Compare( const EDA_SHAPE* aOther ) const;
 
@@ -461,7 +460,7 @@ public:
     bool operator==( const EDA_SHAPE& aOther ) const;
 
 protected:
-    wxString getFriendlyName() const;
+    wxString getFriendlyName( FRAME_T aFrameType ) const;
 
     void     setPosition( const VECTOR2I& aPos );
     VECTOR2I getPosition() const;
