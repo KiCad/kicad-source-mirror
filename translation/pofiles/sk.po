@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-26 19:51+0000\n"
+"PO-Revision-Date: 2026-08-31 12:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -1199,7 +1199,7 @@ msgstr "Šírka:"
 #: common/dialogs/panel_gal_options_base.cpp:57
 #: common/dialogs/panel_gal_options_base.cpp:68
 msgid "pixels"
-msgstr "pixely"
+msgstr "pixelov"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:76
 #: common/dialogs/panel_common_settings_base.cpp:288
@@ -1410,11 +1410,11 @@ msgstr "X rozlíšenie:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:120
 msgid "pixels/in"
-msgstr "pixely/palec"
+msgstr "pixelov/palec"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:121
 msgid "pixels/mm"
-msgstr "pixely/mm"
+msgstr "pixelov/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:126
 msgid "Y resolution:"
@@ -5901,7 +5901,7 @@ msgstr "Bodky"
 
 #: common/dialogs/panel_gal_options_base.cpp:34
 msgid "Lines"
-msgstr "Riadky"
+msgstr "Čiary"
 
 #: common/dialogs/panel_gal_options_base.cpp:37
 msgid "Small crosses"
@@ -8331,7 +8331,7 @@ msgstr "Farba výplne"
 #: eeschema/dialogs/dialog_shape_properties.cpp:124 eeschema/sch_line.cpp:1377
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1111
 msgid "Arrow"
-msgstr ""
+msgstr "Šípka"
 
 #: common/eda_shape.cpp:4776 eeschema/dialogs/dialog_line_properties.cpp:117
 #: eeschema/dialogs/dialog_shape_properties.cpp:127 eeschema/sch_line.cpp:1379
@@ -8343,9 +8343,8 @@ msgstr "Štvorce"
 #: common/eda_shape.cpp:4777 eeschema/dialogs/dialog_line_properties.cpp:115
 #: eeschema/dialogs/dialog_shape_properties.cpp:125 eeschema/sch_line.cpp:1380
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1112
-#, fuzzy
 msgid "Open Arrow"
-msgstr "Vybrať v knižnici"
+msgstr "Otvorená šípka"
 
 #: common/eda_shape.cpp:4780 eeschema/sch_line.cpp:1461
 #, fuzzy
@@ -17172,7 +17171,7 @@ msgstr "Šírka ramena tep.prep.:"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1377
 #, c-format
 msgid "Shape sizes of 0 = auto (%g× line width)."
-msgstr ""
+msgstr "Veľkosti tvarov 0 = automatické (%g× šírka čiary)."
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
@@ -19842,7 +19841,7 @@ msgstr "Režim kreslenia čiar:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "Free Angle"
-msgstr "Voľný uhol"
+msgstr "Ľubovoľný uhol"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "90 deg Angle"
@@ -24793,7 +24792,7 @@ msgstr "KiCad súbory knižnice symbolov"
 #: eeschema/sch_io/pads/pads_sch_parser.cpp:2086
 #, c-format
 msgid "BUSSES line %llu: unsupported record, %s. The bus was skipped."
-msgstr ""
+msgstr "ZBERNICE línia %llu: nepodporovaný záznam, %s. Zbernica bola vynechaná."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:416
 #, fuzzy, c-format
@@ -24806,6 +24805,9 @@ msgid ""
 "'%s' contains a complete PADS Logic binary schematic and cannot be loaded as "
 "a hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
+"'%s' obsahuje kompletnú PADS Logic binárnu schému a nemožno ju načítať ako "
+"hierarchický list. Namiesto toho použite Súbor > Importovať > Schéma, ktorá "
+"nie je KiCad."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1306
 #, fuzzy, c-format
@@ -24815,7 +24817,7 @@ msgstr "Súbor '%s' nie je platná gEDA schéma."
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1337
 #, c-format
 msgid " (%zu occurrences)"
-msgstr ""
+msgstr " (%zu výskytov)"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1428
 #, c-format
@@ -25409,7 +25411,7 @@ msgstr "Zrkadliť X"
 
 #: eeschema/sch_symbol.cpp:4718
 msgid "Mirror Y"
-msgstr "Zrcadlit Y"
+msgstr "Zrkadliť Y"
 
 #: eeschema/sch_symbol.cpp:4746 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:5366 pcbnew/widgets/search_handlers.cpp:145
@@ -25420,7 +25422,7 @@ msgstr "Knižničné prepojenie"
 #: pcbnew/footprint.cpp:5369 pcbnew/plot_board_layers.cpp:188
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
-msgstr "Popis knižnice"
+msgstr "Knižničný popis"
 
 #: eeschema/sch_table.cpp:391
 #, c-format
@@ -28187,7 +28189,7 @@ msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Skryté napájacie vývody prenášajú svoje názvy vývodov do všetkých "
-"pripojených sietí.)"
+"pripojených spojov.)"
 
 #: eeschema/symbol_checker.cpp:363
 #, c-format
@@ -31085,6 +31087,7 @@ msgstr "Uloží aktuálnu dosku"
 #: pcbnew/tools/edit_tool.cpp:2323
 msgid "Use Properties panel to edit properties common to selected items."
 msgstr ""
+"Na úpravu vlastností spoločných pre vybraté položky použite panel Vlastnosti."
 
 #: eeschema/tools/sch_edit_tool.cpp:2947
 #: eeschema/tools/symbol_editor_edit_tool.cpp:946
@@ -31130,7 +31133,7 @@ msgstr "Upraviť vlastnosti symbolu..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3929
 msgid "Edit Netclasses..."
-msgstr "Upraviť triedy sietí..."
+msgstr "Upraviť triedy spojov..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3933 eeschema/tools/sch_edit_tool.cpp:3987
 #, fuzzy
@@ -34695,31 +34698,31 @@ msgstr "Jednotky protokolu, platné možnosti: in, mm"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:53
 msgid "Omit color from the CSV export"
-msgstr ""
+msgstr "Vynechať farbu z exportu CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:56
 msgid "Omit material from the CSV export"
-msgstr ""
+msgstr "Vynechať materiál z exportu CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:60
 msgid "Omit thickness from the CSV export"
-msgstr ""
+msgstr "Vynechať hrúbku z exportu CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:64
 msgid "Omit Epsilon R from the CSV export"
-msgstr ""
+msgstr "Vynechať Epsilon R z exportu CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:68
 msgid "Omit loss tangent from the CSV export"
-msgstr ""
+msgstr "Vynechať stratový tangent z exportu CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:72
 msgid "Omit board finish from the CSV export"
-msgstr ""
+msgstr "Vynechať povrchovú úpravu dosky z exportu CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:76
 msgid "Omit board options from the CSV export"
-msgstr ""
+msgstr "Vynechať možnosti dosky z exportu CSV"
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
 msgid "Generate a board statistics report"
@@ -41680,6 +41683,8 @@ msgid ""
 "Footprint '%s' in the reference area (%s) appears as '%s' in the target area "
 "(%s)."
 msgstr ""
+"Puzdro '%s' v referenčnej oblasti (%s) sa v cieľovej oblasti (%s) zobrazuje "
+"ako '%s'."
 
 #: pcbnew/connectivity/topo_match.cpp:771
 #, c-format
@@ -41687,6 +41692,8 @@ msgid ""
 "Footprint '%s' is used by %s in the target area but by nothing in the "
 "reference area."
 msgstr ""
+"Puzdro '%s' je používané %s v cieľovej oblasti, ale ničím v referenčnej "
+"oblasti."
 
 #: pcbnew/connectivity/topo_match.cpp:777
 #, c-format
@@ -41694,11 +41701,13 @@ msgid ""
 "Footprint '%s' is used by %s in the reference area but by nothing in the "
 "target area."
 msgstr ""
+"Puzdro '%s' je používané %s v referenčnej oblasti, ale ničím v cieľovej "
+"oblasti."
 
 #: pcbnew/connectivity/topo_match.cpp:787
 #, c-format
 msgid "Footprint '%s': %d in the reference area, %d in the target area."
-msgstr ""
+msgstr "Puzdro '%s': %d v referenčnej oblasti, %d v cieľovej oblasti."
 
 #: pcbnew/connectivity/topo_match.cpp:837
 #, fuzzy
@@ -41726,6 +41735,9 @@ msgid ""
 "Gave up after %d attempts to pair up the two areas. Either their connections "
 "differ, or too many components are interchangeable to tell apart."
 msgstr ""
+"Neúspešne ukončené po %d pokusoch o spárovanie dvoch oblastí. Buď sa ich "
+"pripojenia líšia, alebo je príliš veľa komponentov zameniteľných pre "
+"rozlíšenie."
 
 #: pcbnew/connectivity/topo_match.cpp:1365
 #, c-format
@@ -43572,7 +43584,7 @@ msgstr ""
 "Vybrať smer šípky kóty\n"
 "Automaticky: Určené na základe polohy textu.\n"
 "Smerom dovnútra: >-----<\n"
-"Smerom von: <----->"
+"Smerom von:       <----->"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:140
 #: pcbnew/pcb_dimension.cpp:2114 pcbnew/pcb_dimension.cpp:2305
@@ -44020,6 +44032,8 @@ msgstr "Zahrnúť:"
 #: pcbnew/dialogs/dialog_export_2581.cpp:440
 msgid "This data set has no optional sections to choose from."
 msgstr ""
+"Tento údajový súbor nemá žiadne voliteľné sekcie, z ktorých by ste si mohli "
+"vybrať."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:441
 #: pcbnew/dialogs/dialog_export_2581.cpp:446
@@ -44029,7 +44043,7 @@ msgstr "Vlastná veľkosť"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:445
 msgid "Choose the optional sections to include."
-msgstr ""
+msgstr "Vybrať voliteľné sekcie, ktoré majú byť zahrnuté."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -44074,9 +44088,8 @@ msgid "Content"
 msgstr "Obsah bunky:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
-#, fuzzy
 msgid "Data set:"
-msgstr "Technický list"
+msgstr "Údajový súbor:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
 #, fuzzy
@@ -44105,28 +44118,31 @@ msgstr "Zadný pohľad osadenia"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
 msgid "Stencil"
-msgstr ""
+msgstr "Šablóna"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
 msgid ""
 "Which sections of the design the file carries, per the IPC-2581 function "
 "mode table"
 msgstr ""
+"Časti návrhu, ktoré súbor obsahuje podľa tabuľky funkčných režimov IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:133
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
 msgid "Net names:"
-msgstr "Názvy sietí:"
+msgstr "Názvy spojov:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:137
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonymizovať"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid ""
 "Anonymized names keep connectivity for netlist compare without carrying the "
 "design intent"
 msgstr ""
+"Anonymizované názvy zachovávajú konektivitu pre porovnávanie netlistov bez "
+"toho, aby prenášali zámer návrhu"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
 #, fuzzy
@@ -44145,6 +44161,9 @@ msgid ""
 "text drawn on silkscreen is artwork the fabricator must reproduce and is "
 "always kept."
 msgstr ""
+"Vynecháva označenie z komponentu, zoznamu materiálu a metadát grafiky. "
+"Referenčný text potlače je grafikou, ktorú musí výrobca reprodukovať a je "
+"vždy uchovávaný."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:160
 #, fuzzy
@@ -44606,13 +44625,13 @@ msgstr "Vyplniť všetky prekovy"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:158
 msgid "Net filter (supports wildcards):"
-msgstr "Filter sietí (podporuje zástupné znaky):"
+msgstr "Filter spojov (podporuje zástupné znaky):"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:163
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
 msgstr ""
-"Exportovaní budú iba medené položky patriace do sietí zodpovedajúcich tomuto "
+"Exportované budú iba medené položky patriace k spojom zodpovedajúcich tomuto "
 "filtru."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:177
@@ -45223,7 +45242,7 @@ msgstr "Zmeniť puzdro..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:236
 #: pcbnew/tools/pcb_actions.cpp:813
 msgid "Edit Library Footprint..."
-msgstr "Upraviť knižnicu puzdra..."
+msgstr "Upraviť puzdro v knižnici..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:327
@@ -45620,6 +45639,9 @@ msgid ""
 "\n"
 "They will be skipped."
 msgstr ""
+"Zložené padstacky nie je možné exportovať cez CSV.\n"
+"\n"
+"Budú preskočené."
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1268
 #, fuzzy
@@ -46575,9 +46597,8 @@ msgid "Major tick every:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:156
-#, fuzzy
 msgid "lines"
-msgstr "Riadky"
+msgstr "čiary"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:160
 #, fuzzy
@@ -49653,11 +49674,11 @@ msgstr "Režim ťahania spoja myšou:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
 msgid "Drag (45 degree mode)"
-msgstr "Ťahanie (režim 45 stupňov)"
+msgstr "Ťahať (režim 45 stupňov)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
 msgid "Drag (free angle)"
-msgstr "Drag (voľný uhol)"
+msgstr "Ťahať (ľubovoľný uhol)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:96
 msgid "Flip board items:"
@@ -50010,7 +50031,7 @@ msgstr "Os X"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:60
 msgid "Increases right"
-msgstr "Zvyšuje sa správne"
+msgstr "Zvyšuje sa vpravo"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:63
 msgid "Increases left"
@@ -50022,7 +50043,7 @@ msgstr "Os Y"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:79
 msgid "Increases up"
-msgstr "Zvyšuje sa"
+msgstr "Zvyšuje sa nahor"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:82
 msgid "Increases down"
@@ -53491,7 +53512,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:273
 msgid "Net chain nets do not have consistent tuning profile assignment"
-msgstr ""
+msgstr "Zreťazený spoje nemajú konzistentné priradenie profilu ladenia"
 
 #: pcbnew/drc/drc_item.cpp:277
 msgid "Skew between tracks out of range"
@@ -54422,7 +54443,7 @@ msgstr "Kontrolujú sa chýbajúce ladiace profily..."
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:86
 #, c-format
 msgid "Net chain %s nets have multiple tuning profiles assigned"
-msgstr ""
+msgstr "Zreťazený spoj %s má priradených viacero ladiacich profilov"
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:91
 msgid "Gathering physical items..."
@@ -54699,7 +54720,7 @@ msgstr "Cez dĺžku:"
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:56
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:144
 msgid "Allowed deviation above or below the optimum length"
-msgstr ""
+msgstr "Povolená odchýlka nad alebo pod optimálnu dĺžku"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:78
 msgid "Optimum Length must be greater than 0"
@@ -54715,7 +54736,7 @@ msgstr "Tolerancia je príliš veľká: výsledná minimálna dĺžka nie je kla
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:146
 msgid "Maximum length difference between matched tracks"
-msgstr ""
+msgstr "Maximálny rozdiel dĺžky medzi zhodnými spojmi"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:147
 msgid "Within diff pairs"
@@ -54789,7 +54810,7 @@ msgstr "Zakázať"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:53
 msgid "Forbid the matched items entirely"
-msgstr ""
+msgstr "Úplne zakázať zhodné položky"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:45
 msgid "Where conditions match:"
@@ -54829,7 +54850,7 @@ msgstr "Objekt B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:60
 msgid "Which of the two compared objects this condition applies to"
-msgstr ""
+msgstr "Na ktorý z dvoch porovnávaných objektov sa táto podmienka vzťahuje"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:68
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
@@ -58368,7 +58389,7 @@ msgstr "Vytváranie vyrovnávacích pamätí"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4615
 msgid "Creating nets"
-msgstr "Vytváranie sietí"
+msgstr "Vytváranie spojov"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4624
 msgid "Creating tracks"
@@ -59831,7 +59852,7 @@ msgstr "Adresár knižnice DPS puzdier gEDA / Lepton EDA"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:381
 msgid "Cannot produce this IPC-2581 data set."
-msgstr ""
+msgstr "Nie je možné vytvoriť IPC-2581 údajový súbor."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:391
 #, fuzzy
@@ -59941,9 +59962,9 @@ msgid "Generating vendor list"
 msgstr "&Generovať Netlist"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4938
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown IPC-2581 data set '%s'."
-msgstr "Neznámy reťazec Mode: '%s'."
+msgstr "Neznámy IPC-2581 údajový súbor %s'."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4949
 #, fuzzy, c-format
@@ -60379,7 +60400,9 @@ msgstr "Nepodarilo sa vytvoriť adresár '%s'."
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:847
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
-msgstr "Importovaných %zu puzdier, %d sietí, %zu spojov, %zu prekovov, %zu zón"
+msgstr ""
+"Importovaných %zu puzdier, %d spojov, %zu medených spojov, %zu prekovov, %zu "
+"zón"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:122
 msgid "Starting PADS PCB import"
@@ -62340,7 +62363,7 @@ msgstr "(žiadny spoj)"
 
 #: pcbnew/router/router_tool.cpp:3147
 msgid "Free-angle"
-msgstr "Voľný uhol"
+msgstr "Ľubovoľný uhol"
 
 #: pcbnew/router/router_tool.cpp:3153
 msgid "45-degree"
@@ -62634,7 +62657,7 @@ msgstr "Na zlúčenie, sa zóny dostatočne neprekrývajú."
 
 #: pcbnew/tools/board_editor_control.cpp:1778
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "Niektoré kódy sietí zón sa nezhodovali a neboli zlúčené."
+msgstr "Niektoré kódy spojov zón sa nezhodovali a neboli zlúčené."
 
 #: pcbnew/tools/board_editor_control.cpp:1784
 msgid "Some zones were rule areas and were not merged."
@@ -62678,7 +62701,7 @@ msgstr "Výber neobsahuje položky s označenými spojmi."
 
 #: pcbnew/tools/board_inspection_tool.cpp:85
 msgid "Net Inspection Tools"
-msgstr "Nástroje pre kontrolu sietí"
+msgstr "Nástroje pre kontrolu spojov"
 
 #: pcbnew/tools/board_inspection_tool.cpp:221
 #, c-format
@@ -65388,7 +65411,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2007
 msgid "Net Color Mode (3-state)"
-msgstr "Režim farieb sietí (3-stavový)"
+msgstr "Režim farieb spoja (3-stavový)"
 
 #: pcbnew/tools/pcb_actions.cpp:2008
 msgid ""
@@ -66171,7 +66194,7 @@ msgstr "Rozdeliť segment spoja na dva segmenty spojené na pozícii kurzora."
 
 #: pcbnew/tools/pcb_actions.cpp:3071
 msgid "Drag 45 Degree Mode"
-msgstr "Ťahanie v režime 45 stupňov"
+msgstr "Ťahať v režime 45 stupňov"
 
 #: pcbnew/tools/pcb_actions.cpp:3072
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
@@ -66180,7 +66203,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:3080
 msgid "Drag Free Angle"
-msgstr "Ťahanie pod voľným uhlom"
+msgstr "Ťahať pod akýmkoľvek uhlom"
 
 #: pcbnew/tools/pcb_actions.cpp:3081
 msgid ""
