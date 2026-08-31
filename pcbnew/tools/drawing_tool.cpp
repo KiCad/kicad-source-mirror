@@ -4557,11 +4557,11 @@ int DRAWING_TOOL::runSimpleShapeDraw( const TOOL_EVENT& aEvent, SHAPE_T aShapeTy
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
     TOOL_EVENT         originalEvent = aEvent;     // This can change out from under us when the event loop runs
-    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, originalEvent );
 
     Activate();
 
-    while( aDrawer( aEvent, &shape, startingPoint ) )
+    while( aDrawer( originalEvent, &shape, startingPoint ) )
     {
         if( shape )
         {

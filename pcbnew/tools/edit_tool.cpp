@@ -3236,10 +3236,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         m_selectionTool->ReportFilteredLockedItems();
 
         if( hadInitialSelection && selectionCopy.Empty() )
-        {
-            editFrame->PopTool( aEvent );
             return 0;
-        }
 
         size_t beforeFPCount = selectionCopy.CountType( PCB_FOOTPRINT_T );
 
