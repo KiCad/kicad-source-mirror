@@ -938,6 +938,31 @@ static void drawAltPinModesIcon( GAL& aGal, const VECTOR2D& aPos, double aSize, 
 };
 
 
+/**
+ * Draw the stack icon, three bars standing in for the pins in the stack.
+ */
+static void drawStackedPinIcon( GAL& aGal, const VECTOR2D& aPos, int aSize, bool aVertical, int aExtraLineWidth,
+                                const COLOR4D& aColor )
+{
+    aGal.Save();
+    aGal.Translate( aPos );
+
+    aGal.SetIsFill( true );
+    aGal.SetIsStroke( false );
+    aGal.SetFillColor( aColor );
+
+    BuildStackedPinIconBars( aSize, aVertical,
+            [&]( const BOX2I& aBar )
+            {
+                BOX2I bar( aBar );
+                bar.Inflate( aExtraLineWidth / 2 );
+                aGal.DrawRectangle( bar.GetOrigin(), bar.GetEnd() );
+            } );
+
+    aGal.Restore();
+}
+
+
 void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 {
     // Don't draw pins from a selection view-group.  Pins in a schematic must always be drawn
@@ -1542,9 +1567,13 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
     // Request text layout info and draw it
 
+    // A pad-remapped label pushes the whole number aside, so whatever sits after the head moves with it
+    VECTOR2I remapShift;
+
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numInfo = cache.GetPinNumberInfo( shadowWidth ) )
     {
         std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> origInfo;
+        const VECTOR2I                             unshifted = numInfo->m_TextPosition;
 
         // Vertical numbers read bottom to top. Shift the pair back when the label would otherwise run into the
         // symbol body.
@@ -1578,6 +1607,8 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
             }
         }
 
+        remapShift = numInfo->m_TextPosition - unshifted;
+
         drawTextInfo( *numInfo, getColorForLayer( LAYER_PINNUM ) );
 
         if( origInfo )
@@ -1592,6 +1623,19 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         }
     }
 
+    if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> tailInfo = cache.GetPinNumberTailInfo( shadowWidth ) )
+    {
+        tailInfo->m_TextPosition += remapShift;
+        drawTextInfo( *tailInfo, getColorForLayer( LAYER_PINNUM ) );
+    }
+
+    // A zero number text size still needs the icon, since it is the only trace of the stack
+    if( OPT_BOX2I stackIconBox = cache.GetStackIconBBox() )
+    {
+        drawStackedPinIcon( *m_gal, stackIconBox->GetCenter() + remapShift, StackedPinIconSize( *aPin ), dir.y != 0,
+                            shadowWidth, getColorForLayer( LAYER_PINNUM ) );
+    }
+
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> nameInfo = cache.GetPinNameInfo( shadowWidth ) )
     {
         drawTextInfo( *nameInfo, getColorForLayer( LAYER_PINNAM ) );
@@ -1602,6 +1646,13 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
             // anyway.
             drawAltPinModesIcon( *m_gal, altIconBox->GetCenter(), altIconBox->GetWidth(), true,
                                  nameInfo->m_Angle == ANGLE_VERTICAL, shadowWidth, getColorForLayer( LAYER_PINNAM ) );
+        }
+
+        if( OPT_BOX2I stackIconBox = cache.GetStackNameIconBBox() )
+        {
+            drawStackedPinIcon( *m_gal, stackIconBox->GetCenter(),
+                                std::min( aPin->GetNameTextSize(), schIUScale.mmToIU( 1.5 ) ),
+                                nameInfo->m_Angle == ANGLE_VERTICAL, shadowWidth, getColorForLayer( LAYER_PINNAM ) );
         }
     }
 

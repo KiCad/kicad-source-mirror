@@ -49,6 +49,8 @@ struct PIN_COMPARISON_DATA
     std::optional<bool> hidden;
     std::optional<int> numberTextSize;
     std::optional<int> nameTextSize;
+    PIN_NUMBER_DISPLAY numberDisplay = PIN_NUMBER_DISPLAY::ALL;
+    bool stackIconOnName = false;
     std::map<wxString, PIN_ALTERNATE> alternates;
 
     int Compare( const PIN_COMPARISON_DATA& aOther, int aCompareFlags ) const;

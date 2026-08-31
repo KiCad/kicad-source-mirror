@@ -293,6 +293,8 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
     for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
         m_choiceOrientation->Insert( orientationNames[ii], KiBitmapBundle( orientationIcons[ii] ), ii );
 
+    m_choiceNumberDisplay->Append( PinNumberDisplayNames() );
+
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
     m_tabOrder = {
@@ -306,6 +308,8 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN
         m_pinLengthCtrl,
         m_nameSizeCtrl,
         m_numberSizeCtrl,
+        m_choiceNumberDisplay,
+        m_checkStackIconOnName,
         m_checkApplyToAllParts,
       	m_checkApplyToAllBodyStyles,
       	m_checkShow,
@@ -366,6 +370,8 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_posY.SetValue( m_origPos.y );
     m_textPinNumber->SetValue( m_pin->GetNumber() );
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
+    m_choiceNumberDisplay->SetSelection( PinNumberDisplayIndex( m_pin->GetNumberDisplay() ) );
+    m_checkStackIconOnName->SetValue( m_pin->GetStackIconOnName() );
     m_pinLength.SetValue( m_pin->GetLength() );
     m_checkApplyToAllParts->Enable( m_pin->GetParentSymbol()->IsMultiUnit() );
     m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMultiUnit() && m_pin->GetUnit() == ALL_UNITS );
@@ -462,6 +468,9 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
     m_pin->SetNumber( m_textPinNumber->GetValue() );
     m_pin->SetNameTextSize( m_nameSize.GetIntValue() );
     m_pin->SetNumberTextSize( m_numberSize.GetIntValue() );
+    m_pin->SetNumberDisplay( getNumberDisplaySelection() );
+    m_pin->SetStackIconOnName( m_checkStackIconOnName->GetValue() );
+
     m_pin->SetOrientation( PinOrientationCode( m_choiceOrientation->GetSelection() ) );
     m_pin->SetPosition( newPos );
     m_pin->ChangeLength( m_pinLength.GetIntValue() );
@@ -484,6 +493,15 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
 }
 
 
+PIN_NUMBER_DISPLAY DIALOG_PIN_PROPERTIES::getNumberDisplaySelection() const
+{
+    if( m_choiceNumberDisplay->GetSelection() == wxNOT_FOUND )
+        return m_pin->GetNumberDisplay();
+
+    return PinNumberDisplayCode( m_choiceNumberDisplay->GetSelection() );
+}
+
+
 void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
 {
     if( !IsShownOnScreen() )   // do nothing at init time
@@ -493,6 +511,8 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
     m_dummyPin->SetNumber( m_textPinNumber->GetValue() );
     m_dummyPin->SetNameTextSize( m_nameSize.GetIntValue() );
     m_dummyPin->SetNumberTextSize( m_numberSize.GetIntValue() );
+    m_dummyPin->SetNumberDisplay( getNumberDisplaySelection() );
+    m_dummyPin->SetStackIconOnName( m_checkStackIconOnName->GetValue() );
     m_dummyPin->SetOrientation( PinOrientationCode( m_choiceOrientation->GetSelection() ) );
     m_dummyPin->SetLength( m_pinLength.GetIntValue() );
     m_dummyPin->SetType( m_choiceElectricalType->GetPinTypeSelection() );

@@ -36,6 +36,8 @@ static thread_local wxArrayString        g_shapeNames;
 static thread_local std::vector<BITMAPS> g_orientationIcons;
 static thread_local wxArrayString        g_orientationNames;
 
+static wxArrayString        g_numberDisplayNames;
+
 
 struct pinTypeStruct
 {
@@ -114,7 +116,18 @@ void InitTables()
         { PIN_ORIENTATION::PIN_DOWN,  { _( "Down" ),        BITMAPS::pinorient_down } },
         { PIN_ORIENTATION::INHERIT,   { _( "Unspecified" ), BITMAPS::pintype_notspecif } },
     };
+
+    // Indexed by PIN_NUMBER_DISPLAY, so the order is the enum's, not alphabetical
+    g_numberDisplayNames = {
+        _( "All numbers" ),
+        _( "First number only" ),
+        _( "First number and icon" ),
+        _( "First number and count" ),
+        _( "Icon only" ),
+    };
     // clang-format on
+
+    wxASSERT( g_numberDisplayNames.GetCount() == PIN_NUMBER_DISPLAYS_TOTAL );
 
     g_language = Pgm().GetSelectedLanguageIdentifier();
 
@@ -268,6 +281,32 @@ wxString PinOrientationName( PIN_ORIENTATION aOrientation )
                  wxString::Format( "Pin orientation not found for type %d!", (int) aOrientation ) );
 
     return it->second.name;
+}
+
+
+const wxArrayString& PinNumberDisplayNames()
+{
+    if( g_numberDisplayNames.empty() || g_language != Pgm().GetSelectedLanguageIdentifier() )
+        InitTables();
+
+    return g_numberDisplayNames;
+}
+
+
+PIN_NUMBER_DISPLAY PinNumberDisplayCode( size_t index )
+{
+    wxCHECK( index < static_cast<size_t>( PIN_NUMBER_DISPLAYS_TOTAL ), PIN_NUMBER_DISPLAY::ALL );
+
+    return static_cast<PIN_NUMBER_DISPLAY>( index );
+}
+
+
+int PinNumberDisplayIndex( PIN_NUMBER_DISPLAY code )
+{
+    if( code == PIN_NUMBER_DISPLAY::INHERIT )
+        return wxNOT_FOUND;
+
+    return static_cast<int>( code );
 }
 
 

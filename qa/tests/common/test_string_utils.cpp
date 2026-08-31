@@ -26,6 +26,7 @@
 #include <wx/filefn.h>
 #include <wx/utils.h>
 
+#include <limits>
 
 BOOST_AUTO_TEST_SUITE( StringUtilsTests )
 
@@ -409,5 +410,85 @@ BOOST_AUTO_TEST_CASE( SplitGraphemeClustersKeepsCharactersWhole )
     BOOST_TEST( clusters == expected, boost::test_tools::per_element() );
 }
 
+
+
+BOOST_AUTO_TEST_CASE( StackedPinNotation_SummarizeAgreesWithExpansion )
+{
+    // The renderers summarize where connectivity expands, so the two walkers must not drift.
+    // Malformed and escaped forms are in here because both describe them as a single pin.
+    const std::vector<wxString> notations = { wxS( "[1,2,3]" ),  wxS( "[7,3,5]" ),    wxS( "[5-9]" ),
+                                              wxS( "[A12,A2]" ), wxS( "[6,7,9-11]" ), wxS( "[B\\,2,A\\,1]" ),
+                                              wxS( "[9-1]" ),    wxS( "[1,2" ),       wxS( "[1,5-2]" ),
+                                              wxS( "9" ),        wxEmptyString,
+                                              wxS( "[0-2147483647]" ),
+                                              wxS( "[0-2000000000,0-2000000000]" ) };
+
+    for( const wxString& notation : notations )
+    {
+        bool                  expandValid = false;
+        std::vector<wxString> expanded = ExpandStackedPinNotation( notation, &expandValid );
+
+        wxString smallest;
+        int      count = 0;
+        bool     summaryValid = SummarizeStackedPinNotation( notation, &smallest, &count );
+
+        BOOST_TEST_CONTEXT( notation.ToStdString() )
+        {
+            BOOST_TEST( summaryValid == expandValid );
+            BOOST_TEST( count == static_cast<int>( expanded.size() ) );
+
+            StrNumSort( expanded, CMP_T::CASE_SENSITIVE );
+            BOOST_TEST( smallest == expanded.front() );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( StackedPinNotation_SummarizeNeverExpandsRanges )
+{
+    // This runs on the repaint path, so a range spanning the whole int must cost the same as a
+    // single pad; expanding it would exhaust memory
+    wxString smallest;
+    int      count = 0;
+
+    BOOST_TEST( SummarizeStackedPinNotation( wxS( "[0-2000000000]" ), &smallest, &count ) );
+    BOOST_TEST( smallest == wxString( "0" ) );
+    BOOST_TEST( count == 2000000001 );
+}
+
+
+BOOST_AUTO_TEST_CASE( StackedPinNotation_RejectsCountOverflow )
+{
+    for( const wxString& notation : { wxString( "[0-2147483647]" ),
+                                      wxString( "[0-2000000000,0-2000000000]" ) } )
+    {
+        wxString smallest;
+        int      count = 0;
+        bool     valid = true;
+
+        BOOST_CHECK( !SummarizeStackedPinNotation( notation, &smallest, &count ) );
+        BOOST_CHECK_EQUAL( smallest, notation );
+        BOOST_CHECK_EQUAL( count, 1 );
+        BOOST_CHECK_EQUAL( CountStackedPinNotation( notation, &valid ), 1 );
+        BOOST_CHECK( !valid );
+    }
+
+    int count = 0;
+    BOOST_CHECK( SummarizeStackedPinNotation( wxString( "[0-2147483646]" ), nullptr, &count ) );
+    BOOST_CHECK_EQUAL( count, 2147483647 );
+}
+
+
+BOOST_AUTO_TEST_CASE( StackedPinNotation_RangeEndingAtLongMax )
+{
+    const wxString last = wxString::Format( "%ld", std::numeric_limits<long>::max() );
+    const wxString notation = "[" + last + "-" + last + "]";
+    bool valid = false;
+
+    const std::vector<wxString> expanded = ExpandStackedPinNotation( notation, &valid );
+    BOOST_CHECK( valid );
+    BOOST_REQUIRE_EQUAL( expanded.size(), 1u );
+    BOOST_CHECK_EQUAL( expanded.front(), last );
+}
 
 BOOST_AUTO_TEST_SUITE_END()

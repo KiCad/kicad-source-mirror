@@ -37,12 +37,77 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
 {
     recomputeCaches();
 
-    if( m_pin.GetShownNumber().IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNumbers() )
+    std::optional<TEXT_INFO> info = getNumberLineInfo();
+
+    if( !info || info->m_Text.IsEmpty() )
+        return std::nullopt;
+
+    if( m_summary )
+        placeAlongNumber( *info, m_summaryLayout.m_HeadStart - shadowOffset( aShadowWidth ) );
+
+    return info;
+}
+
+
+std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberTailInfo( int aShadowWidth )
+{
+    recomputeCaches();
+
+    if( !m_summary || m_summary->m_Tail.IsEmpty() )
+        return std::nullopt;
+
+    std::optional<TEXT_INFO> info = getNumberLineInfo();
+
+    if( !info )
+        return std::nullopt;
+
+    info->m_Text = m_summary->m_Tail;
+    info->m_TextSize = m_summaryLayout.m_TailSize;
+    info->m_Thickness = std::max( 1, KiROUND( static_cast<double>( m_numberThickness ) * m_summaryLayout.m_TailSize
+                                              / std::max( 1, m_pin.GetNumberTextSize() ) ) );
+    placeAlongNumber( *info, m_summaryLayout.m_TailStart - shadowOffset( aShadowWidth ) );
+
+    // Down the text is towards +X for vertical text
+    if( info->m_Angle == ANGLE_VERTICAL )
+        info->m_TextPosition.x += m_summaryLayout.m_TailDrop;
+    else
+        info->m_TextPosition.y += m_summaryLayout.m_TailDrop;
+
+    return info;
+}
+
+
+int PIN_LAYOUT_CACHE::shadowOffset( int aShadowWidth ) const
+{
+    // Left aligned shadow text starts a half shadow width early, as it does for names
+    return KiROUND( aShadowWidth * m_shadowOffsetAdjust ) / 2;
+}
+
+
+void PIN_LAYOUT_CACHE::placeAlongNumber( TEXT_INFO& aInfo, int aAlong )
+{
+    // Vertical text reads bottom to top
+    if( aInfo.m_Angle == ANGLE_VERTICAL )
+        aInfo.m_TextPosition.y -= aAlong;
+    else
+        aInfo.m_TextPosition.x += aAlong;
+
+    aInfo.m_HAlign = GR_TEXT_H_ALIGN_LEFT;
+}
+
+
+std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::getNumberLineInfo()
+{
+    if( !m_pin.GetParentSymbol()->GetShowPinNumbers() )
         return std::nullopt;
 
     // Draw the string recomputeCaches() measured, so the box always matches the text.
-    const wxString& formatted = m_numExtentsCache.m_Text;
-    const int       num_size = m_pin.GetNumberTextSize();
+    const wxString& formatted = m_displayNumber;
+
+    if( formatted.IsEmpty() && !m_summary )
+        return std::nullopt;
+
+    const int num_size = m_pin.GetNumberTextSize();
 
     std::optional<TEXT_INFO> info = TEXT_INFO();
     info->m_Text = formatted;
@@ -56,7 +121,8 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     const SYMBOL* parentSym = m_pin.GetParentSymbol();
 
     VECTOR2I  pinPos = m_pin.GetPosition();
-    const int halfLength = m_pin.GetLength() / 2;
+    // A line wider than the pin moves towards the pin's free end rather than into the symbol body
+    const int halfLength = m_pin.GetLength() / 2 - ( m_summary ? m_summaryLayout.m_OutwardShift : 0 );
     bool      verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
 
     const int perpendicularOffset = getNumberBlockOffset();
@@ -266,21 +332,35 @@ void PIN_LAYOUT_CACHE::recomputeCaches()
         m_shadowOffsetAdjust = 1.0f;
 
     {
-        const int       numSize = m_pin.GetNumberTextSize();
-        const int       length = m_pin.GetLength();
-        const wxString& number = m_pin.GetShownNumber();
+        const int                numSize = m_pin.GetNumberTextSize();
+        const int                length = m_pin.GetLength();
+        const wxString&          number = m_pin.GetShownNumber();
+        const PIN_NUMBER_DISPLAY display = m_pin.GetNumberDisplay();
 
         // Formatting a stacked number measures it, so only redo it when one of its inputs moves.
         // The pin length is one of them and has no dirty flag of its own.
+        const int iconSize = StackedPinIconSize( m_pin );
+
         if( isDirty( DIRTY_FLAGS::NUMBER ) || m_numSource != number || m_numSourceLength != length
-            || m_numExtentsCache.m_Font != font || m_numExtentsCache.m_FontSize != numSize )
+            || m_numSourceDisplay != display || m_numSourceIconSize != iconSize || m_numExtentsCache.m_Font != font
+            || m_numExtentsCache.m_FontSize != numSize )
         {
             m_numSource = number;
             m_numSourceLength = length;
+            m_numSourceDisplay = display;
+            m_numSourceIconSize = iconSize;
 
-            recomputeExtentsCache( true, font, numSize,
-                                   FormatStackedPinForDisplay( number, length, numSize, font, metrics ),
-                                   metrics, m_numExtentsCache );
+            m_displayNumber = FormatStackedPinForDisplay( number, length, numSize, font, metrics, display );
+            m_summary = SummarizeStackedPinForDisplay( number, display );
+
+            recomputeExtentsCache( true, font, numSize, m_displayNumber, metrics, m_numExtentsCache );
+
+            // The line spans the icon and both texts, so the box has to as well
+            if( m_summary )
+            {
+                m_summaryLayout = LayoutStackedPinSummary( *m_summary, numSize, iconSize, length, font, metrics );
+                m_numExtentsCache.m_Extents = m_summaryLayout.m_Extents;
+            }
         }
     }
 
@@ -452,6 +532,11 @@ BOX2I PIN_LAYOUT_CACHE::GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins,
         {
             bbox.Merge( *altIconBox );
         }
+
+        if( OPT_BOX2I stackIconBox = getUntransformedStackNameIconBox() )
+        {
+            bbox.Merge( *stackIconBox );
+        }
     }
 
     if( includeNumber )
@@ -460,6 +545,7 @@ BOX2I PIN_LAYOUT_CACHE::GetPinBoundingBox( bool aIncludeLabelsOnInvisiblePins,
         {
             bbox.Merge( *numBox );
         }
+
     }
 
     if( includeType )
@@ -504,6 +590,9 @@ int PIN_LAYOUT_CACHE::getNumberBlockOffset() const
 {
     const int numSize = m_pin.GetNumberTextSize();
     int       perpHeight = numSize;
+
+    if( m_summary )
+        perpHeight = std::max( perpHeight, m_summaryLayout.m_Extents.y );
 
     if( m_numExtentsCache.m_Text.Contains( '\n' ) )
     {
@@ -586,7 +675,8 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox() const
     const int pinLength = m_pin.GetLength();
 
     // The pin number is always over the pin (centered along its length)
-    OPT_BOX2I box = BOX2I::ByCenter( { pinLength / 2, 0 }, m_numExtentsCache.m_Extents );
+    OPT_BOX2I box = BOX2I::ByCenter( { pinLength / 2 - ( m_summary ? m_summaryLayout.m_OutwardShift : 0 ), 0 },
+                                     m_numExtentsCache.m_Extents );
 
     // Check if both name and number are displayed (name outside the pin)
     bool showBothNameAndNumber = pinNameOffset == 0 && isNameShown();
@@ -656,6 +746,30 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedAltIconBox() const
     }
 
     return BOX2I::ByCenter( c, { iconSize, iconSize } );
+}
+
+
+OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedStackNameIconBox() const
+{
+    const OPT_BOX2I nameBox = getUntransformedPinNameBox();
+
+    if( !nameBox || !isNameShown() || !m_pin.ShowsStackIconOnName() )
+        return std::nullopt;
+
+    const int iconSize = std::min( m_pin.GetNameTextSize(), schIUScale.mmToIU( 1.5 ) );
+
+    // An alternate icon takes the first slot beside the name, so the stack icon goes one beyond it
+    const bool altShown = !m_pin.GetAlternates().empty() && m_showAltIcons;
+    const int  reach = altShown ? iconSize * 7 / 4 : iconSize * 3 / 4;
+
+    VECTOR2I c{ 0, ( nameBox->GetTop() + nameBox->GetBottom() ) / 2 };
+
+    if( m_pin.GetParentSymbol()->GetPinNameOffset() > 0 )
+        c.x = nameBox->GetRight() + reach;
+    else
+        c.x = nameBox->GetLeft() - reach;
+
+    return BOX2I::ByCenter( c, StackedPinIconExtents( iconSize ) );
 }
 
 
@@ -758,6 +872,43 @@ OPT_BOX2I PIN_LAYOUT_CACHE::GetPinNumberBBox()
 OPT_BOX2I PIN_LAYOUT_CACHE::GetAltIconBBox()
 {
     OPT_BOX2I box = getUntransformedAltIconBox();
+
+    if( box )
+        transformBoxForPin( *box );
+
+    return box;
+}
+
+
+OPT_BOX2I PIN_LAYOUT_CACHE::GetStackIconBBox()
+{
+    if( !m_pin.ShowsStackIconInline() )
+        return std::nullopt;
+
+    recomputeCaches();
+
+    const std::optional<TEXT_INFO> line = getNumberLineInfo();
+
+    if( !line || !m_summary )
+        return std::nullopt;
+
+    const bool     vertical = ( line->m_Angle == ANGLE_VERTICAL );
+    const VECTOR2I extents = StackedPinIconExtents( StackedPinIconSize( m_pin ) );
+
+    // Vertical text reads bottom to top
+    const VECTOR2I centre = line->m_TextPosition
+                            + ( vertical ? VECTOR2I( 0, -m_summaryLayout.m_IconCentre )
+                                         : VECTOR2I( m_summaryLayout.m_IconCentre, 0 ) );
+
+    return BOX2I::ByCenter( centre, vertical ? VECTOR2I( extents.y, extents.x ) : extents );
+}
+
+
+OPT_BOX2I PIN_LAYOUT_CACHE::GetStackNameIconBBox()
+{
+    recomputeCaches();
+
+    OPT_BOX2I box = getUntransformedStackNameIconBox();
 
     if( box )
         transformBoxForPin( *box );

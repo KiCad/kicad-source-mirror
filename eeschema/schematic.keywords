@@ -1,3 +1,4 @@
+all
 alternate
 anchor
 angles
@@ -65,6 +66,9 @@ field
 fields_autoplaced
 file
 fill
+first
+first_and_count
+first_and_icon
 font
 footprint
 free
@@ -81,6 +85,7 @@ hint_alt_swap
 hint_pin_swap
 host
 href
+icon_only
 id
 image
 input
@@ -126,6 +131,7 @@ no_connect
 non_logic
 none
 number
+number_display
 offset
 on_board
 open_collector
@@ -186,6 +192,7 @@ nets
 to
 span
 square
+stack_icon_on_name
 start
 start_angle
 start_shape

@@ -290,6 +290,7 @@ set( QA_EESCHEMA_SRCS
     test_pin_stacked_layout.cpp
     test_pin_text_overlap.cpp
     test_pin_number_default_style_clearance.cpp
+    test_pin_number_display.cpp
     test_remote_symbol_download_security.cpp
     test_remote_symbol_import.cpp
     test_remote_symbol_load_from_payload.cpp

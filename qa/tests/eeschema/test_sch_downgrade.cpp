@@ -278,6 +278,32 @@ BOOST_AUTO_TEST_CASE( LibSymbolEllipseLoweredForKicad10 )
 }
 
 
+// The target draws every stacked pin number in full, so the notation and icon settings are dropped from the
+// library cache and the export proceeds.
+BOOST_AUTO_TEST_CASE( PinStackDisplayDroppedForKicad10 )
+{
+    SCH_SCREEN  screen;
+    LIB_SYMBOL* symbol = new LIB_SYMBOL( wxT( "test" ) );
+    SCH_PIN*    pin = new SCH_PIN( symbol );
+    pin->SetNumber( wxT( "[1,2,3]" ) );
+    pin->SetNumberDisplay( PIN_NUMBER_DISPLAY::FIRST_AND_COUNT );
+    pin->SetStackIconOnName( true );
+    symbol->AddDrawItem( pin );
+    screen.AddLibSymbol( symbol );
+
+    COMPATIBILITY_REPORT report = ClassifyScreenForDowngrade( &screen, kicad10 );
+
+    BOOST_CHECK( !report.IsBlocked() );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::DROP ), 1 );
+
+    DowngradeScreenInPlace( &screen, kicad10 );
+
+    BOOST_CHECK( pin->GetNumberDisplay() == PIN_NUMBER_DISPLAY::ALL );
+    BOOST_CHECK( !pin->GetStackIconOnName() );
+    BOOST_CHECK_EQUAL( ClassifyScreenForDowngrade( &screen, kicad10 ).Count( DOWNGRADE_BUCKET::DROP ), 0 );
+}
+
+
 // Turning a local power symbol global merges nets across sheets. A netlist change must never
 // ship silently, so the export blocks for 9.0.
 BOOST_AUTO_TEST_CASE( LocalPowerSymbolBlocksKicad9 )

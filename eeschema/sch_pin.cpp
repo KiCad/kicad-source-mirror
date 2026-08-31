@@ -24,6 +24,7 @@
 #include <sch_render_settings.h>
 #include "sch_pin.h"
 
+#include <algorithm>
 #include <connectivity/conn_pin_name.h>
 #include <lib_id.h>
 #include <lib_symbol.h>
@@ -48,12 +49,138 @@
 #include <properties/property_mgr.h>
 #include <api/schematic/schematic_types.pb.h>
 
+int StackedPinIconSize( const SCH_PIN& aPin )
+{
+    // Zeroing the number text size is how a symbol hides one pin's number, and the indicator has
+    // to outlive that or the stack disappears with nothing to show for it
+    int size = aPin.GetNumberTextSize();
+
+    if( size <= 0 )
+        size = aPin.GetNameTextSize();
+
+    if( size <= 0 )
+        size = schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE );
+
+    return std::min( size, schIUScale.mmToIU( 1.5 ) );
+}
+
+
+VECTOR2I StackedPinIconExtents( int aSize )
+{
+    const int thickness = std::max( aSize / 8, 1 );
+    const int pitch = aSize * 3 / 10;
+
+    return { aSize * 4 / 5, 2 * pitch + thickness };
+}
+
+
+void BuildStackedPinIconBars( int aSize, bool aVertical, const std::function<void( const BOX2I& )>& aEmit )
+{
+    const int thickness = std::max( aSize / 8, 1 );
+    const int pitch = aSize * 3 / 10;
+    const int length = aSize * 4 / 5;
+
+    for( int bar = -1; bar <= 1; ++bar )
+    {
+        if( aVertical )
+            aEmit( BOX2I::ByCenter( { bar * pitch, 0 }, { thickness, length } ) );
+        else
+            aEmit( BOX2I::ByCenter( { 0, bar * pitch }, { length, thickness } ) );
+    }
+}
+
+
+std::optional<STACKED_PIN_SUMMARY> SummarizeStackedPinForDisplay( const wxString&   aPinNumber,
+                                                                  PIN_NUMBER_DISPLAY aDisplay )
+{
+    if( aDisplay != PIN_NUMBER_DISPLAY::FIRST_AND_ICON && aDisplay != PIN_NUMBER_DISPLAY::FIRST_AND_COUNT
+        && aDisplay != PIN_NUMBER_DISPLAY::ICON_ONLY )
+        return std::nullopt;
+
+    if( !aPinNumber.StartsWith( "[" ) || !aPinNumber.EndsWith( "]" ) )
+        return std::nullopt;
+
+    wxString first;
+    int      count = 0;
+
+    // Malformed notation falls through to the full block rather than reporting a first pad
+    // and a count that the author never wrote
+    if( !SummarizeStackedPinNotation( aPinNumber, &first, &count ) || count < 2 )
+        return std::nullopt;
+
+    if( aDisplay == PIN_NUMBER_DISPLAY::ICON_ONLY )
+        return STACKED_PIN_SUMMARY{};
+
+    if( aDisplay == PIN_NUMBER_DISPLAY::FIRST_AND_ICON )
+        return STACKED_PIN_SUMMARY{ first, wxString() };
+
+    return STACKED_PIN_SUMMARY{ first, wxString::Format( wxS( "%d" ), count ) };
+}
+
+
+STACKED_PIN_SUMMARY_LAYOUT LayoutStackedPinSummary( const STACKED_PIN_SUMMARY& aSummary, int aTextSize, int aIconSize,
+                                                    int aPinLength, KIFONT::FONT* aFont,
+                                                    const KIFONT::METRICS& aFontMetrics )
+{
+    const VECTOR2I icon = StackedPinIconExtents( aIconSize );
+    const int      headGap = aIconSize / 4;
+    const int      tailGap = aIconSize / 8;
+    const int      tailSize = std::max( aTextSize * 3 / 5, 0 );
+
+    auto measure =
+            [&]( const wxString& aText, int aSize ) -> VECTOR2I
+            {
+                if( aText.IsEmpty() || aSize <= 0 )
+                    return { 0, 0 };
+
+                return aFont->StringBoundaryLimits( aText, VECTOR2D( aSize, aSize ), GetPenSizeForNormal( aSize ),
+                                                    false, false, aFontMetrics );
+            };
+
+    const VECTOR2I head = measure( aSummary.m_Head, aTextSize );
+    const VECTOR2I tail = measure( aSummary.m_Tail, tailSize );
+    const int      headSpan = head.x > 0 ? head.x + headGap : 0;
+    const int      tailSpan = tail.x > 0 ? tail.x + tailGap : 0;
+    const int      width = headSpan + icon.x + tailSpan;
+
+    STACKED_PIN_SUMMARY_LAYOUT layout;
+    layout.m_TailSize = tail.x > 0 ? tailSize : 0;
+    layout.m_TailDrop = tail.x > 0 ? aTextSize / 5 : 0;
+
+    // The text size is the line height the number would have had, so an icon alone keeps the room a number takes.
+    // The block grows about the line centre so the head sits at the same height in every mode.
+    const int tailReach = tail.x > 0 ? 2 * ( layout.m_TailDrop + tail.y / 2 ) : 0;
+
+    layout.m_Extents = { width, std::max( { head.y, icon.y, aTextSize, tailReach } ) };
+    layout.m_HeadStart = -width / 2;
+    layout.m_IconCentre = layout.m_HeadStart + headSpan + icon.x / 2;
+    layout.m_TailStart = layout.m_HeadStart + headSpan + icon.x + tailGap;
+    layout.m_OutwardShift = std::max( ( width - aPinLength ) / 2, 0 );
+
+    return layout;
+}
+
+
 wxString FormatStackedPinForDisplay( const wxString& aPinNumber, int aPinLength, int aTextSize, KIFONT::FONT* aFont,
-                                     const KIFONT::METRICS& aFontMetrics )
+                                     const KIFONT::METRICS& aFontMetrics, PIN_NUMBER_DISPLAY aDisplay )
 {
     // Check if this is stacked pin notation: [A,B,C]
     if( !aPinNumber.StartsWith( "[" ) || !aPinNumber.EndsWith( "]" ) )
         return aPinNumber;
+
+    if( aDisplay == PIN_NUMBER_DISPLAY::FIRST )
+    {
+        wxString first;
+        int      count = 0;
+
+        if( SummarizeStackedPinNotation( aPinNumber, &first, &count ) )
+            return first;
+    }
+    else if( std::optional<STACKED_PIN_SUMMARY> summary = SummarizeStackedPinForDisplay( aPinNumber, aDisplay ) )
+    {
+        // The icon and the tail belong to the layout, which draws them around this text.
+        return summary->m_Head;
+    }
 
     // Escaping must never reach the user, so every display form below is built from the unescaped
     // items.  Range notation (e.g. 1-5) is preserved rather than expanded.
@@ -147,6 +274,8 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol ) :
         m_hidden( false ),
         m_numTextSize( schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE ) ),
         m_nameTextSize( schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE ) ),
+        m_numberDisplay( PIN_NUMBER_DISPLAY::ALL ),
+        m_stackIconOnName( false ),
         m_isDangling( true )
 {
     if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
@@ -174,6 +303,8 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol, const wxString& aName, const wxStri
         m_hidden( false ),
         m_numTextSize( aNumTextSize ),
         m_nameTextSize( aNameTextSize ),
+        m_numberDisplay( PIN_NUMBER_DISPLAY::ALL ),
+        m_stackIconOnName( false ),
         m_isDangling( true )
 {
     SetName( aName );
@@ -189,6 +320,8 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin ) :
         m_orientation( PIN_ORIENTATION::INHERIT ),
         m_shape( GRAPHIC_PINSHAPE::INHERIT ),
         m_type( ELECTRICAL_PINTYPE::PT_INHERIT ),
+        m_numberDisplay( PIN_NUMBER_DISPLAY::INHERIT ),
+        m_stackIconOnName( false ),
         m_isDangling( true )
 {
     wxASSERT( aParentSymbol );
@@ -211,6 +344,8 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxSt
         m_type( ELECTRICAL_PINTYPE::PT_INHERIT ),
         m_number( aNumber ),
         m_alt( aAlt ),
+        m_numberDisplay( PIN_NUMBER_DISPLAY::INHERIT ),
+        m_stackIconOnName( false ),
         m_isDangling( true )
 {
     wxASSERT( aParentSymbol );
@@ -233,6 +368,8 @@ SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         m_numTextSize( aPin.m_numTextSize ),
         m_nameTextSize( aPin.m_nameTextSize ),
         m_alt( aPin.m_alt ),
+        m_numberDisplay( aPin.m_numberDisplay ),
+        m_stackIconOnName( aPin.m_stackIconOnName ),
         m_isDangling( aPin.m_isDangling )
 {
     SetName( aPin.m_name );
@@ -264,6 +401,8 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
     m_hidden = aPin.m_hidden;
     m_numTextSize = aPin.m_numTextSize;
     m_nameTextSize = aPin.m_nameTextSize;
+    m_numberDisplay = aPin.m_numberDisplay;
+    m_stackIconOnName = aPin.m_stackIconOnName;
     m_isDangling = aPin.m_isDangling;
     m_layoutCache.reset();
 
@@ -290,6 +429,8 @@ void SCH_PIN::swapData( SCH_ITEM* aItem )
     std::swap( m_hidden, pin->m_hidden );
     std::swap( m_numTextSize, pin->m_numTextSize );
     std::swap( m_nameTextSize, pin->m_nameTextSize );
+    std::swap( m_numberDisplay, pin->m_numberDisplay );
+    std::swap( m_stackIconOnName, pin->m_stackIconOnName );
     std::swap( m_isDangling, pin->m_isDangling );
 }
 
@@ -328,6 +469,11 @@ void SCH_PIN::Serialize( google::protobuf::Any& aContainer ) const
 
     kiapi::common::PackCustomProperties( pin.mutable_custom_properties(), *this );
 
+    if( m_numberDisplay != PIN_NUMBER_DISPLAY::INHERIT )
+        pin.set_number_display( ToProtoEnum<PIN_NUMBER_DISPLAY, SchematicPinNumberDisplay>( m_numberDisplay ) );
+
+    pin.set_stack_icon_on_name( m_stackIconOnName );
+
     if( !aContainer.PackFrom( pin ) )
         wxFAIL_MSG( wxT( "Failed to pack SCH_PIN" ) );
 }
@@ -353,6 +499,7 @@ bool SCH_PIN::Deserialize( const google::protobuf::Any& aContainer )
 
     m_type = FromProtoEnum<ELECTRICAL_PINTYPE>( pin.electrical_type() );
     m_shape = FromProtoEnum<GRAPHIC_PINSHAPE>( pin.shape() );
+
     SetVisible( pin.visible() );
 
     m_nameTextSize = UnpackDistance( pin.name_text_size(), schIUScale );
@@ -370,6 +517,12 @@ bool SCH_PIN::Deserialize( const google::protobuf::Any& aContainer )
     }
 
     kiapi::common::UnpackCustomProperties( pin.custom_properties(), *this );
+
+    // Absent means inherit, which reads as the full list on a pin with no library pin behind it
+    m_numberDisplay = pin.has_number_display() ? FromProtoEnum<PIN_NUMBER_DISPLAY>( pin.number_display() )
+                                               : PIN_NUMBER_DISPLAY::INHERIT;
+
+    m_stackIconOnName = pin.stack_icon_on_name();
 
     if( m_layoutCache )
         m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::ALL );
@@ -727,24 +880,75 @@ int SCH_PIN::GetStackedPinCount( bool* aValid ) const
 }
 
 
-std::optional<wxString> SCH_PIN::GetSmallestLogicalNumber() const
+void SCH_PIN::SetNumberDisplay( PIN_NUMBER_DISPLAY aDisplay )
 {
-    bool valid = false;
-    auto numbers = GetStackedPinNumbers( &valid );
+    if( m_numberDisplay == aDisplay )
+        return;
 
-    if( valid && !numbers.empty() )
-        return numbers.front();    // Already in ascending order
+    m_numberDisplay = aDisplay;
 
-    return std::nullopt;
+    if( m_layoutCache )
+        m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NUMBER );
+}
+
+
+PIN_NUMBER_DISPLAY SCH_PIN::GetNumberDisplay() const
+{
+    if( m_numberDisplay == PIN_NUMBER_DISPLAY::INHERIT )
+    {
+        if( !m_libPin )
+            return PIN_NUMBER_DISPLAY::ALL;
+
+        return m_libPin->GetNumberDisplay();
+    }
+
+    return m_numberDisplay;
+}
+
+
+bool SCH_PIN::IsStackedNotation() const
+{
+    bool      valid = false;
+    const int count = GetStackedPinCount( &valid );
+
+    return valid && count > 1;
+}
+
+
+bool SCH_PIN::ShowsStackIconInline() const
+{
+    const PIN_NUMBER_DISPLAY display = GetNumberDisplay();
+
+    return ( display == PIN_NUMBER_DISPLAY::FIRST_AND_ICON || display == PIN_NUMBER_DISPLAY::FIRST_AND_COUNT
+             || display == PIN_NUMBER_DISPLAY::ICON_ONLY )
+           && IsStackedNotation();
+}
+
+
+void SCH_PIN::SetStackIconOnName( bool aShow )
+{
+    m_stackIconOnName = aShow;
+}
+
+
+bool SCH_PIN::GetStackIconOnName() const
+{
+    return m_libPin ? m_libPin->GetStackIconOnName() : m_stackIconOnName;
+}
+
+
+bool SCH_PIN::ShowsStackIconOnName() const
+{
+    return GetStackIconOnName() && IsStackedNotation();
 }
 
 
 wxString SCH_PIN::GetSmallestStackedPadNumber() const
 {
-    if( auto smallest = GetSmallestLogicalNumber() )
-        return *smallest;
+    const std::vector<wxString> numbers = GetStackedPinNumbers();
 
-    return GetShownNumber();
+    // Existing net names use the first authored pad, independently of display ordering.
+    return numbers.empty() ? GetShownNumber() : numbers.front();
 }
 
 
@@ -1094,13 +1298,21 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
     if( aDrawPinNum && !number.IsEmpty() )
     {
         const KIFONT::METRICS& metrics = GetFontMetrics();
-        number = FormatStackedPinForDisplay( number, GetLength(), GetNumberTextSize(), font, metrics );
+        number = FormatStackedPinForDisplay( number, GetLength(), GetNumberTextSize(), font, metrics,
+                                             GetNumberDisplay() );
     }
+
+    // A zeroed number text size hides the text but must not take the icon with it, so the
+    // number branches below still have to run
+    std::optional<STACKED_PIN_SUMMARY> summary;
+
+    if( aDrawPinNum )
+        summary = SummarizeStackedPinForDisplay( GetShownNumber(), GetNumberDisplay() );
 
     if( name.IsEmpty() || m_nameTextSize == 0 )
         aDrawPinName = false;
 
-    if( number.IsEmpty() || m_numTextSize == 0 )
+    if( ( number.IsEmpty() || m_numTextSize == 0 ) && !summary )
         aDrawPinNum = false;
 
     if( !aDrawPinNum && !aDrawPinName )
@@ -1166,9 +1378,137 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 aPlotter->PlotText( VECTOR2I( x, y ), col, txt, attrs, font, GetFontMetrics() );
             };
 
+    auto plotStackIcon =
+            [&]( const VECTOR2I& aCentre, int aSize, bool aVertical )
+            {
+                aPlotter->SetColor( numColor );
+
+                BuildStackedPinIconBars( aSize, aVertical,
+                        [&]( const BOX2I& aBar )
+                        {
+                            aPlotter->Rect( aBar.GetPosition() + aCentre, aBar.GetEnd() + aCentre,
+                                            FILL_T::FILLED_SHAPE, 0 );
+                        } );
+            };
+
+    auto plotSummary =
+            [&]( int anchorX, int anchorY, const EDA_ANGLE& angle, GR_TEXT_V_ALIGN_T vAlign )
+            {
+                const int                        textSize = GetNumberTextSize();
+                const int                        iconSize = StackedPinIconSize( *this );
+                const bool                       vertical = ( angle == ANGLE_VERTICAL );
+                const STACKED_PIN_SUMMARY_LAYOUT layout =
+                        LayoutStackedPinSummary( *summary, textSize, iconSize, GetLength(), font, GetFontMetrics() );
+
+                // The anchor is the line's edge nearest the pin, so step half a line height away from it
+                int across = 0;
+
+                if( vAlign == GR_TEXT_V_ALIGN_BOTTOM )
+                    across = -layout.m_Extents.y / 2;
+                else if( vAlign == GR_TEXT_V_ALIGN_TOP )
+                    across = layout.m_Extents.y / 2;
+
+                // Offsets run along the reading direction, which is up the sheet for vertical text
+                // The free end of a pin is where its connection point is. Reading runs up the sheet for
+                // vertical text, so the free end is at lower offsets for RIGHT and UP pins.
+                const bool freeEndAhead = aPinOrient == PIN_ORIENTATION::PIN_LEFT
+                                          || aPinOrient == PIN_ORIENTATION::PIN_DOWN;
+                const int  shift = freeEndAhead ? layout.m_OutwardShift : -layout.m_OutwardShift;
+
+                // A drop moves down the text, which is towards +X for vertical text
+                auto place = [&]( int aAlong, int aDrop = 0 ) -> VECTOR2I
+                {
+                    aAlong += shift;
+
+                    return vertical ? VECTOR2I( anchorX + across + aDrop, anchorY - aAlong )
+                                    : VECTOR2I( anchorX + aAlong, anchorY + across + aDrop );
+                };
+
+                if( textSize > 0 && !summary->m_Head.IsEmpty() )
+                {
+                    const VECTOR2I pos = place( layout.m_HeadStart );
+                    plotSimpleText( pos.x, pos.y, angle, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, summary->m_Head,
+                                    textSize, numPenWidth, numColor );
+                }
+
+                if( textSize > 0 && !summary->m_Tail.IsEmpty() )
+                {
+                    const VECTOR2I pos = place( layout.m_TailStart, layout.m_TailDrop );
+                    plotSimpleText( pos.x, pos.y, angle, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, summary->m_Tail,
+                                    layout.m_TailSize, numPenWidth, numColor );
+                }
+
+                plotStackIcon( place( layout.m_IconCentre ), iconSize, vertical );
+            };
+
+    // Mirrors PIN_LAYOUT_CACHE, minus the gap for an alternate icon, which only exists on screen
+    auto plotNameStackIcon =
+            [&]()
+            {
+                const int      iconSize = std::min( GetNameTextSize(), schIUScale.mmToIU( 1.5 ) );
+                const int      reach = iconSize * 3 / 4;
+                const int      nameSize = GetNameTextSize();
+                const VECTOR2I nameExtent = font->StringBoundaryLimits( name, VECTOR2D( nameSize, nameSize ),
+                                                                        GetPenSizeForNormal( nameSize ), false, false,
+                                                                        GetFontMetrics() );
+                const bool     vertical = ( aPinOrient == PIN_ORIENTATION::PIN_UP
+                                            || aPinOrient == PIN_ORIENTATION::PIN_DOWN );
+                const VECTOR2I mid( ( x1 + aPinPos.x ) / 2, ( y1 + aPinPos.y ) / 2 );
+
+                VECTOR2I centre;
+
+                if( aTextInside )
+                {
+                    VECTOR2I inward;
+
+                    switch( aPinOrient )
+                    {
+                    case PIN_ORIENTATION::PIN_LEFT: inward = { -1, 0 }; break;
+                    case PIN_ORIENTATION::PIN_UP:   inward = { 0, -1 }; break;
+                    case PIN_ORIENTATION::PIN_DOWN: inward = { 0, 1 };  break;
+                    default:                        inward = { 1, 0 };  break;
+                    }
+
+                    centre = VECTOR2I( x1, y1 ) + inward * ( aTextInside + nameExtent.x + reach );
+                }
+                else if( !vertical )
+                {
+                    const int side = ( aPinOrient == PIN_ORIENTATION::PIN_LEFT ) ? 1 : -1;
+
+                    centre = { mid.x + side * ( nameExtent.x / 2 + reach ), y1 - pinTextOffset - nameExtent.y / 2 };
+                }
+                else
+                {
+                    const int side = ( aPinOrient == PIN_ORIENTATION::PIN_UP ) ? 1 : -1;
+
+                    centre = { x1 - pinTextOffset - nameExtent.y / 2, mid.y + side * ( nameExtent.x / 2 + reach ) };
+                }
+
+                // The name's own colour, as the on-screen icon takes it
+                aPlotter->SetColor( nameColor );
+
+                BuildStackedPinIconBars( iconSize, vertical,
+                        [&]( const BOX2I& aBar )
+                        {
+                            aPlotter->Rect( aBar.GetPosition() + centre, aBar.GetEnd() + centre,
+                                            FILL_T::FILLED_SHAPE, 0 );
+                        } );
+            };
+
     auto plotMultiLineWithBraces =
             [&]( int anchorX, int anchorY, EDA_ANGLE angle, GR_TEXT_V_ALIGN_T vAlign, bool aAllowFlip )
     {
+        if( summary )
+        {
+            plotSummary( anchorX, anchorY, angle, vAlign );
+            return;
+        }
+
+        // A zeroed number size leaves nothing to draw; plotting the text anyway marks the sheet with a
+        // degenerate glyph
+        if( number.IsEmpty() || GetNumberTextSize() <= 0 )
+            return;
+
         // If not multi-line formatted, just plot single line centered.
         if( !number.StartsWith( "[" ) || !number.EndsWith( "]" ) || !number.Contains( "\n" ) )
         {
@@ -1323,6 +1663,9 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             plotBrace( rightTop, rightBot, false, false );
         }
     };
+
+    if( aDrawPinName && ShowsStackIconOnName() )
+        plotNameStackIcon();
 
     // Logic largely mirrors original single-line placement but calls multi-line path for numbers
     if( aTextInside )
@@ -1635,6 +1978,31 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Name" ), UnescapeString( GetShownName() ) );
     aList.emplace_back( _( "Number" ), GetShownNumber() );
+
+    bool      stackValid = false;
+    const int stackCount = GetStackedPinCount( &stackValid );
+
+    if( stackValid && stackCount > 1 )
+    {
+        // A range can name more pads than a status bar could ever show, so list a prefix of the
+        // authored items and let the count carry the rest
+        static const size_t MAX_LISTED = 32;
+
+        const wxString&             shown = GetShownNumber();
+        const std::vector<wxString> items =
+                SplitStackedPinDisplayItems( shown.Mid( 1, shown.Length() - 2 ) );
+
+        wxString listed;
+
+        for( size_t ii = 0; ii < items.size() && ii < MAX_LISTED; ++ii )
+            listed << ( ii > 0 ? wxS( ", " ) : wxS( "" ) ) << items[ii];
+
+        if( items.size() > MAX_LISTED )
+            listed << wxS( ", ..." );
+
+        aList.emplace_back( wxString::Format( _( "Stacked pins (%d)" ), stackCount ), listed );
+    }
+
     aList.emplace_back( _( "Type" ), ElectricalPinTypeGetText( GetType() ) );
     aList.emplace_back( _( "Style" ), PinShapeGetText( GetShape() ) );
 
@@ -1739,7 +2107,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     if( fact.padNumber != fact.shownNumber )
     {
         wxLogTrace( traceStackedPins,
-                    wxString::Format( "GetDefaultNetName: stacked pin shown='%s' -> using smallest logical='%s'",
+                    wxString::Format( "GetDefaultNetName: stacked pin shown='%s' -> using first authored pad='%s'",
                                       fact.shownNumber, fact.padNumber ) );
     }
 
@@ -1971,6 +2339,8 @@ struct PIN_COMPARISON_VIEW
     std::optional<bool> hidden;
     std::optional<int> numberTextSize;
     std::optional<int> nameTextSize;
+    PIN_NUMBER_DISPLAY numberDisplay;
+    bool stackIconOnName;
     const std::map<wxString, PIN_ALTERNATE>& alternates;
 
     int Compare( const PIN_COMPARISON_VIEW& aOther, int aCompareFlags ) const
@@ -2017,6 +2387,12 @@ struct PIN_COMPARISON_VIEW
         if( nameTextSize != aOther.nameTextSize )
             return nameTextSize.value_or( 0 ) - aOther.nameTextSize.value_or( 0 );
 
+        if( numberDisplay != aOther.numberDisplay )
+            return static_cast<int>( numberDisplay ) - static_cast<int>( aOther.numberDisplay );
+
+        if( stackIconOnName != aOther.stackIconOnName )
+            return static_cast<int>( stackIconOnName ) - static_cast<int>( aOther.stackIconOnName );
+
         if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::PIN_ALT_DEFS ) )
             return 0;
 
@@ -2054,7 +2430,7 @@ PIN_COMPARISON_VIEW pinComparisonView( const PIN_COMPARISON_DATA& aData )
 {
     return { aData.unit, aData.bodyStyle, aData.isPrivate, aData.position, aData.number,
              aData.length, aData.orientation, aData.shape, aData.type, aData.hidden,
-             aData.numberTextSize, aData.nameTextSize, aData.alternates };
+             aData.numberTextSize, aData.nameTextSize, aData.numberDisplay, aData.stackIconOnName, aData.alternates };
 }
 }
 
@@ -2067,7 +2443,8 @@ PIN_COMPARISON_DATA SCH_PIN::ComparisonData() const
 {
     wxCHECK( dynamic_cast<const LIB_SYMBOL*>( GetParentSymbol() ), {} );
     return { GetUnit(), GetBodyStyle(), IsPrivate(), m_position, m_number, m_name, m_length,
-             m_orientation, m_shape, m_type, m_hidden, m_numTextSize, m_nameTextSize, m_alternates };
+             m_orientation, m_shape, m_type, m_hidden, m_numTextSize, m_nameTextSize, m_numberDisplay,
+             m_stackIconOnName, m_alternates };
 }
 
 
@@ -2088,10 +2465,11 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     {
         const PIN_COMPARISON_VIEW lhs{ GetUnit(), GetBodyStyle(), IsPrivate(), m_position, m_number,
                                        m_length, m_orientation, m_shape, m_type, m_hidden, m_numTextSize,
-                                       m_nameTextSize, m_alternates };
+                                       m_nameTextSize, m_numberDisplay, m_stackIconOnName, m_alternates };
         const PIN_COMPARISON_VIEW rhs{ tmp->GetUnit(), tmp->GetBodyStyle(), tmp->IsPrivate(), tmp->m_position,
                                        tmp->m_number, tmp->m_length, tmp->m_orientation, tmp->m_shape, tmp->m_type,
-                                       tmp->m_hidden, tmp->m_numTextSize, tmp->m_nameTextSize, tmp->m_alternates };
+                                       tmp->m_hidden, tmp->m_numTextSize, tmp->m_nameTextSize,
+                                       tmp->m_numberDisplay, tmp->m_stackIconOnName, tmp->m_alternates };
         return lhs.Compare( rhs, aCompareFlags );
     }
 
@@ -2225,6 +2603,12 @@ bool SCH_PIN::operator==( const SCH_PIN& aPin ) const
         return false;
 
     if( GetNameTextSize() != aPin.GetNameTextSize() )
+        return false;
+
+    if( GetNumberDisplay() != aPin.GetNumberDisplay() )
+        return false;
+
+    if( GetStackIconOnName() != aPin.GetStackIconOnName() )
         return false;
 
     return true;
@@ -2370,6 +2754,17 @@ static struct SCH_PIN_DESC
                            .Map( PIN_ORIENTATION::PIN_DOWN,  _HKI( "Down" ) );
         }
 
+        auto& numberDisplayEnum = ENUM_MAP<PIN_NUMBER_DISPLAY>::Instance();
+
+        if( numberDisplayEnum.Choices().GetCount() == 0 )
+        {
+            numberDisplayEnum.Map( PIN_NUMBER_DISPLAY::ALL,             _HKI( "All numbers" ) )
+                             .Map( PIN_NUMBER_DISPLAY::FIRST,           _HKI( "First number only" ) )
+                             .Map( PIN_NUMBER_DISPLAY::FIRST_AND_ICON,  _HKI( "First number and icon" ) )
+                             .Map( PIN_NUMBER_DISPLAY::FIRST_AND_COUNT, _HKI( "First number and count" ) )
+                             .Map( PIN_NUMBER_DISPLAY::ICON_ONLY,       _HKI( "Icon only" ) );
+        }
+
         auto isSymbolEditor =
                 []( INSPECTABLE* aItem ) -> bool
                 {
@@ -2434,6 +2829,13 @@ static struct SCH_PIN_DESC
                     &SCH_PIN::SetVisible, &SCH_PIN::IsVisible ) )
                 .SetAvailableFunc( isSymbolEditor );
 
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_PIN, PIN_NUMBER_DISPLAY>( _HKI( "Pin-stack Notation" ),
+                    &SCH_PIN::SetNumberDisplay, &SCH_PIN::GetNumberDisplay ) )
+                .SetWriteableFunc( isSymbolEditor );
+
+        propMgr.AddProperty( new PROPERTY<SCH_PIN, bool>( _HKI( "Pin-stack Icon on Name" ),
+                    &SCH_PIN::SetStackIconOnName, &SCH_PIN::GetStackIconOnName ) )
+                .SetWriteableFunc( isSymbolEditor );
     }
 } _SCH_PIN_DESC;
 
@@ -2441,3 +2843,4 @@ static struct SCH_PIN_DESC
 ENUM_TO_WXANY( PIN_ORIENTATION )
 ENUM_TO_WXANY( GRAPHIC_PINSHAPE )
 ENUM_TO_WXANY( ELECTRICAL_PINTYPE )
+ENUM_TO_WXANY( PIN_NUMBER_DISPLAY )

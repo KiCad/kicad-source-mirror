@@ -363,6 +363,17 @@ enum SchematicPinShape
   SPS_NONLOGIC = 9;
 }
 
+// How much of a stacked pin number, e.g. [1,2,3], is drawn
+enum SchematicPinNumberDisplay
+{
+  SPND_UNKNOWN = 0;
+  SPND_ALL = 1;
+  SPND_FIRST = 2;
+  SPND_FIRST_AND_COUNT = 3;
+  SPND_ICON_ONLY = 4;
+  SPND_FIRST_AND_ICON = 5;
+}
+
 message SchematicPinAlternate
 {
   string name = 1;
@@ -393,6 +404,12 @@ message SchematicPin
   optional string active_alternate = 13;
 
   repeated kiapi.common.types.CustomProperty custom_properties = 14;
+
+  // Absent on pins that inherit the setting from their library pin
+  optional SchematicPinNumberDisplay number_display = 15;
+
+  // Draw the stack icon beside the pin name as well
+  bool stack_icon_on_name = 16;
 }
 
 message SchematicSymbolUnit

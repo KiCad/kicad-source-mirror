@@ -24,6 +24,7 @@
 
 #include <clocale>
 #include <cmath>
+#include <limits>
 #include <map>
 #include <core/map_helpers.h>
 #include <fmt/core.h>
@@ -1927,6 +1928,66 @@ namespace
 
         return { prefix, numValue };
     }
+
+
+    /// One item of a stacked notation list, either a literal pin number or a range.
+    struct STACKED_PIN_ITEM
+    {
+        wxString m_Literal;   ///< the item as authored, unescaped; empty for a range
+        wxString m_Prefix;    ///< range prefix, e.g. "A" in A1-A4
+        long     m_Start = 0;
+        long     m_End = 0;
+
+        bool IsRange() const { return m_Literal.IsEmpty(); }
+    };
+
+
+    /**
+     * Parse one comma-separated item of a stacked notation list.
+     *
+     * A range yields only its endpoints, never its members, so the widest range costs the same
+     * as a single pad.  Returns nullopt when the item is a malformed range.
+     */
+    std::optional<STACKED_PIN_ITEM> ParseStackedPinItem( const wxString& aPart )
+    {
+        STACKED_PIN_ITEM item;
+
+        // A range is only recognized on an unescaped dash; an escaped dash is a literal character
+        int dashPos = FindUnescaped( aPart, '-' );
+
+        if( dashPos == wxNOT_FOUND )
+        {
+            item.m_Literal = UnescapeStackedPinItem( aPart );
+            return item;
+        }
+
+        wxString startTxt = UnescapeStackedPinItem( aPart.Left( dashPos ) );
+        wxString endTxt = UnescapeStackedPinItem( aPart.Mid( dashPos + 1 ) );
+        startTxt.Trim( true ).Trim( false );
+        endTxt.Trim( true ).Trim( false );
+
+        auto [startPrefix, startVal] = ParseAlphaNumericPin( startTxt );
+        auto [endPrefix, endVal] = ParseAlphaNumericPin( endTxt );
+
+        if( startPrefix != endPrefix || startVal == -1 || endVal == -1 || startVal > endVal )
+            return std::nullopt;
+
+        item.m_Prefix = startPrefix;
+        item.m_Start = startVal;
+        item.m_End = endVal;
+
+        return item;
+    }
+
+
+    /// Render one member of a range item as the author would have written it longhand.
+    wxString StackedRangeMember( const STACKED_PIN_ITEM& aItem, long aValue )
+    {
+        if( aItem.m_Prefix.IsEmpty() )
+            return wxString::Format( wxT( "%ld" ), aValue );
+
+        return wxString::Format( wxT( "%s%ld" ), aItem.m_Prefix, aValue );
+    }
 }
 
 wxString EscapeStackedPinItem( const wxString& aPinNumber )
@@ -1958,24 +2019,17 @@ std::vector<wxString> SplitStackedPinDisplayItems( const wxString& aInner )
 
 std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* aValid )
 {
+    bool valid;
+    CountStackedPinNotation( aPinName, &valid );
+
     if( aValid )
-        *aValid = true;
+        *aValid = valid;
+
+    // Validate the whole list before a range allocates its members.
+    if( !valid )
+        return { aPinName };
 
     std::vector<wxString> expanded;
-
-    const bool hasOpenBracket  = aPinName.Contains( wxT( "[" ) );
-    const bool hasCloseBracket = aPinName.Contains( wxT( "]" ) );
-
-    if( hasOpenBracket || hasCloseBracket )
-    {
-        if( !aPinName.StartsWith( wxT( "[" ) ) || !aPinName.EndsWith( wxT( "]" ) ) )
-        {
-            if( aValid )
-                *aValid = false;
-            expanded.push_back( aPinName );
-            return expanded;
-        }
-    }
 
     if( !aPinName.StartsWith( wxT( "[" ) ) || !aPinName.EndsWith( wxT( "]" ) ) )
     {
@@ -1992,39 +2046,30 @@ std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* 
         if( part.empty() )
             continue;
 
-        // A range (e.g. A1-A4) is only recognized on an unescaped dash; an escaped dash is a
-        // literal character inside a single pin number.
-        int dashPos = FindUnescaped( part, '-' );
-        if( dashPos != wxNOT_FOUND )
+        std::optional<STACKED_PIN_ITEM> item = ParseStackedPinItem( part );
+
+        if( !item )
         {
-            wxString startTxt = UnescapeStackedPinItem( part.Left( dashPos ) );
-            wxString endTxt   = UnescapeStackedPinItem( part.Mid( dashPos + 1 ) );
-            startTxt.Trim( true ).Trim( false );
-            endTxt.Trim( true ).Trim( false );
+            if( aValid )
+                *aValid = false;
 
-            auto [startPrefix, startVal] = ParseAlphaNumericPin( startTxt );
-            auto [endPrefix, endVal]     = ParseAlphaNumericPin( endTxt );
-
-            if( startPrefix != endPrefix || startVal == -1 || endVal == -1 || startVal > endVal )
-            {
-                if( aValid )
-                    *aValid = false;
-                expanded.clear();
-                expanded.push_back( aPinName );
-                return expanded;
-            }
-
-            for( long ii = startVal; ii <= endVal; ++ii )
-            {
-                if( startPrefix.IsEmpty() )
-                    expanded.emplace_back( wxString::Format( wxT( "%ld" ), ii ) );
-                else
-                    expanded.emplace_back( wxString::Format( wxT( "%s%ld" ), startPrefix, ii ) );
-            }
+            expanded.clear();
+            expanded.push_back( aPinName );
+            return expanded;
         }
-        else
+
+        if( !item->IsRange() )
         {
-            expanded.push_back( UnescapeStackedPinItem( part ) );
+            expanded.push_back( item->m_Literal );
+            continue;
+        }
+
+        for( long ii = item->m_Start; ; ++ii )
+        {
+            expanded.emplace_back( StackedRangeMember( *item, ii ) );
+
+            if( ii == item->m_End )
+                break;
         }
     }
 
@@ -2090,33 +2135,27 @@ int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
         if( part.empty() )
             continue;
 
-        int dashPos = FindUnescaped( part, '-' );
-        if( dashPos != wxNOT_FOUND )
+        std::optional<STACKED_PIN_ITEM> item = ParseStackedPinItem( part );
+
+        if( !item )
         {
-            wxString startTxt = UnescapeStackedPinItem( part.Left( dashPos ) );
-            wxString endTxt   = UnescapeStackedPinItem( part.Mid( dashPos + 1 ) );
-            startTxt.Trim( true ).Trim( false );
-            endTxt.Trim( true ).Trim( false );
+            if( aValid )
+                *aValid = false;
 
-            auto [startPrefix, startVal] = ParseAlphaNumericPin( startTxt );
-            auto [endPrefix, endVal]     = ParseAlphaNumericPin( endTxt );
-
-            if( startPrefix != endPrefix || startVal == -1 || endVal == -1 || startVal > endVal )
-            {
-                if( aValid )
-                    *aValid = false;
-
-                return 1;
-            }
-
-            // Count pins in the range
-            count += static_cast<int>( endVal - startVal + 1 );
+            return 1;
         }
-        else
+
+        const long span = item->IsRange() ? item->m_End - item->m_Start : 0;
+
+        if( span >= std::numeric_limits<int>::max() - count )
         {
-            // Single pin
-            ++count;
+            if( aValid )
+                *aValid = false;
+
+            return 1;
         }
+
+        count += static_cast<int>( span ) + 1;
     }
 
     if( count == 0 )
@@ -2128,6 +2167,79 @@ int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
     }
 
     return count;
+}
+
+
+bool SummarizeStackedPinNotation( const wxString& aPinName, wxString* aSmallest, int* aCount )
+{
+    const size_t len = aPinName.length();
+
+    if( len < 2 || aPinName[0] != '[' || aPinName[len - 1] != ']' )
+    {
+        if( aSmallest )
+            *aSmallest = aPinName;
+
+        if( aCount )
+            *aCount = 1;
+
+        // A stray bracket is malformed notation, not a pin number that happens to contain one
+        return !aPinName.Contains( wxT( "[" ) ) && !aPinName.Contains( wxT( "]" ) );
+    }
+
+    wxString smallest;
+    int      count = 0;
+
+    for( wxString part : SplitStackedPinItems( aPinName.Mid( 1, len - 2 ) ) )
+    {
+        part.Trim( true ).Trim( false );
+
+        if( part.empty() )
+            continue;
+
+        std::optional<STACKED_PIN_ITEM> item = ParseStackedPinItem( part );
+
+        if( !item )
+        {
+            count = 0;
+            break;
+        }
+
+        const long span = item->IsRange() ? item->m_End - item->m_Start : 0;
+
+        if( span >= std::numeric_limits<int>::max() - count )
+        {
+            count = 0;
+            break;
+        }
+
+        // Only a range's start can be its smallest member, so the interior is never materialized
+        wxString candidate = item->IsRange() ? StackedRangeMember( *item, item->m_Start )
+                                             : item->m_Literal;
+
+        if( count == 0 || StrNumCmp( candidate, smallest ) < 0 )
+            smallest = candidate;
+
+        count += static_cast<int>( span ) + 1;
+    }
+
+    if( count == 0 )
+    {
+        if( aSmallest )
+            *aSmallest = aPinName;
+
+        if( aCount )
+            *aCount = 1;
+
+        return false;
+    }
+
+    if( aSmallest )
+        *aSmallest = smallest;
+
+    if( aCount )
+        *aCount = count;
+
+    return true;
 }
 
 

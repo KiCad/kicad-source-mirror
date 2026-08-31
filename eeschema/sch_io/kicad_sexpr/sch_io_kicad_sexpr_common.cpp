@@ -153,6 +153,33 @@ const char* getPinShapeToken( GRAPHIC_PINSHAPE aShape )
 }
 
 
+const char* getPinNumberDisplayToken( PIN_NUMBER_DISPLAY aDisplay )
+{
+    switch( aDisplay )
+    {
+    case PIN_NUMBER_DISPLAY::ALL:
+        return SCHEMATIC_LEXER::TokenName( T_all );
+
+    case PIN_NUMBER_DISPLAY::FIRST:
+        return SCHEMATIC_LEXER::TokenName( T_first );
+
+    case PIN_NUMBER_DISPLAY::FIRST_AND_ICON:
+        return SCHEMATIC_LEXER::TokenName( T_first_and_icon );
+
+    case PIN_NUMBER_DISPLAY::FIRST_AND_COUNT:
+        return SCHEMATIC_LEXER::TokenName( T_first_and_count );
+
+    case PIN_NUMBER_DISPLAY::ICON_ONLY:
+        return SCHEMATIC_LEXER::TokenName( T_icon_only );
+
+    default:
+        wxFAIL_MSG( "Missing symbol library pin number display type" );
+    }
+
+    return emptyString;
+}
+
+
 EDA_ANGLE getPinAngle( PIN_ORIENTATION aOrientation )
 {
     switch( aOrientation )

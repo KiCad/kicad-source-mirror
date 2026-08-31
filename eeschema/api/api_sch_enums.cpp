@@ -255,6 +255,43 @@ PIN_ORIENTATION FromProtoEnum( types::SchematicPinOrientation aValue )
 
 
 template<>
+types::SchematicPinNumberDisplay ToProtoEnum( PIN_NUMBER_DISPLAY aValue )
+{
+    switch( aValue )
+    {
+    case PIN_NUMBER_DISPLAY::ALL:             return types::SchematicPinNumberDisplay::SPND_ALL;
+    case PIN_NUMBER_DISPLAY::FIRST:           return types::SchematicPinNumberDisplay::SPND_FIRST;
+    case PIN_NUMBER_DISPLAY::FIRST_AND_ICON:  return types::SchematicPinNumberDisplay::SPND_FIRST_AND_ICON;
+    case PIN_NUMBER_DISPLAY::FIRST_AND_COUNT: return types::SchematicPinNumberDisplay::SPND_FIRST_AND_COUNT;
+    case PIN_NUMBER_DISPLAY::ICON_ONLY:       return types::SchematicPinNumberDisplay::SPND_ICON_ONLY;
+
+    default:
+        wxCHECK_MSG( false, types::SchematicPinNumberDisplay::SPND_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PIN_NUMBER_DISPLAY>" );
+    }
+}
+
+
+template<>
+PIN_NUMBER_DISPLAY FromProtoEnum( types::SchematicPinNumberDisplay aValue )
+{
+    switch( aValue )
+    {
+    case types::SchematicPinNumberDisplay::SPND_UNKNOWN:
+    case types::SchematicPinNumberDisplay::SPND_ALL:             return PIN_NUMBER_DISPLAY::ALL;
+    case types::SchematicPinNumberDisplay::SPND_FIRST:           return PIN_NUMBER_DISPLAY::FIRST;
+    case types::SchematicPinNumberDisplay::SPND_FIRST_AND_ICON:  return PIN_NUMBER_DISPLAY::FIRST_AND_ICON;
+    case types::SchematicPinNumberDisplay::SPND_FIRST_AND_COUNT: return PIN_NUMBER_DISPLAY::FIRST_AND_COUNT;
+    case types::SchematicPinNumberDisplay::SPND_ICON_ONLY:       return PIN_NUMBER_DISPLAY::ICON_ONLY;
+
+    default:
+        wxCHECK_MSG( false, PIN_NUMBER_DISPLAY::ALL,
+                     "Unhandled case in FromProtoEnum<types::SchematicPinNumberDisplay>" );
+    }
+}
+
+
+template<>
 types::SchematicPinShape ToProtoEnum( GRAPHIC_PINSHAPE aValue )
 {
     switch( aValue )

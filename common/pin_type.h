@@ -95,6 +95,27 @@ enum class GRAPHIC_PINSHAPE
 #define GRAPHIC_PINSHAPES_TOTAL ( static_cast<int>( GRAPHIC_PINSHAPE::LAST_OPTION ) + 1 )
 
 /**
+ * How much of a stacked pin's number block is drawn.
+ *
+ * A stacked pin carries every pad it covers in a single bracketed number (`[1,3,5]`).  Drawing
+ * all of them is unreadable once a stack grows past a handful of pads, so the symbol author
+ * picks how much of the block is worth the space.
+ */
+enum class PIN_NUMBER_DISPLAY
+{
+    ALL,             ///< The whole bracketed list
+    FIRST,           ///< The first authored number alone, as an unstacked pin would look
+    FIRST_AND_ICON,  ///< The first number followed by the stack icon
+    FIRST_AND_COUNT, ///< The first number, the stack icon and the pad count as a subscript
+    ICON_ONLY,       ///< The stack icon alone
+
+    LAST_OPTION = ICON_ONLY, ///< this is the sentinel value, must be set to last enum value
+    INHERIT
+};
+
+#define PIN_NUMBER_DISPLAYS_TOTAL ( static_cast<int>( PIN_NUMBER_DISPLAY::LAST_OPTION ) + 1 )
+
+/**
  *  The symbol library pin object orientations.
  */
 enum class PIN_ORIENTATION
@@ -144,6 +165,10 @@ BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE );
 wxString PinOrientationName( PIN_ORIENTATION aOrientation );
 PIN_ORIENTATION PinOrientationCode( size_t index );
 int PinOrientationIndex( PIN_ORIENTATION code );
+
+PIN_NUMBER_DISPLAY PinNumberDisplayCode( size_t index );
+int PinNumberDisplayIndex( PIN_NUMBER_DISPLAY code );
+const wxArrayString& PinNumberDisplayNames();
 
 const wxArrayString& PinTypeNames();
 const std::vector<BITMAPS>& PinTypeIcons();

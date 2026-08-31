@@ -2076,6 +2076,23 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
                 }
             };
 
+    auto parseNumberDisplay =
+            [&]( T token ) -> PIN_NUMBER_DISPLAY
+            {
+                switch( token )
+                {
+                case T_all:             return PIN_NUMBER_DISPLAY::ALL;
+                case T_first:           return PIN_NUMBER_DISPLAY::FIRST;
+                case T_first_and_icon:  return PIN_NUMBER_DISPLAY::FIRST_AND_ICON;
+                case T_first_and_count: return PIN_NUMBER_DISPLAY::FIRST_AND_COUNT;
+                case T_icon_only:       return PIN_NUMBER_DISPLAY::ICON_ONLY;
+
+                default:
+                    Expecting( "all, first, first_and_icon, first_and_count or icon_only" );
+                    return PIN_NUMBER_DISPLAY::ALL;
+                }
+            };
+
     wxCHECK_MSG( CurTok() == T_pin, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a pin token." ) );
 
@@ -2126,6 +2143,16 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
 
         case T_length:
             pin->SetLength( parseInternalUnits( "pin length" ) );
+            NeedRIGHT();
+            break;
+
+        case T_number_display:
+            pin->SetNumberDisplay( parseNumberDisplay( NextTok() ) );
+            NeedRIGHT();
+            break;
+
+        case T_stack_icon_on_name:
+            pin->SetStackIconOnName( parseBool() );
             NeedRIGHT();
             break;
 
@@ -2239,7 +2266,8 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
             break;
 
         default:
-            Expecting( "at, name, number, hide, length, alternate, or custom_property" );
+            Expecting( "at, name, number, number_display, stack_icon_on_name, hide, length, alternate, "
+                       "or custom_property" );
         }
     }
 

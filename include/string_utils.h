@@ -558,12 +558,33 @@ KICOMMON_API std::vector<wxString> SplitStackedPinDisplayItems( const wxString& 
  *
  * This is a lighter-weight alternative to ExpandStackedPinNotation().size() for cases where only
  * the count is needed, as it does not materialize the individual numbers in an expanded range.
+ * Counts exceeding INT_MAX are invalid and return the single-pin fallback.
  *
  * @param aPinName is the pin name to count (may or may not use stacked notation)
  * @param aValid is optionally set to indicate whether the notation was valid
  * @return count of individual pins represented (always >= 1)
  */
 KICOMMON_API int CountStackedPinNotation( const wxString& aPinName, bool* aValid = nullptr );
+
+/**
+ * Describe stacked pin notation without materializing it.
+ *
+ * A range contributes only its endpoints, so `[0-2000000000]` costs the same to summarize as a
+ * single pad.  Renderers use this; ExpandStackedPinNotation() is for callers that need every
+ * number, such as connectivity.
+ *
+ * The smallest number orders by StrNumCmp(), so pads sort the way they do in a footprint file
+ * rather than by the order the symbol author typed them.
+ *
+ * On malformed notation or a count exceeding INT_MAX, both outputs describe \a aPinName as a single unstacked pin.
+ *
+ * @param aPinName is the pin name to inspect (may or may not use stacked notation)
+ * @param aSmallest optionally receives the lowest pin number
+ * @param aCount optionally receives the number of pins represented (always >= 1)
+ * @return true when the notation was valid
+ */
+KICOMMON_API bool SummarizeStackedPinNotation( const wxString& aPinName, wxString* aSmallest = nullptr,
+                                               int* aCount = nullptr );
 
 
 /** Recognize the reserved prefixes used for generated pin-net names. */

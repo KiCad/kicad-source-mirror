@@ -68,6 +68,8 @@ protected:
     void OnSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
+    /// The chosen number display mode, or the pin's current one while the control is unset.
+    PIN_NUMBER_DISPLAY getNumberDisplaySelection() const;
 private:
     SYMBOL_EDIT_FRAME*     m_frame;
     SCH_PIN*               m_pin;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,6 +25,7 @@ class WX_INFOBAR;
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/combobox.h>
+#include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
@@ -68,6 +69,9 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_pinLengthUnits;
 		wxStaticText* m_nameSizeUnits;
 		wxStaticText* m_numberSizeUnits;
+		wxStaticText* m_numberDisplayLabel;
+		wxChoice* m_choiceNumberDisplay;
+		wxCheckBox* m_checkStackIconOnName;
 		wxCheckBox* m_checkApplyToAllParts;
 		wxCheckBox* m_checkApplyToAllBodyStyles;
 		wxCheckBox* m_checkShow;

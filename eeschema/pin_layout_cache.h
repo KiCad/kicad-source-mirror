@@ -89,6 +89,16 @@ public:
     OPT_BOX2I GetAltIconBBox();
 
     /**
+     * Get the box of the stack icon inside the pin number, if the number is drawn as a collapsed stack.
+     */
+    OPT_BOX2I GetStackIconBBox();
+
+    /**
+     * Get the box of the stack icon beside the pin name, if the pin asks for one and the name is drawn.
+     */
+    OPT_BOX2I GetStackNameIconBBox();
+
+    /**
      * Gets the dangling indicator geometry for this pin, if the
      * pin were to be dangling.
      */
@@ -112,6 +122,14 @@ public:
      */
     std::optional<TEXT_INFO> GetPinNameInfo( int aShadowWidth );
     std::optional<TEXT_INFO> GetPinNumberInfo( int aShadowWidth );
+
+    /**
+     * Get the text info for what follows the stack icon in a collapsed stack, e.g. the `+9`.
+     *
+     * The number info then holds only what precedes the icon, and both are left aligned so they
+     * read as one line with the icon between them.
+     */
+    std::optional<TEXT_INFO> GetPinNumberTailInfo( int aShadowWidth );
     std::optional<TEXT_INFO> GetPinElectricalTypeInfo( int aShadowWidth );
 
 private:
@@ -183,6 +201,19 @@ private:
     OPT_BOX2I getUntransformedPinNumberBox() const;
     OPT_BOX2I getUntransformedPinTypeBox() const;
     OPT_BOX2I getUntransformedAltIconBox() const;
+    OPT_BOX2I getUntransformedStackNameIconBox() const;
+
+    /**
+     * The number's text info with the whole line's centre as its position, before any collapsed
+     * stack is split around its icon.
+     */
+    std::optional<TEXT_INFO> getNumberLineInfo();
+
+    /// How far left aligned shadow text moves back along its reading direction to sit under its text
+    int shadowOffset( int aShadowWidth ) const;
+
+    /// Move \a aInfo along the number's reading direction and left align it, so it starts there.
+    static void placeAlongNumber( TEXT_INFO& aInfo, int aAlong );
 
     /// Pin type decoration if any
     OPT_BOX2I getUntransformedDecorationBox() const;
@@ -203,10 +234,19 @@ private:
     bool  m_showAltIcons = false;
 
     // Inputs the stacked-number formatting depends on, so a repeat call can skip it
-    wxString m_numSource;
-    int      m_numSourceLength = -1;
+    wxString           m_numSource;
+    int                m_numSourceLength = -1;
+    PIN_NUMBER_DISPLAY m_numSourceDisplay = PIN_NUMBER_DISPLAY::ALL;
 
     // Various cache members
+
+    /// The number as drawn, which is not the authored number for an abbreviated stack.
+    int                m_numSourceIconSize = -1;
+    wxString           m_displayNumber;
+
+    /// Set when the number is drawn as a collapsed stack with the icon between its parts
+    std::optional<STACKED_PIN_SUMMARY> m_summary;
+    STACKED_PIN_SUMMARY_LAYOUT         m_summaryLayout = {};
     TEXT_EXTENTS_CACHE m_numExtentsCache;
     TEXT_EXTENTS_CACHE m_nameExtentsCache;
     TEXT_EXTENTS_CACHE m_typeExtentsCache;

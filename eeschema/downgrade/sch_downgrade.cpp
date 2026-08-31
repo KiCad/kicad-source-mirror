@@ -86,11 +86,12 @@ static constexpr int SCH_VER_CUSTOM_PROPERTIES = 20260830;
 static constexpr int SCH_VER_IMAGE_ROTATION = 20261025;
 static constexpr int SCH_VER_IMAGE_OPACITY = 20261025;
 static constexpr int SCH_VER_RULE_AREA_VARIANTS = 20261113;
+static constexpr int SCH_VER_PIN_STACK_DISPLAY = 20261123;
 
 // The formats this feature was built for. If a version moves past its constant, a new feature
 // landed and the rules or denylist may be stale. Review the keywords, then update these.
-static constexpr int SCH_DOWNGRADE_COVERED = 20261113;
-static constexpr int SYMLIB_DOWNGRADE_COVERED = 20261106;
+static constexpr int SCH_DOWNGRADE_COVERED = 20261123;
+static constexpr int SYMLIB_DOWNGRADE_COVERED = 20261123;
 
 
 static bool isEllipse( const SCH_ITEM* aItem )
@@ -289,6 +290,30 @@ static void dropSymbolPinMaps( LIB_SYMBOL* aSymbol )
 {
     aSymbol->SetPinMaps( PIN_MAP_SET() );
     aSymbol->SetAssociatedFootprints( {} );
+}
+
+
+static int countSymbolPinStackDisplays( const LIB_SYMBOL* aSymbol )
+{
+    int count = 0;
+
+    for( const SCH_PIN* pin : aSymbol->GetGraphicalPins() )
+    {
+        if( pin->GetNumberDisplay() != PIN_NUMBER_DISPLAY::ALL || pin->GetStackIconOnName() )
+            count++;
+    }
+
+    return count;
+}
+
+
+static void dropSymbolPinStackDisplays( LIB_SYMBOL* aSymbol )
+{
+    for( SCH_PIN* pin : aSymbol->GetGraphicalPins() )
+    {
+        pin->SetNumberDisplay( PIN_NUMBER_DISPLAY::ALL );
+        pin->SetStackIconOnName( false );
+    }
 }
 
 
@@ -715,6 +740,38 @@ static void dropPinMaps( SCH_SCREEN* aScreen )
     {
         if( symbol )
             dropSymbolPinMaps( symbol );
+    }
+}
+
+
+static int countPinStackDisplays( const SCH_SCREEN* aScreen )
+{
+    int count = 0;
+
+    for( const auto& [name, symbol] : aScreen->GetLibSymbols() )
+    {
+        if( symbol )
+            count += countSymbolPinStackDisplays( symbol );
+    }
+
+    return count;
+}
+
+
+static void dropPinStackDisplays( SCH_SCREEN* aScreen )
+{
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetLibSymbolRef() )
+            dropSymbolPinStackDisplays( symbol->GetLibSymbolRef().get() );
+    }
+
+    for( const auto& [name, symbol] : aScreen->GetLibSymbols() )
+    {
+        if( symbol )
+            dropSymbolPinStackDisplays( symbol );
     }
 }
 
@@ -2079,6 +2136,9 @@ static std::vector<SCREEN_RULE> screenRules()
 {
     // clang-format off
     return {
+        { SCH_VER_PIN_STACK_DISPLAY, DOWNGRADE_BUCKET::DROP, _( "Pin-stack notation" ),
+          _( "The target draws every stacked pin number in full. The notation and icon settings are removed." ),
+          countPinStackDisplays, dropPinStackDisplays, countSymbolPinStackDisplays, dropSymbolPinStackDisplays },
         { SCH_VER_CUSTOM_PROPERTIES, DOWNGRADE_BUCKET::DROP, _( "Custom user properties" ),
           _( "Custom user-property metadata is removed." ),
           countCustomProperties, dropCustomProperties, countSymbolCustomProperties, dropSymbolCustomProperties },
@@ -2440,6 +2500,8 @@ static constexpr DATED_TOKEN SCH_TOKENS[] = {
     { "map", SCH_VER_PIN_MAPS },
     { "edit", SCH_VER_PIN_MAPS },
     { "opacity", SCH_VER_IMAGE_OPACITY },
+    { "number_display", SCH_VER_PIN_STACK_DISPLAY },
+    { "stack_icon_on_name", SCH_VER_PIN_STACK_DISPLAY },
 };
 
 // Bareword values the target cannot parse. The node scan cannot see these.
