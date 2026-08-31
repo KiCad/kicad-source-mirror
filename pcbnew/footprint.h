@@ -491,6 +491,17 @@ public:
     const KIID_PATH& GetPath() const { return m_path; }
     void SetPath( const KIID_PATH& aPath ) { m_path = aPath; }
 
+    /**
+     * Test whether this footprint's symbol lives on \a aSheetPath or any sheet below it.
+     *
+     * @param aSheetPath is a schematic sheet path as returned by SCH_SHEET_PATH::Path(), which
+     *                   leads with the root sheet UUID.  Board paths never record the root sheet,
+     *                   so it is stripped before comparing.
+     * @return true if the footprint's path is at or below \a aSheetPath, false if \a aSheetPath
+     *         is empty.
+     */
+    bool IsWithinSchematicSheet( const KIID_PATH& aSheetPath ) const;
+
     wxString GetSheetname() const { return m_sheetname; }
     void SetSheetname( const wxString& aSheetname ) { m_sheetname = aSheetname; }
 

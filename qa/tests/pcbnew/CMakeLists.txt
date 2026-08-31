@@ -68,6 +68,7 @@ set( QA_PCBNEW_SRCS
     test_footprint_library_adapter.cpp
     test_footprint_load_save.cpp
     test_footprint_realignment.cpp
+    test_footprint_sheet_path.cpp
     test_footprint_transform_sync.cpp
     test_footprint_rescue_layer.cpp
     test_issue24735.cpp

@@ -1223,6 +1223,19 @@ bool FOOTPRINT::IsConflicting() const
 }
 
 
+bool FOOTPRINT::IsWithinSchematicSheet( const KIID_PATH& aSheetPath ) const
+{
+    if( aSheetPath.empty() )
+        return false;
+
+    // m_path is written by the netlist, which omits the root sheet the way PathAsString() does
+    KIID_PATH boardPath;
+    boardPath.assign( aSheetPath.begin() + 1, aSheetPath.end() );
+
+    return m_path.IsContainedWithin( boardPath );
+}
+
+
 void FOOTPRINT::GetContextualTextVars( wxArrayString* aVars ) const
 {
     aVars->push_back( wxT( "REFERENCE" ) );

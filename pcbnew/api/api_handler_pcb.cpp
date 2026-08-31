@@ -2712,6 +2712,15 @@ static std::vector<BOARD_ITEM*> findItemsFromSyncSelection( const BOARD* aBoard,
     std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
     wxCHECK( aBoard, {} );
 
+    // Unpacking rebuilds a KIID per path element, so do it once rather than per footprint
+    std::vector<KIID_PATH> sheetPaths( aItems.size() );
+
+    for( int index = 0; index < aItems.size(); ++index )
+    {
+        if( aItems[index].spec_case() == SelectionSpec::SpecCase::kSheetPath )
+            sheetPaths[index] = kiapi::common::UnpackSheetPath( aItems[index].sheet_path() );
+    }
+
     for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         wxString fpRef = footprint->GetReference();
@@ -2748,9 +2757,7 @@ static std::vector<BOARD_ITEM*> findItemsFromSyncSelection( const BOARD* aBoard,
 
             case SelectionSpec::SpecCase::kSheetPath:
             {
-                KIID_PATH fpSheetPath = footprint->GetPath();
-
-                if( fpSheetPath.IsContainedWithin( kiapi::common::UnpackSheetPath( spec.sheet_path() ) ) )
+                if( footprint->IsWithinSchematicSheet( sheetPaths[index] ) )
                     orderPairs.emplace_back( index, footprint );
 
                 break;
