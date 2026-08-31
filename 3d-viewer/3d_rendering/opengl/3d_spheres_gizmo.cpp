@@ -25,6 +25,21 @@
 #include "3d_spheres_gizmo.h"
 
 
+namespace
+{
+
+// View-matrix Z translation: camera sits this many arrow-lengths from the gizmo origin.
+constexpr float GIZMO_CAMERA_DISTANCE_FACTOR = 2.75f;
+
+// Nudge axis labels toward the camera to reduce z-fighting on the sphere surface.
+constexpr float GIZMO_LABEL_CAMERA_OFFSET = 0.02f;
+
+// Full width/height of the X/Y/Z letter strokes in gizmo units.
+constexpr float GIZMO_LABEL_SIZE = 0.30f;
+
+} // namespace
+
+
 SPHERES_GIZMO::~SPHERES_GIZMO()
 {
     if( m_quadric )
@@ -119,12 +134,14 @@ void SPHERES_GIZMO::render3dSpheresGizmo( glm::mat4 aCameraRotationMatrix )
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
-    gluPerspective( fov, 1.0f, 0.001f, 2.0f * RANGE_SCALE_3D );
+    const float camDist = m_arrowSize * GIZMO_CAMERA_DISTANCE_FACTOR;
+    const float clipRadius = m_arrowSize + m_sphereRadius;
+    gluPerspective( fov, 1.0f, camDist - clipRadius, camDist + clipRadius );
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-    glm::mat4 TranslationMatrix = glm::translate( glm::mat4( 1.0f ), SFVEC3F( 0.0f, 0.0f, -( m_arrowSize * 2.75f ) ) );
+    glm::mat4 TranslationMatrix = glm::translate( glm::mat4( 1.0f ), SFVEC3F( 0.0f, 0.0f, -( m_arrowSize * GIZMO_CAMERA_DISTANCE_FACTOR ) ) );
     glm::mat4 ViewMatrix = TranslationMatrix * aCameraRotationMatrix;
     glLoadMatrixf( glm::value_ptr( ViewMatrix ) );
 
@@ -182,7 +199,7 @@ void SPHERES_GIZMO::render3dSpheresGizmo( glm::mat4 aCameraRotationMatrix )
     // View direction (camera looks along negative Z in view space)
     // So we offset a little toward the camera to avoid z-fighting
     glm::vec3 camForward( m_cameraRotationMatrix[0][2], m_cameraRotationMatrix[1][2], m_cameraRotationMatrix[2][2] );
-    glm::vec3 offset = camForward * 0.02f;
+    glm::vec3 offset = camForward * GIZMO_LABEL_CAMERA_OFFSET;
 
     glColor4f( 0.0f, 0.0f, 0.0f, 1.0f );
 
@@ -267,15 +284,15 @@ void SPHERES_GIZMO::render3dSpheresGizmo( glm::mat4 aCameraRotationMatrix )
 
         if( label == "X" )
         {
-            drawX( textPos, 0.30f, glm::vec3( 0.0f ), camRight, camUp );
+            drawX( textPos, GIZMO_LABEL_SIZE, glm::vec3( 0.0f ), camRight, camUp );
         }
         else if( label == "Y" )
         {
-            drawY( textPos, 0.30f, glm::vec3( 0.0f ), camRight, camUp );
+            drawY( textPos, GIZMO_LABEL_SIZE, glm::vec3( 0.0f ), camRight, camUp );
         }
         else if( label == "Z" )
         {
-            drawZ( textPos, 0.30f, glm::vec3( 0.0f ), camRight, camUp );
+            drawZ( textPos, GIZMO_LABEL_SIZE, glm::vec3( 0.0f ), camRight, camUp );
         }
     }
 
@@ -321,10 +338,12 @@ void SPHERES_GIZMO::updateSelection( glm::mat4 aCameraRotationMatrix )
     m_cameraRotationMatrix = aCameraRotationMatrix;
 
     float     fov = 60.0f;
-    glm::mat4 TranslationMatrix = glm::translate( glm::mat4( 1.0f ), SFVEC3F( 0.0f, 0.0f, -( m_arrowSize * 2.75f ) ) );
+    glm::mat4 TranslationMatrix = glm::translate( glm::mat4( 1.0f ), SFVEC3F( 0.0f, 0.0f, -( m_arrowSize * GIZMO_CAMERA_DISTANCE_FACTOR ) ) );
     glm::mat4 ViewMatrix = TranslationMatrix * aCameraRotationMatrix;
 
-    glm::mat4 proj = glm::perspective( glm::radians( fov ), 1.0f, 0.001f, 2.0f * RANGE_SCALE_3D );
+    const float camDist = m_arrowSize * GIZMO_CAMERA_DISTANCE_FACTOR;
+    const float clipRadius = m_arrowSize + m_sphereRadius;
+    glm::mat4 proj = glm::perspective( glm::radians( fov ), 1.0f, camDist - clipRadius, camDist + clipRadius );
     glm::mat4 invVP = glm::inverse( proj * ViewMatrix );
 
     glm::vec4 rayStartNDC( m_ndcX, m_ndcY, -1.0f, 1.0f );
