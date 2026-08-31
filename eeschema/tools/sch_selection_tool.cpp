@@ -1145,15 +1145,19 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         m_selection = RequestSelection( { SCH_PIN_T } );
 
-                        if( m_selection.Size() > 0 )
+                        // Go through select()/unselect() so the SELECTED flags, the view state
+                        // and the selection events all stay in step
+                        std::vector<SCH_PIN*> pins;
+
+                        for( EDA_ITEM* item : m_selection )
+                            pins.push_back( static_cast<SCH_PIN*>( item ) );
+
+                        for( SCH_PIN* pin : pins )
                         {
-                            SCH_PIN* pin = static_cast<SCH_PIN*>( m_selection.GetItem( 0 ) );
+                            unselect( pin );
 
                             if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParentSymbol() ) )
-                            {
-                                m_selection.Clear();
-                                m_selection.Add( symbol );
-                            }
+                                select( symbol );
                         }
                     }
                 }
