@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-08-30 09:53+0000\n"
+"PO-Revision-Date: 2026-08-31 12:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -1491,7 +1491,7 @@ msgstr "導体レイヤーとテクニカルレイヤーの厚みを表示（遅
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
-msgstr "ロールオーバー時にアイテムをハイライト"
+msgstr "ロールオーバー時にアイテムを強調表示"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -2104,7 +2104,7 @@ msgstr "終了コード %d"
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
 msgid "missing plugin environment"
-msgstr "プラグイン環境の不正"
+msgstr "プラグイン環境がありません"
 
 #: common/api/api_plugin_manager.cpp:360
 #, c-format
@@ -4406,8 +4406,8 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
-"回路図 エディターもしくはPCB エディターのウィンドウの領域にマウス カーソルが"
-"重なると、ウィンドウを前面化します。"
+"回路図 エディター もしくは PCB エディター のウィンドウのキャンバス上にマウス "
+"カーソルを移動すると、 そのウィンドウが前面に表示されます。"
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 msgid "Show popup indicator when toggling settings with hotkeys"
@@ -7262,7 +7262,7 @@ msgstr "形状のプロパティ"
 #: pcbnew/pcb_tablecell.cpp:296 pcbnew/pcb_textbox.cpp:858
 #: pcbnew/pcb_track.cpp:3147
 msgid "Start X"
-msgstr "始点X"
+msgstr "始点 X"
 
 #: common/eda_shape.cpp:2913 eeschema/sch_line.cpp:1267
 #: eeschema/sch_table.cpp:534 eeschema/sch_tablecell.cpp:430
@@ -7270,15 +7270,15 @@ msgstr "始点X"
 #: pcbnew/pcb_tablecell.cpp:297 pcbnew/pcb_textbox.cpp:859
 #: pcbnew/pcb_track.cpp:3151
 msgid "Start Y"
-msgstr "始点Y"
+msgstr "始点 Y"
 
 #: common/eda_shape.cpp:2919 pcbnew/pcb_shape.cpp:1047
 msgid "Center X"
-msgstr "X中央"
+msgstr "中心 X"
 
 #: common/eda_shape.cpp:2925 pcbnew/pcb_shape.cpp:1049
 msgid "Center Y"
-msgstr "Y中央"
+msgstr "中心 Y"
 
 #: common/eda_shape.cpp:2937 eeschema/sch_line.cpp:1271
 #: eeschema/sch_tablecell.cpp:431 pcbnew/generators/pcb_tuning_pattern.cpp:2604
@@ -8349,7 +8349,7 @@ msgstr "選択に追加"
 #: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1560
 #: pcbnew/tools/pcb_actions.cpp:1590
 msgid "Highlight Net"
-msgstr "ネットをハイライト"
+msgstr "ネットを強調表示"
 
 #: common/hotkey_store.cpp:52
 msgid "Remove from Selection"
@@ -9137,7 +9137,7 @@ msgstr "移動中のアイテム"
 
 #: common/layer_id.cpp:113
 msgid "Highlighted items"
-msgstr "ハイライトされたアイテム"
+msgstr "強調表示されたアイテム"
 
 #: common/layer_id.cpp:114
 msgid "Hidden items"
@@ -9145,7 +9145,7 @@ msgstr "非表示アイテム"
 
 #: common/layer_id.cpp:115
 msgid "Net color highlight"
-msgstr "ネット色 ハイライト"
+msgstr "ネット色 強調表示"
 
 #: common/layer_id.cpp:116
 msgid "Drag net collisions"
@@ -9153,7 +9153,7 @@ msgstr "配線変化に伴う接続衝突の変化を表示"
 
 #: common/layer_id.cpp:117 common/layer_id.cpp:155
 msgid "Selection highlight"
-msgstr "選択をハイライト"
+msgstr "選択を強調表示"
 
 #: common/layer_id.cpp:118 common/layer_id.cpp:148
 msgid "Drawing sheet"
@@ -12796,7 +12796,7 @@ msgstr "%s が見つかりません"
 
 #: eeschema/cross-probing.cpp:252
 msgid "Highlighted net:"
-msgstr "ハイライトされたネット:"
+msgstr "強調表示されたネット:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:112
 msgid "Annotation Messages:"
@@ -13554,8 +13554,7 @@ msgstr "選択したアイテムをクロス プローブする"
 
 #: eeschema/dialogs/dialog_erc.cpp:244
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr ""
-"ERCリストで選択されたときにキャンバス上の対応するアイテムをハイライト表示"
+msgstr "ERCリストで選択されたときにキャンバス上の対応するアイテムを強調表示"
 
 #: eeschema/dialogs/dialog_erc.cpp:248 pcbnew/dialogs/dialog_drc.cpp:330
 msgid "Center on Cross-probe"
@@ -14771,11 +14770,11 @@ msgstr "読み取り専用"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1461
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:991
 msgid "Highlight on Cross-probe"
-msgstr "クロスプローブをハイライト"
+msgstr "クロスプローブを強調表示"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1462
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
-msgstr "テーブルでの選択に対応するキャンバス上についてハイライト表示"
+msgstr "テーブルで選択されたピンをキャンバス上で強調表示"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1705
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:991
@@ -17239,7 +17238,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:992
 msgid "Highlight corresponding item on canvas when it is selected in the table"
-msgstr "テーブルで選択されたときにキャンバス上の対応する項目をハイライト表示"
+msgstr "テーブルで選択されたときにキャンバス上の対応する項目を強調表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:996
 msgid "Select on Cross-probe"
@@ -18066,11 +18065,11 @@ msgstr "クロスプローブ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "PCB エディターでの選択に対応するオブジェクトを選択/ハイライトします"
+msgstr "PCB エディターでの選択に対応するオブジェクトを選択/強調表示します"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "選択したフットプリントに対応するシンボルをハイライト表示"
+msgstr "選択したフットプリントに対応するシンボルを強調表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:49
 #: pcbnew/dialogs/panel_display_options_base.cpp:174
@@ -18089,11 +18088,11 @@ msgstr "クロスプローブされたアイテムに合わせてズーム"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 #: pcbnew/dialogs/panel_display_options_base.cpp:184
 msgid "Highlight cross-probed nets"
-msgstr "クロスプローブされたネットをハイライト表示"
+msgstr "クロスプローブされたネットを強調表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "PCB エディターでハイライトされたトラックのネットをハイライト"
+msgstr "PCB エディターで強調表示されたネットを強調表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:65
 #: pcbnew/dialogs/panel_display_options_base.cpp:190
@@ -18158,7 +18157,7 @@ msgstr "ページの境界を表示 (&t)"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 #: pcbnew/dialogs/panel_display_options_base.cpp:138
 msgid "Selection && Highlighting"
-msgstr "選択領域とハイライト"
+msgstr "選択領域と強調表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:167
 msgid "Draw selected child items"
@@ -18182,7 +18181,7 @@ msgstr "ネット衝突マーカー幅:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:200
 msgid "Highlight thickness:"
-msgstr "ハイライトの太さ:"
+msgstr "強調表示の太さ:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:211
 msgid "Highlight netclass colors"
@@ -18190,11 +18189,11 @@ msgstr "ネットクラスの色を強調表示する"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:219
 msgid "Color highlight thickness:"
-msgstr "色ハイライトの太さ:"
+msgstr "色強調表示の太さ:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:227
 msgid "Color highlight opacity:"
-msgstr "色ハイライトの不透明度:"
+msgstr "色強調表示の不透明度:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Line drawing mode:"
@@ -18255,14 +18254,12 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:66
 #: pcbnew/dialogs/panel_edit_options_base.cpp:427
 msgid "<ESC> clears net highlighting"
-msgstr "<ESC> ネットのハイライトをクリア"
+msgstr "<ESC> ネットの強調表示を解除"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr ""
-"選択ツールの最初の <ESC> は選択をクリアし、次はネットのハイライト表示をクリア"
-"します"
+msgstr "選択ツールの最初の <ESC> は選択を解除し、次はネットの強調表示を解除します"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
 msgid "Automatically annotate symbols"
@@ -20937,7 +20934,7 @@ msgstr "[回路図が読み込まれていません]"
 #: eeschema/sch_edit_frame.cpp:2101
 #, c-format
 msgid "Highlighted net: %s"
-msgstr "ハイライトされたネット: %s"
+msgstr "強調表示されたネット: %s"
 
 #: eeschema/sch_edit_frame.cpp:2307
 msgid "Save Symbol to Schematic"
@@ -26819,24 +26816,24 @@ msgstr "未接続のセグメントに分割します"
 
 #: eeschema/tools/sch_actions.cpp:1038 pcbnew/tools/pcb_actions.cpp:1561
 msgid "Highlight net under cursor"
-msgstr "カーソルの下にあるネットをハイライト"
+msgstr "カーソルの下にあるネットを強調表示"
 
 #: eeschema/tools/sch_actions.cpp:1045 pcbnew/tools/pcb_actions.cpp:1576
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1098
 msgid "Clear Net Highlighting"
-msgstr "ネットのハイライトをクリア"
+msgstr "ネットの強調表示を解除"
 
 #: eeschema/tools/sch_actions.cpp:1046
 msgid "Clear any existing net highlighting"
-msgstr "既存のネットハイライトをクリアする"
+msgstr "既存のネット強調表示を解除する"
 
 #: eeschema/tools/sch_actions.cpp:1055
 msgid "Highlight Nets"
-msgstr "ネットをハイライト"
+msgstr "ネットを強調表示"
 
 #: eeschema/tools/sch_actions.cpp:1056
 msgid "Highlight wires and pins of a net"
-msgstr "ネットのワイヤーとピンをハイライト表示"
+msgstr "ネットのワイヤーとピンを強調表示"
 
 #: eeschema/tools/sch_actions.cpp:1065
 msgid "Show/hide the net navigator"
@@ -29559,11 +29556,11 @@ msgstr "IPNEG Gerberコマンドは2012年以降非推奨です。スキップ�
 
 #: gerbview/toolbars_gerber.cpp:187 gerbview/toolbars_gerber.cpp:306
 msgid "Highlight items belonging to this component"
-msgstr "このコンポーネントに属しているアイテムをハイライト"
+msgstr "このコンポーネントに属しているアイテムを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:209 gerbview/toolbars_gerber.cpp:310
 msgid "Highlight items belonging to this net"
-msgstr "このネットに属しているアイテムをハイライト"
+msgstr "このネットに属しているアイテムを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:229 gerbview/toolbars_gerber.cpp:232
 msgid "Attr:"
@@ -29571,7 +29568,7 @@ msgstr "属性:"
 
 #: gerbview/toolbars_gerber.cpp:231 gerbview/toolbars_gerber.cpp:314
 msgid "Highlight items with this aperture attribute"
-msgstr "このアパーチャ属性を持つアイテムをハイライト"
+msgstr "この開口部属性を持つアイテムを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:254 gerbview/toolbars_gerber.cpp:256
 msgid "DCode:"
@@ -29583,15 +29580,15 @@ msgstr "テキスト情報の入力"
 
 #: gerbview/toolbars_gerber.cpp:305
 msgid "Component highlight"
-msgstr "コンポーネントハイライト"
+msgstr "コンポーネントを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:309
 msgid "Net highlight"
-msgstr "ネットハイライト"
+msgstr "ネットを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:313
 msgid "Aperture highlight"
-msgstr "アパーチャハイライト"
+msgstr "開口部を強調表示"
 
 #: gerbview/toolbars_gerber.cpp:317
 msgid "DCode selector"
@@ -29689,19 +29686,19 @@ msgstr "すべてのレイヤーを再読み込み"
 
 #: gerbview/tools/gerbview_actions.cpp:127
 msgid "Clear Highlight"
-msgstr "ハイライトをクリア"
+msgstr "強調表示を解除"
 
 #: gerbview/tools/gerbview_actions.cpp:139
 msgid "Highlight Component"
-msgstr "コンポーネントをハイライト"
+msgstr "コンポーネントを強調表示"
 
 #: gerbview/tools/gerbview_actions.cpp:145
 msgid "Highlight Attribute"
-msgstr "属性情報をハイライト"
+msgstr "属性情報を強調表示"
 
 #: gerbview/tools/gerbview_actions.cpp:151
 msgid "Highlight DCode"
-msgstr "Dコードをハイライト"
+msgstr "Dコードを強調表示"
 
 #: gerbview/tools/gerbview_actions.cpp:159
 msgid "Next Layer"
@@ -29807,27 +29804,27 @@ msgstr "アクティブ レイヤー%d上にファイルが読み込まれてい
 
 #: gerbview/tools/gerbview_selection_tool.cpp:46
 msgid "Highlight"
-msgstr "ハイライト"
+msgstr "強調表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:68
 #, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "コンポーネント '%s' のアイテムをハイライト表示"
+msgstr "コンポーネント '%s' のアイテムを強調表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:76
 #, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "ネット '%s' のアイテムをハイライト表示"
+msgstr "ネット '%s' のアイテムを強調表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "アパーチャのタイプ '%s' をハイライト表示"
+msgstr "開口部タイプ '%s' を強調表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
 msgid "Highlight DCode D%d"
-msgstr "Dコード D%d をハイライト"
+msgstr "Dコード D%d を強調表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:80
 #: gerbview/widgets/layer_widget.cpp:537
@@ -30623,7 +30620,7 @@ msgstr "ネットリスト属性を生成しない"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:82
 msgid "Disable aperture macros"
-msgstr "アパーチャ マクロを無効にする"
+msgstr "開口部 マクロを無効にする"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:86
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:119
@@ -37683,7 +37680,7 @@ msgstr "物理的積層構造"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
 msgid "Board Finish"
-msgstr "基板仕上げ"
+msgstr "基板表面仕上げ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:130
 #: pcbnew/dialogs/dialog_plot.cpp:1373
@@ -38768,7 +38765,7 @@ msgstr "チェックを外すと、各配線の最初のエラーのみレポー
 
 #: pcbnew/dialogs/dialog_drc.cpp:326
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr "DRC リストの選択に対応するキャンバス上のアイテムをハイライト表示"
+msgstr "DRC リストの選択に対応するキャンバス上のアイテムを強調表示"
 
 #: pcbnew/dialogs/dialog_drc.cpp:415
 msgid "DRC incomplete: could not compile custom design rules."
@@ -40695,7 +40692,7 @@ msgstr "精度"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:31
 msgid "Click on items to highlight them on the board."
-msgstr "基板上でハイライトさせるアイテムをクリックします。"
+msgstr "基板上でアイテムをクリックしそのアイテムを強調表示。"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
 #, c-format
@@ -42773,20 +42770,20 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"ガーバー ファイルにネットリストの付帯情報とアパーチャの属性を含めます。\n"
+"ガーバー ファイルにネットリストの付帯情報と開口部の属性を含めます。\n"
 "X1 フォーマットではこれらはコメントです。\n"
-"CAMツールとガーバービューアーで接続をチェックするために使用されます。"
+"CAMツールとガーバービューアーで接続性をチェックするために使用されます。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:261
 msgid "Disable aperture macros (not recommended)"
-msgstr "アパーチャ マクロを無効化 (非推奨)"
+msgstr "開口部 マクロを無効化 (非推奨)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:262
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"ガーバー ファイルのアパーチャ マクロを無効化します\n"
+"ガーバー ファイルの開口部 マクロを無効化します\n"
 "壊れたガーバー ビューアー*のみ*に対して使用します。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:274
@@ -42935,7 +42932,7 @@ msgstr "モード"
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
 #: pcbnew/router/router_tool.cpp:2993
 msgid "Highlight collisions"
-msgstr "衝突箇所をハイライト表示"
+msgstr "衝突箇所を強調表示"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Free angle mode"
@@ -42950,8 +42947,8 @@ msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(衝突箇所ハイライト表示モードのみ) - DRC ルール違反があっても配線することを許"
-"容します。"
+"(衝突箇所強調表示モードのみ) - DRC ルール違反があっても配線することを許容しま"
+"す。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
 #: pcbnew/router/router_tool.cpp:2995
@@ -44039,7 +44036,7 @@ msgstr "この条件を削除"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:106
 msgid "Highlight matching footprints"
-msgstr "ハイライトに該当するフットプリント"
+msgstr "一致するフットプリントを強調表示"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:116
 msgid "Match all"
@@ -44135,11 +44132,11 @@ msgstr "親のフットプリントが選択されている場合にすべての
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:168
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "回路図 エディターでの選択に対応するオブジェクトを選択/ハイライトします"
+msgstr "回路図 エディターでの選択に対応するオブジェクトを選択/強調表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:170
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "選択したシンボルに対応するフットプリントをハイライト表示"
+msgstr "選択したシンボルに対応するフットプリントを強調表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:176
 msgid "Ensures that cross-probed footprints are visible in the current view"
@@ -44148,7 +44145,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:186
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "回路図 エディターでハイライトされたネットをハイライト"
+msgstr "回路図 エディターで強調表示されたネットを強調表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:196
 msgid "Refresh 3D view automatically"
@@ -44232,7 +44229,7 @@ msgstr "選択状態を切り替える"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:186
 #: pcbnew/dialogs/panel_edit_options_base.cpp:260
 msgid "Highlight net (for pads/tracks)"
-msgstr "ネットをハイライトします(パッドまたはトラック)"
+msgstr "ネットを強調表示(パッドまたは配線)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:240
 msgid "Shift+Cmd:"
@@ -45151,8 +45148,8 @@ msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
 msgstr ""
-"同じフットプリント内のパッド間のハンダマスク アパーチャ ブリッジの DRC エ"
-"ラー チェックを無効にする。"
+"同じフットプリント内のパッド間のハンダマスク 開口部 ブリッジの DRC エラー "
+"チェックを無効にする。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 msgid "Tent vias:"
@@ -47718,7 +47715,7 @@ msgstr "導体スライバー"
 
 #: pcbnew/drc/drc_item.cpp:240
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "異なるネットのアイテムがハンダマスクのアパーチャで接続されている"
+msgstr "異なるネットのアイテムがハンダマスクの開口部で接続されている"
 
 #: pcbnew/drc/drc_item.cpp:244
 msgid "Silkscreen clipped by solder mask"
@@ -48726,13 +48723,13 @@ msgstr "基板セットアップのハンダマスクの最小幅"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:710
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:837
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr "異なるネットのアイテムが表面ハンダマスクのアパーチャで接続されている"
+msgstr "異なるネットのアイテムが表面ハンダマスクの開口部で接続されている"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:616
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:712
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:839
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr "異なるネットのアイテムが裏面ハンダマスクのアパーチャで接続されている"
+msgstr "異なるネットのアイテムが裏面ハンダマスクの開口部で接続されている"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:949
 msgid "Building solder mask..."
@@ -58145,19 +58142,19 @@ msgstr "キャンバス上でのアイテムの移動やサイズ変更を許可
 
 #: pcbnew/tools/pcb_actions.cpp:1568
 msgid "Toggle Last Net Highlight"
-msgstr "最後のネット ハイライト表示を切り替え"
+msgstr "最後のネット 強調表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1569
 msgid "Toggle between last two highlighted nets"
-msgstr "最後の２つのハイライトされたネットを切り替えます"
+msgstr "最後の２つの強調表示されたネットを切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1582
 msgid "Toggle Net Highlight"
-msgstr "ネットのハイライトを切り替え"
+msgstr "ネットの強調表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1591
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "選択したネットの全導体アイテムをハイライト表示"
+msgstr "選択したネットの全導体アイテムを強調表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1602
 msgid "Hide Net in Ratsnest"
@@ -58838,11 +58835,11 @@ msgstr "差動ペアの寸法設定を開く"
 
 #: pcbnew/tools/pcb_actions.cpp:2592
 msgid "Router Highlight Mode"
-msgstr "ルーター ハイライト モード"
+msgstr "ルーター 強調表示 モード"
 
 #: pcbnew/tools/pcb_actions.cpp:2593
 msgid "Switch router to highlight mode"
-msgstr "ルーターをハイライト モードに切り替え"
+msgstr "ルーターを強調表示 モードに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:2600
 msgid "Router Shove Mode"
@@ -59841,7 +59838,7 @@ msgstr "ネットの色をクリア"
 #: pcbnew/widgets/appearance_controls.cpp:955
 #, c-format
 msgid "Highlight %s"
-msgstr "%s をハイライト"
+msgstr "%s を強調表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:958
 #: pcbnew/widgets/appearance_controls.cpp:2546
@@ -60208,7 +60205,7 @@ msgstr "ネットクラスの色をクリア"
 #: pcbnew/widgets/appearance_controls.cpp:2543
 #, c-format
 msgid "Highlight Nets in %s"
-msgstr "%s のネットをハイライト"
+msgstr "%s のネットを強調表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:2554
 msgid "Show All Netclasses"
@@ -60312,7 +60309,7 @@ msgstr "パッド数"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1094
 msgid "Highlight Selected Net"
-msgstr "選択されたネットをハイライト表示"
+msgstr "選択されたネットを強調表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1110
 msgid "Rename Selected Net..."
@@ -60328,7 +60325,7 @@ msgstr "ネットを追加..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1133
 msgid "Highlight Selected Nets"
-msgstr "選択されたネットをハイライト表示"
+msgstr "選択されたネットを強調表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1135
 msgid "Delete Selected Nets"
