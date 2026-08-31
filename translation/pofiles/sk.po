@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-08-26 20:51+0000\n"
+"PO-Revision-Date: 2026-08-31 12:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -1159,7 +1159,7 @@ msgstr "Šírka:"
 #: common/widgets/gal_options_panel_base.cpp:57
 #: common/widgets/gal_options_panel_base.cpp:68
 msgid "pixels"
-msgstr "pixely"
+msgstr "pixelov"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/panel_common_settings_base.cpp:288
@@ -1368,11 +1368,11 @@ msgstr "X rozlíšenie:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:124
 msgid "pixels/in"
-msgstr "pixely/palec"
+msgstr "pixelov/palec"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:125
 msgid "pixels/mm"
-msgstr "pixely/mm"
+msgstr "pixelov/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:130
 msgid "Y resolution:"
@@ -5091,7 +5091,7 @@ msgstr "Bodky"
 #: common/dialogs/panel_gal_options_base.cpp:34
 #: common/widgets/gal_options_panel_base.cpp:34
 msgid "Lines"
-msgstr "Riadky"
+msgstr "Čiary"
 
 #: common/dialogs/panel_gal_options_base.cpp:37
 #: common/widgets/gal_options_panel_base.cpp:37
@@ -18220,7 +18220,7 @@ msgstr "Režim kreslenia čiar:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "Free Angle"
-msgstr "Voľný uhol"
+msgstr "Ľubovoľný uhol"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "90 deg Angle"
@@ -22613,7 +22613,7 @@ msgstr "Zrkadliť X"
 
 #: eeschema/sch_symbol.cpp:3947
 msgid "Mirror Y"
-msgstr "Zrcadlit Y"
+msgstr "Zrkadliť Y"
 
 #: eeschema/sch_symbol.cpp:3974 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:4855 pcbnew/widgets/search_handlers.cpp:145
@@ -22624,7 +22624,7 @@ msgstr "Knižničné prepojenie"
 #: pcbnew/footprint.cpp:4858 pcbnew/plot_board_layers.cpp:191
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
-msgstr "Popis knižnice"
+msgstr "Knižničný popis"
 
 #: eeschema/sch_table.cpp:301
 #, c-format
@@ -25223,7 +25223,7 @@ msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Skryté napájacie vývody prenášajú svoje názvy vývodov do všetkých "
-"pripojených sietí.)"
+"pripojených spojov.)"
 
 #: eeschema/symbol_checker.cpp:367
 #, c-format
@@ -27866,7 +27866,7 @@ msgstr "Upraviť vlastnosti symbolu..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3644
 msgid "Edit Netclasses..."
-msgstr "Upraviť triedy sietí..."
+msgstr "Upraviť triedy spojov..."
 
 #: eeschema/tools/sch_editor_control.cpp:467
 #, c-format
@@ -38787,7 +38787,7 @@ msgstr ""
 "Vybrať smer šípky kóty\n"
 "Automaticky: Určené na základe polohy textu.\n"
 "Smerom dovnútra: >-----<\n"
-"Smerom von: <----->"
+"Smerom von:       <----->"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:142
 #: pcbnew/pcb_dimension.cpp:1902 pcbnew/pcb_dimension.cpp:2005
@@ -39606,13 +39606,13 @@ msgstr "Vyplniť všetky prekovy"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:158
 msgid "Net filter (supports wildcards):"
-msgstr "Filter sietí (podporuje zástupné znaky):"
+msgstr "Filter spojov (podporuje zástupné znaky):"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:163
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
 msgstr ""
-"Exportovaní budú iba medené položky patriace do sietí zodpovedajúcich tomuto "
+"Exportované budú iba medené položky patriace k spojom zodpovedajúcich tomuto "
 "filtru."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:177
@@ -40082,7 +40082,7 @@ msgstr "Zmeniť puzdro..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:236
 #: pcbnew/tools/pcb_actions.cpp:566
 msgid "Edit Library Footprint..."
-msgstr "Upraviť knižnicu puzdra..."
+msgstr "Upraviť puzdro v knižnici..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:327
@@ -44168,7 +44168,7 @@ msgstr "Zobraziť minimálnu vzdialenosť plôšky"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
 msgid "Net names:"
-msgstr "Názvy sietí:"
+msgstr "Názvy spojov:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:122
 msgid "Do not show"
@@ -44243,11 +44243,11 @@ msgstr "Režim ťahania spoja myšou:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
 msgid "Drag (45 degree mode)"
-msgstr "Ťahanie (režim 45 stupňov)"
+msgstr "Ťahať (režim 45 stupňov)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
 msgid "Drag (free angle)"
-msgstr "Drag (voľný uhol)"
+msgstr "Ťahať (ľubovoľný uhol)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:96
 msgid "Flip board items:"
@@ -44538,7 +44538,7 @@ msgstr "Os X"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:60
 msgid "Increases right"
-msgstr "Zvyšuje sa správne"
+msgstr "Zvyšuje sa vpravo"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:63
 msgid "Increases left"
@@ -44550,7 +44550,7 @@ msgstr "Os Y"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:79
 msgid "Increases up"
-msgstr "Zvyšuje sa"
+msgstr "Zvyšuje sa nahor"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:82
 msgid "Increases down"
@@ -52146,7 +52146,7 @@ msgstr "Vytváranie vyrovnávacích pamätí"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4721
 msgid "Creating nets"
-msgstr "Vytváranie sietí"
+msgstr "Vytváranie spojov"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4730
 msgid "Creating tracks"
@@ -53901,7 +53901,9 @@ msgstr "Preskakujem zakázané oblasti s neplatnými vrstvami"
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
-msgstr "Importovaných %zu puzdier, %d sietí, %zu spojov, %zu prekovov, %zu zón"
+msgstr ""
+"Importovaných %zu puzdier, %d spojov, %zu medených spojov, %zu prekovov, %zu "
+"zón"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:109
 msgid "Starting PADS binary PCB import"
@@ -55662,7 +55664,7 @@ msgstr "(žiadny spoj)"
 
 #: pcbnew/router/router_tool.cpp:2975
 msgid "Free-angle"
-msgstr "Voľný uhol"
+msgstr "Ľubovoľný uhol"
 
 #: pcbnew/router/router_tool.cpp:2981
 msgid "45-degree"
@@ -55944,7 +55946,7 @@ msgstr "Na zlúčenie, sa zóny dostatočne neprekrývajú."
 
 #: pcbnew/tools/board_editor_control.cpp:1711
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "Niektoré kódy sietí zón sa nezhodovali a neboli zlúčené."
+msgstr "Niektoré kódy spojov zón sa nezhodovali a neboli zlúčené."
 
 #: pcbnew/tools/board_editor_control.cpp:1717
 msgid "Some zones were rule areas and were not merged."
@@ -55988,7 +55990,7 @@ msgstr "Výber neobsahuje položky s označenými spojmi."
 
 #: pcbnew/tools/board_inspection_tool.cpp:76
 msgid "Net Inspection Tools"
-msgstr "Nástroje pre kontrolu sietí"
+msgstr "Nástroje pre kontrolu spojov"
 
 #: pcbnew/tools/board_inspection_tool.cpp:212
 #, c-format
@@ -58282,7 +58284,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1720
 msgid "Net Color Mode (3-state)"
-msgstr "Režim farieb sietí (3-stavový)"
+msgstr "Režim farieb spoja (3-stavový)"
 
 #: pcbnew/tools/pcb_actions.cpp:1721
 msgid ""
@@ -58995,7 +58997,7 @@ msgstr "Rozdeliť segment spoja na dva segmenty spojené na pozícii kurzora."
 
 #: pcbnew/tools/pcb_actions.cpp:2735
 msgid "Drag 45 Degree Mode"
-msgstr "Ťahanie v režime 45 stupňov"
+msgstr "Ťahať v režime 45 stupňov"
 
 #: pcbnew/tools/pcb_actions.cpp:2736
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
@@ -59004,7 +59006,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2744
 msgid "Drag Free Angle"
-msgstr "Ťahanie pod voľným uhlom"
+msgstr "Ťahať pod akýmkoľvek uhlom"
 
 #: pcbnew/tools/pcb_actions.cpp:2745
 msgid ""
