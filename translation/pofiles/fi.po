@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-08-15 10:51+0000\n"
+"PO-Revision-Date: 2026-09-01 19:51+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -9963,9 +9963,9 @@ msgid "Failed to archive file '%s'."
 msgstr "Tiedoston '%s' arkistointi epäonnistui."
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "Tiedoston '%s' arkistointi epäonnistui."
+msgstr "Tiedoston '%s' arkistointi epäonnistui %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
