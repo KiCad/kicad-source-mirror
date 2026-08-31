@@ -652,6 +652,15 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, PCBEXPR_CONTEXT* 
             if( zoneRTree->QueryColliding( areaBBox, &areaOutline, aLayer ) )
                 return true;
         }
+        else
+        {
+            std::unique_ptr<DRC_RTREE> rtree = std::make_unique<DRC_RTREE>();
+            rtree->Insert( zone, aLayer, CLEARANCE_CONSTRAINT );
+            rtree->Build();
+
+            if( rtree->QueryColliding( areaBBox, &areaOutline, aLayer ) )
+                return true;
+        }
 
         return false;
     }
