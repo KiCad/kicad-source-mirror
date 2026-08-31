@@ -1496,15 +1496,15 @@ wxString EDA_SHAPE::getFriendlyName() const
     {
         switch( m_shape )
         {
-        case SHAPE_T::CIRCLE: return _( "Circle" );
-        case SHAPE_T::ARC: return _( "Arc" );
-        case SHAPE_T::BEZIER: return _( "Curve" );
-        case SHAPE_T::POLY: return _( "Polygon" );
-        case SHAPE_T::RECTANGLE: return _( "Rectangle" );
-        case SHAPE_T::SEGMENT: return _( "Segment" );
-        case SHAPE_T::ELLIPSE: return _( "Ellipse" );
+        case SHAPE_T::CIRCLE:      return _( "Circle" );
+        case SHAPE_T::ARC:         return _( "Arc" );
+        case SHAPE_T::BEZIER:      return _( "Curve" );
+        case SHAPE_T::POLY:        return _( "Polygon" );
+        case SHAPE_T::RECTANGLE:   return _( "Rectangle" );
+        case SHAPE_T::SEGMENT:     return _( "Segment" );
+        case SHAPE_T::ELLIPSE:     return _( "Ellipse" );
         case SHAPE_T::ELLIPSE_ARC: return _( "Elliptical Arc" );
-        default: return _( "Unrecognized" );
+        default:                   return _( "Unrecognized" );
         }
     }
 }
@@ -1555,6 +1555,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     case SHAPE_T::POLY:
     {
         int pointCount = 0;
+
         if( GetPolyShape().OutlineCount() > 0 )
             pointCount = GetPolyShape().Outline( 0 ).PointCount();
 

@@ -782,8 +782,7 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
 }
 
 
-bool SCH_LINE::HasConnectivityChanges( const SCH_ITEM* aItem,
-                                       const SCH_SHEET_PATH* aInstance ) const
+bool SCH_LINE::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SHEET_PATH* aInstance ) const
 {
     // Do not compare to ourself.
     if( aItem == this || !IsConnectable() )
@@ -1020,8 +1019,8 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
 
     if( IsGraphicLine() )
     {
-        drawLineBody =
-                EDA_SHAPE::ShortenSegmentForEndings( plotStart, plotEnd, GetStartEnding(), GetEndEnding(), penWidth );
+        drawLineBody = EDA_SHAPE::ShortenSegmentForEndings( plotStart, plotEnd, GetStartEnding(), GetEndEnding(),
+                                                            penWidth );
     }
 
     if( drawLineBody )
@@ -1243,8 +1242,7 @@ bool SCH_LINE::ShouldHopOver( const SCH_LINE* aLine ) const
 }
 
 
-std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen,
-                                                       double aArcRadius ) const
+std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen, double aArcRadius ) const
 {
     // Note: Points are VECTOR3D, with Z coord used as flag
     // for segments: start point and end point have the Z coord = 0
