@@ -60,7 +60,7 @@ public:
 
     bool IsConnected() const override;
 
-    wxString GetFriendlyName() const override { return getFriendlyName(); }
+    wxString GetFriendlyName() const override { return getFriendlyName( FRAME_PCB_EDITOR ); }
 
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override;
 
