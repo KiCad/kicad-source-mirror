@@ -1,0 +1,327 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "c19be2cb-0127-4a74-b67a-d7035fcc012b")
+	(paper "A4")
+	(lib_symbols
+		(symbol "Production:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.762)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files no)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "TP"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace yes)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Production:TestPoint_Pad_D1.5mm"
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Test Point, SMD pad, 1.5 mm diameter"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 3.302)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 1.27 90)
+					(length 1.27)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(polyline
+			(pts
+				(xy 113.03 66.04) (xy 130.81 66.04) (xy 130.81 77.47) (xy 113.03 77.47)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid "5de233da-1ccc-439a-a082-8d5a28e4b191")
+		)
+	)
+	(netclass_flag ""
+		(length 2.54)
+		(shape round)
+		(at 115.57 66.04 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f6539af6-f787-43dd-9fbb-12c0f78f41ff")
+		(property "Netclass" "WideClearance"
+			(at 116.2685 63.5 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Component Class" ""
+			(at -22.86 -3.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Production:TestPoint")
+		(at 110.49 74.93 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "74edc669-c989-4bce-9fd3-b96f5b6976ee")
+		(property "Reference" "TP1"
+			(at 110.49 69.85 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 110.49 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Production:TestPoint_Pad_D1.5mm"
+			(at 115.57 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Test Point, SMD pad, 1.5 mm diameter"
+			(at 110.49 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0735b468-66fd-40eb-a16e-393e6230c593")
+		)
+		(instances
+			(project "proj"
+				(path "/c19be2cb-0127-4a74-b67a-d7035fcc012b"
+					(reference "TP1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Production:TestPoint")
+		(at 124.46 74.93 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c2e92311-d62a-4fa6-a415-a097984c0555")
+		(property "Reference" "TP2"
+			(at 124.46 69.85 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 124.46 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Production:TestPoint_Pad_D1.5mm"
+			(at 129.54 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 129.54 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Test Point, SMD pad, 1.5 mm diameter"
+			(at 124.46 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b6859651-8fc4-40dd-9588-c9ae2b2f0816")
+		)
+		(instances
+			(project "proj"
+				(path "/c19be2cb-0127-4a74-b67a-d7035fcc012b"
+					(reference "TP2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

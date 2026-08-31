@@ -224,7 +224,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "net_colors",
             [&]() -> nlohmann::json
             {
-                nlohmann::json ret = {};
+                nlohmann::json ret = nlohmann::json::object();
 
                 for( const auto& [netname, color] : m_netColorAssignments )
                 {
@@ -323,7 +323,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "netclass_assignments",
             [&]() -> nlohmann::json
             {
-                nlohmann::json ret = {};
+                nlohmann::json ret = nlohmann::json::object();
 
                 for( const auto& [netname, netclassNames] : m_netClassLabelAssignments )
                 {
@@ -357,6 +357,9 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 }
             },
             {} ) );
+
+    // Let the save drop stale netclass assignments instead of merging them back in
+    m_params.back()->SetClearUnknownKeys();
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "netclass_patterns",
             [&]() -> nlohmann::json

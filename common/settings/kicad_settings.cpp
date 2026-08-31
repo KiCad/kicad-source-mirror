@@ -158,6 +158,9 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
             },
             nlohmann::json::object() ) );
 
+    // The getter omits an override once both flags clear, so the save has to delete the key
+    m_params.back()->SetClearUnknownKeys();
+
     m_params.emplace_back(
             new PARAM<wxString>( "pcm.last_download_dir", &m_PcmLastDownloadDir, "" ) );
 

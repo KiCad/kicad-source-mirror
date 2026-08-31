@@ -529,7 +529,7 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         {
             nlohmann::json_pointer p = JSON_SETTINGS_INTERNALS::PointerFromString( param->GetJsonPath() );
 
-            toSave[p] = nlohmann::json( {} );
+            toSave[p] = nlohmann::json::object();
         }
     }
 
