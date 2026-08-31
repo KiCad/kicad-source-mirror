@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -228,18 +228,18 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	ptSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticText* ptLabel;
-	ptLabel = new wxStaticText( sbAttributes->GetStaticBox(), wxID_ANY, _("Passthrough"), wxDefaultPosition, wxDefaultSize, 0 );
+	ptLabel = new wxStaticText( sbAttributes->GetStaticBox(), wxID_ANY, _("Passthrough:"), wxDefaultPosition, wxDefaultSize, 0 );
 	ptLabel->Wrap( -1 );
-	ptSizer->Add( ptLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	ptSizer->Add( ptLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
 	wxString m_choicePassthroughChoices[] = { _("Default"), _("Block"), _("Force") };
 	int m_choicePassthroughNChoices = sizeof( m_choicePassthroughChoices ) / sizeof( wxString );
 	m_choicePassthrough = new wxChoice( sbAttributes->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePassthroughNChoices, m_choicePassthroughChoices, 0 );
 	m_choicePassthrough->SetSelection( 0 );
-	ptSizer->Add( m_choicePassthrough, 1, wxEXPAND, 0 );
+	ptSizer->Add( m_choicePassthrough, 1, wxEXPAND|wxTOP, 5 );
 
 
-	sbAttributes->Add( ptSizer, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	sbAttributes->Add( ptSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMiddleCol->Add( sbAttributes, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -346,7 +346,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	bSizerBottom->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP, 2 );
+	bSizerBottom->Add( m_libraryIDLabel, 0, wxBOTTOM|wxALIGN_CENTER_VERTICAL, 2 );
 
 	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	bSizerBottom->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
