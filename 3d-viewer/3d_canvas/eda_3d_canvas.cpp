@@ -422,8 +422,14 @@ void EDA_3D_CANVAS::DoRePaint()
     // therefore with invalid board.
     // This is dependent of the platform.
     // Especially on OSX, but also on Windows, it frequently happens
-    if( !GetParent()->GetParent()->IsShownOnScreen() )
+    wxWindow* viewer = wxGetTopLevelParent( this );
+    wxWindow* owner = viewer ? viewer->GetParent() : nullptr;
+
+    if( owner && !owner->IsShownOnScreen() )
+    {
+        m_is_currently_painting.clear();
         return; // The parent board editor frame is no more alive
+    }
 
     if( !m_activityReporterSync || !m_warningReporterSync )
     {

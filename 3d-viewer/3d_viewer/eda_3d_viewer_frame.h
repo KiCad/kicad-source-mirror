@@ -272,6 +272,7 @@ private:
 private:
     wxFileName                     m_defaultSaveScreenshotFileName;
 
+    wxPanel*                       m_canvasHolder;
     EDA_3D_CANVAS*                 m_canvas;
     BOARD_ADAPTER                  m_boardAdapter;
     CAMERA&                        m_currentCamera;

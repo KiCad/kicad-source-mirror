@@ -94,6 +94,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
                                           const wxString& aTitle, long style ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_PCB_DISPLAY3D, aTitle, wxDefaultPosition,
                       wxDefaultSize, style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ), unityScale ),
+        m_canvasHolder( nullptr ),
         m_canvas( nullptr ),
         m_currentCamera( m_trackBallCamera ),
         m_trackBallCamera( 2 * RANGE_SCALE_3D )
@@ -125,8 +126,15 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     if( cfg )
         aaMode = static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode );
 
-    m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode, true ), m_boardAdapter,
-                                  m_currentCamera, PROJECT_PCB::Get3DCacheManager( &Prj() ) );
+    m_canvasHolder = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
+
+    m_canvas = new EDA_3D_CANVAS( m_canvasHolder, OGL_ATT_LIST::GetAttributesList( aaMode, true ),
+                                  m_boardAdapter, m_currentCamera,
+                                  PROJECT_PCB::Get3DCacheManager( &Prj() ) );
+
+    wxBoxSizer* canvasSizer = new wxBoxSizer( wxVERTICAL );
+    canvasSizer->Add( m_canvas, 1, wxEXPAND, 0 );
+    m_canvasHolder->SetSizer( canvasSizer );
 
     m_appearancePanel = new APPEARANCE_CONTROLS_3D( this, GetCanvas() );
 
@@ -163,7 +171,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     configureToolbars();
     RecreateToolbars();
 
-    m_infoBar = new WX_INFOBAR( m_canvas, wxID_ANY, true );
+    m_infoBar = new WX_INFOBAR( m_canvasHolder, wxID_ANY, true );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -173,7 +181,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
                       .Right().Layer( 3 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
                       .MinSize( FromDIP( 180 ), -1 ).BestSize( FromDIP( 190 ), -1 ) );
-    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
+    m_auimgr.AddPane( m_canvasHolder, EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
                       .Center() );
 
     wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
