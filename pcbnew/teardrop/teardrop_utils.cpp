@@ -31,10 +31,16 @@
 #include <limits>
 
 #include <board_design_settings.h>
+#include <core/kicad_algo.h>
+#include <footprint.h>
+#include <netinfo.h>
 #include <pcb_track.h>
 #include <pad.h>
+#include <zone.h>
 #include <zone_filler.h>
 #include <board_commit.h>
+#include <connectivity/connectivity_data.h>
+#include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <trigo.h>
 
@@ -49,20 +55,7 @@
 
 void TRACK_BUFFER::AddTrack( PCB_TRACK* aTrack, int aLayer, int aNetcode )
 {
-    auto item = m_map_tracks.find( idxFromLayNet( aLayer, aNetcode ) );
-    std::vector<PCB_TRACK*>* buffer;
-
-    if( item == m_map_tracks.end() )
-    {
-        buffer = new std::vector<PCB_TRACK*>;
-        m_map_tracks[idxFromLayNet( aLayer, aNetcode )] = buffer;
-    }
-    else
-    {
-        buffer = (*item).second;
-    }
-
-    buffer->push_back( aTrack );
+    m_map_tracks[idxFromLayNet( aLayer, aNetcode )].push_back( aTrack );
 }
 
 
@@ -117,6 +110,102 @@ void TEARDROP_MANAGER::BuildTrackCaches()
 }
 
 
+void TEARDROP_MANAGER::ensureCopperIndex() const
+{
+    if( m_copperIndexed )
+        return;
+
+    m_copperIndexed = true;
+
+    auto indexCopper =
+            [&]( BOARD_ITEM* aItem )
+            {
+                // The filler's priority rules knock a different-net pour back around a teardrop,
+                // but nothing keeps two teardrops out of the same gap.
+                if( aItem->Type() == PCB_GROUP_T )
+                    return;
+
+                if( aItem->Type() == PCB_ZONE_T && !static_cast<ZONE*>( aItem )->IsTeardropArea() )
+                    return;
+
+                for( PCB_LAYER_ID layer : aItem->GetLayerSet().CuStack() )
+                    m_copperRTree.Insert( aItem, layer );
+            };
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+        indexCopper( track );
+
+    for( ZONE* zone : m_board->Zones() )
+        indexCopper( zone );
+
+    // Graphics, text and dimensions all plot as copper when they sit on a copper layer.
+    for( BOARD_ITEM* drawing : m_board->Drawings() )
+    {
+        indexCopper( drawing );
+        drawing->RunOnChildren( indexCopper, RECURSE_MODE::RECURSE );
+    }
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+        footprint->RunOnChildren( indexCopper, RECURSE_MODE::RECURSE );
+}
+
+
+int TEARDROP_MANAGER::copperNetcode( const BOARD_ITEM* aItem )
+{
+    if( const BOARD_CONNECTED_ITEM* connected = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem ) )
+        return connected->GetNetCode();
+
+    return NETINFO_LIST::UNCONNECTED;
+}
+
+
+int TEARDROP_MANAGER::pairClearance( PCB_TRACK* aSourceTrack, BOARD_ITEM* aItem,
+                                     PCB_LAYER_ID aLayer ) const
+{
+    PTR_PTR_LAYER_CACHE_KEY key = { aSourceTrack, aItem, aLayer };
+
+    if( auto it = m_pairClearanceCache.find( key ); it != m_pairClearanceCache.end() )
+        return it->second;
+
+    BOARD_DESIGN_SETTINGS&      bds = m_board->GetDesignSettings();
+    std::shared_ptr<DRC_ENGINE> drcEngine = bds.m_DRCEngine;
+    int                         clearance = 0;
+
+    if( drcEngine )
+    {
+        DRC_CONSTRAINT constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aSourceTrack,
+                                                          aItem, aLayer );
+
+        if( constraint.Value().HasMin() )
+            clearance = constraint.Value().Min();
+
+        // DRC allows geometry exactly at the limit; rejecting it here would silently delete a
+        // teardrop the rules permit.
+        clearance = std::max( 0, clearance - bds.GetDRCEpsilon() );
+    }
+
+    m_pairClearanceCache.emplace( key, clearance );
+
+    return clearance;
+}
+
+
+const std::vector<std::set<const BOARD_ITEM*>>&
+TEARDROP_MANAGER::zoneConnections( ZONE* aZone, PCB_LAYER_ID aLayer ) const
+{
+    PTR_LAYER_CACHE_KEY key = { aZone, aLayer };
+
+    if( auto it = m_zoneConnectionCache.find( key ); it != m_zoneConnectionCache.end() )
+        return it->second;
+
+    std::vector<std::set<const BOARD_ITEM*>> islands;
+
+    m_board->GetConnectivity()->GetZoneIslandConnections( aZone, aLayer, &islands );
+
+    return m_zoneConnectionCache.emplace( key, std::move( islands ) ).first->second;
+}
+
+
 bool TEARDROP_MANAGER::areItemsInSameZone( BOARD_ITEM* aPadOrVia, PCB_TRACK* aTrack ) const
 {
     PCB_LAYER_ID layer = aTrack->GetLayer();
@@ -134,43 +223,181 @@ bool TEARDROP_MANAGER::areItemsInSameZone( BOARD_ITEM* aPadOrVia, PCB_TRACK* aTr
         if( zone->GetNetCode() != aTrack->GetNetCode() )
             continue;
 
-        // The zone must have filled copper on this layer to provide a connection
+        // No fill on this layer means no copper here, so it joins nothing here.
         if( !zone->HasFilledPolysForLayer( layer ) )
             continue;
 
-        std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
-
-        if( !fill || fill->IsEmpty() )
-            continue;
-
-        // Check if the zone's filled copper actually contains both the pad/via and the track.
-        // The zone outline might contain these items, but the actual fill might not reach them
-        // due to thermal settings, minimum width, island removal, etc.
-        VECTOR2I padPos( aPadOrVia->GetPosition() );
-
-        if( !fill->Contains( padPos ) )
-            continue;
-
-        // Also verify the track is within the filled zone (check both endpoints)
-        if( !fill->Contains( aTrack->GetStart() ) && !fill->Contains( aTrack->GetEnd() ) )
-            continue;
-
-        // If the first item is a pad, ensure it can be connected to the zone
-        if( aPadOrVia->Type() == PCB_PAD_T )
+        // One island has to reach both; a pad here and a track the pour reaches elsewhere
+        // are not connected by it.
+        for( const std::set<const BOARD_ITEM*>& island : zoneConnections( zone, layer ) )
         {
-            PAD* pad = static_cast<PAD*>( aPadOrVia );
-
-            if( zone->GetPadConnection() == ZONE_CONNECTION::NONE
-                || pad->GetZoneConnectionOverrides( nullptr ) == ZONE_CONNECTION::NONE )
-            {
-                return false;
-            }
+            if( island.count( aPadOrVia ) && island.count( aTrack ) )
+                return true;
         }
-
-        return true;
     }
 
     return false;
+}
+
+
+bool TEARDROP_MANAGER::collidesWithOtherNets( const std::vector<VECTOR2I>& aPoints,
+                                              PCB_TRACK* aSourceTrack,
+                                              const std::vector<const BOARD_ITEM*>& aExempt ) const
+{
+    if( aPoints.size() < 3 )
+        return false;
+
+    SHAPE_POLY_SET teardrop;
+    teardrop.NewOutline();
+
+    for( const VECTOR2I& pt : aPoints )
+        teardrop.Append( pt.x, pt.y );
+
+    // The shape can self-intersect on awkward entries, and the collision test triangulates.
+    teardrop.Simplify();
+
+    if( teardrop.OutlineCount() == 0 )
+        return false;
+
+    ensureCopperIndex();
+
+    PCB_LAYER_ID layer = aSourceTrack->GetLayer();
+    int          netcode = aSourceTrack->GetNetCode();
+
+    // Net 0 is no net at all, so geometry stands in for it: copper touching the anchor or the
+    // track is the same conductor, and anything carrying a net is foreign whatever it touches.
+    std::vector<std::shared_ptr<SHAPE>> anchorShapes;
+    std::map<const BOARD_ITEM*, bool>   touchesAnchor;
+
+    if( netcode <= 0 )
+    {
+        for( const BOARD_ITEM* item : aExempt )
+        {
+            if( std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( layer ) )
+                anchorShapes.push_back( shape );
+        }
+    }
+
+    auto touchesTeardropAnchor =
+            [&]( BOARD_ITEM* aItem ) -> bool
+            {
+                auto it = touchesAnchor.find( aItem );
+
+                if( it == touchesAnchor.end() )
+                {
+                    std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( layer );
+                    bool                   touches = false;
+
+                    if( shape )
+                    {
+                        touches = std::any_of( anchorShapes.begin(), anchorShapes.end(),
+                                               [&]( const std::shared_ptr<SHAPE>& aAnchor )
+                                               {
+                                                   return aAnchor->Collide( shape.get() );
+                                               } );
+                    }
+
+                    it = touchesAnchor.emplace( aItem, touches ).first;
+                }
+
+                return it->second;
+            };
+
+    auto isSameConductor =
+            [&]( BOARD_ITEM* aItem ) -> bool
+            {
+                int itemNet = copperNetcode( aItem );
+
+                if( netcode > 0 )
+                    return itemNet == netcode;
+
+                return itemNet <= 0 && touchesTeardropAnchor( aItem );
+            };
+
+    auto resolveClearance =
+            [&]( BOARD_ITEM* aItem, int* aClearance ) -> bool
+            {
+                if( alg::contains( aExempt, aItem ) || isSameConductor( aItem ) )
+                    return false;
+
+                *aClearance = pairClearance( aSourceTrack, aItem, layer );
+                return true;
+            };
+
+    // The radius has to cover the widest clearance anything can demand, or an obstacle with a
+    // generous one of its own is never offered to the resolver.
+    return m_copperRTree.CheckColliding( &teardrop, layer, m_board->GetMaxClearanceValue(),
+                                         resolveClearance );
+}
+
+
+bool TEARDROP_MANAGER::computeFittedTeardropPolygon( const TEARDROP_PARAMETERS& aParams,
+                                                     std::vector<VECTOR2I>& aPoints,
+                                                     PCB_TRACK* aTrack, PCB_TRACK* aSourceTrack,
+                                                     BOARD_ITEM* aOther,
+                                                     const VECTOR2I& aOtherPos ) const
+{
+    // A teardrop overlaps its anchor and its track by construction.  aTrack is a stub or a
+    // two-segment extension when it differs from aSourceTrack, so both have to be named.
+    const std::vector<const BOARD_ITEM*> exempt = { aOther, aSourceTrack, aTrack };
+
+    if( !computeTeardropPolygon( aParams, aPoints, aTrack, aSourceTrack, aOther, aOtherPos ) )
+        return false;
+
+    if( !collidesWithOtherNets( aPoints, aSourceTrack, exempt ) )
+        return true;
+
+    // Bisect between the requested width and the track width, the narrowest worth keeping.
+    PCB_LAYER_ID layer = aTrack->GetLayer();
+    int          preferred = KiROUND( GetWidth( aOther, layer ) * aParams.m_BestWidthRatio );
+    int          hi = aParams.m_TdMaxWidth > 0 ? std::min( aParams.m_TdMaxWidth, preferred )
+                                               : preferred;
+    int          lo = aTrack->GetWidth();
+
+    // Nothing narrower than the track is kept, so a track at or over the bound leaves nothing
+    // that fits.  Only the pad and via paths reject this before they get here.
+    if( lo >= hi )
+        return false;
+
+    TEARDROP_PARAMETERS   params = aParams;
+    std::vector<VECTOR2I> fitted;
+
+    auto tryWidth =
+            [&]( int aWidth ) -> bool
+            {
+                std::vector<VECTOR2I> candidate;
+
+                params.m_TdMaxWidth = aWidth;
+
+                if( !computeTeardropPolygon( params, candidate, aTrack, aSourceTrack, aOther,
+                                             aOtherPos )
+                    || collidesWithOtherNets( candidate, aSourceTrack, exempt ) )
+                {
+                    return false;
+                }
+
+                fitted = std::move( candidate );
+                return true;
+            };
+
+    // Midpoints alone never probe the bottom of the range, losing a teardrop that only fits
+    // close to the track width.
+    if( !tryWidth( lo ) )
+        return false;
+
+    for( int ii = 0; ii < 4 && hi - lo > 1; ++ii )
+    {
+        int mid = lo + ( hi - lo ) / 2;
+
+        if( tryWidth( mid ) )
+            lo = mid;
+        else
+            hi = mid;
+    }
+
+    aPoints = std::move( fitted );
+
+    return !aPoints.empty();
 }
 
 
@@ -262,6 +489,7 @@ int TEARDROP_MANAGER::computeChordThroughShape( PCB_TRACK* aTrack, BOARD_ITEM* a
 
 
 PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_TRACK* aTrackRef,
+                                                PCB_TRACK* aSourceTrack,
                                                 const VECTOR2I& aEndPoint ) const
 {
     int matches = 0;                    // Count of candidates: only 1 is acceptable
@@ -271,7 +499,9 @@ PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_
             // Filter:
             [&]( BOARD_ITEM* trackItem ) -> bool
             {
-                return trackItem != aTrackRef;
+                // A stub shares an endpoint with the track it stands in for, and continuing
+                // back onto that is not a continuation.
+                return trackItem != aTrackRef && trackItem != aSourceTrack;
             },
             // Visitor
             [&]( BOARD_ITEM* trackItem ) -> bool
@@ -737,7 +967,10 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
     // clip the shape to the smallest of size.x and size.y values.
     if( force_clip || ( aParams.m_TdMaxWidth > 0 && aParams.m_TdMaxWidth < preferred_width ) )
     {
-        int halfsize = std::min( aParams.m_TdMaxWidth, preferred_width )/2;
+        // A max width of 0 means no limit, so a min against it would clip the shape to nothing.
+        int halfsize = ( aParams.m_TdMaxWidth > 0
+                                 ? std::min( aParams.m_TdMaxWidth, preferred_width )
+                                 : preferred_width ) / 2;
 
         // teardrop_axis is the line from anchor point on the track and the end point
         // of the teardrop in the pad/via
@@ -878,7 +1111,8 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
 bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aParams,
                                                 VECTOR2I& aStartPoint, VECTOR2I& aEndPoint,
                                                 VECTOR2I& aIntersection, PCB_TRACK*& aTrack,
-                                                BOARD_ITEM* aOther, const VECTOR2I& aOtherPos,
+                                                PCB_TRACK* aSourceTrack, BOARD_ITEM* aOther,
+                                                const VECTOR2I& aOtherPos,
                                                 int* aEffectiveTeardropLen ) const
 {
     bool         found = true;
@@ -965,7 +1199,7 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
         {
             EDA_ITEM_FLAGS matchType;
 
-            PCB_TRACK* connected_track = findTouchingTrack( matchType, aTrack, end );
+            PCB_TRACK* connected_track = findTouchingTrack( matchType, aTrack, aSourceTrack, end );
 
             if( connected_track == nullptr )
                 break;
@@ -1084,7 +1318,8 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
 
 bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParams,
                                                std::vector<VECTOR2I>& aCorners, PCB_TRACK* aTrack,
-                                               BOARD_ITEM* aOther, const VECTOR2I& aOtherPos ) const
+                                               PCB_TRACK* aSourceTrack, BOARD_ITEM* aOther,
+                                               const VECTOR2I& aOtherPos ) const
 {
     VECTOR2I start, end;    // Start and end points of the track anchor of the teardrop
                             // the start point is inside the teardrop shape
@@ -1097,8 +1332,8 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     // Save the original pointer so we can detect two-segment extension.
     PCB_TRACK* originalTrack = aTrack;
 
-    if( !findAnchorPointsOnTrack( aParams, start, end, intersection, aTrack, aOther, aOtherPos,
-                                  &track_stub_len ) )
+    if( !findAnchorPointsOnTrack( aParams, start, end, intersection, aTrack, aSourceTrack, aOther,
+                                  aOtherPos, &track_stub_len ) )
     {
         return false;
     }
@@ -1310,7 +1545,9 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
 
     std::vector<VECTOR2I> pts = { anchorA, anchorB, pointC, pointD, pointE };
 
-    computeAnchorPoints( aParams, aTrack->GetLayer(), aOther, aOtherPos, pts );
+    // On failure the pad-side anchors are left at the origin, stretching the shape to (0, 0).
+    if( !computeAnchorPoints( aParams, aTrack->GetLayer(), aOther, aOtherPos, pts ) )
+        return false;
 
     // For off-center track connections, the convex hull produces asymmetric anchor points
     // (C and E at different distances from the track axis). Recompute them to be symmetric

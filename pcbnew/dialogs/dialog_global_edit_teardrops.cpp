@@ -412,14 +412,14 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
         }
     }
 
-    if( m_trackToTrack->GetValue() )
+    // "Remove all" has to reach track-to-track too, or the update below rebuilds them at once.
+    if( m_trackToTrack->GetValue() || remove_all )
     {
         TEARDROP_PARAMETERS_LIST* paramsList = m_brd->GetDesignSettings().GetTeadropParamsList();
         TEARDROP_PARAMETERS*      targetParams = paramsList->GetParameters( TARGET_TRACK );
         TEARDROP_MANAGER          teardropManager( m_brd, m_parent->GetToolManager() );
 
         teardropManager.DeleteTrackToTrackTeardrops( commit );
-        teardropManager.BuildTrackCaches();
 
         if( m_removeTeardrops->GetValue() || m_removeAllTeardrops->GetValue() )
         {
@@ -428,6 +428,7 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
         else if( m_addTeardrops->GetValue() )
         {
             targetParams->m_Enabled = true;
+            teardropManager.BuildTrackCaches();
             teardropManager.AddTeardropsOnTracks( commit, nullptr, true );
         }
     }

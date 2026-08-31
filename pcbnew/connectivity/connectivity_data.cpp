@@ -706,6 +706,29 @@ void CONNECTIVITY_DATA::GetConnectedPadsAndVias( const BOARD_CONNECTED_ITEM* aIt
 }
 
 
+void CONNECTIVITY_DATA::GetZoneIslandConnections( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                                  std::vector<std::set<const BOARD_ITEM*>>* aIslands )
+{
+    aIslands->clear();
+
+    for( CN_ITEM* citem : m_connAlgo->ItemEntry( aZone ).GetItems() )
+    {
+        CN_ZONE_LAYER* island = dynamic_cast<CN_ZONE_LAYER*>( citem );
+
+        if( !island || !island->Valid() || island->GetLayer() != aLayer )
+            continue;
+
+        std::set<const BOARD_ITEM*>& connected = aIslands->emplace_back();
+
+        for( CN_ITEM* other : island->ConnectedItems() )
+        {
+            if( other->Valid() )
+                connected.insert( other->Parent() );
+        }
+    }
+}
+
+
 unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
 {
     int sum = 0;

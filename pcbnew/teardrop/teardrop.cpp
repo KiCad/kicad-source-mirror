@@ -39,6 +39,11 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <bezier_curves.h>
 
+#include <algorithm>
+#include <limits>
+#include <unordered_map>
+#include <unordered_set>
+
 #include <wx/log.h>
 
 // The first priority level of a teardrop area (arbitrary value)
@@ -47,32 +52,68 @@
 
 TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, TOOL_MANAGER* aToolManager ) :
         m_board( aBoard ),
-        m_toolManager( aToolManager )
+        m_toolManager( aToolManager ),
+        m_copperIndexed( false )
 {
     m_prmsList = m_board->GetDesignSettings().GetTeadropParamsList();
     m_tolerance = 0;
 }
 
 
+KIID TEARDROP_MANAGER::teardropUuid( const PCB_TRACK* aTrack, const BOARD_ITEM* aCandidate,
+                                     int aSlot )
+{
+    // Deriving the UUID from the pair keeps teardrop ordering stable across save/load.  A
+    // crossing track yields two from one pair, so each takes a slot, and a slot spans two UUIDs.
+    KIID uuid = KIID::Combine( aTrack->m_Uuid, aCandidate->m_Uuid );
+
+    for( int ii = 0; ii < 2 * aSlot; ++ii )
+        uuid.Increment();
+
+    return uuid;
+}
+
+
+KIID TEARDROP_MANAGER::maskUuidFor( const KIID& aCopperUuid )
+{
+    KIID uuid = aCopperUuid;
+    uuid.Increment();
+
+    return uuid;
+}
+
+
+void TEARDROP_MANAGER::buildCrossingStub( PCB_TRACK& aStub, const PCB_TRACK* aTrack,
+                                          const VECTOR2I& aEnd )
+{
+    // Copying aTrack would slice a PCB_ARC while the copy kept PCB_ARC_T, so the arc branches
+    // would read a mid-point that is not there.
+    aStub.SetLayer( aTrack->GetLayer() );
+    aStub.SetWidth( aTrack->GetWidth() );
+    aStub.SetNet( aTrack->GetNet() );
+    aStub.SetHasSolderMask( aTrack->HasSolderMask() );
+    aStub.SetLocalSolderMaskMargin( aTrack->GetLocalSolderMaskMargin() );
+    aStub.SetEnd( aEnd );
+}
+
+
 ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
-                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack,
-                                        BOARD_ITEM* aCandidate ) const
+                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aSourceTrack,
+                                        const KIID& aUuid ) const
 {
     ZONE* teardrop = new ZONE( m_board );
 
-    // Create a deterministic UUID from the track and candidate UUIDs so that teardrops
-    // maintain stable ordering in the output file across save/load cycles.
-    teardrop->SetUuidDirect( KIID::Combine( aTrack->m_Uuid, aCandidate->m_Uuid ) );
+    teardrop->SetUuidDirect( aUuid );
 
-    // teardrop settings are the last zone settings used by a zone dialog.
-    // override them by default.
+    // Pristine rather than the board's, so nothing the user set up for a pour (hatch fill,
+    // rule area, locking) leaks into a teardrop.
     ZONE_SETTINGS::GetDefaultSettings().ExportSetting( *teardrop, false );
 
     // Add zone properties (priority will be fixed later)
     teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ? TEARDROP_TYPE::TD_VIAPAD
                                                                       : TEARDROP_TYPE::TD_TRACKEND );
-    teardrop->SetLayer( aTrack->GetLayer() );
-    teardrop->SetNetCode( aTrack->GetNetCode() );
+    teardrop->SetLayer( aSourceTrack->GetLayer() );
+    teardrop->SetNetCode( aSourceTrack->GetNetCode() );
     teardrop->SetLocalClearance( 0 );
     teardrop->SetMinThickness( pcbIUScale.mmToIU( 0.0254 ) );  // The minimum zone thickness
     teardrop->SetPadConnection( ZONE_CONNECTION::FULL );
@@ -88,7 +129,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 
     // Until we know better (ie: pay for a potentially very expensive zone refill), the teardrop
     // fill is the same as its outline.
-    teardrop->SetFilledPolysList( aTrack->GetLayer(), *teardrop->Outline() );
+    teardrop->SetFilledPolysList( aSourceTrack->GetLayer(), *teardrop->Outline() );
     teardrop->SetIsFilled( true );
 
     // Used in priority calculations:
@@ -99,20 +140,21 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 
 
 ZONE* TEARDROP_MANAGER::createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
-                                            std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack,
-                                            BOARD_ITEM* aCandidate ) const
+                                            std::vector<VECTOR2I>& aPoints,
+                                            PCB_TRACK* aSourceTrack, const KIID& aUuid ) const
 {
     ZONE* teardrop = new ZONE( m_board );
 
-    // Create a deterministic UUID from the track and candidate UUIDs, then increment it
-    // to differentiate from the copper teardrop zone.
-    KIID maskUuid = KIID::Combine( aTrack->m_Uuid, aCandidate->m_Uuid );
-    maskUuid.Increment();
-    teardrop->SetUuidDirect( maskUuid );
+    // The second UUID of the slot, so the mask differs from the copper it covers.
+    teardrop->SetUuidDirect( maskUuidFor( aUuid ) );
+
+    // As for the copper teardrop.  The ZONE constructor imports the board's zone defaults,
+    // which follow the last pour the user set up.
+    ZONE_SETTINGS::GetDefaultSettings().ExportSetting( *teardrop, false );
 
     teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ? TEARDROP_TYPE::TD_VIAPAD
                                                                       : TEARDROP_TYPE::TD_TRACKEND );
-    teardrop->SetLayer( aTrack->GetLayer() == F_Cu ? F_Mask : B_Mask );
+    teardrop->SetLayer( aSourceTrack->GetLayer() == F_Cu ? F_Mask : B_Mask );
     teardrop->SetMinThickness( pcbIUScale.mmToIU( 0.0254 ) );  // The minimum zone thickness
     teardrop->SetIsFilled( false );
     teardrop->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
@@ -124,7 +166,7 @@ ZONE* TEARDROP_MANAGER::createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
     for( const VECTOR2I& pt: aPoints )
         outline->Append( pt.x, pt.y );
 
-    if( int expansion = aTrack->GetSolderMaskExpansion() )
+    if( int expansion = aSourceTrack->GetSolderMaskExpansion() )
     {
         // The zone-min-thickness deflate/reinflate is going to round corners, so it's more
         // efficient to allow acute corners on the solder mask expansion here, and delegate the
@@ -147,17 +189,22 @@ ZONE* TEARDROP_MANAGER::createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
 void TEARDROP_MANAGER::createAndAddTeardropWithMask( BOARD_COMMIT& aCommit,
                                                      TEARDROP_VARIANT aTeardropVariant,
                                                      std::vector<VECTOR2I>& aPoints,
-                                                     PCB_TRACK* aTrack, BOARD_ITEM* aCandidate )
+                                                     PCB_TRACK* aSourceTrack, const KIID& aUuid )
 {
-    ZONE* new_teardrop = createTeardrop( aTeardropVariant, aPoints, aTrack, aCandidate );
+    ZONE* new_teardrop = createTeardrop( aTeardropVariant, aPoints, aSourceTrack, aUuid );
     m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
     m_createdTdList.push_back( new_teardrop );
 
+    // The next teardrop has to see this one, or two of them flare into the same gap.
+    ensureCopperIndex();
+    m_copperRTree.Insert( new_teardrop, new_teardrop->GetLayer() );
+
     aCommit.Added( new_teardrop );
 
-    if( aTrack->HasSolderMask() && IsExternalCopperLayer( aTrack->GetLayer() ) )
+    if( aSourceTrack->HasSolderMask() && IsExternalCopperLayer( aSourceTrack->GetLayer() ) )
     {
-        ZONE* new_teardrop_mask = createTeardropMask( aTeardropVariant, aPoints, aTrack, aCandidate );
+        ZONE* new_teardrop_mask = createTeardropMask( aTeardropVariant, aPoints, aSourceTrack,
+                                                      aUuid );
         m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );
         aCommit.Added( new_teardrop_mask );
     }
@@ -167,14 +214,15 @@ void TEARDROP_MANAGER::createAndAddTeardropWithMask( BOARD_COMMIT& aCommit,
 bool TEARDROP_MANAGER::tryCreateTrackTeardrop( BOARD_COMMIT& aCommit,
                                                const TEARDROP_PARAMETERS& aParams,
                                                TEARDROP_MANAGER::TEARDROP_VARIANT aTeardropVariant,
-                                               PCB_TRACK* aTrack, BOARD_ITEM* aCandidate,
-                                               const VECTOR2I& aPos )
+                                               PCB_TRACK* aTrack, PCB_TRACK* aSourceTrack,
+                                               BOARD_ITEM* aCandidate, const VECTOR2I& aPos,
+                                               const KIID& aUuid )
 {
     std::vector<VECTOR2I> points;
 
-    if( computeTeardropPolygon( aParams, points, aTrack, aCandidate, aPos ) )
+    if( computeFittedTeardropPolygon( aParams, points, aTrack, aSourceTrack, aCandidate, aPos ) )
     {
-        createAndAddTeardropWithMask( aCommit, aTeardropVariant, points, aTrack, aCandidate );
+        createAndAddTeardropWithMask( aCommit, aTeardropVariant, points, aSourceTrack, aUuid );
         return true;
     }
 
@@ -183,44 +231,193 @@ bool TEARDROP_MANAGER::tryCreateTrackTeardrop( BOARD_COMMIT& aCommit,
 
 
 void TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT& aCommit,
-                                        const std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
-                                        const std::set<PCB_TRACK*>* dirtyTracks )
+                                        std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
+                                        std::set<PCB_TRACK*>* dirtyTracks,
+                                        const std::vector<BOARD_ITEM*>* dirtyCopper )
 {
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
 
-    auto isStale =
-            [&]( ZONE* zone )
+    struct TEARDROP_ANCHORS
+    {
+        std::vector<PAD*>       pads;
+        std::vector<PCB_VIA*>   vias;
+        std::vector<PCB_TRACK*> tracks;
+    };
+
+    std::vector<ZONE*>                masks;
+    std::vector<ZONE*>                copperTeardrops;
+    std::map<ZONE*, TEARDROP_ANCHORS> anchors;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        // Connectivity knows nothing of a mask layer, so a mask teardrop is never stale on its
+        // own.  It goes when the copper it covers goes.
+        if( !zone->IsOnCopperLayer() )
+        {
+            masks.push_back( zone );
+            continue;
+        }
+
+        copperTeardrops.push_back( zone );
+
+        TEARDROP_ANCHORS& zoneAnchors = anchors[zone];
+
+        connectivity->GetConnectedPadsAndVias( zone, &zoneAnchors.pads, &zoneAnchors.vias );
+        zoneAnchors.tracks = connectivity->GetConnectedTracks( zone );
+    }
+
+    // A footprint move pushes every copper descendant, and the test below runs against the whole
+    // list once per teardrop.  PCB_ARC rebuilds a SHAPE_ARC every time it is asked for its box.
+    struct DIRTY_COPPER
+    {
+        BOX2I bbox;
+        int   netcode;
+    };
+
+    std::map<PCB_LAYER_ID, std::vector<DIRTY_COPPER>> dirtyCopperByLayer;
+
+    if( dirtyCopper )
+    {
+        for( BOARD_ITEM* item : *dirtyCopper )
+        {
+            DIRTY_COPPER entry = { item->GetBoundingBox(), copperNetcode( item ) };
+
+            for( PCB_LAYER_ID layer : item->GetLayerSet().CuStack() )
+                dirtyCopperByLayer[layer].push_back( entry );
+        }
+    }
+
+    int maxClearance = m_board->GetMaxClearanceValue();
+
+    // A width fitted to the neighbours goes stale when one of them moves, though the teardrop
+    // anchors on neither.  Pre- and post-edit geometry both count, so moving away counts too.
+    auto foreignNeighbourMoved =
+            [&]( ZONE* zone ) -> bool
             {
-                std::vector<PAD*>     connectedPads;
-                std::vector<PCB_VIA*> connectedVias;
+                PCB_LAYER_ID layer = zone->GetFirstLayer();
 
-                connectivity->GetConnectedPadsAndVias( zone, &connectedPads, &connectedVias );
+                auto it = dirtyCopperByLayer.find( layer );
 
-                for( PAD* pad : connectedPads )
+                if( it == dirtyCopperByLayer.end() )
+                    return false;
+
+                // The fit resolves clearance per pair, so no one number bounds the neighbourhood.
+                // Take the widest anything can demand; over-retiring only costs a rebuild.
+                BOX2I reach = zone->GetBoundingBox();
+
+                reach.Inflate( maxClearance );
+
+                for( const DIRTY_COPPER& item : it->second )
                 {
-                    if( alg::contains( *dirtyPadsAndVias, pad ) )
-                        return true;
-                }
+                    // Net 0 is "no net", not a net that every unassigned item shares.
+                    if( zone->GetNetCode() > 0 && item.netcode == zone->GetNetCode() )
+                        continue;
 
-                for( PCB_VIA* via : connectedVias )
-                {
-                    if( alg::contains( *dirtyPadsAndVias, via ) )
-                        return true;
-                }
-
-                for( PCB_TRACK* track : connectivity->GetConnectedTracks( zone ) )
-                {
-                    if( alg::contains( *dirtyTracks, track ) )
+                    if( reach.Intersects( item.bbox ) )
                         return true;
                 }
 
                 return false;
             };
 
-    for( ZONE* zone : m_board->Zones() )
+    std::unordered_set<BOARD_ITEM*> dirtyPadViaSet( dirtyPadsAndVias->begin(),
+                                                    dirtyPadsAndVias->end() );
+
+    auto isStale =
+            [&]( const TEARDROP_ANCHORS& zoneAnchors )
+            {
+                auto anchorDirty = [&]( BOARD_ITEM* aItem )
+                                   {
+                                       return dirtyPadViaSet.count( aItem ) > 0;
+                                   };
+
+                return std::any_of( zoneAnchors.pads.begin(), zoneAnchors.pads.end(),
+                                    anchorDirty )
+                       || std::any_of( zoneAnchors.vias.begin(), zoneAnchors.vias.end(),
+                                       anchorDirty )
+                       || std::any_of( zoneAnchors.tracks.begin(), zoneAnchors.tracks.end(),
+                                       [&]( PCB_TRACK* aTrack )
+                                       {
+                                           return dirtyTracks->contains( aTrack );
+                                       } );
+            };
+
+    // Dirty the anchors first, or the rebuild passes these teardrops by and they are lost.
+    // Doing it here also lets the staleness pass below see the lists UpdateTeardrops() will.
+    for( ZONE* zone : copperTeardrops )
     {
-        if( zone->IsTeardropArea() && isStale( zone ) )
+        if( !foreignNeighbourMoved( zone ) )
+            continue;
+
+        const TEARDROP_ANCHORS& zoneAnchors = anchors[zone];
+
+        for( PAD* pad : zoneAnchors.pads )
+        {
+            if( dirtyPadViaSet.insert( pad ).second )
+                dirtyPadsAndVias->push_back( pad );
+        }
+
+        for( PCB_VIA* via : zoneAnchors.vias )
+        {
+            if( dirtyPadViaSet.insert( via ).second )
+                dirtyPadsAndVias->push_back( via );
+        }
+
+        for( PCB_TRACK* track : zoneAnchors.tracks )
+            dirtyTracks->insert( track );
+    }
+
+    std::map<PCB_LAYER_ID, std::vector<ZONE*>> survivingCopper;
+    std::unordered_map<KIID, bool>             maskSurvives;
+
+    for( ZONE* zone : copperTeardrops )
+    {
+        bool stale = isStale( anchors[zone] );
+
+        // A slot spans both UUIDs, so the pairing is exact rather than guessed from geometry.
+        maskSurvives[maskUuidFor( zone->m_Uuid )] = !stale;
+
+        if( stale )
             zone->SetFlags( STRUCT_DELETED );
+        else
+            survivingCopper[zone->GetFirstLayer()].push_back( zone );
+    }
+
+    for( ZONE* mask : masks )
+    {
+        bool covers;
+
+        if( auto it = maskSurvives.find( mask->m_Uuid ); it != maskSurvives.end() )
+        {
+            covers = it->second;
+        }
+        else
+        {
+            // A mask predating the UUID spacing pairs with nothing, so fall back to concentricity
+            // (the expansion can be negative).  Erring towards a spare mask, not a lost opening.
+            PCB_LAYER_ID copperLayer = mask->GetFirstLayer() == F_Mask ? F_Cu : B_Cu;
+            BOX2I        maskBBox = mask->Outline()->BBox();
+
+            covers = false;
+
+            for( ZONE* copper : survivingCopper[copperLayer] )
+            {
+                BOX2I copperBBox = copper->GetBoundingBox();
+
+                if( maskBBox.Contains( copperBBox.GetCenter() )
+                    && copperBBox.Contains( maskBBox.GetCenter() ) )
+                {
+                    covers = true;
+                    break;
+                }
+            }
+        }
+
+        if( !covers )
+            mask->SetFlags( STRUCT_DELETED );
     }
 
     m_board->BulkRemoveStaleTeardrops( aCommit );
@@ -238,9 +435,8 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
     // Init parameters:
     m_tolerance = pcbIUScale.mmToIU( 0.01 );
 
-    BuildTrackCaches();
-
-    // Old teardrops must be removed, to ensure a clean teardrop rebuild
+    // Old teardrops must be removed, to ensure a clean teardrop rebuild.  Before the caches are
+    // built, or they index zones that are no longer on the board.
     if( aForceFullUpdate )
     {
         for( ZONE* zone : m_board->Zones() )
@@ -252,7 +448,13 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
         m_board->BulkRemoveStaleTeardrops( aCommit );
     }
 
+    BuildTrackCaches();
+
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
+    std::unordered_set<BOARD_ITEM*>    dirtyPadViaSet;
+
+    if( dirtyPadsAndVias )
+        dirtyPadViaSet.insert( dirtyPadsAndVias->begin(), dirtyPadsAndVias->end() );
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
@@ -268,7 +470,7 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
 
         for( PAD* pad : connectedPads )
         {
-            if( !forceUpdate && !alg::contains( *dirtyPadsAndVias, pad ) )
+            if( !forceUpdate && !dirtyPadViaSet.count( pad ) )
                 continue;
 
             TEARDROP_PARAMETERS& tdParams = pad->GetTeardropParams();
@@ -279,8 +481,8 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
 
             // Ensure a teardrop shape can be built: track width must be < teardrop width and
-            // filter width
-            if( track->GetWidth() >= tdParams.m_TdMaxWidth
+            // filter width.  A max width of 0 means no limit, not "nothing fits".
+            if( ( tdParams.m_TdMaxWidth > 0 && track->GetWidth() >= tdParams.m_TdMaxWidth )
                 || track->GetWidth() >= annularWidth * tdParams.m_BestWidthRatio
                 || track->GetWidth() >= annularWidth * tdParams.m_WidthtoSizeFilterRatio )
             {
@@ -308,26 +510,33 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
             if( !tdParams.m_TdOnPadsInZones && areItemsInSameZone( pad, track ) )
                 continue;
 
-            tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, track, pad, pad->GetPosition() );
-
-            // A track can be connected to pad when just crossing it. So we can create 2 teardrops,
-            // one from pad to track start point and the other to track end point.
-            // However this is acceptable only if the pad position is inside the track.
-            // Otherwise the 2 teardrop shapes can be strange (and of course incorrect
+            // A track crossing the pad earns one teardrop per side, not one over the whole track.
             if( !startHitsPad && !endHitsPad && track->HitTest( pad->GetPosition() ) )
             {
-                PCB_TRACK reversed( *track );
-                reversed.SetStart( track->GetEnd() );
-                reversed.SetEnd( pad->GetPosition() );
-                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &reversed, pad, pad->GetPosition() );
-                reversed.SetStart( track->GetStart() );
-                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &reversed, pad, pad->GetPosition() );
+                PCB_TRACK stub( m_board );
+
+                buildCrossingStub( stub, track, pad->GetPosition() );
+
+                stub.SetStart( track->GetEnd() );
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &stub,
+                                        track, pad, pad->GetPosition(),
+                                        teardropUuid( track, pad, 0 ) );
+                stub.SetStart( track->GetStart() );
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &stub,
+                                        track, pad, pad->GetPosition(),
+                                        teardropUuid( track, pad, 1 ) );
+            }
+            else
+            {
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, track,
+                                        track, pad, pad->GetPosition(),
+                                        teardropUuid( track, pad, 0 ) );
             }
         }
 
         for( PCB_VIA* via : connectedVias )
         {
-            if( !forceUpdate && !alg::contains( *dirtyPadsAndVias, via ) )
+            if( !forceUpdate && !dirtyPadViaSet.count( via ) )
                 continue;
 
             TEARDROP_PARAMETERS tdParams = via->GetTeardropParams();
@@ -337,8 +546,8 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
 
             // Ensure a teardrop shape can be built: track width must be < teardrop width and
-            // filter width
-            if( track->GetWidth() >= tdParams.m_TdMaxWidth
+            // filter width.  A max width of 0 means no limit, not "nothing fits".
+            if( ( tdParams.m_TdMaxWidth > 0 && track->GetWidth() >= tdParams.m_TdMaxWidth )
                 || track->GetWidth() >= annularWidth * tdParams.m_BestWidthRatio
                 || track->GetWidth() >= annularWidth * tdParams.m_WidthtoSizeFilterRatio )
             {
@@ -361,21 +570,27 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                 continue;
             }
 
-            tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, track, via,
-                                    via->GetPosition() );
-
-            // A track can be connected to via when just crossing it. So we can create 2 teardrops,
-            // one from via to track start point and the other to track end point.
-            // However this is acceptable only if the via position is inside the track.
-            // Otherwise the 2 teardrop shapes can be strange (and of course incorrect
+            // As for pads, a track that merely crosses the via earns a teardrop on each side.
             if( !startHitsVia && !endHitsVia && track->HitTest( via->GetPosition() ) )
             {
-                PCB_TRACK reversed( *track );
-                reversed.SetStart( track->GetEnd() );
-                reversed.SetEnd( via->GetPosition() );
-                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &reversed, via, via->GetPosition() );
-                reversed.SetStart( track->GetStart() );
-                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &reversed, via, via->GetPosition() );
+                PCB_TRACK stub( m_board );
+
+                buildCrossingStub( stub, track, via->GetPosition() );
+
+                stub.SetStart( track->GetEnd() );
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &stub,
+                                        track, via, via->GetPosition(),
+                                        teardropUuid( track, via, 0 ) );
+                stub.SetStart( track->GetStart() );
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, &stub,
+                                        track, via, via->GetPosition(),
+                                        teardropUuid( track, via, 1 ) );
+            }
+            else
+            {
+                tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, track,
+                                        track, via, via->GetPosition(),
+                                        teardropUuid( track, via, 0 ) );
             }
         }
     }
@@ -383,7 +598,7 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
     if( ( aForceFullUpdate || !dirtyTracks->empty() )
         && m_prmsList->GetParameters( TARGET_TRACK )->m_Enabled )
     {
-        AddTeardropsOnTracks( aCommit, dirtyTracks, aForceFullUpdate );
+        AddTeardropsOnTracks( aCommit, dirtyTracks, aForceFullUpdate, false );
     }
 
     // Now set priority of teardrops now all teardrops are added
@@ -408,7 +623,7 @@ void TEARDROP_MANAGER::setTeardropPriorities()
     // Note: a teardrop area is on only one layer, so using GetFirstLayer() is OK
     // to know the zone layer of a teardrop
 
-    int priority_base = MAGIC_TEARDROP_ZONE_ID;
+    unsigned priority_base = MAGIC_TEARDROP_ZONE_ID;
 
     // The sort function to sort by increasing copper layers. Group by layers.
     // For same layers sort by decreasing areas
@@ -432,6 +647,17 @@ void TEARDROP_MANAGER::setTeardropPriorities()
 
     std::sort( m_createdTdList.begin(), m_createdTdList.end(), compareLess );
 
+    // Survivors of an incremental update keep their priorities, and equal-priority zones of
+    // different nets do not clear each other, so hand out what the layer still has free.
+    std::set<ZONE*>                   created( m_createdTdList.begin(), m_createdTdList.end() );
+    std::map<int, std::set<unsigned>> taken;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->IsTeardropArea() && !created.count( zone ) )
+            taken[zone->GetFirstLayer()].insert( zone->GetAssignedPriority() );
+    }
+
     int curr_layer = -1;
 
     for( ZONE* td: m_createdTdList )
@@ -442,14 +668,25 @@ void TEARDROP_MANAGER::setTeardropPriorities()
             priority_base = MAGIC_TEARDROP_ZONE_ID;
         }
 
-        td->SetAssignedPriority( priority_base++ );
+        const std::set<unsigned>& layerTaken = taken[curr_layer];
+
+        while( layerTaken.count( priority_base )
+               && priority_base < std::numeric_limits<unsigned>::max() )
+        {
+            priority_base++;
+        }
+
+        td->SetAssignedPriority( priority_base );
+
+        if( priority_base < std::numeric_limits<unsigned>::max() )
+            priority_base++;
     }
 }
 
 
 void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
                                              const std::set<PCB_TRACK*>* aTracks,
-                                             bool aForceFullUpdate )
+                                             bool aForceFullUpdate, bool aSetPriorities )
 {
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
     TEARDROP_PARAMETERS                params = *m_prmsList->GetParameters( TARGET_TRACK );
@@ -460,7 +697,7 @@ void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
         int layer, netcode;
         TRACK_BUFFER::GetNetcodeAndLayerFromIndex( grp.first, &layer, &netcode );
 
-        std::vector<PCB_TRACK*>* sublist = grp.second;
+        std::vector<PCB_TRACK*>* sublist = &grp.second;
 
         if( sublist->size() <= 1 )  // We need at least 2 track segments
             continue;
@@ -484,7 +721,7 @@ void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
         {
             PCB_TRACK* track = (*sublist)[ii];
             int        track_len = (int) track->GetLength();
-            bool       track_needs_update = aForceFullUpdate || alg::contains( *aTracks, track );
+            bool       track_needs_update = aForceFullUpdate || aTracks->contains( track );
             min_width = track->GetWidth();
 
             // to avoid creating a teardrop between 2 tracks having similar widths give a threshold
@@ -521,7 +758,9 @@ void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
                 if( !match_points )
                     continue;
 
-                if( !track_needs_update && alg::contains( *aTracks, candidate ) )
+                // An untouched pair's teardrop was not removed as stale, so building another
+                // would duplicate it, and its UUID, on every edit elsewhere on the board.
+                if( !track_needs_update && !aTracks->contains( candidate ) )
                     continue;
 
                 // Pads/vias have priority for teardrops; ensure there isn't one at our position
@@ -546,8 +785,15 @@ void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
                 if( existingPadOrVia )
                     continue;
 
-                tryCreateTrackTeardrop( aCommit, params, TEARDROP_MANAGER::TD_TYPE_TRACKEND, track, candidate, pos );
+                tryCreateTrackTeardrop( aCommit, params, TEARDROP_MANAGER::TD_TYPE_TRACKEND, track,
+                                        track, candidate, pos,
+                                        teardropUuid( track, candidate, 0 ) );
             }
         }
     }
+
+    // The global edit dialog calls this directly, and a teardrop left at the default priority is
+    // outranked by every pour.  UpdateTeardrops() has more to add, so it numbers them itself.
+    if( aSetPriorities )
+        setTeardropPriorities();
 }

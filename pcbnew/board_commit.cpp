@@ -207,6 +207,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     bool                     updateBoardBoundingBox = false;
     std::vector<BOARD_ITEM*> staleTeardropPadsAndVias;
     std::set<PCB_TRACK*>     staleTeardropTracks;
+    std::vector<BOARD_ITEM*> dirtyCopper;
+    std::set<BOARD_ITEM*>    dirtyCopperSeen;
     std::vector<ZONE*>       staleZonesStorage;
     std::vector<ZONE*>*      staleZones = nullptr;
     std::vector<BOX2I>       staleRuleAreas;
@@ -257,6 +259,41 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( !( aCommitFlags & SKIP_TEARDROPS ) )
             {
+                // Teardrops are fitted to the copper around them, so any changed copper item
+                // can invalidate one, not only what a teardrop connects to.
+                auto collectCopper =
+                        [&]( BOARD_ITEM* aItem )
+                        {
+                            // Pours are the filler's business.  Containers have no copper of
+                            // their own and their boxes sweep far more than they occupy.
+                            if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FOOTPRINT_T
+                                || aItem->Type() == PCB_GROUP_T
+                                || aItem->Type() == PCB_GENERATOR_T )
+                            {
+                                return;
+                            }
+
+                            // A group and its members can both be in the commit.
+                            if( ( aItem->GetLayerSet() & LSET::AllCuMask() ).any()
+                                && dirtyCopperSeen.insert( aItem ).second )
+                            {
+                                dirtyCopper.push_back( aItem );
+                            }
+                        };
+
+                collectCopper( boardItem );
+                boardItem->RunOnChildren( collectCopper, RECURSE_MODE::RECURSE );
+
+                // boardItem already carries the edit, so it cannot show where the item was.
+                // The pre-edit clone is still ours here and answers a bounding box.
+                if( entry.m_copy && entry.m_copy->IsBOARD_ITEM() )
+                {
+                    BOARD_ITEM* copy = static_cast<BOARD_ITEM*>( entry.m_copy );
+
+                    collectCopper( copy );
+                    copy->RunOnChildren( collectCopper, RECURSE_MODE::RECURSE );
+                }
+
                 if( boardItem->Type() == PCB_FOOTPRINT_T )
                 {
                     for( PAD* pad : static_cast<FOOTPRINT*>( boardItem )->Pads() )
@@ -291,8 +328,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     }
 
     // Old teardrops must be removed before connectivity is rebuilt
-    if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )
-        teardropMgr.RemoveTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks );
+    if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty()
+        || !dirtyCopper.empty() )
+    {
+        teardropMgr.RemoveTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks,
+                                     &dirtyCopper );
+    }
 
     auto updateComponentClasses =
             [this]( BOARD_ITEM* boardItem )
