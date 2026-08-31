@@ -76,9 +76,11 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildSymbol( const SYMBOL_DEF& aSymbolDef )
     }
 
     // Add pins
+    bool mapDiodeAK = isDiodeAKPinSet( aSymbolDef.pins );
+
     for( const SYMBOL_PIN& pin : aSymbolDef.pins )
     {
-        SCH_PIN* schPin = createPin( pin, libSymbol );
+        SCH_PIN* schPin = createPin( pin, libSymbol, mapDiodeAK );
 
         if( schPin )
             libSymbol->AddDrawItem( schPin );
@@ -157,20 +159,12 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol( const PARTTYPE_DEF&  
         }
 
         // Add pins with PARTTYPE overrides
-        for( size_t p = 0; p < symDef.pins.size(); p++ )
+        std::vector<SYMBOL_PIN> pins = applyGateOverrides( symDef.pins, gate );
+        bool                    mapDiodeAK = isDiodeAKPinSet( pins );
+
+        for( const SYMBOL_PIN& pin : pins )
         {
-            SYMBOL_PIN pin = symDef.pins[p];
-
-            if( p < gate.pins.size() )
-            {
-                pin.name = gate.pins[p].pin_name;
-                pin.number = gate.pins[p].pin_id;
-
-                if( gate.pins[p].pin_type != 0 )
-                    pin.type = PADS_SCH_PARSER::ParsePinTypeChar( gate.pins[p].pin_type );
-            }
-
-            SCH_PIN* schPin = createPin( pin, libSymbol );
+            SCH_PIN* schPin = createPin( pin, libSymbol, mapDiodeAK );
 
             if( schPin )
             {
@@ -238,22 +232,13 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol( const PARTTYPE_D
             libSymbol->AddDrawItem( shape );
     }
 
-    const GATE_DEF& gate = aPartType.gates[0];
+    const GATE_DEF&         gate = aPartType.gates[0];
+    std::vector<SYMBOL_PIN> pins = applyGateOverrides( aSymbolDef.pins, gate );
+    bool                    mapDiodeAK = isDiodeAKPinSet( pins );
 
-    for( size_t p = 0; p < aSymbolDef.pins.size(); p++ )
+    for( const SYMBOL_PIN& pin : pins )
     {
-        SYMBOL_PIN pin = aSymbolDef.pins[p];
-
-        if( p < gate.pins.size() )
-        {
-            pin.name = gate.pins[p].pin_name;
-            pin.number = gate.pins[p].pin_id;
-
-            if( gate.pins[p].pin_type != 0 )
-                pin.type = PADS_SCH_PARSER::ParsePinTypeChar( gate.pins[p].pin_type );
-        }
-
-        SCH_PIN* schPin = createPin( pin, libSymbol );
+        SCH_PIN* schPin = createPin( pin, libSymbol, mapDiodeAK );
 
         if( schPin )
             libSymbol->AddDrawItem( schPin );
@@ -661,17 +646,60 @@ SCH_TEXT* PADS_SCH_SYMBOL_BUILDER::createSymbolText( const SYMBOL_TEXT& aText, i
 }
 
 
-SCH_PIN* PADS_SCH_SYMBOL_BUILDER::createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL* aParent )
+std::vector<SYMBOL_PIN> PADS_SCH_SYMBOL_BUILDER::applyGateOverrides( const std::vector<SYMBOL_PIN>& aDecalPins,
+                                                                     const GATE_DEF&               aGate )
+{
+    std::vector<SYMBOL_PIN> pins = aDecalPins;
+
+    for( size_t p = 0; p < pins.size() && p < aGate.pins.size(); p++ )
+    {
+        pins[p].name = aGate.pins[p].pin_name;
+        pins[p].number = aGate.pins[p].pin_id;
+
+        if( aGate.pins[p].pin_type != 0 )
+            pins[p].type = PADS_SCH_PARSER::ParsePinTypeChar( aGate.pins[p].pin_type );
+    }
+
+    return pins;
+}
+
+
+bool PADS_SCH_SYMBOL_BUILDER::isDiodeAKPinSet( const std::vector<SYMBOL_PIN>& aPins )
+{
+    if( aPins.size() != 2 )
+        return false;
+
+    bool haveA = false;
+    bool haveK = false;
+
+    for( const SYMBOL_PIN& pin : aPins )
+    {
+        if( !pin.name.empty() )
+            return false;
+
+        if( pin.number == "A" )
+            haveA = true;
+        else if( pin.number == "K" )
+            haveK = true;
+        else
+            return false;
+    }
+
+    return haveA && haveK;
+}
+
+
+SCH_PIN* PADS_SCH_SYMBOL_BUILDER::createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL* aParent, bool aMapDiodeAK )
 {
     SCH_PIN* pin = new SCH_PIN( aParent );
 
     // Set pin name and number
-    if( aPin.name.empty() && aPin.number == "A" )
+    if( aMapDiodeAK && aPin.number == "A" )
     {
         pin->SetName( wxString::FromUTF8( aPin.number ) );
         pin->SetNumber( wxT( "2" ) );
     }
-    else if( aPin.name.empty() && aPin.number == "K" )
+    else if( aMapDiodeAK && aPin.number == "K" )
     {
         pin->SetName( wxString::FromUTF8( aPin.number ) );
         pin->SetNumber( wxT( "1" ) );

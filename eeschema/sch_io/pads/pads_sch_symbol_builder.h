@@ -154,7 +154,15 @@ private:
 
     std::vector<SCH_SHAPE*> createShapes( const SYMBOL_GRAPHIC& aGraphic );
 
-    SCH_PIN* createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL* aParent );
+    /// Return the decal's pins with the gate's name, number and type overrides applied.
+    static std::vector<SYMBOL_PIN> applyGateOverrides( const std::vector<SYMBOL_PIN>& aDecalPins,
+                                                       const GATE_DEF&               aGate );
+
+    /// True when @p aPins is a bare two-pin A/K pair, i.e. a PADS diode decal whose pins must be
+    /// renumbered to the KiCad 1/2 convention.
+    static bool isDiodeAKPinSet( const std::vector<SYMBOL_PIN>& aPins );
+
+    SCH_PIN* createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL* aParent, bool aMapDiodeAK = false );
 
     /// Build the configured SCH_TEXT for one symbol text field, or nullptr when its content is
     /// empty. A non-zero @p aUnit binds the text to that body unit.
