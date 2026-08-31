@@ -2516,7 +2516,7 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
     // completion
     m_frame->SetObjectVisible( LAYER_GRIDITEMS );
 
-    SCOPED_TOOL_PUSHER( m_frame, aEvent );
+    SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
 
     auto setCursor =
             [&]()

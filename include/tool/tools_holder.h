@@ -189,7 +189,8 @@ protected:
 class SCOPED_TOOL_PUSHER
 {
 public:
-    SCOPED_TOOL_PUSHER( TOOLS_HOLDER* aHolder, const TOOL_EVENT& aEvent ) :
+    // nodiscard on the constructor makes an unnamed temporary (which pops immediately) a warning
+    [[nodiscard]] SCOPED_TOOL_PUSHER( TOOLS_HOLDER* aHolder, const TOOL_EVENT& aEvent ) :
             m_holder( aHolder ),
             m_event( aEvent )
     {

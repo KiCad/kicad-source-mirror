@@ -3281,7 +3281,8 @@ int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
 
     if( labels.empty() )
     {
-        SCOPED_TOOL_PUSHER( m_frame, aEvent );
+        SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
+
         m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
         m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
         m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
