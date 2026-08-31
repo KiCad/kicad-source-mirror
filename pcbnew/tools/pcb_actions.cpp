@@ -439,6 +439,28 @@ TOOL_ACTION PCB_ACTIONS::placeStackup( TOOL_ACTION_ARGS()
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::placeDrillChart( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.placeDrillChart" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Drill Chart" ) )
+        .Tooltip( _( "Add a drill chart that tracks the board's holes" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::placeDrillMap( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.placeDrillMap" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Drill Map" ) )
+        .Tooltip( _( "Draw drill symbols at the holes on a documentation layer" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::showDrillGroups( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.showDrillGroups" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Drill Groups..." ) )
+        .Tooltip( _( "Inspect drill groups and assign symbols" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::placePoint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.placePoint" )
         .Scope( AS_GLOBAL )

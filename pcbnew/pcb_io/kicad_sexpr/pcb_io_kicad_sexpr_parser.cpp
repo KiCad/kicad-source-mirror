@@ -51,6 +51,9 @@
 #include <pcb_grid_item.h>
 #include <pcb_track.h>
 #include <pcb_textbox.h>
+#include <pcb_drill_chart.h>
+#include <drill/drill_chart_template.h>
+#include <pcb_drill_map.h>
 #include <pcb_table.h>
 #include <pad.h>
 #include <generators_mgr.h>
@@ -1300,6 +1303,18 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             bulkAddedItems.push_back( item );
             break;
 
+        case T_drill_chart:
+            item = parsePCB_DRILL_CHART( m_board );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+            bulkAddedItems.push_back( item );
+            break;
+
+        case T_drill_map:
+            item = parsePCB_DRILL_MAP( m_board );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+            bulkAddedItems.push_back( item );
+            break;
+
         case T_table:
             item = parsePCB_TABLE( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
@@ -1612,6 +1627,10 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
         net->ResolveTerminalPads( m_board );
     }
+
+    // Pads and vias read this from ViewGetLayers(), so a loaded map draws nothing until it
+    // is populated
+    m_board->RefreshDrillSymbolLayers();
 
     return m_board;
 }
@@ -2718,6 +2737,141 @@ LSET PCB_IO_KICAD_SEXPR_PARSER::parseLayersForCuItemWithSoldermask()
 }
 
 
+void PCB_IO_KICAD_SEXPR_PARSER::parseDrillSymbolProfile()
+{
+    wxCHECK_RET( CurTok() == T_drill_symbol_profile,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a drill symbol profile." ) );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    DRILL_SYMBOL_PROFILE&  profile = bds.GetDrillSymbolProfile();
+
+    for( DRILL_GROUP_KEY key : { DRILL_GROUP_KEY::SIZE, DRILL_GROUP_KEY::SLOT,
+                                 DRILL_GROUP_KEY::PLATING, DRILL_GROUP_KEY::SPAN,
+                                 DRILL_GROUP_KEY::OPERATION, DRILL_GROUP_KEY::HOLE_FUNCTION,
+                                 DRILL_GROUP_KEY::PROTECTION,
+                                 DRILL_GROUP_KEY::POST_MACHINING } )
+    {
+        profile.SetGroupedBy( key, false );
+    }
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_name:
+            NeedSYMBOLorNUMBER();
+            profile.SetName( FromUTF8() );
+            NeedRIGHT();
+            break;
+
+        case T_group_by:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                DRILL_GROUP_KEY key;
+
+                if( DrillGroupKeyFromToken( FromUTF8(), key ) )
+                    profile.SetGroupedBy( key, true );
+            }
+
+            break;
+
+        case T_default_marks:
+        {
+            NeedSYMBOLorNUMBER();
+            DRILL_MARK_POLICY policy;
+
+            if( DrillMarkPolicyFromToken( FromUTF8(), policy ) )
+                profile.SetMarkPolicy( policy );
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_size:
+            profile.SetSymbolSize( parseBoardUnits( "drill symbol size" ) );
+            NeedRIGHT();
+            break;
+
+        case T_width:
+            profile.SetSymbolWidth( parseBoardUnits( "drill symbol line width" ) );
+            NeedRIGHT();
+            break;
+
+        case T_freeze_assignments:
+            profile.SetFreezeAssignments( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_assignment:
+        {
+            std::string             key;
+            DRILL_SYMBOL_ASSIGNMENT assignment;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_key:
+                    NeedSYMBOLorNUMBER();
+                    key = CurStr();
+                    NeedRIGHT();
+                    break;
+
+                case T_mark:
+                {
+                    NeedSYMBOLorNUMBER();
+                    DrillMarkModeFromToken( FromUTF8(), assignment.m_MarkMode );
+
+                    if( assignment.m_MarkMode == DRILL_MARK_MODE::SHAPE )
+                    {
+                        assignment.m_ShapeIndex = parseInt( "drill symbol shape" );
+                    }
+                    else if( assignment.m_MarkMode == DRILL_MARK_MODE::LETTER )
+                    {
+                        NeedSYMBOLorNUMBER();
+                        assignment.m_Letter = FromUTF8();
+                    }
+
+                    NeedRIGHT();
+                    break;
+                }
+
+                case T_descr:
+                    NeedSYMBOLorNUMBER();
+                    assignment.m_Description = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    skipCurrent();
+                    break;
+                }
+            }
+
+            if( !key.empty() )
+                profile.SetAssignment( key, assignment );
+
+            break;
+        }
+
+        default:
+            skipCurrent();
+            break;
+        }
+    }
+}
+
+
 void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 {
     wxCHECK_RET( CurTok() == T_setup,
@@ -2740,6 +2894,10 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
         switch( token )
         {
+        case T_drill_symbol_profile:
+            parseDrillSymbolProfile();
+            break;
+
         case T_stackup:
             if( m_preserveDestinationStackup )
                 skipCurrent();
@@ -4856,48 +5014,48 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
 }
 
 
-PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
+// A drill chart offers its own tokens first and shares the rest, so identity is accepted
+// only for the plain table form
+bool PCB_IO_KICAD_SEXPR_PARSER::parseTableBodyToken( PCB_TABLE* aTable, T aToken, bool aAllowIdentity )
 {
-    wxCHECK_MSG( CurTok() == T_table, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a table." ) );
+    PCB_TABLE* table = aTable;
+    T          token = aToken;
 
-    STROKE_PARAMS borderStroke( -1, LINE_STYLE::SOLID );
-    STROKE_PARAMS separatorsStroke( -1, LINE_STYLE::SOLID );
-    std::unique_ptr<PCB_TABLE> table = std::make_unique<PCB_TABLE>( aParent, -1 );
-
-    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    switch( aToken )
     {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        switch( token )
-        {
         case T_column_count:
             table->SetColCount( parseInt( "column count" ) );
             NeedRIGHT();
-            break;
+            return true;
 
         case T_uuid:
+            if( !aAllowIdentity )
+                Expecting( "table geometry without identity" );
+
             NextTok();
             table->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
-            break;
+            return true;
 
         case T_locked:
+            if( !aAllowIdentity )
+                Expecting( "table geometry without identity" );
+
             table->SetLocked( parseBool() );
             NeedRIGHT();
-            break;
+            return true;
 
         case T_angle:   // legacy token no longer used
             NeedRIGHT();
-            break;
+            return true;
 
         case T_layer:
+            if( !aAllowIdentity )
+                Expecting( "table geometry without identity" );
+
             table->SetLayer( parseBoardItemLayer() );
             NeedRIGHT();
-            break;
+            return true;
 
         case T_column_widths:
         {
@@ -4906,7 +5064,7 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
             while( ( token = NextTok() ) != T_RIGHT )
                 table->SetColWidth( col++, parseBoardUnits() );
 
-            break;
+            return true;
         }
 
         case T_row_heights:
@@ -4916,7 +5074,7 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
             while( ( token = NextTok() ) != T_RIGHT )
                 table->SetRowHeight( row++, parseBoardUnits() );
 
-            break;
+            return true;
         }
 
         case T_cells:
@@ -4930,10 +5088,10 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
                 if( token != T_table_cell )
                     Expecting( "table_cell" );
 
-                table->AddCell( parsePCB_TABLECELL( table.get() ) );
+                table->AddCell( parsePCB_TABLECELL( table ) );
             }
 
-            break;
+            return true;
 
         case T_border:
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -4960,6 +5118,7 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
                     STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
                     strokeParser.SyncLineReaderWith( *this );
 
+                    STROKE_PARAMS borderStroke( -1, LINE_STYLE::SOLID );
                     strokeParser.ParseStroke( borderStroke );
                     SyncLineReaderWith( strokeParser );
 
@@ -4973,7 +5132,7 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
                 }
             }
 
-            break;
+            return true;
 
         case T_separators:
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -5000,6 +5159,7 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
                     STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
                     strokeParser.SyncLineReaderWith( *this );
 
+                    STROKE_PARAMS separatorsStroke( -1, LINE_STYLE::SOLID );
                     strokeParser.ParseStroke( separatorsStroke );
                     SyncLineReaderWith( strokeParser );
 
@@ -5013,16 +5173,363 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
                 }
             }
 
+            return true;
+
+    default:
+        return false;
+    }
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseTableBody( PCB_TABLE* aTable, bool aAllowIdentity )
+{
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        if( !parseTableBodyToken( aTable, token, aAllowIdentity ) )
+            Expecting( "columns, layer, col_widths, row_heights, border, separators, header or cells" );
+    }
+}
+
+
+DRILL_SPAN PCB_IO_KICAD_SEXPR_PARSER::parseDrillSpanBody()
+{
+    wxString           name = FromUTF8();
+    const PCB_LAYER_ID startLayer = static_cast<PCB_LAYER_ID>( LSET::NameToLayer( name ) );
+
+    NeedSYMBOLorNUMBER();
+    name = FromUTF8();
+    const PCB_LAYER_ID endLayer = static_cast<PCB_LAYER_ID>( LSET::NameToLayer( name ) );
+
+    bool backdrill = false;
+    bool nonPlated = false;
+
+    // The flags are what tell a backdrill span apart from the primary span sharing its layer
+    // pair, so a map without them comes back pointing at the wrong holes
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_backdrill )
+            backdrill = true;
+        else if( token == T_npth )
+            nonPlated = true;
+    }
+
+    return DRILL_SPAN( startLayer, endLayer, backdrill, nonPlated );
+}
+
+
+PCB_DRILL_MAP* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_DRILL_MAP( BOARD_ITEM* aParent )
+{
+    wxCHECK_MSG( CurTok() == T_drill_map, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a drill map." ) );
+
+    std::unique_ptr<PCB_DRILL_MAP> map = std::make_unique<PCB_DRILL_MAP>( aParent );
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_uuid:
+            NextTok();
+            map->SetUuidDirect( CurStrToKIID() );
+            NeedRIGHT();
+            break;
+
+        case T_locked:
+            map->SetLocked( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_layer:
+            map->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
+            break;
+
+        case T_offset:
+        {
+            VECTOR2I offset;
+            offset.x = parseBoardUnits( "drill map x offset" );
+            offset.y = parseBoardUnits( "drill map y offset" );
+            map->SetOffset( offset );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_size:
+            map->SetSymbolSize( parseBoardUnits( "drill map symbol size" ) );
+            NeedRIGHT();
+            break;
+
+        case T_span:
+        {
+            NextTok();
+
+            if( CurTok() == T_all )
+            {
+                map->SetAllSpans( true );
+                NeedRIGHT();
+            }
+            else
+            {
+                map->SetAllSpans( false );
+                map->SetSpan( parseDrillSpanBody() );
+            }
+
+            break;
+        }
+
+        case T_outline_slots:
+            map->SetOutlineSlots( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_guide_cross:
+            map->SetGuideCross( parseBool() );
+            NeedRIGHT();
             break;
 
         case T_custom_property:
-            parseCustomProperty( table.get() );
+            parseCustomProperty( map.get() );
             break;
 
         default:
-            Expecting( "columns, layer, col_widths, row_heights, border, separators, header or cells" );
+            skipCurrent();
+            break;
         }
     }
+
+    if( !DrillDocumentationLayers().Contains( map->GetLayer() ) )
+    {
+        THROW_IO_ERROR( _( "Invalid drill map: not on a documentation layer" ) );
+    }
+
+    return map.release();
+}
+
+
+PCB_DRILL_CHART* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_DRILL_CHART( BOARD_ITEM* aParent )
+{
+    wxCHECK_MSG( CurTok() == T_drill_chart, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a drill chart." ) );
+
+    std::unique_ptr<PCB_DRILL_CHART> chart = std::make_unique<PCB_DRILL_CHART>( aParent );
+    chart->Columns().clear();
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_uuid:
+            NextTok();
+            chart->SetUuidDirect( CurStrToKIID() );
+            NeedRIGHT();
+            break;
+
+        case T_locked:
+            chart->SetLocked( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_layer:
+            chart->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
+            break;
+
+        case T_filter:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_plated:      chart->Filter().m_Plated = parseBool(); NeedRIGHT(); break;
+                case T_npth:        chart->Filter().m_NonPlated = parseBool(); NeedRIGHT(); break;
+                case T_vias:        chart->Filter().m_Vias = parseBool(); NeedRIGHT(); break;
+                case T_slots:       chart->Filter().m_Slots = parseBool(); NeedRIGHT(); break;
+                case T_backdrill:   chart->Filter().m_Backdrills = parseBool(); NeedRIGHT(); break;
+                case T_castellated: chart->Filter().m_Castellated = parseBool(); NeedRIGHT(); break;
+                default:            skipCurrent(); break;
+                }
+            }
+
+            break;
+
+        case T_units:
+        {
+            NeedSYMBOLorNUMBER();
+            DRILL_CHART_UNITS units;
+
+            if( DrillChartUnitsFromToken( FromUTF8(), units ) )
+                chart->SetUnits( units );
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_precision:
+            chart->SetPrecision( parseInt( "drill chart precision" ) );
+            NeedRIGHT();
+            break;
+
+        case T_totals:
+            chart->SetShowTotals( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_column:
+        {
+            DRILL_CHART_COLUMN col;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_id:
+                    NeedSYMBOLorNUMBER();
+
+                    if( DrillChartColumnFromToken( FromUTF8(), col.m_Id ) )
+                    {
+                        // The writer leaves out whatever matches these, so they have to be
+                        // in place before the rest of the block overrides them
+                        DrillChartDefaultColumn( col.m_Id, col );
+                    }
+
+                    NeedRIGHT();
+                    break;
+
+                case T_name:
+                    NeedSYMBOLorNUMBER();
+                    col.m_Heading = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_justify:
+                    NeedSYMBOLorNUMBER();
+                    DrillChartAlignFromToken( FromUTF8(), col.m_Align );
+                    NeedRIGHT();
+                    break;
+
+                case T_width:
+                    col.m_Width = parseBoardUnits( "drill chart column width" );
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    skipCurrent();
+                    break;
+                }
+            }
+
+            chart->Columns().push_back( col );
+            break;
+        }
+
+        case T_row_shapes:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                if( token == T_column )
+                {
+                    chart->SetSymbolColumn( parseInt( "symbol column" ) );
+                }
+                else if( token == T_shape )
+                {
+                    const int row = parseInt( "row shape row" );
+                    chart->RowShapes()[row] = parseInt( "row shape index" );
+                }
+
+                NeedRIGHT();
+            }
+
+            break;
+
+        case T_row_keys:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                if( token == T_key )
+                {
+                    const int row = parseInt( "row key row" );
+
+                    NeedSYMBOLorNUMBER();
+                    chart->RowKeys()[row] = curText;
+                }
+
+                NeedRIGHT();
+            }
+
+            break;
+
+        default:
+            // A chart is a table, so whatever is left is the geometry and cells it shares
+            // with one rather than something to skip
+            if( !parseTableBodyToken( chart.get(), token, false ) )
+                skipCurrent();
+
+            break;
+        }
+    }
+
+    if( chart->Columns().empty() )
+        chart->ApplyTemplate( DRILL_CHART_TEMPLATE::MakeDefault() );
+
+    // No columns leaves every later consumer dividing by the column count. Repeats and
+    // implausible widths reach table geometry
+
+    if( chart->GetColCount() < 1 || !ValidateDrillChartColumns( chart->Columns() ) )
+    {
+        THROW_IO_ERROR( _( "Invalid drill chart: bad column set" ) );
+    }
+
+    // Copper, silkscreen, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are all
+    // manufacturing inputs that chart artwork would corrupt rather than document
+    if( !DrillDocumentationLayers().Contains( chart->GetLayer() ) )
+    {
+        THROW_IO_ERROR( _( "Invalid drill chart: not on a documentation layer" ) );
+    }
+
+    return chart.release();
+}
+
+
+PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
+{
+    wxCHECK_MSG( CurTok() == T_table, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a table." ) );
+
+    std::unique_ptr<PCB_TABLE> table = std::make_unique<PCB_TABLE>( aParent, -1 );
+
+    parseTableBody( table.get(), true );
 
     return table.release();
 }

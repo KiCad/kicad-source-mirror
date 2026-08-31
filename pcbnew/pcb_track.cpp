@@ -2415,9 +2415,17 @@ const BOX2I PCB_TRACK::ViewBBox() const
     BOX2I bbox = GetBoundingBox();
 
     if( const BOARD* board = GetBoard() )
+    {
         bbox.Inflate( 2 * board->GetDesignSettings().GetBiggestClearanceValue() );
+
+        // Only a via drills, so a plain segment would just be given an oversized box
+        if( HasHole() )
+            bbox = board->ExpandBoundingBoxForDrillSymbols( bbox );
+    }
     else
+    {
         bbox.Inflate( GetWidth() );     // Add a bit extra for safety
+    }
 
     return bbox;
 }
@@ -2428,6 +2436,14 @@ std::vector<int> PCB_VIA::ViewGetLayers() const
     LAYER_RANGE layers( Padstack().Drill().start, Padstack().Drill().end, MAX_CU_LAYERS );
     std::vector<int> ret_layers{ LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS, LAYER_VIA_NETNAMES };
     ret_layers.reserve( MAX_CU_LAYERS + 6 );
+
+    // A drill map on a layer asks the holes to draw their symbols there, so the symbols stay
+    // in the view index and one hole edit repaints one hole
+    if( const BOARD* drillBoard = GetBoard() )
+    {
+        for( PCB_LAYER_ID mapLayer : drillBoard->DrillSymbolLayers().Seq() )
+            ret_layers.push_back( DRILL_SYMBOL_LAYER_FOR( mapLayer ) );
+    }
 
     // TODO(JE) Rendering order issue
 #if 0
@@ -2474,6 +2490,14 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
     const BOARD*         board = GetBoard();
+
+    // Reviewing a drill drawing with vias hidden is normal, so the symbols answer to the
+    // map's own layer rather than to the vias meta control
+    if( IsDrillSymbolLayer( aLayer ) )
+    {
+        return aView->IsLayerVisibleCached( aLayer - LAYER_DRILL_SYMBOL_START ) ? LOD_SHOW
+                                                                                : LOD_HIDE;
+    }
 
     // Meta control for hiding all vias
     if( !aView->IsLayerVisibleCached( LAYER_VIAS ) )
@@ -3166,6 +3190,28 @@ static struct TRACK_VIA_DESC
                 .Map( FILLING_MODE::NOT_FILLED, _HKI( "Not filled" ) );
 
         // clang-format on: the suggestion is less readable
+
+        // Pad and via registration can run in either order across translation units.
+        ENUM_MAP<PAD_DRILL_POST_MACHINING_MODE>& pmMap = ENUM_MAP<PAD_DRILL_POST_MACHINING_MODE>::Instance();
+
+        if( pmMap.Choices().GetCount() == 0 )
+        {
+            pmMap.Undefined( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                .Map( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED, _HKI( "Not post-machined" ) )
+                .Map( PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE,       _HKI( "Counterbore" ) )
+                .Map( PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,       _HKI( "Countersink" ) );
+        }
+
+        ENUM_MAP<BACKDRILL_MODE>& bdMap = ENUM_MAP<BACKDRILL_MODE>::Instance();
+
+        if( bdMap.Choices().GetCount() == 0 )
+        {
+            bdMap.Undefined( BACKDRILL_MODE::NO_BACKDRILL )
+                .Map( BACKDRILL_MODE::NO_BACKDRILL,     _HKI( "No backdrill" ) )
+                .Map( BACKDRILL_MODE::BACKDRILL_BOTTOM, _HKI( "Backdrill bottom" ) )
+                .Map( BACKDRILL_MODE::BACKDRILL_TOP,    _HKI( "Backdrill top" ) )
+                .Map( BACKDRILL_MODE::BACKDRILL_BOTH,   _HKI( "Backdrill both" ) );
+        }
 
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 

@@ -29,6 +29,7 @@
 #include <advanced_config.h>
 #include <board_item.h>
 #include <pcb_dimension.h>
+#include <pcb_drill_map.h>
 #include <pcb_shape.h>
 #include <footprint.h>
 #include <pcb_table.h>
@@ -2124,6 +2125,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         break;
 
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
         if( aFrom )
         {
             if( aSelectionFilter && !aSelectionFilter->text )
@@ -2153,6 +2155,36 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             addAnchor( bottomRight, CORNER | SNAPPABLE, table, POINT_TYPE::PT_END );
 
             addAnchor( table->GetCenter(), ORIGIN, table, POINT_TYPE::PT_MID );
+        }
+
+        break;
+
+    case PCB_DRILL_MAP_T:
+        if( aFrom )
+        {
+            if( aSelectionFilter && !aSelectionFilter->graphics )
+                break;
+        }
+        else if( !m_magneticSettings->graphics )
+        {
+            break;
+        }
+
+        if( checkVisibility( aItem ) )
+        {
+            const PCB_DRILL_MAP* map = static_cast<const PCB_DRILL_MAP*>( aItem );
+            const BOX2I          box = map->GetBoundingBox();
+
+            // The offset is the only thing a map owns, so snapping it back onto the origin is
+            // how the marks are put back on their holes
+            addAnchor( map->GetOffset(), ORIGIN | SNAPPABLE, aItem, POINT_TYPE::PT_MID );
+
+            addAnchor( box.GetOrigin(), CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_END );
+            addAnchor( box.GetEnd(), CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_END );
+            addAnchor( VECTOR2I( box.GetRight(), box.GetTop() ), CORNER | SNAPPABLE, aItem,
+                       POINT_TYPE::PT_END );
+            addAnchor( VECTOR2I( box.GetLeft(), box.GetBottom() ), CORNER | SNAPPABLE, aItem,
+                       POINT_TYPE::PT_END );
         }
 
         break;

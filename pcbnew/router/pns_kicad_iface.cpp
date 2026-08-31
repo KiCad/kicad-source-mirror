@@ -2332,6 +2332,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
             break;
 
         case PCB_TABLE_T:
+        case PCB_DRILL_CHART_T:
             syncTextItem( aWorld, static_cast<PCB_TABLE*>( gitem ), gitem->GetLayer() );
             break;
 

@@ -2699,6 +2699,17 @@ std::vector<int> PAD::ViewGetLayers() const
     std::vector<int> layers;
     layers.reserve( 64 );
 
+    // A drill map on a layer asks the holes to draw their symbols there, so the symbols stay
+    // in the view index and one hole edit repaints one hole
+    if( m_attribute == PAD_ATTRIB::PTH || m_attribute == PAD_ATTRIB::NPTH )
+    {
+        if( const BOARD* drillBoard = GetBoard() )
+        {
+            for( PCB_LAYER_ID mapLayer : drillBoard->DrillSymbolLayers().Seq() )
+                layers.push_back( DRILL_SYMBOL_LAYER_FOR( mapLayer ) );
+        }
+    }
+
     // These 2 types of pads contain a hole
     if( m_attribute == PAD_ATTRIB::PTH )
     {
@@ -2783,6 +2794,14 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     PCB_PAINTER&         painter = static_cast<PCB_PAINTER&>( *aView->GetPainter() );
     PCB_RENDER_SETTINGS& renderSettings = *painter.GetSettings();
     const BOARD*         board = GetBoard();
+
+    // Reviewing a drill drawing with pads hidden is normal, so the symbols answer to the
+    // map's own layer rather than to the pads meta control
+    if( IsDrillSymbolLayer( aLayer ) )
+    {
+        return aView->IsLayerVisibleCached( aLayer - LAYER_DRILL_SYMBOL_START ) ? LOD_SHOW
+                                                                                : LOD_HIDE;
+    }
 
     // Meta control for hiding all pads
     if( !aView->IsLayerVisibleCached( LAYER_PADS ) )
@@ -2880,8 +2899,14 @@ const BOX2I PAD::ViewBBox() const
     int xMargin = std::max( solderMaskMargin, solderPasteMargin.x ) + clearance;
     int yMargin = std::max( solderMaskMargin, solderPasteMargin.y ) + clearance;
 
-    return BOX2I( VECTOR2I( bbox.GetOrigin() ) - VECTOR2I( xMargin, yMargin ),
-                  VECTOR2I( bbox.GetSize() ) + VECTOR2I( 2 * xMargin, 2 * yMargin ) );
+    BOX2I viewBox( VECTOR2I( bbox.GetOrigin() ) - VECTOR2I( xMargin, yMargin ),
+                   VECTOR2I( bbox.GetSize() ) + VECTOR2I( 2 * xMargin, 2 * yMargin ) );
+
+    // Only a hole draws a drill symbol, so an SMD pad would just be given an oversized box
+    if( HasHole() && GetBoard() )
+        return GetBoard()->ExpandBoundingBoxForDrillSymbols( viewBox );
+
+    return viewBox;
 }
 
 

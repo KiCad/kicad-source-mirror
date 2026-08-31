@@ -20,6 +20,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <memory>
+#include <limits>
 #include <import_export.h>
 #include <qa_utils/api_test_utils.h>
 #include <qa_utils/wx_utils/wx_assert.h>
@@ -34,6 +35,8 @@
 #include <footprint.h>
 #include <pcb_barcode.h>
 #include <pcb_dimension.h>
+#include <pcb_drill_chart.h>
+#include <pcb_drill_map.h>
 #include <pcb_grid_item.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
@@ -61,6 +64,8 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
     KI_TEST::LoadBoard( m_settingsManager, "api_kitchen_sink", m_board );
 
     int barcodeCount = 0;
+    int drillChartCount = 0;
+    int drillMapCount = 0;
     int referenceImageCount = 0;
     int tableCount = 0;
     int textCount = 0;
@@ -137,6 +142,18 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
             ++referenceImageCount;
             break;
 
+        case PCB_DRILL_CHART_T:
+            testProtoFromKiCadObject<kiapi::board::types::DrillChart>(
+                    static_cast<PCB_DRILL_CHART*>( item ), m_board.get() );
+            ++drillChartCount;
+            break;
+
+        case PCB_DRILL_MAP_T:
+            testProtoFromKiCadObject<kiapi::board::types::DrillMap>(
+                    static_cast<PCB_DRILL_MAP*>( item ), m_board.get() );
+            ++drillMapCount;
+            break;
+
         case PCB_TABLE_T:
             testProtoFromKiCadObject<kiapi::board::types::Table>( static_cast<PCB_TABLE*>( item ), m_board.get() );
             ++tableCount;
@@ -165,6 +182,8 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
     }
 
     BOOST_CHECK_GT( barcodeCount, 0 );
+    BOOST_CHECK_GT( drillChartCount, 0 );
+    BOOST_CHECK_GT( drillMapCount, 0 );
     BOOST_CHECK_GT( referenceImageCount, 0 );
     BOOST_CHECK_GT( tableCount, 0 );
     BOOST_CHECK_GT( textCount, 0 );
@@ -181,6 +200,52 @@ BOOST_AUTO_TEST_CASE( FootprintExcludeFromSimulationRoundTrip )
     footprint.SetExcludedFromSim( true );
 
     testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( &footprint, &board );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( DrillChartColumnWidths, PROTO_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "api_kitchen_sink", m_board );
+
+    PCB_DRILL_CHART* chart = nullptr;
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() == PCB_DRILL_CHART_T )
+        {
+            chart = static_cast<PCB_DRILL_CHART*>( item );
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( chart );
+
+    google::protobuf::Any any;
+    chart->Serialize( any );
+    kiapi::board::types::DrillChart proto;
+    BOOST_REQUIRE( any.UnpackTo( &proto ) );
+    BOOST_REQUIRE_GT( proto.columns_size(), 0 );
+    BOOST_CHECK_EQUAL( proto.columns( 0 ).width().value_nm(), 16000000 );
+
+    for( int64_t width : { int64_t( 0 ), int64_t( DRILL_CHART_MAX_COLUMN_WIDTH ) } )
+    {
+        proto.mutable_columns( 0 )->mutable_width()->set_value_nm( width );
+        any.PackFrom( proto );
+        PCB_DRILL_CHART restored( m_board.get() );
+        BOOST_REQUIRE( restored.Deserialize( any ) );
+        BOOST_CHECK_EQUAL( restored.Columns().front().m_Width, width );
+    }
+
+    for( int64_t width : { int64_t( -1 ), int64_t( DRILL_CHART_MAX_COLUMN_WIDTH ) + 1,
+                          std::numeric_limits<int64_t>::max() } )
+    {
+        proto.mutable_columns( 0 )->mutable_width()->set_value_nm( width );
+        any.PackFrom( proto );
+        PCB_DRILL_CHART restored( m_board.get() );
+        BOOST_REQUIRE( restored.Deserialize( any ) );
+        BOOST_CHECK_EQUAL( restored.Columns().front().m_Width,
+                           width < 0 ? 0 : DRILL_CHART_MAX_COLUMN_WIDTH );
+    }
 }
 
 

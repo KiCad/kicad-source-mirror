@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='utf-8'?>
+<wxFormBuilder_Project>
+  <FileVersion major="1" minor="18" />
+  <object class="Project" expanded="true">
+    <property name="code_generation">C++</property>
+    <property name="cpp_disconnect_events">1</property>
+    <property name="cpp_event_generation">connect</property>
+    <property name="cpp_use_enum">1</property>
+    <property name="encoding">UTF-8</property>
+    <property name="file">panel_setup_drill_chart_base</property>
+    <property name="first_id">1000</property>
+    <property name="internationalize">1</property>
+    <property name="name">panel_setup_drill_chart_base</property>
+    <property name="path">.</property>
+    <property name="relative_path">1</property>
+    <object class="Panel" expanded="true">
+      <property name="event_handler">impl_virtual</property>
+      <property name="id">wxID_ANY</property>
+      <property name="name">PANEL_SETUP_DRILL_CHART_BASE</property>
+      <property name="size">-1,-1</property>
+      <object class="wxBoxSizer" expanded="true">
+        <property name="name">bMain</property>
+        <property name="orient">wxVERTICAL</property>
+        <object class="sizeritem" expanded="true">
+          <property name="border">5</property>
+          <property name="flag">wxEXPAND|wxALL</property>
+          <property name="proportion">1</property>
+          <object class="wxStaticBoxSizer" expanded="true">
+            <property name="name">sbSymbols</property>
+            <property name="label">Symbols</property>
+            <property name="orient">wxVERTICAL</property>
+            <object class="sizeritem" expanded="true">
+              <property name="border">0</property>
+              <property name="flag">wxEXPAND</property>
+              <property name="proportion">0</property>
+              <object class="wxBoxSizer" expanded="true">
+                <property name="name">bGroupBy</property>
+                <property name="orient">wxVERTICAL</property>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
+                  <property name="proportion">0</property>
+                  <object class="wxStaticText" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="label">Group holes by:</property>
+                    <property name="name">m_groupByLabel</property>
+                    <property name="wrap">-1</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxEXPAND|wxALL</property>
+                  <property name="proportion">1</property>
+                  <object class="wxCheckListBox" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="name">m_groupByList</property>
+                    <property name="minimum_size">-1,140</property>
+                    <property name="choices">"Hole size" "Slot shape" "Plating" "Layer span" "Drill operation" "Hole function" "IPC-4761 protection" "Post-machining"</property>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <object class="sizeritem" expanded="true">
+              <property name="border">5</property>
+              <property name="flag">wxEXPAND|wxALL</property>
+              <property name="proportion">0</property>
+              <object class="wxFlexGridSizer" expanded="true">
+                <property name="name">fgSymbols</property>
+                <property name="rows">0</property>
+                <property name="cols">3</property>
+                <property name="vgap">5</property>
+                <property name="hgap">5</property>
+                <property name="flexible_direction">wxBOTH</property>
+                <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                <property name="growablecols">1</property>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                  <property name="proportion">0</property>
+                  <object class="wxStaticText" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="label">Default marks:</property>
+                    <property name="name">m_markPolicyLabel</property>
+                    <property name="wrap">-1</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxEXPAND</property>
+                  <property name="proportion">0</property>
+                  <object class="wxChoice" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="name">m_markPolicyCtrl</property>
+                    <property name="choices">"Curated shapes" "Letters" "Curated shapes, then letters" "Hole size text"</property>
+                    <property name="selection">0</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxRIGHT</property>
+                  <property name="proportion">0</property>
+                  <object class="wxStaticText" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="label" />
+                    <property name="name">m_markPolicyPad</property>
+                    <property name="wrap">-1</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                  <property name="proportion">0</property>
+                  <object class="wxStaticText" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="label">Symbol size:</property>
+                    <property name="name">m_symbolSizeLabel</property>
+                    <property name="wrap">-1</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxEXPAND</property>
+                  <property name="proportion">0</property>
+                  <object class="wxTextCtrl" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="name">m_symbolSizeCtrl</property>
+                    <property name="value" />
+                    <property name="maxlength">0</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                  <property name="proportion">0</property>
+                  <object class="wxStaticText" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="label">mm</property>
+                    <property name="name">m_symbolSizeUnits</property>
+                    <property name="wrap">-1</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                  <property name="proportion">0</property>
+                  <object class="wxStaticText" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="label">Symbol line width:</property>
+                    <property name="name">m_symbolWidthLabel</property>
+                    <property name="wrap">-1</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxEXPAND</property>
+                  <property name="proportion">0</property>
+                  <object class="wxTextCtrl" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="name">m_symbolWidthCtrl</property>
+                    <property name="value" />
+                    <property name="maxlength">0</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                  <property name="proportion">0</property>
+                  <object class="wxStaticText" expanded="true">
+                    <property name="id">wxID_ANY</property>
+                    <property name="label">mm</property>
+                    <property name="name">m_symbolWidthUnits</property>
+                    <property name="wrap">-1</property>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <object class="sizeritem" expanded="true">
+              <property name="border">5</property>
+              <property name="flag">wxALL|wxEXPAND</property>
+              <property name="proportion">0</property>
+              <object class="wxCheckBox" expanded="true">
+                <property name="id">wxID_ANY</property>
+                <property name="name">m_freezeAssignments</property>
+                <property name="label">Keep existing symbol assignments when holes change</property>
+                <property name="checked">1</property>
+              </object>
+            </object>
+          </object>
+        </object>
+        <object class="sizeritem" expanded="true">
+          <property name="border">5</property>
+          <property name="flag">wxALL</property>
+          <property name="proportion">0</property>
+          <object class="wxButton" expanded="true">
+            <property name="id">wxID_ANY</property>
+            <property name="name">m_editGroupsButton</property>
+            <property name="label">Close and Edit Drill Groups...</property>
+            <event name="OnButtonClick">onEditGroups</event>
+          </object>
+        </object>
+      </object>
+    </object>
+  </object>
+</wxFormBuilder_Project>

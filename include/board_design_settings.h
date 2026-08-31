@@ -27,6 +27,7 @@
 #include <vector>
 
 #include <board_stackup_manager/board_stackup.h>
+#include <drill/drill_symbol_profile.h>
 #include <drc/drc_exclusion.h>
 #include <eda_units.h>
 #include <lset.h>
@@ -300,6 +301,9 @@ public:
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
     const BOARD_STACKUP& GetStackupDescriptor() const { return m_stackup; }
+
+    DRILL_SYMBOL_PROFILE& GetDrillSymbolProfile() { return m_drillSymbolProfile; }
+    const DRILL_SYMBOL_PROFILE& GetDrillSymbolProfile() const { return m_drillSymbolProfile; }
 
     TEARDROP_PARAMETERS_LIST* GetTeadropParamsList()
     {
@@ -854,6 +858,12 @@ private:
      * It includes not only layers enabled for the board edition, but also dielectric layers.
      */
     BOARD_STACKUP m_stackup;
+
+    /**
+     * Grouping rules and symbol assignments shared by every drill chart and map on the board.
+     */
+    DRILL_SYMBOL_PROFILE m_drillSymbolProfile;
+
 
     /// The default settings that will be used for new zones.
     ZONE_SETTINGS m_defaultZoneSettings;

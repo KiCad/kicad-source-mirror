@@ -76,6 +76,8 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
         { "type.googleapis.com/kiapi.board.types.BoardText", PCB_TEXT_T },
         { "type.googleapis.com/kiapi.board.types.BoardTextBox", PCB_TEXTBOX_T },
         { "type.googleapis.com/kiapi.board.types.Table", PCB_TABLE_T },
+        { "type.googleapis.com/kiapi.board.types.DrillChart", PCB_DRILL_CHART_T },
+        { "type.googleapis.com/kiapi.board.types.DrillMap", PCB_DRILL_MAP_T },
         { "type.googleapis.com/kiapi.board.types.TableCell", PCB_TABLECELL_T },
         { "type.googleapis.com/kiapi.board.types.BoardGraphicShape", PCB_SHAPE_T },
         { "type.googleapis.com/kiapi.board.types.Barcode", PCB_BARCODE_T },

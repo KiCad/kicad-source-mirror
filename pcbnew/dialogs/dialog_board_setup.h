@@ -66,6 +66,7 @@ private:
     size_t m_defaultsPage;
     size_t m_formattingPage;
     size_t m_maskAndPastePage;
+    size_t m_drillChartPage;
     size_t m_constraintsPage;
     size_t m_tracksAndViasPage;
     size_t m_viaStacksPage;

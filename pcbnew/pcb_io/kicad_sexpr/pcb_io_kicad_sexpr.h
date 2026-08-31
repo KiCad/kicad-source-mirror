@@ -58,6 +58,8 @@ class ZONE;
 class PCB_TEXT;
 class PCB_TEXTBOX;
 class PCB_TABLE;
+class PCB_DRILL_CHART;
+class PCB_DRILL_MAP;
 class PCB_BARCODE;
 class EDA_TEXT;
 class SHAPE_LINE_CHAIN;
@@ -216,7 +218,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20260826  // Bold is a stroke-width multiplier; thickness stores the base width
 //#define SEXPR_BOARD_FILE_VERSION    20260828  // Exclude-from-simulation footprint attribute
 //#define SEXPR_BOARD_FILE_VERSION    20260830  // Microvia stack generator (via_stack)
-#define SEXPR_BOARD_FILE_VERSION      20260831  // Custom user properties
+//#define SEXPR_BOARD_FILE_VERSION    20260831  // Custom user properties
+#define SEXPR_BOARD_FILE_VERSION      20260901  // Drill charts and maps
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
@@ -458,6 +461,8 @@ protected:
     /// formats the board setup information
     void formatSetup( const BOARD* aBoard ) const;
 
+    void formatDrillSymbolProfile( const BOARD_DESIGN_SETTINGS& aSettings ) const;
+
     /// formats the General section of the file
     void formatGeneral( const BOARD* aBoard ) const;
 
@@ -503,6 +508,13 @@ private:
     void format( const PCB_TEXTBOX* aTextBox ) const;
 
     void format( const PCB_TABLE* aTable ) const;
+    void format( const PCB_DRILL_CHART* aChart ) const;
+    void format( const PCB_DRILL_MAP* aMap ) const;
+
+    /**
+     * Geometry and cells with no identity, so an enclosing form owns uuid/layer/locked.
+     */
+    void formatTableData( const PCB_TABLE* aTable ) const;
 
     void format( const PCB_GENERATOR* aGenerator ) const;
 

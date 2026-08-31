@@ -159,6 +159,12 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_render_job.cpp
     dialogs/dialog_swap_layers.cpp
     dialogs/dialog_swap_layers_base.cpp
+    dialogs/dialog_drill_chart_properties.cpp
+    dialogs/dialog_drill_groups.cpp
+    dialogs/dialog_drill_groups_base.cpp
+    dialogs/panel_setup_drill_chart.cpp
+    dialogs/panel_setup_drill_chart_base.cpp
+    dialogs/dialog_drill_chart_properties_base.cpp
     dialogs/dialog_table_properties.cpp
     dialogs/dialog_table_properties_base.cpp
     dialogs/dialog_tablecell_properties.cpp

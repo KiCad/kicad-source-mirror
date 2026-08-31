@@ -51,6 +51,8 @@
 #include <pcb_reference_image.h>
 #include <pcb_barcode.h>
 #include <pcb_shape.h>
+#include <pcb_drill_chart.h>
+#include <pcb_drill_map.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_target.h>
@@ -420,6 +422,14 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
         format( static_cast<const PCB_TABLE*>( aItem ) );
         break;
 
+    case PCB_DRILL_CHART_T:
+        format( static_cast<const PCB_DRILL_CHART*>( aItem ) );
+        break;
+
+    case PCB_DRILL_MAP_T:
+        format( static_cast<const PCB_DRILL_MAP*>( aItem ) );
+        break;
+
     case PCB_GROUP_T:
         format( static_cast<const PCB_GROUP*>( aItem ) );
         break;
@@ -658,7 +668,75 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard ) const
                       formatInternalUnits( origin.y ).c_str() );
     }
 
+    formatDrillSymbolProfile( dsnSettings );
+
     aBoard->GetPlotOptions().Format( m_out );
+
+    m_out->Print( ")" );
+}
+
+
+/// Layers plus the flags that distinguish a backdrill or non-plated span from the primary
+/// one that shares its layer pair
+static void formatDrillSpan( OUTPUTFORMATTER* aOut, const DRILL_SPAN& aSpan )
+{
+    aOut->Print( "%s %s", aOut->Quotew( LSET::Name( aSpan.DrillStartLayer() ) ).c_str(),
+                 aOut->Quotew( LSET::Name( aSpan.DrillEndLayer() ) ).c_str() );
+
+    if( aSpan.m_IsBackdrill )
+        aOut->Print( " backdrill" );
+
+    if( aSpan.m_IsNonPlatedFile )
+        aOut->Print( " npth" );
+}
+
+
+void PCB_IO_KICAD_SEXPR::formatDrillSymbolProfile( const BOARD_DESIGN_SETTINGS& aSettings ) const
+{
+    const DRILL_SYMBOL_PROFILE& profile = aSettings.GetDrillSymbolProfile();
+    const DRILL_SYMBOL_PROFILE  defaults;
+
+    // A board nobody has configured writes nothing, so existing files keep their bytes
+    if( profile == defaults )
+    {
+        return;
+    }
+
+    m_out->Print( "(drill_symbol_profile" );
+
+    if( !profile.GetName().IsEmpty() )
+        m_out->Print( "(name %s)", m_out->Quotew( profile.GetName() ).c_str() );
+
+    m_out->Print( "(group_by" );
+
+    for( DRILL_GROUP_KEY key : profile.GroupKeys() )
+        m_out->Print( " %s", DrillGroupKeyToken( key ) );
+
+    m_out->Print( ")" );
+
+    m_out->Print( "(default_marks %s)", DrillMarkPolicyToken( profile.GetMarkPolicy() ) );
+    m_out->Print( "(size %s)", formatInternalUnits( profile.GetSymbolSize() ).c_str() );
+    m_out->Print( "(width %s)", formatInternalUnits( profile.GetSymbolWidth() ).c_str() );
+    KICAD_FORMAT::FormatBool( m_out, "freeze_assignments", profile.GetFreezeAssignments() );
+
+
+    for( const auto& [key, assignment] : profile.Assignments() )
+    {
+        m_out->Print( "(assignment (key %s) (mark %s", m_out->Quotew( wxString::FromUTF8( key ) ).c_str(),
+                      DrillMarkModeToken( assignment.m_MarkMode ) );
+
+        if( assignment.m_MarkMode == DRILL_MARK_MODE::SHAPE )
+            m_out->Print( " %d", assignment.m_ShapeIndex );
+        else if( assignment.m_MarkMode == DRILL_MARK_MODE::LETTER )
+            m_out->Print( " %s", m_out->Quotew( assignment.m_Letter ).c_str() );
+
+        m_out->Print( ")" );
+
+        if( !assignment.m_Description.IsEmpty() )
+            m_out->Print( "(descr %s)", m_out->Quotew( assignment.m_Description ).c_str() );
+
+        m_out->Print( ")" );
+    }
 
     m_out->Print( ")" );
 }
@@ -1985,6 +2063,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
         m_out->Print( ")" );
     }
 
+
     if( aPad->Padstack().SecondaryDrill().size.x > 0 )
     {
         m_out->Print( "(backdrill (size %s) (layers %s %s))",
@@ -2674,18 +2753,11 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox ) const
 }
 
 
-void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable ) const
+void PCB_IO_KICAD_SEXPR::formatTableData( const PCB_TABLE* aTable ) const
 {
-    wxCHECK_RET( aTable != nullptr && m_out != nullptr, "" );
-
-    m_out->Print( "(table (column_count %d)", aTable->GetColCount() );
-
-    KICAD_FORMAT::FormatUuid( m_out, aTable->m_Uuid );
-
-    if( aTable->IsLocked() )
-        KICAD_FORMAT::FormatBool( m_out, "locked", true );
-
-    formatLayer( aTable->GetLayer() );
+    // Carries geometry and cells only. Identity belongs to whatever encloses this, or a
+    // drill chart would write its uuid and layer twice and the second copy would win on load
+    m_out->Print( "(column_count %d)", aTable->GetColCount() );
 
     m_out->Print( "(border" );
     KICAD_FORMAT::FormatBool( m_out, "external", aTable->StrokeExternal() );
@@ -2727,6 +2799,149 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable ) const
     m_out->Print( ")" );        // Close `cells` token.
 
     KICAD_FORMAT::FormatCustomProperties( m_out, *aTable );
+}
+
+
+void PCB_IO_KICAD_SEXPR::format( const PCB_DRILL_MAP* aMap ) const
+{
+    wxCHECK_RET( aMap != nullptr && m_out != nullptr, "" );
+
+    m_out->Print( "(drill_map " );
+
+    KICAD_FORMAT::FormatUuid( m_out, aMap->m_Uuid );
+
+    if( aMap->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, "locked", true );
+
+    formatLayer( aMap->GetLayer() );
+
+    // An offset applied to every mark, not a place of its own. Zero puts the marks on their
+    // holes
+    m_out->Print( "(offset %s)", formatInternalUnits( aMap->GetOffset() ).c_str() );
+    m_out->Print( "(size %s)", formatInternalUnits( aMap->GetSymbolSize() ).c_str() );
+
+    if( aMap->GetAllSpans() )
+    {
+        m_out->Print( "(span all)" );
+    }
+    else
+    {
+        m_out->Print( "(span " );
+        formatDrillSpan( m_out, aMap->GetSpan() );
+        m_out->Print( ")" );
+    }
+
+    KICAD_FORMAT::FormatBool( m_out, "outline_slots", aMap->GetOutlineSlots() );
+    KICAD_FORMAT::FormatBool( m_out, "guide_cross", aMap->GetGuideCross() );
+
+    m_out->Print( ")" );        // Close `drill_map` token.
+}
+
+
+void PCB_IO_KICAD_SEXPR::format( const PCB_DRILL_CHART* aChart ) const
+{
+    wxCHECK_RET( aChart != nullptr && m_out != nullptr, "" );
+
+    m_out->Print( "(drill_chart " );
+
+    KICAD_FORMAT::FormatUuid( m_out, aChart->m_Uuid );
+
+    if( aChart->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, "locked", true );
+
+    formatLayer( aChart->GetLayer() );
+
+    // Anything the reader would arrive at on its own is left out. A chart nobody has
+    // reconfigured is a handful of bytes rather than a page of them
+    const DRILL_CHART_TEMPLATE defaults = DRILL_CHART_TEMPLATE::MakeDefault();
+    const DRILL_CHART_FILTER&  filter = aChart->Filter();
+
+    if( !( filter == DRILL_CHART_FILTER() ) )
+    {
+        m_out->Print( "(filter" );
+        KICAD_FORMAT::FormatBool( m_out, "plated", filter.m_Plated );
+        KICAD_FORMAT::FormatBool( m_out, "npth", filter.m_NonPlated );
+        KICAD_FORMAT::FormatBool( m_out, "vias", filter.m_Vias );
+        KICAD_FORMAT::FormatBool( m_out, "slots", filter.m_Slots );
+        KICAD_FORMAT::FormatBool( m_out, "backdrill", filter.m_Backdrills );
+        KICAD_FORMAT::FormatBool( m_out, "castellated", filter.m_Castellated );
+        m_out->Print( ")" );
+    }
+
+    if( aChart->GetUnits() != defaults.GetUnits() )
+        m_out->Print( "(units %s)", DrillChartUnitsToken( aChart->GetUnits() ) );
+
+    if( aChart->GetPrecision() != defaults.GetPrecision() )
+        m_out->Print( "(precision %d)", aChart->GetPrecision() );
+
+    if( aChart->GetShowTotals() != defaults.GetShowTotals() )
+        KICAD_FORMAT::FormatBool( m_out, "totals", aChart->GetShowTotals() );
+
+    for( const DRILL_CHART_COLUMN& col : aChart->Columns() )
+    {
+        DRILL_CHART_COLUMN colDefaults;
+        const bool         haveDefaults = DrillChartDefaultColumn( col.m_Id, colDefaults );
+
+        m_out->Print( "(column (id %s)", DrillChartColumnToken( col.m_Id ) );
+
+        if( !haveDefaults || col.m_Heading != colDefaults.m_Heading )
+            m_out->Print( "(name %s)", m_out->Quotew( col.m_Heading ).c_str() );
+
+        if( !haveDefaults || col.m_Align != colDefaults.m_Align )
+            m_out->Print( "(justify %s)", DrillChartAlignToken( col.m_Align ) );
+
+        if( col.m_Width > 0 )
+            m_out->Print( "(width %s)", formatInternalUnits( col.m_Width ).c_str() );
+
+        m_out->Print( ")" );
+    }
+
+    if( aChart->GetSymbolColumn() >= 0 && !aChart->RowShapes().empty() )
+    {
+        // Generated payload, like the cell text. A shape mark has no text of its own, so
+        // without this the symbol column comes back blank
+        m_out->Print( "(row_shapes (column %d)", aChart->GetSymbolColumn() );
+
+        for( const auto& [row, shapeIndex] : aChart->RowShapes() )
+            m_out->Print( "(shape %d %d)", row, shapeIndex );
+
+        m_out->Print( ")" );
+    }
+
+    if( !aChart->RowKeys().empty() )
+    {
+        // Which group each row reports, so a rebuild after the board has changed can hand a
+        // row's formatting to the row that still reports the same holes
+        m_out->Print( "(row_keys" );
+
+        for( const auto& [row, key] : aChart->RowKeys() )
+            m_out->Print( "(key %d %s)", row, m_out->Quotew( wxString::FromUTF8( key ) ).c_str() );
+
+        m_out->Print( ")" );
+    }
+
+    // The geometry and cells a chart shares with any other table, written the same way
+    formatTableData( aChart );
+
+    m_out->Print( ")" );        // Close `drill_chart` token.
+}
+
+
+void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable ) const
+{
+    wxCHECK_RET( aTable != nullptr && m_out != nullptr, "" );
+
+    m_out->Print( "(table " );
+
+    KICAD_FORMAT::FormatUuid( m_out, aTable->m_Uuid );
+
+    if( aTable->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, "locked", true );
+
+    formatLayer( aTable->GetLayer() );
+
+    formatTableData( aTable );
+
     m_out->Print( ")" );        // Close `table` token.
 }
 

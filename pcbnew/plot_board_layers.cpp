@@ -132,10 +132,26 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     for( PCB_LAYER_ID layer : aLayers )
         PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions, layer == aLayers[0] );
 
+    // Drill symbols go after the normal layers but before the physical marks, so a symbol is
+    // never sitting under a knockout
+    LSET mapLayers = aBoard->DrillSymbolLayers() & LSET( aLayers );
+
+    if( mapLayers.any() )
+    {
+        BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOptions );
+        itemplotter.SetLayerSet( aLayers );
+
+        for( PCB_LAYER_ID layer : mapLayers.Seq() )
+            itemplotter.PlotDrillSymbols( layer );
+    }
+
     // Drill marks are plotted in white to knockout the pad if any layers of the pad are
     // being plotted, and in black if the pad is not being plotted. For the former, this
     // must happen after all other layers are plotted.
-    if( aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
+
+    // One global knockout pass, so a plotted layer carrying a map skips them rather than
+    // punching through the symbols they would annotate
+    if( aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE && !mapLayers.any() )
     {
         BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOptions );
         itemplotter.SetLayerSet( aLayers );

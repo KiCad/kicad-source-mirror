@@ -920,6 +920,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             break;
 
         case PCB_TABLE_T:
+        case PCB_DRILL_CHART_T:
         {
             PCB_TABLE* table = static_cast<PCB_TABLE*>( item );
 

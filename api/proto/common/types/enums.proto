@@ -92,6 +92,8 @@ enum KiCadObjectType
   KOT_SCH_RULE_AREA = 55;
 
   KOT_PCB_POINT = 56;
+  KOT_PCB_DRILL_CHART = 57;
+  KOT_PCB_DRILL_MAP = 58;
 }
 
 // Mapped to GR_TEXT_H_ALIGN_T

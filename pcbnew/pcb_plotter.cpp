@@ -26,6 +26,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <project.h>
+#include <pcb_drill_chart.h>
 #include <reporter.h>
 #include <pcbplot.h>
 #include <wx/filename.h>
@@ -83,6 +84,13 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         m_reporter->Report( _( "No layers selected for plotting." ), RPT_SEVERITY_ERROR );
         return false;
     }
+
+    // The one path GUI plotting, PNG, PS and every CLI plot job share. Common layers are
+    // included or a chart plotted as one slips past the policy
+    LSET plotted( { aLayersToPlot } );
+    plotted |= LSET( { aCommonLayers } );
+
+    RefreshDrillCharts( *m_board );
 
     PAGE_INFO existingPageInfo = m_board->GetPageSettings();
     VECTOR2I  existingAuxOrigin = m_board->GetDesignSettings().GetAuxOrigin();

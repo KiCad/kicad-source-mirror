@@ -109,6 +109,9 @@ public:
      */
     virtual void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr );
 
+    /// Refresh cached drill symbols in frames that render drill maps.
+    virtual void RefreshDrillSymbols( int aUpdateFlags ) {}
+
     /**
      * Attempt to load \a aFootprintId from the footprint library table.
      *

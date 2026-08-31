@@ -1185,6 +1185,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
     }
 
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
     {
         PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
 

@@ -709,16 +709,16 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
     bool found = findDpEndingPrimitives( aWorld, aP, aItem, aPair, aErrorMsg );
 
     PNS_DBG( Dbg(), Message,
-             wxString::Format( "EP=%d target-p [%d,%d] target-n [%d,%d]", found ? 1 : 0, m_target->AnchorP().x,
-                               m_target->AnchorP().y, m_target->AnchorN().x, m_target->AnchorN().y, aP.x, aP.y ) );
+             wxString::Format( "EP=%d target-p [%d,%d] target-n [%d,%d]", found ? 1 : 0, aPair.AnchorP().x,
+                               aPair.AnchorP().y, aPair.AnchorN().x, aPair.AnchorN().y ) );
 
     if( !found )
     {
         found = findDpMidtraceIntersection( aWorld, aP, aItem, aPair, aErrorMsg );
 
         PNS_DBG( Dbg(), Message,
-                 wxString::Format( "MT=%d target-p [%d,%d] target-n [%d,%d]", found ? 1 : 0, m_target->AnchorP().x,
-                                   m_target->AnchorP().y, m_target->AnchorN().x, m_target->AnchorN().y, aP.x, aP.y ) );
+                 wxString::Format( "MT=%d target-p [%d,%d] target-n [%d,%d]", found ? 1 : 0, aPair.AnchorP().x,
+                                   aPair.AnchorP().y, aPair.AnchorN().x, aPair.AnchorN().y ) );
     }
 
 
@@ -1121,7 +1121,7 @@ bool DIFF_PAIR_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     PNS_DBG( Dbg(), Message,
              wxString::Format( "target %d, p-sc %d n-sc %d", m_target ? 1 : 0,
-                               m_currentTrace.PLine().SegmentCount() && m_currentTrace.NLine().SegmentCount() ) );
+                               m_currentTrace.PLine().SegmentCount(), m_currentTrace.NLine().SegmentCount() ) );
 
 
     if( m_target )
@@ -1300,7 +1300,9 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForce
         if( m_prevPair )
             m_prevPair->Unlink();
         
-        m_target->Unlink();
+        if( m_target )
+            m_target->Unlink();
+
         return true;
     }
     else
@@ -1332,7 +1334,9 @@ bool DIFF_PAIR_PLACER::HasPlacedAnything() const
 
 bool DIFF_PAIR_PLACER::CommitPlacement()
 {
-    m_target->Unlink();
+    if( m_target )
+        m_target->Unlink();
+
     m_start = DP_PRIMITIVE_PAIR();
 
     if( m_lastFixNode )

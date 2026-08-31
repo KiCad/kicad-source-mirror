@@ -52,6 +52,7 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME*  
         m_marginRight( aFrame, nullptr, m_marginRightCtrl, nullptr ),
         m_marginBottom( aFrame, nullptr, m_marginBottomCtrl, nullptr ),
         m_cellText( m_cellTextCtrl ),
+        m_cellTextIsGenerated( false ),
         m_returnValue( TABLECELL_PROPS_CANCEL )
 {
     wxASSERT( m_cells.size() > 0 && m_cells[0] );
@@ -96,6 +97,15 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME*  
     SetInitialFocus( m_cellText );
 
     m_table = static_cast<PCB_TABLE*>( m_cells[0]->GetParent() );
+
+    // A drill chart reports the board. Its text is generated, so only the formatting on this
+    // page is the user's to change
+    if( m_table->Type() == PCB_DRILL_CHART_T )
+    {
+        m_cellTextIsGenerated = true;
+        m_cellText->SetReadOnly( true );
+        SetInitialFocus( m_SizeXCtrl );
+    }
 
     m_hAlignLeft->SetIsRadioButton();
     m_hAlignLeft->SetBitmap( KiBitmapBundle( BITMAPS::text_align_left ) );
@@ -157,6 +167,10 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
+
+    // Scintilla drops every write while it is read-only, so generated text would arrive here
+    // as an empty control and be written back over the cell on OK
+    m_cellText->SetReadOnly( false );
 
     bool              firstCell = true;
     GR_TEXT_H_ALIGN_T hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
@@ -282,6 +296,8 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         m_textThickness.SetValue( textThickness );
     }
 
+    m_cellText->SetReadOnly( m_cellTextIsGenerated );
+
     return true;
 }
 
@@ -366,7 +382,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
 
     for( PCB_TABLECELL* cell : m_cells )
     {
-        if( m_cellTextCtrl->GetValue() != INDETERMINATE_STATE )
+        if( !m_cellTextIsGenerated && m_cellTextCtrl->GetValue() != INDETERMINATE_STATE )
         {
             wxString txt = m_cellTextCtrl->GetValue();
 

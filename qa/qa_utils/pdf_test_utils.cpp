@@ -118,7 +118,12 @@ static void append_decompressed_streams( std::string& aBuffer )
                     zs.avail_out = static_cast<uInt>( out.size() - zs.total_out );
                     ret = inflate( &zs, Z_FINISH );
 
-                    if( ret == Z_STREAM_END || ret != Z_BUF_ERROR )
+                    if( ret != Z_BUF_ERROR )
+                        break;
+
+                    // Z_BUF_ERROR also reports exhausted input, which a bigger output buffer
+                    // cannot cure. Doubling on that alone allocates until it throws
+                    if( zs.avail_out > 0 )
                         break;
 
                     out.resize( out.size() * 2 );

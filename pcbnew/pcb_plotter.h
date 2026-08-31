@@ -69,6 +69,14 @@ public:
                                    const wxString& aExtension );
 
     /**
+     * True when the board's out-of-date-chart policy regenerated charts during the last
+     * Plot().
+     *
+     * The board changed in memory and no plot writes the board file, so an interactive
+     * caller has to mark the document modified or the regenerated charts are lost on close.
+     */
+
+    /**
      * Translate a JOB to PCB_PLOT_PARAMS
      */
     static void PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT* aJob,

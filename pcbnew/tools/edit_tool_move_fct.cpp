@@ -1333,7 +1333,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                         // Images and grid items are on non-cached layers and will not be updated automatically in
                         // the overlay, so explicitly tell the view they've moved.
-                        if( item->Type() == PCB_REFERENCE_IMAGE_T || item->Type() == PCB_GRID_ITEM_T )
+                        if( item->Type() == PCB_REFERENCE_IMAGE_T || item->Type() == PCB_GRID_ITEM_T
+                            || item->Type() == PCB_DRILL_MAP_T )
                             view()->Update( item, KIGFX::GEOMETRY );
                     }
 
@@ -1778,6 +1779,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest );
 
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
     m_inMoveWithReference = false;
     return !restore_state;
 }

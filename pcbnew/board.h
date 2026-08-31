@@ -25,6 +25,9 @@
 #include <board_item_container.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <core/mirror.h>
+#include <drill/drill_chart_model.h>
+#include <drill/drill_symbol_assigner.h>
+#include <drill/drill_symbol_profile.h>
 #include <embedded_files.h>
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <geometry/shape_poly_set.h>
@@ -59,6 +62,7 @@ class ZONE;
 class PCB_TRACK;
 class PCB_VIA;
 class PAD;
+class PCB_DRILL_MAP;
 class PCB_GROUP;
 class PCB_GENERATOR;
 class PCB_MARKER;
@@ -332,6 +336,36 @@ private:
  */
 class BOARD;
 
+/**
+ * What moved, so a drill consumer can decide whether it cares.
+ */
+/**
+ * Everything the renderers need to draw drill symbols, resolved once.
+ *
+ * Immutable once published, so a painting thread can hold it while another rebuilds.
+ */
+struct DRILL_SYMBOL_CACHE
+{
+    std::map<std::string, DRILL_SYMBOL_ASSIGNMENT>  m_ByGroup;
+    std::map<KIID, std::vector<DRILL_SYMBOL_ENTRY>> m_ByItem;
+
+    /**
+     * Counts for the ${DRILL_*} text variables. Cached here rather than recomputed per
+     * token, because text variables resolve on every redraw of every text item.
+     */
+    DRILL_CHART_TOTALS m_Totals;
+
+    /**
+     * Extent of every hole that carries a mark. A drill map is sized from this, and its
+     * ViewBBox is asked for far too often to walk the board each time.
+     */
+    BOX2I m_HoleExtent;
+
+    uint64_t m_Generation = 0;
+    uint64_t m_Profile = 0;
+};
+
+
 class BOARD_LISTENER
 {
 public:
@@ -445,6 +479,12 @@ public:
     const PCB_BOARD_OUTLINE* BoardOutline() const { return m_boardOutline; }
     void                     UpdateBoardOutline();
 
+    /**
+     * Bumped by every UpdateBoardOutline(), so anything deriving geometry from the edge cuts
+     * can tell whether its own copy is still current.
+     */
+    uint64_t GetBoardOutlineGeneration() const { return m_boardOutlineGeneration; }
+
     const MARKERS& Markers() const { return m_markers; }
 
     const PCB_POINTS& Points() const { return m_points; }
@@ -533,6 +573,61 @@ public:
 
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad() const { return m_fileFormatVersionAtLoad; }
+
+    /**
+     * Bumped whenever anything a drill chart or map reports on has moved.
+     *
+     * Charts record the value their cells were built from, so staleness is a comparison
+     * rather than a guess. Item callbacks alone are not enough. Layer renames, stackup edits,
+     * rule changes and text variables all change what a chart prints without touching a pad
+     * or a via, so those paths call this too.
+     */
+    void BumpDrillModelGeneration();
+
+    uint64_t GetDrillModelGeneration() const { return m_drillModelGeneration; }
+
+    void bumpDrillModelFor( const std::vector<BOARD_ITEM*>& aItems );
+
+    /**
+     * Container-boundary notification, so an item that arrives or leaves without going
+     * through a commit still invalidates the drill caches and the map layer set.
+     */
+    void noteDrillModelChange( BOARD_ITEM* aItem );
+
+    /**
+     * Layers that currently have a drill map on them.
+     *
+     * Pads and vias consult this from ViewGetLayers(), so it has to be cheap and it has to be
+     * refreshed whenever a map is added, removed or moved.
+     */
+    const LSET& DrillSymbolLayers() const { return m_drillSymbolLayers; }
+
+    void RefreshDrillSymbolLayers();
+
+    /**
+     * Resolved drill symbols, by group and by owning item.
+     *
+     * The painter asks per hole while repainting, so recomputing would make a redraw
+     * quadratic in the hole count. Keyed on the drill generation and a profile fingerprint,
+     * which between them cover everything the answer depends on.
+     *
+     * Handed out as a shared immutable snapshot rather than a reference, because painting
+     * runs on several threads and a caller must not be reading a map that a later thread
+     * replaces.
+     */
+    std::shared_ptr<const DRILL_SYMBOL_CACHE> DrillSymbolCache() const;
+
+    /**
+     * Every map on this layer. Renderers need them because a map's span filter decides
+     * which of a hole's operations get a mark, and the UI is not the only way one arrives.
+     */
+    std::vector<const PCB_DRILL_MAP*> DrillMapsOnLayer( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * Include every displaced copy of a hole-owned drill symbol in its view bounds. Callers
+     * are pad and track ViewBBox(), so this returns immediately when no map exists.
+     */
+    BOX2I ExpandBoundingBoxForDrillSymbols( const BOX2I& aBoundingBox ) const;
 
     void SetGenerator( const wxString& aGenerator ) { m_generator = aGenerator; }
     const wxString& GetGenerator() const { return m_generator; }
@@ -1821,6 +1916,18 @@ private:
     HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
 
     int                 m_fileFormatVersionAtLoad;  // the version loaded from the file
+    uint64_t            m_drillModelGeneration;
+    uint64_t            m_boardOutlineGeneration;
+    LSET                m_drillSymbolLayers;
+
+    /**
+     * Offset and symbol reach of every drill map, so a pad or track ViewBBox() does not walk
+     * the drawings list. Kept in step with m_drillSymbolLayers.
+     */
+    std::vector<std::pair<VECTOR2I, int>> m_drillSymbolPlacements;
+
+    mutable std::shared_ptr<const DRILL_SYMBOL_CACHE> m_drillSymbolCache;
+    mutable std::mutex                                m_drillSymbolCacheMutex;
     wxString            m_generator;                // the generator tag from the file
 
     std::map<wxString, wxString>        m_properties;

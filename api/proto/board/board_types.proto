@@ -24,6 +24,7 @@ package kiapi.board.types;
 import "google/protobuf/any.proto";
 import "common/types/base_types.proto";
 import "common/types/embedded_files.proto";
+import "common/types/enums.proto";
 
 enum BoardLayer
 {
@@ -1569,6 +1570,97 @@ message Table
 
   // Since: 11.0
   repeated kiapi.common.types.CustomProperty custom_properties = 15;
+}
+
+// Since: 11.0
+enum DrillChartColumnId
+{
+  DCC_UNKNOWN = 0;
+  DCC_SYMBOL = 1;
+  DCC_DRILL_DIAMETER = 2;
+  DCC_SLOT_SIZE = 3;
+  DCC_PLATING = 4;
+  DCC_OPERATION_COUNT = 5;
+  DCC_SITE_COUNT = 6;
+  DCC_LAYER_SPAN = 7;
+  DCC_OPERATION = 8;
+  DCC_PROTECTION = 9;
+  DCC_BACKDRILL_STUB = 10;
+  DCC_ASPECT_RATIO = 11;
+  DCC_DESCRIPTION = 12;
+}
+
+// Since: 11.0
+enum DrillChartAlign
+{
+  DCA_UNKNOWN = 0;
+  DCA_LEFT = 1;
+  DCA_CENTER = 2;
+  DCA_RIGHT = 3;
+}
+
+// Since: 11.0
+message DrillChartColumn
+{
+  DrillChartColumnId id = 1;
+  string heading = 2;
+  DrillChartAlign align = 3;
+  kiapi.common.types.Distance width = 4;
+}
+
+// Since: 11.0
+message DrillChartFilter
+{
+  bool plated = 1;
+  bool non_plated = 2;
+  bool vias = 3;
+  bool slots = 4;
+  bool backdrills = 5;
+  bool castellated = 6;
+}
+
+// Since: 11.0
+message DrillSpan
+{
+  BoardLayer start_layer = 1;
+  BoardLayer end_layer = 2;
+  bool is_backdrill = 3;
+  bool is_non_plated = 4;
+}
+
+// Since: 11.0
+message DrillChart
+{
+  Table table = 1;
+
+  DrillChartFilter filter = 2;
+  repeated DrillChartColumn columns = 3;
+
+  kiapi.common.types.Units units = 4;
+  int32 precision = 5;
+
+  bool show_totals = 6;
+
+  map<int32, int32> row_shapes = 7;
+  int32 symbol_column = 8;
+
+  map<int32, string> row_keys = 9;
+}
+
+// Since: 11.0
+message DrillMap
+{
+  kiapi.common.types.KIID id = 1;
+  BoardLayer layer = 2;
+  kiapi.common.types.Vector2 position = 3;
+  kiapi.common.types.LockedState locked = 4;
+
+  bool all_spans = 5;
+  DrillSpan span = 6;
+
+  bool outline_slots = 7;
+  bool guide_cross = 8;
+  kiapi.common.types.Distance symbol_size = 9;
 }
 
 // Since: 10.0.7

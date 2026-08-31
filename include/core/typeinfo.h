@@ -236,6 +236,8 @@ enum KICAD_T
     PCB_SHAPE_LOCATE_ELLIPSE_ARC_T,
     PCB_CONSTRAINT_T,                   ///< a geometric constraint between board items
     PCB_GRID_ITEM_T,                    ///< a subgrid placed on a board
+    PCB_DRILL_CHART_T,     ///< class PCB_DRILL_CHART, a live drill chart derived from PCB_TABLE
+    PCB_DRILL_MAP_T,       ///< class PCB_DRILL_MAP, drill symbols drawn at the holes
 
     // End value
     MAX_STRUCT_TYPE_ID
@@ -303,6 +305,9 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
         return PCB_DIMENSION_T;
+
+    case PCB_DRILL_CHART_T:
+        return PCB_TABLE_T;
 
     default:
         return aType;
@@ -458,6 +463,8 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_TARGET_T:
+    case PCB_DRILL_CHART_T:
+    case PCB_DRILL_MAP_T:
     case PCB_POINT_T:
     case PCB_ZONE_T:
     case PCB_ITEM_LIST_T:
@@ -507,6 +514,8 @@ constexpr bool IsSingleLayerType( const KICAD_T aType )
     case PCB_TEXTBOX_T:
     case PCB_BARCODE_T:
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
+    case PCB_DRILL_MAP_T:
     case PCB_TABLECELL_T:
     case PCB_TRACE_T:
     case PCB_ARC_T:

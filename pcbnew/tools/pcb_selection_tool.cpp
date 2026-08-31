@@ -33,6 +33,7 @@ using namespace std::placeholders;
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_point.h>
+#include <pcb_drill_chart.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
@@ -58,6 +59,7 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/board_inspection_tool.h>
 #include <ratsnest/ratsnest_data.h>
+#include <trace_helpers.h>
 #include <geometry/geometry_utils.h>
 #include <wx/event.h>
 #include <wx/timer.h>
@@ -581,7 +583,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T )
                 EnterGroup();
-            else
+            else if( !selectChartRow( evt->Position() ) )
                 m_toolMgr->RunAction( PCB_ACTIONS::properties );
         }
         else if( evt->IsDblClick( BUT_MIDDLE ) )
@@ -3660,6 +3662,8 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
+    case PCB_DRILL_MAP_T:
     case PCB_TABLECELL_T:
         return aFilterOptions.includePcbTexts;
 
@@ -3884,6 +3888,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
     case PCB_TABLECELL_T:
         if( !m_filter.text )
             return false;
@@ -3965,6 +3970,44 @@ void PCB_SELECTION_TOOL::ClearSelection( bool aQuietMode )
         m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
         m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest );
     }
+}
+
+
+bool PCB_SELECTION_TOOL::selectChartRow( const VECTOR2I& aPosition )
+{
+    // The whole row goes in, because formatting one cell of a generated row and not its
+    // neighbours is never what was meant
+    if( m_selection.GetSize() != 1 || m_selection[0]->Type() != PCB_DRILL_CHART_T )
+        return false;
+
+    PCB_DRILL_CHART* chart = static_cast<PCB_DRILL_CHART*>( m_selection[0] );
+    PCB_TABLECELL*   clicked = nullptr;
+
+    for( PCB_TABLECELL* cell : chart->GetCells() )
+    {
+        if( cell->HitTest( aPosition, 0 ) )
+        {
+            clicked = cell;
+            break;
+        }
+    }
+
+    // The title and totals rows are configured from the chart's own dialog, so a click there
+    // falls through to it rather than offering to reformat a row the user cannot vary
+    if( !clicked || !chart->IsDataRow( clicked->GetRow() ) )
+        return false;
+
+    ClearSelection( true );
+
+    for( PCB_TABLECELL* cell : chart->GetCells() )
+    {
+        if( cell->GetRow() == clicked->GetRow() )
+            select( cell );
+    }
+
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    return true;
 }
 
 
@@ -4264,6 +4307,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
         if( !layerVisible( aItem->GetLayer() ) )
             return false;
 
@@ -4532,6 +4576,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
     }
 
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
     {
         PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
         distance = aMaxDistance;
@@ -4820,6 +4865,32 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     VECTOR2I               where( aWhere.x, aWhere.y );
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
     PCB_LAYER_ID           activeLayer = m_frame->GetActiveLayer();
+
+    // A map's marks sit on the holes they mark, so a plain click falls through to the via or
+    // pad under them. Holding the click skips these heuristics and reaches the map
+    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+    {
+        if( aCollector[i]->Type() != PCB_DRILL_MAP_T )
+            continue;
+
+        if( aCollector[i]->GetLayer() == activeLayer )
+            preferred.insert( aCollector[i] );
+        else if( aCollector.GetCount() > 1 )
+            aCollector.Remove( i );
+    }
+
+    // A drill chart says what the board says, so a click on it is a click on the chart. Its
+    // cells stay collectable for everything else, and a double-click still reaches them.
+    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+    {
+        const BOARD_ITEM* parent = aCollector[i]->GetParent();
+
+        if( aCollector[i]->Type() == PCB_TABLECELL_T && parent
+            && parent->Type() == PCB_DRILL_CHART_T && aCollector.HasItem( parent ) )
+        {
+            aCollector.Remove( i );
+        }
+    }
 
     // If a silk layer is in front, we assume the user is working with silk and give preferential
     // treatment to single-layer items on *either* silk layer.

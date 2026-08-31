@@ -30,6 +30,9 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <board_design_settings.h>
+#include <drill/drill_chart_model.h>
+#include <drill/drill_symbol_assigner.h>
+#include <pcb_drill_map.h>
 #include <board_commit.h>
 #include <board.h>
 #include <collectors.h>
@@ -116,6 +119,8 @@ BOARD::BOARD() :
 
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
+    m_drillModelGeneration = 1;
+    m_boardOutlineGeneration = 1;
 
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
@@ -165,6 +170,157 @@ BOARD::BOARD() :
     // per-item notifications.
     m_textVarAdapter = std::make_unique<BOARD_TEXT_VAR_ADAPTER>( *this );
     AddListener( m_textVarAdapter.get() );
+}
+
+
+void BOARD::BumpDrillModelGeneration()
+{
+    m_drillModelGeneration++;
+}
+
+
+// Footprints count because the board editor promotes a pad edit to its parent, so watching
+// PAD_T alone would miss every drill change made through the normal editing path
+static bool affectsDrillModel( const BOARD_ITEM* aItem )
+{
+    if( !aItem )
+        return false;
+
+    switch( aItem->Type() )
+    {
+    case PCB_PAD_T:
+    case PCB_VIA_T:
+    case PCB_FOOTPRINT_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+
+std::vector<const PCB_DRILL_MAP*> BOARD::DrillMapsOnLayer( PCB_LAYER_ID aLayer ) const
+{
+    std::vector<const PCB_DRILL_MAP*> maps;
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( item->Type() == PCB_DRILL_MAP_T && item->GetLayer() == aLayer )
+            maps.push_back( static_cast<const PCB_DRILL_MAP*>( item ) );
+    }
+
+    return maps;
+}
+
+
+void BOARD::noteDrillModelChange( BOARD_ITEM* aItem )
+{
+    if( !aItem )
+        return;
+
+    // A deleted map keeps drawing until the holes themselves are told
+    if( aItem->Type() == PCB_DRILL_MAP_T )
+    {
+        RefreshDrillSymbolLayers();
+        BumpDrillModelGeneration();
+    }
+    else if( affectsDrillModel( aItem ) )
+    {
+        BumpDrillModelGeneration();
+    }
+}
+
+
+void BOARD::RefreshDrillSymbolLayers()
+{
+    LSET                                  layers;
+    std::vector<std::pair<VECTOR2I, int>> placements;
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( item->Type() != PCB_DRILL_MAP_T )
+            continue;
+
+        const PCB_DRILL_MAP* map = static_cast<const PCB_DRILL_MAP*>( item );
+
+        layers.set( map->GetLayer() );
+        placements.emplace_back( map->GetOffset(), map->GetSymbolExtent() );
+    }
+
+    // Both, because a map can change layer without moving and can move without changing layer
+    if( m_drillSymbolLayers == layers && m_drillSymbolPlacements == placements )
+        return;
+
+    m_drillSymbolLayers = layers;
+    m_drillSymbolPlacements = std::move( placements );
+
+}
+
+
+std::shared_ptr<const DRILL_SYMBOL_CACHE> BOARD::DrillSymbolCache() const
+{
+    std::lock_guard<std::mutex> lock( m_drillSymbolCacheMutex );
+
+    const uint64_t profileKey = GetDesignSettings().GetDrillSymbolProfile().Fingerprint();
+
+    if( m_drillSymbolCache && m_drillSymbolCache->m_Generation == m_drillModelGeneration
+        && m_drillSymbolCache->m_Profile == profileKey )
+    {
+        return m_drillSymbolCache;
+    }
+
+    std::shared_ptr<DRILL_SYMBOL_CACHE> rebuilt = std::make_shared<DRILL_SYMBOL_CACHE>();
+    rebuilt->m_ByGroup = ResolveDrillSymbols( *this );
+    rebuilt->m_ByItem = ResolveDrillSymbolsByItem( *this, rebuilt->m_ByGroup );
+
+    DRILL_CHART_MODEL totalsModel( GetDesignSettings().GetDrillSymbolProfile() );
+    totalsModel.Build( *this, EnumerateDrillSpans( *this ) );
+    rebuilt->m_Totals = totalsModel.Totals();
+
+    for( const auto& [itemId, entries] : rebuilt->m_ByItem )
+    {
+        for( const DRILL_SYMBOL_ENTRY& entry : entries )
+            rebuilt->m_HoleExtent.Merge( entry.m_Position );
+    }
+
+    rebuilt->m_Generation = m_drillModelGeneration;
+    rebuilt->m_Profile = profileKey;
+
+    m_drillSymbolCache = rebuilt;
+
+    return m_drillSymbolCache;
+}
+
+
+BOX2I BOARD::ExpandBoundingBoxForDrillSymbols( const BOX2I& aBoundingBox ) const
+{
+    if( m_drillSymbolPlacements.empty() )
+        return aBoundingBox;
+
+    BOX2I result = aBoundingBox;
+
+    for( const auto& [offset, extent] : m_drillSymbolPlacements )
+    {
+        BOX2I symbolBox = aBoundingBox;
+        symbolBox.Move( offset );
+        symbolBox.Inflate( extent );
+        result.Merge( symbolBox );
+    }
+
+    return result;
+}
+
+
+void BOARD::bumpDrillModelFor( const std::vector<BOARD_ITEM*>& aItems )
+{
+    for( const BOARD_ITEM* item : aItems )
+    {
+        if( affectsDrillModel( item ) )
+        {
+            BumpDrillModelGeneration();
+            return;
+        }
+    }
 }
 
 
@@ -498,6 +654,9 @@ void BOARD::GetContextualTextVars( wxArrayString* aVars ) const
     add( wxT( "DRC_WARNING <message_text>" ) );
     add( wxT( "VARIANT" ) );
     add( wxT( "VARIANT_DESC" ) );
+    add( wxT( "DRILL_OPERATIONS" ) );
+    add( wxT( "DRILL_SITES" ) );
+    add( wxT( "DRILL_GROUPS" ) );
 
     GetTitleBlock().GetContextualTextVars( aVars );
 
@@ -583,6 +742,23 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
     else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) && GetProject() )
     {
         *token = GetProject()->GetProjectName();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "DRILL_OPERATIONS" ) )
+             || token->IsSameAs( wxT( "DRILL_SITES" ) )
+             || token->IsSameAs( wxT( "DRILL_GROUPS" ) ) )
+    {
+        // Cached, because this resolves on every redraw of every text item and the model
+        // walks every hole on every span
+        const DRILL_CHART_TOTALS& totals = DrillSymbolCache()->m_Totals;
+
+        if( token->IsSameAs( wxT( "DRILL_OPERATIONS" ) ) )
+            *token = wxString::Format( wxT( "%d" ), totals.m_Operations );
+        else if( token->IsSameAs( wxT( "DRILL_SITES" ) ) )
+            *token = wxString::Format( wxT( "%d" ), totals.m_Sites );
+        else
+            *token = wxString::Format( wxT( "%d" ), totals.m_Groups );
+
         return true;
     }
 
@@ -778,6 +954,9 @@ bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
         {
             m_layers[aLayer].m_userName = aLayerName;
             recalcOpposites();
+
+            // A chart prints the span using layer names, so a rename changes what it says
+            BumpDrillModelGeneration();
             return true;
         }
     }
@@ -944,6 +1123,9 @@ void BOARD::SetCopperLayerCount( int aCount )
 {
     GetDesignSettings().SetCopperLayerCount( aCount );
     recalcOpposites();
+
+    // A chart prints layer spans, so the count and order change what it says
+    BumpDrillModelGeneration();
 }
 
 
@@ -1006,6 +1188,7 @@ const LSET& BOARD::GetVisibleLayers() const
 void BOARD::SetEnabledLayers( const LSET& aLayerSet )
 {
     GetDesignSettings().SetEnabledLayers( aLayerSet );
+    BumpDrillModelGeneration();
 }
 
 
@@ -1384,6 +1567,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
+    case PCB_DRILL_MAP_T:
     case PCB_TARGET_T:
     case PCB_GRID_ITEM_T:
         if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
@@ -1414,7 +1599,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     // dangling cache entry and an indexed item can always reach its board through its parent.
     CacheItemById( aBoardItem );
 
-    if( aBoardItem->Type() == PCB_FOOTPRINT_T || aBoardItem->Type() == PCB_TABLE_T )
+    if( aBoardItem->Type() == PCB_FOOTPRINT_T || BaseType( aBoardItem->Type() ) == PCB_TABLE_T )
         CacheChildrenById( aBoardItem );
 
     if( !aSkipConnectivity )
@@ -1422,18 +1607,26 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
 
     if( aMode != ADD_MODE::BULK_INSERT && aMode != ADD_MODE::BULK_APPEND )
         InvokeListeners( &BOARD_LISTENER::OnBoardItemAdded, *this, aBoardItem );
+
+    noteDrillModelChange( aBoardItem );
 }
 
 
 void BOARD::FinalizeBulkAdd( std::vector<BOARD_ITEM*>& aNewItems )
 {
     InvokeListeners( &BOARD_LISTENER::OnBoardItemsAdded, *this, aNewItems );
+
+    for( BOARD_ITEM* item : aNewItems )
+        noteDrillModelChange( item );
 }
 
 
 void BOARD::FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems )
 {
     InvokeListeners( &BOARD_LISTENER::OnBoardItemsRemoved, *this, aRemovedItems );
+
+    for( BOARD_ITEM* item : aRemovedItems )
+        noteDrillModelChange( item );
 }
 
 
@@ -1534,11 +1727,13 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
+    case PCB_DRILL_CHART_T:
+    case PCB_DRILL_MAP_T:
     case PCB_TARGET_T:
     case PCB_GRID_ITEM_T:
         std::erase( m_drawings, aBoardItem );
 
-        if( aBoardItem->Type() == PCB_TABLE_T )
+        if( BaseType( aBoardItem->Type() ) == PCB_TABLE_T )
             UncacheChildrenById( aBoardItem );
 
         break;
@@ -1561,6 +1756,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
     if( aRemoveMode != REMOVE_MODE::BULK )
         InvokeListeners( &BOARD_LISTENER::OnBoardItemRemoved, *this, aBoardItem );
+
+    noteDrillModelChange( aBoardItem );
 }
 
 
@@ -1645,6 +1842,8 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
         case PCB_TABLE_T:
+        case PCB_DRILL_CHART_T:
+        case PCB_DRILL_MAP_T:
         case PCB_TARGET_T:
         case PCB_BARCODE_T:
             wxFAIL_MSG( wxT( "Use PCB_SHAPE_T to remove all graphics and text" ) );
@@ -1883,7 +2082,7 @@ void BOARD::DetachAllFootprints()
 
 static PCB_TABLECELL* findTableCell( const BOARD_ITEM* aDrawing, const KIID& aID )
 {
-    if( aDrawing->Type() != PCB_TABLE_T )
+    if( BaseType( aDrawing->Type() ) != PCB_TABLE_T )
         return nullptr;
 
     for( PCB_TABLECELL* cell : static_cast<const PCB_TABLE*>( aDrawing )->GetCells() )
@@ -2642,6 +2841,8 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
         case PCB_TABLE_T:
+        case PCB_DRILL_CHART_T:
+        case PCB_DRILL_MAP_T:
         case PCB_TABLECELL_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
@@ -3767,12 +3968,17 @@ void BOARD::RemoveAllListeners()
 
 void BOARD::OnItemChanged( BOARD_ITEM* aItem )
 {
+    if( affectsDrillModel( aItem ) )
+        BumpDrillModelGeneration();
+
     InvokeListeners( &BOARD_LISTENER::OnBoardItemChanged, *this, aItem );
 }
 
 
 void BOARD::OnItemsChanged( std::vector<BOARD_ITEM*>& aItems )
 {
+    bumpDrillModelFor( aItems );
+
     InvokeListeners( &BOARD_LISTENER::OnBoardItemsChanged, *this, aItems );
 }
 
@@ -3786,6 +3992,10 @@ void BOARD::OnBoardSelectionChanged()
 void BOARD::OnItemsCompositeUpdate( std::vector<BOARD_ITEM*>& aAddedItems, std::vector<BOARD_ITEM*>& aRemovedItems,
                                     std::vector<BOARD_ITEM*>& aChangedItems )
 {
+    bumpDrillModelFor( aAddedItems );
+    bumpDrillModelFor( aRemovedItems );
+    bumpDrillModelFor( aChangedItems );
+
     InvokeListeners( &BOARD_LISTENER::OnBoardCompositeUpdate, *this, aAddedItems, aRemovedItems, aChangedItems );
 }
 
@@ -3978,7 +4188,7 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM
         if( cmp == 0 )
             cmp = textbox->EDA_TEXT::Compare( other );
     }
-    else if( aFirst->Type() == PCB_TABLE_T )
+    else if( BaseType( aFirst->Type() ) == PCB_TABLE_T )
     {
         const PCB_TABLE* table = static_cast<const PCB_TABLE*>( aFirst );
         const PCB_TABLE* other = static_cast<const PCB_TABLE*>( aSecond );
@@ -4081,11 +4291,16 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         }
 
         case PCB_TABLE_T:
+        case PCB_DRILL_CHART_T:
         {
             const PCB_TABLE* table = static_cast<const PCB_TABLE*>( item );
             table->TransformGraphicItemsToPolySet( aOutlines, maxError, ERROR_INSIDE, aRenderSettings );
             break;
         }
+
+        // Configuration only. The symbols it asks for are drawn by the holes themselves
+        case PCB_DRILL_MAP_T:
+            break;
 
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
@@ -4215,6 +4430,7 @@ bool BOARD::operator==( const BOARD_ITEM& aItem ) const
 
 void BOARD::UpdateBoardOutline()
 {
+    m_boardOutlineGeneration++;
     m_boardOutline->GetOutline().RemoveAllContours();
 
     bool has_outline = GetBoardPolygonOutlines( m_boardOutline->GetOutline(), false );

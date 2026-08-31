@@ -25,6 +25,8 @@
 #include <board.h>
 #include <netinfo.h>
 #include <board_design_settings.h>
+#include <pcb_drill_chart.h>
+#include <pcb_drill_map.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <footprint.h>
@@ -35,6 +37,10 @@
 #include <pcb_reference_image.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <drill/drill_enumerator.h>
+#include <drill/drill_symbol_assigner.h>
+#include <drill/drill_symbol_profile.h>
+#include <plotters/drill_markers.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_marker.h>
@@ -153,6 +159,11 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     // Init specific graphic layers colors:
     for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
         m_layerColors[i] = aSettings->GetColor( i );
+
+    // A per-board-layer GAL layer is unknown to every theme and resolves to UNSPECIFIED,
+    // which is transparent, so take the colour of the documentation layer hosting the map
+    for( int i = 0; i < PCB_LAYER_ID_COUNT; i++ )
+        m_layerColors[DRILL_SYMBOL_LAYER_FOR( i )] = m_layerColors[i];
 
     // Colors for layers that aren't theme-able
     m_layerColors[LAYER_PAD_PLATEDHOLES] = aSettings->GetColor( LAYER_PCB_BACKGROUND );
@@ -347,7 +358,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     {
         // Selection for tables is done with a background wash, so pass in nullptr to GetColor()
         // so we just get the "normal" (un-selected/un-brightened) color for the borders.
-        if( aItem->Type() != PCB_TABLE_T && aItem->Type() != PCB_TABLECELL_T )
+        if( BaseType( aItem->Type() ) != PCB_TABLE_T && aItem->Type() != PCB_TABLECELL_T )
         {
             auto it_selected = m_layerColorsSel.find( aLayer );
             color = it_selected == m_layerColorsSel.end() ? color.Brightened( 0.8 ) : it_selected->second;
@@ -704,11 +715,19 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_VIA_T:
-        draw( static_cast<const PCB_VIA*>( item ), aLayer );
+        if( IsDrillSymbolLayer( aLayer ) )
+            drawDrillSymbol( item, aLayer );
+        else
+            draw( static_cast<const PCB_VIA*>( item ), aLayer );
+
         break;
 
     case PCB_PAD_T:
-        draw( static_cast<const PAD*>( item ), aLayer );
+        if( IsDrillSymbolLayer( aLayer ) )
+            drawDrillSymbol( item, aLayer );
+        else
+            draw( static_cast<const PAD*>( item ), aLayer );
+
         break;
 
     case PCB_SHAPE_T:
@@ -733,6 +752,21 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     case PCB_TABLE_T:
         draw( static_cast<const PCB_TABLE*>( item ), aLayer );
+        break;
+
+    case PCB_DRILL_CHART_T:
+    {
+        const PCB_DRILL_CHART* chart = static_cast<const PCB_DRILL_CHART*>( item );
+
+        // Before the table, whose selection wash is drawn last and would otherwise bury the
+        // marks the way it does not bury the cell text
+        drawChartSymbols( chart, aLayer );
+        draw( static_cast<const PCB_TABLE*>( item ), aLayer );
+        break;
+    }
+
+    case PCB_DRILL_MAP_T:
+        draw( static_cast<const PCB_DRILL_MAP*>( item ), aLayer );
         break;
 
     case PCB_FOOTPRINT_T:
@@ -1471,6 +1505,286 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
         m_gal->DrawCircle( center, radius + aVia->GetOwnClearance( copperLayerForClearance ) );
+    }
+}
+
+
+// A shape mark has no text, so the cells are empty and the symbol column would otherwise
+// print blank on every chart using the default policy
+void PCB_PAINTER::drawChartSymbols( const PCB_DRILL_CHART* aChart, int aLayer )
+{
+    if( aChart->GetSymbolColumn() < 0 || aChart->RowShapes().empty() )
+        return;
+
+    const BOARD* board = aChart->GetBoard();
+
+    if( !board )
+        return;
+
+    const DRILL_SYMBOL_PROFILE& profile = board->GetDesignSettings().GetDrillSymbolProfile();
+
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( m_pcbSettings.GetColor( aChart, aLayer ) );
+    m_gal->SetLineWidth( profile.GetSymbolWidth() );
+
+    for( const auto& [row, shapeIndex] : aChart->RowShapes() )
+    {
+        const PCB_TABLECELL* cell = aChart->GetCell( row, aChart->GetSymbolColumn() );
+
+        if( !cell )
+            continue;
+
+        const BOX2I    box = cell->GetBoundingBox();
+        const VECTOR2I centre = box.GetCenter();
+
+        // Fitted to the cell so a tall symbol size cannot spill into the neighbouring row
+        const int radius = std::min<int>( profile.GetSymbolSize() / 2,
+                                          std::min( box.GetWidth(), box.GetHeight() ) / 3 );
+
+        if( radius <= 0 )
+            continue;
+
+        const unsigned shape = DRILL_MARKERS::CuratedShape( shapeIndex );
+
+        for( const DRILL_MARKERS::MARKER_PART& part :
+             DRILL_MARKERS::BuildMarker( centre, radius, shape ) )
+        {
+            switch( part.m_Type )
+            {
+            case DRILL_MARKERS::MARKER_PART::SEGMENT:
+                m_gal->DrawLine( part.m_Points.front(), part.m_Points.back() );
+                break;
+
+            case DRILL_MARKERS::MARKER_PART::POLYLINE:
+                for( size_t ii = 0; ii + 1 < part.m_Points.size(); ++ii )
+                    m_gal->DrawLine( part.m_Points[ii], part.m_Points[ii + 1] );
+
+                break;
+
+            case DRILL_MARKERS::MARKER_PART::CIRCLE:
+                m_gal->DrawCircle( centre, part.m_Radius );
+                break;
+            }
+        }
+    }
+}
+
+
+// The holes draw the marks, so without the outline and anchor drawn here there would be
+// nothing on screen to click and a placed map could not be selected or deleted
+void PCB_PAINTER::draw( const PCB_DRILL_MAP* aMap, int aLayer )
+{
+    const BOARD* board = aMap->GetBoard();
+
+    // The plotted width, not the sketch width, because the outline is artwork the map really
+    // does emit rather than an editing decoration
+    const int outlineWidth =
+            board ? std::max<int>( board->GetDesignSettings().GetDrillSymbolProfile().GetSymbolWidth(), 1 ) : 1;
+
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( m_pcbSettings.GetColor( aMap, aLayer ) );
+    m_gal->SetLineWidth( outlineWidth );
+
+    const std::shared_ptr<const SHAPE_POLY_SET> outlines = aMap->GetBoardOutlines();
+
+    for( int ii = 0; ii < outlines->OutlineCount(); ++ii )
+    {
+        m_gal->DrawSegmentChain( outlines->COutline( ii ), outlineWidth );
+
+        for( int jj = 0; jj < outlines->HoleCount( ii ); ++jj )
+            m_gal->DrawSegmentChain( outlines->CHole( ii, jj ), outlineWidth );
+    }
+
+    // Every hole's view bounds were computed for the offset the map had when the drag began,
+    // so the holes cannot draw the marks where they are now without being culled
+    if( aMap->IsMoving() && board )
+    {
+        const std::shared_ptr<const DRILL_SYMBOL_CACHE> cache = board->DrillSymbolCache();
+        const COLOR4D                                   markColor = m_pcbSettings.GetColor( aMap, aLayer );
+
+        for( const auto& [itemId, entries] : cache->m_ByItem )
+            drawDrillMarks( aMap, entries, markColor, aMap->GetFontMetrics() );
+    }
+
+    if( !aMap->IsSelected() && !aMap->IsBrightened() )
+        return;
+
+    const int thickness = std::max<int>( m_pcbSettings.m_outlineWidth, 1 );
+
+    m_gal->SetLineWidth( thickness );
+
+    const BOX2I box = aMap->GetBoundingBox();
+
+    if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
+        return;
+
+    SHAPE_RECT rect( box );
+
+    STROKE_PARAMS::Stroke( &rect, LINE_STYLE::DASH, thickness, &m_pcbSettings,
+                           [&]( const VECTOR2I& a, const VECTOR2I& b )
+                           {
+                               m_gal->DrawSegment( a, b, thickness );
+                           } );
+}
+
+
+// The mark comes from the board's shared symbol profile, so a symbol on screen means the
+// same hole as that symbol in a plotted chart
+void PCB_PAINTER::drawDrillSymbol( const BOARD_ITEM* aItem, int aLayer )
+{
+    const BOARD* board = aItem->GetBoard();
+
+    if( !board )
+        return;
+
+    const std::vector<const PCB_DRILL_MAP*> maps =
+            board->DrillMapsOnLayer( BOARD_LAYER_FOR_DRILL_SYMBOL( aLayer ) );
+
+    if( maps.empty() )
+        return;
+
+    // Held for the duration, because another thread may publish a new snapshot mid-draw
+    const std::shared_ptr<const DRILL_SYMBOL_CACHE> cache = board->DrillSymbolCache();
+
+    const auto it = cache->m_ByItem.find( aItem->m_Uuid );
+
+    if( it == cache->m_ByItem.end() )
+    {
+        return;
+    }
+
+    const COLOR4D color = m_pcbSettings.GetColor( aItem, aLayer );
+
+    // Several maps can share a layer. The UI prevents it but a parsed, pasted or
+    // API-created board need not
+    for( const PCB_DRILL_MAP* map : maps )
+    {
+        // A map being dragged draws its own marks. The hole's view bounds still describe
+        // where they were, so drawing them from here would have them culled mid-drag.
+        if( map->IsMoving() )
+            continue;
+
+        drawDrillMarks( map, it->second, color, aItem->GetFontMetrics() );
+    }
+}
+
+
+void PCB_PAINTER::drawDrillMarks( const PCB_DRILL_MAP* aMap, const std::vector<DRILL_SYMBOL_ENTRY>& aEntries,
+                                  const COLOR4D& aColor, const KIFONT::METRICS& aFontMetrics )
+{
+    const BOARD* board = aMap->GetBoard();
+
+    if( !board )
+        return;
+
+    const DRILL_SYMBOL_PROFILE& profile = board->GetDesignSettings().GetDrillSymbolProfile();
+
+    const int symbolSize = aMap->GetSymbolSize();
+    const int radius = symbolSize / 2;
+
+    for( const DRILL_SYMBOL_ENTRY& entry : aEntries )
+    {
+        if( !aMap->GetAllSpans() && !( entry.m_Span == aMap->GetSpan() ) )
+            continue;
+
+        // The mark is displaced from the hole it reports. The hole itself never moves
+        const VECTOR2I pos = entry.m_Position + aMap->GetOffset();
+
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( aColor );
+        m_gal->SetLineWidth( profile.GetSymbolWidth() );
+
+        if( entry.m_Symbol.m_MarkMode == DRILL_MARK_MODE::SHAPE )
+        {
+            const unsigned shape = DRILL_MARKERS::CuratedShape( entry.m_Symbol.m_ShapeIndex );
+
+            for( const DRILL_MARKERS::MARKER_PART& part :
+                 DRILL_MARKERS::BuildMarker( pos, radius, shape ) )
+            {
+                switch( part.m_Type )
+                {
+                case DRILL_MARKERS::MARKER_PART::SEGMENT:
+                    m_gal->DrawLine( part.m_Points.front(), part.m_Points.back() );
+                    break;
+
+                case DRILL_MARKERS::MARKER_PART::POLYLINE:
+                    for( size_t ii = 0; ii + 1 < part.m_Points.size(); ++ii )
+                        m_gal->DrawLine( part.m_Points[ii], part.m_Points[ii + 1] );
+
+                    break;
+
+                case DRILL_MARKERS::MARKER_PART::CIRCLE:
+                    m_gal->DrawCircle( pos, part.m_Radius );
+                    break;
+                }
+            }
+        }
+        else
+        {
+            // The hole's own diameter, not the glyph size, or every hole would be labelled
+            // with the same number and the screen would disagree with the plot
+            const wxString text =
+                    entry.m_Symbol.m_MarkMode == DRILL_MARK_MODE::LETTER
+                            ? entry.m_Symbol.m_Letter
+                            : wxString::Format( wxT( "%.2f" ),
+                                                pcbIUScale.IUTomm( entry.m_Diameter ) );
+
+            TEXT_ATTRIBUTES attrs;
+            attrs.m_Size = VECTOR2I( symbolSize, symbolSize );
+            attrs.m_StrokeWidth = profile.GetSymbolWidth();
+            attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+            attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+
+            m_gal->SetIsFill( true );
+            m_gal->SetFillColor( aColor );
+            strokeText( text, pos, attrs, aFontMetrics );
+        }
+
+        if( aMap->GetGuideCross() )
+        {
+            // Reach matches the plotter exactly rather than 2 * radius, which loses an IU
+            // for an odd symbol size and makes screen and plot disagree
+            const int reach = symbolSize;
+
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( aColor );
+            m_gal->SetLineWidth( profile.GetSymbolWidth() );
+            m_gal->DrawLine( pos - VECTOR2I( reach, 0 ), pos + VECTOR2I( reach, 0 ) );
+            m_gal->DrawLine( pos - VECTOR2I( 0, reach ), pos + VECTOR2I( 0, reach ) );
+        }
+
+        // A slot's true extent is the cost driver, so it is outlined as well as marked
+        if( aMap->GetOutlineSlots() && entry.m_IsSlot )
+        {
+            // Built the same way the plotter builds its oval, so a rotated or tall slot is
+            // not drawn as a horizontal one on screen
+            VECTOR2I size = entry.m_SizeXY;
+            EDA_ANGLE orientation = entry.m_Orientation;
+
+            if( size.x > size.y )
+            {
+                std::swap( size.x, size.y );
+                orientation += ANGLE_90;
+            }
+
+            const int      half = ( size.y - size.x ) / 2;
+            const VECTOR2I offset = VECTOR2I( 0, half );
+            VECTOR2I       start = offset;
+            VECTOR2I       end = VECTOR2I( 0, -half );
+
+            RotatePoint( start, orientation );
+            RotatePoint( end, orientation );
+
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( aColor );
+            m_gal->SetLineWidth( profile.GetSymbolWidth() );
+            m_gal->DrawSegment( pos + start, pos + end, size.x );
+        }
     }
 }
 

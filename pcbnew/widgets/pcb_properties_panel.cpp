@@ -34,8 +34,11 @@
 #include <constraints/board_constraint_adapter.h>
 #include <constraints/constraint_builder.h>
 #include <constraints/pcb_constraint.h>
+#include <drill/drill_chart_model.h>
 #include <math/util.h>
 #include <base_units.h>
+#include <pcb_drill_chart.h>
+#include <pcb_drill_map.h>
 #include <pcb_shape.h>
 #include <eda_units.h>
 #include <properties/property_mgr.h>
@@ -1279,6 +1282,14 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
         }
 
         item->Set( property, newValue );
+
+        // A chart's cells are generated from the settings just changed, so they say nothing
+        // about the edit until the table has been laid out again
+        if( item->Type() == PCB_DRILL_CHART_T && item->GetBoard() )
+        {
+            PCB_DRILL_CHART* chart = static_cast<PCB_DRILL_CHART*>( item );
+            chart->RebuildCells( *item->GetBoard() );
+        }
     }
 
     changes.Push( _( "Edit Properties" ) );
@@ -1379,6 +1390,29 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 
     auto stitchGuardedNet = m_propMgr.GetProperty( TYPE_HASH( PCB_VIA_STITCH ), _HKI( "Guarded Net" ) );
     stitchGuardedNet->SetChoices( nets );
+
+    // Drill spans come from the stackup rather than from an enum, and enumerating them costs a
+    // walk of the board, so only a board that actually has a map pays for it
+    if( aBoard->DrillSymbolLayers().any() )
+    {
+        wxPGChoices spans;
+        spans.Add( _( "All spans" ), -1 );
+
+        int index = 0;
+
+        for( const DRILL_SPAN& span : EnumerateDrillSpans( *aBoard ) )
+        {
+            spans.Add( wxString::Format( wxT( "%s - %s%s" ),
+                                         aBoard->GetLayerName( span.TopLayer() ),
+                                         aBoard->GetLayerName( span.BottomLayer() ),
+                                         span.m_IsBackdrill ? _( " (backdrill)" )
+                                                            : wxString( wxEmptyString ) ),
+                       index++ );
+        }
+
+        m_propMgr.GetProperty( TYPE_HASH( PCB_DRILL_MAP ), _HKI( "Hole Span" ) )
+                ->SetChoices( spans );
+    }
 }
 
 

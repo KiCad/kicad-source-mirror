@@ -39,6 +39,8 @@
 #include <diff_merge/project_file_patch.h>
 #include <diff_merge/kicad_diff_types.h>
 #include <settings/json_settings_internals.h>
+#include <trace_helpers.h>
+#include <pcb_drill_chart.h>
 #include <drc/drc_engine.h>
 #include <board_statistics_report.h>
 #include <drc/drc_item.h>
@@ -1928,6 +1930,15 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     // Ensure layers to plot are restricted to enabled layers of the board to plot
     LSET layersToPlot = LSET( { aGerberJob->m_plotLayerSequence } ) & brd->GetEnabledLayers();
 
+    // Once for the run, not per file, so an update rebuilds each chart once. Common layers
+    // included or a chart plotted as one is never looked at
+    LSET preflightLayers = layersToPlot;
+
+    for( PCB_LAYER_ID commonLayer : aGerberJob->m_plotOnAllLayersSequence )
+        preflightLayers.set( commonLayer );
+
+    RefreshDrillCharts( *brd );
+
     for( PCB_LAYER_ID layer : layersToPlot.UIOrder() )
     {
         LSEQ plotSequence;
@@ -2339,6 +2350,15 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
     // We are feeding it one layer at the start here to silence a logic check
+
+    // It drives StartPlotBoard directly rather than PCB_PLOTTER::Plot, so it needs its own
+    // preflight or a FAIL policy would still emit a stale chart
+    {
+        LSET preflightLayers( { aGerberJob->m_plotLayerSequence } );
+
+        RefreshDrillCharts( *brd );
+    }
+
     PLOTTER* plotter = StartPlotBoard( brd, &plotOpts, layer, layerName, outPath, sheetName, sheetPath );
 
     if( plotter )
@@ -3300,6 +3320,14 @@ int PCBNEW_JOBS_HANDLER::JobUpgrade( JOB* aJob )
         IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
         BOARD*              brd = getBoard( job->m_filename );
         if( brd->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION )
+            shouldSave = true;
+
+        // A chart is derived data, so the upgrade brings every one up to date and saves if
+        // that changed anything
+        const uint64_t before = brd->GetDrillModelGeneration();
+        RefreshDrillCharts( *brd );
+
+        if( brd->GetDrillModelGeneration() != before )
             shouldSave = true;
 
         if( shouldSave )

@@ -41,6 +41,8 @@
 #include <connectivity/connectivity_algo.h>
 #include <teardrop/teardrop.h>
 #include <pcb_board_outline.h>
+#include <pcb_drill_map.h>
+#include <pcb_base_frame.h>
 
 #include <functional>
 #include <unordered_set>
@@ -220,6 +222,23 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     if( Empty() )
         return;
+
+    bool containsDrillMap = false;
+    bool containsDrillChart = false;
+
+    for( const COMMIT_LINE& entry : m_entries )
+    {
+        if( !entry.m_item || !entry.m_item->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( entry.m_item );
+
+        if( item->Type() == PCB_DRILL_CHART_T || item->Type() == PCB_DRILL_MAP_T )
+        {
+            containsDrillMap |= item->Type() == PCB_DRILL_MAP_T;
+            containsDrillChart |= item->Type() == PCB_DRILL_CHART_T;
+        }
+    }
 
     undoList.SetDescription( aMessage );
 
@@ -446,6 +465,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             case PCB_TEXTBOX_T:
             case PCB_BARCODE_T:
             case PCB_TABLE_T:
+            case PCB_DRILL_CHART_T:
+            case PCB_DRILL_MAP_T:
             case PCB_TRACE_T:
             case PCB_ARC_T:
             case PCB_VIA_T:
@@ -648,6 +669,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 else
                     view->Add( outline );
              }
+
+            RefreshDrillMapOutlines( *board, view );
         }
 
         if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
@@ -709,6 +732,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     if( bulkAddedItems.size() > 0 || bulkRemovedItems.size() > 0 || itemsChanged.size() > 0 )
         board->OnItemsCompositeUpdate( bulkAddedItems, bulkRemovedItems, itemsChanged );
 
+    // A shrinking table deletes the cells past its new end and the selection holds those
+    // cells directly, so it has to be resolved again from what is still on the board
+    if( containsDrillChart && selTool )
+        selTool->RebuildSelection();
+
     if( frame )
     {
         if( !( aCommitFlags & SKIP_UNDO ) )
@@ -760,6 +788,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
     }
 
+    if( containsDrillMap && frame )
+        frame->RefreshDrillSymbols( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
+
     clear();
 }
 
@@ -776,7 +807,7 @@ EDA_ITEM* BOARD_COMMIT::undoLevelItem( EDA_ITEM* aItem ) const
 
     EDA_ITEM* parent = aItem->GetParent();
 
-    if( parent && parent->Type() == PCB_TABLE_T )
+    if( parent && BaseType( parent->Type() ) == PCB_TABLE_T )
         return parent;
 
     return aItem;
@@ -821,6 +852,7 @@ void BOARD_COMMIT::Revert()
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
     std::vector<BOARD_ITEM*> itemsToDelete;
+    bool                     containsDrillMap = false;
 
     for( COMMIT_LINE& entry : m_entries )
     {
@@ -830,6 +862,11 @@ void BOARD_COMMIT::Revert()
         BOARD_ITEM*  boardItem = static_cast<BOARD_ITEM*>( entry.m_item );
         int          changeType = entry.m_type & CHT_TYPE;
         int          changeFlags = entry.m_type & CHT_FLAGS;
+
+        if( boardItem->Type() == PCB_DRILL_CHART_T || boardItem->Type() == PCB_DRILL_MAP_T )
+        {
+            containsDrillMap |= boardItem->Type() == PCB_DRILL_MAP_T;
+        }
 
         switch( changeType )
         {
@@ -953,6 +990,14 @@ void BOARD_COMMIT::Revert()
 
     // Property panel needs to know about the reselect
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+
+    if( containsDrillMap )
+    {
+        if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() ) )
+        {
+            frame->RefreshDrillSymbols( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
+        }
+    }
 
     clear();
 }

@@ -45,6 +45,7 @@ using namespace std::placeholders;
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <wx/msgdlg.h>
 #include <pcb_board_outline.h>
+#include <pcb_drill_map.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
@@ -218,6 +219,21 @@ static bool undoListContainsShapesOrFootprints( const PICKED_ITEMS_LIST* aList )
 }
 
 
+static bool undoListContainsDrillMap( const PICKED_ITEMS_LIST* aList )
+{
+    for( unsigned ii = 0; ii < aList->GetCount(); ++ii )
+    {
+        if( EDA_ITEM* item = aList->GetPickedItem( ii ) )
+        {
+            if( item->Type() == PCB_DRILL_MAP_T )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
 void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 {
     if( UndoRedoBlocked() )
@@ -233,9 +249,16 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
     PICKED_ITEMS_LIST* list = PopCommandFromUndoList();
 
     bool shapesChanged = undoListContainsShapesOrFootprints( list );
+    bool drillMapChanged = undoListContainsDrillMap( list );
 
     // Undo the command
     PutDataInPreviousState( list, shapesChanged );
+
+    if( drillMapChanged )
+    {
+        if( PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( this ) )
+            editFrame->RefreshDrillSymbols( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
+    }
 
     // Put the old list in RedoList
     list->ReversePickersListOrder();
@@ -250,6 +273,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
     {
         m_pcb->UpdateBoardOutline();
         GetCanvas()->GetView()->Update( m_pcb->BoardOutline() );
+        RefreshDrillMapOutlines( *m_pcb, GetCanvas()->GetView() );
     }
 
     GetCanvas()->Refresh();
@@ -271,9 +295,16 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
     PICKED_ITEMS_LIST* list = PopCommandFromRedoList();
 
     bool shapesChanged = undoListContainsShapesOrFootprints( list );
+    bool drillMapChanged = undoListContainsDrillMap( list );
 
     // Redo the command
     PutDataInPreviousState( list, shapesChanged );
+
+    if( drillMapChanged )
+    {
+        if( PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( this ) )
+            editFrame->RefreshDrillSymbols( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
+    }
 
     // Put the old list in UndoList
     list->ReversePickersListOrder();
@@ -288,6 +319,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
     {
         m_pcb->UpdateBoardOutline();
         GetCanvas()->GetView()->Update( m_pcb->BoardOutline() );
+        RefreshDrillMapOutlines( *m_pcb, GetCanvas()->GetView() );
     }
 
     GetCanvas()->Refresh();
@@ -765,5 +797,6 @@ void PCB_BASE_EDIT_FRAME::RollbackFromUndo()
 
     m_pcb->UpdateBoardOutline();
     GetCanvas()->GetView()->Update( m_pcb->BoardOutline() );
+    RefreshDrillMapOutlines( *m_pcb, GetCanvas()->GetView() );
     GetCanvas()->Refresh();
 }

@@ -370,6 +370,11 @@ protected:
 
 private:
     /**
+     * Select the drill chart row under a point, when the chart itself is what is selected.
+     */
+    bool selectChartRow( const VECTOR2I& aPosition );
+
+    /**
      * Select an item pointed by the parameter \a aWhere.
      *
      * If there is more than one item at that place, there is a menu displayed that allows

@@ -27,6 +27,8 @@
 #include <memory>
 #include <tools/pcb_tool_base.h>
 #include <status_popup.h>
+#include <wx/dialog.h>
+#include <wx/weakref.h>
 
 namespace KIGFX {
     class ORIGIN_VIEWITEM;
@@ -111,6 +113,10 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int PlaceCharacteristics( const TOOL_EVENT& aEvent );
     int PlaceStackup( const TOOL_EVENT& aEvent );
+    int PlaceDrillChart( const TOOL_EVENT& aEvent );
+    int PlaceDrillMap( const TOOL_EVENT& aEvent );
+    int ShowDrillGroups( const TOOL_EVENT& aEvent );
+
     int CollectAndEmbed3DModels( const TOOL_EVENT& aEvent );
 
     int FlipPcbView( const TOOL_EVENT& aEvent );
@@ -167,6 +173,12 @@ private:
     BOARD_ITEM*                             m_pickerItem;
 
     std::unique_ptr<STATUS_TEXT_POPUP>      m_statusPopup;
+
+    /**
+     * Modeless, so it outlives the action that opened it. Weak, so a dialog the user
+     * closed leaves nothing dangling here.
+     */
+    wxWeakRef<wxDialog>                     m_drillGroupsDialog;
 };
 
 #endif

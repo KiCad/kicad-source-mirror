@@ -234,6 +234,9 @@ public:
     static TOOL_ACTION drawSimilarZone;
     static TOOL_ACTION placeCharacteristics;
     static TOOL_ACTION placeStackup;
+    static TOOL_ACTION placeDrillChart;
+    static TOOL_ACTION placeDrillMap;
+    static TOOL_ACTION showDrillGroups;
     static TOOL_ACTION placeFootprint;
     static TOOL_ACTION placeImportedGraphics;
     static TOOL_ACTION setAnchor;

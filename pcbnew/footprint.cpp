@@ -1882,7 +1882,13 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     // If this footprint is on a board, update the board's item-by-id cache
     // Skip caching for copy-constructed footprints (inherited board ptr but not a real member).
     if( BOARD* board = GetBoard(); board && board->IsItemIndexedById( this ) )
+    {
         board->CacheItemSubtreeById( aBoardItem );
+
+        // A pad arriving here never passes through BOARD::Add, so this is the only chance to
+        // invalidate the drill caches
+        board->noteDrillModelChange( aBoardItem );
+    }
 
     InvalidateGeometryCaches();
 }
@@ -2009,7 +2015,10 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     if( BOARD* board = GetBoard() )
     {
         if( board->IsItemIndexedById( this ) )
+        {
             board->UncacheItemSubtreeById( aBoardItem );
+            board->noteDrillModelChange( aBoardItem );
+        }
 
         board->IncrementTimeStamp();
     }

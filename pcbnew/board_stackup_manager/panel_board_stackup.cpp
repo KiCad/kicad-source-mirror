@@ -1451,7 +1451,12 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
     }
 
     if( modified )
+    {
+        // Backdrill stub length comes from layer distances, so a chart reporting stubs is
+        // stale the moment the stackup changes
+        m_frame->GetBoard()->BumpDrillModelGeneration();
         m_frame->OnModify();
+    }
 
     return true;
 }

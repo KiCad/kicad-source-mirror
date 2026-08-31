@@ -369,6 +369,13 @@ enum GAL_LAYER_ID: int
     LAYER_UI_START,
     LAYER_UI_END = LAYER_UI_START + GAL_UI_LAYER_COUNT,
 
+    /**
+     * Drill symbols, one channel per board layer. Appended at the end because the offsets
+     * from GAL_LAYER_ID_START are stored in visibility settings.
+     */
+    LAYER_DRILL_SYMBOL_START,
+    LAYER_DRILL_SYMBOL_END = LAYER_DRILL_SYMBOL_START + PCB_LAYER_ID_COUNT,
+
     GAL_LAYER_ID_END
 };
 
@@ -381,6 +388,9 @@ enum GAL_LAYER_ID: int
 #define PAD_COPPER_LAYER_FOR( boardLayer ) ( LAYER_PAD_COPPER_START + boardLayer )
 #define VIA_COPPER_LAYER_FOR( boardLayer ) ( LAYER_VIA_COPPER_START + boardLayer )
 #define CLEARANCE_LAYER_FOR( boardLayer ) ( LAYER_CLEARANCE_START + boardLayer )
+#define DRILL_SYMBOL_LAYER_FOR( boardLayer ) ( LAYER_DRILL_SYMBOL_START + boardLayer )
+#define BOARD_LAYER_FOR_DRILL_SYMBOL( galLayer ) \
+    ( (PCB_LAYER_ID) ( ( galLayer ) - LAYER_DRILL_SYMBOL_START ) )
 #define POINT_LAYER_FOR( boardLayer ) ( LAYER_POINT_START + boardLayer )
 
 constexpr int GAL_LAYER_ID_COUNT = GAL_LAYER_ID_END - GAL_LAYER_ID_START;
@@ -909,6 +919,12 @@ inline bool IsViaCopperLayer( int aLayer )
 inline bool IsClearanceLayer( int aLayer )
 {
     return aLayer >= LAYER_CLEARANCE_START && aLayer <= LAYER_CLEARANCE_END;
+}
+
+
+inline bool IsDrillSymbolLayer( int aLayer )
+{
+    return aLayer >= LAYER_DRILL_SYMBOL_START && aLayer < LAYER_DRILL_SYMBOL_END;
 }
 
 

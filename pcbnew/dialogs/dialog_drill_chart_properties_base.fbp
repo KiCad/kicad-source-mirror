@@ -1,0 +1,538 @@
+<?xml version='1.0' encoding='utf-8'?>
+<wxFormBuilder_Project>
+  <FileVersion major="1" minor="18" />
+  <object class="Project" expanded="true">
+    <property name="code_generation">C++</property>
+    <property name="cpp_disconnect_events">1</property>
+    <property name="cpp_event_generation">connect</property>
+    <property name="cpp_use_enum">1</property>
+    <property name="encoding">UTF-8</property>
+    <property name="file">dialog_drill_chart_properties_base</property>
+    <property name="first_id">1000</property>
+    <property name="internationalize">1</property>
+    <property name="name">dialog_drill_chart_properties_base</property>
+    <property name="path">.</property>
+    <property name="relative_path">1</property>
+    <object class="Dialog" expanded="true">
+      <property name="event_handler">impl_virtual</property>
+      <property name="id">wxID_ANY</property>
+      <property name="name">DIALOG_DRILL_CHART_PROPERTIES_BASE</property>
+      <property name="size">-1,-1</property>
+      <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
+      <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
+      <property name="title">Drill Chart Properties</property>
+      <object class="wxBoxSizer" expanded="true">
+        <property name="name">bMain</property>
+        <property name="orient">wxVERTICAL</property>
+        <object class="sizeritem" expanded="true">
+          <property name="border">0</property>
+          <property name="flag">wxEXPAND</property>
+          <property name="proportion">0</property>
+          <object class="wxInfoBar" expanded="true">
+            <property name="id">wxID_ANY</property>
+            <property name="name">m_infoBar</property>
+            <property name="subclass">WX_INFOBAR; widgets/wx_infobar.h; forward_declare</property>
+          </object>
+        </object>
+        <object class="sizeritem" expanded="true">
+          <property name="border">5</property>
+          <property name="flag">wxEXPAND|wxALL</property>
+          <property name="proportion">1</property>
+          <object class="wxNotebook" expanded="true">
+            <property name="id">wxID_ANY</property>
+            <property name="name">m_notebook</property>
+            <object class="notebookpage" expanded="true">
+              <property name="label">Contents</property>
+              <property name="select">0</property>
+              <object class="wxPanel" expanded="true">
+                <property name="id">wxID_ANY</property>
+                <property name="name">m_contentsPanel</property>
+                <object class="wxBoxSizer" expanded="true">
+                  <property name="name">bContents</property>
+                  <property name="orient">wxVERTICAL</property>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxALL</property>
+                    <property name="proportion">0</property>
+                    <object class="wxFlexGridSizer" expanded="true">
+                      <property name="name">fgContents</property>
+                      <property name="rows">0</property>
+                      <property name="cols">2</property>
+                      <property name="vgap">5</property>
+                      <property name="hgap">5</property>
+                      <property name="flexible_direction">wxBOTH</property>
+                      <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                      <property name="growablecols">1</property>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxStaticText" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="label">Layer:</property>
+                          <property name="name">m_layerLabel</property>
+                          <property name="wrap">-1</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxEXPAND|wxRIGHT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxBitmapComboBox" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="name">m_LayerSelectionCtrl</property>
+                          <property name="minimum_size">175,-1</property>
+                          <property name="selection">-1</property>
+                          <property name="subclass">PCB_LAYER_BOX_SELECTOR; pcb_layer_box_selector.h</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxStaticText" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="label">Units:</property>
+                          <property name="name">m_unitsLabel</property>
+                          <property name="wrap">-1</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxEXPAND|wxRIGHT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxChoice" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="name">m_unitsCtrl</property>
+                          <property name="choices">"mm" "inch"</property>
+                          <property name="selection">0</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxStaticText" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="label">Decimal places:</property>
+                          <property name="name">m_precisionLabel</property>
+                          <property name="wrap">-1</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxRIGHT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxSpinCtrl" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="name">m_precisionCtrl</property>
+                          <property name="value">3</property>
+                          <property name="min">0</property>
+                          <property name="max">6</property>
+                          <property name="initial">0</property>
+                          <property name="style">wxSP_ARROW_KEYS</property>
+                        </object>
+                      </object>
+                      </object>
+                  </object>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxALL</property>
+                    <property name="proportion">0</property>
+                    <object class="wxStaticBoxSizer" expanded="true">
+                      <property name="name">sbInclude</property>
+                      <property name="label">Include</property>
+                      <property name="orient">wxVERTICAL</property>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxEXPAND|wxALL</property>
+                        <property name="proportion">0</property>
+                        <object class="wxFlexGridSizer" expanded="true">
+                          <property name="name">fgFilter</property>
+                          <property name="rows">0</property>
+                          <property name="cols">3</property>
+                          <property name="vgap">5</property>
+                          <property name="hgap">5</property>
+                          <property name="flexible_direction">wxBOTH</property>
+                          <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxRIGHT</property>
+                            <property name="proportion">0</property>
+                            <object class="wxCheckBox" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_filterPlated</property>
+                              <property name="label">Plated holes</property>
+                              <property name="checked">1</property>
+                            </object>
+                          </object>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxRIGHT</property>
+                            <property name="proportion">0</property>
+                            <object class="wxCheckBox" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_filterNonPlated</property>
+                              <property name="label">Non-plated holes</property>
+                              <property name="checked">1</property>
+                            </object>
+                          </object>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxRIGHT</property>
+                            <property name="proportion">0</property>
+                            <object class="wxCheckBox" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_filterVias</property>
+                              <property name="label">Vias</property>
+                              <property name="checked">1</property>
+                            </object>
+                          </object>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxRIGHT</property>
+                            <property name="proportion">0</property>
+                            <object class="wxCheckBox" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_filterSlots</property>
+                              <property name="label">Slots</property>
+                              <property name="checked">1</property>
+                            </object>
+                          </object>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxRIGHT</property>
+                            <property name="proportion">0</property>
+                            <object class="wxCheckBox" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_filterBackdrills</property>
+                              <property name="label">Backdrills</property>
+                              <property name="checked">1</property>
+                            </object>
+                          </object>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxRIGHT</property>
+                            <property name="proportion">0</property>
+                            <object class="wxCheckBox" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_filterCastellated</property>
+                              <property name="label">Castellated</property>
+                              <property name="checked">1</property>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">0</property>
+                    <object class="wxCheckBox" expanded="true">
+                      <property name="id">wxID_ANY</property>
+                      <property name="name">m_showTotals</property>
+                      <property name="label">Show totals row</property>
+                      <property name="checked">1</property>
+                    </object>
+                  </object>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">0</property>
+                    <object class="wxCheckBox" expanded="true">
+                      <property name="id">wxID_ANY</property>
+                      <property name="name">m_cbLocked</property>
+                      <property name="label">Locked</property>
+                      <property name="checked">0</property>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <object class="notebookpage" expanded="true">
+              <property name="label">Columns</property>
+              <property name="select">0</property>
+              <object class="wxPanel" expanded="true">
+                <property name="id">wxID_ANY</property>
+                <property name="name">m_columnsPanel</property>
+                <object class="wxBoxSizer" expanded="true">
+                  <property name="name">bColumns</property>
+                  <property name="orient">wxVERTICAL</property>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">0</property>
+                    <property name="flag">wxEXPAND</property>
+                    <property name="proportion">1</property>
+                    <object class="wxBoxSizer" expanded="true">
+                      <property name="name">bColumnsTop</property>
+                      <property name="orient">wxHORIZONTAL</property>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxEXPAND|wxALL</property>
+                        <property name="proportion">1</property>
+                        <object class="wxGrid" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="name">m_columnGrid</property>
+                          <property name="subclass">WX_GRID; widgets/wx_grid.h; Not forward declarable</property>
+                          <property name="rows">0</property>
+                          <property name="cols">5</property>
+                          <property name="autosize_rows">0</property>
+                          <property name="autosize_cols">0</property>
+                          <property name="drag_grid_size">0</property>
+                          <property name="drag_col_move">0</property>
+                          <property name="drag_col_size">1</property>
+                          <property name="drag_row_size">0</property>
+                          <property name="grid_line_color">wxSYS_COLOUR_ACTIVEBORDER</property>
+                          <property name="grid_lines">1</property>
+                          <property name="margin_height">0</property>
+                          <property name="margin_width">0</property>
+                          <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
+                          <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
+                          <property name="col_label_size">22</property>
+                          <property name="row_label_horiz_alignment">wxALIGN_CENTER</property>
+                          <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
+                          <property name="row_label_size">0</property>
+                          <property name="cell_horiz_alignment">wxALIGN_LEFT</property>
+                          <property name="cell_vert_alignment">wxALIGN_CENTER</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxALIGN_TOP|wxALL</property>
+                        <property name="proportion">0</property>
+                        <object class="wxBoxSizer" expanded="true">
+                          <property name="name">bColButtons</property>
+                          <property name="orient">wxVERTICAL</property>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM</property>
+                            <property name="proportion">0</property>
+                            <object class="wxButton" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_moveUpButton</property>
+                              <property name="label">Move Up</property>
+                              <event name="OnButtonClick">onMoveUp</event>
+                            </object>
+                          </object>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM</property>
+                            <property name="proportion">0</property>
+                            <object class="wxButton" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_moveDownButton</property>
+                              <property name="label">Move Down</property>
+                              <event name="OnButtonClick">onMoveDown</event>
+                            </object>
+                          </object>
+                          <object class="sizeritem" expanded="true">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND|wxTOP</property>
+                            <property name="proportion">0</property>
+                            <object class="wxButton" expanded="true">
+                              <property name="id">wxID_ANY</property>
+                              <property name="name">m_resetColumnsButton</property>
+                              <property name="label">Reset to Default</property>
+                              <event name="OnButtonClick">onResetColumns</event>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxALL</property>
+                    <property name="proportion">0</property>
+                    <object class="wxBoxSizer" expanded="true">
+                      <property name="name">bTemplate</property>
+                      <property name="orient">wxHORIZONTAL</property>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxRIGHT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxButton" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="name">m_importTemplateButton</property>
+                          <property name="label">Import Template...</property>
+                          <event name="OnButtonClick">onImportTemplate</event>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxRIGHT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxButton" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="name">m_exportTemplateButton</property>
+                          <property name="label">Export Template...</property>
+                          <event name="OnButtonClick">onExportTemplate</event>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <object class="notebookpage" expanded="true">
+              <property name="label">Appearance</property>
+              <property name="select">0</property>
+              <object class="wxPanel" expanded="true">
+                <property name="id">wxID_ANY</property>
+                <property name="name">m_appearancePanel</property>
+                <object class="wxBoxSizer" expanded="true">
+                  <property name="name">bAppearance</property>
+                  <property name="orient">wxVERTICAL</property>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">0</property>
+                    <object class="wxCheckBox" expanded="true">
+                      <property name="id">wxID_ANY</property>
+                      <property name="name">m_borderCheckbox</property>
+                      <property name="label">External border</property>
+                      <property name="checked">1</property>
+                      <event name="OnCheckBox">onBorderChecked</event>
+                    </object>
+                  </object>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">0</property>
+                    <object class="wxCheckBox" expanded="true">
+                      <property name="id">wxID_ANY</property>
+                      <property name="name">m_headerBorder</property>
+                      <property name="label">Header separator</property>
+                      <property name="checked">1</property>
+                    </object>
+                  </object>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">0</property>
+                    <object class="wxCheckBox" expanded="true">
+                      <property name="id">wxID_ANY</property>
+                      <property name="name">m_rowSeparators</property>
+                      <property name="label">Row separators</property>
+                      <property name="checked">1</property>
+                    </object>
+                  </object>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="proportion">0</property>
+                    <object class="wxCheckBox" expanded="true">
+                      <property name="id">wxID_ANY</property>
+                      <property name="name">m_colSeparators</property>
+                      <property name="label">Column separators</property>
+                      <property name="checked">1</property>
+                    </object>
+                  </object>
+                  <object class="sizeritem" expanded="true">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxALL</property>
+                    <property name="proportion">0</property>
+                    <object class="wxFlexGridSizer" expanded="true">
+                      <property name="name">fgAppearance</property>
+                      <property name="rows">0</property>
+                      <property name="cols">3</property>
+                      <property name="vgap">5</property>
+                      <property name="hgap">5</property>
+                      <property name="flexible_direction">wxBOTH</property>
+                      <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                      <property name="growablecols">1</property>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxStaticText" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="label">Border width:</property>
+                          <property name="name">m_borderWidthLabel</property>
+                          <property name="wrap">-1</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxEXPAND</property>
+                        <property name="proportion">0</property>
+                        <object class="wxTextCtrl" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="name">m_borderWidthCtrl</property>
+                          <property name="value" />
+                          <property name="maxlength">0</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxStaticText" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="label">mm</property>
+                          <property name="name">m_borderWidthUnits</property>
+                          <property name="wrap">-1</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxStaticText" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="label">Separator width:</property>
+                          <property name="name">m_separatorsWidthLabel</property>
+                          <property name="wrap">-1</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxEXPAND</property>
+                        <property name="proportion">0</property>
+                        <object class="wxTextCtrl" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="name">m_separatorsWidthCtrl</property>
+                          <property name="value" />
+                          <property name="maxlength">0</property>
+                        </object>
+                      </object>
+                      <object class="sizeritem" expanded="true">
+                        <property name="border">5</property>
+                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                        <property name="proportion">0</property>
+                        <object class="wxStaticText" expanded="true">
+                          <property name="id">wxID_ANY</property>
+                          <property name="label">mm</property>
+                          <property name="name">m_separatorsWidthUnits</property>
+                          <property name="wrap">-1</property>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+        </object>
+        <object class="sizeritem" expanded="true">
+          <property name="border">5</property>
+          <property name="flag">wxEXPAND|wxALL</property>
+          <property name="proportion">0</property>
+          <object class="wxStdDialogButtonSizer" expanded="true">
+            <property name="Apply">0</property>
+            <property name="Cancel">1</property>
+            <property name="ContextHelp">0</property>
+            <property name="Help">0</property>
+            <property name="No">0</property>
+            <property name="OK">1</property>
+            <property name="Save">0</property>
+            <property name="Yes">0</property>
+            <property name="minimum_size"></property>
+            <property name="name">m_sdbSizer</property>
+            <property name="permission">protected</property>
+          </object>
+        </object>
+        </object>
+    </object>
+  </object>
+</wxFormBuilder_Project>

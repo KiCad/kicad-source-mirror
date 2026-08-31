@@ -68,6 +68,9 @@
 #include <dialogs/dialog_migrate_3d_models.h>
 #include <dialog_board_setup.h>
 #include <dialogs/dialog_dimension_properties.h>
+#include <pcb_drill_chart.h>
+#include <pcb_drill_map.h>
+#include <dialogs/dialog_drill_chart_properties.h>
 #include <dialogs/dialog_table_properties.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <pad.h>
@@ -1769,6 +1772,32 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
 }
 
 
+void PCB_EDIT_FRAME::RefreshDrillSymbols( int aUpdateFlags )
+{
+    BOARD*       board = GetBoard();
+    KIGFX::VIEW* view = GetCanvas()->GetView();
+
+    board->RefreshDrillSymbolLayers();
+
+    for( PCB_TRACK* track : board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+            view->Update( track, aUpdateFlags );
+    }
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( pad->HasHole() )
+                view->Update( pad, aUpdateFlags );
+        }
+    }
+
+    GetCanvas()->Refresh();
+}
+
+
 void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, wxWindow* aParent )
 {
     static std::mutex dialogMutex; // Local static mutex
@@ -2258,11 +2287,14 @@ void PCB_EDIT_FRAME::OnModify()
     if( m_isClosing )
         return;
 
+    // A chart reports the board, so an edit that moved a hole has already made it wrong.
+    // Costs one integer comparison per chart when nothing drill related changed.
+    RefreshDrillCharts( *GetBoard() );
+
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
     if( !GetTitle().StartsWith( wxT( "*" ) ) )
         UpdateTitle();
-
 }
 
 
@@ -3042,6 +3074,15 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
         //QuasiModal required for Scintilla auto-complete
         dlg.ShowQuasiModal();
+        break;
+    }
+
+    case PCB_DRILL_CHART_T:
+    {
+        // Not the generic table dialog, which would offer copper layers and direct editing of
+        // cells that the next rebuild discards
+        DIALOG_DRILL_CHART_PROPERTIES dlg( this, static_cast<PCB_DRILL_CHART*>( aItem ) );
+        dlg.ShowModal();
         break;
     }
 

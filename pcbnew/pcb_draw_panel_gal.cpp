@@ -585,6 +585,11 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     for( int i = LAYER_VIA_COPPER_START; i < LAYER_VIA_COPPER_END; i++ )
         m_view->SetLayerVisible( i, true );
 
+    // Holes draw their drill map symbols here. Whether anything appears is governed by the
+    // documentation layer these depend on, not by this flag
+    for( int i = LAYER_DRILL_SYMBOL_START; i < LAYER_DRILL_SYMBOL_END; i++ )
+        m_view->SetLayerVisible( i, true );
+
     for( int i = LAYER_CLEARANCE_START; i < LAYER_CLEARANCE_END; i++ )
         m_view->SetLayerVisible( i, false );
 
@@ -705,6 +710,16 @@ void ApplyPcbGalLayerOrder( KIGFX::VIEW* aView )
             aView->SetLayerOrder( layer, i, false );
     }
 
+    // Drill symbol layers are not listed in the table above. Each one draws with the
+    // documentation layer whose map owns it
+    for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
+    {
+        const PCB_LAYER_ID boardLayer = static_cast<PCB_LAYER_ID>( i );
+
+        aView->SetLayerOrder( DRILL_SYMBOL_LAYER_FOR( boardLayer ),
+                              aView->GetLayerOrder( boardLayer ), false );
+    }
+
     aView->SortOrderedLayers();
 }
 
@@ -748,6 +763,11 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
 
+    // A map's offset changes while its hole owners do not. Rebuilding every drilled pad and
+    // via on each mouse event makes dragging scale with the board's hole count.
+    for( int i = LAYER_DRILL_SYMBOL_START; i < LAYER_DRILL_SYMBOL_END; ++i )
+        m_view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
+
     for( int i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( int ); ++i )
     {
         int layer = GAL_LAYER_ORDER[i];
@@ -765,6 +785,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
             m_view->SetRequired( BITMAP_LAYER_FOR( layer ), layer );
             m_view->SetLayerTarget( BITMAP_LAYER_FOR( layer ), KIGFX::TARGET_NONCACHED );
             m_view->SetRequired( GetNetnameLayer( layer ), layer );
+            m_view->SetRequired( DRILL_SYMBOL_LAYER_FOR( layer ), layer );
         }
         else if( IsNonCopperLayer( layer ) )
         {
@@ -772,6 +793,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
             m_view->SetRequired( ZONE_LAYER_FOR( layer ), layer );
             m_view->SetLayerTarget( BITMAP_LAYER_FOR( layer ), KIGFX::TARGET_NONCACHED );
             m_view->SetRequired( BITMAP_LAYER_FOR( layer ), layer );
+            m_view->SetRequired( DRILL_SYMBOL_LAYER_FOR( layer ), layer );
         }
         else if( IsNetnameLayer( layer ) )
         {

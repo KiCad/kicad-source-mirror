@@ -24,6 +24,7 @@ add_net
 addsublayer
 affects
 aligned
+all
 allowed
 allow_missing_courtyard
 allow_soldermask_bridges
@@ -42,6 +43,7 @@ arrow2a
 arrow2b
 arrow_direction
 arrow_length
+assignment
 at
 attr
 autoplace_cost90
@@ -64,6 +66,7 @@ bottom
 bottom_left
 bottom_right
 buried
+castellated
 castellated_pads
 cells
 center
@@ -75,6 +78,7 @@ clearance
 clearance_min
 color
 cols
+column
 column_count
 column_widths
 comment
@@ -92,6 +96,17 @@ cross_hatch
 curve_points
 curved_edges
 custom
+default_marks
+drill_chart
+drill_map
+drill_symbol_profile
+filter
+freeze_assignments
+group_by
+guide_cross
+key
+mark
+npth
 outline
 convexhull
 copper_line_width
@@ -276,6 +291,7 @@ orientation
 orthogonal
 other_layers_line_width
 other_layers_text_dims
+outline_slots
 outward
 oval
 overall_height
@@ -297,6 +313,7 @@ pad_prop_mechanical
 pad_prop_pressfit
 padstack
 padvia
+plated
 prefer_zone_connections
 private_layers
 custom_property
@@ -339,6 +356,8 @@ rotation_angle
 roundrect
 roundrect_rratio
 routing
+row_keys
+row_shapes
 rows
 row_heights
 scale
@@ -354,6 +373,7 @@ silk_text_dims
 sim_electrical_type
 sink
 size
+slots
 smd
 smoothing
 solder_mask_margin
@@ -408,6 +428,7 @@ through_hole_min
 top
 top_left
 top_right
+totals
 trace_width
 tracks
 track_end

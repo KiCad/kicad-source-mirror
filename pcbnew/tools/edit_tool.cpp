@@ -877,6 +877,7 @@ bool EDIT_TOOL::Init()
                                        PCB_DIM_RADIAL_T,
                                        PCB_DIM_ORTHOGONAL_T,
                                        PCB_TABLE_T,
+                                       PCB_DRILL_CHART_T,
                                        PCB_TABLECELL_T,
                                } );
 
@@ -2695,6 +2696,7 @@ const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
     PCB_POINT_T,
     PCB_TABLE_T,
     PCB_REFERENCE_IMAGE_T,
+    PCB_DRILL_CHART_T,
 };
 
 
@@ -2774,7 +2776,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             static_cast<PCB_TEXTBOX*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
-        case PCB_TABLE_T: static_cast<PCB_TABLE*>( item )->Mirror( mirrorPoint, flipDirection ); break;
+        case PCB_TABLE_T:
+        case PCB_DRILL_CHART_T:
+            static_cast<PCB_TABLE*>( item )->Mirror( mirrorPoint, flipDirection );
+            break;
 
         case PCB_PAD_T:
             mirrorPad( *static_cast<PAD*>( item ), mirrorPoint, flipDirection );
@@ -3073,6 +3078,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_TEXTBOX_T:
         case PCB_BARCODE_T:
         case PCB_TABLE_T:
+        case PCB_DRILL_CHART_T:
         case PCB_REFERENCE_IMAGE_T:
         case PCB_DIMENSION_T:
         case PCB_DIM_ALIGNED_T:
@@ -3086,6 +3092,10 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_TABLECELL_T:
+            // A drill chart's cells report the board, so there is no user text to clear
+            if( board_item->GetParent() && board_item->GetParent()->Type() == PCB_DRILL_CHART_T )
+                break;
+
             // Clear contents of table cell
             commit.Modify( board_item );
             static_cast<PCB_TABLECELL*>( board_item )->SetText( wxEmptyString );
@@ -3540,6 +3550,11 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 commit.Add( dupe_item );
                 break;
 
+            case PCB_DRILL_CHART_T:
+                // A second chart of the same holes says nothing the first does not, and it
+                // would land on top of it
+                break;
+
             case PCB_GENERATOR_T:
             case PCB_GROUP_T:
             {
@@ -3725,7 +3740,7 @@ bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
         return false;
 
     // When there is only one item selected, the reference point is its position...
-    if( aSelection.Size() == 1 && aSelection.Front()->Type() != PCB_TABLE_T )
+    if( aSelection.Size() == 1 && BaseType( aSelection.Front()->Type() ) != PCB_TABLE_T )
     {
         if( aSelection.Front()->IsBOARD_ITEM() )
         {
@@ -3972,6 +3987,7 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
                     return textBox.GetShownText( true );
                 }
                 case PCB_TABLE_T:
+            case PCB_DRILL_CHART_T:
                 {
                     const PCB_TABLE& table = static_cast<const PCB_TABLE&>( aItem );
                     wxString         s;

@@ -57,6 +57,9 @@
 #include <pcb_layer_presentation.h>
 #include <pcb_reference_image.h>
 #include <pcb_textbox.h>
+#include <pcb_drill_chart.h>
+#include <dialogs/dialog_drill_groups.h>
+#include <pcb_drill_map.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
@@ -1253,6 +1256,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 case PCB_TEXT_T:
                 case PCB_TEXTBOX_T:
                 case PCB_TABLE_T:
+            case PCB_DRILL_CHART_T:
                 case PCB_SHAPE_T:
                 case PCB_BARCODE_T:
                 case PCB_DIM_ALIGNED_T:
@@ -2969,6 +2973,178 @@ int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_CONTROL::PlaceDrillChart( const TOOL_EVENT& aEvent )
+{
+    BOARD* board = m_frame->GetBoard();
+
+    // Copper, silk, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are manufacturing
+    // inputs a chart would corrupt. Unlike a map, a chart may share a layer with another
+    const auto available =
+            [board]( PCB_LAYER_ID aLayer )
+            {
+                return DrillDocumentationLayers().Contains( aLayer ) && board->IsLayerEnabled( aLayer );
+            };
+
+    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+
+    if( !available( layer ) )
+    {
+        const LSEQ candidates = DrillDocumentationLayers().Seq();
+        const auto next = std::find_if( candidates.begin(), candidates.end(), available );
+
+        if( next == candidates.end() )
+        {
+            m_frame->ShowInfoBarError( _( "No documentation layer is enabled to hold a drill "
+                                          "chart." ) );
+            return 0;
+        }
+
+        layer = *next;
+        m_frame->SetActiveLayer( layer );
+    }
+
+    // Placing onto a hidden layer draws nothing at all, which is indistinguishable from the
+    // feature being broken
+    if( !board->IsLayerVisible( layer ) )
+    {
+        m_frame->ShowInfoBarWarning( wxString::Format(
+                _( "Layer '%s' is hidden; nothing will be shown until you make it visible." ),
+                board->GetLayerName( layer ) ) );
+    }
+
+    BOARD_COMMIT commit( this );
+
+    PCB_DRILL_CHART* chart = new PCB_DRILL_CHART( board );
+
+    // Seeded from the board, not default-constructed. RebuildCells builds on whatever it is
+    // handed, so a default here would drop the board's grouping and its existing marks
+    DRILL_SYMBOL_PROFILE assigned = board->GetDesignSettings().GetDrillSymbolProfile();
+
+    chart->SetLayer( layer );
+    chart->RebuildCells( *board, &assigned );
+
+    // Cascade off any chart already on this layer rather than landing on top of it
+    int existing = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() == PCB_DRILL_CHART_T && item->GetLayer() == layer )
+            existing++;
+    }
+
+    if( existing )
+    {
+        const BOX2I bbox = chart->GetBoundingBox();
+        chart->Move( VECTOR2I( 0, existing * ( bbox.GetHeight() + pcbIUScale.mmToIU( 5 ) ) ) );
+    }
+
+    std::vector<BOARD_ITEM*> items;
+    items.push_back( chart );
+
+    if( placeBoardItems( &commit, items, true, true, false, false ) )
+    {
+        // Only now do the assignments become the board's. The profile is design settings,
+        // which KiCad does not undo, so the board is marked dirty instead
+        board->GetDesignSettings().GetDrillSymbolProfile() = assigned;
+        m_frame->OnModify();
+
+        commit.Push( _( "Place Drill Chart" ) );
+    }
+    else
+    {
+        delete chart;
+    }
+
+    return 0;
+}
+
+
+int PCB_CONTROL::PlaceDrillMap( const TOOL_EVENT& aEvent )
+{
+    BOARD* board = m_frame->GetBoard();
+
+    // Two maps on one layer would overdraw each other's marks, so an occupied layer is no
+    // more available than one that cannot hold a map at all
+    const auto available =
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                if( !DrillDocumentationLayers().Contains( aLayer ) || !board->IsLayerEnabled( aLayer ) )
+                    return false;
+
+                for( const BOARD_ITEM* item : board->Drawings() )
+                {
+                    if( item->Type() == PCB_DRILL_MAP_T && item->GetLayer() == aLayer )
+                        return false;
+                }
+
+                return true;
+            };
+
+    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+
+    if( !available( layer ) )
+    {
+        const LSEQ candidates = DrillDocumentationLayers().Seq();
+        const auto next = std::find_if( candidates.begin(), candidates.end(), available );
+
+        if( next == candidates.end() )
+        {
+            m_frame->ShowInfoBarError( _( "Every documentation layer already has a drill map." ) );
+            return 0;
+        }
+
+        layer = *next;
+        m_frame->SetActiveLayer( layer );
+    }
+
+    // Placing onto a hidden layer draws nothing at all, which is indistinguishable from the
+    // feature being broken
+    if( !board->IsLayerVisible( layer ) )
+    {
+        m_frame->ShowInfoBarWarning( wxString::Format(
+                _( "Layer '%s' is hidden; nothing will be shown until you make it visible." ),
+                board->GetLayerName( layer ) ) );
+    }
+
+    BOARD_COMMIT commit( this );
+
+    // A map draws on the holes, so there is nothing to drag into place. It lands at zero
+    // offset and the user moves it from there
+    PCB_DRILL_MAP* map = new PCB_DRILL_MAP( board );
+    map->SetLayer( layer );
+
+    commit.Add( map );
+    commit.Push( _( "Place Drill Map" ) );
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, map );
+
+    return 0;
+}
+
+
+int PCB_CONTROL::ShowDrillGroups( const TOOL_EVENT& aEvent )
+{
+
+    PCB_EDIT_FRAME* frame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
+    if( !frame )
+        return 0;
+
+    if( m_drillGroupsDialog )
+    {
+        m_drillGroupsDialog->Raise();
+        return 0;
+    }
+
+    DIALOG_DRILL_GROUPS* dialog = new DIALOG_DRILL_GROUPS( frame );
+    m_drillGroupsDialog = dialog;
+    dialog->Show( true );
+
+    return 0;
+}
+
+
 int PCB_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
 {
     PCB_DISPLAY_OPTIONS opts = m_frame->GetDisplayOptions();
@@ -3200,6 +3376,9 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::DdAppendBoard,        PCB_ACTIONS::ddAppendBoard.MakeEvent() );
     Go( &PCB_CONTROL::PlaceCharacteristics, PCB_ACTIONS::placeCharacteristics.MakeEvent() );
     Go( &PCB_CONTROL::PlaceStackup,         PCB_ACTIONS::placeStackup.MakeEvent() );
+    Go( &PCB_CONTROL::PlaceDrillChart,      PCB_ACTIONS::placeDrillChart.MakeEvent() );
+    Go( &PCB_CONTROL::PlaceDrillMap,        PCB_ACTIONS::placeDrillMap.MakeEvent() );
+    Go( &PCB_CONTROL::ShowDrillGroups,      PCB_ACTIONS::showDrillGroups.MakeEvent() );
 
     Go( &PCB_CONTROL::Paste,                ACTIONS::paste.MakeEvent() );
     Go( &PCB_CONTROL::Paste,                ACTIONS::pasteSpecial.MakeEvent() );

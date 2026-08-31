@@ -38,6 +38,7 @@
 #include <math/box2.h>
 #include <optional>
 #include <constraints/pcb_constraint.h>
+#include <drill/drill_span.h>
 #include <string_any_map.h>
 #include <padstack.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
@@ -65,6 +66,9 @@ class PCB_TEXT;
 class PCB_TEXTBOX;
 class PCB_TRACK;
 class PCB_TABLE;
+class PCB_DRILL_CHART;
+class PCB_DRILL_MAP;
+class PCB_DRILL_CHART;
 class PCB_TABLECELL;
 class FOOTPRINT;
 class PCB_GROUP;
@@ -266,6 +270,8 @@ private:
     void parseBoardStackup();
 
     void parseSetup();
+
+    void parseDrillSymbolProfile();
     void parseDefaults( BOARD_DESIGN_SETTINGS& aSettings );
     void parseDefaultTextDims( BOARD_DESIGN_SETTINGS& aSettings, int aLayer );
     void parseNETINFO_ITEM();
@@ -293,6 +299,18 @@ private:
     PCB_BARCODE*         parsePCB_BARCODE( BOARD_ITEM* aParent );
     PCB_TABLECELL*       parsePCB_TABLECELL( BOARD_ITEM* aParent );
     PCB_TABLE*           parsePCB_TABLE( BOARD_ITEM* aParent );
+    /**
+     * aAllowIdentity is false inside a drill chart's table_data, where the enclosing
+     * form owns uuid, layer and lock state. A nested copy would silently win.
+     * One token of a table's geometry and cells. False when the token is none of them, so a
+     * drill chart can offer its own tokens first and share everything a table already reads.
+     */
+    bool                 parseTableBodyToken( PCB_TABLE* aTable, PCB_KEYS_T::T aToken,
+                                              bool aAllowIdentity );
+    void                 parseTableBody( PCB_TABLE* aTable, bool aAllowIdentity );
+    PCB_DRILL_CHART*     parsePCB_DRILL_CHART( BOARD_ITEM* aParent );
+    DRILL_SPAN           parseDrillSpanBody();
+    PCB_DRILL_MAP*       parsePCB_DRILL_MAP( BOARD_ITEM* aParent );
     PCB_DIMENSION_BASE*  parseDIMENSION( BOARD_ITEM* aParent );
 
     // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.

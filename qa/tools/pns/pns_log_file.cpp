@@ -683,7 +683,7 @@ bool PNS_LOG_FILE::loadJsonLog( const wxString& aFilename, REPORTER* aRpt, bool 
 
         if( aRpt )
         {
-            aRpt->Report( wxString::Format( "JSON log load: %lu events, %lu added, %lu removed\n", m_events.size(),
+            aRpt->Report( wxString::Format( "JSON log load: %zu events, %zu added, %zu removed\n", m_events.size(),
                                             m_commitState.m_addedItems.size(), m_commitState.m_removedIds.size() ),
                           RPT_SEVERITY_INFO );
         }

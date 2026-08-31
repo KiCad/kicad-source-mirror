@@ -88,6 +88,11 @@ private:
     wxStyledTextCtrl*           m_cellText;
     SCINTILLA_TRICKS*           m_scintillaTricks;
 
+    /**
+     * Generated cell text, shown so the user can read it but not theirs to change.
+     */
+    bool                        m_cellTextIsGenerated;
+
     HTML_MESSAGE_BOX*           m_helpWindow;
 
     TABLECELL_PROPS_RETVALUE    m_returnValue; // the option that closed the dialog

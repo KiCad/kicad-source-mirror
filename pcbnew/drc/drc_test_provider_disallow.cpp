@@ -205,7 +205,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
         if( item->Type() == PCB_FIELD_T
             || item->Type() == PCB_TEXT_T
             || item->Type() == PCB_TEXTBOX_T
-            || item->Type() == PCB_TABLE_T
+            || BaseType( item->Type() ) == PCB_TABLE_T
             || item->Type() == PCB_BARCODE_T
             || BaseType( item->Type() ) == PCB_DIMENSION_T )
         {

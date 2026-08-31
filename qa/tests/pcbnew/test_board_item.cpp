@@ -32,6 +32,7 @@
 #include <pcb_barcode.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_drill_chart.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_reference_image.h>
@@ -146,6 +147,43 @@ public:
         case PCB_POINT_T:             return new PCB_POINT( &m_board );
         case PCB_GRID_ITEM_T:         return new PCB_GRID_ITEM( &m_board );
 
+        case PCB_DRILL_CHART_T:
+        {
+            PCB_DRILL_CHART* chart = new PCB_DRILL_CHART( &m_board );
+
+            const int colWidths[2] = { pcbIUScale.mmToIU( 20.0 ), pcbIUScale.mmToIU( 30.0 ) };
+            const int rowHeights[2] = { pcbIUScale.mmToIU( 5.0 ), pcbIUScale.mmToIU( 7.0 ) };
+
+            chart->SetColCount( 2 );
+            chart->SetColWidth( 0, colWidths[0] );
+            chart->SetColWidth( 1, colWidths[1] );
+            chart->SetRowHeight( 0, rowHeights[0] );
+            chart->SetRowHeight( 1, rowHeights[1] );
+
+            int y = 0;
+
+            for( int row = 0; row < 2; ++row )
+            {
+                int x = 0;
+
+                for( int col = 0; col < 2; ++col )
+                {
+                    PCB_TABLECELL* cell = new PCB_TABLECELL( &m_board );
+                    cell->SetRectangleHeight( 0 );
+                    cell->SetRectangleWidth( 0 );
+                    cell->SetStart( VECTOR2I( x, y ) );
+                    cell->SetEnd( VECTOR2I( x + colWidths[col], y + rowHeights[row] ) );
+                    chart->AddCell( cell );
+
+                    x += colWidths[col];
+                }
+
+                y += rowHeights[row];
+            }
+
+            return chart;
+        }
+
         case PCB_ZONE_T:
         {
             ZONE* zone = new ZONE( &m_board );
@@ -174,6 +212,7 @@ public:
         case PCB_GENERATOR_T:
         case PCB_CONSTRAINT_T:   // geometry-free; geometric behavior covered by ConstraintSolverItem
         case PCB_BOARD_OUTLINE_T:
+        case PCB_DRILL_MAP_T:    // configuration only; its symbols are drawn by the holes
             return nullptr;
 
         default:

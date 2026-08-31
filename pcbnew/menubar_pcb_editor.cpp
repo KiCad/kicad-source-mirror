@@ -362,6 +362,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::placeCharacteristics );
     placeMenu->Add( PCB_ACTIONS::placeStackup );
+    placeMenu->Add( PCB_ACTIONS::placeDrillChart );
+    placeMenu->Add( PCB_ACTIONS::placeDrillMap );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::drillOrigin );
@@ -433,6 +435,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::drcRuleEditor );
+    toolsMenu->Add( PCB_ACTIONS::showDrillGroups );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showFootprintEditor );

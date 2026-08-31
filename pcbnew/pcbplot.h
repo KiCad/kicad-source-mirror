@@ -35,6 +35,7 @@ class PCB_TEXT;
 class PCB_BARCODE;
 class PAD;
 class PCB_SHAPE;
+class PCB_DRILL_CHART;
 class PCB_TABLE;
 class PCB_DIMENSION_BASE;
 class FOOTPRINT;
@@ -116,6 +117,16 @@ public:
      * a negative (i.e. white) shape in FILLED plot mode (for PS and PDF outputs).
      */
     void PlotDrillMarks();
+
+    /**
+     * Draw each hole's chart symbol on aLayer, from the board's shared symbol profile.
+     */
+    void PlotDrillSymbols( PCB_LAYER_ID aLayer );
+
+    /**
+     * Shape marks in a chart's symbol column, which carry no cell text of their own.
+     */
+    void PlotChartSymbols( const PCB_DRILL_CHART* aChart );
 
     /**
      * White color is special because it cannot be seen on a white paper in B&W mode. It is

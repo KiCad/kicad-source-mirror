@@ -44,6 +44,8 @@
 #include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_drill_chart.h>
+#include <pcb_drill_map.h>
 #include <pcb_table.h>
 #include <pcb_dimension.h>
 #include <zone.h>
@@ -59,6 +61,8 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
     case PCB_TEXT_T:            return std::make_unique<PCB_TEXT>( aContainer );
     case PCB_TEXTBOX_T:         return std::make_unique<PCB_TEXTBOX>( aContainer );
     case PCB_TABLE_T:           return std::make_unique<PCB_TABLE>( aContainer );
+    case PCB_DRILL_CHART_T:     return std::make_unique<PCB_DRILL_CHART>( aContainer );
+    case PCB_DRILL_MAP_T:       return std::make_unique<PCB_DRILL_MAP>( aContainer );
     case PCB_TABLECELL_T:
     {
         PCB_TABLE* table = dynamic_cast<PCB_TABLE*>( aContainer );

@@ -324,6 +324,14 @@ public:
     ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;
 
+    /**
+     * Tell every hole to redraw its drill symbol.
+     *
+     * A cached GAL group replays until its own item is updated, so changing a map or a
+     * symbol assignment is invisible until the holes themselves are refreshed.
+     */
+    void RefreshDrillSymbols( int aUpdateFlags ) override;
+
     void ShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString, wxWindow* aParent = nullptr );
 
     void PrepareLayerIndicator( bool aForceRebuild = false );
