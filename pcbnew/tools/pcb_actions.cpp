@@ -3051,9 +3051,10 @@ TOOL_ACTION PCB_ACTIONS::routerAutorouteSelected( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::routerOptimizeSelected( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.OptimizeSelected" )
         .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_SHIFT + 'O' )
+        .DefaultHotkey( MD_SHIFT + 'T' )
         .FriendlyName( _( "Optimize Selected Track(s)" ) )
         .Tooltip( _( "Simplify selected routed track(s)." ) )
+        .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_ROUTE_SINGLE ) );
 
 TOOL_ACTION PCB_ACTIONS::cancelCurrentItem( TOOL_ACTION_ARGS()
