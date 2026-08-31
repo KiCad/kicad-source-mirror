@@ -816,7 +816,6 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     PCB_REFERENCE_IMAGE* image = aEvent.Parameter<PCB_REFERENCE_IMAGE*>();
     bool                 immediateMode = image != nullptr;
     PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    LSET                 snapLayers = { m_frame->GetActiveLayer() };
     bool                 ignorePrimePosition = false;
     COMMON_SETTINGS*     common_settings = Pgm().GetCommonSettings();
 
@@ -888,6 +887,10 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         cursorPos = m_controls->GetMousePosition();
+
+        // Re-evaluate every iteration: the active layer can be changed mid-tool
+        const LSET snapLayers = { m_frame->GetActiveLayer() };
+
         cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, snapLayers, GRID_GRAPHICS ).position,
                                       COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
@@ -1121,7 +1124,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     BOARD_COMMIT                 commit( m_frame );
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TEXT );
     PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    LSET                         snapLayers = { m_frame->GetActiveLayer() };
 
     auto setCursor =
             [&]()
@@ -1175,6 +1177,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = m_controls->GetMousePosition();
+
+        // Re-evaluate every iteration: the active layer can be changed mid-tool
+        const LSET snapLayers = { m_frame->GetActiveLayer() };
+
         cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, snapLayers, GRID_TEXT ).position, COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1361,7 +1367,6 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
     BOARD_COMMIT                 commit( m_frame );
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TABLE );
     PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    LSET                         snapLayers = { m_frame->GetActiveLayer() };
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -1411,6 +1416,10 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = m_controls->GetMousePosition();
+
+        // Re-evaluate every iteration: the active layer can be changed mid-tool
+        const LSET snapLayers = { m_frame->GetActiveLayer() };
+
         cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, snapLayers, GRID_TEXT ).position, COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1594,7 +1603,6 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::BARCODE );
     PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
-    LSET                         snapLayers = { m_frame->GetActiveLayer() };
 
     auto setCursor =
             [&]()
@@ -1638,6 +1646,10 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = m_controls->GetMousePosition();
+
+        // Re-evaluate every iteration: the active layer can be changed mid-tool
+        const LSET snapLayers = { m_frame->GetActiveLayer() };
+
         cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, snapLayers, GRID_TEXT ).position, COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
