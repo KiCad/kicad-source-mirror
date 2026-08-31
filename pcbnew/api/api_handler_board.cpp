@@ -20,6 +20,7 @@
  */
 
 #include <set>
+#include <fmt/ranges.h>
 #include <magic_enum.hpp>
 
 #include <common.h>
@@ -343,6 +344,23 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             e.set_error_message( fmt::format( "could not unpack {} from request",
                                               item->GetClass().ToStdString() ) );
             return tl::unexpected( e );
+        }
+
+        if( std::vector<wxString> removed = item->RemoveConflictingCustomProperties(); !removed.empty() )
+        {
+            auto as_str =
+                []( const wxString& aIn )
+                {
+                    return std::string( aIn.ToUTF8() );
+                };
+
+            status.set_code( ItemStatusCode::ISC_INVALID_DATA );
+            status.set_error_message( fmt::format(
+                    "Invalid custom properties for item {}: property name(s) '{}' already in use",
+                    item->m_Uuid.AsStdString(), fmt::join( std::views::transform( removed, as_str ), ", " ) ) );
+
+            aItemHandler( status, anyItem );
+            continue;
         }
 
         std::optional<BOARD_ITEM*> optItem = getItemById( item->m_Uuid );

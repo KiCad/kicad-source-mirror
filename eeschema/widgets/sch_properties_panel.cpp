@@ -613,15 +613,7 @@ bool SCH_PROPERTIES_PANEL::isKeyNameInUse( const wxString& aName ) const
     if( !item )
         return false;
 
-    if( wxString dummy; item->GetCustomProperty( aName, dummy ) )
-        return true;
-
-    if( item->Type() == SCH_SYMBOL_T )
-        return static_cast<SCH_SYMBOL*>( item )->GetField( aName ) != nullptr;
-    else if( item->Type() == SCH_SHEET_T )
-        return static_cast<SCH_SHEET*>( item )->GetField( aName ) != nullptr;
-
-    return false;
+    return m_propMgr.GetProperty( item, aName ) != nullptr;
 }
 
 

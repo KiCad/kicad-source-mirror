@@ -573,11 +573,7 @@ bool PCB_PROPERTIES_PANEL::isKeyNameInUse( const wxString& aName ) const
     if( !item )
         return false;
 
-    if( item->Type() == PCB_FOOTPRINT_T && static_cast<FOOTPRINT*>( item )->HasField( aName ) )
-        return true;
-
-    wxString dummy;
-    return item->GetCustomProperty( aName, dummy );
+    return m_propMgr.GetProperty( item, aName ) != nullptr;
 }
 
 

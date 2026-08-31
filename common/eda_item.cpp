@@ -33,6 +33,7 @@
 #include <eda_pattern_match.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <ranges>
 
 
 class EDA_CUSTOM_PROPERTY : public PROPERTY_BASE
@@ -148,6 +149,26 @@ void EDA_ITEM::RemoveCustomProperty( const wxString& aKey )
 {
     m_customProperties.erase( aKey );
     m_dynamicCustomPropsCache.erase( aKey );
+}
+
+
+std::vector<wxString> EDA_ITEM::RemoveConflictingCustomProperties()
+{
+    std::vector<wxString> toRemove;
+
+    for( const wxString& key : m_customProperties | std::views::keys )
+    {
+        if( PROPERTY_BASE* prop = PROPERTY_MANAGER::Instance().GetProperty( this, key ) )
+        {
+            if( prop->Group() != _HKI( "Custom Properties" ) )
+                toRemove.push_back( key );
+        }
+    }
+
+    for( const wxString& key : toRemove )
+        RemoveCustomProperty( key );
+
+    return toRemove;
 }
 
 

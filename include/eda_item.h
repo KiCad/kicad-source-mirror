@@ -226,6 +226,8 @@ public:
      * Custom user-defined string key/value properties attached to this item.
      *
      * Keys and values are arbitrary strings; their meaning is defined by the user.
+     * The only constraint is that keys may not duplicate a built-in property (or field name,
+     * for items that have fields).
      */
     const std::map<wxString, wxString>& GetCustomProperties() const
     {
@@ -234,18 +236,36 @@ public:
 
     void SetCustomProperties( const std::map<wxString, wxString>& aProps )
     {
-        m_customProperties = aProps;
+        m_customProperties.clear();
+
+        for( const auto& [ key, value ] : aProps )
+            SetCustomProperty( key, value );
     }
 
     void SetCustomProperty( const wxString& aKey, const wxString& aValue )
     {
-        m_customProperties[aKey] = aValue;
+        for( auto& [ key, value ] : m_customProperties )
+        {
+            if( key.CmpNoCase( aKey ) == 0 )
+            {
+                value = aValue;
+                return;
+            }
+        }
+
+        m_customProperties.emplace( aKey, aValue );
     }
 
     bool HasCustomProperties() const { return !m_customProperties.empty(); }
     void ClearCustomProperties() { m_customProperties.clear(); }
 
     void RemoveCustomProperty( const wxString& aKey );
+
+    /**
+     * Remove custom properties whose keys collide with an existing field or built-in property
+     * name (matched case-insensitively).  Returns the keys removed, if any.
+     */
+    std::vector<wxString> RemoveConflictingCustomProperties();
 
     /**
      * @return true if \a aKey is present and \a aValue was filled
