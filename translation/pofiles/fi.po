@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-15 10:51+0000\n"
+"PO-Revision-Date: 2026-09-01 19:51+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -180,14 +180,13 @@ msgid "Loading 3D models..."
 msgstr "Ladataan 3D-malleja..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid "Load completed in %.3f s"
-msgstr "Valmistuu ajassa %s"
+msgstr "Latautui ajassa %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1172
-#, fuzzy
 msgid "Stopping background load..."
-msgstr "Tulosta taustaväri"
+msgstr "Pysäytetään taustalataus..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1891
 #: eeschema/libraries/legacy_symbol_library.cpp:535
@@ -2548,12 +2547,12 @@ msgstr "Symbolikirjastoja ei ole ladattu."
 #: common/design_block_library_adapter.cpp:233
 #, fuzzy
 msgid "Configured design block libraries:"
-msgstr "Ladataan suunnittelulohkokirjastoja"
+msgstr "Konfiguroitu suunnittelulohkokirjastoja:"
 
 #: common/design_block_library_adapter.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "and %d more"
-msgstr "%s, %s ja %d enemmän"
+msgstr "ja %d muuta"
 
 #: common/design_block_library_adapter.cpp:247
 #, fuzzy
@@ -8395,9 +8394,8 @@ msgid "Open Arrow"
 msgstr "Valitse selaimella"
 
 #: common/eda_shape.cpp:4780 eeschema/sch_line.cpp:1461
-#, fuzzy
 msgid "Start Shape"
-msgstr "Aloituskerros:"
+msgstr "Aloitumuoto"
 
 #: common/eda_shape.cpp:4785 eeschema/sch_line.cpp:1465
 #, fuzzy
@@ -9860,9 +9858,8 @@ msgid "Schematic: Generate Bill of Materials"
 msgstr "Kytkentäkaavio: Luo materiaaliluettelo"
 
 #: common/jobs/job_export_bom.cpp:137
-#, fuzzy
 msgid "PCB: Generate Bill of Materials"
-msgstr "Luo materiaaliluettelo..."
+msgstr "PCB: luo materiaaliluettelo"
 
 #: common/jobs/job_export_pcb_3d.cpp:185
 msgid "3D model export"
@@ -11369,9 +11366,9 @@ msgid "Failed to archive file '%s'."
 msgstr "Tiedoston '%s' arkistointi epäonnistui."
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "Tiedoston '%s' arkistointi epäonnistui."
+msgstr "Tiedoston '%s' arkistointi epäonnistui %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
@@ -17257,14 +17254,13 @@ msgstr "Pituus:"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1083
 #, fuzzy
 msgid "Start Width:"
-msgstr "Erottimen leveys"
+msgstr "Alkuleveys:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:87
 #: eeschema/dialogs/dialog_shape_properties.cpp:97
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1084
-#, fuzzy
 msgid "End Width:"
-msgstr "Reunan leveys"
+msgstr "Loppuleveys:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:88
 #: eeschema/dialogs/dialog_shape_properties.cpp:98
@@ -20056,9 +20052,8 @@ msgid "Sheet background:"
 msgstr "Arkin tausta:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:119
-#, fuzzy
 msgid "Power symbols:"
-msgstr "Teholähde-symboli"
+msgstr "Tehosymbolit:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:123
 #: eeschema/widgets/search_handlers.cpp:479
@@ -20668,9 +20663,8 @@ msgid "Generate error"
 msgstr "Luo virhe"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:32
-#, fuzzy
 msgid "Check for missing fields"
-msgstr "Tarkistetaan jalanjälki-linkitysongelmia..."
+msgstr "Tarkista puuttuvien kenttien varalta"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:36
 #, fuzzy
@@ -21313,9 +21307,8 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:2415 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:4456
-#, fuzzy
 msgid "--output is required\n"
-msgstr "Saaren vähimmäiskoko:"
+msgstr "--output on pakollinen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2505
 #, c-format
