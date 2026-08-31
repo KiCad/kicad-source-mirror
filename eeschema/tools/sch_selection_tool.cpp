@@ -1433,7 +1433,7 @@ bool SCH_SELECTION_TOOL::CollectHits( SCH_COLLECTOR& aCollector, const VECTOR2I&
 
         // If pins are disabled in the filter, they will be removed later.  Let's add the parent
         // so that people can use pins to select symbols in this case.
-        if( ( m_frame->eeconfig() && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol ) || !m_filter.pins )
+        if( !m_filter.pins )
         {
             int originalCount = aCollector.GetCount();
 
@@ -3659,7 +3659,7 @@ bool SCH_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos
         if( !pin->IsVisible() && !m_frame->GetShowAllPins() )
             return false;
 
-        if( ( m_frame->eeconfig() && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol ) || !m_filter.pins )
+        if( !m_filter.pins )
         {
             // Pin anchors have to be allowed for auto-starting wires.
             if( aPos )
