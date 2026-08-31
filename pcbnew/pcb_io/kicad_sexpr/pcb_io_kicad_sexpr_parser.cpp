@@ -1335,7 +1335,14 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
         case T_embedded_fonts:
         {
-            m_board->GetEmbeddedFiles()->SetAreFontsEmbedded( parseBool() );
+            bool embedFonts = parseBool();
+
+            // An append must not clear the destination's flag; saving with it off deletes the
+            // fonts the destination already embedded
+            if( m_appendToExisting )
+                embedFonts = embedFonts || m_board->GetEmbeddedFiles()->GetAreFontsEmbedded();
+
+            m_board->GetEmbeddedFiles()->SetAreFontsEmbedded( embedFonts );
             NeedRIGHT();
             break;
         }

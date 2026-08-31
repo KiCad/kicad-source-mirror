@@ -2704,6 +2704,13 @@ void LIB_SYMBOL::EmbedFonts()
     for( KIFONT::OUTLINE_FONT* font : fonts )
     {
         auto file = GetEmbeddedFiles()->AddFile( font->GetFileName(), false );
+
+        if( !file )
+        {
+            wxLogTrace( "EMBED", "Failed to add font file: %s", font->GetFileName() );
+            continue;
+        }
+
         file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
     }
 }

@@ -76,12 +76,13 @@ using namespace TSCHEMATIC_T;
 SCH_IO_KICAD_SEXPR_PARSER::SCH_IO_KICAD_SEXPR_PARSER( LINE_READER* aLineReader,
                                                       PROGRESS_REPORTER* aProgressReporter,
                                                       unsigned aLineCount, SCH_SHEET* aRootSheet,
-                                                      bool aIsAppending ) :
+                                                      bool aIsAppending, bool aIsSheetLoad ) :
         SCHEMATIC_LEXER( aLineReader ),
         m_requiredVersion( 0 ),
         m_unit( 1 ),
         m_bodyStyle( 1 ),
         m_appending( aIsAppending ),
+        m_sheetLoad( aIsSheetLoad ),
         m_progressReporter( aProgressReporter ),
         m_lineReader( aLineReader ),
         m_lastProgressLine( 0 ),
@@ -3032,7 +3033,14 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
                 THROW_PARSE_ERROR( _( "No schematic object" ), CurSource(), CurLine(),
                                    CurLineNumber(), CurOffset() );
 
-            schematic->GetEmbeddedFiles()->SetAreFontsEmbedded( parseBool() );
+            bool embedFonts = parseBool();
+
+            // A sheet loaded into an open schematic must not clear the destination's flag;
+            // saving with it off deletes the fonts the destination already embedded
+            if( m_sheetLoad )
+                embedFonts = embedFonts || schematic->GetAreFontsEmbedded();
+
+            schematic->GetEmbeddedFiles()->SetAreFontsEmbedded( embedFonts );
             NeedRIGHT();
             break;
         }
