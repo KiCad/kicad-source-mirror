@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-30 09:53+0000\n"
+"PO-Revision-Date: 2026-08-31 12:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -1530,7 +1530,7 @@ msgstr "導体レイヤーとテクニカルレイヤーの厚みを表示（遅
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
-msgstr "ロールオーバー時にアイテムをハイライト"
+msgstr "ロールオーバー時にアイテムを強調表示"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -2143,9 +2143,9 @@ msgid "Plugin '%s': %s"
 msgstr "プラグイン '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading plugin '%s'"
-msgstr "ライブラリ '%s' の読み込み中にエラー"
+msgstr "プラグイン '%s' の読み込み中にエラー"
 
 #: common/api/api_plugin_manager.cpp:143
 #, c-format
@@ -2158,7 +2158,7 @@ msgstr "アクションが登録されていない"
 
 #: common/api/api_plugin_manager.cpp:388
 msgid "missing plugin environment"
-msgstr "プラグイン環境の不正"
+msgstr "プラグイン環境がありません"
 
 #: common/api/api_plugin_manager.cpp:397
 #, c-format
@@ -2186,14 +2186,12 @@ msgstr "エラー コード %d"
 
 #: common/api/api_plugin_manager.cpp:780 common/api/api_plugin_manager.cpp:860
 #: common/api/api_plugin_manager.cpp:950
-#, fuzzy
 msgid "Could not create plugin environment"
-msgstr "プラグイン環境を作成できません: %s"
+msgstr "プラグイン環境を作成できません"
 
 #: common/api/api_plugin_manager.cpp:805 common/api/api_plugin_manager.cpp:888
-#, fuzzy
 msgid "Missing plugin environment"
-msgstr "プラグイン環境の不正"
+msgstr "プラグイン環境がありません"
 
 #: common/api/api_plugin_manager.cpp:898
 msgid "requirements.txt could not be read"
@@ -2409,14 +2407,14 @@ msgid "Design block library '%s' cannot be deleted."
 msgstr "デザイン ブロック ライブラリ ' %s ' は削除できません。"
 
 #: common/design_block_io.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library folder '%s' could not be opened."
-msgstr "デザイン ブロック フォルダ ' %s ' を作成できませんでした。"
+msgstr "デザインブロック ライブラリ フォルダ '%s' を開くことができませんでした。"
 
 #: common/design_block_io.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist in library '%s'."
-msgstr "デザインブロック '%s' はライブラリ '%s' にすでに存在します。"
+msgstr "デザインブロック '%s' はライブラリ '%s' に存在しません。"
 
 #: common/design_block_io.cpp:350
 #, c-format
@@ -2502,9 +2500,11 @@ msgid "Internal error"
 msgstr "内部エラー"
 
 #: common/design_block_library_adapter.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is not in the design block library table."
-msgstr "ライブラリ '%s' がシンボル ライブラリ テーブルに見つかりません。"
+msgstr ""
+"デザインブロック ライブラリ '%s' はデザインブロック ライブラリ テーブルに存在"
+"しません。"
 
 #: common/design_block_library_adapter.cpp:225
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3649
@@ -2513,9 +2513,8 @@ msgid " Did you mean '%s'?"
 msgstr " '%s'でしょうか？"
 
 #: common/design_block_library_adapter.cpp:231
-#, fuzzy
 msgid "No design block libraries are configured."
-msgstr "シンボル ライブラリがロードされていません。"
+msgstr "デザインブロックライブラリは設定されていません。"
 
 #: common/design_block_library_adapter.cpp:233
 msgid "Configured design block libraries:"
@@ -2535,24 +2534,24 @@ msgid "global"
 msgstr "グローバル"
 
 #: common/design_block_library_adapter.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is disabled in the library table."
-msgstr "デザインブロックライブラリ '%s' の読み込みに失敗しました。"
+msgstr "デザインブロック ライブラリ '%s' は ライブラリ テーブルで無効になっています。"
 
 #: common/design_block_library_adapter.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' could not be opened."
-msgstr "デザイン ブロック ライブラリ ' %s ' は削除できません。"
+msgstr "デザイン ブロック ライブラリ ' %s ' は開くことができませんでした。"
 
 #: common/design_block_library_adapter.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is still loading."
-msgstr "デザインブロックライブラリ '%s' の読み込みに失敗しました。"
+msgstr "デザインブロック ライブラリ'%s' はまだ読み込み中です。"
 
 #: common/design_block_library_adapter.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' not found in any library."
-msgstr "シンボル %s がライブラリまたはキャッシュに見つかりません。"
+msgstr "デザインブロック '%s' はどのライブラリにも見つかりません。"
 
 #: common/design_block_tree_model_adapter.cpp:127 cvpcb/cvpcb_mainframe.cpp:790
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:535
@@ -3177,17 +3176,14 @@ msgid "Design Block Properties"
 msgstr "デザインブロックのプロパティ"
 
 #: common/dialogs/dialog_fields_table.cpp:103
-#, fuzzy
 msgid "Revert Row"
-msgstr "変更を破棄"
+msgstr "行をもとに戻す"
 
 #: common/dialogs/dialog_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the fields in this row"
-msgstr "ファイルとその内容を削除"
+msgstr "この行のフィールドを元に戻す"
 
 #: common/dialogs/dialog_fields_table.cpp:105
-#, fuzzy
 msgid "Clear Cell"
 msgstr "セルのクリア"
 
@@ -5207,8 +5203,8 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
-"回路図 エディターもしくはPCB エディターのウィンドウの領域にマウス カーソルが"
-"重なると、ウィンドウを前面化します。"
+"回路図 エディター もしくは PCB エディター のウィンドウのキャンバス上にマウス "
+"カーソルを移動すると、 そのウィンドウが前面に表示されます。"
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 msgid "Show popup indicator when toggling settings with hotkeys"
@@ -8227,7 +8223,7 @@ msgstr "形状のプロパティ"
 #: pcbnew/pcb_table.cpp:985 pcbnew/pcb_tablecell.cpp:343
 #: pcbnew/pcb_textbox.cpp:1033 pcbnew/pcb_track.cpp:3210
 msgid "Start X"
-msgstr "始点X"
+msgstr "始点 X"
 
 #: common/eda_shape.cpp:4592 eeschema/sch_line.cpp:1432
 #: eeschema/sch_shape.cpp:852 eeschema/sch_table.cpp:624
@@ -8235,15 +8231,15 @@ msgstr "始点X"
 #: pcbnew/pcb_table.cpp:988 pcbnew/pcb_tablecell.cpp:344
 #: pcbnew/pcb_textbox.cpp:1034 pcbnew/pcb_track.cpp:3214
 msgid "Start Y"
-msgstr "始点Y"
+msgstr "始点 Y"
 
 #: common/eda_shape.cpp:4598 pcbnew/pcb_shape.cpp:1916
 msgid "Center X"
-msgstr "X中央"
+msgstr "中心 X"
 
 #: common/eda_shape.cpp:4604 pcbnew/pcb_shape.cpp:1918
 msgid "Center Y"
-msgstr "Y中央"
+msgstr "中心 Y"
 
 #: common/eda_shape.cpp:4616 eeschema/sch_line.cpp:1436
 #: eeschema/sch_shape.cpp:854 eeschema/sch_tablecell.cpp:474
@@ -8309,61 +8305,51 @@ msgstr "塗りつぶしの色"
 #: eeschema/dialogs/dialog_shape_properties.cpp:124 eeschema/sch_line.cpp:1377
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1111
 msgid "Arrow"
-msgstr "矢印"
+msgstr "塗りつぶした矢印"
 
 #: common/eda_shape.cpp:4776 eeschema/dialogs/dialog_line_properties.cpp:117
 #: eeschema/dialogs/dialog_shape_properties.cpp:127 eeschema/sch_line.cpp:1379
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1114
-#, fuzzy
 msgid "Square"
-msgstr "正方形"
+msgstr "四角形"
 
 #: common/eda_shape.cpp:4777 eeschema/dialogs/dialog_line_properties.cpp:115
 #: eeschema/dialogs/dialog_shape_properties.cpp:125 eeschema/sch_line.cpp:1380
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1112
-#, fuzzy
 msgid "Open Arrow"
-msgstr "ブラウザーで開く"
+msgstr "塗りつぶされていない矢印"
 
 #: common/eda_shape.cpp:4780 eeschema/sch_line.cpp:1461
-#, fuzzy
 msgid "Start Shape"
-msgstr "シンプルに始めよう:"
+msgstr "始点形状"
 
 #: common/eda_shape.cpp:4785 eeschema/sch_line.cpp:1465
-#, fuzzy
 msgid "Start Length"
-msgstr "目標の長さ"
+msgstr "始点長"
 
 #: common/eda_shape.cpp:4790 eeschema/sch_line.cpp:1469
-#, fuzzy
 msgid "Start Width"
-msgstr "ワイヤーを開始"
+msgstr "始点幅"
 
 #: common/eda_shape.cpp:4795 eeschema/sch_line.cpp:1473
-#, fuzzy
 msgid "Start Stroke Width"
-msgstr "開始トラック幅を使用"
+msgstr "始点の幹の幅"
 
 #: common/eda_shape.cpp:4801 eeschema/sch_line.cpp:1478
-#, fuzzy
 msgid "End Shape"
-msgstr "パッド形状"
+msgstr "終点形状"
 
 #: common/eda_shape.cpp:4806 eeschema/sch_line.cpp:1482
-#, fuzzy
 msgid "End Length"
-msgstr "配線長を調整"
+msgstr "終点長"
 
 #: common/eda_shape.cpp:4811 eeschema/sch_line.cpp:1486
-#, fuzzy
 msgid "End Width"
-msgstr "最小幅"
+msgstr "終点幅"
 
 #: common/eda_shape.cpp:4816 eeschema/sch_line.cpp:1490
-#, fuzzy
 msgid "End Stroke Width"
-msgstr "スポーク幅"
+msgstr "終点の幹の幅"
 
 #: common/eda_text.cpp:1002 common/eda_text.cpp:1383
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
@@ -9374,7 +9360,7 @@ msgstr "選択に追加"
 #: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1842
 #: pcbnew/tools/pcb_actions.cpp:1872
 msgid "Highlight Net"
-msgstr "ネットをハイライト"
+msgstr "ネットを強調表示"
 
 #: common/hotkey_store.cpp:48
 msgid "Remove from Selection"
@@ -9958,19 +9944,16 @@ msgid "PCB: Export Postscript"
 msgstr "PCB: PostScript としてエクスポート"
 
 #: common/jobs/job_export_pcb_stackup.cpp:66
-#, fuzzy
 msgid "Export board stackup table"
-msgstr "基板統計をエクスポート"
+msgstr "基板積層構造テーブルをエクスポート"
 
 #: common/jobs/job_export_pcb_stackup.cpp:72
-#, fuzzy
 msgid "Export Board Stackup Job Settings"
-msgstr "基板統計のエクスポートジョブ設定"
+msgstr "基板積層構造のエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_stackup.cpp:91
-#, fuzzy
 msgid "PCB: Export Stackup Table"
-msgstr "基板積層構造の表を置く"
+msgstr "PCB:積層構造テーブルをエクスポート"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
 msgid "Export board statistics"
@@ -10459,7 +10442,7 @@ msgstr "移動中のアイテム"
 
 #: common/layer_id.cpp:113
 msgid "Highlighted items"
-msgstr "ハイライトされたアイテム"
+msgstr "強調表示されたアイテム"
 
 #: common/layer_id.cpp:114
 msgid "Hidden items"
@@ -10467,7 +10450,7 @@ msgstr "非表示アイテム"
 
 #: common/layer_id.cpp:115
 msgid "Net color highlight"
-msgstr "ネット色 ハイライト"
+msgstr "ネット色 強調表示"
 
 #: common/layer_id.cpp:116
 msgid "Drag net collisions"
@@ -10475,7 +10458,7 @@ msgstr "配線変化に伴う接続衝突の変化を表示"
 
 #: common/layer_id.cpp:117 common/layer_id.cpp:157
 msgid "Selection highlight"
-msgstr "選択をハイライト"
+msgstr "選択を強調表示"
 
 #: common/layer_id.cpp:118 common/layer_id.cpp:150
 msgid "Drawing sheet"
@@ -10583,7 +10566,7 @@ msgstr "DRC マーカーの影"
 
 #: common/layer_id.cpp:145
 msgid "DRC highlighted"
-msgstr "DRC ハイライト"
+msgstr "強調表示されたDRC"
 
 #: common/layer_id.cpp:148
 msgid "Grid items"
@@ -11607,9 +11590,8 @@ msgid "Configuration"
 msgstr "設定"
 
 #: common/table_io.cpp:40
-#, fuzzy
 msgid "Select data file"
-msgstr "ファイルを選択"
+msgstr "データ ファイルを選択"
 
 #: common/tool/action_menu.cpp:220 common/tool/action_menu.cpp:225
 #, c-format
@@ -13114,9 +13096,8 @@ msgid "Select Path"
 msgstr "パスを選択"
 
 #: common/widgets/kistatusbar.cpp:106
-#, fuzzy
 msgid "Additional information"
-msgstr "情報がありません"
+msgstr "追加情報"
 
 #: common/widgets/kistatusbar.cpp:193
 msgid "Clear Warnings"
@@ -14213,7 +14194,7 @@ msgstr "%s が見つかりません"
 
 #: eeschema/cross-probing.cpp:268 eeschema/cross-probing.cpp:348
 msgid "Highlighted net:"
-msgstr "ハイライトされたネット:"
+msgstr "強調表示されたネット:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:108
 msgid "Annotation Messages:"
@@ -15176,8 +15157,7 @@ msgstr "選択したアイテムをクロス プローブする"
 
 #: eeschema/dialogs/dialog_erc.cpp:236
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr ""
-"ERCリストで選択されたときにキャンバス上の対応するアイテムをハイライト表示"
+msgstr "ERCリストで選択されたときにキャンバス上の対応するアイテムを強調表示"
 
 #: eeschema/dialogs/dialog_erc.cpp:240 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Center on Cross-probe"
@@ -16369,11 +16349,11 @@ msgstr "読み取り専用"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:700
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:581
 msgid "Highlight on Cross-probe"
-msgstr "クロスプローブをハイライト"
+msgstr "クロスプローブを強調表示"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1221
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
-msgstr "テーブルでの選択に対応するキャンバス上についてハイライト表示"
+msgstr "テーブルで選択されたピンをキャンバス上で強調表示"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1336
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1376
@@ -16542,7 +16522,6 @@ msgid "Related Symbols Only"
 msgstr "関連シンボルのみ"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:276
-#, fuzzy
 msgid "Symbol Names"
 msgstr "シンボル名"
 
@@ -18945,7 +18924,7 @@ msgstr "#"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:701
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:582
 msgid "Highlight corresponding item on canvas when it is selected in the table"
-msgstr "テーブルで選択されたときにキャンバス上の対応する項目をハイライト表示"
+msgstr "テーブルで選択されたときにキャンバス上の対応する項目を強調表示"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:705
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:586
@@ -19634,11 +19613,11 @@ msgstr "クロスプローブ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "PCB エディターでの選択に対応するオブジェクトを選択/ハイライトします"
+msgstr "PCB エディターでの選択に対応するオブジェクトを選択/強調表示します"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "選択したフットプリントに対応するシンボルをハイライト表示"
+msgstr "選択したフットプリントに対応するシンボルを強調表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:49
 #: pcbnew/dialogs/panel_display_options_base.cpp:174
@@ -19657,11 +19636,11 @@ msgstr "クロスプローブされたアイテムに合わせてズーム"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 #: pcbnew/dialogs/panel_display_options_base.cpp:184
 msgid "Highlight cross-probed nets"
-msgstr "クロスプローブされたネットをハイライト表示"
+msgstr "クロスプローブされたネットを強調表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "PCB エディターでハイライトされたトラックのネットをハイライト"
+msgstr "PCB エディターで強調表示されたネットを強調表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:65
 #: pcbnew/dialogs/panel_display_options_base.cpp:190
@@ -19730,7 +19709,7 @@ msgstr "ページの境界を表示 (&t)"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:161
 #: pcbnew/dialogs/panel_display_options_base.cpp:138
 msgid "Selection && Highlighting"
-msgstr "選択領域とハイライト"
+msgstr "選択領域と強調表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:171
 msgid "Draw selected child items"
@@ -19754,7 +19733,7 @@ msgstr "ネット衝突マーカー幅:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:204
 msgid "Highlight thickness:"
-msgstr "ハイライトの太さ:"
+msgstr "強調表示の太さ:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:215
 msgid "Highlight netclass colors"
@@ -19762,11 +19741,11 @@ msgstr "ネットクラスの色を強調表示する"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:223
 msgid "Color highlight thickness:"
-msgstr "色ハイライトの太さ:"
+msgstr "色強調表示の太さ:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:231
 msgid "Color highlight opacity:"
-msgstr "色ハイライトの不透明度:"
+msgstr "色強調表示の不透明度:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Line drawing mode:"
@@ -19827,14 +19806,12 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:69
 #: pcbnew/dialogs/panel_edit_options_base.cpp:350
 msgid "<ESC> clears net highlighting"
-msgstr "<ESC> ネットのハイライトをクリア"
+msgstr "<ESC> ネットの強調表示を解除"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:70
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr ""
-"選択ツールの最初の <ESC> は選択をクリアし、次はネットのハイライト表示をクリア"
-"します"
+msgstr "選択ツールの最初の <ESC> は選択を解除し、次はネットの強調表示を解除します"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
 msgid "Automatically annotate symbols"
@@ -22285,9 +22262,9 @@ msgid "Library '%s': %s"
 msgstr "ライブラリ '%s': %s"
 
 #: eeschema/libraries/legacy_cache_reconcile.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' could not be loaded."
-msgstr "ファイル '%s' を作成できませんでした。"
+msgstr "ライブラリ '%s' を読み込めませんでした。"
 
 #: eeschema/libraries/legacy_symbol_library.cpp:579
 #, c-format
@@ -23013,9 +22990,8 @@ msgstr ""
 
 #: eeschema/sch_design_block_utils.cpp:640
 #: pcbnew/pcb_design_block_utils.cpp:616
-#, fuzzy
 msgid "Update Design Block Group"
-msgstr "基板からデザイン ブロックを更新"
+msgstr "デザインブロック グループを更新"
 
 #: eeschema/sch_edit_frame.cpp:180
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
@@ -23090,7 +23066,7 @@ msgstr "ネット チェーンのメンバー: %s"
 #: eeschema/sch_edit_frame.cpp:2148
 #, c-format
 msgid "Highlighted net: %s"
-msgstr "ハイライトされたネット: %s"
+msgstr "強調表示されたネット: %s"
 
 #: eeschema/sch_edit_frame.cpp:2354
 msgid "Save Symbol to Schematic"
@@ -27573,14 +27549,12 @@ msgid "Voltage (measured)"
 msgstr "電圧 (measured)"
 
 #: eeschema/sim/sim_plot_tab.cpp:2195
-#, fuzzy
 msgid "Add a new signal view"
-msgstr "フィールドを新規追加"
+msgstr "新しい信号ビューを追加"
 
 #: eeschema/sim/sim_plot_tab.cpp:2199
-#, fuzzy
 msgid "Remove the last signal view"
-msgstr "関連付けファイルを削除"
+msgstr "最後の信号ビューを削除"
 
 #: eeschema/sim/sim_plot_tab.h:161 eeschema/sim/simulator_frame_ui.cpp:268
 #: eeschema/sim/simulator_frame_ui.cpp:954
@@ -27772,9 +27746,8 @@ msgstr "プロット"
 
 #: eeschema/sim/simulator_frame_ui.cpp:771
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
-#, fuzzy
 msgid "Y Scale"
-msgstr "拡大／縮小率"
+msgstr "横軸"
 
 #: eeschema/sim/simulator_frame_ui.cpp:773
 #: eeschema/sim/simulator_frame_ui_base.cpp:116
@@ -28200,10 +28173,9 @@ msgid "Library changes are unsaved"
 msgstr "ライブラリの変更は保存されていません"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Editing %s from schematic.  Saving will update the schematic only."
-msgstr ""
-"回路図のシンボル %s を編集します。保存すると、回路図のみが更新されます。"
+msgstr "回路図からシンボル %s を編集します。保存すると、回路図のみが更新されます。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:993
 #, c-format
@@ -29893,32 +29865,32 @@ msgstr "未接続のセグメントに分割します"
 
 #: eeschema/tools/sch_actions.cpp:1136 pcbnew/tools/pcb_actions.cpp:1843
 msgid "Highlight net under cursor"
-msgstr "カーソルの下にあるネットをハイライト"
+msgstr "カーソルの下にあるネットを強調表示"
 
 #: eeschema/tools/sch_actions.cpp:1143 pcbnew/tools/pcb_actions.cpp:1858
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1233
 msgid "Clear Net Highlighting"
-msgstr "ネットのハイライトをクリア"
+msgstr "ネットの強調表示を解除"
 
 #: eeschema/tools/sch_actions.cpp:1144
 msgid "Clear any existing net highlighting"
-msgstr "既存のネットハイライトをクリアする"
+msgstr "既存のネット強調表示を解除する"
 
 #: eeschema/tools/sch_actions.cpp:1153
 msgid "Highlight Nets"
-msgstr "ネットをハイライト"
+msgstr "ネットを強調表示"
 
 #: eeschema/tools/sch_actions.cpp:1154
 msgid "Highlight wires and pins of a net"
-msgstr "ネットのワイヤーとピンをハイライト表示"
+msgstr "ネットのワイヤーとピンを強調表示"
 
 #: eeschema/tools/sch_actions.cpp:1162 pcbnew/tools/pcb_actions.cpp:1880
 msgid "Highlight Net Chain"
-msgstr "ネット チェーンをハイライト"
+msgstr "ネット チェーンを強調表示"
 
 #: eeschema/tools/sch_actions.cpp:1163
 msgid "Highlight the net chain under the cursor"
-msgstr "カーソルの下にあるネット チェーンをハイライト"
+msgstr "カーソルの下にあるネット チェーンを強調表示"
 
 #: eeschema/tools/sch_actions.cpp:1169
 msgid "Remove from Net Chain"
@@ -30985,9 +30957,8 @@ msgstr "選択されたパッドにデフォルトのパッド プロパティ�
 #: eeschema/tools/sch_edit_tool.cpp:2947
 #: eeschema/tools/symbol_editor_edit_tool.cpp:946
 #: pcbnew/tools/edit_tool.cpp:2315
-#, fuzzy
 msgid "Show Properties panel"
-msgstr "プロパティ マネージャーを表示"
+msgstr "プロパティ パネルを表示"
 
 #: eeschema/tools/sch_edit_tool.cpp:3081
 msgid "Edit Sheet Properties"
@@ -32928,11 +32899,11 @@ msgstr "IPNEG Gerberコマンドは2012年以降非推奨です。スキップ�
 
 #: gerbview/toolbars_gerber.cpp:187 gerbview/toolbars_gerber.cpp:306
 msgid "Highlight items belonging to this component"
-msgstr "このコンポーネントに属しているアイテムをハイライト"
+msgstr "このコンポーネントに属しているアイテムを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:209 gerbview/toolbars_gerber.cpp:310
 msgid "Highlight items belonging to this net"
-msgstr "このネットに属しているアイテムをハイライト"
+msgstr "このネットに属しているアイテムを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:229 gerbview/toolbars_gerber.cpp:232
 msgid "Attr:"
@@ -32940,7 +32911,7 @@ msgstr "属性:"
 
 #: gerbview/toolbars_gerber.cpp:231 gerbview/toolbars_gerber.cpp:314
 msgid "Highlight items with this aperture attribute"
-msgstr "このアパーチャ属性を持つアイテムをハイライト"
+msgstr "この開口部属性を持つアイテムを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:254 gerbview/toolbars_gerber.cpp:256
 msgid "DCode:"
@@ -32952,15 +32923,15 @@ msgstr "テキスト情報の入力"
 
 #: gerbview/toolbars_gerber.cpp:305
 msgid "Component highlight"
-msgstr "コンポーネントハイライト"
+msgstr "コンポーネントを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:309
 msgid "Net highlight"
-msgstr "ネットハイライト"
+msgstr "ネットを強調表示"
 
 #: gerbview/toolbars_gerber.cpp:313
 msgid "Aperture highlight"
-msgstr "アパーチャハイライト"
+msgstr "開口部を強調表示"
 
 #: gerbview/toolbars_gerber.cpp:317
 msgid "DCode selector"
@@ -33058,19 +33029,19 @@ msgstr "すべてのレイヤーを再読み込み"
 
 #: gerbview/tools/gerbview_actions.cpp:127
 msgid "Clear Highlight"
-msgstr "ハイライトをクリア"
+msgstr "強調表示を解除"
 
 #: gerbview/tools/gerbview_actions.cpp:139
 msgid "Highlight Component"
-msgstr "コンポーネントをハイライト"
+msgstr "コンポーネントを強調表示"
 
 #: gerbview/tools/gerbview_actions.cpp:145
 msgid "Highlight Attribute"
-msgstr "属性情報をハイライト"
+msgstr "属性情報を強調表示"
 
 #: gerbview/tools/gerbview_actions.cpp:151
 msgid "Highlight DCode"
-msgstr "Dコードをハイライト"
+msgstr "Dコードを強調表示"
 
 #: gerbview/tools/gerbview_actions.cpp:159
 msgid "Next Layer"
@@ -33176,27 +33147,27 @@ msgstr "アクティブ レイヤー%d上にファイルが読み込まれてい
 
 #: gerbview/tools/gerbview_selection_tool.cpp:46
 msgid "Highlight"
-msgstr "ハイライト"
+msgstr "強調表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:68
 #, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "コンポーネント '%s' のアイテムをハイライト表示"
+msgstr "コンポーネント '%s' のアイテムを強調表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:76
 #, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "ネット '%s' のアイテムをハイライト表示"
+msgstr "ネット '%s' のアイテムを強調表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "アパーチャのタイプ '%s' をハイライト表示"
+msgstr "開口部タイプ '%s' を強調表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
 msgid "Highlight DCode D%d"
-msgstr "Dコード D%d をハイライト"
+msgstr "Dコード D%d を強調表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:76
 #: gerbview/widgets/layer_widget.cpp:533
@@ -34346,7 +34317,7 @@ msgstr "ネットリスト属性を生成しない"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:86
 msgid "Disable aperture macros"
-msgstr "アパーチャ マクロを無効にする"
+msgstr "開口部 マクロを無効にする"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:90
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:119
@@ -34515,19 +34486,16 @@ msgid "Force A4 paper size."
 msgstr "強制的にA4用紙サイズとする。"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:41
-#, fuzzy
 msgid "Export a board stackup report"
-msgstr "基板統計レポートを生成"
+msgstr "基板積層構造レポートをエクスポート"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:45
-#, fuzzy
 msgid "Output file format; valid options: csv, json"
-msgstr "出力ファイル形式, オプション: json, レポート"
+msgstr "出力ファイル形式; 有功なオプション: csv,json"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:50
-#, fuzzy
 msgid "CSV units; valid options: in, mm"
-msgstr "レポート単位;有効なオプション:in,mm"
+msgstr "CSV単位; 有効なオプション: in,mm"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:53
 msgid "Omit color from the CSV export"
@@ -42169,7 +42137,7 @@ msgstr "物理的積層構造"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
 msgid "Board Finish"
-msgstr "基板仕上げ"
+msgstr "基板表面仕上げ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:130
 #: pcbnew/dialogs/dialog_plot.cpp:1389
@@ -42271,17 +42239,14 @@ msgid "Include Fields"
 msgstr "非表示フィールドを含める"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:70
-#, fuzzy
 msgid "Loss tangent"
 msgstr "損失正接"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:73
-#, fuzzy
 msgid "Board finish"
-msgstr "基板仕上げ"
+msgstr "基板表面仕上げ"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:76
-#, fuzzy
 msgid "Board options"
 msgstr "基板オプション"
 
@@ -43353,7 +43318,7 @@ msgstr "チェックを外すと、各配線の最初のエラーのみレポー
 
 #: pcbnew/dialogs/dialog_drc.cpp:387
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr "DRC リストの選択に対応するキャンバス上のアイテムをハイライト表示"
+msgstr "DRC リストの選択に対応するキャンバス上のアイテムを強調表示"
 
 #: pcbnew/dialogs/dialog_drc.cpp:476
 msgid "DRC incomplete: could not compile custom design rules."
@@ -43685,83 +43650,68 @@ msgstr ""
 "一時ファイル '%s' のリネームに失敗しました。"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:360
-#, fuzzy
 msgid "packages"
-msgstr "パッケージャー"
+msgstr "製造データパッケージ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:361
-#, fuzzy
 msgid "components"
-msgstr "コンポーネント %s"
+msgstr "電子部品データ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:362
 msgid "padstacks"
 msgstr "パッド スタック"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:363
-#, fuzzy
 msgid "stackup"
-msgstr "レイヤー スタックアップ"
+msgstr "基板積層構造"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:364
-#, fuzzy
 msgid "board profile"
-msgstr "Kicad プロジェクト ファイル"
+msgstr "基板外形"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:365
-#, fuzzy
 msgid "solder mask"
 msgstr "ハンダマスク"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:366
-#, fuzzy
 msgid "solder paste"
 msgstr "ハンダペースト"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:367
-#, fuzzy
 msgid "silkscreen"
 msgstr "シルクスクリーン"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:368
-#, fuzzy
 msgid "drill and router"
-msgstr "ドリルとプロット座標の原点"
+msgstr "ドリルとルーター加工"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:369
-#, fuzzy
 msgid "documentation"
-msgstr "ドキュメント"
+msgstr "ドキュメント情報"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:370
-#, fuzzy
 msgid "outer copper"
-msgstr "ベリリウム銅"
+msgstr "外側の導体層"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:371
-#, fuzzy
 msgid "inner copper"
-msgstr "内部の導体層"
+msgstr "内側の導体層"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:372
-#, fuzzy
 msgid "dielectric"
 msgstr "誘電体"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:373
-#, fuzzy
 msgid "misc fab layers"
-msgstr "表示レイヤー"
+msgstr "その他の製造用レイヤー"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:374
-#, fuzzy
 msgid "logical netlist"
-msgstr "ネットリストをエクスポート"
+msgstr "回路図ネットリスト"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:375
-#, fuzzy
 msgid "physical netlist"
-msgstr "Eeschema ネットリスト"
+msgstr "基板図ネットリスト"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:397
 #, c-format
@@ -43770,17 +43720,16 @@ msgstr "含む: %s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:440
 msgid "This data set has no optional sections to choose from."
-msgstr ""
+msgstr "このデータセットにはオプションとして選択可能なセクションはありません。"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:441
 #: pcbnew/dialogs/dialog_export_2581.cpp:446
-#, fuzzy
 msgid "Customize Content"
-msgstr "後でカスタマイズ:"
+msgstr "内容をカスタマイズ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:445
 msgid "Choose the optional sections to include."
-msgstr ""
+msgstr "含めるオプションのセクションを選択する。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -43838,29 +43787,28 @@ msgid "Bill of materials"
 msgstr "部品表(BOM)"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Stackup"
 msgstr "基板積層構造"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Fabrication"
-msgstr "基板製造用 レイヤー"
+msgstr "基板製造"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Assembly"
-msgstr "背面図"
+msgstr "実装"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
 msgid "Stencil"
-msgstr ""
+msgstr "ステンシル"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
 msgid ""
 "Which sections of the design the file carries, per the IPC-2581 function "
 "mode table"
 msgstr ""
+"IPC-2581ファンクションモード テーブルに従って、出力ファイルがどの設計"
+"セクションを包含しているか"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:133
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
@@ -43869,13 +43817,15 @@ msgstr "ネット名:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:137
 msgid "Anonymize"
-msgstr ""
+msgstr "匿名化する"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid ""
 "Anonymized names keep connectivity for netlist compare without carrying the "
 "design intent"
 msgstr ""
+"匿名化された名前は設計意図を伝えることなくネットリスト比較のための接続性情報"
+"を保持します"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
 msgid "Reference designators:"
@@ -43900,14 +43850,12 @@ msgid "Includes:"
 msgstr "含む:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:166
-#, fuzzy
 msgid "Customize..."
-msgstr "カスタム..."
+msgstr "カスタマイズ..."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:172
-#, fuzzy
 msgid "BOM Fields..."
-msgstr "BOM ファイル (&B)..."
+msgstr "部品表(BOM)フィールド..."
 
 #: pcbnew/dialogs/dialog_export_2581_bom.cpp:140
 msgid "manufacturer"
@@ -43973,9 +43921,8 @@ msgid "Distributor:"
 msgstr "販売者:"
 
 #: pcbnew/dialogs/dialog_export_2581_bom_base.h:60
-#, fuzzy
 msgid "BOM Fields"
-msgstr "フィールド"
+msgstr "部品表(BOM)フィールド"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:71
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:197
@@ -45354,9 +45301,8 @@ msgid "Edit Pads"
 msgstr "パッドを編集"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1240
-#, fuzzy
 msgid "Select pad data file"
-msgstr "ピンデータファイルを選択"
+msgstr "パッドデータ ファイルを選択"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1267
 msgid ""
@@ -45364,20 +45310,21 @@ msgid ""
 "\n"
 "They will be skipped."
 msgstr ""
+"複雑なパッド スタックはCSVでエクスポートすることができません。\n"
+"\n"
+"それらはスキップされました。"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1268
-#, fuzzy
 msgid "Export Pad Table"
-msgstr "パッド テーブル"
+msgstr "パッド テーブルをエクスポート"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1369
 msgid "Imported pad data must include pad numbers."
 msgstr "インポートされたパッドデータにはパッド番号を含める必要がある。"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1370
-#, fuzzy
 msgid "Import error"
-msgstr "インポート元:"
+msgstr "インポート エラー"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:31
 msgid "Pad numbers:"
@@ -45416,14 +45363,12 @@ msgid "Pad->Die Delay"
 msgstr "パッドからダイまでの遅延"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:145
-#, fuzzy
 msgid "Replace all existing pads"
-msgstr "既存のピンを全て置き換える"
+msgstr "既存のパッドを全て置き換える"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:148
-#, fuzzy
 msgid "Append to existing pads"
-msgstr "既存のピンに追加"
+msgstr "既存のパッドに追加"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.h:77
 msgid "Pad Table"
@@ -45641,7 +45586,7 @@ msgstr "精度"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:31
 msgid "Click on items to highlight them on the board."
-msgstr "基板上でハイライトさせるアイテムをクリックします。"
+msgstr "基板上でアイテムをクリックしそのアイテムを強調表示。"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
 #, c-format
@@ -46543,14 +46488,13 @@ msgid "Select Copper Layer Pair"
 msgstr "導体レイヤー ペアを選択"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:189
-#, fuzzy
 msgid "Footprint Names"
 msgstr "フットプリント名"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Fields Table ('%s' Library)"
-msgstr "シンボル フィールド テーブル (ライブラリ '%s')"
+msgstr "フットプリント フィールド テーブル (ライブラリ '%s')"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:237
 #, c-format
@@ -46563,9 +46507,8 @@ msgid "Error loading footprint '%s': %s"
 msgstr "フットプリント '%s' の読み込み中にエラー: %s"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:263
-#, fuzzy
 msgid "No footprints could be loaded from the library."
-msgstr "ライブラリからシンボルが読み込まれていません。"
+msgstr "ライブラリからフットプリントが読み込まれていません。"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:380
 #: pcbnew/footprint.cpp:2365
@@ -47863,20 +47806,20 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"ガーバー ファイルにネットリストの付帯情報とアパーチャの属性を含めます。\n"
+"ガーバー ファイルにネットリストの付帯情報と開口部の属性を含めます。\n"
 "X1 フォーマットではこれらはコメントです。\n"
-"CAMツールとガーバービューアーで接続をチェックするために使用されます。"
+"CAMツールとガーバービューアーで接続性をチェックするために使用されます。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:261
 msgid "Disable aperture macros (not recommended)"
-msgstr "アパーチャ マクロを無効化 (非推奨)"
+msgstr "開口部 マクロを無効化 (非推奨)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:262
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"ガーバー ファイルのアパーチャ マクロを無効化します\n"
+"ガーバー ファイルの開口部 マクロを無効化します\n"
 "壊れたガーバー ビューアー*のみ*に対して使用します。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:274
@@ -48025,7 +47968,7 @@ msgstr "モード"
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
 #: pcbnew/router/router_tool.cpp:3165
 msgid "Highlight collisions"
-msgstr "衝突箇所をハイライト表示"
+msgstr "衝突箇所を強調表示"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Free angle mode"
@@ -48040,8 +47983,8 @@ msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(衝突箇所ハイライト表示モードのみ) - DRC ルール違反があっても配線することを許"
-"容します。"
+"(衝突箇所強調表示モードのみ) - DRC ルール違反があっても配線することを許容しま"
+"す。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
 #: pcbnew/router/router_tool.cpp:3167
@@ -49225,7 +49168,7 @@ msgstr "この条件を削除"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:106
 msgid "Highlight matching footprints"
-msgstr "ハイライトに該当するフットプリント"
+msgstr "一致するフットプリントを強調表示"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:116
 msgid "Match all"
@@ -49317,11 +49260,11 @@ msgstr "親のフットプリントが選択されている場合にすべての
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:168
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "回路図 エディターでの選択に対応するオブジェクトを選択/ハイライトします"
+msgstr "回路図 エディターでの選択に対応するオブジェクトを選択/強調表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:170
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "選択したシンボルに対応するフットプリントをハイライト表示"
+msgstr "選択したシンボルに対応するフットプリントを強調表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:176
 msgid "Ensures that cross-probed footprints are visible in the current view"
@@ -49330,7 +49273,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:186
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "回路図 エディターでハイライトされたネットをハイライト"
+msgstr "回路図 エディターで強調表示されたネットを強調表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:196
 msgid "Refresh 3D view automatically"
@@ -49414,7 +49357,7 @@ msgstr "選択状態を切り替える"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:186
 #: pcbnew/dialogs/panel_edit_options_base.cpp:260
 msgid "Highlight net (for pads/tracks)"
-msgstr "ネットをハイライトします(パッドまたはトラック)"
+msgstr "ネットを強調表示(パッドまたは配線)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:240
 msgid "Shift+Cmd:"
@@ -50393,8 +50336,8 @@ msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
 msgstr ""
-"同じフットプリント内のパッド間のハンダマスク アパーチャ ブリッジの DRC エ"
-"ラー チェックを無効にする。"
+"同じフットプリント内のパッド間のハンダマスク 開口部 ブリッジの DRC エラー "
+"チェックを無効にする。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 msgid "Tent vias:"
@@ -53197,7 +53140,7 @@ msgstr "導体スライバー"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "異なるネットのアイテムがハンダマスクのアパーチャで接続されている"
+msgstr "異なるネットのアイテムがハンダマスクの開口部で接続されている"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Silkscreen clipped by solder mask"
@@ -54258,11 +54201,11 @@ msgstr "基板セットアップのハンダマスクの最小幅"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:840
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr "異なるネットのアイテムが表面ハンダマスクのアパーチャで接続されている"
+msgstr "異なるネットのアイテムが表面ハンダマスクの開口部で接続されている"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:841
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr "異なるネットのアイテムが裏面ハンダマスクのアパーチャで接続されている"
+msgstr "異なるネットのアイテムが裏面ハンダマスクの開口部で接続されている"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:1069
 msgid "Building solder mask..."
@@ -54535,7 +54478,7 @@ msgstr "許可しない"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:53
 msgid "Forbid the matched items entirely"
-msgstr ""
+msgstr "一致したアイテムを完全に禁止する"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:45
 msgid "Where conditions match:"
@@ -54621,7 +54564,7 @@ msgstr "ルール 領域内にアイテムを配置する必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:104
 msgid "Custom match expression in the DRC rule language"
-msgstr ""
+msgstr "DRCルール言語のカスタム一致式"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:134
 msgid "Remove this condition"
@@ -54633,7 +54576,7 @@ msgstr "ルールテキストは空欄にできません"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:45
 msgid "Complete rule text in the DRC rule language"
-msgstr ""
+msgstr "DRCルール言語の完全なルールテキスト"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:334
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:336
@@ -54710,7 +54653,7 @@ msgstr "すでに最大数のプラグインがダイアログに追加済みで
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:137
 msgid "Minimum width of the copper ring around a hole"
-msgstr ""
+msgstr "穴の周りの最小導体リング幅"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:150
 #, fuzzy
@@ -54724,7 +54667,7 @@ msgstr "ピンとピンの接続"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:174
 msgid "Minimum width of solder mask left between two mask openings"
-msgstr ""
+msgstr "２つのマスク開口部の間に残されたハンダマスク最小幅"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:188
 #, fuzzy
@@ -54743,7 +54686,7 @@ msgstr "最小 uVia 直径"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:224
 msgid "Minimum clearance between silkscreen items"
-msgstr ""
+msgstr "シルクスクリーンのアイテム間の最小クリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:237
 #, fuzzy
@@ -54752,11 +54695,11 @@ msgstr "パッドと半田マスク間のマージン"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:250
 msgid "Distance the solder mask opening extends beyond the pad"
-msgstr ""
+msgstr "ハンダマスク開口部がパッドからどれだけはみ出しているか"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:263
 msgid "Distance the solder paste aperture extends beyond the pad"
-msgstr ""
+msgstr "ハンダペースト開口部がパッドからどれだけはみ出しているか"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_input_constraint_data.h:96
 msgid "Numeric input value must be greater than 0"
@@ -54885,19 +54828,19 @@ msgstr "最小ビア穴サイズは最大ビア穴サイズより大きくでき
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:57
 msgid "Forbid through vias under surface mount pads"
-msgstr ""
+msgstr "表面実装パッド下の貫通ビアを禁止する"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:59
 msgid "Forbid micro vias under surface mount pads"
-msgstr ""
+msgstr "表面実装パッド下のマイクロビアを禁止する"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:61
 msgid "Forbid blind vias under surface mount pads"
-msgstr ""
+msgstr "表面実装パッド下のブラインドビアを禁止する"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:63
 msgid "Forbid buried vias under surface mount pads"
-msgstr ""
+msgstr "表面実装パッド下のベリード ビアを禁止する"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:73
 msgid "At least one via type must be selected"
@@ -54971,11 +54914,11 @@ msgstr "ルール名は重複せず一意である必要があります"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:120
 msgid "Optional comment stored with the rule"
-msgstr ""
+msgstr "ルールと共に保存されるオプションのコメント"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:123
 msgid "Layers this rule applies to"
-msgstr ""
+msgstr "このルールが適用されるレイヤー"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:444
 msgid "Rule name must be unique."
@@ -58294,7 +58237,7 @@ msgstr "ネットを読み込み中..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2506
 #, c-format
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "Altium ネット %zu は名前がありません; '%s'としてインポートされる 。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2527
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2833
@@ -59583,7 +59526,7 @@ msgstr "gEDA / Lepton EDA プリント基板 フットプリント ライブラ�
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:381
 msgid "Cannot produce this IPC-2581 data set."
-msgstr ""
+msgstr "IPC-2581 データセットは生成できません。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:391
 #, fuzzy
@@ -59592,17 +59535,19 @@ msgstr "接続されたネットが未選択です。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:407
 msgid "Cannot export assembly data without outer copper layers."
-msgstr ""
+msgstr "外側の導体レイヤーが無いので組立てデータをエクスポートできません。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:415
 msgid "Cannot export physical netlist without outer copper layers."
-msgstr ""
+msgstr "外側の導体レイヤーが無いので物理ネットリストをエクスポートできません。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:448
 msgid ""
 "Component assembly data cannot be exported without component packages in "
 "IPC-2581B."
 msgstr ""
+"IPC-2581Bではコンポーネント製造データパッケージが無いとコンポーネント組立て"
+"データをエクスポートできません。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:540
 msgid "Generating content section"
@@ -60131,6 +60076,8 @@ msgid ""
 "Design rules for the imported differential pairs were not written; '%s' "
 "already exists."
 msgstr ""
+"インポートされた差動ペアの設計ルールは書き込まれません;'%s'がすでに存在してい"
+"ます。"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:802
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:823
@@ -60201,12 +60148,12 @@ msgstr ""
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:978
 #, c-format
 msgid "Skipped a non-positive-width route on PADS layer %d."
-msgstr ""
+msgstr "PADSレイヤー %dで正の幅でない配線をスキップしました。"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:1076
 #, c-format
 msgid "Skipped a via on net '%s' with an unusable PADS layer span %d,%d."
-msgstr ""
+msgstr "'%s'上のビアをスキップしました (使用不可のPADSレイヤースパン %d,%d）。"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:1123
 #, fuzzy, c-format
@@ -61473,14 +61420,13 @@ msgid "Wrote board statistics to '%s'.\n"
 msgstr "基板統計を '%s' に書き込みました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2187
-#, fuzzy
 msgid "Failed to serialize board stackup\n"
-msgstr "基板の保存に失敗しました。\n"
+msgstr "基板積層構造のシリアライズに失敗しました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2254
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board stackup to '%s'.\n"
-msgstr "基板統計を '%s' に書き込みました。\n"
+msgstr "基板積層構造を '%s' に書き込みました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2582 pcbnew/pcbnew_jobs_handler.cpp:2657
 #, c-format
@@ -63652,9 +63598,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2214
-#, fuzzy
 msgid "The components in the two areas could not be paired up."
-msgstr "プロジェクト ファイルのいくつかはバックアップされませんでした。"
+msgstr "2つの領域のコンポーネントを組み合わせることができませんでした。"
 
 #: pcbnew/tools/multichannel_tool.cpp:2221
 #, c-format
@@ -64445,9 +64390,8 @@ msgid "Bulk Edit Footprint Fields..."
 msgstr "フットプリント フィールドを一括編集..."
 
 #: pcbnew/tools/pcb_actions.cpp:1206
-#, fuzzy
 msgid "Edit a table of fields from all footprints in the library"
-msgstr "基板上のすべてのフットプリントからフィールド テーブルを編集します"
+msgstr "ライブラリ内のすべてのフットプリントからフィールド テーブルを編集します"
 
 #: pcbnew/tools/pcb_actions.cpp:1212
 msgid "Footprint Properties..."
@@ -64972,19 +64916,19 @@ msgstr "ライン モード"
 
 #: pcbnew/tools/pcb_actions.cpp:1850
 msgid "Toggle Last Net Highlight"
-msgstr "最後のネット ハイライト表示を切り替え"
+msgstr "最後のネット 強調表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1851
 msgid "Toggle between last two highlighted nets"
-msgstr "最後の２つのハイライトされたネットを切り替えます"
+msgstr "最後の２つの強調表示されたネットを切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1864
 msgid "Toggle Net Highlight"
-msgstr "ネットのハイライトを切り替え"
+msgstr "ネットの強調表示を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1873
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "選択したネットの全導体アイテムをハイライト表示"
+msgstr "選択したネットの全導体アイテムを強調表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1881
 msgid "Highlight every net in the net chain"
@@ -65717,11 +65661,11 @@ msgstr "差動ペアの寸法設定を開く"
 
 #: pcbnew/tools/pcb_actions.cpp:2920
 msgid "Router Highlight Mode"
-msgstr "ルーター ハイライト モード"
+msgstr "ルーター 強調表示 モード"
 
 #: pcbnew/tools/pcb_actions.cpp:2921
 msgid "Switch router to highlight mode"
-msgstr "ルーターをハイライト モードに切り替え"
+msgstr "ルーターを強調表示 モードに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:2928
 msgid "Router Shove Mode"
@@ -66023,9 +65967,8 @@ msgid "Applying Design Block Layouts"
 msgstr "デザイン ブロック レイアウトを適用"
 
 #: pcbnew/tools/pcb_control.cpp:1563
-#, fuzzy
 msgid "the design block has no saved board layout"
-msgstr "デザインブロックには保存するレイアウトがありません"
+msgstr "デザインブロックには保存された基板レイアウトがありません"
 
 #: pcbnew/tools/pcb_control.cpp:1594
 #, fuzzy
@@ -66034,14 +65977,12 @@ msgstr ""
 "デザイン ブロック付帯情報ファイル ' %s ' を読み取ることができませんでした。"
 
 #: pcbnew/tools/pcb_control.cpp:1621
-#, fuzzy
 msgid "the design block's board layout is empty"
-msgstr "デザイン ブロックには配置するレイアウトがありません。"
+msgstr "デザインブロックの基板レイアウトが空です。"
 
 #: pcbnew/tools/pcb_control.cpp:1672
-#, fuzzy
 msgid "the group has no items"
-msgstr "グループにフットプリントがありません"
+msgstr "グループにアイテムがありません"
 
 #: pcbnew/tools/pcb_control.cpp:1677 pcbnew/tools/pcb_control.cpp:1804
 msgid "(unnamed group)"
@@ -66049,7 +65990,7 @@ msgstr "(名称未定のグループ)"
 
 #: pcbnew/tools/pcb_control.cpp:1723
 msgid "the layout could not be copied onto the group"
-msgstr ""
+msgstr "レイアウトをグループにコピーできませんでした"
 
 #: pcbnew/tools/pcb_control.cpp:1741
 #, c-format
@@ -66774,7 +66715,7 @@ msgstr "ネットの色をクリア"
 #: pcbnew/widgets/appearance_controls.cpp:959
 #, c-format
 msgid "Highlight %s"
-msgstr "%s をハイライト"
+msgstr "%s を強調表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:962
 #: pcbnew/widgets/appearance_controls.cpp:2550
@@ -67141,7 +67082,7 @@ msgstr "ネットクラスの色をクリア"
 #: pcbnew/widgets/appearance_controls.cpp:2547
 #, c-format
 msgid "Highlight Nets in %s"
-msgstr "%s のネットをハイライト"
+msgstr "%s のネットを強調表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:2558
 msgid "Show All Netclasses"
@@ -67286,7 +67227,7 @@ msgstr "パッド数"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1229
 msgid "Highlight Selected Net"
-msgstr "選択されたネットをハイライト表示"
+msgstr "選択されたネットを強調表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1245
 msgid "Rename Selected Net..."
@@ -67302,7 +67243,7 @@ msgstr "ネットを追加..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1268
 msgid "Highlight Selected Nets"
-msgstr "選択されたネットをハイライト表示"
+msgstr "選択されたネットを強調表示"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1270
 msgid "Delete Selected Nets"
@@ -67569,7 +67510,7 @@ msgstr "銅平衡ブロック"
 
 #: pcbnew/zone.cpp:2172
 msgid "Squares"
-msgstr "正方形"
+msgstr "正方形/四角形"
 
 #: pcbnew/zone.cpp:2307
 msgid "Keepout"
@@ -67765,14 +67706,12 @@ msgid "Refill zones after changes made on board"
 msgstr "基板上で変更を行った後でゾーンを塗りつぶす"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:159
-#, fuzzy
 msgid "Select on canvas"
-msgstr "基板上で選択"
+msgstr "キャンバス上で選択"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:161
-#, fuzzy
 msgid "Select and focus the highlighted zone on the board canvas"
-msgstr "基板上でハイライトさせるアイテムをクリックします。"
+msgstr "基板のキャンバス上に選択たゾーンをフォーカスし強調表示された領域を表示"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:168
 msgid "Update Displayed Zones"
