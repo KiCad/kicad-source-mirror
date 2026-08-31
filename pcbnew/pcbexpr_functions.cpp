@@ -1772,6 +1772,94 @@ static void hasComponentClassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void customPropertyFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE*  arg    = aCtx->Pop();
+    PCBEXPR_VAR_REF* vref   = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item   = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*  result = aCtx->AllocValue();
+
+    result->Set( "" );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing property name argument to %s." ),
+                                                 wxT( "customProperty()" ) ) );
+        }
+
+        return;
+    }
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> wxString
+            {
+                const wxString key = arg->AsString();
+                wxString       value;
+
+                if( item && item->GetCustomProperty( key, value ) )
+                    return value;
+
+                if( FOOTPRINT* parentFp = item ? item->GetParentFootprint() : nullptr )
+                {
+                    if( parentFp->GetCustomProperty( key, value ) )
+                        return value;
+                }
+
+                return wxString();
+            } );
+}
+
+
+static void hasCustomPropertyFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE*  arg    = aCtx->Pop();
+    PCBEXPR_VAR_REF* vref   = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item   = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*  result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing property name argument to %s." ),
+                                                 wxT( "hasCustomProperty()" ) ) );
+        }
+
+        return;
+    }
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> double
+            {
+                const wxString key = arg->AsString();
+                wxString       value;
+
+                if( item && item->GetCustomProperty( key, value ) )
+                    return 1.0;
+
+                if( FOOTPRINT* parentFp = item ? item->GetParentFootprint() : nullptr )
+                {
+                    if( parentFp->GetCustomProperty( key, value ) )
+                        return 1.0;
+                }
+
+                return 0.0;
+            } );
+}
+
+
 PCBEXPR_BUILTIN_FUNCTIONS::PCBEXPR_BUILTIN_FUNCTIONS()
 {
     RegisterAllFunctions();
@@ -1823,4 +1911,7 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "hasNetclass('x')" ), hasNetclassFunc );
     RegisterFunc( wxT( "hasExactNetclass('x')" ), hasExactNetclassFunc );
     RegisterFunc( wxT( "hasComponentClass('x')" ), hasComponentClassFunc );
+
+    RegisterFunc( wxT( "customProperty('x')" ), customPropertyFunc );
+    RegisterFunc( wxT( "hasCustomProperty('x')" ), hasCustomPropertyFunc );
 }

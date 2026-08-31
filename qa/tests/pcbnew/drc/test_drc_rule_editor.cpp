@@ -2577,4 +2577,62 @@ BOOST_AUTO_TEST_CASE( RuleLoaderPermittedLayersStandardLoadsStructured )
     BOOST_CHECK( layerData->GetBottomLayerEnabled() );
 }
 
+
+BOOST_AUTO_TEST_CASE( CustomPropertyHelperMatches )
+{
+    BOARD board;
+
+    FOOTPRINT* vendorFp = new FOOTPRINT( &board );
+    vendorFp->SetReference( wxT( "U1" ) );
+    vendorFp->SetCustomProperty( wxT( "Vendor" ), wxT( "ACME" ) );
+    board.Add( vendorFp );
+
+    FOOTPRINT* otherFp = new FOOTPRINT( &board );
+    otherFp->SetReference( wxT( "U2" ) );
+    board.Add( otherFp );
+
+    auto rule = std::make_shared<DRC_RULE>( wxT( "Custom property" ) );
+    rule->m_Condition = new DRC_RULE_CONDITION( wxT( "A.customProperty('Vendor') == 'ACME'" ) );
+    BOOST_REQUIRE( rule->m_Condition->Compile( nullptr ) );
+
+    DRC_CONSTRAINT constraint( COURTYARD_CLEARANCE_CONSTRAINT );
+    rule->AddConstraint( constraint );
+
+    DRC_ENGINE engine( &board, &board.GetDesignSettings() );
+
+    std::vector<BOARD_ITEM*> matches = engine.GetItemsMatchingRule( rule, nullptr );
+
+    BOOST_REQUIRE_EQUAL( matches.size(), 1u );
+    BOOST_CHECK( matches.front() == vendorFp );
+}
+
+
+BOOST_AUTO_TEST_CASE( HasCustomPropertyHelperMatches )
+{
+    BOARD board;
+
+    FOOTPRINT* vendorFp = new FOOTPRINT( &board );
+    vendorFp->SetReference( wxT( "U1" ) );
+    vendorFp->SetCustomProperty( wxT( "Vendor" ), wxT( "ACME" ) );
+    board.Add( vendorFp );
+
+    FOOTPRINT* otherFp = new FOOTPRINT( &board );
+    otherFp->SetReference( wxT( "U2" ) );
+    board.Add( otherFp );
+
+    auto rule = std::make_shared<DRC_RULE>( wxT( "Has custom property" ) );
+    rule->m_Condition = new DRC_RULE_CONDITION( wxT( "A.hasCustomProperty('Vendor')" ) );
+    BOOST_REQUIRE( rule->m_Condition->Compile( nullptr ) );
+
+    DRC_CONSTRAINT constraint( COURTYARD_CLEARANCE_CONSTRAINT );
+    rule->AddConstraint( constraint );
+
+    DRC_ENGINE engine( &board, &board.GetDesignSettings() );
+
+    std::vector<BOARD_ITEM*> matches = engine.GetItemsMatchingRule( rule, nullptr );
+
+    BOOST_REQUIRE_EQUAL( matches.size(), 1u );
+    BOOST_CHECK( matches.front() == vendorFp );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
