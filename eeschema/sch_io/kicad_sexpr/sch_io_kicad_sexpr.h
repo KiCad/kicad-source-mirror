@@ -175,6 +175,7 @@ private:
 protected:
     int                     m_version;          ///< Version of file being loaded.
     bool                    m_appending;        ///< Schematic load append status.
+    bool                    m_sheetLoad;        ///< Loading a sheet into an open schematic.
     wxString                m_error;            ///< For throwing exceptions or errors on partial
                                                 ///<  loads.
 

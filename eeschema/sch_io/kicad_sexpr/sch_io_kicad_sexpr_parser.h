@@ -81,7 +81,8 @@ class SCH_IO_KICAD_SEXPR_PARSER : public SCHEMATIC_LEXER
 public:
     SCH_IO_KICAD_SEXPR_PARSER( LINE_READER* aLineReader = nullptr,
                       PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0,
-                      SCH_SHEET* aRootSheet = nullptr, bool aIsAppending = false );
+                      SCH_SHEET* aRootSheet = nullptr, bool aIsAppending = false,
+                      bool aIsSheetLoad = false );
 
     void ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap );
 
@@ -328,6 +329,7 @@ private:
     int      m_bodyStyle;         ///< The current body style being parsed.
     wxString m_symbolName;        ///< The current symbol name.
     bool     m_appending;         ///< Appending load status.
+    bool     m_sheetLoad;         ///< Loading a sheet into an already open schematic.
 
     std::set<KIID>     m_uuids;
 
