@@ -21,7 +21,10 @@
 #ifndef TEARDROP_H
 #define TEARDROP_H
 
+#include <unordered_map>
+
 #include <tool/tool_manager.h>
+#include <board.h>
 #include <drc/drc_rtree.h>
 #include "teardrop_parameters.h"
 
@@ -42,17 +45,9 @@ public:
     void AddTrack( PCB_TRACK* aTrack, int aLayer, int aNetcode );
 
     /**
-     * @return the buffer that stores tracks having the same layer and the same netcode
-     */
-    std::vector<PCB_TRACK*>* GetTrackList( int aLayer, int aNetcode ) const
-    {
-        return m_map_tracks.at( idxFromLayNet( aLayer, aNetcode ) );
-    }
-
-    /**
      * @return a reference to the internal buffer
      */
-    const std::map< int, std::vector<PCB_TRACK*>* >& GetBuffer() const { return m_map_tracks; }
+    std::map<int, std::vector<PCB_TRACK*>>& GetBuffer() { return m_map_tracks; }
 
     static void GetNetcodeAndLayerFromIndex( int aIdx, int* aLayer, int* aNetcode )
     {
@@ -68,7 +63,7 @@ private:
     }
 
     // Track buffer, tracks are grouped by layer+netcode
-    std::map< int, std::vector<PCB_TRACK*>* > m_map_tracks;
+    std::map<int, std::vector<PCB_TRACK*>> m_map_tracks;
 };
 
 
@@ -101,13 +96,12 @@ public:
     TEARDROP_MANAGER( BOARD* aBoard, TOOL_MANAGER* aToolManager );
 
     /**
-     * Remove teardrops connected to any dirty pads, vias or tracks.  They need to be removed
-     * before being rebuilt.
-     *
-     * NB: this must be called BEFORE the connectivity is updated for the change in question.
+     * Remove teardrops on dirty pads, vias or tracks, and any whose neighbouring copper moved,
+     * dirtying the anchors of the latter.  Call this BEFORE connectivity is updated.
      */
-    void RemoveTeardrops( BOARD_COMMIT& aCommit, const std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
-                          const std::set<PCB_TRACK*>* dirtyTracks );
+    void RemoveTeardrops( BOARD_COMMIT& aCommit, std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
+                          std::set<PCB_TRACK*>* dirtyTracks,
+                          const std::vector<BOARD_ITEM*>* dirtyCopper = nullptr );
     /**
      * Update teardrops on a list of items.
      */
@@ -116,9 +110,10 @@ public:
 
     /**
      * Add teardrop on tracks of different sizes connected by their end
+     * @param aSetPriorities is false when the caller numbers them itself once the rest are built
      */
     void AddTeardropsOnTracks( BOARD_COMMIT& aCommit, const std::set<PCB_TRACK*>* aTracks,
-                               bool aForceFullUpdate = false );
+                               bool aForceFullUpdate = false, bool aSetPriorities = true );
 
     void DeleteTrackToTrackTeardrops( BOARD_COMMIT& aCommit );
 
@@ -133,6 +128,44 @@ private:
      * @return true if the given aViaPad + aTrack is located inside a zone of the same netname
      */
     bool areItemsInSameZone( BOARD_ITEM* aPadOrVia, PCB_TRACK* aTrack) const;
+
+    /**
+     * @return one set per filled island of aZone on aLayer, holding what that island reaches.
+     * Islands stay apart because two items are only joined by the pour if one island has both.
+     */
+    const std::vector<std::set<const BOARD_ITEM*>>& zoneConnections( ZONE* aZone,
+                                                                    PCB_LAYER_ID aLayer ) const;
+
+    /// @return aItem's netcode, or NETINFO_LIST::UNCONNECTED.  IsConnected() is not a proxy;
+    /// a copper graphic in a footprint answers false to it and still carries a net.
+    static int copperNetcode( const BOARD_ITEM* aItem );
+
+    /// @return the clearance aSourceTrack owes aItem on aLayer, less the DRC epsilon, so that
+    /// geometry sitting exactly at the limit is not rejected where DRC would pass it.
+    int pairClearance( PCB_TRACK* aSourceTrack, BOARD_ITEM* aItem,
+                       PCB_LAYER_ID aLayer ) const;
+
+    /// Build the copper collision index, deferred so a commit with no teardrop candidate
+    /// never pays for it.
+    void ensureCopperIndex() const;
+
+    /**
+     * @return true if a teardrop with the given outline would touch copper of another net.
+     * @param aExempt are the items it overlaps by construction, its anchor and its track(s);
+     * without them a no-net teardrop collides with its own anchor, no net being shared with none
+     */
+    bool collidesWithOtherNets( const std::vector<VECTOR2I>& aPoints, PCB_TRACK* aSourceTrack,
+                                const std::vector<const BOARD_ITEM*>& aExempt ) const;
+
+    /**
+     * Widen a teardrop as far as the surrounding copper allows.  The requested width knows
+     * nothing of what is nearby, so bisect down from it; the result is within a few percent.
+     * @return false if no width down to the track width clears the neighbouring copper
+     */
+    bool computeFittedTeardropPolygon( const TEARDROP_PARAMETERS& aParams,
+                                       std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack,
+                                       PCB_TRACK* aSourceTrack, BOARD_ITEM* aOther,
+                                       const VECTOR2I& aOtherPos ) const;
 
     /// Return the centerline chord length through aOther's copper span at aInsidePoint.
     /// Degenerate, arc, or non-crossing cases return INT_MAX to avoid rejection.
@@ -171,7 +204,8 @@ private:
      */
     bool computeTeardropPolygon( const TEARDROP_PARAMETERS& aParams,
                                  std::vector<VECTOR2I>& aCorners, PCB_TRACK* aTrack,
-                                 BOARD_ITEM* aOther, const VECTOR2I& aOtherPos ) const;
+                                 PCB_TRACK* aSourceTrack, BOARD_ITEM* aOther,
+                                 const VECTOR2I& aOtherPos ) const;
     /**
      * Compute the 2 points on pad/via of the teardrop shape
      * @return false if these 2 points are not found
@@ -195,51 +229,69 @@ private:
      * @return a reference to the touching track (or nullptr)
      * @param aMatchType returns the end point id 0, STARTPOINT, ENDPOINT
      * @param aTrackRef is the reference track
+     * @param aSourceTrack is the board track aTrackRef stands in for, excluded from the search
      * @param aEndpoint is the coordinate to test
      * @param tracksRTree is an RTree containing the available tracks
      */
     PCB_TRACK* findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_TRACK* aTrackRef,
-                                  const VECTOR2I& aEndPoint ) const;
+                                  PCB_TRACK* aSourceTrack, const VECTOR2I& aEndPoint ) const;
+
+    /**
+     * Build the UUID a teardrop is created with.
+     * @param aSlot separates the two teardrops of a crossing track; each slot spans two UUIDs
+     */
+    static KIID teardropUuid( const PCB_TRACK* aTrack, const BOARD_ITEM* aCandidate, int aSlot );
+
+    /// Build the UUID of the mask sibling of aCopperUuid.  Producer and consumer of that
+    /// pairing are far apart, so it has one home.
+    static KIID maskUuidFor( const KIID& aCopperUuid );
+
+    /// Set aStub up as the segment from one end of aTrack to aEnd, for a track that crosses
+    /// the pad or via it connects to.
+    static void buildCrossingStub( PCB_TRACK& aStub, const PCB_TRACK* aTrack,
+                                   const VECTOR2I& aEnd );
 
     /**
      * Creates a teardrop (a ZONE item) from its polygonal shape, track netcode and layer
      * @param aTeardropVariant = variant of the teardrop( attached to a pad, or a track end )
      * @param aPoints is the polygonal shape
-     * @param aTrack is the track connected to the starting points of the teardrop
-     * (mainly for net info)
-     * @param aCandidate is the pad/via/track that the teardrop connects to (used for UUID)
+     * @param aSourceTrack is the board track it belongs to, not the stub geometry came from
+     * @param aUuid is the UUID to give the teardrop
      */
     ZONE* createTeardrop( TEARDROP_VARIANT aTeardropVariant, std::vector<VECTOR2I>& aPoints,
-                          PCB_TRACK* aTrack, BOARD_ITEM* aCandidate ) const;
+                          PCB_TRACK* aSourceTrack, const KIID& aUuid ) const;
 
     ZONE* createTeardropMask( TEARDROP_VARIANT aTeardropVariant, std::vector<VECTOR2I>& aPoints,
-                              PCB_TRACK* aTrack, BOARD_ITEM* aCandidate ) const;
+                              PCB_TRACK* aSourceTrack, const KIID& aUuid ) const;
 
     /**
      * Creates and adds a teardrop with optional mask to the board
      * @param aCommit the board commit to add the teardrop to
      * @param aTeardropVariant = variant of the teardrop( attached to a pad, or a track end )
      * @param aPoints is the polygonal shape
-     * @param aTrack is the track connected to the starting points of the teardrop
-     * @param aCandidate is the pad/via/track that the teardrop connects to
+     * @param aSourceTrack is the board track the teardrop belongs to
+     * @param aUuid is the UUID to give the teardrop
      */
     void createAndAddTeardropWithMask( BOARD_COMMIT& aCommit, TEARDROP_VARIANT aTeardropVariant,
-                                       std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack,
-                                       BOARD_ITEM* aCandidate );
+                                       std::vector<VECTOR2I>& aPoints, PCB_TRACK* aSourceTrack,
+                                       const KIID& aUuid );
 
     /**
      * Attempts to create a track-to-track teardrop
      * @param aCommit the board commit to add the teardrop to
      * @param aParams the teardrop parameters
      * @param aTeardropVariant = variant of the teardrop( attached to a pad, or a track end )
-     * @param aTrack the source track
+     * @param aTrack the track the teardrop geometry is built from
+     * @param aSourceTrack the board track it belongs to, the same as aTrack unless that is a stub
      * @param aCandidate the target item
      * @param aPos the connection position
+     * @param aUuid is the UUID to give the teardrop
      * @return true if teardrop was created successfully
      */
     bool tryCreateTrackTeardrop( BOARD_COMMIT& aCommit, const TEARDROP_PARAMETERS& aParams,
                                  TEARDROP_VARIANT aTeardropVariant, PCB_TRACK* aTrack,
-                                 BOARD_ITEM* aCandidate, const VECTOR2I& aPos );
+                                 PCB_TRACK* aSourceTrack, BOARD_ITEM* aCandidate,
+                                 const VECTOR2I& aPos, const KIID& aUuid );
 
     /**
      * Set priority of created teardrops. smaller have bigger priority
@@ -263,8 +315,8 @@ private:
     */
     bool findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aParams, VECTOR2I& aStartPoint,
                                   VECTOR2I& aEndPoint, VECTOR2I& aIntersection,
-                                  PCB_TRACK*& aTrack, BOARD_ITEM* aOther, const VECTOR2I& aOtherPos,
-                                  int* aEffectiveTeardropLen ) const;
+                                  PCB_TRACK*& aTrack, PCB_TRACK* aSourceTrack, BOARD_ITEM* aOther,
+                                  const VECTOR2I& aOtherPos, int* aEffectiveTeardropLen ) const;
 
 private:
     int                       m_tolerance;      // max dist between track end point and pad/via
@@ -276,6 +328,15 @@ private:
     DRC_RTREE                 m_tracksRTree;
     TRACK_BUFFER              m_trackLookupList;
     std::vector<ZONE*>        m_createdTdList;  // list of new created teardrops
+
+    /// Every copper item plus the teardrops built so far, to keep teardrops off other nets.
+    mutable DRC_RTREE         m_copperRTree;
+    mutable bool              m_copperIndexed;
+
+    mutable std::unordered_map<PTR_LAYER_CACHE_KEY, std::vector<std::set<const BOARD_ITEM*>>>
+            m_zoneConnectionCache;
+
+    mutable std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, int> m_pairClearanceCache;
 };
 
 #endif  // ifndef TEARDROP_H

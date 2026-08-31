@@ -218,6 +218,58 @@ public:
     }
 
     /**
+     * As CheckColliding(), but the clearance is resolved per item hit rather than once for the
+     * whole query, so a rule written against a particular obstacle is honoured.
+     * @param aClearanceResolver returns false to ignore an item, else writes what it is owed
+     */
+    bool CheckColliding( SHAPE* aRefShape, PCB_LAYER_ID aTargetLayer, int aMaxClearance,
+                         const std::function<bool( BOARD_ITEM*, int* )>& aClearanceResolver ) const
+    {
+        BOX2I box = aRefShape->BBox();
+        box.Inflate( aMaxClearance );
+
+        int min[2] = { box.GetX(),     box.GetY() };
+        int max[2] = { box.GetRight(), box.GetBottom() };
+
+        bool collision = false;
+
+        // Compound and triangulated items are visited once per subshape, but the clearance is
+        // a property of the item.
+        std::unordered_map<BOARD_ITEM*, std::pair<bool, int>> resolved;
+
+        auto visit =
+                [&] ( ITEM_WITH_SHAPE* aItem ) -> bool
+                {
+                    auto it = resolved.find( aItem->parent );
+
+                    if( it == resolved.end() )
+                    {
+                        int  clearance = 0;
+                        bool test = aClearanceResolver( aItem->parent, &clearance );
+
+                        it = resolved.emplace( aItem->parent,
+                                               std::make_pair( test, clearance ) ).first;
+                    }
+
+                    if( !it->second.first )
+                        return true;
+
+                    if( aRefShape->Collide( aItem->shape, it->second.second ) )
+                    {
+                        collision = true;
+                        return false;
+                    }
+
+                    return true;
+                };
+
+        if( auto it = m_tree.find( aTargetLayer ); it != m_tree.end() )
+            it->second.Search( min, max, visit );
+
+        return collision;
+    }
+
+    /**
      * This is a fast test which essentially does bounding-box overlap given a worst-case
      * clearance.  It's used when looking up the specific item-to-item clearance might be
      * expensive and should be deferred till we know we have a possible hit.

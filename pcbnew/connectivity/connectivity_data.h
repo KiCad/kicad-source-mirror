@@ -28,6 +28,7 @@
 
 #include <memory>
 #include <mutex>
+#include <set>
 #include <vector>
 #include <wx/string.h>
 
@@ -195,6 +196,13 @@ public:
 
     void GetConnectedPadsAndVias( const BOARD_CONNECTED_ITEM* aItem, std::vector<PAD*>* pads,
                                   std::vector<PCB_VIA*>* vias );
+
+    /**
+     * Return, for each filled island of aZone on aLayer, the items that island touches.
+     * The other queries here union the islands, which loses whether one island reaches both.
+     */
+    void GetZoneIslandConnections( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                   std::vector<std::set<const BOARD_ITEM*>>* aIslands );
 
     /**
      * Function GetConnectedItemsAtAnchor()

@@ -609,6 +609,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     TEARDROP_PARAMETERS* td_prm = m_TeardropParamsList.GetParameters( (TARGET_TD)ii );
 
                     entry["td_target_name"]  = GetTeardropTargetCanonicalName( (TARGET_TD)ii );
+                    entry["td_enabled"]  = td_prm->m_Enabled;
                     entry["td_maxlen"]  = pcbIUScale.IUTomm( td_prm->m_TdMaxLen );
                     entry["td_maxheight"]  = pcbIUScale.IUTomm( td_prm->m_TdMaxWidth );
                     entry["td_length_ratio"]  = td_prm->m_BestLengthRatio;
@@ -641,6 +642,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     if( idx >= 0 && idx < 3 )
                     {
                         TEARDROP_PARAMETERS* td_prm = m_TeardropParamsList.GetParameters( (TARGET_TD)idx );
+
+                        // Pads and vias carry their enable in the board file; this one has
+                        // nowhere else to live.
+                        if( entry.contains( "td_enabled" ) )
+                            td_prm->m_Enabled = entry["td_enabled"].get<bool>();
 
                         if( entry.contains( "td_maxlen" ) )
                             td_prm->m_TdMaxLen = pcbIUScale.mmToIU( entry["td_maxlen"].get<double>() );
