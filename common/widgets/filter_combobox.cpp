@@ -20,12 +20,14 @@
 
 #include "widgets/filter_combobox.h"
 
+#include <wx/dc.h>
 #include <wx/textctrl.h>
 #include <wx/vlbox.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/valtext.h>
+#include <wx/listbox.h>
 
 #include <kiplatform/ui.h>
 #include <widgets/ui_common.h>
