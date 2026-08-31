@@ -77,7 +77,6 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
     m_editPinMapButton->Bind( wxEVT_BUTTON, &SCH_PROPERTIES_PANEL::onEditPinMap, this );
 
     m_addCustomPropertyButton = new wxButton( this, wxID_ANY, _( "Add Custom Property" ) );
-    m_addCustomPropertyButton->Hide();
     GetSizer()->Add( m_addCustomPropertyButton, 0, wxALL | wxEXPAND, 5 );
 
     m_addCustomPropertyButton->Bind( wxEVT_BUTTON,
@@ -318,13 +317,6 @@ void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         Layout();
     }
 
-    bool showAddCustomProps = !aSelection.Empty() && !hasCustomPropertySection();
-
-    if( m_addCustomPropertyButton && m_addCustomPropertyButton->IsShown() != showAddCustomProps )
-    {
-        m_addCustomPropertyButton->Show( showAddCustomProps );
-        Layout();
-    }
 }
 
 

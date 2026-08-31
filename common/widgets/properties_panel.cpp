@@ -691,16 +691,6 @@ void PROPERTIES_PANEL::beginLabelEdit( const wxString& aKey, bool aStartBlank )
 }
 
 
-bool PROPERTIES_PANEL::hasCustomPropertySection() const
-{
-    for( PROPERTY_BASE* prop : m_displayed )
-    {
-        if( prop->Group() == wxS( "Custom Properties" ) )
-            return true;
-    }
-
-    return false;
-}
 
 
 void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )

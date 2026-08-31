@@ -347,8 +347,8 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
         PROPERTIES_PANEL( aParent, aFrame ),
         m_frame( aFrame ),
         m_propMgr( PROPERTY_MANAGER::Instance() ),
-        m_scaleConfirmPending( false ),
-        m_addCustomPropertyButton( nullptr )
+        m_addCustomPropertyButton( nullptr ),
+        m_scaleConfirmPending( false )
 {
     m_propMgr.Rebuild();
     bool found = false;
@@ -458,7 +458,6 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
     Bind( wxEVT_MENU, &PCB_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_CUSTOM_PROPERTY );
 
     m_addCustomPropertyButton = new wxButton( this, wxID_ANY, _( "Add Custom Property" ) );
-    m_addCustomPropertyButton->Hide();
     GetSizer()->Add( m_addCustomPropertyButton, 0, wxALL | wxEXPAND, 5 );
 
     m_addCustomPropertyButton->Bind( wxEVT_BUTTON,
@@ -876,13 +875,6 @@ void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aRawSelection )
 
     PROPERTIES_PANEL::rebuildProperties( aSelection );
 
-    bool showAddCustomProps = !aSelection.Empty() && !hasCustomPropertySection();
-
-    if( m_addCustomPropertyButton && m_addCustomPropertyButton->IsShown() != showAddCustomProps )
-    {
-        m_addCustomPropertyButton->Show( showAddCustomProps );
-        Layout();
-    }
 }
 
 

@@ -103,8 +103,6 @@ protected:
 
     void beginLabelEdit( const wxString& aKey, bool aStartBlank = false );
 
-    bool hasCustomPropertySection() const;
-
     /**
      * Utility to fetch a property value and convert to wxVariant
      * Precondition: aItem is known to have property aProperty
