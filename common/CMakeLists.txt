@@ -675,6 +675,7 @@ set( COMMON_ABOUT_DLG_SRCS
 
 set( COMMON_GIT_DLG_SRCS
     dialogs/git/dialog_git_switch.cpp
+    dialogs/git/dialog_mdw_design_release.cpp
     dialogs/git/dialog_mdw_change_orders.cpp
     dialogs/git/dialog_mdw_change_orders_base.cpp
     dialogs/git/dialog_git_credentials.cpp
@@ -790,6 +791,7 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_workspace_config.cpp
     widgets/mdw_library_notice.cpp
     widgets/mdw_part_actions.cpp
+    widgets/mdw_workspace_strip.cpp
     dialogs/panel_workspace_settings.cpp
     dialogs/panel_design_block_lib_table_base.cpp
     dialogs/panel_design_block_lib_table.cpp

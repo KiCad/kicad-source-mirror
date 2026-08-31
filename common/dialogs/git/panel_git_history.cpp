@@ -283,6 +283,8 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
                 },
                 300 )
 {
+    m_historyQuery.OnWait( m_dialog->ReadWaitHandler() );
+
     m_historySearch->SetDescriptiveText( _( "Search history" ) );
     m_historyPathRow->ShowItems( false );
 

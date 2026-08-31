@@ -43,6 +43,8 @@ PANEL_GIT_BRANCHES::PANEL_GIT_BRANCHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* 
         m_dialog( aDialog ),
         m_frame( aFrame )
 {
+    m_listQuery.OnWait( m_dialog->ReadWaitHandler() );
+
     m_branchSearch->SetDescriptiveText( _( "Search branches" ) );
 
     m_branchesList->AppendColumn( _( "Branch" ), wxLIST_FORMAT_LEFT, FromDIP( 220 ) );

@@ -65,6 +65,8 @@ PANEL_GIT_STASHES::PANEL_GIT_STASHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
         m_dialog( aDialog ),
         m_frame( aFrame )
 {
+    m_listQuery.OnWait( m_dialog->ReadWaitHandler() );
+
     m_stashesList->AppendColumn( _( "Description" ), wxLIST_FORMAT_LEFT, FromDIP( 360 ) );
     m_stashesList->AppendColumn( _( "Date" ), wxLIST_FORMAT_LEFT, FromDIP( 100 ) );
     m_stashFiles->AppendColumn( _( "File" ), wxLIST_FORMAT_LEFT, FromDIP( 300 ) );

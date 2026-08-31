@@ -35,6 +35,8 @@ PANEL_GIT_TAGS::PANEL_GIT_TAGS( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog,
         m_dialog( aDialog ),
         m_frame( aFrame )
 {
+    m_listQuery.OnWait( m_dialog->ReadWaitHandler() );
+
     m_tagsList->AppendColumn( _( "Tag" ), wxLIST_FORMAT_LEFT, FromDIP( 220 ) );
     m_tagsList->AppendColumn( _( "Commit" ), wxLIST_FORMAT_LEFT, FromDIP( 100 ) );
     m_tagsList->AppendColumn( _( "Date" ), wxLIST_FORMAT_LEFT, FromDIP( 110 ) );

@@ -36,6 +36,8 @@ PANEL_GIT_REPOSITORY::PANEL_GIT_REPOSITORY( wxWindow* aParent, GIT_ADVANCED_DIAL
         m_dialog( aDialog ),
         m_frame( aFrame )
 {
+    m_configQuery.OnWait( m_dialog->ReadWaitHandler() );
+
     m_repoUserName->SetEditable( false );
     m_repoUserEmail->SetEditable( false );
     m_identityNote->SetLabel( _( "Edits apply to this repository only." ) );

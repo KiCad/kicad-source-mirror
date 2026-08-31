@@ -31,6 +31,7 @@
 #include <dialogs/git/panel_git_repository.h>
 #include <dialogs/git/panel_git_stashes.h>
 #include <dialogs/git/panel_git_tags.h>
+#include <dialogs/git/panel_git_workspace.h>
 
 #include <memory>
 
@@ -82,6 +83,8 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_stashesPage( nullptr ),
         m_tagsPage( nullptr ),
         m_repositoryPage( nullptr ),
+        m_workspacePage( nullptr ),
+        m_changesPage( nullptr ),
         m_changesSplitter( nullptr ),
         m_changesPane( nullptr ),
         m_workingDiff( nullptr )
@@ -97,9 +100,23 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
 
     setIcons();
 
-    m_book->AddPage( buildChangesPage( m_book ), _( "Changes" ), true, 0 );
+    m_waitNote = new wxStaticText( this, wxID_ANY, wxEmptyString );
+    m_waitNote->SetFont( KIUI::GetInfoFont( this ).Italic() );
+    m_waitNote->Hide();
+    // After the branch, ahead of the spacer and the three transfer buttons
+    m_topBar->Insert( m_topBar->GetItemCount() - 4, m_waitNote, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 16 );
+
+    m_changesPage = buildChangesPage( m_book );
+    m_book->AddPage( m_changesPage, _( "Changes" ), true, 0 );
     m_historyPage = new PANEL_GIT_HISTORY( m_book, this, m_parent );
     m_book->AddPage( m_historyPage, _( "History" ), false, 1 );
+
+    // Off means invisible, so the page only exists while the preference is on
+    if( Pgm().MdwFrameworkOrNull() )
+    {
+        m_workspacePage = new PANEL_GIT_WORKSPACE( m_book, this, m_parent );
+        m_book->AddPage( m_workspacePage, _( "Workspace" ), false, 7 );
+    }
 
     m_branchesPage = new PANEL_GIT_BRANCHES( m_book, this, m_parent );
     m_book->AddPage( m_branchesPage, _( "Branches" ), false, 2 );
@@ -301,6 +318,8 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
         m_pane->SetMessageChangedHandler( nullptr );
     }
 
+    m_transferLink.reset();
+
     // A transfer's completion finds this window gone, so release its holds before the panels'
     // Cancel can reach it
     m_fetchBusy.Release();
@@ -336,8 +355,40 @@ void GIT_ADVANCED_DIALOG::syncListener()
                                 {
                                     ReloadPages();
                                 } );
+    m_transferLink = common->Transfers().Subscribe( this );
     m_listenerSession = common;
     m_listenerAttached = true;
+}
+
+
+void GIT_ADVANCED_DIALOG::OnGitTransfersChanged()
+{
+    updateWaitNote();
+}
+
+
+std::function<void( bool aWaiting )> GIT_ADVANCED_DIALOG::ReadWaitHandler()
+{
+    return [this]( bool aWaiting )
+    {
+        m_waitingReads += aWaiting ? 1 : -1;
+        updateWaitNote();
+    };
+}
+
+
+void GIT_ADVANCED_DIALOG::updateWaitNote()
+{
+    bool show = m_waitingReads > 0;
+
+    if( !show && !m_waitNote->IsShown() )
+        return;
+
+    if( show )
+        m_waitNote->SetLabel( m_parent->Prj().GetGitCommon()->Transfers().WaitingMessage() );
+
+    m_waitNote->Show( show );
+    m_topBar->Layout();
 }
 
 
@@ -364,6 +415,9 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
     m_stashesPage->Populate();
     m_tagsPage->Populate();
     m_repositoryPage->Populate();
+
+    if( m_workspacePage )
+        m_workspacePage->Populate();
 }
 
 
@@ -371,6 +425,25 @@ void GIT_ADVANCED_DIALOG::ShowHistoryForFile( EDA_BASE_FRAME* aParent, GIT_COMMI
 {
     ShowForFrame( aParent, aPane, GIT_ADVANCED_PAGE::HISTORY );
     activeDialog()->ShowHistoryForFile( aPath );
+}
+
+
+bool GIT_ADVANCED_DIALOG::CanOpenFor( EDA_BASE_FRAME* aParent )
+{
+    std::shared_ptr<KIGIT_COMMON> git = aParent->Prj().GetGitCommon();
+
+    return git && git->GetRepo() && Pgm().GetCommonSettings()->m_Git.enableGit
+           && !aParent->Prj().GetLocalSettings().m_GitIntegrationDisabled;
+}
+
+
+void GIT_ADVANCED_DIALOG::ShowWorkspaceItem( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane,
+                                             const wxString& aItemId )
+{
+    ShowForFrame( aParent, aPane, GIT_ADVANCED_PAGE::WORKSPACE );
+
+    if( PANEL_GIT_WORKSPACE* page = activeDialog()->m_workspacePage )
+        page->SelectItem( aItemId );
 }
 
 
@@ -402,6 +475,7 @@ void GIT_ADVANCED_DIALOG::setIcons()
     pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_stashes, 16 ) );
     pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_tags, 16 ) );
     pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_repository, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::locked, 16 ) );
     m_book->SetImages( pageIcons );
 
     m_fetchButton->SetBitmap( KiBitmapBundle( BITMAPS::git_fetch ) );
@@ -410,9 +484,34 @@ void GIT_ADVANCED_DIALOG::setIcons()
 }
 
 
+wxWindow* GIT_ADVANCED_DIALOG::pageWindow( GIT_ADVANCED_PAGE aPage ) const
+{
+    switch( aPage )
+    {
+    case GIT_ADVANCED_PAGE::CHANGES:    return m_changesPage;
+    case GIT_ADVANCED_PAGE::HISTORY:    return m_historyPage;
+    case GIT_ADVANCED_PAGE::BRANCHES:   return m_branchesPage;
+    case GIT_ADVANCED_PAGE::REMOTES:    return m_remotesPage;
+    case GIT_ADVANCED_PAGE::STASHES:    return m_stashesPage;
+    case GIT_ADVANCED_PAGE::TAGS:       return m_tagsPage;
+    case GIT_ADVANCED_PAGE::REPOSITORY: return m_repositoryPage;
+    case GIT_ADVANCED_PAGE::WORKSPACE:  return m_workspacePage;
+    }
+
+    return nullptr;
+}
+
+
 void GIT_ADVANCED_DIALOG::selectPage( GIT_ADVANCED_PAGE aPage )
 {
-    m_book->SetSelection( static_cast<size_t>( aPage ) );
+    // Pages that come and go with preferences shift the others, so a page is found by its window
+    if( wxWindow* page = pageWindow( aPage ) )
+    {
+        int index = m_book->FindPage( page );
+
+        if( index != wxNOT_FOUND )
+            m_book->SetSelection( index );
+    }
 }
 
 

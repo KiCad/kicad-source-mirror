@@ -43,6 +43,7 @@ class PANEL_GIT_REMOTES;
 class PANEL_GIT_STASHES;
 class PANEL_GIT_REPOSITORY;
 class PANEL_GIT_TAGS;
+class PANEL_GIT_WORKSPACE;
 class wxSplitterWindow;
 struct GIT_WORKTREE_STATUS;
 
@@ -56,7 +57,8 @@ enum class GIT_ADVANCED_PAGE
     REMOTES,
     STASHES,
     TAGS,
-    REPOSITORY
+    REPOSITORY,
+    WORKSPACE      ///< Present only while the design workspace preference is on
 };
 
 
@@ -66,7 +68,7 @@ enum class GIT_ADVANCED_PAGE
  * repository. The Changes page carries the same commit controls as the docked Version Control
  * panel, and branch, tag, remote, stash and identity management happen here.
  */
-class GIT_ADVANCED_DIALOG : public DIALOG_GIT_ADVANCED_BASE
+class GIT_ADVANCED_DIALOG : public DIALOG_GIT_ADVANCED_BASE, public GIT_TRANSFER_WATCHER
 {
 public:
     GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane );
@@ -85,6 +87,12 @@ public:
     /// Open the window on its History page, narrowed to the commits that changed aPath.
     static void ShowHistoryForFile( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane, const wxString& aPath );
 
+    /// True when aParent's project has a repository this window can stay open on.
+    static bool CanOpenFor( EDA_BASE_FRAME* aParent );
+
+    /// Open the Workspace page with aItemId selected. The page needs the workspace preference.
+    static void ShowWorkspaceItem( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane, const wxString& aItemId );
+
     /// Turn to the History page narrowed to aPath, a file or folder relative to the repository
     /// root. Empty shows every commit again.
     void ShowHistoryForFile( const wxString& aPath );
@@ -102,6 +110,12 @@ public:
 
     /// Show a line of transfer progress on the hosted commit panel's status line.
     void ShowTransferProgress( const wxString& aText );
+
+    /// For a page's repository reads, so the window names the transfer they wait for instead of
+    /// showing empty pages until it ends.
+    std::function<void( bool aWaiting )> ReadWaitHandler();
+
+    void OnGitTransfersChanged() override;
 
     /// Run a repository write under the action lock, then refresh every surface on success.
     /// Shows a busy message if the lock is held, or aError if the action returns false. Set
@@ -139,6 +153,9 @@ private:
     void setIcons();
 
     void selectPage( GIT_ADVANCED_PAGE aPage );
+
+    /// The window behind aPage, or null when this window was opened without it.
+    wxWindow* pageWindow( GIT_ADVANCED_PAGE aPage ) const;
 
     /// The Changes page: the docked panel's commit controls with the selected file's diff below.
     wxWindow* buildChangesPage( wxWindow* aBook );
@@ -186,6 +203,8 @@ private:
     PANEL_GIT_STASHES*    m_stashesPage;
     PANEL_GIT_TAGS*       m_tagsPage;
     PANEL_GIT_REPOSITORY* m_repositoryPage;
+    PANEL_GIT_WORKSPACE*  m_workspacePage;
+    wxWindow*             m_changesPage;
 
     // Changes page
     wxSplitterWindow*   m_changesSplitter;
@@ -217,6 +236,13 @@ private:
 
     /// Where the user left the sash between the Changes page's list and its diff area.
     int m_changesSashPos = 0;
+
+    /// Show or hide the top bar's note on reads waiting for the action lock.
+    void updateWaitNote();
+
+    wxStaticText* m_waitNote = nullptr;
+    int           m_waitingReads = 0;
+    UTIL::LINK    m_transferLink;
 };
 
 #endif // GIT_ADVANCED_DIALOG_H

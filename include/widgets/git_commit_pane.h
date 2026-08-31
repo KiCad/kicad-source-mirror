@@ -22,19 +22,25 @@
 
 #include <atomic>
 #include <functional>
+#include <map>
 #include <memory>
 #include <optional>
 #include <set>
+#include <vector>
 
 #include <dialogs/git/git_commit_pane_base.h>
 #include <dialogs/git/git_transfer.h>
 #include <git/git_transfer_busy.h>
 #include <git/git_editor_snapshot.h>
 #include <git/kigit_known_hosts.h>
+#include <mdw/client/mdw_lock.h>
+#include <mdw/client/mdw_subscription.h>
 
+class MDW_SESSION;
 class EDA_BASE_FRAME;
 class GIT_ADVANCED_DIALOG;
 class KIGIT_COMMON;
+class MDW_WORKSPACE_STRIP;
 enum class GitOperation;
 class wxCommandEvent;
 class wxMenuItem;
@@ -86,6 +92,10 @@ public:
     /// Open the advanced window on its History page.
     void ShowHistory();
 
+    /// Show aItemId in the design workspace, in the advanced window when the project has a
+    /// repository and in a window of its own when it does not.
+    void ShowWorkspaceItem( const wxString& aItemId );
+
     /// Get changes from the remote, as the Get Changes button does. The advanced window's
     /// Pull button lands here, so one place owns the merge and its conflict handling.
     void Pull();
@@ -96,6 +106,12 @@ public:
 
     /// Prepare the amend form. A history entry supplies its hash and starts with no files selected.
     void BeginAmend( const wxString& aExpectedCommit = wxEmptyString );
+
+    /**
+     * Commit every changed project file under aMessage and push, or only push when nothing is left to commit.
+     * aOnDone runs on the UI thread once, however the commit and push end.
+     */
+    void CommitAllAndPush( const wxString& aMessage, std::function<void()> aOnDone );
 
     /// Called when a transfer starts and when it ends, so an owning window can follow along.
     void SetBusyChangedHandler( std::function<void( bool )> aHandler ) { m_busyChangedHandler = aHandler; }
@@ -130,7 +146,16 @@ private:
     /// push when aAndPush is set. Both halves of the commit button land here.
     void doCommit( bool aAndPush );
 
+    /// Warn once when teammates marked any of aFiles for editing, dropping theirs if asked.
+    /// @return false when the commit was cancelled.
+    bool confirmSharedEditing( std::vector<wxString>& aFiles );
+
     struct COMMIT_REQUEST;
+    struct DONE_NOTICE;
+
+    /// Read on a worker what a commit of aRequest's files must check first
+    static void readCommitFacts( KIGIT_COMMON& aCommon, COMMIT_REQUEST& aRequest );
+
     void saveForCommit( std::shared_ptr<KIGIT_COMMON> aCommon, std::shared_ptr<COMMIT_REQUEST> aRequest );
     void finishCommit( std::shared_ptr<KIGIT_COMMON> aCommon, const COMMIT_REQUEST& aRequest );
     void onChecklistChanged( wxDataViewEvent& aEvent );
@@ -171,6 +196,29 @@ private:
 
     /// Apply a completed repository snapshot on the UI thread.
     void applyStatus( const STATUS& aStatus );
+
+    /// The workspace session whose ownership the list shows, or null when there is none to show.
+    std::shared_ptr<MDW_SESSION> ownershipSession() const;
+
+    /// Fill the Editing column from what the session knows, without asking the backend.
+    void refreshOwners();
+
+    /// Ask the backend for every claim, then fill the Editing column.
+    void loadLocks();
+
+    wxString itemIdFor( const wxString& aPath ) const;
+
+    /// True when the Design Workspace is on and this project is bound to one
+    bool hasWorkspaceSession() const;
+
+    /// What the pane says for a workspace-bound project with no repository, with the files checked out
+    wxString workspaceStatus() const;
+
+    /// Offer to stop editing only while a ticked file is one the user is editing.
+    void updateFinishEditing();
+
+    /// Stop editing the pushed files, except those changed again since, which stay pending.
+    void finishEditing( const std::set<wxString>& aChanged );
 
     /// Fill the branch dropdown from the completed snapshot.
     void populateBranches( const STATUS& aStatus );
@@ -253,7 +301,9 @@ private:
     /// if the session changed since last time (it is recreated when a project is loaded).
     void syncListener();
 
-    EDA_BASE_FRAME* m_frame;
+    EDA_BASE_FRAME*      m_frame;
+    MDW_WORKSPACE_STRIP* m_workspaceStrip = nullptr;   ///< Docked pane only
+    MDW_SUBSCRIPTION     m_mdwEvents;
 
     /// The widest row's minimum width, measured before anything is hidden.
     int m_minDockWidth = 0;
@@ -270,6 +320,9 @@ private:
 
     /// Whether the last completed status snapshot had a repository.
     bool m_hasRepo = false;
+
+    /// Whether the status line is the workspace text, which a lock change rewrites
+    bool m_workspaceStatus = false;
 
     /// True when HEAD is a commit rather than a branch, so nothing can be committed or pushed.
     bool m_headDetached;
@@ -363,6 +416,15 @@ private:
     /// deliberately unticked from files that are simply new, and preserve those unticks.
     std::set<wxString> m_shownPaths;
 
+    /// Shown paths a teammate has marked for editing, with the claim
+    std::map<wxString, MDW_LOCK_INFO> m_editedByOthers;
+
+    std::set<wxString> m_claimsUnread;        ///< Shown paths whose claims have not been read yet
+    std::set<wxString> m_editedByMe;          ///< Shown paths the user has marked for editing
+    wxCheckBox*        m_finishEditing = nullptr;
+    std::set<wxString> m_finishPending;       ///< Committed files to stop editing once pushed
+    bool               m_finishOnRefresh = false;
+
     /// On-disk identity of the open documents, taken before a pull so only the ones the merge
     /// rewrote are reloaded afterwards.
     EDITOR_SNAPSHOT m_docsBeforePull;
@@ -387,6 +449,10 @@ private:
     KIGIT_QUERY m_refresh;
     KIGIT_QUERY m_actionQuery;
     bool        m_actionPending = false;
+
+    /// A CommitAllAndPush notice handed from step to step of its commit and push, through any pull a rejected
+    /// push asks for, and held only between those steps
+    std::shared_ptr<DONE_NOTICE> m_pushNotice;
 };
 
 #endif // GIT_COMMIT_PANE_H

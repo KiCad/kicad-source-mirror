@@ -37,6 +37,8 @@ PANEL_GIT_REMOTES::PANEL_GIT_REMOTES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
         m_dialog( aDialog ),
         m_frame( aFrame )
 {
+    m_listQuery.OnWait( m_dialog->ReadWaitHandler() );
+
     m_remotesList->AppendColumn( _( "Name" ), wxLIST_FORMAT_LEFT, FromDIP( 110 ) );
     m_remotesList->AppendColumn( _( "URL" ), wxLIST_FORMAT_LEFT, FromDIP( 340 ) );
 
