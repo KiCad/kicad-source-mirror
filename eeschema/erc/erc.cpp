@@ -2031,6 +2031,26 @@ int ERC_TESTER::TestSimilarLabels()
 
     std::unordered_map<wxString, std::vector<SIMILAR_ENTRY>> generalMap;
 
+    auto normalizeLabel =
+            []( const wxString& aLabel )
+            {
+                wxString stripped = aLabel.Strip( wxString::leading ).Strip( wxString::trailing );
+                wxString prefix;
+                wxString value;
+                wxString units;
+
+                SplitString( stripped, &prefix, &value, &units );
+
+                if( prefix == wxT( "+" ) )
+                    prefix = wxEmptyString;
+
+                /// Although the two 'μ's look the same, they are U+03BC and U+00B5
+                units.Replace( wxS( "µ" ), 'u' );
+                units.Replace( wxS( "μ" ), 'u' );
+
+                return prefix.Lower() + value.Lower() + units.Lower();
+            };
+
     // Collect first, report afterwards.  The exclusion depends on the scan order of m_nets which is an
     // unordered map that can change between ERC runs and orphan saved exclusions.
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
@@ -2050,7 +2070,7 @@ int ERC_TESTER::TestSimilarLabels()
                     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
                     wxString        unnormalized = label->GetShownText( &sheet, false );
 
-                    generalMap[unnormalized.Lower()].push_back( { unnormalized, label, sheet } );
+                    generalMap[normalizeLabel( unnormalized )].push_back( { unnormalized, label, sheet } );
                     break;
                 }
                 case SCH_PIN_T:
@@ -2063,7 +2083,7 @@ int ERC_TESTER::TestSimilarLabels()
                     SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
                     wxString    unnormalized = symbol->GetValue( true, &sheet, false );
 
-                    generalMap[unnormalized.Lower()].push_back( { unnormalized, pin, sheet } );
+                    generalMap[normalizeLabel( unnormalized )].push_back( { unnormalized, pin, sheet } );
                     break;
                 }
 
@@ -2091,8 +2111,7 @@ int ERC_TESTER::TestSimilarLabels()
                 ercItem->SetSheetSpecificPath( aMain.m_sheet );
                 ercItem->SetItemsSheetPaths( aMain.m_sheet, aAux.m_sheet );
 
-                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ),
-                                                     aMain.m_item->GetPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), aMain.m_item->GetPosition() );
                 aMain.m_sheet.LastScreen()->Append( marker );
             };
 

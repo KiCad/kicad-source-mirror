@@ -108,15 +108,15 @@ ERC_ITEM ERC_ITEM::isolatedPinLabel( ERCE_LABEL_SINGLE_PIN,
         wxT( "isolated_pin_label" ) );
 
 ERC_ITEM ERC_ITEM::similarLabels( ERCE_SIMILAR_LABELS,
-        _HKI( "Labels are similar (lower/upper case difference only)"),
+        _HKI( "Labels are similar"),
         wxT( "similar_labels" ) );
 
 ERC_ITEM ERC_ITEM::similarPower( ERCE_SIMILAR_POWER,
-        _HKI( "Power pins are similar (lower/upper case difference only)"),
+        _HKI( "Power pins are similar"),
         wxT( "similar_power" ) );
 
 ERC_ITEM ERC_ITEM::similarLabelAndPower( ERCE_SIMILAR_LABEL_AND_POWER,
-        _HKI( "Power pin and label are similar (lower/upper case difference only)"),
+        _HKI( "Power pin and label are similar"),
         wxT( "similar_label_and_power" ) );
 
 ERC_ITEM ERC_ITEM::singleGlobalLabel( ERCE_SINGLE_GLOBAL_LABEL,
