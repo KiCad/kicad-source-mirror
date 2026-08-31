@@ -179,6 +179,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
 
     m_fieldsAutoplaced = aSymbol.m_fieldsAutoplaced;
     m_schLibSymbolName = aSymbol.m_schLibSymbolName;
+    m_pinMapOverride = aSymbol.m_pinMapOverride;
 }
 
 
@@ -3813,6 +3814,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_SYMBOL& aSymbol )
 
         m_instances = aSymbol.m_instances;
         m_instancePathIndex = aSymbol.m_instancePathIndex;
+        m_pinMapOverride = aSymbol.m_pinMapOverride;
 
         m_fields = aSymbol.m_fields; // std::vector's assignment operator
 

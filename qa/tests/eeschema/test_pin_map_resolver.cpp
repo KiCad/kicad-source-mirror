@@ -255,4 +255,20 @@ BOOST_AUTO_TEST_CASE( SyncSharedLibSymbolCopies )
 }
 
 
+BOOST_AUTO_TEST_CASE( OverrideSurvivesCopyAndAssign )
+{
+    PIN_MAP_INSTANCE_OVERRIDE named;
+    named.m_Mode = PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP;
+    named.m_ActiveMapName = wxS( "DFN-8-EP" );
+    m_symbol->SetPinMapOverride( named );
+
+    SCH_SYMBOL copy( *m_symbol );
+    BOOST_CHECK( copy.GetPinMapOverride() == named );
+
+    SCH_SYMBOL assigned( *m_lib, m_lib->GetLibId(), nullptr, 0, 0, VECTOR2I( 0, 0 ) );
+    assigned = *m_symbol;
+    BOOST_CHECK( assigned.GetPinMapOverride() == named );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
