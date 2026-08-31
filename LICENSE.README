@@ -67,4 +67,5 @@ Licensed under CC0:
 Licensed under GPLv3 (or later):
 - 3dxware_sdk [Copyright 3Dconnexion] in thirdparty/3dxware_sdk
 - zint (fork of https://github.com/zint/zint) in thirdparty/zint
+- GIMP/GEGL in portions of common
 - All remaining code not listed above
