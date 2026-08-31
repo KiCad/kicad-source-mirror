@@ -24,9 +24,11 @@
 
 #include <wx/panel.h>
 #include <wx/dataview.h>
+#include <functional>
 #include <vector>
 
 class LIB_TREE;
+class LIB_TREE_NODE;
 class SYMBOL_EDIT_FRAME;
 class LIB_SYMBOL_LIBRARY_MANAGER;
 class wxBoxSizer;
@@ -58,6 +60,8 @@ protected:
     SYMBOL_EDIT_FRAME*          m_symbolEditFrame;
     LIB_TREE*                   m_tree;             ///< symbol search tree widget
     LIB_SYMBOL_LIBRARY_MANAGER* m_libMgr;
+
+    std::function<bool( LIB_TREE_NODE& )> m_filter;
 };
 
 #endif /* SYM_TREE_PANE_H */

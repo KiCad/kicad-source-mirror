@@ -41,17 +41,16 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, LIB_SYMBOL_LIBRA
     Layout();
     boxSizer->Fit( this );
 
-    static std::function<bool( LIB_TREE_NODE& )> filter =
-            [&]( LIB_TREE_NODE& aNode ) -> bool
-            {
-                if( m_tree->GetSearchString().StartsWith( "::" ) )
-                    return aNode.m_IsRoot;
-                else
-                    return true;
-            };
+    m_filter = [this]( LIB_TREE_NODE& aNode ) -> bool
+    {
+        if( m_tree->GetSearchString().StartsWith( "::" ) )
+            return aNode.m_IsRoot;
+        else
+            return true;
+    };
 
     m_libMgr->GetAdapter()->FinishTreeInitialization();
-    m_libMgr->GetAdapter()->SetFilter( &filter );
+    m_libMgr->GetAdapter()->SetFilter( &m_filter );
 
     // Event handlers
     Bind( EVT_LIBITEM_CHOSEN, &SYMBOL_TREE_PANE::onSymbolSelected, this );
