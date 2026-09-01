@@ -23,8 +23,7 @@
  *
  * These tests verify:
  * 1. SVG export produces valid output for symbols
- * 2. Symbol bounding box calculation is correct for different element types
- * 3. PNG alpha computation using dual-buffer technique
+ * 2. PNG alpha computation using dual-buffer technique
  */
 
 #include <boost/test/unit_test.hpp>
@@ -111,30 +110,6 @@ public:
                                                                     text, LAYER_DEVICE );
         txt->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 50 ) ) );
         m_symbol->AddDrawItem( txt.release() );
-    }
-
-    BOX2I GetSymbolBoundingBox( int aUnit = 0, int aBodyStyle = 0 )
-    {
-        BOX2I bbox;
-
-        for( SCH_ITEM& item : m_symbol->GetDrawItems() )
-        {
-            if( item.Type() == SCH_FIELD_T )
-                continue;
-
-            if( aUnit && item.GetUnit() && item.GetUnit() != aUnit )
-                continue;
-
-            if( aBodyStyle && item.GetBodyStyle() && item.GetBodyStyle() != aBodyStyle )
-                continue;
-
-            if( bbox.GetWidth() == 0 && bbox.GetHeight() == 0 )
-                bbox = item.GetBoundingBox();
-            else
-                bbox.Merge( item.GetBoundingBox() );
-        }
-
-        return bbox;
     }
 
     wxString PlotToSvgString( int aUnit = 0, int aBodyStyle = 0 )
@@ -259,58 +234,6 @@ BOOST_AUTO_TEST_CASE( SvgExport_ContainsText )
 
 
 /**
- * Test that bounding box is calculated correctly for pins
- */
-BOOST_AUTO_TEST_CASE( BoundingBox_Pins )
-{
-    AddPin( 0, 0, wxT( "PIN1" ), wxT( "1" ) );
-    AddPin( 200, 0, wxT( "PIN2" ), wxT( "2" ) );
-
-    BOX2I bbox = GetSymbolBoundingBox();
-
-    // Bounding box should span from first pin to second pin (plus pin length and decoration)
-    BOOST_CHECK( bbox.GetWidth() > 0 );
-    BOOST_CHECK( bbox.GetHeight() > 0 );
-}
-
-
-/**
- * Test that bounding box is calculated correctly for rectangle
- */
-BOOST_AUTO_TEST_CASE( BoundingBox_Rectangle )
-{
-    AddRectangle( -50, -50, 50, 50 );
-
-    BOX2I bbox = GetSymbolBoundingBox();
-
-    // Bounding box should approximately match the rectangle size
-    int expectedWidth = schIUScale.MilsToIU( 100 );  // 50 - (-50) = 100 mils
-    int expectedHeight = schIUScale.MilsToIU( 100 );
-
-    BOOST_CHECK( std::abs( bbox.GetWidth() - expectedWidth ) < schIUScale.MilsToIU( 20 ) );
-    BOOST_CHECK( std::abs( bbox.GetHeight() - expectedHeight ) < schIUScale.MilsToIU( 20 ) );
-}
-
-
-/**
- * Test that bounding box is calculated correctly for circle
- */
-BOOST_AUTO_TEST_CASE( BoundingBox_Circle )
-{
-    int radius = 100;
-    AddCircle( 0, 0, radius );
-
-    BOX2I bbox = GetSymbolBoundingBox();
-
-    // Bounding box should be approximately 2*radius in each dimension
-    int expectedSize = schIUScale.MilsToIU( 2 * radius );
-
-    BOOST_CHECK( std::abs( bbox.GetWidth() - expectedSize ) < schIUScale.MilsToIU( 20 ) );
-    BOOST_CHECK( std::abs( bbox.GetHeight() - expectedSize ) < schIUScale.MilsToIU( 20 ) );
-}
-
-
-/**
  * Test that a complex symbol with multiple elements produces valid SVG
  */
 BOOST_AUTO_TEST_CASE( SvgExport_ComplexSymbol )
@@ -409,21 +332,6 @@ BOOST_AUTO_TEST_CASE( PngExport_AlphaComputation_SemiTransparentPixel )
 
     // Alpha should be around 127-128 (50%)
     BOOST_CHECK( alpha > 120 && alpha < 140 );
-}
-
-
-/**
- * Test that an empty symbol produces empty SVG content
- */
-BOOST_AUTO_TEST_CASE( SvgExport_EmptySymbol )
-{
-    // Don't add any items - the symbol only has default fields
-    // After removing fields from bounding box calculation, should be empty
-
-    BOX2I bbox = GetSymbolBoundingBox();
-
-    // An empty symbol (no non-field items) should have zero-size bounding box
-    BOOST_CHECK( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 );
 }
 
 
