@@ -124,6 +124,11 @@ public:
 
     virtual void DisplayToolMsg( const wxString& msg ) {};
 
+    /**
+     * Select the given action in the toolbar group which contains it, if any.
+     */
+    virtual void SelectToolbarAction( const TOOL_ACTION& aAction ) {}
+
     virtual void ShowChangedLanguage();
 
     /**

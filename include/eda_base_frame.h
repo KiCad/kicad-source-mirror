@@ -208,7 +208,7 @@ public:
      * Select the given action in the toolbar group which contains it, if any.
      * This updates the displayed icon/tooltip and UI conditions for that group.
      */
-    void SelectToolbarAction( const TOOL_ACTION& aAction );
+    void SelectToolbarAction( const TOOL_ACTION& aAction ) override;
 
     void OnMaximize( wxMaximizeEvent& aEvent );
 
