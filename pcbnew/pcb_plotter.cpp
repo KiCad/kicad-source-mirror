@@ -100,8 +100,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         m_board->SetPageSettings( currPageInfo );
         m_plotOpts.SetUseAuxOrigin( true );
 
-        VECTOR2I origin = bbox.GetOrigin();
-        m_board->GetDesignSettings().SetAuxOrigin( origin );
+        // Keep the origin at the board origin so it lands on the SVG origin. The SVG
+        // plotter was given the bounding box to build its viewBox from elsewhere.
+        m_board->GetDesignSettings().SetAuxOrigin( VECTOR2I( 0, 0 ) );
     }
 
     // To reuse logic, in single plot mode, we want to kick any extra layers from the main list to commonLayers

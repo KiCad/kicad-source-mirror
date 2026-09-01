@@ -1227,6 +1227,12 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard, const PCB
 
     aPlotter->SetViewport( offset, pcbIUScale.IU_PER_MILS/10, compound_scale, aPlotOpts->GetMirror() );
 
+    // For SVG fit-to-board plots the page is the board bounding box and the origin is at
+    // (0,0), so the SVG viewBox must be that bounding box (it can extend to negative
+    // coordinates relative to the origin, and the origin doesn't need to be on the page).
+    if( aPlotOpts->GetFormat() == PLOT_FORMAT::SVG && aPlotOpts->GetSvgFitPagetoBoard() )
+        aPlotter->SetPlotBBox( bbox );
+
     // Has meaning only for gerber plotter. Must be called only after SetViewport
     aPlotter->SetGerberCoordinatesFormat( aPlotOpts->GetGerberPrecision() );
 
