@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-31 12:51+0000\n"
+"PO-Revision-Date: 2026-09-01 19:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -41455,6 +41455,8 @@ msgid ""
 "Footprint '%s' is used by %s in the target area but by nothing in the "
 "reference area."
 msgstr ""
+"フットプリント '%s' はターゲット 領域では %s によって使用されているが、"
+"リファレンス 領域では使われていません。"
 
 #: pcbnew/connectivity/topo_match.cpp:777
 #, c-format
@@ -41462,11 +41464,13 @@ msgid ""
 "Footprint '%s' is used by %s in the reference area but by nothing in the "
 "target area."
 msgstr ""
+"フットプリント '%s' はリファレンス 領域では %s によって使用されているが、"
+"ターゲット 領域では使われていません。"
 
 #: pcbnew/connectivity/topo_match.cpp:787
 #, c-format
 msgid "Footprint '%s': %d in the reference area, %d in the target area."
-msgstr ""
+msgstr "フットプリント '%s': %d リファレンス 領域、%d ターゲット 領域。"
 
 #: pcbnew/connectivity/topo_match.cpp:837
 #, fuzzy
@@ -42234,9 +42238,8 @@ msgid "Units:"
 msgstr "単位:"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:56
-#, fuzzy
 msgid "Include Fields"
-msgstr "非表示フィールドを含める"
+msgstr "フィールドを含める"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:70
 msgid "Loss tangent"
@@ -43770,9 +43773,8 @@ msgid "Compress output into 'zip' file"
 msgstr "出力を'zip'ファイルに圧縮"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:108
-#, fuzzy
 msgid "Content"
-msgstr "セルの内容:"
+msgstr "内容"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 msgid "Data set:"
@@ -43845,7 +43847,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:160
-#, fuzzy
 msgid "Includes:"
 msgstr "含む:"
 
@@ -47507,7 +47508,6 @@ msgid "Back:"
 msgstr "裏面:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1203
-#, fuzzy
 msgid "Backdrilling"
 msgstr "バックドリル"
 
@@ -47517,9 +47517,8 @@ msgstr "上 & 下"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1254
-#, fuzzy
 msgid "Must-cut layer:"
-msgstr "開始レイヤー:"
+msgstr "必須切り取りレイヤー:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1221
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
@@ -54381,14 +54380,13 @@ msgstr "DRC ルールの再読み込みに失敗しました: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:54
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:142
-#, fuzzy
 msgid "Optimum routed length"
-msgstr "最適な長さ"
+msgstr "最適な配線長"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:56
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:144
 msgid "Allowed deviation above or below the optimum length"
-msgstr ""
+msgstr "最適な長さの許容範囲（±）"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:78
 msgid "Optimum Length must be greater than 0"
@@ -54404,16 +54402,15 @@ msgstr "許容差が大きすぎます: 計算結果の最小長さは正値で�
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:146
 msgid "Maximum length difference between matched tracks"
-msgstr ""
+msgstr "一致した配線間の最大長さの差分"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:147
 msgid "Within diff pairs"
 msgstr "差動ペア内"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:148
-#, fuzzy
 msgid "Limit skew between the two tracks of each differential pair"
-msgstr "差動ペア配線の遅延(スキュー)/位相を調整"
+msgstr "2つの差動ペア配線間の遅延(スキュー)/位相を調整"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:206
 msgid "At least one constraint must be defined"
@@ -54428,45 +54425,40 @@ msgid "Allow 0°"
 msgstr "0° 許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:61
-#, fuzzy
 msgid "Allow footprints placed at 0 degrees"
-msgstr "フットプリントのリファレンスを表示"
+msgstr "0度に配置されたフットプリントを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:62
 msgid "Allow 90°"
 msgstr "90° 許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:63
-#, fuzzy
 msgid "Allow footprints placed at 90 degrees"
-msgstr "フットプリントのリファレンスを表示"
+msgstr "90度に配置されたフットプリントを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 180°"
 msgstr "180° 許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:65
-#, fuzzy
 msgid "Allow footprints placed at 180 degrees"
-msgstr "フットプリントのリファレンスを表示"
+msgstr "180度に配置されたフットプリントを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:66
 msgid "Allow 270°"
 msgstr "270° 許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:67
-#, fuzzy
 msgid "Allow footprints placed at 270 degrees"
-msgstr "フットプリントのリファレンスを表示"
+msgstr "270度に配置されたフットプリントを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:68
 msgid "Allow All"
 msgstr "すべて許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:69
-#, fuzzy
 msgid "Allow footprints at any orientation"
-msgstr "フットプリント %s(%s) の角度 %.1f"
+msgstr "あらゆる角度に配置されたフットプリントを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:112
 msgid "At least one orientation must be selected"
@@ -54597,14 +54589,12 @@ msgid "Syntax check passed with warnings:\n"
 msgstr "構文確認は警告付きで通過した:\n"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:56
-#, fuzzy
 msgid "Minimum text height"
-msgstr "最小テキスト高:"
+msgstr "最小テキスト高"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:58
-#, fuzzy
 msgid "Minimum text stroke thickness"
-msgstr "最小のテキストの太さ:"
+msgstr "最小のテキストストロークの太さ"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:75
 msgid "Minimum Text Height must be greater than 0"
@@ -54615,9 +54605,8 @@ msgid "Minimum Text Thickness must be greater than 0"
 msgstr "最小テキスト厚さは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:35
-#, fuzzy
 msgid "Minimum clearance between copper items and the board edge"
-msgstr "別の点として扱う点間の最小距離"
+msgstr "導体アイテムと基板端（エッジ）の間の最小クリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:47
 msgid "Minimum clearance between copper items and hole edges"
@@ -54628,70 +54617,60 @@ msgid "Minimum clearance between footprint courtyards"
 msgstr "フットプリントとコートヤードの間の最小クリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:73
-#, fuzzy
 msgid "Minimum clearance between items regardless of net"
-msgstr "別の点として扱う点間の最小距離"
+msgstr "ネットに関係なくアイテム間のクリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:86
-#, fuzzy
 msgid "Minimum creepage distance between conductors along the board surface"
-msgstr "別の点として扱う点間の最小距離"
+msgstr "基板表面に沿った導体間の最小沿面距離"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:98
 msgid "Minimum hole diameter"
 msgstr "最小スルーホール直径"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:110
-#, fuzzy
 msgid "Minimum distance between hole edges"
-msgstr "列の間の距離"
+msgstr "穴端間の最小距離"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:124
-#, fuzzy
 msgid "Maximum number of vias allowed on a matched net"
-msgstr "すでに最大数のプラグインがダイアログに追加済みです。"
+msgstr "一致したネット上での最大許容ビア数"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:137
 msgid "Minimum width of the copper ring around a hole"
 msgstr "穴の周りの最小導体リング幅"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:150
-#, fuzzy
 msgid "Minimum clearance between copper items on different nets"
-msgstr "別の点として扱う点間の最小距離"
+msgstr "異なるネット上での最小導体アイテム間のクリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:161
-#, fuzzy
 msgid "Minimum width of any copper connection"
-msgstr "ピンとピンの接続"
+msgstr "導体接続部の最小幅"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:174
 msgid "Minimum width of solder mask left between two mask openings"
 msgstr "２つのマスク開口部の間に残されたハンダマスク最小幅"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:188
-#, fuzzy
 msgid "Minimum number of thermal relief spokes connecting a pad to its zone"
-msgstr "最小サーマルリリーフ スポーク数:"
+msgstr "パッドをそのゾーンに接続するサーマルリリーフスポークの最小数"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:199
-#, fuzzy
 msgid "Minimum drill diameter"
 msgstr "最小ドリル直径"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:211
-#, fuzzy
 msgid "Minimum outer diameter of vias"
-msgstr "最小 uVia 直径"
+msgstr "ビアの最小外形"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:224
 msgid "Minimum clearance between silkscreen items"
 msgstr "シルクスクリーンのアイテム間の最小クリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:237
-#, fuzzy
 msgid "Minimum clearance between silkscreen and solder mask openings"
-msgstr "パッドと半田マスク間のマージン"
+msgstr "シルクスクリーンとハンダマスク開口部の間の最小クリアランス"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:250
 msgid "Distance the solder mask opening extends beyond the pad"
@@ -54710,9 +54689,8 @@ msgid "Allow top Layer"
 msgstr "表面レイヤーを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:54
-#, fuzzy
 msgid "Allow matched items on the front copper layer"
-msgstr "基板表面に導体層を使用したい場合"
+msgstr "表面の導体レイヤーに一致するアイテムを許可する"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:55
 msgid "Allow bottom Layer"
@@ -54729,7 +54707,7 @@ msgstr "一つ以上のレイヤーを選択する必要があります"
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:56
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:62
 msgid "Allowed deviation above or below the optimum width"
-msgstr ""
+msgstr "最適な幅の許容範囲（±）"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:66
 msgid "Optimum Width must be greater than 0"
@@ -54747,19 +54725,19 @@ msgstr "幅の許容差は最適な幅より小さくなければなりません
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:60
 msgid "Optimum width of each track in the pair"
-msgstr ""
+msgstr "それぞれのペア配線内の最適な幅"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:64
 msgid "Optimum gap between the two tracks of the pair"
-msgstr ""
+msgstr "それぞれのペア配線内の最適なギャップ"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:66
 msgid "Allowed deviation above or below the optimum gap"
-msgstr ""
+msgstr "最適なギャップからの許容範囲（±）"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:68
 msgid "Maximum length over which the pair may run uncoupled"
-msgstr ""
+msgstr "ペアが連結しないで進むことが出来る最大長"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:92
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -54779,24 +54757,20 @@ msgid "At least one constraint must be specified"
 msgstr "一つ以上の制約を指定する必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:70
-#, fuzzy
 msgid "Smallest allowed via diameter"
-msgstr "ビアのドリル サイズはビアの直径より小さくなければなりません"
+msgstr "ビア直径で許容される最小値"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:71
-#, fuzzy
 msgid "Largest allowed via diameter"
-msgstr "ビアのドリル サイズはビアの直径より小さくなければなりません"
+msgstr "ビア直径で許容される最大値"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:74
-#, fuzzy
 msgid "Smallest allowed via hole diameter"
-msgstr "ビアのメッキ穴直径"
+msgstr "ビア穴直径で許容される最小値"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:75
-#, fuzzy
 msgid "Largest allowed via hole diameter"
-msgstr "ビアのメッキ穴直径"
+msgstr "ビア穴直径で許容される最大値"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:78
 msgid "Restrict this rule to a single via type"
@@ -55675,9 +55649,8 @@ msgid "Scale Y"
 msgstr "拡大／縮小率 Y軸"
 
 #: pcbnew/footprint.cpp:5384
-#, fuzzy
 msgid "Footprint Type"
-msgstr "フットプリント タイプ:"
+msgstr "フットプリント タイプ"
 
 #: pcbnew/footprint.cpp:5387
 msgid "Not in Schematic"
@@ -57305,15 +57278,13 @@ msgid "Press-fit"
 msgstr "プレスフィット"
 
 #: pcbnew/pad.cpp:2268
-#, fuzzy
 msgid "(mixed shapes)"
-msgstr "塗りつぶし"
+msgstr "（混在形状）"
 
 #: pcbnew/pad.cpp:2273 pcbnew/pad.cpp:2278 pcbnew/pad.cpp:2280
 #: pcbnew/pcb_track.cpp:2538
-#, fuzzy
 msgid "(mixed)"
-msgstr "混在"
+msgstr "（混在）"
 
 #: pcbnew/pad.cpp:2295
 msgid "Length in Package"
@@ -57871,12 +57842,11 @@ msgid "New PCB file is unsaved"
 msgstr "新しい基板ファイルは保存されていません"
 
 #: pcbnew/pcb_edit_frame.cpp:2090
-#, fuzzy
 msgid "WRL 3D model could not be matched to equivalent STEP model."
-msgstr "%d 個のWRL 3Dモデルが、同等のSTEPモデルとマッチングできませんでした。"
+msgstr "WRL 3Dモデルが、同等のSTEPモデルとマッチングできませんでした。"
 
 #: pcbnew/pcb_edit_frame.cpp:2094
-#, fuzzy, c-format
+#, c-format
 msgid "%d WRL 3D models could not be matched to equivalent STEP models."
 msgstr "%d 個のWRL 3Dモデルが、同等のSTEPモデルとマッチングできませんでした。"
 
@@ -58154,7 +58124,7 @@ msgstr "基板データを読み込み中..."
 msgid ""
 "Board outline has %d vertices outside the coordinate range; they were "
 "dropped."
-msgstr ""
+msgstr "基板外形には %d 個の座標範囲外の頂点がありました;それらは削除されました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1483
 #, c-format
@@ -58250,6 +58220,8 @@ msgid ""
 "Polygon on layer '%s' has %d vertices outside the coordinate range; they "
 "were dropped."
 msgstr ""
+"レイヤー '%s' 上のポリゴンに %d 個の座標範囲外の頂点がありました;それらは削除"
+"されました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2577
 #, c-format
@@ -58508,7 +58480,7 @@ msgstr "矩形を読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5665
 msgid "Ignored a keep-out area with no restrictions."
-msgstr ""
+msgstr "禁止領域を制限なく無視した。"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:34
 msgid "Altium Circuit Maker PCB files"
@@ -59529,9 +59501,8 @@ msgid "Cannot produce this IPC-2581 data set."
 msgstr "IPC-2581 データセットは生成できません。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:391
-#, fuzzy
 msgid "No IPC-2581 content selected."
-msgstr "接続されたネットが未選択です。"
+msgstr "IPC-2581の内容を選択していない。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:407
 msgid "Cannot export assembly data without outer copper layers."
@@ -59555,9 +59526,8 @@ msgstr "contextセクションを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:766
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:785
-#, fuzzy
 msgid "IPC-2581 export cancelled"
-msgstr "IPC2581 としてエクスポート"
+msgstr "IPC2581 エクスポートはキャンセルされた"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1375
 msgid "Pad has unsupported type; it was skipped."
@@ -59594,9 +59564,8 @@ msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr "基板外形が存在しないか、不正な形です。DRCを実行してください。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3753
-#, fuzzy
 msgid "Generating components"
-msgstr "contextセクションを生成"
+msgstr "コンポーネントを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3800
 msgid ""
@@ -59606,17 +59575,15 @@ msgstr ""
 "能性があります。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3870
-#, fuzzy
 msgid "Generating logical netlist"
-msgstr "logisticセクションを生成"
+msgstr "論理ネットリストを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3908
-#, fuzzy
 msgid "Generating physical netlist"
-msgstr "ネットリストを生成"
+msgstr "物理ネットリストを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4195
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting layer %s, net %s"
 msgstr "レイヤー %s, ネット %s をエクスポート"
 
@@ -59641,14 +59608,13 @@ msgstr ""
 "してエクスポートされました。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4742
-#, fuzzy
 msgid "Generating vendor list"
-msgstr "ネットリストを生成"
+msgstr "外部の提供会社のリストを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4938
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown IPC-2581 data set '%s'."
-msgstr "未知のモード名: '%s'."
+msgstr "未知のIPC-2581データセット '%s'。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4949
 #, c-format
@@ -59660,9 +59626,8 @@ msgid "Generating logistic section"
 msgstr "logisticセクションを生成"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5047
-#, fuzzy
 msgid "Resolving references"
-msgstr "設定を開く"
+msgstr "リファレンスを解決"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5055
 msgid "Saving file"
@@ -59673,7 +59638,6 @@ msgid "Failed to save IPC-2581 data to buffer."
 msgstr "IPC-2581 データをバッファに保存できませんでした。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5097
-#, fuzzy
 msgid "Finishing"
 msgstr "完了"
 
@@ -60081,9 +60045,9 @@ msgstr ""
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:802
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:823
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write design rules to '%s'."
-msgstr "ディレクトリ '%s' を作成できませんでした。"
+msgstr "デザイン ルール を '%s' に書き込みできませんでした。"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:847
 #, c-format
@@ -65978,7 +65942,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1621
 msgid "the design block's board layout is empty"
-msgstr "デザインブロックの基板レイアウトが空です。"
+msgstr "デザインブロックの基板レイアウトが空です"
 
 #: pcbnew/tools/pcb_control.cpp:1672
 msgid "the group has no items"
