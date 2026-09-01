@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20260826)
+	(version 20260830)
 	(generator "eeschema")
 	(generator_version "10.99")
 	(uuid "d6ee7e6a-6570-43fd-93e6-b98f9cea3e37")
@@ -1342,6 +1342,7 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "bffa20b1-fbd5-4785-b4f2-2f3a90b6099a")
+		(custom_property "JunctionProp" "T-shaped")
 	)
 	(no_connect
 		(at 72.39 38.1)
@@ -1394,6 +1395,7 @@
 			(type default)
 		)
 		(uuid "0f525f79-ebad-4a9e-9e68-a12181b329a8")
+		(custom_property "WireType" "Green")
 	)
 	(bus
 		(pts
@@ -1699,6 +1701,7 @@
 			(type default)
 		)
 		(uuid "c564dc43-aec8-4532-9215-8afa714846fa")
+		(custom_property "WireType" "Green")
 	)
 	(polyline
 		(pts
@@ -2122,6 +2125,8 @@
 				)
 			)
 		)
+		(custom_property "OtherSymbolCustom" "Red")
+		(custom_property "SymbolCustom" "Orange")
 	)
 	(symbol
 		(lib_id "MCU_ST_STM32C0:STM32C011J_4-6_Mx")
@@ -2399,6 +2404,7 @@
 				)
 			)
 		)
+		(custom_property "SymbolCustom" "Orange")
 	)
 	(symbol
 		(lib_id "Device:Q_NPN")
@@ -2484,6 +2490,7 @@
 				)
 			)
 		)
+		(custom_property "OtherSymbolCustom" "Red")
 	)
 	(group "MyGroup"
 		(uuid "5293140e-402e-4756-967e-45a85458734f")
@@ -2569,6 +2576,7 @@
 				)
 			)
 		)
+		(custom_property "SheetCustom" "Interesting")
 	)
 	(sheet_instances
 		(path "/"
