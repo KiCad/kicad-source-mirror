@@ -103,19 +103,22 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
     if( projectFile.Exists() )
     {
         aSettingsManager.LoadProject( projectFile.GetFullPath() );
-        BOOST_TEST_MESSAGE( "Loading project file: " << projectFile.GetFullPath() );
+        BOOST_TEST_CHECKPOINT( "Loading project file: " << projectFile.GetFullPath() );
     }
     else if( legacyProject.Exists() )
     {
         aSettingsManager.LoadProject( legacyProject.GetFullPath() );
-        BOOST_TEST_MESSAGE( "Loading project file: " << projectFile.GetFullPath() );
+        BOOST_TEST_CHECKPOINT( "Loading project file: " << projectFile.GetFullPath() );
     }
     else
+    {
         BOOST_TEST_MESSAGE( "Could not load project: " << projectFile.GetFullPath() );
+    }
 
-    BOOST_TEST_MESSAGE( "Loading board file: " << boardPath );
+    BOOST_TEST_CHECKPOINT( "Loading board file: " << boardPath );
 
-    try {
+    try
+    {
         aBoard = ReadBoardFromFileOrStream( boardPath );
     }
     catch( const IO_ERROR& ioe )
