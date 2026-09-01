@@ -121,7 +121,9 @@ public:
 
     int GetRowCount() const
     {
-        return m_cells.size() / m_colCount;
+        wxCHECK_MSG( m_colCount, 0, wxT( "Degenerate table with no columns!" ) );
+
+        return (int) m_cells.size() / m_colCount;
     }
 
     void SetColWidth( int aCol, int aWidth ) { m_colWidths[aCol] = aWidth; }
