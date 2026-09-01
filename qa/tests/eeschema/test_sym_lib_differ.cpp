@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <schematic_utils/schematic_file_util.h>
 
@@ -33,13 +34,25 @@
 #include <sch_item.h>
 #include <sch_pin.h>
 #include <sch_shape.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
+#include <sch_io/sch_io.h>
+#include <sch_io/sch_io_mgr.h>
+#include <cli/exit_codes.h>
+#include <eeschema_jobs_handler.h>
+#include <mdw/client/mdw_library_sources.h>
+#include <reporter.h>
 
 #include <json_common.h>
 
 #include <wx/filename.h>
 
+#include <cstring>
+#include <fstream>
 #include <functional>
+#include <map>
 #include <set>
+#include <sstream>
+#include <tuple>
 
 
 using namespace KICAD_DIFF;
@@ -56,6 +69,196 @@ static wxString getFixturePath()
     fn.AppendDir( wxS( "libraries" ) );
     fn.SetFullName( wxS( "Device.kicad_sym" ) );
     return fn.GetFullPath();
+}
+
+
+// A checkout with autocrlf adds CRs the tests' text slicing does not expect
+static std::string readLibrary( const wxFileName& aFile )
+{
+    std::ifstream in( aFile.GetFullPath().fn_str(), std::ios::binary );
+    std::string   text( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+
+    std::erase( text, '\r' );
+    return text;
+}
+
+
+// A release older than its library keeps its De Morgan drawings, which its own header infers
+BOOST_AUTO_TEST_CASE( OldFormatSymbolSplicesIntoCurrentLibrary )
+{
+    wxFileName source( KI_TEST::GetEeschemaTestDataDir(), wxS( "4xxx.kicad_sym" ) );
+    source.AppendDir( wxS( "libs" ) );
+
+    const std::string          old = readLibrary( source );
+    std::optional<std::string> current = SYM_LIB_DIFFER::UpgradedWithMember( old, {}, old, wxS( "4001" ) );
+    BOOST_REQUIRE( current );
+
+    auto alternateItems = [&]( const std::string& aLibrary )
+    {
+        auto [owners, map] = SYM_LIB_DIFFER::LoadLibraryText( aLibrary );
+        int  count = 0;
+
+        for( const SCH_ITEM& item : map.at( wxS( "4001" ) )->GetDrawItems() )
+            count += item.GetBodyStyle() == 2;
+
+        return count;
+    };
+
+    std::optional<std::string> spliced =
+            MDW_SETUP::SpliceMember( *current, {}, old, wxS( "4001" ), &SYM_LIB_DIFFER::UpgradedWithMember );
+
+    BOOST_REQUIRE( spliced );
+    BOOST_REQUIRE_GT( alternateItems( old ), 0 );
+    BOOST_CHECK_EQUAL( alternateItems( *spliced ), alternateItems( old ) );
+}
+
+
+static std::string acmePassives()
+{
+    wxFileName source( KI_TEST::GetTestDataRootDir(), wxS( "passives.kicad_sym" ) );
+    source.AppendDir( wxS( "common" ) );
+    source.AppendDir( wxS( "git" ) );
+    source.AppendDir( wxS( "acme-library" ) );
+    return readLibrary( source );
+}
+
+
+/// aLibrary as saved with C's reference in bold, which needs an explicit stroke to migrate
+static std::string withBoldReference( std::string aLibrary )
+{
+    const std::string font = "(size 1.27 1.27)";
+
+    aLibrary.replace( aLibrary.find( font ), font.size(), font + " (thickness 0.16) (bold yes)" );
+    return aLibrary;
+}
+
+
+static int boldStroke( const std::string& aLibrary )
+{
+    auto [owners, map] = SYM_LIB_DIFFER::LoadLibraryText( aLibrary );
+    return map.at( wxS( "C" ) )->GetReferenceField().GetTextThickness();
+}
+
+
+// A bold stroke is stored multiplied before 20260826, so a member read under another format's header is migrated
+// twice or not at all
+BOOST_AUTO_TEST_CASE( SplicedMemberKeepsBoldStroke )
+{
+    const std::string          library = acmePassives();
+    const std::string          released = withBoldReference( library );
+    std::optional<std::string> current = SYM_LIB_DIFFER::UpgradedWithMember( released, {}, released, wxS( "C" ) );
+    BOOST_REQUIRE( current );
+
+    for( const std::string& member : { released, *current } )
+    {
+        std::optional<std::string> spliced =
+                MDW_SETUP::SpliceMember( library, {}, member, wxS( "C" ), &SYM_LIB_DIFFER::UpgradedWithMember );
+
+        BOOST_REQUIRE( spliced );
+        BOOST_CHECK_EQUAL( boldStroke( *spliced ), boldStroke( released ) );
+        BOOST_CHECK_EQUAL( spliced->find( "(version 20241209)" ) != std::string::npos, member == released );
+    }
+}
+
+
+// Answers to an older library all go into its one upgraded file, which would otherwise undo the others
+BOOST_AUTO_TEST_CASE( AnswersToOlderLibraryShareOneUpgradedFile )
+{
+    KI_TEST::SCOPED_TEMP_DIR dir( wxS( "sym_lib_answers" ) );
+    const std::string        library = acmePassives();
+    std::string              edited = withBoldReference( library );
+
+    edited.replace( edited.find( "\"Inductor\"" ), 10, "\"Inductor, 10uH\"" );
+    std::ofstream( dir.Path() / "passives.kicad_sym", std::ios::binary ) << library;
+
+    // Merged answers are saved in the current format
+    std::optional<std::string> answer = SYM_LIB_DIFFER::UpgradedWithMember( edited, {}, edited, wxS( "C" ) );
+    BOOST_REQUIRE( answer );
+
+    std::vector<MDW_UPDATE_CONFLICT>     conflicts( 2 );
+    std::vector<MDW_CONFLICT_RESOLUTION> resolutions( 2 );
+
+    for( size_t ii = 0; ii < 2; ++ii )
+    {
+        conflicts[ii].item.item_id = ii ? wxS( "passives.kicad_sym#L" ) : wxS( "passives.kicad_sym#C" );
+        conflicts[ii].relative_path = wxS( "passives.kicad_sym" );
+        conflicts[ii].name = ii ? wxS( "L" ) : wxS( "C" );
+        resolutions[ii].item_id = conflicts[ii].item.item_id;
+        resolutions[ii].merged = answer;
+    }
+
+    std::optional<std::vector<MDW_CONFLICT_RESOLUTION>> placed =
+            MDW_SETUP::PlacedAnswers( wxString::FromUTF8( dir.Path().string() ), conflicts, resolutions,
+                                      &SYM_LIB_DIFFER::UpgradedWithMember );
+
+    BOOST_REQUIRE( placed && placed->size() == 2 );
+    BOOST_CHECK( !placed->front().whole_file_of.IsEmpty() && !placed->back().whole_file_of.IsEmpty() );
+    BOOST_REQUIRE( placed->front().merged == placed->back().merged );
+
+    auto [owners, map] = SYM_LIB_DIFFER::LoadLibraryText( *placed->front().merged );
+
+    BOOST_CHECK_EQUAL( boldStroke( *placed->front().merged ), boldStroke( edited ) );
+    BOOST_CHECK( map.at( wxS( "L" ) )->GetDescription() == wxS( "Inductor, 10uH" ) );
+}
+
+
+// A derived symbol does not read without its parent, so its answer is its whole file even in the same format
+BOOST_AUTO_TEST_CASE( DerivedAnswerIsItsWholeFile )
+{
+    KI_TEST::SCOPED_TEMP_DIR dir( wxS( "sym_lib_derived" ) );
+    const std::string        library = readLibrary( wxFileName( getFixturePath() ) );
+
+    std::ofstream( dir.Path() / "Device.kicad_sym", std::ios::binary ) << library;
+
+    MDW_UPDATE_CONFLICT conflict;
+    conflict.item.item_id = wxS( "Device.kicad_sym#Filter_EMI_C" );
+    conflict.relative_path = wxS( "Device.kicad_sym" );
+    conflict.name = wxS( "Filter_EMI_C" );
+
+    MDW_CONFLICT_RESOLUTION resolution;
+    resolution.item_id = conflict.item.item_id;
+    resolution.merged = library;
+
+    std::optional<std::vector<MDW_CONFLICT_RESOLUTION>> placed = MDW_SETUP::PlacedAnswers(
+            wxString::FromUTF8( dir.Path().string() ), { conflict }, { resolution }, nullptr );
+
+    BOOST_REQUIRE( placed && placed->size() == 1 );
+    BOOST_CHECK( !placed->front().whole_file_of.IsEmpty() );
+    BOOST_CHECK( placed->front().merged == library );
+}
+
+
+// A folder file's symbols may extend parents in its other files, and a derived member file may lack its parent
+BOOST_AUTO_TEST_CASE( UpgradeFindsParentsInTheFolder )
+{
+    const std::string device = readLibrary( wxFileName( getFixturePath() ) );
+    const std::string header = device.substr( 0, device.find( "\t(symbol \"" ) );
+
+    auto symbol = [&]( const std::string& aText, const std::string& aName )
+    {
+        const size_t from = aText.find( "\t(symbol \"" + aName + "\"\n" );
+        const size_t to = aText.find( "\n\t(symbol \"", from + 1 );
+
+        BOOST_REQUIRE( from != std::string::npos );
+        return aText.substr( from, ( to == std::string::npos ? aText.rfind( ')' ) : to ) - from ) + "\n";
+    };
+
+    const std::string parentFile = header + symbol( device, "C_Feedthrough" ) + ")\n";
+    const std::string destination = header + symbol( device, "C" ) + symbol( device, "Filter_EMI_C" ) + ")\n";
+    const std::string both = header + symbol( device, "C_Feedthrough" ) + symbol( device, "Filter_EMI_C" ) + ")\n";
+
+    std::optional<std::string> current = SYM_LIB_DIFFER::UpgradedWithMember( destination, { parentFile }, destination,
+                                                                             wxS( "C" ) );
+    std::optional<std::string> derived = SYM_LIB_DIFFER::UpgradedWithMember( both, {}, both, wxS( "C_Feedthrough" ) );
+
+    BOOST_REQUIRE( current && derived );
+    BOOST_CHECK( current->find( "(symbol \"C_Feedthrough\"" ) == std::string::npos );
+
+    const std::string derivedFile =
+            current->substr( 0, current->find( "\t(symbol \"" ) ) + symbol( *derived, "Filter_EMI_C" ) + ")\n";
+
+    BOOST_CHECK( SYM_LIB_DIFFER::UpgradedWithMember( destination, { parentFile }, derivedFile,
+                                                     wxS( "Filter_EMI_C" ) ) );
 }
 
 
@@ -573,6 +776,215 @@ BOOST_AUTO_TEST_CASE( CombineSymbolEditsRejectsUnreportedState )
 }
 
 
+namespace
+{
+std::string fixtureText()
+{
+    std::ifstream     in( getFixturePath().fn_str(), std::ios::binary );
+    std::stringstream buffer;
+    buffer << in.rdbuf();
+
+    // A Windows checkout may hold the fixture with CRLF endings, and the edits search for LF text
+    std::string text = buffer.str();
+    std::erase( text, '\r' );
+    return text;
+}
+
+
+void editSymbol( std::string& aText, const std::string& aSymbol, const std::string& aFrom, const std::string& aTo )
+{
+    size_t at = aText.find( aFrom, aText.find( "\t(symbol \"" + aSymbol + "\"\n" ) );
+
+    BOOST_REQUIRE( at != std::string::npos );
+    aText.replace( at, aFrom.size(), aTo );
+}
+
+
+/// Merge the texts as the merge job does, with theirs saved in the current format, into aMerged
+int mergeSymbolLibraries( const std::string& aAncestor, const std::string& aOurs, const std::string& aTheirs,
+                          std::vector<std::unique_ptr<LIB_SYMBOL>>& aOwners, SYM_LIB_DIFFER::SYMBOL_MAP& aMerged )
+{
+    KI_TEST::SCOPED_TEMP_DIR dir( wxS( "sym_lib_convergent" ) );
+    const wxString           base = wxString::FromUTF8( dir.Path().string() ) + wxFileName::GetPathSeparator();
+
+    auto write = [&]( const wxString& aName, const std::string& aText )
+    {
+        std::ofstream( ( base + aName ).fn_str(), std::ios::binary ) << aText;
+        return base + aName;
+    };
+
+    const wxString ancestor = write( wxS( "ancestor.kicad_sym" ), aAncestor );
+    const wxString ours = write( wxS( "ours.kicad_sym" ), aOurs );
+    const wxString theirs = base + wxS( "theirs.kicad_sym" );
+
+    {
+        SCH_IO_KICAD_SEXPR_LIB_CACHE cache( theirs );
+
+        for( std::unique_ptr<LIB_SYMBOL>& symbol : SYM_LIB_DIFFER::LoadLibraryText( aTheirs ).first )
+            cache.AddSymbol( std::move( symbol ) );
+
+        cache.SetModified( true );
+        cache.Save();
+    }
+
+    EESCHEMA_JOBS_HANDLER handler( nullptr );
+    WX_STRING_REPORTER    reporter;
+    const wxString        output = base + wxS( "merged.kicad_sym" );
+    const int             result = handler.RunMerge( DOC_KIND::SYM_LIB, ancestor, ours, theirs, output, false, true,
+                                                     &reporter );
+
+    std::tie( aOwners, aMerged ) = SYM_LIB_DIFFER::LoadLibrary( output );
+    return result;
+}
+} // namespace
+
+
+// Both sides making the same edits agree, though one side reads from an older file format, and a symbol derived
+// from an edited parent follows it
+BOOST_AUTO_TEST_CASE( SymLibMergeTakesAConvergentEdit )
+{
+    const std::string before = fixtureText();
+    std::string       theirs = before;
+
+    editSymbol( theirs, "C", "(property \"Value\" \"C\"", "(property \"Value\" \"C_UP4\"" );
+    editSymbol( theirs, "C_Feedthrough_1_1", "(name \"1\"", "(name \"IN\"" );
+
+    std::string ours = theirs;
+    editSymbol( ours, "Filter_EMI_C", "single capacitor", "single feedthrough capacitor" );
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> owners;
+    SYM_LIB_DIFFER::SYMBOL_MAP               merged;
+
+    BOOST_CHECK_EQUAL( mergeSymbolLibraries( before, ours, theirs, owners, merged ), CLI::EXIT_CODES::SUCCESS );
+    BOOST_CHECK_EQUAL( merged.at( wxS( "C" ) )->GetValueField().GetText(), wxS( "C_UP4" ) );
+    BOOST_CHECK( merged.at( wxS( "Filter_EMI_C" ) )->GetDescription().Contains( wxS( "feedthrough" ) ) );
+}
+
+
+// Both sides moving a symbol to a new parent agree, while a symbol below it keeps inheriting what the other side
+// changed in that parent
+BOOST_AUTO_TEST_CASE( SymLibMergeTakesAConvergentReparent )
+{
+    std::string before = fixtureText();
+    editSymbol( before, "Filter_EMI_CommonMode", "(extends \"Filter_EMI_LL\")", "(extends \"Filter_EMI_C\")" );
+
+    std::string theirs = before;
+    editSymbol( theirs, "Filter_EMI_C", "(extends \"C_Feedthrough\")", "(extends \"C\")" );
+
+    std::string ours = theirs;
+    editSymbol( ours, "Filter_EMI_CommonMode", "common mode filter", "common mode filter, edited" );
+    editSymbol( theirs, "C", "(at 0 3.81 270)", "(at 0 5.08 270)" );
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> owners;
+    SYM_LIB_DIFFER::SYMBOL_MAP               merged;
+
+    BOOST_CHECK_EQUAL( mergeSymbolLibraries( before, ours, theirs, owners, merged ), CLI::EXIT_CODES::SUCCESS );
+    BOOST_CHECK( merged.at( wxS( "Filter_EMI_CommonMode" ) )->GetDescription().EndsWith( wxS( "edited" ) ) );
+}
+
+
+// Ours only laid out anew leaves the merge theirs, even an edit no change record names
+BOOST_AUTO_TEST_CASE( SymLibMergeTakesTheirsOverAResavedOurs )
+{
+    const std::string keywords = "(property \"ki_keywords\" \"EMI filter feedthrough capacitor\"\n\t\t\t(at 0 0 0)\n"
+                                 "\t\t\t(effects\n\t\t\t\t(font\n\t\t\t\t\t(size 1.27 1.27)\n\t\t\t\t)\n"
+                                 "\t\t\t\t(hide yes)\n\t\t\t)\n\t\t)";
+    const std::string before = fixtureText();
+    std::string       ours = before;
+    std::string       theirs = before;
+
+    // Filter_EMI_C repeats its parent's keywords, so dropping them changes nothing it shows
+    editSymbol( ours, "Filter_EMI_C", keywords,
+                "(property \"ki_keywords\" \"EMI filter feedthrough capacitor\" (at 0 0 0) (effects (font (size 1.27 "
+                "1.27)) (hide yes)))" );
+    editSymbol( theirs, "Filter_EMI_C", keywords, "" );
+
+    auto [ancestorOwners, ancestor] = SYM_LIB_DIFFER::LoadLibraryText( before );
+    auto [oursOwners, oursMap] = SYM_LIB_DIFFER::LoadLibraryText( ours );
+    auto [theirsOwners, theirsMap] = SYM_LIB_DIFFER::LoadLibraryText( theirs );
+
+    BOOST_REQUIRE( SYM_LIB_DIFFER( ancestor, theirsMap ).Diff().changes.empty() );
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> owners;
+    SYM_LIB_DIFFER::SYMBOL_MAP               merged;
+
+    BOOST_CHECK_EQUAL( mergeSymbolLibraries( before, ours, theirs, owners, merged ), CLI::EXIT_CODES::SUCCESS );
+    BOOST_CHECK( merged.at( wxS( "Filter_EMI_C" ) )->GetRawKeyWords().IsEmpty() );
+    BOOST_CHECK( !SYM_LIB_DIFFER::MergeKeepsBothSides( ancestor, oursMap, theirsMap, ancestor ) );
+}
+
+
+// A teammate's format upgrade changes no symbol, so an edit made over the old format merges cleanly into it
+BOOST_AUTO_TEST_CASE( SymLibMergeKeepsAnEditOverAFormatUpgrade )
+{
+    auto read = []( const wxString& aPath )
+    {
+        std::ifstream      in( aPath.fn_str(), std::ios::binary );
+        std::ostringstream text;
+
+        text << in.rdbuf();
+
+        // A Windows checkout may hold the files with CRLF endings, and the edit searches for LF text
+        std::string read = text.str();
+        std::erase( read, '\r' );
+        return read;
+    };
+
+    const wxString    data = wxString( KI_TEST::GetTestDataRootDir() ) + wxS( "/common/git/" );
+    const std::string before = read( data + wxS( "acme-library/passives.kicad_sym" ) );
+    const std::string theirs = read( data + wxS( "acme-library-upgraded/passives.kicad_sym" ) );
+    std::string       ours = before;
+
+    BOOST_REQUIRE( theirs != before );
+    editSymbol( ours, "L", "(property \"Description\" \"Inductor\"", "(property \"Description\" \"Inductor, 10uH\"" );
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> owners;
+    SYM_LIB_DIFFER::SYMBOL_MAP               merged;
+
+    BOOST_CHECK_EQUAL( mergeSymbolLibraries( before, ours, theirs, owners, merged ), CLI::EXIT_CODES::SUCCESS );
+    BOOST_CHECK_EQUAL( merged.at( wxS( "L" ) )->GetDescription(), wxS( "Inductor, 10uH" ) );
+}
+
+
+// A folder library's files may come from different versions, with a parent in one and its derived symbol in
+// another, and still compare as one library
+BOOST_AUTO_TEST_CASE( LibraryTextsLinkParentsAcrossFilesInTheirOwnFormats )
+{
+    const std::string device = fixtureText();
+
+    auto header = []( const std::string& aText )
+    {
+        return aText.substr( 0, aText.find( "\t(symbol \"" ) );
+    };
+
+    auto symbol = []( const std::string& aText, const std::string& aName )
+    {
+        const size_t from = aText.find( "\t(symbol \"" + aName + "\"\n" );
+        const size_t to = aText.find( "\n\t(symbol \"", from + 1 );
+
+        BOOST_REQUIRE( from != std::string::npos );
+        return aText.substr( from, ( to == std::string::npos ? aText.rfind( ')' ) : to ) - from ) + "\n";
+    };
+
+    // The parent and the symbol derived from it, as the fixture's older format and the current one save them
+    const std::string old =
+            header( device ) + symbol( device, "C_Feedthrough" ) + symbol( device, "Filter_EMI_C" ) + ")\n";
+    const std::optional<std::string> current =
+            SYM_LIB_DIFFER::UpgradedWithMember( old, {}, old, wxS( "C_Feedthrough" ) );
+
+    BOOST_REQUIRE( current );
+    BOOST_REQUIRE( header( old ) != header( *current ) );
+
+    const std::string derived = header( *current ) + symbol( *current, "Filter_EMI_C" ) + ")\n";
+    const std::string oldParent = header( old ) + symbol( old, "C_Feedthrough" ) + ")\n";
+    const std::string newParent = header( *current ) + symbol( *current, "C_Feedthrough" ) + ")\n";
+    DOCUMENT_DIFF     diff;
+
+    BOOST_REQUIRE( SYM_LIB_DIFFER::DiffLibraryTexts( { oldParent, derived }, { newParent, derived }, &diff ) );
+    BOOST_CHECK( diff.changes.empty() );
+}
+
+
 // A lower unit count from one side must not combine with an edit the other side makes to a dropped unit
 BOOST_AUTO_TEST_CASE( CombineSymbolEditsKeepsTheOtherSidesEdits )
 {
@@ -645,5 +1057,134 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolKeepsResolvedParentAfterLoad )
     BOOST_CHECK( checked > 0 );
 }
 
+
+BOOST_AUTO_TEST_CASE( LibraryTextDiffListsSymbolsDerivedFromAnEditedParent )
+{
+    const std::string before = fixtureText();
+    std::string       after = before;
+    size_t            parent = after.find( "(symbol \"C_Feedthrough\"" );
+    size_t            length = after.find( "(length 2.54)", parent );
+
+    BOOST_REQUIRE( parent != std::string::npos && length != std::string::npos );
+    after.replace( length, strlen( "(length 2.54)" ), "(length 5.08)" );
+
+    DOCUMENT_DIFF diff;
+    BOOST_REQUIRE( SYM_LIB_DIFFER::DiffLibraryText( before, after, &diff ) );
+
+    std::set<wxString> modified;
+
+    for( const ITEM_CHANGE& change : diff.changes )
+    {
+        BOOST_CHECK( change.kind == CHANGE_KIND::MODIFIED );
+        modified.insert( change.refdes.value_or( wxString() ) );
+    }
+
+    BOOST_CHECK( modified == std::set<wxString>( { wxS( "C_Feedthrough" ), wxS( "Filter_EMI_C" ) } ) );
+
+    BOOST_CHECK( !SYM_LIB_DIFFER::DiffLibraryText( before, before.substr( 0, before.size() / 2 ), &diff ) );
+
+    std::string orphaned = before;
+    size_t      extends = orphaned.find( "(extends \"C_Feedthrough\")" );
+
+    BOOST_REQUIRE( extends != std::string::npos );
+    orphaned.insert( extends + strlen( "(extends \"C_Feedthrough" ), "_missing" );
+    BOOST_CHECK( !SYM_LIB_DIFFER::DiffLibraryText( before, orphaned, &diff ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( LibraryTextDiffListsSymbolMovedToAnEqualParent )
+{
+    const std::string before = fixtureText();
+    std::string       after = before;
+    size_t            start = after.find( "\t(symbol \"C_Feedthrough\"" );
+    size_t            end = after.find( "\n\t)\n", start );
+
+    BOOST_REQUIRE( start != std::string::npos && end != std::string::npos );
+
+    // Give Filter_EMI_C a twin of its parent, which flattens it to the same symbol
+    std::string twin = after.substr( start, end + 3 - start );
+
+    for( size_t pos = twin.find( "(symbol \"C_Feedthrough" ); pos != std::string::npos;
+         pos = twin.find( "(symbol \"C_Feedthrough", pos + 1 ) )
+    {
+        twin.insert( pos + strlen( "(symbol \"C_Feedthrough" ), "2" );
+    }
+
+    after.insert( end + 3, "\n" + twin );
+
+    size_t extends = after.find( "(extends \"C_Feedthrough\")" );
+    BOOST_REQUIRE( extends != std::string::npos );
+    after.replace( extends, strlen( "(extends \"C_Feedthrough\")" ), "(extends \"C_Feedthrough2\")" );
+
+    DOCUMENT_DIFF diff;
+    BOOST_REQUIRE( SYM_LIB_DIFFER::DiffLibraryText( before, after, &diff ) );
+
+    std::map<wxString, CHANGE_KIND> changes;
+
+    for( const ITEM_CHANGE& change : diff.changes )
+        changes[change.refdes.value_or( wxString() )] = change.kind;
+
+    BOOST_CHECK( changes
+                 == ( std::map<wxString, CHANGE_KIND>{ { wxS( "C_Feedthrough2" ), CHANGE_KIND::ADDED },
+                                                       { wxS( "Filter_EMI_C" ), CHANGE_KIND::MODIFIED } } ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( LibraryTextDiffListsDerivedSymbolOwnState )
+{
+    const std::string before = fixtureText();
+    std::string       after = before;
+    size_t            start = after.find( "\t(symbol \"Filter_EMI_C\"" );
+    size_t            end = after.find( "\n\t)\n", start );
+
+    BOOST_REQUIRE( start != std::string::npos && end != std::string::npos );
+
+    // Flattening takes the embedded fonts flag from the root symbol
+    after.insert( end, "\n\t\t(embedded_fonts yes)" );
+
+    DOCUMENT_DIFF diff;
+    BOOST_REQUIRE( SYM_LIB_DIFFER::DiffLibraryText( before, after, &diff ) );
+    BOOST_REQUIRE_EQUAL( diff.changes.size(), 1 );
+    BOOST_CHECK( diff.changes[0].refdes == wxS( "Filter_EMI_C" ) );
+}
+
+
+// A re-save of a library reorders and rewrites text without changing a symbol, so it diffs as no change
+BOOST_AUTO_TEST_CASE( ResavedLibraryDiffsAsFormatOnly )
+{
+    auto read = []( const wxString& aPath )
+    {
+        std::ifstream      in( aPath.ToStdString(), std::ios::binary );
+        std::ostringstream text;
+
+        text << in.rdbuf();
+        return text.str();
+    };
+
+    const wxString           original =
+            wxString( KI_TEST::GetTestDataRootDir() ) + wxS( "/common/git/acme-library/ics.kicad_sym" );
+    KI_TEST::SCOPED_TEMP_DIR temp( wxS( "sym_lib_resave" ) );
+    const wxString           resaved = temp.ChildPathStr( wxS( "ics.kicad_sym" ) );
+
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    wxArrayString       names;
+
+    plugin->EnumerateSymbolLib( names, original );
+    BOOST_REQUIRE( !names.IsEmpty() );
+
+    plugin->CreateLibrary( resaved );
+
+    for( const wxString& name : names )
+        plugin->SaveSymbol( resaved, std::make_unique<LIB_SYMBOL>( *plugin->LoadSymbol( original, name ) ) );
+
+    plugin->SaveLibrary( resaved );
+
+    BOOST_REQUIRE( read( original ) != read( resaved ) );
+
+    DOCUMENT_DIFF diff;
+
+    BOOST_REQUIRE( SYM_LIB_DIFFER::DiffLibraryText( read( original ), read( resaved ), &diff ) );
+    BOOST_CHECK( diff.changes.empty() );
+}
 
 BOOST_AUTO_TEST_SUITE_END()

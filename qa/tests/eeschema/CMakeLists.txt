@@ -222,6 +222,7 @@ set( QA_EESCHEMA_SRCS
     test_bus_parsing.cpp
     test_sch_differ.cpp
     test_sch_merge_applier.cpp
+    test_sym_digest.cpp
     test_sym_lib_differ.cpp
     test_label_bus_connectivity.cpp
     test_label_bounding_box.cpp

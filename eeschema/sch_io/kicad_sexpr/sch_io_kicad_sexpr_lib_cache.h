@@ -58,6 +58,9 @@ public:
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
 
+    /// Open a library file of the current format, as every save of one starts it
+    static void FormatLibraryHeader( OUTPUTFORMATTER& aFormatter );
+
 private:
     friend SCH_IO_KICAD_SEXPR;
 
@@ -70,8 +73,6 @@ private:
      * @throw #IO_ERROR if a parent symbol name cannot be found for any symbols in the library.
      */
     void updateParentSymbolLinks();
-
-    void formatLibraryHeader( OUTPUTFORMATTER& aFormatter );
 
     bool isLibraryPathValid() const;
 

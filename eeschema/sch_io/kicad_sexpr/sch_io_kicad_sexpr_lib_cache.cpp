@@ -257,7 +257,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
     {
         auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
 
-        formatLibraryHeader( *formatter.get() );
+        FormatLibraryHeader( *formatter.get() );
 
         std::vector<LIB_SYMBOL*> orderedSymbols;
 
@@ -374,7 +374,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
 
             auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( oldFn.GetFullPath() );
 
-            formatLibraryHeader( *formatter.get() );
+            FormatLibraryHeader( *formatter.get() );
 
             for( LIB_SYMBOL* symbol : symbols )
                 SaveSymbol( symbol, *formatter.get() );
@@ -982,7 +982,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::updateParentSymbolLinks()
 }
 
 
-void SCH_IO_KICAD_SEXPR_LIB_CACHE::formatLibraryHeader( OUTPUTFORMATTER& aFormatter )
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::FormatLibraryHeader( OUTPUTFORMATTER& aFormatter )
 {
     aFormatter.Print( "(kicad_symbol_lib (version %d) (generator \"kicad_symbol_editor\") "
                       "(generator_version \"%s\")",

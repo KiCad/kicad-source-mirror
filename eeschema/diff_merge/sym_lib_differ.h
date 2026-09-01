@@ -29,6 +29,8 @@
 #include <wx/string.h>
 
 #include <map>
+#include <optional>
+#include <string>
 
 
 class LIB_SYMBOL;
@@ -70,8 +72,41 @@ public:
     static std::pair<std::vector<std::unique_ptr<LIB_SYMBOL>>, SYMBOL_MAP>
     LoadLibrary( const wxString& aPath );
 
+    /// LoadLibrary for the text of a .kicad_sym file. Throws IO_ERROR when any symbol fails to parse,
+    /// since a skipped symbol would read as removed
+    static std::pair<std::vector<std::unique_ptr<LIB_SYMBOL>>, SYMBOL_MAP>
+    LoadLibraryText( const std::string& aText );
+
+    /// LoadLibraryText for the texts of every file of one library, each read in its own format, with derived
+    /// symbols linked to parents in any of them. Throws IO_ERROR also when two files hold one name
+    static std::pair<std::vector<std::unique_ptr<LIB_SYMBOL>>, SYMBOL_MAP>
+    LoadLibraryTexts( const std::vector<std::string>& aTexts );
+
+    /**
+     * Library file text aDestination with its symbol aName replaced by, or joined by, the one library file text
+     * aMemberFile holds, saved whole in the current format as a first save would. aFolder holds the texts of the
+     * other files of aDestination's .kicad_symdir folder, where parents may be, and none of them is saved. Each text
+     * is read under its own header, so none is migrated twice. Nothing when one does not parse, a parent is missing
+     * or aMemberFile lacks aName.
+     */
+    static std::optional<std::string> UpgradedWithMember( const std::string&              aDestination,
+                                                          const std::vector<std::string>& aFolder,
+                                                          const std::string& aMemberFile, const wxString& aName );
+
+    /// Diff two versions of a .kicad_sym file's text into aDiff, an empty text being an empty library.
+    /// Only names the changed symbols, without property detail or bounding boxes, so it is safe off the GUI
+    /// thread. A symbol counts as changed when its parent or its flattened text differs. False when either side
+    /// does not parse.
+    static bool DiffLibraryText( const std::string& aBefore, const std::string& aAfter, DOCUMENT_DIFF* aDiff );
+
+    /// DiffLibraryText for libraries held in several files, as a .kicad_symdir folder is, each side read with
+    /// LoadLibraryTexts
+    static bool DiffLibraryTexts( const std::vector<std::string>& aBefore, const std::vector<std::string>& aAfter,
+                                  DOCUMENT_DIFF* aDiff );
+
     /// True when aMerged differs from each side of a three-way merge exactly as the other side differs
-    /// from aAncestor, so no edit from either side was dropped, altered or added to
+    /// from aAncestor, so no edit from either side was dropped, altered or added to. A symbol that both
+    /// sides and aMerged save to the same text holds both sides' edits however they were reached.
     static bool MergeKeepsBothSides( const SYMBOL_MAP& aAncestor, const SYMBOL_MAP& aOurs, const SYMBOL_MAP& aTheirs,
                                      const SYMBOL_MAP& aMerged );
 

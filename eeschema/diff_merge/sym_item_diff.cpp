@@ -120,10 +120,24 @@ std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LI
 }
 
 
+std::string SavedSymbolText( const LIB_SYMBOL& aSymbol )
+{
+    LIB_SYMBOL       copy( aSymbol );
+    STRING_FORMATTER formatter;
+
+    SCH_IO_KICAD_SEXPR::FormatLibSymbol( &copy, formatter );
+    return formatter.GetString();
+}
+
+
 std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aAncestor, const LIB_SYMBOL& aOurs,
                                                 const LIB_SYMBOL& aTheirs, const ITEM_CHANGE& aOurChange,
                                                 const ITEM_CHANGE& aTheirChange )
 {
+    // Both sides made the same edits, however differently formatted the files they were read from
+    if( SavedSymbolText( aOurs ) == SavedSymbolText( aTheirs ) )
+        return std::make_unique<LIB_SYMBOL>( aOurs );
+
     // Edits are compared on flattened symbols, so an inherited field cannot be copied back safely
     if( aOurs.IsDerived() || aTheirs.IsDerived() )
         return nullptr;
@@ -189,20 +203,10 @@ std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aAncestor, con
         return target;
     };
 
-    // The saved form holds everything a symbol carries, including state no diff reports
-    auto saved = []( const LIB_SYMBOL& aSymbol )
-    {
-        LIB_SYMBOL       copy( aSymbol );
-        STRING_FORMATTER formatter;
-
-        SCH_IO_KICAD_SEXPR::FormatLibSymbol( &copy, formatter );
-        return formatter.GetString();
-    };
-
     // Judge the merge as it will be written, since a symbol can hold state its file drops
     auto reload = [&]( const LIB_SYMBOL& aSymbol ) -> std::unique_ptr<LIB_SYMBOL>
     {
-        std::string text = saved( aSymbol );
+        std::string text = SavedSymbolText( aSymbol );
 
         try
         {
@@ -222,7 +226,7 @@ std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aAncestor, con
 
     std::unique_ptr<LIB_SYMBOL> replay = donate( aAncestor );
 
-    if( !replay || saved( *replay ) != saved( donor ) )
+    if( !replay || SavedSymbolText( *replay ) != SavedSymbolText( donor ) )
         return nullptr;
 
     std::unique_ptr<LIB_SYMBOL> merged = donate( theirsDonates ? aOurs : aTheirs );

@@ -3744,6 +3744,57 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
     KICAD_DIFF::KICAD_MERGE_ENGINE engine;
     KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
 
+    auto savedText = []( const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP& aSide,
+                         const wxString&                               aName ) -> std::optional<std::string>
+    {
+        auto it = aSide.find( aName );
+
+        return it == aSide.end() ? std::nullopt
+                                 : std::optional<std::string>( KICAD_DIFF::SavedSymbolText( *it->second ) );
+    };
+
+    std::set<wxString> allNames;
+
+    for( const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP* side : { &ancestor.map, &ours.map, &theirs.map } )
+    {
+        for( const auto& [name, symbol] : *side )
+            allNames.insert( name );
+    }
+
+    // The saved text holds all a file keeps, so a side that saves as the ancestor did leaves the other side's
+    // symbol whole, even an edit the change records miss
+    for( const wxString& name : allNames )
+    {
+        const std::optional<std::string> base = savedText( ancestor.map, name );
+        const std::optional<std::string> mine = savedText( ours.map, name );
+        const std::optional<std::string> other = savedText( theirs.map, name );
+
+        if( mine == other || ( mine != base && other != base ) )
+            continue;
+
+        const KIID_PATH            id = KICAD_DIFF::LibraryItemKiidPath( name );
+        const KICAD_DIFF::ITEM_RES kind =
+                mine == base ? KICAD_DIFF::ITEM_RES::TAKE_THEIRS : KICAD_DIFF::ITEM_RES::TAKE_OURS;
+
+        auto action = std::ranges::find_if( plan.actions,
+                                            [&]( const KICAD_DIFF::ITEM_RESOLUTION& aAction )
+                                            {
+                                                return aAction.id == id;
+                                            } );
+
+        if( action == plan.actions.end() )
+        {
+            plan.actions.push_back( { id, kind, {} } );
+        }
+        else
+        {
+            action->kind = kind;
+            action->props.clear();
+        }
+
+        std::erase( plan.unresolved, id );
+    }
+
     std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> ourChanges = KICAD_DIFF::IndexChangesByKiid( ourDocDiff );
     std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> theirChanges = KICAD_DIFF::IndexChangesByKiid( theirDocDiff );
 

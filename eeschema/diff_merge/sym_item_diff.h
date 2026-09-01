@@ -26,6 +26,7 @@
 
 #include <memory>
 #include <set>
+#include <string>
 #include <vector>
 #include <wx/string.h>
 
@@ -44,6 +45,12 @@ namespace KICAD_DIFF
  * returned. Either symbol may be null for a whole symbol add or remove.
  */
 std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter );
+
+/**
+ * The symbol as a library file saves it, which holds everything it carries, including state no diff
+ * reports. Equal texts are the same symbol however differently formatted the files they were read from.
+ */
+std::string SavedSymbolText( const LIB_SYMBOL& aSymbol );
 
 /**
  * Combine two edits of one library symbol when neither can lose anything. One side may have
