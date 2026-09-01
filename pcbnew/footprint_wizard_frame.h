@@ -48,6 +48,7 @@ public:
     ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
+    /// Return a duplicate of the generated footprint.  The caller takes ownership.
     FOOTPRINT* GetBuiltFootprint();
 
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;

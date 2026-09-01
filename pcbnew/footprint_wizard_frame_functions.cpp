@@ -89,7 +89,10 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_FRAME::GetMyWizard()
 
 FOOTPRINT* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 {
-    return m_builtFootprint;
+    if( !m_builtFootprint )
+        return nullptr;
+
+    return static_cast<FOOTPRINT*>( m_builtFootprint->Duplicate( IGNORE_PARENT_GROUP ) );
 }
 
 
