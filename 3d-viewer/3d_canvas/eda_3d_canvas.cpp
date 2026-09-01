@@ -1138,23 +1138,29 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
         restart_editingTimeOut_Timer();
     }
 
-    wxSize logicalSize = GetClientSize();
-    int    logicalW = logicalSize.GetWidth();
-    int    logicalH = logicalSize.GetHeight();
+    bool gizmoClicked = false;
 
-    int gizmo_x = 0, gizmo_y = 0, gizmo_width = 0, gizmo_height = 0;
-    std::tie( gizmo_x, gizmo_y, gizmo_width, gizmo_height ) = m_3d_render_opengl->getGizmoViewport();
+    if( m_boardAdapter.m_Cfg->m_Render.show_navigator
+        && m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
+    {
+        wxSize logicalSize = GetClientSize();
+        int    logicalW = logicalSize.GetWidth();
+        int    logicalH = logicalSize.GetHeight();
 
-    float scaleX = static_cast<float>( static_cast<double>( gizmo_width ) / static_cast<double>( logicalW ) );
-    float scaleY = static_cast<float>( static_cast<double>( gizmo_height ) / static_cast<double>( logicalH ) );
+        int gizmo_x = 0, gizmo_y = 0, gizmo_width = 0, gizmo_height = 0;
+        std::tie( gizmo_x, gizmo_y, gizmo_width, gizmo_height ) = m_3d_render_opengl->getGizmoViewport();
 
-    int scaledMouseX = static_cast<int>( static_cast<float>( event.GetX() ) * scaleX );
-    int scaledMouseY = static_cast<int>( static_cast<float>( logicalH - event.GetY() ) * scaleY );
+        float scaleX = static_cast<float>( static_cast<double>( gizmo_width ) / static_cast<double>( logicalW ) );
+        float scaleY = static_cast<float>( static_cast<double>( gizmo_height ) / static_cast<double>( logicalH ) );
 
-    m_3d_render_opengl->handleGizmoMouseInput( scaledMouseX, scaledMouseY );
-    m_3d_render_opengl->updateGizmoSelection( m_camera.GetRotationMatrix() );
+        int scaledMouseX = static_cast<int>( static_cast<float>( event.GetX() ) * scaleX );
+        int scaledMouseY = static_cast<int>( static_cast<float>( logicalH - event.GetY() ) * scaleY );
 
-    bool gizmoClicked = m_3d_render_opengl->getSelectedGizmoSphere() != SPHERES_GIZMO::GizmoSphereSelection::None;
+        m_3d_render_opengl->handleGizmoMouseInput( scaledMouseX, scaledMouseY );
+        m_3d_render_opengl->updateGizmoSelection( m_camera.GetRotationMatrix() );
+
+        gizmoClicked = m_3d_render_opengl->getSelectedGizmoSphere() != SPHERES_GIZMO::GizmoSphereSelection::None;
+    }
 
     // A plain click that missed the orientation gizmo: cross-probe the clicked footprint,
     // or clear the selection when clicking empty space. A click-drag rotation or a click
