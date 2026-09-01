@@ -59,10 +59,14 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
     m_selectedWizard = wxEmptyString;
     m_footprintGeneratorsGrid->ClearGrid();
 
-    FOOTPRINT_WIZARD_MANAGER* manager = ParentFrame()->Manager();
-
-    manager->ReloadWizards();
+    FOOTPRINT_WIZARD_MANAGER*      manager = ParentFrame()->Manager();
     std::vector<FOOTPRINT_WIZARD*> wizards = manager->Wizards();
+
+    if( wizards.empty() )
+    {
+        manager->ReloadWizards();
+        wizards = manager->Wizards();
+    }
 
     m_footprintGeneratorsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
