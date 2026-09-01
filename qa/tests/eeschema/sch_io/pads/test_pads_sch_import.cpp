@@ -3937,18 +3937,18 @@ BOOST_AUTO_TEST_CASE( BinaryLongBusEntryStaysOnTheWire )
                 if( connection.vertices.size() < 2 )
                     continue;
 
-                SOURCE_POINT* far = nullptr;
+                SOURCE_POINT* farPt = nullptr;
 
                 if( samePoint( connection.vertices.front(), entry.position ) )
-                    far = &connection.vertices[1];
+                    farPt = &connection.vertices[1];
                 else if( samePoint( connection.vertices.back(), entry.position ) )
-                    far = &connection.vertices[connection.vertices.size() - 2];
+                    farPt = &connection.vertices[connection.vertices.size() - 2];
 
-                if( !far )
+                if( !farPt )
                     continue;
 
-                far->x = entry.position.x + stub;
-                far->y = entry.position.y + stub;
+                farPt->x = entry.position.x + stub;
+                farPt->y = entry.position.y + stub;
                 ++stretched;
             }
         }
