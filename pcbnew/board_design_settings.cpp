@@ -554,6 +554,16 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                                    : 0;
                 };
 
+                // Bound in mm, before the conversion to IU, because an absurd hand-edited
+                // value overflows int on the way in and lands past the limit as a negative
+                auto boundedMmOr = []( const nlohmann::json& aEntry, const char* aKey, double aMaxMM )
+                {
+                    if( !aEntry.contains( aKey ) || !aEntry[aKey].is_number() )
+                        return 0;
+
+                    return pcbIUScale.mmToIU( std::clamp( aEntry[aKey].get<double>(), 0.0, aMaxMM ) );
+                };
+
                 for( const nlohmann::json& entry : aObj )
                 {
                     if( entry.empty() || !entry.is_object() || !entry.contains( "name" ) || !entry["name"].is_string() )
@@ -572,8 +582,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     preset.m_UseNetclass = boolOr( entry, "use_netclass", false );
                     preset.m_Filled = boolOr( entry, "filled", true );
                     preset.m_Capped = boolOr( entry, "capped", false );
-                    preset.m_Pitch =
-                            std::min( mmOr( entry, "pitch" ), pcbIUScale.mmToIU( MAX_MICROVIA_STACK_PITCH_MM ) );
+                    preset.m_Pitch = boundedMmOr( entry, "pitch", MAX_MICROVIA_STACK_PITCH_MM );
 
                     // Presets are referenced by name, so a duplicate would be ambiguous.
                     auto sameName = [&]( const VIA_STACK_PRESET& aOther )
