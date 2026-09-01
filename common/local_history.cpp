@@ -1968,7 +1968,24 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     }
 
     if( parent )
+    {
+        git_tree*  newHeadTree = nullptr;
+        git_index* newIndex = nullptr;
+
+        if( git_commit_tree( &newHeadTree, parent ) == 0 && git_repository_index( &newIndex, newRepo ) == 0 )
+        {
+            git_index_read_tree( newIndex, newHeadTree );
+            git_index_write( newIndex );
+        }
+
+        if( newIndex )
+            git_index_free( newIndex );
+
+        if( newHeadTree )
+            git_tree_free( newHeadTree );
+
         git_commit_free( parent );
+    }
 
     // Recreate preserved tags pointing to new commit OIDs where possible.
     for( const auto& tt : tagTargets )

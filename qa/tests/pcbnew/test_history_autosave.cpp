@@ -893,4 +893,54 @@ BOOST_AUTO_TEST_CASE( DivergentAutosaveStillFlaggedStale )
 }
 
 
+BOOST_AUTO_TEST_CASE( EnforceSizeLimitKeepsUnstagedFilesInNextSnapshot )
+{
+    LIBGIT2_SCOPE libgit;
+
+    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_trim_partial_save" ) );
+    const wxString& path = project.Path();
+    const wxString  sep = wxFileName::GetPathSeparator();
+
+    writeTextFile( path + sep + wxS( "trim.kicad_pro" ), wxS( "{}\n" ) );
+    writeTextFile( path + sep + wxS( "trim.kicad_pcb" ), wxS( "(kicad_pcb (version 20240108))\n" ) );
+    writeTextFile( path + sep + wxS( "trim.kicad_sch" ), wxS( "(kicad_sch (version 20240108))\n" ) );
+
+    LOCAL_HISTORY history;
+    BOOST_REQUIRE( history.CommitFullProjectSnapshot( path, wxS( "Initial" ) ) );
+
+    writeTextFile( path + sep + wxS( "trim.kicad_pcb" ), wxS( "(kicad_pcb (version 20240108) (net 1))\n" ) );
+    BOOST_REQUIRE( history.CommitFullProjectSnapshot( path, wxS( "Second" ) ) );
+
+    BOOST_REQUIRE( history.EnforceSizeLimit( path, 1 ) );
+
+    writeTextFile( path + sep + wxS( "trim.kicad_sch" ), wxS( "(kicad_sch (version 20240108) (mod))\n" ) );
+    BOOST_REQUIRE( history.CommitSnapshot( { path + sep + wxS( "trim.kicad_sch" ) }, wxS( "Sch Save" ) ) );
+
+    wxString        historyDir = path + sep + wxS( ".history" );
+    git_repository* repo = nullptr;
+    BOOST_REQUIRE( git_repository_open( &repo, historyDir.mb_str().data() ) == 0 );
+
+    git_oid     headOid;
+    git_commit* head = nullptr;
+    git_tree*   tree = nullptr;
+    BOOST_REQUIRE( git_reference_name_to_id( &headOid, repo, "HEAD" ) == 0 );
+    BOOST_REQUIRE( git_commit_lookup( &head, repo, &headOid ) == 0 );
+    BOOST_REQUIRE( git_commit_tree( &tree, head ) == 0 );
+
+    BOOST_CHECK_MESSAGE( git_tree_entry_byname( tree, "trim.kicad_sch" ),
+                         "schematic missing from snapshot after trim" );
+    BOOST_CHECK_MESSAGE( git_tree_entry_byname( tree, "trim.kicad_pcb" ), "board dropped from snapshot after trim" );
+    BOOST_CHECK_MESSAGE( git_tree_entry_byname( tree, "trim.kicad_pro" ),
+                         "project file dropped from snapshot after trim" );
+
+    git_tree_free( tree );
+    git_commit_free( head );
+    git_repository_free( repo );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
