@@ -284,11 +284,6 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::~DIALOG_FOOTPRINT_FIELDS_TABLE()
                           &DIALOG_FOOTPRINT_FIELDS_TABLE::OnCurrentSchematicSheetChanged, this );
     }
 
-    if( savePresets( !m_job ) )
-    {
-        m_parent->OnModify();
-    }
-
     SavePanelLayout();
     SaveColumnWidths();
 
@@ -726,6 +721,9 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
             return;
         }
     }
+
+    if( savePresets( true ) )
+        m_parent->OnModify();
 
     // Stop listening to board events
     m_parent->GetBoard()->RemoveListener( this );

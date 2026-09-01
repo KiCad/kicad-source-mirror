@@ -367,11 +367,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     if( m_aborted )
         return;
 
-    if( savePresets( !m_job ) )
-    {
-        m_parent->OnModify();
-    }
-
     SavePanelLayout();
     SaveColumnWidths();
 
@@ -870,6 +865,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
             return;
         }
     }
+
+    if( savePresets( true ) )
+        m_parent->OnModify();
 
     // Stop listening to schematic events
     m_parent->Schematic().RemoveListener( this );
