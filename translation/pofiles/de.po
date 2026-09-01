@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-28 13:51+0000\n"
+"PO-Revision-Date: 2026-09-01 19:51+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -2586,14 +2586,13 @@ msgid "No design block libraries are configured."
 msgstr "Es wurden keine Symbolbibliotheken geladen."
 
 #: common/design_block_library_adapter.cpp:233
-#, fuzzy
 msgid "Configured design block libraries:"
-msgstr "Lade Designblock-Bibliotheken"
+msgstr "Konfigurierte Designblock-Bibliotheken:"
 
 #: common/design_block_library_adapter.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "and %d more"
-msgstr "%s, %s und %d mehr"
+msgstr "und %d mehr"
 
 #: common/design_block_library_adapter.cpp:247
 msgid "project"
@@ -8441,7 +8440,7 @@ msgstr "Füllfarbe"
 #: eeschema/dialogs/dialog_shape_properties.cpp:124 eeschema/sch_line.cpp:1377
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1111
 msgid "Arrow"
-msgstr ""
+msgstr "Pfeil"
 
 #: common/eda_shape.cpp:4776 eeschema/dialogs/dialog_line_properties.cpp:117
 #: eeschema/dialogs/dialog_shape_properties.cpp:127 eeschema/sch_line.cpp:1379
@@ -8458,9 +8457,8 @@ msgid "Open Arrow"
 msgstr "Trotzdem öffnen"
 
 #: common/eda_shape.cpp:4780 eeschema/sch_line.cpp:1461
-#, fuzzy
 msgid "Start Shape"
-msgstr "Einfacher Einstieg:"
+msgstr "Anfangsform"
 
 #: common/eda_shape.cpp:4785 eeschema/sch_line.cpp:1465
 #, fuzzy
@@ -13300,9 +13298,8 @@ msgid "Additional information"
 msgstr "Fehlende Information"
 
 #: common/widgets/kistatusbar.cpp:193
-#, fuzzy
 msgid "Clear Warnings"
-msgstr "DRC-Warnungen"
+msgstr "Warnungen leeren"
 
 #: common/widgets/kistatusbar.cpp:360
 msgid "View load messages"
@@ -17354,9 +17351,8 @@ msgstr "Länge:"
 #: eeschema/dialogs/dialog_line_properties.cpp:86
 #: eeschema/dialogs/dialog_shape_properties.cpp:96
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1083
-#, fuzzy
 msgid "Start Width:"
-msgstr "Verbindung zeichnen"
+msgstr "Anfangsbreite:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:87
 #: eeschema/dialogs/dialog_shape_properties.cpp:97
@@ -17368,9 +17364,8 @@ msgstr "Breite:"
 #: eeschema/dialogs/dialog_line_properties.cpp:88
 #: eeschema/dialogs/dialog_shape_properties.cpp:98
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1085
-#, fuzzy
 msgid "Start Stroke Width:"
-msgstr "Breite der verwendeten Leiterbahn verwenden"
+msgstr "Anfangsstrichbreite:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:90
 #: eeschema/dialogs/dialog_shape_properties.cpp:100
@@ -17384,7 +17379,7 @@ msgstr "Stegbreite:"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1377
 #, c-format
 msgid "Shape sizes of 0 = auto (%g× line width)."
-msgstr ""
+msgstr "Formgrößen von 0 = auto (%g× Linienbreite)."
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
@@ -22857,6 +22852,8 @@ msgid ""
 "Symbol '%s' uses repeat-per-unit decomposition, which requires a named "
 "subcircuit model."
 msgstr ""
+"Symbol \"%s\" verwendet eine Wiederholungen-je-Einheit-Zerlegung, wofür ein "
+"benanntes Subcircuit-Modell nötig ist."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:764
 #, c-format
@@ -23643,6 +23640,8 @@ msgstr "<unbenannt>"
 msgid ""
 "Invalid binary file hex data size. Chars expected: %d, hex string length: %d"
 msgstr ""
+"Ungültige Hex-Datengröße der Binärdatei. Erwartete Zeichen: %d, Hex-"
+"Zeichenkettenlänge: %d"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:140
 msgid "Storage stream was not parsed correctly"
@@ -23768,6 +23767,8 @@ msgid ""
 "Failed to read embedded image '%s'. The image data may be corrupt or in an "
 "unsupported format."
 msgstr ""
+"Lesen des eingebetteten Bildes \"%s\" schlug fehl. Möglicherweise sind die "
+"Daten beschädigt oder haben ein nicht unterstütztes Format."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5048
 #, c-format
@@ -23775,6 +23776,8 @@ msgid ""
 "Could not find image file '%s'. The file path may be specific to a different "
 "operating system."
 msgstr ""
+"Bilddatei \"%s\" konnte nicht gefunden werden. Der Pfad stammt "
+"möglicherweise von einem anderen Betriebssystem."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5066
 #, c-format
@@ -23782,6 +23785,8 @@ msgid ""
 "Failed to read image file '%s'. The image may be corrupt or in an "
 "unsupported format."
 msgstr ""
+"Bilddatei \"%s\" konnte nicht gelesen werden. Das Bild ist möglicherweise "
+"beschädigt oder hat ein nicht unterstütztes Format."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5615
 #, c-format
@@ -24984,6 +24989,8 @@ msgid ""
 "Page '%s': the off-page connector at (%d, %d) is unconnected in the source "
 "design; skipped."
 msgstr ""
+"Seite \"%s\": Off-Page-Verbinder bei (%d, %d) ist im Ursprungsdesign nicht "
+"verbunden; übersprungen."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:1660
 #, fuzzy
@@ -24996,11 +25003,14 @@ msgid ""
 "Symbol '%s' is absent from the design cache; synthesized placeholder from %d "
 "instance(s)."
 msgstr ""
+"Symbol \"%s\" fehlt im Design-Cache; erzeugter Platzhalter aus %d Instanz(en)"
+"."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:648
 #, c-format
 msgid "No cached symbol for '%s' (%s); placeholder emitted."
 msgstr ""
+"Kein gecachtes Symbol für \"%s\" (%s) vorhanden; Platzhalter ausgegeben."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1264
 #, c-format
@@ -28181,9 +28191,9 @@ msgstr ""
 
 #: eeschema/sim/simulator_frame_ui.cpp:1124
 #: eeschema/sim/simulator_frame_ui.cpp:1138
-#, fuzzy, c-format
+#, c-format
 msgid "View %d"
-msgstr "Ansicht"
+msgstr "Zeige %d"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1656
 #: eeschema/sim/simulator_frame_ui.cpp:4083
@@ -42153,10 +42163,12 @@ msgid "(no library ID)"
 msgstr "(keine Bibliothek-ID)"
 
 #: pcbnew/connectivity/topo_match.cpp:693
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s uses footprint '%s' in the reference area but '%s' in the target area."
-msgstr "Bauteile außerhalb des Referenzregelbereichs einbeziehen"
+msgstr ""
+"%s verwendet im Referenzbereich den Footprint \"%s\", im Zielbereich jedoch "
+"\"%s\"."
 
 #: pcbnew/connectivity/topo_match.cpp:744
 #, c-format
@@ -42200,9 +42212,9 @@ msgid "The target area has no footprints to match."
 msgstr "Ausgewählte Gruppe enthält keine platzierbaren Footprints."
 
 #: pcbnew/connectivity/topo_match.cpp:850
-#, fuzzy, c-format
+#, c-format
 msgid "The reference area has %d components and the target area has %d."
-msgstr "In der Zielfläche wurde kein kompatibles Bauteil gefunden."
+msgstr "Der Referenzbereich enthält %d Komponenten, der Zielbereich %d."
 
 #: pcbnew/connectivity/topo_match.cpp:966
 #, c-format
@@ -44490,9 +44502,9 @@ msgid "physical netlist"
 msgstr "Eeschema Netzliste"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Includes: %s"
-msgstr "Enthalten:"
+msgstr "Enthält: %s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:440
 msgid "This data set has no optional sections to choose from."
@@ -44500,9 +44512,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:441
 #: pcbnew/dialogs/dialog_export_2581.cpp:446
-#, fuzzy
 msgid "Customize Content"
-msgstr "Später anpassen:"
+msgstr "Inhalt anpassen"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:445
 msgid "Choose the optional sections to include."
@@ -44547,19 +44558,16 @@ msgid "Compress output into 'zip' file"
 msgstr "Ausgabe komprimiert als ZIP-Archiv ausgeben"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:108
-#, fuzzy
 msgid "Content"
-msgstr "Zellinhalt:"
+msgstr "Inhalt"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
-#, fuzzy
 msgid "Data set:"
-msgstr "Datenblatt"
+msgstr "Datensatz:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "All data (user-defined)"
-msgstr "Kein Datenblatt definiert."
+msgstr "Alle Daten (benutzerdefiniert)"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
 #, fuzzy
@@ -44608,9 +44616,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
-#, fuzzy
 msgid "Reference designators:"
-msgstr "Referenzbezeichner"
+msgstr "Referenzbezeichner:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 #: pcbnew/dialogs/dialog_export_2581_bom_base.cpp:56
@@ -46117,14 +46124,12 @@ msgid "Export Pad Table"
 msgstr "Pad-Tabelle"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1369
-#, fuzzy
 msgid "Imported pad data must include pad numbers."
-msgstr "Padnummern einbeziehen"
+msgstr "Importierte Paddaten müssen Padnummern enthalten."
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1370
-#, fuzzy
 msgid "Import error"
-msgstr "Importieren von:"
+msgstr "Fehler beim Import"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:31
 msgid "Pad numbers:"
@@ -47333,14 +47338,14 @@ msgid "Footprint Fields Table ('%s' Library)"
 msgstr "Symbolfelder-Tabelle (\"%s\" Bibliothek)"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints found in library '%s'."
-msgstr "Bibliothek \"%s\" enthält keine Footprints"
+msgstr "Bibliothek \"%s\" enthält keine Footprints."
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint '%s': %s"
-msgstr "Fehler beim Laden des Footprints: %s"
+msgstr "Fehler beim Laden des Footprints \"%s\": %s"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:263
 #, fuzzy
@@ -48215,11 +48220,8 @@ msgid "Press-fit (round TH only)"
 msgstr "Einpresspad (nur runde, durchgehende Bohrung)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:627
-#, fuzzy
 msgid "Simulation electrical type:"
-msgstr ""
-"Simulation\n"
-"Elektrischer Typ:"
+msgstr "Simulation Elektrischer Typ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:634 pcbnew/pad.cpp:3739
 #, fuzzy
@@ -54388,9 +54390,9 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s min Restring-Breite %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
-msgstr "(%s min Restring-Breite %s; tatsächlich %s)"
+msgstr "(%s min Ringbreite %s; tatsächlich %s auf %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:355
 #, c-format
@@ -55266,9 +55268,9 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s min Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
-msgstr "(%s min Durchmesser %s; tatsächlich %s)"
+msgstr "(%s min Durchmesser %s; tatsächlich %s auf %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:144
 #, c-format
@@ -55276,9 +55278,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
-msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
+msgstr "(%s maximaler Durchmesser %s; tatsächlich %s auf %s)"
 
 #: pcbnew/drc/drc_test_provider_via_stitch.cpp:56
 #, fuzzy
@@ -55535,9 +55537,8 @@ msgid "Net class an item must belong to"
 msgstr "Mindestens ein Via-Typ muss ausgewählt werden"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:96
-#, fuzzy
 msgid "Rule area an item must be inside"
-msgstr "Regelname muss eindeutig sein."
+msgstr "Regelbereich muss ein Element enthalten"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:104
 msgid "Custom match expression in the DRC rule language"
@@ -55574,14 +55575,12 @@ msgid "Syntax check passed with warnings:\n"
 msgstr "Syntaxprüfung mit Warnungen bestanden:\n"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:56
-#, fuzzy
 msgid "Minimum text height"
-msgstr "Minimale Schrifthöhe:"
+msgstr "Minimale Schrifthöhe"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:58
-#, fuzzy
 msgid "Minimum text stroke thickness"
-msgstr "Minimale Schriftstärke:"
+msgstr "Minimale Schriftstärke"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:75
 msgid "Minimum Text Height must be greater than 0"
@@ -55597,14 +55596,12 @@ msgid "Minimum clearance between copper items and the board edge"
 msgstr "Mindestabstand zwischen Punkten, um diese als getrennt zu behandeln"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:47
-#, fuzzy
 msgid "Minimum clearance between copper items and hole edges"
-msgstr "Freiraum zwischen Pads im selben Netz und gefüllten Flächen."
+msgstr "Minimaler Freiraum zwischen Kupferelementen und Lochkanten"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:60
-#, fuzzy
 msgid "Minimum clearance between footprint courtyards"
-msgstr "Ermittle Footprint-Abstandsflächen ..."
+msgstr "Minimaler Freiraum zwischen Footprint-Abstandsflächen"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:73
 #, fuzzy
@@ -55617,9 +55614,8 @@ msgid "Minimum creepage distance between conductors along the board surface"
 msgstr "Mindestabstand zwischen Punkten, um diese als getrennt zu behandeln"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:98
-#, fuzzy
 msgid "Minimum hole diameter"
-msgstr "Min Lochdurchmesser: "
+msgstr "Min. Lochdurchmesser"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:110
 #, fuzzy
@@ -55627,9 +55623,8 @@ msgid "Minimum distance between hole edges"
 msgstr "Abstand zwischen Spalten"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:124
-#, fuzzy
 msgid "Maximum number of vias allowed on a matched net"
-msgstr "Maximalanzahl von Plugins bereits zum Dialog hinzugefügt."
+msgstr "Maximalanzahl von Vias in einem zugehörigen Netz"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:137
 msgid "Minimum width of the copper ring around a hole"
@@ -55649,9 +55644,9 @@ msgid "Minimum width of solder mask left between two mask openings"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:188
-#, fuzzy
 msgid "Minimum number of thermal relief spokes connecting a pad to its zone"
-msgstr "Mindeststeganzahl für Wärmefallen:"
+msgstr ""
+"Mindeststeganzahl für Wärmefallenstege die ein Pad mit seiner Zone verbinden"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:199
 #, fuzzy
@@ -55659,9 +55654,8 @@ msgid "Minimum drill diameter"
 msgstr "Min. Bohrdurchmesser"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:211
-#, fuzzy
 msgid "Minimum outer diameter of vias"
-msgstr "µVia-Mindestdurchmesser:"
+msgstr "Mindestaußendurchmesser für Vias"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:224
 msgid "Minimum clearance between silkscreen items"
@@ -55698,9 +55692,8 @@ msgid "Allow bottom Layer"
 msgstr "Unterste Lage zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:56
-#, fuzzy
 msgid "Allow matched items on the back copper layer"
-msgstr "Wie viele Elemente sind im Array."
+msgstr "Übereinstimmende Elemente auf der rückseitigen Kupferlage zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:89
 msgid "At least one layer must be selected"
@@ -55779,9 +55772,8 @@ msgid "Largest allowed via hole diameter"
 msgstr "Durchmesser des metallisierten Via-Lochs"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:78
-#, fuzzy
 msgid "Restrict this rule to a single via type"
-msgstr "Setze diesen Wert auf Ausgangswert zurück."
+msgstr "Regel auf einen Viatyp beschränken"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:92
 msgid "Minimum Via Diameter must be greater than 0"
@@ -55896,9 +55888,8 @@ msgid "Rule Name"
 msgstr "Regelname"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:119
-#, fuzzy
 msgid "Name of this rule, must be unique"
-msgstr "Regelname muss eindeutig sein."
+msgstr "Regelname, muss eindeutig sein"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:120
 msgid "Optional comment stored with the rule"
@@ -56677,9 +56668,8 @@ msgid "Scale Y"
 msgstr "Skalierung"
 
 #: pcbnew/footprint.cpp:5384
-#, fuzzy
 msgid "Footprint Type"
-msgstr "Footprint-Typ:"
+msgstr "Footprinttyp"
 
 #: pcbnew/footprint.cpp:5387
 msgid "Not in Schematic"
@@ -60683,9 +60673,8 @@ msgid "Generating logical netlist"
 msgstr "Erzeuge Logistik-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3908
-#, fuzzy
 msgid "Generating physical netlist"
-msgstr "Physische Elemente werden erfasst ..."
+msgstr "Erzeuge physische Netzliste"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4195
 #, fuzzy, c-format
@@ -60723,9 +60712,9 @@ msgid "Unknown IPC-2581 data set '%s'."
 msgstr "Unbekannte Modus-Zeichenkette: „%s“."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4949
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IPC-2581 section key '%s'."
-msgstr "Ungültiges IBIS-Bauteil \"%s\""
+msgstr "Ungültiger IPC-2581-Sektionsschlüssel \"%s\"."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5005
 msgid "Generating logistic section"
@@ -61200,14 +61189,16 @@ msgid "Part '%s': decal '%s' not found, no pads created"
 msgstr "Variante \"%s\": Symbol \"%s\" nicht in Bibliotheken gefunden"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:942
-#, fuzzy, c-format
+#, c-format
 msgid "Route net '%s' not found, skipping"
-msgstr "Footprint \"%s\" nicht in \"%s\" gefunden"
+msgstr "Route Netz \"%s\" nicht gefunden, übersprungen"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:963
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped a route on non-copper or unmapped PADS layer %d."
-msgstr "Überspringe decal-Element auf nicht zugeordneter Lage %d"
+msgstr ""
+"Eine Verbindung auf der Nicht-Kupfer- oder unzugeordneten PADS-Ebene %d "
+"übersprungen."
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:978
 #, c-format
@@ -63422,9 +63413,9 @@ msgstr "Leiterbahnbreite verkleinern"
 
 #: pcbnew/tools/board_editor_control.cpp:1248
 #: pcbnew/tools/board_editor_control.cpp:1314
-#, fuzzy, c-format
+#, c-format
 msgid "%s not supported on complex padstacks."
-msgstr " (nicht unterstützt im herkömmlichen Grafikmodus)"
+msgstr "%s bei komplexen Padstacks nicht unterstützt."
 
 #: pcbnew/tools/board_editor_control.cpp:1544
 msgid "Place Footprint"
@@ -64675,9 +64666,9 @@ msgstr "Regelbereichstopologien nicht übereinstimmend: %s"
 
 #: pcbnew/tools/multichannel_tool.cpp:950
 #: pcbnew/tools/multichannel_tool.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy the layout from '%s' to '%s'."
-msgstr "Konnte das Verzeichnis %s nicht nach %s kopieren"
+msgstr "Konnte Layout nicht von \"%s\" nach \"%s\" kopieren."
 
 #: pcbnew/tools/multichannel_tool.cpp:973
 msgid "Target group does not have a group."
@@ -67203,19 +67194,16 @@ msgid "Applying Design Block Layouts"
 msgstr "Designblock-Layouts verwenden"
 
 #: pcbnew/tools/pcb_control.cpp:1563
-#, fuzzy
 msgid "the design block has no saved board layout"
-msgstr "Designblock hat kein gespeichertes PCB-Layout"
+msgstr "Designblock hat kein gespeichertes Platinenlayout"
 
 #: pcbnew/tools/pcb_control.cpp:1594
-#, fuzzy
 msgid "the design block's board file could not be read"
-msgstr "Designblock Metadatendatei \"%s\" konnte nicht gelesen werden."
+msgstr "Designblock-Platinendatei konnte nicht gelesen werden"
 
 #: pcbnew/tools/pcb_control.cpp:1621
-#, fuzzy
 msgid "the design block's board layout is empty"
-msgstr "Designblock hat kein Layout das eingefügt werden könnte."
+msgstr "Das Designblocklayout ist leer"
 
 #: pcbnew/tools/pcb_control.cpp:1672
 #, fuzzy
@@ -68965,9 +68953,8 @@ msgid "Select on canvas"
 msgstr "Auf Leiterplatte auswählen"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:161
-#, fuzzy
 msgid "Select and focus the highlighted zone on the board canvas"
-msgstr "Auf Elemente klicken, um diese auf der Platine hervorzuheben."
+msgstr "Hervorgehobene Zone auf der Platinenfläche auswählen und fokussieren"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:168
 msgid "Update Displayed Zones"
