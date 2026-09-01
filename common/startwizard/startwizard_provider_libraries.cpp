@@ -62,7 +62,7 @@ public:
         m_bmpWarning->Show( m_showWarning );
         m_stWarning->Show( m_showWarning );
 
-        m_containingSizer->Fit( this );
+        GetSizer()->Fit( this );
         SetSize( GetBestSize() );
     }
 
@@ -360,4 +360,3 @@ void STARTWIZARD_PROVIDER_LIBRARIES::ApplyDefaults()
         LIBRARY_MANAGER::CreateGlobalTable( type, true );
     }
 }
-
