@@ -469,6 +469,9 @@ void PCB_BARCODE::AssembleBarcode() const
 
 void PCB_BARCODE::ComputeTextPoly() const
 {
+    if( !m_cache )
+        m_cache = std::make_unique<PCB_BARCODE_CACHE>();
+
     m_cache->textPoly.RemoveAllContours();
 
     if( !m_text.IsVisible() )
@@ -515,6 +518,9 @@ void PCB_BARCODE::ComputeTextPoly() const
 
 void PCB_BARCODE::ComputeBarcode() const
 {
+    if( !m_cache )
+        m_cache = std::make_unique<PCB_BARCODE_CACHE>();
+
     m_cache->symbolPoly.RemoveAllContours();
     m_cache->lastError.clear();
 
