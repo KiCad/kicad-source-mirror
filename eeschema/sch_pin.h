@@ -36,8 +36,22 @@ class LIB_ID;
 class SCH_SHEET_PATH;
 class PIN_LAYOUT_CACHE;
 
+namespace KIFONT
+{
+class FONT;
+}
+
 // Circle diameter drawn at the active end of pins:
 #define TARGET_PIN_RADIUS   schIUScale.MilsToIU( 15 )
+
+/**
+ * Break a stacked pin number of the form "[A,B,C]" into one number per line when it is too wide
+ * to sit alongside the pin.  Anything else, and anything that already fits, is returned as-is.
+ *
+ * Everything that draws, plots or measures a pin number goes through here.
+ */
+wxString FormatStackedPinForDisplay( const wxString& aPinNumber, int aPinLength, int aTextSize,
+                                     KIFONT::FONT* aFont, const KIFONT::METRICS& aFontMetrics );
 
 
 class SCH_PIN : public SCH_ITEM

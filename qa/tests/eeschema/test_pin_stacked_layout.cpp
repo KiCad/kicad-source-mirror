@@ -721,4 +721,78 @@ BOOST_AUTO_TEST_CASE( StackedBlockFollowsMirror )
     }
 }
 
+
+// The reporter's symbol: one pin carrying 25 stacked numbers, too wide to sit alongside the pin.
+static std::unique_ptr<LIB_SYMBOL> createLongStackSymbol( PIN_ORIENTATION aOrientation )
+{
+    auto symbol = std::make_unique<LIB_SYMBOL>( wxT( "TestLongStack" ) );
+
+    symbol->SetShowPinNames( false );
+    symbol->SetShowPinNumbers( true );
+
+    auto pin = std::make_unique<SCH_PIN>( symbol.get() );
+    pin->SetPosition( VECTOR2I( 0, 0 ) );
+    pin->SetOrientation( aOrientation );
+    pin->SetLength( schIUScale.MilsToIU( 100 ) );
+    pin->SetNumber( wxT( "[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]" ) );
+    pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    pin->SetUnit( 1 );
+
+    symbol->AddDrawItem( pin.release() );
+
+    return symbol;
+}
+
+
+// The number was measured unformatted, so the pin's bounding box landed somewhere other than the
+// block the painter draws and clicking the numbers missed the pin.
+BOOST_AUTO_TEST_CASE( StackedNumberBlockIsSelectable )
+{
+    const std::vector<PIN_ORIENTATION> orientations = { PIN_ORIENTATION::PIN_RIGHT, PIN_ORIENTATION::PIN_LEFT,
+                                                        PIN_ORIENTATION::PIN_UP, PIN_ORIENTATION::PIN_DOWN };
+
+    const std::vector<TRANSFORM> transforms = { TRANSFORM( 1, 0, 0, 1 ),   // identity
+                                                TRANSFORM( -1, 0, 0, 1 ),  // mirror left-right
+                                                TRANSFORM( 1, 0, 0, -1 ),  // mirror top-bottom
+                                                TRANSFORM( -1, 0, 0, -1 ) };
+
+    for( PIN_ORIENTATION orientation : orientations )
+    {
+        for( const TRANSFORM& transform : transforms )
+        {
+            std::unique_ptr<LIB_SYMBOL> symbol = createLongStackSymbol( orientation );
+            SCH_PIN*                    pin = nullptr;
+
+            for( SCH_ITEM& item : symbol->GetDrawItems() )
+            {
+                if( item.Type() == SCH_PIN_T )
+                    pin = static_cast<SCH_PIN*>( &item );
+            }
+
+            BOOST_REQUIRE( pin );
+
+            TRANSFORM oldTransform = DefaultTransform;
+            DefaultTransform = transform;
+
+            PIN_LAYOUT_CACHE                           cache( *pin );
+            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> info = cache.GetPinNumberInfo( 0 );
+
+            BOOST_REQUIRE( info.has_value() );
+            BOOST_REQUIRE_MESSAGE( info->m_Text.Contains( '\n' ), "Stacked number did not wrap to a block" );
+
+            const bool  hit = pin->HitTest( info->m_TextPosition, 0 );
+            const BOX2I bbox = pin->GetBoundingBox( false, true, false );
+
+            DefaultTransform = oldTransform;
+
+            BOOST_CHECK_MESSAGE( hit, "Orientation " << (int) orientation << " transform (" << transform.x1 << ","
+                                          << transform.y1 << "," << transform.x2 << "," << transform.y2
+                                          << "): number drawn at (" << info->m_TextPosition.x << ","
+                                          << info->m_TextPosition.y << ") is outside the pin box ("
+                                          << bbox.GetLeft() << "," << bbox.GetTop() << ")-(" << bbox.GetRight()
+                                          << "," << bbox.GetBottom() << ")" );
+        }
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()

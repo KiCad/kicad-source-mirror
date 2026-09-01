@@ -30,26 +30,16 @@
 // Small margin in internal units between the pin text and the pin line
 static const int PIN_TEXT_MARGIN = 4;
 
-// Forward declaration for helper implemented in sch_pin.cpp
-wxString FormatStackedPinForDisplay( const wxString& aPinNumber, int aPinLength, int aTextSize,
-                                     KIFONT::FONT* aFont, const KIFONT::METRICS& aFontMetrics );
-
 std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( int aShadowWidth )
 {
     recomputeCaches();
 
-    wxString number = m_pin.GetShownNumber();
-
-    if( number.IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNumbers() )
+    if( m_pin.GetShownNumber().IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNumbers() )
         return std::nullopt;
 
-    // Format stacked representation if necessary
-    EESCHEMA_SETTINGS*     cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-    KIFONT::FONT*          font = KIFONT::FONT::GetFont( cfg ? cfg->m_Appearance.default_font : wxString( "" ) );
-    const KIFONT::METRICS& metrics = m_pin.GetFontMetrics();
-    int                    length = m_pin.GetLength();
-    int                    num_size = m_pin.GetNumberTextSize();
-    wxString               formatted = FormatStackedPinForDisplay( number, length, num_size, font, metrics );
+    // Draw the string recomputeCaches() measured, so the box always matches the text.
+    const wxString& formatted = m_numExtentsCache.m_Text;
+    const int       num_size = m_pin.GetNumberTextSize();
 
     std::optional<TEXT_INFO> info = TEXT_INFO();
     info->m_Text = formatted;
@@ -62,23 +52,11 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
 
     const SYMBOL* parentSym = m_pin.GetParentSymbol();
 
-    int       clearance = getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
     VECTOR2I  pinPos = m_pin.GetPosition();
     const int halfLength = m_pin.GetLength() / 2;
     bool      verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
 
-    // Nominal size, not the measured glyph bbox, which stroke fonts inflate for descenders
-    // digits never have; using it kept the gap constant across rotations without the extra push
-    int perpHeight = num_size;
-
-    if( formatted.Contains( '\n' ) )
-    {
-        wxArrayString lines;
-        wxStringSplit( formatted, lines, '\n' );
-        perpHeight = (int) lines.size() * KiROUND( num_size * 1.3 );
-    }
-
-    const int perpendicularHalf = perpHeight / 2;
+    const int perpendicularOffset = getNumberBlockOffset();
 
     // Keep a multi-line stacked block on the authored side of a mirrored symbol (issue 24894)
     const bool flipStacked = formatted.Contains( '\n' )
@@ -93,8 +71,6 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
                                      && parentSym
                                      && parentSym->GetShowPinNames()
                                      && parentSym->GetPinNameOffset() == 0; // name is outside
-
-        int perpendicularOffset = clearance + perpendicularHalf + m_numberThickness;
 
         int centerX;
 
@@ -129,16 +105,16 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
                                      && parentSym->GetPinNameOffset() == 0; // name is outside
 
         int centerY;
+
         if( showBothNameAndNumber )
         {
             // When both are shown: name goes above, number goes below (top-aligned)
-            centerY = pinPos.y + clearance + perpendicularHalf + m_numberThickness;
+            centerY = pinPos.y + perpendicularOffset;
         }
         else
         {
             // When only number is shown: place it above the pin (below when mirrored)
-            centerY = flipStacked ? pinPos.y + ( perpendicularHalf + clearance + m_numberThickness )
-                                  : pinPos.y - ( perpendicularHalf + clearance + m_numberThickness );
+            centerY = flipStacked ? pinPos.y + perpendicularOffset : pinPos.y - perpendicularOffset;
         }
 
         if( orient == PIN_ORIENTATION::PIN_LEFT )
@@ -218,14 +194,17 @@ void PIN_LAYOUT_CACHE::recomputeExtentsCache( bool aDefinitelyDirty, KIFONT::FON
                                               const KIFONT::METRICS& aFontMetrics,
                                               TEXT_EXTENTS_CACHE&    aCache )
 {
-    // Even if not definitely dirty, verify no font changes
-    if( !aDefinitelyDirty && aCache.m_Font == aFont && aCache.m_FontSize == aSize )
+    // Even if not definitely dirty, verify no font changes.  The text is part of the key because
+    // the stacked-pin layout also depends on the pin length, which has no dirty flag of its own.
+    if( !aDefinitelyDirty && aCache.m_Font == aFont && aCache.m_FontSize == aSize
+        && aCache.m_Text == aText )
     {
         return;
     }
 
     aCache.m_Font = aFont;
     aCache.m_FontSize = aSize;
+    aCache.m_Text = aText;
 
     VECTOR2D fontSize( aSize, aSize );
     int      penWidth = GetPenSizeForNormal( aSize );
@@ -255,9 +234,10 @@ void PIN_LAYOUT_CACHE::recomputeExtentsCache( bool aDefinitelyDirty, KIFONT::FON
             // Calculate total dimensions - width is max line width, height accounts for all lines
             int totalHeight = aSize + ( lines.size() - 1 ) * lineSpacing;
 
-            // Add space for braces
+            // Add space for braces.  drawBracesAroundText() anchors each brace a braceWidth
+            // clear of the text and drawBrace() curls a further braceWidth outwards.
             int braceWidth = aSize / 3;
-            maxWidth += braceWidth * 2;  // Space for braces on both sides
+            maxWidth += braceWidth * 4;
             totalHeight += aSize / 3;    // Extra height for brace extensions
 
             aCache.m_Extents = VECTOR2I( maxWidth, totalHeight );
@@ -287,9 +267,22 @@ void PIN_LAYOUT_CACHE::recomputeCaches()
         m_shadowOffsetAdjust = 1.0f;
 
     {
-        const bool     dirty = isDirty( DIRTY_FLAGS::NUMBER );
-        const wxString number = m_pin.GetShownNumber();
-        recomputeExtentsCache( dirty, font, m_pin.GetNumberTextSize(), number, metrics, m_numExtentsCache );
+        const int       numSize = m_pin.GetNumberTextSize();
+        const int       length = m_pin.GetLength();
+        const wxString& number = m_pin.GetShownNumber();
+
+        // Formatting a stacked number measures it, so only redo it when one of its inputs moves.
+        // The pin length is one of them and has no dirty flag of its own.
+        if( isDirty( DIRTY_FLAGS::NUMBER ) || m_numSource != number || m_numSourceLength != length
+            || m_numExtentsCache.m_Font != font || m_numExtentsCache.m_FontSize != numSize )
+        {
+            m_numSource = number;
+            m_numSourceLength = length;
+
+            recomputeExtentsCache( true, font, numSize,
+                                   FormatStackedPinForDisplay( number, length, numSize, font, metrics ),
+                                   metrics, m_numExtentsCache );
+        }
     }
 
     {
@@ -508,6 +501,22 @@ CIRCLE PIN_LAYOUT_CACHE::GetDanglingIndicator() const
 }
 
 
+int PIN_LAYOUT_CACHE::getNumberBlockOffset() const
+{
+    const int numSize = m_pin.GetNumberTextSize();
+    int       perpHeight = numSize;
+
+    if( m_numExtentsCache.m_Text.Contains( '\n' ) )
+    {
+        wxArrayString lines;
+        wxStringSplit( m_numExtentsCache.m_Text, lines, '\n' );
+        perpHeight = (int) lines.size() * KiROUND( numSize * 1.3 );
+    }
+
+    return perpHeight / 2 + getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + m_numberThickness;
+}
+
+
 int PIN_LAYOUT_CACHE::getPinTextOffset() const
 {
     const float offsetRatio =
@@ -576,17 +585,24 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox() const
                                    && !m_pin.GetShownName().empty()
                                    && m_pin.GetParentSymbol()->GetShowPinNames() );
 
+    // Same side decision as GetPinNumberInfo(), so the box follows a mirrored block (issue 24894)
+    const bool flipStacked = m_numExtentsCache.m_Text.Contains( '\n' )
+                             && ( m_pin.GetFlipStackedTextSide() != m_pin.StackedTextSideFlipped( DefaultTransform ) );
+
+    const int offset = m_numExtentsCache.m_Extents.y / 2 + getPinTextOffset();
+
     int textPos;
+
     if( showBothNameAndNumber )
     {
         // When both are shown: name goes above, number goes below (top-aligned to bottom)
         // Position the number below the pin, with its top edge at the clearance distance
-        textPos = m_numExtentsCache.m_Extents.y / 2 + getPinTextOffset();
+        textPos = offset;
     }
     else
     {
-        // When only number is shown: place it above the pin
-        textPos = -m_numExtentsCache.m_Extents.y / 2 - getPinTextOffset();
+        // When only number is shown: place it above the pin (below when mirrored)
+        textPos = flipStacked ? offset : -offset;
     }
 
     // Bump it up (or down)
