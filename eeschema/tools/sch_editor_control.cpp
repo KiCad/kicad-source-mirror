@@ -20,11 +20,24 @@
 
 #include "tools/sch_editor_control.h"
 
-#include <clipboard.h>
-#include <core/base64.h>
 #include <algorithm>
-#include <chrono>
+
+#include <wx_filename.h>
+#include <wx/clipbrd.h>
+#include <wx/buffer.h>
+#include <wx/filedlg.h>
+#include <wx/filefn.h>
+#include <wx/imagpng.h>
+#include <wx/log.h>
+#include <wx/log.h>
+#include <wx/msgdlg.h>
+#include <wx/mstream.h>
+#include <wx/textdlg.h>
+#include <wx/treectrl.h>
+
 #include <api/api_plugin_manager.h>
+#include <core/base64.h>
+#include <clipboard.h>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <design_block.h>
@@ -63,7 +76,6 @@
 #include <sch_bus_entry.h>
 #include <sch_shape.h>
 #include <sch_painter.h>
-#include <wx/log.h>
 #include <sch_sheet_pin.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>
@@ -84,12 +96,6 @@
 #include <view/view_controls.h>
 #include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
-#include <wx_filename.h>
-#include <wx/filedlg.h>
-#include <wx/log.h>
-#include <wx/treectrl.h>
-#include <wx/msgdlg.h>
-#include <wx/textdlg.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <libraries/symbol_library_adapter.h>
 #include <printing/dialog_print.h>
@@ -99,12 +105,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/gal_print.h>
 #include <gal/cairo/cairo_print.h>
-#include <wx/ffile.h>
-#include <wx/filefn.h>
-#include <wx/mstream.h>
-#include <wx/clipbrd.h>
-#include <wx/imagpng.h>
-
 
 /**
  * Flag to enable schematic paste debugging output.
@@ -117,31 +117,6 @@ namespace
 {
 constexpr int clipboardMaxBitmapSize = 4096;
 constexpr double clipboardBboxInflation = 0.02;  // Small padding around selection
-
-
-bool loadFileToBuffer( const wxString& aFileName, wxMemoryBuffer& aBuffer )
-{
-    wxFFile file( aFileName, wxS( "rb" ) );
-
-    if( !file.IsOpened() )
-        return false;
-
-    wxFileOffset size = file.Length();
-
-    if( size <= 0 )
-        return false;
-
-    void* data = aBuffer.GetWriteBuf( size );
-
-    if( file.Read( data, size ) != static_cast<size_t>( size ) )
-    {
-        aBuffer.UngetWriteBuf( 0 );
-        return false;
-    }
-
-    aBuffer.UngetWriteBuf( size );
-    return true;
-}
 
 
 std::vector<SCH_ITEM*> collectSelectionItems( const SCH_SELECTION& aSelection )
@@ -235,7 +210,7 @@ bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
     plotter->EndPlot();
     plotter.reset();
 
-    bool ok = loadFileToBuffer( tempFile.GetFullPath(), aBuffer );
+    bool ok = LoadFileToMemory( tempFile.GetFullPath(), aBuffer );
     wxRemoveFile( tempFile.GetFullPath() );
     return ok;
 }

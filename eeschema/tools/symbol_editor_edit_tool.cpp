@@ -20,6 +20,10 @@
 
 #include "symbol_editor_edit_tool.h"
 
+#include <wx/buffer.h>
+#include <wx/mstream.h>
+#include <wx/dcmemory.h>
+
 #include <tool/picker_tool.h>
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_tool_utils.h>
@@ -56,9 +60,6 @@
 #include <gal/gal_print.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <zoom_defines.h>
-#include <wx/ffile.h>
-#include <wx/mstream.h>
-#include <wx/dcmemory.h>
 
 
 namespace
@@ -93,31 +94,6 @@ void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString
 }
 
 
-bool loadFileToBuffer( const wxString& aFileName, wxMemoryBuffer& aBuffer )
-{
-    wxFFile file( aFileName, wxS( "rb" ) );
-
-    if( !file.IsOpened() )
-        return false;
-
-    wxFileOffset size = file.Length();
-
-    if( size <= 0 )
-        return false;
-
-    void* data = aBuffer.GetWriteBuf( size );
-
-    if( file.Read( data, size ) != static_cast<size_t>( size ) )
-    {
-        aBuffer.UngetWriteBuf( 0 );
-        return false;
-    }
-
-    aBuffer.UngetWriteBuf( size );
-    return true;
-}
-
-
 bool plotSymbolToSvg( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2I& aBBox,
                       int aUnit, int aBodyStyle, wxMemoryBuffer& aBuffer )
 {
@@ -138,7 +114,7 @@ bool plotSymbolToSvg( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2
         return false;
     }
 
-    bool ok = loadFileToBuffer( tempFile.GetFullPath(), aBuffer );
+    bool ok = LoadFileToMemory( tempFile.GetFullPath(), aBuffer );
     wxRemoveFile( tempFile.GetFullPath() );
     return ok;
 }
