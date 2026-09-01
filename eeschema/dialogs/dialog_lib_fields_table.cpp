@@ -175,7 +175,7 @@ protected:
             auto validator =
                     [&]( const wxString& aNewName ) -> bool
                     {
-                        return symbolNames.Index( aNewName ) == wxNOT_FOUND;
+                        return symbolNames.Index( UnescapeString( aNewName ) ) == wxNOT_FOUND;
                     };
 
             const auto styler =
