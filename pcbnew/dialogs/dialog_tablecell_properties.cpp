@@ -184,11 +184,11 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
             m_marginRight.SetValue( cell->GetMarginRight() );
             m_marginBottom.SetValue( cell->GetMarginBottom() );
 
-            // wxCheckBoxState bold = cell->IsBold() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
             m_bold->Check( cell->IsBold() );
+            m_mixedBoldSetting = false;
 
-            // wxCheckBoxState italic = cell->IsItalic() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
             m_italic->Check( cell->IsItalic() );
+            m_mixedItalicSetting = false;
 
             m_cbKnockout->SetValue( cell->IsKnockout() );
 
@@ -214,6 +214,18 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
             if( GetPenSizeForNormal( cell->GetTextWidth() ) != basePenWidth )
                 basePenWidth = -1;
 
+            if( cell->IsBold() != m_bold->IsChecked() )
+            {
+                m_mixedBoldSetting = true;
+                m_bold->Check( false );
+            }
+
+            if( cell->IsItalic() != m_italic->IsChecked() )
+            {
+                m_mixedItalicSetting = true;
+                m_italic->Check( false );
+            }
+
             if( cell->GetHorizJustify() != hAlign )
                 hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
 
@@ -231,6 +243,9 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
             if( cell->GetMarginBottom() != m_marginBottom.GetIntValue() )
                 m_marginBottom.SetValue( INDETERMINATE_STATE );
+
+            if( cell->IsKnockout() != m_cbKnockout->GetValue() )
+                m_cbKnockout->Set3StateValue( wxCHK_UNDETERMINED );
         }
 
         switch( hAlign )
@@ -273,7 +288,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 void DIALOG_TABLECELL_PROPERTIES::onTextSize( wxCommandEvent& aEvent )
 {
     if( m_autoTextThickness->IsChecked() )
-        m_textThickness.SetValue( GetPenSizeForNormal( m_textWidth.GetValue() ) );
+        m_textThickness.SetValue( GetPenSizeForNormal( m_textWidth.GetIntValue() ) );
 }
 
 
@@ -295,6 +310,20 @@ void DIALOG_TABLECELL_PROPERTIES::onAutoTextThickness( wxCommandEvent& aEvent )
     {
         m_textThickness.Enable( true );
     }
+}
+
+
+void DIALOG_TABLECELL_PROPERTIES::onBold(wxCommandEvent& aEvent)
+{
+    m_mixedBoldSetting = false;
+    aEvent.Skip();
+}
+
+
+void DIALOG_TABLECELL_PROPERTIES::onItalic(wxCommandEvent& aEvent)
+{
+    m_mixedItalicSetting = false;
+    aEvent.Skip();
 }
 
 
@@ -354,9 +383,14 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
             cell->SetText( txt );
         }
 
-        cell->SetBold( m_bold->IsChecked() );
-        cell->SetItalic( m_italic->IsChecked() );
-        cell->SetIsKnockout( m_cbKnockout->IsChecked() );
+        if( !m_mixedBoldSetting )
+            cell->SetBold( m_bold->IsChecked() );
+
+        if( !m_mixedItalicSetting )
+            cell->SetItalic( m_italic->IsChecked() );
+
+        if( m_cbKnockout->Get3StateValue() != wxCHK_UNDETERMINED )
+            cell->SetIsKnockout( m_cbKnockout->IsChecked() );
 
         if( m_fontCtrl->HaveFontSelection() )
             cell->SetFont( m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) );
