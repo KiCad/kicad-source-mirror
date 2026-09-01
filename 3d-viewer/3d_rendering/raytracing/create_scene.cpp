@@ -26,7 +26,6 @@
 #include "shapes3D/cylinder_3d.h"
 #include "shapes3D/frustum_3d.h"
 #include "shapes3D/triangle_3d.h"
-#include "shapes3D/dummy_block_3d.h"
 #include "shapes2D/layer_item_2d.h"
 #include "shapes2D/ring_2d.h"
 #include "shapes2D/polygon_2d.h"
@@ -1986,24 +1985,33 @@ void RENDER_3D_RAYTRACE_BASE::addPlaceholderToRaytracer( CONTAINER_3D& aDstConta
     SFVEC3F boxMin( offsetX - bboxW * 0.5f, offsetY - bboxH * 0.5f, 0.0f );
     SFVEC3F boxMax( offsetX + bboxW * 0.5f, offsetY + bboxH * 0.5f, scaleZ );
 
-    BBOX_3D worldBBox;
-    worldBBox.Reset();
+    SFVEC3F corners[8];
 
     for( int i = 0; i < 8; ++i )
     {
         SFVEC3F corner( ( i & 1 ) ? boxMax.x : boxMin.x, ( i & 2 ) ? boxMax.y : boxMin.y,
                         ( i & 4 ) ? boxMax.z : boxMin.z );
 
-        glm::vec4 transformed = aFpMatrix * glm::vec4( corner, 1.0f );
-        worldBBox.Union( SFVEC3F( transformed ) );
+        corners[i] = SFVEC3F( aFpMatrix * glm::vec4( corner, 1.0f ) );
     }
 
-    DUMMY_BLOCK* placeholder = new DUMMY_BLOCK( worldBBox );
-    placeholder->SetBoardItem( const_cast<FOOTPRINT*>( aFootprint ) );
-    placeholder->SetMaterial( &m_materials.m_EpoxyBoard );
-    placeholder->SetColor( SFVEC3F( 1.0f, 0.5f, 0.0f ) );
+    static const int faces[6][4] = { { 4, 5, 7, 6 }, { 0, 2, 3, 1 }, { 0, 1, 5, 4 },
+                                     { 3, 2, 6, 7 }, { 0, 4, 6, 2 }, { 1, 3, 7, 5 } };
 
-    aDstContainer.Add( placeholder );
+    auto addTriangle = [&]( const SFVEC3F& aV0, const SFVEC3F& aV1, const SFVEC3F& aV2 )
+    {
+        TRIANGLE* triangle = new TRIANGLE( aV0, aV1, aV2 );
+        triangle->SetBoardItem( const_cast<FOOTPRINT*>( aFootprint ) );
+        triangle->SetMaterial( &m_materials.m_EpoxyBoard );
+        triangle->SetColor( SFVEC3F( 1.0f, 0.5f, 0.0f ) );
+        aDstContainer.Add( triangle );
+    };
+
+    for( const int* face : faces )
+    {
+        addTriangle( corners[face[0]], corners[face[2]], corners[face[1]] );
+        addTriangle( corners[face[0]], corners[face[3]], corners[face[2]] );
+    }
 }
 
 
