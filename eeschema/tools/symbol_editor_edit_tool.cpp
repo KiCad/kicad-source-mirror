@@ -51,10 +51,8 @@
 #include <math/util.h>      // for KiROUND
 #include <io/kicad/kicad_io_utils.h>
 #include <trace_helpers.h>
-#include <plotters/plotters_pslike.h>
 #include <sch_painter.h>
 #include <sch_plotter.h>
-#include <locale_io.h>
 #include <gal/gal_print.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <zoom_defines.h>
@@ -123,47 +121,22 @@ bool loadFileToBuffer( const wxString& aFileName, wxMemoryBuffer& aBuffer )
 bool plotSymbolToSvg( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2I& aBBox,
                       int aUnit, int aBodyStyle, wxMemoryBuffer& aBuffer )
 {
-    if( !aSymbol )
-        return false;
+    wxCHECK( aSymbol, false );
 
     SCH_RENDER_SETTINGS renderSettings;
     renderSettings.LoadColors( aFrame->GetColorSettings() );
     renderSettings.SetDefaultPenWidth( aFrame->GetRenderSettings()->GetDefaultPenWidth() );
 
-    std::unique_ptr<SVG_PLOTTER> plotter = std::make_unique<SVG_PLOTTER>();
-    plotter->SetRenderSettings( &renderSettings );
-
-    PAGE_INFO pageInfo = aFrame->GetScreen()->GetPageSettings();
-    pageInfo.SetWidthMils( schIUScale.IUToMils( aBBox.GetWidth() ) );
-    pageInfo.SetHeightMils( schIUScale.IUToMils( aBBox.GetHeight() ) );
-
-    plotter->SetPageSettings( pageInfo );
-    plotter->SetColorMode( true );
-
-    VECTOR2I plot_offset = aBBox.GetOrigin();
-    plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, 1.0, false );
-    plotter->SetCreator( wxT( "Eeschema-SVG" ) );
-
     wxFileName tempFile( wxFileName::CreateTempFileName( wxS( "kicad_symbol_svg" ) ) );
 
-    if( !plotter->OpenFile( tempFile.GetFullPath() ) )
+    // The bbox is the bounding box of the selected items only, so it is passed in rather than
+    // computed from the whole (partial) symbol.
+    if( !PlotSymbolToSVG( *aSymbol, *aSymbol, aUnit, aBodyStyle, aBBox, renderSettings, false,
+                          tempFile.GetFullPath() ) )
     {
         wxRemoveFile( tempFile.GetFullPath() );
         return false;
     }
-
-    LOCALE_IO     toggle;
-    SCH_PLOT_OPTS plotOpts;
-
-    plotter->StartPlot( wxT( "1" ) );
-
-    constexpr bool background = true;
-    aSymbol->Plot( plotter.get(), background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
-    aSymbol->Plot( plotter.get(), !background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
-    aSymbol->PlotFields( plotter.get(), !background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
-
-    plotter->EndPlot();
-    plotter.reset();
 
     bool ok = loadFileToBuffer( tempFile.GetFullPath(), aBuffer );
     wxRemoveFile( tempFile.GetFullPath() );

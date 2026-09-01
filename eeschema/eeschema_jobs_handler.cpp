@@ -1070,53 +1070,13 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, SCH_REND
                                                   unit, fn.GetFullPath() ),
                                 RPT_SEVERITY_ACTION );
 
-            // Get the symbol bounding box to fit the plot page to it
-            BOX2I symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle, !aSvgJob->m_includeHiddenFields );
-            PAGE_INFO pageInfo( PAGE_SIZE_TYPE::User );
-            pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
-            pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
+            BOX2I symbolBB = GetSymbolPlotBBox( *symbol, unit, bodyStyle, aSvgJob->m_includeHiddenFields );
 
-            SVG_PLOTTER* plotter = new SVG_PLOTTER();
-            plotter->SetRenderSettings( aRenderSettings );
-            plotter->SetPageSettings( pageInfo );
-            plotter->SetColorMode( !aSvgJob->m_blackAndWhite );
-
-            VECTOR2I     plot_offset = symbolBB.GetCenter();
-            const double scale = 1.0;
-
-            // Currently, plot units are in decimal
-            plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, scale, false );
-
-            plotter->SetCreator( wxT( "Eeschema-SVG" ) );
-
-            if( !plotter->OpenFile( fn.GetFullPath() ) )
+            if( !PlotSymbolToSVG( *symbolToPlot, *symbol, unit, bodyStyle, symbolBB, *aRenderSettings,
+                                  aSvgJob->m_blackAndWhite, fn.GetFullPath(), m_reporter ) )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ), fn.GetFullPath() ),
-                        RPT_SEVERITY_ERROR );
-
-                delete plotter;
                 return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
             }
-
-            LOCALE_IO     toggle;
-            SCH_PLOT_OPTS plotOpts;
-
-            plotter->StartPlot( wxT( "1" ) );
-
-            bool     background = true;
-            VECTOR2I offset( pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2,
-                             pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2 );
-
-            // note, we want the fields from the original symbol pointer (in case of non-alias)
-            symbolToPlot->Plot( plotter, background, plotOpts, unit, bodyStyle, offset, false );
-            symbol->PlotFields( plotter, background, plotOpts, unit, bodyStyle, offset, false );
-
-            symbolToPlot->Plot( plotter, !background, plotOpts, unit, bodyStyle, offset, false );
-            symbol->PlotFields( plotter, !background, plotOpts, unit, bodyStyle, offset, false );
-
-            plotter->EndPlot();
-            delete plotter;
         }
     }
 

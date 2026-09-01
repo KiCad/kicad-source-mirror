@@ -841,24 +841,8 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 
     if( !fullFileName.IsEmpty() )
     {
-        PAGE_INFO pageSave = editFrame->GetScreen()->GetPageSettings();
-        PAGE_INFO pageTemp = pageSave;
-
-        BOX2I symbolBBox = symbol->GetUnitBoundingBox( editFrame->GetUnit(),
-                                                       editFrame->GetBodyStyle(), false );
-
-        // Add a small margin (10% of size)to the plot bounding box
-        symbolBBox.Inflate( symbolBBox.GetSize().x * 0.1, symbolBBox.GetSize().y * 0.1 );
-
-        pageTemp.SetWidthMils( schIUScale.IUToMils( symbolBBox.GetSize().x ) );
-        pageTemp.SetHeightMils( schIUScale.IUToMils( symbolBBox.GetSize().y ) );
-
-        // Add an offet to plot the symbol centered on the page.
-        VECTOR2I plot_offset = symbolBBox.GetOrigin();
-
-        editFrame->GetScreen()->SetPageSettings( pageTemp );
-        editFrame->SVGPlotSymbol( fullFileName, -plot_offset );
-        editFrame->GetScreen()->SetPageSettings( pageSave );
+        // The symbol origin is kept at the SVG origin; the page/viewBox is sized to the symbol.
+        editFrame->SVGPlotSymbol( fullFileName );
     }
 
     return 0;

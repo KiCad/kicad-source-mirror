@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "core/typeinfo.h"
 #include <wx/log.h>
 #include <common.h>
 #include <sch_plotter.h>
@@ -30,11 +31,16 @@
 #include <pgm_base.h>
 #include <trace_helpers.h>
 
+#include <lib_symbol.h>
+#include <locale_io.h>
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
+#include <sch_shape.h>
 #include <schematic.h>
 #include <sch_screen.h>
 #include <settings/settings_manager.h>
+
+#include <algorithm>
 
 // Note:
 // We need to switch between sheets to plot a hierarchy and update references and sheet number
@@ -1076,4 +1082,69 @@ void SCH_PLOTTER::Plot( PLOT_FORMAT aPlotFormat, const SCH_PLOT_OPTS& aPlotOpts,
     }
 
     m_schematic->SetCurrentVariant( oldVariant );
+}
+
+
+BOX2I GetSymbolPlotBBox( const LIB_SYMBOL& aSymbol, int aUnit, int aBodyStyle, bool aIncludeHiddenFields )
+{
+    std::unique_ptr<LIB_SYMBOL> flatSymbol = aSymbol.Flatten();
+
+    BOX2I symbolBB = flatSymbol->GetUnitBoundingBox( aUnit, aBodyStyle, !aIncludeHiddenFields );
+
+    // Inflate the bbox by "some margin". A lot bounding boxes are slightly
+    // small because a stroke size of '0' is actually 'inherit', by default 6 mils,
+    // but the actual value can unly be known for sure with the schematic context.
+    // A margin of 2mm seems to cover most evantualities, but this is a bit of a
+    // guess.
+
+    const int expansion = schIUScale.mmToIU( 2 );
+    symbolBB.Inflate( expansion );
+
+    return symbolBB;
+}
+
+
+bool PlotSymbolToSVG( LIB_SYMBOL& aDrawSymbol, LIB_SYMBOL& aFieldsSymbol, int aUnit, int aBodyStyle, const BOX2I& aBBox,
+                      SCH_RENDER_SETTINGS& aRenderSettings, bool aBlackAndWhite, const wxString& aFileName,
+                      REPORTER* aReporter )
+{
+    PAGE_INFO pageInfo( PAGE_SIZE_TYPE::User );
+    pageInfo.SetHeightMils( schIUScale.IUToMils( aBBox.GetHeight() ) );
+    pageInfo.SetWidthMils( schIUScale.IUToMils( aBBox.GetWidth() ) );
+
+    std::unique_ptr<SVG_PLOTTER> plotter = std::make_unique<SVG_PLOTTER>();
+    plotter->SetRenderSettings( &aRenderSettings );
+    plotter->SetPageSettings( pageInfo );
+    plotter->SetColorMode( !aBlackAndWhite );
+
+    // Currently, plot units are in decimal.  Keep the symbol origin at the SVG origin; the
+    // viewBox is the content bbox.
+    plotter->SetViewport( VECTOR2I( 0, 0 ), schIUScale.IU_PER_MILS / 10, 1.0, false );
+    plotter->SetPlotBBox( aBBox );
+
+    plotter->SetCreator( wxT( "Eeschema-SVG" ) );
+
+    if( !plotter->OpenFile( aFileName ) )
+    {
+        if( aReporter )
+        {
+            aReporter->Report( wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ),
+                                                 aFileName ),
+                               RPT_SEVERITY_ERROR );
+        }
+        return false;
+    }
+
+    LOCALE_IO     toggle;
+    SCH_PLOT_OPTS plotOpts;
+
+    plotter->StartPlot( wxS( "1" ) );
+
+    constexpr bool background = true;
+    aDrawSymbol.Plot( plotter.get(), background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
+    aDrawSymbol.Plot( plotter.get(), !background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
+    aFieldsSymbol.PlotFields( plotter.get(), !background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
+
+    plotter->EndPlot();
+    return true;
 }

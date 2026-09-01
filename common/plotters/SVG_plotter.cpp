@@ -203,6 +203,12 @@ void SVG_PLOTTER::SetSvgCoordinatesFormat( unsigned aPrecision )
 }
 
 
+void SVG_PLOTTER::SetPlotBBox( const BOX2I& aBBoxIU )
+{
+    m_plotBBoxIU = aBBoxIU;
+}
+
+
 void SVG_PLOTTER::setFillMode( FILL_T fill )
 {
     if( m_fillMode != fill )
@@ -769,15 +775,29 @@ bool SVG_PLOTTER::StartPlot( const wxString& aPageNumber )
     // Write header.
     fmt::print( m_outputFile, "{}", header );
 
-    // Write viewport pos and size
-    VECTOR2D origin;    // TODO set to actual value
+    // Write viewport pos and size.  The SVG width/height and viewBox are in mm (device
+    // units). When a plot bounding box was supplied, the viewBox is that box
+    // transformed by the viewport, so the content keeps its origin at the SVG
+    // origin even when it extends to negative coordinates. Otherwise the page
+    // size is used and the origin is the viewbox (which is also the page) corner.
+    VECTOR2D origin( 0, 0 );
+    VECTOR2D size( m_paperSize.x * m_iuPerDeviceUnit, m_paperSize.y * m_iuPerDeviceUnit );
+
+    if( m_plotBBoxIU )
+    {
+        double deviceScale = m_plotScale * m_iuPerDeviceUnit;
+
+        origin.x = ( m_plotBBoxIU->GetLeft() - m_plotOffset.x ) * deviceScale;
+        origin.y = ( m_plotBBoxIU->GetTop() - m_plotOffset.y ) * deviceScale;
+        size.x   = static_cast<double>( m_plotBBoxIU->GetWidth() ) * deviceScale;
+        size.y   = static_cast<double>( m_plotBBoxIU->GetHeight() ) * deviceScale;
+    }
+
     fmt::print( m_outputFile,
                 "  width=\"{:.{}f}mm\" height=\"{:.{}f}mm\" viewBox=\"{:.{}f} {:.{}f} {:.{}f} {:.{}f}\">\n",
-                (double) m_paperSize.x / m_IUsPerDecimil * 2.54 / 1000, m_precision,
-                (double) m_paperSize.y / m_IUsPerDecimil * 2.54 / 1000, m_precision,
+                size.x, m_precision, size.y, m_precision,
                 origin.x, m_precision, origin.y, m_precision,
-                m_paperSize.x * m_iuPerDeviceUnit, m_precision,
-                m_paperSize.y * m_iuPerDeviceUnit, m_precision );
+                size.x, m_precision, size.y, m_precision );
 
     // Write title
     wxString date = GetISO8601CurrentDateTime();

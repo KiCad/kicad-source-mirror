@@ -581,6 +581,17 @@ public:
     }
 
     /**
+     * Set an explicit bounding box for the plotted content (in IUs).
+     *
+     * Used by the SVG plotter to derive its viewBox from the content instead of the page
+     * size, so the content origin can stay at the SVG origin.
+     */
+    virtual void SetPlotBBox( const BOX2I& aBBoxIU )
+    {
+        // NOP for most plotters. Only for SVG plotter
+    }
+
+    /**
      * calling this function allows one to define the beginning of a group
      * of drawing items, for instance in SVG  or Gerber format.
      * (example: group all segments of a letter or a text)

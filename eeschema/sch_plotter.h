@@ -39,6 +39,7 @@ class SCH_SCREEN;
 using KIGFX::RENDER_SETTINGS;
 class PDF_PLOTTER;
 class REPORTER;
+class LIB_SYMBOL;
 
 enum PageFormatReq
 {
@@ -201,5 +202,44 @@ private:
     wxString        m_lastOutputFilePath;
     std::vector<wxString> m_outputFilePaths;
 };
+
+
+/**
+ * Compute the bounding box used to size a symbol SVG plot.
+ *
+ * The symbol's unit bounding box, is inflated by a small margin so the
+ * drawing does not touch the page edges.
+ *
+ * @param aSymbol is the symbol to measure (may be a derived symbol).
+ * @param aUnit is the unit to measure (1-based).
+ * @param aBodyStyle is the body style to measure (1-based).
+ * @param aIncludeHiddenFields when true, hidden fields are included in the bounding box.
+ */
+BOX2I GetSymbolPlotBBox( const LIB_SYMBOL& aSymbol, int aUnit, int aBodyStyle, bool aIncludeHiddenFields );
+
+
+/**
+ * Plot a single symbol variant (unit and body style) to an SVG file.
+ *
+ * The page is sized to \a aBBox and the symbol is plotted with its origin at the SVG origin;
+ * the SVG viewBox covers the whole bounding box, which may extend to negative coordinates.
+ *
+ * @param aDrawSymbol is the symbol whose draw items are plotted.  For derived (alias)
+ *                   symbols this is the root symbol, which holds the draw items.
+ * @param aFieldsSymbol is the symbol whose fields are plotted.  For aliases this is the
+ *                     derived symbol.
+ * @param aUnit is the unit to plot (1-based).
+ * @param aBodyStyle is the body style to plot (1-based).
+ * @param aBBox is the bounding box used to size the page and the SVG viewBox this may be computed
+ *              using \ref GetSymbolPlotBBox, or by some other means.
+ * @param aRenderSettings the render settings used for the plot.
+ * @param aBlackAndWhite when true, plot without color.
+ * @param aFileName the full path of the SVG file to create.
+ * @param aReporter optional reporter for error messages.
+ * @return true when the file was written, false on error.
+ */
+bool PlotSymbolToSVG( LIB_SYMBOL& aDrawSymbol, LIB_SYMBOL& aFieldsSymbol, int aUnit, int aBodyStyle, const BOX2I& aBBox,
+                      SCH_RENDER_SETTINGS& aRenderSettings, bool aBlackAndWhite, const wxString& aFileName,
+                      REPORTER* aReporter = nullptr );
 
 #endif

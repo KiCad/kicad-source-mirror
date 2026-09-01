@@ -20,53 +20,21 @@
 
 #include <sch_painter.h>
 #include <symbol_edit_frame.h>
-#include <locale_io.h>
-#include <plotters/plotters_pslike.h>
 #include <sch_plotter.h>
 
-void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName, const VECTOR2I& aOffset )
+void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
 {
+    if( !m_symbol )
+        return;
+
     SCH_RENDER_SETTINGS renderSettings;
     renderSettings.LoadColors( GetColorSettings() );
     renderSettings.SetDefaultPenWidth( GetRenderSettings()->GetDefaultPenWidth() );
 
-    const PAGE_INFO& pageInfo = GetScreen()->GetPageSettings();
+    // The symbol is exported in color with its origin at the SVG origin; the page and viewBox
+    // are sized to the symbol's bounding box, with hidden fields excluded from the box (they
+    // are still plotted).
+    BOX2I symbolBB = GetSymbolPlotBBox( *m_symbol, GetUnit(), GetBodyStyle(), false );
 
-    SVG_PLOTTER* plotter = new SVG_PLOTTER();
-    plotter->SetRenderSettings( &renderSettings );
-    plotter->SetPageSettings( pageInfo );
-    plotter->SetColorMode( true );
-
-    VECTOR2I plot_offset;
-    const double scale = 1.0;
-
-    // Currently, plot units are in decimil
-    plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS/10, scale, false );
-
-    // Init :
-    plotter->SetCreator( wxT( "Eeschema-SVG" ) );
-
-    if( !plotter->OpenFile( aFullFileName ) )
-    {
-        delete plotter;
-        return;
-    }
-
-    LOCALE_IO     toggle;
-    SCH_PLOT_OPTS plotOpts;
-
-    plotter->StartPlot( wxT( "1" ) );
-
-    if( m_symbol )
-    {
-        constexpr bool background = true;
-
-        m_symbol->Plot( plotter, background, plotOpts, GetUnit(), GetBodyStyle(), aOffset, false );
-        m_symbol->Plot( plotter, !background, plotOpts, GetUnit(), GetBodyStyle(), aOffset, false );
-        m_symbol->PlotFields( plotter, !background, plotOpts, GetUnit(), GetBodyStyle(), aOffset,
-                              false );
-    }
-
-    plotter->EndPlot();
-    delete plotter;
+    PlotSymbolToSVG( *m_symbol, *m_symbol, GetUnit(), GetBodyStyle(), symbolBB, renderSettings, false, aFullFileName );
 }
