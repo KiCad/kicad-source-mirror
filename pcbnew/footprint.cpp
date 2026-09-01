@@ -1229,10 +1229,8 @@ bool FOOTPRINT::IsWithinSchematicSheet( const KIID_PATH& aSheetPath ) const
         return false;
 
     // m_path is written by the netlist, which omits the root sheet the way PathAsString() does
-    KIID_PATH boardPath;
-    boardPath.assign( aSheetPath.begin() + 1, aSheetPath.end() );
-
-    return m_path.IsContainedWithin( boardPath );
+    return m_path.size() >= aSheetPath.size() - 1
+           && std::equal( aSheetPath.begin() + 1, aSheetPath.end(), m_path.begin() );
 }
 
 

@@ -2704,93 +2704,10 @@ HANDLER_RESULT<CrossProbeAnnounceResponse> API_HANDLER_PCB::handleCrossProbeAnno
 }
 
 
-using google::protobuf::RepeatedPtrField;
-
-static std::vector<BOARD_ITEM*> findItemsFromSyncSelection( const BOARD* aBoard,
-                                                            const RepeatedPtrField<SelectionSpec>& aItems )
-{
-    std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
-    wxCHECK( aBoard, {} );
-
-    // Unpacking rebuilds a KIID per path element, so do it once rather than per footprint
-    std::vector<KIID_PATH> sheetPaths( aItems.size() );
-
-    for( int index = 0; index < aItems.size(); ++index )
-    {
-        if( aItems[index].spec_case() == SelectionSpec::SpecCase::kSheetPath )
-            sheetPaths[index] = kiapi::common::UnpackSheetPath( aItems[index].sheet_path() );
-    }
-
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
-    {
-        wxString fpRef = footprint->GetReference();
-
-        for( int index = 0; index < aItems.size(); ++index )
-        {
-            const SelectionSpec& spec = aItems[index];
-
-            switch( spec.spec_case() )
-            {
-            case SelectionSpec::SpecCase::kFootprint:
-            {
-                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
-                    orderPairs.emplace_back( index, footprint );
-
-                break;
-            }
-
-            case SelectionSpec::SpecCase::kPad:
-            {
-                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
-                {
-                    wxString padNumber = wxString::FromUTF8( spec.pad().number() );
-
-                    for( PAD* pad : footprint->Pads() )
-                    {
-                        if( padNumber == pad->GetNumber() )
-                            orderPairs.emplace_back( index, pad );
-                    }
-                }
-
-                break;
-            }
-
-            case SelectionSpec::SpecCase::kSheetPath:
-            {
-                if( footprint->IsWithinSchematicSheet( sheetPaths[index] ) )
-                    orderPairs.emplace_back( index, footprint );
-
-                break;
-            }
-
-            default: break;
-            }
-        }
-    }
-
-    std::ranges::sort( orderPairs,
-                       []( const std::pair<int, BOARD_ITEM*>& a, const std::pair<int, BOARD_ITEM*>& b ) -> bool
-                       {
-                           return a.first < b.first;
-                       } );
-
-    std::vector<BOARD_ITEM*> items;
-    items.reserve( orderPairs.size() );
-
-    for( BOARD_ITEM* val : orderPairs | std::views::values )
-        items.push_back( val );
-
-    return items;
-}
-
-
 HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_PCB::handleSyncSelection( const HANDLER_CONTEXT<SyncSelection>& aCtx )
 {
     if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SyncSelection" ) )
         return tl::unexpected( *headless );
-
-    std::string req = aCtx.Request.SerializeAsString();
-    frame()->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, req );
 
     SyncSelectionResponse response;
 
@@ -2803,7 +2720,8 @@ HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_PCB::handleSyncSelection( cons
         return response;
     }
 
-    std::vector<BOARD_ITEM*> items = findItemsFromSyncSelection( board(), aCtx.Request.items() );
+    std::vector<BOARD_ITEM*> items =
+            kiapi::board::FindItemsFromSyncSelection( board(), aCtx.Request.items() );
 
     frame()->m_ProbingSchToPcb = true; // recursion guard
 

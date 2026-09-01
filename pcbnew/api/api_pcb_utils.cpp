@@ -18,6 +18,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <ranges>
+
 #include <api/api_pcb_utils.h>
 #include <api/api_enums.h>
 #include <api/board/board.pb.h>
@@ -273,6 +276,87 @@ bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const common::types::Embedded
     aOutput = files;
 
     return true;
+}
+
+
+std::vector<BOARD_ITEM*> FindItemsFromSyncSelection(
+        const BOARD* aBoard,
+        const google::protobuf::RepeatedPtrField<kiapi::common::commands::SelectionSpec>& aItems )
+{
+    using kiapi::common::commands::SelectionSpec;
+
+    std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
+    wxCHECK( aBoard, {} );
+
+    // Unpacking rebuilds a KIID per path element, so do it once rather than per footprint
+    std::vector<KIID_PATH> sheetPaths( aItems.size() );
+
+    for( int index = 0; index < aItems.size(); ++index )
+    {
+        if( aItems[index].spec_case() == SelectionSpec::SpecCase::kSheetPath )
+            sheetPaths[index] = kiapi::common::UnpackSheetPath( aItems[index].sheet_path() );
+    }
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+    {
+        wxString fpRef = footprint->GetReference();
+
+        for( int index = 0; index < aItems.size(); ++index )
+        {
+            const SelectionSpec& spec = aItems[index];
+
+            switch( spec.spec_case() )
+            {
+            case SelectionSpec::SpecCase::kFootprint:
+            {
+                if( fpRef == wxString::FromUTF8( spec.footprint().reference() ) )
+                    orderPairs.emplace_back( index, footprint );
+
+                break;
+            }
+
+            case SelectionSpec::SpecCase::kPad:
+            {
+                if( fpRef == wxString::FromUTF8( spec.pad().reference() ) )
+                {
+                    wxString padNumber = wxString::FromUTF8( spec.pad().number() );
+
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( padNumber == pad->GetNumber() )
+                            orderPairs.emplace_back( index, pad );
+                    }
+                }
+
+                break;
+            }
+
+            case SelectionSpec::SpecCase::kSheetPath:
+            {
+                if( footprint->IsWithinSchematicSheet( sheetPaths[index] ) )
+                    orderPairs.emplace_back( index, footprint );
+
+                break;
+            }
+
+            default: break;
+            }
+        }
+    }
+
+    std::ranges::sort( orderPairs,
+                       []( const std::pair<int, BOARD_ITEM*>& a, const std::pair<int, BOARD_ITEM*>& b ) -> bool
+                       {
+                           return a.first < b.first;
+                       } );
+
+    std::vector<BOARD_ITEM*> items;
+    items.reserve( orderPairs.size() );
+
+    for( BOARD_ITEM* val : orderPairs | std::views::values )
+        items.push_back( val );
+
+    return items;
 }
 
 }   // namespace kiapi::board

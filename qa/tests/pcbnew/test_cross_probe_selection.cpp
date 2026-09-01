@@ -23,10 +23,16 @@
 #include <algorithm>
 #include <memory>
 
+#include <api/api_pcb_utils.h>
+#include <api/api_utils.h>
 #include <board.h>
 #include <footprint.h>
 #include <kiid.h>
+#include <pad.h>
 #include <settings/settings_manager.h>
+
+using kiapi::common::commands::SelectionSpec;
+using kiapi::common::commands::SyncSelection;
 
 
 // The two hierarchical sheets of the complex_hierarchy demo.  Both instantiate ampli_ht.kicad_sch
@@ -38,9 +44,9 @@ static const std::size_t c_footprintsPerSheet = 29;
 static const std::size_t c_footprintsOnBoard = 72;
 
 
-struct FOOTPRINT_SHEET_PATH_FIXTURE
+struct CROSS_PROBE_SELECTION_FIXTURE
 {
-    FOOTPRINT_SHEET_PATH_FIXTURE()
+    CROSS_PROBE_SELECTION_FIXTURE()
     {
         KI_TEST::LoadBoard( m_settingsManager, wxS( "complex_hierarchy" ), m_board );
     }
@@ -65,12 +71,17 @@ struct FOOTPRINT_SHEET_PATH_FIXTURE
                                        } ) );
     }
 
+    std::vector<BOARD_ITEM*> Resolve( const SyncSelection& aRequest ) const
+    {
+        return kiapi::board::FindItemsFromSyncSelection( m_board.get(), aRequest.items() );
+    }
+
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
 };
 
 
-BOOST_FIXTURE_TEST_SUITE( FootprintSheetPath, FOOTPRINT_SHEET_PATH_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( CrossProbeSelection, CROSS_PROBE_SELECTION_FIXTURE )
 
 
 BOOST_AUTO_TEST_CASE( SheetSelectionFindsItsFootprints )
@@ -125,6 +136,49 @@ BOOST_AUTO_TEST_CASE( RootSheetSelectsTheWholeBoard )
 
     BOOST_CHECK_EQUAL( CountOnSheet( rootOnly ), c_footprintsOnBoard );
     BOOST_CHECK_EQUAL( CountOnSheet( KIID_PATH() ), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( PinSpecResolvesToItsPad )
+{
+    SyncSelection request;
+    SelectionSpec* spec = request.add_items();
+    spec->mutable_pad()->set_reference( "C4" );
+    spec->mutable_pad()->set_number( "2" );
+
+    std::vector<BOARD_ITEM*> items = Resolve( request );
+
+    BOOST_REQUIRE_EQUAL( items.size(), 1 );
+    BOOST_REQUIRE_EQUAL( items[0]->Type(), PCB_PAD_T );
+
+    PAD* pad = static_cast<PAD*>( items[0] );
+
+    BOOST_CHECK_EQUAL( pad->GetNumber(), wxS( "2" ) );
+    BOOST_CHECK_EQUAL( pad->GetParentFootprint()->GetReference(), wxS( "C4" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SheetSpecResolvesThroughTheApi )
+{
+    SyncSelection request;
+    kiapi::common::PackSheetPath( *request.add_items()->mutable_sheet_path(),
+                                  SchematicPath( KIID(), c_verticalSheet ) );
+
+    BOOST_CHECK_EQUAL( Resolve( request ).size(), c_footprintsPerSheet );
+}
+
+
+BOOST_AUTO_TEST_CASE( SpecsResolveInRequestOrder )
+{
+    SyncSelection request;
+    request.add_items()->mutable_footprint()->set_reference( "C5" );
+    request.add_items()->mutable_footprint()->set_reference( "C3" );
+
+    std::vector<BOARD_ITEM*> items = Resolve( request );
+
+    BOOST_REQUIRE_EQUAL( items.size(), 2 );
+    BOOST_CHECK_EQUAL( static_cast<FOOTPRINT*>( items[0] )->GetReference(), wxS( "C5" ) );
+    BOOST_CHECK_EQUAL( static_cast<FOOTPRINT*>( items[1] )->GetReference(), wxS( "C3" ) );
 }
 
 
