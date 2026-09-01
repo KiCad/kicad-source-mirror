@@ -69,9 +69,14 @@ void TOOLS_HOLDER::PushTool( const TOOL_EVENT& aEvent )
     TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( actionName );
 
     if( action )
+    {
         DisplayToolMsg( action->GetFriendlyName() );
+        SelectToolbarAction( *action );
+    }
     else
+    {
         DisplayToolMsg( actionName );
+    }
 }
 
 
