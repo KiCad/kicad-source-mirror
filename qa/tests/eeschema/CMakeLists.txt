@@ -250,7 +250,7 @@ set( QA_EESCHEMA_SRCS
     test_symbol_library.cpp
     test_symbol_library_parse_error.cpp
     test_symbol_embedded_files.cpp
-    test_symbol_clipboard_export.cpp
+    test_symbol_svg_export.cpp
     test_schematic_clipboard_export.cpp
     test_autoplace_fields.cpp
     test_field_case_conflicts.cpp

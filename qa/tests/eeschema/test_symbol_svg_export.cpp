@@ -18,11 +18,8 @@
  */
 
 /**
- * @file test_symbol_clipboard_export.cpp
- * Tests for multi-format clipboard export functionality for symbol editor.
- *
- * These tests verify:
- * 1. SVG export produces valid output for symbols
+ * @file test_symbol_svg_export.cpp
+ * Tests for symbol export to the SVG format
  */
 
 #include <boost/test/unit_test.hpp>
@@ -43,15 +40,15 @@
 #include <qa_utils/svg_test_utils.h>
 
 
-class SYMBOL_CLIPBOARD_FIXTURE
+class SYMBOL_SVG_EXPORT_FIXTURE
 {
 public:
-    SYMBOL_CLIPBOARD_FIXTURE()
+    SYMBOL_SVG_EXPORT_FIXTURE()
     {
         m_symbol = std::make_unique<LIB_SYMBOL>( wxT( "TestSymbol" ), nullptr );
     }
 
-    ~SYMBOL_CLIPBOARD_FIXTURE() = default;
+    ~SYMBOL_SVG_EXPORT_FIXTURE() = default;
 
     void AddPin( int x, int y, const wxString& name, const wxString& number )
     {
@@ -145,7 +142,7 @@ public:
 };
 
 
-BOOST_FIXTURE_TEST_SUITE( SymbolClipboardExport, SYMBOL_CLIPBOARD_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( SymbolSvgExport, SYMBOL_SVG_EXPORT_FIXTURE )
 
 
 /**
