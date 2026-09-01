@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-31 12:51+0000\n"
+"PO-Revision-Date: 2026-09-01 19:52+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -281,14 +281,13 @@ msgid "Loading 3D models..."
 msgstr "Caricamento modelli 3D..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid "Load completed in %.3f s"
-msgstr "Raggruppa pin selezionati"
+msgstr "Caricamento completato in %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1172
-#, fuzzy
 msgid "Stopping background load..."
-msgstr "Stampa il colore dello sfondo"
+msgstr "Interruzione caricamento in background..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1891
 #: eeschema/libraries/legacy_symbol_library.cpp:535
@@ -317,27 +316,24 @@ msgid "Loading..."
 msgstr "Caricamento..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:442
-#, fuzzy
 msgid "Building hit-test scene..."
-msgstr "Creazione riempimenti zone..."
+msgstr ""
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:444
 msgid "Load Raytracing: board"
 msgstr "Carica raytracing: scheda"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:678
-#, fuzzy
 msgid "Building hit-test scene: layers..."
-msgstr "Creazione riempimenti zone..."
+msgstr ""
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:680
 msgid "Load Raytracing: layers"
 msgstr "Carica raytracing: strati"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:916
-#, fuzzy
 msgid "Building hit-test scene: 3D models..."
-msgstr "Caricamento modelli 3D componenti..."
+msgstr ""
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1113
 #, c-format
@@ -2277,9 +2273,9 @@ msgid "Plugin '%s': %s"
 msgstr "Plugin '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading plugin '%s'"
-msgstr "Errore nel caricamento della libreria '%s'"
+msgstr "Errore nel caricamento plugin '%s'"
 
 #: common/api/api_plugin_manager.cpp:143
 #, c-format
@@ -2320,14 +2316,12 @@ msgstr "codice errore %d"
 
 #: common/api/api_plugin_manager.cpp:780 common/api/api_plugin_manager.cpp:860
 #: common/api/api_plugin_manager.cpp:950
-#, fuzzy
 msgid "Could not create plugin environment"
-msgstr "impossibile creare l'ambiente plugin: %s"
+msgstr "Impossibile creare l'ambiente plugin"
 
 #: common/api/api_plugin_manager.cpp:805 common/api/api_plugin_manager.cpp:888
-#, fuzzy
 msgid "Missing plugin environment"
-msgstr "ambiente plugin mancante"
+msgstr "Ambiente plugin mancante"
 
 #: common/api/api_plugin_manager.cpp:898
 msgid "requirements.txt could not be read"
@@ -15205,11 +15199,10 @@ msgid ""
 "\n"
 "Would you like to force-create a manual chain link between these components?"
 msgstr ""
-"Non è stato trovato alcun percorso net chain tra %s e %s tramite componenti "
-"passanti.\n"
+"Non è stato trovato alcun percorso a catena di net tra %s e %s tramite "
+"componenti passanti.\n"
 "\n"
-"Si desidera creare manualmente un collegamento net chain tra questi "
-"componenti?"
+"Creare manualmente un collegamento a catena di net tra questi componenti?"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:438
 msgid "Selected components have no connected pins to anchor a manual chain."
@@ -15229,8 +15222,8 @@ msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
 msgstr ""
-"Tutti i percorsi della net chain %zu tra %s e %s sono già stati confermati "
-"come net chain."
+"Tutti i percorsi della catena di net %zu tra %s e %s sono già stati "
+"confermati come catene di net."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:546
 #, c-format
@@ -15251,13 +15244,13 @@ msgstr "Membri"
 #: eeschema/dialogs/dialog_create_net_chain.cpp:794
 #, c-format
 msgid "Member Nets — %s (%zu) [%s]"
-msgstr ""
+msgstr "Net membri — %s (%zu) [%s]"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:799
 #: eeschema/dialogs/panel_setup_net_chains.cpp:649
 #, c-format
 msgid "Member Nets — %s (%zu)"
-msgstr ""
+msgstr "Net membri — %s (%zu)"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1079
 #, fuzzy, c-format
@@ -15276,11 +15269,15 @@ msgid ""
 "No uncommitted chains match the selected %s. Use Refresh to restore the full "
 "list."
 msgstr ""
+"Nessuna chain su cui non è stato fatto ancora un commit corrisponde alla %s "
+"selezionata. Usare Aggiorna per ripristinare l'elenco completo."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:22
 msgid ""
 " Select a detected net chain path and assign a name to create a net chain."
 msgstr ""
+" Seleziona una catena di net rilevata e assegnagli un nome per creare una "
+"catena di net."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
 #, fuzzy
@@ -15325,7 +15322,7 @@ msgstr "Nome catena:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
 msgid "Re-detect potential net chains from the schematic"
-msgstr "Ri-individua le potenziali catene di net dallo schema"
+msgstr "Rileva nuovamente le potenziali catene di net dallo schema"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:123
 msgid "Connected to database successfully"
@@ -20793,8 +20790,8 @@ msgstr "Rinomina i file"
 msgid ""
 "Delete net chain class '%s'?  Chains assigned to it will become unclassified."
 msgstr ""
-"Eliminare la classe catena di net '%s'? Le net assegnate ad essa "
-"diventeranno non classificate."
+"Eliminare la classe catena di net '%s'? Le net assegnate a essa diventeranno "
+"non classificate."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:742
 #, fuzzy
