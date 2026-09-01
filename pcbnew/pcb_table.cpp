@@ -116,7 +116,7 @@ BOARD_ITEM* PCB_TABLE::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit )
     BOARD_ITEM* dupe = static_cast<BOARD_ITEM*>( Clone() );
     dupe->ResetUuid();
 
-    RunOnChildren( []( BOARD_ITEM* aChild )
+    dupe->RunOnChildren( []( BOARD_ITEM* aChild )
                    {
                        aChild->ResetUuid();
                    },
