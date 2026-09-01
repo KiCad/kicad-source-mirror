@@ -217,6 +217,14 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         {
             if( !openProjectPath )
             {
+                if( !openDocuments.empty() )
+                {
+                    auto closeResult = closeAllDocuments( commands::CloseAllDocuments() );
+
+                    if( !closeResult )
+                        return tl::unexpected( closeResult.error() );
+                }
+
                 if( !Pgm().GetSettingsManager().LoadProject( projectPath.GetFullPath(), true ) )
                 {
                     wxLogTrace( traceApi, "Warning: no project file found for %s", inputPath );
