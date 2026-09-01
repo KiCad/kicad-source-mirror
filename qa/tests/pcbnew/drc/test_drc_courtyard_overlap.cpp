@@ -19,7 +19,6 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <pcbnew_utils/board_construction_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -29,32 +28,7 @@
 #include <drc/drc_engine.h>
 #include <widgets/ui_common.h>
 
-#include <pcbnew_utils/board_test_utils.h>
 #include "drc_test_utils.h"
-
-/**
- * Simple definition of a rectangle, can be rounded
- */
-struct RECT_DEFINITION
-{
-    VECTOR2I m_centre;
-    VECTOR2I m_size;
-    int      m_corner_rad;
-
-    // On front or back layer (the exact layer is context-dependent)
-    bool m_front;
-};
-
-
-/*
- * A simple mock footprint with a set of courtyard rectangles and some other information
- */
-struct COURTYARD_TEST_FP
-{
-    std::string                  m_refdes;
-    std::vector<RECT_DEFINITION> m_rects;
-    VECTOR2I                     m_pos;
-};
 
 
 /*
@@ -76,302 +50,60 @@ std::ostream& operator<<( std::ostream& os, const COURTYARD_COLLISION& aColl )
 
 
 /**
- * A complete courtyard overlap test case: a name, the board footprint list
- * and the expected collisions.
+ * A complete courtyard overlap test case: the board fixture to load and the
+ * expected collisions.
  */
 struct COURTYARD_OVERLAP_TEST_CASE
 {
-    std::string                      m_case_name;
-    std::vector<COURTYARD_TEST_FP>   m_fpDefs;      // The footprint in the test case
-    std::vector<COURTYARD_COLLISION> m_collisions;  // The expected number of collisions
+    std::string                      m_board_name;  // Fixture under drc_courtyard/overlap/
+    std::vector<COURTYARD_COLLISION> m_collisions;  // The expected collisions
 };
 
 
-/**
- * Add a rectangular courtyard outline to a footprint.
- */
-void AddRectCourtyard( FOOTPRINT& aFootprint, const RECT_DEFINITION& aRect )
-{
-    const PCB_LAYER_ID layer = aRect.m_front ? F_CrtYd : B_CrtYd;
-
-    const int width = pcbIUScale.mmToIU( 0.1 );
-
-    KI_TEST::DrawRect( aFootprint, aRect.m_centre, aRect.m_size, aRect.m_corner_rad, width, layer );
-}
-
-
-/**
- * Construct a #FOOTPRINT to use in a courtyard test from a #COURTYARD_TEST_FP definition.
- */
-std::unique_ptr<FOOTPRINT> MakeCourtyardTestFP( BOARD& aBoard, const COURTYARD_TEST_FP& aFPDef )
-{
-    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( &aBoard );
-
-    for( const RECT_DEFINITION& rect : aFPDef.m_rects )
-        AddRectCourtyard( *footprint, rect );
-
-    footprint->SetReference( aFPDef.m_refdes );
-
-    // This has to go after adding the courtyards, or all the poly sets are empty when DRC'd
-    footprint->SetPosition( aFPDef.m_pos );
-
-    return footprint;
-}
-
-/**
- * Make a board for courtyard testing.
- *
- * @param aFPDefs the list of footprint definitions to add to the board
- */
-std::unique_ptr<BOARD> MakeBoard( const std::vector<COURTYARD_TEST_FP>& aFPDefs )
-{
-    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-
-    for( const COURTYARD_TEST_FP& fpDef : aFPDefs )
-    {
-        std::unique_ptr<FOOTPRINT> footprint = MakeCourtyardTestFP( *board, fpDef );
-
-        board->Add( footprint.release() );
-    }
-
-    return board;
-}
-
-
-struct COURTYARD_TEST_FIXTURE
-{
-    const KI_TEST::BOARD_DUMPER m_dumper;
-};
-
-
-BOOST_FIXTURE_TEST_SUITE( DrcCourtyardOverlap, COURTYARD_TEST_FIXTURE )
+BOOST_AUTO_TEST_SUITE( DrcCourtyardOverlap )
 
 // clang-format off
 static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
     {
-        "empty board",
-        {}, // no footprint
+        "empty_board",
         {}, // no collisions
     },
     {
-        "single empty footprint",
-        {
-            {
-                "U1",
-                {},         // no courtyard
-                { 0, 0 },   // at origin
-            },
-        },
+        "single_empty_footprint",
         {}, // no collisions
     },
     {
         // A single footprint can't overlap itself
-        "single footprint, single courtyard",
-        {
-            {
-                "U1",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { 0, 0 },
-            },
-        },
+        "single_footprint_single_courtyard",
         {}, // no collisions
     },
     {
-        "two footprint, no overlap",
-        {
-            {
-                "U1",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { 0, 0 },
-            },
-            {
-                "U2",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { pcbIUScale.mmToIU( 3 ), pcbIUScale.mmToIU( 1 ) }, // One footprint is far from the other
-            },
-        },
+        "two_footprints_no_overlap",
         {}, // no collisions
     },
     {
-        "two footprints, touching, no overlap",
-        {
-            {
-                "U1",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { 0, 0 },
-            },
-            {
-                "U2",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 0 ) }, // Just touching
-            },
-        },
+        "two_footprints_touching",
         {}, // Touching means not colliding
     },
     {
-        "two footprints, overlap",
-        {
-            {
-                "U1",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { 0, 0 },
-            },
-            {
-                "U2",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { pcbIUScale.mmToIU( 0.5 ), pcbIUScale.mmToIU( 0 ) }, // Partial overlap
-            },
-        },
+        "two_footprints_overlap",
         {
             { "U1", "U2" }, // These two collide
         },
     },
     {
-        "two footprints, overlap, different sides",
-        {
-            {
-                "U1",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { 0, 0 },
-            },
-            {
-                "U2",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        false,
-                    },
-                },
-                { 0, 0 }, // complete overlap
-            },
-        },
+        "two_footprints_overlap_different_sides",
         {}, // but on different sides
     },
     {
-        "two footprints, multiple courtyards, overlap",
-        {
-            {
-                "U1",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                    {
-                        { pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 0 ) },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { 0, 0 },
-            },
-            {
-                "U2",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        0,
-                        true,
-                    },
-                },
-                { 0, 0 }, // complete overlap with one of the others
-            },
-        },
+        "two_footprints_multiple_courtyards_overlap",
         {
             { "U1", "U2" },
         },
     },
     {
         // The courtyards do not overlap, but their bounding boxes do
-        "two footprints, no overlap, bbox overlap",
-        {
-            {
-                "U1",
-                {
-                    {
-                        { 0, 0 },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        pcbIUScale.mmToIU( 0.5 ),
-                        true,
-                    },
-                },
-                { 0, 0 },
-            },
-            {
-                "U2",
-                {
-                    {
-                        { pcbIUScale.mmToIU( 0.9 ), pcbIUScale.mmToIU( 0.9 ) },
-                        { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) },
-                        pcbIUScale.mmToIU( 0.5 ),
-                        true,
-                    },
-                },
-                { 0, 0 },
-            },
-        },
+        "two_footprints_bbox_overlap_only",
         {},
     },
 };
@@ -433,13 +165,14 @@ static void CheckCollisionsMatchExpected( BOARD& aBoard,
  * Run a single courtyard overlap testcase
  * @param aCase The testcase to run.
  */
-static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
-                                    const KI_TEST::BOARD_DUMPER& aDumper )
+static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase )
 {
-    auto board = MakeBoard( aCase.m_fpDefs );
+    const std::string path = KI_TEST::GetPcbnewTestDataDir() + "drc_courtyard/overlap/"
+                             + aCase.m_board_name + ".kicad_pcb";
 
-    // Dump if env var set
-    aDumper.DumpBoardToFile( *board, aCase.m_case_name );
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( path );
+
+    BOOST_REQUIRE( board );
 
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
@@ -477,9 +210,9 @@ BOOST_AUTO_TEST_CASE( OverlapCases )
 {
     for( const auto& c : courtyard_cases )
     {
-        BOOST_TEST_CONTEXT( c.m_case_name )
+        BOOST_TEST_CONTEXT( c.m_board_name )
         {
-            DoCourtyardOverlapTest( c, m_dumper );
+            DoCourtyardOverlapTest( c );
         }
     }
 }
