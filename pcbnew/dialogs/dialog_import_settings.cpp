@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
@@ -31,9 +33,6 @@
 #include <kiplatform/ui.h>
 
 #include <dialog_import_settings.h>
-
-
-wxString DIALOG_IMPORT_SETTINGS::m_filePath;     // remember for session
 
 
 DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAME* aFrame ) :
@@ -53,59 +52,67 @@ DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAM
 
     SetupStandardButtons( { { wxID_OK, _( "Import Settings" ) } } );
 
-    // Disable "Import Settings" button until user selects at least one import option
-    m_sdbSizer1OK->Enable( false );
+    m_filePathCtrl->Bind( wxEVT_TEXT, &DIALOG_IMPORT_SETTINGS::onFilePathChanged, this );
+
+    m_options = { m_LayersOpt,         m_MaskAndPasteOpt,   m_ZoneHatchingOffsetsOpt, m_TextAndGraphicsOpt,
+                  m_FormattingOpt,     m_ConstraintsOpt,    m_TracksAndViasOpt,       m_TeardropsOpt,
+                  m_TuningPatternsOpt, m_NetclassesOpt,     m_ComponentClassesOpt,    m_TuningProfilesOpt,
+                  m_CustomRulesOpt,    m_SeveritiesOpt };
 
     m_buttonsSizer->Layout();
 
-    m_showSelectAllOnBtn = true; // Store state to toggle message/usage of "Select All" button
+    updateImportSettingsButton();
+}
+
+
+bool DIALOG_IMPORT_SETTINGS::anyOptionSelected() const
+{
+    return std::any_of( m_options.begin(), m_options.end(),
+                        []( const wxCheckBox* aOpt )
+                        {
+                            return aOpt->IsChecked();
+                        } );
 }
 
 
 void DIALOG_IMPORT_SETTINGS::OnCheckboxClicked( wxCommandEvent& event )
 {
-    bool importButtonEnabled = UpdateImportSettingsButton();
-
-    // If clicking this checkbox clears the last of the import selection checkboxes,
-    // then make sure the "Select All" button is actually going to select all.
-
-    if( !importButtonEnabled )
-    {
-        m_showSelectAllOnBtn = true;
-        UpdateSelectAllButton();
-    }
+    updateImportSettingsButton();
+    updateSelectAllButton();
 }
 
 
-bool DIALOG_IMPORT_SETTINGS::UpdateImportSettingsButton()
+void DIALOG_IMPORT_SETTINGS::updateImportSettingsButton()
 {
-    // Enable "Import Settings" button if at least one import option is selected
-    bool buttonEnableState =
-            ( m_LayersOpt->IsChecked() || m_MaskAndPasteOpt->IsChecked() || m_ConstraintsOpt->IsChecked()
-              || m_NetclassesOpt->IsChecked() || m_SeveritiesOpt->IsChecked() || m_TextAndGraphicsOpt->IsChecked()
-              || m_FormattingOpt->IsChecked() || m_TracksAndViasOpt->IsChecked() || m_TuningPatternsOpt->IsChecked()
-              || m_CustomRulesOpt->IsChecked() || m_ComponentClassesOpt->IsChecked() || m_TuningProfilesOpt->IsChecked()
-              || m_TeardropsOpt->IsChecked() || m_ZoneHatchingOffsetsOpt->IsChecked() );
-
-    m_sdbSizer1OK->Enable( buttonEnableState );
-
-    return buttonEnableState;
+    // Importing needs both a source board and something to take from it
+    m_sdbSizer1OK->Enable( anyOptionSelected() && !m_filePathCtrl->GetValue().IsEmpty() );
 }
 
 
-void DIALOG_IMPORT_SETTINGS::UpdateSelectAllButton()
+void DIALOG_IMPORT_SETTINGS::onFilePathChanged( wxCommandEvent& aEvent )
 {
-    // Update message on button
-    if( m_showSelectAllOnBtn )
-        m_selectAllButton->SetLabel( _( "Select All" ) );
-    else
+    updateImportSettingsButton();
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_IMPORT_SETTINGS::updateSelectAllButton()
+{
+    if( anyOptionSelected() )
         m_selectAllButton->SetLabel( _( "Deselect All" ) );
+    else
+        m_selectAllButton->SetLabel( _( "Select All" ) );
 }
 
 
 bool DIALOG_IMPORT_SETTINGS::TransferDataToWindow()
 {
-    m_filePathCtrl->SetValue( m_filePath );
+    // DIALOG_SHIM has restored the checkboxes by now and wxCheckBox::SetValue() emits no
+    // event, so both buttons are stale until synced here
+    updateImportSettingsButton();
+    updateSelectAllButton();
+
     return true;
 }
 
@@ -140,33 +147,17 @@ bool DIALOG_IMPORT_SETTINGS::TransferDataFromWindow()
         return false;
     }
 
-    m_filePath = m_filePathCtrl->GetValue();
     return true;
 }
 
 
 void DIALOG_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
 {
-    // Select or deselect all options based on internal flag
-    m_LayersOpt->SetValue( m_showSelectAllOnBtn );
-    m_TextAndGraphicsOpt->SetValue( m_showSelectAllOnBtn );
-    m_FormattingOpt->SetValue( m_showSelectAllOnBtn );
-    m_ConstraintsOpt->SetValue( m_showSelectAllOnBtn );
-    m_NetclassesOpt->SetValue( m_showSelectAllOnBtn );
-    m_TracksAndViasOpt->SetValue( m_showSelectAllOnBtn );
-    m_ZoneHatchingOffsetsOpt->SetValue( m_showSelectAllOnBtn );
-    m_MaskAndPasteOpt->SetValue( m_showSelectAllOnBtn );
-    m_SeveritiesOpt->SetValue( m_showSelectAllOnBtn );
-    m_TeardropsOpt->SetValue( m_showSelectAllOnBtn );
-    m_TuningPatternsOpt->SetValue( m_showSelectAllOnBtn );
-    m_CustomRulesOpt->SetValue( m_showSelectAllOnBtn );
-    m_TuningProfilesOpt->SetValue( m_showSelectAllOnBtn );
-    m_ComponentClassesOpt->SetValue( m_showSelectAllOnBtn );
+    bool select = !anyOptionSelected();
 
-    // Ensure "Import Settings" button state is enabled as appropriate
-    UpdateImportSettingsButton();
+    for( wxCheckBox* opt : m_options )
+        opt->SetValue( select );
 
-    // Toggle whether button selects or deselects all.
-    m_showSelectAllOnBtn = !m_showSelectAllOnBtn;
-    UpdateSelectAllButton();
+    updateImportSettingsButton();
+    updateSelectAllButton();
 }
