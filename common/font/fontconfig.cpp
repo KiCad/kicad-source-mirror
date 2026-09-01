@@ -68,10 +68,10 @@ void fontconfig::FONTCONFIG::SetReporter( REPORTER* aReporter )
 }
 
 
-REPORTER* fontconfig::FONTCONFIG::GetReporter()
+REPORTER& fontconfig::FONTCONFIG::GetReporter()
 {
     std::lock_guard lock( g_fontConfigMutex );
-    return s_reporter;
+    return s_reporter ? *s_reporter : NULL_REPORTER::GetInstance();
 }
 
 
@@ -499,4 +499,3 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string&
     for( const std::pair<const std::string, FONTINFO>& entry : m_fontInfoCache )
         aFonts.push_back( entry.second.Family() );
 }
-

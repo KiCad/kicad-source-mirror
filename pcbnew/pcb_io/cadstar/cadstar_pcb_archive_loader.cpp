@@ -3413,9 +3413,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER:: applyTextCode( EDA_TEXT* aKiCadText, const TEX
         // So, substitute the Kicad stroke font.  (We could default to a similarly-named outline font, but the
         // performance penalty on some designs would be large.  Better to let the user do that if they want.)
 
-        fontconfig::FONTCONFIG::GetReporter()->Report( wxString::Format( _( "Font '%s' not found; substituting '%s'." ),
-                                                                         CADSTAR_FONT_NAME,
-                                                                         KICAD_FONT_NAME ) );
+        fontconfig::FONTCONFIG::GetReporter().Report( wxString::Format( _( "Font '%s' not found; substituting '%s'." ),
+                                                                        CADSTAR_FONT_NAME, KICAD_FONT_NAME ) );
+
         font = KIFONT::FONT::GetFont( KICAD_FONT_NAME );
     }
     else

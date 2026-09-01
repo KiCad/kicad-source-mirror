@@ -363,7 +363,7 @@ LOAD_INFO_REPORTER_SCOPE::~LOAD_INFO_REPORTER_SCOPE()
 
 
 FONTCONFIG_REPORTER_SCOPE::FONTCONFIG_REPORTER_SCOPE( REPORTER* aReporter ) :
-        m_previousReporter( fontconfig::FONTCONFIG::GetReporter() )
+        m_previousReporter( &fontconfig::FONTCONFIG::GetReporter() )
 {
     fontconfig::FONTCONFIG::SetReporter( aReporter );
 }

@@ -84,9 +84,9 @@ public:
     /**
      * Get the current reporter used for font substitution warnings.
      *
-     * @return The current reporter, or nullptr if not set.
+     * @return The current reporter, or #NULL_REPORTER if not set.
      */
-    static REPORTER* GetReporter();
+    static REPORTER& GetReporter();
 
 private:
     std::map<std::string, FONTINFO> m_fontInfoCache;
