@@ -705,12 +705,16 @@ public:
      * Replace @a aExisting with @a aNew, preserving connectivity and metadata.
      */
     void ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
-                            bool matchPadPositions,
-                            bool deleteExtraTexts = true, bool resetTextLayers = true,
-                            bool resetTextEffects = true, bool resetTextPositions = true,
-                            bool resetTextContent = true, bool resetFabricationAttrs = true,
-                            bool resetClearanceOverrides = true, bool reset3DModels = true,
-                            bool resetTransform = false,
+                            bool aMatchPadPositions,
+                            bool aDeleteExtraTexts = true,
+                            bool aResetTextLayers = true,
+                            bool aResetTextEffects = true,
+                            bool aResetTextPositions = true,
+                            bool aResetTextContent = true,
+                            bool aResetFabricationAttrs = true,
+                            bool aResetClearanceOverrides = true,
+                            bool aReset3DModels = true,
+                            bool aResetTransform = false,
                             bool* aUpdated = nullptr, bool* aShifted = nullptr );
 
     /**

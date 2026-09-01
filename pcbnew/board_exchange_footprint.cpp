@@ -174,16 +174,16 @@ static std::vector<std::pair<T*, T*>> matchItemsBySimilarity( const std::vector<
 
 
 void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
-                               bool matchPadPositions,
-                               bool deleteExtraTexts,
-                               bool resetTextLayers,
-                               bool resetTextEffects,
-                               bool resetTextPositions,
-                               bool resetTextContent,
-                               bool resetFabricationAttrs,
-                               bool resetClearanceOverrides,
-                               bool reset3DModels,
-                               bool resetTransform,
+                               bool aMatchPadPositions,
+                               bool aDeleteExtraTexts,
+                               bool aResetTextLayers,
+                               bool aResetTextEffects,
+                               bool aResetTextPositions,
+                               bool aResetTextContent,
+                               bool aResetFabricationAttrs,
+                               bool aResetClearanceOverrides,
+                               bool aReset3DModels,
+                               bool aResetTransform,
                                bool* aUpdated, bool* aShifted )
 {
     EDA_GROUP* parentGroup = aExisting->GetParentGroup();
@@ -212,7 +212,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     VECTOR2I  position = aExisting->GetPosition();
     EDA_ANGLE orientation = aExisting->GetOrientation();
 
-    if( matchPadPositions )
+    if( aMatchPadPositions )
     {
         if( ComputeFootprintShift( *aExisting, *aNew, posShift, angleShift ) )
         {
@@ -232,7 +232,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     if( aNew->GetOrientation() != orientation )
         aNew->SetOrientation( orientation );
 
-    if( !resetTransform )
+    if( !aResetTransform )
     {
         const double existingScaleX = aExisting->GetTransform().GetScaleX();
         const double existingScaleY = aExisting->GetTransform().GetScaleY();
@@ -493,10 +493,10 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
             if( newTextItem )
             {
                 handledTextItems.insert( newTextItem );
-                processTextItem( *oldTextItem, *newTextItem, posShift, angleShift, resetTextContent, resetTextLayers,
-                                 resetTextEffects, resetTextPositions, aUpdated );
+                processTextItem( *oldTextItem, *newTextItem, posShift, angleShift, aResetTextContent,
+                                 aResetTextLayers, aResetTextEffects, aResetTextPositions, aUpdated );
             }
-            else if( deleteExtraTexts )
+            else if( aDeleteExtraTexts )
             {
                 *aUpdated = true;
             }
@@ -529,15 +529,15 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     }
 
     // Copy reference. The initial text is always used, never resetted
-    processTextItem( aExisting->Reference(), aNew->Reference(), posShift, angleShift, false, resetTextLayers,
-                     resetTextEffects, resetTextPositions, aUpdated );
+    processTextItem( aExisting->Reference(), aNew->Reference(), posShift, angleShift, false, aResetTextLayers,
+                     aResetTextEffects, aResetTextPositions, aUpdated );
 
     // Copy value
     processTextItem( aExisting->Value(), aNew->Value(), posShift, angleShift,
                      // reset value text only when it is a proxy for the footprint ID
                      // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
                      aExisting->GetValue() == aExisting->GetFPID().GetLibItemName().wx_str(),
-                     resetTextLayers, resetTextEffects, resetTextPositions, aUpdated );
+                     aResetTextLayers, aResetTextEffects, aResetTextPositions, aUpdated );
 
     std::set<PCB_FIELD*> handledFields;
 
@@ -560,10 +560,10 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         if( newField )
         {
             handledFields.insert( newField );
-            processTextItem( *oldField, *newField, posShift, angleShift, resetTextContent, resetTextLayers,
-                             resetTextEffects, resetTextPositions, aUpdated );
+            processTextItem( *oldField, *newField, posShift, angleShift, aResetTextContent, aResetTextLayers,
+                             aResetTextEffects, aResetTextPositions, aUpdated );
         }
-        else if( deleteExtraTexts )
+        else if( aDeleteExtraTexts )
         {
             *aUpdated = true;
         }
@@ -591,7 +591,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         }
     }
 
-    if( resetFabricationAttrs )
+    if( aResetFabricationAttrs )
     {
         // We've replaced the existing footprint with the library one, so the fabrication attrs
         // are already reset.  Just set the aUpdated flag if appropriate.
@@ -603,7 +603,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         aNew->SetAttributes( aExisting->GetAttributes() );
     }
 
-    if( resetClearanceOverrides )
+    if( aResetClearanceOverrides )
     {
         if( aExisting->AllowSolderMaskBridges() != aNew->AllowSolderMaskBridges() )
             *aUpdated = true;
@@ -627,7 +627,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         aNew->SetAllowSolderMaskBridges( aExisting->AllowSolderMaskBridges() );
     }
 
-    if( reset3DModels )
+    if( aReset3DModels )
     {
         // We've replaced the existing footprint with the library one, so the 3D models are
         // already reset.  Just set the aUpdated flag if appropriate.

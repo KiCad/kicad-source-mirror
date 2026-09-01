@@ -989,16 +989,14 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
     BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
 
-    newFootprint->ApplyDefaultSettings( *m_pcb, bds.m_StyleFPFields, bds.m_StyleFPText,
-                                        bds.m_StyleFPShapes, bds.m_StyleFPDimensions,
-                                        bds.m_StyleFPBarcodes );
+    newFootprint->ApplyDefaultSettings( *m_pcb, bds.m_StyleFPFields, bds.m_StyleFPText, bds.m_StyleFPShapes,
+                                        bds.m_StyleFPDimensions, bds.m_StyleFPBarcodes );
 
     if( sourceFootprint )         // this is an update command
     {
-        // In the main board the new footprint replaces the old one (pos, orient, ref, value,
-        // connections and properties are kept) and the sourceFootprint (old footprint) is
-        // deleted
-        mainpcb->ExchangeFootprint( sourceFootprint, newFootprint, commit, true );
+        // In the main board the new footprint replaces the old one (pos, orient, ref, value, connections
+        // and properties are kept) and the sourceFootprint (old footprint) is deleted
+        mainpcb->ExchangeFootprint( sourceFootprint, newFootprint, commit, true /* match pad positions */ );
 
         commit.Push( _( "Update Footprint" ) );
     }
@@ -1095,7 +1093,6 @@ public:
         return footprintName;
     }
 
-protected:
     bool TransferDataToWindow() override
     {
         // Respond to any filter text loaded from previously-saved state
@@ -1252,10 +1249,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 
                 // The tab is keyed on the footprint name, which the revert may have rolled back
                 if( m_activeTab && m_activeTab->GetTabKey() != oldKey )
-                {
-                    m_tabsPanel->RenameTab( oldKey, m_activeTab->GetTabKey(),
-                                            m_activeTab->GetDisplayName() );
-                }
+                    m_tabsPanel->RenameTab( oldKey, m_activeTab->GetTabKey(), m_activeTab->GetDisplayName() );
             }
             else
             {
