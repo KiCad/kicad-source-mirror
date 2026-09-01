@@ -42,6 +42,11 @@ public:
     ELLIPSE_ARC_DRAW_BEHAVIOR( const ELLIPSE_ARC_DRAW_BEHAVIOR& ) = delete;
     ELLIPSE_ARC_DRAW_BEHAVIOR& operator=( const ELLIPSE_ARC_DRAW_BEHAVIOR& ) = delete;
 
+    bool OnProperties( EDA_SHAPE& aShape ) override
+    {
+        return m_manager.GetStep() > KIGFX::PREVIEW::ELLIPSE_GEOM_MANAGER::SET_BBOX_C1;
+    }
+
     void ApplyToShape( EDA_SHAPE& aShape ) const override
     {
         const ELLIPSE<int> ellipse = m_manager.GetEllipse();
