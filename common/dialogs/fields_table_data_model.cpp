@@ -317,6 +317,7 @@ void FIELDS_TABLE_DATA_MODEL_BASE::RenameColumn( int aCol, const wxString& newNa
 
     m_cols[aCol].m_fieldName = newName;
     m_cols[aCol].m_label = newName;
+    m_edited = true;
 }
 
 
