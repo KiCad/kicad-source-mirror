@@ -58,6 +58,7 @@ target_link_libraries( qa_utils
     Boost::unit_test_framework
     ${wxWidgets_LIBRARIES}
     ${LIBBOOST_UNIT_TEST_LIB}
+    ZLIB::ZLIB
 )
 
 # Pass in the default data location
