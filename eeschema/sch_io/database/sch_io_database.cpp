@@ -591,6 +591,8 @@ void SCH_IO_DATABASE::ensureConnection()
 
 void SCH_IO_DATABASE::connect()
 {
+    wxCHECK_RET( m_settings, "Call ensureSettings before connect()!" );
+
     {
         std::unique_lock connLock( m_cacheMutex );
 
