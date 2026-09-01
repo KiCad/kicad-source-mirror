@@ -405,9 +405,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
 
         if( it->type == types::DOCTYPE_PROJECT )
         {
-            PROJECT& project = Pgm().GetSettingsManager().Prj();
-            Pgm().GetSettingsManager().UnloadProject( &project, false );
-            openProjectPath.reset();
+            return closeAllDocuments( commands::CloseAllDocuments() );
         }
         else
         {
