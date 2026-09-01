@@ -1860,6 +1860,39 @@ BOOST_AUTO_TEST_CASE( PadPrimitiveFlipStaysPadLocal )
 }
 
 
+BOOST_AUTO_TEST_CASE( PadPrimitiveFlipSurvivesNonUniformScale )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetPosition( VECTOR2I( 0, 0 ) );
+    board.Add( fp );
+
+    PAD* pad = new PAD( fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+    pad->SetPosition( VECTOR2I( 0, 0 ) );
+    fp->Add( pad, ADD_MODE::APPEND );
+
+    PCB_SHAPE* prim = new PCB_SHAPE( pad, SHAPE_T::CIRCLE );
+    prim->SetStart( VECTOR2I( 0, 600000 ) );
+    prim->SetEnd( VECTOR2I( 0, 1100000 ) );
+    pad->AddPrimitive( PADSTACK::ALL_LAYERS, prim );
+
+    fp->SetTransformScale( 2.0, 1.0 );
+
+    BOOST_REQUIRE_EQUAL( static_cast<int>( prim->GetShape() ), static_cast<int>( SHAPE_T::ELLIPSE ) );
+    BOOST_REQUIRE_EQUAL( static_cast<int>( prim->GetLibraryShape() ), static_cast<int>( SHAPE_T::CIRCLE ) );
+
+    fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+
+    BOOST_CHECK_EQUAL( prim->GetLibraryStart().y, -600000 );
+    BOOST_CHECK_EQUAL( prim->GetEllipseCenter().y, -600000 );
+
+    fp->SetTransformScale( 3.0, 1.0 );
+    BOOST_CHECK_EQUAL( prim->GetEllipseCenter().y, -600000 );
+}
+
+
 BOOST_AUTO_TEST_CASE( CirclePadStaysCircularUnderNonUniformScale )
 {
     FOOTPRINT fp( nullptr );

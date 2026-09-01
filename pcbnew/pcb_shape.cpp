@@ -807,14 +807,29 @@ void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    // Null for pad-local primitives, which mirror directly rather than through the FP transform.
     const FOOTPRINT* fp = transformFp();
 
-    if( fp
+    TRANSFORM_TRS xform;
+    bool          mirrorLib = false;
+
+    if( fp )
+    {
+        xform = fp->GetTransform();
+        mirrorLib = true;
+    }
+    else if( GetParent() && GetParent()->Type() == PCB_PAD_T && m_shape != m_libShape )
+    {
+        double sx = 1.0, sy = 1.0;
+        static_cast<const PAD*>( static_cast<const BOARD_ITEM*>( GetParent() ) )->GetPrimitiveLibScale( sx, sy );
+        xform.SetScale( sx, sy );
+        mirrorLib = true;
+    }
+
+    if( mirrorLib
         && ( m_libShape == SHAPE_T::SEGMENT || m_libShape == SHAPE_T::CIRCLE || m_libShape == SHAPE_T::ARC
              || m_libShape == SHAPE_T::RECTANGLE || m_libShape == SHAPE_T::BEZIER || m_libShape == SHAPE_T::POLY ) )
     {
-        const VECTOR2I libCenter = fp->GetTransform().InverseApply( aCentre );
+        const VECTOR2I libCenter = xform.InverseApply( aCentre );
 
         auto mirrorPt = [&]( VECTOR2I& p )
         {
@@ -854,13 +869,13 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         }
 
         SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
-        RebakeFromLib();
+        rebakeFromTransform( xform );
         return;
     }
 
-    if( fp && ( m_libShape == SHAPE_T::ELLIPSE || m_libShape == SHAPE_T::ELLIPSE_ARC ) )
+    if( mirrorLib && ( m_libShape == SHAPE_T::ELLIPSE || m_libShape == SHAPE_T::ELLIPSE_ARC ) )
     {
-        const VECTOR2I libCenter = fp->GetTransform().InverseApply( aCentre );
+        const VECTOR2I libCenter = xform.InverseApply( aCentre );
 
         if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
             m_libEllipseCenter.x = 2 * libCenter.x - m_libEllipseCenter.x;
@@ -884,7 +899,7 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         }
 
         SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
-        RebakeFromLib();
+        rebakeFromTransform( xform );
         return;
     }
 
