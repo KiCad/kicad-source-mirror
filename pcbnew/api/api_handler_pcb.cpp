@@ -598,11 +598,14 @@ HANDLER_RESULT<BoardEnabledLayersResponse> API_HANDLER_PCB::handleSetBoardEnable
             modified |= board->RemoveAllItemsOnLayer( layer_id );
     }
 
-    if( enabled != previousEnabled )
-        frame()->UpdateUserInterface();
+    if( frame() )
+    {
+        if( enabled != previousEnabled )
+            frame()->UpdateUserInterface();
 
-    if( modified )
-        frame()->OnModify();
+        if( modified )
+            frame()->OnModify();
+    }
 
     BoardEnabledLayersResponse response;
 
@@ -1256,14 +1259,23 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardOrigin(
     {
         PCB_EDIT_FRAME* f = frame();
 
-        frame()->CallAfter( [f, origin]()
-                            {
-                                // gridSetOrigin takes ownership and frees this
-                                VECTOR2D* dorigin = new VECTOR2D( origin );
-                                TOOL_MANAGER* mgr = f->GetToolManager();
-                                mgr->RunAction( PCB_ACTIONS::gridSetOrigin, dorigin );
-                                f->Refresh();
-                            } );
+        if( f )
+        {
+            frame()->CallAfter(
+                    [f, origin]()
+                    {
+                        // gridSetOrigin takes ownership and frees this
+                        VECTOR2D*     dorigin = new VECTOR2D( origin );
+                        TOOL_MANAGER* mgr = f->GetToolManager();
+                        mgr->RunAction( PCB_ACTIONS::gridSetOrigin, dorigin );
+                        f->Refresh();
+                    } );
+        }
+        else
+        {
+            board()->GetDesignSettings().SetGridOrigin( origin );
+        }
+
         break;
     }
 
@@ -1271,12 +1283,21 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardOrigin(
     {
         PCB_EDIT_FRAME* f = frame();
 
-        frame()->CallAfter( [f, origin]()
-                            {
-                                TOOL_MANAGER* mgr = f->GetToolManager();
-                                mgr->RunAction( PCB_ACTIONS::drillSetOrigin, origin );
-                                f->Refresh();
-                            } );
+        if( f )
+        {
+            frame()->CallAfter(
+                    [f, origin]()
+                    {
+                        TOOL_MANAGER* mgr = f->GetToolManager();
+                        mgr->RunAction( PCB_ACTIONS::drillSetOrigin, origin );
+                        f->Refresh();
+                    } );
+        }
+        else
+        {
+            board()->GetDesignSettings().SetAuxOrigin( origin );
+        }
+
         break;
     }
 
