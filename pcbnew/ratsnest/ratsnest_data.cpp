@@ -38,96 +38,89 @@ using namespace std::placeholders;
 #include <cassert>
 #include <limits>
 #include <list>
+#include <span>
+#include <tuple>
+
+#include <core/filter_kruskal.h>
+#include <core/union_find.h>
 
 #include <delaunator.hpp>
 
-class disjoint_set
+void RN_NET::kruskalMST( std::vector<CN_EDGE>& aEdges )
 {
-
-public:
-    disjoint_set( size_t size )
-    {
-        m_data.resize( size );
-        m_depth.resize( size, 0 );
-
-        for( size_t i = 0; i < size; i++ )
-            m_data[i]  = i;
-    }
-
-    int find( int aVal )
-    {
-        int root = aVal;
-
-        while( m_data[root] != root )
-            root = m_data[root];
-
-        // Compress the path
-        while( m_data[aVal] != aVal )
-        {
-            auto& tmp = m_data[aVal];
-            aVal      = tmp;
-            tmp       = root;
-        }
-
-        return root;
-    }
-
-
-    bool unite( int aVal1, int aVal2 )
-    {
-        aVal1 = find( aVal1 );
-        aVal2 = find( aVal2 );
-
-        if( aVal1 != aVal2 )
-        {
-            if( m_depth[aVal1] < m_depth[aVal2] )
-            {
-                m_data[aVal1] = aVal2;
-            }
-            else
-            {
-                m_data[aVal2] = aVal1;
-
-                if( m_depth[aVal1] == m_depth[aVal2] )
-                    m_depth[aVal1]++;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-private:
-    std::vector<int> m_data;
-    std::vector<int> m_depth;
-};
-
-
-void RN_NET::kruskalMST( const std::vector<CN_EDGE> &aEdges )
-{
-    disjoint_set dset( m_nodes.size() );
-
     m_rnEdges.clear();
 
-    int i = 0;
+    int tag = 0;
 
     for( const std::shared_ptr<CN_ANCHOR>& node : m_nodes )
-        node->SetTag( i++ );
+        node->SetTag( tag++ );
 
-    for( const CN_EDGE& tmp : aEdges )
+    KI_UNION_FIND forest( m_nodes.size() );
+
+    // A zero-weight edge is a connection the board already makes and can never be a ratsnest
+    // line, so uniting it here keeps it out of the sort where on a routed net it would dominate
+    size_t candidateCount = 0;
+
+    for( size_t ii = 0; ii < aEdges.size(); ++ii )
     {
-        const std::shared_ptr<const CN_ANCHOR>& source = tmp.GetSourceNode();
-        const std::shared_ptr<const CN_ANCHOR>& target = tmp.GetTargetNode();
+        const std::shared_ptr<const CN_ANCHOR>& source = aEdges[ii].GetSourceNode();
+        const std::shared_ptr<const CN_ANCHOR>& target = aEdges[ii].GetTargetNode();
 
         wxCHECK2( source && !source->Dirty() && target && !target->Dirty(), continue );
 
-        if( dset.unite( source->GetTag(), target->GetTag() ) )
+        if( aEdges[ii].GetWeight() > 0 )
         {
-            if( tmp.GetWeight() > 0 )
-                m_rnEdges.push_back( tmp );
+            if( candidateCount != ii )
+                aEdges[candidateCount] = std::move( aEdges[ii] );
+
+            ++candidateCount;
+        }
+        else
+        {
+            forest.Unite( source->GetTag(), target->GetTag() );
         }
     }
+
+    auto endpoints =
+            []( const CN_EDGE& aEdge )
+            {
+                return std::pair<size_t, size_t>( aEdge.GetSourceNode()->GetTag(),
+                                                  aEdge.GetTargetNode()->GetTag() );
+            };
+
+    // Canonical because an edge is undirected and the triangulator may hand it to us either
+    // way round; the tag then separates distinct anchors that share a position
+    auto orderKey =
+            []( const CN_EDGE& aEdge )
+            {
+                const std::shared_ptr<const CN_ANCHOR>& source = aEdge.GetSourceNode();
+                const std::shared_ptr<const CN_ANCHOR>& target = aEdge.GetTargetNode();
+
+                std::tuple<int, int, int> first( source->Pos().x, source->Pos().y,
+                                                 source->GetTag() );
+                std::tuple<int, int, int> second( target->Pos().x, target->Pos().y,
+                                                  target->GetTag() );
+
+                if( second < first )
+                    std::swap( first, second );
+
+                return std::tuple_cat( std::tuple( aEdge.GetWeight() ), first, second );
+            };
+
+    auto mstOrder =
+            [&orderKey]( const CN_EDGE& aLhs, const CN_EDGE& aRhs )
+            {
+                return orderKey( aLhs ) < orderKey( aRhs );
+            };
+
+    m_rnEdges.reserve( m_nodes.size() );
+
+    KI_MST::FilterKruskal<CN_EDGE>( std::span<CN_EDGE>( aEdges.data(), candidateCount ), forest,
+                                    mstOrder, endpoints,
+                                    [&]( const CN_EDGE& aEdge )
+                                    {
+                                        m_rnEdges.push_back( aEdge );
+                                    } );
 }
 
 
@@ -235,19 +228,18 @@ public:
             delaunator::Delaunator delaunator( node_pts );
             auto& triangles = delaunator.triangles;
 
-            for( size_t i = 0; i < triangles.size(); i += 3 )
+            // Half-edge e runs from triangles[e] to triangles[next(e)], so keeping the
+            // lower half of each opposite pair plus the hull edges visits each edge once
+            for( size_t e = 0; e < triangles.size(); e++ )
             {
-                addEdge( anchors[triangles[i]],     anchors[triangles[i + 1]] );
-                addEdge( anchors[triangles[i + 1]], anchors[triangles[i + 2]] );
-                addEdge( anchors[triangles[i + 2]], anchors[triangles[i]]     );
-            }
+                size_t opposite = delaunator.halfedges[e];
 
-            for( size_t i = 0; i < delaunator.halfedges.size(); i++ )
-            {
-                if( delaunator.halfedges[i] == delaunator::INVALID_INDEX )
+                if( opposite != delaunator::INVALID_INDEX && opposite < e )
                     continue;
 
-                addEdge( anchors[triangles[i]], anchors[triangles[delaunator.halfedges[i]]] );
+                size_t next = ( e % 3 == 2 ) ? e - 2 : e + 1;
+
+                addEdge( anchors[triangles[e]], anchors[triangles[next]] );
             }
         }
 
@@ -319,7 +311,9 @@ void RN_NET::compute()
         m_triangulator->AddNode( n );
 
     std::vector<CN_EDGE> triangEdges;
-    triangEdges.reserve( m_nodes.size() + m_boardEdges.size() );
+
+    // A Delaunay triangulation of n points has at most 3n-6 edges
+    triangEdges.reserve( 3 * m_nodes.size() + m_boardEdges.size() );
 
 #ifdef PROFILE
     PROF_TIMER cnt( "triangulate" );
@@ -331,8 +325,6 @@ void RN_NET::compute()
 
     for( const CN_EDGE& e : m_boardEdges )
         triangEdges.emplace_back( e );
-
-    std::sort( triangEdges.begin(), triangEdges.end() );
 
 // Get the minimal spanning tree
 #ifdef PROFILE

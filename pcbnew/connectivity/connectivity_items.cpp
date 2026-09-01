@@ -180,7 +180,7 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
      }
 
      addItemtoTree( item );
-     m_items.push_back( item );
+     appendItem( item );
 
      // Re-mark dirty after tree insertion since BBox() clears the dirty flag
      item->SetDirty( true );
@@ -192,7 +192,7 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
 CN_ITEM* CN_LIST::Add( PCB_TRACK* track )
 {
     CN_ITEM* item = new CN_ITEM( track, true );
-    m_items.push_back( item );
+    appendItem( item );
     item->AddAnchor( track->GetStart() );
     item->AddAnchor( track->GetEnd() );
     item->SetLayer( track->GetLayer() );
@@ -208,7 +208,7 @@ CN_ITEM* CN_LIST::Add( PCB_TRACK* track )
 CN_ITEM* CN_LIST::Add( PCB_ARC* aArc )
 {
     CN_ITEM* item = new CN_ITEM( aArc, true );
-    m_items.push_back( item );
+    appendItem( item );
     item->AddAnchor( aArc->GetStart() );
     item->AddAnchor( aArc->GetEnd() );
     item->SetLayer( aArc->GetLayer() );
@@ -225,7 +225,7 @@ CN_ITEM* CN_LIST::Add( PCB_VIA* via )
 {
     CN_ITEM* item = new CN_ITEM( via, !via->GetIsFree(), 1 );
 
-    m_items.push_back( item );
+    appendItem( item );
     item->AddAnchor( via->GetStart() );
 
     item->SetLayers( via->TopLayer(), via->BottomLayer() );
@@ -262,7 +262,7 @@ const std::vector<CN_ITEM*> CN_LIST::Add( ZONE* zone, PCB_LAYER_ID aLayer )
 
 CN_ITEM* CN_LIST::Add( CN_ZONE_LAYER* zitem )
 {
-    m_items.push_back( zitem );
+    appendItem( zitem );
     addItemtoTree( zitem );
 
     // Re-mark dirty after tree insertion since BBox() clears the dirty flag
@@ -275,7 +275,7 @@ CN_ITEM* CN_LIST::Add( CN_ZONE_LAYER* zitem )
 CN_ITEM* CN_LIST::Add( PCB_SHAPE* shape )
 {
     CN_ITEM* item = new CN_ITEM( shape, true );
-    m_items.push_back( item );
+    appendItem( item );
 
     for( const VECTOR2I& point : shape->GetConnectionPoints() )
         item->AddAnchor( point );
@@ -308,6 +308,10 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
                                     } );
 
     m_items.resize( lastItem - m_items.begin() );
+
+    // Compaction shifted everything past the first hole, so restamp before anything reads
+    for( size_t ii = 0; ii < m_items.size(); ++ii )
+        m_items[ii]->SetListIndex( static_cast<int>( ii ) );
 
     for( CN_ITEM* item : aGarbage )
         m_index.Remove( item );

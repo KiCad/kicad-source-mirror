@@ -254,6 +254,14 @@ public:
         return ( !m_parent || !m_valid ) ? -1 : m_parent->GetNetCode();
     }
 
+    /**
+     * Position of this item in its owning CN_LIST.  Maintained by the list, which is the only
+     * thing allowed to set it, so that readers -- notably SearchClusters(), which several DRC
+     * threads may be inside at once -- can map an item to an array slot without a lookup.
+     */
+    void SetListIndex( int aIndex ) { m_listIndex = aIndex; }
+    int  ListIndex() const { return m_listIndex; }
+
 protected:
     std::atomic<bool> m_dirty;       ///< used to identify recently added item not yet
                                      ///< scanned into the connectivity search
@@ -270,6 +278,8 @@ private:
     bool            m_canChangeNet;  ///< can the net propagator modify the netcode?
 
     bool            m_valid;         ///< used to identify garbage items (we use lazy removal)
+
+    int             m_listIndex = -1;    ///< position in the owning CN_LIST, see SetListIndex()
 
     std::mutex      m_listLock;      ///< mutex protecting this item's connected_items set to
 };
@@ -501,6 +511,13 @@ protected:
     void addItemtoTree( CN_ITEM* item )
     {
         m_index.Insert( item );
+    }
+
+    ///< The sole place CN_ITEM list numbering is assigned.
+    void appendItem( CN_ITEM* aItem )
+    {
+        aItem->SetListIndex( static_cast<int>( m_items.size() ) );
+        m_items.push_back( aItem );
     }
 
 protected:

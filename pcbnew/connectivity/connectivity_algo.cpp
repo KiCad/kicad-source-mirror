@@ -28,6 +28,7 @@
 #include <ranges>
 
 #include <connectivity/connectivity_algo.h>
+#include <core/union_find.h>
 #include <progress_reporter.h>
 #include <geometry/geometry_utils.h>
 #include <board.h>
@@ -403,85 +404,109 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, bool aExcludeZo
 {
     bool withinAnyNet = ( aMode != CSM_PROPAGATE );
 
-    std::deque<CN_ITEM*> Q;
-    std::set<CN_ITEM*> item_set;
-
     CLUSTERS clusters;
 
     if( m_itemList.IsDirty() )
         searchConnections();
 
-    std::set<CN_ITEM*> visited;
+    // Numbering stays local rather than stamped on the items because several DRC threads can
+    // be inside this function at once, each with a different view of who takes part
+    std::vector<CN_ITEM*> members;
+    std::vector<int>      memberOf( m_itemList.Size(), -1 );
 
-    auto addToSearchList =
-            [&item_set, withinAnyNet, aSingleNet, &aExcludeZones]( CN_ITEM *aItem )
-            {
-                if( withinAnyNet && aItem->Net() <= 0 )
-                    return;
+    members.reserve( m_itemList.Size() );
 
-                if( !aItem->Valid() )
-                    return;
+    // aSingleNet restricts which items may seed a cluster, not which may be reached, since
+    // propagation mode crosses nets once started.  Hold the net test back for the emit
+    std::vector<bool> selected;
+    selected.reserve( m_itemList.Size() );
 
-                if( aSingleNet >=0 && aItem->Net() != aSingleNet )
-                    return;
-
-                if( aExcludeZones && aItem->Parent()->Type() == PCB_ZONE_T )
-                    return;
-
-                item_set.insert( aItem );
-            };
-
-    std::for_each( m_itemList.begin(), m_itemList.end(), addToSearchList );
-
-    if( m_progressReporter && m_progressReporter->IsCancelled() )
-        return CLUSTERS();
-
-    while( !item_set.empty() )
+    for( CN_ITEM* item : m_itemList )
     {
-        std::shared_ptr<CN_CLUSTER> cluster = std::make_shared<CN_CLUSTER>();
-        CN_ITEM*                    root;
-        auto                        it = item_set.begin();
+        bool participates = item->Valid()
+                            && !( withinAnyNet && item->Net() <= 0 )
+                            && !( withinAnyNet && aSingleNet >= 0 && item->Net() != aSingleNet )
+                            && !( aExcludeZones && item->Parent()->Type() == PCB_ZONE_T );
 
-        while( it != item_set.end() && visited.contains( *it ) )
-            it = item_set.erase( item_set.begin() );
-
-        if( it == item_set.end() )
-            break;
-
-        root = *it;
-        visited.insert( root );
-
-        Q.clear();
-        Q.push_back( root );
-
-        while( Q.size() )
+        if( participates )
         {
-            CN_ITEM* current = Q.front();
-
-            Q.pop_front();
-            cluster->Add( current );
-
-            for( CN_ITEM* n : current->ConnectedItems() )
-            {
-                if( withinAnyNet && n->Net() != root->Net() )
-                    continue;
-
-                if( aExcludeZones && n->Parent()->Type() == PCB_ZONE_T )
-                    continue;
-
-                if( !visited.contains( n ) && n->Valid() )
-                {
-                    visited.insert( n );
-                    Q.push_back( n );
-                }
-            }
+            memberOf[item->ListIndex()] = static_cast<int>( members.size() );
+            members.push_back( item );
+            selected.push_back( aSingleNet < 0 || item->Net() == aSingleNet );
         }
-
-        clusters.push_back( std::move( cluster ) );
     }
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return CLUSTERS();
+
+    // Every member of a cluster carries the cluster's net, so gating a neighbour on the near
+    // end's net selects the same edges as gating it on the component root's
+    KI_UNION_FIND forest( members.size() );
+
+    // Stays serial although Unite() is lock-free, because DRC enters here from inside a
+    // thread pool task and feeding work back to a pool we already occupy deadlocks it
+    for( size_t ii = 0; ii < members.size(); ++ii )
+    {
+        CN_ITEM* item = members[ii];
+
+        for( CN_ITEM* neighbour : item->ConnectedItems() )
+        {
+            int listIndex = neighbour->ListIndex();
+
+            // An adjacency that outlived its item would otherwise index the map out of range
+            if( listIndex < 0 || listIndex >= (int) memberOf.size() )
+                continue;
+
+            int index = memberOf[listIndex];
+
+            if( index < 0 )
+                continue;
+
+            if( withinAnyNet && neighbour->Net() != item->Net() )
+                continue;
+
+            forest.Unite( ii, static_cast<size_t>( index ) );
+        }
+    }
+
+    if( m_progressReporter && m_progressReporter->IsCancelled() )
+        return CLUSTERS();
+
+    // Index order makes cluster contents a function of the item list alone, so the origin pad
+    // elected on a cluster spanning several nets no longer follows the heap layout
+    std::vector<int>  clusterOf( members.size(), -1 );
+    std::vector<bool> clusterSelected;
+
+    for( size_t ii = 0; ii < members.size(); ++ii )
+    {
+        size_t root = forest.FindCompress( ii );
+
+        if( clusterOf[root] < 0 )
+        {
+            clusterOf[root] = static_cast<int>( clusters.size() );
+            clusters.push_back( std::make_shared<CN_CLUSTER>() );
+            clusterSelected.push_back( false );
+        }
+
+        clusters[clusterOf[root]]->Add( members[ii] );
+
+        if( selected[ii] )
+            clusterSelected[clusterOf[root]] = true;
+    }
+
+    // A component reached only from items outside aSingleNet was never a result
+    if( aSingleNet >= 0 )
+    {
+        CLUSTERS keep;
+
+        for( size_t ii = 0; ii < clusters.size(); ++ii )
+        {
+            if( clusterSelected[ii] )
+                keep.push_back( std::move( clusters[ii] ) );
+        }
+
+        clusters = std::move( keep );
+    }
 
     std::sort( clusters.begin(), clusters.end(),
                []( const std::shared_ptr<CN_CLUSTER>& a, const std::shared_ptr<CN_CLUSTER>& b )

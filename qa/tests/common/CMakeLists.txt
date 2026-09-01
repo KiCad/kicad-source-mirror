@@ -41,6 +41,7 @@ set( QA_COMMON_SRCS
     test_color4d.cpp
     test_commit.cpp
     test_coroutine.cpp
+    test_filter_kruskal.cpp
     test_design_block_io.cpp
     test_design_block_library_adapter.cpp
     test_desktop_app_id.cpp
@@ -49,6 +50,7 @@ set( QA_COMMON_SRCS
     test_eda_text.cpp
     test_editor_tabs_panel.cpp
     test_edit_relations.cpp
+    test_union_find.cpp
     test_unit_binder.cpp
     test_wx_dataviewctrl.cpp
     test_wx_grid.cpp

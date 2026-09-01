@@ -134,8 +134,8 @@ protected:
     ///< Recompute ratsnest from scratch.
     void compute();
 
-    ///< Compute the minimum spanning tree using Kruskal's algorithm
-    void kruskalMST( const std::vector<CN_EDGE> &aEdges );
+    ///< Compute the minimum spanning tree using Filter-Kruskal.  \a aEdges is reordered.
+    void kruskalMST( std::vector<CN_EDGE>& aEdges );
 
 protected:
     ///< Vector of nodes
