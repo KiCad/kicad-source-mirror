@@ -1156,14 +1156,14 @@ int SYMBOL_EDITOR_CONTROL::CompareLibraryWithFile( const TOOL_EVENT& aEvent )
     KICAD_DIFF::SYM_LIB_DIFFER differ( beforeMap, afterMap, otherPath );
     KICAD_DIFF::DOCUMENT_DIFF  result = differ.Diff();
 
+    auto cloneHolder = std::make_shared<std::vector<std::unique_ptr<LIB_SYMBOL>>>();
+
     DIALOG_KICAD_DIFF dlgDiff( editFrame, currentLib, otherPath, result );
 
     std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> changesById;
 
     for( const KICAD_DIFF::ITEM_CHANGE& c : result.changes )
         changesById[c.id] = &c;
-
-    auto cloneHolder = std::make_shared<std::vector<std::unique_ptr<LIB_SYMBOL>>>();
 
     dlgDiff.SetChangeSelectedHandler(
             [&, cloneHolder]( const KIID_PATH& aId )
