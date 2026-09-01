@@ -21,6 +21,8 @@
 #ifndef KICAD_DIALOG_IMPORT_SETTINGS_H
 #define KICAD_DIALOG_IMPORT_SETTINGS_H
 
+#include <vector>
+
 #include "dialog_import_settings_base.h"
 
 
@@ -39,33 +41,32 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    /**
-     * Enable or disable the "Import Settings" button.
-     *
-     * This dialog defaults to all import selections cleared, and the "Import
-     * Settings" button disabled.  The user must check at least one of the import
-     * selection checkboxes for the "Import Settings" button to be enabled.
-     *
-     * @return the "Import Settings" button enable state.
-     */
-    bool UpdateImportSettingsButton();
-
-    /**
-     * Update "Select All" button label as appropriate
-     */
-    void UpdateSelectAllButton();
-
-    wxString GetFilePath() { return m_filePath; }
+    wxString GetFilePath() const { return m_filePathCtrl->GetValue(); }
 
 protected:
     PCB_EDIT_FRAME* m_frame;
-    static wxString m_filePath;
 
 private:
+    void onFilePathChanged( wxCommandEvent& aEvent );
+
+    bool anyOptionSelected() const;
+
     /**
-     * Store state used to toggle button between "Select All" and "Deselect All"
+     * Enable the "Import Settings" button, which needs both a source file and at least one
+     * checked import selection.
      */
-    bool m_showSelectAllOnBtn;
+    void updateImportSettingsButton();
+
+    /**
+     * Label the toggle for what it will actually do to the current selection.
+     */
+    void updateSelectAllButton();
+
+    /**
+     * Every import selection checkbox, so that the enable, select-all and deselect-all paths
+     * cannot drift apart as options are added.
+     */
+    std::vector<wxCheckBox*> m_options;
 };
 
 #endif //KICAD_DIALOG_IMPORT_SETTINGS_H
