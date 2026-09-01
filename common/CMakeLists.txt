@@ -853,6 +853,7 @@ set( COMMON_SRCS
     refdes_utils.cpp
     reference_image.cpp
     render_settings.cpp
+    render_utils.cpp
     status_popup.cpp
     line_ending.cpp
     stroke_params.cpp

@@ -23,7 +23,6 @@
  *
  * These tests verify:
  * 1. SVG export produces valid output for symbols
- * 2. PNG alpha computation using dual-buffer technique
  */
 
 #include <boost/test/unit_test.hpp>
@@ -266,72 +265,6 @@ BOOST_AUTO_TEST_CASE( SvgExport_ComplexSymbol )
 
     // A complex symbol should have multiple paths
     BOOST_CHECK( pathCount >= 1 );
-}
-
-
-/**
- * Test PNG alpha computation formula:
- * Given pixels on white background (W) and black background (B),
- * alpha = 255 - (W - B), and color = B * 255 / alpha
- */
-BOOST_AUTO_TEST_CASE( PngExport_AlphaComputation_OpaquePixel )
-{
-    // An opaque red pixel: on white = red, on black = red
-    int rW = 255, gW = 0, bW = 0;    // red on white
-    int rB = 255, gB = 0, bB = 0;    // red on black
-
-    int diffR = rW - rB;
-    int diffG = gW - gB;
-    int diffB = bW - bB;
-    int avgDiff = ( diffR + diffG + diffB ) / 3;
-
-    int alpha = 255 - avgDiff;
-
-    BOOST_CHECK_EQUAL( alpha, 255 );  // Fully opaque
-}
-
-
-/**
- * Test PNG alpha computation for transparent pixel
- */
-BOOST_AUTO_TEST_CASE( PngExport_AlphaComputation_TransparentPixel )
-{
-    // A transparent pixel: on white = white, on black = black
-    int rW = 255, gW = 255, bW = 255;    // white on white
-    int rB = 0, gB = 0, bB = 0;          // black on black
-
-    int diffR = rW - rB;
-    int diffG = gW - gB;
-    int diffB = bW - bB;
-    int avgDiff = ( diffR + diffG + diffB ) / 3;
-
-    int alpha = 255 - avgDiff;
-
-    BOOST_CHECK_EQUAL( alpha, 0 );  // Fully transparent
-}
-
-
-/**
- * Test PNG alpha computation for semi-transparent pixel
- */
-BOOST_AUTO_TEST_CASE( PngExport_AlphaComputation_SemiTransparentPixel )
-{
-    // A 50% transparent red pixel
-    // On white: blends to (255, 128, 128)  approximately
-    // On black: blends to (128, 0, 0) approximately
-
-    int rW = 255, gW = 128, bW = 128;
-    int rB = 128, gB = 0, bB = 0;
-
-    int diffR = rW - rB;  // 127
-    int diffG = gW - gB;  // 128
-    int diffB = bW - bB;  // 128
-    int avgDiff = ( diffR + diffG + diffB ) / 3;  // approximately 127-128
-
-    int alpha = 255 - avgDiff;
-
-    // Alpha should be around 127-128 (50%)
-    BOOST_CHECK( alpha > 120 && alpha < 140 );
 }
 
 

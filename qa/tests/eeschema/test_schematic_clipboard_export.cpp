@@ -351,44 +351,6 @@ BOOST_AUTO_TEST_CASE( Circle_Creation )
 
 
 /**
- * Test PNG alpha computation formula used in schematic export.
- */
-BOOST_AUTO_TEST_CASE( PngExport_AlphaComputation_Opaque )
-{
-    // Opaque pixel: same on white and black
-    int rW = 128, gW = 128, bW = 128;
-    int rB = 128, gB = 128, bB = 128;
-
-    int diffR = rW - rB;
-    int diffG = gW - gB;
-    int diffB = bW - bB;
-    int avgDiff = ( diffR + diffG + diffB ) / 3;
-    int alpha = 255 - avgDiff;
-
-    BOOST_CHECK_EQUAL( alpha, 255 );
-}
-
-
-/**
- * Test PNG alpha computation for transparent pixel.
- */
-BOOST_AUTO_TEST_CASE( PngExport_AlphaComputation_Transparent )
-{
-    // Transparent pixel: shows background
-    int rW = 255, gW = 255, bW = 255;
-    int rB = 0, gB = 0, bB = 0;
-
-    int diffR = rW - rB;
-    int diffG = gW - gB;
-    int diffB = bW - bB;
-    int avgDiff = ( diffR + diffG + diffB ) / 3;
-    int alpha = 255 - avgDiff;
-
-    BOOST_CHECK_EQUAL( alpha, 0 );
-}
-
-
-/**
  * Test that a complex schematic selection can be created.
  */
 BOOST_AUTO_TEST_CASE( ComplexSchematic_MultipleLayers )

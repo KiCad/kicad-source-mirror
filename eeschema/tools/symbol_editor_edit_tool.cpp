@@ -19,8 +19,11 @@
  */
 
 #include "symbol_editor_edit_tool.h"
+#include "tl/expected.hpp"
 
+#include <optional>
 #include <wx/buffer.h>
+#include <wx/debug.h>
 #include <wx/mstream.h>
 #include <wx/dcmemory.h>
 
@@ -34,6 +37,7 @@
 #include <sch_actions.h>
 #include <increment.h>
 #include <pin_layout_cache.h>
+#include <render_utils.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
@@ -225,16 +229,16 @@ wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, co
 }
 
 
-wxImage renderSymbolToImageWithAlpha( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol,
-                                      const BOX2I& aBBox, int aUnit, int aBodyStyle )
+tl::expected<wxImage, std::string> renderSymbolToImageWithAlpha( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol,
+                                                                 const BOX2I& aBBox, int aUnit, int aBodyStyle )
 {
     if( !aSymbol )
-        return wxImage();
+        return tl::make_unexpected( "Invalid symbol" );
 
     VECTOR2I size = aBBox.GetSize();
 
     if( size.x <= 0 || size.y <= 0 )
-        return wxImage();
+        return tl::make_unexpected( "Invalid image size" + std::to_string( size.x ) + "x" + std::to_string( size.y ) );
 
     // Use the current view scale to match what the user sees on screen
     double viewScale = aFrame->GetCanvas()->GetView()->GetScale();
@@ -251,60 +255,19 @@ wxImage renderSymbolToImageWithAlpha( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSy
     }
 
     if( bitmapWidth <= 0 || bitmapHeight <= 0 )
-        return wxImage();
+        return tl::make_unexpected( "Invalid image size" + std::to_string( bitmapWidth ) + "x"
+                                    + std::to_string( bitmapHeight ) );
 
     // Render twice with different backgrounds for alpha computation
-    wxImage imageOnWhite = renderSymbolToBitmap( aFrame, aSymbol, aBBox, aUnit, aBodyStyle,
-                                                  bitmapWidth, bitmapHeight, viewScale, *wxWHITE );
-    wxImage imageOnBlack = renderSymbolToBitmap( aFrame, aSymbol, aBBox, aUnit, aBodyStyle,
-                                                  bitmapWidth, bitmapHeight, viewScale, *wxBLACK );
+    wxImage imageOnWhite = renderSymbolToBitmap( aFrame, aSymbol, aBBox, aUnit, aBodyStyle, bitmapWidth, bitmapHeight,
+                                                 viewScale, *wxWHITE );
+    wxImage imageOnBlack = renderSymbolToBitmap( aFrame, aSymbol, aBBox, aUnit, aBodyStyle, bitmapWidth, bitmapHeight,
+                                                 viewScale, *wxBLACK );
 
     if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
-        return wxImage();
+        return tl::make_unexpected( "Failed to render symbol to white/black bitmaps" );
 
-    // Create output image with alpha channel
-    wxImage result( bitmapWidth, bitmapHeight );
-    result.InitAlpha();
-
-    unsigned char* rgbWhite = imageOnWhite.GetData();
-    unsigned char* rgbBlack = imageOnBlack.GetData();
-    unsigned char* rgbResult = result.GetData();
-    unsigned char* alphaResult = result.GetAlpha();
-
-    int pixelCount = bitmapWidth * bitmapHeight;
-
-    for( int i = 0; i < pixelCount; ++i )
-    {
-        int idx = i * 3;
-
-        int rW = rgbWhite[idx], gW = rgbWhite[idx + 1], bW = rgbWhite[idx + 2];
-        int rB = rgbBlack[idx], gB = rgbBlack[idx + 1], bB = rgbBlack[idx + 2];
-
-        // Alpha computation: α = 1 - (white - black) / 255
-        int diffR = rW - rB;
-        int diffG = gW - gB;
-        int diffB = bW - bB;
-        int avgDiff = ( diffR + diffG + diffB ) / 3;
-
-        int alpha = 255 - avgDiff;
-        alpha = std::max( 0, std::min( 255, alpha ) );
-        alphaResult[i] = static_cast<unsigned char>( alpha );
-
-        if( alpha > 0 )
-        {
-            rgbResult[idx] = static_cast<unsigned char>( std::min( 255, rB * 255 / alpha ) );
-            rgbResult[idx + 1] = static_cast<unsigned char>( std::min( 255, gB * 255 / alpha ) );
-            rgbResult[idx + 2] = static_cast<unsigned char>( std::min( 255, bB * 255 / alpha ) );
-        }
-        else
-        {
-            rgbResult[idx] = 0;
-            rgbResult[idx + 1] = 0;
-            rgbResult[idx + 2] = 0;
-        }
-    }
-
-    return result;
+    return CreateAlphaImageFromTwoRenders( imageOnWhite, imageOnBlack );
 }
 
 }  // namespace
@@ -1640,10 +1603,18 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
         if( plotSymbolToSvg( m_frame, cleanSymbol, bbox, unit, bodyStyle, svgBuffer ) )
             appendMimeData( mimeData, wxS( "image/svg+xml" ), svgBuffer );
 
-        wxImage pngImage = renderSymbolToImageWithAlpha( m_frame, cleanSymbol, bbox, unit, bodyStyle );
+        tl::expected<wxImage, std::string> pngImage =
+                renderSymbolToImageWithAlpha( m_frame, cleanSymbol, bbox, unit, bodyStyle );
 
-        if( pngImage.IsOk() )
-            appendMimeData( mimeData, wxS( "image/png" ), std::move( pngImage ) );
+        if( pngImage )
+        {
+            wxASSERT( pngImage->IsOk() );
+            appendMimeData( mimeData, wxS( "image/png" ), std::move( *pngImage ) );
+        }
+        else
+        {
+            wxLogWarning( wxS( "Failed to render symbol to PNG: " ) + wxString::FromUTF8( pngImage.error() ) );
+        }
 
         delete cleanSymbol;
     }

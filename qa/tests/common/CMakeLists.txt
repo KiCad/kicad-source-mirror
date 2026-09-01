@@ -79,6 +79,7 @@ set( QA_COMMON_SRCS
     test_gerber_plotter.cpp
     test_pdf_unicode_plot.cpp
     test_png_plotter.cpp
+    test_render_utils.cpp
     test_kiid.cpp
     test_layer_ids.cpp
     test_line_ending.cpp
