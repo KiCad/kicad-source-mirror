@@ -936,7 +936,7 @@ wxString SCH_IO_PCAD::getLibName( const ::SCHEMATIC* aSchematic, const wxString&
 {
     wxString libName;
 
-    if( aSchematic )
+    if( aSchematic && aSchematic->IsValid() )
         libName = aSchematic->Project().GetProjectName();
 
     if( libName.IsEmpty() )
@@ -1510,7 +1510,10 @@ SCH_SHEET* SCH_IO_PCAD::LoadSchematicFile( const wxString& aFileName, ::SCHEMATI
 
     if( !aAppendToMe )
     {
-        wxString projectName = aSchematic->Project().GetProjectName();
+        wxString projectName;
+
+        if( aSchematic->IsValid() )
+            projectName = aSchematic->Project().GetProjectName();
 
         if( projectName.IsEmpty() )
             projectName = wxFileName( aFileName ).GetName();
