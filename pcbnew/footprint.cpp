@@ -1732,24 +1732,22 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
 {
     const BOARD* board = GetBoard();
 
+    if( board )
     {
         std::lock_guard<std::mutex> lock( m_geometry_cache_mutex );
 
-        if( board )
-        {
-            if( !m_geometry_cache )
-                m_geometry_cache = std::make_unique<FOOTPRINT_GEOMETRY_CACHE_DATA>();
+        if( !m_geometry_cache )
+            m_geometry_cache = std::make_unique<FOOTPRINT_GEOMETRY_CACHE_DATA>();
 
-            if( aIncludeText )
-            {
-                if( m_geometry_cache->bounding_box_timestamp >= board->GetTimeStamp() )
-                    return m_geometry_cache->bounding_box;
-            }
-            else
-            {
-                if( m_geometry_cache->text_excluded_bbox_timestamp >= board->GetTimeStamp() )
-                    return m_geometry_cache->text_excluded_bbox;
-            }
+        if( aIncludeText )
+        {
+            if( m_geometry_cache->bounding_box_timestamp >= board->GetTimeStamp() )
+                return m_geometry_cache->bounding_box;
+        }
+        else
+        {
+            if( m_geometry_cache->text_excluded_bbox_timestamp >= board->GetTimeStamp() )
+                return m_geometry_cache->text_excluded_bbox;
         }
     }
 
@@ -1950,6 +1948,8 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 
     if( board )
     {
+        std::lock_guard<std::mutex> lock( m_geometry_cache_mutex );
+
         if( m_geometry_cache && m_geometry_cache->hull_timestamp >= board->GetTimeStamp() )
             return m_geometry_cache->hull;
     }
@@ -1962,10 +1962,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
             continue;
 
         if( item->Type() != PCB_FIELD_T && item->Type() != PCB_REFERENCE_IMAGE_T )
-        {
-            item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
-                                           ERROR_OUTSIDE );
-        }
+            item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
 
         // We intentionally exclude footprint fields from the bounding hull.
     }
@@ -2016,19 +2013,23 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     std::vector<VECTOR2I> convex_hull;
     BuildConvexHull( convex_hull, rawPolys );
 
-    if( !m_geometry_cache )
-        m_geometry_cache = std::make_unique<FOOTPRINT_GEOMETRY_CACHE_DATA>();
+    {
+        std::lock_guard<std::mutex> lock( m_geometry_cache_mutex );
 
-    m_geometry_cache->hull.RemoveAllContours();
-    m_geometry_cache->hull.NewOutline();
+        if( !m_geometry_cache )
+            m_geometry_cache = std::make_unique<FOOTPRINT_GEOMETRY_CACHE_DATA>();
 
-    for( const VECTOR2I& pt : convex_hull )
-        m_geometry_cache->hull.Append( pt );
+        m_geometry_cache->hull.RemoveAllContours();
+        m_geometry_cache->hull.NewOutline();
 
-    if( board )
-        m_geometry_cache->hull_timestamp = board->GetTimeStamp();
+        for( const VECTOR2I& pt : convex_hull )
+            m_geometry_cache->hull.Append( pt );
 
-    return m_geometry_cache->hull;
+        if( board )
+            m_geometry_cache->hull_timestamp = board->GetTimeStamp();
+
+        return m_geometry_cache->hull;
+    }
 }
 
 
