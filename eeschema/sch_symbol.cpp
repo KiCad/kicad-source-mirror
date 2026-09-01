@@ -4428,6 +4428,13 @@ std::vector<SCH_PIN*> SCH_SYMBOL::MapLibPins( const std::vector<const SCH_PIN*>&
     if( aByNumber )
     {
         const LIB_SYMBOL*           baseSymbol = m_part.get();
+
+        if( !baseSymbol )
+        {
+            mapped.resize( aLibPins.size(), nullptr );
+            return mapped;
+        }
+
         std::vector<const SCH_PIN*> basePins = baseSymbol->GetGraphicalPins( GetUnit(), GetBodyStyle() );
         std::vector<bool>           matched( basePins.size(), false );
 
