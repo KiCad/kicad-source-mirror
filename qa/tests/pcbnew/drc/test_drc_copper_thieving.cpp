@@ -26,6 +26,7 @@
 #include <pcb_marker.h>
 #include <settings/settings_manager.h>
 #include <zone.h>
+#include <pcbnew_utils/board_file_utils.h>
 
 
 struct DRC_COPPER_THIEVING_FIXTURE
@@ -46,41 +47,31 @@ struct DRC_COPPER_THIEVING_FIXTURE
 BOOST_FIXTURE_TEST_CASE( ThievingZoneProducesNoIsolatedCopperViolations,
                          DRC_COPPER_THIEVING_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 2 );
+    m_board = KI_TEST::ReadBoardFromFileOrStream(
+            KI_TEST::GetPcbnewTestDataDir() + "drc_copper_thieving/copper_thieving.kicad_pcb" );
 
-    // Each thieving stamp is an isolated island; without the DRC exclusion every
-    // one would trigger DRCE_ISOLATED_COPPER.
-    ZONE* zone = new ZONE( m_board.get() );
-    zone->SetLayer( F_Cu );
-    zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
-    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ), -1 );
-    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ), -1 );
-    zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 20 ) ), -1 );
-    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+    BOOST_REQUIRE( m_board );
 
-    THIEVING_SETTINGS thieving;
-    thieving.pattern      = THIEVING_PATTERN::DOTS;
-    thieving.element_size = pcbIUScale.mmToIU( 0.5 );
-    thieving.gap        = pcbIUScale.mmToIU( 2.0 );
-    zone->SetThievingSettings( thieving );
-    zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
-    m_board->Add( zone );
+    // A board with no thieving fill also reports no isolated copper, so confirm
+    // the stamps the exclusion has to cover are actually present.
+    BOOST_REQUIRE_EQUAL( m_board->Zones().size(), 1u );
 
-    KI_TEST::FillZones( m_board.get() );
+    const ZONE* zone = m_board->Zones().front();
+
+    BOOST_REQUIRE( zone->GetFillMode() == ZONE_FILL_MODE::COPPER_THIEVING );
+    BOOST_REQUIRE_GT( zone->GetFilledPolysList( F_Cu )->OutlineCount(), 1 );
 
     int isolatedCount = 0;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    // Synthetic boards skip the loader, so the DRC engine is not yet wired up.
-    // The loader does this at board_loader.cpp:132; replicate it here.
+    // The QA loader does not wire up the DRC engine the way board_loader.cpp does.
     if( !bds.m_DRCEngine )
         bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
 
     bds.m_DRCEngine->InitEngine( wxFileName() );
 
     // Disable all DRC checks except the one we care about so the test focuses on
-    // the isolated-copper path and runs fast on a synthetic board.
+    // the isolated-copper path.
     for( int code = 0; code < DRCE_LAST; ++code )
     {
         if( code != DRCE_ISOLATED_COPPER )

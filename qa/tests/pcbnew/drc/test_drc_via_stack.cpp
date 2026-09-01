@@ -23,6 +23,7 @@
 #include <wx/filename.h>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <pcbnew_utils/board_file_utils.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -81,6 +82,25 @@ struct VIA_STACK_DRC_FIXTURE
 
         m_rulePath = rulePath;
     }
+
+    // Cases whose subject is the stackup still build their board here: a
+    // synthesized stackup is not written to the board file, so a fixture would
+    // come back with no thicknesses and quietly test something else.
+    //
+    // Each case's board is stored under drc_via_stack/ named after the test case,
+    // so a renamed case fails loudly here rather than silently reading the wrong
+    // board.  Via stacks do not exist in v10, so these fixtures are written by
+    // the development build.
+    void loadBoard()
+    {
+        m_board = KI_TEST::ReadBoardFromFileOrStream(
+                KI_TEST::GetPcbnewTestDataDir() + "drc_via_stack/"
+                + boost::unit_test::framework::current_test_case().p_name.get()
+                + ".kicad_pcb" );
+
+        BOOST_REQUIRE( m_board );
+    }
+
 
     void run()
     {
@@ -193,16 +213,7 @@ BOOST_FIXTURE_TEST_CASE( GoodStackNoViolations, VIA_STACK_DRC_FIXTURE )
 
 BOOST_FIXTURE_TEST_CASE( StackNotTilingItsSpanReported, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    PCB_VIA_STACK* stack = makeStack( m_board.get(), F_Cu, In2_Cu );
-
-    // One microvia spanning the whole non-adjacent span leaves the middle hop missing.
-    stack->AddItem( makeMicrovia( m_board.get(), pos, F_Cu, In2_Cu, true ) );
+    loadBoard();
 
     run();
 
@@ -212,16 +223,7 @@ BOOST_FIXTURE_TEST_CASE( StackNotTilingItsSpanReported, VIA_STACK_DRC_FIXTURE )
 
 BOOST_FIXTURE_TEST_CASE( UnfilledInnerHopReported, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    PCB_VIA_STACK* stack = makeStack( m_board.get(), F_Cu, In2_Cu );
-
-    stack->AddItem( makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, true ) );
-    stack->AddItem( makeMicrovia( m_board.get(), pos, In1_Cu, In2_Cu, false ) );
+    loadBoard();
 
     run();
 
@@ -232,16 +234,9 @@ BOOST_FIXTURE_TEST_CASE( UnfilledInnerHopReported, VIA_STACK_DRC_FIXTURE )
 
 BOOST_FIXTURE_TEST_CASE( StackTooDeepReported, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+    loadBoard();
+
     setRule( "microvia_stack_depth (max 1)" );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    PCB_VIA_STACK* stack = makeStack( m_board.get(), F_Cu, In2_Cu );
-    stack->AddItem( makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, true ) );
-    stack->AddItem( makeMicrovia( m_board.get(), pos, In1_Cu, In2_Cu, true ) );
 
     run();
 
@@ -252,16 +247,7 @@ BOOST_FIXTURE_TEST_CASE( StackTooDeepReported, VIA_STACK_DRC_FIXTURE )
 
 BOOST_FIXTURE_TEST_CASE( LooseStackedMicroviasReportNotFilled, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    // No generator anywhere. The physics does not care how these were placed.
-    // The deeper hop carries the one above it, so that is the one that must be filled.
-    makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), pos, In1_Cu, In2_Cu, false );
+    loadBoard();
 
     run();
 
@@ -271,16 +257,9 @@ BOOST_FIXTURE_TEST_CASE( LooseStackedMicroviasReportNotFilled, VIA_STACK_DRC_FIX
 
 BOOST_FIXTURE_TEST_CASE( LooseStackedMicroviasReportDepth, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 6 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 6 ) | LSET::AllTechMask() );
+    loadBoard();
+
     setRule( "microvia_stack_depth (max 2)" );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), pos, In1_Cu, In2_Cu, true );
-    makeMicrovia( m_board.get(), pos, In2_Cu, In3_Cu, true );
 
     run();
 
@@ -291,15 +270,9 @@ BOOST_FIXTURE_TEST_CASE( LooseStackedMicroviasReportDepth, VIA_STACK_DRC_FIXTURE
 // Two microvias sharing an x,y but not touching are two structures, not one three deep.
 BOOST_FIXTURE_TEST_CASE( CoaxialButSeparatedMicroviasAreNotOneStack, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 6 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 6 ) | LSET::AllTechMask() );
+    loadBoard();
+
     setRule( "microvia_stack_depth (max 1)" );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), pos, In2_Cu, In3_Cu, true );
 
     run();
 
@@ -311,17 +284,7 @@ BOOST_FIXTURE_TEST_CASE( CoaxialButSeparatedMicroviasAreNotOneStack, VIA_STACK_D
 // A generator stack must be judged once, not once as a generator and again as loose geometry.
 BOOST_FIXTURE_TEST_CASE( GeneratorStackIsNotReportedTwice, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    PCB_VIA_STACK* stack = makeStack( m_board.get(), F_Cu, In2_Cu );
-
-    // Both hops unfilled, so counting a member twice would give four reports, not two.
-    stack->AddItem( makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, false ) );
-    stack->AddItem( makeMicrovia( m_board.get(), pos, In1_Cu, In2_Cu, false ) );
+    loadBoard();
 
     run();
 
@@ -333,15 +296,7 @@ BOOST_FIXTURE_TEST_CASE( GeneratorStackIsNotReportedTwice, VIA_STACK_DRC_FIXTURE
 // below, so both rules still apply.
 BOOST_FIXTURE_TEST_CASE( OverlappingButOffsetMicroviasAreOneStructure, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    // Drill is 0.15 mm, so 0.05 mm apart still overlaps.
-    makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), pos + VECTOR2I( pcbIUScale.mmToIU( 0.05 ), 0 ), In1_Cu, In2_Cu, false );
+    loadBoard();
 
     run();
 
@@ -352,14 +307,7 @@ BOOST_FIXTURE_TEST_CASE( OverlappingButOffsetMicroviasAreOneStructure, VIA_STACK
 // A real stagger clears the via below, so the fill rule does not apply to it.
 BOOST_FIXTURE_TEST_CASE( ClearOfTheViaBelowIsAStaggerNotAStack, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), pos + VECTOR2I( pcbIUScale.mmToIU( 0.5 ), 0 ), In1_Cu, In2_Cu, false );
+    loadBoard();
 
     run();
 
@@ -372,14 +320,7 @@ BOOST_FIXTURE_TEST_CASE( ClearOfTheViaBelowIsAStaggerNotAStack, VIA_STACK_DRC_FI
 // structure and not only to the ones carrying another hop.
 BOOST_FIXTURE_TEST_CASE( EveryHopOfAStackMustBeFilled, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, false );
-    makeMicrovia( m_board.get(), pos, In1_Cu, In2_Cu, false );
+    loadBoard();
 
     run();
 
@@ -390,11 +331,7 @@ BOOST_FIXTURE_TEST_CASE( EveryHopOfAStackMustBeFilled, VIA_STACK_DRC_FIXTURE )
 // A lone microvia carries nothing, so it may be unfilled.
 BOOST_FIXTURE_TEST_CASE( ALoneMicroviaMayBeUnfilled, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    makeMicrovia( m_board.get(), VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ), F_Cu, In1_Cu, false );
+    loadBoard();
 
     run();
 
@@ -503,17 +440,10 @@ BOOST_FIXTURE_TEST_CASE( AspectRatioNeedsStackupThicknesses, VIA_STACK_DRC_FIXTU
 
 BOOST_FIXTURE_TEST_CASE( MicroviaStackDepthRuleIsHonoured, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
+    loadBoard();
+
     setRule( "microvia_stack_depth (max 2)" );
 
-    VECTOR2I at( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    makeMicrovia( m_board.get(), at, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), at, In1_Cu, In2_Cu, true );
-    makeMicrovia( m_board.get(), at, In2_Cu, B_Cu, true );
-
-    // Three hops against a limit of two.
     run();
     BOOST_CHECK_EQUAL( m_depth, 1 );
 
@@ -537,14 +467,7 @@ BOOST_FIXTURE_TEST_CASE( MicroviaStackDepthRuleIsHonoured, VIA_STACK_DRC_FIXTURE
 // in the chain walk, so a handful of them must not multiply into a pile of violations.
 BOOST_FIXTURE_TEST_CASE( ZeroSpanMicroviasDoNotMultiplyViolations, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I at( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    for( int i = 0; i < 3; ++i )
-        makeMicrovia( m_board.get(), at, In1_Cu, In1_Cu, false );
+    loadBoard();
 
     run();
 
@@ -636,18 +559,7 @@ BOOST_FIXTURE_TEST_CASE( AspectRatioUsesTheFoilTheLaserEnters, VIA_STACK_DRC_FIX
 // An unset fill means "use the board default", not "unfilled".
 BOOST_FIXTURE_TEST_CASE( FillFromBoardHonoursTheBoardDefault, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-    m_board->GetDesignSettings().m_FillVias = true;
-
-    VECTOR2I at( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-
-    for( PCB_VIA* via : { makeMicrovia( m_board.get(), at, F_Cu, In1_Cu, true ),
-                          makeMicrovia( m_board.get(), at, In1_Cu, In2_Cu, true ) } )
-    {
-        via->SetFillingMode( FILLING_MODE::FROM_BOARD );
-    }
+    loadBoard();
 
     run();
 
@@ -659,16 +571,7 @@ BOOST_FIXTURE_TEST_CASE( FillFromBoardHonoursTheBoardDefault, VIA_STACK_DRC_FIXT
 // for each.
 BOOST_FIXTURE_TEST_CASE( AViaCarriedTwiceIsReportedOnce, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I at( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-    VECTOR2I beside( at.x + pcbIUScale.mmToIU( 0.05 ), at.y );
-
-    makeMicrovia( m_board.get(), at, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), beside, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), at, In1_Cu, In2_Cu, false );
+    loadBoard();
 
     run();
 
@@ -679,15 +582,7 @@ BOOST_FIXTURE_TEST_CASE( AViaCarriedTwiceIsReportedOnce, VIA_STACK_DRC_FIXTURE )
 // Holes a drill diameter apart touch, leaving no wall between them.
 BOOST_FIXTURE_TEST_CASE( TouchingHolesFormAColumn, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I at( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-    VECTOR2I touching( at.x + pcbIUScale.mmToIU( 0.15 ), at.y );
-
-    makeMicrovia( m_board.get(), at, F_Cu, In1_Cu, true );
-    makeMicrovia( m_board.get(), touching, In1_Cu, In2_Cu, false );
+    loadBoard();
 
     run();
 
@@ -768,18 +663,7 @@ BOOST_FIXTURE_TEST_CASE( MicroviaThroughCoreIsReported, VIA_STACK_DRC_FIXTURE )
 // fill checked rather than dropped for sharing.
 BOOST_FIXTURE_TEST_CASE( ASecondHopSharingALandingViaIsStillChecked, VIA_STACK_DRC_FIXTURE )
 {
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 4 );
-    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
-
-    VECTOR2I at( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
-    VECTOR2I beside( at.x + pcbIUScale.mmToIU( 0.05 ), at.y );
-
-    // Both upper hops are unfilled, so the count does not depend on which one is walked
-    // first: dropping either of them loses a report.
-    makeMicrovia( m_board.get(), at, F_Cu, In1_Cu, false );
-    makeMicrovia( m_board.get(), beside, F_Cu, In1_Cu, false );
-    makeMicrovia( m_board.get(), at, In1_Cu, In2_Cu, true );
+    loadBoard();
 
     run();
 
