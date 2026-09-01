@@ -191,7 +191,9 @@ const char* ConstraintTypeName( DRC_CONSTRAINT_T aType )
     case TRACK_ANGLE_CONSTRAINT:             return "track_angle";
     case VIA_DANGLING_CONSTRAINT:            return "via_dangling";
     case BRIDGED_MASK_CONSTRAINT:            return "bridged_mask";
-    case SOLDER_MASK_SLIVER_CONSTRAINT:      return "solder_mask_sliver";
+    case SOLDER_MASK_SLIVER_CONSTRAINT: return "solder_mask_sliver";
+    case MICROVIA_STACK_DEPTH_CONSTRAINT: return "microvia_stack_depth";
+    case MICROVIA_ASPECT_RATIO_CONSTRAINT: return "microvia_aspect_ratio";
     }
 
     return "?";
@@ -200,28 +202,47 @@ const char* ConstraintTypeName( DRC_CONSTRAINT_T aType )
 
 const std::vector<DRC_CONSTRAINT_T>& AllConstraintTypes()
 {
-    static const std::vector<DRC_CONSTRAINT_T> types = {
-        CLEARANCE_CONSTRAINT,             CREEPAGE_CONSTRAINT,
-        HOLE_CLEARANCE_CONSTRAINT,        HOLE_TO_HOLE_CONSTRAINT,
-        EDGE_CLEARANCE_CONSTRAINT,        HOLE_SIZE_CONSTRAINT,
-        COURTYARD_CLEARANCE_CONSTRAINT,   SILK_CLEARANCE_CONSTRAINT,
-        TEXT_HEIGHT_CONSTRAINT,           TEXT_THICKNESS_CONSTRAINT,
-        TRACK_WIDTH_CONSTRAINT,           TRACK_SEGMENT_LENGTH_CONSTRAINT,
-        ANNULAR_WIDTH_CONSTRAINT,         ZONE_CONNECTION_CONSTRAINT,
-        THERMAL_RELIEF_GAP_CONSTRAINT,    THERMAL_SPOKE_WIDTH_CONSTRAINT,
-        MIN_RESOLVED_SPOKES_CONSTRAINT,   SOLDER_MASK_EXPANSION_CONSTRAINT,
-        SOLDER_PASTE_ABS_MARGIN_CONSTRAINT, SOLDER_PASTE_REL_MARGIN_CONSTRAINT,
-        DISALLOW_CONSTRAINT,              VIA_DIAMETER_CONSTRAINT,
-        LENGTH_CONSTRAINT,                NET_CHAIN_LENGTH_CONSTRAINT,
-        NET_CHAIN_STUB_LENGTH_CONSTRAINT, NET_CHAIN_RETURN_PATH_CONSTRAINT,
-        SKEW_CONSTRAINT,                  DIFF_PAIR_GAP_CONSTRAINT,
-        MAX_UNCOUPLED_CONSTRAINT,         DIFF_PAIR_INTRA_SKEW_CONSTRAINT,
-        VIA_COUNT_CONSTRAINT,             PHYSICAL_CLEARANCE_CONSTRAINT,
-        PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, ASSERTION_CONSTRAINT,
-        CONNECTION_WIDTH_CONSTRAINT,      TRACK_ANGLE_CONSTRAINT,
-        VIA_DANGLING_CONSTRAINT,          BRIDGED_MASK_CONSTRAINT,
-        SOLDER_MASK_SLIVER_CONSTRAINT
-    };
+    static const std::vector<DRC_CONSTRAINT_T> types = { CLEARANCE_CONSTRAINT,
+                                                         CREEPAGE_CONSTRAINT,
+                                                         HOLE_CLEARANCE_CONSTRAINT,
+                                                         HOLE_TO_HOLE_CONSTRAINT,
+                                                         EDGE_CLEARANCE_CONSTRAINT,
+                                                         HOLE_SIZE_CONSTRAINT,
+                                                         COURTYARD_CLEARANCE_CONSTRAINT,
+                                                         SILK_CLEARANCE_CONSTRAINT,
+                                                         TEXT_HEIGHT_CONSTRAINT,
+                                                         TEXT_THICKNESS_CONSTRAINT,
+                                                         TRACK_WIDTH_CONSTRAINT,
+                                                         TRACK_SEGMENT_LENGTH_CONSTRAINT,
+                                                         ANNULAR_WIDTH_CONSTRAINT,
+                                                         ZONE_CONNECTION_CONSTRAINT,
+                                                         THERMAL_RELIEF_GAP_CONSTRAINT,
+                                                         THERMAL_SPOKE_WIDTH_CONSTRAINT,
+                                                         MIN_RESOLVED_SPOKES_CONSTRAINT,
+                                                         SOLDER_MASK_EXPANSION_CONSTRAINT,
+                                                         SOLDER_PASTE_ABS_MARGIN_CONSTRAINT,
+                                                         SOLDER_PASTE_REL_MARGIN_CONSTRAINT,
+                                                         DISALLOW_CONSTRAINT,
+                                                         VIA_DIAMETER_CONSTRAINT,
+                                                         LENGTH_CONSTRAINT,
+                                                         NET_CHAIN_LENGTH_CONSTRAINT,
+                                                         NET_CHAIN_STUB_LENGTH_CONSTRAINT,
+                                                         NET_CHAIN_RETURN_PATH_CONSTRAINT,
+                                                         SKEW_CONSTRAINT,
+                                                         DIFF_PAIR_GAP_CONSTRAINT,
+                                                         MAX_UNCOUPLED_CONSTRAINT,
+                                                         DIFF_PAIR_INTRA_SKEW_CONSTRAINT,
+                                                         VIA_COUNT_CONSTRAINT,
+                                                         PHYSICAL_CLEARANCE_CONSTRAINT,
+                                                         PHYSICAL_HOLE_CLEARANCE_CONSTRAINT,
+                                                         ASSERTION_CONSTRAINT,
+                                                         CONNECTION_WIDTH_CONSTRAINT,
+                                                         TRACK_ANGLE_CONSTRAINT,
+                                                         VIA_DANGLING_CONSTRAINT,
+                                                         BRIDGED_MASK_CONSTRAINT,
+                                                         SOLDER_MASK_SLIVER_CONSTRAINT,
+                                                         MICROVIA_STACK_DEPTH_CONSTRAINT,
+                                                         MICROVIA_ASPECT_RATIO_CONSTRAINT };
 
     return types;
 }
@@ -232,23 +253,37 @@ const std::vector<wxString>& AllPredicateNames()
     // Mirrors the RegisterFunc entries in pcbexpr_functions.cpp. The expensive geometry and
     // per-item lookups the optimizer watches are listed first for readability, but the order is
     // not load-bearing.
-    static const std::vector<wxString> names = {
-        wxT( "intersectsCourtyard" ),     wxT( "intersectsFrontCourtyard" ),
-        wxT( "intersectsBackCourtyard" ), wxT( "insideCourtyard" ),
-        wxT( "insideFrontCourtyard" ),    wxT( "insideBackCourtyard" ),
-        wxT( "intersectsArea" ),          wxT( "enclosedByArea" ),
-        wxT( "insideArea" ),              wxT( "getField" ),
-        wxT( "hasNetclass" ),             wxT( "hasExactNetclass" ),
-        wxT( "hasComponentClass" ),       wxT( "memberOf" ),
-        wxT( "memberOfSheet" ),           wxT( "memberOfSheetOrChildren" ),
-        wxT( "memberOfFootprint" ),       wxT( "memberOfGroup" ),
-        wxT( "fromTo" ),                  wxT( "inDiffPair" ),
-        wxT( "isCoupledDiffPair" ),       wxT( "inNetChain" ),
-        wxT( "inNetChainClass" ),         wxT( "hasNetChain" ),
-        wxT( "existsOnLayer" ),           wxT( "isPlated" ),
-        wxT( "isMicroVia" ),              wxT( "isBlindVia" ),
-        wxT( "isBuriedVia" ),             wxT( "isBlindBuriedVia" )
-    };
+    static const std::vector<wxString> names = { wxT( "intersectsCourtyard" ),
+                                                 wxT( "intersectsFrontCourtyard" ),
+                                                 wxT( "intersectsBackCourtyard" ),
+                                                 wxT( "insideCourtyard" ),
+                                                 wxT( "insideFrontCourtyard" ),
+                                                 wxT( "insideBackCourtyard" ),
+                                                 wxT( "intersectsArea" ),
+                                                 wxT( "enclosedByArea" ),
+                                                 wxT( "insideArea" ),
+                                                 wxT( "getField" ),
+                                                 wxT( "hasNetclass" ),
+                                                 wxT( "hasExactNetclass" ),
+                                                 wxT( "hasComponentClass" ),
+                                                 wxT( "memberOf" ),
+                                                 wxT( "memberOfSheet" ),
+                                                 wxT( "memberOfSheetOrChildren" ),
+                                                 wxT( "memberOfFootprint" ),
+                                                 wxT( "memberOfGroup" ),
+                                                 wxT( "fromTo" ),
+                                                 wxT( "inDiffPair" ),
+                                                 wxT( "isCoupledDiffPair" ),
+                                                 wxT( "inNetChain" ),
+                                                 wxT( "inNetChainClass" ),
+                                                 wxT( "hasNetChain" ),
+                                                 wxT( "existsOnLayer" ),
+                                                 wxT( "isPlated" ),
+                                                 wxT( "isMicroVia" ),
+                                                 wxT( "isBlindVia" ),
+                                                 wxT( "isBuriedVia" ),
+                                                 wxT( "isBlindBuriedVia" ),
+                                                 wxT( "isStackedVia" ) };
 
     return names;
 }

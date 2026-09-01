@@ -310,4 +310,60 @@ BOOST_AUTO_TEST_CASE( SeededBoardValueSurvivesRoundTrip )
 }
 
 
+// A hand-edited preset holding the wrong type must not take the presets after it down with it.
+BOOST_AUTO_TEST_CASE( OneMalformedPresetDoesNotDropTheRest )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    nlohmann::json js = nlohmann::json::array();
+
+    for( int i = 0; i < 3; ++i )
+    {
+        nlohmann::json entry = {};
+        entry["name"] = "preset" + std::to_string( i );
+        entry["start_layer"] = (int) F_Cu;
+        entry["end_layer"] = (int) In1_Cu;
+
+        // The middle one carries its size as a string, the way a hand edit would leave it.
+        entry["via_size"] = ( i == 1 ) ? nlohmann::json( "0.25" ) : nlohmann::json( 0.25 );
+        js.push_back( entry );
+    }
+
+    bds.Set( "via_stack_presets", js );
+    bds.m_ViaStackPresets.clear();
+    bds.Load();
+
+    BOOST_REQUIRE_EQUAL( bds.m_ViaStackPresets.size(), 3u );
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[2].m_Name, wxS( "preset2" ) );
+
+    // The unreadable size falls back rather than carrying a garbage value.
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[1].m_ViaSize, 0 );
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[2].m_ViaSize, pcbIUScale.mmToIU( 0.25 ) );
+}
+
+
+// A hand-edited pitch has to be bounded, or the hop position arithmetic overflows.
+BOOST_AUTO_TEST_CASE( AnAbsurdPresetPitchIsClampedOnLoad )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    nlohmann::json entry = {};
+    entry["name"] = "silly";
+    entry["start_layer"] = (int) F_Cu;
+    entry["end_layer"] = (int) In1_Cu;
+    entry["staggered"] = true;
+    entry["pitch"] = 100000.0;
+
+    nlohmann::json js = nlohmann::json::array();
+    js.push_back( entry );
+
+    bds.Set( "via_stack_presets", js );
+    bds.m_ViaStackPresets.clear();
+    bds.Load();
+
+    BOOST_REQUIRE_EQUAL( bds.m_ViaStackPresets.size(), 1u );
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[0].m_Pitch, pcbIUScale.mmToIU( MAX_MICROVIA_STACK_PITCH_MM ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

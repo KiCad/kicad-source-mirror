@@ -169,6 +169,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_text_properties_base.cpp
     dialogs/dialog_textbox_properties.cpp
     dialogs/dialog_textbox_properties_base.cpp
+    dialogs/dialog_microvia_stack.cpp
+    dialogs/dialog_microvia_stack_base.cpp
     dialogs/dialog_track_via_properties.cpp
     dialogs/dialog_track_via_properties_base.cpp
     dialogs/dialog_track_via_size.cpp
@@ -231,6 +233,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_text_and_graphics_base.cpp
     dialogs/panel_setup_tracks_and_vias.cpp
     dialogs/panel_setup_tracks_and_vias_base.cpp
+    dialogs/panel_setup_via_stacks.cpp
+    dialogs/panel_setup_via_stacks_base.cpp
     dialogs/panel_setup_tuning_patterns.cpp
     dialogs/panel_setup_tuning_patterns_base.cpp
     dialogs/panel_setup_tuning_profiles_base.cpp
@@ -302,6 +306,7 @@ set( PCBNEW_MICROWAVE_SRCS
 
 set( PCBNEW_GENERATORS_SRCS
     generators/pcb_tuning_pattern.cpp
+    generators/pcb_via_stack.cpp
     generators/pcb_via_stitch.cpp
     generators/via_stitch_tool.cpp
     )
@@ -335,6 +340,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_track_segment_length.cpp
     drc/drc_test_provider_zone_connections.cpp
     drc/drc_test_provider_via_diameter.cpp
+    drc/drc_test_provider_via_stack.cpp
     drc/drc_test_provider_via_stitch.cpp
     drc/drc_test_provider_solder_mask.cpp
     drc/drc_test_provider_silk_clearance.cpp

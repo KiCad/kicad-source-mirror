@@ -3395,9 +3395,15 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    // Duplicating tuning patterns alone is not supported
-    if( selection.Size() == 1 && selection.CountType( PCB_GENERATOR_T ) )
-        return 0;
+    // Some generators cannot be duplicated on their own.
+    if( selection.Size() == 1 )
+    {
+        if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( selection.Front() ) )
+        {
+            if( !generator->CanDuplicate() )
+                return 0;
+        }
+    }
 
     // we have a selection to work on now, so start the tool process
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();

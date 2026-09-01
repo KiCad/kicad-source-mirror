@@ -27,6 +27,8 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_group.h>
+#include <lset.h>
+#include <generators/pcb_via_stack.h>
 #include <pcb_view.h>
 #include <tools/pcb_selection_tool.h>
 
@@ -161,6 +163,147 @@ BOOST_AUTO_TEST_CASE( RemoveFootprintPrunesSelectedChildren )
     // With SKIP_UNDO the removed footprint is ours to free
     delete fp;
 }
+
+// Undo after a drag must put the hops back with the stack.
+BOOST_AUTO_TEST_CASE( RevertAfterDraggingAViaStackRestoresItsHops )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+
+    board.SetCopperLayerCount( 4 );
+    board.SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( dummyTool );
+
+    VECTOR2I origin( 10000000, 10000000 );
+
+    PCB_VIA_STACK* stack = new PCB_VIA_STACK( &board, F_Cu );
+    stack->SetStartLayer( F_Cu );
+    stack->SetEndLayer( In2_Cu );
+    stack->SetViaSize( 300000 );
+    stack->SetViaDrill( 150000 );
+    stack->SetPosition( origin );
+    board.Add( stack );
+    stack->Regenerate( &board, nullptr );
+
+    std::map<BOARD_ITEM*, VECTOR2I> before;
+
+    for( BOARD_ITEM* item : stack->GetBoardItems() )
+        before[item] = item->GetPosition();
+
+    BOOST_REQUIRE_EQUAL( before.size(), 2u );
+
+    BOARD_COMMIT commit( &mgr, true, false );
+
+    stack->EditStart( nullptr, &board, &commit );
+
+    // A drag is a stream of motion events.
+    for( const VECTOR2I& step : { VECTOR2I( 500000, 0 ), VECTOR2I( 500000, 250000 ) } )
+    {
+        stack->Move( step );
+        stack->Update( nullptr, &board, &commit );
+    }
+
+    stack->EditFinish( nullptr, &board, &commit );
+
+    commit.Revert();
+
+    BOOST_CHECK_EQUAL( stack->GetPosition(), origin );
+
+    for( const auto& [item, pos] : before )
+    {
+        BOOST_CHECK_MESSAGE( item->GetPosition() == pos,
+                             "hop left behind at " + item->GetPosition().Format() + " instead of " + pos.Format() );
+    }
+}
+
+
+// Editing a stack stages its members, then rebuilds them. A member must not carry both a
+// modify and a remove line, or redo trips over the pair.
+BOOST_AUTO_TEST_CASE( RegeneratingAViaStackDoesNotDoubleStageItsHops )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+
+    board.SetCopperLayerCount( 6 );
+    board.SetEnabledLayers( LSET::AllCuMask( 6 ) | LSET::AllTechMask() );
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( dummyTool );
+
+    PCB_VIA_STACK* stack = new PCB_VIA_STACK( &board, F_Cu );
+    stack->SetStartLayer( F_Cu );
+    stack->SetEndLayer( In2_Cu );
+    stack->SetViaSize( 300000 );
+    stack->SetViaDrill( 150000 );
+    stack->SetPosition( VECTOR2I( 10000000, 10000000 ) );
+    board.Add( stack );
+    stack->Regenerate( &board, nullptr );
+
+    std::vector<BOARD_ITEM*> original( stack->GetBoardItems().begin(), stack->GetBoardItems().end() );
+    BOOST_REQUIRE_EQUAL( original.size(), 2u );
+
+    BOARD_COMMIT commit( &mgr, true, false );
+
+    stack->EditStart( nullptr, &board, &commit );
+
+    // Widening the span changes the hop set, so the members are replaced rather than reused.
+    stack->SetEndLayer( In3_Cu );
+    stack->Update( nullptr, &board, &commit );
+    stack->EditFinish( nullptr, &board, &commit );
+
+    for( BOARD_ITEM* item : original )
+    {
+        BOOST_CHECK_MESSAGE( commit.GetStatus( item ) == CHT_REMOVE,
+                             "replaced hop is staged as " << commit.GetStatus( item ) << ", expected CHT_REMOVE only" );
+    }
+
+    commit.Revert();
+}
+
+
+// Update outside an edit must do nothing. Regenerating there would delete and rebuild the
+// hops behind the back of whatever holds them.
+BOOST_AUTO_TEST_CASE( UpdateOutsideAnEditIsInert )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+
+    board.SetCopperLayerCount( 4 );
+    board.SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( dummyTool );
+
+    PCB_VIA_STACK* stack = new PCB_VIA_STACK( &board, F_Cu );
+    stack->SetStartLayer( F_Cu );
+    stack->SetEndLayer( In2_Cu );
+    stack->SetViaSize( 300000 );
+    stack->SetViaDrill( 150000 );
+    stack->SetPosition( VECTOR2I( 10000000, 10000000 ) );
+    board.Add( stack );
+    stack->Regenerate( &board, nullptr );
+
+    std::vector<BOARD_ITEM*> before( stack->GetBoardItems().begin(), stack->GetBoardItems().end() );
+    BOOST_REQUIRE_EQUAL( before.size(), 2u );
+
+    BOARD_COMMIT commit( &mgr, true, false );
+
+    // No EditStart, so IN_EDIT is not set.
+    BOOST_CHECK( !stack->Update( nullptr, &board, &commit ) );
+
+    std::vector<BOARD_ITEM*> after( stack->GetBoardItems().begin(), stack->GetBoardItems().end() );
+
+    BOOST_REQUIRE_EQUAL( after.size(), before.size() );
+    BOOST_CHECK_MESSAGE( std::set<BOARD_ITEM*>( before.begin(), before.end() )
+                                 == std::set<BOARD_ITEM*>( after.begin(), after.end() ),
+                         "the hops were rebuilt outside an edit" );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
 

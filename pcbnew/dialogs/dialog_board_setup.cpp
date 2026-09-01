@@ -22,6 +22,7 @@
 #include <panel_setup_defaults.h>
 #include <panel_setup_constraints.h>
 #include <panel_setup_tracks_and_vias.h>
+#include <panel_setup_via_stacks.h>
 #include <panel_setup_mask_and_paste.h>
 #include <../board_stackup_manager/panel_board_stackup.h>
 #include <../board_stackup_manager/panel_board_finish.h>
@@ -78,6 +79,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_maskAndPastePage( 0 ),
         m_constraintsPage( 0 ),
         m_tracksAndViasPage( 0 ),
+        m_viaStacksPage( 0 ),
         m_teardropsPage( 0 ),
         m_tuningPatternsPage( 0 ),
         m_netclassesPage( 0 ),
@@ -166,6 +168,14 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
             {
                 return new PANEL_SETUP_TRACKS_AND_VIAS( aParent, m_frame );
             },  _( "Pre-defined Sizes" ) );
+
+    m_viaStacksPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_VIA_STACKS( aParent, m_frame );
+            },
+            _( "Microvia Stacks" ) );
 
     m_zonesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
@@ -467,7 +477,10 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         }
 
         if( importDlg.m_TracksAndViasOpt->GetValue() )
+        {
             RESOLVE_PAGE( PANEL_SETUP_TRACKS_AND_VIAS, m_tracksAndViasPage )->ImportSettingsFrom( other );
+            RESOLVE_PAGE( PANEL_SETUP_VIA_STACKS, m_viaStacksPage )->ImportSettingsFrom( other );
+        }
 
         if( importDlg.m_ZonesOpt->GetValue() )
             RESOLVE_PAGE( PANEL_SETUP_ZONES, m_zonesPage )->ImportSettingsFrom( other );

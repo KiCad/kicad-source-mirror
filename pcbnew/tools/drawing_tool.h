@@ -39,12 +39,39 @@ namespace KIGFX
 }
 
 class BOARD;
+class BOARD_ITEM;
+class PAD;
+class PCB_TRACK;
+class DRC_ENGINE;
 class PCB_BASE_EDIT_FRAME;
 class PCB_SHAPE;
+class BOARD_CONNECTED_ITEM;
+class PCB_VIA;
 class POLYGON_GEOM_MANAGER;
 class PCB_TUNING_PATTERN;
 class SHAPE_DRAW_BEHAVIOR;
 class STATUS_MIN_MAX_POPUP;
+
+
+/**
+ * Shared placement DRC checks, used by the plain via tool and the microvia stack tool so both
+ * block placement over foreign copper consistently.
+ */
+int  ComputeWorstViaClearance( PCB_BASE_EDIT_FRAME* aFrame, DRC_ENGINE* aEngine );
+bool CheckItemDRCViolation( BOARD_CONNECTED_ITEM* aItem, PCB_BASE_EDIT_FRAME* aFrame, DRC_ENGINE* aEngine,
+                            int aWorstClearance, int aEpsilon );
+
+
+/**
+ * Shared placement snapping, used by the plain via tool and the microvia stack tool. @a aVia
+ * gives the reach and the bounding box to search, @a aLayers which layers may be snapped to,
+ * so a stack can offer every layer it spans rather than just the via's own.
+ */
+int        ViaSnapRange( PCB_BASE_EDIT_FRAME* aFrame );
+PCB_TRACK* FindSnapTrack( PCB_BASE_EDIT_FRAME* aFrame, const PCB_VIA* aVia, const VECTOR2I& aPosition,
+                          const LSET& aLayers, int aSnapRange = 0 );
+PAD* FindSnapPad( PCB_BASE_EDIT_FRAME* aFrame, const PCB_VIA* aVia, const VECTOR2I& aPosition, const LSET& aLayers,
+                  int aSnapRange = 0 );
 
 
 /**
@@ -112,6 +139,23 @@ public:
     /**
      */
     int PlaceViaStitch( const TOOL_EVENT& aEvent );
+
+    /**
+     * Place a stacked or staggered microvia stack.
+     */
+    int PlaceMicroviaStack( const TOOL_EVENT& aEvent );
+
+    /**
+     * Pre-anchor the next microvia stack placement to a fixed first hop and span, used when the
+     * router hands off a staggered stack so the user places the remaining hops interactively.
+     */
+    void SeedViaStackStart( const VECTOR2I& aPos, PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd )
+    {
+        m_viaStackSeeded = true;
+        m_viaStackSeedPos = aPos;
+        m_viaStackSeedStart = aStart;
+        m_viaStackSeedEnd = aEnd;
+    }
 
     /**
      * Start interactively drawing a line.
@@ -362,6 +406,12 @@ private:
     PCB_SELECTION             m_preview;
     BOARD_CONNECTED_ITEM*     m_pickerItem;
     PCB_TUNING_PATTERN*       m_tuningPattern;
+
+    // Router handoff: pre-anchored first hop and span for the next stack placement.
+    bool         m_viaStackSeeded = false;
+    VECTOR2I     m_viaStackSeedPos;
+    PCB_LAYER_ID m_viaStackSeedStart = UNDEFINED_LAYER;
+    PCB_LAYER_ID m_viaStackSeedEnd = UNDEFINED_LAYER;
 
     static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
     static const unsigned int COORDS_PADDING;      // Padding from coordinates limits for this tool

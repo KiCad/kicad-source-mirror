@@ -57,6 +57,7 @@ class FOOTPRINT;
 class FOOTPRINT_COURTYARD_INDEX;
 class ZONE;
 class PCB_TRACK;
+class PCB_VIA;
 class PAD;
 class PCB_GROUP;
 class PCB_GENERATOR;
@@ -1719,6 +1720,10 @@ public:
     mutable std::optional<int>                            m_maxClearanceValue;
 
     mutable std::unordered_map<const BOARD_ITEM*, wxString> m_ItemNetclassCache;
+
+    // Microvias that land on another microvia, for isStackedVia(). Whole-board relation, so it
+    // is built in one pass rather than per via.
+    mutable std::optional<std::set<const PCB_VIA*>> m_StackedMicroviaCache;
 
     // Zone name lookup cache for DRC rule area functions like enclosedByArea/intersectsArea.
     // Maps zone names to vectors of matching zones to avoid O(n) zone iteration per lookup.

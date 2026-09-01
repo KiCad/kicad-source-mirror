@@ -198,6 +198,7 @@ set( BMAPS_MID
     add_textbox
     add_tracks
     add_via
+    add_via_stack
     add_via_stitch
     add_zone_cutout
     add_zone
@@ -758,6 +759,8 @@ set( BMAPS_CONSTRAINTS
     solderpaste-expansion
     via-style
     vias-under-smd
+    microvia-stack-depth
+    microvia-aspect-ratio
     )
 
 set( BMAPS_CONSTRAINTS_GEOM

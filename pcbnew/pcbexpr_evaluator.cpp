@@ -901,11 +901,12 @@ PCBEXPR_COMPILER::PCBEXPR_COMPILER( LIBEVAL::UNIT_RESOLVER* aUnitResolver )
  */
 
 PCBEXPR_EVALUATOR::PCBEXPR_EVALUATOR( LIBEVAL::UNIT_RESOLVER* aUnitResolver ) :
-    m_result( 0 ),
-    m_units( EDA_UNITS::MM ),
-    m_compiler( aUnitResolver ),
-    m_ucode(),
-    m_errorStatus()
+        m_result( 0 ),
+        m_resultAsDouble( 0.0 ),
+        m_units( EDA_UNITS::MM ),
+        m_compiler( aUnitResolver ),
+        m_ucode(),
+        m_errorStatus()
 {
 }
 
@@ -928,7 +929,8 @@ bool PCBEXPR_EVALUATOR::Evaluate( const wxString& aExpr )
 
     if( result->GetType() == LIBEVAL::VT_NUMERIC )
     {
-        m_result = KiROUND( result->AsDouble() );
+        m_resultAsDouble = result->AsDouble();
+        m_result = KiROUND( m_resultAsDouble );
         m_units = result->GetUnits();
     }
 

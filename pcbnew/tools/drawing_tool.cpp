@@ -3789,6 +3789,345 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 }
 
 
+int ComputeWorstViaClearance( PCB_BASE_EDIT_FRAME* aFrame, DRC_ENGINE* aEngine )
+{
+    int worst = 0;
+
+    try
+    {
+        if( aFrame )
+            aEngine->InitEngine( aFrame->GetBoard()->GetDesignRulesPath() );
+
+        DRC_CONSTRAINT constraint;
+
+        if( aEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, constraint ) )
+            worst = constraint.GetValue().Min();
+
+        if( aEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, constraint ) )
+            worst = std::max( worst, constraint.GetValue().Min() );
+
+        for( FOOTPRINT* footprint : aFrame->GetBoard()->Footprints() )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                std::optional<int> padOverride = pad->GetClearanceOverrides( nullptr );
+
+                if( padOverride.has_value() )
+                    worst = std::max( worst, padOverride.value() );
+            }
+        }
+    }
+    catch( PARSE_ERROR& )
+    {
+    }
+
+    return worst;
+}
+
+
+static bool ItemHasDRCViolation( BOARD_CONNECTED_ITEM* aItem, BOARD_ITEM* aOther, DRC_ENGINE* aEngine, int aEpsilon )
+{
+    auto sub_e = [&]( int aClearance )
+    {
+        return std::max( 0, aClearance - aEpsilon );
+    };
+
+    DRC_CONSTRAINT        constraint;
+    int                   clearance;
+    BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aOther );
+    ZONE*                 zone = dynamic_cast<ZONE*>( aOther );
+
+    PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem );
+
+    if( zone && zone->GetIsRuleArea() )
+    {
+        if( via ? zone->GetDoNotAllowVias() : zone->GetDoNotAllowTracks() )
+        {
+            SHAPE_POLY_SET zoneOutline = zone->GetBoardOutline();
+
+            if( !via )
+                return zoneOutline.Collide( aItem->GetEffectiveShape().get() );
+
+            bool hit = false;
+
+            via->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID aLayer )
+                    {
+                        if( hit )
+                            return;
+
+                        if( zoneOutline.Collide( via->GetPosition(), via->GetWidth( aLayer ) / 2 ) )
+                            hit = true;
+                    } );
+
+            return hit;
+        }
+
+        return false;
+    }
+
+    if( connectedItem )
+    {
+        int connectedItemNet = connectedItem->GetNetCode();
+
+        if( connectedItemNet == 0 || connectedItemNet == aItem->GetNetCode() )
+            return false;
+    }
+
+    for( PCB_LAYER_ID layer : aOther->GetLayerSet() )
+    {
+        // Reference images are "on" a copper layer but are not actually part of it
+        if( !IsCopperLayer( layer ) || aOther->Type() == PCB_REFERENCE_IMAGE_T )
+            continue;
+
+        constraint = aEngine->EvalRules( CLEARANCE_CONSTRAINT, aItem, aOther, layer );
+        clearance = constraint.GetValue().Min();
+
+        if( clearance >= 0 )
+        {
+            std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( layer );
+            std::shared_ptr<SHAPE> otherShape = aOther->GetEffectiveShape( layer );
+
+            if( itemShape->Collide( otherShape.get(), sub_e( clearance ) ) )
+                return true;
+        }
+    }
+
+    if( aOther->HasHole() )
+    {
+        constraint = aEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, aItem, aOther, UNDEFINED_LAYER );
+        clearance = constraint.GetValue().Min();
+
+        if( clearance >= 0 )
+        {
+            std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( UNDEFINED_LAYER );
+
+            if( itemShape->Collide( aOther->GetEffectiveHoleShape().get(), sub_e( clearance ) ) )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool CheckItemDRCViolation( BOARD_CONNECTED_ITEM* aItem, PCB_BASE_EDIT_FRAME* aFrame, DRC_ENGINE* aEngine,
+                            int aWorstClearance, int aEpsilon )
+{
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+    std::set<BOARD_ITEM*>                     checkedItems;
+    BOX2I                                     bbox = aItem->GetBoundingBox();
+
+    bbox.Inflate( aWorstClearance );
+    aFrame->GetCanvas()->GetView()->Query( bbox, items );
+
+    for( std::pair<KIGFX::VIEW_ITEM*, int> it : items )
+    {
+        if( !it.first->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+
+        if( item->Type() == PCB_ZONE_T && !static_cast<ZONE*>( item )->GetIsRuleArea() )
+        {
+            continue; // the pour is not refilled yet, so it still looks solid where the via is going
+        }
+        else if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_GROUP_T )
+        {
+            continue; // check against children, but not against footprint itself
+        }
+        else if( ( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
+                 && !static_cast<PCB_TEXT*>( item )->IsVisible() )
+        {
+            continue; // ignore hidden items
+        }
+        else if( checkedItems.count( item ) )
+        {
+            continue; // already checked
+        }
+
+        if( ItemHasDRCViolation( aItem, item, aEngine, aEpsilon ) )
+            return true;
+
+        checkedItems.insert( item );
+    }
+
+    DRC_CONSTRAINT constraint = aEngine->EvalRules( DISALLOW_CONSTRAINT, aItem, nullptr, UNDEFINED_LAYER );
+
+    if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+        return true;
+
+    return false;
+}
+
+
+int ViaSnapRange( PCB_BASE_EDIT_FRAME* aFrame )
+{
+    KIGFX::VIEW* view = aFrame->GetCanvas()->GetView();
+
+    // The visible grid can exceed INT_MAX, so clamp in double as GRID_HELPER does.
+    double scale = view->ToWorld( 25.0 );
+
+    return KiROUND( std::min( scale, view->GetGAL()->GetVisibleGridSize().x ) );
+}
+
+
+/**
+ * Get the bounding box the via would have if placed at the given position
+ * (the via's bounding box is relative to its own position).
+ */
+static BOX2I ViaSnapBoundingBox( const PCB_VIA& aVia, const VECTOR2I& aPosition )
+{
+    BOX2I bbox = aVia.GetBoundingBox();
+    bbox.Move( aPosition - aVia.GetPosition() );
+    return bbox;
+}
+
+
+PCB_TRACK* FindSnapTrack( PCB_BASE_EDIT_FRAME* aFrame, const PCB_VIA* aVia, const VECTOR2I& aPosition,
+                          const LSET& aLayers, int aSnapRange )
+{
+    const LSET  lset = aLayers;
+    const BOX2I bbox = ViaSnapBoundingBox( *aVia, aPosition );
+
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+    KIGFX::PCB_VIEW*                          view = aFrame->GetCanvas()->GetView();
+    std::vector<PCB_TRACK*>                   possible_tracks;
+
+    wxCHECK( view, nullptr );
+
+    view->Query( bbox, items );
+
+    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
+    {
+        if( !it.first->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+
+        if( !( item->GetLayerSet() & lset ).any() )
+            continue;
+
+        if( item->Type() == PCB_TRACE_T )
+        {
+            PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
+
+            if( TestSegmentHit(
+                        aPosition, track->GetStart(), track->GetEnd(),
+                        std::max( ( track->GetWidth() + aVia->GetWidth( track->GetLayer() ) ) / 2, aSnapRange ) ) )
+            {
+                possible_tracks.push_back( track );
+            }
+        }
+        else if( item->Type() == PCB_ARC_T )
+        {
+            PCB_ARC* arc = static_cast<PCB_ARC*>( item );
+
+            if( arc->HitTest( aPosition, std::max( aVia->GetWidth( arc->GetLayer() ) / 2, aSnapRange ) ) )
+                possible_tracks.push_back( arc );
+        }
+    }
+
+    PCB_TRACK* return_track = nullptr;
+    int        min_d = std::numeric_limits<int>::max();
+
+    for( PCB_TRACK* track : possible_tracks )
+    {
+        SEG test( track->GetStart(), track->GetEnd() );
+        int dist = ( test.NearestPoint( aPosition ) - aPosition ).EuclideanNorm();
+
+        if( dist < min_d )
+        {
+            min_d = dist;
+            return_track = track;
+        }
+    }
+
+    return return_track;
+}
+
+
+PAD* FindSnapPad( PCB_BASE_EDIT_FRAME* aFrame, const PCB_VIA* aVia, const VECTOR2I& aPosition, const LSET& aLayers,
+                  int aSnapRange )
+{
+    const LSET  lset = aLayers;
+    const BOX2I bbox = ViaSnapBoundingBox( *aVia, aPosition );
+
+    const KIGFX::PCB_VIEW&                    view = *aFrame->GetCanvas()->GetView();
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+
+    view.Query( bbox, items );
+
+    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
+    {
+        if( !it.first->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM& item = static_cast<BOARD_ITEM&>( *it.first );
+
+        if( item.Type() == PCB_PAD_T && ( item.GetLayerSet() & lset ).any() )
+        {
+            PAD& pad = static_cast<PAD&>( item );
+
+            if( pad.HitTest( aPosition, aSnapRange ) )
+                return &pad;
+        }
+    }
+
+    return nullptr;
+}
+
+
+static PCB_SHAPE* FindSnapGraphic( PCB_BASE_EDIT_FRAME* aFrame, const PCB_VIA* aVia, const VECTOR2I& aPosition,
+                                   const LSET& aLayers, int aSnapRange = 0 )
+{
+    const LSET lset = aLayers & LSET::AllCuMask();
+    BOX2I      bbox = ViaSnapBoundingBox( *aVia, aPosition );
+
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+    KIGFX::PCB_VIEW*                          view = aFrame->GetCanvas()->GetView();
+    PCB_LAYER_ID                              activeLayer = aFrame->GetActiveLayer();
+    std::vector<PCB_SHAPE*>                   possible_shapes;
+
+    view->Query( bbox, items );
+
+    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
+    {
+        if( !it.first->IsBOARD_ITEM() )
+            continue;
+
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+
+        if( !( item->GetLayerSet() & lset ).any() )
+            continue;
+
+        if( item->Type() == PCB_SHAPE_T )
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+            if( shape->HitTest( aPosition, std::max( aVia->GetWidth( activeLayer ) / 2, aSnapRange ) ) )
+                possible_shapes.push_back( shape );
+        }
+    }
+
+    PCB_SHAPE* return_shape = nullptr;
+    int        min_d = std::numeric_limits<int>::max();
+
+    for( PCB_SHAPE* shape : possible_shapes )
+    {
+        int dist = ( shape->GetPosition() - aPosition ).EuclideanNorm();
+
+        if( dist < min_d )
+        {
+            min_d = dist;
+            return_shape = shape;
+        }
+    }
+
+    return return_shape;
+}
+
+
 int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 {
     if( m_isFootprintEditor )
@@ -3825,309 +4164,30 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             if( router )
                 m_allowDRCViolations = router->Router()->Settings().AllowDRCViolations();
 
-            try
-            {
-                if( aFrame )
-                    m_drcEngine->InitEngine( aFrame->GetBoard()->GetDesignRulesPath() );
-
-                DRC_CONSTRAINT constraint;
-
-                if( m_drcEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, constraint ) )
-                    m_worstClearance = constraint.GetValue().Min();
-
-                if( m_drcEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, constraint ) )
-                    m_worstClearance = std::max( m_worstClearance, constraint.GetValue().Min() );
-
-                for( FOOTPRINT* footprint : aFrame->GetBoard()->Footprints() )
-                {
-                    for( PAD* pad : footprint->Pads() )
-                    {
-                        std::optional<int> padOverride = pad->GetClearanceOverrides( nullptr );
-
-                        if( padOverride.has_value() )
-                            m_worstClearance = std::max( m_worstClearance, padOverride.value() );
-                    }
-                }
-            }
-            catch( PARSE_ERROR& )
-            {
-            }
+            m_worstClearance = ComputeWorstViaClearance( aFrame, m_drcEngine.get() );
         }
 
         virtual ~VIA_PLACER()
         {
         }
-
-        /**
-         * Get the bounding box the via would have if placed at the given position
-         * (the via's bounding box is relative to its own position).
-         */
-        static BOX2I getEffectiveBoundingBox( const PCB_VIA& aVia, const VECTOR2I& aPosition )
+        bool checkDRCViolation( PCB_VIA* aVia )
         {
-            BOX2I bbox = aVia.GetBoundingBox();
-            bbox.Move( aPosition - aVia.GetPosition() );
-            return bbox;
+            return CheckItemDRCViolation( aVia, m_frame, m_drcEngine.get(), m_worstClearance, m_drcEpsilon );
         }
 
         PCB_TRACK* findTrack( const PCB_VIA* aVia, const VECTOR2I& aPosition ) const
         {
-            const LSET  lset = aVia->GetLayerSet();
-            const BOX2I bbox = getEffectiveBoundingBox( *aVia, aPosition );
-
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
-            KIGFX::PCB_VIEW*        view = m_frame->GetCanvas()->GetView();
-            std::vector<PCB_TRACK*> possible_tracks;
-
-            wxCHECK( view, nullptr );
-
-            view->Query( bbox, items );
-
-            for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
-            {
-                if( !it.first->IsBOARD_ITEM() )
-                    continue;
-
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
-
-                if( !( item->GetLayerSet() & lset ).any() )
-                    continue;
-
-                if( item->Type() == PCB_TRACE_T )
-                {
-                    PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
-
-                    if( TestSegmentHit( aPosition, track->GetStart(), track->GetEnd(),
-                                        ( track->GetWidth() + aVia->GetWidth( track->GetLayer() ) ) / 2 ) )
-                    {
-                        possible_tracks.push_back( track );
-                    }
-                }
-                else if( item->Type() == PCB_ARC_T )
-                {
-                    PCB_ARC* arc = static_cast<PCB_ARC*>( item );
-
-                    if( arc->HitTest( aPosition, aVia->GetWidth( arc->GetLayer() ) / 2 ) )
-                        possible_tracks.push_back( arc );
-                }
-            }
-
-            PCB_TRACK* return_track = nullptr;
-            int min_d = std::numeric_limits<int>::max();
-
-            for( PCB_TRACK* track : possible_tracks )
-            {
-                SEG test( track->GetStart(), track->GetEnd() );
-                int dist = ( test.NearestPoint( aPosition ) - aPosition ).EuclideanNorm();
-
-                if( dist < min_d )
-                {
-                    min_d = dist;
-                    return_track = track;
-                }
-            }
-
-            return return_track;
-        }
-
-        bool hasDRCViolation( PCB_VIA* aVia, BOARD_ITEM* aOther )
-        {
-            DRC_CONSTRAINT        constraint;
-            int                   clearance;
-            BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aOther );
-            ZONE*                 zone = dynamic_cast<ZONE*>( aOther );
-
-            if( zone && zone->GetIsRuleArea() )
-            {
-                if( zone->GetDoNotAllowVias() )
-                {
-                    bool hit = false;
-
-                    aVia->Padstack().ForEachUniqueLayer(
-                            [&]( PCB_LAYER_ID aLayer )
-                            {
-                                if( hit )
-                                    return;
-
-                                SHAPE_POLY_SET zoneOutline = zone->GetBoardOutline();
-
-                                if( zoneOutline.Collide( aVia->GetPosition(), aVia->GetWidth( aLayer ) / 2 ) )
-                                    hit = true;
-                            } );
-
-                    return hit;
-                }
-
-                return false;
-            }
-
-            if( connectedItem )
-            {
-                int connectedItemNet = connectedItem->GetNetCode();
-
-                if( connectedItemNet == 0 || connectedItemNet == aVia->GetNetCode() )
-                    return false;
-            }
-
-            for( PCB_LAYER_ID layer : aOther->GetLayerSet() )
-            {
-                // Reference images are "on" a copper layer but are not actually part of it
-                if( !IsCopperLayer( layer ) || aOther->Type() == PCB_REFERENCE_IMAGE_T )
-                    continue;
-
-                constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aVia,  aOther, layer );
-                clearance = constraint.GetValue().Min();
-
-                if( clearance >= 0 )
-                {
-                    std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( layer );
-                    std::shared_ptr<SHAPE> otherShape = aOther->GetEffectiveShape( layer );
-
-                    if( viaShape->Collide( otherShape.get(), sub_e( clearance ) ) )
-                        return true;
-                }
-            }
-
-            if( aOther->HasHole() )
-            {
-                constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, aVia, aOther, UNDEFINED_LAYER );
-                clearance = constraint.GetValue().Min();
-
-                if( clearance >= 0 )
-                {
-                    std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( UNDEFINED_LAYER );
-
-                    if( viaShape->Collide( aOther->GetEffectiveHoleShape().get(), sub_e( clearance ) ) )
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        bool checkDRCViolation( PCB_VIA* aVia )
-        {
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
-            std::set<BOARD_ITEM*> checkedItems;
-            BOX2I bbox = aVia->GetBoundingBox();
-
-            bbox.Inflate( m_worstClearance );
-            m_frame->GetCanvas()->GetView()->Query( bbox, items );
-
-            for( std::pair<KIGFX::VIEW_ITEM*, int> it : items )
-            {
-                if( !it.first->IsBOARD_ITEM() )
-                    continue;
-
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
-
-                if( item->Type() == PCB_ZONE_T && !static_cast<ZONE*>( item )->GetIsRuleArea() )
-                {
-                    continue;       // stitching vias bind to zones, so ignore them
-                }
-                else if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_GROUP_T )
-                {
-                    continue;       // check against children, but not against footprint itself
-                }
-                else if( ( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
-                         && !static_cast<PCB_TEXT*>( item )->IsVisible() )
-                {
-                    continue;       // ignore hidden items
-                }
-                else if( checkedItems.count( item ) )
-                {
-                    continue;       // already checked
-                }
-
-                if( hasDRCViolation( aVia, item ) )
-                    return true;
-
-                checkedItems.insert( item );
-            }
-
-            DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, aVia, nullptr,
-                                                                UNDEFINED_LAYER );
-
-            if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
-                return true;
-
-            return false;
+            return FindSnapTrack( m_frame, aVia, aPosition, aVia->GetLayerSet() );
         }
 
         PAD* findPad( const PCB_VIA* aVia, const VECTOR2I& aPosition ) const
         {
-            const LSET  lset = aVia->GetLayerSet();
-            const BOX2I bbox = getEffectiveBoundingBox( *aVia, aPosition );
-
-            const KIGFX::PCB_VIEW&                    view = *m_frame->GetCanvas()->GetView();
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
-
-            view.Query( bbox, items );
-
-            for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
-            {
-                if( !it.first->IsBOARD_ITEM() )
-                    continue;
-
-                BOARD_ITEM& item = static_cast<BOARD_ITEM&>( *it.first );
-
-                if( item.Type() == PCB_PAD_T && ( item.GetLayerSet() & lset ).any() )
-                {
-                    PAD& pad = static_cast<PAD&>( item );
-
-                    if( pad.HitTest( aPosition ) )
-                        return &pad;
-                }
-            }
-
-            return nullptr;
+            return FindSnapPad( m_frame, aVia, aPosition, aVia->GetLayerSet() );
         }
 
         PCB_SHAPE* findGraphic( const PCB_VIA* aVia, const VECTOR2I& aPosition ) const
         {
-            const LSET lset = aVia->GetLayerSet() & LSET::AllCuMask();
-            BOX2I      bbox = getEffectiveBoundingBox( *aVia, aPosition );
-
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
-            KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
-            PCB_LAYER_ID activeLayer = m_frame->GetActiveLayer();
-            std::vector<PCB_SHAPE*> possible_shapes;
-
-            view->Query( bbox, items );
-
-            for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
-            {
-                if( !it.first->IsBOARD_ITEM() )
-                    continue;
-
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
-
-                if( !( item->GetLayerSet() & lset ).any() )
-                    continue;
-
-                if( item->Type() == PCB_SHAPE_T )
-                {
-                    PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
-
-                    if( shape->HitTest( aPosition, aVia->GetWidth( activeLayer ) / 2 ) )
-                        possible_shapes.push_back( shape );
-                }
-            }
-
-            PCB_SHAPE* return_shape = nullptr;
-            int min_d = std::numeric_limits<int>::max();
-
-            for( PCB_SHAPE* shape : possible_shapes )
-            {
-                int dist = ( shape->GetPosition() - aPosition ).EuclideanNorm();
-
-                if( dist < min_d )
-                {
-                    min_d = dist;
-                    return_shape = shape;
-                }
-            }
-
-            return return_shape;
+            return FindSnapGraphic( m_frame, aVia, aPosition, aVia->GetLayerSet() );
         }
 
         std::optional<int> selectPossibleNetsByPopupMenu( std::set<int>& aNetcodeList )
@@ -4612,6 +4672,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawViaStitchArea.MakeEvent() );
     Go( &DRAWING_TOOL::DrawVia,               PCB_ACTIONS::drawVia.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceMicroviaStack,    PCB_ACTIONS::placeViaStack.MakeEvent() );
     Go( &DRAWING_TOOL::PlacePoint,            PCB_ACTIONS::placePoint.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceReferenceImage,   PCB_ACTIONS::placeReferenceImage.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,             PCB_ACTIONS::placeText.MakeEvent() );

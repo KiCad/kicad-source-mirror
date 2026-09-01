@@ -163,6 +163,11 @@ public:
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aShowNetclass, bool aShowEdit );
 
     /**
+     * Fill the via stack preset selector with the board's defined presets plus an edit entry.
+     */
+    void UpdateViaStackSelectBox( wxChoice* aViaStackSelectBox );
+
+    /**
      * Update the variant selection dropdown with the current board's variant names.
      *
      * If the currently selected variant is no longer available, the default (no variant)
@@ -256,6 +261,10 @@ public:
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
 
+    /**
+     * Handle the via stack preset selector on the auxiliary toolbar.
+     */
+    void SelectViaStack_Event( wxCommandEvent& event );
 
 
     /**
@@ -798,6 +807,7 @@ protected:
 public:
     wxChoice* m_SelTrackWidthBox;        // a choice box to display and select current track width
     wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
+    wxChoice* m_SelViaStackBox;          // a choice box to display and select current via stack preset
     wxChoice* m_CurrentVariantCtrl;      // a choice box to display and select current variant
 
     bool      m_ShowLayerManagerTools;

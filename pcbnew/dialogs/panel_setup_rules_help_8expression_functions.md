@@ -146,6 +146,14 @@ matches `<class_name>`.  Class assignments live in the project's
 
 
 ```
+    A.isStackedVia()
+```
+> True if `A` is a microvia that lands on another microvia, or is landed on by one.
+
+> The test is hole overlap, so a staggered pair counts whenever the holes touch.
+
+
+```
     A.isPlated()
 ```
 > True if `A` has a hole which is plated.

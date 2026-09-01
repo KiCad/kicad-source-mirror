@@ -36,6 +36,8 @@ using namespace std::placeholders;
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_item.h>
+#include <netclass.h>
+#include <netinfo.h>
 #include <collectors.h>
 #include <footprint.h>
 #include <geometry/geometry_utils.h>
@@ -68,6 +70,9 @@ using namespace std::placeholders;
 #include <tool/tool_menu.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <board_commit.h>
+#include <generators/pcb_via_stack.h>
+#include <tools/drawing_tool.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/drc_tool.h>
 #include <tools/zone_filler_tool.h>
@@ -98,6 +103,45 @@ using namespace std::placeholders;
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 using namespace KIGFX;
+
+
+const VIA_STACK_PRESET* MatchPendingStackExpansion( PCB_VIA* aVia, const std::set<KIID>& aPreRoute,
+                                                    const std::vector<PENDING_STACK_EXPANSION>& aPending )
+{
+    if( aPreRoute.count( aVia->m_Uuid ) )
+        return nullptr;
+
+    for( const PENDING_STACK_EXPANSION& exp : aPending )
+    {
+        if( aVia->GetNetCode() != exp.m_Net )
+            continue;
+
+        if( ( aVia->TopLayer() == exp.m_Start && aVia->BottomLayer() == exp.m_End )
+            || ( aVia->TopLayer() == exp.m_End && aVia->BottomLayer() == exp.m_Start ) )
+        {
+            return &exp.m_Preset;
+        }
+    }
+
+    return nullptr;
+}
+
+
+PCB_LAYER_ID ViaStackTargetLayer( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd, PCB_LAYER_ID aCurrent )
+{
+    if( aStart == aEnd )
+        return UNDEFINED_LAYER;
+
+    if( aCurrent == aStart )
+        return aEnd;
+
+    // From the end layer the stack goes back the way it came.
+    if( aCurrent == aEnd )
+        return aStart;
+
+    return UNDEFINED_LAYER;
+}
+
 
 namespace
 {
@@ -181,6 +225,17 @@ static const TOOL_ACTION ACT_PlaceMicroVia( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::via_microvia )
         .Flags( AF_NONE )
         .Parameter<int>( VIA_ACTION_FLAGS::MICROVIA ) );
+
+static const TOOL_ACTION ACT_PlaceViaStack(
+        TOOL_ACTION_ARGS()
+                .Name( "pcbnew.InteractiveRouter.PlaceViaStack" )
+                .Scope( AS_CONTEXT )
+                .DefaultHotkey( MD_CTRL + MD_SHIFT + 'V' )
+                .FriendlyName( _( "Place Microvia Stack at Track End" ) )
+                .Tooltip( _( "Drops the active microvia stack preset at the end of the currently routed track "
+                             "and continues on the target layer." ) )
+                .Icon( BITMAPS::add_via_stack )
+                .Flags( AF_NONE ) );
 
 static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SelLayerAndPlaceVia" )
@@ -277,6 +332,7 @@ ROUTER_TOOL::ROUTER_TOOL() :
         TOOL_BASE( "pcbnew.InteractiveRouter" ),
         m_lastTargetLayer( UNDEFINED_LAYER ),
         m_originalActiveLayer( UNDEFINED_LAYER ),
+        m_viaStackResumeLayer( UNDEFINED_LAYER ),
         m_inRouterTool( false ),
         m_inRouteSelected( false ),
         m_startWithVia( false )
@@ -618,6 +674,7 @@ bool ROUTER_TOOL::Init()
     menu.AddItem( ACT_PlaceThroughVia,                SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_PlaceBlindVia,                  SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_PlaceMicroVia,                  SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_PlaceViaStack, SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SelLayerAndPlaceThroughVia,     SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SelLayerAndPlaceBlindVia,       SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SelLayerAndPlaceMicroVia,       SELECTION_CONDITIONS::ShowAlways );
@@ -1137,6 +1194,156 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 }
 
 
+int ROUTER_TOOL::onViaStackCommand( const TOOL_EVENT& aEvent )
+{
+    if( !IsToolActive() )
+        return 0;
+
+    if( !m_router->RoutingInProgress() || !m_router->Placer() )
+        return 0;
+
+    m_iface->SetBoard( board() );
+
+    BOARD_DESIGN_SETTINGS&               bds = board()->GetDesignSettings();
+    const std::vector<VIA_STACK_PRESET>& presets = bds.m_ViaStackPresets;
+
+    if( presets.empty() )
+    {
+        frame()->GetInfoBar()->ShowMessageFor(
+                _( "No microvia stack presets defined. Add one in Board Setup, Microvia Stacks." ), 3000,
+                wxICON_INFORMATION );
+        return 0;
+    }
+
+    int                     idx = std::clamp( bds.GetViaStackIndex(), 0, (int) presets.size() - 1 );
+    const VIA_STACK_PRESET& preset = presets[idx];
+
+    PCB_LAYER_ID currentLayer = m_iface->GetBoardLayerFromPNSLayer( m_router->GetCurrentLayer() );
+
+    if( currentLayer == UNDEFINED_LAYER )
+        return 0;
+
+    const LSET enabled = board()->GetEnabledLayers();
+
+    if( !enabled.Contains( preset.m_StartLayer ) || !enabled.Contains( preset.m_EndLayer ) )
+    {
+        frame()->GetInfoBar()->ShowMessageFor( _( "The microvia stack preset layers are not present on this board." ),
+                                               3000, wxICON_ERROR );
+        return 0;
+    }
+
+    PCB_LAYER_ID targetLayer = ViaStackTargetLayer( preset.m_StartLayer, preset.m_EndLayer, currentLayer );
+
+    if( targetLayer == UNDEFINED_LAYER )
+    {
+        frame()->GetInfoBar()->ShowMessageFor(
+                wxString::Format( _( "The microvia stack runs between %s and %s. Route on one of those layers "
+                                     "to place it." ),
+                                  board()->GetLayerName( preset.m_StartLayer ),
+                                  board()->GetLayerName( preset.m_EndLayer ) ),
+                3000, wxICON_ERROR );
+        return 0;
+    }
+
+    if( preset.m_Staggered )
+    {
+        // The router cannot route through a staggered stack (lateral walk + connecting traces).
+        // Fix the track here and REMEMBER the stack, but build it only after routing tears down.
+        // Committing to the board while the PNS world is live invalidates its nodes (crash).
+        VECTOR2I head = m_endSnapPoint;
+
+        if( !m_router->FixRoute( head, m_endItem, true, false ) )
+        {
+            frame()->GetInfoBar()->ShowMessageFor( _( "Could not end the track here for a microvia stack." ), 3000,
+                                                   wxICON_ERROR );
+            UpdateMessagePanel();
+            return 0;
+        }
+
+        m_pendingViaStack = true;
+        m_pendingStackHead = head;
+        m_pendingStackStart = currentLayer;
+        m_pendingStackEnd = targetLayer;
+
+        UpdateMessagePanel();
+        return 0;
+    }
+
+    // A via the route places with no net reports UNCONNECTED, not ORPHANED.
+    int net = NETINFO_LIST::UNCONNECTED;
+
+    if( !m_router->GetCurrentNets().empty() )
+    {
+        if( NETINFO_ITEM* ni = static_cast<NETINFO_ITEM*>( m_router->GetCurrentNets()[0] ) )
+            net = ni->GetNetCode();
+    }
+
+    int viaSize;
+    int viaDrill;
+
+    if( preset.m_UseNetclass )
+    {
+        NETINFO_ITEM* ni = board()->FindNet( net );
+        NETCLASS*     nc = ni ? ni->GetNetClass() : nullptr;
+
+        viaSize = ( nc && nc->HasuViaDiameter() ) ? nc->GetuViaDiameter() : bds.GetCurrentViaSize();
+        viaDrill = ( nc && nc->HasuViaDrill() ) ? nc->GetuViaDrill() : bds.GetCurrentViaDrill();
+    }
+    else
+    {
+        viaSize = preset.m_ViaSize > 0 ? preset.m_ViaSize : bds.GetCurrentViaSize();
+        viaDrill = preset.m_ViaDrill > 0 ? preset.m_ViaDrill : bds.GetCurrentViaDrill();
+    }
+
+    // Routing to a non-adjacent layer leaves one multi-hop microvia that finishInteractive()
+    // expands into a stack.
+    if( m_pendingStackedExpansions.empty() )
+    {
+        m_preRouteExpandableVias = PCB_VIA_STACK::CollectExpandableMicrovias( board() );
+    }
+
+    m_pendingStackedExpansions.push_back( { currentLayer, targetLayer, net, preset } );
+
+    PNS::SIZES_SETTINGS sizes = m_router->Sizes();
+    sizes.ClearLayerPairs();
+
+    sizes.SetViaDiameter( viaSize );
+    sizes.SetViaDrill( viaDrill );
+    sizes.SetViaType( VIATYPE::MICROVIA );
+    sizes.AddLayerPair( m_iface->GetPNSLayerFromBoardLayer( currentLayer ),
+                        m_iface->GetPNSLayerFromBoardLayer( targetLayer ) );
+
+    m_router->UpdateSizes( sizes );
+
+    if( !m_router->IsPlacingVia() )
+        m_router->ToggleViaPlacement();
+
+    if( m_router->RoutingInProgress() )
+    {
+        updateEndItem( aEvent );
+        m_router->Move( m_endSnapPoint, m_endItem );
+    }
+
+    UpdateMessagePanel();
+    return 0;
+}
+
+
+void ROUTER_TOOL::commitPendingViaStack()
+{
+    m_pendingViaStack = false;
+
+    // Hand off to the interactive microvia stack placement, pre-anchored at the routed head, so
+    // the user steers each staggered hop exactly like free-standing placement. Running this only
+    // after the route has fully torn down keeps the board edit clear of the PNS world.
+    if( DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>() )
+    {
+        drawingTool->SeedViaStackStart( m_pendingStackHead, m_pendingStackStart, m_pendingStackEnd );
+        m_toolMgr->RunAction( PCB_ACTIONS::placeViaStack );
+    }
+}
+
+
 int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 {
     wxCHECK( m_router, 0 );
@@ -1470,6 +1677,14 @@ bool ROUTER_TOOL::prepareInteractive( VECTOR2D aStartPosition )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     PCB_LAYER_ID    pcbLayer = getStartLayer( m_startItem );
+
+    // The stack handoff names the resume layer so snapping does not guess it from nearby copper.
+    if( m_viaStackResumeLayer != UNDEFINED_LAYER )
+    {
+        pcbLayer = m_viaStackResumeLayer;
+        m_viaStackResumeLayer = UNDEFINED_LAYER;
+    }
+
     int             pnsLayer = m_iface->GetPNSLayerFromBoardLayer( pcbLayer );
 
     if( !::IsCopperLayer( pcbLayer ) )
@@ -1544,6 +1759,22 @@ bool ROUTER_TOOL::prepareInteractive( VECTOR2D aStartPosition )
 bool ROUTER_TOOL::finishInteractive()
 {
     m_router->StopRouting();
+
+    if( !m_pendingStackedExpansions.empty() )
+    {
+        BOARD_COMMIT commit( frame() );
+
+        auto matcher = [&]( PCB_VIA* aVia ) -> const VIA_STACK_PRESET*
+        {
+            return MatchPendingStackExpansion( aVia, m_preRouteExpandableVias, m_pendingStackedExpansions );
+        };
+
+        if( PCB_VIA_STACK::ExpandMultiHopMicrovias( board(), &commit, matcher ) > 0 )
+            commit.Push( _( "Expand Microvia Stacks" ), APPEND_UNDO );
+
+        m_pendingStackedExpansions.clear();
+        m_preRouteExpandableVias.clear();
+    }
 
     m_startItem = nullptr;
     m_endItem   = nullptr;
@@ -1715,6 +1946,19 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = nullptr;
         }
+        else if( evt->IsAction( &ACT_PlaceViaStack ) )
+        {
+            onViaStackCommand( *evt );
+
+            // A staggered drop fixes the track and queues the stack, break so the normal
+            // teardown runs (restores the cursor) and the generator is committed after the
+            // PNS world is gone.
+            if( m_pendingViaStack || !m_router->RoutingInProgress() )
+                break;
+
+            updateEndItem( *evt );
+            m_router->Move( m_endSnapPoint, m_endItem );
+        }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
             m_router->FlipPosture();
@@ -1780,6 +2024,10 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
     m_iface->SetCommitFlags( 0 );
 
     finishInteractive();
+
+    // The PNS world is now torn down, so it is safe to add a queued staggered stack to the board.
+    if( m_pendingViaStack )
+        commitPendingViaStack();
 }
 
 
@@ -1862,6 +2110,17 @@ void ROUTER_TOOL::breakTrack()
 {
     if( !m_startItem )
         return;
+
+    // Never split a via stack's connecting trace. The stack manages it as a unit, and a
+    // split fragment would drop out of the group. Other generators still allow splitting.
+    if( BOARD_ITEM* parent = m_startItem->Parent() )
+    {
+        if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( parent->GetParentGroup() ) )
+        {
+            if( generator->GetGeneratorType() == PCB_VIA_STACK::GENERATOR_TYPE )
+                return;
+        }
+    }
 
     if( m_startItem->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T ) )
         m_router->BreakSegmentOrArc( m_startItem, m_startSnapPoint );
@@ -3248,6 +3507,7 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceThroughVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceBlindVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceMicroVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaStackCommand, ACT_PlaceViaStack.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceThroughVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceBlindVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceMicroVia.MakeEvent() );

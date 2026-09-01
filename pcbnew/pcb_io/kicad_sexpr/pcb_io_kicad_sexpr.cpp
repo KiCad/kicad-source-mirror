@@ -2817,8 +2817,11 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_CONSTRAINT* aConstraint ) const
 void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATOR* aGenerator ) const
 {
     // Some conditions appear to still be creating ghost tuning patterns.  Don't save them.
-    if( aGenerator->GetGeneratorType() == wxT( "tuning_pattern" )
-            && aGenerator->GetItems().empty() )
+    // A microvia stack with no members is the same kind of ghost: it reloads with no size, so
+    // it can be neither seen nor picked, and with no net to rebuild its vias on.
+    if( aGenerator->GetItems().empty()
+        && ( aGenerator->GetGeneratorType() == wxT( "tuning_pattern" )
+             || aGenerator->GetGeneratorType() == wxT( "via_stack" ) ) )
     {
         return;
     }

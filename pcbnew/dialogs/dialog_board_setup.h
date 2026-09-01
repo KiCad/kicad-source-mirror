@@ -68,6 +68,7 @@ private:
     size_t m_maskAndPastePage;
     size_t m_constraintsPage;
     size_t m_tracksAndViasPage;
+    size_t m_viaStacksPage;
     size_t m_zonesPage;
     size_t m_teardropsPage;
     size_t m_tuningPatternsPage;

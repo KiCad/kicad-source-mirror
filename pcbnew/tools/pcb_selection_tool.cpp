@@ -2419,7 +2419,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
     for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
     {
         std::map<VECTOR2I, std::vector<PCB_TRACK*>> trackMap;
-        std::map<VECTOR2I, PCB_VIA*>                viaMap;
+        std::map<VECTOR2I, std::vector<PCB_VIA*>>   viaMap;
         std::map<VECTOR2I, PAD*>                    padMap;
         std::map<VECTOR2I, std::vector<PCB_SHAPE*>> shapeMap;
         std::vector<std::pair<VECTOR2I, LSET>>      activePts;
@@ -2446,7 +2446,10 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
             case PCB_VIA_T:
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                viaMap[via->GetStart()] = via;
+
+                // The hops of a stacked microvia stack are coaxial, so one position can hold
+                // several vias.
+                viaMap[via->GetStart()].push_back( via );
                 break;
             }
 
@@ -2522,40 +2525,63 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
 
                 PCB_VIA* hitVia = nullptr;
 
+                // Prefer an unvisited via so a stack is walked hop by hop.
+                auto better = [&]( PCB_VIA* aCandidate )
+                {
+                    return !hitVia || ( hitVia->HasFlag( SKIP_STRUCT ) && !aCandidate->HasFlag( SKIP_STRUCT ) );
+                };
+
+                // An unvisited hit is the best there is, so stop looking for one.
+                auto settled = [&]()
+                {
+                    return hitVia && !hitVia->HasFlag( SKIP_STRUCT );
+                };
+
                 // exact position match (common case)
                 auto exactIt = viaMap.find( pt );
 
-                if( exactIt != viaMap.end() && ( exactIt->second->GetLayerSet() & layerSetCu ).any() )
+                if( exactIt != viaMap.end() )
                 {
-                    hitVia = exactIt->second;
+                    for( PCB_VIA* via : exactIt->second )
+                    {
+                        if( ( via->GetLayerSet() & layerSetCu ).any() && better( via ) )
+                            hitVia = via;
+
+                        if( settled() )
+                            break;
+                    }
                 }
-                else
+
+                if( !hitVia )
                 {
                     // off-center VIA connection
-                    for( auto& [pos, via] : viaMap )
+                    for( auto& [pos, vias] : viaMap )
                     {
-                        if( !( via->GetLayerSet() & layerSetCu ).any() )
-                            continue;
-
-                        bool hit = false;
-
-                        for( PCB_LAYER_ID layer : LSET( via->GetLayerSet() & layerSetCu ).CuStack() )
+                        for( PCB_VIA* via : vias )
                         {
-                            int     radius = via->GetWidth( layer ) / 2;
-                            int64_t radiusSq = static_cast<int64_t>( radius ) * radius;
+                            if( !( via->GetLayerSet() & layerSetCu ).any() || !better( via ) )
+                                continue;
 
-                            if( ( pt - pos ).SquaredEuclideanNorm() <= radiusSq )
+                            for( PCB_LAYER_ID layer : LSET( via->GetLayerSet() & layerSetCu ).CuStack() )
                             {
-                                hit = true;
-                                break;
+                                int     radius = via->GetWidth( layer ) / 2;
+                                int64_t radiusSq = static_cast<int64_t>( radius ) * radius;
+
+                                if( ( pt - pos ).SquaredEuclideanNorm() <= radiusSq )
+                                {
+                                    hitVia = via;
+                                    break;
+                                }
                             }
+
+                            if( settled() )
+                                break;
                         }
 
-                        if( hit )
-                        {
-                            hitVia = via;
+                        // The walk reaches the next hop by re-opening this position, so there is
+                        // no reason to keep scanning once something covers the point.
+                        if( hitVia )
                             break;
-                        }
                     }
                 }
 
@@ -2718,6 +2744,9 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                             if( inside )
                                 activePts.push_back( { trkPt, hitVia->GetLayerSet() } );
                         }
+
+                        // Re-open this position so the next hop of a stack is found.
+                        activePts.push_back( { viaPos, hitVia->GetLayerSet() } );
 
                         if( aStopCondition != STOP_AT_SEGMENT )
                             expand = true;

@@ -316,6 +316,9 @@ public:
 
     bool Evaluate( const wxString& aExpr );
     int  Result() const { return m_result; }
+
+    /// Unrounded result, for constraints whose value is a ratio rather than a count or a length.
+    double    ResultAsDouble() const { return m_resultAsDouble; }
     EDA_UNITS Units() const { return m_units; }
 
     void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
@@ -328,6 +331,7 @@ public:
 
 private:
     int  m_result;
+    double    m_resultAsDouble;
     EDA_UNITS m_units;
 
     PCBEXPR_COMPILER      m_compiler;

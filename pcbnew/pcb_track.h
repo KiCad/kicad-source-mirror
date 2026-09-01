@@ -366,6 +366,12 @@ public:
     PCB_VIA( const PCB_VIA& aOther );
     PCB_VIA& operator=( const PCB_VIA &aOther );
 
+    /**
+     * Runs of microvias that land on one another, each ordered from its outermost hop down.
+     * A run of one is left out, so an entry is a stack whether or not a generator built it.
+     */
+    static std::vector<std::vector<PCB_VIA*>> CollectMicroviaColumns( BOARD* aBoard );
+
     void CopyFrom( const BOARD_ITEM* aOther ) override;
 
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override

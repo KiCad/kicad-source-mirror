@@ -60,6 +60,11 @@ enum PCB_DRC_CODE
     DRCE_PADSTACK,                       // something is questionable with a pad or via stackup
     DRCE_PADSTACK_INVALID,               // something is invalid with a pad or via stackup
     DRCE_MICROVIA_DRILL_OUT_OF_RANGE,    // Too small micro via drill
+    DRCE_MALFORMED_MICROVIA_STACK_SPAN,  // Stack's hops do not tile the span it declares
+    DRCE_MICROVIA_STACK_NOT_FILLED,      // Microvia under another microvia is not filled
+    DRCE_MICROVIA_STACK_DEPTH,           // Microvia stack exceeds the maximum depth
+    DRCE_MICROVIA_ASPECT_RATIO,          // Microvia is too deep for its diameter
+    DRCE_MICROVIA_CROSSES_CORE,          // Microvia crosses core rather than build-up material
     DRCE_OVERLAPPING_FOOTPRINTS,         // footprint courtyards overlap
     DRCE_MISSING_COURTYARD,              // footprint has no courtyard defined
     DRCE_MALFORMED_COURTYARD,            // footprint has a courtyard but malformed
@@ -120,8 +125,8 @@ enum PCB_DRC_CODE
 
     DRCE_SCHEMATIC_FIELDS_PARITY, // Mismatch with schematic fields
 
-    DRCE_VIA_STITCH_OVERLAP,      // Two same-net via-stitching zones overlap — placement priority
-                                  // is undefined in the overlap, leading to nondeterministic vias.
+    DRCE_VIA_STITCH_OVERLAP, // Two same-net via-stitching zones overlap — placement priority
+                             // is undefined in the overlap, leading to nondeterministic vias.
 
     DRCE_LAST = DRCE_VIA_STITCH_OVERLAP
 };
@@ -227,6 +232,11 @@ private:
     static DRC_ITEM padstack;
     static DRC_ITEM padstackInvalid;
     static DRC_ITEM microviaDrillTooSmall;
+    static DRC_ITEM malformedMicroviaStackSpan;
+    static DRC_ITEM microviaStackNotFilled;
+    static DRC_ITEM microviaStackDepth;
+    static DRC_ITEM microviaAspectRatio;
+    static DRC_ITEM microviaCrossesCore;
     static DRC_ITEM courtyardsOverlap;
     static DRC_ITEM missingCourtyard;
     static DRC_ITEM malformedCourtyard;

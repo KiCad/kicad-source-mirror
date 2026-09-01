@@ -25,6 +25,10 @@
 #include <pcbnew/pad.h>
 #include <pcbnew/pcb_track.h>
 #include <pcbnew/pcbexpr_evaluator.h>
+#include <pcbnew/generators/pcb_via_stack.h>
+
+#include <lset.h>
+#include <padstack.h>
 
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
@@ -341,6 +345,8 @@ public:
         return inheritTrackWidth( aItem, aInheritedWidth, aStartPosition );
     }
 
+    std::unique_ptr<PNS::VIA> TestSyncVia( PCB_VIA* aVia ) { return syncVia( aVia ); }
+
 private:
     PNS_TEST_FIXTURE* m_testFixture;
 };
@@ -393,6 +399,100 @@ BOOST_FIXTURE_TEST_CASE( PNSShoveOwnsRootLineHistory, PNS_TEST_FIXTURE )
     shove.SetShovePolicy( &segment, PNS::SHOVE::SHP_SHOVE );
     shove.SetShovePolicy( line, PNS::SHOVE::SHP_SHOVE );
 }
+
+// A microvia stack's hops are copper on a net, so the router has to be able to anchor a route
+// on one. Non-routable means "obstacle carrying no connectivity", which would send
+// snapToItem() to the nearest grid point and start the track off the via. Locked is what
+// keeps the hop from being shoved.
+BOOST_FIXTURE_TEST_CASE( PNSViaStackHopIsRoutableButLocked, PNS_TEST_FIXTURE )
+{
+    BOARD board;
+    board.SetCopperLayerCount( 4 );
+    board.SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+
+    PCB_VIA_STACK* stack = new PCB_VIA_STACK( &board, F_Cu );
+    stack->SetStartLayer( F_Cu );
+    stack->SetEndLayer( In2_Cu );
+    stack->SetViaSize( 300000 );
+    stack->SetViaDrill( 150000 );
+
+    // Deliberately off grid, which is where the grid fallback shows itself.
+    stack->SetPosition( VECTOR2I( 1234567, 7654321 ) );
+    board.Add( stack );
+    stack->Regenerate( &board, nullptr );
+
+    PCB_VIA* hop = nullptr;
+
+    for( BOARD_ITEM* item : stack->GetBoardItems() )
+    {
+        if( item->Type() == PCB_VIA_T )
+            hop = static_cast<PCB_VIA*>( item );
+    }
+
+    BOOST_REQUIRE_MESSAGE( hop, "the stack must have built at least one microvia" );
+
+    m_iface->SetBoard( &board );
+
+    std::unique_ptr<PNS::VIA> synced = m_iface->TestSyncVia( hop );
+
+    BOOST_REQUIRE( synced );
+    BOOST_CHECK_MESSAGE( synced->IsRoutable(), "a stack hop must be a valid route anchor" );
+    BOOST_CHECK_MESSAGE( synced->IsLocked(), "a stack hop must still be locked against shoving" );
+}
+
+
+// Routability decides whether a route may anchor on an item, not whether it collides with one.
+// A stack hop has to obstruct a foreign-net via either way.
+BOOST_FIXTURE_TEST_CASE( PNSViaStackHopIsAnObstacle, PNS_TEST_FIXTURE )
+{
+    BOARD board;
+    board.SetCopperLayerCount( 4 );
+    board.SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+
+    VECTOR2I at( 5000000, 5000000 );
+
+    PCB_VIA_STACK* stack = new PCB_VIA_STACK( &board, F_Cu );
+    stack->SetStartLayer( F_Cu );
+    stack->SetEndLayer( In2_Cu );
+    stack->SetViaSize( 300000 );
+    stack->SetViaDrill( 150000 );
+    stack->SetPosition( at );
+    board.Add( stack );
+    stack->Regenerate( &board, nullptr );
+
+    m_iface->SetBoard( &board );
+
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    int hops = 0;
+
+    for( BOARD_ITEM* item : stack->GetBoardItems() )
+    {
+        if( item->Type() != PCB_VIA_T )
+            continue;
+
+        std::unique_ptr<PNS::VIA> synced = m_iface->TestSyncVia( static_cast<PCB_VIA*>( item ) );
+        BOOST_REQUIRE( synced );
+        world->AddRaw( synced.release() );
+        hops++;
+    }
+
+    BOOST_REQUIRE_EQUAL( hops, 2 );
+
+    PNS::VIA* intruder = new PNS::VIA( at, PNS_LAYER_RANGE( F_Cu, B_Cu ), 300000, 150000 );
+    intruder->SetNet( (PNS::NET_HANDLE) 99 );
+    world->AddRaw( intruder );
+
+    m_ruleResolver.m_defaultClearance = 200000;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( intruder, obstacles );
+
+    BOOST_CHECK_MESSAGE( obstacles.size() > 0, "a stack hop must obstruct a foreign-net via" );
+}
+
 
 static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
 {

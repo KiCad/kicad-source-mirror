@@ -91,6 +91,38 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* 
 }
 
 
+void PCB_EDIT_FRAME::SelectViaStack_Event( wxCommandEvent& event )
+{
+    int nPresets = (int) GetDesignSettings().m_ViaStackPresets.size();
+    int sel = m_SelViaStackBox->GetSelection();
+
+    if( sel == int( m_SelViaStackBox->GetCount() - 2 ) )
+    {
+        // the "---" separator
+        m_SelViaStackBox->SetSelection( GetDesignSettings().GetViaStackIndex() );
+    }
+    else if( sel == int( m_SelViaStackBox->GetCount() - 1 ) )
+    {
+        // "Edit Via Stacks..."
+        m_SelViaStackBox->SetSelection( GetDesignSettings().GetViaStackIndex() );
+
+        // See the matching comment in Tracks_and_Vias_Size_Event: defer so the GTK
+        // EVT_CHOICE signal unwinds before the toolbar is rebuilt.
+        CallAfter(
+                [this]()
+                {
+                    ShowBoardSetupDialog( _( "Microvia Stacks" ) );
+                } );
+    }
+    else if( sel >= 0 && sel < nPresets )
+    {
+        GetDesignSettings().SetViaStackIndex( sel );
+    }
+
+    GetCanvas()->SetFocus();
+}
+
+
 void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
 {
     int ii;

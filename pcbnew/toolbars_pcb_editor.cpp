@@ -125,6 +125,9 @@ ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter( "control.PCBVia
                                                                  _( "Via diameter selector" ),
                                                                  _( "Control to select the via diameter" ),
                                                                  { FRAME_PCB_EDITOR } );
+ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::viaStack( "control.PCBViaStack", _( "Microvia stack selector" ),
+                                                              _( "Control to select the microvia stack preset" ),
+                                                              { FRAME_PCB_EDITOR } );
 ACTION_TOOLBAR_CONTROL PCB_ACTION_TOOLBAR_CONTROLS::currentVariant( "control.PCBCurrentVariant",
                                                                     _( "Current variant" ),
                                                                     _( "Control to select the current variant" ),
@@ -236,6 +239,7 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( PCB_ACTIONS::showDiffPhaseSkew )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Via tools" ) )
                             .AddAction( PCB_ACTIONS::drawVia )
+                            .AddAction( PCB_ACTIONS::placeViaStack )
                             .AddAction( PCB_ACTIONS::drawViaStitchArea ) )
               .AppendAction( PCB_ACTIONS::drawZone )
               .WithContextMenu(
@@ -393,6 +397,9 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendControl( PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter );
 
         config.AppendSeparator()
+              .AppendControl( PCB_ACTION_TOOLBAR_CONTROLS::viaStack );
+
+        config.AppendSeparator()
               .AppendControl( ACTION_TOOLBAR_CONTROLS::layerSelector )
               .AppendAction( PCB_ACTIONS::selectLayerPair );
 
@@ -456,6 +463,24 @@ void PCB_EDIT_FRAME::configureToolbars()
 
     RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::viaDiameter, viaDiaSelectorFactory );
 
+    // Box to display and choose via stack presets
+    auto viaStackSelectorFactory = [this]( ACTION_TOOLBAR* aToolbar )
+    {
+        if( !m_SelViaStackBox )
+        {
+            m_SelViaStackBox = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VIA_STACK, wxDefaultPosition, wxDefaultSize,
+                                             0, nullptr );
+        }
+
+        m_SelViaStackBox->SetToolTip( _( "Select the microvia stack preset placed by the "
+                                         "microvia stack tool." ) );
+
+        UpdateViaStackSelectBox( m_SelViaStackBox );
+        aToolbar->Add( m_SelViaStackBox );
+    };
+
+    RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::viaStack, viaStackSelectorFactory );
+
     // Variant selection drop down control on main tool bar
     auto variantSelectionCtrlFactory =
             [this]( ACTION_TOOLBAR* aToolbar )
@@ -503,6 +528,7 @@ void PCB_EDIT_FRAME::ClearToolbarControl( int aId )
     {
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:    m_SelTrackWidthBox = nullptr;   break;
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:       m_SelViaSizeBox = nullptr;      break;
+    case ID_AUX_TOOLBAR_PCB_VIA_STACK: m_SelViaStackBox = nullptr; break;
     case ID_AUX_TOOLBAR_PCB_VARIANT_SELECT: m_CurrentVariantCtrl = nullptr; break;
     }
 }
@@ -743,6 +769,36 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 }
 
 
+void PCB_EDIT_FRAME::UpdateViaStackSelectBox( wxChoice* aViaStackSelectBox )
+{
+    if( aViaStackSelectBox == nullptr )
+        return;
+
+    aViaStackSelectBox->Clear();
+
+    const std::vector<VIA_STACK_PRESET>& presets = GetDesignSettings().m_ViaStackPresets;
+
+    if( presets.empty() )
+        aViaStackSelectBox->Append( _( "Microvia stack: none defined" ) );
+
+    for( const VIA_STACK_PRESET& preset : presets )
+        aViaStackSelectBox->Append( wxString::Format( _( "Microvia stack: %s" ), preset.m_Name ) );
+
+    aViaStackSelectBox->Append( wxT( "---" ) );
+    aViaStackSelectBox->Append( _( "Edit Pre-defined Microvia Stacks..." ) );
+
+    int idx = GetDesignSettings().GetViaStackIndex();
+
+    if( idx < 0 || idx >= (int) presets.size() )
+    {
+        idx = 0;
+        GetDesignSettings().SetViaStackIndex( 0 );
+    }
+
+    aViaStackSelectBox->SetSelection( presets.empty() ? 0 : idx );
+}
+
+
 void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 {
     if( m_SelLayerBox == nullptr || m_tbTopAux == nullptr )
@@ -853,6 +909,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 {
     UpdateTrackWidthSelectBox( m_SelTrackWidthBox, true, true );
     UpdateViaSizeSelectBox( m_SelViaSizeBox, true, true );
+    UpdateViaStackSelectBox( m_SelViaStackBox );
 }
 
 

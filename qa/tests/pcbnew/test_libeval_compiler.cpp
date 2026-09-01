@@ -410,6 +410,64 @@ BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
     testEvalExpr( wxT( "A.inNetChainClass('LowSpeed')" ), VAL( 0.0 ), false, &trackClassified, &trackClassified );
 }
 
+BOOST_AUTO_TEST_CASE( StackedMicroviaExpression )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    BOARD brd;
+    brd.SetCopperLayerCount( 4 );
+
+    auto microvia = []( BOARD* aBoard, const VECTOR2I& aPos, PCB_LAYER_ID aTop, PCB_LAYER_ID aBottom )
+    {
+        PCB_VIA* via = new PCB_VIA( aBoard );
+
+        via->SetViaType( VIATYPE::MICROVIA );
+        via->SetPosition( aPos );
+        via->SetLayerPair( aTop, aBottom );
+        via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.25 ) );
+        via->SetDrill( pcbIUScale.mmToIU( 0.1 ) );
+        aBoard->Add( via );
+
+        return via;
+    };
+
+    VECTOR2I origin( 0, 0 );
+    VECTOR2I away( pcbIUScale.mmToIU( 10 ), 0 );
+
+    PCB_VIA* upperHop = microvia( &brd, origin, F_Cu, In1_Cu );
+    PCB_VIA* lowerHop = microvia( &brd, origin, In1_Cu, In2_Cu );
+    PCB_VIA* lone = microvia( &brd, away, F_Cu, In1_Cu );
+
+    PCB_VIA* through = new PCB_VIA( &brd );
+
+    through->SetViaType( VIATYPE::THROUGH );
+    through->SetPosition( origin );
+    through->SetLayerPair( F_Cu, B_Cu );
+    through->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.6 ) );
+    through->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
+    brd.Add( through );
+
+    // Both hops of a stack are in it, not just the one on top.
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), false, upperHop, upperHop );
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), false, lowerHop, lowerHop );
+
+    // A microvia landing on nothing is not a stack.
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 0.0 ), false, lone, lone );
+
+    // A through via sharing the position of a stack is not part of it.
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 0.0 ), false, through, through );
+
+    // The predicate composes with the rest of the language.
+    testEvalExpr( wxT( "A.isMicroVia() && !A.isStackedVia()" ), VAL( 1.0 ), false, lone, lone );
+
+    // The relation is cached for the whole board, so an edit has to drop it.
+    PCB_VIA* landing = microvia( &brd, away, In1_Cu, In2_Cu );
+    brd.IncrementTimeStamp();
+
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), false, lone, lone );
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), false, landing, landing );
+}
 
 BOOST_AUTO_TEST_CASE( ParentNavigation )
 {

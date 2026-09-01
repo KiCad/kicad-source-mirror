@@ -200,6 +200,15 @@ protected:
 
     /// @copydoc BOARD_ITEM::swapData
     void swapData( BOARD_ITEM* aImage ) override;
+
+    /**
+     * Re-point the children of this group and @a aImage at whichever group now holds them.
+     *
+     * swapData() exchanges the member set with the undo image, but the children's
+     * parentGroup back-pointers are not part of that swap and are left naming the wrong
+     * group. Subclasses that swap their own derived data must call this afterwards.
+     */
+    void swapChildOwnership( PCB_GROUP* aImage );
 };
 
 #endif // CLASS_PCB_GROUP_H_

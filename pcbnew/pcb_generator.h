@@ -130,6 +130,10 @@ public:
 
     virtual wxString GetGeneratorType() const;
 
+    virtual bool LayerFollowsMembers() const { return true; }
+
+    virtual bool CanDuplicate() const { return false; }
+
     virtual const STRING_ANY_MAP GetProperties() const;
 
     virtual void SetProperties( const STRING_ANY_MAP& aProps );

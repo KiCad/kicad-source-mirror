@@ -55,6 +55,9 @@
 #define DEFAULT_DIMENSION_ARROW_LENGTH         50 // mils, for legacy purposes
 #define DEFAULT_DIMENSION_EXTENSION_OFFSET     0.5
 
+// Largest microvia stack pitch, in mm. Bounds the hop position arithmetic.
+#define MAX_MICROVIA_STACK_PITCH_MM 25.0
+
 // Board thickness, mainly for 3D view:
 #define DEFAULT_BOARD_THICKNESS_MM             1.6
 
@@ -151,6 +154,27 @@ struct VIA_DIMENSION
 
         return m_Drill < aOther.m_Drill;
     }
+};
+
+
+/**
+ * A named microvia stack definition, chosen while routing instead of entering the values
+ * each time. See PCB_VIA_STACK.
+ */
+struct VIA_STACK_PRESET
+{
+    wxString     m_Name;
+    PCB_LAYER_ID m_StartLayer = F_Cu;
+    PCB_LAYER_ID m_EndLayer = In1_Cu;
+    bool         m_Staggered = false;
+    int          m_ViaSize = 0; // <= 0 means use netclass
+    int          m_ViaDrill = 0;
+    bool         m_UseNetclass = false;
+    bool         m_Filled = true;
+    bool         m_Capped = false;
+    int          m_Pitch = 0; // staggered only
+
+    bool operator==( const VIA_STACK_PRESET& aOther ) const = default;
 };
 
 
@@ -384,6 +408,16 @@ public:
      * @return the current via size list index.
      */
     int GetViaSizeIndex() const { return m_viaSizeIndex; }
+
+    /**
+     * @return the currently selected via stack preset index (into m_ViaStackPresets).
+     */
+    inline int GetViaStackIndex() const { return m_viaStackIndex; }
+
+    /**
+     * Set the current via stack preset index to \a aIndex.
+     */
+    inline void SetViaStackIndex( int aIndex ) { m_viaStackIndex = aIndex; }
 
     /**
      * Set the current via size list index to \a aIndex.
@@ -661,6 +695,7 @@ public:
     // Note: the first value in each dimensions list is the current netclass value
     std::vector<int>                 m_TrackWidthList;
     std::vector<VIA_DIMENSION>       m_ViasDimensionsList;
+    std::vector<VIA_STACK_PRESET>    m_ViaStackPresets;
     std::vector<DIFF_PAIR_DIMENSION> m_DiffPairDimensionsList;
 
     /**
@@ -791,6 +826,7 @@ private:
     int        m_trackWidthIndex;
     int        m_viaSizeIndex;
     int        m_diffPairIndex;
+    int        m_viaStackIndex; // current selection into m_ViaStackPresets
 
     // Custom values for track/via sizes (specified via dialog instead of netclass or lists)
     bool       m_useCustomTrackVia;

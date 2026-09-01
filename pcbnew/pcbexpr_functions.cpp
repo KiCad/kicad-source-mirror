@@ -21,6 +21,7 @@
 #include <cstdio>
 #include <memory>
 #include <mutex>
+#include <set>
 
 #include <wx/log.h>
 
@@ -1265,6 +1266,50 @@ static void isBuriedVia( LIBEVAL::CONTEXT* aCtx, void* self )
         result->Set( 1.0 );
 }
 
+static void isStackedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*      item = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*  result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !item || item->Type() != PCB_VIA_T )
+        return;
+
+    PCB_VIA* via = static_cast<PCB_VIA*>( item );
+    BOARD*   board = via->GetBoard();
+
+    if( !board || via->GetViaType() != VIATYPE::MICROVIA )
+        return;
+
+    {
+        std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
+
+        if( board->m_StackedMicroviaCache.has_value() )
+        {
+            if( board->m_StackedMicroviaCache->count( via ) )
+                result->Set( 1.0 );
+
+            return;
+        }
+    }
+
+    std::set<const PCB_VIA*> stacked;
+
+    for( const std::vector<PCB_VIA*>& column : PCB_VIA::CollectMicroviaColumns( board ) )
+        stacked.insert( column.begin(), column.end() );
+
+    {
+        std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+        board->m_StackedMicroviaCache = stacked;
+    }
+
+    if( stacked.count( via ) )
+        result->Set( 1.0 );
+}
+
 static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
@@ -1758,6 +1803,7 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "isBlindVia()" ), isBlindVia );
     RegisterFunc( wxT( "isBuriedVia()" ), isBuriedVia );
     RegisterFunc( wxT( "isBlindBuriedVia()" ), isBlindBuriedViaFunc );
+    RegisterFunc( wxT( "isStackedVia()" ), isStackedViaFunc );
 
     RegisterFunc( wxT( "memberOf('x') DEPRECATED" ), memberOfGroupFunc );
     RegisterFunc( wxT( "memberOfGroup('x')" ), memberOfGroupFunc );

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <title>constraint_microvia_aspect_ratio</title>
+
+  <defs>
+    <marker id="tail" markerWidth="10" markerHeight="8" refX="0.5" refY="4" orient="auto">
+      <path d="M 0.5 4 L 9 0.8 L 7 4 L 9 7.2 Z" fill="#545454"/>
+    </marker>
+    <marker id="head" markerWidth="10" markerHeight="8" refX="9.5" refY="4" orient="auto">
+      <path d="M 9.5 4 L 1 0.8 L 3 4 L 1 7.2 Z" fill="#545454"/>
+    </marker>
+  </defs>
+
+  <!-- the two foils one hop joins, with a single dielectric between -->
+  <rect x="20" y="62"  width="146" height="9" fill="#4D4D4D"/>
+  <rect x="20" y="136" width="146" height="9" fill="#4D4D4D"/>
+
+  <!-- one laser drilled hop, tapering away from the foil the laser enters -->
+  <path d="M 70 71 L 122 71 L 112 136 L 80 136 Z" fill="#F59200" stroke="#4D4D4D" stroke-width="1.5"/>
+  <rect x="62" y="58"  width="68" height="8" fill="#F59200" stroke="#4D4D4D" stroke-width="1.5"/>
+  <rect x="70" y="132" width="52" height="8" fill="#F59200" stroke="#4D4D4D" stroke-width="1.5"/>
+
+  <!-- hole diameter, measured where the laser enters -->
+  <line x1="70"  y1="56" x2="70"  y2="22" stroke="#545454" stroke-width="1.2"/>
+  <line x1="122" y1="56" x2="122" y2="22" stroke="#545454" stroke-width="1.2"/>
+  <line x1="70" y1="30" x2="122" y2="30" stroke="#545454" stroke-width="1.4"
+        marker-start="url(#tail)" marker-end="url(#head)"/>
+
+  <!-- depth, the dielectric plus the foil the laser passes through -->
+  <line x1="166" y1="62"  x2="207" y2="62"  stroke="#545454" stroke-width="1.2"/>
+  <line x1="166" y1="140" x2="207" y2="140" stroke="#545454" stroke-width="1.2"/>
+  <line x1="196" y1="62" x2="196" y2="140" stroke="#545454" stroke-width="1.4"
+        marker-start="url(#tail)" marker-end="url(#head)"/>
+</svg>

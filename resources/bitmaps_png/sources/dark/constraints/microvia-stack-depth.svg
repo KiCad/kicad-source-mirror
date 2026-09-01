@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <title>constraint_microvia_stack_depth_dark</title>
+
+  <defs>
+    <!-- drawn pointing along +X, orient="auto" turns them to follow the line -->
+    <marker id="tail" markerWidth="10" markerHeight="8" refX="0.5" refY="4" orient="auto">
+      <path d="M 0.5 4 L 9 0.8 L 7 4 L 9 7.2 Z" fill="#E8EAED"/>
+    </marker>
+    <marker id="head" markerWidth="10" markerHeight="8" refX="9.5" refY="4" orient="auto">
+      <path d="M 9.5 4 L 1 0.8 L 3 4 L 1 7.2 Z" fill="#E8EAED"/>
+    </marker>
+  </defs>
+
+  <!-- four copper foils of the build-up -->
+  <rect x="20" y="42"  width="146" height="9" fill="#B4B4B4"/>
+  <rect x="20" y="92"  width="146" height="9" fill="#B4B4B4"/>
+  <rect x="20" y="142" width="146" height="9" fill="#B4B4B4"/>
+  <rect x="20" y="192" width="146" height="9" fill="#B4B4B4"/>
+
+  <!-- three hops stacked on one another, tapered because each is laser drilled -->
+  <path d="M 76 51  L 112 51  L 107 92  L 81 92  Z" fill="#F59200" stroke="#B4B4B4" stroke-width="1.5"/>
+  <path d="M 76 101 L 112 101 L 107 142 L 81 142 Z" fill="#F59200" stroke="#B4B4B4" stroke-width="1.5"/>
+  <path d="M 76 151 L 112 151 L 107 192 L 81 192 Z" fill="#F59200" stroke="#B4B4B4" stroke-width="1.5"/>
+
+  <!-- the landing pad each hop sits on -->
+  <rect x="68" y="88"  width="52" height="8" fill="#F59200" stroke="#B4B4B4" stroke-width="1.5"/>
+  <rect x="68" y="138" width="52" height="8" fill="#F59200" stroke="#B4B4B4" stroke-width="1.5"/>
+
+  <!-- extension lines to the dimension -->
+  <line x1="166" y1="46"  x2="207" y2="46"  stroke="#E8EAED" stroke-width="1.2"/>
+  <line x1="166" y1="196" x2="207" y2="196" stroke="#E8EAED" stroke-width="1.2"/>
+
+  <!-- how far down the stack goes, which is what the field limits -->
+  <line x1="196" y1="46" x2="196" y2="196" stroke="#E8EAED" stroke-width="1.4"
+        marker-start="url(#tail)" marker-end="url(#head)"/>
+</svg>

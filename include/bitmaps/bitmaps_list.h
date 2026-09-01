@@ -77,6 +77,7 @@ enum class BITMAPS : unsigned int
     add_textbox,
     add_tracks,
     add_via,
+    add_via_stack,
     add_via_stitch,
     add_zone,
     add_zone_cutout,
@@ -696,6 +697,8 @@ enum class BITMAPS : unsigned int
 
     constraint_basic_clearance,
     constraint_board_outline_clearance,
+    constraint_microvia_aspect_ratio,
+    constraint_microvia_stack_depth,
     constraint_minimum_clearance,
     constraint_creepage_distance,
     constraint_minimum_connection_width,

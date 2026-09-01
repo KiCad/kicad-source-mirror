@@ -417,6 +417,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_24.png" ), 24, wxT( "light" ) );
@@ -611,7 +612,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_24.png" ), 24, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_24.png" ), 24,
+                                                            wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_24.png" ), 24, wxT( "light" ) );
@@ -865,6 +867,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1059,7 +1062,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_dark_24.png" ), 24, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons,
+                                                            wxT( "merge_polygons_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1313,6 +1317,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_16.png" ), 16, wxT( "light" ) );
@@ -1507,7 +1512,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_16.png" ), 16, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_16.png" ), 16,
+                                                            wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_16.png" ), 16, wxT( "light" ) );
@@ -1761,6 +1767,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_dark_16.png" ), 16, wxT( "dark" ) );
@@ -1955,7 +1962,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_dark_16.png" ), 16, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons,
+                                                            wxT( "merge_polygons_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_dark_16.png" ), 16, wxT( "dark" ) );
@@ -2209,6 +2217,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_32.png" ), 32, wxT( "light" ) );
@@ -2403,7 +2412,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_32.png" ), 32, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_32.png" ), 32,
+                                                            wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_32.png" ), 32, wxT( "light" ) );
@@ -2657,6 +2667,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_dark_32.png" ), 32, wxT( "dark" ) );
@@ -2851,7 +2862,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_dark_32.png" ), 32, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons,
+                                                            wxT( "merge_polygons_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_dark_32.png" ), 32, wxT( "dark" ) );
@@ -3105,6 +3117,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_48.png" ), 48, wxT( "light" ) );
@@ -3299,7 +3312,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_48.png" ), 48, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_48.png" ), 48,
+                                                            wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_48.png" ), 48, wxT( "light" ) );
@@ -3553,6 +3567,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_dark_48.png" ), 48, wxT( "dark" ) );
@@ -3747,7 +3762,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_dark_48.png" ), 48, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons,
+                                                            wxT( "merge_polygons_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_dark_48.png" ), 48, wxT( "dark" ) );
@@ -4001,6 +4017,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_64.png" ), 64, wxT( "light" ) );
@@ -4195,7 +4212,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_64.png" ), 64, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_64.png" ), 64,
+                                                            wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_64.png" ), 64, wxT( "light" ) );
@@ -4449,6 +4467,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::add_textbox].emplace_back( BITMAPS::add_textbox, wxT( "add_textbox_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_tracks].emplace_back( BITMAPS::add_tracks, wxT( "add_tracks_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via].emplace_back( BITMAPS::add_via, wxT( "add_via_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::add_via_stack].emplace_back( BITMAPS::add_via_stack, wxT( "add_via_stack_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_via_stitch].emplace_back( BITMAPS::add_via_stitch, wxT( "add_via_stitch_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone_cutout].emplace_back( BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::add_zone].emplace_back( BITMAPS::add_zone, wxT( "add_zone_dark_64.png" ), 64, wxT( "dark" ) );
@@ -4643,7 +4662,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::marker_next].emplace_back( BITMAPS::marker_next, wxT( "marker_next_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::marker_previous].emplace_back( BITMAPS::marker_previous, wxT( "marker_previous_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::measurement].emplace_back( BITMAPS::measurement, wxT( "measurement_dark_64.png" ), 64, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons, wxT( "merge_polygons_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::merge_polygons].emplace_back( BITMAPS::merge_polygons,
+                                                            wxT( "merge_polygons_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_h].emplace_back( BITMAPS::mirror_h, wxT( "mirror_h_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mirror_v].emplace_back( BITMAPS::mirror_v, wxT( "mirror_v_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::mode_module].emplace_back( BITMAPS::mode_module, wxT( "mode_module_dark_64.png" ), 64, wxT( "dark" ) );
@@ -5109,7 +5129,9 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_maximum_allowed_deviation].emplace_back( BITMAPS::constraint_maximum_allowed_deviation, wxT( "constraint_maximum_allowed_deviation.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_maximum_via_count].emplace_back( BITMAPS::constraint_maximum_via_count, wxT( "constraint_maximum_via_count.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_angular_ring].emplace_back( BITMAPS::constraint_minimum_angular_ring, wxT( "constraint_minimum_angular_ring.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_minimum_annular_width].emplace_back( BITMAPS::constraint_minimum_annular_width, wxT( "constraint_minimum_annular_width.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_minimum_annular_width].emplace_back(
+            BITMAPS::constraint_minimum_annular_width, wxT( "constraint_minimum_annular_width.png" ), -1,
+            wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_clearance].emplace_back( BITMAPS::constraint_minimum_clearance, wxT( "constraint_minimum_clearance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_connection_width].emplace_back( BITMAPS::constraint_minimum_connection_width, wxT( "constraint_minimum_connection_width.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_silk_to_silk_clearance].emplace_back( BITMAPS::constraint_silk_to_silk_clearance, wxT( "constraint_silk_to_silk_clearance.png" ), -1, wxT( "light" ) );
@@ -5128,6 +5150,12 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_solderpaste_expansion].emplace_back( BITMAPS::constraint_solderpaste_expansion, wxT( "constraint_solderpaste_expansion.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_via_style].emplace_back( BITMAPS::constraint_via_style, wxT( "constraint_via_style.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_vias_under_smd].emplace_back( BITMAPS::constraint_vias_under_smd, wxT( "constraint_vias_under_smd.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_microvia_stack_depth].emplace_back(
+            BITMAPS::constraint_microvia_stack_depth, wxT( "constraint_microvia_stack_depth.png" ), -1,
+            wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_microvia_aspect_ratio].emplace_back(
+            BITMAPS::constraint_microvia_aspect_ratio, wxT( "constraint_microvia_aspect_ratio.png" ), -1,
+            wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_absolute_length_2].emplace_back( BITMAPS::constraint_absolute_length_2, wxT( "constraint_absolute_length_2_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_allowed_orientation].emplace_back( BITMAPS::constraint_allowed_orientation, wxT( "constraint_allowed_orientation_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_basic_clearance].emplace_back( BITMAPS::constraint_basic_clearance, wxT( "constraint_basic_clearance_dark.png" ), -1, wxT( "dark" ) );
@@ -5146,7 +5174,9 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_maximum_allowed_deviation].emplace_back( BITMAPS::constraint_maximum_allowed_deviation, wxT( "constraint_maximum_allowed_deviation_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_maximum_via_count].emplace_back( BITMAPS::constraint_maximum_via_count, wxT( "constraint_maximum_via_count_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_angular_ring].emplace_back( BITMAPS::constraint_minimum_angular_ring, wxT( "constraint_minimum_angular_ring_dark.png" ), -1, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::constraint_minimum_annular_width].emplace_back( BITMAPS::constraint_minimum_annular_width, wxT( "constraint_minimum_annular_width_dark.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_minimum_annular_width].emplace_back(
+            BITMAPS::constraint_minimum_annular_width, wxT( "constraint_minimum_annular_width_dark.png" ), -1,
+            wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_clearance].emplace_back( BITMAPS::constraint_minimum_clearance, wxT( "constraint_minimum_clearance_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_connection_width].emplace_back( BITMAPS::constraint_minimum_connection_width, wxT( "constraint_minimum_connection_width_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_silk_to_silk_clearance].emplace_back( BITMAPS::constraint_silk_to_silk_clearance, wxT( "constraint_silk_to_silk_clearance_dark.png" ), -1, wxT( "dark" ) );
@@ -5165,6 +5195,12 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_solderpaste_expansion].emplace_back( BITMAPS::constraint_solderpaste_expansion, wxT( "constraint_solderpaste_expansion_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_via_style].emplace_back( BITMAPS::constraint_via_style, wxT( "constraint_via_style_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_vias_under_smd].emplace_back( BITMAPS::constraint_vias_under_smd, wxT( "constraint_vias_under_smd_dark.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_microvia_stack_depth].emplace_back(
+            BITMAPS::constraint_microvia_stack_depth, wxT( "constraint_microvia_stack_depth_dark.png" ), -1,
+            wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_microvia_aspect_ratio].emplace_back(
+            BITMAPS::constraint_microvia_aspect_ratio, wxT( "constraint_microvia_aspect_ratio_dark.png" ), -1,
+            wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_24.png" ), 24, wxT( "light" ) );

@@ -188,6 +188,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     // Horizontal toolbar
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
+    EVT_CHOICE( ID_AUX_TOOLBAR_PCB_VIA_STACK, PCB_EDIT_FRAME::SelectViaStack_Event )
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_VARIANT_SELECT, PCB_EDIT_FRAME::onVariantSelected )
 
     // Tracks and vias sizes general options
@@ -226,6 +227,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showBorderAndTitleBlock = true;   // true to display sheet references
     m_SelTrackWidthBox = nullptr;
     m_SelViaSizeBox = nullptr;
+    m_SelViaStackBox = nullptr;
     m_CurrentVariantCtrl = nullptr;
     m_ShowLayerManagerTools = true;
     m_supportsAutoSave = true;
@@ -1458,6 +1460,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::tuneSkew );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::showDiffPhaseSkew );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawVia );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeViaStack );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZone );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRuleArea );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLine );

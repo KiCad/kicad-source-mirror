@@ -34,6 +34,8 @@ max
 mechanical_clearance
 mechanical_hole_clearance
 micro_via
+microvia_aspect_ratio
+microvia_stack_depth
 min
 min_resolved_spokes
 net

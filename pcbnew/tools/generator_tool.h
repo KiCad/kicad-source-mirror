@@ -57,6 +57,9 @@ public:
     int RegenerateItem( const TOOL_EVENT& aEvent );
     int GenEditAction( const TOOL_EVENT& aEvent );
 
+    ///< Wrap selected microvias and traces into a via stack.
+    int MakeViaStackFromSelection( const TOOL_EVENT& aEvent );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;

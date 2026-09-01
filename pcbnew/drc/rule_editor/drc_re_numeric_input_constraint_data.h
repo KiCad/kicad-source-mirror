@@ -54,12 +54,12 @@ public:
         wxString code = GetConstraintCode();
         wxString valueStr;
 
-        if( code == "via_count" || code == "min_resolved_spokes" )
+        if( code == "via_count" || code == "min_resolved_spokes" || code == "microvia_stack_depth" )
             valueStr = wxString::Format( "%d", (int) m_numericInputValue );
         else
             valueStr = formatDouble( m_numericInputValue );
 
-        if( code == "via_count" )
+        if( code == "via_count" || code == "microvia_stack_depth" || code == "microvia_aspect_ratio" )
         {
             return { wxString::Format( "(constraint %s (max %s))", code, valueStr ) };
         }

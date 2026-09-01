@@ -24,8 +24,37 @@
 #define __ROUTER_TOOL_H
 
 #include "pns_tool_base.h"
+#include <board_design_settings.h>
 
 class PCB_SELECTION_TOOL;
+class PCB_VIA;
+
+
+// A stacked drop armed during a route, expanded into a stack when the route finishes.
+struct PENDING_STACK_EXPANSION
+{
+    PCB_LAYER_ID     m_Start;
+    PCB_LAYER_ID     m_End;
+    int              m_Net;
+    VIA_STACK_PRESET m_Preset;
+};
+
+
+/**
+ * Preset a route's stacked drop wants for @a aVia, or nullptr when the via is not one of
+ * them. Vias in @a aPreRoute already existed, so the route did not create them.
+ */
+const VIA_STACK_PRESET* MatchPendingStackExpansion( PCB_VIA* aVia, const std::set<KIID>& aPreRoute,
+                                                    const std::vector<PENDING_STACK_EXPANSION>& aPending );
+
+
+/**
+ * Layer a microvia stack drop lands on when invoked on @a aCurrent. A preset places only from
+ * its own terminals: the start layer runs the span, the end layer runs it back.
+ * UNDEFINED_LAYER anywhere else.
+ */
+PCB_LAYER_ID ViaStackTargetLayer( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd, PCB_LAYER_ID aCurrent );
+
 
 class ROUTER_TOOL : public PNS::TOOL_BASE
 {
@@ -52,6 +81,12 @@ public:
     int CustomTrackWidthDialog( const TOOL_EVENT& aEvent );
 
     PNS::PNS_MODE GetRouterMode();
+
+    /**
+     * Layer the next route must start on, used by the microvia stack handoff. One shot, so
+     * only the primed resume is affected and a normal route start still follows the snap.
+     */
+    void SetViaStackResumeLayer( PCB_LAYER_ID aLayer ) { m_viaStackResumeLayer = aLayer; }
 
     /**
      * @brief Returns whether routing is currently active.
@@ -88,6 +123,10 @@ private:
 
     int onLayerCommand( const TOOL_EVENT& aEvent );
     int onViaCommand( const TOOL_EVENT& aEvent );
+    int onViaStackCommand( const TOOL_EVENT& aEvent );
+
+    /// Build and commit a staggered via stack queued during routing (after the PNS world is gone).
+    void commitPendingViaStack();
     int onTrackViaSizeChanged( const TOOL_EVENT& aEvent );
 
     bool prepareInteractive( VECTOR2D aStartPosition );
@@ -98,15 +137,28 @@ private:
     std::shared_ptr<ACTION_MENU> m_diffPairMenu;
     std::shared_ptr<ACTION_MENU> m_trackViaMenu;
 
-    // Both of these are in board layer ID format and must be converted to PNS layer ID format
+    // These are in board layer ID format and must be converted to PNS layer ID format
     // when used with the PNS interface.
     PCB_LAYER_ID                 m_lastTargetLayer;
     PCB_LAYER_ID                 m_originalActiveLayer;
+    PCB_LAYER_ID                 m_viaStackResumeLayer;
 
     bool                         m_inRouterTool;         // Re-entrancy guard
     bool                         m_inRouteSelected;
 
     bool                         m_startWithVia;         // User pressed V before routing started
+
+    // A staggered via stack queued mid-route, committed after the PNS world is torn down.
+    bool         m_pendingViaStack = false;
+    VECTOR2I     m_pendingStackHead;
+    PCB_LAYER_ID m_pendingStackStart = UNDEFINED_LAYER;
+    PCB_LAYER_ID m_pendingStackEnd = UNDEFINED_LAYER;
+
+    // Stacked drops armed during this route, expanded into stacks when the route finishes.
+    std::vector<PENDING_STACK_EXPANSION> m_pendingStackedExpansions;
+
+    // Vias already expandable when the first drop was armed; the route did not create these.
+    std::set<KIID> m_preRouteExpandableVias;
 };
 
 #endif

@@ -33,6 +33,8 @@
 #include <thread_pool.h>
 #include <lset.h>
 #include <pad.h>
+#include <pcb_generator.h>
+#include <generators/pcb_via_stack.h>
 #include <pcb_track.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -167,6 +169,14 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun,
 
 bool TRACKS_CLEANER::filterItem( BOARD_CONNECTED_ITEM* aItem )
 {
+    // A via stack owns its vias and connecting traces, and rebuilds them as a unit, so cleanup
+    // must not delete one out from under it. Other generators are left to the cleaner as before.
+    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aItem->GetParentGroup() ) )
+    {
+        if( generator->GetGeneratorType() == PCB_VIA_STACK::GENERATOR_TYPE )
+            return true;
+    }
+
     if( !m_filter )
         return false;
 

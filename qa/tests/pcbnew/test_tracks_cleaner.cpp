@@ -27,6 +27,8 @@
 #include <drc/drc_engine.h>
 #include <connectivity/connectivity_data.h>
 #include <tracks_cleaner.h>
+#include <lset.h>
+#include <generators/pcb_via_stack.h>
 #include <cleanup_item.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
@@ -229,4 +231,44 @@ BOOST_DATA_TEST_CASE_F( TRACK_CLEANER_TEST_FIXTURE, TrackCleanerRegressionTests,
 
         BOOST_ERROR( wxString::Format( "Track cleaner regression: %s, failed", relPath ) );
     }
+}
+
+
+// A stack dropped under a BGA before anything is routed to it connects only to itself, which is
+// what the dangling-via test looks for. The cleaner must not eat it.
+BOOST_FIXTURE_TEST_CASE( CleanupKeepsAnUnlandedMicroviaStack, TRACK_CLEANER_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 4 );
+    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+
+    PCB_VIA_STACK* stack = new PCB_VIA_STACK( m_board.get(), F_Cu );
+    stack->SetStartLayer( F_Cu );
+    stack->SetEndLayer( In2_Cu );
+    stack->SetViaSize( 300000 );
+    stack->SetViaDrill( 150000 );
+    stack->SetPosition( VECTOR2I( 10000000, 10000000 ) );
+    m_board->Add( stack );
+    stack->Regenerate( m_board.get(), nullptr );
+
+    const size_t hops = stack->GetBoardItems().size();
+    BOOST_REQUIRE_EQUAL( hops, 2u );
+
+    m_board->BuildConnectivity();
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    BOARD_COMMIT                               commit( dummyTool );
+    TRACKS_CLEANER                             cleaner( m_board.get(), commit );
+    std::vector<std::shared_ptr<CLEANUP_ITEM>> items;
+
+    cleaner.CleanupBoard( false, &items, false, false, false, false, false, true );
+
+    BOOST_CHECK_MESSAGE( stack->GetBoardItems().size() == hops,
+                         "cleanup deleted hops of a stack nothing has been routed to yet" );
+    BOOST_CHECK_EQUAL( m_board->Tracks().size(), hops );
 }

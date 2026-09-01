@@ -128,36 +128,36 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
 {
     // These documents at one time failed to catch DRC errors that they should have
 
-    std::map<int, SEVERITY> issue19325_ignore, issue22102_ignore;
+    std::map<int, SEVERITY> issue19325_ignore, issue22102_ignore, issue18142_ignore;
     issue19325_ignore[DRCE_DRILLED_HOLES_TOO_CLOSE] = SEVERITY::RPT_SEVERITY_IGNORE;
     issue22102_ignore[DRCE_UNCONNECTED_ITEMS] = SEVERITY::RPT_SEVERITY_IGNORE;
     issue22102_ignore[DRCE_DANGLING_TRACK] = SEVERITY::RPT_SEVERITY_IGNORE;
+    issue18142_ignore[DRCE_MICROVIA_CROSSES_CORE] = SEVERITY::RPT_SEVERITY_IGNORE;
 
-    std::vector<std::tuple<wxString, int, decltype(BOARD_DESIGN_SETTINGS::m_DRCSeverities)>> tests =
-    {
-        { "issue1358",  2, {} },
-        { "issue2512",  5, {} },
-        { "issue2528",  1, {} },
-        { "issue5750",  4, {} },   // Shorting zone fills pass DRC in some cases
-        { "issue5854",  3, {} },
-        { "issue6879",  6, {} },
-        { "issue6945",  2, {} },
-        { "issue7241",  1, {} },
-        { "issue7267",  5, {} },
-        { "issue7325",  2, {} },
-        { "issue8003",  2, {} },
-        { "issue9081",  2, {} },
-        { "issue12109", 8, {} },        // Pads fail annular width test
-        { "issue14334", 2, {} },        // Thermal spoke to otherwise unconnected island
-        { "issue16566", 6, {} },        // Pad_Shape vs Shape property
-        { "issue18142", 1, {} },        // blind/buried via to micro-via hole-to-hole
-        { "reverse_via", 3, {} },       // Via/track ordering
-        { "intersectingzones", 1, {} }, // zones are too close to each other
-        { "fill_bad",   1, {} },        // zone max BBox was too small
-        { "issue18878", 12, {} },       // Updated: fix reports all cross-net mask bridge pairs
+    std::vector<std::tuple<wxString, int, decltype( BOARD_DESIGN_SETTINGS::m_DRCSeverities )>> tests = {
+        { "issue1358", 2, {} },
+        { "issue2512", 5, {} },
+        { "issue2528", 1, {} },
+        { "issue5750", 4, {} }, // Shorting zone fills pass DRC in some cases
+        { "issue5854", 3, {} },
+        { "issue6879", 6, {} },
+        { "issue6945", 2, {} },
+        { "issue7241", 1, {} },
+        { "issue7267", 5, {} },
+        { "issue7325", 2, {} },
+        { "issue8003", 2, {} },
+        { "issue9081", 2, {} },
+        { "issue12109", 8, {} },                           // Pads fail annular width test
+        { "issue14334", 2, {} },                           // Thermal spoke to otherwise unconnected island
+        { "issue16566", 6, {} },                           // Pad_Shape vs Shape property
+        { "issue18142", 1, issue18142_ignore },            // blind/buried via to micro-via hole-to-hole
+        { "reverse_via", 3, {} },                          // Via/track ordering
+        { "intersectingzones", 1, {} },                    // zones are too close to each other
+        { "fill_bad", 1, {} },                             // zone max BBox was too small
+        { "issue18878", 12, {} },                          // Updated: fix reports all cross-net mask bridge pairs
         { "issue19325/issue19325", 4, issue19325_ignore }, // Overlapping pad annular ring calculation
-        { "issue22102", 2, issue22102_ignore },        // arc-to-rect collision; colocated arcs collision
-        { "issue11814", 2, {} },        // Teardrop clearance to pad
+        { "issue22102", 2, issue22102_ignore },            // arc-to-rect collision; colocated arcs collision
+        { "issue11814", 2, {} },                           // Teardrop clearance to pad
     };
 
     for( const auto& [testName, expectedErrors, customSeverities] : tests )

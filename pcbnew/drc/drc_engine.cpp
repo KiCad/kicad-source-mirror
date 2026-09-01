@@ -1448,6 +1448,18 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                               MessageTextFromUnscaledValue( c->constraint.m_Value.Min() ) ) )
                     break;
 
+                case MICROVIA_STACK_DEPTH_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s max microvia stack depth: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              MessageTextFromUnscaledValue( c->constraint.m_Value.Max() ) ) )
+                    break;
+
+                case MICROVIA_ASPECT_RATIO_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s max microvia aspect ratio: %.3f." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              c->constraint.m_Value.Max() / 1000.0 ) )
+                    break;
+
                 case ZONE_CONNECTION_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s zone connection: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
@@ -2720,7 +2732,9 @@ SHOWMATCH_DOMAIN_SPEC getShowMatchDomainSpec( DRC_CONSTRAINT_T aConstraint )
     case SKEW_CONSTRAINT: return { SHOWMATCH_DOMAIN::ROUTING_ITEMS };
 
     case VIA_DIAMETER_CONSTRAINT:
-    case VIA_COUNT_CONSTRAINT: return { SHOWMATCH_DOMAIN::VIAS };
+    case VIA_COUNT_CONSTRAINT:
+    case MICROVIA_STACK_DEPTH_CONSTRAINT:
+    case MICROVIA_ASPECT_RATIO_CONSTRAINT: return { SHOWMATCH_DOMAIN::VIAS };
 
     case HOLE_SIZE_CONSTRAINT: return { SHOWMATCH_DOMAIN::HOLE_ITEMS };
 

@@ -102,6 +102,7 @@ set( QA_COMMON_SRCS
     test_template_fieldnames.cpp
     test_text_attributes.cpp
     test_tool_dispatcher.cpp
+    test_tool_prime.cpp
     git/test_libgit_backend.cpp
     git/test_git_compare_handler.cpp
     text_eval/test_text_eval_parser.cpp

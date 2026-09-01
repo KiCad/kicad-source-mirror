@@ -152,7 +152,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_ViasMinAnnularWidth = pcbIUScale.mmToIU( DEFAULT_VIASMINSIZE - DEFAULT_MINTHROUGHDRILL ) / 2;
     m_ViasMinSize         = pcbIUScale.mmToIU( DEFAULT_VIASMINSIZE );
     m_MinThroughDrill     = pcbIUScale.mmToIU( DEFAULT_MINTHROUGHDRILL );
-    m_MicroViasMinSize    = pcbIUScale.mmToIU( DEFAULT_MICROVIASMINSIZE );
+    m_MicroViasMinSize = pcbIUScale.mmToIU( DEFAULT_MICROVIASMINSIZE );
     m_MicroViasMinDrill   = pcbIUScale.mmToIU( DEFAULT_MICROVIASMINDRILL );
     m_CopperEdgeClearance = pcbIUScale.mmToIU( DEFAULT_COPPEREDGECLEARANCE );
     m_HoleClearance       = pcbIUScale.mmToIU( DEFAULT_HOLECLEARANCE );
@@ -175,6 +175,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_DRCSeverities[ DRCE_DANGLING_TRACK ] = RPT_SEVERITY_WARNING;
     m_DRCSeverities[ DRCE_DANGLING_VIA ] = RPT_SEVERITY_WARNING;
+
+    m_DRCSeverities[DRCE_MICROVIA_CROSSES_CORE] = RPT_SEVERITY_WARNING;
+    m_DRCSeverities[DRCE_MICROVIA_STACK_NOT_FILLED] = RPT_SEVERITY_WARNING;
 
     m_DRCSeverities[ DRCE_COPPER_SLIVER ] = RPT_SEVERITY_WARNING;
     m_DRCSeverities[ DRCE_ISOLATED_COPPER ] = RPT_SEVERITY_WARNING;
@@ -254,6 +257,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DiffPairMeanderSettings.m_spacing = pcbIUScale.mmToIU( DEFAULT_DP_MEANDER_SPACING );
 
     m_viaSizeIndex = 0;
+    m_viaStackIndex = 0;
     m_trackWidthIndex = 0;
     m_diffPairIndex = 0;
 
@@ -484,6 +488,101 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     int drill    = pcbIUScale.mmToIU( entry["drill"].get<double>() );
 
                     m_ViasDimensionsList.emplace_back( VIA_DIMENSION( diameter, drill ) );
+                }
+            },
+            {} ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "via_stack_presets",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::array();
+
+                for( const VIA_STACK_PRESET& preset : m_ViaStackPresets )
+                {
+                    nlohmann::json entry = {};
+
+                    entry["name"] = preset.m_Name.ToUTF8();
+                    entry["start_layer"] = LSET::Name( preset.m_StartLayer );
+                    entry["end_layer"] = LSET::Name( preset.m_EndLayer );
+                    entry["staggered"] = preset.m_Staggered;
+                    entry["via_size"] = pcbIUScale.IUTomm( preset.m_ViaSize );
+                    entry["via_drill"] = pcbIUScale.IUTomm( preset.m_ViaDrill );
+                    entry["use_netclass"] = preset.m_UseNetclass;
+                    entry["filled"] = preset.m_Filled;
+                    entry["capped"] = preset.m_Capped;
+                    entry["pitch"] = pcbIUScale.IUTomm( preset.m_Pitch );
+
+                    js.push_back( entry );
+                }
+
+                return js;
+            },
+            [&]( const nlohmann::json& aObj )
+            {
+                if( !aObj.is_array() )
+                    return;
+
+                m_ViaStackPresets.clear();
+
+                // An odd or non-copper layer from a hand-edited file would make every
+                // LAYER_RANGE built from the preset throw or never terminate.
+                auto copperLayer = []( const nlohmann::json& aEntry, const char* aKey,
+                                       PCB_LAYER_ID aFallback ) -> PCB_LAYER_ID
+                {
+                    if( !aEntry.contains( aKey ) || !aEntry[aKey].is_string() )
+                        return aFallback;
+
+                    wxString name = wxString::FromUTF8( aEntry[aKey].get<std::string>() );
+                    int      layer = LSET::NameToLayer( name );
+
+                    if( layer >= 0 && layer < PCB_LAYER_ID_COUNT && !( layer & 1 ) && IsCopperLayer( layer ) )
+                        return ToLAYER_ID( layer );
+
+                    return aFallback;
+                };
+
+                auto boolOr = []( const nlohmann::json& aEntry, const char* aKey, bool aFallback )
+                {
+                    return aEntry.contains( aKey ) && aEntry[aKey].is_boolean() ? aEntry[aKey].get<bool>() : aFallback;
+                };
+
+                auto mmOr = []( const nlohmann::json& aEntry, const char* aKey )
+                {
+                    return aEntry.contains( aKey ) && aEntry[aKey].is_number()
+                                   ? pcbIUScale.mmToIU( aEntry[aKey].get<double>() )
+                                   : 0;
+                };
+
+                for( const nlohmann::json& entry : aObj )
+                {
+                    if( entry.empty() || !entry.is_object() || !entry.contains( "name" ) || !entry["name"].is_string() )
+                    {
+                        continue;
+                    }
+
+                    VIA_STACK_PRESET preset;
+
+                    preset.m_Name = wxString::FromUTF8( entry["name"].get<std::string>() );
+                    preset.m_StartLayer = copperLayer( entry, "start_layer", F_Cu );
+                    preset.m_EndLayer = copperLayer( entry, "end_layer", In1_Cu );
+                    preset.m_Staggered = boolOr( entry, "staggered", false );
+                    preset.m_ViaSize = mmOr( entry, "via_size" );
+                    preset.m_ViaDrill = mmOr( entry, "via_drill" );
+                    preset.m_UseNetclass = boolOr( entry, "use_netclass", false );
+                    preset.m_Filled = boolOr( entry, "filled", true );
+                    preset.m_Capped = boolOr( entry, "capped", false );
+                    preset.m_Pitch =
+                            std::min( mmOr( entry, "pitch" ), pcbIUScale.mmToIU( MAX_MICROVIA_STACK_PITCH_MM ) );
+
+                    // Presets are referenced by name, so a duplicate would be ambiguous.
+                    auto sameName = [&]( const VIA_STACK_PRESET& aOther )
+                    {
+                        return aOther.m_Name.CmpNoCase( preset.m_Name ) == 0;
+                    };
+
+                    if( std::none_of( m_ViaStackPresets.begin(), m_ViaStackPresets.end(), sameName ) )
+                        m_ViaStackPresets.push_back( preset );
                 }
             },
             {} ) );
@@ -1124,6 +1223,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     // Copy of NESTED_SETTINGS around is not allowed, so let's just update the params.
     m_TrackWidthList              = aOther.m_TrackWidthList;
     m_ViasDimensionsList          = aOther.m_ViasDimensionsList;
+    m_ViaStackPresets = aOther.m_ViaStackPresets;
     m_DiffPairDimensionsList      = aOther.m_DiffPairDimensionsList;
     m_CurrentViaType              = aOther.m_CurrentViaType;
     m_UseConnectedTrackWidth      = aOther.m_UseConnectedTrackWidth;
@@ -1135,7 +1235,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_ViasMinAnnularWidth         = aOther.m_ViasMinAnnularWidth;
     m_ViasMinSize                 = aOther.m_ViasMinSize;
     m_MinThroughDrill             = aOther.m_MinThroughDrill;
-    m_MicroViasMinSize            = aOther.m_MicroViasMinSize;
+    m_MicroViasMinSize = aOther.m_MicroViasMinSize;
     m_MicroViasMinDrill           = aOther.m_MicroViasMinDrill;
     m_CopperEdgeClearance         = aOther.m_CopperEdgeClearance;
     m_HoleClearance               = aOther.m_HoleClearance;
@@ -1201,6 +1301,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
 
     m_trackWidthIndex     = aOther.m_trackWidthIndex;
     m_viaSizeIndex        = aOther.m_viaSizeIndex;
+    m_viaStackIndex = aOther.m_viaStackIndex;
     m_diffPairIndex       = aOther.m_diffPairIndex;
     m_useCustomTrackVia   = aOther.m_useCustomTrackVia;
     m_customTrackWidth    = aOther.m_customTrackWidth;
@@ -1229,6 +1330,8 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
 {
     if( m_TrackWidthList         != aOther.m_TrackWidthList ) return false;
     if( m_ViasDimensionsList     != aOther.m_ViasDimensionsList ) return false;
+    if( m_ViaStackPresets != aOther.m_ViaStackPresets )
+        return false;
     if( m_DiffPairDimensionsList != aOther.m_DiffPairDimensionsList ) return false;
     if( m_CurrentViaType         != aOther.m_CurrentViaType ) return false;
     if( m_UseConnectedTrackWidth != aOther.m_UseConnectedTrackWidth ) return false;
@@ -1240,7 +1343,8 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_ViasMinAnnularWidth    != aOther.m_ViasMinAnnularWidth ) return false;
     if( m_ViasMinSize            != aOther.m_ViasMinSize ) return false;
     if( m_MinThroughDrill        != aOther.m_MinThroughDrill ) return false;
-    if( m_MicroViasMinSize       != aOther.m_MicroViasMinSize ) return false;
+    if( m_MicroViasMinSize != aOther.m_MicroViasMinSize )
+        return false;
     if( m_MicroViasMinDrill      != aOther.m_MicroViasMinDrill ) return false;
     if( m_CopperEdgeClearance    != aOther.m_CopperEdgeClearance ) return false;
     if( m_HoleClearance          != aOther.m_HoleClearance ) return false;
@@ -1309,6 +1413,8 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_BomFmtPresets            != aOther.m_BomFmtPresets ) return false;
     if( m_trackWidthIndex          != aOther.m_trackWidthIndex ) return false;
     if( m_viaSizeIndex             != aOther.m_viaSizeIndex ) return false;
+    if( m_viaStackIndex != aOther.m_viaStackIndex )
+        return false;
     if( m_diffPairIndex            != aOther.m_diffPairIndex ) return false;
     if( m_useCustomTrackVia        != aOther.m_useCustomTrackVia ) return false;
     if( m_customTrackWidth         != aOther.m_customTrackWidth ) return false;

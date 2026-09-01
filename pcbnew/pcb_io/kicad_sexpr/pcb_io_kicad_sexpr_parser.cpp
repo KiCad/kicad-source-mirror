@@ -1715,8 +1715,10 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
                     group->AddItem( item );
             }
 
-            // For generators, set the layer to match the layer of the contained tracks
-            if( PCB_GENERATOR* gen = dynamic_cast<PCB_GENERATOR*>( group ) )
+            // For generators, set the layer to match the layer of the contained tracks.
+            // GetBoardItems() is unordered, so this may only be done for a generator whose
+            // members all share one layer; one that spans layers keeps its own.
+            if( PCB_GENERATOR* gen = dynamic_cast<PCB_GENERATOR*>( group ); gen && gen->LayerFollowsMembers() )
             {
                 for( BOARD_ITEM* item : gen->GetBoardItems() )
                 {
@@ -8082,9 +8084,13 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
         }
     }
 
-    // Previous versions had bugs which could save ghost tuning patterns.  Ignore them.
-    if( genInfo.genType == wxT( "tuning_pattern" ) && genInfo.memberUuids.empty() )
+    // Previous versions had bugs which could save ghost tuning patterns. Ignore them, and
+    // ignore member-less microvia stacks already sitting in files for the same reason.
+    if( genInfo.memberUuids.empty()
+        && ( genInfo.genType == wxT( "tuning_pattern" ) || genInfo.genType == wxT( "via_stack" ) ) )
+    {
         m_generatorInfos.pop_back();
+    }
 }
 
 

@@ -301,6 +301,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     placeMenu->Add( PCB_ACTIONS::placeFootprint );
     placeMenu->Add( PCB_ACTIONS::drawVia );
+    placeMenu->Add( PCB_ACTIONS::placeViaStack );
+    placeMenu->Add( PCB_ACTIONS::makeViaStack );
     placeMenu->Add( PCB_ACTIONS::drawZone );
     placeMenu->Add( PCB_ACTIONS::drawCopperThievingZone );
     placeMenu->Add( PCB_ACTIONS::drawRuleArea );

@@ -284,15 +284,21 @@ void PCB_GROUP::swapData( BOARD_ITEM* aImage )
 
     std::swap( *this, *image );
 
+    swapChildOwnership( image );
+}
+
+
+void PCB_GROUP::swapChildOwnership( PCB_GROUP* aImage )
+{
     // A group doesn't own its children (they're owned by the board), so undo doesn't do a
     // deep clone when making an image.  However, it's still safest to update the parentGroup
     // pointers of the group's children. We must do it in the right order in case any of the
     // children are shared (ie: image first, "this" second so that any shared children end up
     // with "this").
-    image->RunOnChildren(
+    aImage->RunOnChildren(
             [&]( BOARD_ITEM* child )
             {
-                child->SetParentGroup( image );
+                child->SetParentGroup( aImage );
             },
             RECURSE_MODE::NO_RECURSE );
 

@@ -33,6 +33,8 @@
 #include <length_delay_calculation/length_delay_calculation.h>
 #include <lset.h>
 #include <cstdlib>
+#include <map>
+#include <set>
 #include <string_utils.h>
 #include <view/view.h>
 #include <settings/color_settings.h>
@@ -760,6 +762,141 @@ void PCB_VIA::SetPrimaryDrillCapped( const std::optional<bool>& aCapped )
 void PCB_VIA::SetPrimaryDrillCappedFlag( bool aCapped )
 {
     m_padStack.Drill().is_capped = aCapped;
+}
+
+
+// Two microvias belong to one structure when the upper one lands on the lower one. Exact
+// concentricity is only the extreme case of that, so the test is hole overlap.
+std::vector<std::vector<PCB_VIA*>> PCB_VIA::CollectMicroviaColumns( BOARD* aBoard )
+{
+    std::map<int, int> ordinals;
+    int                n = 0;
+
+    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, aBoard->GetCopperLayerCount() ) )
+        ordinals[layer] = n++;
+
+    std::vector<PCB_VIA*> microvias;
+
+    for( PCB_TRACK* track : aBoard->Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+        if( via->GetViaType() != VIATYPE::MICROVIA )
+            continue;
+
+        // A via on a single layer lands on nothing.
+        if( via->TopLayer() == via->BottomLayer() )
+            continue;
+
+        if( ordinals.count( via->TopLayer() ) && ordinals.count( via->BottomLayer() ) )
+            microvias.push_back( via );
+    }
+
+    auto upper = [&]( PCB_VIA* aVia )
+    {
+        return std::min( ordinals[aVia->TopLayer()], ordinals[aVia->BottomLayer()] );
+    };
+
+    auto lower = [&]( PCB_VIA* aVia )
+    {
+        return std::max( ordinals[aVia->TopLayer()], ordinals[aVia->BottomLayer()] );
+    };
+
+    // Touching holes have no wall between them, so they count as one column too.
+    auto overlaps = []( PCB_VIA* aFirst, PCB_VIA* aSecond )
+    {
+        double reach = ( aFirst->GetDrillValue() + aSecond->GetDrillValue() ) / 2.0;
+
+        return ( aFirst->GetPosition() - aSecond->GetPosition() ).EuclideanNorm() <= reach;
+    };
+
+    // Overlap needs the centres closer than the largest hole, so bucket the vias by landing
+    // layer and position and only the neighbouring buckets have to be looked at.
+    int cellSize = 1;
+
+    for( PCB_VIA* via : microvias )
+        cellSize = std::max( cellSize, via->GetDrillValue() );
+
+    auto cellOf = [&]( int aCoord )
+    {
+        return (int) std::floor( (double) aCoord / cellSize );
+    };
+
+    std::map<std::tuple<int, int, int>, std::vector<PCB_VIA*>> byCell;
+
+    for( PCB_VIA* via : microvias )
+    {
+        VECTOR2I pos = via->GetPosition();
+        byCell[{ upper( via ), cellOf( pos.x ), cellOf( pos.y ) }].push_back( via );
+    }
+
+    // The via a given one lands on, if any.
+    auto below = [&]( PCB_VIA* aVia ) -> PCB_VIA*
+    {
+        VECTOR2I pos = aVia->GetPosition();
+
+        for( int dx = -1; dx <= 1; ++dx )
+        {
+            for( int dy = -1; dy <= 1; ++dy )
+            {
+                auto it = byCell.find( { lower( aVia ), cellOf( pos.x ) + dx, cellOf( pos.y ) + dy } );
+
+                if( it == byCell.end() )
+                    continue;
+
+                for( PCB_VIA* other : it->second )
+                {
+                    if( other != aVia && overlaps( aVia, other ) )
+                        return other;
+                }
+            }
+        }
+
+        return nullptr;
+    };
+
+    std::set<PCB_VIA*> carried;
+
+    for( PCB_VIA* via : microvias )
+    {
+        if( PCB_VIA* under = below( via ) )
+            carried.insert( under );
+    }
+
+    std::vector<std::vector<PCB_VIA*>> columns;
+    std::set<PCB_VIA*>                 taken;
+
+    for( PCB_VIA* via : microvias )
+    {
+        // Walk down from the top of each structure so every one is built once.
+        if( carried.count( via ) )
+            continue;
+
+        std::vector<PCB_VIA*> column;
+        bool                  landsOnAnother = false;
+
+        for( PCB_VIA* step = via; step; step = below( step ) )
+        {
+            if( !taken.insert( step ).second )
+            {
+                landsOnAnother = true;
+                break;
+            }
+
+            column.push_back( step );
+
+            if( column.size() > ordinals.size() )
+                break;
+        }
+
+        if( column.size() > 1 || landsOnAnother )
+            columns.push_back( std::move( column ) );
+    }
+
+    return columns;
 }
 
 

@@ -599,6 +599,22 @@ TOOL_ACTION PCB_ACTIONS::drawVia( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_via )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::placeViaStack( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.viaStack" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Place Microvia Stack" ) )
+        .Tooltip( _( "Place a stacked or staggered microvia stack" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_via_stack )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::makeViaStack( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.makeViaStack" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Create Stack from Selection" ) )
+        .Tooltip( _( "Wrap the selected microvias and traces into a microvia stack" ) )
+        .Icon( BITMAPS::add_via_stack ) );
+
 TOOL_ACTION PCB_ACTIONS::drawRuleArea( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.ruleArea" )
         .Scope( AS_GLOBAL )
