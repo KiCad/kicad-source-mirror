@@ -566,7 +566,7 @@ static SHAPE_POLY_SET getDeflatedZoneOutline( BOARD* aBoard, ZONE* aArea )
 }
 
 
-bool collidesWithArea( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
+bool collidesWithArea( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, PCBEXPR_CONTEXT* aCtx, ZONE* aArea, bool aForKeepout )
 {
     BOARD* board = aArea->GetBoard();
     BOX2I  areaBBox = aArea->GetBoundingBox();
@@ -645,25 +645,32 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, PCBEXPR_CONTEXT* 
     {
         ZONE* zone = static_cast<ZONE*>( aItem );
 
-        if( !zone->IsFilled() )
-            return false;
-
-        if( DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ zone ].get() )
+        if( aForKeepout )
         {
-            if( zoneRTree->QueryColliding( areaBBox, &areaOutline, aLayer ) )
-                return true;
+            if( !zone->IsFilled() )
+                return false;
+
+            if( DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ zone ].get() )
+            {
+                if( zoneRTree->QueryColliding( areaBBox, &areaOutline, aLayer ) )
+                    return true;
+            }
+            else
+            {
+                std::unique_ptr<DRC_RTREE> rtree = std::make_unique<DRC_RTREE>();
+                rtree->Insert( zone, aLayer, CLEARANCE_CONSTRAINT );
+                rtree->Build();
+
+                if( rtree->QueryColliding( areaBBox, &areaOutline, aLayer ) )
+                    return true;
+            }
+
+            return false;
         }
         else
         {
-            std::unique_ptr<DRC_RTREE> rtree = std::make_unique<DRC_RTREE>();
-            rtree->Insert( zone, aLayer, CLEARANCE_CONSTRAINT );
-            rtree->Build();
-
-            if( rtree->QueryColliding( areaBBox, &areaOutline, aLayer ) )
-                return true;
+            return areaOutline.Collide( zone->Outline() );
         }
-
-        return false;
     }
     else
     {
@@ -781,7 +788,7 @@ private:
 #define MISSING_AREA_ARG( f ) \
     wxString::Format( _( "Missing rule-area argument (A, B, or rule-area name) to %s." ), f )
 
-static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+static void doIntersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self, bool aForKeepout )
 {
     PCBEXPR_CONTEXT* context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*  arg = aCtx->Pop();
@@ -793,7 +800,12 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     if( !arg || arg->AsString().IsEmpty() )
     {
         if( aCtx->HasErrorCallback() )
-            aCtx->ReportError( MISSING_AREA_ARG( wxT( "intersectsArea()" ) ) );
+        {
+            if( aForKeepout )
+                aCtx->ReportError( MISSING_AREA_ARG( wxT( "intersectsKeepout()" ) ) );
+            else
+                aCtx->ReportError( MISSING_AREA_ARG( wxT( "intersectsArea()" ) ) );
+        }
 
         return;
     }
@@ -805,7 +817,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     result->SetDeferredEval(
-            [item, arg, context]() -> double
+            [item, arg, context, aForKeepout]() -> double
             {
                 BOARD*         board = item->GetBoard();
                 PCB_LAYER_ID   aLayer = context->GetLayer();
@@ -887,7 +899,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                             for( PCB_LAYER_ID layer : layersToCompute )
                             {
-                                bool collides = collidesWithArea( item, layer, context, aArea );
+                                bool collides = collidesWithArea( item, layer, context, aArea, aForKeepout );
 
                                 if( !isTransient )
                                     board->m_IntersectsAreaCache.Set( { aArea, item, layer }, collides );
@@ -904,6 +916,18 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 return res ? 1.0 : 0.0;
             } );
+}
+
+
+static void intersectsKeepoutFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    doIntersectsAreaFunc( aCtx, self, true );
+}
+
+
+static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    doIntersectsAreaFunc( aCtx, self, false );
 }
 
 
@@ -1174,8 +1198,11 @@ static void memberOfSheetOrChildrenFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( refPath.size() > sheetPath.size() )
                     return 0.0;
 
-                if( ( refName.Matches( wxT( "/" ) ) || refName.IsEmpty() ) && sheetName.IsEmpty() )
+                if( ( refName.Matches( wxT( "/" ) ) || refName.IsEmpty() )
+                        && sheetName.IsEmpty() )
+                {
                     return 1.0;
+                }
 
                 for( size_t i = 0; i < refPath.size(); i++ )
                 {
@@ -1883,8 +1910,9 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "intersectsFrontCourtyard('x')" ), intersectsFrontCourtyardFunc, true );
     RegisterFunc( wxT( "intersectsBackCourtyard('x')" ), intersectsBackCourtyardFunc, true );
 
-    RegisterFunc( wxT( "insideArea('x') DEPRECATED" ), intersectsAreaFunc, true );
+    RegisterFunc( wxT( "insideArea('x') DEPRECATED" ), intersectsKeepoutFunc, true );
     RegisterFunc( wxT( "intersectsArea('x')" ), intersectsAreaFunc, true );
+    RegisterFunc( wxT( "intersectsKeepout('x')" ), intersectsKeepoutFunc, true );
     RegisterFunc( wxT( "enclosedByArea('x')" ), enclosedByAreaFunc, true );
 
     RegisterFunc( wxT( "isMicroVia()" ), isMicroVia );

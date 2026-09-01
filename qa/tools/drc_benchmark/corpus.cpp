@@ -260,6 +260,7 @@ const std::vector<wxString>& AllPredicateNames()
                                                  wxT( "insideFrontCourtyard" ),
                                                  wxT( "insideBackCourtyard" ),
                                                  wxT( "intersectsArea" ),
+                                                 wxT( "intersectsKeepout" ),
                                                  wxT( "enclosedByArea" ),
                                                  wxT( "insideArea" ),
                                                  wxT( "getField" ),
