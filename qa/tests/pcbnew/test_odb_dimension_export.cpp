@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <pcbnew_utils/board_file_utils.h>
 #include <boost/test/unit_test.hpp>
 
 #include <base_units.h>
@@ -97,44 +98,23 @@ static int countSilkLineRecords( const fs::path& aRoot, bool& aFoundFile )
 BOOST_AUTO_TEST_CASE( OdbDimensionExport )
 {
     SETTINGS_MANAGER       settingsManager;
-    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
+            KI_TEST::GetPcbnewTestDataDir() + "issue20249/dimension.kicad_pcb" );
 
-    const int side = pcbIUScale.mmToIU( 20 );
+    BOOST_REQUIRE( board );
 
-    // Give the board a square Edge.Cuts outline so the export produces a valid board profile.  Edge
-    // cuts land in their own layer feature file, not the silkscreen one we inspect, so they cannot
-    // mask a dropped dimension.
-    auto addEdge = [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd )
+    // A dimension with no geometry would export nothing and the test would pass
+    // for the wrong reason.
+    const PCB_DIMENSION_BASE* dimension = nullptr;
+
+    for( const BOARD_ITEM* item : board->Drawings() )
     {
-        PCB_SHAPE* edge = new PCB_SHAPE( board.get(), SHAPE_T::SEGMENT );
-        edge->SetLayer( Edge_Cuts );
-        edge->SetStart( aStart );
-        edge->SetEnd( aEnd );
-        edge->SetWidth( pcbIUScale.mmToIU( 0.1 ) );
-        board->Add( edge );
-    };
+        if( item->Type() == PCB_DIM_ALIGNED_T )
+            dimension = static_cast<const PCB_DIMENSION_BASE*>( item );
+    }
 
-    addEdge( { 0, 0 }, { side, 0 } );
-    addEdge( { side, 0 }, { side, side } );
-    addEdge( { side, side }, { 0, side } );
-    addEdge( { 0, side }, { 0, 0 } );
-
-    // The item under test: an aligned dimension on the front silkscreen.
-    PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( board.get(), PCB_DIM_ALIGNED_T );
-    dimension->SetLayer( F_SilkS );
-    dimension->SetStart( { 0, 0 } );
-    dimension->SetEnd( { side, 0 } );
-    dimension->SetHeight( pcbIUScale.mmToIU( 3 ) );
-    dimension->SetLineThickness( pcbIUScale.mmToIU( 0.15 ) );
-
-    // Update() must run after the feature points are set to populate the geometry returned by
-    // GetShapes(); otherwise the dimension has no shapes to plot.
-    dimension->Update();
-
-    BOOST_REQUIRE_MESSAGE( !dimension->GetShapes().empty(),
-                           "Dimension produced no geometry to export" );
-
-    board->Add( dimension );
+    BOOST_REQUIRE( dimension );
+    BOOST_REQUIRE( !dimension->GetShapes().empty() );
 
     const fs::path outDir = fs::temp_directory_path()
                             / ( "kicad_qa_odb_dimension_20249_" + KIID().AsString().ToStdString() );

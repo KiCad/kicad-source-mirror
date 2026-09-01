@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <pcbnew_utils/board_file_utils.h>
 #include <boost/test/unit_test.hpp>
 
 #include <base_units.h>
@@ -58,37 +59,23 @@ static int countSurfaceRecords( const fs::path& aFeaturesFile )
 BOOST_AUTO_TEST_CASE( OdbKnockoutTextboxExport )
 {
     SETTINGS_MANAGER       settingsManager;
-    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
+            KI_TEST::GetPcbnewTestDataDir() + "issue25074/knockout_textbox.kicad_pcb" );
 
-    const int side = pcbIUScale.mmToIU( 20 );
+    BOOST_REQUIRE( board );
 
-    auto addEdge = [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd )
+    // The crash needed a knockout text box specifically, so fail loudly if the
+    // fixture ever loses the flag.
+    const PCB_TEXTBOX* textbox = nullptr;
+
+    for( const BOARD_ITEM* item : board->Drawings() )
     {
-        PCB_SHAPE* edge = new PCB_SHAPE( board.get(), SHAPE_T::SEGMENT );
-        edge->SetLayer( Edge_Cuts );
-        edge->SetStart( aStart );
-        edge->SetEnd( aEnd );
-        edge->SetWidth( pcbIUScale.mmToIU( 0.1 ) );
-        board->Add( edge );
-    };
+        if( item->Type() == PCB_TEXTBOX_T )
+            textbox = static_cast<const PCB_TEXTBOX*>( item );
+    }
 
-    addEdge( { 0, 0 }, { side, 0 } );
-    addEdge( { side, 0 }, { side, side } );
-    addEdge( { side, side }, { 0, side } );
-    addEdge( { 0, side }, { 0, 0 } );
-
-    PCB_TEXTBOX* textbox = new PCB_TEXTBOX( board.get() );
-    textbox->SetLayer( B_SilkS );
-    textbox->SetStart( { pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 8 ) } );
-    textbox->SetEnd( { pcbIUScale.mmToIU( 15 ), pcbIUScale.mmToIU( 12 ) } );
-    textbox->SetText( wxT( "MCU" ) );
-    textbox->SetTextSize( { pcbIUScale.mmToIU( 1.26 ), pcbIUScale.mmToIU( 1.26 ) } );
-    textbox->SetTextThickness( pcbIUScale.mmToIU( 0.254 ) );
-    textbox->SetBold( true );
-    textbox->SetMirrored( true );
-    textbox->SetBorderEnabled( false );
-    textbox->SetIsKnockout( true );
-    board->Add( textbox );
+    BOOST_REQUIRE( textbox );
+    BOOST_REQUIRE( textbox->IsKnockout() );
 
     const fs::path outDir =
             fs::temp_directory_path() / ( "kicad_qa_odb_knockout_25074_" + KIID().AsString().ToStdString() );
