@@ -266,8 +266,15 @@ PCB_MARKER* PCB_MARKER::FromLegacyString( const wxString& aData )
 void PCB_MARKER::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == PCB_MARKER_T );
+    PCB_MARKER* image = static_cast<PCB_MARKER*>( aImage );
 
-    std::swap( *((PCB_MARKER*) this), *((PCB_MARKER*) aImage) );
+    std::swap( *this, *image );
+
+    if( m_rcItem )
+        m_rcItem->SetParent( this );
+
+    if( image->m_rcItem )
+        image->m_rcItem->SetParent( image );
 }
 
 

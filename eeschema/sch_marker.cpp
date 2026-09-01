@@ -79,7 +79,15 @@ void SCH_MARKER::swapData( SCH_ITEM* aItem )
     std::swap( m_markerType, item->m_markerType );
     std::swap( m_excluded, item->m_excluded );
     std::swap( m_comment, item->m_comment );
+
     std::swap( m_rcItem, item->m_rcItem );
+    {
+        if( m_rcItem )
+            m_rcItem->SetParent( this );
+
+        if( item->m_rcItem )
+            item->m_rcItem->SetParent( item );
+    }
 
     std::swap( m_scalingFactor, item->m_scalingFactor );
     std::swap( m_shapeBoundingBox, item->m_shapeBoundingBox );
