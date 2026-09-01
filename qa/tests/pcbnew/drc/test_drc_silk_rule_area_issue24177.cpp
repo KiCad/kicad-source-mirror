@@ -30,74 +30,50 @@
  * resulting collisions produced bogus violations between the rule area and
  * any nearby silk graphic.
  *
- * The fix skips rule areas in both providers' rtree population.  This test
- * builds a synthetic board with one rule area placed near a silk segment
- * and verifies that DRC reports zero silk-clearance, silk-mask-clearance
- * and solder-mask-bridge violations.
+ * The fix skips rule areas in both providers' rtree population.
  */
+
+#include <algorithm>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_shape.h>
-#include <pcb_track.h>
+#include <pcbnew_utils/board_file_utils.h>
 #include <zone.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
-#include <settings/settings_manager.h>
 #include <widgets/report_severity.h>
 
 
-struct DRC_SILK_RULE_AREA_FIXTURE
+BOOST_AUTO_TEST_CASE( RuleAreaDoesNotCauseSilkOrMaskViolationsIssue24177 )
 {
-    DRC_SILK_RULE_AREA_FIXTURE() = default;
+    const std::string path = KI_TEST::GetPcbnewTestDataDir()
+                             + "issue24177/silk_rule_area.kicad_pcb";
 
-    SETTINGS_MANAGER       m_settingsManager;
-    std::unique_ptr<BOARD> m_board;
-};
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( path );
 
+    BOOST_REQUIRE( board );
 
-BOOST_FIXTURE_TEST_CASE( RuleAreaDoesNotCauseSilkOrMaskViolationsIssue24177,
-                         DRC_SILK_RULE_AREA_FIXTURE )
-{
-    m_board = std::make_unique<BOARD>();
-    m_board->SetCopperLayerCount( 2 );
+    // Zero violations is also what an empty board reports, so pin down the
+    // geometry that has to be present for the counts below to mean anything.
+    BOOST_REQUIRE_EQUAL( board->Zones().size(), 1u );
+    BOOST_REQUIRE( board->Zones().front()->GetIsRuleArea() );
 
-    // Logical rule area on F.Cu.  Its layer set covers the mask and silk targets
-    // that the silk-clearance and solder-mask providers walk; without the fix
-    // the providers would insert this zone into their rtrees and report bogus
-    // clearance violations against the silk segment below.
-    ZONE* ruleArea = new ZONE( m_board.get() );
-    ruleArea->SetIsRuleArea( true );
-    ruleArea->SetLayerSet( LSET( { F_Cu, F_Mask, F_SilkS } ) );
-    ruleArea->AppendCorner( VECTOR2I( 0, 0 ), -1 );
-    ruleArea->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ), -1 );
-    ruleArea->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ), -1 );
-    ruleArea->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 20 ) ), -1 );
-    m_board->Add( ruleArea );
+    const auto isSilk =
+            []( const BOARD_ITEM* aItem )
+            {
+                return aItem->Type() == PCB_SHAPE_T && aItem->GetLayer() == F_SilkS;
+            };
 
-    // Silk segment placed across the rule-area boundary so any collision-based
-    // check using the rule area's effective shape would flag it.
-    PCB_SHAPE* silk = new PCB_SHAPE( m_board.get(), SHAPE_T::SEGMENT );
-    silk->SetLayer( F_SilkS );
-    silk->SetStart( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 10 ) ) );
-    silk->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 25 ), pcbIUScale.mmToIU( 10 ) ) );
-    silk->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
-    m_board->Add( silk );
+    BOOST_REQUIRE( std::any_of( board->Drawings().begin(), board->Drawings().end(), isSilk ) );
 
-    // Unrelated copper trace to keep the connectivity graph non-trivial.
-    PCB_TRACK* trace = new PCB_TRACK( m_board.get() );
-    trace->SetLayer( F_Cu );
-    trace->SetStart( VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 0 ) ) );
-    trace->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 20 ) ) );
-    trace->SetWidth( pcbIUScale.mmToIU( 0.2 ) );
-    m_board->Add( trace );
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
+    // The QA loader does not wire up the DRC engine the way board_loader.cpp does.
     if( !bds.m_DRCEngine )
-        bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
+        bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( board.get(), &bds );
 
     bds.m_DRCEngine->InitEngine( wxFileName() );
 
