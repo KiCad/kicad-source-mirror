@@ -531,6 +531,7 @@ public:
     static TOOL_ACTION pasteFootprint;
     static TOOL_ACTION importFootprint;
     static TOOL_ACTION exportFootprint;
+    static TOOL_ACTION exportFootprintAsSVG;
 
     static TOOL_ACTION compareFpLibraryWithFile;
     static TOOL_ACTION showLibFootprintFieldsTable;

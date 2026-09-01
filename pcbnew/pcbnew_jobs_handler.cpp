@@ -2863,32 +2863,6 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
 
 int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPRINT* aFootprint )
 {
-    // the hack for now is we create fake boards containing the footprint and plot the board
-    // until we refactor better plot api later
-    std::unique_ptr<BOARD> brd = BOARD_LOADER::CreateEmptyBoard( Pgm().GetSettingsManager().GetProject( "" ) );
-    brd->GetProject()->ApplyTextVars( aSvgJob->GetVarOverrides() );
-    brd->SynchronizeProperties();
-
-    FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aFootprint->Clone() );
-
-    if( fp == nullptr )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-
-    fp->SetLink( niluuid );
-    fp->SetFlags( IS_NEW );
-    fp->SetParent( brd.get() );
-
-    for( PAD* pad : fp->Pads() )
-    {
-        pad->SetLocalRatsnestVisible( false );
-        pad->SetNetCode( 0 );
-    }
-
-    fp->SetOrientation( ANGLE_0 );
-    fp->SetPosition( VECTOR2I( 0, 0 ) );
-
-    brd->Add( fp, ADD_MODE::INSERT, true );
-
     wxFileName outputFile;
     outputFile.SetPath( aSvgJob->GetFullOutputPath( nullptr ) );
     outputFile.SetName( aFootprint->GetFPID().GetLibItemName().wx_str() );
@@ -2901,21 +2875,14 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob, *m_reporter );
 
-    // always fixed for the svg plot
-    plotOpts.SetPlotFrameRef( false );
-    plotOpts.SetSvgFitPageToBoard( true );
-    plotOpts.SetMirror( false );
-    plotOpts.SetSkipPlotNPTH_Pads( false );
-
     if( plotOpts.GetSketchPadsOnFabLayers() )
     {
         plotOpts.SetPlotPadNumbers( true );
     }
 
-    PCB_PLOTTER plotter( brd.get(), m_reporter, plotOpts );
-
-    if( !plotter.Plot( outputFile.GetFullPath(), aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence,
-                       false, true, wxEmptyString, wxEmptyString, wxEmptyString ) )
+    if( !PlotFootprintToSVG( *aFootprint, *Pgm().GetSettingsManager().GetProject( "" ), &aSvgJob->GetVarOverrides(),
+                             plotOpts, aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence,
+                             outputFile.GetFullPath(), m_reporter ) )
     {
         m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;

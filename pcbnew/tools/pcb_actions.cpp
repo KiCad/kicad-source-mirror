@@ -1243,6 +1243,13 @@ TOOL_ACTION PCB_ACTIONS::exportFootprint( TOOL_ACTION_ARGS()
         .Tooltip( _( "Export edited footprint to file" ) )
         .Icon( BITMAPS::export_module ) );
 
+TOOL_ACTION PCB_ACTIONS::exportFootprintAsSVG( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.exportFootprintAsSVG" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export Current Footprint as SVG..." ) )
+        .Tooltip( _( "Export the current footprint to an SVG file" ) )
+        .Icon( BITMAPS::export_svg ) );
+
 TOOL_ACTION PCB_ACTIONS::compareFpLibraryWithFile( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.CompareFpLibraryWithFile" )
         .Scope( AS_GLOBAL )

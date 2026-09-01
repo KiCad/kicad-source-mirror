@@ -71,6 +71,7 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     submenuExport->SetIcon( BITMAPS::export_file );
 
     submenuExport->Add( PCB_ACTIONS::exportFootprint, ACTION_MENU::NORMAL, _( "Footprint..." ) );
+    submenuExport->Add( PCB_ACTIONS::exportFootprintAsSVG, ACTION_MENU::NORMAL, _( "Footprint as &SVG..." ) );
     submenuExport->Add( _( "View as &PNG..." ),
                         _( "Create a PNG file from the current view" ),
                         ID_FPEDIT_SAVE_PNG,

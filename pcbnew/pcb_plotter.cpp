@@ -22,6 +22,10 @@
 #include <plotters/plotter.h>
 #include <plotters/plotters_pslike.h>
 #include <board.h>
+#include <board_loader.h>
+#include <footprint.h>
+#include <pad.h>
+#include <project.h>
 #include <reporter.h>
 #include <pcbplot.h>
 #include <wx/filename.h>
@@ -523,4 +527,55 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
 
     aOpts.SetColorSettings( colors );
     aOpts.SetOutputDirectory( aJob->GetConfiguredOutputPath() );
+}
+
+
+bool PlotFootprintToSVG( const FOOTPRINT& aFootprint, PROJECT& aProject,
+                         const std::map<wxString, wxString>* aVarOverrides, PCB_PLOT_PARAMS& aPlotOpts,
+                         const LSEQ& aLayersToPlot, const LSEQ& aLayersOnAll, const wxString& aFileName,
+                         REPORTER* aReporter )
+{
+    // Plot the footprint by placing it at the origin of a temporary board; the SVG
+    // fit-to-board options make the footprint origin land on the SVG origin and size the
+    // page/viewBox to the footprint's bounding box.
+
+    // The hack for now is we create fake boards containing the footprint and plot the board
+    // until we refactor better plot api later
+    std::unique_ptr<BOARD> brd = BOARD_LOADER::CreateEmptyBoard( &aProject );
+
+    if( aVarOverrides )
+        brd->GetProject()->ApplyTextVars( *aVarOverrides );
+
+    brd->SynchronizeProperties();
+
+    FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aFootprint.Clone() );
+
+    if( fp == nullptr )
+        return false;
+
+    fp->SetLink( niluuid );
+    fp->SetFlags( IS_NEW );
+    fp->SetParent( brd.get() );
+
+    for( PAD* pad : fp->Pads() )
+    {
+        pad->SetLocalRatsnestVisible( false );
+        pad->SetNetCode( 0 );
+    }
+
+    fp->SetOrientation( ANGLE_0 );
+    fp->SetPosition( VECTOR2I( 0, 0 ) );
+
+    brd->Add( fp, ADD_MODE::INSERT, true );
+
+    aPlotOpts.SetFormat( PLOT_FORMAT::SVG );
+    aPlotOpts.SetPlotFrameRef( false );
+    aPlotOpts.SetSvgFitPageToBoard( true );
+    aPlotOpts.SetMirror( false );
+    aPlotOpts.SetSkipPlotNPTH_Pads( false );
+
+    PCB_PLOTTER plotter( brd.get(), aReporter, aPlotOpts );
+
+    return plotter.Plot( aFileName, aLayersToPlot, aLayersOnAll, false, true, wxEmptyString, wxEmptyString,
+                         wxEmptyString );
 }

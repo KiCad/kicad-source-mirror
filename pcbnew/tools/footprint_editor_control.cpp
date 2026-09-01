@@ -19,6 +19,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "footprint_editor_control.h"
+
+#include <memory>
+
 #include <advanced_config.h>
 #include <string_utils.h>
 #include <pgm_base.h>
@@ -34,6 +38,8 @@
 #include <pcbnew_id.h>
 #include <confirm.h>
 #include <kidialog.h>
+#include <wx/debug.h>
+#include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wildcards_and_files_ext.h>
 #include <launch_ext.h> // To default when file manager setting is empty
@@ -50,6 +56,7 @@
 #include <dialogs/dialog_lib_footprint_fields_table.h>
 #include <footprint_wizard_frame.h>
 #include <kiway.h>
+#include <pcb_plotter.h>
 #include <project_pcb.h>
 #include <view/view_controls.h>
 #include <widgets/appearance_controls.h>
@@ -58,15 +65,11 @@
 #include <libraries/library_manager.h>
 #include <wx/dirdlg.h>
 
-#include <memory>
-
-#include "footprint_editor_control.h"
-
 
 FOOTPRINT_EDITOR_CONTROL::FOOTPRINT_EDITOR_CONTROL() :
-    PCB_TOOL_BASE( "pcbnew.ModuleEditor" ),
-    m_frame( nullptr ),
-    m_checkerDialog( nullptr )
+        PCB_TOOL_BASE( "pcbnew.ModuleEditor" ),
+        m_frame( nullptr ),
+        m_checkerDialog( nullptr )
 {
 }
 
@@ -628,6 +631,41 @@ int FOOTPRINT_EDITOR_CONTROL::ExportFootprint( const TOOL_EVENT& aEvent )
 {
     if( FOOTPRINT* fp = m_frame->GetBoard()->GetFirstFootprint() )
         m_frame->ExportFootprint( fp );
+
+    return 0;
+}
+
+
+int FOOTPRINT_EDITOR_CONTROL::ExportFootprintAsSVG( const TOOL_EVENT& aEvent )
+{
+    FOOTPRINT* fp = m_frame->GetBoard()->GetFirstFootprint();
+
+    if( !fp )
+    {
+        wxMessageBox( _( "No footprint to export" ) );
+        return 0;
+    }
+
+    wxFileName fn( fp->GetFPID().GetLibItemName() );
+    fn.SetExt( FILEEXT::SVGFileExtension );
+
+    wxString pro_dir = wxPathOnly( m_frame->Prj().GetProjectFullName() );
+
+    wxString fullFileName = wxFileSelector( _( "SVG File Name" ), pro_dir, fn.GetFullName(), FILEEXT::SVGFileExtension,
+                                            FILEEXT::SVGFileWildcard(), wxFD_SAVE, m_frame );
+
+    if( !fullFileName.IsEmpty() )
+    {
+        PCB_PLOT_PARAMS plotOpts;
+        plotOpts.SetFormat( PLOT_FORMAT::SVG );
+        plotOpts.SetColorSettings( m_frame->GetColorSettings() );
+        plotOpts.SetScale( 1.0 );
+        plotOpts.SetAutoScale( false );
+
+        LSEQ layersToPlot = LSET::AllLayersMask().SeqStackupForPlotting();
+
+        PlotFootprintToSVG( *fp, m_frame->Prj(), nullptr, plotOpts, layersToPlot, LSEQ(), fullFileName );
+    }
 
     return 0;
 }
@@ -1195,6 +1233,7 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_CONTROL::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ExportFootprintAsSVG, PCB_ACTIONS::exportFootprintAsSVG.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CompareLibraryWithFile,
         PCB_ACTIONS::compareFpLibraryWithFile.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ShowLibraryFieldsTable,
