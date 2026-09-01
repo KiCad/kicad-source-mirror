@@ -794,8 +794,8 @@ void DRC_ENGINE::InitEngine( const std::shared_ptr<DRC_RULE>& rule )
     {
         for( PCB_MARKER* marker : m_board->Markers() )
         {
-            DRC_ITEM* drcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
-            drcItem->SetViolatingRule( nullptr );
+            if( DRC_ITEM* drcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() ) )
+                drcItem->SetViolatingRule( nullptr );
         }
     }
 
@@ -849,8 +849,8 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
     {
         for( PCB_MARKER* marker : m_board->Markers() )
         {
-            DRC_ITEM* drcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
-            drcItem->SetViolatingRule( nullptr );
+            if( DRC_ITEM* drcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() ) )
+                drcItem->SetViolatingRule( nullptr );
         }
     }
 
