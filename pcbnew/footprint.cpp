@@ -3730,6 +3730,16 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
         break;
     }
 
+    case PCB_TABLE_T:
+    {
+        new_item = aItem->Duplicate( addToParentGroup, aCommit );
+
+        if( addToFootprint )
+            Add( new_item );
+
+        break;
+    }
+
     case PCB_GROUP_T:
     {
         PCB_GROUP* group = static_cast<const PCB_GROUP*>( aItem )->DeepDuplicate( addToParentGroup, aCommit );
