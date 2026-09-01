@@ -742,13 +742,13 @@ int PCBNEW_JOBS_HANDLER::JobExportBom( JOB* aJob )
     if( !aBomJob->m_bomPresetName.IsEmpty() )
     {
         // Find the preset
-        const BOM_PRESET* boardPreset = nullptr;
+        std::optional<BOM_PRESET> boardPreset;
 
         for( const BOM_PRESET& p : BOM_PRESET::BuiltInPresets() )
         {
             if( p.name == aBomJob->m_bomPresetName )
             {
-                boardPreset = &p;
+                boardPreset = p;
                 break;
             }
         }
@@ -757,7 +757,7 @@ int PCBNEW_JOBS_HANDLER::JobExportBom( JOB* aJob )
         {
             if( p.name == aBomJob->m_bomPresetName )
             {
-                boardPreset = &p;
+                boardPreset = p;
                 break;
             }
         }
