@@ -117,6 +117,8 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
                     break;
                 }
             }
+
+            AddCreatedFile( fullFilename );
         }
 
         if( doing_npth )
@@ -161,6 +163,8 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
                     msg.Printf( _( "Created file '%s'." ), fullFilename );
                     aReporter->Report( msg, RPT_SEVERITY_ACTION );
                 }
+
+                AddCreatedFile( fullFilename );
             }
         }
     }
@@ -494,6 +498,8 @@ bool GERBER_WRITER::writeBackdrillLayerPairFile( const wxString& aPlotDirectory,
         msg.Printf( _( "Created file '%s'." ), fullFilename );
         aReporter->Report( msg, RPT_SEVERITY_ACTION );
     }
+
+    AddCreatedFile( fullFilename );
 
     return true;
 }

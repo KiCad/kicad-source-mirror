@@ -2457,7 +2457,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
 
-        aDrillJob->AddOutput( outPath );
+        for( const wxString& outputFile : drillWriter->GetCreatedFiles() )
+            aDrillJob->AddOutput( outputFile );
 
         if( aDrillJob->m_generateReport )
         {
@@ -2491,7 +2492,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
 
-        aDrillJob->AddOutput( outPath );
+        for( const wxString& outputFile : drillWriter->GetCreatedFiles() )
+            aDrillJob->AddOutput( outputFile );
 
         if( aDrillJob->m_generateReport )
         {

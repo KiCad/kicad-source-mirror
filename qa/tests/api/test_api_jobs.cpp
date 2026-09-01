@@ -23,7 +23,6 @@
 #include <string>
 
 #include <boost/test/unit_test.hpp>
-#include <wx/dir.h>
 #include <wx/filename.h>
 
 #include "api_e2e_utils.h"
@@ -257,21 +256,16 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardDrill, API_SERVER_E2E_FIXTURE )
                            "Job failed: " + wxString::FromUTF8( response.message() ) );
 
     BOOST_REQUIRE_MESSAGE( response.output_path_size() > 0, "Job returned no output paths" );
-
-    // Find the generated .drl file.  The API may return either explicit file paths or an output
-    // directory (for jobs that emit multiple files).
-    wxString generatedOutputDir = wxString::FromUTF8( response.output_path( 0 ) );
     wxString generatedDrillPath;
 
-    if( !generatedOutputDir.IsEmpty() )
+    for( int i = 0; i < response.output_path_size(); ++i )
     {
-        wxDir    dir( generatedOutputDir );
-        wxString filename;
+        wxString outputPath = wxString::FromUTF8( response.output_path( i ) );
 
-        if( dir.IsOpened() && dir.GetFirst( &filename, wxS( "*.drl" ), wxDIR_FILES ) )
+        if( outputPath.EndsWith( wxS( ".drl" ) ) )
         {
-            wxFileName fn( generatedOutputDir, filename );
-            generatedDrillPath = fn.GetFullPath();
+            generatedDrillPath = outputPath;
+            break;
         }
     }
 

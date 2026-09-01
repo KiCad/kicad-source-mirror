@@ -606,6 +606,8 @@ bool GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory, RE
                     msg.Printf( _( "Created file '%s'." ), fullfilename );
                     aReporter->Report( msg, RPT_SEVERITY_ACTION );
                 }
+
+                AddCreatedFile( fullfilename );
             }
         }
     }

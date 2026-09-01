@@ -164,6 +164,9 @@ bool EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                         break;
                     }
                 }
+
+                if( wroteDrillFile )
+                    AddCreatedFile( fullFilename );
             }
         }
     }
@@ -707,9 +710,10 @@ bool EXCELLON_WRITER::writeBackdrillLayerPairFile( const wxString& aPlotDirector
         return false;
     }
 
+    AddCreatedFile( fullFilename );
+
     return true;
 }
-
 
 void EXCELLON_WRITER::writeHoleComments( const HOLE_INFO& aHole, bool aTagBackdrillHit )
 {

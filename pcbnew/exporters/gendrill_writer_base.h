@@ -411,6 +411,8 @@ public:
      */
     wxString GetDrillFileExt() const { return m_drillFileExtension; }
 
+    const std::vector<wxString>& GetCreatedFiles() const { return m_createdFiles; }
+
 protected:
     /**
      * Plot a map of drill marks for holes.
@@ -536,6 +538,8 @@ protected:
         m_zeroFormat      = DECIMAL_FORMAT;
     }
 
+    void AddCreatedFile( const wxString& aPath ) { m_createdFiles.emplace_back( aPath ); }
+
     BOARD*                   m_pcb;
     wxString                 m_drillFileExtension;      // .drl or .gbr, depending on format
     bool                     m_unitsMetric;             // true = mm, false = inches
@@ -554,6 +558,7 @@ protected:
                                                         // if this map is needed
     const PAGE_INFO*         m_pageInfo;                // the page info used to plot drill maps
                                                         // If NULL, use a A4 page format
+    std::vector<wxString>    m_createdFiles;
 };
 
 #endif      // #define GENDRILL_FILE_WRITER_BASE_H
