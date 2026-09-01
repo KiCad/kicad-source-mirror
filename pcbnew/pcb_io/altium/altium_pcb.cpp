@@ -21,8 +21,11 @@
 #include "altium_pcb.h"
 #include "altium_parser_pcb.h"
 #include <altium_pcb_compound_file.h>
+#include <io/altium/altium_ascii_parser.h>
 #include <io/altium/altium_binary_parser.h>
 #include <io/altium/altium_parser_utils.h>
+#include <io/altium/altium_props_utils.h>
+#include <io/io_utils.h>
 #include <io/altium/altium_project_variants.h>
 
 #include <board.h>
@@ -488,9 +491,13 @@ void ALTIUM_PCB::checkpoint()
     }
 }
 
-void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumPcbFile,
-                        const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
+void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&              altiumPcbFile,
+                        const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping,
+                        const std::map<std::string, UTF8>*           aProperties )
 {
+    if( aProperties )
+        MapSchematicNetNames( *aProperties );
+
     // this vector simply declares in which order which functions to call.
     const std::vector<std::tuple<bool, ALTIUM_PCB_DIR, PARSE_FUNCTION_POINTER_fp>> parserOrder = {
         { true, ALTIUM_PCB_DIR::FILE_HEADER,
@@ -1630,8 +1637,8 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumP
 
             for( const wxString& name : elem.names )
             {
-                m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
-                        name, nc->GetName() );
+                m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment( SchematicCasedNetName( name ),
+                                                                                          nc->GetName() );
             }
 
             if( m_board->GetDesignSettings().m_NetSettings->HasNetclass( nc->GetName() ) )
@@ -2478,6 +2485,101 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
 }
 
 
+static void altiumCollectSchematicNetNames( const wxString& aFileName, std::map<wxString, wxString>& aNames,
+                                            std::set<wxString>& aAmbiguous )
+{
+    auto collect = [&]( const std::map<wxString, wxString>& aProps )
+    {
+        int      record = ALTIUM_PROPS_UTILS::ReadInt( aProps, wxT( "RECORD" ), 0 );
+        wxString name;
+
+        switch( record )
+        {
+        case 16: // sheet entry
+        case 18: // port
+            name = ALTIUM_PROPS_UTILS::ReadString( aProps, wxT( "NAME" ), wxT( "" ) );
+            break;
+
+        case 17: // power port
+        case 25: // net label
+            name = ALTIUM_PROPS_UTILS::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+            break;
+
+        default: return;
+        }
+
+        if( name.IsEmpty() )
+            return;
+
+        wxString key = name.Upper();
+        auto     it = aNames.find( key );
+
+        if( it == aNames.end() )
+            aNames.emplace( key, name );
+        else if( it->second != name )
+            aAmbiguous.insert( key );
+    };
+
+    if( IO_UTILS::fileHasBinaryHeader( aFileName, IO_UTILS::COMPOUND_FILE_HEADER ) )
+    {
+        ALTIUM_COMPOUND_FILE            schFile( aFileName );
+        const CFB::COMPOUND_FILE_ENTRY* header = schFile.FindStream( { "FileHeader" } );
+
+        if( !header )
+            return;
+
+        ALTIUM_BINARY_PARSER reader( schFile, header );
+
+        while( reader.GetRemainingBytes() > 0 )
+            collect( reader.ReadProperties() );
+    }
+    else
+    {
+        ALTIUM_ASCII_PARSER reader( aFileName );
+
+        while( reader.CanRead() )
+            collect( reader.ReadProperties() );
+    }
+}
+
+
+void ALTIUM_PCB::MapSchematicNetNames( const std::map<std::string, UTF8>& aProperties )
+{
+    std::set<wxString> ambiguous;
+
+    for( int i = 0;; i++ )
+    {
+        auto it = aProperties.find( "sch" + std::to_string( i ) );
+
+        if( it == aProperties.end() )
+            break;
+
+        try
+        {
+            altiumCollectSchematicNetNames( it->second.wx_str(), m_schematicNetNames, ambiguous );
+        }
+        catch( ... )
+        {
+            // an unreadable schematic must not break the board import
+        }
+    }
+
+    for( const wxString& key : ambiguous )
+        m_schematicNetNames.erase( key );
+}
+
+
+wxString ALTIUM_PCB::SchematicCasedNetName( const wxString& aNetName ) const
+{
+    auto it = m_schematicNetNames.find( aNetName.Upper() );
+
+    if( it != m_schematicNetNames.end() )
+        return it->second;
+
+    return aNetName;
+}
+
+
 void ALTIUM_PCB::ParseNets6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
@@ -2495,7 +2597,7 @@ void ALTIUM_PCB::ParseNets6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
         checkpoint();
         ANET6 elem( reader );
 
-        wxString netName = elem.name;
+        wxString netName = SchematicCasedNetName( elem.name );
 
         if( netName.IsEmpty() )
         {

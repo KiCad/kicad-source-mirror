@@ -107,7 +107,7 @@ BOARD* PCB_IO_ALTIUM_CIRCUIT_STUDIO::LoadBoard( const wxString& aFileName, BOARD
     {
         // Parse File
         ALTIUM_PCB pcb( m_board, m_progressReporter, m_layer_mapping_handler, m_reporter );
-        pcb.Parse( altiumPcbFile, mapping );
+        pcb.Parse( altiumPcbFile, mapping, m_props );
     }
     catch( CFB::CFBException& exception )
     {

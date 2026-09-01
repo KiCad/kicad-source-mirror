@@ -129,7 +129,7 @@ BOARD* PCB_IO_SOLIDWORKS::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     {
         // Parse File
         ALTIUM_PCB pcb( m_board, m_progressReporter, m_layer_mapping_handler, m_reporter );
-        pcb.Parse( altiumPcbFile, mapping );
+        pcb.Parse( altiumPcbFile, mapping, m_props );
     }
     catch( CFB::CFBException& exception )
     {

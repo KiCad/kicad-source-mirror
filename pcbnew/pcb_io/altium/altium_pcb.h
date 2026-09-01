@@ -21,6 +21,7 @@
 #ifndef ALTIUM_PCB_H
 #define ALTIUM_PCB_H
 
+#include <core/utf8.h>
 #include <embedded_files.h>
 #include <functional>
 #include <layer_ids.h>
@@ -159,8 +160,9 @@ public:
                          const wxString& aFootprintName = wxEmptyString);
     ~ALTIUM_PCB();
 
-    void Parse( const ALTIUM_PCB_COMPOUND_FILE&                  aAltiumPcbFile,
-                const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
+    void Parse( const ALTIUM_PCB_COMPOUND_FILE&              aAltiumPcbFile,
+                const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping,
+                const std::map<std::string, UTF8>*           aProperties = nullptr );
 
     FOOTPRINT* ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
                                const wxString&       aFootprintName );
@@ -238,6 +240,9 @@ private:
 
     /// Rebuild the composite netclasses and point every net at its effective netclass.
     void HelperAssignNetclassesToNets();
+
+    void     MapSchematicNetNames( const std::map<std::string, UTF8>& aProperties );
+    wxString SchematicCasedNetName( const wxString& aNetName ) const;
 
     void ParseTexts6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
@@ -338,6 +343,7 @@ private:
     std::vector<PCB_DIM_RADIAL*>         m_radialDimensions;
     std::map<uint32_t, wxString>         m_unicodeStrings;
     std::vector<int>                     m_altiumToKicadNetcodes;
+    std::map<wxString, wxString>         m_schematicNetNames; // upper cased name to schematic casing
     std::map<ALTIUM_LAYER, PCB_LAYER_ID> m_layermap; // used to correctly map layers
     std::map<ALTIUM_LAYER, wxString>     m_layerNames;
 

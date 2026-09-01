@@ -27,6 +27,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/altium/pcb_io_altium_designer.h>
+#include <pcbnew/pcb_io/altium/pcb_io_altium_circuit_studio.h>
 #include <pcbnew/pcb_io/altium/altium_pcb.h>
 #include <pcbnew/pcb_io/altium/altium_pcb_compound_file.h>
 #include <pcbnew/pcb_io/altium/altium_parser_pcb.h>
@@ -1655,6 +1656,40 @@ BOOST_AUTO_TEST_CASE( PolygonVertexOutsideCoordinateRangeIsDiscarded )
     // Every survivor keeps its own coordinates, so nothing was renumbered or shifted
     BOOST_CHECK_EQUAL( vertices[1].position, VECTOR2I( 89077800, -72237600 ) );
     BOOST_CHECK_EQUAL( vertices[2].position, VECTOR2I( 95427800, -71983600 ) );
+}
+
+
+/**
+ * Altium net names are not case sensitive, so board and schematic may spell the same net
+ * differently. A project import must take the schematic casing. A board imported alone must
+ * keep the names stored in the file.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25374
+ */
+BOOST_AUTO_TEST_CASE( NetNamesTakeSchematicCase )
+{
+    std::string dataDir = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue25374/";
+
+    std::map<std::string, UTF8> props;
+    props["sch0"] = dataDir + "altium_import_netname.SchDoc";
+
+    PCB_IO_ALTIUM_CIRCUIT_STUDIO plugin;
+    std::unique_ptr<BOARD>       board = std::make_unique<BOARD>();
+    plugin.LoadBoard( dataDir + "altium_import_netname.CSPcbDoc", board.get(), &props, nullptr );
+
+    BOOST_CHECK( board->FindNet( wxT( "all_low_letter" ) ) );
+    BOOST_CHECK( board->FindNet( wxT( "UperCamelCase" ) ) );
+    BOOST_CHECK( board->FindNet( wxT( "lowerCamelCase" ) ) );
+    BOOST_CHECK( board->FindNet( wxT( "ALL_BIG_LETTER" ) ) );
+    BOOST_CHECK( board->FindNet( wxT( "GND" ) ) );
+    BOOST_CHECK( !board->FindNet( wxT( "ALL_LOW_LETTER" ) ) );
+
+    PCB_IO_ALTIUM_CIRCUIT_STUDIO standalonePlugin;
+    std::unique_ptr<BOARD>       standaloneBoard = std::make_unique<BOARD>();
+    standalonePlugin.LoadBoard( dataDir + "altium_import_netname.CSPcbDoc", standaloneBoard.get(), nullptr, nullptr );
+
+    BOOST_CHECK( standaloneBoard->FindNet( wxT( "ALL_LOW_LETTER" ) ) );
+    BOOST_CHECK( !standaloneBoard->FindNet( wxT( "all_low_letter" ) ) );
 }
 
 
