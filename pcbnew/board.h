@@ -711,7 +711,7 @@ public:
                             bool resetTextContent = true, bool resetFabricationAttrs = true,
                             bool resetClearanceOverrides = true, bool reset3DModels = true,
                             bool resetTransform = false,
-                            bool* aUpdated = nullptr );
+                            bool* aUpdated = nullptr, bool* aShifted = nullptr );
 
     /**
      * Reset all high light data to the init state

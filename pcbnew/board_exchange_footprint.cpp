@@ -174,23 +174,26 @@ static std::vector<std::pair<T*, T*>> matchItemsBySimilarity( const std::vector<
 
 
 void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
-                                        bool matchPadPositions,
-                                        bool deleteExtraTexts,
-                                        bool resetTextLayers,
-                                        bool resetTextEffects,
-                                        bool resetTextPositions,
-                                        bool resetTextContent,
-                                        bool resetFabricationAttrs,
-                                        bool resetClearanceOverrides,
-                                        bool reset3DModels,
-                                        bool resetTransform,
-                                        bool* aUpdated )
+                               bool matchPadPositions,
+                               bool deleteExtraTexts,
+                               bool resetTextLayers,
+                               bool resetTextEffects,
+                               bool resetTextPositions,
+                               bool resetTextContent,
+                               bool resetFabricationAttrs,
+                               bool resetClearanceOverrides,
+                               bool reset3DModels,
+                               bool resetTransform,
+                               bool* aUpdated, bool* aShifted )
 {
     EDA_GROUP* parentGroup = aExisting->GetParentGroup();
     bool       dummyBool   = false;
 
     if( !aUpdated )
         aUpdated = &dummyBool;
+
+    if( !aShifted )
+        aShifted = &dummyBool;
 
     if( parentGroup )
     {
@@ -202,7 +205,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     aNew->SetParent( this );
 
     // This is the position and angle shift to apply to the new footprint if the footprint
-    // has a change anchor point or rotation compared to the existing footprint.
+    // has a changed anchor point or rotation compared to the existing footprint.
     VECTOR2I  posShift( 0, 0 );
     EDA_ANGLE angleShift = ANGLE_0;
 
@@ -215,6 +218,9 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         {
             position += posShift;
             orientation += angleShift;
+
+            if( posShift != VECTOR2I( 0, 0 ) || angleShift != ANGLE_0 )
+                *aShifted = true;
         }
     }
 
@@ -256,10 +262,10 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     for( PAD* pad : aNew->Pads() )
         newPads.push_back( pad );
 
-    auto padMatches = matchItemsBySimilarity<PAD>( oldPads, newPads );
+    std::vector<std::pair<PAD*, PAD*>> padMatches = matchItemsBySimilarity( oldPads, newPads );
     std::unordered_set<PAD*> matchedNewPads;
 
-    for( const auto& match : padMatches )
+    for( const std::pair<PAD*, PAD*>& match : padMatches )
     {
         PAD* oldPad = match.first;
         PAD* newPad = match.second;
@@ -297,11 +303,11 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     for( BOARD_ITEM* item : aNew->GraphicalItems() )
         newDrawings.push_back( item );
 
-    auto drawingMatches = matchItemsBySimilarity<BOARD_ITEM>( oldDrawings, newDrawings );
+    std::vector<std::pair<BOARD_ITEM*, BOARD_ITEM*>> drawingMatches = matchItemsBySimilarity( oldDrawings, newDrawings );
     std::unordered_map<BOARD_ITEM*, BOARD_ITEM*> oldToNewDrawings;
     std::unordered_set<BOARD_ITEM*> matchedNewDrawings;
 
-    for( const auto& match : drawingMatches )
+    for( const std::pair<BOARD_ITEM*, BOARD_ITEM*>& match : drawingMatches )
     {
         BOARD_ITEM* oldItem = match.first;
         BOARD_ITEM* newItem = match.second;
@@ -329,10 +335,10 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     for( ZONE* zone : aNew->Zones() )
         newZones.push_back( zone );
 
-    auto zoneMatches = matchItemsBySimilarity<ZONE>( oldZones, newZones );
+    std::vector<std::pair<ZONE*, ZONE*>> zoneMatches = matchItemsBySimilarity( oldZones, newZones );
     std::unordered_set<ZONE*> matchedNewZones;
 
-    for( const auto& match : zoneMatches )
+    for( const std::pair<ZONE*, ZONE*>& match : zoneMatches )
     {
         ZONE* oldZone = match.first;
         ZONE* newZone = match.second;
@@ -359,10 +365,10 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     for( PCB_POINT* point : aNew->Points() )
         newPoints.push_back( point );
 
-    auto pointMatches = matchItemsBySimilarity<PCB_POINT>( oldPoints, newPoints );
+    std::vector<std::pair<PCB_POINT*, PCB_POINT*>> pointMatches = matchItemsBySimilarity( oldPoints, newPoints );
     std::unordered_set<PCB_POINT*> matchedNewPoints;
 
-    for( const auto& match : pointMatches )
+    for( const std::pair<PCB_POINT*, PCB_POINT*>& match : pointMatches )
     {
         PCB_POINT* oldPoint = match.first;
         PCB_POINT* newPoint = match.second;
@@ -389,10 +395,10 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     for( PCB_GROUP* group : aNew->Groups() )
         newGroups.push_back( group );
 
-    auto groupMatches = matchItemsBySimilarity<PCB_GROUP>( oldGroups, newGroups );
+    std::vector<std::pair<PCB_GROUP*, PCB_GROUP*>> groupMatches = matchItemsBySimilarity( oldGroups, newGroups );
     std::unordered_set<PCB_GROUP*> matchedNewGroups;
 
-    for( const auto& match : groupMatches )
+    for( const std::pair<PCB_GROUP*, PCB_GROUP*>& match : groupMatches )
     {
         PCB_GROUP* oldGroup = match.first;
         PCB_GROUP* newGroup = match.second;
@@ -407,10 +413,10 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
             newGroup->ResetUuid();
     }
 
-    std::vector<PCB_FIELD*> oldFieldsVec;
-    std::vector<PCB_FIELD*> newFieldsVec;
+    std::vector<PCB_FIELD*> oldFields;
+    std::vector<PCB_FIELD*> newFields;
 
-    oldFieldsVec.reserve( aExisting->GetFields().size() );
+    oldFields.reserve( aExisting->GetFields().size() );
 
     for( PCB_FIELD* field : aExisting->GetFields() )
     {
@@ -419,10 +425,10 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         if( field->IsReference() || field->IsValue() )
             continue;
 
-        oldFieldsVec.push_back( field );
+        oldFields.push_back( field );
     }
 
-    newFieldsVec.reserve( aNew->GetFields().size() );
+    newFields.reserve( aNew->GetFields().size() );
 
     for( PCB_FIELD* field : aNew->GetFields() )
     {
@@ -431,14 +437,14 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         if( field->IsReference() || field->IsValue() )
             continue;
 
-        newFieldsVec.push_back( field );
+        newFields.push_back( field );
     }
 
-    auto fieldMatches = matchItemsBySimilarity<PCB_FIELD>( oldFieldsVec, newFieldsVec );
+    std::vector<std::pair<PCB_FIELD*, PCB_FIELD*>> fieldMatches = matchItemsBySimilarity( oldFields, newFields );
     std::unordered_map<PCB_FIELD*, PCB_FIELD*> oldToNewFields;
     std::unordered_set<PCB_FIELD*> matchedNewFields;
 
-    for( const auto& match : fieldMatches )
+    for( const std::pair<PCB_FIELD*, PCB_FIELD*>& match : fieldMatches )
     {
         PCB_FIELD* oldField = match.first;
         PCB_FIELD* newField = match.second;
@@ -448,7 +454,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         newField->SetUuid( oldField->m_Uuid );
     }
 
-    for( PCB_FIELD* newField : newFieldsVec )
+    for( PCB_FIELD* newField : newFields )
     {
         if( matchedNewFields.find( newField ) == matchedNewFields.end() )
             newField->ResetUuid();
@@ -456,7 +462,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
 
     std::unordered_map<PCB_TEXT*, PCB_TEXT*> oldToNewTexts;
 
-    for( const auto& match : drawingMatches )
+    for( const std::pair<BOARD_ITEM*, BOARD_ITEM*>& match : drawingMatches )
     {
         PCB_TEXT* oldText = dynamic_cast<PCB_TEXT*>( match.first );
         PCB_TEXT* newText = dynamic_cast<PCB_TEXT*>( match.second );

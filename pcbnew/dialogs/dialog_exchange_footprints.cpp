@@ -381,6 +381,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
     }
 
     bool updated = !m_updateMode || aFootprint->FootprintNeedsUpdate( newFootprint );
+    bool shifted = false;
 
     m_parent->GetBoard()->ExchangeFootprint( aFootprint, newFootprint, m_commit,
                                              m_matchPadPositions->GetValue(),
@@ -393,7 +394,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
                                              m_resetClearanceOverrides->GetValue(),
                                              m_reset3DModels->GetValue(),
                                              m_resetTransform->GetValue(),
-                                             &updated );
+                                             &updated, &shifted );
 
     if( aFootprint == m_currentFootprint )
         m_currentFootprint = newFootprint;
@@ -403,7 +404,11 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
 
     if( m_updateMode && !updated )
     {
-        msg += _( ": (no changes)" );
+        if( shifted )
+            msg += _( ": (shifted/rotated to match pad positions)" );
+        else
+            msg += _( ": (no changes)" );
+
         m_MessageWindow->Report( msg, RPT_SEVERITY_INFO );
     }
     else
