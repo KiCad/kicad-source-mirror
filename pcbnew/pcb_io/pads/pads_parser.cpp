@@ -2792,26 +2792,45 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
              break;
         }
 
-        // Header format: name type xloc yloc pieces flags [text [signame]]
+        // Header format: name type xloc yloc pieces flags [text] [signame]
+        // While the docs claim `... pieces flags [text [signame]]`, and the `*REMARK*` lines our
+        // sample files claim `... pieces text signame`, the files themselves clearly contain many
+        // instances of `pieces flags signame`.
         std::istringstream iss( line );
         std::string name, type;
         double xloc = 0.0, yloc = 0.0;
         int pieces = 0, flags = 0, textCount = 0;
+        std::string seventhToken, eighthToken;
         std::string signame;
 
-        iss >> name >> type >> xloc >> yloc >> pieces >> flags;
+        iss >> name >> type >> xloc >> yloc >> pieces >> flags >> seventhToken >> eighthToken;
 
-        // Try to read optional text count and signal name (for COPPER type).
-        // Standard format: pieces flags textcount signame
-        // EasyEDA format:  pieces flags signame (no text count)
-        if( iss >> textCount )
+        if( !eighthToken.empty() )
         {
-            iss >> signame;
+            // If we have the full eight tokens, the last two must be text-count and signame.
+
+            signame = eighthToken;
+
+            std::istringstream tiss( seventhToken );
+            tiss >> textCount;
         }
-        else
+        else if( !seventhToken.empty() )
         {
-            iss.clear();
-            iss >> signame;
+            // Here's where it gets dicey: with seven tokens we don't know whether the last
+            // is a text-count or a signame.  We can't compare with known signal names, as
+            // they're all later in the file.  The best we can do is assume that anything that
+            // is all digits is a text-count, and that any signame will contain at least one
+            // symbol or letter.
+
+            if( std::all_of( seventhToken.begin(), seventhToken.end(), ::isdigit ) )
+            {
+                std::istringstream tiss( seventhToken );
+                tiss >> textCount;
+            }
+            else
+            {
+                signame = seventhToken;
+            }
         }
 
         // Check for optional .REUSE. line after header
