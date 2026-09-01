@@ -5892,6 +5892,12 @@ bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgra
 void CONNECTION_GRAPH::collectBusMemberSiblings( const CONNECTION_SUBGRAPH* aBusParent, const wxString& aMemberName,
                                                  std::unordered_set<const CONNECTION_SUBGRAPH*>& aOut ) const
 {
+    while( aBusParent && aBusParent->m_absorbed )
+        aBusParent = aBusParent->m_absorbed_by;
+
+    if( !aBusParent || !aBusParent->m_driver_connection )
+        return;
+
     auto busBucket = m_net_name_to_subgraphs_map.find( aBusParent->m_driver_connection->Name() );
 
     if( busBucket == m_net_name_to_subgraphs_map.end() )
