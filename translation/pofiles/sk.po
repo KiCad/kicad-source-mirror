@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-31 12:51+0000\n"
+"PO-Revision-Date: 2026-09-01 19:52+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -11715,7 +11715,7 @@ msgstr "Pridať existujúci priečinok knižnice"
 
 #: common/tool/actions.cpp:66
 msgid "Open..."
-msgstr "Otvorené..."
+msgstr "Otvoriť..."
 
 #: common/tool/actions.cpp:67
 msgid "Open existing document"
