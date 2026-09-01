@@ -31,8 +31,9 @@ set( QA_UTIL_COMMON_SRC
     wx_utils/unit_test_utils.cpp
     wx_utils/wx_assert.cpp
 
-    # PDF testing helpers
+    # Format testing helpers
     pdf_test_utils.cpp
+    svg_test_utils.cpp
 )
 
 # A generic library of useful functions for various testing purposes

@@ -29,18 +29,20 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <wx/ffile.h>
+#include <wx/mstream.h>
+
+#include <eda_units.h>
 #include <lib_symbol.h>
 #include <sch_pin.h>
 #include <sch_shape.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
-#include <plotters/plotters_pslike.h>
 #include <sch_painter.h>
 #include <sch_plotter.h>
-#include <locale_io.h>
 #include <settings/color_settings.h>
-#include <wx/ffile.h>
-#include <wx/mstream.h>
+
+#include <qa_utils/svg_test_utils.h>
 
 
 class SYMBOL_CLIPBOARD_FIXTURE
@@ -137,52 +139,23 @@ public:
 
     wxString PlotToSvgString( int aUnit = 0, int aBodyStyle = 0 )
     {
-        BOX2I bbox = GetSymbolBoundingBox( aUnit, aBodyStyle );
-
-        if( bbox.GetWidth() <= 0 || bbox.GetHeight() <= 0 )
-            return wxEmptyString;
-
-        bbox.Inflate( bbox.GetWidth() * 0.02, bbox.GetHeight() * 0.02 );
-
+        // Route through the production export so the tests cover the real viewport/viewBox
+        // handling rather than a reimplementation of the plot setup.
         SCH_RENDER_SETTINGS renderSettings;
         COLOR_SETTINGS      colorSettings;
         renderSettings.LoadColors( &colorSettings );
         renderSettings.SetDefaultPenWidth( schIUScale.MilsToIU( 6 ) );
 
-        std::unique_ptr<SVG_PLOTTER> plotter = std::make_unique<SVG_PLOTTER>();
-        plotter->SetRenderSettings( &renderSettings );
-
-        PAGE_INFO pageInfo;
-        pageInfo.SetWidthMils( schIUScale.IUToMils( bbox.GetWidth() ) );
-        pageInfo.SetHeightMils( schIUScale.IUToMils( bbox.GetHeight() ) );
-
-        plotter->SetPageSettings( pageInfo );
-        plotter->SetColorMode( true );
-
-        VECTOR2I plot_offset = bbox.GetOrigin();
-        plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, 1.0, false );
-        plotter->SetCreator( wxT( "Eeschema-SVG-Test" ) );
+        const BOX2I bbox = GetSymbolPlotBBox( *m_symbol, aUnit, aBodyStyle, false );
 
         wxFileName tempFile( wxFileName::CreateTempFileName( wxT( "kicad_test_svg" ) ) );
 
-        if( !plotter->OpenFile( tempFile.GetFullPath() ) )
+        if( !PlotSymbolToSVG( *m_symbol, *m_symbol, aUnit, aBodyStyle, bbox, renderSettings, false,
+                              tempFile.GetFullPath() ) )
         {
             wxRemoveFile( tempFile.GetFullPath() );
             return wxEmptyString;
         }
-
-        LOCALE_IO     toggle;
-        SCH_PLOT_OPTS plotOpts;
-
-        plotter->StartPlot( wxT( "1" ) );
-
-        constexpr bool background = true;
-        m_symbol->Plot( plotter.get(), background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
-        m_symbol->Plot( plotter.get(), !background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
-        m_symbol->PlotFields( plotter.get(), !background, plotOpts, aUnit, aBodyStyle, VECTOR2I( 0, 0 ), false );
-
-        plotter->EndPlot();
-        plotter.reset();
 
         wxFFile file( tempFile.GetFullPath(), wxT( "rb" ) );
         wxString content;
@@ -451,6 +424,39 @@ BOOST_AUTO_TEST_CASE( SvgExport_EmptySymbol )
 
     // An empty symbol (no non-field items) should have zero-size bounding box
     BOOST_CHECK( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 );
+}
+
+
+/**
+ * A symbol body centred on the symbol origin extends to negative coordinates, so the
+ * exported SVG viewBox must start at a negative left/top edge, not at (0, 0).
+ *
+ * This is an important contract of the SVG export because it allows plotted symbols
+ * to be placed into a parent document (e.g. for diffs) at a consistent position.
+ */
+BOOST_AUTO_TEST_CASE( SvgExport_ViewBoxOrigin )
+{
+    // A 100 x 100 mil rectangle centred on the origin (spanning -50..+50 mil).
+    AddRectangle( -50, -50, 50, 50 );
+
+    const wxString svg = PlotToSvgString();
+
+    const std::vector<double> viewBox = KI_TEST::ParseViewBox( svg );
+
+    // We must be able to parse the viewBox attribute and get four numbers
+    BOOST_REQUIRE_EQUAL( viewBox.size(), 4u );
+
+    // The viewbox should be about 100 x 100 mils in size, plus some padding for stroke width.
+    // The SVG export function doesn't promise a specific padding, so just make sure the viewBox
+    // is larger than the rectangle and is offset appropriately.
+
+    // The left and top edges of the viewport must be negative, not (0, 0).
+    BOOST_TEST( viewBox[0] < EDA_UNIT_UTILS::Mils2mm( -50 ) );
+    BOOST_TEST( viewBox[1] < EDA_UNIT_UTILS::Mils2mm( -50 ) );
+
+    // The viewport must still have a positive size
+    BOOST_TEST( viewBox[2] > EDA_UNIT_UTILS::Mils2mm( 100 ) );
+    BOOST_TEST( viewBox[3] > EDA_UNIT_UTILS::Mils2mm( 100 ) );
 }
 
 
