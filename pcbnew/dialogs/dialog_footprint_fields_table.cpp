@@ -759,7 +759,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsAdded( BOARD& aPcb, std::vector<
         for( PCB_FIELD* field : ref.GetFootprint().GetFields() )
         {
             if( !field->IsMandatory() && !field->IsPrivate() )
-                AddField( field->GetUntranslatedName(), field->GetName(), true, false, true );
+                AddField( field->GetUntranslatedName(), field->GetName(), true, false, false );
         }
     }
 
@@ -806,7 +806,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsChanged( BOARD& aPcb, std::vecto
         for( PCB_FIELD* field : ref.GetFootprint().GetFields() )
         {
             if( !field->IsMandatory() && !field->IsPrivate() )
-                AddField( field->GetUntranslatedName(), field->GetName(), true, false, true );
+                AddField( field->GetUntranslatedName(), field->GetName(), true, false, false );
         }
     }
 
