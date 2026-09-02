@@ -111,7 +111,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
             it = self.iterator()
             try:
                 while True:
-                    item = it.next()  # throws StopIteration when iterator reached the end.
+                    item = next(it)  # throws StopIteration when iterator reached the end.
                     yield item.Cast()
             except StopIteration:
                 return
@@ -125,7 +125,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
             it = self.iterator()
             try:
                 while True:
-                    item = it.next()  # throws StopIteration when iterator reached the end.
+                    item = next(it)  # throws StopIteration when iterator reached the end.
                     yield item.Cast()
             except StopIteration:
                 return
