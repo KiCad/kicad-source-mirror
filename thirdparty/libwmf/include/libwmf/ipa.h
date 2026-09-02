@@ -150,6 +150,12 @@ struct _wmfFont
 	U8 lfQuality;
 	U8 lfPitchAndFamily;
 
+	/**
+	 * Derived rather than read from the record.  A zero Width asks the device to keep the
+	 * face's own aspect instead of supplying a width in logical x units.
+	 */
+	U8 lfWidthIsDefault;
+
 	char* lfFaceName;
 
 	void* user_data;

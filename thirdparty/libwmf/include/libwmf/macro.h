@@ -157,6 +157,11 @@
 #define WMF_FONT_WIDTH(F)       ((F)->lfWidth)
 
 /**
+ * WMF_FONT_WIDTH_IS_DEFAULT(wmfFont* F) -> (U8) record left `width' at zero
+ */
+#define WMF_FONT_WIDTH_IS_DEFAULT(F) ((F)->lfWidthIsDefault)
+
+/**
  * WMF_FONT_HEIGHT(wmfFont* F)  -> (U16) font height
  */
 #define WMF_FONT_HEIGHT(F)      ((F)->lfHeight)
@@ -225,6 +230,11 @@
  * WMF_FONT_SET_WIDTH(wmfFont* F,(U16) font `width')
  */
 #define WMF_FONT_SET_WIDTH(F,Z)       (F)->lfWidth = (Z)
+
+/**
+ * WMF_FONT_SET_WIDTH_IS_DEFAULT(wmfFont* F,(U8) record left `width' at zero)
+ */
+#define WMF_FONT_SET_WIDTH_IS_DEFAULT(F,Z) (F)->lfWidthIsDefault = (Z)
 
 /**
  * WMF_FONT_SET_HEIGHT(wmfFont* F,(U16) font height)

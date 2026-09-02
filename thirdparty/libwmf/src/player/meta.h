@@ -2840,8 +2840,13 @@ static int meta_text (wmfAPI* API,wmfRecord* Record)
         /* FIXME: bug here?  Negative font height is supposed to represent absolute font pointsize */
 	drawtext.font_height = (double) WMF_FONT_HEIGHT (font) * ABS (P->dc->pixel_height);
 
-        /* FIXME: bug here, WMF_FONT_WIDTH and  WMF_FONT_HEIGHT do not necessarily have same scale! */
 	drawtext.font_ratio = (double) WMF_FONT_WIDTH (font) / (double) WMF_FONT_HEIGHT (font);
+
+	/* font_height is already in D units, so the ratio carries the x/y scale difference.  A
+	   zero Width asks for the face's own aspect and so keeps the ratio it was digitized at */
+	if (!WMF_FONT_WIDTH_IS_DEFAULT (font))
+	{	drawtext.font_ratio *= ABS (P->dc->pixel_width) / ABS (P->dc->pixel_height);
+	}
 
 	par_U16 = 0;
 	for (i = 0; i < length; i++)
@@ -3382,6 +3387,7 @@ static int meta_font_create (wmfAPI* API,wmfRecord* Record)
 
 	WMF_FONT_SET_HEIGHT (font,ABS (par_S16_h));
 	WMF_FONT_SET_WIDTH  (font,ABS (par_S16_w));
+	WMF_FONT_SET_WIDTH_IS_DEFAULT (font,(par_S16_w == 0));
 
 	WMF_FONT_SET_ESCAPEMENT  (font,ParS16 (API,Record,2)); /* text angle */
 	WMF_FONT_SET_ORIENTATION (font,ParS16 (API,Record,3));

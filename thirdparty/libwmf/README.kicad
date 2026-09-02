@@ -12,3 +12,8 @@ Local changes:
 - Disable libwmf's Windows DLL entry point, relocation helpers, and import/export
   annotations for the static KiCad target.  KiCad supplies the installed font
   directory explicitly.
+- Honour negative bitmap extents so mirrored StretchDIBits records render flipped
+  rather than being dropped.
+- Scale the text width-to-height ratio by the mapping mode's x/y pixel scale, and
+  track a zero Width field so those fonts keep the face's own aspect.  Resolves the
+  upstream FIXME in player/meta.h.

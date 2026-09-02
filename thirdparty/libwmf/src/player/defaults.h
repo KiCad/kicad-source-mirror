@@ -44,6 +44,7 @@ static void SetDefaults (wmfAPI* API,wmfPen* pen,wmfBrush* brush,wmfFont* font)
 
 	WMF_FONT_SET_HEIGHT      (font,12);
 	WMF_FONT_SET_WIDTH       (font,12);
+	WMF_FONT_SET_WIDTH_IS_DEFAULT (font,1); /* stock font, no width was ever specified */
 	WMF_FONT_SET_ESCAPEMENT  (font, 0);
 	WMF_FONT_SET_ORIENTATION (font, 0);
 	WMF_FONT_SET_WEIGHT      (font, 0);
