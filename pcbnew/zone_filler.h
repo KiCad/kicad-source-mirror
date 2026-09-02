@@ -97,6 +97,11 @@ private:
      */
     BOX2I zoneKnockoutQueryBox( const ZONE* aZone ) const;
 
+    /**
+     * True if the fill of aZone can reach outside the board outline.
+     */
+    bool mayHoldOutOfBoardCopper( const ZONE* aZone ) const;
+
     void subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                       SHAPE_POLY_SET& aRawFill );
 

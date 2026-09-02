@@ -515,6 +515,21 @@ void ZONE_FILLER::buildItemIndexes()
 }
 
 
+bool ZONE_FILLER::mayHoldOutOfBoardCopper( const ZONE* aZone ) const
+{
+    if( !m_brdOutlinesValid )
+        return true;
+
+    // BuildSmoothedPoly() clips to the board outline and then smooths, and it closes against the
+    // zone extents. Only a chamfer or a fillet can put copper back outside the edge.
+    if( aZone->IsTeardropArea() )
+        return false;
+
+    return aZone->GetCornerSmoothingType() == ZONE_SETTINGS::CORNER_SMOOTHING::CHAMFER
+           || aZone->GetCornerSmoothingType() == ZONE_SETTINGS::CORNER_SMOOTHING::FILLET;
+}
+
+
 BOX2I ZONE_FILLER::zoneKnockoutQueryBox( const ZONE* aZone ) const
 {
     // The candidate corner radius is unknown here, so use the board maximum.
@@ -1563,6 +1578,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
     for( ZONE* zone : aZones )
     {
+        if( !mayHoldOutOfBoardCopper( zone ) )
+            continue;
+
         // Don't check for connections on layers that only exist in the zone but
         // were disabled in the board
         BOARD* board = zone->GetBoard();
