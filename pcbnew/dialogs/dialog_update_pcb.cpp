@@ -131,6 +131,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         }
 
         toolMgr->RunAction( ACTIONS::selectionClear );
+        m_runDragCommand = false;
     }
 }
 
