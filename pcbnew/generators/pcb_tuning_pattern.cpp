@@ -1174,6 +1174,21 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     PNS::ROUTER*     router = aTool->Router();
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
     PCB_LAYER_ID     pcblayer = GetLayer();
+    SHAPE_LINE_CHAIN bounds = getOutline();
+    int              epsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
+
+    auto withinBounds = [bounds, epsilon]( BOARD_ITEM* aItem )
+    {
+        if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
+        {
+            if( bounds.PointInside( track->GetStart(), epsilon ) && bounds.PointInside( track->GetEnd(), epsilon ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    };
 
     auto hideRemovedItems = [&]( bool aHide )
     {
@@ -1183,7 +1198,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
             {
                 for( BOARD_ITEM* item : pnsCommit.removedItems )
                 {
-                    if( view )
+                    if( view && withinBounds( item ) )
                         view->Hide( item, aHide, aHide );
                 }
             }
@@ -1330,6 +1345,21 @@ void PCB_TUNING_PATTERN::EditFinish( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD
         router->StopRouting();
     }
 
+    PNS::NODE* world = router->GetWorld();
+
+    auto withinBounds = [bounds, epsilon]( BOARD_ITEM* aItem )
+    {
+        if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
+        {
+            if( bounds.PointInside( track->GetStart(), epsilon ) && bounds.PointInside( track->GetEnd(), epsilon ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     const std::vector<GENERATOR_PNS_CHANGES>& pnsCommits = aTool->GetRouterChanges();
 
     for( const GENERATOR_PNS_CHANGES& pnsCommit : pnsCommits )
@@ -1343,6 +1373,13 @@ void PCB_TUNING_PATTERN::EditFinish( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD
 
         for( BOARD_ITEM* item : routerRemovedItems )
         {
+            // Don't include the baseline that isn't in the final route
+            if( world->FindItemByParent( item ) == nullptr )
+                continue;
+
+            if( !withinBounds( item ) )
+                continue;
+
             if( view )
                 view->Hide( item, false );
 
@@ -1351,15 +1388,14 @@ void PCB_TUNING_PATTERN::EditFinish( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD
 
         for( BOARD_ITEM* item : routerAddedItems )
         {
-            aCommit->Add( item );
+            // Don't include the baseline that isn't in the final route
+            if( world->FindItemByParent( item ) == nullptr )
+                continue;
 
-            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
+            if( withinBounds( item ) )
             {
-                if( bounds.PointInside( track->GetStart(), epsilon )
-                    && bounds.PointInside( track->GetEnd(), epsilon ) )
-                {
-                    AddItem( item );
-                }
+                aCommit->Add( item );
+                AddItem( item );
             }
         }
     }
