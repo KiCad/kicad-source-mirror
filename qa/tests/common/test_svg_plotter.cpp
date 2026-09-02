@@ -86,6 +86,24 @@ std::set<std::string> fillOpacities( const wxString& aSvg )
     return values;
 }
 
+
+std::set<std::string> strokeOpacities( const wxString& aSvg )
+{
+    const std::string     doc = aSvg.ToStdString();
+    const std::string     key = "stroke-opacity:";
+    std::set<std::string> values;
+
+    for( size_t pos = doc.find( key ); pos != std::string::npos; pos = doc.find( key, pos + 1 ) )
+    {
+        size_t start = pos + key.size();
+        size_t end = doc.find_first_not_of( "0123456789.", start );
+
+        values.insert( doc.substr( start, end - start ) );
+    }
+
+    return values;
+}
+
 } // anonymous namespace
 
 
@@ -138,6 +156,14 @@ BOOST_AUTO_TEST_CASE( FillOpacityPreservedThroughSetColor )
             }
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( StrokeOpacityMatchesColorAlpha )
+{
+    std::set<std::string> values = strokeOpacities( plotFilledShape( COLOR4D( 1.0, 0.0, 0.0, 0.25 ) ) );
+
+    BOOST_CHECK_EQUAL( values.count( "0.2500" ), 1 );
 }
 
 

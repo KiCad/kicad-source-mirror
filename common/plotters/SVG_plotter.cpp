@@ -253,8 +253,9 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
         // So we use only 4 digits in mantissa for stroke-width.
         // TODO: perhaps used only 3 or 4 digits in mantissa for all values in mm, because some
         // issues were previously reported reported when using nm as integer units
-        fmt::print( m_outputFile, "\nstroke:#{:06X}; stroke-width:{:.{}f}; stroke-opacity:1; \n",
-                    m_pen_rgb_color, pen_w, m_precision );
+        fmt::print( m_outputFile,
+                    "\nstroke:#{:06X}; stroke-width:{:.{}f}; stroke-opacity:{:.{}f}; \n",
+                    m_pen_rgb_color, pen_w, m_precision, m_brush_alpha, m_precision );
         fmt::print( m_outputFile, "stroke-linecap:round; stroke-linejoin:round;" );
 
         //set any extra attributes for non-solid lines
