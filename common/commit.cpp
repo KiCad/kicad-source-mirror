@@ -56,11 +56,36 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
 
     wxASSERT( changeType != CHT_MODIFY || ( flags & CHT_DONE ) == 0 );
 
+    auto removeExistingLinesMatchingType =
+        [this, aItem, aScreen]( const CHANGE_TYPE aType )
+        {
+            std::erase_if( m_entries,
+                           [&]( const COMMIT_LINE& line )
+                           {
+                               if( line.m_item == aItem && line.m_screen == aScreen
+                                   && ( line.m_type & CHT_TYPE ) == aType )
+                               {
+                                   delete line.m_copy;
+                                   return true;
+                               }
+
+                               return false;
+                           } );
+        };
+
     switch( changeType )
     {
     case CHT_ADD:
         if( m_addedItems.find( { aItem, aScreen } ) != m_addedItems.end() )
             break;
+
+        // Guard against code that removes and then re-adds items during the same commit.
+        // Tuning patterns, for example, can add and then remove the baseline segment.
+        if( m_deletedItems.erase( { aItem, aScreen } ) )
+        {
+            removeExistingLinesMatchingType( CHT_REMOVE );
+            return *this;
+        }
 
         makeEntry( aItem, CHT_ADD | flags, nullptr, aScreen );
         break;
@@ -68,6 +93,19 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
     case CHT_REMOVE:
         if( m_deletedItems.find( { aItem, aScreen } ) != m_deletedItems.end() )
             break;
+
+        // Guard against code that adds and then removes items during the same commit.
+        // Tuning patterns, for example, can add and then remove the baseline segment.
+        if( m_addedItems.erase( { aItem, aScreen } ) )
+        {
+            removeExistingLinesMatchingType( CHT_ADD );
+            return *this;
+        }
+
+        // Generator children can be inserted as CHT_MODIFY but then removed by the generator
+        // itself as part of its property-changed listener.
+        if( m_changedItems.erase( { aItem, aScreen } ) )
+            removeExistingLinesMatchingType( CHT_MODIFY );
 
         makeEntry( aItem, CHT_REMOVE | flags, makeImage( aItem ), aScreen );
 
@@ -85,6 +123,9 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
 
         if( m_changedItems.find( { undoItem, aScreen } ) != m_changedItems.end() )
             break;
+
+        if( m_deletedItems.erase( { aItem, aScreen } ) )
+            removeExistingLinesMatchingType( CHT_REMOVE );
 
         makeEntry( undoItem, CHT_MODIFY | flags, makeImage( undoItem ), aScreen );
         break;
