@@ -53,8 +53,9 @@ private:
         bool ( *m_Accepts )( const PCB_SHAPE& aShape );
 
         /// Snap kinds this operation cannot use.  Trim reads which side of a crossing the
-        /// pointer is on, so a snap derived from one leaves the question no answer.
-        std::set<SNAP_CANDIDATE_SUBTYPE> m_SuppressedSnaps;
+        /// pointer is on, so a snap derived from one leaves the question no answer.  Empty
+        /// unless the operation says otherwise.
+        std::set<SNAP_CANDIDATE_SUBTYPE> m_SuppressedSnaps = {};
 
         /// The colour role the preview borrows.  Trim marks a removal, extend an addition.
         int m_PreviewLayer;

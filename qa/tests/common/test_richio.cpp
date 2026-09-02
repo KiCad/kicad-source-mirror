@@ -109,4 +109,25 @@ BOOST_AUTO_TEST_CASE( PrettifyLongQuotedString )
 }
 
 
+/**
+ * Indent must emit exactly the whitespace the nesting Print() overload prepends, since callers
+ * that only want the indentation use it in place of a Print() with an empty format string.
+ */
+BOOST_AUTO_TEST_CASE( IndentMatchesNestedPrint )
+{
+    for( int nestLevel : { 0, 1, 2, 7 } )
+    {
+        STRING_FORMATTER indented;
+        STRING_FORMATTER printed;
+
+        const int written = indented.Indent( nestLevel );
+
+        printed.Print( nestLevel, "%s", "" );
+
+        BOOST_CHECK_EQUAL( indented.GetString(), printed.GetString() );
+        BOOST_CHECK_EQUAL( written, static_cast<int>( indented.GetString().size() ) );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

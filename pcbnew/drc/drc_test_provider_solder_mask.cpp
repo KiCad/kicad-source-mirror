@@ -808,11 +808,23 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::collectBridge( BOARD_ITEM* aItemA, BOARD_ITE
 
     // Only the third item is ever absent, and the swaps above already ordered the copper items, so
     // the key needs at most the aperture inserted.  The unused slot stays trailing.
-    PENDING_BRIDGE bridge = { aItemA, aItemB, aItemC, aPos, aLayer,
-                              { aItemA->m_Uuid, aItemB->m_Uuid,
-                                aItemC ? aItemC->m_Uuid : niluuid } };
+    std::array<KIID, 3> ids = { aItemA->m_Uuid, aItemB->m_Uuid,
+                                aItemC ? aItemC->m_Uuid : niluuid };
 
-    std::sort( bridge.ids.begin(), bridge.ids.end() - ( aItemC ? 0 : 1 ) );
+    // Inserted by hand because std::sort over a two- or three-element runtime range inlines an
+    // introsort GCC cannot bound
+    if( ids[1] < ids[0] )
+        std::swap( ids[0], ids[1] );
+
+    if( aItemC && ids[2] < ids[1] )
+    {
+        std::swap( ids[1], ids[2] );
+
+        if( ids[1] < ids[0] )
+            std::swap( ids[0], ids[1] );
+    }
+
+    PENDING_BRIDGE bridge = { aItemA, aItemB, aItemC, aPos, aLayer, ids };
 
     std::lock_guard<std::mutex> lock( m_bridgeMutex );
 

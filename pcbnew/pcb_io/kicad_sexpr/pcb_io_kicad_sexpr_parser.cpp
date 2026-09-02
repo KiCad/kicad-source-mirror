@@ -8658,8 +8658,8 @@ PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aAllowLegacyFormat )
 {
     T token = NextTok();
 
-    std::optional<bool> front = std::nullopt;
-    std::optional<bool> back = std::nullopt;
+    std::pair<std::optional<bool>, std::optional<bool>> result;
+    auto& [front, back] = result;
 
     if( token != T_LEFT && aAllowLegacyFormat )
     {
@@ -8687,7 +8687,7 @@ PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aAllowLegacyFormat )
             token = NextTok();
         }
 
-        return { front, back };
+        return result;
     }
 
     while( token != T_RIGHT )
@@ -8709,7 +8709,7 @@ PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aAllowLegacyFormat )
         token = NextTok();
     }
 
-    return { front, back };
+    return result;
 }
 
 

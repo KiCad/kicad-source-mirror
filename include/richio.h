@@ -361,6 +361,15 @@ public:
     int PRINTF_FUNC Print( const char* fmt, ... );
 
     /**
+     * Write the leading whitespace for a nesting level, with no other output.
+     *
+     * @param aNestLevel The multiple of spaces to write.
+     * @return int - the number of characters output.
+     * @throw IO_ERROR, if there is a problem outputting, such as a full disk.
+     */
+    int Indent( int aNestLevel );
+
+    /**
      * Perform quote character need determination.
      *
      * It returns the quote character as a single character string for a given input wrapee

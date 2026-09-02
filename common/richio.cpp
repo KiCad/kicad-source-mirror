@@ -415,31 +415,35 @@ int OUTPUTFORMATTER::sprint( const char* fmt, ... )
 }
 
 
-int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... )
+int OUTPUTFORMATTER::Indent( int aNestLevel )
 {
 #define NESTWIDTH           2   ///< how many spaces per nestLevel
 
+    int total = 0;
+
+    for( int i = 0; i < aNestLevel; ++i )
+    {
+        // no error checking needed, an exception indicates an error.
+        total += sprint( "%*c", NESTWIDTH, ' ' );
+    }
+
+    return total;
+}
+
+
+int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... )
+{
     va_list     args;
 
     va_start( args, fmt );
 
-    int result = 0;
-    int total  = 0;
-
-    for( int i = 0; i < nestLevel; ++i )
-    {
-        // no error checking needed, an exception indicates an error.
-        result = sprint( "%*c", NESTWIDTH, ' ' );
-
-        total += result;
-    }
+    int total = Indent( nestLevel );
 
     // no error checking needed, an exception indicates an error.
-    result = vprint( fmt, args );
+    total += vprint( fmt, args );
 
     va_end( args );
 
-    total += result;
     return total;
 }
 

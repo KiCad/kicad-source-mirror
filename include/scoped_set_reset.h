@@ -21,6 +21,7 @@
 #define __SCOPED_SET_RESET_H
 
 #include <functional>
+#include <utility>
 
 /**
  * RAII class that sets an value at construction and resets it to the original value
@@ -42,10 +43,11 @@ template <typename VAL_TYPE>
 class SCOPED_SET_RESET
 {
 public:
-    SCOPED_SET_RESET( VAL_TYPE& target, VAL_TYPE value ) : m_target( target )
+    SCOPED_SET_RESET( VAL_TYPE& target, VAL_TYPE value ) :
+            m_original( target ),
+            m_target( target )
     {
-        m_original = target;
-        m_target = value;
+        m_target = std::move( value );
     }
 
     /**

@@ -320,11 +320,10 @@ void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
     // on the conflict so it isn't lost in the wide-area auto-fit.
     KICAD_DIFF::ExpandBBoxToGeometry( scene );
 
-    const std::optional<KIID_PATH> highlight =
-            m_currentConflict >= 0
-                    ? std::optional<KIID_PATH>(
-                            m_plan.actions[m_conflictActionIndex[m_currentConflict]].id )
-                    : std::nullopt;
+    std::optional<KIID_PATH> highlight;
+
+    if( m_currentConflict >= 0 )
+        highlight = m_plan.actions[m_conflictActionIndex[m_currentConflict]].id;
 
     m_canvas->SetScene( std::move( scene ) );
     m_canvas->HighlightChange( highlight );

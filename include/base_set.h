@@ -24,7 +24,17 @@
 #include <limits>
 #include <ostream>
 #include <stdexcept>
+
+// dynamic_bitset pulls in libpopcnt, whose static dispatch helpers go unused in the great
+// majority of the translation units this header reaches.
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 #include <dynamic_bitset.h>
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#pragma GCC diagnostic pop
+#endif
 
 #include <core/arraydim.h>
 #include <core/kicad_algo.h>

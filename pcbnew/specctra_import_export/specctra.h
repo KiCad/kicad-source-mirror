@@ -2908,7 +2908,7 @@ public:
             for( WINDOW& window : m_windows )
                 window.Format( out, nestLevel + 1 );
 
-            out->Print( nestLevel, "" );
+            out->Indent( nestLevel );
         }
 
         if( m_connect )

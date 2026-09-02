@@ -12,8 +12,10 @@ set( PLANEGCS_SRCS
 
 add_library( planegcs STATIC ${PLANEGCS_SRCS} )
 
+# SYSTEM so the vendored headers' own diagnostics stay out of the KiCad adapter
+# that includes GCS.h.
 target_include_directories( planegcs
-    PUBLIC
+    SYSTEM PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     )
 

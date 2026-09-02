@@ -50,7 +50,7 @@ enum class LOAD_STATUS
 struct KICOMMON_API LIB_STATUS
 {
     LOAD_STATUS                  load_status = LOAD_STATUS::INVALID;
-    std::optional<LIBRARY_ERROR> error;
+    std::optional<LIBRARY_ERROR> error = std::nullopt;
 };
 
 
