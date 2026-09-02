@@ -508,6 +508,10 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, bool aExcludeZo
 
 void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
+    // Nothing queries the index until searchConnections(), so index the board in one packed
+    // load rather than run the R*-tree insertion heuristic once per item
+    CN_LIST::BULK_ADD_SCOPE bulkAdd( m_itemList );
+
     // Generate CN_ZONE_LAYERs for each island on each layer of each zone
     //
     std::vector<CN_ZONE_LAYER*> zitems;

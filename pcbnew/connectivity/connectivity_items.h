@@ -483,7 +483,71 @@ public:
 
         m_items.clear();
         m_index.RemoveAll();
+        m_bulkAdd = false;
     }
+
+    /**
+     * Defer spatial indexing until FinishBulkAdd(), which packs the index in one pass.
+     *
+     * Only legal on an empty list, because the bulk load replaces the whole index.  Prefer
+     * BULK_ADD_SCOPE to calling this directly.
+     *
+     * @return true if the list entered bulk mode, false to keep indexing as usual.
+     */
+    bool StartBulkAdd()
+    {
+        if( !m_items.empty() || m_hasInvalid )
+            return false;
+
+        m_bulkAdd = true;
+        return true;
+    }
+
+    ///< Index everything queued since StartBulkAdd().  A no-op outside bulk mode.
+    void FinishBulkAdd()
+    {
+        if( !m_bulkAdd )
+            return;
+
+        m_bulkAdd = false;
+
+        std::vector<CN_RTREE<CN_ITEM*>::BULK_ENTRY> entries;
+        entries.reserve( m_items.size() );
+
+        for( CN_ITEM* item : m_items )
+        {
+            // BBox() clears the dirty flag that Add() deliberately leaves set
+            bool         dirty = item->Dirty();
+            const BOX2I& bbox = item->BBox();
+
+            entries.push_back( { { item->StartLayer(), bbox.GetX(), bbox.GetY() },
+                                 { item->EndLayer(), bbox.GetRight(), bbox.GetBottom() },
+                                 item } );
+
+            item->SetDirty( dirty );
+        }
+
+        m_index.BulkLoad( entries );
+    }
+
+    /**
+     * Hold bulk mode for a scope.
+     *
+     * A list left in bulk mode indexes nothing it is given afterwards, so the board comes up
+     * missing connectivity instead of failing.  Tie the exit to the scope, not to a return.
+     */
+    class BULK_ADD_SCOPE
+    {
+    public:
+        explicit BULK_ADD_SCOPE( CN_LIST& aList ) : m_list( aList ) { m_list.StartBulkAdd(); }
+        ~BULK_ADD_SCOPE() { m_list.FinishBulkAdd(); }
+
+        BULK_ADD_SCOPE( const BULK_ADD_SCOPE& ) = delete;
+        BULK_ADD_SCOPE& operator=( const BULK_ADD_SCOPE& ) = delete;
+
+    private:
+        CN_LIST& m_list;
+    };
 
     std::vector<CN_ITEM*>::iterator begin() { return m_items.begin(); };
     std::vector<CN_ITEM*>::iterator end() { return m_items.end(); };
@@ -528,7 +592,8 @@ public:
 protected:
     void addItemtoTree( CN_ITEM* item )
     {
-        m_index.Insert( item );
+        if( !m_bulkAdd )
+            m_index.Insert( item );
     }
 
     ///< The sole place CN_ITEM list numbering is assigned.
@@ -544,6 +609,7 @@ protected:
 private:
     bool                  m_dirty;
     bool                  m_hasInvalid;
+    bool                  m_bulkAdd = false;   ///< see StartBulkAdd()
     CN_RTREE<CN_ITEM*>    m_index;
 };
 
