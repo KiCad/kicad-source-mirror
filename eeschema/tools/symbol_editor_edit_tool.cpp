@@ -98,20 +98,18 @@ void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString
 }
 
 
-bool plotSymbolToSvg( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2I& aBBox,
+bool plotSymbolToSvg( SYMBOL_EDIT_FRAME& aFrame, LIB_SYMBOL& aSymbol, const BOX2I& aBBox,
                       int aUnit, int aBodyStyle, wxMemoryBuffer& aBuffer )
 {
-    wxCHECK( aSymbol, false );
-
     SCH_RENDER_SETTINGS renderSettings;
-    renderSettings.LoadColors( aFrame->GetColorSettings() );
-    renderSettings.SetDefaultPenWidth( aFrame->GetRenderSettings()->GetDefaultPenWidth() );
+    renderSettings.LoadColors( aFrame.GetColorSettings() );
+    renderSettings.SetDefaultPenWidth( aFrame.GetRenderSettings()->GetDefaultPenWidth() );
 
     wxFileName tempFile( wxFileName::CreateTempFileName( wxS( "kicad_symbol_svg" ) ) );
 
     // The bbox is the bounding box of the selected items only, so it is passed in rather than
     // computed from the whole (partial) symbol.
-    if( !PlotSymbolToSVG( *aSymbol, *aSymbol, aUnit, aBodyStyle, aBBox, renderSettings, false,
+    if( !PlotSymbolToSVG( aSymbol, aSymbol, aUnit, aBodyStyle, aBBox, renderSettings, false,
                           tempFile.GetFullPath() ) )
     {
         wxRemoveFile( tempFile.GetFullPath() );
@@ -124,13 +122,10 @@ bool plotSymbolToSvg( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2
 }
 
 
-wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, const BOX2I& aBBox,
+wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME& aFrame, LIB_SYMBOL& aSymbol, const BOX2I& aBBox,
                               int aUnit, int aBodyStyle, int aWidth, int aHeight,
                               double aViewScale, const wxColour& aBgColor )
 {
-    if( !aSymbol )
-        return wxImage();
-
     wxBitmap bitmap( aWidth, aHeight, 24 );
     wxMemoryDC dc;
     dc.SelectObject( bitmap );
@@ -160,7 +155,7 @@ wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, co
     // Clone items and add to view
     std::vector<std::unique_ptr<SCH_ITEM>> clonedItems;
 
-    for( SCH_ITEM& item : aSymbol->GetDrawItems() )
+    for( SCH_ITEM& item : aSymbol.GetDrawItems() )
     {
         if( aUnit && item.GetUnit() && item.GetUnit() != aUnit )
             continue;
@@ -174,8 +169,8 @@ wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, co
     }
 
     SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
-    dstSettings->LoadColors( aFrame->GetColorSettings() );
-    dstSettings->SetDefaultPenWidth( aFrame->GetRenderSettings()->GetDefaultPenWidth() );
+    dstSettings->LoadColors( aFrame.GetColorSettings() );
+    dstSettings->SetDefaultPenWidth( aFrame.GetRenderSettings()->GetDefaultPenWidth() );
     dstSettings->SetIsPrinting( true );
 
     COLOR4D bgColor4D( aBgColor.Red() / 255.0, aBgColor.Green() / 255.0,
@@ -229,19 +224,16 @@ wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, co
 }
 
 
-tl::expected<wxImage, std::string> renderSymbolToImageWithAlpha( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol,
+tl::expected<wxImage, std::string> renderSymbolToImageWithAlpha( SYMBOL_EDIT_FRAME& aFrame, LIB_SYMBOL aSymbol,
                                                                  const BOX2I& aBBox, int aUnit, int aBodyStyle )
 {
-    if( !aSymbol )
-        return tl::make_unexpected( "Invalid symbol" );
-
     VECTOR2I size = aBBox.GetSize();
 
     if( size.x <= 0 || size.y <= 0 )
         return tl::make_unexpected( "Invalid image size" + std::to_string( size.x ) + "x" + std::to_string( size.y ) );
 
     // Use the current view scale to match what the user sees on screen
-    double viewScale = aFrame->GetCanvas()->GetView()->GetScale();
+    double viewScale = aFrame.GetCanvas()->GetView()->GetScale();
     int    bitmapWidth = KiROUND( size.x * viewScale );
     int    bitmapHeight = KiROUND( size.y * viewScale );
 
@@ -1564,7 +1556,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
                       bbox.GetHeight() * clipboardBboxInflation );
 
         // Create a temporary symbol with just the selected items for plotting
-        LIB_SYMBOL* plotSymbol = new LIB_SYMBOL( *symbol );
+        std::unique_ptr<LIB_SYMBOL> plotSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
 
         // Mark unselected items as deleted in the plot copy
         for( SCH_ITEM& item : plotSymbol->GetDrawItems() )
@@ -1592,19 +1584,19 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
         }
 
         // Now copy only the non-deleted items to a clean symbol for plotting
-        LIB_SYMBOL* cleanSymbol = new LIB_SYMBOL( *plotSymbol );
-        delete plotSymbol;
+        std::unique_ptr<LIB_SYMBOL> cleanSymbol = std::make_unique<LIB_SYMBOL>( *plotSymbol );
+        plotSymbol.reset();
 
         int unit = m_frame->GetUnit();
         int bodyStyle = m_frame->GetBodyStyle();
 
         wxMemoryBuffer svgBuffer;
 
-        if( plotSymbolToSvg( m_frame, cleanSymbol, bbox, unit, bodyStyle, svgBuffer ) )
+        if( plotSymbolToSvg( *m_frame, *cleanSymbol, bbox, unit, bodyStyle, svgBuffer ) )
             appendMimeData( mimeData, wxS( "image/svg+xml" ), svgBuffer );
 
         tl::expected<wxImage, std::string> pngImage =
-                renderSymbolToImageWithAlpha( m_frame, cleanSymbol, bbox, unit, bodyStyle );
+                renderSymbolToImageWithAlpha( *m_frame, *cleanSymbol, bbox, unit, bodyStyle );
 
         if( pngImage )
         {
@@ -1615,8 +1607,6 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
         {
             wxLogWarning( wxS( "Failed to render symbol to PNG: " ) + wxString::FromUTF8( pngImage.error() ) );
         }
-
-        delete cleanSymbol;
     }
 
     if( SaveClipboard( prettyData, mimeData ) )
