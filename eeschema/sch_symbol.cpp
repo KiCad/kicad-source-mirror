@@ -1813,7 +1813,7 @@ wxString SCH_SYMBOL::SubReference( int aUnit, bool aAddSeparator ) const
         const std::map<int, wxString>& names = m_part->GetUnitDisplayNames();
         auto                           it = names.find( aUnit );
 
-        if( it != names.end() && !it->second.IsEmpty() )
+        if( it != names.end() )
         {
             wxString subRef;
 
