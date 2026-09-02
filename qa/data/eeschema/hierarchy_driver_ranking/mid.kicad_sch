@@ -1,0 +1,369 @@
+(kicad_sch
+	(version 20260830)
+	(generator "eeschema")
+	(generator_version "10.99")
+	(uuid "40000000-0000-4000-8000-000000000000")
+	(paper "A4")
+	(lib_symbols
+		(symbol "Device:R"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(junction
+		(at 65 40)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "368c5829-bb3d-450b-8585-50716a9991b4")
+	)
+	(junction
+		(at 80 40)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b8a04f1f-b55d-4882-80f0-5cc1e47904b7")
+	)
+	(wire
+		(pts
+			(xy 65 40) (xy 80 40)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3140d8d7-4ca9-47f8-8e19-cab192999b98")
+	)
+	(wire
+		(pts
+			(xy 80 40) (xy 80 30)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "43aa15df-e1b1-46e9-8fae-d5d5392246ff")
+	)
+	(wire
+		(pts
+			(xy 50 40) (xy 65 40)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "45d0b28c-9814-4903-8bab-986486d6abf7")
+	)
+	(wire
+		(pts
+			(xy 80 40) (xy 110 40)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2808023-7c5f-4a52-825f-388601ebb246")
+	)
+	(global_label "ZZZ_SHALLOW"
+		(shape input)
+		(at 80 30 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "cb7e9b2e-0f41-409a-880f-99c1e4aaf69e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 80 30 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(hierarchical_label "N4"
+		(shape input)
+		(at 50 40 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "12c1ef0f-f7c1-49df-80d4-641f23a29860")
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 65 43.81 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8c150baa-d83e-4307-8893-295a463358fd")
+		(property "Reference" "R31"
+			(at 67.032 43.81 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 63.222 43.81 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 65 43.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 65 43.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 65 43.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "79c5b450-5434-49eb-84d8-9375afd6d3d2")
+		)
+		(pin "2"
+			(uuid "4885a0f6-ae75-49ed-898c-d8758ad1cf0d")
+		)
+		(instances
+			(project "hierarchy_driver_ranking"
+				(path "/10000000-0000-4000-8000-000000000000/c0000000-0000-4000-8000-000000000000"
+					(reference "R31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet
+		(at 110 30)
+		(size 30 25)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d0000000-0000-4000-8000-000000000000")
+		(property "Sheetname" "Deep"
+			(at 110 29.2884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "deep.kicad_sch"
+			(at 110 55.7116 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "N4D" input
+			(at 110 40 180)
+			(uuid "c5f806f9-99f6-492f-8203-8ad8baf60579")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "hierarchy_driver_ranking"
+				(path "/10000000-0000-4000-8000-000000000000/c0000000-0000-4000-8000-000000000000"
+					(page "5")
+				)
+			)
+		)
+	)
+)
