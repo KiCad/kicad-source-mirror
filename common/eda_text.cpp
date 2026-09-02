@@ -729,7 +729,8 @@ void EDA_TEXT::AddRenderCacheGlyph( const SHAPE_POLY_SET& aPoly )
 
 int EDA_TEXT::GetInterline( const RENDER_SETTINGS* aSettings ) const
 {
-    return KiROUND( GetDrawFont( aSettings )->GetInterline( GetTextHeight(), getFontMetrics() ) );
+    return KiROUND( GetDrawFont( aSettings )->GetInterline( GetTextHeight(), getFontMetrics() )
+                    * GetLineSpacing() );
 }
 
 
@@ -780,8 +781,10 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
     if( font->IsStroke() )
         textsize.y += fudgeFactor;
 
+    int interline = KiROUND( font->GetInterline( fontSize.y, getFontMetrics() ) * GetLineSpacing() );
+
     if( IsMultilineAllowed() && aLine > 0 && aLine < (int) strings.GetCount() )
-        pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y, getFontMetrics() ) );
+        pos.y -= aLine * interline;
 
     if( text.Contains( wxT( "~{" ) ) )
         overbarOffset = extents.y / 6;
@@ -800,7 +803,7 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 
         // interline spacing is only *between* lines, so total height is the height of the first
         // line plus the interline distance (with interline spacing) for all subsequent lines
-        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y, getFontMetrics() ) );
+        textsize.y += ( strings.GetCount() - 1 ) * interline;
     }
 
     textsize.y += overbarOffset;
