@@ -20,6 +20,7 @@
 #include <dialog_lib_fields_table.h>
 
 #include <algorithm>
+#include <functional>
 #include <set>
 
 #include <confirm.h>
@@ -38,7 +39,9 @@
 #include <symbol_editor/symbol_editor_settings.h>
 #include <template_fieldnames.h>
 #include <trace_helpers.h>
+#include <validators.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/grid_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/arrstr.h>
 #include <wx/menu.h>
@@ -46,6 +49,38 @@
 
 using DIALOG_NEW_SYMBOL = DIALOG_LIB_NEW_SYMBOL;
 using SCOPE = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
+
+
+class LIB_SYMBOL_REFERENCE_VALIDATOR : public FIELD_VALIDATOR
+{
+public:
+    LIB_SYMBOL_REFERENCE_VALIDATOR( std::function<bool()> aAllowEmpty ) :
+            FIELD_VALIDATOR( FIELD_T::REFERENCE ),
+            m_allowEmpty( aAllowEmpty )
+    {
+    }
+
+    LIB_SYMBOL_REFERENCE_VALIDATOR( const LIB_SYMBOL_REFERENCE_VALIDATOR& aOther ) :
+            FIELD_VALIDATOR( aOther ),
+            m_allowEmpty( aOther.m_allowEmpty )
+    {
+    }
+
+    wxObject* Clone() const override { return new LIB_SYMBOL_REFERENCE_VALIDATOR( *this ); }
+
+    bool Validate( wxWindow* aParent ) override
+    {
+        wxTextEntry* const text = GetTextEntry();
+
+        if( text && text->GetValue().IsEmpty() && m_allowEmpty() )
+            return true;
+
+        return FIELD_VALIDATOR::Validate( aParent );
+    }
+
+private:
+    std::function<bool()> m_allowEmpty;
+};
 
 
 static GRID_CELL_URL_EDITOR_CONTEXT getDatasheetContext( const std::vector<LIB_SYMBOL*>& aSymbols )
@@ -386,6 +421,41 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
 }
 
 
+/**
+ * Lib symbols have different rules for references. Derived symbols are allowed
+ * to have a blank reference to mean inherit-from-parent.
+ */
+wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createReferenceEditor()
+{
+    auto rowAllowsEmptyReference =
+            [this]()
+            {
+                int row = m_grid->GetGridCursorRow();
+
+                if( row < 0 || row >= m_dataModel->GetNumberRows() )
+                    return false;
+
+                std::vector<LIB_SYMBOL*> symbols = m_dataModel->GetRowReferences( row );
+
+                if( symbols.empty() )
+                    return false;
+
+                // Can't have any parent symbols with empty references
+                for( LIB_SYMBOL* symbol : symbols )
+                {
+                    if( symbol->IsRoot() )
+                        return false;
+                }
+
+                return true;
+            };
+
+    GRID_CELL_TEXT_EDITOR* editor = new GRID_CELL_TEXT_EDITOR;
+    editor->SetValidator( LIB_SYMBOL_REFERENCE_VALIDATOR( rowAllowsEmptyReference ) );
+    return editor;
+}
+
+
 wxGridCellEditor* DIALOG_LIB_FIELDS_TABLE::createDatasheetEditor()
 {
     return new GRID_CELL_URL_EDITOR(
@@ -444,6 +514,16 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataFromWindow()
 {
     if( !m_grid->CommitPendingChanges() )
         return false;
+
+    wxString symbolName;
+    wxString errorMessage;
+
+    if( !m_dataModel->ValidateReferences( symbolName, errorMessage ) )
+    {
+        DisplayErrorMessage( this, wxString::Format( _( "Invalid reference for symbol '%s'." ), symbolName ),
+                             errorMessage );
+        return false;
+    }
 
     if( !wxDialog::TransferDataFromWindow() )
         return false;

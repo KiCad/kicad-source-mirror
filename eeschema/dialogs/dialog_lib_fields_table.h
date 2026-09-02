@@ -41,6 +41,7 @@ public:
 private:
     void loadSymbols();
 
+    wxGridCellEditor* createReferenceEditor() override;
     wxGridCellEditor* createDatasheetEditor() override;
     wxGridCellEditor* createFootprintEditor() override;
 

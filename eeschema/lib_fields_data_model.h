@@ -94,6 +94,8 @@ public:
     void ApplyData( std::function<void( LIB_SYMBOL* )> symbolChangeHandler,
                     std::function<void()> postApplyHandler = nullptr );
 
+    bool ValidateReferences( wxString& aSymbolName, wxString& aErrorMessage ) const;
+
     /// Get and clear the list of newly created derived symbols for library manager processing
     std::vector<std::pair<LIB_SYMBOL*, wxString>> GetAndClearCreatedDerivedSymbols()
     {

@@ -28,6 +28,7 @@
 #include <template_fieldnames.h>
 #include "string_utils.h"
 #include <trace_helpers.h>
+#include <validators.h>
 
 #include "lib_fields_data_model.h"
 
@@ -812,6 +813,32 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
     // Call post-apply handler if provided (for library operations and tree refresh)
     if( postApplyHandler )
         postApplyHandler();
+}
+
+
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ValidateReferences( wxString& aSymbolName, wxString& aErrorMessage ) const
+{
+    const wxString referenceFieldName = GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED );
+
+    for( LIB_SYMBOL* symbol : m_symbolsList )
+    {
+        wxString reference;
+        getStoredFieldValue( symbol, referenceFieldName, reference );
+
+        // An empty reference on a derived symbol inherits the parent's reference.
+        if( symbol->IsDerived() && reference.IsEmpty() )
+            continue;
+
+        aErrorMessage = GetFieldValidationErrorMessage( FIELD_T::REFERENCE, reference );
+
+        if( !aErrorMessage.IsEmpty() )
+        {
+            aSymbolName = UnescapeString( symbol->GetName() );
+            return false;
+        }
+    }
+
+    return true;
 }
 
 

@@ -129,6 +129,7 @@ protected:
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();
 
+    virtual wxGridCellEditor* createReferenceEditor();
     virtual wxGridCellEditor* createFootprintEditor();
     virtual wxGridCellEditor* createDatasheetEditor() = 0;
     virtual void              onBomSettingsChanged();
