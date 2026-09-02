@@ -25,6 +25,7 @@
 #ifndef PCBNEW_CONNECTIVITY_ITEMS_H
 #define PCBNEW_CONNECTIVITY_ITEMS_H
 
+#include <geometry/rtree/packed_rtree.h>
 #include <geometry/shape_poly_set.h>
 
 #include <algorithm>
@@ -287,6 +288,8 @@ private:
  */
 class CN_ZONE_LAYER : public CN_ITEM
 {
+    using TRI_RTREE = KIRTREE::PACKED_RTREE<const SHAPE*, int, 2>;
+
 public:
     CN_ZONE_LAYER( ZONE* aParent, PCB_LAYER_ID aLayer, int aSubpolyIndex ) :
             CN_ITEM( aParent, false ),
@@ -308,12 +311,14 @@ public:
             return;
 
         m_triangulatedPolys.clear();
-        m_rTree.RemoveAll();
+        m_rTree = TRI_RTREE();
 
         std::shared_ptr<SHAPE_POLY_SET> fillPoly = m_zone->GetFilledPolysList( m_layer );
 
         if( !fillPoly )
             return;
+
+        size_t triangleCount = 0;
 
         for( unsigned int ii = 0; ii < fillPoly->TriangulatedPolyCount(); ++ii )
         {
@@ -327,19 +332,36 @@ public:
             // triangles remain valid even if the zone is refilled on another thread.
             m_triangulatedPolys.push_back(
                     std::make_unique<SHAPE_POLY_SET::TRIANGULATED_POLYGON>( *triangleSet ) );
+
+            triangleCount += m_triangulatedPolys.back()->GetTriangleCount();
         }
+
+        // A fill is triangulated once and then only queried, so pack the index in one pass
+        // rather than run the R*-tree subtree choice once per triangle
+        TRI_RTREE::Builder builder;
+        builder.Reserve( triangleCount );
 
         for( const auto& triPoly : m_triangulatedPolys )
         {
+            const std::deque<VECTOR2I>& verts = triPoly->Vertices();
+
             for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : triPoly->Triangles() )
             {
-                BOX2I     bbox = tri.BBox();
-                const int mmin[2] = { bbox.GetX(), bbox.GetY() };
-                const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+                const VECTOR2I& va = verts[tri.a];
+                const VECTOR2I& vb = verts[tri.b];
+                const VECTOR2I& vc = verts[tri.c];
 
-                m_rTree.Insert( mmin, mmax, &tri );
+                // The box TRI::BBox() returns, without its out-of-line virtual call
+                const int mmin[2] = { std::min( { va.x, vb.x, vc.x } ),
+                                      std::min( { va.y, vb.y, vc.y } ) };
+                const int mmax[2] = { std::max( { va.x, vb.x, vc.x } ),
+                                      std::max( { va.y, vb.y, vc.y } ) };
+
+                builder.Add( mmin, mmax, &tri );
             }
         }
+
+        m_rTree = builder.Build();
     }
 
     int SubpolyIndex() const { return m_subpolyIndex; }
@@ -439,7 +461,7 @@ private:
     SHAPE_LINE_CHAIN                    m_outline;       ///< Cached copy of the zone outline
     ///< Owned deep copies of triangulated polygons (includes vertex storage that TRI references)
     std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> m_triangulatedPolys;
-    KIRTREE::DYNAMIC_RTREE<const SHAPE*, int, 2> m_rTree;
+    TRI_RTREE                                                          m_rTree;
 };
 
 
