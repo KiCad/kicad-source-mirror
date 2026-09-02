@@ -915,8 +915,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
             // Copper-thieving fills are intentionally disconnected stamps; do not
             // track them through the isolated-islands pass or every stamp gets
-            // classified as removable.
-            if( !zone->IsCopperThieving() )
+            // classified as removable.  A teardrop sits on the track and pad it fillets, so it
+            // is connected by construction and is ISLAND_REMOVAL_MODE::NEVER.
+            if( !zone->IsCopperThieving() && !zone->IsTeardropArea() )
                 isolatedIslandsMap[zone][layer] = ISOLATED_ISLANDS();
         }
 
@@ -1464,10 +1465,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                     continue;
 
-                // Mirrors the initial isolatedIslandsMap build above: thieving stamps
-                // are intentionally disconnected and must not be tracked as islands,
-                // or the iterative refill will delete them on the next pass.
-                if( zone->IsCopperThieving() )
+                // Mirrors the initial isolatedIslandsMap build above.
+                if( zone->IsCopperThieving() || zone->IsTeardropArea() )
                     continue;
 
                 refillIslandsMap[zone][layer] = ISOLATED_ISLANDS();
