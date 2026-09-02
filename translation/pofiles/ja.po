@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-01 19:51+0000\n"
+"PO-Revision-Date: 2026-09-03 06:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -19864,9 +19864,8 @@ msgstr ""
 "ローカルは、新しい電源シンボルをローカル電源シンボルに変換します。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:161
-#, fuzzy
 msgid "Clicking on a pin selects the symbol"
-msgstr "ピン選択 シンボル選択"
+msgstr "ピンをクリックするとシンボルを選択"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 msgid ""
@@ -22982,11 +22981,8 @@ msgstr "デザイン ブロック グループ リンクを設定"
 
 #: eeschema/sch_design_block_utils.cpp:506
 #: pcbnew/pcb_design_block_utils.cpp:533
-#, fuzzy
 msgid "The selection contains more than one group linked to this design block."
-msgstr ""
-"デザインブロックにリンクされたグループではない、選択されたアイテムのうち%d個"
-"をスキップしました。"
+msgstr "選択はこのデザインブロックにリンクされた多くのグループを含んでいます。"
 
 #: eeschema/sch_design_block_utils.cpp:640
 #: pcbnew/pcb_design_block_utils.cpp:616
@@ -30950,9 +30946,8 @@ msgstr "バリアント シンボルを設定"
 #: eeschema/tools/sch_edit_tool.cpp:2898 eeschema/tools/sch_edit_tool.cpp:2955
 #: eeschema/tools/symbol_editor_edit_tool.cpp:954
 #: pcbnew/tools/edit_tool.cpp:2323
-#, fuzzy
 msgid "Use Properties panel to edit properties common to selected items."
-msgstr "選択されたパッドにデフォルトのパッド プロパティをコピーする。"
+msgstr "プロパティパネルを使用して、選択した項目に共通するプロパティを編集。"
 
 #: eeschema/tools/sch_edit_tool.cpp:2947
 #: eeschema/tools/symbol_editor_edit_tool.cpp:946
@@ -41448,6 +41443,8 @@ msgid ""
 "Footprint '%s' in the reference area (%s) appears as '%s' in the target area "
 "(%s)."
 msgstr ""
+"フットプリント '%s' について リファレンス 領域 (%s) は、 '%s' として"
+"ターゲット 領域 (%s)として見える。"
 
 #: pcbnew/connectivity/topo_match.cpp:771
 #, c-format
@@ -41473,19 +41470,16 @@ msgid "Footprint '%s': %d in the reference area, %d in the target area."
 msgstr "フットプリント '%s': %d リファレンス 領域、%d ターゲット 領域。"
 
 #: pcbnew/connectivity/topo_match.cpp:837
-#, fuzzy
 msgid "Neither area has any footprints to match."
-msgstr "選択したグループには配置するフットプリントが含まれていません。"
+msgstr "リファレンス 領域にもターゲット 領域にもフットプリントが見つかりません。"
 
 #: pcbnew/connectivity/topo_match.cpp:839
-#, fuzzy
 msgid "The reference area has no footprints to match."
-msgstr "選択したグループには配置するフットプリントが含まれていません。"
+msgstr "リファレンス 領域にフットプリントが見つかりません。"
 
 #: pcbnew/connectivity/topo_match.cpp:841
-#, fuzzy
 msgid "The target area has no footprints to match."
-msgstr "選択したグループには配置するフットプリントが含まれていません。"
+msgstr "ターゲット 領域にフットプリントが見つかりません。"
 
 #: pcbnew/connectivity/topo_match.cpp:850
 #, c-format
@@ -54543,12 +54537,11 @@ msgstr "この条件を削除"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:82
 msgid "Net an item must belong to"
-msgstr ""
+msgstr "アイテムが所属するネット"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:89
-#, fuzzy
 msgid "Net class an item must belong to"
-msgstr "一つ以上のビア タイプを選択する必要があります"
+msgstr "アイテムが所属するネットクラス"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:96
 msgid "Rule area an item must be inside"
@@ -63368,6 +63361,8 @@ msgid ""
 "Save or discard the changes in all modified footprint tabs before opening "
 "the Footprint Fields Table."
 msgstr ""
+"フットプリントフィールドテーブルを開く前にすべての変更した"
+"フットプリントテーブルを保存また破裂してください。"
 
 #: pcbnew/tools/generator_tool.cpp:178
 msgid "Regenerate All"
@@ -67096,19 +67091,19 @@ msgstr "この基板の新規プロジェクトを作成"
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:286
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid "%s must be at most %s."
-msgstr "%s は少なくとも %s でなければなりません。"
+msgstr "%s は 最大 %s でなければなりません。"
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid "%s must be a multiple of %s."
-msgstr "%s は少なくとも %s でなければなりません。"
+msgstr "%s は %s で割り切れなければなりません。"
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s does not match the required format '%s'."
-msgstr "フットプリント '%s' が、ライブラリ '%s' のコピーと一致しません"
+msgstr "'%s' は必要な形式 '%s' に一致していません。"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
 msgid "Omit extra information"
