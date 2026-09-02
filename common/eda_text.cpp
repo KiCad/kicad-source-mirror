@@ -821,14 +821,19 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 
         break;
 
-    case GR_TEXT_H_ALIGN_CENTER: bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) / 2 ); break;
+    case GR_TEXT_H_ALIGN_CENTER:
+        bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) / 2 );
+        break;
 
     case GR_TEXT_H_ALIGN_RIGHT:
         if( !IsMirrored() )
             bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) );
+
         break;
 
-    case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) ); break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     switch( GetVertJustify() )
