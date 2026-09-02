@@ -328,6 +328,9 @@ struct _wmfBMP_Draw_t
 
 	double pixel_width;
 	double pixel_height;
+
+	int flip_x;
+	int flip_y;
 };
 
 struct _wmfROP_Draw_t

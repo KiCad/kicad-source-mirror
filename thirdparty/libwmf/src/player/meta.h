@@ -1924,10 +1924,12 @@ static int meta_dib_draw (wmfAPI* API,wmfRecord* Record)
 	wmfL_Coord l_pt;
 	wmfD_Coord d_pt;
 
-	U16 par_U16_x = 0;
-	U16 par_U16_y = 0;
+	S16 dest_x = 0;
+	S16 dest_y = 0;
 	U16 par_U16_w = 0;
 	U16 par_U16_h = 0;
+	S16 dest_width = 0;
+	S16 dest_height = 0;
 
 	S32 width;
 	S32 height;
@@ -1953,11 +1955,13 @@ static int meta_dib_draw (wmfAPI* API,wmfRecord* Record)
 		{	fprintf (stderr,"\t#par=%lu; index 0 skipped; max. index = 8",Record->size);
 		}
 
-		par_U16_x = ParU16 (API,Record,8);
-		par_U16_y = ParU16 (API,Record,7);
+		dest_x = ParS16 (API,Record,8);
+		dest_y = ParS16 (API,Record,7);
 
 		par_U16_w = ParU16 (API,Record,6);
 		par_U16_h = ParU16 (API,Record,5);
+		dest_width = (S16) par_U16_w;
+		dest_height = (S16) par_U16_h;
 
 		bmp_draw.crop.w = par_U16_w;
 		bmp_draw.crop.h = par_U16_h;
@@ -1978,11 +1982,13 @@ static int meta_dib_draw (wmfAPI* API,wmfRecord* Record)
 		{	fprintf (stderr,"\t#par=%lu; index 2 skipped; max. index = 10",Record->size);
 		}
 
-		par_U16_x = ParU16 (API,Record,10);
-		par_U16_y = ParU16 (API,Record,9);
+		dest_x = ParS16 (API,Record,10);
+		dest_y = ParS16 (API,Record,9);
 
 		par_U16_w = ParU16 (API,Record,8);
 		par_U16_h = ParU16 (API,Record,7);
+		dest_width = ParS16 (API,Record,8);
+		dest_height = ParS16 (API,Record,7);
 
 		bmp_draw.crop.x = ParU16 (API,Record,6);
 		bmp_draw.crop.y = ParU16 (API,Record,5);
@@ -2003,11 +2009,13 @@ static int meta_dib_draw (wmfAPI* API,wmfRecord* Record)
 		{	fprintf (stderr,"\t#par=%lu; max. index = 9",Record->size);
 		}
 
-		par_U16_x = ParU16 (API,Record,9);
-		par_U16_y = ParU16 (API,Record,8);
+		dest_x = ParS16 (API,Record,9);
+		dest_y = ParS16 (API,Record,8);
 
 		par_U16_w = ParU16 (API,Record,7);
 		par_U16_h = ParU16 (API,Record,6);
+		dest_width = ParS16 (API,Record,7);
+		dest_height = ParS16 (API,Record,6);
 
 		bmp_draw.crop.x = ParU16 (API,Record,5);
 		bmp_draw.crop.y = ParU16 (API,Record,4);
@@ -2028,11 +2036,13 @@ static int meta_dib_draw (wmfAPI* API,wmfRecord* Record)
 		{	fprintf (stderr,"\t#par=%lu; max. index = 7",Record->size);
 		}
 
-		par_U16_x = ParU16 (API,Record,7);
-		par_U16_y = ParU16 (API,Record,6);
+		dest_x = ParS16 (API,Record,7);
+		dest_y = ParS16 (API,Record,6);
 
 		par_U16_w = ParU16 (API,Record,5);
 		par_U16_h = ParU16 (API,Record,4);
+		dest_width = ParS16 (API,Record,5);
+		dest_height = ParS16 (API,Record,4);
 
 		bmp_draw.crop.x = ParU16 (API,Record,3);
 		bmp_draw.crop.y = ParU16 (API,Record,2);
@@ -2060,18 +2070,22 @@ static int meta_dib_draw (wmfAPI* API,wmfRecord* Record)
 		return (changed);
 	}
 
-	if ((par_U16_w == 0) || (par_U16_h == 0) || (bmp_draw.crop.w == 0) || (bmp_draw.crop.h == 0))
+	if ((dest_width == 0) || (dest_height == 0) || (bmp_draw.crop.w == 0) || (bmp_draw.crop.h == 0))
 	{	return (changed);
 	}
 
-	l_pt_TL = L_Coord (par_U16_x,par_U16_y);
+	bmp_draw.flip_x = (dest_width < 0);
+	bmp_draw.flip_y = (dest_height < 0);
+
+	if (bmp_draw.flip_x) dest_x += dest_width;
+	if (bmp_draw.flip_y) dest_y += dest_height;
+
+	l_pt_TL = L_Coord (dest_x,dest_y);
 
 	bmp_draw.pt = wmf_D_Coord_translate (API,l_pt_TL);
 
-	l_pt = L_Coord (par_U16_w,par_U16_h);
-
-	width  = ABS (l_pt.x);
-	height = ABS (l_pt.y);
+	width  = ABS ((S32) dest_width);
+	height = ABS ((S32) dest_height);
 
 	if (SCAN (API))
 	{	D_Coord_Register (API,bmp_draw.pt,0);
@@ -2126,8 +2140,8 @@ static int meta_dib_draw (wmfAPI* API,wmfRecord* Record)
 		return (changed);
 	}
 
-	stretch_x = (double) par_U16_w / (double) bmp_draw.crop.w;
-	stretch_y = (double) par_U16_h / (double) bmp_draw.crop.h;
+	stretch_x = (double) ABS ((S32) dest_width) / (double) bmp_draw.crop.w;
+	stretch_y = (double) ABS ((S32) dest_height) / (double) bmp_draw.crop.h;
 
 	bmp_draw.pixel_width  = ABS (P->dc->pixel_width ) * stretch_x;
 	bmp_draw.pixel_height = ABS (P->dc->pixel_height) * stretch_y;

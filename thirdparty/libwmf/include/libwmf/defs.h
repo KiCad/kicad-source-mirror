@@ -235,6 +235,8 @@
 #define PATINVERT      (U32)0x005A0049 /* dest = pattern XOR dest         */
 #undef  DSTINVERT
 #define DSTINVERT      (U32)0x00550009 /* dest = (NOT dest)               */
+#undef  DSTCOPY
+#define DSTCOPY        (U32)0x00AA0029 /* dest = dest                     */
 #undef  BLACKNESS
 #define BLACKNESS      (U32)0x00000042 /* dest = BLACK                    */
 #undef  WHITENESS

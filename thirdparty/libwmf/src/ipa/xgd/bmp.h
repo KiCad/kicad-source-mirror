@@ -35,6 +35,8 @@ static void wmf_gd_rop_draw (wmfAPI* API,wmfROP_Draw_t* rop_draw)
 
 	switch (rop_draw->ROP) /* Ternary raster operations */
 	{
+	case DSTCOPY: /* dest = dest */
+		return;
 	case SRCCOPY: /* dest = source */
 	break;
 	case SRCPAINT: /* dest = source OR dest */
@@ -172,7 +174,9 @@ static void wmf_gd_bmp_draw (wmfAPI* API,wmfBMP_Draw_t* bmp_draw)
 
 			color = gdImageColorResolveAlpha (gd->image,rgb.r,rgb.g,rgb.b,alpha);
 
-			gdImageSetPixel (gd->image,i+pt.x,(height-1-j)+pt.y,color);
+			gdImageSetPixel (gd->image,
+			                 (bmp_draw->flip_x ? width - 1 - i : i) + pt.x,
+			                 (bmp_draw->flip_y ? j : height - 1 - j) + pt.y,color);
 		}
 	}
 }
