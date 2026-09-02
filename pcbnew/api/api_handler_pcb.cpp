@@ -1555,6 +1555,10 @@ HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_PCB::handleExpandTextVar
     for( const std::string& textMsg : aCtx.Request.text() )
     {
         wxString text = ExpandTextVars( wxString::FromUTF8( textMsg ), &textResolver );
+
+        if( aCtx.Request.expand_env_vars() )
+            text = ExpandEnvVarSubstitutions( text, board->GetProject() );
+
         reply.add_text( text.ToUTF8() );
     }
 

@@ -289,6 +289,10 @@ HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_COMMON::handleExpandText
     for( const std::string& textMsg : aCtx.Request.text() )
     {
         wxString result = ExpandTextVars( wxString::FromUTF8( textMsg ), &project );
+
+        if( aCtx.Request.expand_env_vars() )
+            result = ExpandEnvVarSubstitutions( result, &project );
+
         reply.add_text( result.ToUTF8() );
     }
 
