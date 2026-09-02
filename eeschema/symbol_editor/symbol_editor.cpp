@@ -1176,7 +1176,10 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 {
     wxCHECK( m_symbol, /* void */ );
 
-    wxString lib = m_symbol->GetLibNickname();
+    wxString lib;
+
+    if( !IsSymbolFromSchematic() )
+        lib = m_symbol->GetLibNickname();
 
     if( !lib.IsEmpty() && aOldName && *aOldName != m_symbol->GetName() )
     {
