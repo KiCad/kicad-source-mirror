@@ -209,8 +209,22 @@ DIALOG_SHIM::~DIALOG_SHIM()
     Unbind( wxEVT_MOVE, &DIALOG_SHIM::OnMove, this );
     Unbind( wxEVT_INIT_DIALOG, &DIALOG_SHIM::onInitDialog, this );
 
-    std::function<void( wxWindowList& )> disconnectFocusHandlers =
+    std::function<void( wxWindowList& )> clearOptOuts =
             [&]( wxWindowList& children )
+                {
+                    for( wxWindow* child : children )
+                    {
+                        delete PROPERTY_HOLDER::SafeCast( child->GetClientData() );
+                        child->SetClientData( nullptr );
+                    }
+                };
+
+    delete PROPERTY_HOLDER::SafeCast( GetClientData() );
+    SetClientData( nullptr );
+    clearOptOuts( GetChildren() );
+
+    std::function<void( wxWindowList& )> disconnectFocusHandlers =
+        [&]( wxWindowList& children )
             {
                 for( wxWindow* child : children )
                 {
