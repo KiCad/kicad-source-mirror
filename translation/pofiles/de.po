@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-01 19:51+0000\n"
+"PO-Revision-Date: 2026-09-03 06:51+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -237,27 +237,24 @@ msgid "Loading..."
 msgstr "Lade ..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:442
-#, fuzzy
 msgid "Building hit-test scene..."
-msgstr "Erstelle Füllung der Kupferzonen ..."
+msgstr "Erstelle Hit-Test-Szene..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:444
 msgid "Load Raytracing: board"
 msgstr "Lade Raytracing: Platine"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:678
-#, fuzzy
 msgid "Building hit-test scene: layers..."
-msgstr "Erstelle Füllung der Kupferzonen ..."
+msgstr "Erstelle Hit-Test-Szene: Lagen..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:680
 msgid "Load Raytracing: layers"
 msgstr "Lade Raytracing: Lagen"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:916
-#, fuzzy
 msgid "Building hit-test scene: 3D models..."
-msgstr "Lade 3D-Modelle der Bauteile ..."
+msgstr "Erstelle Hit-Test-Szene: 3D-Modelle..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1113
 #, c-format
@@ -2206,9 +2203,9 @@ msgid "Plugin '%s': %s"
 msgstr "Plugin \"%s\": %s"
 
 #: common/api/api_plugin_manager.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading plugin '%s'"
-msgstr "Fehler beim Laden der Bibliothek \"%s\""
+msgstr "Fehler beim Laden des Plugins \"%s\""
 
 #: common/api/api_plugin_manager.cpp:143
 #, c-format
@@ -2249,14 +2246,12 @@ msgstr "Fehlercode %d"
 
 #: common/api/api_plugin_manager.cpp:780 common/api/api_plugin_manager.cpp:860
 #: common/api/api_plugin_manager.cpp:950
-#, fuzzy
 msgid "Could not create plugin environment"
-msgstr "Konnte Plugin-Umgebung nicht erstellen: %s"
+msgstr "Konnte Pluginumgebung nicht erstellen"
 
 #: common/api/api_plugin_manager.cpp:805 common/api/api_plugin_manager.cpp:888
-#, fuzzy
 msgid "Missing plugin environment"
-msgstr "Fehlende Pluginumgebung"
+msgstr "Pluginumgebung fehlt"
 
 #: common/api/api_plugin_manager.cpp:898
 msgid "requirements.txt could not be read"
@@ -2478,14 +2473,14 @@ msgid "Design block library '%s' cannot be deleted."
 msgstr "Designblock-Bibliothek \"%s\" kann nicht gelöscht werden."
 
 #: common/design_block_io.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library folder '%s' could not be opened."
-msgstr "Designblock-Verzeichnis \"%s\" konnte nicht erstellt werden."
+msgstr "Designblockbibliothek-Verzeichnis \"%s\" konnte nicht geöffnet werden."
 
 #: common/design_block_io.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist in library '%s'."
-msgstr "Designblock \"%s\" existiert in Bibliothek \"%s\" bereits."
+msgstr "Designblock \"%s\" existiert in Bibliothek \"%s\" nicht."
 
 #: common/design_block_io.cpp:350
 #, c-format
@@ -2570,9 +2565,10 @@ msgid "Internal error"
 msgstr "Interner Fehler"
 
 #: common/design_block_library_adapter.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is not in the design block library table."
-msgstr "Bibliothek \"%s\" nicht in der Symbol-Bibliothekstabelle gefunden."
+msgstr ""
+"Designblockbibliothek \"%s\" ist nicht in der Designblockbibliothek-Tabelle."
 
 #: common/design_block_library_adapter.cpp:225
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3649
@@ -2581,9 +2577,8 @@ msgid " Did you mean '%s'?"
 msgstr " Meinten Sie \"%s\"?"
 
 #: common/design_block_library_adapter.cpp:231
-#, fuzzy
 msgid "No design block libraries are configured."
-msgstr "Es wurden keine Symbolbibliotheken geladen."
+msgstr "Es sind keine Designblockbibliotheken konfiguriert."
 
 #: common/design_block_library_adapter.cpp:233
 msgid "Configured design block libraries:"
@@ -2603,25 +2598,24 @@ msgid "global"
 msgstr "Global"
 
 #: common/design_block_library_adapter.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is disabled in the library table."
-msgstr "Designblockbibliothek \"%s\" konnte nicht geladen werden."
+msgstr "Designblockbibliothek \"%s\" ist in Bibliothekstabelle deaktiviert."
 
 #: common/design_block_library_adapter.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' could not be opened."
-msgstr "Designblock-Bibliothek \"%s\" kann nicht gelöscht werden."
+msgstr "Designblockbibliothek \"%s\" konnte nicht geöffnet werden."
 
 #: common/design_block_library_adapter.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is still loading."
-msgstr "Designblockbibliothek \"%s\" konnte nicht geladen werden."
+msgstr "Designblockbibliothek \"%s\" lädt noch."
 
 #: common/design_block_library_adapter.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' not found in any library."
-msgstr ""
-"Symbol \"%s\" konnte in keiner Bibliothek oder dem Cache gefunden werden."
+msgstr "Designblock \"%s\" konnte in keiner Bibliothek gefunden werden."
 
 #: common/design_block_tree_model_adapter.cpp:127 cvpcb/cvpcb_mainframe.cpp:790
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:535
@@ -2926,7 +2920,6 @@ msgstr ""
 "während Sie noch ungespeicherte Änderungen hatten."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
 msgstr "Automatisch gespeicherte(s) wiederherstellen"
 
@@ -3253,17 +3246,14 @@ msgid "Design Block Properties"
 msgstr "Designblockeigenschaften"
 
 #: common/dialogs/dialog_fields_table.cpp:103
-#, fuzzy
 msgid "Revert Row"
-msgstr "Zurücksetzen"
+msgstr "Zeile zurücksetzen"
 
 #: common/dialogs/dialog_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the fields in this row"
-msgstr "Das Verzeichnis und seinen Inhalt löschen"
+msgstr "Felder in dieser Zeile zurücksetzen"
 
 #: common/dialogs/dialog_fields_table.cpp:105
-#, fuzzy
 msgid "Clear Cell"
 msgstr "Zelle leeren"
 
@@ -3367,11 +3357,10 @@ msgstr ""
 "werden?"
 
 #: common/dialogs/dialog_fields_table.cpp:1253
-#, fuzzy
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
-"Kann keinen relativen Pfadnamen erstellen (unterschiedliche Datenträger für "
-"Ziel und Platinendatei)!"
+"Kann keinen relativen Pfadnamen erstellen (Zieldatenträger weicht vom "
+"Dateidatenträger ab)!"
 
 #: common/dialogs/dialog_fields_table.cpp:1266
 msgid "Unsaved data"
@@ -3627,9 +3616,8 @@ msgid "Keep line breaks"
 msgstr "Zeilenumbrüche erhalten"
 
 #: common/dialogs/dialog_fields_table_base.cpp:330
-#, fuzzy
 msgid "Include byte order mark"
-msgstr "Inklusive Platinenumrisslage"
+msgstr "Byte-Reihenfolge-Markierung einschließen"
 
 #: common/dialogs/dialog_fields_table_base.cpp:331
 msgid ""
@@ -3678,9 +3666,8 @@ msgid "Apply, Save Schematic && Continue"
 msgstr "Übernehmen, Schaltplan speichern && Fortfahren"
 
 #: common/dialogs/dialog_fields_table_base.h:151
-#, fuzzy
 msgid "Fields Table"
-msgstr "Symbolfelder-Tabelle"
+msgstr "Feldtabelle"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
 msgid "Generate Database Connection"
@@ -4100,9 +4087,8 @@ msgid "Hide Change"
 msgstr "Änderung ausblenden"
 
 #: common/dialogs/dialog_kicad_diff.cpp:340
-#, fuzzy
 msgid "Show All Hidden"
-msgstr "Alle Netze anzeigen"
+msgstr "Alle Ausgeblendete anzeigen"
 
 #: common/dialogs/dialog_kicad_diff.cpp:416
 #: common/dialogs/dialog_page_settings_base.cpp:240
@@ -4166,9 +4152,8 @@ msgstr ""
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
-#, fuzzy
 msgid "Resolve Merge Conflicts"
-msgstr "Importkonflikte auflösen"
+msgstr "Zusammenführungskonflikte auflösen"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
@@ -4192,9 +4177,8 @@ msgid "Conflicts"
 msgstr "Konflikte"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:58
-#, fuzzy
 msgid "Pick a side"
-msgstr "Innenseitiger Pinname"
+msgstr "Seite wählen"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
