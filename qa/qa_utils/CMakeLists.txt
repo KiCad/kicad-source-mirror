@@ -23,6 +23,7 @@ set( QA_UTIL_COMMON_SRC
     env_var_utils.cpp
     file_utils.cpp
     mock_utils.cpp
+    scoped_global_lib_table.cpp
     uuid_test_utils.cpp
 
     geometry/geometry.cpp

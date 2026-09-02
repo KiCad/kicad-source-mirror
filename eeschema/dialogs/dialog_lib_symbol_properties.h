@@ -44,6 +44,9 @@ public:
     /// Switch the notebook to the Pin Map page (issue #2282).
     void SelectPinMapPage();
 
+    /// True once OK was refused because the symbol is released; nothing was applied to it
+    bool WasEditRefused() const { return m_editRefused; }
+
 protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -120,6 +123,8 @@ private:
     /// When set by SelectPinMapPage(), TransferDataToWindow opens the Pin Map page instead of the
     /// remembered last page (issue #2282).
     bool m_forcePinMapPage = false;
+
+    bool m_editRefused = false;
 
     /// Ancestor supplying the keywords while the symbol leaves them empty.
     wxString m_keywordsSource;

@@ -94,6 +94,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
                  wxString::Format( wxT( "Cannot use relative file paths in sexpr plugin to open library '%s'." ),
                                    m_libFileName.GetFullPath() ) );
 
+    // Snapshot the file time before parsing, so a library that throws partway through still
+    // reloads once its file changes
+    m_fileModTime = GetLibModificationTime();
+
     if( !m_libFileName.IsDir() )
     {
         wxLogTrace( traceSchLegacyPlugin, "Loading sexpr symbol library file '%s'",
@@ -148,6 +152,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
 
             do
             {
+                // A folder of thousands of files would otherwise hold up an abort, such as on quit
+                if( m_loadCancelled && m_loadCancelled->load() )
+                    THROW_IO_ERRORF( _( "Loading symbol library '%s' was cancelled." ), m_libFileName.GetPath() );
+
                 tmp.SetFullName( libFileName );
                 wxString sourceFilePath = tmp.GetFullPath();
 
@@ -222,10 +230,6 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
         updateParentSymbolLinks();
         IncrementModifyHash();
     }
-
-    // Remember the file modification time of library file when the cache snapshot was made,
-    // so that in a networked environment we will reload the cache as needed.
-    m_fileModTime = GetLibModificationTime();
 }
 
 

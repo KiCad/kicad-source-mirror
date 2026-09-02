@@ -129,6 +129,13 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
             if( entry )
             {
                 entry->SetName( EscapeString( entry->GetName(), CTX_LIBID ) );
+
+                if( RefuseReleasedChange( libName, entry->GetName() ) )
+                {
+                    skippedCount++;
+                    continue;
+                }
+
                 m_libMgr->UpdateSymbol( entry, libName );
 
                 if( firstImported.IsEmpty() )

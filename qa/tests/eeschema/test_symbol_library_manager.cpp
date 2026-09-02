@@ -944,6 +944,33 @@ BOOST_AUTO_TEST_CASE( SaveKeepsChangesMadeUnderTheBuffer )
 }
 
 
+/*
+ * The tree re-reads a library only when its hash changes, so a pull that rewrites an unbuffered library file
+ * must change it
+ */
+BOOST_AUTO_TEST_CASE( LibraryFileHashFollowsFileWrites )
+{
+    wxString dir = wxFileName::CreateTempFileName( wxS( "kicad_test_" ) );
+    wxRemoveFile( dir );
+    wxFileName::Mkdir( dir );
+
+    wxFileName lib( dir, wxS( "4xxx.kicad_sym" ) );
+    BOOST_REQUIRE( wxCopyFile( KI_TEST::GetEeschemaTestDataDir() + "/libs/4xxx.kicad_sym", lib.GetFullPath() ) );
+
+    wxDateTime written( 1, wxDateTime::Jan, 2026, 12, 0, 0 );
+    BOOST_REQUIRE( lib.SetTimes( &written, &written, nullptr ) );
+
+    const int before = SYMBOL_LIBRARY_MANAGER::LibraryFileHash( wxS( "4xxx" ), lib.GetFullPath() );
+
+    written.Add( wxTimeSpan::Seconds( 5 ) );
+    BOOST_REQUIRE( lib.SetTimes( &written, &written, nullptr ) );
+
+    BOOST_CHECK_NE( SYMBOL_LIBRARY_MANAGER::LibraryFileHash( wxS( "4xxx" ), lib.GetFullPath() ), before );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 /// Fill a buffer from the acme power library the way SYMBOL_LIBRARY_MANAGER does
 static void loadAcmePower( LIB_BUFFER& aBuffer, const wxString& aPath )
 {

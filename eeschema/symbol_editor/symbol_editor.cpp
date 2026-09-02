@@ -36,11 +36,13 @@
 #include <lib_symbol_library_manager.h>
 #include <symbol_tree_pane.h>
 #include <project/project_file.h>
+#include <widgets/mdw_member_index.h>
 #include <richio.h>
 #include <widgets/lib_tree.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <dialogs/dialog_lib_new_symbol.h>
+#include <dialogs/dialog_library_source_setup.h>
 #include <eda_list_dialog.h>
 #include <set>
 #include <wx/clipbrd.h>
@@ -55,6 +57,7 @@
 #include <widgets/symbol_library_save_as_filedlg_hook.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <libraries/symbol_library_adapter.h>
+#include <mdw/client/mdw_library_sources.h>
 
 
 void SYMBOL_EDIT_FRAME::UpdateTitle()
@@ -336,6 +339,9 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
 
                 if( !lib.empty() && m_libMgr->SymbolNameInUse( newName, lib ) )
                 {
+                    if( RefuseReleasedChange( lib, newName ) )
+                        return false;
+
                     wxString msg;
 
                     msg.Printf( _( "Symbol '%s' already exists in library '%s'." ),
@@ -966,6 +972,12 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
                 const std::vector<wxString> conflicts =
                         CheckForParentalChainConflicts( *m_libMgr, *symbol, flattenSymbol, newName, newLib );
 
+                for( const wxString& conflict : conflicts )
+                {
+                    if( RefuseReleasedChange( newLib, conflict ) )
+                        return wxID_CANCEL;
+                }
+
                 if( conflicts.size() == 1 && conflicts.front() == newName )
                 {
                     // The simplest case is when the symbol itself has a conflict
@@ -1298,6 +1310,20 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
         if( removedWithBase.count( libId ) )
             continue;
 
+        wxArrayString derived;
+        m_libMgr->GetDerivedSymbolNames( libId.GetLibItemName(), libId.GetLibNickname(), derived );
+
+        // Deleting a base deletes what derives from it, so none of them may be released
+        if( RefuseReleasedChange( libId.GetLibNickname(), libId.GetLibItemName() )
+            || std::any_of( derived.begin(), derived.end(),
+                            [&]( const wxString& aName )
+                            {
+                                return RefuseReleasedChange( libId.GetLibNickname(), aName );
+                            } ) )
+        {
+            continue;
+        }
+
         if( m_libMgr->IsSymbolModified( libId.GetLibItemName(), libId.GetLibNickname() )
             && !IsOK( this, wxString::Format( _( "The symbol '%s' has been modified.\n"
                                                  "Do you want to remove it from the library?" ),
@@ -1306,9 +1332,7 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
             continue;
         }
 
-        wxArrayString derived;
-
-        if( m_libMgr->GetDerivedSymbolNames( libId.GetLibItemName(), libId.GetLibNickname(), derived ) > 0 )
+        if( !derived.empty() )
         {
             wxString msg = _( "Deleting a base symbol will delete all symbols derived from it.\n\n" );
 
@@ -1712,14 +1736,45 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS a
             fileType = SCH_IO_MGR::SCH_KICAD;
     }
 
+    if( ( newPackedLibrary || newUnpackedLibrary ) && MDW_LIBRARY_SOURCES::TeamLibrariesEnabled() )
+    {
+        wxString destination = newUnpackedLibrary ? wxFileName::DirName( fn.GetPath() ).GetPathWithSep()
+                                                  : fn.GetFullPath();
+
+        // Replacing a whole team library would overwrite its released symbols without a Revise
+        for( LIBRARY_TABLE_ROW* row : adapter->Rows() )
+        {
+            // A packed save onto the library's own file is just a save
+            bool self = !newUnpackedLibrary && row->Nickname() == aLibrary;
+
+            if( self || !MdwTeamLibrary( MDW_LIBRARY_TYPE::SYMBOL, *row ) )
+                continue;
+
+            wxString uri = LIBRARY_MANAGER::GetFullURI( row, true );
+            bool     inside = newUnpackedLibrary && wxFileName( uri ).GetFullPath().StartsWith( destination );
+
+            if( inside || LIBRARY_MANAGER::UrisAreEquivalent( uri, destination ) )
+            {
+                ShowInfoBarError( wxString::Format( _( "%s is a team library and cannot be replaced. Check in "
+                                                       "changes to its symbols instead." ),
+                                                    uri ) );
+                return false;
+            }
+        }
+    }
+
     // Verify the user has write privileges before attempting to save the library file.
     if( ( aSaveType == SAVE_LIBRARY_AS::ORIGINAL ) && m_libMgr->IsLibraryReadOnly( aLibrary ) )
         return false;
 
     ClearMsgPanel();
 
-    // Only make a backup when saving to the original library.
-    if( aSaveType == SAVE_LIBRARY_AS::ORIGINAL )
+    std::optional<LIBRARY_TABLE_ROW*> savedRow = adapter->GetRow( aLibrary );
+    bool teamCopy = savedRow && !MDW_LIBRARY_SOURCES::MarkerOf( ( *savedRow )->Options() ).IsEmpty();
+
+    // Only make a backup when saving to the original library. A team copy's history is its source, and a
+    // backup inside the copy would read as a local change
+    if( aSaveType == SAVE_LIBRARY_AS::ORIGINAL && !teamCopy )
     {
         wxString errMsg;
 
@@ -1729,6 +1784,20 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS a
             return false;
         }
     }
+
+    std::vector<wxString> overwritten;
+
+    if( aSaveType == SAVE_LIBRARY_AS::ORIGINAL )
+    {
+        overwritten = m_libMgr->SymbolsChangedOnDisk( aLibrary, fn.GetFullPath(), fileType );
+
+        if( !overwritten.empty() && !ConfirmSaveOverChangedParts( this, overwritten ) )
+            return false;
+    }
+
+    // A team symbol saved over a newer version must be settled against it before it is released
+    if( teamCopy && !MarkOverwrittenParts( this, Prj(), MDW_LIBRARY_TYPE::SYMBOL, **savedRow, overwritten ) )
+        return false;
 
     if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), fileType,
                                 type == SYMBOL_SAVEAS_TYPE::REPLACE_TABLE_ENTRY ) )
@@ -1744,6 +1813,9 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS a
         m_libMgr->ClearLibraryModified( aLibrary );
 
         clearSymbolTabsModifiedForLibrary( aLibrary );
+
+        if( savedRow )
+            MdwWarnLocalSave( this, MDW_LIBRARY_TYPE::SYMBOL, **savedRow );
 
         // Update the library modification time so that we don't reload based on the watcher
         if( aLibrary == getTargetLib() )
@@ -1797,6 +1869,16 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS a
     ClearMsgPanel();
     msg.Printf( _( "Symbol library file '%s' saved." ), fn.GetFullPath() );
     RebuildSymbolUnitAndBodyStyleLists();
+
+    // A save ends the unsaved work the infobar's outcome may describe, once its caller is done
+    if( !m_isClosing )
+    {
+        CallAfter(
+                [this]()
+                {
+                    RefreshPart();
+                } );
+    }
 
     return true;
 }

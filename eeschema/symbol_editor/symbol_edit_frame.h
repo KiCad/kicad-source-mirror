@@ -30,7 +30,11 @@
 #include <widgets/editor_tab_context.h>
 #include <memory>
 #include <optional>
+#include <set>
 #include <vector>
+
+#include <libraries/library_table.h>
+#include <widgets/mdw_part_controller.h>
 
 class SCH_EDIT_FRAME;
 class LIB_SYMBOL;
@@ -69,7 +73,7 @@ enum class SAVE_LIBRARY_AS
 /**
  * The symbol library editor main window.
  */
-class SYMBOL_EDIT_FRAME : public SCH_BASE_FRAME
+class SYMBOL_EDIT_FRAME : public SCH_BASE_FRAME, public MDW_PART_EDITOR
 {
     // Lets the headless tab tests drive the static undo/redo helpers without a full GUI frame.
     friend struct SYMBOL_EDITOR_TABS_TEST_FIXTURE;
@@ -469,6 +473,28 @@ public:
      */
     bool IsSymbolEditable() const;
 
+    /// True while the open symbol matches a published team library revision nobody is revising.
+    bool IsContentReadOnly() const { return m_symbol && !IsSymbolFromSchematic() && m_teamPart.IsReadOnly(); }
+
+    /// The state of aSymbol in library aLibrary while it is a released team part, which must be revised before it
+    /// changes, else nothing
+    std::optional<MDW_PART_STATE> ReleasedTeamPart( const LIB_SYMBOL& aSymbol, const wxString& aLibrary );
+
+    MDW_PART_CONTROLLER&           TeamPart() override { return m_teamPart; }
+    EDA_BASE_FRAME*                PartFrame() override { return this; }
+    std::optional<MDW_PART_TARGET> ResolvePart( const LIB_ID& aId ) override;
+    LIBRARY_TABLE_TYPE             PartTableType() const override { return LIBRARY_TABLE_TYPE::SYMBOL; }
+    bool                           OpenPart( const LIB_ID& aId ) override;
+    void                           RefreshPart() override;
+    void                           CheckInLibrary( const wxString& aNickname ) override;
+
+    /// Save team library aNickname in the current file format and check that in, once it has no unsaved edits
+    void UpgradeLibraryFormat( const wxString& aNickname );
+    bool DescribeForRelease( MDW_RELEASE_ITEM& aItem, const std::vector<LIB_ID>& aReleasing ) override;
+
+    /// Tell the user and return true when aName in aLibrary is a released team part
+    bool RefuseReleasedChange( const wxString& aLibrary, const wxString& aName );
+
     /**
      * Test if a symbol is loaded and can be edited graphically.
      *
@@ -503,8 +529,6 @@ protected:
 
     void updateSelectionFilterVisbility() override;
 
-    bool hasUnsavedLibraryEdits( const wxString& aLibNickname ) const override;
-
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 
 private:
@@ -512,6 +536,38 @@ private:
     void setupTools();
 
     void updateInfoBar();
+
+    /// Follow the open symbol's team part; aReload reads its state from its source again, and aKeepUnresolved
+    /// keeps the current part when it no longer resolves.
+    void refreshTeamPart( bool aReload, bool aKeepUnresolved = false );
+
+    /// Refresh the tree and the open part whenever a team library's listing lands
+    void listenForTeamListings();
+
+    std::optional<MDW_PART_TARGET> resolveTeamPart( const wxString& aLibrary, const wxString& aName );
+
+    bool SaveForRelease( std::vector<MDW_RELEASE_ITEM>& aItems ) override;
+    void GetLatest() override;
+
+    /// Replace the open symbol and its undo history with its library's copy on disk; false when the library has no
+    /// such symbol.
+    bool reloadSymbolFromLibrary();
+
+    bool CanReloadPart( bool aDiscardEdits ) override;
+
+    /// Read the open team symbol again from its file, which the editor did not write; false while edits it may not
+    /// drop, a dialog or a tool hold it.
+    bool ReloadPart( bool aDiscardEdits ) override;
+
+    std::optional<std::string> CurrentFormat( const std::string& aDestination, const std::vector<std::string>& aFolder,
+                                              const std::string& aPartFile, const wxString& aName ) override;
+
+    /// Recheck the infobar's outcome once no tool runs, since an open tool may be what it describes
+    void PopTool( const TOOL_EVENT& aEvent ) override;
+
+    /// Read again the stale library buffers no edit, dialog or tool holds, with the tabs that show them, and
+    /// retry the rest later. aSync resyncs the tree even when nothing was read again.
+    void refreshStaleLibraries( bool aSync );
 
     void saveSymbolCopyAs( bool aOpenCopy );
 
@@ -744,6 +800,8 @@ private:
     SCH_SCREEN*         m_dummyScreen;
 
     LIB_SYMBOL*         m_symbol;                // a symbol I own, it is not in any library, but a copy could be.
+
+    MDW_PART_CONTROLLER m_teamPart;   ///< Release state of m_symbol when it lives in a team library
     wxComboBox*         m_unitSelectBox;         // a ComboBox to select a unit to edit (if the
                                                  //   symbol has multiple units)
     wxComboBox*         m_bodyStyleSelectBox;    // a ComboBox to select a body style to edit (if the symbol has
@@ -758,6 +816,10 @@ private:
     std::vector<std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>> m_tabContexts;
     SYMBOL_EDITOR_TAB_CONTEXT*                              m_activeTab = nullptr;
     EDITOR_TABS_PANEL*                                      m_tabsPanel = nullptr;
+
+    /// Buffered libraries a reload may have changed on disk that refreshStaleLibraries() could not read again yet
+    std::set<wxString> m_staleLibraries;
+    wxTimer            m_staleLibrariesTimer;
 
     // Guards against re-entering tab activation while a tab is being created or restored, since
     // AddTab() activates synchronously.

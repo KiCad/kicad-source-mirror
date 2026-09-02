@@ -94,6 +94,15 @@ SYMBOL_EDITOR_TAB_CONTEXT::~SYMBOL_EDITOR_TAB_CONTEXT()
 }
 
 
+void SYMBOL_EDITOR_TAB_CONTEXT::ReplaceDetachedSymbol( LIB_SYMBOL* aSymbol )
+{
+    wxCHECK( !m_frameOwns, /* void */ );
+
+    delete m_symbol;
+    m_symbol = aSymbol;
+}
+
+
 bool SYMBOL_EDITOR_TAB_CONTEXT::IsModified() const
 {
     return m_screen && m_screen->IsContentModified();

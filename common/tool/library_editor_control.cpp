@@ -17,8 +17,13 @@
 
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
+#include <tool/conditional_menu.h>
+#include <tool/tool_menu.h>
+#include <dialogs/dialog_mdw_library_checkin.h>
 #include <eda_draw_frame.h>
 #include <widgets/lib_tree.h>
+#include <widgets/mdw_part_actions.h>
+#include <widgets/mdw_part_controller.h>
 #include <project.h>
 #include <kiway.h>
 #include "wx/generic/textdlgg.h"
@@ -83,6 +88,82 @@ void LIBRARY_EDITOR_CONTROL::AddContextMenuItems( CONDITIONAL_MENU* aMenu )
 
     aMenu->AddSeparator( 400 );
     aMenu->AddItem( ACTIONS::hideLibraryTree,   SELECTION_CONDITIONS::ShowAlways, 400 );
+}
+
+
+void LIBRARY_EDITOR_CONTROL::AddTeamLibraryMenuItems( TOOL_INTERACTIVE* aTool, TOOL_MENU& aToolMenu,
+                                                      CONDITIONAL_MENU&          aMenu,
+                                                      const SELECTION_CONDITION& aLibSelected )
+{
+    auto teamLibraryCondition =
+            [this]( const SELECTION& aSel )
+            {
+                MDW_PART_EDITOR* editor = partEditor();
+
+                return editor
+                       && !MdwTeamLibraryMarker( editor->PartTableType(), selectedLibraryName() ).IsEmpty();
+            };
+
+    aMenu.AddItem( ACTIONS::checkInTeamLibrary, aLibSelected && teamLibraryCondition, 10 );
+    aMenu.AddItem( ACTIONS::updateTeamLibrary, aLibSelected && teamLibraryCondition, 10 );
+
+    MdwAddLifecycleMenu( aTool, aToolMenu, aMenu,
+                         [this]()
+                         {
+                             return partEditor();
+                         },
+                         [this]()
+                         {
+                             return selectedLibIds();
+                         } );
+}
+
+
+MDW_PART_EDITOR* LIBRARY_EDITOR_CONTROL::partEditor() const
+{
+    return dynamic_cast<MDW_PART_EDITOR*>( m_frame );
+}
+
+
+wxString LIBRARY_EDITOR_CONTROL::selectedLibraryName() const
+{
+    return m_frame->GetLibTree()->GetSelectedLibId().GetLibNickname();
+}
+
+
+std::vector<LIB_ID> LIBRARY_EDITOR_CONTROL::selectedLibIds() const
+{
+    std::vector<LIB_ID> selected;
+
+    m_frame->GetLibTree()->GetSelectedLibIds( selected );
+    return selected;
+}
+
+
+int LIBRARY_EDITOR_CONTROL::CheckInTeamLibrary( const TOOL_EVENT& aEvent )
+{
+    if( MDW_PART_EDITOR* editor = partEditor() )
+        editor->CheckInLibrary( selectedLibraryName() );
+
+    return 0;
+}
+
+
+int LIBRARY_EDITOR_CONTROL::UpdateTeamLibrary( const TOOL_EVENT& aEvent )
+{
+    if( MDW_PART_EDITOR* editor = partEditor() )
+        MdwUpdatePartLibrary( *editor, selectedLibraryName() );
+
+    return 0;
+}
+
+
+int LIBRARY_EDITOR_CONTROL::TeamPartAction( const TOOL_EVENT& aEvent )
+{
+    if( MDW_PART_EDITOR* editor = partEditor() )
+        MdwRunPartToolAction( *editor, aEvent, selectedLibIds() );
+
+    return 0;
 }
 
 
@@ -206,4 +287,9 @@ void LIBRARY_EDITOR_CONTROL::setTransitions()
     Go( &LIBRARY_EDITOR_CONTROL::ToggleLibraryTree,    ACTIONS::showLibraryTree.MakeEvent() );
     Go( &LIBRARY_EDITOR_CONTROL::ToggleLibraryTree,    ACTIONS::hideLibraryTree.MakeEvent() );
     Go( &LIBRARY_EDITOR_CONTROL::LibraryTreeSearch,    ACTIONS::libraryTreeSearch.MakeEvent() );
+    Go( &LIBRARY_EDITOR_CONTROL::CheckInTeamLibrary,   ACTIONS::checkInTeamLibrary.MakeEvent() );
+    Go( &LIBRARY_EDITOR_CONTROL::UpdateTeamLibrary,    ACTIONS::updateTeamLibrary.MakeEvent() );
+
+    for( const auto& [action, id] : MdwPartToolActions() )
+        Go( &LIBRARY_EDITOR_CONTROL::TeamPartAction, action->MakeEvent() );
 }

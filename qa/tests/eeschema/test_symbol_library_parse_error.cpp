@@ -34,11 +34,13 @@
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
 #include <sch_io/sch_io_mgr.h>
 
+#include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/file.h>
 #include <wx/stdpaths.h>
 
 #include <fstream>
+#include <sstream>
 
 
 class SYMBOL_LIBRARY_PARSE_ERROR_FIXTURE
@@ -345,6 +347,49 @@ BOOST_AUTO_TEST_CASE( CacheTracksParseErrorState )
     // Verify that a valid library can be saved
     validCache.SetModified( true );
     BOOST_CHECK_NO_THROW( validCache.Save() );
+}
+
+
+// A library that threw on a bad symbol must reload its symbols once the file is restored
+BOOST_AUTO_TEST_CASE( RestoredLibraryReloadsAfterParseError )
+{
+    wxFileName data( KI_TEST::GetEeschemaTestDataDir(), wxEmptyString );
+    data.AppendDir( wxS( "reload_after_parse_error" ) );
+
+    wxString libPath = GetTempLibraryPath();
+
+    data.SetFullName( wxS( "ecc83-pp_restored.kicad_sym" ) );
+
+    std::ifstream      restored( data.GetFullPath().fn_str(), std::ios::binary );
+    std::ostringstream text;
+
+    text << restored.rdbuf();
+
+    // Break the restored file inside its first symbol so the throw comes from a symbol and not the header
+    std::string  corrupt = text.str();
+    const size_t at = corrupt.find( '\n', corrupt.find( "(symbol \"R\"" ) );
+
+    BOOST_REQUIRE( at != std::string::npos );
+    corrupt.insert( at + 1, "\t\t(garbage (((\n" );
+    std::ofstream( libPath.fn_str(), std::ios::binary ) << corrupt;
+
+    SCH_IO_KICAD_SEXPR plugin;
+    wxArrayString      names;
+
+    BOOST_CHECK_THROW( plugin.EnumerateSymbolLib( names, libPath ), IO_ERROR );
+
+    BOOST_REQUIRE( wxCopyFile( data.GetFullPath(), libPath ) );
+
+    // A restore inside the file time resolution must still read as a change
+    wxFileName lib( libPath );
+    wxDateTime later = lib.GetModificationTime() + wxTimeSpan::Seconds( 2 );
+    BOOST_REQUIRE( lib.SetTimes( nullptr, &later, nullptr ) );
+
+    names.clear();
+    plugin.EnumerateSymbolLib( names, libPath );
+
+    for( const wxString& name : { wxS( "R" ), wxS( "R_ALT" ), wxS( "R_US" ) } )
+        BOOST_CHECK_MESSAGE( names.Index( name ) != wxNOT_FOUND, name + " must load from the restored file" );
 }
 
 

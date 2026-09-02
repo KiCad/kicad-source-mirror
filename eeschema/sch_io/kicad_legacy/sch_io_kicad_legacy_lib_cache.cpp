@@ -83,6 +83,10 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::Load()
 
     wxLogTrace( traceSchLegacyPlugin, "Loading legacy symbol file '%s'", m_libFileName.GetFullPath() );
 
+    // Snapshot the file time before parsing, so a library that throws partway through still
+    // reloads once its file changes
+    m_fileModTime = GetLibModificationTime();
+
     FILE_LINE_READER reader( m_libFileName.GetFullPath() );
 
     if( !reader.ReadLine() )
@@ -156,11 +160,6 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::Load()
     }
 
     SCH_IO_KICAD_LEGACY_LIB_CACHE::IncrementModifyHash();
-
-    // Remember the file modification time of library file when the
-    // cache snapshot was made, so that in a networked environment we will
-    // reload the cache as needed.
-    m_fileModTime = GetLibModificationTime();
 
     if( USE_OLD_DOC_FILE_FORMAT( m_versionMajor, m_versionMinor ) )
         loadDocs();

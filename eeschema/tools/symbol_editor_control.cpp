@@ -29,6 +29,7 @@
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>
 #include <dialogs/dialog_lib_fields_table.h>
+#include <dialogs/dialog_mdw_library_checkin.h>
 #include <gestfich.h> // To open with a text editor
 #include <kidialog.h>
 #include <kiway.h>
@@ -37,6 +38,7 @@
 #include <libraries/symbol_library_adapter.h>
 #include <pgm_base.h>
 #include <project_sch.h>
+#include <sch_file_versions.h>
 #include <sch_painter.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
@@ -263,6 +265,20 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( SCH_ACTIONS::saveSymbolAs,             symbolSelectedCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::saveSymbolCopyAs,         symbolSelectedCondition, 10 );
         ctxMenu.AddItem( ACTIONS::revert,                       symbolSelectedCondition || libInferredCondition, 10 );
+        libraryTreeTool->AddTeamLibraryMenuItems( this, *m_menu, ctxMenu, libSelectedCondition );
+
+        auto outdatedTeamLibraryCondition =
+                [this]( const SELECTION& aSel )
+                {
+                    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+                    return editFrame
+                           && MdwCanUpgradeLibraryFormat( editFrame->GetTreeLIBID().GetLibNickname(),
+                                                          SEXPR_SYMBOL_LIB_FILE_VERSION );
+                };
+
+        ctxMenu.AddItem( SCH_ACTIONS::upgradeTeamLibraryFormat, libSelectedCondition && outdatedTeamLibraryCondition,
+                         10 );
 
         ctxMenu.AddSeparator( 20 );
         ctxMenu.AddItem( SCH_ACTIONS::importSymbol,             libInferredCondition, 20 );
@@ -679,6 +695,10 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
     if( !libSymbol )
         return 0;
 
+    // Renaming changes a released symbol, and replacing one removes it
+    if( editFrame->RefuseReleasedChange( libName, oldName ) || editFrame->RefuseReleasedChange( libName, newName ) )
+        return 0;
+
     // Renaming the current symbol
     const bool isCurrentSymbol = editFrame->IsCurrentSymbol( libId );
     bool       overwritingCurrentSymbol = false;
@@ -978,6 +998,9 @@ int SYMBOL_EDITOR_CONTROL::FlattenSymbol( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    if( editFrame->RefuseReleasedChange( symId.GetLibNickname(), symId.GetLibItemName() ) )
+        return 0;
+
     const LIB_SYMBOL*           symbol = libMgr.GetBufferedSymbol( symId.GetLibItemName(), symId.GetLibNickname() );
     std::unique_ptr<LIB_SYMBOL> flatSymbol = symbol->Flatten();
     wxCHECK_MSG( flatSymbol, 0, _( "Failed to flatten symbol" ) );
@@ -1181,6 +1204,15 @@ int SYMBOL_EDITOR_CONTROL::CloseTab( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::UpgradeTeamLibraryFormat( const TOOL_EVENT& aEvent )
+{
+    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+        editFrame->UpgradeLibraryFormat( editFrame->GetTreeLIBID().GetLibNickname() );
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::CompareLibraryWithFile( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
@@ -1324,6 +1356,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
 
     Go( &SYMBOL_EDITOR_CONTROL::CompareLibraryWithFile,
         SCH_ACTIONS::compareLibraryWithFile.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::UpgradeTeamLibraryFormat, SCH_ACTIONS::upgradeTeamLibraryFormat.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::previousUnit.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::nextUnit.MakeEvent() );

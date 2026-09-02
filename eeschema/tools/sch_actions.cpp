@@ -216,6 +216,13 @@ TOOL_ACTION SCH_ACTIONS::compareLibraryWithFile( TOOL_ACTION_ARGS()
         .Tooltip( _( "Diff the current symbol library against another .kicad_sym file" ) )
         .Icon( BITMAPS::library ) );
 
+TOOL_ACTION SCH_ACTIONS::upgradeTeamLibraryFormat( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.upgradeTeamLibraryFormat" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Upgrade Team Library Format..." ) )
+        .Tooltip( _( "Save the team library in the current file format and check that in for the team" ) )
+        .Icon( BITMAPS::library ) );
+
 TOOL_ACTION SCH_ACTIONS::newSymbol( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.newSymbol" )
         .Scope( AS_GLOBAL )

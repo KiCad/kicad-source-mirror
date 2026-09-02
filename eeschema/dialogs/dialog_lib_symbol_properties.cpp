@@ -686,6 +686,13 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
+    // A released symbol is refused before anything is applied, so nothing needs putting back
+    if( m_libEntry == m_Parent->GetCurSymbol() && m_Parent->IsContentReadOnly() )
+    {
+        m_editRefused = true;
+        return true;
+    }
+
     wxString   newName = EscapeString( m_SymbolNameCtrl->GetValue(), CTX_LIBID );
     wxString   oldName = m_libEntry->GetName();
 

@@ -243,6 +243,7 @@ public:
     static TOOL_ACTION saveLibraryAsPacked;
     static TOOL_ACTION saveLibraryAsUnpacked;
     static TOOL_ACTION compareLibraryWithFile;
+    static TOOL_ACTION upgradeTeamLibraryFormat;
     static TOOL_ACTION saveSymbolAs;
     static TOOL_ACTION saveSymbolCopyAs;
     static TOOL_ACTION newSymbol;

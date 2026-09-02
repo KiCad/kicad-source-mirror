@@ -23,6 +23,7 @@
 #ifndef SCH_IO_KICAD_SEXPR_H_
 #define SCH_IO_KICAD_SEXPR_H_
 
+#include <atomic>
 #include <memory>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
@@ -139,6 +140,11 @@ public:
 
     void LeakCacheAtExit() override { m_leakCacheAtExit = true; }
 
+    /// Stops a symbol folder load between files, and drops what it had read so the next load reads it all
+    void CancelLoad() override { m_loadCancelled.store( true ); }
+
+    void ResumeLoad() noexcept override { m_loadCancelled.store( false ); }
+
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
 
@@ -193,6 +199,7 @@ protected:
     OUTPUTFORMATTER*        m_out;              ///< The formatter for saving SCH_SCREEN objects.
     SCH_IO_KICAD_SEXPR_LIB_CACHE* m_cache;
     bool                    m_leakCacheAtExit = false;
+    std::atomic<bool>       m_loadCancelled = false;
 
     /// initialize PLUGIN like a constructor would.
     void init( SCHEMATIC* aSchematic, const std::map<std::string, UTF8>* aProperties = nullptr );

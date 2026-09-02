@@ -27,11 +27,18 @@
 #include <pgm_base.h>
 #include <project_sch.h>
 #include <kiway.h>
+#include <core/kicad_algo.h>
 #include <core/profile.h>
 #include <core/wx_stl_compat.h>
 #include <unordered_map>
 #include <wx_filename.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+#include <richio.h>
+#include <gestfich.h>
+#include <filesystem>
+#include <optional>
+#include <set>
 #include <progress_reporter.h>
 #include <algorithm>
 #include <list>
@@ -40,6 +47,7 @@
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <kiplatform/io.h>
+#include <wx/msgdlg.h>
 #include <libraries/library_manager.h>
 #include <libraries/symbol_library_adapter.h>
 
@@ -86,31 +94,36 @@ int SYMBOL_LIBRARY_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
     if( std::optional<wxString> uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aLibrary, true ); uri )
-    {
-        // Mix a file modification timestamp into the hash so that external changes (e.g. a git
-        // branch switch) are detected by the library tree synchronizer without a restart.
-        wxFileName fn( *uri );
-        long long  mtime = 0;
-
-        wxLogNull silence;
-
-        fn.Normalize( FN_NORMALIZE_FLAGS );
-
-        if( fn.DirExists() )
-        {
-            mtime = KIPLATFORM::IO::TimestampDir( fn.GetFullPath(),
-                        wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
-        }
-        else if( fn.IsFileReadable() )
-        {
-            mtime = fn.GetModificationTime().GetValue().GetValue();
-        }
-
-        size_t base = std::hash<std::string>{}( aLibrary.ToStdString() + uri->ToStdString() );
-        return static_cast<int>( base ^ static_cast<size_t>( mtime ) );
-    }
+        return LibraryFileHash( aLibrary, *uri );
 
     return -1;
+}
+
+
+int SYMBOL_LIBRARY_MANAGER::LibraryFileHash( const wxString& aLibrary, const wxString& aUri )
+{
+    // Mix a file modification timestamp into the hash so that external changes (e.g. a git
+    // branch switch) are detected by the library tree synchronizer without a restart.
+    wxFileName fn( aUri );
+    long long  mtime = 0;
+
+    wxLogNull silence;
+
+    fn.Normalize( FN_NORMALIZE_FLAGS );
+
+    // The member DirExists() tests the parent folder, which every file library has
+    if( wxFileName::DirExists( fn.GetFullPath() ) )
+    {
+        mtime = KIPLATFORM::IO::TimestampDir( fn.GetFullPath(),
+                    wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
+    }
+    else if( fn.IsFileReadable() )
+    {
+        mtime = fn.GetModificationTime().GetValue().GetValue();
+    }
+
+    size_t base = std::hash<std::string>{}( aLibrary.ToStdString() + aUri.ToStdString() );
+    return static_cast<int>( base ^ static_cast<size_t>( mtime ) );
 }
 
 
@@ -195,6 +208,9 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
         if( original != destination )
             return libBuf.SaveAs( aFileName, &*pi, aReplacesOwnFile );
+
+        // Files a save rewrites one at a time may change under it, so later saves always check
+        libBuf.SetFileStamp( 0 );
 
         res = libBuf.SaveModifiedBuffers( aFileName, &*pi );
 
@@ -291,10 +307,43 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 }
 
 
+std::vector<wxString> SYMBOL_LIBRARY_MANAGER::SymbolsChangedOnDisk( const wxString& aLibrary,
+                                                                   const wxString& aFileName,
+                                                                   SCH_IO_MGR::SCH_FILE_T aFileType ) const
+{
+    auto it = m_libs.find( aLibrary );
+
+    if( it == m_libs.end() )
+        return {};
+
+    return it->second.SymbolsChangedOnDisk( aFileName, aFileType );
+}
+
+
 bool SYMBOL_LIBRARY_MANAGER::IsLibraryModified( const wxString& aLibrary ) const
 {
     auto it = m_libs.find( aLibrary );
     return it != m_libs.end() ? it->second.IsModified() : false;
+}
+
+
+bool SYMBOL_LIBRARY_MANAGER::IsLibraryModifiedBesides( const wxString& aLibrary, const wxString& aSymbolName ) const
+{
+    auto libIt = m_libs.find( aLibrary );
+
+    if( libIt == m_libs.end() )
+        return false;
+
+    const LIB_BUFFER& buf = libIt->second;
+
+    if( !buf.GetDeletedBuffers().empty() )
+        return true;
+
+    return std::ranges::any_of( buf.GetBuffers(),
+                                [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuffer )
+                                {
+                                    return aBuffer->IsModified() && aBuffer->GetSymbol().GetName() != aSymbolName;
+                                } );
 }
 
 
@@ -842,6 +891,10 @@ std::set<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::getOriginalSymbols( const wxString
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
 
+    // A library a table reload is still reading would be buffered empty, and waiting on the whole table stalls
+    if( !adapter->IsLibraryLoaded( aLibrary ) )
+        adapter->LoadOne( aLibrary );
+
     for( LIB_SYMBOL* symbol : adapter->GetSymbols( aLibrary ) )
         symbols.insert( symbol );
 
@@ -862,6 +915,9 @@ LIB_BUFFER& SYMBOL_LIBRARY_MANAGER::getLibraryBuffer( const wxString& aLibrary )
 
     const std::set<LIB_SYMBOL*> originals = getOriginalSymbols( aLibrary );
     buf.BufferOriginals( { originals.begin(), originals.end() } );
+
+    // Taken before the plugin read the files, so a file rewritten since never matches it
+    buf.SetFileStamp( PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() )->LoadedFileStamp( aLibrary ) );
 
     return buf;
 }
@@ -891,13 +947,24 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateLibraryBuffer( const wxString& aLibrary )
 }
 
 
-std::vector<wxString> SYMBOL_LIBRARY_MANAGER::DropUnmodifiedBuffers( const std::set<wxString>& aKeep )
+std::set<wxString> SYMBOL_LIBRARY_MANAGER::GetBufferedLibraries() const
+{
+    std::set<wxString> libraries;
+
+    for( const auto& [name, buffer] : m_libs )
+        libraries.insert( name );
+
+    return libraries;
+}
+
+
+std::vector<wxString> SYMBOL_LIBRARY_MANAGER::DropUnmodifiedBuffers( const std::set<wxString>& aLibraries )
 {
     std::vector<wxString> dropped;
 
     for( auto it = m_libs.begin(); it != m_libs.end(); )
     {
-        if( it->second.IsModified() || aKeep.contains( it->first ) )
+        if( it->second.IsModified() || !aLibraries.contains( it->first ) )
         {
             ++it;
             continue;
@@ -1379,6 +1446,260 @@ bool LIB_BUFFER::SaveAs( const wxString& aFileName, SCH_IO* aPlugin, bool aRepla
     }
 
     return res;
+}
+
+
+/// The symbol as a save writes it, so two loads of the same text compare equal
+static std::string savedText( const LIB_SYMBOL& aSymbol )
+{
+    LIB_SYMBOL       copy( aSymbol );
+    STRING_FORMATTER formatter;
+
+    SCH_IO_KICAD_SEXPR::FormatLibSymbol( &copy, formatter );
+    return formatter.GetString();
+}
+
+
+LIB_BUFFER LIB_BUFFER::clone() const
+{
+    LIB_BUFFER                                                     copy( m_libName );
+    std::map<const SYMBOL_BUFFER*, std::shared_ptr<SYMBOL_BUFFER>> twins;
+    std::map<const LIB_SYMBOL*, LIB_SYMBOL*>                       symbols;
+
+    auto twinOf = [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+    {
+        std::shared_ptr<SYMBOL_BUFFER>& twin = twins[aBuf.get()];
+
+        if( !twin )
+        {
+            auto screen = std::make_unique<SCH_SCREEN>();
+
+            if( aBuf->IsModified() )
+                screen->SetContentModified();
+
+            twin = std::make_shared<SYMBOL_BUFFER>( std::make_unique<LIB_SYMBOL>( aBuf->GetSymbol() ),
+                                                    std::move( screen ) );
+            twin->SetOriginal( std::make_unique<LIB_SYMBOL>( aBuf->GetOriginal() ) );
+            symbols[&aBuf->GetSymbol()] = &twin->GetSymbol();
+            symbols[&aBuf->GetOriginal()] = &twin->GetOriginal();
+        }
+
+        return twin;
+    };
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : m_symbols )
+        copy.m_symbols.push_back( twinOf( buf ) );
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : m_added )
+        copy.m_added.push_back( twinOf( buf ) );
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : m_deleted )
+        copy.m_deleted.push_back( twinOf( buf ) );
+
+    // The copies still link to parents in this buffer
+    for( const auto& [buf, twin] : twins )
+    {
+        for( LIB_SYMBOL* symbol : { &twin->GetSymbol(), &twin->GetOriginal() } )
+        {
+            std::shared_ptr<LIB_SYMBOL> parent = symbol->GetParent().lock();
+
+            if( parent && symbols.contains( parent.get() ) )
+                symbol->SetParent( symbols[parent.get()] );
+        }
+    }
+
+    return copy;
+}
+
+
+/// The files of the library at aPath, which for a folder are the symbol files directly inside it
+static std::optional<std::vector<std::filesystem::path>> libraryFiles( const std::filesystem::path& aPath )
+{
+    namespace fs = std::filesystem;
+
+    const wxString        ext = wxS( "." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension );
+    std::error_code       ec;
+    std::vector<fs::path> files;
+
+    if( fs::is_regular_file( aPath, ec ) )
+        return std::vector<fs::path>{ aPath };
+
+    for( fs::directory_iterator it( aPath, ec ), end; !ec && it != end; it.increment( ec ) )
+    {
+        if( FromFsPath( it->path().extension() ).IsSameAs( ext, false ) && it->is_regular_file( ec ) )
+            files.push_back( it->path() );
+    }
+
+    if( ec )
+        return std::nullopt;
+
+    return files;
+}
+
+
+/// Every symbol of the library at aPath by name, as a save writes it
+static std::map<wxString, std::string> readLibrary( SCH_IO& aPlugin, const wxString& aPath )
+{
+    std::vector<LIB_SYMBOL*>        symbols;
+    std::map<wxString, std::string> texts;
+
+    aPlugin.EnumerateSymbolLib( symbols, aPath );
+
+    for( const LIB_SYMBOL* symbol : symbols )
+        texts[symbol->GetName()] = savedText( *symbol );
+
+    return texts;
+}
+
+
+std::vector<wxString> LIB_BUFFER::SymbolsChangedOnDisk( const wxString& aFileName,
+                                                       SCH_IO_MGR::SCH_FILE_T aFileType ) const
+{
+    namespace fs = std::filesystem;
+
+    std::vector<wxString> changed;
+
+    if( !wxFileName::FileExists( aFileName ) && !wxFileName::DirExists( aFileName ) )
+        return changed;
+
+    // Files still as the buffer read them need no parse
+    if( m_fileStamp && LIBRARY_MANAGER::FileStamp( aFileName ) == m_fileStamp )
+        return changed;
+
+    auto isAdded = [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+    {
+        return std::ranges::any_of( m_added,
+                                    [&]( const std::shared_ptr<SYMBOL_BUFFER>& aAdded )
+                                    {
+                                        return aAdded.get() == aBuf.get();
+                                    } );
+    };
+
+    auto bufferOf = [&]( const LIB_SYMBOL* aSymbol ) -> const SYMBOL_BUFFER*
+    {
+        for( const std::deque<std::shared_ptr<SYMBOL_BUFFER>>* buffers : { &m_symbols, &m_deleted } )
+        {
+            for( const std::shared_ptr<SYMBOL_BUFFER>& buf : *buffers )
+            {
+                if( &buf->GetSymbol() == aSymbol || &buf->GetOriginal() == aSymbol )
+                    return buf.get();
+            }
+        }
+
+        return nullptr;
+    };
+
+    // The whole library is buffered when it is read. An original derived symbol links to its parent's working
+    // copy, which a rename changes, so it is written against the parent as read
+    std::map<wxString, std::string> read;
+
+    for( const std::deque<std::shared_ptr<SYMBOL_BUFFER>>* buffers : { &m_symbols, &m_deleted } )
+    {
+        for( const std::shared_ptr<SYMBOL_BUFFER>& buf : *buffers )
+        {
+            if( isAdded( buf ) )
+                continue;
+
+            LIB_SYMBOL original( buf->GetOriginal() );
+
+            if( const SYMBOL_BUFFER* parent = bufferOf( buf->GetOriginal().GetParent().lock().get() ) )
+                original.SetParent( &parent->GetOriginal() );
+
+            read[original.GetName()] = savedText( original );
+        }
+    }
+
+    auto textOf = []( const std::map<wxString, std::string>& aTexts, const wxString& aName )
+    {
+        auto it = aTexts.find( aName );
+        return it != aTexts.end() ? std::optional<std::string>( it->second ) : std::nullopt;
+    };
+
+    try
+    {
+        IO_RELEASER<SCH_IO>             plugin( SCH_IO_MGR::FindPlugin( aFileType ) );
+        std::map<wxString, std::string> onDisk = readLibrary( *plugin, aFileName );
+        std::set<wxString>              pulled;
+
+        for( const auto& [name, text] : onDisk )
+        {
+            if( textOf( read, name ) != text )
+                pulled.insert( name );
+        }
+
+        for( const auto& [name, text] : read )
+        {
+            if( !onDisk.contains( name ) )
+                pulled.insert( name );
+        }
+
+        if( pulled.empty() )
+            return changed;
+
+        // Run the save itself on a copy of the files as they are now, since a save rewrites more than the edits
+        const fs::path   source = ToFsPath( aFileName ).lexically_normal();
+        SCOPED_TEMP_PATH folder;
+
+        auto save = [&]() -> std::optional<std::map<wxString, std::string>>
+        {
+            std::optional<std::vector<fs::path>> files = libraryFiles( source );
+
+            if( !files || !folder.MakeDirectory( wxS( "kicad_symsave" ), 0700 ) )
+                return std::nullopt;
+
+            const fs::path  name = ( source.has_filename() ? source : source.parent_path() ).filename();
+            const fs::path  copy = ToFsPath( folder.Path() ) / name;
+            std::error_code ec;
+            const bool      inFolder = fs::is_directory( source, ec );
+
+            if( inFolder && !fs::create_directory( copy, ec ) )
+                return std::nullopt;
+
+            for( const fs::path& file : *files )
+            {
+                if( !fs::copy_file( file, inFolder ? copy / file.filename() : copy, ec ) )
+                    return std::nullopt;
+            }
+
+            const wxString      path = FromFsPath( copy );
+            LIB_BUFFER          twin = clone();
+            IO_RELEASER<SCH_IO> sim( SCH_IO_MGR::FindPlugin( aFileType ) );
+
+            if( !twin.SaveModifiedBuffers( path, &*sim ) || !twin.RemoveDeletedSymbols( path, &*sim ) )
+                return std::nullopt;
+
+            sim->SaveLibrary( path );
+
+            IO_RELEASER<SCH_IO> reader( SCH_IO_MGR::FindPlugin( aFileType ) );
+            return readLibrary( *reader, path );
+        };
+
+        std::optional<std::map<wxString, std::string>> saved;
+
+        try
+        {
+            saved = save();
+        }
+        catch( const IO_ERROR& )
+        {
+        }
+
+        // Without a save to compare with, any symbol that changed on disk may be written over
+        if( !saved )
+            return { pulled.begin(), pulled.end() };
+
+        for( const wxString& name : pulled )
+        {
+            if( textOf( *saved, name ) != textOf( onDisk, name ) )
+                changed.push_back( name );
+        }
+    }
+    catch( const IO_ERROR& )
+    {
+        // The save reads the file again and reports why it cannot
+    }
+
+    return changed;
 }
 
 

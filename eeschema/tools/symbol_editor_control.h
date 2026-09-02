@@ -85,6 +85,9 @@ public:
     /// Diff the currently-open symbol library against another .kicad_sym file.
     int CompareLibraryWithFile( const TOOL_EVENT& aEvent );
 
+    /// Save the selected team library in the current file format and check that in.
+    int UpgradeTeamLibraryFormat( const TOOL_EVENT& aEvent );
+
 private:
     /// Set up handlers for various events.
     void setTransitions() override;

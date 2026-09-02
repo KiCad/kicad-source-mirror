@@ -2002,10 +2002,26 @@ void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
         // a spectacular episode in memory management:
         delete m_cache;
         m_cache = new SCH_IO_KICAD_SEXPR_LIB_CACHE( aLibraryFileName );
+        m_cache->m_loadCancelled = &m_loadCancelled;
 
         if( !isBuffering( aProperties ) || ( isNewCache && m_cache->isLibraryPathValid() ) )
         {
-            m_cache->Load();
+            try
+            {
+                m_cache->Load();
+            }
+            catch( const IO_ERROR& )
+            {
+                // A cancelled load holds part of the library, so the next load must read it again
+                if( m_loadCancelled.load() )
+                {
+                    delete m_cache;
+                    m_cache = nullptr;
+                }
+
+                throw;
+            }
+
             m_cache->m_modHash = oldModifyHash + 1;
         }
     }

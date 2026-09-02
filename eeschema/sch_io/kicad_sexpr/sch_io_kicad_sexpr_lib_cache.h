@@ -23,6 +23,7 @@
 #define SCH_IO_KICAD_SEXPR_LIB_CACHE_H_
 
 #include "sch_io/sch_io_lib_cache.h"
+#include <atomic>
 #include <set>
 
 class FILE_LINE_READER;
@@ -79,6 +80,9 @@ private:
     int m_fileFormatVersionAtLoad;
 
     std::set<wxString> m_pendingFileDeletes;
+
+    /// The owning plugin's cancel flag, read between the files of a symbol folder
+    const std::atomic<bool>* m_loadCancelled = nullptr;
 
     static void saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFORMATTER& aFormatter );
     static void saveField( SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter );

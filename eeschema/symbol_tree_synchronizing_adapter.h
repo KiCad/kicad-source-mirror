@@ -55,6 +55,7 @@ protected:
 
     void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem, unsigned int aCol ) const override;
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol, wxDataViewItemAttr& aAttr ) const override;
+    bool isModified( const LIB_TREE_NODE& aNode ) const override;
 
     SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr );
 

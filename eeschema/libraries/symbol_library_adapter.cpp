@@ -88,7 +88,7 @@ void SYMBOL_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString& a
 
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 {
-    aLib->status.load_status = LOAD_STATUS::LOADING;
+    setStatus( aLib, { LOAD_STATUS::LOADING } );
 
     std::lock_guard pluginGuard( pluginMutex( aLib->row->Nickname() ) );
 
@@ -103,31 +103,23 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
         wxArrayString dummyList;
         schplugin( aLib )->EnumerateSymbolLib( dummyList, getUri( aLib->row ), &options );
         wxLogTrace( traceLibraries, "Sym: %s: library enumerated %zu items", aLib->row->Nickname(), dummyList.size() );
-        aLib->status.load_status = LOAD_STATUS::LOADED;
-        aLib->status.error.reset();
+        return setStatus( aLib, { LOAD_STATUS::LOADED } );
     }
     catch( IO_ERROR& e )
     {
         // A load the abort cut short is not a failure of the library
         if( cancelling || m_cancelling.load() || m_abortGeneration.load() != abortGeneration )
-        {
-            aLib->status.load_status = LOAD_STATUS::INVALID;
-            aLib->status.error.reset();
-            return aLib->status;
-        }
+            return setStatus( aLib, { LOAD_STATUS::INVALID } );
 
-        aLib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-        aLib->status.error = LIBRARY_ERROR( e.Problem(), e.Where() );
         wxLogTrace( traceLibraries, "Sym: %s: plugin threw exception: %s", aLib->row->Nickname(), e.What() );
+        return setStatus( aLib, { LOAD_STATUS::LOAD_ERROR, LIBRARY_ERROR( e.Problem(), e.Where() ) } );
     }
-
-    return aLib->status;
 }
 
 
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::CheckLibrary( LIB_DATA* aLib )
 {
-    aLib->status.load_status = LOAD_STATUS::LOADING;
+    setStatus( aLib, { LOAD_STATUS::LOADING } );
 
     std::lock_guard pluginGuard( pluginMutex( aLib->row->Nickname() ) );
 
@@ -136,17 +128,13 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::CheckLibrary( LIB_DATA* aLib )
     try
     {
         schplugin( aLib )->CheckLibrary( getUri( aLib->row ), &options );
-        aLib->status.load_status = LOAD_STATUS::LOADED;
-        aLib->status.error.reset();
+        return setStatus( aLib, { LOAD_STATUS::LOADED } );
     }
     catch( IO_ERROR& e )
     {
-        aLib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-        aLib->status.error = LIBRARY_ERROR( e.Problem(), e.Where() );
         wxLogTrace( traceLibraries, "Sym: %s: library check failed: %s", aLib->row->Nickname(), e.What() );
+        return setStatus( aLib, { LOAD_STATUS::LOAD_ERROR, LIBRARY_ERROR( e.Problem(), e.Where() ) } );
     }
-
-    return aLib->status;
 }
 
 

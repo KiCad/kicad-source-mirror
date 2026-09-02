@@ -23,6 +23,7 @@
 #include <memory>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <qa_utils/env_var_utils.h>
+#include <qa_utils/scoped_global_lib_table.h>
 
 #include <mock_pgm_base.h>
 #include <pgm_base.h>
@@ -130,6 +131,8 @@ BOOST_AUTO_TEST_CASE( ProjectLibraryTable )
 // installation so that you can benchmark a typical load
 BOOST_AUTO_TEST_CASE( AsyncLoad )
 {
+    KI_TEST::SCOPED_GLOBAL_LIB_TABLE globalTable( LIBRARY_TABLE_TYPE::SYMBOL );
+
     LIBRARY_MANAGER manager;
     manager.LoadGlobalTables();
 

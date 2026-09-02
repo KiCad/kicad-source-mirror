@@ -29,6 +29,7 @@
 #include <symbol_edit_frame.h>
 #include <symbol_editor/lib_symbol_library_manager.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/mdw_member_index.h>
 
 #include <wx/filename.h>
 
@@ -82,6 +83,7 @@ public:
         if( libMgr.IsLibraryReadOnly( libName ) )
             return false;
 
+        MDW_SILENT_SAVE silent;
         return m_frame->SaveLibraryHeadless( libName );
     }
 

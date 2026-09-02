@@ -26,6 +26,7 @@
 
 #include <core/throttle.h>
 #include <kiplatform/ui.h>
+#include <mdw/client/mdw_library.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <symbol_edit_frame.h>
@@ -188,7 +189,9 @@ int SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetLibrariesCount() const
 
 void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNode )
 {
-    auto hashIt = m_libHashes.find( aLibNode.m_Name );
+    // Walks a folder library's files, so it is read once per sync
+    const int hash = m_libMgr->GetLibraryHash( aLibNode.m_Name );
+    auto      hashIt = m_libHashes.find( aLibNode.m_Name );
 
     if( hashIt == m_libHashes.end() )
     {
@@ -196,7 +199,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aL
         for( LIB_SYMBOL* symbol : m_libMgr->EnumerateSymbols( aLibNode.m_Name ) )
             aLibNode.AddItem( symbol );
     }
-    else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.m_Name ) )
+    else if( hashIt->second != hash )
     {
         // update an existing library
         std::list<LIB_SYMBOL*> symbols = m_libMgr->EnumerateSymbols( aLibNode.m_Name );
@@ -235,8 +238,16 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aL
     for( const wxString& column : adapter->GetAvailableExtraFields( aLibNode.m_Name ) )
         addColumnIfNecessary( column );
 
+    RefreshLifecycle( aLibNode );
     aLibNode.AssignIntrinsicRanks( m_shownColumns );
-    m_libHashes[aLibNode.m_Name] = m_libMgr->GetLibraryHash( aLibNode.m_Name );
+    m_libHashes[aLibNode.m_Name] = hash;
+}
+
+
+bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::isModified( const LIB_TREE_NODE& aNode ) const
+{
+    return aNode.m_Type == LIB_TREE_NODE::TYPE::ITEM && aNode.m_Parent
+           && m_libMgr->IsSymbolModified( aNode.m_Name, aNode.m_Parent->m_Name );
 }
 
 
@@ -245,6 +256,8 @@ SYMBOL_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( std::vector<std::unique_ptr<LI
 {
     LIB_TREE_NODE* node = aLibNodeIt->get();
     m_libHashes.erase( node->m_Name );
+    m_lifecycleLibs.erase( node->m_Name );
+    m_teamLibs.erase( node->m_Name );
     return m_tree.m_Children.erase( aLibNodeIt );
 }
 
@@ -326,10 +339,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
             if( key == wxT( "Description" ) )
                 valueStr = node->m_Desc;
-            else if( node->m_Fields.count( key ) )
-                valueStr = node->m_Fields.at( key );
             else
-                valueStr = wxEmptyString;
+                valueStr = fieldText( *node, key );
 
             valueStr.Replace( wxS( "\n" ), wxS( " " ) ); // Clear line breaks
 

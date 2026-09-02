@@ -106,8 +106,11 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
                         lib_node.AddItem( item );
                 }
 
+                RefreshLifecycle( lib_node );
                 lib_node.AssignIntrinsicRanks( m_shownColumns, false );
             };
+
+    FollowLifecycle();
 
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
@@ -276,5 +279,5 @@ bool SYMBOL_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem& aItem, unsigned i
 
 wxString SYMBOL_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, int aUnit )
 {
-    return GenerateAliasInfo( m_adapter, aLibId, aUnit );
+    return GenerateAliasInfo( m_adapter, aLibId, aUnit ) + lifecycleInfo( aLibId );
 }

@@ -181,6 +181,9 @@ void SYMBOL_EDIT_FRAME::activateSymbolTab( SYMBOL_EDITOR_TAB_CONTEXT* aContext )
     m_unit = aContext->GetUnit();
     m_bodyStyle = aContext->GetBodyStyle();
 
+    refreshTeamPart( true );
+    updateInfoBar();
+
     // Install the new screen before SetScreen, whose ResetTools would otherwise deref the freed one.
     m_toolManager->SetEnvironment( aContext->GetScreen(), GetCanvas()->GetView(), GetCanvas()->GetViewControls(),
                                    GetSettings(), this );

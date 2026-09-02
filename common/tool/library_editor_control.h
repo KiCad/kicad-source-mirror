@@ -18,11 +18,15 @@
 #ifndef LIBRARY_EDITOR_CONTROL_H
 #define LIBRARY_EDITOR_CONTROL_H
 
+#include <tool/conditional_menu.h>
 #include <tool/tool_interactive.h>
+#include <lib_id.h>
 #include <project.h>
 
 
 class EDA_DRAW_FRAME;
+class MDW_PART_EDITOR;
+class TOOL_MENU;
 
 /**
  * Module editor specific tools.
@@ -37,10 +41,20 @@ public:
 
     void AddContextMenuItems( CONDITIONAL_MENU* aMenu );
 
+    /**
+     * Add the team library check-in, update and Lifecycle items, shown for the library aLibSelected accepts when it
+     * belongs to a team library. The frame must be a MDW_PART_EDITOR, or the items never show.
+     */
+    void AddTeamLibraryMenuItems( TOOL_INTERACTIVE* aTool, TOOL_MENU& aToolMenu, CONDITIONAL_MENU& aMenu,
+                                  const SELECTION_CONDITION& aLibSelected );
+
     int PinLibrary( const TOOL_EVENT& aEvent );
     int UnpinLibrary( const TOOL_EVENT& aEvent );
     int ToggleLibraryTree( const TOOL_EVENT& aEvent );
     int LibraryTreeSearch( const TOOL_EVENT& aEvent );
+    int CheckInTeamLibrary( const TOOL_EVENT& aEvent );
+    int UpdateTeamLibrary( const TOOL_EVENT& aEvent );
+    int TeamPartAction( const TOOL_EVENT& aEvent );
 
     bool RenameLibrary( const wxString& aTitle, const wxString& aName,
                         std::function<bool( const wxString& aNewName )> aValidator );
@@ -52,6 +66,10 @@ private:
     void setTransitions() override;
 
     void regenerateLibraryTree();
+
+    MDW_PART_EDITOR*    partEditor() const;
+    wxString            selectedLibraryName() const;
+    std::vector<LIB_ID> selectedLibIds() const;
 
 private:
     EDA_DRAW_FRAME* m_frame;

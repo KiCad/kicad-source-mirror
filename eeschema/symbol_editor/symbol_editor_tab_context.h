@@ -186,6 +186,11 @@ public:
     }
 
     /**
+     * Replace a detached tab's working symbol with aSymbol, which the tab then owns.
+     */
+    void ReplaceDetachedSymbol( LIB_SYMBOL* aSymbol );
+
+    /**
      * Track the frame's new working symbol after undo/redo replaces it, while staying frame-owned.
      */
     void RefreshFrameOwnedObjects( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen )

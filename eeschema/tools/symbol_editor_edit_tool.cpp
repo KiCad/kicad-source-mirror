@@ -978,6 +978,10 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolPropertiesFromLibrary( const LIB_ID& aLi
     if( !bufferedSymbol )
         return;
 
+    // The canvas lock only covers the symbol on screen, not one picked in the tree
+    if( m_frame->RefuseReleasedChange( libName, symbolName ) )
+        return;
+
     // Create a copy to work with
     LIB_SYMBOL tempSymbol( *bufferedSymbol );
 
@@ -1031,6 +1035,14 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
+    // A refused edit changed nothing, and is reported only now, since the refusal reloads the symbol
+    // the dialog was showing
+    if( dlg.WasEditRefused() )
+    {
+        m_frame->OnModify();
+        return;
+    }
+
     m_frame->RebuildSymbolUnitAndBodyStyleLists();
     m_frame->OnModify();
 
@@ -1071,6 +1083,14 @@ int SYMBOL_EDITOR_EDIT_TOOL::EditSymbolPinMaps( const TOOL_EVENT& aEvent )
     // quasimodally to keep that support working.
     if( dlg.ShowQuasiModal() != wxID_OK )
         return 0;
+
+    // A refused edit changed nothing, and is reported only now, since the refusal reloads the symbol
+    // the dialog was showing
+    if( dlg.WasEditRefused() )
+    {
+        m_frame->OnModify();
+        return 0;
+    }
 
     m_frame->RebuildSymbolUnitAndBodyStyleLists();
     m_frame->OnModify();
