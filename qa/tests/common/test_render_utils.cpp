@@ -214,4 +214,26 @@ BOOST_AUTO_TEST_CASE( InvalidInputsReturnError )
 }
 
 
+/**
+ * Colour-to-alpha: converting the background colour makes matching pixels transparent,
+ * with pixels in between getting a proportional opacity.
+ */
+BOOST_AUTO_TEST_CASE( ColourToAlphaMakesBackgroundTransparent )
+{
+    wxImage img( 3, 1 );
+    img.SetRGB( 0, 0, 255, 255, 255 ); // closest to the background -> transparent
+    img.SetRGB( 1, 0, 42, 42, 42 );    // in between -> semi-transparent
+    img.SetRGB( 2, 0, 0, 0, 0 );       // farthest from the background
+
+    ConvertColourToAlphaInPlace( img, wxColour( 255, 255, 255 ) );
+
+    BOOST_REQUIRE( img.HasAlpha() );
+
+    // White is now fully transparent, black stays fully opaque.
+    BOOST_CHECK_EQUAL( static_cast<int>( img.GetAlpha( 0, 0 ) ), 0 );
+    BOOST_CHECK_EQUAL( static_cast<int>( img.GetAlpha( 1, 0 ) ), 255 - 42 );
+    BOOST_CHECK_EQUAL( static_cast<int>( img.GetAlpha( 2, 0 ) ), 255 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

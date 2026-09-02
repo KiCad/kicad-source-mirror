@@ -21,6 +21,7 @@
 
 #include <tl/expected.hpp>
 
+#include <wx/colour.h>
 #include <wx/image.h>
 
 
@@ -52,3 +53,19 @@
  *         an error message when the inputs are not valid images of the same size.
  */
 tl::expected<wxImage, std::string> CreateAlphaImageFromTwoRenders( const wxImage& aOnWhite, const wxImage& aOnBlack );
+
+
+/**
+ * Apply the "Color to Alpha" algorithm in place, converting \a aColour to transparent.
+ *
+ * Pixels matching \a aColour exactly become fully transparent; pixels further from it
+ * keep proportionally more opacity. An alpha channel is added if the image does not
+ * have one.
+ *
+ * This is a port of the GEGL color-to-alpha operation used by GIMP; see the
+ * implementation file for the full attribution.
+ *
+ * @param aImage the image to modify in place.
+ * @param aColour the colour to make transparent.
+ */
+void ConvertColourToAlphaInPlace( wxImage& aImage, const wxColour& aColour );

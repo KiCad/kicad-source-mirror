@@ -26,6 +26,7 @@
 #include <math/util.h>    // for KiROUND
 #include <memory>         // for make_unique, unique_ptr
 #include <plotters/plotter.h>
+#include <render_utils.h>
 #include <richio.h>
 #include <wx/bitmap.h>    // for wxBitmap
 #include <wx/mstream.h>
@@ -539,132 +540,6 @@ void BITMAP_BASE::invertImageInPlace( wxImage& aImage )
 }
 
 
-/*
- * This is the "Color to Alpha" algorithm from GIMP (the GEGL color-to-alpha
- * operation).
- *
- * The implementation of this is taken with love from GEGL's
- * operations/common-gpl3+/color-to-alpha.c, which is licensed under the GNU
- * General Public License version 3 or later (GPLv3+). The original code is
- * Copyright (C) 1995-2017 by the GIMP Development Team and is licensed under the
- * GPLv3+.
- *
- * A pixel that:
- *   - matches the background colour within the transparency threshold becomes
- *     fully transparent
- *   - has channels that are further than the opacity threshold stays fully opaque
- *   - everything in between gets a proportional opacity.
- */
-void BITMAP_BASE::convertColourToAlphaInPlace( wxImage& aImage, const wxColour& aColour )
-{
-    /*
-     * Thresholds of 0 and 1 are the GIMP defaults, which means a linear
-     * scale from full match = transparent to full mismatch = opaque.
-     * These can be made into parameters if needed, but for now they are hard-coded.
-     */
-    constexpr float TRANSPARENCY_THRESHOLD = 0.0f;
-    constexpr float OPACITY_THRESHOLD = 1.0f;
-
-    const int w = aImage.GetWidth();
-    const int h = aImage.GetHeight();
-
-    if( w == 0 || h == 0 )
-        return;
-
-    aImage.UnShare();
-
-    if( !aImage.HasAlpha() )
-        aImage.InitAlpha();
-
-    unsigned char* rgb = aImage.GetData();
-    unsigned char* alpha = aImage.GetAlpha();
-
-    // Background colour to make transparent, as float components in [0, 1].
-    const float bgRgb[3] = {
-        static_cast<float>( aColour.Red() ) / 255.0f,
-        static_cast<float>( aColour.Green() ) / 255.0f,
-        static_cast<float>( aColour.Blue() ) / 255.0f,
-    };
-
-    constexpr float EPSILON = 0.00001f;
-    const float     transparencyThreshold = TRANSPARENCY_THRESHOLD + EPSILON;
-    const float     opacityThreshold = OPACITY_THRESHOLD - EPSILON;
-
-    for( int y = 0; y < h; ++y )
-    {
-        for( int x = 0; x < w; ++x )
-        {
-            // Index into the RGB array for the pixel
-            const int pos = ( y * w + x ) * 3;
-            const int alphaPos = y * w + x;
-
-            const float srcRgb[3] = {
-                static_cast<float>( rgb[pos] ) / 255.0f,
-                static_cast<float>( rgb[pos + 1] ) / 255.0f,
-                static_cast<float>( rgb[pos + 2] ) / 255.0f,
-            };
-            const float srcAlpha = static_cast<float>( alpha[alphaPos] ) / 255.0f;
-
-            // The largest fraction of the pixel that each channel can keep
-            // without leaving its colour range, and the channel distance that
-            // produced it.
-            float outAlpha = 0.0f;
-            float dist = 0.0f;
-
-            for( int i = 0; i < 3; ++i )
-            {
-                const float channelDist = std::fabs( srcRgb[i] - bgRgb[i] );
-
-                float a = 0.0f;
-
-                if( channelDist < transparencyThreshold )
-                {
-                    a = 0.0f;
-                }
-                else if( channelDist > opacityThreshold )
-                {
-                    a = 1.0f;
-                }
-                else if( srcRgb[i] < bgRgb[i] )
-                {
-                    const float factor = std::min( opacityThreshold, bgRgb[i] ) - transparencyThreshold;
-                    a = ( channelDist - transparencyThreshold ) / factor;
-                }
-                else
-                {
-                    const float factor = std::min( opacityThreshold, 1.0f - bgRgb[i] ) - transparencyThreshold;
-                    a = ( channelDist - transparencyThreshold ) / factor;
-                }
-
-                // Choose the largest (most opaque) alpha value from the three channels
-                if( a > outAlpha )
-                {
-                    outAlpha = a;
-                    dist = channelDist;
-                }
-            }
-
-            // If the new alpha is nonzero, remove the background contribution from the colour and
-            // un-premultiply the colour by the new alpha. Otherwise leave the colour as-is.
-            if( outAlpha > EPSILON )
-            {
-                const float ratio = transparencyThreshold / dist;
-                const float alphaInv = 1.0f / outAlpha;
-
-                for( int i = 0; i < 3; ++i )
-                {
-                    const float c = bgRgb[i] + ( srcRgb[i] - bgRgb[i] ) * ratio;
-                    const int   value = KiROUND( ( c + ( srcRgb[i] - c ) * alphaInv ) * 255.0f );
-                    rgb[pos + i] = std::clamp( value, 0, 255 );
-                }
-            }
-
-            alpha[alphaPos] = std::clamp( KiROUND( srcAlpha * outAlpha * 255.0f ), 0, 255 );
-        }
-    }
-}
-
-
 void BITMAP_BASE::Mirror( FLIP_DIRECTION aFlipDirection )
 {
     if( m_image )
@@ -736,8 +611,8 @@ void BITMAP_BASE::ConvertColourToAlpha( const wxColour& aColour )
 {
     if( m_image )
     {
-        convertColourToAlphaInPlace( *m_image, aColour );
-        convertColourToAlphaInPlace( *m_originalImage, aColour );
+        ConvertColourToAlphaInPlace( *m_image, aColour );
+        ConvertColourToAlphaInPlace( *m_originalImage, aColour );
         m_bitmapDirty = true;
         m_imageData.Clear();
         m_imageId = KIID();
