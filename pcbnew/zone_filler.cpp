@@ -2749,20 +2749,24 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    if( aIncludeZoneClearances )
+    if( auto it = m_zoneIndex.find( aLayer ); it != m_zoneIndex.end() )
     {
-        if( auto it = m_zoneIndex.find( aLayer ); it != m_zoneIndex.end() )
+        // The knockout reach is the wider of the two windows tested above.
+        queryIndex( it->second, zoneKnockoutQueryBox( aZone ), hits );
+
+        for( const INDEXED_ITEM& hit : hits )
         {
-            // The knockout reach is the wider of the two windows tested above.
-            queryIndex( it->second, zoneKnockoutQueryBox( aZone ), hits );
+            if( checkForCancel( m_progressReporter ) )
+                return;
 
-            for( const INDEXED_ITEM& hit : hits )
-            {
-                if( checkForCancel( m_progressReporter ) )
-                    return;
+            ZONE* otherZone = static_cast<ZONE*>( hit.m_item );
 
-                knockoutZoneClearance( static_cast<ZONE*>( hit.m_item ) );
-            }
+            // Zone knockouts are deferred past the min-width cycle so the refill can cache the
+            // fill before them. A teardrop cannot move, so knock it out here with the tracks.
+            if( !aIncludeZoneClearances && !otherZone->IsTeardropArea() )
+                continue;
+
+            knockoutZoneClearance( otherZone );
         }
     }
 
@@ -2799,6 +2803,10 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
             [&]( ZONE* aKnockout )
             {
                 if( aKnockout->GetIsRuleArea() )
+                    return;
+
+                // buildCopperItemClearances() knocks teardrops out before the min-width cycle.
+                if( aKnockout->IsTeardropArea() )
                     return;
 
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
@@ -4538,7 +4546,8 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
                 if( !otherZone->GetLayerSet().test( aLayer ) )
                     return;
 
-                if( otherZone->IsTeardropArea() && otherZone->SameNet( aZone ) )
+                // The cached pre-knockout fill already holds the teardrop knockouts.
+                if( otherZone->IsTeardropArea() )
                     return;
 
                 if( !otherZone->HigherPriority( aZone ) )
