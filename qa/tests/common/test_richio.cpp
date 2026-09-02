@@ -110,23 +110,34 @@ BOOST_AUTO_TEST_CASE( PrettifyLongQuotedString )
 
 
 /**
- * Indent must emit exactly the whitespace the nesting Print() overload prepends, since callers
- * that only want the indentation use it in place of a Print() with an empty format string.
+ * Indent writes two spaces per nesting level and nothing else.  Callers that want only the
+ * indentation, such as DSN::WIRE::Format re-indenting a closing paren, depend on the exact width.
  */
-BOOST_AUTO_TEST_CASE( IndentMatchesNestedPrint )
+BOOST_AUTO_TEST_CASE( IndentWritesTwoSpacesPerLevel )
 {
     for( int nestLevel : { 0, 1, 2, 7 } )
     {
-        STRING_FORMATTER indented;
-        STRING_FORMATTER printed;
+        STRING_FORMATTER fmt;
 
-        const int written = indented.Indent( nestLevel );
+        const int written = fmt.Indent( nestLevel );
 
-        printed.Print( nestLevel, "%s", "" );
-
-        BOOST_CHECK_EQUAL( indented.GetString(), printed.GetString() );
-        BOOST_CHECK_EQUAL( written, static_cast<int>( indented.GetString().size() ) );
+        BOOST_CHECK_EQUAL( fmt.GetString(), std::string( 2 * nestLevel, ' ' ) );
+        BOOST_CHECK_EQUAL( written, 2 * nestLevel );
     }
+}
+
+
+/**
+ * The nesting Print() overload prepends that same indentation to its formatted output.
+ */
+BOOST_AUTO_TEST_CASE( NestedPrintIndentsItsOutput )
+{
+    STRING_FORMATTER fmt;
+
+    const int written = fmt.Print( 3, "(net %d)", 42 );
+
+    BOOST_CHECK_EQUAL( fmt.GetString(), "      (net 42)" );
+    BOOST_CHECK_EQUAL( written, 14 );
 }
 
 
