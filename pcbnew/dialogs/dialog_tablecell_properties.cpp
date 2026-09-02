@@ -389,8 +389,10 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
         if( !m_mixedItalicSetting )
             cell->SetItalic( m_italic->IsChecked() );
 
-        if( m_cbKnockout->Get3StateValue() != wxCHK_UNDETERMINED )
-            cell->SetIsKnockout( m_cbKnockout->IsChecked() );
+        if( m_cbKnockout->Get3StateValue() == wxCHK_CHECKED )
+            cell->SetIsKnockout( true );
+        else if( m_cbKnockout->Get3StateValue() == wxCHK_UNCHECKED )
+            cell->SetIsKnockout( false );
 
         if( m_fontCtrl->HaveFontSelection() )
             cell->SetFont( m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) );
