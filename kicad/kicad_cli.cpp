@@ -661,7 +661,11 @@ void PGM_KICAD::OnPgmExit()
     GetKiCadThreadPool().purge();
     GetKiCadThreadPool().wait();
 
-    Kiway.OnKiwayEnd();
+    for( KIWAY::FACE_T face : { KIWAY::FACE_SCH, KIWAY::FACE_PCB } )
+    {
+        if( KIFACE* kiface = Kiway.KiFACE( face, false ) )
+            kiface->Reset();
+    }
 
     if( m_settings_manager && m_settings_manager->IsOK() )
     {
@@ -677,6 +681,13 @@ void PGM_KICAD::OnPgmExit()
         }
     }
 
+    Kiway.OnKiwayEnd();
+
+    // Release module settings while the settings manager is still available.
+    Destroy();
+
+    m_settings_manager.reset();
+
     if( GetGitBackend() )
     {
         GetGitBackend()->Shutdown();
@@ -684,8 +695,6 @@ void PGM_KICAD::OnPgmExit()
         SetGitBackend( nullptr );
     }
 
-    // Destroy PGM_KICAD earlier than wxApp and static destruction would
-    Destroy();
 }
 
 

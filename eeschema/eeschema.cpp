@@ -568,6 +568,8 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
 void IFACE::Reset()
 {
+    if( m_jobHandler )
+        m_jobHandler->ClearCachedSchematic();
 }
 
 

@@ -197,6 +197,9 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
 
 void EESCHEMA_JOBS_HANDLER::ClearCachedSchematic()
 {
+    if( m_cliSchematic )
+        m_cliSchematic->SetProject( nullptr );
+
     delete m_cliSchematic;
     m_cliSchematic = nullptr;
 }
