@@ -1539,12 +1539,11 @@ void DIALOG_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     m_filter->ChangeValue( getDataModel()->GetFilter() );
     m_filterScope->SetSelection( static_cast<int>( getDataModel()->GetFilterScope() ) );
 
-    SetupAllColumnProperties();
-
-    // This will rebuild all rows and columns in the model such that the order
-    // and labels are right, then we refresh the shown grid data to match
+    // Rebuild before sizing columns so their widths account for the current row data.
     getDataModel()->EnableRebuilds();
     getDataModel()->RebuildRows();
+
+    SetupAllColumnProperties();
 
     if( m_nbPages->GetSelection() == 1 )
         PreviewRefresh();
