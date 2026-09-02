@@ -1023,17 +1023,26 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 // Skip the O(N²) dependency scan when the caller guarantees no deps.
                 if( aAnyDependencies )
                 {
-                    for( size_t i = 0; i < count; ++i )
-                    {
-                        for( size_t j = 0; j < count; ++j )
-                        {
-                            if( i == j )
-                                continue;
+                    // Two items can only depend on each other on a shared layer.
+                    std::map<PCB_LAYER_ID, std::vector<size_t>> byLayer;
 
-                            if( aHasDependency( aFillItems[j], aFillItems[i] ) )
+                    for( size_t i = 0; i < count; ++i )
+                        byLayer[aFillItems[i].second].push_back( i );
+
+                    for( const auto& [layer, items] : byLayer )
+                    {
+                        for( size_t i : items )
+                        {
+                            for( size_t j : items )
                             {
-                                successors[i].push_back( j );
-                                inDegree[j].fetch_add( 1, std::memory_order_relaxed );
+                                if( i == j )
+                                    continue;
+
+                                if( aHasDependency( aFillItems[j], aFillItems[i] ) )
+                                {
+                                    successors[i].push_back( j );
+                                    inDegree[j].fetch_add( 1, std::memory_order_relaxed );
+                                }
                             }
                         }
                     }

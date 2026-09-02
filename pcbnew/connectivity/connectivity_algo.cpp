@@ -767,29 +767,56 @@ void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_
 
     m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );
 
+    // Bucket the zone items in one pass. A search per zone layer is O(zone layers x items).
+    // Keep the cluster and item order, which sets the recorded outline order.
+    struct ZONE_CLUSTER_ITEM
+    {
+        CN_ZONE_LAYER* m_item;
+        bool           m_orphaned;
+    };
+
+    std::unordered_map<const BOARD_ITEM*, std::map<PCB_LAYER_ID, std::vector<ZONE_CLUSTER_ITEM>>>
+            zoneItems;
+
+    for( const auto& [ zone, zoneIslands ] : aMap )
+        zoneItems[zone];
+
+    for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
+    {
+        const bool orphaned = cluster->IsOrphaned();
+
+        for( CN_ITEM* item : *cluster )
+        {
+            auto it = zoneItems.find( item->Parent() );
+
+            if( it != zoneItems.end() )
+            {
+                it->second[item->GetBoardLayer()].push_back(
+                        { static_cast<CN_ZONE_LAYER*>( item ), orphaned } );
+            }
+        }
+    }
+
     for( auto& [ zone, zoneIslands ] : aMap )
     {
+        const auto& layerItems = zoneItems[zone];
+
         for( auto& [ layer, layerIslands ] : zoneIslands )
         {
             if( zone->GetFilledPolysList( layer )->IsEmpty() )
                 continue;
 
-            bool notInConnectivity = true;
+            auto layerIt = layerItems.find( layer );
+            bool notInConnectivity = layerIt == layerItems.end();
 
-            for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
+            if( !notInConnectivity )
             {
-                for( CN_ITEM* item : *cluster )
+                for( const ZONE_CLUSTER_ITEM& entry : layerIt->second )
                 {
-                    if( item->Parent() == zone && item->GetBoardLayer() == layer )
-                    {
-                        CN_ZONE_LAYER* z = static_cast<CN_ZONE_LAYER*>( item );
-                        notInConnectivity = false;
-
-                        if( cluster->IsOrphaned() )
-                            layerIslands.m_IsolatedOutlines.push_back( z->SubpolyIndex() );
-                        else if( z->HasSingleConnection() )
-                            layerIslands.m_SingleConnectionOutlines.push_back( z->SubpolyIndex() );
-                    }
+                    if( entry.m_orphaned )
+                        layerIslands.m_IsolatedOutlines.push_back( entry.m_item->SubpolyIndex() );
+                    else if( entry.m_item->HasSingleConnection() )
+                        layerIslands.m_SingleConnectionOutlines.push_back( entry.m_item->SubpolyIndex() );
                 }
             }
 
