@@ -94,11 +94,9 @@ public:
     template <class Visitor>
     void Query( const BOX2I& aBounds, int aStartLayer, int aEndLayer, Visitor& aVisitor ) const
     {
-        int start_layer = aStartLayer == B_Cu ? INT_MAX : aStartLayer;
-        int end_layer = aEndLayer == B_Cu ? INT_MAX : aEndLayer;
-
-        const int mmin[3] = { start_layer, aBounds.GetX(), aBounds.GetY() };
-        const int mmax[3] = { end_layer, aBounds.GetRight(), aBounds.GetBottom() };
+        // The layer bounds are copper layer ordinals, the same as Insert() stores.
+        const int mmin[3] = { aStartLayer, aBounds.GetX(), aBounds.GetY() };
+        const int mmax[3] = { aEndLayer, aBounds.GetRight(), aBounds.GetBottom() };
 
         m_tree.Search( mmin, mmax, aVisitor );
     }

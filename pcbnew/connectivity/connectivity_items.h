@@ -162,16 +162,12 @@ public:
      */
     void SetLayers( int aStartLayer, int aEndLayer )
     {
-        // B_Cu is nominally layer 2 but we reset it to INT_MAX to ensure that it is
-        // always greater than any other layer in the RTree
-        if( aStartLayer == B_Cu )
-            aStartLayer = std::numeric_limits<int>::max();
-
-        if( aEndLayer == B_Cu )
-            aEndLayer = std::numeric_limits<int>::max();
-
-        m_start_layer = aStartLayer;
-        m_end_layer = aEndLayer;
+        // Copper layer ids do not run in stack order, so store the ordinal.  The R-tree keys
+        // on this, and an ordinal keeps a through item's span 31 wide rather than INT_MAX
+        // wide.  A span that large overflows the int64 volume the tree splits on, which
+        // wrecks the split and leaves queries walking most of the tree.
+        m_start_layer = static_cast<int>( CopperLayerToOrdinal( ToLAYER_ID( aStartLayer ) ) );
+        m_end_layer = static_cast<int>( CopperLayerToOrdinal( ToLAYER_ID( aEndLayer ) ) );
     }
 
     /**
@@ -187,27 +183,27 @@ public:
 
     /**
      * Return the item's layer, for single-layered items only.
-     * N.B. This should only be used inside connectivity as B_Cu
-     * is mapped to a large int
+     * N.B. This is a copper layer ordinal and not a PCB_LAYER_ID.
      */
     virtual int Layer() const
     {
         return StartLayer();
     }
 
-    /**
-     * When using CN_ITEM layers to compare against board items,
-     * use this function which correctly remaps the B_Cu layer
-    */
-    PCB_LAYER_ID GetBoardLayer() const
+    ///< Convert a copper layer ordinal back to the board layer it stands for.
+    static PCB_LAYER_ID BoardLayerFromOrdinal( int aOrdinal )
     {
-        int layer = Layer();
+        if( aOrdinal <= 0 )
+            return F_Cu;
 
-        if( layer == std::numeric_limits<int>::max() )
-            layer = B_Cu;
+        if( aOrdinal >= MAX_CU_LAYERS - 1 )
+            return B_Cu;
 
-        return ToLAYER_ID( layer );
+        return ToLAYER_ID( B_Cu + 2 * aOrdinal );
     }
+
+    ///< @return the board layer of a single-layered item.
+    PCB_LAYER_ID GetBoardLayer() const { return BoardLayerFromOrdinal( Layer() ); }
 
     const BOX2I& BBox()
     {

@@ -283,44 +283,32 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
     if( m_itemList.IsDirty() )
     {
-        std::vector<std::future<size_t>> returns( dirtyItems.size() );
-
         // Collect deferred net code changes to avoid data races in parallel search.
         // Vias connected to zones have their net codes updated after all parallel work
         // completes, but only if the via has no higher-priority connections (tracks, pads).
         std::vector<std::pair<CN_ITEM*, int>> deferredNetCodes;
         std::mutex deferredNetCodesMutex;
 
-        for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
+        // One task per item made the queue and its futures cost more than the searches they
+        // carried, so hand the pool blocks of items instead.
+        auto returns = tp.submit_loop( size_t( 0 ), dirtyItems.size(),
+                [&dirtyItems, this, &deferredNetCodes, &deferredNetCodesMutex]( const size_t ii )
+                {
+                    if( m_progressReporter && m_progressReporter->IsCancelled() )
+                        return;
+
+                    CN_VISITOR visitor( dirtyItems[ii], &deferredNetCodes, &deferredNetCodesMutex );
+                    m_itemList.FindNearby( dirtyItems[ii], visitor );
+
+                    if( m_progressReporter )
+                        m_progressReporter->AdvanceProgress();
+                } );
+
+        // Here we balance returns with a 250ms timeout to allow UI updating
+        while( !returns.wait_for( std::chrono::milliseconds( 250 ) ) )
         {
-            returns[ii] = tp.submit_task(
-                    [&dirtyItems, ii, this, &deferredNetCodes, &deferredNetCodesMutex] () ->size_t
-                    {
-                        if( m_progressReporter && m_progressReporter->IsCancelled() )
-                            return 0;
-
-                        CN_VISITOR visitor( dirtyItems[ii], &deferredNetCodes, &deferredNetCodesMutex );
-                        m_itemList.FindNearby( dirtyItems[ii], visitor );
-
-                        if( m_progressReporter )
-                            m_progressReporter->AdvanceProgress();
-
-                        return 1;
-                    } );
-        }
-
-        for( const std::future<size_t>& ret : returns )
-        {
-            // Here we balance returns with a 250ms timeout to allow UI updating
-            std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
-
-            while( status != std::future_status::ready )
-            {
-                if( m_progressReporter )
-                    m_progressReporter->KeepRefreshing();
-
-                status = ret.wait_for( std::chrono::milliseconds( 250 ) );
-            }
+            if( m_progressReporter )
+                m_progressReporter->KeepRefreshing();
         }
 
         // Apply deferred zone net changes, but only for vias that have no non-zone

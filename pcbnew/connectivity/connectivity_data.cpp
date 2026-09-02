@@ -443,12 +443,8 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
         {
             CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected );
 
-            // lyIdx is compatible with StartLayer() and EndLayer() notation in CN_ITEM
-            // items, where B_Cu is set to INT_MAX (std::numeric_limits<int>::max())
-            int lyIdx = aLayer;
-
-            if( aLayer == B_Cu )
-                lyIdx = std::numeric_limits<int>::max();
+            // StartLayer() and EndLayer() are copper layer ordinals, not PCB_LAYER_IDs
+            int lyIdx = static_cast<int>( CopperLayerToOrdinal( ToLAYER_ID( aLayer ) ) );
 
             if( connected->Valid()
                     && connected->StartLayer() <= lyIdx && connected->EndLayer() >= lyIdx
