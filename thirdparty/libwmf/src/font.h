@@ -99,6 +99,7 @@ static wmfMapping PSFontMap[13] = {
  */
 static wmfFontMap WMFFontMap[] = {
 { "Courier",		"Courier",     "Courier-Oblique",   "Courier-Bold",   "Courier-BoldOblique"   },
+{ "Calibri",		"Helvetica",   "Helvetica-Oblique", "Helvetica-Bold", "Helvetica-BoldOblique" },
 { "Helvetica",		"Helvetica",   "Helvetica-Oblique", "Helvetica-Bold", "Helvetica-BoldOblique" },
 { "Modern",		"Courier",     "Courier-Oblique",   "Courier-Bold",   "Courier-BoldOblique"   },
 { "Monotype Corsiva",	"Courier",     "Courier-Oblique",   "Courier-Bold",   "Courier-BoldOblique"   },
@@ -111,6 +112,7 @@ static wmfFontMap WMFFontMap[] = {
  */
 static wmfMapping SubFontMap[] = {
 	{	"Arial",		"Helvetica", ft_encoding_adobe_standard	},
+	{	"Calibri",		"Helvetica", ft_encoding_adobe_standard	},
 	{	"Courier",		"Courier", ft_encoding_adobe_standard	},
 	{	"Fixed",		"Courier", ft_encoding_adobe_standard	},
 	{	"Helvetica",		"Helvetica", ft_encoding_adobe_standard	},

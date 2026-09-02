@@ -17,3 +17,4 @@ Local changes:
 - Scale the text width-to-height ratio by the mapping mode's x/y pixel scale, and
   track a zero Width field so those fonts keep the face's own aspect.  Resolves the
   upstream FIXME in player/meta.h.
+- Map Calibri onto Helvetica in the font and substitute tables.
