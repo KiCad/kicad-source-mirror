@@ -91,6 +91,12 @@ void SCH_EDIT_FRAME::LoadDrawingSheet()
 
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
 
+    if( settings.m_SchDrawingSheetFileName == wxS( "empty.kicad_wks" ) )
+    {
+        DS_DATA_MODEL::GetTheInstance().SetEmptyLayout();
+        return;
+    }
+
     wxString msg;
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadFromName( settings.m_SchDrawingSheetFileName,

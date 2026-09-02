@@ -286,6 +286,12 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
     if( !aDrawingSheetOverride.IsEmpty() && loadSheet( aDrawingSheetOverride ) )
         return;
 
+    if( aSch->Settings().m_SchDrawingSheetFileName == wxS( "empty.kicad_wks" ) )
+    {
+        DS_DATA_MODEL::GetTheInstance().SetEmptyLayout();
+        return;
+    }
+
     // no override or failed override continues here
     loadSheet( aSch->Settings().m_SchDrawingSheetFileName );
 }
@@ -1640,6 +1646,11 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
         }
 
         schematic->SetSheetNumberAndCount();
+
+        // Imported schematics preserve their source page frame as schematic graphics.
+        // Match the editor import path and suppress KiCad's default frame/title block.
+        schematic->Settings().m_SchDrawingSheetFileName = wxS( "empty.kicad_wks" );
+        DS_DATA_MODEL::GetTheInstance().SetEmptyLayout();
 
         if( SCH_SHEET* topSheet = schematic->GetTopLevelSheet() )
             topSheet->SetFileName( outputFn.GetFullName() );
