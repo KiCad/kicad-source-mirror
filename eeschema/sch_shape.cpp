@@ -367,7 +367,14 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( aBackground && IsHatchedFill() )
     {
         for( int ii = 0; ii < GetHatching().OutlineCount(); ++ii )
-            aPlotter->PlotPoly( GetHatching().COutline( ii ), FILL_T::FILLED_SHAPE, 0, nullptr );
+        {
+            SHAPE_LINE_CHAIN outline = GetHatching().COutline( ii );
+
+            for( int jj = 0; jj < outline.PointCount(); ++jj )
+                outline.SetPoint( jj, renderSettings->TransformCoordinate( outline.CPoint( jj ) ) + aOffset );
+
+            aPlotter->PlotPoly( outline, FILL_T::FILLED_SHAPE, 0, nullptr );
+        }
 
         return;
     }
