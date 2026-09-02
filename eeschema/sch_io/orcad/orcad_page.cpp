@@ -1079,7 +1079,16 @@ ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
     uint16_t instanceCount = stream.ReadU16();
 
     for( uint16_t i = 0; i < instanceCount; i++ )
+    {
+        // The block length is unknown. Stop here to avoid a false error in the next record.
+        if( stream.PeekU8() == ORCAD_ST_DRAWN_INSTANCE )
+        {
+            THROW_IO_ERRORF( wxS( "v2 page: hierarchical block instance at 0x%zx is not "
+                                  "decoded for this format version" ), stream.GetOffset() );
+        }
+
         page.instances.push_back( v2PlacedInstance( stream, aStrings ) );
+    }
 
     uint16_t portCount = stream.ReadU16();
 

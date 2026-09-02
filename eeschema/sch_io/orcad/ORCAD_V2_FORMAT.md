@@ -128,6 +128,38 @@ Median coverage is 56% of `Cache` bytes.  The unclaimed remainder is the per-ent
 and tails, not unrecognised graphics: the primitive grammar never needed a version 2
 variant.
 
+## Hierarchical block instances (not yet decoded)
+
+53 of the 188 legacy designs have more than one schematic folder.  Most import (flat),
+but a design whose root page carries the hierarchical blocks loses that page entirely,
+because the page reader parses every entry of the placed-instance list with the part
+grammar and type 12 (`ORCAD_ST_DRAWN_INSTANCE`) has a different body.
+
+Partial decode of one block, from `M523XEVB-SCH-ORCAD/SCH-20380.DSN`, page
+`Hierarchical Interconnects`, offset `0x55e1`:
+
+```
+u8   typeId = 12
+i16  propCount = 0
+u32  ?                          0x000000c3
+u32  ?                          0x0012f340
+u16  ?                          0
+u32  ?                          0x002ab2ed
+u16  ?                          0x0013
+i16  ?  x4                      819, 165, 1103, 820      bounding box, order unconfirmed
+i16  ?  x2                      40, 48
+u16  ?                          0x000c
+u16  displayPropCount = 2       followed by 2 x 15-byte type-39 display properties
+     ... 25 undecoded bytes ...
+u16  portCount = 21
+port*                           type 26/27 records, identical to v2SymbolPin
+```
+
+The ports are ordinary `v2SymbolPin` records (`/RSTOUT`, `ETH_CLK`, `EMDIO`, `EMDC`,
+`/IRQ[7:1]`, `ECOL`), so only the 25-byte block header between the display properties and
+the port count is still unknown.  Until it is, the reader stops at the block and says so
+rather than desynchronising into a misleading stream error further down the page.
+
 ## Not yet examined
 
 * The `Packages/<name>` and `Symbols/<name>` storages of a version 2 `.DSN`.  The plugin
