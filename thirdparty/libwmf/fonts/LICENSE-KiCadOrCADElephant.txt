@@ -1,0 +1,9 @@
+KiCad OrCAD Elephant Black is a renamed copy of Noto Serif Display Black.
+Only the font-family and related name-table entries were changed.
+
+Copyright 2010, 2012-2020 Google Inc.
+Copyright 2015-2020 Google LLC.
+
+This font is licensed under the SIL Open Font License, Version 1.1. The
+license text is included in the font metadata and reproduced in
+LICENSE-SourceSans.txt in this directory.
