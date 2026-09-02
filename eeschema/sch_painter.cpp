@@ -580,36 +580,6 @@ static bool isFieldsLayer( int aLayer )
 }
 
 
-static BOX2I GetTextExtents( const wxString& aText, const VECTOR2D& aPosition, KIFONT::FONT& aFont,
-                             const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
-{
-    const VECTOR2I extents = aFont.StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth,
-                                                         aAttrs.m_Bold, aAttrs.m_Italic, aFontMetrics );
-    BOX2I box( aPosition, VECTOR2I( extents.x, aAttrs.m_Size.y ) );
-
-    switch( aAttrs.m_Halign )
-    {
-    case GR_TEXT_H_ALIGN_LEFT:                                                        break;
-    case GR_TEXT_H_ALIGN_CENTER:        box.SetX( box.GetX() - box.GetWidth() / 2 );  break;
-    case GR_TEXT_H_ALIGN_RIGHT:         box.SetX( box.GetX() - box.GetWidth() );      break;
-    case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) ); break;
-    }
-
-    switch( aAttrs.m_Valign )
-    {
-    case GR_TEXT_V_ALIGN_TOP:                                                         break;
-    case GR_TEXT_V_ALIGN_CENTER:        box.SetY( box.GetY() - box.GetHeight() / 2 ); break;
-    case GR_TEXT_V_ALIGN_BOTTOM:        box.SetY( box.GetY() - box.GetHeight() );     break;
-    case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) ); break;
-    }
-
-    box.Normalize(); // Make h and v sizes always >= 0
-    box = box.GetBoundingBoxRotated( aPosition, aAttrs.m_Angle );
-
-    return box;
-}
-
-
 static void drawText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
                       const TEXT_ATTRIBUTES& aAttrs, float aShadowWidth, const KIFONT::METRICS& aFontMetrics,
                       std::optional<VECTOR2I> aMousePos = std::nullopt, wxString* aActiveUrl = nullptr )
@@ -1480,7 +1450,11 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                         }
 
                         // Draw braces around the text
-                        drawBracesAroundText( aGal, lines, startPos, lineSpacing, aAttrs );
+                        if( aRenderTextAsBitmap )
+                            drawBracesAroundTextBitmap( aGal, lines, startPos, lineSpacing, aAttrs );
+                        else
+                            drawBracesAroundText( aGal, lines, startPos, lineSpacing, aAttrs );
+
                         return;
                     }
                 }
