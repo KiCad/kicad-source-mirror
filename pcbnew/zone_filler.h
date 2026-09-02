@@ -26,12 +26,14 @@
 #include <mutex>
 #include <vector>
 #include <zone.h>
+#include <geometry/rtree/packed_rtree.h>
 #include <geometry/shape_poly_set.h>
 #include <hash_128.h>
 
 class PROGRESS_REPORTER;
 class BOARD;
 class COMMIT;
+class FOOTPRINT;
 class SHAPE_LINE_CHAIN;
 
 
@@ -89,6 +91,11 @@ private:
      * for the reach rationale.
      */
     bool zoneKnockoutMayInteract( const ZONE* aZone, const ZONE* aKnockout ) const;
+
+    /**
+     * A window that holds every zone zoneKnockoutMayInteract() can accept for aZone.
+     */
+    BOX2I zoneKnockoutQueryBox( const ZONE* aZone ) const;
 
     void subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                       SHAPE_POLY_SET& aRawFill );
@@ -213,17 +220,47 @@ private:
     bool refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys,
                               const FillSnapshot* aSnapshot = nullptr );
 
+    /**
+     * An item in one of the fill indexes.  m_seq is the item position in board order; query
+     * results are sorted back into it because the boolean engine depends on contour order.
+     */
+    struct INDEXED_ITEM
+    {
+        BOARD_ITEM* m_item;
+        FOOTPRINT*  m_owner;    // the footprint that owns a graphic item, else nullptr
+        int         m_seq;
+    };
+
+    using ITEM_RTREE = KIRTREE::PACKED_RTREE<INDEXED_ITEM, int, 2>;
+
+    /// Collect the items whose bounding box overlaps aBBox, in board order.
+    static void queryIndex( const ITEM_RTREE& aIndex, const BOX2I& aBBox,
+                            std::vector<INDEXED_ITEM>& aResult );
+
+    /// Index the static board items once per fill.
+    void buildItemIndexes();
+
     BOARD*                m_board;
     SHAPE_POLY_SET        m_boardOutline;       // the board outlines, if exists
     bool                  m_brdOutlinesValid;   // true if m_boardOutline is well-formed
     COMMIT*               m_commit;
     PROGRESS_REPORTER*    m_progressReporter;
 
+    // Rebuilt per fill, then read-only, so the fill workers can share them.
+    ITEM_RTREE                         m_graphicIndex;    // fp reference/value/graphics + drawings
+    ITEM_RTREE                         m_footprintIndex;  // footprints, for the courtyard knockout
+    ITEM_RTREE                         m_padIndex;
+    std::map<PCB_LAYER_ID, ITEM_RTREE> m_trackIndex;
+    std::map<PCB_LAYER_ID, ITEM_RTREE> m_zoneIndex;
+
     int                   m_maxError;
     int                   m_worstClearance;
 
     // ExtraClearance plus max approximation error, part of the knockout reach
     int                   m_zoneKnockoutSlack;
+
+    // Largest corner radius on the board. Widens the knockout query window.
+    int                   m_maxZoneCornerRadius;
 
     bool                  m_debugZoneFiller;
 

@@ -378,7 +378,8 @@ ZONE_FILLER::ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit ) :
         m_brdOutlinesValid( false ),
         m_commit( aCommit ),
         m_progressReporter( nullptr ),
-        m_worstClearance( 0 )
+        m_worstClearance( 0 ),
+        m_maxZoneCornerRadius( 0 )
 {
     m_maxError = aBoard->GetDesignSettings().m_MaxError;
     m_zoneKnockoutSlack = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance ) + m_maxError;
@@ -396,6 +397,135 @@ ZONE_FILLER::~ZONE_FILLER()
 void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
+}
+
+
+void ZONE_FILLER::queryIndex( const ITEM_RTREE& aIndex, const BOX2I& aBBox,
+                              std::vector<INDEXED_ITEM>& aResult )
+{
+    aResult.clear();
+
+    if( aIndex.empty() )
+        return;
+
+    const int min[2] = { aBBox.GetLeft(), aBBox.GetTop() };
+    const int max[2] = { aBBox.GetRight(), aBBox.GetBottom() };
+
+    auto visitor =
+            [&]( const INDEXED_ITEM& aEntry ) -> bool
+            {
+                aResult.push_back( aEntry );
+                return true;
+            };
+
+    aIndex.Search( min, max, visitor );
+
+    std::sort( aResult.begin(), aResult.end(),
+               []( const INDEXED_ITEM& a, const INDEXED_ITEM& b )
+               {
+                   return a.m_seq < b.m_seq;
+               } );
+}
+
+
+void ZONE_FILLER::buildItemIndexes()
+{
+    auto add =
+            []( ITEM_RTREE::Builder& aBuilder, BOARD_ITEM* aItem, FOOTPRINT* aOwner, int aSeq )
+            {
+                BOX2I     bbox = aItem->GetBoundingBox();
+                const int min[2] = { bbox.GetLeft(), bbox.GetTop() };
+                const int max[2] = { bbox.GetRight(), bbox.GetBottom() };
+
+                aBuilder.Add( min, max, INDEXED_ITEM{ aItem, aOwner, aSeq } );
+            };
+
+    m_maxZoneCornerRadius = 0;
+
+    forEachBoardAndFootprintZone( m_board,
+                                  [&]( ZONE* zone )
+                                  {
+                                      m_maxZoneCornerRadius = std::max( m_maxZoneCornerRadius,
+                                                                        (int) zone->GetCornerRadius() );
+                                  } );
+
+    ITEM_RTREE::Builder graphics;
+    ITEM_RTREE::Builder footprints;
+    ITEM_RTREE::Builder pads;
+    int                 seq = 0;
+    int                 padSeq = 0;
+
+    // Keep the walk order of the linear scans this replaces.
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        add( footprints, footprint, footprint, seq );
+        add( graphics, &footprint->Reference(), footprint, seq++ );
+        add( graphics, &footprint->Value(), footprint, seq++ );
+
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+            add( graphics, item, footprint, seq++ );
+
+        for( PAD* pad : footprint->Pads() )
+            add( pads, pad, footprint, padSeq++ );
+    }
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+        add( graphics, item, nullptr, seq++ );
+
+    m_graphicIndex = graphics.Build();
+    m_footprintIndex = footprints.Build();
+    m_padIndex = pads.Build();
+
+    LSET boardCu = LSET::AllCuMask( m_board->GetCopperLayerCount() );
+
+    std::map<PCB_LAYER_ID, ITEM_RTREE::Builder> tracks;
+    seq = 0;
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        LSET trackLayers = track->GetLayerSet() & boardCu;
+
+        for( PCB_LAYER_ID layer : trackLayers )
+            add( tracks[layer], track, nullptr, seq );
+
+        seq++;
+    }
+
+    m_trackIndex.clear();
+
+    for( auto& [layer, builder] : tracks )
+        m_trackIndex.emplace( layer, builder.Build() );
+
+    std::map<PCB_LAYER_ID, ITEM_RTREE::Builder> zones;
+    seq = 0;
+
+    forEachBoardAndFootprintZone( m_board,
+                                  [&]( ZONE* zone )
+                                  {
+                                      for( PCB_LAYER_ID layer : zone->GetLayerSet() )
+                                          add( zones[layer], zone, nullptr, seq );
+
+                                      seq++;
+                                  } );
+
+    m_zoneIndex.clear();
+
+    for( auto& [layer, builder] : zones )
+        m_zoneIndex.emplace( layer, builder.Build() );
+}
+
+
+BOX2I ZONE_FILLER::zoneKnockoutQueryBox( const ZONE* aZone ) const
+{
+    // The candidate corner radius is unknown here, so use the board maximum.
+    int reach = m_worstClearance + m_zoneKnockoutSlack + aZone->GetMinThickness();
+
+    if( m_board->GetDesignSettings().m_ZoneKeepExternalFillets )
+        reach += (int) aZone->GetCornerRadius() + m_maxZoneCornerRadius;
+
+    BOX2I bbox = aZone->GetBoundingBox();
+    bbox.Inflate( reach );
+    return bbox;
 }
 
 
@@ -527,6 +657,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
         footprint->BuildCourtyardCaches();
         footprint->BuildNetTieCache();
     }
+
+    buildItemIndexes();
 
     LSET boardCuMask = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
@@ -1849,10 +1981,18 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
     std::unordered_set<PAD_KNOCKOUT_KEY, PAD_KNOCKOUT_KEY_HASH> processedPads;
     std::unordered_set<VIA_KNOCKOUT_KEY, VIA_KNOCKOUT_KEY_HASH> processedVias;
 
-    for( FOOTPRINT* footprint : m_board->Footprints() )
+    // Inflating the query window is equivalent to inflating each pad box below.
+    BOX2I padQueryBox = aZone->GetBoundingBox();
+    padQueryBox.Inflate( m_worstClearance );
+
+    std::vector<INDEXED_ITEM> padHits;
+    queryIndex( m_padIndex, padQueryBox, padHits );
+
+    for( const INDEXED_ITEM& padHit : padHits )
     {
-        for( PAD* pad : footprint->Pads() )
         {
+            PAD* pad = static_cast<PAD*>( padHit.m_item );
+
             // NPTH pads with a drill hole affect all copper layers even when they carry no copper
             // on that layer (e.g. layers limited to "*.Mask"). The physical hole still requires
             // a clearance knockout, so skip only pads that are truly irrelevant to this layer.
@@ -2351,8 +2491,15 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    for( PCB_TRACK* track : m_board->Tracks() )
+    std::vector<INDEXED_ITEM> hits;
+
+    if( auto trackIt = m_trackIndex.find( aLayer ); trackIt != m_trackIndex.end() )
+        queryIndex( trackIt->second, zone_boundingbox, hits );
+
+    for( const INDEXED_ITEM& hit : hits )
     {
+        PCB_TRACK* track = static_cast<PCB_TRACK*>( hit.m_item );
+
         if( !track->IsOnLayer( aLayer ) )
             continue;
 
@@ -2453,56 +2600,79 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        knockoutCourtyardClearance( footprint );
-        knockoutGraphicClearance( &footprint->Reference() );
-        knockoutGraphicClearance( &footprint->Value() );
+    // Don't knock out holes for graphic items which implement a net-tie to the zone's net
+    // on the layer being filled.  Net-tie footprints are rare, so build the set on first use.
+    std::map<FOOTPRINT*, std::set<PAD*>> netTiePads;
 
-        std::set<PAD*> allowedNetTiePads;
-
-        // Don't knock out holes for graphic items which implement a net-tie to the zone's net
-        // on the layer being filled.
-        if( footprint->IsNetTie() )
-        {
-            for( PAD* pad : footprint->Pads() )
+    auto allowedNetTiePads =
+            [&]( FOOTPRINT* aFootprint ) -> const std::set<PAD*>&
             {
-                bool sameNet = pad->GetNetCode() == aZone->GetNetCode();
+                auto [it, inserted] = netTiePads.try_emplace( aFootprint );
 
-                if( !aZone->IsTeardropArea() && aZone->GetNetCode() == 0 )
-                    sameNet = false;
+                if( !inserted || !aFootprint->IsNetTie() )
+                    return it->second;
 
-                if( sameNet )
+                for( PAD* pad : aFootprint->Pads() )
                 {
-                    if( pad->IsOnLayer( aLayer ) )
-                        allowedNetTiePads.insert( pad );
+                    bool sameNet = pad->GetNetCode() == aZone->GetNetCode();
 
-                    for( PAD* other : footprint->GetNetTiePads( pad ) )
+                    if( !aZone->IsTeardropArea() && aZone->GetNetCode() == 0 )
+                        sameNet = false;
+
+                    if( sameNet )
                     {
-                        if( other->IsOnLayer( aLayer ) )
-                            allowedNetTiePads.insert( other );
+                        if( pad->IsOnLayer( aLayer ) )
+                            it->second.insert( pad );
+
+                        for( PAD* other : aFootprint->GetNetTiePads( pad ) )
+                        {
+                            if( other->IsOnLayer( aLayer ) )
+                                it->second.insert( other );
+                        }
                     }
                 }
-            }
+
+                return it->second;
+            };
+
+    std::vector<INDEXED_ITEM> gfxHits;
+    std::vector<INDEXED_ITEM> fpHits;
+
+    queryIndex( m_graphicIndex, zone_boundingbox, gfxHits );
+    queryIndex( m_footprintIndex, zone_boundingbox, fpHits );
+
+    // Merge back into the original order: each footprint courtyard, then its graphics.
+    size_t gi = 0;
+    size_t fi = 0;
+
+    while( gi < gfxHits.size() || fi < fpHits.size() )
+    {
+        if( checkForCancel( m_progressReporter ) )
+            return;
+
+        if( fi < fpHits.size() && ( gi >= gfxHits.size() || fpHits[fi].m_seq <= gfxHits[gi].m_seq ) )
+        {
+            knockoutCourtyardClearance( static_cast<FOOTPRINT*>( fpHits[fi++].m_item ) );
+            continue;
         }
 
-        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        const INDEXED_ITEM& hit = gfxHits[gi++];
+        BOARD_ITEM*         item = hit.m_item;
+        FOOTPRINT*          owner = hit.m_owner;
+        bool                skipItem = false;
+
+        // Only a footprint's own graphics can form the net tie.
+        if( owner && item != &owner->Reference() && item != &owner->Value()
+                && item->IsOnLayer( aLayer ) )
         {
-            if( checkForCancel( m_progressReporter ) )
-                return;
+            const std::set<PAD*>& allowed = allowedNetTiePads( owner );
 
-            BOX2I itemBBox = item->GetBoundingBox();
-
-            if( !zone_boundingbox.Intersects( itemBBox ) )
-                continue;
-
-            bool skipItem = false;
-
-            if( item->IsOnLayer( aLayer ) )
+            if( !allowed.empty() )
             {
+                BOX2I                  itemBBox = item->GetBoundingBox();
                 std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape();
 
-                for( PAD* pad : allowedNetTiePads )
+                for( PAD* pad : allowed )
                 {
                     if( pad->GetBoundingBox().Intersects( itemBBox )
                             && pad->GetEffectiveShape( aLayer )->Collide( itemShape.get() ) )
@@ -2512,18 +2682,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     }
                 }
             }
-
-            if( !skipItem )
-                knockoutGraphicClearance( item );
         }
-    }
 
-    for( BOARD_ITEM* item : m_board->Drawings() )
-    {
-        if( checkForCancel( m_progressReporter ) )
-            return;
-
-        knockoutGraphicClearance( item );
+        if( !skipItem )
+            knockoutGraphicClearance( item );
     }
 
     // Add non-connected zone clearances
@@ -2563,22 +2725,17 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
     if( aIncludeZoneClearances )
     {
-        for( ZONE* otherZone : m_board->Zones() )
+        if( auto it = m_zoneIndex.find( aLayer ); it != m_zoneIndex.end() )
         {
-            if( checkForCancel( m_progressReporter ) )
-                return;
+            // The knockout reach is the wider of the two windows tested above.
+            queryIndex( it->second, zoneKnockoutQueryBox( aZone ), hits );
 
-            knockoutZoneClearance( otherZone );
-        }
-
-        for( FOOTPRINT* footprint : m_board->Footprints() )
-        {
-            for( ZONE* otherZone : footprint->Zones() )
+            for( const INDEXED_ITEM& hit : hits )
             {
                 if( checkForCancel( m_progressReporter ) )
                     return;
 
-                knockoutZoneClearance( otherZone );
+                knockoutZoneClearance( static_cast<ZONE*>( hit.m_item ) );
             }
         }
     }
@@ -2637,7 +2794,14 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
                 }
             };
 
-    forEachBoardAndFootprintZone( m_board, knockoutZoneClearance );
+    if( auto it = m_zoneIndex.find( aLayer ); it != m_zoneIndex.end() )
+    {
+        std::vector<INDEXED_ITEM> hits;
+        queryIndex( it->second, zoneKnockoutQueryBox( aZone ), hits );
+
+        for( const INDEXED_ITEM& hit : hits )
+            knockoutZoneClearance( static_cast<ZONE*>( hit.m_item ) );
+    }
 
     aHoles.Simplify();
 }
@@ -2662,19 +2826,25 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
                     appendZoneOutlineWithoutArcs( aKnockout, knockouts );
             };
 
-    forEachBoardAndFootprintZone(
-            m_board,
-            [&]( ZONE* otherZone )
-            {
-                // Don't use `HigherPriority()` here because we only want explicitly-higher
-                // priorities, not equal-priority zones.
-                bool higherPrioritySameNet =
-                        otherZone->SameNet( aZone )
-                        && otherZone->GetAssignedPriority() > aZone->GetAssignedPriority();
+    if( auto it = m_zoneIndex.find( aLayer ); it != m_zoneIndex.end() )
+    {
+        std::vector<INDEXED_ITEM> hits;
+        queryIndex( it->second, zoneBBox, hits );
 
-                if( higherPrioritySameNet && !otherZone->IsTeardropArea() )
-                    collectZoneOutline( otherZone );
-            } );
+        for( const INDEXED_ITEM& hit : hits )
+        {
+            ZONE* otherZone = static_cast<ZONE*>( hit.m_item );
+
+            // Don't use `HigherPriority()` here because we only want explicitly-higher
+            // priorities, not equal-priority zones.
+            bool higherPrioritySameNet =
+                    otherZone->SameNet( aZone )
+                    && otherZone->GetAssignedPriority() > aZone->GetAssignedPriority();
+
+            if( higherPrioritySameNet && !otherZone->IsTeardropArea() )
+                collectZoneOutline( otherZone );
+        }
+    }
 
     if( knockouts.OutlineCount() > 0 )
         aRawFill.BooleanSubtract( knockouts );
@@ -4416,7 +4586,14 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
                 }
             };
 
-    forEachBoardAndFootprintZone( m_board, collectZoneKnockout );
+    if( auto it = m_zoneIndex.find( aLayer ); it != m_zoneIndex.end() )
+    {
+        std::vector<INDEXED_ITEM> hits;
+        queryIndex( it->second, zoneKnockoutQueryBox( aZone ), hits );
+
+        for( const INDEXED_ITEM& hit : hits )
+            collectZoneKnockout( static_cast<ZONE*>( hit.m_item ) );
+    }
 
     // Refill output is a pure function of the (fill-constant) pre-knockout fill and these
     // knockouts; hash them and skip the subtract + min-width prune below on a cache hit.
