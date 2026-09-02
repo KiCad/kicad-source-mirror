@@ -1127,6 +1127,14 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
         m_progressReporter->KeepRefreshing();
     }
 
+    // The islands map is what re-adds a zone to the connectivity graph, and teardrops are no
+    // longer in it. Their fill is final here, so one pass keeps the graph correct.
+    for( ZONE* zone : aZones )
+    {
+        if( zone->IsTeardropArea() )
+            connectivity->Update( zone );
+    }
+
     connectivity->SetProgressReporter( m_progressReporter );
     connectivity->FillIsolatedIslandsMap( isolatedIslandsMap );
     connectivity->SetProgressReporter( nullptr );
@@ -1332,6 +1340,11 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 for( ZONE* zone : aZones )
                 {
                     if( zone->GetIsRuleArea() )
+                        continue;
+
+                    // Nothing that can shrink outranks a teardrop, so no refill frees space for
+                    // one. A refill would restore the fill it already has.
+                    if( zone->IsTeardropArea() )
                         continue;
 
                     if( !zone->GetLayerSet().test( changedLayer ) )
