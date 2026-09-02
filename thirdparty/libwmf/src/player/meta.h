@@ -2768,7 +2768,7 @@ static int meta_text (wmfAPI* API,wmfRecord* Record)
 		if (length == 0) break;
 
 		bbox_info = ParU16 (API,Record,3);
-		if (bbox_info)
+		if (bbox_info & (ETO_OPAQUE | ETO_CLIPPED))
 		{	if (Record->size < (unsigned long)(8 + (length + 1) / 2))
 			{	WMF_ERROR (API,"Record is too short!");
 				API->err = wmf_E_BadFormat;
