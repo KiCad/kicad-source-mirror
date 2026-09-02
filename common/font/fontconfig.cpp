@@ -240,10 +240,10 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString& aFontName, wxString&
     FcPattern* pat = FcPatternCreate();
 
     if( aBold )
-        FcPatternAddString( pat, FC_STYLE, (const FcChar8*) "Bold" );
+        FcPatternAddInteger( pat, FC_WEIGHT, FC_WEIGHT_BOLD );
 
     if( aItalic )
-        FcPatternAddString( pat, FC_STYLE, (const FcChar8*) "Italic" );
+        FcPatternAddInteger( pat, FC_SLANT, FC_SLANT_ITALIC );
 
     FcPatternAddString( pat, FC_FAMILY, (FcChar8*) fcBuffer.data() );
 

@@ -152,4 +152,20 @@ BOOST_AUTO_TEST_CASE( InterlineIgnoresFaceHeightRatio )
 }
 
 
+// A fallback family must retain requested styles even when the selected face has a different
+// family name.
+BOOST_AUTO_TEST_CASE( MissingFamilyFallbackRetainsStyles )
+{
+    KIFONT::FONT* font = KIFONT::FONT::GetFont( wxT( "KiCad Definitely Missing Font Family" ),
+                                                true, true );
+
+    BOOST_REQUIRE( font );
+    BOOST_REQUIRE( font->IsOutline() );
+
+    KIFONT::OUTLINE_FONT* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
+    BOOST_CHECK( outline->IsBold() || outline->IsFakeBold() );
+    BOOST_CHECK( outline->IsItalic() || outline->IsFakeItalic() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
