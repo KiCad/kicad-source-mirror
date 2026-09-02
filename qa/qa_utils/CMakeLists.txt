@@ -68,3 +68,15 @@ target_include_directories( qa_utils PUBLIC
 target_compile_definitions( qa_utils PUBLIC
     BOOST_TEST_DYN_LINK
 )
+
+# Some tests need to reach into the native Gtk/Gdk headers on GTK builds.
+# Examples:
+#  - test_print_to_file.cpp reaches into GtkPrintSettings to reset the print-to-file setting
+#  - CanDoDisplayTests needs GdkDisplay
+if( KICAD_WX_PORT STREQUAL "gtk" )
+    find_package( PkgConfig REQUIRED )
+    pkg_check_modules( GTK3 REQUIRED gtk+-3.0 )
+    target_include_directories( qa_utils
+        SYSTEM PUBLIC ${GTK3_INCLUDE_DIRS}
+    )
+endif()

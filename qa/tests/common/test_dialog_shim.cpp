@@ -19,31 +19,23 @@
 
 #define BOOST_TEST_NO_MAIN
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <dialog_shim.h>
 
 #include <wx/display.h>
 #include <wx/textctrl.h>
 
-// Creating windows requires a display connection, which headless CI does not have
-static bool IsDisplayAvailable()
-{
-#ifdef __WXGTK__
-    return wxDisplay::GetCount() > 0;
-#endif
-    return true;
-}
 
 #define SKIP_IF_HEADLESS()                                                                                             \
     do                                                                                                                 \
     {                                                                                                                  \
-        if( !IsDisplayAvailable() )                                                                                    \
+        if( !KI_TEST::CanDoDisplayTests() )                                                                            \
         {                                                                                                              \
             BOOST_TEST_MESSAGE( "Skipping test - no display available" );                                              \
             return;                                                                                                    \
         }                                                                                                              \
     } while( 0 )
-
 
 namespace
 {

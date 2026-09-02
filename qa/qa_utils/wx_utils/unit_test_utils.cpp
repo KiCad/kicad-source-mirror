@@ -19,12 +19,14 @@
 
 #include "qa_utils/wx_utils/unit_test_utils.h"
 
-#include <exception>
-#include <filesystem>
 #include <fstream>
 
 #include <wx/filename.h>
 #include <wx/utils.h>
+
+#if defined( __WXGTK__ )
+#include <gdk/gdk.h> // For gdk_display_get_default()
+#endif
 
 std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aPt )
 {
@@ -129,4 +131,20 @@ void KI_TEST::SetMockConfigDir()
             wxSetEnv( wxT( "KICAD_INHIBIT_SETTINGS_WRITES" ), wxT( "1" ) );
         }
     }
+}
+
+
+bool KI_TEST::CanDoDisplayTests()
+{
+    // On Linux/GTK, clipboard operations require a display connection.
+    // This function checks if a display is available without spamming GDK-Critical errors
+    // like wxDisplay::GetCount() does
+    // (see https://github.com/wxWidgets/wxWidgets/issues/26967)
+#ifdef __WXGTK__
+    GdkDisplay* display = gdk_display_get_default();
+    return display != nullptr;
+#endif
+
+    // Other platforms don't have this restriction, so always return true
+    return true;
 }

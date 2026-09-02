@@ -243,14 +243,6 @@ if( TARGET api_schema_build_copy )
     add_dependencies( qa_common api_schema_build_copy )
 endif()
 
-# The print-to-file reset test reaches into the native GtkPrintSettings on GTK builds.
-# The GTK3 libraries themselves propagate transitively through kiplatform.
-if( KICAD_WX_PORT STREQUAL "gtk" )
-    find_package( PkgConfig REQUIRED )
-    pkg_check_modules( GTK3 REQUIRED gtk+-3.0 )
-    target_include_directories( qa_common SYSTEM PRIVATE ${GTK3_INCLUDE_DIRS} )
-endif()
-
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/kicad

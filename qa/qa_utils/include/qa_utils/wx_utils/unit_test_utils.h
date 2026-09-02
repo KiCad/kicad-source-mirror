@@ -362,6 +362,16 @@ std::vector<uint8_t> LoadBinaryData( const std::string& aFilePath, std::optional
 
 void SetMockConfigDir();
 
+
+/**
+ * Some tests on some platforms require a display connection to run.
+ * This function checks if a display is available on those platforms
+ * (GTK).
+ *
+ * On platforms where this doesn't matter, this always returns true.
+ */
+bool CanDoDisplayTests();
+
 } // namespace KI_TEST
 
 #endif // UNIT_TEST_UTILS__H
