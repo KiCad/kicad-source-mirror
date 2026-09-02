@@ -20,6 +20,7 @@
 #ifndef RTREE_NODE_H
 #define RTREE_NODE_H
 
+#include <algorithm>
 #include <atomic>
 #include <bitset>
 #include <cassert>
@@ -104,15 +105,21 @@ inline uint64_t HilbertND2D( int aOrder, const uint32_t aCoords[NUMDIMS] )
     {
         // For 3+ dimensions, fall back to Z-order (Morton) curve interleaving.
         // This gives good-enough clustering without the complexity of generalized
-        // Hilbert in N dimensions. Each coordinate contributes aOrder bits, interleaved.
+        // Hilbert in N dimensions.
+        //
+        // A 64-bit index holds only 64/NUMDIMS bits per axis.  Interleaving every bit
+        // shifts the significant ones back out of the index, so take the high bits.
+        const int bits = std::min( aOrder, 64 / NUMDIMS );
+        const int drop = aOrder - bits;
+
         uint64_t d = 0;
 
-        for( int bit = aOrder - 1; bit >= 0; --bit )
+        for( int bit = bits - 1; bit >= 0; --bit )
         {
             for( int dim = NUMDIMS - 1; dim >= 0; --dim )
             {
                 d <<= 1;
-                d |= ( aCoords[dim] >> bit ) & 1;
+                d |= ( aCoords[dim] >> ( bit + drop ) ) & 1;
             }
         }
 

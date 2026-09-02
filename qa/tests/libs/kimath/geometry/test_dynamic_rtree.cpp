@@ -737,6 +737,114 @@ BOOST_AUTO_TEST_CASE( BulkLoadCorrectnessVsBruteForce )
 }
 
 
+// The 3D index used for connectivity leans on the generic Morton branch of the curve.
+// A 64-bit index holds only 21 bits per axis in 3D, so it has to carry the most
+// significant bits of each coordinate; carrying the low ones orders on noise.
+BOOST_AUTO_TEST_CASE( MortonIndexOrdersOnHighBits )
+{
+    const uint32_t origin[3] = { 0, 0, 0 };
+
+    for( int dim = 0; dim < 3; ++dim )
+    {
+        uint32_t topBitSet[3] = { 0, 0, 0 };
+        topBitSet[dim] = 0x80000000u;
+
+        BOOST_CHECK( HilbertND2D<3>( 32, origin ) != HilbertND2D<3>( 32, topBitSet ) );
+    }
+
+    // Halves of the coordinate space must not interleave along the curve
+    const uint32_t nearHalf[3] = { 0x10000000u, 0x20000000u, 0x30000000u };
+    const uint32_t farHalf[3] = { 0x90000000u, 0xA0000000u, 0xB0000000u };
+
+    BOOST_CHECK( HilbertND2D<3>( 32, nearHalf ) < HilbertND2D<3>( 32, farHalf ) );
+}
+
+
+// The connectivity index is a 3D tree, and 3D takes the generic branch of both the
+// space-filling curve and the bulk packing loop.
+BOOST_AUTO_TEST_CASE( BulkLoad3DCorrectnessVsBruteForce )
+{
+    const int                          N = 4000;
+    std::mt19937                       rng( 12345 );
+    std::uniform_int_distribution<int> coordDist( 0, 100000 );
+    std::uniform_int_distribution<int> sizeDist( 100, 5000 );
+    std::uniform_int_distribution<int> layerDist( 0, 31 );
+
+    struct ITEM
+    {
+        int min[3];
+        int max[3];
+        int id;
+    };
+
+    std::vector<ITEM> items( N );
+
+    for( int i = 0; i < N; ++i )
+    {
+        items[i].min[0] = layerDist( rng );
+        items[i].max[0] = items[i].min[0] + layerDist( rng ) / 8;
+        items[i].min[1] = coordDist( rng );
+        items[i].min[2] = coordDist( rng );
+        items[i].max[1] = items[i].min[1] + sizeDist( rng );
+        items[i].max[2] = items[i].min[2] + sizeDist( rng );
+        items[i].id = i;
+    }
+
+    DYNAMIC_RTREE<int, int, 3>                          tree;
+    std::vector<DYNAMIC_RTREE<int, int, 3>::BULK_ENTRY> entries;
+    entries.reserve( N );
+
+    for( const ITEM& item : items )
+    {
+        entries.push_back( { { item.min[0], item.min[1], item.min[2] },
+                             { item.max[0], item.max[1], item.max[2] },
+                             item.id } );
+    }
+
+    tree.BulkLoad( entries );
+
+    BOOST_CHECK_EQUAL( tree.size(), static_cast<size_t>( N ) );
+
+    // Every entry must survive the load exactly once
+    std::set<int> allViaIter;
+
+    for( int val : tree )
+        allViaIter.insert( val );
+
+    BOOST_CHECK_EQUAL( allViaIter.size(), static_cast<size_t>( N ) );
+
+    const int QUERIES = 200;
+
+    for( int q = 0; q < QUERIES; ++q )
+    {
+        int qMin[3] = { layerDist( rng ), coordDist( rng ), coordDist( rng ) };
+        int qMax[3] = { qMin[0] + 2, qMin[1] + sizeDist( rng ) * 5, qMin[2] + sizeDist( rng ) * 5 };
+
+        std::set<int> expected;
+
+        for( const ITEM& item : items )
+        {
+            bool overlaps = true;
+
+            for( int d = 0; d < 3; ++d )
+            {
+                if( item.min[d] > qMax[d] || item.max[d] < qMin[d] )
+                    overlaps = false;
+            }
+
+            if( overlaps )
+                expected.insert( item.id );
+        }
+
+        std::set<int> actual;
+        auto collect = [&actual]( int val ) { actual.insert( val ); return true; };
+        tree.Search( qMin, qMax, collect );
+
+        BOOST_CHECK( actual == expected );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( BulkLoadThenInsertAndRemove )
 {
     const int N = 500;

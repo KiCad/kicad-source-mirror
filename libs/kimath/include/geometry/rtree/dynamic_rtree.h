@@ -219,18 +219,17 @@ public:
      *
      * Any existing tree contents are discarded.
      *
-     * @param aEntries  Entries to load. The vector may be reordered.
+     * @param aEntries  Entries to load.
      */
     void BulkLoad( std::vector<BULK_ENTRY>& aEntries )
     {
-        removeAllNodes( m_root );
-        m_root = nullptr;
-        m_count = 0;
-
         if( aEntries.empty() )
+        {
+            removeAllNodes( m_root );
+            m_root = nullptr;
+            m_count = 0;
             return;
-
-        m_count = aEntries.size();
+        }
 
         // Find global bounds for Hilbert normalization
         ELEMTYPE globalMin[NUMDIMS], globalMax[NUMDIMS];
@@ -264,31 +263,37 @@ public:
                 range[d] = 1.0;
         }
 
-        std::sort( aEntries.begin(), aEntries.end(),
-                   [&]( const BULK_ENTRY& a, const BULK_ENTRY& b )
-                   {
-                       uint32_t coordsA[NUMDIMS], coordsB[NUMDIMS];
+        // Derive each curve index once.  A comparator that derives them re-derives both
+        // operands on every comparison, which for three axes costs more than the load
+        size_t n = aEntries.size();
+        std::vector<std::pair<uint64_t, size_t>> order( n );
 
-                       for( int d = 0; d < NUMDIMS; ++d )
-                       {
-                           double centerA = ( static_cast<double>( a.min[d] ) + a.max[d] ) / 2.0;
-                           double centerB = ( static_cast<double>( b.min[d] ) + b.max[d] ) / 2.0;
+        for( size_t i = 0; i < n; ++i )
+        {
+            const BULK_ENTRY& entry = aEntries[i];
+            uint32_t          coords[NUMDIMS];
 
-                           coordsA[d] = static_cast<uint32_t>(
-                                   ( ( centerA - globalMin[d] ) / range[d] )
-                                   * static_cast<double>( UINT32_MAX ) );
-                           coordsB[d] = static_cast<uint32_t>(
-                                   ( ( centerB - globalMin[d] ) / range[d] )
-                                   * static_cast<double>( UINT32_MAX ) );
-                       }
+            for( int d = 0; d < NUMDIMS; ++d )
+            {
+                double center = ( static_cast<double>( entry.min[d] ) + entry.max[d] ) / 2.0;
 
-                       return HilbertND2D<NUMDIMS>( 32, coordsA )
-                              < HilbertND2D<NUMDIMS>( 32, coordsB );
-                   } );
+                coords[d] = static_cast<uint32_t>( ( ( center - globalMin[d] ) / range[d] )
+                                                   * static_cast<double>( UINT32_MAX ) );
+            }
+
+            order[i] = { HilbertND2D<NUMDIMS>( 32, coords ), i };
+        }
+
+        std::sort( order.begin(), order.end() );
+
+        // Drop the old tree only after the last large allocation, so a caller that runs out
+        // of memory keeps its index instead of an empty tree that reports a size
+        removeAllNodes( m_root );
+        m_root = nullptr;
+        m_count = n;
 
         // Pack entries into leaf nodes
         std::vector<NODE*> currentLevel;
-        size_t n = aEntries.size();
         currentLevel.reserve( ( n + MAXNODES - 1 ) / MAXNODES );
 
         for( size_t i = 0; i < n; i += MAXNODES )
@@ -299,7 +304,7 @@ public:
 
             for( int j = 0; j < cnt; ++j )
             {
-                const auto& entry = aEntries[i + j];
+                const auto& entry = aEntries[order[i + j].second];
                 leaf->SetChildBounds( j, entry.min, entry.max );
                 leaf->SetInsertBounds( j, entry.min, entry.max );
                 leaf->data[j] = entry.data;
