@@ -77,6 +77,9 @@ SCH_IO* SYMBOL_LIBRARY_ADAPTER::schplugin( const LIB_DATA* aRow )
 void SYMBOL_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString& aUri )
 {
     wxArrayString dummyList;
+
+    std::lock_guard pluginGuard( pluginMutex( aLib->row->Nickname() ) );
+
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
     schplugin( aLib )->EnumerateSymbolLib( dummyList, aUri, &options );
 }
@@ -85,6 +88,8 @@ void SYMBOL_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString& a
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 {
     aLib->status.load_status = LOAD_STATUS::LOADING;
+
+    std::lock_guard pluginGuard( pluginMutex( aLib->row->Nickname() ) );
 
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
 
@@ -109,6 +114,8 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::CheckLibrary( LIB_DATA* aLib )
 {
     aLib->status.load_status = LOAD_STATUS::LOADING;
+
+    std::lock_guard pluginGuard( pluginMutex( aLib->row->Nickname() ) );
 
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
 
@@ -185,6 +192,9 @@ std::vector<LIB_SYMBOL*> SYMBOL_LIBRARY_ADAPTER::GetSymbols( const wxString& aNi
         return symbols;
 
     const LIB_DATA* lib = *maybeLib;
+
+    std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
     std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
     if( aType == SYMBOL_TYPE::POWER_ONLY )
@@ -218,6 +228,9 @@ std::vector<wxString> SYMBOL_LIBRARY_ADAPTER::GetSymbolNames( const wxString& aN
     if( std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname ) )
     {
         const LIB_DATA* lib = *maybeLib;
+
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
         if( aType == SYMBOL_TYPE::POWER_ONLY )
@@ -245,6 +258,8 @@ LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname, const
 {
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
     {
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         if( LIB_SYMBOL* symbol = schplugin( *lib )->LoadSymbol( getUri( ( *lib )->row ), aName ) )
         {
             LIB_ID id = symbol->GetLibId();

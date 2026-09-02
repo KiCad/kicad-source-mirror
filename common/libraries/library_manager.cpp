@@ -50,19 +50,19 @@ struct LIBRARY_MANAGER_INTERNALS
 };
 
 
-std::mutex& LIBRARY_MANAGER_ADAPTER::pluginMutex( const wxString& aNickname )
+std::recursive_mutex& LIBRARY_MANAGER_ADAPTER::pluginMutex( const wxString& aNickname )
 {
     // Leaked and never erased: must outlive every caller including static teardown, and stable node
     // addresses keep the returned reference valid.
-    static std::mutex&                                      registryLock = *new std::mutex;
-    static std::map<wxString, std::unique_ptr<std::mutex>>& registry =
-            *new std::map<wxString, std::unique_ptr<std::mutex>>;
+    static std::mutex&                                                registryLock = *new std::mutex;
+    static std::map<wxString, std::unique_ptr<std::recursive_mutex>>& registry =
+            *new std::map<wxString, std::unique_ptr<std::recursive_mutex>>;
 
-    std::lock_guard              guard( registryLock );
-    std::unique_ptr<std::mutex>& slot = registry[aNickname];
+    std::lock_guard                        guard( registryLock );
+    std::unique_ptr<std::recursive_mutex>& slot = registry[aNickname];
 
     if( !slot )
-        slot = std::make_unique<std::mutex>();
+        slot = std::make_unique<std::recursive_mutex>();
 
     return *slot;
 }

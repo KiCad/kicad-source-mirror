@@ -253,7 +253,9 @@ protected:
     /// and tree refreshes. Keyed by nickname, a safe over-approximation of the real resource (the
     /// plugin instance): sharing one mutex across two distinct resources can only over-serialize,
     /// never under-protect. Static because global-library plugins are shared process-wide.
-    static std::mutex& pluginMutex( const wxString& aNickname );
+    /// Recursive because database/http libraries resolve references back through the adapter into
+    /// other plugins' LoadSymbol paths while already holding their own mutex.
+    static std::recursive_mutex& pluginMutex( const wxString& aNickname );
 
     LIBRARY_MANAGER& m_manager;
 
