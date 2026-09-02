@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-01 19:52+0000\n"
+"PO-Revision-Date: 2026-09-03 06:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -2649,19 +2649,17 @@ msgid "Configured design block libraries:"
 msgstr "Caricamento librerie blocchi progetto"
 
 #: common/design_block_library_adapter.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "and %d more"
-msgstr "%s, %s e %d di più"
+msgstr "e %d di più"
 
 #: common/design_block_library_adapter.cpp:247
-#, fuzzy
 msgid "project"
-msgstr "Progetto"
+msgstr "progetto"
 
 #: common/design_block_library_adapter.cpp:247
-#, fuzzy
 msgid "global"
-msgstr "Globale"
+msgstr "globale"
 
 #: common/design_block_library_adapter.cpp:262
 #, fuzzy, c-format
