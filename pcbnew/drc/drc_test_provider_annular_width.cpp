@@ -169,11 +169,12 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     }
                 }
 
+                BOX2I                   padBBox = pad->GetBoundingBox( aLayer );
                 std::vector<const PAD*> overlappingSameNumPads;
 
                 for( const PAD* p : sameNumPads )
                 {
-                    if( p->IsOnLayer( aLayer ) && pad->GetBoundingBox().Intersects( p->GetBoundingBox() ) )
+                    if( p->IsOnLayer( aLayer ) && padBBox.Intersects( p->GetBoundingBox( aLayer) ) )
                         overlappingSameNumPads.push_back( p );
                 }
 
@@ -185,14 +186,14 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
                 for( const PAD* p : overlappingSameNumPads )
                 {
-                    if( p->GetBoundingBox().Contains( pad->GetBoundingBox() ) )
+                    if( p->GetBoundingBox( aLayer ).Contains( padBBox ) )
                         overlapCoversThisPad = true;
 
                     if( p->HasHole() )
                     {
                         BOX2I holeBBox = p->GetEffectiveHoleShape( aLayer, ANNULAR_WIDTH_CONSTRAINT )->BBox();
 
-                        if( pad->GetBoundingBox().Intersects( holeBBox ) )
+                        if( padBBox.Intersects( holeBBox ) )
                             overlapHasConstrainingHole = true;
                     }
 

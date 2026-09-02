@@ -414,7 +414,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
 
             for( PAD* pad : allowedNetTiePads )
             {
-                if( pad->GetBoundingBox().Intersects( itemBBox )
+                if( pad->GetBoundingBox( aLayer ).Intersects( itemBBox )
                         && pad->GetEffectiveShape( aLayer )->Collide( itemShape.get() ) )
                 {
                     return;
