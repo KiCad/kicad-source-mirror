@@ -35,6 +35,7 @@
 #include <kiway.h>
 #include <sch_field.h>
 #include <sch_group.h>
+#include <common.h>
 #include <connection_graph.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
@@ -161,6 +162,8 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<HighlightNets, HighlightNetsResponse>( &API_HANDLER_SCH::handleHighlightNets );
     registerHandler<GetSchematicVariants, SchematicVariantsResponse>(
             &API_HANDLER_SCH::handleGetSchematicVariants );
+    registerHandler<ExpandTextVariables, ExpandTextVariablesResponse>(
+            &API_HANDLER_SCH::handleExpandTextVariables );
 }
 
 
@@ -2215,4 +2218,48 @@ API_HANDLER_SCH::handleGetSchematicVariants(
     response.set_current_variant( schematic()->GetCurrentVariant().ToUTF8() );
 
     return response;
+}
+
+
+HANDLER_RESULT<ExpandTextVariablesResponse>
+API_HANDLER_SCH::handleExpandTextVariables( const HANDLER_CONTEXT<ExpandTextVariables>& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    SCH_SHEET_PATH path = m_context->GetCurrentSheet().value_or( *schematic()->Hierarchy().begin() );
+
+    if( aCtx.Request.document().has_sheet_path() )
+    {
+        KIID_PATH kiidPath = UnpackSheetPath( aCtx.Request.document().sheet_path() );
+
+        if( std::optional<SCH_SHEET_PATH> resolvedPath = schematic()->Hierarchy().GetSheetPathByKIIDPath( kiidPath ) )
+        {
+            path = *resolvedPath;
+        }
+    }
+
+    ExpandTextVariablesResponse reply;
+
+    std::function<bool( wxString* )> textResolver =
+        [&]( wxString* token ) -> bool
+        {
+            return schematic()->ResolveTextVar( &path, token, 0 );
+        };
+
+    PROJECT& project = m_context->Prj();
+
+    for( const std::string& textMsg : aCtx.Request.text() )
+    {
+        wxString text = ExpandTextVars( wxString::FromUTF8( textMsg ), &textResolver );
+
+        if( aCtx.Request.expand_env_vars() )
+            text = ExpandEnvVarSubstitutions( text, &project );
+
+        reply.add_text( text.ToUTF8() );
+    }
+
+    return reply;
 }

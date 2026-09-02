@@ -169,6 +169,9 @@ private:
     HANDLER_RESULT<kiapi::schematic::commands::SchematicVariantsResponse>
     handleGetSchematicVariants( const HANDLER_CONTEXT<kiapi::schematic::commands::GetSchematicVariants>& aCtx );
 
+    HANDLER_RESULT<commands::ExpandTextVariablesResponse>
+    handleExpandTextVariables( const HANDLER_CONTEXT<commands::ExpandTextVariables>& aCtx );
+
     SCHEMATIC* schematic() const;
 
     void filterValidSchTypes( std::set<KICAD_T>& aTypeList );
