@@ -454,7 +454,11 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
     wxASSERT( aTool != nullptr );
 
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
-    evt.SetMousePosition( GetCursorPosition() );
+
+    // Attach the cursor position if there is a canvas to query
+    if( m_viewControls )
+        evt.SetMousePosition( GetCursorPosition() );
+
     processEvent( evt );
 
     if( TOOL_STATE* active = GetCurrentToolState() )
