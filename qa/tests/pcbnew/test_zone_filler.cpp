@@ -4362,3 +4362,81 @@ BOOST_FIXTURE_TEST_CASE( SameNetBorderIdenticalAcrossFillModes, ZONE_FILL_TEST_F
                            wxString::Format( "Expected at least three zones sharing a same-net "
                                              "border, found %d.", checkedZones ) );
 }
+
+
+/**
+ * A pad or its footprint can override the zone connection. The fill builds the spoke test area
+ * from the generated spokes, not from the zone setting, so the override still gets its relief.
+ */
+BOOST_FIXTURE_TEST_CASE( ThermalOverrideOnSolidZoneKeepsSpokes, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue24865/issue24865", m_board );
+
+    // Move the zone default away from thermal, so only the override asks for a relief.
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+            zone->SetPadConnection( ZONE_CONNECTION::FULL );
+    }
+
+    PAD*         overriddenPad = nullptr;
+    ZONE*        hostZone = nullptr;
+    PCB_LAYER_ID hostLayer = UNDEFINED_LAYER;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            for( ZONE* zone : m_board->Zones() )
+            {
+                if( zone->GetIsRuleArea() || zone->GetNetCode() != pad->GetNetCode() )
+                    continue;
+
+                for( PCB_LAYER_ID layer : zone->GetLayerSet() )
+                {
+                    if( !pad->IsOnLayer( layer ) || !pad->FlashLayer( layer ) )
+                        continue;
+
+                    if( !zone->Outline()->Contains( pad->GetPosition() ) )
+                        continue;
+
+                    overriddenPad = pad;
+                    hostZone = zone;
+                    hostLayer = layer;
+                    break;
+                }
+
+                if( overriddenPad )
+                    break;
+            }
+
+            if( overriddenPad )
+                break;
+        }
+
+        if( overriddenPad )
+            break;
+    }
+
+    BOOST_REQUIRE_MESSAGE( overriddenPad, "No same-net pad sits inside a zone on this board." );
+
+    overriddenPad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    std::shared_ptr<SHAPE_POLY_SET> fill = hostZone->GetFilledPolysList( hostLayer );
+
+    BOOST_REQUIRE_MESSAGE( fill && !fill->IsEmpty(),
+                           wxString::Format( "Zone on %s did not fill.",
+                                             m_board->GetLayerName( hostLayer ) ) );
+
+    // A relief with spokes still overlaps the pad. A relief without them leaves a clear gap.
+    std::shared_ptr<SHAPE> padShape = overriddenPad->GetEffectiveShape( hostLayer );
+
+    BOOST_CHECK_MESSAGE( fill->Collide( padShape.get(), 0 ),
+                         wxString::Format( "Pad %s on net %s overrides the zone to a thermal "
+                                           "connection, but the fill no longer reaches it on %s.",
+                                           overriddenPad->GetNumber(),
+                                           overriddenPad->GetNetname(),
+                                           m_board->GetLayerName( hostLayer ) ) );
+}

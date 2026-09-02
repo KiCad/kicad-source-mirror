@@ -3121,11 +3121,6 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    // Create a temporary zone that we can hit-test spoke-ends against.  It's only temporary
-    // because the "real" subtract-clearance-holes has to be done after the spokes are added.
-    SHAPE_POLY_SET testAreas = aFillPolys.CloneDropTriangulation();
-    testAreas.BooleanSubtract( clearanceHoles );
-
     // When iterative refill is enabled, zone-to-zone clearances are not included in
     // clearanceHoles (they're applied later to allow pre-knockout caching).  But we still
     // need to account for them when testing spoke endpoints, otherwise spokes will be kept
@@ -3133,72 +3128,80 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     SHAPE_POLY_SET zoneClearances;
 
     if( iterativeRefill )
-    {
         buildDifferentNetZoneClearances( aZone, aLayer, zoneClearances );
-
-        if( zoneClearances.OutlineCount() > 0 )
-            testAreas.BooleanSubtract( zoneClearances );
-    }
-
-    DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, wxT( "minus-clearance-holes" ) );
-
-    // Prune features that don't meet minimum-width criteria
-    if( half_min_width - epsilon > epsilon )
-    {
-        testAreas.Deflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
-        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In5_Cu, wxT( "spoke-test-deflated" ) );
-
-        testAreas.Inflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
-        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In6_Cu, wxT( "spoke-test-reinflated" ) );
-    }
-
-    if( m_progressReporter && m_progressReporter->IsCancelled() )
-        return false;
-
-    // Build a Y-stripe spatial index for O(sqrt(V)) spoke endpoint containment queries
-    // instead of O(V) brute-force ray-casting with bbox caches.
-    POLY_YSTRIPES_INDEX spokeTestIndex;
-    spokeTestIndex.Build( testAreas );
-    int interval = 0;
 
     SHAPE_POLY_SET debugSpokes;
 
-    for( const SHAPE_LINE_CHAIN& spoke : thermalSpokes )
+    // The spoke test area costs a clone, two booleans and a deflate/inflate cycle. Build it
+    // only when a spoke exists. The debug filler still needs the intermediate dumps.
+    if( !thermalSpokes.empty() || m_debugZoneFiller )
     {
-        const VECTOR2I& testPt = spoke.CPoint( 3 );
+        // Create a temporary zone that we can hit-test spoke-ends against.  It's only temporary
+        // because the "real" subtract-clearance-holes has to be done after the spokes are added.
+        SHAPE_POLY_SET testAreas = aFillPolys.CloneDropTriangulation();
+        testAreas.BooleanSubtract( clearanceHoles );
 
-        // Hit-test against zone body
-        if( spokeTestIndex.Contains( testPt, 1 ) )
+        if( zoneClearances.OutlineCount() > 0 )
+            testAreas.BooleanSubtract( zoneClearances );
+
+        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, wxT( "minus-clearance-holes" ) );
+
+        // Prune features that don't meet minimum-width criteria
+        if( half_min_width - epsilon > epsilon )
         {
-            if( m_debugZoneFiller )
-                debugSpokes.AddOutline( spoke );
+            testAreas.Deflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
+            DUMP_POLYS_TO_COPPER_LAYER( testAreas, In5_Cu, wxT( "spoke-test-deflated" ) );
 
-            aFillPolys.AddOutline( spoke );
-            continue;
+            testAreas.Inflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
+            DUMP_POLYS_TO_COPPER_LAYER( testAreas, In6_Cu, wxT( "spoke-test-reinflated" ) );
         }
 
-        if( interval++ > 400 )
-        {
-            if( m_progressReporter && m_progressReporter->IsCancelled() )
-                return false;
+        if( m_progressReporter && m_progressReporter->IsCancelled() )
+            return false;
 
-            interval = 0;
-        }
+        // Build a Y-stripe spatial index for O(sqrt(V)) spoke endpoint containment queries
+        // instead of O(V) brute-force ray-casting with bbox caches.
+        POLY_YSTRIPES_INDEX spokeTestIndex;
+        spokeTestIndex.Build( testAreas );
+        int interval = 0;
 
-        // Hit-test against other spokes
-        for( const SHAPE_LINE_CHAIN& other : thermalSpokes )
+        for( const SHAPE_LINE_CHAIN& spoke : thermalSpokes )
         {
-            // Hit test in both directions to avoid interactions with round-off errors.
-            // (See https://gitlab.com/kicad/code/kicad/-/issues/13316.)
-            if( &other != &spoke
-                && other.PointInside( testPt, 1 )
-                && spoke.PointInside( other.CPoint( 3 ), 1 ) )
+            const VECTOR2I& testPt = spoke.CPoint( 3 );
+
+            // Hit-test against zone body
+            if( spokeTestIndex.Contains( testPt, 1 ) )
             {
                 if( m_debugZoneFiller )
                     debugSpokes.AddOutline( spoke );
 
                 aFillPolys.AddOutline( spoke );
-                break;
+                continue;
+            }
+
+            if( interval++ > 400 )
+            {
+                if( m_progressReporter && m_progressReporter->IsCancelled() )
+                    return false;
+
+                interval = 0;
+            }
+
+            // Hit-test against other spokes
+            for( const SHAPE_LINE_CHAIN& other : thermalSpokes )
+            {
+                // Hit test in both directions to avoid interactions with round-off errors.
+                // (See https://gitlab.com/kicad/code/kicad/-/issues/13316.)
+                if( &other != &spoke
+                    && other.PointInside( testPt, 1 )
+                    && spoke.PointInside( other.CPoint( 3 ), 1 ) )
+                {
+                    if( m_debugZoneFiller )
+                        debugSpokes.AddOutline( spoke );
+
+                    aFillPolys.AddOutline( spoke );
+                    break;
+                }
             }
         }
     }
