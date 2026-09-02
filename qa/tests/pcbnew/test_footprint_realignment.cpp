@@ -21,6 +21,7 @@
 #include <boost/test/data/test_case.hpp>
 
 #include <optional>
+#include <ostream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -31,11 +32,28 @@
 #include <pad.h>
 
 
+/**
+ * @brief Information needed to make a footprint to use for alignment tests
+ */
+struct ALIGN_FP_DEF
+{
+    std::string m_name;
+    std::vector<std::pair<std::string, VECTOR2I>> m_pads;
+};
+
+
+std::ostream& operator<<( std::ostream& os, const ALIGN_FP_DEF& fpDef )
+{
+    os << "ALIGN_FP_DEF: " << fpDef.m_name;
+    return os;
+}
+
+
 struct FP_ALIGNMENT_TEST_CASE
 {
     std::string m_TestName;
-    const std::vector<std::pair<std::string, VECTOR2I>>& m_OrigPadPositions;
-    const std::vector<std::pair<std::string, VECTOR2I>>& m_NewPadPositions;
+    const ALIGN_FP_DEF& m_OrigPadPositions;
+    const ALIGN_FP_DEF& m_NewPadPositions;
     std::optional<VECTOR2I> m_ExpectedPosShift;
     std::optional<EDA_ANGLE> m_ExpectedAngleShift;
 
@@ -52,11 +70,11 @@ struct FP_REALIGNMENT_TEST_FIXTURE
     VECTOR2I m_PosShift;
     EDA_ANGLE m_AngleShift;
 
-    std::unique_ptr<FOOTPRINT> CreateFootprint( const std::vector<std::pair<std::string, VECTOR2I>>& padPositions )
+    std::unique_ptr<FOOTPRINT> CreateFootprint( const ALIGN_FP_DEF& padPositions )
     {
         std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( nullptr );
 
-        for( const auto& [number, pos] : padPositions )
+        for( const auto& [number, pos] : padPositions.m_pads )
         {
             PAD* pad = new PAD( fp.get() );
             pad->SetNumber( number );
@@ -111,75 +129,134 @@ struct FP_REALIGNMENT_TEST_FIXTURE
 };
 
 
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_NoPins{
+static const ALIGN_FP_DEF FpDef_NoPins{
+    "No pins",
+    {},
 };
 
 
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_DIP4_OrigPin1{
-    { "1", { 0, 0 } },
-    { "2", { 0, 1000 } },
-    { "3", { 2000, 0 } },
-    { "4", { 2000, 1000 } },
+static const ALIGN_FP_DEF FpDef_DIP4_OrigPin1{
+    "DIP4, pin 1 at origin",
+    {
+        { "1", { 0, 0 } },
+        { "2", { 0, 1000 } },
+        { "3", { 2000, 0 } },
+        { "4", { 2000, 1000 } },
+    },
 };
 
 
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_DIP4_OrigBodyCenter{
-    { "1", { -1000, -500 } },
-    { "2", { -1000, 500 } },
-    { "3", { 1000, -500 } },
-    { "4", { 1000, 500 } },
+static const ALIGN_FP_DEF FpDef_DIP4_OrigBodyCenter{
+    "DIP4, body center at origin",
+    {
+        { "1", { -1000, -500 } },
+        { "2", { -1000, 500 } },
+        { "3", { 1000, -500 } },
+        { "4", { 1000, 500 } },
+    },
 };
 
 
 // Pin 1 bottom left = Level B style
 // Rotated 90 degrees CCW around origin
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_DIP4_Rotated90DegCCW{
-    { "1", { 0, 0 } },
-    { "2", { 1000, 0 } },
-    { "3", { 1000, -2000 } },
-    { "4", { 0, -2000 } },
+static const ALIGN_FP_DEF FpDef_DIP4_Rotated90DegCCW{
+    "DIP4, rotated 90 deg CCW",
+    {
+        { "1", { 0, 0 } },
+        { "2", { 1000, 0 } },
+        { "3", { 1000, -2000 } },
+        { "4", { 0, -2000 } },
+    },
 };
 
 
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_DIP4_OrigBodyCenter_Rotated90DegCCW{
-    { "1", { -500, 1000 } },
-    { "2", { 500, 1000 } },
-    { "3", { 500, -1000 } },
-    { "4", { -500, -1000 } },
+static const ALIGN_FP_DEF FpDef_DIP4_OrigBodyCenter_Rotated90DegCCW{
+    "DIP4, body center at origin, rotated 90 deg CCW",
+    {
+        { "1", { -500, 1000 } },
+        { "2", { 500, 1000 } },
+        { "3", { 500, -1000 } },
+        { "4", { -500, -1000 } },
+    },
 };
 
 
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_DIP4_Pin4Deleted{
-    { "1", { 0, 0 } },
-    { "2", { 0, 1000 } },
-    { "3", { 2000, 0 } },
+static const ALIGN_FP_DEF FpDef_DIP4_Pin4Deleted{
+    "DIP4, pin 4 deleted",
+    {
+        { "1", { 0, 0 } },
+        { "2", { 0, 1000 } },
+        { "3", { 2000, 0 } },
+    },
 };
 
 
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_DIP4_Pin4Moved{
-    { "1", { 0, 0 } },
-    { "2", { 0, 1000 } },
-    { "3", { 2000, 0 } },
-    { "4", { 2100, 1000 } },
+static const ALIGN_FP_DEF FpDef_DIP4_Pin4Moved{
+    "DIP4, pin 4 moved",
+    {
+        { "1", { 0, 0 } },
+        { "2", { 0, 1000 } },
+        { "3", { 2000, 0 } },
+        { "4", { 2100, 1000 } },
+    },
 };
 
 
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_DIP4_Widened{
-    { "1", { 0, 0 } },
-    { "2", { 0, 1000 } },
-    { "3", { 2400, 0 } },
-    { "4", { 2400, 1000 } },
+static const ALIGN_FP_DEF FpDef_DIP4_Widened{
+    "DIP4, widened",
+    {
+        { "1", { 0, 0 } },
+        { "2", { 0, 1000 } },
+        { "3", { 2400, 0 } },
+        { "4", { 2400, 1000 } },
+    },
 };
 
 
-static const std::vector<std::pair<std::string, VECTOR2I>> FpDef_DIP4_WithMPs{
-    { "1", { 0, 0 } },
-    { "2", { 0, 1000 } },
-    { "3", { 2000, 0 } },
-    { "4", { 2000, 1000 } },
-    { "MP", { -1000, 500 } },
-    { "MP", { 3000, 500 } },
+static const ALIGN_FP_DEF FpDef_DIP4_WithMPs{
+    "DIP4, with mechanical pins",
+    {
+        { "1", { 0, 0 } },
+        { "2", { 0, 1000 } },
+        { "3", { 2000, 0 } },
+        { "4", { 2000, 1000 } },
+        { "MP", { -1000, 500 } },
+        { "MP", { 3000, 500 } },
+    },
 };
+
+
+/**
+ * Definition of a test case for self-to-self alignment.
+ * This either succeeds (with zero shift and rotation) or fails
+ * (if no baseline is available).
+ */
+struct SELF_ALIGNMENT_TEST_CASE
+{
+    const ALIGN_FP_DEF& m_FpDef;
+    bool                m_ExpectSuccess;
+};
+
+
+static const std::vector<SELF_ALIGNMENT_TEST_CASE> FpSelfToSelfCases = {
+    // No baseline, not enough information to align
+    { FpDef_NoPins, false },
+    { FpDef_DIP4_OrigPin1, true },
+    { FpDef_DIP4_OrigBodyCenter, true },
+    { FpDef_DIP4_Rotated90DegCCW, true },
+    { FpDef_DIP4_OrigBodyCenter_Rotated90DegCCW, true },
+    { FpDef_DIP4_Pin4Deleted, true },
+    { FpDef_DIP4_Pin4Moved, true },
+    { FpDef_DIP4_Widened, true },
+    { FpDef_DIP4_WithMPs, true },
+};
+
+
+std::ostream& operator<<( std::ostream& os, const SELF_ALIGNMENT_TEST_CASE& testCase )
+{
+    os << "SELF_ALIGNMENT_TEST_CASE: " << testCase.m_FpDef.m_name;
+    return os;
+}
 
 
 static const std::vector<FP_ALIGNMENT_TEST_CASE> FpAlignmentTestCases = {
@@ -238,11 +315,37 @@ static const std::vector<FP_ALIGNMENT_TEST_CASE> FpAlignmentTestCases = {
             FpDef_DIP4_WithMPs,
             VECTOR2I( 0, 0 ),
             ANGLE_0,
-    }
+    },
 };
 
 
 BOOST_FIXTURE_TEST_SUITE( FootprintRealignment, FP_REALIGNMENT_TEST_FIXTURE )
+
+
+BOOST_DATA_TEST_CASE( TestSelfToSelfCases,
+                      boost::unit_test::data::make( FpSelfToSelfCases ),
+                      selfCase )
+{
+    std::optional<VECTOR2I>  expectedPosShift;
+    std::optional<EDA_ANGLE> expectedAngleShift;
+
+    // If the alignment can be computed, it's zero shift and zero rotation
+    if( selfCase.m_ExpectSuccess )
+    {
+        expectedPosShift = VECTOR2I( 0, 0 );
+        expectedAngleShift = ANGLE_0;
+    }
+
+    const FP_ALIGNMENT_TEST_CASE selfAlignTestCase = {
+        selfCase.m_FpDef.m_name + "-> " + selfCase.m_FpDef.m_name,
+        selfCase.m_FpDef,
+        selfCase.m_FpDef,
+        expectedPosShift,
+        expectedAngleShift,
+    };
+
+    ExecuteTestCase( selfAlignTestCase );
+}
 
 
 BOOST_DATA_TEST_CASE( TestAllCases,

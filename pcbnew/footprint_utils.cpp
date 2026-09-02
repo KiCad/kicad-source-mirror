@@ -62,7 +62,10 @@ bool ComputeFootprintShift( const FOOTPRINT& aExisting, const FOOTPRINT& aNew, V
                         continue;
                     }
 
-                    result[number] = pad->GetFPRelativePosition();
+                    // Use the exact library-frame position. PAD::GetFPRelativePosition()
+                    // applies the footprint transform in integer coordinates, which can
+                    // cause rounding errors.
+                    result[number] = pad->GetLibraryPosition();
                 }
 
                 return result;
