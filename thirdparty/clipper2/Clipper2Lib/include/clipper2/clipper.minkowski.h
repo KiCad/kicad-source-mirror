@@ -60,7 +60,7 @@ namespace Clipper2Lib
             quad.emplace_back(tmp[i][h]);
             quad.emplace_back(tmp[i][j]);
             quad.emplace_back(tmp[g][j]);
-          };
+          }
           if (!IsPositive(quad))
             std::reverse(quad.begin(), quad.end());
           result.emplace_back(std::move(quad));

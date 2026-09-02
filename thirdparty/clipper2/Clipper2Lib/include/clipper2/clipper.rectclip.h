@@ -72,7 +72,7 @@ namespace Clipper2Lib
     void ExecuteInternal(const Path64& path);
     Path64 GetPath(OutPt2*& op);
   public:
-    explicit RectClipLines64(const Rect64& rect) : RectClip64(rect) {};
+    explicit RectClipLines64(const Rect64& rect) : RectClip64(rect) {}
     Paths64 Execute(const Paths64& paths);
   };
 
