@@ -255,6 +255,7 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
     aRenderSettings->m_LabelSizeRatio = aSch->Settings().m_LabelSizeRatio;
     aRenderSettings->m_TextOffsetRatio = aSch->Settings().m_TextOffsetRatio;
     aRenderSettings->m_PinSymbolSize = aSch->Settings().m_PinSymbolSize;
+    aRenderSettings->m_ShowDNPMarkers = aSch->Settings().m_ShowDNPMarkers;
 
     aRenderSettings->SetDashLengthRatio( aSch->Settings().m_DashedLineDashRatio );
     aRenderSettings->SetGapLengthRatio( aSch->Settings().m_DashedLineGapRatio );

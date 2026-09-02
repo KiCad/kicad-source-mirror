@@ -39,6 +39,7 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowPinNames( false ),
         m_ShowPinAltIcons( false ),
         m_ShowRemappedPinNumbers( true ),
+        m_ShowDNPMarkers( true ),
         m_ShowDisabled( false ),
         m_ShowGraphicsDisabled( false ),
         m_ShowConnectionPoints( false ),
@@ -78,4 +79,3 @@ bool SCH_RENDER_SETTINGS::GetShowPageLimits() const
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     return cfg && cfg->m_Appearance.show_page_limits && !IsPrinting();
 }
-

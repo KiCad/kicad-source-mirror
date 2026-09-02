@@ -1733,7 +1733,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     for( SCH_FIELD& field : m_fields )
         field.Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed || dnp );
 
-    if( dnp )
+    if( dnp && renderSettings->m_ShowDNPMarkers )
     {
         BOX2I    bbox = GetBodyBoundingBox();
         BOX2I    pins = GetBoundingBox();

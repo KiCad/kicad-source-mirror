@@ -2792,7 +2792,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     // Draw DNP and EXCLUDE from SIM markers.
     // These drawings are associated to the symbol body, so draw them only when the LAYER_DEVICE
     // is drawn (to avoid draw artifacts).
-    if( DNP && aLayer == LAYER_DEVICE )
+    if( DNP && m_schSettings.m_ShowDNPMarkers && aLayer == LAYER_DEVICE )
     {
         COLOR4D  marker_color = m_schSettings.GetLayerColor( LAYER_DNP_MARKER );
         BOX2I    bbox = aSymbol->GetBodyBoundingBox();
@@ -3379,7 +3379,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         m_gal->DrawRectangle( pos, pos + size );
     }
 
-    if( DNP && aLayer == LAYER_SHEET )
+    if( DNP && m_schSettings.m_ShowDNPMarkers && aLayer == LAYER_SHEET )
     {
         int      layer = LAYER_DNP_MARKER;
         BOX2I    bbox = aSheet->GetBodyBoundingBox();

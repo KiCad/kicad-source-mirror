@@ -4505,7 +4505,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
             }
         }
 
-        if( dnp )
+        if( dnp && renderSettings->m_ShowDNPMarkers )
             PlotDNP( aPlotter );
 
         // Plot attributes to a hypertext menu

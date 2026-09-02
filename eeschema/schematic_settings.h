@@ -96,6 +96,7 @@ public:
 
     int       m_JunctionSizeChoice;     // none = 0, smallest = 1, small = 2, etc.
     int       m_HopOverSizeChoice;      // none = 0, smallest = 1, etc.
+    bool      m_ShowDNPMarkers;
 
     int       m_ConnectionGridSize;     // usually 50mils (IU internally; mils in the JSON file)
 

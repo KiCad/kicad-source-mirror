@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -129,6 +129,12 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 
 
 	bLeftColumn->Add( fgSizer321, 0, wxEXPAND|wxALL, 5 );
+
+	m_showDNPMarkers = new wxCheckBox( this, wxID_ANY, _("Show 'Do not populate' markers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_showDNPMarkers->SetValue(true);
+	m_showDNPMarkers->SetToolTip( _("Draw a cross over symbols marked 'Do not populate'") );
+
+	bLeftColumn->Add( m_showDNPMarkers, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
 	bLeftColumn->Add( 0, 5, 0, wxEXPAND, 5 );

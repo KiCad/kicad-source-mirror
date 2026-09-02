@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,9 +19,9 @@
 #include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
-#include <wx/checkbox.h>
 #include <wx/radiobut.h>
 #include <wx/spinctrl.h>
 #include <wx/panel.h>
@@ -63,6 +63,7 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_pinSymbolSizeLabel;
 		wxTextCtrl* m_pinSymbolSizeCtrl;
 		wxStaticText* m_pinSymbolSizeUnits;
+		wxCheckBox* m_showDNPMarkers;
 		wxStaticText* m_staticText28;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_junctionDotLabel;

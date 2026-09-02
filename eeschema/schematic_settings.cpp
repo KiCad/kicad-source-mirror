@@ -67,6 +67,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * schIUScale.IU_PER_MILS / 2 ),
         m_JunctionSizeChoice( 3 ),
         m_HopOverSizeChoice( 0 ),
+        m_ShowDNPMarkers( true ),
         m_ConnectionGridSize( DEFAULT_CONNECTION_GRID_MILS * schIUScale.IU_PER_MILS ),
         m_AnnotateStartNum( 0 ),
         m_AnnotateSortOrder( 0 ),
@@ -121,6 +122,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<double>( "drawing.dashed_lines_gap_length_ratio",
             &m_DashedLineGapRatio, 3.0 ) );     // Default from ISO 128-2
+
+    m_params.emplace_back( new PARAM<bool>( "drawing.show_dnp_markers", &m_ShowDNPMarkers, true ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.operating_point_overlay_v_precision",
             &m_OPO_VPrecision, 3 ) );

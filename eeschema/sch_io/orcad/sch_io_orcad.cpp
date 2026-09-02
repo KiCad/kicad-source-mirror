@@ -511,6 +511,8 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
     converter.Convert( rootSheet );
 
+    aSchematic->Settings().m_ShowDNPMarkers = false;
+
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
     aSchematic->FixupJunctionsAfterImport();
 

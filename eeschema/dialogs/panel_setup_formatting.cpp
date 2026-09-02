@@ -73,6 +73,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_textSize.SetValue( settings.m_DefaultTextSize );
     m_lineWidth.SetValue( settings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( settings.m_PinSymbolSize );
+    m_showDNPMarkers->SetValue( settings.m_ShowDNPMarkers );
     m_choiceJunctionDotSize->SetSelection( settings.m_JunctionSizeChoice );
     m_choiceHopOverSize->SetSelection( settings.m_HopOverSizeChoice );
     m_connectionGridSize.SetValue( settings.m_ConnectionGridSize );
@@ -124,6 +125,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_DefaultTextSize = m_textSize.GetIntValue();
     settings.m_DefaultLineWidth = m_lineWidth.GetIntValue();
     settings.m_PinSymbolSize = m_pinSymbolSize.GetIntValue();
+    settings.m_ShowDNPMarkers = m_showDNPMarkers->GetValue();
     settings.m_ConnectionGridSize = m_connectionGridSize.GetIntValue();
 
     if( m_choiceJunctionDotSize->GetSelection() != wxNOT_FOUND )
@@ -174,6 +176,7 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     m_textSize.SetValue( aSettings.m_DefaultTextSize );
     m_lineWidth.SetValue( aSettings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( aSettings.m_PinSymbolSize );
+    m_showDNPMarkers->SetValue( aSettings.m_ShowDNPMarkers );
     m_connectionGridSize.SetValue( aSettings.m_ConnectionGridSize );
 
     m_showIntersheetsReferences->SetValue( aSettings.m_IntersheetRefsShow );

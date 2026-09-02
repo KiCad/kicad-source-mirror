@@ -1080,7 +1080,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
 
         sym->PlotPins( aPlotter, dnp );
 
-        if( dnp )
+        if( dnp && Schematic()->Settings().m_ShowDNPMarkers )
             sym->PlotDNP( aPlotter );
     }
 
