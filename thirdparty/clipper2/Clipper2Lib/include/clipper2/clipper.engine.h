@@ -65,6 +65,27 @@ namespace Clipper2Lib {
 		}
 	};
 
+	// Buckets a ring's edges into horizontal Y stripes so a PIP query only scans the
+	// stripe spanning pt.y (~O(sqrt n) vs O(n)). After KiCad's POLY_YSTRIPES_INDEX.
+	struct StripeIndex {
+		void BuildFromPath(const Path64& path);
+		void BuildFromRing(const OutPt* op);
+		PointInPolygonResult PointInPolygon(const Point64& pt) const;
+		size_t EdgeCount() const { return edges_.size(); }
+		bool Empty() const { return edges_.empty(); }
+
+	private:
+		struct StripeEdge { Point64 a; Point64 b; };
+		void Build(std::vector<StripeEdge>&& edges);
+		int YToStripe(int64_t y) const;
+
+		std::vector<StripeEdge> edges_;
+		std::vector<std::vector<int32_t>> stripes_;
+		int64_t y_min_ = 0;
+		int64_t stripe_height_ = 1;
+		int stripe_count_ = 1;
+	};
+
 	class PolyPath;
 	class PolyPath64;
 	class PolyPathD;
@@ -88,12 +109,14 @@ namespace Clipper2Lib {
 		Rect64 bounds = {};
 		Path64 path;
 		bool is_open = false;
+		// Lazily built during PolyTree nesting; only valid once pts is stable.
+		std::unique_ptr<StripeIndex> pip_index;
 
 		~OutRec() {
 			if (splits) delete splits;
 			// nb: don't delete the split pointers
 			// as these are owned by ClipperBase's outrec_list_
-		};
+		}
 	};
 
 	///////////////////////////////////////////////////////////////////
@@ -156,7 +179,7 @@ namespace Clipper2Lib {
 	struct HorzJoin {
 		OutPt* op1 = nullptr;
 		OutPt* op2 = nullptr;
-		HorzJoin() {};
+		HorzJoin() {}
 		explicit HorzJoin(OutPt* ltr, OutPt* rtl) : op1(ltr), op2(rtl) { }
 	};
 
@@ -261,6 +284,10 @@ namespace Clipper2Lib {
 		int error_code_ = 0;
 		bool has_open_paths_ = false;
 		bool succeeded_ = true;
+
+		// Ring edge count below which index build does not pay off; brute force instead.
+		// 64 is an empirical break-even.
+		size_t pip_index_threshold_ = 64;
 		OutRecList outrec_list_; //pointers in case list memory reallocated
 		bool ExecuteInternal(ClipType ct, FillRule ft, bool use_polytrees);
 		void CleanCollinear(OutRec* outrec);
@@ -276,11 +303,15 @@ namespace Clipper2Lib {
 		void AddPaths(const Paths64& paths, PathType polytype, bool is_open);
 	public:
 		virtual ~ClipperBase();
-		int ErrorCode() const { return error_code_; };
-		void PreserveCollinear(bool val) { preserve_collinear_ = val; };
-		bool PreserveCollinear() const { return preserve_collinear_;};
-		void ReverseSolution(bool val) { reverse_solution_ = val; };
-		bool ReverseSolution() const { return reverse_solution_; };
+		int ErrorCode() const { return error_code_; }
+		void PreserveCollinear(bool val) { preserve_collinear_ = val; }
+		bool PreserveCollinear() const { return preserve_collinear_;}
+		void ReverseSolution(bool val) { reverse_solution_ = val; }
+		bool ReverseSolution() const { return reverse_solution_; }
+
+		// Testing knob. High forces brute-force nesting, low forces stripe indexing.
+		void PipIndexThreshold(size_t val) { pip_index_threshold_ = val; }
+		size_t PipIndexThreshold() const { return pip_index_threshold_; }
 		void Clear();
 		void AddReuseableData(const ReuseableDataContainer64& reuseable_data);
 #ifdef USINGZ
@@ -300,7 +331,7 @@ namespace Clipper2Lib {
 		PolyPath* parent_;
 	public:
 		PolyPath(PolyPath* parent = nullptr): parent_(parent){}
-		virtual ~PolyPath() {};
+		virtual ~PolyPath() {}
 		//https://en.cppreference.com/w/cpp/language/rule_of_three
 		PolyPath(const PolyPath&) = delete;
 		PolyPath& operator=(const PolyPath&) = delete;
@@ -339,7 +370,7 @@ namespace Clipper2Lib {
 		explicit PolyPath64(PolyPath64* parent = nullptr) : PolyPath(parent) {}
 		explicit PolyPath64(PolyPath64* parent, const Path64& path) : PolyPath(parent) { polygon_ = path; }
 
-		~PolyPath64() {
+		~PolyPath64() override {
 			childs_.resize(0);
 		}
 
@@ -371,7 +402,7 @@ namespace Clipper2Lib {
 			return childs_.size();
 		}
 
-		const Path64& Polygon() const { return polygon_; };
+		const Path64& Polygon() const { return polygon_; }
 
 		double Area() const
 		{
@@ -406,7 +437,7 @@ namespace Clipper2Lib {
 			polygon_ = path;
 		}
 
-		~PolyPathD() {
+		~PolyPathD() override {
 			childs_.resize(0);
 		}
 
@@ -446,7 +477,7 @@ namespace Clipper2Lib {
 			return childs_.size();
 		}
 
-		const PathD& Polygon() const { return polygon_; };
+		const PathD& Polygon() const { return polygon_; }
 
 		double Area() const
 		{
@@ -537,7 +568,7 @@ namespace Clipper2Lib {
 		}
 
 #ifdef USINGZ
-		void SetZCallback(ZCallbackD cb) { zCallbackD_ = cb; };
+		void SetZCallback(ZCallbackD cb) { zCallbackD_ = cb; }
 
 		void ZCB(const Point64& e1bot, const Point64& e1top,
 			const Point64& e2bot, const Point64& e2top, Point64& pt)
@@ -553,7 +584,7 @@ namespace Clipper2Lib {
 			PointD e2t = PointD(e2top) * invScale_;
 			zCallbackD_(e1b,e1t, e2b, e2t, tmp);
 			pt.z = tmp.z; // only update 'z'
-		};
+		}
 
 		void CheckCallback()
 		{

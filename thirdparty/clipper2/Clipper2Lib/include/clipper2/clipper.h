@@ -13,8 +13,9 @@
 #include "clipper2/clipper.core.h"
 #include "clipper2/clipper.engine.h"
 #include "clipper2/clipper.offset.h"
-#include "clipper2/clipper.minkowski.h"
 #include "clipper2/clipper.rectclip.h"
+#include "clipper2/clipper.minkowski.h"
+#include "clipper2/clipper.triangulation.h"
 #include <type_traits>
 
 namespace Clipper2Lib {
@@ -133,7 +134,7 @@ namespace Clipper2Lib {
     JoinType jt, EndType et, double miter_limit = 2.0,
     double arc_tolerance = 0.0)
   {
-    if (!delta) return paths;
+    if (delta==0.0) return paths;
     ClipperOffset clip_offset(miter_limit, arc_tolerance);
     clip_offset.AddPaths(paths, jt, et);
     Paths64 solution;
@@ -147,7 +148,7 @@ namespace Clipper2Lib {
   {
     int error_code = 0;
     CheckPrecisionRange(precision, error_code);
-    if (!delta) return paths;
+    if (delta==0.0) return paths;
     if (error_code) return PathsD();
     const double scale = std::pow(10, precision);
     ClipperOffset clip_offset(miter_limit, arc_tolerance * scale);
@@ -157,7 +158,7 @@ namespace Clipper2Lib {
     clip_offset.Execute(delta * scale, solution);
     return ScalePaths<double, int64_t>(solution, 1 / scale, error_code);
   }
-
+  
   template <typename T>
   inline Path<T> TranslatePath(const Path<T>& path, T dx, T dy)
   {
