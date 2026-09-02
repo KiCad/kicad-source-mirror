@@ -61,7 +61,7 @@ private:
     int m_c = 0;
 };
 
-class C 
+class C
 {
 public:
     bool getBool() const { return m_bool; }
@@ -113,7 +113,7 @@ static struct ENUM_GLOB_DESC
                 .Map( enum_glob::TEST2, "TEST2" )
                 .Map( enum_glob::TEST3, "TEST3" );
     }
-} _ENUM_GLOB_DESC;
+} s_ENUM_GLOB_DESC;
 
 ENUM_TO_WXANY( enum_glob );
 

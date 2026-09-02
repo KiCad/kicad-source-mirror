@@ -55,6 +55,17 @@ enum class WX_ANY_TEST_ENUM
 
 ENUM_TO_WXANY( WX_ANY_TEST_ENUM );
 
+static struct WX_ANY_TEST_ENUM_DESC
+{
+    WX_ANY_TEST_ENUM_DESC()
+    {
+        ENUM_MAP<WX_ANY_TEST_ENUM>::Instance()
+                .Map( WX_ANY_TEST_ENUM::ALPHA, wxT( "ALPHA" ) )
+                .Map( WX_ANY_TEST_ENUM::BETA,  wxT( "BETA" ) )
+                .Map( WX_ANY_TEST_ENUM::GAMMA, wxT( "GAMMA" ) );
+    }
+} s_WX_ANY_TEST_ENUM_DESC;
+
 
 BOOST_AUTO_TEST_SUITE( WxAnyUtils )
 
@@ -210,14 +221,6 @@ struct ENUM_OWNER
 
 struct ENUM_TEST_FIXTURE
 {
-    ENUM_TEST_FIXTURE()
-    {
-        ENUM_MAP<WX_ANY_TEST_ENUM>::Instance()
-                .Map( WX_ANY_TEST_ENUM::ALPHA, wxT( "ALPHA" ) )
-                .Map( WX_ANY_TEST_ENUM::BETA, wxT( "BETA" ) )
-                .Map( WX_ANY_TEST_ENUM::GAMMA, wxT( "GAMMA" ) );
-    }
-
     PROPERTY_ENUM<ENUM_OWNER, WX_ANY_TEST_ENUM> prop{ wxT( "Value" ), &ENUM_OWNER::setValue,
                                                       &ENUM_OWNER::getValue };
 };
