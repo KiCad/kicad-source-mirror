@@ -610,19 +610,43 @@ static BOX2I GetTextExtents( const wxString& aText, const VECTOR2D& aPosition, K
 }
 
 
-static void strokeText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
-                        const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics,
-                        std::optional<VECTOR2I> aMousePos = std::nullopt, wxString* aActiveUrl = nullptr )
+static void drawText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
+                      const TEXT_ATTRIBUTES& aAttrs, float aShadowWidth, const KIFONT::METRICS& aFontMetrics,
+                      std::optional<VECTOR2I> aMousePos = std::nullopt, wxString* aActiveUrl = nullptr )
 {
     KIFONT::FONT* font = aAttrs.m_Font;
 
     if( !font )
         font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold, aAttrs.m_Italic );
 
-    aGal.SetIsFill( font->IsOutline() );
-    aGal.SetIsStroke( font->IsStroke() );
+    if( aShadowWidth > 0.0f )
+    {
+        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
 
-    font->Draw( &aGal, aText, aPosition, aAttrs, aFontMetrics, aMousePos, aActiveUrl );
+        CALLBACK_GAL callback_gal( empty_opts,
+                // Stroke callback
+                [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+                {
+                    aGal.SetLineWidth( (float) aAttrs.m_StrokeWidth + aShadowWidth );
+                    aGal.DrawLine( aPt1, aPt2 );
+                },
+                // Polygon callback
+                [&]( const SHAPE_LINE_CHAIN& aPoly )
+                {
+                    aGal.SetLineWidth( aShadowWidth );
+                    aGal.DrawPolygon( aPoly );
+                } );
+
+        aGal.SetIsStroke( true );
+        font->Draw( &callback_gal, aText, aPosition, aAttrs, aFontMetrics );
+    }
+    else
+    {
+        aGal.SetIsFill( font->IsOutline() );
+        aGal.SetIsStroke( font->IsStroke() );
+
+        font->Draw( &aGal, aText, aPosition, aAttrs, aFontMetrics, aMousePos, aActiveUrl );
+    }
 }
 
 
@@ -638,6 +662,31 @@ static void bitmapText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D&
     aGal.SetVerticalJustify( aAttrs.m_Valign );
 
     aGal.BitmapText( aText, aPosition, aAttrs.m_Angle );
+}
+
+
+static void drawCache( KIGFX::GAL& aGal, std::vector<std::unique_ptr<KIFONT::GLYPH>>* aCache, float aStrokeWidth,
+                       float aShadowWidth )
+{
+    aGal.SetLineWidth( aStrokeWidth + aShadowWidth );
+    aGal.DrawGlyphs( *aCache );
+
+    if( aShadowWidth > 0.0f )
+    {
+        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *aCache )
+        {
+            if( glyph->IsOutline() )
+            {
+                KIFONT::OUTLINE_GLYPH* outlineGlyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
+
+                aGal.SetIsStroke( true );
+                aGal.SetLineWidth( aShadowWidth );
+
+                for( int ii = 0; ii < outlineGlyph->OutlineCount(); ++ii )
+                    aGal.DrawPolygon( outlineGlyph->Outline( ii ) );
+            }
+        }
+    }
 }
 
 
@@ -684,25 +733,6 @@ static void knockoutText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2
     aGal.SetIsFill( true );
     aGal.SetFillColor( attrs.m_Color );
     aGal.DrawPolygon( finalPoly );
-}
-
-
-static void boxText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
-                     const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
-{
-    KIFONT::FONT* font = aAttrs.m_Font;
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold, aAttrs.m_Italic );
-
-    BOX2I box = GetTextExtents( aText, aPosition, *font, aAttrs, aFontMetrics );
-
-    // Give the highlight a bit of margin.
-    box.Inflate( aAttrs.m_StrokeWidth / 2, aAttrs.m_StrokeWidth * 2 );
-
-    aGal.SetIsFill( true );
-    aGal.SetIsStroke( false );
-    aGal.DrawRectangle( box.GetOrigin(), box.GetEnd() );
 }
 
 
@@ -1141,9 +1171,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     float shadowWidth = 0.0f;
 
     if( drawingShadows )
-    {
         shadowWidth = getShadowWidth( aPin->IsBrightened() );
-    }
 
     PIN_LAYOUT_CACHE& cache = aPin->GetLayoutCache();
     cache.SetRenderParameters( nameStrokeWidth, numStrokeWidth, m_schSettings.m_ShowPinsElectricalType,
@@ -1371,8 +1399,8 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
     // Helper functions for drawing multi-line pin text with braces
     const auto drawMultiLineText =
-            [&]( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
-                 const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
+            [&]( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition, const TEXT_ATTRIBUTES& aAttrs,
+                 bool aRenderTextAsBitmap, float aShadowWidth, const KIFONT::METRICS& aFontMetrics )
             {
                 // Check if this is multi-line stacked pin text with braces
                 if( aText.StartsWith( "[" ) && aText.EndsWith( "]" ) && aText.Contains( "\n" ) )
@@ -1409,12 +1437,15 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                             for( size_t i = 0; i < lines.size(); i++ )
                             {
                                 VECTOR2D linePos = startPos;
-                                linePos.x += i * lineSpacing;
+                                linePos.x += (int) i * lineSpacing;
 
                                 wxString line = lines[i];
                                 line.Trim( true ).Trim( false );
 
-                                strokeText( aGal, line, linePos, aAttrs, aFontMetrics );
+                                if( aRenderTextAsBitmap )
+                                    bitmapText( aGal, line, linePos, aAttrs );
+                                else
+                                    drawText( aGal, line, linePos, aAttrs, aShadowWidth, aFontMetrics );
                             }
                         }
                         else
@@ -1441,7 +1472,10 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                                 wxString line = lines[i];
                                 line.Trim( true ).Trim( false );
 
-                                strokeText( aGal, line, linePos, aAttrs, aFontMetrics );
+                                if( aRenderTextAsBitmap )
+                                    bitmapText( aGal, line, linePos, aAttrs );
+                                else
+                                    drawText( aGal, line, linePos, aAttrs, aShadowWidth, aFontMetrics );
                             }
                         }
 
@@ -1452,158 +1486,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 }
 
                 // Fallback to regular single-line text
-                strokeText( aGal, aText, aPosition, aAttrs, aFontMetrics );
-            };
-
-    const auto boxMultiLineText =
-            [&]( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
-                 const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
-            {
-                // Similar to drawMultiLineText but uses boxText for outline fonts
-                if( aText.StartsWith( "[" ) && aText.EndsWith( "]" ) && aText.Contains( "\n" ) )
-                {
-                    wxString content = aText.Mid( 1, aText.Length() - 2 );
-                    wxArrayString lines;
-                    wxStringSplit( content, lines, '\n' );
-
-                    if( lines.size() > 1 )
-                    {
-                        int lineSpacing = KiROUND( aAttrs.m_Size.y * 1.3 );
-                        VECTOR2D startPos = aPosition;
-
-                        if( aAttrs.m_Angle == ANGLE_VERTICAL )
-                        {
-                            // For vertical text, lines are spaced horizontally
-                            if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT )
-                            {
-                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
-                                startPos.x -= totalWidth;
-                            }
-                            else if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_CENTER )
-                            {
-                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
-                                startPos.x -= totalWidth / 2.0;
-                            }
-
-                            for( size_t i = 0; i < lines.size(); i++ )
-                            {
-                                VECTOR2D linePos = startPos;
-                                linePos.x += (int) i * lineSpacing;
-
-                                wxString line = lines[i];
-                                line.Trim( true ).Trim( false );
-
-                                boxText( aGal, line, linePos, aAttrs, aFontMetrics );
-                            }
-                        }
-                        else
-                        {
-                            // For horizontal text, lines are spaced vertically
-                            if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_BOTTOM )
-                            {
-                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
-                                startPos.y -= totalHeight;
-                            }
-                            else if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_CENTER )
-                            {
-                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
-                                startPos.y -= totalHeight / 2.0;
-                            }
-
-                            for( size_t i = 0; i < lines.size(); i++ )
-                            {
-                                VECTOR2D linePos = startPos;
-                                linePos.y += (int) i * lineSpacing;
-
-                                wxString line = lines[i];
-                                line.Trim( true ).Trim( false );
-
-                                boxText( aGal, line, linePos, aAttrs, aFontMetrics );
-                            }
-                        }
-
-                        drawBracesAroundText( aGal, lines, startPos, lineSpacing, aAttrs );
-                        return;
-                    }
-                }
-
-                boxText( aGal, aText, aPosition, aAttrs, aFontMetrics );
-            };
-
-    const auto drawMultiLineBitmapText =
-            [&]( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
-                 const TEXT_ATTRIBUTES& aAttrs )
-            {
-                // Similar to drawMultiLineText but uses bitmapText
-                if( aText.StartsWith( "[" ) && aText.EndsWith( "]" ) && aText.Contains( "\n" ) )
-                {
-                    wxString content = aText.Mid( 1, aText.Length() - 2 );
-                    wxArrayString lines;
-                    wxStringSplit( content, lines, '\n' );
-
-                    if( lines.size() > 1 )
-                    {
-                        int lineSpacing = KiROUND( aAttrs.m_Size.y * 1.3 );
-                        VECTOR2D startPos = aPosition;
-
-                        if( aAttrs.m_Angle == ANGLE_VERTICAL )
-                        {
-                            // For vertical text, lines are spaced horizontally
-                            if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT )
-                            {
-                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
-                                startPos.x -= totalWidth;
-                            }
-                            else if( aAttrs.m_Halign == GR_TEXT_H_ALIGN_CENTER )
-                            {
-                                int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
-                                startPos.x -= totalWidth / 2.0;
-                            }
-
-                            for( size_t i = 0; i < lines.size(); i++ )
-                            {
-                                VECTOR2D linePos = startPos;
-                                linePos.x += (int) i * lineSpacing;
-
-                                wxString line = lines[i];
-                                line.Trim( true ).Trim( false );
-
-                                bitmapText( aGal, line, linePos, aAttrs );
-                            }
-                        }
-                        else
-                        {
-                            // For horizontal text, lines are spaced vertically
-                            if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_BOTTOM )
-                            {
-                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
-                                startPos.y -= totalHeight;
-                            }
-                            else if( aAttrs.m_Valign == GR_TEXT_V_ALIGN_CENTER )
-                            {
-                                int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
-                                startPos.y -= totalHeight / 2.0;
-                            }
-
-                            for( size_t i = 0; i < lines.size(); i++ )
-                            {
-                                VECTOR2D linePos = startPos;
-                                linePos.y += (int) i * lineSpacing;
-
-                                wxString line = lines[i];
-                                line.Trim( true ).Trim( false );
-
-                                bitmapText( aGal, line, linePos, aAttrs );
-                            }
-                        }
-
-                        // Draw braces with bitmap text (simplified version)
-                        drawBracesAroundTextBitmap( aGal, lines, startPos, lineSpacing, aAttrs );
-                        return;
-                    }
-                }
-
-                bitmapText( aGal, aText, aPosition, aAttrs );
+                drawText( aGal, aText, aPosition, aAttrs, aShadowWidth, aFontMetrics );
             };
 
     const auto drawTextInfo =
@@ -1624,31 +1507,18 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 attrs.m_Angle = aTextInfo.m_Angle;
                 attrs.m_StrokeWidth = aTextInfo.m_Thickness;
 
-                if( drawingShadows )
+                if( nonCached( aPin ) && renderTextAsBitmap )
                 {
                     attrs.m_StrokeWidth += KiROUND( shadowWidth );
-
-                    if( !attrs.m_Font->IsOutline() )
-                    {
-                        drawMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                                         aPin->GetFontMetrics() );
-                    }
-                    else
-                    {
-                        boxMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                                          aPin->GetFontMetrics() );
-                    }
-                }
-                else if( nonCached( aPin ) && renderTextAsBitmap )
-                {
-                    drawMultiLineBitmapText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs );
+                    drawMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs, true, shadowWidth,
+                                       aPin->GetFontMetrics() );
                     const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
                 else
                 {
-                    drawMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                    drawMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs, false, shadowWidth,
                                        aPin->GetFontMetrics() );
-                    const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
+                    const_cast<SCH_PIN*>( aPin )->ClearFlags( IS_SHOWN_AS_BITMAP );
                 }
             };
 
@@ -1801,12 +1671,9 @@ void SCH_PAINTER::drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aC
 void SCH_PAINTER::draw( const SCH_JUNCTION* aJct, int aLayer )
 {
     bool highlightNetclassColors = false;
-    EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
 
-    if( eeschemaCfg )
-    {
+    if( EESCHEMA_SETTINGS* eeschemaCfg = eeconfig() )
         highlightNetclassColors = eeschemaCfg->m_Selection.highlight_netclass_colors;
-    }
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1839,18 +1706,16 @@ void SCH_PAINTER::draw( const SCH_JUNCTION* aJct, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 {
-    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    bool drawingNetColorHighlights = aLayer == LAYER_NET_COLOR_HIGHLIGHT;
-    bool drawingWires = aLayer == LAYER_WIRE;
-    bool drawingBusses = aLayer == LAYER_BUS;
-    bool drawingDangling = aLayer == LAYER_DANGLING;
-    bool drawingOP = aLayer == LAYER_OP_VOLTAGES;
-
-    bool highlightNetclassColors = false;
-    double             highlightAlpha = 0.6;
-    EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
-    double             hopOverScale = 0.0;
-    int                defaultLineWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
+    bool   drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool   drawingNetColorHighlights = aLayer == LAYER_NET_COLOR_HIGHLIGHT;
+    bool   drawingWires = aLayer == LAYER_WIRE;
+    bool   drawingBusses = aLayer == LAYER_BUS;
+    bool   drawingDangling = aLayer == LAYER_DANGLING;
+    bool   drawingOP = aLayer == LAYER_OP_VOLTAGES;
+    bool   highlightNetclassColors = false;
+    double highlightAlpha = 0.6;
+    double hopOverScale = 0.0;
+    int    defaultLineWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
     if( aLine->Schematic() )    // Can be nullptr when run from the color selection panel
     {
@@ -1858,7 +1723,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         defaultLineWidth = aLine->Schematic()->Settings().m_DefaultLineWidth;
     }
 
-    if( eeschemaCfg )
+    if( EESCHEMA_SETTINGS* eeschemaCfg = eeconfig() )
     {
         highlightNetclassColors = eeschemaCfg->m_Selection.highlight_netclass_colors;
         highlightAlpha = eeschemaCfg->m_Selection.highlight_netclass_colors_alpha;
@@ -1900,15 +1765,13 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     // If the user has highlighted a chain and this wire belongs to that chain,
     // and the chain has a colour override, tint the wire in that colour so the
     // highlighted chain is immediately visible.
-    if( drawingWires && !drawingShadows && m_schematic
-        && !m_schematic->GetHighlightedNetChain().IsEmpty() )
+    if( drawingWires && !drawingShadows && m_schematic && !m_schematic->GetHighlightedNetChain().IsEmpty() )
     {
         SCH_CONNECTION* conn = !aLine->IsConnectivityDirty() ? aLine->Connection() : nullptr;
 
         if( conn && !conn->Name().IsEmpty() )
         {
-            if( SCH_NETCHAIN* chain =
-                        m_schematic->ConnectionGraph()->GetNetChainForNet( conn->Name() ) )
+            if( SCH_NETCHAIN* chain = m_schematic->ConnectionGraph()->GetNetChainForNet( conn->Name() ) )
             {
                 if( chain->GetName() == m_schematic->GetHighlightedNetChain()
                     && chain->GetColor() != COLOR4D::UNSPECIFIED )
@@ -2398,26 +2261,18 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     attrs.m_Angle = aText->GetDrawRotation();
     attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
 
+    float shadowWidth = 0.0f;
+
+    if( drawingShadows )
+    {
+        attrs.m_Underlined = false;
+        shadowWidth = getShadowWidth( !aText->IsSelected() );
+    }
+
     if( transparentColor )
     {
         // Clear any hover URL so a hidden item leaves no stale clickable region behind.
         aText->SetActiveUrl( wxString() );
-    }
-    else if( drawingShadows && font->IsOutline() )
-    {
-        // Trying to draw glyph-shaped shadows on outline text is a fool's errand.  Just box it.
-        // Use GetBoundingBox() which correctly handles multiline text dimensions.
-        BOX2I bbox = aText->GetBoundingBox();
-
-        // SCH_TEXT glyphs are drawn shifted by GetOffsetToMatchSCH_FIELD(); shift the box to match.
-        if( aText->Type() == SCH_TEXT_T )
-            bbox.Offset( aText->GetOffsetToMatchSCH_FIELD( nullptr ) );
-
-        bbox.Inflate( attrs.m_StrokeWidth / 2, attrs.m_StrokeWidth * 2 );
-
-        m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
-        m_gal->DrawRectangle( bbox.GetOrigin(), bbox.GetEnd() );
     }
     else if( aText->GetLayer() == LAYER_DEVICE )
     {
@@ -2427,15 +2282,6 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         // Due to the fact a shadow text can be drawn left or right aligned, it needs to be
         // offset by shadowWidth/2 to be drawn at the same place as normal text.
         double shadowOffset = 0.0;
-
-        if( drawingShadows )
-        {
-            double shadowWidth = getShadowWidth( !aText->IsSelected() );
-            attrs.m_StrokeWidth += getShadowWidth( !aText->IsSelected() );
-
-            const double adjust = 1.2f;      // Value chosen after tests
-            shadowOffset = shadowWidth/2.0f * adjust;
-        }
 
         if( attrs.m_Angle == ANGLE_VERTICAL )
         {
@@ -2478,30 +2324,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         // vertically centered.
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
 
-        strokeText( *m_gal, shownText, pos, attrs, aText->GetFontMetrics() );
-    }
-    else if( drawingShadows )
-    {
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        attrs.m_StrokeWidth += KiROUND( getShadowWidth( !aText->IsSelected() ) );
-        attrs.m_Underlined = false;
-
-        // Fudge factors to match 6.0 positioning
-        // New text stroking has width dependent offset but we need to center the shadow on the
-        // stroke.  NB this offset is in font.cpp also.
-        int fudge = KiROUND( getShadowWidth( !aText->IsSelected() ) / 1.52 );
-
-        if( attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && attrs.m_Angle == ANGLE_0 )
-            text_offset.x -= fudge;
-        else if( attrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT && attrs.m_Angle == ANGLE_90 )
-            text_offset.y -= fudge;
-        else if( attrs.m_Halign == GR_TEXT_H_ALIGN_RIGHT && attrs.m_Angle == ANGLE_0 )
-            text_offset.x += fudge;
-        else if( attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && attrs.m_Angle == ANGLE_90 )
-            text_offset.y += fudge;
-
-        strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs, aText->GetFontMetrics() );
+        drawText( *m_gal, shownText, pos, attrs, shadowWidth, aText->GetFontMetrics() );
     }
     else
     {
@@ -2527,6 +2350,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         if( nonCached( aText ) && aText->RenderAsBitmap( m_gal->GetWorldScale() )
                                && !shownText.Contains( wxT( "\n" ) ) )
         {
+            attrs.m_StrokeWidth += shadowWidth;
             bitmapText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs );
             const_cast<SCH_TEXT*>( aText )->SetFlags( IS_SHOWN_AS_BITMAP );
         }
@@ -2539,12 +2363,11 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
 
             if( cache )
             {
-                m_gal->SetLineWidth( attrs.m_StrokeWidth );
-                m_gal->DrawGlyphs( *cache );
+                drawCache( *m_gal, cache, attrs.m_StrokeWidth, shadowWidth );
             }
             else
             {
-                strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs,
+                drawText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs, shadowWidth,
                             aText->GetFontMetrics(), aText->GetRolloverPos(), &activeUrl );
             }
 
@@ -2615,49 +2438,6 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
     float         borderWidth = getLineWidth( aTextBox, drawingShadows );
     KIFONT::FONT* font = getFont( aTextBox );
 
-    auto drawText =
-            [&]()
-            {
-                wxString        shownText = aTextBox->GetShownText( true );
-                TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
-                wxString        activeUrl;
-
-                attrs.m_Angle = aTextBox->GetDrawRotation();
-                attrs.m_StrokeWidth = KiROUND( getTextThickness( aTextBox ) );
-
-                if( aTextBox->IsRollover() && !aTextBox->IsMoving() )
-                {
-                    // Highlight any urls found within the text
-                    m_gal->SetHoverColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
-
-                    // Highlight the whole text if it has a link definition
-                    if( aTextBox->HasHyperlink() )
-                    {
-                        attrs.m_Hover = true;
-                        attrs.m_Underlined = true;
-                        activeUrl = aTextBox->GetHyperlink();
-                    }
-                }
-
-                std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
-
-                if( !aTextBox->IsRollover() && font->IsOutline() )
-                    cache = aTextBox->GetRenderCache( font, shownText );
-
-                if( cache )
-                {
-                    m_gal->SetLineWidth( attrs.m_StrokeWidth );
-                    m_gal->DrawGlyphs( *cache );
-                }
-                else
-                {
-                    strokeText( *m_gal, shownText, aTextBox->GetDrawPos(), attrs,
-                                aTextBox->GetFontMetrics(), aTextBox->GetRolloverPos(), &activeUrl );
-                }
-
-                aTextBox->SetActiveUrl( activeUrl );
-            };
-
     if( drawingShadows && !( aTextBox->IsBrightened() || aTextBox->IsSelected() ) )
         return;
 
@@ -2692,9 +2472,49 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
     else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES || aLayer == LAYER_PRIVATE_NOTES )
     {
         if( transparentColor )
+        {
             aTextBox->SetActiveUrl( wxString() );
+        }
         else
-            drawText();
+        {
+            wxString        shownText = aTextBox->GetShownText( true );
+            TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
+            wxString        activeUrl;
+
+            attrs.m_Angle = aTextBox->GetDrawRotation();
+            attrs.m_StrokeWidth = KiROUND( getTextThickness( aTextBox ) );
+
+            if( aTextBox->IsRollover() && !aTextBox->IsMoving() )
+            {
+                // Highlight any urls found within the text
+                m_gal->SetHoverColor( m_schSettings.GetLayerColor( LAYER_HOVERED ) );
+
+                // Highlight the whole text if it has a link definition
+                if( aTextBox->HasHyperlink() )
+                {
+                    attrs.m_Hover = true;
+                    attrs.m_Underlined = true;
+                    activeUrl = aTextBox->GetHyperlink();
+                }
+            }
+
+            std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+            if( !aTextBox->IsRollover() && font->IsOutline() )
+                cache = aTextBox->GetRenderCache( font, shownText );
+
+            if( cache )
+            {
+                drawCache( *m_gal, cache, attrs.m_StrokeWidth, 0.0f );
+            }
+            else
+            {
+                drawText( *m_gal, shownText, aTextBox->GetDrawPos(), attrs, 0.0f, aTextBox->GetFontMetrics(),
+                          aTextBox->GetRolloverPos(), &activeUrl );
+            }
+
+            aTextBox->SetActiveUrl( activeUrl );
+        }
 
         if( aTextBox->Type() != SCH_TABLECELL_T && borderWidth > 0 )
         {
@@ -3162,8 +2982,16 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     if( m_schSettings.GetDrawBoundingBoxes() )
         drawItemBoundingBox( aField );
 
-    TEXT_ATTRIBUTES attributes = aField->GetAttributes();
-    attributes.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
+    TEXT_ATTRIBUTES attrs = aField->GetAttributes();
+    attrs.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
+
+    float shadowWidth = 0.0f;
+
+    if( drawingShadows )
+    {
+        attrs.m_Underlined = false;
+        shadowWidth = getShadowWidth( !aField->IsSelected() );
+    }
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
@@ -3173,26 +3001,13 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     {
         // Skip glyph rendering; the anchor/umbilical drawing below still runs.
     }
-    else if( drawingShadows && getFont( aField )->IsOutline() )
-    {
-        // Trying to draw glyph-shaped shadows on outline text is a fool's errand.  Just box it.
-        VECTOR2I textpos = bbox.Centre();
-
-        attributes.m_Halign = GR_TEXT_H_ALIGN_CENTER;
-        attributes.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-        attributes.m_Angle = orient;
-        boxText( *m_gal, shownText, textpos, attributes, aField->GetFontMetrics() );
-    }
     else
     {
         VECTOR2I textpos = bbox.Centre();
 
-        attributes.m_Halign = GR_TEXT_H_ALIGN_CENTER;
-        attributes.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-        attributes.m_Angle = orient;
-
-        if( drawingShadows )
-            attributes.m_StrokeWidth += getShadowWidth( !aField->IsSelected() );
+        attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+        attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+        attrs.m_Angle = orient;
 
         if( aField->IsRollover() && !aField->IsMoving() )
         {
@@ -3202,14 +3017,15 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             // Highlight the whole text if it has a link definition
             if( aField->HasHyperlink() )
             {
-                attributes.m_Hover = true;
-                attributes.m_Underlined = true;
+                attrs.m_Hover = true;
+                attrs.m_Underlined = true;
             }
         }
 
         if( nonCached( aField ) && aField->RenderAsBitmap( m_gal->GetWorldScale() ) )
         {
-            bitmapText( *m_gal, shownText, textpos, attributes );
+            attrs.m_StrokeWidth += shadowWidth;
+            bitmapText( *m_gal, shownText, textpos, attrs );
             const_cast<SCH_FIELD*>( aField )->SetFlags( IS_SHOWN_AS_BITMAP );
         }
         else
@@ -3217,17 +3033,16 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
             if( !aField->IsRollover() )
-                cache = aField->GetRenderCache( shownText, textpos, attributes );
+                cache = aField->GetRenderCache( shownText, textpos, attrs );
 
             if( cache )
             {
-                m_gal->SetLineWidth( attributes.m_StrokeWidth );
-                m_gal->DrawGlyphs( *cache );
+                drawCache( *m_gal, cache, attrs.m_StrokeWidth, shadowWidth );
             }
             else
             {
-                strokeText( *m_gal, shownText, textpos, attributes, aField->GetFontMetrics(),
-                            aField->GetRolloverPos() );
+                drawText( *m_gal, shownText, textpos, attrs, shadowWidth, aField->GetFontMetrics(),
+                          aField->GetRolloverPos() );
             }
 
             const_cast<SCH_FIELD*>( aField )->ClearFlags( IS_SHOWN_AS_BITMAP );
@@ -3254,11 +3069,8 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
                             bbox.GetBottom() - bbox.GetHeight() / 6.0 );
         }
 
-        if( !transparentColor && parent->IsSymbolLikePowerLocalLabel()
-                && aField->GetId() == FIELD_T::VALUE )
-        {
+        if( !transparentColor && parent->IsSymbolLikePowerLocalLabel() && aField->GetId() == FIELD_T::VALUE )
             drawLocalPowerIcon( pos, size, rotated, color, drawingShadows, aField->IsBrightened() );
-        }
     }
 
     // Draw anchor or umbilical line.  The umbilical line shows independent motion of a field
@@ -3551,7 +3363,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
             draw( &field, aLayer, DNP );
 
         for( SCH_SHEET_PIN* sheetPin : aSheet->GetPins() )
-            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer, DNP );
+            draw( sheetPin, aLayer, DNP );
     }
 
     if( isFieldsLayer( aLayer ) )
@@ -3694,12 +3506,9 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
         return;
 
     bool highlightNetclassColors = false;
-    EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
 
-    if( eeschemaCfg )
-    {
+    if( EESCHEMA_SETTINGS* eeschemaCfg = eeconfig() )
         highlightNetclassColors = eeschemaCfg->m_Selection.highlight_netclass_colors;
-    }
 
     if( !highlightNetclassColors && drawingNetColorHighlights )
         return;
@@ -3744,10 +3553,8 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     if( drawingNetColorHighlights )
     {
         // Don't draw highlights for default-colored nets
-        if( ( aEntry->Type() == SCH_BUS_WIRE_ENTRY_T
-              && color == m_schSettings.GetLayerColor( LAYER_WIRE ) )
-            || ( aEntry->Type() == SCH_BUS_BUS_ENTRY_T
-                 && color == m_schSettings.GetLayerColor( LAYER_BUS ) ) )
+        if(   ( aEntry->Type() == SCH_BUS_WIRE_ENTRY_T && color == m_schSettings.GetLayerColor( LAYER_WIRE ) )
+           || ( aEntry->Type() == SCH_BUS_BUS_ENTRY_T  && color == m_schSettings.GetLayerColor( LAYER_BUS ) ) )
         {
             return;
         }
@@ -3761,16 +3568,10 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
         m_gal->SetLineWidth( m_schSettings.GetDanglingIndicatorThickness() );
 
         if( aEntry->IsStartDangling() )
-        {
-            m_gal->DrawCircle( aEntry->GetPosition(),
-                               aEntry->GetPenWidth() + KiROUND( TARGET_BUSENTRY_RADIUS / 2.0 ) );
-        }
+            m_gal->DrawCircle( aEntry->GetPosition(), aEntry->GetPenWidth() + KiROUND( TARGET_BUSENTRY_RADIUS / 2.0 ) );
 
         if( aEntry->IsEndDangling() )
-        {
-            m_gal->DrawCircle( aEntry->GetEnd(),
-                               aEntry->GetPenWidth() + KiROUND( TARGET_BUSENTRY_RADIUS / 2.0 ) );
-        }
+            m_gal->DrawCircle( aEntry->GetEnd(), aEntry->GetPenWidth() + KiROUND( TARGET_BUSENTRY_RADIUS / 2.0 ) );
     }
     else
     {
