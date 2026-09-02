@@ -428,14 +428,14 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::RealtimeCreepage, &m_RealtimeCreepage,
                                                            m_RealtimeCreepage ) );
 
-    m_entries.push_back(
-            std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DRCEpsilon, &m_DRCEpsilon, m_DRCEpsilon, 0.0, 1.0 ) );
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DRCEpsilon, &m_DRCEpsilon,
+                                                             m_DRCEpsilon, 1e-6, 1e-2 ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>(
             true, AC_KEYS::DRCSliverWidthTolerance, &m_SliverWidthTolerance, m_SliverWidthTolerance, 0.01, 0.25 ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>(
-            true, AC_KEYS::DRCSliverMinimumLength, &m_SliverMinimumLength, m_SliverMinimumLength, 1e-9, 10 ) );
+            true, AC_KEYS::DRCSliverMinimumLength, &m_SliverMinimumLength, m_SliverMinimumLength, 1e-6, 10 ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>(
             true, AC_KEYS::DRCSliverAngleTolerance, &m_SliverAngleTolerance, m_SliverAngleTolerance, 1.0, 90.0 ) );

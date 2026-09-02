@@ -157,10 +157,10 @@ public:
     /**
      * Epsilon for DRC tests.
      *
-     * @note Fo zone tests this is essentially additive with #m_ExtraClearance.  Units are mm.
+     * @note For zone tests this is essentially additive with #m_ExtraClearance.  Units are mm.
      *
      * Setting name: "DRCEpsilon"
-     * Valid values: 0 to 1
+     * Valid values: 1e-6 to 0.01
      * Default value: 0.0005
      */
     double m_DRCEpsilon;
@@ -182,7 +182,7 @@ public:
      * Units are mm.
      *
      * Setting name: "DRCSliverMinimumLength"
-     * Valid values: 1e-9 to 10
+     * Valid values: 1e-6 to 10
      * Default value: 0.0008
      */
     double m_SliverMinimumLength;
