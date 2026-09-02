@@ -122,12 +122,12 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
     m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
-    m_trackOpacity    = 1.0;
-    m_viaOpacity      = 1.0;
-    m_padOpacity      = 1.0;
-    m_zoneOpacity     = 1.0;
-    m_imageOpacity    = 1.0;
-    m_filledShapeOpacity    = 1.0;
+    m_trackOpacity = DEFAULT_TRACK_OPACITY;
+    m_viaOpacity = DEFAULT_VIA_OPACITY;
+    m_padOpacity = DEFAULT_PAD_OPACITY;
+    m_zoneOpacity = DEFAULT_ZONE_OPACITY;
+    m_imageOpacity = DEFAULT_IMAGE_OPACITY;
+    m_filledShapeOpacity = DEFAULT_FILLED_SHAPE_OPACITY;
 
     m_groupEditModeActive = false;
     m_outsideGroupOpacity = 1.0;

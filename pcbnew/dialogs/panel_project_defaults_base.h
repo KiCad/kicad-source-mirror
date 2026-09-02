@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-115-g11c2dec8)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,7 +18,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/statline.h>
-#include <wx/textctrl.h>
+#include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/simplebook.h>
@@ -37,23 +37,23 @@ class PANEL_PROJECT_DEFAULTS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_defaultOpacityLabel;
 		wxStaticLine* m_staticline6;
 		wxStaticText* m_trackOpacityLabel;
-		wxTextCtrl* m_OptTrackOpacity;
-		wxStaticText* m_opacityUnit;
+        wxSpinCtrl*   m_OptTrackOpacity;
+        wxStaticText* m_opacityUnit;
 		wxStaticText* m_viaOpacityLabel;
-		wxTextCtrl* m_OptViaOpacity;
-		wxStaticText* m_opacityUnit1;
+        wxSpinCtrl*   m_OptViaOpacity;
+        wxStaticText* m_opacityUnit1;
 		wxStaticText* m_padOpacityLabel;
-		wxTextCtrl* m_OptPadOpacity;
-		wxStaticText* m_opacityUnit2;
+        wxSpinCtrl*   m_OptPadOpacity;
+        wxStaticText* m_opacityUnit2;
 		wxStaticText* m_zoneOpacityLabel;
-		wxTextCtrl* m_OptZoneOpacity;
-		wxStaticText* m_opacityUnit3;
+        wxSpinCtrl*   m_OptZoneOpacity;
+        wxStaticText* m_opacityUnit3;
 		wxStaticText* m_filledShapesOpacityLabel;
-		wxTextCtrl* m_OptFilledShapeOpacity;
-		wxStaticText* m_opacityUnit4;
+        wxSpinCtrl*   m_OptFilledShapeOpacity;
+        wxStaticText* m_opacityUnit4;
 		wxStaticText* m_imageOpacityLabel;
-		wxTextCtrl* m_OptImageOpacity;
-		wxStaticText* m_opacityUnit5;
+        wxSpinCtrl*   m_OptImageOpacity;
+        wxStaticText* m_opacityUnit5;
 
 	public:
 

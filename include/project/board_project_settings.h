@@ -357,4 +357,11 @@ struct KICOMMON_API PANEL_NET_INSPECTOR_SETTINGS
 };
 
 
+constexpr double DEFAULT_TRACK_OPACITY = 1.0;
+constexpr double DEFAULT_VIA_OPACITY = 1.0;
+constexpr double DEFAULT_PAD_OPACITY = 1.0;
+constexpr double DEFAULT_ZONE_OPACITY = 0.6;
+constexpr double DEFAULT_FILLED_SHAPE_OPACITY = 1.0;
+constexpr double DEFAULT_IMAGE_OPACITY = 0.6;
+
 #endif // KICAD_BOARD_PROJECT_SETTINGS_H

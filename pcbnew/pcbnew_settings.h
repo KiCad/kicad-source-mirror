@@ -209,12 +209,12 @@ public:
 
     struct PROJECT_DEFAULT_SETTINGS
     {
-        double m_TrackOpacity{ 1.0 };
-        double m_ViaOpacity{ 1.0 };
-        double m_PadOpacity{ 1.0 };
-        double m_ZoneOpacity{ 0.6 };
-        double m_FilledShapeOpacity{ 1.0 };
-        double m_ImageOpacity{ 0.6 };
+        double m_TrackOpacity{ DEFAULT_TRACK_OPACITY };
+        double m_ViaOpacity{ DEFAULT_VIA_OPACITY };
+        double m_PadOpacity{ DEFAULT_PAD_OPACITY };
+        double m_ZoneOpacity{ DEFAULT_ZONE_OPACITY };
+        double m_FilledShapeOpacity{ DEFAULT_FILLED_SHAPE_OPACITY };
+        double m_ImageOpacity{ DEFAULT_IMAGE_OPACITY };
     };
 
     struct DIFF_PHASE_SKEW_SETTINGS

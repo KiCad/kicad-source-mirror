@@ -22,6 +22,7 @@
 #include <pcbnew_settings.h>
 #include <config_map.h>
 #include <panel_project_defaults.h>
+#include <math/util.h>
 
 
 PANEL_PROJECT_DEFAULTS::PANEL_PROJECT_DEFAULTS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
@@ -38,18 +39,12 @@ PANEL_PROJECT_DEFAULTS::~PANEL_PROJECT_DEFAULTS()
 
 void PANEL_PROJECT_DEFAULTS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 {
-    double trackOpacityPercent = aCfg->m_ProjectDefaults.m_TrackOpacity * 100.0;
-    m_OptTrackOpacity->SetValue( wxString::Format( "%.0f", trackOpacityPercent ) );
-    double viaOpacityPercent = aCfg->m_ProjectDefaults.m_ViaOpacity * 100.0;
-    m_OptViaOpacity->SetValue( wxString::Format( "%.0f", viaOpacityPercent ) );
-    double padOpacityPercent = aCfg->m_ProjectDefaults.m_PadOpacity * 100.0;
-    m_OptPadOpacity->SetValue( wxString::Format( "%.0f", padOpacityPercent ) );
-    double zoneOpacityPercent = aCfg->m_ProjectDefaults.m_ZoneOpacity * 100.0;
-    m_OptZoneOpacity->SetValue( wxString::Format( "%.0f", zoneOpacityPercent ) );
-    double imageOpacityPercent = aCfg->m_ProjectDefaults.m_ImageOpacity * 100.0;
-    m_OptImageOpacity->SetValue( wxString::Format( "%.0f", imageOpacityPercent ) );
-    double filledShapeOpacityPercent = aCfg->m_ProjectDefaults.m_FilledShapeOpacity * 100.0;
-    m_OptFilledShapeOpacity->SetValue( wxString::Format( "%.0f", filledShapeOpacityPercent ) );
+    m_OptTrackOpacity->SetValue( KiROUND( aCfg->m_ProjectDefaults.m_TrackOpacity * 100.0 ) );
+    m_OptViaOpacity->SetValue( KiROUND( aCfg->m_ProjectDefaults.m_ViaOpacity * 100.0 ) );
+    m_OptPadOpacity->SetValue( KiROUND( aCfg->m_ProjectDefaults.m_PadOpacity * 100.0 ) );
+    m_OptZoneOpacity->SetValue( KiROUND( aCfg->m_ProjectDefaults.m_ZoneOpacity * 100.0 ) );
+    m_OptImageOpacity->SetValue( KiROUND( aCfg->m_ProjectDefaults.m_ImageOpacity * 100.0 ) );
+    m_OptFilledShapeOpacity->SetValue( KiROUND( aCfg->m_ProjectDefaults.m_FilledShapeOpacity * 100.0 ) );
 }
 
 
@@ -71,25 +66,12 @@ bool PANEL_PROJECT_DEFAULTS::TransferDataFromWindow()
     {
         if( PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
         {
-            double trackOpacityPercent = cfg->m_ProjectDefaults.m_TrackOpacity * 100.0;
-            m_OptTrackOpacity->GetValue().ToDouble( &trackOpacityPercent );
-            double viaOpacityPercent = cfg->m_ProjectDefaults.m_ViaOpacity * 100.0;
-            m_OptViaOpacity->GetValue().ToDouble( &viaOpacityPercent );
-            double padOpacityPercent = cfg->m_ProjectDefaults.m_PadOpacity * 100.0;
-            m_OptPadOpacity->GetValue().ToDouble( &padOpacityPercent );
-            double zoneOpacityPercent = cfg->m_ProjectDefaults.m_ZoneOpacity * 100.0;
-            m_OptZoneOpacity->GetValue().ToDouble( &zoneOpacityPercent );
-            double imageOpacityPercent = cfg->m_ProjectDefaults.m_ImageOpacity * 100.0;
-            m_OptImageOpacity->GetValue().ToDouble( &imageOpacityPercent );
-            double filledShapeOpacityPercent = cfg->m_ProjectDefaults.m_FilledShapeOpacity * 100.0;
-            m_OptFilledShapeOpacity->GetValue().ToDouble( &filledShapeOpacityPercent );
-
-            cfg->m_ProjectDefaults.m_TrackOpacity = trackOpacityPercent / 100.0;
-            cfg->m_ProjectDefaults.m_ViaOpacity = viaOpacityPercent / 100.0;
-            cfg->m_ProjectDefaults.m_PadOpacity = padOpacityPercent / 100.0;
-            cfg->m_ProjectDefaults.m_ZoneOpacity = zoneOpacityPercent / 100.0;
-            cfg->m_ProjectDefaults.m_ImageOpacity = imageOpacityPercent / 100.0;
-            cfg->m_ProjectDefaults.m_FilledShapeOpacity = filledShapeOpacityPercent / 100.0;
+            cfg->m_ProjectDefaults.m_TrackOpacity = m_OptTrackOpacity->GetValue() / 100.0;
+            cfg->m_ProjectDefaults.m_ViaOpacity = m_OptViaOpacity->GetValue() / 100.0;
+            cfg->m_ProjectDefaults.m_PadOpacity = m_OptPadOpacity->GetValue() / 100.0;
+            cfg->m_ProjectDefaults.m_ZoneOpacity = m_OptZoneOpacity->GetValue() / 100.0;
+            cfg->m_ProjectDefaults.m_ImageOpacity = m_OptImageOpacity->GetValue() / 100.0;
+            cfg->m_ProjectDefaults.m_FilledShapeOpacity = m_OptFilledShapeOpacity->GetValue() / 100.0;
         }
     }
 

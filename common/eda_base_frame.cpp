@@ -1809,9 +1809,9 @@ void EDA_BASE_FRAME::ShowPreferences( const wxString& aStartPage, const wxString
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_PROJECT_DEFAULTS ), _( "Project Defaults" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_TOOLBARS ), _( "Toolbars" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ACTION_PLUGINS ), _( "Plugins" ) );
-                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_PROJECT_DEFAULTS ), _( "Project Defaults" ) );
 
                 if( GetFrameType() == FRAME_PCB_DISPLAY3D )
                     expand.push_back( (int) book->GetPageCount() );

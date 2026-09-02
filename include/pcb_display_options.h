@@ -23,6 +23,7 @@
 
 #include <project/board_project_settings.h>
 
+
 class PCB_DISPLAY_OPTIONS
 {
 public:
@@ -32,12 +33,12 @@ public:
         m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
         m_NetColorMode        = NET_COLOR_MODE::RATSNEST;
 
-        m_TrackOpacity        = 1.0;
-        m_ViaOpacity          = 1.0;
-        m_PadOpacity          = 1.0;
-        m_ZoneOpacity         = 1.0;
-        m_ImageOpacity        = 1.0;
-        m_FilledShapeOpacity        = 1.0;
+        m_TrackOpacity = DEFAULT_TRACK_OPACITY;
+        m_ViaOpacity = DEFAULT_VIA_OPACITY;
+        m_PadOpacity = DEFAULT_PAD_OPACITY;
+        m_ZoneOpacity = DEFAULT_ZONE_OPACITY;
+        m_FilledShapeOpacity = DEFAULT_FILLED_SHAPE_OPACITY;
+        m_ImageOpacity = DEFAULT_IMAGE_OPACITY;
         m_OutsideGroupOpacity = 1.0;
     }
 

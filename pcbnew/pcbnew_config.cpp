@@ -92,20 +92,25 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     // If the project is new (no .kicad_prl file is create yet),
     // Load opacity defaults.
 
-    if( !prlPath.FileExists() )
-    {
-        PCBNEW_SETTINGS* appSettings = GetPcbNewSettings();
 
-        if( appSettings )
-        {
+    PCBNEW_SETTINGS* appSettings = GetPcbNewSettings();
+
+    if( appSettings )
+    {
+        if( !localSettings.Contains( "board.opacity.tracks" ) )
             localSettings.m_TrackOpacity = appSettings->m_ProjectDefaults.m_TrackOpacity;
+        if( !localSettings.Contains( "board.opacity.vias" ) )
             localSettings.m_ViaOpacity = appSettings->m_ProjectDefaults.m_ViaOpacity;
+        if( !localSettings.Contains( "board.opacity.pads" ) )
             localSettings.m_PadOpacity = appSettings->m_ProjectDefaults.m_PadOpacity;
+        if( !localSettings.Contains( "board.opacity.zones" ) )
             localSettings.m_ZoneOpacity = appSettings->m_ProjectDefaults.m_ZoneOpacity;
+        if( !localSettings.Contains( "board.opacity.images" ) )
             localSettings.m_ImageOpacity = appSettings->m_ProjectDefaults.m_ImageOpacity;
+        if( !localSettings.Contains( "board.opacity.shapes" ) )
             localSettings.m_ShapeOpacity = appSettings->m_ProjectDefaults.m_FilledShapeOpacity;
-        }
     }
+
 
     ApplyProjectFileSettings();
 

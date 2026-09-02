@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-115-g11c2dec8)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,8 +48,9 @@ PANEL_PROJECT_DEFAULTS_BASE::PANEL_PROJECT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	m_trackOpacityLabel->Wrap( -1 );
 	fgSizer1->Add( m_trackOpacityLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_OptTrackOpacity = new wxTextCtrl( pcbPage, wxID_ANY, _("100"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptTrackOpacity, 0, wxALL, 5 );
+    m_OptTrackOpacity = new wxSpinCtrl( pcbPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                        wxSP_ARROW_KEYS, 0, 100, 100 );
+    fgSizer1->Add( m_OptTrackOpacity, 0, wxALL, 5 );
 
 	m_opacityUnit = new wxStaticText( pcbPage, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_opacityUnit->Wrap( -1 );
@@ -59,8 +60,9 @@ PANEL_PROJECT_DEFAULTS_BASE::PANEL_PROJECT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	m_viaOpacityLabel->Wrap( -1 );
 	fgSizer1->Add( m_viaOpacityLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_OptViaOpacity = new wxTextCtrl( pcbPage, wxID_ANY, _("100"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptViaOpacity, 0, wxALL, 5 );
+    m_OptViaOpacity = new wxSpinCtrl( pcbPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                      wxSP_ARROW_KEYS, 0, 100, 100 );
+    fgSizer1->Add( m_OptViaOpacity, 0, wxALL, 5 );
 
 	m_opacityUnit1 = new wxStaticText( pcbPage, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_opacityUnit1->Wrap( -1 );
@@ -70,8 +72,9 @@ PANEL_PROJECT_DEFAULTS_BASE::PANEL_PROJECT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	m_padOpacityLabel->Wrap( -1 );
 	fgSizer1->Add( m_padOpacityLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_OptPadOpacity = new wxTextCtrl( pcbPage, wxID_ANY, _("100"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptPadOpacity, 0, wxALL, 5 );
+    m_OptPadOpacity = new wxSpinCtrl( pcbPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                      wxSP_ARROW_KEYS, 0, 100, 100 );
+    fgSizer1->Add( m_OptPadOpacity, 0, wxALL, 5 );
 
 	m_opacityUnit2 = new wxStaticText( pcbPage, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_opacityUnit2->Wrap( -1 );
@@ -81,8 +84,9 @@ PANEL_PROJECT_DEFAULTS_BASE::PANEL_PROJECT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	m_zoneOpacityLabel->Wrap( -1 );
 	fgSizer1->Add( m_zoneOpacityLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_OptZoneOpacity = new wxTextCtrl( pcbPage, wxID_ANY, _("60"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptZoneOpacity, 0, wxALL, 5 );
+    m_OptZoneOpacity = new wxSpinCtrl( pcbPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                       wxSP_ARROW_KEYS, 0, 100, 60 );
+    fgSizer1->Add( m_OptZoneOpacity, 0, wxALL, 5 );
 
 	m_opacityUnit3 = new wxStaticText( pcbPage, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_opacityUnit3->Wrap( -1 );
@@ -92,8 +96,9 @@ PANEL_PROJECT_DEFAULTS_BASE::PANEL_PROJECT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	m_filledShapesOpacityLabel->Wrap( -1 );
 	fgSizer1->Add( m_filledShapesOpacityLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_OptFilledShapeOpacity = new wxTextCtrl( pcbPage, wxID_ANY, _("100"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptFilledShapeOpacity, 0, wxALL, 5 );
+    m_OptFilledShapeOpacity = new wxSpinCtrl( pcbPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                              wxSP_ARROW_KEYS, 0, 100, 100 );
+    fgSizer1->Add( m_OptFilledShapeOpacity, 0, wxALL, 5 );
 
 	m_opacityUnit4 = new wxStaticText( pcbPage, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_opacityUnit4->Wrap( -1 );
@@ -103,8 +108,9 @@ PANEL_PROJECT_DEFAULTS_BASE::PANEL_PROJECT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	m_imageOpacityLabel->Wrap( -1 );
 	fgSizer1->Add( m_imageOpacityLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_OptImageOpacity = new wxTextCtrl( pcbPage, wxID_ANY, _("60"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_OptImageOpacity, 0, wxALL, 5 );
+    m_OptImageOpacity = new wxSpinCtrl( pcbPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                        wxSP_ARROW_KEYS, 0, 100, 60 );
+    fgSizer1->Add( m_OptImageOpacity, 0, wxALL, 5 );
 
 	m_opacityUnit5 = new wxStaticText( pcbPage, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_opacityUnit5->Wrap( -1 );

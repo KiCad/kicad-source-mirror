@@ -308,23 +308,23 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "pcb_display.live_3d_refresh",
             &m_Display.m_Live3DRefresh, false ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "pcb_project_defaults.track_opacity", &m_ProjectDefaults.m_TrackOpacity, 1.0 ) );
+    m_params.emplace_back( new PARAM<double>( "pcb_project_defaults.track_opacity", &m_ProjectDefaults.m_TrackOpacity,
+                                              DEFAULT_TRACK_OPACITY ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "pcb_project_defaults.via_opacity", &m_ProjectDefaults.m_ViaOpacity, 1.0 ) );
+    m_params.emplace_back( new PARAM<double>( "pcb_project_defaults.via_opacity", &m_ProjectDefaults.m_ViaOpacity,
+                                              DEFAULT_VIA_OPACITY ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "pcb_project_defaults.pad_opacity", &m_ProjectDefaults.m_PadOpacity, 1.0 ) );
+    m_params.emplace_back( new PARAM<double>( "pcb_project_defaults.pad_opacity", &m_ProjectDefaults.m_PadOpacity,
+                                              DEFAULT_PAD_OPACITY ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "pcb_project_defaults.zone_opacity", &m_ProjectDefaults.m_ZoneOpacity, 0.6 ) );
+    m_params.emplace_back( new PARAM<double>( "pcb_project_defaults.zone_opacity", &m_ProjectDefaults.m_ZoneOpacity,
+                                              DEFAULT_ZONE_OPACITY ) );
 
     m_params.emplace_back( new PARAM<double>( "pcb_project_defaults.filled_shape_opacity",
-                                              &m_ProjectDefaults.m_FilledShapeOpacity, 1.0 ) );
+                                              &m_ProjectDefaults.m_FilledShapeOpacity, DEFAULT_FILLED_SHAPE_OPACITY ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "pcb_project_defaults.image_opacity", &m_ProjectDefaults.m_ImageOpacity, 0.6 ) );
+    m_params.emplace_back( new PARAM<double>( "pcb_project_defaults.image_opacity", &m_ProjectDefaults.m_ImageOpacity,
+                                              DEFAULT_IMAGE_OPACITY ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.show_page_borders",
             &m_ShowPageLimits, true ) );
