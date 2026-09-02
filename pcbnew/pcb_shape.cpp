@@ -831,13 +831,14 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     {
         const VECTOR2I libCenter = xform.InverseApply( aCentre );
 
-        auto mirrorPt = [&]( VECTOR2I& p )
-        {
-            if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-                p.x = 2 * libCenter.x - p.x;
-            else
-                p.y = 2 * libCenter.y - p.y;
-        };
+        auto mirrorPt =
+                [&]( VECTOR2I& p )
+                {
+                    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+                        p.x = 2 * libCenter.x - p.x;
+                    else
+                        p.y = 2 * libCenter.y - p.y;
+                };
 
         if( m_libShape == SHAPE_T::ARC )
         {

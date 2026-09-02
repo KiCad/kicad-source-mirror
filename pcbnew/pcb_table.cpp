@@ -586,11 +586,16 @@ void PCB_TABLE::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     // because rotate-then-LR-flip equals TB-flip.
     PCB_LAYER_ID              origLayer = GetLayer();
     std::vector<PCB_LAYER_ID> origCellLayers;
+    std::vector<bool>         origMirrorSettings;
 
     origCellLayers.reserve( m_cells.size() );
+    origMirrorSettings.reserve( m_cells.size() );
 
     for( PCB_TABLECELL* cell : m_cells )
+    {
         origCellLayers.push_back( cell->GetLayer() );
+        origMirrorSettings.push_back( cell->IsMirrored() );
+    }
 
     if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
         Rotate( aCentre, ANGLE_180 );
@@ -600,7 +605,10 @@ void PCB_TABLE::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     SetLayer( origLayer );
 
     for( size_t i = 0; i < m_cells.size(); ++i )
+    {
         m_cells[i]->SetLayer( origCellLayers[i] );
+        m_cells[i]->SetMirrored( origMirrorSettings[i] );
+    }
 }
 
 
