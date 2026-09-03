@@ -2108,8 +2108,8 @@ bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
 void BOARD_DESIGN_SETTINGS::SetDefaultMasterPad()
 {
     m_Pad_Master->SetPadstackMode( PADSTACK::MODE::NORMAL );
-    m_Pad_Master->SetSizeX( pcbIUScale.mmToIU( DEFAULT_PAD_WIDTH_MM ) );
-    m_Pad_Master->SetSizeY( pcbIUScale.mmToIU( DEFAULT_PAD_HEIGTH_MM ) );
+    m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( DEFAULT_PAD_WIDTH_MM ),
+                                                           pcbIUScale.mmToIU( DEFAULT_PAD_HEIGTH_MM ) ) );
     m_Pad_Master->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
     m_Pad_Master->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ), 0 ) );
     m_Pad_Master->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
