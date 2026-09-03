@@ -1103,12 +1103,17 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                             remaining.fetch_sub( 1, std::memory_order_acq_rel );
                         };
 
-                // Seed the pool with every dependency-free item.
+                std::vector<size_t> roots;
+
+                // Avoid decrementing while loading to prevnt double-decrement
                 for( size_t i = 0; i < count; ++i )
                 {
                     if( inDegree[i].load( std::memory_order_relaxed ) == 0 )
-                        dispatch( i );
+                        roots.push_back( i );
                 }
+
+                for( size_t idx : roots )
+                    dispatch( idx );
 
                 // Drain the DAG, keeping the UI responsive and honoring cancellation.
                 while( remaining.load( std::memory_order_acquire ) > 0 )
