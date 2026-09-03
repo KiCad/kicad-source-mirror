@@ -21,6 +21,7 @@
 #ifndef QA_PCBNEW_UTILS_BOARD_FILE_UTILS__H
 #define QA_PCBNEW_UTILS_BOARD_FILE_UTILS__H
 
+#include <filesystem>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -52,12 +53,12 @@ std::string GetPcbnewTestDataDir();
  * @param aBoard    the board to write out
  * @param aFilename the filename to write to
  */
-void DumpBoardToFile( BOARD& aBoard, const std::string& aFilename );
+void DumpBoardToFile( BOARD& aBoard, const std::filesystem::path& aFilename );
 
 /**
  * Same as DumpBoardToFile, but for footprints
  */
-void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::string& aLibraryPath );
+void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::filesystem::path& aLibraryPath );
 
 /**
  * Utility function to read a #BOARD_ITEM (probably a #FOOTPRINT or a #BOARD)

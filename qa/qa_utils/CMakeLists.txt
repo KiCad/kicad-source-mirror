@@ -20,6 +20,7 @@ set( QA_UTIL_COMMON_SRC
     utility_program.cpp
     error_handlers.cpp
 
+    file_utils.cpp
     uuid_test_utils.cpp
 
     geometry/geometry.cpp

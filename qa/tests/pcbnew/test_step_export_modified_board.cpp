@@ -36,6 +36,7 @@
 #include <vector>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 #include <boost/test/unit_test.hpp>
 
 #include <pcbnew_utils/board_file_utils.h>
@@ -46,37 +47,6 @@
 #include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/string.h>
-
-
-namespace
-{
-/// A uniquely-named temporary directory removed on destruction, so concurrent runs and early
-/// test failures cannot collide or leak.
-class SCOPED_TEMP_DIR
-{
-public:
-    SCOPED_TEMP_DIR( const wxString& aPrefix )
-    {
-        wxString reserved = wxFileName::CreateTempFileName( aPrefix );
-        BOOST_REQUIRE( !reserved.IsEmpty() );
-        BOOST_REQUIRE( wxRemoveFile( reserved ) );
-
-        m_path = std::filesystem::path( std::string( reserved.utf8_str() ) );
-        std::filesystem::create_directory( m_path );
-    }
-
-    ~SCOPED_TEMP_DIR()
-    {
-        std::error_code ec;
-        std::filesystem::remove_all( m_path, ec );
-    }
-
-    const std::filesystem::path& Path() const { return m_path; }
-
-private:
-    std::filesystem::path m_path;
-};
-} // namespace
 
 
 BOOST_AUTO_TEST_SUITE( StepExportModifiedBoard )
@@ -96,9 +66,9 @@ BOOST_AUTO_TEST_CASE( ModifiedBoardStagesCurrentState )
 
     // Stage the board's "saved" copy in an isolated temp directory so the helper writes its
     // temporary export file alongside it rather than into the shared test data tree.
-    const SCOPED_TEMP_DIR       workDir( wxS( "kicad_step_export_23704_" ) );
-    const std::filesystem::path onDisk = workDir.Path() / "panel.kicad_pcb";
-    KI_TEST::DumpBoardToFile( *board, onDisk.string() );
+    const KI_TEST::SCOPED_TEMP_DIR workDir( wxS( "kicad_step_export_23704_" ) );
+    const std::filesystem::path& onDisk = workDir.Path() / "panel.kicad_pcb";
+    KI_TEST::DumpBoardToFile( *board, onDisk );
     const wxString onDiskPath = wxString::FromUTF8( onDisk.string() );
 
     // A sibling project file must be staged too, so project-relative model and library paths

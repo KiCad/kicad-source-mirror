@@ -58,10 +58,10 @@ std::string GetPcbnewTestDataDir()
 }
 
 
-void DumpBoardToFile( BOARD& board, const std::string& aFilename )
+void DumpBoardToFile( BOARD& board, const std::filesystem::path& aFilename )
 {
     PCB_IO_KICAD_SEXPR io;
-    io.SaveBoard( aFilename, &board );
+    io.SaveBoard( aFilename.string(), &board );
 }
 
 
@@ -141,10 +141,10 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFi
 }
 
 
-void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::string& aLibraryPath )
+void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::filesystem::path& aLibraryPath )
 {
     PCB_IO_KICAD_SEXPR io;
-    io.FootprintSave( aLibraryPath, &aFootprint, nullptr );
+    io.FootprintSave( aLibraryPath.string(), &aFootprint, nullptr );
 }
 
 
