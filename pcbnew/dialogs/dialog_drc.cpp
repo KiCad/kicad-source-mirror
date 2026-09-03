@@ -255,17 +255,20 @@ bool DIALOG_DRC::hitTestLink( wxDataViewCtrl* aCtrl, const wxPoint& aPoint, wxSt
     if( !item.IsOk() || !col )
         return false;
 
-    auto* hl = dynamic_cast<HYPERLINK_DV_RENDERER*>( col->GetRenderer() );
+    HYPERLINK_DV_RENDERER* hl = dynamic_cast<HYPERLINK_DV_RENDERER*>( col->GetRenderer() );
 
     if( !hl )
         return false;
 
-    wxVariant value;
+    wxVariant          value;
+    wxDataViewItemAttr attr;
+
     model->GetValue( value, item, col->GetModelColumn() );
+    model->GetAttr( item, col->GetModelColumn(), attr );
 
-    wxRect cell = aCtrl->GetItemRect( item, col );
+    wxRect cellRect = aCtrl->GetItemRect( item, col );
 
-    return hl->HitTestRunsForCell( value.GetString(), cell, aPoint, aHref );
+    return hl->HitTestRunsForCell( value.GetString(), attr, cellRect, aPoint, aHref );
 }
 
 
