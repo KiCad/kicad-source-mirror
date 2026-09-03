@@ -122,30 +122,49 @@ static const PADSTACK_LAYOUT& padstackLayout( uint16_t aVersion )
 namespace DRW_ITEM
 {
     constexpr size_t SIZE = 112;
-    constexpr int    PIECE_START = 8;
-    constexpr int    VERTEX_START = 12;
-    constexpr int    ARC_START = 16;
-    constexpr int    CLASS_WORD = 24;
-    constexpr int    PIECE_COUNT = 24;
-    constexpr int    SUBTYPE_WORD = 28;
-    constexpr int    NAME = 44;
-    constexpr int    TYPE_TAG = 84;
-    constexpr int    ORIGIN_X = 88;
-    constexpr int    ORIGIN_Y = 92;
-    constexpr int    BBOX_MIN_X = 96;
-    constexpr int    BBOX_MIN_Y = 100;
-    constexpr int    BBOX_MAX_X = 104;
-    constexpr int    BBOX_MAX_Y = 108;
+
+    // Ring rotation shared by every section-10 record access
+    constexpr size_t ROTATION = 68;
+
+    enum FIELD : size_t
+    {
+        PIECE_START = 8,
+        VERTEX_START = 12,
+        ARC_START = 16,
+        CLASS_WORD = 24,
+        PIECE_COUNT = 24,
+        SUBTYPE_WORD = 28,
+        NAME = 44,
+        TYPE_TAG = 84,
+        ORIGIN_X = 88,
+        ORIGIN_Y = 92,
+        BBOX_MIN_X = 96,
+        BBOX_MIN_Y = 100,
+        BBOX_MAX_X = 104,
+        BBOX_MAX_Y = 108
+    };
 } // namespace DRW_ITEM
+
+
+// PADS <= v2022 packs the same record into 100 bytes with its own name and origin offsets
+namespace DRW_ITEM_V2022
+{
+    constexpr size_t SIZE = 100;
+    constexpr size_t NAME = 32;
+    constexpr size_t ORIGIN_X = 72;
+} // namespace DRW_ITEM_V2022
 
 
 // Block-class tags carried at DRW_ITEM::TYPE_TAG. 0x4D00 also marks the board-outline item and
 // is the library decal marker elsewhere.
 namespace DRW_TAG
 {
-    constexpr uint32_t COPPER_FILL = 0x00004900;   // filled copper region
-    constexpr uint32_t COPPER_FILL_B = 0x0000FF00; // second filled-copper tag, same class/shape
-    constexpr uint32_t LINE_ITEM = 0x00004D00;     // line/outline item (board outline, v2026 line copper)
+    enum TAG : uint32_t
+    {
+        COPPER_FILL = 0x00004900,   // filled copper region
+        COPPER_FILL_B = 0x0000FF00, // second filled-copper tag, same class/shape
+        LINE_ITEM = 0x00004D00      // line/outline item (board outline, v2026 line copper)
+    };
 } // namespace DRW_TAG
 
 
@@ -2883,7 +2902,7 @@ void BINARY_PARSER::parseCopperShapes()
 
     const size_t pieceStride = m_version <= 0x2024 ? 16 : 20;
 
-    if( sec10->stride != 112 || sec11->stride != pieceStride || sec12->stride != 12 )
+    if( sec10->stride != DRW_ITEM::SIZE || sec11->stride != pieceStride || sec12->stride != 12 )
         THROW_IO_ERROR( "Invalid PADS copper-shape controller framing" );
 
     constexpr size_t MAX_COPPER_SHAPE_EDGES = 80;
@@ -2895,7 +2914,7 @@ void BINARY_PARSER::parseCopperShapes()
         if( name.size() < 4 || name.substr( 0, 3 ) != "DRW" )
             continue;
 
-        const size_t ownerStride = m_version <= 0x2022 ? 100 : 112;
+        const size_t ownerStride = m_version <= 0x2022 ? DRW_ITEM_V2022::SIZE : DRW_ITEM::SIZE;
 
         if( ( run.itemKind & 0xFFFFU ) != 3 )
             continue;
@@ -2905,8 +2924,8 @@ void BINARY_PARSER::parseCopperShapes()
         if( sec11Index >= sec11->count )
             continue;
 
-        int32_t originX = ringI32( *sec10, 68, ownerStride, run.ownerIndex, DRW_ITEM::ORIGIN_X );
-        int32_t originY = ringI32( *sec10, 68, ownerStride, run.ownerIndex, DRW_ITEM::ORIGIN_Y );
+        int32_t originX = ringI32( *sec10, DRW_ITEM::ROTATION, ownerStride, run.ownerIndex, DRW_ITEM::ORIGIN_X );
+        int32_t originY = ringI32( *sec10, DRW_ITEM::ROTATION, ownerStride, run.ownerIndex, DRW_ITEM::ORIGIN_Y );
 
         // fetchOwnerLoop already strips the duplicate closing point, so its own >= 3 success
         // condition is the true minimum for a valid polygon (a triangle). The previous minEdges
@@ -2990,7 +3009,7 @@ void BINARY_PARSER::parseDimensions()
     // empty, so KiCad recomputes the displayed value from start/end (which equals the PADS value).
     for( uint32_t rec = 0; rec < sec10->count; ++rec )
     {
-        std::string name = ringStr( *sec10, 68, 112, rec, 44, 24 );
+        std::string name = ringStr( *sec10, DRW_ITEM::ROTATION, DRW_ITEM::SIZE, rec, DRW_ITEM::NAME, 24 );
 
         if( name.size() < 4 || name.substr( 0, 3 ) != "DIM" )
             continue;
@@ -3109,26 +3128,26 @@ void BINARY_PARSER::buildOwnerRuns()
     if( sec10->count == 0 )
         return;
 
-    const size_t stride = m_version <= 0x2022 ? 100 : 112;
-    const size_t nameOffset = m_version <= 0x2022 ? 32 : 44;
+    const size_t stride = m_version <= 0x2022 ? DRW_ITEM_V2022::SIZE : DRW_ITEM::SIZE;
+    const size_t nameOffset = m_version <= 0x2022 ? DRW_ITEM_V2022::NAME : DRW_ITEM::NAME;
 
     if( sec10->totalBytes != static_cast<uint64_t>( sec10->count ) * stride )
         THROW_IO_ERROR( "Invalid PADS drawing-controller extent" );
 
     for( uint32_t ownerIndex = 0; ownerIndex < sec10->count; ++ownerIndex )
     {
-        std::string name = ringStr( *sec10, 68, stride, ownerIndex, nameOffset, stride - nameOffset );
+        std::string name = ringStr( *sec10, DRW_ITEM::ROTATION, stride, ownerIndex, nameOffset, stride - nameOffset );
 
         if( name.empty() || m_ownerRuns.count( name ) )
             continue;
 
         uint32_t  lagIndex = ( ownerIndex + 1 ) % sec10->count;
         OWNER_RUN run;
-        run.pieceStart = ringI32( *sec10, 68, stride, lagIndex, DRW_ITEM::PIECE_START );
-        run.vertexStart = ringI32( *sec10, 68, stride, lagIndex, DRW_ITEM::VERTEX_START );
-        run.arcStart = ringI32( *sec10, 68, stride, lagIndex, DRW_ITEM::ARC_START );
-        run.pieceCount = ringI32( *sec10, 68, stride, lagIndex, DRW_ITEM::PIECE_COUNT );
-        run.itemKind = ringU32( *sec10, 68, stride, lagIndex, DRW_ITEM::SUBTYPE_WORD );
+        run.pieceStart = ringI32( *sec10, DRW_ITEM::ROTATION, stride, lagIndex, DRW_ITEM::PIECE_START );
+        run.vertexStart = ringI32( *sec10, DRW_ITEM::ROTATION, stride, lagIndex, DRW_ITEM::VERTEX_START );
+        run.arcStart = ringI32( *sec10, DRW_ITEM::ROTATION, stride, lagIndex, DRW_ITEM::ARC_START );
+        run.pieceCount = ringI32( *sec10, DRW_ITEM::ROTATION, stride, lagIndex, DRW_ITEM::PIECE_COUNT );
+        run.itemKind = ringU32( *sec10, DRW_ITEM::ROTATION, stride, lagIndex, DRW_ITEM::SUBTYPE_WORD );
         run.ownerIndex = ownerIndex;
         m_ownerRuns.emplace( std::move( name ), run );
     }
@@ -3186,11 +3205,11 @@ void BINARY_PARSER::parseBoardOutlineDirect()
     if( !owners || !pieces || !vertices || !arcParameters )
         THROW_IO_ERROR( "Missing PADS outline controllers" );
 
-    const size_t ownerStride = m_version <= 0x2022 ? 100 : 112;
+    const size_t ownerStride = m_version <= 0x2022 ? DRW_ITEM_V2022::SIZE : DRW_ITEM::SIZE;
     const size_t pieceStride = m_version <= 0x2024 ? 16 : 20;
     const size_t pieceHead = pieceStride == 16 ? 8 : 12;
     const size_t cornerField = pieceStride == 16 ? 12 : 16;
-    const size_t originXField = ownerStride == 100 ? 72 : 88;
+    const size_t originXField = ownerStride == DRW_ITEM_V2022::SIZE ? DRW_ITEM_V2022::ORIGIN_X : DRW_ITEM::ORIGIN_X;
     const size_t originYField = originXField + 4;
     const size_t pieceRotation = pieces->totalBytes - pieceHead;
 
@@ -3202,8 +3221,8 @@ void BINARY_PARSER::parseBoardOutlineDirect()
         if( static_cast<uint64_t>( run.pieceStart ) + static_cast<uint64_t>( run.pieceCount ) > pieces->count )
             THROW_IO_ERROR( "Invalid PADS board-outline piece range" );
 
-        int32_t originX = ringI32( *owners, 68, ownerStride, run.ownerIndex, originXField );
-        int32_t originY = ringI32( *owners, 68, ownerStride, run.ownerIndex, originYField );
+        int32_t originX = ringI32( *owners, DRW_ITEM::ROTATION, ownerStride, run.ownerIndex, originXField );
+        int32_t originY = ringI32( *owners, DRW_ITEM::ROTATION, ownerStride, run.ownerIndex, originYField );
         int32_t vertexCursor = run.vertexStart;
 
         for( int32_t piece = 0; piece < run.pieceCount; ++piece )
@@ -3270,11 +3289,11 @@ void BINARY_PARSER::parseGraphicLines()
     if( !owners || !pieces || !vertices || !arcParameters )
         THROW_IO_ERROR( "Missing PADS graphic controllers" );
 
-    const size_t ownerStride = m_version <= 0x2022 ? 100 : 112;
+    const size_t ownerStride = m_version <= 0x2022 ? DRW_ITEM_V2022::SIZE : DRW_ITEM::SIZE;
     const size_t pieceStride = m_version <= 0x2024 ? 16 : 20;
     const size_t pieceHead = pieceStride - 8;
     const size_t cornerField = pieceStride - 4;
-    const size_t originXField = ownerStride == 100 ? 72 : 88;
+    const size_t originXField = ownerStride == DRW_ITEM_V2022::SIZE ? DRW_ITEM_V2022::ORIGIN_X : DRW_ITEM::ORIGIN_X;
     const size_t originYField = originXField + 4;
     const size_t pieceRotation = pieces->totalBytes - pieceHead;
 
@@ -3295,8 +3314,8 @@ void BINARY_PARSER::parseGraphicLines()
         if( static_cast<uint64_t>( run.pieceStart ) + static_cast<uint64_t>( run.pieceCount ) > pieces->count )
             THROW_IO_ERROR( "Invalid PADS graphic piece range" );
 
-        int32_t originX = ringI32( *owners, 68, ownerStride, run.ownerIndex, originXField );
-        int32_t originY = ringI32( *owners, 68, ownerStride, run.ownerIndex, originYField );
+        int32_t originX = ringI32( *owners, DRW_ITEM::ROTATION, ownerStride, run.ownerIndex, originXField );
+        int32_t originY = ringI32( *owners, DRW_ITEM::ROTATION, ownerStride, run.ownerIndex, originYField );
         int32_t vertexCursor = run.vertexStart;
 
         for( int32_t piece = 0; piece < run.pieceCount; ++piece )
@@ -3502,7 +3521,7 @@ void BINARY_PARSER::parseKeepouts()
     if( !sec10 || !sec12 )
         THROW_IO_ERROR( "Missing PADS keepout controllers" );
 
-    if( sec10->stride < 112 || sec12->stride < 12 )
+    if( sec10->stride < DRW_ITEM::SIZE || sec12->stride < 12 )
         THROW_IO_ERROR( "Invalid PADS keepout-controller framing" );
 
     struct Owner
@@ -3525,15 +3544,19 @@ void BINARY_PARSER::parseKeepouts()
 
         Owner owner;
         owner.name = name;
-        owner.originX = ringI32( *sec10, 68, 112, run.ownerIndex, DRW_ITEM::ORIGIN_X );
-        owner.originY = ringI32( *sec10, 68, 112, run.ownerIndex, DRW_ITEM::ORIGIN_Y );
-        owner.minX = static_cast<int64_t>( ringI32( *sec10, 68, 112, run.ownerIndex, DRW_ITEM::BBOX_MIN_X ) )
+        owner.originX = ringI32( *sec10, DRW_ITEM::ROTATION, DRW_ITEM::SIZE, run.ownerIndex, DRW_ITEM::ORIGIN_X );
+        owner.originY = ringI32( *sec10, DRW_ITEM::ROTATION, DRW_ITEM::SIZE, run.ownerIndex, DRW_ITEM::ORIGIN_Y );
+        owner.minX = static_cast<int64_t>( ringI32( *sec10, DRW_ITEM::ROTATION, DRW_ITEM::SIZE, run.ownerIndex,
+                                                    DRW_ITEM::BBOX_MIN_X ) )
                      - owner.originX;
-        owner.minY = static_cast<int64_t>( ringI32( *sec10, 68, 112, run.ownerIndex, DRW_ITEM::BBOX_MIN_Y ) )
+        owner.minY = static_cast<int64_t>( ringI32( *sec10, DRW_ITEM::ROTATION, DRW_ITEM::SIZE, run.ownerIndex,
+                                                    DRW_ITEM::BBOX_MIN_Y ) )
                      - owner.originY;
-        owner.maxX = static_cast<int64_t>( ringI32( *sec10, 68, 112, run.ownerIndex, DRW_ITEM::BBOX_MAX_X ) )
+        owner.maxX = static_cast<int64_t>( ringI32( *sec10, DRW_ITEM::ROTATION, DRW_ITEM::SIZE, run.ownerIndex,
+                                                    DRW_ITEM::BBOX_MAX_X ) )
                      - owner.originX;
-        owner.maxY = static_cast<int64_t>( ringI32( *sec10, 68, 112, run.ownerIndex, DRW_ITEM::BBOX_MAX_Y ) )
+        owner.maxY = static_cast<int64_t>( ringI32( *sec10, DRW_ITEM::ROTATION, DRW_ITEM::SIZE, run.ownerIndex,
+                                                    DRW_ITEM::BBOX_MAX_Y ) )
                      - owner.originY;
 
         owners.push_back( std::move( owner ) );
