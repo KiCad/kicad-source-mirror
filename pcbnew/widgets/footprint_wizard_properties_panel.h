@@ -61,7 +61,6 @@ private:
     };
 
     FOOTPRINT_WIZARD_FRAME* m_frame;
-    FOOTPRINT_WIZARD* m_wizard;
     std::vector<std::unique_ptr<WIZARD_PARAM_INFO>> m_paramInfos;
 
     PG_UNIT_EDITOR*     m_unitEditorInstance;

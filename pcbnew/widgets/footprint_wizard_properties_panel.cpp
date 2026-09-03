@@ -37,7 +37,6 @@ FOOTPRINT_WIZARD_PROPERTIES_PANEL::FOOTPRINT_WIZARD_PROPERTIES_PANEL( wxWindow* 
                                                                       FOOTPRINT_WIZARD_FRAME* aFrame ) :
         PROPERTIES_PANEL( aParent, aFrame ),
         m_frame( aFrame ),
-        m_wizard( nullptr ),
         m_unitEditorInstance( nullptr ),
         m_checkboxEditorInstance( nullptr ),
         m_ratioEditorInstance( nullptr )

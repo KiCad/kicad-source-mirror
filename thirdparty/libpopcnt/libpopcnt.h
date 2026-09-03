@@ -774,7 +774,7 @@ static inline uint64_t popcnt_arm_sve(const void* data, uint64_t size)
  * @data: An array
  * @size: Size of data in bytes
  */
-static uint64_t popcnt(const void* data, uint64_t size)
+static inline uint64_t popcnt(const void* data, uint64_t size)
 {
 /*
  * CPUID runtime checks are only enabled if this is needed.
