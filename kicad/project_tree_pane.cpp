@@ -3210,12 +3210,25 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
     wxLogTrace( traceGit, "onGitSyncTimer" );
     COMMON_SETTINGS::GIT& gitSettings = Pgm().GetCommonSettings()->m_Git;
 
-    if( !gitSettings.enableGit || !m_TreeProject )
+    if( !gitSettings.enableGit || gitSettings.updatInterval <= 0 || !m_TreeProject )
         return;
 
-    thread_pool& tp = GetKiCadThreadPool();
+    // Skip the tick rather than stack a second fetch; assigning over a running std::async
+    // future blocks in its destructor, here on the UI thread.
+    if( m_gitSyncTask.valid()
+            && m_gitSyncTask.wait_for( std::chrono::seconds( 0 ) ) != std::future_status::ready )
+    {
+        wxLogTrace( traceGit, "onGitSyncTimer: previous fetch still running, skipping" );
+        m_gitSyncTimer.Start( gitSettings.updatInterval * 60 * 1000, wxTIMER_ONE_SHOT );
+        return;
+    }
 
-    m_gitSyncTask = tp.submit_task( [this]()
+    if( std::shared_ptr<KIGIT_COMMON> gitCommon = m_TreeProject->GitCommonPtr() )
+        gitCommon->SetCancelled( false );
+
+    // Never the shared compute pool; a libgit2 network read parked there stalls DRC, zone
+    // filling and library loading.
+    m_gitSyncTask = std::async( std::launch::async, [this]()
     {
         // Pin a shared handle so a concurrent releaseGitRepo() cannot free the common while
         // PerformFetch() is inside it holding the action mutex.
@@ -3242,12 +3255,9 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
             CallAfter( [this]() { gitStatusTimerHandler(); } );
     } );
 
-    if( gitSettings.updatInterval > 0 )
-    {
-        wxLogTrace( traceGit, "onGitSyncTimer: Restarting git sync timer" );
-        // We store the timer interval in minutes but wxTimer uses milliseconds
-        m_gitSyncTimer.Start( gitSettings.updatInterval * 60 * 1000, wxTIMER_ONE_SHOT );
-    }
+    wxLogTrace( traceGit, "onGitSyncTimer: Restarting git sync timer" );
+    // We store the timer interval in minutes but wxTimer uses milliseconds
+    m_gitSyncTimer.Start( gitSettings.updatInterval * 60 * 1000, wxTIMER_ONE_SHOT );
 }
 
 

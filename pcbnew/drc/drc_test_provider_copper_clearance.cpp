@@ -1119,9 +1119,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                         m_board->m_DRCMaxClearance );
             };
 
+    BS::multi_future<void> graphic_futures;
+
     for( BOARD_ITEM* item : m_board->Drawings() )
     {
-        (void)tp.submit_task(
+        graphic_futures.push_back( tp.submit_task(
                 [this, item, &done, testGraphicAgainstZone, testCopperGraphic]()
                 {
                     if( !m_drcEngine->IsCancelled() )
@@ -1136,12 +1138,12 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
 
                         done.fetch_add( 1 );
                     }
-                } );
+                } ) );
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        (void)tp.submit_task(
+        graphic_futures.push_back( tp.submit_task(
                 [this, footprint, &done, testGraphicAgainstZone, testCopperGraphic]()
                 {
                     for( BOARD_ITEM* item : footprint->GraphicalItems() )
@@ -1170,18 +1172,17 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                             done.fetch_add( 1 );
                         }
                     }
-                } );
+                } ) );
     }
 
-    while( true )
+    // Wait on our own futures, not the pool; the tasks hold done by reference until they return.
+    // reportProgress() pumps the dialog and latches a Cancel click, so run it even when ready.
+    for( std::future<void>& future : graphic_futures )
     {
-        reportProgress( done, count );
-
-        if( m_drcEngine->IsCancelled() )
-            break;
-
-        if( tp.wait_for( std::chrono::milliseconds( 250 ) ) )
-            break;
+        do
+        {
+            reportProgress( done, count );
+        } while( future.wait_for( std::chrono::milliseconds( 250 ) ) != std::future_status::ready );
     }
 }
 
@@ -1232,9 +1233,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
     std::vector<std::map<PCB_LAYER_ID, std::vector<SEG>>> poly_segments( m_board->m_DRCCopperZones.size() );
     std::vector<std::map<PCB_LAYER_ID, SEG_RTREE>>        seg_rtrees( m_board->m_DRCCopperZones.size() );
 
-    thread_pool&        tp = GetKiCadThreadPool();
-    std::atomic<size_t> done( 0 );
-    size_t              count = 0;
+    thread_pool&           tp = GetKiCadThreadPool();
+    std::atomic<size_t>    done( 0 );
+    size_t                 count = 0;
+    BS::multi_future<void> zone_futures;
 
     auto reportZoneZoneViolation =
             [this]( ZONE* zoneA, ZONE* zoneB, VECTOR2I& pt, int actual, const DRC_CONSTRAINT& constraint,
@@ -1254,6 +1256,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
             [this, reportZoneZoneViolation, &poly_segments, &seg_rtrees, &done]
             ( size_t zoneA_idx, size_t zoneB_idx, PCB_LAYER_ID layer ) -> void
             {
+                if( m_drcEngine->IsCancelled() )
+                    return;
+
                 ZONE*          zoneA = m_board->m_DRCCopperZones[zoneA_idx];
                 ZONE*          zoneB = m_board->m_DRCCopperZones[zoneB_idx];
                 int            actual = 0;
@@ -1274,6 +1279,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
                         for( SEG& refSegment : refSegments )
                         {
+                            // A single zone pair can be a long scan on a dense board.
+                            if( m_drcEngine->IsCancelled() )
+                                return;
+
                             int minX = std::min( refSegment.A.x, refSegment.B.x ) - clearance;
                             int minY = std::min( refSegment.A.y, refSegment.B.y ) - clearance;
                             int maxX = std::max( refSegment.A.x, refSegment.B.x ) + clearance;
@@ -1403,24 +1412,23 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     continue;
 
                 count++;
-                (void)tp.submit_task(
+                zone_futures.push_back( tp.submit_task(
                         [checkZones, ia, ia2, layer]()
                         {
                             checkZones( ia, ia2, layer );
-                        } );
+                        } ) );
             }
         }
     }
 
-    while( true )
+    // Wait on our own futures, not the pool; checkZones holds done and poly_segments by reference.
+    // reportProgress() pumps the dialog and latches a Cancel click, so run it even when ready.
+    for( std::future<void>& future : zone_futures )
     {
-        reportProgress( done, count );
-
-        if( m_drcEngine->IsCancelled() )
-            break;
-
-        if( tp.wait_for( std::chrono::milliseconds( 250 ) ) )
-            break;
+        do
+        {
+            reportProgress( done, count );
+        } while( future.wait_for( std::chrono::milliseconds( 250 ) ) != std::future_status::ready );
     }
 }
 

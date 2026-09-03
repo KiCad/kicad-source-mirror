@@ -78,6 +78,21 @@ static std::string getFormattedCommitDate( const git_time& aTime )
 void LIBGIT_BACKEND::Init()
 {
     git_libgit2_init();
+
+    // libgit2 sets no timeout of its own, so an unreachable remote parks a fetch in connect()
+    // or recv() for as long as the OS allows.  SSH remotes stay bounded only by libssh2.
+
+#if ( LIBGIT2_VER_MAJOR > 1 ) || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 7 )
+    constexpr int connectTimeoutMs = 10000;
+    constexpr int transferTimeoutMs = 30000;
+
+    if( git_libgit2_opts( GIT_OPT_SET_SERVER_CONNECT_TIMEOUT, connectTimeoutMs ) != GIT_OK
+            || git_libgit2_opts( GIT_OPT_SET_SERVER_TIMEOUT, transferTimeoutMs ) != GIT_OK )
+    {
+        wxLogTrace( traceGit, "LIBGIT_BACKEND::Init(): could not set server timeouts: %s",
+                    KIGIT_COMMON::GetLastGitError() );
+    }
+#endif
 }
 
 
@@ -1073,7 +1088,9 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     git_proxy_options proxyOpts;
     git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
     proxyOpts.type = GIT_PROXY_AUTO;
-    aHandler->GetCommon()->SetCancelled( false );
+
+    // Do not SetCancelled( false ) here.  A close or a preference change can raise the flag
+    // after this fetch starts, and clearing it would strand the caller on the transfer.
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
