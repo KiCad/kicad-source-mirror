@@ -809,6 +809,9 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
 
     temp->SetParent( GetBoard() );
 
+    if( !( aCompareFlags & COMPARE_FLAGS::INSTANCE_TO_INSTANCE ) && IsFlipped() != temp->IsFlipped() )
+        temp->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
+
     for( BOARD_ITEM* item : temp->GraphicalItems() )
         item->NormalizeForCompare();
 

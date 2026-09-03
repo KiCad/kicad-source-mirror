@@ -341,6 +341,33 @@ BOOST_FIXTURE_TEST_CASE( UndoRedoRestoresFootprintAndPadState, BOARD_FIXTURE )
 }
 
 
+BOOST_FIXTURE_TEST_CASE( FlippedFootprintMatchesLibraryCopy, BOARD_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue18", m_board );
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        std::unique_ptr<FOOTPRINT> libCopy( static_cast<FOOTPRINT*>( fp->Clone() ) );
+
+        BOOST_REQUIRE_MESSAGE( !fp->FootprintNeedsUpdate( libCopy.get(), BOARD_ITEM::COMPARE_FLAGS::DRC ),
+                               "footprint " << fp->GetReference() << " differs from its own clone" );
+
+        fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+
+        BOOST_CHECK_MESSAGE( !fp->FootprintNeedsUpdate( libCopy.get(), BOARD_ITEM::COMPARE_FLAGS::DRC ),
+                             "footprint " << fp->GetReference()
+                                          << " flipped top-bottom reported as differing from library" );
+
+        fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+        fp->Flip( fp->GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
+
+        BOOST_CHECK_MESSAGE( !fp->FootprintNeedsUpdate( libCopy.get(), BOARD_ITEM::COMPARE_FLAGS::DRC ),
+                             "footprint " << fp->GetReference()
+                                          << " flipped left-right reported as differing from library" );
+    }
+}
+
+
 // Stored lib start and the derived FP-relative pos must agree within 1 IU.
 static void CHECK_SHAPE_LIBPOS_MIRROR( const FOOTPRINT& aFp )
 {
