@@ -903,17 +903,17 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
     for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
-        if( !sameNet && !freePad )
+        if( IsDrilledHole( aA ) && IsDrilledHole( aB ) )
         {
-            if( IsDrilledHole( aA ) && IsDrilledHole( aB ) )
+            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
             {
-                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
-                {
-                    if( constraint.m_Value.Min() > rv )
-                        rv = constraint.m_Value.Min();
-                }
+                if( constraint.m_Value.Min() > rv )
+                    rv = constraint.m_Value.Min();
             }
-            else if( isHole( aA ) || isHole( aB ) )
+        }
+        else if( isHole( aA ) || isHole( aB ) )
+        {
+            if( !sameNet )
             {
                 if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
                 {
@@ -921,9 +921,12 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                         rv = constraint.m_Value.Min();
                 }
             }
+        }
 
-            // No 'else'; plated holes get both HOLE_CLEARANCE and CLEARANCE
-            if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
+        // No 'else'; plated holes get both HOLE_CLEARANCE and CLEARANCE
+        if( isCopper( aA ) && ( !aB || isCopper( aB ) ) && !sameNet && !freePad )
+        {
+            if( !sameNet && !freePad )
             {
                 if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
                 {
@@ -931,15 +934,14 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                         rv = constraint.m_Value.Min();
                 }
             }
+        }
 
-            // No 'else'; non-plated milled holes get both HOLE_CLEARANCE and EDGE_CLEARANCE
-            if( isEdge( aA ) || IsNonPlatedSlot( aA ) || isEdge( aB ) || IsNonPlatedSlot( aB ) )
+        if( isEdge( aA ) || IsNonPlatedSlot( aA ) || isEdge( aB ) || IsNonPlatedSlot( aB ) )
+        {
+            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
             {
-                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
-                {
-                    if( constraint.m_Value.Min() > rv )
-                        rv = constraint.m_Value.Min();
-                }
+                if( constraint.m_Value.Min() > rv )
+                    rv = constraint.m_Value.Min();
             }
         }
 
@@ -1421,7 +1423,7 @@ public:
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
         PNS_PCBNEW_DEBUG_DECORATOR::Clear();
-        
+
         for ( PNS::ITEM* item : m_clonedItems )
         {
             delete item;
