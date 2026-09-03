@@ -345,6 +345,7 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( int aFlags )
     }
 
     viewControls->LoadSettings();
+    GetCanvas()->UpdateTouchpadGestureHandler();
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 

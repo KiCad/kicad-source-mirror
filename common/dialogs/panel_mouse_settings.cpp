@@ -20,6 +20,7 @@
 
 #include <bitmaps.h>
 #include <dialogs/panel_mouse_settings.h>
+#include <kiplatform/touchpad.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <widgets/paged_dialog.h>
@@ -28,7 +29,9 @@
 
 PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( wxWindow* aParent ) :
         PANEL_MOUSE_SETTINGS_BASE( aParent ),
-        m_currentScrollMod( {} )
+        m_currentScrollMod( {} ),
+        m_nativeTouchpadGestureAvailable(
+                KIPLATFORM::UI::IsNativeTouchpadGestureAvailable() )
 {
 #ifdef __WXOSX_MAC__
     for( wxSizerItem* child : m_zoomSizer->GetChildren() )
@@ -49,6 +52,12 @@ PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( wxWindow* aParent ) :
 
     m_scrollWarning->SetBitmap( KiBitmapBundle( BITMAPS::small_warning ) );
     m_scrollWarning->Hide();
+
+    if( !m_nativeTouchpadGestureAvailable )
+    {
+        m_touchpadModeLabel->Hide();
+        m_choiceTouchpadMode->Hide();
+    }
 
     m_checkAutoZoomSpeed->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
             [&]( wxCommandEvent& aEvt )
@@ -78,6 +87,8 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
 
     m_currentScrollMod = getScrollModSet();
+
+    TOUCHPAD_MODE touchpadMode = getTouchpadMode();
 
     if( !isScrollModSetValid( m_currentScrollMod ) )
     {
@@ -126,6 +137,7 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
     cfg->m_Input.zoom_speed            = m_zoomSpeed->GetValue();
     cfg->m_Input.zoom_speed_auto       = m_checkAutoZoomSpeed->GetValue();
     cfg->m_Input.horizontal_pan        = m_checkEnablePanH->GetValue();
+    cfg->m_Input.touchpad_mode         = touchpadMode;
 
     cfg->m_Input.scroll_modifier_zoom  = m_currentScrollMod.zoom;
     cfg->m_Input.scroll_modifier_pan_h = m_currentScrollMod.panh;
@@ -199,6 +211,12 @@ void PANEL_MOUSE_SETTINGS::applySettingsToPanel( const COMMON_SETTINGS& aSetting
     m_currentScrollMod.panv        = aSettings.m_Input.scroll_modifier_pan_v;
     m_currentScrollMod.zoomReverse = aSettings.m_Input.reverse_scroll_zoom;
     m_currentScrollMod.panHReverse = aSettings.m_Input.reverse_scroll_pan_h;
+
+    TOUCHPAD_MODE touchpadMode = m_nativeTouchpadGestureAvailable
+                                         ? aSettings.m_Input.touchpad_mode
+                                         : TOUCHPAD_MODE::SCROLL_GESTURES;
+
+    m_choiceTouchpadMode->SetSelection( static_cast<int>( touchpadMode ) );
 
     updateScrollModButtons();
 }
@@ -362,6 +380,18 @@ void PANEL_MOUSE_SETTINGS::updateScrollModButtons()
 }
 
 
+TOUCHPAD_MODE PANEL_MOUSE_SETTINGS::getTouchpadMode() const
+{
+    if( !m_nativeTouchpadGestureAvailable )
+        return TOUCHPAD_MODE::SCROLL_GESTURES;
+
+    if( m_choiceTouchpadMode->GetSelection() == static_cast<int>( TOUCHPAD_MODE::NATIVE_GESTURES ) )
+        return TOUCHPAD_MODE::NATIVE_GESTURES;
+
+    return TOUCHPAD_MODE::SCROLL_GESTURES;
+}
+
+
 void PANEL_MOUSE_SETTINGS::onMouseDefaults( wxCommandEvent& event )
 {
     m_currentScrollMod.zoom              = 0;
@@ -378,6 +408,8 @@ void PANEL_MOUSE_SETTINGS::onMouseDefaults( wxCommandEvent& event )
 
 void PANEL_MOUSE_SETTINGS::onTrackpadDefaults( wxCommandEvent& event )
 {
+    m_choiceTouchpadMode->SetSelection( static_cast<int>( TOUCHPAD_MODE::SCROLL_GESTURES ) );
+
     m_currentScrollMod.zoom              = WXK_CONTROL;
     m_currentScrollMod.panh              = WXK_SHIFT;
     m_currentScrollMod.panv              = 0;

@@ -277,6 +277,16 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "input.zoom_speed_auto",
             &m_Input.zoom_speed_auto, true ) );
 
+#ifdef __WXMSW__
+    constexpr TOUCHPAD_MODE defaultTouchpadMode = TOUCHPAD_MODE::NATIVE_GESTURES;
+#else
+    constexpr TOUCHPAD_MODE defaultTouchpadMode = TOUCHPAD_MODE::SCROLL_GESTURES;
+#endif
+
+    m_params.emplace_back( new PARAM_ENUM<TOUCHPAD_MODE>( "input.touchpad_mode",
+            &m_Input.touchpad_mode, defaultTouchpadMode, TOUCHPAD_MODE::NATIVE_GESTURES,
+            TOUCHPAD_MODE::SCROLL_GESTURES ) );
+
     m_params.emplace_back( new PARAM<int>( "input.scroll_modifier_zoom",
             &m_Input.scroll_modifier_zoom, 0 ) );
 

@@ -55,6 +55,12 @@ enum class BACKUP_LOCATION
     USER_DIR    = 1     ///< Under the KiCad user data directory
 };
 
+enum class TOUCHPAD_MODE
+{
+    NATIVE_GESTURES = 0,
+    SCROLL_GESTURES = 1
+};
+
 class KICOMMON_API COMMON_SETTINGS : public JSON_SETTINGS
 {
 public:
@@ -107,6 +113,8 @@ public:
         bool zoom_acceleration;
         int  zoom_speed;
         bool zoom_speed_auto;
+
+        TOUCHPAD_MODE touchpad_mode;
 
         int scroll_modifier_zoom;
         int scroll_modifier_pan_h;

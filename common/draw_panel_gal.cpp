@@ -45,6 +45,7 @@
 
 #include <widgets/wx_infobar.h>
 
+#include <kiplatform/touchpad.h>
 #include <kiplatform/ui.h>
 
 #include <core/profile.h>
@@ -165,6 +166,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
 EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 {
+    m_touchpadGestureHandler.reset();
+
     // Ensure EDA_DRAW_PANEL_GAL::onShowEvent is not fired during Dtor process
     Disconnect( wxEVT_SHOW, wxShowEventHandler( EDA_DRAW_PANEL_GAL::onShowEvent ) );
     StopDrawing();
@@ -707,6 +710,9 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     // trigger update of the gal options in case they differ from the defaults
     m_options.NotifyChanged();
 
+    // The native touchpad hook is attached to the backend's child window.
+    m_touchpadGestureHandler.reset();
+
     delete m_gal;
     m_gal = new_gal;
 
@@ -744,7 +750,33 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     UpdateOverlayExclusions();
 
+    UpdateTouchpadGestureHandler();
+
     return result;
+}
+
+
+void EDA_DRAW_PANEL_GAL::UpdateTouchpadGestureHandler()
+{
+    m_touchpadGestureHandler.reset();
+
+    if( Pgm().GetCommonSettings()->m_Input.touchpad_mode != TOUCHPAD_MODE::NATIVE_GESTURES )
+        return;
+
+    if( wxWindow* inputWindow = dynamic_cast<wxWindow*>( m_gal ) )
+    {
+        m_touchpadGestureHandler = KIPLATFORM::UI::CreateTouchpadGestureHandler(
+                inputWindow,
+                [this]( const KIPLATFORM::UI::TOUCHPAD_GESTURE& aGesture )
+                {
+                    if( !m_viewControls )
+                        return;
+
+                    m_viewControls->ApplyPanAndZoomGesture(
+                            VECTOR2D( aGesture.panX, aGesture.panY ), aGesture.zoomFactor,
+                            VECTOR2D( aGesture.zoomAnchor.x, aGesture.zoomAnchor.y ) );
+                } );
+    }
 }
 
 

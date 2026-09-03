@@ -40,6 +40,8 @@
 #include <kiplatform/ui.h>
 #include <wx/log.h>
 
+#include <cmath>
+
 #ifdef __WXMSW__
 #define USE_MOUSE_CAPTURE
 #endif
@@ -734,26 +736,31 @@ void WX_VIEW_CONTROLS::onZoomGesture( wxZoomGestureEvent& aEvent )
     }
 
     VECTOR2D evtPos( aEvent.GetPosition().x, aEvent.GetPosition().y );
-    VECTOR2D deltaWorld = m_view->ToWorld( evtPos - m_gestureLastPos, false );
-
-    m_view->SetCenter( m_view->GetCenter() - deltaWorld );
-
-    m_view->SetScale( m_view->GetScale() * aEvent.GetZoomFactor() / m_gestureLastZoomFactor,
-                      m_view->ToWorld( evtPos ) );
+    ApplyPanAndZoomGesture( evtPos - m_gestureLastPos,
+                           aEvent.GetZoomFactor() / m_gestureLastZoomFactor, evtPos );
 
     m_gestureLastZoomFactor = aEvent.GetZoomFactor();
     m_gestureLastPos = evtPos;
-
-    refreshMouse( true );
 }
 
 
 void WX_VIEW_CONTROLS::onPanGesture( wxPanGestureEvent& aEvent )
 {
     VECTOR2I screenDelta( aEvent.GetDelta().x, aEvent.GetDelta().y );
-    VECTOR2D deltaWorld = m_view->ToWorld( screenDelta, false );
+
+    ApplyPanAndZoomGesture( screenDelta, 1.0, VECTOR2D() );
+}
+
+
+void WX_VIEW_CONTROLS::ApplyPanAndZoomGesture( const VECTOR2D& aPanDelta, double aZoomFactor,
+                                               const VECTOR2D& aZoomAnchor )
+{
+    VECTOR2D deltaWorld = m_view->ToWorld( aPanDelta, false );
 
     m_view->SetCenter( m_view->GetCenter() - deltaWorld );
+
+    if( std::isfinite( aZoomFactor ) && aZoomFactor > 0.0 && aZoomFactor != 1.0 )
+        m_view->SetScale( m_view->GetScale() * aZoomFactor, m_view->ToWorld( aZoomAnchor ) );
 
     refreshMouse( true );
 }

@@ -42,6 +42,14 @@ class TOOL_DISPATCHER;
 class PROF_COUNTER;
 class wxImage;
 
+namespace KIPLATFORM
+{
+namespace UI
+{
+class TOUCHPAD_GESTURE_HANDLER;
+}
+}
+
 namespace KIGFX
 {
 class GAL;
@@ -106,6 +114,11 @@ public:
      * @param aGalType is a type of rendering engine that you want to use.
      */
     virtual bool SwitchBackend( GAL_TYPE aGalType );
+
+    /**
+     * Apply the current native touchpad gesture preference to the active backend window.
+     */
+    void UpdateTouchpadGestureHandler();
 
     /**
      * Return the type of backend currently used by GAL canvas.
@@ -360,6 +373,8 @@ protected:
 
     /// Optional overlay for drawing transient debug objects
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;
+
+    std::unique_ptr<KIPLATFORM::UI::TOUCHPAD_GESTURE_HANDLER> m_touchpadGestureHandler;
 };
 
 #endif

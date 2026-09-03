@@ -26,6 +26,7 @@
 
 class COMMON_SETTINGS;
 class PAGED_DIALOG;
+enum class TOUCHPAD_MODE;
 
 
 struct SCROLL_MOD_SET
@@ -63,10 +64,13 @@ private:
 
     void updateScrollModButtons();
 
+    TOUCHPAD_MODE getTouchpadMode() const;
+
     bool isScrollModSetValid( const SCROLL_MOD_SET& aSet );
 
 private:
     SCROLL_MOD_SET m_currentScrollMod;
+    bool           m_nativeTouchpadGestureAvailable;
 };
 
 

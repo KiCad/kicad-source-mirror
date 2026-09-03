@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-62-g497c85bd-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -187,6 +187,24 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer1->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
+	wxBoxSizer* bTouchpadModeSizer;
+	bTouchpadModeSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_touchpadModeLabel = new wxStaticText( this, wxID_ANY, _("Touchpad navigation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_touchpadModeLabel->Wrap( -1 );
+	bTouchpadModeSizer->Add( m_touchpadModeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 8 );
+
+	wxString m_choiceTouchpadModeChoices[] = { _("Native gestures (recommended)"), _("Configurable scroll gestures") };
+	int m_choiceTouchpadModeNChoices = sizeof( m_choiceTouchpadModeChoices ) / sizeof( wxString );
+	m_choiceTouchpadMode = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceTouchpadModeNChoices, m_choiceTouchpadModeChoices, 0 );
+	m_choiceTouchpadMode->SetSelection( 0 );
+	m_choiceTouchpadMode->SetToolTip( _("Native gestures use two-finger movement to pan and pinch to zoom. Mouse wheel mappings remain active in both modes.") );
+
+	bTouchpadModeSizer->Add( m_choiceTouchpadMode, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizer1->Add( bTouchpadModeSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxHORIZONTAL );
 
@@ -328,7 +346,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_mouseDefaults = new wxButton( this, wxID_ANY, _("Reset to Mouse Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_mouseDefaults, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_trackpadDefaults = new wxButton( this, wxID_ANY, _("Reset to Trackpad Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackpadDefaults = new wxButton( this, wxID_ANY, _("Reset to Configurable Touchpad Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_trackpadDefaults, 0, wxEXPAND|wxALL, 5 );
 
 

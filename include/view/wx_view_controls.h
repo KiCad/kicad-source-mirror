@@ -63,6 +63,16 @@ public:
     void onScroll( wxScrollWinEvent& aEvent );
     void onCaptureLost( wxMouseEvent& WXUNUSED( aEvent ) );
 
+    /**
+     * Apply a platform gesture expressed in canvas pixel coordinates.
+     *
+     * @param aPanDelta is the content translation since the previous update.
+     * @param aZoomFactor is the relative scale change since the previous update.
+     * @param aZoomAnchor is the canvas position around which zooming is applied.
+     */
+    void ApplyPanAndZoomGesture( const VECTOR2D& aPanDelta, double aZoomFactor,
+                                 const VECTOR2D& aZoomAnchor );
+
 
     /**
      * Force the cursor to stay within the drawing panel area.

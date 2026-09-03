@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-62-g497c85bd-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -65,6 +65,8 @@ class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxChoice* m_choicePanMoveKey;
 		wxStaticText* m_scrollLabel;
 		wxStaticLine* m_staticline2;
+		wxStaticText* m_touchpadModeLabel;
+		wxChoice* m_choiceTouchpadMode;
 		wxStaticText* m_staticText21;
 		wxStaticBitmap* m_scrollWarning;
 		wxStaticText* m_staticText19;
