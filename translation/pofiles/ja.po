@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-03 06:51+0000\n"
+"PO-Revision-Date: 2026-09-04 09:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.9\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -41492,6 +41492,9 @@ msgid ""
 "Gave up after %d attempts to pair up the two areas. Either their connections "
 "differ, or too many components are interchangeable to tell apart."
 msgstr ""
+"2つの領域をペアリングしようと %d 回試みたがうまくいかず諦めました。 接続方法"
+"が異なるか、交換可能なコンポーネントが多すぎて区別がつかなかったかのどちらか"
+"です。"
 
 #: pcbnew/connectivity/topo_match.cpp:1365
 #, c-format
@@ -43839,6 +43842,9 @@ msgid ""
 "text drawn on silkscreen is artwork the fabricator must reproduce and is "
 "always kept."
 msgstr ""
+"コンポーネント、部品表(BOM)、およびアートワークのメタデータから指定子を切り捨"
+"てます。 シルクスクリーンに描かれた参照テキストは、製造業者が複製しなければな"
+"らないアートワークであり、常に保管されます。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:160
 msgid "Includes:"
@@ -54504,7 +54510,7 @@ msgstr "オブジェクトB"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:60
 msgid "Which of the two compared objects this condition applies to"
-msgstr ""
+msgstr "この条件は2つの比較対象オブジェクトのうちどちらに適用されるか"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:68
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
@@ -54531,9 +54537,8 @@ msgid "Custom Query"
 msgstr "カスタム クエリ"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:76
-#, fuzzy
 msgid "How items are matched by this condition"
-msgstr "この条件を削除"
+msgstr "この条件によってアイテムがどの様に一致するのか"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:82
 msgid "Net an item must belong to"
@@ -58231,6 +58236,8 @@ msgid ""
 "Altium rule '%s' applies to netclass '%s', which this board does not define. "
 "Its constraint is not imported."
 msgstr ""
+"Altiumルール '%s' はネットクラス '%s' に適用される；この基板では定義されてい"
+"ないため、 その制約はインポートされません。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2813
 msgid "Loading board regions..."
@@ -60004,6 +60011,8 @@ msgid ""
 "The PADS file declares %d copper layers; KiCad supports %d, so the layers "
 "past that share the last inner layer."
 msgstr ""
+"PADSファイルでは %d 個の導体レイヤーが宣言されている。 KiCadは %d 個までを"
+"サポートしているため、 それ以降のレイヤーは最後の内層を共有します。"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:447
 #, c-format
@@ -60026,6 +60035,8 @@ msgid ""
 "Skipped design rule for differential pair '%s'; a net name ends with a "
 "backslash."
 msgstr ""
+"差動ペア '%s' のデザインルールをスキップしました。ネット名がバックスラッシュ"
+"で終わっています。"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:800
 #, c-format
@@ -60086,9 +60097,12 @@ msgid "Starting PADS binary PCB import"
 msgstr "PADSバイナリープリント基板のインポート開始"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Part '%s': decal '%s' not found, no pads created"
-msgstr "バリアント'%s': シンボル'%s' がライブラリーに見つかりません"
+msgstr ""
+"シンボル(PADS LogicでいうところのPart) '%s'に対応するフットプリント(PADS "
+"Logicでいうところのdecal) '%s' がライブラリーに見つかりません。そのため基板側"
+"にパッドを生成することが出来ませんでした"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:942
 #, c-format
@@ -60113,7 +60127,7 @@ msgid "Skipped a via on net '%s' with an unusable PADS layer span %d,%d."
 msgstr "'%s'上のビアをスキップしました (使用不可のPADSレイヤースパン %d,%d）。"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:1123
-#, fuzzy, c-format
+#, c-format
 msgid "COPPER item on unmapped layer %d"
 msgstr "マッピングされていないレイヤー %d の導体を F.Cu レイヤー配置しました"
 
@@ -65930,10 +65944,8 @@ msgid "the design block has no saved board layout"
 msgstr "デザインブロックには保存された基板レイアウトがありません"
 
 #: pcbnew/tools/pcb_control.cpp:1594
-#, fuzzy
 msgid "the design block's board file could not be read"
-msgstr ""
-"デザイン ブロック付帯情報ファイル ' %s ' を読み取ることができませんでした。"
+msgstr "デザイン ブロック付帯情報ファイルを読み取ることができませんでした"
 
 #: pcbnew/tools/pcb_control.cpp:1621
 msgid "the design block's board layout is empty"
