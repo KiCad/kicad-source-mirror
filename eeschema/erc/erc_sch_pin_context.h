@@ -35,18 +35,12 @@
 class ERC_SCH_PIN_CONTEXT
 {
 public:
-    ERC_SCH_PIN_CONTEXT() :
-            m_pin( nullptr ),
-            m_sheet(),
-            m_hash( 0 )
-    {}
+    ERC_SCH_PIN_CONTEXT() = default;
 
     ERC_SCH_PIN_CONTEXT( SCH_PIN* pin, const SCH_SHEET_PATH& sheet ) :
             m_pin( pin ),
             m_sheet( sheet )
-    {
-        rehash();
-    }
+    {}
 
     ERC_SCH_PIN_CONTEXT( const ERC_SCH_PIN_CONTEXT& other ) = default;
 
@@ -65,24 +59,18 @@ public:
     const SCH_SHEET_PATH& Sheet() const;
 
     /**
-     * Test two pin contexts for equality based on the deterministic hash.
+     * Compare the exact sheet instance and pin UUID.
      */
     bool operator==( const ERC_SCH_PIN_CONTEXT& other ) const;
 
     /**
-     * Provide a deterministic ordering for item contexts based on hash value.
+     * Order by sheet instance and pin UUID, with null pins preceding live pins.
      */
     bool operator<( const ERC_SCH_PIN_CONTEXT& other ) const;
 
 protected:
-    /**
-     * Calculate the deterministic hash for this context.
-     */
-    void rehash();
-
-    SCH_PIN*       m_pin;
+    SCH_PIN*       m_pin = nullptr;
     SCH_SHEET_PATH m_sheet;
-    size_t         m_hash;
 };
 
 #endif //_ERC_ITEM_CONTEXT_H
