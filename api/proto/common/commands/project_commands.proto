@@ -59,6 +59,7 @@ message ExpandTextVariables
 
   // If set, environment variables (such as ${KIPRJMOD} or user-defined variables) will be
   // expanded in addition to the usual text variables, after the text variables are expanded.
+  // Since: 10.0.7
   bool expand_env_vars = 3;
 }
 
