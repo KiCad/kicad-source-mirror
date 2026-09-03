@@ -33,12 +33,12 @@ enum class HTTP_LIB_SOURCE_TYPE
 
 struct HTTP_LIB_SOURCE
 {
-    HTTP_LIB_SOURCE_TYPE type;
+    HTTP_LIB_SOURCE_TYPE type = HTTP_LIB_SOURCE_TYPE::INVALID;
     std::string          root_url;
     std::string          api_version;
     std::string          token;
-    int                  timeout_parts;
-    int                  timeout_categories;
+    int                  timeout_parts = 30;
+    int                  timeout_categories = 600;
 };
 
 
