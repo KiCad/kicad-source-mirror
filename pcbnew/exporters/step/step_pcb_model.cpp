@@ -2683,18 +2683,33 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                         shape = cut.Shape();
                     };
 
-                    // submit_loop can throw mid-submission after queueing some blocks.  Drain the
-                    // pool before unwinding so no queued block outlives the captured mutex and
-                    // vector.  get() then re-raises any worker exception.
+                    // submit_loop() drops its multi_future if a later submission throws, leaving
+                    // queued blocks that outlive the captured mutex with no future to wait on.
                     BS::multi_future<void> cutFutures;
 
                     try
                     {
-                        cutFutures = tp.submit_loop( 0, vec.size(), subtractLoopFn );
+                        const size_t count = vec.size();
+                        const size_t blocks = std::min( count, tp.get_thread_count() );
+
+                        cutFutures.reserve( blocks );
+
+                        for( size_t blk = 0; blk < blocks; ++blk )
+                        {
+                            size_t first = ( count * blk ) / blocks;
+                            size_t last = ( count * ( blk + 1 ) ) / blocks;
+
+                            cutFutures.push_back( tp.submit_task(
+                                    [&subtractLoopFn, first, last]()
+                                    {
+                                        for( size_t idx = first; idx < last; ++idx )
+                                            subtractLoopFn( static_cast<int>( idx ) );
+                                    } ) );
+                        }
                     }
                     catch( ... )
                     {
-                        tp.wait();
+                        cutFutures.wait();
                         throw;
                     }
 
@@ -2799,7 +2814,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
         }
         catch( ... )
         {
-            tp.wait();
+            // The queued tasks hold the mutex by reference and must finish before it dies.
+            mf.wait();
             throw;
         }
 
