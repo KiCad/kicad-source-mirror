@@ -470,8 +470,11 @@ private:
  *
  * Writes through a sibling temp file and atomically renames onto the final target in
  * Finish(). A crash, throw, or power loss between construction and Finish() leaves the
- * final target byte-identical to its prior contents -- never truncated. If Finish() is
- * not called explicitly, the destructor attempts a best-effort commit and logs on failure.
+ * final target byte-identical to its prior contents -- never truncated. Finish() is the
+ * only way to commit; destroying the formatter without it discards the temp, so a caller
+ * that gives up part way through cannot leave a partial file on the target. A directory
+ * flush failure after the rename is the one exception: it throws while the new contents
+ * are already visible, because only their durability is in doubt.
  *
  * It is about 8 times faster than STREAM_OUTPUTFORMATTER for file streams.
  */
@@ -490,15 +493,21 @@ public:
     FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode = wxT( "wt" ),
                           char aQuoteChar = '"' );
 
+    /**
+     * Discards the temp file unless Finish() already committed it, leaving the final target
+     * untouched.
+     */
     ~FILE_OUTPUTFORMATTER();
 
     /**
      * Flushes the temp file to disk and atomically renames it over the final target path.
-     * After a successful return the final target contains the bytes written; on failure
-     * the original contents remain intact.
+     * This is the only way to commit; the destructor never does. After a successful return
+     * the final target contains the bytes written. A failure before the rename leaves the
+     * original intact; a directory-flush failure after it throws even though the new
+     * contents are already visible, since only their durability is in doubt.
      *
      * @return true on successful commit.
-     * @throw IO_ERROR if fsync, close, or rename fails.
+     * @throw IO_ERROR if fsync, close, rename, or the directory flush fails.
      */
     bool Finish() override;
 
@@ -519,16 +528,22 @@ public:
             KICAD_FORMAT::FORMAT_MODE aFormatMode = KICAD_FORMAT::FORMAT_MODE::NORMAL,
             const wxChar* aMode = wxT( "wt" ), char aQuoteChar = '"' );
 
+    /**
+     * Discards the temp file unless Finish() already committed it, leaving the final target
+     * untouched.
+     */
     ~PRETTIFIED_FILE_OUTPUTFORMATTER();
 
     /**
      * Runs prettification over the buffered bytes, writes them to the sibling temp file,
-     * fsyncs, and atomically renames the temp file over the final target. A crash or
-     * power loss anywhere in this sequence leaves the final target byte-identical to its
-     * prior contents.
+     * fsyncs, and atomically renames the temp file over the final target. This is the only
+     * way to commit; the destructor never does. A failure before the rename leaves the
+     * final target byte-identical to its prior contents; a directory flush failure after
+     * it throws although the new contents are already visible.
      *
      * @return true on successful commit.
-     * @throw IO_ERROR if prettification, fwrite, fsync, or rename fails.
+     * @throw IO_ERROR if prettification, fwrite, fsync, close, rename, or the directory
+     *        flush fails.
      */
     bool Finish() override;
 

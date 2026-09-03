@@ -20,7 +20,6 @@
 
 
 #include <cstdarg>
-#include <exception>
 #include <config.h> // HAVE_FGETC_NOLOCK
 
 #include <kiplatform/io.h>
@@ -542,6 +541,10 @@ void STRING_FORMATTER::StripUseless()
 // Both file-output formatters below write to a sibling temp file and atomically rename
 // over the target on Finish(). A crash, throw, or power loss before commit leaves the
 // final target byte-identical to its prior contents.
+//
+// Finish() is the only thing that promotes the temp. A destructor cannot report a commit
+// failure, and it cannot tell a caller that forgot Finish() from one that abandoned the
+// save after handling an error, so it always discards.
 
 namespace
 {
@@ -616,38 +619,6 @@ void discardTempFile( FILE*& aFp, wxString& aTempPath )
 }
 
 
-// Shared destructor body for the atomic-commit formatters. Throwing from a destructor
-// while another exception is in flight calls std::terminate, so during stack unwinding
-// we discard the temp and let the original exception propagate. When no exception is in
-// flight we fall back to a best-effort commit for callers that have not been migrated to
-// explicit Finish() yet. Explicit Finish() is the contract for anything that cares about
-// data-loss detection; destructor-path failures are surfaced as wxLogError because we
-// cannot throw safely from here.
-template <typename FinishFn>
-void finalizeFormatter( FILE*& aFp, wxString& aTempPath, const wxString& aFilename,
-                        bool aCommitted, FinishFn aFinish )
-{
-    if( aCommitted )
-        return;
-
-    if( std::uncaught_exceptions() > 0 )
-    {
-        discardTempFile( aFp, aTempPath );
-        return;
-    }
-
-    try
-    {
-        aFinish();
-    }
-    catch( const std::exception& e )
-    {
-        wxLogError( _( "Failed to commit save of '%s': %s. "
-                       "The file on disk has not been modified." ),
-                    aFilename, wxString::FromUTF8( e.what() ) );
-        discardTempFile( aFp, aTempPath );
-    }
-}
 } // anonymous namespace
 
 
@@ -667,7 +638,8 @@ FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxC
 
 FILE_OUTPUTFORMATTER::~FILE_OUTPUTFORMATTER()
 {
-    finalizeFormatter( m_fp, m_tempPath, m_filename, m_committed, [this] { Finish(); } );
+    if( !m_committed )
+        discardTempFile( m_fp, m_tempPath );
 }
 
 
@@ -718,8 +690,8 @@ PRETTIFIED_FILE_OUTPUTFORMATTER::PRETTIFIED_FILE_OUTPUTFORMATTER( const wxString
 
 PRETTIFIED_FILE_OUTPUTFORMATTER::~PRETTIFIED_FILE_OUTPUTFORMATTER()
 {
-    finalizeFormatter( m_fp, m_tempPath, m_filename, m_committed,
-                       [this] { PRETTIFIED_FILE_OUTPUTFORMATTER::Finish(); } );
+    if( !m_committed )
+        discardTempFile( m_fp, m_tempPath );
 }
 
 
