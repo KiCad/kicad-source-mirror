@@ -386,20 +386,28 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
     std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( node->m_RcItem );
     MARKER_BASE*              marker = ercItem->GetParent();
     wxString                  msg;
+    const SCH_SHEET_PATH& fallbackSheet = ercItem->IsSheetSpecific() ? ercItem->GetSpecificSheetPath()
+                                                                    : schEditFrame->GetCurrentSheet();
 
     auto getItemDesc =
-            [&]( EDA_ITEM* aCurrItem, SCH_SHEET_PATH& aSheet )
+            [&]( EDA_ITEM* aCurrItem, const SCH_SHEET_PATH& aSheet )
             {
+                const auto currentPath = schEditFrame->Schematic().Hierarchy().GetSheetPathByKIIDPath(
+                        aSheet.PathRef() );
+
+                if( !currentPath )
+                    return _( "(Deleted Item)" );
+
                 SCH_SHEET_PATH curSheet = schEditFrame->GetCurrentSheet();
                 wxString       desc;
 
-                if( aSheet != curSheet )
+                if( *currentPath != curSheet )
                 {
                     // Use the schematic-level setter to avoid the view side effects of
                     // SCH_EDIT_FRAME::SetCurrentSheet, which recreates the drawing sheet
                     // proxy with potentially stale page number state.
-                    schEditFrame->Schematic().SetCurrentSheet( aSheet );
-                    aSheet.UpdateAllScreenReferences();
+                    schEditFrame->Schematic().SetCurrentSheet( *currentPath );
+                    currentPath->UpdateAllScreenReferences();
                     {
                         desc = aCurrItem->GetItemDescription( m_editFrame, true );
                     }
@@ -450,7 +458,7 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
         {
             msg = getItemDesc( schEditFrame->ResolveItem( ercItem->GetMainItemID() ),
                                ercItem->MainItemHasSheetPath() ? ercItem->GetMainItemSheetPath()
-                                                               : schEditFrame->GetCurrentSheet() );
+                                                               : fallbackSheet );
         }
 
         break;
@@ -458,17 +466,17 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
     case RC_TREE_NODE::AUX_ITEM:
         msg = getItemDesc( schEditFrame->ResolveItem( ercItem->GetAuxItemID() ),
                            ercItem->AuxItemHasSheetPath() ? ercItem->GetAuxItemSheetPath()
-                                                          : schEditFrame->GetCurrentSheet() );
+                                                          : fallbackSheet );
         break;
 
     case RC_TREE_NODE::AUX_ITEM2:
         msg = getItemDesc( schEditFrame->ResolveItem( ercItem->GetAuxItem2ID() ),
-                           schEditFrame->GetCurrentSheet() );
+                           fallbackSheet );
         break;
 
     case RC_TREE_NODE::AUX_ITEM3:
         msg = getItemDesc( schEditFrame->ResolveItem( ercItem->GetAuxItem3ID() ),
-                           schEditFrame->GetCurrentSheet() );
+                           fallbackSheet );
         break;
 
     case RC_TREE_NODE::COMMENT:
@@ -489,17 +497,25 @@ wxString ERC_ITEM::getItemDescription( EDA_ITEM* aItem, int aIndex,
     SCH_ITEM*  schItem = dynamic_cast<SCH_ITEM*>( aItem );
     SCHEMATIC* sch     = schItem ? schItem->Schematic() : nullptr;
 
-    const std::optional<SCH_SHEET_PATH>& itemSheet = ( aIndex == 0 ) ? m_mainItemSheet
-                                                                     : m_auxItemSheet;
+    const std::optional<SCH_SHEET_PATH>& explicitSheet = aIndex == 0 ? m_mainItemSheet : m_auxItemSheet;
+    const std::optional<SCH_SHEET_PATH>& itemSheet = explicitSheet ? explicitSheet : m_sheetSpecificPath;
 
-    if( !sch || !itemSheet.has_value() || sch->CurrentSheet() == *itemSheet )
+    if( !sch || !itemSheet.has_value() )
+        return RC_ITEM::getItemDescription( aItem, aIndex, aUnitsProvider );
+
+    const auto currentPath = sch->Hierarchy().GetSheetPathByKIIDPath( itemSheet->PathRef() );
+
+    if( !currentPath )
+        return _( "(Deleted Item)" );
+
+    if( sch->CurrentSheet() == *currentPath )
         return RC_ITEM::getItemDescription( aItem, aIndex, aUnitsProvider );
 
     // Temporarily point the schematic at the affected item's sheet so per-instance
     // fields (notably the symbol reference) resolve to the same text the GUI ERC
     // dialog shows.  Mirrors the lambda in ERC_TREE_MODEL::GetValue.
     SCH_SHEET_PATH savedSheet  = sch->CurrentSheet();
-    SCH_SHEET_PATH targetSheet = *itemSheet;
+    SCH_SHEET_PATH targetSheet = *currentPath;
 
     sch->SetCurrentSheet( targetSheet );
     targetSheet.UpdateAllScreenReferences();

@@ -665,6 +665,19 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
             }
         }
 
+        if( !sheet.empty() )
+        {
+            const auto currentPath = m_parent->Schematic().Hierarchy().GetSheetPathByKIIDPath( sheet.PathRef() );
+
+            if( !currentPath )
+            {
+                aEvent.Skip();
+                return;
+            }
+
+            sheet = *currentPath;
+        }
+
         WINDOW_THAWER thawer( m_parent );
 
         if( !sheet.empty() && sheet != m_parent->GetCurrentSheet() )
