@@ -92,6 +92,16 @@ bool HasErrorForPin( const std::vector<VARIANT_COMPAT_RESULT>& aResults,
 BOOST_AUTO_TEST_SUITE( VariantSymbolCompatibility )
 
 
+BOOST_AUTO_TEST_CASE( UnresolvedLibraryPinTypeIsUnspecified )
+{
+    auto base = MakeTwoPinPassive( wxS( "Base" ) );
+    auto candidate = MakeTwoPinPassive( wxS( "Candidate" ) );
+    base->GetGraphicalPins().front()->SetType( ELECTRICAL_PINTYPE::PT_INHERIT );
+    candidate->GetGraphicalPins().front()->SetType( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
+    BOOST_CHECK( ValidateVariantSymbolCompatibility( *base, *candidate ).empty() );
+}
+
+
 BOOST_AUTO_TEST_CASE( IdenticalSymbols_Compatible )
 {
     auto base = MakeTwoPinPassive( wxS( "R_100R" ) );

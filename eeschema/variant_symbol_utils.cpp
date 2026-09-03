@@ -24,6 +24,7 @@
 #include "variant_symbol_utils.h"
 
 #include <lib_symbol.h>
+#include <span>
 #include <pin_type.h>
 #include <sch_pin.h>
 
@@ -39,13 +40,14 @@ bool VariantSymbolPinsMatch( const SCH_PIN& aBase, const SCH_PIN& aCandidate )
 }
 
 
-std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB_SYMBOL& aBase,
-                                                                        const LIB_SYMBOL& aCandidate )
+static std::vector<VARIANT_COMPAT_RESULT> validateCompatibility(
+        int aBaseUnits, int aBaseBodyStyles, std::span<const PIN_COMPARISON_DATA> basePins,
+        int aCandidateUnits, int aCandidateBodyStyles, std::span<const PIN_COMPARISON_DATA> candidatePins )
 {
     std::vector<VARIANT_COMPAT_RESULT> results;
 
-    int baseUnits = std::max( aBase.GetUnitCount(), 1 );
-    int candUnits = std::max( aCandidate.GetUnitCount(), 1 );
+    int baseUnits = std::max( aBaseUnits, 1 );
+    int candUnits = std::max( aCandidateUnits, 1 );
 
     if( candUnits < baseUnits )
     {
@@ -56,28 +58,32 @@ std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB
         results.push_back( result );
     }
 
-    int baseBodyStyles = aBase.GetBodyStyleCount();
+    int baseBodyStyles = aBaseBodyStyles;
 
-    if( baseBodyStyles > 1 && aCandidate.GetBodyStyleCount() < baseBodyStyles )
+    if( baseBodyStyles > 1 && aCandidateBodyStyles < baseBodyStyles )
     {
         VARIANT_COMPAT_RESULT result;
         result.error  = VARIANT_COMPAT_ERROR::MISSING_BODY_STYLE;
         result.detail = wxString::Format( _( "Candidate has %d body style(s), base requires %d" ),
-                                          aCandidate.GetBodyStyleCount(), baseBodyStyles );
+                                          aCandidateBodyStyles, baseBodyStyles );
         results.push_back( result );
     }
 
-    std::vector<const SCH_PIN*> basePins = aBase.GetGraphicalPins();
-    std::vector<const SCH_PIN*> candidatePins = aCandidate.GetGraphicalPins();
-    std::vector<bool>           matched( candidatePins.size(), false );
-
-    for( const SCH_PIN* basePin : basePins )
+    // Library pins without a concrete type resolve to unspecified, as with SCH_PIN::GetType().
+    const auto type = []( const PIN_COMPARISON_DATA& pin )
     {
-        auto sameSlot = [&]( const SCH_PIN* aCandidatePin )
+        return pin.type == ELECTRICAL_PINTYPE::PT_INHERIT ? ELECTRICAL_PINTYPE::PT_UNSPECIFIED : pin.type;
+    };
+
+    std::vector<bool> matched( candidatePins.size(), false );
+
+    for( const PIN_COMPARISON_DATA& basePin : basePins )
+    {
+        auto sameSlot = [&]( const PIN_COMPARISON_DATA& aCandidatePin )
         {
-            return basePin->GetNumber() == aCandidatePin->GetNumber()
-                   && basePin->GetUnit() == aCandidatePin->GetUnit()
-                   && basePin->GetBodyStyle() == aCandidatePin->GetBodyStyle();
+            return basePin.number == aCandidatePin.number
+                   && basePin.unit == aCandidatePin.unit
+                   && basePin.bodyStyle == aCandidatePin.bodyStyle;
         };
 
         auto findCandidate = [&]( bool aRequirePosition, bool aRequireType )
@@ -87,10 +93,10 @@ std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB
                 if( matched[i] || !sameSlot( candidatePins[i] ) )
                     continue;
 
-                if( aRequirePosition && candidatePins[i]->GetPosition() != basePin->GetPosition() )
+                if( aRequirePosition && candidatePins[i].position != basePin.position )
                     continue;
 
-                if( aRequireType && candidatePins[i]->GetType() != basePin->GetType() )
+                if( aRequireType && type( candidatePins[i] ) != type( basePin ) )
                     continue;
 
                 return i;
@@ -111,9 +117,9 @@ std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB
         {
             VARIANT_COMPAT_RESULT result;
             result.error     = VARIANT_COMPAT_ERROR::MISSING_PIN_NUMBER;
-            result.pinNumber = basePin->GetNumber();
-            result.unit      = basePin->GetUnit();
-            result.bodyStyle = basePin->GetBodyStyle();
+            result.pinNumber = basePin.number;
+            result.unit      = basePin.unit;
+            result.bodyStyle = basePin.bodyStyle;
             result.detail    = wxString::Format(
                     _( "Unit %d, body style %d: pin '%s' not found in candidate" ),
                     result.unit, result.bodyStyle, result.pinNumber );
@@ -122,36 +128,36 @@ std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB
         }
 
         matched[candidateIndex] = true;
-        const SCH_PIN* candidatePin = candidatePins[candidateIndex];
+        const auto& candidatePin = candidatePins[candidateIndex];
 
-        if( candidatePin->GetPosition() != basePin->GetPosition() )
+        if( candidatePin.position != basePin.position )
         {
             VARIANT_COMPAT_RESULT result;
             result.error     = VARIANT_COMPAT_ERROR::PIN_POSITION_MISMATCH;
-            result.pinNumber = basePin->GetNumber();
-            result.unit      = basePin->GetUnit();
-            result.bodyStyle = basePin->GetBodyStyle();
+            result.pinNumber = basePin.number;
+            result.unit      = basePin.unit;
+            result.bodyStyle = basePin.bodyStyle;
             result.detail    = wxString::Format(
                     _( "Unit %d, body style %d: pin '%s' position mismatch "
                        "(%d,%d) vs (%d,%d)" ),
                     result.unit, result.bodyStyle, result.pinNumber,
-                    basePin->GetPosition().x, basePin->GetPosition().y,
-                    candidatePin->GetPosition().x, candidatePin->GetPosition().y );
+                    basePin.position.x, basePin.position.y,
+                    candidatePin.position.x, candidatePin.position.y );
             results.push_back( result );
         }
 
-        if( candidatePin->GetType() != basePin->GetType() )
+        if( type( candidatePin ) != type( basePin ) )
         {
             VARIANT_COMPAT_RESULT result;
             result.error     = VARIANT_COMPAT_ERROR::PIN_TYPE_MISMATCH;
-            result.pinNumber = basePin->GetNumber();
-            result.unit      = basePin->GetUnit();
-            result.bodyStyle = basePin->GetBodyStyle();
+            result.pinNumber = basePin.number;
+            result.unit      = basePin.unit;
+            result.bodyStyle = basePin.bodyStyle;
             result.detail    = wxString::Format(
                     _( "Unit %d, body style %d: pin '%s' type mismatch ('%s' vs '%s')" ),
                     result.unit, result.bodyStyle, result.pinNumber,
-                    GetCanonicalElectricalTypeName( basePin->GetType() ),
-                    GetCanonicalElectricalTypeName( candidatePin->GetType() ) );
+                    GetCanonicalElectricalTypeName( type( basePin ) ),
+                    GetCanonicalElectricalTypeName( type( candidatePin ) ) );
             results.push_back( result );
         }
     }
@@ -160,12 +166,12 @@ std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB
     {
         if( !matched[i] )
         {
-            const SCH_PIN* candidatePin = candidatePins[i];
+            const auto& candidatePin = candidatePins[i];
             VARIANT_COMPAT_RESULT result;
             result.error     = VARIANT_COMPAT_ERROR::EXTRA_PIN_NUMBER;
-            result.pinNumber = candidatePin->GetNumber();
-            result.unit      = candidatePin->GetUnit();
-            result.bodyStyle = candidatePin->GetBodyStyle();
+            result.pinNumber = candidatePin.number;
+            result.unit      = candidatePin.unit;
+            result.bodyStyle = candidatePin.bodyStyle;
             result.detail    = wxString::Format(
                     _( "Unit %d, body style %d: candidate has extra pin '%s'" ),
                     result.unit, result.bodyStyle, result.pinNumber );
@@ -174,4 +180,23 @@ std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB
     }
 
     return results;
+}
+
+
+static std::vector<PIN_COMPARISON_DATA> variantPins( const LIB_SYMBOL& aSymbol )
+{
+    std::vector<PIN_COMPARISON_DATA> result;
+
+    for( const SCH_PIN* pin : aSymbol.GetGraphicalPins() )
+        result.push_back( pin->ComparisonData() );
+
+    return result;
+}
+
+
+std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB_SYMBOL& aBase,
+                                                                        const LIB_SYMBOL& aCandidate )
+{
+    return validateCompatibility( aBase.GetUnitCount(), aBase.GetBodyStyleCount(), variantPins( aBase ),
+                                 aCandidate.GetUnitCount(), aCandidate.GetBodyStyleCount(), variantPins( aCandidate ) );
 }
