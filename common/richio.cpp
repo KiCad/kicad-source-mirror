@@ -545,31 +545,66 @@ void STRING_FORMATTER::StripUseless()
 
 namespace
 {
-void atomicCommit( FILE*& aFp, const wxString& aTempPath, const wxString& aFinalPath )
+// Some fails threw, which could leave the file to be attempted for removal twice.  This
+// will neatly suppress errors saying that you can't remove a non-existant file and use the
+// filename as the flag to check if we were successful last time
+void removeTempFile( wxString& aTempPath )
 {
+    if( aTempPath.IsEmpty() )
+        return;
+
+    bool removed = false;
+
+    {
+        wxLogNull suppressExpectedAbsence;
+        removed = wxRemoveFile( aTempPath );
+    }
+
+    if( removed || !wxFileName::FileExists( aTempPath ) )
+        aTempPath.clear();
+}
+
+
+void atomicCommit( FILE*& aFp, wxString& aTempPath, const wxString& aFinalPath )
+{
+    // Removal clears the path, so keep a copy for the diagnostics below
+    const wxString failedPath = aTempPath;
+
     if( !KIPLATFORM::IO::FlushToDisk( aFp ) )
     {
         int err = errno;
         fclose( aFp );
         aFp = nullptr;
-        wxRemoveFile( aTempPath );
-        THROW_IO_ERRORF( _( "Cannot flush '%s' to disk: %s" ), aTempPath, wxString::FromUTF8( strerror( err ) ) );
+        removeTempFile( aTempPath );
+        THROW_IO_ERRORF( _( "Cannot flush '%s' to disk: %s" ), failedPath, wxString::FromUTF8( strerror( err ) ) );
     }
 
-    fclose( aFp );
+    // Buffered writes on NFS and quota'd volumes surface their errors here, not at write time,
+    // so an unchecked close can commit a short file
+    if( fclose( aFp ) != 0 )
+    {
+        int err = errno;
+        aFp = nullptr;
+        removeTempFile( aTempPath );
+        THROW_IO_ERRORF( _( "Cannot close '%s': %s" ), failedPath, wxString::FromUTF8( strerror( err ) ) );
+    }
+
     aFp = nullptr;
 
     wxString commitError;
 
     if( !KIPLATFORM::IO::CommitTempFile( aTempPath, aFinalPath, &commitError ) )
     {
-        wxRemoveFile( aTempPath );
+        removeTempFile( aTempPath );
         THROW_IO_ERROR( commitError );
     }
+
+    // The rename consumed the temp
+    aTempPath.clear();
 }
 
 
-void discardTempFile( FILE*& aFp, const wxString& aTempPath )
+void discardTempFile( FILE*& aFp, wxString& aTempPath )
 {
     if( aFp )
     {
@@ -577,8 +612,7 @@ void discardTempFile( FILE*& aFp, const wxString& aTempPath )
         aFp = nullptr;
     }
 
-    if( !aTempPath.IsEmpty() )
-        wxRemoveFile( aTempPath );
+    removeTempFile( aTempPath );
 }
 
 
@@ -590,7 +624,7 @@ void discardTempFile( FILE*& aFp, const wxString& aTempPath )
 // data-loss detection; destructor-path failures are surfaced as wxLogError because we
 // cannot throw safely from here.
 template <typename FinishFn>
-void finalizeFormatter( FILE*& aFp, const wxString& aTempPath, const wxString& aFilename,
+void finalizeFormatter( FILE*& aFp, wxString& aTempPath, const wxString& aFilename,
                         bool aCommitted, FinishFn aFinish )
 {
     if( aCommitted )
@@ -644,9 +678,7 @@ bool FILE_OUTPUTFORMATTER::Finish()
 
     if( !m_fp )
     {
-        if( !m_tempPath.IsEmpty() )
-            wxRemoveFile( m_tempPath );
-
+        removeTempFile( m_tempPath );
         return false;
     }
 
@@ -698,9 +730,7 @@ bool PRETTIFIED_FILE_OUTPUTFORMATTER::Finish()
 
     if( !m_fp )
     {
-        if( !m_tempPath.IsEmpty() )
-            wxRemoveFile( m_tempPath );
-
+        removeTempFile( m_tempPath );
         return false;
     }
 
@@ -708,11 +738,13 @@ bool PRETTIFIED_FILE_OUTPUTFORMATTER::Finish()
 
     if( !m_buf.empty() && fwrite( m_buf.c_str(), m_buf.length(), 1, m_fp ) != 1 )
     {
-        int err = errno;
+        int            err = errno;
+        const wxString failedPath = m_tempPath;
+
         fclose( m_fp );
         m_fp = nullptr;
-        wxRemoveFile( m_tempPath );
-        THROW_IO_ERRORF( _( "Write failed to '%s': %s" ), m_tempPath, wxString::FromUTF8( strerror( err ) ) );
+        removeTempFile( m_tempPath );
+        THROW_IO_ERRORF( _( "Write failed to '%s': %s" ), failedPath, wxString::FromUTF8( strerror( err ) ) );
     }
 
     atomicCommit( m_fp, m_tempPath, m_filename );
