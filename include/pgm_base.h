@@ -363,6 +363,14 @@ public:
     void PreloadDesignBlockLibraries( KIWAY* aKiway );
 
     /**
+     * Ask the design block preload to stop and wait for it to finish.
+     *
+     * The coordinator runs on its own thread, so it outlives the thread pool drain at exit
+     * and keeps submitting library workers to the pool.  Call this before that drain.
+     */
+    void CancelDesignBlockPreload();
+
+    /**
      * Register a status bar to receive library load warning messages.
      * Multiple status bars can be registered (one per open frame).
      */
