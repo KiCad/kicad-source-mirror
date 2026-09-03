@@ -324,6 +324,18 @@ private:
 
     FOOTPRINT* HelperGetFootprint( uint16_t aComponent ) const;
 
+    void HelperBuildPadstackLayerIndex();
+
+    /**
+     * Return the slot @p aLayer occupies in an Altium padstack's per-layer arrays.
+     *
+     * Those arrays are indexed by Altium layer id (top, mid 1 through 30, bottom), which only
+     * lines up with the KiCad stack position when the board stacks its mid layers in order.
+     *
+     * @return the slot, or -1 when the layer has none, as internal planes do.
+     */
+    int HelperGetPadstackLayerIndex( PCB_LAYER_ID aLayer ) const;
+
     /**
      * Return the 3D model @p aModelName embedded in @p aFootprint, inflating and embedding
      * @p aCompressedData first if it is not there yet.
@@ -346,6 +358,7 @@ private:
     std::map<wxString, wxString>         m_schematicNetNames; // upper cased name to schematic casing
     std::map<ALTIUM_LAYER, PCB_LAYER_ID> m_layermap; // used to correctly map layers
     std::map<ALTIUM_LAYER, wxString>     m_layerNames;
+    std::map<PCB_LAYER_ID, int>          m_padstackLayerIndex;
 
     std::map<wxString, ALTIUM_EMBEDDED_MODEL_DATA>  m_EmbeddedModels;
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;
