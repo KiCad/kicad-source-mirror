@@ -31,7 +31,6 @@
 #include <wx/filefn.h>
 #include <wx/filename.h>
 
-#include <memory>
 #include <string>
 
 #if defined( _WIN32 )
@@ -139,14 +138,14 @@ BOOST_AUTO_TEST_CASE( PrettifiedFormatter_DestructorDiscardsWithoutExplicitFinis
 {
     // Finish() is the only thing that commits. A formatter that goes out of scope without it
     // has abandoned the save, so the target keeps the bytes it already had.
-    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-implicit" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-discard-unfinished" ) );
     const wxString target = tempDir.PathStr() + wxFileName::GetPathSeparator() + wxT( "target" );
     const std::string original = "(original \"keep me\")\n";
     writeFileContents( target, original );
 
     {
         PRETTIFIED_FILE_OUTPUTFORMATTER f( target );
-        f.Print( 0, "(implicit_commit ok)\n" );
+        f.Print( 0, "(uncommitted content)\n" );
     }
 
     BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
@@ -177,31 +176,17 @@ BOOST_AUTO_TEST_CASE( FileFormatter_UnwindingPreservesOriginal )
 }
 
 
-BOOST_AUTO_TEST_CASE( FileFormatter_HandledExceptionDiscardsWithoutFinish )
+BOOST_AUTO_TEST_CASE( FileFormatter_DestructorDiscardsWithoutExplicitFinish )
 {
-    // A formatter that outlives the catch -- HYPERLYNX_EXPORTER keeps one in a member -- is
-    // destroyed with no exception in flight, so an unwinding check cannot see that the save
-    // failed. Committing there promotes a partial write the caller has already reported.
-    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-outlives" ) );
+    // Same invariant for the streaming (non-prettified) formatter.
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-stream-scope-exit" ) );
     const wxString target = tempDir.PathStr() + wxFileName::GetPathSeparator() + wxT( "target" );
     const std::string original = "original export content\n";
     writeFileContents( target, original );
 
     {
-        std::shared_ptr<FILE_OUTPUTFORMATTER> out;
-
-        try
-        {
-            out = std::make_shared<FILE_OUTPUTFORMATTER>( target );
-            out->Print( 0, "partial export before the failure " );
-            THROW_IO_ERROR( wxT( "simulated mid-export failure" ) );
-        }
-        catch( const IO_ERROR& )
-        {
-            // Swallowed on purpose; the exporter this models reports by returning false
-        }
-
-        BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+        FILE_OUTPUTFORMATTER f( target );
+        f.Print( 0, "uncommitted streaming content\n" );
     }
 
     BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
@@ -298,6 +283,59 @@ BOOST_AUTO_TEST_CASE( FileFormatter_ExplicitFinishThrowsOnCommitFailure )
     BOOST_REQUIRE_MESSAGE( threw, "Finish() must throw IO_ERROR when atomic commit fails" );
     BOOST_REQUIRE( wxFileName::DirExists( target ) );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
+}
+
+
+BOOST_AUTO_TEST_CASE( Formatter_SecondFinishIsACallerError )
+{
+    // Committing is single-use: a second Finish() after a successful commit or after a
+    // failed one is a programming error and must trip the QA assertion thrower.
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-double-finish" ) );
+    const wxString sep = wxFileName::GetPathSeparator();
+
+    // Streaming formatter: second Finish() after a successful commit.
+    {
+        const wxString target = tempDir.PathStr() + sep + wxT( "stream-ok" );
+        FILE_OUTPUTFORMATTER f( target );
+        f.Print( 0, "saved once\n" );
+
+        BOOST_REQUIRE( f.Finish() );
+        CHECK_WX_ASSERT( f.Finish() );
+    }
+
+    // Streaming formatter: second Finish() after a failed commit.
+    {
+        const wxString target = tempDir.PathStr() + sep + wxT( "stream-fail" );
+        BOOST_REQUIRE( wxFileName::Mkdir( target, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+        FILE_OUTPUTFORMATTER f( target );
+        f.Print( 0, "doomed streaming save\n" );
+
+        BOOST_REQUIRE_THROW( f.Finish(), IO_ERROR );
+        CHECK_WX_ASSERT( f.Finish() );
+    }
+
+    // Prettified formatter: second Finish() after a successful commit.
+    {
+        const wxString target = tempDir.PathStr() + sep + wxT( "prettified-ok" );
+        PRETTIFIED_FILE_OUTPUTFORMATTER f( target );
+        f.Print( 0, "(saved once)\n" );
+
+        BOOST_REQUIRE( f.Finish() );
+        CHECK_WX_ASSERT( f.Finish() );
+    }
+
+    // Prettified formatter: second Finish() after a failed commit.
+    {
+        const wxString target = tempDir.PathStr() + sep + wxT( "prettified-fail" );
+        BOOST_REQUIRE( wxFileName::Mkdir( target, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+        PRETTIFIED_FILE_OUTPUTFORMATTER f( target );
+        f.Print( 0, "(doomed pretty save)\n" );
+
+        BOOST_REQUIRE_THROW( f.Finish(), IO_ERROR );
+        CHECK_WX_ASSERT( f.Finish() );
+    }
 }
 
 
