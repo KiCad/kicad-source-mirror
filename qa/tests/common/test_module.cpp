@@ -22,6 +22,7 @@
  */
 #include <boost/test/unit_test.hpp>
 #include <mock_pgm_base.h>
+#include <qa_utils/wx_utils/wx_assert.h>
 #include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
 
@@ -40,6 +41,8 @@ bool init_unit_test()
 
     boost::unit_test::framework::master_test_suite().p_name.value = "Common library module tests";
     bool ok = wxInitialize();
+
+    wxSetAssertHandler( &KI_TEST::wxAssertThrower );
 
     if( ok )
     {

@@ -67,20 +67,14 @@ BOOST_AUTO_TEST_CASE( RangeBoundVolume )
 
 
 // A unitless bound converts nothing and must not carry a units label; requesting one trips
-// GetText's UNIMPLEMENTED_FOR assertion. qa_common does not install the assert thrower
-// globally, so arm it here or a regression would assert silently and the string checks
-// would still pass.
+// GetText's UNIMPLEMENTED_FOR assertion.
 BOOST_AUTO_TEST_CASE( RangeBoundUnitless )
 {
-    wxAssertHandler_t prevHandler = wxSetAssertHandler( &KI_TEST::wxAssertThrower );
-
     UNIT_BINDER::RANGE_BOUND bound{};
 
     BOOST_CHECK_NO_THROW( bound = UNIT_BINDER::ConvertRangeBound( pcbIUScale, EDA_UNITS::UNSCALED,
                                                                   5.0, EDA_UNITS::UNSCALED,
                                                                   EDA_DATA_TYPE::UNITLESS ) );
-
-    wxSetAssertHandler( prevHandler );
 
     BOOST_CHECK_CLOSE( bound.internalUnits, 5.0, 1e-9 );
     BOOST_CHECK_EQUAL( bound.displayText, wxString::FromUTF8( "5" ) );
