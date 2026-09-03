@@ -185,8 +185,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
 }
 
 
-FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
-                                                int aTextSize, int aPadCount )
+FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue, int aTextSize, int aPadCount )
 {
     PCB_EDIT_FRAME& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
 
