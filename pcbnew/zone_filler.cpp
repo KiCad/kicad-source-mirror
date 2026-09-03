@@ -876,7 +876,25 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
                 std::atomic<int> remaining( (int) count );
 
+                // This fill's own outstanding tasks.  The wrapper decrements rather than
+                // process() so that process() has unwound before the count can reach zero.
+                std::atomic<int> inFlight( 0 );
+
                 std::function<void( size_t )> process;
+
+                auto dispatch =
+                        [&]( size_t idx )
+                        {
+                            inFlight.fetch_add( 1, std::memory_order_relaxed );
+
+                            tp.detach_task(
+                                    [&process, &inFlight, idx]()
+                                    {
+                                        process( idx );
+                                        inFlight.fetch_sub( 1, std::memory_order_acq_rel );
+                                    } );
+                        };
+
                 process =
                         [&]( size_t idx )
                         {
@@ -886,7 +904,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                             for( size_t succ : successors[idx] )
                             {
                                 if( inDegree[succ].fetch_sub( 1, std::memory_order_acq_rel ) == 1 )
-                                    tp.detach_task( [&process, succ]() { process( succ ); } );
+                                    dispatch( succ );
                             }
 
                             if( filled != 0 && !cancelled.load() )
@@ -899,7 +917,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 for( size_t i = 0; i < count; ++i )
                 {
                     if( inDegree[i].load( std::memory_order_relaxed ) == 0 )
-                        tp.detach_task( [&process, i]() { process( i ); } );
+                        dispatch( i );
                 }
 
                 // Drain the DAG, keeping the UI responsive and honoring cancellation.
@@ -919,8 +937,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 // remaining hits zero inside the final task, before it has unwound.  The detached
                 // tasks capture process/successors/inDegree by reference, so we must let every
                 // worker fully exit before those locals leave scope or a straggler dereferences
-                // freed state (issue 24758).
-                tp.wait();
+                // freed state (issue 24758).  Not tp.wait(), which waits on the whole pool.
+                while( inFlight.load( std::memory_order_acquire ) > 0 )
+                    std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
             };
 
     run_fill_waves( toFill, fill_lambda, tesselate_lambda, fill_item_dependency, true );
