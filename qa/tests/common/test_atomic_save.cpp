@@ -30,6 +30,7 @@
 #include <wx/filefn.h>
 #include <wx/filename.h>
 
+#include <memory>
 #include <string>
 
 #if defined( _WIN32 )
@@ -82,6 +83,22 @@ unsigned countSiblingTemps( const wxString& aTargetPath )
     return matches.GetCount();
 }
 
+
+// Counts error-level records so a failed save can be checked for reports beyond the one it
+// throws. Warnings are ignored; only errors reach the user as a dialog.
+class ERROR_COUNTING_LOG : public wxLog
+{
+public:
+    unsigned m_errors = 0;
+
+protected:
+    void DoLogRecord( wxLogLevel aLevel, const wxString&, const wxLogRecordInfo& ) override
+    {
+        if( aLevel <= wxLOG_Error )
+            m_errors++;
+    }
+};
+
 } // anonymous namespace
 
 BOOST_AUTO_TEST_SUITE( AtomicSave )
@@ -133,21 +150,21 @@ BOOST_AUTO_TEST_CASE( PrettifiedFormatter_UnwindingPreservesOriginal )
 }
 
 
-BOOST_AUTO_TEST_CASE( PrettifiedFormatter_DestructorCommitsWithoutExplicitFinish )
+BOOST_AUTO_TEST_CASE( PrettifiedFormatter_DestructorDiscardsWithoutExplicitFinish )
 {
-    // Callers that don't call Finish() explicitly rely on the destructor to commit.
-    // This is the legacy contract -- preserve it, but without the silent-error-swallow.
+    // Finish() is the only thing that commits. A formatter that goes out of scope without it
+    // has abandoned the save, so the target keeps the bytes it already had.
     KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-implicit" ) );
     const wxString target = tempDir.PathStr() + wxFileName::GetPathSeparator() + wxT( "target" );
+    const std::string original = "(original \"keep me\")\n";
+    writeFileContents( target, original );
 
     {
         PRETTIFIED_FILE_OUTPUTFORMATTER f( target );
         f.Print( 0, "(implicit_commit ok)\n" );
     }
 
-    BOOST_REQUIRE( wxFileName::FileExists( target ) );
-    std::string actual = readFileContents( target );
-    BOOST_REQUIRE( actual.find( "implicit_commit" ) != std::string::npos );
+    BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
 
@@ -170,6 +187,38 @@ BOOST_AUTO_TEST_CASE( FileFormatter_UnwindingPreservesOriginal )
         std::runtime_error );
 
     BOOST_REQUIRE( wxFileName::FileExists( target ) );
+    BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+    BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
+}
+
+
+BOOST_AUTO_TEST_CASE( FileFormatter_HandledExceptionDiscardsWithoutFinish )
+{
+    // A formatter that outlives the catch -- HYPERLYNX_EXPORTER keeps one in a member -- is
+    // destroyed with no exception in flight, so an unwinding check cannot see that the save
+    // failed. Committing there promotes a partial write the caller has already reported.
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-outlives" ) );
+    const wxString target = tempDir.PathStr() + wxFileName::GetPathSeparator() + wxT( "target" );
+    const std::string original = "original export content\n";
+    writeFileContents( target, original );
+
+    {
+        std::shared_ptr<FILE_OUTPUTFORMATTER> out;
+
+        try
+        {
+            out = std::make_shared<FILE_OUTPUTFORMATTER>( target );
+            out->Print( 0, "partial export before the failure " );
+            THROW_IO_ERROR( wxT( "simulated mid-export failure" ) );
+        }
+        catch( const IO_ERROR& )
+        {
+            // Swallowed on purpose; the exporter this models reports by returning false
+        }
+
+        BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+    }
+
     BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
@@ -284,21 +333,30 @@ BOOST_AUTO_TEST_CASE( DrawingSheetSave_PropagatesCommitFailure )
 }
 
 
-BOOST_AUTO_TEST_CASE( PrettifiedFormatter_DestructorCommitFailureLeavesTargetIntact )
+BOOST_AUTO_TEST_CASE( PrettifiedFormatter_DestructorDiscardsWhenTargetIsDirectory )
 {
-    // Legacy callers without explicit Finish() must still leave the target untouched
-    // on commit failure. A destructor cannot throw during unwinding, so we can only
-    // assert the on-disk state.
+    // A target that cannot be renamed over is still a target the formatter must not disturb.
+    // Asserting on-disk state alone would pass either way, since a destructor that attempted
+    // the commit would fail the rename and tidy up too -- but it would say so first.
     KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-commitfail-implicit" ) );
     const wxString target = tempDir.PathStr() + wxFileName::GetPathSeparator() + wxT( "target" );
 
     BOOST_REQUIRE( wxFileName::Mkdir( target, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    ERROR_COUNTING_LOG* counter = new ERROR_COUNTING_LOG;
+    wxLog*              previous = wxLog::SetActiveTarget( counter );
 
     {
         PRETTIFIED_FILE_OUTPUTFORMATTER f( target );
         f.Print( 0, "(implicit doomed)\n" );
     }
 
+    wxLog::SetActiveTarget( previous );
+    unsigned errors = counter->m_errors;
+    delete counter;
+
+    // Nothing was attempted, so nothing had anything to report
+    BOOST_REQUIRE_EQUAL( errors, 0u );
     BOOST_REQUIRE( wxFileName::DirExists( target ) );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
