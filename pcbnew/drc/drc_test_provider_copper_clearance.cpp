@@ -1111,32 +1111,16 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
 
     BS::multi_future<void> graphic_futures;
 
-    for( BOARD_ITEM* item : m_board->Drawings() )
+    // Reserving up front keeps push_back() from discarding a future whose task is already queued
+    // and still holds done by reference.  submit_task() can throw, hence the drain below.
+    graphic_futures.reserve( m_board->Drawings().size() + m_board->Footprints().size() );
+
+    try
     {
-        graphic_futures.push_back( tp.submit_task(
-                [this, item, &done, testGraphicAgainstZone, testCopperGraphic]()
-                {
-                    if( !m_drcEngine->IsCancelled() )
-                    {
-                        testGraphicAgainstZone( item );
-
-                        if( ( item->Type() == PCB_SHAPE_T || item->Type() == PCB_BARCODE_T )
-                                && item->IsOnCopperLayer() )
-                        {
-                            testCopperGraphic( static_cast<PCB_SHAPE*>( item ) );
-                        }
-
-                        done.fetch_add( 1 );
-                    }
-                } ) );
-    }
-
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        graphic_futures.push_back( tp.submit_task(
-                [this, footprint, &done, testGraphicAgainstZone, testCopperGraphic]()
-                {
-                    for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        for( BOARD_ITEM* item : m_board->Drawings() )
+        {
+            graphic_futures.push_back( tp.submit_task(
+                    [this, item, &done, testGraphicAgainstZone, testCopperGraphic]()
                     {
                         if( !m_drcEngine->IsCancelled() )
                         {
@@ -1150,19 +1134,47 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
 
                             done.fetch_add( 1 );
                         }
-                    }
+                    } ) );
+        }
 
-                    // Fields (reference, value, etc.) live in their own list but render as real
-                    // copper when placed on a copper layer, so they must be tested too.
-                    for( PCB_FIELD* field : footprint->GetFields() )
+        for( FOOTPRINT* footprint : m_board->Footprints() )
+        {
+            graphic_futures.push_back( tp.submit_task(
+                    [this, footprint, &done, testGraphicAgainstZone, testCopperGraphic]()
                     {
-                        if( !m_drcEngine->IsCancelled() )
+                        for( BOARD_ITEM* item : footprint->GraphicalItems() )
                         {
-                            testGraphicAgainstZone( field );
-                            done.fetch_add( 1 );
+                            if( !m_drcEngine->IsCancelled() )
+                            {
+                                testGraphicAgainstZone( item );
+
+                                if( ( item->Type() == PCB_SHAPE_T || item->Type() == PCB_BARCODE_T )
+                                        && item->IsOnCopperLayer() )
+                                {
+                                    testCopperGraphic( static_cast<PCB_SHAPE*>( item ) );
+                                }
+
+                                done.fetch_add( 1 );
+                            }
                         }
-                    }
-                } ) );
+
+                        // Fields (reference, value, etc.) live in their own list but render as real
+                        // copper when placed on a copper layer, so they must be tested too.
+                        for( PCB_FIELD* field : footprint->GetFields() )
+                        {
+                            if( !m_drcEngine->IsCancelled() )
+                            {
+                                testGraphicAgainstZone( field );
+                                done.fetch_add( 1 );
+                            }
+                        }
+                    } ) );
+        }
+    }
+    catch( ... )
+    {
+        graphic_futures.wait();
+        throw;
     }
 
     // Wait on our own futures, not the pool; the tasks hold done by reference until they return.
@@ -1226,6 +1238,16 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
     std::atomic<size_t>    done( 0 );
     size_t                 count = 0;
     BS::multi_future<void> zone_futures;
+
+    struct ZONE_PAIR
+    {
+        size_t       m_a;
+        size_t       m_b;
+        bool         m_sameNet;
+        PCB_LAYER_ID m_layer;
+    };
+
+    std::vector<ZONE_PAIR> jobs;
 
     auto reportZoneZoneViolation =
             [this]( ZONE* zoneA, ZONE* zoneB, VECTOR2I& pt, int actual, const DRC_CONSTRAINT& constraint,
@@ -1422,14 +1444,32 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                         || !polyA->BBoxFromCaches().Intersects( polyB->BBoxFromCaches() ) )
                     continue;
 
-                count++;
-                zone_futures.push_back( tp.submit_task(
-                        [checkZones, ia, ia2, sameNet, layer]()
-                        {
-                            checkZones( ia, ia2, sameNet, layer );
-                        } ) );
+                jobs.push_back( { ia, ia2, sameNet, layer } );
             }
         }
+    }
+
+    count = jobs.size();
+
+    // Reserving up front keeps push_back() from discarding a future whose task is already queued
+    // and still holds done and poly_segments.  submit_task() can throw, hence the drain below.
+    zone_futures.reserve( count );
+
+    try
+    {
+        for( const ZONE_PAIR& job : jobs )
+        {
+            zone_futures.push_back( tp.submit_task(
+                    [checkZones, job]()
+                    {
+                        checkZones( job.m_a, job.m_b, job.m_sameNet, job.m_layer );
+                    } ) );
+        }
+    }
+    catch( ... )
+    {
+        zone_futures.wait();
+        throw;
     }
 
     // Wait on our own futures, not the pool; checkZones holds done and poly_segments by reference.
