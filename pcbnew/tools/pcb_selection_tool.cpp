@@ -2932,10 +2932,9 @@ int PCB_SELECTION_TOOL::selectUnconnected( const TOOL_EVENT& aEvent )
 
 int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
 {
-    PCB_SELECTION originalSelection = m_selection;
-
     // Get all connected items that can represent the source side of the ratsnest.
     std::vector<BOARD_CONNECTED_ITEM*> sourceItems;
+    std::vector<FOOTPRINT*>            nearestFootprints;
 
     for( EDA_ITEM* item : m_selection.GetItems() )
     {
@@ -2949,8 +2948,6 @@ int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
             sourceItems.push_back( connItem );
         }
     }
-
-    ClearSelection();
 
     std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
     std::shared_ptr<CN_CONNECTIVITY_ALGO> connAlgo = conn->GetConnectivityAlgo();
@@ -3023,8 +3020,16 @@ int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
         }
 
         if( nearest != nullptr )
-            select( nearest );
+            nearestFootprints.push_back( nearest );
     }
+
+    if( nearestFootprints.empty() )
+        return 0;
+
+    ClearSelection();
+
+    for( FOOTPRINT* footprint : nearestFootprints )
+        select( footprint );
 
     m_toolMgr->RunAction( PCB_ACTIONS::moveIndividually );
 
