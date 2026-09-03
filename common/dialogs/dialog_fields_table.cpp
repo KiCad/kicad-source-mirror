@@ -1073,6 +1073,14 @@ void DIALOG_FIELDS_TABLE::OnRenameField( wxCommandEvent& aEvent )
         OnViewControlsCellChanged( evt );
     }
 
+    if( m_nbPages->GetSelection() == 1 )
+        PreviewRefresh();
+    else
+    {
+        getDataModel()->RebuildRows();
+        m_grid->ForceRefresh();
+    }
+
     syncBomPresetSelection();
     OnModify();
 }
