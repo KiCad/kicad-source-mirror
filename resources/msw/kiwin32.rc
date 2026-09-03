@@ -35,11 +35,7 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 #define MANIFEST_ID CREATEPROCESS_MANIFEST_RESOURCE_ID
 #endif
 
-#if !defined( KICAD_WIN32_DPI_AWARE ) || KICAD_WIN32_DPI_AWARE == 0
-#define MANIFEST_NAME basic.manifest
-#else
 #define MANIFEST_NAME dpi_aware_pmv2.manifest
-#endif
 
 //MSYS2
 #define RC_STR( text ) RC_STR2( text )

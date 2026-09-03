@@ -17,8 +17,7 @@
         "rhs": "Windows"
       },
       "cacheVariables": {
-        "KICAD_BUILD_QA_TESTS": "ON",
-        "KICAD_WIN32_DPI_AWARE": "ON"
+        "KICAD_BUILD_QA_TESTS": "ON"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {

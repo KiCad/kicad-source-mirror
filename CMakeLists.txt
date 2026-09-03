@@ -138,11 +138,6 @@ cmake_dependent_option( KICAD_BUILD_NIGHTLY_FLATPAK
     OFF "UNIX_NOT_APPLE"
     OFF )
 
-cmake_dependent_option( KICAD_WIN32_DPI_AWARE
-    "Turn on DPI awareness for Windows builds only"
-    OFF "WIN32"
-    OFF )
-
 cmake_dependent_option( KICAD_WIN32_VERIFY_CODESIGN
     "When enabled, verifies the code signing signature of certain DLLs loaded during runtime."
     OFF "WIN32"
@@ -357,8 +352,6 @@ if( WIN32 )
     # In fully standards-compliant mode, M_PI et al. are defined only if
     # _USE_MATH_DEFINES is set.
     add_compile_definitions( _USE_MATH_DEFINES )
-
-    add_compile_definitions( $<$<BOOL:${KICAD_WIN32_DPI_AWARE}>:KICAD_WIN32_DPI_AWARE=1> )
 endif()
 
 add_compile_definitions( $<$<BOOL:${KICAD_BUILD_ARCH_X86}>:KICAD_BUILD_ARCH_X86> )
@@ -506,10 +499,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         # include dir to allow getting the version header
         list(APPEND mingw_resource_compiler_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/ )
         list(APPEND mingw_resource_compiler_DEFINES KICAD_BUILD_ARCH=${KICAD_BUILD_ARCH} )
-        if( KICAD_WIN32_DPI_AWARE )
-            list(APPEND mingw_resource_compiler_DEFINES KICAD_WIN32_DPI_AWARE=1 )
-        endif()
-
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -s" )
 
         # for some reasons, cmake does do use always a response file to send the list of objects
