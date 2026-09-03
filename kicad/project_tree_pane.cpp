@@ -31,6 +31,9 @@
 #include <wx/timer.h>
 #include <wx/wupdlock.h>
 #include <wx/log.h>
+#include <wx/dcclient.h>
+#include <wx/progdlg.h>
+#include <wx/settings.h>
 
 #include <frame_type.h>
 #include <kiway.h>
@@ -57,9 +60,7 @@
 #include <string_utils.h>
 #include <thread_pool.h>
 #include <launch_ext.h>
-#include <wx/dcclient.h>
-#include <wx/progdlg.h>
-#include <wx/settings.h>
+#include <wx_log_utils.h>
 
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
@@ -1565,13 +1566,13 @@ void PROJECT_TREE_PANE::FileWatcherReset()
 
         bool watcherHasError = false;
         WatcherLogHandler tmpLog( &watcherHasError );
-        wxLog* oldLog = wxLog::SetActiveTarget( &tmpLog );
 
-        m_watcher = new wxFileSystemWatcher();
-        m_watcher->SetOwner( this );
+        {
+            SCOPED_WXLOG_TARGET logOverride( &tmpLog );
 
-        // Restore previous log handler
-        wxLog::SetActiveTarget( oldLog );
+            m_watcher = new wxFileSystemWatcher();
+            m_watcher->SetOwner( this );
+        }
 
         if( watcherHasError )
         {

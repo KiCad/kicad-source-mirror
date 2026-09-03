@@ -68,6 +68,7 @@
 #include <pcb_marker.h>
 #include <project.h>
 #include <widgets/progress_reporter_base.h>
+#include <wx_log_utils.h>
 
 #include <pcbnew_utils/board_file_utils.h>
 
@@ -448,32 +449,31 @@ RUN_SAMPLE timeRun( BOARD* aBoard, const wxFileName& aRulesFile, double aTimeout
     // chained, so ordinary logging still reaches the console.
     wxLog::AddTraceMask( wxT( "KICAD_DRC_PROFILE" ) );
 
-    DRC_PROFILE_LOG* profileLog = new DRC_PROFILE_LOG();
-    wxLog*           prevTarget = wxLog::SetActiveTarget( profileLog );
-
     // Deadline starts at the check phase so a slow rule compile spends its own time without
     // eating the evaluator's budget. InitEngine is not cancellable, so the timeout only bounds
     // RunTests, which is the long pole this tool exists to measure.
     BENCH_PROGRESS progress( aTimeoutSec );
     engine->SetProgressReporter( &progress );
 
-    PROF_TIMER checkTimer;
-
-    try
+    DRC_PROFILE_LOG           profileLog;
+    std::chrono::milliseconds runDuration{ 0 };
     {
-        engine->RunTests( EDA_UNITS::MM, true, false );
-    }
-    catch( const std::exception& e )
-    {
-        std::printf( "error during RunTests: %s\n", e.what() );
-    }
+        SCOPED_WXLOG_TARGET logOverride( &profileLog );
 
-    checkTimer.Stop();
+        try
+        {
+            SCOPED_PROF_TIMER scopedTimer( runDuration );
+            engine->RunTests( EDA_UNITS::MM, true, false );
+        }
+        catch( const std::exception& e )
+        {
+            std::printf( "error during RunTests: %s\n", e.what() );
+        }
+    }
 
     engine->SetProgressReporter( nullptr );
-    wxLog::SetActiveTarget( prevTarget );
 
-    sample.providerMs = profileLog->ProviderMs();
+    sample.providerMs = profileLog.ProviderMs();
 
     sample.timedOut = progress.TimedOut();
 
@@ -486,9 +486,9 @@ RUN_SAMPLE timeRun( BOARD* aBoard, const wxFileName& aRulesFile, double aTimeout
     // Prefer the engine's own "DRC took" total as the check denominator since it brackets
     // the same span the provider rows live in. Fall back to our outer timer if the trace
     // line did not arrive (e.g. RunTests bailed early).
-    double engineTotal = profileLog->TotalMs();
+    double engineTotal = profileLog.TotalMs();
 
-    sample.checkMs = engineTotal > 0.0 ? engineTotal : checkTimer.msecs();
+    sample.checkMs = engineTotal > 0.0 ? engineTotal : static_cast<double>( runDuration.count() );
 
     double providerSum = 0.0;
 
@@ -500,8 +500,6 @@ RUN_SAMPLE timeRun( BOARD* aBoard, const wxFileName& aRulesFile, double aTimeout
     sample.cacheGenMs = std::max( 0.0, sample.checkMs - providerSum );
 
     sample.violations = violationCount.load( std::memory_order_relaxed );
-
-    delete profileLog;
 
     return sample;
 }

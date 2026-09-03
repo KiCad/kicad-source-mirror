@@ -21,10 +21,12 @@
 #include <boost/test/data/test_case.hpp>
 
 #include <chrono>
+#include <cmath>
 
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_commit.h>
+#include <wx/log.h>
 #include <zone_filler.h>
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
@@ -42,7 +44,6 @@
 #include <project/net_settings.h>
 #include <netclass.h>
 #include <netinfo.h>
-#include <cmath>
 
 
 /// Assert every outline in @p aFill has at least @p aMinArea — used to verify
@@ -3173,35 +3174,15 @@ BOOST_FIXTURE_TEST_CASE( IterativeRefillConvergenceLimit, ZONE_FILL_TEST_FIXTURE
         ~ScopeGuard() { ref = orig; }
     } guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
 
-    // Capture wxLogWarning calls so we can assert that the iteration cap fires.
-    class WarningCapture : public wxLog
-    {
-    public:
-        bool m_hadWarning = false;
 
-    protected:
-        void DoLogRecord( wxLogLevel aLevel, const wxString&, const wxLogRecordInfo& ) override
-        {
-            if( aLevel == wxLOG_Warning )
-                m_hadWarning = true;
-        }
-    };
-
-    auto*  capture = new WarningCapture();
-    wxLog* oldLog = wxLog::SetActiveTarget( capture );
-
-    struct LogGuard
-    {
-        wxLog* old;
-        ~LogGuard() { wxLog::SetActiveTarget( old ); }
-    } logGuard{ oldLog };
+    KI_TEST::SCOPED_COUNTING_WXLOG countingLog( nullptr, wxLOG_Warning );
 
     KI_TEST::LoadBoard( m_settingsManager, "zone_refill_convergence_limit", m_board );
     KI_TEST::FillZones( m_board.get() );
 
-    BOOST_CHECK_MESSAGE( capture->m_hadWarning, "Expected a wxLogWarning when iterative refill hits the iteration "
-                                                "limit, but none was emitted.  The convergence-limit board may no "
-                                                "longer trigger the cap, or the warning path has changed." );
+    BOOST_CHECK_MESSAGE( countingLog.GetCount() > 0, "Expected a wxLogWarning when iterative refill hits the iteration "
+                                                     "limit, but none was emitted.  The convergence-limit board may no "
+                                                     "longer trigger the cap, or the warning path has changed." );
 }
 
 

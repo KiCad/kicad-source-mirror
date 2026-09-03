@@ -34,7 +34,10 @@
 #include <vector>
 
 #include <wx/gdicmn.h>
+#include <wx/log.h>
 #include <wx/string.h>
+
+#include <wx_log_utils.h>
 
 
 template<class T>
@@ -337,6 +340,75 @@ struct NAMED_CASE
 #else
 #define CHECK_WX_ASSERT( STATEMENT )
 #endif
+
+
+/**
+ * Counts error-level records so a failed save can be checked for reports beyond the one it
+ * throws. Warnings are ignored; only errors reach the user as a dialog.
+ */
+class COUNTING_WXLOG : public wxLog
+{
+public:
+    COUNTING_WXLOG( wxLogLevelValues aMaxLevel ) :
+            m_maxLevel( aMaxLevel )
+    {
+    }
+
+    unsigned GetCount() const { return m_count; }
+
+protected:
+    void DoLogRecord( wxLogLevel aLevel, const wxString&, const wxLogRecordInfo& ) override
+    {
+        if( aLevel <= m_maxLevel )
+            m_count++;
+    }
+
+private:
+    wxLogLevelValues m_maxLevel;
+    unsigned         m_count = 0;
+};
+
+
+/**
+ * A scoped application of a wxLog target that counts error-level messages.
+ *
+ * On destruction, the number of error-level messages logged is written to
+ * the given reference.
+ */
+class SCOPED_COUNTING_WXLOG : public SCOPED_WXLOG_TARGET
+{
+public:
+    /**
+     * @param aLogCount pointer to the counter. Will be written-back at destruction.
+     *                  If null, the count is not written back. This is useful if you
+     *                  have a tightly-defined scope and want to check the count after
+     *                  the scope ends.
+     * @param aMaxLevel the maximum log level to count (default: wxLOG_Error)
+     */
+    SCOPED_COUNTING_WXLOG( unsigned* aLogCount, wxLogLevelValues aMaxLevel = wxLOG_Error ) :
+            SCOPED_WXLOG_TARGET( &m_logger ),
+            m_logger( aMaxLevel ),
+            m_logCountRef( aLogCount )
+    {
+    }
+
+    ~SCOPED_COUNTING_WXLOG()
+    {
+        // Update the caller's log count reference with the number of logs recorded
+        if( m_logCountRef )
+            *m_logCountRef = m_logger.GetCount();
+    }
+
+    /*
+     * Gets the current count of matching log messages.
+     */
+    unsigned GetCount() const { return m_logger.GetCount(); }
+
+private:
+    COUNTING_WXLOG m_logger;
+    unsigned*      m_logCountRef;
+};
+
 
 /**
  * Get the configured location of Eeschema test data.

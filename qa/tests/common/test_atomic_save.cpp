@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "qa_utils/wx_utils/unit_test_utils.h"
 #include <boost/test/unit_test.hpp>
 #include <qa_utils/file_utils.h>
 
@@ -82,22 +83,6 @@ unsigned countSiblingTemps( const wxString& aTargetPath )
     wxDir::GetAllFiles( dir, &matches, pattern, wxDIR_FILES );
     return matches.GetCount();
 }
-
-
-// Counts error-level records so a failed save can be checked for reports beyond the one it
-// throws. Warnings are ignored; only errors reach the user as a dialog.
-class ERROR_COUNTING_LOG : public wxLog
-{
-public:
-    unsigned m_errors = 0;
-
-protected:
-    void DoLogRecord( wxLogLevel aLevel, const wxString&, const wxLogRecordInfo& ) override
-    {
-        if( aLevel <= wxLOG_Error )
-            m_errors++;
-    }
-};
 
 } // anonymous namespace
 
@@ -343,20 +328,15 @@ BOOST_AUTO_TEST_CASE( PrettifiedFormatter_DestructorDiscardsWhenTargetIsDirector
 
     BOOST_REQUIRE( wxFileName::Mkdir( target, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
-    ERROR_COUNTING_LOG* counter = new ERROR_COUNTING_LOG;
-    wxLog*              previous = wxLog::SetActiveTarget( counter );
+    KI_TEST::SCOPED_COUNTING_WXLOG logCounter( nullptr );
 
     {
         PRETTIFIED_FILE_OUTPUTFORMATTER f( target );
         f.Print( 0, "(implicit doomed)\n" );
     }
 
-    wxLog::SetActiveTarget( previous );
-    unsigned errors = counter->m_errors;
-    delete counter;
-
     // Nothing was attempted, so nothing had anything to report
-    BOOST_REQUIRE_EQUAL( errors, 0u );
+    BOOST_REQUIRE_EQUAL( logCounter.GetCount(), 0u );
     BOOST_REQUIRE( wxFileName::DirExists( target ) );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }

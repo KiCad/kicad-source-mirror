@@ -18,6 +18,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <project/project_archiver.h>
 #include <reporter.h>
@@ -44,16 +45,6 @@ BOOST_AUTO_TEST_SUITE( ProjectArchiver )
 
 namespace
 {
-
-class COUNTING_LOG : public wxLog
-{
-public:
-    unsigned m_records = 0;
-
-protected:
-    void DoLogRecord( wxLogLevel, const wxString&, const wxLogRecordInfo& ) override { m_records++; }
-};
-
 
 wxString makeProjectDir( const wxString& aTag )
 {
@@ -133,17 +124,12 @@ BOOST_AUTO_TEST_CASE( Archive_UnreadableFileRaisesNoSystemError )
         return;
     }
 
-    COUNTING_LOG*      counter = new COUNTING_LOG;
-    wxLog*             previous = wxLog::SetActiveTarget( counter );
-    WX_STRING_REPORTER reporter;
+    KI_TEST::SCOPED_COUNTING_WXLOG logOverride( nullptr, wxLOG_Warning );
+    WX_STRING_REPORTER             reporter;
 
     PROJECT_ARCHIVER::Archive( dir, zip, reporter );
 
-    wxLog::SetActiveTarget( previous );
-    unsigned records = counter->m_records;
-    delete counter;
-
-    BOOST_REQUIRE_EQUAL( records, 0u );
+    BOOST_REQUIRE_EQUAL( logOverride.GetCount(), 0u );
 
     wxRemoveFile( zip );
     removeProjectDir( dir, sheet );

@@ -28,6 +28,9 @@
  */
 
 #include "test_diptrace_benchmarks_fixture.h"
+#include "wx_log_utils.h"
+
+#include <wx_log_utils.h>
 
 
 namespace
@@ -2700,14 +2703,9 @@ BOOST_AUTO_TEST_CASE( ExternalCorpusImportOptional )
         }
 
         std::unique_ptr<BOARD> board;
-        auto*                  capture = new DIPTRACE_WARNING_CAPTURE();
-        wxLog*                 oldLog = wxLog::SetActiveTarget( capture );
 
-        struct LOG_GUARD
-        {
-            wxLog* old;
-            ~LOG_GUARD() { wxLog::SetActiveTarget( old ); }
-        } logGuard{ oldLog };
+        DIPTRACE_WARNING_CAPTURE capture;
+        SCOPED_WXLOG_TARGET      logOverride( &capture );
 
         try
         {
@@ -2727,7 +2725,7 @@ BOOST_AUTO_TEST_CASE( ExternalCorpusImportOptional )
         BOOST_REQUIRE_MESSAGE( board, "Failed to load: " + path.string() );
         loaded++;
 
-        for( const wxString& warning : capture->m_warnings )
+        for( const wxString& warning : capture.m_warnings )
         {
             BOOST_CHECK_MESSAGE( !IsHeuristicParserWarning( warning ),
                                  path.string() + ": unexpected heuristic parser warning: "
@@ -2743,7 +2741,6 @@ BOOST_AUTO_TEST_CASE( ExternalCorpusImportOptional )
                                                                    + std::to_string( outlineDisconnected ) + "/"
                                                                    + std::to_string( outlineEndpoints ) );
         }
-
     }
 
     BOOST_CHECK_MESSAGE( loaded > 0, "External corpus sweep loaded zero boards" );
