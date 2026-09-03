@@ -44,6 +44,7 @@
 #include <title_block.h>
 
 #include <lib_id.h>
+#include <mdw/client/mdw_client_types.h>
 #include <sch_reference_list.h>
 #include <sch_rtree.h>
 #include <sch_sheet.h>
@@ -89,6 +90,9 @@ struct PICKED_SYMBOL
     bool   PlaceAllUnits;
 
     std::vector<std::pair<FIELD_T, wxString>> Fields;
+
+    /// The workspace part chosen, which placement records on the symbol; empty for a library symbol
+    std::optional<MDW_PART_IDENTITY> PartIdentity;
 
     PICKED_SYMBOL() :
             Unit( 1 ),

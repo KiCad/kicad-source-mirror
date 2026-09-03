@@ -3123,6 +3123,13 @@ void SCH_EDIT_TOOL::EditProperties( EDA_ITEM* aItem )
         {
             m_toolMgr->RunAction( SCH_ACTIONS::clearVariantSymbol );
         }
+        else if( retval == SYMBOL_PROPS_WANT_ASSIGN_PART )
+        {
+            // An ERC fix opens this dialog on a symbol that is not selected
+            m_selectionTool->ClearSelection( true );
+            m_selectionTool->AddItemToSel( symbol );
+            m_toolMgr->RunAction( SCH_ACTIONS::mdwAssignPart );
+        }
 
         break;
     }

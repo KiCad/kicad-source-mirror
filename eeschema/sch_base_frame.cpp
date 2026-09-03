@@ -846,8 +846,6 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
         return;
     }
 
-    m_watcherLibName = aID->GetLibNickname().wx_str();
-
     wxLogTrace( traceLibWatch, "Setting up watcher for %s", tmp );
 
     if( wxFileName::DirExists( tmp ) )
@@ -991,20 +989,16 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 
     m_inSymChangeTimerEvent = true;
 
-    if( !hasUnsavedLibraryEdits( m_watcherLibName )
-          || IsOK( this, _( "The library containing the current symbol has changed.\n"
-                            "Do you want to reload the library?" ) ) )
-    {
-        wxLogTrace( traceLibWatch, "Sending refresh symbol mail" );
+    // The editor refreshes only what holds no unsaved edits, and a save over the change asks first
+    wxLogTrace( traceLibWatch, "Sending refresh symbol mail" );
 
-        // For directory libraries, GetFullPath() appends a trailing separator which
-        // won't match the library table URI. Use GetPath() for directories instead.
-        std::string libName = m_watcherIsDir ? m_watcherFileName.GetPath().ToStdString()
-                                             : m_watcherFileName.GetFullPath().ToStdString();
+    // For directory libraries, GetFullPath() appends a trailing separator which
+    // won't match the library table URI. Use GetPath() for directories instead.
+    std::string libName = m_watcherIsDir ? m_watcherFileName.GetPath().ToStdString()
+                                         : m_watcherFileName.GetFullPath().ToStdString();
 
-        Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_REFRESH_SYMBOL, libName );
-        Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_REFRESH_SYMBOL, libName );
-    }
+    Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_REFRESH_SYMBOL, libName );
+    Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_REFRESH_SYMBOL, libName );
 
     m_inSymChangeTimerEvent = false;
 }

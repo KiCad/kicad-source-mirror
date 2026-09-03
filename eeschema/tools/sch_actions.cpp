@@ -1347,6 +1347,12 @@ TOOL_ACTION SCH_ACTIONS::editSymbolFields( TOOL_ACTION_ARGS()
         .Tooltip( _( "Edit a table of fields from all symbols in the schematic" ) )
         .Icon( BITMAPS::spreadsheet ) );
 
+TOOL_ACTION SCH_ACTIONS::mdwAssignPart( TOOL_ACTION_ARGS()
+        .Name( "eeschema.MdwPartTool.assignPart" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Assign Part..." ) )
+        .Tooltip( _( "Link the selected symbol to a workspace part that uses it" ) ) );
+
 TOOL_ACTION SCH_ACTIONS::editSymbolLibraryLinks( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.editSymbolLibraryLinks" )
         .Scope( AS_GLOBAL )

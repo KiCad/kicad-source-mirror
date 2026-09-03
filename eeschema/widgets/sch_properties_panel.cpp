@@ -49,6 +49,7 @@
 #include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
+#include <tools/sch_mdw_part_tool.h>
 #include <tools/sch_selection_tool.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
@@ -210,6 +211,7 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
     Bind( wxEVT_MENU, &SCH_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_ADD_CUSTOM_PROPERTY );
     Bind( wxEVT_MENU, &SCH_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_FIELD );
     Bind( wxEVT_MENU, &SCH_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_CUSTOM_PROPERTY );
+    Bind( wxEVT_MENU, &SCH_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_ASSIGN_PART );
 }
 
 
@@ -723,6 +725,17 @@ void SCH_PROPERTIES_PANEL::onKeyRenamed( const wxString& aOldName, const wxStrin
 
 bool SCH_PROPERTIES_PANEL::buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp )
 {
+    SELECTION          fallbackSelection;
+    const SELECTION&   selection = getSelection( fallbackSelection );
+    SCH_MDW_PART_TOOL* partTool = m_frame->GetToolManager()->GetTool<SCH_MDW_PART_TOOL>();
+
+    if( partTool && m_frame->IsType( FRAME_SCH ) && selection.Size() == 1
+        && selection.Front()->Type() == SCH_SYMBOL_T
+        && partTool->CanAssignPart( *static_cast<const SCH_SYMBOL*>( selection.Front() ) ) )
+    {
+        aMenu.Append( ID_CTX_ASSIGN_PART, _( "Assign Part..." ) );
+    }
+
     if( aPGProp->IsCategory() )
     {
         if( aPGProp->GetLabel() == wxGetTranslation( _HKI( "Fields" ) ) )
@@ -763,6 +776,7 @@ void SCH_PROPERTIES_PANEL::onContextMenu( wxCommandEvent& aEvent )
     case ID_CTX_ADD_CUSTOM_PROPERTY:   addBlankCustomProperty();                 break;
     case ID_CTX_REMOVE_FIELD:          removeField( m_contextMenuPropertyName ); break;
     case ID_CTX_REMOVE_CUSTOM_PROPERTY: removeCustomProperty( m_contextMenuPropertyName ); break;
+    case ID_CTX_ASSIGN_PART:           m_frame->GetToolManager()->RunAction( SCH_ACTIONS::mdwAssignPart ); break;
     default:                                                                     break;
     }
 }

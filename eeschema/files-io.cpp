@@ -40,6 +40,9 @@
 #include <libraries/symbol_library_adapter.h>
 #include <local_history.h>
 #include <lockfile.h>
+#include <mdw/client/mdw_client.h>
+#include <mdw/client/mdw_library_sources.h>
+#include <widgets/mdw_library_notice.h>
 #include <pgm_base.h>
 #include <core/profile.h>
 #include <project/project_file.h>
@@ -72,6 +75,7 @@
 #include <trace_helpers.h>
 #include <widgets/filedlg_import_non_kicad.h>
 #include <widgets/kistatusbar.h>
+#include <widgets/mdw_save_prompt.h>
 #include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <local_history.h>
@@ -880,6 +884,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     updateTitle();
+    UpdateWorkspacePill();
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
     Prj().GetProjectFile().AcknowledgeTopLevelSheetChange();
 
@@ -915,6 +920,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // A standalone editor has no project manager to attach the git session for it.
     RefreshGitCommitPane();
 
+    ShowTeamLibraryNotice( this, Prj() );
     return true;
 }
 
@@ -1449,6 +1455,20 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             return false;
     }
 
+    // A workspace may refuse a sheet's state, so ask before the first write rather than leave a partial save
+    for( size_t i = 0; i < screens.GetCount(); i++ )
+    {
+        wxFileName sheetFn = filenameMap[screens.GetScreen( i )];
+
+        if( sheetFn.IsOk() )
+        {
+            sheetFn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+            if( !MdwConfirmSave( this, GetInfoBar(), Prj(), Prj().AbsolutePath( sheetFn.GetFullPath() ) ) )
+                return false;
+        }
+    }
+
     screens.BuildClientSheetPathList();
 
     std::vector<wxString> savedSheetPaths;
@@ -1504,7 +1524,10 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         bool savedThisSheet = saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath(), saveCopy );
 
         if( savedThisSheet )
+        {
             savedSheetPaths.push_back( tmpFn.GetFullPath() );
+            MDW_CLIENT::Get().NoteSaved( Prj(), Prj().AbsolutePath( tmpFn.GetFullPath() ) );
+        }
 
         success &= savedThisSheet;
     }
@@ -1536,6 +1559,19 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         // Do not save the virtual root sheet
         if( !sheet->IsVirtualRootSheet() )
             sheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
+    }
+
+    // The project records a team library source once its design uses one, and a first Save As creates the project
+    if( success && !saveCopy && ( !Prj().IsNullProject() || createNewProject )
+        && MDW_LIBRARY_SOURCES::TeamLibrariesEnabled() )
+    {
+        wxArrayString nicknames;
+        screens.GetLibNicknames( nicknames );
+
+        MDW_LIBRARY_SOURCES::Record( Prj().GetProjectFile().m_WorkspaceLibrarySources,
+                                     MDW_LIBRARY_SOURCES::RequirementsFor( { nicknames.begin(), nicknames.end() },
+                                                                           Pgm().GetLibraryManager(),
+                                                                           MDW_LIBRARY_TYPE::SYMBOL ) );
     }
 
     wxASSERT( filenameMap.count( Schematic().RootScreen() ) );

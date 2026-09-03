@@ -77,6 +77,7 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_clearVariantSymbolBtn;
 		wxButton* m_editSchematicSymbolBtn;
 		wxButton* m_editLibrarySymbolBtn;
+		wxButton* m_assignPartBtn;
 		wxPanel* m_pinTablePage;
 		WX_GRID* m_pinGrid;
 		wxPanel* m_pinMapPage;
@@ -107,6 +108,7 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onUpdateEditSymbol( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnEditLibrarySymbol( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdateEditLibrarySymbol( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnAssignPart( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPinTableCellEdited( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnSizePinsGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }

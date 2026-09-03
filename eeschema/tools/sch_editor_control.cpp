@@ -107,6 +107,9 @@
 #include <wildcards_and_files_ext.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <libraries/symbol_library_adapter.h>
+#include <widgets/mdw_part_controller.h>
+#include <widgets/mdw_save_prompt.h>
+#include <mdw/client/mdw_client.h>
 #include <printing/dialog_print.h>
 #include <plotters/plotters_pslike.h>
 #include <view/view.h>
@@ -428,7 +431,13 @@ int SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs( const TOOL_EVENT& aEvent )
 
     wxString newFilename = EnsureFileExtension( dlg.GetPath(), FILEEXT::KiCadSchematicFileExtension );
 
-    m_frame->saveSchematicFile( curr_sheet, newFilename, true );
+    // A copy written over a checked-out file replaces that working copy just the same
+    if( !MdwConfirmSave( m_frame, m_frame->GetInfoBar(), m_frame->Prj(), newFilename ) )
+        return 0;
+
+    if( m_frame->saveSchematicFile( curr_sheet, newFilename, true ) )
+        MDW_CLIENT::Get().NoteSaved( m_frame->Prj(), newFilename );
+
     return 0;
 }
 
@@ -711,15 +720,29 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
     wxFileName dest = LIBRARY_MANAGER::GetFullURI( row );
     dest.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
+    wxArrayString refused;
+    bool          anySaved = false;
+
     for( const std::pair<const LIB_ID, LIB_SYMBOL*>& it : libSymbols )
     {
         LIB_SYMBOL*                 origSym = it.second;
         std::unique_ptr<LIB_SYMBOL> newSym = origSym->Flatten();
         const wxString              newSymName = newSym->GetName();
 
+        // Exporting over a released library symbol would replace it without a Revise
+        std::optional<MDW_PART_TARGET> target =
+                MdwPartTarget( MDW_LIBRARY_TYPE::SYMBOL, *row, newSymName, wxEmptyString );
+
+        if( target && target->ListedState().IsReadOnly() )
+        {
+            refused.Add( UnescapeString( newSymName ) );
+            continue;
+        }
+
         try
         {
             pi->SaveSymbol( dest.GetFullPath(), std::move( newSym ) );
+            anySaved = true;
         }
         catch( const IO_ERROR& ioe )
         {
@@ -763,6 +786,16 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         }
 
         commit.Push( wxS( "Update Library Identifiers" ) );
+    }
+
+    if( anySaved )
+        MdwWarnLocalSave( m_frame, MDW_LIBRARY_TYPE::SYMBOL, *row );
+
+    if( !refused.empty() )
+    {
+        DisplayInfoMessage( m_frame, wxString::Format( _( "These symbols are released in '%s' and were not "
+                                                          "replaced. Revise them to change them:\n\n%s" ),
+                                                       targetLib, wxJoin( refused, '\n', '\0' ) ) );
     }
 
     return 0;

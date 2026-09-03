@@ -50,6 +50,7 @@
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <sch_symbol.h>
+#include <mdw_part_field.h>
 #include <sch_no_connect.h>
 #include <sch_group.h>
 #include <sch_line.h>
@@ -438,6 +439,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos,
                                          &m_frame->Schematic() );
+
+                if( sel.PartIdentity )
+                    MdwWritePartField( *symbol, *sel.PartIdentity );
+
                 addSymbol( symbol );
                 annotate();
 

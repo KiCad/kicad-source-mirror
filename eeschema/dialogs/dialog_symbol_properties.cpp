@@ -46,6 +46,7 @@
 #include <sch_sheet_path.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
+#include <tools/sch_mdw_part_tool.h>
 
 #include <dialog_sim_model.h>
 #include <panel_embedded_files.h>
@@ -429,6 +430,10 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
 
     CallAfter( &DIALOG_SYMBOL_PROPERTIES::HandleDelayedSelection, 0, FDC_VALUE );
     CallAfter( &DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus, 0, FDC_VALUE );
+
+    SCH_MDW_PART_TOOL* partTool = aParent->GetToolManager()->GetTool<SCH_MDW_PART_TOOL>();
+
+    m_assignPartBtn->Show( partTool && partTool->CanAssignPart( *aSymbol ) );
 
     // Remind user that they are editing the current variant.
     wxString variantName = aParent->Schematic().GetCurrentVariant();
@@ -1129,6 +1134,13 @@ void DIALOG_SYMBOL_PROPERTIES::OnEditLibrarySymbol( wxCommandEvent&  )
 {
     if( TransferDataFromWindow() )
         EndDialogShim( SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL );
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::OnAssignPart( wxCommandEvent& )
+{
+    if( TransferDataFromWindow() )
+        EndDialogShim( SYMBOL_PROPS_WANT_ASSIGN_PART );
 }
 
 

@@ -477,6 +477,7 @@ set( EESCHEMA_SRCS
     junction_helpers.cpp
     lib_fields_data_model.cpp
     lib_symbol.cpp
+    mdw_part_field.cpp
     link_imported_footprints.cpp
     menubar.cpp
     net_navigator.cpp
@@ -579,6 +580,7 @@ set( EESCHEMA_SRCS
     tools/assign_footprints.cpp
     tools/backannotate.cpp
     tools/sch_align_tool.cpp
+    tools/sch_mdw_part_tool.cpp
     tools/ee_graphic_tool.cpp
     tools/ee_grid_helper.cpp
     tools/rule_area_create_helper.cpp

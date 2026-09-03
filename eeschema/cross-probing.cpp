@@ -644,6 +644,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         break;
 
+    case MAIL_REVIEW_LIBRARY_UPDATES:
+        m_toolManager->PostAction( SCH_ACTIONS::updateSymbols );
+        break;
+
     case MAIL_SCH_RELOAD:
     {
         // A git operation rewrote files on disk. Reload the schematic so the editor matches.

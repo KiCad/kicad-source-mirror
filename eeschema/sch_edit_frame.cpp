@@ -70,6 +70,9 @@
 #include <sch_rule_area.h>
 #include <variant_proxy_undo_item.h>
 #include <settings/settings_manager.h>
+#include <settings/common_settings.h>
+#include <widgets/mdw_library_notice.h>
+#include <widgets/mdw_status_pill.h>
 #include <advanced_config.h>
 #include <connectivity/conn_facade.h>
 #include <sim/simulator_frame.h>
@@ -91,6 +94,7 @@
 #include <tools/ee_grid_helper.h>
 #include <tools/ee_graphic_tool.h>
 #include <tools/sch_inspection_tool.h>
+#include <tools/sch_mdw_part_tool.h>
 #include <tools/sch_point_editor.h>
 #include <tools/sch_design_block_control.h>
 #include <sch_io/sch_io_mgr.h>
@@ -473,6 +477,15 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     updateTitle();
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
 
+    if( GetStatusBar() )
+    {
+        m_workspacePill = new MDW_STATUS_PILL( GetStatusBar() );
+        m_workspacePill->PlaceInStatusBar( 7 );
+        UpdateWorkspacePill();
+    }
+
+    m_libraryUpdates = WatchTeamLibraryUpdates( this );
+
     m_apiHandler = std::make_unique<API_HANDLER_SCH>( this );
     Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
     subscribeConnectivity();
@@ -754,6 +767,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_EDIT_TABLE_TOOL );
     m_toolManager->RegisterTool( new SCH_GROUP_TOOL );
     m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_MDW_PART_TOOL );
     m_toolManager->RegisterTool( new SCH_DESIGN_BLOCK_CONTROL );
     m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new SCH_FIND_REPLACE_TOOL );
@@ -1268,6 +1282,10 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     }
 
     if( !Kiway().PlayerClose( FRAME_SIMULATOR, false ) )   // Can close the simulator?
+        return false;
+
+    // CvPcb saves its assignments back into this schematic, so it closes first and asks about unsaved ones
+    if( !Kiway().PlayerClose( FRAME_CVPCB, false ) )
         return false;
 
     if( m_symbolFieldsTableDialog
@@ -1920,6 +1938,23 @@ void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 }
 
 
+void SCH_EDIT_FRAME::UpdateWorkspacePill()
+{
+    if( !m_workspacePill )
+        return;
+
+    // Resolved at each refresh, so moving to another sheet only needs the refresh
+    m_workspacePill->TrackProject( Prj().GetProjectFullName(),
+                                   Pgm().MdwFrameworkOrNull() != nullptr,
+                                   [this]() -> wxString
+                                   {
+                                       SCH_SCREEN* screen = GetScreen();
+
+                                       return screen ? screen->GetFileName() : wxString();
+                                   } );
+}
+
+
 void SCH_EDIT_FRAME::updateTitle()
 {
     SCH_SCREEN* screen = GetScreen();
@@ -2206,6 +2241,8 @@ std::unique_ptr<GRID_HELPER> SCH_EDIT_FRAME::MakeGridHelper()
 void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aFlags );
+
+    UpdateWorkspacePill();
 
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
 
@@ -2604,6 +2641,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     }
 
     updateTitle();
+    UpdateWorkspacePill();
 
     HardRedraw();   // Ensure all items are redrawn (especially the drawing-sheet items)
 
