@@ -87,6 +87,8 @@ wxString ERC_REPORT::GetTextReport()
         {
             if( item->MainItemHasSheetPath() )
                 orderedItems[item->GetMainItemSheetPath()].emplace_back( item );
+            else if( item->IsSheetSpecific() )
+                orderedItems[item->GetSpecificSheetPath()].emplace_back( item );
             else
                 orderedItems[sheetList[0]].emplace_back( item );
         }
@@ -192,6 +194,8 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         {
             if( item->MainItemHasSheetPath() )
                 orderedItems[item->GetMainItemSheetPath()].emplace_back( item );
+            else if( item->IsSheetSpecific() )
+                orderedItems[item->GetSpecificSheetPath()].emplace_back( item );
             else
                 orderedItems[sheetList[0]].emplace_back( item );
         }
