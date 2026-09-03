@@ -236,10 +236,13 @@ SCH_MARKER* SCH_MARKER::FromProto( const kiapi::schematic::ErcMarker& aMsg, cons
     }
     else
     {
-        KIID mainId = aMsg.items_size() > 0 ? KIID( aMsg.items( 0 ).value() ) : niluuid;
-        KIID auxId  = aMsg.items_size() > 1 ? KIID( aMsg.items( 1 ).value() ) : niluuid;
+        std::vector<KIID> ids;
+        ids.reserve( aMsg.items_size() );
 
-        ercItem->SetItems( mainId, auxId );
+        for( const auto& item : aMsg.items() )
+            ids.emplace_back( item.value() );
+
+        ercItem->SetItems( ids );
     }
 
     SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pos );
