@@ -246,10 +246,14 @@ BOOST_AUTO_TEST_CASE( IsSafeUrlDirect )
     BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "javascript:alert(1)" ) ) );
     BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "data:text/html,<script>" ) ) );
     BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "\\\\server\\share\\foo.exe" ) ) );
+    BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "\\\\server\\share\\foo.exe?bar" ) ) );
+    BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "\\\\server\\share\\foo.exe#bar" ) ) );
     BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "mailto:user@example.com" ) ) );
     BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "file:///foo.exe" ) ) );
     BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "file:///FOO.EXE" ) ) );
     BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "file:///foo.bat" ) ) );
+    BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "file:///foo.exe?bar" ) ) );
+    BOOST_CHECK( !HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "file:///foo.exe#bar" ) ) );
 
     BOOST_CHECK( HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "\\\\server\\share\\foo.pdf" ) ) );
     BOOST_CHECK( HYPERLINK_DV_RENDERER::IsSafeUrl( wxString( "\\\\server\\share\\Spec.PDF" ) ) );

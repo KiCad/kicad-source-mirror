@@ -21,6 +21,7 @@
 
 #include <wx/dcclient.h>
 #include <wx/settings.h>
+#include <wx/uri.h>
 #include <wx/utils.h>
 
 
@@ -84,13 +85,12 @@ void layoutRuns( wxDC& aDC, std::vector<HYPERLINK_DV_RENDERER::RUN>& aRuns, int 
 bool HYPERLINK_DV_RENDERER::IsSafeUrl( const wxString& aHref )
 {
     wxString lower = aHref.Lower();
+    wxURI    uri( lower );
 
-    if( lower.StartsWith( wxT( "http://" ) ) || lower.StartsWith( wxT( "https://" ) ) )
+    if( uri.GetScheme() == wxT( "http" ) || uri.GetScheme() == wxT( "https" ) )
         return true;
 
-    bool isLocalFile = lower.StartsWith( wxT( "file://" ) ) || lower.StartsWith( wxT( "\\\\" ) );
-
-    if( isLocalFile )
+    if( uri.GetScheme() == wxT( "file" ) || lower.StartsWith( wxT( "\\\\" ) ) )
     {
         static const wxString blockedExtensions[] = { wxT( ".exe" ), wxT( ".com" ), wxT( ".bat" ), wxT( ".cmd" ),
                                                       wxT( ".ps1" ), wxT( ".vbs" ), wxT( ".js" ),  wxT( ".jar" ),
@@ -99,7 +99,7 @@ bool HYPERLINK_DV_RENDERER::IsSafeUrl( const wxString& aHref )
 
         for( const wxString& ext : blockedExtensions )
         {
-            if( lower.EndsWith( ext ) )
+            if( uri.GetPath().EndsWith( ext ) )
                 return false;
         }
 
@@ -212,9 +212,6 @@ bool HYPERLINK_DV_RENDERER::Render( wxRect aCell, wxDC* aDC, int aState )
 {
     RenderBackground( aDC, aCell );
 
-    // Capture aDC's font so HitTestRunsForCell can measure with the same font.
-    m_renderFont = aDC->GetFont();
-
     layoutRuns( *aDC, m_runs, aCell.x, aCell.y, aCell.height );
 
     const bool selected = ( aState & wxDATAVIEW_CELL_SELECTED ) != 0;
@@ -259,15 +256,26 @@ bool HYPERLINK_DV_RENDERER::Render( wxRect aCell, wxDC* aDC, int aState )
 }
 
 
-bool HYPERLINK_DV_RENDERER::HitTestRunsForCell( const wxString& aValue, const wxRect& aCell, const wxPoint& aPoint,
-                                                wxString* aHref ) const
+bool HYPERLINK_DV_RENDERER::HitTestRunsForCell( const wxString& aValue, const wxDataViewItemAttr& aCellAttr,
+                                                const wxRect& aCellRect, const wxPoint& aPoint, wxString* aHref ) const
 {
     std::vector<RUN> runs;
     ParseRuns( aValue, runs );
 
     wxClientDC dc( const_cast<wxDataViewCtrl*>( GetView() ) );
-    dc.SetFont( m_renderFont.IsOk() ? m_renderFont : GetView()->GetFont() );
-    layoutRuns( dc, runs, aCell.x, aCell.y, aCell.height );
+    wxFont     font = GetView()->GetFont();
+
+    if( aCellAttr.GetBold() )
+        font.MakeBold();
+
+    if( aCellAttr.GetItalic() )
+        font.MakeItalic();
+
+    if( aCellAttr.GetStrikethrough() )
+        font.MakeStrikethrough();
+
+    dc.SetFont( font );
+    layoutRuns( dc, runs, aCellRect.x, aCellRect.y, aCellRect.height );
 
     for( const RUN& run : runs )
     {

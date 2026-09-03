@@ -42,8 +42,8 @@ public:
     bool   Render( wxRect aCell, wxDC* aDC, int aState ) override;
 
     /// Hit-test aPoint against the link runs of aValue laid out in aCell.
-    bool HitTestRunsForCell( const wxString& aValue, const wxRect& aCell, const wxPoint& aPoint,
-                             wxString* aHref ) const;
+    bool HitTestRunsForCell( const wxString& aValue, const wxDataViewItemAttr& aCellAttr, const wxRect& aCellRect,
+                             const wxPoint& aPoint, wxString* aHref ) const;
 
     struct RUN
     {
@@ -64,7 +64,6 @@ public:
 private:
     wxString         m_value;
     std::vector<RUN> m_runs;
-    wxFont           m_renderFont;
 };
 
 #endif // WX_DATA_VIEW_HYPERLINK_RENDERER_H
