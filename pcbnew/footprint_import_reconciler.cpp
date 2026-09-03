@@ -60,8 +60,8 @@ wxString placedSignature( const FOOTPRINT* aFp )
 {
     BOX2I bbox = aFp->GetBoundingBox( false );
 
-    return wxString::Format( wxS( "%zu:%zu:%d:%d" ), aFp->Pads().size(),
-                             aFp->GraphicalItems().size(), bbox.GetWidth(), bbox.GetHeight() );
+    return wxString::Format( wxS( "%zu:%zu:%lld:%lld" ), aFp->Pads().size(), aFp->GraphicalItems().size(),
+                             (long long) bbox.GetWidth(), (long long) bbox.GetHeight() );
 }
 
 
