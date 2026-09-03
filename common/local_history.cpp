@@ -30,7 +30,6 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <pgm_base.h>
-#include <thread_pool.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
@@ -384,21 +383,36 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
         return false;
     }
 
-    // Phase 2: submit Prettify + file I/O + git to background thread
+    // Phase 2: run Prettify + file I/O + git on a thread of its own.  Storage sets the duration
+    // of this work, so the shared compute pool would leave a manual save queued behind DRC.
     m_saveInProgress.store( true, std::memory_order_release );
 
-    m_pendingFuture = GetKiCadThreadPool().submit_task(
-            [this, projectPath = aProjectPath, title = aTitle, tagFileType = aTagFileType,
-             data = std::move( fileData )]() mutable -> bool
-            {
-                bool result = commitInBackground( projectPath, title, data, !tagFileType.IsEmpty() );
+    try
+    {
+        m_pendingFuture = std::async( std::launch::async,
+                [this, projectPath = aProjectPath, title = aTitle, tagFileType = aTagFileType,
+                 data = std::move( fileData )]() mutable -> bool
+                {
+                    bool result = commitInBackground( projectPath, title, data,
+                                                      !tagFileType.IsEmpty() );
 
-                if( !tagFileType.IsEmpty() )
-                    TagSave( projectPath, tagFileType );
+                    if( !tagFileType.IsEmpty() )
+                        TagSave( projectPath, tagFileType );
 
-                m_saveInProgress.store( false, std::memory_order_release );
-                return result;
-            } );
+                    m_saveInProgress.store( false, std::memory_order_release );
+                    return result;
+                } );
+    }
+    catch( const std::system_error& e )
+    {
+        // Unlike a pool submission, this has to create a thread and the OS can refuse.  Drop the
+        // snapshot instead of failing the save; the caller has already written the document.
+        wxLogTrace( traceAutoSave, wxS( "[history] could not start the save thread (%s); "
+                                        "skipping this snapshot" ), e.what() );
+
+        m_saveInProgress.store( false, std::memory_order_release );
+        return false;
+    }
 
     // Manual save must complete (commit + tag)
     if( !aTagFileType.IsEmpty() )
