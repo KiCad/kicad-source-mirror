@@ -904,8 +904,7 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreC
 }
 
 
-bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
-                        bool case_sensitive )
+bool WildCompareString( const wxString& pattern, const wxString& string_to_tst, bool case_sensitive )
 {
     const wxChar* cp = nullptr;
     const wxChar* mp = nullptr;

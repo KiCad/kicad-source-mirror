@@ -614,6 +614,12 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
     std::vector<LIB_SYMBOL*> symbols = adapter->GetSymbols( libName );
 
+    std::sort( symbols.begin(), symbols.end(),
+            []( LIB_SYMBOL* a, LIB_SYMBOL* b ) -> bool
+            {
+                return StrNumCmp( b->GetName(), a->GetName(), true ) > 0;
+            } );
+
     std::set<wxString> excludes;
 
     if( !m_symbolFilter->GetValue().IsEmpty() )
