@@ -1095,8 +1095,7 @@ struct VIEW::DRAW_ITEM_VISITOR
 
 void VIEW::redrawRect( const BOX2I& aRect )
 {
-
-    syncLayerVisibilityCache();
+    SyncLayerVisibilityCache();
 
     for( VIEW_LAYER* l : m_orderedLayers )
     {
@@ -1914,7 +1913,8 @@ void VIEW::ShowPreview( bool aShow )
    SetVisible( m_preview.get(), aShow );
 }
 
-void VIEW::syncLayerVisibilityCache()
+
+void VIEW::SyncLayerVisibilityCache()
 {
     for( const auto& layer : m_layers )
     {

@@ -777,6 +777,7 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
     EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetToolHolder() );
     KIGFX::VIEW*    view = m_toolMgr->GetView();
 
+    view->SyncLayerVisibilityCache();   // Required for ViewGetLOD() calls.
     view->Query( aArea, selectedItems );
 
     for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : selectedItems )

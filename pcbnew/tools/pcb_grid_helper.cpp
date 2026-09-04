@@ -1429,6 +1429,8 @@ std::vector<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( std::initializer_list<BO
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
     bool                 isHighContrast = settings->GetHighContrast();
 
+    view->SyncLayerVisibilityCache();   // Required for ViewGetLOD() calls.
+
     for( const BOX2I& area : aAreas )
     {
         if( area.GetWidth() > 0 && area.GetHeight() > 0 )
@@ -1732,6 +1734,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
     const PCB_LAYER_ID   activeHighContrastPrimaryLayer = settings->GetPrimaryHighContrastLayer();
     bool                 isHighContrast = settings->GetHighContrast();
+
+    view->SyncLayerVisibilityCache();   // Required for ViewGetLOD() calls.
 
     const auto checkVisibility =
             [&]( const BOARD_ITEM* item )

@@ -363,6 +363,8 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
     bool                 isHighContrast = settings->GetHighContrast();
 
+    view->SyncLayerVisibilityCache();   // Required for ViewGetLOD() calls.
+
     auto checkVisibility =
             [&]( BOARD_ITEM* item )
             {

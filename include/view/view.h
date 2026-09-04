@@ -434,7 +434,9 @@ public:
         return it->second.visible;
     }
 
-    inline bool IsLayerVisibleCached( int aLayer ) const
+    void SyncLayerVisibilityCache();
+
+    bool IsLayerVisibleCached( int aLayer ) const
     {
         return m_layerVisibilityCache[ aLayer ];
     }
@@ -883,8 +885,6 @@ protected:
 
     /// Check if every layer required by the aLayerId layer is enabled.
     bool areRequiredLayersEnabled( int aLayerId ) const;
-
-    void syncLayerVisibilityCache();
 
     // Function objects that need to access VIEW/VIEW_ITEM private/protected members
     struct CLEAR_LAYER_CACHE_VISITOR;

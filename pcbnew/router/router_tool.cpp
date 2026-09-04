@@ -1836,6 +1836,10 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Catch any visibility
+        // changes while routing.
+        m_toolMgr->GetView()->SyncLayerVisibilityCache();
+
         setCursor();
 
         // Don't crash if we missed an operation that canceled routing.
@@ -2412,6 +2416,10 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Catch any visibility
+        // changes while routing.
+        m_toolMgr->GetView()->SyncLayerVisibilityCache();
+
         if( !evt->IsDrag() )
             setCursor();
 
@@ -2546,6 +2554,10 @@ void ROUTER_TOOL::performDragging( int aMode )
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Catch any visibility
+        // changes while dragging.
+        m_toolMgr->GetView()->SyncLayerVisibilityCache();
+
         ctls->ForceCursorPosition( false );
 
         if( evt->IsMotion() )
@@ -2839,6 +2851,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     // a Move operation). Sync it now so that FindItemByParent and joint lookups work correctly.
     m_router->SyncWorld();
 
+    // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Make sure it's up-to-date.
+    m_toolMgr->GetView()->SyncLayerVisibilityCache();
+
     if( !footprints.empty() )
     {
         if( footprints.size() == 1 )
@@ -3031,6 +3046,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Catch any visibility
+        // changes while dragging.
+        m_toolMgr->GetView()->SyncLayerVisibilityCache();
+
         setCursor();
 
         if( evt->IsCancelInteractive()
@@ -3245,8 +3264,7 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 )
         return 0;
 
-    const BOARD_CONNECTED_ITEM* item =
-            static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
+    const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
 
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_ARC_T )
         return 0;
@@ -3254,6 +3272,9 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     Activate();
+
+    // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Make sure it's up-to-date.
+    m_toolMgr->GetView()->SyncLayerVisibilityCache();
 
     m_startItem = m_router->GetWorld()->FindItemByParent( item );
 

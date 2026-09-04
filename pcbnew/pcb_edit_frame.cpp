@@ -897,6 +897,8 @@ void PCB_EDIT_FRAME::redrawNetnames()
     KIGFX::VIEW* view = GetCanvas()->GetView();
     BOX2D        viewport = view->GetViewport();
 
+    view->SyncLayerVisibilityCache();   // Required for ViewGetLOD() calls.
+
     // Inflate to catch most of the track width
     BOX2I_MINMAX clipbox( BOX2ISafe( viewport.Inflate( pcbIUScale.mmToIU( 2.0 ) ) ) );
 

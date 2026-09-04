@@ -331,8 +331,7 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
 
 void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 {
-    int tl = m_router->GetInterface()->GetPNSLayerFromBoardLayer(
-            static_cast<PCB_LAYER_ID>( getView()->GetTopLayer() ) );
+    int      tl = m_router->GetInterface()->GetPNSLayerFromBoardLayer( ToLAYER_ID( getView()->GetTopLayer() ) );
     GAL*     gal = m_toolMgr->GetView()->GetGAL();
     VECTOR2I pos = aEvent.HasPosition() ? (VECTOR2I) aEvent.Position() : m_startSnapPoint;
 
@@ -345,6 +344,9 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
         controls()->ForceCursorPosition( true, m_startSnapPoint );
         return;
     }
+
+    // Snapping uses ViewGetLOD(), which use the layerVisibilityCache.  Make sure the cache is up-to-date.
+    m_toolMgr->GetView()->SyncLayerVisibilityCache();
 
     controls()->ForceCursorPosition( false );
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
@@ -364,6 +366,9 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 {
     int  layer;
     GAL* gal = m_toolMgr->GetView()->GetGAL();
+
+    // Snapping uses ViewGetLOD(), which use the layerVisibilityCache.  Make sure the cache is up-to-date.
+    m_toolMgr->GetView()->SyncLayerVisibilityCache();
 
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
