@@ -3255,6 +3255,9 @@ static struct TRACK_VIA_DESC
 
         propMgr.Mask( TYPE_HASH( PCB_VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) );
 
+        propMgr.AddProperty( new PROPERTY<PCB_VIA, bool>( _HKI( "Automatically Update Net" ),
+                    &PCB_VIA::SetIsNotFree, &PCB_VIA::GetIsNotFree ) );
+
         // clang-format off: the suggestion is less readable
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Diameter" ),
             &PCB_VIA::SetFrontWidth, &PCB_VIA::GetFrontWidth, PROPERTY_DISPLAY::PT_SIZE ), groupVia )
