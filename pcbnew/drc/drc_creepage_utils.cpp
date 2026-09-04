@@ -1782,7 +1782,11 @@ std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
     VECTOR2I center2 = aS2.GetPos();
     double   dist = ( center1 - center2 ).EuclideanNorm();
 
-    if( dist > aMaxWeight || dist == 0 )
+    // Prune on the tangent sqrt(dist^2 - R2^2) - R1, which is much shorter than the centre
+    // distance beside a large hole
+    double reach = aMaxWeight + R1;
+
+    if( dist == 0 || dist * dist > reach * reach + R2 * R2 )
         return result;
 
     double circleAngle = EDA_ANGLE( center2 - center1 ).AsRadians();
