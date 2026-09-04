@@ -85,18 +85,6 @@ public:
      */
     std::vector<SEARCH_TERM>& GetSearchTerms() override;
 
-    unsigned GetPadCount()
-    {
-        ensure_loaded();
-        return m_pad_count;
-    }
-
-    unsigned GetUniquePadCount()
-    {
-        ensure_loaded();
-        return m_unique_pad_count;
-    }
-
     unsigned GetNumberedPadCount()
     {
         ensure_loaded();
@@ -135,25 +123,21 @@ protected:
     virtual void load() { };
 
     /**
-     * Safe to build once and keep.
-     * Name fields come from the constructor.
-     * Keyword and description fields come from load(), one-shot behind m_loaded.
-     * All source fields are final by the time this runs.
+     * Safe to build once and keep.  Name fields come from the constructor.  Keyword and description fields
+     * come from load(), one-shot behind m_loaded.  All source fields are final by the time this runs.
      */
     void cacheSearchTerms();
 
-    FOOTPRINT_LIST* m_owner; ///< provides access to FP_LIB_TABLE
+    FOOTPRINT_LIST* m_owner;              ///< provides access to FP_LIB_TABLE
 
     bool            m_loaded;
 
-    wxString        m_nickname;         ///< library as known in FP_LIB_TABLE
-    wxString        m_fpname;           ///< Module name.
-    int             m_num;              ///< Order number in the display list.
-    unsigned        m_pad_count;        ///< Number of pads
-    unsigned        m_unique_pad_count; ///< Number of unique pads
+    wxString        m_nickname;           ///< library as known in FP_LIB_TABLE
+    wxString        m_fpname;             ///< Module name.
+    int             m_num;                ///< Order number in the display list.
     unsigned        m_numbered_pad_count; ///< Number of unique electrical pads (numeric or BGA-style numbers)
-    wxString        m_doc;              ///< Footprint description.
-    wxString        m_keywords;         ///< Footprint keywords.
+    wxString        m_doc;                ///< Footprint description.
+    wxString        m_keywords;           ///< Footprint keywords.
 
     std::vector<SEARCH_TERM> m_searchTerms;
 };

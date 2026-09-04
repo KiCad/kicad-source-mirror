@@ -70,12 +70,6 @@ namespace KIFONT {
 class OUTLINE_FONT;
 }
 
-enum INCLUDE_NPTH_T
-{
-    DO_NOT_INCLUDE_NPTH = false,
-    INCLUDE_NPTH = true
-};
-
 /**
  * The set of attributes allowed within a FOOTPRINT, using FOOTPRINT::SetAttributes()
  * and FOOTPRINT::GetAttributes().  These are to be ORed together when calling
@@ -1197,31 +1191,17 @@ public:
     std::vector<const PAD*> GetPads( const wxString& aPadNumber, const PAD* aIgnore = nullptr ) const;
 
     /**
-     * Return the number of pads.
-     *
-     * @param aIncludeNPTH includes non-plated through holes when true.  Does not include
-     *                     non-plated through holes when false.
-     * @return the number of pads according to \a aIncludeNPTH.
+     * @return the number of pads.
      */
-    unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
+    unsigned GetPadCount() const;
 
     /**
-     * Return the number of unique non-blank pads.
-     *
      * A complex pad can be built with many pads having the same pad name to create a complex
      * shape or fragmented solder paste areas.
      *
-     * @param aIncludeNPTH includes non-plated through holes when true.  Does not include
-     *                     non-plated through holes when false.
-     * @return the number of unique pads according to \a aIncludeNPTH.
+     * @return the names of the unique, non-blank pads.
      */
-    unsigned GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
-
-    /**
-     * Return the names of the unique, non-blank pads.
-     */
-    std::set<wxString>
-    GetUniquePadNumbers( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
+    std::set<wxString> GetUniquePadNumbers() const;
 
     /**
      * Return the number of unique pads whose pad number represents an electrical pin.
@@ -1234,11 +1214,7 @@ public:
     unsigned GetNumberedPadCount() const;
 
     /**
-     * Return the next available pad number in the footprint.
-     *
-     * @param aFillSequenceGaps true if the numbering should "fill in" gaps in the sequence,
-     *                          else return the highest value + 1
-     * @return the next available pad number
+     * @return the next available pad number in the footprint.
      */
     wxString GetNextPadNumber( const wxString& aLastPadName ) const;
 

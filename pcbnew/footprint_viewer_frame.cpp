@@ -511,7 +511,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
             {
                 int matched = matcher.ScoreTerms( footprint->GetSearchTerms() );
 
-                if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) )
+                if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)footprint->GetNumberedPadCount() )
                     matched++;
 
                 if( !matched )

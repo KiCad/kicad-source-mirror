@@ -2474,10 +2474,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull( PCB_LAYER_ID aLayer ) const
         if( item->IsOnLayer( aLayer ) )
         {
             if( item->Type() != PCB_FIELD_T && item->Type() != PCB_REFERENCE_IMAGE_T )
-            {
-                item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
-                                               ERROR_OUTSIDE );
-            }
+                item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
 
             // We intentionally exclude footprint fields from the bounding hull.
         }
@@ -2525,20 +2522,18 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     // Don't use GetShownText(); we want to see the variable references here
     aList.emplace_back( UnescapeString( Reference().GetText() ),
-                        UnescapeString( GetFieldValueForVariant(
-                                variant, GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) ) ) );
+                        UnescapeString( GetFieldValueForVariant( variant, GetDefaultFieldName( FIELD_T::VALUE,
+                                                                                               UNTRANSLATED ) ) ) );
 
     if( aFrame->IsType( FRAME_FOOTPRINT_VIEWER )
         || aFrame->IsType( FRAME_FOOTPRINT_CHOOSER )
         || aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) )
     {
-        size_t     padCount = GetPadCount( DO_NOT_INCLUDE_NPTH );
-
         aList.emplace_back( _( "Library" ), GetFPID().GetLibNickname().wx_str() );
 
         aList.emplace_back( _( "Footprint Name" ), GetFPID().GetLibItemName().wx_str() );
 
-        aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%zu" ), padCount ) );
+        aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%zu" ), GetNumberedPadCount() ) );
 
         aList.emplace_back( wxString::Format( _( "Doc: %s" ), GetLibDescription() ),
                             wxString::Format( _( "Keywords: %s" ), GetKeywords() ) );
@@ -2914,26 +2909,13 @@ std::vector<const PAD*> FOOTPRINT::GetPads( const wxString& aPadNumber, const PA
 }
 
 
-unsigned FOOTPRINT::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+unsigned FOOTPRINT::GetPadCount() const
 {
-    if( aIncludeNPTH )
-        return m_pads.size();
-
-    unsigned cnt = 0;
-
-    for( PAD* pad : m_pads )
-    {
-        if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-            continue;
-
-        cnt++;
-    }
-
-    return cnt;
+    return m_pads.size();
 }
 
 
-std::set<wxString> FOOTPRINT::GetUniquePadNumbers( INCLUDE_NPTH_T aIncludeNPTH ) const
+std::set<wxString> FOOTPRINT::GetUniquePadNumbers() const
 {
     std::set<wxString> usedNumbers;
 
@@ -2950,23 +2932,10 @@ std::set<wxString> FOOTPRINT::GetUniquePadNumbers( INCLUDE_NPTH_T aIncludeNPTH )
         if( pad->GetNumber().IsEmpty() )
             continue;
 
-        if( !aIncludeNPTH )
-        {
-            // skip NPTH
-            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-                continue;
-        }
-
         usedNumbers.insert( pad->GetNumber() );
     }
 
     return usedNumbers;
-}
-
-
-unsigned FOOTPRINT::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
-{
-    return GetUniquePadNumbers( aIncludeNPTH ).size();
 }
 
 

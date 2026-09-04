@@ -181,7 +181,7 @@ static wxString filterFootprints( const wxString& aFilterJson )
                 // Pin count filter
                 if( pinCount > 0 )
                 {
-                    int fpPadCount = fp->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
+                    int fpPadCount = fp->GetNumberedPadCount();
 
                     if( fpPadCount != pinCount )
                         continue;

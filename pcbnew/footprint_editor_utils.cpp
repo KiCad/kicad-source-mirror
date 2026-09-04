@@ -235,8 +235,6 @@ public:
 
         m_nickname = aFootprint->GetFPID().GetLibNickname().wx_str();
         m_fpname = aFootprint->GetFPID().GetLibItemName().wx_str();
-        m_pad_count = aFootprint->GetPadCount( DO_NOT_INCLUDE_NPTH );
-        m_unique_pad_count = aFootprint->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
         m_keywords = aFootprint->GetKeywords();
         m_doc = aFootprint->GetLibDescription();
         m_loaded = true;
@@ -244,8 +242,7 @@ public:
 };
 
 
-void FOOTPRINT_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem,
-                                              FOOTPRINT* aFootprint )
+void FOOTPRINT_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem, FOOTPRINT* aFootprint )
 {
     wxCHECK( aFootprint, /* void */ );
 

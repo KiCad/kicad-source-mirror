@@ -44,14 +44,10 @@ void FOOTPRINT_INFO_IMPL::load()
 
         if( footprint == nullptr ) // Should happen only with malformed/broken libraries
         {
-            m_pad_count = 0;
-            m_unique_pad_count = 0;
             m_numbered_pad_count = 0;
         }
         else
         {
-            m_pad_count = footprint->GetPadCount( DO_NOT_INCLUDE_NPTH );
-            m_unique_pad_count = footprint->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
             m_numbered_pad_count = footprint->GetNumberedPadCount();
             m_keywords = footprint->GetKeywords();
             m_doc = footprint->GetLibDescription();
@@ -63,8 +59,6 @@ void FOOTPRINT_INFO_IMPL::load()
         if( m_owner )
             m_owner->PushError( std::make_unique<IO_ERROR>( ioe ) );
 
-        m_pad_count = 0;
-        m_unique_pad_count = 0;
         m_numbered_pad_count = 0;
     }
 

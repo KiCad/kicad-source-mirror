@@ -17,8 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef FOOTPRINT_INFO_IMPL_H
-#define FOOTPRINT_INFO_IMPL_H
+#pragma once
 
 #include <atomic>
 #include <functional>
@@ -40,31 +39,12 @@ public:
         m_nickname = aNickname;
         m_fpname = aFootprintName;
         m_num = 0;
-        m_pad_count = 0;
-        m_unique_pad_count = 0;
+        m_numbered_pad_count = 0;
 
         m_owner = aOwner;
         m_loaded = false;
         load();
     }
-
-    // A constructor for cached items
-    FOOTPRINT_INFO_IMPL( const wxString& aNickname, const wxString& aFootprintName,
-                         const wxString& aDescription, const wxString& aKeywords,
-                         int aOrderNum, unsigned int aPadCount, unsigned int aUniquePadCount )
-    {
-        m_nickname = aNickname;
-        m_fpname = aFootprintName;
-        m_num = aOrderNum;
-        m_pad_count = aPadCount;
-        m_unique_pad_count = aUniquePadCount;
-        m_doc = aDescription;
-        m_keywords = aKeywords;
-
-        m_owner = nullptr;
-        m_loaded = true;
-    }
-
 
     // A dummy constructor for use as a target in a binary search
     FOOTPRINT_INFO_IMPL( const wxString& aNickname, const wxString& aFootprintName )
@@ -123,6 +103,3 @@ private:
     std::mutex               m_join;
     std::mutex               m_loadInProgress;
 };
-
-
-#endif // FOOTPRINT_INFO_IMPL_H
