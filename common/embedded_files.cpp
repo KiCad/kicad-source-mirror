@@ -303,7 +303,7 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::CompressAndEncode( EMBEDDED_FILE& aF
 
 
 // Decompress and Base64 decode data
-EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& aFile )
+EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& aFile, bool aAllowEmptyHash )
 {
     std::vector<char> compressedData;
     size_t            compressedSize = wxBase64DecodedSize( aFile.compressedEncodedData.size() );
@@ -356,7 +356,11 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
     hash.add( aFile.decompressedData );
     std::string new_hash = hash.digest().ToString();
 
-    if( aFile.data_hash.length() == 64 )
+    if( aAllowEmptyHash && aFile.data_hash.empty() )
+    {
+        wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "Generated new hash for '%s'"), aFile.name );
+    }
+    else if( aFile.data_hash.length() == 64 )
     {
         // SHA-256 hash from older file formats
         std::string sha_hash;

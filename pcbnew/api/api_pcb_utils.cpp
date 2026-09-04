@@ -34,6 +34,7 @@
 #include <pad.h>
 #include <pcb_group.h>
 #include <constraints/pcb_constraint.h>
+#include <mmh3_hash.h>
 #include <pcb_barcode.h>
 #include <pcb_griditem.h>
 #include <pcb_reference_image.h>
@@ -263,8 +264,11 @@ bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const common::types::Embedded
         file->compressedEncodedData = protoFile.data();
         file->data_hash = protoFile.data_hash();
 
-        if( EMBEDDED_FILES::DecompressAndDecode( *file ) != EMBEDDED_FILES::RETURN_CODE::OK )
+        if( EMBEDDED_FILES::DecompressAndDecode( *file, /* aAllowEmptyHash = */ true )
+            != EMBEDDED_FILES::RETURN_CODE::OK )
+        {
             return false;
+        }
 
         if( !file->Validate() )
             return false;
