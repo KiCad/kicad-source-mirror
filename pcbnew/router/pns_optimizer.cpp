@@ -1319,7 +1319,6 @@ bool OPTIMIZER::fanoutCleanup( LINE* aLine )
     return false;
 }
 
-#if 0
 int findCoupledVertices( const VECTOR2I& aVertex, const SEG& aOrigSeg,
                          const SHAPE_LINE_CHAIN& aCoupled, DIFF_PAIR* aPair, int* aIndices )
 {
@@ -1707,7 +1706,6 @@ void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLin
     //auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     //dbg->AddLine ( current, 4, 100000 );
 }
-#endif
 
 
 }
