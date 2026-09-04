@@ -160,6 +160,9 @@ public:
   
 
 private:
+    static constexpr int DP_DEFAULT_GAP_EPSILON = 1000;
+
+
     int viaGap() const;
     int gap() const;
 
