@@ -530,7 +530,11 @@ BOOST_AUTO_TEST_CASE( LargeInputPerformanceSmoke )
     const double seconds = std::chrono::duration<double>( elapsed ).count();
 
     BOOST_TEST_MESSAGE( "Reconcile(1k items) elapsed: " << seconds << "s" );
+
+    // Sanitizer instrumentation changes execution cost, not the reconciliation contract
+#if !defined( KICAD_SANITIZE_THREADS ) && !defined( KICAD_SANITIZE_ADDRESS )
     BOOST_CHECK( seconds < 5.0 );
+#endif
 
     // Every A must have found a match.
     BOOST_CHECK_EQUAL( result.aToB.size(), static_cast<size_t>( N ) );

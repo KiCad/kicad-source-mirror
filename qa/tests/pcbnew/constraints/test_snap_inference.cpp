@@ -923,7 +923,11 @@ BOOST_AUTO_TEST_CASE( CandidateDensityP95StaysWithinFourMilliseconds )
     std::sort( samples.begin(), samples.end() );
     std::chrono::microseconds p95 = samples[18];
     BOOST_TEST_MESSAGE( "10k-object candidate generation p95: " << p95.count() << " us" );
+
+    // Sanitizer instrumentation changes execution cost, not the snapping contract
+#if !defined( KICAD_SANITIZE_THREADS ) && !defined( KICAD_SANITIZE_ADDRESS )
     BOOST_CHECK_LE( p95.count(), 4000 );
+#endif
 }
 
 

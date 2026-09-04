@@ -198,10 +198,13 @@ BOOST_FIXTURE_TEST_CASE( SolderMaskExpansionPerformance, DRC_SOLDER_MASK_EXPANSI
                                           totalCalls, timer.msecs(),
                                           timer.msecs() * 1e6 / totalCalls ) );
 
+    // Sanitizer instrumentation changes execution cost, not the lookup contract
+#if !defined( KICAD_SANITIZE_THREADS ) && !defined( KICAD_SANITIZE_ADDRESS )
     // With the fix (direct property lookup), this should be well under 100ms.
     // Without the fix (EvalRules for every call), this was ~500ms+ even in debug builds.
     // Use a generous threshold to avoid flakiness on slow CI machines.
     BOOST_CHECK_MESSAGE( timer.msecs() < 500.0,
                          wxString::Format( "GetSolderMaskExpansion too slow: %0.1f ms for %d calls",
                                            timer.msecs(), totalCalls ) );
+#endif
 }

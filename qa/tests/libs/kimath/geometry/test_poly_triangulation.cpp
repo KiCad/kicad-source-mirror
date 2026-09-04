@@ -578,8 +578,12 @@ BOOST_AUTO_TEST_CASE( LargePolygonStressTest )
         BOOST_TEST( fixture.GetResult().GetTriangleCount() > 0 );
     }
 
-    // Performance check - should complete in reasonable time
+    // Sanitizer instrumentation changes execution cost, not the triangulation contract
+#if defined( KICAD_SANITIZE_THREADS ) || defined( KICAD_SANITIZE_ADDRESS )
+    BOOST_TEST_MESSAGE( "Instrumented triangulation: " << duration.count() << " ms" );
+#else
     BOOST_TEST( duration.count() < 10000 ); // Less than 10 seconds
+#endif
 }
 
 // Thread safety tests (following SHAPE_POLY_SET patterns)

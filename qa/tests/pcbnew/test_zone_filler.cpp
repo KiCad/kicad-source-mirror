@@ -3403,9 +3403,12 @@ BOOST_FIXTURE_TEST_CASE( CopperThievingZone_HighDensityPerformance, ZONE_FILL_TE
     BOOST_REQUIRE( zone->GetFilledPolysList( F_Cu ) );
     BOOST_CHECK_GT( zone->GetFilledPolysList( F_Cu )->OutlineCount(), 4000 );
 
+    // Sanitizer instrumentation changes execution cost, not the fill contract
+#if !defined( KICAD_SANITIZE_THREADS ) && !defined( KICAD_SANITIZE_ADDRESS )
     // 30 s upper bound on QABUILD with assertions on; current implementation
     // measures in low seconds.
     BOOST_CHECK_LT( elapsed, 30000 );
+#endif
 }
 
 

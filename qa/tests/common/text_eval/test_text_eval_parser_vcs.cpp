@@ -403,7 +403,12 @@ BOOST_AUTO_TEST_CASE( VcsPerformance )
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start );
 
+    // Sanitizer instrumentation changes execution cost, not the evaluation contract
+#if defined( KICAD_SANITIZE_THREADS ) || defined( KICAD_SANITIZE_ADDRESS )
+    BOOST_TEST_MESSAGE( "Instrumented VCS evaluation: " << duration.count() << " ms" );
+#else
     BOOST_CHECK_LT( duration.count(), 2000 );
+#endif
 }
 
 /**

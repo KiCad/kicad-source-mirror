@@ -640,8 +640,12 @@ BOOST_AUTO_TEST_CASE( Performance )
     BOOST_CHECK( !evaluator.HasErrors() );
     BOOST_CHECK( !result.empty() );
 
-    // Should complete in reasonable time (less than 1 second)
+    // Sanitizer instrumentation changes execution cost, not the evaluation contract
+#if defined( KICAD_SANITIZE_THREADS ) || defined( KICAD_SANITIZE_ADDRESS )
+    BOOST_TEST_MESSAGE( "Instrumented large expression evaluation: " << duration.count() << " ms" );
+#else
     BOOST_CHECK_LT( duration.count(), 1000 );
+#endif
 }
 
 BOOST_AUTO_TEST_SUITE_END()

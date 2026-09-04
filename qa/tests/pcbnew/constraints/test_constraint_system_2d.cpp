@@ -121,7 +121,11 @@ BOOST_AUTO_TEST_CASE( BoundedParameterHandlingP95StaysWithinSixteenMilliseconds 
     std::sort( samples.begin(), samples.end() );
     std::chrono::microseconds p95 = samples[18];
     BOOST_TEST_MESSAGE( "128-parameter/64-relation solve p95: " << p95.count() << " us" );
+
+    // Sanitizer instrumentation changes execution cost, not the solver contract
+#if !defined( KICAD_SANITIZE_THREADS ) && !defined( KICAD_SANITIZE_ADDRESS )
     BOOST_CHECK_LE( p95.count(), 16000 );
+#endif
 }
 
 
