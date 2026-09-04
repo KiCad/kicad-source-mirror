@@ -360,10 +360,6 @@ public:
     void SetWidth( int aValue )
     {
         m_trackWidth = aValue;
-
-        for( BOARD_ITEM* item : GetBoardItems() )
-            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
-                track->SetWidth( aValue );
     }
 
     int GetNetCode() const
@@ -609,6 +605,7 @@ protected:
     std::optional<SHAPE_LINE_CHAIN> m_baseLineCoupled;
 
     int                   m_trackWidth;
+    int                   m_assembledLineWidth;
     int                   m_diffPairGap;
 
     LENGTH_TUNING_MODE    m_tuningMode;

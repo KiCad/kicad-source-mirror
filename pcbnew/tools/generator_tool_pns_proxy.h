@@ -47,6 +47,10 @@ public:
 
     void                                      ClearRouterChanges();
     const std::vector<GENERATOR_PNS_CHANGES>& GetRouterChanges();
+
+    /// Returns true if the given board item was created by the router interface during the
+    /// current generator edit session
+    bool ItemCreatedBySession( BOARD_ITEM* aItem ) const;
 };
 
 #endif // GENERATOR_TOOL_PNS_PROXY_H
