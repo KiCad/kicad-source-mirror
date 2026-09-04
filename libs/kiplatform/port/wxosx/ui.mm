@@ -206,6 +206,11 @@ bool KIPLATFORM::UI::AllowIconsInMenus()
 
 wxPoint KIPLATFORM::UI::GetMousePosition()
 {
+    // wxOSX flips the pointer against screen 0, which raises NSRangeException with no window
+    // server attached
+    if( [[NSScreen screens] count] == 0 )
+        return wxPoint( 0, 0 );
+
     return wxGetMousePosition();
 }
 

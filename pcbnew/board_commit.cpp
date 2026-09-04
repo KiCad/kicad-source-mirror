@@ -735,7 +735,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         m_toolMgr->PostAction( PCB_ACTIONS::zoneFillDirty );
     }
 
-    m_toolMgr->PostAction( PCB_ACTIONS::rehatchShapes );
+    // Rehatching only refreshes cached view geometry (consumers regenerate it lazily), and
+    // dispatching it headlessly makes the tool manager query the platform cursor position
+    if( view )
+        m_toolMgr->PostAction( PCB_ACTIONS::rehatchShapes );
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
