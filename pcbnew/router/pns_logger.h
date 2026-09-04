@@ -74,6 +74,7 @@ public:
         std::vector<KIID> uuids;
         SIZES_SETTINGS sizes;
         int layer;
+        bool useConnectedTrackWidth;
 
         EVENT_ENTRY() :
                 type( EVT_START_ROUTE ),
@@ -86,7 +87,8 @@ public:
                 type( aE.type ),
                 uuids( aE.uuids ),
                 sizes( aE.sizes ),
-                layer( aE.layer )
+                layer( aE.layer ),
+                useConnectedTrackWidth( aE.useConnectedTrackWidth )
         {
         }
     };

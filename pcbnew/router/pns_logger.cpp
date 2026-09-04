@@ -157,6 +157,9 @@ nlohmann::json LOGGER::FormatEventAsJSON( const LOGGER::EVENT_ENTRY& aEvent )
     ret["position"] = aEvent.p;
     ret["type"] = aEvent.type;
     ret["layer"] = aEvent.layer;
+    // this is the only relevant setting for the runtime behaviour of the router
+    // we store it straight in the event instead of saving the entire kicad settings
+    ret["useConnectedTrackWidth"] = aEvent.useConnectedTrackWidth;
     
     nlohmann::json uuids = nlohmann::json::array();
 
@@ -301,6 +304,11 @@ LOGGER::EVENT_ENTRY LOGGER::ParseEvent( const wxString& aLine )
 LOGGER::EVENT_ENTRY LOGGER::ParseEventFromJSON( const nlohmann::json& aJSON )
 {
     EVENT_ENTRY evt;
+
+    auto useConnProp = aJSON.at("useConnectedTrackWidth");
+
+    if( !useConnProp.empty() )
+        evt.useConnectedTrackWidth = useConnProp.get<bool>();
 
     evt.sizes = parseSizesFromJSON( aJSON.at("sizes") );
     evt.p = aJSON.at("position").get<VECTOR2I>();

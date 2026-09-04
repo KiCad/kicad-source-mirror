@@ -19,6 +19,8 @@
 
 #include <core/profile.h>
 
+#include <board_design_settings.h>
+
 #include "pns_test_debug_decorator.h"
 #include "pns_log_file.h"
 #include "pns_log_player.h"
@@ -130,7 +132,8 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         case LOGGER::EVT_START_ROUTE:
         {
             wxString msg;
-            PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
+            PNS::SIZES_SETTINGS sizes( evt.sizes );
+            m_board->GetDesignSettings().m_UseConnectedTrackWidth = evt.useConnectedTrackWidth;
             m_iface->SetStartLayerFromPNS( routingLayer );
             m_iface->ImportSizes( sizes, ritem, nullptr, evt.p );
             m_router->UpdateSizes( sizes );
@@ -155,7 +158,7 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         case LOGGER::EVT_START_MULTIDRAG:
         case LOGGER::EVT_START_DRAG:
         {
-            PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
+            PNS::SIZES_SETTINGS sizes( evt.sizes );
             m_iface->SetStartLayerFromPNS( routingLayer );
             m_iface->ImportSizes( sizes, ritem, nullptr, evt.p );
             m_router->UpdateSizes( sizes );
