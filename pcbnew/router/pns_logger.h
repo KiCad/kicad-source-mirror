@@ -126,11 +126,13 @@ public:
     static EVENT_ENTRY ParseEventFromJSON( const nlohmann::json& aJSON );
     static wxString FormatLogFileAsJSON( const LOG_DATA& aLogData );
 
-private:
+protected:
 
     static nlohmann::json formatSizesAsJSON( const SIZES_SETTINGS& aEvent );
     static nlohmann::json formatRouterItemAsJSON( const PNS::ITEM* aItem );
     static nlohmann::json formatShapeAsJSON( const SHAPE* aShape );
+    static SIZES_SETTINGS parseSizesFromJSON( const nlohmann::json& aJSON );
+
 
     std::vector<EVENT_ENTRY> m_events;
     std::optional<TEST_CASE_TYPE> m_testCaseType;

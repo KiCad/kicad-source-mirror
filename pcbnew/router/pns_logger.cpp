@@ -224,7 +224,11 @@ nlohmann::json LOGGER::formatSizesAsJSON( const SIZES_SETTINGS& aSizes )
             { "trackWidthIsExplicit", aSizes.TrackWidthIsExplicit() },
             { "layerBottom", aSizes.GetLayerBottom() },
             { "layerTop", aSizes.GetLayerTop() },
-            { "viaType", aSizes.ViaType() } } );
+            { "viaType", aSizes.ViaType() },
+            { "diffPairWidth", aSizes.DiffPairWidth() },
+            { "diffPairGap", aSizes.DiffPairGap() },
+            { "diffPairViaGap", aSizes.DiffPairViaGap() }
+            } );
 }
 
 
@@ -298,6 +302,7 @@ LOGGER::EVENT_ENTRY LOGGER::ParseEventFromJSON( const nlohmann::json& aJSON )
 {
     EVENT_ENTRY evt;
 
+    evt.sizes = parseSizesFromJSON( aJSON.at("sizes") );
     evt.p = aJSON.at("position").get<VECTOR2I>();
     evt.type = static_cast<EVENT_TYPE>( aJSON.at("type").get<int>() );
     evt.layer = aJSON.at("layer").get<int>();
@@ -306,6 +311,28 @@ LOGGER::EVENT_ENTRY LOGGER::ParseEventFromJSON( const nlohmann::json& aJSON )
         evt.uuids.push_back( uuid.get<KIID>() );
 
     return evt;
+}
+
+
+SIZES_SETTINGS LOGGER::parseSizesFromJSON( const nlohmann::json& aJSON )
+{
+    SIZES_SETTINGS sizes; 
+
+    try {
+        sizes.SetTrackWidth( aJSON.at("trackWidth").get<int>() );
+        sizes.SetViaDiameter( aJSON.at("viaDiameter").get<int>() );
+        sizes.SetViaDrill( aJSON.at("viaDrill").get<int>() );
+        sizes.SetTrackWidthIsExplicit( aJSON.at("trackWidthIsExplicit").get<bool>() );
+        sizes.SetDiffPairViaGap( aJSON.at("diffPairViaGap").get<int>() );
+        sizes.SetDiffPairGap( aJSON.at("diffPairGap").get<int>() );
+        sizes.SetDiffPairWidth( aJSON.at("diffPairWidth").get<int>() );
+    }
+    catch ( nlohmann::json::exception& xpt )
+    {
+        // be lenient when something is wrong with these settings, they're not critical
+    }
+
+    return sizes;
 }
 
 
