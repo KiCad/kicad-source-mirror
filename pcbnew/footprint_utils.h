@@ -40,6 +40,12 @@ class FOOTPRINT;
  *
  * The shift is computed based on pad positions and assumes that there are at least
  * two non-coincident pads with unique numbers that are the same in both footprints.
+ *
+ * Pad positions are compared on the side of the existing footprint.  A footprint on
+ * the back of the board stores its pads mirrored in its library frame, so if the new
+ * footprint is on the other side (and will be flipped onto the existing footprint's
+ * side when it is exchanged in), its pad positions are mirrored to match before the
+ * shift is computed.
  */
 bool ComputeFootprintShift( const FOOTPRINT& aExisting, const FOOTPRINT& aNew, VECTOR2I& aShift,
                             EDA_ANGLE& aAngleShift );

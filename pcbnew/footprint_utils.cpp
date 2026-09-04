@@ -19,6 +19,7 @@
 
 #include "footprint_utils.h"
 
+#include <core/mirror.h>
 #include <trigo.h>
 
 #include <footprint.h>
@@ -73,6 +74,16 @@ bool ComputeFootprintShift( const FOOTPRINT& aExisting, const FOOTPRINT& aNew, V
 
     std::unordered_map<wxString, VECTOR2I> existingPads = getUniquelyNumberedPads( aExisting );
     std::unordered_map<wxString, VECTOR2I> newPads = getUniquelyNumberedPads( aNew );
+
+    // Pads of footprints on opposite sides are mirror images in the library frame, so they
+    // cannot be aligned by a rotation and translation.  Mirror the new pads onto the existing
+    // footprint's side to match. FOOTPRINT::Flip() always mirrors children about the
+    // footprint's library origin, whatever the flip centre, so this mirror is about (0,0).
+    if( aExisting.IsFlipped() != aNew.IsFlipped() )
+    {
+        for( auto& [number, pos] : newPads )
+            MIRROR( pos.y, 0 );
+    }
 
     std::vector<VECTOR2I> existingPoints;
     std::vector<VECTOR2I> newPoints;
