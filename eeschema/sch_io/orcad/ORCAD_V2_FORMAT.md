@@ -141,6 +141,28 @@ The initial count of 107 picture failures included harness errors. An uninstalle
 `kicad-cli` needs `KICAD_STOCK_DATA_HOME` set to the build directory so libwmf can
 find its fonts. The table excludes those errors.
 
+## Netlist agreement
+
+The Capture Viewer never resolves pin-to-net — `FLAT_NET` is empty in every extraction and
+only 83 of 109,551 `PIN` records carry a net — so the oracle's authority is the net name
+OrCAD stores on each wire, plus the net on each power symbol and off-page connector.  Those
+are compared against a KiCad netlist exported from a project-level import.
+
+Across 358 designs with oracle data:
+
+| | designs | all named nets present | coverage |
+|---|---|---|---|
+| legacy | 159 | 121 | 78.2% |
+| legacy, excluding the 3 hierarchical-block failures | 156 | 121 | 88.7% |
+| modern | 199 | 146 | 89.0% |
+
+The reported net coverage is similar for both format families after exclusion of the
+three block failures. This comparison does not prove pin-to-net connectivity.
+
+Compare local net names without their sheet path. KiCad can export `CB1` as
+`/TILE_TPS65400 (2)/CB1`. Exclude bus aliases such as `clk_n[11:8]` from scalar net
+comparisons.
+
 ## What the corpus proves
 
 A scanner that recognises symbol definitions by their decoded fields, rather than by any
