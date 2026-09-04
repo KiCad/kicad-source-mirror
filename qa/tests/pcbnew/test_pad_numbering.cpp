@@ -30,33 +30,49 @@ struct PAD_FIXTURE
     {
     }
 
-    PAD MakeNPTH()
+    PAD* MakePTH( const wxString& aNumber )
     {
-        PAD pad( &m_footprint );
+        PAD* pad = new PAD( &m_footprint );
 
-        pad.SetAttribute( PAD_ATTRIB::NPTH );
-        pad.SetLayerSet( PAD::UnplatedHoleMask() );
+        pad->SetNumber( aNumber );
+        pad->SetAttribute( PAD_ATTRIB::PTH );
+        pad->SetLayerSet( PAD::UnplatedHoleMask() );
 
+        m_footprint.Add( pad );
         return pad;
     }
 
-    PAD MakeAperture()
+    PAD* MakeNPTH()
     {
-        PAD pad( &m_footprint );
+        PAD* pad = new PAD( &m_footprint );
 
-        pad.SetAttribute( PAD_ATTRIB::PTH );
-        pad.SetLayerSet( PAD::ApertureMask() );
+        pad->SetAttribute( PAD_ATTRIB::NPTH );
+        pad->SetLayerSet( PAD::UnplatedHoleMask() );
 
+        m_footprint.Add( pad );
         return pad;
     }
 
-    PAD MakeSmd()
+    PAD* MakeAperture()
     {
-        PAD pad( &m_footprint );
+        PAD* pad = new PAD( &m_footprint );
 
-        pad.SetAttribute( PAD_ATTRIB::SMD );
-        pad.SetLayerSet( PAD::SMDMask() );
+        pad->SetAttribute( PAD_ATTRIB::PTH );
+        pad->SetLayerSet( PAD::ApertureMask() );
 
+        m_footprint.Add( pad );
+        return pad;
+    }
+
+    PAD* MakeSmd( const wxString& aNumber = wxEmptyString )
+    {
+        PAD* pad = new PAD( &m_footprint );
+
+        pad->SetNumber( aNumber );
+        pad->SetAttribute( PAD_ATTRIB::SMD );
+        pad->SetLayerSet( PAD::SMDMask() );
+
+        m_footprint.Add( pad );
         return pad;
     }
 
@@ -72,14 +88,51 @@ BOOST_FIXTURE_TEST_SUITE( PadNumbering, PAD_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( CanNumber )
 {
-    auto npth = MakeNPTH();
-    BOOST_CHECK_EQUAL( false, npth.CanHaveNumber() );
+    PAD* npth = MakeNPTH();
+    BOOST_CHECK_EQUAL( false, npth->CanHaveNumber() );
 
-    auto aperture = MakeAperture();
-    BOOST_CHECK_EQUAL( false, aperture.CanHaveNumber() );
+    PAD* aperture = MakeAperture();
+    BOOST_CHECK_EQUAL( false, aperture->CanHaveNumber() );
 
-    auto smd = MakeSmd();
-    BOOST_CHECK_EQUAL( true, smd.CanHaveNumber() );
+    PAD* smd = MakeSmd();
+    BOOST_CHECK_EQUAL( true, smd->CanHaveNumber() );
+}
+
+
+BOOST_AUTO_TEST_CASE( TestPadCounting )
+{
+    PAD* p1  = MakeSmd( "1" );
+    PAD* p2  = MakeSmd( "2" );
+    PAD* p3  = MakeSmd( "33" );
+    PAD* p4  = MakeSmd( "AA12" );
+    PAD* p5  = MakeSmd( "BC35" );
+    PAD* pXa = MakeSmd( "AAA1" );
+    PAD* pXb = MakePTH( "MP" );
+    PAD* pXc = MakeSmd( "MP1a" );
+
+    BOOST_CHECK_EQUAL( m_footprint.GetNumberedPadCount(), 5 );
+}
+
+
+BOOST_AUTO_TEST_CASE( TestUSBcPadCounting )
+{
+    PAD* p1_2   = MakeSmd( "A1_B12" );
+    PAD* p3_4   = MakeSmd( "A4_B9" );
+    PAD* p5     = MakeSmd( "B8" );
+    PAD* p6     = MakeSmd( "A5" );
+    PAD* p7     = MakeSmd( "B7" );
+    PAD* p8     = MakeSmd( "A6" );
+    PAD* p9     = MakeSmd( "A7" );
+    PAD* p10    = MakeSmd( "B6" );
+    PAD* p11    = MakeSmd( "A8" );
+    PAD* p12    = MakeSmd( "B5" );
+    PAD* p13_14 = MakeSmd( "B4_A9" );
+    PAD* p15_16 = MakeSmd( "B1_A12" );
+    PAD* p17a   = MakeSmd( "S1" );
+    PAD* p17b   = MakeSmd( "S1" );
+    PAD* p17c   = MakeSmd( "S1" );
+
+    BOOST_CHECK_EQUAL( m_footprint.GetNumberedPadCount(), 17 );
 }
 
 

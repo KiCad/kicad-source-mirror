@@ -2942,11 +2942,21 @@ std::set<wxString> FOOTPRINT::GetUniquePadNumbers() const
 unsigned FOOTPRINT::GetNumberedPadCount() const
 {
     // A pad number is "electrical" (i.e. maps to a schematic pin) when it is either:
+    //
     //   - purely numeric:           "1", "42"
+    //
     //   - BGA / alphanumeric style: up to two leading letters followed by digits, e.g.
     //                               "A1", "B12", "AA3", "AB10"
-    // Mounting-pad designators such as "MP" do not end in a digit typically
-    // and are intentionally excluded.
+    //
+    //   - ganged alphanumeric:      two strings matching the above alphanumeric style
+    //                               separated by an underscore, as used on the outside
+    //                               ganged pins of a USB-C connector, e.g.
+    //                               "A1_B12", "A12_B1"
+    //                               these pads count as two each, as they will match
+    //                               two schematic pins
+    //
+    // Mounting-pad designators such as "MP" do not end in a digit typically and are
+    // intentionally excluded.
     auto isElectricalPadNumber =
             []( const wxString& num ) -> bool
             {
@@ -2990,7 +3000,20 @@ unsigned FOOTPRINT::GetNumberedPadCount() const
         const wxString& num = pad->GetNumber();
 
         if( isElectricalPadNumber( num ) )
+        {
             counted.insert( num );
+        }
+        else if( num.Contains( '_' ) )
+        {
+            wxString first, second;
+            first = num.BeforeFirst( '_', &second );
+
+            if( isElectricalPadNumber( first ) && isElectricalPadNumber( second ) )
+            {
+                counted.insert( first );
+                counted.insert( second );
+            }
+        }
     }
 
     return static_cast<unsigned>( counted.size() );
