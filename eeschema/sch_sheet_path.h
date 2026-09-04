@@ -413,6 +413,9 @@ public:
      */
     KIID_PATH Path() const;
 
+    /** Borrow the cached path until this sheet path is modified or destroyed. */
+    const KIID_PATH& PathRef() const { return m_path; }
+
     /**
      * Return the sheet path in a human readable form made from the sheet names.
      *
