@@ -28,6 +28,7 @@
 #include <sch_shape.h>
 #include <sch_pin.h>
 #include <lib_symbol.h>
+#include <locale_io.h>
 #include <sch_file_versions.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
@@ -487,6 +488,37 @@ BOOST_AUTO_TEST_CASE( SubReference )
             BOOST_CHECK_EQUAL( subref, c.m_expSubRef );
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeBezierComparisonHandlesUnequalCaches )
+{
+    LOCALE_IO locale;
+    auto symbol = loadDeMorganSymbol();
+    BOOST_REQUIRE( symbol );
+    SCH_SHAPE* shape = nullptr;
+
+    for( SCH_ITEM& item : symbol->GetDrawItems()[SCH_SHAPE_T] )
+    {
+        shape = static_cast<SCH_SHAPE*>( &item );
+        break;
+    }
+
+    BOOST_REQUIRE( shape );
+    shape->SetShape( SHAPE_T::BEZIER );
+    shape->SetStart( VECTOR2I( 0, 0 ) );
+    shape->SetEnd( VECTOR2I( 100000, 0 ) );
+    shape->SetBezierC1( VECTOR2I( 0, 100000 ) );
+    shape->SetBezierC2( VECTOR2I( 100000, 100000 ) );
+    BOOST_REQUIRE( shape->GetBezierPoints().empty() );
+    SCH_SHAPE rebuilt( *shape );
+    rebuilt.RebuildBezierToSegmentsPointsList( 100 );
+    BOOST_REQUIRE( !rebuilt.GetBezierPoints().empty() );
+    const auto& empty = static_cast<const EDA_SHAPE&>( *shape );
+    const auto& populated = static_cast<const EDA_SHAPE&>( rebuilt );
+    BOOST_REQUIRE_NE( empty.Compare( &populated ), 0 );
+    BOOST_CHECK_LT( empty.Compare( &populated ), 0 );
+    BOOST_CHECK_GT( populated.Compare( &empty ), 0 );
 }
 
 

@@ -3518,6 +3518,9 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
         TEST( GetPolyShape().TotalVertices(), aOther->GetPolyShape().TotalVertices() );
     }
 
+    if( m_bezierPoints.size() != aOther->m_bezierPoints.size() )
+        return m_bezierPoints.size() < aOther->m_bezierPoints.size() ? -1 : 1;
+
     for( size_t ii = 0; ii < m_bezierPoints.size(); ++ii )
         TEST_PT( m_bezierPoints[ii], aOther->m_bezierPoints[ii] );
 
