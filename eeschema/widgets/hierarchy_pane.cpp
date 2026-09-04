@@ -865,7 +865,7 @@ void HIERARCHY_PANE::UpdateNetHighlight( const wxString& aNetName )
             for( const CONNECTION_SUBGRAPH* sg : graph->GetAllSubgraphs( aNetName ) )
             {
                 if( sg && sg->GetSheet().Last() )
-                    sheetsWithNet.insert( sg->GetSheet().PathAsString() );
+                    sheetsWithNet.insert( sg->GetSheet().Path().AsString() );
             }
         }
     }
@@ -878,7 +878,7 @@ void HIERARCHY_PANE::UpdateNetHighlight( const wxString& aNetName )
 
         if( data )
         {
-            bool mark = sheetsWithNet.count( data->m_SheetPath.PathAsString() ) > 0;
+            bool mark = sheetsWithNet.count( data->m_SheetPath.Path().AsString() ) > 0;
             m_tree->SetItemTextColour( id, mark ? markText : wxNullColour );
         }
 

@@ -322,8 +322,8 @@ public:
         return m_highlightedConn;
     }
 
-    void SetHighlightedConnection( const wxString& aConnection,
-                                   const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
+    void SetHighlightedConnection( const wxString& aConnection, const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr,
+                                   bool aForceNetNavigatorRefresh = false );
 
     void DirtyHighlightedConnection() { m_highlightedConnChanged = true; }
 

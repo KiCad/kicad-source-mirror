@@ -738,7 +738,7 @@ void SCH_EDIT_FRAME::FindNetInInspector( const wxString& aNetName )
         ToggleNetNavigator();
 
     // Clear any net highlights
-    m_highlightedConn = wxEmptyString;
+    SetHighlightedConnection( wxEmptyString );
     GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
 
     // Set the search text to the aNetName

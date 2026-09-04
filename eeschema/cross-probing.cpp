@@ -242,12 +242,11 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         wxString netName = From_UTF8( text );
 
         if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( netName ) )
-            m_highlightedConn = sg->GetDriverConnection()->Name();
+            SetHighlightedConnection( sg->GetDriverConnection()->Name(), nullptr, true );
         else
-            m_highlightedConn = wxEmptyString;
+            SetHighlightedConnection( wxEmptyString, nullptr, true );
 
         GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
-        RefreshNetNavigator();
 
         SetStatusText( _( "Highlighted net:" ) + wxS( " " ) + UnescapeString( netName ) );
         return;
