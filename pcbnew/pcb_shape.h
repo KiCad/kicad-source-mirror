@@ -110,6 +110,12 @@ public:
         syncLibCoords();
     }
 
+    void SetArcAngle( const EDA_ANGLE& aAngle ) override
+    {
+        EDA_SHAPE::SetArcAngle( aAngle );
+        syncLibCoords();
+    }
+
     /**
      * @return a list of connection points (may be empty): points where this shape can form
      * electrical connections to other shapes that are natural "start/end" points.

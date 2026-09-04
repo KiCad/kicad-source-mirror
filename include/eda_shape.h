@@ -438,6 +438,8 @@ public:
      */
     void SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeAngle = false );
 
+    virtual void SetArcAngle( const EDA_ANGLE& aAngle ) { SetArcAngleAndEnd( aAngle, true ); }
+
     EDA_ANGLE GetArcAngle() const;
 
     EDA_ANGLE GetSegmentAngle() const;

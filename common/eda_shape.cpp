@@ -4711,16 +4711,30 @@ static struct EDA_SHAPE_DESC
                     shapeProps )
                 .SetIsHiddenFromRulesEditor();
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
-                    NO_SETTER( EDA_SHAPE, EDA_ANGLE ), &EDA_SHAPE::GetArcAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
-                    shapeProps )
-                .SetAvailableFunc( [=]( INSPECTABLE* aItem ) -> bool
-                                   {
-                                       if( EDA_SHAPE* curr_shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-                                           return curr_shape->GetShape() == SHAPE_T::ARC;
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ), &EDA_SHAPE::SetArcAngle,
+                                                                 &EDA_SHAPE::GetArcAngle,
+                                                                 PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                             shapeProps )
+                .SetAvailableFunc(
+                        [=]( INSPECTABLE* aItem ) -> bool
+                        {
+                            if( EDA_SHAPE* curr_shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                                return curr_shape->GetShape() == SHAPE_T::ARC;
 
-                                       return false;
-                                   } );
+                            return false;
+                        } )
+                .SetValidator(
+                        []( const wxAny&& aValue, EDA_ITEM* aItem ) -> VALIDATOR_RESULT
+                        {
+                            double degrees = 0.0;
+
+                            if( aValue.GetAs( &degrees ) && degrees == 0.0 )
+                            {
+                                return std::make_unique<VALIDATION_ERROR_MSG>( _( "Arc angle must not be zero." ) );
+                            }
+
+                            return std::nullopt;
+                        } );
 
         auto fillAvailable =
                 [=]( INSPECTABLE* aItem ) -> bool
