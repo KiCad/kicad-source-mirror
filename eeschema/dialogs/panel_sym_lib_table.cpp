@@ -722,11 +722,14 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
                                                           lastGlobalLibDir, wxEmptyString ),
                     true /* take ownership */ );
 
-    LIB_TABLE_NOTEBOOK_PANEL* panel0 =
-            static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( 0 ) );
+    LIB_TABLE_NOTEBOOK_PANEL* panel0 = static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( 0 ) );
     panel0->ClearDirty();
+
     static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )->SetChangeCallback(
-            [panel0]() { panel0->MarkDirty(); } );
+            [panel0]()
+            {
+                panel0->MarkDirty();
+            } );
 
     m_parent->m_GlobalTableChanged = true;
 
