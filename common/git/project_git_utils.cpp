@@ -17,8 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <text_eval/text_eval_environment.h>
 #include "project_git_utils.h"
 #include "git_backend.h"
+#include "kicad_git_memory.h"
 
 #include <wx/filename.h>
 #include <wx/string.h>
@@ -66,34 +68,54 @@ bool PROJECT_GIT_UTILS::RemoveVCS( git_repository*& aRepo, const wxString& aProj
 }
 
 
+git_oid PROJECT_GIT_UTILS::GetCapturedHeadOid( git_repository* aRepo )
+{
+    if( !aRepo )
+        return {};
+
+    using ENVIRONMENT = TEXT_EVAL::ENVIRONMENT;
+    const auto read = [&]() -> ENVIRONMENT::VCS_VALUE
+    {
+        git_oid oid{};
+
+        if( git_reference_name_to_id( &oid, aRepo, "HEAD" ) != 0 )
+            return {};
+
+        char hash[GIT_OID_HEXSZ + 1];
+        git_oid_tostr( hash, sizeof( hash ), &oid );
+        return { hash };
+    };
+    auto* environment = ENVIRONMENT::Current();
+    const char* path = git_repository_path( aRepo );
+    const auto value = environment && path
+            ? environment->VcsValue( { ENVIRONMENT::VCS_QUERY::HEAD, wxString::FromUTF8( path ), "", 0, false }, read )
+            : read();
+    git_oid oid{};
+
+    if( value.text.empty() || git_oid_fromstr( &oid, value.text.c_str() ) != 0 )
+        return {};
+
+    return oid;
+}
+
+
 wxString PROJECT_GIT_UTILS::GetCurrentHash( const wxString& aProjectFile, bool aShort )
 {
-    wxString result = wxT( "no hash" );
-    git_repository* repo = PROJECT_GIT_UTILS::GetRepositoryForFile( TO_UTF8( aProjectFile ) );
-
-    if( repo )
+    const auto read = [&]
     {
-        git_reference* head = nullptr;
+        GitRepositoryPtr repo( GetRepositoryForFile( TO_UTF8( aProjectFile ) ) );
+        const git_oid oid = GetCapturedHeadOid( repo.get() );
 
-        if( git_repository_head( &head, repo ) == 0 )
-        {
-            const git_oid* oid = git_reference_target( head );
+        if( git_oid_is_zero( &oid ) )
+            return wxString( "no hash" );
 
-            if( oid )
-            {
-                char buf[GIT_OID_HEXSZ + 1];
-                size_t len = aShort ? 9 : GIT_OID_HEXSZ + 1; // 8 chars + null terminator
-                git_oid_tostr( buf, len, oid );
-                result = wxString::FromUTF8( buf );
-            }
-
-            git_reference_free( head );
-        }
-
-        git_repository_free( repo );
-    }
-
-    return result;
+        char hash[GIT_OID_HEXSZ + 1];
+        git_oid_tostr( hash, sizeof( hash ), &oid );
+        return wxString::FromUTF8( hash );
+    };
+    auto*          environment = TEXT_EVAL::ENVIRONMENT::Current();
+    const wxString hash = environment ? environment->GitHash( aProjectFile, read ) : read();
+    return aShort ? hash.Left( 8 ) : hash;
 }
 
 

@@ -59,6 +59,18 @@ public:
     static wxString GetCurrentHash( const wxString& aProjectFile, bool aShort );
 
     /**
+     * Return HEAD for commit-based text queries.
+     *
+     * An active text-evaluation frame captures the first result per repository Git directory;
+     * later calls can return an older HEAD than the repository currently has. Without a frame,
+     * this reads the live HEAD.
+     *
+     * @param aRepo Repository to read, or nullptr.
+     * @return HEAD object ID, or the zero OID when unavailable (including read errors).
+     */
+    static git_oid GetCapturedHeadOid( git_repository* aRepo );
+
+    /**
      * Remove version control from a directory by freeing the repository and
      * optionally removing the .git directory.
      *

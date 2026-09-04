@@ -20,6 +20,7 @@
 #pragma once
 
 #include <kicommon.h>
+#include <text_eval/text_eval_environment.h>
 #include <wx/string.h>
 #include <string>
 #include <cstdint>
@@ -34,6 +35,12 @@
  */
 namespace TEXT_EVAL_VCS
 {
+/**
+ * Re-read an owned query descriptor using any active frame memo.
+ * Run source comparison outside SOURCE_SCOPE collection: replay records consultations too.
+ */
+KICOMMON_API TEXT_EVAL::ENVIRONMENT::VCS_VALUE ReadSource( const TEXT_EVAL::ENVIRONMENT::VCS_KEY& aKey );
+
 /**
  * Get the current HEAD commit identifier (hash).
  *

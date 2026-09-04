@@ -131,6 +131,47 @@ BOOST_AUTO_TEST_CASE( VcsNativeProjectContextPaths )
     }
 
     BOOST_CHECK_EQUAL( TEXT_EVAL_VCS::GetContextPath(), previous );
+
+    {
+        TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE context( owner.PathStr() );
+        TEXT_EVAL::ENVIRONMENT environment;
+        TEXT_EVAL::ENVIRONMENT_SCOPE frame( environment );
+        TEXT_EVAL::ENVIRONMENT::SOURCE_VALUES sources;
+        wxString projectHash;
+
+        {
+            TEXT_EVAL::SOURCE_SCOPE collect( environment, sources );
+            projectHash = KIGIT::PROJECT_GIT_UTILS::GetCurrentHash( projectFile, false );
+            BOOST_CHECK_EQUAL( evaluateVcs( "@{vcsbranch()}" ), "owner" );
+        }
+
+        git_commit* rawCommit = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_lookup( &rawCommit, repo.get(), &commitId ), 0 );
+        KIGIT::GitCommitPtr original( rawCommit );
+        git_oid changedId;
+        BOOST_REQUIRE_EQUAL( git_commit_create_v( &changedId, repo.get(), "HEAD", signature.get(), signature.get(),
+                                                 nullptr, "Next native project", tree.get(), 1, original.get() ), 0 );
+        git_reference* rawBranch = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &rawBranch, repo.get(), "refs/heads/changed",
+                                                   &changedId, 0, nullptr ), 0 );
+        git_reference_free( rawBranch );
+        BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), "refs/heads/changed" ), 0 );
+        BOOST_CHECK_EQUAL( KIGIT::PROJECT_GIT_UTILS::GetCurrentHash( projectFile, false ), projectHash );
+        BOOST_CHECK_EQUAL( commitHash(), projectHash.ToStdString( wxConvUTF8 ) );
+        BOOST_CHECK_EQUAL( evaluateVcs( "@{vcsbranch()}" ), "owner" );
+
+        for( const auto& [key, value] : sources.vcsValues )
+            BOOST_CHECK( TEXT_EVAL_VCS::ReadSource( key ) == value );
+
+        {
+            TEXT_EVAL::ENVIRONMENT refreshed;
+            TEXT_EVAL::ENVIRONMENT_SCOPE refreshedFrame( refreshed );
+            BOOST_CHECK_EQUAL( evaluateVcs( "@{vcsbranch()}" ), "changed" );
+            BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::GetCurrentHash( projectFile, false ) != projectHash );
+        }
+
+        BOOST_CHECK_EQUAL( evaluateVcs( "@{vcsbranch()}" ), "owner" );
+    }
 }
 
 
