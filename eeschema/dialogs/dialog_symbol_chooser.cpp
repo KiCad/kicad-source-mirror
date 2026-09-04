@@ -89,6 +89,15 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
     sdbSizer->AddButton( cancelButton );
     sdbSizer->Realize();
 
+    // A workspace part is looked up again before the dialog closes; Ctrl+Enter posts OK to the dialog itself
+    Bind(
+            wxEVT_BUTTON,
+            [this]( wxCommandEvent& )
+            {
+                m_chooserPanel->AcceptSelection();
+            },
+            wxID_OK );
+
     buttonsSizer->Add( sdbSizer, 1, wxALL, 5 );
 
     sizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );

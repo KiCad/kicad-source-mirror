@@ -37,7 +37,11 @@
 #include <symbol_editor_settings.h>
 #include <string_utils.h>
 #include <symbol_library_common.h>         // For SYMBOL_LIBRARY_FILTER
+#include <mdw/client/mdw_library_sources.h>
+#include <mdw/client/mdw_lifecycle.h>
+#include <mdw/client/mdw_source.h>
 #include <algorithm>
+#include <optional>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
 #include <wx/display.h>
@@ -50,6 +54,70 @@
 #include <wx/choice.h>
 #include <wx/stattext.h>
 #include <lib_symbol.h>
+
+
+namespace
+{
+
+/// A parts lookup that does not answer by then is placed from its search result
+constexpr int WORKSPACE_CONFIRM_TIMEOUT_MS = 3000;
+
+
+wxString lifecycleText( const MDW_PART_INFO& aPart )
+{
+    wxString text = aPart.state.not_for_new_designs ? wxString( _( "Not for New Designs" ) )
+                                                    : MdwCategoryName( aPart.state.category );
+
+    if( !aPart.revision_label.IsEmpty() )
+        text << wxS( " \u00B7 " ) << wxString::Format( _( "Rev %s" ), aPart.revision_label );
+
+    return text;
+}
+
+
+const MDW_PART_MEMBER* findMember( const MDW_PART_INFO& aPart, MDW_MEMBER_KIND aKind )
+{
+    for( const MDW_PART_MEMBER& member : aPart.members )
+    {
+        if( member.kind == aKind )
+            return &member;
+    }
+
+    return nullptr;
+}
+
+
+/// The footprint aPart names, or empty when it names none
+wxString footprintHint( const MDW_PART_INFO& aPart )
+{
+    const MDW_PART_MEMBER* footprint = findMember( aPart, MDW_MEMBER_KIND::FOOTPRINT );
+
+    if( !footprint )
+        return wxString();
+
+    std::optional<LIB_ID> id =
+            MDW_LIBRARY_SOURCES::Get().LocalLibId( MDW_LIBRARY_TYPE::FOOTPRINT, footprint->member );
+
+    return id ? wxString( id->Format().wx_str() ) : wxString();
+}
+
+} // namespace
+
+
+wxString WORKSPACE_ROW_ITEM::GetFootprint() const
+{
+    if( m_row.resolution != WORKSPACE_PARTS_SEARCH::RESOLUTION::RESOLVED )
+        return wxEmptyString;
+
+    return footprintHint( m_row.part );
+}
+
+
+void WORKSPACE_ROW_ITEM::GetChooserFields( std::map<wxString, wxString>& aColumnMap )
+{
+    if( m_row.kind == WORKSPACE_PARTS_SEARCH::ROW_KIND::PART )
+        aColumnMap[wxS( "Lifecycle" )] = lifecycleText( m_row.part );
+}
 
 
 wxString PANEL_SYMBOL_CHOOSER::g_symbolSearchString;
@@ -78,7 +146,8 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_show_footprints( aShowFootprints ),
         m_bodyStyleLabel( nullptr ),
         m_bodyStyleChoice( nullptr ),
-        m_selectedBodyStyle( 1 )
+        m_selectedBodyStyle( 1 ),
+        m_confirmTimer( nullptr )
 {
     SYMBOL_LIBRARY_ADAPTER*   libmgr = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
     COMMON_SETTINGS::SESSION& session = Pgm().GetCommonSettings()->m_Session;
@@ -171,6 +240,12 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     processList( aHistoryList, history_list_storage, history_list );
     processList( aAlreadyPlaced, already_placed_storage, already_placed );
 
+    for( const PICKED_SYMBOL& picked : aHistoryList )
+    {
+        if( picked.PartIdentity )
+            m_recentParts[picked.LibId.Format().wx_str()] = *picked.PartIdentity;
+    }
+
     adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString, history_list,
                            false, true )
             .m_IsRecentlyUsedGroup = true;
@@ -181,6 +256,32 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     adapter->DoAddLibrary( wxT( "-- " ) + _( "Already Placed" ) + wxT( " --" ), wxEmptyString, already_placed,
                            false, true )
             .m_IsAlreadyPlacedGroup = true;
+
+    if( !m_showPower )
+    {
+        std::vector<std::shared_ptr<MDW_SOURCE>> partSources = WORKSPACE_PARTS_SEARCH::PartSources();
+
+        if( !partSources.empty() )
+        {
+            m_workspaceParts = std::make_unique<WORKSPACE_PARTS_SEARCH>(
+                    std::move( partSources ),
+                    [this]( const MDW_PART_INFO& aPart, LIB_ID& aSymbol )
+                    {
+                        return resolveWorkspacePart( aPart, aSymbol );
+                    },
+                    [this]( size_t aGroup )
+                    {
+                        refillWorkspaceGroup( aGroup );
+                    } );
+
+            for( const WORKSPACE_PARTS_SEARCH::GROUP& group : m_workspaceParts->Groups() )
+            {
+                LIB_TREE_NODE_LIBRARY& node = adapter->DoAddLibrary( group.name, wxEmptyString, {}, false, true );
+                node.m_IsExternalResultsGroup = true;
+                m_workspaceGroups.push_back( &node );
+            }
+        }
+    }
 
     adapter->AddLibraries( m_frame );
 
@@ -243,6 +344,15 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
     m_adapter->FinishTreeInitialization();
 
+    if( m_workspaceParts )
+    {
+        m_tree->SetQueryChangedHandler(
+                [this]( const wxString& aQuery )
+                {
+                    m_workspaceParts->SetQuery( aQuery );
+                } );
+    }
+
     if( m_showPower )
         m_tree->SetSearchString( g_powerSearchString );
     else
@@ -254,6 +364,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
     m_dbl_click_timer = new wxTimer( this );
     m_open_libs_timer = new wxTimer( this );
+    m_confirmTimer = new wxTimer( this );
 
     SetSizer( sizer );
 
@@ -261,6 +372,17 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
     Bind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::onCloseTimer, this, m_dbl_click_timer->GetId() );
     Bind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::onOpenLibsTimer, this, m_open_libs_timer->GetId() );
+
+    Bind(
+            wxEVT_TIMER,
+            [this]( wxTimerEvent& )
+            {
+                m_confirmOp.Cancel();
+
+                if( m_pickedPart )
+                    acceptWorkspacePart( *m_pickedPart, m_pickedSymbol );
+            },
+            m_confirmTimer->GetId() );
     Bind( EVT_LIBITEM_SELECTED, &PANEL_SYMBOL_CHOOSER::onSymbolSelected, this );
     Bind( EVT_LIBITEM_CHOSEN, &PANEL_SYMBOL_CHOOSER::onSymbolChosen, this );
     aFrame->Bind( wxEVT_MENU_OPEN, &PANEL_SYMBOL_CHOOSER::onMenuOpen, this );
@@ -293,8 +415,11 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_dbl_click_timer->Stop();
     m_open_libs_timer->Stop();
+    m_confirmTimer->Stop();
+    m_confirmOp.Cancel();
     delete m_dbl_click_timer;
     delete m_open_libs_timer;
+    delete m_confirmTimer;
 
     if( m_showPower )
         g_powerSearchString = m_tree->GetSearchString();
@@ -523,6 +648,10 @@ LIB_ID PANEL_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit, int* aBodyStyle ) con
 {
     LIB_ID id = m_tree->GetSelectedLibId( aUnit );
 
+    // The lookup at accept time may have moved the part to another symbol
+    if( m_pickedPart )
+        id = m_pickedSymbol;
+
     if( aBodyStyle )
         *aBodyStyle = m_selectedBodyStyle;
 
@@ -598,7 +727,7 @@ void PANEL_SYMBOL_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
     }
     else
     {
-        m_acceptHandler();
+        AcceptSelection();
     }
 }
 
@@ -733,15 +862,46 @@ void PANEL_SYMBOL_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
 
 void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
 {
-    LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
-    bool           sameSymbolDifferentUnit = false;
+    LIB_TREE_NODE*                     node = m_tree->GetCurrentTreeNode();
+    size_t                             group = 0;
+    const WORKSPACE_PARTS_SEARCH::ROW* workspace = workspaceRow( node, &group );
+    bool                               sameSymbolDifferentUnit = false;
+
+    // A pending accept was for the previous selection
+    if( m_confirmTimer && m_confirmTimer->IsRunning() )
+    {
+        m_confirmTimer->Stop();
+        m_confirmOp.Cancel();
+        m_pickedPart.reset();
+    }
+
+    if( workspace
+        && ( workspace->kind == WORKSPACE_PARTS_SEARCH::ROW_KIND::MORE
+             || workspace->kind == WORKSPACE_PARTS_SEARCH::ROW_KIND::RETRY ) )
+    {
+        // This event is posted, so refilling the group cannot pull the row out from under the tree
+        m_workspaceParts->Activate( group, m_workspaceRows.at( node ).second );
+        return;
+    }
+
+    MDW_ITEM_REF part;
+
+    if( workspace && workspace->kind == WORKSPACE_PARTS_SEARCH::ROW_KIND::PART )
+        part = workspace->part.part;
+
+    // Two parts can share a symbol yet not a footprint
+    bool otherPart = part.item_id != m_curPart.item_id || part.source != m_curPart.source;
+    m_curPart = part;
 
     if( node && node->m_LibId.IsValid() )
     {
-        if( node->m_LibId == m_curSymbolId )
+        if( node->m_LibId == m_curSymbolId && !otherPart )
             sameSymbolDifferentUnit = true;
         else
             m_field_edits.clear();
+
+        if( otherPart )
+            m_fp_override.Empty();
 
         m_curSymbolId = node->m_LibId;
         LIB_SYMBOL* symbol = m_frame->GetLibSymbol( m_curSymbolId );
@@ -795,6 +955,12 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
         updateBodyStyleChoice( nullptr );
         populateFootprintSelector( m_curSymbolId );
     }
+
+    if( workspace && workspace->kind == WORKSPACE_PARTS_SEARCH::ROW_KIND::PART )
+    {
+        if( HTML_WINDOW* details = m_tree->GetDetailsCtrl() )
+            details->SetPage( workspacePartDetails( group, *workspace, wxEmptyString ) );
+    }
 }
 
 
@@ -818,9 +984,283 @@ void PANEL_SYMBOL_CHOOSER::onSymbolChosen( wxCommandEvent& aEvent )
 
 void PANEL_SYMBOL_CHOOSER::Regenerate()
 {
+    if( m_workspaceParts )
+        m_workspaceParts->Reresolve();
+
     LIB_ID savedSelection = m_tree->GetSelectedLibId();
     m_tree->Regenerate( true );
 
     if( savedSelection.IsValid() )
         m_tree->CenterLibId( savedSelection );
+}
+
+
+void PANEL_SYMBOL_CHOOSER::AcceptSelection()
+{
+    LIB_TREE_NODE*                     node = m_tree->GetCurrentTreeNode();
+    size_t                             group = 0;
+    const WORKSPACE_PARTS_SEARCH::ROW* row = workspaceRow( node, &group );
+
+    if( !row )
+    {
+        m_pickedPart.reset();
+
+        const LIB_TREE_NODE* library = node;
+
+        while( library && library->m_Type != LIB_TREE_NODE::TYPE::LIBRARY )
+            library = library->m_Parent;
+
+        // A recently used workspace part is placed as that part again
+        if( library && library->m_IsRecentlyUsedGroup )
+        {
+            if( auto it = m_recentParts.find( node->m_LibId.Format().wx_str() ); it != m_recentParts.end() )
+            {
+                m_pickedPart.emplace();
+                m_pickedPart->part = it->second.part;
+                m_pickedPart->revision_id = it->second.revision_id;
+                m_pickedSymbol = node->m_LibId;
+            }
+        }
+
+        m_acceptHandler();
+        return;
+    }
+
+    if( row->kind != WORKSPACE_PARTS_SEARCH::ROW_KIND::PART
+        || row->resolution != WORKSPACE_PARTS_SEARCH::RESOLUTION::RESOLVED || m_confirmTimer->IsRunning() )
+    {
+        return;
+    }
+
+    // Placed as searched unless the lookup below answers in time
+    m_pickedPart = row->part;
+    m_pickedSymbol = row->symbol;
+
+    const WORKSPACE_PARTS_SEARCH::ROW searched = *row;
+    const wxString                    source = m_workspaceParts->Groups()[group].source_name;
+
+    m_confirmTimer->StartOnce( WORKSPACE_CONFIRM_TIMEOUT_MS );
+    m_confirmOp = m_workspaceParts->Source( group )->Parts().Get(
+            searched.part.part, wxEmptyString,
+            [this, group, searched, source]( const MDW_RESULT& aResult, const MDW_PART_INFO& aPart )
+            {
+                m_confirmTimer->Stop();
+
+                if( aResult.IsOk() )
+                {
+                    LIB_ID symbol;
+
+                    if( resolveWorkspacePart( aPart, symbol ) == WORKSPACE_PARTS_SEARCH::RESOLUTION::RESOLVED )
+                    {
+                        acceptWorkspacePart( aPart, symbol );
+                        return;
+                    }
+
+                    m_pickedPart.reset();
+
+                    if( HTML_WINDOW* details = m_tree->GetDetailsCtrl() )
+                    {
+                        details->SetPage( workspacePartDetails(
+                                group, searched, _( "The part changed and its symbol is not available here." ) ) );
+                    }
+
+                    return;
+                }
+
+                switch( aResult.error )
+                {
+                case MDW_ERROR_CODE::CANCELLED:
+                    return;
+
+                case MDW_ERROR_CODE::ITEM_NOT_FOUND:
+                    m_pickedPart.reset();
+
+                    if( HTML_WINDOW* details = m_tree->GetDetailsCtrl() )
+                    {
+                        details->SetPage( workspacePartDetails(
+                                group, searched, wxString::Format( _( "This part is no longer in %s." ), source ) ) );
+                    }
+
+                    return;
+
+                default:
+                    m_frame->SetStatusText( wxString::Format( _( "Could not check %s with %s; placed as found." ),
+                                                              searched.text, source ) );
+                    acceptWorkspacePart( searched.part, searched.symbol );
+                    return;
+                }
+            } );
+}
+
+
+void PANEL_SYMBOL_CHOOSER::acceptWorkspacePart( const MDW_PART_INFO& aPart, const LIB_ID& aSymbol )
+{
+    m_confirmTimer->Stop();
+
+    const wxString searched = m_pickedPart ? footprintHint( *m_pickedPart ) : wxString();
+    const wxString confirmed = footprintHint( aPart );
+
+    // The searched revision chose the footprint unless the user picked another, so a newer one may replace it
+    if( confirmed != searched )
+    {
+        auto edit = std::find_if( m_field_edits.begin(), m_field_edits.end(),
+                                  []( const std::pair<FIELD_T, wxString>& aEdit )
+                                  {
+                                      return aEdit.first == FIELD_T::FOOTPRINT;
+                                  } );
+
+        if( edit == m_field_edits.end() || edit->second == searched )
+        {
+            if( edit != m_field_edits.end() )
+                m_field_edits.erase( edit );
+
+            if( !confirmed.IsEmpty() )
+                m_field_edits.emplace_back( FIELD_T::FOOTPRINT, confirmed );
+        }
+    }
+
+    updateBodyStyleChoice( m_frame->GetLibSymbol( aSymbol ) );
+
+    m_pickedPart = aPart;
+    m_pickedSymbol = aSymbol;
+    m_acceptHandler();
+}
+
+
+void PANEL_SYMBOL_CHOOSER::refillWorkspaceGroup( size_t aGroup )
+{
+    if( !m_tree || aGroup >= m_workspaceGroups.size() )
+        return;
+
+    std::erase_if( m_workspaceRows,
+                   [aGroup]( const auto& aEntry )
+                   {
+                       return aEntry.second.first == aGroup;
+                   } );
+
+    const std::vector<WORKSPACE_PARTS_SEARCH::ROW>& rows = m_workspaceParts->Groups()[aGroup].rows;
+
+    m_tree->RefillGroup( *m_workspaceGroups[aGroup],
+                         [&]( LIB_TREE_NODE_LIBRARY& aNode )
+                         {
+                             for( size_t ii = 0; ii < rows.size(); ++ii )
+                             {
+                                 const WORKSPACE_PARTS_SEARCH::ROW& row = rows[ii];
+                                 WORKSPACE_ROW_ITEM                 item( row );
+                                 LIB_TREE_NODE_ITEM&                node = aNode.AddItem( &item );
+                                 bool resolved = row.resolution == WORKSPACE_PARTS_SEARCH::RESOLUTION::RESOLVED;
+
+                                 // The node names its library after the item, but a part names its symbol
+                                 node.m_LibId = resolved ? row.symbol : LIB_ID();
+                                 node.m_Unavailable =
+                                         row.kind == WORKSPACE_PARTS_SEARCH::ROW_KIND::STATUS
+                                         || ( row.kind == WORKSPACE_PARTS_SEARCH::ROW_KIND::PART && !resolved );
+
+                                 m_workspaceRows[&node] = { aGroup, ii };
+                             }
+                         } );
+}
+
+
+const WORKSPACE_PARTS_SEARCH::ROW* PANEL_SYMBOL_CHOOSER::workspaceRow( const LIB_TREE_NODE* aNode,
+                                                                       size_t*              aGroup ) const
+{
+    auto it = aNode ? m_workspaceRows.find( aNode ) : m_workspaceRows.end();
+
+    if( it == m_workspaceRows.end() )
+        return nullptr;
+
+    const std::vector<WORKSPACE_PARTS_SEARCH::GROUP>& groups = m_workspaceParts->Groups();
+    auto [group, row] = it->second;
+
+    if( group >= groups.size() || row >= groups[group].rows.size() )
+        return nullptr;
+
+    if( aGroup )
+        *aGroup = group;
+
+    return &groups[group].rows[row];
+}
+
+
+WORKSPACE_PARTS_SEARCH::RESOLUTION PANEL_SYMBOL_CHOOSER::resolveWorkspacePart( const MDW_PART_INFO& aPart,
+                                                                               LIB_ID&              aSymbol ) const
+{
+    const MDW_PART_MEMBER* member = findMember( aPart, MDW_MEMBER_KIND::SYMBOL );
+
+    if( !member )
+        return WORKSPACE_PARTS_SEARCH::RESOLUTION::NO_SYMBOL;
+
+    if( member->member.item_id.IsEmpty() )
+        return WORKSPACE_PARTS_SEARCH::RESOLUTION::UNRESOLVED;
+
+    // The item id finds the member in the local copies, which know the nickname this computer registered it under
+    std::optional<LIB_ID> id = MDW_LIBRARY_SOURCES::Get().LocalLibId( MDW_LIBRARY_TYPE::SYMBOL, member->member );
+    SYMBOL_LIBRARY_ADAPTER* libs = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
+
+    if( !id || !id->IsValid() || !libs->HasLibrary( id->GetLibNickname(), true ) || !m_frame->GetLibSymbol( *id ) )
+        return WORKSPACE_PARTS_SEARCH::RESOLUTION::NOT_SET_UP;
+
+    aSymbol = *id;
+    return WORKSPACE_PARTS_SEARCH::RESOLUTION::RESOLVED;
+}
+
+
+wxString PANEL_SYMBOL_CHOOSER::workspacePartDetails( size_t aGroup, const WORKSPACE_PARTS_SEARCH::ROW& aRow,
+                                                     const wxString& aNote ) const
+{
+    const MDW_PART_INFO&   part = aRow.part;
+    const wxString&        source = m_workspaceParts->Groups()[aGroup].source_name;
+    const MDW_PART_MEMBER* symbol = findMember( part, MDW_MEMBER_KIND::SYMBOL );
+
+    wxString html = wxS( "<b>" ) + EscapeHTML( aRow.text ) + wxS( "</b>" );
+
+    if( !part.description.IsEmpty() )
+        html << wxS( "<br>" ) << EscapeHTML( part.description );
+
+    auto line =
+            [&]( const wxString& aLabel, const wxString& aValue )
+            {
+                if( !aValue.IsEmpty() )
+                {
+                    html << wxS( "<tr><td>" ) << EscapeHTML( aLabel ) << wxS( "</td><td>" ) << EscapeHTML( aValue )
+                         << wxS( "</td></tr>" );
+                }
+            };
+
+    html << wxS( "<table>" );
+    line( _( "Revision" ), part.revision_label );
+    line( _( "State" ), lifecycleText( part ) );
+    line( _( "Source" ), source );
+    line( _( "Symbol" ), symbol ? symbol->member.path_hint : wxString() );
+    line( _( "Footprint" ), footprintHint( part ) );
+    html << wxS( "</table>" );
+
+    if( aRow.resolution == WORKSPACE_PARTS_SEARCH::RESOLUTION::NOT_SET_UP )
+    {
+        html << wxS( "<p><i>" )
+             << _( "The library for this part is not set up on this computer, or its copy does not hold the part "
+                   "yet. Updating the library may bring it." )
+             << wxS( "</i></p>" );
+    }
+    else if( aRow.resolution == WORKSPACE_PARTS_SEARCH::RESOLUTION::NO_SYMBOL )
+        html << wxS( "<p><i>" ) << _( "This part has no KiCad symbol." ) << wxS( "</i></p>" );
+    else if( aRow.resolution == WORKSPACE_PARTS_SEARCH::RESOLUTION::UNRESOLVED && symbol )
+    {
+        html << wxS( "<p><i>" )
+             << EscapeHTML( wxString::Format( _( "%s names symbol %s, which none of its libraries holds." ), source,
+                                              symbol->member.path_hint ) )
+             << wxS( "</i></p>" );
+    }
+
+    if( !aNote.IsEmpty() )
+        html << wxS( "<p><b>" ) << EscapeHTML( aNote ) << wxS( "</b></p>" );
+
+    if( !part.url.IsEmpty() )
+    {
+        html << wxS( "<p><a href=\"" ) << EscapeHTML( part.url ) << wxS( "\">" )
+             << EscapeHTML( wxString::Format( _( "Open in %s" ), source ) ) << wxS( "</a></p>" );
+    }
+
+    return html;
 }

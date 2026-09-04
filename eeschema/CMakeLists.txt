@@ -360,6 +360,7 @@ set( EESCHEMA_WIDGETS
     widgets/db_lib_preview_panel.cpp
     widgets/symbol_preview_widget.cpp
     widgets/symbol_tree_pane.cpp
+    widgets/workspace_parts_search.cpp
     )
 
 

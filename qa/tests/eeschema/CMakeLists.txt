@@ -224,6 +224,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_differ.cpp
     test_sch_merge_applier.cpp
     test_mdw_placed_parts.cpp
+    test_mdw_workspace_row_item.cpp
     test_sym_digest.cpp
     test_sym_lib_differ.cpp
     test_label_bus_connectivity.cpp

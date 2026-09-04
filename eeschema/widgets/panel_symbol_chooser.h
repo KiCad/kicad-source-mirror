@@ -26,6 +26,11 @@
 #include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
 #include <widgets/html_window.h>
+#include <mdw/client/mdw_part.h>
+#include <widgets/workspace_parts_search.h>
+
+#include <map>
+#include <optional>
 
 class wxPanel;
 class wxTimer;
@@ -40,6 +45,30 @@ class FOOTPRINT_PREVIEW_WIDGET;
 class FOOTPRINT_SELECT_WIDGET;
 class SCH_BASE_FRAME;
 struct PICKED_SYMBOL;
+
+
+/// Feeds one search row to LIB_TREE_NODE_ITEM, which copies what it needs
+class WORKSPACE_ROW_ITEM : public LIB_TREE_ITEM
+{
+public:
+    explicit WORKSPACE_ROW_ITEM( const WORKSPACE_PARTS_SEARCH::ROW& aRow ) :
+            m_row( aRow )
+    {
+    }
+
+    LIB_ID   GetLIB_ID() const override { return m_row.symbol; }
+    wxString GetName() const override { return m_row.text; }
+    wxString GetLibNickname() const override { return m_row.symbol.GetLibNickname(); }
+    wxString GetDesc() override { return m_row.part.DisplayDescription(); }
+    wxString GetFootprint() const override;
+    void     GetChooserFields( std::map<wxString, wxString>& aColumnMap ) override;
+
+    std::vector<SEARCH_TERM>& GetSearchTerms() override { return m_terms; }
+
+private:
+    const WORKSPACE_PARTS_SEARCH::ROW& m_row;
+    std::vector<SEARCH_TERM>           m_terms;
+};
 
 
 class PANEL_SYMBOL_CHOOSER : public wxPanel
@@ -114,6 +143,12 @@ public:
 
     void Regenerate();
 
+    /// Accept the selection, first checking that a workspace part is still current
+    void AcceptSelection();
+
+    /// The workspace part behind the accepted symbol, or nothing for a library symbol
+    const std::optional<MDW_PART_INFO>& GetWorkspacePart() const { return m_pickedPart; }
+
 protected:
     static constexpr int DBLCLICK_DELAY = 100; // milliseconds
 
@@ -160,6 +195,19 @@ protected:
      */
     void populateFootprintSelector( const LIB_ID& aLibId );
 
+    void refillWorkspaceGroup( size_t aGroup );
+
+    /// The search row behind a tree node, or null for a library node
+    const WORKSPACE_PARTS_SEARCH::ROW* workspaceRow( const LIB_TREE_NODE* aNode, size_t* aGroup = nullptr ) const;
+
+    WORKSPACE_PARTS_SEARCH::RESOLUTION resolveWorkspacePart( const MDW_PART_INFO& aPart, LIB_ID& aSymbol ) const;
+
+    wxString workspacePartDetails( size_t aGroup, const WORKSPACE_PARTS_SEARCH::ROW& aRow,
+                                   const wxString& aNote ) const;
+
+    /// Pick aPart, placing aSymbol, and close
+    void acceptWorkspacePart( const MDW_PART_INFO& aPart, const LIB_ID& aSymbol );
+
 public:
     static std::mutex g_Mutex;
 
@@ -168,6 +216,7 @@ protected:
     static wxString           g_powerSearchString;
 
     LIB_ID                    m_curSymbolId;
+    MDW_ITEM_REF              m_curPart;          ///< The workspace part selected, empty for a library row
 
     wxTimer*                  m_dbl_click_timer;
     wxTimer*                  m_open_libs_timer;
@@ -197,6 +246,20 @@ protected:
     std::vector<std::pair<FIELD_T, wxString>>  m_field_edits;
 
     SYMBOL_COMPAT_FUNC        m_compatCallback;
+
+    std::unique_ptr<WORKSPACE_PARTS_SEARCH> m_workspaceParts;
+    std::vector<LIB_TREE_NODE_LIBRARY*>     m_workspaceGroups;
+
+    /// Group and row index of each workspace node now in the tree
+    std::map<const LIB_TREE_NODE*, std::pair<size_t, size_t>> m_workspaceRows;
+
+    MDW_OP                       m_confirmOp;
+    wxTimer*                     m_confirmTimer;
+    std::optional<MDW_PART_INFO> m_pickedPart;
+    LIB_ID                       m_pickedSymbol;
+
+    /// The workspace part each Recently Used symbol was placed as, by formatted LIB_ID
+    std::map<wxString, MDW_PART_IDENTITY> m_recentParts;
 };
 
 #endif /* PANEL_SYMBOL_CHOOSER_H */

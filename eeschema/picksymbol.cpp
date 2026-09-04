@@ -81,6 +81,9 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
     sel.Fields = dlg.GetFields();
     sel.LibId = id;
 
+    if( const std::optional<MDW_PART_INFO>& part = dlg.GetChooserPanel()->GetWorkspacePart() )
+        sel.PartIdentity = MDW_PART_IDENTITY{ part->part, part->revision_id };
+
     if( sel.LibId.IsValid() )
     {
         std::erase_if( aHistoryList, [&sel]( PICKED_SYMBOL const& i )
