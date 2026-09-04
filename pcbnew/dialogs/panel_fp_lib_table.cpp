@@ -185,9 +185,16 @@ protected:
         std::shared_ptr<LIBRARY_TABLE> child = std::make_shared<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::GLOBAL,
                                                                                 LIBRARY_TABLE_TYPE::FOOTPRINT );
 
-        Pgm().GetLibraryManager().ApplyLibOverrides( *child );
+        if( !child->IsOk() )
+        {
+            wxMessageBox( _( "Unable to load library table." ) );
+        }
+        else
+        {
+            Pgm().GetLibraryManager().ApplyLibOverrides( *child );
 
-        m_panel->OpenTable( child, aRow.Nickname() );
+            m_panel->OpenTable( child, aRow.Nickname() );
+        }
     }
 
     wxString getTablePreamble() override
