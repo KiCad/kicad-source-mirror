@@ -35,6 +35,7 @@
 #include <bitmaps.h>
 #include <clipboard.h>
 #include <confirm.h>
+#include <core/kicad_algo.h>
 #include <eda_item.h>
 #include <macros.h>
 #include <string_utils.h>
@@ -522,8 +523,14 @@ int PL_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
+    // A repeated data item generates one draw item per repeat, but must be copied only once.
     for( EDA_ITEM* item : selection.GetItems() )
-        items.push_back( static_cast<DS_DRAW_ITEM_BASE*>( item )->GetPeer() );
+    {
+        DS_DATA_ITEM* peer = static_cast<DS_DRAW_ITEM_BASE*>( item )->GetPeer();
+
+        if( !alg::contains( items, peer ) )
+            items.push_back( peer );
+    }
 
     try
     {
