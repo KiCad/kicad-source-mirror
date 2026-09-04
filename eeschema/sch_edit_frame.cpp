@@ -2636,20 +2636,18 @@ wxWindow* SCH_EDIT_FRAME::createHighlightedNetNavigator()
 }
 
 
-void SCH_EDIT_FRAME::SetHighlightedConnection( const wxString& aConnection,
-                                               const NET_NAVIGATOR_ITEM_DATA* aSelection )
+void SCH_EDIT_FRAME::SetHighlightedConnection( const wxString& aConnection, const NET_NAVIGATOR_ITEM_DATA* aSelection,
+                                               bool aForceNetNavigatorRefresh )
 {
-    bool refreshNetNavigator = aConnection != m_highlightedConn;
+    bool connectionChanged = aConnection != m_highlightedConn;
 
     m_highlightedConn = aConnection;
 
-    if( refreshNetNavigator )
-    {
+    if( connectionChanged || aForceNetNavigatorRefresh )
         RefreshNetNavigator( aSelection );
 
-        if( m_hierarchy )
-            m_hierarchy->UpdateNetHighlight( aConnection );
-    }
+    if( connectionChanged && m_hierarchy )
+        m_hierarchy->UpdateNetHighlight( aConnection );
 }
 
 

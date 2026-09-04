@@ -248,9 +248,9 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         wxString netName = From_UTF8( text );
 
         if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( netName ) )
-            m_highlightedConn = sg->GetDriverConnection()->Name();
+            SetHighlightedConnection( sg->GetDriverConnection()->Name(), nullptr, true );
         else
-            m_highlightedConn = wxEmptyString;
+            SetHighlightedConnection( wxEmptyString, nullptr, true );
 
         // If the incoming net belongs to a net chain, also turn on chain
         // highlight so the schematic mirrors what the PCB editor is doing.
@@ -263,7 +263,6 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         }
 
         GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
-        RefreshNetNavigator();
 
         SetStatusText( _( "Highlighted net:" ) + wxS( " " ) + UnescapeString( netName ) );
         return;
@@ -328,9 +327,9 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 void SCH_EDIT_FRAME::HandleRemoteNetHighlight( const wxString& aNetName )
 {
     if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( aNetName ) )
-        m_highlightedConn = sg->GetDriverConnection()->Name();
+        SetHighlightedConnection( sg->GetDriverConnection()->Name(), nullptr, true );
     else
-        m_highlightedConn = wxEmptyString;
+        SetHighlightedConnection( wxEmptyString, nullptr, true );
 
     // If the incoming net belongs to a net chain, also turn on chain
     // highlight so the schematic mirrors what the PCB editor is doing.
@@ -343,7 +342,6 @@ void SCH_EDIT_FRAME::HandleRemoteNetHighlight( const wxString& aNetName )
     }
 
     GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
-    RefreshNetNavigator();
 
     SetStatusText( _( "Highlighted net:" ) + wxS( " " ) + UnescapeString( aNetName ) );
 }
