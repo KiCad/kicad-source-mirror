@@ -1251,6 +1251,22 @@ std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const BE_SHAPE_CIRCLE& aS2
             result.push_back( pc );
         }
     }
+    else if( projectedPos1 < 0 && projectedPos2 > length )
+    {
+        // The circle projects past both ends of the track, so neither tangent lands on the
+        // track flank and each end cap carries one side of the path
+        CU_SHAPE_CIRCLE              cscStart( start, halfWidth );
+        std::vector<PATH_CONNECTION> startPcs = cscStart.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+
+        if( startPcs.size() >= 2 )
+            result.push_back( startPcs.at( trackSide == 1 ? 0 : 1 ) );
+
+        CU_SHAPE_CIRCLE              cscEnd( end, halfWidth );
+        std::vector<PATH_CONNECTION> endPcs = cscEnd.Paths( aS2, aMaxWeight, aMaxSquaredWeight );
+
+        if( endPcs.size() >= 2 )
+            result.push_back( endPcs.at( trackSide == 1 ? 1 : 0 ) );
+    }
 
     return result;
 }

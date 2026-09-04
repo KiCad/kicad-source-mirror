@@ -1,0 +1,10 @@
+(version 1)
+
+(rule "NPTH creepage test"
+  (layer outer)
+  (constraint creepage (min 8mm))
+  (condition "(A.NetName == 'N1_A' && B.NetName == 'N1_B') || (A.NetName == 'N1_B' && B.NetName == 'N1_A')"))
+
+(rule "Ignore net 0"
+  (constraint creepage (min 0mm))
+  (condition "A.Net == 0 || B.Net == 0"))
