@@ -462,15 +462,16 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
 OPENGL_GAL::~OPENGL_GAL()
 {
     GL_CONTEXT_MANAGER* gl_mgr = Pgm().GetGLContextManager();
-    wxASSERT( gl_mgr );
 
     if( gl_mgr )
     {
         gl_mgr->LockCtx( m_glPrivContext, this );
 
         --m_instanceCounter;
+
         if( m_isInitialized )
             glFlush();
+        
         gluDeleteTess( m_tesselator );
         ClearCache();
 
