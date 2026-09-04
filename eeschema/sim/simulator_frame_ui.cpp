@@ -3932,9 +3932,13 @@ void SIMULATOR_FRAME_UI::fillSmithCursorRow( int aRow, CURSOR* aCursor, TRACE* a
 
     if( std::isfinite( rl ) )
         m_cursorsGrid->SetCellValue( aRow, COL_CURSOR_RL, wxString::Format( wxS( "%.1f dB" ), rl ) );
+    else if( std::isinf( rl ) )
+        m_cursorsGrid->SetCellValue( aRow, COL_CURSOR_RL, wxS( "inf dB" ) );
 
     if( std::isfinite( vswr ) )
         m_cursorsGrid->SetCellValue( aRow, COL_CURSOR_VSWR, wxString::Format( wxS( "%.2f" ), vswr ) );
+    else if( std::isinf( vswr ) )
+        m_cursorsGrid->SetCellValue( aRow, COL_CURSOR_VSWR, wxS( "inf" ) );
 }
 
 
