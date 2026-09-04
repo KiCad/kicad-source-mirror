@@ -27,6 +27,9 @@
 #include <sch_screen.h>
 #include <sch_reference_list.h>
 #include <connection_graph.h>
+#include <widgets/mdw_member_index.h>
+#include <functional>
+#include <optional>
 #include <vector>
 #include <map>
 
@@ -38,6 +41,8 @@ class PROGRESS_REPORTER;
 struct KIFACE;
 class PROJECT;
 class SCH_RULE_AREA;
+class SCH_SYMBOL;
+class MDW_LIBRARY_SOURCES;
 
 
 extern const wxString CommentERC_H[];
@@ -240,6 +245,23 @@ public:
      */
     int TestRefSuffixMismatch();
 
+    /// What the member index holds of the symbol library a nickname names
+    using LIBRARY_LISTING = std::function<MDW_LIBRARY_LISTING( const wxString& aNickname )>;
+
+    /// Replace how TestLibPartNotReleased reads the team libraries, which is from the member index by default
+    void SetLibraryListing( LIBRARY_LISTING aListing ) { m_listing = std::move( aListing ); }
+
+    /// The listing without integration, which names the team libraries aSources holds a copy of but lists none.
+    /// aSources must outlive the listing
+    static LIBRARY_LISTING UnintegratedListing( const MDW_LIBRARY_SOURCES& aSources );
+
+    /**
+     * Report symbols placed from a team library part that never was released, differs from every release, sits in
+     * a state designs may not use or not for new designs, is not published or was never checked in, once per
+     * reference. A library whose listing has not arrived is reported once, since none of its parts can be checked.
+     */
+    int TestLibPartNotReleased();
+
     void RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                    KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter );
 
@@ -253,6 +275,7 @@ private:
     SCH_MULTI_UNIT_REFERENCE_MAP m_refMap;
     const NET_MAP&               m_nets;
     bool                         m_showAllErrors;
+    LIBRARY_LISTING              m_listing;
 };
 
 

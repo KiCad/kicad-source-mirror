@@ -251,6 +251,7 @@ private:
     static ERC_ITEM wireDangling;
     static ERC_ITEM libSymbolIssues;
     static ERC_ITEM libSymbolMismatch;
+    static ERC_ITEM libPartNotReleased;
     static ERC_ITEM footprintLinkIssues;
     static ERC_ITEM footprintFilters;
     static ERC_ITEM unannotated;

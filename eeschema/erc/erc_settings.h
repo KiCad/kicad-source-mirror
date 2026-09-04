@@ -106,7 +106,9 @@ enum ERCE_T
     ERCE_DUPLICATE_SHEET_SUFFIX,            ///< Two uses of one sheet file share a reference suffix.
     ERCE_REF_SUFFIX_MISMATCH,               ///< Saved reference lacks the suffix of its reused sheet.
 
-    ERCE_LAST = ERCE_REF_SUFFIX_MISMATCH,
+    ERCE_LIB_PART_NOT_RELEASED,             ///< A team library part is placed unreleased or differs from its release.
+
+    ERCE_LAST = ERCE_LIB_PART_NOT_RELEASED,
 
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING, // pin connected to an other pin: warning level

@@ -229,6 +229,10 @@ ERC_ITEM ERC_ITEM::libSymbolMismatch( ERCE_LIB_SYMBOL_MISMATCH,
         _HKI( "Symbol doesn't match copy in library" ),
         wxT( "lib_symbol_mismatch" ) );
 
+ERC_ITEM ERC_ITEM::libPartNotReleased( ERCE_LIB_PART_NOT_RELEASED,
+        _HKI( "Team library part is not released" ),
+        wxT( "lib_part_not_released" ) );
+
 ERC_ITEM ERC_ITEM::footprintLinkIssues( ERCE_FOOTPRINT_LINK_ISSUES,
         _HKI( "Footprint link issue" ),
         wxT( "footprint_link_issues" ) );
@@ -307,7 +311,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
           // Commented out until the logic for this element is coded
           // TODO: Add bus label syntax checking
           //                 ERC_ITEM::busLabelSyntax,
-          ERC_ITEM::libSymbolIssues, ERC_ITEM::libSymbolMismatch, ERC_ITEM::footprintLinkIssues,
+          ERC_ITEM::libSymbolIssues, ERC_ITEM::libSymbolMismatch, ERC_ITEM::libPartNotReleased,
+          ERC_ITEM::footprintLinkIssues,
           ERC_ITEM::footprintFilters, ERC_ITEM::extraUnits, ERC_ITEM::missingUnits, ERC_ITEM::missingInputPin,
           ERC_ITEM::missingBidiPin, ERC_ITEM::missingPowerInputPin, ERC_ITEM::variantSymbolInvalid,
           ERC_ITEM::variantSymbolIncompatible,
@@ -360,6 +365,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_WIRE_DANGLING:           return std::make_shared<ERC_ITEM>( wireDangling );
     case ERCE_LIB_SYMBOL_ISSUES:       return std::make_shared<ERC_ITEM>( libSymbolIssues );
     case ERCE_LIB_SYMBOL_MISMATCH:     return std::make_shared<ERC_ITEM>( libSymbolMismatch );
+    case ERCE_LIB_PART_NOT_RELEASED:   return std::make_shared<ERC_ITEM>( libPartNotReleased );
     case ERCE_FOOTPRINT_LINK_ISSUES:   return std::make_shared<ERC_ITEM>( footprintLinkIssues );
     case ERCE_FOOTPRINT_FILTERS:       return std::make_shared<ERC_ITEM>( footprintFilters );
     case ERCE_UNANNOTATED:             return std::make_shared<ERC_ITEM>( unannotated );

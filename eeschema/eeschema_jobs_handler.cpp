@@ -63,6 +63,7 @@
 #include <tool/tool_manager.h>
 #include <project.h>
 #include <project/project_file.h>
+#include <wx/app.h>
 #include <wx/dir.h>
 #include <wx/file.h>
 #include <memory>

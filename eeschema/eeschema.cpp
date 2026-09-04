@@ -31,6 +31,7 @@
 #include <api/headless_symbol_editor_context.h>
 #include <core/json_serializers.h>
 #include <pgm_base.h>
+#include <libraries/library_preload_gate.h>
 #include <kiface_base.h>
 #include <background_jobs_monitor.h>
 #include <cli_progress_reporter.h>
@@ -39,6 +40,7 @@
 #include "eeschema_jobs_handler.h"
 #include "eeschema_helpers.h"
 #include <diff_merge/diff_doc_kind.h>
+#include <diff_merge/sym_lib_differ.h>
 #include <reporter.h>
 #include "git/kigit_sch_merge.h"
 #include "git/kigit_sym_lib_merge.h"
@@ -66,6 +68,7 @@
 #include <trace_helpers.h>
 #include <thread_pool.h>
 #include <kiface_services.h>
+#include <mdw_placed_parts.h>
 #include <symbol_library_query.h>
 #include <widgets/kistatusbar.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
@@ -443,8 +446,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
             KIFACE_BASE( aName, aType ),
-            UNITS_PROVIDER( schIUScale, EDA_UNITS::MM ),
-            m_libraryPreloadInProgress( false )
+            UNITS_PROVIDER( schIUScale, EDA_UNITS::MM )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
@@ -695,6 +697,21 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case KIFACE_ATTACH_DIFF_CANVASES:
             return KifaceServiceAddress<KIFACE_ATTACH_DIFF_CANVASES_SERVICE>( &eeschemaAttachDiffCanvasesExport );
+
+        case KIFACE_DIFF_SYMBOL_LIBRARY_TEXT:
+            return KifaceServiceAddress<KIFACE_DIFF_SYMBOL_LIBRARY_TEXT_SERVICE>(
+                    &KICAD_DIFF::SYM_LIB_DIFFER::DiffLibraryText );
+
+        case KIFACE_COLLECT_PLACED_PARTS:
+            return KifaceServiceAddress<KIFACE_COLLECT_PLACED_PARTS_SERVICE>( &SchCollectPlacedParts );
+
+        case KIFACE_CURRENT_SYMBOL_FORMAT:
+            return KifaceServiceAddress<KIFACE_CURRENT_SYMBOL_FORMAT_SERVICE>(
+                    &KICAD_DIFF::SYM_LIB_DIFFER::UpgradedWithMember );
+
+        case KIFACE_DIFF_SYMBOL_LIBRARY_FILES:
+            return KifaceServiceAddress<KIFACE_DIFF_SYMBOL_LIBRARY_FILES_SERVICE>(
+                    &KICAD_DIFF::SYM_LIB_DIFFER::DiffLibraryTexts );
         }
 
         return nullptr;
@@ -741,7 +758,7 @@ private:
     std::unique_ptr<EESCHEMA_JOBS_HANDLER> m_jobHandler;
     std::shared_ptr<BACKGROUND_JOB>        m_libraryPreloadBackgroundJob;
     std::future<void>                      m_libraryPreloadReturn;
-    std::atomic_bool                       m_libraryPreloadInProgress;
+    LIBRARY_PRELOAD_GATE                   m_libraryPreloadGate;
     std::atomic_bool                       m_libraryPreloadAbort;
 
     void closeSchematic( KICAD_API_SERVER* aServer );
@@ -862,12 +879,11 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 {
     wxCHECK( aKiway, /* void */ );
 
-    // Use compare_exchange to atomically check and set the flag to prevent race conditions
-    // when PreloadLibraries is called multiple times concurrently (e.g., from project manager
-    // and schematic editor both scheduling via CallAfter)
-    bool expected = false;
+    if( !aKiway->IsLibraryPreloadWanted( KIWAY::FACE_SCH ) )
+        return;
 
-    if( !m_libraryPreloadInProgress.compare_exchange_strong( expected, true ) )
+    // A request while a preload runs makes it load again, so rows added since it started still load
+    if( !m_libraryPreloadGate.Enter() )
         return;
 
     Pgm().ClearLibraryLoadMessages();
@@ -883,37 +899,47 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
             SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aKiway->Prj() );
 
-            reporter->Report( _( "Loading Symbol Libraries" ) );
-            bool aborted = !adapter->RunPreload( *reporter, m_libraryPreloadAbort );
+            bool aborted = false;
 
-            // If aborted, skip operations that use the adapter since the project may have changed
-            // and the adapter's project reference could be stale. This prevents use-after-free
-            // crashes when switching projects during library preload.
-            if( !aborted )
+            auto finish =
+                    [&]()
+                    {
+                        // If aborted, skip operations that use the adapter since the project may have changed
+                        // and the adapter's project reference could be stale. This prevents use-after-free
+                        // crashes when switching projects during library preload.
+                        if( !aborted )
+                        {
+                            // Collect library load errors for async reporting
+                            Pgm().AddLibraryLoadMessages( adapter->GetLibraryLoadErrors() );
+                        }
+                        else
+                        {
+                            wxLogTrace( traceLibraries,
+                                        "eeschema PreloadLibraries: aborted, skipping symbol processing" );
+                        }
+
+                        Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+                        m_libraryPreloadBackgroundJob.reset();
+
+                        // Only send reload notifications if we weren't aborted
+                        if( !aborted )
+                        {
+                            std::string payload = "";
+                            aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload, nullptr, true );
+                            aKiway->ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+                            aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload, nullptr, true );
+                        }
+
+                        // A cancel that came after the loop left the flag set, and it would end the next preload
+                        // at once
+                        m_libraryPreloadAbort.store( false );
+                    };
+
+            do
             {
-                // Collect library load errors for async reporting
-                Pgm().AddLibraryLoadMessages( adapter->GetLibraryLoadErrors() );
-            }
-            else
-            {
-                wxLogTrace( traceLibraries, "eeschema PreloadLibraries: aborted, skipping symbol processing" );
-            }
-
-            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
-            m_libraryPreloadBackgroundJob.reset();
-
-            // Only send reload notifications if we weren't aborted
-            if( !aborted )
-            {
-                std::string payload = "";
-                aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload, nullptr, true );
-                aKiway->ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
-                aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload, nullptr, true );
-            }
-
-            // A cancel that came after the loop left the flag set, and it would end the next preload at once
-            m_libraryPreloadAbort.store( false );
-            m_libraryPreloadInProgress.store( false );
+                reporter->Report( _( "Loading Symbol Libraries" ) );
+                aborted = !adapter->RunPreload( *reporter, m_libraryPreloadAbort );
+            } while( m_libraryPreloadGate.Again( aborted, finish ) );
         };
 
     std::future<void> preloadFuture = std::async( std::launch::async, preload );
@@ -923,7 +949,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
 void IFACE::CancelPreload( bool aBlock )
 {
-    if( m_libraryPreloadInProgress.load() )
+    if( m_libraryPreloadGate.IsRunning() )
     {
         m_libraryPreloadAbort.store( true );
 
@@ -940,7 +966,7 @@ void IFACE::CancelPreload( bool aBlock )
 
 void IFACE::ProjectChanged()
 {
-    if( m_libraryPreloadInProgress.load() )
+    if( m_libraryPreloadGate.IsRunning() )
         m_libraryPreloadAbort.store( true );
 }
 

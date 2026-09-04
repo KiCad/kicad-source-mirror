@@ -114,6 +114,7 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_net_chain_pin_to_pin.cpp
     erc/test_erc_pin_context.cpp
     erc/test_erc_power_pin_marker_location.cpp
+    erc/test_erc_lib_part_not_released.cpp
     erc/test_erc_lib_symbol_mismatch.cpp
     erc/test_erc_lib_symbol_field_position.cpp
     erc/test_erc_footprint_filters.cpp
@@ -222,6 +223,7 @@ set( QA_EESCHEMA_SRCS
     test_bus_parsing.cpp
     test_sch_differ.cpp
     test_sch_merge_applier.cpp
+    test_mdw_placed_parts.cpp
     test_sym_digest.cpp
     test_sym_lib_differ.cpp
     test_label_bus_connectivity.cpp

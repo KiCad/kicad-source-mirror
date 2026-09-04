@@ -479,6 +479,7 @@ set( EESCHEMA_SRCS
     lib_fields_data_model.cpp
     lib_symbol.cpp
     mdw_part_field.cpp
+    mdw_placed_parts.cpp
     mdw_bom_compare.cpp
     link_imported_footprints.cpp
     menubar.cpp

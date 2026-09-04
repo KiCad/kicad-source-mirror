@@ -428,6 +428,7 @@ ErcErrorType ToProtoEnum( ERCE_T aValue )
     case ERCE_EMPTY_POWER_VALUE: return ErcErrorType::ERCET_EMPTY_POWER_VALUE;
     case ERCE_DUPLICATE_SHEET_SUFFIX:       return ErcErrorType::ERCET_DUPLICATE_SHEET_SUFFIX;
     case ERCE_REF_SUFFIX_MISMATCH:          return ErcErrorType::ERCET_REF_SUFFIX_MISMATCH;
+    case ERCE_LIB_PART_NOT_RELEASED:        return ErcErrorType::ERCET_LIB_PART_NOT_RELEASED;
     case ERCE_DUPLICATE_PIN_ERROR:          return ErcErrorType::ERCET_DUPLICATE_PIN_ERROR;
     case ERCE_PIN_TO_PIN_WARNING:           return ErcErrorType::ERCET_PIN_TO_PIN_WARNING;
     case ERCE_PIN_TO_PIN_ERROR:             return ErcErrorType::ERCET_PIN_TO_PIN_ERROR;
@@ -502,6 +503,7 @@ ERCE_T FromProtoEnum( ErcErrorType aValue )
     case ErcErrorType::ERCET_EMPTY_POWER_VALUE: return ERCE_EMPTY_POWER_VALUE;
     case ErcErrorType::ERCET_DUPLICATE_SHEET_SUFFIX:        return ERCE_DUPLICATE_SHEET_SUFFIX;
     case ErcErrorType::ERCET_REF_SUFFIX_MISMATCH:           return ERCE_REF_SUFFIX_MISMATCH;
+    case ErcErrorType::ERCET_LIB_PART_NOT_RELEASED:         return ERCE_LIB_PART_NOT_RELEASED;
     case ErcErrorType::ERCET_VARIANT_SYMBOL_INVALID:        return ERCE_VARIANT_SYMBOL_INVALID;
     case ErcErrorType::ERCET_VARIANT_SYMBOL_INCOMPATIBLE:   return ERCE_VARIANT_SYMBOL_INCOMPATIBLE;
     case ErcErrorType::ERCET_WIRED_IMPLICIT_POWER:         return ERCE_WIRED_IMPLICIT_POWER;

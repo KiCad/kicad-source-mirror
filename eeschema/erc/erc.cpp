@@ -53,6 +53,11 @@
 #include <lib_symbol.h>
 #include <sch_symbol.h>
 #include <pin_map.h>
+#include <diff_merge/sym_digest.h>
+#include <libraries/library_manager.h>
+#include <mdw/client/mdw_baseline_design.h>
+#include <mdw/client/mdw_library_sources.h>
+#include <widgets/mdw_member_index.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <vector>
@@ -340,7 +345,15 @@ ERC_TESTER::ERC_TESTER( SCHEMATIC* aSchematic, bool aShowAllErrors ) :
         m_sheetList( aSchematic->BuildSheetListSortedByPageNumbers() ),
         m_screens( aSchematic->Root() ),
         m_nets( aSchematic->ConnectionGraph()->GetNetMap() ),
-        m_showAllErrors( aShowAllErrors )
+        m_showAllErrors( aShowAllErrors ),
+        m_listing(
+                []( const wxString& aNickname )
+                {
+                    if( MDW_LIBRARY_SOURCES::TeamLibrariesEnabled() )
+                        return MDW_MEMBER_INDEX::Get().Listing( MDW_LIBRARY_TYPE::SYMBOL, aNickname );
+
+                    return UnintegratedListing( MDW_LIBRARY_SOURCES::Get() )( aNickname );
+                } )
 {
     if( !ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
         m_sheetList.GetMultiUnitSymbols( m_refMap, SYMBOL_FILTER_ALL );
@@ -1144,6 +1157,126 @@ int ERC_TESTER::TestRefSuffixMismatch()
             ercItem->SetItems( symbol );
             markers.Place( std::move( ercItem ), path.Path(), symbol->GetPosition(), ITEM_PATHS::MAIN );
         }
+    }
+
+    return markers.Count();
+}
+
+
+ERC_TESTER::LIBRARY_LISTING ERC_TESTER::UnintegratedListing( const MDW_LIBRARY_SOURCES& aSources )
+{
+    // Nothing lists a team library without integration, as under kicad-cli, so it reads as unlisted
+    return [&aSources]( const wxString& aNickname )
+    {
+        std::optional<LIBRARY_TABLE_ROW*> row =
+                Pgm().GetLibraryManager().GetRow( LIBRARY_TABLE_TYPE::SYMBOL, aNickname );
+        MDW_LIBRARY_LISTING listing;
+
+        listing.team = row
+                       && aSources.ForRowAt( MDW_LIBRARY_TYPE::SYMBOL, ( *row )->Options(),
+                                             LIBRARY_MANAGER::GetFullURI( *row, true ) )
+                                  .has_value();
+        return listing;
+    };
+}
+
+
+int ERC_TESTER::TestLibPartNotReleased()
+{
+    ERC_MARKER_PLACER markers( *m_schematic );
+
+    // The statuses that block a design at release, and a part never checked in
+    auto unreleased = []( kiapi::mdw::PlacedPartStatus aStatus )
+    {
+        return aStatus != kiapi::mdw::PPS_RELEASED && aStatus != kiapi::mdw::PPS_OUTDATED
+               && aStatus != kiapi::mdw::PPS_NOT_FOR_NEW_DESIGNS;
+    };
+
+    struct UNCHECKED
+    {
+        SCH_SYMBOL* symbol;
+        KIID_PATH   path;
+    };
+
+    std::map<wxString, MDW_LIBRARY_LISTING>                     listings;
+    std::map<wxString, UNCHECKED>                               unchecked;
+    std::map<const SCH_SYMBOL*, std::optional<MDW_PART_FACTS>> answers;
+    std::set<std::pair<wxString, wxString>>                     reported;
+
+    for( const SCH_SHEET_PATH& path : m_sheetList )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*    symbol = static_cast<SCH_SYMBOL*>( item );
+            const wxString nickname = symbol->GetLibId().GetLibNickname().wx_str();
+
+            auto [listing, listingIsNew] = listings.try_emplace( nickname );
+
+            if( listingIsNew )
+                listing->second = m_listing( nickname );
+
+            if( !listing->second.team )
+                continue;
+
+            if( !listing->second.members )
+            {
+                unchecked.try_emplace( nickname, UNCHECKED{ symbol, path.Path() } );
+                continue;
+            }
+
+            // A reused sheet places each symbol once per use, and the answer is the same
+            auto [answer, isNew] = answers.try_emplace( symbol );
+
+            if( isNew )
+            {
+                answer->second = MdwListedFacts( listing->second, symbol->GetLibId().GetUniStringLibItemName(),
+                                                 KICAD_DIFF::PlacedSymbolDigest( *symbol ) );
+            }
+
+            if( !answer->second )
+                continue;
+
+            const MDW_PART_FACTS& facts = *answer->second;
+            const wxString        name = UnescapeString( symbol->GetLibId().GetLibItemName() );
+            wxString              msg;
+
+            if( std::ranges::any_of( facts.statuses, unreleased ) )
+            {
+                msg = wxString::Format( _( "Symbol '%s' is not released as placed: %s" ), name,
+                                        MdwPlacedStatusText( facts ) );
+            }
+            else if( std::ranges::find( facts.statuses, kiapi::mdw::PPS_NOT_FOR_NEW_DESIGNS ) != facts.statuses.end() )
+            {
+                msg = wxString::Format( _( "Symbol '%s' is placed from revision %s, which is not for new designs" ),
+                                        name, facts.matched_revision_label );
+            }
+            else
+            {
+                continue;
+            }
+
+            // The units of one symbol share a reference and a library part, so one warning covers them
+            if( symbol->IsAnnotated( &path )
+                && !reported.emplace( symbol->GetRef( &path, false ), symbol->GetLibId().Format() ).second )
+            {
+                continue;
+            }
+
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_PART_NOT_RELEASED );
+            ercItem->SetErrorMessage( msg );
+            ercItem->SetItems( symbol );
+            markers.Place( std::move( ercItem ), path.Path(), symbol->GetPosition(), ITEM_PATHS::MAIN );
+        }
+    }
+
+    for( const auto& [nickname, first] : unchecked )
+    {
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_PART_NOT_RELEASED );
+        ercItem->SetErrorMessage( wxString::Format( _( "Release state of symbols from library '%s' was not checked, "
+                                                       "since no listing of it is available" ),
+                                                    UnescapeString( nickname ) ) );
+        ercItem->SetItems( first.symbol );
+        markers.Place( std::move( ercItem ), first.path, first.symbol->GetPosition(), ITEM_PATHS::MAIN );
     }
 
     return markers.Count();
@@ -3582,6 +3715,9 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
 
     if( m_settings.IsTestEnabled( ERCE_REF_SUFFIX_MISMATCH ) )
         TestRefSuffixMismatch();
+
+    if( m_settings.IsTestEnabled( ERCE_LIB_PART_NOT_RELEASED ) )
+        TestLibPartNotReleased();
 
     // Test pin-to-pad maps for stale pins, duplicate pad targets and bad pad references (issue #2282).
     if( m_settings.IsTestEnabled( ERCE_PIN_MAP_STALE_PIN ) || m_settings.IsTestEnabled( ERCE_PIN_MAP_DUPLICATE_PAD )
