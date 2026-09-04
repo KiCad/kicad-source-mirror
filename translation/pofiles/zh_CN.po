@@ -48,7 +48,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-08-01 16:45+0000\n"
+"PO-Revision-Date: 2026-09-04 19:27+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.1.dev0\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5479,17 +5479,16 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, 从而更有效地识别用户群体中存"
-"在的关键问题, 并帮助分析功能以指导改进工作。\n"
+"允许 KiCad 匿名地向开发者报告崩溃和特殊事件数据, 以便更有效地识别影响用户的关"
+"键问题, 并分析功能使用情况以指导改进工作。\n"
 "\n"
 "为了将来自同一 KiCad 安装的自动报告关联起来, 系统会生成一个完全随机的唯一标识"
-"符, 仅用于崩溃报告的目的, 不会存储或关联任何个人身份信息 (PII), 包括 IP 地"
-"址。\n"
-"您可以随时在数据收集的偏好设置页面重置该标识符。\n"
+"符, 仅用于崩溃报告的目的。不会存储或关联任何个人身份信息 (PII), 包括 IP 地址"
+"。\n"
+"您可以随时在「偏好设置」的「数据收集」页面重置此标识符。\n"
 "\n"
-"如果您选择自愿参与, KiCad 将在发生崩溃或特殊事件时会自动处理并发送这些报"
-"告。\n"
-"你的设计文件 (如原理图、PCB 和库) 也绝不会在此过程中被共享。"
+"如果您自愿参与, KiCad 会在发生崩溃或特殊事件时自动发送相应报告。您的原理图或 "
+"PCB 等设计文件绝不会在此过程中被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -6988,8 +6987,8 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
-"未在预期位置找到内置库表。这通常意味着表示你安装了 KiCad 软件但未安装库。\n"
-"你可以继续进行配置, 但需要单独安装库后才会生效。"
+"未在预期位置找到内置库表。这通常意味着你安装了 KiCad 软件, 但没有安装库。你可"
+"以继续进行配置, 但需要单独安装这些库后才能生效和使用。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 msgid "Updates"
@@ -8642,7 +8641,7 @@ msgstr ""
 
 #: common/exceptions.cpp:154
 msgid "Full error text:"
-msgstr "Full error text:"
+msgstr "完整错误内容:"
 
 #: common/file_history.cpp:151
 msgid "No Files"
@@ -10921,12 +10920,12 @@ msgstr ""
 #: common/netlist_reader/legacy_netlist_reader.cpp:111
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:112
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr "无法解析网表的元件部分的时间戳。"
+msgstr "无法解析网表符号部分中的时间戳。"
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:121
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:122
 msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr "无法解析网表的元件部分的封装名称。"
+msgstr "无法解析网表符号部分中的封装名称。"
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:135
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:136
@@ -14224,9 +14223,9 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"搜索路径: \n"
-"%s\n"
-"%s"
+"搜索位置:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:292
 msgid "Generating BOM requires a fully annotated schematic."
@@ -17104,7 +17103,7 @@ msgid ""
 msgstr ""
 "此引脚不在 %d mils 栅格上 (未与栅格对齐), 这可能会导致此引脚在在原理图中难以"
 "连接。\n"
-"确定继续?"
+"是否继续?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:426
 msgid "Synchronized Pins Mode."
@@ -17170,7 +17169,7 @@ msgstr "作用于符号的所有单元 (&U)"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:254
 msgid "Common to all body &styles"
-msgstr "作用于符号的所有图形样式"
+msgstr "作用于所有图形样式 (&S)"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
 msgid "&Visible"
@@ -17690,7 +17689,7 @@ msgstr "下一页 (&B)"
 #: eeschema/dialogs/dialog_sch_find_base.cpp:83
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 msgid "Match &case"
-msgstr "区分大小写 (C)"
+msgstr "区分大小写 (&C)"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:49
@@ -19212,7 +19211,7 @@ msgstr "文本框属性"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:177 eeschema/schematic.cpp:1016
 msgid "<root sheet>"
-msgstr "<root sheet>"
+msgstr "<根图纸>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:181
 #, c-format
@@ -20637,7 +20636,7 @@ msgstr "加载符号库"
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
-msgstr "文件 '%s' 会被新的工作表根目录图纸文件所覆盖, 无法复制。"
+msgstr "无法复制文件 '%s', 因为它将被新的根图纸文件覆盖。"
 
 #: eeschema/eeschema_config.cpp:223
 #, c-format
@@ -21996,7 +21995,7 @@ msgstr "关联封装"
 
 #: eeschema/lib_symbol.cpp:2607
 msgid "Symbol keywords differ."
-msgstr "'封装关键字' 不一致。"
+msgstr "'符号关键字' 不一致。"
 
 #: eeschema/lib_symbol.cpp:2616
 msgid "Symbol pin name offsets differ."
@@ -27910,7 +27909,7 @@ msgstr "在符号库表中找不到库。"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1819
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
-msgstr "当前配置中未启用封装库 '%s'。"
+msgstr "当前配置中未启用符号库 '%s'。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1822
 msgid "Symbol library not enabled."
@@ -34205,7 +34204,8 @@ msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
-"以厘米为单位, 设置相对于电路板中心的 Pivot, 格式为 'X,Y,Z', 例如: '-10,2,0'"
+"以厘米为单位, 设置相对于电路板中心的旋转中心点, 格式为 'X,Y,Z', 例如: '-"
+"10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:299
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -34249,7 +34249,7 @@ msgstr "无效平移格式\n"
 
 #: kicad/cli/command_pcb_render.cpp:380
 msgid "Invalid pivot format\n"
-msgstr "无效的 Pivot 格式\n"
+msgstr "旋转中心格式无效\n"
 
 #: kicad/cli/command_pcb_render.cpp:387
 msgid "Invalid light top intensity format\n"
@@ -34902,7 +34902,7 @@ msgstr "预览 Gerber 文件"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:175
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "将位图图像转换为原理符号或 PCB 封装"
+msgstr "将位图图像转换为原理图符号或 PCB 封装"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:178
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -39110,21 +39110,18 @@ msgid ""
 "\n"
 "The value 0 is a special case and is not present in any series."
 msgstr ""
-"无源元件通常使用与其精度相适应的 E 系列值。\n"
-"电容器通常使用 E12 值。10% 和 5% 电阻器通常使用 E24 值。1%\n"
-"电阻器使用 E96 值。其他系列不常用。\n"
+"无源元件通常采用与其精度相应的 E 系列值\n"
+"电容通常采用 E12 值。10% 和 5% 电阻通常采用 E24 值\n"
+"1% 电阻采用 E96 值。其他系列并不常用\n"
 "\n"
-"要选择一个值, 请从计算出的目标值开始, 然后四舍五入到 2 位有效数字 (E24 或以"
-"下), 或 3 位有效数字 (E48 和以下)。\n"
-"对于 E24 或以下, 四舍五入到两位有效数字; 对于 E48 及以上, 四舍五入到三位有效"
-"数字。\n"
-"然后从表中找出与剩余有效数字最接近的值, 并用它代替这些数字。\n"
-"然后从表中找出与剩余有效数字最接近的值, 并用它代替这些数字。\n"
+"选择数值时, 先取计算得到的目标值对 E24 及以下系列四舍五入到 2 位有效数字, 对 "
+"E48 及以上系列四舍五入到 3 位有效数字\n"
+"然后在表中找到最接近剩余有效数字的值, 并用它替换这些数字\n"
 "\n"
-"例如, 如果计算出的目标值是 16,834.2Ω , 则四舍五入为 16,800Ω。\n"
-"与 168 最接近的数值是 169, 选定的 E96 值是 16.9kΩ。\n"
+"例如, 计算得到的目标值为 16,834.2Ω 时, 先四舍五入为 16,800Ω。\n"
+"最接近 168 的值是 169, 因此选用的 E96 值为 16.9kΩ。\n"
 "\n"
-"数值 0 是一种特殊情况, 在任何系列中都不存在。"
+"数值 0 属于特殊情况, 不存在于任何系列中。"
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -39325,19 +39322,18 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"- 此计算器可以找到标准 E 系列 (范围在 10Ω 到 1MΩ 之间) 的组合以创建任意值的电"
-"阻。\n"
-"- 您可以输入所需的电阻值, 范围从 0.0025 到 4000 kΩ。\n"
-"- 提供的解决方案最多使用4个元件。\n"
+"- 此计算器通过组合标准 E 系列电阻 (10Ω 到 1MΩ) 得到任意阻值\n"
+"- 可输入 0.0025 到 4000 kΩ 的目标电阻值\n"
+"- 给出最多使用 4 个元件的解决方案\n"
 "\n"
-"请求的电阻值总是会被排除在解决方案集之外。<br>\n"
-"您还可以选择排除最多两个额外的值, 以应对元件可用性问题。\n"
+"目标值始终从解决方案集合中排除。<br>\n"
+"如果存在元件供应问题, 还可选择排除最多两个额外值\n"
 "\n"
-"解决方案以以下格式给出:\n"
+"解决方案采用以下格式:\n"
 "\n"
-"\tR1 + R2 + ... + Rn: 串联电阻\n"
-"\tR1 | R2 | ... | Rn: 并联电阻\n"
-"\tR1 + (R2 | R3)...: 任何上述组合\n"
+"\tR1 + R2 +...+ Rn\t电阻串联\n"
+"\tR1 | R2 |...| Rn\t电阻并联\n"
+"\tR1 + (R2|R3)...\t\t上述方式的任意组合\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 #, fuzzy
@@ -40092,11 +40088,11 @@ msgstr "Djordjevic-Sarkar"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:135
 msgid "Core"
-msgstr "Core"
+msgstr "芯板"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:136
 msgid "PrePreg"
-msgstr "PrePreg"
+msgstr "PrePreg (PP)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:232
 #, c-format
@@ -40152,8 +40148,7 @@ msgstr "选择要移除的层:"
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
-msgstr ""
-"Epsilon R (相对介电常数) 的值不正确 (如果未使用, 则 Epsilon R 必须为正或为空)"
+msgstr "Epsilon R (相对介电常数) 的值不正确 (如果使用, 其值必须为正; 不使用时应为空)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1268
 msgid ""
@@ -44551,11 +44546,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"这是以此焊盘宽度和高度的百分比形式应用的局部间距比率。\n"
-"值为 10 表示水平间距值是焊盘宽度的 10% o, 垂直间距值是焊盘高度的 10% o。\n"
-"最终间距值是该值与绝对间距值之和。\n"
-"负值表示锡膏钢网孔径小于焊盘尺寸。\n"
-"在焊盘属性的局部间距和设置选项卡中, 可以覆盖此值。"
+"这是此封装按焊盘宽度和高度百分比应用的局部间距比率\n"
+"值为 10 表示水平间距为焊盘宽度的 10%, 垂直间距为焊盘高度的 10%\n"
+"最终间距值为此值与绝对间距值之和\n"
+"负值表示钢网开窗尺寸小于焊盘尺寸\n"
+"可在「焊盘属性」的「局部间距和设置」选项卡中, 按焊盘覆盖此值"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:423
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:228
@@ -44657,7 +44652,7 @@ msgstr "自定义形状"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:127
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:393
 msgid "Aperture"
-msgstr "Aperture"
+msgstr "开窗"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:92
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:107
@@ -46459,7 +46454,7 @@ msgstr "非电镀孔 (NPTH), 机械"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "SMD Aperture"
-msgstr "SMD Aperture"
+msgstr "SMD 开窗"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:45
 msgid "Pad number:"
@@ -46517,7 +46512,7 @@ msgstr "自定义 (基于矩形)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:142
 msgid "Trapezoid delta:"
-msgstr "Trapezoid delta:"
+msgstr "梯形 delta:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:153
 msgid "Trapezoid axis:"
@@ -47719,7 +47714,7 @@ msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:188
 msgid "Pivot:"
-msgstr "Pivot:"
+msgstr "旋转中心:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:208
 msgid "Pan:"
@@ -53247,7 +53242,7 @@ msgstr "'%s' 设置不一致"
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:233
 #, c-format
 msgid "Missing symbol field '%s' in footprint"
-msgstr "原理图中缺少符号字段 '%s'"
+msgstr "封装中缺少符号字段 '%s'"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:240
 #, c-format
@@ -58223,7 +58218,7 @@ msgstr "无法在 '%s' 中找到有效封装"
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:361
 #, c-format
 msgid "Error enumerating footprints in library '%s': %s"
-msgstr "从库 '%s' 加载封装时出错: %s"
+msgstr "枚举库 '%s' 中的封装时出错: %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:512
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:519
@@ -58241,7 +58236,7 @@ msgstr "无法从 '%2$s' 加载封装 '%1$s'"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:444
 #, c-format
 msgid "Footprint '%s' not found in project '%s'"
-msgstr "在工程 '%2$s 中未发现封装 '%1$s'"
+msgstr "在工程 '%2$s 中找不到封装 '%1$s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:36
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:41
@@ -60318,7 +60313,7 @@ msgstr "成功创建 3D 渲染图像"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1393
 msgid "Error creating 3D render image"
-msgstr "成功创建 3D 渲染图像出错"
+msgstr "创建 3D 渲染图像时出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1451 pcbnew/pcbnew_jobs_handler.cpp:1524
 #: pcbnew/pcbnew_jobs_handler.cpp:1622 pcbnew/pcbnew_jobs_handler.cpp:1714
