@@ -1025,8 +1025,7 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         for( const auto&f : fits )
         {
 
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT("fit: bestCpr0=%.3f bestCpr1=%.3f diag=%d cpr=%.2f ar=%.2f score=%d concave=%d"), bestCpr[0], bestCpr[1], f.diagonal?1:0, f.coupledRatio, f.aspectRatio, f.score, f.isConcave ? 1 : 0 ), 0 );
-
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT("fit: bestCpr0=%.3f bestCpr1=%.3f diag=%d cpr=%.2f ar=%.2f score=%d"), bestCpr[0], bestCpr[1], f.diagonal?1:0, f.coupledRatio, f.aspectRatio, f.score ), 0 );
             drawSingleGateway( Dbg(), f.entry, wxString::Format("entry=%s", f.entry.GetName() ) );
             drawSingleGateway( Dbg(), f.target, wxString::Format("target=%s", f.target.GetName() ) );
 
@@ -1065,9 +1064,6 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
             int index = f.diagonal ? 1 : 0;
             int score = f.score;
-
-            if( f.isConcave )
-                score -= 101;
 
             if( score > bestScore[ index ] || f.coupledRatio > bestCpr[index] * 2.0 )
             {

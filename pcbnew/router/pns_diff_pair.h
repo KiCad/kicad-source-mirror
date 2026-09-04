@@ -220,6 +220,8 @@ private:
 class DP_PRIMITIVE_PAIR : public ITEM_OWNER
 {
 public:
+    static constexpr double DP_ASSUME_PRIMS_COLINEAR_FACTOR = 0.1;
+
     DP_PRIMITIVE_PAIR():
         m_primP( nullptr ), m_primN( nullptr ) {};
 
@@ -290,6 +292,9 @@ public:
         return m_fixedDirection.value();
     }
 
+    // returns the minimum dimension of the parent objects (be that width/height, thickness, radius)
+    int GetMinDimension() const;
+
 private:
     DIRECTION_45 anchorDirection( const ITEM* aItem, const VECTOR2I& aP ) const;
 
@@ -326,10 +331,10 @@ public:
         return m_fitVias;
     }
 
-    void BuildForCursor( const VECTOR2I& aCursorPos );
+    void BuildForCursor( const VECTOR2I& aCursorPos, int aDirectionMask = -1 );
     void BuildOrthoProjections( DP_GATEWAYS& aEntries, const VECTOR2I& aCursorPos,
                                 int aOrthoScore );
-    void BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool aBuildEntries = false,
+    void BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, int aColinearityThreshold = 0, bool aBuildEntries = false,
                        bool aViaMode = false );
     void BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool aPreferDiagonal );
 
@@ -344,7 +349,6 @@ public:
         bool diagonal;
         bool entryAngleOK;
         bool targetAngleOK;
-        bool isConcave;
     };
 
     std::vector<FIT_RESULT> FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool aFitVias );
@@ -363,7 +367,6 @@ public:
 
 private:
 
-    bool isGatewayConcave( const DP_GATEWAY& gw, const DIFF_PAIR& dp ) const;
     void addGateway( DP_GATEWAY& aGw, const wxString&name = wxT(""), bool aAddTurns = false );
 
     struct DP_CANDIDATE

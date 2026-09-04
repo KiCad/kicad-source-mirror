@@ -32,6 +32,7 @@
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
 #include "pns_utils.h"
+#include "pns_arc.h"
 
 namespace PNS {
 
@@ -225,8 +226,11 @@ DIRECTION_45 DIFF_PAIR::getDirection( bool aIsP, bool aEnd ) const
         return DIRECTION_45();
     
     const SEG s = aEnd ? l.CSegment( l.SegmentCount() -1 ) : l.CSegment( 0 );
-
-    return DIRECTION_45( s );
+    
+    if( aEnd )
+        return DIRECTION_45( s ).Opposite();
+    else
+        return DIRECTION_45( s );
 }
 
 
@@ -578,33 +582,6 @@ std::optional<DP_GATEWAY> DP_GATEWAY::AddTurns( bool aSide, bool a90Deg, bool aL
     }
 }
 
-bool DP_GATEWAYS::isGatewayConcave( const DP_GATEWAY& gw, const DIFF_PAIR& dp ) const
-{
-    SEG lead;
-    if( !gw.HasEntryLines() )
-        lead = SEG( gw.AnchorN(), gw.AnchorP() );
-    else
-        lead = SEG( gw.EntryP().CPoint(0), gw.EntryN().CPoint(0) );
-
-
-    const auto& lp = dp.CP();
-    const auto& ln = dp.CN();
-
-    int minDist = std::numeric_limits<int>::max();
-    int maxDist = std::numeric_limits<int>::min();
-    
-    for( int i = 0; i < lp.PointCount(); i ++)
-    {
-        int d = lead.LineDistance( lp.CPoint(i), true );
-        minDist = std::min( minDist, d );
-        maxDist = std::max( maxDist, d );
-        if( minDist < -100 && maxDist > 100 )
-            return true;
-    }
-
-    return false;
-  
-}
 
 void DP_GATEWAYS::addGateway( DP_GATEWAY& aGw, const wxString&name, bool aAddTurns  )
 {
@@ -720,10 +697,7 @@ std::vector<DP_GATEWAYS::FIT_RESULT> DP_GATEWAYS::FitGateways( DP_GATEWAYS& aEnt
                         result.diagonal = diagonal;
                         result.entry = g_entry;
                         result.target = g_target;
-                        result.isConcave = isGatewayConcave( g_entry, l );
                         results.push_back( result );
-
-    
                     }
             }    
                 }
@@ -779,7 +753,7 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
 
     if( aPair.PrimP() == nullptr )
     {
-        BuildGeneric( aPair.AnchorP(), aPair.AnchorN(), true );
+        BuildGeneric( aPair.AnchorP(), aPair.AnchorN(), 0, true );
         return;
     }
 
@@ -803,13 +777,15 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
 
     majorDirection = ( p0_p - p0_n ).Perpendicular();
 
+    int colinearityThreshold = DP_PRIMITIVE_PAIR::DP_ASSUME_PRIMS_COLINEAR_FACTOR * aPair.GetMinDimension();
+
     if( shP == nullptr )
         return;
 
     switch( shP->Type() )
     {
     case SH_CIRCLE:
-        BuildGeneric ( p0_p, p0_n, true );
+        BuildGeneric ( p0_p, p0_n, colinearityThreshold, true );
         return;
 
     case SH_RECT:
@@ -905,11 +881,11 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
         }
     }
 
-    BuildGeneric( p0_p, p0_n, true );
+    BuildGeneric( p0_p, p0_n, colinearityThreshold, true );
 }
 
 
-void DP_GATEWAYS::BuildForCursor( const VECTOR2I& aCursorPos )
+void DP_GATEWAYS::BuildForCursor( const VECTOR2I& aCursorPos, int aDirectionMask  )
 {
     int gap = m_fitVias ? m_dims.ViaGap() + m_dims.ViaDiameter() : m_dims.Gap() + m_dims.Width();
 
@@ -938,7 +914,10 @@ void DP_GATEWAYS::BuildForCursor( const VECTOR2I& aCursorPos )
             }
 
             if( m_fitVias )
-                BuildGeneric( aCursorPos + dir, aCursorPos - dir, true, true );
+            {
+                DIRECTION_45 dirV( dir );
+                    BuildGeneric( aCursorPos + dir, aCursorPos - dir, 0, true, true );
+            }
             else
             {
                 DP_GATEWAY gw( aCursorPos + dir, aCursorPos - dir, diagonal );
@@ -1038,7 +1017,7 @@ void DP_GATEWAYS::buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsD
 }
 
 
-void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool aBuildEntries,
+void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, int aColinearityThreshold, bool aBuildEntries,
                                 bool aViaMode )
 {
     SEG st_p[2], st_n[2];
@@ -1066,8 +1045,9 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
     // midpoint exit & side-by exits
     for( int i = 0; i < 2; i++ )
     {
-        bool straightColl = st_p[i].Collinear( st_n[i] );
-        bool diagColl = d_p[i].Collinear( d_n[i] );
+        int threshold = aColinearityThreshold ? aColinearityThreshold : DIFF_PAIR::DP_PARALLELITY_THRESHOLD;
+        bool straightColl = st_p[i].ApproxCollinear( st_n[i], threshold );
+        bool diagColl = d_p[i].ApproxCollinear( d_n[i], threshold );
 
         if( straightColl || diagColl )
         {
@@ -1077,13 +1057,13 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
 
             if( !aViaMode )
             {
-                m_gateways.emplace_back( m - dir, m + dir, diagColl, DIRECTION_45::ANG_OBTUSE, prio, DIRECTION_45(dir).Mask(), wxString::Format( "gen-mp-gap %d", gap ).ToStdString() );
+                m_gateways.emplace_back( m - dir, m + dir, diagColl, DIRECTION_45::ANG_OBTUSE, prio, DIRECTION_45::AllDirectionsMask(), wxString::Format( "gen-mp-gap %d", gap ).ToStdString() );
 
                 dir = makeGapVector( p0_n - p0_p, 2 * gap );
-                m_gateways.emplace_back( p0_p - dir, p0_p - dir + dir.Perpendicular(), diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45(dir).Mask(), "gen-d1" );
-                m_gateways.emplace_back( p0_p - dir, p0_p - dir - dir.Perpendicular(), diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45(dir).Mask(), "gen-d2" );
-                m_gateways.emplace_back( p0_n + dir + dir.Perpendicular(), p0_n + dir, diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45(dir).Mask(), "gen-d3" );
-                m_gateways.emplace_back( p0_n + dir - dir.Perpendicular(), p0_n + dir, diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45(dir).Mask(), "gen-d4" );
+                m_gateways.emplace_back( p0_p - dir, p0_p - dir + dir.Perpendicular(), diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45::AllDirectionsMask(), "gen-d1" );
+                m_gateways.emplace_back( p0_p - dir, p0_p - dir - dir.Perpendicular(), diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45::AllDirectionsMask(), "gen-d2" );
+                m_gateways.emplace_back( p0_n + dir + dir.Perpendicular(), p0_n + dir, diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45::AllDirectionsMask(), "gen-d3" );
+                m_gateways.emplace_back( p0_n + dir - dir.Perpendicular(), p0_n + dir, diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45::AllDirectionsMask(), "gen-d4" );
             }
         }
     }
@@ -1177,6 +1157,36 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
           buildEntries( gw, p0_p, p0_n );
     }
 
+}
+
+static int minDimensionForPrimitive( const ITEM* aPrim )
+{
+    if( const SEGMENT* seg = dyn_cast<const SEGMENT*>( aPrim ) )
+        return seg->Width();
+    else if( const ARC* arc = dyn_cast<const ARC*>( aPrim ) )
+        return arc->Width();
+    else
+    {
+        const SHAPE *shape = aPrim->Shape( -1 );
+        if( !shape )
+            return 0;
+        
+        const BOX2I& bbox = shape->BBox();
+        return std::min( bbox.GetWidth(), bbox.GetHeight() );
+    }
+
+    return 0;
+}
+
+int DP_PRIMITIVE_PAIR::GetMinDimension() const
+{
+    if( !m_primN || !m_primN )
+        return 0;
+    
+    return std::min(
+        minDimensionForPrimitive( m_primN ),
+        minDimensionForPrimitive( m_primP )
+    );
 }
 
 
@@ -1291,8 +1301,6 @@ void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs,
     {
         gapConstraint.SetMin( opt - 10000 );
     }
-
-    printf("gapc: %s\n", ::PNS::Format(gapConstraint).c_str().AsChar() );
 
     for( int i = 0; i < p.SegmentCount(); i++ )
     {
@@ -1444,7 +1452,6 @@ std::optional<DP_PRIMITIVE_PAIR> DIFF_PAIR::BuildMidpairIntersection( PNS::SEGME
             auto cproj = cpair.coupledP.LineProject( pproj );
             prims = PNS::DP_PRIMITIVE_PAIR( cproj, pproj );
             prims->SetPrimitives( cpair.linkP, cpair.linkN );
-            printf("linkP %p linkN %p\n",cpair.linkP, cpair.linkN );
             prims->SetName( wxT( "prim-coupled-p" ) );
             break;
         }
