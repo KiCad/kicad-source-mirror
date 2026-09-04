@@ -742,8 +742,9 @@ public:
 
         for( SCH_PIN* pin : aPins )
         {
-            const bool includedByUnit = m_unitFilter == -1 || pin->GetUnit() == 0 || pin->GetUnit() == m_unitFilter;
-            const bool includedByBodyStyle = m_bodyStyleFilter == -1 || pin->GetBodyStyle() == m_bodyStyleFilter;
+            const bool includedByUnit = m_unitFilter <= 0 || pin->GetUnit() == 0 || pin->GetUnit() == m_unitFilter;
+            const bool includedByBodyStyle =
+                    m_bodyStyleFilter <= 0 || pin->GetBodyStyle() == 0 || pin->GetBodyStyle() == m_bodyStyleFilter;
             const bool includedBySelection = !m_filterBySelection || pinIsInEditorSelection( pin );
 
             if( includedByUnit && includedByBodyStyle && includedBySelection )
@@ -857,8 +858,8 @@ private:
     // data model is a 2D vector.  If we're in the single pin case, each row's SCH_PINs
     // contains only a single pin.
     std::vector<std::vector<SCH_PIN*>> m_rows;
-    int                                m_unitFilter;      // -1 to show pins for all units
-    int                                m_bodyStyleFilter; // -1 to show all body styles
+    int                                m_unitFilter;      // 0 or -1 to show pins for all units
+    int                                m_bodyStyleFilter; // 0 or -1 to show all body styles
     bool                               m_filterBySelection;
 
     bool                               m_edited;
