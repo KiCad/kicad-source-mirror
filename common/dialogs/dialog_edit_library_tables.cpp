@@ -19,6 +19,7 @@
 
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/aui/auibook.h>
 #include <confirm.h>
 #include <lib_table_notebook_panel.h>
 
