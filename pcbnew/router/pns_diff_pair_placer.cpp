@@ -884,25 +884,6 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
     gwsEntry.SetDimensions( dims2 );
     gwsEntry.BuildFromPrimitivePair( *m_prevPair, m_startDiagonal );
 
-    auto jtP = m_currentNode->FindJoint( m_prevPair->AnchorP(), m_prevPair->PrimP() );
-    auto jtN = m_currentNode->FindJoint( m_prevPair->AnchorN(), m_prevPair->PrimN() );
-
-        if( jtP )
-            PNS_DBG( Dbg(), AddPoint, jtP->Pos(), YELLOW, 400000, wxT("mp-jt-p") );
-
-        if (jtP && jtN && jtP->IsTrivialEndpoint() && jtN->IsTrivialEndpoint() )
-        {
-
-            m_start.SetFixedDirection( DIRECTION_45( static_cast<PNS::SEGMENT*>( m_prevPair->PrimP())->Seg() ) );
-            PNS_DBG( Dbg(), Message, wxString::Format("midpair: p=%d,n=%d, fixdir=%s",
-            jtP->IsTrivialEndpoint()?1:0, jtN->IsTrivialEndpoint()?1:0, m_start.FixedDirection().Format() ) );
-    
-        }
-
-    //PNS_DBG( Dbg(), Message, wxString::Format("start-is-mid: %d, pp-p %p pp-n %p", m_start.IsMidtrace()?1:0, m_prevPair?m_prevPair->PrimP():0, m_prevPair?m_prevPair->PrimN():0 ) );
-
-    PNS_DBG( Dbg(), Message, wxString::Format("gwsEntry: %d, pp-p %p pp-n %p min-cl %d", (int) gwsEntry.Gateways().size(), m_prevPair?m_prevPair->PrimP():0, m_prevPair?m_prevPair->PrimN():0, minClearance.value() ) );
-
     if (m_prevPair)
         drawGateways( Dbg(), wxT("entry-gateways"), *m_prevPair, gwsEntry, VECTOR2D(0,0), VECTOR2D(0, 2000000) );
 
@@ -1016,6 +997,7 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         
         for( const auto&f : fits )
         {
+            constexpr int angleMask = DIRECTION_45::ANG_OBTUSE | DIRECTION_45::ANG_STRAIGHT;
 
             PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT("fit: bestCpr0=%.3f bestCpr1=%.3f diag=%d cpr=%.2f ar=%.2f score=%d"), bestCpr[0], bestCpr[1], f.diagonal?1:0, f.coupledRatio, f.aspectRatio, f.score ), 0 );
             drawSingleGateway( Dbg(), f.entry, wxString::Format("entry=%s", f.entry.GetName() ) );
@@ -1024,34 +1006,22 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
             DIFF_PAIR dp( m_sizes.DiffPairGap() );
             dp.SetDimensions( dims );
             dp.SetShape( f.p, f.n );
-
-            if( m_prevPair )
-            {
-                auto dirP = dp.DirP( false );
-                auto dirN = dp.DirN( false );
-                
-                auto angP = m_prevPair->DirP().Angle( dirP );
-                auto angN = m_prevPair->DirN().Angle( dirN );
-
-                bool penalty = false;
-
-                if( !( angP & (DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_OBTUSE ) ) )
-                    penalty = true;
-                if( !( angN & (DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_OBTUSE ) ) )
-                    penalty = true;
-                
-                PNS_DBG( Dbg(), AddShape, &f.p, RED, 20000, wxString::Format("l+ e: %s-%s pen %d", m_prevPair->DirP().Format(), dirP.Format(), penalty?1:0 ) );
-                PNS_DBG( Dbg(), AddShape, &f.n, BLUE, 20000, wxString::Format("l- e: %s-%s", m_prevPair->DirN().Format(), dirN.Format() ) );
-                
-                if( penalty && rejectNonObtuseAngles )
-                {
-                //    continue;
-                }
-
-                //if( f.p.Intersects( m_prevPair->PrimP()->Shape() )
-            }
-
             
+            if( rejectNonObtuseAngles )
+            {
+                DIRECTION_45 startDirP = m_start.DirP();
+                DIRECTION_45 startDirN = m_start.DirN();
+                auto angP = startDirP.Angle( dp.DirP( false ) );
+                auto angN = startDirN.Angle( dp.DirN( false ) );
+
+                if( ! (angP & angleMask) || ! (angN & angleMask ))
+                {
+                    PNS_DBG( Dbg(), Message, wxString::Format(" reject dp %s dn %s sd %s %s", dp.DirP(false).Format(), dp.DirN(false).Format(), startDirP.Format(), startDirN.Format() ) );
+                    PNS_DBGN( Dbg(), EndGroup );
+
+                    continue;
+                }
+            }
             PNS_DBGN( Dbg(), EndGroup );
 
             int index = f.diagonal ? 1 : 0;

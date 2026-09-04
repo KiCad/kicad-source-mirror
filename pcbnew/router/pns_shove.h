@@ -278,7 +278,8 @@ private:
     std::vector<LINE>           m_lineStack;
     std::vector<LINE>           m_optimizerQueue;
     std::deque<HEAD_LINE_ENTRY> m_headLines;
-
+    COLLISION_FILTER_FUNC       m_collisionFilter;
+    
     // UID entries may alias the same history entry, so ownership lives outside the index.
     std::vector<std::unique_ptr<ROOT_LINE_ENTRY>> m_rootLineHistoryEntries;
     std::unordered_map<LINKED_ITEM::UNIQ_ID, ROOT_LINE_ENTRY*> m_rootLineHistory;
