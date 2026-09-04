@@ -23,6 +23,7 @@
 #include <dialog_shim.h>
 #include <functional>
 #include <wx/panel.h>
+#include <wx/aui/auibook.h>
 #include <widgets/wx_infobar.h>
 
 
