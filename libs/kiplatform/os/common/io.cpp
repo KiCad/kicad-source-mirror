@@ -26,16 +26,16 @@
 
 #include <atomic>
 #include <cstdio>
+#include <cstring>
+#include <cerrno>
 #include <stdexcept>
 #include <string>
 
 #if defined( _WIN32 )
 #include <process.h>
 #else
-#include <cerrno>
 #include <climits>
 #include <cstdlib>
-#include <cstring>
 #include <fcntl.h>
 #include <sys/file.h>
 #include <sys/stat.h>
@@ -292,7 +292,21 @@ bool KIPLATFORM::IO::AtomicWriteFile( const wxString& aTargetPath, const void* a
         return false;
     }
 
-    std::fclose( fp );
+    // Buffered writes on NFS and quota'd volumes can surface their errors at close, not
+    // at write time, so an unchecked close could rename a short file into place.
+    if( std::fclose( fp ) != 0 )
+    {
+        int err = errno;
+
+        if( aError )
+        {
+            *aError = wxString::Format( wxT( "Cannot close temp file '%s': %s" ), tempPath,
+                                        wxString::FromUTF8( strerror( err ) ) );
+        }
+
+        wxRemoveFile( tempPath );
+        return false;
+    }
 
     if( !CommitTempFile( tempPath, target, aError ) )
     {
