@@ -1161,142 +1161,139 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
             };
 
     // Helper function for drawing braces around multi-line text
-    const auto drawBrace =
-            [&]( KIGFX::GAL& aGal, const VECTOR2D& aTop, const VECTOR2D& aBottom,
-                 int aBraceWidth, bool aLeftBrace, const TEXT_ATTRIBUTES& aAttrs )
-            {
-                // Draw a simple brace using line segments, accounting for text rotation
-                VECTOR2D mid = ( aTop + aBottom ) / 2.0;
+    const auto drawBrace = [&]( KIGFX::GAL& aGal, const VECTOR2D& aTop, const VECTOR2D& aBottom, int aBraceWidth,
+                                bool aLeftBrace, const TEXT_ATTRIBUTES& aAttrs, float aShadowWidth )
+    {
+        // Draw a simple brace using line segments, accounting for text rotation
+        VECTOR2D mid = ( aTop + aBottom ) / 2.0;
 
-                aGal.SetLineWidth( aAttrs.m_StrokeWidth );
-                aGal.SetIsFill( false );
-                aGal.SetIsStroke( true );
+        aGal.SetLineWidth( (float) aAttrs.m_StrokeWidth + aShadowWidth );
+        aGal.SetIsFill( false );
+        aGal.SetIsStroke( true );
 
-                // Calculate brace points in text coordinate system
-                VECTOR2D p1 = aTop;
-                VECTOR2D p2 = aTop;
-                VECTOR2D p3 = mid;
-                VECTOR2D p4 = aBottom;
-                VECTOR2D p5 = aBottom;
+        // Calculate brace points in text coordinate system
+        VECTOR2D p1 = aTop;
+        VECTOR2D p2 = aTop;
+        VECTOR2D p3 = mid;
+        VECTOR2D p4 = aBottom;
+        VECTOR2D p5 = aBottom;
 
-                // Apply brace offset based on text orientation
-                if( aAttrs.m_Angle == ANGLE_VERTICAL )
-                {
-                    // For vertical text, braces extend in the Y direction
-                    // "Left" brace is actually towards negative Y, "right" towards positive Y
-                    double braceOffset = aLeftBrace ? -aBraceWidth : aBraceWidth;
-                    p2.y += braceOffset / 2;
-                    p3.y += braceOffset;
-                    p4.y += braceOffset / 2;
-                }
-                else
-                {
-                    // For horizontal text, braces extend in the X direction
-                    double braceOffset = aLeftBrace ? -aBraceWidth : aBraceWidth;
-                    p2.x += braceOffset / 2;
-                    p3.x += braceOffset;
-                    p4.x += braceOffset / 2;
-                }
+        // Apply brace offset based on text orientation
+        if( aAttrs.m_Angle == ANGLE_VERTICAL )
+        {
+            // For vertical text, braces extend in the Y direction
+            // "Left" brace is actually towards negative Y, "right" towards positive Y
+            double braceOffset = aLeftBrace ? -aBraceWidth : aBraceWidth;
+            p2.y += braceOffset / 2;
+            p3.y += braceOffset;
+            p4.y += braceOffset / 2;
+        }
+        else
+        {
+            // For horizontal text, braces extend in the X direction
+            double braceOffset = aLeftBrace ? -aBraceWidth : aBraceWidth;
+            p2.x += braceOffset / 2;
+            p3.x += braceOffset;
+            p4.x += braceOffset / 2;
+        }
 
-                // Draw the brace segments
-                aGal.DrawLine( p1, p2 );
-                aGal.DrawLine( p2, p3 );
-                aGal.DrawLine( p3, p4 );
-                aGal.DrawLine( p4, p5 );
-            };
+        // Draw the brace segments
+        aGal.DrawLine( p1, p2 );
+        aGal.DrawLine( p2, p3 );
+        aGal.DrawLine( p3, p4 );
+        aGal.DrawLine( p4, p5 );
+    };
 
-    const auto drawBracesAroundText =
-            [&]( KIGFX::GAL& aGal, const wxArrayString& aLines, const VECTOR2D& aStartPos,
-                 int aLineSpacing, const TEXT_ATTRIBUTES& aAttrs )
-            {
-                if( aLines.size() <= 1 )
-                    return;
+    const auto drawBracesAroundText = [&]( KIGFX::GAL& aGal, const wxArrayString& aLines, const VECTOR2D& aStartPos,
+                                           int aLineSpacing, const TEXT_ATTRIBUTES& aAttrs, float aShadowWidth )
+    {
+        if( aLines.size() <= 1 )
+            return;
 
-                // Calculate brace dimensions
-                int braceWidth = aAttrs.m_Size.x / 3;  // Make braces a bit larger
+        // Calculate brace dimensions
+        int braceWidth = aAttrs.m_Size.x / 3; // Make braces a bit larger
 
-                // Find the maximum line width to position braces
-                int maxLineWidth = 0;
-                KIFONT::FONT* font = aAttrs.m_Font;
+        // Find the maximum line width to position braces
+        int           maxLineWidth = 0;
+        KIFONT::FONT* font = aAttrs.m_Font;
 
-                if( !font )
-                    font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
+        if( !font )
+            font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
 
-                for( const wxString& line : aLines )
-                {
-                    wxString trimmedLine = line;
-                    trimmedLine.Trim( true ).Trim( false );
-                    VECTOR2I lineExtents = font->StringBoundaryLimits( trimmedLine, aAttrs.m_Size,
-                                                                       aAttrs.m_StrokeWidth, false, false,
-                                                                       KIFONT::METRICS() );
-                    maxLineWidth = std::max( maxLineWidth, lineExtents.x );
-                }
+        for( const wxString& line : aLines )
+        {
+            wxString trimmedLine = line;
+            trimmedLine.Trim( true ).Trim( false );
+            VECTOR2I lineExtents = font->StringBoundaryLimits( trimmedLine, aAttrs.m_Size, aAttrs.m_StrokeWidth, false,
+                                                               false, KIFONT::METRICS() );
+            maxLineWidth = std::max( maxLineWidth, lineExtents.x );
+        }
 
-                // Calculate brace positions based on text vertical alignment and rotation
-                VECTOR2D braceStart = aStartPos;
-                VECTOR2D braceEnd = aStartPos;
+        // Calculate brace positions based on text vertical alignment and rotation
+        VECTOR2D braceStart = aStartPos;
+        VECTOR2D braceEnd = aStartPos;
 
-                // Extend braces beyond the text bounds
-                int textHeight = aAttrs.m_Size.y;
-                int extraHeight = textHeight / 3;  // Extend braces by 1/3 of text height beyond text
+        // Extend braces beyond the text bounds
+        int textHeight = aAttrs.m_Size.y;
+        int extraHeight = textHeight / 3; // Extend braces by 1/3 of text height beyond text
 
-                if( aAttrs.m_Angle == ANGLE_VERTICAL )
-                {
-                    // For vertical text, lines are spaced horizontally and braces are horizontal
-                    braceEnd.x += ( (int) aLines.size() - 1 ) * aLineSpacing;
+        if( aAttrs.m_Angle == ANGLE_VERTICAL )
+        {
+            // For vertical text, lines are spaced horizontally and braces are horizontal
+            braceEnd.x += ( (int) aLines.size() - 1 ) * aLineSpacing;
 
-                    // Extend braces horizontally to encompass all lines plus extra space
-                    braceStart.x -= 2 * extraHeight;
+            // Extend braces horizontally to encompass all lines plus extra space
+            braceStart.x -= 2 * extraHeight;
 
-                    // Position braces in the perpendicular direction (Y) with proper spacing
-                    int braceSpacing = maxLineWidth / 2 + braceWidth;
+            // Position braces in the perpendicular direction (Y) with proper spacing
+            int braceSpacing = maxLineWidth / 2 + braceWidth;
 
-                    VECTOR2D topBraceStart = braceStart;
-                    topBraceStart.y -= braceSpacing;
+            VECTOR2D topBraceStart = braceStart;
+            topBraceStart.y -= braceSpacing;
 
-                    VECTOR2D topBraceEnd = braceEnd;
-                    topBraceEnd.y -= braceSpacing;
+            VECTOR2D topBraceEnd = braceEnd;
+            topBraceEnd.y -= braceSpacing;
 
-                    drawBrace( aGal, topBraceStart, topBraceEnd, braceWidth, true, aAttrs );
+            drawBrace( aGal, topBraceStart, topBraceEnd, braceWidth, true, aAttrs, aShadowWidth );
 
-                    VECTOR2D bottomBraceStart = braceStart;
-                    bottomBraceStart.y += braceSpacing;
+            VECTOR2D bottomBraceStart = braceStart;
+            bottomBraceStart.y += braceSpacing;
 
-                    VECTOR2D bottomBraceEnd = braceEnd;
-                    bottomBraceEnd.y += braceSpacing;
+            VECTOR2D bottomBraceEnd = braceEnd;
+            bottomBraceEnd.y += braceSpacing;
 
-                    drawBrace( aGal, bottomBraceStart, bottomBraceEnd, braceWidth, false, aAttrs );
-                }
-                else
-                {
-                    // For horizontal text, lines are spaced vertically and braces are vertical
-                    braceEnd.y += ( (int) aLines.size() - 1 ) * aLineSpacing;
+            drawBrace( aGal, bottomBraceStart, bottomBraceEnd, braceWidth, false, aAttrs, aShadowWidth );
+        }
+        else
+        {
+            // For horizontal text, lines are spaced vertically and braces are vertical
+            braceEnd.y += ( (int) aLines.size() - 1 ) * aLineSpacing;
 
-                    // Extend braces vertically to encompass all lines plus extra space
-                    braceStart.y -= 2 * extraHeight;
+            // Extend braces vertically to encompass all lines plus extra space
+            braceStart.y -= 2 * extraHeight;
 
-                    // Position braces in the perpendicular direction (X) with proper spacing
-                    int braceSpacing = maxLineWidth / 2 + braceWidth;
+            // Position braces in the perpendicular direction (X) with proper spacing
+            int braceSpacing = maxLineWidth / 2 + braceWidth;
 
-                    // Draw left brace
-                    VECTOR2D leftTop = braceStart;
-                    leftTop.x -= braceSpacing;
+            // Draw left brace
+            VECTOR2D leftTop = braceStart;
+            leftTop.x -= braceSpacing;
 
-                    VECTOR2D leftBottom = braceEnd;
-                    leftBottom.x -= braceSpacing;
+            VECTOR2D leftBottom = braceEnd;
+            leftBottom.x -= braceSpacing;
 
-                    drawBrace( aGal, leftTop, leftBottom, braceWidth, true, aAttrs );
+            drawBrace( aGal, leftTop, leftBottom, braceWidth, true, aAttrs, aShadowWidth );
 
-                    // Draw right brace
-                    VECTOR2D rightTop = braceStart;
-                    rightTop.x += braceSpacing;
+            // Draw right brace
+            VECTOR2D rightTop = braceStart;
+            rightTop.x += braceSpacing;
 
-                    VECTOR2D rightBottom = braceEnd;
-                    rightBottom.x += braceSpacing;
+            VECTOR2D rightBottom = braceEnd;
+            rightBottom.x += braceSpacing;
 
-                    drawBrace( aGal, rightTop, rightBottom, braceWidth, false, aAttrs );
-                }
-            };
+            drawBrace( aGal, rightTop, rightBottom, braceWidth, false, aAttrs, aShadowWidth );
+        }
+    };
 
     const auto drawBracesAroundTextBitmap =
             [&]( KIGFX::GAL& aGal, const wxArrayString& aLines, const VECTOR2D& aStartPos,
@@ -1328,7 +1325,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                     VECTOR2D leftEnd = braceEnd;
                     leftEnd.y -= maxLineWidth / 2.0 + braceWidth / 2.0;
 
-                    drawBrace( aGal, leftStart, leftEnd, braceWidth, true, aAttrs );
+                    drawBrace( aGal, leftStart, leftEnd, braceWidth, true, aAttrs, 0.0f );
 
                     VECTOR2D rightStart = braceStart;
                     rightStart.y += maxLineWidth / 2.0 + braceWidth / 2.0;
@@ -1336,7 +1333,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                     VECTOR2D rightEnd = braceEnd;
                     rightEnd.y += maxLineWidth / 2.0 + braceWidth / 2.0;
 
-                    drawBrace( aGal, rightStart, rightEnd, braceWidth, false, aAttrs );
+                    drawBrace( aGal, rightStart, rightEnd, braceWidth, false, aAttrs, 0.0f );
                 }
                 else
                 {
@@ -1355,7 +1352,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                     VECTOR2D leftBottom = braceBottom;
                     leftBottom.x -= maxLineWidth / 2.0 + braceWidth / 2.0;
 
-                    drawBrace( aGal, leftTop, leftBottom, braceWidth, true, aAttrs );
+                    drawBrace( aGal, leftTop, leftBottom, braceWidth, true, aAttrs, 0.0f );
 
                     VECTOR2D rightTop = braceTop;
                     rightTop.x += maxLineWidth / 2.0 + braceWidth / 2.0;
@@ -1363,7 +1360,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                     VECTOR2D rightBottom = braceBottom;
                     rightBottom.x += maxLineWidth / 2.0 + braceWidth / 2.0;
 
-                    drawBrace( aGal, rightTop, rightBottom, braceWidth, false, aAttrs );
+                    drawBrace( aGal, rightTop, rightBottom, braceWidth, false, aAttrs, 0.0f );
                 }
             };
 
@@ -1453,7 +1450,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                         if( aRenderTextAsBitmap )
                             drawBracesAroundTextBitmap( aGal, lines, startPos, lineSpacing, aAttrs );
                         else
-                            drawBracesAroundText( aGal, lines, startPos, lineSpacing, aAttrs );
+                            drawBracesAroundText( aGal, lines, startPos, lineSpacing, aAttrs, aShadowWidth );
 
                         return;
                     }
