@@ -210,9 +210,9 @@ public:
 
         std::shared_ptr<bool> popupShown = std::make_shared<bool>( false );
         auto commitValue =
-                [this, aGrid, aProperty]()
+                [this, aGrid, aProperty, editor]()
                 {
-                    if( !m_unitBinder )
+                    if( !m_unitBinder || editor->GetValue() == INDETERMINATE_STATE )
                         return;
 
                     wxVariant val( static_cast<long>( m_unitBinder->GetValue() ) );
@@ -248,7 +248,7 @@ public:
                       } );
 
         editor->Bind( wxEVT_CHAR_HOOK,
-                      [commitValue, popupShown]( wxKeyEvent& aEvent )
+                      [commitValue, editor, popupShown]( wxKeyEvent& aEvent )
                       {
                           // Pressing Enter after typing a custom value should apply the typed value,
                           // not the first preset in the dropdown.
@@ -256,8 +256,13 @@ public:
                                 || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
                               && !*popupShown )
                           {
-                              commitValue();
-                              return;
+                              if( editor->GetValue() != INDETERMINATE_STATE )
+                              {
+                                  commitValue();
+                                  return;
+                              }
+
+                              // Let the property grid accept an unchanged mixed value.
                           }
 
                           aEvent.Skip();
@@ -285,7 +290,7 @@ public:
         wxCHECK( editor, /* void */ );
 
         if( aProperty->IsValueUnspecified() )
-            m_unitBinder->ChangeValue( INDETERMINATE_STATE );
+            editor->ChangeValue( INDETERMINATE_STATE );
         else
             m_unitBinder->ChangeValue( aProperty->GetValue().GetLong() );
     }
