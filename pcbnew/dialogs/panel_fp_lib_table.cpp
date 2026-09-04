@@ -214,7 +214,12 @@ void PANEL_FP_LIB_TABLE::OpenTable( const std::shared_ptr<LIBRARY_TABLE>& aTable
 
     for( int ii = 2; ii < (int) m_notebook->GetPageCount(); ++ii )
     {
-        if( m_notebook->GetPageText( ii ) == tabTitle )
+        wxString candidate = m_notebook->GetPageText( ii );
+
+        if( candidate.EndsWith( " *" ) )
+            candidate = candidate.Left( candidate.Length() - 2 );
+
+        if( candidate == tabTitle )
         {
             // Something is pretty fishy with wxAuiNotebook::ChangeSelection(); on Mac at least it
             // results in a re-entrant call where the second call is one page behind.
