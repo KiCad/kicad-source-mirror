@@ -117,12 +117,36 @@ The tail is the one part not yet fully pinned down, and it is the reason a walk 
 yet run end to end.  It is a bounded problem: the tails belong to the structure types, not
 to the container, and several of those types already have readers in the page path.
 
+## Corpus state
+
+Sweep over 856 OrCAD designs in the corpus (188 legacy, 668 modern), counting designs
+that emit each diagnostic:
+
+| diagnostic | legacy before | legacy after | modern |
+|---|---|---|---|
+| placeholder symbols | 130 | 1 | 6 |
+| page display order unreadable | 186 | 0 | 5 |
+| page skipped | 9 | 8 | 5 |
+| embedded picture undecoded | 14 | 0 | 9 |
+| occurrence tree unreadable | 0 | 0 | 20 |
+| pin position mismatch | n/a | 9 | 0 |
+| hierarchical block undecoded | n/a | 6 | 0 |
+
+Legacy designs now carry 137,382 graphic primitives (median 504 per design) where they
+previously carried a placeholder box per part.  "Pin position mismatch" only became
+measurable once real symbols were read: it is the importer's own check that transformed
+definition hot points land on the page's absolute pin positions.
+
+The initial count of 107 picture failures included harness errors. An uninstalled
+`kicad-cli` needs `KICAD_STOCK_DATA_HOME` set to the build directory so libwmf can
+find its fonts. The table excludes those errors.
+
 ## What the corpus proves
 
 A scanner that recognises symbol definitions by their decoded fields, rather than by any
 byte pattern, was run over all 188 legacy designs.  Every file yielded definitions, and
 together they hold **10,934 symbol definitions carrying 120,861 graphic primitives** — all
-of which the importer currently discards in favour of a placeholder box.
+of which the importer discarded before the cache fix.
 
 Median coverage is 56% of `Cache` bytes.  The unclaimed remainder is the per-entry headers
 and tails, not unrecognised graphics: the primitive grammar never needed a version 2
