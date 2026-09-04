@@ -1510,7 +1510,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
         // Vertical numbers read bottom to top. Shift the pair back when the label
         // would otherwise run into the symbol body.
-        if( !drawingShadows && !aPin->GetRemappedFromNumber().IsEmpty() )
+        if( !aPin->GetRemappedFromNumber().IsEmpty() )
         {
             if( OPT_BOX2I numBox = cache.GetPinNumberBBox() )
             {
@@ -1545,7 +1545,10 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         if( origInfo )
         {
             COLOR4D dimmed = getColorForLayer( LAYER_PINNUM );
-            dimmed.a *= 0.5;
+
+            // Dim the text but not its selection halo.
+            if( !drawingShadows )
+                dimmed.a *= 0.5;
 
             drawTextInfo( *origInfo, dimmed );
         }
