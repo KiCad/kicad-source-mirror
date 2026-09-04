@@ -106,6 +106,9 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM_LIST<wxString>( "libraries.pinned_footprint_libs",
             &m_PinnedFootprintLibs, {} ) );
 
+    m_params.emplace_back( new PARAM_LIST<wxString>( "libraries.pinned_design_block_libs",
+            &m_PinnedDesignBlockLibs, {} ) );
+
     m_params.emplace_back(
             new PARAM_LIST<wxString>( "pcbnew.find_by_properties.recent_queries", &m_FindByPropertiesQueries, {} ) );
 
