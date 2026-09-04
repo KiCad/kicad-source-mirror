@@ -29,6 +29,8 @@
  * VCS (Version Control System) utility functions for text evaluation.
  * These functions provide generic VCS operations that are currently implemented
  * for Git repositories, but can be extended to support other VCS systems in the future.
+ * File paths may be absolute or relative to the context directory (the parent directory
+ * when the context names an existing file at activation). Without a context, relative paths use the cwd.
  */
 namespace TEXT_EVAL_VCS
 {
@@ -123,8 +125,7 @@ int64_t GetCommitTimestamp( const std::string& aPath = "." );
 std::string GetCommitDate( const std::string& aPath = "." );
 
 /**
- * Set the filesystem path used as the repository-discovery starting point for repo-scoped
- * VCS queries (functions that would otherwise use current working directory).
+ * Set the filesystem path used for repository discovery and relative file queries.
  *
  * The context is stored per-thread. Passing an empty string clears the override, causing
  * VCS queries to fall back to the process current working directory.
@@ -132,8 +133,8 @@ std::string GetCommitDate( const std::string& aPath = "." );
  * This is primarily used so non-GUI entry points (for example kicad-cli job handlers) can
  * anchor VCS lookups to the loaded project directory without touching the process cwd.
  *
- * Pass an absolute path. Relative paths are resolved by libgit2 against the process cwd,
- * which is precisely what this override is meant to bypass.
+ * Prefer an absolute path. Relative contexts use the process cwd. Whether the path names
+ * an existing file is captured here; later removal does not change its directory interpretation.
  *
  * @param aPath Absolute filesystem path (directory or file inside the project), or empty
  *              to clear the override.
@@ -146,6 +147,9 @@ KICOMMON_API void SetContextPath( const wxString& aPath );
  * @return The path previously passed to SetContextPath(), or "." if no override is active.
  */
 KICOMMON_API wxString GetContextPath();
+
+/** File/directory classification captured when the current context was activated. */
+KICOMMON_API bool GetContextIsFile();
 
 /**
  * RAII helper that sets the VCS context path on construction and restores the previous
@@ -162,6 +166,7 @@ public:
 
 private:
     wxString m_previous;
+    bool     m_previousIsFile;
 };
 
 } // namespace TEXT_EVAL_VCS

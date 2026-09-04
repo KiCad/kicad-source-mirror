@@ -23,6 +23,7 @@
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <string_utils.h>
+#include <wx/filename.h>
 #include <wx/string.h>
 #include <wx/arrstr.h> // REQUIRED for wxString vector export on MSVC
 #include <map>
@@ -34,12 +35,15 @@ namespace TEXT_EVAL_VCS
 namespace
 {
     thread_local wxString tl_contextPath;
+    thread_local bool tl_contextIsFile = false;
 }
 
 
 void SetContextPath( const wxString& aPath )
 {
+    const bool isFile = !aPath.IsEmpty() && wxFileName( aPath ).FileExists();
     tl_contextPath = aPath;
+    tl_contextIsFile = isFile;
 }
 
 
@@ -49,30 +53,45 @@ wxString GetContextPath()
 }
 
 
-CONTEXT_PATH_SCOPE::CONTEXT_PATH_SCOPE( const wxString& aPath ) :
-        m_previous( tl_contextPath )
+bool GetContextIsFile()
 {
-    tl_contextPath = aPath;
+    return tl_contextIsFile;
+}
+
+
+CONTEXT_PATH_SCOPE::CONTEXT_PATH_SCOPE( const wxString& aPath ) :
+        m_previous( tl_contextPath ),
+        m_previousIsFile( tl_contextIsFile )
+{
+    SetContextPath( aPath );
 }
 
 
 CONTEXT_PATH_SCOPE::~CONTEXT_PATH_SCOPE()
 {
     tl_contextPath = m_previous;
+    tl_contextIsFile = m_previousIsFile;
 }
 
 
 // Private implementation details
 namespace
 {
-    // Resolve the effective path for repo discovery. Inputs of "." are replaced with the
-    // current context path (which itself falls back to ".").
     wxString ResolveEffectivePath( const std::string& aPath )
     {
         if( aPath.empty() || aPath == "." )
             return GetContextPath();
 
-        return wxString::FromUTF8( aPath );
+        wxFileName path( wxString::FromUTF8( aPath ) );
+
+        if( path.IsRelative() )
+        {
+            wxFileName context( GetContextPath() );
+            context.MakeAbsolute();
+            path.MakeAbsolute( tl_contextIsFile ? context.GetPath() : context.GetFullPath() );
+        }
+
+        return path.GetFullPath();
     }
 
 
@@ -81,8 +100,15 @@ namespace
         if( !GetGitBackend() )
             return nullptr;
 
-        const wxString effective = ResolveEffectivePath( aPath );
-        return KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( TO_UTF8( effective ) );
+        wxFileName effective( ResolveEffectivePath( aPath ) );
+
+        if( ( !aPath.empty() && aPath != "." ) || tl_contextIsFile )
+        {
+            effective.MakeAbsolute();
+            return KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( TO_UTF8( effective.GetPath() ) );
+        }
+
+        return KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( TO_UTF8( effective.GetFullPath() ) );
     }
 
     void CloseRepo( git_repository* aRepo )
@@ -112,6 +138,24 @@ namespace
         // For repo-level query (empty or "."), just return HEAD
         if( aPath.empty() || aPath == "." )
             return head_oid;
+
+        const char* workdir = git_repository_workdir( aRepo );
+
+        if( !workdir )
+            return MakeZeroOid();
+
+        wxFileName file( ResolveEffectivePath( aPath ) );
+
+        const wxString base = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir(
+                file.GetPath(), wxString::FromUTF8( workdir ) );
+
+        if( !file.MakeRelativeTo( base ) )
+            return MakeZeroOid();
+
+        const std::string treePath = file.GetFullPath( wxPATH_UNIX ).ToStdString( wxConvUTF8 );
+
+        if( treePath.empty() || treePath == "." || treePath == ".." || treePath.starts_with( "../" ) )
+            return MakeZeroOid();
 
         // For file-specific query, walk history to find last commit that touched this file
         git_revwalk* walker = nullptr;
@@ -143,7 +187,7 @@ namespace
                 // Try to find the file in this tree
                 git_tree_entry* entry = nullptr;
 
-                if( git_tree_entry_bypath( &entry, tree, aPath.c_str() ) == 0 )
+                if( git_tree_entry_bypath( &entry, tree, treePath.c_str() ) == 0 )
                 {
                     const git_oid* blob_oid = git_tree_entry_id( entry );
 

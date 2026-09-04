@@ -22,13 +22,21 @@
  * Integration tests for text_eval_parser functionality including real-world scenarios
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <common.h>
+#include <git/git_backend.h>
+#include <git/kicad_git_memory.h>
+#include <git/libgit_backend.h>
+#include <git/project_git_utils.h>
 #include <text_eval/text_eval_environment.h>
+#include <text_eval/text_eval_vcs.h>
 #include <text_eval/text_eval_wrapper.h>
 #include <title_block.h>
+#include <wx/filefn.h>
+#include <wx/filename.h>
 
 #include <fmt/ranges.h>
 #include <chrono>
@@ -38,6 +46,93 @@
  * Declare the test suite
  */
 BOOST_AUTO_TEST_SUITE( TextEvalParserIntegration )
+
+BOOST_AUTO_TEST_CASE( VcsNativeProjectContextPaths )
+{
+    struct BACKEND_SCOPE
+    {
+        GIT_BACKEND* previous = GetGitBackend();
+        LIBGIT_BACKEND backend;
+        BACKEND_SCOPE()
+        {
+            backend.Init();
+            SetGitBackend( &backend );
+        }
+        ~BACKEND_SCOPE()
+        {
+            SetGitBackend( previous );
+            backend.Shutdown();
+        }
+    } backend;
+    KI_TEST::SCOPED_TEMP_DIR owner( "text-vcs-owner" );
+    const wxString projectFile = owner.PathStr() + "/multinetclasses.kicad_pro";
+    const wxString source = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
+                            + "/netlists/multinetclasses/multinetclasses.kicad_pro";
+    BOOST_REQUIRE( wxCopyFile( source, projectFile ) );
+    BOOST_REQUIRE( wxMkdir( owner.PathStr() + "/sub" ) );
+    BOOST_REQUIRE( wxCopyFile( source, owner.PathStr() + "/sub/multinetclasses.kicad_pro" ) );
+    git_repository* rawRepo = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_init( &rawRepo, owner.PathStr().ToUTF8().data(), 0 ), 0 );
+    KIGIT::GitRepositoryPtr repo( rawRepo );
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), "refs/heads/owner" ), 0 );
+    git_index* rawIndex = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &rawIndex, repo.get() ), 0 );
+    KIGIT::GitIndexPtr index( rawIndex );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), "multinetclasses.kicad_pro" ), 0 );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), "sub/multinetclasses.kicad_pro" ), 0 );
+    git_oid treeId;
+    BOOST_REQUIRE_EQUAL( git_index_write_tree( &treeId, index.get() ), 0 );
+    BOOST_REQUIRE_EQUAL( git_index_write( index.get() ), 0 );
+    git_tree* rawTree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_tree_lookup( &rawTree, repo.get(), &treeId ), 0 );
+    KIGIT::GitTreePtr tree( rawTree );
+    git_signature* rawSignature = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_now( &rawSignature, "Connectivity QA", "qa@example.invalid" ), 0 );
+    KIGIT::GitSignaturePtr signature( rawSignature );
+    git_oid commitId;
+    BOOST_REQUIRE_EQUAL( git_commit_create_v( &commitId, repo.get(), "HEAD", signature.get(), signature.get(),
+                                             nullptr, "Native project", tree.get(), 0 ), 0 );
+    const wxString previous = TEXT_EVAL_VCS::GetContextPath();
+    const auto evaluateVcs = []( const wxString& expression )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        const wxString result = evaluator.Evaluate( expression );
+        BOOST_REQUIRE_MESSAGE( !evaluator.HasErrors(), evaluator.GetErrorSummary() );
+        return result.ToStdString( wxConvUTF8 );
+    };
+    const auto commitHash = [&]( const std::string& path = "." )
+    {
+        wxString quoted = wxString::FromUTF8( path );
+        quoted.Replace( "\\", "\\\\" );
+        quoted.Replace( "\"", "\\\"" );
+        return evaluateVcs( wxString::Format( "@{vcsfileidentifier(\"%s\")}", quoted ) );
+    };
+
+    {
+        TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE context( owner.PathStr() );
+        const auto hash = commitHash();
+        BOOST_REQUIRE_EQUAL( hash.size(), 40u );
+        BOOST_CHECK_EQUAL( evaluateVcs( "@{vcsbranch()}" ), "owner" );
+        BOOST_CHECK_EQUAL( commitHash( "multinetclasses.kicad_pro" ), hash );
+        BOOST_CHECK_EQUAL( commitHash( projectFile.ToStdString( wxConvUTF8 ) ), hash );
+        BOOST_CHECK_EQUAL( commitHash( "untracked.kicad_pro" ), "<unknown>" );
+
+        {
+            TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE fileContext( owner.PathStr() + "/sub/multinetclasses.kicad_pro" );
+            BOOST_CHECK( TEXT_EVAL_VCS::GetContextIsFile() );
+            BOOST_CHECK_EQUAL( commitHash( "multinetclasses.kicad_pro" ), hash );
+            BOOST_CHECK_EQUAL( commitHash( "../multinetclasses.kicad_pro" ), hash );
+            BOOST_REQUIRE( wxRemoveFile( owner.PathStr() + "/sub/multinetclasses.kicad_pro" ) );
+            BOOST_CHECK_EQUAL( commitHash( "multinetclasses.kicad_pro" ), hash );
+        }
+
+        BOOST_CHECK_EQUAL( TEXT_EVAL_VCS::GetContextPath(), owner.PathStr() );
+        BOOST_CHECK( !TEXT_EVAL_VCS::GetContextIsFile() );
+    }
+
+    BOOST_CHECK_EQUAL( TEXT_EVAL_VCS::GetContextPath(), previous );
+}
+
 
 BOOST_AUTO_TEST_CASE( EnvironmentFrameCapturesDynamicSources )
 {
