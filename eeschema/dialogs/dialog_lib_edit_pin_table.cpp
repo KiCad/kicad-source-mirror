@@ -964,6 +964,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
         m_bodyStyleFilter->Enable( false );
     }
 
+    OptOut( m_cbFilterSelected );
+
     SetupStandardButtons();
 
     if( !parent->IsSymbolEditable() || parent->IsSymbolAlias() )
@@ -1013,6 +1015,22 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 
     for( SCH_PIN* pin : pins )
         m_pins.push_back( new SCH_PIN( *pin ) );
+
+    if( m_cbFilterByUnit->GetValue() )
+    {
+        if( m_unitFilter->GetSelection() == -1 )
+            m_unitFilter->SetSelection( 0 );
+
+        m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
+    }
+
+    if( m_cbFilterByBodyStyle->GetValue() )
+    {
+        if( m_bodyStyleFilter->GetSelection() == -1 )
+            m_bodyStyleFilter->SetSelection( 0 );
+
+        m_dataModel->SetBodyStyleFilter( m_bodyStyleFilter->GetSelection() );
+    }
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue(), false );
 
