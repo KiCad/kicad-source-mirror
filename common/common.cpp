@@ -29,6 +29,7 @@
 #include <reporter.h>
 #include <macros.h>
 #include <string_utils.h>
+#include <text_eval/text_eval_environment.h>
 #include <text_eval/text_eval_wrapper.h>
 #include <text_var_dependency.h>
 #include <mutex>
@@ -530,19 +531,29 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
     wxString strResult;
     strResult.Alloc( strlen ); // best guess (improves performance)
 
+    auto readEnvironment = []( const wxString& aName, wxString* aValue ) -> bool
+    {
+        const bool found = wxGetEnv( aName, aValue );
+
+        if( TEXT_EVAL::ENVIRONMENT* environment = TEXT_EVAL::ENVIRONMENT::Current() )
+            environment->RecordEnvironmentVariable( aName, found ? std::optional<wxString>( *aValue ) : std::nullopt );
+
+        return found;
+    };
+
     auto getVersionedEnvVar =
-            []( const wxString& aMatch, wxString& aResult ) -> bool
+            [&]( const wxString& aMatch, wxString& aResult ) -> bool
             {
                 for( const wxString& var : ENV_VAR::GetPredefinedEnvVars() )
                 {
                     if( var.Matches( aMatch ) )
                     {
-                        const auto value = ENV_VAR::GetEnvVar<wxString>( var );
+                        wxString value;
 
-                        if( !value )
+                        if( !readEnvironment( var, &value ) )
                             continue;
 
-                        aResult += *value;
+                        aResult += value;
                         return true;
                     }
                 }
@@ -635,7 +646,7 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
                 strResult += tmp;
                 expanded = true;
             }
-            else if( wxGetEnv( strVarName, &tmp ) )
+            else if( readEnvironment( strVarName, &tmp ) )
             {
                 strResult += tmp;
                 expanded = true;

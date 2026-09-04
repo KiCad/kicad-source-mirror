@@ -25,7 +25,10 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
+#include <common.h>
+#include <text_eval/text_eval_environment.h>
 #include <text_eval/text_eval_wrapper.h>
+#include <title_block.h>
 
 #include <fmt/ranges.h>
 #include <chrono>
@@ -35,6 +38,52 @@
  * Declare the test suite
  */
 BOOST_AUTO_TEST_SUITE( TextEvalParserIntegration )
+
+BOOST_AUTO_TEST_CASE( EnvironmentFrameCapturesDynamicSources )
+{
+    const wxDateTime                      time( 3, wxDateTime::Jan, 2001, 4, 5, 6 );
+    TEXT_EVAL::ENVIRONMENT                environment( time );
+    TEXT_EVAL::ENVIRONMENT::SOURCE_VALUES sources;
+    BOOST_CHECK( TEXT_EVAL::ENVIRONMENT::Current() == nullptr );
+
+    {
+        TEXT_EVAL::ENVIRONMENT_SCOPE frame( environment );
+        TEXT_EVAL::SOURCE_SCOPE      collect( environment, sources );
+        BOOST_CHECK_EQUAL( TITLE_BLOCK::GetCurrentDate(), time.FormatISODate() );
+        BOOST_CHECK_EQUAL( TITLE_BLOCK::GetCurrentTimeHHMMSS(), time.Format( "%Hh%Mm%Ss" ) );
+        BOOST_CHECK_EQUAL( TITLE_BLOCK::GetCurrentTimeLocale(), time.FormatTime() );
+        EXPRESSION_EVALUATOR evaluator;
+        BOOST_CHECK_EQUAL( evaluator.Evaluate( "@{format(now(), 0)}" ),
+                           wxString::Format( "%lld", static_cast<long long>( time.GetTicks() ) ) );
+        BOOST_CHECK_EQUAL( evaluator.Evaluate( "@{format(today(), 0)}" ),
+                           wxString::Format( "%lld", static_cast<long long>( time.GetTicks() ) / ( 24 * 3600 ) ) );
+        TEXT_EVAL::ENVIRONMENT other( wxDateTime( 4, wxDateTime::Feb, 2002 ) );
+
+        {
+            TEXT_EVAL::ENVIRONMENT_SCOPE nested( other );
+            BOOST_CHECK_EQUAL( TITLE_BLOCK::GetCurrentDate(), wxString( "2002-02-04" ) );
+        }
+
+        BOOST_CHECK_EQUAL( TITLE_BLOCK::GetCurrentDate(), time.FormatISODate() );
+        evaluator.Evaluate( "@{random()}" );
+        BOOST_CHECK( sources.randomUsed );
+        BOOST_REQUIRE( sources.time );
+        BOOST_CHECK( *sources.time == time );
+
+        const wxString envName = wxS( "KICAD_QA_TEXT_EVAL_SOURCE" );
+        wxSetEnv( envName, wxS( "captured" ) );
+        BOOST_CHECK_EQUAL( ExpandEnvVarSubstitutions( wxS( "${KICAD_QA_TEXT_EVAL_SOURCE}" ), nullptr ),
+                           wxString( wxS( "captured" ) ) );
+        wxUnsetEnv( envName );
+        BOOST_CHECK( sources.environmentVariables[envName] == wxString( wxS( "captured" ) ) );
+    }
+
+    BOOST_CHECK( TEXT_EVAL::ENVIRONMENT::Current() == nullptr );
+    const wxString liveBefore = wxDateTime::Now().FormatISODate();
+    const wxString outside = TITLE_BLOCK::GetCurrentDate();
+    BOOST_CHECK( outside == liveBefore || outside == wxDateTime::Now().FormatISODate() );
+}
+
 
 /**
  * Test real-world expression scenarios

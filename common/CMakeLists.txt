@@ -234,6 +234,7 @@ set( KICOMMON_SRCS
 
     text_eval/text_eval_wrapper.cpp
     text_eval/text_eval_parser.cpp
+    text_eval/text_eval_environment.cpp
     text_eval/text_eval_vcs.cpp
 
     # This is basically a settings object, but for the toolbar

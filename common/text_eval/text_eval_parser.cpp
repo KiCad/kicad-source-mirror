@@ -18,6 +18,7 @@
  */
 
 #include <text_eval/text_eval_parser.h>
+#include <text_eval/text_eval_environment.h>
 #include <text_eval/text_eval_vcs.h>
 #include <fmt/format.h>
 #include <array>
@@ -305,15 +306,13 @@ public:
 
     static auto GetCurrentDays() -> int
     {
-        auto now = std::chrono::system_clock::now();
-        auto timeT = std::chrono::system_clock::to_time_t( now );
+        const auto timeT = TEXT_EVAL::ENVIRONMENT::CurrentTime().GetTicks();
         return static_cast<int>( timeT / ( 24 * 3600 ) );
     }
 
     static auto GetCurrentTimestamp() -> double
     {
-        auto now = std::chrono::system_clock::now();
-        auto timeT = std::chrono::system_clock::to_time_t( now );
+        const auto timeT = TEXT_EVAL::ENVIRONMENT::CurrentTime().GetTicks();
         return static_cast<double>( timeT );
     }
 
@@ -612,6 +611,9 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
             return MakeValue<Value>( DATE_UTILS::GetCurrentTimestamp() );
         else if( name == "random" )
         {
+            if( TEXT_EVAL::ENVIRONMENT* environment = TEXT_EVAL::ENVIRONMENT::Current() )
+                environment->RecordRandomUse();
+
             std::uniform_real_distribution<double> dis( 0.0, 1.0 );
             return MakeValue<Value>( dis( m_gen ) );
         }
