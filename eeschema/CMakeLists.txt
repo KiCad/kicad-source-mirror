@@ -203,6 +203,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_sheet_properties_base.cpp
     dialogs/dialog_symbol_chooser.cpp
     dialogs/dialog_symbol_fields_table.cpp
+    dialogs/panel_symbol_fields_workspace.cpp
     dialogs/dialog_symbol_properties.cpp
     dialogs/dialog_symbol_properties_base.cpp
     dialogs/dialog_symbol_remap.cpp
@@ -478,6 +479,7 @@ set( EESCHEMA_SRCS
     lib_fields_data_model.cpp
     lib_symbol.cpp
     mdw_part_field.cpp
+    mdw_bom_compare.cpp
     link_imported_footprints.cpp
     menubar.cpp
     net_navigator.cpp

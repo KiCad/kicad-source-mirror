@@ -22,6 +22,8 @@
 #include <fields_table_data_model.h>
 #include <sch_reference_list.h>
 
+#include <functional>
+
 
 class SCH_SYMBOL;
 
@@ -82,6 +84,9 @@ public:
     bool DeleteRows( size_t aPosition = 0, size_t aNumRows = 1 ) override;
 
     const SCH_REFERENCE_LIST& GetReferenceList() const { return m_symbolsList; }
+
+    /// Called after every completed RebuildRows(), whichever page or control asked for it
+    void SetRowsRebuiltCallback( std::function<void()> aCallback ) { m_rowsRebuilt = std::move( aCallback ); }
 
 private:
     void setCellValues( int aRow, int aCol, const std::vector<wxString>& aValues ) override;
@@ -157,4 +162,5 @@ protected:
     SCH_REFERENCE_LIST    m_symbolsList;
     SCOPE                 m_scope;
     SCH_SHEET_PATH        m_path;
+    std::function<void()> m_rowsRebuilt;
 };

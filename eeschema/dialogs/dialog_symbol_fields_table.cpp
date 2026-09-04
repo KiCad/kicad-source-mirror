@@ -43,10 +43,18 @@
 #include <wx/grid.h>
 #include <wx/textdlg.h>
 #include <wx/msgdlg.h>
+#include <core/kicad_algo.h>
 #include <dialogs/eda_view_switcher.h>
 #include "dialog_symbol_fields_table.h"
 #include "dialog_resolve_field_case_conflicts.h"
+#include "panel_symbol_fields_workspace.h"
+#include <mdw/client/mdw_client.h>
+#include <libraries/library_manager.h>
+#include <mdw/client/mdw_library_sources.h>
+#include <mdw/client/mdw_source.h>
+#include <mdw_part_field.h>
 #include <symbol_fields_data_model.h>
+#include <pgm_base.h>
 #include <project_sch.h>
 #include <project/project_file.h>
 #include <jobs/job_export_bom.h>
@@ -353,6 +361,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* aParent,
     {
         // Start listening for schematic changes
         m_parent->Schematic().AddListener( this );
+
+        addWorkspacePage();
     }
     else
     {
@@ -366,6 +376,10 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* aParent,
 
 DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
+    // The grid's model can outlive the Workspace page
+    if( m_dataModel )
+        m_dataModel->SetRowsRebuiltCallback( nullptr );
+
     if( m_aborted )
         return;
 
@@ -715,6 +729,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
     {
         m_dataModel->SetExcludeDNP( !m_dataModel->GetExcludeDNP() );
         m_dataModel->RebuildRows();
+
         m_grid->ForceRefresh();
 
         syncBomPresetSelection();
@@ -723,6 +738,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& aEvent )
     {
         m_dataModel->SetIncludeExcludedFromBOM( !m_dataModel->GetIncludeExcludedFromBOM() );
         m_dataModel->RebuildRows();
+
         m_grid->ForceRefresh();
 
         syncBomPresetSelection();
@@ -750,15 +766,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableSelectionChanged( const std::set<int>& a
     if( m_nbPages->GetSelection() != 0 )
         return;
 
-    // Cross-probing is disabled when we're in selection scope mode, otherwise
-    // we're just in a loop
-    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
-        return;
-
     // Multi-select can grab the rows that are expanded child refs, and also the row
     // containing the list of all child refs. Make sure we add refs/symbols uniquely
     std::set<SCH_REFERENCE> refs;
-    std::set<SCH_ITEM*>     symbols;
 
     for( int row : aRows )
     {
@@ -766,18 +776,31 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableSelectionChanged( const std::set<int>& a
             refs.insert( ref );
     }
 
-    for( const SCH_REFERENCE& ref : refs )
+    crossProbe( refs );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::crossProbe( const std::set<SCH_REFERENCE>& aRefs )
+{
+    // Cross-probing is disabled when we're in selection scope mode, otherwise
+    // we're just in a loop
+    if( m_dataModel->GetScope() == SCOPE::SCOPE_SELECTION )
+        return;
+
+    std::set<SCH_ITEM*> symbols;
+
+    for( const SCH_REFERENCE& ref : aRefs )
         symbols.insert( ref.GetSymbol() );
 
     if( m_cfgDialogSettings.selection_mode == 0 )
     {
         SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
-        if( refs.size() > 0 )
+        if( aRefs.size() > 0 )
         {
             // Use of full path based on UUID allows select of not yet annotated or duplicated
             // symbols
-            wxString symbolPath = refs.begin()->GetFullPath();
+            wxString symbolPath = aRefs.begin()->GetFullPath();
 
             // Focus only handles one item at this time
             editor->FindSymbolAndItem( &symbolPath, nullptr, true, HIGHLIGHT_SYMBOL, wxEmptyString );
@@ -792,8 +815,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableSelectionChanged( const std::set<int>& a
         SCH_SELECTION_TOOL*    selectionTool = m_parent->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
         std::vector<SCH_ITEM*> items( symbols.begin(), symbols.end() );
 
-        if( refs.size() > 0 )
-            selectionTool->SyncSelection( refs.begin()->GetSheetPath(), nullptr, items );
+        if( aRefs.size() > 0 )
+            selectionTool->SyncSelection( aRefs.begin()->GetSheetPath(), nullptr, items );
         else
             selectionTool->ClearSelection();
     }
@@ -1047,6 +1070,112 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildRowsPreservingSelection( const std::set<
     RestoreGridSelection( aSavedSelection );
 
     EnableSelectionEvents();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::addWorkspacePage()
+{
+    std::shared_ptr<MDW_SOURCE> source = MDW_CLIENT::Get().ProjectSource();
+
+    if( !source || !source->Has( MDW_CAPABILITY_GROUP::BOM ) )
+        return;
+
+    // A working copy may ask its backend for the project item, so the page waits for the answer
+    m_projectStateOp = MDW_CLIENT::Get().ProjectState(
+            m_parent->Prj(),
+            [this, source]( const MDW_RESULT& aResult, const MDW_PROJECT_STATE& aState )
+            {
+                if( aResult.IsOk() )
+                {
+                    showWorkspacePage( source, aState );
+                    return;
+                }
+
+                // Without its revision the page still shows the design, with reviews of every revision
+                m_projectRefOp = MDW_CLIENT::Get().ProjectRef(
+                        m_parent->Prj(),
+                        [this, source]( const MDW_RESULT& aLink, const MDW_ITEM_REF& aProjectItem )
+                        {
+                            MDW_PROJECT_STATE state;
+                            state.item = aProjectItem;
+                            showWorkspacePage( source, state, aLink );
+                        } );
+            } );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::showWorkspacePage( const std::shared_ptr<MDW_SOURCE>& aSource,
+                                                    const MDW_PROJECT_STATE& aDesign, const MDW_RESULT& aLink )
+{
+    MDW_PROJECT_STATE design = aDesign;
+
+    if( design.item.path_hint.IsEmpty() )
+        design.item.path_hint = m_parent->Prj().GetProjectName();
+
+    m_workspacePage = new PANEL_SYMBOL_FIELDS_WORKSPACE(
+            m_nbPages, aSource, design, aLink, m_parent->Prj().GetProjectName(),
+            [this]()
+            {
+                LIBRARY_MANAGER&     tables = Pgm().GetLibraryManager();
+                MDW_LIBRARY_SOURCES& librarySources = MDW_LIBRARY_SOURCES::Get();
+
+                // Parts resolve once the library copies can name their members. Ask the symbol table alone, since
+                // a same-nicknamed footprint library may hold the name too
+                return MdwDesignGroups( *m_dataModel,
+                                        [&]( const SCH_REFERENCE& aRef, MDW_DESIGN_SYMBOL& aSymbol )
+                                        {
+                                            if( std::optional<MDW_PART_IDENTITY> identity =
+                                                        MdwReadPartField( *aRef.GetSymbol() ) )
+                                            {
+                                                aSymbol.part = identity->part;
+                                            }
+
+                                            aSymbol.member = librarySources.MemberOf( tables, MDW_LIBRARY_TYPE::SYMBOL,
+                                                                                      aSymbol.lib_id );
+                                        } );
+            },
+            [this]( const std::vector<wxString>& aPaths )
+            {
+                crossProbePaths( aPaths );
+            } );
+
+    m_nbPages->AddPage( m_workspacePage, _( "Workspace" ), false );
+
+    // Grouping, presets, scope, filters and variants all rebuild the rows, from any page
+    m_dataModel->SetRowsRebuiltCallback(
+            [this]()
+            {
+                m_workspacePage->DesignChanged();
+            } );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnPageChanged( wxNotebookEvent& aEvent )
+{
+    DIALOG_FIELDS_TABLE::OnPageChanged( aEvent );
+
+    if( m_workspacePage && m_nbPages->GetCurrentPage() == m_workspacePage )
+    {
+        m_workspacePage->Activate();
+        m_workspacePage->DesignChanged();
+    }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::crossProbePaths( const std::vector<wxString>& aPaths )
+{
+    // The model tracks symbols added and removed since the dialog opened
+    const SCH_REFERENCE_LIST& symbols = m_dataModel->GetReferenceList();
+    const std::set<wxString>  paths( aPaths.begin(), aPaths.end() );
+    std::set<SCH_REFERENCE>   refs;
+
+    for( size_t ii = 0; ii < symbols.GetCount(); ++ii )
+    {
+        if( paths.contains( symbols[ii].GetFullPath() ) )
+            refs.insert( symbols[ii] );
+    }
+
+    crossProbe( refs );
 }
 
 

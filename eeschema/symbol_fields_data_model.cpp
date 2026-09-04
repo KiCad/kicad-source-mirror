@@ -677,6 +677,9 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     }
 
     Sort();
+
+    if( m_rowsRebuilt )
+        m_rowsRebuilt();
 }
 
 
