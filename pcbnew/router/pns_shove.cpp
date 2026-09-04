@@ -1655,6 +1655,9 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         {
             bool rv = true;
 
+            if( m_collisionFilter && ! m_collisionFilter( item, aRefItem ) )
+                return false;
+
             if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T | ITEM::VIA_T | ITEM::SOLID_T | ITEM::HOLE_T ) )
             {
                 const LINKED_ITEM* litem = static_cast<const LINKED_ITEM*>( item );
@@ -2653,6 +2656,10 @@ const VIA_HANDLE SHOVE::GetModifiedHeadVia( int aIndex ) const
     return *m_headLines[ aIndex ].theVia;
 }
 
+void SHOVE::SetCollisionFilter( COLLISION_FILTER_FUNC aFunc )
+{
+    m_collisionFilter = aFunc;
+}
 
 
 }

@@ -173,22 +173,30 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
     VECTOR2I              force, totalForce;
     std::set<const ITEM*> handled;
 
+    COLLISION_SEARCH_OPTIONS ctxOpts;
+    ctxOpts.m_filter = [&]( const PNS::ITEM* aTestItem, const PNS::ITEM* aRefItem ) -> bool
+    {
+        if( aTestItem->Net() == m_currentTrace.NetP() || aTestItem->Net() == m_currentTrace.NetN() )
+        {
+            return false;
+        }
+        return true;
+    };
+
+    ctxOpts.m_kindMask = solidsOnly ? ITEM::SOLID_T : ITEM::ANY_T;
     while( iter < maxIter )
     {
-        NODE::OPT_OBSTACLE obs = m_currentNode->CheckColliding( &virtHead, solidsOnly ?
-                                                                           ITEM::SOLID_T :
-                                                                           ITEM::ANY_T  );
+        NODE::OPT_OBSTACLE obs = m_currentNode->CheckColliding( &virtHead, ctxOpts );
         if( !obs || handled.count( obs->m_item ) )
             break;
 
-        int clearance = m_currentNode->GetClearance( obs->m_item, &m_currentTrace.PLine(), false );
+        int      clearance = m_currentNode->GetClearance( obs->m_item, &m_currentTrace.PLine(), false );
         VECTOR2I layerForce;
         collided = false;
 
         for( int viaLayer : virtHead.RelevantShapeLayers( obs->m_item ) )
         {
-            collided |= obs->m_item->Shape( viaLayer )->Collide( virtHead.Shape( viaLayer ),
-                                                                 clearance, &layerForce );
+            collided |= obs->m_item->Shape( viaLayer )->Collide( virtHead.Shape( viaLayer ), clearance, &layerForce );
 
             if( layerForce.SquaredEuclideanNorm() > force.SquaredEuclideanNorm() )
                 force = layerForce;
@@ -411,6 +419,17 @@ bool DIFF_PAIR_PLACER::rhShoveOnly( const VECTOR2I& aP )
     m_shove->AddHeads( pLine );
     m_shove->AddHeads( nLine );
 
+    auto collisionFilter = [&]( const PNS::ITEM* aTestItem, const PNS::ITEM* aRefItem ) -> bool
+    {
+        if( aTestItem->Net() == m_currentTrace.NetP() || aTestItem->Net() == m_currentTrace.NetN() )
+        {
+            return false;
+        }
+        return true;
+    };
+
+    m_shove->SetCollisionFilter( collisionFilter );
+    
     SHOVE::SHOVE_STATUS status = m_shove->Run();
 
     m_currentNode = m_shove->CurrentNode();

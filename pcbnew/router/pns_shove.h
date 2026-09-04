@@ -88,6 +88,8 @@ public:
     bool ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                                     LINE& aResultLine );
 
+    void SetCollisionFilter( COLLISION_FILTER_FUNC aFunc );
+
     void ForceClearance ( bool aEnabled, int aClearance )
     {
         if( aEnabled )
