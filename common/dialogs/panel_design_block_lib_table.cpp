@@ -453,32 +453,6 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CHANGING, &PANEL_DESIGN_BLOCK_LIB_TABLE::onNotebookPageChangeRequest, this );
     // This is the button only press for the browse button instead of the menu
     m_browseButton->Bind( wxEVT_BUTTON, &PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler, this );
-
-    m_parent->SetCanCloseCheck(
-            [this]()
-            {
-                for( int ii = 0; ii < (int) m_notebook->GetPageCount(); ++ii )
-                {
-                    LIB_TABLE_NOTEBOOK_PANEL* panel =
-                            static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( ii ) );
-
-                    if( panel->GetClosable() )
-                    {
-                        bool wasDirty = panel->TableModified();
-
-                        if( !panel->GetCanClose() )
-                            return false;
-
-                        if( wasDirty && !panel->TableModified() )
-                        {
-                            m_parent->m_GlobalTableChanged = true;
-                            m_parent->m_ProjectTableChanged = true;
-                        }
-                    }
-                }
-
-                return true;
-            } );
 }
 
 
@@ -973,12 +947,13 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::populateEnvironReadOnlyTable()
 
 void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
-    DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Design Block Libraries" ) );
+    DIALOG_EDIT_LIBRARY_TABLES    dlg( aParent, _( "Design Block Libraries" ) );
+    PANEL_DESIGN_BLOCK_LIB_TABLE* panel = new PANEL_DESIGN_BLOCK_LIB_TABLE( &dlg, &aKiway->Prj() );
 
-    dlg.InstallPanel( new PANEL_DESIGN_BLOCK_LIB_TABLE( &dlg, &aKiway->Prj() ) );
+    dlg.InstallPanel( panel, panel->GetNotebook() );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
+    // User can choose to save changes on a Cancel, so don't exit on wxID_CANCEL.
+    dlg.ShowModal();
 
     if( dlg.m_GlobalTableChanged )
         Pgm().GetLibraryManager().LoadGlobalTables();
@@ -995,6 +970,4 @@ void InvokeEditDesignBlockLibTable( KIWAY* aKiway, wxWindow *aParent )
     std::string payload = "";
     aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );
     aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload );
-
-    return;
 }

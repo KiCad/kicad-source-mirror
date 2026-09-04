@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include <widgets/panel_notebook_base.h>
 #include <lib_table_grid_data_model.h>
 

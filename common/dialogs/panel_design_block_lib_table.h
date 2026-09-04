@@ -45,6 +45,8 @@ public:
     void AddTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aClosable );
     void OpenTable( const std::shared_ptr<LIBRARY_TABLE>& table, const wxString& aTitle );
 
+    wxAuiNotebook* GetNotebook() const { return m_notebook; }
+
 private:
     /**
      * Trim important fields, removes blank row entries, and checks for duplicates.
