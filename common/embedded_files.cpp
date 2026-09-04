@@ -403,6 +403,9 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
 EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::ComputeFileHash( const wxFileName& aFileName,
                                                              std::string& aHash )
 {
+    if( !aFileName.FileExists() )
+        return RETURN_CODE::FILE_NOT_FOUND;
+
     wxFFileInputStream file( aFileName.GetFullPath() );
 
     if( !file.IsOk() )
