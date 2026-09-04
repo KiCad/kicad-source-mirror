@@ -101,6 +101,12 @@ public:
 
     void SetChangeCallback( std::function<void()> aCallback ) { m_changeCallback = std::move( aCallback ); }
 
+    void OnModify()
+    {
+        if( m_changeCallback )
+            m_changeCallback();
+    }
+
 protected:
     bool badCoords( int aRow, int aCol );
 
