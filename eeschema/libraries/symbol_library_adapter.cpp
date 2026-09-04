@@ -428,18 +428,19 @@ bool SYMBOL_LIBRARY_ADAPTER::SupportsConfigurationDialog( const wxString& aNickn
 }
 
 
-void SYMBOL_LIBRARY_ADAPTER::ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const
+int SYMBOL_LIBRARY_ADAPTER::ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const
 {
     std::optional<const LIB_DATA*> optRow = fetchIfLoaded( aNickname );
 
     if( !optRow )
-        return;
+        return wxID_CANCEL;
 
     if( !( *optRow )->plugin->SupportsConfigurationDialog() )
-        return;
+        return wxID_CANCEL;
 
     DIALOG_SHIM* dialog = ( *optRow )->plugin->CreateConfigurationDialog( aParent );
-    dialog->ShowModal();
+
+    return dialog->ShowModal();
 }
 
 

@@ -53,9 +53,9 @@ void LIB_TABLE_GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
         // Errored rows should have the warning button, so we show their error
         // Configurable libraries will have the options button, so we launch the config
         // Chained tables will have the open button, so we request the table be opened
-        LIB_TABLE_GRID_DATA_MODEL* table = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
-        const LIBRARY_TABLE_ROW&   row = table->at( aEvent.GetRow() );
-        LIBRARY_MANAGER_ADAPTER*   adapter = table->Adapter();
+        LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
+        const LIBRARY_TABLE_ROW&   row = model->at( aEvent.GetRow() );
+        LIBRARY_MANAGER_ADAPTER*   adapter = model->Adapter();
 
         wxString title = row.Type() == "Table"
                                 ? wxString::Format( _( "Error loading library table '%s'" ), row.Nickname() )
@@ -71,7 +71,8 @@ void LIB_TABLE_GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
         }
         else if( adapter->SupportsConfigurationDialog( row.Nickname() ) )
         {
-            adapter->ShowConfigurationDialog( row.Nickname(), wxGetTopLevelParent( m_grid ) );
+            if( adapter->ShowConfigurationDialog( row.Nickname(), wxGetTopLevelParent( m_grid ) ) != wxID_CANCEL )
+                model->OnModify();
         }
         else if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
         {
@@ -92,18 +93,18 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     // Ensure selection parameters are up to date
     getSelectedArea();
 
-    LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
-    const LIBRARY_TABLE_ROW&   firstRow = tbl->at( m_sel_row_start );
-    bool                       readOnly = tbl->Table().IsReadOnly();
+    LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
+    const LIBRARY_TABLE_ROW&   firstRow = model->at( m_sel_row_start );
+    bool                       readOnly = model->Table().IsReadOnly();
 
     bool showSettings = false;
     bool showOpen = false;
 
     if( !readOnly )
     {
-        if( LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter() )
+        if( LIBRARY_MANAGER_ADAPTER* adapter = model->Adapter() )
         {
-            wxString nickname = tbl->GetValue( m_sel_row_start, COL_NICKNAME );
+            wxString nickname = model->GetValue( m_sel_row_start, COL_NICKNAME );
 
             if( m_sel_row_count == 1 && adapter->SupportsConfigurationDialog( nickname ) )
             {
@@ -130,12 +131,12 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
     for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
     {
-        if( tbl->GetValueAsBool( row, 0 ) )
+        if( model->GetValueAsBool( row, 0 ) )
             showDeactivate = true;
         else
             showActivate = true;
 
-        if( tbl->GetValueAsBool( row, 1 ) )
+        if( model->GetValueAsBool( row, 1 ) )
             showUnsetVisible = true;
         else
             showSetVisible = true;
@@ -178,7 +179,7 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
     int menu_id = event.GetId();
-    LIB_TABLE_GRID_DATA_MODEL* tbl = (LIB_TABLE_GRID_DATA_MODEL*) m_grid->GetTable();
+    LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
     if( menu_id == LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR )
     {
@@ -190,7 +191,7 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         bool selected_state = menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED;
 
         for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
-            tbl->SetValueAsBool( row, 0, selected_state );
+            model->SetValueAsBool( row, 0, selected_state );
 
         // Ensure the new state (on/off) of the widgets is immediately shown:
         m_grid->Refresh();
@@ -201,21 +202,22 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         bool selected_state = menu_id == LIB_TABLE_GRID_TRICKS_SET_VISIBLE;
 
         for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
-            tbl->SetValueAsBool( row, 1, selected_state );
+            model->SetValueAsBool( row, 1, selected_state );
 
         // Ensure the new state (on/off) of the widgets is immediately shown:
         m_grid->Refresh();
     }
     else if( menu_id == LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS )
     {
-        LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter();
-        LIBRARY_TABLE_ROW&       row = tbl->At( m_sel_row_start );
+        LIBRARY_MANAGER_ADAPTER* adapter = model->Adapter();
+        LIBRARY_TABLE_ROW&       row = model->At( m_sel_row_start );
 
-        adapter->ShowConfigurationDialog( row.Nickname(), wxGetTopLevelParent( m_grid ) );
+        if( adapter->ShowConfigurationDialog( row.Nickname(), wxGetTopLevelParent( m_grid ) ) != wxID_CANCEL )
+            model->OnModify();
     }
     else if( menu_id == LIB_TABLE_GRID_TRICKS_OPEN_TABLE )
     {
-        openTable( tbl->At( m_sel_row_start ) );
+        openTable( model->At( m_sel_row_start ) );
     }
     else
     {
@@ -249,10 +251,12 @@ void LIB_TABLE_GRID_TRICKS::onCharHook( wxKeyEvent& ev )
 
                     // Check if the current row already has data (has a nickname)
                     wxGridTableBase* table = m_grid->GetTable();
+
                     if( table && row >= 0 && row < table->GetNumberRows() )
                     {
                         // Check if the row has a nickname (indicating it has existing data)
                         wxString nickname = table->GetValue( row, COL_NICKNAME );
+
                         if( !nickname.IsEmpty() )
                         {
                             // Row already has data, don't allow pasting over it
@@ -287,9 +291,9 @@ void LIB_TABLE_GRID_TRICKS::onCharHook( wxKeyEvent& ev )
  */
 void LIB_TABLE_GRID_TRICKS::paste_text( const wxString& cb_text )
 {
-    LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
+    LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
-    if( tbl->Table().IsReadOnly() )
+    if( model->Table().IsReadOnly() )
     {
         wxBell();
         return;
@@ -299,15 +303,16 @@ void LIB_TABLE_GRID_TRICKS::paste_text( const wxString& cb_text )
     {
         // paste the LIB_TABLE_ROWs of s-expr, starting at column 0 regardless of current cursor column.
 
-        if( LIBRARY_TABLE tempTable( true, cb_text, tbl->Table().Scope() ); tempTable.IsOk() )
+        if( LIBRARY_TABLE tempTable( true, cb_text, model->Table().Scope() ); tempTable.IsOk() )
         {
             std::ranges::copy( tempTable.Rows(),
-                               std::inserter( tbl->Table().Rows(), tbl->Table().Rows().begin() ) );
+                               std::inserter( model->Table().Rows(), model->Table().Rows().begin() ) );
 
-            if( tbl->GetView() )
+            if( model->GetView() )
             {
-                wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, 0, 0 );
-                tbl->GetView()->ProcessTableMessage( msg );
+                wxGridTableMessage msg( model, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, 0, 0 );
+                model->GetView()->ProcessTableMessage( msg );
+                model->OnModify();
             }
         }
         else
@@ -332,6 +337,7 @@ void LIB_TABLE_GRID_TRICKS::paste_text( const wxString& cb_text )
         }
 
         GRID_TRICKS::paste_text( text );
+        model->OnModify();
 
         m_grid->AutoSizeColumns( false );
     }
@@ -354,8 +360,8 @@ bool LIB_TABLE_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 
 static bool isGridReadOnly( WX_GRID* aGrid )
 {
-    LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
-    return tbl && tbl->Table().IsReadOnly();
+    LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+    return model && model->Table().IsReadOnly();
 }
 
 
@@ -370,7 +376,10 @@ void LIB_TABLE_GRID_TRICKS::AppendRowHandler( WX_GRID* aGrid )
     aGrid->OnAddRow(
             [&]() -> std::pair<int, int>
             {
-                    aGrid->AppendRows( 1 );
+                LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+
+                aGrid->AppendRows( 1 );
+                model->OnModify();
                 return { aGrid->GetNumberRows() - 1, COL_NICKNAME };
             } );
 }
@@ -440,6 +449,7 @@ void LIB_TABLE_GRID_TRICKS::DeleteRowHandler( WX_GRID* aGrid )
         {
             last_row = row;
             aGrid->DeleteRows( row, 1 );
+            static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() )->OnModify();
         }
     }
 
@@ -459,10 +469,9 @@ void LIB_TABLE_GRID_TRICKS::MoveUpHandler( WX_GRID* aGrid )
     aGrid->OnMoveRowUp(
             [&]( int row )
             {
-                LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
-                int curRow = aGrid->GetGridCursorRow();
-
-                std::deque<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
+                LIB_TABLE_GRID_DATA_MODEL*     model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+                int                            curRow = aGrid->GetGridCursorRow();
+                std::deque<LIBRARY_TABLE_ROW>& rows = model->Table().Rows();
 
                 auto current = rows.begin() + curRow;
                 auto prev    = rows.begin() + curRow - 1;
@@ -470,8 +479,9 @@ void LIB_TABLE_GRID_TRICKS::MoveUpHandler( WX_GRID* aGrid )
                 std::iter_swap( current, prev );
 
                 // Update the wxGrid
-                wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row - 1, 0 );
-                tbl->GetView()->ProcessTableMessage( msg );
+                wxGridTableMessage msg( model, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row - 1, 0 );
+                model->GetView()->ProcessTableMessage( msg );
+                model->OnModify();
             } );
 }
 
@@ -487,9 +497,9 @@ void LIB_TABLE_GRID_TRICKS::MoveDownHandler( WX_GRID* aGrid )
     aGrid->OnMoveRowDown(
             [&]( int row )
             {
-                LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
-                int curRow = aGrid->GetGridCursorRow();
-                std::deque<LIBRARY_TABLE_ROW>& rows = tbl->Table().Rows();
+                LIB_TABLE_GRID_DATA_MODEL*     model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+                int                            curRow = aGrid->GetGridCursorRow();
+                std::deque<LIBRARY_TABLE_ROW>& rows = model->Table().Rows();
 
                 auto current = rows.begin() + curRow;
                 auto next    = rows.begin() + curRow + 1;
@@ -497,8 +507,9 @@ void LIB_TABLE_GRID_TRICKS::MoveDownHandler( WX_GRID* aGrid )
                 std::iter_swap( current, next );
 
                 // Update the wxGrid
-                wxGridTableMessage msg( tbl, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row, 0 );
-                tbl->GetView()->ProcessTableMessage( msg );
+                wxGridTableMessage msg( model, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, row, 0 );
+                model->GetView()->ProcessTableMessage( msg );
+                model->OnModify();
             } );
 }
 

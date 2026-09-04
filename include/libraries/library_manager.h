@@ -195,7 +195,7 @@ public:
 
     virtual bool SupportsConfigurationDialog( const wxString& aNickname ) const { return false; }
 
-    virtual void ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const {};
+    virtual int ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const { return wxID_CANCEL; }
 
     virtual std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const;
 

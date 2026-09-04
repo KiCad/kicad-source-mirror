@@ -185,6 +185,7 @@ protected:
 
             if( options != result )
             {
+                tbl->OnModify();
                 row.SetOptions( result );
                 m_grid->Refresh();
             }

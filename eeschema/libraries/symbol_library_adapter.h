@@ -80,7 +80,7 @@ public:
 
     bool SupportsConfigurationDialog( const wxString& aNickname ) const override;
 
-    void ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const override;
+    int ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const override;
 
     enum class SYMBOL_TYPE
     {
