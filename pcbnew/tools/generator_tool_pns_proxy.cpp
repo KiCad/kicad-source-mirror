@@ -53,6 +53,7 @@ public:
     {
         m_changes.clear();
         m_changes.emplace_back();
+        m_createdItems.clear();
     }
 
     void AddItem( PNS::ITEM* aItem ) override
@@ -64,6 +65,7 @@ public:
             aItem->SetParent( brdItem );
             brdItem->ClearFlags();
 
+            m_createdItems.insert( brdItem );
             m_changes.back().addedItems.emplace( brdItem );
         }
     }
@@ -94,7 +96,11 @@ public:
 
     std::vector<GENERATOR_PNS_CHANGES>& Changes() { return m_changes; };
 
+    bool IsGeneratedItem( BOARD_ITEM* aItem ) const { return m_createdItems.contains( aItem ); }
+
 private:
+    std::set<BOARD_ITEM*> m_createdItems;
+
     std::vector<GENERATOR_PNS_CHANGES> m_changes;
 };
 
@@ -108,6 +114,12 @@ void GENERATOR_TOOL_PNS_PROXY::ClearRouterChanges()
 const std::vector<GENERATOR_PNS_CHANGES>& GENERATOR_TOOL_PNS_PROXY::GetRouterChanges()
 {
     return static_cast<PNS_KICAD_IFACE_GENERATOR*>( GetInterface() )->Changes();
+}
+
+
+bool GENERATOR_TOOL_PNS_PROXY::ItemCreatedBySession( BOARD_ITEM* aItem ) const
+{
+    return static_cast<PNS_KICAD_IFACE_GENERATOR*>( GetInterface() )->IsGeneratedItem( aItem );
 }
 
 
