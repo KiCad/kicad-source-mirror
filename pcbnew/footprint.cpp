@@ -2947,32 +2947,33 @@ unsigned FOOTPRINT::GetNumberedPadCount() const
     //                               "A1", "B12", "AA3", "AB10"
     // Mounting-pad designators such as "MP" do not end in a digit typically
     // and are intentionally excluded.
-    auto isElectricalPadNumber = []( const wxString& num ) -> bool
-    {
-        if( num.IsEmpty() )
-            return false;
+    auto isElectricalPadNumber =
+            []( const wxString& num ) -> bool
+            {
+                if( num.IsEmpty() )
+                    return false;
 
-        // Walk past an optional alphabetic prefix of at most two characters.
-        size_t i = 0;
-        while( i < num.size() && wxIsalpha( num[i] ) )
-            ++i;
+                // Walk past an optional alphabetic prefix of at most two characters.
+                size_t i = 0;
+                while( i < num.size() && wxIsalpha( num[i] ) )
+                    ++i;
 
-        // Prefix must be 0–2 letters; anything longer is not a pin number.
-        if( i > 2 )
-            return false;
+                // Prefix must be 0–2 letters; anything longer is not a pin number.
+                if( i > 2 )
+                    return false;
 
-        // The remainder must be non-empty and consist entirely of digits.
-        if( i == num.size() )
-            return false;   // no digits at all (e.g. "MP", "GND")
+                // The remainder must be non-empty and consist entirely of digits.
+                if( i == num.size() )
+                    return false;   // no digits at all (e.g. "MP", "GND")
 
-        for( size_t j = i; j < num.size(); ++j )
-        {
-            if( !wxIsdigit( num[j] ) )
-                return false;
-        }
+                for( size_t j = i; j < num.size(); ++j )
+                {
+                    if( !wxIsdigit( num[j] ) )
+                        return false;
+                }
 
-        return true;
-    };
+                return true;
+            };
 
     std::set<wxString> counted;
 
