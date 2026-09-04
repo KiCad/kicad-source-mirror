@@ -3398,6 +3398,9 @@ static struct TRACK_VIA_DESC
 
         propMgr.Mask( TYPE_HASH( PCB_VIA ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) );
 
+        propMgr.AddProperty( new PROPERTY<PCB_VIA, bool>( _HKI( "Automatically Update Net" ),
+                    &PCB_VIA::SetIsNotFree, &PCB_VIA::GetIsNotFree ) );
+
         // clang-format off: the suggestion is less readable
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Diameter" ),
                     &PCB_VIA::SetFrontWidth, &PCB_VIA::GetFrontWidth, PROPERTY_DISPLAY::PT_SIZE ),
@@ -3418,22 +3421,22 @@ static struct TRACK_VIA_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, VIATYPE>( _HKI( "Via Type" ),
                     &PCB_VIA::SetViaType, &PCB_VIA::GetViaType ),
                     groupVia );
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Front tenting" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Front Tenting" ),
                     &PCB_VIA::SetFrontTentingMode, &PCB_VIA::GetFrontTentingMode ),
                     groupVia ).SetIsCopyable();
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Back tenting" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Back Tenting" ),
                     &PCB_VIA::SetBackTentingMode, &PCB_VIA::GetBackTentingMode ),
                     groupVia ).SetIsCopyable();
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, COVERING_MODE>( _HKI( "Front covering" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, COVERING_MODE>( _HKI( "Front Covering" ),
                     &PCB_VIA::SetFrontCoveringMode, &PCB_VIA::GetFrontCoveringMode ),
                     groupVia ).SetIsCopyable();
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, COVERING_MODE>( _HKI( "Back covering" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, COVERING_MODE>( _HKI( "Back Covering" ),
                     &PCB_VIA::SetBackCoveringMode, &PCB_VIA::GetBackCoveringMode ),
                     groupVia ).SetIsCopyable();
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PLUGGING_MODE>( _HKI( "Front plugging" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PLUGGING_MODE>( _HKI( "Front Plugging" ),
                     &PCB_VIA::SetFrontPluggingMode, &PCB_VIA::GetFrontPluggingMode ),
                     groupVia ).SetIsCopyable();
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PLUGGING_MODE>( _HKI( "Back plugging" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PLUGGING_MODE>( _HKI( "Back Plugging" ),
                     &PCB_VIA::SetBackPluggingMode, &PCB_VIA::GetBackPluggingMode ),
                     groupVia ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, CAPPING_MODE>( _HKI( "Capping" ),
@@ -3446,19 +3449,19 @@ static struct TRACK_VIA_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, BACKDRILL_MODE>( _HKI( "Backdrill Mode" ),
                     &PCB_VIA::SetBackdrillMode, &PCB_VIA::GetBackdrillMode ),
                     groupBackdrill )
-        .SetAvailableFunc( []( INSPECTABLE* aItem )
-                           {
-                               if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
-                               {
-                                   if( via->GetViaType() == VIATYPE::THROUGH )
-                                       return true;
+                .SetAvailableFunc( []( INSPECTABLE* aItem )
+                                   {
+                                       if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
+                                       {
+                                           if( via->GetViaType() == VIATYPE::THROUGH )
+                                               return true;
 
-                                   if( via->Padstack().GetBackdrillMode() != BACKDRILL_MODE::NO_BACKDRILL )
-                                       return true;
-                               }
+                                           if( via->Padstack().GetBackdrillMode() != BACKDRILL_MODE::NO_BACKDRILL )
+                                               return true;
+                                       }
 
-                               return false;
-                           } );
+                                       return false;
+                                   } );
 
         propMgr.AddProperty( new PROPERTY<PCB_VIA, std::optional<int>>( _HKI( "Bottom Backdrill Size" ),
                     &PCB_VIA::SetBottomBackdrillSize, &PCB_VIA::GetBottomBackdrillSize, PROPERTY_DISPLAY::PT_SIZE ),

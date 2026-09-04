@@ -825,6 +825,10 @@ public:
     bool GetIsFree() const              { return m_isFree; }
     void SetIsFree( bool aFree = true ) { m_isFree = aFree; }
 
+    // For property manager:
+    bool GetIsNotFree() const           { return !m_isFree; }
+    void SetIsNotFree( bool aNotFree )  { m_isFree = !aNotFree; }
+
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                               FLASHING aFlash = FLASHING::DEFAULT,
@@ -853,6 +857,7 @@ private:
     // Silence GCC warning about hiding the PCB_TRACK base method
     bool operator==( const PCB_TRACK& aOther ) const override;
 
+private:
     VIATYPE      m_viaType;                  ///< through, blind/buried or micro
 
     PADSTACK     m_padStack;
