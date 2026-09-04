@@ -239,8 +239,11 @@ bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const common::types::Embedded
         file->compressedEncodedData = protoFile.data();
         file->data_hash = protoFile.data_hash();
 
-        if( EMBEDDED_FILES::DecompressAndDecode( *file ) != EMBEDDED_FILES::RETURN_CODE::OK )
+        if( EMBEDDED_FILES::DecompressAndDecode( *file, /* aAllowEmptyHash = */ true )
+            != EMBEDDED_FILES::RETURN_CODE::OK )
+        {
             return false;
+        }
 
         if( !file->Validate() )
             return false;

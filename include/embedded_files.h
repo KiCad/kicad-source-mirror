@@ -222,8 +222,10 @@ public:
      *
      * The data is then decompressed using ZSTD and stored in the #decompressedData buffer.
      * This call is used when loading the embedded files using the parsers.
+     *
+     * @param aAllowEmptyHash will let this succeed if aFile.data_hash is empty
      */
-    static RETURN_CODE  DecompressAndDecode( EMBEDDED_FILE& aFile );
+    static RETURN_CODE  DecompressAndDecode( EMBEDDED_FILE& aFile, bool aAllowEmptyHash = false );
 
     /**
      * Compute the hash of a file on disk without fully embedding it.
