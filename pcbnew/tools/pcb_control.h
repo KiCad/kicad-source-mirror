@@ -36,8 +36,10 @@ namespace KIGFX {
 }
 
 class PCB_BASE_FRAME;
+class BOARD;
 class BOARD_ITEM;
 class PCB_GENERATED_TABLE;
+class BOARD_COMMIT;
 
 /**
  * Handle actions that are shared between different frames in PcbNew.
@@ -112,6 +114,14 @@ public:
     int SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent );
     int AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK* aDesignBlock = nullptr,
                      BOARD_COMMIT* aCommit = nullptr, bool aSkipMove = false );
+
+    /**
+     * Remove every net that no connected item references, recording the removals in @p aCommit so
+     * they undo with the rest of the operation.
+     *
+     * Reverting the temporary design block append drops its items but leaves their nets behind.
+     */
+    static void PruneOrphanNets( BOARD* aBoard, BOARD_COMMIT* aCommit );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int PlaceCharacteristics( const TOOL_EVENT& aEvent );
     int PlaceStackup( const TOOL_EVENT& aEvent );

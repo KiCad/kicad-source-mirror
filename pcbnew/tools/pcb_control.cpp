@@ -1481,6 +1481,24 @@ int PCB_CONTROL::AppendDesignBlock( const TOOL_EVENT& aEvent )
     return ret;
 }
 
+// Reverting the temporary design block append drops its items but not its nets
+void PCB_CONTROL::PruneOrphanNets( BOARD* aBoard, BOARD_COMMIT* aCommit )
+{
+    for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
+        net->SetIsCurrent( net->GetNetCode() == 0 );
+
+    // Tracks, vias and zones keep a net alive too, not just pads
+    for( BOARD_CONNECTED_ITEM* item : aBoard->AllConnectedItems() )
+    {
+        if( item->GetNet() )
+            item->GetNet()->SetIsCurrent( true );
+    }
+
+    aBoard->BuildConnectivity();
+    aBoard->RemoveUnusedNets( aCommit );
+}
+
+
 int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
@@ -1808,6 +1826,8 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
     if( applied > 0 )
     {
+        PruneOrphanNets( brd, &sharedCommit );
+
         sharedCommit.Push( _( "Apply Design Block Layout" ) );
 
         if( netlessCopperPlaced )

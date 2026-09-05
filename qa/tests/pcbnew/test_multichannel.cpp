@@ -34,11 +34,12 @@
 #include <zone.h>
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
-#include <tools/multichannel_tool.h>
 #include <board_commit.h>
+#include <tools/multichannel_tool.h>
 #include <wx/filename.h>
 #include <wx/ffile.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <tools/pcb_control.h>
 #include <connectivity/topo_match.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_utils.h>
@@ -4599,6 +4600,48 @@ BOOST_FIXTURE_TEST_CASE( RepeatFromSelection, REPEAT_TOOL_FIXTURE )
                                                         { return aPad->GetNetCode() > 0
                                                                  && seedNets.contains( aPad->GetNetCode() ); } ) );
     }
+}
+
+
+// Reverting a design block append leaves its nets registered with nothing using them (issue 24447)
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutPrunesOrphanNets, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    NETINFO_ITEM* padNet = new NETINFO_ITEM( m_board.get(), wxT( "PAD_NET" ) );
+    NETINFO_ITEM* trackNet = new NETINFO_ITEM( m_board.get(), wxT( "TRACK_NET" ) );
+    NETINFO_ITEM* orphanNet = new NETINFO_ITEM( m_board.get(), wxT( "Net-(D3-A)" ) );
+    m_board->Add( padNet );
+    m_board->Add( trackNet );
+    m_board->Add( orphanNet );
+
+    FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+    PAD*       pad = new PAD( fp );
+    pad->SetNet( padNet );
+    fp->Add( pad );
+    m_board->Add( fp );
+
+    PCB_TRACK* track = new PCB_TRACK( m_board.get() );
+    track->SetLayer( F_Cu );
+    track->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 2 ), 0 ) );
+    track->SetNet( trackNet );
+    m_board->Add( track );
+
+    const int padCode = padNet->GetNetCode();
+    const int trackCode = trackNet->GetNetCode();
+    const int orphanCode = orphanNet->GetNetCode();
+
+    BOARD_COMMIT commit( &toolMgr );
+    PCB_CONTROL::PruneOrphanNets( m_board.get(), &commit );
+
+    BOOST_CHECK( m_board->FindNet( padCode ) != nullptr );
+    BOOST_CHECK( m_board->FindNet( trackCode ) != nullptr );
+    BOOST_CHECK( m_board->FindNet( orphanCode ) == nullptr );
 }
 
 
