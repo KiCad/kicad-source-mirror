@@ -1,0 +1,122 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Jon Evans <jon@craftyjon.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/*
+ * variant_commands.proto
+ * Commands and responses for reading and editing design variants
+ */
+
+syntax = "proto3";
+
+package kiapi.common.commands;
+
+import "common/types/base_types.proto";
+import "common/types/variants.proto";
+
+message GetVariants
+{
+  // Within a project, variants can exist on the schematic and the board.
+  // They are not necessarily in sync (a user may create variants on the board
+  // that have no matching schematic variants, for example).
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+message VariantsResponse
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  // All non-default variants for the given document
+  repeated kiapi.common.types.DesignVariant variants = 2;
+}
+
+// Adds a variant to the registry.  Errors with AS_BAD_REQUEST when the name
+// already exists (case-insensitive).
+message AddVariant
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string name = 2;
+
+  optional string description = 3;
+}
+
+// Deletes a variant and all its per-instance records
+// Deleting the current variant resets the active variant to default.
+message DeleteVariant
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string name = 2;
+}
+
+message RenameVariant
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string old_name = 2;
+
+  string new_name = 3;
+}
+
+message SetVariantDescription
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string name = 2;
+
+  string description = 3;
+}
+
+// Copies an existing variant to a new variant, including copying all
+// item overrides in the existing variant (that is, does a deep copy)
+message CopyVariant
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string old_name = 2;
+
+  string new_name = 3;
+
+  optional string new_description = 4;
+}
+
+// Selects the active variant in the editor (absent or empty name selects the default variant).
+message SetCurrentVariant
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  optional string name = 2;
+}
+
+message GetCurrentVariant
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+message CurrentVariantResponse
+{
+  // Will be omitted if the current variant is the default variant
+  optional string name = 1;
+}

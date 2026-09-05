@@ -25,10 +25,12 @@ set( KIAPI_PROTO_SRCS
     common/types/embedded_files.proto
     common/types/enums.proto
     common/types/project_settings.proto
+    common/types/variants.proto
 
     common/commands/base_commands.proto
     common/commands/editor_commands.proto
     common/commands/project_commands.proto
+    common/commands/variant_commands.proto
 
     board/board.proto
     board/board_commands.proto
