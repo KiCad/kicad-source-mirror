@@ -2608,6 +2608,35 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     // the bus may have been renamed by a hierarchical connection.  So, for each of these cases,
     // we need to identify the appropriate bus members to link together (and their final names),
     // and then update all instances of the old name in the hierarchy.
+
+    // A bus crossing a sheet boundary is several subgraphs sharing one name, each with its own copy
+    // of the members, so renaming a member in only one of them splits the bus at the boundary
+    auto busSubgraphsSharingName =
+            [&]( CONNECTION_SUBGRAPH* aSubgraph )
+            {
+                std::vector<CONNECTION_SUBGRAPH*> subgraphs = { aSubgraph };
+                wxString                          name = aSubgraph->m_driver_connection->Name();
+                auto                              it = m_net_name_to_subgraphs_map.find( name );
+
+                if( it == m_net_name_to_subgraphs_map.end() )
+                    return subgraphs;
+
+                for( CONNECTION_SUBGRAPH* candidate : it->second )
+                {
+                    while( candidate->m_absorbed )
+                        candidate = candidate->m_absorbed_by;
+
+                    if( candidate != aSubgraph
+                        && candidate->m_driver_connection->IsBus()
+                        && candidate->m_driver_connection->Name() == name )
+                    {
+                        subgraphs.push_back( candidate );
+                    }
+                }
+
+                return subgraphs;
+            };
+
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
         // All SGs should have been processed by propagateToNeighbors above
@@ -2635,33 +2664,54 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 while( parent->m_absorbed )
                     parent = parent->m_absorbed_by;
 
-                SCH_CONNECTION* match = matchBusMember( parent->m_driver_connection, link_member );
-
-                if( !match )
+                for( CONNECTION_SUBGRAPH* bus_sg : busSubgraphsSharingName( parent ) )
                 {
-                    wxLogTrace( ConnTrace, wxS( "Warning: could not match %s inside %lu (%s)" ),
-                                conn->Name(), parent->m_code, parent->m_driver_connection->Name() );
-                    continue;
-                }
+                    SCH_CONNECTION* match = matchBusMember( bus_sg->m_driver_connection, link_member );
 
-                if( conn->Name() != match->Name() )
-                {
+                    if( !match )
+                    {
+                        wxLogTrace( ConnTrace, wxS( "Warning: could not match %s inside %lu (%s)" ),
+                                    conn->Name(), bus_sg->m_code, bus_sg->m_driver_connection->Name() );
+                        continue;
+                    }
+
+                    if( conn->Name() == match->Name() )
+                        continue;
+
                     wxString old_name = match->Name();
 
                     wxLogTrace( ConnTrace, wxS( "Updating %lu (%s) member %s to %s" ),
-                                parent->m_code, parent->m_driver_connection->Name(), old_name, conn->Name() );
+                                bus_sg->m_code, bus_sg->m_driver_connection->Name(), old_name,
+                                conn->Name() );
+
+                    // The far side may already carry a name from another bus it is shorted to, so
+                    // reach it through the member link rather than by its old name
+                    std::vector<CONNECTION_SUBGRAPH*> stale_subgraphs;
+
+                    for( const auto& kv : bus_sg->m_bus_neighbors )
+                    {
+                        if( matchBusMember( bus_sg->m_driver_connection, kv.first.get() ) != match )
+                            continue;
+
+                        for( CONNECTION_SUBGRAPH* neighbor : kv.second )
+                        {
+                            if( CONNECTION_SUBGRAPH::GetDriverPriority( neighbor->m_driver )
+                                < CONNECTION_SUBGRAPH::PRIORITY::GLOBAL_POWER_PIN )
+                            {
+                                stale_subgraphs.push_back( neighbor );
+                            }
+                        }
+                    }
 
                     match->Clone( *conn );
 
                     auto jj = m_net_name_to_subgraphs_map.find( old_name );
 
-                    if( jj == m_net_name_to_subgraphs_map.end() )
-                        continue;
-
                     // Copy the vector to avoid iterator invalidation when recaching
-                    std::vector<CONNECTION_SUBGRAPH*> old_subgraphs = jj->second;
+                    if( jj != m_net_name_to_subgraphs_map.end() )
+                        stale_subgraphs.insert( stale_subgraphs.end(), jj->second.begin(), jj->second.end() );
 
-                    for( CONNECTION_SUBGRAPH* old_sg : old_subgraphs )
+                    for( CONNECTION_SUBGRAPH* old_sg : stale_subgraphs )
                     {
                         while( old_sg->m_absorbed )
                             old_sg = old_sg->m_absorbed_by;
