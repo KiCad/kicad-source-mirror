@@ -128,7 +128,7 @@ protected:
     void backfillPostMachine();
     void load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation, std::stop_token aStop = {} );
     void addPlaceholderToRaytracer( CONTAINER_3D& aDstContainer, const FOOTPRINT* aFootprint,
-                                    const glm::mat4& aFpMatrix, bool aHasExtrudedBody = false );
+                                    const glm::mat4& aFpMatrix, bool aHasExtrudedBody = false, float aOpacity = 1.0f );
     bool addExtrudedBodyToRaytracer( CONTAINER_3D& aDstContainer, const FOOTPRINT* aFootprint );
     void addModels( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
                     const glm::mat4& aModelMatrix, float aFPOpacity,

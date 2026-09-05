@@ -1964,7 +1964,8 @@ void RENDER_3D_RAYTRACE_BASE::addPadsAndVias()
 
 
 void RENDER_3D_RAYTRACE_BASE::addPlaceholderToRaytracer( CONTAINER_3D& aDstContainer, const FOOTPRINT* aFootprint,
-                                                         const glm::mat4& aFpMatrix, bool aHasExtrudedBody )
+                                                         const glm::mat4& aFpMatrix, bool aHasExtrudedBody,
+                                                         float aOpacity )
 {
     if( aHasExtrudedBody )
         return;
@@ -2003,6 +2004,7 @@ void RENDER_3D_RAYTRACE_BASE::addPlaceholderToRaytracer( CONTAINER_3D& aDstConta
         TRIANGLE* triangle = new TRIANGLE( aV0, aV1, aV2 );
         triangle->SetBoardItem( const_cast<FOOTPRINT*>( aFootprint ) );
         triangle->SetMaterial( &m_materials.m_EpoxyBoard );
+        triangle->SetModelTransparency( 1.0f - aOpacity );
         triangle->SetColor( SFVEC3F( 1.0f, 0.5f, 0.0f ) );
         aDstContainer.Add( triangle );
     };
@@ -2314,6 +2316,8 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
                 }
             }
 
+            bool placeholderAdded = false;
+
             for( FP_3DMODEL& model : fp->Models() )
             {
                 if( !model.m_Show || model.m_Filename.empty() )
@@ -2353,16 +2357,17 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
                     addModels( aDstContainer, modelPtr, modelMatrix, (float) model.m_Opacity,
                                aSkipMaterialInformation, fp );
                 }
-                else if( showMissing )
+                else if( showMissing && !placeholderAdded )
                 {
-                    addPlaceholderToRaytracer( aDstContainer, fp, fpMatrix, hasExtrudedBody );
+                    addPlaceholderToRaytracer( aDstContainer, fp, fpMatrix, hasExtrudedBody, (float) model.m_Opacity );
+                    placeholderAdded = true;
                 }
             }
 
             // Footprint with no models assigned at all
             if( !hasModels && showMissing )
             {
-                addPlaceholderToRaytracer( aDstContainer, fp, fpMatrix, hasExtrudedBody );
+                addPlaceholderToRaytracer( aDstContainer, fp, fpMatrix, hasExtrudedBody, 1.0f );
             }
         }
     }
