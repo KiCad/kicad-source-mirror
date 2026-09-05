@@ -97,9 +97,15 @@ bool HYPERLINK_DV_RENDERER::IsSafeUrl( const wxString& aHref )
                                                       wxT( ".msi" ), wxT( ".scr" ), wxT( ".pif" ), wxT( ".lnk" ),
                                                       wxT( ".hta" ) };
 
+        // The OS launches the decoded name, and Windows drops trailing dots and spaces.
+        wxString path = wxURI::Unescape( uri.GetPath() );
+
+        while( path.EndsWith( wxT( "." ) ) || path.EndsWith( wxT( " " ) ) )
+            path.RemoveLast();
+
         for( const wxString& ext : blockedExtensions )
         {
-            if( uri.GetPath().EndsWith( ext ) )
+            if( path.EndsWith( ext ) )
                 return false;
         }
 
