@@ -276,12 +276,10 @@ wxString KIPLATFORM::IO::ResolveSymlinkTarget( const wxString& aPath )
 
 bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
 {
-    bool result = false;
+    const DWORD attributes = GetFileAttributesW( aFileName.fn_str() );
 
-    if( ( GetFileAttributesW( aFileName.fn_str() ) & FILE_ATTRIBUTE_HIDDEN ) )
-        result = true;
-
-    return result;
+    return attributes != INVALID_FILE_ATTRIBUTES
+           && ( attributes & FILE_ATTRIBUTE_HIDDEN ) != 0;
 }
 
 
