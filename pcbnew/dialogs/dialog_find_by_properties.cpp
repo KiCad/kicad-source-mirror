@@ -23,6 +23,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_group.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
@@ -827,6 +828,9 @@ std::vector<BOARD_ITEM*> DIALOG_FIND_BY_PROPERTIES::collectAllBoardItems()
 
     for( ZONE* zone : m_board->Zones() )
         items.push_back( zone );
+
+    for( PCB_GROUP* group : m_board->Groups() )
+        items.push_back( group );
 
     return items;
 }
