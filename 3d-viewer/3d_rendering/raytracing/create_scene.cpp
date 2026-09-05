@@ -2175,6 +2175,7 @@ bool RENDER_3D_RAYTRACE_BASE::addExtrudedBodyToRaytracer( CONTAINER_3D& aDstCont
         layerItem->SetBoardItem( const_cast<FOOTPRINT*>( aFootprint ) );
         layerItem->SetMaterial( bodyMaterial );
         layerItem->SetColor( objColor );
+        layerItem->SetModelTransparency( 1.0f - (float) c.a );
         aDstContainer.Add( layerItem );
     }
 
