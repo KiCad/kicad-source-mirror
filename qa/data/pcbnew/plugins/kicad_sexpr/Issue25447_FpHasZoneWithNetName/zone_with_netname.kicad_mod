@@ -1,0 +1,80 @@
+(footprint "zone_with_netname"
+	(version 20260831)
+	(generator "pcbnew")
+	(generator_version "10.99")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -3 0)
+		(layer "F.SilkS")
+		(uuid "384ff9f5-2cc4-4fb7-9631-9184d8f5e861")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "zone_with_netname"
+		(at 0 3 0)
+		(layer "F.Fab")
+		(uuid "6f281eaf-63a1-4660-88d5-4b07117600ef")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a5482516-f4d6-4758-b184-cf631fc0f3c0")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ed9c77fb-8865-4c35-883b-6ba3e2350ea4")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(pad "1" smd rect
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "c41db894-caca-4197-be8c-be8ab9dc9e79")
+	)
+	(zone
+		(net 1)
+		(net_name "netname_not_in_board")
+		(layer "F.Cu")
+		(uuid "fb0a7275-588f-41fe-9203-4d34c3c544db")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0.25)
+		)
+		(min_thickness 0.25)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 0)
+		)
+		(polygon
+			(pts
+				(xy -2 -2) (xy 2 -2) (xy 2 2) (xy -2 2)
+			)
+		)
+	)
+	(embedded_fonts no)
+)

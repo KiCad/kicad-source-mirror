@@ -41,6 +41,9 @@ struct FPLIB_LOAD_FP_TEST_CASE
     // If set, the expected number of pads in the footprint
     std::optional<unsigned> m_expectedPadCount;
 
+    // If set, the expected number of zones in the footprint
+    std::optional<unsigned> m_expectedZoneCount;
+
     // For printing the test name
     friend std::ostream& operator<<( std::ostream& os, const FPLIB_LOAD_FP_TEST_CASE& aTestCase )
     {
@@ -57,7 +60,15 @@ const std::vector<FPLIB_LOAD_FP_TEST_CASE> FpLibLoadSave_testCases{
             20240108U,
             // 2 SMD pads, 2 paste pads
             4U,
+            0U,
     },
+    {
+            "plugins/kicad_sexpr/Issue25447_FpHasZoneWithNetName",
+            "zone_with_netname",
+            20260831U,
+            1U,
+            1U,
+    }
 };
 
 } // namespace
@@ -77,6 +88,10 @@ BOOST_DATA_TEST_CASE( FpLibLoadSave, boost::unit_test::data::make( FpLibLoadSave
         if( testCase.m_expectedPadCount )
         {
             BOOST_CHECK_EQUAL( aBoard.Pads().size(), *testCase.m_expectedPadCount );
+        }
+        if( testCase.m_expectedZoneCount )
+        {
+            BOOST_CHECK_EQUAL( aBoard.Zones().size(), *testCase.m_expectedZoneCount );
         }
     };
 
