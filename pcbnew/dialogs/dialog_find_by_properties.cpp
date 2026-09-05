@@ -487,6 +487,8 @@ void DIALOG_FIND_BY_PROPERTIES::rebuildPropertyGrid()
 
     if( selection.Empty() )
     {
+        m_propertyRows.clear();
+        m_selectedTypes.clear();
         m_statusLabel->SetLabel( _( "No items selected" ) );
         m_createQueryBtn->Enable( false );
         return;
