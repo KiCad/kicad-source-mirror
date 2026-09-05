@@ -472,6 +472,8 @@ public:
     void AddVariant( const wxString& aVariantName );
     void DeleteVariant( const wxString& aVariantName );
     void RenameVariant( const wxString& aOldName, const wxString& aNewName );
+    void CopyVariant( const wxString& aOldName, const wxString& aNewName,
+                      const wxString& aNewDescription = wxEmptyString );
 
     wxString GetVariantDescription( const wxString& aVariantName ) const;
     void SetVariantDescription( const wxString& aVariantName, const wxString& aDescription );

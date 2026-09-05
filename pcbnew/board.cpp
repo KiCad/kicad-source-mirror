@@ -2960,6 +2960,41 @@ void BOARD::RenameVariant( const wxString& aOldName, const wxString& aNewName )
 }
 
 
+void BOARD::CopyVariant( const wxString& aOldName, const wxString& aNewName, const wxString& aNewDescription )
+{
+    if( aOldName.IsEmpty() || aNewName.IsEmpty()
+        || aNewName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    {
+        return;
+    }
+
+    wxString actualOldName = FindVariantNameCaseInsensitive( m_variantNames, aOldName );
+
+    if( actualOldName.IsEmpty() )
+        return;
+
+    if( wxString existingName = FindVariantNameCaseInsensitive( m_variantNames, aNewName ); !existingName.IsEmpty() )
+        return;
+
+    AddVariant( aNewName );
+
+    if( !aNewDescription.IsEmpty() )
+        SetVariantDescription( aNewName, aNewDescription );
+    else
+        SetVariantDescription( aNewName, GetVariantDescription( actualOldName ) );
+
+    for( FOOTPRINT* fp : m_footprints )
+    {
+        if( const FOOTPRINT_VARIANT* variant = fp->GetVariant( actualOldName ) )
+        {
+            FOOTPRINT_VARIANT copied = *variant;
+            copied.SetName( aNewName );
+            fp->SetVariant( copied );
+        }
+    }
+}
+
+
 wxString BOARD::GetVariantDescription( const wxString& aVariantName ) const
 {
     if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )

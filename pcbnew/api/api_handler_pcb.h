@@ -28,6 +28,7 @@
 #include <api/board/board_types.pb.h>
 #include <api/common/commands/editor_commands.pb.h>
 #include <api/common/commands/project_commands.pb.h>
+#include <api/common/commands/variant_commands.pb.h>
 #include <kiid.h>
 #include <properties/property_mgr.h>
 
@@ -182,6 +183,16 @@ private:
 
     HANDLER_RESULT<InjectDrcErrorResponse> handleInjectDrcError(
             const HANDLER_CONTEXT<InjectDrcError>& aCtx );
+
+    HANDLER_RESULT<commands::VariantsResponse> handleGetVariants( const HANDLER_CONTEXT<commands::GetVariants>& aCtx );
+    HANDLER_RESULT<Empty> handleAddVariant( const HANDLER_CONTEXT<commands::AddVariant>& aCtx );
+    HANDLER_RESULT<Empty> handleDeleteVariant( const HANDLER_CONTEXT<commands::DeleteVariant>& aCtx );
+    HANDLER_RESULT<Empty> handleRenameVariant( const HANDLER_CONTEXT<commands::RenameVariant>& aCtx );
+    HANDLER_RESULT<Empty> handleCopyVariant( const HANDLER_CONTEXT<commands::CopyVariant>& aCtx );
+    HANDLER_RESULT<Empty> handleSetVariantDescription( const HANDLER_CONTEXT<commands::SetVariantDescription>& aCtx );
+    HANDLER_RESULT<Empty> handleSetCurrentVariant( const HANDLER_CONTEXT<commands::SetCurrentVariant>& aCtx );
+    HANDLER_RESULT<commands::CurrentVariantResponse>
+    handleGetCurrentVariant( const HANDLER_CONTEXT<commands::GetCurrentVariant>& aCtx );
 
 protected:
     std::unique_ptr<COMMIT> createCommit() override;
