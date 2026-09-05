@@ -102,8 +102,7 @@ public:
 
         if( aError.HasDebugText() )
         {
-            WX_COLLAPSIBLE_PANE* pane = new WX_COLLAPSIBLE_PANE( this, wxID_ANY,
-                                                                 _( "Additional information" ) );
+            WX_COLLAPSIBLE_PANE* pane = new WX_COLLAPSIBLE_PANE( this, wxID_ANY, _( "Additional information" ) );
             pane->Collapse();
             pane->SetBackgroundColour( bg );
             textSizer->Add( pane, 0, wxEXPAND | wxALL, 1 );

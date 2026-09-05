@@ -17,17 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <bitmaps.h>
+#include <kiplatform/ui.h>
+#include <widgets/ui_common.h>
 #include <widgets/wx_collapsible_pane.h>
 
-#include <wx/collpane.h>
 #include <wx/dc.h>
 #include <wx/dcclient.h>
 #include <wx/panel.h>
 #include <wx/renderer.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/toplevel.h>
 #include <wx/window.h>
 
 #ifdef _WIN32
@@ -41,22 +40,22 @@ wxDEFINE_EVENT( WX_COLLAPSIBLE_PANE_HEADER_CHANGED, wxCommandEvent );
 wxDEFINE_EVENT( WX_COLLAPSIBLE_PANE_CHANGED, wxCommandEvent );
 
 
-bool WX_COLLAPSIBLE_PANE:: Create( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
-                                   const wxPoint& aPos, const wxSize& aSize, long aStyle,
-                                   const wxValidator& aValidator, const wxString& aName )
+bool WX_COLLAPSIBLE_PANE::Create( wxWindow* aParent, wxWindowID aId, const wxString& aLabel )
 {
-    if( !wxControl::Create( aParent, aId, aPos, aSize, aStyle, aValidator, aName ) )
+    if( !wxControl::Create( aParent, aId, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE, wxDefaultValidator,
+                            wxT( "COLLAPSIBLE_PANE_HEADER" ) ) )
+    {
         return false;
+    }
 
     m_sizer = new wxBoxSizer( wxVERTICAL );
 
-    m_header = new WX_COLLAPSIBLE_PANE_HEADER( this, wxID_ANY, aLabel, wxPoint( 0, 0 ),
-                                               wxDefaultSize );
+    m_header = new WX_COLLAPSIBLE_PANE_HEADER( this, wxID_ANY, aLabel );
 
-    m_sizer->Add( m_header, wxSizerFlags().Border( wxBOTTOM, getBorder() ) );
+    m_sizer->Add( m_header );
 
-    m_pane = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                          wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "COLLAPSIBLE_PANE_PANE" ) );
+    m_pane = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER,
+                          wxT( "COLLAPSIBLE_PANE_PANEL" ) );
 
     m_pane->Hide();
 
@@ -146,7 +145,7 @@ wxSize WX_COLLAPSIBLE_PANE::DoGetBestClientSize() const
         wxSize paneSize = m_pane->GetBestSize();
 
         size.SetWidth( std::max( size.GetWidth(), paneSize.x ) );
-        size.SetHeight( size.y +  getBorder() + paneSize.y );
+        size.SetHeight( size.y + GetMargin() + GetMargin() + paneSize.y );
     }
 
     return size;
@@ -165,8 +164,8 @@ bool WX_COLLAPSIBLE_PANE::Layout()
 
     if( IsExpanded() )
     {
-        int yoffset = m_sizer->GetSize().y + getBorder();
-        m_pane->SetSize( 0, yoffset, size.x, size.y - yoffset );
+        int yoffset = m_sizer->GetSize().y + GetMargin();
+        m_pane->SetSize( GetMargin(), yoffset, size.x - ( GetMargin() * 2 ), size.y - ( GetMargin() + yoffset ) );
         m_pane->Layout();
     }
 
@@ -174,7 +173,7 @@ bool WX_COLLAPSIBLE_PANE::Layout()
 }
 
 
-int WX_COLLAPSIBLE_PANE::getBorder() const
+int WX_COLLAPSIBLE_PANE::GetMargin() const
 {
 #if defined( __WXMSW__ )
     wxASSERT( m_header );
@@ -211,6 +210,16 @@ void WX_COLLAPSIBLE_PANE::onHeaderClicked( wxCommandEvent& aEvent )
 // WX_COLLAPSIBLE_PANE_HEADER implementation
 
 
+WX_COLLAPSIBLE_PANE_HEADER::WX_COLLAPSIBLE_PANE_HEADER( WX_COLLAPSIBLE_PANE* aParent, wxWindowID aId,
+                                                        const wxString& aLabel ) :
+        m_parent( aParent )
+{
+    init();
+
+    Create( aParent, aId, aLabel );
+}
+
+
 void WX_COLLAPSIBLE_PANE_HEADER::init()
 {
     m_collapsed = true;
@@ -218,12 +227,13 @@ void WX_COLLAPSIBLE_PANE_HEADER::init()
 }
 
 
-bool WX_COLLAPSIBLE_PANE_HEADER::Create( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
-                                         const wxPoint& aPos, const wxSize& aSize, long aStyle,
-                                         const wxValidator& aValidator, const wxString& aName )
+bool WX_COLLAPSIBLE_PANE_HEADER::Create( wxWindow* aParent, wxWindowID aId, const wxString& aLabel )
 {
-    if( !wxControl::Create( aParent, aId, aPos, aSize, aStyle, aValidator, aName ) )
+    if( !wxControl::Create( aParent, aId, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE, wxDefaultValidator,
+                            wxT( "COLLAPSIBLE_PANE_HEADER" ) ) )
+    {
         return false;
+    }
 
     SetLabel( aLabel );
 
@@ -269,11 +279,11 @@ wxSize WX_COLLAPSIBLE_PANE_HEADER::DoGetBestClientSize() const
     wxSize size = dc.GetTextExtent( text );
 
     // Reserve space for arrow (which is a square the height of the text)
-    size.x += size.GetHeight();
+    size.x += size.GetHeight() + m_parent->GetMargin() * 2;
+    size.y += m_parent->GetMargin() * 2;
 
 #ifdef __WXMSW__
-    size.IncBy( GetSystemMetrics( SM_CXFOCUSBORDER ),
-                GetSystemMetrics( SM_CYFOCUSBORDER ) );
+    size.IncBy( GetSystemMetrics( SM_CXFOCUSBORDER ), GetSystemMetrics( SM_CYFOCUSBORDER ) );
 #endif // __WXMSW__
 
     return size;
@@ -293,22 +303,26 @@ void WX_COLLAPSIBLE_PANE_HEADER::onPaint( wxPaintEvent& aEvent )
     dc.DrawRectangle( rect );
 #endif
 
-    // Make the background look like a button when the pointer is over it
+    // Make the background look like an AUI toolbar button when the pointer is over it
     if( m_inWindow )
     {
-        dc.SetBrush( wxBrush( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNHIGHLIGHT ) ) );
-        dc.SetPen( *wxTRANSPARENT_PEN );
+        bool    darkMode       = KIPLATFORM::UI::IsDarkTheme();
+        wxColor highlightColor = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+
+        dc.SetPen( wxPen( highlightColor ) );
+        dc.SetBrush( wxBrush( highlightColor.ChangeLightness( darkMode ? 40 : 170 ) ) );
         dc.DrawRectangle( rect );
     }
 
     wxString text;
-    int indexAccel = wxControl::FindAccelIndex( GetLabel(), &text );
-
-    wxSize textSize = dc.GetTextExtent( text );
+    int      indexAccel = wxControl::FindAccelIndex( GetLabel(), &text );
 
     // Compute all the sizes
-    wxRect arrowRect( 0, 0, textSize.GetHeight(), textSize.GetHeight() );
-    wxRect textRect( arrowRect.GetTopRight(), textSize );
+    wxSize  textSize = dc.GetTextExtent( text );
+    wxRect  arrowRect( 0, 0, textSize.GetHeight(), textSize.GetHeight() );
+    wxRect  textRect( arrowRect.GetRight() + m_parent->GetMargin(), 0, textSize.GetWidth(), textSize.GetHeight() );
+
+    arrowRect = arrowRect.CenterIn( rect, wxVERTICAL );
     textRect = textRect.CenterIn( rect, wxVERTICAL );
 
     // Find out if the window we are in is active or not
@@ -322,12 +336,8 @@ void WX_COLLAPSIBLE_PANE_HEADER::onPaint( wxPaintEvent& aEvent )
     drawArrow( dc, arrowRect, isActive );
 
     // We are responsible for showing the text as disabled when the window isn't active
-    wxColour clr;
-
-    if( isActive )
-        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-    else
-        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+    wxColour clr = isActive ? wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT )
+                            : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
 
     dc.SetTextForeground( clr );
     dc.DrawLabel( text, textRect, wxALIGN_CENTER_VERTICAL, indexAccel );
@@ -397,31 +407,30 @@ void WX_COLLAPSIBLE_PANE_HEADER::drawArrow( wxDC& aDC, wxRect aRect, bool aIsAct
 {
     // The bottom corner of the triangle is located halfway across the area and 3/4 down from
     // the top
-    wxPoint btmCorner( aRect.GetWidth() / 2, 3 * aRect.GetHeight() / 4 );
+    wxPoint btmCorner( aRect.GetLeft() + aRect.GetWidth() / 2, aRect.GetTop() + 3 * aRect.GetHeight() / 4 );
 
     // The right corner of the triangle is located halfway down from the top and 3/4 across the area
-    wxPoint rtCorner( 3 * aRect.GetWidth() / 4, aRect.GetHeight() / 2 );
+    wxPoint rtCorner( aRect.GetLeft() + 3 * aRect.GetWidth() / 4, aRect.GetTop() + aRect.GetHeight() / 2 );
 
     // Choose the other corner depending on if the panel is expanded or collapsed
     wxPoint otherCorner( 0, 0 );
 
     if( m_collapsed )
-        otherCorner = wxPoint( aRect.GetWidth() / 2, aRect.GetHeight() / 4 );
+        otherCorner = wxPoint( aRect.GetLeft() + aRect.GetWidth() / 2, aRect.GetTop() + aRect.GetHeight() / 4 );
     else
-        otherCorner = wxPoint( aRect.GetWidth() / 4,  aRect.GetHeight() / 2 );
+        otherCorner = wxPoint( aRect.GetLeft() + aRect.GetWidth() / 4,  aRect.GetTop() + aRect.GetHeight() / 2 );
+
+    // Because it looks better
+    if( !m_collapsed )
+    {
+        btmCorner.y -= 1;
+        rtCorner.y -= 1;
+        otherCorner.y -= 1;
+    }
 
     // Choose the color to draw the triangle
-    wxColour clr;
-
-    // Highlight the arrow when the pointer is inside the header, otherwise use text color
-    if( m_inWindow )
-        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
-    else
-        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-
-    // If the window isn't active, then use the disabled text color
-    if( !aIsActive )
-        clr = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+    wxColour clr = aIsActive ? wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT )
+                             : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
 
     // Must set both the pen (for the outline) and the brush (for the polygon fill)
     aDC.SetPen( wxPen( clr ) );

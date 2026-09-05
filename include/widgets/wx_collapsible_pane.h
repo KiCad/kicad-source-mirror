@@ -30,6 +30,9 @@
 extern const KICOMMON_API wxEventTypeTag<wxCommandEvent> WX_COLLAPSIBLE_PANE_HEADER_CHANGED;
 extern const KICOMMON_API wxEventTypeTag<wxCommandEvent> WX_COLLAPSIBLE_PANE_CHANGED;
 
+class WX_COLLAPSIBLE_PANE;
+
+
 /**
  * A header control for #WX_COLLAPSIBLE_PANE.
  *
@@ -39,44 +42,18 @@ extern const KICOMMON_API wxEventTypeTag<wxCommandEvent> WX_COLLAPSIBLE_PANE_CHA
 class KICOMMON_API WX_COLLAPSIBLE_PANE_HEADER : public wxControl
 {
 public:
-    WX_COLLAPSIBLE_PANE_HEADER()
-    {
-        init();
-    }
+    WX_COLLAPSIBLE_PANE_HEADER( WX_COLLAPSIBLE_PANE* aParent, wxWindowID aId, const wxString& aLabel );
 
-    WX_COLLAPSIBLE_PANE_HEADER( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
-                                const wxPoint& aPos = wxDefaultPosition,
-                                const wxSize& aSize = wxDefaultSize, long aStyle = wxBORDER_NONE,
-                                const wxValidator& aValidator = wxDefaultValidator,
-                                const wxString& aName = wxT( "COLLAPSIBLE_PANE_HEADER" ) )
-    {
-        init();
-
-        Create( aParent, aId, aLabel, aPos, aSize, aStyle, aValidator, aName );
-    }
-
-    bool Create( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
-                 const wxPoint& aPos = wxDefaultPosition,
-                 const wxSize& aSize = wxDefaultSize, long aStyle = wxBORDER_NONE,
-                 const wxValidator& aValidator = wxDefaultValidator,
-                 const wxString& aName = wxT( "COLLAPSIBLE_PANE_HEADER" ) );
+    bool Create( wxWindow* aParent, wxWindowID aId, const wxString& aLabel );
 
     void SetCollapsed( bool aCollapsed = true );
 
-    bool IsCollapsed() const
-    {
-        return m_collapsed;
-    }
+    bool IsCollapsed() const { return m_collapsed; }
 
 protected:
-
     wxSize DoGetBestClientSize() const override;
 
 private:
-    wxString m_label;
-    bool     m_collapsed;
-    bool     m_inWindow;
-
     void init();
 
     void onPaint( wxPaintEvent& aEvent );
@@ -94,6 +71,12 @@ private:
     void doSetCollapsed( bool aCollapsed );
 
     void drawArrow( wxDC& aDC, wxRect aRect, bool aIsActive );
+
+private:
+    WX_COLLAPSIBLE_PANE* m_parent;
+    wxString             m_label;
+    bool                 m_collapsed;
+    bool                 m_inWindow;
 };
 
 
@@ -106,29 +89,15 @@ private:
 class KICOMMON_API WX_COLLAPSIBLE_PANE : public wxNavigationEnabled<wxControl>
 {
 public:
-    WX_COLLAPSIBLE_PANE()
+    WX_COLLAPSIBLE_PANE( wxWindow* aParent, wxWindowID aId, const wxString& aLabel )
     {
         init();
-    }
-
-    WX_COLLAPSIBLE_PANE( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
-                         const wxPoint& aPos = wxDefaultPosition,
-                         const wxSize& aSize = wxDefaultSize, long aStyle = wxBORDER_NONE,
-                         const wxValidator& aValidator = wxDefaultValidator,
-                         const wxString& aName = wxT( "COLLAPSIBLE_PANE_HEADER" ) )
-    {
-        init();
-
-        Create( aParent, aId, aLabel, aPos, aSize, aStyle, aValidator, aName );
+        Create( aParent, aId, aLabel );
     }
 
     ~WX_COLLAPSIBLE_PANE();
 
-    bool Create( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
-                 const wxPoint& aPos = wxDefaultPosition,
-                 const wxSize& aSize = wxDefaultSize, long aStyle = wxBORDER_NONE,
-                 const wxValidator& aValidator = wxDefaultValidator,
-                 const wxString& aName = wxT( "COLLAPSIBLE_PANE_HEADER" ) );
+    bool Create( wxWindow* aParent, wxWindowID aId, const wxString& aLabel );
 
     void Collapse( bool aCollapse = true );
 
@@ -141,10 +110,9 @@ public:
 
     bool IsExpanded() const { return !IsCollapsed(); }
 
-    wxWindow* GetPane()
-    {
-        return m_pane;
-    }
+    wxWindow* GetPane() { return m_pane; }
+
+    int GetMargin() const;
 
     wxString GetLabel() const override
     {
@@ -157,22 +125,22 @@ public:
 
     bool InformFirstDirection( int aDirection, int aSize, int aAvailableOtherDir ) override;
 
+    bool Layout() override;
+
+protected:
     wxSize DoGetBestClientSize() const override;
 
-    bool Layout() override;
+private:
+    void init();
+
+    void onSize( wxSizeEvent& aEvent );
+
+    void onHeaderClicked( wxCommandEvent& aEvent );
 
 private:
     wxWindow*                   m_pane;
     wxSizer*                    m_sizer;
     WX_COLLAPSIBLE_PANE_HEADER* m_header;
-
-    void init();
-
-    int getBorder() const;
-
-    void onSize( wxSizeEvent& aEvent );
-
-    void onHeaderClicked( wxCommandEvent& aEvent );
 };
 
 #endif // KICAD_WX_COLLAPSIBLE_PANE_H

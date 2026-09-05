@@ -627,8 +627,7 @@ void APPEARANCE_CONTROLS::createControls()
     wxFont   infoFont = KIUI::GetInfoFont( this );
 
     // Create layer display options
-    m_paneLayerDisplayOptions = new WX_COLLAPSIBLE_PANE( m_panelLayers, wxID_ANY,
-                                                         _( "Layer Display Options" ) );
+    m_paneLayerDisplayOptions = new WX_COLLAPSIBLE_PANE( m_panelLayers, wxID_ANY, _( "Layer Display Options" ) );
     m_paneLayerDisplayOptions->Collapse();
     m_paneLayerDisplayOptions->SetBackgroundColour( m_notebook->GetThemeBackgroundColour() );
 
@@ -689,7 +688,7 @@ void APPEARANCE_CONTROLS::createControls()
     layerDisplayPane->Layout();
     layerDisplayOptionsSizer->Fit( layerDisplayPane );
 
-    m_panelLayersSizer->Add( m_paneLayerDisplayOptions, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );
+    m_panelLayersSizer->Add( m_paneLayerDisplayOptions, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 3 );
 
     m_paneLayerDisplayOptions->Bind( WX_COLLAPSIBLE_PANE_CHANGED,
                                      [&]( wxCommandEvent& aEvent )
@@ -702,8 +701,7 @@ void APPEARANCE_CONTROLS::createControls()
 
     // Create net display options
 
-    m_paneNetDisplayOptions = new WX_COLLAPSIBLE_PANE( m_panelNetsAndClasses, wxID_ANY,
-                                                       _( "Net Display Options" ) );
+    m_paneNetDisplayOptions = new WX_COLLAPSIBLE_PANE( m_panelNetsAndClasses, wxID_ANY, _( "Net Display Options" ) );
     m_paneNetDisplayOptions->Collapse();
     m_paneNetDisplayOptions->SetBackgroundColour( m_notebook->GetThemeBackgroundColour() );
 

@@ -12,9 +12,7 @@
 #include <wx/intl.h>
 class PINSHAPE_COMBOBOX;
 class PINTYPE_COMBOBOX;
-class STD_BITMAP_BUTTON;
 class WX_BITMAP_COMBOBOX;
-class WX_GRID;
 class WX_INFOBAR;
 
 #include "dialog_shim.h"
@@ -31,13 +29,7 @@ class WX_INFOBAR;
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
-#include <wx/grid.h>
-#include <wx/bmpbuttn.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/collpane.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -81,10 +73,7 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkShow;
 		wxStaticText* m_staticText16;
 		wxPanel* m_panelShowPin;
-		wxCollapsiblePane* m_alternatesTurndown;
-		WX_GRID* m_alternatesGrid;
-		STD_BITMAP_BUTTON* m_addAlternate;
-		STD_BITMAP_BUTTON* m_deleteAlternate;
+		wxBoxSizer* m_lowerSizer;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
@@ -93,9 +82,6 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPropertiesChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCollapsiblePaneChange( wxCollapsiblePaneEvent& event ) { event.Skip(); }
-		virtual void OnAddAlternate( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDeleteAlternate( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

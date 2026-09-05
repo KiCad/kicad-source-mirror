@@ -7,9 +7,7 @@
 
 #include "pinshape_combobox.h"
 #include "pintype_combobox.h"
-#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_bitmap_combobox.h"
-#include "widgets/wx_grid.h"
 #include "widgets/wx_infobar.h"
 
 #include "dialog_pin_properties_base.h"
@@ -182,78 +180,10 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	mainSizer->Add( bUpperSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bLowerSizer;
-	bLowerSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_alternatesTurndown = new wxCollapsiblePane( this, wxID_ANY, _("Alternate pin function definitions"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
-	m_alternatesTurndown->Collapse( true );
-
-	wxBoxSizer* bAlternatesSizer;
-	bAlternatesSizer = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bRightMargin;
-	bRightMargin = new wxBoxSizer( wxVERTICAL );
-
-	m_alternatesGrid = new WX_GRID( m_alternatesTurndown->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-
-	// Grid
-	m_alternatesGrid->CreateGrid( 1, 3 );
-	m_alternatesGrid->EnableEditing( true );
-	m_alternatesGrid->EnableGridLines( true );
-	m_alternatesGrid->EnableDragGridSize( false );
-	m_alternatesGrid->SetMargins( 0, 0 );
-
-	// Columns
-	m_alternatesGrid->SetColSize( 0, 260 );
-	m_alternatesGrid->SetColSize( 1, 140 );
-	m_alternatesGrid->SetColSize( 2, 140 );
-	m_alternatesGrid->EnableDragColMove( false );
-	m_alternatesGrid->EnableDragColSize( false );
-	m_alternatesGrid->SetColLabelValue( 0, _("Alternate Pin Name") );
-	m_alternatesGrid->SetColLabelValue( 1, _("Electrical Type") );
-	m_alternatesGrid->SetColLabelValue( 2, _("Graphic Style") );
-	m_alternatesGrid->SetColLabelSize( 22 );
-	m_alternatesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_alternatesGrid->EnableDragRowSize( false );
-	m_alternatesGrid->SetRowLabelSize( 0 );
-	m_alternatesGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_alternatesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_alternatesGrid->SetMinSize( wxSize( -1,100 ) );
-
-	bRightMargin->Add( m_alternatesGrid, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_lowerSizer = new wxBoxSizer( wxVERTICAL );
 
 
-	bAlternatesSizer->Add( bRightMargin, 1, wxEXPAND|wxRIGHT, 5 );
-
-	wxBoxSizer* bButtonSizer;
-	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_addAlternate = new STD_BITMAP_BUTTON( m_alternatesTurndown->GetPane(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSizer->Add( m_addAlternate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-
-	bButtonSizer->Add( 20, 0, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_deleteAlternate = new STD_BITMAP_BUTTON( m_alternatesTurndown->GetPane(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSizer->Add( m_deleteAlternate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-
-	bAlternatesSizer->Add( bButtonSizer, 0, wxTOP, 5 );
-
-
-	m_alternatesTurndown->GetPane()->SetSizer( bAlternatesSizer );
-	m_alternatesTurndown->GetPane()->Layout();
-	bAlternatesSizer->Fit( m_alternatesTurndown->GetPane() );
-	bLowerSizer->Add( m_alternatesTurndown, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	mainSizer->Add( bLowerSizer, 1, wxEXPAND|wxLEFT, 10 );
+	mainSizer->Add( m_lowerSizer, 1, wxEXPAND|wxLEFT, 10 );
 
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
@@ -285,9 +215,6 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_checkApplyToAllParts->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkApplyToAllBodyStyles->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkShow->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
-	m_alternatesTurndown->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnCollapsiblePaneChange ), NULL, this );
-	m_addAlternate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnAddAlternate ), NULL, this );
-	m_deleteAlternate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnDeleteAlternate ), NULL, this );
 }
 
 DIALOG_PIN_PROPERTIES_BASE::~DIALOG_PIN_PROPERTIES_BASE()
@@ -306,8 +233,5 @@ DIALOG_PIN_PROPERTIES_BASE::~DIALOG_PIN_PROPERTIES_BASE()
 	m_checkApplyToAllParts->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkApplyToAllBodyStyles->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkShow->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
-	m_alternatesTurndown->Disconnect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnCollapsiblePaneChange ), NULL, this );
-	m_addAlternate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnAddAlternate ), NULL, this );
-	m_deleteAlternate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnDeleteAlternate ), NULL, this );
 
 }
