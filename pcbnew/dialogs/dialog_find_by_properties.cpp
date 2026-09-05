@@ -144,6 +144,11 @@ wxVariant DIALOG_FIND_BY_PROPERTIES::anyToVariant( const wxAny& aValue )
     else if( aValue.CheckType<wxString>() )
         return wxVariant( aValue.As<wxString>() );
 
+    wxVariant variant;
+
+    if( aValue.GetAs( &variant ) )
+        return variant;
+
     wxString strVal;
 
     if( aValue.GetAs( &strVal ) )
