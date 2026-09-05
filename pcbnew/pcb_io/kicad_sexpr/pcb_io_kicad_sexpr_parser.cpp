@@ -9597,7 +9597,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     // In legacy files, ensure the zone net name is valid, and matches the net code
-    if( !legacyNetnameFromFile.IsEmpty() && zone->GetNetname() != legacyNetnameFromFile )
+    if( m_board && !legacyNetnameFromFile.IsEmpty() && zone->GetNetname() != legacyNetnameFromFile )
     {
         // Can happens which old boards, with nonexistent nets ...
         // or after being edited by hand
