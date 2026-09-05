@@ -1250,6 +1250,9 @@ void RENDER_3D_OPENGL::get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstR
 
         fpMatrix = glm::scale( fpMatrix, SFVEC3F( modelunit_to_3d_units_factor ) );
 
+        // The placeholder stands in for the whole footprint, so several missing models share one.
+        bool placeholderAdded = false;
+
         // Get the list of model files for this model
         for( const FP_3DMODEL& sM : aFootprint->Models() )
         {
@@ -1261,8 +1264,13 @@ void RENDER_3D_OPENGL::get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstR
 
             if( cache_i == m_3dModelMap.end() )
             {
-                renderPlaceholderForFootprint( aDstRenderList, fpMatrix, aFootprint, aRenderTransparentOnly,
-                                               aIsSelected, aRenderTransparentOnly ? sM.m_Opacity : 1.0f );
+                if( !placeholderAdded )
+                {
+                    renderPlaceholderForFootprint( aDstRenderList, fpMatrix, aFootprint, aRenderTransparentOnly,
+                                                   aIsSelected, aRenderTransparentOnly ? sM.m_Opacity : 1.0f );
+                    placeholderAdded = true;
+                }
+
                 continue;
             }
 
