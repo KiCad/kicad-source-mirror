@@ -42,8 +42,7 @@ namespace
 class MSW_TOUCHPAD_GESTURE_HANDLER final : public KIPLATFORM::UI::TOUCHPAD_GESTURE_HANDLER
 {
 public:
-    MSW_TOUCHPAD_GESTURE_HANDLER( wxWindow* aInputWindow,
-                                  KIPLATFORM::UI::TOUCHPAD_GESTURE_CALLBACK aCallback ) :
+    MSW_TOUCHPAD_GESTURE_HANDLER( wxWindow* aInputWindow, KIPLATFORM::UI::TOUCHPAD_GESTURE_CALLBACK aCallback ) :
             m_inputWindow( aInputWindow ),
             m_callback( std::move( aCallback ) )
     {
@@ -53,7 +52,7 @@ public:
     ~MSW_TOUCHPAD_GESTURE_HANDLER() override
     {
         if( m_registered )
-            m_registerTouchpadWindow( getHwnd(), FALSE );
+            m_registerTouchpadCapableWindow( getHwnd(), FALSE );
 
         if( m_subclassed )
             m_removeWindowSubclass( getHwnd(), windowProc, SUBCLASS_ID );
@@ -71,36 +70,33 @@ public:
     bool IsActive() const { return m_registered && m_subclassed; }
 
 private:
-    using REGISTER_TOUCHPAD_WINDOW = BOOL (WINAPI*)( HWND, BOOL );
-    using GET_TOUCHPAD_HISTORY = BOOL (WINAPI*)( UINT32, UINT32*, UINT32*,
-                                                 POINTER_TOUCH_INFO* );
-    using CREATE_INTERACTION_CONTEXT = HRESULT (WINAPI*)( HINTERACTIONCONTEXT* );
-    using DESTROY_INTERACTION_CONTEXT = HRESULT (WINAPI*)( HINTERACTIONCONTEXT );
-    using REGISTER_OUTPUT_CALLBACK = HRESULT (WINAPI*)( HINTERACTIONCONTEXT,
-                                                         INTERACTION_CONTEXT_OUTPUT_CALLBACK,
+    using REGISTER_TOUCHPAD_CAPABLE_WINDOW = BOOL( WINAPI* )( HWND, BOOL );
+    using GET_POINTER_FRAME_TOUCHPAD_INFO_HISTORY = BOOL( WINAPI* )( UINT32, UINT32*, UINT32*, POINTER_TOUCH_INFO* );
+    using CREATE_INTERACTION_CONTEXT = HRESULT( WINAPI* )( HINTERACTIONCONTEXT* );
+    using DESTROY_INTERACTION_CONTEXT = HRESULT( WINAPI* )( HINTERACTIONCONTEXT );
+    using REGISTER_OUTPUT_CALLBACK = HRESULT( WINAPI* )( HINTERACTIONCONTEXT, INTERACTION_CONTEXT_OUTPUT_CALLBACK,
                                                          void* );
-    using SET_INTERACTION_CONFIGURATION = HRESULT (WINAPI*)(
-            HINTERACTIONCONTEXT, UINT32, const INTERACTION_CONTEXT_CONFIGURATION* );
-    using SET_INTERACTION_PROPERTY = HRESULT (WINAPI*)( HINTERACTIONCONTEXT,
-                                                        INTERACTION_CONTEXT_PROPERTY, UINT32 );
-    using PROCESS_POINTER_FRAMES = HRESULT (WINAPI*)( HINTERACTIONCONTEXT, UINT32, UINT32,
-                                                      const POINTER_TYPE_INFO* );
-    using SET_WINDOW_SUBCLASS = BOOL (WINAPI*)( HWND, SUBCLASSPROC, UINT_PTR, DWORD_PTR );
-    using REMOVE_WINDOW_SUBCLASS = BOOL (WINAPI*)( HWND, SUBCLASSPROC, UINT_PTR );
-    using DEF_SUBCLASS_PROC = LRESULT (WINAPI*)( HWND, UINT, WPARAM, LPARAM );
+    using SET_INTERACTION_CONFIGURATION = HRESULT( WINAPI* )( HINTERACTIONCONTEXT, UINT32,
+                                                              const INTERACTION_CONTEXT_CONFIGURATION* );
+    using SET_INTERACTION_PROPERTY = HRESULT( WINAPI* )( HINTERACTIONCONTEXT, INTERACTION_CONTEXT_PROPERTY, UINT32 );
+    using PROCESS_POINTER_FRAMES_INTERACTION_CONTEXT2 = HRESULT( WINAPI* )( HINTERACTIONCONTEXT, UINT32, UINT32,
+                                                                            const POINTER_TYPE_INFO* );
+    using SET_WINDOW_SUBCLASS = BOOL( WINAPI* )( HWND, SUBCLASSPROC, UINT_PTR, DWORD_PTR );
+    using REMOVE_WINDOW_SUBCLASS = BOOL( WINAPI* )( HWND, SUBCLASSPROC, UINT_PTR );
+    using DEF_SUBCLASS_PROC = LRESULT( WINAPI* )( HWND, UINT, WPARAM, LPARAM );
 
 #ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable : 4191 )
 #endif
 
-    template<typename T>
+    template <typename T>
     static T loadNamedProc( HMODULE aModule, const char* aName )
     {
         return reinterpret_cast<T>( GetProcAddress( aModule, aName ) );
     }
 
-    template<typename T>
+    template <typename T>
     static T loadOrdinalProc( HMODULE aModule, WORD aOrdinal )
     {
         return reinterpret_cast<T>( GetProcAddress( aModule, MAKEINTRESOURCEA( aOrdinal ) ) );
@@ -110,10 +106,7 @@ private:
 #pragma warning( pop )
 #endif
 
-    HWND getHwnd() const
-    {
-        return reinterpret_cast<HWND>( m_inputWindow->GetHandle() );
-    }
+    HWND getHwnd() const { return reinterpret_cast<HWND>( m_inputWindow->GetHandle() ); }
 
     void initialize()
     {
@@ -124,31 +117,26 @@ private:
         if( !user32 || !m_ninput || !m_comctl32 )
             return;
 
-        m_registerTouchpadWindow = loadOrdinalProc<REGISTER_TOUCHPAD_WINDOW>( user32, 2689 );
-        m_getTouchpadHistory = loadOrdinalProc<GET_TOUCHPAD_HISTORY>( user32, 2694 );
-        m_processPointerFrames = loadOrdinalProc<PROCESS_POINTER_FRAMES>( m_ninput, 2507 );
-        m_createInteractionContext =
-                loadNamedProc<CREATE_INTERACTION_CONTEXT>( m_ninput, "CreateInteractionContext" );
+        m_registerTouchpadCapableWindow = loadOrdinalProc<REGISTER_TOUCHPAD_CAPABLE_WINDOW>( user32, 2689 );
+        m_getPointerFrameTouchpadInfoHistory = loadOrdinalProc<GET_POINTER_FRAME_TOUCHPAD_INFO_HISTORY>( user32, 2694 );
+        m_processPointerFramesInteractionContext2 =
+                loadOrdinalProc<PROCESS_POINTER_FRAMES_INTERACTION_CONTEXT2>( m_ninput, 2507 );
+        m_createInteractionContext = loadNamedProc<CREATE_INTERACTION_CONTEXT>( m_ninput, "CreateInteractionContext" );
         m_destroyInteractionContext =
                 loadNamedProc<DESTROY_INTERACTION_CONTEXT>( m_ninput, "DestroyInteractionContext" );
-        m_registerOutputCallback = loadNamedProc<REGISTER_OUTPUT_CALLBACK>(
-                m_ninput, "RegisterOutputCallbackInteractionContext" );
+        m_registerOutputCallback =
+                loadNamedProc<REGISTER_OUTPUT_CALLBACK>( m_ninput, "RegisterOutputCallbackInteractionContext" );
         m_setInteractionConfiguration = loadNamedProc<SET_INTERACTION_CONFIGURATION>(
                 m_ninput, "SetInteractionConfigurationInteractionContext" );
-        m_setInteractionProperty = loadNamedProc<SET_INTERACTION_PROPERTY>(
-                m_ninput, "SetPropertyInteractionContext" );
-        m_setWindowSubclass =
-                loadNamedProc<SET_WINDOW_SUBCLASS>( m_comctl32, "SetWindowSubclass" );
-        m_removeWindowSubclass =
-                loadNamedProc<REMOVE_WINDOW_SUBCLASS>( m_comctl32, "RemoveWindowSubclass" );
-        m_defSubclassProc =
-                loadNamedProc<DEF_SUBCLASS_PROC>( m_comctl32, "DefSubclassProc" );
+        m_setInteractionProperty = loadNamedProc<SET_INTERACTION_PROPERTY>( m_ninput, "SetPropertyInteractionContext" );
+        m_setWindowSubclass = loadNamedProc<SET_WINDOW_SUBCLASS>( m_comctl32, "SetWindowSubclass" );
+        m_removeWindowSubclass = loadNamedProc<REMOVE_WINDOW_SUBCLASS>( m_comctl32, "RemoveWindowSubclass" );
+        m_defSubclassProc = loadNamedProc<DEF_SUBCLASS_PROC>( m_comctl32, "DefSubclassProc" );
 
-        if( !m_registerTouchpadWindow || !m_getTouchpadHistory || !m_processPointerFrames
-            || !m_createInteractionContext || !m_destroyInteractionContext
-            || !m_registerOutputCallback || !m_setInteractionConfiguration
-            || !m_setInteractionProperty || !m_setWindowSubclass || !m_removeWindowSubclass
-            || !m_defSubclassProc )
+        if( !m_registerTouchpadCapableWindow || !m_getPointerFrameTouchpadInfoHistory
+            || !m_processPointerFramesInteractionContext2 || !m_createInteractionContext || !m_destroyInteractionContext
+            || !m_registerOutputCallback || !m_setInteractionConfiguration || !m_setInteractionProperty
+            || !m_setWindowSubclass || !m_removeWindowSubclass || !m_defSubclassProc )
         {
             return;
         }
@@ -160,14 +148,13 @@ private:
             return;
 
         INTERACTION_CONTEXT_CONFIGURATION configuration = {
-            INTERACTION_ID_MANIPULATION,
-            INTERACTION_CONFIGURATION_FLAG_MANIPULATION
-                    | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_TRANSLATION_X
-                    | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_TRANSLATION_Y
-                    | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_SCALING
-                    | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_RAILS_X
-                    | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_RAILS_Y
-                    | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_MULTIPLE_FINGER_PANNING
+            INTERACTION_ID_MANIPULATION, INTERACTION_CONFIGURATION_FLAG_MANIPULATION
+                                                 | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_TRANSLATION_X
+                                                 | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_TRANSLATION_Y
+                                                 | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_SCALING
+                                                 | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_RAILS_X
+                                                 | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_RAILS_Y
+                                                 | INTERACTION_CONFIGURATION_FLAG_MANIPULATION_MULTIPLE_FINGER_PANNING
         };
 
         if( FAILED( m_setInteractionConfiguration( m_context, 1, &configuration ) ) )
@@ -175,25 +162,20 @@ private:
 
         // Device-space output is stable across display scale factors.  It is converted to the
         // input window's effective DPI in onOutput().
-        if( FAILED( m_setInteractionProperty( m_context,
-                                              INTERACTION_CONTEXT_PROPERTY_MEASUREMENT_UNITS,
-                                              0 ) )
-            || FAILED( m_setInteractionProperty( m_context,
-                                                 INTERACTION_CONTEXT_PROPERTY_FILTER_POINTERS,
-                                                 FALSE ) ) )
+        if( FAILED( m_setInteractionProperty( m_context, INTERACTION_CONTEXT_PROPERTY_MEASUREMENT_UNITS, 0 ) )
+            || FAILED( m_setInteractionProperty( m_context, INTERACTION_CONTEXT_PROPERTY_FILTER_POINTERS, FALSE ) ) )
         {
             return;
         }
 
-        m_registered = m_registerTouchpadWindow( getHwnd(), TRUE ) != FALSE;
+        m_registered = m_registerTouchpadCapableWindow( getHwnd(), TRUE ) != FALSE;
 
         if( !m_registered )
             return;
 
-        if( !m_setWindowSubclass( getHwnd(), windowProc, SUBCLASS_ID,
-                                  reinterpret_cast<DWORD_PTR>( this ) ) )
+        if( !m_setWindowSubclass( getHwnd(), windowProc, SUBCLASS_ID, reinterpret_cast<DWORD_PTR>( this ) ) )
         {
-            m_registerTouchpadWindow( getHwnd(), FALSE );
+            m_registerTouchpadCapableWindow( getHwnd(), FALSE );
             m_registered = false;
             return;
         }
@@ -203,8 +185,8 @@ private:
 
     bool handleMessage( UINT aMessage, WPARAM aWParam )
     {
-        if( !m_registered || ( aMessage != WM_POINTERDOWN && aMessage != WM_POINTERUPDATE
-                               && aMessage != WM_POINTERUP ) )
+        if( !m_registered
+            || ( aMessage != WM_POINTERDOWN && aMessage != WM_POINTERUPDATE && aMessage != WM_POINTERUP ) )
         {
             return false;
         }
@@ -218,9 +200,8 @@ private:
         UINT32 frameCount = 0;
         UINT32 pointerCount = 0;
 
-        if( !m_getTouchpadHistory( pointerId, &frameCount, &pointerCount, nullptr )
-            || frameCount == 0 || pointerCount == 0
-            || frameCount > std::numeric_limits<size_t>::max() / pointerCount )
+        if( !m_getPointerFrameTouchpadInfoHistory( pointerId, &frameCount, &pointerCount, nullptr ) || frameCount == 0
+            || pointerCount == 0 || frameCount > std::numeric_limits<size_t>::max() / pointerCount )
         {
             return false;
         }
@@ -234,7 +215,7 @@ private:
 
         std::vector<POINTER_TOUCH_INFO> touchInfos( entryCount );
 
-        if( !m_getTouchpadHistory( pointerId, &frameCount, &pointerCount, touchInfos.data() ) )
+        if( !m_getPointerFrameTouchpadInfoHistory( pointerId, &frameCount, &pointerCount, touchInfos.data() ) )
             return false;
 
         const size_t filledEntryCount = static_cast<size_t>( frameCount ) * pointerCount;
@@ -250,8 +231,8 @@ private:
             typeInfos[i].touchInfo = touchInfos[i];
         }
 
-        if( FAILED( m_processPointerFrames( m_context, frameCount, pointerCount,
-                                           typeInfos.data() ) ) )
+        if( FAILED( m_processPointerFramesInteractionContext2( m_context, frameCount, pointerCount,
+                                                               typeInfos.data() ) ) )
         {
             return false;
         }
@@ -261,8 +242,8 @@ private:
         return true;
     }
 
-    static LRESULT CALLBACK windowProc( HWND aHwnd, UINT aMessage, WPARAM aWParam, LPARAM aLParam,
-                                        UINT_PTR, DWORD_PTR aReferenceData )
+    static LRESULT CALLBACK windowProc( HWND aHwnd, UINT aMessage, WPARAM aWParam, LPARAM aLParam, UINT_PTR,
+                                        DWORD_PTR aReferenceData )
     {
         auto* handler = reinterpret_cast<MSW_TOUCHPAD_GESTURE_HANDLER*>( aReferenceData );
 
@@ -282,8 +263,7 @@ private:
         return DefWindowProcW( aHwnd, aMessage, aWParam, aLParam );
     }
 
-    static void CALLBACK outputCallback( void* aClientData,
-                                         const INTERACTION_CONTEXT_OUTPUT* aOutput )
+    static void CALLBACK outputCallback( void* aClientData, const INTERACTION_CONTEXT_OUTPUT* aOutput )
     {
         try
         {
@@ -297,16 +277,15 @@ private:
 
     void onOutput( const INTERACTION_CONTEXT_OUTPUT* aOutput )
     {
-        if( !aOutput || aOutput->interactionId != INTERACTION_ID_MANIPULATION
-            || aOutput->inputType != PT_TOUCHPAD )
+        if( !aOutput || aOutput->interactionId != INTERACTION_ID_MANIPULATION || aOutput->inputType != PT_TOUCHPAD )
         {
             return;
         }
 
-        const wxSize dpi = m_inputWindow->GetDPI();
-        constexpr double HIMETRIC_PER_INCH = 2540.0;
-        const double pixelsPerHimetricX = ( dpi.x > 0 ? dpi.x : 96 ) / HIMETRIC_PER_INCH;
-        const double pixelsPerHimetricY = ( dpi.y > 0 ? dpi.y : 96 ) / HIMETRIC_PER_INCH;
+        const wxSize                  dpi = m_inputWindow->GetDPI();
+        constexpr double              HIMETRIC_PER_INCH = 2540.0;
+        const double                  pixelsPerHimetricX = ( dpi.x > 0 ? dpi.x : 96 ) / HIMETRIC_PER_INCH;
+        const double                  pixelsPerHimetricY = ( dpi.y > 0 ? dpi.y : 96 ) / HIMETRIC_PER_INCH;
         const MANIPULATION_TRANSFORM& delta = aOutput->arguments.manipulation.delta;
 
         POINT cursorPosition = {};
@@ -314,36 +293,32 @@ private:
         if( !GetCursorPos( &cursorPosition ) || !ScreenToClient( getHwnd(), &cursorPosition ) )
             return;
 
-        m_callback( {
-                delta.translationX * pixelsPerHimetricX,
-                delta.translationY * pixelsPerHimetricY,
-                delta.scale,
-                wxPoint( cursorPosition.x, cursorPosition.y )
-        } );
+        m_callback( { delta.translationX * pixelsPerHimetricX, delta.translationY * pixelsPerHimetricY, delta.scale,
+                      wxPoint( cursorPosition.x, cursorPosition.y ) } );
     }
 
     static constexpr UINT_PTR SUBCLASS_ID = 1;
 
-    wxWindow*                                m_inputWindow = nullptr;
-    KIPLATFORM::UI::TOUCHPAD_GESTURE_CALLBACK m_callback;
-    HMODULE                                  m_ninput = nullptr;
-    HMODULE                                  m_comctl32 = nullptr;
-    HINTERACTIONCONTEXT                      m_context = nullptr;
-    REGISTER_TOUCHPAD_WINDOW                 m_registerTouchpadWindow = nullptr;
-    GET_TOUCHPAD_HISTORY                     m_getTouchpadHistory = nullptr;
-    CREATE_INTERACTION_CONTEXT               m_createInteractionContext = nullptr;
-    DESTROY_INTERACTION_CONTEXT              m_destroyInteractionContext = nullptr;
-    REGISTER_OUTPUT_CALLBACK                 m_registerOutputCallback = nullptr;
-    SET_INTERACTION_CONFIGURATION            m_setInteractionConfiguration = nullptr;
-    SET_INTERACTION_PROPERTY                 m_setInteractionProperty = nullptr;
-    PROCESS_POINTER_FRAMES                   m_processPointerFrames = nullptr;
-    SET_WINDOW_SUBCLASS                      m_setWindowSubclass = nullptr;
-    REMOVE_WINDOW_SUBCLASS                   m_removeWindowSubclass = nullptr;
-    DEF_SUBCLASS_PROC                        m_defSubclassProc = nullptr;
-    bool                                     m_registered = false;
-    bool                                     m_subclassed = false;
+    wxWindow*                                   m_inputWindow = nullptr;
+    KIPLATFORM::UI::TOUCHPAD_GESTURE_CALLBACK   m_callback;
+    HMODULE                                     m_ninput = nullptr;
+    HMODULE                                     m_comctl32 = nullptr;
+    HINTERACTIONCONTEXT                         m_context = nullptr;
+    REGISTER_TOUCHPAD_CAPABLE_WINDOW            m_registerTouchpadCapableWindow = nullptr;
+    GET_POINTER_FRAME_TOUCHPAD_INFO_HISTORY     m_getPointerFrameTouchpadInfoHistory = nullptr;
+    CREATE_INTERACTION_CONTEXT                  m_createInteractionContext = nullptr;
+    DESTROY_INTERACTION_CONTEXT                 m_destroyInteractionContext = nullptr;
+    REGISTER_OUTPUT_CALLBACK                    m_registerOutputCallback = nullptr;
+    SET_INTERACTION_CONFIGURATION               m_setInteractionConfiguration = nullptr;
+    SET_INTERACTION_PROPERTY                    m_setInteractionProperty = nullptr;
+    PROCESS_POINTER_FRAMES_INTERACTION_CONTEXT2 m_processPointerFramesInteractionContext2 = nullptr;
+    SET_WINDOW_SUBCLASS                         m_setWindowSubclass = nullptr;
+    REMOVE_WINDOW_SUBCLASS                      m_removeWindowSubclass = nullptr;
+    DEF_SUBCLASS_PROC                           m_defSubclassProc = nullptr;
+    bool                                        m_registered = false;
+    bool                                        m_subclassed = false;
 };
-}
+} // namespace
 
 
 bool KIPLATFORM::UI::IsNativeTouchpadGestureAvailable()
@@ -353,17 +328,14 @@ bool KIPLATFORM::UI::IsNativeTouchpadGestureAvailable()
     HMODULE comctl32 = LoadLibraryExW( L"comctl32.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32 );
 
     const bool available =
-            user32 && ninput && comctl32
-            && GetProcAddress( user32, MAKEINTRESOURCEA( 2689 ) )
-            && GetProcAddress( user32, MAKEINTRESOURCEA( 2694 ) )
-            && GetProcAddress( ninput, MAKEINTRESOURCEA( 2507 ) )
+            user32 && ninput && comctl32 && GetProcAddress( user32, MAKEINTRESOURCEA( 2689 ) )
+            && GetProcAddress( user32, MAKEINTRESOURCEA( 2694 ) ) && GetProcAddress( ninput, MAKEINTRESOURCEA( 2507 ) )
             && GetProcAddress( ninput, "CreateInteractionContext" )
             && GetProcAddress( ninput, "DestroyInteractionContext" )
             && GetProcAddress( ninput, "RegisterOutputCallbackInteractionContext" )
             && GetProcAddress( ninput, "SetInteractionConfigurationInteractionContext" )
             && GetProcAddress( ninput, "SetPropertyInteractionContext" )
-            && GetProcAddress( comctl32, "SetWindowSubclass" )
-            && GetProcAddress( comctl32, "RemoveWindowSubclass" )
+            && GetProcAddress( comctl32, "SetWindowSubclass" ) && GetProcAddress( comctl32, "RemoveWindowSubclass" )
             && GetProcAddress( comctl32, "DefSubclassProc" );
 
     if( ninput )
@@ -377,14 +349,12 @@ bool KIPLATFORM::UI::IsNativeTouchpadGestureAvailable()
 
 
 std::unique_ptr<KIPLATFORM::UI::TOUCHPAD_GESTURE_HANDLER>
-KIPLATFORM::UI::CreateTouchpadGestureHandler( wxWindow* aInputWindow,
-                                              TOUCHPAD_GESTURE_CALLBACK aCallback )
+KIPLATFORM::UI::CreateTouchpadGestureHandler( wxWindow* aInputWindow, TOUCHPAD_GESTURE_CALLBACK aCallback )
 {
     if( !aInputWindow || !aCallback )
         return nullptr;
 
-    auto handler = std::make_unique<MSW_TOUCHPAD_GESTURE_HANDLER>( aInputWindow,
-                                                                  std::move( aCallback ) );
+    auto handler = std::make_unique<MSW_TOUCHPAD_GESTURE_HANDLER>( aInputWindow, std::move( aCallback ) );
 
     if( !handler->IsActive() )
         return nullptr;
