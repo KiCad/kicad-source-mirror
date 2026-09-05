@@ -1203,6 +1203,23 @@ message FootprintAttributes
   bool allow_soldermask_bridges = 9;
 }
 
+// Per-variant overrides for a footprint instance
+// Since: 10.0.7
+message FootprintVariant
+{
+  // Variant name that these overrides apply to.
+  string name = 1;
+
+  bool do_not_populate = 2;
+  bool exclude_from_bill_of_materials = 3;
+  bool exclude_from_position_files = 4;
+
+  reserved 5;
+
+  // Map of field name to override value in this variant
+  map<string, string> fields = 6;
+}
+
 message NetTieDefinition
 {
   repeated string pad_number = 1;
@@ -1311,6 +1328,12 @@ message FootprintInstance
 
   // Since: 10.0.7
   kiapi.common.types.EmbeddedFiles embedded_files = 18;
+
+  reserved 19;
+
+  // Per-variant data for this footprint instance
+  // Since: 10.0.7
+  repeated FootprintVariant variants = 20;
 }
 
 // Since: 10.0.7

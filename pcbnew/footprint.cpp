@@ -440,6 +440,21 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
     kiapi::board::PackEmbeddedFiles( *footprint.mutable_embedded_files(), *this );
 
+    for( const auto& [variantName, variant] : m_variants )
+    {
+        types::FootprintVariant* variantMsg = footprint.add_variants();
+        variantMsg->set_name( variantName.ToUTF8() );
+        variantMsg->set_do_not_populate( variant.GetDNP() );
+        variantMsg->set_exclude_from_bill_of_materials( variant.GetExcludedFromBOM() );
+        variantMsg->set_exclude_from_position_files( variant.GetExcludedFromPosFiles() );
+
+        for( const auto& [fieldName, fieldValue] : variant.GetFields() )
+        {
+            variantMsg->mutable_fields()->insert( { std::string( fieldName.ToUTF8() ),
+                                                    std::string( fieldValue.ToUTF8() ) } );
+        }
+    }
+
     aContainer.PackFrom( footprint );
 }
 
@@ -655,6 +670,25 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
     if( !kiapi::board::UnpackEmbeddedFiles( *this, footprint.embedded_files() ) )
         return false;
+
+    m_variants.clear();
+
+    for( const types::FootprintVariant& variantMsg : footprint.variants() )
+    {
+        wxString variantName = wxString::FromUTF8( variantMsg.name() );
+
+        if( variantName.IsEmpty() || variantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+            continue;
+
+        FOOTPRINT_VARIANT& variant = m_variants[variantName];
+        variant.SetName( variantName );
+        variant.SetDNP( variantMsg.do_not_populate() );
+        variant.SetExcludedFromBOM( variantMsg.exclude_from_bill_of_materials() );
+        variant.SetExcludedFromPosFiles( variantMsg.exclude_from_position_files() );
+
+        for( const auto& [fieldName, fieldValue] : variantMsg.fields() )
+            variant.SetFieldValue( wxString::FromUTF8( fieldName ), wxString::FromUTF8( fieldValue ) );
+    }
 
     return true;
 }
