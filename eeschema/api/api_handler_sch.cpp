@@ -35,8 +35,7 @@ using kiapi::common::types::ItemRequestStatus;
 
 
 API_HANDLER_SCH::API_HANDLER_SCH( SCH_EDIT_FRAME* aFrame ) :
-        API_HANDLER_EDITOR(),
-        m_frame( aFrame )
+        API_HANDLER_EDITOR( aFrame )
 {
     registerHandler<GetOpenDocuments, GetOpenDocumentsResponse>(
             &API_HANDLER_SCH::handleGetOpenDocuments );
@@ -45,7 +44,7 @@ API_HANDLER_SCH::API_HANDLER_SCH( SCH_EDIT_FRAME* aFrame ) :
 
 std::unique_ptr<COMMIT> API_HANDLER_SCH::createCommit()
 {
-    return std::make_unique<SCH_COMMIT>( m_frame );
+    return std::make_unique<SCH_COMMIT>( static_cast<SCH_EDIT_FRAME*>( m_frame ) );
 }
 
 
@@ -153,7 +152,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         return tl::unexpected( e );
     }
 
-    SCH_SCREEN* screen = m_frame->GetScreen();
+    SCH_SCREEN* screen = static_cast<SCH_EDIT_FRAME*>( m_frame )->GetScreen();
     EE_RTREE& screenItems = screen->Items();
 
     std::map<KIID, EDA_ITEM*> itemUuidMap;

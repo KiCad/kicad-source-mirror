@@ -1221,6 +1221,11 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SCH_EDIT_FRAME::doCloseWindow()
 {
+#ifdef KICAD_IPC_API
+    Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
+#endif
+
     // Unregister the autosave saver before any cleanup that might invalidate m_schematic
     if( m_schematic )
         Kiway().LocalHistory().UnregisterSaver( m_schematic );
@@ -1247,11 +1252,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
         Kiway().LocalHistory().RemoveAutosaveFiles( Prj().GetProjectPath(), sheetSrcs );
     }
-
-#ifdef KICAD_IPC_API
-    Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
-    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
-#endif
 
     // Close modeless dialogs.  They're trouble when they get destroyed after the frame.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );

@@ -66,8 +66,6 @@ protected:
 private:
     HANDLER_RESULT<commands::GetOpenDocumentsResponse> handleGetOpenDocuments(
             const HANDLER_CONTEXT<commands::GetOpenDocuments>& aCtx );
-
-    SCH_EDIT_FRAME* m_frame;
 };
 
 
