@@ -2570,7 +2570,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
         aList.emplace_back( _( "Footprint Name" ), GetFPID().GetLibItemName().wx_str() );
 
-        aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%zu" ), GetNumberedPadCount() ) );
+        aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%u" ), GetNumberedPadCount() ) );
 
         aList.emplace_back( wxString::Format( _( "Doc: %s" ), GetLibDescription() ),
                             wxString::Format( _( "Keywords: %s" ), GetKeywords() ) );
