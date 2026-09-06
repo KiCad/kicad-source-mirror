@@ -22,12 +22,15 @@
 
 # Compiled bitmap sources
 bitmaps_png/cpp_*/*.cpp     generated
+common/bitmap_info.cpp      generated
 
 # wxFormBuilder-generated files
 **/dialog*/*_base.cpp       generated
 **/dialog*/*_base.h         generated
 **/sim/*_base.cpp           generated
 **/sim/*_base.h             generated
+pcb_calculator/calculator_panels/*_base.cpp    generated
+pcb_calculator/calculator_panels/*_base.h      generated
 
 # Lemon grammars
 common/libeval/grammar.c    generated
