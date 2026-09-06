@@ -178,7 +178,7 @@ public:
         return it != m_netClassChainPatternAssignments.end() && !it->second.empty();
     }
 
-    /// @brief Clears effective netclass cache for the given net
+    /// @brief Clears the net cache and cached bus classes derived from that net
     void ClearCacheForNet( const wxString& netName );
 
     /// @brief Clears the effective netclass cache for all nets
@@ -390,6 +390,9 @@ private:
 
     /// @brief Cache of nets to pattern-matched netclasses
     std::map<wxString, std::shared_ptr<NETCLASS>> m_effectiveNetclassCache;
+
+    /// @brief Members consulted when a cached bus inherits its effective class.
+    std::map<wxString, std::set<wxString>> m_netclassBusMembers;
 
     /**
      * A map of fully-qualified net names to colors used in the board context.

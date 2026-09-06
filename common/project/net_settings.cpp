@@ -839,11 +839,27 @@ void NET_SETTINGS::ClearChainPatternAssignments( NET_CHAIN_SOURCE aSource )
 
 void NET_SETTINGS::ClearCacheForNet( const wxString& netName )
 {
-    if( m_effectiveNetclassCache.count( netName ) )
+    std::set<wxString> pending{ netName };
+
+    while( !pending.empty() )
     {
-        wxString compositeNetclassName = m_effectiveNetclassCache[netName]->GetName();
-        m_compositeNetClasses.erase( compositeNetclassName );
-        m_effectiveNetclassCache.erase( netName );
+        const wxString name = *pending.begin();
+        pending.erase( pending.begin() );
+        auto cached = m_effectiveNetclassCache.find( name );
+
+        if( cached != m_effectiveNetclassCache.end() )
+        {
+            m_compositeNetClasses.erase( cached->second->GetName() );
+            m_effectiveNetclassCache.erase( cached );
+        }
+
+        m_netclassBusMembers.erase( name );
+
+        for( const auto& [bus, members] : m_netclassBusMembers )
+        {
+            if( members.contains( name ) )
+                pending.insert( bus );
+        }
     }
 }
 
@@ -852,6 +868,7 @@ void NET_SETTINGS::ClearAllCaches()
 {
     m_effectiveNetclassCache.clear();
     m_compositeNetClasses.clear();
+    m_netclassBusMembers.clear();
 }
 
 
@@ -1094,6 +1111,9 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
                               if( !allSameNetclass )
                                   return;
 
+                              // The first disagreeing pair suffices: later members cannot change
+                              // the result while that pair remains unequal.
+                              m_netclassBusMembers[aNetName].insert( member );
                               std::shared_ptr<NETCLASS> memberNc = GetEffectiveNetClass( member );
 
                               if( !sharedNetclass )
