@@ -1799,6 +1799,11 @@ static struct SCH_FIELD_DESC
         // Lock state is inherited from parent symbol (no independent locking of child items)
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ), _HKI( "Locked" ) );
 
+        // Library fields are written at symbol scope rather than inside a unit body, so a
+        // per-unit or per-body-style assignment is silently dropped by the next save
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ), _HKI( "Unit" ) );
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ), _HKI( "Body Style" ) );
+
         const wxString textProps = _HKI( "Text Properties" );
 
         propMgr.ReplaceProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Horizontal Justification" ),
