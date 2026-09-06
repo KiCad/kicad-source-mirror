@@ -21,10 +21,10 @@
 #include <common_data.h>
 #include <calculator_panels/panel_cable_size.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 #include <string_utils.h>
 #include <widgets/unit_selector.h>
 
-extern double DoubleFromString( const wxString& TextValue );
 
 #define VACCUM_PERMEABILITY 1.256637e-6
 #define RELATIVE_PERMEABILITY 1

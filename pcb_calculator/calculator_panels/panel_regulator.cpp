@@ -29,8 +29,8 @@
 #include <class_regulator_data.h>
 #include <dialogs/dialog_regulator_form.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 
-extern double DoubleFromString( const wxString& TextValue );
 
 // extension of pcb_calculator data filename:
 static const wxString DataFileNameExt( wxT( "pcbcalc" ) );

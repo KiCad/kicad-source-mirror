@@ -24,13 +24,12 @@
 #include <attenuators/attenuator_classes.h>
 #include <calculator_panels/panel_rf_attenuators.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <widgets/ui_common.h>
 #include <widgets/std_bitmap_button.h>
-
-extern double DoubleFromString( const wxString& TextValue );
 
 
 PANEL_RF_ATTENUATORS::PANEL_RF_ATTENUATORS( wxWindow* parent, wxWindowID id, const wxPoint& pos,

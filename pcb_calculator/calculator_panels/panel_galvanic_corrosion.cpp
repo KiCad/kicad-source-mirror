@@ -19,15 +19,13 @@
 
 #include <calculator_panels/panel_galvanic_corrosion.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 #include <widgets/unit_selector.h>
 #include <math/util.h>      // for KiROUND
 #include <string_utils.h>
 #include <i18n_utility.h>   // For _HKI definition in galvanic_corrosion_help.h
 wxString galvanic_corrosion_help =
 #include "galvanic_corrosion_help.h"
-
-
-extern double DoubleFromString( const wxString& TextValue );
 
 
 // Return ITU-R BT.709 luminance text colour contrast (white or black) for a given background.

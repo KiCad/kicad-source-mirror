@@ -24,14 +24,12 @@
 #include <bitmaps.h>
 #include <calculator_panels/panel_transline.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/unit_selector.h>
 #include <properties/property_mgr.h>
 #include <properties/property.h>
 #include <transline_calculations/transline_calculation_base.h>
-
-
-extern double DoubleFromString( const wxString& TextValue );
 
 
 PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id, const wxPoint& pos,

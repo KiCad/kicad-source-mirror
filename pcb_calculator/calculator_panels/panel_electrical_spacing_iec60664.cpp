@@ -24,6 +24,7 @@
  */
 #include <calculator_panels/panel_electrical_spacing.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 #include <string_utils.h>
 #include "iec60664.h"
 #include <wx/string.h>
@@ -35,7 +36,6 @@
 wxString iec60664help =
 #include "iec60664_help.h"
 
-extern double DoubleFromString( const wxString& TextValue );
 
 PANEL_ELECTRICAL_SPACING_IEC60664::PANEL_ELECTRICAL_SPACING_IEC60664( wxWindow* parent,
                                                                       wxWindowID id,

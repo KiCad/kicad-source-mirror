@@ -30,6 +30,7 @@
 
 #include <calculator_panels/panel_track_width.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 #include <string_utils.h>
 #include <track_width_calculations.h>
 #include <units_scales.h>
@@ -40,7 +41,6 @@
 wxString tracks_width_versus_current_formula =
 #include "tracks_width_versus_current_formula.h"
 
-extern double DoubleFromString( const wxString& TextValue );
 
 // The track width formula is valid only for copper material
 const double copper_resistivity = 1.72e-8;

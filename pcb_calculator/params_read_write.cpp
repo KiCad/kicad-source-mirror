@@ -24,6 +24,7 @@
 
 #include <calculator_panels/panel_transline.h>
 #include <pcb_calculator_frame.h>
+#include <pcb_calculator_utils.h>
 #include <transline/transline.h>
 
 /*

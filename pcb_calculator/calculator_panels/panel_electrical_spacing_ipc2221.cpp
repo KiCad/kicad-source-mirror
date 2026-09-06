@@ -26,11 +26,11 @@
 
 #include <calculator_panels/panel_electrical_spacing_ipc2221.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 #include <string_utils.h>
 #include <widgets/unit_selector.h>
 #include <units_scales.h>
 
-extern double DoubleFromString( const wxString& TextValue );
 
 // The IPC2221 formula used to calculate track width is valid only for copper material
 const double copper_resistivity = 1.72e-8;
@@ -66,29 +66,29 @@ const double copper_resistivity = 1.72e-8;
  */
 static double clist[CLASS_COUNT][VALUE_COUNT] =
 {
-    { 0.05 * UNIT_MM, 0.1 * UNIT_MM,  0.1 * UNIT_MM,  0.075 * UNIT_MM, 0.075 * UNIT_MM, 0.13 * UNIT_MM, 
+    { 0.05 * UNIT_MM, 0.1 * UNIT_MM,  0.1 * UNIT_MM,  0.075 * UNIT_MM, 0.075 * UNIT_MM, 0.13 * UNIT_MM,
       0.13 * UNIT_MM, 0.13 * UNIT_MM, }, // 0 ... 15
-    { 0.05 * UNIT_MM, 0.1 * UNIT_MM,  0.1 * UNIT_MM,  0.075 * UNIT_MM, 0.075 * UNIT_MM, 0.13 * UNIT_MM, 
+    { 0.05 * UNIT_MM, 0.1 * UNIT_MM,  0.1 * UNIT_MM,  0.075 * UNIT_MM, 0.075 * UNIT_MM, 0.13 * UNIT_MM,
       0.25 * UNIT_MM, 0.25 * UNIT_MM, }, // 16 ... 30
-    { 0.1 * UNIT_MM,  0.64 * UNIT_MM, 0.64 * UNIT_MM, 0.3 * UNIT_MM,   0.13 * UNIT_MM,  0.13 * UNIT_MM, 
+    { 0.1 * UNIT_MM,  0.64 * UNIT_MM, 0.64 * UNIT_MM, 0.3 * UNIT_MM,   0.13 * UNIT_MM,  0.13 * UNIT_MM,
       0.4 * UNIT_MM,  0.8 * UNIT_MM, }, // 31 ... 50
-    { 0.1 * UNIT_MM,  0.64 * UNIT_MM, 1.5 * UNIT_MM,  0.3 * UNIT_MM,   0.13 * UNIT_MM,  0.13 * UNIT_MM, 
+    { 0.1 * UNIT_MM,  0.64 * UNIT_MM, 1.5 * UNIT_MM,  0.3 * UNIT_MM,   0.13 * UNIT_MM,  0.13 * UNIT_MM,
       0.5 * UNIT_MM,  1 * UNIT_MM, }, // 51 ... 100
-    { 0.2 * UNIT_MM,  0.64 * UNIT_MM, 3.2 * UNIT_MM,  0.8 * UNIT_MM,   0.4 * UNIT_MM,   0.4 * UNIT_MM, 
+    { 0.2 * UNIT_MM,  0.64 * UNIT_MM, 3.2 * UNIT_MM,  0.8 * UNIT_MM,   0.4 * UNIT_MM,   0.4 * UNIT_MM,
       0.8 * UNIT_MM,  1.6 * UNIT_MM, }, // 101 ... 150
-    { 0.2 * UNIT_MM,  1.25 * UNIT_MM, 3.2 * UNIT_MM,  0.8 * UNIT_MM,   0.4 * UNIT_MM,   0.4 * UNIT_MM, 
+    { 0.2 * UNIT_MM,  1.25 * UNIT_MM, 3.2 * UNIT_MM,  0.8 * UNIT_MM,   0.4 * UNIT_MM,   0.4 * UNIT_MM,
       0.8 * UNIT_MM,  1.6 * UNIT_MM, }, // 151 ... 170
-    { 0.2 * UNIT_MM,  1.25 * UNIT_MM, 6.4 * UNIT_MM,  0.8 * UNIT_MM,   0.4 * UNIT_MM,   0.4 * UNIT_MM, 
+    { 0.2 * UNIT_MM,  1.25 * UNIT_MM, 6.4 * UNIT_MM,  0.8 * UNIT_MM,   0.4 * UNIT_MM,   0.4 * UNIT_MM,
       0.8 * UNIT_MM,  1.6 * UNIT_MM, }, // 171 ... 250
-    { 0.2 * UNIT_MM,  1.25 * UNIT_MM, 12.5 * UNIT_MM, 0.8 * UNIT_MM,   0.4 * UNIT_MM,   0.4 * UNIT_MM, 
+    { 0.2 * UNIT_MM,  1.25 * UNIT_MM, 12.5 * UNIT_MM, 0.8 * UNIT_MM,   0.4 * UNIT_MM,   0.4 * UNIT_MM,
       0.8 * UNIT_MM,  1.6 * UNIT_MM, }, // 251 ... 300
-    { 0.25 * UNIT_MM, 2.5 * UNIT_MM,  12.5 * UNIT_MM, 1.6 * UNIT_MM,   0.8 * UNIT_MM,   0.8 * UNIT_MM, 
+    { 0.25 * UNIT_MM, 2.5 * UNIT_MM,  12.5 * UNIT_MM, 1.6 * UNIT_MM,   0.8 * UNIT_MM,   0.8 * UNIT_MM,
       1.5 * UNIT_MM,  3 * UNIT_MM, }, // 301 ... 500
 
 
     // These last values are used to calculate spacing for voltage > 500V
     // there are not the spacing
-    { 0.0025 * UNIT_MM,  0.005 * UNIT_MM,   0.025 * UNIT_MM, 0.00305 * UNIT_MM, 0.00305 * UNIT_MM, 
+    { 0.0025 * UNIT_MM,  0.005 * UNIT_MM,   0.025 * UNIT_MM, 0.00305 * UNIT_MM, 0.00305 * UNIT_MM,
       0.00305 * UNIT_MM, 0.00305 * UNIT_MM, 0.0061 * UNIT_MM, }, // >500
 
 };

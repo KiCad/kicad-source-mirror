@@ -32,8 +32,6 @@
 #include <properties/property.h>
 
 
-extern double DoubleFromString( const wxString& TextValue );
-
 void PANEL_TRANSLINE::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 {
     wxArrayString list = StandardRelativeDielectricConstantList();

@@ -26,6 +26,7 @@
 
 #include <calculator_panels/panel_r_calculator.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 #include <string_utils.h>
 #include <wx/msgdlg.h>
 #include <eseries.h>
@@ -42,8 +43,6 @@ wxString r_calculator_help =
  */
 static const double min_target_value = static_cast<double>(RES_EQUIV_CALC_FIRST_VALUE) / 4;
 static const double max_target_value = static_cast<double>(RES_EQUIV_CALC_LAST_VALUE) * 4;
-
-extern double DoubleFromString( const wxString& TextValue );
 
 PANEL_R_CALCULATOR::PANEL_R_CALCULATOR( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                         const wxSize& size, long style, const wxString& name ) :

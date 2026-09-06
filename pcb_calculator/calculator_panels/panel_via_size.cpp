@@ -49,10 +49,8 @@
 #include <calculator_panels/panel_via_size.h>
 #include <common_data.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_utils.h>
 #include <units_scales.h>
-
-
-extern double DoubleFromString( const wxString& TextValue );
 
 
 PANEL_VIA_SIZE::PANEL_VIA_SIZE( wxWindow* parent, wxWindowID id,

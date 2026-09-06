@@ -17,11 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <wx/string.h>
-#include <wx/arrstr.h>
+#pragma once
 
-#ifndef PCB_CALCULATOR_UTILS_H
-#define PCB_CALCULATOR_UTILS_H
+#include <wx/arrstr.h>
+#include <wx/string.h>
+
 // Display a selection of usual Er, TanD, Rho values
 // List format is <value><space><comment>
 
@@ -29,4 +29,5 @@
 // return true if a index in aList that matches aValue is found.
 bool findMatch( wxArrayString& aList, const wxString& aValue, int& aIdx );
 
-#endif
+// Return the value from a string.
+double DoubleFromString( const wxString& TextValue );
