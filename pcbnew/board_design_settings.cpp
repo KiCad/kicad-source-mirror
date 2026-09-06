@@ -1034,7 +1034,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             0.0 ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.zones.hatch_smoothing_level",
-                                           &m_defaultZoneSettings.m_HatchSmoothingLevel, 0, 0, 2 ) );
+                                           &m_defaultZoneSettings.m_HatchSmoothingLevel, 0, 0, 3 ) );
 
     m_params.emplace_back( new PARAM<double>( "defaults.zones.hatch_smoothing_value",
                                               &m_defaultZoneSettings.m_HatchSmoothingValue, 0.1, 0.0, 1.0 ) );
