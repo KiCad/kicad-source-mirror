@@ -19,6 +19,7 @@
  */
 
 #include <api/api_handler_editor.h>
+#include <api/api_server.h>
 #include <api/api_utils.h>
 #include <eda_base_frame.h>
 #include <eda_item.h>
@@ -40,9 +41,53 @@ API_HANDLER_EDITOR::API_HANDLER_EDITOR( EDA_BASE_FRAME* aFrame ) :
 }
 
 
+static std::optional<ApiResponseStatus> rejectIfMultipleEditors( const std::string& aFuncName )
+{
+    // Handle legacy clients that don't know about the document field, when it's safe to do so
+    if( std::ranges::count_if( Pgm().GetApiServer().Handlers(),
+                               []( const API_HANDLER* aHandler )
+                               {
+                                   return dynamic_cast<const API_HANDLER_EDITOR*>( aHandler );
+                               } )
+        > 1 )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format(
+                "{} without a document specified is not allowed when multiple editors are open", aFuncName ) );
+        return e;
+    }
+
+    return std::nullopt;
+}
+
+
 HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit(
         const HANDLER_CONTEXT<BeginCommit>& aCtx )
 {
+    // Handle legacy clients that don't know about the document field, when it's safe to do so
+    if( std::optional<ApiResponseStatus> r = rejectIfMultipleEditors( "BeginCommit" );
+        !aCtx.Request.has_document() && r.has_value() )
+    {
+        return tl::unexpected( *r );
+    }
+
+    // TODO Mark BeginCommit.document explicitly required in V12 and remove this optionality along with the above
+    if( aCtx.Request.has_document() )
+    {
+        if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
+            return tl::unexpected( documentValidation.error() );
+
+        if( !validateDocumentInternal( aCtx.Request.document() ) )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( fmt::format( "the requested document '{}' is not open",
+                                              aCtx.Request.document().board_filename() ) );
+            return tl::unexpected( e );
+        }
+    }
+
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
@@ -72,6 +117,29 @@ HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit(
 HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit(
         const HANDLER_CONTEXT<EndCommit>& aCtx )
 {
+    // Handle legacy clients that don't know about the document field, when it's safe to do so
+    if( std::optional<ApiResponseStatus> r = rejectIfMultipleEditors( "EndCommit" );
+        !aCtx.Request.has_document() && r.has_value() )
+    {
+        return tl::unexpected( *r );
+    }
+
+    // TODO Mark EndCommit.document explicitly required in V12 and remove this optionality along with the above
+    if( aCtx.Request.has_document() )
+    {
+        if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
+            return tl::unexpected( documentValidation.error() );
+
+        if( !validateDocumentInternal( aCtx.Request.document() ) )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( fmt::format( "the requested document '{}' is not open",
+                                              aCtx.Request.document().board_filename() ) );
+            return tl::unexpected( e );
+        }
+    }
+
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 

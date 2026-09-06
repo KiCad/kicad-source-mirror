@@ -65,6 +65,8 @@ public:
 
     void DeregisterHandler( API_HANDLER* aHandler );
 
+    std::set<API_HANDLER*> Handlers() const { return m_handlers; }
+
     void SetReadyToReply( bool aReady = true ) { m_readyToReply = aReady; }
 
     std::string SocketPath() const;
