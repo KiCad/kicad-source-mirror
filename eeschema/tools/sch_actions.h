@@ -28,6 +28,15 @@ class SCH_SYMBOL;
 class TOOL_EVENT;
 class TOOL_MANAGER;
 
+
+// These are macros so that it will re-resolve if the language is changed
+#define NO_PIN_FUNCTIONS_WITH_MULTIPLE_BODY_STYLES \
+    _( "Alternate pin functions are not available on symbols with multiple body styles." )
+
+#define NO_BODY_STYLES_WITH_ALTERNATE_PIN_FUNCTIONS \
+    _( "Multiple body styles are not supported on symbols with alternate pin functions." )
+
+
 /**
  * Gather all the actions that are shared by tools. The instance of SCH_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.

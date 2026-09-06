@@ -87,10 +87,20 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
     {
         wxClientDC dc( m_valueCtrl );
 
-        // Gives enough room to display a value in inches in textEntry
-        // 3 digits + '.' + 10 digits
-        wxSize     minSize = m_valueCtrl->GetMinSize();
-        int        minWidth = dc.GetTextExtent( wxT( "XXX.XXXXXXXXXX" ) ).GetWidth();
+        wxSize minSize = m_valueCtrl->GetMinSize();
+        int    minWidth;
+
+        if( m_iuScale->IU_PER_MM <= schIUScale.IU_PER_MM )
+        {
+            // PLEditor and SCH editors don't need as much room
+            minWidth = dc.GetTextExtent( wxT( "XXX.XXXXX" ) ).GetWidth();
+        }
+        else
+        {
+            // Gives enough room to display a value in inches in PCBNew
+            // 3 digits + '.' + 8 digits
+            minWidth = dc.GetTextExtent( wxT( "XXX.XXXXXXXX" ) ).GetWidth();
+        }
 
         if( minSize.GetWidth() < minWidth )
             m_valueCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );

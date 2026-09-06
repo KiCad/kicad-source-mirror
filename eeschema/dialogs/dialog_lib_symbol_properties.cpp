@@ -37,16 +37,19 @@
 #include <project_sch.h>
 #include <refdes_utils.h>
 #include <dialog_sim_model.h>
-#include <vector>
-
+#include <tools/sch_actions.h>
 #include <panel_embedded_files.h>
 #include <panel_symbol_pin_map.h>
 #include <settings/common_settings.h>
 #include <symbol_editor_settings.h>
 #include <widgets/listbox_tricks.h>
 
+#include <vector>
+
 #include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
+
+#include "pin_numbers.h"
 
 
 int DIALOG_LIB_SYMBOL_PROPERTIES::m_lastOpenedPage = 0;
@@ -54,8 +57,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT DIALOG_LIB_SYMBOL_PROPERTIES::m_lastLa
         DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::NONE;
 
 
-DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
-                                                            LIB_SYMBOL* aLibEntry ) :
+DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* aParent, LIB_SYMBOL* aLibEntry ) :
         DIALOG_LIB_SYMBOL_PROPERTIES_BASE( aParent ),
         m_Parent( aParent ),
         m_libEntry( aLibEntry ),
@@ -104,12 +106,30 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     if( std::shared_ptr<LIB_SYMBOL> parent = m_libEntry->GetParent().lock() )
         addInheritedFields( parent );
 
+    int minWidth = wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+
+    for( int ii = 0; ii <= 7; ++ii )
+    {
+        if( m_grid->IsColShown( ii ) )
+            minWidth += m_grid->GetColSize( ii );
+    }
+
+    m_grid->SetMinSize( wxSize( minWidth, -1 ) );
+
+    // Putting too many columns in wxFormBuilder results in the minimum dialog size getting set too
+    // large (even with the m_grid->SetMinSize() call above).
+    m_grid->SetColSize( 13, 48 );     // "Color"
+    m_grid->SetColSize( 14, 136 );    // "Allow Autoplace"
+    m_grid->SetColSize( 15, 62 );     // "Private"
+    m_grid->SetupColumnAutosizer( 1 );
+
     m_grid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
 
     m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( FIELD_T::VALUE ) );
 
     m_unitNamesGrid->PushEventHandler( new GRID_TRICKS( m_unitNamesGrid ) );
     m_unitNamesGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_unitNamesGrid->SetupColumnAutosizer( 1 );
 
     m_bodyStyleNamesGrid->PushEventHandler( new GRID_TRICKS( m_bodyStyleNamesGrid,
                                                              [this]( wxCommandEvent& aEvent )
@@ -117,6 +137,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
                                                                  OnAddBodyStyle( aEvent );
                                                              } ) );
     m_bodyStyleNamesGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_bodyStyleNamesGrid->SetupColumnAutosizer( 0 );
 
     m_jumperGroupsGrid->SetupColumnAutosizer( 0 );
     m_jumperGroupsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
@@ -278,8 +299,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     // Add in any global template field names not yet defined.
     for( const TEMPLATE_FIELDNAME& templateFieldname :
-         Pgm().GetCommonSettings()->m_FieldNameTemplates.GetTemplateFieldNames(
-                 TEMPLATES::SCOPE::GLOBAL ) )
+                Pgm().GetCommonSettings()->m_FieldNameTemplates.GetTemplateFieldNames( TEMPLATES::SCOPE::GLOBAL ) )
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
@@ -397,11 +417,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
             m_Parent->GetLibManager().GetSymbolNames( libName, symbolNames );
 
             // Sort the list of symbols for easier search
-            symbolNames.Sort(
-                    []( const wxString& a, const wxString& b ) -> int
-                    {
-                        return StrNumCmp( a, b, true );
-                    } );
+            symbolNames.Sort( []( const wxString& a, const wxString& b ) -> int
+                              {
+                                  return StrNumCmp( a, b, true );
+                              } );
 
             // Don't allow a symbol to be derived from itself
             if( symbolNames.Index( m_libEntry->GetName() ) != wxNOT_FOUND )
@@ -625,12 +644,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
         if( !libName.empty() && m_Parent->GetLibManager().SymbolNameInUse( newName, libName ) )
         {
-            wxString msg;
-
-            msg.Printf( _( "Symbol name '%s' already in use in library '%s'." ),
-                        UnescapeString( newName ),
-                        libName );
-            DisplayErrorMessage( this, msg );
+            DisplayErrorMessage( this, wxString::Format( _( "Symbol name '%s' already in use in library '%s'." ),
+                                                         UnescapeString( newName ),
+                                                         libName ) );
             return false;
         }
 
@@ -804,10 +820,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
             if( !m_libEntry->HasPinNumber( token ) )
             {
-                wxString msg;
-                msg.Printf( _( "Pin '%s' in jumper pin group %d does not exist in this symbol." ),
-                             token, ii + 1 );
-                DisplayErrorMessage( this, msg );
+                DisplayErrorMessage( this, wxString::Format( _( "Pin '%s' in jumper pin group %d does not exist "
+                                                                "in this symbol." ),
+                                                             token,
+                                                             ii + 1 ) );
                 return false;
             }
 
@@ -829,6 +845,26 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnBodyStyle( wxCommandEvent& event )
 {
+    if( event.GetEventObject() == m_radioDeMorgan || event.GetEventObject() == m_radioCustom  )
+    {
+        PIN_NUMBERS pinNumbersWithAlternates;
+
+        for( SCH_PIN* pin : m_libEntry->GetPins() )
+        {
+            if( !pin->GetAlternates().empty() )
+                pinNumbersWithAlternates.insert( pin->GetNumber() );
+        }
+
+        if( pinNumbersWithAlternates.size() )
+        {
+            DisplayErrorMessage( this, NO_BODY_STYLES_WITH_ALTERNATE_PIN_FUNCTIONS,
+                                 wxString::Format( _( "(Pins %s.)" ), pinNumbersWithAlternates.GetSummary() ) );
+
+            m_radioSingle->SetValue( true );
+            return;
+        }
+    }
+
     syncBodyStyleControls();
 }
 
@@ -878,7 +914,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
             if( FieldNamesAreDuplicates( newName, m_grid->GetCellValue( i, FDC_NAME ) ) )
             {
-                DisplayError( this, wxString::Format( _( "The name '%s' is already in use." ), newName ) );
+                DisplayErrorMessage( this, wxString::Format( _( "The name '%s' is already in use." ), newName ) );
                 event.Veto();
                 m_delayedFocusRow = event.GetRow();
                 m_delayedFocusColumn = event.GetCol();
@@ -958,8 +994,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
             {
                 if( row < m_fields->GetMandatoryRowCount() )
                 {
-                    DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                          m_fields->GetMandatoryRowCount() ) );
+                    DisplayErrorMessage( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                                 m_fields->GetMandatoryRowCount() ) );
                     return false;
                 }
 

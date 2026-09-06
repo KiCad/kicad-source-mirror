@@ -45,7 +45,7 @@
 #include <sch_commit.h>
 #include <sch_sheet_path.h>
 #include <tool/tool_manager.h>
-#include <tool/actions.h>
+#include <tools/sch_actions.h>
 
 #include <dialog_sim_model.h>
 #include <panel_embedded_files.h>
@@ -330,8 +330,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     // wxASSERT( m_part );
 
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_fieldsGrid, m_symbol );
-
     m_fieldsGrid->SetTable( m_fields );
+    m_fieldsGrid->OverrideMinSize( 1.0, 1.0 );
     m_fieldsGrid->PushEventHandler( new FIELDS_GRID_TRICKS( m_fieldsGrid, this,
                                                             { &aParent->Schematic(), m_part },
                                                             [&]( wxCommandEvent& aEvent )
@@ -339,9 +339,24 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
                                                                 OnAddField( aEvent );
                                                             } ) );
     m_fieldsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+    int minWidth = wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+
+    for( int ii = 0; ii <= 7; ++ii )
+    {
+        if( m_fieldsGrid->IsColShown( ii ) )
+            minWidth += m_fieldsGrid->GetColSize( ii );
+    }
+
+    m_fieldsGrid->SetMinSize( wxSize( minWidth, -1 ) );
+
+    // Putting too many columns in wxFormBuilder results in the minimum dialog size getting set too
+    // large (even with the m_grid->SetMinSize() call above).
+    m_fieldsGrid->SetColSize( 13, 48 );     // "Color"
+    m_fieldsGrid->SetColSize( 14, 136 );    // "Allow Autoplace"
+    m_fieldsGrid->SetupColumnAutosizer( 1 );
+
     m_fieldsGrid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
-    m_fieldsGrid->SetMinSize( wxSize( -1, 160 ) );
-    m_fieldsGrid->OverrideMinSize( 1.0, 1.0 );
     m_shownColumns = m_fieldsGrid->GetShownColumns();
 
     if( m_symbol->GetEmbeddedFiles() )
@@ -355,12 +370,18 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
 
     if( m_part && m_part->IsMultiBodyStyle() )
     {
-        // Multiple body styles are a superclass of alternate pin assignments, so don't allow
-        // free-form alternate assignments as well.  (We won't know how to map the alternates
-        // back and forth when the body style is changed.)
-        m_pinTablePage->Disable();
-        m_pinTablePage->SetToolTip( _( "Alternate pin assignments are not available for symbols with multiple "
-                                       "body styles." ) );
+        wxSizer* altPinDefsSizer = m_pinGrid->GetContainingSizer();
+
+        // Multiple body styles are a superclass of alternate pin assignments, so don't allow free-form
+        // alternate assignments as well.  (We won't know how to map the alternates back and forth when
+        // the body style is changed.)
+        wxStaticText* hint = new wxStaticText( m_pinTablePage, wxID_ANY, NO_PIN_FUNCTIONS_WITH_MULTIPLE_BODY_STYLES );
+        hint->SetFont( KIUI::GetControlFont( this ).Italic() );
+        altPinDefsSizer->AddStretchSpacer( 1 );
+        altPinDefsSizer->Add( hint, 0, wxALIGN_CENTER_HORIZONTAL );
+        altPinDefsSizer->AddStretchSpacer( 2 );
+        m_pinGrid->Hide();
+        altPinDefsSizer->Layout();
     }
     else
     {
@@ -970,8 +991,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
             if( FieldNamesAreDuplicates( newName, m_fieldsGrid->GetCellValue( i, FDC_NAME ) ) )
             {
-                DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ),
-                                                      newName ) );
+                DisplayErrorMessage( this, wxString::Format( _( "Field name '%s' already in use." ), newName ) );
                 event.Veto();
                 wxCommandEvent *evt = new wxCommandEvent( SYMBOL_DELAY_FOCUS );
                 evt->SetClientData( new VECTOR2I( event.GetRow(), event.GetCol() ) );
@@ -1033,8 +1053,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
             {
                 if( row < m_fields->GetMandatoryRowCount() )
                 {
-                    DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                                          m_fields->GetMandatoryRowCount() ) );
+                    DisplayErrorMessage( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                                 m_fields->GetMandatoryRowCount() ) );
                     return false;
                 }
 

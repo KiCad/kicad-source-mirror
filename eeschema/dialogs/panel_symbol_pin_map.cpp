@@ -296,8 +296,8 @@ void PANEL_SYMBOL_PIN_MAP::rebuildGrid()
     for( size_t row = 0; row < m_pinNumbers.size(); ++row )
     {
         const int      gridRow = (int) row + 1;
-        const wxString unit =
-                pinUnits[row] > 0 ? wxString::Format( wxT( "%d" ), pinUnits[row] ) : wxString( wxT( "-" ) );
+        const wxString unit = pinUnits[row] > 0 ? wxString::Format( wxT( "%d" ), pinUnits[row] )
+                                                : wxString( wxT( "-" ) );
 
         m_grid->SetCellValue( gridRow, 0, unit );
         m_grid->SetCellValue( gridRow, 1, m_pinNumbers[row] );
@@ -595,10 +595,10 @@ void PANEL_SYMBOL_PIN_MAP::adjustGridColumns()
     if( padCols <= 0 )
         return;
 
-    const int remaining = std::max( m_grid->GetClientSize().GetWidth() - fixedWidth, padCols * 80 );
+    const int remaining = m_grid->GetClientSize().GetWidth() - fixedWidth;
 
     for( int col = FIXED_COLS; col < m_grid->GetNumberCols(); ++col )
-        m_grid->SetColSize( col, remaining / padCols );
+        m_grid->SetColSize( col, std::max( remaining / padCols, 84 ) );
 }
 
 

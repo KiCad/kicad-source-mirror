@@ -33,7 +33,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_grid = new WX_GRID( sbSizer4->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_grid->CreateGrid( 4, 14 );
+	m_grid->CreateGrid( 4, 13 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
@@ -41,19 +41,18 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	// Columns
 	m_grid->SetColSize( 0, 72 );
-	m_grid->SetColSize( 1, 8 );
+	m_grid->SetColSize( 1, 15 );
 	m_grid->SetColSize( 2, 48 );
 	m_grid->SetColSize( 3, 84 );
-	m_grid->SetColSize( 4, 66 );
-	m_grid->SetColSize( 5, 66 );
+	m_grid->SetColSize( 4, 60 );
+	m_grid->SetColSize( 5, 60 );
 	m_grid->SetColSize( 6, 48 );
 	m_grid->SetColSize( 7, 48 );
 	m_grid->SetColSize( 8, 80 );
 	m_grid->SetColSize( 9, 84 );
 	m_grid->SetColSize( 10, 84 );
 	m_grid->SetColSize( 11, 84 );
-	m_grid->SetColSize( 12, 10 );
-	m_grid->SetColSize( 13, 48 );
+	m_grid->SetColSize( 12, 100 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelValue( 0, _("Name") );
@@ -69,7 +68,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_grid->SetColLabelValue( 10, _("X Position") );
 	m_grid->SetColLabelValue( 11, _("Y Position") );
 	m_grid->SetColLabelValue( 12, _("Font") );
-	m_grid->SetColLabelValue( 13, _("Color") );
 	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -189,8 +187,8 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	bSizerLowerBasicPanel->Add( bSizerLeftCol, 1, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizerPinTextCol;
-	bSizerPinTextCol = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerMiddleCol;
+	bSizerMiddleCol = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerPinTextOpts;
 	sbSizerPinTextOpts = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("Pin Text Options") ), wxVERTICAL );
@@ -223,26 +221,23 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_nameOffsetLabel->Wrap( -1 );
 	m_nameOffsetLabel->SetToolTip( _("Margin between the pin name position and the symbol body.") );
 
-	bSizerNameOffset->Add( m_nameOffsetLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerNameOffset->Add( m_nameOffsetLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 20 );
 
 	m_nameOffsetCtrl = new wxTextCtrl( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerNameOffset->Add( m_nameOffsetCtrl, 1, wxLEFT|wxRIGHT, 5 );
+	bSizerNameOffset->Add( m_nameOffsetCtrl, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_nameOffsetUnits = new wxStaticText( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nameOffsetUnits->Wrap( -1 );
 	bSizerNameOffset->Add( m_nameOffsetUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxBOTTOM|wxEXPAND|wxTOP, 3 );
 
 
-	sbSizerPinTextOpts->Add( 0, 0, 0, wxEXPAND, 5 );
+	bSizerMiddleCol->Add( sbSizerPinTextOpts, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizerPinTextCol->Add( sbSizerPinTextOpts, 1, wxALL|wxEXPAND, 5 );
-
-
-	bSizerLowerBasicPanel->Add( bSizerPinTextCol, 1, wxEXPAND, 5 );
+	bSizerLowerBasicPanel->Add( bSizerMiddleCol, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerRightCol;
 	bSizerRightCol = new wxBoxSizer( wxVERTICAL );
@@ -278,7 +273,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PanelBasic->SetSizer( bSizerBasicPanel );
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
-	m_NoteBook->AddPage( m_PanelBasic, _("General"), false );
+	m_NoteBook->AddPage( m_PanelBasic, _("General"), true );
 	m_PanelUnitsAndBodyStyles = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerUnitsAndBodyStyles;
 	bSizerUnitsAndBodyStyles = new wxBoxSizer( wxHORIZONTAL );
@@ -327,7 +322,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	// Columns
 	m_unitNamesGrid->SetColSize( 0, 36 );
-	m_unitNamesGrid->SetColSize( 1, 400 );
+	m_unitNamesGrid->SetColSize( 1, 300 );
 	m_unitNamesGrid->EnableDragColMove( false );
 	m_unitNamesGrid->EnableDragColSize( false );
 	m_unitNamesGrid->SetColLabelSize( 0 );
@@ -378,7 +373,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_bodyStyleNamesGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_bodyStyleNamesGrid->SetColSize( 0, 400 );
+	m_bodyStyleNamesGrid->SetColSize( 0, 320 );
 	m_bodyStyleNamesGrid->EnableDragColMove( false );
 	m_bodyStyleNamesGrid->EnableDragColSize( false );
 	m_bodyStyleNamesGrid->SetColLabelSize( 0 );
@@ -552,7 +547,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PanelPinConnections->SetSizer( bSizerPinConnections );
 	m_PanelPinConnections->Layout();
 	bSizerPinConnections->Fit( m_PanelPinConnections );
-	m_NoteBook->AddPage( m_PanelPinConnections, _("Pin Connections"), true );
+	m_NoteBook->AddPage( m_PanelPinConnections, _("Pin Connections"), false );
 	m_pinMapPage = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	bPinMapPageSizer = new wxBoxSizer( wxVERTICAL );
 

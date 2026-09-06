@@ -183,7 +183,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_lowerSizer = new wxBoxSizer( wxVERTICAL );
 
 
-	mainSizer->Add( m_lowerSizer, 1, wxEXPAND|wxLEFT, 10 );
+	mainSizer->Add( m_lowerSizer, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
