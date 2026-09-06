@@ -182,6 +182,7 @@ bool BOARD_LOADER::SaveBoard( wxString& aFileName, BOARD& aBoard, PCB_IO_MGR::PC
 {
     aBoard.BuildConnectivity();
     aBoard.SynchronizeNetsAndNetClasses( false );
+    aBoard.SynchronizeProperties();
 
     try
     {
