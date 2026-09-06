@@ -1489,6 +1489,12 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
+        else if( evt->IsAction( &ACTIONS::selectionActivate ) )
+        {
+            // Passing reactivation would nest another selection loop and retain its view items.
+            evt->SetPassEvent( false );
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+        }
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
