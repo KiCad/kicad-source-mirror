@@ -122,7 +122,7 @@ message RunActionResponse
  */
 message BeginCommit
 {
-  // Which document is this request targeting?
+  // Specifies which document to associate the commit with
   //
   // API clients should always specify this field.  Legacy clients passing an empty BeginCommit
   // will continue to work as long as the user has only one possible document open, otherwise
@@ -131,7 +131,7 @@ message BeginCommit
   // Use of BeginCommit without a document specified will be deprecated in a future release.
   //
   // Since: 10.0.7
-  kiapi.common.types.DocumentSpecifier document = 1;
+  kiapi.common.types.ItemHeader header = 1;
 }
 
 
@@ -161,7 +161,7 @@ message EndCommit
   // Optional message describing this changeset
   string message = 3;
 
-  // Which document is this request targeting?
+  // Specifies which document to associate the commit with
   //
   // API clients should always specify this field.  Legacy clients passing an EndCommit without it
   // will continue to work as long as the user has only one possible document open, otherwise
@@ -170,7 +170,7 @@ message EndCommit
   // Use of EndCommit without a document specified will be deprecated in a future release.
   //
   // Since: 10.0.7
-  kiapi.common.types.DocumentSpecifier document = 4;
+  kiapi.common.types.ItemHeader header = 4;
 }
 
 

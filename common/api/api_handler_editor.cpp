@@ -67,25 +67,16 @@ HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit(
 {
     // Handle legacy clients that don't know about the document field, when it's safe to do so
     if( std::optional<ApiResponseStatus> r = rejectIfMultipleEditors( "BeginCommit" );
-        !aCtx.Request.has_document() && r.has_value() )
+        !aCtx.Request.has_header() && r.has_value() )
     {
         return tl::unexpected( *r );
     }
 
-    // TODO Mark BeginCommit.document explicitly required in V12 and remove this optionality along with the above
-    if( aCtx.Request.has_document() )
+    // TODO Mark BeginCommit.header explicitly required in V12 and remove this optionality along with the above
+    if( aCtx.Request.has_header() )
     {
-        if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
-            return tl::unexpected( documentValidation.error() );
-
-        if( !validateDocumentInternal( aCtx.Request.document() ) )
-        {
-            ApiResponseStatus e;
-            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-            e.set_error_message( fmt::format( "the requested document '{}' is not open",
-                                              aCtx.Request.document().board_filename() ) );
-            return tl::unexpected( e );
-        }
+        if( HANDLER_RESULT<std::optional<KIID>> valid = validateItemHeaderDocument( aCtx.Request.header() ); !valid )
+            return tl::unexpected( valid.error() );
     }
 
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
@@ -119,25 +110,16 @@ HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit(
 {
     // Handle legacy clients that don't know about the document field, when it's safe to do so
     if( std::optional<ApiResponseStatus> r = rejectIfMultipleEditors( "EndCommit" );
-        !aCtx.Request.has_document() && r.has_value() )
+        !aCtx.Request.has_header() && r.has_value() )
     {
         return tl::unexpected( *r );
     }
 
-    // TODO Mark EndCommit.document explicitly required in V12 and remove this optionality along with the above
-    if( aCtx.Request.has_document() )
+    // TODO Mark EndCommit.header explicitly required in V12 and remove this optionality along with the above
+    if( aCtx.Request.has_header() )
     {
-        if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
-            return tl::unexpected( documentValidation.error() );
-
-        if( !validateDocumentInternal( aCtx.Request.document() ) )
-        {
-            ApiResponseStatus e;
-            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-            e.set_error_message( fmt::format( "the requested document '{}' is not open",
-                                              aCtx.Request.document().board_filename() ) );
-            return tl::unexpected( e );
-        }
+        if( HANDLER_RESULT<std::optional<KIID>> valid = validateItemHeaderDocument( aCtx.Request.header() ); !valid )
+            return tl::unexpected( valid.error() );
     }
 
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
