@@ -54,6 +54,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_walkaroundHugLengthThreshold = 1.5;
     m_diffPairGapPickupRatioThreshold = 2.5;
     m_diffPairGapCouplingRecognitionThreshold = 0.05;
+    m_diffPairWidthToMiterRatio = 3.0;
     m_autoPosture = true;
     m_fixAllSegments = true;
     m_restrictAngles = false;
@@ -106,6 +107,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
             DIRECTION_45::CORNER_MODE::ROUNDED_90, DIRECTION_45::CORNER_MODE::MITERED_45 ) );
 
     m_params.emplace_back( new PARAM<double>( "walkaround_hug_length_threshold",     &m_walkaroundHugLengthThreshold,     1.5 ) );
+    m_params.emplace_back( new PARAM<double>( "diff_pair_width_to_miter_ratio",     &m_diffPairWidthToMiterRatio,     3.0 ) );
 
     LoadFromFile();
 }

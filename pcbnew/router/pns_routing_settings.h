@@ -162,6 +162,7 @@ public:
 
     double DiffPairGapPickupRatioThreshold() const { return m_diffPairGapPickupRatioThreshold; }
     double DiffPairGapCouplingRecognitionThreshold() const { return m_diffPairGapCouplingRecognitionThreshold; }
+    double DiffPairWidthToMiterRatio() const { return m_diffPairWidthToMiterRatio; }
 
 private:
     bool m_shoveVias;
@@ -192,6 +193,7 @@ private:
     double m_diffPairGapPickupRatioThreshold;
     double m_diffPairGapCouplingRecognitionThreshold;
     double m_walkaroundHugLengthThreshold;
+    double m_diffPairWidthToMiterRatio;
 
     TIME_LIMIT m_shoveTimeLimit;
     TIME_LIMIT m_walkaroundTimeLimit;

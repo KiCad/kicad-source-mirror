@@ -556,7 +556,9 @@ void DP_GATEWAYS::addGateway( DP_GATEWAY& aGw, const wxString& name, bool aAddTu
 
     if( aAddTurns )
     {
-        const int                 extensionDist = 600000;
+        auto router = ROUTER::GetInstance();
+        const double widthToMiterRatio = router->Settings().DiffPairWidthToMiterRatio();
+        const int    extensionDist = (int) ( widthToMiterRatio * (double) aGw.Dimensions().Width() );
         std::optional<DP_GATEWAY> extend, turn45_l, turn45_r, turn45_lw, turn45_rw;
         std::optional<DP_GATEWAY> turn45_le, turn45_re;
 
