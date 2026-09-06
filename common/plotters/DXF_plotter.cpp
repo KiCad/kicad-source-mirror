@@ -1469,8 +1469,7 @@ void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int
 }
 
 
-void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
-                            void* aData )
+void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth, void* aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -1478,7 +1477,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     unsigned last = aCornerList.size() - 1;
 
     // Plot outlines with lines (thickness = 0) to define the polygon
-    if( aWidth <= 0 || aFill == FILL_T::NO_FILL  )
+    if( aWidth <= 0  )
     {
         MoveTo( aCornerList[0] );
 
@@ -1493,12 +1492,23 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
         }
 
         PenFinish();
+
+        return;
+    }
+    // If the polygon outline has thickness, and is not filled (i.e. is a polyline) plot outlines
+    // with thick segments
+    else if( aFill == FILL_T::NO_FILL )
+    {
+        MoveTo( aCornerList[0] );
+
+        for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+            ThickSegment( aCornerList[ii-1], aCornerList[ii], aWidth, aData );
+
         return;
     }
 
     // The polygon outline has thickness, and is filled
-    // Build and plot the polygon which contains the initial
-    // polygon and its thick outline
+    // Build and plot the polygon which contains the initial polygon and its thick outline
     SHAPE_POLY_SET  bufferOutline;
     SHAPE_POLY_SET  bufferPolybase;
 
@@ -1515,8 +1525,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     for( const VECTOR2I& corner : aCornerList )
         bufferPolybase.Append( corner );
 
-    // Merge polygons to build the polygon which contains the initial
-    // polygon and its thick outline
+    // Merge polygons to build the polygon which contains the initial polygon and its thick outline
 
     // create the outline which contains thick outline:
     bufferPolybase.BooleanAdd( bufferOutline );
@@ -1554,8 +1563,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 }
 
 
-void DXF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth,
-                            void* aData )
+void DXF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth, void* aData )
 {
     if( aLineChain.PointCount() == 0 )
         return;
@@ -1578,17 +1586,14 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     wxASSERT( m_outputFile );
 
     if( plume == 'Z' )
-    {
         return;
-    }
 
     VECTOR2D pos_dev = userToDeviceCoordinates( pos );
     VECTOR2D pen_lastpos_dev = userToDeviceCoordinates( m_penLastpos );
 
     if( m_penLastpos != pos && plume == 'D' )
     {
-        wxASSERT( m_currentLineType >= LINE_STYLE::FIRST_TYPE
-                  && m_currentLineType <= LINE_STYLE::LAST_TYPE );
+        wxASSERT( m_currentLineType >= LINE_STYLE::FIRST_TYPE && m_currentLineType <= LINE_STYLE::LAST_TYPE );
 
         // DXF LINE
         wxString    cLayerName = GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE::Current_Layer_Name );
@@ -1619,8 +1624,7 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 
 void DXF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 {
-    wxASSERT( aLineStyle >= LINE_STYLE::FIRST_TYPE
-                && aLineStyle <= LINE_STYLE::LAST_TYPE );
+    wxASSERT( aLineStyle >= LINE_STYLE::FIRST_TYPE && aLineStyle <= LINE_STYLE::LAST_TYPE );
 
     m_currentLineType = aLineStyle;
 }
@@ -1671,8 +1675,7 @@ void DXF_PLOTTER::ThickSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, in
     {
         std::vector<VECTOR2I> cornerList;
         SHAPE_POLY_SET outlineBuffer;
-        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef(),
-                                ERROR_INSIDE );
+        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef(), ERROR_INSIDE );
         const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline( 0 );
 
         cornerList.reserve( path.PointCount() );
@@ -1694,8 +1697,8 @@ void DXF_PLOTTER::ThickSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, in
 }
 
 
-void DXF_PLOTTER::ThickArc( const VECTOR2D& centre, const EDA_ANGLE& aStartAngle,
-                            const EDA_ANGLE& aAngle, double aRadius, int aWidth, void* aData )
+void DXF_PLOTTER::ThickArc( const VECTOR2D& centre, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle,
+                            double aRadius, int aWidth, void* aData )
 {
     const PLOT_PARAMS* cfg = static_cast<const PLOT_PARAMS*>( aData );
 
@@ -1782,8 +1785,7 @@ void DXF_PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aDat
 }
 
 
-void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
-                                const EDA_ANGLE& aOrient, void* aData )
+void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient, void* aData )
 {
     wxASSERT( m_outputFile );
 
@@ -1809,8 +1811,8 @@ void DXF_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre, void* aData
 }
 
 
-void DXF_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize,
-                                const EDA_ANGLE& aOrient, void* aData )
+void DXF_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize, const EDA_ANGLE& aOrient,
+                                void* aData )
 {
     wxASSERT( m_outputFile );
 
@@ -1868,12 +1870,12 @@ void DXF_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize,
 }
 
 
-void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                     int aCornerRadius, const EDA_ANGLE& aOrient, void* aData )
+void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, int aCornerRadius,
+                                     const EDA_ANGLE& aOrient, void* aData )
 {
     SHAPE_POLY_SET outline;
-    TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0, 0,
-                                          0, GetPlotterArcHighDef(), ERROR_INSIDE );
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0, 0, 0,
+                                          GetPlotterArcHighDef(), ERROR_INSIDE );
 
     // TransformRoundRectToPolygon creates only one convex polygon
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
@@ -1887,9 +1889,8 @@ void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aS
 }
 
 
-void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                  const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
-                                  void* aData )
+void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
+                                  SHAPE_POLY_SET* aPolygons, void* aData )
 {
     for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
     {
@@ -1905,8 +1906,8 @@ void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize
 }
 
 
-void DXF_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                  const EDA_ANGLE& aPadOrient, void* aData )
+void DXF_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners, const EDA_ANGLE& aPadOrient,
+                                  void* aData )
 {
     wxASSERT( m_outputFile );
     VECTOR2I coord[4]; /* coord actual corners of a trapezoidal trace */
