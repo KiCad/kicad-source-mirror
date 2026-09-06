@@ -710,16 +710,21 @@ bool SCH_SCREEN::IsTerminalPoint( const VECTOR2I& aPosition, int aLayer ) const
 }
 
 
-void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
+void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter, LEGACY_SYMBOL_LIBS* aLegacyLibs,
+                                   SYMBOL_LIBRARY_ADAPTER* aLibraries )
 {
     wxCHECK_RET( Schematic(), "Cannot call SCH_SCREEN::UpdateSymbolLinks with no SCHEMATIC" );
 
     wxString msg;
     std::vector<SCH_SYMBOL*> symbols;
-    SYMBOL_LIBRARY_ADAPTER* libs = PROJECT_SCH::SymbolLibAdapter( &Schematic()->Project() );
+    SYMBOL_LIBRARY_ADAPTER* libs = aLibraries ? aLibraries
+                                            : PROJECT_SCH::SymbolLibAdapter( &Schematic()->Project() );
 
-    // This will be a nullptr if an s-expression schematic is loaded.
-    LEGACY_SYMBOL_LIBS* legacyLibs = PROJECT_SCH::LegacySchLibs( &Schematic()->Project() );
+    // Headless GUI callers can share an adapter with the editor's preload worker.
+    if( aLegacyLibs )
+        libs->AbortAsyncLoad();
+
+    LEGACY_SYMBOL_LIBS* legacyLibs = aLegacyLibs ? aLegacyLibs : PROJECT_SCH::LegacySchLibs( &Schematic()->Project() );
 
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
         symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
@@ -754,7 +759,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             continue;
         }
 
-        if( !symbol->GetLibId().IsValid() )
+        if( !symbol->GetLibId().IsValid() && !( aLegacyLibs && symbol->GetLibId().IsLegacy() ) )
         {
             if( aReporter )
             {

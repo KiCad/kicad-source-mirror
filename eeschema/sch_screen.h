@@ -50,6 +50,8 @@
 class BUS_ALIAS;
 class EDA_ITEM;
 class LIB_SYMBOL;
+class LEGACY_SYMBOL_LIBS;
+class SYMBOL_LIBRARY_ADAPTER;
 class SCH_COMMIT;
 class SCH_PIN;
 class SCH_SYMBOL;
@@ -239,8 +241,11 @@ public:
      *       symbols and should call #UpdateLocalLibSymbolLinks.
      *
      * @param[in] aReporter Optional #REPORTER object to write status and error messages into.
+     * @param[in] aLegacyLibs Optional caller-owned legacy libraries; avoids lazy project loading.
+     * @param[in] aLibraries Optional adapter for a caller-owned project context.
      */
-    void UpdateSymbolLinks( REPORTER* aReporter = nullptr );
+    void UpdateSymbolLinks( REPORTER* aReporter = nullptr, LEGACY_SYMBOL_LIBS* aLegacyLibs = nullptr,
+                            SYMBOL_LIBRARY_ADAPTER* aLibraries = nullptr );
 
     /**
      * Initialize the #LIB_SYMBOL reference for each #SCH_SYMBOL found in this schematic

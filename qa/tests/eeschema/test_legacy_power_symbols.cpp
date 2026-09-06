@@ -18,11 +18,16 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 #include <schematic_utils/schematic_file_util.h>
+#include <wx/filefn.h>
 
 #include <connection_graph.h>
+#include <eeschema_helpers.h>
+#include <pgm_base.h>
 #include <schematic.h>
 #include <sch_screen.h>
+#include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
 
@@ -33,6 +38,8 @@ struct LEGACY_POWER_SYMBOLS_TEST_FIXTURE
 
     void CheckSymbols()
     {
+        size_t checked = 0;
+
         for( SCH_ITEM* item : m_schematic->RootScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
@@ -45,10 +52,13 @@ struct LEGACY_POWER_SYMBOLS_TEST_FIXTURE
                 && symbol->GetAllLibPins()[0]->IsGlobalPower()
                 && !symbol->GetAllLibPins()[0]->IsVisible() )
             {
+                ++checked;
                 BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetText(),
                                    symbol->GetAllLibPins()[0]->GetName() );
             }
         }
+
+        BOOST_CHECK_GT( checked, 0 );
     }
 
     SETTINGS_MANAGER           m_settingsManager;
@@ -64,9 +74,109 @@ BOOST_FIXTURE_TEST_CASE( LegacyPowerFixup, LEGACY_POWER_SYMBOLS_TEST_FIXTURE )
 }
 
 
+BOOST_FIXTURE_TEST_CASE( LegacyPower4HeadlessLoad, LEGACY_POWER_SYMBOLS_TEST_FIXTURE )
+{
+    const wxString path = KI_TEST::GetEeschemaTestDataDir() + "netlists/legacy_power4/legacy_power4.sch";
+    m_schematic.reset( EESCHEMA_HELPERS::LoadSchematic( path, false, true ) );
+    BOOST_REQUIRE( m_schematic );
+    size_t symbols = 0;
+
+    for( SCH_ITEM* item : m_schematic->RootScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        const auto* symbol = static_cast<SCH_SYMBOL*>( item );
+        BOOST_REQUIRE( symbol->GetLibSymbolRef() );
+        ++symbols;
+
+        if( symbol->GetField( FIELD_T::REFERENCE )->GetText().StartsWith( "R" ) )
+            BOOST_CHECK_EQUAL( symbol->GetAllLibPins().size(), 2 );
+    }
+
+    BOOST_CHECK_EQUAL( symbols, 6 );
+    CheckSymbols();
+
+    m_schematic.reset();
+    KI_TEST::SCOPED_TEMP_DIR directory( "legacy-headless" );
+    const wxString withoutCache = directory.PathStr() + "/legacy_power4.sch";
+    BOOST_REQUIRE( wxCopyFile( path, withoutCache ) );
+    m_schematic.reset( EESCHEMA_HELPERS::LoadSchematic( withoutCache, false, true ) );
+    BOOST_CHECK( !m_schematic );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacyHeadlessLoadUsesItsProjectLibraries )
+{
+    KI_TEST::SCOPED_TEMP_DIR directory( "legacy-project-libraries" );
+    const wxString source = KI_TEST::GetEeschemaTestDataDir() + "netlists/complex_hierarchy";
+    std::filesystem::copy( std::filesystem::path( source.ToStdString() ), directory.Path(),
+                           std::filesystem::copy_options::recursive );
+    SETTINGS_MANAGER settings;
+    BOOST_REQUIRE( settings.LoadProject( directory.PathStr() + "/complex_hierarchy.kicad_pro" ) );
+    PROJECT* active = &Pgm().GetSettingsManager().Prj();
+    const wxString activePath = active->GetProjectFullName();
+    BOOST_REQUIRE( active != &settings.Prj() );
+    std::unique_ptr<SCHEMATIC> schematic( EESCHEMA_HELPERS::LoadSchematic(
+            directory.PathStr() + "/complex_hierarchy.sch", false, false, &settings.Prj() ) );
+    BOOST_REQUIRE( schematic );
+    BOOST_CHECK( &Pgm().GetSettingsManager().Prj() == active );
+    BOOST_CHECK_EQUAL( active->GetProjectFullName(), activePath );
+    BOOST_CHECK( &schematic->Project() == &settings.Prj() );
+    size_t aliases = 0;
+    SCH_SCREENS screens( schematic->Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            auto* symbol = static_cast<SCH_SYMBOL*>( item );
+            BOOST_REQUIRE( symbol->GetLibSymbolRef() );
+
+            if( symbol->GetLibId().GetLibItemName() == UTF8( "LM358N" ) )
+            {
+                ++aliases;
+                BOOST_CHECK_EQUAL( symbol->GetLibSymbolRef()->GetUnitCount(), 2 );
+                BOOST_CHECK_EQUAL( symbol->GetAllLibPins().size(), 8 );
+            }
+        }
+    }
+
+    BOOST_CHECK_EQUAL( aliases, 2 );
+
+}
+
+
 BOOST_FIXTURE_TEST_CASE( LegacyPower4Fixup, LEGACY_POWER_SYMBOLS_TEST_FIXTURE )
 {
-    KI_TEST::LoadSchematic( m_settingsManager, "netlists/legacy_power/legacy_power", m_schematic );
+    const wxString path = KI_TEST::GetEeschemaTestDataDir() + "netlists/legacy_power4/legacy_power4";
+    m_settingsManager.LoadProject( "" );
+    m_schematic = std::make_unique<SCHEMATIC>( &m_settingsManager.Prj() );
+    m_schematic->Reset();
+    SCH_IO_KICAD_LEGACY io;
+    SCH_SHEET* root = io.LoadSchematicFile( path + ".sch", m_schematic.get() );
+    BOOST_REQUIRE( root );
+    BOOST_REQUIRE_MESSAGE( io.GetError().IsEmpty(), io.GetError() );
+    m_schematic->SetTopLevelSheets( { root } );
+    BOOST_REQUIRE_LT( m_schematic->RootScreen()->GetFileFormatVersionAtLoad(), 20230221 );
 
+    size_t mismatches = 0;
+
+    for( SCH_ITEM* item : m_schematic->RootScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+        LIB_SYMBOL* lib = io.LoadSymbol( path + "-cache.lib", symbol->GetLibId().GetLibItemName() );
+        BOOST_REQUIRE( lib );
+        symbol->SetLibSymbol( lib->Flatten().release() );
+
+        if( lib->IsGlobalPower() && symbol->GetField( FIELD_T::VALUE )->GetText() == "+3.3V" )
+        {
+            BOOST_REQUIRE_EQUAL( symbol->GetAllLibPins().size(), 1 );
+            BOOST_REQUIRE( symbol->GetAllLibPins()[0]->IsGlobalPower() );
+            BOOST_REQUIRE( !symbol->GetAllLibPins()[0]->IsVisible() );
+            BOOST_CHECK_EQUAL( symbol->GetAllLibPins()[0]->GetName(), wxString( "VCC" ) );
+            ++mismatches;
+        }
+    }
+
+    BOOST_REQUIRE_GT( mismatches, 0 );
+    m_schematic->RootScreen()->FixLegacyPowerSymbolMismatches();
     CheckSymbols();
 }

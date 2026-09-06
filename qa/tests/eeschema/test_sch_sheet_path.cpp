@@ -141,9 +141,10 @@ BOOST_AUTO_TEST_CASE( SheetListGetOrdinalPath )
     std::unique_ptr<SCHEMATIC> schematic;
     wxFileName fn( wxString::Format( wxS( "%snetlists/complex_hierarchy" ),
                                      KI_TEST::GetEeschemaTestDataDir() ),
-                   wxS( "complex_hierarchy" ), FILEEXT::ProjectFileExtension );
+                   wxS( "complex_hierarchy" ), FILEEXT::KiCadSchematicFileExtension );
 
     schematic.reset( EESCHEMA_HELPERS::LoadSchematic( fn.GetFullPath(), false, false, nullptr ) );
+    BOOST_REQUIRE( schematic );
 
     SCH_SHEET_LIST hierarchy = schematic->Hierarchy();
     BOOST_CHECK_EQUAL( hierarchy.size(), 3 );

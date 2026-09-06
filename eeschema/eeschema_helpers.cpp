@@ -23,6 +23,8 @@
 
 #include <connection_graph.h>
 #include <locale_io.h>
+#include <libraries/legacy_symbol_library.h>
+#include <libraries/symbol_library_adapter.h>
 #include <project/project_file.h>
 #include <schematic.h>
 #include <reporter.h>
@@ -214,8 +216,50 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     SCH_SHEET_LIST sheetList = schematic->BuildSheetListSortedByPageNumbers();
     SCH_SCREENS    screens( schematic->Root() );
 
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-        screen->UpdateLocalLibSymbolLinks();
+    if( aFormat == SCH_IO_MGR::SCH_LEGACY )
+    {
+        LIBRARY_MANAGER libraries( project );
+        libraries.RegisterAdapter( LIBRARY_TABLE_TYPE::SYMBOL,
+                                    std::make_unique<SYMBOL_LIBRARY_ADAPTER>( libraries ) );
+        libraries.LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
+        libraries.LoadProjectTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
+        auto* adapter = static_cast<SYMBOL_LIBRARY_ADAPTER*>(
+                libraries.Adapter( LIBRARY_TABLE_TYPE::SYMBOL ).value() );
+        LEGACY_SYMBOL_LIBS legacyLibs;
+        const wxString cache = LEGACY_SYMBOL_LIBS::CacheName( schFile.GetFullPath() );
+
+        if( !cache.IsEmpty() )
+        {
+            LEGACY_SYMBOL_LIB* library = legacyLibs.AddLibrary( cache );
+
+            if( !library )
+            {
+                schematic->SetProject( nullptr );
+                return nullptr;
+            }
+
+            library->SetCache();
+        }
+
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        {
+            screen->UpdateSymbolLinks( nullptr, &legacyLibs, adapter );
+
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                if( !static_cast<SCH_SYMBOL*>( item )->GetLibSymbolRef() )
+                {
+                    schematic->SetProject( nullptr );
+                    return nullptr;
+                }
+            }
+        }
+    }
+    else
+    {
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+            screen->UpdateLocalLibSymbolLinks();
+    }
 
     if( schematic->RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
         sheetList.UpdateSymbolInstanceData( schematic->RootScreen()->GetSymbolInstances());
