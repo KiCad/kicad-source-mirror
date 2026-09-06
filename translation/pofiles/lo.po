@@ -1,11 +1,12 @@
 # BoneNI <bounkirdni@gmail.com>, 2026.
+# Bone NI <bounkirdni@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-07-24 13:05+0000\n"
-"Last-Translator: BoneNI <bounkirdni@gmail.com>\n"
+"PO-Revision-Date: 2026-09-07 00:51+0000\n"
+"Last-Translator: Bone NI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://hosted.weblate.org/projects/kicad/master-source/"
 "lo/>\n"
 "Language: lo\n"
@@ -13,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.1.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:54
 #: common/dialogs/panel_embedded_files.cpp:379
@@ -145,14 +146,13 @@ msgid "Loading 3D models..."
 msgstr "ກຳລັງໂຫລດແບບຈຳລອງ 3D..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid "Load completed in %.3f s"
-msgstr "ສຳເລັດໃນ %s"
+msgstr "ສຳເລັດໃນ %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1172
-#, fuzzy
 msgid "Stopping background load..."
-msgstr "ພິມສີພື້ນຫຼັງ"
+msgstr "ກຳລັງຢຸດການໂຫຼດພື້ນຫຼັງ..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1891
 #: eeschema/libraries/legacy_symbol_library.cpp:535
@@ -181,32 +181,29 @@ msgid "Loading..."
 msgstr "ກຳລັງໂຫລດ..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:442
-#, fuzzy
 msgid "Building hit-test scene..."
-msgstr "ກຳລັງສ້າງການຖົມໂຊນ..."
+msgstr "ກຳລັງສ້າງສາກທົດສອບການຕຳ..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:444
 msgid "Load Raytracing: board"
 msgstr "ໂຫລດ Raytracing: ແຜ່ນວົງຈອນ"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:678
-#, fuzzy
 msgid "Building hit-test scene: layers..."
-msgstr "ກຳລັງສ້າງການຖົມໂຊນ..."
+msgstr "ກຳລັງສ້າງສາກທົດສອບການຕຳ: ຊັ້ນ..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:680
 msgid "Load Raytracing: layers"
 msgstr "ໂຫລດ Raytracing: ຊັ້ນວາງ"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:916
-#, fuzzy
 msgid "Building hit-test scene: 3D models..."
-msgstr "ກຳລັງໂຫຼດໂມເດລ 3D ຂອງອຸປະກອນ..."
+msgstr "ກຳລັງສ້າງສາກທົດສອບການຕຳ: ແບບຈຳລອງ 3D..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1113
 #, c-format
 msgid "Hit-test scene ready in %.3f s"
-msgstr ""
+msgstr "ສາກທົດສອບການຕຳພ້ອມແລ້ວໃນ %.3f ວິນາທີ"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1117
 #, c-format
@@ -2120,9 +2117,9 @@ msgid "Plugin '%s': %s"
 msgstr "ປລັກອິນ '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading plugin '%s'"
-msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຄັງອຸປະກອນ '%s'"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດປລັກອິນ '%s'"
 
 #: common/api/api_plugin_manager.cpp:143
 #, c-format
@@ -2163,14 +2160,12 @@ msgstr "ລະຫັດຂໍ້ຜິດພາດ %d"
 
 #: common/api/api_plugin_manager.cpp:780 common/api/api_plugin_manager.cpp:860
 #: common/api/api_plugin_manager.cpp:950
-#, fuzzy
 msgid "Could not create plugin environment"
-msgstr "ບໍ່ສາມາດສ້າງສະພາບແວດລ້ອມປລັກອິນ: %s"
+msgstr "ບໍ່ສາມາດສ້າງສະພາບແວດລ້ອມປລັກອິນໄດ້"
 
 #: common/api/api_plugin_manager.cpp:805 common/api/api_plugin_manager.cpp:888
-#, fuzzy
 msgid "Missing plugin environment"
-msgstr "ສະພາບແວດລ້ອມປລັກອິນຫາຍໄປ"
+msgstr "ຂາດສະພາບແວດລ້ອມປລັກອິນ"
 
 #: common/api/api_plugin_manager.cpp:898
 msgid "requirements.txt could not be read"
@@ -2382,14 +2377,14 @@ msgid "Design block library '%s' cannot be deleted."
 msgstr "ຫ້ອງສະໝຸດບລັອກການອອກແບບ '%s' ບໍ່ສາມາດລຶບໄດ້."
 
 #: common/design_block_io.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library folder '%s' could not be opened."
-msgstr "ບໍ່ສາມາດສ້າງໂຟນເດີບລັອກການອອກແບບ '%s'."
+msgstr "ບໍ່ສາມາດເປີດໂຟນເດີຄັງສັບບລັອກອອກແບບ '%s' ໄດ້."
 
 #: common/design_block_io.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' does not exist in library '%s'."
-msgstr "ບລັອກການອອກແບບ '%s' ມີຢູ່ແລ້ວໃນຄັງ '%s'."
+msgstr "ບລັອກອອກແບບ '%s' ບໍ່ມີຢູ່ໃນຄັງສັບ '%s'."
 
 #: common/design_block_io.cpp:350
 #, c-format
@@ -2470,9 +2465,9 @@ msgid "Internal error"
 msgstr "ຂໍ້ຜິດພາດພາຍໃນ"
 
 #: common/design_block_library_adapter.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is not in the design block library table."
-msgstr "ບໍ່ພົບຄັງອຸປະກອນໃນຕາຕະລາງຄັງອຸປະກອນ"
+msgstr "ຄັງສັບບລັອກອອກແບບ '%s' ບໍ່ມີຢູ່ໃນຕາຕະລາງຄັງສັບບລັອກອອກແບບ."
 
 #: common/design_block_library_adapter.cpp:225
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3649
@@ -2481,49 +2476,45 @@ msgid " Did you mean '%s'?"
 msgstr " ທ່ານໝາຍເຖິງ '%s' ແມ່ນບໍ່?"
 
 #: common/design_block_library_adapter.cpp:231
-#, fuzzy
 msgid "No design block libraries are configured."
-msgstr "ລຶບຄັງບລັອກການອອກແບບ '%s' ແລ້ວ"
+msgstr "ບໍ່ມີຄັງສັບບລັອກອອກແບບຖືກຕັ້ງຄ່າໄວ້."
 
 #: common/design_block_library_adapter.cpp:233
-#, fuzzy
 msgid "Configured design block libraries:"
-msgstr "ກຳລັງໂຫລດຄັງບລັອກການອອກແບບ"
+msgstr "ຄັງສັບບລັອກອອກແບບທີ່ຕັ້ງຄ່າໄວ້:"
 
 #: common/design_block_library_adapter.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "and %d more"
-msgstr "%s, %s ແລະ ອີກ %d ອັນ"
+msgstr "ແລະ ອີກ %d ລາຍການ"
 
 #: common/design_block_library_adapter.cpp:247
-#, fuzzy
 msgid "project"
 msgstr "ໂຄງການ"
 
 #: common/design_block_library_adapter.cpp:247
-#, fuzzy
 msgid "global"
-msgstr "ທົ່ວໄປ (Global)"
+msgstr "ທົ່ວໄປ"
 
 #: common/design_block_library_adapter.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is disabled in the library table."
-msgstr "ຫ້ອງສະໝຸດບລັອກການອອກແບບ '%s' ບໍ່ສາມາດລຶບໄດ້."
+msgstr "ຄັງສັບບລັອກອອກແບບ '%s' ຖືກປິດໃຊ້ງານໃນຕາຕະລາງຄັງສັບ."
 
 #: common/design_block_library_adapter.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' could not be opened."
-msgstr "ຫ້ອງສະໝຸດບລັອກການອອກແບບ '%s' ບໍ່ສາມາດລຶບໄດ້."
+msgstr "ບໍ່ສາມາດເປີດຄັງສັບບລັອກອອກແບບ '%s' ໄດ້."
 
 #: common/design_block_library_adapter.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is still loading."
-msgstr "ລຶບຄັງບລັອກການອອກແບບ '%s' ແລ້ວ"
+msgstr "ຄັງສັບບລັອກອອກແບບ '%s' ກຳລັງໂຫຼດຢູ່."
 
 #: common/design_block_library_adapter.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' not found in any library."
-msgstr "ບໍ່ພົບສັນຍາລັກ '%s' ໃນຄັງສັນຍາລັກ gEDA."
+msgstr "ບໍ່ພົບພາບບລັອກອອກແບບ '%s' ໃນຄັງສັບໃດເລີຍ."
 
 #: common/design_block_tree_model_adapter.cpp:127 cvpcb/cvpcb_mainframe.cpp:790
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:535
@@ -3140,19 +3131,16 @@ msgid "Design Block Properties"
 msgstr "ຄຸນສົມບັດຂອງບລັອກການອອກແບບ"
 
 #: common/dialogs/dialog_fields_table.cpp:103
-#, fuzzy
 msgid "Revert Row"
-msgstr "ຄືນຄ່າ"
+msgstr "ຄືນຄ່າແຖວ"
 
 #: common/dialogs/dialog_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the fields in this row"
-msgstr "ລົບໄຟລ໌ຕ່າງໆ ແລະ ເນື້ອໃນ"
+msgstr "ຄືນຄ່າຟິລໃນແຖວນີ້"
 
 #: common/dialogs/dialog_fields_table.cpp:105
-#, fuzzy
 msgid "Clear Cell"
-msgstr "ລ້າງຫ້ອງ (Cell)"
+msgstr "ລຶບຂໍ້ມູນໃນຫ້ອງ"
 
 #: common/dialogs/dialog_fields_table.cpp:106
 msgid "Clear the cell value"
@@ -3254,9 +3242,9 @@ msgstr ""
 "'%s' ບໍ່?"
 
 #: common/dialogs/dialog_fields_table.cpp:1253
-#, fuzzy
 msgid "Cannot make path relative (target volume different from file volume)!"
-msgstr "ບໍ່ສາມາດເຮັດໃຫ້ເສັ້ນທາງເປັນແບບສຳພັນໄດ້ (ເນື່ອງຈາກໄດຣຟ໌ປາຍທາງຕ່າງຈາກໄດຣຟ໌ຂອງໄຟລ໌ບອດ)!"
+msgstr ""
+"ບໍ່ສາມາດເຮັດໃຫ້ເສັ້ນທາງເປັນແບບທຽບຖານໄດ້ (ໄດຣຟ໌ເປົ້າໝາຍຕ່າງຈາກໄດຣຟ໌ຂອງໄຟລ໌)!"
 
 #: common/dialogs/dialog_fields_table.cpp:1266
 msgid "Unsaved data"
@@ -3511,15 +3499,16 @@ msgid "Keep line breaks"
 msgstr "ຄົງຄ່າການຂຶ້ນແຖວໃໝ່ໄວ້"
 
 #: common/dialogs/dialog_fields_table_base.cpp:330
-#, fuzzy
 msgid "Include byte order mark"
-msgstr "ລວມຊັ້ນຂອບບອດ"
+msgstr "ລວມເຄື່ອງໝາຍລຳດັບໄບຕ໌"
 
 #: common/dialogs/dialog_fields_table_base.cpp:331
 msgid ""
 "Can increase compatibility with older software that does not import UTF-8 "
 "correctly, such as Excel. Can worsen compatibility in some cases."
 msgstr ""
+"ສາມາດເພີ່ມຄວາມເຂົ້າກັນໄດ້ກັບຊອບແວເກົ່າທີ່ບໍ່ຮອງຮັບ UTF-8 ຢ່າງຖືກຕ້ອງ ເຊັ່ນ Excel. ແຕ່ໃນບາງກໍລະນີອາດ"
+"ເຮັດໃຫ້ຄວາມເຂົ້າກັນໄດ້ຫຼຸດລົງ."
 
 #: common/dialogs/dialog_fields_table_base.cpp:338
 msgid "Format presets:"
@@ -3559,9 +3548,8 @@ msgid "Apply, Save Schematic && Continue"
 msgstr "ນຳໃຊ້, ບັນທຶກຜັງວົງຈອນ ແລະ ດຳເນີນການຕໍ່"
 
 #: common/dialogs/dialog_fields_table_base.h:151
-#, fuzzy
 msgid "Fields Table"
-msgstr "ຕາຕະລາງຟິວສັນຍະລັກ"
+msgstr "ຕາຕະລາງຟິລ"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
 msgid "Generate Database Connection"
@@ -6728,9 +6716,8 @@ msgid "Always"
 msgstr "ຕະຫຼອດ"
 
 #: common/dialogs/panel_snapping_base.cpp:17
-#, fuzzy
 msgid "Grid Snapping"
-msgstr "ການຕັ້ງຄ່າເສັ້ນຕາໜ່າງ"
+msgstr "ການດູດຕາຕາລາງ"
 
 #: common/dialogs/panel_snapping_base.cpp:29
 msgid "Snap to grid:"
@@ -6741,9 +6728,8 @@ msgid "When grid shown"
 msgstr "ເມື່ອສະແດງຕາຕະລາງ"
 
 #: common/dialogs/panel_snapping_base.cpp:37
-#, fuzzy
 msgid "Snap the cursor to the active grid"
-msgstr "ລັອກໃສ່ວັດຖຸໃນ Layer ທີ່ກຳລັງໃຊ້ເທົ່ານັ້ນ"
+msgstr "ດູດເຄີເຊີໄປຫາຕາຕາລາງທີ່ໃຊ້ງານຢູ່"
 
 #: common/dialogs/panel_snapping_base.cpp:47 pcbnew/tools/pcb_control.cpp:2399
 msgid "Object Snapping"
@@ -6774,53 +6760,49 @@ msgid "Capture cursor when the mouse approaches graphical control points"
 msgstr "ຈັບຕຳແໜ່ງເຄີເຊີເມື່ອເມົາສ໌ເຂົ້າໃກ້ຈຸດຄວບຄຸມກຣາບຟິກ"
 
 #: common/dialogs/panel_snapping_base.cpp:97
-#, fuzzy
 msgid "Snap to objects on all layers"
-msgstr "ລັອກໃສ່ວັດຖຸໃນທຸກ Layer"
+msgstr "ດູດຫາວັດຖຸໃນທຸກໆຊັ້ນ"
 
 #: common/dialogs/panel_snapping_base.cpp:98
-#, fuzzy
 msgid "When unchecked, only objects on the active layer are snapped to"
-msgstr "ເປີດການລັອກ (Snap) ໃສ່ວັດຖຸໃນ Layer ທີ່ກຳລັງໃຊ້ເທົ່ານັ້ນ"
+msgstr "ຫາກບໍ່ເລືອກ, ຈະດູດຫາສະເພາະວັດຖຸທີ່ຢູ່ໃນຊັ້ນທີ່ກຳລັງໃຊ້ງານຢູ່ເທົ່ານັ້ນ"
 
 #: common/dialogs/panel_snapping_base.cpp:108
-#, fuzzy
 msgid "Snap Inference"
-msgstr "ຈຸດອ້າງອີງດ້ານເທິງ"
+msgstr "ການຄາດຄະເນການດູດ"
 
 #: common/dialogs/panel_snapping_base.cpp:117
-#, fuzzy
 msgid "Object geometry"
-msgstr "ວັດຖຸ A"
+msgstr "ເລຂາຄະນິດຂອງວັດຖຸ"
 
 #: common/dialogs/panel_snapping_base.cpp:118
 msgid "Snap to endpoints, midpoints, centres and edges of existing objects"
-msgstr ""
+msgstr "ດູດຫາຈຸດປາຍ, ຈຸດເຄິ່ງກາງ, ຈຸດສູນກາງ ແລະ ຂອບຂອງວັດຖຸທີ່ມີຢູ່"
 
 #: common/dialogs/panel_snapping_base.cpp:122
-#, fuzzy
 msgid "Construction extensions"
-msgstr "ກຳລັງສ້າງແຄຊ (cache)"
+msgstr "ສ່ວນຕໍ່ຂະຫຍາຍການສ້າງ"
 
 #: common/dialogs/panel_snapping_base.cpp:123
 msgid "Snap to virtual extensions of lines and arcs"
-msgstr ""
+msgstr "ດູດຫາສ່ວນຕໍ່ຂະຫຍາຍສະເມືອນຂອງເສັ້ນ ແລະ ເສັ້ນໂຄ້ງ"
 
 #: common/dialogs/panel_snapping_base.cpp:127
 msgid "Tangent and normal contacts"
-msgstr ""
+msgstr "ຈຸດສຳຜັດເສັ້ນສຳຜັດ ແລະ ເສັ້ນຕັ້ງສາກ"
 
 #: common/dialogs/panel_snapping_base.cpp:128
 msgid "Snap where the dragged geometry meets an arc tangentially or normally"
 msgstr ""
+"ດູດຫາຈຸດທີ່ເລຂາຄະນິດທີ່ລາກມາ ສົມຜັດກັບເສັ້ນໂຄ້ງແບບເສັ້ນສຳຜັດ ຫຼື ເສັ້ນຕັ້ງສາກ"
 
 #: common/dialogs/panel_snapping_base.cpp:132
 msgid "Alignment and equal spacing"
-msgstr ""
+msgstr "ການຈັດລຽງ ແລະ ໄລຍະຫ່າງທີ່ເທົ່າກັນ"
 
 #: common/dialogs/panel_snapping_base.cpp:133
 msgid "Snap to alignment with, and equal spacing between, nearby objects"
-msgstr ""
+msgstr "ດູດຫາການຈັດລຽງ ແລະ ໄລຍະຫ່າງທີ່ເທົ່າກັນລະຫວ່າງວັດຖຸທີ່ຢູ່ໃກ້ຄຽງ"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
 msgid "Pan and Rotate"
@@ -7499,9 +7481,8 @@ msgstr "ຕົວເລືອກການສະແດງຜົນ"
 #: common/eda_base_frame.cpp:1601 common/eda_base_frame.cpp:1612
 #: common/eda_base_frame.cpp:1637 common/eda_base_frame.cpp:1652
 #: common/eda_base_frame.cpp:1687 common/eda_base_frame.cpp:1707
-#, fuzzy
 msgid "Snapping"
-msgstr "ການປິດຫົວ"
+msgstr "ການດູດ"
 
 #: common/eda_base_frame.cpp:1602 common/eda_base_frame.cpp:1613
 #: common/eda_base_frame.cpp:1639 common/eda_base_frame.cpp:1654
@@ -7840,9 +7821,8 @@ msgid "Barcode"
 msgstr "ບາໂຄດ"
 
 #: common/eda_item.cpp:470
-#, fuzzy
 msgid "GridItem"
-msgstr "ຕາຕະລາງ (Grid)"
+msgstr "ລາຍການຕາຕາລາງ"
 
 #: common/eda_item.cpp:473 eeschema/sch_junction.cpp:343
 #: eeschema/sch_junction.h:101
@@ -8216,61 +8196,51 @@ msgstr "ສີເຕີມ"
 #: eeschema/dialogs/dialog_shape_properties.cpp:124 eeschema/sch_line.cpp:1377
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1111
 msgid "Arrow"
-msgstr ""
+msgstr "ລູກສອນ"
 
 #: common/eda_shape.cpp:4776 eeschema/dialogs/dialog_line_properties.cpp:117
 #: eeschema/dialogs/dialog_shape_properties.cpp:127 eeschema/sch_line.cpp:1379
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1114
-#, fuzzy
 msgid "Square"
-msgstr "ຮູບສີ່ຫຼ່ຽມ"
+msgstr "ສີ່ຫຼ່ຽມ"
 
 #: common/eda_shape.cpp:4777 eeschema/dialogs/dialog_line_properties.cpp:115
 #: eeschema/dialogs/dialog_shape_properties.cpp:125 eeschema/sch_line.cpp:1380
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1112
-#, fuzzy
 msgid "Open Arrow"
-msgstr "ເປີດຕໍ່ໄປ (&O)"
+msgstr "ລູກສອນແບບເປີດ"
 
 #: common/eda_shape.cpp:4780 eeschema/sch_line.cpp:1461
-#, fuzzy
 msgid "Start Shape"
-msgstr "ຊັ້ນເລີ່ມຕົ້ນ"
+msgstr "ຮູບຊົງເລີ່ມຕົ້ນ"
 
 #: common/eda_shape.cpp:4785 eeschema/sch_line.cpp:1465
-#, fuzzy
 msgid "Start Length"
-msgstr "ຄວາມຍາວເປົ້າໝາຍ"
+msgstr "ຄວາມຍາວເລີ່ມຕົ້ນ"
 
 #: common/eda_shape.cpp:4790 eeschema/sch_line.cpp:1469
-#, fuzzy
 msgid "Start Width"
-msgstr "ຄວາມກວ້າງເສັ້ນແບ່ງ"
+msgstr "ຄວາມກວ້າງເລີ່ມຕົ້ນ"
 
 #: common/eda_shape.cpp:4795 eeschema/sch_line.cpp:1473
-#, fuzzy
 msgid "Start Stroke Width"
-msgstr "ໃຊ້ຄວາມກວ້າງຕາມເສັ້ນລາຍເລີ່ມຕົ້ນ"
+msgstr "ຄວາມກວ້າງຂອງເສັ້ນເລີ່ມຕົ້ນ"
 
 #: common/eda_shape.cpp:4801 eeschema/sch_line.cpp:1478
-#, fuzzy
 msgid "End Shape"
-msgstr "ຮູບຊົງແພັດ"
+msgstr "ຮູບຊົງສິ້ນສຸດ"
 
 #: common/eda_shape.cpp:4806 eeschema/sch_line.cpp:1482
-#, fuzzy
 msgid "End Length"
-msgstr "ຄວາມຍາວ"
+msgstr "ຄວາມຍາວສິ້ນສຸດ"
 
 #: common/eda_shape.cpp:4811 eeschema/sch_line.cpp:1486
-#, fuzzy
 msgid "End Width"
-msgstr "ຄວາມກວ້າງເສັ້ນ"
+msgstr "ຄວາມກວ້າງສິ້ນສຸດ"
 
 #: common/eda_shape.cpp:4816 eeschema/sch_line.cpp:1490
-#, fuzzy
 msgid "End Stroke Width"
-msgstr "ຄວາມກວ້າງເສັ້ນລາຍວົງຈອນຕ່ຳສຸດ"
+msgstr "ຄວາມກວ້າງຂອງເສັ້ນສິ້ນສຸດ"
 
 #: common/eda_text.cpp:1002 common/eda_text.cpp:1383
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
@@ -9654,9 +9624,8 @@ msgid "Schematic: Generate Bill of Materials"
 msgstr "ຜັງວົງຈອນ: ສ້າງລາຍການອຸປະກອນ"
 
 #: common/jobs/job_export_bom.cpp:137
-#, fuzzy
 msgid "PCB: Generate Bill of Materials"
-msgstr "ສ້າງລາຍການອຸປະກອນ..."
+msgstr "PCB: ສ້າງບັນຊີລາຍການວັດສະດຸ (BOM)"
 
 #: common/jobs/job_export_pcb_3d.cpp:185
 msgid "3D model export"
@@ -9830,19 +9799,16 @@ msgid "PCB: Export Postscript"
 msgstr "PCB: ສົ່ງອອກ Postscript"
 
 #: common/jobs/job_export_pcb_stackup.cpp:66
-#, fuzzy
 msgid "Export board stackup table"
-msgstr "ສົ່ງອອກສະຖິຕິບອດ"
+msgstr "ສົ່ງອອກຕາຕະລາງການຊ້ອນຊັ້ນຂອງແຜ່ນວົງຈອນ"
 
 #: common/jobs/job_export_pcb_stackup.cpp:72
-#, fuzzy
 msgid "Export Board Stackup Job Settings"
-msgstr "ການຕັ້ງຄ່າວຽກສົ່ງອອກສະຖິຕິບອດ"
+msgstr "ຕັ້ງຄ່າງານສົ່ງອອກການຊ້ອນຊັ້ນຂອງແຜ່ນວົງຈອນ"
 
 #: common/jobs/job_export_pcb_stackup.cpp:91
-#, fuzzy
 msgid "PCB: Export Stackup Table"
-msgstr "ວາງຕາຕະລາງລຳດັບຊັ້ນບອດ"
+msgstr "PCB: ສົ່ງອອກຕາຕະລາງການຊ້ອນຊັ້ນ"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
 msgid "Export board statistics"
@@ -10452,14 +10418,12 @@ msgid "DRC highlighted"
 msgstr "DRC ທີ່ໄຮໄລ້ຢູ່"
 
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Grid items"
-msgstr "ລາຍການກຣາບຟິກ"
+msgstr "ລາຍການຕາຕາລາງ"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "Via stitching"
-msgstr "ກົງກັນ"
+msgstr "ການຫຍິບຜ່ານ (Via stitching)"
 
 #: common/layer_id.cpp:155
 msgid "Grid axes"
@@ -10474,24 +10438,20 @@ msgid "Courtyard collision shadow"
 msgstr "ເງົາການຕຳກັນຂອງ Courtyard"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Constrained item shadow"
-msgstr "ເງົາຂອງລາຍການທີ່ລັອກໄວ້"
+msgstr "ເງົາຂອງລາຍການທີ່ມີຂໍ້ຈຳກັດ"
 
 #: common/layer_id.cpp:161
-#, fuzzy
 msgid "Under-constrained tint"
-msgstr "ບໍ່ມີຂໍ້ກຳນົດ"
+msgstr "ສີເນັ້ນຂໍ້ຈຳກັດທີ່ບໍ່ພຽງພໍ"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "Fully constrained tint"
-msgstr "ອະນຸຍາດໃຫ້ສະຫຼັບຂາໄດ້ຢ່າງອິດສະຫຼະ"
+msgstr "ສີເນັ້ນຂໍ້ຈຳກັດທີ່ຄົບຖ້ວນ"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "Over-constrained tint"
-msgstr "ບໍ່ມີຂໍ້ກຳນົດ"
+msgstr "ສີເນັ້ນຂໍ້ຈຳກັດທີ່ເກີນກຳນົດ"
 
 #: common/layer_id.cpp:164
 msgid "Board outline area"
@@ -11129,9 +11089,9 @@ msgid "Failed to archive file '%s'."
 msgstr "ຈັດເກັບໄຟລ໌ '%s' ບໍ່ສຳເລັດ."
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "ຈັດເກັບໄຟລ໌ '%s' ບໍ່ສຳເລັດ."
+msgstr "ບໍ່ສາມາດຈັດເກັບໄຟລ໌ '%s' ລົງໃນອາໄຄຟ໌ໄດ້: %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
@@ -11383,6 +11343,8 @@ msgid ""
 "One backup of this project is larger than the total backup size limit.  "
 "KiCad kept the new backup; increase the limit in Preferences."
 msgstr ""
+"ມີໄຟລ໌ສຳຮອງໜຶ່ງຂອງໂຄງການນີ້ໃຫຍ່ກວ່າຂີດຈຳກັດຂະໜາດສຳຮອງທັງໝົດ. KiCad ໄດ້ເກັບໄຟລ໌ສຳຮອງໃໝ່ໄວ້; ທ່ານ"
+"ສາມາດເພີ່ມຂີດຈຳກັດໄດ້ໃນສ່ວນ 'ການຕັ້ງຄ່າ'."
 
 #: common/startwizard/startwizard.cpp:97
 #, c-format
@@ -11453,9 +11415,8 @@ msgid "Configuration"
 msgstr "ການຕັ້ງຄ່າ"
 
 #: common/table_io.cpp:40
-#, fuzzy
 msgid "Select data file"
-msgstr "ເລືອກໄຟລ໌ຂໍ້ມູນຂາ (pin)"
+msgstr "ເລືອກໄຟລ໌ຂໍ້ມູນ"
 
 #: common/tool/action_menu.cpp:220 common/tool/action_menu.cpp:225
 #, c-format
@@ -12953,14 +12914,12 @@ msgid "Select Path"
 msgstr "ເລືອກເສັ້ນທາງ"
 
 #: common/widgets/kistatusbar.cpp:106
-#, fuzzy
 msgid "Additional information"
-msgstr "ຂໍ້ມູນບໍ່ຄົບຖ້ວນ"
+msgstr "ຂໍ້ມູນເພີ່ມເຕີມ"
 
 #: common/widgets/kistatusbar.cpp:193
-#, fuzzy
 msgid "Clear Warnings"
-msgstr "ຄຳເຕືອນ DRC"
+msgstr "ລຶບຄຳເຕືອນ"
 
 #: common/widgets/kistatusbar.cpp:360
 msgid "View load messages"
@@ -16325,7 +16284,6 @@ msgid "Related Symbols Only"
 msgstr "ສະເພາະສັນຍະລັກທີ່ກ່ຽວຂ້ອງ"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:276
-#, fuzzy
 msgid "Symbol Names"
 msgstr "ຊື່ສັນຍະລັກ"
 
@@ -16343,9 +16301,8 @@ msgid "[Read Only]"
 msgstr "[ອ່ານຢ່າງດຽວ]"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:284
-#, fuzzy
 msgid "Apply"
-msgstr "&ນຳໃຊ້"
+msgstr "ນຳໃຊ້"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:325
 #, c-format
@@ -16858,65 +16815,57 @@ msgstr "ຄຸນສົມບັດສັນຍະລັກໃນຄັງ"
 #: eeschema/dialogs/dialog_line_properties.cpp:45
 #: eeschema/dialogs/dialog_shape_properties.cpp:55
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1042
-#, fuzzy
 msgid "Start Shape:"
-msgstr "ຊັ້ນເລີ່ມຕົ້ນ:"
+msgstr "ຮູບຊົງເລີ່ມຕົ້ນ:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:55
 #: eeschema/dialogs/dialog_shape_properties.cpp:65
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1052
-#, fuzzy
 msgid "End Shape:"
-msgstr "ຮູບຮ່າງ:"
+msgstr "ຮູບຊົງສິ້ນສຸດ:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:84
 #: eeschema/dialogs/dialog_shape_properties.cpp:94
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1081
-#, fuzzy
 msgid "Start Length:"
-msgstr "ຄວາມຍາວເປົ້າໝາຍ:"
+msgstr "ຄວາມຍາວເລີ່ມຕົ້ນ:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:85
 #: eeschema/dialogs/dialog_shape_properties.cpp:95
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1082
-#, fuzzy
 msgid "End Length:"
-msgstr "ຄວາມຍາວ:"
+msgstr "ຄວາມຍາວສິ້ນສຸດ:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:86
 #: eeschema/dialogs/dialog_shape_properties.cpp:96
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1083
-#, fuzzy
 msgid "Start Width:"
-msgstr "ຄວາມກວ້າງເສັ້ນແບ່ງ"
+msgstr "ຄວາມກວ້າງເລີ່ມຕົ້ນ:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:87
 #: eeschema/dialogs/dialog_shape_properties.cpp:97
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1084
-#, fuzzy
 msgid "End Width:"
-msgstr "ຄວາມກວ້າງ:"
+msgstr "ຄວາມກວ້າງສິ້ນສຸດ:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:88
 #: eeschema/dialogs/dialog_shape_properties.cpp:98
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1085
-#, fuzzy
 msgid "Start Stroke Width:"
-msgstr "ໃຊ້ຄວາມກວ້າງຕາມເສັ້ນລາຍເລີ່ມຕົ້ນ"
+msgstr "ຄວາມກວ້າງຂອງເສັ້ນເລີ່ມຕົ້ນ:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:90
 #: eeschema/dialogs/dialog_shape_properties.cpp:100
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1087
-#, fuzzy
 msgid "End Stroke Width:"
-msgstr "ຄວາມກວ້າງຂອງແສກ:"
+msgstr "ຄວາມກວ້າງຂອງເສັ້ນສິ້ນສຸດ:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:162
 #: eeschema/dialogs/dialog_shape_properties.cpp:173
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1377
 #, c-format
 msgid "Shape sizes of 0 = auto (%g× line width)."
-msgstr ""
+msgstr "ຂະໜາດຮູບຊົງເປັນ 0 = ອັດຕະໂນມັດ (%g× ຄວາມກວ້າງຂອງເສັ້ນ)."
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
@@ -17704,9 +17653,8 @@ msgid "BOM format presets"
 msgstr "ການຕັ້ງຄ່າຮູບແບບ BOM ລ່ວງໜ້າ"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
-#, fuzzy
 msgid "Compare symbol with library settings"
-msgstr "ປຽບທຽບສັນຍາລັກກັບຄັງ"
+msgstr "ປຽບທຽບສັນຍະລັກກັບການຕັ້ງຄ່າຄັງສັບ"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:93
@@ -18684,16 +18632,14 @@ msgstr " (ໂຫລດແລ້ວ %d ລາຍການ)"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:149
 #: eeschema/dialogs/dialog_symbol_properties.cpp:419
 #: eeschema/tools/sch_actions.cpp:977
-#, fuzzy
 msgid "Set Variant Symbol..."
-msgstr "ແກ້ໄຂສັນຍະລັກ..."
+msgstr "ກຳນົດສັນຍະລັກຕົວປ່ຽນ..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:156
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:259
 #: eeschema/tools/sch_actions.cpp:984 eeschema/tools/sch_edit_tool.cpp:2782
-#, fuzzy
 msgid "Clear Variant Symbol"
-msgstr "ສ້າງສັນຍະລັກສືບທອດ (Derived Symbol)"
+msgstr "ລ້າງສັນຍະລັກຕົວປ່ຽນ"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:313
 msgid "Symbol Fields Table"
@@ -19616,9 +19562,8 @@ msgid "Sheet background:"
 msgstr "ພື້ນຫຼັງແຜ່ນວົງຈອນ:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:119
-#, fuzzy
 msgid "Power symbols:"
-msgstr "ສັນຍະລັກໄຟລ້ຽງ"
+msgstr "ສັນຍະລັກໄຟຟ້າ:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:123
 #: eeschema/widgets/search_handlers.cpp:479
@@ -19639,7 +19584,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:161
 msgid "Clicking on a pin selects the symbol"
-msgstr ""
+msgstr "ຄລິກທີ່ຂາ (Pin) ເພື່ອເລືອກສັນຍະລັກ"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 msgid ""
@@ -19647,6 +19592,9 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
+"ໃນຕົວແກ້ໄຂຜັງວົງຈອນ:\n"
+"ຫາກເປີດໃຊ້, ການຄລິກທີ່ຂາຈະເລືອກສັນຍະລັກຫຼັກ.\n"
+"ຫາກປິດໃຊ້, ການຄລິກທີ່ຂາຈະເລືອກສະເພາະຂາເທົ່ານັ້ນ."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:177
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:235
@@ -20160,23 +20108,19 @@ msgid "Chains"
 msgstr "ສາຍໂສ້"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:124
-#, fuzzy
 msgid ""
 "Group net chains under a class label so DRC rules can target the whole group "
 "via "
 msgstr ""
-"ຈັດກຸ່ມສາຍໂສ້ເນັດໄວ້ພາຍໃຕ້ປ້າຍຊື່ຄລາສ ເພື່ອໃຫ້ກົດ DRC ສາມາດກວດສອບທັງກຸ່ມໄດ້ຜ່ານຄຳສັ່ງ "
-"inNetChainClass('ຊື່')."
+"ຈັດກຸ່ມຕ່ອງໂສ້ເນັດໄວ້ພາຍໃຕ້ຊື່ຄລາດ ເພື່ອໃຫ້ກົດ DRC ສາມາດກຳນົດເປົ້າໝາຍທັງກຸ່ມຜ່ານ "
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:128
-#, fuzzy
 msgid "inNetChainClass('name')"
-msgstr "ຄລາສຂອງສາຍໂສ້ເນັດ"
+msgstr "inNetChainClass('ຊື່')"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:132
-#, fuzzy
 msgid "."
-msgstr ".A"
+msgstr "."
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:156
 msgid "Class Name"
@@ -20207,64 +20151,52 @@ msgid "Generate error"
 msgstr "ສ້າງຂໍ້ຜິດພາດ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:32
-#, fuzzy
 msgid "Check for missing fields"
-msgstr "ກຳລັງກວດສອບໂປຣໄຟລ໌ການປັບແຕ່ງທີ່ຫາຍໄປ..."
+msgstr "ກວດສອບຟິລທີ່ຂາດຫາຍ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:36
-#, fuzzy
 msgid "Check for extra fields"
-msgstr "ຟິລອື່ນglobal_edit_text_and_graphics_base.cpp:14"
+msgstr "ກວດສອບຟິລທີ່ເກີນມາ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:39
-#, fuzzy
 msgid "Compare non-reference field text"
-msgstr "ອັບເດດ/ຕັ້ງຄ່າຂໍ້ຄວາມໃນຟິວໃໝ່"
+msgstr "ປຽບທຽບຂໍ້ຄວາມໃນຟິລທີ່ບໍ່ແມ່ນການອ້າງອີງ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:42
-#, fuzzy
 msgid "Compare field visibilities"
-msgstr "ອັບເດດການເບິ່ງເຫັນຂອງຟິວ"
+msgstr "ປຽບທຽບການເບິ່ງເຫັນຂອງຟິລ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:45
-#, fuzzy
 msgid "Compare field text sizes and styles"
-msgstr "ອັບເດດ/ຕັ້ງຄ່າຂະໜາດ ແລະ ຮູບແບບຂໍ້ຄວາມຟິລໃໝ່"
+msgstr "ປຽບທຽບຂະໜາດ ແລະ ຮູບແບບຂໍ້ຄວາມຂອງຟິລ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:48
-#, fuzzy
 msgid "Compare field positions"
-msgstr "ອັບເດດຕຳແໜ່ງຂອງຟິລ"
+msgstr "ປຽບທຽບຕຳແໜ່ງຂອງຟິລ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:69
-#, fuzzy
 msgid "Compare pin name/number visibilities"
-msgstr "ອັບເດດການເບິ່ງເຫັນຊື່/ເລກຂາ"
+msgstr "ປຽບທຽບການເບິ່ງເຫັນຊື່/ໝາຍເລກຂາ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:72
-#, fuzzy
 msgid "Compare alternate pin functions"
-msgstr "ຕັ້ງຄ່າຟັງຊັນຂາສຳຮອງໃໝ່"
+msgstr "ປຽບທຽບຟັງຊັນຂາສຳຮອງ"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:94
-#, fuzzy
 msgid "Compare exclude from board flags"
-msgstr "ແຍກອອກຈາກບອດ"
+msgstr "ປຽບທຽບການຕັ້ງຄ່າ 'ຍົກເວັ້ນຈາກແຜ່ນວົງຈອນ'"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:98
-#, fuzzy
 msgid "Compare do not populate flags"
-msgstr "ບໍ່ຕ້ອງລົງອຸປະກອນ"
+msgstr "ປຽບທຽບການຕັ້ງຄ່າ 'ບໍ່ຕ້ອງຕິດຕັ້ງອຸປະກອນ'"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:101
-#, fuzzy
 msgid "Compare exlucde from bill of materials flags"
-msgstr "ແຍກອອກຈາກລາຍການວັດສະດຸ"
+msgstr "ປຽບທຽບການຕັ້ງຄ່າ 'ຍົກເວັ້ນຈາກບັນຊີວັດສະດຸ'"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:104
-#, fuzzy
 msgid "Compare exclude from position file flags"
-msgstr "ຍົກເວັ້ນຈາກໄຟລ໌ຕຳແໜ່ງ"
+msgstr "ປຽບທຽບການຕັ້ງຄ່າ 'ຍົກເວັ້ນຈາກໄຟລ໌ຕຳແໜ່ງ'"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
@@ -21076,14 +21008,14 @@ msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
 msgstr "ຮອຍຕີນທີ່ກຳນົດ (%s) ບໍ່ກົງກັບຕົວຕອງຮອຍຕີນ (%s)"
 
 #: eeschema/erc/erc.cpp:2647
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s': symbol '%s' not found in libraries"
-msgstr "ບໍ່ພົບສັນຍາລັກ '%s' ໃນຄັງສັນຍາລັກ gEDA."
+msgstr "ຕົວປ່ຽນ '%s': ບໍ່ພົບສັນຍະລັກ '%s' ໃນຄັງສັບ"
 
 #: eeschema/erc/erc.cpp:2669
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s', alternate '%s': %s"
-msgstr "ມີຮຸ່ນ '%s' ແລ້ວ."
+msgstr "ຕົວປ່ຽນ '%s', ຕົວເລືອກ '%s': %s"
 
 #: eeschema/erc/erc.cpp:2693
 msgid "Checking sheet names..."
@@ -21127,9 +21059,8 @@ msgid "Checking field names..."
 msgstr "ກຳລັງກວດສອບຊື່ຟີວ..."
 
 #: eeschema/erc/erc.cpp:2807
-#, fuzzy
 msgid "Checking for empty label names..."
-msgstr "ກຳລັງກວດສອບຊື່ຟີວ..."
+msgstr "ກຳລັງກວດສອບຊື່ເລເບວທີ່ວ່າງເປົ່າ..."
 
 #: eeschema/erc/erc.cpp:2815
 msgid "Checking SPICE models..."
@@ -21168,9 +21099,8 @@ msgid "Checking for undefined netclasses..."
 msgstr "ກຳລັງກວດສອບຊັ້ນເນັດທີ່ບໍ່ໄດ້ກຳນົດ..."
 
 #: eeschema/erc/erc.cpp:2889
-#, fuzzy
 msgid "Checking variant symbols..."
-msgstr "ກຳລັງກວດສອບຮູຂອງເວຍ..."
+msgstr "ກຳລັງກວດສອບສັນຍະລັກຕົວປ່ຽນ..."
 
 #: eeschema/erc/erc_item.cpp:39 pcbnew/dialogs/panel_edit_options_base.cpp:340
 #: pcbnew/drc/drc_item.cpp:45
@@ -21298,9 +21228,8 @@ msgid "Field name has leading or trailing whitespace"
 msgstr "ຊື່ຟີວມີຫວ່າງວ່າງທາງໜ້າ ຫຼື ທາງຫຼັງ"
 
 #: eeschema/erc/erc_item.cpp:174
-#, fuzzy
 msgid "Label has an empty name"
-msgstr "ປ້າຍຊື່ບໍ່ສາມາດວ່າງເປົ່າໄດ້."
+msgstr "ເລເບວມີຊື່ທີ່ວ່າງເປົ່າ"
 
 #: eeschema/erc/erc_item.cpp:178
 msgid "Pin map references a pad that does not exist on the footprint"
@@ -21388,14 +21317,12 @@ msgid "Bus Entry needed"
 msgstr "ຕ້ອງການຈຸດເຊື່ອມຕໍ່ບັສ (Bus Entry)"
 
 #: eeschema/erc/erc_item.cpp:266
-#, fuzzy
 msgid "Variant symbol not found in libraries"
-msgstr "ບໍ່ພົບຟຸດປຣິນໃນໄລບຣາຣີ"
+msgstr "ບໍ່ພົບສັນຍະລັກຕົວປ່ຽນໃນຄັງສັບ"
 
 #: eeschema/erc/erc_item.cpp:270
-#, fuzzy
 msgid "Variant symbol is not pin-compatible"
-msgstr "ສັນຍາລັກຍັງບໍ່ໄດ້ໃສ່ໝາຍເລກອ້າງອີງ"
+msgstr "ສັນຍະລັກຕົວປ່ຽນບໍ່ເຂົ້າກັນກັບຂາ (Pin)"
 
 #: eeschema/fields_grid_table.cpp:306 eeschema/files-io.cpp:1206
 #: eeschema/tools/sch_editor_control.cpp:427
@@ -21457,9 +21384,9 @@ msgstr ""
 "ໃຫ້ໃຊ້ເມນູ ໄຟລ໌ -> ນຳເຂົ້າ ສຳລັບໄຟລ໌ຜັງວົງຈອນທີ່ບໍ່ແມ່ນຂອງ KiCad."
 
 #: eeschema/files-io.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a recognised schematic format."
-msgstr " ບໍ່ແມ່ນປະເພດມາຕຣິກຊ໌ທີ່ຮູ້ຈັກ."
+msgstr "'%s' ບໍ່ແມ່ນຮູບແບບຜັງວົງຈອນທີ່ຮອງຮັບ."
 
 #: eeschema/files-io.cpp:403
 msgid ""
@@ -21705,9 +21632,8 @@ msgstr "ຍັງບໍ່ໄດ້ເລືອກໄຟລ໌!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:187
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:246
-#, fuzzy
 msgid "Import scale must be a positive number."
-msgstr "ມາດຕາສ່ວນຕ້ອງເປັນຕົວເລກບວກ."
+msgstr "ມາດຕາສ່ວນການນຳເຂົ້າຕ້ອງເປັນຕົວເລກບວກ."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:230
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:326
@@ -21783,19 +21709,16 @@ msgid "Unit %s"
 msgstr "ໜ່ວຍ %s"
 
 #: eeschema/lib_symbol.cpp:2264
-#, fuzzy
 msgid "Name differs."
-msgstr "ຊື່ຂອງ %s ແຕກຕ່າງກັນ."
+msgstr "ຊື່ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2273
-#, fuzzy
 msgid "Library ID differs."
-msgstr "ຕົວແກ້ໄຂໄລບຣາຣີ"
+msgstr "ID ຂອງຄັງສັບແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2286
-#, fuzzy
 msgid "Symbol parent differs."
-msgstr "ໄລຍະຫ່າງ (offset) ຂອງຊື່ຂາສັນຍາລັກຕ່າງກັນ."
+msgstr "ສັນຍະລັກຫຼັກແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2296
 msgid "Power flag differs."
@@ -21841,39 +21764,39 @@ msgid "Field '%s' differs: %s; %s."
 msgstr "ຟີວ '%s' ຕ່າງກັນ: %s; %s."
 
 #: eeschema/lib_symbol.cpp:2447
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' fonts differ."
-msgstr "ຟີວ '%s' ຕ່າງກັນ: %s; %s."
+msgstr "ຟອນຂອງຟິລ '%s' ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2460
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' text sizes differ."
-msgstr "ຂະໜາດຂໍ້ຄວາມຂອງ %s ແຕກຕ່າງກັນ."
+msgstr "ຂະໜາດຂໍ້ຄວາມຂອງຟິລ '%s' ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2469
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' text styles differ."
-msgstr "ຂະໜາດຂໍ້ຄວາມຂອງ %s ແຕກຕ່າງກັນ."
+msgstr "ຮູບແບບຂໍ້ຄວາມຂອງຟິລ '%s' ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2481
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' visibility flags differ."
-msgstr "ການຕັ້ງຄ່າ '%s' ແຕກຕ່າງກັນ."
+msgstr "ການຕັ້ງຄ່າການເບິ່ງເຫັນຂອງຟິລ '%s' ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2490
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' name shown flags differ."
-msgstr "ການຕັ້ງຄ່າ '%s' ແຕກຕ່າງກັນ."
+msgstr "ການສະແດງຊື່ຂອງຟິລ '%s' ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2500
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' privacy flags differ."
-msgstr "ຟີວ '%s' ຕ່າງກັນ: %s; %s."
+msgstr "ການຕັ້ງຄ່າຄວາມເປັນສ່ວນຕົວຂອງຟິລ '%s' ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2516
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' positions differ."
-msgstr "ຕຳແໜ່ງ %s ແຕກຕ່າງກັນ."
+msgstr "ຕຳແໜ່ງຂອງຟິລ '%s' ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2539
 #, c-format
@@ -21933,9 +21856,8 @@ msgid "Exclude from board settings differ."
 msgstr "ການຕັ້ງຄ່າການຍົກເວັ້ນຈາກແຜ່ນວົງຈອນຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2684
-#, fuzzy
 msgid "Do not populate settings differ."
-msgstr "ການຕັ້ງຄ່າການສະແດງຊື່ຂາຕ່າງກັນ."
+msgstr "ການຕັ້ງຄ່າ 'ບໍ່ຕ້ອງຕິດຕັ້ງອຸປະກອນ' ແຕກຕ່າງກັນ."
 
 #: eeschema/lib_symbol.cpp:2696
 msgid "Exclude from position files settings differ."
@@ -22014,9 +21936,9 @@ msgid "Library '%s': %s"
 msgstr "ຄັງອຸປະກອນ '%s': %s"
 
 #: eeschema/libraries/legacy_cache_reconcile.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' could not be loaded."
-msgstr "ບໍ່ສາມາດສ້າງໄຟລ໌ '%s'."
+msgstr "ບໍ່ສາມາດໂຫຼດຄັງສັບ '%s' ໄດ້."
 
 #: eeschema/libraries/legacy_symbol_library.cpp:579
 #, c-format
@@ -22720,15 +22642,13 @@ msgstr "ຕັ້ງຄ່າການເຊື່ອມໂຍງບລັອກ
 
 #: eeschema/sch_design_block_utils.cpp:506
 #: pcbnew/pcb_design_block_utils.cpp:533
-#, fuzzy
 msgid "The selection contains more than one group linked to this design block."
-msgstr "ຂ້າມ %d ລາຍການທີ່ເລືອກ ເຊິ່ງບໍ່ແມ່ນກຸ່ມທີ່ເຊື່ອມໂຍງກັບບລັອກການອອກແບບ."
+msgstr "ລາຍການທີ່ເລືອກມີຫຼາຍກວ່າໜຶ່ງກຸ່ມທີ່ເຊື່ອມຕໍ່ກັບບລັອກອອກແບບນີ້."
 
 #: eeschema/sch_design_block_utils.cpp:640
 #: pcbnew/pcb_design_block_utils.cpp:616
-#, fuzzy
 msgid "Update Design Block Group"
-msgstr "ອັບເດດ Design Block ຈາກແຜ່ນວົງຈອນ"
+msgstr "ອັບເດດກຸ່ມບລັອກອອກແບບ"
 
 #: eeschema/sch_edit_frame.cpp:180
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
@@ -22955,16 +22875,15 @@ msgstr "<ບໍ່ມີຊື່>"
 msgid ""
 "Invalid binary file hex data size. Chars expected: %d, hex string length: %d"
 msgstr ""
+"ຂະໜາດຂໍ້ມູນ hex ຂອງໄຟລ໌ binary ບໍ່ຖືກຕ້ອງ. ຄາດຫວັງ: %d, ຄວາມຍາວສາຍຂໍ້ຄວາມ hex: %d"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:140
-#, fuzzy
 msgid "Storage stream was not parsed correctly"
-msgstr "'%s' ບໍ່ໄດ້ຖືກວິເຄາະຢ່າງຖືກຕ້ອງ."
+msgstr "ສະຕຣີມການຈັດເກັບບໍ່ໄດ້ຖືກແປງຢ່າງຖືກຕ້ອງ"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:152
-#, fuzzy
 msgid "Additional stream was not parsed correctly"
-msgstr "'%s' ບໍ່ໄດ້ຖືກວິເຄາະຢ່າງຖືກຕ້ອງ."
+msgstr "ສະຕຣີມເພີ່ມເຕີມບໍ່ໄດ້ຖືກແປງຢ່າງຖືກຕ້ອງ"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1345
 #, c-format
@@ -23094,9 +23013,9 @@ msgid ""
 msgstr "ອ່ານໄຟລ໌ຮູບພາບ '%s' ບໍ່ສຳເລັດ. ຮູບພາບອາດຈະເສຍຫາຍ ຫຼື ຢູ່ໃນຮູບແບບທີ່ບໍ່ຮອງຮັບ."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5615
-#, fuzzy, c-format
+#, c-format
 msgid "Converting symbol '%s'"
-msgstr "ກຳລັງແປງໜ້າ '%s'..."
+msgstr "ກຳລັງແປງສັນຍະລັກ '%s'"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5878
 #, c-format
@@ -24030,14 +23949,13 @@ msgid "Invalid property value"
 msgstr "ຄ່າຄຸນສົມບັດບໍ່ຖືກຕ້ອງ"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1356
-#, fuzzy, c-format
+#, c-format
 msgid "Variant symbol override contains invalid character '%c'"
-msgstr "ສັນຍາລັກ %s ມີຕົວອັກສອນທີ່ບໍ່ຖືກຕ້ອງ '%c'"
+msgstr "ການຂຽນທັບສັນຍະລັກຕົວປ່ຽນມີຕົວອັກສອນທີ່ບໍ່ຖືກຕ້ອງ '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1362
-#, fuzzy
 msgid "Invalid variant symbol override LIB_ID"
-msgstr "ຊື່ສັນຍາລັກຕົ້ນແບບບໍ່ຖືກຕ້ອງ"
+msgstr "LIB_ID ຂອງການຂຽນທັບສັນຍະລັກຕົວປ່ຽນບໍ່ຖືກຕ້ອງ"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1393
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2720
@@ -24211,10 +24129,8 @@ msgstr ""
 "ບໍ່ມີການເຊື່ອມຕໍ່ໃນການອອກແບບຕົ້ນສະບັບ; ຖືກຂ້າມໄປ."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:1660
-#, fuzzy
 msgid "An embedded picture could not be decoded and was skipped."
-msgstr ""
-"ຮູບພາບທີ່ຝັງມາບໍ່ສາມາດຖອດລະຫັດໄດ້ ແລະ ຖືກຂ້າມໄປ; ຮອງຮັບສະເພາະຮູບພາບແບບ bitmap ທຳມະດາເທົັ້ນ."
+msgstr "ບໍ່ສາມາດຖອດລະຫັດຮູບພາບທີ່ຝັງມາໄດ້ ແລະ ຖືກຂ້າມໄປ."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:219
 #, c-format
@@ -24244,7 +24160,7 @@ msgstr "ໜ້າ %s: ຕຳແໜ່ງຂາຂອງ %s ບໍ່ກົງກ
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:83
 msgid "OrCAD stream size exceeds the compound file"
-msgstr ""
+msgstr "ຂະໜາດສະຕຣີມ OrCAD ເກີນຂະໜາດຂອງໄຟລ໌ປະສົມ"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:232
 msgid ""
@@ -24316,12 +24232,12 @@ msgstr "ໄຟລ໌ຄັງສັນຍາລັກ OrCAD Capture"
 #: eeschema/sch_io/pads/pads_sch_parser.cpp:2086
 #, c-format
 msgid "BUSSES line %llu: unsupported record, %s. The bus was skipped."
-msgstr ""
+msgstr "ເສັ້ນ BUS ແຖວທີ %llu: ບໍ່ຮອງຮັບຂໍ້ມູນ, %s. ບັດສ໌ນີ້ຖືກຂ້າມໄປ."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS file: %s"
-msgstr "ບໍ່ສາມາດແຍກວິເຄາະໄຟລ໌ PADS Logic '%s'."
+msgstr "ບໍ່ສາມາດແປງໄຟລ໌ PADS ໄດ້: %s"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1292
 #, c-format
@@ -24329,16 +24245,18 @@ msgid ""
 "'%s' contains a complete PADS Logic binary schematic and cannot be loaded as "
 "a hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
+"'%s' ມີຂໍ້ມູນຜັງວົງຈອນ PADS Logic ແບບ binary ແລະ ບໍ່ສາມາດໂຫຼດເປັນແຜ່ນງານລຳດັບຊັ້ນໄດ້. ກະລຸນາໃ"
+"ຊ້ ໄຟລ໌ > ນຳເຂົ້າ > ຜັງວົງຈອນທີ່ບໍ່ແມ່ນ KiCad... ແທນ."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid PADS Logic binary schematic."
-msgstr "ໄຟລ໌ '%s' ບໍ່ແມ່ນຜັງວົງຈອນ gEDA ທີ່ຖືກຕ້ອງ."
+msgstr "'%s' ບໍ່ແມ່ນຜັງວົງຈອນ PADS Logic binary ທີ່ຖືກຕ້ອງ."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1337
 #, c-format
 msgid " (%zu occurrences)"
-msgstr ""
+msgstr " (ພົບ %zu ແຫ່ງ)"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1428
 #, c-format
@@ -24391,39 +24309,38 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "ບໍ່ຮູ້ຈັກຄ່າ SCH_FILE_T: %d"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:255
-#, fuzzy
 msgid "Unrecognized library type"
-msgstr "ບໍ່ຮູ້ຈັກຊັ້ນ '%s'"
+msgstr "ບໍ່ຮູ້ຈັກປະເພດຄັງສັບ"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Loading symbol library '%s'"
-msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຄັງສັນຍາລັກ '%s'."
+msgstr "ກຳລັງໂຫຼດຄັງສັບສັນຍະລັກ '%s'"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:318
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' Convert err: \"%s\""
-msgstr "ຄັງອຸປະກອນ '%s': %s"
+msgstr "ຄັງສັບ '%s' ແປງຜິດພາດ: \"%s\""
 
 #: eeschema/sch_io/sch_io_mgr.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s': %s"
-msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຄັງອຸປະກອນ '%s'"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຄັງສັບ '%s': %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s': unknown error"
-msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຄັງອຸປະກອນ '%s'"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຄັງສັບ '%s': ບໍ່ຮູ້ສາເຫດ"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:344 eeschema/sch_io/sch_io_mgr.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol '%s': %s"
-msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດສັນຍະລັກ '%s': %s"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການບັນທຶກສັນຍະລັກ '%s': %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol '%s': unknown error"
-msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດສັນຍະລັກ '%s': %s"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການບັນທຶກສັນຍະລັກ '%s': ບໍ່ຮູ້ສາເຫດ"
 
 #: eeschema/sch_item.cpp:194 eeschema/sch_item.cpp:215
 #: eeschema/sch_item.cpp:899
@@ -24804,14 +24721,12 @@ msgid "Fill color"
 msgstr "ສີຖົມ"
 
 #: eeschema/sch_shape.cpp:764
-#, fuzzy
 msgid "Reverse hatch"
-msgstr "ການແຕ້ມເສັ້ນຂີດແບບປີ້ນ"
+msgstr "ລາຍຂວາງແບບກັບດ້ານ"
 
 #: eeschema/sch_shape.cpp:765
-#, fuzzy
 msgid "Cross hatch"
-msgstr "ການແຕ້ມເສັ້ນຂີດຕັດກັນ"
+msgstr "ລາຍຂວາງແບບຕັດກັນ"
 
 #: eeschema/sch_shape.cpp:859 pcbnew/pcb_textbox.cpp:1041
 #: pcbnew/pcb_track.cpp:2984
@@ -26926,9 +26841,9 @@ msgid "Unknown simulation model pin '%s'"
 msgstr "ບໍ່ຮູ້ຈັກຂາໂມເດລການຈຳລອງ '%s'"
 
 #: eeschema/sim/sim_model.cpp:804 eeschema/sim/sim_model_ngspice.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model parameter '%s'"
-msgstr "ບໍ່ຮູ້ຈັກຂາໂມເດລການຈຳລອງ '%s'"
+msgstr "ບໍ່ຮູ້ຈັກພາລາມິເຕີຂອງແບບຈຳລອງການຈຳລອງ '%s'"
 
 #: eeschema/sim/sim_model_ibis.cpp:85
 #, c-format
@@ -27067,11 +26982,11 @@ msgstr "ການແຍກແບບ Repeat-per-unit ບໍ່ໄດ້ສ້າ�
 
 #: eeschema/sim/sim_plot_tab.cpp:550
 msgid "Normalized Z/Z0 (ports differ)"
-msgstr ""
+msgstr "Z/Z0 ທີ່ປັບມາດຕະຖານແລ້ວ (ພອດຕ່າງກັນ)"
 
 #: eeschema/sim/sim_plot_tab.cpp:552
 msgid "Normalized Z/Z0"
-msgstr ""
+msgstr "Z/Z0 ທີ່ປັບມາດຕະຖານແລ້ວ"
 
 #: eeschema/sim/sim_plot_tab.cpp:1169
 #, c-format
@@ -27125,14 +27040,12 @@ msgid "Voltage (measured)"
 msgstr "ແຮງດັນໄຟຟ້າ (ວັດແທກ)"
 
 #: eeschema/sim/sim_plot_tab.cpp:2195
-#, fuzzy
 msgid "Add a new signal view"
-msgstr "ເພີ່ມຟິວໃໝ່"
+msgstr "ເພີ່ມມຸມມອງສັນຍານໃໝ່"
 
 #: eeschema/sim/sim_plot_tab.cpp:2199
-#, fuzzy
 msgid "Remove the last signal view"
-msgstr "ລຶບໄຟລ໌id \"Ref"
+msgstr "ລຶບມຸມມອງສັນຍານຫຼ້າສຸດອອກ"
 
 #: eeschema/sim/sim_plot_tab.h:161 eeschema/sim/simulator_frame_ui.cpp:268
 #: eeschema/sim/simulator_frame_ui.cpp:954
@@ -27318,9 +27231,8 @@ msgstr "ພລັອດ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:771
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
-#, fuzzy
 msgid "Y Scale"
-msgstr "ມາດຕາສ່ວນ"
+msgstr "ມາດຕາສ່ວນແກນ Y"
 
 #: eeschema/sim/simulator_frame_ui.cpp:773
 #: eeschema/sim/simulator_frame_ui_base.cpp:116
@@ -27340,9 +27252,9 @@ msgstr "ບໍ່ພົບໄຟລ໌ເວີກບຸກ '%s'. ຈະໂຫ�
 
 #: eeschema/sim/simulator_frame_ui.cpp:1124
 #: eeschema/sim/simulator_frame_ui.cpp:1138
-#, fuzzy, c-format
+#, c-format
 msgid "View %d"
-msgstr "ມຸມເບິ່ງ"
+msgstr "ມຸມມອງ %d"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1656
 #: eeschema/sim/simulator_frame_ui.cpp:4083
@@ -27380,13 +27292,12 @@ msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "ຂໍ້ຜິດພາດ: ປະເພດການຈຳລອງບໍ່ຮອງຮັບການສ້າງເສັ້ນສະແດງ.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3869
-#, fuzzy
 msgid "Return loss"
-msgstr "ກຳລັງໄຟສູນເສຍ:"
+msgstr "ຄ່າສູນເສຍການສະທ້ອນ (Return loss)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3992
 msgid "Refl. Coeff."
-msgstr ""
+msgstr "ສຳປະສິດການສະທ້ອນ."
 
 #: eeschema/sim/simulator_frame_ui.cpp:4271
 #: eeschema/sim/simulator_frame_ui.cpp:4388
@@ -27735,9 +27646,10 @@ msgid "Library changes are unsaved"
 msgstr "ການປ່ຽນແປງໃນໄລບຣາຣີຍັງບໍ່ໄດ້ບັນທຶກ"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Editing %s from schematic.  Saving will update the schematic only."
-msgstr "ກຳລັງແກ້ໄຂສັນຍະລັກ %s ຈາກແຜນຜັງ. ການບັນທຶກຈະອັບເດດສະເພາະໃນແຜນຜັງເທົ່ານັ້ນ."
+msgstr ""
+"ກຳລັງແກ້ໄຂ %s ຈາກຜັງວົງຈອນ. ການບັນທຶກຈະອັບເດດສະເພາະໃນຜັງວົງຈອນເທົ່ານັ້ນ."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:993
 #, c-format
@@ -28104,10 +28016,11 @@ msgid "Text objects"
 msgstr "ວັດຖຸຂໍ້ຄວາມ"
 
 #: eeschema/symbol_import_reconciler.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Imported symbol '%s' has conflicting placed definitions; keeping the first."
-msgstr "Footprint '%s' ທີ່ນຳພວກເຮົາມີການກຳນົດການວາງທີ່ຂັດແຍ້ງກັນ; ຈະຮັກສາອັນທຳອິດໄວ້."
+msgstr ""
+"ສັນຍະລັກ '%s' ທີ່ນຳເຂົ້າມີຄຳນິຍາມການວາງທີ່ຂັດແຍ້ງກັນ; ຈະເກັບອັນທຳອິດໄວ້."
 
 #: eeschema/symbol_import_reconciler.cpp:329
 #, c-format
@@ -28115,49 +28028,49 @@ msgid ""
 "Imported symbol '%s' from '%s' was renamed to '%s' because another library "
 "supplies a different symbol of that name."
 msgstr ""
+"ສັນຍະລັກ '%s' ທີ່ນຳເຂົ້າມາຈາກ '%s' ຖືກປ່ຽນຊື່ເປັນ '%s' ເພາະມີຄັງສັບອື່ນທີ່ໃຊ້ຊື່ນີ້ແລ້ວ."
 
 #: eeschema/symbol_import_reconciler.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A symbol library named '%s' is already registered; leaving imported symbols "
 "unresolved."
-msgstr "ມີຄັງຢູ່ແລ້ວທີ່ '%s'; ຈະປ່ອຍໃຫ້ footprint ທີ່ນຳເຂົ້າຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂ."
+msgstr ""
+"ມີຄັງສັບສັນຍະລັກຊື່ '%s' ລົງທະບຽນໄວ້ແລ້ວ; ຈະປະສັນຍະລັກທີ່ນຳເຂົ້າໄວ້ໂດຍບໍ່ແກ້ໄຂ."
 
 #: eeschema/symbol_import_reconciler.cpp:421
-#, fuzzy
 msgid "Cannot reconcile imported symbols: no KiCad symbol writer."
-msgstr "ບໍ່ສາມາດປັບ footprint ທີ່ນຳເຂົ້າໃຫ້ກົງກັນໄດ້: ບໍ່ມີຕົວຂຽນ footprint ຂອງ KiCad."
+msgstr "ບໍ່ສາມາດປັບຈູນສັນຍະລັກທີ່ນຳເຂົ້າໄດ້: ບໍ່ມີຕົວຂຽນສັນຍະລັກ KiCad."
 
 #: eeschema/symbol_import_reconciler.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported symbol cache '%s': %s"
-msgstr "ຂໍ້ຜິດພາດໃນການຂຽນແຄຊ footprint ທີ່ນຳເຂົ້າ '%s': %s"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການຂຽນແຄສສັນຍະລັກທີ່ນຳເຂົ້າ '%s': %s"
 
 #: eeschema/symbol_import_reconciler.cpp:492
-#, fuzzy, c-format
+#, c-format
 msgid "A library already exists at '%s'; leaving imported symbols unresolved."
-msgstr "ມີຄັງຢູ່ແລ້ວທີ່ '%s'; ຈະປ່ອຍໃຫ້ footprint ທີ່ນຳເຂົ້າຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂ."
+msgstr "ມີຄັງສັບຢູ່ທີ່ '%s' ແລ້ວ; ຈະປະສັນຍະລັກທີ່ນຳເຂົ້າໄວ້ໂດຍບໍ່ແກ້ໄຂ."
 
 #: eeschema/symbol_import_reconciler.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported symbol cache to '%s'."
-msgstr "ບໍ່ສາມາດເຜີຍແຜ່ແຄຊ footprint ທີ່ນຳເຂົ້າໄປຫາ '%s'."
+msgstr "ບໍ່ສາມາດເຜີຍແຜ່ແຄສສັນຍະລັກທີ່ນຳເຂົ້າໄປຫາ '%s' ໄດ້."
 
 #: eeschema/symbol_import_reconciler.cpp:524
-#, fuzzy
 msgid "Cannot register imported symbol cache: no project library table."
-msgstr "ບໍ່ສາມາດລົງທະບຽນແຄຊ footprint ທີ່ນຳເຂົ້າ: ບໍ່ມີຕາຕະລາງຄັງຂອງໂຄງການ."
+msgstr "ບໍ່ສາມາດລົງທະບຽນແຄສສັນຍະລັກທີ່ນຳເຂົ້າໄດ້: ບໍ່ມີຕາຕະລາງຄັງສັບຂອງໂຄງການ."
 
 #: eeschema/symbol_import_reconciler.cpp:549
-#, fuzzy
 msgid ""
 "Error saving project symbol library table; imported symbols left unresolved."
-msgstr "ຂໍ້ຜິດພາດໃນການບັນທຶກຕາຕະລາງຄັງ footprint ຂອງໂຄງການ."
+msgstr ""
+"ເກີດຂໍ້ຜິດພາດໃນການບັນທຶກຕາຕະລາງຄັງສັບ; ສັນຍະລັກທີ່ນຳເຂົ້າຈຶ່ງບໍ່ໄດ້ຮັບການແກ້ໄຂ."
 
 #: eeschema/symbol_import_reconciler.cpp:610
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported symbol libraries: %s"
-msgstr "ບໍ່ສາມາດປັບປຸງຄັງ Footprint ທີ່ນຳເຂົ້າໃຫ້ສອດຄ່ອງກັນໄດ້: %s"
+msgstr "ບໍ່ສາມາດປັບຈູນຄັງສັບສັນຍະລັກທີ່ນຳເຂົ້າໄດ້: %s"
 
 #: eeschema/symbol_library_manager.cpp:200
 #, c-format
@@ -29237,13 +29150,12 @@ msgid "Update symbol to include any changes from the library"
 msgstr "ອັບເດດສັນຍະລັກໃຫ້ກົງກັບການປ່ຽນແປງໃນຄັງ"
 
 #: eeschema/tools/sch_actions.cpp:978
-#, fuzzy
 msgid "Assign an alternate library symbol for this design variant"
-msgstr "ກຳນົດສັນຍະລັກທີ່ແຕກຕ່າງຈາກຄັງ"
+msgstr "ກຳນົດສັນຍະລັກຄັງສັບສຳຮອງສຳລັບຕົວປ່ຽນການອອກແບບນີ້"
 
 #: eeschema/tools/sch_actions.cpp:985
 msgid "Remove the variant symbol override and revert to the base symbol"
-msgstr ""
+msgstr "ລຶບການຂຽນທັບສັນຍະລັກຕົວປ່ຽນ ແລະ ກັບຄືນໄປໃຊ້ສັນຍະລັກຫຼັກ"
 
 #: eeschema/tools/sch_actions.cpp:991 pcbnew/tools/pcb_actions.cpp:1704
 msgid "Assign Netclass..."
@@ -30041,11 +29953,11 @@ msgstr "ແຕ້ມເສັ້ນສັນຍານສຳຮອງ (ກະແ�
 
 #: eeschema/tools/sch_actions.cpp:1860
 msgid "Smith Chart"
-msgstr ""
+msgstr "ແຜນພູມສະມິດ (Smith Chart)"
 
 #: eeschema/tools/sch_actions.cpp:1861
 msgid "Show S-parameter results on a Smith chart"
-msgstr ""
+msgstr "ສະແດງຜົນລັດພາລາມິເຕີ S ເທິງແຜນພູມສະມິດ"
 
 #: eeschema/tools/sch_actions.cpp:1866
 msgid "Dark Mode Plots"
@@ -30426,11 +30338,13 @@ msgid ""
 "Change Symbol is not available when a design variant is active. Use Set "
 "Variant Symbol or switch to the default variant first."
 msgstr ""
+"ບໍ່ສາມາດໃຊ້ 'ປ່ຽນສັນຍະລັກ' ໄດ້ໃນຂະນະທີ່ຕົວປ່ຽນການອອກແບບກຳລັງໃຊ້ງານຢູ່. ກະລຸນາໃຊ້ 'ກຳນົດສັນຍະລັກຕົວ"
+"ປ່ຽນ' ຫຼື ສະຫຼັບໄປໃຊ້ຕົວປ່ຽນເລີ່ມຕົ້ນກ່ອນ."
 
 #: eeschema/tools/sch_edit_tool.cpp:2702
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load symbol '%s' from library."
-msgstr "ບໍ່ສາມາດໂຫຼດສັນຍະລັກ '%s' ຈາກໄລບຣາຣີ '%s'."
+msgstr "ບໍ່ສາມາດໂຫຼດສັນຍະລັກ '%s' ຈາກຄັງສັບໄດ້."
 
 #: eeschema/tools/sch_edit_tool.cpp:2719
 #, c-format
@@ -30438,32 +30352,32 @@ msgid ""
 "The selected symbol '%s' is not pin-compatible with the base symbol '%s'.\n"
 "\n"
 msgstr ""
+"ສັນຍະລັກ '%s' ທີ່ເລືອກ ບໍ່ເຂົ້າກັນກັບຂາຂອງສັນຍະລັກຫຼັກ '%s'.\n"
+"\n"
 
 #: eeschema/tools/sch_edit_tool.cpp:2727
 msgid "Choose a symbol with equivalent pins and pin positions."
-msgstr ""
+msgstr "ເລືອກສັນຍະລັກທີ່ມີຈຳນວນຂາ ແລະ ຕຳແໜ່ງຂາທີ່ຄືກັນ."
 
 #: eeschema/tools/sch_edit_tool.cpp:2728
 msgid "Variant Symbol Compatibility"
-msgstr ""
+msgstr "ຄວາມເຂົ້າກັນໄດ້ຂອງສັນຍະລັກຕົວປ່ຽນ"
 
 #: eeschema/tools/sch_edit_tool.cpp:2741
-#, fuzzy
 msgid "Set Variant Symbol"
-msgstr "ຕົວປ່ຽນຂໍ້ຄວາມ"
+msgstr "ກຳນົດສັນຍະລັກຕົວປ່ຽນ"
 
 #: eeschema/tools/sch_edit_tool.cpp:2898 eeschema/tools/sch_edit_tool.cpp:2955
 #: eeschema/tools/symbol_editor_edit_tool.cpp:954
 #: pcbnew/tools/edit_tool.cpp:2323
 msgid "Use Properties panel to edit properties common to selected items."
-msgstr ""
+msgstr "ໃຊ້ແຜງຄຸນສົມບັດເພື່ອແກ້ໄຂຄຸນສົມບັດຮ່ວມກັນຂອງລາຍການທີ່ເລືອກ."
 
 #: eeschema/tools/sch_edit_tool.cpp:2947
 #: eeschema/tools/symbol_editor_edit_tool.cpp:946
 #: pcbnew/tools/edit_tool.cpp:2315
-#, fuzzy
 msgid "Show Properties panel"
-msgstr "ຄຸນສົມບັດຮູບຊົງ"
+msgstr "ສະແດງແຜງຄຸນສົມບັດ"
 
 #: eeschema/tools/sch_edit_tool.cpp:3081
 msgid "Edit Sheet Properties"
@@ -30505,9 +30419,8 @@ msgid "Edit Netclasses..."
 msgstr "ແກ້ໄຂກຸ່ມເນັດ (Netclasses)..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3933 eeschema/tools/sch_edit_tool.cpp:3987
-#, fuzzy
 msgid "Remove Empty Label"
-msgstr "ລຶບເຄື່ອງມືສົ່ງອອກcpp:37"
+msgstr "ລຶບເລເບວທີ່ວ່າງເປົ່າອອກ"
 
 #: eeschema/tools/sch_editor_control.cpp:464
 #, c-format
@@ -30596,6 +30509,8 @@ msgid ""
 "Bulk Edit Symbol Library Links is not available when a design variant is "
 "active. Switch to the default variant first."
 msgstr ""
+"ບໍ່ສາມາດໃຊ້ 'ແກ້ໄຂລິ້ງຄັງສັບສັນຍະລັກແບບກຸ່ມ' ໄດ້ໃນຂະນະທີ່ຕົວປ່ຽນການອອກແບບກຳລັງໃຊ້ງານຢູ່. ກະລຸນາສະຫຼັບ"
+"ໄປໃຊ້ຕົວປ່ຽນເລີ່ມຕົ້ນກ່ອນ."
 
 #: eeschema/tools/sch_editor_control.cpp:3867
 #, c-format
@@ -31025,32 +30940,32 @@ msgstr "ເຮັດຊ້ຳຂາ"
 #: eeschema/variant_symbol_utils.cpp:54
 #, c-format
 msgid "Candidate has %d unit(s), base requires %d"
-msgstr ""
+msgstr "ຕົວເລືອກມີ %d ຢູນິດ, ແຕ່ຕົວຫຼັກຕ້ອງການ %d"
 
 #: eeschema/variant_symbol_utils.cpp:65
 #, c-format
 msgid "Candidate has %d body style(s), base requires %d"
-msgstr ""
+msgstr "ຕົວເລືອກມີ %d ຮູບແບບຮ່າງ, ແຕ່ຕົວຫຼັກຕ້ອງການ %d"
 
 #: eeschema/variant_symbol_utils.cpp:118
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' not found in candidate"
-msgstr ""
+msgstr "ຢູນິດ %d, ຮູບແບບຮ່າງ %d: ບໍ່ພົບຂາ '%s' ໃນຕົວເລືອກ"
 
 #: eeschema/variant_symbol_utils.cpp:135
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' position mismatch (%d,%d) vs (%d,%d)"
-msgstr ""
+msgstr "ຢູນິດ %d, ຮູບແບບຮ່າງ %d: ຕຳແໜ່ງຂາ '%s' ບໍ່ຕົງກັນ (%d,%d) ທຽບກັບ (%d,%d)"
 
 #: eeschema/variant_symbol_utils.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %d, body style %d: pin '%s' type mismatch ('%s' vs '%s')"
-msgstr "ຢູນິດຕິ %d ຈັບຄູ່ຂາໂມເດລ '%s' ກັບທັງຂາສັນຍະລັກ '%s' ແລະ '%s'."
+msgstr "ຢູນິດ %d, ຮູບແບບຮ່າງ %d: ປະເພດຂາ '%s' ບໍ່ຕົງກັນ ('%s' ທຽບກັບ '%s')"
 
 #: eeschema/variant_symbol_utils.cpp:170
 #, c-format
 msgid "Unit %d, body style %d: candidate has extra pin '%s'"
-msgstr ""
+msgstr "ຢູນິດ %d, ຮູບແບບຮ່າງ %d: ຕົວເລືອກມີຂາເກີນມາ '%s'"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:36
 msgid "Create a new project for this schematic"
@@ -31357,9 +31272,8 @@ msgid "Invalid footprint specified"
 msgstr "ຟຸດປຣິນທີ່ລະບຸບໍ່ຖືກຕ້ອງ"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:767
-#, fuzzy
 msgid "Compatibility Warnings:"
-msgstr "ໂໝດຄວາມເຂົ້າກັນໄດ້:"
+msgstr "ຄຳເຕືອນຄວາມເຂົ້າກັນໄດ້:"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:38
 msgid "Place as sheet"
@@ -32105,7 +32019,7 @@ msgstr "ບໍ່ພົບໄຟລ໌:"
 #: gerbview/files.cpp:307
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>ໄຟລ໌ວຽກ Gerber ບໍ່ສາມາດໂຫຼດເປັນໄຟລ໌ພລັອດໄດ້</b> <i>%s</i>"
+msgstr "<b>ບໍ່ສາມາດໂຫຼດໄຟລ໌ເກີເບີເປັນໄຟລ໌ພລັອດ</b> <i>%s</i>"
 
 #: gerbview/files.cpp:320
 msgid "Load Files"
@@ -32941,9 +32855,8 @@ msgid "Generate a Bill of Materials (BOM)"
 msgstr "ສ້າງລາຍການອຸປະກອນ (BOM)"
 
 #: kicad/cli/command_export_bom.cpp:196
-#, fuzzy
 msgid "Input file does not exist or is not accessible\n"
-msgstr "ໄຟລ໌ແຜ່ນວົງຈອນບໍ່ມີຢູ່ ຫຼື ບໍ່ສາມາດເຂົ້າເຖິງໄດ້\n"
+msgstr "ໄຟລ໌ຂາເຂົ້າບໍ່ມີຢູ່ ຫຼື ບໍ່ສາມາດເຂົ້າເຖິງໄດ້\n"
 
 #: kicad/cli/command_fp.h:31
 msgid "Footprint and Footprint Libraries"
@@ -33934,47 +33847,44 @@ msgid "Force A4 paper size."
 msgstr "ບັງຄັບໃຫ້ໃຊ້ຂະໜາດເຈ້ຍ A4."
 
 #: kicad/cli/command_pcb_export_stackup.cpp:41
-#, fuzzy
 msgid "Export a board stackup report"
-msgstr "ສ້າງລາຍງານສະຖິຕິແຜ່ນວົງຈອນ"
+msgstr "ສົ່ງອອກລາຍງານການຊ້ອນຊັ້ນຂອງແຜ່ນວົງຈອນ"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:45
-#, fuzzy
 msgid "Output file format; valid options: csv, json"
-msgstr "ຮູບແບບໄຟລ໌ສົ່ງອອກ, ຕົວເລືອກ: json, report"
+msgstr "ຮູບແບບໄຟລ໌ຂາອອກ; ຕົວເລືອກທີ່ໃຊ້ໄດ້: csv, json"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:50
-#, fuzzy
 msgid "CSV units; valid options: in, mm"
-msgstr "ຫົວໜ່ວຍລາຍງານ; ຕົວເລືອກ: in, mm"
+msgstr "ຫົວໜ່ວຍ CSV; ຕົວເລືອກທີ່ໃຊ້ໄດ້: in, mm"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:53
 msgid "Omit color from the CSV export"
-msgstr ""
+msgstr "ບໍ່ລວມສີໃນການສົ່ງອອກ CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:56
 msgid "Omit material from the CSV export"
-msgstr ""
+msgstr "ບໍ່ລວມວັດສະດຸໃນການສົ່ງອອກ CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:60
 msgid "Omit thickness from the CSV export"
-msgstr ""
+msgstr "ບໍ່ລວມຄວາມໜາໃນການສົ່ງອອກ CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:64
 msgid "Omit Epsilon R from the CSV export"
-msgstr ""
+msgstr "ບໍ່ລວມ Epsilon R ໃນການສົ່ງອອກ CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:68
 msgid "Omit loss tangent from the CSV export"
-msgstr ""
+msgstr "ບໍ່ລວມຄ່າ Loss tangent ໃນການສົ່ງອອກ CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:72
 msgid "Omit board finish from the CSV export"
-msgstr ""
+msgstr "ບໍ່ລວມການເຄືອບຜິວໃນການສົ່ງອອກ CSV"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:76
 msgid "Omit board options from the CSV export"
-msgstr ""
+msgstr "ບໍ່ລວມຕົວເລືອກແຜ່ນວົງຈອນໃນການສົ່ງອອກ CSV"
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
 msgid "Generate a board statistics report"
@@ -35453,9 +35363,8 @@ msgid ""
 msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການປິດຕົວຈັດການແພັກເກັດ ແລະ ຍົກເລີກການປ່ຽນແປງທີ່ຄ້າງຢູ່?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:289
-#, fuzzy
 msgid "-- All repositories --"
-msgstr "ເພີ່ມຄັງເກັບຂໍ້ມູນ"
+msgstr "-- ທຸກໆຄັງເກັບຂໍ້ມູນ --"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:339
 msgid "Install Package"
@@ -39776,9 +39685,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_board.cpp:1066
-#, fuzzy
 msgid "Flipped items via API"
-msgstr "ລຶບລາຍການຜ່ານ API"
+msgstr "ພິກລາຍການຜ່ານ API"
 
 #: pcbnew/api/api_handler_pcb.cpp:1725 pcbnew/tools/zone_filler_tool.cpp:158
 #: pcbnew/tools/zone_filler_tool.cpp:239 pcbnew/tools/zone_filler_tool.cpp:430
@@ -40791,6 +40699,7 @@ msgstr "(ບໍ່ມີ ID ຫ້ອງສະໝຸດ)"
 msgid ""
 "%s uses footprint '%s' in the reference area but '%s' in the target area."
 msgstr ""
+"%s ໃຊ້ຮອຍຕີນອຸປະກອນ '%s' ໃນພື້ນທີ່ອ້າງອີງ ແຕ່ໃຊ້ '%s' ໃນພື້ນທີ່ເປົ້າໝາຍ."
 
 #: pcbnew/connectivity/topo_match.cpp:744
 #, c-format
@@ -40798,6 +40707,7 @@ msgid ""
 "Footprint '%s' in the reference area (%s) appears as '%s' in the target area "
 "(%s)."
 msgstr ""
+"ຮອຍຕີນອຸປະກອນ '%s' ໃນພື້ນທີ່ອ້າງອີງ (%s) ປະກົດເປັນ '%s' ໃນພື້ນທີ່ເປົ້າໝາຍ (%s)."
 
 #: pcbnew/connectivity/topo_match.cpp:771
 #, c-format
@@ -40805,6 +40715,7 @@ msgid ""
 "Footprint '%s' is used by %s in the target area but by nothing in the "
 "reference area."
 msgstr ""
+"ຮອຍຕີນອຸປະກອນ '%s' ຖືກໃຊ້ໂດຍ %s ໃນພື້ນທີ່ເປົ້າໝາຍ ແຕ່ບໍ່ມີການໃຊ້ໃນພື້ນທີ່ອ້າງອີງ."
 
 #: pcbnew/connectivity/topo_match.cpp:777
 #, c-format
@@ -40812,29 +40723,29 @@ msgid ""
 "Footprint '%s' is used by %s in the reference area but by nothing in the "
 "target area."
 msgstr ""
+"ຮອຍຕີນອຸປະກອນ '%s' ຖືກໃຊ້ໂດຍ %s ໃນພື້ນທີ່ອ້າງອີງ ແຕ່ບໍ່ມີການໃຊ້ໃນພື້ນທີ່ເປົ້າໝາຍ."
 
 #: pcbnew/connectivity/topo_match.cpp:787
 #, c-format
 msgid "Footprint '%s': %d in the reference area, %d in the target area."
-msgstr ""
+msgstr "ຮອຍຕີນອຸປະກອນ '%s': %d ໃນພື້ນທີ່ອ້າງອີງ, %d ໃນພື້ນທີ່ເປົ້າໝາຍ."
 
 #: pcbnew/connectivity/topo_match.cpp:837
 msgid "Neither area has any footprints to match."
-msgstr ""
+msgstr "ທັງສອງພື້ນທີ່ບໍ່ມີຮອຍຕີນອຸປະກອນທີ່ຈະຈັບຄູ່ກັນໄດ້."
 
 #: pcbnew/connectivity/topo_match.cpp:839
-#, fuzzy
 msgid "The reference area has no footprints to match."
-msgstr "ບໍ່ພົບຊັ້ນອ້າງອີງດ້ານເທິງໃນໂຄງສ້າງຊັ້ນ"
+msgstr "ພື້ນທີ່ອ້າງອີງບໍ່ມີຮອຍຕີນອຸປະກອນທີ່ຈະຈັບຄູ່."
 
 #: pcbnew/connectivity/topo_match.cpp:841
 msgid "The target area has no footprints to match."
-msgstr ""
+msgstr "ພື້ນທີ່ເປົ້າໝາຍບໍ່ມີຮອຍຕີນອຸປະກອນທີ່ຈະຈັບຄູ່."
 
 #: pcbnew/connectivity/topo_match.cpp:850
-#, fuzzy, c-format
+#, c-format
 msgid "The reference area has %d components and the target area has %d."
-msgstr "ບໍ່ພົບອຸປະກອນທີ່ເຂົ້າກັນໄດ້ໃນພື້ນທີ່ເປົ້າໝາຍ."
+msgstr "ພື້ນທີ່ອ້າງອີງມີ %d ອຸປະກອນ ແລະ ພື້ນທີ່ເປົ້າໝາຍມີ %d ອຸປະກອນ."
 
 #: pcbnew/connectivity/topo_match.cpp:966
 #, c-format
@@ -40842,6 +40753,8 @@ msgid ""
 "Gave up after %d attempts to pair up the two areas. Either their connections "
 "differ, or too many components are interchangeable to tell apart."
 msgstr ""
+"ຍົກເລີກຫຼັງຈາກພະຍາຍາມຈັບຄູ່ທັງສອງພື້ນທີ່ %d ຄັ້ງ. ອາດເປັນເພາະການເຊື່ອມຕໍ່ຕ່າງກັນ ຫຼື ມີອຸປະກອນທີ່ໃຊ້ແທນກັນ"
+"ໄດ້ຫຼາຍເກີນໄປຈົນແຍກບໍ່ອອກ."
 
 #: pcbnew/connectivity/topo_match.cpp:1365
 #, c-format
@@ -40867,43 +40780,44 @@ msgstr "ແຜ່ນບັດກີຂອງອຸປະກອນແຕກຕ່
 #: pcbnew/constraints/constraint_builder.cpp:277
 #, c-format
 msgid "%s needs two line segments.  Click them to constrain."
-msgstr ""
+msgstr "%s ຕ້ອງການສ່ວນຂອງເສັ້ນສອງເສັ້ນ. ຄລິກທີ່ພວກມັນເພື່ອກຳນົດຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/constraint_builder.cpp:282
 #, c-format
 msgid "%s needs two line segments of nonzero length.  Click them to constrain."
 msgstr ""
+"%s ຕ້ອງການສ່ວນຂອງເສັ້ນສອງເສັ້ນທີ່ມີຄວາມຍາວບໍ່ເປັນສູນ. ຄລິກເພື່ອຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/constraint_builder.cpp:287
 #, c-format
 msgid ""
 "%s needs one line segment, or two anchor points.  Click them to constrain."
-msgstr ""
+msgstr "%s ຕ້ອງການເສັ້ນໜຶ່ງເສັ້ນ ຫຼື ຈຸດຢຶດສອງຈຸດ. ຄລິກເພື່ອຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/constraint_builder.cpp:291
 #, c-format
 msgid "%s needs one line segment.  Click it to constrain."
-msgstr ""
+msgstr "%s ຕ້ອງການສ່ວນຂອງເສັ້ນໜຶ່ງເສັ້ນ. ຄລິກເພື່ອຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/constraint_builder.cpp:296
 #, c-format
 msgid "%s needs two arcs, circles or ellipses.  Click them to constrain."
-msgstr ""
+msgstr "%s ຕ້ອງການເສັ້ນໂຄ້ງ, ວົງມົນ ຫຼື ວົງລີສອງອັນ. ຄລິກເພື່ອຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/constraint_builder.cpp:300
 #, c-format
 msgid "%s needs two arcs or circles.  Click them to constrain."
-msgstr ""
+msgstr "%s ຕ້ອງການເສັ້ນໂຄ້ງ ຫຼື ວົງມົນສອງອັນ. ຄລິກເພື່ອຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/constraint_builder.cpp:304
 #, c-format
 msgid "%s needs one arc or circle.  Click it to constrain."
-msgstr ""
+msgstr "%s ຕ້ອງການເສັ້ນໂຄ້ງ ຫຼື ວົງມົນໜຶ່ງອັນ. ຄລິກເພື່ອຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/constraint_builder.cpp:308
 #, c-format
 msgid "%s needs one arc.  Click it to constrain."
-msgstr ""
+msgstr "%s ຕ້ອງການເສັ້ນໂຄ້ງໜຶ່ງອັນ. ຄລິກເພື່ອຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/constraint_builder.cpp:313
 #, c-format
@@ -40911,112 +40825,95 @@ msgid ""
 "%s needs a line and a curve, or two arcs or circles.  Click them to "
 "constrain."
 msgstr ""
+"%s ຕ້ອງການເສັ້ນ ແລະ ເສັ້ນໂຄ້ງ, ຫຼື ເສັ້ນໂຄ້ງສອງອັນ ຫຼື ວົງມົນ. ຄລິກເພື່ອຂໍ້ຈຳກັດ."
 
 #: pcbnew/constraints/pcb_constraint.cpp:191
-#, fuzzy
 msgid "start"
 msgstr "ເລີ່ມຕົ້ນ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:192
-#, fuzzy
 msgid "end"
 msgstr "ສິ້ນສຸດ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:193
-#, fuzzy
 msgid "mid"
-msgstr "ປະສົມ (mixed)"
-
-#: pcbnew/constraints/pcb_constraint.cpp:194
-#, fuzzy
-msgid "center"
 msgstr "ກາງ"
 
+#: pcbnew/constraints/pcb_constraint.cpp:194
+msgid "center"
+msgstr "ສູນກາງ"
+
 #: pcbnew/constraints/pcb_constraint.cpp:195
-#, fuzzy
 msgid "radius"
 msgstr "ລັດສະໝີ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:196
-#, fuzzy
 msgid "vertex"
-msgstr "ກັບດ້ານ (Inverted)"
+msgstr "ຈຸດຍອດ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:207
 msgid "Coincident"
-msgstr ""
+msgstr "ທັບກັນພໍດີ (Coincident)"
 
 #: pcbnew/constraints/pcb_constraint.cpp:210 pcbnew/tools/pcb_actions.cpp:67
 msgid "Parallel"
-msgstr ""
+msgstr "ຂະໜານ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:211 pcbnew/tools/pcb_actions.cpp:77
 msgid "Perpendicular"
-msgstr ""
+msgstr "ຕັ້ງສາກ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:212 pcbnew/tools/pcb_actions.cpp:97
-#, fuzzy
 msgid "Collinear"
-msgstr "ການຕຳກັນ"
+msgstr "ຢູ່ໃນເສັ້ນຊື່ດຽວກັນ (Collinear)"
 
 #: pcbnew/constraints/pcb_constraint.cpp:213
-#, fuzzy
 msgid "Symmetric"
 msgstr "ສົມມາດ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:214
-#, fuzzy
 msgid "Equal length"
-msgstr "ຄວາມຍາວສາຍໄຟ"
+msgstr "ຄວາມຍາວເທົ່າກັນ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:215
-#, fuzzy
 msgid "Equal radius"
-msgstr "ລັດສະໝີມຸມມົນ:"
+msgstr "ລັດສະໝີເທົ່າກັນ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:216
-#, fuzzy
 msgid "Point on line"
-msgstr "ຈຸດເທິງວົງມົນ"
+msgstr "ຈຸດເທິງເສັ້ນ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:217
-#, fuzzy
 msgid "Midpoint"
 msgstr "ຈຸດເຄິ່ງກາງ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:218
-#, fuzzy
 msgid "Fixed position"
-msgstr "ຕຳແໜ່ງຕາຕະລາງ"
+msgstr "ຄົງທີ່ຕຳແໜ່ງ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:219
-#, fuzzy
 msgid "Fixed length"
-msgstr "ຄວາມຍາວຂອງເສັ້ນ"
+msgstr "ຄົງທີ່ຄວາມຍາວ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:220 pcbnew/tools/pcb_actions.cpp:157
 msgid "Concentric"
-msgstr ""
+msgstr "ຮ່ວມສູນກາງ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:221
-#, fuzzy
 msgid "Fixed radius"
-msgstr "ລັດສະໝີມຸມມົນ:"
+msgstr "ຄົງທີ່ລັດສະໝີ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:222
-#, fuzzy
 msgid "Angular dimension"
-msgstr "ການບອກຂະໜາດ PCB"
+msgstr "ຂະໜາດມຸມ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:223 pcbnew/tools/pcb_actions.cpp:117
-#, fuzzy
 msgid "Tangent"
-msgstr "Loss Tangent"
+msgstr "ເສັ້ນສຳຜັດ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:224
-#, fuzzy
 msgid "Arc angle"
-msgstr "ມຸມເສັ້ນລາຍວົງຈອນ"
+msgstr "ມຸມຂອງເສັ້ນໂຄ້ງ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:225
 #: pcbnew/constraints/pcb_constraint.cpp:228 pcbnew/pad.cpp:3732
@@ -41024,31 +40921,30 @@ msgid "Undefined"
 msgstr "ບໍ່ໄດ້ກຳນົດ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Constraint: %s (%zu members)"
-msgstr "ກຸ່ມ '%s', ມີສະມາຊິກ %zu ຢ່າງ"
+msgstr "ຂໍ້ຈຳກັດ: %s (ສະມາຊິກ %zu)"
 
 #: pcbnew/constraints/pcb_constraint.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "corner %lld"
-msgstr "ຮູບແບບມຸມ"
+msgstr "ມຸມ %lld"
 
 #: pcbnew/constraints/pcb_constraint.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "vertex %lld"
-msgstr "ກັບດ້ານ (Inverted)"
+msgstr "ຈຸດຍອດ %lld"
 
 #: pcbnew/constraints/pcb_constraint.cpp:483
-#, fuzzy
 msgid "Constraint Properties"
-msgstr "ຄຸນສົມບັດຂອງຟຸດປຣິນ"
+msgstr "ຄຸນສົມບັດຂໍ້ຈຳກັດ"
 
 #: pcbnew/constraints/pcb_constraint.cpp:487
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:419
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2100
 msgid "Driving"
-msgstr ""
+msgstr "ຕົວຂັບເຄື່ອນ (Driving)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:502
 msgid "(multiple board outlines not supported)"
@@ -41580,24 +41476,20 @@ msgid "Units:"
 msgstr "ຫົວໜ່ວຍ:"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:56
-#, fuzzy
 msgid "Include Fields"
-msgstr "ລວມຟີວທີ່ຖືກເຊື່ອງໄວ້"
+msgstr "ລວມຟິລ"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:70
-#, fuzzy
 msgid "Loss tangent"
-msgstr "Loss Tangent"
+msgstr "ຄ່າສູນເສຍທັງເຈນ (Loss tangent)"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:73
-#, fuzzy
 msgid "Board finish"
 msgstr "ການເຄືອບຜິວແຜ່ນວົງຈອນ"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:76
-#, fuzzy
 msgid "Board options"
-msgstr "ຕົວເລືອກບອດ"
+msgstr "ຕົວເລືອກແຜ່ນວົງຈອນ"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:128
 #: pcbnew/dialogs/dialog_render_job_base.cpp:43
@@ -41822,33 +41714,28 @@ msgstr "ລ້າງຂໍ້ມູນເສັ້ນລາຍວົງຈອນ
 #: pcbnew/dialogs/dialog_constraint_list_base.h:48
 #: pcbnew/menubar_pcb_editor.cpp:348 pcbnew/pcb_edit_frame.cpp:413
 #: pcbnew/tools/pcb_actions.cpp:277
-#, fuzzy
 msgid "Geometric Constraints"
-msgstr "ຂໍ້ກຳນົດ (Constraints)"
+msgstr "ຂໍ້ຈຳກັດທາງເລຂາຄະນິດ"
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:105
-#, fuzzy
 msgid "Enter an arc angle between 0 and 360 degrees."
-msgstr "ໃຊ້ເປົ້າເລັງຂະໜາດນ້ອຍທີ່ວາງແນວ 0 ແລະ 90 ອົງສາ"
+msgstr "ປ້ອນມຸມເສັ້ນໂຄ້ງລະຫວ່າງ 0 ຫາ 360 ອົງສາ."
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:120
-#, fuzzy
 msgid "Enter a value greater than zero."
-msgstr "ຄວາມກວ້າງຂອງເສັ້ນຕ້ອງຫຼາຍກວ່າສູນ."
+msgstr "ປ້ອນຄ່າທີ່ຫຼາຍກວ່າສູນ."
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:148
-#, fuzzy
 msgid "Edit Geometric Constraint"
-msgstr "ຄ່າຄົງທີ່ໄດອີເລັກທຣິກສຳພັດ"
+msgstr "ແກ້ໄຂຂໍ້ຈຳກັດທາງເລຂາຄະນິດ"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.cpp:36
 msgid "Driving (locks the geometry)"
-msgstr ""
+msgstr "ຂັບເຄື່ອນ (ລັອກເລຂາຄະນິດ)"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.h:46
-#, fuzzy
 msgid "Constraint Value"
-msgstr "ນຳໃຊ້ຂໍ້ກຳນົດແລ້ວ."
+msgstr "ຄ່າຂໍ້ຈຳກັດ"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:131
 msgid "Legacy Teardrop Properties"
@@ -42311,12 +42198,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:358
 msgid "Enter a positive length for a driving dimension."
-msgstr ""
+msgstr "ປ້ອນຄວາມຍາວທີ່ເປັນຄ່າບວກສຳລັບຂະໜາດທີ່ເປັນຕົວຂັບເຄື່ອນ."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:359
-#, fuzzy
 msgid "Invalid Value"
-msgstr "ຄ່າ Vinh ບໍ່ຖືກຕ້ອງ."
+msgstr "ຄ່າບໍ່ຖືກຕ້ອງ"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:387
 msgid "Edit Dimension Properties"
@@ -42326,20 +42212,18 @@ msgstr "ແກ້ໄຂຄຸນສົມບັດຂອງຂະໜາດ"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2099
 msgid "Driven"
-msgstr ""
+msgstr "ຖືກຂັບເຄື່ອນ (Driven)"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:421
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2101
-#, fuzzy
 msgid "Arbitrary"
-msgstr "ຄັງ (Library)"
+msgstr "ກຳນົດເອງ (Arbitrary)"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:528
 #: pcbnew/widgets/pcb_properties_panel.cpp:1110
-#, fuzzy
 msgid "Apply Dimension Length"
-msgstr "ເສັ້ນບອກຂະໜາດ"
+msgstr "ນຳໃຊ້ຄວາມຍາວຂະໜາດ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -42369,6 +42253,8 @@ msgid ""
 "Driven follows the measured geometry; Driving forces the geometry to the "
 "entered length; Arbitrary shows custom text"
 msgstr ""
+"Driven: ປ່ຽນຕາມເລຂາຄະນິດທີ່ວັດແທກໄດ້; Driving: ບັງຄັບເລຂາຄະນິດໃຫ້ມີຄວາມຍາວຕາມທີ່ປ້ອນ; "
+"Arbitrary: ສະແດງຂໍ້ຄວາມທີ່ກຳນົດເອງ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:127
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
@@ -42996,103 +42882,86 @@ msgstr ""
 "ບໍ່ສາມາດປ່ຽນຊື່ໄຟລ໌ຊົ່ວຄາວ '%s' ໄດ້."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:360
-#, fuzzy
 msgid "packages"
-msgstr "ຜູ້ຈັດທຳແພັກເກດ"
+msgstr "ແພັກເກດ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:361
-#, fuzzy
 msgid "components"
-msgstr "ອຸປະກອນ %s"
+msgstr "ອຸປະກອນ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:362
-#, fuzzy
 msgid "padstacks"
-msgstr "ແພັດ"
+msgstr "ຊຸດແຜ່ນທອງແດງ (padstacks)"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:363
-#, fuzzy
 msgid "stackup"
-msgstr "ການວາງຊັ້ນທາງກາຍະພາບ"
+msgstr "ການຊ້ອນຊັ້ນ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:364
-#, fuzzy
 msgid "board profile"
-msgstr "ໄຟລ໌ໂຄງການ KiCad"
+msgstr "ໂປຣໄຟລ໌ແຜ່ນວົງຈອນ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:365
-#, fuzzy
 msgid "solder mask"
-msgstr "ໜ້າກາກບັດກີ (Solder mask)"
+msgstr "ຊັ້ນກັນຈອດ (solder mask)"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:366
-#, fuzzy
 msgid "solder paste"
-msgstr "ຄີມບັດກີ (Solder Paste)"
+msgstr "ຊັ້ນຄຣີມຈອດ (solder paste)"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:367
-#, fuzzy
 msgid "silkscreen"
-msgstr "ດ້ານໜ້າ.ຊິວສະກຣີນ"
+msgstr "ຊັ້ນພິມອັກສອນ (silkscreen)"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:368
-#, fuzzy
 msgid "drill and router"
-msgstr "ແລະ ອື່ນໆ"
+msgstr "ການເຈາະ ແລະ ການຕັດ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:369
-#, fuzzy
 msgid "documentation"
 msgstr "ເອກະສານ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:370
-#, fuzzy
 msgid "outer copper"
-msgstr "ເບຣິລລຽມທອງແດງ"
+msgstr "ທອງແດງຊັ້ນນອກ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:371
-#, fuzzy
 msgid "inner copper"
-msgstr "ເລເຍີທອງແດງຊັ້ນໃນ"
+msgstr "ທອງແດງຊັ້ນໃນ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:372
-#, fuzzy
 msgid "dielectric"
-msgstr "ໄດເອເລັກຕຣິກ"
+msgstr "ໄດອີເລັກທຣິກ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:373
-#, fuzzy
 msgid "misc fab layers"
-msgstr "ເລເຍີທີ່ເບິ່ງເຫັນ"
+msgstr "ຊັ້ນການຜະລິດອື່ນໆ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:374
-#, fuzzy
 msgid "logical netlist"
-msgstr "ສົ່ງອອກ netlist"
+msgstr "ເນັດລິສທາງຕັກກະ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:375
-#, fuzzy
 msgid "physical netlist"
-msgstr "ລາຍການເນັດ Eeschema"
+msgstr "ເນັດລິສທາງກາຍະພາບ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Includes: %s"
-msgstr "ລວມມີ:"
+msgstr "ລວມມີ: %s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:440
 msgid "This data set has no optional sections to choose from."
-msgstr ""
+msgstr "ຊຸດຂໍ້ມູນນີ້ບໍ່ມີສ່ວນເສີມໃຫ້ເລືອກ."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:441
 #: pcbnew/dialogs/dialog_export_2581.cpp:446
-#, fuzzy
 msgid "Customize Content"
-msgstr "ຂໍ້ກຳນົດ (Constraints)"
+msgstr "ປັບແຕ່ງເນື້ອຫາ"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:445
 msgid "Choose the optional sections to include."
-msgstr ""
+msgstr "ເລືອກສ່ວນເສີມທີ່ຈະລວມເຂົ້າ."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -43132,49 +43001,43 @@ msgid "Compress output into 'zip' file"
 msgstr "ບີບອັດຂໍ້ມູນທີ່ສົ່ງອອກເປັນໄຟລ໌ 'zip'"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:108
-#, fuzzy
 msgid "Content"
-msgstr "ເນື້ອໃນຫ້ອງ (Cell):"
+msgstr "ເນື້ອຫາ"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
-#, fuzzy
 msgid "Data set:"
-msgstr "ແຜ່ນຂໍ້ມູນ (Datasheet)"
+msgstr "ຊຸດຂໍ້ມູນ:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "All data (user-defined)"
-msgstr "ບໍ່ໄດ້ກຳນົດແຜ່ນຂໍ້ມູນ (Datasheet)."
+msgstr "ຂໍ້ມູນທັງໝົດ (ຜູ້ໃຊ້ກຳນົດ)"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Bill of materials"
-msgstr "ໃບບິນລາຍການວັດສະດຸ"
+msgstr "ບັນຊີລາຍການວັດສະດຸ"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Stackup"
-msgstr "ການວາງຊັ້ນແຜ່ນວົງຈອນ (Stackup)"
+msgstr "ການຊ້ອນຊັ້ນ"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Fabrication"
-msgstr "ຊັ້ນການຜະລິດ (Fabrication)"
+msgstr "ການຜະລິດ"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Assembly"
-msgstr "ມຸມເບິ່ງການປະກອບດ້ານຫຼັງ"
+msgstr "ການປະກອບ"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
 msgid "Stencil"
-msgstr ""
+msgstr "ແຜ່ນມາກບັດກີ"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
 msgid ""
 "Which sections of the design the file carries, per the IPC-2581 function "
 "mode table"
 msgstr ""
+"ພາກສ່ວນໃດຂອງການອອກແບບທີ່ໄຟລ໌ບັນຈຸໄວ້, ຕາມຕາຕະລາງໂໝດການເຮັດວຽກຂອງ IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:133
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
@@ -43183,18 +43046,18 @@ msgstr "ຊື່ Net:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:137
 msgid "Anonymize"
-msgstr ""
+msgstr "ປິດບັງຂໍ້ມູນລະບຸຕົວຕົນ"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid ""
 "Anonymized names keep connectivity for netlist compare without carrying the "
 "design intent"
 msgstr ""
+"ຊື່ທີ່ຖືກປິດບັງຈະຮັກສາການເຊື່ອມຕໍ່ໄວ້ເພື່ອປຽບທຽບ netlist ໂດຍບໍ່ເປີດເຜີຍຈຸດປະສົງຂອງການອອກແບບ"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
-#, fuzzy
 msgid "Reference designators:"
-msgstr "ຕົວລະບຸການອ້າງອີງ"
+msgstr "ຕົວລະບຸອ້າງອີງ:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 #: pcbnew/dialogs/dialog_export_2581_bom_base.cpp:56
@@ -43208,21 +43071,20 @@ msgid ""
 "text drawn on silkscreen is artwork the fabricator must reproduce and is "
 "always kept."
 msgstr ""
+"ຕັດຕົວລະບຸອອກຈາກອຸປະກອນ, BOM ແລະ ຂໍ້ມູນ artwork. ຂໍ້ຄວາມອ້າງອີງທີ່ແຕ້ມໃສ່ຊັ້ນພິມ (silkscreen) ແ"
+"ມ່ນ artwork ທີ່ຜູ້ຜະລິດInstance ຕ້ອງເຮັດຄືນໃໝ່ ແລະ ຈະຖືກຮັກສາໄວ້ສະເໝີ."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:160
-#, fuzzy
 msgid "Includes:"
 msgstr "ລວມມີ:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:166
-#, fuzzy
 msgid "Customize..."
-msgstr "ກຳນົດເອງ..."
+msgstr "ປັບແຕ່ງ..."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:172
-#, fuzzy
 msgid "BOM Fields..."
-msgstr "ຟິລ (Fields)"
+msgstr "ຟີວ BOM..."
 
 #: pcbnew/dialogs/dialog_export_2581_bom.cpp:140
 msgid "manufacturer"
@@ -43286,9 +43148,8 @@ msgid "Distributor:"
 msgstr "ຕົວແທນຈຳໜ່າຍ:"
 
 #: pcbnew/dialogs/dialog_export_2581_bom_base.h:60
-#, fuzzy
 msgid "BOM Fields"
-msgstr "ຟິລ (Fields)"
+msgstr "ຟີວ BOM"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:71
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:197
@@ -44064,42 +43925,40 @@ msgid "Footprint Checker"
 msgstr "ເຄື່ອງມືກວດສອບຟຸດປຣິນ"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:212
-#, fuzzy
 msgid "Footprint Fields Table"
-msgstr "ຊ່ອງຂໍ້ມູນ Footprint:"
+msgstr "ຕາຕະລາງຟີວຟຸດປຣິນ"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:214
-#, fuzzy
 msgid "Apply, Save Board && Continue"
-msgstr "ນຳໃຊ້, ບັນທຶກຜັງວົງຈອນ ແລະ ດຳເນີນການຕໍ່"
+msgstr "ນຳໃຊ້, ບັນທຶກແຜ່ນ pcb ແລະ ດຳເນີນການຕໍ່"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:567
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:437
-#, fuzzy
 msgid "Include 'DNP' Footprints"
-msgstr "ລວມ &ຟຸດປຣິນ"
+msgstr "ລວມຟຸດປຣິນ 'DNP'"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:568
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:438
-#, fuzzy
 msgid ""
 "Show footprints marked 'DNP' in the table.  This setting also controls "
 "whether or not 'DNP' footprints are included on export."
-msgstr "ສະແດງສັນຍະລັກທີ່ໝາຍວ່າ 'DNP' ໃນຕາຕະລາງ. ຄ່ານີ້ຍັງຄວບຄຸມການສົ່ງອອກສັນຍະລັກ 'DNP' ນຳ."
+msgstr ""
+"ສະແດງຟຸດປຣິນທີ່ໝາຍວ່າ 'DNP' ໃນຕາຕະລາງ. ການຕັ້ງຄ່ານີ້ຍັງຄວບຄຸມວ່າມີການລວມຟຸດປຣິນ 'DNP' ເມື່ອສົ່ງອອ"
+"ກຫຼືບໍ່."
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:573
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:443
-#, fuzzy
 msgid "Include 'Exclude from BOM' Footprints"
-msgstr "ລວມສັນຍະລັກ 'Exclude from BOM'"
+msgstr "ລວມຟຸດປຣິນ 'ຍົກເວັ້ນຈາກ BOM'"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:574
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:444
-#, fuzzy
 msgid ""
 "Show footprints marked 'Exclude from BOM' in the table.  Footprints marked "
 "'Exclude from BOM' are never included on export."
-msgstr "ສະແດງສັນຍະລັກທີ່ໝາຍວ່າ 'ບໍ່ລວມໃນ BOM' ໃນຕາຕະລາງ. ສັນຍະລັກເຫຼົ່ານີ້ຈະບໍ່ຖືກສົ່ງອອກ."
+msgstr ""
+"ສະແດງຟຸດປຣິນທີ່ໝາຍວ່າ 'ຍົກເວັ້ນຈາກ BOM' ໃນຕາຕະລາງ. ຟຸດປຣິນທີ່ໝາຍ 'ຍົກເວັ້ນຈາກ BOM' ຈະບໍ່ຖືກລວມເ"
+"ຂົ້າໃນການສົ່ງອອກ."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:72
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:172
@@ -44647,9 +44506,8 @@ msgid "Edit Pads"
 msgstr "ແກ້ໄຂແພັດ"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1240
-#, fuzzy
 msgid "Select pad data file"
-msgstr "ເລືອກໄຟລ໌ຂໍ້ມູນຂາ (pin)"
+msgstr "ເລືອກໄຟລ໌ຂໍ້ມູນແຜ່ນຮອງ (Pad)"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1267
 msgid ""
@@ -44657,21 +44515,21 @@ msgid ""
 "\n"
 "They will be skipped."
 msgstr ""
+"Padstack ທີ່ຊັບຊ້ອນບໍ່ສາມາດສົ່ງອອກຜ່ານ CSV ໄດ້.\n"
+"\n"
+"ພວກມັນຈະຖືກຂ້າມໄປ."
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1268
-#, fuzzy
 msgid "Export Pad Table"
-msgstr "ຕາຕະລາງແພັດ"
+msgstr "ສົ່ງອອກຕາຕະລາງແຜ່ນຮອງ"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1369
-#, fuzzy
 msgid "Imported pad data must include pad numbers."
-msgstr "ຮວມໝາຍເລກ Pad"
+msgstr "ຂໍ້ມູນແຜ່ນຮອງທີ່ນຳເຂົ້າຕ້ອງມີເລກແຜ່ນຮອງ (Pad number)."
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1370
-#, fuzzy
 msgid "Import error"
-msgstr "ນຳເຂົ້າຈາກ:"
+msgstr "ການນຳເຂົ້າຜິດພາດ"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:31
 msgid "Pad numbers:"
@@ -44710,14 +44568,12 @@ msgid "Pad->Die Delay"
 msgstr "ຄວາມໜ່ວງຈາກແພັດຫາໄດ (Pad->Die)"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:145
-#, fuzzy
 msgid "Replace all existing pads"
-msgstr "ປ່ຽນແທນຂາທີ່ມີຢູ່ທັງໝົດ"
+msgstr "ປ່ຽນແທນແຜ່ນຮອງທີ່ມີຢູ່ທັງໝົດ"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:148
-#, fuzzy
 msgid "Append to existing pads"
-msgstr "ເພີ່ມຕໍ່ໃສ່ຂາທີ່ມີຢູ່"
+msgstr "ເພີ່ມຕໍ່ໃສ່ແຜ່ນຮອງທີ່ມີຢູ່"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.h:77
 msgid "Pad Table"
@@ -45536,13 +45392,12 @@ msgstr "ຈຸດສິ້ນສຸດ"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:170
 msgid "Angular extent"
-msgstr ""
+msgstr "ຂອບເຂດມຸມ"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:311
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:83
-#, fuzzy
 msgid "Center and Radius"
-msgstr "ລັດສະໝີມຸມ"
+msgstr "ຈຸດໃຈກາງ ແລະ ລັດສະໝີ"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:315
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:35
@@ -45563,66 +45418,56 @@ msgid "By Center and Size"
 msgstr "ຕາມຈຸດເຄິ່ງກາງ ແລະ ຂະໜາດ"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:353
-#, fuzzy
 msgid "Radius spacing:"
-msgstr "ລັດສະໝີ:"
+msgstr "ໄລຍະຫ່າງລັດສະໝີ:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:354
-#, fuzzy
 msgid "Angular spacing:"
-msgstr "ວົງແຫວນຮອບຮູ (Annular rings):"
+msgstr "ໄລຍະຫ່າງມຸມ:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:362
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:121
-#, fuzzy
 msgid "Spacing X:"
-msgstr "ໄລຍະຫ່າງ (s):"
+msgstr "ໄລຍະຫ່າງ X:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:363
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:134
-#, fuzzy
 msgid "Spacing Y:"
-msgstr "ໄລຍະຫ່າງ (s):"
+msgstr "ໄລຍະຫ່າງ Y:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:433
-#, fuzzy
 msgid "Edit Grid Item Properties"
-msgstr "ແກ້ໄຂຄຸນສົມບັດຂອງກຸ່ມ"
+msgstr "ແກ້ໄຂຄຸນສົມບັດຂອງລາຍການເສັ້ນຕາໜ່າງ"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:98
-#, fuzzy
 msgid "Grid type:"
-msgstr "ປະເພດ Pad:"
+msgstr "ປະເພດເສັ້ນຕາໜ່າງ:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:102
 #: pcbnew/pcb_griditem.cpp:498
 msgid "Cartesian"
-msgstr ""
+msgstr "ຄາດີຊຽນ (ສາກ)"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:102
 #: pcbnew/pcb_griditem.cpp:499
-#, fuzzy
 msgid "Polar"
-msgstr "ຂົ້ວ"
+msgstr "ໂພລາ (ມຸມ)"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:147
 msgid "Major tick every:"
-msgstr ""
+msgstr "ຂີດໝາຍຫຼັກທຸກໆ:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:156
-#, fuzzy
 msgid "lines"
 msgstr "ເສັ້ນ"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:160
-#, fuzzy
 msgid "Priority:"
-msgstr "ລຳດັບຄວາມສຳຄັນ"
+msgstr "ລຳດັບຄວາມສຳຄັນ:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:169
-#, fuzzy
 msgid "Affects:"
-msgstr "%s ທີ່ມີຜົນສັກສິດ:"
+msgstr "ສົ່ງຜົນຕໍ່:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:80
@@ -45840,29 +45685,27 @@ msgid "Select Copper Layer Pair"
 msgstr "ເລືອກຄູ່ຊັ້ນທອງແດງ"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:189
-#, fuzzy
 msgid "Footprint Names"
-msgstr "ຊື່ຟຸດພຣິນ"
+msgstr "ຊື່ຟຸດປຣິນ"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Fields Table ('%s' Library)"
-msgstr "ຕາຕະລາງຟິວສັນຍະລັກ (ຄັງ '%s')"
+msgstr "ຕາຕະລາງຟີວຟຸດປຣິນ (ຄັງ ‘%s’)"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints found in library '%s'."
-msgstr "ບໍ່ມີຮອຍຕີນອຸປະກອນໃນຫ້ອງສະໝຸດ '%s'"
+msgstr "ບໍ່ພົບຟຸດປຣິນໃນຄັງ '%s'."
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint '%s': %s"
-msgstr "ເກີິນ: %s"
+msgstr "ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຟຸດປຣິນ '%s': %s"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:263
-#, fuzzy
 msgid "No footprints could be loaded from the library."
-msgstr "ບໍ່ສາມາດໂຫຼດສັນຍະລັກຈາກຄັງໄດ້."
+msgstr "ບໍ່ສາມາດໂຫຼດຟຸດປຣິນຈາກຄັງໄດ້."
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:380
 #: pcbnew/footprint.cpp:2365
@@ -46713,11 +46556,8 @@ msgid "Press-fit (round TH only)"
 msgstr "Press-fit (ສະເພາະຮູມົນ TH)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:627
-#, fuzzy
 msgid "Simulation electrical type:"
-msgstr ""
-"ການຈຳລອງ\n"
-"ປະເພດໄຟຟ້າ:"
+msgstr "ປະເພດໄຟຟ້າສຳລັບການຈຳລອງ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:634 pcbnew/pad.cpp:3739
 msgid "Sink"
@@ -46852,9 +46692,8 @@ msgid "Back:"
 msgstr "ດ້ານຫຼັງ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1203
-#, fuzzy
 msgid "Backdrilling"
-msgstr "ເຈາະກັບດ້ານ (Backdrill)"
+msgstr "ການເຈາະຈາກດ້ານຫຼັງ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1205
 msgid "Top & bottom"
@@ -46862,9 +46701,8 @@ msgstr "ເທິງ & ລຸ່ມ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1254
-#, fuzzy
 msgid "Must-cut layer:"
-msgstr "ຊັ້ນເລີ່ມຕົ້ນ:"
+msgstr "ຊັ້ນທີ່ຕ້ອງຕັດ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1221
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
@@ -47404,9 +47242,8 @@ msgid "Suggest track finish"
 msgstr "ແນະນຳການສິ້ນສຸດລາຍວົງຈອນ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:117
-#, fuzzy
 msgid "Dragging"
-msgstr "ລາກ"
+msgstr "ການລາກ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:122
 msgid "Smooth dragged segments"
@@ -47435,13 +47272,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:132
 msgid "Avoid sharp angles"
-msgstr ""
+msgstr "ຫຼີກເວັ້ນມຸມແຫຼມ"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:133
 msgid ""
 "When enabled, dragged traces will be optimized to avoid creating 90-degree "
 "or acute corners in most situations."
 msgstr ""
+"ເມື່ອເປີດໃຊ້, ເສັ້ນທາງທີ່ລາກຈະຖືກປັບໃຫ້ເໝາະສົມເພື່ອຫຼີກເວັ້ນການສ້າງມຸມ 90 ອົງສາ ຫຼື ມຸມແຫຼມໃນກໍລະນີສ່ວນໃຫ"
+"ຍ່."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
@@ -47903,9 +47742,8 @@ msgid "By Start/Mid/End"
 msgstr "ຕາມຈຸດເລີ່ມຕົ້ນ/ຈຸດເຄິ່ງກາງ/ຈຸດສິ້ນສຸດ"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
-#, fuzzy
 msgid "By Center/Radius/Angles"
-msgstr "ຕາມຈຸດເຄິ່ງກາງ/ລັດສະໝີ"
+msgstr "ໂດຍ ຈຸດໃຈກາງ/ລັດສະໝີ/ມຸມ"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
 msgid "By Center/Radius"
@@ -48362,63 +48200,54 @@ msgid "Update PCB from Schematic"
 msgstr "ອັບເດດ PCB ຈາກ Schematic"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties.cpp:63
-#, fuzzy
 msgid "Via Stitching Properties"
-msgstr "ຄຸນສົມບັດວຽກ"
+msgstr "ຄຸນສົມບັດຂອງການເຊື່ອມວຽ (Via Stitching)"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
-#, fuzzy
 msgid "Normal Grid"
-msgstr "ປົກກະຕິ"
+msgstr "ເສັ້ນຕາໜ່າງປົກກະຕິ"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:76
-#, fuzzy
 msgid "Staggered Grid"
-msgstr "ການວາງສະຫຼັບ:"
+msgstr "ເສັ້ນຕາໜ່າງແບບສະຫຼັບ"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:77
 msgid "Poisson"
-msgstr ""
+msgstr "ປົວຊົງ (Poisson)"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:80
-#, fuzzy
 msgid "Pitch:"
-msgstr "ສະຫຼັບ"
+msgstr "ໄລຍະຫ່າງ (Pitch):"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:91
 msgid "Seed:"
-msgstr ""
+msgstr "ຄ່າເລີ່ມຕົ້ນ (Seed):"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:98
-#, fuzzy
 msgid "Via Properties:"
-msgstr "ຄຸນສົມບັດວຽກ"
+msgstr "ຄຸນສົມບັດຂອງວຽ:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:102
-#, fuzzy
 msgid "Configure"
-msgstr "ກຳນົດຄ່າເສັ້ນທາງ"
+msgstr "ຕັ້ງຄ່າ"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:105
-#, fuzzy
 msgid "Mode:"
-msgstr "ແບບຈຳລອງ:"
+msgstr "ໂໝດ:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:110
 #: pcbnew/generators/pcb_via_stitch.cpp:1595
-#, fuzzy
 msgid "Stitch"
-msgstr "ສະຫຼັບ"
+msgstr "ເຊື່ອມຕໍ່ (Stitch)"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:111
 #: pcbnew/generators/pcb_via_stitch.cpp:1596
 msgid "Guard"
-msgstr ""
+msgstr "ປ້ອງກັນ (Guard)"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:83
-#, fuzzy
 msgid "Via Stitch Properties"
-msgstr "ຄຸນສົມບັດວຽກ"
+msgstr "ຄຸນສົມບັດການເຊື່ອມວຽ"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:189
 #, c-format
@@ -51371,14 +51200,12 @@ msgid "Enable time domain tuning"
 msgstr "ເປີດໃຊ້ການປັບຈູນໃນໂດເມນເວລາ"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
-#, fuzzy
 msgid "Model solder mask"
-msgstr "ຈຳລອງ Solder Mask"
+msgstr "ຈຳລອງມາກກັນບັດກີ"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:152
-#, fuzzy
 msgid "Net Chain Bridge Propagation"
-msgstr "ການສົ່ງສັນຍານຜ່ານເວຍ (Via)"
+msgstr "ການແຜ່ກະຈາຍຂົວຕໍ່ສາຍເນັດ"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:158
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:252
@@ -51444,7 +51271,7 @@ msgstr "ໄລຍະຫຍັບ (Offsets) ຂອງການເຕີມລາ�
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:61
 msgid "Use solid fills for hatched zones"
-msgstr ""
+msgstr "ໃຊ້ການເຕັມແບບແຂງ (Solid) ສຳລັບໂຊນທີ່ມີເສັ້ນຂີດ (Hatch)"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:62
 msgid ""
@@ -51452,6 +51279,8 @@ msgid ""
 "on large boards. This local setting takes effect the next time zones are "
 "filled."
 msgstr ""
+"ໂໝດການເຕັມໂຊນຕົ້ນແບບຈະເຕັມໂຊນທີ່ມີເສັ້ນຂີດໃຫ້ເປັນແບບແຂງເພື່ອເພີ່ມປະສິດທິພາບໃນແຜ່ນວົງຈອນຂະໜາດໃຫຍ່. "
+"ການຕັ້ງຄ່ານີ້ຈະມີຜົນໃນຄັ້ງຕໍ່ໄປທີ່ມີການເຕັມໂຊນ."
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
 msgid "Default Properties for New Zones"
@@ -51632,14 +51461,14 @@ msgid "netclass '%s'"
 msgstr "ເນັດຄລາສ '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:312 pcbnew/drc/drc_engine.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' diff pair"
-msgstr "ເນັດຄລາສ '%s' (ຄູ່ສັນຍານຜົນຕ່າງ)"
+msgstr "ຄູ່ສັນຍານຜ່ານຕ່າງ (diff pair) ຂອງຄຣາດເນັດ '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:399 pcbnew/drc/drc_engine.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' uvia"
-msgstr "ເນັດຄລາສ '%s' (uvia)"
+msgstr "uvia ຂອງຄຣາດເນັດ '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:467 pcbnew/drc/drc_engine.cpp:493
 #: pcbnew/drc/drc_engine.cpp:511 pcbnew/drc/drc_engine.cpp:532
@@ -51959,9 +51788,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "ບໍ່ເປັນໄປຕາມເງື່ອນໄຂ; ກົດຖືກລະເລີຍ."
 
 #: pcbnew/drc/drc_engine.cpp:1936
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved minimum clearance: %s."
-msgstr "ໄລຍະຫ່າງຕ່ຳສຸດ: %s."
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດທີ່ກຳນົດ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1960
 #, c-format
@@ -52190,7 +52019,7 @@ msgstr "ຟິລຂອງຟຸດປຣິນບໍ່ກົງກັບຟິ
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Via-stitching zones overlap for same net"
-msgstr ""
+msgstr "ໂຊນການເຊື່ອມວຽທັບຊ້ອນກັນສຳລັບເນັດດຽວກັນ"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Footprint not found in libraries"
@@ -52247,7 +52076,7 @@ msgstr "ເນັດເຊນຖືກເດີນສາຍໂດຍບໍ່ມ
 
 #: pcbnew/drc/drc_item.cpp:273
 msgid "Net chain nets do not have consistent tuning profile assignment"
-msgstr ""
+msgstr "ເນັດໃນສາຍເນັດ (Net chain) ມີການກຳນົດ tuning profile ທີ່ບໍ່ສອດຄ່ອງກັນ"
 
 #: pcbnew/drc/drc_item.cpp:277
 msgid "Skew between tracks out of range"
@@ -52478,9 +52307,9 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s ຄວາມກວ້າງວົງແຫວນຕ່ຳສຸດ %s; ຄ່າຈິງ %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
-msgstr "(%s ຄວາມກວ້າງວົງແຫວນຕ່ຳສຸດ %s; ຄ່າຈິງ %s)"
+msgstr "(%s ຄວາມກວ້າງວົງແຫວນຕໍ່າສຸດ %s; ຕົວຈິງ %s ໃນ %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:355
 #, c-format
@@ -53165,14 +52994,13 @@ msgid "Checking for missing tuning profiles..."
 msgstr "ກຳລັງກວດສອບໂປຣໄຟລ໌ການປັບແຕ່ງທີ່ຫາຍໄປ..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:57
-#, fuzzy
 msgid "Checking net chain tuning profiles..."
-msgstr "ກຳລັງກວດສອບໂປຣໄຟລ໌ການປັບແຕ່ງທີ່ຫາຍໄປ..."
+msgstr "ກຳລັງກວດສອບ tuning profiles ຂອງສາຍເນັດ..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:86
 #, c-format
 msgid "Net chain %s nets have multiple tuning profiles assigned"
-msgstr ""
+msgstr "ເນັດໃນສາຍເນັດ %s ມີການກຳນົດ tuning profiles ຫຼາຍອັນ"
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:91
 msgid "Gathering physical items..."
@@ -53352,9 +53180,9 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s ເສັ້ນຜ່ານສູນກາງຕ່ຳສຸດ %s; ຕົວຈິງ %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
-msgstr "(%s ເສັ້ນຜ່ານສູນກາງຕ່ຳສຸດ %s; ຕົວຈິງ %s)"
+msgstr "(%s ເສັ້ນຜ່ານສູນກາງຕໍ່າສຸດ %s; ຕົວຈິງ %s ໃນ %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:144
 #, c-format
@@ -53362,14 +53190,13 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s ເສັ້ນຜ່ານສູນກາງສູງສຸດ %s; ຕົວຈິງ %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
-msgstr "(%s ເສັ້ນຜ່ານສູນກາງສູງສຸດ %s; ຕົວຈິງ %s)"
+msgstr "(%s ເສັ້ນຜ່ານສູນກາງສູງສຸດ %s; ຕົວຈິງ %s ໃນ %s)"
 
 #: pcbnew/drc/drc_test_provider_via_stitch.cpp:56
-#, fuzzy
 msgid "Checking via-stitch zone overlaps..."
-msgstr "ກຳລັງກວດສອບຮູຂອງເວຍ..."
+msgstr "ກຳລັງກວດສອບການທັບຊ້ອນຂອງໂຊນເຊື່ອມວຽ..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:195
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
@@ -53440,14 +53267,13 @@ msgstr "ໂຫຼດກົດລະບຽບ DRC ຄືນໃໝ່ບໍ່ສ�
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:54
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:142
-#, fuzzy
 msgid "Optimum routed length"
-msgstr "ຄວາມຍາວທີ່ລາກເສັ້ນແລ້ວ"
+msgstr "ຄວາມຍາວການເດີນເສັ້ນທີ່ເໝາະສົມທີ່ສຸດ"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:56
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:144
 msgid "Allowed deviation above or below the optimum length"
-msgstr ""
+msgstr "ຄ່າຜິດດ່ຽງທີ່ອະນຸຍາດ ຫຼາຍກວ່າ ຫຼື ໜ້ອຍກວ່າຄວາມຍາວທີ່ເໝາະສົມ"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:78
 msgid "Optimum Length must be greater than 0"
@@ -53463,7 +53289,7 @@ msgstr "ຄ່າຄວາມຄາດເຄື່ອນໃຫຍ່ເກີນ
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:146
 msgid "Maximum length difference between matched tracks"
-msgstr ""
+msgstr "ຄວາມແຕກຕ່າງຂອງຄວາມຍາວສູງສຸດລະຫວ່າງເສັ້ນທີ່ເຂົ້າຄູ່ກັນ"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:147
 msgid "Within diff pairs"
@@ -53471,7 +53297,7 @@ msgstr "ພາຍໃນຄູ່ຕ່າງ (Diff pairs)"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:148
 msgid "Limit skew between the two tracks of each differential pair"
-msgstr ""
+msgstr "ຈຳກັດຄ່າ skew ລະຫວ່າງສອງເສັ້ນຂອງແຕ່ລະຄູ່ສັນຍານຜ່ານຕ່າງ"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:206
 msgid "At least one constraint must be defined"
@@ -53486,45 +53312,40 @@ msgid "Allow 0°"
 msgstr "ອະນຸຍາດ 0°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:61
-#, fuzzy
 msgid "Allow footprints placed at 0 degrees"
-msgstr "ສະແດງຊື່ລຳດັບຂອງຟຸດປຣິນ"
+msgstr "ອະນຸຍາດໃຫ້ວາງຟຸດປຣິນທີ່ 0 ອົງສາ"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:62
 msgid "Allow 90°"
 msgstr "ອະນຸຍາດ 90°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:63
-#, fuzzy
 msgid "Allow footprints placed at 90 degrees"
-msgstr "ສະແດງຊື່ລຳດັບຂອງຟຸດປຣິນ"
+msgstr "ອະນຸຍາດໃຫ້ວາງຟຸດປຣິນທີ່ 90 ອົງສາ"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 180°"
 msgstr "ອະນຸຍາດ 180°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:65
-#, fuzzy
 msgid "Allow footprints placed at 180 degrees"
-msgstr "ສະແດງຊື່ລຳດັບຂອງຟຸດປຣິນ"
+msgstr "ອະນຸຍາດໃຫ້ວາງຟຸດປຣິນທີ່ 180 ອົງສາ"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:66
 msgid "Allow 270°"
 msgstr "ອະນຸຍາດ 270°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:67
-#, fuzzy
 msgid "Allow footprints placed at 270 degrees"
-msgstr "ສະແດງຊື່ລຳດັບຂອງຟຸດປຣິນ"
+msgstr "ອະນຸຍາດໃຫ້ວາງຟຸດປຣິນທີ່ 270 ອົງສາ"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:68
 msgid "Allow All"
 msgstr "ອະນຸຍາດທັງໝົດ"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:69
-#, fuzzy
 msgid "Allow footprints at any orientation"
-msgstr "ສະແດງຟຸດພຣິນທີ່ຢູ່ດ້ານໜ້າຂອງບອດ"
+msgstr "ອະນຸຍາດໃຫ້ວາງຟຸດປຣິນໃນທຸກທິດທາງ"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:112
 msgid "At least one orientation must be selected"
@@ -53536,7 +53357,7 @@ msgstr "ບໍ່ອະນຸຍາດ"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:53
 msgid "Forbid the matched items entirely"
-msgstr ""
+msgstr "ຫ້າມລາຍການທີ່ກົງກັນໂດຍສິ້ນເຊີງ"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:45
 msgid "Where conditions match:"
@@ -53576,7 +53397,7 @@ msgstr "ວັດຖຸ B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:60
 msgid "Which of the two compared objects this condition applies to"
-msgstr ""
+msgstr "ວັດຖຸໃດໃນສອງອັນທີ່ປຽບທຽບກັນ ທີ່ເງື່ອນໄຂນີ້ຈະນຳໃຊ້"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:68
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
@@ -53603,27 +53424,24 @@ msgid "Custom Query"
 msgstr "ຄຳຖາມກຳນົດເອງ"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:76
-#, fuzzy
 msgid "How items are matched by this condition"
-msgstr "ລຶບເງື່ອນໄຂນີ້ອອກ"
+msgstr "ວິທີທີ່ລາຍການຕ່າງໆຖືກຈັບຄູ່ໂດຍເງື່ອນໄຂນີ້"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:82
 msgid "Net an item must belong to"
-msgstr ""
+msgstr "ເນັດທີ່ລາຍການຕ້ອງສັງກັດຢູ່"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:89
-#, fuzzy
 msgid "Net class an item must belong to"
-msgstr "ຕ້ອງເລືອກປະເພດເວຍຢ່າງໜ້ອຍໜຶ່ງຢ່າງ"
+msgstr "ຄຣາດເນັດທີ່ລາຍການຕ້ອງສັງກັດຢູ່"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:96
-#, fuzzy
 msgid "Rule area an item must be inside"
-msgstr "ຊື່ກົດລະບຽບຕ້ອງບໍ່ຊ້ຳກັນ."
+msgstr "ພື້ນທີ່ກົດລະບຽບທີ່ລາຍການຕ້ອງຢູ່ພາຍໃນ"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:104
 msgid "Custom match expression in the DRC rule language"
-msgstr ""
+msgstr "ນິພົດການຈັບຄູ່ທີ່ປັບແຕ່ງເອງໃນພາສາກົດ DRC"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:134
 msgid "Remove this condition"
@@ -53635,7 +53453,7 @@ msgstr "ຂໍ້ຄວາມກົດລະບຽບບໍ່ສາມາດຫ
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:45
 msgid "Complete rule text in the DRC rule language"
-msgstr ""
+msgstr "ຂໍ້ຄວາມກົດລະບຽບທີ່ສົມບູນໃນພາສາກົດ DRC"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:334
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:336
@@ -53656,14 +53474,12 @@ msgid "Syntax check passed with warnings:\n"
 msgstr "ການກວດສອບໄວຍາກອນຜ່ານແຕ່ມີຄຳເຕືອນ:\n"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:56
-#, fuzzy
 msgid "Minimum text height"
-msgstr "ຄວາມສູງຂໍ້ຄວາມຕໍ່າສຸດ:"
+msgstr "ຄວາມສູງຂອງຂໍ້ຄວາມຕໍ່າສຸດ"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:58
-#, fuzzy
 msgid "Minimum text stroke thickness"
-msgstr "ຄວາມໜາຂໍ້ຄວາມຕໍ່າສຸດ:"
+msgstr "ຄວາມໜາຂອງເສັ້ນຂໍ້ຄວາມຕໍ່າສຸດ"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:75
 msgid "Minimum Text Height must be greater than 0"
@@ -53674,93 +53490,80 @@ msgid "Minimum Text Thickness must be greater than 0"
 msgstr "ຄວາມໜາຕ່ຳສຸດຂອງຂໍ້ຄວາມຕ້ອງຫຼາຍກວ່າ 0"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:35
-#, fuzzy
 msgid "Minimum clearance between copper items and the board edge"
-msgstr "ໄລຍະຫ່າງຕ່ຳສຸດລະຫວ່າງຈຸດ ເພື່ອຖືວ່າເປັນຈຸດແຍກກັນ"
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດລະຫວ່າງວັດຖຸທອງແດງ ແລະ ຂອບແຜ່ນວົງຈອນ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:47
-#, fuzzy
 msgid "Minimum clearance between copper items and hole edges"
-msgstr "ໄລຍະຫ່າງລະຫວ່າງແຜ່ນທອງແດງໃນເນັດດຽວກັນ ແລະ ພື້ນທີ່ເຕີມ."
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດລະຫວ່າງວັດຖຸທອງແດງ ແລະ ຂອບຮູ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:60
-#, fuzzy
 msgid "Minimum clearance between footprint courtyards"
-msgstr "ກຳລັງຮວບຮວມ courtyard ຂອງຟຸດປຣິນ..."
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດລະຫວ່າງເຂດຟຸດປຣິນ (Courtyard)"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:73
-#, fuzzy
 msgid "Minimum clearance between items regardless of net"
-msgstr "ໄລຍະຫ່າງຕ່ຳສຸດລະຫວ່າງຈຸດ ເພື່ອຖືວ່າເປັນຈຸດແຍກກັນ"
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດລະຫວ່າງລາຍການໂດຍບໍ່ສົນໃຈເນັດ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:86
-#, fuzzy
 msgid "Minimum creepage distance between conductors along the board surface"
-msgstr "ໄລຍະຫ່າງຕ່ຳສຸດລະຫວ່າງຈຸດ ເພື່ອຖືວ່າເປັນຈຸດແຍກກັນ"
+msgstr "ໄລຍະຫ່າງ Creepage ຕໍ່າສຸດລະຫວ່າງຕົວນຳຕາມຜິວແຜ່ນວົງຈອນ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:98
-#, fuzzy
 msgid "Minimum hole diameter"
-msgstr "ຂະໜາດຮູເຈາະຕ່ຳສຸດ: "
+msgstr "ເສັ້ນຜ່ານສູນກາງຮູຕໍ່າສຸດ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:110
-#, fuzzy
 msgid "Minimum distance between hole edges"
-msgstr "ໄລຍະຫ່າງລະຫວ່າງຖັນ"
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດລະຫວ່າງຂອບຮູ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:124
-#, fuzzy
 msgid "Maximum number of vias allowed on a matched net"
-msgstr "ເພີ່ມປລັກອິນເຂົ້າໃນກ່ອງຂໍ້ຄວາມຄົບຈຳນວນສູງສຸດແລ້ວ."
+msgstr "ຈຳນວນວຽສູງສຸດທີ່ອະນຸຍາດໃນເນັດທີ່ກົງກັນ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:137
 msgid "Minimum width of the copper ring around a hole"
-msgstr ""
+msgstr "ຄວາມກວ້າງຕໍ່າສຸດຂອງວົງແຫວນທອງແດງອ້ອມຮູ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:150
-#, fuzzy
 msgid "Minimum clearance between copper items on different nets"
-msgstr "ໄລຍະຫ່າງຕ່ຳສຸດລະຫວ່າງຈຸດ ເພື່ອຖືວ່າເປັນຈຸດແຍກກັນ"
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດລະຫວ່າງວັດຖຸທອງແດງໃນເນັດທີ່ຕ່າງກັນ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:161
 msgid "Minimum width of any copper connection"
-msgstr ""
+msgstr "ຄວາມກວ້າງຕໍ່າສຸດຂອງການເຊື່ອມຕໍ່ທອງແດງໃດໆ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:174
 msgid "Minimum width of solder mask left between two mask openings"
-msgstr ""
+msgstr "ຄວາມກວ້າງຕໍ່າສຸດຂອງມາກກັນບັດກີທີ່ເຫຼືອລະຫວ່າງຊ່ອງເປີດມາກສອງອັນ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:188
-#, fuzzy
 msgid "Minimum number of thermal relief spokes connecting a pad to its zone"
-msgstr "ຈຳນວນກ້ານ (spoke) thermal relief ຕໍ່າສຸດ:"
+msgstr "ຈຳນວນແກນ Thermal relief ຕໍ່າສຸດທີ່ເຊື່ອມຕໍ່ແຜ່ນຮອງກັບໂຊນ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:199
-#, fuzzy
 msgid "Minimum drill diameter"
-msgstr "ຂະໜາດຮູເຈາະຕ່ຳສຸດ"
+msgstr "ເສັ້ນຜ່ານສູນກາງການເຈາະຕໍ່າສຸດ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:211
-#, fuzzy
 msgid "Minimum outer diameter of vias"
-msgstr "ເສັ້ນຜ່ານສູນກາງ uVia ຕໍ່າສຸດ:"
+msgstr "ເສັ້ນຜ່ານສູນກາງພາຍນອກຕໍ່າສຸດຂອງວຽ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:224
 msgid "Minimum clearance between silkscreen items"
-msgstr ""
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດລະຫວ່າງລາຍການໃນຊັ້ນພິມ (silkscreen)"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:237
-#, fuzzy
 msgid "Minimum clearance between silkscreen and solder mask openings"
-msgstr "ຕັດຊັ້ນຕົວອັກສອນຢູ່ຂອບຂອງຊັ້ນເຄືອບກັນບັດກີ (solder mask)"
+msgstr "ໄລຍະຫ່າງຕໍ່າສຸດລະຫວ່າງຊັ້ນພິມ ແລະ ຊ່ອງເປີດມາກກັນບັດກີ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:250
 msgid "Distance the solder mask opening extends beyond the pad"
-msgstr ""
+msgstr "ໄລຍະທີ່ຊ່ອງເປີດມາກກັນບັດກີຂະຫຍາຍອອກໄປນອກແຜ່ນຮອງ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:263
 msgid "Distance the solder paste aperture extends beyond the pad"
-msgstr ""
+msgstr "ໄລຍະທີ່ຊ່ອງເປີດເນື້ອບັດກີ (solder paste) ຂະຫຍາຍອອກໄປນອກແຜ່ນຮອງ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_input_constraint_data.h:96
 msgid "Numeric input value must be greater than 0"
@@ -53771,18 +53574,16 @@ msgid "Allow top Layer"
 msgstr "ອະນຸຍາດເລເຍີດ້ານເທິງ"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:54
-#, fuzzy
 msgid "Allow matched items on the front copper layer"
-msgstr "ມີຈັກລາຍການໃນອາເຣ."
+msgstr "ອະນຸຍາດໃຫ້ລາຍການທີ່ກົງກັນຢູ່ເທິງຊັ້ນທອງແດງດ້ານໜ້າ"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:55
 msgid "Allow bottom Layer"
 msgstr "ອະນຸຍາດເລເຍີດ້ານລຸ່ມ"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:56
-#, fuzzy
 msgid "Allow matched items on the back copper layer"
-msgstr "ມີຈັກລາຍການໃນອາເຣ."
+msgstr "ອະນຸຍາດໃຫ້ລາຍການທີ່ກົງກັນຢູ່ເທິງຊັ້ນທອງແດງດ້ານຫຼັງ"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:89
 msgid "At least one layer must be selected"
@@ -53791,7 +53592,7 @@ msgstr "ຕ້ອງເລືອກຢ່າງໜ້ອຍໜຶ່ງເລເ
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:56
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:62
 msgid "Allowed deviation above or below the optimum width"
-msgstr ""
+msgstr "ຄ່າຜິດດ່ຽງທີ່ອະນຸຍາດ ຫຼາຍກວ່າ ຫຼື ໜ້ອຍກວ່າຄວາມກວ້າງທີ່ເໝາະສົມ"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:66
 msgid "Optimum Width must be greater than 0"
@@ -53809,19 +53610,19 @@ msgstr "ຄ່າຄວາມຄາດເຄື່ອນຂອງຄວາມກ
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:60
 msgid "Optimum width of each track in the pair"
-msgstr ""
+msgstr "ຄວາມກວ້າງທີ່ເໝາະສົມທີ່ສຸດຂອງແຕ່ລະເສັ້ນໃນຄູ່"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:64
 msgid "Optimum gap between the two tracks of the pair"
-msgstr ""
+msgstr "ຊ່ອງວ່າງທີ່ເໝາະສົມທີ່ສຸດລະຫວ່າງສອງເສັ້ນຂອງຄູ່"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:66
 msgid "Allowed deviation above or below the optimum gap"
-msgstr ""
+msgstr "ຄ່າຜິດດ່ຽງທີ່ອະນຸຍາດ ຫຼາຍກວ່າ ຫຼື ໜ້ອຍກວ່າຊ່ອງວ່າງທີ່ເໝາະສົມ"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:68
 msgid "Maximum length over which the pair may run uncoupled"
-msgstr ""
+msgstr "ຄວາມຍາວສູງສຸດທີ່ຄູ່ສັນຍານອາດຈະແຍກກັນ (uncoupled)"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:92
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -53841,27 +53642,24 @@ msgid "At least one constraint must be specified"
 msgstr "ຕ້ອງລະບຸຂໍ້ຈຳກັດຢ່າງໜ້ອຍໜຶ່ງຢ່າງ"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:70
-#, fuzzy
 msgid "Smallest allowed via diameter"
-msgstr "ຂະໜາດຮູເຈາະວຽກຕ້ອງນ້ອຍກວ່າເສັ້ນຜ່ານສູນກາງວຽກ"
+msgstr "ເສັ້ນຜ່ານສູນກາງວຽທີ່ນ້ອຍທີ່ສຸດທີ່ອະນຸຍາດ"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:71
 msgid "Largest allowed via diameter"
-msgstr ""
+msgstr "ເສັ້ນຜ່ານສູນກາງວຽທີ່ໃຫຍ່ທີ່ສຸດທີ່ອະນຸຍາດ"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:74
-#, fuzzy
 msgid "Smallest allowed via hole diameter"
-msgstr "ເສັ້ນຜ່ານສູນກາງຂອງຮູ Via"
+msgstr "ເສັ້ນຜ່ານສູນກາງຮູວຽທີ່ນ້ອຍທີ່ສຸດທີ່ອະນຸຍາດ"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:75
-#, fuzzy
 msgid "Largest allowed via hole diameter"
-msgstr "ເສັ້ນຜ່ານສູນກາງຂອງຮູ Via"
+msgstr "ເສັ້ນຜ່ານສູນກາງຮູວຽທີ່ໃຫຍ່ທີ່ສຸດທີ່ອະນຸຍາດ"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:78
 msgid "Restrict this rule to a single via type"
-msgstr ""
+msgstr "ຈຳກັດກົດລະບຽບນີ້ໃຫ້ໃຊ້ກັບປະເພດວຽດຽວເທົ່ານັ້ນ"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:92
 msgid "Minimum Via Diameter must be greater than 0"
@@ -53889,19 +53687,19 @@ msgstr "ຂະໜາດຮູຕ່ຳສຸດຂອງເວຍບໍ່ສາ
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:57
 msgid "Forbid through vias under surface mount pads"
-msgstr ""
+msgstr "ຫ້າມມີຮູເຊື່ອມຕໍ່ທະລຸຢູ່ກ້ອງແຜ່ນຮອງອຸປະກອນຕິດໜ້າຜິວ"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:59
 msgid "Forbid micro vias under surface mount pads"
-msgstr ""
+msgstr "ຫ້າມມີໄມໂຄຣເວຍຢູ່ກ້ອງແຜ່ນຮອງອຸປະກອນຕິດໜ້າຜິວ"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:61
 msgid "Forbid blind vias under surface mount pads"
-msgstr ""
+msgstr "ຫ້າມມີບລາຍເວຍຢູ່ກ້ອງແຜ່ນຮອງອຸປະກອນຕິດໜ້າຜິວ"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:63
 msgid "Forbid buried vias under surface mount pads"
-msgstr ""
+msgstr "ຫ້າມມີບີຣີດເວຍຢູ່ກ້ອງແຜ່ນຮອງອຸປະກອນຕິດໜ້າຜິວ"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:73
 msgid "At least one via type must be selected"
@@ -53970,17 +53768,16 @@ msgid "Rule Name"
 msgstr "ຊື່ກົດເກນ"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:119
-#, fuzzy
 msgid "Name of this rule, must be unique"
-msgstr "ຊື່ກົດລະບຽບຕ້ອງບໍ່ຊ້ຳກັນ."
+msgstr "ຊື່ຂອງກົດລະບຽບນີ້, ຕ້ອງບໍ່ຊໍ້າກັນ"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:120
 msgid "Optional comment stored with the rule"
-msgstr ""
+msgstr "ຄຳອະທິບາຍເພີ່ມເຕີມທີ່ບັນທຶກໄວ້ກັບກົດລະບຽບ"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:123
 msgid "Layers this rule applies to"
-msgstr ""
+msgstr "ຊັ້ນຕ່າງໆທີ່ກົດລະບຽບນີ້ຈະນຳໃຊ້"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:444
 msgid "Rule name must be unique."
@@ -54724,9 +54521,8 @@ msgid "Scale Y"
 msgstr "ຂະໜາດແກນ Y"
 
 #: pcbnew/footprint.cpp:5384
-#, fuzzy
 msgid "Footprint Type"
-msgstr "ປະເພດຟຸດປຣິນ:"
+msgstr "ປະເພດຟຸດປຣິນ"
 
 #: pcbnew/footprint.cpp:5387
 msgid "Not in Schematic"
@@ -54809,18 +54605,17 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "ກຳລັງແກ້ໄຂ %s ຈາກບອດ. ການບັນທຶກຈະອັບເດດສະເພາະໃນບອດເທົ່ານັ້ນ."
 
 #: pcbnew/footprint_edit_frame.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Open footprint from library %s"
-msgstr "ເປີດສັນຍະລັກຈາກໄລບຣາຣີ %s"
+msgstr "ເປີດຟຸດປຣິນຈາກຄັງ %s"
 
 #: pcbnew/footprint_edit_frame.cpp:811
 msgid "Save as editable copy"
 msgstr "ບັນທຶກເປັນສຳເນົາທີ່ແກ້ໄຂໄດ້"
 
 #: pcbnew/footprint_edit_frame.cpp:1203 pcbnew/footprint_edit_frame.cpp:1269
-#, fuzzy
 msgid "[from board]"
-msgstr "ຈາກຄລິບບອດ"
+msgstr "[ຈາກແຜ່ນວົງຈອນ]"
 
 #: pcbnew/footprint_edit_frame.cpp:2486
 msgid "No footprint selected."
@@ -54870,13 +54665,15 @@ msgid ""
 "Imported footprint '%s' from '%s' was renamed to '%s' because another "
 "library supplies a different footprint of that name."
 msgstr ""
+"ຟຸດປຣິນ '%s' ທີ່ນຳເຂົ້າຈາກ '%s' ຖືກປ່ຽນຊື່ເປັນ '%s' ເພາະມີຄັງອື່ນທີ່ໃຊ້ຊື່ນີ້ແລ້ວ."
 
 #: pcbnew/footprint_import_reconciler.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A footprint library named '%s' is already registered; leaving imported "
 "footprints unresolved."
-msgstr "ມີຄັງຢູ່ແລ້ວທີ່ '%s'; ຈະປ່ອຍໃຫ້ footprint ທີ່ນຳເຂົ້າຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂ."
+msgstr ""
+"ມີຄັງຟຸດປຣິນຊື່ '%s' ລົງທະບຽນໄວ້ແລ້ວ; ຈະປະໃຫ້ຟຸດປຣິນທີ່ນຳເຂົ້າຢູ່ໃນສະຖານະທີ່ຍັງບໍ່ທັນແກ້ໄຂ."
 
 #: pcbnew/footprint_import_reconciler.cpp:381
 msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
@@ -54903,11 +54700,11 @@ msgid "Cannot register imported footprint cache: no project library table."
 msgstr "ບໍ່ສາມາດລົງທະບຽນແຄຊ footprint ທີ່ນຳເຂົ້າ: ບໍ່ມີຕາຕະລາງຄັງຂອງໂຄງການ."
 
 #: pcbnew/footprint_import_reconciler.cpp:506
-#, fuzzy
 msgid ""
 "Error saving project footprint library table; imported footprints left "
 "unresolved."
-msgstr "ຂໍ້ຜິດພາດໃນການບັນທຶກຕາຕະລາງຄັງ footprint ຂອງໂຄງການ."
+msgstr ""
+"ເກີດຂໍ້ຜິດພາດໃນການບັນທຶກຕາຕະລາງຄັງຟຸດປຣິນຂອງໂຄງການ; ຟຸດປຣິນທີ່ນຳເຂົ້າຈະບໍ່ຖືກແກ້ໄຂ."
 
 #: pcbnew/footprint_import_reconciler.cpp:547
 #, c-format
@@ -55333,62 +55130,53 @@ msgstr "ການປັບແຕ່ງ"
 #: pcbnew/generators/pcb_via_stitch.h:73 pcbnew/generators/pcb_via_stitch.h:76
 #: pcbnew/generators/pcb_via_stitch.h:78
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Via Stitching"
-msgstr "ກົງກັນ"
+msgstr "ການເຊື່ອມວຽ (Via Stitching)"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1366
-#, fuzzy
 msgid "Edit Via Stitching"
-msgstr "ການສະຫຼັບຕາຕະລາງແບບໄວ"
+msgstr "ແກ້ໄຂການເຊື່ອມວຽ"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1571
-#, fuzzy
 msgid "Drill"
-msgstr "ການເຈາະ"
+msgstr "ເຈາະ"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1574
-#, fuzzy
 msgid "Pitch"
-msgstr "ສະຫຼັບ"
+msgstr "ໄລຍະຫ່າງ (Pitch)"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1579
-#, fuzzy
 msgid "Plain grid"
-msgstr "ຂໍ້ຄວາມທຳມະດາ (Plain text)"
+msgstr "ເສັ້ນຕາໜ່າງທຳມະດາ"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1580
-#, fuzzy
 msgid "Staggered grid"
-msgstr "ການວາງສະຫຼັບ:"
+msgstr "ເສັ້ນຕາໜ່າງແບບສະຫຼັບ"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1581
-#, fuzzy
 msgid "Poisson disk"
-msgstr "ການອະນຸຍາດຖືກປະຕິເສດ"
+msgstr "ປົວຊົງດິສ (Poisson disk)"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1601
 msgid "Seed"
-msgstr ""
+msgstr "ຄ່າເລີ່ມຕົ້ນ (Seed)"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1616
 #: pcbnew/widgets/pcb_properties_panel.cpp:1179
 msgid "Guarded Net"
-msgstr ""
+msgstr "ເນັດທີ່ຖືກປ້ອງກັນ"
 
 #: pcbnew/generators/pcb_via_stitch.h:124
-#, fuzzy
 msgid "Stitching Update"
-msgstr "ເສັ້ນທາງທີ່ມີຢູ່:"
+msgstr "ອັບເດດການເຊື່ອມວຽ"
 
 #: pcbnew/generators/via_stitch_tool.cpp:106
-#, fuzzy
 msgid "Exclude Via From Stitching"
-msgstr "ແຍກອອກຈາກການຈຳລອງ"
+msgstr "ຍົກເວັ້ນວຽຈາກການເຊື່ອມວຽ"
 
 #: pcbnew/generators/via_stitch_tool.cpp:146 pcbnew/tools/pcb_actions.cpp:3150
 msgid "Clear Via Stitching Exclusions"
-msgstr ""
+msgstr "ລຶບການຍົກເວັ້ນການເຊື່ອມວຽອອກ"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:227
 msgid "Please select a file to import."
@@ -55427,19 +55215,16 @@ msgid "If not checked: use interactive placement."
 msgstr "ຫາກບໍ່ໄດ້ເລືອກ: ຈະໃຊ້ການວາງແບບໂຕ້ຕອບ."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:154
-#, fuzzy
 msgid "Current layer"
-msgstr "ເລເຍີປັດຈຸບັນ"
+msgstr "ຊັ້ນປັດຈຸບັນ"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
-#, fuzzy
 msgid "Map layers"
-msgstr "ຈັບຄູ່ເລເຍີ"
+msgstr "ຈັບຄູ່ຊັ້ນ"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:161
-#, fuzzy
 msgid "Single layer:"
-msgstr "ເລເຍີດ່ຽວ"
+msgstr "ຊັ້ນດຽວ:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Group imported items"
@@ -56320,15 +56105,13 @@ msgid "Press-fit"
 msgstr "ເພຣດຟິດ (Press-fit)"
 
 #: pcbnew/pad.cpp:2268
-#, fuzzy
 msgid "(mixed shapes)"
-msgstr "ຮູບຊົງທີ່ຖົມແລ້ວ"
+msgstr "(ຮູບຊົງປະສົມ)"
 
 #: pcbnew/pad.cpp:2273 pcbnew/pad.cpp:2278 pcbnew/pad.cpp:2280
 #: pcbnew/pcb_track.cpp:2538
-#, fuzzy
 msgid "(mixed)"
-msgstr "ປະສົມ (mixed)"
+msgstr "(ປະສົມ)"
 
 #: pcbnew/pad.cpp:2295
 msgid "Length in Package"
@@ -56818,16 +56601,15 @@ msgstr "1234.0 (ມມ)"
 
 #: pcbnew/pcb_dimension.cpp:2178
 msgid "Driving requires both dimension endpoints bound to objects"
-msgstr ""
+msgstr "ການກຳນົດຂະໜາດແບບ Driving ຕ້ອງການໃຫ້ຈຸດປາຍທັງສອງຕິດກັບວັດຖຸ"
 
 #: pcbnew/pcb_dimension.cpp:2204
 msgid "Enter a positive length for a driving dimension"
-msgstr ""
+msgstr "ປ້ອນຄ່າຄວາມຍາວທີ່ເປັນບວກສຳລັບການກຳນົດຂະໜາດ"
 
 #: pcbnew/pcb_dimension.cpp:2215 pcbnew/widgets/pcb_properties_panel.cpp:1024
-#, fuzzy
 msgid "Value Mode"
-msgstr "ແບບຈຳລອງສະເໝືອນ"
+msgstr "ໂໝດຄ່າ"
 
 #: pcbnew/pcb_dimension.cpp:2243
 msgid "Units Format"
@@ -56874,14 +56656,13 @@ msgid "New PCB file is unsaved"
 msgstr "ໄຟລ໌ PCB ໃໝ່ຍັງບໍ່ໄດ້ບັນທຶກ"
 
 #: pcbnew/pcb_edit_frame.cpp:2090
-#, fuzzy
 msgid "WRL 3D model could not be matched to equivalent STEP model."
-msgstr "ບໍ່ສາມາດຈັບຄູ່ໂມເດລ 3D WRL %d ອັນ ກັບໂມເດລ STEP ທີ່ທຽບເທົ່າໄດ້."
+msgstr "ບໍ່ສາມາດຈັບຄູ່ໂມເດວ 3D ແບບ WRL ກັບໂມເດວ STEP ທີ່ກົງກັນໄດ້."
 
 #: pcbnew/pcb_edit_frame.cpp:2094
-#, fuzzy, c-format
+#, c-format
 msgid "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr "ບໍ່ສາມາດຈັບຄູ່ໂມເດລ 3D WRL %d ອັນ ກັບໂມເດລ STEP ທີ່ທຽບເທົ່າໄດ້."
+msgstr "%d ໂມເດວ 3D ແບບ WRL ບໍ່ສາມາດຈັບຄູ່ກັບໂມເດວ STEP ທີ່ກົງກັນໄດ້."
 
 #: pcbnew/pcb_edit_frame.cpp:2099
 msgid "Show options"
@@ -56987,51 +56768,44 @@ msgid "Generator Properties"
 msgstr "ຄຸນສົມບັດຂອງຕົວສ້າງ"
 
 #: pcbnew/pcb_griditem.cpp:328 pcbnew/pcb_griditem.cpp:346
-#, fuzzy
 msgid "Grid Item"
-msgstr "ຈັດກຸ່ມລາຍການ"
+msgstr "ລາຍການເສັ້ນຕາໜ່າງ"
 
 #: pcbnew/pcb_griditem.cpp:531
-#, fuzzy
 msgid "Grid Type"
-msgstr "ປະເພດແພັດ"
+msgstr "ປະເພດເສັ້ນຕາໜ່າງ"
 
 #: pcbnew/pcb_griditem.cpp:538
 msgid "Extent X"
-msgstr ""
+msgstr "ຂອບເຂດ X"
 
 #: pcbnew/pcb_griditem.cpp:542
 msgid "Extent Y"
-msgstr ""
+msgstr "ຂອບເຂດ Y"
 
 #: pcbnew/pcb_griditem.cpp:546
-#, fuzzy
 msgid "Spacing X"
-msgstr "ໄລຍະຫ່າງ (s):"
+msgstr "ໄລຍະຫ່າງ X"
 
 #: pcbnew/pcb_griditem.cpp:550
-#, fuzzy
 msgid "Spacing Y"
-msgstr "ໄລຍະຫ່າງ (s):"
+msgstr "ໄລຍະຫ່າງ Y"
 
 #: pcbnew/pcb_griditem.cpp:554
-#, fuzzy
 msgid "Radius Extent"
-msgstr "ລັດສະໝີ"
+msgstr "ຂອບເຂດລັດສະໝີ"
 
 #: pcbnew/pcb_griditem.cpp:558
-#, fuzzy
 msgid "Radius Spacing"
-msgstr "ໄລຍະຫ່າງຕ່ຳສຸດ"
+msgstr "ໄລຍະຫ່າງລັດສະໝີ"
 
 #: pcbnew/pcb_griditem.cpp:562
 msgid "Phi Extent"
-msgstr ""
+msgstr "ຂອບເຂດມຸມ Phi"
 
 #: pcbnew/pcb_griditem.cpp:567
-#, fuzzy
 msgid "Phi Spacing"
-msgstr "ໄລຍະຫ່າງຕ່ຳສຸດ"
+msgstr "ໄລຍະຫ່າງມຸມ Phi"
 
 #: pcbnew/pcb_griditem.cpp:572 pcbnew/widgets/search_handlers.cpp:229
 #: pcbnew/zone.cpp:1122 pcbnew/zone.cpp:2300
@@ -57040,21 +56814,19 @@ msgstr "ລຳດັບຄວາມສຳຄັນ"
 
 #: pcbnew/pcb_griditem.cpp:575
 msgid "Tick Interval"
-msgstr ""
+msgstr "ໄລຍະຫ່າງຂີດໝາຍ"
 
 #: pcbnew/pcb_griditem.cpp:578
 msgid "Affects Cursor Snap"
-msgstr ""
+msgstr "ສົ່ງຜົນຕໍ່ການດູດ (Snap) ຂອງເຄີເຊີ"
 
 #: pcbnew/pcb_griditem.cpp:581
-#, fuzzy
 msgid "Affects Routing"
-msgstr "ການເດີນເສັ້ນລາຍວົງຈອນ"
+msgstr "ສົ່ງຜົນຕໍ່ການເດີນເສັ້ນ"
 
 #: pcbnew/pcb_griditem.cpp:584
-#, fuzzy
 msgid "Affects Placement"
-msgstr "ການວາງ"
+msgstr "ສົ່ງຜົນຕໍ່ການວາງ"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4600
 msgid "Constructing caches"
@@ -57075,12 +56847,12 @@ msgstr "ກຳລັງແປງຮອຍຕີນອຸປະກອນ"
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:187
 #, c-format
 msgid "Unknown Allegro file version %#010x (rev %d)"
-msgstr ""
+msgstr "ບໍ່ຮູ້ຈັກລຸ້ນໄຟລ໌ Allegro %#010x (rev %d)"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown board units %d"
-msgstr "ບໍ່ຮູ້ຈັກຂົ້ວ (polarity) "
+msgstr "ບໍ່ຮູ້ຈັກຫົວໜ່ວຍແຜ່ນວົງຈອນ %d"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2691
 msgid "Parsing Allegro objects"
@@ -57101,9 +56873,9 @@ msgstr ""
 "ແລ້ວບັນທຶກໃໝ່, ຈາກນັ້ນຈຶ່ງນຳເຂົ້າໄຟລ໌ນັ້ນ."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "File is empty: %s"
-msgstr "ໄຟລ໌ '%s' ຫວ່າງເປົ່າ."
+msgstr "ໄຟລ໌ວ່າງເປົ່າ: %s"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:181
 msgid "Failed to build board from Allegro data"
@@ -57164,6 +56936,7 @@ msgid ""
 "Board outline has %d vertices outside the coordinate range; they were "
 "dropped."
 msgstr ""
+"ຂອບແຜ່ນວົງຈອນມີຈຸດຍອດ (vertices) %d ຈຸດຢູ່ນອກຂອບເຂດພິກັດ; ພວກມັນຖືກຕັດອອກ."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1483
 #, c-format
@@ -57244,7 +57017,7 @@ msgstr "ກຳລັງໂຫຼດເນັດ..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2506
 #, c-format
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "ເນັດ Altium %zu ບໍ່ມີຊື່; ນຳເຂົ້າເປັນ '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2527
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2833
@@ -57257,6 +57030,7 @@ msgid ""
 "Polygon on layer '%s' has %d vertices outside the coordinate range; they "
 "were dropped."
 msgstr ""
+"Polygon ເທິງຊັ້ນ '%s' ມີຈຸດຍອດ %d ຈຸດຢູ່ນອກຂອບເຂດພິກັດ; ພວກມັນຖືກຕັດອອກ."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2577
 #, c-format
@@ -57273,6 +57047,7 @@ msgid ""
 "Altium rule '%s' applies to netclass '%s', which this board does not define. "
 "Its constraint is not imported."
 msgstr ""
+"ກົດ Altium '%s' ນຳໃຊ້ກັບຄຣາດເນັດ '%s' ເຊິ່ງແຜ່ນວົງຈອນນີ້ບໍ່ໄດ້ກຳນົດໄວ້. ຂໍ້ກຳນົດນີ້ຈະບໍ່ຖືກນຳເຂົ້າ."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2813
 msgid "Loading board regions..."
@@ -57499,7 +57274,7 @@ msgstr "ກຳລັງໂຫຼດຮູບສີ່ແຈ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5665
 msgid "Ignored a keep-out area with no restrictions."
-msgstr ""
+msgstr "ລະເລີຍພື້ນທີ່ Keep-out ທີ່ບໍ່ມີຂໍ້ຈຳກັດ."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:34
 msgid "Altium Circuit Maker PCB files"
@@ -57510,9 +57285,9 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "ໄຟລ໌ Altium Circuit Studio PCB"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Component name not found: '%s'"
-msgstr "ບໍ່ພົບໄຟລ໌ຂາເຂົ້າ: '%s'\n"
+msgstr "ບໍ່ພົບຊື່ອຸປະກອນ: '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:431
 #, c-format
@@ -57698,9 +57473,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "ການກຳນົດແພັດ CADSTAR '%s' ມີຂໍ້ຜິດພາດໃນການນຳເຂົ້າ: %s"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1356
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%ld' in footprint '%s'."
-msgstr "ບໍ່ພົບດັດຊະນີແພັດ '%d' ໃນຮອຍຕີນອຸປະກອນ '%s'."
+msgstr "ບໍ່ສາມາດຊອກຫາດັດຊະນີແຜ່ນຮອງ '%ld' ໃນຟຸດປຣິນ '%s'."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1388
 #, c-format
@@ -57877,11 +57652,12 @@ msgid ""
 msgstr "ເນັດ '%s' ອ້າງອີງເຖິງ ID ອຸປະກອນ '%s' ເຊິ່ງບໍ່ມີຢູ່. ມັນຖືກຍົກເວັ້ນ."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2283
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%ld' in component '%s'. This "
 "has been ignored."
-msgstr "ເນັດ '%s' ອ້າງອີງເຖິງດັດຊະນີແພັດ '%d' ທີ່ບໍ່ມີຢູ່ ໃນອຸປະກອນ '%s'. ມັນຖືກຍົກເວັ້ນ."
+msgstr ""
+"ເນັດ '%s' ອ້າງອີງເຖິງດັດຊະນີແຜ່ນຮອງ '%ld' ທີ່ບໍ່ມີຢູ່ ໃນອຸປະກອນ '%s'. ສ່ວນນີ້ຖືກລະເລີຍ."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2482
 msgid "Text Variables could not be set as there is no project loaded."
@@ -58391,9 +58167,9 @@ msgid "Invalid shape type %d in zone outline"
 msgstr "ປະເພດຮູບຮ່າງ %d ບໍ່ຖືກຕ້ອງໃນເສັ້ນຂອບໂຊນ"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file %s."
-msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ '%s'."
+msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ %s ໄດ້."
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:34
 msgid "Fabmaster PCB files"
@@ -58468,26 +58244,26 @@ msgstr "ໄດເຣັກທໍຣີຄັງສຳຮອງຟຸດພຣິ
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:381
 msgid "Cannot produce this IPC-2581 data set."
-msgstr ""
+msgstr "ບໍ່ສາມາດສ້າງຊຸດຂໍ້ມູນ IPC-2581 ນີ້ໄດ້."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:391
-#, fuzzy
 msgid "No IPC-2581 content selected."
-msgstr "ບໍ່ມີເນັດທີ່ເຊື່ອມຕໍ່ຖືກເລືອກ."
+msgstr "ບໍ່ໄດ້ເລືອກເນື້ອຫາ IPC-2581."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:407
 msgid "Cannot export assembly data without outer copper layers."
-msgstr ""
+msgstr "ບໍ່ສາມາດສົ່ງອອກຂໍ້ມູນການປະກອບໄດ້ໂດຍບໍ່ມີຊັ້ນທອງແດງຊັ້ນນອກ."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:415
 msgid "Cannot export physical netlist without outer copper layers."
-msgstr ""
+msgstr "ບໍ່ສາມາດສົ່ງອອກ netlist ທາງກາຍະພາບໄດ້ໂດຍບໍ່ມີຊັ້ນທອງແດງຊັ້ນນອກ."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:448
 msgid ""
 "Component assembly data cannot be exported without component packages in "
 "IPC-2581B."
 msgstr ""
+"ບໍ່ສາມາດສົ່ງອອກຂໍ້ມູນການປະກອບອຸປະກອນໄດ້ໂດຍບໍ່ມີແພັກເກັດອຸປະກອນໃນ IPC-2581B."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:540
 msgid "Generating content section"
@@ -58496,7 +58272,7 @@ msgstr "ກຳລັງສ້າງສ່ວນເນື້ອໃນ"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:766
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:785
 msgid "IPC-2581 export cancelled"
-msgstr ""
+msgstr "ຍົກເລີກການສົ່ງອອກ IPC-2581"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1375
 msgid "Pad has unsupported type; it was skipped."
@@ -58529,9 +58305,8 @@ msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr "ເສັ້ນຂອບແຜ່ນວົງຈອນບໍ່ຖືກຕ້ອງ ຫຼື ຂາດຫາຍໄປ. ກະລຸນາລັນ DRC."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3753
-#, fuzzy
 msgid "Generating components"
-msgstr "ກຳລັງສ້າງສ່ວນເນື້ອໃນ"
+msgstr "ກຳລັງສ້າງອຸປະກອນ"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3800
 msgid ""
@@ -58539,17 +58314,15 @@ msgid ""
 msgstr "ພົບຕົວຊີ້ຟຸດພຣິນຊ້ຳກັນ; ຜົນການສົ່ງອອກ IPC-2581 ອາດຈະບໍ່ຖືກຕ້ອງ."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3870
-#, fuzzy
 msgid "Generating logical netlist"
-msgstr "ກຳລັງສ້າງສ່ວນການຂົນສົ່ງ (logistic)"
+msgstr "ກຳລັງສ້າງ Netlist ທາງຕັກກະ"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3908
-#, fuzzy
 msgid "Generating physical netlist"
-msgstr "ກຳລັງລວບລວມລາຍການທາງກາຍະພາບ..."
+msgstr "ກຳລັງສ້າງ Netlist ທາງກາຍະພາບ"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4195
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting layer %s, net %s"
 msgstr "ກຳລັງສົ່ງອອກຊັ້ນ %s, ເນັດ %s"
 
@@ -58568,28 +58341,26 @@ msgid ""
 msgstr "ບໍ່ຮອງຮັບ Teardrops ໃນ IPC-2581 ເວີຊັນ B; ພວກມັນໄດ້ຖືກສົ່ງອອກເປັນໂຊນ."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4742
-#, fuzzy
 msgid "Generating vendor list"
-msgstr "ກຳລັງສ້າງສ່ວນເນື້ອໃນ"
+msgstr "ກຳລັງສ້າງລາຍຊື່ຜູ້ຂາຍ"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4938
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown IPC-2581 data set '%s'."
-msgstr "ບໍ່ຮູ້ຈັກຂໍ້ຄວາມໂໝດ: '%s'."
+msgstr "ບໍ່ຮູ້ຈັກຊຸດຂໍ້ມູນ IPC-2581 '%s'."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4949
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IPC-2581 section key '%s'."
-msgstr "ຄອມໂພເນນ IBIS '%s' ບໍ່ຖືກຕ້ອງ"
+msgstr "ຄີພາກສ່ວນ IPC-2581 ບໍ່ຖືກຕ້ອງ '%s'."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5005
 msgid "Generating logistic section"
 msgstr "ກຳລັງສ້າງສ່ວນການຂົນສົ່ງ (logistic)"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5047
-#, fuzzy
 msgid "Resolving references"
-msgstr "ເປີດການຕັ້ງຄ່າ"
+msgstr "ກຳລັງແກ້ໄຂການອ້າງອີງ"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5055
 msgid "Saving file"
@@ -58600,9 +58371,8 @@ msgid "Failed to save IPC-2581 data to buffer."
 msgstr "ບໍ່ສາມາດບັນທຶກຂໍ້ມູນ IPC-2581 ລົງໃນບັບເຟີ."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:5097
-#, fuzzy
 msgid "Finishing"
-msgstr "ສຳເລັດ"
+msgstr "ກຳລັງສິ້ນສຸດ"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:647
 #, c-format
@@ -58713,14 +58483,14 @@ msgid "unknown pad type: %d"
 msgstr "ບໍ່ຮູ້ຈັກປະເພດແພັດ: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1886
-#, fuzzy, c-format
+#, c-format
 msgid "unknown pad attribute: %d"
-msgstr "ບໍ່ຮູ້ຈັກປະເພດແພັດ: %d"
+msgstr "ບໍ່ຮູ້ຈັກຄຸນລັກສະນະແຜ່ນຮອງ: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1904
-#, fuzzy, c-format
+#, c-format
 msgid "unknown pad property: %d"
-msgstr "ບໍ່ຮູ້ຈັກປະເພດແພັດ: %d"
+msgstr "ບໍ່ຮູ້ຈັກຄຸນສົມບັດແຜ່ນຮອງ: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2983
 #, c-format
@@ -58966,6 +58736,8 @@ msgid ""
 "The PADS file declares %d copper layers; KiCad supports %d, so the layers "
 "past that share the last inner layer."
 msgstr ""
+"ໄຟລ໌ PADS ປະກາດຊັ້ນທອງແດງ %d ຊັ້ນ; KiCad ຮອງຮັບ %d ຊັ້ນ, ດັ່ງນັ້ນຊັ້ນທີ່ເກີນຈະໃຊ້ຊັ້ນໃນຊັ້ນສຸດທ້າຍຮ່ວມ"
+"ກັນ."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:447
 #, c-format
@@ -58987,19 +58759,20 @@ msgid ""
 "Skipped design rule for differential pair '%s'; a net name ends with a "
 "backslash."
 msgstr ""
+"ຂ້າມກົດການອອກແບບສຳລັບຄູ່ສັນຍານຜ່ານຕ່າງ '%s'; ຊື່ເນັດລົງທ້າຍດ້ວຍ backslash."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:800
 #, c-format
 msgid ""
 "Design rules for the imported differential pairs were not written; '%s' "
 "already exists."
-msgstr ""
+msgstr "ບໍ່ໄດ້ຂຽນກົດການອອກແບບສຳລັບຄູ່ສັນຍານຜ່ານຕ່າງທີ່ນຳເຂົ້າ; '%s' ມີຢູ່ແລ້ວ."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:802
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:823
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write design rules to '%s'."
-msgstr "ບໍ່ສາມາດສ້າງໂຟນເດີ '%s' ໄດ້."
+msgstr "ບໍ່ສາມາດຂຽນກົດການອອກແບບລົງໃນ '%s'."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:847
 #, c-format
@@ -59041,34 +58814,34 @@ msgid "Starting PADS binary PCB import"
 msgstr "ກຳລັງເລີ່ມການນຳເຂົ້າ PADS binary PCB"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Part '%s': decal '%s' not found, no pads created"
-msgstr "ບໍ່ພົບສັນຍາລັກ '%s' ໃນຄັງສັນຍາລັກ gEDA."
+msgstr "ສ່ວນປະກອບ '%s': ບໍ່ພົບ decal '%s', ບໍ່ມີແຜ່ນຮອງຖືກສ້າງຂຶ້ນ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:942
-#, fuzzy, c-format
+#, c-format
 msgid "Route net '%s' not found, skipping"
-msgstr "ບໍ່ພົບເອກະສານ PCB '%s' ໃນ '%s'"
+msgstr "ບໍ່ພົບເສັ້ນທາງເນັດ '%s', ກຳລັງຂ້າມ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:963
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped a route on non-copper or unmapped PADS layer %d."
-msgstr "ກຳລັງຂ້າມລາຍການ decal ໃນຊັ້ນ %d ທີ່ບໍ່ໄດ້ແມັບ"
+msgstr "ຂ້າມເສັ້ນທາງໃນຊັ້ນທີ່ບໍ່ແມ່ນທອງແດງ ຫຼື ຊັ້ນ PADS ທີ່ບໍ່ໄດ້ຈັບຄູ່ %d."
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:978
 #, c-format
 msgid "Skipped a non-positive-width route on PADS layer %d."
-msgstr ""
+msgstr "ຂ້າມເສັ້ນທາງທີ່ມີຄວາມກວ້າງບໍ່ເປັນບວກໃນຊັ້ນ PADS %d."
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:1076
 #, c-format
 msgid "Skipped a via on net '%s' with an unusable PADS layer span %d,%d."
-msgstr ""
+msgstr "ຂ້າມວຽໃນເນັດ '%s' ທີ່ມີຊ່ວງຊັ້ນ PADS ທີ່ໃຊ້ບໍ່ໄດ້ %d,%d."
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:1123
-#, fuzzy, c-format
+#, c-format
 msgid "COPPER item on unmapped layer %d"
-msgstr "ລາຍການທອງແດງໃນຊັ້ນ %d ທີ່ບໍ່ໄດ້ແມັບ ຈະໃຊ້ F.Cu ໂດຍຄ່າເລີ່ມຕົ້ນ"
+msgstr "ລາຍການທອງແດງໃນຊັ້ນທີ່ບໍ່ໄດ້ຈັບຄູ່ %d"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:91
 #, c-format
@@ -60255,12 +60028,12 @@ msgid "Invalid layer name '%s'\n"
 msgstr "ຊື່ຊັ້ນ '%s' ບໍ່ຖືກຕ້ອງ\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:686
-#, fuzzy
 msgid ""
 "Warning: board has unannotated footprints, please use the PCB editor to "
 "annotate them\n"
 msgstr ""
-"ຄຳເຕືອນ: ຜັງວົງຈອນມີຂໍ້ຜິດພາດໃນການໃສ່ໝາຍເລກອ້າງອີງ, ກະລຸນາໃຊ້ຕົວແກ້ໄຂຜັງວົງຈອນເພື່ອແກ້ໄຂ\n"
+"ຄຳເຕືອນ: ແຜ່ນວົງຈອນມີຟຸດປຣິນທີ່ຍັງບໍ່ໄດ້ກຳນົດຊື່ (annotate), ກະລຸນາໃຊ້ຕົວແກ້ໄຂ PCB ເພື່ອກຳນົດຊື່ໃຫ້ພວກ"
+"ມັນ\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1034 pcbnew/pcbnew_jobs_handler.cpp:1105
 #: pcbnew/pcbnew_jobs_handler.cpp:1152
@@ -60314,14 +60087,13 @@ msgid "Wrote board statistics to '%s'.\n"
 msgstr "ຂຽນສະຖິຕິແຜ່ນວົງຈອນລົງໃນ '%s' ແລ້ວ.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2187
-#, fuzzy
 msgid "Failed to serialize board stackup\n"
-msgstr "ບັນທຶກແຜ່ນວົງຈອນບໍ່ສຳເລັດ.\n"
+msgstr "ລົ້ມເຫຼວໃນການຈັດລຳດັບຊັ້ນ (stackup) ຂອງແຜ່ນວົງຈອນ\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2254
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board stackup to '%s'.\n"
-msgstr "ຂຽນສະຖິຕິແຜ່ນວົງຈອນລົງໃນ '%s' ແລ້ວ.\n"
+msgstr "ຂຽນ stackup ຂອງແຜ່ນວົງຈອນລົງໃນ '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2582 pcbnew/pcbnew_jobs_handler.cpp:2657
 #, c-format
@@ -60870,9 +60642,8 @@ msgid "Tracks on Copper layers only."
 msgstr "ເສັ້ນລາຍວົງຈອນຢູ່ເທິງຊັ້ນທອງແດງເທົ່ານັ້ນ."
 
 #: pcbnew/router/router_tool.cpp:2045
-#, fuzzy
 msgid "Differential pair members cannot be optimized."
-msgstr "ຄວາມກວ້າງຂອງເສັ້ນວົງຈອນຄູ່"
+msgstr "ບໍ່ສາມາດປັບແຕ່ງສະມາຊິກຂອງຄູ່ສັນຍານຜ່ານຕ່າງໄດ້."
 
 #: pcbnew/router/router_tool.cpp:2260 pcbnew/router/router_tool.cpp:3025
 msgid "The selected item is locked."
@@ -61075,9 +60846,8 @@ msgid "Track tuning tools"
 msgstr "ເຄື່ອງມືປັບແຕ່ງເສັ້ນລາຍວົງຈອນ"
 
 #: pcbnew/toolbars_pcb_editor.cpp:237
-#, fuzzy
 msgid "Via tools"
-msgstr "ຮູເວຍ"
+msgstr "ເຄື່ອງມືວຽ"
 
 #: pcbnew/toolbars_pcb_editor.cpp:315
 msgid "PCB origins and points"
@@ -61200,7 +60970,7 @@ msgstr "ຫຼຸດຄວາມກວ້າງຂອງເສັ້ນ (Track)"
 #: pcbnew/tools/board_editor_control.cpp:1314
 #, c-format
 msgid "%s not supported on complex padstacks."
-msgstr ""
+msgstr "ບໍ່ຮອງຮັບ %s ໃນ padstack ທີ່ຊັບຊ້ອນ."
 
 #: pcbnew/tools/board_editor_control.cpp:1544
 msgid "Place Footprint"
@@ -61742,81 +61512,73 @@ msgstr "ຈັດການ Footprint Libraries"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:214
 #: pcbnew/widgets/constraint_list_view.cpp:85
-#, fuzzy
 msgid "Error (missing item)"
-msgstr "(ຫາຍສາບສູນ)"
+msgstr "ຂໍ້ຜິດພາດ (ຂາດລາຍການ)"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:216
 #: pcbnew/widgets/constraint_list_view.cpp:87
-#, fuzzy
 msgid "Over-constrained"
-msgstr "ບໍ່ມີຂໍ້ກຳນົດ"
+msgstr "ຂໍ້ກຳນົດຫຼາຍເກີນໄປ"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:218
 #: pcbnew/widgets/constraint_list_view.cpp:89
-#, fuzzy
 msgid "Redundant"
-msgstr "ລົບວີອາທີ່ຊ້ຳຊ້ອນ"
+msgstr "ຊໍ້າຊ້ອນ"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:220
 #: pcbnew/widgets/constraint_list_view.cpp:38
-#, fuzzy
 msgid "State"
 msgstr "ສະຖານະ"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:524
-#, fuzzy
 msgid "Remove Geometric Constraint"
-msgstr "ຄ່າຄົງທີ່ໄດອີເລັກທຣິກສຳພັດ"
+msgstr "ລຶບຂໍ້ກຳນົດທາງເລຂາຄະນິດ"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:665
-#, fuzzy
 msgid "Add Geometric Constraint"
-msgstr "ເພີ່ມເງື່ອນໄຂແຜ່ນຜັງ (Sheet)"
+msgstr "ເພີ່ມຂໍ້ກຳນົດທາງເລຂາຄະນິດ"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:683
 msgid ""
 "All items referenced by this constraint are locked, so the constraint cannot "
 "move any geometry."
 msgstr ""
+"ລາຍການທັງໝົດທີ່ອ້າງອີງໂດຍຂໍ້ກຳນົດນີ້ຖືກລັອກໄວ້, ດັ່ງນັ້ນຂໍ້ກຳນົດຈຶ່ງບໍ່ສາມາດຍ້າຍຮູບຊົງໃດໆໄດ້."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:698
 msgid ""
 "The new geometric constraint conflicts with existing constraints and could "
 "not be satisfied."
-msgstr ""
+msgstr "ຂໍ້ກຳນົດທາງເລຂາຄະນິດໃໝ່ຂັດແຍ້ງກັບຂໍ້ກຳນົດທີ່ມີຢູ່ ແລະ ບໍ່ສາມາດນຳໃຊ້ໄດ້."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:706
 msgid ""
 "The new geometric constraint could not be applied to the referenced items."
-msgstr ""
+msgstr "ບໍ່ສາມາດນຳໃຊ້ຂໍ້ກຳນົດທາງເລຂາຄະນິດໃໝ່ກັບລາຍການທີ່ອ້າງອີງໄດ້."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:781
 #: pcbnew/tools/constraint_edit_tool.cpp:800
 #: pcbnew/tools/constraint_edit_tool.cpp:821 pcbnew/tools/drawing_tool.cpp:210
-#, fuzzy
 msgid "Apply Geometric Constraint"
-msgstr "ຄ່າຄົງທີ່ໄດອີເລັກທຣິກສຳພັດ"
+msgstr "ນຳໃຊ້ຂໍ້ກຳນົດທາງເລຂາຄະນິດ"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:848
 msgid "A geometric constraint could not be satisfied by this edit."
-msgstr ""
+msgstr "ຂໍ້ກຳນົດທາງເລຂາຄະນິດບໍ່ສາມາດບັນລຸໄດ້ໂດຍການແກ້ໄຂນີ້."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1151
 #: pcbnew/tools/constraint_edit_tool.cpp:1526
-#, fuzzy
 msgid "An identical geometric constraint already exists."
-msgstr "ມີລາຍການທີ່ມີຊື່ຫຼິ້ນ '%s' ຢູ່ແລ້ວ."
+msgstr "ມີຂໍ້ກຳນົດທາງເລຂາຄະນິດທີ່ຄືກັນຢູ່ແລ້ວ."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot form a %s constraint from those items."
-msgstr "ບໍ່ສາມາດເລີ່ມການເດີນເສັ້ນຈາກລາຍການຂໍ້ຄວາມ."
+msgstr "ບໍ່ສາມາດສ້າງຂໍ້ກຳນົດ %s ຈາກລາຍການເຫຼົ່ານັ້ນໄດ້."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1640 pcbnew/tools/pcb_actions.cpp:270
-#, fuzzy
 msgid "Remove Geometric Constraints"
-msgstr "ຄ່າຄົງທີ່ໄດອີເລັກທຣິກສຳພັດ"
+msgstr "ລຶບຂໍ້ກຳນົດທາງເລຂາຄະນິດອອກ"
 
 #: pcbnew/tools/convert_tool.cpp:81
 msgid "Copy line width of first object"
@@ -61957,9 +61719,8 @@ msgid "Move Footprint Anchor"
 msgstr "ຍ້າຍຈຸດຢຶດ (Anchor) ຂອງ Footprint"
 
 #: pcbnew/tools/drawing_tool.cpp:2585
-#, fuzzy
 msgid "Place a local grid item"
-msgstr "ວາງທຸກໜ່ວຍ"
+msgstr "ວາງລາຍການເສັ້ນຕາໜ່າງສະເພາະບ່ອນ"
 
 #: pcbnew/tools/drawing_tool.cpp:4153
 msgid "Select Net:"
@@ -62261,6 +62022,7 @@ msgid ""
 "Save or discard the changes in all modified footprint tabs before opening "
 "the Footprint Fields Table."
 msgstr ""
+"ບັນທຶກ ຫຼື ຍົກເລີກການປ່ຽນແປງໃນແຖບຟຸດປຣິນທັງໝົດກ່ອນທີ່ຈະເປີດຕາຕະລາງຟີວຟຸດປຣິນ."
 
 #: pcbnew/tools/generator_tool.cpp:178
 msgid "Regenerate All"
@@ -62410,9 +62172,9 @@ msgstr "ໂຄງສ້າງ Rule Area ບໍ່ກົງກັນ: %s"
 
 #: pcbnew/tools/multichannel_tool.cpp:950
 #: pcbnew/tools/multichannel_tool.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy the layout from '%s' to '%s'."
-msgstr "ບໍ່ສາມາດຄັດລອກໂຟນເດີ: %s ໄປຍັງ %s"
+msgstr "ບໍ່ສາມາດຄັດລອກເລເອົາທ໌ຈາກ '%s' ໄປຍັງ '%s'."
 
 #: pcbnew/tools/multichannel_tool.cpp:973
 msgid "Target group does not have a group."
@@ -62451,9 +62213,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2214
-#, fuzzy
 msgid "The components in the two areas could not be paired up."
-msgstr "ບາງໄຟລ໌ໃນໂຄງການບໍ່ສາມາດສຳຮອງໄດ້."
+msgstr "ອຸປະກອນໃນສອງພື້ນທີ່ບໍ່ສາມາດຈັບຄູ່ກັນໄດ້."
 
 #: pcbnew/tools/multichannel_tool.cpp:2221
 #, c-format
@@ -62542,178 +62303,164 @@ msgstr "ສ້າງ Zone ທອງແດງຈາກສິ່ງທີ່ເລ
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Constrain the two selected segments to be parallel"
-msgstr ""
+msgstr "ກຳນົດໃຫ້ສອງສ່ວນເສັ້ນທີ່ເລືອກຂະໜານກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:78
 msgid "Constrain the two selected segments to be perpendicular"
-msgstr ""
+msgstr "ກຳນົດໃຫ້ສອງສ່ວນເສັ້ນທີ່ເລືອກຕັ້ງສາກກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:87
-#, fuzzy
 msgid "Equal Length"
-msgstr "ຄວາມຍາວທັງໝົດ"
+msgstr "ຄວາມຍາວເທົ່າກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Constrain the two selected segments to be of equal length"
-msgstr ""
+msgstr "ກຳນົດໃຫ້ສອງສ່ວນເສັ້ນທີ່ເລືອກມີຄວາມຍາວເທົ່າກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:98
 msgid "Constrain the two selected segments to be collinear"
-msgstr ""
+msgstr "ກຳນົດໃຫ້ສອງສ່ວນເສັ້ນທີ່ເລືອກຢູ່ໃນເສັ້ນຊື່ດຽວກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:107
-#, fuzzy
 msgid "Angular Dimension"
-msgstr "ແຕ້ມຂະໜາດ (Dimension)"
+msgstr "ການກຳນົດຂະໜາດມຸມ"
 
 #: pcbnew/tools/pcb_actions.cpp:108
-#, fuzzy
 msgid "Constrain the angle between the two selected segments"
-msgstr "ສ້າງສາຍໂສ້ເນັດໃໝ່ທີ່ເຊື່ອມຕໍ່ສອງຂາທີ່ເລືອກ"
+msgstr "ກຳນົດມຸມລະຫວ່າງສອງສ່ວນເສັ້ນທີ່ເລືອກ"
 
 #: pcbnew/tools/pcb_actions.cpp:118
 msgid ""
 "Constrain the selected line and curve, or two curves, to touch tangentially"
 msgstr ""
+"ກຳນົດໃຫ້ເສັ້ນຊື່ ແລະ ເສັ້ນໂຄ້ງທີ່ເລືອກ, ຫຼື ເສັ້ນໂຄ້ງສອງເສັ້ນ, ສຳຜັດກັນແບບສຳຜັດວົງ (tangentially)"
 
 #: pcbnew/tools/pcb_actions.cpp:128
 msgid "Constrain the selected segment to be horizontal"
-msgstr ""
+msgstr "ກຳນົດໃຫ້ສ່ວນເສັ້ນທີ່ເລືອກເປັນແນວນອນ"
 
 #: pcbnew/tools/pcb_actions.cpp:138
 msgid "Constrain the selected segment to be vertical"
-msgstr ""
+msgstr "ກຳນົດໃຫ້ສ່ວນເສັ້ນທີ່ເລືອກເປັນແນວຕັ້ງ"
 
 #: pcbnew/tools/pcb_actions.cpp:147
-#, fuzzy
 msgid "Fixed Length"
-msgstr "ຄວາມຍາວຂອງໄດ (Die length)"
+msgstr "ຄວາມຍາວຄົງທີ່"
 
 #: pcbnew/tools/pcb_actions.cpp:148
-#, fuzzy
 msgid "Lock the selected segment to its current length"
-msgstr "ລະບຸຕຳແໜ່ງເນັດທີ່ເລືອກໃນຕົວນຳທາງເນັດ"
+msgstr "ລັອກສ່ວນເສັ້ນທີ່ເລືອກໃຫ້ມີຄວາມຍາວເທົ່າກັບຄ່າປັດຈຸບັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:158
 msgid "Constrain the two selected circles, arcs or ellipses to share a center"
-msgstr ""
+msgstr "ກຳນົດໃຫ້ວົງມົນ, ເສັ້ນໂຄ້ງ ຫຼື ວົງລີທີ່ເລືອກໃຊ້ຈຸດໃຈກາງຮ່ວມກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:167
-#, fuzzy
 msgid "Equal Radius"
-msgstr "ລັດສະໝີແກນເອກ"
+msgstr "ລັດສະໝີເທົ່າກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 msgid "Constrain the two selected circles or arcs to be of equal radius"
-msgstr ""
+msgstr "ກຳນົດໃຫ້ວົງມົນ ຫຼື ເສັ້ນໂຄ້ງສອງອັນທີ່ເລືອກມີລັດສະໝີເທົ່າກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:177
-#, fuzzy
 msgid "Fixed Radius"
-msgstr "ລັດສະໝີມຸມມົນ:"
+msgstr "ລັດສະໝີຄົງທີ່"
 
 #: pcbnew/tools/pcb_actions.cpp:178
 msgid "Lock the selected circle or arc to its current radius"
-msgstr ""
+msgstr "ລັອກວົງມົນ ຫຼື ເສັ້ນໂຄ້ງທີ່ເລືອກໃຫ້ມີລັດສະໝີເທົ່າກັບຄ່າປັດຈຸບັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:187
-#, fuzzy
 msgid "Arc Angle"
-msgstr "ມຸມສິ້ນສຸດເສັ້ນໂຄ້ງ"
+msgstr "ມຸມຂອງເສັ້ນໂຄ້ງ"
 
 #: pcbnew/tools/pcb_actions.cpp:188
-#, fuzzy
 msgid "Drive the selected arc's swept angle"
-msgstr "ລຶບສາຍໂສ້ເນັດທີ່ຢືນຢັນແລ້ວທີ່ເລືອກໄວ້"
+msgstr "ກຳນົດຄ່າມຸມທີ່ກວາດໄປຂອງເສັ້ນໂຄ້ງທີ່ເລືອກ"
 
 #: pcbnew/tools/pcb_actions.cpp:197
 msgid "Fix in Place..."
-msgstr ""
+msgstr "ຄຶງໄວ້ກັບທີ່..."
 
 #: pcbnew/tools/pcb_actions.cpp:198
 msgid ""
 "Click a point to pin it where it is, grounding the shapes constrained to it"
-msgstr ""
+msgstr "ຄລິກໃສ່ຈຸດເພື່ອຄຶງມັນໄວ້, ໂດຍໃຫ້ຮູບຊົງທີ່ຖືກກຳນົດໄວ້ຍຶດກັບຈຸດນັ້ນ"
 
 #: pcbnew/tools/pcb_actions.cpp:207
 msgid "Coincident..."
-msgstr ""
+msgstr "ທັບກັນ..."
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Click two shape endpoints to make them coincide"
-msgstr ""
+msgstr "ຄລິກທີ່ຈຸດປາຍສອງຈຸດຂອງຮູບຊົງເພື່ອໃຫ້ພວກມັນທັບກັນ"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Point on Line..."
-msgstr "ຈຸດເທິງວົງມົນ"
+msgstr "ຈຸດເທິງເສັ້ນ..."
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Click an endpoint, then a segment or circle, to put the point on it"
 msgstr ""
+"ຄລິກທີ່ຈຸດປາຍ, ແລ້ວຄລິກທີ່ສ່ວນເສັ້ນ ຫຼື ວົງມົນ ເພື່ອວາງຈຸດນັ້ນລົງເທິງວັດຖຸ"
 
 #: pcbnew/tools/pcb_actions.cpp:227
-#, fuzzy
 msgid "Midpoint..."
-msgstr "ຍ້າຍຈຸດເຄິ່ງກາງໄປຍັງ..."
+msgstr "ຈຸດເຄິ່ງກາງ..."
 
 #: pcbnew/tools/pcb_actions.cpp:228
 msgid "Click an endpoint, then a segment, to put the point at its midpoint"
-msgstr ""
+msgstr "ຄລິກທີ່ຈຸດປາຍ, ແລ້ວຄລິກທີ່ສ່ວນເສັ້ນ ເພື່ອວາງຈຸດນັ້ນໄວ້ທີ່ຈຸດເຄິ່ງກາງ"
 
 #: pcbnew/tools/pcb_actions.cpp:237
-#, fuzzy
 msgid "Symmetric..."
-msgstr "ສົມມາດ"
+msgstr "ສົມມາດ..."
 
 #: pcbnew/tools/pcb_actions.cpp:238
 msgid "Click two endpoints, then a segment axis, to mirror them across it"
 msgstr ""
+"ຄລິກທີ່ຈຸດປາຍສອງຈຸດ, ແລ້ວຄລິກທີ່ແກນສ່ວນເສັ້ນ ເພື່ອເຮັດໃຫ້ພວກມັນສົມມາດກັນຂ້າມແກນນັ້ນ"
 
 #: pcbnew/tools/pcb_actions.cpp:247
-#, fuzzy
 msgid "Always Show Geometric Constraints"
-msgstr "ສະແດງເປົ້າເລັງ (Crosshairs) ຕະຫຼອດເວລາ"
+msgstr "ສະແດງຂໍ້ກຳນົດທາງເລຂາຄະນິດສະເໝີ"
 
 #: pcbnew/tools/pcb_actions.cpp:248
 msgid "Always show the geometric-constraint diagnostics overlay"
-msgstr ""
+msgstr "ສະແດງຊັ້ນການວິເຄາະຂໍ້ກຳນົດທາງເລຂາຄະນິດສະເໝີ"
 
 #: pcbnew/tools/pcb_actions.cpp:255
 msgid "Show Geometric Constraints on Hover Only"
-msgstr ""
+msgstr "ສະແດງຂໍ້ກຳນົດທາງເລຂາຄະນິດເມື່ອເອົາເມົ້າໄປຊີ້ເທົ່ານັ້ນ"
 
 #: pcbnew/tools/pcb_actions.cpp:256
 msgid "Reveal a shape's geometric constraints only while hovering it"
-msgstr ""
+msgstr "ສະແດງຂໍ້ກຳນົດທາງເລຂາຄະນິດຂອງຮູບຊົງສະເພາະຕອນທີ່ເອົາເມົ້າໄປຊີ້"
 
 #: pcbnew/tools/pcb_actions.cpp:263
-#, fuzzy
 msgid "Geometric Constraints..."
-msgstr "ກຳລັງກວດສອບຂໍ້ຈຳກັດຄວາມຍາວ..."
+msgstr "ຂໍ້ກຳນົດທາງເລຂາຄະນິດ..."
 
 #: pcbnew/tools/pcb_actions.cpp:264
 msgid "List, locate and delete the board's geometric constraints"
-msgstr ""
+msgstr "ລາຍການ, ຄົ້ນຫາ ແລະ ລຶບຂໍ້ກຳນົດທາງເລຂາຄະນິດຂອງແຜ່ນວົງຈອນ"
 
 #: pcbnew/tools/pcb_actions.cpp:271
-#, fuzzy
 msgid "Remove geometric constraints referencing the selected items"
-msgstr "ສ້າງເສັ້ນຂອບຂະຫຍາຍຈາກລາຍການທີ່ເລືອກ"
+msgstr "ລຶບຂໍ້ກຳນົດທາງເລຂາຄະນິດທີ່ອ້າງອີງເຖິງລາຍການທີ່ເລືອກ"
 
 #: pcbnew/tools/pcb_actions.cpp:278
-#, fuzzy
 msgid "Show/hide the geometric constraints panel"
-msgstr "ສະແດງ/ຊ່ອນ ແຜງການຄົ້ນຫາ"
+msgstr "ສະແດງ/ປິດ ແຖບຂໍ້ກຳນົດທາງເລຂາຄະນິດ"
 
 #: pcbnew/tools/pcb_actions.cpp:284
-#, fuzzy
 msgid "Automatic Constraints"
-msgstr "ຂໍ້ກຳນົດ (Constraints)"
+msgstr "ຂໍ້ກຳນົດອັດຕະໂນມັດ"
 
 #: pcbnew/tools/pcb_actions.cpp:285
 msgid "Automatically add geometric constraints while drawing"
-msgstr ""
+msgstr "ເພີ່ມຂໍ້ກຳນົດທາງເລຂາຄະນິດໂດຍອັດຕະໂນມັດໃນຂະນະທີ່ແຕ້ມ"
 
 #: pcbnew/tools/pcb_actions.cpp:292
 msgid "Create Rule Area from Selection..."
@@ -62756,14 +62503,12 @@ msgid "Create outset lines from the selected item"
 msgstr "ສ້າງເສັ້ນຂອບຂະຫຍາຍຈາກລາຍການທີ່ເລືອກ"
 
 #: pcbnew/tools/pcb_actions.cpp:353
-#, fuzzy
 msgid "Draw Via Stitch area"
-msgstr "ແຕ້ມເສັ້ນໂຄ້ງວົງຮີ"
+msgstr "ແຕ້ມພື້ນທີ່ເຊື່ອມວຽ"
 
 #: pcbnew/tools/pcb_actions.cpp:354
-#, fuzzy
 msgid "Draw a via stitch area"
-msgstr "ແຕ້ມເສັ້ນໂຄ້ງວົງຮີ"
+msgstr "ແຕ້ມພື້ນທີ່ສຳລັບການເຊື່ອມວຽ"
 
 #: pcbnew/tools/pcb_actions.cpp:381
 msgid "Draw an ellipse"
@@ -63257,14 +63002,12 @@ msgid "Diff the current footprint library against another .pretty directory"
 msgstr "ປຽບທຽບຄວາມຕ່າງຂອງ Footprint library ປັດຈຸບັນກັບໂຟນເດີ .pretty ອື່ນ"
 
 #: pcbnew/tools/pcb_actions.cpp:1205 pcbnew/tools/pcb_actions.cpp:1538
-#, fuzzy
 msgid "Bulk Edit Footprint Fields..."
-msgstr "ແກ້ໄຂຟິວສັນຍະລັກແບບກຸ່ມ..."
+msgstr "ແກ້ໄຂຟີວຟຸດປຣິນແບບກຸ່ມ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1206
-#, fuzzy
 msgid "Edit a table of fields from all footprints in the library"
-msgstr "ແກ້ໄຂຕາຕະລາງຟິວຂອງທຸກສັນຍະລັກໃນໄລບຣາຣີ"
+msgstr "ແກ້ໄຂຕາຕະລາງຟີວຈາກທຸກຟຸດປຣິນໃນຄັງ"
 
 #: pcbnew/tools/pcb_actions.cpp:1212
 msgid "Footprint Properties..."
@@ -63580,9 +63323,8 @@ msgid "Export Specctra DSN routing info"
 msgstr "ສົ່ງອອກຂໍ້ມູນການເດີນເສັ້ນແບບ Specctra DSN"
 
 #: pcbnew/tools/pcb_actions.cpp:1539
-#, fuzzy
 msgid "Edit a table of fields from all footprints in the board"
-msgstr "ແກ້ໄຂຕາຕະລາງຟິວຂອງທຸກສັນຍະລັກໃນໄລບຣາຣີ"
+msgstr "ແກ້ໄຂຕາຕະລາງຟີວຈາກທຸກຟຸດປຣິນໃນແຜ່ນວົງຈອນ"
 
 #: pcbnew/tools/pcb_actions.cpp:1545
 msgid "Gerbers (.gbr)..."
@@ -63645,10 +63387,9 @@ msgid "Create bill of materials from board"
 msgstr "ສ້າງລາຍການອຸປະກອນຈາກແຜ່ນວົງຈອນ"
 
 #: pcbnew/tools/pcb_actions.cpp:1602
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current board using the legacy exporter"
-msgstr "ສ້າງລາຍການອຸປະກອນສຳລັບຜັງວົງຈອນປັດຈຸບັນ (ຕົວສ້າງແບບເກົ່າ)"
+msgstr "ສ້າງລາຍການວັດສະດຸສຳລັບແຜ່ນວົງຈອນປັດຈຸບັນໂດຍໃຊ້ຕົວສົ່ງອອກແບບເກົ່າ"
 
 #: pcbnew/tools/pcb_actions.cpp:1608
 msgid "Export GenCAD..."
@@ -64618,11 +64359,11 @@ msgstr "ພະຍາຍາມເດີນເສັ້ນອັດຕະໂນມ
 
 #: pcbnew/tools/pcb_actions.cpp:3049
 msgid "Optimize Selected Track(s)"
-msgstr ""
+msgstr "ປັບແຕ່ງເສັ້ນທາງທີ່ເລືອກ"
 
 #: pcbnew/tools/pcb_actions.cpp:3050
 msgid "Simplify selected routed track(s)."
-msgstr ""
+msgstr "ເຮັດໃຫ້ເສັ້ນທາງການເດີນເສັ້ນທີ່ເລືອກງ່າຍຂຶ້ນ."
 
 #: pcbnew/tools/pcb_actions.cpp:3056
 msgid "Cancel Current Item"
@@ -64687,20 +64428,20 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "ສະແດງໜ້າຕ່າງຕົວຈັດການສຳລັບວັດຖຸ Generator"
 
 #: pcbnew/tools/pcb_actions.cpp:3143
-#, fuzzy
 msgid "Exclude From Stitching"
-msgstr "ແຍກອອກຈາກການຈຳລອງ"
+msgstr "ຍົກເວັ້ນຈາກການເຊື່ອມວຽ"
 
 #: pcbnew/tools/pcb_actions.cpp:3144
 msgid ""
 "Remove the selected via from its via-stitch generator and prevent it from "
 "being regenerated"
 msgstr ""
+"ເອົາວຽທີ່ເລືອກອອກຈາກຕົວສ້າງການເຊື່ອມວຽ ແລະ ປ້ອງກັນບໍ່ໃຫ້ມັນຖືກສ້າງຂຶ້ນໃໝ່"
 
 #: pcbnew/tools/pcb_actions.cpp:3151
 msgid ""
 "Restore all vias previously excluded from the selected via-stitch generators"
-msgstr ""
+msgstr "ຄືນຄ່າວຽທັງໝົດທີ່ເຄີຍຖືກຍົກເວັ້ນຈາກຕົວສ້າງການເຊື່ອມວຽທີ່ເລືອກ"
 
 #: pcbnew/tools/pcb_actions.cpp:3164
 msgid "Length Tuning Settings"
@@ -64739,14 +64480,12 @@ msgid "Show relative skew of diff pair tracks"
 msgstr "ສະແດງຄ່າຄວາມລໍ້າສຳພັດຂອງເສັ້ນຄູ່ຕ່າງ"
 
 #: pcbnew/tools/pcb_actions.cpp:3218
-#, fuzzy
 msgid "Place Grid Item"
-msgstr "ວາງຮູບພາບ"
+msgstr "ວາງລາຍການເສັ້ນຕາໜ່າງ"
 
 #: pcbnew/tools/pcb_actions.cpp:3219
-#, fuzzy
 msgid "Adds a grid item to the board"
-msgstr "ປັບຂະໜາດໜ້າໃຫ້ພໍດີກັບແຜ່ນວົງຈອນ"
+msgstr "ເພີ່ມລາຍການເສັ້ນຕາໜ່າງໃສ່ແຜ່ນວົງຈອນ"
 
 #: pcbnew/tools/pcb_control.cpp:155 pcbnew/tools/pcb_control.cpp:185
 msgid "Add Footprint Library"
@@ -64818,24 +64557,20 @@ msgid "Applying Design Block Layouts"
 msgstr "ກຳລັງນຳໃຊ້ການຈັດວາງບລັອກການອອກແບບ"
 
 #: pcbnew/tools/pcb_control.cpp:1563
-#, fuzzy
 msgid "the design block has no saved board layout"
-msgstr "ບລັອກການອອກແບບບໍ່ມີການຈັດວາງ PCB ທີ່ບັນທຶກໄວ້"
+msgstr "ບລັອກການອອກແບບບໍ່ມີເລເອົາທ໌ແຜ່ນວົງຈອນທີ່ບັນທຶກໄວ້"
 
 #: pcbnew/tools/pcb_control.cpp:1594
-#, fuzzy
 msgid "the design block's board file could not be read"
-msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ metadata ຂອງບລັອກການອອກແບບ '%s'."
+msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ແຜ່ນວົງຈອນຂອງບລັອກການອອກແບບໄດ້"
 
 #: pcbnew/tools/pcb_control.cpp:1621
-#, fuzzy
 msgid "the design block's board layout is empty"
-msgstr "ບລັອກການອອກແບບບໍ່ມີການຈັດວາງທີ່ຈະວາງ."
+msgstr "ເລເອົາທ໌ແຜ່ນວົງຈອນຂອງບລັອກການອອກແບບວ່າງເປົ່າ"
 
 #: pcbnew/tools/pcb_control.cpp:1672
-#, fuzzy
 msgid "the group has no items"
-msgstr "ເຂົ້າໄປໃນກຸ່ມເພື່ອແກ້ໄຂລາຍການ"
+msgstr "ກຸ່ມບໍ່ມີລາຍການໃດໆ"
 
 #: pcbnew/tools/pcb_control.cpp:1677 pcbnew/tools/pcb_control.cpp:1804
 msgid "(unnamed group)"
@@ -64843,7 +64578,7 @@ msgstr "(ກຸ່ມທີ່ບໍ່ມີຊື່)"
 
 #: pcbnew/tools/pcb_control.cpp:1723
 msgid "the layout could not be copied onto the group"
-msgstr ""
+msgstr "ບໍ່ສາມາດຄັດລອກເລເອົາທ໌ລົງໃນກຸ່ມໄດ້"
 
 #: pcbnew/tools/pcb_control.cpp:1741
 #, c-format
@@ -65070,9 +64805,8 @@ msgid "Draw Zone"
 msgstr "ແຕ້ມໂຊນ"
 
 #: pcbnew/tools/zone_create_helper.cpp:289
-#, fuzzy
 msgid "Create Via Stitch"
-msgstr "ສ້າງຜັງວົງຈອນ"
+msgstr "ສ້າງການເຊື່ອມວຽ"
 
 #: pcbnew/tools/zone_create_helper.cpp:311
 msgid "Draw Polygon"
@@ -65333,19 +65067,16 @@ msgstr "ສະແດງຈຸດ Snap ທີ່ຊັດເຈນເປັນເ
 #: pcbnew/widgets/appearance_controls.cpp:357
 #: pcbnew/widgets/panel_selection_filter.cpp:237
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
-#, fuzzy
 msgid "Grid Items"
-msgstr "ຈັດກຸ່ມລາຍການ"
+msgstr "ລາຍການເສັ້ນຕາໜ່າງ"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
-#, fuzzy
 msgid "Show custom routing/placement grids"
-msgstr "ອະ/dialog_text_properties_base.cpp:12"
+msgstr "ສະແດງເສັ້ນຕາໜ່າງການເດີນເສັ້ນ/ການວາງ ທີ່ປັບແຕ່ງເອງ"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Show via stitching generator outlines"
-msgstr "ສະແດງຮູເຊື່ອມຕໍ່ໃນໂໝດຂອບນອກ"
+msgstr "ສະແດງເສັ້ນຂອບຂອງຕົວສ້າງການເຊື່ອມວຽ"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Locked Item Shadow"
@@ -65364,14 +65095,12 @@ msgid "Show colliding footprint courtyards"
 msgstr "ສະແດງຂອບເຂດຟຸດພຣິນທີ່ຊ້ອນທັບກັນ"
 
 #: pcbnew/widgets/appearance_controls.cpp:361
-#, fuzzy
 msgid "Constrained Item Shadow"
-msgstr "ເງົາຂອງລາຍການທີ່ຖືກລັອກ"
+msgstr "ເງົາຂອງລາຍການທີ່ມີຂໍ້ກຳນົດ"
 
 #: pcbnew/widgets/appearance_controls.cpp:361
-#, fuzzy
 msgid "Show a shadow on constrained items"
-msgstr "ສະແດງເງົາໃນລາຍການທີ່ຖືກລັອກໄວ້"
+msgstr "ສະແດງເງົາໃນລາຍການທີ່ມີຂໍ້ກຳນົດ"
 
 #: pcbnew/widgets/appearance_controls.cpp:362
 msgid "Board Area Shadow"
@@ -65958,19 +65687,17 @@ msgid "Configure net classes"
 msgstr "ກຳນົດຄ່າເນັດຄລາສ"
 
 #: pcbnew/widgets/constraint_list_view.cpp:35
-#, fuzzy
 msgid "Item 1"
-msgstr "ລາຍການ"
+msgstr "ລາຍການ 1"
 
 #: pcbnew/widgets/constraint_list_view.cpp:36
-#, fuzzy
 msgid "Item 2"
-msgstr "ລາຍການ"
+msgstr "ລາຍການ 2"
 
 #: pcbnew/widgets/constraint_list_view.cpp:75
 #, c-format
 msgid " (+%zu)"
-msgstr ""
+msgstr " (+%zu)"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:36
 msgid "Create a new project for this board"
@@ -65978,19 +65705,19 @@ msgstr "ສ້າງໂຄງການໃໝ່ສຳລັບບອດນີ້
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:286
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid "%s must be at most %s."
-msgstr "%s ຕ້ອງມີຢ່າງໜ້ອຍ %s."
+msgstr "%s ຕ້ອງມີຄ່າສູງສຸດບໍ່ເກີນ %s."
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid "%s must be a multiple of %s."
-msgstr "%s ຕ້ອງມີຢ່າງໜ້ອຍ %s."
+msgstr "%s ຕ້ອງເປັນຕົວຄູນຂອງ %s."
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s does not match the required format '%s'."
-msgstr "ຟຸດພຣິນ '%s' ບໍ່ກົງກັບສຳເນົາໃນຄັງສັບ '%s'"
+msgstr "%s ບໍ່ກົງກັບຮູບແບບທີ່ຕ້ອງການ '%s'."
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
 msgid "Omit extra information"
@@ -66064,9 +65791,8 @@ msgid "Die Length"
 msgstr "ຄວາມຍາວຂອງໄດ (Die length)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:164
-#, fuzzy
 msgid "Unrouted Length"
-msgstr "ຄວາມຍາວທີ່ລາກເສັ້ນແລ້ວ"
+msgstr "ຄວາມຍາວທີ່ຍັງບໍ່ໄດ້ເດີນເສັ້ນ"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:167
 msgid "Pad Count"
@@ -66547,14 +66273,12 @@ msgid "Refill zones after changes made on board"
 msgstr "ຖົມໂຊນໃໝ່ຫຼັງຈາກມີການປ່ຽນແປງໃນບອດ"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:159
-#, fuzzy
 msgid "Select on canvas"
-msgstr "ເລືອກເທິງ PCB"
+msgstr "ເລືອກເທິງພື້ນທີ່ເຮັດວຽກ"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:161
-#, fuzzy
 msgid "Select and focus the highlighted zone on the board canvas"
-msgstr "ຄລິກໃສ່ລາຍການເພື່ອເນັ້ນໃສ່ພວກມັນໃນແຜ່ນວົງຈອນ."
+msgstr "ເລືອກ ແລະ ໂຟກັສໂຊນທີ່ໄຮໄລ້ໄວ້ເທິງພື້ນທີ່ແຜ່ນວົງຈອນ"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:168
 msgid "Update Displayed Zones"
