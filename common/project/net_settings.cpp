@@ -130,7 +130,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             {
                 wxString name = entry["name"];
 
-                std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( name, false );
+                std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( name, name == NETCLASS::Default );
 
                 if( entry.contains( "priority" ) && entry["priority"].is_number() )
                     nc->SetPriority( entry["priority"].get<int>() );

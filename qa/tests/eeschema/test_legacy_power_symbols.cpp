@@ -25,6 +25,8 @@
 #include <connection_graph.h>
 #include <eeschema_helpers.h>
 #include <pgm_base.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 #include <schematic.h>
 #include <sch_screen.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
@@ -111,6 +113,12 @@ BOOST_AUTO_TEST_CASE( LegacyHeadlessLoadUsesItsProjectLibraries )
                            std::filesystem::copy_options::recursive );
     SETTINGS_MANAGER settings;
     BOOST_REQUIRE( settings.LoadProject( directory.PathStr() + "/complex_hierarchy.kicad_pro" ) );
+    const auto defaults = settings.Prj().GetProjectFile().NetSettings()->GetDefaultNetclass();
+    BOOST_REQUIRE( defaults );
+    BOOST_CHECK( defaults->HasWireWidth() );
+    BOOST_CHECK_GT( defaults->GetWireWidth(), 0 );
+    BOOST_CHECK( defaults->HasBusWidth() );
+    BOOST_CHECK_GT( defaults->GetBusWidth(), 0 );
     PROJECT* active = &Pgm().GetSettingsManager().Prj();
     const wxString activePath = active->GetProjectFullName();
     BOOST_REQUIRE( active != &settings.Prj() );
