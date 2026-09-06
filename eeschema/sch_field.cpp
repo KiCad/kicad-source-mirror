@@ -1730,6 +1730,11 @@ static struct SCH_FIELD_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ) );
 
+        // Library fields are written at symbol scope rather than inside a unit body, so a
+        // per-unit or per-body-style assignment is silently dropped by the next save
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ), _HKI( "Unit" ) );
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ), _HKI( "Body Style" ) );
+
         const wxString textProps = _HKI( "Text Properties" );
 
         auto horiz = new PROPERTY_ENUM<SCH_FIELD, GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
