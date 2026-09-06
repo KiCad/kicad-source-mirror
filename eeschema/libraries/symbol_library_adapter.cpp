@@ -154,7 +154,7 @@ LIBRARY_RESULT<IO_BASE*> SYMBOL_LIBRARY_ADAPTER::createPlugin( const LIBRARY_TAB
     if( type == SCH_IO_MGR::SCH_NESTED_TABLE )
     {
         wxString   msg;
-        wxFileName fileName( m_manager.GetFullURI( row, true ) );
+        wxFileName fileName( m_manager.GetFullURI( row, true, &m_manager.Project() ) );
 
         if( fileName.FileExists() )
             return tl::unexpected( LIBRARY_TABLE_OK() );

@@ -176,10 +176,25 @@ public:
     std::optional<int> GetLibraryModifyHash( const wxString& aNickname ) const;
 
 protected:
-    std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries.Get(); }
-    std::map<wxString, LIB_DATA>& globalLibs() const override { return GlobalLibraries.Get(); }
-    std::shared_mutex& globalLibsMutex() override { return GlobalLibraryMutex.Get(); }
-    std::shared_mutex& globalLibsMutex() const override { return GlobalLibraryMutex.Get(); }
+    std::map<wxString, LIB_DATA>& globalLibs() override
+    {
+        return m_manager.IsProjectScoped() ? m_scopedGlobalLibraries : GlobalLibraries.Get();
+    }
+
+    std::map<wxString, LIB_DATA>& globalLibs() const override
+    {
+        return m_manager.IsProjectScoped() ? m_scopedGlobalLibraries : GlobalLibraries.Get();
+    }
+
+    std::shared_mutex& globalLibsMutex() override
+    {
+        return m_manager.IsProjectScoped() ? m_scopedGlobalLibraryMutex : GlobalLibraryMutex.Get();
+    }
+
+    std::shared_mutex& globalLibsMutex() const override
+    {
+        return m_manager.IsProjectScoped() ? m_scopedGlobalLibraryMutex : GlobalLibraryMutex.Get();
+    }
 
     void enumerateLibrary( LIB_DATA* aLib, const wxString& aUri ) override;
 
@@ -189,6 +204,10 @@ protected:
 
 private:
     static SCH_IO* schplugin( const LIB_DATA* aRow );
+
+    // Global rows can contain project variables, so passive loads cannot share their plugins.
+    mutable std::map<wxString, LIB_DATA> m_scopedGlobalLibraries;
+    mutable std::shared_mutex m_scopedGlobalLibraryMutex;
 
     static LEAK_AT_EXIT<std::map<wxString, LIB_DATA>> GlobalLibraries;
 
