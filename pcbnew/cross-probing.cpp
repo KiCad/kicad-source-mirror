@@ -74,6 +74,7 @@
 #include <libraries/library_manager.h>
 #include <libraries/library_table.h>
 #include <unordered_set>
+#include <json_common.h>
 
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -851,6 +852,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         if( SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) ) )
             payload = "success";
 
+        break;
+
+    case MAIL_REVIEW_LIBRARY_UPDATES:
+        m_toolManager->PostAction( PCB_ACTIONS::updateFootprints );
         break;
 
     case MAIL_PCB_RELOAD:

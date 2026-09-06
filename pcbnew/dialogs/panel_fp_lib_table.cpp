@@ -897,6 +897,7 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
             return false;
 
         m_parent->m_GlobalTableChanged = true;
+        manager.AbortAsyncLoads( LIBRARY_TABLE_TYPE::FOOTPRINT );
         *globalTable.value() = get_model( 0 )->Table();
 
         globalTable.value()->Save( true ).map_error(
@@ -921,6 +922,7 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
                 return false;
 
             m_parent->m_ProjectTableChanged = true;
+            manager.AbortAsyncLoads( LIBRARY_TABLE_TYPE::FOOTPRINT );
             *projectTable.value() = get_model( 1 )->Table();
 
             projectTable.value()->Save( true ).map_error(
@@ -1038,12 +1040,18 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
         Pgm().GetLibraryManager().ProjectChanged();
     }
 
+    ReloadFootprintLibraries( aKiway );
+}
+
+
+void ReloadFootprintLibraries( KIWAY* aKiway )
+{
     // Trigger a reload in case any libraries have been added or removed
     if( KIFACE *face = aKiway->KiFACE( KIWAY::FACE_PCB ) )
         face->PreloadLibraries( aKiway );
 
+    // CvPcb blocks until every library loads, so it waits for the preload's own reload mail
     std::string payload = "";
     aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload );
     aKiway->ExpressMail( FRAME_FOOTPRINT_VIEWER, MAIL_RELOAD_LIB, payload );
-    aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
 }

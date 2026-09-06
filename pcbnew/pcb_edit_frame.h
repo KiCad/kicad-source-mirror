@@ -25,6 +25,7 @@
 #include "zones.h"
 #include <board.h>
 #include <mail_type.h>
+#include <mdw/client/mdw_subscription.h>
 #include <settings/app_settings.h>
 #include <variant>
 
@@ -70,6 +71,7 @@ class KICAD_API_SERVER;
 class API_HANDLER_PCB;
 class API_HANDLER_COMMON;
 class API_HANDLER_LIBRARIES;
+class MDW_STATUS_PILL;
 
 enum LAST_PATH_TYPE : unsigned int;
 
@@ -674,6 +676,10 @@ public:
      */
     void UpdateTitle();
 
+    /// Recompute the Design Workspace status pill from the active project's session and
+    /// re-observe its event bus. Safe to call with no binding or in standalone mode.
+    void UpdateWorkspacePill();
+
     /**
      * Called after the preferences dialog is run.
      */
@@ -894,6 +900,8 @@ private:
     PCB_DESIGN_BLOCK_PANE* m_designBlocksPane;
     // Tool Reset() reads this before the ctor creates the panel.
     PANEL_CONSTRAINTS* m_constraintsPanel = nullptr; ///< Dockable geometric-constraint list (#2329).
+    MDW_STATUS_PILL*       m_workspacePill = nullptr;
+    MDW_SUBSCRIPTION       m_libraryUpdates;
 
     /// Secondary infobar that stacks above the main one; reserved for load-time
     /// notices (currently the WRL -> STEP migration prompt) that must not be

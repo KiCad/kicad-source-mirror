@@ -80,6 +80,7 @@ set( QA_PCBNEW_SRCS
     test_footprint_import_reconciler.cpp
     test_import_design_rules.cpp
     test_footprint_library_adapter.cpp
+    test_footprint_lib_table_reload.cpp
     test_footprint_load_save.cpp
     test_footprint_net_tie.cpp
     test_footprint_pad_fixup.cpp
@@ -128,6 +129,7 @@ set( QA_PCBNEW_SRCS
     test_custom_drc_diff_merge.cpp
     test_lib_table_diff_merge.cpp
     test_applier_helpers.cpp
+    test_fp_digest.cpp
     test_fp_lib_differ.cpp
     test_footprint_item_equality.cpp
     test_pad_setters.cpp

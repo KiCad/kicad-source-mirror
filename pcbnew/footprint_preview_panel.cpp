@@ -197,6 +197,10 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 
     try
     {
+        // Only the previewed library loads, since no PCB-side editor has preloaded the rest
+        if( !adapter->IsLibraryLoaded( aFPID.GetLibNickname() ) )
+            adapter->LoadOne( aFPID.GetLibNickname() );
+
         m_currentFootprint.reset( adapter->LoadFootprint( aFPID.GetLibNickname(), aFPID.GetLibItemName(), false ) );
     }
     catch( ... )

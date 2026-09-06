@@ -32,6 +32,7 @@
 
 #include <kiplatform/app.h>
 #include <mock_pgm_base.h>
+#include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
 
 #include <pcbnew_settings.h>
@@ -62,6 +63,7 @@ bool init_unit_test()
 
         Pgm().InitPgm( true, true );
         Pgm().GetSettingsManager().RegisterSettings( new PCBNEW_SETTINGS, false );
+        Pgm().GetSettingsManager().RegisterSettings( new KICAD_SETTINGS, false );
         Pgm().GetSettingsManager().Load();
 
         const MOCK_PGM_BASE& program = static_cast<MOCK_PGM_BASE&>( Pgm() );

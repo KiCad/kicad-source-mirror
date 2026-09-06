@@ -67,8 +67,13 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
         for( FOOTPRINT* fp : footprints )
             treeItems.push_back( fp );
 
-        DoAddLibrary( libName, *m_libs->GetLibraryDescription( libName ), treeItems, pinned, true );
+        LIB_TREE_NODE_LIBRARY& node =
+                DoAddLibrary( libName, *m_libs->GetLibraryDescription( libName ), treeItems, pinned, true );
+
+        RefreshLifecycle( node );
     }
+
+    FollowLifecycle();
 
     m_tree.AssignIntrinsicRanks( m_shownColumns );
 }
@@ -76,5 +81,5 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
 
 wxString FP_TREE_MODEL_ADAPTER::GenerateInfo( LIB_ID const& aLibId, int aUnit )
 {
-    return GenerateFootprintInfo( m_libs, aLibId );
+    return GenerateFootprintInfo( m_libs, aLibId ) + lifecycleInfo( aLibId );
 }

@@ -26,6 +26,9 @@
 
 #include <pcb_base_frame.h>
 #include <pcb_base_edit_frame.h>
+#include <libraries/library_table.h>
+#include <widgets/mdw_part_controller.h>
+#include <wx/timer.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <widgets/lib_tree.h>
 #include <footprint_tree_pane.h>
@@ -48,7 +51,7 @@ class API_HANDLER_LIBRARIES;
 namespace PCB { struct IFACE; }     // A KIFACE coded in pcbnew.cpp
 
 
-class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
+class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME, public MDW_PART_EDITOR
 {
 public:
     ~FOOTPRINT_EDIT_FRAME();
@@ -126,6 +129,16 @@ public:
     bool IsContentModified() const override;
 
     bool IsCurrentFPFromBoard() const;
+
+    bool IsContentReadOnly() const override;
+    void ShowReadOnlyRefusal() override;
+
+    /// Whether the library footprint aId of aProject is a released team part, which must be revised before
+    /// it changes
+    static bool IsReleasedTeamPart( PROJECT& aProject, const LIB_ID& aId );
+
+    /// Tell the user and return true when the library footprint aId is a released team part
+    bool RefuseReleasedChange( const LIB_ID& aId );
 
     /**
      * Prompt to save each dirty tab that meets the requirements.  Returns false if the user
@@ -249,6 +262,10 @@ public:
      */
     FOOTPRINT_EDITOR_TAB_CONTEXT* CreateUnsavedFootprintTab();
 
+    /// Drop the open footprint's load baseline, for one that did not come from a file and so has nothing on disk
+    /// to have changed.
+    void DiscardLoadBaseline();
+
     /**
      * Update the open tab for aOldId, if any, to the renamed footprint aNewId so its label and key
      * track the rename.
@@ -257,18 +274,34 @@ public:
 
     /**
      * Return true if any footprint editor tab has unsaved changes, or with aLibraryOnly any tab holding a
-     * library footprint.
+     * library footprint. A non-empty aNickname counts only the library tabs of aNickname, never board
+     * instances or unsaved imports.
      */
-    bool HasModifiedFootprintTabs( bool aLibraryOnly = false ) const;
+    bool HasModifiedFootprintTabs( bool aLibraryOnly = false, const wxString& aNickname = wxEmptyString ) const;
+
+    /// True when the library footprint aId has edits not saved yet, in the canvas or another tab
+    bool IsFootprintModified( const LIB_ID& aId ) const;
+
+    MDW_PART_CONTROLLER&           TeamPart() override { return m_teamPart; }
+    EDA_BASE_FRAME*                PartFrame() override { return this; }
+    std::optional<MDW_PART_TARGET> ResolvePart( const LIB_ID& aId ) override;
+    LIBRARY_TABLE_TYPE             PartTableType() const override { return LIBRARY_TABLE_TYPE::FOOTPRINT; }
+    bool                           OpenPart( const LIB_ID& aId ) override;
+    void                           RefreshPart() override;
+    void                           CheckInLibrary( const wxString& aNickname ) override;
+    bool DescribeForRelease( MDW_RELEASE_ITEM& aItem, const std::vector<LIB_ID>& aReleasing ) override;
 
     /// Save every tab with unsaved edits to a library footprint, then return to the tab that was
-    /// active. False when a save failed; the tabs after it are left unsaved.
-    bool SaveModifiedLibraryTabs();
+    /// active. False when a save failed; the tabs after it are left unsaved. A non-empty aNickname
+    /// limits this to the tabs HasModifiedFootprintTabs() counts for it, and a non-empty aOnly to those footprints.
+    bool SaveModifiedLibraryTabs( const wxString& aNickname = wxEmptyString, const std::vector<LIB_ID>& aOnly = {} );
 
     /**
      * Replace the clean open editor tab matching aFootprint, if any, with the saved footprint.
+     *
+     * @return true when a tab was replaced.
      */
-    void RefreshLibraryFootprintTab( const FOOTPRINT& aFootprint );
+    bool RefreshLibraryFootprintTab( const FOOTPRINT& aFootprint );
 
     /**
      * Return the adapter object that provides the stored data.
@@ -456,6 +489,33 @@ protected:
      */
     void updateInfoBar();
 
+    /// Follow the open footprint's team part; aReload reads its state from its source again, aKeepUnresolved
+    /// keeps the current part when it no longer resolves, and aDigest digests the footprint as edited now.
+    void refreshTeamPart( bool aReload, bool aKeepUnresolved = false, bool aDigest = true );
+
+    /// Refresh the tree and the open part whenever a team library's listing lands
+    void listenForTeamListings();
+
+    static std::optional<MDW_PART_TARGET> resolveTeamPart( PROJECT& aProject, const LIB_ID& aId );
+
+    bool SaveForRelease( std::vector<MDW_RELEASE_ITEM>& aItems ) override;
+    void GetLatest() override;
+
+    bool CanReloadPart( bool aDiscardEdits ) override;
+
+    /// Read the open team footprint again from its file, which the editor did not write; false while edits it may
+    /// not drop, a dialog or a tool hold it.
+    bool ReloadPart( bool aDiscardEdits ) override;
+
+    std::optional<std::string> CurrentFormat( const std::string& aDestination, const std::vector<std::string>& aFolder,
+                                              const std::string& aPartFile, const wxString& aName ) override;
+
+    /// Recheck the infobar's outcome once no tool runs, since an open tool may be what it describes
+    void PopTool( const TOOL_EVENT& aEvent ) override;
+
+    /// True when a tab other than the active one holds unsaved edits to aId
+    bool hasModifiedTab( const LIB_ID& aId ) const;
+
     /**
      * @brief (Re)Create the menubar for the Footprint Editor frame
      */
@@ -526,6 +586,21 @@ private:
     /// Fold a pad being edited back together, so its primitives are not left as loose copper.
     void recombineEditedPad();
 
+    /// Make a copy of aFootprint the open footprint's baseline, which a revert restores and a save checks the
+    /// library file against.
+    void setLoadBaseline( const FOOTPRINT& aFootprint );
+
+    /// Reload the unedited library tabs whose footprint files changed on disk, as after a git pull, and retry
+    /// while a tool, a dialog or a library load holds the editor.
+    void refreshStaleFootprintTabs();
+
+    /// Ask before saving aFootprint into aLibrary replaces a change made to its file since the baseline was read,
+    /// and refuse while that file cannot be read. aReplaces is set when the user agreed to replace such a change.
+    bool confirmSaveOverChangedFootprint( const FOOTPRINT* aFootprint, const wxString& aLibrary, bool& aReplaces );
+
+    /// True when aOnDisk, the footprint as its library file holds it now, is not what aLoaded was read as.
+    static bool footprintChangedOnDisk( const FOOTPRINT& aLoaded, const FOOTPRINT* aOnDisk );
+
     /**
      * Snapshot the active tab's view/selection, fold the dirty state back into it, and clear
      * m_activeTab.
@@ -587,12 +662,20 @@ private:
     FOOTPRINT_TREE_PANE*        m_treePane;
     LIB_ID                      m_centerItemOnIdle;
 
+    /// Tree target a sync could not find because its library was still loading, reselected once it has loaded
+    /// while the canvas still shows m_pendingTreeCanvas.
+    LIB_ID                      m_pendingTreeTarget;
+    LIB_ID                      m_pendingTreeCanvas;
+
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
     bool                        m_show_layer_manager_tools;
 
     std::unique_ptr<FOOTPRINT>  m_originalFootprintCopy;
     wxString                    m_footprintNameWhenLoaded;
+    MDW_PART_CONTROLLER m_teamPart;   ///< Release state of the footprint when it lives in a team library
+    wxTimer             m_teamDigest; ///< Digests the team part once a burst of edits settles
+    wxTimer             m_staleTabsTimer; ///< Retries refreshStaleFootprintTabs() once the editor is free
     std::map<KIID, KIID>        m_boardFootprintUuids;
 
     EDITOR_TABS_PANEL*          m_tabsPanel;

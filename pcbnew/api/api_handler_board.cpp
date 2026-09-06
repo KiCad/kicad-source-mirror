@@ -51,6 +51,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/mdw_member_index.h>
 
 #include <api/common/types/base_types.pb.h>
 
@@ -769,6 +770,7 @@ HANDLER_RESULT<RunActionResponse> API_HANDLER_BOARD::handleRunAction(
         return tl::unexpected( *busy );
 
     RunActionResponse response;
+    MDW_SILENT_SAVE silent;
 
     if( toolManager()->RunAction( aCtx.Request.action(), true ) )
         response.set_status( RunActionStatus::RAS_OK );

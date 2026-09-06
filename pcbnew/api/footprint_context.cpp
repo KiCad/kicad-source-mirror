@@ -20,6 +20,7 @@
 #include <api/footprint_context.h>
 
 #include <footprint_edit_frame.h>
+#include <widgets/mdw_member_index.h>
 
 
 class FOOTPRINT_EDIT_FRAME_CONTEXT : public FOOTPRINT_CONTEXT
@@ -62,11 +63,13 @@ public:
 
     bool SaveFootprint( FOOTPRINT* aFootprint ) override
     {
+        MDW_SILENT_SAVE silent;
         return m_frame->SaveFootprint( aFootprint );
     }
 
     bool SaveFootprintInLibrary( FOOTPRINT* aFootprint, const wxString& aLibraryName ) override
     {
+        MDW_SILENT_SAVE silent;
         return m_frame->SaveFootprintInLibrary( aFootprint, aLibraryName );
     }
 

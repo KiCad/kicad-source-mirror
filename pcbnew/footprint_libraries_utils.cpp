@@ -31,6 +31,7 @@
 #include <filter_reader.h>
 #include <footprint_library_adapter.h>
 #include <validators.h>
+#include <dialogs/dialog_library_source_setup.h>
 #include <dialogs/dialog_text_entry.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -49,6 +50,8 @@
 #include <settings/settings_manager.h>
 #include <kiplatform/ui.h>
 #include <project_pcb.h>
+#include <mdw/client/mdw_library_sources.h>
+#include <widgets/mdw_member_index.h>
 #include <project/project_file.h>
 #include <footprint_editor_settings.h>
 #include <footprint_viewer_frame.h>
@@ -411,6 +414,17 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aDialogTitle, co
                 ShowInfoBarError( msg );
                 return wxEmptyString;
             }
+            else if( std::optional<LIBRARY_TABLE_ROW*> row =
+                             PROJECT_PCB::FootprintLibAdapter( &Prj() )->FindRowByURI( libPath );
+                     row && MDW_LIBRARY_SOURCES::TeamLibrariesEnabled()
+                     && !MDW_LIBRARY_SOURCES::MarkerOf( ( *row )->Options() ).IsEmpty() )
+            {
+                // Replacing a whole team library would drop its released footprints without a Revise
+                ShowInfoBarError( wxString::Format( _( "%s is a team library and cannot be replaced. Check in "
+                                                       "changes to its footprints instead." ),
+                                                    libPath ) );
+                return wxEmptyString;
+            }
             else
             {
                 wxString msg = wxString::Format( _( "Library %s already exists." ), libPath );
@@ -612,7 +626,7 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aDialogTitle, const wxStri
 
 bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool aConfirm )
 {
-    if( !aFPID.IsValid() )
+    if( !aFPID.IsValid() || RefuseReleasedChange( aFPID ) )
         return false;
 
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
@@ -704,6 +718,9 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib )
 
     prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
 
+    wxArrayString refused;
+    bool          anySaved = false;
+
     for( FOOTPRINT* footprint : GetBoard()->Footprints() )
     {
         bool saved = false;
@@ -712,7 +729,17 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib )
         {
             FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
-            if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
+            LIB_ID destination( nickname, footprint->GetFPID().GetLibItemName() );
+
+            // Exporting over a released library footprint would replace it without a Revise
+            if( !destination.GetLibItemName().empty()
+                && FOOTPRINT_EDIT_FRAME::IsReleasedTeamPart( Prj(), destination ) )
+            {
+                // Several board footprints can share one library footprint
+                if( refused.Index( destination.GetUniStringLibItemName() ) == wxNOT_FOUND )
+                    refused.Add( destination.GetUniStringLibItemName() );
+            }
+            else if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
             {
                 std::unique_ptr<FOOTPRINT> fpCopy(
                         static_cast<FOOTPRINT*>( footprint->Duplicate( IGNORE_PARENT_GROUP ) ) );
@@ -733,6 +760,8 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib )
             DisplayError( this, ioe.What() );
         }
 
+        anySaved |= saved;
+
         // Relink only if the footprint was actually written; otherwise the board would point
         // at an entry the library does not contain.
         if( map && saved )
@@ -741,6 +770,19 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib )
             id.SetLibNickname( nickname );
             footprint->SetFPID( id );
         }
+    }
+
+    if( anySaved )
+    {
+        if( std::optional<LIBRARY_TABLE_ROW*> row = PROJECT_PCB::FootprintLibAdapter( &Prj() )->GetRow( nickname ) )
+            MdwWarnLocalSave( this, MDW_LIBRARY_TYPE::FOOTPRINT, **row );
+    }
+
+    if( !refused.empty() )
+    {
+        DisplayInfoMessage( this, wxString::Format( _( "These footprints are released in '%s' and were not "
+                                                       "replaced. Revise them to change them:\n\n%s" ),
+                                                    nickname, wxJoin( refused, '\n', '\0' ) ) );
     }
 }
 
@@ -797,6 +839,20 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
         return false;
     }
 
+    bool replaces = false;
+
+    if( !confirmSaveOverChangedFootprint( aFootprint, libraryName, replaces ) )
+        return false;
+
+    // A team footprint saved over a newer version must be settled against it before it is released
+    if( replaces )
+    {
+        std::optional<LIBRARY_TABLE_ROW*> row = PROJECT_PCB::FootprintLibAdapter( &Prj() )->GetRow( libraryName );
+
+        if( row && !MarkOverwrittenParts( this, Prj(), MDW_LIBRARY_TYPE::FOOTPRINT, **row, { footprintName } ) )
+            return false;
+    }
+
     // Save the renamed footprint before deleting the original, so a failed save does not
     // destroy the old entry and lose the user's work (issue #23850).
     if( !SaveFootprintInLibrary( aFootprint, libraryName ) )
@@ -811,7 +867,48 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
         SyncLibraryTree( true );
     }
 
+    if( aFootprint == GetBoard()->GetFirstFootprint() )
+        setLoadBaseline( *aFootprint );
+
     return true;
+}
+
+
+bool FOOTPRINT_EDIT_FRAME::confirmSaveOverChangedFootprint( const FOOTPRINT* aFootprint, const wxString& aLibrary,
+                                                            bool& aReplaces )
+{
+    // The baseline belongs to the open footprint, and a footprint never saved has no file to have changed
+    if( !m_originalFootprintCopy || aFootprint != GetBoard()->GetFirstFootprint() || !m_activeTab
+        || m_activeTab->IsUnsaved() || m_originalFootprintCopy->GetFPID().GetLibNickname().wx_str() != aLibrary )
+    {
+        return true;
+    }
+
+    bool changed = false;
+
+    try
+    {
+        FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+        std::unique_ptr<FOOTPRINT> onDisk = adapter->FootprintOnDisk( aLibrary, m_footprintNameWhenLoaded );
+
+        changed = footprintChangedOnDisk( *m_originalFootprintCopy, onDisk.get() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        // A file that no longer parses, such as one left with conflict markers, must not be saved over unseen
+        DisplayErrorMessage( this,
+                             wxString::Format( _( "Footprint '%s' was not saved because its library file could "
+                                                  "not be read." ),
+                                               UnescapeString( m_footprintNameWhenLoaded ) ),
+                             ioe.What() );
+        return false;
+    }
+
+    if( !changed )
+        return true;
+
+    aReplaces = ConfirmSaveOverChangedParts( this, { m_footprintNameWhenLoaded } );
+    return aReplaces;
 }
 
 
@@ -858,6 +955,10 @@ bool FOOTPRINT_EDIT_FRAME::DuplicateFootprint( FOOTPRINT* aFootprint )
 bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( FOOTPRINT* aFootprint,
                                                    const wxString& aLibraryName )
 {
+    // Every way of writing a footprint into a library comes through here, so a released one is refused here
+    if( RefuseReleasedChange( LIB_ID( aLibraryName, aFootprint->GetFPID().GetLibItemName() ) ) )
+        return false;
+
     try
     {
         aFootprint->SetFPID( LIB_ID( wxEmptyString, aFootprint->GetFPID().GetLibItemName() ) );
@@ -886,6 +987,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( FOOTPRINT* aFootprint,
 
         if( aFootprint == GetBoard()->GetFirstFootprint() )
             setFPWatcher( aFootprint );
+
+        if( std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( aLibraryName ) )
+            MdwWarnLocalSave( this, MDW_LIBRARY_TYPE::FOOTPRINT, **row );
 
         return true;
     }
@@ -1185,6 +1289,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 
                     if( footprintExists )
                     {
+                        if( RefuseReleasedChange( LIB_ID( newLib, newName ) ) )
+                            return false;
+
                         wxString msg = wxString::Format( _( "Footprint %s already exists in %s." ),
                                                          newName,
                                                          newLib );
@@ -1244,6 +1351,10 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
     SetStatusText( msg );
     RenameFootprintTab( old_FPID, aFootprint->GetFPID() );
     ReCreateHToolbar();
+
+    // Later saves check the new library's file against what this one wrote
+    if( aFootprint == GetBoard()->GetFirstFootprint() )
+        setLoadBaseline( *aFootprint );
 
     return true;
 }

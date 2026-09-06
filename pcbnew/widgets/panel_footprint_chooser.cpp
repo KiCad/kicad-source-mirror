@@ -21,6 +21,8 @@
 
 #include <widgets/panel_footprint_chooser.h>
 #include <algorithm>
+#include <memory>
+#include <optional>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
 #include <wx/display.h>
@@ -29,6 +31,7 @@
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/timer.h>
+#include <wx/utils.h>
 #include <wx/wxhtml.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
@@ -36,6 +39,7 @@
 #include <footprint_library_adapter.h>
 #include <settings/settings_manager.h>
 #include <widgets/lib_tree.h>
+#include <widgets/wx_progress_reporters.h>
 #include <widgets/footprint_preview_widget.h>
 #include <footprint.h>
 #include <project_pcb.h>
@@ -67,7 +71,36 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     // Ensure libraries are loaded before building the tree. This is necessary when the footprint
     // chooser is opened from contexts that don't preload libraries (e.g., from Eeschema).
     footprints->AsyncLoad();
-    footprints->BlockUntilLoaded();
+
+    bool waited = true;
+
+    {
+        std::unique_ptr<WX_PROGRESS_REPORTER> progress;
+        std::optional<float>                  fraction;
+
+        while( ( fraction = footprints->AsyncLoadProgress() ) && *fraction < 1 )
+        {
+            // The dialog only appears when the load is still running
+            if( !progress )
+                progress = std::make_unique<WX_PROGRESS_REPORTER>( aFrame, _( "Loading Footprint Libraries" ), 1,
+                                                                    PR_CAN_ABORT );
+
+            progress->SetCurrentProgress( *fraction );
+
+            // The load can be a preload the whole process shares, so Cancel only stops this wait for it
+            if( !progress->KeepRefreshing() )
+            {
+                waited = false;
+                break;
+            }
+
+            wxMilliSleep( 50 );
+        }
+    }
+
+    if( waited )
+        footprints->BlockUntilLoaded();
+
     footprints->RefreshChangedLibraries();
 
     m_adapter = FP_TREE_MODEL_ADAPTER::Create( aFrame, footprints );

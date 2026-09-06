@@ -20,6 +20,7 @@
  */
 
 #include <pgm_base.h>
+#include <libraries/library_preload_gate.h>
 #include <eda_pattern_match.h>
 #include <background_jobs_monitor.h>
 #include <cli_progress_reporter.h>
@@ -85,6 +86,8 @@
 #include <wildcards_and_files_ext.h>
 #include "pcbnew_jobs_handler.h"
 #include <diff_merge/diff_doc_kind.h>
+#include <diff_merge/fp_digest.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <reporter.h>
 #include "git/kigit_pcb_merge.h"
 #include "git/kigit_fp_merge.h"
@@ -299,6 +302,41 @@ static float footprintLibraryLoadProgress()
         return *progress;
 
     return 1.0f;
+}
+
+
+/**
+ * The footprints placed on the board saved at aFile, read as Release Design checks them, as a JSON array of
+ * objects with reference, lib_id and digest. Nothing when the board does not load.
+ */
+static std::optional<std::string> PcbCollectPlacedParts( const wxString& aFile, PROJECT& aProject,
+                                                         PROGRESS_REPORTER* aReporter )
+{
+    std::unique_ptr<BOARD> board;
+
+    try
+    {
+        board = PCB_IO_MGR::Load( PCB_IO_MGR::KICAD_SEXP, aFile, nullptr, &aProject, aReporter );
+    }
+    catch( ... )
+    {
+        // A malformed file can throw more than IO_ERROR, which must not reach Release Design's UI thread
+        return std::nullopt;
+    }
+
+    if( !board )
+        return std::nullopt;
+
+    nlohmann::json parts = nlohmann::json::array();
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        parts.push_back( { { "reference", footprint->GetReference().utf8_string() },
+                           { "lib_id", footprint->GetFPID().Format().wx_str().utf8_string() },
+                           { "digest", KICAD_DIFF::FootprintDigest( *footprint ).utf8_string() } } );
+    }
+
+    return parts.dump();
 }
 
 
@@ -654,6 +692,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case KIFACE_ATTACH_DIFF_CANVASES:
             return KifaceServiceAddress<KIFACE_ATTACH_DIFF_CANVASES_SERVICE>( &pcbnewAttachDiffCanvasesExport );
 
+        case KIFACE_COLLECT_PLACED_PARTS:
+            return KifaceServiceAddress<KIFACE_COLLECT_PLACED_PARTS_SERVICE>( &PcbCollectPlacedParts );
+
         default:
             return nullptr;
         }
@@ -703,7 +744,7 @@ private:
     std::unique_ptr<PCBNEW_JOBS_HANDLER> m_jobHandler;
     std::shared_ptr<BACKGROUND_JOB>      m_libraryPreloadBackgroundJob;
     std::future<void>                    m_libraryPreloadReturn;
-    std::atomic_bool                     m_libraryPreloadInProgress;
+    LIBRARY_PRELOAD_GATE                 m_libraryPreloadGate;
     std::atomic_bool                     m_libraryPreloadAbort;
 
     void closeBoard( KICAD_API_SERVER* aServer );
@@ -1361,12 +1402,11 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 {
     wxCHECK( aKiway, /* void */ );
 
-    // Use compare_exchange to atomically check and set the flag to prevent race conditions
-    // when PreloadLibraries is called multiple times concurrently (e.g., from project manager
-    // and pcb editor both scheduling via CallAfter)
-    bool expected = false;
+    if( !aKiway->IsLibraryPreloadWanted( KIWAY::FACE_PCB ) )
+        return;
 
-    if( !m_libraryPreloadInProgress.compare_exchange_strong( expected, true ) )
+    // A request while a preload runs makes it load again, so rows added since it started still load
+    if( !m_libraryPreloadGate.Enter() )
         return;
 
     Pgm().ClearLibraryLoadMessages();
@@ -1382,37 +1422,47 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
             FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &aKiway->Prj() );
 
-            reporter->Report( _( "Loading Footprint Libraries" ) );
-            bool aborted = !adapter->RunPreload( *reporter, m_libraryPreloadAbort );
+            bool aborted = false;
 
-            // If aborted, skip operations that use the adapter since the project may have changed
-            // and the adapter's project reference could be stale. This prevents use-after-free
-            // crashes when switching projects during library preload.
-            if( !aborted )
+            auto finish =
+                    [&]()
+                    {
+                        // If aborted, skip operations that use the adapter since the project may have changed
+                        // and the adapter's project reference could be stale. This prevents use-after-free
+                        // crashes when switching projects during library preload.
+                        if( !aborted )
+                        {
+                            // Report library load errors from adapter
+                            Pgm().AddLibraryLoadMessages( adapter->GetLibraryLoadErrors() );
+                        }
+                        else
+                        {
+                            wxLogTrace( traceLibraries,
+                                        "pcbnew PreloadLibraries: aborted, skipping footprint processing" );
+                        }
+
+                        Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+                        m_libraryPreloadBackgroundJob.reset();
+
+                        // Only send reload notifications if we weren't aborted
+                        if( !aborted )
+                        {
+                            std::string payload = "";
+                            aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+                            aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+                            aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload, nullptr, true );
+                        }
+
+                        // A cancel that came after the loop left the flag set, and it would end the next preload
+                        // at once
+                        m_libraryPreloadAbort.store( false );
+                    };
+
+            do
             {
-                // Report library load errors from adapter
-                Pgm().AddLibraryLoadMessages( adapter->GetLibraryLoadErrors() );
-            }
-            else
-            {
-                wxLogTrace( traceLibraries, "pcbnew PreloadLibraries: aborted, skipping footprint processing" );
-            }
-
-            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
-            m_libraryPreloadBackgroundJob.reset();
-
-            // Only send reload notifications if we weren't aborted
-            if( !aborted )
-            {
-                std::string payload = "";
-                aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
-                aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
-                aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload, nullptr, true );
-            }
-
-            // A cancel that came after the loop left the flag set, and it would end the next preload at once
-            m_libraryPreloadAbort.store( false );
-            m_libraryPreloadInProgress.store( false );
+                reporter->Report( _( "Loading Footprint Libraries" ) );
+                aborted = !adapter->RunPreload( *reporter, m_libraryPreloadAbort );
+            } while( m_libraryPreloadGate.Again( aborted, finish ) );
         };
 
     std::future<void> preloadFuture = std::async( std::launch::async, preload );
@@ -1422,14 +1472,14 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
 void IFACE::ProjectChanged()
 {
-    if( m_libraryPreloadInProgress.load() )
+    if( m_libraryPreloadGate.IsRunning() )
         m_libraryPreloadAbort.store( true );
 }
 
 
 void IFACE::CancelPreload( bool aBlock )
 {
-    if( m_libraryPreloadInProgress.load() )
+    if( m_libraryPreloadGate.IsRunning() )
     {
         m_libraryPreloadAbort.store( true );
 

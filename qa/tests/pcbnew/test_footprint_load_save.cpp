@@ -26,8 +26,11 @@
 #include <kiid.h>
 #include <footprint.h>
 #include <board_design_settings.h>
+#include <embedded_files.h>
+#include <font/font.h>
 #include <pcb_field.h>
 #include <pcb_text.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <settings/settings_manager.h>
@@ -214,4 +217,49 @@ BOOST_AUTO_TEST_CASE( LegacyFootprintPropertyTakesBoardDefaults )
 
     // Saving upgrades the file, so the roundtrip also covers the field once it has its own effects
     KI_TEST::LoadAndTestBoardFile( "custom_fields", true, doBoardTest );
+}
+
+
+// A font that exists only as embedded data is drawn from its extracted copy, named after its hash, and saving
+// the footprint must not embed it a second time under that name
+BOOST_AUTO_TEST_CASE( FootprintEmbedsAnExtractedFontOnce )
+{
+    wxFileName root( wxString::FromUTF8( KI_TEST::GetTestDataRootDir() ), wxEmptyString );
+    root.RemoveLastDir();
+    root.RemoveLastDir();
+
+    wxFileName resistors( root.GetPath(), wxEmptyString );
+    resistors.AppendDir( wxS( "qa" ) );
+    resistors.AppendDir( wxS( "data" ) );
+    resistors.AppendDir( wxS( "libraries" ) );
+    resistors.AppendDir( wxS( "Resistor_SMD.pretty" ) );
+
+    // A face nothing else in this process loads, so the font cache cannot supply its original file
+    wxFileName font( root.GetPath(), wxS( "KiCadOrCADElephant-Black.ttf" ) );
+    font.AppendDir( wxS( "thirdparty" ) );
+    font.AppendDir( wxS( "libwmf" ) );
+    font.AppendDir( wxS( "fonts" ) );
+
+    PCB_IO_KICAD_SEXPR         io;
+    std::unique_ptr<FOOTPRINT> footprint( io.FootprintLoad( resistors.GetPath(), wxS( "R_0603_1608Metric" ) ) );
+    BOOST_REQUIRE( footprint );
+
+    EMBEDDED_FILES* files = footprint->GetEmbeddedFiles();
+    BOOST_REQUIRE( files->AddFile( font, false ) );
+    files->SetAreFontsEmbedded( true );
+
+    // As a load does, the face is found only in the extracted copy
+    footprint->Reference().SetFont(
+            KIFONT::FONT::GetFont( wxS( "KiCad OrCAD Elephant" ), false, false, files->UpdateFontFiles() ) );
+    BOOST_REQUIRE( footprint->Reference().GetFont()->IsOutline() );
+
+    KI_TEST::SCOPED_TEMP_DIR dir( "kicad_qa_extracted_font" );
+    const wxString           library = wxString::FromUTF8( ( dir.Path() / "fonts.pretty" ).string() );
+
+    io.CreateLibrary( library );
+    io.FootprintSave( library, footprint.get() );
+
+    std::unique_ptr<FOOTPRINT> saved( io.FootprintLoad( library, wxS( "R_0603_1608Metric" ) ) );
+    BOOST_REQUIRE( saved );
+    BOOST_CHECK_EQUAL( saved->GetEmbeddedFiles()->EmbeddedFileMap().size(), 1 );
 }

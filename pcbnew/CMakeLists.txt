@@ -601,6 +601,7 @@ set( PCBNEW_GIT_SRCS
 set( PCBNEW_DIFF_MERGE_SRCS
     diff_merge/pcb_differ.cpp
     diff_merge/pcb_merge_applier.cpp
+    diff_merge/fp_digest.cpp
     diff_merge/fp_lib_differ.cpp
     diff_merge/pcb_geometry_extractor.cpp
     diff_merge/pcb_diff_canvas_context.cpp

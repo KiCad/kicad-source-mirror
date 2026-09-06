@@ -46,6 +46,9 @@
 #include <trace_helpers.h>
 #include <length_delay_calculation/length_delay_calculation.h>
 #include <lockfile.h>
+#include <mdw/client/mdw_client.h>
+#include <mdw/client/mdw_library_sources.h>
+#include <widgets/mdw_library_notice.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <pcbnew_id.h>
 #include <wildcards_and_files_ext.h>
@@ -57,6 +60,7 @@
 #include <kiplatform/app.h>
 #include <kiplatform/ui.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/mdw_save_prompt.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_progress_reporters.h>
 #include <settings/settings_manager.h>
@@ -413,7 +417,16 @@ bool PCB_EDIT_FRAME::SaveBoard( bool aSaveAs, bool aSaveCopy )
     {
         if( aSaveCopy )
         {
-            success = SavePcbCopy( EnsureFileExtension( filename, FILEEXT::KiCadPcbFileExtension ), createProject );
+            wxString copyPath = EnsureFileExtension( filename, FILEEXT::KiCadPcbFileExtension );
+
+            // A copy written over a checked-out file replaces that working copy just the same
+            if( !MdwConfirmSave( this, GetInfoBar(), Prj(), copyPath ) )
+                return false;
+
+            success = SavePcbCopy( copyPath, createProject );
+
+            if( success )
+                MDW_CLIENT::Get().NoteSaved( Prj(), copyPath );
         }
         else
         {
@@ -1042,6 +1055,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // A standalone editor has no project manager to attach the git session for it.
     RefreshGitCommitPane();
 
+    UpdateWorkspacePill();
+    ShowTeamLibraryNotice( this, Prj() );
     return true;
 }
 
@@ -1054,6 +1069,14 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     if( pcbFileName.GetExt() == FILEEXT::LegacyPcbFileExtension )
         pcbFileName.SetExt( FILEEXT::KiCadPcbFileExtension );
+
+    // The binding is keyed by the path the user saved to, so check before resolving
+    const wxString logicalPath = pcbFileName.GetFullPath();
+
+    // A board checked out from a workspace may be in a state the backend will
+    // refuse, so warn before the local write rather than after the failed push
+    if( !MdwConfirmSave( this, GetInfoBar(), Prj(), logicalPath ) )
+        return false;
 
     // Write through symlinks, don't replace them
     WX_FILENAME::ResolvePossibleSymlinks( pcbFileName );
@@ -1077,6 +1100,19 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     if( projectFile.FileExists() )
     {
+        // The project records a team library source once its design uses one
+        if( MDW_LIBRARY_SOURCES::TeamLibrariesEnabled() )
+        {
+            std::set<wxString> nicknames;
+
+            for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+                nicknames.insert( footprint->GetFPID().GetLibNickname().wx_str() );
+
+            MDW_LIBRARY_SOURCES::Record( Prj().GetProjectFile().m_WorkspaceLibrarySources,
+                                         MDW_LIBRARY_SOURCES::RequirementsFor( nicknames, Pgm().GetLibraryManager(),
+                                                                               MDW_LIBRARY_TYPE::FOOTPRINT ) );
+        }
+
         GetSettingsManager()->SaveProject();
     }
     else if( aChangeProject )
@@ -1184,6 +1220,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     m_autoSavePending = false;
     m_autoSaveRequired = false;
 
+    MDW_CLIENT::Get().NoteSaved( Prj(), logicalPath );
     RefreshGitCommitPane();
 
     return true;

@@ -21,6 +21,7 @@
 
 #include <pgm_base.h>
 #include <kiplatform/ui.h>
+#include <mdw/client/mdw_library.h>
 #include <project/project_file.h>
 #include <fp_tree_synchronizing_adapter.h>
 #include <footprint_edit_frame.h>
@@ -148,7 +149,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
         for( FOOTPRINT* fp : footprints )
             treeItems.push_back( fp );
 
-        DoAddLibrary( libName, ( *optRow )->Description(), treeItems, pinned, true );
+        RefreshLifecycle( DoAddLibrary( libName, ( *optRow )->Description(), treeItems, pinned, true ) );
         m_libMap.insert( libName );
     }
 
@@ -200,8 +201,15 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNo
     for( auto& [name, fp] : fpMap )
         aLibNode.AddItem( fp );
 
+    RefreshLifecycle( aLibNode );
     aLibNode.AssignIntrinsicRanks( m_shownColumns );
     m_libMap.insert( aLibNode.m_Name );
+}
+
+
+bool FP_TREE_SYNCHRONIZING_ADAPTER::isModified( const LIB_TREE_NODE& aNode ) const
+{
+    return aNode.m_Type == LIB_TREE_NODE::TYPE::ITEM && m_frame->IsFootprintModified( aNode.m_LibId );
 }
 
 
@@ -210,6 +218,8 @@ FP_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( std::vector<std::unique_ptr<LIB_TR
 {
     LIB_TREE_NODE* node = aLibNodeIt->get();
     m_libMap.erase( node->m_Name );
+    m_lifecycleLibs.erase( node->m_Name );
+    m_teamLibs.erase( node->m_Name );
     return m_tree.m_Children.erase( aLibNodeIt );
 }
 
@@ -237,9 +247,10 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         return;
     }
 
-    switch( aCol )
-    {
-    case NAME_COL:
+    auto header = m_colIdxMap.find( aCol );
+
+    // Columns follow the user's choice, so Description is found by its header and not its position
+    if( aCol == NAME_COL )
     {
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
@@ -261,11 +272,8 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         {
             aVariant = node->m_Name;
         }
-
-        break;
     }
-
-    case DESC_COL:
+    else if( header != m_colIdxMap.end() && header->second == wxT( "Description" ) )
     {
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
@@ -284,12 +292,15 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         descStr.Replace( wxS( "\n" ), wxS( " " ) ); // Clear line breaks
 
         aVariant = descStr;
-        break;
     }
-
-    default: // column == -1 is used for default Compare function
+    else if( header != m_colIdxMap.end() )
+    {
+        LIB_TREE_MODEL_ADAPTER::GetValue( aVariant, aItem, aCol );
+    }
+    else
+    {
+        // column == -1 is used for default Compare function
         aVariant = node->m_Name;
-        break;
     }
 }
 

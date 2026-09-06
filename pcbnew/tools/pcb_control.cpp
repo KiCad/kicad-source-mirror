@@ -2449,6 +2449,13 @@ int PCB_CONTROL::Undo( const TOOL_EVENT& aEvent )
     PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame );
     wxCommandEvent       dummy;
 
+    // Undo restores items without a commit, so it would get past a read-only footprint
+    if( editFrame && editFrame->IsContentReadOnly() )
+    {
+        wxBell();
+        return 0;
+    }
+
     if( editFrame )
         editFrame->RestoreCopyFromUndoList( dummy );
 
@@ -2460,6 +2467,13 @@ int PCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame );
     wxCommandEvent       dummy;
+
+    // Undo restores items without a commit, so it would get past a read-only footprint
+    if( editFrame && editFrame->IsContentReadOnly() )
+    {
+        wxBell();
+        return 0;
+    }
 
     if( editFrame )
         editFrame->RestoreCopyFromRedoList( dummy );

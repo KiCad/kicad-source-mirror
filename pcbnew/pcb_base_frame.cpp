@@ -1208,6 +1208,17 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
         return;
     }
 
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+
+    // The reload below aborts a running library load, which would drop the libraries it had not reached
+    if( std::optional<float> progress = adapter ? adapter->AsyncLoadProgress() : std::nullopt;
+        progress && *progress < 1 )
+    {
+        wxLogTrace( traceLibWatch, "Library load in progress; restarting debounce timer" );
+        m_watcherDebounceTimer.StartOnce( 1000 );
+        return;
+    }
+
     wxLogTrace( traceLibWatch, "OnFpChangeDebounceTimer" );
 
     wxDateTime lastModified;
@@ -1224,7 +1235,6 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
     m_watcherLastModified = lastModified;
 
     FOOTPRINT* fp = GetBoard()->GetFirstFootprint();
-    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
     // When loading a footprint from a library in the footprint editor
     // the items UUIDs must be keep and not reinitialized
@@ -1244,6 +1254,11 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
 
         try
         {
+            // The preloaded copy may predate this change, and a same-second rewrite keeps its timestamp
+            // Reload only the row in effect, since a shadowed global library shares its preload cache
+            if( std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( nickname ) )
+                adapter->ReloadLibraryEntry( nickname, ( *row )->Scope() );
+
             FOOTPRINT* newfp = adapter->LoadFootprint( nickname, fpname, keepUUID );
 
             if( newfp )

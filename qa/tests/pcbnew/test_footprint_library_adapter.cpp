@@ -22,12 +22,15 @@
 #include <fstream>
 #include <algorithm>
 #include <iterator>
+#include <map>
 #include <memory>
 #include <set>
 #include <thread>
 #include <vector>
 
+#include <qa_utils/env_var_utils.h>
 #include <qa_utils/file_utils.h>
+#include <qa_utils/scoped_global_lib_table.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
@@ -40,6 +43,11 @@
 #include <pad.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <project.h>
+#include <pgm_base.h>
+#include <scoped_set_reset.h>
+#include <settings/kicad_settings.h>
+#include <settings/settings_manager.h>
 
 
 namespace
@@ -65,18 +73,29 @@ public:
      * write instead of bailing out as "not loaded".  The row is owned here to outlive the
      * adapter's use of it.
      */
-    void SeedLoadedLibrary( const wxString& aNickname, const wxString& aUri )
+    LIB_DATA& SeedLoadedLibrary( const wxString& aNickname, const wxString& aUri,
+                                 LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::PROJECT )
     {
         LIBRARY_TABLE_ROW* row = m_rows.emplace_back( std::make_unique<LIBRARY_TABLE_ROW>() ).get();
         row->SetNickname( aNickname );
         row->SetType( wxS( "KiCad" ) );
         row->SetURI( aUri );
+        row->SetScope( aScope );
 
-        LIB_DATA& data = m_libraries[aNickname];
+        bool      global = aScope == LIBRARY_TABLE_SCOPE::GLOBAL;
+        LIB_DATA& data = global ? globalLibs()[aNickname] : m_libraries[aNickname];
         data.status.load_status = LOAD_STATUS::LOADED;
         data.plugin = std::make_unique<PCB_IO_KICAD_SEXPR>();
         data.row = row;
+
+        // Evicted from the process-wide map by the destructor
+        if( global )
+            data.global_owner = this;
+
+        return data;
     }
+
+    const LIB_DATA* Loaded( const wxString& aNickname ) { return fetchIfLoaded( aNickname ).value_or( nullptr ); }
 
 private:
     std::vector<std::unique_ptr<LIBRARY_TABLE_ROW>> m_rows;
@@ -91,6 +110,16 @@ wxString getResistorLibPath()
     fn.RemoveLastDir();
     fn.AppendDir( wxS( "libraries" ) );
     fn.AppendDir( wxS( "Resistor_SMD.pretty" ) );
+    return fn.GetPath();
+}
+
+
+/// Absolute path to qa/data/libraries/Lifecycle_SMD.pretty, whose R_0402_1005Metric adds a Lifecycle field
+wxString getLifecycleLibPath()
+{
+    wxFileName fn( getResistorLibPath(), wxEmptyString );
+    fn.RemoveLastDir();
+    fn.AppendDir( wxS( "Lifecycle_SMD.pretty" ) );
     return fn.GetPath();
 }
 
@@ -593,5 +622,288 @@ BOOST_AUTO_TEST_CASE( SaveKeepsUserFieldUuids )
     BOOST_CHECK_EQUAL( saved->GetField( wxS( "Lifecycle" ) )->m_Uuid.AsString(), uuid.AsString() );
 }
 
+
+/**
+ * Adding one row to the global table must not reload every global library on the UI thread
+ */
+BOOST_AUTO_TEST_CASE( GlobalTableReloadKeepsUnchangedLibraries )
+{
+    KI_TEST::SCOPED_TEMP_DIR    tmpTable( "kicad_qa_global_reload" );
+    const std::filesystem::path tablePath = tmpTable.Path() / "fp-lib-table";
+    const wxString              libPath = getResistorLibPath();
+    const wxString              otherPath =
+            wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() ) + wxS( "plugins/kicad_sexpr/fp.pretty" );
+
+    // The QA global fp-lib-table nests the table this variable names
+    KI_TEST::SCOPED_PROCESS_ENV_VAR nested( wxS( "KICAD_QA_NESTED_FP_LIB_TABLE" ), wxString( tablePath.string() ) );
+    KI_TEST::SCOPED_PROCESS_ENV_VAR libDir( wxS( "KICAD_QA_RELOAD_FP_DIR" ), libPath );
+
+    std::vector<std::pair<wxString, wxString>> libs = { { wxS( "Kept" ), libPath },
+                                                        { wxS( "Edited" ), libPath },
+                                                        { wxS( "Moved" ), wxS( "${KICAD_QA_RELOAD_FP_DIR}" ) },
+                                                        { wxS( "Deleted" ), libPath } };
+
+    KI_TEST::SCOPED_GLOBAL_LIB_TABLE globalTable( LIBRARY_TABLE_TYPE::FOOTPRINT );
+
+    // Scoped to a project so the load skips PCM upkeep, which needs settings this suite does not register
+    PROJECT         project;
+    LIBRARY_MANAGER manager( &project );
+
+    manager.RegisterAdapter( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                             std::make_unique<TEST_FOOTPRINT_LIBRARY_ADAPTER>( manager ) );
+
+    TEST_FOOTPRINT_LIBRARY_ADAPTER& adapter =
+            *static_cast<TEST_FOOTPRINT_LIBRARY_ADAPTER*>( *manager.Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT ) );
+
+    std::ofstream( tablePath ) << "(fp_lib_table (version 7))\n";
+    manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+
+    LIBRARY_TABLE& global = *manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL ).value();
+
+    for( const auto& [name, uri] : libs )
+    {
+        LIBRARY_TABLE_ROW& row = global.InsertRow();
+        row.SetNickname( name );
+        row.SetType( wxS( "KiCad" ) );
+        row.SetURI( uri );
+    }
+
+    adapter.AsyncLoad();
+    adapter.BlockUntilLoaded();
+
+    std::map<wxString, const IO_BASE*> before;
+
+    for( const auto& [name, uri] : libs )
+    {
+        const LIB_DATA* lib = adapter.Loaded( name );
+        BOOST_REQUIRE( lib );
+        before[name] = lib->plugin.get();
+    }
+
+    // Edited as the dialog does, which assigns over the manager's table before the reload
+    LIBRARY_TABLE edited = global;
+    edited.Rows().pop_back();
+    ( *edited.Row( wxS( "Edited" ) ) )->SetURI( otherPath );
+    global = edited;
+
+    KI_TEST::SCOPED_PROCESS_ENV_VAR movedDir( wxS( "KICAD_QA_RELOAD_FP_DIR" ), otherPath );
+
+    // The shared QA global table only nests ours, so the saved rows go there
+    {
+        std::ofstream table( tablePath );
+        table << "(fp_lib_table\n  (version 7)\n";
+
+        for( const LIBRARY_TABLE_ROW& row : edited.Rows() )
+        {
+            if( before.contains( row.Nickname() ) )
+                table << "  (lib (name \"" << row.Nickname() << "\")(type \"KiCad\")(uri \"" << row.URI() << "\"))\n";
+        }
+
+        table << ")\n";
+    }
+
+    manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+
+    const LIB_DATA* kept = adapter.Loaded( wxS( "Kept" ) );
+    BOOST_CHECK( kept && kept->plugin.get() == before[wxS( "Kept" )] && kept->row == *adapter.GetRow( wxS( "Kept" ) ) );
+    BOOST_CHECK( !adapter.Loaded( wxS( "Edited" ) ) );
+    BOOST_CHECK( !adapter.Loaded( wxS( "Moved" ) ) );
+}
+
+
+/**
+ * A library dialog reloads a global table changed on disk, which must not drop the libraries already loaded
+ */
+BOOST_AUTO_TEST_CASE( ChangedGlobalTableReloadKeepsLoadedLibraries )
+{
+    if( !wxGetEnv( wxT( "KICAD_CONFIG_HOME_IS_QA" ), nullptr ) )
+    {
+        BOOST_TEST_MESSAGE( "QA test is running using unknown config home; skipping" );
+        return;
+    }
+
+    KI_TEST::SCOPED_TEMP_DIR    tmpTable( "kicad_qa_changed_global" );
+    const std::filesystem::path tablePath = tmpTable.Path() / "fp-lib-table";
+
+    KI_TEST::SCOPED_PROCESS_ENV_VAR  nested( wxS( "KICAD_QA_NESTED_FP_LIB_TABLE" ), wxString( tablePath.string() ) );
+    KI_TEST::SCOPED_GLOBAL_LIB_TABLE globalTable( LIBRARY_TABLE_TYPE::FOOTPRINT );
+
+    std::ofstream( tablePath ) << "(fp_lib_table (version 7)\n  (lib (name \"Kept\")(type \"KiCad\")(uri \""
+                               << getResistorLibPath().ToStdString() << "\")))\n";
+
+    // Scoped to a project so the load skips PCM upkeep, which needs settings this suite does not register
+    PROJECT         project;
+    LIBRARY_MANAGER manager( &project );
+
+    manager.RegisterAdapter( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                             std::make_unique<TEST_FOOTPRINT_LIBRARY_ADAPTER>( manager ) );
+
+    TEST_FOOTPRINT_LIBRARY_ADAPTER& adapter =
+            *static_cast<TEST_FOOTPRINT_LIBRARY_ADAPTER*>( *manager.Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT ) );
+
+    manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+    adapter.AsyncLoad();
+    adapter.BlockUntilLoaded();
+
+    const LIB_DATA* before = adapter.Loaded( wxS( "Kept" ) );
+    BOOST_REQUIRE( before );
+    const IO_BASE* plugin = before->plugin.get();
+
+    struct RESTORE
+    {
+        std::filesystem::path path;
+        std::string           bytes;
+
+        ~RESTORE() { std::ofstream( path, std::ios::binary ) << bytes; }
+    };
+
+    // The table is compared by content, so another instance's save is any change of bytes
+    const std::filesystem::path globalPath(
+            LIBRARY_MANAGER::DefaultGlobalTablePath( LIBRARY_TABLE_TYPE::FOOTPRINT ).ToStdString() );
+    std::ifstream in( globalPath, std::ios::binary );
+    RESTORE       restore{ globalPath, std::string( std::istreambuf_iterator<char>( in ), {} ) };
+    in.close();
+    std::ofstream( globalPath, std::ios::binary ) << restore.bytes << "\n";
+    BOOST_REQUIRE( manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL ).value()->DiskChanged() );
+
+    manager.ReloadChangedTables( LIBRARY_TABLE_TYPE::FOOTPRINT );
+
+    const LIB_DATA* kept = adapter.Loaded( wxS( "Kept" ) );
+    BOOST_CHECK( kept && kept->plugin.get() == plugin );
+}
+
+
+/*
+ * An aborted library load stops between footprint files, so quitting during a preload need not wait on it
+ */
+BOOST_AUTO_TEST_CASE( CancelledLoadIsNotCached )
+{
+    IO_RELEASER<PCB_IO> plugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
+    const wxString      lib = getResistorLibPath();
+    wxArrayString       names;
+
+    plugin->CancelLoad();
+    BOOST_CHECK_THROW( plugin->FootprintEnumerate( names, lib, false ), IO_ERROR );
+    BOOST_CHECK( names.empty() );
+
+    plugin->ResumeLoad();
+    plugin->FootprintEnumerate( names, lib, false );
+    BOOST_CHECK_EQUAL( names.size(), 6 );
+}
+
+
+/**
+ * A project library shadowing a global one of the same nickname keeps its own preloaded footprints, or
+ * whichever scope was enumerated last is served for both
+ */
+BOOST_AUTO_TEST_CASE( ShadowedGlobalLibraryKeepsItsOwnPreloadedFootprints )
+{
+    const wxString  nickname = wxS( "ShadowCheck" );
+    const wxString  fpName = wxS( "R_0402_1005Metric" );
+    LIBRARY_MANAGER manager;
+
+    TEST_FOOTPRINT_LIBRARY_ADAPTER adapter( manager );
+    adapter.LoadOne( &adapter.SeedLoadedLibrary( nickname, getResistorLibPath(), LIBRARY_TABLE_SCOPE::GLOBAL ) );
+    adapter.LoadOne( &adapter.SeedLoadedLibrary( nickname, getLifecycleLibPath() ) );
+
+    auto servesProjectCopy =
+            [&]()
+            {
+                std::unique_ptr<FOOTPRINT> fp( adapter.LoadFootprint( nickname, fpName, false ) );
+                BOOST_REQUIRE( fp );
+                return fp->HasField( wxS( "Lifecycle" ) );
+            };
+
+    BOOST_CHECK( servesProjectCopy() );
+
+    // Switching to a project without the library leaves the global one already loaded
+    adapter.ProjectChanged();
+    adapter.ProjectTablesReloaded( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+
+    BOOST_CHECK( !servesProjectCopy() );
+}
+
+
+/**
+ * A global row that resolves per project loads again on a project switch, or the next project is served
+ * the last project's footprints
+ */
+BOOST_AUTO_TEST_CASE( GlobalProjectRelativeLibraryReloadsForNewProject )
+{
+    KI_TEST::SCOPED_TEMP_DIR    projA( "kicad_qa_kiprjmod_a" );
+    KI_TEST::SCOPED_TEMP_DIR    projB( "kicad_qa_kiprjmod_b" );
+    KI_TEST::SCOPED_TEMP_DIR    byName( "kicad_qa_projectname_libs" );
+    const std::string           fpFile = "R_0402_1005Metric.kicad_mod";
+    const std::filesystem::path libs = std::filesystem::path( getResistorLibPath().ToStdString() ).parent_path();
+
+    for( const auto& [proj, name, source] :
+         { std::tuple( &projA, "a", "Resistor_SMD.pretty" ), std::tuple( &projB, "b", "Lifecycle_SMD.pretty" ) } )
+    {
+        std::filesystem::copy_file( libs / source / fpFile, proj->CreateChildDir( "lib.pretty" ) / fpFile );
+        std::filesystem::copy_file( libs / source / fpFile,
+                                    byName.CreateChildDir( wxString( name ) + wxS( ".pretty" ) ) / fpFile );
+    }
+
+    // One row moves with ${KIPRJMOD}, the other with the ${PROJECTNAME} text variable
+    const std::map<wxString, wxString> rows = { { wxS( "KiprjmodCheck" ), wxS( "${KIPRJMOD}/lib.pretty" ) },
+                                                { wxS( "TextVarCheck" ),
+                                                  byName.PathStr() + wxS( "/${PROJECTNAME}.pretty" ) } };
+
+    KI_TEST::SCOPED_GLOBAL_LIB_TABLE globalTable( LIBRARY_TABLE_TYPE::FOOTPRINT );
+
+    LIBRARY_MANAGER manager;
+
+    // Only these rows in the in-memory global table, which is never saved, and no PCM pass that could save it
+    KICAD_SETTINGS*        kicadSettings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>( "kicad" );
+    SCOPED_SET_RESET<bool> noPcmAdd( kicadSettings->m_PcmLibAutoAdd, false );
+    SCOPED_SET_RESET<bool> noPcmRemove( kicadSettings->m_PcmLibAutoRemove, false );
+
+    manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+    LIBRARY_TABLE* global = manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT, LIBRARY_TABLE_SCOPE::GLOBAL ).value();
+    global->Rows().clear();
+
+    for( const auto& [nickname, uri] : rows )
+    {
+        LIBRARY_TABLE_ROW& row = global->InsertRow();
+        row.SetNickname( nickname );
+        row.SetType( wxS( "KiCad" ) );
+        row.SetURI( uri );
+    }
+
+    manager.RegisterAdapter( LIBRARY_TABLE_TYPE::FOOTPRINT, std::make_unique<FOOTPRINT_LIBRARY_ADAPTER>( manager ) );
+    FOOTPRINT_LIBRARY_ADAPTER& adapter =
+            *static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( *manager.Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT ) );
+
+    // Project B's copy carries the Lifecycle field, project A's does not
+    auto checkServes = [&]( bool aProjectB )
+    {
+        adapter.AsyncLoad();
+        adapter.BlockUntilLoaded();
+
+        for( const auto& [nickname, uri] : rows )
+        {
+            std::unique_ptr<FOOTPRINT> fp( adapter.LoadFootprint( nickname, wxS( "R_0402_1005Metric" ), false ) );
+            BOOST_REQUIRE_MESSAGE( fp, nickname + " served nothing" );
+            BOOST_CHECK_MESSAGE( fp->HasField( wxS( "Lifecycle" ) ) == aProjectB,
+                                 nickname + " served the other project's footprint" );
+        }
+    };
+
+    Pgm().GetSettingsManager().LoadProject( projA.ChildPathStr( wxS( "a.kicad_pro" ) ) );
+    manager.ProjectChanged();
+    checkServes( false );
+
+    // A table edit notifies the same project, which must keep its libraries loaded
+    manager.ProjectChanged();
+
+    for( const auto& [nickname, uri] : rows )
+        BOOST_CHECK_MESSAGE( adapter.IsLibraryLoaded( nickname ), nickname + " unloaded without a project switch" );
+
+    Pgm().GetSettingsManager().LoadProject( projB.ChildPathStr( wxS( "b.kicad_pro" ) ) );
+    manager.ProjectChanged();
+    checkServes( true );
+
+    Pgm().GetSettingsManager().LoadProject( wxEmptyString );
+}
 
 BOOST_AUTO_TEST_SUITE_END()

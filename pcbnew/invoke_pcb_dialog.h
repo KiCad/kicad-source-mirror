@@ -42,3 +42,8 @@ class KIWAY;
  * @param aCaller is the wxWindow which is invoking the dialog.
  */
 void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller );
+
+/**
+ * Preload the footprint libraries after a library table change and have the open footprint frames reload them.
+ */
+void ReloadFootprintLibraries( KIWAY* aKiway );

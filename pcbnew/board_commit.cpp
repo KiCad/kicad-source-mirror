@@ -251,6 +251,21 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     if( Empty() )
         return;
 
+    // Dialogs and the properties panel edit past the tools' checks, so a locked part is put back here. A tool
+    // still holds what it added, so a commit adding anything goes through and the save refuses it instead
+    if( frame && frame->IsContentReadOnly()
+        && std::none_of( m_entries.begin(), m_entries.end(),
+                         []( const COMMIT_LINE& aEntry )
+                         {
+                             return ( aEntry.m_type & CHT_TYPE ) == CHT_ADD;
+                         } ) )
+    {
+        Revert();
+        wxBell();
+        frame->ShowReadOnlyRefusal();
+        return;
+    }
+
     bool containsDrillMap = false;
     bool containsGeneratedTable = false;
 

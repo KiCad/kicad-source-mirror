@@ -240,7 +240,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem, F
     if( aTreeItem.IsOk() )   // Can be not found in tree if the current footprint is imported
                              // from file therefore not yet in tree.
     {
-        static_cast<LIB_TREE_NODE_ITEM*>( aTreeItem.GetID() )->Update( &footprintInfo );
+        m_adapter->UpdateItem( *static_cast<LIB_TREE_NODE_ITEM*>( aTreeItem.GetID() ), &footprintInfo );
         m_treePane->GetLibTree()->RefreshLibTree();
     }
 }
@@ -500,6 +500,7 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     case MAIL_RELOAD_LIB:
         SyncLibraryTree( true );
         RefreshLibraryTree();
+        refreshStaleFootprintTabs();
         break;
 
     default:

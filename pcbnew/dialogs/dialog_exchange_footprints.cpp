@@ -30,6 +30,9 @@
 #include <string_utils.h>
 #include <kiway.h>
 #include <kiway_mail.h>
+#include <diff_merge/fp_digest.h>
+#include <widgets/mdw_member_index.h>
+#include <mdw/client/mdw_lifecycle.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <widgets/wx_html_report_panel.h>
@@ -37,7 +40,9 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 
+#include <algorithm>
 #include <map>
+#include <set>
 #include <ranges>
 
 
@@ -56,6 +61,48 @@ int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
 static wxString formatPadChanges( const PAD_CHANGE_SUMMARY& aChanges )
 {
     return wxString::Format( _( "%d moved, %d added, %d removed" ), aChanges.moved, aChanges.added, aChanges.removed );
+}
+
+
+/// The release change an update makes to a footprint of a team library, empty for any other or no change
+static wxString formatRevisionChange( const LIB_ID& aId, const FOOTPRINT& aPlaced, const FOOTPRINT& aLibrary )
+{
+    const MDW_LIBRARY_LISTING listing =
+            MDW_MEMBER_INDEX::Get().Listing( MDW_LIBRARY_TYPE::FOOTPRINT, aId.GetLibNickname() );
+    const wxString name = aId.GetUniStringLibItemName();
+
+    if( !listing.team )
+        return wxEmptyString;
+
+    if( !listing.members )
+        return _( " [release state not checked yet]" );
+
+    std::optional<MDW_PART_FACTS> library = MdwListedFacts( listing, name, KICAD_DIFF::FootprintDigest( aLibrary ) );
+    std::optional<MDW_PART_FACTS> placed = MdwListedFacts( listing, name, KICAD_DIFF::FootprintDigest( aPlaced ) );
+
+    if( !library || !placed || library->statuses.front() == kiapi::mdw::PPS_UNKNOWN )
+        return wxEmptyString;
+
+    if( library->statuses.front() == kiapi::mdw::PPS_NEVER_RELEASED )
+        return _( " [library copy never released]" );
+
+    if( library->statuses.front() == kiapi::mdw::PPS_DIFFERS )
+        return wxString::Format( _( " [library copy differs from Rev %s]" ), library->latest_revision_label );
+
+    const wxString& to = library->matched_revision_label;
+    wxString        usable;
+
+    if( std::ranges::find( library->statuses, kiapi::mdw::PPS_NOT_USABLE ) != library->statuses.end() )
+        usable = wxS( ", " ) + MdwCategoryName( library->matched_state.category );
+
+    // The old revision is known only when the placed content matches one of the releases
+    if( placed->matched_revision_id.IsEmpty() )
+        return wxString::Format( _( " [now Rev %s%s]" ), to, usable );
+
+    if( placed->matched_revision_label == to )
+        return wxEmptyString;
+
+    return wxString::Format( _( " [Rev %s \u2192 Rev %s%s]" ), placed->matched_revision_label, to, usable );
 }
 
 
@@ -90,6 +137,18 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
                     "or the user made changes to the library footprint and wants to propagate "
                     "them back to the PCB." );
 #endif
+
+    // A listing that has landed by the time Update is pressed names the Rev changes
+    if( m_updateMode )
+    {
+        std::set<wxString> nicknames;
+
+        for( const FOOTPRINT* footprint : m_parent->GetBoard()->Footprints() )
+            nicknames.insert( footprint->GetFPID().GetLibNickname() );
+
+        for( const wxString& nickname : nicknames )
+            MDW_MEMBER_INDEX::Get().Listing( MDW_LIBRARY_TYPE::FOOTPRINT, nickname );
+    }
 
     if( m_updateMode )
         m_changeSizer->Show( false );
@@ -441,6 +500,8 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
     bool shifted = false;
 
     PAD_CHANGE_SUMMARY padChanges = m_updateMode ? ComparePads( *aFootprint, *newFootprint ) : PAD_CHANGE_SUMMARY();
+    wxString           revision =
+            m_updateMode ? formatRevisionChange( oldFPID, *aFootprint, *newFootprint ) : wxString();
 
     m_parent->GetBoard()->ExchangeFootprint( aFootprint, newFootprint, m_commit,
                                              m_parent->GetPcbNewSettings()->m_FlipDirection,
@@ -473,12 +534,12 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
     }
     else if( padChanges.Any() )
     {
-        msg += wxString::Format( _( ": pads changed (%s)" ), formatPadChanges( padChanges ) );
+        msg += wxString::Format( _( ": pads changed (%s)" ), formatPadChanges( padChanges ) ) + revision;
         m_MessageWindow->Report( msg, RPT_SEVERITY_WARNING );
     }
     else
     {
-        msg += _( ": OK" );
+        msg += _( ": OK" ) + revision;
         m_MessageWindow->Report( msg, RPT_SEVERITY_ACTION );
     }
 }

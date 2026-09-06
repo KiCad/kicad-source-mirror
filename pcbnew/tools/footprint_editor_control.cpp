@@ -63,6 +63,7 @@
 #include <project_pcb.h>
 #include <view/view_controls.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/mdw_member_index.h>
 #include <dialogs/dialog_kicad_diff.h>
 #include <diff_merge/fp_lib_differ.h>
 #include <diff_merge/pcb_diff_canvas_context.h>
@@ -144,6 +145,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     ctxMenu.AddItem( ACTIONS::save,                   SELECTION_CONDITIONS::ShowAlways, 10 );
     ctxMenu.AddItem( ACTIONS::saveAs,                 libSelectedCondition || fpSelectedCondition, 10 );
     ctxMenu.AddItem( ACTIONS::revert,                 libSelectedCondition || libInferredCondition, 10 );
+    libraryTreeTool->AddTeamLibraryMenuItems( this, *m_menu, ctxMenu, libSelectedCondition );
 
     ctxMenu.AddSeparator( 10 );
     ctxMenu.AddItem( PCB_ACTIONS::cutFootprint,       fpSelectedCondition, 10 );
@@ -216,6 +218,9 @@ void FOOTPRINT_EDITOR_CONTROL::tryToSaveFootprintInLibrary( FOOTPRINT&    aFootp
             fpid.SetLibNickname( aTargetLib.GetLibNickname() );
             aFootprint.SetFPID( fpid );
 
+            // An empty new footprint is no edit to warn about, so the user's first real save warns instead
+            MDW_SILENT_SAVE silent;
+
             // Clear the modified flag only on a successful save, else the edits are silently
             // lost (issue #23850).
             if( m_frame->SaveFootprint( &aFootprint ) )
@@ -252,6 +257,9 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 
     canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     m_frame->AddFootprintToBoard( newFootprint );
+
+    // No file exists yet, so a baseline would read as a footprint changed on disk
+    m_frame->DiscardLoadBaseline();
 
     // Initialize data relative to nets and netclasses (for a new footprint the defaults are
     // used).  This is mandatory to handle and draw pads.
@@ -519,6 +527,10 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
     }
 
     if( newName == oldName )
+        return 0;
+
+    // Renaming changes a released footprint, and replacing one removes it
+    if( m_frame->RefuseReleasedChange( fpID ) || m_frame->RefuseReleasedChange( LIB_ID( libraryName, newName ) ) )
         return 0;
 
     FOOTPRINT* footprint = nullptr;
@@ -1030,6 +1042,13 @@ void FOOTPRINT_EDITOR_CONTROL::editFootprintPropertiesFromLibrary( const LIB_ID&
     if( !libraryFootprint )
         return;
 
+    // The canvas lock only covers the footprint on screen, not one picked in the tree
+    if( m_frame->RefuseReleasedChange( aLibId ) )
+    {
+        delete libraryFootprint;
+        return;
+    }
+
     // Create a temporary board to hold the footprint (required by the dialog)
     std::unique_ptr<BOARD> tempBoard( new BOARD() );
 
@@ -1064,7 +1083,11 @@ void FOOTPRINT_EDITOR_CONTROL::editFootprintPropertiesFromLibrary( const LIB_ID&
 
     try
     {
-        adapter->SaveFootprint( libName, tempFootprint, true );
+        if( adapter->SaveFootprint( libName, tempFootprint, true ) == FOOTPRINT_LIBRARY_ADAPTER::SAVE_OK )
+        {
+            if( std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( libName ) )
+                MdwWarnLocalSave( m_frame, MDW_LIBRARY_TYPE::FOOTPRINT, **row );
+        }
 
         // Update the tree view
         wxDataViewItem treeItem = m_frame->GetLibTreeAdapter()->FindItem( oldFPID );
@@ -1286,6 +1309,7 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::Save,                 ACTIONS::save.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::SaveAs,               ACTIONS::saveAs.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Revert,               ACTIONS::revert.MakeEvent() );
+
     Go( &FOOTPRINT_EDITOR_CONTROL::DuplicateFootprint,   PCB_ACTIONS::duplicateFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::RenameFootprint,      PCB_ACTIONS::renameFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::DeleteFootprint,      PCB_ACTIONS::deleteFootprint.MakeEvent() );
