@@ -67,8 +67,7 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
 
     m_originalTitle = GetTitle();
     onLazyLoadUpdate();
-    m_chooserPanel->Adapter()->RegisterLazyLoadHandler(
-            std::bind( &DIALOG_SYMBOL_CHOOSER::onLazyLoadUpdate, this ) );
+    m_chooserPanel->Adapter()->RegisterLazyLoadHandler( std::bind( &DIALOG_SYMBOL_CHOOSER::onLazyLoadUpdate, this ) );
 
     wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -111,6 +110,15 @@ DIALOG_SYMBOL_CHOOSER::~DIALOG_SYMBOL_CHOOSER()
 }
 
 
+bool DIALOG_SYMBOL_CHOOSER::TransferDataToWindow()
+{
+    // Regenerate tree after saved search string is loaded by RestoreState().
+    m_chooserPanel->Regenerate();
+
+    return true;
+}
+
+
 LIB_ID DIALOG_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit, int* aBodyStyle ) const
 {
     return m_chooserPanel->GetSelectedLibId( aUnit, aBodyStyle );
@@ -126,7 +134,6 @@ std::vector<std::pair<FIELD_T, wxString>> DIALOG_SYMBOL_CHOOSER::GetFields() con
 
 void DIALOG_SYMBOL_CHOOSER::onLazyLoadUpdate()
 {
-    SetTitle( m_originalTitle + wxString::Format( _( " (%d items loaded)" ),
-                                                  m_chooserPanel->GetItemCount() ) );
+    SetTitle( m_originalTitle + wxString::Format( _( " (%d items loaded)" ), m_chooserPanel->GetItemCount() ) );
     m_chooserPanel->Regenerate();
 }
