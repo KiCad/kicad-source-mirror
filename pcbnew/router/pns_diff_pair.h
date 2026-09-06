@@ -44,11 +44,11 @@ class DP_DIMENSIONS
 {
 public:
     DP_DIMENSIONS( int aWidth = 0, int aGap = 0, int aViaGap = 0, int aViaDiameter = 0, int aMinClearance = 0 ) :
-    m_width( aWidth ),
-    m_gap( aGap ),
-    m_viaGap( aViaGap ),
-    m_viaDiameter( aViaDiameter ),
-    m_minClearance( aMinClearance )
+            m_width( aWidth ),
+            m_gap( aGap ),
+            m_viaGap( aViaGap ),
+            m_viaDiameter( aViaDiameter ),
+            m_minClearance( aMinClearance )
     {
     }
 
@@ -58,31 +58,22 @@ public:
     int ViaDiameter() const { return m_viaDiameter; }
     int MinClearance() const { return m_minClearance; }
 
-    void SetGap( int aGap )
-    {
-        m_gap = aGap;
-    }
+    void SetGap( int aGap ) { m_gap = aGap; }
 
-    void SetGapConstraint( const DP_GAP_CONSTRAINT& aGapConstraint )
-    {
-        m_gapConstraint = aGapConstraint;
-    }
+    void SetGapConstraint( const DP_GAP_CONSTRAINT& aGapConstraint ) { m_gapConstraint = aGapConstraint; }
 
-    void SetMinClearance( int aClearance )
-    {
-        m_minClearance = aClearance;
-    }
+    void SetMinClearance( int aClearance ) { m_minClearance = aClearance; }
 
     const DP_GAP_CONSTRAINT& GapConstraint() const { return m_gapConstraint; }
 
     const wxString Format() const;
-private:
 
-    int m_width;
-    int m_gap;
-    int m_viaGap;
-    int m_viaDiameter;
-    int m_minClearance;
+private:
+    int               m_width;
+    int               m_gap;
+    int               m_viaGap;
+    int               m_viaDiameter;
+    int               m_minClearance;
     DP_GAP_CONSTRAINT m_gapConstraint;
 };
 
@@ -95,13 +86,14 @@ class DP_GATEWAY
 {
 public:
     DP_GATEWAY( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN, bool aIsDiagonal,
-                int aAllowedEntryAngles = DIRECTION_45::ANG_OBTUSE, int aPriority = 0,
-                int aDirectionMask = 0,
-                const wxString aName = wxT("") ) :
+                int aAllowedEntryAngles = DIRECTION_45::ANG_OBTUSE, int aPriority = 0, int aDirectionMask = 0,
+                const wxString aName = wxT( "" ) ) :
             m_anchorP( aAnchorP ),
-            m_anchorN( aAnchorN ), m_isDiagonal( aIsDiagonal ),
-            m_allowedEntryAngles( aAllowedEntryAngles ), m_priority( aPriority ),
-          m_directionMask( aDirectionMask ),
+            m_anchorN( aAnchorN ),
+            m_isDiagonal( aIsDiagonal ),
+            m_allowedEntryAngles( aAllowedEntryAngles ),
+            m_priority( aPriority ),
+            m_directionMask( aDirectionMask ),
             m_name( aName )
     {
         m_hasEntryLines = false;
@@ -202,16 +194,16 @@ public:
     DIRECTION_45 DirN() const { return m_dirN; };
 
 private:
-    DP_DIMENSIONS m_dims;
-    DIRECTION_45 m_dirP, m_dirN;
+    DP_DIMENSIONS    m_dims;
+    DIRECTION_45     m_dirP, m_dirN;
     SHAPE_LINE_CHAIN m_entryP, m_entryN;
-    bool m_hasEntryLines;
-    VECTOR2I m_anchorP, m_anchorN;
-    bool m_isDiagonal;
-    int m_allowedEntryAngles;
-    int m_priority;
-    int m_directionMask;
-    wxString m_name;
+    bool             m_hasEntryLines;
+    VECTOR2I         m_anchorP, m_anchorN;
+    bool             m_isDiagonal;
+    int              m_allowedEntryAngles;
+    int              m_priority;
+    int              m_directionMask;
+    wxString         m_name;
 };
 
 /**
@@ -271,11 +263,11 @@ public:
         m_primP = m_primN = nullptr;
     }
 
-    void SetName( const wxString& aName ) { m_name = aName; }
+    void            SetName( const wxString& aName ) { m_name = aName; }
     const wxString& GetName() const { return m_name; }
 
     bool HasDefinedGap() const { return m_gap.has_value(); }
-    int GetGap() const { return *m_gap; }
+    int  GetGap() const { return *m_gap; }
     void SetGap( int aGap ) { m_gap = aGap; }
 
     void SetFixedDirection( DIRECTION_45 aDir )
@@ -298,13 +290,13 @@ public:
 private:
     DIRECTION_45 anchorDirection( const ITEM* aItem, const VECTOR2I& aP ) const;
 
-    ITEM* m_primP;
-    ITEM* m_primN;
-    VECTOR2I m_anchorP, m_anchorN;
-    bool m_isMidtrace;
+    ITEM*                       m_primP;
+    ITEM*                       m_primN;
+    VECTOR2I                    m_anchorP, m_anchorN;
+    bool                        m_isMidtrace;
     std::optional<DIRECTION_45> m_fixedDirection;
-    wxString m_name;
-    std::optional<int> m_gap;
+    wxString                    m_name;
+    std::optional<int>          m_gap;
 };
 
 /**
@@ -332,23 +324,22 @@ public:
     }
 
     void BuildForCursor( const VECTOR2I& aCursorPos, int aDirectionMask = -1 );
-    void BuildOrthoProjections( DP_GATEWAYS& aEntries, const VECTOR2I& aCursorPos,
-                                int aOrthoScore );
-    void BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, int aColinearityThreshold = 0, bool aBuildEntries = false,
-                       bool aViaMode = false );
+    void BuildOrthoProjections( DP_GATEWAYS& aEntries, const VECTOR2I& aCursorPos, int aOrthoScore );
+    void BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, int aColinearityThreshold = 0,
+                       bool aBuildEntries = false, bool aViaMode = false );
     void BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool aPreferDiagonal );
 
     struct FIT_RESULT
     {
         SHAPE_LINE_CHAIN p, n;
-        DP_GATEWAY entry, target;
-        float aspectRatio;
-        float coupledRatio;
-        bool isDiagonal;
-        int score;
-        bool diagonal;
-        bool entryAngleOK;
-        bool targetAngleOK;
+        DP_GATEWAY       entry, target;
+        float            aspectRatio;
+        float            coupledRatio;
+        bool             isDiagonal;
+        int              score;
+        bool             diagonal;
+        bool             entryAngleOK;
+        bool             targetAngleOK;
     };
 
     std::vector<FIT_RESULT> FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool aFitVias );
@@ -359,8 +350,9 @@ public:
 
     void FilterByOrientation( int aDirectionMask );
 
-    void SetDimensions( const DP_DIMENSIONS& aDims ) { 
-        m_dims = aDims; 
+    void SetDimensions( const DP_DIMENSIONS& aDims )
+    {
+        m_dims = aDims;
         for( auto& gw : m_gateways )
             gw.SetDimensions( aDims );
     }

@@ -995,7 +995,7 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidthAndDpGap( PNS::ITEM* aItem, const VE
 
     if( coupledNet && aInheritedGap )
     {
-        PNS::TOPOLOGY topo( m_world );
+        PNS::TOPOLOGY  topo( m_world );
         PNS::DIFF_PAIR dp;
         if( topo.AssembleDiffPair( static_cast<PNS::SEGMENT*>( aItem ), dp ) )
         {

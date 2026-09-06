@@ -143,8 +143,8 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, int aSlopRadius )
         opts.m_differentNetsOnly = false;
         node->QueryColliding( &test, obs, opts );
 
-        DIFF_PAIR_PLACER *dpPlacer = static_cast<DIFF_PAIR_PLACER*>( Placer() );
-        auto currentDP = dpPlacer->CurrentTrace();
+        DIFF_PAIR_PLACER* dpPlacer = static_cast<DIFF_PAIR_PLACER*>( Placer() );
+        auto              currentDP = dpPlacer->CurrentTrace();
 
         int distP = std::numeric_limits<int>::max();
         int distN = std::numeric_limits<int>::max();
@@ -154,46 +154,45 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, int aSlopRadius )
         for( const OBSTACLE& obstacle : obs )
         {
             NET_HANDLE netP, netN;
-            
+
             if( m_iface->GetRuleResolver()->DpNetPair( obstacle.m_item, netP, netN ) )
             {
-                    int dist = obstacle.m_item->Shape( obstacle.m_item->Layer() )->Distance( aP );
+                int dist = obstacle.m_item->Shape( obstacle.m_item->Layer() )->Distance( aP );
 
-                    if( dist <= 0 )
+                if( dist <= 0 )
+                {
+                    ret.Add( obstacle.m_item, false );
+                }
+
+                int polarity = m_iface->GetRuleResolver()->DpNetPolarity( obstacle.m_item->Net() );
+
+                if( polarity > 0 )
+                {
+                    if( dist < distP )
                     {
-                        ret.Add( obstacle.m_item, false );
+                        distP = dist;
+                        best = obstacle.m_item;
                     }
-
-                    int polarity = m_iface->GetRuleResolver()->DpNetPolarity( obstacle.m_item->Net() );
-
-                    if( polarity > 0 )
+                }
+                else
+                {
+                    if( dist < distN )
                     {
-                        if( dist < distP )
-                        {
-                            distP = dist;
+                        distN = dist;
+                        if( distN <= distP )
                             best = obstacle.m_item;
-                        }
                     }
-                    else
-                    {
-                        if( dist < distN )
-                        {
-                            distN = dist;
-                            if( distN <= distP )
-                                best = obstacle.m_item;
-                        }        
-                    }
+                }
             }
         }
 
         if( distP < Sizes().DiffPairGap() && distN < Sizes().DiffPairGap() )
         {
-            ret.Add(best, false );
+            ret.Add( best, false );
             return ret;
         }
 
         return ret;
-
     }
 
     if( aSlopRadius > 0 )
