@@ -53,6 +53,10 @@ public:
      */
     virtual std::unique_ptr<BOARD_NETLIST_UPDATER> MakeNetlistUpdater() = 0;
 
+    virtual bool IsContentModified() const = 0;
+
+    virtual void SetContentModified( bool aModified = true ) = 0;
+
     /**
      * Post-import board sync (nets, classes, DRC, ratsnest, new footprint placement).
      */

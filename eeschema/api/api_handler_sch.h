@@ -185,6 +185,13 @@ private:
 
     void filterValidSchTypes( std::set<KICAD_T>& aTypeList );
 
+protected:
+
+    HANDLER_RESULT<commands::GetDocumentModifiedStateResponse>
+    handleGetDocumentModifiedState( const HANDLER_CONTEXT<commands::GetDocumentModifiedState>& aCtx ) override;
+
+private:
+
     std::shared_ptr<SCH_CONTEXT> m_context;
     static std::set<KICAD_T>     s_allowedTypes;
 };

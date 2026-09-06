@@ -54,6 +54,24 @@ message GetOpenDocumentsResponse
   repeated kiapi.common.types.DocumentSpecifier documents = 1;
 }
 
+enum DocumentModifiedState
+{
+  DMS_UNKNOWN    = 0;
+  DMS_UNMODIFIED = 1;
+  DMS_MODIFIED   = 2;
+}
+
+// Checks whether a document currently open in an editor or headless context has unsaved changes
+message GetDocumentModifiedState
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+message GetDocumentModifiedStateResponse
+{
+  DocumentModifiedState state = 1;
+}
+
 // Saves the given document to a new location and opens the new copy
 // Note, this is not going to be implemented anytime soon as we don't currently
 // want to allow API access to changing which project is open

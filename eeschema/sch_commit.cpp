@@ -32,6 +32,7 @@
 #include <connection_graph.h>
 
 #include <functional>
+#include <set>
 #include <wx/log.h>
 
 
@@ -448,6 +449,21 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             if( frame )
                 frame->UpdateHierarchyNavigator();
         }
+    }
+
+    // Mark the touched screens dirty so that the state is tracked even in headless API server mode
+    if( !( aCommitFlags & SKIP_SET_DIRTY ) )
+    {
+        std::set<SCH_SCREEN*> dirtyScreens;
+
+        for( COMMIT_LINE& entry : m_entries )
+        {
+            if( SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( entry.m_screen ) )
+                dirtyScreens.insert( screen );
+        }
+
+        for( SCH_SCREEN* screen : dirtyScreens )
+            screen->SetContentModified();
     }
 
     if( !( aCommitFlags & SKIP_UNDO ) && frame && undoList.GetCount() > 0 )

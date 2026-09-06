@@ -54,6 +54,10 @@ public:
 
     bool CanAcceptApiCommands() const override { return true; }
 
+    bool IsContentModified() const override { return m_contentModified; }
+
+    void SetContentModified( bool aModified = true ) override { m_contentModified = aModified; }
+
     bool SaveBoard() override;
 
     bool SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless ) override;
@@ -69,6 +73,10 @@ private:
     PROJECT* m_project;
     KIWAY* m_kiway;
     std::unique_ptr<TOOL_MANAGER> m_toolManager;
+
+    // Board currently doesn't track its own modification state the way SCH_SCREEN does
+    // This could be cleaned up in the future
+    bool m_contentModified = false;
 };
 
 #endif

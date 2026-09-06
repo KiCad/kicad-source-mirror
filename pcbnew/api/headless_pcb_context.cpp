@@ -105,6 +105,8 @@ bool HEADLESS_PCB_CONTEXT::SaveBoard()
 
     if( success )
     {
+        m_contentModified = false;
+
         wxFileName pro = fileName;
         pro.SetExt( FILEEXT::ProjectFileExtension );
         pro.MakeAbsolute();

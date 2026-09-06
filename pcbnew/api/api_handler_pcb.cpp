@@ -1399,12 +1399,27 @@ void API_HANDLER_PCB::setDrawingSheetFileName( const wxString& aFileName )
 
 void API_HANDLER_PCB::onModified()
 {
+    pcbContext()->SetContentModified();
+
     if( frame() )
     {
         frame()->Refresh();
         frame()->OnModify();
         frame()->UpdateUserInterface();
     }
+}
+
+
+HANDLER_RESULT<GetDocumentModifiedStateResponse>
+API_HANDLER_PCB::handleGetDocumentModifiedState( const HANDLER_CONTEXT<GetDocumentModifiedState>& aCtx )
+{
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    GetDocumentModifiedStateResponse response;
+    response.set_state( pcbContext()->IsContentModified() ? DocumentModifiedState::DMS_MODIFIED
+                                                          : DocumentModifiedState::DMS_UNMODIFIED );
+    return response;
 }
 
 

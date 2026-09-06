@@ -125,9 +125,7 @@ void API_HANDLER_BOARD::pushCurrentCommit( const std::string& aClientName,
                                             const wxString& aMessage )
 {
     API_HANDLER_EDITOR::pushCurrentCommit( aClientName, aMessage );
-
-    if( m_frame )
-        m_frame->Refresh();
+    onModified();
 }
 
 

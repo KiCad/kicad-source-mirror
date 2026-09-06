@@ -80,6 +80,9 @@ protected:
     HANDLER_RESULT<commands::HitTestResponse> handleHitTest(
         const HANDLER_CONTEXT<commands::HitTest>& aCtx );
 
+    virtual HANDLER_RESULT<commands::GetDocumentModifiedStateResponse>
+    handleGetDocumentModifiedState( const HANDLER_CONTEXT<commands::GetDocumentModifiedState>& aCtx );
+
     HANDLER_RESULT<types::TitleBlockInfo> handleGetTitleBlockInfo(
             const HANDLER_CONTEXT<commands::GetTitleBlockInfo>& aCtx );
 

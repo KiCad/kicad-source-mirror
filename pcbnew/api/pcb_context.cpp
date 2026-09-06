@@ -54,6 +54,16 @@ public:
         return &m_frame->Kiway();
     }
 
+    bool IsContentModified() const override
+    {
+        return m_frame->GetScreen()->IsContentModified();
+    }
+
+    void SetContentModified( bool aModified = true ) override
+    {
+        m_frame->GetScreen()->SetContentModified( aModified );
+    }
+
     wxString GetCurrentFileName() const override
     {
         return m_frame->GetCurrentFileName();

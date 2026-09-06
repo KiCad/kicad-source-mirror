@@ -459,6 +459,46 @@ HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_SCH::handleGetOpenDocuments
 }
 
 
+HANDLER_RESULT<GetDocumentModifiedStateResponse>
+API_HANDLER_SCH::handleGetDocumentModifiedState( const HANDLER_CONTEXT<GetDocumentModifiedState>& aCtx )
+{
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    GetDocumentModifiedStateResponse response;
+
+    if( aCtx.Request.document().has_sheet_path() )
+    {
+        KIID_PATH path = UnpackSheetPath( aCtx.Request.document().sheet_path() );
+
+        std::optional<SCH_SHEET_PATH> sheetPath = schematic()->Hierarchy().GetSheetPathByKIIDPath( path );
+
+        if( !sheetPath )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "the requested sheet path is not valid for this schematic" );
+            return tl::unexpected( e );
+        }
+
+        if( const SCH_SCREEN* screen = sheetPath->LastScreen() )
+        {
+            response.set_state( screen->IsContentModified() ? DocumentModifiedState::DMS_MODIFIED
+                                                            : DocumentModifiedState::DMS_UNMODIFIED );
+        }
+
+        return response;
+    }
+
+    if( !schematic()->HasHierarchy() )
+        schematic()->RefreshHierarchy();
+
+    response.set_state( schematic()->Hierarchy().IsModified() ? DocumentModifiedState::DMS_MODIFIED
+                                                              : DocumentModifiedState::DMS_UNMODIFIED );
+    return response;
+}
+
+
 void API_HANDLER_SCH::filterValidSchTypes( std::set<KICAD_T>& aTypeList )
 {
     std::erase_if( aTypeList,
