@@ -429,9 +429,9 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
         m_brd->OnItemsChanged( m_items_changed );
         m_parent->OnModify();
 
-        auto connectivity = m_brd->GetConnectivity();
-        connectivity->RecalculateRatsnest();
-        connectivity->ClearLocalRatsnest();
+        m_brd->GetConnectivity()->ClearLocalRatsnest();
+        m_brd->CompileRatsnest();
+
         m_parent->GetCanvas()->RedrawRatsnest();
         m_brd->OnRatsnestChanged();
     }
