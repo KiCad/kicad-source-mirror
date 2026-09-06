@@ -64,15 +64,33 @@ BOOST_AUTO_TEST_CASE( SerializeRoundTripIncludesPowerFlags )
     BOOST_CHECK( tracker2.Contains( "C258" ) );
     BOOST_CHECK( tracker2.Contains( "#PWR304" ) );
 
-    // Prefix order in m_prefixData is unordered_map iteration order, so verify
-    // round-trip stability by content rather than by string compare.
     REFDES_TRACKER tracker3;
     BOOST_REQUIRE( tracker3.Deserialize( tracker2.Serialize() ) );
+    BOOST_CHECK_EQUAL( tracker3.Serialize(), serialized );
     BOOST_CHECK_EQUAL( tracker3.Size(), tracker.Size() );
     BOOST_CHECK( tracker3.Contains( "C254" ) );
     BOOST_CHECK( tracker3.Contains( "C257" ) );
     BOOST_CHECK( tracker3.Contains( "C258" ) );
     BOOST_CHECK( tracker3.Contains( "#PWR304" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SerializationIsSortedAndStable )
+{
+    REFDES_TRACKER tracker;
+
+    tracker.Insert( "R2" );
+    tracker.Insert( "C3" );
+    tracker.Insert( "#PWR1" );
+    tracker.Insert( "C1" );
+    tracker.Insert( "TP" );
+    tracker.Insert( "C2" );
+
+    BOOST_CHECK_EQUAL( tracker.Serialize(), "#PWR1,C1-3,R2,TP" );
+
+    REFDES_TRACKER tracker2;
+    BOOST_REQUIRE( tracker2.Deserialize( "TP,C1-3,#PWR1,R2" ) );
+    BOOST_CHECK_EQUAL( tracker2.Serialize(), tracker.Serialize() );
 }
 
 

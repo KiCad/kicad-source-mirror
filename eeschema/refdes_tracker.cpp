@@ -320,8 +320,25 @@ std::string REFDES_TRACKER::Serialize() const
     std::ostringstream result;
     bool first = true;
 
-    for( const auto& [prefix, data] : m_prefixData )
+    using PREFIX_ENTRY = std::pair<const std::string, PREFIX_DATA>;
+
+    std::vector<const PREFIX_ENTRY*> entries;
+    entries.reserve( m_prefixData.size() );
+
+    for( const auto& entry : m_prefixData )
+        entries.push_back( &entry );
+
+    std::sort( entries.begin(), entries.end(),
+               []( const auto* aLeft, const auto* aRight )
+               {
+                   return aLeft->first < aRight->first;
+               } );
+
+    for( const auto* entry : entries )
     {
+        const std::string& prefix = entry->first;
+        const PREFIX_DATA& data = entry->second;
+
         if( !first )
             result << ",";
         first = false;
