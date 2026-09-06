@@ -763,4 +763,24 @@ BOOST_AUTO_TEST_CASE( SharedParserRejectsMalformedBoundsWithoutExpansion )
 }
 
 
+BOOST_AUTO_TEST_CASE( SharedParserExpandsLargestVectorIndex )
+{
+    const long last = std::numeric_limits<long>::max();
+    const wxString text = wxString::Format( "D[%ld..%ld]", last - 1, last );
+    std::vector<wxString> members;
+    BOOST_REQUIRE( NET_SETTINGS::ParseBusVector( text, nullptr, &members ) );
+    BOOST_REQUIRE_EQUAL( members.size(), 2 );
+    BOOST_CHECK_EQUAL( members[1], wxString::Format( "D%ld", last ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SharedParserPreservesPadding )
+{
+    std::vector<wxString> members;
+    BOOST_REQUIRE( NET_SETTINGS::ParseBusVector( "D[01..03]", nullptr, &members ) );
+    BOOST_REQUIRE_EQUAL( members.size(), 3 );
+    BOOST_CHECK_EQUAL( members[0], wxString( "D01" ) );
+    BOOST_CHECK_EQUAL( members[2], wxString( "D03" ) );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

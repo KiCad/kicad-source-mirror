@@ -1457,6 +1457,8 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     bool     fmtWrapsName = false;
     bool     inQuotes = false;
     bool     parsedEnd = false;
+    bool     padded = false;
+    size_t   width = 0;
 
     prefix.reserve( busLen );
 
@@ -1566,6 +1568,9 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
         {
             if( tmp.IsEmpty() || !tmp.ToLong( &begin ) )
                 return false;
+
+            width = tmp.length();
+            padded = width > 1 && tmp[0] == '0';
             i += 2;
             break;
         }
@@ -1590,6 +1595,8 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
             if( tmp.IsEmpty() || !tmp.ToLong( &end ) )
                 return false;
 
+            padded |= tmp.length() > 1 && tmp[0] == '0';
+            width = std::max( width, tmp.length() );
             parsedEnd = true;
             ++i;
             break;
@@ -1640,10 +1647,14 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     {
         for( long idx = begin; idx <= end; ++idx )
         {
+            wxString number;
+            number << idx;
             wxString str = prefix;
-            str << idx;
-            str << suffix;
 
+            if( padded && number.length() < width )
+                str += wxString( '0', width - number.length() );
+
+            str << number << suffix;
             aMemberList->emplace_back( str );
         }
     }
