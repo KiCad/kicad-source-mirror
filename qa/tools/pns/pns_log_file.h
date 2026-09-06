@@ -62,7 +62,7 @@ public:
         std::vector<PNS::ITEM*> m_addedItems;
         std::vector<PNS::ITEM*> m_heads;
 
-        bool Compare( const COMMIT_STATE& aOther );
+        bool Compare( const COMMIT_STATE& aOther, bool aSkipHeads = false );
     };
 
     // Saves a P&S event log only (e.g. after fixing a bug and wanting a new "golden" commit state)

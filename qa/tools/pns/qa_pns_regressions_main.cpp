@@ -126,7 +126,14 @@ public:
             auto cstate = player.GetRouterUpdatedItems();
             auto expected = logFile.GetExpectedResult();
 
-            bool pass = cstate.Compare( expected );
+            bool hasHeads = expected.m_heads.size() > 0;
+
+            if( !hasHeads )
+            {
+                BOOST_TEST_MESSAGE( "Test " << aTestData->m_name << " has no reference head geometry. Skipping head comparson" );
+            }
+
+            bool pass = cstate.Compare( expected, !hasHeads );
             BOOST_REQUIRE( pass );
             return pass;
         }

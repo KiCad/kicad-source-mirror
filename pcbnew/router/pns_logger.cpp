@@ -196,6 +196,16 @@ nlohmann::json LOGGER::formatRouterItemAsJSON( const PNS::ITEM* aItem )
             ret["shape"] = formatShapeAsJSON( aItem->Shape( aItem->Layer() ) );
             break;
 
+        case ITEM::LINE_T:
+        {
+            auto line = static_cast<const LINE*>( aItem );
+            ret["width"] = line->Width();
+            ret["shape"] = formatShapeAsJSON( aItem->Shape( aItem->Layer() ) );
+            if( line->EndsWithVia() )
+                ret["via"] = formatRouterItemAsJSON( &line->Via() );
+            break;
+        }
+
         case ITEM::VIA_T:
         {
             auto via = static_cast<const VIA*>( aItem );
@@ -268,6 +278,15 @@ nlohmann::json LOGGER::formatShapeAsJSON( const SHAPE* aShape )
                 { "radius", circle->GetRadius() },
                 { "center", circle->GetCenter() },
             } );
+        }
+        case SH_LINE_CHAIN:
+        {
+            auto schain = static_cast<const SHAPE_LINE_CHAIN*>( aShape );
+            auto points = nlohmann::json::array();
+            for( int i = 0; i < schain->PointCount(); i++ )
+                points.push_back( schain->CPoint( i ) );
+
+            return nlohmann::json( { { "type", "line_chain" }, { "points", points } } );
         }
 
         default:

@@ -102,7 +102,7 @@ public:
 
     void SetTimeLimit( uint64_t microseconds ) { m_timeLimitUs = microseconds; }
 
-    bool CompareResults( PNS_LOG_FILE* aLog );
+    bool CompareResults( PNS_LOG_FILE* aLog, bool aSkipHeads = false );
     const PNS_LOG_FILE::COMMIT_STATE GetRouterUpdatedItems();
     void CreateRouter();
 

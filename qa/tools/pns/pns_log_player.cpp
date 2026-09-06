@@ -86,7 +86,9 @@ const PNS_LOG_FILE::COMMIT_STATE PNS_LOG_PLAYER::GetRouterUpdatedItems()
     // fixme: update the state with the head trace (not supported in current testsuite)
     // Note: we own the head items (cloned inside GetUpdatedItems) - we need to delete them!
     for( auto head : heads )
-        delete head;
+    {
+        state.m_heads.push_back( head );
+    }
 
     return state;
 }
@@ -321,10 +323,10 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
 }
 
 
-bool PNS_LOG_PLAYER::CompareResults( PNS_LOG_FILE* aLog )
+bool PNS_LOG_PLAYER::CompareResults( PNS_LOG_FILE* aLog, bool aSkipHeads )
 {
     auto cstate = GetRouterUpdatedItems();
-    return cstate.Compare( aLog->GetExpectedResult() );
+    return cstate.Compare( aLog->GetExpectedResult(), aSkipHeads );
 }
 
 

@@ -117,6 +117,14 @@ std::shared_ptr<SHAPE> PNS_LOG_FILE::parseShape( const nlohmann::json& aJSON )
         std::shared_ptr<SHAPE_ARC> sh( new SHAPE_ARC( start, mid, end, width ) );
         return sh;
     }
+    else if( type == wxT("line_chain") )
+    {
+        std::shared_ptr<SHAPE_LINE_CHAIN> sh( new SHAPE_LINE_CHAIN );
+        for( const nlohmann::json& p : aJSON.at( "points" ) )
+            sh->Append( p.get<VECTOR2I>(), true );
+
+        return sh;
+    }
 
     return nullptr;
 }
@@ -300,7 +308,22 @@ std::unique_ptr<PNS::ITEM> PNS_LOG_FILE::parseItem( const nlohmann::json& aJSON 
             return std::move( hole );
         }
     }
+    else if( kind == wxT("line") )
+    {
+        auto parsedShape = parseShape( aJSON.at("shape") );
 
+        if( !parsedShape )
+            return nullptr;
+
+        auto shape = static_cast<const SHAPE_LINE_CHAIN*>( parsedShape.get() );
+        std::unique_ptr<PNS::LINE> line( new PNS::LINE() );
+        line->SetShape( *shape );
+        line->SetWidth( aJSON.at("width").get<int>() );
+
+        parseCommonPnsProps( aJSON, line.get() );
+
+        return std::move( line );
+    }
     return nullptr;
 }
 
@@ -408,7 +431,7 @@ const std::set<PNS::ITEM*> deduplicate( const std::vector<PNS::ITEM*>& items )
 }
 
 
-bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOther )
+bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOther, bool aSkipHeads )
 {
     COMMIT_STATE check( aOther );
 
@@ -422,6 +445,7 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
 
     std::set<PNS::ITEM*> addedItems = deduplicate( m_addedItems );
     std::set<PNS::ITEM*> chkAddedItems = deduplicate( check.m_addedItems );
+
 
     for( PNS::ITEM* item : addedItems )
     {
@@ -439,6 +463,20 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
 
         if( !matched )
             return false;
+    }
+
+    if( !aSkipHeads )
+    {
+        if( m_heads.size() != check.m_heads.size() )
+            return false;
+        
+        for( int headIdx = 0; headIdx < m_heads.size(); headIdx ++)
+        {
+            const SHAPE_LINE_CHAIN& headRef = static_cast<const PNS::LINE*> ( m_heads[ headIdx ] )->CLine();
+            const SHAPE_LINE_CHAIN& headChk = static_cast<const PNS::LINE*> ( aOther.m_heads[ headIdx ] )->CLine();
+            if ( ! headRef.CompareGeometry( headChk ) )
+                return false;        
+        }
     }
 
     if( chkAddedItems.empty() && check.m_removedIds.empty() )
@@ -635,6 +673,12 @@ bool PNS_LOG_FILE::loadJsonLog( const wxString& aFilename, REPORTER* aRpt, bool 
         for( const nlohmann::json& addedItem : logJson.at( "removedItems" ) )
         {
             m_commitState.m_removedIds.insert( addedItem.get<KIID>() );
+        }
+
+
+        for( const nlohmann::json& headItem : logJson.at( "headItems" ) )
+        {
+            m_commitState.m_heads.push_back( parseItem( headItem ).release() );
         }
 
         if( aRpt )
