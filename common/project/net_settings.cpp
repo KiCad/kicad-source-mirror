@@ -1456,6 +1456,7 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     int      braceNesting = 0;
     bool     fmtWrapsName = false;
     bool     inQuotes = false;
+    bool     parsedEnd = false;
 
     prefix.reserve( busLen );
 
@@ -1563,7 +1564,8 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     {
         if( aBus[i] == '.' && i + 1 < busLen && aBus[i+1] == '.' )
         {
-            tmp.ToLong( &begin );
+            if( tmp.IsEmpty() || !tmp.ToLong( &begin ) )
+                return false;
             i += 2;
             break;
         }
@@ -1585,7 +1587,10 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     {
         if( aBus[i] == ']' )
         {
-            tmp.ToLong( &end );
+            if( tmp.IsEmpty() || !tmp.ToLong( &end ) )
+                return false;
+
+            parsedEnd = true;
             ++i;
             break;
         }
@@ -1595,6 +1600,9 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
 
         tmp += aBus[i];
     }
+
+    if( !parsedEnd )
+        return false;
 
     // Parse suffix
     //

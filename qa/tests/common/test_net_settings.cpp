@@ -754,4 +754,13 @@ BOOST_AUTO_TEST_CASE( RenameNetPathPrefixRetargetsAssignments )
 }
 
 
+BOOST_AUTO_TEST_CASE( SharedParserRejectsMalformedBoundsWithoutExpansion )
+{
+    BOOST_CHECK( !NET_SETTINGS::ParseBusVector( "D[..2]", nullptr, nullptr ) );
+    BOOST_CHECK( !NET_SETTINGS::ParseBusVector( "D[1..]", nullptr, nullptr ) );
+    BOOST_CHECK( !NET_SETTINGS::ParseBusVector( "D[1..2", nullptr, nullptr ) );
+    BOOST_CHECK( !NET_SETTINGS::ParseBusVector( "D[1..999999999999999999999999999999]", nullptr, nullptr ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
