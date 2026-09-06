@@ -22,6 +22,7 @@
 
 #include <sch_io/orcad/orcad_structures.h>
 
+#include <limits>
 #include <memory>
 #include <utility>
 #include <variant>
@@ -31,8 +32,7 @@
 #include <sch_io/orcad/orcad_cache.h>
 
 
-ORCAD_STRUCT_READER::ORCAD_STRUCT_READER( ORCAD_STREAM& aStream,
-                                          const std::vector<std::string>* aStrings,
+ORCAD_STRUCT_READER::ORCAD_STRUCT_READER( ORCAD_STREAM& aStream, const std::vector<std::string>* aStrings,
                                           ORCAD_WARN_FN aWarn ) :
         m_stream( aStream ),
         m_strings( aStrings ),
@@ -48,107 +48,143 @@ void ORCAD_STRUCT_READER::Warn( const wxString& aMsg ) const
 }
 
 
-ORCAD_PREFIXES ORCAD_STRUCT_READER::TryReadPrefixes( int aCount )
+std::optional<size_t> OrcadLongPrefixCount( int aTypeId )
+{
+    switch( aTypeId )
+    {
+    case 9:
+    case 66:
+    case 67:
+    case 68:
+    case 69:
+    case 82:
+    case 91: return 1;
+
+    case 10:
+    case 16:
+    case 17:
+    case 20:
+    case 21:
+    case 26:
+    case 27:
+    case 29:
+    case 32:
+    case 37:
+    case 38:
+    case 39:
+    case 48:
+    case 49:
+    case 55:
+    case 56:
+    case 57:
+    case 58:
+    case 59:
+    case 60:
+    case 61:
+    case 62:
+    case 88:
+    case 89: return 2;
+
+    case 2:
+    case 6:
+    case 12:
+    case 23:
+    case 31:
+    case 65:
+    case 77: return 3;
+
+    case 13:
+    case 33:
+    case 34:
+    case 35:
+    case 64:
+    case 75:
+    case 76: return 4;
+
+    case 24: return 5;
+
+    default: return std::nullopt;
+    }
+}
+
+
+ORCAD_PREFIXES ORCAD_STRUCT_READER::ReadPrefixes( int aExpectedType, size_t aEnclosingEnd, size_t aLongPrefixCount )
 {
     ORCAD_PREFIXES pfx;
     pfx.start = m_stream.GetOffset();
 
-    bool haveFirst = false;
-    int  first = 0;
+    int typeId = m_stream.PeekU8();
 
-    for( int i = 0; i < aCount; i++ )
+    if( typeId < 0 )
+        THROW_IO_ERROR( wxS( "OrCAD structure: missing structure type" ) );
+
+    if( aExpectedType >= 0 && typeId != aExpectedType )
+        THROW_IO_ERRORF( wxS( "OrCAD structure: expected type %d, got %d" ), aExpectedType, typeId );
+
+    std::optional<size_t> longCount = aLongPrefixCount == ORCAD_STREAM::npos
+                                              ? OrcadLongPrefixCount( typeId )
+                                              : std::optional<size_t>( aLongPrefixCount );
+
+    if( !longCount )
+        THROW_IO_ERRORF( wxS( "OrCAD structure: unregistered structure type %d" ), typeId );
+
+    if( *longCount == 0 )
+        THROW_IO_ERROR( wxS( "OrCAD structure: long prefix count is zero" ) );
+
+    size_t bound = aEnclosingEnd == ORCAD_STREAM::npos ? m_stream.Size() : aEnclosingEnd;
+
+    if( bound > m_stream.Size() )
+        THROW_IO_ERROR( wxS( "OrCAD structure: enclosing bound exceeds stream" ) );
+
+    for( size_t i = 0; i < *longCount; ++i )
     {
-        int typeId = m_stream.ReadU8();
+        int prefixType = m_stream.ReadU8();
 
-        if( !haveFirst )
-        {
-            first = typeId;
-            haveFirst = true;
-        }
-        else if( typeId != first )
-        {
-            THROW_IO_ERRORF( wxS( "OrCAD structure: prefix type mismatch %d != %d" ), typeId, first );
-        }
+        if( prefixType != typeId )
+            THROW_IO_ERRORF( wxS( "OrCAD structure: prefix type mismatch %d != %d" ), prefixType, typeId );
 
-        if( i == aCount - 1 )
-        {
-            // Short prefix i16 pair count, then (u32 nameIdx, u32 valueIdx) pairs. Negative count = no pairs.
-            int16_t count = m_stream.ReadI16();
+        pfx.bodyLens.push_back( m_stream.ReadU32() );
 
-            if( count >= 0 )
-            {
-                for( int k = 0; k < count; k++ )
-                {
-                    uint32_t nameIdx = m_stream.ReadU32();
-                    uint32_t valueIdx = m_stream.ReadU32();
-                    pfx.props.emplace_back( nameIdx, valueIdx );
-                }
-            }
-        }
-        else
-        {
-            // Long prefix u32 body length, then always-zero u32.
-            uint32_t bodyLen = m_stream.ReadU32();
-            uint32_t zeros = m_stream.ReadU32();
-
-            if( zeros != 0 )
-                THROW_IO_ERROR( wxS( "OrCAD structure: long prefix pad not zero" ) );
-
-            pfx.bodyLens.push_back( bodyLen );
-        }
+        if( m_stream.ReadU32() != 0 )
+            THROW_IO_ERROR( wxS( "OrCAD structure: long prefix pad not zero" ) );
     }
 
-    // Preamble magic must follow prefix chain (not consumed here).
-    if( !m_stream.AtPreamble() )
-        THROW_IO_ERROR( wxS( "OrCAD structure: no preamble after prefixes" ) );
+    if( m_stream.ReadU8() != typeId )
+        THROW_IO_ERROR( wxS( "OrCAD structure: short prefix type mismatch" ) );
 
-    pfx.typeId = first;
-    return pfx;
-}
+    // Short prefix i16 pair count, then (u32 nameIdx, u32 valueIdx) pairs. Negative count = no pairs.
+    int16_t propertyCount = m_stream.ReadI16();
 
-
-ORCAD_PREFIXES ORCAD_STRUCT_READER::ReadPrefixes()
-{
-    size_t         saved = m_stream.GetOffset();
-    wxString       lastErr;
-    ORCAD_PREFIXES pfx;
-    bool           found = false;
-
-    // Long-prefix count type-dependent; try longest chain first so short chain never wins as prefix of longer.
-    for( int n = 10; n >= 1 && !found; n-- )
+    for( int i = 0; i < propertyCount; ++i )
     {
-        m_stream.Seek( saved );
-
-        try
-        {
-            pfx = TryReadPrefixes( n );
-            found = true;
-        }
-        catch( const IO_ERROR& e )
-        {
-            lastErr = e.Problem();
-        }
-    }
-
-    if( !found )
-    {
-        m_stream.Seek( saved );
-        THROW_IO_ERRORF( wxS( "OrCAD structure: no valid prefix chain at 0x%zx: %s" ), saved, lastErr );
+        uint32_t nameIdx = m_stream.ReadU32();
+        uint32_t valueIdx = m_stream.ReadU32();
+        pfx.props.emplace_back( nameIdx, valueIdx );
     }
 
     m_stream.ExpectPreamble( wxS( "structure preamble" ) );
     uint32_t trail = m_stream.ReadU32();
     m_stream.Skip( trail );
     pfx.bodyStart = m_stream.GetOffset();
+    pfx.typeId = typeId;
 
-    if( !pfx.bodyLens.empty() )
+    for( size_t i = 0; i < pfx.bodyLens.size(); ++i )
     {
         // Body length counts bytes after own 9-byte record; outermost bounds whole structure.
-        for( size_t i = 0; i < pfx.bodyLens.size(); i++ )
-            pfx.stops.push_back( pfx.start + 9 * i + 9 + pfx.bodyLens[i] );
+        size_t headerEnd = pfx.start + 9 * i + 9;
 
-        pfx.end = pfx.stops[0];
+        if( pfx.bodyLens[i] > std::numeric_limits<size_t>::max() - headerEnd )
+            THROW_IO_ERROR( wxS( "OrCAD structure: structure stop overflow" ) );
+
+        size_t stop = headerEnd + pfx.bodyLens[i];
+
+        if( stop < pfx.bodyStart || stop > bound )
+            THROW_IO_ERRORF( wxS( "OrCAD structure: stop 0x%zx outside the enclosing bound" ), stop );
+
+        pfx.stops.push_back( stop );
     }
+
+    pfx.end = pfx.stops.front();
 
     return pfx;
 }
@@ -204,28 +240,20 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
 
     try
     {
+        ORCAD_STREAM::LIMIT_GUARD limit( m_stream, pfx.end );
+
         switch( pfx.typeId )
         {
         case ORCAD_ST_WIRE_SCALAR:
-        case ORCAD_ST_WIRE_BUS:
-            result.record = OrcadReadWire( *this, pfx );
-            break;
+        case ORCAD_ST_WIRE_BUS: result.record = OrcadReadWire( *this, pfx ); break;
 
-        case ORCAD_ST_ALIAS:
-            result.record = OrcadReadAlias( *this, pfx );
-            break;
+        case ORCAD_ST_ALIAS: result.record = OrcadReadAlias( *this, pfx ); break;
 
-        case ORCAD_ST_SYMBOL_DISPLAY_PROP:
-            result.record = OrcadReadDisplayProp( *this, pfx );
-            break;
+        case ORCAD_ST_SYMBOL_DISPLAY_PROP: result.record = OrcadReadDisplayProp( *this, pfx ); break;
 
-        case ORCAD_ST_PLACED_INSTANCE:
-            result.record = OrcadReadPlacedInstance( *this, pfx );
-            break;
+        case ORCAD_ST_PLACED_INSTANCE: result.record = OrcadReadPlacedInstance( *this, pfx ); break;
 
-        case ORCAD_ST_PORT:
-            result.record = OrcadReadPort( *this, pfx );
-            break;
+        case ORCAD_ST_PORT: result.record = OrcadReadPort( *this, pfx ); break;
 
         case ORCAD_ST_GLOBAL:
         case ORCAD_ST_OFFPAGE_CONNECTOR:
@@ -238,48 +266,31 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
         case ORCAD_ST_GRAPHIC_COMMENT_TEXT_INST:
         case ORCAD_ST_GRAPHIC_BITMAP_INST:
         case ORCAD_ST_GRAPHIC_BEZIER_INST:
-        case ORCAD_ST_GRAPHIC_OLE_INST:
-            result.record = OrcadReadGraphicInst( *this, pfx );
-            break;
+        case ORCAD_ST_GRAPHIC_OLE_INST: result.record = OrcadReadGraphicInst( *this, pfx ); break;
 
-        case ORCAD_ST_TITLEBLOCK:
-            result.record = OrcadReadTitleBlock( *this, pfx );
-            break;
+        case ORCAD_ST_TITLEBLOCK: result.record = OrcadReadTitleBlock( *this, pfx ); break;
 
-        case ORCAD_ST_ERC_OBJECT:
-            result.record = OrcadReadErcObject( *this, pfx );
-            break;
+        case ORCAD_ST_ERC_OBJECT: result.record = OrcadReadErcObject( *this, pfx ); break;
 
-        case ORCAD_ST_BUS_ENTRY:
-            result.record = OrcadReadBusEntry( *this, pfx );
-            break;
+        case ORCAD_ST_BUS_ENTRY: result.record = OrcadReadBusEntry( *this, pfx ); break;
 
         case ORCAD_ST_T0X10:
-        case ORCAD_ST_T0X11:
-            result.record = OrcadReadPinInst( *this, pfx );
-            break;
+        case ORCAD_ST_T0X11: result.record = OrcadReadPinInst( *this, pfx ); break;
 
-        case ORCAD_ST_STH_IN_PAGES0:
-            result.record = OrcadReadSthInPages0( *this, pfx );
-            break;
+        case ORCAD_ST_STH_IN_PAGES0: result.record = OrcadReadSthInPages0( *this, pfx ); break;
 
-        case ORCAD_ST_DRAWN_INSTANCE:
-            result.record = OrcadReadDrawnInstance( *this, pfx );
-            break;
+        case ORCAD_ST_DRAWN_INSTANCE: result.record = OrcadReadDrawnInstance( *this, pfx ); break;
 
-        default:
-            SkipStructure( pfx, wxString::Format( wxS( "type %d" ), pfx.typeId ) );
-            break;
+        default: SkipStructure( pfx, wxString::Format( wxS( "type %d" ), pfx.typeId ) ); break;
         }
     }
-    catch( const IO_ERROR& )
+    catch( const IO_ERROR& e )
     {
         // Recover via prefix offsets on body-parse failure; one bad record must not abort page/cache parse.
         if( pfx.end != 0 && pfx.end > start )
         {
-            Warn( wxString::Format( wxS( "OrCAD structure type %d at 0x%zx: body parse failed, "
-                                         "skipped" ),
-                                    pfx.typeId, start ) );
+            Warn( wxString::Format( wxS( "OrCAD structure type %d at 0x%zx: %s; skipped" ), pfx.typeId, start,
+                                    e.What() ) );
             m_stream.Seek( pfx.end );
             result.record = std::monostate();
             return result;
@@ -295,8 +306,7 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
 // -- per-type body readers ----------------------------------------------------------------
 
 
-ORCAD_DISPLAY_PROP OrcadReadDisplayProp( ORCAD_STRUCT_READER& aReader,
-                                         const ORCAD_PREFIXES& /* aPrefixes */ )
+ORCAD_DISPLAY_PROP OrcadReadDisplayProp( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& /* aPrefixes */ )
 {
     ORCAD_STREAM&      ds = aReader.Stream();
     ORCAD_DISPLAY_PROP prop;
@@ -340,7 +350,7 @@ ORCAD_WIRE OrcadReadWire( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aP
     ORCAD_STREAM& ds = aReader.Stream();
     ORCAD_WIRE    wire;
 
-    ds.Skip( 4 );               // unknown
+    wire.dbId = ds.ReadU32();
     wire.id = ds.ReadU32();
     wire.color = static_cast<int>( ds.ReadU32() );
     wire.x1 = ds.ReadI32();
@@ -373,14 +383,15 @@ ORCAD_WIRE OrcadReadWire( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aP
 }
 
 
-ORCAD_PLACED_INSTANCE OrcadReadPlacedInstance( ORCAD_STRUCT_READER& aReader,
-                                               const ORCAD_PREFIXES& aPrefixes )
+ORCAD_PLACED_INSTANCE OrcadReadPlacedInstance( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
 {
     ORCAD_STREAM&         ds = aReader.Stream();
     ORCAD_PLACED_INSTANCE inst;
 
-    ds.Skip( 8 );               // unknown, zeros observed
+    ds.ReadU32();
+    uint32_t headerWordB = ds.ReadU32();
     inst.pkgName = ds.ReadLzt();
+    inst.sourceLibrary = aReader.Resolve( headerWordB );
     inst.dbId = ds.ReadU32();
 
     // Placed bbox stored y-first; includes displayed text.
@@ -402,7 +413,8 @@ ORCAD_PLACED_INSTANCE OrcadReadPlacedInstance( ORCAD_STRUCT_READER& aReader,
     inst.rotation = orientation & 0x3;
     inst.mirror = ( orientation & 0x4 ) != 0;
 
-    ds.Skip( 2 );               // structId, unknown
+    inst.partIndex = ds.ReadU8();
+    inst.partByte = ds.ReadU8();
 
     inst.displayProps = OrcadReadDisplayPropList( aReader );
 
@@ -425,7 +437,7 @@ ORCAD_PLACED_INSTANCE OrcadReadPlacedInstance( ORCAD_STRUCT_READER& aReader,
     }
 
     inst.sourcePackage = ds.ReadLzt();
-    ds.Skip( 2 );
+    inst.unitIndex = ds.ReadU16();
 
     inst.props = aReader.PropsDict( aPrefixes );
 
@@ -433,14 +445,13 @@ ORCAD_PLACED_INSTANCE OrcadReadPlacedInstance( ORCAD_STRUCT_READER& aReader,
 }
 
 
-ORCAD_GRAPHIC_INST OrcadReadGraphicInst( ORCAD_STRUCT_READER& aReader,
-                                         const ORCAD_PREFIXES& aPrefixes )
+ORCAD_GRAPHIC_INST OrcadReadGraphicInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
 {
     ORCAD_STREAM&      ds = aReader.Stream();
     ORCAD_GRAPHIC_INST inst;
 
-    uint32_t nameIdx = ds.ReadU32();    // logical net/port name string index (ports)
-    ds.ReadU32();                       // source library string index
+    uint32_t nameIdx = ds.ReadU32(); // logical net/port name string index (ports)
+    ds.ReadU32();                    // source library string index
     inst.name = ds.ReadLzt();
     inst.dbId = ds.ReadU32();
 
@@ -463,7 +474,7 @@ ORCAD_GRAPHIC_INST OrcadReadGraphicInst( ORCAD_STRUCT_READER& aReader,
     inst.rotation = orientation & 0x3;
     inst.mirror = ( orientation & 0x4 ) != 0;
 
-    ds.Skip( 2 );               // structId, unknown
+    ds.Skip( 2 ); // structId, unknown
 
     inst.displayProps = OrcadReadDisplayPropList( aReader );
 
@@ -495,8 +506,7 @@ ORCAD_GRAPHIC_INST OrcadReadPort( ORCAD_STRUCT_READER& aReader, const ORCAD_PREF
 }
 
 
-ORCAD_GRAPHIC_INST OrcadReadTitleBlock( ORCAD_STRUCT_READER& aReader,
-                                        const ORCAD_PREFIXES& aPrefixes )
+ORCAD_GRAPHIC_INST OrcadReadTitleBlock( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
 {
     ORCAD_GRAPHIC_INST inst = OrcadReadGraphicInst( aReader, aPrefixes );
     aReader.Stream().Skip( 12 );
@@ -505,8 +515,7 @@ ORCAD_GRAPHIC_INST OrcadReadTitleBlock( ORCAD_STRUCT_READER& aReader,
 }
 
 
-ORCAD_GRAPHIC_INST OrcadReadErcObject( ORCAD_STRUCT_READER& aReader,
-                                       const ORCAD_PREFIXES& aPrefixes )
+ORCAD_GRAPHIC_INST OrcadReadErcObject( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
 {
     ORCAD_GRAPHIC_INST inst = OrcadReadGraphicInst( aReader, aPrefixes );
 
@@ -523,12 +532,11 @@ ORCAD_PIN_INST OrcadReadPinInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFI
     ORCAD_STREAM&  ds = aReader.Stream();
     ORCAD_PIN_INST pin;
 
-    ds.ReadU16();
+    pin.pinIndex = ds.ReadI16();
     pin.x = ds.ReadI16();
     pin.y = ds.ReadI16();
     pin.wordA = ds.ReadU32();
     pin.wordB = ds.ReadU32();
-
     pin.displayProps = OrcadReadDisplayPropList( aReader );
 
     // Remaining body bytes padding; record ends at outer stop.
@@ -539,20 +547,24 @@ ORCAD_PIN_INST OrcadReadPinInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFI
 }
 
 
-ORCAD_BUS_ENTRY OrcadReadBusEntry( ORCAD_STRUCT_READER& aReader,
-                                   const ORCAD_PREFIXES& /* aPrefixes */ )
+ORCAD_BUS_ENTRY OrcadReadBusEntryBody( ORCAD_STREAM& aStream )
 {
-    ORCAD_STREAM&   ds = aReader.Stream();
     ORCAD_BUS_ENTRY entry;
 
-    entry.color = static_cast<int>( ds.ReadU32() );
-    entry.x1 = ds.ReadI32();
-    entry.y1 = ds.ReadI32();
-    entry.x2 = ds.ReadI32();
-    entry.y2 = ds.ReadI32();
-    ds.Skip( 8 ); // unknown
+    entry.color = static_cast<int>( aStream.ReadU32() );
+    entry.x1 = aStream.ReadI32();
+    entry.y1 = aStream.ReadI32();
+    entry.x2 = aStream.ReadI32();
+    entry.y2 = aStream.ReadI32();
+    aStream.Skip( 8 );
 
     return entry;
+}
+
+
+ORCAD_BUS_ENTRY OrcadReadBusEntry( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& /* aPrefixes */ )
+{
+    return OrcadReadBusEntryBody( aReader.Stream() );
 }
 
 
@@ -574,22 +586,30 @@ std::vector<ORCAD_DISPLAY_PROP> OrcadReadDisplayPropList( ORCAD_STRUCT_READER& a
 }
 
 
-void OrcadReadT0x34Raw( ORCAD_STREAM& aStream )
+ORCAD_NET_GROUP OrcadReadT0x34Raw( ORCAD_STREAM& aStream )
 {
+    ORCAD_NET_GROUP net;
+
     aStream.Skip( 9 );
-    aStream.ReadU32();          // id
-    aStream.ReadLzt();
+    net.id = aStream.ReadU32();
+    net.name = aStream.ReadLzt();
     aStream.ReadU32();
-    aStream.ReadU32();          // color
-    aStream.ReadU32();          // line style
-    aStream.ReadU32();          // line width
+    aStream.ReadU32(); // color
+    aStream.ReadU32(); // line style
+    aStream.ReadU32(); // line width
+
+    return net;
 }
 
 
-void OrcadReadT0x35Raw( ORCAD_STREAM& aStream )
+ORCAD_NET_GROUP OrcadReadT0x35Raw( ORCAD_STREAM& aStream )
 {
-    OrcadReadT0x34Raw( aStream );
+    ORCAD_NET_GROUP net = OrcadReadT0x34Raw( aStream );
 
     uint16_t count = aStream.ReadU16();
-    aStream.Skip( 4 * static_cast<size_t>( count ) );
+
+    for( uint16_t i = 0; i < count; ++i )
+        net.members.push_back( aStream.ReadU32() );
+
+    return net;
 }

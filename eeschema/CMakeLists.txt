@@ -116,6 +116,7 @@ set( EESCHEMA_SCH_IO
 
     # OrCAD IO plugin
     sch_io/orcad/orcad_cache.cpp
+    sch_io/orcad/orcad_cis.cpp
     sch_io/orcad/orcad_converter_sheet.cpp
     sch_io/orcad/orcad_converter_symbols.cpp
     sch_io/orcad/orcad_library.cpp

@@ -46,7 +46,8 @@ ORCAD_PAGE_SETTINGS OrcadParsePageSettings( ORCAD_STREAM& aStream )
 {
     ORCAD_PAGE_SETTINGS settings;
 
-    aStream.Skip( 8 );                  // create/modify dates
+    settings.createTimestamp = aStream.ReadU32();
+    settings.modifyTimestamp = aStream.ReadU32();
     aStream.Skip( 16 );                 // unknown
 
     settings.width = aStream.ReadU32();
@@ -54,11 +55,18 @@ ORCAD_PAGE_SETTINGS OrcadParsePageSettings( ORCAD_STREAM& aStream )
     settings.pinToPin = aStream.ReadU32();
 
     aStream.Skip( 2 );
-    aStream.Skip( 4 );                  // horizontal/vertical count
+    settings.horizontalCount = aStream.ReadU16();
+    settings.verticalCount = aStream.ReadU16();
     aStream.Skip( 2 );
-    aStream.Skip( 8 );                  // horizontal/vertical width
+    settings.horizontalWidth = aStream.ReadU32();
+    settings.verticalWidth = aStream.ReadU32();
     aStream.Skip( 48 );                 // unknown
-    aStream.Skip( 24 );                 // grid-reference character settings
+    settings.horizontalChar = aStream.ReadU32() != 0;
+    aStream.Skip( 4 );
+    settings.horizontalAscending = aStream.ReadU32() != 0;
+    settings.verticalChar = aStream.ReadU32() != 0;
+    aStream.Skip( 4 );
+    settings.verticalAscending = aStream.ReadU32() != 0;
 
     // 8 x u32 flags; flags[0] set = metric units (width/height in um, not mils)
     uint32_t flags[8];
@@ -67,6 +75,13 @@ ORCAD_PAGE_SETTINGS OrcadParsePageSettings( ORCAD_STREAM& aStream )
         flag = aStream.ReadU32();
 
     settings.isMetric = flags[0] != 0;
+    settings.borderDisplayed = flags[1] != 0;
+    settings.borderPrinted = flags[2] != 0;
+    settings.gridRefDisplayed = flags[3] != 0;
+    settings.gridRefPrinted = flags[4] != 0;
+    settings.titleblockDisplayed = flags[5] != 0;
+    settings.titleblockPrinted = flags[6] != 0;
+    settings.ansiGridRefs = flags[7] != 0;
 
     return settings;
 }
@@ -83,7 +98,8 @@ ORCAD_LIBRARY_INFO OrcadParseLibrary( const std::vector<char>& aData )
 
     lib.versionMajor = stream.ReadU16();
     lib.versionMinor = stream.ReadU16();
-    stream.Skip( 8 );                   // create/modify dates
+    lib.createTimestamp = stream.ReadU32();
+    lib.modifyTimestamp = stream.ReadU32();
     stream.Skip( 4 );                   // zeros
 
     // u16 font count stores count+1; count-1 LOGFONTA records follow
@@ -91,13 +107,17 @@ ORCAD_LIBRARY_INFO OrcadParseLibrary( const std::vector<char>& aData )
 
     for( int i = 0; i < fontCount - 1; i++ )
     {
-        // 60-byte LOGFONTA; lfHeight i32 +0, lfWeight i32 +16, lfItalic u8 +20, lfFaceName char[32] +28
+        // 60-byte LOGFONTA; numeric fields through lfWeight, flags, then lfFaceName char[32].
         std::vector<uint8_t> rec = stream.ReadBytes( 60 );
 
         ORCAD_FONT font;
         font.height = i32At( rec, 0 );
+        font.width = i32At( rec, 4 );
+        font.escapement = i32At( rec, 8 );
+        font.orientation = i32At( rec, 12 );
         font.italic = rec[20] != 0;
         font.bold = i32At( rec, 16 ) >= 600;
+        font.pitchAndFamily = rec[27];
 
         size_t faceLen = 0;
 
@@ -111,15 +131,40 @@ ORCAD_LIBRARY_INFO OrcadParseLibrary( const std::vector<char>& aData )
 
     if( lib.versionMajor >= 2 )
     {
-        // u16 length (always 24), 2 * length bytes, 8 bytes
+        // Design Template font indices followed by reserved slots and flags.
         uint16_t someLen = stream.ReadU16();
-        stream.Skip( 2 * static_cast<size_t>( someLen ) );
+        lib.templateFonts.resize( someLen );
+
+        for( uint16_t i = 0; i < someLen; ++i )
+        {
+            int fontIdx = stream.ReadU16();
+            lib.templateFonts[i] = fontIdx;
+
+            if( i == 10 && fontIdx > 0 )
+                lib.pinNameFont = i;
+            else if( i == 11 && fontIdx > 0 )
+                lib.pinNumberFont = i;
+        }
+
         stream.Skip( 8 );
     }
     else
     {
-        // v1.x fixed 42 bytes (17 x u16 + 2 x u32, no count field)
-        stream.Skip( 42 );
+        // v1.x has the same first 17 slots without a count field.
+        lib.templateFonts.resize( 17 );
+
+        for( int i = 0; i < 17; ++i )
+        {
+            int fontIdx = stream.ReadU16();
+            lib.templateFonts[i] = fontIdx;
+
+            if( i == 10 && fontIdx > 0 )
+                lib.pinNameFont = i;
+            else if( i == 11 && fontIdx > 0 )
+                lib.pinNumberFont = i;
+        }
+
+        stream.Skip( 8 );
     }
 
     // 8 named part fields (Part Reference, Value, ...)
@@ -129,57 +174,19 @@ ORCAD_LIBRARY_INFO OrcadParseLibrary( const std::vector<char>& aData )
     ORCAD_PAGE_SETTINGS settings = OrcadParsePageSettings( stream );
     lib.pinToPin = settings.pinToPin;
 
-    size_t tablePos = stream.GetOffset();
+    // The count width belongs to the format version: pre-2003 files store u16, later ones u32.
+    uint32_t stringCount = lib.versionMajor < 3 ? stream.ReadU16() : stream.ReadU32();
 
-    // Count = u32 (modern) or u16 (legacy). Wrong width yields implausible count, so
-    // sanity-check each vs remaining bytes; failed read keeps parsed strings, never aborts file
-    auto readStringTable = [&]( bool aU16Count ) -> bool
+    if( stringCount > 2000000
+        || static_cast<uint64_t>( stringCount ) * 3 > static_cast<uint64_t>( stream.Remaining() ) + 16 )
     {
-        stream.Seek( tablePos );
-        lib.strings.clear();
-
-        uint32_t count = aU16Count ? stream.ReadU16() : stream.ReadU32();
-
-        if( count > 2000000
-            || static_cast<uint64_t>( count ) * 3
-                       > static_cast<uint64_t>( stream.Remaining() ) + 16 )
-        {
-            return false;
-        }
-
-        for( uint32_t i = 0; i < count; i++ )
-            lib.strings.push_back( stream.ReadLzt() );
-
-        return true;
-    };
-
-    // Legacy v2.x always u16; u32-first can pass sanity w/ bogus large count -> huge alloc
-    bool u16First = lib.versionMajor < 3;
-
-    try
-    {
-        if( !readStringTable( u16First ) && !readStringTable( !u16First ) )
-        {
-            stream.Seek( tablePos );
-            lib.strings.clear();
-        }
+        THROW_IO_ERRORF( wxS( "OrCAD library: string table count %u does not fit the stream" ), stringCount );
     }
-    catch( const IO_ERROR& )
-    {
-        try
-        {
-            if( !readStringTable( !u16First ) )
-            {
-                stream.Seek( tablePos );
-                lib.strings.clear();
-            }
-        }
-        catch( const IO_ERROR& )
-        {
-            stream.Seek( tablePos );
-            lib.strings.clear();
-        }
-    }
+
+    lib.strings.reserve( stringCount );
+
+    for( uint32_t i = 0; i < stringCount; i++ )
+        lib.strings.push_back( stream.ReadLzt() );
 
     // Alias pairs and root schematic folder follow; both optional, so read failure
     // must not sink whole library

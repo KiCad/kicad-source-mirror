@@ -20,14 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @file orcad_page.h
- *
- * Parsers for the per-page streams 'Views/<folder>/Pages/<page>', the per-folder
- * page-order stream 'Views/<folder>/Schematic', and — for hierarchy DETECTION
- * only — the 'Views/<folder>/Hierarchy/Hierarchy' stream.  Implemented in
- * orcad_page.cpp.
- */
 
 #ifndef ORCAD_PAGE_H_
 #define ORCAD_PAGE_H_
@@ -39,125 +31,46 @@
 
 #include <sch_io/orcad/orcad_records.h>
 
-/**
- * Parse one 'Views/<folder>/Pages/<page>' stream into raw structure lists.
- *
- * Stream layout: one framed structure of type 10 (Page) whose body starts with
- * lzt page name, lzt page-size name, then the 156-byte PageSettings block
- * (OrcadParsePageSettings — supplies width/height/isMetric), followed by these
- * u16-counted lists in order:
- *
- *   1. title blocks           framed structures (type 65)
- *   2. T0x34 records          raw, NOT prefix-framed (OrcadReadT0x34Raw)
- *   3. T0x35 records          raw, NOT prefix-framed (OrcadReadT0x35Raw)
- *   4. net table              per entry: lzt net name + u32 net db id
- *   5. wires                  framed (types 20/21)
- *   6. placed parts           framed; type 13 -> instances, type 12 -> blocks
- *   7. ports                  framed (type 23)
- *   8. globals                framed (type 37), each entry followed by 5 bytes
- *   9. off-page connectors    framed (type 38), each entry followed by 5 bytes
- *  10. ERC objects            framed (type 77)
- *  11. bus entries            framed (type 29)
- *  12. graphic instances      framed (types 55..62, 88, 89)
- *
- * The net table is authoritative for net names and junction computation: wires
- * carry ids that key it.  Structures that fail to parse are skipped with a
- * warning via aWarn (never aborting the page); only a structurally unreadable
- * Page structure itself throws IO_ERROR.
- */
-ORCAD_RAW_PAGE OrcadParsePage( const std::vector<char>& aData,
-                               const std::vector<std::string>& aStrings,
+/** A body failure skips that structure. Invalid page framing throws IO_ERROR. */
+ORCAD_RAW_PAGE OrcadParsePage( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
                                const ORCAD_WARN_FN& aWarn );
 
-/**
- * Parse the 'Views/<folder>/Schematic' stream and return the folder's page names
- * in display order.
- *
- * Layout: one prefix chain, lzt folder name, 4 bytes, u16 page count, then the
- * lzt page names stored LAST-FIRST (the returned vector is already reversed into
- * display order).
- *
- * The caller (plugin shell) must intersect the result with the page streams that
- * actually exist under 'Views/<folder>/Pages/', append any pages missing from the
- * order stream, and fall back to name-sorted order with a warning when this
- * parser throws IO_ERROR.
- */
+/** Returns display order. The caller must reconcile these names with available page streams. */
 std::vector<std::string> OrcadParsePageOrder( const std::vector<char>& aData );
 
-// Throws IO_ERROR if the legacy page-order stream has invalid framing.
-std::vector<std::string> OrcadParsePageOrderV2( const std::vector<char>& aData,
+/** Returns display order; throws IO_ERROR for invalid legacy framing. */
+std::vector<std::string> OrcadParsePageOrderV2( const std::vector<char>&        aData,
                                                 const std::vector<std::string>& aStrings );
 
-/**
- * Parse a 'Views/<folder>/Hierarchy/Hierarchy' stream into block-instance links:
- * block db id -> child folder name.  Used to name skipped child folders in
- * hierarchy warnings (hierarchical designs are converted flat).
- *
- * The stream header is version-fragile, so the reader scans for preambles and
- * backtracks prefix chains (OrcadFindStructureStart), keeping only type-66
- * structures.  Type-66 body: u32, u32 instance db id, u8 inner-frame marker that
- * must equal 0x42, u32, u32, lzt child folder name, lzt occurrence reference.
- * Bad candidates are skipped silently; the scan never throws.
- *
- * When aOccurrenceRefs is non-null it receives instance db id -> reference
- * designator from the second lzt, which occurrence-annotated designs use to
- * store the real refdes that the placed instance itself leaves as "C?".
- */
-std::map<uint32_t, std::string> OrcadReadHierarchyLinks( const std::vector<char>& aData,
-                                                         const std::vector<std::string>& aStrings,
-                                                         const ORCAD_WARN_FN& aWarn,
-                                                         std::map<uint32_t, std::string>*
-                                                                 aOccurrenceRefs = nullptr );
+/** Unlisted Views storages can be stale. Import them only if a hierarchy occurrence refers to them. */
+std::vector<std::string> OrcadParseSchematicFolderOrder( const std::vector<char>& aData );
 
-/**
- * Parse the root folder 'Hierarchy/Hierarchy' stream into the full occurrence tree:
- * per-scope part reference designators (keyed by placed-instance db id) and the
- * hierarchical block occurrences that descend into child schematics, each with its
- * own nested scope so a schematic reused N times yields N per-occurrence ref sets.
- *
- * Returns an empty scope for legacy pre-preamble streams (which are instance-
- * annotated) and on any parse error (the caller then falls back to the scan-based
- * OrcadReadHierarchyLinks for the flat root-scope refs).
- */
-ORCAD_OCC_SCOPE OrcadReadOccurrenceTree( const std::vector<char>& aData,
+/** Returns occurrence references and child scopes. Parse errors return an empty scope. */
+ORCAD_OCC_SCOPE OrcadReadOccurrenceTree( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
                                          const ORCAD_WARN_FN& aWarn );
 
-/**
- * Parse one v2.0 (pre-2003) 'Views/<folder>/Pages/<page>' stream.  v2.0 uses
- * short-prefix-only framing (no long prefixes, no FF E4 5C 39 preambles) with u16
- * string-table indices and a collapsed primitive envelope, but the same record
- * vocabulary as the modern format.  Throws IO_ERROR on any framing error (the
- * format has no per-record skip offsets, so recovery is per-page).
- */
-ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
-                                 const std::vector<std::string>& aStrings,
-                                 const ORCAD_WARN_FN& aWarn );
+/** Parse a short-prefix-only v2.0 Hierarchy stream without scan recovery. */
+ORCAD_OCC_SCOPE OrcadReadOccurrenceTreeV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings );
 
-// Skip unreadable entries; warn if the cache yields no symbols.
+/** Legacy records have no stop offsets. A framing error throws IO_ERROR and discards the page. */
+ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
+                                 const ORCAD_WARN_FN& aWarn, bool aShortDisplayProp = false );
+
+/** Keep decoded entries if a framing error ends the legacy cache. */
 void OrcadParseCacheV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                        const ORCAD_WARN_FN& aWarn,
-                        std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols );
+                        const ORCAD_WARN_FN& aWarn, std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
+                        std::map<std::string, ORCAD_PACKAGE>& aPackages );
 
-/**
- * Parse one v2.0 .OLB 'Symbols/<name>' stream (a single special symbol: power,
- * port, off-page, title block or ERC) into aSymbols, keyed by symbol name.
- * Throws IO_ERROR on a framing error.
- */
-void OrcadParseOlbSymbolStreamV2( const std::vector<char>& aData,
-                                  const std::vector<std::string>& aStrings,
-                                  std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols );
+/** aShortDisplayProp selects the version 1 display-property layout. */
+void OrcadParseOlbSymbolStreamV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
+                                  std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols, bool aShortDisplayProp = false );
 
-/**
- * Parse one v2.0 .OLB 'Packages/<name>' stream (a part's inline symbol definitions
- * plus its package/device pin maps) into aSymbols (keyed by view name, e.g.
- * "7400.Normal") and aPackages (keyed by package name).  Throws on a framing error.
- */
-void OrcadParseOlbPackageStreamV2( const std::vector<char>& aData,
-                                   const std::vector<std::string>& aStrings,
+/** aShortDisplayProp selects the version 1 display-property layout. */
+void OrcadParseOlbPackageStreamV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
                                    std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
-                                   std::map<std::string, ORCAD_PACKAGE>& aPackages );
+                                   std::map<std::string, ORCAD_PACKAGE>& aPackages, bool aShortDisplayProp = false );
 
-/// True when the page contains hierarchical block instances (DrawnInstance, type 12).
+/** True when the page contains hierarchical block instances (DrawnInstance, type 12). */
 inline bool OrcadPageHasHierarchyBlocks( const ORCAD_RAW_PAGE& aPage )
 {
     return !aPage.blocks.empty();

@@ -1,8 +1,10 @@
 # OrCAD Capture legacy (pre-2003) design format
 
-Companion to `orcad_dsn.ksy`, which documents the modern (version 3.x) framing.  This
-file records what is known about the version 1.x/2.x framing that `SCH_IO_ORCAD` currently
-gates off with `design.library.versionMajor < 3`.
+Read when changing the OrCAD stream parsers or investigating import failures.
+
+`orcad_dsn.ksy` records the modern and legacy layouts. This document records the
+container rules and historical corpus measurements. Those measurements predate
+the expanded decoder and are not a current coverage claim.
 
 ## Version detection
 
@@ -30,92 +32,19 @@ two families differ in three independent ways:
    table; version 2 pairs are `u16`/`u16`, with `0xFFFF` meaning "empty".
 3. **String table length.**  Version 3 counts strings with a `u32`; version 2 uses a `u16`.
 
-Items 1-3 are already handled.  What follows is the part that is not.
+## Cache framing
 
-## The `Cache` stream
+Both families use a zero u16 marker followed by four counted sections: loose
+symbols, LibraryParts, PartCells, and Packages. Each section contains a u16 group
+count. A group contains an LZT name, a u16 variant count, and that many entries.
+Each entry contains an LZT source library, two u32 dates, a type byte, a zero pad,
+and a body in the selected framing.
 
-In a version 3 design the root `Cache` stream is preamble-framed and `OrcadParseCache`
-reads it.  In a version 2 design it uses an entirely different container, so the importer
-skips it and synthesizes a placeholder symbol for every part.  That is the single largest
-visible defect in legacy import: the netlist and the sheet come through, but no part has
-its real graphics.
-
-The container has been recovered from the corpus:
-
-```
-cache_stream:
-    u16     unknown0                    observed 0
-    u16     unknown1                    observed 2
-    entry*                              until the stream is consumed
-
-entry:
-    lzt     name                        "C.Normal", "TitleBlock0", "MC33063.Normal"
-    u16     flag                        observed 1
-    lzt     sourceLib                   absolute path of the .OLB it came from
-    u32     dateCreated                 time_t
-    u32     dateModified                time_t
-    u8      typeId                      structure type of the body
-    u8      0x00                        mandatory pad; the type byte is doubled
-    body                                type-specific; its short prefix repeats typeId
-```
-
-The doubled type byte is the same convention `ORCAD_PRIM_SYMBOL_VECTOR` already uses for
-its nested graphic, so it is a general version 2 idiom rather than a quirk of this stream.
-
-### Entry body types
-
-The `typeId` values observed as cache entries are all existing `ORCAD_STRUCTURE_TYPE`
-members:
-
-| typeId | name | body | files |
-|--------|------|------|-------|
-| 24 | `ORCAD_ST_LIBRARY_PART` | symbol definition; a part's drawn body | 187 |
-| 31 | `ORCAD_ST_PACKAGE` | pin map, no graphics | 182 |
-| 33 | `ORCAD_ST_GLOBAL_SYMBOL` | power symbol; tail carries the net name | 174 |
-| 64 | `ORCAD_ST_TITLEBLOCK_SYMBOL` | title block | 159 |
-| 26 | `ORCAD_ST_SYMBOL_PIN_SCALAR` | pin shape | 121 |
-| 75 | `ORCAD_ST_ERC_SYMBOL` | ERC marker shape | 83 |
-| 35 | `ORCAD_ST_OFFPAGE_SYMBOL` | off-page connector shape | 55 |
-| 49 | `ORCAD_ST_ALIAS` | net alias | 23 |
-| 48 | `ORCAD_ST_SYMBOL_VECTOR` | nested vector graphic | 18 |
-| 76 | `ORCAD_ST_BOOKMARK_SYMBOL` | bookmark shape | 12 |
-| 34 | `ORCAD_ST_PORT_SYMBOL` | hierarchical port shape | 10 |
-
-The "files" column counts how many of the 188 legacy designs in the corpus contain at
-least one entry of that type.  Every value that appears is an existing
-`ORCAD_STRUCTURE_TYPE` member, which is the strongest evidence that the structure
-numbering did not change between the two format families.
-
-For every symbol-bearing type the body is **byte-identical to what `v2SymbolDef` already
-reads** for `.OLB` `Symbols/<name>` streams:
-
-```
-symbol_def:
-    short prefix                        u8 typeId, i16 propCount, pairs of u16/u16
-    lzt     name
-    lzt     sourceLib
-    u32     colour
-    u16     primitiveCount
-    primitive*                          u8 type then a body from the table below
-    i16     bbox x1, y1, x2, y2
-```
-
-Primitive bodies are the ordinary `ORCAD_PRIM_*` set (40 rect, 41 line, 42 arc, 43 ellipse,
-44 polygon, 45 polyline, 46 text, 48 symbol vector).  Nothing about them is version
-specific.  This is the important result: the version 2 symbol grammar was already correct
-and already implemented; only the container that locates each definition was missing.
-
-### Entry tail
-
-After the symbol definition each entry carries a type-specific tail before the next entry
-begins.  For `ORCAD_ST_TITLEBLOCK_SYMBOL` the tail is `u16 pad` then a display-property
-list (`u16 count`, then `count` records of a type-39 short prefix plus a 12-byte body).
-For `ORCAD_ST_GLOBAL_SYMBOL` the tail additionally carries an `lzt` net name ("GND") and
-six `u32` fields before its display-property list.
-
-The tail is the one part not yet fully pinned down, and it is the reason a walk cannot
-yet run end to end.  It is a bounded problem: the tails belong to the structure types, not
-to the container, and several of those types already have readers in the page path.
+The first definition is the default. Later definitions with the same name become
+variants. Modern records have prefix bounds for recovery. A legacy framing error
+ends the stream and preserves definitions already read; it does not scan for a
+later header. Cache PartCells end after their view lists, while Package PartCells
+also contain inline symbol definitions.
 
 ## Corpus state
 
@@ -163,58 +92,34 @@ Compare local net names without their sheet path. KiCad can export `CB1` as
 `/TILE_TPS65400 (2)/CB1`. Exclude bus aliases such as `clk_n[11:8]` from scalar net
 comparisons.
 
-## What the corpus proves
+## Initial cache scan
 
 A scanner that recognises symbol definitions by their decoded fields, rather than by any
 byte pattern, was run over all 188 legacy designs.  Every file yielded definitions, and
 together they hold **10,934 symbol definitions carrying 120,861 graphic primitives** — all
 of which the importer discarded before the cache fix.
 
-Median coverage is 56% of `Cache` bytes.  The unclaimed remainder is the per-entry headers
-and tails, not unrecognised graphics: the primitive grammar never needed a version 2
-variant.
+The initial scanner decoded a median of 56% of each Cache stream. The sequential
+parser described above replaced that scanner.
 
-## Hierarchical block instances (not yet decoded)
+## Hierarchy and stream selection
 
-53 of the 188 legacy designs have more than one schematic folder.  Most import (flat),
-but a design whose root page carries the hierarchical blocks loses that page entirely,
-because the page reader parses every entry of the placed-instance list with the part
-grammar and type 12 (`ORCAD_ST_DRAWN_INSTANCE`) has a different body.
+Type 12 describes a hierarchical block. Its inline LibraryPart supplies the pin
+interface; placed pin records supply page positions. Both format families now
+have block and occurrence readers. Repeated child folders receive separate
+occurrence references.
 
-Partial decode of one block, from `M523XEVB-SCH-ORCAD/SCH-20380.DSN`, page
-`Hierarchical Interconnects`, offset `0x55e1`:
+DSN import reads Library, Cache, local Packages, Views Directory, page-order,
+page, hierarchy, and CIS streams. The Views Directory supplies visible folders;
+an unlisted folder is imported only when a hierarchy occurrence reaches it.
+Standalone OLB import also reads Symbols streams and skips names beginning with `$`.
 
-```
-u8   typeId = 12
-i16  propCount = 0
-u32  ?                          0x000000c3
-u32  ?                          0x0012f340
-u16  ?                          0
-u32  ?                          0x002ab2ed
-u16  ?                          0x0013
-i16  ?  x4                      819, 165, 1103, 820      bounding box, order unconfirmed
-i16  ?  x2                      40, 48
-u16  ?                          0x000c
-u16  displayPropCount = 2       followed by 2 x 15-byte type-39 display properties
-     ... 25 undecoded bytes ...
-u16  portCount = 21
-port*                           type 26/27 records, identical to v2SymbolPin
-```
+The Library version selects the framing. A modern design can contain a legacy
+Package stream; its header selects that stream's parser. Legacy files always use
+the legacy Package grammar.
 
-The ports are ordinary `v2SymbolPin` records (`/RSTOUT`, `ETH_CLK`, `EMDIO`, `EMDC`,
-`/IRQ[7:1]`, `ECOL`), so only the 25-byte block header between the display properties and
-the port count is still unknown.  Until it is, the reader stops at the block and says so
-rather than desynchronising into a misleading stream error further down the page.
-
-## Not yet examined
-
-* The `Packages/<name>` and `Symbols/<name>` storages of a version 2 `.DSN`.  The plugin
-  currently reads these only for version 3 (`!isV2 ? FindStreamSingleLevel(...)`), yet the
-  storages are present in version 2 files, and the `.OLB` readers
-  `OrcadParseOlbPackageStreamV2` / `OrcadParseOlbSymbolStreamV2` may apply unchanged.
-* The root `Hierarchy` storage of version 1.1 files, which version 3 relocates to
-  `Views/<root>/Hierarchy/Hierarchy`.
-* Version 3.3, which no corpus test currently covers.
+CIS selection uses the requested variant or the first name in byte order. Its
+property overrides are applied to occurrences before schematic conversion.
 
 ## Corpus
 
@@ -235,7 +140,7 @@ Open an extracted stream in the Kaitai IDE.
 |---|---|
 | `/Library` | Version, fonts, string table |
 | `/Cache` | Cached symbols and packages |
-| `/Symbols/<name>` | One symbol |
+| `/Symbols/<name>` | One symbol (OLB import only) |
 | `/Packages/<name>` | Part cells, library parts, package |
 | `/Views/<folder>/Schematic` | Page display order |
 | `/Views/<folder>/Pages/<page>` | One page |
