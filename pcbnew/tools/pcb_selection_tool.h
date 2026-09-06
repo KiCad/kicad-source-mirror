@@ -316,6 +316,13 @@ public:
     static bool isWithinEnteredGroup( BOARD_ITEM* aItem, PCB_GROUP* aEnteredGroup, bool aIsFootprintEditor );
 
     /**
+     * True if the Render tab's Footprints Front/Back switches leave aItem drawn, mirroring the
+     * ViewGetLOD() overrides that implement them (25416).
+     */
+    static bool isOnVisibleFootprintSide( const BOARD_ITEM& aItem, bool aFrontVisible,
+                                          bool aBackVisible, bool aIsFootprintEditor );
+
+    /**
      * If the most recent FilterCollectorForLockedItems call filtered a locked item, show an
      * InfoBar warning prompting the user to enable Override locks and return true.  The caller
      * should stop the action in that case.  Return false otherwise.
