@@ -242,12 +242,6 @@ public:
     void CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I& aMidpoint,
                             VECTOR2I& aDirection ) const;
 
-    void dump()
-    {
-        printf( "-- Prim-P %p anchor [%d, %d]\n", m_primP, m_anchorP.x, m_anchorP.y );
-        printf( "-- Prim-N %p anchor [%d, %d]\n", m_primN, m_anchorN.x, m_anchorN.y );
-    }
-
     void SetIsMidtrace( bool aMidtrace )
     {
         m_isMidtrace = aMidtrace;

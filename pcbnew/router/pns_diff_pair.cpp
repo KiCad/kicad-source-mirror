@@ -191,25 +191,6 @@ static DIRECTION_45::AngleType angle( const VECTOR2I &a, const VECTOR2I &b )
 }
 
 
-static bool checkGap( const SHAPE_LINE_CHAIN& p, const SHAPE_LINE_CHAIN& n, int gap )
-{
-    SEG::ecoord gap_sq = SEG::Square( gap - 100 );
-
-    for( int i = 0; i < p.SegmentCount(); i++ )
-    {
-        for( int j = 0; j < n.SegmentCount(); j++ )
-        {
-            SEG::ecoord dist_sq = p.CSegment( i ).SquaredDistance( n.CSegment( j ) );
-
-            if( dist_sq < gap_sq )
-                return false;
-        }
-    }
-
-    return true;
-}
-
-
 void DP_GATEWAY::Reverse()
 {
     m_entryN = m_entryN.Reverse();
@@ -253,8 +234,6 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarge
     SHAPE_LINE_CHAIN sum_n, sum_p;
     m_p = p;
     m_n = n;
-
-    bool entryDirMatch = true;
 
     bool entryIsStraight = false;
     bool targetIsStraight = false;
@@ -575,34 +554,37 @@ void DP_GATEWAYS::addGateway( DP_GATEWAY& aGw, const wxString& name, bool aAddTu
     aGw.SetDimensions( m_dims );
     m_gateways.push_back( aGw );
 
-
     if( aAddTurns )
     {
         const int                 extensionDist = 600000;
         std::optional<DP_GATEWAY> extend, turn45_l, turn45_r, turn45_lw, turn45_rw;
         std::optional<DP_GATEWAY> turn45_le, turn45_re;
 
-        if( turn45_l = aGw.AddTurns( false, false, true, false ) )
+        turn45_l = aGw.AddTurns( false, false, true, false );
+        if( turn45_l.has_value() )
         {
             addGateway( *turn45_l, "45-l" );
-            if( turn45_le = turn45_l->Extend( extensionDist ) )
+            turn45_le = turn45_l->Extend( extensionDist );
+            if( turn45_le.has_value() )
             {
                 addGateway( *turn45_le, "45-lext" );
 
                 std::optional<DP_GATEWAY> turn90_lel = turn45_le->AddTurns( false, false, true, false );
-                if( turn90_lel )
+                if( turn90_lel.has_value() )
                     addGateway( *turn90_lel, "90-lext-l" );
             }
         }
         //if( turn45_lw = aGw.AddTurns( false, false, true, true ) )
         //  addGateway( *turn45_lw, "45-lw" );
-        if( turn45_r = aGw.AddTurns( false, false, false, false ) )
+        turn45_r = aGw.AddTurns( false, false, false, false );
+        if( turn45_r.has_value() )
         {
             addGateway( *turn45_r, "45-r" );
-            if( turn45_re = turn45_r->Extend( extensionDist ) )
+            turn45_re = turn45_r->Extend( extensionDist );
+            if( turn45_re.has_value() )
             {
                 std::optional<DP_GATEWAY> turn90_rer = turn45_re->AddTurns( false, false, false, false );
-                if( turn90_rer )
+                if( turn90_rer.has_value() )
                     addGateway( *turn90_rer, "90-rext-r" );
             }
         }
@@ -655,8 +637,7 @@ std::vector<DP_GATEWAYS::FIT_RESULT> DP_GATEWAYS::FitGateways( DP_GATEWAYS& aEnt
     auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
     PNS_DBG( dbg, BeginGroup, wxT( "fit-gateways" ), 0 );
-    bool found;
-
+    
     for( bool diagonal : { true, false } )
     {
         for( const DP_GATEWAY& g_entry : aEntry.Gateways() )
@@ -1252,15 +1233,11 @@ void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs,
     gapConstraint.SetMin( 0 );
     gapConstraint.SetMax( (int) ( (double)m_dims.Width() * threshold ) );
  
-    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-
     if ( aOverrideGapConstraint )
         gapConstraint = aOverrideGapConstraint.value();
     else if( aUseGapConstraint )
         gapConstraint = m_dims.GapConstraint();
     
-    bool pickNearest = !gapConstraint.HasMax();
-
     double opt = gapConstraint.Opt();
 
     if( !gapConstraint.HasMax() )
@@ -1468,9 +1445,7 @@ std::optional<DP_PRIMITIVE_PAIR> DIFF_PAIR::BuildMidpairIntersection( PNS::SEGME
     // still nothing? take the nearest vertex of the complement track
     if( !prims )
     {
-        auto  nearest = coupledLine.CLine().NearestPoint( pproj );
-        ITEM* nearestLink = nullptr;
-        ITEM* refLink = nullptr;
+        auto nearest = coupledLine.CLine().NearestPoint( pproj );
 
         if( nHasStart )
         {

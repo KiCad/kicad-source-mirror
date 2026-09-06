@@ -570,11 +570,7 @@ bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP )
         return false;
 
     const JOINT* jt = aNode->FindJoint( aP, aSeg );
-    if( jt )
-    {
-        printf("jt %d %d lc %d\n", jt->Pos().x, jt->Pos().y, jt->LinkCount() );
-    }
-
+    
     if( jt && jt->LinkCount() >= 1 )
     {
         return false;

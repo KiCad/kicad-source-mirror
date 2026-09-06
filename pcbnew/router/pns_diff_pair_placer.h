@@ -226,7 +226,6 @@ private:
     bool findDpMidtraceIntersection( NODE* aWorld, const VECTOR2I& aP,
                                                    ITEM* aStartItem, DP_PRIMITIVE_PAIR& aPair,
                                                    wxString* aErrorMsg );
-
     enum State {
         RT_START = 0,
         RT_ROUTE = 1,

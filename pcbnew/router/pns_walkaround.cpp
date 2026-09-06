@@ -101,6 +101,7 @@ void WALKAROUND::RestrictToCluster( bool aEnabled, const TOPOLOGY::CLUSTER& aClu
     }
 }
 
+/*
 static wxString policy2string ( WALKAROUND::WALK_POLICY policy )
 {
     switch(policy)
@@ -111,6 +112,7 @@ static wxString policy2string ( WALKAROUND::WALK_POLICY policy )
     }
     return wxT("?");
 }
+*/
 
 bool WALKAROUND::singleStep()
 {
