@@ -248,26 +248,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         if( !crossProbingSettings.auto_highlight )
             return;
 
-        wxString netName = From_UTF8( text );
-
-        if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( netName ) )
-            SetHighlightedConnection( sg->GetDriverConnection()->Name(), nullptr, true );
-        else
-            SetHighlightedConnection( wxEmptyString, nullptr, true );
-
-        // If the incoming net belongs to a net chain, also turn on chain
-        // highlight so the schematic mirrors what the PCB editor is doing.
-        if( CONNECTION_GRAPH* graph = Schematic().ConnectionGraph() )
-        {
-            if( SCH_NETCHAIN* chain = graph->GetNetChainForNet( m_highlightedConn ) )
-                SetHighlightedNetChain( chain->GetName() );
-            else
-                SetHighlightedNetChain( wxEmptyString );
-        }
-
-        GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
-
-        SetStatusText( _( "Highlighted net:" ) + wxS( " " ) + UnescapeString( netName ) );
+        HandleRemoteNetHighlight( From_UTF8( text ) );
         return;
     }
     else if( strcmp( idcmd, "$CLEAR:" ) == 0 )
