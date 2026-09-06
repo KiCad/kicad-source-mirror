@@ -125,7 +125,6 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCH
 
     if( aAppendToMe )
     {
-        m_appending = true;
         wxLogTrace( traceSchPlugin, "Append \"%s\" to sheet \"%s\".",
                     aFileName, aAppendToMe->GetFileName() );
 
@@ -149,6 +148,7 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCH
 
     m_currentPath.push( m_path );
     init( aSchematic, aProperties );
+    m_appending = aAppendToMe != nullptr;
 
     if( aAppendToMe == nullptr )
     {
