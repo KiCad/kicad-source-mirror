@@ -24,10 +24,8 @@
 #include <cstddef>
 #include <optional>
 #include <unordered_map>
-#include <unordered_set>
 #include <vector>
 #include <memory>
-#include <span>
 
 #include <gal/cursors.h>
 #include <math/vector2d.h>
@@ -46,7 +44,8 @@ class VIEW_OVERLAY;
 
 /**
  * Helper responsible for tracking the original net assignments of items involved in a drag
- * operation and providing visual feedback when the drag would create an unintended net merge.
+ * operation and providing approximate local merge and broken-contact warnings.
+ * Net assignments are frozen at startup; dragging never rebuilds the connectivity graph.
  */
 class SCH_DRAG_NET_COLLISION_MONITOR
 {
@@ -56,20 +55,11 @@ public:
 
     void Initialize( const SCH_SELECTION& aSelection );
 
-    struct PREVIEW_NET_ASSIGNMENT
-    {
-        const SCH_ITEM*  item;
-        std::optional<int> netCode;
-    };
-
-    bool Update( const std::vector<SCH_JUNCTION*>& aJunctions, const SCH_SELECTION& aSelection,
-                 std::span<const PREVIEW_NET_ASSIGNMENT> aPreviewAssignments = {} );
+    bool Update( const std::vector<SCH_JUNCTION*>& aJunctions, const SCH_SELECTION& aSelection );
 
     void Reset();
 
     KICURSOR AdjustCursor( KICURSOR aBaseCursor ) const;
-
-    std::optional<int> GetNetCode( const SCH_ITEM* aItem ) const;
 
 private:
     struct COLLISION_MARKER
@@ -94,9 +84,7 @@ private:
     };
 
     std::optional<COLLISION_MARKER> analyzeJunction( SCH_JUNCTION* aJunction,
-                                                     const SCH_SELECTION& aSelection,
-                                                     const std::unordered_map<const SCH_ITEM*, std::optional<int>>&
-                                                             aPreviewNetCodes ) const;
+                                                      const SCH_SELECTION& aSelection ) const;
 
     void recordItemNet( SCH_ITEM* aItem );
     void recordOriginalConnections( const SCH_SELECTION& aSelection );
