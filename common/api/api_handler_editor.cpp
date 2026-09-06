@@ -18,11 +18,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ranges>
+
 #include <api/api_handler_editor.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
 #include <eda_base_frame.h>
 #include <eda_item.h>
+#include <pgm_base.h>
 #include <wx/wx.h>
 
 using namespace kiapi::common::commands;
