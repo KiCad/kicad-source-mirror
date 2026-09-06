@@ -86,8 +86,7 @@ void FILTER_COMBOPOPUP_LISTBOX::OnDrawItem( wxDC& aDC, const wxRect& aRect, size
     }
     else
     {
-        wxListBox dummy( GetParent(), wxID_ANY );
-        aDC.SetTextForeground( dummy.GetForegroundColour() );
+        aDC.SetTextForeground( wxListBox::GetClassDefaultAttributes( GetWindowVariant() ).colFg );
     }
 
     // Draw the text inside the item bounds
@@ -110,8 +109,7 @@ void FILTER_COMBOPOPUP_LISTBOX::OnDrawBackground( wxDC& aDC, const wxRect& aRect
     }
     else
     {
-        wxListBox dummy( GetParent(), wxID_ANY );
-        background = dummy.GetBackgroundColour();
+        background = wxListBox::GetClassDefaultAttributes( GetWindowVariant() ).colBg;
     }
 
     aDC.SetBrush( wxBrush( background ) );
