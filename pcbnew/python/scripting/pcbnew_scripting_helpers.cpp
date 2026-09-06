@@ -325,6 +325,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, PCB_IO_MGR::PCB_FILE_T aForm
 {
     aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses( false );
+    aBoard->SynchronizeProperties();
 
     try
     {

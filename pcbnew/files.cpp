@@ -1125,6 +1125,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     SaveProjectLocalSettings();
 
     GetBoard()->SynchronizeNetsAndNetClasses( false );
+    GetBoard()->SynchronizeProperties();
 
     // On Windows, ensure the target file is writeable by clearing problematic attributes like
     // hidden or read-only. This can happen when files are synced via cloud services.
