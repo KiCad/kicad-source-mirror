@@ -382,13 +382,13 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     {
         m_infoBar->RemoveAllButtons();
         m_infoBar->AddLink( _( "Exit sync pins mode" ),
-                      [&]( wxHyperlinkEvent& aEvent )
-                      {
-                          if( SYMBOL_EDITOR_SETTINGS* cfg = m_frame->GetSettings() )
-                              cfg->m_SyncPinEdit = !cfg->m_SyncPinEdit;
+                            [&]( wxHyperlinkEvent& aEvent )
+                            {
+                                if( SYMBOL_EDITOR_SETTINGS* cfg = m_frame->GetSettings() )
+                                    cfg->m_SyncPinEdit = !cfg->m_SyncPinEdit;
 
-                          m_infoBar->Dismiss();
-                      } );
+                                m_infoBar->Dismiss();
+                            } );
 
         m_infoBar->ShowMessage( getSyncPinsMessage() );
 
