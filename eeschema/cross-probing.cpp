@@ -483,7 +483,8 @@ void SCH_EDIT_FRAME::SetCrossProbeConnection( const SCH_CONNECTION* aConnection 
     }
     else
     {
-        std::string data = message.SerializeAsString();
+        std::string data;
+        kiapi::common::PackKiwayApiMessage( message, data );
         Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, data, this );
     }
 }
