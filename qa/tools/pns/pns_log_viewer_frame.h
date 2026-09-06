@@ -258,10 +258,10 @@ private:
     virtual void onRewindScroll( wxScrollEvent& event ) override;
     virtual void onRewindCountText( wxCommandEvent& event ) override;
     virtual void onListRightClick( wxMouseEvent& event );
-    virtual void onListSelect( wxCommandEvent& event );
+    virtual void onListSelect( wxTreeListEvent& event );
     virtual void onBtnRewindLeft( wxCommandEvent& event ) override;
     virtual void onBtnRewindRight( wxCommandEvent& event ) override;
-    virtual void onListChecked( wxCommandEvent& event );
+    virtual void onListChecked( wxTreeListEvent& event );
     virtual void onShowThinLinesChecked( wxCommandEvent& event ) override;
     virtual void onShowRPIsChecked( wxCommandEvent& event ) override;
     virtual void onShowVerticesChecked( wxCommandEvent& event ) override;
@@ -276,6 +276,7 @@ private:
     std::shared_ptr<KIGFX::VIEW_GROUP>      m_previewItems;
     std::shared_ptr<PNS_VIEWER_IFACE>       m_viewerIface;
     std::map<wxString,wxString>             m_filenameToPathMap;
+    std::optional<PNS_DEBUG_SHAPE*>         m_lastSelectedItem;
 
     bool m_showThinLines = true;
     bool m_showRPIs = true;

@@ -64,6 +64,25 @@ void PNS_DEBUG_SHAPE::AddChild( PNS_DEBUG_SHAPE* ent )
 }
 
 
+bool PNS_DEBUG_SHAPE::IsSelected() const
+{
+     if( m_selected )
+        return true;
+
+    PNS_DEBUG_SHAPE* parent = m_parent;
+
+    while( parent )
+    {
+        if( parent->m_selected )
+            return true;
+
+        parent = parent->m_parent;
+    }
+
+    return false;
+}
+    
+
 bool PNS_DEBUG_SHAPE::IsVisible() const
 {
     if( m_visible )

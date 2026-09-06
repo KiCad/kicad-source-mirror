@@ -181,10 +181,10 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) :
                          this );
     //m_itemList->Connect(m_itemList->GetId(),wxEVT_LISTBOX,wxCommandEventHandler(PNS_LOG_VIEWER_FRAME::onListSelect),nullptr,this);
     m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_SELECTION_CHANGED,
-                         wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListSelect ),
+                         wxTreeListEventHandler( PNS_LOG_VIEWER_FRAME::onListSelect ),
                          nullptr, this );
     m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CHECKED,
-                         wxCommandEventHandler( PNS_LOG_VIEWER_FRAME::onListChecked ),
+                         wxTreeListEventHandler( PNS_LOG_VIEWER_FRAME::onListChecked ),
                          nullptr, this );
 
     m_itemList->AppendColumn( "Type" );
@@ -295,12 +295,12 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
     auto drawShapes = [&]( PNS_DEBUG_SHAPE* ent ) -> bool
     {
         bool isEnabled = ent->IsVisible();
-        bool isSelected = ent->m_selected;
+        bool isSelected = ent->IsSelected();
 
         if( m_searchString.Length() > 0 )
             isEnabled = ent->m_filterMatch;
 
-        if( !isEnabled )
+        if( !isEnabled && !isSelected )
             return true;
 
         for( auto& sh : ent->m_shapes )
@@ -481,7 +481,7 @@ void PNS_LOG_VIEWER_FRAME::onExit( wxCommandEvent& event )
 }
 
 
-void PNS_LOG_VIEWER_FRAME::onListChecked( wxCommandEvent& event )
+void PNS_LOG_VIEWER_FRAME::onListChecked( wxTreeListEvent& event )
 {
     syncModel();
     drawLoggedItems( m_rewindIter );
@@ -595,6 +595,7 @@ void PNS_LOG_VIEWER_FRAME::syncModel()
         {
             bool checked = m_itemList->GetCheckedState( item ) == wxCHK_CHECKED;
             bool selected = m_itemList->IsSelected( item );
+            idata->m_item->m_checked = checked;
             idata->m_item->m_visible = checked || selected;
             idata->m_item->m_selected = selected;
         }
@@ -694,8 +695,16 @@ void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
 }
 
 
-void PNS_LOG_VIEWER_FRAME::onListSelect( wxCommandEvent& event )
+void PNS_LOG_VIEWER_FRAME::onListSelect( wxTreeListEvent& event )
 {
+    WX_SHAPE_TREE_ITEM_DATA* idata =
+        static_cast<WX_SHAPE_TREE_ITEM_DATA*>( m_itemList->GetItemData( event.GetItem() ) );
+
+    if( idata )
+    {
+        m_lastSelectedItem = idata->m_item;
+    }
+
     syncModel();
     drawLoggedItems( m_rewindIter );
 }
@@ -803,6 +812,8 @@ void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
     else
     {
         ritem = m_itemList->AppendItem( item, "Child" );
+        m_itemList->CheckItem( ritem, ent->m_selected ? wxCHK_CHECKED: wxCHK_UNCHECKED );
+
         int n_verts = 0;
         for(auto sh : ent->m_shapes )
         {
@@ -855,6 +866,12 @@ void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
 
     m_itemList->SetItemData( ritem, new WX_SHAPE_TREE_ITEM_DATA( ent, depth ) );
 
+    if( m_lastSelectedItem.has_value() && m_lastSelectedItem.value() == ent )
+    {
+        m_itemList->Select( ritem );
+        m_itemList->EnsureVisible( ritem );
+    }
+
     if( !ent->m_children.size() )
         return;
 
@@ -894,6 +911,25 @@ static void collapseAllChildren( wxTreeListCtrl* tree )
 }
 
 
+static void forceSelected( wxTreeListCtrl* tree, PNS_DEBUG_SHAPE* aEntry )
+{
+    wxTreeListItem child = tree->GetFirstItem ();
+
+    while( child.IsOk() )
+    {
+        WX_SHAPE_TREE_ITEM_DATA* idata =
+                static_cast<WX_SHAPE_TREE_ITEM_DATA*>( tree->GetItemData( child ) );
+
+        
+        if( idata && idata->m_item == aEntry )
+        {
+            tree->Select( child );
+            tree->Expand ( child );
+        }
+        child = tree->GetNextItem( child );
+    }
+}
+
 void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
 {
     printf("UpdateDUmp %d\n", iter );
@@ -931,11 +967,13 @@ void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
 
     m_itemList->DeleteAllItems();
     filterStringMatches( st->m_entries );
-    buildListTree( rootItem, st->m_entries );
     m_itemList->CheckItemRecursively( rootItem, wxCHK_UNCHECKED );
-
+    buildListTree( rootItem, st->m_entries );
+    
     expandAllChildren( m_itemList, 0 );
-
+    if (m_lastSelectedItem )
+         forceSelected( m_itemList, m_lastSelectedItem.value() );
+   
     m_itemList->Refresh();
 }
 

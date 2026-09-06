@@ -35,6 +35,7 @@ public:
     PNS_DEBUG_SHAPE* NewChild();
     void             AddChild( PNS_DEBUG_SHAPE* ent );
     bool             IsVisible() const;
+    bool IsSelected() const;
     void             IterateTree( std::function<bool( PNS_DEBUG_SHAPE* )> visitor, int depth = 0 );
 
     PNS_DEBUG_SHAPE*                        m_parent;
@@ -48,6 +49,7 @@ public:
     wxString                                m_msg;
     PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO m_srcLoc;
     bool                                    m_visible;
+    bool m_checked;
     bool                                    m_selected;
     bool                                    m_filterMatch;
     int                                     m_level;
