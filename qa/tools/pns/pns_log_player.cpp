@@ -41,7 +41,8 @@ PNS_LOG_PLAYER::~PNS_LOG_PLAYER()
 {
 }
 
-void PNS_LOG_PLAYER::createRouter()
+
+void PNS_LOG_PLAYER::CreateRouter()
 {
     m_viewTracker.reset( new PNS_LOG_VIEW_TRACKER );
     m_iface.reset( new PNS_LOG_PLAYER_KICAD_IFACE( m_viewTracker.get() ) );
@@ -95,7 +96,7 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
 {
     m_board = aLog->GetBoard();
 
-    createRouter();
+    CreateRouter();
 
     m_router->LoadSettings( aLog->GetRoutingSettings() );
 

@@ -104,9 +104,9 @@ public:
 
     bool CompareResults( PNS_LOG_FILE* aLog );
     const PNS_LOG_FILE::COMMIT_STATE GetRouterUpdatedItems();
+    void CreateRouter();
 
 private:
-    void createRouter();
 
     std::shared_ptr<PNS_LOG_VIEW_TRACKER>       m_viewTracker;
     std::unique_ptr<PNS_LOG_PLAYER_KICAD_IFACE> m_iface; // needs to be deleted after m_router

@@ -94,6 +94,11 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std:
     }
 }
 
+void PNS_LOG_VIEWER_OVERLAY::ClearAnnotations()
+{
+    m_labelMgr->Clear();
+}
+
 
 void PNS_LOG_VIEWER_OVERLAY::AnnotatedPoint( const VECTOR2I p, int size, std::string name, bool aShowVertexNumbers )
 {
@@ -192,6 +197,8 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) :
 
     m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
     m_galPanel->GetView()->Add( m_overlay.get() );
+    m_galPanel->GetView()->SetVisible( m_overlay.get() );
+    m_galPanel->GetView()->SetLayerVisible( LAYER_GP_OVERLAY );
     m_galPanel->GetViewControls()->EnableCursorWarping(false);
 
     for( PCB_LAYER_ID layer : LSET::AllNonCuMask().Seq() )
@@ -409,6 +416,9 @@ void PNS_LOG_VIEWER_FRAME::SetBoard2( std::shared_ptr<BOARD> aBoard )
     bbd.Inflate( std::min( bbd.GetWidth(), bbd.GetHeight() ) / 5 );
 
     m_galPanel->GetView()->SetViewport( bbd );
+    m_galPanel->GetView()->Add( m_overlay.get() );
+    m_galPanel->GetView()->SetVisible( m_overlay.get() );
+    m_galPanel->GetView()->SetLayerVisible( LAYER_GP_OVERLAY );
 }
 
 

@@ -13,6 +13,9 @@ class PCB_TEST_FRAME_BASE;
 class PCB_TEST_SELECTION_TOOL : public SELECTION_TOOL
 {
 public:
+    
+    typedef std::function<void(PCB_TEST_SELECTION_TOOL*, const TOOL_EVENT&, PCB_SELECTION&)> CUSTOM_HANDLER;
+
     PCB_TEST_SELECTION_TOOL();
     virtual ~PCB_TEST_SELECTION_TOOL();
 
@@ -34,6 +37,10 @@ public:
     }
 
     void SetSelectableItemTypes( const std::vector<KICAD_T> aTypes );
+    void SetCustomEventHandler( CUSTOM_HANDLER aHandler )
+    {
+        m_customEventHandler = aHandler;
+    }
 
 protected:
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
@@ -69,6 +76,7 @@ private:
     std::function<void(PCB_TEST_FRAME_BASE*,PCB_SELECTION*)> m_selectionHook;
     PCB_SELECTION m_selection; // Current state of selection
     std::vector<KICAD_T> m_selectableTypes;
+    CUSTOM_HANDLER m_customEventHandler;
 };
 
 

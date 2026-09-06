@@ -14,7 +14,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
 
@@ -47,6 +51,10 @@ public:
     void Add( VECTOR2I target, wxString msg, KIGFX::COLOR4D color );
     void Add( const SHAPE_LINE_CHAIN& aL, KIGFX::COLOR4D color );
     void Redraw( KIGFX::VIEW_OVERLAY* aOvl );
+    void Clear()
+    {
+        m_labels.clear();
+    }
 
 private:
     VECTOR2I nearestBoxCorner( BOX2I b, VECTOR2I p );

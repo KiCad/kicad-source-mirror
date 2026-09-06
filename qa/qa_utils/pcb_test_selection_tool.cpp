@@ -102,6 +102,8 @@ bool PCB_TEST_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere )
     if( m_selectionHook )
         m_selectionHook( frame(), &m_selection );
 
+    getView()->SetVisible( &m_selection, true );
+
     return false;
 }
 
@@ -181,9 +183,6 @@ void PCB_TEST_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* 
 
 void PCB_TEST_SELECTION_TOOL::select( EDA_ITEM* aItem )
 {
-    if( aItem->IsSelected() )
-        return;
-
     highlight( aItem, SELECTED, &m_selection );
 }
 
@@ -198,6 +197,9 @@ int PCB_TEST_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        if( m_customEventHandler )
+            m_customEventHandler( this, *evt, m_selection );
+
         if( evt->IsClick( BUT_LEFT ) )
         {
             selectPoint( evt->Position() );

@@ -291,6 +291,7 @@ class PNS_LOG_VIEWER_OVERLAY : public KIGFX::VIEW_OVERLAY
 {
 public:
     PNS_LOG_VIEWER_OVERLAY( KIGFX::GAL* aGal );
+    void ClearAnnotations();
     void AnnotatedPolyset( const SHAPE_POLY_SET& aL, std::string name = "",
                            bool aShowVertexNumbers = false );
     void AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name,
