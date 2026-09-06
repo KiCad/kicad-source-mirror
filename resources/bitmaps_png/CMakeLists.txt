@@ -89,9 +89,7 @@ set( BMAPS_SMALL
     label_align_right
     label_align_top
     label_align_bottom
-    list_nets_16
     notifications
-    options_generic_16
     pinorient_right
     pinorient_left
     pinorient_up
@@ -943,8 +941,13 @@ function( bitmap_dir pngWidth pngHeight bmapList )
         endif()
 
         foreach( bmn ${bmapList} )
+            # If the specific SVG file with the height tag exists, use it
+            # Else use the generic SVG file without the height tag and scale it
+            set( svgFile "${CMAKE_CURRENT_SOURCE_DIR}/sources/${theme}/${bmn}${heightTag}.svg" )
+            if ( NOT EXISTS ${svgFile} )
+                set( svgFile "${CMAKE_CURRENT_SOURCE_DIR}/sources/${theme}/${bmn}.svg" )
+            endif()
 
-            set( svgFile "${CMAKE_CURRENT_SOURCE_DIR}/sources/${theme}/${bmn}.svg" )
             set( pngFile "${bmn}${themeTag}${heightTag}.png" )
             set( pngPath "${pngDir}/${pngFile}" )
             set( tmpFile "${TMP_DIR}/${pngFile}" )
@@ -1098,6 +1101,10 @@ install( FILES ${BITMAP_ARCHIVE_PATH}
     )
 
 if( MAINTAIN_PNGS )
+
+    # Re-run CMake whenever the set of source SVGs changes.
+    file( GLOB_RECURSE _maintain_png_svgs CONFIGURE_DEPENDS
+          "${CMAKE_CURRENT_SOURCE_DIR}/sources/*.svg" )
 
     # Inkscape is required to convert SVG files to PNG files.
     set( Inkscape_FOUND FALSE )
