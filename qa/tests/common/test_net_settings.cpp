@@ -783,4 +783,18 @@ BOOST_AUTO_TEST_CASE( SharedParserPreservesPadding )
     BOOST_CHECK_EQUAL( members[2], wxString( "D03" ) );
 }
 
+
+BOOST_AUTO_TEST_CASE( SharedParserGroupPrefixBoundaryUsesSourceSpelling )
+{
+    size_t boundary = 99;
+    BOOST_REQUIRE( NET_SETTINGS::ParseBusGroup( "I^{2}C\\ BUS{A}", nullptr, nullptr, &boundary ) );
+    BOOST_CHECK_EQUAL( boundary, wxString( "I^{2}C\\ BUS" ).length() );
+    BOOST_REQUIRE( NET_SETTINGS::ParseBusGroup( "{A}", nullptr, nullptr, &boundary ) );
+    BOOST_CHECK_EQUAL( boundary, 0 );
+    boundary = 99;
+    BOOST_CHECK( !NET_SETTINGS::ParseBusGroup( "G{A", nullptr, nullptr, &boundary ) );
+    BOOST_CHECK_EQUAL( boundary, 99 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -302,10 +302,11 @@ public:
      * @param aGroup is the input label, e.g. "USB{DP DM}"
      * @param name is the output group name, e.g. "USB"
      * @param aMemberList is a list of member strings, e.g. "DP", "DM"
+     * @param aPrefixEnd receives the opening member-list brace position in aGroup on success.
      * @return true if aGroup was successfully parsed
      */
     static bool ParseBusGroup( const wxString& aGroup, wxString* name,
-                               std::vector<wxString>* aMemberList );
+                               std::vector<wxString>* aMemberList, size_t* aPrefixEnd = nullptr );
 
     /**
      * Call a function for each member of an expanded bus pattern.

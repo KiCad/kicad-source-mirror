@@ -1664,7 +1664,7 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
 
 
 bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
-                                  std::vector<wxString>* aMemberList )
+                                  std::vector<wxString>* aMemberList, size_t* aPrefixEnd )
 {
     size_t   groupLen = aGroup.length();
     size_t   i = 0;
@@ -1764,6 +1764,8 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
     if( aName )
         *aName = prefix;
 
+    const size_t prefixEnd = i;
+
     // Parse members
     //
     i++;  // '{' character
@@ -1826,6 +1828,9 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
             {
                 if( aMemberList && !tmp.IsEmpty() )
                     aMemberList->push_back( EscapeString( escapeSpacesForBus( tmp ), CTX_NETNAME ) );
+
+                if( aPrefixEnd )
+                    *aPrefixEnd = prefixEnd;
 
                 return true;
             }
