@@ -48,7 +48,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-05 19:51+0000\n"
+"PO-Revision-Date: 2026-09-07 00:51+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -2216,7 +2216,7 @@ msgstr "错误代码 %d"
 #: common/api/api_plugin_manager.cpp:780 common/api/api_plugin_manager.cpp:860
 #: common/api/api_plugin_manager.cpp:950
 msgid "Could not create plugin environment"
-msgstr "无法创建插件环境"
+msgstr "无法创建插件运行环境"
 
 #: common/api/api_plugin_manager.cpp:805 common/api/api_plugin_manager.cpp:888
 msgid "Missing plugin environment"
@@ -2520,9 +2520,9 @@ msgid "Internal error"
 msgstr "内部错误"
 
 #: common/design_block_library_adapter.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is not in the design block library table."
-msgstr "在符号库表中找不到库 '%s'。"
+msgstr "设计图块库 '%s' 不在设计图块库表中。"
 
 #: common/design_block_library_adapter.cpp:225
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3649
@@ -2531,14 +2531,12 @@ msgid " Did you mean '%s'?"
 msgstr " 你是否在寻找 '%s'?"
 
 #: common/design_block_library_adapter.cpp:231
-#, fuzzy
 msgid "No design block libraries are configured."
-msgstr "没有符号库被加载。"
+msgstr "尚未配置设计图块库。"
 
 #: common/design_block_library_adapter.cpp:233
-#, fuzzy
 msgid "Configured design block libraries:"
-msgstr "加载设计图块库"
+msgstr "已配置的设计图块库:"
 
 #: common/design_block_library_adapter.cpp:241
 #, fuzzy, c-format
@@ -2564,14 +2562,14 @@ msgid "Design block library '%s' could not be opened."
 msgstr "无法打开设计图块库 '%s'。"
 
 #: common/design_block_library_adapter.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' is still loading."
-msgstr "设计图块库 '%s' 加载失败。"
+msgstr "设计图块库 '%s' 仍在加载。"
 
 #: common/design_block_library_adapter.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' not found in any library."
-msgstr "在所有库或缓存中都找不到符号 '%s'。"
+msgstr "在所有库中均未找到设计图块 '%s'。"
 
 #: common/design_block_tree_model_adapter.cpp:127 cvpcb/cvpcb_mainframe.cpp:790
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:535
@@ -3295,9 +3293,8 @@ msgid ""
 msgstr "是否要使用'%s'的相对路径?"
 
 #: common/dialogs/dialog_fields_table.cpp:1253
-#, fuzzy
 msgid "Cannot make path relative (target volume different from file volume)!"
-msgstr "无法使用相对路径 (目标卷与电路板文件卷不同)!"
+msgstr "无法使用相对路径 (目标磁盘分卷与文件所在磁盘分卷不同)!"
 
 #: common/dialogs/dialog_fields_table.cpp:1266
 msgid "Unsaved data"
@@ -4070,9 +4067,8 @@ msgid "Compare Files"
 msgstr "比较文件"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:129
-#, fuzzy
 msgid "No conflicts to resolve."
-msgstr "未选择任何已连接网络。"
+msgstr "没有需要解决的冲突。"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
@@ -6860,7 +6856,7 @@ msgstr ""
 
 #: common/dialogs/panel_snapping_base.cpp:132
 msgid "Alignment and equal spacing"
-msgstr ""
+msgstr "对齐和等距"
 
 #: common/dialogs/panel_snapping_base.cpp:133
 msgid "Snap to alignment with, and equal spacing between, nearby objects"
@@ -7157,9 +7153,8 @@ msgid "Move Down"
 msgstr "下移"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "项目:"
+msgstr "项目 ID: "
 
 #: common/diff_merge/auto_resolution.cpp:252
 #, fuzzy
@@ -7208,9 +7203,8 @@ msgid "%zu property edit(s) in this resolution.\n"
 msgstr ""
 
 #: common/diff_merge/diff_job_output.cpp:88
-#, fuzzy
 msgid "Failed to render diff image\n"
-msgstr "图像数据读取失败。"
+msgstr "差异图像渲染失败\n"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
@@ -9613,23 +9607,20 @@ msgid "Cannot read ZIP archive '%s'"
 msgstr "无法读取 ZIP 文件 '%s'"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid DOCHEAD in '%s' at line %d"
-msgstr ""
-"无效的封装标识位于\n"
-"文件: '%s'\n"
-"行: %d"
+msgstr "在 '%s' 的第 %d 行发现无效的 DOCHEAD"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:319
 #, c-format
 msgid "Expected DOCHEAD in '%s' at line %d"
-msgstr ""
+msgstr "在 '%s' 的第 %d 行应为 DOCHEAD"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:347
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "读取 JSON 文件 '%s' 时出错: %s"
+msgstr "在 '%s' 的第 %d 行发生 JSON 错误: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:539
 #, c-format
@@ -9660,14 +9651,14 @@ msgid "Cannot read file '%s'."
 msgstr "无法读取文件 '%s'。"
 
 #: common/io/pcad/s_expr_loader.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a P-CAD ASCII file."
-msgstr "'%s' 不是 PADS Logic ASCII 文件。"
+msgstr "'%s' 不是 P-CAD ASCII 文件。"
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Unbalanced parentheses in '%s'."
-msgstr "无法解析 '%2$s' 中的 '%1$s'"
+msgstr "'%s' 中的括号不配对。"
 
 #: common/jobs/job.cpp:82
 msgid "Job Settings"
@@ -9984,36 +9975,36 @@ msgid "Gerber: Info"
 msgstr "Gerber: 信息"
 
 #: common/jobs/job_import_utils.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open layer map file '%s'"
-msgstr "找不到库文件 '%s'"
+msgstr "无法打开板层映射文件 '%s'"
 
 #: common/jobs/job_import_utils.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read layer map file '%s'"
-msgstr "无法读取文件 '%s'。"
+msgstr "无法读取板层映射文件 '%s'"
 
 #: common/jobs/job_import_utils.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Layer map file '%s' is not valid JSON: %s"
-msgstr "页面类型 '%s' 无效。"
+msgstr "板层映射文件 '%s' 不是有效的 JSON: %s"
 
 #: common/jobs/job_import_utils.cpp:86
 #, c-format
 msgid ""
 "Layer map file '%s' must be a JSON object mapping source layer names to "
 "KiCad layer names"
-msgstr ""
+msgstr "板层映射文件 '%s' 必须是将源板层名称映射到 KiCad 板层名称的 JSON 对象"
 
 #: common/jobs/job_import_utils.cpp:97
 #, c-format
 msgid "Layer map entry for '%s' must be a KiCad layer name string"
-msgstr ""
+msgstr "板层映射项 '%s' 必须是 KiCad 板层名称字符串"
 
 #: common/jobs/job_import_utils.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write import report to '%s'\n"
-msgstr "无法将绘制文件写入到文件夹 '%s'。"
+msgstr "无法将导入报告写入 '%s'\n"
 
 #: common/jobs/job_pcb_diff.cpp:37
 msgid "Diff two PCB files"
@@ -10480,9 +10471,8 @@ msgid "DRC highlighted"
 msgstr "已高亮的 DRC 标记"
 
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Grid items"
-msgstr "图形项目"
+msgstr "栅格项目"
 
 #: common/layer_id.cpp:149
 #, fuzzy
@@ -20168,9 +20158,8 @@ msgstr ""
 "组。"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:128
-#, fuzzy
 msgid "inNetChainClass('name')"
-msgstr "网络链类"
+msgstr "inNetChainClass('name')"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:132
 #, fuzzy
@@ -20214,34 +20203,28 @@ msgid "Check for extra fields"
 msgstr "检查多余字段"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:39
-#, fuzzy
 msgid "Compare non-reference field text"
-msgstr "更新/重置 字段的文本内容"
+msgstr "比较非位号字段文本"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:42
-#, fuzzy
 msgid "Compare field visibilities"
-msgstr "更新字段可见性设置"
+msgstr "比较字段可见性"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:45
-#, fuzzy
 msgid "Compare field text sizes and styles"
-msgstr "更新/重置 字段文本大小和样式"
+msgstr "比较字段文本大小和样式"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:48
-#, fuzzy
 msgid "Compare field positions"
-msgstr "更新字段位置"
+msgstr "比较字段位置"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:69
-#, fuzzy
 msgid "Compare pin name/number visibilities"
-msgstr "更新引脚名称/编号可见性设置"
+msgstr "比较引脚名称/编号可见性"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:72
-#, fuzzy
 msgid "Compare alternate pin functions"
-msgstr "重置引脚复用为默认值"
+msgstr "比较引脚复用功能"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:94
 #, fuzzy
@@ -20803,14 +20786,14 @@ msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:2327
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged schematic: %s\n"
-msgstr "无法保存原理图 '%s'"
+msgstr "保存合并后的原理图失败: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2374 pcbnew/pcbnew_jobs_handler.cpp:4051
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged project file: %s\n"
-msgstr "无法获取父树: %s"
+msgstr "保存合并后的工程文件失败: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2392 pcbnew/pcbnew_jobs_handler.cpp:4131
 #, c-format
@@ -21377,9 +21360,8 @@ msgid "Bus Entry needed"
 msgstr "需要总线入口"
 
 #: eeschema/erc/erc_item.cpp:266
-#, fuzzy
 msgid "Variant symbol not found in libraries"
-msgstr "在库中找不到封装"
+msgstr "在库中找不到变体符号"
 
 #: eeschema/erc/erc_item.cpp:270
 #, fuzzy
@@ -23051,24 +23033,24 @@ msgid "Embedded file '%s' not found in storage."
 msgstr "在存储中找不到嵌入文件 %s。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5009
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not write a temporary file while extracting the embedded image '%s'."
-msgstr "无法创建临时输出目录。"
+msgstr "提取嵌入图片 '%s' 时无法写入临时文件。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5031
 #, c-format
 msgid ""
 "Failed to read embedded image '%s'. The image data may be corrupt or in an "
 "unsupported format."
-msgstr ""
+msgstr "读取嵌入图片 '%s' 失败。图片数据可能已损坏或格式不受支持。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5048
 #, c-format
 msgid ""
 "Could not find image file '%s'. The file path may be specific to a different "
 "operating system."
-msgstr ""
+msgstr "找不到图片文件 '%s'。该文件路径可能仅适用于其他操作系统。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5066
 #, c-format
@@ -27326,13 +27308,12 @@ msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "错误: 仿真类型不支持绘制。\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3869
-#, fuzzy
 msgid "Return loss"
-msgstr "电源损耗:"
+msgstr "回波损耗"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3992
 msgid "Refl. Coeff."
-msgstr ""
+msgstr "反射系数"
 
 #: eeschema/sim/simulator_frame_ui.cpp:4271
 #: eeschema/sim/simulator_frame_ui.cpp:4388
@@ -32885,9 +32866,8 @@ msgid "Generate a Bill of Materials (BOM)"
 msgstr "生成物料清单 (BOM)"
 
 #: kicad/cli/command_export_bom.cpp:196
-#, fuzzy
 msgid "Input file does not exist or is not accessible\n"
-msgstr "电路板文件不存在或无法访问\n"
+msgstr "输入文件不存在或无法访问\n"
 
 #: kicad/cli/command_fp.h:31
 msgid "Footprint and Footprint Libraries"
@@ -33081,12 +33061,12 @@ msgstr ""
 
 #: kicad/cli/command_git_mergedriver.cpp:57
 msgid "Document kind: pcb, sch, sym, or fp"
-msgstr ""
+msgstr "文档类型: pcb、sch、sym 或 fp"
 
 #: kicad/cli/command_git_mergedriver.cpp:105
 #, c-format
 msgid "Unknown --kind '%s' (expected pcb, sch, sym, or fp)\n"
-msgstr ""
+msgstr "未知的 --kind '%s' (应为 pcb, sch, sym, 或 fp)\n"
 
 #: kicad/cli/command_git_mergedriver.cpp:121
 #, fuzzy
@@ -33223,6 +33203,8 @@ msgid ""
 "Unsupported output extension '%s'. "
 "Expected .kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod\n"
 msgstr ""
+"不支持的输出扩展名 '%s'。应为 .kicad_pcb, .kicad_sch, .kicad_sym, 或 "
+".kicad_mod\n"
 
 #: kicad/cli/command_mergetool.cpp:141
 msgid "Cannot find the main kicad binary alongside kicad-cli.\n"
@@ -34325,7 +34307,7 @@ msgstr "版本信息格式 (简明提交、关于)"
 #: kicad/cli/diff_format_helpers.h:75
 #, c-format
 msgid "Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
-msgstr ""
+msgstr "无效的输出格式 '%s' (应为 'json', 'text', 'png', 或 'svg')\n"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:24
 msgid "Archive file:"
@@ -40724,50 +40706,50 @@ msgstr "%s 与 %s 的元件焊盘不同。"
 #: pcbnew/constraints/constraint_builder.cpp:277
 #, c-format
 msgid "%s needs two line segments.  Click them to constrain."
-msgstr ""
+msgstr "%s 需要两个线段。单击线段以添加约束。"
 
 #: pcbnew/constraints/constraint_builder.cpp:282
 #, c-format
 msgid "%s needs two line segments of nonzero length.  Click them to constrain."
-msgstr ""
+msgstr "%s 需要两个长度非零的线段。单击线段以添加约束。"
 
 #: pcbnew/constraints/constraint_builder.cpp:287
 #, c-format
 msgid ""
 "%s needs one line segment, or two anchor points.  Click them to constrain."
-msgstr ""
+msgstr "%s 需要一个线段或两个锚点。单击它们以添加约束。"
 
 #: pcbnew/constraints/constraint_builder.cpp:291
 #, c-format
 msgid "%s needs one line segment.  Click it to constrain."
-msgstr ""
+msgstr "%s 需要一个线段。单击线段以添加约束。"
 
 #: pcbnew/constraints/constraint_builder.cpp:296
 #, c-format
 msgid "%s needs two arcs, circles or ellipses.  Click them to constrain."
-msgstr ""
+msgstr "%s 需要两个圆弧、圆或椭圆。单击它们以添加约束。"
 
 #: pcbnew/constraints/constraint_builder.cpp:300
 #, c-format
 msgid "%s needs two arcs or circles.  Click them to constrain."
-msgstr ""
+msgstr "%s 需要两个圆弧或圆。单击它们以添加约束。"
 
 #: pcbnew/constraints/constraint_builder.cpp:304
 #, c-format
 msgid "%s needs one arc or circle.  Click it to constrain."
-msgstr ""
+msgstr "%s 需要一个圆弧或圆。单击它以添加约束。"
 
 #: pcbnew/constraints/constraint_builder.cpp:308
 #, c-format
 msgid "%s needs one arc.  Click it to constrain."
-msgstr ""
+msgstr "%s 需要一个圆弧。单击它以添加约束。"
 
 #: pcbnew/constraints/constraint_builder.cpp:313
 #, c-format
 msgid ""
 "%s needs a line and a curve, or two arcs or circles.  Click them to "
 "constrain."
-msgstr ""
+msgstr "%s 需要一条直线和一条曲线, 或两个圆弧或圆。单击它们以添加约束。"
 
 #: pcbnew/constraints/pcb_constraint.cpp:191
 msgid "start"
@@ -40839,15 +40821,13 @@ msgid "Midpoint"
 msgstr "中点"
 
 #: pcbnew/constraints/pcb_constraint.cpp:218
-#, fuzzy
 msgid "Fixed position"
-msgstr "栅格位置"
+msgstr "固定位置"
 
 # Die 裸芯片
 #: pcbnew/constraints/pcb_constraint.cpp:219
-#, fuzzy
 msgid "Fixed length"
-msgstr "裸芯片长度"
+msgstr "固定长度"
 
 #: pcbnew/constraints/pcb_constraint.cpp:220 pcbnew/tools/pcb_actions.cpp:157
 #, fuzzy
@@ -44471,9 +44451,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1268
-#, fuzzy
 msgid "Export Pad Table"
-msgstr "焊盘表"
+msgstr "导出焊盘表"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1369
 #, fuzzy
@@ -47198,7 +47177,6 @@ msgid "Suggest track finish"
 msgstr "建议走线终点"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:117
-#, fuzzy
 msgid "Dragging"
 msgstr "拖动"
 
@@ -47226,15 +47204,14 @@ msgstr ""
 "禁用后, 将只优化被拖动部分附近的走线。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:132
-#, fuzzy
 msgid "Avoid sharp angles"
-msgstr "添加一个矩形"
+msgstr "避免锐角"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:133
 msgid ""
 "When enabled, dragged traces will be optimized to avoid creating 90-degree "
 "or acute corners in most situations."
-msgstr ""
+msgstr "启用后, 拖动走线时会尝试走线以尽可能避免产生直角或锐角走线。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
@@ -47695,9 +47672,8 @@ msgid "By Start/Mid/End"
 msgstr "根据 起点/中点/终点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
-#, fuzzy
 msgid "By Center/Radius/Angles"
-msgstr "根据 中心/半径"
+msgstr "根据 中心/半径/角度"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
 msgid "By Center/Radius"
@@ -53238,9 +53214,8 @@ msgstr "DRC 规则重载失败: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:54
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:142
-#, fuzzy
 msgid "Optimum routed length"
-msgstr "最优长度"
+msgstr "最优布线长度"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:56
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:144
@@ -53681,19 +53656,19 @@ msgstr "最小过孔孔径不能大于最大过孔孔径"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:57
 msgid "Forbid through vias under surface mount pads"
-msgstr ""
+msgstr "禁止在贴片焊盘下使用通孔过孔"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:59
 msgid "Forbid micro vias under surface mount pads"
-msgstr ""
+msgstr "禁止在贴片焊盘下使用微孔"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:61
 msgid "Forbid blind vias under surface mount pads"
-msgstr ""
+msgstr "禁止在贴片焊盘下使用盲孔"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:63
 msgid "Forbid buried vias under surface mount pads"
-msgstr ""
+msgstr "禁止在贴片焊盘下使用埋孔"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:73
 msgid "At least one via type must be selected"
@@ -55125,14 +55100,12 @@ msgstr "调整"
 #: pcbnew/generators/pcb_via_stitch.h:73 pcbnew/generators/pcb_via_stitch.h:76
 #: pcbnew/generators/pcb_via_stitch.h:78
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Via Stitching"
-msgstr "匹配"
+msgstr "缝合过孔"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1366
-#, fuzzy
 msgid "Edit Via Stitching"
-msgstr "快速栅格切换"
+msgstr "编辑缝合过孔"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1571
 msgid "Drill"
@@ -56663,14 +56636,13 @@ msgid "New PCB file is unsaved"
 msgstr "新的 PCB 文件未保存"
 
 #: pcbnew/pcb_edit_frame.cpp:2090
-#, fuzzy
 msgid "WRL 3D model could not be matched to equivalent STEP model."
-msgstr "%d 个 WRL 3D 模型无法匹配等效的 STEP 模型。"
+msgstr "WRL 3D 模型无法匹配到等效的 STEP 模型。"
 
 #: pcbnew/pcb_edit_frame.cpp:2094
-#, fuzzy, c-format
+#, c-format
 msgid "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr "%d 个 WRL 3D 模型无法匹配等效的 STEP 模型。"
+msgstr "%d 个 WRL 3D 模型无法匹配到等效的 STEP 模型。"
 
 #: pcbnew/pcb_edit_frame.cpp:2099
 msgid "Show options"
@@ -56863,12 +56835,12 @@ msgstr "正在转换封装"
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:187
 #, c-format
 msgid "Unknown Allegro file version %#010x (rev %d)"
-msgstr ""
+msgstr "未知的 Allegro 文件版本 %#010x (rev %d)"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown board units %d"
-msgstr "未知的记录编号： %d。"
+msgstr "未知的电路板单位 %d"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2691
 msgid "Parsing Allegro objects"
@@ -57033,7 +57005,7 @@ msgstr "加载网中..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2506
 #, c-format
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "Altium 网络 %zu 未被命名; 已导入为 '%s'。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2527
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2833
@@ -58755,20 +58727,20 @@ msgstr "跳过没有有效板层的禁布区"
 msgid ""
 "Skipped design rule for differential pair '%s'; a net name ends with a "
 "backslash."
-msgstr ""
+msgstr "已跳过差分对 '%s' 的设计规则; 某个网络名称以反斜杠结尾。"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:800
 #, c-format
 msgid ""
 "Design rules for the imported differential pairs were not written; '%s' "
 "already exists."
-msgstr ""
+msgstr "未写入导入差分对的设计规则; '%s' 已存在。"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:802
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:823
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write design rules to '%s'."
-msgstr "无法创建目录 '%s'。"
+msgstr "无法将设计规则写入 '%s'。"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:847
 #, c-format
@@ -60084,14 +60056,13 @@ msgid "Wrote board statistics to '%s'.\n"
 msgstr "已将电路板统计信息写入 '%s'。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2187
-#, fuzzy
 msgid "Failed to serialize board stackup\n"
-msgstr "电路板保存失败。\n"
+msgstr "序列化电路板叠层失败\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2254
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board stackup to '%s'.\n"
-msgstr "已将电路板统计信息写入 '%s'。\n"
+msgstr "已将电路板叠层写入到 '%s'。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2582 pcbnew/pcbnew_jobs_handler.cpp:2657
 #, c-format
@@ -60247,14 +60218,14 @@ msgid "Merge applier failed to produce a board\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3977
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged board: %s\n"
-msgstr "电路板保存失败。\n"
+msgstr "保存合并后的电路板失败: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4074
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged %s: %s\n"
-msgstr "保存图框 '%s' 失败: %s"
+msgstr "保存合并后的 %s 失败: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4089
 msgid "custom DRC rules"
@@ -60747,9 +60718,8 @@ msgstr ""
 "解决问题并重试"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:77
-#, fuzzy
 msgid "Import Specctra Session"
-msgstr "导入 Specctra (无栅格自动布线器) 会话..."
+msgstr "导入 Specctra 会话"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:79
 msgid "Session file imported and merged OK."
@@ -61571,9 +61541,8 @@ msgstr ""
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1151
 #: pcbnew/tools/constraint_edit_tool.cpp:1526
-#, fuzzy
 msgid "An identical geometric constraint already exists."
-msgstr "已存在名为 '%s' 的项目。"
+msgstr "已存在相同的几何约束。"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1270
 #, fuzzy, c-format
@@ -61581,9 +61550,8 @@ msgid "Cannot form a %s constraint from those items."
 msgstr "无法从一个文本项目开始布线。"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1640 pcbnew/tools/pcb_actions.cpp:270
-#, fuzzy
 msgid "Remove Geometric Constraints"
-msgstr "相对介电常数"
+msgstr "移除几何约束"
 
 #: pcbnew/tools/convert_tool.cpp:81
 msgid "Copy line width of first object"
@@ -62356,14 +62324,12 @@ msgstr "将选定的线段转换为圆弧"
 
 # Die 裸芯片
 #: pcbnew/tools/pcb_actions.cpp:147
-#, fuzzy
 msgid "Fixed Length"
-msgstr "Die 引线长度"
+msgstr "固定长度"
 
 #: pcbnew/tools/pcb_actions.cpp:148
-#, fuzzy
 msgid "Lock the selected segment to its current length"
-msgstr "在网络导航中定位选定的网络"
+msgstr "将选中线段锁定为当前长度"
 
 #: pcbnew/tools/pcb_actions.cpp:158
 msgid "Constrain the two selected circles, arcs or ellipses to share a center"
@@ -63027,14 +62993,12 @@ msgid "Diff the current footprint library against another .pretty directory"
 msgstr "在封装浏览器中显示当前封装"
 
 #: pcbnew/tools/pcb_actions.cpp:1205 pcbnew/tools/pcb_actions.cpp:1538
-#, fuzzy
 msgid "Bulk Edit Footprint Fields..."
-msgstr "封装字段..."
+msgstr "批量编辑封装字段..."
 
 #: pcbnew/tools/pcb_actions.cpp:1206
-#, fuzzy
 msgid "Edit a table of fields from all footprints in the library"
-msgstr "编辑库中所有符号的字段表"
+msgstr "编辑库中所有封装的字段表"
 
 #: pcbnew/tools/pcb_actions.cpp:1212
 msgid "Footprint Properties..."
@@ -63350,9 +63314,8 @@ msgid "Export Specctra DSN routing info"
 msgstr "导出自动布线 DSN 布线信息"
 
 #: pcbnew/tools/pcb_actions.cpp:1539
-#, fuzzy
 msgid "Edit a table of fields from all footprints in the board"
-msgstr "编辑库中所有符号的字段表"
+msgstr "编辑电路板中所有封装的字段表"
 
 #: pcbnew/tools/pcb_actions.cpp:1545
 msgid "Gerbers (.gbr)..."
@@ -65827,9 +65790,8 @@ msgid "Die Length"
 msgstr "Die 引线长度"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:164
-#, fuzzy
 msgid "Unrouted Length"
-msgstr "已布线长度"
+msgstr "未布线长度"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:167
 msgid "Pad Count"
@@ -66309,9 +66271,8 @@ msgid "Refill zones after changes made on board"
 msgstr "在板上发生修改后重新填充填充区"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:159
-#, fuzzy
 msgid "Select on canvas"
-msgstr "在 PCB 上选择"
+msgstr "在画布上选择"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:161
 #, fuzzy
