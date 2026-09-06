@@ -25,7 +25,7 @@
 #include <sch_io/orcad/orcad_cis.h>
 #include <sch_io/orcad/orcad_converter.h>
 #include <sch_io/orcad/orcad_library.h>
-#include <sch_io/orcad/orcad_ole.h>
+#include <sch_io/ole_image.h>
 #include <sch_io/orcad/orcad_page.h>
 #include <sch_io/ole_image.h>
 
@@ -1920,9 +1920,9 @@ BOOST_AUTO_TEST_CASE( OleMetafilePreviewExtraction )
 
     std::vector<uint16_t> name = { 2, 'O', 'l', 'e', 'P', 'r', 'e', 's', '0', '0', '0', 0 };
     std::vector<uint8_t>  cfb = makeOlePreviewCfb( name, presentation );
-    ORCAD_OLE_PREVIEW     preview = OrcadExtractOlePreview( makeOlePayload( cfb, cfb.size() ) );
+    OLE_IMAGE_PAYLOAD     preview = ExtractOleImageFromPayload( makeOlePayload( cfb, cfb.size() ) );
 
-    BOOST_CHECK( preview.type == ORCAD_OLE_PREVIEW_TYPE::WMF );
+    BOOST_CHECK( preview.type == OLE_IMAGE_TYPE::WMF );
     BOOST_REQUIRE_EQUAL( preview.data.size(), presentation.size() - 40 );
     BOOST_CHECK_EQUAL( preview.data[0], 1 );
     BOOST_CHECK_EQUAL( preview.data[2], 9 );
@@ -1941,9 +1941,9 @@ BOOST_AUTO_TEST_CASE( TruncatedEmbeddedOleContainerIsPadded )
     uint32_t              declared = static_cast<uint32_t>( cfb.size() );
     cfb.resize( cfb.size() - 200 );
 
-    ORCAD_OLE_PREVIEW preview = OrcadExtractOlePreview( makeOlePayload( cfb, declared ) );
+    OLE_IMAGE_PAYLOAD preview = ExtractOleImageFromPayload( makeOlePayload( cfb, declared ) );
 
-    BOOST_CHECK( preview.type == ORCAD_OLE_PREVIEW_TYPE::WMF );
+    BOOST_CHECK( preview.type == OLE_IMAGE_TYPE::WMF );
     BOOST_REQUIRE_EQUAL( preview.data.size(), presentation.size() - 40 );
     BOOST_CHECK_EQUAL( preview.data[0], 1 );
     BOOST_CHECK_EQUAL( preview.data[2], 9 );
@@ -1962,12 +1962,23 @@ BOOST_AUTO_TEST_CASE( OleNativeBitmapExtraction )
 
     std::vector<uint16_t> name = { 1, 'O', 'l', 'e', '1', '0', 'N', 'a', 't', 'i', 'v', 'e', 0 };
     std::vector<uint8_t>  cfb = makeOlePreviewCfb( name, native );
-    ORCAD_OLE_PREVIEW     preview = OrcadExtractOlePreview( makeOlePayload( cfb, cfb.size() ) );
+    OLE_IMAGE_PAYLOAD     preview = ExtractOleImageFromPayload( makeOlePayload( cfb, cfb.size() ) );
 
-    BOOST_CHECK( preview.type == ORCAD_OLE_PREVIEW_TYPE::BMP );
+    BOOST_CHECK( preview.type == OLE_IMAGE_TYPE::BMP );
     BOOST_REQUIRE_EQUAL( preview.data.size(), native.size() - 4 );
     BOOST_CHECK_EQUAL( preview.data[0], 'B' );
     BOOST_CHECK_EQUAL( preview.data[1], 'M' );
+
+    for( const std::vector<uint8_t>& signature :
+         { std::vector<uint8_t>{ 0x89, 'P', 'N', 'G' }, std::vector<uint8_t>{ 0xFF, 0xD8, 0xFF } } )
+    {
+        std::copy( signature.begin(), signature.end(), native.begin() + 4 );
+        cfb = makeOlePreviewCfb( name, native );
+        preview = ExtractOleImageFromPayload( makeOlePayload( cfb, cfb.size() ) );
+
+        BOOST_CHECK( preview.type == OLE_IMAGE_TYPE::BMP );
+        BOOST_CHECK_EQUAL_COLLECTIONS( preview.data.begin(), preview.data.end(), native.begin() + 4, native.end() );
+    }
 }
 
 
@@ -2052,15 +2063,15 @@ BOOST_AUTO_TEST_CASE( CiImageFullRasterExtraction )
     const std::vector<uint8_t> png = { 0x89, 'P', 'N', 'G', 0x0D, 0x0A, 0x1A, 0x0A, 1, 2, 3 };
     payload.insert( payload.end(), png.begin(), png.end() );
 
-    BOOST_CHECK( OrcadExtractCiImage( payload ) == png );
+    BOOST_CHECK( OleExtractCiImage( payload ) == png );
 
     payload.resize( 40 );
-    BOOST_CHECK( OrcadExtractCiImage( payload ).empty() );
+    BOOST_CHECK( OleExtractCiImage( payload ).empty() );
 
     writeLe32( payload, 4, 0x7FFFFFFF );
     writeLe32( payload, 8, 0x80000000 );
     writeLe16( payload, 14, 32 );
-    BOOST_CHECK( OrcadExtractCiImage( payload ).empty() );
+    BOOST_CHECK( OleExtractCiImage( payload ).empty() );
 }
 
 
@@ -2072,7 +2083,7 @@ BOOST_AUTO_TEST_CASE( CiImageScannerDoesNotConsumeOleNativeCache )
     payload.insert( payload.end(), { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 } );
     payload.insert( payload.end(), { 0x89, 'P', 'N', 'G', 0x0D, 0x0A, 0x1A, 0x0A } );
 
-    BOOST_CHECK( OrcadExtractCiImage( payload ).empty() );
+    BOOST_CHECK( OleExtractCiImage( payload ).empty() );
 }
 
 
@@ -2096,7 +2107,7 @@ BOOST_AUTO_TEST_CASE( WmfGlyphIndexTextAndDestinationCopyRender )
 {
     wxImage image;
 
-    BOOST_REQUIRE( OrcadRenderWmf( makeGlyphIndexWmf(), 200, 200, image ) );
+    BOOST_REQUIRE( OleRenderWmf( makeGlyphIndexWmf(), 200, 200, image ) );
 
     const unsigned char* pixels = image.GetData();
     size_t               nonWhite = 0;
@@ -2115,7 +2126,7 @@ BOOST_AUTO_TEST_CASE( WmfNegativeDestinationHeightFlipsDibWithoutClipping )
 {
     wxImage image;
 
-    BOOST_REQUIRE( OrcadRenderWmf( makeFlippedDibWmf(), 200, 200, image ) );
+    BOOST_REQUIRE( OleRenderWmf( makeFlippedDibWmf(), 200, 200, image ) );
     BOOST_CHECK_LE( image.GetWidth(), 200 );
     BOOST_CHECK_LE( image.GetHeight(), 200 );
     BOOST_CHECK_GE( image.GetWidth(), 50 );
@@ -2136,7 +2147,7 @@ BOOST_AUTO_TEST_CASE( WmfNegativeDestinationHeightFlipsDibWithoutClipping )
 
 BOOST_AUTO_TEST_CASE( EmbeddedEmfChunksExcludeWmfFraming )
 {
-    std::vector<uint8_t> emf = OrcadExtractEmbeddedEmf( makeEmbeddedEmfWmf() );
+    std::vector<uint8_t> emf = OleExtractEmbeddedEmf( makeEmbeddedEmfWmf() );
 
     BOOST_REQUIRE_EQUAL( emf.size(), 100u );
     BOOST_CHECK_EQUAL( emf[0], 1 );
@@ -2278,8 +2289,8 @@ BOOST_AUTO_TEST_CASE( MetafilePreviewPrefersEmbeddedEmfAndFallsBackToWmf )
     std::vector<uint8_t> emf = makeRenderableEmf();
 
     BOOST_REQUIRE( OleRenderEmf( emf, 200, 200, directEmfImage ) );
-    BOOST_REQUIRE( OrcadRenderMetafilePreview( makeEmbeddedEmfWmf( emf ), 200, 200, emfImage ) );
-    BOOST_REQUIRE( OrcadRenderMetafilePreview( makeGlyphIndexWmf(), 200, 200, wmfImage ) );
+    BOOST_REQUIRE( OleRenderMetafilePreview( makeEmbeddedEmfWmf( emf ), 200, 200, emfImage ) );
+    BOOST_REQUIRE( OleRenderMetafilePreview( makeGlyphIndexWmf(), 200, 200, wmfImage ) );
     BOOST_CHECK_EQUAL( emfImage.GetWidth(), 100 );
     BOOST_CHECK_EQUAL( emfImage.GetHeight(), 100 );
     size_t byteCount = static_cast<size_t>( emfImage.GetWidth() ) * emfImage.GetHeight() * 3;
@@ -2326,13 +2337,13 @@ BOOST_AUTO_TEST_CASE( ExternalWmfEmbeddedEmfRendersWhenProvided )
     std::ifstream input( wmfPath, std::ios::binary );
     BOOST_REQUIRE( input );
     std::vector<uint8_t> wmf( std::istreambuf_iterator<char>( input ), {} );
-    std::vector<uint8_t> emf = OrcadExtractEmbeddedEmf( wmf );
+    std::vector<uint8_t> emf = OleExtractEmbeddedEmf( wmf );
     wxImage              image;
     wxImage              directImage;
 
     BOOST_REQUIRE( !emf.empty() );
     BOOST_REQUIRE( OleRenderEmf( emf, 2200, 1360, directImage, 2200.0 / 1360.0 ) );
-    BOOST_REQUIRE( OrcadRenderMetafilePreview( wmf, 2200, 1360, image, 2200.0 / 1360.0 ) );
+    BOOST_REQUIRE( OleRenderMetafilePreview( wmf, 2200, 1360, image, 2200.0 / 1360.0 ) );
     BOOST_REQUIRE_EQUAL( image.GetWidth(), directImage.GetWidth() );
     BOOST_REQUIRE_EQUAL( image.GetHeight(), directImage.GetHeight() );
     size_t byteCount = static_cast<size_t>( image.GetWidth() ) * image.GetHeight() * 3;
@@ -2390,15 +2401,15 @@ BOOST_AUTO_TEST_CASE( OlePreviewWithMultiplePresentationStreams )
                       | ( static_cast<size_t>( bytes[offset + 3] ) << 24 );
         BOOST_REQUIRE_LE( offset + size + 4, bytes.size() );
 
-        ORCAD_OLE_PREVIEW preview =
-                OrcadExtractOlePreview( { bytes.begin() + offset, bytes.begin() + offset + size + 4 } );
-        BOOST_CHECK( preview.type == ORCAD_OLE_PREVIEW_TYPE::WMF );
+        OLE_IMAGE_PAYLOAD preview =
+                ExtractOleImageFromPayload( { bytes.begin() + offset, bytes.begin() + offset + size + 4 } );
+        BOOST_CHECK( preview.type == OLE_IMAGE_TYPE::WMF );
         BOOST_CHECK_GT( preview.data.size(), 200000u );
 
         wxImage image;
-        BOOST_REQUIRE_MESSAGE( OrcadRenderWmf( preview.data, 2048, 2048, image ),
+        BOOST_REQUIRE_MESSAGE( OleRenderWmf( preview.data, 2048, 2048, image ),
                                "marker " << markerIndex << ", preview bytes " << preview.data.size() << ", "
-                                         << OrcadDescribeImagePayload( preview.data ) );
+                                         << OleDescribeImagePayload( preview.data ) );
         BOOST_CHECK_GT( image.GetWidth(), 1000 );
         BOOST_CHECK_GT( image.GetHeight(), 500 );
     }

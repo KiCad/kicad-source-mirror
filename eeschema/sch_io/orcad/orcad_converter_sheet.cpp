@@ -23,7 +23,6 @@
 
 
 #include <sch_io/orcad/orcad_converter.h>
-#include <sch_io/orcad/orcad_ole.h>
 #include <sch_io/ole_image.h>
 
 #include <algorithm>
@@ -7905,7 +7904,7 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
 
     bool readOk = false;
 
-    std::vector<uint8_t> ciImage = OrcadExtractCiImage( aPrim.data );
+    std::vector<uint8_t> ciImage = OleExtractCiImage( aPrim.data );
 
     if( !ciImage.empty() )
     {
@@ -7925,26 +7924,26 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
     if( !readOk )
     {
         bmpData.Clear();
-        ORCAD_OLE_PREVIEW preview = OrcadExtractOlePreview( aPrim.data );
+        OLE_IMAGE_PAYLOAD preview = ExtractOleImageFromPayload( aPrim.data );
 
-        if( preview.type == ORCAD_OLE_PREVIEW_TYPE::BMP )
+        if( preview.type == OLE_IMAGE_TYPE::BMP )
         {
             bmpData.AppendData( preview.data.data(), preview.data.size() );
             wxLogNull noLog;
             readOk = refImage.ReadImageFile( bmpData );
         }
-        else if( preview.type == ORCAD_OLE_PREVIEW_TYPE::DIB && OleMakeBmpFromDib( preview.data, bmpData ) )
+        else if( preview.type == OLE_IMAGE_TYPE::DIB && OleMakeBmpFromDib( preview.data, bmpData ) )
         {
             wxLogNull noLog;
             readOk = refImage.ReadImageFile( bmpData );
         }
-        else if( preview.type == ORCAD_OLE_PREVIEW_TYPE::WMF )
+        else if( preview.type == OLE_IMAGE_TYPE::WMF )
         {
             wxImage image;
             int     maxWidth = static_cast<int>( std::clamp<int64_t>( static_cast<int64_t>( widthDbu ) * 4, 1, 4096 ) );
             int maxHeight = static_cast<int>( std::clamp<int64_t>( static_cast<int64_t>( heightDbu ) * 4, 1, 4096 ) );
 
-            if( OrcadRenderMetafilePreview( preview.data, maxWidth, maxHeight, image,
+            if( OleRenderMetafilePreview( preview.data, maxWidth, maxHeight, image,
                                             static_cast<double>( widthDbu ) / heightDbu, aUsedEmbeddedEmf ) )
                 readOk = refImage.SetImage( image );
         }
@@ -7954,7 +7953,7 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
     {
         warn( wxString::Format( _( "An embedded picture could not be decoded and was skipped "
                                    "(%s)." ),
-                                OrcadDescribeImagePayload( aPrim.data ) ) );
+                                OleDescribeImagePayload( aPrim.data ) ) );
         return;
     }
 

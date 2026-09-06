@@ -12,6 +12,10 @@
 #include <sch_io/ole_image.h>
 
 #include <algorithm>
+#include <boost/endian/conversion.hpp>
+#include <memory>
+#include <utility>
+#include <optional>
 #include <array>
 #include <cmath>
 #include <limits>
@@ -20,6 +24,8 @@
 #include <wx/buffer.h>
 #include <wx/filename.h>
 #include <wx/image.h>
+
+#include <math/vector2d.h>
 #include <wx/log.h>
 
 #include <compoundfilereader.h>
@@ -33,20 +39,21 @@
 namespace
 {
 
+constexpr std::array<uint8_t, 8> CFB_MAGIC = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
+
 constexpr size_t MAX_CFB_BYTES = 256 * 1024 * 1024;
 constexpr size_t MAX_STREAM_BYTES = 64 * 1024 * 1024;
 
 
 uint16_t readU16( const uint8_t* aData )
 {
-    return static_cast<uint16_t>( aData[0] ) | ( static_cast<uint16_t>( aData[1] ) << 8 );
+    return boost::endian::load_little_u16( aData );
 }
 
 
 uint32_t readU32( const uint8_t* aData )
 {
-    return static_cast<uint32_t>( aData[0] ) | ( static_cast<uint32_t>( aData[1] ) << 8 )
-           | ( static_cast<uint32_t>( aData[2] ) << 16 ) | ( static_cast<uint32_t>( aData[3] ) << 24 );
+    return boost::endian::load_little_u32( aData );
 }
 
 
@@ -92,34 +99,6 @@ bool isWmf( const uint8_t* aData, size_t aSize )
 }
 
 
-size_t wmfPayloadSize( const uint8_t* aData, size_t aSize )
-{
-    size_t headerOffset = readU32( aData ) == 0x9AC6CDD7 ? 22 : 0;
-
-    if( aSize < headerOffset + 18 || readU16( aData + headerOffset + 2 ) != 9 )
-        return 0;
-
-    size_t cursor = headerOffset + 18;
-
-    while( cursor + 6 <= aSize )
-    {
-        uint32_t recordWords = readU32( aData + cursor );
-        uint16_t function = readU16( aData + cursor + 4 );
-        uint64_t recordBytes = uint64_t( recordWords ) * 2;
-
-        if( recordWords < 3 || recordBytes > aSize - cursor )
-            return 0;
-
-        cursor += static_cast<size_t>( recordBytes );
-
-        if( function == 0 )
-            return cursor;
-    }
-
-    return 0;
-}
-
-
 wxString wmfFontDirectory()
 {
     wxFileName fontDir;
@@ -154,14 +133,14 @@ wxString wmfFontDirectory()
 
 OLE_IMAGE_PAYLOAD classifyContents( std::vector<uint8_t> aData, std::string aName )
 {
-    if( aData.size() >= 2 && aData[0] == 'B' && aData[1] == 'M' )
+    if( ( aData.size() >= 2 && aData[0] == 'B' && aData[1] == 'M' )
+        || ( aData.size() >= 4 && aData[0] == 0x89 && aData[1] == 'P' && aData[2] == 'N' && aData[3] == 'G' )
+        || ( aData.size() >= 3 && aData[0] == 0xFF && aData[1] == 0xD8 && aData[2] == 0xFF ) )
         return { OLE_IMAGE_TYPE::BMP, std::move( aData ), std::move( aName ) };
 
     if( aData.size() >= 40 )
     {
-        // A bare size word is a weak signature, and claiming the stream here permanently hides the
-        // OlePres000 preview because the caller only falls through on an unrecognized type, not on
-        // a failed decode. Check the rest of the BITMAPINFOHEADER before taking it.
+        // Validate the DIB fields before selecting CONTENTS and hiding a valid presentation.
         uint32_t headerSize = readU32( aData.data() );
         int32_t  width = static_cast<int32_t>( readU32( aData.data() + 4 ) );
         int32_t  height = static_cast<int32_t>( readU32( aData.data() + 8 ) );
@@ -207,30 +186,91 @@ OLE_IMAGE_PAYLOAD classifyPresentation( std::vector<uint8_t> aData )
 
 OLE_IMAGE_PAYLOAD classifyNative( const std::vector<uint8_t>& aData )
 {
-    for( size_t offset = 0; offset < aData.size(); ++offset )
+    // Ole10Native starts with a length. A 0x0002 flag selects the Packager header.
+    if( aData.size() < 6 )
+        return {};
+
+    size_t stated = readU32( aData.data() );
+
+    if( stated > aData.size() - 4 )
+        return {};
+
+    size_t offset = 4;
+    size_t length = stated;
+
+    if( readU16( aData.data() + 4 ) == 0x0002 )
     {
-        if( offset + 2 <= aData.size() && aData[offset] == 'B' && aData[offset + 1] == 'M' )
+        offset += 2;
+
+        // The label and the originating path are NUL terminated; the temporary path that
+        // follows them is counted instead.
+        for( int i = 0; i < 2; ++i )
         {
-            return { OLE_IMAGE_TYPE::BMP, { aData.begin() + offset, aData.end() }, "\\x01Ole10Native" };
+            while( offset < aData.size() && aData[offset] != 0 )
+                ++offset;
+
+            if( offset >= aData.size() )
+                return {};
+
+            ++offset;
         }
 
-        if( isWmf( aData.data() + offset, aData.size() - offset ) )
-        {
-            size_t payloadBytes = wmfPayloadSize( aData.data() + offset, aData.size() - offset );
+        if( aData.size() - offset < 8 )
+            return {};
 
-            if( payloadBytes )
-                return { OLE_IMAGE_TYPE::WMF,
-                         { aData.begin() + offset, aData.begin() + offset + payloadBytes },
-                         "\\x01Ole10Native" };
+        offset += 4;
 
-            return { OLE_IMAGE_TYPE::WMF, { aData.begin() + offset, aData.end() }, "\\x01Ole10Native" };
-        }
+        size_t pathLength = readU32( aData.data() + offset );
+        offset += 4;
+
+        if( pathLength > aData.size() - offset )
+            return {};
+
+        offset += pathLength;
+
+        if( aData.size() - offset < 4 )
+            return {};
+
+        length = readU32( aData.data() + offset );
+        offset += 4;
+
+        if( length > aData.size() - offset )
+            return {};
     }
 
-    return {};
+    std::vector<uint8_t> body( aData.begin() + offset, aData.begin() + offset + length );
+
+    return classifyContents( std::move( body ), "\\x01Ole10Native" );
 }
 
+
 } // namespace
+
+
+std::optional<std::pair<size_t, size_t>> OleEmbeddedCompoundFile( const std::vector<uint8_t>& aPayload )
+{
+    constexpr size_t PROLOGUE = 26;
+
+    if( aPayload.size() < PROLOGUE + CFB_MAGIC.size() )
+        return std::nullopt;
+
+    uint64_t stated = readU32( aPayload.data() );
+    uint64_t length = readU32( aPayload.data() + 22 );
+
+    // The two length fields must agree. Capture truncates the unused tail of the final sector,
+    // so the length is not always a multiple of 512; never round it up.
+    if( stated != length + 22 || length < CFB_MAGIC.size() )
+        return std::nullopt;
+
+    if( !std::equal( CFB_MAGIC.begin(), CFB_MAGIC.end(), aPayload.begin() + PROLOGUE ) )
+        return std::nullopt;
+
+    // A container cut short of its stated length still reads; the compound file reader pads the
+    // final sector. Clamping keeps that working without letting the length address absent bytes.
+    size_t extent = std::min<size_t>( length, aPayload.size() - PROLOGUE );
+
+    return std::make_pair( PROLOGUE, extent );
+}
 
 
 OLE_IMAGE_PAYLOAD ExtractOleImage( const uint8_t* aCfb, size_t aSize )
@@ -288,6 +328,23 @@ OLE_IMAGE_PAYLOAD ExtractOleImage( const uint8_t* aCfb, size_t aSize )
 }
 
 
+OLE_IMAGE_PAYLOAD ExtractOleImageFromPayload( const std::vector<uint8_t>& aPayload )
+{
+    std::optional<std::pair<size_t, size_t>> located = OleEmbeddedCompoundFile( aPayload );
+
+    if( !located )
+        return {};
+
+    // The reader wants whole sectors, and a container cut short of its stated length is still
+    // readable once the final one is padded.
+    std::vector<uint8_t> compound( aPayload.begin() + located->first,
+                                   aPayload.begin() + located->first + located->second );
+    compound.resize( ( compound.size() + 511 ) & ~size_t( 511 ) );
+
+    return ExtractOleImage( compound.data(), compound.size() );
+}
+
+
 bool OleMakeBmpFromDib( const std::vector<uint8_t>& aDib, wxMemoryBuffer& aOut )
 {
     if( aDib.size() < 40 || aDib.size() > std::numeric_limits<uint32_t>::max() - 14 )
@@ -324,108 +381,176 @@ bool OleMakeBmpFromDib( const std::vector<uint8_t>& aDib, wxMemoryBuffer& aOut )
 }
 
 
-bool OleRenderWmf( const std::vector<uint8_t>& aWmf, int aMaxWidth, int aMaxHeight, wxImage& aImage )
+std::vector<uint8_t> OleExtractEmbeddedEmf( const std::vector<uint8_t>& aWmf )
 {
-    if( aWmf.empty() || aWmf.size() > MAX_STREAM_BYTES
-        || aWmf.size() > static_cast<size_t>( std::numeric_limits<long>::max() ) )
+    constexpr uint32_t WMFC_IDENTIFIER = 0x43464D57;
+    constexpr uint16_t META_ESCAPE = 0x0626;
+    constexpr uint16_t ENHANCED_METAFILE = 0x000F;
+    constexpr size_t   COMMENT_HEADER_SIZE = 34;
+
+    size_t headerOffset = 0;
+
+    if( aWmf.size() >= 4 && readU32( aWmf.data() ) == 0x9AC6CDD7 )
+        headerOffset = 22;
+
+    if( aWmf.size() < headerOffset + 18 || readU16( aWmf.data() + headerOffset + 2 ) != 9 )
+        return {};
+
+    size_t               offset = headerOffset + 18;
+    uint32_t             expectedRecordCount = 0;
+    uint32_t             expectedEmfSize = 0;
+    uint32_t             chunkCount = 0;
+    std::vector<uint8_t> emf;
+
+    while( offset + 6 <= aWmf.size() )
     {
-        return false;
+        uint32_t sizeWords = readU32( aWmf.data() + offset );
+
+        if( sizeWords < 3 || sizeWords > std::numeric_limits<size_t>::max() / 2 )
+            return {};
+
+        size_t recordSize = static_cast<size_t>( sizeWords ) * 2;
+
+        if( recordSize > aWmf.size() - offset )
+            return {};
+
+        uint16_t function = readU16( aWmf.data() + offset + 4 );
+
+        if( function == META_ESCAPE && recordSize >= 10 + COMMENT_HEADER_SIZE
+            && readU16( aWmf.data() + offset + 6 ) == ENHANCED_METAFILE )
+        {
+            uint16_t byteCount = readU16( aWmf.data() + offset + 8 );
+
+            if( byteCount < COMMENT_HEADER_SIZE || static_cast<size_t>( byteCount ) + 10 > recordSize )
+                return {};
+
+            const uint8_t* header = aWmf.data() + offset + 10;
+
+            if( readU32( header ) != WMFC_IDENTIFIER || readU32( header + 4 ) != 1 )
+                return {};
+
+            uint32_t recordCount = readU32( header + 18 );
+            uint32_t chunkSize = readU32( header + 22 );
+            uint32_t remaining = readU32( header + 26 );
+            uint32_t emfSize = readU32( header + 30 );
+
+            if( chunkSize > byteCount - COMMENT_HEADER_SIZE || emfSize < remaining )
+                return {};
+
+            if( chunkCount == 0 )
+            {
+                expectedRecordCount = recordCount;
+                expectedEmfSize = emfSize;
+
+                if( emfSize > aWmf.size() )
+                    return {};
+
+                emf.reserve( emfSize );
+            }
+            else if( recordCount != expectedRecordCount || emfSize != expectedEmfSize )
+            {
+                return {};
+            }
+
+            if( chunkSize > expectedEmfSize - emf.size()
+                || remaining != expectedEmfSize - emf.size() - chunkSize )
+                return {};
+
+            emf.insert( emf.end(), header + COMMENT_HEADER_SIZE, header + COMMENT_HEADER_SIZE + chunkSize );
+            ++chunkCount;
+        }
+
+        offset += recordSize;
+
+        if( function == 0 )
+            break;
     }
 
-    // libwmf takes a non-const buffer, so render from a copy rather than exposing the caller's.
-    std::vector<uint8_t> normalized = aWmf;
-
-    if( normalized.size() >= 40 && readU32( normalized.data() ) == 0x9AC6CDD7 )
+    if( chunkCount == 0 || chunkCount != expectedRecordCount || emf.size() != expectedEmfSize || emf.size() < 52
+        || readU32( emf.data() ) != 1 || readU32( emf.data() + 40 ) != 0x464D4520
+        || readU32( emf.data() + 48 ) != emf.size() )
     {
-        uint32_t standardWords = static_cast<uint32_t>( ( normalized.size() - 22 ) / 2 );
-
-        for( int shift = 0; shift < 32; shift += 8 )
-            normalized[28 + shift / 8] = static_cast<uint8_t>( standardWords >> shift );
+        return {};
     }
 
-    wmfAPI*        api = nullptr;
-    wmfAPI_Options options{};
-    wxCharBuffer   fontDir = wmfFontDirectory().utf8_str();
-    char*          fontDirs[] = { fontDir.data(), nullptr };
-    options.function = wmf_gd_function;
-    options.fontdirs = fontDirs;
+    return emf;
+}
 
-    constexpr unsigned long flags = WMF_OPT_FUNCTION | WMF_OPT_FONTDIRS | WMF_OPT_SYS_FONTS | WMF_OPT_IGNORE_NONFATAL
-                                    | WMF_OPT_NO_DEBUG | WMF_OPT_NO_ERROR;
 
-    if( wmf_api_create( &api, flags, &options ) != wmf_E_None )
+std::vector<uint8_t> OleExtractCiImage( const std::vector<uint8_t>& aPayload )
+{
+    constexpr std::string_view ciMarker = "~~CI_IMAGE~~";
+    constexpr size_t           DIB_HEADER = 40;
+
+    // The CI marker follows the preview DIB, including its palette and padded rows.
+    if( aPayload.size() < DIB_HEADER )
+        return {};
+
+    uint32_t headerSize = readU32( aPayload.data() );
+    int32_t  width = static_cast<int32_t>( readU32( aPayload.data() + 4 ) );
+    int32_t  height = static_cast<int32_t>( readU32( aPayload.data() + 8 ) );
+    uint16_t planes = readU16( aPayload.data() + 12 );
+    uint16_t depth = readU16( aPayload.data() + 14 );
+    uint32_t paletteEntries = readU32( aPayload.data() + 32 );
+
+    if( headerSize != DIB_HEADER || planes != 1 || width <= 0 || height == 0 )
+        return {};
+
+    if( depth != 1 && depth != 4 && depth != 8 && depth != 16 && depth != 24 && depth != 32 )
+        return {};
+
+    if( !paletteEntries && depth <= 8 )
+        paletteEntries = uint32_t( 1 ) << depth;
+
+    uint64_t rows = height < 0 ? -static_cast<int64_t>( height ) : height;
+    uint64_t stride = ( ( static_cast<uint64_t>( width ) * depth + 31 ) / 32 ) * 4;
+    uint64_t headerBytes = DIB_HEADER + static_cast<uint64_t>( paletteEntries ) * 4;
+
+    if( headerBytes > aPayload.size() || rows > ( aPayload.size() - headerBytes ) / stride )
+        return {};
+
+    size_t previewSize = static_cast<size_t>( headerBytes + stride * rows );
+
+    if( aPayload.size() - previewSize < ciMarker.size() )
+        return {};
+
+    auto marker = aPayload.begin() + previewSize;
+
+    if( !std::equal( ciMarker.begin(), ciMarker.end(), marker ) )
+        return {};
+
+    if( OleEmbeddedCompoundFile( aPayload ) )
+        return {};
+
+    // After the marker: NUL, digit count, decimal byte length, then the raster bytes.
+    auto header = marker + ciMarker.size();
+
+    if( aPayload.end() - header < 2 || *header != 0 )
+        return {};
+
+    size_t digits = header[1];
+
+    if( digits < 1 || digits > 10 || static_cast<size_t>( aPayload.end() - header ) < 2 + digits )
+        return {};
+
+    size_t length = 0;
+
+    for( size_t i = 0; i < digits; ++i )
     {
-        return false;
+        uint8_t byte = header[2 + i];
+
+        if( byte < '0' || byte > '9' )
+            return {};
+
+        length = length * 10 + static_cast<size_t>( byte - '0' );
     }
 
-    auto destroyApi = [&]
-    {
-        wmf_api_destroy( api );
-        api = nullptr;
-    };
+    auto image = header + 2 + digits;
 
-    wmf_gd_t* gd = WMF_GD_GetData( api );
-    gd->type = wmf_gd_image;
+    if( static_cast<size_t>( aPayload.end() - image ) < length )
+        return {};
 
-    if( wmf_mem_open( api, normalized.data(), static_cast<long>( normalized.size() ) ) != wmf_E_None )
-    {
-        destroyApi();
-        return false;
-    }
-
-    wmfD_Rect bbox;
-
-    if( wmf_scan( api, 0, &bbox ) != wmf_E_None )
-    {
-        destroyApi();
-        return false;
-    }
-
-    unsigned int naturalWidth = 0;
-    unsigned int naturalHeight = 0;
-
-    if( wmf_display_size( api, &naturalWidth, &naturalHeight, 144.0, 144.0 ) != wmf_E_None || naturalWidth == 0
-        || naturalHeight == 0 )
-    {
-        destroyApi();
-        return false;
-    }
-
-    double scale = std::min( static_cast<double>( std::max( 1, aMaxWidth ) ) / naturalWidth,
-                             static_cast<double>( std::max( 1, aMaxHeight ) ) / naturalHeight );
-    scale = std::min( scale, 1.0 );
-    unsigned int width = static_cast<unsigned int>( std::max<long>( 1, std::lround( naturalWidth * scale ) ) );
-    unsigned int height = static_cast<unsigned int>( std::max<long>( 1, std::lround( naturalHeight * scale ) ) );
-
-    gd->bbox = bbox;
-    gd->width = width;
-    gd->height = height;
-
-    if( wmf_play( api, 0, &bbox ) != wmf_E_None )
-    {
-        destroyApi();
-        return false;
-    }
-
-    int* pixels = wmf_gd_get_image_pixels( api );
-
-    if( !pixels || !aImage.Create( width, height, false ) )
-    {
-        destroyApi();
-        return false;
-    }
-
-    unsigned char* rgb = aImage.GetData();
-
-    for( size_t i = 0; i < static_cast<size_t>( width ) * height; ++i )
-    {
-        rgb[3 * i] = static_cast<unsigned char>( ( pixels[i] >> 16 ) & 0xFF );
-        rgb[3 * i + 1] = static_cast<unsigned char>( ( pixels[i] >> 8 ) & 0xFF );
-        rgb[3 * i + 2] = static_cast<unsigned char>( pixels[i] & 0xFF );
-    }
-
-    destroyApi();
-    return true;
+    return std::vector<uint8_t>( image, image + length );
 }
 
 
@@ -457,4 +582,159 @@ VECTOR2I OleWmfRenderSize( int aNaturalWidth, int aNaturalHeight, int aMaxWidth,
     scale = std::min( scale, 1.0 );
     return VECTOR2I( std::max( 1, KiROUND( aNaturalWidth * scale ) ),
                      std::max( 1, KiROUND( aNaturalHeight * scale ) ) );
+}
+
+bool OleRenderWmf( const std::vector<uint8_t>& aWmf, int aMaxWidth, int aMaxHeight, wxImage& aImage,
+                     double aTargetAspect )
+{
+    if( aWmf.empty() || aWmf.size() > MAX_STREAM_BYTES
+        || aWmf.size() > static_cast<size_t>( std::numeric_limits<long>::max() ) )
+    {
+        return false;
+    }
+
+    // Copy the buffer for libwmf. Recompute the standard size when a placeable header is present.
+    std::vector<uint8_t> normalized = aWmf;
+
+    if( normalized.size() >= 40 && readU32( normalized.data() ) == 0x9AC6CDD7 )
+    {
+        uint32_t standardWords = static_cast<uint32_t>( ( normalized.size() - 22 ) / 2 );
+
+        for( int shift = 0; shift < 32; shift += 8 )
+            normalized[28 + shift / 8] = static_cast<uint8_t>( standardWords >> shift );
+    }
+
+    wmfAPI*        api = nullptr;
+    wmfAPI_Options options{};
+    wxCharBuffer   fontDir = wmfFontDirectory().utf8_str();
+    char*          fontDirs[] = { fontDir.data(), nullptr };
+    options.function = wmf_gd_function;
+    options.fontdirs = fontDirs;
+
+    constexpr unsigned long flags = WMF_OPT_FUNCTION | WMF_OPT_FONTDIRS | WMF_OPT_SYS_FONTS
+                                    | WMF_OPT_IGNORE_NONFATAL | WMF_OPT_NO_DEBUG | WMF_OPT_NO_ERROR;
+
+    if( wmf_api_create( &api, flags, &options ) != wmf_E_None )
+        return false;
+
+    std::unique_ptr<wmfAPI, decltype( &wmf_api_destroy )> apiOwner( api, wmf_api_destroy );
+
+    wmf_gd_t* gd = WMF_GD_GetData( api );
+    gd->type = wmf_gd_image;
+
+    if( wmf_mem_open( api, normalized.data(), static_cast<long>( normalized.size() ) ) != wmf_E_None )
+    {
+        return false;
+    }
+
+    wmfD_Rect bbox;
+
+    if( wmf_scan( api, 0, &bbox ) != wmf_E_None )
+    {
+        return false;
+    }
+
+    unsigned int naturalWidth = 0;
+    unsigned int naturalHeight = 0;
+
+    if( wmf_display_size( api, &naturalWidth, &naturalHeight, 144.0, 144.0 ) != wmf_E_None || naturalWidth == 0
+        || naturalHeight == 0 )
+    {
+        return false;
+    }
+
+    VECTOR2I renderSize = OleWmfRenderSize( naturalWidth, naturalHeight, std::max( 1, aMaxWidth ),
+                                              std::max( 1, aMaxHeight ), aTargetAspect );
+    unsigned int width = static_cast<unsigned int>( renderSize.x );
+    unsigned int height = static_cast<unsigned int>( renderSize.y );
+
+    gd->bbox = bbox;
+    gd->width = width;
+    gd->height = height;
+
+    if( wmf_play( api, 0, &bbox ) != wmf_E_None )
+    {
+        return false;
+    }
+
+    int* pixels = wmf_gd_get_image_pixels( api );
+
+    if( !pixels || !aImage.Create( width, height, false ) )
+    {
+        return false;
+    }
+
+    unsigned char* rgb = aImage.GetData();
+
+    for( size_t i = 0; i < static_cast<size_t>( width ) * height; ++i )
+    {
+        rgb[3 * i] = static_cast<unsigned char>( ( pixels[i] >> 16 ) & 0xFF );
+        rgb[3 * i + 1] = static_cast<unsigned char>( ( pixels[i] >> 8 ) & 0xFF );
+        rgb[3 * i + 2] = static_cast<unsigned char>( pixels[i] & 0xFF );
+    }
+
+    return true;
+}
+
+
+bool OleRenderMetafilePreview( const std::vector<uint8_t>& aWmf, int aMaxWidth, int aMaxHeight,
+                                 wxImage& aImage, double aTargetAspect, bool* aUsedEmbeddedEmf )
+{
+    if( aUsedEmbeddedEmf )
+        *aUsedEmbeddedEmf = false;
+
+    std::vector<uint8_t> emf = OleExtractEmbeddedEmf( aWmf );
+
+    if( !emf.empty() && OleRenderEmf( emf, aMaxWidth, aMaxHeight, aImage, aTargetAspect ) )
+    {
+        if( aUsedEmbeddedEmf )
+            *aUsedEmbeddedEmf = true;
+
+        return true;
+    }
+
+    return OleRenderWmf( aWmf, aMaxWidth, aMaxHeight, aImage, aTargetAspect );
+}
+
+
+wxString OleDescribeImagePayload( const std::vector<uint8_t>& aPayload )
+{
+    if( aPayload.empty() )
+        return wxS( "empty" );
+
+    auto starts = [&]( std::initializer_list<uint8_t> aSig, size_t aOffset = 0 )
+    {
+        if( aPayload.size() < aOffset + aSig.size() )
+            return false;
+
+        return std::equal( aSig.begin(), aSig.end(), aPayload.begin() + aOffset );
+    };
+
+    if( starts( { 0x89, 'P', 'N', 'G' } ) )
+        return wxS( "PNG" );
+    if( starts( { 0xFF, 0xD8, 0xFF } ) )
+        return wxS( "JPEG" );
+    if( starts( { 'G', 'I', 'F', '8' } ) )
+        return wxS( "GIF" );
+    if( starts( { 'B', 'M' } ) )
+        return wxS( "BMP" );
+    if( starts( { 'I', 'I', 0x2A, 0x00 } ) )
+        return wxS( "TIFF" );
+    if( starts( { 'M', 'M', 0x00, 0x2A } ) )
+        return wxS( "TIFF" );
+    if( starts( { 0xD7, 0xCD, 0xC6, 0x9A } ) )
+        return wxS( "placeable WMF" );
+    if( starts( { 0x01, 0x00, 0x09, 0x00 } ) )
+        return wxS( "WMF" );
+    if( starts( { 'E', 'M', 'F', 0x20 }, 40 ) )
+        return wxS( "EMF" );
+    if( starts( { 0xD0, 0xCF, 0x11, 0xE0 } ) )
+        return wxS( "OLE compound document" );
+
+    wxString head;
+
+    for( size_t i = 0; i < std::min<size_t>( 8, aPayload.size() ); ++i )
+        head += wxString::Format( wxS( "%02X" ), aPayload[i] );
+
+    return wxString::Format( wxS( "unrecognized, %zu bytes starting %s" ), aPayload.size(), head );
 }
