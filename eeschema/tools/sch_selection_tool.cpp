@@ -3635,9 +3635,6 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( !graphicalSelection.Empty() )
-        graphicalAdded = expandConnectionGraphically( graphicalSelection );
-
     // For whatever reason, the connection graph isn't working (e.g. in symbol editor )
     // so fall back to graphical expansion for those items if nothing was added.
     if( graphAdded.empty() && !connectableSelection.Empty() )
