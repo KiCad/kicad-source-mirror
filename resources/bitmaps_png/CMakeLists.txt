@@ -801,7 +801,6 @@ set( BMAPS_OTHER
     creepage_clearance
     cpw
     cpw_back
-    light
     microstrip
     microstrip_zodd_zeven
     pads_npth
@@ -953,7 +952,7 @@ function( bitmap_dir pngWidth pngHeight bmapList )
             set( tmpFile "${TMP_DIR}/${pngFile}" )
 
             if( NOT EXISTS ${svgFile} )
-                message( "Warning: Source SVG ${svgFile} does not exist!" )
+                message( "Warning: Source SVG ${svgFile} does not exist (for ${bmn} at ${pngHeight}px)!" )
                 continue()
             endif()
 
