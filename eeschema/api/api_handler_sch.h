@@ -181,9 +181,10 @@ private:
 
     SCHEMATIC* schematic() const;
 
+    SCH_EDIT_FRAME* frame() const;
+
     void filterValidSchTypes( std::set<KICAD_T>& aTypeList );
 
-    SCH_EDIT_FRAME*              m_frame;
     std::shared_ptr<SCH_CONTEXT> m_context;
     static std::set<KICAD_T>     s_allowedTypes;
 };

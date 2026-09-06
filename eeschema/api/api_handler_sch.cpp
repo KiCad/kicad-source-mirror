@@ -118,7 +118,6 @@ API_HANDLER_SCH::API_HANDLER_SCH( SCH_EDIT_FRAME* aFrame ) :
 API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
                                   SCH_EDIT_FRAME* aFrame ) :
         API_HANDLER_EDITOR( aFrame ),
-        m_frame( aFrame ),
         m_context( std::move( aContext ) )
 {
     using namespace kiapi::schematic::jobs;
@@ -178,7 +177,7 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
 std::unique_ptr<COMMIT> API_HANDLER_SCH::createCommit()
 {
     if( m_frame )
-        return std::make_unique<SCH_COMMIT>( m_frame );
+        return std::make_unique<SCH_COMMIT>( static_cast<SCH_EDIT_FRAME*>( m_frame ) );
 
     return std::make_unique<SCH_COMMIT>( toolManager() );
 }
@@ -188,6 +187,12 @@ SCHEMATIC* API_HANDLER_SCH::schematic() const
 {
     wxCHECK( m_context, nullptr );
     return m_context->GetSchematic();
+}
+
+
+SCH_EDIT_FRAME* API_HANDLER_SCH::frame() const
+{
+    return static_cast<SCH_EDIT_FRAME*>( m_frame );
 }
 
 
@@ -407,10 +412,10 @@ API_HANDLER_SCH::handleRevertDocument( const HANDLER_CONTEXT<RevertDocument>& aC
 
     wxFileName fn = project().AbsolutePath( schematic()->GetFileName() );
 
-    if( m_frame->GetCurrentSheet().Last() != &schematic()->Root() )
+    if( frame()->GetCurrentSheet().Last() != &schematic()->Root() )
     {
         SCH_SHEET_PATH rootSheetPath = schematic()->Hierarchy().at( 0 );
-        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
+        frame()->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
     }
 
     SCH_SCREENS screenList( schematic()->Root() );
@@ -418,8 +423,8 @@ API_HANDLER_SCH::handleRevertDocument( const HANDLER_CONTEXT<RevertDocument>& aC
     for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
         screen->SetContentModified( false );
 
-    m_frame->ReleaseFile();
-    m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
+    frame()->ReleaseFile();
+    frame()->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
 
     return google::protobuf::Empty();
 }
@@ -691,7 +696,7 @@ API_HANDLER_SCH::handleClearSelection( const HANDLER_CONTEXT<ClearSelection>& aC
     }
 
     m_context->GetToolManager()->RunAction( ACTIONS::selectionClear );
-    m_frame->Refresh();
+    frame()->Refresh();
 
     return Empty();
 }
@@ -732,7 +737,7 @@ API_HANDLER_SCH::handleAddToSelection( const HANDLER_CONTEXT<AddToSelection>& aC
     }
 
     tool->AddItemsToSel( &toAdd );
-    m_frame->Refresh();
+    frame()->Refresh();
 
     SelectionResponse response;
     google::protobuf::Any any;
@@ -781,7 +786,7 @@ API_HANDLER_SCH::handleRemoveFromSelection( const HANDLER_CONTEXT<RemoveFromSele
     }
 
     tool->RemoveItemsFromSel( &toRemove );
-    m_frame->Refresh();
+    frame()->Refresh();
 
     SelectionResponse response;
     google::protobuf::Any any;
@@ -1164,7 +1169,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
     }
 
     if( m_frame && connectivityChanged )
-        m_frame->RecalculateConnections( nullptr, LOCAL_CLEANUP );
+        frame()->RecalculateConnections( nullptr, LOCAL_CLEANUP );
 
     return ItemRequestStatus::IRS_OK;
 }
@@ -1247,7 +1252,7 @@ void API_HANDLER_SCH::setDrawingSheetFileName( const wxString& aFileName )
     schematic()->Settings().m_SchDrawingSheetFileName = aFileName;
 
     if( m_frame )
-        m_frame->LoadDrawingSheet();
+        frame()->LoadDrawingSheet();
 }
 
 
@@ -1255,8 +1260,8 @@ void API_HANDLER_SCH::onModified()
 {
     if( m_frame )
     {
-        m_frame->Refresh();
-        m_frame->OnModify();
+        frame()->Refresh();
+        frame()->OnModify();
     }
 }
 
@@ -2109,7 +2114,7 @@ HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_SCH::handleSyncSelection(
 
     SyncSelectionResponse response;
 
-    const CROSS_PROBING_SETTINGS& settings = m_frame->eeconfig()->m_CrossProbing;
+    const CROSS_PROBING_SETTINGS& settings = frame()->eeconfig()->m_CrossProbing;
 
     if( !settings.on_selection && aCtx.Request.context() != SyncSelectionContext::SSC_EXPLICIT )
     {
@@ -2121,11 +2126,11 @@ HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_SCH::handleSyncSelection(
     // A request carrying no items asks for nothing to be selected, so there is nothing to find.
     if( aCtx.Request.items_size() == 0 )
     {
-        m_frame->SetSyncingSelection( true ); // recursion guard
+        frame()->SetSyncingSelection( true ); // recursion guard
 
-        m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( std::nullopt, nullptr, {} );
+        frame()->GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( std::nullopt, nullptr, {} );
 
-        m_frame->SetSyncingSelection( false );
+        frame()->SetSyncingSelection( false );
 
         response.set_status( CPS_OK );
         return response;
@@ -2138,13 +2143,13 @@ HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_SCH::handleSyncSelection(
     {
         auto& [sheetPath, focusItem, items] = *findRet;
 
-        m_frame->SetSyncingSelection( true ); // recursion guard
+        frame()->SetSyncingSelection( true ); // recursion guard
 
-        m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( sheetPath, focusItem, items );
+        frame()->GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->SyncSelection( sheetPath, focusItem, items );
 
-        m_frame->SetSyncingSelection( false );
+        frame()->SetSyncingSelection( false );
 
-        if( m_frame->eeconfig()->m_CrossProbing.flash_selection )
+        if( frame()->eeconfig()->m_CrossProbing.flash_selection )
         {
             wxLogTrace( traceCrossProbeFlash, "MAIL_SELECTION(_FORCE): flash enabled, items=%zu",
                         items.size() );
@@ -2158,7 +2163,7 @@ HANDLER_RESULT<SyncSelectionResponse> API_HANDLER_SCH::handleSyncSelection(
                 std::vector<SCH_ITEM*> itemPtrs;
                 std::copy( items.begin(), items.end(), std::back_inserter( itemPtrs ) );
 
-                m_frame->StartCrossProbeFlash( itemPtrs );
+                frame()->StartCrossProbeFlash( itemPtrs );
             }
         }
         else
@@ -2179,7 +2184,7 @@ HANDLER_RESULT<HighlightNetsResponse> API_HANDLER_SCH::handleHighlightNets(
         return tl::unexpected( *headless );
 
     HighlightNetsResponse response;
-    CROSS_PROBING_SETTINGS& crossProbingSettings = m_frame->eeconfig()->m_CrossProbing;
+    CROSS_PROBING_SETTINGS& crossProbingSettings = frame()->eeconfig()->m_CrossProbing;
 
     if( aCtx.ClientName == StandaloneCrossProbeClientName
         || aCtx.ClientName == KiwayClientName )
@@ -2196,7 +2201,7 @@ HANDLER_RESULT<HighlightNetsResponse> API_HANDLER_SCH::handleHighlightNets(
     if( aCtx.Request.net_name_size() > 0 )
         net = wxString::FromUTF8( aCtx.Request.net_name( 0 ) );
 
-    m_frame->HandleRemoteNetHighlight( net );
+    frame()->HandleRemoteNetHighlight( net );
 
     response.set_status( CPS_OK );
     return response;
@@ -2302,7 +2307,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleAddVariant( const HANDLER_CONTEXT<A
         schematic->SetVariantDescription( name, wxString::FromUTF8( aCtx.Request.description() ) );
 
     if( m_frame )
-        m_frame->UpdateVariantSelectionCtrl( m_frame->Schematic().GetVariantNamesForUI() );
+        frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
 
     return Empty();
 }
@@ -2319,7 +2324,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleDeleteVariant( const HANDLER_CONTEX
     if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    SCH_COMMIT commit( m_frame ? m_frame->GetToolManager() : toolManager() );
+    SCH_COMMIT commit( m_frame ? frame()->GetToolManager() : toolManager() );
 
     SCHEMATIC* schematic = this->schematic();
     wxString   name = wxString::FromUTF8( aCtx.Request.name() );
@@ -2344,11 +2349,11 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleDeleteVariant( const HANDLER_CONTEX
 
     if( m_frame )
     {
-        if( m_frame->Schematic().GetCurrentVariant().CmpNoCase( name ) == 0 )
-            m_frame->SetCurrentVariant( wxEmptyString );
+        if( frame()->Schematic().GetCurrentVariant().CmpNoCase( name ) == 0 )
+            frame()->SetCurrentVariant( wxEmptyString );
 
-        m_frame->UpdateVariantSelectionCtrl( m_frame->Schematic().GetVariantNamesForUI() );
-        m_frame->GetCanvas()->Refresh();
+        frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
+        frame()->GetCanvas()->Refresh();
     }
 
     return Empty();
@@ -2366,7 +2371,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleRenameVariant( const HANDLER_CONTEX
     if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    SCH_COMMIT commit( m_frame ? m_frame->GetToolManager() : toolManager() );
+    SCH_COMMIT commit( m_frame ? frame()->GetToolManager() : toolManager() );
 
     SCHEMATIC* schematic = this->schematic();
     wxString   oldName = wxString::FromUTF8( aCtx.Request.old_name() );
@@ -2407,7 +2412,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleRenameVariant( const HANDLER_CONTEX
     schematic->RenameVariant( oldName, newName, &commit );
 
     if( m_frame )
-        m_frame->UpdateVariantSelectionCtrl( m_frame->Schematic().GetVariantNamesForUI() );
+        frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
 
     return Empty();
 }
@@ -2424,7 +2429,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleCopyVariant( const HANDLER_CONTEXT<
     if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    SCH_COMMIT commit( m_frame ? m_frame->GetToolManager() : toolManager() );
+    SCH_COMMIT commit( m_frame ? frame()->GetToolManager() : toolManager() );
 
     SCHEMATIC* schematic = this->schematic();
     wxString   oldName = wxString::FromUTF8( aCtx.Request.old_name() );
@@ -2465,7 +2470,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleCopyVariant( const HANDLER_CONTEXT<
     schematic->CopyVariant( oldName, newName, &commit );
 
     if( m_frame )
-        m_frame->UpdateVariantSelectionCtrl( m_frame->Schematic().GetVariantNamesForUI() );
+        frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
 
     return Empty();
 }
@@ -2526,7 +2531,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleSetCurrentVariant( const HANDLER_CO
     wxString name = aCtx.Request.has_name() ? wxString::FromUTF8( aCtx.Request.name() ) : wxString();
 
     if( m_frame )
-        m_frame->SetCurrentVariant( name );
+        frame()->SetCurrentVariant( name );
     else
         schematic->SetCurrentVariant( name );
 
