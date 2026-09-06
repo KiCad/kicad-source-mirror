@@ -1566,7 +1566,7 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
     aReader.SkipSubrecord();
 
     // Altium only supports inverting truetype fonts
-    if( fonttype != ALTIUM_TEXT_TYPE::STROKE )
+    if( fonttype != ALTIUM_TEXT_TYPE::TRUETYPE )
     {
         isInverted = false;
         isInvertedRect = false;

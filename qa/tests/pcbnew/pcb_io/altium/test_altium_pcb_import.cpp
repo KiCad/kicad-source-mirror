@@ -1136,6 +1136,39 @@ BOOST_AUTO_TEST_CASE( ProjectParametersPreserveExisting )
 
 
 /**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25058
+ *
+ * Altium can only invert (knock out) TrueType strings, so the parser discards the inverted flag on
+ * every other font type.  That guard was reversed, and so threw the flag away for exactly the
+ * TrueType strings it exists to keep.  The HiFive board carries three inverted "GND" TrueType
+ * strings on the top overlay.
+ */
+BOOST_AUTO_TEST_CASE( InvertedTrueTypeTextImportsAsKnockout )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/HiFive/HiFive1.B01.PcbDoc";
+
+    std::unique_ptr<BOARD> board = m_altiumPlugin.LoadBoard( dataPath, nullptr );
+    BOOST_REQUIRE( board );
+
+    std::vector<PCB_TEXT*> knockouts;
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        {
+            if( item->Type() == PCB_TEXT_T && item->IsKnockout() )
+                knockouts.push_back( static_cast<PCB_TEXT*>( item ) );
+        }
+    }
+
+    BOOST_REQUIRE_EQUAL( knockouts.size(), 3 );
+
+    for( PCB_TEXT* text : knockouts )
+        BOOST_CHECK_EQUAL( text->GetText(), wxString( wxT( "GND" ) ) );
+}
+
+
+/**
  * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24504
  *
  * The Fastino board places several labels as a coincident pair of free strings, one on a copper
