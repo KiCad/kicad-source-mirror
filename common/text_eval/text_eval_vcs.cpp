@@ -184,7 +184,12 @@ namespace
             return MakeZeroOid();
 
         git_revwalk_sorting( walker, GIT_SORT_TIME );
-        git_revwalk_push( walker, &head_oid );
+
+        if( git_revwalk_push( walker, &head_oid ) != 0 )
+        {
+            git_revwalk_free( walker );
+            return MakeZeroOid();
+        }
 
         // Walk through commits to find when the file was last modified
         git_oid result = MakeZeroOid();
@@ -327,7 +332,13 @@ namespace
         }
 
         git_revwalk_sorting( walker, GIT_SORT_TOPOLOGICAL | GIT_SORT_TIME );
-        git_revwalk_push( walker, &head_oid );
+
+        if( git_revwalk_push( walker, &head_oid ) != 0 )
+        {
+            git_revwalk_free( walker );
+            CloseRepo( repo );
+            return { std::string(), 0 };
+        }
 
         DescribeInfo result{ std::string(), 0 };
         int          distance = 0;
