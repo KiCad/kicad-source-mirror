@@ -97,6 +97,7 @@ private:
 
     void OnPadShapeSelection( wxCommandEvent& event ) override;
     void OnDrillShapeSelected( wxCommandEvent& event ) override;
+    void OnHoleSizeCalculator( wxCommandEvent& event ) override;
 	void onChangePadDrawMode( wxCommandEvent& event ) override;
 	void OnOffsetCheckbox( wxCommandEvent& event ) override;
 	void OnPadToDieCheckbox( wxCommandEvent& event ) override;

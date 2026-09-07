@@ -23,10 +23,13 @@
 
 #include <typeinfo>
 
+#include <sstream>
+
 #include <bitmaps.h>
 #include <bitmap_store.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_base.h>
+#include <kiway_mail.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -285,6 +288,58 @@ void PCB_CALCULATOR_FRAME::AddCalculator( CALCULATOR_PANEL *aPanel, const wxStri
     m_panelTypes[ typeid( *aPanel ).hash_code() ] = aPanel;
 
     m_treebook->AddSubPage( aPanel, panelUIName );
+}
+
+
+void PCB_CALCULATOR_FRAME::showCalculatorPage( wxWindow* aPage )
+{
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    {
+        if( m_treebook->GetPage( i ) == aPage )
+        {
+            const int pageIndex = static_cast<int>( i );
+            const int parentIndex = m_treebook->GetPageParent( pageIndex );
+
+            if( parentIndex != wxNOT_FOUND )
+                m_treebook->ExpandNode( parentIndex );
+
+            m_treebook->SetSelection( pageIndex );
+            break;
+        }
+    }
+}
+
+
+void PCB_CALCULATOR_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& aEvent )
+{
+    if( aEvent.Command() != MAIL_CALC_SHOW )
+        return;
+
+
+    // Decode trhe payload: JSON
+    const std::string& payloadStr = aEvent.GetPayload();
+    nlohmann::json     payload = nlohmann::json::parse( payloadStr, nullptr, false );
+
+    const std::string pageName = payload.value( "page", "" );
+
+    if( pageName.empty() )
+        return;
+
+    wxWindow* shownPanel = nullptr;
+
+    if( pageName == "pth_size" )
+    {
+        PANEL_PTH_SIZE* pthPanel = GetCalculator<PANEL_PTH_SIZE>();
+        // Any dedicated setup would be here
+        shownPanel = pthPanel;
+    }
+    else
+    {
+        // Unknown page name, do nothing
+    }
+
+    if( shownPanel )
+        showCalculatorPage( shownPanel );
 }
 
 

@@ -22,6 +22,9 @@
 
 #include <kicommon.h>
 
+#include <wx/debug.h>
+
+
 class KIWAY;
 class PROJECT;
 class wxWindow;

@@ -63,6 +63,8 @@ public:
 
     void AddCalculator( CALCULATOR_PANEL *aPanel, const wxString& panelUIName );
 
+    void KiwayMailIn( KIWAY_MAIL_EVENT& aEvent ) override;
+
     void ShowChangedLanguage() override;
 
     // Config read-write, virtual from EDA_BASE_FRAME
@@ -88,6 +90,8 @@ private:
     void onThemeChanged( wxSysColourChangedEvent& aEvent );
 
     void loadPages();
+
+    void showCalculatorPage( wxWindow* aPage );
 
 private:
     wxBoxSizer* m_mainSizer;

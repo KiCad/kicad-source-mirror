@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "kiway_holder.h"
+#include "mail_type.h"
 #include <drc/drc_item.h>
 #include <base_units.h>
 #include <bitmaps.h>
@@ -48,6 +50,11 @@
 #include <tool/tool_manager.h>
 #include <tools/pad_tool.h>
 #include <advanced_config.h>    // for pad property feature management
+#include <algorithm>
+#include <frame_type.h>
+#include <kiway.h>
+#include <kiway_player.h>
+#include <pth_hole_size.h>
 #include <wx/choicdlg.h>
 #include <wx/msgdlg.h>
 
@@ -170,6 +177,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_FlippedWarningIcon->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
     m_nonCopperWarningIcon->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
     m_legacyTeardropsIcon->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
+    m_launchCalculatorBtn->SetBitmap( KiBitmapBundle( BITMAPS::calculator ) );
+    m_launchCalculatorBtn->SetToolTip( _( "Open the through-hole size calculator" ) );
 
     m_masterPad = m_parent->GetDesignSettings().m_Pad_Master.get();
     m_previewPad = new PAD( (FOOTPRINT*) nullptr );
@@ -325,6 +334,37 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 
     // Now call default handler for wxID_CANCEL command event
     event.Skip();
+}
+
+
+static void showCalculatorPage( KIWAY_PLAYER& aHolder, std::string& aPayload )
+{
+    KIWAY&        kiway = aHolder.Kiway();
+    KIWAY_PLAYER* calcFrame = kiway.Player( FRAME_CALC, true );
+
+    if( !calcFrame )
+        return;
+
+    kiway.ExpressMail( FRAME_CALC, MAIL_CALC_SHOW, aPayload, &aHolder );
+
+    if( !calcFrame->IsVisible() )
+        calcFrame->Show( true );
+
+    if( calcFrame->IsIconized() )
+        calcFrame->Iconize( false );
+
+    calcFrame->Raise();
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnHoleSizeCalculator( wxCommandEvent& aEvent )
+{
+    nlohmann::json payload;
+    payload["page"] = "pth_size";
+
+    std::string payloadStr = payload.dump();
+
+    showCalculatorPage( *m_parent, payloadStr );
 }
 
 

@@ -230,6 +230,7 @@ set( BMAPS_MID
     bug
     bus_definition_tool
     cancel
+    calculator
     chamfer
     change_entry_orient
     checked_ok
