@@ -94,6 +94,77 @@ BOOST_AUTO_TEST_CASE( Orientation )
 }
 
 
+BOOST_AUTO_TEST_CASE( DuplicatePinMatchingPreservesStoredOrder )
+{
+    LoadSchematic( SchematicQAPath( wxS( "component_classes" ) ) );
+    SCH_SYMBOL* source = nullptr;
+
+    for( SCH_ITEM* item : m_schematic->RootScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        auto* candidate = static_cast<SCH_SYMBOL*>( item );
+        std::set<wxString> numbers;
+
+        for( const auto& pin : candidate->GetRawPins() )
+            numbers.insert( pin->GetNumber() );
+
+        if( numbers.size() >= 3 && numbers.size() == candidate->GetRawPins().size() )
+        {
+            source = candidate;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( source );
+    std::unique_ptr<SCH_SYMBOL> symbol( static_cast<SCH_SYMBOL*>( source->Clone() ) );
+    auto& pins = symbol->GetRawPins();
+    const wxString number = pins.front()->GetNumber();
+    const size_t originalCount = pins.size();
+    pins.emplace_back( static_cast<SCH_PIN*>( pins.front()->Duplicate( false ) ) );
+
+    // Oppose allocation order so the saved order cannot pass by allocator coincidence.
+    const auto opposeAllocationOrder = [&]
+    {
+        std::sort( pins.begin(), pins.end(), []( const auto& a, const auto& b )
+                   { return std::less<SCH_PIN*>{}( b.get(), a.get() ); } );
+    };
+    const auto numbered = [&]( const auto& pin ) { return pin->GetNumber() == number; };
+    opposeAllocationOrder();
+    const KIID expected = ( *std::find_if( pins.begin(), pins.end(), numbered ) )->m_Uuid;
+    symbol->UpdatePins();
+    BOOST_CHECK_EQUAL( pins.size(), originalCount );
+
+    for( int pass = 0; pass < 2; ++pass )
+    {
+        const auto retained = std::find_if( pins.begin(), pins.end(), numbered );
+        BOOST_REQUIRE( retained != pins.end() );
+        BOOST_CHECK( ( *retained )->m_Uuid == expected );
+        symbol->UpdatePins();
+    }
+
+    opposeAllocationOrder();
+    const auto libraryPins = symbol->GetLibSymbolRef()->GetPins();
+    BOOST_REQUIRE_EQUAL( libraryPins.size(), pins.size() );
+    const wxString commonNumber = libraryPins.front()->GetNumber();
+    std::map<const SCH_PIN*, KIID> expectedMapping;
+
+    for( size_t i = 0; i < pins.size(); ++i )
+    {
+        expectedMapping.emplace( libraryPins[i], pins[i]->m_Uuid );
+        pins[i]->SetNumber( commonNumber );
+    }
+
+    // Only the first library pin matches; the others must reuse saved pins in order.
+    symbol->UpdatePins();
+    BOOST_REQUIRE_EQUAL( pins.size(), originalCount );
+
+    for( const auto& pin : pins )
+    {
+        BOOST_REQUIRE( expectedMapping.contains( pin->GetLibPin() ) );
+        BOOST_CHECK( pin->m_Uuid == expectedMapping.at( pin->GetLibPin() ) );
+    }
+}
+
+
 /**
  * Test symbol variant handling.
  */

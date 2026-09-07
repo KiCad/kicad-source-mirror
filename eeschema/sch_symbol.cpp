@@ -1252,13 +1252,14 @@ void SCH_SYMBOL::UpdatePins()
 {
     std::map<wxString, wxString>           altPinMap;
     std::map<wxString, SCH_PIN::ALT>       altPinDefs;
-    std::map<wxString, std::set<SCH_PIN*>> pinUuidMap;
+    std::map<wxString, std::vector<SCH_PIN*>> pinUuidMap;
     std::set<SCH_PIN*>                     unassignedSchPins;
-    std::set<SCH_PIN*>                     unassignedLibPins;
+    std::vector<SCH_PIN*>                  unassignedLibPins;
 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        pinUuidMap[pin->GetNumber()].insert( pin.get() );
+        // Saved order keeps duplicate-number identities independent of allocation order.
+        pinUuidMap[pin->GetNumber()].push_back( pin.get() );
 
         unassignedSchPins.insert( pin.get() );
 
@@ -1292,7 +1293,7 @@ void SCH_SYMBOL::UpdatePins()
 
         if( ii == pinUuidMap.end() || ii->second.empty() )
         {
-            unassignedLibPins.insert( libPin );
+            unassignedLibPins.push_back( libPin );
             continue;
         }
 
@@ -1337,6 +1338,8 @@ void SCH_SYMBOL::UpdatePins()
     }
 
     // Add any pins that were not found in the symbol
+    size_t nextUnassigned = 0;
+
     for( SCH_PIN* libPin : unassignedLibPins )
     {
         SCH_PIN* pin = nullptr;
@@ -1344,9 +1347,14 @@ void SCH_SYMBOL::UpdatePins()
         // First try to re-use an existing pin
         if( !unassignedSchPins.empty() )
         {
-            auto it = unassignedSchPins.begin();
-            pin = *it;
-            unassignedSchPins.erase( it );
+            while( nextUnassigned < m_pins.size()
+                   && !unassignedSchPins.contains( m_pins[nextUnassigned].get() ) )
+            {
+                ++nextUnassigned;
+            }
+
+            pin = m_pins.at( nextUnassigned++ ).get();
+            unassignedSchPins.erase( pin );
         }
         else
         {
