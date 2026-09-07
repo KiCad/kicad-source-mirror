@@ -30,8 +30,9 @@ class EDA_BASE_FRAME;
 class EDA_ITEM;
 class SELECTION;
 class PROPERTY_BASE;
+class BITMAP_BUTTON;
+class wxPropertyGridEvent;
 class wxStaticText;
-class wxMenu;
 
 enum PROPERTIES_PANEL_CONTEXT_MENU_IDS
 {
@@ -43,9 +44,10 @@ enum PROPERTIES_PANEL_CONTEXT_MENU_IDS
 
 class PROPERTIES_PANEL : public wxPanel
 {
+    friend class PROPERTIES_PANEL_GRID;
+
 public:
     PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame );
-
     virtual ~PROPERTIES_PANEL();
 
     virtual void UpdateData() = 0;
@@ -98,6 +100,7 @@ protected:
     virtual void onLabelEditEnding( wxPropertyGridEvent& aEvent );
 
     virtual bool buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp ) { return false; }
+    virtual void onAddCustomPropertyClicked() {}
     virtual void onNewItemLeftBlank( const wxString& aKey ) {}
     void onRightClick( wxPropertyGridEvent& aEvent );
 
@@ -122,6 +125,22 @@ protected:
     bool extractValueAndWritability( const SELECTION& aSelection, const wxString& aPropName,
                                      wxVariant& aValue, bool& aWritable, wxPGChoices& aChoices );
 
+    /// Shows the "+" overlay button on the Custom Properties caption row and positions it.
+    void updateCustomPropertiesButton();
+
+    /// Updates overlay button position on scroll
+    void positionCustomPropertiesButton();
+
+    ///< Find the Custom Properties caption row, if present in the grid.
+    wxPGProperty* customPropertiesCategory() const;
+
+    /**
+     * Synchronously ends any in-progress label edit (e.g. from adding a new field or property)
+     */
+    void settlePendingLabelEdit();
+
+    wxStaticText*               m_caption;
+
 public:
     int                         m_SuppressGridChangeEvents;
 
@@ -129,7 +148,6 @@ protected:
     std::vector<PROPERTY_BASE*> m_displayed;    // no ownership of pointers
     wxPropertyGrid*             m_grid;
     EDA_BASE_FRAME*             m_frame;
-    wxStaticText*               m_caption;
 
     /// Proportion of the grid column splitter that is used for the key column (0.0 - 1.0)
     float m_splitter_key_proportion;
@@ -138,9 +156,15 @@ protected:
 
     wxString m_contextMenuPropertyName;
 
+    BITMAP_BUTTON* m_addCustomPropertyButton;
+
+    /// True while settling a pending label edit synchronously (see settlePendingLabelEdit).
+    bool m_resolvingPendingKey = false;
+
     /// Key of a freshly-added blank field/custom property awaiting a name from the user.
     wxString m_pendingNewKey;
 };
+
 
 class SUPPRESS_GRID_CHANGED_EVENTS
 {

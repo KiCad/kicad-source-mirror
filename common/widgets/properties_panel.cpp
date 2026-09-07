@@ -20,14 +20,17 @@
  */
 
 #include "properties_panel.h"
+#include <bitmaps.h>
 #include <tool/selection.h>
 #include <eda_base_frame.h>
 #include <eda_item.h>
+#include <i18n_utility.h>
 #include <import_export.h>
 #include <pgm_base.h>
 #include <properties/pg_cell_renderer.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <widgets/bitmap_button.h>
 
 #include <algorithm>
 #include <iterator>
@@ -55,6 +58,17 @@ public:
             wxPropertyGrid( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPG_DEFAULT_STYLE | wxPG_TOOLTIPS )
     {
     }
+
+    void ScrollWindow( int aDx, int aDy, const wxRect* aRect = nullptr ) override
+    {
+        wxPropertyGrid::ScrollWindow( aDx, aDy, aRect );
+
+        if( PROPERTIES_PANEL* panel = static_cast<PROPERTIES_PANEL*>( GetParent() ) )
+            panel->positionCustomPropertiesButton();
+    }
+
+    ///< True while a wxPropertyGrid event (e.g. right-click) is being processed.
+    bool IsProcessingWxPGEvent() const { return m_processedEvent != nullptr; }
 
 #if wxUSE_STATUSBAR
     wxStatusBar* GetStatusBar() override { return nullptr; }
@@ -148,6 +162,35 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     // something where the label/key should be editable (user fields, custom properties, ...)
     m_grid->MakeColumnEditable( 0 );
 
+    // "+" button overlaid on the Custom Properties caption row.  It is a child of the
+    // grid so it scrolls (and is clipped) with the grid contents; it is shown only
+    // when that row is on-screen.
+    //
+    // TODO it would be nice to remove this hack by getting upstream wxWidgets to support
+    // customizing/subclassing the property group widgets
+    m_addCustomPropertyButton = new BITMAP_BUTTON( m_grid, wxID_ANY );
+    m_addCustomPropertyButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_addCustomPropertyButton->SetPadding( 2 );
+    m_addCustomPropertyButton->SetToolTip( _( "Add Custom Property" ) );
+    m_addCustomPropertyButton->Hide();
+    m_addCustomPropertyButton->Bind( wxEVT_BUTTON,
+                                     [this]( wxCommandEvent& )
+                                     {
+                                         onAddCustomPropertyClicked();
+                                     } );
+
+    Bind( wxEVT_PG_ITEM_EXPANDED,
+          [&]( wxPropertyGridEvent& )
+          {
+              positionCustomPropertiesButton();
+          } );
+
+    Bind( wxEVT_PG_ITEM_COLLAPSED,
+          [&]( wxPropertyGridEvent& )
+          {
+              positionCustomPropertiesButton();
+          } );
+
     Bind( wxEVT_PG_LABEL_EDIT_BEGIN, &PROPERTIES_PANEL::onLabelEditBegin, this );
     Bind( wxEVT_PG_LABEL_EDIT_ENDING, &PROPERTIES_PANEL::onLabelEditEnding, this );
     Bind( wxEVT_PG_RIGHT_CLICK, &PROPERTIES_PANEL::onRightClick, this );
@@ -161,6 +204,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
           [&]( wxPropertyGridEvent& )
           {
               m_splitter_key_proportion = static_cast<float>( m_grid->GetSplitterPosition() ) / m_grid->GetSize().x;
+              positionCustomPropertiesButton();
           } );
 
     Bind( wxEVT_SIZE,
@@ -169,6 +213,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
               CallAfter( [this]()
                          {
                             RecalculateSplitterPos();
+                            positionCustomPropertiesButton();
                          } );
               aEvent.Skip();
           } );
@@ -214,6 +259,21 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 {
     SUPPRESS_GRID_CHANGED_EVENTS raii( this );
 
+    // wxPG defers property deletion while one of its events is being processed
+    // (m_processedEvent != nullptr), and wxPropertyGridPageState::DoClear() then
+    // leaves the old rows in place; re-appending the new set on top of them
+    // duplicates every row.  This happens when e.g. the context menu (opened from
+    // a grid right-click) removes a property.  Re-run once the event has unwound.
+    if( static_cast<PROPERTIES_PANEL_GRID*>( m_grid )->IsProcessingWxPGEvent() )
+    {
+        m_addCustomPropertyButton->Hide();
+        CallAfter( [this, aSelection]()
+                   {
+                       rebuildProperties( aSelection );
+                   } );
+        return;
+    }
+
     auto reset =
             [&]()
             {
@@ -227,6 +287,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     if( aSelection.Empty() )
     {
         m_caption->SetLabel( _( "No objects selected" ) );
+        m_addCustomPropertyButton->Hide();
         reset();
         return;
     }
@@ -334,6 +395,15 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         }
     }
 
+    // Always show the Custom Properties group, even when it has no members, because it has the
+    // clearest path to add a custom property (the custom "+" button)
+    if( !groups.contains( _HKI( "Custom Properties" ) ) )
+    {
+        groupDisplayOrder.emplace_back( _HKI( "Custom Properties" ) );
+        groups.insert( _HKI( "Custom Properties" ) );
+    }
+
+
     bool isLibraryEditor = m_frame->IsType( FRAME_FOOTPRINT_EDITOR )
                         || m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
@@ -427,11 +497,15 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
     for( const wxString& groupName : groupDisplayOrder )
     {
-        if( !pgPropGroups.count( groupName ) )
+        if( groupName != _HKI( "Custom Properties" ) && !pgPropGroups.contains( groupName ) )
             continue;
 
-        std::vector<wxPGProperty*>& properties = pgPropGroups[groupName];
-        wxString                    groupCaption = wxGetTranslation( groupName );
+        std::vector<wxPGProperty*> properties;
+
+        if( pgPropGroups.contains( groupName ) )
+            properties = pgPropGroups[groupName];
+
+        wxString groupCaption = wxGetTranslation( groupName );
 
         auto groupItem = new wxPropertyCategory( groupName.IsEmpty() ? unspecifiedGroupCaption
                                                                      : groupCaption );
@@ -449,6 +523,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     }
 
     RecalculateSplitterPos();
+    updateCustomPropertiesButton();
 }
 
 
@@ -599,7 +674,14 @@ void PROPERTIES_PANEL::onLabelEditEnding( wxPropertyGridEvent& aEvent )
 
         m_pendingNewKey.Clear();
 
-        if( newName.IsEmpty() || isKeyNameInUse( newName ) )
+        if( m_resolvingPendingKey )
+        {
+            if( newName.IsEmpty() || isKeyNameInUse( newName ) )
+                onNewItemLeftBlank( pendingKey );
+            else
+                onKeyRenamed( oldName, newName );
+        }
+        else if( newName.IsEmpty() || isKeyNameInUse( newName ) )
         {
             CallAfter(
                     [this, pendingKey]()
@@ -662,12 +744,46 @@ void PROPERTIES_PANEL::onRightClick( wxPropertyGridEvent& aEvent )
 
     m_contextMenuPropertyName = pgProp->GetBaseName();
 
-    wxMenu menu;
+    wxMenu* menu = new wxMenu;
 
-    if( !buildContextMenu( menu, pgProp ) )
+    if( !buildContextMenu( *menu, pgProp ) )
+    {
+        delete menu;
+        return;
+    }
+
+    // Defer showing the menu until the property event has finished
+    const wxPoint pos = ScreenToClient( wxGetMousePosition() );
+    CallAfter( [this, menu, pos]()
+               {
+                   PopupMenu( menu, pos );
+                   delete menu;
+               } );
+}
+
+
+void PROPERTIES_PANEL::settlePendingLabelEdit()
+{
+    if( !m_grid->GetLabelEditor() )
+    {
+        m_pendingNewKey.Clear();
+        return;
+    }
+
+    const wxString newName = m_grid->GetLabelEditor()->GetValue();
+    const wxString pendingKey = m_pendingNewKey;
+
+    m_resolvingPendingKey = true;
+    m_grid->EndLabelEdit( true );
+    m_resolvingPendingKey = false;
+
+    if( pendingKey.IsEmpty() )
         return;
 
-    PopupMenu( &menu, ScreenToClient( wxGetMousePosition() ) );
+    if( newName.IsEmpty() || isKeyNameInUse( newName ) )
+        onNewItemLeftBlank( pendingKey );
+    else if( newName != pendingKey )
+        onKeyRenamed( pendingKey, newName );
 }
 
 
@@ -814,4 +930,58 @@ void PROPERTIES_PANEL::SetSplitterProportion( float aProportion )
 {
     m_splitter_key_proportion = aProportion;
     RecalculateSplitterPos();
+}
+
+
+wxPGProperty* PROPERTIES_PANEL::customPropertiesCategory() const
+{
+    for( wxPropertyGridIterator it = m_grid->GetIterator( wxPG_ITERATE_VISIBLE ); !it.AtEnd(); it.Next() )
+    {
+        wxPGProperty* pgProp = it.GetProperty();
+
+        if( pgProp->IsCategory() && pgProp->GetLabel() == wxGetTranslation( _HKI( "Custom Properties" ) ) )
+            return pgProp;
+    }
+
+    return nullptr;
+}
+
+
+void PROPERTIES_PANEL::updateCustomPropertiesButton()
+{
+    if( customPropertiesCategory() )
+        positionCustomPropertiesButton();
+    else
+        m_addCustomPropertyButton->Hide();
+}
+
+
+void PROPERTIES_PANEL::positionCustomPropertiesButton()
+{
+    wxPGProperty* category = customPropertiesCategory();
+
+    if( !category )
+    {
+        m_addCustomPropertyButton->Hide();
+        return;
+    }
+
+    const int rowY = m_grid->CalcScrolledPosition( wxPoint( 0, category->GetY() ) ).y;
+    const int rowHeight = m_grid->GetRowHeight();
+
+    if( rowY + rowHeight <= 0 || rowY >= m_grid->GetClientSize().y )
+    {
+        m_addCustomPropertyButton->Hide();
+        return;
+    }
+
+    const wxSize btnSize = m_addCustomPropertyButton->GetSize();
+    const int    btnX = m_grid->GetClientSize().x - btnSize.x - m_grid->FromDIP( 4 );
+    const int    btnY = rowY + ( rowHeight - btnSize.y ) / 2;
+
+    if( !m_addCustomPropertyButton->IsShown() )
+        m_addCustomPropertyButton->Show();
+
+    m_addCustomPropertyButton->SetPosition( wxPoint( std::max( 0, btnX ), std::max( 0, btnY ) ) );
+    m_addCustomPropertyButton->Raise();
 }

@@ -68,6 +68,8 @@ protected:
     bool buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp ) override;
     void onNewItemLeftBlank( const wxString& aKey ) override;
 
+    void onAddCustomPropertyClicked() override;
+
     void addBlankField();
     void addBlankCustomProperty();
     void removeField( const wxString& aName );
@@ -114,7 +116,6 @@ protected:
     PG_TRACK_WIDTH_EDITOR*  m_trackWidthEditorInstance;
     PG_FPID_EDITOR*      m_fpEditorInstance;
     PG_URL_EDITOR*       m_urlEditorInstance;
-    wxButton*            m_addCustomPropertyButton;
 
     wxPGChoices m_nets;
 

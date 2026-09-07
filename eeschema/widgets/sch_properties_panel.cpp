@@ -66,8 +66,8 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
         m_colorEditorInstance( nullptr ),
         m_fpEditorInstance( nullptr ),
         m_urlEditorInstance( nullptr ),
-        m_editPinMapButton( nullptr ),
-        m_addCustomPropertyButton( nullptr )
+        m_editPinMapButton( nullptr )
+
 {
     // Pin Map editor launcher (issue #2282).  The button lives below the property grid and is only
     // shown when a single symbol with an effective associated footprint is selected.
@@ -75,15 +75,6 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
     m_editPinMapButton->Hide();
     GetSizer()->Add( m_editPinMapButton, 0, wxALL | wxEXPAND, 5 );
     m_editPinMapButton->Bind( wxEVT_BUTTON, &SCH_PROPERTIES_PANEL::onEditPinMap, this );
-
-    m_addCustomPropertyButton = new wxButton( this, wxID_ANY, _( "Add Custom Property" ) );
-    GetSizer()->Add( m_addCustomPropertyButton, 0, wxALL | wxEXPAND, 5 );
-
-    m_addCustomPropertyButton->Bind( wxEVT_BUTTON,
-            [this]( wxCommandEvent& )
-            {
-                addBlankCustomProperty();
-            } );
 
     m_propMgr.Rebuild();
     bool found = false;
@@ -790,10 +781,18 @@ void SCH_PROPERTIES_PANEL::addBlankField()
 }
 
 
+void SCH_PROPERTIES_PANEL::onAddCustomPropertyClicked()
+{
+    addBlankCustomProperty();
+}
+
+
 void SCH_PROPERTIES_PANEL::addBlankCustomProperty()
 {
     SELECTION fallbackSelection;
     const SELECTION& selection = getSelection( fallbackSelection );
+
+    settlePendingLabelEdit();
 
     if( selection.Empty() )
         return;

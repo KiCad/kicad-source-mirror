@@ -352,7 +352,6 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
         PROPERTIES_PANEL( aParent, aFrame ),
         m_frame( aFrame ),
         m_propMgr( PROPERTY_MANAGER::Instance() ),
-        m_addCustomPropertyButton( nullptr ),
         m_scaleConfirmPending( false )
 {
     m_propMgr.Rebuild();
@@ -461,15 +460,6 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
     Bind( wxEVT_MENU, &PCB_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_ADD_CUSTOM_PROPERTY );
     Bind( wxEVT_MENU, &PCB_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_FIELD );
     Bind( wxEVT_MENU, &PCB_PROPERTIES_PANEL::onContextMenu, this, ID_CTX_REMOVE_CUSTOM_PROPERTY );
-
-    m_addCustomPropertyButton = new wxButton( this, wxID_ANY, _( "Add Custom Property" ) );
-    GetSizer()->Add( m_addCustomPropertyButton, 0, wxALL | wxEXPAND, 5 );
-
-    m_addCustomPropertyButton->Bind( wxEVT_BUTTON,
-                                     [this]( wxCommandEvent& )
-                                     {
-                                         addBlankCustomProperty();
-                                     } );
 }
 
 
@@ -729,10 +719,18 @@ void PCB_PROPERTIES_PANEL::addBlankField()
 }
 
 
+void PCB_PROPERTIES_PANEL::onAddCustomPropertyClicked()
+{
+    addBlankCustomProperty();
+}
+
+
 void PCB_PROPERTIES_PANEL::addBlankCustomProperty()
 {
     SELECTION fallbackSelection;
     const SELECTION& selection = getSelection( fallbackSelection );
+
+    settlePendingLabelEdit();
 
     if( selection.Empty() )
         return;
