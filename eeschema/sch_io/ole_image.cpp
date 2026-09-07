@@ -383,10 +383,10 @@ bool OleMakeBmpFromDib( const std::vector<uint8_t>& aDib, wxMemoryBuffer& aOut )
 
 std::vector<uint8_t> OleExtractEmbeddedEmf( const std::vector<uint8_t>& aWmf )
 {
-    constexpr uint32_t WMFC_IDENTIFIER = 0x43464D57;
-    constexpr uint16_t META_ESCAPE = 0x0626;
-    constexpr uint16_t ENHANCED_METAFILE = 0x000F;
-    constexpr size_t   COMMENT_HEADER_SIZE = 34;
+    constexpr uint32_t c_WMFC_IDENTIFIER = 0x43464D57;
+    constexpr uint16_t c_META_ESCAPE = 0x0626;
+    constexpr uint16_t c_ENHANCED_METAFILE = 0x000F;
+    constexpr size_t   c_COMMENT_HEADER_SIZE = 34;
 
     size_t headerOffset = 0;
 
@@ -416,17 +416,17 @@ std::vector<uint8_t> OleExtractEmbeddedEmf( const std::vector<uint8_t>& aWmf )
 
         uint16_t function = readU16( aWmf.data() + offset + 4 );
 
-        if( function == META_ESCAPE && recordSize >= 10 + COMMENT_HEADER_SIZE
-            && readU16( aWmf.data() + offset + 6 ) == ENHANCED_METAFILE )
+        if( function == c_META_ESCAPE && recordSize >= 10 + c_COMMENT_HEADER_SIZE
+            && readU16( aWmf.data() + offset + 6 ) == c_ENHANCED_METAFILE )
         {
             uint16_t byteCount = readU16( aWmf.data() + offset + 8 );
 
-            if( byteCount < COMMENT_HEADER_SIZE || static_cast<size_t>( byteCount ) + 10 > recordSize )
+            if( byteCount < c_COMMENT_HEADER_SIZE || static_cast<size_t>( byteCount ) + 10 > recordSize )
                 return {};
 
             const uint8_t* header = aWmf.data() + offset + 10;
 
-            if( readU32( header ) != WMFC_IDENTIFIER || readU32( header + 4 ) != 1 )
+            if( readU32( header ) != c_WMFC_IDENTIFIER || readU32( header + 4 ) != 1 )
                 return {};
 
             uint32_t recordCount = readU32( header + 18 );
@@ -434,7 +434,7 @@ std::vector<uint8_t> OleExtractEmbeddedEmf( const std::vector<uint8_t>& aWmf )
             uint32_t remaining = readU32( header + 26 );
             uint32_t emfSize = readU32( header + 30 );
 
-            if( chunkSize > byteCount - COMMENT_HEADER_SIZE || emfSize < remaining )
+            if( chunkSize > byteCount - c_COMMENT_HEADER_SIZE || emfSize < remaining )
                 return {};
 
             if( chunkCount == 0 )
@@ -456,7 +456,7 @@ std::vector<uint8_t> OleExtractEmbeddedEmf( const std::vector<uint8_t>& aWmf )
                 || remaining != expectedEmfSize - emf.size() - chunkSize )
                 return {};
 
-            emf.insert( emf.end(), header + COMMENT_HEADER_SIZE, header + COMMENT_HEADER_SIZE + chunkSize );
+            emf.insert( emf.end(), header + c_COMMENT_HEADER_SIZE, header + c_COMMENT_HEADER_SIZE + chunkSize );
             ++chunkCount;
         }
 
