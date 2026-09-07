@@ -37,6 +37,10 @@ include_directories(
 # multi-threaded build
 add_dependencies( qa_eeschema_tools eeschema_kiface_objects )
 
+if( TARGET api_schema_build_copy )
+    add_dependencies( qa_eeschema_tools api_schema_build_copy )
+endif()
+
 target_link_libraries( qa_eeschema_tools
     eeschema_kiface_objects
     common
