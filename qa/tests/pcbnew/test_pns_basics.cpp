@@ -342,7 +342,8 @@ public:
                                 const VECTOR2I& aStartPosition = VECTOR2I() )
     {
         m_startLayer = aItem->Layer();
-        return inheritTrackWidth( aItem, aInheritedWidth, aStartPosition );
+
+        return inheritTrackWidthAndDpGap( aItem, aStartPosition, aInheritedWidth, nullptr );
     }
 
     std::unique_ptr<PNS::VIA> TestSyncVia( PCB_VIA* aVia ) { return syncVia( aVia ); }

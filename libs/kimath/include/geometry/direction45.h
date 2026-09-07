@@ -307,7 +307,7 @@ public:
         return 1 << ( (int) m_dir );
     }
 
-    static const int AllDirectionsMask()
+    static int AllDirectionsMask()
     {
         return 0xffff;
     }

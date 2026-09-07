@@ -25,7 +25,7 @@
 #include <limits>
 
 #include <algorithm>
-
+#include <core/typeinfo.h>
 #include <geometry/shape_rect.h>
 
 #include "pns_diff_pair.h"

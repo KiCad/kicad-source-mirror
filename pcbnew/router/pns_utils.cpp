@@ -638,17 +638,24 @@ const wxString Format( const MINOPTMAX<int> x )
 {
     wxString ret;
 
+    ret = wxT( "min:" );
+    if( x.HasMin() )
+        ret.Append( wxString::Format( wxT( "%d" ), x.Min() ) );
+    else
+        ret.Append( wxT( "none" ) );
 
+    ret.Append( wxT( " max:" ) );
+    if( x.HasMax() )
+        ret.Append( wxString::Format( wxT( "%d" ), x.Max() ) );
+    else
+        ret.Append( wxT( "none" ) );
 
-    ret = wxT("min:");
-    ret.Append(x.HasMin() ? wxString::Format( wxT("%d"), x.Min() ): wxT("none") );
-    ret.Append(wxT(" max:"));
-    ret.Append(x.HasMax() ? wxString::Format( wxT("%d"), x.Max() ): wxT("none") );
-    ret.Append( wxT(" opt:"));
-    ret.Append( x.HasOpt() ? wxString::Format( wxT("%d"), x.Opt() ): wxT("none") );
-    
+    ret.Append( wxT( " opt:" ) );
+    if( x.HasOpt() )
+        ret.Append( wxString::Format( wxT( "%d" ), x.Opt() ) );
+    else
+        ret.Append( wxT( "none" ) );
+
     return ret;
 }
-
-
 }

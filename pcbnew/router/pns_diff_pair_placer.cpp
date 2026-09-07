@@ -19,6 +19,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <core/typeinfo.h>
+
 #include "pns_walkaround.h"
 #include "pns_shove.h"
 #include "pns_router.h"

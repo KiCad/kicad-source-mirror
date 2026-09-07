@@ -20,7 +20,7 @@
  */
 
 #include <optional>
-
+#include <core/typeinfo.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 
