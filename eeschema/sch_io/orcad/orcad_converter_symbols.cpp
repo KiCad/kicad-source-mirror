@@ -3389,7 +3389,7 @@ void ORCAD_CONVERTER::placeSymbolFields( SCH_SYMBOL* aSymbol, const ORCAD_PLACED
             continue;
         }
 
-        wxString fieldName = propertyNamesEqual( propName, "Footprint" ) ? wxS( "OrCAD Footprint Property" )
+        wxString  fieldName = propertyNamesEqual( propName, "Footprint" ) ? wxString( "OrCAD Footprint Property" )
                                                                           : FromOrcadString( propName );
         SCH_FIELD field( aSymbol, FIELD_T::USER, fieldName );
         field.SetText( FromOrcadString( propValue ) );
