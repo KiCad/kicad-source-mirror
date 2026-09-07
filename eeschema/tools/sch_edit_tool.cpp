@@ -18,6 +18,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <symbol_edit_frame.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_selection_tool.h>
 #include <kiway.h>
 #include <tool/action_manager.h>
 #include <tool/picker_tool.h>

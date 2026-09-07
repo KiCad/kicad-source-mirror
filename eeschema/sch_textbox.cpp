@@ -39,6 +39,7 @@
 #include <geometry/geometry_utils.h>
 #include <sch_textbox.h>
 #include <tools/sch_navigate_tool.h>
+#include <tool/tool_manager.h>
 #include <markup_parser.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>

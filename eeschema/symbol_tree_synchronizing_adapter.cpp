@@ -27,9 +27,12 @@
 #include <core/throttle.h>
 #include <kiplatform/ui.h>
 #include <pgm_base.h>
+#include <settings/common_settings.h>
+#include <symbol_edit_frame.h>
 #include <project/project_file.h>
 #include <lib_symbol_library_manager.h>
 #include <tools/symbol_editor_control.h>
+#include <tool/tool_manager.h>
 #include <project_sch.h>
 #include <string_utils.h>
 #include <symbol_preview_widget.h>

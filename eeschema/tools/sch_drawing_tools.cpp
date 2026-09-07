@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <eda_shape.h>
+#include <tool/tool_manager.h>
 #include "sch_sheet_path.h"
 #include <limits>
 #include <memory>

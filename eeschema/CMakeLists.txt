@@ -552,6 +552,7 @@ set( EESCHEMA_SRCS
     tools/sch_point_editor.cpp
     tools/sch_selection.cpp
     tools/sch_selection_tool.cpp
+    tools/sch_tool_base.cpp
     tools/sch_tool_utils.cpp
     tools/symbol_editor_control.cpp
     tools/symbol_editor_drawing_tools.cpp

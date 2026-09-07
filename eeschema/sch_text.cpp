@@ -46,6 +46,7 @@
 #include <core/mirror.h>
 #include <core/kicad_algo.h>
 #include <tools/sch_navigate_tool.h>
+#include <tool/tool_manager.h>
 #include <trigo.h>
 #include <markup_parser.h>
 #include <properties/property.h>

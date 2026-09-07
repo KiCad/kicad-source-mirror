@@ -18,6 +18,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sch_edit_frame.h>
+#include <symbol_edit_frame.h>
+#include <tools/sch_selection_tool.h>
+#include <tool/tool_manager.h>
 #include <sch_commit.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>

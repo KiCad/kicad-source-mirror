@@ -28,8 +28,7 @@ include_directories(
     # symbol_edit_frame.h (white-box tested by the tab regression tests) includes
     # <symbol_tree_pane.h>, which lives under eeschema/widgets.
     ${CMAKE_SOURCE_DIR}/eeschema/widgets
-    # sch_tool_base.h (pulled in by tools/sch_editor_control.h) includes the bare
-    # <symbol_edit_frame.h>, which lives under eeschema/symbol_editor.
+    # Symbol editor white-box tests include <symbol_edit_frame.h>.
     ${CMAKE_SOURCE_DIR}/eeschema/symbol_editor
     # dialog_sim_model.h (white-box tested for issue 23687) includes <dialog_sim_model_base.h>.
     ${CMAKE_SOURCE_DIR}/eeschema/dialogs

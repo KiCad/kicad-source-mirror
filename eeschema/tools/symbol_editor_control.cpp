@@ -18,6 +18,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sch_edit_frame.h>
+#include <settings/common_settings.h>
+#include <tools/sch_selection_tool.h>
 #include "tools/symbol_editor_control.h"
 
 #include <advanced_config.h>

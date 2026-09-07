@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <tool/tool_manager.h>
+#include <tools/sch_selection_tool.h>
 #include "symbol_editor_pin_tool.h"
 
 #include <sch_commit.h>

@@ -43,7 +43,9 @@
 #include <project_sch.h>
 #include <richio.h>
 #include <tools/sch_actions.h>
+#include <tool/tool_manager.h>
 #include <tools/sch_editor_control.h>
+#include <tools/sch_selection_tool.h>
 #include <advanced_config.h>
 #include <api/api_handler_sch.h>
 

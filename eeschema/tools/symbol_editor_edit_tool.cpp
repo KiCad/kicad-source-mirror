@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <tool/tool_manager.h>
 #include "symbol_editor_edit_tool.h"
 #include "tl/expected.hpp"
 

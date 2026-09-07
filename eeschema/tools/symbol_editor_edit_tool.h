@@ -23,6 +23,9 @@
 #include <tools/sch_tool_base.h>
 
 
+class LIB_ID;
+class SCH_FIELD;
+class SCH_ITEM;
 class SCH_PIN;
 class SCH_SHAPE;
 class SYMBOL_EDIT_FRAME;

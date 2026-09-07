@@ -27,6 +27,7 @@
 #include <sch_painter.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
+#include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <tools/symbol_editor_control.h>
 #include <widgets/wx_menubar.h>

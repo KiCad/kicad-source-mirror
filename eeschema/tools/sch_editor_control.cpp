@@ -19,6 +19,7 @@
  */
 
 #include <advanced_config.h>
+#include <symbol_edit_frame.h>
 #include "tools/sch_editor_control.h"
 
 #include <algorithm>

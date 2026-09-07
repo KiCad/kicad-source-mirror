@@ -18,6 +18,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <tools/sch_selection_tool.h>
+#include <sch_edit_frame.h>
+#include <tool/tool_manager.h>
 #include <schematic.h>
 #include <eeschema_id.h>
 #include <tools/sch_actions.h>

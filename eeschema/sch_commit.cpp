@@ -17,7 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sch_edit_frame.h>
+#include <symbol_edit_frame.h>
+#include <tools/sch_selection_tool.h>
+#include <sch_view.h>
 #include <macros.h>
+#include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_tool_base.h>
 

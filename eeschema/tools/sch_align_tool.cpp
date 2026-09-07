@@ -30,6 +30,7 @@
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
 #include <tool/tool_event.h>
+#include <tool/tool_manager.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/sch_align_tool.h>
 #include <view/view_controls.h>

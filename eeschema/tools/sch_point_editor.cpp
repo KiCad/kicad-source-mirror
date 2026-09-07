@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <symbol_edit_frame.h>
 #include "sch_point_editor.h"
 
 #include <algorithm>

@@ -33,6 +33,7 @@
 #include <kiway_mail.h>
 #include <locale_io.h>
 #include <symbol_viewer_frame.h>
+#include <symbol_edit_frame.h>
 #include <widgets/msgpanel.h>
 #include <widgets/wx_listbox.h>
 #include <widgets/wx_aui_utils.h>
@@ -53,6 +54,7 @@
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 #include <tools/symbol_editor_control.h>
 #include <tools/sch_inspection_tool.h>
 #include <view/view_controls.h>

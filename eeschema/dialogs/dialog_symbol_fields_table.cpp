@@ -50,6 +50,7 @@
 #include <project/project_file.h>
 #include <jobs/job_export_bom.h>
 #include <tools/sch_actions.h>
+#include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
 #include <sch_sheet_path.h>
 

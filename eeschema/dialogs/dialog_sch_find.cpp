@@ -22,6 +22,7 @@
 #include <tool/actions.h>
 #include <sch_edit_frame.h>
 #include <tools/sch_find_replace_tool.h>
+#include <tool/tool_manager.h>
 
 
 DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_BASE_FRAME* aParent, SCH_SEARCH_DATA* aData,

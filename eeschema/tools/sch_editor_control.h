@@ -22,7 +22,7 @@
 #ifndef SCH_EDITOR_CONTROL_H
 #define SCH_EDITOR_CONTROL_H
 
-#include <sch_base_frame.h>
+#include <sch_edit_frame.h>
 #include <tools/sch_tool_base.h>
 #include <status_popup.h>
 

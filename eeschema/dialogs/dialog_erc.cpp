@@ -50,6 +50,7 @@
 #include <wx/hyperlink.h>
 #include <wx/msgdlg.h>
 #include <sch_edit_tool.h>
+#include <tool/tool_manager.h>
 
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );

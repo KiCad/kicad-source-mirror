@@ -17,6 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sch_edit_frame.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_selection_tool.h>
 #include <sch_actions.h>
 #include <tools/sch_edit_table_tool.h>
 #include <dialogs/dialog_table_properties.h>

@@ -27,6 +27,8 @@
 
 namespace KIGFX { namespace PREVIEW { class ANGLE_ITEM; } }
 
+class EE_GRID_HELPER;
+enum class ARC_EDIT_MODE;
 class SCH_SELECTION_TOOL;
 class POINT_EDIT_BEHAVIOR;
 class SCH_BASE_FRAME;
