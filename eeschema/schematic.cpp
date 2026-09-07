@@ -1728,6 +1728,11 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
             {
                 m_schematicHolder->RemoveFromScreen( aItem, aScreen );
             }
+            else
+            {
+                aScreen->Remove( aItem );
+            }
+
             aCommit->Removed( aItem, aScreen );
         }
     };
@@ -1880,6 +1885,10 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
                     if( m_schematicHolder )
                     {
                         m_schematicHolder->AddToScreen( mergedLine, aScreen );
+                    }
+                    else
+                    {
+                        aScreen->Append( mergedLine );
                     }
 
                     aCommit->Added( mergedLine, aScreen );
