@@ -3596,12 +3596,12 @@ VECTOR2I ORCAD_CONVERTER::textSize( int aFontIdx, bool aTemplateFont ) const
 
     const ORCAD_FONT& font = m_design.library.fonts[aFontIdx - 1];
 
-    constexpr uint8_t FIXED_PITCH = 1;
+    constexpr uint8_t c_FIXED_PITCH = 1;
 
     if( font.width == 0 )
         return VECTOR2I( height, height );
 
-    if( ( font.pitchAndFamily & 0x3 ) != FIXED_PITCH )
+    if( ( font.pitchAndFamily & 0x3 ) != c_FIXED_PITCH )
     {
         std::string face = font.face;
         std::transform( face.begin(), face.end(), face.begin(),
