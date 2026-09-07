@@ -172,6 +172,9 @@ public:
 
     void SetConnectivityDirty();
 
+    /// Resolve a drawing item or a connectable child on this screen; ambiguous IDs return null.
+    SCH_ITEM* GetConnectivityItem( const KIID& aId ) const;
+
     /**
      * Return the number of times this screen is used.
      *

@@ -901,6 +901,39 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 }
 
 
+SCH_ITEM* SCH_SCREEN::GetConnectivityItem( const KIID& aId ) const
+{
+    SCH_ITEM* result = nullptr;
+    bool ambiguous = false;
+    const auto consider = [&]( SCH_ITEM* item )
+    {
+        if( item->m_Uuid == aId )
+        {
+            ambiguous |= result && result != item;
+            result = item;
+        }
+    };
+
+    for( SCH_ITEM* item : Items() )
+    {
+        consider( item );
+
+        if( item->Type() == SCH_SYMBOL_T || item->Type() == SCH_SHEET_T )
+        {
+            item->RunOnChildren(
+                    [&]( SCH_ITEM* child )
+                    {
+                        if( child->IsConnectable() )
+                            consider( child );
+                    },
+                    RECURSE_MODE::NO_RECURSE );
+        }
+    }
+
+    return ambiguous ? nullptr : result;
+}
+
+
 void SCH_SCREEN::SetConnectivityDirty()
 {
     for( SCH_ITEM* item : Items() )
