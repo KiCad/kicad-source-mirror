@@ -1708,6 +1708,8 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
     std::vector<SCH_JUNCTION*>   junctions;
     std::vector<SCH_NO_CONNECT*> ncs;
     std::vector<SCH_ITEM*>       items_to_remove;
+    std::unordered_set<SCH_LINE*> generatedLines;
+    std::vector<std::unique_ptr<SCH_LINE>> retiredLines;
     bool                         changed = true;
 
     if( aScreen == nullptr )
@@ -1734,6 +1736,13 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
             }
 
             aCommit->RemovedForCleanup( aItem, aScreen );
+
+            if( aItem->Type() == SCH_LINE_T && generatedLines.erase( static_cast<SCH_LINE*>( aItem ) )
+                && !aCommit->GetStatus( aItem, aScreen ) )
+            {
+                // An intermediate merge has no undo owner when its Add/Remove entries cancel.
+                retiredLines.emplace_back( static_cast<SCH_LINE*>( aItem ) );
+            }
         }
     };
 
@@ -1891,6 +1900,7 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
                         aScreen->Append( mergedLine );
                     }
 
+                    generatedLines.insert( mergedLine );
                     aCommit->Added( mergedLine, aScreen );
 
                     if( selectionTool && ( firstLine->IsSelected() || secondLine->IsSelected() ) )
