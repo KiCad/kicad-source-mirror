@@ -1735,7 +1735,7 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
     {
-        if( !aScreen->IsExplicitJunction( item->GetPosition() ) )
+        if( !aScreen->IsExplicitJunctionAllowed( item->GetPosition() ) )
         {
             if( item->IsSelected() || item->HasFlag( SELECTED_BY_DRAG ) )
                 continue;
