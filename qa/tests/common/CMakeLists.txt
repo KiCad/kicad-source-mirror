@@ -116,6 +116,7 @@ set( QA_COMMON_SRCS
     text_eval/test_text_eval_render.cpp
     test_title_block.cpp
     test_track_width_calculations.cpp
+    test_pth_hole_size.cpp
     test_types.cpp
     test_utf8.cpp
     test_wildcards_and_files_ext.cpp

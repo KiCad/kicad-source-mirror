@@ -49,6 +49,7 @@
 #include <calculator_panels/panel_via_size.h>
 #include <calculator_panels/panel_wavelength.h>
 #include <calculator_panels/panel_eseries_display.h>
+#include <calculator_panels/panel_pth_size.h>
 #include "widgets/wx_menubar.h"
 
 
@@ -163,6 +164,10 @@ void PCB_CALCULATOR_FRAME::loadPages()
 
     AddCalculator( new PANEL_REGULATOR( m_treebook ), _( "Regulators" ) );
     AddCalculator( new PANEL_R_CALCULATOR( m_treebook ), _( "Resistor Calculator" ) );
+
+    m_treebook->AddPage( nullptr, _( "Footprint design" ) );
+
+    AddCalculator( new PANEL_PTH_SIZE( m_treebook ), _( "Through-hole Size" ) );
 
     m_treebook->AddPage( nullptr, _( "Power, current and isolation" ) );
 

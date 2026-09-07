@@ -33,6 +33,8 @@ set( PCB_CALCULATOR_SRCS
     calculator_panels/panel_electrical_spacing_iec60664_base.cpp
     calculator_panels/panel_electrical_spacing_ipc2221.cpp
     calculator_panels/panel_electrical_spacing_ipc2221_base.cpp
+    calculator_panels/panel_pth_size.cpp
+    calculator_panels/panel_pth_size_base.cpp
     calculator_panels/panel_r_calculator.cpp
     calculator_panels/panel_r_calculator_base.cpp
     calculator_panels/panel_fusing_current.cpp

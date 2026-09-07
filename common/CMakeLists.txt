@@ -810,6 +810,7 @@ set( COMMON_SRCS
     ${COMMON_IMPORT_GFX_SRCS}
     ${COMMON_TRANSLINE_CALCULATION_SRCS}
     track_width_calculations.cpp
+    pth_hole_size.cpp
     base_screen.cpp
     bin_mod.cpp
     bitmap_base.cpp
