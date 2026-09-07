@@ -53,6 +53,11 @@ class PROGRESS_REPORTER;
 class TOOL_MANAGER;
 class PICKED_ITEMS_LIST;
 
+namespace SCH_CONNECTIVITY
+{
+class NETCHAIN_MANAGER;
+}
+
 namespace KIFONT
 {
 class OUTLINE_FONT;
@@ -123,6 +128,10 @@ struct SCHEMATIC_CONTENT
     SCH_SHEET_LIST                    hierarchy;
     std::optional<SCH_SHEET_PATH>     currentSheet;
     std::unique_ptr<CONNECTION_GRAPH> connectionGraph;
+
+    /// Keep the schematic's net chains instead of the staged graph's, for append.
+    bool preserveNetChains = false;
+
     std::optional<EMBEDDED_FILES>     embeddedFiles;
     wxString                          drawingSheetFileName;
 };
@@ -301,6 +310,8 @@ public:
     }
 
     SCH_SCREEN* GetCurrentScreen() const { return CurrentSheet().LastScreen(); }
+
+    SCH_CONNECTIVITY::NETCHAIN_MANAGER& NetChains() const { return *m_netChains; }
 
     CONNECTION_GRAPH* ConnectionGraph() const
     {
@@ -709,6 +720,7 @@ private:
 
     /// Hold and calculate connectivity information of this schematic.
     CONNECTION_GRAPH* m_connectionGraph;
+    std::unique_ptr<SCH_CONNECTIVITY::NETCHAIN_MANAGER> m_netChains;
 
     wxString m_highlightedNetChain;
 

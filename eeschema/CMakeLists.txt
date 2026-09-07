@@ -421,6 +421,7 @@ set( EESCHEMA_SRCS
     bom_plugins.cpp
     bus-wire-junction.cpp
     connection_graph.cpp
+    connectivity/conn_netchain_manager.cpp
     cross-probing.cpp
     sch_design_block_utils.cpp
     eeschema_config.cpp

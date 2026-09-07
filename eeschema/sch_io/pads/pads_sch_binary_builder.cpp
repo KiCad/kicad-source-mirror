@@ -1486,6 +1486,7 @@ namespace
             else
             {
                 content.targetSheet = aAppendToMe;
+                content.preserveNetChains = true;
                 content.screenItems = std::move( appendIndex );
                 content.screenLibSymbols = std::move( appendCache );
                 content.itemOwners = std::move( appendItems );

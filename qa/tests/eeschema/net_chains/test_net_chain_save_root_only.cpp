@@ -39,7 +39,7 @@
 void boost_test_inject_committed_net_chain( CONNECTION_GRAPH& aGraph,
                                             std::unique_ptr<SCH_NETCHAIN> aChain )
 {
-    aGraph.m_committedNetChains.push_back( std::move( aChain ) );
+    aGraph.m_netChains->m_committedNetChains.push_back( std::move( aChain ) );
 }
 
 

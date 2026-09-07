@@ -779,38 +779,40 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
     // Committed chains and override maps belong to the persistent schematic state, so they
     // must travel across an incremental graph merge.  Potential chains are moved alongside
     // them to keep the merged graph self-consistent until the next RebuildNetChains() pass.
-    for( std::unique_ptr<SCH_NETCHAIN>& chain : aGraph.m_committedNetChains )
+    for( std::unique_ptr<SCH_NETCHAIN>& chain : aGraph.m_netChains->m_committedNetChains )
     {
         if( chain )
-            m_committedNetChains.push_back( std::move( chain ) );
+            m_netChains->m_committedNetChains.push_back( std::move( chain ) );
     }
 
-    aGraph.m_committedNetChains.clear();
+    aGraph.m_netChains->m_committedNetChains.clear();
 
-    for( std::unique_ptr<SCH_NETCHAIN>& chain : aGraph.m_potentialNetChains )
+    for( std::unique_ptr<SCH_NETCHAIN>& chain : aGraph.m_netChains->m_potentialNetChains )
     {
         if( chain )
-            m_potentialNetChains.push_back( std::move( chain ) );
+            m_netChains->m_potentialNetChains.push_back( std::move( chain ) );
     }
 
-    aGraph.m_potentialNetChains.clear();
+    aGraph.m_netChains->m_potentialNetChains.clear();
 
-    m_netChainsBuilt = m_netChainsBuilt || aGraph.m_netChainsBuilt;
+    m_netChains->m_netChainsBuilt = m_netChains->m_netChainsBuilt || aGraph.m_netChains->m_netChainsBuilt;
 
-    for( auto& [key, value] : aGraph.m_netChainTerminalOverrides )
-        m_netChainTerminalOverrides.insert_or_assign( key, value );
+    for( auto& [key, value] : aGraph.m_netChains->m_netChainTerminalOverrides )
+        m_netChains->m_netChainTerminalOverrides.insert_or_assign( key, value );
 
-    for( auto& [key, value] : aGraph.m_netChainNetClassOverrides )
-        m_netChainNetClassOverrides.insert_or_assign( key, value );
+    for( auto& [key, value] : aGraph.m_netChains->m_netChainNetClassOverrides )
+        m_netChains->m_netChainNetClassOverrides.insert_or_assign( key, value );
 
-    for( auto& [key, value] : aGraph.m_netChainColorOverrides )
-        m_netChainColorOverrides.insert_or_assign( key, value );
+    for( auto& [key, value] : aGraph.m_netChains->m_netChainColorOverrides )
+        m_netChains->m_netChainColorOverrides.insert_or_assign( key, value );
 
-    for( auto& [key, value] : aGraph.m_netChainTerminalRefOverrides )
-        m_netChainTerminalRefOverrides.insert_or_assign( key, value );
+    for( auto& [key, value] : aGraph.m_netChains->m_netChainTerminalRefOverrides )
+        m_netChains->m_netChainTerminalRefOverrides.insert_or_assign( key, value );
 
-    for( auto& [key, value] : aGraph.m_netChainMemberNetOverrides )
-        m_netChainMemberNetOverrides.insert_or_assign( key, value );
+    for( auto& [key, value] : aGraph.m_netChains->m_netChainMemberNetOverrides )
+        m_netChains->m_netChainMemberNetOverrides.insert_or_assign( key, value );
+
+    m_netChains->ApplyNetChainNetclasses();
 }
 
 
@@ -891,14 +893,14 @@ void CONNECTION_GRAPH::Reset()
     // SCH_NETCHAIN::m_symbols holds non-owning SCH_SYMBOL pointers. Once the connectivity
     // pass clears the rest of the graph the schematic items can be freed before
     // RebuildNetChains() repopulates the chain caches, so drop the stale pointers now.
-    for( std::unique_ptr<SCH_NETCHAIN>& chain : m_committedNetChains )
+    for( std::unique_ptr<SCH_NETCHAIN>& chain : m_netChains->m_committedNetChains )
     {
         if( chain )
             chain->ClearSymbols();
     }
 
-    m_potentialNetChains.clear();
-    m_netChainsBuilt = false;
+    m_netChains->m_potentialNetChains.clear();
+    m_netChains->m_netChainsBuilt = false;
 }
 
 
@@ -3364,15 +3366,15 @@ void CONNECTION_GRAPH::RebuildNetChains()
 {
     // Snapshot the committed-chain count so a throw partway through the restore loop can
     // truncate any half-built entries instead of leaving the container partially mutated.
-    const size_t committedSnapshot = m_committedNetChains.size();
-    const bool   builtSnapshot = m_netChainsBuilt;
+    const size_t committedSnapshot = m_netChains->m_committedNetChains.size();
+    const bool   builtSnapshot = m_netChains->m_netChainsBuilt;
 
     try
     {
         wxLogTrace( traceSchNetChain, "RebuildNetChains: begin (items=%zu, schematic=%p)",
                     m_items.size(), (void*) m_schematic );
         // Clear only potential net chains; leave committed net chains intact.
-        m_potentialNetChains.clear();
+        m_netChains->m_potentialNetChains.clear();
 
         if( !m_schematic )
         {
@@ -3398,7 +3400,8 @@ void CONNECTION_GRAPH::RebuildNetChains()
                 static_cast<SCH_SYMBOL*>( item )->SetNetChainName( wxEmptyString );
         }
         wxLogTrace( traceSchNetChain, "RebuildNetChains: screens=%zu (global build)", allScreens.size() );
-    wxLogTrace( traceSchNetChain, "RebuildNetChains: debug start passes (pre-pass chains=%zu)", m_committedNetChains.size() );
+    wxLogTrace( traceSchNetChain, "RebuildNetChains: debug start passes (pre-pass chains=%zu)",
+                m_netChains->m_committedNetChains.size() );
 
     // (Removed legacy findWire heuristic; global symbol-based connectivity no longer relies on
     // scanning parallel wires for 2-pin passthrough components.)
@@ -3491,7 +3494,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
 
 
     // Structural filtering already done by excluding edges; isolated power nets are implicitly ignored.
-    m_potentialNetChains.clear();
+    m_netChains->m_potentialNetChains.clear();
 
     // Recompute nets list after filtering
     std::set<wxString> netsAll;
@@ -3525,17 +3528,18 @@ void CONNECTION_GRAPH::RebuildNetChains()
             for( const BRIDGE_EDGE& be : bridgeEdges )
                 if( comp.contains( be.a ) && comp.contains( be.b ) && be.sym )
                     sig->AddSymbol( be.sym );
-            m_potentialNetChains.push_back( std::move( sig ) );
+            m_netChains->m_potentialNetChains.push_back( std::move( sig ) );
         }
     }
     // Build netToNetChain map for potential net chains
     netToNetChain.clear();
-    for( const auto& sigUP : m_potentialNetChains )
+    for( const auto& sigUP : m_netChains->m_potentialNetChains )
         if( sigUP ) for( const wxString& n : sigUP->GetNets() ) netToNetChain[n] = sigUP.get();
 
     // Debug: enumerate chains and their nets prior to label-based naming.
-    wxLogTrace( traceSchNetChain, "RebuildNetChains: pre-label potentialNetChains=%zu", m_potentialNetChains.size() );
-    for( const auto& sigUP : m_potentialNetChains )
+    wxLogTrace( traceSchNetChain, "RebuildNetChains: pre-label potentialNetChains=%zu",
+                m_netChains->m_potentialNetChains.size() );
+    for( const auto& sigUP : m_netChains->m_potentialNetChains )
     {
         if( !sigUP ) continue;
         wxString netsStr;
@@ -3565,7 +3569,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
     // chain entirely on collision, silently losing it.
     std::set<wxString> committedNames;
 
-    for( const auto& chain : m_committedNetChains )
+    for( const auto& chain : m_netChains->m_committedNetChains )
     {
         if( chain )
             committedNames.insert( chain->GetName() );
@@ -3601,7 +3605,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
     int idx = 1;
 
     wxLogTrace( traceSchNetChain, "RebuildNetChains: pass 3 (default naming)" );
-    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_potentialNetChains )
+    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_netChains->m_potentialNetChains )
     {
         if( sig->GetName().IsEmpty() )
         {
@@ -3611,7 +3615,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
     }
 
     wxLogTrace( traceSchNetChain, "RebuildNetChains: pass 4 (terminal pins)" );
-    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_potentialNetChains )
+    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_netChains->m_potentialNetChains )
     {
         struct PIN_INFO
         {
@@ -3669,15 +3673,15 @@ void CONNECTION_GRAPH::RebuildNetChains()
                                   pins[bestJ].sym->GetRef( pins[bestJ].sheet ), pins[bestJ].pin->GetNumber() );
         }
 
-        if( m_netChainTerminalOverrides.count( sig->GetName() ) )
+        if( m_netChains->m_netChainTerminalOverrides.count( sig->GetName() ) )
         {
-            auto ov = m_netChainTerminalOverrides[sig->GetName()];
+            auto ov = m_netChains->m_netChainTerminalOverrides[sig->GetName()];
             sig->SetTerminalPins( ov.first, ov.second );
         }
     }
 
     wxLogTrace( traceSchNetChain, "RebuildNetChains: pass 5 (apply symbol names)" );
-    for( auto& sigUP : m_potentialNetChains )
+    for( auto& sigUP : m_netChains->m_potentialNetChains )
     {
         SCH_NETCHAIN* sig = sigUP.get();
         for( SCH_SYMBOL* sym : sig->GetSymbols() )
@@ -3690,7 +3694,8 @@ void CONNECTION_GRAPH::RebuildNetChains()
     wxLogTrace( traceSchNetChain, "FinalChain %p nets(%zu): %s", (void*) sig, sig->GetNets().size(), netsStr );
     }
 
-    wxLogTrace( traceSchNetChain, "RebuildNetChains: built %zu potential net chains", m_potentialNetChains.size() );
+    wxLogTrace( traceSchNetChain, "RebuildNetChains: built %zu potential net chains",
+                m_netChains->m_potentialNetChains.size() );
 
     // Restore committed chains from file.
     // Priority 1: match by terminal ref+pin (survives net renames)
@@ -3698,7 +3703,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
     {
         std::set<wxString> alreadyCommitted;
 
-        for( const auto& chain : m_committedNetChains )
+        for( const auto& chain : m_netChains->m_committedNetChains )
         {
             if( chain )
                 alreadyCommitted.insert( chain->GetName() );
@@ -3738,7 +3743,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
         // scan m_committedNetChains for every override entry.
         std::unordered_map<wxString, SCH_NETCHAIN*> committedByName;
 
-        for( const auto& chain : m_committedNetChains )
+        for( const auto& chain : m_netChains->m_committedNetChains )
         {
             if( chain )
                 committedByName[chain->GetName()] = chain.get();
@@ -3748,10 +3753,10 @@ void CONNECTION_GRAPH::RebuildNetChains()
         // potential-based payload with its broader member-net symbol collection.
         std::set<wxString> refreshedThisPass;
 
-        for( const auto& [chainName, termRefs] : m_netChainTerminalRefOverrides )
+        for( const auto& [chainName, termRefs] : m_netChains->m_netChainTerminalRefOverrides )
         {
             SCH_NETCHAIN* match = resolvePotentialChainByTerminals( termRefs, refPinToNet,
-                                                                    m_potentialNetChains, chainName );
+                                                                    m_netChains->m_potentialNetChains, chainName );
 
             if( !match )
                 continue;
@@ -3776,7 +3781,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
 
         // Manual chains have no inferred potential; rebuild from the persisted
         // member-net list by collecting symbols whose pins land on those nets.
-        for( const auto& [chainName, memberNets] : m_netChainMemberNetOverrides )
+        for( const auto& [chainName, memberNets] : m_netChains->m_netChainMemberNetOverrides )
         {
             if( memberNets.empty() )
                 continue;
@@ -3786,9 +3791,9 @@ void CONNECTION_GRAPH::RebuildNetChains()
             if( alreadyCommitted.count( chainName ) && refreshedThisPass.count( chainName ) )
                 continue;
 
-            auto termIt = m_netChainTerminalRefOverrides.find( chainName );
+            auto termIt = m_netChains->m_netChainTerminalRefOverrides.find( chainName );
 
-            if( termIt == m_netChainTerminalRefOverrides.end() )
+            if( termIt == m_netChains->m_netChainTerminalRefOverrides.end() )
                 continue;
 
             const CHAIN_TERMINAL_REFS& termRefs = termIt->second;
@@ -3864,7 +3869,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
     }
 
     // Committed chain names take priority over potential chain names set by pass 5.
-    for( const auto& chain : m_committedNetChains )
+    for( const auto& chain : m_netChains->m_committedNetChains )
     {
         if( chain )
         {
@@ -3882,7 +3887,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
         hook( *this );
 
     // An empty chain list is a valid built state for chainless schematics.
-    m_netChainsBuilt = true;
+    m_netChains->m_netChainsBuilt = true;
     }
     catch( const std::exception& e )
     {
@@ -3890,12 +3895,12 @@ void CONNECTION_GRAPH::RebuildNetChains()
         wxLogError( _( "Net chain rebuild failed: %s.  The schematic may have stale chain "
                        "data; reload to recover." ),
                     wxString( e.what() ) );
-        m_potentialNetChains.clear();
+        m_netChains->m_potentialNetChains.clear();
 
-        if( m_committedNetChains.size() > committedSnapshot )
-            m_committedNetChains.resize( committedSnapshot );
+        if( m_netChains->m_committedNetChains.size() > committedSnapshot )
+            m_netChains->m_committedNetChains.resize( committedSnapshot );
 
-        m_netChainsBuilt = builtSnapshot;
+        m_netChains->m_netChainsBuilt = builtSnapshot;
         return;
     }
     catch( ... )
@@ -3903,12 +3908,12 @@ void CONNECTION_GRAPH::RebuildNetChains()
         wxFAIL_MSG( "RebuildNetChains threw an unknown exception" );
         wxLogError( _( "Net chain rebuild failed with an unknown error.  The schematic may "
                        "have stale chain data; reload to recover." ) );
-        m_potentialNetChains.clear();
+        m_netChains->m_potentialNetChains.clear();
 
-        if( m_committedNetChains.size() > committedSnapshot )
-            m_committedNetChains.resize( committedSnapshot );
+        if( m_netChains->m_committedNetChains.size() > committedSnapshot )
+            m_netChains->m_committedNetChains.resize( committedSnapshot );
 
-        m_netChainsBuilt = builtSnapshot;
+        m_netChains->m_netChainsBuilt = builtSnapshot;
         return;
     }
 }
@@ -3919,28 +3924,8 @@ SCH_NETCHAIN* CONNECTION_GRAPH::resolvePotentialChainByTerminals(
         const std::vector<std::unique_ptr<SCH_NETCHAIN>>& aPotentials,
         const wxString& aChainName )
 {
-    auto itFrom = aRefPinToNet.find( { aTermRefs.first.ref, aTermRefs.first.pin } );
-    auto itTo = aRefPinToNet.find( { aTermRefs.second.ref, aTermRefs.second.pin } );
-
-    if( itFrom == aRefPinToNet.end() || itTo == aRefPinToNet.end() )
-    {
-        wxLogTrace( traceSchNetChain,
-                    "RebuildNetChains: cannot restore chain '%s' (terminal %s.%s/%s.%s unresolved)",
-                    aChainName, aTermRefs.first.ref, aTermRefs.first.pin,
-                    aTermRefs.second.ref, aTermRefs.second.pin );
-        return nullptr;
-    }
-
-    for( const auto& pot : aPotentials )
-    {
-        if( pot && pot->GetNets().count( itFrom->second ) && pot->GetNets().count( itTo->second ) )
-            return pot.get();
-    }
-
-    wxLogTrace( traceSchNetChain,
-                "RebuildNetChains: no potential chain spans both terminals of '%s' (%s/%s)",
-                aChainName, itFrom->second, itTo->second );
-    return nullptr;
+    return SCH_CONNECTIVITY::NETCHAIN_MANAGER::resolvePotentialChainByTerminals( aTermRefs, aRefPinToNet, aPotentials,
+                                                                                 aChainName );
 }
 
 
@@ -3961,7 +3946,7 @@ SCH_NETCHAIN* CONNECTION_GRAPH::FindPotentialNetChainBetweenPins( SCH_PIN* aPinA
     if( netA.IsEmpty() || netB.IsEmpty() )
         return nullptr;
 
-    for( const auto& sigUP : m_potentialNetChains )
+    for( const auto& sigUP : m_netChains->m_potentialNetChains )
     {
         if( sigUP && sigUP->GetNets().contains( netA ) && sigUP->GetNets().contains( netB ) )
             return sigUP.get();
@@ -3972,101 +3957,19 @@ SCH_NETCHAIN* CONNECTION_GRAPH::FindPotentialNetChainBetweenPins( SCH_PIN* aPinA
 
 bool CONNECTION_GRAPH::DeleteCommittedNetChain( const wxString& aName )
 {
-    if( aName.IsEmpty() )
-        return false;
-
-    auto it = std::find_if( m_committedNetChains.begin(), m_committedNetChains.end(),
-                            [&]( const std::unique_ptr<SCH_NETCHAIN>& aChain )
-                            {
-                                return aChain && aChain->GetName() == aName;
-                            } );
-
-    if( it == m_committedNetChains.end() )
-        return false;
-
-    // Drop the chain marker from every member symbol so a future
-    // RebuildNetChains() doesn't re-promote them under the same name.
-    for( SCH_SYMBOL* sym : (*it)->GetSymbols() )
-    {
-        if( sym )
-            sym->SetNetChainName( wxEmptyString );
-    }
-
-    m_committedNetChains.erase( it );
-
-    // Drop orphaned overrides keyed on this name.
-    m_netChainNetClassOverrides.erase( aName );
-    m_netChainColorOverrides.erase( aName );
-    m_netChainTerminalRefOverrides.erase( aName );
-    m_netChainTerminalOverrides.erase( aName );
-    m_netChainMemberNetOverrides.erase( aName );
-
-    return true;
+    return m_netChains->DeleteCommittedNetChain( aName );
 }
 
 
 bool CONNECTION_GRAPH::RenameCommittedNetChain( const wxString& aOld, const wxString& aNew )
 {
-    if( aOld.IsEmpty() || aNew.IsEmpty() || aOld == aNew )
-        return false;
-
-    auto findByName = [&]( const wxString& aName ) -> SCH_NETCHAIN*
-    {
-        for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_committedNetChains )
-        {
-            if( chain && chain->GetName() == aName )
-                return chain.get();
-        }
-
-        return nullptr;
-    };
-
-    SCH_NETCHAIN* existing = findByName( aOld );
-
-    if( !existing )
-        return false;
-
-    // Reject collisions: if some other committed chain already owns aNew, don't
-    // silently merge them.
-    if( findByName( aNew ) )
-        return false;
-
-    existing->SetName( aNew );
-
-    for( SCH_SYMBOL* sym : existing->GetSymbols() )
-    {
-        if( sym )
-            sym->SetNetChainName( aNew );
-    }
-
-    rekeyOverrideMaps( aOld, aNew );
-
-    return true;
+    return m_netChains->RenameCommittedNetChain( aOld, aNew );
 }
 
 
 void CONNECTION_GRAPH::rekeyOverrideMaps( const wxString& aOld, const wxString& aNew )
 {
-    if( aOld == aNew )
-        return;
-
-    auto rekey = [&]( auto& aMap )
-    {
-        auto it = aMap.find( aOld );
-
-        if( it != aMap.end() )
-        {
-            auto val = std::move( it->second );
-            aMap.erase( it );
-            aMap[aNew] = std::move( val );
-        }
-    };
-
-    rekey( m_netChainNetClassOverrides );
-    rekey( m_netChainColorOverrides );
-    rekey( m_netChainTerminalRefOverrides );
-    rekey( m_netChainTerminalOverrides );
-    rekey( m_netChainMemberNetOverrides );
+    m_netChains->rekeyOverrideMaps( aOld, aNew );
 }
 
 
@@ -4080,115 +3983,21 @@ void CONNECTION_GRAPH::refreshCommittedChainPayload( SCH_NETCHAIN* aTarget,
                                                      const wxString& aRefB,
                                                      const wxString& aPinNumB )
 {
-    if( !aTarget )
-        return;
-
-    std::set<wxString> filtered;
-
-    for( const wxString& net : aNets )
-    {
-        if( !net.IsEmpty() )
-            filtered.insert( net );
-    }
-
-    aTarget->ReplaceNets( filtered );
-
-    aTarget->ClearSymbols();
-
-    for( SCH_SYMBOL* sym : aSymbols )
-        aTarget->AddSymbol( sym );
-
-    // Honor an explicit terminal-pin override (set via ReplaceNetChainTerminalPin) over the
-    // topology-derived defaults; otherwise an unconditional Recalculate would silently revert
-    // user retargeting of the chain's terminal endpoints.
-    auto termOverride = m_netChainTerminalOverrides.find( aTarget->GetName() );
-
-    if( termOverride != m_netChainTerminalOverrides.end() )
-        aTarget->SetTerminalPins( termOverride->second.first, termOverride->second.second );
-    else
-        aTarget->SetTerminalPins( aTerminalPinA, aTerminalPinB );
-
-    aTarget->SetTerminalRefs( aRefA, aPinNumA, aRefB, aPinNumB );
-
-    for( SCH_SYMBOL* sym : aTarget->GetSymbols() )
-        sym->SetNetChainName( aTarget->GetName() );
+    m_netChains->refreshCommittedChainPayload( aTarget, aNets, aSymbols, aTerminalPinA, aTerminalPinB, aRefA, aPinNumA,
+                                               aRefB, aPinNumB );
 }
 
 
 void CONNECTION_GRAPH::refreshCommittedChainFromPotential( SCH_NETCHAIN* aTarget,
                                                            const SCH_NETCHAIN& aSource )
 {
-    refreshCommittedChainPayload( aTarget, aSource.GetNets(), aSource.GetSymbols(),
-                                  aSource.GetTerminalPinA(), aSource.GetTerminalPinB(),
-                                  aSource.GetTerminalRef( 0 ), aSource.GetTerminalPinNum( 0 ),
-                                  aSource.GetTerminalRef( 1 ), aSource.GetTerminalPinNum( 1 ) );
+    m_netChains->refreshCommittedChainFromPotential( aTarget, aSource );
 }
 
 
 SCH_NETCHAIN* CONNECTION_GRAPH::CreateNetChainFromPotential( SCH_NETCHAIN* aPotential, const wxString& aName )
 {
-    if( !aPotential )
-        return nullptr;
-    auto sig = std::make_unique<SCH_NETCHAIN>();
-    for( const wxString& n : aPotential->GetNets() )
-        sig->AddNet( n );
-    for( SCH_SYMBOL* sym : aPotential->GetSymbols() )
-        sig->AddSymbol( sym );
-    sig->SetName( aName );
-    sig->SetTerminalPins( aPotential->GetTerminalPinA(), aPotential->GetTerminalPinB() );
-    sig->SetTerminalRefs( aPotential->GetTerminalRef( 0 ), aPotential->GetTerminalPinNum( 0 ),
-                          aPotential->GetTerminalRef( 1 ), aPotential->GetTerminalPinNum( 1 ) );
-
-    // Apply any parsed netclass override for this chain name.
-    auto ncIt = m_netChainNetClassOverrides.find( aName );
-
-    if( ncIt != m_netChainNetClassOverrides.end() )
-        sig->SetNetClass( ncIt->second );
-
-    // Apply any parsed colour override for this chain name.
-    auto colIt = m_netChainColorOverrides.find( aName );
-
-    if( colIt != m_netChainColorOverrides.end() )
-        sig->SetColor( colIt->second );
-
-    // Apply name to symbols now
-    for( SCH_SYMBOL* sym : sig->GetSymbols() )
-        sym->SetNetChainName( sig->GetName() );
-
-    // Register terminal refs in the override map so a subsequent unconditional Recalculate
-    // (which calls Reset() and clears the chain's symbol list) can find this chain in the
-    // restore pass and refresh it in place.  Runtime-created chains otherwise live only in
-    // m_committedNetChains and would be missed by the override-driven restore loop.
-    CHAIN_TERMINAL_REFS termRefs{
-        { aPotential->GetTerminalRef( 0 ), aPotential->GetTerminalPinNum( 0 ) },
-        { aPotential->GetTerminalRef( 1 ), aPotential->GetTerminalPinNum( 1 ) }
-    };
-    m_netChainTerminalRefOverrides[aName] = termRefs;
-
-    // Mirror the persisted-format member-net override so pass 2b has a fallback if the
-    // schematic topology shifts and the inferred potential no longer resolves.  Synthetic
-    // and empty entries are excluded to match the save path's filter in the s-expr writer.
-    std::set<wxString> persistableNets;
-
-    for( const wxString& net : sig->GetNets() )
-    {
-        if( net.IsEmpty() )
-            continue;
-
-        if( net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
-            continue;
-
-        persistableNets.insert( net );
-    }
-
-    if( !persistableNets.empty() )
-        m_netChainMemberNetOverrides[aName] = std::move( persistableNets );
-    else
-        m_netChainMemberNetOverrides.erase( aName );
-
-    SCH_NETCHAIN* raw = sig.get();
-    m_committedNetChains.push_back( std::move( sig ) ); // committed from potential net chain
-    return raw;
+    return m_netChains->CreateNetChainFromPotential( aPotential, aName );
 }
 
 
@@ -4202,170 +4011,40 @@ SCH_NETCHAIN* CONNECTION_GRAPH::CreateManualNetChain( const wxString& aName,
                                                       const wxString& aRefB,
                                                       const wxString& aPinNumB )
 {
-    if( !SCH_NETCHAIN::IsValidName( aName ) )
-        return nullptr;
-
-    if( GetNetChainByName( aName ) )
-        return nullptr;
-
-    // GetNetChainForNet returns the first match, so dual ownership of any net would
-    // make resolution depend on iteration order.
-    for( const wxString& net : aNets )
-    {
-        if( net.IsEmpty() )
-            continue;
-
-        if( GetNetChainForNet( net ) )
-            return nullptr;
-    }
-
-    auto sig = std::make_unique<SCH_NETCHAIN>();
-    sig->SetName( aName );
-
-    for( const wxString& net : aNets )
-    {
-        if( net.IsEmpty() )
-            continue;
-
-        sig->AddNet( net );
-    }
-
-    for( SCH_SYMBOL* sym : aSymbols )
-        sig->AddSymbol( sym );
-
-    sig->SetTerminalPins( aTerminalPinA, aTerminalPinB );
-    sig->SetTerminalRefs( aRefA, aPinNumA, aRefB, aPinNumB );
-
-    auto ncIt = m_netChainNetClassOverrides.find( aName );
-
-    if( ncIt != m_netChainNetClassOverrides.end() )
-        sig->SetNetClass( ncIt->second );
-
-    auto colIt = m_netChainColorOverrides.find( aName );
-
-    if( colIt != m_netChainColorOverrides.end() )
-        sig->SetColor( colIt->second );
-
-    for( SCH_SYMBOL* sym : sig->GetSymbols() )
-        sym->SetNetChainName( sig->GetName() );
-
-    // Register the override-map entries that the rebuild restore pass needs to refresh this
-    // manual chain after a future unconditional Recalculate.  Without this the chain is only
-    // known to m_committedNetChains, and the restore pass cannot rebuild its derived view.
-    CHAIN_TERMINAL_REFS termRefs{ { aRefA, aPinNumA }, { aRefB, aPinNumB } };
-    m_netChainTerminalRefOverrides[aName] = termRefs;
-    m_netChainMemberNetOverrides[aName] = sig->GetNets();
-
-    SCH_NETCHAIN* raw = sig.get();
-    m_committedNetChains.push_back( std::move( sig ) );
-    return raw;
+    return m_netChains->CreateManualNetChain( aName, aSymbols, aNets, aTerminalPinA, aTerminalPinB, aRefA, aPinNumA,
+                                              aRefB, aPinNumB );
 }
 
 
 SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainForNet( const wxString& aNet )
 {
-    wxLogTrace( traceSchNetChain, "CONNECTION_GRAPH::GetNetChainForNet(%s)", aNet );
-    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_committedNetChains )
-    {
-        if( !sig )
-            continue;
-
-        if( sig->GetNets().count( aNet ) )
-        {
-            wxLogTrace( traceSchNetChain, "GetNetChainForNet: found chain '%s'", sig->GetName() );
-            return sig.get();
-        }
-    }
-
-    wxLogTrace( traceSchNetChain, "GetNetChainForNet: no chain found" );
-    return nullptr;
+    return m_netChains->GetNetChainForNet( aNet );
 }
 
 
 void CONNECTION_GRAPH::ApplyNetChainNetclasses()
 {
-    if( !m_schematic )
-        return;
-
-    std::shared_ptr<NET_SETTINGS> netSettings = m_schematic->Project().GetProjectFile().NetSettings();
-
-    if( !netSettings )
-        return;
-
-    bool anyOverride = std::any_of( m_committedNetChains.begin(), m_committedNetChains.end(),
-                                    []( const std::unique_ptr<SCH_NETCHAIN>& aChain )
-                                    {
-                                        return aChain && !aChain->GetNetClass().IsEmpty();
-                                    } );
-
-    // The common no-chain path must not wipe the effective-netclass cache on every connectivity
-    // rebuild.  Only rebuild when a chain carries an override or a prior pass left stale entries.
-    if( !anyOverride && !netSettings->HasChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC ) )
-        return;
-
-    netSettings->ClearChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC );
-
-    for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_committedNetChains )
-    {
-        if( !chain )
-            continue;
-
-        const wxString& netclass = chain->GetNetClass();
-
-        if( netclass.IsEmpty() || !netSettings->HasNetclass( netclass ) )
-            continue;
-
-        for( const wxString& net : chain->GetNets() )
-        {
-            // Synthetic per-run keys embed a subgraph code and never match a resolved net name.
-            if( net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
-                continue;
-
-            netSettings->SetChainPatternAssignment( NET_CHAIN_SOURCE::SCHEMATIC, net, netclass );
-        }
-    }
+    m_netChains->ApplyNetChainNetclasses();
 }
 
 
 SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainByName( const wxString& aName )
 {
-    wxLogTrace( traceSchNetChain, "CONNECTION_GRAPH::GetNetChainByName(%s)", aName );
-    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_committedNetChains )
-    {
-        if( sig->GetName() == aName )
-        {
-            wxLogTrace( traceSchNetChain, "GetNetChainByName: found" );
-            return sig.get();
-        }
-    }
-
-    wxLogTrace( traceSchNetChain, "GetNetChainByName: not found" );
-    return nullptr;
+    return m_netChains->GetNetChainByName( aName );
 }
 
 
 void CONNECTION_GRAPH::ReplaceNetChainTerminalPin( const wxString& aNetChain, const KIID& aPrev,
                                                 const KIID& aNew )
 {
-    wxLogTrace( traceSchNetChain, "ReplaceNetChainTerminalPin: chain='%s' prev=%s new=%s",
-                aNetChain, aPrev.AsString(), aNew.AsString() );
-    if( SCH_NETCHAIN* sig = GetNetChainByName( aNetChain ) )
-    {
-        sig->ReplaceTerminalPin( aPrev, aNew );
-        m_netChainTerminalOverrides[aNetChain] = std::make_pair( sig->GetTerminalPinA(),
-                                                             sig->GetTerminalPinB() );
-        wxLogTrace( traceSchNetChain, "ReplaceNetChainTerminalPin: updated overrides to (%s,%s)",
-                    sig->GetTerminalPinA().AsString(), sig->GetTerminalPinB().AsString() );
-    }
+    m_netChains->ReplaceNetChainTerminalPin( aNetChain, aPrev, aNew );
 }
 
 
 void CONNECTION_GRAPH::SetNetChainTerminalOverrides( const std::map<wxString,
                                                 std::pair<KIID, KIID>>& aOverrides )
 {
-    m_netChainTerminalOverrides = aOverrides;
-    wxLogTrace( traceSchNetChain, "SetNetChainTerminalOverrides: count=%zu",
-                m_netChainTerminalOverrides.size() );
+    m_netChains->SetNetChainTerminalOverrides( aOverrides );
 }
 
 

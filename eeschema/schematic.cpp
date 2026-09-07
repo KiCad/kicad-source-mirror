@@ -80,7 +80,8 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
         m_schematicHolder( nullptr )
 {
     m_currentSheet = new SCH_SHEET_PATH();
-    m_connectionGraph = new CONNECTION_GRAPH( this );
+    m_netChains = std::make_unique<SCH_CONNECTIVITY::NETCHAIN_MANAGER>( this );
+    m_connectionGraph = new CONNECTION_GRAPH( this, m_netChains.get() );
     m_IsSchematicExists = true;
 
     SetProject( aPrj );
@@ -426,6 +427,9 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 
 void SCHEMATIC::AdoptContent( SCHEMATIC_CONTENT&& aContent ) noexcept
 {
+    wxCHECK_RET( aContent.connectionGraph && aContent.connectionGraph->m_ownedNetChains,
+                 wxS( "AdoptContent requires a staged graph with its own netchain manager" ) );
+
     SCH_SHEET*  target = aContent.targetSheet ? aContent.targetSheet : m_rootSheet;
     SCH_SCREEN* outgoingScreen = nullptr;
 
@@ -485,6 +489,16 @@ void SCHEMATIC::AdoptContent( SCHEMATIC_CONTENT&& aContent ) noexcept
     m_labelToPageRefsMap.clear();
 
     CONNECTION_GRAPH* outgoingGraph = std::exchange( m_connectionGraph, aContent.connectionGraph.release() );
+
+    // The outgoing graph, deleted below, still points at a replaced manager
+    std::unique_ptr<SCH_CONNECTIVITY::NETCHAIN_MANAGER> outgoingNetChains;
+
+    if( aContent.preserveNetChains )
+        m_connectionGraph->BorrowNetChains( *m_netChains );
+    else
+        outgoingNetChains = std::exchange( m_netChains, m_connectionGraph->ReleaseNetChains() );
+
+    m_connectionGraph->SetSchematic( this );
 
 
     // The hierarchy and the current sheet named sheets that the outgoing screen and the

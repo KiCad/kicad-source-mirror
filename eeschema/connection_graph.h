@@ -34,6 +34,7 @@
 #include <sch_connection.h>
 #include <sch_item.h>
 #include <sch_netchain.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <wx/treectrl.h>
 #include <wx/string.h>
 #include <advanced_config.h>
@@ -374,7 +375,11 @@ typedef std::unordered_map<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGR
 class CONNECTION_GRAPH
 {
 public:
-    CONNECTION_GRAPH( SCHEMATIC* aSchematic = nullptr ) :
+    CONNECTION_GRAPH( SCHEMATIC* aSchematic = nullptr,
+                      SCH_CONNECTIVITY::NETCHAIN_MANAGER* aNetChains = nullptr ) :
+              m_ownedNetChains( aNetChains ? nullptr
+                                         : std::make_unique<SCH_CONNECTIVITY::NETCHAIN_MANAGER>( aSchematic ) ),
+              m_netChains( aNetChains ? aNetChains : m_ownedNetChains.get() ),
               m_last_net_code( 1 ),
               m_last_bus_code( 1 ),
               m_last_subgraph_code( 1 ),
@@ -405,6 +410,7 @@ public:
     void SetSchematic( SCHEMATIC* aSchematic )
     {
         m_schematic = aSchematic;
+        m_netChains->SetSchematic( aSchematic );
     }
 
     SCHEMATIC* GetSchematic() const { return m_schematic; }
@@ -469,44 +475,40 @@ public:
      */
     void SetNetChainNetClassOverrides( const std::map<wxString, wxString>& aOverrides )
     {
-        m_netChainNetClassOverrides = aOverrides;
+        m_netChains->m_netChainNetClassOverrides = aOverrides;
     }
 
     const std::map<wxString, wxString>& GetNetChainNetClassOverrides() const
     {
-        return m_netChainNetClassOverrides;
+        return m_netChains->m_netChainNetClassOverrides;
     }
 
-    struct CHAIN_TERMINAL_REF
-    {
-        wxString ref;
-        wxString pin;
-    };
-    using CHAIN_TERMINAL_REFS = std::pair<CHAIN_TERMINAL_REF, CHAIN_TERMINAL_REF>;
+    using CHAIN_TERMINAL_REF = SCH_CONNECTIVITY::NETCHAIN_MANAGER::CHAIN_TERMINAL_REF;
+    using CHAIN_TERMINAL_REFS = SCH_CONNECTIVITY::NETCHAIN_MANAGER::CHAIN_TERMINAL_REFS;
 
     void SetNetChainTerminalRefOverrides( const std::map<wxString, CHAIN_TERMINAL_REFS>& aRefs )
     {
-        m_netChainTerminalRefOverrides = aRefs;
+        m_netChains->m_netChainTerminalRefOverrides = aRefs;
     }
 
     const std::map<wxString, CHAIN_TERMINAL_REFS>& GetNetChainTerminalRefOverrides() const
     {
-        return m_netChainTerminalRefOverrides;
+        return m_netChains->m_netChainTerminalRefOverrides;
     }
 
     const std::map<wxString, std::pair<KIID, KIID>>& GetNetChainTerminalOverrides() const
     {
-        return m_netChainTerminalOverrides;
+        return m_netChains->m_netChainTerminalOverrides;
     }
 
     void SetNetChainColorOverrides( const std::map<wxString, COLOR4D>& aOverrides )
     {
-        m_netChainColorOverrides = aOverrides;
+        m_netChains->m_netChainColorOverrides = aOverrides;
     }
 
     const std::map<wxString, COLOR4D>& GetNetChainColorOverrides() const
     {
-        return m_netChainColorOverrides;
+        return m_netChains->m_netChainColorOverrides;
     }
 
     /**
@@ -516,12 +518,12 @@ public:
      */
     void SetNetChainMemberNetOverrides( const std::map<wxString, std::set<wxString>>& aOverrides )
     {
-        m_netChainMemberNetOverrides = aOverrides;
+        m_netChains->m_netChainMemberNetOverrides = aOverrides;
     }
 
     const std::map<wxString, std::set<wxString>>& GetNetChainMemberNetOverrides() const
     {
-        return m_netChainMemberNetOverrides;
+        return m_netChains->m_netChainMemberNetOverrides;
     }
 
     /**
@@ -926,7 +928,10 @@ public:
      * Potential net chains are inferred groupings produced by RebuildNetChains() but not
      * yet user-committed. Existing m_committedNetChains now represents only user-created connectivity groups.
      */
-    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetPotentialNetChains() const { return m_potentialNetChains; }
+    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetPotentialNetChains() const
+    {
+        return m_netChains->m_potentialNetChains;
+    }
 
     /** Locate a potential net chain that contains both pins (by subgraph net membership). */
     SCH_NETCHAIN* FindPotentialNetChainBetweenPins( SCH_PIN* aPinA, SCH_PIN* aPinB );
@@ -958,7 +963,10 @@ public:
                                         const wxString& aRefB, const wxString& aPinNumB );
 
     /** Return user-created (committed) net chains (legacy accessor retained under net-chain API). */
-    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const { return m_committedNetChains; }
+    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const
+    {
+        return m_netChains->m_committedNetChains;
+    }
 
     /**
      * Mirror each committed net chain's netclass override into the project NET_SETTINGS as a
@@ -971,7 +979,7 @@ public:
     void ApplyNetChainNetclasses();
 
     /** Returns true once RebuildNetChains() has completed at least once on this graph. */
-    bool NetChainsBuilt() const { return m_netChainsBuilt; }
+    bool NetChainsBuilt() const { return m_netChains->m_netChainsBuilt; }
 
     /**
      * Test-only hook fired inside RebuildNetChains() after the restore passes have finished
@@ -1001,6 +1009,20 @@ public:
     bool RenameCommittedNetChain( const wxString& aOld, const wxString& aNew );
 
 private:
+    friend class SCHEMATIC;
+
+    /** The graph keeps using the released manager. */
+    std::unique_ptr<SCH_CONNECTIVITY::NETCHAIN_MANAGER> ReleaseNetChains() noexcept
+    {
+        return std::move( m_ownedNetChains );
+    }
+
+    void BorrowNetChains( SCH_CONNECTIVITY::NETCHAIN_MANAGER& aManager ) noexcept
+    {
+        m_netChains = &aManager;
+        m_ownedNetChains.reset();
+    }
+
     /**
      * Disambiguate the saved (refA.pinA, refB.pinB) terminal pair against the current set of
      * potential net chains.  Returns the potential chain whose net set contains BOTH endpoint
@@ -1112,14 +1134,8 @@ private:
 
     NET_MAP m_net_code_to_subgraphs_map;
 
-    std::vector<std::unique_ptr<SCH_NETCHAIN>> m_committedNetChains;
-    std::vector<std::unique_ptr<SCH_NETCHAIN>> m_potentialNetChains; ///< last built potential (uncommitted) net chains
-    bool                                       m_netChainsBuilt = false;
-    std::map<wxString, std::pair<KIID, KIID>> m_netChainTerminalOverrides;
-    std::map<wxString, wxString>              m_netChainNetClassOverrides;
-    std::map<wxString, COLOR4D>               m_netChainColorOverrides;
-    std::map<wxString, CHAIN_TERMINAL_REFS>    m_netChainTerminalRefOverrides;
-    std::map<wxString, std::set<wxString>>    m_netChainMemberNetOverrides;
+    std::unique_ptr<SCH_CONNECTIVITY::NETCHAIN_MANAGER> m_ownedNetChains;
+    SCH_CONNECTIVITY::NETCHAIN_MANAGER* m_netChains;
 
     int m_last_net_code;
 

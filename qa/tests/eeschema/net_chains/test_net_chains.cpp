@@ -25,6 +25,11 @@
 #include <connection_graph.h>
 #include <schematic.h>
 #include <sch_sheet.h>
+#include <sch_screen.h>
+#include <netclass.h>
+#include <project.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
 
@@ -189,6 +194,69 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithBypassCap_ExcludesPowerBranch, SIGNA
     BOOST_CHECK_MESSAGE( mainSignalExcludesGND,
                          "Expected at least one multi-net signal that does not include GND "
                          "(power branch should not be merged into the main signal)" );
+}
+
+BOOST_FIXTURE_TEST_CASE( NetChain_AppendAdoptionKeepsCommittedChains, SIGNALS_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets_labeled" ), m_schematic );
+    m_schematic->ConnectionGraph()->Recalculate( m_schematic->Hierarchy(), true );
+
+    CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
+    BOOST_REQUIRE( !graph->GetPotentialNetChains().empty() );
+
+    SCH_NETCHAIN* committed =
+            graph->CreateNetChainFromPotential( graph->GetPotentialNetChains().front().get(), "APPEND_CHAIN" );
+    BOOST_REQUIRE( committed );
+
+    const std::set<wxString> nets = committed->GetNets();
+    const SCH_SHEET_PATH     path = m_schematic->Hierarchy().front();
+
+    SCHEMATIC_CONTENT content;
+    content.targetSheet = path.Last();
+    content.hierarchy = m_schematic->Hierarchy();
+    content.currentSheet = path;
+    content.connectionGraph = std::make_unique<CONNECTION_GRAPH>( m_schematic.get() );
+    content.preserveNetChains = true;
+
+    for( SCH_ITEM* item : path.LastScreen()->Items() )
+        content.screenItems.insert( item );
+
+    m_schematic->AdoptContent( std::move( content ) );
+
+    graph = m_schematic->ConnectionGraph();
+    BOOST_REQUIRE( graph->GetNetChainByName( "APPEND_CHAIN" ) == committed );
+
+    graph->Recalculate( m_schematic->Hierarchy(), true );
+    BOOST_CHECK( committed->GetNets() == nets );
+    BOOST_CHECK( !committed->GetSymbols().empty() );
+}
+
+
+
+BOOST_FIXTURE_TEST_CASE( NetChain_TemporaryGraphPreservesProjectAssignments, SIGNALS_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets_labeled" ), m_schematic );
+    m_schematic->ConnectionGraph()->Recalculate( m_schematic->Hierarchy(), true );
+
+    CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
+    BOOST_REQUIRE( !graph->GetPotentialNetChains().empty() );
+
+    SCH_NETCHAIN* committed =
+            graph->CreateNetChainFromPotential( graph->GetPotentialNetChains().front().get(), "NETCLASS_CHAIN" );
+    BOOST_REQUIRE( committed );
+
+    std::shared_ptr<NET_SETTINGS> ns = m_schematic->Project().GetProjectFile().NetSettings();
+    std::shared_ptr<NETCLASS>     highSpeed = std::make_shared<NETCLASS>( wxT( "HighSpeed" ) );
+    ns->SetNetclass( wxT( "HighSpeed" ), highSpeed );
+    committed->SetNetClass( wxT( "HighSpeed" ) );
+    graph->ApplyNetChainNetclasses();
+    BOOST_REQUIRE( ns->HasChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC ) );
+
+    CONNECTION_GRAPH temporary( m_schematic.get() );
+    temporary.Recalculate( m_schematic->Hierarchy(), true );
+    BOOST_CHECK( ns->HasChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC ) );
 }
 
 // EOF
