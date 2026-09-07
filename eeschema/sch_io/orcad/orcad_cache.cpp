@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <utility>
+#include <set>
 
 #include <ki_exception.h>
 
