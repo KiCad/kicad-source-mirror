@@ -67,8 +67,6 @@ protected:
     bool buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp ) override;
     void onNewItemLeftBlank( const wxString& aKey ) override;
 
-    void onAddCustomPropertyClicked() override;
-
     void addBlankField();
     void addBlankCustomProperty();
     void removeField( const wxString& aName );
@@ -101,7 +99,7 @@ protected:
      * Open the symbol properties dialog on its Pin Map page for the single selected symbol
      * (issue #2282).  Only enabled in the schematic editor.
      */
-    void onEditPinMap( wxCommandEvent& aEvent );
+    void onEditPinMap();
 
     /// @return the single selected SCH_SYMBOL with an effective associated footprint, else nullptr.
     SCH_SYMBOL* getSinglePinMappedSymbol();
@@ -120,5 +118,4 @@ protected:
 
     wxPGChoices               m_nets;
 
-    wxButton* m_editPinMapButton;
 };

@@ -68,8 +68,6 @@ protected:
     bool buildContextMenu( wxMenu& aMenu, wxPGProperty* aPGProp ) override;
     void onNewItemLeftBlank( const wxString& aKey ) override;
 
-    void onAddCustomPropertyClicked() override;
-
     void addBlankField();
     void addBlankCustomProperty();
     void removeField( const wxString& aName );

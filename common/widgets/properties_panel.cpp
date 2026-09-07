@@ -64,7 +64,7 @@ public:
         wxPropertyGrid::ScrollWindow( aDx, aDy, aRect );
 
         if( PROPERTIES_PANEL* panel = static_cast<PROPERTIES_PANEL*>( GetParent() ) )
-            panel->positionCustomPropertiesButton();
+            panel->positionCategoryButtons();
     }
 
     ///< True while a wxPropertyGrid event (e.g. right-click) is being processed.
@@ -162,33 +162,16 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     // something where the label/key should be editable (user fields, custom properties, ...)
     m_grid->MakeColumnEditable( 0 );
 
-    // "+" button overlaid on the Custom Properties caption row.  It is a child of the
-    // grid so it scrolls (and is clipped) with the grid contents; it is shown only
-    // when that row is on-screen.
-    //
-    // TODO it would be nice to remove this hack by getting upstream wxWidgets to support
-    // customizing/subclassing the property group widgets
-    m_addCustomPropertyButton = new BITMAP_BUTTON( m_grid, wxID_ANY );
-    m_addCustomPropertyButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_addCustomPropertyButton->SetPadding( 2 );
-    m_addCustomPropertyButton->SetToolTip( _( "Add Custom Property" ) );
-    m_addCustomPropertyButton->Hide();
-    m_addCustomPropertyButton->Bind( wxEVT_BUTTON,
-                                     [this]( wxCommandEvent& )
-                                     {
-                                         onAddCustomPropertyClicked();
-                                     } );
-
     Bind( wxEVT_PG_ITEM_EXPANDED,
           [&]( wxPropertyGridEvent& )
           {
-              positionCustomPropertiesButton();
+              positionCategoryButtons();
           } );
 
     Bind( wxEVT_PG_ITEM_COLLAPSED,
           [&]( wxPropertyGridEvent& )
           {
-              positionCustomPropertiesButton();
+              positionCategoryButtons();
           } );
 
     Bind( wxEVT_PG_LABEL_EDIT_BEGIN, &PROPERTIES_PANEL::onLabelEditBegin, this );
@@ -204,7 +187,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
           [&]( wxPropertyGridEvent& )
           {
               m_splitter_key_proportion = static_cast<float>( m_grid->GetSplitterPosition() ) / m_grid->GetSize().x;
-              positionCustomPropertiesButton();
+              positionCategoryButtons();
           } );
 
     Bind( wxEVT_SIZE,
@@ -213,7 +196,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
               CallAfter( [this]()
                          {
                             RecalculateSplitterPos();
-                            positionCustomPropertiesButton();
+                            positionCategoryButtons();
                          } );
               aEvent.Skip();
           } );
@@ -266,7 +249,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     // a grid right-click) removes a property.  Re-run once the event has unwound.
     if( static_cast<PROPERTIES_PANEL_GRID*>( m_grid )->IsProcessingWxPGEvent() )
     {
-        m_addCustomPropertyButton->Hide();
+        hideCategoryButtons();
         CallAfter( [this, aSelection]()
                    {
                        rebuildProperties( aSelection );
@@ -287,7 +270,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     if( aSelection.Empty() )
     {
         m_caption->SetLabel( _( "No objects selected" ) );
-        m_addCustomPropertyButton->Hide();
+        hideCategoryButtons();
         reset();
         return;
     }
@@ -403,6 +386,19 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         groups.insert( _HKI( "Custom Properties" ) );
     }
 
+    // Show category groups that have an action button if they are forced
+    // (e.g. we show "add custom property" even when no custom properties exist)
+    for( const CATEGORY_BUTTON& entry : m_categoryButtons )
+    {
+        if( !entry.forceCategory || groups.contains( entry.groupKey ) )
+            continue;
+
+        if( entry.enableFunc && !entry.enableFunc() )
+            continue;
+
+        groupDisplayOrder.emplace_back( entry.groupKey );
+        groups.insert( entry.groupKey );
+    }
 
     bool isLibraryEditor = m_frame->IsType( FRAME_FOOTPRINT_EDITOR )
                         || m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
@@ -523,7 +519,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     }
 
     RecalculateSplitterPos();
-    updateCustomPropertiesButton();
+    updateCategoryButtons();
 }
 
 
@@ -933,13 +929,43 @@ void PROPERTIES_PANEL::SetSplitterProportion( float aProportion )
 }
 
 
-wxPGProperty* PROPERTIES_PANEL::customPropertiesCategory() const
+void PROPERTIES_PANEL::addCategoryButton( const wxString& aGroupKey, const wxString& aTooltip, BITMAPS aBitmap,
+                                          std::function<void()> aAction, std::function<bool()> aEnableFunc,
+                                          bool aForceCategory )
 {
+    BITMAP_BUTTON* button = new BITMAP_BUTTON( m_grid, wxID_ANY );
+    button->SetBitmap( KiBitmapBundle( aBitmap ) );
+    button->SetToolTip( aTooltip );
+    button->Hide();
+
+    button->Bind( wxEVT_BUTTON,
+                  [this, button]( wxCommandEvent& )
+                  {
+                      for( CATEGORY_BUTTON& entry : m_categoryButtons )
+                      {
+                          if( entry.button == button )
+                          {
+                              entry.action();
+                              return;
+                          }
+                      }
+                  } );
+
+    m_categoryButtons.emplace_back( CATEGORY_BUTTON{ .button = button,
+                                                     .groupKey = aGroupKey,
+                                                     .action = std::move( aAction ),
+                                                     .enableFunc = std::move( aEnableFunc ),
+                                                     .forceCategory = aForceCategory } );
+}
+
+
+wxPGProperty* PROPERTIES_PANEL::categoryForGroup( const wxString& aGroupKey ) const
+{
+    const wxString caption = wxGetTranslation( aGroupKey );
+
     for( wxPropertyGridIterator it = m_grid->GetIterator( wxPG_ITERATE_VISIBLE ); !it.AtEnd(); it.Next() )
     {
-        wxPGProperty* pgProp = it.GetProperty();
-
-        if( pgProp->IsCategory() && pgProp->GetLabel() == wxGetTranslation( _HKI( "Custom Properties" ) ) )
+        if( wxPGProperty* pgProp = it.GetProperty(); pgProp->IsCategory() && pgProp->GetLabel() == caption )
             return pgProp;
     }
 
@@ -947,41 +973,62 @@ wxPGProperty* PROPERTIES_PANEL::customPropertiesCategory() const
 }
 
 
-void PROPERTIES_PANEL::updateCustomPropertiesButton()
+void PROPERTIES_PANEL::updateCategoryButtons()
 {
-    if( customPropertiesCategory() )
-        positionCustomPropertiesButton();
-    else
-        m_addCustomPropertyButton->Hide();
+    positionCategoryButtons();
 }
 
 
-void PROPERTIES_PANEL::positionCustomPropertiesButton()
+void PROPERTIES_PANEL::hideCategoryButtons()
 {
-    wxPGProperty* category = customPropertiesCategory();
+    for( CATEGORY_BUTTON& entry : m_categoryButtons )
+        entry.button->Hide();
+}
 
-    if( !category )
+
+void PROPERTIES_PANEL::positionCategoryButtons()
+{
+    const int rightEdgeBase = m_grid->GetClientSize().x - m_grid->FromDIP( 4 );
+    int       nextRightEdge = rightEdgeBase;
+    wxString  currentRow;
+    bool      haveCurrentRow = false;
+
+    for( CATEGORY_BUTTON& entry : m_categoryButtons )
     {
-        m_addCustomPropertyButton->Hide();
-        return;
+        if( bool sameRow = haveCurrentRow && currentRow == entry.groupKey; !sameRow )
+        {
+            currentRow = entry.groupKey;
+            haveCurrentRow = true;
+            nextRightEdge = rightEdgeBase;
+        }
+
+        wxPGProperty* category = categoryForGroup( entry.groupKey );
+        bool          visible = false;
+        int           rowY = 0;
+        int           rowHeight = m_grid->GetRowHeight();
+
+        if( category && ( !entry.enableFunc || entry.enableFunc() ) )
+        {
+            rowY = m_grid->CalcScrolledPosition( wxPoint( 0, category->GetY() ) ).y;
+            visible = ( rowY + rowHeight > 0 ) && ( rowY < m_grid->GetClientSize().y );
+        }
+
+        if( !visible )
+        {
+            entry.button->Hide();
+            continue;
+        }
+
+        const wxSize btnSize = entry.button->GetSize();
+        const int    btnY = rowY + ( rowHeight - btnSize.y ) / 2;
+        const int    btnX = nextRightEdge - btnSize.x;
+
+        if( !entry.button->IsShown() )
+            entry.button->Show();
+
+        entry.button->SetPosition( wxPoint( std::max( 0, btnX ), std::max( 0, btnY ) ) );
+        entry.button->Raise();
+
+        nextRightEdge = btnX - m_grid->FromDIP( 2 );
     }
-
-    const int rowY = m_grid->CalcScrolledPosition( wxPoint( 0, category->GetY() ) ).y;
-    const int rowHeight = m_grid->GetRowHeight();
-
-    if( rowY + rowHeight <= 0 || rowY >= m_grid->GetClientSize().y )
-    {
-        m_addCustomPropertyButton->Hide();
-        return;
-    }
-
-    const wxSize btnSize = m_addCustomPropertyButton->GetSize();
-    const int    btnX = m_grid->GetClientSize().x - btnSize.x - m_grid->FromDIP( 4 );
-    const int    btnY = rowY + ( rowHeight - btnSize.y ) / 2;
-
-    if( !m_addCustomPropertyButton->IsShown() )
-        m_addCustomPropertyButton->Show();
-
-    m_addCustomPropertyButton->SetPosition( wxPoint( std::max( 0, btnX ), std::max( 0, btnY ) ) );
-    m_addCustomPropertyButton->Raise();
 }

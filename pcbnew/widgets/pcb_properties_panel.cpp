@@ -354,6 +354,18 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
         m_propMgr( PROPERTY_MANAGER::Instance() ),
         m_scaleConfirmPending( false )
 {
+    addCategoryButton( _HKI( "Custom Properties" ), _( "Add Custom Property" ), BITMAPS::small_plus,
+                       [this]()
+                       {
+                           addBlankCustomProperty();
+                       } );
+
+    addCategoryButton( _HKI( "Fields" ), _( "Add Field" ), BITMAPS::small_plus,
+                       [this]()
+                       {
+                           addBlankField();
+                       } );
+
     m_propMgr.Rebuild();
     bool found = false;
 
@@ -669,6 +681,8 @@ void PCB_PROPERTIES_PANEL::addBlankField()
     SELECTION fallbackSelection;
     const SELECTION& selection = getSelection( fallbackSelection );
 
+    settlePendingLabelEdit();
+
     if( selection.Empty() )
         return;
 
@@ -716,12 +730,6 @@ void PCB_PROPERTIES_PANEL::addBlankField()
     m_pendingNewKey = name;
 
     beginLabelEdit( name, true );
-}
-
-
-void PCB_PROPERTIES_PANEL::onAddCustomPropertyClicked()
-{
-    addBlankCustomProperty();
 }
 
 
@@ -795,7 +803,12 @@ void PCB_PROPERTIES_PANEL::removeField( const wxString& aName )
         PCB_FIELD* field     = footprint->GetField( aName );
 
         if( field && !field->IsMandatory() )
-            changes.Remove( field );
+        {
+            // BOARD_COMMIT's own field removal path only hides the field (e.g. when a user presses the delete key),
+            // we want to actually delete a custom field from this explicit menu action
+            changes.Modify( footprint, nullptr, RECURSE_MODE::NO_RECURSE );
+            footprint->Remove( field );
+        }
     }
 
     changes.Push( _( "Remove Field" ) );
