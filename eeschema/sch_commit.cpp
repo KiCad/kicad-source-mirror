@@ -105,6 +105,22 @@ COMMIT& SCH_COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChang
 }
 
 
+void SCH_COMMIT::RemovedForCleanup( SCH_ITEM* aItem, SCH_SCREEN* aScreen )
+{
+    wxASSERT( !aScreen->CheckIfOnDrawList( aItem ) );
+
+    if( COMMIT_LINE* entry = findEntry( aItem, aScreen ); entry && ( entry->m_type & CHT_TYPE ) == CHT_MODIFY )
+    {
+        // Staging REMOVE discards MODIFY, so preserve the original geometry on the removed item
+        // before its image is discarded. Cleanup must still skip it until the commit is processed.
+        aItem->SwapItemData( static_cast<SCH_ITEM*>( entry->m_copy ) );
+        aItem->SetFlags( STRUCT_DELETED );
+    }
+
+    Removed( aItem, aScreen );
+}
+
+
 void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 {
     // Symbol editor just saves copies of the whole symbol, so grab the first and discard the rest

@@ -1733,7 +1733,7 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
                 aScreen->Remove( aItem );
             }
 
-            aCommit->Removed( aItem, aScreen );
+            aCommit->RemovedForCleanup( aItem, aScreen );
         }
     };
 

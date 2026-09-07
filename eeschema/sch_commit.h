@@ -27,6 +27,8 @@ class PICKED_ITEMS_LIST;
 class TOOL_MANAGER;
 class SCH_EDIT_FRAME;
 class SCH_BASE_FRAME;
+class SCH_ITEM;
+class SCH_SCREEN;
 class EDA_DRAW_FRAME;
 class TOOL_BASE;
 
@@ -55,6 +57,9 @@ public:
                    BASE_SCREEN *aScreen = nullptr ) override;
 
     virtual EDA_ITEM* ResolveItem( KIID& aID ) override;
+
+    /** Retain the pre-edit state of an item already removed from its screen by cleanup. */
+    void RemovedForCleanup( SCH_ITEM* aItem, SCH_SCREEN* aScreen );
 
 private:
     EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override;
