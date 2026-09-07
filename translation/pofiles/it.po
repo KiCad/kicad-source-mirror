@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-04 09:51+0000\n"
+"PO-Revision-Date: 2026-09-08 05:57+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -126,7 +126,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9\n"
+"X-Generator: Weblate 2026.9.1.dev0\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -2974,18 +2974,17 @@ msgid "Auto-saved copy"
 msgstr "Copia autosalvata"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad ha trovato modifiche non salvate dell'ultima sessione che sono più "
-"recenti dei file di progetto salvati."
+"KiCad ha rilevato modifiche salvate automaticamente da una sessione "
+"precedente. Ciò di solito significa che KiCad si è chiuso inaspettatamente "
+"mentre si aveva del lavoro non salvato."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
-msgstr "Ripristina predefiniti"
+msgstr "Ripristina auto-salvataggio"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -2996,9 +2995,8 @@ msgstr ""
 "contenuto salvato in precedenza viene eliminato."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
-msgstr "Mantieni in verticale"
+msgstr "Mantieni l'attuale"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
@@ -3007,9 +3005,8 @@ msgstr ""
 "automaticamente."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
-msgstr "Proibiti"
+msgstr "Mantieni entrambi"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
@@ -3020,9 +3017,8 @@ msgstr ""
 "accanto a esso come file separato con data e ora, revisionabile in seguito."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
-msgstr "Annulla caricamento"
+msgstr "Annulla apri"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
@@ -3312,17 +3308,14 @@ msgid "Design Block Properties"
 msgstr "Proprietà blocco progetto"
 
 #: common/dialogs/dialog_fields_table.cpp:103
-#, fuzzy
 msgid "Revert Row"
-msgstr "Ripristina"
+msgstr "Ripristina riga"
 
 #: common/dialogs/dialog_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the fields in this row"
-msgstr "Elimina i file ed i loro contenuti"
+msgstr "Ripristina i campi in questa riga"
 
 #: common/dialogs/dialog_fields_table.cpp:105
-#, fuzzy
 msgid "Clear Cell"
 msgstr "Cancella cella"
 
@@ -3427,11 +3420,10 @@ msgstr ""
 "\"%s\"?"
 
 #: common/dialogs/dialog_fields_table.cpp:1253
-#, fuzzy
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
-"Impossibile creare il percorso relativo (volume di destinazione diverso da "
-"quello del file della scheda)!"
+"Impossibile rendere il percorso relativo (volume di destinazione diverso da "
+"quello del file)!"
 
 #: common/dialogs/dialog_fields_table.cpp:1266
 msgid "Unsaved data"
@@ -3686,9 +3678,8 @@ msgid "Keep line breaks"
 msgstr "Mantieni i ritorni a capo"
 
 #: common/dialogs/dialog_fields_table_base.cpp:330
-#, fuzzy
 msgid "Include byte order mark"
-msgstr "Includi lo strato contorni scheda"
+msgstr "Includi marcatore ordine byte"
 
 #: common/dialogs/dialog_fields_table_base.cpp:331
 msgid ""
@@ -3737,9 +3728,8 @@ msgid "Apply, Save Schematic && Continue"
 msgstr "Applica, salva lo schema e continua"
 
 #: common/dialogs/dialog_fields_table_base.h:151
-#, fuzzy
 msgid "Fields Table"
-msgstr "Tabella campi simbolo"
+msgstr "Tabella campi"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
 msgid "Generate Database Connection"
@@ -3807,9 +3797,8 @@ msgid "Status"
 msgstr "Stato"
 
 #: common/dialogs/dialog_git_mr_review.cpp:49
-#, fuzzy
 msgid "Old Path"
-msgstr "Trova il prossimo"
+msgstr "Vecchio percorso"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 msgid "No git repository available."
@@ -3820,9 +3809,8 @@ msgstr "Nessun repository git disponibile."
 #: common/dialogs/dialog_git_mr_review.cpp:119
 #: common/dialogs/dialog_git_mr_review_base.h:58
 #: kicad/kicad_manager_frame.cpp:1157
-#, fuzzy
 msgid "Compare Branches"
-msgstr "Clearance"
+msgstr "Confronta diramazioni"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
@@ -3849,14 +3837,12 @@ msgstr "Nessun gestore diff per '%s'."
 #: common/dialogs/dialog_git_mr_review.cpp:359
 #: common/dialogs/dialog_git_mr_review.cpp:373
 #: common/dialogs/dialog_git_mr_review.cpp:389
-#, fuzzy
 msgid "Compare File"
-msgstr "Compatibile"
+msgstr "Confronta file"
 
 #: common/dialogs/dialog_git_mr_review.cpp:281
-#, fuzzy
 msgid "Could not create a temporary directory."
-msgstr "Impossibile creare cartella temporanea risultati."
+msgstr "Impossibile creare cartella temporanea."
 
 #: common/dialogs/dialog_git_mr_review.cpp:322
 #: common/dialogs/dialog_git_mr_review.cpp:337
@@ -3875,9 +3861,8 @@ msgid "Head ref:"
 msgstr "Rif head:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
-#, fuzzy
 msgid "Compare"
-msgstr "Compatibile"
+msgstr "Confronta"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
 msgid "Changed files (double-click to open):"
@@ -4094,7 +4079,6 @@ msgstr "Scegli progetto da importare"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:56
-#, fuzzy
 msgid "Property"
 msgstr "Proprietà"
 
@@ -4117,9 +4101,8 @@ msgstr "Aggiunto"
 
 #: common/dialogs/dialog_kicad_diff.cpp:125
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
-msgstr "Rimuovi"
+msgstr "Rimosso"
 
 #: common/dialogs/dialog_kicad_diff.cpp:126
 #: common/dialogs/git/dialog_git_commit.cpp:131
@@ -4128,9 +4111,8 @@ msgid "Modified"
 msgstr "Modificato"
 
 #: common/dialogs/dialog_kicad_diff.cpp:127
-#, fuzzy
 msgid "Conflict"
-msgstr "Conflitti"
+msgstr "Conflitto"
 
 #: common/dialogs/dialog_kicad_diff.cpp:145
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
@@ -4148,9 +4130,8 @@ msgstr "Proprietà"
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:546
-#, fuzzy
 msgid "No differences detected."
-msgstr "Nessuna differenza rilevante rilevata."
+msgstr "Nessuna differenza rilevata."
 
 #: common/dialogs/dialog_kicad_diff.cpp:214
 #: common/dialogs/dialog_kicad_diff.cpp:548
@@ -4159,19 +4140,16 @@ msgid "%zu change(s) detected."
 msgstr "%zu modifiche rilevate."
 
 #: common/dialogs/dialog_kicad_diff.cpp:336
-#, fuzzy
 msgid "Show Change"
-msgstr "Cambia"
+msgstr "Mostra i cambiamenti"
 
 #: common/dialogs/dialog_kicad_diff.cpp:338
-#, fuzzy
 msgid "Hide Change"
-msgstr "Cambiamenti compilazione"
+msgstr "Nascondi i cambiamenti"
 
 #: common/dialogs/dialog_kicad_diff.cpp:340
-#, fuzzy
 msgid "Show All Hidden"
-msgstr "Mostra tutti i collegamenti"
+msgstr "Mostra tutto il nascosto"
 
 #: common/dialogs/dialog_kicad_diff.cpp:416
 #: common/dialogs/dialog_page_settings_base.cpp:240
@@ -4179,9 +4157,8 @@ msgid "Revision:"
 msgstr "Revisione:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:427
-#, fuzzy
 msgid "Older"
-msgstr "Cartella"
+msgstr "Meno recente"
 
 #: common/dialogs/dialog_kicad_diff.cpp:428
 msgid "Newer"
@@ -4209,19 +4186,16 @@ msgid "(none)"
 msgstr "(nessuno)"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:33
-#, fuzzy
 msgid "Comparison:"
-msgstr "Azienda:"
+msgstr "Confronto:"
 
 #: common/dialogs/dialog_kicad_diff_base.h:61
-#, fuzzy
 msgid "Compare Files"
-msgstr "File immagine"
+msgstr "Confronta file"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:129
-#, fuzzy
 msgid "No conflicts to resolve."
-msgstr "Nessun collegamento (net) connesso selezionato."
+msgstr "Nessun conflitto da risolvere."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
@@ -4239,9 +4213,8 @@ msgstr ""
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
-#, fuzzy
 msgid "Resolve Merge Conflicts"
-msgstr "Risolvi i conflitti di importazione"
+msgstr "Risolvi i conflitti di merge"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
@@ -4265,9 +4238,8 @@ msgid "Conflicts"
 msgstr "Conflitti"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:58
-#, fuzzy
 msgid "Pick a side"
-msgstr "Nome pin interno"
+msgstr "Scegli un lato"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
@@ -4278,9 +4250,8 @@ msgid "Theirs"
 msgstr "Loro"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
-#, fuzzy
 msgid "Ancestor"
-msgstr "Recupera"
+msgstr "Antenato"
 
 #: common/dialogs/dialog_page_settings.cpp:85
 msgid "Preview Settings"
@@ -4938,9 +4909,8 @@ msgid "Commit message cannot be empty"
 msgstr "Il messaggio commit non può essere vuoto"
 
 #: common/dialogs/git/dialog_git_commit.cpp:233
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Seleziona almeno una proprietà per l'annotazione inversa."
+msgstr "Seleziona almeno un file su cui fare commit"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:69
 msgid "Key passphrase:"
@@ -4948,9 +4918,8 @@ msgstr "Frase di accesso chiave:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:71
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Password:"
+msgstr "Password / token:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
@@ -4975,14 +4944,12 @@ msgid "Username:"
 msgstr "Nomeutente:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "Password chiave SSH:"
+msgstr "Chiave SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Seleziona file chiave privata SSH"
+msgstr "Seleziona chiave privata SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4990,14 +4957,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Salva tutte le correnti"
+msgstr "Salva credenziali"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Autenticazione"
+msgstr "Richiesta autenticazione git"
 
 #: common/dialogs/git/dialog_git_repository.cpp:163
 #: common/dialogs/git/dialog_git_repository.cpp:397
@@ -5518,9 +5483,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Fattore di attenuazione modalità alto contrasto:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "Usa tema:"
+msgstr "Tema app:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 msgid "Scaling"
@@ -5584,14 +5548,12 @@ msgstr ""
 "salvano i file"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "Incrementa"
+msgstr "Incrementale"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "Archivio"
+msgstr "Archivio zip"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -5605,14 +5567,12 @@ msgstr ""
 "automatico utilizza i file di ripristino."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "Invia progetto direttamente"
+msgstr "Cartella progetto"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "'%s' non è una cartella"
+msgstr "Cartella dati utente"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
@@ -6817,9 +6777,8 @@ msgstr "Clearance rame minima"
 
 #: common/dialogs/panel_setup_netclasses.cpp:700
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:54
-#, fuzzy
 msgid "Optimum track width"
-msgstr "Larghezza pista minima"
+msgstr "Larghezza pista ottimale"
 
 #: common/dialogs/panel_setup_netclasses.cpp:701
 msgid "Via pad diameter"
@@ -7020,9 +6979,8 @@ msgid "Always"
 msgstr "Sempre"
 
 #: common/dialogs/panel_snapping_base.cpp:17
-#, fuzzy
 msgid "Grid Snapping"
-msgstr "Impostazioni griglia"
+msgstr "Magnetismo griglia"
 
 #: common/dialogs/panel_snapping_base.cpp:29
 msgid "Snap to grid:"
@@ -7033,9 +6991,8 @@ msgid "When grid shown"
 msgstr "Se la griglia è visibile"
 
 #: common/dialogs/panel_snapping_base.cpp:37
-#, fuzzy
 msgid "Snap the cursor to the active grid"
-msgstr "Magnetismo degli oggetti solo sullo strato attivo"
+msgstr "Magnetismo del puntatore alla griglia attiva"
 
 #: common/dialogs/panel_snapping_base.cpp:47 pcbnew/tools/pcb_control.cpp:2399
 msgid "Object Snapping"
@@ -7066,7 +7023,6 @@ msgid "Capture cursor when the mouse approaches graphical control points"
 msgstr "Cattura il mouse quando si avvicina a punti di controllo grafici"
 
 #: common/dialogs/panel_snapping_base.cpp:97
-#, fuzzy
 msgid "Snap to objects on all layers"
 msgstr "Magnetismo degli oggetti su tutti gli strati"
 
