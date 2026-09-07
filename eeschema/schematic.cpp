@@ -755,8 +755,10 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
 std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) const
 {
-    for( const std::shared_ptr<BUS_ALIAS>& alias : m_busAliases )
+    for( auto it = m_busAliases.rbegin(); it != m_busAliases.rend(); ++it )
     {
+        const auto& alias = *it;
+
         if( alias && alias->GetName() == aLabel )
             return alias;
     }
@@ -778,9 +780,9 @@ void SCHEMATIC::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
     auto it = std::find_if( m_busAliases.begin(), m_busAliases.end(), sameDefinition );
 
     if( it != m_busAliases.end() )
-        return;
-
-    m_busAliases.push_back( aAlias );
+        std::rotate( it, std::next( it ), m_busAliases.end() );
+    else
+        m_busAliases.push_back( aAlias->Clone() );
 
     updateProjectBusAliases();
 }
@@ -788,7 +790,7 @@ void SCHEMATIC::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 
 void SCHEMATIC::SetBusAliases( const std::vector<std::shared_ptr<BUS_ALIAS>>& aAliases )
 {
-    m_busAliases.clear();
+    std::vector<std::shared_ptr<BUS_ALIAS>> aliases;
 
     for( const std::shared_ptr<BUS_ALIAS>& alias : aAliases )
     {
@@ -802,12 +804,15 @@ void SCHEMATIC::SetBusAliases( const std::vector<std::shared_ptr<BUS_ALIAS>>& aA
             return candidate && candidate->GetName() == clone->GetName() && candidate->Members() == clone->Members();
         };
 
-        if( std::find_if( m_busAliases.begin(), m_busAliases.end(), sameDefinition ) != m_busAliases.end() )
-            continue;
+        auto it = std::find_if( aliases.begin(), aliases.end(), sameDefinition );
 
-        m_busAliases.push_back( clone );
+        if( it != aliases.end() )
+            std::rotate( it, std::next( it ), aliases.end() );
+        else
+            aliases.push_back( clone );
     }
 
+    m_busAliases.swap( aliases );
     updateProjectBusAliases();
 }
 
@@ -842,17 +847,12 @@ void SCHEMATIC::updateProjectBusAliases()
 
     projectAliases.clear();
 
-    std::set<wxString> seen;
-
     for( const std::shared_ptr<BUS_ALIAS>& alias : m_busAliases )
     {
         if( !alias )
             continue;
 
-        if( !seen.insert( alias->GetName() ).second )
-            continue;
-
-        projectAliases.emplace( alias->GetName(), alias->Members() );
+        projectAliases.insert_or_assign( alias->GetName(), alias->Members() );
     }
 }
 

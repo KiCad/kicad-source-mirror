@@ -25,6 +25,9 @@
 #include "eeschema_test_utils.h"
 
 #include <schematic.h>
+#include <bus_alias.h>
+#include <project.h>
+#include <project/project_file.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -78,5 +81,38 @@ BOOST_AUTO_TEST_CASE( TestSchematicIsComplexHierarchy )
     BOOST_CHECK( m_schematic->IsComplexHierarchy() );
 }
 
+
+BOOST_AUTO_TEST_CASE( BusAliasesKeepLastDefinitionAcrossReset )
+{
+    LoadSchematic( SchematicQAPath( "netlists/hierarchy_aliases/hierarchy_aliases" ) );
+    auto original = m_schematic->GetBusAlias( wxS( "ALIAS1" ) );
+    BOOST_REQUIRE( original );
+    auto changed = original->Clone();
+    changed->SetMembers( { wxS( "CHANGED" ) } );
+
+    m_schematic->AddBusAlias( changed );
+    BOOST_REQUIRE( m_schematic->GetBusAlias( original->GetName() ) );
+    BOOST_CHECK( m_schematic->GetBusAlias( original->GetName() )->Members() == changed->Members() );
+    BOOST_CHECK( m_schematic->Project().GetProjectFile().m_BusAliases.at( original->GetName() )
+                 == changed->Members() );
+    changed->SetMembers( original->Members() );
+    BOOST_CHECK( m_schematic->GetBusAlias( original->GetName() )->Members() != changed->Members() );
+    changed->SetMembers( { wxS( "CHANGED" ) } );
+
+    m_schematic->AddBusAlias( original );
+    BOOST_CHECK( m_schematic->GetAllBusAliases().back()->Members() == original->Members() );
+    m_schematic->SetBusAliases( { original, changed, original } );
+    BOOST_CHECK( m_schematic->GetAllBusAliases().back()->Members() == original->Members() );
+    m_schematic->SetBusAliases( m_schematic->GetAllBusAliases() );
+    BOOST_REQUIRE( m_schematic->GetBusAlias( original->GetName() ) );
+
+    m_schematic->Reset();
+    BOOST_REQUIRE( m_schematic->GetBusAlias( original->GetName() ) );
+    BOOST_CHECK( m_schematic->GetBusAlias( original->GetName() )->Members() == original->Members() );
+    m_schematic->SetBusAliases( {} );
+    m_schematic->Reset();
+    BOOST_CHECK( m_schematic->GetAllBusAliases().empty() );
+    BOOST_CHECK( m_schematic->Project().GetProjectFile().m_BusAliases.empty() );
+}
 
 BOOST_AUTO_TEST_SUITE_END()
