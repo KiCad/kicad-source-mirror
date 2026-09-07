@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <font/font.h>
 #include "sch_easyeda_parser.h"
 
 #include <sch_io/sch_io_mgr.h>

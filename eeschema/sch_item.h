@@ -30,12 +30,12 @@
 #include <eda_item.h>
 #include <properties/property.h>
 #include <sch_sheet_path.h>
-#include <netclass.h>
 #include <stroke_params.h>
 #include <layer_ids.h>
-#include <sch_render_settings.h>
-#include <plotters/plotter.h>
 
+class NETCLASS;
+class PLOTTER;
+class SCH_RENDER_SETTINGS;
 class CONNECTION_GRAPH;
 struct CONNECTION_GRAPH_LIFETIME;
 class SCH_CONNECTION;
@@ -47,6 +47,11 @@ class LINE_READER;
 class SCH_EDIT_FRAME;
 class SCH_RULE_AREA;
 struct SCH_PLOT_OPTS;
+
+namespace KIGFX
+{
+class RENDER_SETTINGS;
+}
 
 namespace KIFONT
 {
@@ -359,7 +364,7 @@ public:
 
     int GetEffectivePenWidth( const SCH_RENDER_SETTINGS* aSettings ) const;
 
-    const wxString& GetDefaultFont( const RENDER_SETTINGS* aSettings ) const;
+    const wxString& GetDefaultFont( const KIGFX::RENDER_SETTINGS* aSettings ) const;
 
     const KIFONT::METRICS& GetFontMetrics() const;
 
@@ -736,10 +741,7 @@ protected:
      */
     virtual void swapData( SCH_ITEM* aItem );
 
-    SCH_RENDER_SETTINGS* getRenderSettings( PLOTTER* aPlotter ) const
-    {
-        return static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
-    }
+    SCH_RENDER_SETTINGS* getRenderSettings( PLOTTER* aPlotter ) const;
 
     struct cmp_items
     {

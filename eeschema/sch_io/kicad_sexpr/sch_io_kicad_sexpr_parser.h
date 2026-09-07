@@ -27,6 +27,7 @@
 #ifndef SCH_IO_KICAD_SEXPR_PARSER_H_
 #define SCH_IO_KICAD_SEXPR_PARSER_H_
 
+#include <eda_fill.h>
 #include <symbol_library_common.h>
 #include <lib_id.h>
 #include <line_ending.h>

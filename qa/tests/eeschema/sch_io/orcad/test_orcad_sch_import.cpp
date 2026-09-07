@@ -21,6 +21,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <richio.h>
 
+#include <font/font.h>
 #include <sch_io/orcad/sch_io_orcad.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_io/orcad/orcad_cache.h>

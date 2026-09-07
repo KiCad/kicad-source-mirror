@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <font/font.h>
 #include <advanced_config.h>
 #include <common.h>
 #include <sch_edit_frame.h>

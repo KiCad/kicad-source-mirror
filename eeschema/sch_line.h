@@ -184,12 +184,12 @@ public:
     WIRE_STYLE GetWireStyle() const { return (WIRE_STYLE) GetLineStyle(); }
 
 
-    void SetLineColor( const COLOR4D& aColor );
+    void SetLineColor( const KIGFX::COLOR4D& aColor );
 
     void SetLineColor( const double r, const double g, const double b, const double a );
 
     /// Return #COLOR4D::UNSPECIFIED if a custom color hasn't been set for this line.
-    COLOR4D GetLineColor() const;
+    KIGFX::COLOR4D GetLineColor() const;
 
     void SetLineWidth( const int aSize );
     int GetLineWidth() const { return m_stroke.GetWidth(); }
@@ -421,7 +421,7 @@ private:
     // linestyles, linewidths and colors.
     mutable LINE_STYLE m_lastResolvedLineStyle;
     mutable int        m_lastResolvedWidth;
-    mutable COLOR4D    m_lastResolvedColor;
+    mutable KIGFX::COLOR4D    m_lastResolvedColor;
 
     wxString           m_operatingPoint;
 };

@@ -19,6 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <schematic.h>
 #include <wx/tokenzr.h>
 #include <ki_exception.h>
 #include <lib_symbol.h>

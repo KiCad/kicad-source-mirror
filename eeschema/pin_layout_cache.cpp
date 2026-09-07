@@ -18,8 +18,11 @@
  */
 
 #include "pin_layout_cache.h"
+#include <font/font.h>
+#include <gr_text.h>
 #include <geometry/direction45.h>
 #include <pgm_base.h>
+#include <schematic.h>
 #include <settings/settings_manager.h>
 #include <sch_symbol.h>
 #include <eeschema_settings.h>

@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sch_render_settings.h>
+#include <plotters/plotter.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
@@ -34,6 +36,12 @@
 #include <font/kicad_font_name.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+
+
+SCH_RENDER_SETTINGS* SCH_ITEM::getRenderSettings( PLOTTER* aPlotter ) const
+{
+    return static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+}
 
 
 // Rendering fonts is expensive (particularly when using outline fonts).  At small effective
@@ -799,7 +807,7 @@ int SCH_ITEM::GetMaxError() const
 }
 
 
-const wxString& SCH_ITEM::GetDefaultFont( const RENDER_SETTINGS* aSettings ) const
+const wxString& SCH_ITEM::GetDefaultFont( const KIGFX::RENDER_SETTINGS* aSettings ) const
 {
     static wxString defaultName = KICAD_FONT_NAME;
 

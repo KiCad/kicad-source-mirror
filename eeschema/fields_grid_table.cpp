@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <font/font.h>
 #include <embedded_files.h>
 #include <kiway.h>
 #include <dialog_shim.h>

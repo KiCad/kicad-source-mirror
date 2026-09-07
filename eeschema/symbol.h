@@ -20,6 +20,7 @@
 #ifndef SYMBOL_H
 #define SYMBOL_H
 
+#include <transform.h>
 #include <lib_id.h>
 #include <sch_item.h>
 #include <sch_field.h>

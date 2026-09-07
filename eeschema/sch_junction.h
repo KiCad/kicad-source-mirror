@@ -113,10 +113,10 @@ public:
     int GetDiameter() const { return m_diameter; }
     void SetDiameter( int aDiameter );
 
-    COLOR4D GetJunctionColor() const;
+    KIGFX::COLOR4D GetJunctionColor() const;
 
-    COLOR4D GetColor() const { return m_color; }
-    void SetColor( const COLOR4D& aColor );
+    KIGFX::COLOR4D GetColor() const { return m_color; }
+    void SetColor( const KIGFX::COLOR4D& aColor );
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -147,13 +147,13 @@ private:
 private:
     VECTOR2I         m_pos;
     int              m_diameter;   ///< Zero is user default.
-    COLOR4D          m_color;      ///< #COLOR4D::UNSPECIFIED is user default.
+    KIGFX::COLOR4D    m_color;      ///< #KIGFX::COLOR4D::UNSPECIFIED is user default.
 
     // If real-time connectivity gets disabled (due to being too slow on a particular design),
     // we can no longer rely on getting the NetClass to find netclass-specific linestyles,
     // linewidths and colors.
-    mutable int      m_lastResolvedDiameter;
-    mutable COLOR4D  m_lastResolvedColor;
+    mutable int             m_lastResolvedDiameter;
+    mutable KIGFX::COLOR4D   m_lastResolvedColor;
 };
 
 

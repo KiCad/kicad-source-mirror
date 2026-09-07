@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <advanced_config.h>
 #include "tools/sch_editor_control.h"
 
 #include <algorithm>

@@ -35,9 +35,7 @@
 #include <sch_item.h>
 #include <sch_netchain.h>
 #include <connectivity/conn_netchain_manager.h>
-#include <wx/treectrl.h>
 #include <wx/string.h>
-#include <advanced_config.h>
 #include <progress_reporter.h>
 
 
@@ -592,11 +590,7 @@ public:
      * a temporary solution until the connectivity graph is refactored with an
      * eye toward partial updates
     */
-    bool IsMinor() const
-    {
-        return static_cast<ssize_t>( m_items.size() )
-               < ADVANCED_CFG::GetCfg().m_MinorSchematicGraphSize;
-    }
+    bool IsMinor() const;
 
 private:
 

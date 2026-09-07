@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include <mutex>
 #include <memory>
 #include <set>
 #include <vector>
@@ -32,6 +33,7 @@
 #include <sch_item.h>
 
 class LIB_SYMBOL;
+class TRANSFORM;
 class SCH_SYMBOL;
 class LIB_ID;
 class SCH_SHEET_PATH;

@@ -18,6 +18,7 @@
  */
 
 #include <connectivity/conn_presentation.h>
+#include <netclass.h>
 #include <sch_item.h>
 #include <wx/thread.h>
 #include <sch_connection.h>
@@ -29,7 +30,6 @@ std::optional<wxString> SCH_CONNECTIVITY::AppendConnectionInfo(
 {
     wxASSERT( wxThread::IsMain() );
     wxString name;
-    bool isBus;
 
     const SCH_CONNECTION* connection = aItem.Connection( aPath );
 
@@ -38,7 +38,7 @@ std::optional<wxString> SCH_CONNECTIVITY::AppendConnectionInfo(
 
     connection->AppendInfoToMsgPanel( aList );
     name = connection->Name();
-    isBus = connection->IsBus();
+    bool isBus = connection->IsBus();
 
     if( isBus )
         return std::nullopt;

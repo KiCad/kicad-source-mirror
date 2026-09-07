@@ -27,9 +27,10 @@
 #include <template_fieldnames.h>
 #include <general.h>
 #include <string_utils.h>
-#include "scintilla_tricks.h"
 #include <algorithm>
 
+class SCINTILLA_TRICKS;
+class wxStyledTextEvent;
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
 

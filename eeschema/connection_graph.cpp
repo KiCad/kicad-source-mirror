@@ -67,6 +67,13 @@
 #include <advanced_config.h> // for realtime connectivity switch in release builds
 
 
+bool CONNECTION_GRAPH::IsMinor() const
+{
+    return static_cast<ssize_t>( m_items.size() )
+           < ADVANCED_CFG::GetCfg().m_MinorSchematicGraphSize;
+}
+
+
 /**
  * Flag to enable connectivity profiling
  * @ingroup trace_env_vars

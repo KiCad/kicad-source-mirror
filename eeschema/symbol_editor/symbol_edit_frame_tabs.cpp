@@ -24,6 +24,7 @@
  * takes them back on detach.
  */
 
+#include <sch_render_settings.h>
 #include <symbol_edit_frame.h>
 
 #include <kidialog.h>

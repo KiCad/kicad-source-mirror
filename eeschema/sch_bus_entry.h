@@ -89,8 +89,8 @@ public:
     void SetWireStyle( WIRE_STYLE aStyle ) { SetLineStyle( (LINE_STYLE) aStyle ); }
     WIRE_STYLE GetWireStyle() const { return (WIRE_STYLE) GetStroke().GetLineStyle(); }
 
-    COLOR4D GetBusEntryColor() const;
-    void SetBusEntryColor( const COLOR4D& aColor );
+    KIGFX::COLOR4D GetBusEntryColor() const;
+    void SetBusEntryColor( const KIGFX::COLOR4D& aColor );
 
     void swapData( SCH_ITEM* aItem ) override;
 
@@ -157,9 +157,9 @@ protected:
     // If real-time connectivity gets disabled (due to being too slow on a particular
     // design), we can no longer rely on getting the NetClass to find netclass-specific
     // linestyles, linewidths and colors.
-    mutable LINE_STYLE m_lastResolvedLineStyle;
-    mutable int        m_lastResolvedWidth;
-    mutable COLOR4D    m_lastResolvedColor;
+    mutable LINE_STYLE     m_lastResolvedLineStyle;
+    mutable int            m_lastResolvedWidth;
+    mutable KIGFX::COLOR4D  m_lastResolvedColor;
 };
 
 /**

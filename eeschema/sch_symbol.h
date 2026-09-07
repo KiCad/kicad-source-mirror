@@ -38,7 +38,6 @@
 #include <wx/chartype.h>
 #include <wx/string.h>
 
-#include <schematic.h>
 #include <symbol.h>
 #include <sch_field.h>
 #include <sch_pin.h>
@@ -519,24 +518,15 @@ public:
     /*
      * Field access for property manager
      */
-    wxString GetRefProp() const
-    {
-        return GetRef( &Schematic()->CurrentSheet() );
-    }
+    wxString GetRefProp() const;
 
     void SetRefProp( const wxString& aRef );
 
-    wxString GetValueProp() const
-    {
-        return GetValue( &Schematic()->CurrentSheet(), RAW_VALUE, Schematic()->GetCurrentVariant() );
-    }
+    wxString GetValueProp() const;
 
     void SetValueProp( const wxString& aValue );  // Implemented in sch_symbol.cpp for tracing
 
-    int GetUnitProp() const
-    {
-        return GetUnitSelection( &Schematic()->CurrentSheet() );
-    }
+    int GetUnitProp() const;
 
     void SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath = nullptr,
                        const wxString& aVariantName = wxEmptyString );
@@ -544,11 +534,7 @@ public:
     wxString GetFieldText( const wxString& aFieldName, const SCH_SHEET_PATH* aPath = nullptr,
                            const wxString& aVariantName = wxEmptyString ) const;
 
-    void SetUnitProp( int aUnit )
-    {
-        SetUnitSelection( &Schematic()->CurrentSheet(), aUnit );
-        SetUnit( aUnit );
-    }
+    void SetUnitProp( int aUnit );
 
     wxString GetBodyStyleProp() const override
     {
@@ -738,10 +724,9 @@ public:
     virtual bool GetDNP( const SCH_SHEET_PATH* aInstance = nullptr,
                          const wxString& aVariantName = wxEmptyString ) const override;
 
-    bool GetDNPProp() const { return GetDNP( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() ); }
+    bool GetDNPProp() const;
 
-    void SetDNPProp( bool aEnable ) { SetDNP( aEnable, &Schematic()->CurrentSheet(),
-                                              Schematic()->GetCurrentVariant() ); }
+    void SetDNPProp( bool aEnable );
 
     /**
      * Set the per-instance pin-to-pad map override (issue #2282).
@@ -766,60 +751,36 @@ public:
     bool GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) const override;
 
-    bool GetExcludedFromBOMProp() const
-    {
-        return GetExcludedFromBOM( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    bool GetExcludedFromBOMProp() const;
 
-    void SetExcludedFromBOMProp( bool aEnable )
-    {
-        SetExcludedFromBOM( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    void SetExcludedFromBOMProp( bool aEnable );
 
     void SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) override;
     bool GetExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) const override;
 
-    bool GetExcludedFromSimProp() const
-    {
-        return GetExcludedFromSim( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    bool GetExcludedFromSimProp() const;
 
-    void SetExcludedFromSimProp( bool aEnable )
-    {
-        SetExcludedFromSim( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    void SetExcludedFromSimProp( bool aEnable );
 
     void SetExcludedFromBoard( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
                                const wxString& aVariantName = wxEmptyString ) override;
     bool GetExcludedFromBoard( const SCH_SHEET_PATH* aInstance = nullptr,
                                const wxString& aVariantName = wxEmptyString ) const override;
 
-    bool GetExcludedFromBoardProp() const
-    {
-        return GetExcludedFromBoard( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    bool GetExcludedFromBoardProp() const;
 
-    void SetExcludedFromBoardProp( bool aEnable )
-    {
-        SetExcludedFromBoard( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    void SetExcludedFromBoardProp( bool aEnable );
 
     void SetExcludedFromPosFiles( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
                                   const wxString& aVariantName = wxEmptyString ) override;
     bool GetExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance = nullptr,
                                   const wxString& aVariantName = wxEmptyString ) const override;
 
-    bool GetExcludedFromPosFilesProp() const
-    {
-        return GetExcludedFromPosFiles( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    bool GetExcludedFromPosFilesProp() const;
 
-    void SetExcludedFromPosFilesProp( bool aEnable )
-    {
-        SetExcludedFromPosFiles( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
-    }
+    void SetExcludedFromPosFilesProp( bool aEnable );
 
     /**
      * SCH_SYMBOLs don't currently support embedded files, but their LIB_SYMBOL counterparts

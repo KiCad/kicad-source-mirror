@@ -18,8 +18,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <netclass.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
+#include <schematic.h>
 #include <sch_collectors.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
@@ -55,6 +57,91 @@
 #include <validators.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+
+
+wxString SCH_SYMBOL::GetRefProp() const
+{
+    return GetRef( &Schematic()->CurrentSheet() );
+}
+
+
+wxString SCH_SYMBOL::GetValueProp() const
+{
+    return GetValue( &Schematic()->CurrentSheet(), RAW_VALUE, Schematic()->GetCurrentVariant() );
+}
+
+
+int SCH_SYMBOL::GetUnitProp() const
+{
+    return GetUnitSelection( &Schematic()->CurrentSheet() );
+}
+
+
+void SCH_SYMBOL::SetUnitProp( int aUnit )
+{
+    SetUnitSelection( &Schematic()->CurrentSheet(), aUnit );
+    SetUnit( aUnit );
+}
+
+
+bool SCH_SYMBOL::GetDNPProp() const
+{
+    return GetDNP( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+void SCH_SYMBOL::SetDNPProp( bool aEnable )
+{
+    SetDNP( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+bool SCH_SYMBOL::GetExcludedFromBOMProp() const
+{
+    return GetExcludedFromBOM( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+void SCH_SYMBOL::SetExcludedFromBOMProp( bool aEnable )
+{
+    SetExcludedFromBOM( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+bool SCH_SYMBOL::GetExcludedFromSimProp() const
+{
+    return GetExcludedFromSim( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+void SCH_SYMBOL::SetExcludedFromSimProp( bool aEnable )
+{
+    SetExcludedFromSim( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+bool SCH_SYMBOL::GetExcludedFromBoardProp() const
+{
+    return GetExcludedFromBoard( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+void SCH_SYMBOL::SetExcludedFromBoardProp( bool aEnable )
+{
+    SetExcludedFromBoard( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+bool SCH_SYMBOL::GetExcludedFromPosFilesProp() const
+{
+    return GetExcludedFromPosFiles( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
+
+
+void SCH_SYMBOL::SetExcludedFromPosFilesProp( bool aEnable )
+{
+    SetExcludedFromPosFiles( aEnable, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+}
 
 
 // Stable property names and group captions for the per-object field and pin-map properties

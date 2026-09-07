@@ -18,6 +18,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sch_render_settings.h>
+#include <scintilla_tricks.h>
+#include <netclass.h>
 #include <wx/log.h>
 #include <wx/menu.h>
 

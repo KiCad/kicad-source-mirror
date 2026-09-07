@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <scintilla_tricks.h>
 #include <kiplatform/ui.h>
 #include <sch_edit_frame.h>
 #include <widgets/color_swatch.h>

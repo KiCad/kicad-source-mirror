@@ -21,6 +21,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sch_render_settings.h>
 #include "sch_pin.h"
 
 #include <connectivity/conn_pin_name.h>

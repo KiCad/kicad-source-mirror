@@ -54,6 +54,7 @@
 #include <bitmap_base.h>
 #include <connection_graph.h>
 #include <core/kicad_algo.h>
+#include <font/font.h>
 #include <ki_exception.h>
 #include <kiid.h>
 #include <layer_ids.h>

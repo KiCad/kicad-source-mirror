@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <font/text_attributes.h>
 #include <optional>
 
 #include <geometry/circle.h>

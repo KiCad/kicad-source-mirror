@@ -19,6 +19,7 @@
  */
 
 #include <connectivity/conn_presentation.h>
+#include <netclass.h>
 #include <sch_draw_panel.h>
 #include <trigo.h>
 #include <common.h>

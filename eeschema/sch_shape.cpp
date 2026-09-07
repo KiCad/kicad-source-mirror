@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <sch_render_settings.h>
 #include <sch_draw_panel.h>
 #include <macros.h>
 #include <plotters/plotter.h>
