@@ -4372,7 +4372,11 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_SYMBOL& aSymbol )
         SYMBOL::operator=( aSymbol );
 
         m_lib_id = aSymbol.m_lib_id;
-        m_part.reset( aSymbol.m_part ? new LIB_SYMBOL( *aSymbol.m_part ) : nullptr );
+
+        // Pin relinking still needs the previous library's alternate definitions.
+        auto oldPart = std::exchange( m_part, aSymbol.m_part ? std::make_unique<LIB_SYMBOL>( *aSymbol.m_part )
+                                                          : nullptr );
+
         m_pos = aSymbol.m_pos;
         m_unit = aSymbol.m_unit;
         m_bodyStyle = aSymbol.m_bodyStyle;
