@@ -1533,7 +1533,18 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
         for( PCB_GENERATOR* gen : refGenerators )
         {
+            if( gen->IsLocked() && !aOpts.m_includeLockedItems )
+                continue;
+
             PCB_GENERATOR* clone = gen->DeepClone();
+
+            clone->ResetUuid();
+            clone->RunOnChildren(
+                    []( BOARD_ITEM* child )
+                    {
+                        child->ResetUuidDirect();
+                    },
+                    RECURSE_MODE::RECURSE );
 
             clone->ClearFlags();
             clone->Rotate( VECTOR2( 0, 0 ), rot );
