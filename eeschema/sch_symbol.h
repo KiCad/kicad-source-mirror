@@ -901,7 +901,7 @@ public:
     }
 
     const wxString& GetNetChainName() const { return m_signalName; }
-    void SetNetChainName( const wxString& aName ) { m_signalName = aName; }
+    void SetNetChainName( wxString aName ) noexcept { m_signalName.swap( aName ); }
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 

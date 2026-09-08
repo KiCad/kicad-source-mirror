@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <functional>
+#include <unordered_map>
 #include <map>
 #include <memory>
 #include <set>
@@ -31,6 +33,8 @@ void boost_test_inject_committed_net_chain( CONNECTION_GRAPH&, std::unique_ptr<S
 
 namespace SCH_CONNECTIVITY
 {
+struct NETCHAIN_INPUT;
+
 /** Committed net chains and overrides.  Staged and temporary graphs own a private instance. */
 class NETCHAIN_MANAGER
 {
@@ -39,6 +43,11 @@ public:
             m_schematic( aSchematic )
     {
     }
+
+    void Rebuild( const NETCHAIN_INPUT& aConnectivity, const std::function<void( NETCHAIN_MANAGER& )>& aBeforePublish = {} );
+
+    void ClearDerived();
+    void Merge( NETCHAIN_MANAGER& aOther );
 
     void SetSchematic( SCHEMATIC* aSchematic ) { m_schematic = aSchematic; }
 
@@ -83,7 +92,33 @@ public:
 
     void SetNetChainTerminalOverrides( const std::map<wxString, std::pair<KIID, KIID>>& aOverrides );
 
+    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetPotentialNetChains() const { return m_potentialNetChains; }
+    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const { return m_committedNetChains; }
+    bool NetChainsBuilt() const { return m_netChainsBuilt; }
+
+    const std::map<wxString, std::set<wxString>>& GetNetChainMemberNetOverrides() const
+    {
+        return m_netChainMemberNetOverrides;
+    }
+
+    const std::map<wxString, wxString>& GetNetChainNetClassOverrides() const
+    {
+        return m_netChainNetClassOverrides;
+    }
+
+    const std::map<wxString, KIGFX::COLOR4D>& GetNetChainColorOverrides() const
+    {
+        return m_netChainColorOverrides;
+    }
+
+    const std::map<wxString, CHAIN_TERMINAL_REFS>& GetNetChainTerminalRefOverrides() const
+    {
+        return m_netChainTerminalRefOverrides;
+    }
+
 private:
+    void rebuild( const NETCHAIN_INPUT& aConnectivity );
+    void setSymbolName( SCH_SYMBOL* aSymbol, const wxString& aName );
     friend class ::CONNECTION_GRAPH;
     friend void ::boost_test_inject_committed_net_chain( CONNECTION_GRAPH&, std::unique_ptr<SCH_NETCHAIN> );
 
@@ -96,6 +131,43 @@ private:
     std::map<wxString, CHAIN_TERMINAL_REFS>    m_netChainTerminalRefOverrides;
     std::map<wxString, std::set<wxString>>     m_netChainMemberNetOverrides;
 
+    // Bridge-graph helper types shared by RebuildNetChains() and FindNetChainPathsBetweenPins().
+    // A bridge edge represents a 2-pin passthrough symbol that ties two distinct subgraph nets
+    // together; the bridge graph is the adjacency built from the surviving (non-power-touching)
+    // edges after the leaf-prune pass.
+
+    struct BRIDGE_EDGE
+    {
+        wxString             a;
+        wxString             b;
+        class SCH_SYMBOL*    sym;
+    };
+
+    struct BRIDGE_NEIGHBOR
+    {
+        wxString             other;
+        class SCH_SYMBOL*    sym;
+    };
+
+    struct BRIDGE_GRAPH
+    {
+        std::map<wxString, std::vector<BRIDGE_NEIGHBOR>> adjacency;
+        std::vector<BRIDGE_EDGE>                         edges;
+    };
+
+    /**
+     * Build the bridge graph used for net-chain discovery.  Walks every 2-pin passthrough
+     * symbol on every sheet and records the raw bridge edge list in `edges`; the returned
+     * `adjacency` is built from those edges after dropping any that touch a power subgraph
+     * and after iteratively pruning power-adjacent leaf nets.  `edges` itself stays raw
+     * because RebuildNetChains() still iterates the full list to attach bridging symbols
+     * to their owning component.  Does NOT apply the legacy >4-net stub trim — that fossil
+     * lives only in RebuildNetChains() so the path-enumeration API can see the unpruned
+     * adjacency.
+     */
+    BRIDGE_GRAPH buildBridgeAdjacency( const NETCHAIN_INPUT& aConnectivity );
+
+    std::unordered_map<SCH_SYMBOL*, wxString>* m_pendingSymbolNames = nullptr;
     SCHEMATIC* m_schematic;
 };
 } // namespace SCH_CONNECTIVITY

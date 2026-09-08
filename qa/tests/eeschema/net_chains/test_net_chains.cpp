@@ -27,6 +27,7 @@
 #include <sch_sheet.h>
 #include <sch_screen.h>
 #include <netclass.h>
+#include <sch_label.h>
 #include <project.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
@@ -257,6 +258,38 @@ BOOST_FIXTURE_TEST_CASE( NetChain_TemporaryGraphPreservesProjectAssignments, SIG
     CONNECTION_GRAPH temporary( m_schematic.get() );
     temporary.Recalculate( m_schematic->Hierarchy(), true );
     BOOST_CHECK( ns->HasChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( RebuildSignals_SelectsLabelNameIndependentlyOfItemOrder, SIGNALS_TEST_FIXTURE )
+{
+    LOCALE_IO locale;
+    KI_TEST::LoadSchematic( m_settingsManager, "net_chains_four_nets_labeled", m_schematic );
+    SCH_SCREEN* screen = m_schematic->GetTopLevelSheet()->GetScreen();
+    SCH_LABEL* original = nullptr;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_LABEL_T ) )
+    {
+        original = static_cast<SCH_LABEL*>( item );
+        break;
+    }
+
+    BOOST_REQUIRE( original );
+    auto copy = std::unique_ptr<SCH_LABEL>( static_cast<SCH_LABEL*>( original->Clone() ) );
+    const_cast<KIID&>( copy->m_Uuid ) = KIID();
+    SCH_LABEL* second = copy.get();
+    screen->Append( copy.release() );
+    auto* graph = m_schematic->ConnectionGraph();
+
+    for( bool reverse : { false, true } )
+    {
+        original->SetText( reverse ? "ZZZ" : "AAA" );
+        second->SetText( reverse ? "AAA" : "ZZZ" );
+        graph->Recalculate( m_schematic->Hierarchy(), true );
+        const auto& chains = graph->GetPotentialNetChains();
+        BOOST_REQUIRE_EQUAL( chains.size(), 1 );
+        BOOST_CHECK_EQUAL( chains.front()->GetName(), wxString( "AAA" ) );
+    }
 }
 
 // EOF

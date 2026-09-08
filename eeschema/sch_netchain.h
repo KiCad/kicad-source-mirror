@@ -21,6 +21,7 @@
 #define SCH_NETCHAIN_H
 
 #include <set>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <wx/string.h>
@@ -41,6 +42,27 @@ public:
     static constexpr char SYNTHETIC_NET_PREFIX[] = "__SG_";
 
     SCH_NETCHAIN() {}
+
+    friend void swap( SCH_NETCHAIN& aLeft, SCH_NETCHAIN& aRight ) noexcept
+    {
+        const auto swapMember = []<typename T>( T& a, T& b ) noexcept
+        {
+            static_assert( std::is_nothrow_swappable_v<T> );
+            using std::swap;
+            swap( a, b );
+        };
+
+        swapMember( aLeft.m_name, aRight.m_name );
+        swapMember( aLeft.m_nets, aRight.m_nets );
+        swapMember( aLeft.m_symbols, aRight.m_symbols );
+        swapMember( aLeft.m_terminalPins, aRight.m_terminalPins );
+        swapMember( aLeft.m_terminalRef, aRight.m_terminalRef );
+        swapMember( aLeft.m_terminalPinNum, aRight.m_terminalPinNum );
+        swapMember( aLeft.m_netClass, aRight.m_netClass );
+        swapMember( aLeft.m_color, aRight.m_color );
+        swapMember( aLeft.m_orderedNets, aRight.m_orderedNets );
+        swapMember( aLeft.m_orderedNetsDirty, aRight.m_orderedNetsDirty );
+    }
 
     void SetName( const wxString& aName ) { m_name = aName; }
     const wxString& GetName() const { return m_name; }
