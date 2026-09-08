@@ -37,6 +37,7 @@
 #include <libraries/legacy_symbol_library.h>
 
 #include <algorithm>
+#include <functional>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -2460,7 +2461,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             {
                 if( aField->GetFont() != bField->GetFont() )
                 {
-                    retv = static_cast<int>( aField->GetFont() - bField->GetFont() );
+                    retv = std::less<KIFONT::FONT*>{}( aField->GetFont(), bField->GetFont() ) ? -1 : 1;
                     REPORT( wxString::Format( _( "Field '%s' fonts differ." ), aField->GetName( false ) ) );
 
                     if( !aReporter )
