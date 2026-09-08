@@ -1928,55 +1928,87 @@ void SCHEMATIC::CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
 }
 
 
-void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
-                                        TOOL_MANAGER* aToolManager, PROGRESS_REPORTER* aProgressReporter,
-                                        KIGFX::SCH_VIEW*                  aSchView,
-                                        std::function<void( SCH_ITEM* )>* aChangedItemHandler,
-                                        PICKED_ITEMS_LIST*                aLastChangeList )
+void SCHEMATIC::CleanUpConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+                                    const std::set<SCH_SCREEN*>& aLocalScreens )
 {
-    SCHEMATIC_SETTINGS& settings = Settings();
     RefreshHierarchy();
-    SCH_SHEET_LIST list = Hierarchy();
-    SCH_COMMIT     localCommit( aToolManager );
-
-    if( !aCommit )
-        aCommit = &localCommit;
-
     PROF_TIMER timer;
 
-    // Ensure schematic graph is accurate
     if( aCleanupFlags == LOCAL_CLEANUP )
     {
-        CleanUp( aCommit, GetCurrentScreen() );
+        if( aLocalScreens.empty() )
+            CleanUp( aCommit, GetCurrentScreen() );
+        else
+        {
+            for( SCH_SCREEN* screen : aLocalScreens )
+                CleanUp( aCommit, screen );
+        }
     }
     else if( aCleanupFlags == GLOBAL_CLEANUP )
     {
-        for( const SCH_SHEET_PATH& sheet : list )
-            CleanUp( aCommit, sheet.LastScreen() );
+        std::unordered_set<SCH_SCREEN*> cleanedScreens;
+
+        for( const SCH_SHEET_PATH& sheet : Hierarchy() )
+        {
+            SCH_SCREEN* screen = sheet.LastScreen();
+
+            if( cleanedScreens.insert( screen ).second )
+                CleanUp( aCommit, screen );
+        }
     }
 
     timer.Stop();
     wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
 
-    if( settings.m_IntersheetRefsShow )
+    if( Settings().m_IntersheetRefsShow )
         RecomputeIntersheetRefs();
+}
+
+
+void SCHEMATIC::RebuildConnectivity( std::function<void( SCH_ITEM* )>* aChangedItemHandler,
+                                      PROGRESS_REPORTER* aProgressReporter,
+                                      KIGFX::SCH_VIEW* aSchView )
+{
+    RefreshHierarchy();
+    m_project->GetProjectFile().NetSettings()->ClearAllCaches();
+    std::unordered_set<SCH_SCREEN*> screens;
+
+    for( const SCH_SHEET_PATH& path : Hierarchy() )
+    {
+        if( SCH_SCREEN* screen = path.LastScreen() )
+            screens.insert( screen );
+    }
+
+    SCH_RULE_AREA::UpdateRuleAreasInScreens( screens, aSchView );
+    ConnectionGraph()->Recalculate( Hierarchy(), true, aChangedItemHandler, aProgressReporter );
+}
+
+
+void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+                                        TOOL_MANAGER* aToolManager, PROGRESS_REPORTER* aProgressReporter,
+                                        KIGFX::SCH_VIEW*                  aSchView,
+                                        std::function<void( SCH_ITEM* )>* aChangedItemHandler,
+                                        PICKED_ITEMS_LIST*                aLastChangeList,
+                                        bool aCleanupDone )
+{
+    SCH_COMMIT localCommit( aToolManager );
+
+    if( !aCommit )
+        aCommit = &localCommit;
+
+    if( !aCleanupDone )
+        CleanUpConnections( aCommit, aCleanupFlags );
+
+    SCH_SHEET_LIST list = Hierarchy();
 
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
         || aLastChangeList == nullptr || ConnectionGraph()->IsMinor() )
     {
-        // Clear all resolved netclass caches in case labels have changed
-        m_project->GetProjectFile().NetSettings()->ClearAllCaches();
+        if( !localCommit.Empty() )
+            localCommit.Push( _( "Schematic Cleanup" ), SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
 
-        // Update all rule areas so we can cascade implied connectivity changes
-        std::unordered_set<SCH_SCREEN*> all_screens;
-
-        for( const SCH_SHEET_PATH& path : list )
-            all_screens.insert( path.LastScreen() );
-
-        SCH_RULE_AREA::UpdateRuleAreasInScreens( all_screens, aSchView );
-
-        // Recalculate all connectivity
-        ConnectionGraph()->Recalculate( list, true, aChangedItemHandler, aProgressReporter );
+        RebuildConnectivity( aChangedItemHandler, aProgressReporter, aSchView );
+        return;
     }
     else
     {
@@ -2229,10 +2261,12 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
 
         new_graph.Recalculate( list, false, aChangedItemHandler, aProgressReporter );
         ConnectionGraph()->Merge( new_graph );
+
     }
 
     if( !localCommit.Empty() )
-        localCommit.Push( _( "Schematic Cleanup" ) );
+        localCommit.Push( _( "Schematic Cleanup" ), SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
+
 }
 
 

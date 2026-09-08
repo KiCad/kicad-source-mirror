@@ -537,6 +537,15 @@ public:
      */
     void CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen = nullptr );
 
+    /** Prepare source geometry and intersheet references before rebuilding connectivity. */
+    void CleanUpConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+                             const std::set<SCH_SCREEN*>& aLocalScreens = {} );
+
+    /** Fully rebuild connectivity without changing source geometry. */
+    void RebuildConnectivity( std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr,
+                              PROGRESS_REPORTER* aProgressReporter = nullptr,
+                              KIGFX::SCH_VIEW* aSchView = nullptr );
+
     /**
      * Generate the connection data for the entire schematic hierarchy.
      */
@@ -545,7 +554,8 @@ public:
                                  PROGRESS_REPORTER* aProgressReporter = nullptr,
                                  KIGFX::SCH_VIEW* aSchView = nullptr,
                                  std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr,
-                                 PICKED_ITEMS_LIST*                aLastChangeList = nullptr );
+                                 PICKED_ITEMS_LIST*                aLastChangeList = nullptr,
+                                 bool aCleanupDone = false );
 
     /**
      * Store all existing annotations in the REFDES_TRACKER.

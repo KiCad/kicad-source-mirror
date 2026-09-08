@@ -2334,12 +2334,8 @@ void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
 
     wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::UpdateSymbolLinks" );
 
-    SCH_SHEET_LIST sheets = sch->Hierarchy();
-
-    // All of the library symbols have been replaced with copies so the connection graph
-    // pointers are stale.
-    if( sch->ConnectionGraph() )
-        sch->ConnectionGraph()->Recalculate( sheets, true );
+    // Replacing library symbols invalidates pointers retained by connectivity.
+    sch->RebuildConnectivity();
 }
 
 

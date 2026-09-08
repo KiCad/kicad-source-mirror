@@ -812,6 +812,9 @@ public:
     void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                                  PROGRESS_REPORTER* aProgressReporter = nullptr );
 
+    /** Refresh connectivity-dependent display state after a model rebuild. */
+    void RefreshConnectivity( bool aForce = false );
+
     /**
      * Called after the preferences dialog is run.
      */

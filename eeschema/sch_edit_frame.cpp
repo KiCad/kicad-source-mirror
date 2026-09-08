@@ -1934,10 +1934,18 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                                         m_undoList.m_CommandsList.empty() ? nullptr
                                                                           : m_undoList.m_CommandsList.back() );
 
+    RefreshConnectivity();
+}
+
+
+void SCH_EDIT_FRAME::RefreshConnectivity( bool aForce )
+{
+    const wxString highlightedConn = GetHighlightedConnection();
+
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
-                int             flags = 0;
+                int             flags = aForce ? KIGFX::REPAINT : 0;
                 SCH_ITEM*       item = dynamic_cast<SCH_ITEM*>( aItem );
                 SCH_CONNECTION* connection = item ? item->Connection() : nullptr;
 
@@ -1978,7 +1986,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 return flags;
             } );
 
-    if( m_highlightedConnChanged
+    if( aForce || m_highlightedConnChanged
         || !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
     {
         GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
