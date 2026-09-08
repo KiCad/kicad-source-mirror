@@ -555,6 +555,10 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_SCH::handleGetItems( const HANDLER_
             {
                 itemMap[ aItem->Type() ].emplace_back( aItem, aPath );
 
+                // Group members live in the screen's rtree as well as in the group
+                if( aItem->Type() == SCH_GROUP_T )
+                    continue;
+
                 aItem->RunOnChildren(
                         [&]( SCH_ITEM* aChild )
                         {
