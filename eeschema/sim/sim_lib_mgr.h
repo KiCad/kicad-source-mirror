@@ -25,6 +25,7 @@
 
 #include <sim/sim_library.h>
 #include <sim/sim_model.h>
+#include <sim/sim_model_input.h>
 
 class EMBEDDED_FILES;
 class PROJECT;
@@ -48,29 +49,37 @@ public:
 
     void SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter );
 
-    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, const std::vector<SCH_PIN*>& aPins,
+    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, std::span<const wxString> aPins,
                             REPORTER& aReporter );
 
-    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
+    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, std::span<const wxString> aPins,
                             REPORTER& aReporter );
 
-    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
+    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, std::span<const wxString> aPins,
                             const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
                             REPORTER& aReporter );
 
-    // TODO: The argument can be made const.
+    /** Resolve instance fields once; editors use the field-based overloads for unresolved input. */
+    static SIM_MODEL_INPUT CaptureModelInput( const SCH_SHEET_PATH* aSheetPath, const SCH_SYMBOL& aSymbol,
+                                              int aDepth, const wxString& aVariantName,
+                                              const wxString& aMergedSimPins = wxEmptyString );
+
+    /** Raw-SPICE fallback applies to field-defined models; library parsing keeps its own policy. */
+    SIM_LIBRARY::MODEL CreateModel( const SIM_MODEL_INPUT& aInput, bool aAllowRawFallback,
+                                    REPORTER& aReporter );
+
     // aMergedSimPins is an optional merged Sim.Pins string from all units of a multi-unit symbol.
     // If provided (non-empty), it will be used instead of the symbol's Sim.Pins field.
-    SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
+    SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, const SCH_SYMBOL& aSymbol,
                                     bool aResolve, int aDepth, const wxString& aVariantName,
                                     REPORTER& aReporter, const wxString& aMergedSimPins = wxEmptyString );
 
     SIM_LIBRARY::MODEL CreateModel( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
-                                    const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );
+                                    std::span<const wxString> aPins, REPORTER& aReporter );
 
     SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath, const std::string& aBaseModelName,
                                     const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
-                                    const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );
+                                    std::span<const wxString> aPins, REPORTER& aReporter );
 
     void SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel );
 
@@ -82,6 +91,10 @@ public:
                                          REPORTER& aReporter );
 
 private:
+    SIM_LIBRARY::MODEL createModel( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
+                                    std::span<const wxString> aPins, REPORTER& aReporter,
+                                    bool aAllowRawFallback );
+
     std::vector<EMBEDDED_FILES*>                     m_embeddedFilesStack;  // no ownership
     const PROJECT*                                   m_project;             // no ownership
     bool                                             m_forceFullParse;

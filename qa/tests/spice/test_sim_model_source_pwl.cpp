@@ -32,8 +32,7 @@ public:
     std::string GeneratePwlItemLine( SIM_MODEL::TYPE aType, const std::string& aPwlValue ) const
     {
         WX_STRING_REPORTER          reporter;
-        std::vector<SCH_PIN*>       pins;
-        std::unique_ptr<SIM_MODEL>  model = SIM_MODEL::Create( aType, pins, reporter );
+        std::unique_ptr<SIM_MODEL>  model = SIM_MODEL::Create( aType, {}, reporter );
 
         BOOST_REQUIRE( model );
         model->SetParamValue( "pwl", aPwlValue );

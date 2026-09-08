@@ -23,6 +23,7 @@
 
 #include <wx/string.h>
 #include <map>
+#include <span>
 #include <utility>
 
 #include <sch_field.h>
@@ -407,17 +408,23 @@ public:
     static TYPE ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
                                     REPORTER& aReporter );
 
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );
+    static std::vector<wxString> PinNumbers( std::span<const SCH_PIN* const> aPins );
 
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, std::span<const wxString> aPins, REPORTER& aReporter );
+
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel, std::span<const wxString> aPins,
                                               REPORTER& aReporter );
 
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel, std::span<const wxString> aPins,
                                               const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
                                               REPORTER& aReporter );
 
     static std::unique_ptr<SIM_MODEL> Create( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
-                                              const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );
+                                              std::span<const wxString> aPins, REPORTER& aReporter );
+
+    static std::unique_ptr<SIM_MODEL> Create( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
+                                              std::span<const wxString> aPins, REPORTER& aReporter,
+                                              bool aAllowRawFallback );
 
     const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
     const SIM_MODEL_SERIALIZER& Serializer() const { return *m_serializer; }
@@ -444,7 +451,7 @@ public:
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
 
     void ReadDataFields( const std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
-                         const std::vector<SCH_PIN*>& aPins );
+                         std::span<const wxString> aPins );
 
     void WriteFields( std::vector<SCH_FIELD>& aFields, const SCH_SHEET_PATH* aSheetPath = nullptr,
                       const wxString& aVariantName = wxEmptyString ) const;
@@ -510,10 +517,17 @@ public:
 
     virtual void SwitchSingleEndedDiff( bool aDiff ) { };
 
+    /** aPins follows lexical symbol-pin number order, including duplicate numbers. */
+    static bool InferSimModel( const wxString& aPrefix, std::span<const wxString> aPins,
+                               std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
+                               SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
+                               wxString* aModelType, wxString* aModelParams, wxString* aPinMap );
+
     template <class T>
     static bool InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
-                               wxString* aModelType, wxString* aModelParams, wxString* aPinMap );
+                               wxString* aModelType, wxString* aModelParams, wxString* aPinMap,
+                               const SCH_SHEET_PATH* aSheetPath = nullptr );
 
     template <class T>
     static void MigrateSimModel( T& aSymbol, const PROJECT* aProject );
@@ -526,7 +540,7 @@ protected:
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
                std::unique_ptr<SIM_MODEL_SERIALIZER> aSerializer );
 
-    void createPins( const std::vector<SCH_PIN*>& aSymbolPins );
+    void createPins( std::span<const wxString> aSymbolPins );
 
     virtual int doFindParam( const std::string& aParamName ) const;
     virtual void doSetParamValue( int aParamIndex, const std::string& aValue );

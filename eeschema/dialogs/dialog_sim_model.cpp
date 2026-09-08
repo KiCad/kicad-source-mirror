@@ -230,7 +230,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             m_libraryPathText->ChangeValue( libraryFilename );
             m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, true, 0, reporter );
 
-            m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, true, 0, reporter );
+            m_libraryModelsMgr.CreateModel( nullptr, SIM_MODEL::PinNumbers( m_sortedPartPins ),
+                                             m_fields, true, 0, reporter );
 
             m_modelListBox->Clear();
             m_modelListBox->Append( _( "<unknown>" ) );
@@ -338,7 +339,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         if( m_rbBuiltinModel->GetValue() && type == m_curModelType )
         {
             reporter.Clear();
-            m_builtinModelsMgr.CreateModel( m_fields, true, 0, m_sortedPartPins, reporter );
+            m_builtinModelsMgr.CreateModel( m_fields, true, 0, SIM_MODEL::PinNumbers( m_sortedPartPins ), reporter );
 
             if( reporter.HasMessage() )
             {
@@ -348,7 +349,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         }
         else
         {
-            m_builtinModelsMgr.CreateModel( type, m_sortedPartPins, reporter );
+            m_builtinModelsMgr.CreateModel( type, SIM_MODEL::PinNumbers( m_sortedPartPins ), reporter );
         }
 
         SIM_MODEL::DEVICE_T deviceTypeT = SIM_MODEL::TypeInfo( type ).deviceType;
@@ -971,12 +972,15 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
 
     std::string modelName = GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, true, 0 );
 
+    const auto partPinNumbers = SIM_MODEL::PinNumbers( m_sortedPartPins );
+
     for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {
         if( baseModelName == modelName )
-            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, m_fields, true, 0, aReporter );
+            m_libraryModelsMgr.CreateModel( &baseModel, partPinNumbers,
+                                             m_fields, true, 0, aReporter );
         else
-            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, aReporter );
+            m_libraryModelsMgr.CreateModel( &baseModel, partPinNumbers, aReporter );
     }
 
     m_rbLibraryModel->SetValue( true );
@@ -1679,7 +1683,8 @@ void DIALOG_SIM_MODEL<T>::onWaveformChoice( wxCommandEvent& aEvent )
 
             try
             {
-                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields, true, 0, m_sortedPartPins );
+                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields(
+                        &m_fields, true, 0, SIM_MODEL::PinNumbers( m_sortedPartPins ) );
             }
             catch( IO_ERROR& err )
             {

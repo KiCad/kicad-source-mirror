@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE( ValuePreservedWhenNotStored )
     wxString               original = buildDialogFields( *symbol, fields );
 
     WX_STRING_REPORTER         reporter;
-    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( fields, false, 0, pins, reporter );
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( fields, false, 0, SIM_MODEL::PinNumbers( pins ), reporter );
 
     // Mirror DIALOG_SIM_MODEL::TransferDataFromWindow() with the checkbox unchecked.
     model->SetIsStoredInValue( false );
@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE( ValueReplacedWhenStored )
     wxString               original = buildDialogFields( *symbol, fields );
 
     WX_STRING_REPORTER         reporter;
-    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( fields, false, 0, pins, reporter );
+    std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( fields, false, 0, SIM_MODEL::PinNumbers( pins ), reporter );
 
     // Mirror DIALOG_SIM_MODEL::TransferDataFromWindow() with the checkbox checked. WriteFields()
     // replaces the placeholder with the model value and the restore is a no-op.
