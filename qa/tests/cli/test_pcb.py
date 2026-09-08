@@ -28,6 +28,27 @@ from conftest import KiTestFixture
 import sys
 
 
+@pytest.mark.parametrize("rule", [
+    '(rule test (condition "A.intersectsFrontCourtyard(B.Parent)") '
+    '(constraint assertion "A.Type == \'Graphic\'"))',
+    '(rule test (constraint assertion "A.intersectsFrontCourtyard(B.Parent)"))',
+])
+def test_pcb_drc_rejects_unavailable_second_item(kitest: KiTestFixture, tmp_path: Path, rule: str):
+    source = kitest.get_data_file_path("cli/basic_test/basic_test.kicad_pcb")
+    board = tmp_path / source.name
+    board.write_bytes(source.read_bytes())
+    board.with_suffix(".kicad_dru").write_text("(version 1)\n" + rule, encoding="utf-8")
+    report = tmp_path / "drc.json"
+
+    stdout, stderr, exitcode = utils.run_and_capture([
+        utils.kicad_cli(), "pcb", "drc", "--format", "json", "-o", str(report), str(board)
+    ])
+
+    assert exitcode == 3
+    assert "Item 'B' is not available" in stdout + stderr
+    assert not report.exists()
+
+
 def get_generated_path(kitest: KiTestFixture,
                        input_file: Path,
                        test_name: str,

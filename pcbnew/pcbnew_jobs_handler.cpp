@@ -2945,6 +2945,21 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     std::shared_ptr<DRC_ENGINE> drcEngine = brd->GetDesignSettings().m_DRCEngine;
     std::unique_ptr<NETLIST>    netlist = std::make_unique<NETLIST>();
 
+    if( !drcEngine->RulesValid() )
+    {
+        try
+        {
+            drcEngine->InitEngine( brd->GetDesignRulesPath() );
+        }
+        catch( const PARSE_ERROR& error )
+        {
+            m_reporter->Report( _( "DRC incomplete: could not compile custom design rules." )
+                                       + wxS( "\n" ) + error.What() + wxS( "\n" ),
+                               RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+    }
+
     drcEngine->SetDrawingSheet( getDrawingSheetProxyView( brd ) );
 
     // BOARD_COMMIT uses TOOL_MANAGER to grab the board internally so we must give it one
