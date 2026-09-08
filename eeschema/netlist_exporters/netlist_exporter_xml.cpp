@@ -48,7 +48,7 @@
 
 static bool sortPinsByNumber( SCH_PIN* aPin1, SCH_PIN* aPin2 );
 
-bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+bool NETLIST_EXPORTER_XML::writeNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
                                          REPORTER& aReporter )
 {
     // output the XML format netlist.
@@ -259,7 +259,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     getSheetComponentClasses();
 
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
-    SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
+    SCH_SHEET_LIST sheetList = m_exportSheets;
 
     // pcbnew resolves variants itself from the base design.
     const wxString exportVariant = ( aCtl & GNL_OPT_KICAD ) ? wxString() : m_schematic->GetCurrentVariant();
@@ -777,7 +777,7 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
     // makeLibParts() to emit the libparts section for CvPcb and other consumers.
 
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
-    SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
+    SCH_SHEET_LIST sheetList = m_exportSheets;
     std::map<SCH_SCREEN*, int> screenVisits;
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
@@ -965,7 +965,7 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
      */
     unsigned sheetIndex = 1;     // Human readable index
 
-    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
+    for( const SCH_SHEET_PATH& sheet : m_exportSheets )
     {
         screen = sheet.LastScreen();
 
@@ -1235,68 +1235,41 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     const wxString currentVariant = ( aCtl & GNL_OPT_KICAD ) ? wxString() : m_schematic->GetCurrentVariant();
 
-    for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
+    for( const EXPORT_NET& net : m_exportNets )
     {
-        wxString    net_name = key.Name;
-        NET_RECORD* net_record = nullptr;
+        wxString netName = ( aCtl & GNL_OPT_KICAD ) ? net.name : UnescapeString( net.name );
+        nets.emplace_back( new NET_RECORD( netName ) );
+        NET_RECORD* net_record = nets.back();
+        net_record->m_HasNoConnect = net.hasNoConnect;
 
-        if( !( aCtl & GNL_OPT_KICAD ) )
-            net_name = UnescapeString( net_name );
-
-        if( subgraphs.empty() )
-            continue;
-
-        nets.emplace_back( new NET_RECORD( net_name ) );
-        net_record = nets.back();
-
-        // Resolve the effective netclass by net name through NET_SETTINGS. This matches
-        // the lookup used by the schematic painter and avoids relying on the subgraph's
-        // driver item, which is not set for bus-member subgraphs and which falls back to
-        // the schematic's current sheet path when looking up its connection (the exporter
-        // is not tied to any particular sheet view).
         if( netSettings )
         {
-            std::shared_ptr<NETCLASS> nc = netSettings->GetEffectiveNetClass( key.Name );
-
-            if( nc )
-                net_record->m_Class = UnescapeString( nc->GetName() );
+            if( const auto netclass = netSettings->GetEffectiveNetClass( net.name ) )
+                net_record->m_Class = UnescapeString( netclass->GetName() );
         }
 
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        for( const auto& [pin, sheet] : net.pins )
         {
-            bool nc = subgraph->GetNoConnect() && subgraph->GetNoConnect()->Type() == SCH_NO_CONNECT_T;
-            const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
+            bool        forBOM = aCtl & GNL_OPT_BOM;
+            bool        forBoard = aCtl & GNL_OPT_KICAD;
 
-            if( nc )
-                net_record->m_HasNoConnect = true;
+            if( !symbol )
+                continue;
 
-            for( SCH_ITEM* item : subgraph->GetItems() )
+            if( forBOM && ( sheet.GetExcludedFromBOM( currentVariant )
+                           || symbol->ResolveExcludedFromBOM( &sheet, currentVariant ) ) )
             {
-                if( item->Type() == SCH_PIN_T )
-                {
-                    SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
-                    SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
-                    bool        forBOM = aCtl & GNL_OPT_BOM;
-                    bool        forBoard = aCtl & GNL_OPT_KICAD;
-
-                    if( !symbol )
-                        continue;
-
-                    if( forBOM && ( sheet.GetExcludedFromBOM( currentVariant )
-                                   || symbol->ResolveExcludedFromBOM( &sheet, currentVariant ) ) )
-                    {
-                        continue;
-                    }
-
-                    if( forBoard && ( sheet.GetExcludedFromBoard( currentVariant )
-                                     || symbol->ResolveExcludedFromBoard( &sheet, currentVariant ) ) )
-                    {
-                        continue;
-                    }
-
-                    net_record->m_Nodes.emplace_back( pin, sheet );
-                }
+                continue;
             }
+
+            if( forBoard && ( sheet.GetExcludedFromBoard( currentVariant )
+                             || symbol->ResolveExcludedFromBoard( &sheet, currentVariant ) ) )
+            {
+                continue;
+            }
+
+            net_record->m_Nodes.emplace_back( pin, sheet );
         }
     }
 
@@ -1418,7 +1391,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
 XNODE* NETLIST_EXPORTER_XML::makeNetChains()
 {
-    const auto& committed = m_schematic->ConnectionGraph()->GetCommittedNetChains();
+    const auto& committed = m_schematic->NetChains().GetCommittedNetChains();
 
     if( committed.empty() )
         return nullptr;
@@ -1526,7 +1499,7 @@ void NETLIST_EXPORTER_XML::getSheetComponentClasses()
 {
     m_sheetComponentClasses.clear();
 
-    SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
+    SCH_SHEET_LIST sheetList = m_exportSheets;
 
     auto getComponentClassFields =
             [&]( const std::vector<SCH_FIELD>& fields, const SCH_SHEET_PATH* sheetPath )

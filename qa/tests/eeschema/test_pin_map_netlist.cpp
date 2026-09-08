@@ -53,7 +53,8 @@ public:
 
     std::vector<PIN_INFO> Pins( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aPath )
     {
-        return CreatePinList( aSymbol, aPath, true );
+        CONNECTIVITY_SCOPE connectivity( *this );
+        return CreatePinList( aSymbol, aPath );
     }
 };
 } // namespace

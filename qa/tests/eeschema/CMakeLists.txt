@@ -48,6 +48,7 @@ set( QA_EESCHEMA_SRCS
     test_module.cpp
 
     # Base internal units (1=100nm) testing.
+    test_connectivity_export.cpp
     test_sch_biu.cpp
     test_diff_canvas_context.cpp
     test_mathplot_layers.cpp

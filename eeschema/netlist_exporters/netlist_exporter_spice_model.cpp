@@ -64,6 +64,8 @@ void NETLIST_EXPORTER_SPICE_MODEL::WriteTail( OUTPUTFORMATTER& aFormatter,
 bool NETLIST_EXPORTER_SPICE_MODEL::ReadSchematicAndLibraries( unsigned aNetlistOptions,
                                                               REPORTER& aReporter )
 {
+    CONNECTIVITY_SCOPE connectivity( *this );
+
     readPorts( aNetlistOptions );
 
     return NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( aNetlistOptions, aReporter );

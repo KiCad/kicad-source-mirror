@@ -22,7 +22,6 @@
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <string_utils.h>
-#include <connection_graph.h>
 #include <core/kicad_algo.h>
 #include <netlist.h>
 #include "netlist_exporter_allegro.h"
@@ -31,7 +30,7 @@
 #include <fmt.h>
 #include <fmt/ranges.h>
 
-bool NETLIST_EXPORTER_ALLEGRO::WriteNetlist( const wxString& aOutFileName,
+bool NETLIST_EXPORTER_ALLEGRO::writeNetlist( const wxString& aOutFileName,
                                              unsigned /* aNetlistOptions */,
                                              REPORTER& aReporter )
 {
@@ -138,7 +137,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
     m_referencesAlreadyFound.Clear();
     m_libParts.clear();
 
-    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
+    for( const SCH_SHEET_PATH& sheet : m_exportSheets )
     {
         m_schematic->SetCurrentSheet( sheet );
 
@@ -202,37 +201,17 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 
     std::vector<NET_RECORD*> nets;
 
-    for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
+    for( const EXPORT_NET& net : m_exportNets )
     {
-        wxString                                 net_name  = it.first.Name;
-        const std::vector<CONNECTION_SUBGRAPH*>& subgraphs = it.second;
-        NET_RECORD*                              net_record = nullptr;
+        nets.emplace_back( new NET_RECORD( net.name ) );
+        NET_RECORD* net_record = nets.back();
 
-        if( subgraphs.empty() )
-            continue;
-
-        nets.emplace_back( new NET_RECORD( net_name ) );
-        net_record = nets.back();
-
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        for( const auto& [pin, sheet] : net.pins )
         {
-            bool nc = subgraph->GetNoConnect() &&
-                      subgraph->GetNoConnect()->Type() == SCH_NO_CONNECT_T;
-            const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
+            SYMBOL* symbol = pin->GetParentSymbol();
 
-            for( SCH_ITEM* item : subgraph->GetItems() )
-            {
-                if( item->Type() == SCH_PIN_T )
-                {
-                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
-                    SYMBOL*  symbol = pin->GetParentSymbol();
-
-                    if( !symbol || symbol->GetExcludedFromBoard() )
-                        continue;
-
-                    net_record->m_Nodes.emplace_back( pin, sheet, nc );
-                }
-            }
+            if( symbol && !symbol->GetExcludedFromBoard() )
+                net_record->m_Nodes.emplace_back( pin, sheet );
         }
     }
 

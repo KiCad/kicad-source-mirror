@@ -70,7 +70,7 @@ NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC* aSchematic ) :
 }
 
 
-bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+bool NETLIST_EXPORTER_SPICE::writeNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
                                            REPORTER& aReporter )
 {
     try
@@ -131,6 +131,8 @@ void NETLIST_EXPORTER_SPICE::WriteTail( OUTPUTFORMATTER& aFormatter, unsigned aN
 bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions,
                                                         REPORTER& aReporter )
 {
+    CONNECTIVITY_SCOPE connectivity( *this );
+
     std::set<std::string> refNames; // Set of reference names to check for duplication.
     int                   ncCounter = 1;
     wxString              variant = m_schematic->GetCurrentVariant();
@@ -206,7 +208,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             try
             {
                 SPICE_ITEM            spiceItem;
-                std::vector<PIN_INFO> pins = CreatePinList( symbol, sheet, true );
+                std::vector<PIN_INFO> pins = CreatePinList( symbol, sheet );
 
                 for( const SCH_FIELD& field : symbol->GetFields() )
                 {

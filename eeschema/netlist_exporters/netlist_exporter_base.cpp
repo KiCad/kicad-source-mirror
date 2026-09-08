@@ -33,6 +33,100 @@
 #include <sch_screen.h>
 #include <sch_symbol.h>
 #include <schematic.h>
+#include <reporter.h>
+#include <richio.h>
+
+
+NETLIST_EXPORTER_BASE::CONNECTIVITY_SCOPE::CONNECTIVITY_SCOPE( NETLIST_EXPORTER_BASE& aExporter ) :
+        m_exporter( aExporter )
+{
+    if( m_exporter.m_connectivityDepth == 0 )
+        m_exporter.rebuildConnectivity();
+
+    ++m_exporter.m_connectivityDepth;
+}
+
+NETLIST_EXPORTER_BASE::CONNECTIVITY_SCOPE::~CONNECTIVITY_SCOPE()
+{
+    --m_exporter.m_connectivityDepth;
+}
+
+bool NETLIST_EXPORTER_BASE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+                                        REPORTER& aReporter )
+{
+    try
+    {
+        CONNECTIVITY_SCOPE connectivity( *this );
+        return writeNetlist( aOutFileName, aNetlistOptions, aReporter );
+    }
+    catch( const IO_ERROR& error )
+    {
+        aReporter.Report( error.What(), RPT_SEVERITY_ERROR );
+        return false;
+    }
+    catch( const std::exception& error )
+    {
+        aReporter.Report( wxString::Format( _( "Failed to export schematic: %s" ), error.what() ),
+                          RPT_SEVERITY_ERROR );
+        return false;
+    }
+}
+
+void NETLIST_EXPORTER_BASE::rebuildConnectivity()
+{
+    m_exportNets.clear();
+    m_exportItemNets.clear();
+    m_schematic->RebuildConnectivity();
+    m_exportSheets = m_schematic->Hierarchy();
+
+    for( const SCH_SHEET_PATH& path : m_exportSheets )
+    {
+        auto& itemNets = m_exportItemNets[path];
+        auto collect = [&]( SCH_ITEM* item )
+        {
+            if( SCH_CONNECTION* connection = item->Connection( &path ) )
+                itemNets.emplace( item->m_Uuid, connection->Name() );
+        };
+
+        for( SCH_ITEM* item : path.LastScreen()->Items() )
+        {
+            collect( item );
+            item->RunOnChildren( collect, RECURSE_MODE::NO_RECURSE );
+        }
+    }
+
+    for( const auto& [key, subgraphs] : m_schematic->ConnectionGraph()->GetNetMap() )
+    {
+        EXPORT_NET result{ key.Name, false, {} };
+
+        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        {
+            result.hasNoConnect |= subgraph->GetNoConnect()
+                                   && subgraph->GetNoConnect()->Type() == SCH_NO_CONNECT_T;
+            const SCH_SHEET_PATH& path = subgraph->GetSheet();
+
+            for( SCH_ITEM* item : subgraph->GetItems() )
+            {
+                if( item->Type() == SCH_PIN_T )
+                    result.pins.emplace_back( static_cast<SCH_PIN*>( item ), path );
+            }
+        }
+
+        m_exportNets.push_back( std::move( result ) );
+    }
+}
+
+std::optional<wxString> NETLIST_EXPORTER_BASE::itemNetName( const SCH_ITEM& aItem,
+                                                          const SCH_SHEET_PATH& aPath ) const
+{
+    const auto sheet = m_exportItemNets.find( aPath );
+
+    if( sheet == m_exportItemNets.end() )
+        return std::nullopt;
+
+    const auto found = sheet->second.find( aItem.m_Uuid );
+    return found == sheet->second.end() ? std::nullopt : std::optional( found->second );
+}
 
 
 // a "less than" test on two LIB_SYMBOLs (.m_name wxStrings)
@@ -127,8 +221,7 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem,
 
 
 std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
-                                                            const SCH_SHEET_PATH& aSheetPath,
-                                                            bool aKeepUnconnectedPins )
+                                                            const SCH_SHEET_PATH& aSheetPath )
 {
     std::vector<PIN_INFO> pins;
 
@@ -155,29 +248,15 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     {
         // Collect all pins for this reference designator by searching the entire design for
         // other parts with the same reference designator.
-        findAllUnitsOfSymbol( aSymbol, aSheetPath, pins, aKeepUnconnectedPins );
+        findAllUnitsOfSymbol( aSymbol, aSheetPath, pins );
     }
 
     else // GetUnitCount() <= 1 means one part per package
     {
-        CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
-
         for( const SCH_PIN* pin : aSymbol->GetPins( &aSheetPath ) )
         {
-            if( SCH_CONNECTION* conn = pin->Connection( &aSheetPath ) )
-            {
-                const wxString& netName = conn->Name();
-
-                if( !aKeepUnconnectedPins )     // Skip unconnected pins if requested
-                {
-                    CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, aSheetPath );
-
-                    if( !sg || sg->GetNoConnect() || sg->GetItems().size() < 2 )
-                        continue;
-                }
-
-                appendResolvedPins( pins, pin, aSheetPath, netName );
-            }
+            if( const auto netName = itemNetName( *pin, aSheetPath ) )
+                appendResolvedPins( pins, pin, aSheetPath, *netName );
         }
     }
 
@@ -333,41 +412,23 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
 
 void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
                                                   const SCH_SHEET_PATH& aSheetPath,
-                                                  std::vector<PIN_INFO>& aPins,
-                                                  bool aKeepUnconnectedPins )
+                                                  std::vector<PIN_INFO>& aPins )
 {
-    wxString ref = aSchSymbol->GetRef( &aSheetPath );
-    wxString ref2;
+    const wxString ref = aSchSymbol->GetRef( &aSheetPath );
 
-    CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
-
-    for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
+    for( const SCH_SHEET_PATH& sheet : m_exportSheets )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_SYMBOL* comp2 = static_cast<SCH_SYMBOL*>( item );
+            auto* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            ref2 = comp2->GetRef( &sheet );
-
-            if( ref2.CmpNoCase( ref ) != 0 )
+            if( symbol->GetRef( &sheet ).CmpNoCase( ref ) != 0 )
                 continue;
 
-            for( const SCH_PIN* pin : comp2->GetPins( &sheet ) )
+            for( const SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
-                if( SCH_CONNECTION* conn = pin->Connection( &sheet ) )
-                {
-                    const wxString& netName = conn->Name();
-
-                    if( !aKeepUnconnectedPins )     // Skip unconnected pins if requested
-                    {
-                        CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, sheet );
-
-                        if( !sg || sg->GetNoConnect() || sg->GetItems().size() < 2 )
-                            continue;
-                    }
-
-                    appendResolvedPins( aPins, pin, sheet, netName );
-                }
+                if( const auto netName = itemNetName( *pin, sheet ) )
+                    appendResolvedPins( aPins, pin, sheet, *netName );
             }
         }
     }

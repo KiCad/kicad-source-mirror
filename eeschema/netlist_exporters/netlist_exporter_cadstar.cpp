@@ -22,7 +22,6 @@
 #include <build_version.h>
 #include <confirm.h>
 
-#include <connection_graph.h>
 #include <string_utils.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
@@ -34,7 +33,7 @@
 /* Generate CADSTAR net list. */
 static wxString StartLine( wxT( "." ) );
 
-bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
+bool NETLIST_EXPORTER_CADSTAR::writeNetlist( const wxString& aOutFileName,
                                              unsigned /* aNetlistOptions */,
                                              REPORTER& aReporter )
 {
@@ -65,7 +64,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
         // Create netlist footprints section
         m_referencesAlreadyFound.Clear();
 
-        for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
+        for( const SCH_SHEET_PATH& sheet : m_exportSheets )
         {
             // The rtree returns items in a non-deterministic order (platform-dependent)
             // Therefore we need to sort them before outputting to ensure file stability for version
@@ -150,25 +149,11 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 
         std::vector<std::pair<wxString, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>>> all_nets;
 
-        for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
+        for( const EXPORT_NET& net : m_exportNets )
+            all_nets.emplace_back( wxString::Format( "\"%s\"", net.name ), net.pins );
+
+        for( auto& [netName, sorted_items] : all_nets )
         {
-            wxString netName;
-            netName.Printf( wxT( "\"%s\"" ), key.Name );
-
-            all_nets.emplace_back( netName, std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>{} );
-            std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>& sorted_items = all_nets.back().second;
-
-            for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
-            {
-                SCH_SHEET_PATH sheet = subgraph->GetSheet();
-
-                for( SCH_ITEM* item : subgraph->GetItems() )
-                {
-                    if( item->Type() == SCH_PIN_T )
-                        sorted_items.emplace_back( static_cast<SCH_PIN*>( item ), sheet );
-                }
-            }
-
             // Intra-net ordering: Ref des, then pin name
             std::sort( sorted_items.begin(), sorted_items.end(),
                     []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )

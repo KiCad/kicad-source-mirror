@@ -35,7 +35,7 @@
 #include "netlist_exporter_orcadpcb2.h"
 
 
-bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
+bool NETLIST_EXPORTER_ORCADPCB2::writeNetlist( const wxString& aOutFileName,
                                                unsigned /* aNetlistOptions */,
                                                REPORTER& aReporter )
 {
@@ -63,7 +63,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
         // Create netlist footprints section
         m_referencesAlreadyFound.Clear();
 
-        for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
+        for( const SCH_SHEET_PATH& sheet : m_exportSheets )
         {
             // The rtree returns items in a non-deterministic order (platform-dependent)
             // Therefore we need to sort them before outputting to ensure file stability for version
@@ -91,7 +91,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
                 if( symbol->GetExcludedFromBoard() )
                     continue;
 
-                std::vector<PIN_INFO> pins = CreatePinList( symbol, sheet, true );
+                std::vector<PIN_INFO> pins = CreatePinList( symbol, sheet );
 
                 if( symbol->GetLibSymbolRef()
                       && symbol->GetLibSymbolRef()->GetFPFilters().GetCount() != 0  )

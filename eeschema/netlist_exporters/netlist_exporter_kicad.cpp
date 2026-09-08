@@ -29,7 +29,7 @@
 #include <xnode.h>
 
 
-bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
+bool NETLIST_EXPORTER_KICAD::writeNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
                                            REPORTER& aReporter )
 {
     try
@@ -51,6 +51,7 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 
 void NETLIST_EXPORTER_KICAD::Format( OUTPUTFORMATTER* aOut, int aCtl )
 {
+    CONNECTIVITY_SCOPE connectivity( *this );
     std::unique_ptr<XNODE> xroot( makeRoot( aCtl ) );
 
     xroot->Format( aOut );
