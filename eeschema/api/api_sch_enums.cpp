@@ -172,6 +172,7 @@ LIBRENTRYOPTIONS FromProtoEnum( types::SchematicSymbolType aValue )
 {
     switch( aValue )
     {
+    case types::SchematicSymbolType::SST_UNKNOWN:
     case types::SchematicSymbolType::SST_NORMAL:       return LIBRENTRYOPTIONS::ENTRY_NORMAL;
     case types::SchematicSymbolType::SST_GLOBAL_POWER: return LIBRENTRYOPTIONS::ENTRY_GLOBAL_POWER;
     case types::SchematicSymbolType::SST_LOCAL_POWER:  return LIBRENTRYOPTIONS::ENTRY_LOCAL_POWER;
@@ -205,6 +206,7 @@ SYMBOL_ORIENTATION_PROP FromProtoEnum( types::SchematicSymbolOrientation aValue 
 {
     switch( aValue )
     {
+    case types::SchematicSymbolOrientation::SSO_UNKNOWN:
     case types::SchematicSymbolOrientation::SSO_0:   return SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_0;
     case types::SchematicSymbolOrientation::SSO_90:  return SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_90;
     case types::SchematicSymbolOrientation::SSO_180: return SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_180;
@@ -239,8 +241,9 @@ PIN_ORIENTATION FromProtoEnum( types::SchematicPinOrientation aValue )
 {
     switch( aValue )
     {
-    case types::SchematicPinOrientation::SPO_RIGHT:     return PIN_ORIENTATION::PIN_RIGHT;
+    case types::SchematicPinOrientation::SPO_UNKNOWN:
     case types::SchematicPinOrientation::SPO_LEFT:      return PIN_ORIENTATION::PIN_LEFT;
+    case types::SchematicPinOrientation::SPO_RIGHT:     return PIN_ORIENTATION::PIN_RIGHT;
     case types::SchematicPinOrientation::SPO_UP:        return PIN_ORIENTATION::PIN_UP;
     case types::SchematicPinOrientation::SPO_DOWN:      return PIN_ORIENTATION::PIN_DOWN;
 
@@ -278,6 +281,7 @@ GRAPHIC_PINSHAPE FromProtoEnum( types::SchematicPinShape aValue )
 {
     switch( aValue )
     {
+    case types::SchematicPinShape::SPS_UNKNOWN:
     case types::SchematicPinShape::SPS_LINE:                return GRAPHIC_PINSHAPE::LINE;
     case types::SchematicPinShape::SPS_INVERTED:            return GRAPHIC_PINSHAPE::INVERTED;
     case types::SchematicPinShape::SPS_CLOCK:               return GRAPHIC_PINSHAPE::CLOCK;
