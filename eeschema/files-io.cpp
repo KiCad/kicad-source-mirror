@@ -735,6 +735,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         progressReporter.KeepRefreshing();
 
         RecalculateConnections( &dummy, GLOBAL_CLEANUP, &progressReporter );
+        dummy.Push( _( "Schematic Cleanup" ),
+                    SKIP_UNDO | SKIP_SET_DIRTY | SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
 
         // Migrate conflicting bus definitions, but only for files old enough to store them.
         // The connection graph must be rebuilt first so GetBusesNeedingMigration() can see the
@@ -759,6 +761,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             // Relabeling the conflicting buses changes connectivity, so rebuild it.
             RecalculateConnections( &dummy, GLOBAL_CLEANUP, &progressReporter );
+            dummy.Push( _( "Schematic Cleanup" ),
+                        SKIP_UNDO | SKIP_SET_DIRTY | SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
         }
 
         if( schematic.HasSymbolFieldNamesWithWhiteSpace() )

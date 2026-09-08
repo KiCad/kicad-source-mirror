@@ -32,6 +32,7 @@
 #include <connection_graph.h>
 
 #include <functional>
+#include <memory>
 #include <set>
 #include <wx/log.h>
 
@@ -168,6 +169,7 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 
 void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 {
+
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST   undoList;
     KIGFX::VIEW*        view = m_toolMgr->GetView();
@@ -179,11 +181,17 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     bool                itemsDeselected = false;
     bool                selectedModified = false;
     bool                dirtyConnectivity = false;
+    bool                refreshConnectivity = false;
     bool                refreshHierarchy = false;
     SCH_CLEANUP_FLAGS   connectivityCleanUp = NO_CLEANUP;
 
     if( Empty() )
+    {
         return;
+    }
+
+    if( !frame )
+        aCommitFlags |= SKIP_UNDO;
 
     undoList.SetDescription( aMessage );
 
@@ -191,6 +199,33 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     std::vector<SCH_ITEM*> bulkAddedItems;
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
+    std::vector<std::unique_ptr<SCH_ITEM>> cleanupRemovedItems;
+
+    auto notifyModel = [&]()
+    {
+        if( !schematic )
+            return;
+
+
+        if( !bulkAddedItems.empty() )
+            schematic->OnItemsAdded( bulkAddedItems );
+
+
+        if( !bulkRemovedItems.empty() )
+            schematic->OnItemsRemoved( bulkRemovedItems );
+
+
+        if( !itemsChanged.empty() )
+            schematic->OnItemsChanged( itemsChanged );
+
+
+        if( refreshHierarchy )
+            schematic->RefreshHierarchy();
+
+        bulkAddedItems.clear();
+        bulkRemovedItems.clear();
+        itemsChanged.clear();
+    };
 
     auto updateConnectivityFlag =
             [&]( SCH_ITEM* schItem )
@@ -203,7 +238,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                     if( connectivityCleanUp == NO_CLEANUP )
                         connectivityCleanUp = LOCAL_CLEANUP;
 
-                    // Do a full rebuild of the connectivity if there is a sheet in the commit.
                     if( schItem->Type() == SCH_SHEET_T )
                         connectivityCleanUp = GLOBAL_CLEANUP;
                 }
@@ -213,6 +247,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     // add it to the commit anyway.
     if( enteredGroup && frame )
         Modify( enteredGroup, frame->GetScreen() );
+
 
     // Handle wires with Hop Over shapes (view update only; skipped headless):
     if( frame )
@@ -231,25 +266,50 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     }
 
 
-    // Modify() appends to m_entries, so collect first and stage after the loop.
-    std::vector<std::pair<EDA_GROUP*, BASE_SCREEN*>> removedItemGroups;
-
-    for( COMMIT_LINE& entry : m_entries )
+    auto stageRemovedGroups = [&]()
     {
-        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( entry.m_item );
-        int       changeType = entry.m_type & CHT_TYPE;
+        // Modify() appends to m_entries, so collect before staging group changes.
+        std::vector<std::pair<EDA_GROUP*, BASE_SCREEN*>> removedItemGroups;
 
-        wxCHECK2( schItem, continue );
+        for( COMMIT_LINE& entry : m_entries )
+        {
+            SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( entry.m_item );
+            int       changeType = entry.m_type & CHT_TYPE;
 
-        if( changeType == CHT_REMOVE && schItem->GetParentGroup() )
-            removedItemGroups.emplace_back( schItem->GetParentGroup(), entry.m_screen );
-    }
+            wxCHECK2( schItem, continue );
 
-    for( const auto& [group, screen] : removedItemGroups )
-        Modify( group->AsEdaItem(), screen );
+            if( changeType == CHT_REMOVE && schItem->GetParentGroup() )
+                removedItemGroups.emplace_back( schItem->GetParentGroup(), entry.m_screen );
+        }
 
-    for( COMMIT_LINE& entry : m_entries )
+        for( const auto& [group, screen] : removedItemGroups )
+            Modify( group->AsEdaItem(), screen );
+    };
+    stageRemovedGroups();
+    bool cleanupPending = true;
+    std::set<SCH_SCREEN*> touchedScreens;
+
+    for( size_t index = 0; ; )
     {
+        if( index == m_entries.size() )
+        {
+            if( !cleanupPending || !dirtyConnectivity || ( aCommitFlags & SKIP_CONNECTIVITY ) || !schematic )
+                break;
+
+            cleanupPending = false;
+            notifyModel();
+
+            // Cleanup can replace a MODIFY with REMOVE. Keep its staging separate from processed
+            // entries while retaining their undo records, so both phases form one user action.
+            clear();
+            schematic->CleanUpConnections( this, connectivityCleanUp );
+
+            stageRemovedGroups();
+            index = 0;
+            continue;
+        }
+
+        COMMIT_LINE& entry = m_entries[index++];
         int         changeType = entry.m_type & CHT_TYPE;
         int         changeFlags = entry.m_type & CHT_FLAGS;
         SCH_ITEM*   schItem = dynamic_cast<SCH_ITEM*>( entry.m_item );
@@ -257,6 +317,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
         wxCHECK2( schItem, continue );
         wxCHECK2( screen, continue );
+
+        touchedScreens.insert( screen );
 
         if( !schematic )
             schematic = schItem->Schematic();
@@ -336,6 +398,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 break;
             }
 
+            if( ( aCommitFlags & SKIP_UNDO ) && ( !cleanupPending || ( aCommitFlags & DELETE_REMOVED_ITEMS ) ) )
+                cleanupRemovedItems.emplace_back( schItem );
+
             if( EDA_GROUP* group = schItem->GetParentGroup() )
                 group->RemoveItem( schItem );
 
@@ -372,6 +437,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             {
                 updateConnectivityFlag( schItem );
             }
+            else if( schItem->IsConnectable() && schItem->IsConnectivityDirty() )
+            {
+                // Move previews can change dangling flags without changing the final geometry.
+                refreshConnectivity = true;
+            }
+
 
             if( schItem->Type() == SCH_SYMBOL_T )
             {
@@ -447,55 +518,37 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         }
     }
 
-    if( schematic )
-    {
-        if( bulkAddedItems.size() > 0 )
-            schematic->OnItemsAdded( bulkAddedItems );
-
-        if( bulkRemovedItems.size() > 0 )
-            schematic->OnItemsRemoved( bulkRemovedItems );
-
-        if( itemsChanged.size() > 0 )
-            schematic->OnItemsChanged( itemsChanged );
-
-        if( refreshHierarchy )
-        {
-            schematic->RefreshHierarchy();
-
-            if( frame )
-                frame->UpdateHierarchyNavigator();
-        }
-    }
+    notifyModel();
 
     // Mark the touched screens dirty so that the state is tracked even in headless API server mode
     if( !( aCommitFlags & SKIP_SET_DIRTY ) )
     {
-        std::set<SCH_SCREEN*> dirtyScreens;
-
-        for( COMMIT_LINE& entry : m_entries )
-        {
-            if( SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( entry.m_screen ) )
-                dirtyScreens.insert( screen );
-        }
-
-        for( SCH_SCREEN* screen : dirtyScreens )
+        for( SCH_SCREEN* screen : touchedScreens )
             screen->SetContentModified();
     }
 
     if( !( aCommitFlags & SKIP_UNDO ) && frame && undoList.GetCount() > 0 )
         frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false );
 
-    if( dirtyConnectivity )
+    cleanupRemovedItems.clear();
+
+    if( ( dirtyConnectivity || refreshConnectivity ) && !( aCommitFlags & SKIP_CONNECTIVITY ) )
     {
         wxLogTrace( wxS( "CONN_PROFILE" ),
-                    wxS( "SCH_COMMIT::pushSchEdit() %s clean up connectivity rebuild." ),
-                    connectivityCleanUp == LOCAL_CLEANUP ? wxS( "local" ) : wxS( "global" ) );
+                    wxS( "SCH_COMMIT::pushSchEdit() connectivity refresh, cleanup=%d." ),
+                    static_cast<int>( connectivityCleanUp ) );
 
         if( frame )
-            frame->RecalculateConnections( this, connectivityCleanUp );
+            frame->RecalculateConnections( this, connectivityCleanUp, nullptr, true );
         else if( schematic )
-            schematic->RecalculateConnections( this, connectivityCleanUp, m_toolMgr );
+            schematic->RecalculateConnections( this, connectivityCleanUp, m_toolMgr,
+                                               nullptr, nullptr, nullptr, nullptr, true );
     }
+
+
+    if( refreshHierarchy && frame )
+        frame->UpdateHierarchyNavigator();
+
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
 
@@ -504,6 +557,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
 }
 
 

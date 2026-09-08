@@ -310,10 +310,9 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     if( aCalculateConnectivity )
     {
         SCH_COMMIT dummyCommit( toolManager );
-        schematic->RecalculateConnections( &dummyCommit, GLOBAL_CLEANUP, toolManager );
+        schematic->CleanUpConnections( &dummyCommit, GLOBAL_CLEANUP );
+        dummyCommit.Push( _( "Schematic Cleanup" ), SKIP_UNDO | SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
     }
-
-    schematic->ResolveERCExclusionsPostUpdate();
 
     schematic->SetSheetNumberAndCount();
     schematic->RecomputeIntersheetRefs();
@@ -325,7 +324,9 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     }
 
     if( aCalculateConnectivity )
-        schematic->ConnectionGraph()->Recalculate( sheetList, true );
+        schematic->RebuildConnectivity();
+
+    schematic->ResolveERCExclusionsPostUpdate();
 
     return schematic.release();
 }

@@ -613,8 +613,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             }
         }
 
-        if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-            RecalculateConnections( nullptr, GLOBAL_CLEANUP );
+        PrepareForNetlist();
 
         NETLIST_EXPORTER_KICAD exporter( &Schematic() );
         STRING_FORMATTER formatter;
@@ -622,6 +621,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         exporter.SetKiway( &Kiway() );
         exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
 
+        RefreshConnectivity( true );
         payload = formatter.GetString();
         break;
     }

@@ -22,6 +22,12 @@
 #include <sch_commit.h>
 #include <sch_group.h>
 #include <sch_text.h>
+#include <sch_screen.h>
+#include <sch_label.h>
+#include <schematic.h>
+#include <connection_graph.h>
+#include <schematic_utils/schematic_file_util.h>
+#include <settings/settings_manager.h>
 
 BOOST_AUTO_TEST_SUITE( SchCommit )
 
@@ -55,6 +61,40 @@ BOOST_AUTO_TEST_CASE( ClearsSelectedByDragFlag )
 
     BOOST_CHECK( text.IsSelected() );
     BOOST_CHECK_EQUAL( commit.GetStatus( &text ), CHT_MODIFY );
+}
+
+BOOST_AUTO_TEST_CASE( CommitCanDeferConnectivityUntilExplicitRebuild )
+{
+    SETTINGS_MANAGER settings;
+    std::unique_ptr<SCHEMATIC> schematic;
+    KI_TEST::LoadSchematic( settings, "netlists/multinetclasses/multinetclasses", schematic );
+    const SCH_SHEET_PATH path = schematic->Hierarchy().front();
+    SCH_SCREEN* screen = path.LastScreen();
+    SCH_LABEL* label = nullptr;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_LABEL_T ) )
+    {
+        auto* candidate = static_cast<SCH_LABEL*>( item );
+
+        if( candidate->GetText() == "NET_2" )
+            label = candidate;
+    }
+
+    BOOST_REQUIRE( label );
+    schematic->ConnectionGraph()->Reset();
+    TOOL_MANAGER manager;
+    manager.SetEnvironment( schematic.get(), nullptr, nullptr, nullptr, nullptr );
+    SCH_COMMIT commit( &manager );
+    commit.Modify( label, screen );
+    label->SetText( "DEFERRED_CONNECTIVITY" );
+    commit.Push( "Rename label", SKIP_UNDO | SKIP_CONNECTIVITY );
+    BOOST_CHECK( commit.Empty() );
+    BOOST_CHECK_EQUAL( label->GetText(), "DEFERRED_CONNECTIVITY" );
+    BOOST_CHECK( schematic->ConnectionGraph()->GetNetMap().empty() );
+    schematic->RecalculateConnections( nullptr, GLOBAL_CLEANUP, &manager );
+    const auto name = label->GetConnectionName( &path );
+    BOOST_REQUIRE( name );
+    BOOST_CHECK_EQUAL( *name, "/DEFERRED_CONNECTIVITY" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

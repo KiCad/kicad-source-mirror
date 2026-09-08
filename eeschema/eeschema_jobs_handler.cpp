@@ -1622,6 +1622,7 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
         {
             SCH_COMMIT dummyCommit( toolManager.get() );
             schematic->RecalculateConnections( &dummyCommit, GLOBAL_CLEANUP, toolManager.get() );
+            dummyCommit.Push( _( "Schematic Cleanup" ), SKIP_UNDO | SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
         }
 
         schematic->SetSheetNumberAndCount();

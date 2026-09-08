@@ -548,6 +548,7 @@ public:
 
     /**
      * Generate the connection data for the entire schematic hierarchy.
+     * @param aCleanupDone the commit already applied cleanup; flags still select the rebuild scope.
      */
     void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                                  TOOL_MANAGER* aToolManager,

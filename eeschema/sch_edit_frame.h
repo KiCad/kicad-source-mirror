@@ -808,9 +808,13 @@ public:
 
     /**
      * Generate the connection data for the entire schematic hierarchy.
+     * @param aCleanupDone the commit already applied cleanup; flags still select the rebuild scope.
      */
     void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
-                                 PROGRESS_REPORTER* aProgressReporter = nullptr );
+                                 PROGRESS_REPORTER* aProgressReporter = nullptr, bool aCleanupDone = false );
+
+    /** Commit source cleanup before the exporter's full connectivity rebuild. */
+    void PrepareForNetlist();
 
     /** Refresh connectivity-dependent display state after a model rebuild. */
     void RefreshConnectivity( bool aForce = false );

@@ -53,9 +53,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     if( !ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
         return false;
 
-    // If we are using the new connectivity, make sure that we do a full-rebuild
-    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-        RecalculateConnections( nullptr, GLOBAL_CLEANUP );
+    PrepareForNetlist();
 
     bool res = true;
     bool executeCommandLine = false;
@@ -125,6 +123,8 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         res = helper->WriteNetlist( fileName, aNetlistOptions, devnull );
 
     delete helper;
+
+    RefreshConnectivity( true );
 
     // If user provided a plugin command line, execute it.
     if( executeCommandLine && res && !m_netListerCommand.IsEmpty() )
@@ -235,6 +235,7 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage, bool* aUs
 
 void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 {
+    PrepareForNetlist();
     std::string packet;
 
     {
@@ -250,5 +251,6 @@ void SCH_EDIT_FRAME::sendNetlistToCvpcb()
         // current sheet setting before sending expressmail
     }
 
+    RefreshConnectivity( true );
     Kiway().ExpressMail( FRAME_CVPCB, MAIL_EESCHEMA_NETLIST, packet, this );
 }

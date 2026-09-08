@@ -1622,8 +1622,6 @@ void SCH_EDIT_FRAME::OnOpenCvpcb()
             player->Show( true );
         }
 
-        // Ensure the netlist (mainly info about symbols) is up to date
-        RecalculateConnections( nullptr, GLOBAL_CLEANUP );
         sendNetlistToCvpcb();
 
         player->Raise();
@@ -1898,7 +1896,7 @@ void SCH_EDIT_FRAME::initScreenZoom()
 
 
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
-                                             PROGRESS_REPORTER* aProgressReporter )
+                                             PROGRESS_REPORTER* aProgressReporter, bool aCleanupDone )
 {
     wxString highlightedConn = GetHighlightedConnection();
     bool     hasHighlightedConn = !highlightedConn.IsEmpty();
@@ -1932,9 +1930,18 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                                         GetCanvas()->GetView(),
                                         &changeHandler,
                                         m_undoList.m_CommandsList.empty() ? nullptr
-                                                                          : m_undoList.m_CommandsList.back() );
+                                                                          : m_undoList.m_CommandsList.back(),
+                                        aCleanupDone );
 
     RefreshConnectivity();
+}
+
+
+void SCH_EDIT_FRAME::PrepareForNetlist()
+{
+    SCH_COMMIT cleanup( m_toolManager );
+    Schematic().CleanUpConnections( &cleanup, GLOBAL_CLEANUP );
+    cleanup.Push( _( "Schematic Cleanup" ), SKIP_CONNECTIVITY );
 }
 
 
