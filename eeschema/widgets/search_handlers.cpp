@@ -33,6 +33,9 @@
 
 void SCH_SEARCH_HANDLER::ActivateItem( long aItemRow )
 {
+    if( !m_resultsValid || aItemRow < 0 || aItemRow >= static_cast<long>( m_hitlist.size() ) )
+        return;
+
     std::vector<long> item = { aItemRow };
     SelectItems( item );
 
@@ -47,6 +50,7 @@ void SCH_SEARCH_HANDLER::FindAll( const std::function<bool( SCH_ITEM*, SCH_SHEET
 
     m_hitlist.clear();
 
+    m_resultsValid = false;
     screens.BuildClientSheetPathList();
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
@@ -63,6 +67,8 @@ void SCH_SEARCH_HANDLER::FindAll( const std::function<bool( SCH_ITEM*, SCH_SHEET
                 m_hitlist.push_back( { item, sheet } );
         }
     }
+
+    m_resultsValid = true;
 }
 
 
@@ -102,6 +108,10 @@ void SCH_SEARCH_HANDLER::Sort( int aCol, bool aAscending, std::vector<long>* aSe
 
 void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
+    // Queued list events must not select items from an invalidated search.
+    if( !m_resultsValid )
+        return;
+
     EDA_ITEMS                   selectedItems;
     std::vector<SCH_SEARCH_HIT> selectedHits;
 
@@ -222,6 +232,8 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
     if( !sym )
         return wxEmptyString;
 
+    const wxString variant = m_frame->Schematic().GetCurrentVariant();
+
     if( aCol == 0 )
         return sym->GetRef( aHit.sheetPath, true );
     else if( aCol == 1 )
@@ -235,15 +247,15 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
     else if( aCol == 5 )
         return m_frame->MessageTextFromValue( sym->GetPosition().y );
     else if( aCol == 6 )
-        return sym->ResolveExcludedFromSim() ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveExcludedFromSim( aHit.sheetPath, variant ) ? wxS( "X" ) : wxS( " " );
     else if( aCol == 7 )
-        return sym->ResolveExcludedFromBOM() ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveExcludedFromBOM( aHit.sheetPath, variant ) ? wxS( "X" ) : wxS( " " );
     else if( aCol == 8 )
-        return sym->ResolveExcludedFromBoard() ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveExcludedFromBoard( aHit.sheetPath, variant ) ? wxS( "X" ) : wxS( " " );
     else if( aCol == 9 )
-        return sym->ResolveExcludedFromPosFiles() ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveExcludedFromPosFiles( aHit.sheetPath, variant ) ? wxS( "X" ) : wxS( " " );
     else if( aCol == 10 )
-        return sym->ResolveDNP( aHit.sheetPath, m_frame->Schematic().GetCurrentVariant() ) ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveDNP( aHit.sheetPath, variant ) ? wxS( "X" ) : wxS( " " );
     else if( aCol == 11 )
         return sym->GetLibId().Format();
     else if( aCol == 12 )

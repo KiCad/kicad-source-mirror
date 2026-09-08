@@ -40,11 +40,17 @@ public:
             m_frame( aFrame )
     {}
 
+    void InvalidateResults()
+    {
+        m_resultsValid = false;
+        m_hitlist.clear();
+    }
+
     void ActivateItem( long aItemRow ) override;
 
     wxString GetResultCell( int aRow, int aCol ) override
     {
-        if( m_frame->IsClosing() )
+        if( !m_resultsValid || m_frame->IsClosing() )
             return wxEmptyString;
 
         if( aRow >= static_cast<int>( m_hitlist.size() ) )
@@ -68,6 +74,7 @@ protected:
 protected:
     SCH_EDIT_FRAME*             m_frame;
     std::vector<SCH_SEARCH_HIT> m_hitlist;
+    bool                       m_resultsValid = false;
 };
 
 class SYMBOL_SEARCH_HANDLER : public SCH_SEARCH_HANDLER
