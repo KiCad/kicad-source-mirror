@@ -52,6 +52,7 @@
 #include <kiplatform/policy.h>
 #include <build_version.h>
 #include <jobs/scratch_doc.h>
+#include <kiid.h>
 #include <kiway.h>
 #include <kiway_mail.h>
 #include <launch_ext.h>
@@ -61,6 +62,10 @@
 #include <project/project_local_settings.h>
 #include <sch_file_versions.h>
 #include <settings/common_settings.h>
+#include <widgets/mdw_status_pill.h>
+#include <mdw/client/mdw_client.h>
+#include <mdw/client/mdw_event_notice.h>
+#include <mdw/client/mdw_source.h>
 #include <settings/settings_manager.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
@@ -179,14 +184,34 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // is for Reporter (currently used by archiver/unarchiver and PCM).
     // Note: this is a KISTATUSBAR status bar. Therefore the specified number of fields
     // is the extra number of fields, not the full field count.
-    // We need here 2 fields: the extra fiels to display the project name, and another field
-    // to display a info (specific to Windows) using the FIELD_OFFSET_BGJOB_TEXT id offset (=1)
-    // So the extra field count is 1
-    CreateStatusBar( 2 );
+    // We need here 3 fields for the project name, the Design Workspace pill and an info field
+    // (specific to Windows) that must stay the last one so a background job label clears it
+    CreateStatusBar( 3 );
     Pgm().GetBackgroundJobMonitor().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().GetNotificationsManager().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().RegisterLibraryLoadStatusBar( (KISTATUSBAR*) GetStatusBar() );
     GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
+
+    m_workspacePill = new MDW_STATUS_PILL( GetStatusBar() );
+    m_workspacePill->PlaceInStatusBar( 1 );
+    m_workspacePill->SetShowInVersionControl(
+            [this]()
+            {
+                if( !GitCommitPaneShown() )
+                    ToggleGitCommitPane();
+            } );
+
+    m_backendEvents = MDW_CLIENT::Get().Subscribe( this,
+                                                   [this]( const MDW_EVENT& aEvent )
+                                                   {
+                                                       onBackendEvent( aEvent );
+                                                   } );
+
+    m_connections = MDW_CLIENT::Get().SubscribeConnections( this,
+                                                            [this]( const wxString& aProjectPath )
+                                                            {
+                                                                onConnectionChanged( aProjectPath );
+                                                            } );
 
     // Give an icon
     wxIcon icon;
@@ -372,6 +397,9 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     Pgm().GetNotificationsManager().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().UnregisterLibraryLoadStatusBar( (KISTATUSBAR*) GetStatusBar() );
 
+    m_backendEvents.Reset();
+    m_connections.Reset();
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
@@ -447,18 +475,22 @@ wxStatusBar* KICAD_MANAGER_FRAME::OnCreateStatusBar( int number, long style, wxW
         sbFieldSizes[i] = sb->GetStatusWidth( static_cast<int>( i ) );
 
     // Field 0 (the project path) is the only stretchable field so it uses all the leftover width
-    // before ellipsizing. Field 1 gets a fixed width sized to its watcher text; longer content
+    // before ellipsizing. Field 2 gets a fixed width sized to its watcher text; longer content
     // (archive progress) is ellipsized rather than allowed to steal the path's width.
     if( sbFieldCnt > 0 )
         sbFieldSizes[0] = -1;
 
+    // The workspace pill widens its field only while it is shown
     if( sbFieldCnt > 1 )
+        sbFieldSizes[1] = 0;
+
+    if( sbFieldCnt > 2 )
     {
         int margin = KIUI::GetTextSize( wxT( "XX" ), sb ).x;
         int watcherWidth = std::max( KIUI::GetTextSize( _( "Local path: monitoring folder changes" ), sb ).x,
                                      KIUI::GetTextSize( _( "Network path: not monitoring folder changes" ), sb ).x );
 
-        sbFieldSizes[1] = watcherWidth + margin;
+        sbFieldSizes[2] = watcherWidth + margin;
     }
 
     sb->SetStatusWidths( sbFieldCnt, sbFieldSizes.data() );
@@ -669,6 +701,73 @@ void KICAD_MANAGER_FRAME::ReCreateTreePrj()
 }
 
 
+void KICAD_MANAGER_FRAME::onBackendEvent( const MDW_EVENT& aEvent )
+{
+    std::shared_ptr<MDW_SOURCE> source = MDW_CLIENT::Get().ProjectSource();
+    const wxString              project = source ? source->Info().locator : wxString();
+
+    if( std::optional<MDW_NOTICE> notice = MdwEventNotice( aEvent, project ) )
+        Pgm().GetNotificationsManager().CreateOrUpdate( notice->key, notice->title, notice->message );
+}
+
+
+void KICAD_MANAGER_FRAME::onConnectionChanged( const wxString& aProjectPath )
+{
+    if( aProjectPath != Prj().GetProjectFullName() )
+        return;
+
+    MDW_CONNECTION phase = MDW_CLIENT::Get().ProjectConnection( Prj() ).status.phase;
+
+    // A restarted backend reconnects before it settles, so CONNECTING is no outcome yet
+    if( phase == MDW_CONNECTION::CONNECTING )
+        return;
+
+    bool restarting = m_restartingProject == aProjectPath;
+    m_restartingProject = phase == MDW_CONNECTION::BACKEND_RESTARTING ? aProjectPath : wxString();
+
+    NOTIFICATIONS_MANAGER& notices = Pgm().GetNotificationsManager();
+
+    // Restart from the strip reconnects without passing through BACKEND_RESTARTING
+    if( phase == MDW_CONNECTION::ONLINE )
+        notices.Remove( wxS( "mdw-backend-stopped" ) );
+
+    if( restarting && phase == MDW_CONNECTION::ONLINE )
+    {
+        notices.CreateOrUpdate( wxS( "mdw-backend-reconnected" ), _( "Design Workspace" ),
+                                _( "The workspace backend stopped and has been reconnected." ) );
+    }
+    else if( restarting && phase == MDW_CONNECTION::BACKEND_STOPPED )
+    {
+        notices.Remove( wxS( "mdw-backend-reconnected" ) );
+        notices.CreateOrUpdate( wxS( "mdw-backend-stopped" ), _( "Design Workspace" ),
+                                _( "The workspace backend keeps stopping. Choose Restart to try again." ) );
+    }
+}
+
+
+void KICAD_MANAGER_FRAME::UpdateWorkspacePill()
+{
+    if( !m_workspacePill )
+        return;
+
+    bool enabled = Pgm().MdwFrameworkOrNull() != nullptr;
+
+    m_workspacePill->TrackProject( Prj().GetProjectFullName(), enabled,
+                                   [this]() -> wxString
+                                   {
+                                       return GetProjectFileName();
+                                   } );
+
+    // Notifications outlive a restart, so none a session raised may stay while integration is off. A restart
+    // cut short by turning it off never settles, so a later session's connect must not read as its outcome
+    if( !enabled )
+    {
+        Pgm().GetNotificationsManager().RemoveWithPrefix( wxS( "mdw-" ) );
+        m_restartingProject.clear();
+    }
+}
+
+
 const SEARCH_STACK& KICAD_MANAGER_FRAME::sys_search()
 {
     return PgmTop().SysSearch();
@@ -862,11 +961,21 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
         return false;
 
     // Abort any in-progress background load, since the threads depend on the project not changing
-    for( KIWAY::FACE_T face : { KIWAY::FACE_SCH, KIWAY::FACE_PCB } )
+    KIFACE* schface = Kiway().KiFACE( KIWAY::FACE_SCH );
+    KIFACE* pcbface = Kiway().KiFACE( KIWAY::FACE_PCB );
+
+    // Both preloads share the thread pool, so one waited out alone keeps the other's workers running
+    for( bool block : { false, true } )
     {
-        if( KIFACE* kiface = Kiway().KiFACE( face ) )
-            kiface->CancelPreload();
+        for( KIFACE* kiface : { schface, pcbface } )
+        {
+            if( kiface )
+                kiface->CancelPreload( block );
+        }
     }
+
+    // Notices name items of the project being closed
+    Pgm().GetNotificationsManager().RemoveWithPrefix( wxS( "mdw-" ) );
 
     // Save the project file for the currently loaded project.
     if( m_active_project )
@@ -929,6 +1038,9 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
 
         // Must run before the unload below, which releases the git session without waiting.
         m_projectTreePane->WaitForGitOperations();
+
+        // A session outliving its project would keep its backend running and its git session stale
+        MDW_CLIENT::Get().CloseProject( GetProjectFileName() );
 
         mgr.UnloadProject( &Prj() );
     }
@@ -1255,7 +1367,7 @@ void KICAD_MANAGER_FRAME::OnCompareProjectBranches( wxCommandEvent& event )
 
     // libgit2 is not safe for concurrent use of one repository, so read the refs under the git
     // action lock. If a background operation holds it, fall back to HEAD.
-    if( KIGIT::ACTION_LOCK lock = gitCommon->TryLockAction(); lock.owns_lock() )
+    if( KIGIT::ACTION_LOCK lock = gitCommon->TryLockActionLocal(); lock.owns_lock() )
         refs = KIGIT::CompareBranchRefs( repo );
 
     if( refs.empty() )
@@ -1349,6 +1461,8 @@ void KICAD_MANAGER_FRAME::CommonSettingsChanged( int aFlags )
         m_gitCommitPane->RefreshFileList();
         m_gitCommitPane->ReloadAdvancedWindow();
     }
+
+    UpdateWorkspacePill();
 }
 
 
@@ -1406,6 +1520,8 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
     // Register project file saver. Ensures project file participates in
     // autosave history commits without affecting dirty state.
     Kiway().LocalHistory().RegisterProjectSaver( &Prj() );
+
+    UpdateWorkspacePill();
 }
 
 
@@ -1652,6 +1768,13 @@ void KICAD_MANAGER_FRAME::ToggleGitCommitPane()
 bool KICAD_MANAGER_FRAME::GitCommitPaneShown()
 {
     return m_gitCommitPane && m_auimgr.GetPane( m_gitCommitPane ).IsShown();
+}
+
+
+void KICAD_MANAGER_FRAME::ShowWorkspaceItem( const wxString& aItemId )
+{
+    if( m_gitCommitPane )
+        m_gitCommitPane->ShowWorkspaceItem( aItemId );
 }
 
 

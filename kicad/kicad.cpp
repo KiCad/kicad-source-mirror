@@ -283,6 +283,10 @@ bool PGM_KICAD::OnPgmInit()
         m_api_libraries_handler = std::make_unique<API_HANDLER_LIBRARIES>(
                 LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
         m_api_server->RegisterHandler( m_api_libraries_handler.get() );
+
+        // The workspace framework owns backend processes, so it lives at the
+        // application level to survive editor frame recreation
+        HostMdwFramework();
     }
 
     if( appType == FRAME_MERGETOOL )
@@ -508,6 +512,9 @@ void PGM_KICAD::OnPgmExit()
 
     Kiway.OnKiwayEnd();
 
+    // Tear the backends down before the API server so their event channels close
+    // against a live host
+    DestroyMdwFramework();
     m_api_server.reset();
 
     if( m_settings_manager && m_settings_manager->IsOK() )

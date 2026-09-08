@@ -47,6 +47,7 @@
 #include <reporter.h>
 #include <trace_helpers.h>
 #include <wx/dcclient.h>
+#include <wx/intl.h>
 
 
 class ERROR_CARD : public wxPanel
@@ -507,14 +508,19 @@ void KISTATUSBAR::SetBackgroundProgress( int aAmount )
 
 void KISTATUSBAR::SetBackgroundProgressMax( int aAmount )
 {
-    m_backgroundProgressBar->SetRange( aAmount );
+    if( m_backgroundProgressBar->GetRange() != aAmount )
+        m_backgroundProgressBar->SetRange( aAmount );
 }
 
 
 void KISTATUSBAR::SetBackgroundStatusText( const wxString& aTxt )
 {
-    m_backgroundRawText = aTxt;
-    updateBackgroundText();
+    // Ellipsizing is costly and a running job repeats the same text with every progress step
+    if( aTxt != m_backgroundRawText )
+    {
+        m_backgroundRawText = aTxt;
+        updateBackgroundText();
+    }
 
     // When there are multiple normal fields, the last normal field (typically used for
     // file watcher status on Windows) can visually overlap with the background job label
@@ -528,9 +534,10 @@ void KISTATUSBAR::SetBackgroundStatusText( const wxString& aTxt )
         if( !aTxt.empty() )
         {
             if( !currentText.empty() )
+            {
                 m_savedStatusText = currentText;
-
-            SetStatusText( wxEmptyString, adjacentField );
+                SetStatusText( wxEmptyString, adjacentField );
+            }
         }
         else if( !m_savedStatusText.empty() )
         {
@@ -546,43 +553,48 @@ void KISTATUSBAR::updateAuxFieldWidths()
     if( m_fieldWidths.empty() )
         return;
 
-    int padding = KIUI::GetTextSize( wxT( "M" ), this ).x;
+    std::vector<int> widths = m_fieldWidths;
+    int              padding = KIUI::GetTextSize( wxT( "M" ), this ).x;
 
     // The background job label and gauge only carry content while a job is running. When idle
     // they must collapse to zero so they do not consume stretch reserved for the normal fields.
     bool jobActive = m_backgroundProgressBar && m_backgroundProgressBar->IsShown();
 
     if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_LABEL ) )
-        m_fieldWidths[m_normalFieldsCount + *idx] = jobActive ? -1 : 0;
+        widths[m_normalFieldsCount + *idx] = jobActive ? -1 : 0;
 
     if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_GAUGE ) )
-        m_fieldWidths[m_normalFieldsCount + *idx] = jobActive ? 75 : 0;
+        widths[m_normalFieldsCount + *idx] = jobActive ? 75 : 0;
 
     if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_CANCEL ) )
     {
         if( m_backgroundStopButton && m_backgroundStopButton->IsShown() )
-            m_fieldWidths[m_normalFieldsCount + *idx] = m_backgroundStopButton->GetSize().x + padding;
+            widths[m_normalFieldsCount + *idx] = m_backgroundStopButton->GetSize().x + padding;
         else
-            m_fieldWidths[m_normalFieldsCount + *idx] = 0;
+            widths[m_normalFieldsCount + *idx] = 0;
     }
 
     if( std::optional<int> idx = fieldIndex( FIELD::WARNING ) )
     {
         if( m_warningButton && m_warningButton->IsShown() )
-            m_fieldWidths[m_normalFieldsCount + *idx] = m_warningButton->GetSize().x + padding;
+            widths[m_normalFieldsCount + *idx] = m_warningButton->GetSize().x + padding;
         else
-            m_fieldWidths[m_normalFieldsCount + *idx] = 0;
+            widths[m_normalFieldsCount + *idx] = 0;
     }
 
     if( std::optional<int> idx = fieldIndex( FIELD::NOTIFICATION ) )
     {
         if( m_notificationsButton && m_notificationsButton->IsShown() )
-            m_fieldWidths[m_normalFieldsCount + *idx] = m_notificationsButton->GetSize().x + padding;
+            widths[m_normalFieldsCount + *idx] = m_notificationsButton->GetSize().x + padding;
         else
-            m_fieldWidths[m_normalFieldsCount + *idx] = 0;
+            widths[m_normalFieldsCount + *idx] = 0;
     }
 
-    SetStatusWidths( static_cast<int>( m_fieldWidths.size() ), m_fieldWidths.data() );
+    // Every progress step lands here, and setting widths re-ellipsizes every field on MSW
+    if( widths == m_fieldWidths )
+        return;
+
+    SetStatusWidths( static_cast<int>( widths.size() ), widths.data() );
     layoutControls();
     updateBackgroundText();
 }
@@ -860,4 +872,7 @@ void KISTATUSBAR::SetStatusWidths( int aSize, const int* aWidths )
 
     for( int i = 0; ( i < aSize ) && ( i < static_cast<int>( m_fieldWidths.size() ) ); i++ )
         m_fieldWidths[i] = *( aWidths + i );
+
+    // Moves the fields without a resize, so windows placed over a field must be told
+    SendSizeEvent();
 }

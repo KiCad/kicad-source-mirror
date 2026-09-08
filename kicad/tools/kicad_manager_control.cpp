@@ -32,9 +32,11 @@
 #include <project_downgrade.h>
 #include <filesystem>
 #include <system_error>
+#include <wx/log.h>
 #include <wx/msgdlg.h>
 #include <kiplatform/policy.h>
 #include <dialogs/git/git_credentials_prompt.h>
+#include <git/kigit_platform.h>
 #include <kiplatform/secrets.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
@@ -55,12 +57,14 @@
 #include <dialogs/dialog_export_older_version.h>
 #include <dialogs/dialog_template_selector.h>
 #include <dialogs/git/dialog_git_repository.h>
-#include <git/git_clone_handler.h>
 #include <gestfich.h>
 #include <paths.h>
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
+#include <wx/filename.h>
+#include <wx/intl.h>
+#include <wx/utils.h>
 #include "dialog_pcm.h"
 #include <project/project_archiver.h>
 #include <project_tree_pane.h>
@@ -85,7 +89,7 @@ void KICAD_MANAGER_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
-wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName, bool isRepo )
+wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName, bool isRepo, bool* aCreated )
 {
     wxString default_filename = aFileName ? *aFileName : wxString();
 
@@ -139,6 +143,9 @@ wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName, bool
             DisplayErrorMessage( m_frame, msg );
             return wxFileName();
         }
+
+        if( aCreated )
+            *aCreated = true;
     }
     else if( directory.HasFiles() )
     {
@@ -412,66 +419,33 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
         return -1;
 
     wxString   project_name = dlg.GetRepoName();
-    wxFileName pro = newProjectDirectory( &project_name, true );
+    bool       created = false;
+    wxFileName pro = newProjectDirectory( &project_name, true, &created );
 
     if( !pro.IsOk() )
         return -1;
 
     // No open project owns the repository being cloned, so use a scratch session.
     KIGIT_COMMON cloneCommon( nullptr );
-    bool         retriedAfterTrust = false;
 
-    while( true )
-    {
-        bool     cloned = false;
-        bool     cancelled = false;
-        wxString error;
-        wxString details;
-
-        std::optional<KIGIT::HOST_KEY_FAILURE> hostKey;
-
-        // Scoped, so the progress window is gone before a prompt below
-        {
-            GIT_CLONE_HANDLER cloneHandler( &cloneCommon );
-
-            cloneHandler.SetRemote( dlg.GetRepoURL() );
-            cloneHandler.SetClonePath( pro.GetPath() );
-            cloneHandler.SetUsername( dlg.GetUsername() );
-            cloneHandler.SetPassword( dlg.GetPassword() );
-            cloneHandler.SetSSHKey( dlg.GetRepoSSHPath() );
-
-            cloneHandler.SetProgressReporter(
-                    std::make_unique<WX_PROGRESS_REPORTER>( m_frame, _( "Clone Repository" ), 1, PR_CAN_ABORT ) );
-
-            cloned = cloneHandler.PerformClone();
-            cancelled = !cloned && cloneHandler.IsThisOperationCancelled();
-
-            if( !cloned )
+    // Only once a server accepts the password, so a typo never reaches the keychain
+    cloneCommon.SaveWhenAccepted(
+            []( const wxString& aUrl, const wxString& aUsername, const wxString& aPassword )
             {
-                KIGIT_ERROR_MESSAGE message = cloneHandler.PopError();
-                error = message.summary;
-                details = message.details;
-                hostKey = cloneHandler.GetHostKeyFailure();
-            }
-        }
+                KIGIT::SaveCredentialAsync( aUrl, aUsername, aPassword );
+            } );
 
-        if( cloned )
-            break;
-
-        // Cancelling from the progress dialog is not an error.
-        if( cancelled )
-            return -1;
-
-        if( hostKey )
+    if( KIGIT::CloneWithPrompts( m_frame, cloneCommon, dlg.GetRepoURL(), pro.GetPath(), dlg.GetUsername(),
+                                 dlg.GetPassword(), dlg.GetRepoSSHPath() )
+        != KIGIT::CLONE_OUTCOME::CLONED )
+    {
+        // Not recursive, so a folder that holds anything is left alone, and that is not worth a log box
+        if( created )
         {
-            if( KIGIT::PromptToTrustHost( m_frame, *hostKey, retriedAfterTrust ) != KIGIT::PROMPT_ANSWER::ACCEPTED )
-                return -1;
-
-            retriedAfterTrust = true;
-            continue;
+            wxLogNull quiet;
+            pro.Rmdir();
         }
 
-        DisplayErrorMessage( m_frame, error, details );
         return -1;
     }
 
@@ -525,10 +499,6 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
                 KIGIT::EnsureGitIdentity( m_frame, m_frame, common, identity->identity );
             } );
 
-    // Keyed like the attach-time lookup, which never sees credentials embedded in the address. Async so an
-    // unlock prompt cannot hold the event loop
-    KIPLATFORM::SECRETS::StoreSecretAsync( KIGIT_COMMON::ParseRemoteURL( dlg.GetRepoURL() ).url, dlg.GetUsername(),
-                                           dlg.GetPassword() );
     Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
     Prj().GetLocalSettings().m_GitSSHKey = dlg.GetRepoSSHPath();
 
@@ -686,7 +656,7 @@ int KICAD_MANAGER_CONTROL::ArchiveProject( const TOOL_EVENT& aEvent )
     if( !dir.IsOpened() )   // wxWidgets display a error message on issue.
         return 0;
 
-    STATUSBAR_REPORTER reporter( m_frame->GetStatusBar(), 1 );
+    STATUSBAR_REPORTER reporter( m_frame->GetStatusBar(), 2 );
     PROJECT_ARCHIVER archiver;
 
     archiver.Archive( currdirname, zipFile.GetFullPath(), reporter, true, true );

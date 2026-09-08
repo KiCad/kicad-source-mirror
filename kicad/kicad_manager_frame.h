@@ -23,6 +23,8 @@
 
 #include <kiway_player.h>
 
+#include <mdw/client/mdw_subscription.h>
+
 class ACTION_TOOLBAR;
 class BITMAP_BUTTON;
 class EDA_BASE_FRAME;
@@ -31,6 +33,8 @@ class PANEL_KICAD_LAUNCHER;
 class PLUGIN_CONTENT_MANAGER;
 class PROJECT_TREE;
 class PROJECT_TREE_PANE;
+class MDW_STATUS_PILL;
+struct MDW_EVENT;
 class LOCAL_HISTORY_PANE;
 class GIT_COMMIT_PANE;
 class UPDATE_MANAGER;
@@ -60,6 +64,9 @@ public:
 
     void ToggleGitCommitPane();
     bool GitCommitPaneShown();
+
+    /// Show aItemId in the project's design workspace.
+    void ShowWorkspaceItem( const wxString& aItemId );
 
     /// Open the advanced Git window on its History page, run through the docked panel.
     void ShowGitHistory();
@@ -219,6 +226,9 @@ public:
 
     void ReCreateTreePrj();
 
+    /// Point the Design Workspace status pill at the active project. Safe to call with no binding.
+    void UpdateWorkspacePill();
+
     /**
      * @param aIsExplicitUserSave is true to indicate the user ran a Save Project action explicitly
      *        Note that this parameter should currently *always* be false, because there is no
@@ -271,6 +281,12 @@ private:
     /// Reread the project and local settings files after a history restore rewrote them.
     void reloadProjectSettings();
 
+    /// Report other users' changes to the open project as notifications
+    void onBackendEvent( const MDW_EVENT& aEvent );
+
+    /// Report how a restart of the open project's backend ended
+    void onConnectionChanged( const wxString& aProjectPath );
+
 private:
     bool                  m_openSavedWindows;
     bool                  m_restoredFromHistory;  ///< Set after restore to mark editors dirty
@@ -282,6 +298,10 @@ private:
     PROJECT_TREE_PANE*    m_projectTreePane;
     LOCAL_HISTORY_PANE*   m_historyPane;
     GIT_COMMIT_PANE*      m_gitCommitPane;
+    MDW_STATUS_PILL*      m_workspacePill = nullptr;
+    MDW_SUBSCRIPTION      m_backendEvents;
+    MDW_SUBSCRIPTION      m_connections;
+    wxString              m_restartingProject;    ///< The project whose backend was last seen restarting
     wxAuiNotebook*        m_notebook;
     PANEL_KICAD_LAUNCHER* m_launcher;
     int                   m_lastToolbarIconSize;

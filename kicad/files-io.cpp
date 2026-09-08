@@ -80,7 +80,7 @@ void KICAD_MANAGER_FRAME::UnarchiveFiles()
             return;
     }
 
-    STATUSBAR_REPORTER reporter( GetStatusBar(), 1 );
+    STATUSBAR_REPORTER reporter( GetStatusBar(), 2 );
 
     if( PROJECT_ARCHIVER::Unarchive( zipfiledlg.GetPath(), unzipDir, reporter ) )
     {

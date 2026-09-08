@@ -53,6 +53,9 @@
 #include <dialogs/git/git_ui_utils.h>
 #include <widgets/wx_progress_reporters.h>
 #include <dialogs/git/dialog_git_switch.h>
+#include <mdw/client/mdw_capabilities.h>
+#include <mdw/client/mdw_client.h>
+#include <mdw/client/mdw_source.h>
 #include <gestfich.h>
 #include <macros.h>
 #include <trace_helpers.h>
@@ -73,6 +76,7 @@
 #include <git/git_status_handler.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/kigit_platform.h>
 #include <git/kigit_ignore.h>
 #include <git/project_git_utils.h>
 
@@ -86,6 +90,7 @@
 
 #include "project_tree_pane.h"
 #include <widgets/kistatusbar.h>
+#include <widgets/mdw_editing.h>
 
 #include <kiplatform/io.h>
 #include <kiplatform/secrets.h>
@@ -108,6 +113,10 @@ static bool gitTaskStillRunning( const std::future<void>& aTask )
 {
     return aTask.valid() && aTask.wait_for( std::chrono::seconds( 0 ) ) != std::future_status::ready;
 }
+
+
+// A slow item lookup opens the menu without its workspace entries rather than holding it back
+static constexpr int MDW_MENU_LOCATE_WAIT_MS = 300;
 
 
 namespace
@@ -279,6 +288,10 @@ enum project_tree_ids
     ID_GIT_KEEP_EXTENSION,     // Stop ignoring every file sharing the selection's extension
     ID_GIT_EDIT_IGNORE_FILE,   // Open the project's ignore file in a text editor
 
+    ID_MDW_SHOW_IN_WORKSPACE,  // Show the selected file in the Design Workspace
+    ID_MDW_CLAIM_ACTION,       // The claim actions on the selected file, in menu order
+    ID_MDW_CLAIM_ACTION_LAST = ID_MDW_CLAIM_ACTION + 1,
+
     ID_JOBS_RUN,
 };
 
@@ -302,6 +315,9 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU_RANGE( ID_GIT_IGNORE_PATH, ID_GIT_KEEP_EXTENSION, PROJECT_TREE_PANE::onGitIgnore )
     EVT_MENU( ID_GIT_EDIT_IGNORE_FILE, PROJECT_TREE_PANE::onGitEditIgnoreFile )
     EVT_MENU( ID_GIT_REMOVE_VCS, PROJECT_TREE_PANE::onGitRemoveVCS )
+
+    EVT_MENU( ID_MDW_SHOW_IN_WORKSPACE, PROJECT_TREE_PANE::onShowInWorkspace )
+    EVT_MENU_RANGE( ID_MDW_CLAIM_ACTION, ID_MDW_CLAIM_ACTION_LAST, PROJECT_TREE_PANE::onWorkspaceEditing )
 
     EVT_MENU( ID_JOBS_RUN, PROJECT_TREE_PANE::onRunSelectedJobsFile )
 
@@ -332,6 +348,8 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
 
     m_gitSyncTimer.SetOwner( this );
     m_gitStatusTimer.SetOwner( this );
+    m_menuLocateWait.SetOwner( this );
+    Bind( wxEVT_TIMER, &PROJECT_TREE_PANE::onMenuLocateTimeout, this, m_menuLocateWait.GetId() );
     Bind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this, m_gitSyncTimer.GetId() );
     Bind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this, m_gitStatusTimer.GetId() );
     /*
@@ -358,6 +376,9 @@ PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
 
     m_gitSyncTimer.Stop();
     m_gitStatusTimer.Stop();
+    m_menuLocateWait.Stop();
+    m_menuItemOp.Cancel();
+    Unbind( wxEVT_TIMER, &PROJECT_TREE_PANE::onMenuLocateTimeout, this, m_menuLocateWait.GetId() );
     Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this, m_gitSyncTimer.GetId() );
     Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this, m_gitStatusTimer.GetId() );
     shutdownFileWatcher();
@@ -879,8 +900,63 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     CallAfter(
             [this]
             {
-                showContextMenu();
+                resolveContextMenu();
             } );
+}
+
+
+void PROJECT_TREE_PANE::resolveContextMenu()
+{
+    std::vector<PROJECT_TREE_ITEM*> selection = GetSelectedData();
+
+    ++m_menuGeneration;
+    m_menuLocateWait.Stop();
+    m_menuItemOp.Cancel();
+    m_menuItem = MDW_ITEM_REF();
+    m_menuClaimActions.clear();
+    m_menuItemPath = selection.size() == 1 ? selection[0]->GetFileName() : wxString();
+
+    if( m_menuItemPath.IsEmpty() || !MDW_CLIENT::Get().ProjectSource() )
+    {
+        showContextMenu();
+        return;
+    }
+
+    m_menuItemOp = MDW_CLIENT::Get().ItemRef( Prj(), m_menuItemPath,
+                                              [this]( const MDW_RESULT& aResult, const MDW_ITEM_REF& aItem )
+                                              {
+                                                  if( aResult.IsOk() )
+                                                      m_menuItem = aItem;
+
+                                                  openResolvedMenu();
+                                              } );
+
+    m_menuLocateWait.StartOnce( MDW_MENU_LOCATE_WAIT_MS );
+}
+
+
+void PROJECT_TREE_PANE::openResolvedMenu()
+{
+    m_menuLocateWait.Stop();
+
+    // The menu's event loop must not run inside the completion, and a later right-click may own the state by then
+    CallAfter(
+            [this, generation = m_menuGeneration]
+            {
+                if( generation == m_menuGeneration )
+                    showContextMenu();
+            } );
+}
+
+
+void PROJECT_TREE_PANE::onMenuLocateTimeout( wxTimerEvent& aEvent )
+{
+    // An answer that beat a tick already queued has opened the menu
+    if( m_menuItemOp.IsDone() )
+        return;
+
+    m_menuItemOp.Cancel();
+    showContextMenu();
 }
 
 
@@ -906,12 +982,12 @@ void PROJECT_TREE_PANE::showContextMenu()
     bool vcs_can_remove = vcs_has_repo || gitIntegrationDisabled;
     bool vcs_can_switch = vcs_enabled && vcs_has_repo;
     bool vcs_can_show_history = vcs_enabled && vcs_has_repo;
-    bool vcs_menu        = Pgm().GetCommonSettings()->m_Git.enableGit;
-
     // Check if the libgit2 library is available via backend
     bool libgit_init = GetGitBackend() && GetGitBackend()->IsLibraryAvailable();
 
-    vcs_menu &= libgit_init;
+    // A design workspace reached without git still lives under Version Control
+    bool git_actions = Pgm().GetCommonSettings()->m_Git.enableGit && libgit_init;
+    bool vcs_menu = git_actions || Pgm().MdwFrameworkOrNull();
 
     if( selection.size() == 0 )
         return;
@@ -1094,7 +1170,7 @@ void PROJECT_TREE_PANE::showContextMenu()
     {
         // Setting up the repository, its history, its branch and whether git is used at all
         // apply to the whole project, so they are offered on the project file and nowhere else.
-        // Ignoring is the only thing here that acts on the item clicked.
+        // Ignore and the workspace entries act on the item clicked.
         const bool repoWide =
                 selection.size() == 1 && selection[0] && selection[0]->GetId() == m_TreeProject->GetRootItem();
         wxMenu*     vcs_submenu = new wxMenu();
@@ -1102,7 +1178,7 @@ void PROJECT_TREE_PANE::showContextMenu()
 
         m_gitMenuBranches.clear();
 
-        if( repoWide )
+        if( git_actions && repoWide )
         {
             vcs_menuitem = vcs_submenu->Append( ID_GIT_INITIALIZE_PROJECT, _( "Add Project to Version Control..." ),
                                                 _( "Initialize a new repository" ) );
@@ -1113,7 +1189,7 @@ void PROJECT_TREE_PANE::showContextMenu()
             vcs_menuitem->Enable( vcs_can_set_remote );
 
             // Committing, pushing and pulling are done from the docked Version Control panel, so
-            // the version-control submenu keeps only repository setup, history and branch operations.
+            // the version-control submenu keeps only repository setup, history and branch operations
             vcs_submenu->AppendSeparator();
 
             vcs_menuitem = vcs_submenu->Append( ID_GIT_HISTORY, _( "Version History..." ),
@@ -1121,14 +1197,14 @@ void PROJECT_TREE_PANE::showContextMenu()
             vcs_menuitem->Enable( vcs_can_show_history );
 
             // Reading the branch list walks the repository. On contention the submenu is built
-            // without the shortcuts rather than reading it concurrently.
+            // without the shortcuts rather than reading it concurrently
             std::shared_ptr<KIGIT_COMMON>  common = gitCommon();
             std::vector<KIGIT_BRANCH_INFO> branches;
 
             m_gitMenuSession = common;
 
             {
-                KIGIT::ACTION_LOCK branchLock = common->TryLockAction();
+                KIGIT::ACTION_LOCK branchLock = common->TryLockActionLocal();
 
                 if( branchLock.owns_lock() )
                     branches = common->GetBranches();
@@ -1164,13 +1240,54 @@ void PROJECT_TREE_PANE::showContextMenu()
             vcs_menuitem->Enable( vcs_can_switch );
         }
 
-        bool    ignore_usable = false;
-        wxMenu* ignore_submenu = buildIgnoreSubmenu( selection, ignore_usable );
+        if( git_actions )
+        {
+            bool    ignore_usable = false;
+            wxMenu* ignore_submenu = buildIgnoreSubmenu( selection, ignore_usable );
 
-        vcs_menuitem = vcs_submenu->AppendSubMenu( ignore_submenu, _( "Ignore" ) );
-        vcs_menuitem->Enable( ignore_usable );
+            vcs_menuitem = vcs_submenu->AppendSubMenu( ignore_submenu, _( "Ignore" ) );
+            vcs_menuitem->Enable( ignore_usable );
+        }
 
-        if( repoWide )
+        // Not managed, unknown and not answered in time all leave the id empty and hide the item's entries
+        wxString itemId;
+
+        if( selection.size() == 1 && selection[0]->GetFileName() == m_menuItemPath )
+            itemId = m_menuItem.item_id;
+
+        std::shared_ptr<MDW_SOURCE> claimSource = itemId.IsEmpty() ? nullptr : menuItemSource();
+
+        if( claimSource && claimSource->Has( MDW_CAPABILITY_GROUP::LOCKING ) )
+            m_menuClaimActions = MdwClaimActions( claimSource->Claim( m_menuItem ) );
+
+        const bool showEditing = !m_menuClaimActions.empty();
+
+        if( showEditing )
+        {
+            if( vcs_submenu->GetMenuItemCount() > 0 )
+                vcs_submenu->AppendSeparator();
+
+            for( size_t ii = 0; ii < m_menuClaimActions.size(); ++ii )
+            {
+                vcs_menuitem = vcs_submenu->Append( ID_MDW_CLAIM_ACTION + static_cast<int>( ii ),
+                                                    m_menuClaimActions[ii].label );
+                vcs_menuitem->Enable( m_menuClaimActions[ii].enabled );
+            }
+        }
+
+        if( MDW_CLIENT::Get().ProjectSource() )
+        {
+            if( !itemId.IsEmpty() )
+            {
+                if( !showEditing && vcs_submenu->GetMenuItemCount() > 0 )
+                    vcs_submenu->AppendSeparator();
+
+                vcs_submenu->Append( ID_MDW_SHOW_IN_WORKSPACE, _( "Show in Design Workspace..." ),
+                                     _( "Show the file's versions and who is editing it" ) );
+            }
+        }
+
+        if( git_actions && repoWide )
         {
             vcs_submenu->AppendSeparator();
 
@@ -1188,8 +1305,15 @@ void PROJECT_TREE_PANE::showContextMenu()
             vcs_menuitem->Enable( vcs_can_remove );
         }
 
-        popup_menu.AppendSeparator();
-        popup_menu.AppendSubMenu( vcs_submenu, _( "Version Control" ) );
+        if( vcs_submenu->GetMenuItemCount() == 0 )
+        {
+            delete vcs_submenu;
+        }
+        else
+        {
+            popup_menu.AppendSeparator();
+            popup_menu.AppendSubMenu( vcs_submenu, _( "Version Control" ) );
+        }
     }
 
     if( popup_menu.GetMenuItemCount() > 0 )
@@ -1606,13 +1730,13 @@ void PROJECT_TREE_PANE::FileWatcherReset()
         // avoid spawning a filewatcher. Unfortunately this punishes corporate environments with
         // Windows Server shares :/
         m_Parent->m_FileWatcherInfo = _( "Network path: not monitoring folder changes" );
-        m_Parent->SetStatusText( m_Parent->m_FileWatcherInfo, 1 );
+        m_Parent->SetStatusText( m_Parent->m_FileWatcherInfo, 2 );
         return;
     }
     else
     {
         m_Parent->m_FileWatcherInfo = _( "Local path: monitoring folder changes" );
-        m_Parent->SetStatusText( m_Parent->m_FileWatcherInfo, 1 );
+        m_Parent->SetStatusText( m_Parent->m_FileWatcherInfo, 2 );
     }
 #endif
 
@@ -1801,16 +1925,16 @@ void PROJECT_TREE_PANE::WaitForGitOperations()
         std::shared_ptr<KIGIT_COMMON> common = gitCommon();
         common->SetShuttingDown( true );
 
-        KIGIT::ACTION_LOCK lock = common->TryLockAction();
+        // Freeing the repository waits only for this process, never for another one's git action
+        KIGIT::ACTION_LOCK lock = common->TryLockActionLocal();
 
         constexpr auto kGraceMs = std::chrono::seconds( 2 );
         auto           graceEnd = std::chrono::steady_clock::now() + kGraceMs;
 
         while( !lock.owns_lock() && std::chrono::steady_clock::now() < graceEnd )
         {
-            if( ( lock = common->TryLockActionLocal() ).owns_lock() )
-                break;
             std::this_thread::sleep_for( std::chrono::milliseconds( 50 ) );
+            lock = common->TryLockActionLocal();
         }
 
         constexpr auto kCheckInterval = std::chrono::seconds( 30 );
@@ -1954,12 +2078,14 @@ static bool promptForGitCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, c
 
 // Persist a remote configuration the user accepted, to the secret store and the project
 // local settings. Runs only after the remote itself was set up successfully.
-static void saveAcceptedRemoteSettings( PROJECT& aProject, const RemoteConfig& aConfig )
+static void saveAcceptedRemoteSettings( PROJECT& aProject, KIGIT_COMMON& aCommon, const RemoteConfig& aConfig )
 {
-    // Keyed like the attach-time lookup, which never sees credentials embedded in the address. Async so an
-    // unlock prompt cannot hold the event loop
-    KIPLATFORM::SECRETS::StoreSecretAsync( KIGIT_COMMON::ParseRemoteURL( aConfig.url ).url, aConfig.username,
-                                           aConfig.password );
+    // Only once a server accepts the password, so a typo never reaches the keychain
+    aCommon.SaveWhenAccepted(
+            []( const wxString& aUrl, const wxString& aUsername, const wxString& aPassword )
+            {
+                KIGIT::SaveCredentialAsync( aUrl, aUsername, aPassword );
+            } );
     aProject.GetLocalSettings().m_GitRepoUsername = aConfig.username;
     aProject.GetLocalSettings().m_GitSSHKey = aConfig.sshKey;
 
@@ -2039,11 +2165,11 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     KIGIT::ClearSyncWarnings( m_Parent );
 
-    // Before the fetch, so a corrected login from the prompt below is the one that stays saved
-    saveAcceptedRemoteSettings( Prj(), remoteConfig );
-
     KIGIT_COMMON* common = gitCommon().get();
     bool          retriedAfterTrust = false;
+
+    // Before the fetch, so a corrected login from the prompt below is the one that stays saved
+    saveAcceptedRemoteSettings( Prj(), *common, remoteConfig );
 
     while( true )
     {
@@ -2136,7 +2262,7 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
     wxString                      username = credentials.GetUsername();
 
     // Saving the dialog stores its password, so a locked keyring must unlock rather than read as empty
-    KIPLATFORM::SECRETS::GetSecretAsync(
+    KIGIT_COMMON::ReadSecretAsync(
             credentials.GetRemote(), username,
             [self, session, existingURL, username]( bool aFound, const wxString& aSecret )
             {
@@ -2202,9 +2328,37 @@ void PROJECT_TREE_PANE::showGitRemoteSettings( const wxString& aExistingURL, con
         return;
     }
 
-    saveAcceptedRemoteSettings( Prj(), remoteConfig );
+    saveAcceptedRemoteSettings( Prj(), *common, remoteConfig );
 
     m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
+}
+
+
+std::shared_ptr<MDW_SOURCE> PROJECT_TREE_PANE::menuItemSource() const
+{
+    // An empty source names the one that answered ItemRef, the project's
+    if( m_menuItem.source.IsEmpty() )
+        return MDW_CLIENT::Get().ProjectSource();
+
+    return MDW_CLIENT::Get().FindSource( m_menuItem.source );
+}
+
+
+void PROJECT_TREE_PANE::onShowInWorkspace( wxCommandEvent& aEvent )
+{
+    if( !m_menuItem.item_id.IsEmpty() )
+        m_Parent->ShowWorkspaceItem( m_menuItem.item_id );
+}
+
+
+void PROJECT_TREE_PANE::onWorkspaceEditing( wxCommandEvent& aEvent )
+{
+    size_t index = static_cast<size_t>( aEvent.GetId() - ID_MDW_CLAIM_ACTION );
+
+    if( m_menuItem.item_id.IsEmpty() || index >= m_menuClaimActions.size() )
+        return;
+
+    MdwRunClaimAction( this, menuItemSource(), m_menuItem, m_menuClaimActions[index] );
 }
 
 
@@ -2337,7 +2491,7 @@ wxMenu* PROJECT_TREE_PANE::buildIgnoreSubmenu( const std::vector<PROJECT_TREE_IT
     if( !Prj().GetLocalSettings().m_GitIntegrationDisabled && common->GetRepo() )
     {
         // Reading the state walks the index, so a busy repository leaves the submenu disabled.
-        KIGIT::ACTION_LOCK lock = common->TryLockAction();
+        KIGIT::ACTION_LOCK lock = common->TryLockActionLocal();
 
         if( lock.owns_lock() )
             ignore = gitIgnoreSelection( *common, Prj().GetProjectPath(), aSelection );
@@ -2678,7 +2832,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
 
     // Acquire the git action mutex to synchronize with EmptyTreePrj() shutdown.
     // This ensures the repository isn't freed while we're using it.
-    KIGIT::ACTION_LOCK gitLock = aGitCommon->TryLockAction();
+    KIGIT::ACTION_LOCK gitLock = aGitCommon->TryLockActionLocal();
 
     if( !gitLock.owns_lock() )
     {

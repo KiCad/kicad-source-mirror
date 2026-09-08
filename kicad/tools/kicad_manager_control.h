@@ -82,7 +82,7 @@ public:
 private:
     int openProject( const wxString& aDefaultDir );
 
-    wxFileName newProjectDirectory( wxString* aFileName = nullptr, bool isRepo = false );
+    wxFileName newProjectDirectory( wxString* aFileName = nullptr, bool isRepo = false, bool* aCreated = nullptr );
 
 private:
     KICAD_MANAGER_FRAME* m_frame;           ///< Pointer to the currently used edit/draw frame.
