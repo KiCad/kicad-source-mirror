@@ -240,4 +240,79 @@ BOOST_AUTO_TEST_CASE( MetadataChangeRematerializes )
 }
 
 
+/// A detail record that omits the top-level "description" must not erase the description the
+/// category listing provided.
+BOOST_AUTO_TEST_CASE( ListingDescriptionSurvivesDetailWithoutDescription )
+{
+    HTTP_PLUGIN_HARNESS harness;
+    const wxString settingsPath = httpLibSettingsPath();
+
+    harness.server.SetResponse( RootUrl + "parts/category/1.json",
+                                { 200, R"([
+  { "id": "res-10k", "name": "R_10K", "description": "Listing description" }
+])" } );
+
+    harness.server.SetResponse( RootUrl + "parts/res-10k.json",
+                                { 200, R"({
+  "id": "res-10k",
+  "name": "R_10K",
+  "fields": {
+    "value": { "value": "10k" }
+  }
+})" } );
+
+    std::vector<LIB_SYMBOL*> symbols;
+    harness.plugin.EnumerateSymbolLib( symbols, settingsPath );
+
+    const LIB_SYMBOL* r10k = nullptr;
+
+    for( const LIB_SYMBOL* symbol : symbols )
+    {
+        if( symbol->GetName() == wxS( "R_10K" ) )
+            r10k = symbol;
+    }
+
+    BOOST_REQUIRE( r10k );
+    BOOST_CHECK_EQUAL( r10k->GetDescription(), wxString( wxS( "Listing description" ) ) );
+}
+
+
+/// A "description" entry inside fields must not be blanked by an empty top-level description
+/// in the same detail record.
+BOOST_AUTO_TEST_CASE( DescriptionFieldNotClobberedByEmptySummary )
+{
+    HTTP_PLUGIN_HARNESS harness;
+    const wxString settingsPath = httpLibSettingsPath();
+
+    harness.server.SetResponse( RootUrl + "parts/category/1.json",
+                                { 200, R"([
+  { "id": "res-10k", "name": "R_10K" }
+])" } );
+
+    harness.server.SetResponse( RootUrl + "parts/res-10k.json",
+                                { 200, R"({
+  "id": "res-10k",
+  "name": "R_10K",
+  "fields": {
+    "value":       { "value": "10k" },
+    "description": { "value": "Field description", "visible": "False" }
+  }
+})" } );
+
+    std::vector<LIB_SYMBOL*> symbols;
+    harness.plugin.EnumerateSymbolLib( symbols, settingsPath );
+
+    const LIB_SYMBOL* r10k = nullptr;
+
+    for( const LIB_SYMBOL* symbol : symbols )
+    {
+        if( symbol->GetName() == wxS( "R_10K" ) )
+            r10k = symbol;
+    }
+
+    BOOST_REQUIRE( r10k );
+    BOOST_CHECK_EQUAL( r10k->GetDescription(), wxString( wxS( "Field description" ) ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
