@@ -873,6 +873,8 @@ public:
     DIALOG_BOOK_REPORTER* GetSymbolDiffDialog();
 
     DIALOG_ERC* GetErcDialog();
+    void ClearErcMarkers();
+    void RefreshErcMarkers();
 
     DIALOG_SYMBOL_FIELDS_TABLE* GetSymbolFieldsTableDialog();
 

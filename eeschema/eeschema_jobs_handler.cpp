@@ -1353,8 +1353,24 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     ERC_TESTER ercTester( sch );
 
     std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet( getDrawingSheetProxyView( sch ) );
-    ercTester.RunTests( drawingSheet.get(), nullptr, m_kiway->KiFACE( KIWAY::FACE_CVPCB ), &sch->Project(),
+    SCH_EDIT_FRAME* editFrame = nullptr;
+
+    if( Pgm().IsGUI() )
+    {
+        editFrame = static_cast<SCH_EDIT_FRAME*>( m_kiway->Player( FRAME_SCH, false ) );
+
+        if( editFrame && &editFrame->Schematic() != sch )
+            editFrame = nullptr;
+    }
+
+    if( editFrame )
+        editFrame->ClearErcMarkers();
+
+    ercTester.RunTests( drawingSheet.get(), editFrame, m_kiway->KiFACE( KIWAY::FACE_CVPCB ), &sch->Project(),
                         m_progressReporter );
+
+    if( editFrame )
+        editFrame->RefreshErcMarkers();
 
     markersProvider->SetSeverities( ercJob->m_severity );
 

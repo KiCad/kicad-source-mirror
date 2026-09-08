@@ -2509,6 +2509,38 @@ DIALOG_ERC* SCH_EDIT_FRAME::GetErcDialog()
 }
 
 
+void SCH_EDIT_FRAME::ClearErcMarkers()
+{
+    Schematic().RecordERCExclusions();
+
+    if( m_ercDialog )
+    {
+        m_ercDialog->DeleteAllMarkers( true );
+    }
+    else
+    {
+        GetToolManager()->RunAction( ACTIONS::selectionClear );
+        SCH_SCREENS screens( Schematic().Root() );
+        screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC, true );
+    }
+}
+
+
+void SCH_EDIT_FRAME::RefreshErcMarkers()
+{
+    if( m_ercDialog )
+        m_ercDialog->UpdateData();
+
+    for( SCH_ITEM* marker : GetScreen()->Items().OfType( SCH_MARKER_T ) )
+    {
+        GetCanvas()->GetView()->Remove( marker );
+        GetCanvas()->GetView()->Add( marker );
+    }
+
+    GetCanvas()->Refresh();
+}
+
+
 void SCH_EDIT_FRAME::onCloseErcDialog( wxCommandEvent& aEvent )
 {
     if( m_ercDialog )
