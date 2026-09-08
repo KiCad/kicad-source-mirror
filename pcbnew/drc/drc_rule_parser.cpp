@@ -43,14 +43,20 @@ DRC_RULES_PARSER::DRC_RULES_PARSER( const wxString& aSource, const wxString& aSo
 
 void DRC_RULES_PARSER::reportError( const wxString& aMessage, int aOffset )
 {
+    reportErrorAt( aMessage, CurLineNumber(), CurOffset() + aOffset, CurLine() );
+}
+
+
+void DRC_RULES_PARSER::reportErrorAt( const wxString& aMessage, int aLine, int aOffset, const char* aSourceLine )
+{
     wxString rest;
     wxString first = aMessage.BeforeFirst( '|', &rest );
 
     if( m_reporter )
     {
         wxString msg = wxString::Format( _( "ERROR: <a href='%d:%d'>%s</a>%s" ),
-                                         CurLineNumber(),
-                                         CurOffset() + aOffset,
+                                         aLine,
+                                         aOffset,
                                          first,
                                          rest );
 
@@ -60,7 +66,7 @@ void DRC_RULES_PARSER::reportError( const wxString& aMessage, int aOffset )
     {
         wxString msg = wxString::Format( _( "ERROR: %s%s" ), first, rest );
 
-        THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() + aOffset );
+        THROW_PARSE_ERROR( msg, CurSource(), aSourceLine, aLine, aOffset );
     }
 }
 
@@ -300,6 +306,9 @@ void DRC_RULES_PARSER::ParseComponentClassAssignmentRules(
 std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
 {
     std::shared_ptr<DRC_RULE> rule = std::make_shared<DRC_RULE>();
+    int                     conditionLine = 0;
+    int                     conditionOffset = 0;
+    std::string             conditionSource;
 
     T        token = NextTok();
     wxString msg;
@@ -337,6 +346,9 @@ std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
             {
                 checkUnresolvedTextVariable();
                 rule->m_Condition = new DRC_RULE_CONDITION( FromUTF8() );
+                conditionLine = CurLineNumber();
+                conditionOffset = CurOffset();
+                conditionSource = CurLine();
 
                 if( !rule->m_Condition->Compile( m_reporter, CurLineNumber(), CurOffset() ) )
                     reportError( wxString::Format( _( "Could not parse expression '%s'." ), FromUTF8() ) );
@@ -373,6 +385,29 @@ std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
 
     if( (int) CurTok() != DSN_RIGHT )
         reportError( _( "Missing ')'." ) );
+
+    if( rule->m_Condition && rule->m_Condition->RequiresPairItems() )
+    {
+        for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
+        {
+            // isCoupledDiffPair() can identify the pair from A's net for these constraints
+            if( !rule->m_Condition->ReferencesItemB()
+                    && ( constraint.m_Type == LENGTH_CONSTRAINT
+                         || constraint.m_Type == NET_CHAIN_LENGTH_CONSTRAINT
+                         || constraint.m_Type == SKEW_CONSTRAINT ) )
+            {
+                continue;
+            }
+
+            if( constraint.IsUnary() )
+            {
+                reportErrorAt( wxString::Format(
+                        _( "Item 'B' is not available for a single-item constraint in rule '%s'." ), rule->m_Name ),
+                        conditionLine, conditionOffset, conditionSource.c_str() );
+                break;
+            }
+        }
+    }
 
     return rule;
 }
@@ -732,6 +767,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         {
             c.m_Test = new DRC_RULE_CONDITION( FromUTF8() );
             c.m_Test->Compile( m_reporter, CurLineNumber(), CurOffset() );
+
+            if( c.m_Test->RequiresPairItems() )
+                reportError( _( "Item 'B' is not available in assertion expressions." ) );
 
             if( (int) NextTok() != DSN_RIGHT )
                 reportError( _( "Missing ')'." ) );

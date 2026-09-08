@@ -44,6 +44,7 @@ public:
 
     bool HasGeometryDependentFunctions() const;
     bool RequiresPairItems() const;
+    bool ReferencesItemB() const;
 
 private:
     wxString                       m_expression;

@@ -195,6 +195,8 @@ public:
         return m_Type == NULL_CONSTRAINT;
     }
 
+    bool IsUnary() const;
+
     const MINOPTMAX<int>& GetValue() const { return m_Value; }
     MINOPTMAX<int>& Value() { return m_Value; }
 

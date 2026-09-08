@@ -28,6 +28,9 @@
 #include <geometry/eda_angle.h>
 #include <pcbnew/pcbexpr_evaluator.h>
 #include <drc/drc_rule.h>
+#include <drc/drc_rule_parser.h>
+#include <ki_exception.h>
+#include <reporter.h>
 #include <pcbnew/board.h>
 #include <board_design_settings.h>
 #include <pcbnew/pcb_shape.h>
@@ -591,6 +594,115 @@ BOOST_AUTO_TEST_CASE( FunctionArgumentValidation )
     expectCompileError( wxS( "A.fromTo('U1-1')" ) );
     expectCompileError( wxS( "A.intersectsFrontCourtyard(B.UnknownProperty)" ) );
     expectCompileError( wxS( "A.intersectsFrontCourtyard(B.Parent.unknownFunction())" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SingleItemRulePreflight )
+{
+    PROPERTY_MANAGER::Instance().Rebuild();
+
+    for( const wxString& constraint : {
+                 wxString( "assertion \"A.Type == 'Graphic'\"" ),
+                 wxString( "hole_size (min 0.2mm)" ), wxString( "text_height (min 1mm)" ),
+                 wxString( "text_thickness (min 0.1mm)" ),
+                 wxString( "track_segment_length (min 1mm)" ), wxString( "annular_width (min 0.1mm)" ),
+                 wxString( "solder_mask_expansion (opt 0mm)" ),
+                 wxString( "solder_paste_abs_margin (opt 0mm)" ),
+                 wxString( "solder_paste_rel_margin (opt 0mm)" ), wxString( "disallow track" ),
+                 wxString( "via_diameter (min 0.5mm)" ), wxString( "length (max 100mm)" ),
+                 wxString( "net_chain_length (max 100mm)" ), wxString( "stub_length (max 1mm)" ),
+                 wxString( "return_path (layer 'B.Cu')" ), wxString( "skew (max 1mm)" ),
+                 wxString( "via_count (max 2)" ),
+                 wxString( "via_dangling (max 0)" ), wxString( "bridged_mask (min 0)" ),
+                 wxString( "microvia_stack_depth (max 2)" ), wxString( "microvia_aspect_ratio (max 1)" ) } )
+    {
+        for( bool conditionFirst : { true, false } )
+        {
+            BOOST_TEST_CONTEXT( constraint << ", condition first: " << conditionFirst )
+            {
+                wxString condition = wxS( "(condition \"B.Type == 'Graphic'\")" );
+                wxString body = wxString::Format( wxS( "(constraint %s)" ), constraint );
+                wxString source = wxS( "(version 1)\n(rule test\n" )
+                                  + ( conditionFirst ? condition + wxS( "\n" ) + body
+                                                     : body + wxS( "\n" ) + condition ) + wxS( "\n)" );
+                std::vector<std::shared_ptr<DRC_RULE>> rules;
+                WX_STRING_REPORTER reporter;
+                wxString controlSource = source;
+                controlSource.Replace( wxS( "B.Type" ), wxS( "A.Type" ) );
+                DRC_RULES_PARSER controlParser( controlSource, wxS( "single item control" ) );
+                controlParser.Parse( rules, &reporter );
+                BOOST_REQUIRE_MESSAGE( !reporter.GetMessages().Contains( wxS( "ERROR:" ) ), reporter.GetMessages() );
+                reporter.Clear();
+
+                DRC_RULES_PARSER parser( source, wxS( "single item preflight" ) );
+                parser.Parse( rules, &reporter );
+                BOOST_CHECK_MESSAGE( reporter.GetMessages().Contains( wxS( "Item 'B'" ) ),
+                                     reporter.GetMessages() );
+
+                DRC_RULES_PARSER throwingParser( source, wxS( "single item preflight" ) );
+                BOOST_CHECK_EXCEPTION( throwingParser.Parse( rules, nullptr ), PARSE_ERROR,
+                        [conditionFirst]( const PARSE_ERROR& error )
+                        {
+                            return error.What().Contains( wxS( "Item 'B' is not available" ) )
+                                   && error.lineNumber == ( conditionFirst ? 3 : 4 );
+                        } );
+            }
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( PairConditionsInSingleItemRules )
+{
+    PROPERTY_MANAGER::Instance().Rebuild();
+
+    for( const wxString& body : {
+                 wxString( "(condition \"A.intersectsFrontCourtyard(B.Parent)\")"
+                           "(constraint assertion \"A.Type == 'Graphic'\")" ),
+                 wxString( "(condition \"AB.isCoupledDiffPair()\")(constraint hole_size (min 0.2mm))" ),
+                 wxString( "(constraint assertion \"B.Type == 'Graphic'\")" ),
+                 wxString( "(constraint assertion \"A.intersectsFrontCourtyard(B.Parent.getField('Reference'))\")" ),
+                 wxString( "(condition \"B.Type == 'Graphic'\")(constraint clearance (min 0.2mm))"
+                           "(constraint hole_size (min 0.2mm))" ),
+                 wxString( "(condition \"AB.isCoupledDiffPair() && B.Type == 'Track'\")"
+                           "(constraint length (max 100mm))" ) } )
+    {
+        BOOST_TEST_CONTEXT( body )
+        {
+            std::vector<std::shared_ptr<DRC_RULE>> rules;
+            DRC_RULES_PARSER parser( wxS( "(version 1)(rule test " ) + body + wxS( ")" ), wxS( "preflight" ) );
+            BOOST_CHECK_EXCEPTION( parser.Parse( rules, nullptr ), PARSE_ERROR,
+                    []( const PARSE_ERROR& error )
+                    {
+                        return error.What().Contains( wxS( "Item 'B' is not available" ) );
+                    } );
+        }
+    }
+
+    for( const wxString& body : {
+                 wxString( "(condition \"A.Reference == 'B.Width'\")(constraint hole_size (min 0.2mm))" ),
+                 wxString( "(constraint assertion \"A.Type == 'Graphic'\")" ),
+                 wxString( "(condition \"A.intersectsFrontCourtyard(B.Parent)\")"
+                           "(constraint physical_clearance (min 100mm))" ),
+                 wxString( "(condition \"AB.isCoupledDiffPair()\")(constraint diff_pair_gap (min 0.2mm))" ),
+                 wxString( "(condition \"AB.isCoupledDiffPair()\")(constraint track_width (min 0.2mm))" ),
+                 wxString( "(condition \"AB.isCoupledDiffPair()\")(constraint diff_pair_uncoupled (max 1mm))" ),
+                 wxString( "(condition \"AB.isCoupledDiffPair()\")(constraint length (max 100mm))" ),
+                 wxString( "(condition \"AB.isCoupledDiffPair()\")(constraint net_chain_length (max 100mm))" ),
+                 wxString( "(condition \"AB.isCoupledDiffPair()\")(constraint skew (max 1mm))" ),
+                 wxString( "(condition \"B.Type == 'Track'\")(constraint track_width (min 0.2mm))" ),
+                 wxString( "(condition \"B.Type == 'Track'\")(constraint track_angle (min 45))" ),
+                 wxString( "(condition \"B.Type == 'Zone'\")(constraint thermal_relief_gap (min 0.2mm))" ) } )
+    {
+        BOOST_TEST_CONTEXT( body )
+        {
+            std::vector<std::shared_ptr<DRC_RULE>> rules;
+            WX_STRING_REPORTER reporter;
+            DRC_RULES_PARSER parser( wxS( "(version 1)(rule test " ) + body + wxS( ")" ), wxS( "preflight" ) );
+            parser.Parse( rules, &reporter );
+            BOOST_CHECK_MESSAGE( !reporter.GetMessages().Contains( wxS( "ERROR:" ) ), reporter.GetMessages() );
+        }
+    }
 }
 
 

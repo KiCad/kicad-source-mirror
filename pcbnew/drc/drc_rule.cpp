@@ -84,6 +84,40 @@ std::optional<DRC_CONSTRAINT> DRC_RULE::FindConstraint( DRC_CONSTRAINT_T aType )
 }
 
 
+bool DRC_CONSTRAINT::IsUnary() const
+{
+    // Classify by the items supplied to rule evaluation, not the geometry measured by the test.
+    switch( m_Type )
+    {
+    case HOLE_SIZE_CONSTRAINT:
+    case TEXT_HEIGHT_CONSTRAINT:
+    case TEXT_THICKNESS_CONSTRAINT:
+    case TRACK_SEGMENT_LENGTH_CONSTRAINT:
+    case ANNULAR_WIDTH_CONSTRAINT:
+    case SOLDER_MASK_EXPANSION_CONSTRAINT:
+    case SOLDER_PASTE_ABS_MARGIN_CONSTRAINT:
+    case SOLDER_PASTE_REL_MARGIN_CONSTRAINT:
+    case DISALLOW_CONSTRAINT:
+    case VIA_DIAMETER_CONSTRAINT:
+    case LENGTH_CONSTRAINT:
+    case NET_CHAIN_LENGTH_CONSTRAINT:
+    case NET_CHAIN_STUB_LENGTH_CONSTRAINT:
+    case NET_CHAIN_RETURN_PATH_CONSTRAINT:
+    case SKEW_CONSTRAINT:
+    case VIA_COUNT_CONSTRAINT:
+    case ASSERTION_CONSTRAINT:
+    case VIA_DANGLING_CONSTRAINT:
+    case BRIDGED_MASK_CONSTRAINT:
+    case MICROVIA_STACK_DEPTH_CONSTRAINT:
+    case MICROVIA_ASPECT_RATIO_CONSTRAINT:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+
 wxString DRC_RULE::FormatRuleFromProto( const kiapi::board::CustomRule& aRule, wxString* aErrorText )
 {
     if( aErrorText )

@@ -74,10 +74,12 @@ public:
 
     bool HasGeometryDependentFunctions() const { return m_hasGeometryDependentFunctions; }
     bool RequiresPairItems() const { return m_requiresPairItems; }
+    bool ReferencesItemB() const { return m_referencesItemB; }
 
 private:
     bool m_hasGeometryDependentFunctions = false;
     bool m_requiresPairItems = false;
+    bool m_referencesItemB = false;
 };
 
 

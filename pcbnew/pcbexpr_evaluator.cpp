@@ -711,6 +711,9 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
     if( baseVar == wxT( "B" ) || baseVar == wxT( "AB" ) )
         m_requiresPairItems = true;
 
+    if( baseVar == wxT( "B" ) )
+        m_referencesItemB = true;
+
     auto withNav =
             [&navigation]( std::unique_ptr<PCBEXPR_VAR_REF> aRef ) -> std::unique_ptr<PCBEXPR_VAR_REF>
             {
