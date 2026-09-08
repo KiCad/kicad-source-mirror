@@ -1194,6 +1194,8 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
 
 void CONNECTION_GRAPH::RemoveItem( SCH_ITEM* aItem )
 {
+    std::erase( m_items, aItem );
+
     auto it = m_item_to_subgraph_map.find( aItem );
 
     if( it == m_item_to_subgraph_map.end() )
@@ -1209,7 +1211,6 @@ void CONNECTION_GRAPH::RemoveItem( SCH_ITEM* aItem )
         subgraph->RemoveItem( aItem );
     }
 
-    std::erase( m_items, aItem );
     m_item_to_subgraph_map.erase( it );
 }
 
@@ -4860,7 +4861,7 @@ int CONNECTION_GRAPH::RunERC()
 {
     int error_count = 0;
 
-    wxCHECK_MSG( m_schematic, true, wxS( "Null m_schematic in CONNECTION_GRAPH::RunERC" ) );
+    wxCHECK_MSG( m_schematic, 0, wxS( "Null m_schematic in CONNECTION_GRAPH::RunERC" ) );
 
     ERC_SETTINGS& settings = m_schematic->ErcSettings();
 
