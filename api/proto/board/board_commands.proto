@@ -601,6 +601,24 @@ message FlipItemsResponse
   repeated ItemFlipResult flipped_items = 3;
 }
 
+// Requests placement of a footprint on a board
+// Returns PlaceFromLibraryResponse
+// Since: 11.0
+message PlaceFootprintFromLibrary
+{
+  kiapi.common.types.ItemHeader header = 1;
+
+  kiapi.common.types.LibraryIdentifier lib_id = 2;
+
+  kiapi.common.types.Vector2 position = 3;
+
+  // If unspecified, will use default orientation
+  optional kiapi.common.types.Angle orientation = 4;
+
+  // If unspecified, will place on F_Cu.  Footprint will be flipped if placed on B_Cu.
+  optional kiapi.board.types.BoardLayer layer = 5;
+}
+
 
 //// Interactive commands ////
 // These commands begin an interactive operation in the editor.

@@ -57,3 +57,26 @@ message SchematicNetlistResponse
 
   repeated kiapi.schematic.types.SchematicNet nets = 2;
 }
+
+// Requests placement of a symbol on a schematic
+// Returns PlaceFromLibraryResponse
+// Since: 11.0
+message PlaceSymbolFromLibrary
+{
+  // header.document must specify the sheet path to place on
+  kiapi.common.types.ItemHeader header = 1;
+
+  kiapi.common.types.LibraryIdentifier lib_id = 2;
+
+  kiapi.common.types.Vector2 position = 3;
+
+  // If unspecified, will use default orientation
+  optional kiapi.common.types.Angle orientation = 4;
+
+  // If unspecified, will place the first unit of a multi-unit symbol
+  optional kiapi.schematic.types.SchematicSymbolUnit unit = 5;
+
+  // If unspecified, KiCad will either leave the symbol unannotated or automatically annotate it
+  // depending on the user's current auto-annotation preference.
+  optional string reference = 6;
+}

@@ -27,13 +27,15 @@ set( KIAPI_PROTO_SRCS
     common/types/jobs.proto
     common/types/project_settings.proto
     common/types/variants.proto
-    common/types/wizards.proto
+    common/types/library_types.proto
 
     common/commands/base_commands.proto
     common/commands/cross_probe_commands.proto
     common/commands/editor_commands.proto
+    common/commands/library_commands.proto
     common/commands/project_commands.proto
     common/commands/variant_commands.proto
+    common/types/wizards.proto
 
     board/board.proto
     board/board_commands.proto

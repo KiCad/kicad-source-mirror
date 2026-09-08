@@ -1,0 +1,153 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Jon Evans <jon@craftyjon.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/*
+ * library_types.proto
+ * Types related to library management (library tables, load status, items within libraries)
+ */
+
+syntax = "proto3";
+
+package kiapi.common.types;
+
+
+// The kind of content managed by a library table.
+// Since: 11.0
+enum LibraryType
+{
+  LT_UNKNOWN      = 0;
+  LT_SYMBOL       = 1;
+  LT_FOOTPRINT    = 2;
+  LT_DESIGN_BLOCK = 3;
+}
+
+// Which library table(s) a request or response refers to.
+// Since: 11.0
+enum LibraryTableScope
+{
+  LTS_UNKNOWN  = 0;
+  LTS_GLOBAL   = 1;
+  LTS_PROJECT  = 2;
+  LTS_BOTH     = 3;
+}
+
+// A single row in a library table (a library).
+// Since: 11.0
+message LibraryTableEntry
+{
+  // The library nickname (the first part of a LIB_ID); unique within a table
+  string nickname = 1;
+
+  // The location of the library, in raw form (environment variables are not expanded).
+  string uri = 2;
+
+  LibraryType type = 3;
+
+  LibraryTableScope scope = 4;
+
+  // User-editable description; may be empty
+  string description = 5;
+
+  // Plugin-specific options, as set in the library table.
+  // These options are not covered by API stability guarantees.
+  map<string, string> options = 6;
+
+  // Disabled libraries are not loaded and cannot be queried
+  bool disabled = 7;
+
+  // Hidden libraries are not shown in the library choosers (but can still be queried)
+  bool hidden = 8;
+
+  // True if the library is writable (system libraries are usually not)
+  bool writable = 9;
+}
+
+
+// A row plus the status of its load attempt within this KiCad session
+// Since: 11.0
+message LibraryStatusEntry
+{
+  LibraryTableEntry entry = 1;
+
+  LibraryLoadStatus status = 2;
+
+  // Populated when status == LTS_LOAD_ERROR
+  optional string error_message = 3;
+}
+
+// Since: 11.0
+enum LibraryLoadStatus
+{
+  LLS_UNKNOWN = 0;
+  LLS_INVALID = 1;  // The library cannot be loaded (e.g. table row is invalid)
+  LLS_LOADING = 2;  // An asynchronous load is in progress
+  LLS_LOADED  = 3;  // The library is ready for use
+  LLS_ERROR   = 4;  // A load was attempted and failed
+}
+
+// Describes a library table file itself
+// Since: 11.0
+message LibraryTable
+{
+  // Full path to the table file
+  string path = 1;
+
+  LibraryTableScope scope = 2;
+
+  // Invalid tables could not be parsed and their entries are not available
+  bool valid = 3;
+
+  // Populated when valid == false
+  optional string error_message = 4;
+}
+
+// A summary of the response to a table modification request
+message LibraryTableMutationResponse
+{
+  // The full table after the mutation, if the mutation succeeded
+  optional LibraryTable table = 1;
+}
+
+// A general-purpose status response for library commands
+message LibraryCommandStatus
+{
+  enum Code
+  {
+    LCS_UNKNOWN = 0;
+    LCS_OK = 1;
+    // The given library/table/entry was not found
+    LCS_NOT_FOUND = 2;
+    // The target file is not writable
+    LCS_READ_ONLY = 3;
+    // The request would create a duplicate entry
+    LCS_ALREADY_EXISTS = 4;
+    // Some other error occurred; details in error_message
+    LCS_ERROR = 5;
+  }
+
+  Code code = 1;
+
+  optional string error_message = 2;
+}

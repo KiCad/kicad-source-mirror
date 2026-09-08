@@ -1,0 +1,189 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Jon Evans <jon@craftyjon.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/*
+ * library_commands.proto
+ * Commands and responses related to library management
+ */
+
+syntax = "proto3";
+
+package kiapi.common.commands;
+
+import "common/types/base_types.proto";
+import "common/types/library_types.proto";
+import "google/protobuf/any.proto";
+
+/*
+ * Library table management
+ */
+
+// Returns LibraryTableResponse
+// Since: 11.0
+message GetLibraryTable
+{
+  // Which type of table (symbol, footprint, design block) to query
+  kiapi.common.types.LibraryType type = 1;
+
+  // Which table scope (global, project, or both)
+  kiapi.common.types.LibraryTableScope scope = 2;
+
+  // If true, return URIs with environment variables expanded
+  bool substituted = 3;
+}
+
+// Since: 11.0
+message LibraryTableResponse
+{
+  // The table that was queried
+  kiapi.common.types.LibraryTable table = 1;
+
+  repeated kiapi.common.types.LibraryTableEntry rows = 2;
+}
+
+// Inserts a new row into the given library table.
+// Returns LibraryCommandStatus
+// Since: 11.0
+message AddLibraryTableEntry
+{
+  kiapi.common.types.LibraryTableEntry entry = 1;
+
+  // Which table to modify.  LTS_BOTH is invalid here.
+  kiapi.common.types.LibraryTableScope scope = 2;
+}
+
+// Modifies an existing row, matched by entry.nickname (and scope).
+// Returns LibraryCommandStatus
+// Since: 11.0
+message UpdateLibraryTableEntry
+{
+  kiapi.common.types.LibraryTableEntry entry = 1;
+
+  // Which table to modify.  LTS_BOTH is invalid here.
+  kiapi.common.types.LibraryTableScope scope = 2;
+}
+
+// Deletes a row from the given library table by nickname.
+// Returns LibraryCommandStatus
+// Since: 11.0
+message DeleteLibraryTableEntry
+{
+  // Which table type (symbol, footprint, design block) contains the row
+  kiapi.common.types.LibraryType type = 1;
+
+  string nickname = 2;
+
+  // Which table to modify.  LTS_BOTH is invalid here.
+  kiapi.common.types.LibraryTableScope scope = 3;
+}
+
+/*
+ * Library management
+ */
+
+// Queries the load status of each library of the given type(s)
+// Returns LibraryStatusResponse
+// Since: 11.0
+message GetLibraryStatuses
+{
+  // Types to query; empty means all types
+  repeated kiapi.common.types.LibraryType types = 1;
+
+  // Which table scope(s) to query
+  kiapi.common.types.LibraryTableScope scope = 2;
+}
+
+// Since: 11.0
+message LibraryStatusResponse
+{
+  repeated kiapi.common.types.LibraryStatusEntry libraries = 1;
+}
+
+// Reloads library table row(s) from disk.  This starts a reload process that operates
+// asynchronously.  The API command will return immediately but updated library content
+// will not be available until the load has completed.
+// Returns LibraryCommandStatus
+// Since: 11.0
+message ReloadLibrary
+{
+  // Type of library to reload
+  kiapi.common.types.LibraryType type = 1;
+
+  // Which table to look up the library in.  LTS_BOTH is invalid here.
+  kiapi.common.types.LibraryTableScope scope = 2;
+
+  // List of libraries to reload. If absent, all libraries matching type and scope will be reloaded.
+  repeated string nickname = 3;
+}
+
+/*
+ * Library queries
+ */
+
+// Requests items contained in a library or set of libraries
+// Returns LibraryItemsResponse
+// Since: 11.0
+message GetLibraryItems
+{
+  kiapi.common.types.LibraryType type = 1;
+
+  // The library or libraries to query.
+  repeated string nickname = 2;
+}
+
+// Since: 11.0
+message LibraryItemsResponse
+{
+  // The identifiers of all content in the library
+  repeated kiapi.common.types.LibraryIdentifier items = 1;
+}
+
+// Requests items matching a search query in the given library scopes
+// Returns SearchLibrariesResponse
+// Since: 11.0
+message SearchLibraries
+{
+  kiapi.common.types.LibraryType type = 1;
+
+  // Glob pattern or substring to match against item names.  Follows the same logic
+  // of KiCad's library chooser filter
+  string query = 2;
+}
+
+// Since: 11.0
+message SearchLibrariesResponse
+{
+  // The identifiers of matching content
+  repeated kiapi.common.types.LibraryIdentifier items = 1;
+}
+
+// Since: 11.0
+message PlaceFromLibraryResponse
+{
+  kiapi.common.types.ItemHeader header = 1;
+
+  // The newly-created item
+  google.protobuf.Any item = 2;
+}
