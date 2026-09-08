@@ -1262,25 +1262,52 @@ std::optional<EDA_ITEM*> API_HANDLER_SCH::getItemFromDocument( const DocumentSpe
 }
 
 
-std::optional<TITLE_BLOCK*> API_HANDLER_SCH::getTitleBlock()
+SCH_SCREEN* API_HANDLER_SCH::resolveScreenFromDocument( const DocumentSpecifier& aDocument ) const
 {
-    wxCHECK( m_context->GetCurrentSheet(), std::nullopt );
-    return &m_context->GetCurrentSheet()->LastScreen()->GetTitleBlock();
+    if( aDocument.has_sheet_path() )
+    {
+        KIID_PATH path = UnpackSheetPath( aDocument.sheet_path() );
+
+        if( std::optional<SCH_SHEET_PATH> sheetPath = schematic()->Hierarchy().GetSheetPathByKIIDPath( path ) )
+            return sheetPath->LastScreen();
+
+        return nullptr;
+    }
+
+    if( std::optional<SCH_SHEET_PATH> current = m_context->GetCurrentSheet() )
+        return current->LastScreen();
+
+    return nullptr;
 }
 
 
-std::optional<PAGE_INFO> API_HANDLER_SCH::getPageSettings()
+std::optional<TITLE_BLOCK*> API_HANDLER_SCH::getTitleBlock( const DocumentSpecifier& aDocument )
 {
-    wxCHECK( m_context->GetCurrentSheet(), std::nullopt );
-    return m_context->GetCurrentSheet()->LastScreen()->GetPageSettings();
+    if( SCH_SCREEN* screen = resolveScreenFromDocument( aDocument ) )
+        return &screen->GetTitleBlock();
+
+    return std::nullopt;
 }
 
 
-bool API_HANDLER_SCH::setPageSettings( const PAGE_INFO& aPageInfo )
+std::optional<PAGE_INFO> API_HANDLER_SCH::getPageSettings( const DocumentSpecifier& aDocument )
 {
-    wxCHECK( m_context->GetCurrentSheet(), false );
-    m_context->GetCurrentSheet()->LastScreen()->SetPageSettings( aPageInfo );
-    return true;
+    if( SCH_SCREEN* screen = resolveScreenFromDocument( aDocument ) )
+        return screen->GetPageSettings();
+
+    return std::nullopt;
+}
+
+
+bool API_HANDLER_SCH::setPageSettings( const DocumentSpecifier& aDocument, const PAGE_INFO& aPageInfo )
+{
+    if( SCH_SCREEN* screen = resolveScreenFromDocument( aDocument ) )
+    {
+        screen->SetPageSettings( aPageInfo );
+        return true;
+    }
+
+    return false;
 }
 
 

@@ -197,11 +197,11 @@ protected:
 
     tl::expected<bool, ApiResponseStatus> validateDocumentInternal( const DocumentSpecifier& aDocument ) const override;
 
-    std::optional<TITLE_BLOCK*> getTitleBlock() override;
+    std::optional<TITLE_BLOCK*> getTitleBlock( const DocumentSpecifier& aDocument ) override;
 
-    std::optional<PAGE_INFO> getPageSettings() override;
+    std::optional<PAGE_INFO> getPageSettings( const DocumentSpecifier& aDocument ) override;
 
-    bool setPageSettings( const PAGE_INFO& aPageInfo ) override;
+    bool setPageSettings( const DocumentSpecifier& aDocument, const PAGE_INFO& aPageInfo ) override;
 
     wxString getDrawingSheetFileName() override;
 

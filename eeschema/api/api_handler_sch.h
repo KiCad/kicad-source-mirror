@@ -80,11 +80,11 @@ protected:
     std::optional<EDA_ITEM*> getItemFromDocument( const DocumentSpecifier& aDocument,
                                                   const KIID& aId ) override;
 
-    std::optional<TITLE_BLOCK*> getTitleBlock() override;
+    std::optional<TITLE_BLOCK*> getTitleBlock( const DocumentSpecifier& aDocument ) override;
 
-    std::optional<PAGE_INFO> getPageSettings() override;
+    std::optional<PAGE_INFO> getPageSettings( const DocumentSpecifier& aDocument ) override;
 
-    bool setPageSettings( const PAGE_INFO& aPageInfo ) override;
+    bool setPageSettings( const DocumentSpecifier& aDocument, const PAGE_INFO& aPageInfo ) override;
 
     wxString getDrawingSheetFileName() override;
 
@@ -184,6 +184,10 @@ private:
     SCH_EDIT_FRAME* frame() const;
 
     void filterValidSchTypes( std::set<KICAD_T>& aTypeList );
+
+    /// Returns the sheet path's screen when one is given and it is found.
+    /// Returns the editor's current sheet if not.  May return null in either case.
+    SCH_SCREEN* resolveScreenFromDocument( const DocumentSpecifier& aDocument ) const;
 
 protected:
 

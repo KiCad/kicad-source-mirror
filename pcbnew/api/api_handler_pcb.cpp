@@ -1363,19 +1363,19 @@ HANDLER_RESULT<BoardLayerResponse> API_HANDLER_PCB::handleGetBoardLayerByName(
 }
 
 
-std::optional<TITLE_BLOCK*> API_HANDLER_PCB::getTitleBlock()
+std::optional<TITLE_BLOCK*> API_HANDLER_PCB::getTitleBlock( const DocumentSpecifier& aDocument )
 {
     return &context()->GetBoard()->GetTitleBlock();
 }
 
 
-std::optional<PAGE_INFO> API_HANDLER_PCB::getPageSettings()
+std::optional<PAGE_INFO> API_HANDLER_PCB::getPageSettings( const DocumentSpecifier& aDocument )
 {
     return context()->GetBoard()->GetPageSettings();
 }
 
 
-bool API_HANDLER_PCB::setPageSettings( const PAGE_INFO& aPageInfo )
+bool API_HANDLER_PCB::setPageSettings( const DocumentSpecifier& aDocument, const PAGE_INFO& aPageInfo )
 {
     context()->GetBoard()->SetPageSettings( aPageInfo );
     return true;
