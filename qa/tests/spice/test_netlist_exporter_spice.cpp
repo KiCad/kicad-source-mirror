@@ -734,9 +734,39 @@ BOOST_AUTO_TEST_CASE( RepeatedExportIsDeterministic )
             BOOST_TEST_INFO( "First export:\n" << first );
             BOOST_TEST_INFO( "Second export:\n" << second );
             BOOST_CHECK_EQUAL( first, second );
-
-            Cleanup();
         }
+
+        Cleanup();
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( ExportedFieldsSurviveSchematicReset )
+{
+    LOCALE_IO dummy;
+    LoadSchematic( SchematicQAPath( wxS( "opamp" ) ) );
+
+    NETLIST_EXPORTER_SPICE exporter( m_schematic.get() );
+    WX_STRING_REPORTER reporter;
+    BOOST_REQUIRE( exporter.ReadSchematicAndLibraries( GetNetlistOptions(), reporter ) );
+    BOOST_REQUIRE( !exporter.GetItems().empty() );
+
+    std::vector<wxString> shownFields;
+
+    for( const SPICE_ITEM& item : exporter.GetItems() )
+    {
+        for( const SCH_FIELD& field : item.fields )
+            shownFields.push_back( field.GetShownText( false ) );
+    }
+
+    BOOST_REQUIRE( !shownFields.empty() );
+    m_schematic->Reset();
+    size_t index = 0;
+
+    for( const SPICE_ITEM& item : exporter.GetItems() )
+    {
+        for( const SCH_FIELD& field : item.fields )
+            BOOST_CHECK_EQUAL( field.GetShownText( false ), shownFields[index++] );
     }
 }
 

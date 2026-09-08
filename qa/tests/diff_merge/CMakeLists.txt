@@ -79,6 +79,8 @@ if( UNIX )
         DEPENDS kicad-cli
     )
 
+    setup_qa_env( qa_diff_merge_mergetool_e2e )
+
     # Workflow E2E: requires kicad GUI binary + display server.  Skips
     # cleanly when either is missing so CI without xvfb still passes.
     add_test(
@@ -90,5 +92,8 @@ if( UNIX )
 
     set_tests_properties( qa_diff_merge_mergetool_workflow_e2e PROPERTIES
         DEPENDS "kicad-cli;kicad"
+        TIMEOUT 600
     )
+
+    setup_qa_env( qa_diff_merge_mergetool_workflow_e2e )
 endif()

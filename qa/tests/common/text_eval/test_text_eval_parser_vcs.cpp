@@ -167,6 +167,8 @@ private:
         return err == 0;
     }
 
+    // These tests exercise cwd-based discovery independently of projects loaded by other tests.
+    TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE m_context{ wxString() };
     LIBGIT_BACKEND* m_backend;
     wxString        m_originalDir;
     wxString        m_tempDir;
