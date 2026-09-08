@@ -862,6 +862,10 @@ void SCH_SYMBOL::Serialize( kiapi::schematic::types::SchematicSymbolInstance& aS
         def->set_units_locked( m_part->UnitsLocked() );
         def->set_embedded_fonts( m_part->GetAreFontsEmbedded() );
 
+        def->set_show_pin_numbers( m_part->GetShowPinNumbers() );
+        def->set_show_pin_names( m_part->GetShowPinNames() );
+        PackDistance( *def->mutable_pin_name_offset(), m_part->GetPinNameOffset(), schIUScale );
+
         for( const auto& [unit, displayName] : m_part->GetUnitDisplayNames() )
         {
             SchematicUnitDisplayName* protoName = def->add_unit_display_names();
@@ -1008,6 +1012,10 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
 
     for( const SchematicUnitDisplayName& displayName : def.unit_display_names() )
         libSymbol->GetUnitDisplayNames()[displayName.unit()] = wxString::FromUTF8( displayName.name() );
+
+    libSymbol->SetShowPinNumbers( def.show_pin_numbers() );
+    libSymbol->SetShowPinNames( def.show_pin_names() );
+    libSymbol->SetPinNameOffset( UnpackDistance( def.pin_name_offset(), schIUScale ) );
 
     if( def.has_pin_maps() )
     {

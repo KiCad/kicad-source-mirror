@@ -571,6 +571,15 @@ message SchematicSymbol
   bool units_locked = 16;
   repeated SchematicUnitDisplayName unit_display_names = 17;
   bool embedded_fonts = 18;
+
+  // Whether pin numbers are shown for all pins of this symbol
+  bool show_pin_numbers = 19;
+
+  // Whether pin names are shown for all pins of this symbol
+  bool show_pin_names = 20;
+
+  // Distance between the pin and its name text; 0 means the name is inside the body outline
+  kiapi.common.types.Distance pin_name_offset = 21;
 }
 
 message SchematicSymbolTransform
