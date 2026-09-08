@@ -449,11 +449,18 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
         else
         {
             NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
+            NET_NAVIGATOR_ITEM_DATA savedSelection;
 
             wxTreeItemId selection = m_netNavigator->GetSelection();
 
             if( selection.IsOk() )
                 itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
+
+            if( itemData )
+            {
+                savedSelection = *itemData;
+                itemData = &savedSelection;
+            }
 
             m_netNavigator->DeleteAllItems();
             nodeCnt++;
