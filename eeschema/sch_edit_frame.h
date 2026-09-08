@@ -499,6 +499,8 @@ public:
 
     wxString GetCurrentFileName() const override;
 
+    bool CanAcceptApiCommands() override;
+
     /**
      * Check if any of the screens has unsaved changes and asks the user whether to save or
      * drop them.
@@ -960,6 +962,12 @@ protected:
     bool doAutoSave() override;
 
     bool canRunAutoSave() const override;
+
+    /**
+     * Return true when a tool other than passive selection or an idle point editor is active.
+     * Used to gate both API command acceptance and autosave so neither stomps on a live edit.
+     */
+    bool interactiveOperationInProgress() const;
 
     void configureToolbars() override;
 

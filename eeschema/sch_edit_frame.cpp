@@ -3438,15 +3438,12 @@ bool SCH_EDIT_FRAME::doAutoSave()
 }
 
 
-bool SCH_EDIT_FRAME::canRunAutoSave() const
+bool SCH_EDIT_FRAME::interactiveOperationInProgress() const
 {
-    // Serializing the schematic on the UI thread freezes the editor; defer it while the user
-    // is mid-operation (any tool other than passive selection or point editing is active) so
-    // the snapshot waits for the timer to retry once the edit finishes.
     TOOL_MANAGER* mgr = GetToolManager();
 
     if( !mgr )
-        return true;
+        return false;
 
     TOOL_BASE*        currentTool = mgr->GetCurrentTool();
     SCH_POINT_EDITOR* pointEditor = mgr->GetTool<SCH_POINT_EDITOR>();
@@ -3454,7 +3451,25 @@ bool SCH_EDIT_FRAME::canRunAutoSave() const
     // The point editor is the active tool whenever a point-editable item is selected, even while
     // idle, so it is safe to snapshot unless a drag is actively mutating the model.
     if( currentTool == pointEditor )
-        return pointEditor && !pointEditor->IsDragging();
+        return pointEditor && pointEditor->IsDragging();
 
-    return currentTool == mgr->GetTool<SCH_SELECTION_TOOL>();
+    return currentTool != mgr->GetTool<SCH_SELECTION_TOOL>();
+}
+
+
+bool SCH_EDIT_FRAME::CanAcceptApiCommands()
+{
+    if( interactiveOperationInProgress() )
+        return false;
+
+    return EDA_BASE_FRAME::CanAcceptApiCommands();
+}
+
+
+bool SCH_EDIT_FRAME::canRunAutoSave() const
+{
+    // Serializing the schematic on the UI thread freezes the editor; defer it while the user
+    // is mid-operation (any tool other than passive selection or point editing is active) so
+    // the snapshot waits for the timer to retry once the edit finishes.
+    return !interactiveOperationInProgress();
 }
