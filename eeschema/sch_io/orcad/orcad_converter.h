@@ -36,6 +36,7 @@
 
 #include <wx/string.h>
 
+#include <geometry/seg.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 #include <gal/color4d.h>
@@ -45,11 +46,14 @@
 #include <sch_io/orcad/orcad_records.h>
 
 class LIB_SYMBOL;
+class SCH_LINE;
 class EDA_TEXT;
 class PROGRESS_REPORTER;
 class REPORTER;
 class SCHEMATIC;
 class SCH_ITEM;
+class SCH_LABEL_BASE;
+class SCH_LABEL;
 class SCH_SCREEN;
 class SCH_SHEET;
 class SCH_SHEET_PIN;
@@ -173,6 +177,8 @@ private:
         std::vector<bool>        pinIgnore;  ///< package pins suppressed for this unit
         std::vector<int>         pinOffsets; ///< hidden duplicate-pin electrical offsets, DBU
         std::vector<bool>        explicitPinNets; ///< placed pins whose source net overrides implicit power naming
+
+        bool operator==( const UNIT_INFO& ) const = default;
     };
 
     /** One emitted KiCad lib symbol (possibly multi-unit). */
@@ -199,6 +205,15 @@ private:
     /** (sourcePackage-or-pkgName, pkgName, variant index, unit discriminator) ->
      * (lib name, unit number). */
     using PKG_KEY = std::tuple<std::string, std::string, int, std::string>;
+
+    struct PLACED_PACKAGE_UNIT
+    {
+        SCH_SYMBOL*    symbol;
+        const void*    scope;
+        wxString       reference;
+        const PKG_KEY* sourceUnit;
+        UNIT_INFO      unit;
+    };
 
     /** -- constants (calibrated; do not change) ---------------------------------------- */
 
@@ -243,7 +258,9 @@ private:
     std::pair<const ORCAD_SYMBOL_DEF*, int> pickVariant( const ORCAD_PLACED_INSTANCE& aInst ) const;
 
     /** Returns the registered library name and unit number. */
-    std::pair<std::string, int> libForInstance( const ORCAD_PLACED_INSTANCE& aInst );
+    std::pair<std::string, int> libForInstance( const ORCAD_PLACED_INSTANCE& aInst,
+                                              const PKG_KEY** aSourceUnit = nullptr );
+    void finalizeNativePowerPackages();
 
     /** Key power symbols by net name because users can rename their ports. */
     std::string powerLibFor( const std::string& aSymbolName, const std::string& aNetName );
@@ -321,7 +338,10 @@ private:
     void placeHierarchicalBlockFields( SCH_SHEET* aSheet, const ORCAD_DRAWN_INSTANCE& aBlock,
                                        const std::string& aChildFolder );
     void placeHierarchicalBlockPinFill( SCH_SCREEN* aScreen, SCH_SHEET_PIN* aPin );
-    void promoteUniqueOccurrenceNetNames();
+    void appendNetIntent( SCH_SCREEN* aScreen, SCH_LABEL* aLabel, bool aExplicitName, uint32_t aNetId = 0 );
+    void minimizeNetLabels();
+    void finalizeNetNames();
+    void recordNetNameMap();
     void convertUnreferencedPages();
 
     KIID deterministicUuid( const std::string& aRole, size_t aOrdinal ) const;
@@ -364,6 +384,8 @@ private:
 
     std::vector<int> placedStackedPinOffsets( const ORCAD_PLACED_INSTANCE& aInstance ) const;
     VECTOR2I placedPinElectricalPosition( const ORCAD_PLACED_INSTANCE& aInstance, size_t aPinIndex ) const;
+    bool hasImplicitPowerPinName( const ORCAD_PLACED_INSTANCE& aInstance, size_t aPinIndex,
+                                  const std::string& aNetName ) const;
 
     /** Resolve every off-page connector on the page to (index, net, pin position). */
     std::vector<OFFPAGE_NET> offpageNets( const ORCAD_RAW_PAGE& aPage ) const;
@@ -425,6 +447,10 @@ private:
 
     std::map<std::string, LIB_ENTRY>               m_libSymbols; ///< keyed by emitted lib name
     std::map<PKG_KEY, std::pair<std::string, int>> m_pkgToLib;
+    std::map<PKG_KEY, std::pair<std::string, int>> m_preparedPkgToLib;
+    std::map<std::string, std::vector<UNIT_INFO>> m_preparedLibUnits;
+    std::vector<PLACED_PACKAGE_UNIT>             m_placedPackageUnits;
+    std::set<std::string>                       m_nativePowerFamilies;
     std::map<std::string, std::string>             m_globalNetNames;
     std::map<std::string, std::string>             m_globalNetAliases;
     std::set<std::string>                          m_powerNetNames;
@@ -451,9 +477,46 @@ private:
     std::map<std::string, std::string>                         m_currentInterfaceNetAliases;
     std::map<std::string, std::string>                         m_currentOccurrenceNetAliases;
     std::set<std::string>                                      m_currentConnectorInterfaceNetAliases;
+    std::set<const ORCAD_PIN_INST*>                            m_currentImplicitPowerPins;
     std::map<std::string, std::map<std::string, std::string>> m_hierBusNamesByScreen;
     std::map<std::string, std::string>                         m_occurrenceSuffixByScreen;
     std::map<std::string, std::map<std::string, uint32_t>>     m_occurrenceNetIdsByScreen;
+
+    struct NET_LABEL_INTENT
+    {
+        SCH_SCREEN* screen;
+        SCH_LABEL_BASE* label;
+        bool explicitName;
+    };
+
+    struct INTERFACE_LABEL_SOURCE
+    {
+        SCH_SCREEN* screen;
+        SCH_LABEL_BASE* label;
+        std::vector<SCH_LINE*> wires;
+    };
+
+    void rememberInterfaceLabelSource( SCH_SCREEN* aScreen, SCH_LABEL_BASE* aLabel,
+                                       const std::vector<SEG>& aSourceWires );
+
+    std::vector<INTERFACE_LABEL_SOURCE> m_interfaceLabelSources;
+    std::vector<NET_LABEL_INTENT> m_netLabelIntents;
+    std::map<SCH_LABEL_BASE*, std::pair<SCH_SCREEN*, uint32_t>> m_labelSourceNets;
+    std::map<SCH_SCREEN*, const ORCAD_RAW_PAGE*> m_sourcePages;
+    std::map<std::pair<SCH_SCREEN*, uint32_t>, std::vector<SCH_ITEM*>> m_sourceNetItems;
+    std::map<std::pair<SCH_SCREEN*, uint32_t>, std::set<std::string>> m_sourceNetNames;
+    struct SOURCE_PIN_IDENTITY
+    {
+        wxString number;
+        VECTOR2I position;
+        std::optional<KIID> libraryPin;
+        bool ignored = false;
+    };
+
+    std::map<SCH_SYMBOL*, std::vector<SOURCE_PIN_IDENTITY>> m_sourcePinIdentities;
+    std::map<SCH_SYMBOL*, const ORCAD_PLACED_INSTANCE*> m_sourceInstances;
+    std::map<SCH_SCREEN*, std::vector<wxString>> m_sourceOccurrences;
+    std::map<std::tuple<SCH_SCREEN*, const ORCAD_PLACED_INSTANCE*, size_t>, std::pair<uint32_t, std::string>> m_wirelessNetNames;
 
     /** Lower-cased sheet names already emitted, to keep sibling sheet names unique. */
     std::set<wxString> m_usedSheetNames;

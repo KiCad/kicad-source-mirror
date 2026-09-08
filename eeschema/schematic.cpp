@@ -170,6 +170,8 @@ SCHEMATIC::~SCHEMATIC()
 
 void SCHEMATIC::Reset()
 {
+    m_importNetMap.reset();
+    m_pendingImportNetMapPath.clear();
     delete m_rootSheet;
 
     m_rootSheet = nullptr;
@@ -1433,7 +1435,7 @@ wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision,
 }
 
 
-int SCHEMATIC::FixupJunctionsAfterImport()
+int SCHEMATIC::FixupJunctionsAfterImport( std::function<void( SCH_LINE*, SCH_LINE* )> aOnSplit )
 {
     SCH_SCREENS screens( Root() );
     int         count = 0;
@@ -1458,6 +1460,9 @@ int SCHEMATIC::FixupJunctionsAfterImport()
             {
                 SCH_LINE* newSegment = wire->NonGroupAware_BreakAt( point );
                 screen->Append( newSegment );
+
+                if( aOnSplit )
+                    aOnSplit( wire, newSegment );
             }
         }
     }
@@ -2674,4 +2679,34 @@ void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY
                         absPath, wxString::FromUTF8( ioe.What() ) );
         }
     }
+}
+
+
+bool SCHEMATIC::SaveImportNetMap( const wxString& aRootPath, REPORTER& aReporter )
+{
+    if( !m_importNetMap || !GetTopLevelSheet() )
+        return true;
+
+    const bool saved = WriteImportNetMap( *m_importNetMap, GetTopLevelSheet()->m_Uuid, aRootPath, aReporter );
+    m_pendingImportNetMapPath = saved ? wxString() : aRootPath;
+    return saved;
+}
+
+
+bool SCHEMATIC::RetryImportNetMap( REPORTER& aReporter )
+{
+    if( m_pendingImportNetMapPath.IsEmpty() )
+        return true;
+
+    const wxString path = m_pendingImportNetMapPath;
+    return SaveImportNetMap( path, aReporter );
+}
+
+
+void SCHEMATIC::LoadImportNetMap( const wxString& aRootPath, REPORTER& aReporter )
+{
+    m_pendingImportNetMapPath.clear();
+
+    if( GetTopLevelSheet() )
+        m_importNetMap = ReadImportNetMap( GetTopLevelSheet()->m_Uuid, aRootPath, aReporter );
 }

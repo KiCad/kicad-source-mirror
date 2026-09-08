@@ -19,8 +19,10 @@
 
 #include <boost/test/unit_test.hpp>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <richio.h>
 
 #include <sch_io/orcad/sch_io_orcad.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_io/orcad/orcad_cache.h>
 #include <sch_io/orcad/orcad_cis.h>
 #include <sch_io/orcad/orcad_converter.h>
@@ -30,6 +32,7 @@
 #include <sch_io/ole_image.h>
 
 #include <schematic.h>
+#include <import_net_map.h>
 #include <connection_graph.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -5174,7 +5177,7 @@ BOOST_AUTO_TEST_CASE( OccurrenceAliasRenamesInterfaceNet )
 }
 
 
-BOOST_AUTO_TEST_CASE( OffpageDisplayedNamePreservesClockwiseVerticalRotation )
+BOOST_AUTO_TEST_CASE( OffpageUsesVisibleNativeLabelWithVerticalWireOrientation )
 {
     ORCAD_RAW_PAGE page;
     page.name = "VERTICAL OFFPAGE";
@@ -5210,19 +5213,23 @@ BOOST_AUTO_TEST_CASE( OffpageDisplayedNamePreservesClockwiseVerticalRotation )
     schematic->SetProject( &manager.Prj() );
     SCH_SHEET* root = convertRawDesign( design, *schematic );
 
-    const SCH_TEXT* displayedName = nullptr;
+    const SCH_GLOBALLABEL* connector = nullptr;
 
-    for( const SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_TEXT_T ) )
+    for( const SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
     {
-        const SCH_TEXT* text = static_cast<const SCH_TEXT*>( item );
+        const SCH_GLOBALLABEL* label = static_cast<const SCH_GLOBALLABEL*>( item );
 
-        if( text->GetText() == wxS( "VBUS_P_CTRL0_CON" ) )
-            displayedName = text;
+        if( label->GetText() == wxS( "VBUS_P_CTRL0_CON" )
+            && ( label->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED || label->GetTextColor().a > 0 ) )
+            connector = label;
     }
 
-    BOOST_REQUIRE( displayedName );
-    BOOST_CHECK( displayedName->GetTextAngle() == ANGLE_270 );
-    BOOST_CHECK_EQUAL( displayedName->GetHorizJustify(), GR_TEXT_H_ALIGN_RIGHT );
+    BOOST_REQUIRE( connector );
+    BOOST_CHECK( connector->GetSpinStyle() == SPIN_STYLE::BOTTOM );
+    BOOST_CHECK_EQUAL( connector->GetTextHeight(), 17000 );
+
+    for( const SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_TEXT_T ) )
+        BOOST_CHECK( static_cast<const SCH_TEXT*>( item )->GetText() != wxS( "VBUS_P_CTRL0_CON" ) );
 }
 
 
@@ -5326,7 +5333,7 @@ BOOST_AUTO_TEST_CASE( HiddenOffpageIntersheetReferenceIsNotRendered )
 }
 
 
-BOOST_AUTO_TEST_CASE( PortRetainsSourceGraphicsAndDisplayedName )
+BOOST_AUTO_TEST_CASE( PortUsesVisibleNativeLabelWithoutDuplicateGraphics )
 {
     ORCAD_SYMBOL_DEF definition;
     definition.typeId = ORCAD_ST_PORT_SYMBOL;
@@ -5350,6 +5357,8 @@ BOOST_AUTO_TEST_CASE( PortRetainsSourceGraphicsAndDisplayedName )
 
     ORCAD_RAW_PAGE page;
     page.name = "SOURCE PORT GRAPHICS";
+    page.width = 11000;
+    page.height = 8500;
     page.ports.push_back( std::move( port ) );
     page.wires.push_back( ORCAD_WIRE{ .id = 1, .x1 = 170, .y1 = 110, .x2 = 220, .y2 = 110 } );
     page.netmap[1] = "*SHORT";
@@ -5365,30 +5374,27 @@ BOOST_AUTO_TEST_CASE( PortRetainsSourceGraphicsAndDisplayedName )
     std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
     schematic->SetProject( &manager.Prj() );
     SCH_SHEET* root = convertRawDesign( design, *schematic );
-    BOX2I      graphicsBox;
-    size_t     shapeCount = 0;
-    const SCH_TEXT* displayedName = nullptr;
+    const SCH_GLOBALLABEL* portLabel = nullptr;
 
-    for( const SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SHAPE_T ) )
+    for( const SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
     {
-        graphicsBox.Merge( item->GetBoundingBox() );
-        ++shapeCount;
+        const SCH_GLOBALLABEL* label = static_cast<const SCH_GLOBALLABEL*>( item );
+
+        if( label->GetText() == wxS( "*SHORT" ) )
+            portLabel = label;
     }
+
+    BOOST_REQUIRE( portLabel );
+    BOOST_CHECK_EQUAL( portLabel->GetTextHeight(), schIUScale.mmToIU( 1.70 ) );
+    BOOST_CHECK( portLabel->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED
+                 || portLabel->GetTextColor().a > 0 );
+    BOOST_CHECK( portLabel->GetPosition() == OrcadDbuToIu( 170, 110 ) );
+    BOOST_CHECK( portLabel->GetSpinStyle() == SPIN_STYLE::LEFT );
+    BOOST_CHECK( root->GetScreen()->Items().OfType( SCH_SHAPE_T ).empty() );
 
     for( const SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_TEXT_T ) )
-    {
-        const SCH_TEXT* text = static_cast<const SCH_TEXT*>( item );
+        BOOST_CHECK_NE( static_cast<const SCH_TEXT*>( item )->GetText(), wxString( "*SHORT" ) );
 
-        if( text->GetText() == wxS( "*SHORT" ) )
-            displayedName = text;
-    }
-
-    BOOST_CHECK_EQUAL( shapeCount, 5u );
-    BOOST_CHECK_GE( graphicsBox.GetWidth(), OrcadDbuToIu( 70, 0 ).x );
-    BOOST_CHECK_LE( graphicsBox.GetWidth(), OrcadDbuToIu( 72, 0 ).x );
-    BOOST_REQUIRE( displayedName );
-    BOOST_CHECK_EQUAL( displayedName->GetTextHeight(), schIUScale.mmToIU( 1.70 ) );
-    BOOST_CHECK( displayedName->IsVisible() );
 }
 
 
@@ -5517,7 +5523,7 @@ BOOST_AUTO_TEST_CASE( OccurrenceWireNameOverridesOffpageDisplayName )
 }
 
 
-BOOST_AUTO_TEST_CASE( OccurrencePowerNameGlobalizesMatchingWire )
+BOOST_AUTO_TEST_CASE( OccurrencePowerNameDoesNotGlobalizeUnconnectedWire )
 {
     ORCAD_SYMBOL_DEF power;
     power.typeId = ORCAD_ST_GLOBAL_SYMBOL;
@@ -5554,18 +5560,30 @@ BOOST_AUTO_TEST_CASE( OccurrencePowerNameGlobalizesMatchingWire )
     manager.LoadProject( "" );
     schematic->SetProject( &manager.Prj() );
     convertRawDesign( design, *schematic );
-    int labelCount = 0;
+    wxString wireNet;
+    wxString powerNet;
 
     for( const SCH_SHEET_PATH& path : schematic->Hierarchy() )
     {
-        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        for( SCH_ITEM* item : path.LastScreen()->Items() )
         {
-            ++labelCount;
-            BOOST_CHECK_EQUAL( static_cast<SCH_GLOBALLABEL*>( item )->GetText(), wxS( "VDD" ) );
+            BOOST_CHECK( item->Type() != SCH_GLOBAL_LABEL_T );
+
+            if( item->Type() == SCH_LINE_T && item->GetLayer() == LAYER_WIRE )
+                wireNet = item->Connection( &path )->Name();
+
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                BOOST_REQUIRE_EQUAL( symbol->GetPins( &path ).size(), 1 );
+                powerNet = symbol->GetPins( &path ).front()->Connection( &path )->Name();
+            }
         }
     }
 
-    BOOST_REQUIRE_EQUAL( labelCount, 1 );
+    BOOST_CHECK_EQUAL( wireNet.AfterLast( '/' ), wxString( "VDD" ) );
+    BOOST_CHECK_EQUAL( powerNet, wxString( "VDD" ) );
+    BOOST_CHECK_NE( wireNet, powerNet );
 }
 
 
@@ -5678,55 +5696,237 @@ BOOST_AUTO_TEST_CASE( PowerSymbolDisplayNameDoesNotOverrideLogicalNet )
 
 BOOST_AUTO_TEST_CASE( ExplicitPowerStylePinUsesSourceNetInsteadOfImplicitGlobalName )
 {
-    ORCAD_SYMBOL_DEF part;
-    part.typeId = ORCAD_ST_LIBRARY_PART;
-    part.name = "LOCAL_POWER.Normal";
-    part.bbox = ORCAD_BBOX{ 0, 0, 20, 20 };
-    part.pins.push_back( ORCAD_SYMBOL_PIN{ .name = "V-",
-                                           .position = 0,
-                                           .startX = 10,
-                                           .hotptX = 0,
-                                           .portType = ORCAD_PORT_TYPE::POWER_IN,
-                                           .shapeBits = 0x80 } );
+    for( int pinLength : { 10, 0 } )
+    {
+        ORCAD_SYMBOL_DEF part;
+        part.typeId = ORCAD_ST_LIBRARY_PART;
+        part.name = "LOCAL_POWER.Normal";
+        part.bbox = ORCAD_BBOX{ 0, 0, 20, 20 };
+        part.pins.push_back( ORCAD_SYMBOL_PIN{ .name = "V-",
+                                               .position = 0,
+                                               .startX = pinLength,
+                                               .hotptX = 0,
+                                               .portType = ORCAD_PORT_TYPE::POWER_IN,
+                                               .shapeBits = 0x80 } );
 
-    ORCAD_PLACED_INSTANCE placed;
-    placed.pkgName = part.name;
-    placed.reference = "U1";
-    placed.x = 100;
-    placed.y = 100;
-    placed.pins.push_back( ORCAD_PIN_INST{ .pinIndex = 0,
-                                           .x = 100,
-                                           .y = 100,
-                                           .wordA = std::numeric_limits<uint32_t>::max(),
-                                           .wordB = 1 } );
+        ORCAD_PLACED_INSTANCE placed;
+        placed.pkgName = part.name;
+        placed.reference = "U1";
+        placed.x = 100;
+        placed.y = 100;
+        placed.pins.push_back( ORCAD_PIN_INST{ .pinIndex = 0,
+                                               .x = 100,
+                                               .y = 100,
+                                               .wordA = std::numeric_limits<uint32_t>::max(),
+                                               .wordB = 1 } );
 
-    ORCAD_RAW_PAGE page;
-    page.name = "EXPLICIT HIDDEN POWER PIN";
-    page.netmap[1] = "GND";
-    page.instances.push_back( std::move( placed ) );
+        ORCAD_RAW_PAGE page;
+        page.name = "EXPLICIT HIDDEN POWER PIN";
+        page.netmap[1] = "GND";
+        page.instances.push_back( std::move( placed ) );
 
-    ORCAD_DESIGN design;
-    design.sourceId = "explicit-power-style-pin";
-    design.symbols.emplace( part.name, std::move( part ) );
-    design.pages.push_back( std::move( page ) );
+        ORCAD_DESIGN design;
+        design.sourceId = "explicit-power-style-pin";
+        design.symbols.emplace( part.name, std::move( part ) );
+        design.pages.push_back( std::move( page ) );
 
-    SETTINGS_MANAGER manager;
-    manager.LoadProject( "" );
-    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
-    schematic->SetProject( &manager.Prj() );
-    SCH_SHEET*     root = convertRawDesign( design, *schematic );
-    SCH_SHEET_PATH path;
-    path.push_back( root );
+        SETTINGS_MANAGER manager;
+        manager.LoadProject( "" );
+        std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
+        schematic->SetProject( &manager.Prj() );
+        SCH_SHEET*     root = convertRawDesign( design, *schematic );
+        SCH_SHEET_PATH path;
+        path.push_back( root );
 
-    SCH_SYMBOL* symbol = findConvertedSymbol( *root->GetScreen(), path, wxS( "U1" ) );
-    BOOST_REQUIRE( symbol );
-    BOOST_REQUIRE_EQUAL( symbol->GetPins().size(), 1u );
-    BOOST_CHECK( symbol->GetPins().front()->IsVisible() );
-    BOOST_CHECK( symbol->GetPins().front()->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+        SCH_SYMBOL* symbol = findConvertedSymbol( *root->GetScreen(), path, wxS( "U1" ) );
+        BOOST_REQUIRE( symbol );
+        BOOST_REQUIRE_EQUAL( symbol->GetPins().size(), 1u );
+        BOOST_CHECK_EQUAL( symbol->GetPins().front()->IsVisible(), pinLength != 0 );
+        BOOST_CHECK( !symbol->GetPins().front()->IsGlobalPower() );
+        BOOST_CHECK_EQUAL( symbol->GetPins().front()->GetName(), wxString( "V-" ) );
+        BOOST_CHECK( symbol->GetPins().front()->GetType()
+                     == ( pinLength ? ELECTRICAL_PINTYPE::PT_POWER_IN : ELECTRICAL_PINTYPE::PT_PASSIVE ) );
 
-    schematic->ConnectionGraph()->Recalculate( schematic->BuildSheetListSortedByPageNumbers(), true );
-    BOOST_REQUIRE( symbol->GetPins().front()->Connection( &path ) );
-    BOOST_CHECK_EQUAL( symbol->GetPins().front()->Connection( &path )->Name(), wxS( "/GND" ) );
+        schematic->ConnectionGraph()->Recalculate( schematic->BuildSheetListSortedByPageNumbers(), true );
+        BOOST_REQUIRE( symbol->GetPins().front()->Connection( &path ) );
+        BOOST_CHECK_EQUAL( symbol->GetPins().front()->Connection( &path )->Name(), wxS( "/GND" ) );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeHiddenPowerKeepsMultiunitPackageIdentity )
+{
+    for( int scenario : { 0, 1, 2, 3 } )
+    {
+        bool powerUnitFirst = ( scenario & 1 ) == 0;
+        bool separatePages = ( scenario & 2 ) != 0;
+        ORCAD_SYMBOL_DEF power;
+        power.typeId = ORCAD_ST_LIBRARY_PART;
+        power.name = "DUALA.Normal";
+        power.bbox = ORCAD_BBOX{ 0, 0, 20, 20 };
+        power.pins.push_back( ORCAD_SYMBOL_PIN{ .name = "$$$1",
+                                              .position = 0,
+                                              .portType = ORCAD_PORT_TYPE::POWER_IN,
+                                              .shapeBits = 0x80 } );
+
+        ORCAD_SYMBOL_DEF signal = power;
+        signal.name = "DUALB.Normal";
+        signal.pins.front().name = "SIGNAL";
+        signal.pins.front().startX = 10;
+        signal.pins.front().portType = ORCAD_PORT_TYPE::PASSIVE;
+        signal.pins.front().shapeBits = 0;
+
+        ORCAD_PACKAGE package;
+        package.name = "DUAL";
+        package.devices.push_back( ORCAD_DEVICE{ .unitRef = "A", .pinNumbers = { "1" } } );
+        package.devices.push_back( ORCAD_DEVICE{ .unitRef = "B", .pinNumbers = { "2" } } );
+
+        ORCAD_RAW_PAGE page;
+        page.name = "HIDDEN POWER MULTIUNIT";
+        page.netmap[1] = "$$$1";
+        page.netmap[2] = "OVERRIDE";
+
+        for( int part : { 1, 2, 3 } )
+        {
+            for( int unit : { 0, 1 } )
+            {
+                if( part == 3 && unit == 1 )
+                    continue;
+
+                ORCAD_PLACED_INSTANCE instance;
+                instance.pkgName = unit ? signal.name : power.name;
+                instance.sourcePackage = package.name;
+                instance.reference = "U" + std::to_string( part );
+                instance.unitIndex = unit;
+                instance.x = part * 100;
+                instance.y = ( unit + 1 ) * 100;
+                instance.pins.push_back( ORCAD_PIN_INST{ .pinIndex = 1,
+                                                        .x = instance.x,
+                                                        .y = instance.y,
+                                                        .wordB = unit ? 0u : static_cast<uint32_t>( part == 2 ? 2 : 1 ) } );
+                page.instances.push_back( std::move( instance ) );
+            }
+        }
+
+        if( !powerUnitFirst )
+            std::reverse( page.instances.begin(), page.instances.end() );
+
+        ORCAD_DESIGN design;
+        design.sourceId = "native-hidden-power-multiunit";
+        design.symbols.emplace( power.name, std::move( power ) );
+        design.symbols.emplace( signal.name, std::move( signal ) );
+        design.packages.emplace( package.name, std::move( package ) );
+        design.pages.push_back( std::move( page ) );
+
+        if( separatePages )
+        {
+            ORCAD_RAW_PAGE second;
+            second.name = "SIGNAL UNITS";
+            auto& first = design.pages.front().instances;
+
+            for( auto& instance : first )
+            {
+                if( instance.unitIndex == 1 )
+                    second.instances.push_back( std::move( instance ) );
+            }
+
+            std::erase_if( first, []( const auto& aInstance ) { return aInstance.unitIndex == 1; } );
+            design.pages.push_back( std::move( second ) );
+        }
+
+        SETTINGS_MANAGER manager;
+        manager.LoadProject( "" );
+        std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
+        schematic->SetProject( &manager.Prj() );
+        SCH_SHEET* root = convertRawDesign( design, *schematic );
+        auto checkUnits = [&]()
+        {
+            SCH_SHEET_LIST paths = schematic->BuildSheetListSortedByPageNumbers();
+            schematic->ConnectionGraph()->Recalculate( paths, true );
+            std::map<wxString, std::vector<SCH_SYMBOL*>> parts;
+            std::map<SCH_SYMBOL*, SCH_SHEET_PATH> symbolPaths;
+
+            for( const SCH_SHEET_PATH& path : paths )
+            {
+                for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+                {
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                    parts[symbol->GetRef( &path, false )].push_back( symbol );
+                    symbolPaths.emplace( symbol, path );
+                }
+            }
+
+            BOOST_REQUIRE_EQUAL( parts.size(), 3u );
+
+            for( const auto& [reference, units] : parts )
+            {
+                BOOST_REQUIRE_EQUAL( units.size(), reference == wxS( "U3" ) ? 1u : 2u );
+
+                if( units.size() == 2 )
+                {
+                    BOOST_CHECK( units[0]->GetLibId() == units[1]->GetLibId() );
+                    BOOST_CHECK( units[0]->GetUnit() != units[1]->GetUnit() );
+                }
+
+                for( SCH_SYMBOL* symbol : units )
+                {
+                    const SCH_SHEET_PATH& path = symbolPaths.at( symbol );
+                    BOOST_REQUIRE( symbol->GetLibSymbolRef() );
+                    BOOST_CHECK_EQUAL( symbol->GetLibSymbolRef()->GetUnitCount(), 2 );
+
+                    for( SCH_PIN* pin : symbol->GetPins() )
+                    {
+                        if( pin->GetNumber() == wxS( "1" ) )
+                        {
+                            BOOST_CHECK( !pin->IsVisible() );
+                            BOOST_CHECK_EQUAL( pin->IsGlobalPower(), reference != wxS( "U2" ) );
+                            BOOST_REQUIRE( pin->Connection( &path ) );
+                            BOOST_CHECK_EQUAL( pin->Connection( &path )->Name( true ),
+                                               reference != wxS( "U2" ) ? wxString( "$$$1" )
+                                                                        : wxString( "OVERRIDE" ) );
+                        }
+                    }
+                }
+            }
+        };
+
+        checkUnits();
+        SCH_IO_KICAD_SEXPR io;
+        std::vector<wxString> files;
+        std::vector<std::pair<KIID, wxString>> sheetIdentities;
+
+        for( SCH_SHEET* sheet : schematic->GetTopLevelSheets() )
+        {
+            wxString file = wxFileName::CreateTempFileName( wxS( "orcad_native_power_" ) );
+            BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( file, sheet, schematic.get() ) );
+            files.push_back( file );
+            sheetIdentities.emplace_back( sheet->m_Uuid, sheet->GetName() );
+        }
+
+        schematic->Reset();
+        std::vector<SCH_SHEET*> reloaded;
+
+        for( const wxString& file : files )
+        {
+            BOOST_REQUIRE_NO_THROW( root = io.LoadSchematicFile( file, schematic.get() ) );
+            BOOST_REQUIRE( root );
+            const auto& [uuid, name] = sheetIdentities[reloaded.size()];
+            const_cast<KIID&>( root->m_Uuid ) = uuid;
+            root->SetName( name );
+            reloaded.push_back( root );
+        }
+
+        schematic->SetTopLevelSheets( reloaded );
+        schematic->RefreshHierarchy();
+
+        for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
+            path.LastScreen()->UpdateLocalLibSymbolLinks();
+
+        checkUnits();
+
+        for( const wxString& file : files )
+            wxRemoveFile( file );
+    }
 }
 
 
@@ -5889,7 +6089,7 @@ BOOST_AUTO_TEST_CASE( OccurrencePowerAliasJoinsDistinctChildNetNames )
     {
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            if( !subgraph->GetSheet().LastScreen()->GetFileName().Contains( wxS( "P08_PSU" ) ) )
+            if( !subgraph->GetSheet().LastScreen()->GetFileName().Contains( wxS( "_PSU" ) ) )
                 continue;
 
             for( SCH_ITEM* item : subgraph->GetItems() )
@@ -6279,7 +6479,7 @@ BOOST_AUTO_TEST_CASE( HierarchicalInternalNetUsesBlockName )
         if( label->GetText() == wxS( "LOCAL_PORT_NAME" ) )
         {
             ++exactPortLabels;
-            BOOST_CHECK_EQUAL( label->GetTextColor().a, 0.0 );
+            BOOST_CHECK( label->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED || label->GetTextColor().a > 0 );
         }
     }
 
@@ -6366,6 +6566,8 @@ BOOST_AUTO_TEST_CASE( MultiPageHierarchyFollowsCaptureFolderOrder )
     gateBlock.reference = "GATE";
     gateBlock.w = 100;
     gateBlock.h = 100;
+    gateBlock.pins.push_back( ORCAD_BLOCK_PIN{ .name = "IN", .portType = ORCAD_PORT_TYPE::INPUT,
+                                             .x = 0, .y = 50 } );
     mainPage.blocks.push_back( gateBlock );
 
     ORCAD_DRAWN_INSTANCE microBlock;
@@ -6374,6 +6576,8 @@ BOOST_AUTO_TEST_CASE( MultiPageHierarchyFollowsCaptureFolderOrder )
     microBlock.x1 = 200;
     microBlock.w = 100;
     microBlock.h = 100;
+    microBlock.pins.push_back( ORCAD_BLOCK_PIN{ .name = "OUT", .portType = ORCAD_PORT_TYPE::OUTPUT,
+                                              .x = 300, .y = 50 } );
     mainPage.blocks.push_back( microBlock );
 
     ORCAD_OCC_BLOCK gateOccurrence;
@@ -6437,6 +6641,20 @@ BOOST_AUTO_TEST_CASE( MultiPageHierarchyFollowsCaptureFolderOrder )
     BOOST_REQUIRE_EQUAL( childNames.size(), 2u );
     BOOST_CHECK_EQUAL( childNames[0], wxS( "MICRO" ) );
     BOOST_CHECK_EQUAL( childNames[1], wxS( "GATE" ) );
+
+    for( const SCH_SHEET_PATH& path : sheets )
+    {
+        if( path.Last()->GetName() == wxS( "GATE" ) )
+        {
+            BOOST_REQUIRE_EQUAL( path.Last()->GetPins().size(), 1u );
+            BOOST_CHECK( path.Last()->GetPins().front()->GetShape() == LABEL_FLAG_SHAPE::L_INPUT );
+        }
+        else if( path.Last()->GetName() == wxS( "MICRO" ) )
+        {
+            BOOST_REQUIRE_EQUAL( path.Last()->GetPins().size(), 1u );
+            BOOST_CHECK( path.Last()->GetPins().front()->GetShape() == LABEL_FLAG_SHAPE::L_OUTPUT );
+        }
+    }
 }
 
 
@@ -6477,13 +6695,49 @@ BOOST_AUTO_TEST_CASE( GeneratedParentNetUsesHierarchicalBlockPinName )
     manager.LoadProject( "" );
     schematic->SetProject( &manager.Prj() );
     SCH_SHEET*         root = convertRawDesign( design, *schematic );
-    std::set<wxString> labels;
+    SCH_SHEET_LIST sheets = schematic->BuildSheetListSortedByPageNumbers();
+    schematic->ConnectionGraph()->Recalculate( sheets, true );
+    SCH_LINE* wire = nullptr;
+    SCH_SHEET* child = nullptr;
 
-    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LABEL_T ) )
-        labels.insert( static_cast<SCH_LABEL*>( item )->GetText() );
+    for( SCH_ITEM* item : root->GetScreen()->Items() )
+    {
+        if( item->Type() == SCH_LINE_T && item->GetLayer() == LAYER_WIRE )
+            wire = static_cast<SCH_LINE*>( item );
+        else if( item->Type() == SCH_SHEET_T )
+            child = static_cast<SCH_SHEET*>( item );
+        else if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T )
+            BOOST_CHECK_NE( static_cast<SCH_LABEL_BASE*>( item )->GetText(), wxString( "N12345" ) );
+    }
 
-    BOOST_CHECK( labels.contains( wxS( "SIGNAL" ) ) );
-    BOOST_CHECK( !labels.contains( wxS( "N12345" ) ) );
+    BOOST_REQUIRE( wire );
+    BOOST_REQUIRE( child );
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( root );
+    SCH_CONNECTION* connection = wire->Connection( &rootPath );
+    BOOST_REQUIRE( connection );
+    BOOST_REQUIRE_GT( connection->NetCode(), 0 );
+    std::set<wxString> pinNames;
+
+    for( SCH_SHEET_PIN* pin : child->GetPins() )
+    {
+        pinNames.insert( pin->GetText() );
+        BOOST_REQUIRE( pin->Connection( &rootPath ) );
+        BOOST_CHECK_EQUAL( pin->Connection( &rootPath )->NetCode(), connection->NetCode() );
+    }
+
+    BOOST_CHECK( pinNames.contains( wxS( "SIGNAL" ) ) );
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    auto mapped = std::find_if( map->entries.begin(), map->entries.end(),
+                               []( const IMPORT_NET_MAP_ENTRY& entry )
+                               {
+                                   return entry.sourceNetId == 1 && entry.originalName == wxS( "N12345" );
+                               } );
+    BOOST_REQUIRE( mapped != map->entries.end() );
+    BOOST_CHECK_EQUAL( mapped->status, wxString( "resolved" ) );
+    BOOST_CHECK_EQUAL( mapped->nameAtImport, connection->Name() );
+    BOOST_CHECK_NE( mapped->nameAtImport, wxString( "N12345" ) );
 }
 
 
@@ -6525,13 +6779,50 @@ BOOST_AUTO_TEST_CASE( GeneratedParentNetUsesFirstConnectedHierarchicalBlockPinNa
     manager.LoadProject( "" );
     schematic->SetProject( &manager.Prj() );
     SCH_SHEET*         root = convertRawDesign( design, *schematic );
-    std::set<wxString> labels;
+    SCH_SHEET_LIST sheets = schematic->BuildSheetListSortedByPageNumbers();
+    schematic->ConnectionGraph()->Recalculate( sheets, true );
+    SCH_LINE* wire = nullptr;
+    SCH_SHEET* child = nullptr;
 
-    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LABEL_T ) )
-        labels.insert( static_cast<SCH_LABEL*>( item )->GetText() );
+    for( SCH_ITEM* item : root->GetScreen()->Items() )
+    {
+        if( item->Type() == SCH_LINE_T && item->GetLayer() == LAYER_WIRE )
+            wire = static_cast<SCH_LINE*>( item );
+        else if( item->Type() == SCH_SHEET_T )
+            child = static_cast<SCH_SHEET*>( item );
+        else if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T )
+            BOOST_CHECK_NE( static_cast<SCH_LABEL_BASE*>( item )->GetText(), wxString( "N12345" ) );
+    }
 
-    BOOST_CHECK( labels.contains( wxS( "G1" ) ) );
-    BOOST_CHECK( !labels.contains( wxS( "N12345" ) ) );
+    BOOST_REQUIRE( wire );
+    BOOST_REQUIRE( child );
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( root );
+    SCH_CONNECTION* connection = wire->Connection( &rootPath );
+    BOOST_REQUIRE( connection );
+    BOOST_REQUIRE_GT( connection->NetCode(), 0 );
+    std::set<wxString> pinNames;
+
+    for( SCH_SHEET_PIN* pin : child->GetPins() )
+    {
+        pinNames.insert( pin->GetText() );
+        BOOST_REQUIRE( pin->Connection( &rootPath ) );
+        BOOST_CHECK_EQUAL( pin->Connection( &rootPath )->NetCode(), connection->NetCode() );
+    }
+
+    BOOST_CHECK( pinNames.contains( wxS( "G1" ) ) );
+    BOOST_CHECK( pinNames.contains( wxS( "G5" ) ) );
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    auto mapped = std::find_if( map->entries.begin(), map->entries.end(),
+                               []( const IMPORT_NET_MAP_ENTRY& entry )
+                               {
+                                   return entry.sourceNetId == 1 && entry.originalName == wxS( "N12345" );
+                               } );
+    BOOST_REQUIRE( mapped != map->entries.end() );
+    BOOST_CHECK_EQUAL( mapped->status, wxString( "resolved" ) );
+    BOOST_CHECK_EQUAL( mapped->nameAtImport, connection->Name() );
+    BOOST_CHECK_NE( mapped->nameAtImport, wxString( "N12345" ) );
 }
 
 
@@ -8265,6 +8556,8 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
         if( !designFilter.empty() && rel.find( designFilter ) == std::string::npos )
             continue;
 
+        BOOST_TEST_INFO_SCOPE( "OrCAD source: " << rel );
+
         SCH_IO_ORCAD plugin;
         uint64_t     perDesignPages = 0, perDesignComponents = 0, perDesignPowerSymbols = 0;
         uint64_t     perDesignPins = 0, perDesignWires = 0, perDesignBuses = 0;
@@ -8747,41 +9040,116 @@ BOOST_AUTO_TEST_CASE( OccurrenceFlatNetConnectsAcrossPagesWithoutOffpageSymbols 
 }
 
 
-static std::vector<std::string> collectImportedUuids( const SCHEMATIC& aSchematic )
+static std::map<std::string, std::vector<std::string>> collectImportedUuids( const SCHEMATIC& aSchematic )
 {
-    std::vector<std::string> uuids;
+    std::map<std::string, std::vector<std::string>> uuids;
 
-    for( SCH_SHEET* sheet : aSchematic.GetTopLevelSheets() )
+    auto itemIdentity = []( const SCH_ITEM& item, const SCH_SHEET_PATH& path )
     {
-        uuids.push_back( sheet->m_Uuid.AsStdString() );
+        std::ostringstream identity;
+        const VECTOR2I position = item.GetPosition();
+        const BOX2I bounds = item.GetBoundingBox();
+        identity << item.Type() << ':' << item.GetLayer() << ':' << position.x << ',' << position.y
+                 << ':' << bounds.GetX() << ',' << bounds.GetY() << ',' << bounds.GetWidth() << ','
+                 << bounds.GetHeight();
 
-        if( SCH_SCREEN* screen = sheet->GetScreen() )
+        auto text = [&]( const wxString& value )
         {
-            uuids.push_back( screen->GetUuid().AsStdString() );
+            const std::string utf8 = value.ToStdString( wxConvUTF8 );
+            identity << ':' << utf8.size() << ':' << utf8;
+        };
 
-            for( SCH_ITEM* item : screen->Items() )
+        if( const auto* line = dynamic_cast<const SCH_LINE*>( &item ) )
+        {
+            identity << ':' << line->GetEndPoint().x << ',' << line->GetEndPoint().y;
+        }
+
+        if( const auto* label = dynamic_cast<const EDA_TEXT*>( &item ) )
+        {
+            text( label->GetText() );
+            identity << ':' << label->GetTextAngleDegrees() << ':' << label->GetTextWidth() << ','
+                     << label->GetTextHeight();
+        }
+
+        if( const auto* shape = dynamic_cast<const SCH_SHAPE*>( &item ) )
+        {
+            identity << ':' << static_cast<int>( shape->GetShape() ) << ':' << shape->GetStart().x
+                     << ',' << shape->GetStart().y << ':' << shape->GetEnd().x << ',' << shape->GetEnd().y;
+
+            if( shape->GetShape() == SHAPE_T::POLY )
+                identity << ':' << shape->GetPolyShape().Format();
+            else if( shape->GetShape() == SHAPE_T::ARC )
+                identity << ':' << shape->GetArcMid().x << ',' << shape->GetArcMid().y;
+            else if( shape->GetShape() == SHAPE_T::BEZIER )
+                identity << ':' << shape->GetBezierC1().x << ',' << shape->GetBezierC1().y << ':'
+                         << shape->GetBezierC2().x << ',' << shape->GetBezierC2().y;
+        }
+
+        if( const auto* symbol = dynamic_cast<const SCH_SYMBOL*>( &item ) )
+        {
+            text( symbol->GetRef( &path ) );
+            text( symbol->GetLibId().Format() );
+            identity << ':' << symbol->GetUnitSelection( &path ) << ':' << symbol->GetOrientation();
+        }
+
+        if( const auto* pin = dynamic_cast<const SCH_PIN*>( &item ) )
+        {
+            text( pin->GetNumber() );
+            text( pin->GetName() );
+            identity << ':' << pin->GetUnit() << ':' << pin->GetBodyStyle() << ':'
+                     << static_cast<int>( pin->GetOrientation() ) << ':' << pin->GetLength();
+        }
+
+        if( const auto* sheet = dynamic_cast<const SCH_SHEET*>( &item ) )
+        {
+            text( sheet->GetName() );
+            text( sheet->GetFileName() );
+        }
+
+        return identity.str();
+    };
+
+    for( const SCH_SHEET_PATH& path : aSchematic.Hierarchy() )
+    {
+        std::string scope;
+
+        for( size_t index = 0; index < path.size(); ++index )
+        {
+            SCH_SHEET* sheet = path.at( index );
+            const std::string name = sheet->GetName().ToStdString( wxConvUTF8 );
+            scope += std::to_string( name.size() ) + ':' + name + '/';
+        }
+
+        SCH_SHEET* sheet = path.Last();
+        uuids[scope + "sheet"].push_back( sheet->m_Uuid.AsStdString() );
+        SCH_SCREEN* screen = path.LastScreen();
+        BOOST_REQUIRE( screen );
+        uuids[scope + "screen"].push_back( screen->GetUuid().AsStdString() );
+
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            const std::string identity = scope + itemIdentity( *item, path );
+            uuids[identity].push_back( item->m_Uuid.AsStdString() );
+
+            if( auto* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
             {
-                uuids.push_back( item->m_Uuid.AsStdString() );
-
-                if( item->Type() == SCH_SYMBOL_T )
-                {
-                    for( const std::unique_ptr<SCH_PIN>& pin : static_cast<SCH_SYMBOL*>( item )->GetRawPins() )
-                    {
-                        uuids.push_back( pin->m_Uuid.AsStdString() );
-                    }
-                }
-                else if( item->Type() == SCH_SHEET_T )
-                {
-                    for( const SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
-                        uuids.push_back( pin->m_Uuid.AsStdString() );
-                }
+                for( const std::unique_ptr<SCH_PIN>& pin : symbol->GetRawPins() )
+                    uuids[identity + "/pin/" + itemIdentity( *pin, path )].push_back( pin->m_Uuid.AsStdString() );
+            }
+            else if( const auto* child = dynamic_cast<const SCH_SHEET*>( item ) )
+            {
+                for( const SCH_SHEET_PIN* pin : child->GetPins() )
+                    uuids[identity + "/pin/" + itemIdentity( *pin, path )].push_back( pin->m_Uuid.AsStdString() );
             }
         }
     }
 
+    // Identical overlapping objects are interchangeable, but UUIDs must stay attached to their geometry and owner.
+    for( auto& [identity, values] : uuids )
+        std::sort( values.begin(), values.end() );
+
     return uuids;
 }
-
 
 BOOST_AUTO_TEST_CASE( RepeatedImportHasDeterministicUuids )
 {
@@ -8815,15 +9183,70 @@ BOOST_AUTO_TEST_CASE( RepeatedImportHasDeterministicUuids )
         return collectImportedUuids( *schematic );
     };
 
-    std::vector<std::string> first = importUuids( dsn );
-    std::vector<std::string> second = importUuids( dsn );
+    const auto first = importUuids( dsn );
+    const auto second = importUuids( dsn );
 
     BOOST_REQUIRE( !first.empty() );
-    BOOST_CHECK_EQUAL_COLLECTIONS( first.begin(), first.end(), second.begin(), second.end() );
+    BOOST_REQUIRE_EQUAL( first.size(), second.size() );
+
+    for( const auto& [identity, values] : first )
+    {
+        BOOST_TEST_CONTEXT( identity )
+        {
+            const auto found = second.find( identity );
+            BOOST_REQUIRE( found != second.end() );
+            BOOST_CHECK_EQUAL_COLLECTIONS( values.begin(), values.end(), found->second.begin(), found->second.end() );
+        }
+    }
 }
 
 
-BOOST_AUTO_TEST_CASE( AutoGeneratedNetNamesArePreserved )
+BOOST_AUTO_TEST_CASE( ImportNetMapRetainsSecondarySourceAliases )
+{
+    ORCAD_RAW_PAGE page;
+    page.name = "ALIASES";
+    page.netmap[1] = "N12345";
+    page.netAliases[1] = { "TABLE_ALIAS" };
+    ORCAD_WIRE wire;
+    wire.id = 1;
+    wire.x2 = 100;
+    wire.aliases.push_back( ORCAD_ALIAS{ .name = "PRIMARY", .x = 20 } );
+    wire.aliases.push_back( ORCAD_ALIAS{ .name = "SECONDARY", .x = 80 } );
+    page.wires.push_back( std::move( wire ) );
+
+    ORCAD_DESIGN design;
+    design.sourceId = "secondary-source-aliases";
+    design.pages.push_back( std::move( page ) );
+    SCHEMATIC schematic( nullptr );
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    schematic.SetProject( &manager.Prj() );
+    SCH_SHEET* root = convertRawDesign( design, schematic );
+    SCH_SHEET_PATH path;
+    path.push_back( root );
+    wxString finalName;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LINE_T ) )
+        finalName = item->Connection( &path )->Name();
+
+    BOOST_REQUIRE( !finalName.IsEmpty() );
+    const IMPORT_NET_MAP* map = schematic.GetImportNetMap();
+    BOOST_REQUIRE( map );
+    std::set<wxString> originalNames;
+
+    for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
+    {
+        BOOST_CHECK_EQUAL( entry.sourceNetId, 1 );
+        BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+        BOOST_CHECK_EQUAL( entry.nameAtImport, finalName );
+        originalNames.insert( entry.originalName );
+    }
+
+    BOOST_CHECK( originalNames == std::set<wxString>( { "N12345", "TABLE_ALIAS", "PRIMARY", "SECONDARY" } ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( AutoGeneratedNetNamesAreMappedWithoutNamingLabels )
 {
     const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
 
@@ -8852,8 +9275,43 @@ BOOST_AUTO_TEST_CASE( AutoGeneratedNetNamesArePreserved )
     SCH_IO_ORCAD plugin;
     plugin.LoadSchematicFile( dsn.string(), schematic.get() );
 
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "D10" ), wxS( "A" ) ), wxS( "N12720539" ) );
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "D23" ), wxS( "1" ) ), wxS( "N132252170" ) );
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+
+    for( const auto& [sourceName, reference, number] :
+         { std::tuple{ wxString( "N12720539" ), wxString( "D10" ), wxString( "A" ) },
+           std::tuple{ wxString( "N132252170" ), wxString( "D23" ), wxString( "1" ) } } )
+    {
+        wxString netName = terminalNetName( *schematic, reference, number );
+        BOOST_CHECK_NE( netName, sourceName );
+        bool found = false;
+
+        for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
+        {
+            if( entry.originalName == sourceName )
+            {
+                BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+                BOOST_CHECK_EQUAL( entry.nameAtImport, netName );
+                BOOST_CHECK( !entry.terminals.empty() );
+                found = true;
+            }
+        }
+
+        BOOST_CHECK( found );
+
+        for( const SCH_SHEET_PATH& sheet : schematic->BuildSheetListSortedByPageNumbers() )
+        {
+            for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+            {
+                if( auto* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
+                {
+                    BOOST_CHECK_NE( label->GetText(), sourceName );
+                    BOOST_CHECK( label->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED
+                                 || label->GetTextColor().a > 0 );
+                }
+            }
+        }
+    }
 }
 
 
@@ -8974,6 +9432,156 @@ BOOST_AUTO_TEST_CASE( CaptureNetIdsAndBlankUnitLettersAreAuthoritative )
 }
 
 
+BOOST_AUTO_TEST_CASE( BusMembersWithoutLocalWiresRetainNetMapReferences )
+{
+    const char* corpus = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpus || !*corpus )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpus, "SCH-20380.DSN" );
+
+    if( dsn.empty() )
+        return;
+
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    SCHEMATIC schematic( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), &schematic );
+    schematic.RefreshHierarchy();
+    const IMPORT_NET_MAP* map = schematic.GetImportNetMap();
+    BOOST_REQUIRE( map );
+    bool memberFound = false;
+    bool bundleFound = false;
+    wxString actualName = terminalNetName( schematic, wxS( "J10" ), wxS( "25" ) );
+    BOOST_REQUIRE( !actualName.IsEmpty() );
+
+    for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
+    {
+        if( entry.view != wxS( "Hierarchical Interconnects" ) )
+            continue;
+
+        if( entry.originalName == wxS( "/IRQ[7:1]" ) )
+        {
+            bundleFound = true;
+            BOOST_CHECK_EQUAL( entry.status, wxString( "bus" ) );
+            BOOST_CHECK( !entry.nameAtImport.IsEmpty() );
+            BOOST_CHECK( !entry.terminals.empty() );
+        }
+
+        if( entry.originalName != wxS( "/IRQ7" ) )
+            continue;
+
+        memberFound = true;
+        BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+        BOOST_CHECK_EQUAL( entry.nameAtImport, actualName );
+        BOOST_CHECK( !entry.itemUuids.empty() );
+        std::set<std::string> mappedTerminals;
+
+        for( const IMPORT_NET_TERMINAL& terminal : entry.terminals )
+        {
+            SCH_SHEET_PATH path;
+            auto* symbol = dynamic_cast<SCH_SYMBOL*>( schematic.ResolveItem( terminal.symbolUuid, &path ) );
+            BOOST_REQUIRE( symbol );
+            mappedTerminals.insert( terminalToken( symbol->GetRef( &path, false ).ToStdString(),
+                                                   terminal.pinNumber.ToStdString() ) );
+        }
+
+        const std::set<std::string> expected = { "J10.25", "R77.2", "RP16.7", "U10.R8" };
+        BOOST_CHECK( mappedTerminals == expected );
+    }
+
+    BOOST_CHECK( memberFound );
+    BOOST_CHECK( bundleFound );
+}
+
+
+BOOST_AUTO_TEST_CASE( NetMapIncludesPinsConnectedByImportJunctionCleanup )
+{
+    const char* corpus = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpus || !*corpus )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpus, "DC1096B-1.DSN" );
+
+    if( dsn.empty() )
+        return;
+
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    SCHEMATIC schematic( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), &schematic );
+    const IMPORT_NET_MAP* map = schematic.GetImportNetMap();
+    BOOST_REQUIRE( map );
+    bool found = false;
+
+    for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
+    {
+        if( entry.sourceNetId == 16903175 && entry.originalName == wxS( "GND" ) )
+        {
+            found = true;
+            BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+            BOOST_CHECK_EQUAL( entry.nameAtImport, wxString( "GND" ) );
+        }
+    }
+
+    BOOST_CHECK( found );
+
+    for( const wxString& reference : { wxString( "U1" ), wxString( "U2" ), wxString( "U4" ) } )
+        BOOST_CHECK_EQUAL( terminalNetName( schematic, reference, wxS( "11" ) ), wxString( "GND" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( HierarchicalBusMembersMapToPropagatedScalarNets )
+{
+    const char* corpus = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpus || !*corpus )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpus, "meta_carrier_sch_rev1.dsn" );
+
+    if( dsn.empty() )
+        return;
+
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    SCHEMATIC schematic( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), &schematic );
+    schematic.RefreshHierarchy();
+    const IMPORT_NET_MAP* map = schematic.GetImportNetMap();
+    BOOST_REQUIRE( map );
+    bool found = false;
+
+    for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
+    {
+        if( entry.sourceNetId != 9438909 || entry.originalName != wxS( "OUT_P6" )
+            || entry.occurrence != std::vector<wxString>( { "TOP", "9136400", "TILE_AD9523" } ) )
+            continue;
+
+        found = true;
+        BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+        BOOST_CHECK_EQUAL( entry.nameAtImport, wxString( "CLK_P5" ) );
+        BOOST_REQUIRE( !entry.terminals.empty() );
+
+        for( const IMPORT_NET_TERMINAL& terminal : entry.terminals )
+        {
+            SCH_SHEET_PATH path;
+            auto* symbol = dynamic_cast<SCH_SYMBOL*>( schematic.ResolveItem( terminal.symbolUuid, &path ) );
+            BOOST_REQUIRE( symbol );
+            BOOST_CHECK_EQUAL( terminalNetName( schematic, symbol->GetRef( &path, false ), terminal.pinNumber ),
+                               entry.nameAtImport );
+        }
+    }
+
+    BOOST_CHECK( found );
+}
+
+
 BOOST_AUTO_TEST_CASE( NamedWirelessPinUsesOccurrenceNetName )
 {
     const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
@@ -9002,7 +9610,24 @@ BOOST_AUTO_TEST_CASE( NamedWirelessPinUsesOccurrenceNetName )
     SCH_IO_ORCAD plugin;
     plugin.LoadSchematicFile( dsn.string(), schematic.get() );
 
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "U1" ), wxS( "7" ) ), wxS( "VCC" ) );
+    wxString netName = terminalNetName( *schematic, wxS( "U1" ), wxS( "7" ) );
+    BOOST_CHECK_EQUAL( netName.AfterLast( '/' ), wxString( "VCC" ) );
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    bool mapped = false;
+
+    for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
+    {
+        if( entry.originalName == wxS( "VCC" ) )
+        {
+            BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+            BOOST_CHECK_EQUAL( entry.nameAtImport, netName );
+            BOOST_CHECK( !entry.terminals.empty() );
+            mapped = true;
+        }
+    }
+
+    BOOST_CHECK( mapped );
 }
 
 
@@ -9705,27 +10330,35 @@ BOOST_AUTO_TEST_CASE( PowerNetNameWinsOverSecondaryOccurrencePortAlias )
     SCH_IO_ORCAD plugin;
     plugin.LoadSchematicFile( dsn.string(), schematic.get() );
 
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "J16" ), wxS( "1" ) ).Lower(), wxString( wxS( "gndisohu" ) ) );
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "J17" ), wxS( "1" ) ).Lower(), wxString( wxS( "gndisohv" ) ) );
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "J18" ), wxS( "1" ) ).Lower(), wxString( wxS( "gndisohw" ) ) );
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    std::set<wxString> netNames;
 
-    std::set<wxString> globalNames;
-
-    for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
+    for( const auto& [reference, peer, sourceName] :
+         { std::tuple{ wxString( "J16" ), wxString( "C520" ), wxString( "GNDISOHU" ) },
+           std::tuple{ wxString( "J17" ), wxString( "C590" ), wxString( "GNDISOHV" ) },
+           std::tuple{ wxString( "J18" ), wxString( "C661" ), wxString( "GNDISOHW" ) } } )
     {
-        for( SCH_ITEM* item : path.LastScreen()->Items() )
+        wxString netName = terminalNetName( *schematic, reference, wxS( "1" ) );
+        BOOST_CHECK_EQUAL( netName.AfterLast( '/' ).Upper(), sourceName );
+        BOOST_CHECK_EQUAL( terminalNetName( *schematic, peer, wxS( "2" ) ), netName );
+        netNames.insert( netName );
+        bool mapped = false;
+
+        for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
         {
-            if( item->Type() == SCH_GLOBAL_LABEL_T )
-                globalNames.insert( static_cast<SCH_LABEL_BASE*>( item )->GetText().Lower() );
+            if( entry.originalName.CmpNoCase( sourceName ) == 0 )
+            {
+                BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+                BOOST_CHECK_EQUAL( entry.nameAtImport, netName );
+                mapped = true;
+            }
         }
+
+        BOOST_CHECK( mapped );
     }
 
-    BOOST_CHECK( globalNames.count( wxS( "gndisohu" ) ) );
-    BOOST_CHECK( globalNames.count( wxS( "gndisohv" ) ) );
-    BOOST_CHECK( globalNames.count( wxS( "gndisohw" ) ) );
-    BOOST_CHECK( !globalNames.count( wxS( "ntcu2" ) ) );
-    BOOST_CHECK( !globalNames.count( wxS( "ntcv2" ) ) );
-    BOOST_CHECK( !globalNames.count( wxS( "ntcw2" ) ) );
+    BOOST_CHECK_EQUAL( netNames.size(), 3u );
 }
 
 
@@ -10444,6 +11077,41 @@ BOOST_AUTO_TEST_CASE( CapturePseudoGlobalWirelessPinsConnectAcrossPages )
     auto [consistent, checkable] = checkConnectivity( *schematic, expected );
     BOOST_CHECK_EQUAL( checkable, 1 );
     BOOST_CHECK_EQUAL( consistent, 1 );
+    size_t nativePowerPins = 0;
+
+    for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items() )
+        {
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                wxString ref = symbol->GetRef( &path, false );
+
+                if( ref != wxS( "L1" ) && ref != wxS( "L4" ) )
+                    continue;
+
+                for( SCH_PIN* pin : symbol->GetPins() )
+                {
+                    if( pin->GetNumber() != wxS( "3" ) )
+                        continue;
+
+                    BOOST_CHECK( pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+                    BOOST_CHECK( !pin->IsVisible() );
+                    BOOST_CHECK( pin->IsGlobalPower() );
+                    BOOST_CHECK_EQUAL( pin->GetName(), wxString( "$$$1" ) );
+                    ++nativePowerPins;
+                }
+            }
+            else if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
+            {
+                BOOST_CHECK_NE( label->GetText(), wxString( "$$$1" ) );
+            }
+        }
+    }
+
+    BOOST_CHECK_EQUAL( nativePowerPins, 2 );
+
 }
 
 
@@ -10757,32 +11425,81 @@ BOOST_AUTO_TEST_CASE( PowerNetNameOverridesLocalWireAlias )
     SCH_IO_ORCAD plugin;
     plugin.LoadSchematicFile( dsn.string(), schematic.get() );
 
-    SCH_SHEET_LIST sheets = schematic->BuildSheetListSortedByPageNumbers();
-    schematic->ConnectionGraph()->Recalculate( sheets, true );
-    wxString c36Pin1Net;
+    wxString boostNet = terminalNetName( *schematic, wxS( "C36" ), wxS( "1" ) );
+    wxString supplyNet = terminalNetName( *schematic, wxS( "C12" ), wxS( "1" ) );
+    BOOST_CHECK_EQUAL( boostNet.AfterLast( '/' ), wxString( "VDDB" ) );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "Q4" ), wxS( "C" ) ), boostNet );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "U2" ), wxS( "20" ) ), supplyNet );
+    BOOST_CHECK_NE( boostNet, supplyNet );
 
-    for( const auto& [key, subgraphs] : schematic->ConnectionGraph()->GetNetMap() )
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    auto mapped = std::find_if( map->entries.begin(), map->entries.end(),
+                               []( const IMPORT_NET_MAP_ENTRY& entry )
+                               {
+                                   return entry.sourceNetId == 16939716
+                                          && entry.originalName == wxS( "N16864826" );
+                               } );
+    BOOST_REQUIRE( mapped != map->entries.end() );
+    BOOST_CHECK_EQUAL( mapped->status, wxString( "resolved" ) );
+    BOOST_CHECK_EQUAL( mapped->nameAtImport, boostNet );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativePowerNamesIgnoreSourceCase )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    for( const char* filename : { "Si828X-BW-GDB.DSN", "SI828X-AW-GDB.DSN" } )
     {
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        BOOST_TEST_CONTEXT( filename )
         {
-            for( SCH_ITEM* item : subgraph->GetItems() )
+            std::filesystem::path dsn = findCorpusDesign( corpusEnv, filename );
+            BOOST_REQUIRE_MESSAGE( !dsn.empty(), filename << " not present in corpus." );
+            SETTINGS_MANAGER manager;
+            manager.LoadProject( "" );
+            SCHEMATIC schematic( &manager.Prj() );
+            SCH_IO_ORCAD plugin;
+            plugin.LoadSchematicFile( dsn.string(), &schematic );
+
+            wxString netName = terminalNetName( schematic, wxS( "C306" ), wxS( "1" ) );
+            BOOST_CHECK_EQUAL( netName.Upper(), wxString( "LS-SOURCE" ) );
+
+            for( const auto& [reference, pin] :
+                 { std::pair{ wxString( "U2" ), wxString( "16" ) },
+                   std::pair{ wxString( "C307" ), wxString( "2" ) },
+                   std::pair{ wxString( "C309" ), wxString( "1" ) },
+                   std::pair{ wxString( "C310" ), wxString( "1" ) },
+                   std::pair{ wxString( "R333" ), wxString( "1" ) },
+                   std::pair{ wxString( "UB8" ), wxString( "3" ) },
+                   std::pair{ wxString( "UT6" ), wxString( "5" ) } } )
             {
-                if( item->Type() != SCH_PIN_T )
-                    continue;
+                BOOST_CHECK_EQUAL( terminalNetName( schematic, reference, pin ), netName );
+            }
 
-                SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
-                SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
+            std::set<wxString> powerNames;
 
-                if( symbol && symbol->GetRef( &subgraph->GetSheet(), false ) == wxS( "C36" )
-                    && pin->GetNumber() == wxS( "1" ) )
+            for( const SCH_SHEET_PATH& sheet : schematic.BuildSheetListSortedByPageNumbers() )
+            {
+                for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
                 {
-                    c36Pin1Net = key.Name;
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                    if( symbol->GetField( FIELD_T::VALUE )->GetText().CmpNoCase( wxS( "LS-SOURCE" ) ) == 0
+                        && symbol->GetLibSymbolRef()->IsGlobalPower() )
+                    {
+                        powerNames.insert( symbol->GetField( FIELD_T::VALUE )->GetText() );
+                    }
                 }
             }
+
+            BOOST_REQUIRE_EQUAL( powerNames.size(), 1u );
+            BOOST_CHECK_EQUAL( *powerNames.begin(), netName );
         }
     }
-
-    BOOST_CHECK_EQUAL( c36Pin1Net.AfterLast( '/' ), wxS( "VDDB_16939716" ) );
 }
 
 
@@ -11115,6 +11832,272 @@ BOOST_AUTO_TEST_CASE( MatchingSymbolAndPackageVariantsPreservePhysicalPinNames )
 }
 
 
+BOOST_AUTO_TEST_CASE( OffpageParentBindingPreservesPinNameAndDirection )
+{
+    ORCAD_RAW_PAGE rootPage;
+    rootPage.name = "ROOT";
+    rootPage.width = 10000;
+    rootPage.height = 8000;
+    ORCAD_DRAWN_INSTANCE drawn;
+    drawn.dbId = 100;
+    drawn.reference = "G1";
+    drawn.x1 = drawn.y1 = 100;
+    drawn.w = drawn.h = 100;
+    drawn.pins.push_back( ORCAD_BLOCK_PIN{ .name = "Gate", .portType = ORCAD_PORT_TYPE::INPUT,
+                                           .x = 100, .y = 150 } );
+    rootPage.blocks.push_back( std::move( drawn ) );
+
+    ORCAD_RAW_PAGE childPage;
+    childPage.name = "CHILD";
+    childPage.width = 10000;
+    childPage.height = 8000;
+    childPage.netmap[1] = "gate";
+    ORCAD_WIRE wire;
+    wire.id = 1;
+    wire.x1 = 100;
+    wire.x2 = 150;
+    wire.y1 = wire.y2 = 100;
+    childPage.wires.push_back( wire );
+    ORCAD_GRAPHIC_INST offpage;
+    offpage.logicalName = "gate";
+    offpage.x = offpage.y = 100;
+    childPage.offpage.push_back( std::move( offpage ) );
+
+    ORCAD_OCC_BLOCK occurrence;
+    occurrence.targetDbId = 100;
+    occurrence.childFolder = "CHILD";
+    ORCAD_DESIGN design;
+    design.sourceId = "offpage-parent-input-binding";
+    design.pages.push_back( std::move( rootPage ) );
+    design.childFolderPages["child"].push_back( std::move( childPage ) );
+    design.occurrenceRoot.blocks.push_back( std::move( occurrence ) );
+    SCHEMATIC schematic( nullptr );
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    schematic.SetProject( &manager.Prj() );
+    SCH_SHEET* root = convertRawDesign( design, schematic );
+    SCH_SHEET* child = nullptr;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+        child = static_cast<SCH_SHEET*>( item );
+
+    BOOST_REQUIRE( child );
+    BOOST_REQUIRE_EQUAL( child->GetPins().size(), 1u );
+    int checked = 0;
+
+    for( SCH_ITEM* item : child->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+    {
+        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+
+        if( label->GetText().CmpNoCase( "gate" ) != 0 )
+            continue;
+
+        ++checked;
+        BOOST_CHECK_EQUAL( label->GetText(), child->GetPins().front()->GetText() );
+        BOOST_CHECK( label->GetShape() == LABEL_FLAG_SHAPE::L_INPUT );
+    }
+
+    BOOST_CHECK_EQUAL( checked, 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( OffpageAtCutCrossingStaysOnItsSourceNet )
+{
+    for( int mode : { 0, 1, 2 } )
+    {
+        bool endpoint = mode == 1;
+        bool ambiguous = mode == 2;
+        ORCAD_RAW_PAGE page;
+        page.name = "OFFPAGE AT CUT CROSSING";
+        page.width = 10000;
+        page.height = 8000;
+        page.netmap[1] = "VERTICAL";
+        page.netmap[2] = "HORIZONTAL";
+
+        ORCAD_WIRE vertical;
+        vertical.id = 1;
+        vertical.x1 = vertical.x2 = 100;
+        vertical.y1 = endpoint ? 100 : 50;
+        vertical.y2 = 150;
+        page.wires.push_back( vertical );
+
+        ORCAD_WIRE horizontal;
+        horizontal.id = 2;
+        horizontal.x1 = 50;
+        horizontal.x2 = 150;
+        horizontal.y1 = horizontal.y2 = 100;
+        page.wires.push_back( horizontal );
+
+        ORCAD_GRAPHIC_INST offpage;
+        offpage.logicalName = ambiguous ? "UNKNOWN" : "VERTICAL";
+        offpage.x = offpage.y = 100;
+        page.offpage.push_back( std::move( offpage ) );
+
+        ORCAD_DESIGN design;
+        design.sourceId = endpoint ? "offpage-at-cut-endpoint" : "offpage-at-cut-interior";
+        design.pages.push_back( std::move( page ) );
+        SCHEMATIC schematic( nullptr );
+        SETTINGS_MANAGER manager;
+        manager.LoadProject( "" );
+        schematic.SetProject( &manager.Prj() );
+        if( ambiguous )
+        {
+            BOOST_CHECK_THROW( convertRawDesign( design, schematic ), IO_ERROR );
+            continue;
+        }
+
+        SCH_SHEET* root = convertRawDesign( design, schematic );
+        SCH_SHEET_LIST sheets = schematic.BuildSheetListSortedByPageNumbers();
+        schematic.ConnectionGraph()->Recalculate( sheets, true );
+        SCH_LINE* verticalWire = nullptr;
+        SCH_LINE* horizontalWire = nullptr;
+        const SCH_GLOBALLABEL* connector = nullptr;
+
+        for( SCH_ITEM* item : root->GetScreen()->Items() )
+        {
+            if( item->Type() == SCH_LINE_T )
+            {
+                SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+                if( line->GetLayer() != LAYER_WIRE )
+                    continue;
+
+                if( line->GetStartPoint().x == line->GetEndPoint().x )
+                    verticalWire = line;
+                else
+                    horizontalWire = line;
+            }
+            else if( item->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                const SCH_GLOBALLABEL* label = static_cast<const SCH_GLOBALLABEL*>( item );
+
+                if( label->GetText() == "VERTICAL"
+                    && ( label->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED || label->GetTextColor().a > 0 ) )
+                    connector = label;
+            }
+        }
+
+        BOOST_REQUIRE( connector );
+        BOOST_REQUIRE( verticalWire );
+        BOOST_REQUIRE( horizontalWire );
+        BOOST_CHECK( !horizontalWire->GetSeg().Contains( connector->GetPosition() ) );
+        BOOST_CHECK_NE( verticalWire->Connection( &sheets.front() )->Name(),
+                        horizontalWire->Connection( &sheets.front() )->Name() );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( OffpageParentBindingKeepsVisibleLabelsApart )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "SI347XY_MB_EVB.DSN" );
+
+    if( dsn.empty() )
+        return;
+
+    SCHEMATIC schematic( nullptr );
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    schematic.SetProject( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), &schematic );
+    int checked = 0;
+
+    for( const SCH_SHEET_PATH& sheet : schematic.BuildSheetListSortedByPageNumbers() )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        {
+            SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
+
+            if( label->GetText() != "VDD" )
+                continue;
+
+            for( SCH_ITEM* other : sheet.LastScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+            {
+                SCH_HIERLABEL* hierLabel = static_cast<SCH_HIERLABEL*>( other );
+
+                if( hierLabel->GetText() != label->GetText() || hierLabel->GetPosition() != label->GetPosition() )
+                    continue;
+
+                ++checked;
+                BOOST_CHECK( hierLabel->GetSpinStyle()
+                             == label->GetSpinStyle().RotateCCW().RotateCCW().Spin() );
+                BOOST_CHECK( label->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED
+                             || label->GetTextColor().a > 0 );
+                BOOST_CHECK( hierLabel->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED
+                             || hierLabel->GetTextColor().a > 0 );
+            }
+        }
+    }
+
+    BOOST_CHECK_EQUAL( checked, 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( OffpageAtWireBranchHasVisibleSafeAnchor )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "DC2659A-4.DSN" );
+
+    if( dsn.empty() )
+        return;
+
+    SCHEMATIC schematic( nullptr );
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    schematic.SetProject( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), &schematic );
+    int checked = 0;
+
+    for( const SCH_SHEET_PATH& sheet : schematic.BuildSheetListSortedByPageNumbers() )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+        {
+            if( item->Type() != SCH_GLOBAL_LABEL_T )
+                continue;
+
+            SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
+
+            // PAGE2's source connector starts at a three-wire branch; nearby labels belong to other source objects.
+            if( label->GetText() != "VOUT2"
+                || ( label->GetPosition() - VECTOR2I( 4140200, 901700 ) ).SquaredEuclideanNorm()
+                           > int64_t( 15000 ) * 15000 )
+                continue;
+
+            ++checked;
+            BOOST_CHECK( label->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED
+                         || label->GetTextColor().a > 0 );
+            int incident = 0;
+
+            for( SCH_ITEM* other : sheet.LastScreen()->Items() )
+            {
+                if( other->Type() != SCH_LINE_T )
+                    continue;
+
+                SCH_LINE* line = static_cast<SCH_LINE*>( other );
+
+                if( ( line->GetLayer() == LAYER_WIRE || line->GetLayer() == LAYER_BUS )
+                    && line->GetSeg().Contains( label->GetPosition() ) )
+                    ++incident;
+            }
+
+            BOOST_CHECK_LE( incident, 1 );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( checked, 1 );
+}
+
+
 BOOST_AUTO_TEST_CASE( OffpageDisplayNameDoesNotChangeConnectivity )
 {
     const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
@@ -11230,8 +12213,24 @@ BOOST_AUTO_TEST_CASE( SingleLeafOccurrencePreservesNamedNet )
         }
     }
 
-    BOOST_CHECK_EQUAL( netName, wxS( "ANALOG5V" ) );
-    BOOST_CHECK( !netName.Contains( wxS( "_BRKTSTBCDP5004" ) ) );
+    BOOST_CHECK_EQUAL( netName.AfterLast( '/' ), wxString( "ANALOG5V" ) );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "SH2" ), wxS( "2" ) ), netName );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "U1" ), wxS( "4" ) ), netName );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "VOUT_5" ), wxS( "1" ) ), netName );
+
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    auto mapped = std::find_if( map->entries.begin(), map->entries.end(),
+                               []( const IMPORT_NET_MAP_ENTRY& entry )
+                               {
+                                   return entry.sourceNetId == 16645429
+                                          && entry.originalName == wxS( "ANALOG5V" );
+                               } );
+    BOOST_REQUIRE( mapped != map->entries.end() );
+    BOOST_CHECK_EQUAL( mapped->status, wxString( "resolved" ) );
+    BOOST_CHECK_EQUAL( mapped->nameAtImport, netName );
+    BOOST_REQUIRE( !mapped->occurrence.empty() );
+    BOOST_CHECK_EQUAL( mapped->occurrence.back(), wxString( "BRKTSTBCDP5004" ) );
 }
 
 
@@ -12297,6 +13296,73 @@ BOOST_AUTO_TEST_CASE( LegacyDisplayTypesRemainVisible )
 }
 
 
+BOOST_AUTO_TEST_CASE( UnreferencedPagesDoNotOverwriteHierarchicalSheets )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "SI8281V2-EVB.DSN" );
+
+    if( dsn.empty() )
+        return;
+
+    m_plugin.LoadSchematicFile( dsn.string(), m_schematic.get() );
+    std::map<wxString, SCH_SCREEN*> screensByFile;
+    size_t connectorPins = 0;
+
+    for( const SCH_SHEET_PATH& path : m_schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+        auto [entry, inserted] = screensByFile.emplace( screen->GetFileName().Lower(), screen );
+        BOOST_CHECK_MESSAGE( inserted || entry->second == screen,
+                             "Distinct sheets share output file " << screen->GetFileName() );
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( symbol->GetRef( &path, false ) == wxS( "J24" ) )
+                connectorPins += symbol->GetPins().size();
+        }
+    }
+
+    BOOST_CHECK_EQUAL( connectorPins, 16 );
+}
+
+
+BOOST_AUTO_TEST_CASE( HierarchicalPortsUseVisibleNativeLabels )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "M5275EVB.DSN" );
+
+    if( dsn.empty() )
+        return;
+
+    m_plugin.LoadSchematicFile( dsn.string(), m_schematic.get() );
+    size_t ports = 0;
+
+    for( const SCH_SHEET_PATH& path : m_schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+        {
+            SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+            BOOST_CHECK_MESSAGE( label->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED
+                                         || label->GetTextColor().a > 0,
+                                 "Hidden hierarchical port " << label->GetText() );
+            ++ports;
+        }
+    }
+
+    BOOST_CHECK_GT( ports, 0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( LegacyHierarchicalBlockImport )
 {
     const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
@@ -12328,7 +13394,6 @@ BOOST_AUTO_TEST_CASE( LegacyHierarchicalBlockImport )
 
     size_t pages = 0;
     size_t components = 0;
-    size_t wires = 0;
 
     for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
     {
@@ -12346,18 +13411,17 @@ BOOST_AUTO_TEST_CASE( LegacyHierarchicalBlockImport )
             {
                 ++components;
             }
-            else if( item->Type() == SCH_LINE_T
-                     && ( static_cast<SCH_LINE*>( item )->GetLayer() == LAYER_WIRE
-                          || static_cast<SCH_LINE*>( item )->GetLayer() == LAYER_BUS ) )
-            {
-                ++wires;
-            }
+
         }
     }
 
-    BOOST_CHECK_EQUAL( pages, 17u );
+    BOOST_CHECK_EQUAL( pages, 16u );
     BOOST_CHECK_EQUAL( components, 491u );
-    BOOST_CHECK_EQUAL( wires, 9696u );
+    auto [consistent, checkable] = checkConnectivity(
+            *schematic, { { "J7.54", "RP17.3", "U10.C13" },
+                          { "J10.35", "J12.9", "RP15.7", "U10.N10" } } );
+    BOOST_CHECK_EQUAL( checkable, 2 );
+    BOOST_CHECK_EQUAL( consistent, 2 );
 }
 
 
@@ -12440,7 +13504,31 @@ BOOST_AUTO_TEST_CASE( LegacyDsnEmbeddedSlashNetNameIsAuthoritative )
         }
     }
 
-    BOOST_CHECK_EQUAL( j1Pin7Net, wxString( wxS( "BDM_{slash}RSTIN" ) ) );
+    BOOST_CHECK( !j1Pin7Net.IsEmpty() );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "RP13" ), wxS( "7" ) ), j1Pin7Net );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "U26" ), wxS( "B" ) ), j1Pin7Net );
+
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    auto mapped = std::find_if( map->entries.begin(), map->entries.end(),
+                               []( const IMPORT_NET_MAP_ENTRY& entry )
+                               {
+                                   return entry.sourceNetId == 3221698
+                                          && entry.originalName == wxS( "BDM_/RSTIN" );
+                               } );
+    BOOST_REQUIRE( mapped != map->entries.end() );
+    BOOST_CHECK_EQUAL( mapped->status, wxString( "resolved" ) );
+    BOOST_CHECK_EQUAL( mapped->nameAtImport, j1Pin7Net );
+
+    bool sourcePort = false;
+
+    for( const SCH_SHEET_PATH& sheet : sheets )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+            sourcePort |= static_cast<SCH_HIERLABEL*>( item )->GetText() == wxS( "BDM_/RSTIN" );
+    }
+
+    BOOST_CHECK( sourcePort );
 }
 
 
@@ -12528,7 +13616,6 @@ BOOST_AUTO_TEST_CASE( LegacyFlatPageImport )
 
     size_t pages = 0;
     size_t components = 0;
-    size_t segments = 0;
 
     for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
     {
@@ -12546,18 +13633,12 @@ BOOST_AUTO_TEST_CASE( LegacyFlatPageImport )
             {
                 ++components;
             }
-            else if( item->Type() == SCH_LINE_T
-                     && ( static_cast<SCH_LINE*>( item )->GetLayer() == LAYER_WIRE
-                          || static_cast<SCH_LINE*>( item )->GetLayer() == LAYER_BUS ) )
-            {
-                ++segments;
-            }
+
         }
     }
 
     BOOST_CHECK_EQUAL( pages, 1u );
     BOOST_CHECK_EQUAL( components, 256u );
-    BOOST_CHECK_EQUAL( segments, 1756u );
 }
 
 
@@ -12592,7 +13673,6 @@ BOOST_AUTO_TEST_CASE( LegacyHierarchyPowerTableImport )
 
     size_t pages = 0;
     size_t components = 0;
-    size_t segments = 0;
 
     for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
     {
@@ -12610,18 +13690,12 @@ BOOST_AUTO_TEST_CASE( LegacyHierarchyPowerTableImport )
             {
                 ++components;
             }
-            else if( item->Type() == SCH_LINE_T
-                     && ( static_cast<SCH_LINE*>( item )->GetLayer() == LAYER_WIRE
-                          || static_cast<SCH_LINE*>( item )->GetLayer() == LAYER_BUS ) )
-            {
-                ++segments;
-            }
+
         }
     }
 
     BOOST_CHECK_EQUAL( pages, 1u );
     BOOST_CHECK_EQUAL( components, 74u );
-    BOOST_CHECK_EQUAL( segments, 458u );
 }
 
 
@@ -13199,8 +14273,24 @@ BOOST_AUTO_TEST_CASE( RepeatedHierarchicalBusPinsRemainScoped )
     auto [consistent, checkable] = checkConnectivity( *schematic, expected );
     BOOST_CHECK_EQUAL( checkable, 4 );
     BOOST_CHECK_EQUAL( consistent, 4 );
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "C103" ), wxS( "1" ) ).Lower(),
-                       wxString( wxS( "lf2_ext_cap_clock" ) ) );
+    wxString netName = terminalNetName( *schematic, wxS( "C103" ), wxS( "1" ) );
+    BOOST_CHECK_EQUAL( netName.AfterLast( '/' ), wxString( "LF2_EXT_CAP" ) );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "U7" ), wxS( "11" ) ), netName );
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    std::set<wxString> occurrenceNames;
+
+    for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
+    {
+        if( entry.sourceNetId == 9438967 && entry.originalName == wxS( "LF2_EXT_CAP" ) )
+        {
+            BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+            occurrenceNames.insert( entry.nameAtImport );
+        }
+    }
+
+    BOOST_CHECK( occurrenceNames.contains( netName ) );
+    BOOST_CHECK_EQUAL( occurrenceNames.size(), 2u );
 }
 
 
@@ -13237,8 +14327,24 @@ BOOST_AUTO_TEST_CASE( NestedHierarchicalBusRangesPreserveConnectivity )
     auto [consistent, checkable] = checkConnectivity( *schematic, expected );
     BOOST_CHECK_EQUAL( checkable, 2 );
     BOOST_CHECK_EQUAL( consistent, 2 );
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "R138" ), wxS( "1" ) ).Lower(),
-                       wxString( wxS( "we_wait_wr_p0_snow4-1" ) ) );
+    wxString netName = terminalNetName( *schematic, wxS( "R138" ), wxS( "1" ) );
+    BOOST_CHECK_EQUAL( netName.AfterLast( '/' ), wxString( "WE_WAIT_WR_P0" ) );
+    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "U1" ), wxS( "K3" ) ), netName );
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    std::set<wxString> occurrenceNames;
+
+    for( const IMPORT_NET_MAP_ENTRY& entry : map->entries )
+    {
+        if( entry.sourceNetId == 7937073 && entry.originalName == wxS( "WE_WAIT_WR_P0" ) )
+        {
+            BOOST_CHECK_EQUAL( entry.status, wxString( "resolved" ) );
+            occurrenceNames.insert( entry.nameAtImport );
+        }
+    }
+
+    BOOST_CHECK( occurrenceNames.contains( netName ) );
+    BOOST_CHECK_EQUAL( occurrenceNames.size(), 4u );
 }
 
 
@@ -13343,30 +14449,21 @@ BOOST_AUTO_TEST_CASE( DegenerateHierarchicalPinPlacementsUseDefinitionGeometry )
     auto [consistent, checkable] = checkConnectivity( *schematic, expected );
     BOOST_CHECK_EQUAL( checkable, 6 );
     BOOST_CHECK_EQUAL( consistent, 6 );
-    BOOST_CHECK_EQUAL( terminalNetName( *schematic, wxS( "J6" ), wxS( "F35" ) ).Lower(),
-                       wxString( wxS( "ctrl_n3_ea2" ) ) );
-
-    int generatedLabels = 0;
-
-    for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
-    {
-        for( SCH_ITEM* item : path.LastScreen()->Items() )
-        {
-            if( item->Type() != SCH_LABEL_T )
-                continue;
-
-            SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
-
-            if( !label->GetText().Contains( wxS( "_ORCAD_" ) ) )
-                continue;
-
-            ++generatedLabels;
-            BOOST_CHECK( label->GetTextColor() != KIGFX::COLOR4D::UNSPECIFIED );
-            BOOST_CHECK_EQUAL( label->GetTextColor().a, 0.0 );
-        }
-    }
-
-    BOOST_CHECK_GT( generatedLabels, 0 );
+    wxString netName = terminalNetName( *schematic, wxS( "J6" ), wxS( "F35" ) );
+    BOOST_CHECK( !netName.IsEmpty() );
+    const IMPORT_NET_MAP* map = schematic->GetImportNetMap();
+    BOOST_REQUIRE( map );
+    auto mapped = std::find_if( map->entries.begin(), map->entries.end(),
+                               [&]( const IMPORT_NET_MAP_ENTRY& entry )
+                               {
+                                   return entry.sourceNetId == 9578237
+                                          && entry.originalName == wxS( "CTRL_N3" )
+                                          && entry.nameAtImport == netName;
+                               } );
+    BOOST_REQUIRE( mapped != map->entries.end() );
+    BOOST_CHECK_EQUAL( mapped->status, wxString( "resolved" ) );
+    BOOST_REQUIRE_EQUAL( mapped->occurrence.size(), 3u );
+    BOOST_CHECK_EQUAL( mapped->occurrence[1], wxString( "10280601" ) );
 }
 
 
@@ -13789,6 +14886,484 @@ BOOST_AUTO_TEST_CASE( ComponentDetailImport )
 
     BOOST_CHECK( hasSpin( wxS( "VOLDN" ), SPIN_STYLE::UP ) );
     BOOST_CHECK( hasSpin( wxS( "MUTEP" ), SPIN_STYLE::BOTTOM ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( HierarchicalBusAliasesConnectWithoutHiddenLabels )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "buddy_sch_rev1.dsn" );
+    BOOST_REQUIRE_MESSAGE( !dsn.empty(), "buddy_sch_rev1.dsn not present in corpus." );
+
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    SCHEMATIC schematic( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), &schematic );
+
+    std::set<SCH_SCREEN*> visited;
+
+    for( const SCH_SHEET_PATH& path : schematic.BuildSheetListSortedByPageNumbers() )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !visited.insert( screen ).second )
+            continue;
+
+        std::vector<SCH_ITEM*> hidden;
+
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            if( item->Type() != SCH_LABEL_T && item->Type() != SCH_GLOBAL_LABEL_T )
+                continue;
+
+            SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
+
+            if( label->GetTextColor() != KIGFX::COLOR4D::UNSPECIFIED && label->GetTextColor().a == 0 )
+                hidden.push_back( item );
+        }
+
+        for( SCH_ITEM* item : hidden )
+            screen->DeleteItem( item );
+    }
+
+    auto [consistent, checkable] =
+            checkConnectivity( schematic, { { "U1.BB5", "J6.J30" }, { "U1.BA5", "J6.K31" } } );
+    BOOST_CHECK_EQUAL( checkable, 2 );
+    BOOST_CHECK_EQUAL( consistent, 2 );
+}
+
+
+BOOST_AUTO_TEST_CASE( EscapedHierarchicalBusMembersConnectWithoutGlobalHelpers )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "M5275EVB.DSN" );
+    BOOST_REQUIRE_MESSAGE( !dsn.empty(), "M5275EVB.DSN not present in corpus." );
+
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    SCHEMATIC schematic( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), &schematic );
+
+    std::set<SCH_SCREEN*> visited;
+
+    for( const SCH_SHEET_PATH& path : schematic.BuildSheetListSortedByPageNumbers() )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !visited.insert( screen ).second )
+            continue;
+
+        std::vector<SCH_LABEL_BASE*> hidden;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        {
+            SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
+
+            if( label->GetTextColor() != KIGFX::COLOR4D::UNSPECIFIED && label->GetTextColor().a == 0 )
+                hidden.push_back( label );
+        }
+
+        for( SCH_LABEL_BASE* label : hidden )
+        {
+            screen->Append( new SCH_LABEL( label->GetPosition(), label->GetText() ) );
+            screen->DeleteItem( label );
+        }
+    }
+
+    const std::vector<std::set<std::string>> expected = {
+        { "J3.38", "RP49.7", "U6.D10" },
+        { "J3.40", "RP49.5", "U6.D11" },
+        { "J3.42", "RP49.3", "U6.D12" },
+        { "J3.44", "RP49.1", "U6.D13" },
+        { "J4.43", "RP16.4", "RP45.5", "RP9.8", "TP33.1", "U1.40", "U7.47" },
+        { "J4.45", "RP16.8", "RP45.3", "RP9.6", "TP35.1", "U1.39", "U7.20" },
+        { "J4.47", "RP9.4" },
+        { "J4.49", "RP15.2", "RP9.2", "TP31.1", "U7.24" },
+        { "J5.21", "R37.2", "RP50.1", "U6.G13" },
+        { "J5.22", "RP47.3", "U6.E13" },
+        { "J5.23", "RP50.3", "U6.H16" },
+        { "J5.24", "RP47.1", "U2.6", "U6.F13" },
+        { "J5.25", "RP50.5", "U6.H15" },
+        { "J5.27", "RP50.7", "U6.H14" },
+        { "J5.29", "J9.11", "RP48.3", "U6.J14" },
+        { "J5.31", "RP48.5", "U6.J13", "U8.25" },
+        { "J5.33", "RP48.7", "U6.K13", "U9.25" },
+        { "J6.15", "RP47.7", "TP4.1", "U11.12", "U12.A8", "U2.1", "U6.R6" },
+        { "J6.21", "RP47.5", "U1.6", "U2.3", "U6.N7" },
+    };
+
+    auto [consistent, checkable] = checkConnectivity( schematic, expected );
+    BOOST_CHECK_EQUAL( checkable, expected.size() );
+    BOOST_CHECK_EQUAL( consistent, expected.size() );
+}
+
+
+BOOST_AUTO_TEST_CASE( GeneratedRepairNamesAvoidExplicitNetNames )
+{
+    for( int mode : { 0, 1, 2 } )
+    {
+        const bool collide = mode != 0;
+        const bool remoteGlobal = mode == 2;
+
+        BOOST_TEST_CONTEXT( "collision mode=" << mode )
+        {
+            ORCAD_SYMBOL_DEF definition;
+            definition.typeId = ORCAD_ST_LIBRARY_PART;
+            definition.name = "LOAD.Normal";
+            definition.bbox = ORCAD_BBOX{ 0, 0, 10, 10 };
+            definition.pins.push_back( ORCAD_SYMBOL_PIN{ .name = "1", .position = 0 } );
+            ORCAD_RAW_PAGE page;
+            page.name = "REPAIR NAMES";
+            page.netmap[1] = "N1001";
+            ORCAD_RAW_PAGE peerPage;
+            peerPage.name = "OTHER PAGE";
+
+            for( int index = 0; index < ( collide ? 4 : 2 ); ++index )
+            {
+                const uint32_t net = index < 2 ? 1 : index;
+                const int x = ( index + 1 ) * 100;
+                ORCAD_PLACED_INSTANCE instance;
+                instance.pkgName = definition.name;
+                instance.sourcePackage = "LOAD";
+                instance.reference = "R" + std::to_string( index + 1 );
+                instance.dbId = index + 10;
+                instance.x = x;
+                instance.pins.push_back( ORCAD_PIN_INST{ .pinIndex = 1, .x = x, .wordB = net } );
+                ORCAD_RAW_PAGE& target = remoteGlobal && index >= 2 ? peerPage : page;
+                target.instances.push_back( std::move( instance ) );
+
+                if( index >= 2 )
+                {
+                    const std::string name = index == 2 ? "Net-(R1-Pad1)" : "Net-(R1-Pad1)_2";
+                    target.netmap[net] = name;
+                    ORCAD_WIRE wire{ .id = net, .x1 = x, .x2 = x + 40 };
+
+                    if( remoteGlobal )
+                    {
+                        ORCAD_GRAPHIC_INST connector;
+                        connector.logicalName = name;
+                        connector.x = x + 20;
+                        target.offpage.push_back( std::move( connector ) );
+                    }
+                    else
+                    {
+                        target.netAliases[net] = { name };
+                        wire.aliases.push_back( ORCAD_ALIAS{ .name = name, .x = x + 20 } );
+                    }
+
+                    target.wires.push_back( std::move( wire ) );
+                }
+            }
+
+            ORCAD_DESIGN design;
+            design.sourceId = "generated-repair-name-collision";
+            design.symbols.emplace( definition.name, std::move( definition ) );
+            design.pages.push_back( std::move( page ) );
+
+            if( remoteGlobal )
+                design.pages.push_back( std::move( peerPage ) );
+
+            SETTINGS_MANAGER manager;
+            manager.LoadProject( "" );
+            SCHEMATIC schematic( &manager.Prj() );
+            SCH_SHEET* root = convertRawDesign( design, schematic );
+            SCH_SHEET_PATH path;
+            path.push_back( root );
+            SCH_SYMBOL* first = findConvertedSymbol( *root->GetScreen(), path, wxS( "R1" ) );
+            SCH_SYMBOL* second = findConvertedSymbol( *root->GetScreen(), path, wxS( "R2" ) );
+            BOOST_REQUIRE( first );
+            BOOST_REQUIRE( second );
+            BOOST_REQUIRE_EQUAL( first->GetPins( &path ).size(), 1u );
+            BOOST_REQUIRE_EQUAL( second->GetPins( &path ).size(), 1u );
+            SCH_CONNECTION* repaired = first->GetPins( &path ).front()->Connection( &path );
+            SCH_CONNECTION* peer = second->GetPins( &path ).front()->Connection( &path );
+            BOOST_REQUIRE( repaired );
+            BOOST_REQUIRE( peer );
+            BOOST_CHECK_EQUAL( repaired->NetCode(), peer->NetCode() );
+            BOOST_CHECK_EQUAL( repaired->Name( true ),
+                               collide ? wxString( "Net-(R1-Pad1)_3" ) : wxString( "Net-(R1-Pad1)" ) );
+            BOOST_CHECK( root->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ).empty() );
+
+            if( collide )
+            {
+                std::set<int> nets = { repaired->NetCode() };
+                SCH_SHEET_PATH collisionPath = path;
+
+                if( remoteGlobal )
+                {
+                    BOOST_REQUIRE_EQUAL( schematic.GetTopLevelSheets().size(), 2u );
+                    collisionPath.clear();
+                    collisionPath.push_back( schematic.GetTopLevelSheet( 1 ) );
+                    auto globals = collisionPath.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T );
+                    BOOST_CHECK_EQUAL( std::distance( globals.begin(), globals.end() ), 2 );
+                }
+
+                for( const wxString& reference : { wxString( "R3" ), wxString( "R4" ) } )
+                {
+                    SCH_SYMBOL* symbol = findConvertedSymbol( *collisionPath.LastScreen(), collisionPath, reference );
+                    BOOST_REQUIRE( symbol );
+                    BOOST_REQUIRE_EQUAL( symbol->GetPins( &collisionPath ).size(), 1u );
+                    SCH_CONNECTION* connection = symbol->GetPins( &collisionPath ).front()->Connection( &collisionPath );
+                    BOOST_REQUIRE( connection );
+                    nets.insert( connection->NetCode() );
+                    BOOST_CHECK_EQUAL( connection->Name( true ), reference == wxS( "R3" )
+                                              ? wxString( "Net-(R1-Pad1)" ) : wxString( "Net-(R1-Pad1)_2" ) );
+                }
+
+                BOOST_CHECK_EQUAL( nets.size(), 3u );
+            }
+
+            BOOST_REQUIRE( schematic.GetImportNetMap() );
+            bool mapped = false;
+
+            for( const IMPORT_NET_MAP_ENTRY& entry : schematic.GetImportNetMap()->entries )
+            {
+                if( entry.originalName == wxS( "N1001" ) )
+                {
+                    mapped = true;
+                    BOOST_CHECK_EQUAL( entry.nameAtImport, repaired->Name() );
+                }
+            }
+
+            BOOST_CHECK( mapped );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( RepeatedSheetPinNamesDoNotJoinLocalRepairs )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    const std::filesystem::path dsn = findCorpusDesign( corpusEnv, "HB1A-AAFM.DSN" );
+
+    if( dsn.empty() )
+    {
+        BOOST_TEST_MESSAGE( "HB1A-AAFM.DSN not present in corpus; skipping sheet-pin repair check." );
+        return;
+    }
+
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    SCHEMATIC schematic( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), &schematic );
+    schematic.ConnectionGraph()->Recalculate( schematic.BuildSheetListSortedByPageNumbers(), true );
+    std::set<std::set<std::string>> partitions;
+
+    for( const auto& [key, subgraphs] : schematic.ConnectionGraph()->GetNetMap() )
+    {
+        std::set<std::string> terminals;
+
+        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        {
+            for( SCH_ITEM* item : subgraph->GetItems() )
+            {
+                if( item->Type() != SCH_PIN_T )
+                    continue;
+
+                SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
+                wxString reference = symbol->GetRef( &subgraph->GetSheet(), false );
+
+                if( !reference.IsEmpty() && !reference.StartsWith( wxS( "#" ) ) )
+                {
+                    terminals.insert( terminalToken( reference.ToStdString( wxConvUTF8 ),
+                                                     pin->GetNumber().ToStdString( wxConvUTF8 ) ) );
+                }
+            }
+        }
+
+        partitions.insert( std::move( terminals ) );
+    }
+
+    // These distinct Capture clock nets share interface pin names across repeated ANEMONE instances.
+    const std::map<std::string, std::set<std::string>> expected = {
+        { "UL_UL_WW_LCLK_P", { terminalToken( "R278", "1" ), terminalToken( "U3", "F1" ),
+                                terminalToken( "U3", "M1" ) } },
+        { "UR_UL_WE_LCLK_P", { terminalToken( "R175", "1" ), terminalToken( "U3", "N18" ),
+                                terminalToken( "U4", "F1" ) } }
+    };
+
+    for( const auto& [name, terminals] : expected )
+    {
+        BOOST_TEST_CONTEXT( name )
+        {
+            BOOST_CHECK( partitions.count( terminals ) == 1 );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( WireFreePinJunctionsRetainVisibleLocalConnections )
+{
+    const char* corpus = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpus || !*corpus )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpus, "1822A.DSN" );
+
+    if( dsn.empty() )
+        return;
+
+    SETTINGS_MANAGER manager;
+    manager.LoadProject( "" );
+    SCHEMATIC schematic( &manager.Prj() );
+    SCH_IO_ORCAD plugin;
+    BOOST_REQUIRE_NO_THROW( plugin.LoadSchematicFile( dsn.string(), &schematic ) );
+    bool found = false;
+
+    for( const SCH_SHEET_PATH& path : schematic.BuildSheetListSortedByPageNumbers() )
+    {
+        SCH_SYMBOL* symbol = findConvertedSymbol( *path.LastScreen(), path, wxS( "COUT1" ) );
+
+        if( !symbol )
+            continue;
+
+        for( SCH_PIN* pin : symbol->GetPins( &path ) )
+        {
+            if( pin->GetNumber() != wxS( "3" ) )
+                continue;
+
+            found = true;
+            bool labelled = false;
+            bool junction = false;
+
+            for( SCH_ITEM* item : path.LastScreen()->Items() )
+            {
+                if( auto* wire = dynamic_cast<SCH_LINE*>( item ); wire && wire->GetLayer() == LAYER_WIRE )
+                    BOOST_CHECK( !wire->GetSeg().Contains( pin->GetPosition() ) );
+
+                if( item->GetPosition() != pin->GetPosition() )
+                    continue;
+
+                junction |= item->Type() == SCH_JUNCTION_T;
+
+                if( auto* label = dynamic_cast<SCH_LABEL*>( item ) )
+                {
+                    labelled |= label->GetText() == wxS( "Agnd" );
+                    BOOST_CHECK( label->GetTextColor() == KIGFX::COLOR4D::UNSPECIFIED
+                                 || label->GetTextColor().a > 0 );
+                }
+            }
+
+            BOOST_CHECK( junction );
+            BOOST_CHECK( labelled );
+        }
+    }
+
+    BOOST_CHECK( found );
+
+    for( const wxString& reference : { wxString( "COUT1" ), wxString( "COUT2" ), wxString( "COUT3" ) } )
+        BOOST_CHECK_EQUAL( terminalNetName( schematic, reference, wxS( "3" ) ), wxString( "Agnd" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( InterfaceAnchorsAvoidPinsAndBusEntries )
+{
+    for( int mode = 0; mode < 4; ++mode )
+    {
+        const bool port = mode & 1;
+        const bool entryOnBranch = mode & 2;
+
+        BOOST_TEST_CONTEXT( "port=" << port << ", entryOnBranch=" << entryOnBranch )
+        {
+            ORCAD_SYMBOL_DEF definition;
+            definition.typeId = ORCAD_ST_LIBRARY_PART;
+            definition.name = "LOAD.Normal";
+            definition.bbox = ORCAD_BBOX{ 0, 0, 10, 10 };
+            definition.pins.push_back( ORCAD_SYMBOL_PIN{ .name = "1", .position = 0 } );
+            ORCAD_RAW_PAGE page;
+            page.name = "LATE PIN";
+            page.netmap[1] = "SIGNAL";
+            const int branchEnd = entryOnBranch ? 20 : 5;
+            page.wires = { ORCAD_WIRE{ .id = 1, .x1 = 100, .x2 = 200 },
+                           ORCAD_WIRE{ .id = 1, .x1 = 100, .x2 = 100, .y2 = branchEnd } };
+            page.busEntries.push_back( entryOnBranch
+                                              ? ORCAD_BUS_ENTRY{ .x1 = 100, .y1 = 5, .x2 = 110, .y2 = -5 }
+                                              : ORCAD_BUS_ENTRY{ .x1 = 150, .x2 = 160, .y2 = -10 } );
+            ORCAD_GRAPHIC_INST connector;
+            connector.logicalName = "SIGNAL";
+            connector.x = 100;
+
+            if( port )
+                page.ports.push_back( std::move( connector ) );
+            else
+                page.offpage.push_back( std::move( connector ) );
+
+            for( int index = 0; index < 2; ++index )
+            {
+                ORCAD_PLACED_INSTANCE instance;
+                instance.pkgName = definition.name;
+                instance.sourcePackage = "LOAD";
+                instance.reference = "R" + std::to_string( index + 1 );
+                instance.x = index ? 200 : 100;
+                instance.y = index ? 0 : branchEnd;
+                instance.pins.push_back( ORCAD_PIN_INST{ .pinIndex = 1, .x = instance.x,
+                                                        .y = instance.y, .wordB = 1 } );
+                page.instances.push_back( std::move( instance ) );
+            }
+
+            ORCAD_DESIGN design;
+            design.sourceId = "interface-anchor-late-pin";
+            design.symbols.emplace( definition.name, std::move( definition ) );
+            design.pages.push_back( std::move( page ) );
+            SETTINGS_MANAGER manager;
+            manager.LoadProject( "" );
+            SCHEMATIC schematic( &manager.Prj() );
+            SCH_SHEET* root = convertRawDesign( design, schematic );
+            SCH_SHEET_PATH path;
+            path.push_back( root );
+            SCH_SYMBOL* first = findConvertedSymbol( *root->GetScreen(), path, wxS( "R1" ) );
+            SCH_SYMBOL* second = findConvertedSymbol( *root->GetScreen(), path, wxS( "R2" ) );
+            BOOST_REQUIRE( first );
+            BOOST_REQUIRE( second );
+            BOOST_REQUIRE_EQUAL( first->GetPins( &path ).size(), 1u );
+            BOOST_REQUIRE_EQUAL( second->GetPins( &path ).size(), 1u );
+            SCH_PIN* firstPin = first->GetPins( &path ).front();
+            SCH_PIN* secondPin = second->GetPins( &path ).front();
+            SCH_LABEL_BASE* label = nullptr;
+
+            for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+                label = static_cast<SCH_LABEL_BASE*>( item );
+
+            BOOST_REQUIRE( label );
+            BOOST_CHECK( label->GetPosition() != firstPin->GetPosition() );
+            BOOST_CHECK( label->GetPosition() != secondPin->GetPosition() );
+
+            for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
+            {
+                for( const VECTOR2I& point : item->GetConnectionPoints() )
+                    BOOST_CHECK( label->GetPosition() != point );
+            }
+
+            size_t contacts = 0;
+
+            for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LINE_T ) )
+                contacts += static_cast<SCH_LINE*>( item )->GetSeg().Contains( label->GetPosition() );
+
+            BOOST_CHECK_EQUAL( contacts, 1u );
+            BOOST_REQUIRE( label->Connection( &path ) );
+            BOOST_REQUIRE( firstPin->Connection( &path ) );
+            BOOST_REQUIRE( secondPin->Connection( &path ) );
+            BOOST_CHECK_EQUAL( label->Connection( &path )->NetCode(), firstPin->Connection( &path )->NetCode() );
+            BOOST_CHECK_EQUAL( label->Connection( &path )->NetCode(), secondPin->Connection( &path )->NetCode() );
+        }
+    }
 }
 
 

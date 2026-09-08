@@ -1669,6 +1669,8 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
+    const bool netMapSaved = schematic->SaveImportNetMap( outputFn.GetFullPath(), *m_reporter );
+
     m_reporter->Report( wxString::Format( _( "Successfully saved imported schematic to '%s'\n" ),
                                           outputFn.GetFullPath() ),
                         RPT_SEVERITY_INFO );
@@ -1734,6 +1736,15 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
             { wxS( "symbols" ), symbolCount },
             { wxS( "sheets" ), sheetCount }
         };
+
+        if( const IMPORT_NET_MAP* map = schematic->GetImportNetMap() )
+        {
+            reportData.m_statistics.emplace_back( wxS( "mapped_nets" ), map->entries.size() );
+            reportData.m_extraJson["net_map"] = {
+                { "file", ImportNetMapPath( outputFn.GetFullPath() ).ToStdString( wxConvUTF8 ) },
+                { "saved", netMapSaved }
+            };
+        }
 
         WriteImportReport( m_reporter, job->m_reportFormat, job->m_reportFile, reportData );
     }

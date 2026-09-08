@@ -109,6 +109,75 @@ interface; placed pin records supply page positions. Both format families now
 have block and occurrence readers. Repeated child folders receive separate
 occurrence references.
 
+Sheet pins retain the source electrical direction in both direct and folder
+hierarchies. Child ports use visible native hierarchical labels. Bus aliases on
+child pages follow the parent interface's occurrence-specific bus member names;
+flattened occurrence names must not replace those local bus connections. Reserve
+unreferenced page filenames from a freshly traversed hierarchy, including nested
+screens, before assigning excluded reference pages their filenames.
+
+Off-page connectors use visible global labels with their resolved occurrence net
+names. A connector that also matches a parent sheet pin retains a native
+hierarchical connection. Native labels replace the source arrow and duplicate
+name graphics. Intersection relocation stays on the source net and validates the
+actual emitted wire segments; an unresolved safe anchor is an import error.
+
+An unwired, undisplaced hidden power-input pin can retain KiCad's implicit global
+power connectivity when its resolved source net equals its pin name. A source net
+pointer alone does not imply an override. Explicitly different nets and displaced
+stacked pins retain explicit connectivity instead. Placed power symbols already
+use KiCad global-power symbols: their Value field supplies the net name. Removing
+other generated labels still requires checking disconnected wire components;
+the presence of a power symbol alone does not prove that every fragment connects.
+
+Restoring implicit power pins must retain the complete source package definition.
+Units of one physical part share a library identity within their occurrence scope,
+including units placed on different pages. A package with only one placed unit
+still retains its unplaced units. Explicit power-net overrides remain distinct
+from native implicit power definitions.
+
+## Net labels and import name map
+
+Net-table entries are connectivity intent, not instructions to add global labels.
+After native hierarchy, power pins, power symbols and off-page connectors exist,
+the converter completes junctions and wire splits at pin contacts, preserving
+source provenance for the split segments. It then removes provisional local
+labels and recalculates connectivity.
+Visible local labels retain explicit names, bus membership and connections between
+disconnected pieces on a page. Repairs must preserve the imported net partitions;
+an unresolved split or newly joined partition is an import error. Label anchors
+stay on the intended emitted wire and avoid intersections, junctions and pin
+contacts. A pin or coincident pin group may carry a label only without a wire at
+its position; a pin-only junction dot does not constitute a wire intersection.
+
+Generated `N`-number names, including occurrence-qualified forms, do not become
+electrical naming labels. An explicit source wire alias with that spelling remains
+an explicit name. KiCad chooses the resulting dynamic or hierarchy-qualified name.
+
+Successful native saves write `<root-stem>.orcad-net-map.json` beside the actual
+root schematic. Schema version 1 records the source design digest and root UUID.
+Each entry records source view, occurrence path, source net ID, original spelling,
+`nameAtImport`, status, and imported item/terminal identities. Terminal identity
+uses symbol UUID, unit, pin number and duplicate index; source pin IDs retain the
+one-based placed-pin ordinal. Duplicate indices rank equal-number pins by library
+unit, body style, geometry, orientation, name, electrical type and source ordinal.
+Pin UUIDs are optional. Status distinguishes resolved, split, unconnected,
+no-connect and bus records; a split has no single resulting name. Bus records
+include their native bundle name and terminal membership. Scalar source members
+without local wires resolve through source bus IDs and native bus connections.
+An attached scalar connection takes precedence over a bus member's local identity
+after hierarchy propagation. Competing weak scalar drivers receive dynamic-name
+suffixes in stable physical-identity order so save/reload retains their assignment.
+Equal-name driver candidates also use persistent identity to break ties, including
+different units of a multiunit symbol connected to the same net.
+
+The companion is provenance only: loading, deleting or editing it cannot change
+schematic connectivity. `nameAtImport` remains a snapshot after subsequent edits.
+Save As uses the new root stem. Writes are atomic and preserve an existing malformed
+or incompatible companion, reporting the failure without losing the schematic.
+An unchanged GUI Save retries a failed companion write. Import never writes a
+companion beside the source DSN.
+
 DSN import reads Library, Cache, local Packages, Views Directory, page-order,
 page, hierarchy, and CIS streams. The Views Directory supplies visible folders;
 an unlisted folder is imported only when a hierarchy occurrence reaches it.

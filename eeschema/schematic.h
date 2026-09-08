@@ -28,6 +28,7 @@
 #include <sch_sheet_path.h>
 #include <schematic_settings.h>
 #include <project.h>
+#include <import_net_map.h>
 
 #include <memory>
 #include <optional>
@@ -147,6 +148,21 @@ public:
 
     /// Initialize this schematic to a blank one, unloading anything existing.
     void Reset();
+
+    const IMPORT_NET_MAP* GetImportNetMap() const
+    {
+        return m_importNetMap ? &*m_importNetMap : nullptr;
+    }
+
+    void SetImportNetMap( IMPORT_NET_MAP aMap )
+    {
+        m_importNetMap = std::move( aMap );
+        m_pendingImportNetMapPath.clear();
+    }
+
+    bool SaveImportNetMap( const wxString& aRootPath, REPORTER& aReporter );
+    bool RetryImportNetMap( REPORTER& aReporter );
+    void LoadImportNetMap( const wxString& aRootPath, REPORTER& aReporter );
 
     /// Return a reference to the project this schematic is part of
     PROJECT& Project() const { return *m_project; }
@@ -412,8 +428,9 @@ public:
      *
      * This function is needed for some plugins (e.g. Legacy and Cadstar) in order to retain
      * connectivity after loading.
+     * @param aOnSplit receives the retained wire and its new segment to preserve import provenance.
      */
-    int FixupJunctionsAfterImport();
+    int FixupJunctionsAfterImport( std::function<void( SCH_LINE*, SCH_LINE* )> aOnSplit = {} );
 
     /**
      * Scan existing markers and record data from any that are Excluded.
@@ -678,6 +695,8 @@ private:
     void rebuildHierarchyState( bool aResetConnectionGraph );
 
     PROJECT* m_project;
+    std::optional<IMPORT_NET_MAP> m_importNetMap;
+    wxString m_pendingImportNetMapPath;
 
     /// Sentinel whose expiry signals to LOCAL_HISTORY that this schematic has been destroyed.
     std::shared_ptr<void> m_historyLifetime = std::make_shared<char>();

@@ -481,6 +481,7 @@ set( EESCHEMA_SRCS
     sch_textbox.cpp
     sch_validators.cpp
     sch_view.cpp
+    import_net_map.cpp
     schematic.cpp
     schematic_text_var_adapter.cpp
     schematic_settings.cpp

@@ -76,6 +76,8 @@
 #include <sch_sheet_path.h>
 #include <sch_sheet_pin.h>
 #include <sch_symbol.h>
+#include <sch_pin.h>
+#include <import_net_map.h>
 #include <sch_text.h>
 #include <string_utils.h>
 #include <stroke_params.h>
@@ -769,13 +771,6 @@ static std::string scopedHierBusMember( const std::string& aName,
 }
 
 
-static std::string unscopedHierBusMember( const std::string& aName,
-                                          const std::map<std::string, std::string>& aBusNames )
-{
-    return mappedHierBusMember( aName, aBusNames, true );
-}
-
-
 static std::string scopedHierBusRange( const std::string& aName, const std::map<std::string, std::string>& aBusNames )
 {
     std::string memberPrefix;
@@ -1108,11 +1103,19 @@ static std::string connectedBusName( const ORCAD_RAW_PAGE& aPage, const ORCAD_BL
 }
 
 
-static COLOR4D invisibleElectricalTextColor()
+static LABEL_FLAG_SHAPE hierarchicalPinShape( ORCAD_PORT_TYPE aType )
 {
-    // All-zero COLOR4D is KiCad's unspecified-color sentinel and is not serialized.
-    return COLOR4D( 1.0 / 255.0, 0, 0, 0 );
+    switch( aType )
+    {
+    case ORCAD_PORT_TYPE::INPUT: return LABEL_FLAG_SHAPE::L_INPUT;
+    case ORCAD_PORT_TYPE::OUTPUT: return LABEL_FLAG_SHAPE::L_OUTPUT;
+    case ORCAD_PORT_TYPE::BIDIRECTIONAL: return LABEL_FLAG_SHAPE::L_BIDI;
+    case ORCAD_PORT_TYPE::TRI_STATE: return LABEL_FLAG_SHAPE::L_TRISTATE;
+    default: return LABEL_FLAG_SHAPE::L_UNSPECIFIED;
+    }
 }
+
+
 
 
 static uint32_t busNetAt( const ORCAD_RAW_PAGE& aPage, const ORCAD_BLOCK_PIN& aPin )
@@ -1554,14 +1557,7 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
                                           ->second );
                     pin->SetPosition( position );
 
-                    switch( sourcePin.portType )
-                    {
-                    case ORCAD_PORT_TYPE::INPUT: pin->SetShape( LABEL_FLAG_SHAPE::L_INPUT ); break;
-                    case ORCAD_PORT_TYPE::OUTPUT: pin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT ); break;
-                    case ORCAD_PORT_TYPE::BIDIRECTIONAL: pin->SetShape( LABEL_FLAG_SHAPE::L_BIDI ); break;
-                    case ORCAD_PORT_TYPE::TRI_STATE: pin->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE ); break;
-                    default: pin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED ); break;
-                    }
+                    pin->SetShape( hierarchicalPinShape( sourcePin.portType ) );
 
                     childSheet->AddPin( pin );
                     placeHierarchicalBlockPinFill( aParentSheet->GetScreen(), pin );
@@ -1674,8 +1670,10 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
         m_scopeNamedFlatNets = false;
         m_scopeGeneratedFlatNets = false;
         m_currentUnconnectedInterfaceNetNames.clear();
-        promoteUniqueOccurrenceNetNames();
+        finalizeNativePowerPackages();
         convertUnreferencedPages();
+        finalizeNativePowerPackages();
+        finalizeNetNames();
         return aRootSheet;
     }
 
@@ -2242,7 +2240,7 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
                                                     } )
                                           ->second );
                     pin->SetPosition( position );
-                    pin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+                    pin->SetShape( hierarchicalPinShape( sourcePin.portType ) );
                     childSheet->AddPin( pin );
                     placeHierarchicalBlockPinFill( parent->screen, pin );
                 }
@@ -2347,8 +2345,10 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
         m_scopeGeneratedFlatNets = false;
         m_currentUnconnectedInterfaceNetNames.clear();
         m_currentOccurrenceNetAliases.clear();
-        promoteUniqueOccurrenceNetNames();
+        finalizeNativePowerPackages();
         convertUnreferencedPages();
+        finalizeNativePowerPackages();
+        finalizeNetNames();
         return aRootSheet;
     }
 
@@ -3093,8 +3093,10 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
         }
     }
 
-    promoteUniqueOccurrenceNetNames();
+    finalizeNativePowerPackages();
     convertUnreferencedPages();
+    finalizeNativePowerPackages();
+    finalizeNetNames();
     return aRootSheet;
 }
 
@@ -3111,7 +3113,7 @@ void ORCAD_CONVERTER::convertUnreferencedPages()
 
     std::set<wxString> usedFileNames;
 
-    for( const SCH_SHEET_PATH& path : m_schematic->Hierarchy() )
+    for( const SCH_SHEET_PATH& path : m_schematic->BuildSheetListSortedByPageNumbers() )
     {
         if( path.LastScreen() )
             usedFileNames.insert( wxFileName( path.LastScreen()->GetFileName() ).GetFullName().Lower() );
@@ -3203,669 +3205,862 @@ void ORCAD_CONVERTER::convertUnreferencedPages()
 }
 
 
-void ORCAD_CONVERTER::promoteUniqueOccurrenceNetNames()
+static std::optional<VECTOR2I> safeConnectivityLabelPosition(
+        SCH_SCREEN* aScreen, const VECTOR2I& aPosition,
+        const std::optional<std::vector<SEG>>& aSourceWires );
+
+
+void ORCAD_CONVERTER::rememberInterfaceLabelSource( SCH_SCREEN* aScreen, SCH_LABEL_BASE* aLabel,
+                                                    const std::vector<SEG>& aSourceWires )
 {
-    struct NET_CANDIDATE
+    INTERFACE_LABEL_SOURCE source{ aScreen, aLabel, {} };
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_LINE_T ) )
     {
-        std::string                       name;
-        CONNECTION_SUBGRAPH*              subgraph;
-        std::vector<CONNECTION_SUBGRAPH*> subgraphs;
-        std::set<std::string>             occurrenceSuffixes;
-        std::string                       sourceName;
-        std::string                       sourceKey;
-        uint32_t                          occurrenceId;
-        bool                              hasCommonSuffix;
-        bool                              sourceBusMember;
-        bool                              needsPromotion;
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+        if( line->GetLayer() != LAYER_WIRE && line->GetLayer() != LAYER_BUS )
+            continue;
+
+        const SEG emitted = line->GetSeg();
+
+        if( emitted.A != emitted.B
+            && std::any_of( aSourceWires.begin(), aSourceWires.end(),
+                            [&]( const SEG& eligible )
+                            {
+                                return eligible.Contains( emitted.A ) && eligible.Contains( emitted.B );
+                            } ) )
+        {
+            source.wires.push_back( line );
+        }
+    }
+
+    if( !aSourceWires.empty() && source.wires.empty() )
+        THROW_IO_ERROR( _( "OrCAD interface has no surviving source wire for label placement." ) );
+
+    m_interfaceLabelSources.push_back( std::move( source ) );
+}
+
+
+void ORCAD_CONVERTER::appendNetIntent( SCH_SCREEN* aScreen, SCH_LABEL* aLabel, bool aExplicitName, uint32_t aNetId )
+{
+    // Capture's occurrence names describe identity. They do not grant global connectivity.
+    appendPageItem( aScreen, aLabel );
+    m_netLabelIntents.push_back( { aScreen, aLabel, aExplicitName } );
+
+    if( aNetId )
+        m_labelSourceNets[aLabel] = { aScreen, aNetId };
+}
+
+
+void ORCAD_CONVERTER::minimizeNetLabels()
+{
+    using MEMBER = std::pair<SCH_SHEET_PATH, SCH_ITEM*>;
+    auto itemKey = []( const SCH_ITEM* item )
+    {
+        if( item->Type() == SCH_PIN_T )
+        {
+            const SCH_PIN* pin = static_cast<const SCH_PIN*>( item );
+            return wxS( "pin:" ) + pin->GetParentSymbol()->m_Uuid.AsString() + wxS( ":" ) + pin->GetNumber()
+                   + wxString::Format( wxS( ":%d:%d" ), pin->GetPosition().x, pin->GetPosition().y );
+        }
+
+        return item->m_Uuid.AsString();
+    };
+
+    struct SOURCE_PARTITION
+    {
+        std::vector<MEMBER> members;
+        std::set<wxString> explicitNames;
+        wxString sourceName;
     };
 
     SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
-    m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+    CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
+    graph->Recalculate( sheets, true );
+    std::map<SCH_ITEM*, bool> intents;
 
-    std::vector<NET_CANDIDATE>                  candidates;
-    std::map<std::string, size_t>               nameCounts;
-    std::set<std::string>                       claimedBaseNames;
-    std::set<std::string>                       rootOccurrenceNames;
-    std::map<SCH_SCREEN*, size_t>               screenUseCounts;
-    std::set<std::tuple<std::string, int, int>> sourceBusRanges;
-
-    for( const SCH_SHEET_PATH& sheet : sheets )
-        ++screenUseCounts[sheet.LastScreen()];
-
-    for( const auto& [occurrenceId, occurrenceName] : m_design.occurrenceRoot.netNames )
+    for( const NET_LABEL_INTENT& intent : m_netLabelIntents )
     {
-        std::string key = kicadOccurrenceNetName( occurrenceName );
-        std::transform( key.begin(), key.end(), key.begin(),
-                        []( unsigned char c )
-                        {
-                            return static_cast<char>( std::tolower( c ) );
-                        } );
-        rootOccurrenceNames.insert( std::move( key ) );
+        CONNECTION_SUBGRAPH* subgraph = graph->GetSubgraphForItem( intent.label );
+        bool bus = subgraph && subgraph->GetDriverConnection() && subgraph->GetDriverConnection()->IsBus();
+
+        if( !bus && !SCH_CONNECTION::IsBusLabel( intent.label->GetText() ) )
+            intents.emplace( intent.label, intent.explicitName );
     }
 
-    for( const auto& [screenId, busNames] : m_hierBusNamesByScreen )
-    {
-        for( const auto& [sourceBus, scopedBus] : busNames )
-        {
-            std::string prefix;
-            int         first;
-            int         last;
-
-            if( parseVectorBusName( sourceBus, prefix, first, last ) )
-                sourceBusRanges.emplace( std::move( prefix ), first, last );
-        }
-    }
-
-    for( const auto& [netKey, subgraphs] : m_schematic->ConnectionGraph()->GetNetMap() )
+    // A scalar bus member needs its local name to enter the bus, even with no physical split.
+    for( const auto& [key, subgraphs] : graph->GetNetMap() )
     {
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            if( !subgraph || subgraph->GetNetName().StartsWith( wxS( "/" ) ) )
-                continue;
-
-            std::string key = subgraph->GetNetName().ToStdString();
-            std::transform( key.begin(), key.end(), key.begin(),
-                            []( unsigned char c )
-                            {
-                                return static_cast<char>( std::tolower( c ) );
-                            } );
-            claimedBaseNames.insert( key );
-        }
-    }
-
-    for( const auto& [netKey, subgraphs] : m_schematic->ConnectionGraph()->GetNetMap() )
-    {
-        CONNECTION_SUBGRAPH* selected = nullptr;
-        wxString             netName;
-
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
-        {
-            if( subgraph && subgraph->GetNetName().StartsWith( wxS( "/" ) ) )
+            for( const auto& [member, parents] : subgraph->GetBusParents() )
             {
-                selected = subgraph;
-                netName = subgraph->GetNetName();
-                break;
-            }
-        }
-
-        if( !selected )
-            continue;
-
-        std::string name = netName.AfterLast( '/' ).ToStdString();
-        std::string sourceName = name;
-        std::string screenId = selected->GetSheet().LastScreen()->GetUuid().AsStdString();
-        auto        busNames = m_hierBusNamesByScreen.find( screenId );
-        bool        busMemberRenamed = false;
-        bool        sourceBusMember = false;
-
-        for( const auto& [prefix, first, last] : sourceBusRanges )
-        {
-            if( name.compare( 0, prefix.size(), prefix ) != 0 )
-                continue;
-
-            int              member;
-            std::string_view memberText( name.data() + prefix.size(), name.size() - prefix.size() );
-            auto [next, error] = std::from_chars( memberText.data(), memberText.data() + memberText.size(), member );
-
-            if( !memberText.empty() && error == std::errc() && next == memberText.data() + memberText.size()
-                && member >= std::min( first, last ) && member <= std::max( first, last ) )
-            {
-                sourceBusMember = true;
-                break;
-            }
-        }
-
-        if( name.find( "_ORCAD_" ) != std::string::npos && busNames != m_hierBusNamesByScreen.end() )
-        {
-            name = unscopedHierBusMember( name, busNames->second );
-            busMemberRenamed = name != sourceName;
-        }
-
-        std::string key = name;
-        std::transform( key.begin(), key.end(), key.begin(),
-                        []( unsigned char c )
-                        {
-                            return static_cast<char>( std::tolower( c ) );
-                        } );
-        std::string baseKey = key;
-
-        std::set<std::string> occurrenceSuffixes;
-
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
-        {
-            if( !subgraph )
-                continue;
-
-            std::string subgraphScreenId = subgraph->GetSheet().LastScreen()->GetUuid().AsStdString();
-            auto        suffix = m_occurrenceSuffixByScreen.find( subgraphScreenId );
-
-            if( suffix != m_occurrenceSuffixByScreen.end() && !suffix->second.empty() )
-                occurrenceSuffixes.insert( suffix->second );
-
-            std::string subgraphName = subgraph->GetNetName().AfterLast( '/' ).ToStdString();
-            auto        subgraphBusNames = m_hierBusNamesByScreen.find( subgraphScreenId );
-
-            if( subgraphBusNames != m_hierBusNamesByScreen.end() )
-            {
-                for( const auto& [sourceBus, scopedBus] : subgraphBusNames->second )
-                {
-                    std::string prefix;
-                    int         first;
-                    int         last;
-
-                    if( !parseVectorBusName( sourceBus, prefix, first, last )
-                        || name.compare( 0, prefix.size(), prefix ) != 0 )
-                    {
-                        continue;
-                    }
-
-                    int              member;
-                    std::string_view memberText( name.data() + prefix.size(), name.size() - prefix.size() );
-                    auto [next, error] =
-                            std::from_chars( memberText.data(), memberText.data() + memberText.size(), member );
-
-                    if( !memberText.empty() && error == std::errc() && next == memberText.data() + memberText.size()
-                        && member >= std::min( first, last ) && member <= std::max( first, last ) )
-                    {
-                        sourceBusMember = true;
-                    }
-                }
-            }
-
-            if( subgraphName.find( "_ORCAD_" ) != std::string::npos
-                && subgraphBusNames != m_hierBusNamesByScreen.end() )
-            {
-                std::string unscoped = unscopedHierBusMember( subgraphName, subgraphBusNames->second );
-
-                if( wxString::FromUTF8( unscoped ).CmpNoCase( wxString::FromUTF8( name ) ) == 0 )
-                    busMemberRenamed = true;
-            }
-        }
-
-        std::vector<std::string> commonSuffixParts;
-
-        if( !occurrenceSuffixes.empty() )
-        {
-            auto splitSuffix = []( const std::string& aSuffix )
-            {
-                std::vector<std::string> parts;
-                size_t                   start = 0;
-
-                for( size_t separator = aSuffix.find( '_' );; separator = aSuffix.find( '_', start ) )
-                {
-                    if( separator == std::string::npos )
-                    {
-                        parts.push_back( aSuffix.substr( start ) );
-                        break;
-                    }
-
-                    parts.push_back( aSuffix.substr( start, separator - start ) );
-                    start = separator + 1;
-                }
-
-                return parts;
-            };
-
-            commonSuffixParts = splitSuffix( *occurrenceSuffixes.begin() );
-
-            for( auto suffix = std::next( occurrenceSuffixes.begin() ); suffix != occurrenceSuffixes.end(); ++suffix )
-            {
-                std::vector<std::string> parts = splitSuffix( *suffix );
-                size_t                   common = 0;
-
-                while( common < commonSuffixParts.size() && common < parts.size()
-                       && commonSuffixParts[common] == parts[common] )
-                {
-                    ++common;
-                }
-
-                commonSuffixParts.resize( common );
-            }
-        }
-
-        std::string commonSuffix;
-
-        for( const std::string& part : commonSuffixParts )
-        {
-            if( !commonSuffix.empty() )
-                commonSuffix += '_';
-
-            commonSuffix += part;
-        }
-
-        size_t occurrenceScopeCount = m_occurrenceNetNameScopeCounts[baseKey];
-        bool   canonicalRoot = false;
-
-        if( occurrenceScopeCount > 1 )
-        {
-            bool scopedBusOccurrence = false;
-
-            for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
-            {
-                if( !subgraph )
-                    continue;
+                wxString name = member->Name( true );
+                SCH_LABEL_BASE* selected = nullptr;
+                bool nativeDriver = false;
 
                 for( SCH_ITEM* item : subgraph->GetItems() )
                 {
-                    if( auto label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
-                    {
-                        if( label->GetText().Upper().Contains( wxS( "_ORCAD_" ) ) )
-                        {
-                            scopedBusOccurrence = true;
-                            break;
-                        }
-                    }
+                    auto* label = dynamic_cast<SCH_LABEL_BASE*>( item );
+
+                    if( !label || label->GetText() != name )
+                        continue;
+
+                    if( !intents.count( item ) )
+                        nativeDriver = true;
+                    else if( !selected || label->m_Uuid < selected->m_Uuid )
+                        selected = label;
                 }
 
-                if( scopedBusOccurrence )
-                    break;
-            }
-
-            canonicalRoot = rootOccurrenceNames.count( baseKey ) && !claimedBaseNames.count( baseKey )
-                            && !scopedBusOccurrence && commonSuffix.empty();
-
-            if( !canonicalRoot && !busMemberRenamed && !scopedBusOccurrence )
-            {
-                if( !commonSuffix.empty() )
-                {
-                    name += "_" + commonSuffix;
-                    key = name;
-                    std::transform( key.begin(), key.end(), key.begin(),
-                                    []( unsigned char c )
-                                    {
-                                        return static_cast<char>( std::tolower( c ) );
-                                    } );
-                }
+                if( !nativeDriver && selected )
+                    intents.erase( selected );
             }
         }
+    }
 
-        uint32_t occurrenceId = std::numeric_limits<uint32_t>::max();
+    std::vector<SOURCE_PARTITION> partitions;
+
+    for( const auto& [key, subgraphs] : graph->GetNetMap() )
+    {
+        if( std::any_of( subgraphs.begin(), subgraphs.end(),
+                         []( const CONNECTION_SUBGRAPH* subgraph )
+                         {
+                             return subgraph->GetDriverConnection() && subgraph->GetDriverConnection()->IsBus();
+                         } ) )
+            continue;
+
+        SOURCE_PARTITION partition;
+        partition.sourceName = key.Name;
 
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            if( !subgraph )
-                continue;
+            for( SCH_ITEM* item : subgraph->GetItems() )
+            {
+                auto intent = intents.find( item );
 
-            std::string subgraphScreenId = subgraph->GetSheet().LastScreen()->GetUuid().AsStdString();
-            auto        screenIds = m_occurrenceNetIdsByScreen.find( subgraphScreenId );
-
-            if( screenIds == m_occurrenceNetIdsByScreen.end() )
-                continue;
-
-            auto id = screenIds->second.find( key );
-
-            if( id == screenIds->second.end() )
-                id = screenIds->second.find( baseKey );
-
-            if( id != screenIds->second.end() )
-                occurrenceId = std::min( occurrenceId, id->second );
+                if( intent != intents.end() )
+                {
+                    if( intent->second )
+                        partition.explicitNames.insert( static_cast<SCH_LABEL_BASE*>( item )->GetText() );
+                }
+                else if( item->Type() == SCH_PIN_T || item->Type() == SCH_SHEET_PIN_T
+                         || ( item->Type() == SCH_LINE_T && item->GetLayer() == LAYER_WIRE )
+                         || item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T
+                         || item->Type() == SCH_HIER_LABEL_T )
+                {
+                    partition.members.emplace_back( subgraph->GetSheet(), item );
+                }
+            }
         }
 
-        bool spellingChanged = wxString::FromUTF8( sourceName ).CmpNoCase( wxString::FromUTF8( name ) ) != 0;
-        bool needsPromotion = spellingChanged || occurrenceScopeCount == 1;
-
-        if( canonicalRoot )
-            needsPromotion = false;
-
-        candidates.push_back( { std::move( name ), selected, subgraphs, std::move( occurrenceSuffixes ), sourceName,
-                                baseKey, occurrenceId, !commonSuffix.empty(), sourceBusMember, needsPromotion } );
-        ++nameCounts[key];
+        if( !partition.members.empty() )
+        {
+            std::sort( partition.members.begin(), partition.members.end(),
+                       [&]( const MEMBER& left, const MEMBER& right )
+                       {
+                           return left.first == right.first ? itemKey( left.second ) < itemKey( right.second )
+                                                            : left.first < right.first;
+                       } );
+            partitions.push_back( std::move( partition ) );
+        }
     }
 
-    auto terminalBearing = []( const NET_CANDIDATE& aCandidate )
+    for( const NET_LABEL_INTENT& intent : m_netLabelIntents )
     {
-        return std::any_of( aCandidate.subgraphs.begin(), aCandidate.subgraphs.end(),
-                            []( const CONNECTION_SUBGRAPH* aSubgraph )
-                            {
-                                return aSubgraph
-                                       && std::any_of( aSubgraph->GetItems().begin(), aSubgraph->GetItems().end(),
-                                                       []( const SCH_ITEM* aItem )
-                                                       {
-                                                           return aItem->Type() == SCH_PIN_T;
-                                                       } );
-                            } );
+        if( intents.count( intent.label ) )
+            intent.screen->Remove( intent.label );
+    }
+
+    // Reset while removed items are still alive: the previous graph owns references to them.
+    graph->Recalculate( sheets, true );
+
+    for( const auto& [item, explicitName] : intents )
+        delete item;
+
+    m_netLabelIntents.clear();
+
+    auto component = [&]( const MEMBER& member ) -> std::pair<int, CONNECTION_SUBGRAPH*>
+    {
+        SCH_CONNECTION* connection = member.second->Connection( &member.first );
+
+        if( connection && connection->IsNet() && connection->NetCode() > 0 )
+            return { connection->NetCode(), nullptr };
+
+        // Unannotated pins have physical subgraphs even when GetNetMap omits them.
+        return { 0, graph->GetSubgraphForItem( member.second ) };
     };
 
-    std::map<std::string, std::vector<size_t>> peerGroups;
-    std::map<wxString, wxString>               canonicalRenames;
+    using COMPONENT = std::pair<int, CONNECTION_SUBGRAPH*>;
+    std::map<COMPONENT, size_t> owners;
 
-    for( size_t i = 0; i < candidates.size(); ++i )
-        peerGroups[candidates[i].sourceKey].push_back( i );
-
-    for( const auto& peerGroup : peerGroups )
+    for( size_t index = 0; index < partitions.size(); ++index )
     {
-        const std::vector<size_t>& indices = peerGroup.second;
-
-        if( indices.size() != 1 || !terminalBearing( candidates[indices.front()] ) )
-            continue;
-
-        NET_CANDIDATE& candidate = candidates[indices.front()];
-
-        if( candidate.hasCommonSuffix && !candidate.sourceBusMember
-            && !wxString::FromUTF8( candidate.sourceName ).Upper().Contains( wxS( "_ORCAD" ) ) )
+        for( const MEMBER& member : partitions[index].members )
         {
-            candidate.name = candidate.sourceName;
-            candidate.needsPromotion = true;
+            COMPONENT key = component( member );
+
+            if( key.first == 0 && !key.second )
+                continue;
+
+            auto [owner, inserted] = owners.emplace( key, index );
+
+            if( !inserted && owner->second != index )
+                THROW_IO_ERROR( _( "OrCAD native connectivity joins distinct source nets." ) );
         }
     }
 
-    for( const auto& [key, indices] : peerGroups )
+    std::map<SCH_SHEET_PATH, std::map<wxString, std::set<size_t>>> reservedNames;
+    std::map<wxString, std::set<size_t>> globalNames;
+
+    for( size_t index = 0; index < partitions.size(); ++index )
     {
-        if( !std::any_of( indices.begin(), indices.end(),
-                          [&]( size_t aIndex )
-                          {
-                              return candidates[aIndex].sourceBusMember;
-                          } ) )
+        for( const MEMBER& member : partitions[index].members )
         {
-            continue;
-        }
+            auto& names = reservedNames[member.first];
+            SCH_CONNECTION* connection = member.second->Connection( &member.first );
 
-        std::vector<size_t> realIndices;
+            if( connection && connection->IsNet() )
+                names[connection->Name( true )].insert( index );
 
-        for( size_t index : indices )
-        {
-            if( candidates[index].hasCommonSuffix && terminalBearing( candidates[index] )
-                && !wxString::FromUTF8( candidates[index].sourceName ).Upper().Contains( wxS( "_ORCAD" ) ) )
+            if( member.second->Type() != SCH_SHEET_PIN_T
+                && CONNECTION_SUBGRAPH::GetDriverPriority( member.second ) > CONNECTION_SUBGRAPH::PRIORITY::PIN )
             {
-                realIndices.push_back( index );
+                CONNECTION_SUBGRAPH* subgraph = graph->GetSubgraphForItem( member.second );
+
+                if( subgraph )
+                {
+                    const wxString& driverName = subgraph->GetNameForDriver( member.second );
+                    names[driverName].insert( index );
+
+                    if( CONNECTION_SUBGRAPH::GetDriverPriority( member.second )
+                        >= CONNECTION_SUBGRAPH::PRIORITY::GLOBAL_POWER_PIN )
+                    {
+                        globalNames[driverName].insert( index );
+                    }
+                }
+            }
+
+            for( const wxString& name : partitions[index].explicitNames )
+                names[name].insert( index );
+        }
+    }
+
+    for( size_t index = 0; index < partitions.size(); ++index )
+    {
+        SOURCE_PARTITION& partition = partitions[index];
+        std::map<SCH_SHEET_PATH, std::map<COMPONENT, std::vector<MEMBER>>> bySheet;
+        bool hasExplicitDriver = false;
+        bool needsDriver = false;
+        wxString name;
+
+        for( const MEMBER& member : partition.members )
+        {
+            COMPONENT key = component( member );
+
+            if( key.first == 0 && !key.second )
+                continue;
+
+            bySheet[member.first][key].push_back( member );
+
+            if( member.second->Type() == SCH_PIN_T )
+            {
+                CONNECTION_SUBGRAPH* subgraph = graph->GetSubgraphForItem( member.second );
+                needsDriver |= subgraph && !subgraph->GetDriver();
+            }
+
+            auto priority = CONNECTION_SUBGRAPH::GetDriverPriority( member.second );
+
+            if( priority > CONNECTION_SUBGRAPH::PRIORITY::PIN )
+            {
+                hasExplicitDriver = true;
+                CONNECTION_SUBGRAPH* subgraph = graph->GetSubgraphForItem( member.second );
+
+                if( subgraph && name.IsEmpty() && member.second->Type() != SCH_SHEET_PIN_T )
+                    name = subgraph->GetNameForDriver( member.second );
             }
         }
 
-        if( realIndices.empty() )
+        bool needsBridge = std::any_of( bySheet.begin(), bySheet.end(),
+                                       []( const auto& sheet ) { return sheet.second.size() > 1; } );
+        bool needsName = needsDriver || ( !hasExplicitDriver && !partition.explicitNames.empty() );
+
+        if( !needsBridge && !needsName )
             continue;
 
+        if( name.IsEmpty() && !partition.explicitNames.empty() )
+            name = *partition.explicitNames.begin();
 
-        auto canonical = std::min_element( realIndices.begin(), realIndices.end(),
-                                           [&]( size_t aLeft, size_t aRight )
-                                           {
-                                               if( candidates[aLeft].occurrenceId == candidates[aRight].occurrenceId )
-                                                   return candidates[aLeft].name < candidates[aRight].name;
+        const bool generatedName = name.IsEmpty();
 
-                                               return candidates[aLeft].occurrenceId < candidates[aRight].occurrenceId;
-                                           } );
-
-        if( canonical == realIndices.end() )
-            continue;
-
-        NET_CANDIDATE& owner = candidates[*canonical];
-        wxString       oldName = wxString::FromUTF8( owner.name );
-        canonicalRenames[oldName.Lower()] = wxString::FromUTF8( owner.sourceName );
-
-        for( CONNECTION_SUBGRAPH* subgraph : owner.subgraphs )
+        if( generatedName )
         {
-            if( !subgraph )
+            for( const MEMBER& member : partition.members )
+            {
+                if( member.second->Type() == SCH_PIN_T )
+                {
+                    wxString candidate = static_cast<SCH_PIN*>( member.second )->GetDefaultNetName( member.first );
+
+                    if( !candidate.IsEmpty() && ( name.IsEmpty() || candidate < name ) )
+                        name = candidate;
+                }
+            }
+
+            if( name.IsEmpty() )
+                name = wxS( "Net-(" ) + partition.members.front().second->m_Uuid.AsString() + wxS( ")" );
+        }
+
+        if( generatedName )
+        {
+            const wxString base = name;
+            auto conflicts = [&]()
+            {
+                auto global = globalNames.find( name );
+
+                if( global != globalNames.end()
+                    && std::any_of( global->second.begin(), global->second.end(),
+                                    [&]( size_t owner ) { return owner != index; } ) )
+                    return true;
+
+                for( const auto& [sheet, components] : bySheet )
+                {
+                    const auto& names = reservedNames[sheet];
+                    auto reserved = names.find( name );
+
+                    if( reserved != names.end()
+                        && std::any_of( reserved->second.begin(), reserved->second.end(),
+                                        [&]( size_t owner ) { return owner != index; } ) )
+                        return true;
+                }
+
+                return false;
+            };
+
+            for( size_t suffix = 2; conflicts(); ++suffix )
+                name = wxString::Format( wxS( "%s_%zu" ), base, suffix );
+        }
+
+        for( const auto& [sheet, components] : bySheet )
+        {
+            if( components.size() < 2 && !needsName )
                 continue;
 
-            for( SCH_ITEM* item : subgraph->GetSheet().LastScreen()->Items() )
+            for( const auto& [key, members] : components )
             {
-                auto* label = dynamic_cast<SCH_GLOBALLABEL*>( item );
+                bool alreadyNamed = std::any_of( members.begin(), members.end(),
+                        [&]( const MEMBER& member )
+                        {
+                            if( member.second->Type() == SCH_SHEET_PIN_T
+                                || CONNECTION_SUBGRAPH::GetDriverPriority( member.second )
+                                           <= CONNECTION_SUBGRAPH::PRIORITY::PIN )
+                                return false;
 
-                if( label && label->GetText().CmpNoCase( oldName ) == 0 )
-                    label->SetText( wxString::FromUTF8( owner.sourceName ) );
+                            CONNECTION_SUBGRAPH* subgraph = graph->GetSubgraphForItem( member.second );
+                            return subgraph && subgraph->GetNameForDriver( member.second ) == name;
+                        } );
+
+                if( alreadyNamed )
+                    continue;
+
+                std::vector<SEG> wires;
+                VECTOR2I preferred = members.front().second->GetPosition();
+
+                for( const MEMBER& member : members )
+                {
+                    if( member.second->Type() == SCH_LINE_T )
+                        wires.push_back( static_cast<SCH_LINE*>( member.second )->GetSeg() );
+                }
+
+                std::optional<VECTOR2I> anchor = safeConnectivityLabelPosition( sheet.LastScreen(), preferred, wires );
+
+                if( !anchor )
+                    THROW_IO_ERROR( wxString::Format( _( "Cannot place OrCAD net repair '%s' without a wire intersection." ), name ) );
+
+                SCH_LABEL* label = new SCH_LABEL( *anchor, name );
+                const_cast<KIID&>( label->m_Uuid ) = deterministicUuid(
+                        "net-repair:" + sheet.PathAsString().ToStdString() + ":"
+                                + itemKey( members.front().second ).ToStdString() + ":" + name.ToStdString(), 0 );
+                sheet.LastScreen()->Append( label );
+                reservedNames[sheet][name].insert( index );
+                needsName = false;
+            }
+        }
+    }
+
+    graph->Recalculate( sheets, true );
+    owners.clear();
+
+    for( size_t index = 0; index < partitions.size(); ++index )
+    {
+        std::set<COMPONENT> connected;
+
+        for( const MEMBER& member : partitions[index].members )
+        {
+            COMPONENT key = component( member );
+
+            if( key.first == 0 && !key.second )
+                continue;
+
+            connected.insert( key );
+            auto [owner, inserted] = owners.emplace( key, index );
+
+            if( !inserted && owner->second != index )
+            {
+                SCH_CONNECTION* connection = member.second->Connection( &member.first );
+                THROW_IO_ERROR( wxString::Format(
+                        _( "OrCAD net repair joins source nets '%s' and '%s' at '%s' on sheet '%s' (net '%s')." ),
+                        partitions[owner->second].sourceName, partitions[index].sourceName,
+                        itemKey( member.second ), member.first.Last()->GetName(),
+                        connection ? connection->Name() : wxString() ) );
             }
         }
 
-        owner.name = owner.sourceName;
-        owner.needsPromotion = false;
-    }
-
-    std::map<std::string, std::vector<size_t>> candidateGroups;
-
-    for( size_t i = 0; i < candidates.size(); ++i )
-    {
-        std::string key = candidates[i].name;
-        std::transform( key.begin(), key.end(), key.begin(),
-                        []( unsigned char c )
-                        {
-                            return static_cast<char>( std::tolower( c ) );
-                        } );
-        candidateGroups[key].push_back( i );
-    }
-
-    for( const auto& [key, indices] : candidateGroups )
-    {
-        for( size_t index : indices )
+        if( connected.size() > 1 )
         {
-            if( !terminalBearing( candidates[index] ) )
-                candidates[index].name.clear();
+            wxString detail;
+            std::set<COMPONENT> described;
+
+            for( const MEMBER& member : partitions[index].members )
+            {
+                if( described.insert( component( member ) ).second )
+                {
+                    SCH_CONNECTION* connection = member.second->Connection( &member.first );
+                    detail += wxS( " " ) + member.first.Last()->GetName() + wxS( ":" )
+                              + ( connection ? connection->Name() : wxString() );
+                }
+            }
+
+            THROW_IO_ERROR( wxString::Format( _( "OrCAD source net '%s' remains disconnected after local repair:%s" ),
+                                              partitions[index].sourceName, detail ) );
         }
     }
+}
 
-    nameCounts.clear();
 
-    for( const NET_CANDIDATE& candidate : candidates )
+void ORCAD_CONVERTER::recordNetNameMap()
+{
+    IMPORT_NET_MAP map;
+    map.sourceDesignDigest = FromOrcadString( m_design.sourceId );
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    using TERMINAL = std::pair<SCH_SHEET_PATH, SCH_PIN*>;
+    std::map<int, std::vector<TERMINAL>> terminals;
+    std::map<int, wxString> netNames;
+
+    for( const auto& [key, subgraphs] : m_schematic->ConnectionGraph()->GetNetMap() )
     {
-        if( candidate.name.empty() )
-            continue;
-
-        std::string key = candidate.name;
-        std::transform( key.begin(), key.end(), key.begin(),
-                        []( unsigned char c )
-                        {
-                            return static_cast<char>( std::tolower( c ) );
-                        } );
-        ++nameCounts[key];
-    }
-
-    for( NET_CANDIDATE& candidate : candidates )
-    {
-        if( candidate.name.empty() )
-            continue;
-
-        std::string key = candidate.name;
-        std::transform( key.begin(), key.end(), key.begin(),
-                        []( unsigned char c )
-                        {
-                            return static_cast<char>( std::tolower( c ) );
-                        } );
-
-        if( nameCounts[key] <= 1 )
-            continue;
-
-        auto suffix =
-                m_occurrenceSuffixByScreen.find( candidate.subgraph->GetSheet().LastScreen()->GetUuid().AsStdString() );
-
-        if( suffix != m_occurrenceSuffixByScreen.end() && !suffix->second.empty() )
+        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            candidate.name += "_" + suffix->second;
-            candidate.needsPromotion = true;
-        }
-        else if( m_occurrenceNetNameScopeCounts[key] > 1 && candidate.occurrenceSuffixes.size() == 1 )
-        {
-            candidate.name += "_" + *candidate.occurrenceSuffixes.begin();
-            candidate.needsPromotion = true;
-        }
-    }
-
-    std::map<std::string, size_t> finalNameCounts;
-
-    for( const NET_CANDIDATE& candidate : candidates )
-    {
-        if( candidate.name.empty() )
-            continue;
-
-        if( !candidate.needsPromotion )
-            continue;
-
-        std::string key = candidate.name;
-        std::transform( key.begin(), key.end(), key.begin(),
-                        []( unsigned char c )
-                        {
-                            return static_cast<char>( std::tolower( c ) );
-                        } );
-        ++finalNameCounts[key];
-    }
-
-    for( const NET_CANDIDATE& candidate : candidates )
-    {
-        if( candidate.name.empty() )
-            continue;
-
-        std::string key = candidate.name;
-        std::transform( key.begin(), key.end(), key.begin(),
-                        []( unsigned char c )
-                        {
-                            return static_cast<char>( std::tolower( c ) );
-                        } );
-
-        if( finalNameCounts[key] != 1 )
-            continue;
-
-        bool sharedScreen =
-                std::any_of( candidate.subgraphs.begin(), candidate.subgraphs.end(),
-                             [&]( const CONNECTION_SUBGRAPH* aSubgraph )
-                             {
-                                 return aSubgraph && screenUseCounts[aSubgraph->GetSheet().LastScreen()] != 1;
-                             } );
-
-        if( sharedScreen )
-            continue;
-
-        if( !terminalBearing( candidate ) )
-            continue;
-
-        size_t ordinal = 0;
-
-        for( CONNECTION_SUBGRAPH* subgraph : candidate.subgraphs )
-        {
-            if( !subgraph )
-                continue;
-
-            SCH_ITEM* anchor = nullptr;
-
             for( SCH_ITEM* item : subgraph->GetItems() )
             {
                 if( item->Type() == SCH_PIN_T )
                 {
-                    anchor = item;
-                    break;
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+                    SCH_CONNECTION* connection = pin->Connection( &subgraph->GetSheet() );
+
+                    if( connection && connection->IsNet() )
+                    {
+                        terminals[connection->NetCode()].emplace_back( subgraph->GetSheet(), pin );
+                        netNames[connection->NetCode()] = connection->Name();
+                    }
                 }
             }
-
-            if( !anchor )
-                continue;
-
-            SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( anchor->GetPosition(), FromOrcadString( candidate.name ) );
-            const_cast<KIID&>( label->m_Uuid ) = deterministicUuid( "occurrence-net:" + key, ordinal++ );
-            label->SetTextColor( invisibleElectricalTextColor() );
-            subgraph->GetSheet().LastScreen()->Append( label );
         }
     }
 
-    std::set<SCH_SCREEN*> renamedScreens;
+    std::map<SCH_PIN*, uint32_t> sourcePinIds;
+
+    struct EXTRA_RECORD
+    {
+        uint32_t id;
+        std::string name;
+        SCH_PIN* pin;
+        bool noConnect;
+    };
+
+    std::map<SCH_SCREEN*, std::vector<EXTRA_RECORD>> extraRecords;
 
     for( const SCH_SHEET_PATH& sheet : sheets )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
+        auto page = m_sourcePages.find( screen );
 
-        if( !renamedScreens.insert( screen ).second )
+        if( page == m_sourcePages.end() )
             continue;
 
-        for( SCH_ITEM* item : screen->Items() )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            auto* label = dynamic_cast<SCH_GLOBALLABEL*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            auto source = m_sourceInstances.find( symbol );
 
-            if( !label || label->GetTextColor().a != 0.0 )
+            if( source == m_sourceInstances.end() )
                 continue;
 
-            auto rename = canonicalRenames.find( label->GetText().Lower() );
+            const ORCAD_PLACED_INSTANCE& instance = *source->second;
+            std::set<SCH_PIN*> assigned;
 
-            if( rename != canonicalRenames.end() )
-                label->SetText( rename->second );
+            for( size_t index = 0; index < instance.pins.size(); ++index )
+            {
+                const ORCAD_PIN_INST& sourcePin = instance.pins[index];
+                const SOURCE_PIN_IDENTITY& identity = m_sourcePinIdentities.at( symbol ).at( index );
+
+                if( identity.ignored )
+                    continue;
+
+                std::vector<SCH_PIN*> candidates;
+
+                for( SCH_PIN* candidate : symbol->GetPins( &sheet ) )
+                {
+                    if( candidate->GetNumber() == identity.number && candidate->GetPosition() == identity.position
+                        && !assigned.count( candidate )
+                        && ( !identity.libraryPin || ( candidate->GetLibPin()
+                                                       && candidate->GetLibPin()->m_Uuid == *identity.libraryPin ) ) )
+                    {
+                        candidates.push_back( candidate );
+                    }
+                }
+
+                if( candidates.size() != 1 )
+                {
+                    warn( wxString::Format( _( "Cannot uniquely map OrCAD source pin %zu of '%s'." ),
+                                             index + 1, symbol->GetRef( &sheet, false ) ) );
+                    continue;
+                }
+
+                SCH_PIN* pin = candidates.front();
+                assigned.insert( pin );
+                sourcePinIds[pin] = index + 1;
+                std::set<uint32_t> netIds;
+
+                if( sourcePin.wordB && page->second->netmap.count( sourcePin.wordB ) )
+                    netIds.insert( sourcePin.wordB );
+
+                if( netIds.empty() && sourcePin.wordA )
+                {
+                    for( const ORCAD_WIRE& wire : page->second->wires )
+                    {
+                        if( !wire.isBus && wire.dbId == sourcePin.wordA )
+                            netIds.insert( wire.id );
+                    }
+                }
+
+                if( netIds.empty() && !sourcePin.IsNoConnect() )
+                {
+                    for( const ORCAD_WIRE& wire : page->second->wires )
+                    {
+                        if( !wire.isBus && onSegment( sourcePin.x, sourcePin.y, wire ) )
+                            netIds.insert( wire.id );
+                    }
+
+                    if( netIds.size() > 1 )
+                        netIds.clear();
+                }
+
+                auto wireless = m_wirelessNetNames.find( { screen, &instance, index } );
+
+                if( wireless != m_wirelessNetNames.end() )
+                    extraRecords[screen].push_back( { wireless->second.first, wireless->second.second, pin, false } );
+
+                if( sourcePin.IsNoConnect() )
+                    extraRecords[screen].push_back( { 0, std::string(), pin, true } );
+
+                for( uint32_t netId : netIds )
+                    m_sourceNetItems[{ screen, netId }].push_back( pin );
+            }
         }
     }
 
-    m_schematic->ConnectionGraph()->Recalculate( sheets, true );
-
-    for( const auto& [netKey, subgraphs] : m_schematic->ConnectionGraph()->GetNetMap() )
+    for( const SCH_SHEET_PATH& sheet : sheets )
     {
-        if( netKey.Name.StartsWith( wxS( "/" ) ) )
+        SCH_SCREEN* screen = sheet.LastScreen();
+        auto page = m_sourcePages.find( screen );
+
+        if( page == m_sourcePages.end() )
             continue;
 
-        std::map<std::string, wxString> occurrenceNames;
+        std::map<uint32_t, std::vector<const SCH_CONNECTION*>> busMembers;
+        std::map<uint32_t, std::vector<KIID>> busMemberItems;
+        auto busAliases = m_hierBusNamesByScreen.find( screen->GetUuid().AsStdString() );
 
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        for( const ORCAD_NET_GROUP& group : page->second->netGroups )
         {
-            if( !subgraph )
+            auto groupItems = m_sourceNetItems.find( { screen, group.id } );
+
+            if( groupItems == m_sourceNetItems.end() )
                 continue;
 
-            for( SCH_ITEM* item : subgraph->GetItems() )
+            for( SCH_ITEM* item : groupItems->second )
             {
-                auto* label = dynamic_cast<SCH_GLOBALLABEL*>( item );
+                SCH_CONNECTION* connection = item->Connection( &sheet );
 
-                if( !label || label->GetTextColor().a != 0.0 )
+                if( !connection || !connection->IsBus() )
                     continue;
 
-                std::string key = label->GetText().Lower().ToStdString();
+                const auto members = connection->AllMembers();
 
-                if( rootOccurrenceNames.count( key ) )
-                    occurrenceNames[key] = label->GetText();
-            }
-        }
-
-        if( occurrenceNames.size() < 2 )
-            continue;
-
-        wxString authoritativeName;
-
-        for( const auto& [candidateKey, candidateName] : occurrenceNames )
-        {
-            bool commonBase = std::all_of(
-                    occurrenceNames.begin(), occurrenceNames.end(),
-                    [&]( const auto& aPeer )
-                    {
-                        return aPeer.first == candidateKey
-                               || ( aPeer.first.size() > candidateKey.size() && aPeer.first[candidateKey.size()] == '_'
-                                    && aPeer.first.compare( 0, candidateKey.size(), candidateKey ) == 0 );
-                    } );
-
-            if( commonBase )
-            {
-                authoritativeName = candidateName;
-                break;
-            }
-        }
-
-        if( authoritativeName.IsEmpty() )
-        {
-            auto authoritative = std::max_element( occurrenceNames.begin(), occurrenceNames.end(),
-                                                   [&]( const auto& aLeft, const auto& aRight )
-                                                   {
-                                                       return m_occurrenceNetNameScopeCounts[aLeft.first]
-                                                              < m_occurrenceNetNameScopeCounts[aRight.first];
-                                                   } );
-
-            size_t authoritativeScopeCount = m_occurrenceNetNameScopeCounts[authoritative->first];
-            size_t equallyAuthoritative =
-                    std::count_if( occurrenceNames.begin(), occurrenceNames.end(),
-                                   [&]( const auto& aEntry )
-                                   {
-                                       return m_occurrenceNetNameScopeCounts[aEntry.first] == authoritativeScopeCount;
-                                   } );
-
-            if( equallyAuthoritative != 1 )
-                continue;
-
-            authoritativeName = authoritative->second;
-        }
-
-        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
-        {
-            if( !subgraph )
-                continue;
-
-            for( SCH_ITEM* item : subgraph->GetItems() )
-            {
-                auto* label = dynamic_cast<SCH_GLOBALLABEL*>( item );
-
-                if( label && label->GetTextColor().a == 0.0
-                    && label->GetText().CmpNoCase( authoritativeName ) != 0 )
+                for( uint32_t memberId : group.members )
                 {
-                    label->SetText( authoritativeName );
+                    auto sourceNames = m_sourceNetNames.find( { screen, memberId } );
+
+                    if( sourceNames == m_sourceNetNames.end() )
+                        continue;
+
+                    std::set<wxString> memberNames;
+
+                    for( const std::string& sourceName : sourceNames->second )
+                    {
+                        memberNames.insert( FromOrcadString( kicadElectricalNetName( sourceName ) ) );
+
+                        if( busAliases != m_hierBusNamesByScreen.end() )
+                        {
+                            memberNames.insert( FromOrcadString( kicadElectricalNetName(
+                                    scopedHierBusMember( sourceName, busAliases->second ) ) ) );
+                        }
+                    }
+
+                    // Source membership and the imported bus item bound this lookup to one native bus.
+                    for( const std::shared_ptr<SCH_CONNECTION>& member : members )
+                    {
+                        if( member->IsNet() && memberNames.count( member->Name( true ) ) )
+                        {
+                            busMembers[memberId].push_back( member.get() );
+                            busMemberItems[memberId].push_back( item->m_Uuid );
+                        }
+                    }
                 }
             }
         }
+
+        auto appendRecord = [&]( uint32_t id, const std::set<std::string>& names,
+                                 const std::vector<SCH_ITEM*>& items, bool noConnect )
+        {
+            IMPORT_NET_MAP_ENTRY entry;
+            entry.view = FromOrcadString( page->second->name );
+            entry.sourceNetId = id;
+            entry.occurrence = m_sourceOccurrences[screen];
+
+            std::set<int> codes;
+            std::set<wxString> finalNames;
+            std::set<int> busCodes;
+            std::set<wxString> finalBusNames;
+            auto addNet = [&]( const SCH_CONNECTION* connection )
+            {
+                if( connection && connection->IsNet() && connection->NetCode() > 0 )
+                {
+                    codes.insert( connection->NetCode() );
+                    auto name = netNames.find( connection->NetCode() );
+                    finalNames.insert( name != netNames.end() ? name->second : connection->Name() );
+                }
+            };
+
+            for( SCH_ITEM* item : items )
+            {
+                entry.itemUuids.push_back( item->Type() == SCH_PIN_T
+                                                  ? static_cast<SCH_PIN*>( item )->GetParentSymbol()->m_Uuid
+                                                  : item->m_Uuid );
+                SCH_CONNECTION* connection = item->Connection( &sheet );
+
+                if( connection && connection->IsBus() )
+                {
+                    busCodes.insert( connection->BusCode() );
+                    finalBusNames.insert( connection->Name() );
+
+                    for( const std::shared_ptr<SCH_CONNECTION>& member : connection->AllMembers() )
+                        addNet( member.get() );
+                }
+                else
+                {
+                    addNet( connection );
+                }
+            }
+
+            // A bus can retain its local member identity after the attached scalar net inherits
+            // a parent name.  Use membership only when no physical scalar connection is available.
+            if( codes.empty() )
+            {
+                for( const SCH_CONNECTION* member : busMembers[id] )
+                    addNet( member );
+            }
+
+            entry.itemUuids.insert( entry.itemUuids.end(), busMemberItems[id].begin(), busMemberItems[id].end() );
+
+            std::set<std::tuple<KIID, int, wxString, unsigned>> seen;
+
+            std::vector<TERMINAL> sourceTerminals;
+
+            for( int code : codes )
+                sourceTerminals.insert( sourceTerminals.end(), terminals[code].begin(), terminals[code].end() );
+
+            for( SCH_ITEM* item : items )
+            {
+                if( item->Type() == SCH_PIN_T )
+                    sourceTerminals.emplace_back( sheet, static_cast<SCH_PIN*>( item ) );
+            }
+
+            for( const auto& [pinSheet, pin] : sourceTerminals )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
+                unsigned duplicateIndex = 0;
+                auto pinIdentity = [&]( SCH_PIN* candidate )
+                {
+                    const SCH_PIN* definition = candidate->GetLibPin() ? candidate->GetLibPin() : candidate;
+                    VECTOR2I position = definition->GetPosition();
+                    return std::tuple( definition->GetUnit(), definition->GetBodyStyle(), position.x, position.y,
+                                       definition->GetOrientation(), definition->GetName(), definition->GetType(),
+                                       sourcePinIds[candidate] );
+                };
+
+                for( SCH_PIN* peer : symbol->GetPins( &pinSheet ) )
+                {
+                    if( peer->GetNumber() == pin->GetNumber() && pinIdentity( peer ) < pinIdentity( pin ) )
+                        ++duplicateIndex;
+                }
+
+                int unit = symbol->GetUnitSelection( &pinSheet );
+
+                if( !seen.emplace( symbol->m_Uuid, unit, pin->GetNumber(), duplicateIndex ).second )
+                    continue;
+
+                entry.terminals.push_back( { symbol->m_Uuid, unit, sourcePinIds[pin], pin->GetNumber(),
+                                             duplicateIndex, std::nullopt } );
+            }
+
+            std::sort( entry.terminals.begin(), entry.terminals.end(),
+                       []( const IMPORT_NET_TERMINAL& left, const IMPORT_NET_TERMINAL& right )
+                       {
+                           return std::tie( left.symbolUuid, left.unit, left.pinNumber, left.duplicateIndex )
+                                  < std::tie( right.symbolUuid, right.unit, right.pinNumber, right.duplicateIndex );
+                       } );
+            std::sort( entry.itemUuids.begin(), entry.itemUuids.end() );
+            entry.itemUuids.erase( std::unique( entry.itemUuids.begin(), entry.itemUuids.end() ), entry.itemUuids.end() );
+            if( noConnect )
+                entry.status = wxS( "no_connect" );
+            else if( !busCodes.empty() )
+                entry.status = busCodes.size() == 1 ? wxS( "bus" ) : wxS( "split" );
+            else
+                entry.status = codes.empty() ? wxS( "unconnected" ) : codes.size() == 1 ? wxS( "resolved" ) : wxS( "split" );
+
+            if( busCodes.size() == 1 && finalBusNames.size() == 1 )
+                entry.nameAtImport = *finalBusNames.begin();
+            else if( busCodes.empty() && finalNames.size() == 1 )
+                entry.nameAtImport = *finalNames.begin();
+
+            for( const std::string& name : names )
+            {
+                entry.originalName = FromOrcadString( name );
+                map.entries.push_back( entry );
+            }
+        };
+
+        for( const auto& [sourceKey, names] : m_sourceNetNames )
+        {
+            if( sourceKey.first == screen )
+                appendRecord( sourceKey.second, names, m_sourceNetItems[sourceKey], false );
+        }
+
+        for( const EXTRA_RECORD& record : extraRecords[screen] )
+            appendRecord( record.id, { record.name }, { record.pin }, record.noConnect );
     }
+
+    std::sort( map.entries.begin(), map.entries.end(),
+               []( const IMPORT_NET_MAP_ENTRY& left, const IMPORT_NET_MAP_ENTRY& right )
+               {
+                   auto leftKey = std::tie( left.view, left.occurrence, left.sourceNetId, left.originalName,
+                                            left.nameAtImport, left.status, left.itemUuids );
+                   auto rightKey = std::tie( right.view, right.occurrence, right.sourceNetId, right.originalName,
+                                             right.nameAtImport, right.status, right.itemUuids );
+
+                   if( leftKey != rightKey )
+                       return leftKey < rightKey;
+
+                   return std::lexicographical_compare( left.terminals.begin(), left.terminals.end(),
+                                                        right.terminals.begin(), right.terminals.end(),
+                           []( const IMPORT_NET_TERMINAL& a, const IMPORT_NET_TERMINAL& b )
+                           {
+                               return std::tie( a.symbolUuid, a.unit, a.pinNumber, a.duplicateIndex,
+                                                a.sourcePinId, a.pinUuid )
+                                      < std::tie( b.symbolUuid, b.unit, b.pinNumber, b.duplicateIndex,
+                                                  b.sourcePinId, b.pinUuid );
+                           } );
+               } );
+
+    m_schematic->SetImportNetMap( std::move( map ) );
+}
+
+
+void ORCAD_CONVERTER::finalizeNetNames()
+{
+    for( const auto& [label, sourceKey] : m_labelSourceNets )
+    {
+        std::vector<SEG> wires;
+
+        for( SCH_ITEM* item : m_sourceNetItems[sourceKey] )
+        {
+            if( item->Type() == SCH_LINE_T )
+                wires.push_back( static_cast<SCH_LINE*>( item )->GetSeg() );
+        }
+
+        auto position = safeConnectivityLabelPosition( sourceKey.first, label->GetPosition(), wires );
+
+        if( !position )
+            THROW_IO_ERROR( wxString::Format( _( "Cannot place OrCAD label '%s' without a wire intersection." ),
+                                             label->GetText() ) );
+
+        sourceKey.first->Remove( label );
+        label->SetPosition( *position );
+        sourceKey.first->Append( label );
+    }
+
+    m_labelSourceNets.clear();
+
+    for( const INTERFACE_LABEL_SOURCE& source : m_interfaceLabelSources )
+    {
+        std::vector<SEG> wires;
+
+        for( const SCH_LINE* wire : source.wires )
+            wires.push_back( wire->GetSeg() );
+
+        auto position = safeConnectivityLabelPosition( source.screen, source.label->GetPosition(), wires );
+
+        if( !position )
+            THROW_IO_ERROR( wxString::Format( _( "Cannot place OrCAD interface '%s' clear of wires and pins." ),
+                                             source.label->GetText() ) );
+
+        source.screen->Remove( source.label );
+        source.label->SetPosition( *position );
+        source.screen->Append( source.label );
+    }
+
+    m_interfaceLabelSources.clear();
+
+    std::map<SCH_LINE*, std::vector<std::pair<SCH_SCREEN*, uint32_t>>> wireSources;
+
+    for( const auto& [source, items] : m_sourceNetItems )
+    {
+        for( SCH_ITEM* item : items )
+        {
+            if( auto* wire = dynamic_cast<SCH_LINE*>( item ) )
+                wireSources[wire].push_back( source );
+        }
+    }
+
+    // Pins touching wire interiors must connect before repairing nets or recording their names.
+    m_schematic->FixupJunctionsAfterImport(
+            [&]( SCH_LINE* original, SCH_LINE* segment )
+            {
+                const VECTOR2I start = segment->GetStartPoint();
+                const VECTOR2I end = segment->GetEndPoint();
+                const_cast<KIID&>( segment->m_Uuid ) = KIID::FromName(
+                        "orcad-import:split:" + original->m_Uuid.AsStdString() + ":"
+                        + std::to_string( start.x ) + ":" + std::to_string( start.y ) + ":"
+                        + std::to_string( end.x ) + ":" + std::to_string( end.y ) );
+                wireSources[segment] = wireSources[original];
+
+                for( const auto& source : wireSources[segment] )
+                    m_sourceNetItems[source].push_back( segment );
+            } );
+
+    minimizeNetLabels();
+    recordNetNameMap();
 }
 
 
@@ -3874,6 +4069,53 @@ void ORCAD_CONVERTER::convertPage( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen, c
 {
     m_pageItemScreen = aScreen;
     m_pageItems.clear();
+    m_sourcePages[aScreen] = &aPage;
+    std::vector<wxString> occurrencePath = { FromOrcadString( m_design.library.schematicName ) };
+    std::vector<std::vector<wxString>> exactOccurrences;
+    std::vector<std::vector<wxString>> equivalentOccurrences;
+    std::function<void( const ORCAD_OCC_SCOPE& )> findOccurrences = [&]( const ORCAD_OCC_SCOPE& scope )
+    {
+        if( m_currentOccRefs == &scope.partRefs || m_currentOccNetNames == &scope.netNames )
+            exactOccurrences.push_back( occurrencePath );
+        else if( m_currentOccRefs && m_currentOccNetNames && *m_currentOccRefs == scope.partRefs
+                 && *m_currentOccNetNames == scope.netNames )
+            equivalentOccurrences.push_back( occurrencePath );
+
+        for( const ORCAD_OCC_BLOCK& block : scope.blocks )
+        {
+            occurrencePath.push_back( wxString::Format( wxS( "%u" ), block.targetDbId ) );
+            occurrencePath.push_back( FromOrcadString( block.childFolder ) );
+            findOccurrences( block.scope );
+            occurrencePath.pop_back();
+            occurrencePath.pop_back();
+        }
+    };
+    findOccurrences( m_design.occurrenceRoot );
+
+    if( exactOccurrences.size() == 1 )
+        occurrencePath = exactOccurrences.front();
+    else if( equivalentOccurrences.size() == 1 )
+        occurrencePath = equivalentOccurrences.front();
+    else if( m_currentOccRefs || m_currentOccNetNames )
+    {
+        // Keep ambiguous source occurrences distinct without assigning another occurrence's identity.
+        for( size_t index = 0; index < aSheetPath.size(); ++index )
+            occurrencePath.push_back( aSheetPath.at( index )->m_Uuid.AsString() );
+    }
+
+    m_sourceOccurrences[aScreen] = std::move( occurrencePath );
+
+    for( const auto& [id, name] : aPage.netmap )
+        m_sourceNetNames[{ aScreen, id }].insert( name );
+
+    for( const auto& [id, aliases] : aPage.netAliases )
+        m_sourceNetNames[{ aScreen, id }].insert( aliases.begin(), aliases.end() );
+
+    for( const ORCAD_WIRE& wire : aPage.wires )
+    {
+        for( const ORCAD_ALIAS& alias : wire.aliases )
+            m_sourceNetNames[{ aScreen, wire.id }].insert( alias.name );
+    }
 
     std::string screenId = aScreen->GetUuid().AsStdString();
     m_occurrenceSuffixByScreen[screenId] = m_currentFlatNetSuffix;
@@ -5565,12 +5807,14 @@ std::vector<ORCAD_CONVERTER::OFFPAGE_NET> ORCAD_CONVERTER::offpageNets( const OR
         entry.index = static_cast<int>( i );
 
         std::set<const std::string*> occurrenceNets;
+        std::set<uint32_t> attachedNetIds;
 
         for( const ORCAD_WIRE& wire : aPage.wires )
         {
-            if( wire.isBus || !onSegment( pin.x, pin.y, wire ) )
+            if( wire.isBus || !rawPointOnSegment( pin.x, pin.y, wire ) )
                 continue;
 
+            attachedNetIds.insert( wire.id );
             auto occurrenceNames = occurrenceNamesByPageNetId.find( wire.id );
 
             if( occurrenceNames != occurrenceNamesByPageNetId.end() && occurrenceNames->second.size() == 1 )
@@ -5613,7 +5857,32 @@ std::vector<ORCAD_CONVERTER::OFFPAGE_NET> ORCAD_CONVERTER::offpageNets( const OR
 
         if( occurrenceNets.size() == 1 )
         {
-            entry.net = canonicalGlobalNetName( **occurrenceNets.begin() );
+            const std::string& occurrenceName = **occurrenceNets.begin();
+            std::optional<uint32_t> objectId = occurrenceNetObjectId( occurrenceName );
+            bool instanceName = objectId
+                                && std::any_of( aPage.instances.begin(), aPage.instances.end(),
+                                                [&]( const ORCAD_PLACED_INSTANCE& instance )
+                                                {
+                                                    return instance.dbId == *objectId;
+                                                } )
+                                && std::none_of( aPage.wires.begin(), aPage.wires.end(),
+                                                 [&]( const ORCAD_WIRE& wire )
+                                                 {
+                                                     return wire.dbId == *objectId;
+                                                 } );
+            bool declaredNet = attachedNetIds.size() == 1 && matchingNetIds.count( *attachedNetIds.begin() );
+            bool declaredOccurrence = m_currentOccNetNames
+                                      && std::any_of( m_currentOccNetNames->begin(), m_currentOccNetNames->end(),
+                                                      [&]( const auto& occurrence )
+                                                      {
+                                                          return FromOrcadString( occurrence.second ).CmpNoCase(
+                                                                         FromOrcadString( conn.logicalName ) ) == 0;
+                                                      } );
+
+            // Capture can retain an obsolete instance-derived occurrence after off-page connectors
+            // join its net. A wire-object occurrence override still identifies the connection directly.
+            entry.net = canonicalGlobalNetName( instanceName && declaredNet && declaredOccurrence
+                                                       ? conn.logicalName : occurrenceName );
         }
         else
         {
@@ -5725,6 +5994,56 @@ void ORCAD_CONVERTER::placeJunctions( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* a
 {
     for( const VECTOR2I& pt : computeJunctions( aPage ) )
         appendPageItem( aScreen, new SCH_JUNCTION( OrcadDbuToIu( pt.x, pt.y ) ) );
+}
+
+
+static std::optional<std::vector<SEG>> eligibleSourceConnectivityWires(
+        const ORCAD_RAW_PAGE& aPage, const VECTOR2I& aPosition, const std::set<std::string>& aNames,
+        bool aBus = false, uint32_t* aNetId = nullptr )
+{
+    std::map<uint32_t, std::vector<SEG>> incidentNets;
+    std::set<uint32_t> matchingNets;
+
+    for( const ORCAD_WIRE& wire : aPage.wires )
+    {
+        if( wire.isBus != aBus || !rawPointOnSegment( aPosition.x, aPosition.y, wire ) )
+            continue;
+
+        incidentNets[wire.id].emplace_back( OrcadDbuToIu( wire.x1, wire.y1 ),
+                                           OrcadDbuToIu( wire.x2, wire.y2 ) );
+        auto matchesName = [&]( const std::string& aName )
+        {
+            return std::any_of( aNames.begin(), aNames.end(),
+                                [&]( const std::string& aCandidate )
+                                {
+                                    return !aCandidate.empty()
+                                           && FromOrcadString( aName ).CmpNoCase(
+                                                      FromOrcadString( aCandidate ) ) == 0;
+                                } );
+        };
+        auto name = aPage.netmap.find( wire.id );
+        auto aliases = aPage.netAliases.find( wire.id );
+
+        if( ( name != aPage.netmap.end() && matchesName( name->second ) )
+            || ( aliases != aPage.netAliases.end()
+                 && std::any_of( aliases->second.begin(), aliases->second.end(), matchesName ) ) )
+            matchingNets.insert( wire.id );
+    }
+
+    if( matchingNets.size() == 1 || ( matchingNets.empty() && incidentNets.size() == 1 ) )
+    {
+        uint32_t netId = matchingNets.empty() ? incidentNets.begin()->first : *matchingNets.begin();
+
+        if( aNetId )
+            *aNetId = netId;
+
+        return incidentNets.at( netId );
+    }
+
+    if( incidentNets.empty() )
+        return std::vector<SEG>();
+
+    return std::nullopt;
 }
 
 
@@ -6237,7 +6556,10 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
     }
 
     for( const auto& [netId, name] : occurrenceNamesByNetId )
+    {
         netNamesById[netId] = name;
+        m_sourceNetNames[{ aScreen, netId }].insert( *name );
+    }
 
     for( const auto& [netId, occurrenceName] : occurrenceNamesByNetId )
     {
@@ -6375,13 +6697,15 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
     std::set<uint32_t>                        interfaceNetIds;
     std::map<uint32_t, std::set<std::string>> globalInterfaceNamesByNetId;
 
-    auto addInterfacePoint = [&]( const VECTOR2I& aPin, const std::string* aGlobalName )
+    auto addInterfacePoint = [&]( const VECTOR2I& aPin, const std::string* aGlobalName,
+                                   std::optional<uint32_t> aNetId )
     {
         for( const ORCAD_WIRE& wire : aPage.wires )
         {
             bool endpoint = ( aPin.x == wire.x1 && aPin.y == wire.y1 ) || ( aPin.x == wire.x2 && aPin.y == wire.y2 );
 
-            if( !wire.isBus && ( endpoint || onSegment( aPin.x, aPin.y, wire ) ) )
+            if( !wire.isBus && ( !aNetId || wire.id == *aNetId )
+                && ( endpoint || onSegment( aPin.x, aPin.y, wire ) ) )
             {
                 interfaceNetIds.insert( wire.id );
 
@@ -6404,7 +6728,29 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
             interfaceNames.insert( name );
 
         VECTOR2I pin = aPower ? powerPinPos( aPage, aInstance ) : namedGraphicPinPos( aPage, aInstance );
-        addInterfacePoint( pin, aGlobal ? &name : nullptr );
+        std::optional<uint32_t> sourceNetId;
+
+        if( !aPower )
+        {
+            uint32_t netId = 0;
+            bool bus = SCH_CONNECTION::IsBusLabel( FromOrcadString( name ) );
+            auto sourceWires = eligibleSourceConnectivityWires(
+                    aPage, pin, { aInstance.logicalName, name }, bus, &netId );
+
+            if( !sourceWires )
+            {
+                THROW_IO_ERROR( wxString::Format( _( "Page '%s': cannot determine the source net for interface '%s' "
+                                                    "at (%d, %d)." ),
+                                                 FromOrcadString( aPage.name ), FromOrcadString( name ), pin.x, pin.y ) );
+            }
+
+            if( sourceWires->empty() || bus )
+                return;
+
+            sourceNetId = netId;
+        }
+
+        addInterfacePoint( pin, aGlobal ? &name : nullptr, sourceNetId );
     };
 
     for( const ORCAD_GRAPHIC_INST& port : aPage.ports )
@@ -6451,7 +6797,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
     for( const ORCAD_DRAWN_INSTANCE& block : aPage.blocks )
     {
         for( const ORCAD_BLOCK_PIN& pin : block.pins )
-            addInterfacePoint( VECTOR2I( pin.x, pin.y ), nullptr );
+            addInterfacePoint( VECTOR2I( pin.x, pin.y ), nullptr, std::nullopt );
     }
 
     if( m_scopeNamedFlatNets && !m_currentFlatNetSuffix.empty() )
@@ -6497,6 +6843,32 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
         }
     }
 
+    std::set<VECTOR2I> electricalContacts;
+
+    for( const ORCAD_WIRE& wire : aPage.wires )
+    {
+        electricalContacts.emplace( wire.x1, wire.y1 );
+        electricalContacts.emplace( wire.x2, wire.y2 );
+    }
+
+    for( const ORCAD_PLACED_INSTANCE& instance : aPage.instances )
+    {
+        for( size_t index = 0; index < instance.pins.size(); ++index )
+            electricalContacts.insert( placedPinElectricalPosition( instance, index ) );
+    }
+
+    for( const auto* connectors : { &aPage.globals, &aPage.ports, &aPage.offpage } )
+    {
+        for( const ORCAD_GRAPHIC_INST& connector : *connectors )
+            electricalContacts.emplace( connector.x, connector.y );
+    }
+
+    for( const ORCAD_DRAWN_INSTANCE& block : aPage.blocks )
+    {
+        for( const ORCAD_BLOCK_PIN& pin : block.pins )
+            electricalContacts.emplace( pin.x, pin.y );
+    }
+
     std::map<int, std::vector<size_t>>      horizontalWires;
     std::map<int, std::vector<size_t>>      verticalWires;
     std::map<size_t, std::vector<VECTOR2I>> cutsByWire;
@@ -6529,13 +6901,16 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                 {
                     const ORCAD_WIRE& vertical = aPage.wires[verticalIndex];
 
-                    if( vertical.id == horizontal.id || !onSegment( vertical.x1, y, horizontal )
-                        || !onSegment( vertical.x1, y, vertical ) )
+                    if( vertical.id == horizontal.id || !rawPointOnSegment( vertical.x1, y, horizontal )
+                        || !rawPointOnSegment( vertical.x1, y, vertical ) )
                     {
                         continue;
                     }
 
-                    // Keep nets separate at ambiguous crossings. A graphic fills the gap; labels reconnect each net.
+                    if( !electricalContacts.count( VECTOR2I( vertical.x1, y ) ) )
+                        continue;
+
+                    // Only electrical contacts need isolation; a plain X has no KiCad junction.
                     size_t cutIndex = netNamesById.count( vertical.id ) ? verticalIndex : horizontalIndex;
 
                     if( netNamesById.count( aPage.wires[cutIndex].id ) )
@@ -6620,6 +6995,9 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
             line->SetLineStyle( OrcadLineStyle( wire.lineStyle ) );
             line->SetLineColor( OrcadColor( wire.color ) );
             appendPageItem( aScreen, line );
+
+            if( aLayer == LAYER_WIRE || aLayer == LAYER_BUS )
+                m_sourceNetItems[{ aScreen, wire.id }].push_back( line );
         };
 
         std::vector<VECTOR2I> cuts = cutsByWire[wireIndex];
@@ -6647,7 +7025,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
         {
             return VECTOR2I( aStart.x + ( aEnd.x - aStart.x ) / 2, aStart.y + ( aEnd.y - aStart.y ) / 2 );
         };
-        auto transparentLabelPosition = [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd )
+        auto wireIntentPosition = [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd )
         {
             VECTOR2I midpoint = segmentMidpoint( aStart, aEnd );
             VECTOR2I direction( aEnd.x == aStart.x ? 0 : ( aEnd.x > aStart.x ? 1 : -1 ),
@@ -6681,7 +7059,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
 
             return midpoint;
         };
-        auto appendTransparentLabels = [&]( const VECTOR2I& aPosition )
+        auto appendWireNetIntents = [&]( const VECTOR2I& aPosition )
         {
             std::set<std::string> names;
             size_t                wireGroup = wireRoot( wireIndex );
@@ -6750,55 +7128,25 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                 if( name.empty() )
                     continue;
 
-                SCH_LABEL_BASE* label;
                 bool occurrenceName = occurrenceNamesByNetId.count( wire.id )
                                       && name == *occurrenceNamesByNetId.at( wire.id );
-                bool renamedBusMember = hierBusNames && scopedHierBusMember( name, *hierBusNames ) != name;
-                std::string sourceInterfaceKey = aPage.netmap.count( wire.id ) ? aPage.netmap.at( wire.id )
-                                                                               : std::string();
-                std::transform( sourceInterfaceKey.begin(), sourceInterfaceKey.end(), sourceInterfaceKey.begin(),
-                                []( unsigned char c )
-                                {
-                                    return static_cast<char>( std::tolower( c ) );
-                                } );
-                auto interfaceAlias = m_currentInterfaceNetAliases.find( sourceInterfaceKey );
-                bool scopedHierarchicalInterface =
-                        aHierarchical && interfaceNetIds.count( wire.id )
-                        && interfaceAlias != m_currentInterfaceNetAliases.end()
-                        && wxString::FromUTF8( interfaceAlias->second ).CmpNoCase( wxString::FromUTF8( sourceInterfaceKey ) )
-                                   != 0;
                 wxString electricalName = FromOrcadString(
                         occurrenceName ? occurrenceElectricalName( occurrenceNamesByNetId.at( wire.id ) )
                                        : kicadElectricalNetName( name ) );
+                SCH_LABEL* label = new SCH_LABEL( OrcadDbuToIu( aPosition.x, aPosition.y ), electricalName );
 
-                if( blockElectricalNetIds.count( wire.id ) && netName != netNamesById.end()
-                    && name == *netName->second )
-                {
-                    label = new SCH_LABEL( OrcadDbuToIu( aPosition.x, aPosition.y ), electricalName );
-                }
-                else if( joinedPowerAliases && powerAliases->second.count( name )
-                         && !scopedHierarchicalInterface )
-                {
-                    label = new SCH_GLOBALLABEL( OrcadDbuToIu( aPosition.x, aPosition.y ), electricalName );
-                }
-                else if( renamedNetIds.count( wire.id ) && netName != netNamesById.end() && name == *netName->second )
-                {
-                    label = scopedHierarchicalInterface
-                                    ? static_cast<SCH_LABEL_BASE*>(
-                                              new SCH_LABEL( OrcadDbuToIu( aPosition.x, aPosition.y ), electricalName ) )
-                                    : static_cast<SCH_LABEL_BASE*>( new SCH_GLOBALLABEL(
-                                              OrcadDbuToIu( aPosition.x, aPosition.y ), electricalName ) );
-                }
-                else if( globalInterfaceNamesByNetId[wire.id].count( name ) && !renamedBusMember
-                         && !scopedHierarchicalInterface )
-                {
-                    label = new SCH_GLOBALLABEL( OrcadDbuToIu( aPosition.x, aPosition.y ), electricalName );
-                }
-                else
-                    label = new SCH_LABEL( OrcadDbuToIu( aPosition.x, aPosition.y ), electricalName );
-
-                label->SetTextColor( invisibleElectricalTextColor() );
-                appendPageItem( aScreen, label );
+                auto sourceName = aPage.netmap.find( wire.id );
+                bool generated = isImplicitGeneratedName( name )
+                                 || ( sourceName != aPage.netmap.end() && isImplicitGeneratedName( sourceName->second )
+                                      && name.starts_with( sourceName->second + "_" ) );
+                bool explicitName = ( !generated && sourceName != aPage.netmap.end()
+                                      && canonicalGlobalNetName( sourceName->second ) == name )
+                                    || std::any_of( wire.aliases.begin(), wire.aliases.end(),
+                                                    [&]( const ORCAD_ALIAS& alias )
+                                                    {
+                                                        return alias.name == name;
+                                                    } );
+                appendNetIntent( aScreen, label, explicitName, wire.id );
             }
         };
 
@@ -6816,7 +7164,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
             appendSegment( cursor, before, wire.isBus ? LAYER_BUS : LAYER_WIRE );
 
             if( cursor != before )
-                appendTransparentLabels( transparentLabelPosition( cursor, before ) );
+                appendWireNetIntents( wireIntentPosition( cursor, before ) );
 
             appendSegment( before, after, LAYER_NOTES );
             cursor = after;
@@ -6826,12 +7174,22 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
         appendSegment( cursor, end, wire.isBus ? LAYER_BUS : LAYER_WIRE );
 
         if( !cuts.empty() && cursor != end )
-            appendTransparentLabels( transparentLabelPosition( cursor, end ) );
+            appendWireNetIntents( wireIntentPosition( cursor, end ) );
 
         for( const ORCAD_ALIAS& alias : wire.aliases )
         {
-            wxString text = FromOrcadString( kicadBusName( trimmed( alias.name ) ) );
-            wxString electricalText = FromOrcadString( kicadElectricalNetName( trimmed( alias.name ) ) );
+            wxString    text = FromOrcadString( kicadBusName( trimmed( alias.name ) ) );
+            std::string electricalName = kicadElectricalNetName( trimmed( alias.name ) );
+            std::string mappedName = electricalName;
+
+            if( hierBusNames )
+            {
+                mappedName = wire.isBus ? scopedHierBusRange( electricalName, *hierBusNames )
+                                       : scopedHierBusMember( electricalName, *hierBusNames );
+            }
+
+            bool     mappedBusAlias = mappedName != electricalName;
+            wxString electricalText = FromOrcadString( mappedName );
 
             if( text.IsEmpty() )
                 continue;
@@ -6844,7 +7202,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                                  && isPowerNetName( *netName->second )
                                  && canonicalGlobalNetName( alias.name ) != *netName->second );
 
-            if( occurrenceNamesByNetId.count( wire.id ) && netName != netNamesById.end()
+            if( !mappedBusAlias && occurrenceNamesByNetId.count( wire.id ) && netName != netNamesById.end()
                 && canonicalGlobalNetName( alias.name ) != canonicalGlobalNetName( *netName->second ) )
             {
                 electrical = false;
@@ -6871,12 +7229,11 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                 electricalAnchor = candidate;
             }
 
-            if( electrical && ( electricalText != text || electricalAnchor != anchor ) )
+            if( electrical && ( ( electricalText != text && !mappedBusAlias ) || electricalAnchor != anchor ) )
             {
                 SCH_LABEL* label =
                         new SCH_LABEL( OrcadDbuToIu( electricalAnchor.x, electricalAnchor.y ), electricalText );
-                label->SetTextColor( invisibleElectricalTextColor() );
-                appendPageItem( aScreen, label );
+                appendNetIntent( aScreen, label, true, wire.id );
                 electrical = false;
             }
 
@@ -6888,6 +7245,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                 applyFont( label, fontId );
                 label->SetTextColor( OrcadColor( alias.color ) );
                 appendPageItem( aScreen, label );
+                m_labelSourceNets[label] = { aScreen, wire.id };
             }
             else
             {
@@ -6914,7 +7272,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                  || ( labelWireIndices.count( wireIndex )
                       && ( netName != netNamesById.end() || authoritativeInterface ) ) ) )
         {
-            appendTransparentLabels( transparentLabelPosition( VECTOR2I( wire.x1, wire.y1 ), end ) );
+            appendWireNetIntents( wireIntentPosition( VECTOR2I( wire.x1, wire.y1 ), end ) );
         }
 
     }
@@ -6930,6 +7288,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                             } );
     };
 
+    m_currentImplicitPowerPins.clear();
     std::map<std::pair<int, int>, std::string> generatedWirelessNets;
 
     for( const ORCAD_PLACED_INSTANCE& instance : aPage.instances )
@@ -7058,28 +7417,45 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
             if( hierBusNames )
                 scopedName = scopedHierBusMember( name, *hierBusNames );
 
-            SCH_LABEL_BASE* label;
+            bool globalNet = scopedName == name
+                             && ( globalName || name.rfind( "$$$", 0 ) == 0
+                                  || ( !aHierarchical && isOffpageNetName( name ) ) || isPowerNetName( name ) );
 
-            if( scopedName == name
-                && ( globalName || name.rfind( "$$$", 0 ) == 0 || ( !aHierarchical && isOffpageNetName( name ) )
-                     || isPowerNetName( name ) ) )
+            uint32_t sourceNetId = pin.wordB;
+
+            if( m_currentOccNetNames )
             {
-                label = new SCH_GLOBALLABEL( OrcadDbuToIu( electricalPosition.x, electricalPosition.y ),
-                                             FromOrcadString( name ) );
+                for( const auto& [id, occurrenceName] : *m_currentOccNetNames )
+                {
+                    if( kicadOccurrenceNetName( occurrenceName ) == name )
+                    {
+                        sourceNetId = id;
+                        break;
+                    }
+                }
             }
-            else
-                label = new SCH_LABEL( OrcadDbuToIu( electricalPosition.x, electricalPosition.y ),
-                                       FromOrcadString( name ) );
 
-            label->SetTextColor( invisibleElectricalTextColor() );
-            appendPageItem( aScreen, label );
+            m_wirelessNetNames[{ aScreen, &instance, pinIndex }] = { sourceNetId, name };
+
+            // A source net pointer also records implicit power connectivity; it is not always an override.
+            if( globalNet && !pin.IsNoConnect() && !stackedPeer
+                && electricalPosition == VECTOR2I( pin.x, pin.y )
+                && hasImplicitPowerPinName( instance, pinIndex, scopedName ) )
+            {
+                m_currentImplicitPowerPins.insert( &pin );
+                continue;
+            }
+
+            SCH_LABEL* label = new SCH_LABEL( OrcadDbuToIu( electricalPosition.x, electricalPosition.y ),
+                                               FromOrcadString( name ) );
+
+            appendNetIntent( aScreen, label, !isImplicitGeneratedName( name ) );
 
             if( scopedName != name )
             {
                 SCH_LABEL* scopedLabel = new SCH_LABEL( OrcadDbuToIu( electricalPosition.x, electricalPosition.y ),
                                                         FromOrcadString( scopedName ) );
-                scopedLabel->SetTextColor( invisibleElectricalTextColor() );
-                appendPageItem( aScreen, scopedLabel );
+                appendNetIntent( aScreen, scopedLabel, !isImplicitGeneratedName( name ) );
             }
         }
     }
@@ -7243,6 +7619,188 @@ void ORCAD_CONVERTER::placeGraphicDisplayText( const ORCAD_GRAPHIC_INST& aGraphi
 }
 
 
+
+
+static std::optional<VECTOR2I> safeConnectivityLabelPosition( SCH_SCREEN* aScreen, const VECTOR2I& aPosition,
+                                                           const std::optional<std::vector<SEG>>& aSourceWires )
+{
+    if( !aSourceWires )
+        return std::nullopt;
+
+    std::vector<SEG> wires;
+    std::set<VECTOR2I> junctions;
+    std::set<VECTOR2I> busEntries;
+    std::set<VECTOR2I> pins;
+
+    for( SCH_ITEM* item : aScreen->Items() )
+    {
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            if( line->GetLayer() == LAYER_WIRE || line->GetLayer() == LAYER_BUS )
+                wires.push_back( line->GetSeg() );
+        }
+        else if( item->Type() == SCH_SYMBOL_T )
+        {
+            for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( item )->GetPins() )
+                pins.insert( pin->GetPosition() );
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                pins.insert( pin->GetPosition() );
+        }
+        else if( item->Type() == SCH_JUNCTION_T )
+        {
+            junctions.insert( item->GetPosition() );
+        }
+        else if( item->Type() == SCH_BUS_WIRE_ENTRY_T || item->Type() == SCH_BUS_BUS_ENTRY_T )
+        {
+            for( const VECTOR2I& point : item->GetConnectionPoints() )
+                busEntries.insert( point );
+        }
+    }
+
+    auto safe = [&]( const VECTOR2I& aCandidate )
+    {
+        if( busEntries.count( aCandidate ) )
+            return false;
+
+        int contacts = std::count_if( wires.begin(), wires.end(),
+                                      [&]( const SEG& wire ) { return wire.Contains( aCandidate ); } );
+
+        if( aSourceWires->empty() )
+        {
+            // Coincident pins can require a junction dot without any crossing wires.
+            return aCandidate == aPosition && contacts == 0
+                   && ( !junctions.count( aCandidate ) || pins.count( aCandidate ) );
+        }
+
+        return !junctions.count( aCandidate ) && !pins.count( aCandidate ) && contacts <= 1;
+    };
+
+    auto supported = [&]( const SEG& aWire, const VECTOR2I& aCandidate )
+    {
+        return aWire.Contains( aCandidate )
+               && std::any_of( aSourceWires->begin(), aSourceWires->end(),
+                               [&]( const SEG& aSource )
+                               {
+                                   return aSource.A != aSource.B && aSource.Contains( aCandidate )
+                                          && ( aSource.B - aSource.A ).Cross( aWire.B - aWire.A ) == 0;
+                               } );
+    };
+
+    if( safe( aPosition )
+        && ( aSourceWires->empty()
+             || std::any_of( wires.begin(), wires.end(),
+                             [&]( const SEG& aWire ) { return supported( aWire, aPosition ); } ) ) )
+        return aPosition;
+
+    std::set<VECTOR2I> candidates;
+
+    for( const SEG& wire : wires )
+    {
+        // A crossing cut can remove the intended wire at the original anchor while leaving another net there.
+        if( !std::any_of( aSourceWires->begin(), aSourceWires->end(),
+                          [&]( const SEG& aSource )
+                          {
+                              return aSource.A != aSource.B
+                                     && ( aSource.B - aSource.A ).Cross( wire.B - wire.A ) == 0
+                                     && ( aSource.Contains( wire.A ) || aSource.Contains( wire.B )
+                                          || wire.Contains( aSource.A ) || wire.Contains( aSource.B ) );
+                          } ) )
+            continue;
+
+        VECTOR2I delta = wire.B - wire.A;
+        int steps = std::gcd( std::abs( delta.x ), std::abs( delta.y ) );
+
+        if( !steps )
+            continue;
+
+        VECTOR2I step = delta / steps;
+        std::set<int> offsets = { 0, steps, steps / 2 };
+        auto addOffset = [&]( long double aOffset )
+        {
+            if( aOffset < -2 || aOffset > steps + 2.0L )
+                return;
+
+            int offset = static_cast<int>( std::floor( aOffset ) );
+
+            for( int adjacent = -1; adjacent <= 2; ++adjacent )
+            {
+                if( offset + adjacent >= 0 && offset + adjacent <= steps )
+                    offsets.insert( offset + adjacent );
+            }
+        };
+        auto projection = [&]( const VECTOR2I& aPoint ) -> long double
+        {
+            return step.x ? ( (long double) aPoint.x - wire.A.x ) / step.x
+                          : ( (long double) aPoint.y - wire.A.y ) / step.y;
+        };
+
+        addOffset( projection( aPosition ) );
+        long double inset = schIUScale.MilsToIU( 50 ) / std::hypot( step.x, step.y );
+        addOffset( projection( aPosition ) - inset );
+        addOffset( projection( aPosition ) + inset );
+
+        // Segment ends bound overlaps; crossings and junctions bound the remaining clear intervals.
+        for( const SEG& other : wires )
+        {
+            addOffset( projection( other.A ) );
+            addOffset( projection( other.B ) );
+            VECTOR2I direction = other.B - other.A;
+            long double denominator = (long double) step.x * direction.y - (long double) step.y * direction.x;
+
+            if( denominator != 0 )
+            {
+                long double x = (long double) other.A.x - wire.A.x;
+                long double y = (long double) other.A.y - wire.A.y;
+                addOffset( ( x * direction.y - y * direction.x ) / denominator );
+            }
+        }
+
+        for( const SEG& source : *aSourceWires )
+        {
+            addOffset( projection( source.A ) );
+            addOffset( projection( source.B ) );
+        }
+
+        for( const VECTOR2I& junction : junctions )
+            addOffset( projection( junction ) );
+
+        for( const VECTOR2I& entry : busEntries )
+            addOffset( projection( entry ) );
+
+        for( const VECTOR2I& pin : pins )
+            addOffset( projection( pin ) );
+
+        for( int offset : offsets )
+        {
+            VECTOR2I candidate = wire.A + step * offset;
+
+            if( safe( candidate ) && supported( wire, candidate ) )
+                candidates.insert( candidate );
+        }
+    }
+
+    if( candidates.empty() )
+        return std::nullopt;
+
+    return *std::min_element( candidates.begin(), candidates.end(),
+                              [&]( const VECTOR2I& aLeft, const VECTOR2I& aRight )
+                              {
+                                  int64_t left = ( aLeft - aPosition ).SquaredEuclideanNorm();
+                                  int64_t right = ( aRight - aPosition ).SquaredEuclideanNorm();
+                                  int64_t clearance = schIUScale.MilsToIU( 50 );
+                                  bool leftClear = left >= clearance * clearance;
+                                  bool rightClear = right >= clearance * clearance;
+
+                                  return leftClear != rightClear ? leftClear : left < right;
+                              } );
+}
+
+
 void ORCAD_CONVERTER::placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen,
                                               const SCH_SHEET_PATH& aSheetPath, bool aHierarchical )
 {
@@ -7267,12 +7825,28 @@ void ORCAD_CONVERTER::placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_S
             continue;
         }
 
-        SCH_LABEL_BASE* label;
+        const ORCAD_GRAPHIC_INST& connector = aPage.offpage[offpage.index];
+        bool bus = SCH_CONNECTION::IsBusLabel( FromOrcadString( net ) );
+        auto sourceWires = eligibleSourceConnectivityWires(
+                aPage, VECTOR2I( offpage.x, offpage.y ), { connector.logicalName, offpage.net }, bus );
 
-        if( aHierarchical )
-            label = new SCH_HIERLABEL( OrcadDbuToIu( offpage.x, offpage.y ), FromOrcadString( net ) );
-        else
-            label = new SCH_GLOBALLABEL( OrcadDbuToIu( offpage.x, offpage.y ), FromOrcadString( net ) );
+        if( !bus && sourceWires && sourceWires->empty() )
+            sourceWires = eligibleSourceConnectivityWires(
+                    aPage, VECTOR2I( offpage.x, offpage.y ), { connector.logicalName, offpage.net }, true );
+
+
+        VECTOR2I originalPosition = OrcadDbuToIu( offpage.x, offpage.y );
+        std::optional<VECTOR2I> position = safeConnectivityLabelPosition( aScreen, originalPosition, sourceWires );
+
+        if( !position )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Page '%s': cannot place off-page connector '%s' at (%d, %d) "
+                                                "without a wire intersection." ),
+                                             FromOrcadString( aPage.name ), FromOrcadString( net ),
+                                             offpage.x, offpage.y ) );
+        }
+
+        SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( *position, FromOrcadString( net ) );
         label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
         label->SetTextColor( OrcadColor( aPage.offpage[offpage.index].color ) );
 
@@ -7294,14 +7868,9 @@ void ORCAD_CONVERTER::placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_S
 
         label->SetSpinStyle( spin );
 
-        if( SCH_GLOBALLABEL* global = dynamic_cast<SCH_GLOBALLABEL*>( label ) )
-        {
-            if( SCH_FIELD* refs = global->GetField( FIELD_T::INTERSHEET_REFS ) )
-                refs->SetVisible( false );
-        }
+        if( SCH_FIELD* refs = label->GetField( FIELD_T::INTERSHEET_REFS ) )
+            refs->SetVisible( false );
 
-        const ORCAD_GRAPHIC_INST& connector = aPage.offpage[offpage.index];
-        auto                      definition = m_design.symbols.find( connector.name );
         auto displayedName = std::find_if( connector.displayProps.begin(), connector.displayProps.end(),
                                            []( const ORCAD_DISPLAY_PROP& aProp )
                                            {
@@ -7314,23 +7883,10 @@ void ORCAD_CONVERTER::placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_S
                                            } );
         auto storedIref = connector.props.find( "IREF" );
 
-        bool exactGraphics = definition != m_design.symbols.end() && displayedName != connector.displayProps.end();
-
-        if( exactGraphics )
+        if( displayedName != connector.displayProps.end() )
         {
-            ORCAD_SYMBOL_DEF vectors = definition->second;
-            vectors.color = connector.color;
-
-            if( OrcadColor( vectors.color ) == KIGFX::COLOR4D::UNSPECIFIED )
-                vectors.color = 8;
-
-            int baseX = std::min( connector.bbox.x1, connector.bbox.x2 );
-            int baseY = std::min( connector.bbox.y1, connector.bbox.y2 );
-            int orient = OrcadOrientOf( connector.rotation, connector.mirror );
-            placeDefinitionVectors( vectors, baseX, baseY, orient, aScreen );
-
-            std::string displayText = connector.logicalName.empty() ? net : connector.logicalName;
-            placeGraphicDisplayText( connector, *displayedName, displayText, aScreen );
+            label->SetTextSize( textSize( OrcadDisplayFontId( *displayedName ) ) );
+            applyFont( label, OrcadDisplayFontId( *displayedName ) );
         }
 
         if( storedIref != connector.props.end() && displayedIref != connector.displayProps.end()
@@ -7339,14 +7895,31 @@ void ORCAD_CONVERTER::placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_S
             placeGraphicDisplayText( connector, *displayedIref, storedIref->second, aScreen );
         }
 
-        if( !exactGraphics || aHierarchical )
-        {
-            appendPageItem( aScreen, label );
-            continue;
-        }
-
-        label->SetTextColor( invisibleElectricalTextColor() );
         appendPageItem( aScreen, label );
+        rememberInterfaceLabelSource( aScreen, label, *sourceWires );
+
+        // Some source off-page connectors also bind a drawn block's parent sheet pin.
+        const auto& parentPins = aSheetPath.Last()->GetPins();
+        auto parentPin = std::find_if( parentPins.begin(), parentPins.end(),
+                                       [&]( const SCH_SHEET_PIN* aPin )
+                                       {
+                                           return aPin->GetText().CmpNoCase( label->GetText() ) == 0;
+                                       } );
+
+        if( aHierarchical && parentPin != parentPins.end() )
+        {
+            SCH_HIERLABEL* parentLabel = new SCH_HIERLABEL( *position, ( *parentPin )->GetText() );
+            parentLabel->SetShape( ( *parentPin )->GetShape() );
+            parentLabel->SetSpinStyle( spin.RotateCCW().RotateCCW() );
+            parentLabel->SetTextColor( label->GetTextColor() );
+            parentLabel->SetTextSize( label->GetTextSize() );
+
+            if( displayedName != connector.displayProps.end() )
+                applyFont( parentLabel, OrcadDisplayFontId( *displayedName ) );
+
+            appendPageItem( aScreen, parentLabel );
+            rememberInterfaceLabelSource( aScreen, parentLabel, *sourceWires );
+        }
     }
 }
 
@@ -7408,6 +7981,23 @@ void ORCAD_CONVERTER::placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
         if( net.empty() )
             continue;
 
+        bool bus = SCH_CONNECTION::IsBusLabel( FromOrcadString( net ) );
+        auto sourceWires = eligibleSourceConnectivityWires(
+                aPage, pos, { port.logicalName, net }, bus );
+
+        if( !bus && sourceWires && sourceWires->empty() )
+            sourceWires = eligibleSourceConnectivityWires( aPage, pos, { port.logicalName, net }, true );
+
+        std::optional<VECTOR2I> position = safeConnectivityLabelPosition(
+                aScreen, OrcadDbuToIu( pos.x, pos.y ), sourceWires );
+
+        if( !position )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Page '%s': cannot place port '%s' at (%d, %d) "
+                                                "without a wire intersection." ),
+                                             FromOrcadString( aPage.name ), FromOrcadString( net ), pos.x, pos.y ) );
+        }
+
         // Symbol name encodes arrow direction, e.g. "PORTLEFT-L".
         wxString         symbolName = FromOrcadString( port.name ).Upper();
         LABEL_FLAG_SHAPE shape = LABEL_FLAG_SHAPE::L_BIDI;
@@ -7420,12 +8010,27 @@ void ORCAD_CONVERTER::placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
         SCH_LABEL_BASE* label;
 
         if( aHierarchical )
-            label = new SCH_HIERLABEL( OrcadDbuToIu( pos.x, pos.y ), FromOrcadString( net ) );
+            label = new SCH_HIERLABEL( *position, FromOrcadString( net ) );
         else
-            label = new SCH_GLOBALLABEL( OrcadDbuToIu( pos.x, pos.y ), FromOrcadString( net ) );
+            label = new SCH_GLOBALLABEL( *position, FromOrcadString( net ) );
 
         label->SetShape( shape );
         label->SetSpinStyle( SPIN_STYLE::RIGHT );
+
+        auto end = m_wireEndpoints.find( { pos.x, pos.y } );
+
+        if( end != m_wireEndpoints.end() && !end->second.empty() )
+        {
+            const ORCAD_WIRE& wire = *end->second.front();
+            int64_t dx = static_cast<int64_t>( wire.x1 ) + wire.x2 - 2LL * pos.x;
+            int64_t dy = static_cast<int64_t>( wire.y1 ) + wire.y2 - 2LL * pos.y;
+
+            if( std::abs( dx ) >= std::abs( dy ) )
+                label->SetSpinStyle( dx > 0 ? SPIN_STYLE::LEFT : SPIN_STYLE::RIGHT );
+            else
+                label->SetSpinStyle( dy > 0 ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM );
+        }
+
         label->SetTextColor( OrcadColor( port.color ) );
 
         if( SCH_GLOBALLABEL* global = dynamic_cast<SCH_GLOBALLABEL*>( label ) )
@@ -7434,28 +8039,17 @@ void ORCAD_CONVERTER::placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                 refs->SetVisible( false );
         }
 
-        auto definition = m_design.symbols.find( port.name );
         auto displayedName = std::find_if( port.displayProps.begin(), port.displayProps.end(),
                                            []( const ORCAD_DISPLAY_PROP& aProp )
                                            {
                                                return aProp.name == "Name";
                                            } );
-        bool exactGraphics = definition != m_design.symbols.end() && displayedName != port.displayProps.end();
 
-        if( exactGraphics )
+        if( displayedName != port.displayProps.end() )
         {
-            ORCAD_SYMBOL_DEF vectors = definition->second;
-            vectors.color = port.color;
-
-            if( OrcadColor( vectors.color ) == KIGFX::COLOR4D::UNSPECIFIED )
-                vectors.color = 8;
-
-            int baseX = std::min( port.bbox.x1, port.bbox.x2 );
-            int baseY = std::min( port.bbox.y1, port.bbox.y2 );
-            int orient = OrcadOrientOf( port.rotation, port.mirror );
-            placeDefinitionVectors( vectors, baseX, baseY, orient, aScreen );
-            placeGraphicDisplayText( port, *displayedName, port.logicalName.empty() ? net : port.logicalName,
-                                     aScreen );
+            int fontId = OrcadDisplayFontId( *displayedName );
+            label->SetTextSize( textSize( fontId ) );
+            applyFont( label, fontId );
         }
 
         auto storedIref = port.props.find( "IREF" );
@@ -7471,10 +8065,8 @@ void ORCAD_CONVERTER::placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
             placeGraphicDisplayText( port, *displayedIref, storedIref->second, aScreen );
         }
 
-        if( exactGraphics )
-            label->SetTextColor( invisibleElectricalTextColor() );
-
         appendPageItem( aScreen, label );
+        rememberInterfaceLabelSource( aScreen, label, *sourceWires );
     }
 }
 

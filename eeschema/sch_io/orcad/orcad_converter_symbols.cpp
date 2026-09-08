@@ -814,6 +814,11 @@ void ORCAD_CONVERTER::prepareSymbols()
             libForInstance( inst );
     }
 
+    m_preparedPkgToLib = m_pkgToLib;
+
+    for( const auto& [name, entry] : m_libSymbols )
+        m_preparedLibUnits.emplace( name, entry.units );
+
     computeFontBaseline();
 }
 
@@ -1475,7 +1480,29 @@ std::map<std::string, std::string> ORCAD_CONVERTER::effectiveProps( const ORCAD_
 }
 
 
-std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_INSTANCE& aInst )
+bool ORCAD_CONVERTER::hasImplicitPowerPinName( const ORCAD_PLACED_INSTANCE& aInstance, size_t aPinIndex,
+                                              const std::string& aNetName ) const
+{
+    const ORCAD_SYMBOL_DEF* definition = pickVariant( aInstance ).first;
+
+    if( !definition || aPinIndex >= aInstance.pins.size() )
+        return false;
+
+    size_t index = symbolPinIndex( *definition, aInstance.pins[aPinIndex], aPinIndex );
+
+    if( index >= definition->pins.size() )
+        return false;
+
+    const ORCAD_SYMBOL_PIN& pin = definition->pins[index];
+
+    return pin.portType == ORCAD_PORT_TYPE::POWER_IN && ( pin.shapeBits & 0x80 ) != 0
+           && pin.hotptX == pin.startX && pin.hotptY == pin.startY && !pin.name.empty()
+           && pin.name.compare( 0, 4, "$PIN" ) != 0 && pin.name == aNetName;
+}
+
+
+std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_INSTANCE& aInst,
+                                                           const PKG_KEY** aSourceUnit )
 {
     auto [sym, vi] = pickVariant( aInst );
 
@@ -1777,12 +1804,48 @@ std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_
         {
             pinOffsets[symbolPin] = placedOffsets[i];
 
-            if( !aInst.pins[i].IsNoConnect() && ( aInst.pins[i].wordA || aInst.pins[i].wordB ) )
+            if( !aInst.pins[i].IsNoConnect() && ( aInst.pins[i].wordA || aInst.pins[i].wordB )
+                && !m_currentImplicitPowerPins.count( &aInst.pins[i] ) )
                 explicitPinNets[symbolPin] = true;
         }
     }
 
     PKG_KEY key{ srcOrPkg, aInst.pkgName, vi, letter };
+
+    if( aSourceUnit )
+    {
+        *aSourceUnit = nullptr;
+        auto prepared = m_preparedPkgToLib.find( key );
+
+        if( prepared != m_preparedPkgToLib.end() )
+        {
+            *aSourceUnit = &prepared->first;
+        }
+        else
+        {
+            // An occurrence can rename its unit letter without changing the source device.
+            for( const auto& [sourceKey, selection] : m_preparedPkgToLib )
+            {
+                if( std::get<0>( sourceKey ) != srcOrPkg || std::get<1>( sourceKey ) != aInst.pkgName
+                    || std::get<2>( sourceKey ) != vi )
+                    continue;
+
+                const UNIT_INFO& source = m_preparedLibUnits.at( selection.first )[selection.second - 1];
+
+                if( source.symbol == sym && source.pinNumbers == pinNumbers )
+                {
+                    if( *aSourceUnit )
+                    {
+                        *aSourceUnit = nullptr;
+                        break;
+                    }
+
+                    *aSourceUnit = &sourceKey;
+                }
+            }
+        }
+    }
+
     auto    found = m_pkgToLib.find( key );
 
     if( found != m_pkgToLib.end() )
@@ -2592,10 +2655,149 @@ int ORCAD_CONVERTER::toKicadOrientation( int aOrient )
 }
 
 
+void ORCAD_CONVERTER::finalizeNativePowerPackages()
+{
+    using PART_KEY = std::pair<const void*, wxString>;
+    std::map<PART_KEY, size_t>                            indices;
+    std::vector<std::vector<const PLACED_PACKAGE_UNIT*>> parts;
+
+    for( const PLACED_PACKAGE_UNIT& unit : m_placedPackageUnits )
+    {
+        auto [entry, inserted] = indices.emplace( PART_KEY{ unit.scope, unit.reference }, parts.size() );
+
+        if( inserted )
+            parts.emplace_back();
+
+        parts[entry->second].push_back( &unit );
+    }
+
+    for( const auto& part : parts )
+    {
+        if( !m_nativePowerFamilies.count( std::get<0>( *part.front()->sourceUnit ) ) )
+            continue;
+
+        const PLACED_PACKAGE_UNIT& first = *part.front();
+        const std::string& templateName = m_preparedPkgToLib.at( *first.sourceUnit ).first;
+        std::vector<UNIT_INFO> units = m_preparedLibUnits.at( templateName );
+        std::set<size_t> placedUnits;
+        std::vector<size_t> unitIndices;
+        bool compatible = !first.reference.empty() && !first.reference.EndsWith( wxS( "?" ) );
+
+        for( const PLACED_PACKAGE_UNIT* placed : part )
+        {
+            const auto& source = m_preparedPkgToLib.at( *placed->sourceUnit );
+            size_t index = static_cast<size_t>( source.second - 1 );
+
+            if( source.first != templateName || std::get<0>( *placed->sourceUnit ) != std::get<0>( *first.sourceUnit )
+                || index >= units.size() || !placedUnits.insert( index ).second )
+            {
+                compatible = false;
+                break;
+            }
+
+            units[index] = placed->unit;
+            unitIndices.push_back( index );
+        }
+
+        std::set<std::string> letters;
+
+        for( const UNIT_INFO& unit : units )
+            compatible &= letters.insert( unit.letter ).second;
+
+        if( !compatible )
+        {
+            warn( wxString::Format( _( "Native power units for '%s' have ambiguous package identity; "
+                                      "their symbol definitions were kept separate." ), first.reference ) );
+            continue;
+        }
+
+        std::string libname = templateName;
+
+        for( size_t discriminator = 2;; ++discriminator )
+        {
+            auto candidate = m_libSymbols.find( libname );
+
+            if( candidate == m_libSymbols.end() || candidate->second.units == units )
+                break;
+
+            libname = templateName + "_pins" + std::to_string( discriminator );
+        }
+
+        auto [entry, inserted] = m_libSymbols.try_emplace( libname );
+
+        if( inserted )
+        {
+            const LIB_ENTRY& source = m_libSymbols.at( templateName );
+            entry->second.name = libname;
+            entry->second.units = std::move( units );
+            entry->second.refPrefix = source.refPrefix;
+            entry->second.footprint = source.footprint;
+        }
+
+        LIB_SYMBOL* definition = kicadSymbolFor( libname );
+
+        if( !definition )
+            continue;
+
+        LIB_SYMBOL complete( *definition );
+
+        // Placement adjusts source text and graphics for the instance transform.  Retain each
+        // placed unit's adjusted drawings when assembling the complete package definition.
+        for( size_t i = 0; i < part.size(); ++i )
+        {
+            SCH_SYMBOL* symbol = part[i]->symbol;
+            int targetUnit = static_cast<int>( unitIndices[i] + 1 );
+            std::vector<SCH_ITEM*> replaced;
+
+            for( SCH_ITEM& item : complete.GetDrawItems() )
+            {
+                if( item.GetUnit() == targetUnit && item.Type() != SCH_FIELD_T )
+                    replaced.push_back( &item );
+            }
+
+            for( SCH_ITEM* item : replaced )
+                complete.RemoveDrawItem( item );
+
+            for( const SCH_ITEM& item : symbol->GetLibSymbolRef()->GetDrawItems() )
+            {
+                if( item.GetUnit() == symbol->GetUnit() && item.Type() != SCH_FIELD_T )
+                {
+                    SCH_ITEM* copy = static_cast<SCH_ITEM*>( item.Clone() );
+                    copy->SetUnit( targetUnit );
+                    complete.AddDrawItem( copy, false );
+                }
+            }
+        }
+
+        complete.GetDrawItems().sort();
+        LIB_ID id( wxString::FromUTF8( LIB_NICK ),
+                   LIB_ID::FixIllegalChars( FromOrcadString( libname ), false ).wx_str() );
+
+        // All units of one physical part must carry the same complete library definition on save.
+        for( size_t i = 0; i < part.size(); ++i )
+        {
+            SCH_SYMBOL* symbol = part[i]->symbol;
+            SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( symbol->GetParent() );
+            int unit = static_cast<int>( unitIndices[i] + 1 );
+            screen->Remove( symbol );
+            symbol->SetSchSymbolLibraryName( wxEmptyString );
+            symbol->SetUnit( unit );
+            symbol->SetUnitSelection( unit );
+            symbol->SetLibId( id );
+            symbol->SetLibSymbol( new LIB_SYMBOL( complete ) );
+            screen->Append( symbol );
+        }
+    }
+
+    m_placedPackageUnits.clear();
+}
+
+
 void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_INSTANCE& aInst, SCH_SCREEN* aScreen,
                                      const SCH_SHEET_PATH& aSheetPath )
 {
-    auto [libname, unit] = libForInstance( aInst );
+    const PKG_KEY* sourceUnit = nullptr;
+    auto [libname, unit] = libForInstance( aInst, &sourceUnit );
 
     LIB_ENTRY&              entry = m_libSymbols.at( libname );
     const UNIT_INFO&        uinfo = entry.units[unit - 1];
@@ -2843,9 +3045,54 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
     symbol->SetRef( &aSheetPath, reference );
     symbol->SetUnitSelection( &aSheetPath, unit );
 
+    if( sourceUnit && m_preparedLibUnits.at( m_preparedPkgToLib.at( *sourceUnit ).first ).size() > 1 )
+    {
+        bool nativePower = std::any_of( aInst.pins.begin(), aInst.pins.end(),
+                                        [&]( const ORCAD_PIN_INST& aPin )
+                                        {
+                                            return m_currentImplicitPowerPins.count( &aPin );
+                                        } );
+        const void* scope = m_currentOccRefs ? static_cast<const void*>( m_currentOccRefs ) : aScreen;
+        m_placedPackageUnits.push_back( { symbol, scope, reference, sourceUnit, uinfo } );
+
+        if( nativePower )
+            m_nativePowerFamilies.insert( std::get<0>( *sourceUnit ) );
+    }
+
     // Parts without pins remain in the BOM but must not request footprints during board updates.
     if( def.pins.empty() && aInst.pins.empty() )
         symbol->SetExcludedFromBoard( true );
+
+    m_sourceInstances[symbol] = &aInst;
+    auto& sourcePins = m_sourcePinIdentities[symbol];
+
+    for( size_t index = 0; index < aInst.pins.size(); ++index )
+    {
+        SOURCE_PIN_IDENTITY identity;
+        size_t pi = symbolPinIndex( def, aInst.pins[index], index );
+        VECTOR2I rawPosition = placedPinElectricalPosition( aInst, index );
+        identity.position = OrcadDbuToIu( rawPosition.x, rawPosition.y );
+
+        if( pi < def.pins.size() )
+        {
+            size_t position = def.pins[pi].position >= 0 ? def.pins[pi].position : pi;
+            identity.ignored = position < uinfo.pinIgnore.size() && uinfo.pinIgnore[position];
+            identity.number = position < uinfo.pinNumbers.size() ? FromOrcadString( uinfo.pinNumbers[position] )
+                                                                 : wxString::Format( wxS( "%zu" ), pi + 1 );
+            std::vector<SCH_PIN*> candidates;
+
+            for( SCH_PIN* pin : symbol->GetPins( &aSheetPath ) )
+            {
+                if( pin->GetNumber() == identity.number && pin->GetPosition() == identity.position )
+                    candidates.push_back( pin );
+            }
+
+            if( candidates.size() == 1 && candidates.front()->GetLibPin() )
+                identity.libraryPin = candidates.front()->GetLibPin()->m_Uuid;
+        }
+
+        sourcePins.push_back( std::move( identity ) );
+    }
 
     appendPageItem( aScreen, symbol );
     placeDefinitionImages( def, aInst.x, aInst.y, ori, aScreen );
@@ -2887,7 +3134,13 @@ wxString ORCAD_CONVERTER::resolveReference( const ORCAD_PLACED_INSTANCE& aInst )
 void ORCAD_CONVERTER::placePowerSymbol( ORCAD_RAW_PAGE& aPage, const ORCAD_GRAPHIC_INST& aInst, const std::string& aNet,
                                         SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aSheetPath )
 {
-    std::string libname = powerLibFor( aInst.name, aNet );
+    std::string net = canonicalGlobalNetName( aNet );
+
+    // Capture power names ignore case; occurrence-specific names must still remain distinct.
+    if( FromOrcadString( net ).CmpNoCase( FromOrcadString( aNet ) ) != 0 )
+        net = aNet;
+
+    std::string libname = powerLibFor( aInst.name, net );
 
     LIB_ENTRY&              entry = m_libSymbols.at( libname );
     const ORCAD_SYMBOL_DEF* def = entry.units.front().symbol;
@@ -2936,7 +3189,7 @@ void ORCAD_CONVERTER::placePowerSymbol( ORCAD_RAW_PAGE& aPage, const ORCAD_GRAPH
     auto        nameProperty = aInst.props.find( "Name" );
     std::string displayName = nameProperty != aInst.props.end() ? nameProperty->second : std::string();
     std::string logicalName = aInst.logicalName;
-    symbol->SetValueFieldText( FromOrcadString( aNet ) );
+    symbol->SetValueFieldText( FromOrcadString( net ) );
 
     SCH_FIELD* valField = symbol->GetField( FIELD_T::VALUE );
     valField->SetPosition( pos );

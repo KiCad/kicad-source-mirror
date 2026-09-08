@@ -878,7 +878,6 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
-    aSchematic->FixupJunctionsAfterImport();
     assignPostImportUuids( aSchematic, sourceId );
 
     return rootSheet;

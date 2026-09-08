@@ -160,13 +160,14 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
         for( const wxString& vector_member : members )
         {
             std::shared_ptr<SCH_CONNECTION> member = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
+            wxString escapedMember = EscapeString( vector_member, CTX_NETNAME );
 
             member->m_type         = CONNECTION_TYPE::NET;
             member->m_prefix       = m_prefix;
-            member->m_local_name   = vector_member;
+            member->m_local_name   = escapedMember;
             member->m_local_prefix = m_prefix;
             member->m_vector_index = i++;
-            member->SetName( vector_member );
+            member->SetName( escapedMember );
             member->SetGraph( m_graph );
             m_members.push_back( std::move( member ) );
         }
@@ -199,7 +200,7 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
                 std::shared_ptr<SCH_CONNECTION> member = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
                 member->SetPrefix( prefix );
                 member->SetGraph( m_graph );
-                member->ConfigureFromLabel( group_member );
+                member->ConfigureFromLabel( EscapeString( group_member, CTX_NETNAME ) );
                 m_members.push_back( std::move( member ) );
             }
         }
