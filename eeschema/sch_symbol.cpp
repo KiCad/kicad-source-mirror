@@ -902,7 +902,7 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
     SetFieldsAutoplaced( aSymbol.fields_autoplaced() ? AUTOPLACE_AUTO : AUTOPLACE_NONE );
     kiapi::common::UnpackCustomProperties( aSymbol.custom_properties(), *this );
 
-    if( !aSymbol.has_lib_id() )
+    if( aSymbol.has_lib_id() )
         SetSchSymbolLibraryName( UnpackLibId( aSymbol.lib_id() ).Format() );
 
     SetPassthroughMode( FromProtoEnum<SCH_SYMBOL::PASSTHROUGH_MODE>( aSymbol.passthrough() ) );
