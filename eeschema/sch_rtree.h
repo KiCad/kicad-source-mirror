@@ -27,6 +27,7 @@
 #include <geometry/rtree/dynamic_rtree.h>
 
 #include <utility>
+#include <unordered_set>
 
 /**
  * Implement an R-tree for fast spatial and type indexing of schematic items.
@@ -44,15 +45,18 @@ public:
 
     EE_RTREE( EE_RTREE&& aOther ) noexcept :
             m_tree( std::move( aOther.m_tree ) ),
-            m_count( std::exchange( aOther.m_count, 0 ) )
-    {}
+            m_members( std::move( aOther.m_members ) )
+    {
+        aOther.m_members.clear();
+    }
 
     EE_RTREE& operator=( EE_RTREE&& aOther ) noexcept
     {
         if( this != &aOther )
         {
             m_tree = std::move( aOther.m_tree );
-            m_count = std::exchange( aOther.m_count, 0 );
+            m_members = std::move( aOther.m_members );
+            aOther.m_members.clear();
         }
 
         return *this;
@@ -74,8 +78,17 @@ public:
         const int mmin[3] = { type, bbox.GetX(), bbox.GetY() };
         const int mmax[3] = { type, bbox.GetRight(), bbox.GetBottom() };
 
-        m_tree.Insert( mmin, mmax, aItem );
-        m_count++;
+        const auto member = m_members.insert( aItem );
+
+        try
+        {
+            m_tree.Insert( mmin, mmax, aItem );
+        }
+        catch( ... )
+        {
+            m_members.erase( member );
+            throw;
+        }
     }
 
     /**
@@ -99,7 +112,9 @@ public:
         if( !m_tree.Remove( mmin, mmax, aItem ) )
             return false;
 
-        m_count--;
+        const auto member = m_members.find( aItem );
+        wxASSERT( member != m_members.end() );
+        m_members.erase( member );
         return true;
     }
 
@@ -109,7 +124,7 @@ public:
     void clear()
     {
         m_tree.RemoveAll();
-        m_count = 0;
+        m_members.clear();
     }
 
     /**
@@ -119,11 +134,14 @@ public:
      *       false when it should be true.
      *
      * @param aItem Item that may potentially exist in the tree.
-     * @param aRobust If true, search the whole tree, not just the bounding box.
+     * @param aRobust If true, use exact pointer membership without evaluating the bounding box.
      * @return true if the item definitely exists, false if it does not exist within bbox.
      */
     bool contains( const SCH_ITEM* aItem, bool aRobust = false ) const
     {
+        if( aRobust )
+            return m_members.contains( aItem );
+
         BOX2I bbox = aItem->GetBoundingBox();
 
         // Inflate a bit for safety, selection shadows, etc.
@@ -148,18 +166,6 @@ public:
 
         m_tree.Search( mmin, mmax, search );
 
-        if( !found && aRobust )
-        {
-            // N.B. We must search the whole tree for the pointer to remove
-            // because the item may have been moved.  We do not expand the item
-            // type search as this should not change.
-
-            const int mmin2[3] = { type, INT_MIN, INT_MIN };
-            const int mmax2[3] = { type, INT_MAX, INT_MAX };
-
-            m_tree.Search( mmin2, mmax2, search );
-        }
-
         return found;
     }
 
@@ -170,12 +176,12 @@ public:
      */
     size_t size() const
     {
-        return m_count;
+        return m_members.size();
     }
 
     bool empty() const
     {
-        return m_count == 0;
+        return m_members.empty();
     }
 
     /**
@@ -295,7 +301,7 @@ public:
 
 private:
     ee_rtree m_tree;
-    size_t   m_count = 0;
+    std::unordered_multiset<const SCH_ITEM*> m_members;
 };
 
 

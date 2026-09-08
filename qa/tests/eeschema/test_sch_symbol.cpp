@@ -1374,4 +1374,59 @@ BOOST_AUTO_TEST_CASE( MatchesExcludesFieldText )
 }
 
 
+BOOST_AUTO_TEST_CASE( ExactMembershipAvoidsTextGeometryAndTracksTreeLifetime )
+{
+    LoadSchematic( wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "/issue7203.kicad_sch" ) );
+    auto symbols = m_schematic->Hierarchy().front().LastScreen()->Items().OfType( SCH_SYMBOL_T );
+    BOOST_REQUIRE( symbols.begin() != symbols.end() );
+
+    struct COUNTED_SYMBOL : SCH_SYMBOL
+    {
+        explicit COUNTED_SYMBOL( const SCH_SYMBOL& aSource ) : SCH_SYMBOL( aSource ) {}
+
+        const BOX2I GetBoundingBox() const override
+        {
+            ++boundsReads;
+            return SCH_SYMBOL::GetBoundingBox();
+        }
+
+        mutable unsigned boundsReads = 0;
+    };
+
+    COUNTED_SYMBOL item( *static_cast<SCH_SYMBOL*>( *symbols.begin() ) );
+    COUNTED_SYMBOL copy( item );
+    EE_RTREE tree;
+    tree.insert( &item );
+    item.boundsReads = 0;
+    copy.boundsReads = 0;
+    BOOST_CHECK( tree.contains( &item, true ) );
+    BOOST_CHECK( !tree.contains( &copy, true ) );
+    BOOST_CHECK_EQUAL( item.boundsReads, 0u );
+    BOOST_CHECK_EQUAL( copy.boundsReads, 0u );
+    item.Move( VECTOR2I( 100000000, 100000000 ) );
+    BOOST_CHECK( tree.contains( &item, true ) );
+    tree.insert( &copy );
+    BOOST_CHECK( tree.contains( &copy, true ) );
+    tree.insert( &item );
+    BOOST_REQUIRE( tree.remove( &item ) );
+    BOOST_CHECK( tree.contains( &item, true ) );
+    BOOST_REQUIRE( tree.remove( &item ) );
+    BOOST_CHECK( !tree.contains( &item, true ) );
+    BOOST_CHECK( !tree.remove( &item ) );
+
+    EE_RTREE moved( std::move( tree ) );
+    BOOST_CHECK( moved.contains( &copy, true ) );
+    BOOST_CHECK( !tree.contains( &copy, true ) );
+    tree.insert( &item );
+    tree = std::move( moved );
+    BOOST_CHECK( tree.contains( &copy, true ) );
+    BOOST_CHECK( !tree.contains( &item, true ) );
+    BOOST_CHECK( !moved.contains( &copy, true ) );
+    tree.clear();
+    BOOST_CHECK( !tree.contains( &copy, true ) );
+    tree.insert( &item );
+    BOOST_CHECK( tree.contains( &item, true ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
