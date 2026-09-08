@@ -133,7 +133,11 @@ public:
 
     inline bool IsSelected() const { return m_flags & SELECTED; }
     inline bool IsEntered() const { return m_flags & ENTERED; }
-    inline bool IsBrightened() const { return m_flags & BRIGHTENED; }
+    inline bool IsBrightened() const { return ( m_flags & BRIGHTENED ) || m_netHighlighted; }
+
+    /** Net highlighting must not clear brightening owned by find or picker tools. */
+    bool IsNetHighlighted() const;
+    void SetNetHighlighted( bool aHighlighted );
 
     inline bool IsRollover() const { return m_isRollover; }
     inline VECTOR2I GetRolloverPos() const { return m_rolloverPos; }
@@ -153,7 +157,13 @@ public:
 
     void           SetFlags( EDA_ITEM_FLAGS aMask ) { m_flags |= aMask; }
     void           XorFlags( EDA_ITEM_FLAGS aMask ) { m_flags ^= aMask; }
-    void           ClearFlags( EDA_ITEM_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_flags &= ~aMask; }
+    void ClearFlags( EDA_ITEM_FLAGS aMask = EDA_ITEM_ALL_FLAGS )
+    {
+        m_flags &= ~aMask;
+
+        if( aMask == EDA_ITEM_ALL_FLAGS )
+            m_netHighlighted = false;
+    }
     EDA_ITEM_FLAGS GetFlags() const { return m_flags; }
     bool           HasFlag( EDA_ITEM_FLAGS aFlag ) const { return ( m_flags & aFlag ) == aFlag; }
 
@@ -600,6 +610,7 @@ protected:
     VECTOR2I m_rolloverPos;
     bool     m_isRollover;
     bool     m_forceVisible;
+    bool     m_netHighlighted = false;
 
     std::map<wxString, wxString> m_customProperties;
 

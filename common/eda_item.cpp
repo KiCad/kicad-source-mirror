@@ -112,6 +112,7 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
         m_group( base.m_group ),
         m_isRollover( false ),
         m_forceVisible( base.m_forceVisible ),
+        m_netHighlighted( base.m_netHighlighted ),
         m_customProperties( base.m_customProperties )
 {
     SetForcedTransparency( base.GetForcedTransparency() );
@@ -119,6 +120,18 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
 
 
 EDA_ITEM::~EDA_ITEM() = default;
+
+
+bool EDA_ITEM::IsNetHighlighted() const
+{
+    return m_netHighlighted;
+}
+
+
+void EDA_ITEM::SetNetHighlighted( bool aHighlighted )
+{
+    m_netHighlighted = aHighlighted;
+}
 
 
 EDA_ITEM* EDA_ITEM::findParent( KICAD_T aType ) const
@@ -484,6 +497,7 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
     m_group        = aItem.m_group;
     m_forceVisible = aItem.m_forceVisible;
     m_isRollover   = aItem.m_isRollover;
+    m_netHighlighted = aItem.m_netHighlighted;
     m_customProperties = aItem.m_customProperties;
 
     SetForcedTransparency( aItem.GetForcedTransparency() );

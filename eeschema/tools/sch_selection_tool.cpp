@@ -976,7 +976,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     collector[ 0 ]->DoHypertextAction( m_frame, evt->Position() );
                     selCancelled = true;
                 }
-                else if( collector[0]->IsBrightened() )
+                else if( collector[0]->IsNetHighlighted() )
                 {
                     if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                     {
@@ -4317,7 +4317,7 @@ int SCH_SELECTION_TOOL::SelectNext( const TOOL_EVENT& aEvent )
     if( !editFrame || !editFrame->GetNetNavigator() || m_selection.Size() == 0 )
         return 0;
 
-    if( !m_selection.Front()->IsBrightened() )
+    if( !m_selection.Front()->IsNetHighlighted() )
         return 0;
 
     if( const SCH_ITEM* item = editFrame->SelectNextPrevNetNavigatorItem( true ) )
@@ -4338,7 +4338,7 @@ int SCH_SELECTION_TOOL::SelectPrevious( const TOOL_EVENT& aEvent )
     if( !editFrame || !editFrame->GetNetNavigator() || m_selection.Size() == 0 )
         return 0;
 
-    if( !m_selection.Front()->IsBrightened() )
+    if( !m_selection.Front()->IsNetHighlighted() )
         return 0;
 
     if( const SCH_ITEM* item = editFrame->SelectNextPrevNetNavigatorItem( false ) )

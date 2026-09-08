@@ -58,7 +58,7 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
                     m_selectionTool->BrightenItem( aItem );
                     m_foundItemHighlighted = true;
                 }
-                else if( aItem->IsBrightened() || aItem->IsForceVisible() )
+                else if( aItem->HasFlag( BRIGHTENED ) || aItem->IsForceVisible() )
                 {
                     aItem->SetForceVisible( false );
                     m_selectionTool->UnbrightenItem( aItem );
@@ -359,7 +359,7 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
             m_selectionTool->AddItemToSel( item );
         }
 
-        if( !item->IsBrightened() )
+        if( !item->HasFlag( BRIGHTENED ) )
         {
             // Clear any previous brightening
             UpdateFind( aEvent );
