@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <optional>
 #include <unordered_map>
 #include <unordered_set>
 #include <map>
@@ -555,6 +556,12 @@ public:
      */
     SCH_CONNECTION* Connection( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
+    /** Return the connection name for this sheet instance, if connected. */
+    std::optional<wxString> GetConnectionName( const SCH_SHEET_PATH* aSheet = nullptr,
+                                              bool aLocal = false, bool aIgnoreSheet = false ) const;
+
+    bool HasBusConnection( const SCH_SHEET_PATH* aSheet = nullptr ) const;
+
     /**
      * Retrieve the set of items connected to this item on the given sheet.
      */
@@ -802,4 +809,3 @@ private:
 };
 
 DECLARE_ENUM_TO_WXANY( SCH_LAYER_ID );
-

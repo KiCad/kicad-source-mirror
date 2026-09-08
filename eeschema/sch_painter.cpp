@@ -25,6 +25,7 @@
 #include <chrono>
 #include <bitmap_base.h>
 #include <connection_graph.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_netchain.h>
 #include <callback_gal.h>
@@ -1741,11 +1742,13 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     // highlighted chain is immediately visible.
     if( drawingWires && !drawingShadows && m_schematic && !m_schematic->GetHighlightedNetChain().IsEmpty() )
     {
-        SCH_CONNECTION* conn = !aLine->IsConnectivityDirty() ? aLine->Connection() : nullptr;
+        const auto net = !aLine->IsConnectivityDirty()
+                                 ? aLine->GetConnectionName( &m_schematic->CurrentSheet() )
+                                 : std::nullopt;
 
-        if( conn && !conn->Name().IsEmpty() )
+        if( net && !net->IsEmpty() )
         {
-            if( SCH_NETCHAIN* chain = m_schematic->ConnectionGraph()->GetNetChainForNet( conn->Name() ) )
+            if( SCH_NETCHAIN* chain = m_schematic->NetChains().GetNetChainForNet( *net ) )
             {
                 if( chain->GetName() == m_schematic->GetHighlightedNetChain()
                     && chain->GetColor() != COLOR4D::UNSPECIFIED )
@@ -2200,15 +2203,10 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
 
     COLOR4D color = getRenderColor( aText, aLayer, drawingShadows, aDimmed );
 
-    if( m_schematic )
+    if( m_schematic && !aText->IsConnectivityDirty()
+        && aText->HasBusConnection( &m_schematic->CurrentSheet() ) )
     {
-        SCH_CONNECTION* conn = nullptr;
-
-        if( !aText->IsConnectivityDirty() )
-            conn = aText->Connection();
-
-        if( conn && conn->IsBus() )
-            color = getRenderColor( aText, LAYER_BUS, drawingShadows, aDimmed );
+        color = getRenderColor( aText, LAYER_BUS, drawingShadows, aDimmed );
     }
 
     if( !( aText->IsVisible() || aText->IsForceVisible() ) )

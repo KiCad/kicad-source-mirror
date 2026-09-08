@@ -29,6 +29,7 @@
 #include <project/net_settings.h>
 #include <schematic.h>
 #include <sch_screen.h>
+#include <sch_line.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
@@ -149,6 +150,32 @@ BOOST_AUTO_TEST_CASE( LegacyHeadlessLoadUsesItsProjectLibraries )
 
     BOOST_CHECK_EQUAL( aliases, 2 );
 
+    bool checkedOutput = false;
+
+    for( const SCH_SHEET_PATH& path : schematic->Hierarchy() )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( symbol->GetRef( &path ) == wxS( "U2" ) )
+            {
+                SCH_PIN* pin = symbol->GetPin( "1" );
+                BOOST_REQUIRE( pin );
+                const VECTOR2I pos = pin->GetPosition();
+                const auto wires = path.LastScreen()->GetBusesAndWires( pos, false );
+                BOOST_REQUIRE_EQUAL( wires.size(), 1 );
+                BOOST_CHECK_GT( wires.front()->GetPenWidth(), 0 );
+
+                const auto name = pin->GetConnectionName( &path );
+                BOOST_REQUIRE( name );
+                BOOST_CHECK_EQUAL( *name, wxString( "VCC" ) );
+                checkedOutput = true;
+            }
+        }
+    }
+
+    BOOST_CHECK( checkedOutput );
 }
 
 

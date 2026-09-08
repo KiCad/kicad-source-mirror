@@ -520,6 +520,23 @@ void SCH_ITEM::SetConnectionGraph( CONNECTION_GRAPH* aGraph )
 }
 
 
+std::optional<wxString> SCH_ITEM::GetConnectionName( const SCH_SHEET_PATH* aSheet, bool aLocal,
+                                                   bool aIgnoreSheet ) const
+{
+    if( const SCH_CONNECTION* connection = Connection( aSheet ) )
+        return aLocal ? connection->LocalName() : connection->Name( aIgnoreSheet );
+
+    return std::nullopt;
+}
+
+
+bool SCH_ITEM::HasBusConnection( const SCH_SHEET_PATH* aSheet ) const
+{
+    const SCH_CONNECTION* connection = Connection( aSheet );
+    return connection && connection->IsBus();
+}
+
+
 std::shared_ptr<NETCLASS> SCH_ITEM::GetEffectiveNetClass( const SCH_SHEET_PATH* aSheet ) const
 {
     static std::shared_ptr<NETCLASS> nullNetclass = std::make_shared<NETCLASS>( wxEmptyString );
@@ -534,10 +551,8 @@ std::shared_ptr<NETCLASS> SCH_ITEM::GetEffectiveNetClass( const SCH_SHEET_PATH* 
     if( !netSettings )
         return nullNetclass;
 
-    SCH_CONNECTION* connection = Connection( aSheet );
-
-    if( connection )
-        return netSettings->GetEffectiveNetClass( connection->Name() );
+    if( const auto name = GetConnectionName( aSheet ) )
+        return netSettings->GetEffectiveNetClass( *name );
 
     if( std::shared_ptr<NETCLASS> defaultNetclass = netSettings->GetDefaultNetclass() )
         return defaultNetclass;

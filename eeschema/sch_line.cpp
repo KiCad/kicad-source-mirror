@@ -1049,11 +1049,11 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
     {
         if( GetLayer() == LAYER_WIRE )
         {
-            if( SCH_CONNECTION* connection = Connection() )
+            if( const auto name = GetConnectionName() )
             {
                 properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                            _( "Net" ),
-                                                           connection->Name() ) );
+                                                           *name ) );
 
                 properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                            _( "Resolved netclass" ),
