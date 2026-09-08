@@ -694,6 +694,8 @@ public:
     std::weak_ptr<void> GetHistoryLifetimeToken() const { return m_historyLifetime; }
 
 private:
+    bool resolveCrossReference( wxString* aToken, int aDepth ) const;
+
     friend class SCH_EDIT_FRAME;
 
     template <typename Func, typename... Args>

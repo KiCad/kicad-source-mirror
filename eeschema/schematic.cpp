@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <text_eval/text_eval_environment.h>
 #include <advanced_config.h>
 #include <algorithm>
 #include <common.h>
@@ -891,6 +892,20 @@ std::set<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 
 
 bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
+{
+    auto* environment = TEXT_EVAL::ENVIRONMENT::Current();
+
+    if( !environment || !environment->IsCollectingSources() )
+        return resolveCrossReference( token, aDepth );
+
+    const TEXT_EVAL::ENVIRONMENT::CROSS_REFERENCE_KEY key{ *token, aDepth };
+    const bool resolved = resolveCrossReference( token, aDepth );
+    environment->RecordCrossReference( key, { *token, resolved } );
+    return resolved;
+}
+
+
+bool SCHEMATIC::resolveCrossReference( wxString* token, int aDepth ) const
 {
     wxString       remainder;
     wxString       ref = token->BeforeFirst( ':', &remainder );

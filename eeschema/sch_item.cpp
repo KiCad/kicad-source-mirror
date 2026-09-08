@@ -376,6 +376,14 @@ bool SCH_ITEM::ResolveDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVar
 
 wxString SCH_ITEM::ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPath, int aDepth ) const
 {
+    const SCHEMATIC* schematic = Schematic();
+    return ResolveText( aText, aPath, aDepth, schematic ? schematic->GetCurrentVariant() : wxString() );
+}
+
+
+wxString SCH_ITEM::ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPath, int aDepth,
+                                const wxString& aVariantName ) const
+{
     // Use aDepth to track recursion across nested GetShownText/ResolveText calls
     int depth = aDepth;
 
@@ -390,7 +398,7 @@ wxString SCH_ITEM::ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPa
             [&]( wxString* token ) -> bool
             {
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
-                return symbol->ResolveTextVar( aPath, token, depth + 1 );
+                return symbol->ResolveTextVar( aPath, token, aVariantName, depth + 1 );
             };
 
     std::function<bool( wxString* )> schematicResolver =
@@ -434,11 +442,6 @@ wxString SCH_ITEM::ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPa
                 SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
                 return label->ResolveTextVar( aPath, token, depth + 1 );
             };
-
-    wxString variantName;
-
-    if( SCHEMATIC* schematic = Schematic() )
-        variantName = schematic->GetCurrentVariant();
 
     // Create a unified resolver that delegates to the appropriate resolver based on parent type
     std::function<bool( wxString* )> fieldResolver =

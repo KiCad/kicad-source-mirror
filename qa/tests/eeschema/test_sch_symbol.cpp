@@ -22,6 +22,11 @@
  * Test suite for SCH_SYMBOL object.
  */
 
+#include <settings/settings_manager.h>
+#include <sch_screen.h>
+#include <schematic.h>
+#include <locale_io.h>
+#include <schematic_utils/schematic_file_util.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
 
@@ -31,6 +36,9 @@
 #include <wildcards_and_files_ext.h>
 #include <lib_symbol.h>
 #include <eda_search_data.h>
+#include <sim/sim_lib_mgr.h>
+#include <sim/sim_model.h>
+#include <reporter.h>
 
 
 class TEST_SCH_SYMBOL_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
@@ -1374,6 +1382,47 @@ BOOST_AUTO_TEST_CASE( MatchesExcludesFieldText )
 }
 
 
+BOOST_AUTO_TEST_CASE( OperatingPointSkipsMissingSymbolPinMappings )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+    LoadSchematic( fn.GetFullPath() );
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+    BOOST_REQUIRE( symbol->GetPin( wxS( "1" ) ) );
+    BOOST_REQUIRE( symbol->GetPin( wxS( "2" ) ) );
+    BOOST_REQUIRE( !symbol->GetPin( wxS( "999" ) ) );
+    const SCH_SHEET_PATH path = m_schematic->Hierarchy()[0];
+
+    SetFieldValue( symbol->GetFields(), SIM_DEVICE_FIELD, "R" );
+    SetFieldValue( symbol->GetFields(), SIM_PARAMS_FIELD, "r=1k" );
+    SetFieldValue( symbol->GetFields(), SIM_PINS_FIELD, "999=+ 2=-" );
+
+    SIM_LIB_MGR manager( &m_schematic->Project() );
+    WX_STRING_REPORTER reporter;
+    const auto input = SIM_LIB_MGR::CaptureModelInput( &path, *symbol, 0, wxString() );
+    const auto owned = manager.CreateModel( input, true, reporter );
+    const auto live = manager.CreateModel( &path, *symbol, true, 0, wxString(), reporter );
+    BOOST_CHECK_MESSAGE( !reporter.HasMessage(), reporter.GetMessages() );
+    BOOST_REQUIRE_EQUAL( owned.model.GetPinCount(), 2 );
+    BOOST_REQUIRE_EQUAL( live.model.GetPinCount(), 2 );
+    BOOST_CHECK_EQUAL( owned.model.GetPin( 0 ).symbolPinNumber, wxString( "999" ) );
+    BOOST_CHECK_EQUAL( live.model.GetPin( 0 ).symbolPinNumber, wxString( "999" ) );
+
+    // A stale mapping must not prevent a later valid pin from resolving.
+    wxString token = wxS( "OP:2" );
+    BOOST_CHECK( symbol->ResolveTextVar( &path, &token, wxString(), 0 ) );
+    BOOST_CHECK_EQUAL( token, wxString( "--" ) );
+
+    token = wxS( "OP:999" );
+    BOOST_CHECK( symbol->ResolveTextVar( &path, &token, wxString(), 0 ) );
+    BOOST_CHECK_EQUAL( token, wxString( "?" ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( ExactMembershipAvoidsTextGeometryAndTracksTreeLifetime )
 {
     LoadSchematic( wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "/issue7203.kicad_sch" ) );
@@ -1426,6 +1475,39 @@ BOOST_AUTO_TEST_CASE( ExactMembershipAvoidsTextGeometryAndTracksTreeLifetime )
     BOOST_CHECK( !tree.contains( &copy, true ) );
     tree.insert( &item );
     BOOST_CHECK( tree.contains( &item, true ) );
+}
+
+BOOST_AUTO_TEST_CASE( SymbolPropertyReferencesUseTheExplicitPath )
+{
+    LOCALE_IO                  locale;
+    SETTINGS_MANAGER           settings;
+    std::unique_ptr<SCHEMATIC> schematic;
+    KI_TEST::LoadSchematic( settings, wxS( "issue23840/BusAndVectors" ), schematic );
+    BOOST_REQUIRE_GT( schematic->Hierarchy().size(), 1 );
+    size_t differentReferences = 0;
+
+    for( const SCH_SHEET_PATH& path : schematic->Hierarchy() )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            auto*          symbol = static_cast<SCH_SYMBOL*>( item );
+            const wxString expected = symbol->GetRef( &path );
+
+            for( const SCH_SHEET_PATH& current : schematic->Hierarchy() )
+            {
+                if( current.LastScreen() != path.LastScreen() )
+                    continue;
+
+                schematic->SetCurrentSheet( current );
+                differentReferences += symbol->GetRef( &current ) != expected;
+                wxString token( "PROPERTY.Reference" );
+                BOOST_REQUIRE( symbol->ResolveTextVar( &path, &token, 0 ) );
+                BOOST_CHECK_EQUAL( token, expected );
+            }
+        }
+    }
+
+    BOOST_CHECK_GT( differentReferences, 0 );
 }
 
 

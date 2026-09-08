@@ -463,6 +463,7 @@ public:
     const std::vector<SCH_FIELD>& GetFields() const { return m_fields; }
 
     std::vector<PROPERTY_BASE*> GetDynamicProperties() const override;
+    std::vector<PROPERTY_BASE*> GetDynamicProperties( const SCH_SHEET_PATH* aPath ) const;
 
     /**
      * Add a field to the symbol.

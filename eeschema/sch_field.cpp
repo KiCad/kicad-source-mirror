@@ -304,7 +304,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEX
 
     if( hasTextVars && aContext != RAW_VALUE )
     {
-        text = ResolveText( text, aPath, aDepth );
+        text = ResolveText( text, aPath, aDepth, aVariantName );
         FinalizeTextVarExpansion( text, aContext );
     }
 

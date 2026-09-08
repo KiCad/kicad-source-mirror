@@ -299,4 +299,28 @@ BOOST_FIXTURE_TEST_CASE( VariantOverrideResolvesTextVars, TEST_VARIANT_FIELD_RES
 
     BOOST_CHECK_EQUAL( r1->GetValue( &sheet, INTERNAL, wxS( "TextVars" ) ), mpn + wxS( "-ALT" ) );
     BOOST_CHECK_EQUAL( description->GetShownText( &sheet, INTERNAL, wxS( "TextVars" ) ), mpn + wxS( "-DESC" ) );
+
+    m_schematic->AddVariant( wxS( "TextVars" ) );
+    SetVariantField( r1, wxS( "TextVars" ), wxS( "MPN" ), wxS( "REQUESTED-MPN" ) );
+    r1->GetField( FIELD_T::VALUE )->SetText( wxS( "${MPN}-BASE" ) );
+    description->SetText( wxS( "${MPN}-BASE-DESC" ) );
+
+    for( const wxString& active : { wxString(), wxString( "TextVars" ) } )
+    {
+        m_schematic->SetCurrentVariant( active );
+
+        for( const wxString& requested : { wxString(), wxString( "TextVars" ) } )
+        {
+            BOOST_TEST_CONTEXT( "active=" << active << ", requested=" << requested )
+            {
+                const wxString expectedMpn = requested.empty() ? mpn : wxString( "REQUESTED-MPN" );
+                const wxString expectedValue = expectedMpn + ( requested.empty() ? "-BASE" : "-ALT" );
+                const wxString expectedDescription = expectedMpn + ( requested.empty() ? "-BASE-DESC" : "-DESC" );
+                BOOST_CHECK_EQUAL( r1->GetField( FIELD_T::VALUE )->GetShownText( &sheet, INTERNAL, requested ),
+                                   expectedValue );
+                BOOST_CHECK_EQUAL( description->GetShownText( &sheet, INTERNAL, requested ), expectedDescription );
+                BOOST_CHECK_EQUAL( r1->GetValue( &sheet, INTERNAL, requested ), expectedValue );
+            }
+        }
+    }
 }

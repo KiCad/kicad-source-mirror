@@ -289,6 +289,8 @@ public:
                      const wxString& aVariantName = wxEmptyString ) const;
 
     wxString ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPath, int aDepth = 0 ) const;
+    wxString ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPath, int aDepth,
+                          const wxString& aVariantName ) const;
 
     /**
      * Check if object is movable from the anchor point.

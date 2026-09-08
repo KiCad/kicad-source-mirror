@@ -722,7 +722,8 @@ void SCH_LABEL_BASE::GetIntersheetRefs( const SCH_SHEET_PATH* aPath, std::vector
 
     if( Schematic() )
     {
-        wxString resolvedLabel = GetShownText( &Schematic()->CurrentSheet(), FOR_GUI );
+        const SCH_SHEET_PATH& path = aPath ? *aPath : Schematic()->CurrentSheet();
+        wxString resolvedLabel = GetShownText( &path, FOR_GUI );
         auto     it = Schematic()->GetPageRefsMap().find( resolvedLabel );
 
         if( it != Schematic()->GetPageRefsMap().end() )
@@ -733,7 +734,7 @@ void SCH_LABEL_BASE::GetIntersheetRefs( const SCH_SHEET_PATH* aPath, std::vector
 
             if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
             {
-                int currentPage = Schematic()->CurrentSheet().GetVirtualPageNumber();
+                int currentPage = path.GetVirtualPageNumber();
                 std::erase( pageListCopy, currentPage );
 
                 if( pageListCopy.empty() )
@@ -800,11 +801,8 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         if( range.IsEmpty() )
             range = wxS( "~V" );
 
-        const SCH_CONNECTION* connection = Connection();
-        *token = wxS( "?" );
-
-        if( connection )
-            *token = schematic->GetOperatingPoint( connection->Name( false ), precision, range );
+        const auto name = GetConnectionName( aPath );
+        *token = name ? schematic->GetOperatingPoint( *name, precision, range ) : wxString( "?" );
 
         return true;
     }
@@ -824,31 +822,19 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
     }
     else if( token->IsSameAs( wxT( "SHORT_NET_NAME" ) ) )
     {
-        const SCH_CONNECTION* connection = Connection();
-        *token = wxEmptyString;
-
-        if( connection )
-            *token = connection->LocalName();
+        *token = GetConnectionName( aPath, true ).value_or( wxString() );
 
         return true;
     }
     else if( token->IsSameAs( wxT( "NET_NAME" ) ) )
     {
-        const SCH_CONNECTION* connection = Connection();
-        *token = wxEmptyString;
-
-        if( connection )
-            *token = connection->Name();
+        *token = GetConnectionName( aPath ).value_or( wxString() );
 
         return true;
     }
     else if( token->IsSameAs( wxT( "NET_CLASS" ) ) )
     {
-        const SCH_CONNECTION* connection = Connection();
-        *token = wxEmptyString;
-
-        if( connection )
-            *token = GetEffectiveNetClass()->GetName();
+        *token = GetConnectionName( aPath ) ? GetEffectiveNetClass( aPath )->GetName() : wxString();
 
         return true;
     }
@@ -909,7 +895,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
     {
         if( token->IsSameAs( field.GetName() ) )
         {
-            *token = field.GetShownText( INTERNAL, aDepth + 1 );
+            *token = field.GetShownText( aPath, INTERNAL, variant, aDepth + 1 );
             return true;
         }
     }
@@ -2262,7 +2248,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
 
             if( !settings.m_IntersheetRefsListOwnPage )
             {
-                int currentPage = schematic->CurrentSheet().GetVirtualPageNumber();
+                int currentPage = aPath->GetVirtualPageNumber();
                 std::erase( pageListCopy, currentPage );
             }
 

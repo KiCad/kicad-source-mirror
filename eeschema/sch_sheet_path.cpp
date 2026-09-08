@@ -547,9 +547,15 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
             loopStart = startIdx;
     }
 
+    SCH_SHEET_PATH parentPath;
+
+    for( size_t i = 0; i < loopStart && i < size(); ++i )
+        parentPath.push_back( at( i ) );
+
     for( unsigned i = loopStart; i < size(); i++ )
     {
-        wxString sheetName = at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( FOR_GUI );
+        wxString sheetName = at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( &parentPath, FOR_GUI );
+        parentPath.push_back( at( i ) );
 
         if( aEscapeSheetNames )
             sheetName = EscapeString( sheetName, CTX_NETNAME );
