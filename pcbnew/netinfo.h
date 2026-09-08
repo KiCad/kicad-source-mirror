@@ -63,6 +63,12 @@ public:
         return wxT( "NETINFO_ITEM" );
     }
 
+    PCB_LAYER_ID GetLayer() const override
+    {
+        wxFAIL_MSG( wxT( "NETINFO_ITEM::GetLayer() desn't have meaning.  Don't call it." ) );
+        return UNDEFINED_LAYER;
+    }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override
     {

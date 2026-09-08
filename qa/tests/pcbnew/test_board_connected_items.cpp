@@ -312,7 +312,6 @@ BOOST_AUTO_TEST_CASE( ThievingZone_ReducesToSingleLayerWhenFillModeBecomesThievi
     zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
 
     BOOST_CHECK_EQUAL( zone->GetLayerSet().count(), 1u );
-    BOOST_CHECK_EQUAL( zone->GetLayer(), F_Cu );
 }
 
 

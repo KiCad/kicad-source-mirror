@@ -65,7 +65,9 @@ bool DIALOG_FOOTPRINT_ASSOCIATIONS::TransferDataToWindow()
     try
     {
         libFootprint.reset( adapter->LoadFootprint( libName, fpName, true ) );
-        fpDesc = libFootprint->GetLibDescription();
+
+        if( libFootprint )
+            fpDesc = libFootprint->GetLibDescription();
     }
     catch( const IO_ERROR& )
     {

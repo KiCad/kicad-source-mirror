@@ -99,6 +99,12 @@ public:
     /// @copydoc EDA_ITEM::SetPosition
     void SetPosition( const VECTOR2I& aNewpos ) override;
 
+    PCB_LAYER_ID GetLayer() const override
+    {
+        wxFAIL_MSG( wxT( "PCB_GROUP::GetLayer() isn't well-defined.  Don't call it." ) );
+        return UNDEFINED_LAYER;
+    }
+
     /// @copydoc BOARD_ITEM::GetLayerSet
     LSET GetLayerSet() const override;
 

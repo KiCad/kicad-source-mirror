@@ -179,6 +179,14 @@ int BOARD_ITEM::GetMaxError() const
 }
 
 
+PCB_LAYER_ID BOARD_ITEM::GetLayer() const
+{
+    wxASSERT_MSG( IsSingleLayerType( Type() ),
+                  wxString::Format( wxT( "GetLayer() must be overridden for multi-layer types (%s)." ), GetClass() ) );
+
+    return m_layer;
+}
+
 int BOARD_ITEM::BoardLayerCount() const
 {
     const BOARD* board = GetBoard();

@@ -38,10 +38,11 @@ PCB_TABLECELL::PCB_TABLECELL( BOARD_ITEM* aParent ) :
         m_colSpan( 1 ),
         m_rowSpan( 1 )
 {
-    if( BOARD* board = GetBoard() )
-        SetMirrored( board->IsBackLayer( aParent->GetLayer() ) );
-    else
-        SetMirrored( IsBackLayer( aParent->GetLayer() ) );
+    if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aParent ) )
+    {
+        if( parentFP->IsFlipped() )
+            SetMirrored( true );
+    }
 
     SetRectangleHeight( std::numeric_limits<int>::max() / 2 );
     SetRectangleWidth( std::numeric_limits<int>::max() / 2 );

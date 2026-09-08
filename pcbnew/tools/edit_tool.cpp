@@ -202,10 +202,12 @@ static std::shared_ptr<CONDITIONAL_MENU> makeMirrorRotateMenu( EDIT_TOOL* aEditT
     menu->SetIcon( BITMAPS::special_tools );
     menu->SetUntranslatedTitle( _HKI( "Mirror / Rotate" ) );
 
+    bool isBoardEditor = aEditTool && aEditTool->IsBoardEditor();
+
     auto canMirror =
-            [&]( const SELECTION& aSelection )
+            [isBoardEditor]( const SELECTION& aSelection )
             {
-                if( aEditTool->IsBoardEditor() && SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
+                if( isBoardEditor && SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
                     return false;
 
                 return selectionMirrorable( aSelection );

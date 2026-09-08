@@ -648,7 +648,7 @@ bool PAD::IsFlipped() const
 
 PCB_LAYER_ID PAD::GetLayer() const
 {
-    return BOARD_ITEM::GetLayer();
+    return GetPrincipalLayer();
 }
 
 
@@ -1956,6 +1956,10 @@ void PAD::SetLayerSet( const LSET& aLayers )
 {
     m_padStack.SetLayerSet( aLayers );
     SetDirty();
+
+    // In theory m_layer should never be read, but set it just to be safe.
+    if( m_layer == UNDEFINED_LAYER || !aLayers.test( m_layer ) )
+        m_layer = aLayers.Seq().front();
 
     if( !( GetFlags() & ROUTER_TRANSIENT ) )
     {

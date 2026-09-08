@@ -188,7 +188,20 @@ public:
      */
     virtual bool IsOnCopperLayer() const
     {
-        return IsCopperLayer( GetLayer() );
+        if( IsSingleLayerType( Type() ) )
+        {
+            return IsCopperLayer( GetLayer() );
+        }
+        else
+        {
+            for( PCB_LAYER_ID layer : GetLayerSet() )
+            {
+                if( IsCopperLayer( layer ) )
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     virtual bool HasHole() const
@@ -310,7 +323,7 @@ public:
     /**
      * Return the primary layer this item is on.
      */
-    virtual PCB_LAYER_ID GetLayer() const { return m_layer; }
+    virtual PCB_LAYER_ID GetLayer() const;
 
     /**
      * Return the total number of layers for the board that this item resides on.

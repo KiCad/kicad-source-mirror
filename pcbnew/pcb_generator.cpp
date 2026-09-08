@@ -135,13 +135,6 @@ LSET PCB_GENERATOR::GetLayerSet() const
     return PCB_GROUP::GetLayerSet() | LSET( { GetLayer() } );
 }
 
-
-void PCB_GENERATOR::SetLayer( PCB_LAYER_ID aLayer )
-{
-    m_layer = aLayer;
-}
-
-
 wxString PCB_GENERATOR::GetGeneratorType() const
 {
     return m_generatorType;

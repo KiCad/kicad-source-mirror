@@ -289,7 +289,9 @@ SHAPE_LINE_CHAIN PCB_GRIDITEM::buildOutlineWorld() const
         pushWorld( VECTOR2I( -m_extent.x, m_extent.y ) );
         break;
 
-    default: wxFAIL_MSG( wxT( "buildOutlineWorld: unhandled PCB_GRIDITEM_TYPE" ) ); break;
+    default:
+        wxFAIL_MSG( wxT( "buildOutlineWorld: unhandled PCB_GRIDITEM_TYPE" ) );
+        break;
     }
 
     outline.SetClosed( true );
@@ -351,9 +353,9 @@ void PCB_GRIDITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
     switch( GetGridItemType() )
     {
-    case PCB_GRIDITEM_TYPE::CARTESIAN: typeStr = wxT( "xy" ); break;
-    case PCB_GRIDITEM_TYPE::POLAR: typeStr = wxT( "polar" ); break;
-    default: wxFAIL_MSG( wxT( "GetMsgPanelInfo: unhandled PCB_GRIDITEM_TYPE" ) );
+    case PCB_GRIDITEM_TYPE::CARTESIAN: typeStr = wxT( "xy" );                         break;
+    case PCB_GRIDITEM_TYPE::POLAR:     typeStr = wxT( "polar" );                      break;
+    default:     wxFAIL_MSG( wxT( "GetMsgPanelInfo: unhandled PCB_GRIDITEM_TYPE" ) ); break;
     }
 
     aList.emplace_back( _( "Type" ), typeStr );

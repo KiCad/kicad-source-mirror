@@ -19,8 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __KICAD_TYPEINFO_H
-#define __KICAD_TYPEINFO_H
+#pragma once
 
 
 #include <type_traits>
@@ -497,6 +496,37 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     }
 }
 
+constexpr bool IsSingleLayerType( const KICAD_T aType )
+{
+    switch( aType )
+    {
+    case PCB_SHAPE_T:
+    case PCB_REFERENCE_IMAGE_T:
+    case PCB_FIELD_T:
+    case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
+    case PCB_BARCODE_T:
+    case PCB_TABLE_T:
+    case PCB_TABLECELL_T:
+    case PCB_TRACE_T:
+    case PCB_ARC_T:
+    case PCB_MARKER_T:
+    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_TARGET_T:
+    case PCB_POINT_T:
+    case PCB_GENERATOR_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
 constexpr bool IsGerbviewType( const KICAD_T aType )
 {
     switch( aType )
@@ -559,5 +589,3 @@ constexpr bool IsTypeCorrect( KICAD_T aType )
         || IsPageLayoutEditorType( aType )
         || IsMiscType( aType );
 }
-
-#endif // __KICAD_TYPEINFO_H

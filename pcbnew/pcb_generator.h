@@ -126,7 +126,8 @@ public:
 
     LSET GetLayerSet() const override;
 
-    virtual void SetLayer( PCB_LAYER_ID aLayer ) override;
+    PCB_LAYER_ID GetLayer() const override { return m_layer; }
+    void SetLayer( PCB_LAYER_ID aLayer ) override { m_layer = aLayer; }
 
     virtual wxString GetGeneratorType() const;
 

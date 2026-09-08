@@ -437,8 +437,8 @@ public:
 
     void SetLayer( PCB_LAYER_ID aLayer ) override;
 
-    // to make property magic work
-    PCB_LAYER_ID GetLayer() const override { return BOARD_ITEM::GetLayer(); }
+    // A footprint's m_layer is set to F_Cu or B_Cu to encode which side of the board it's on.
+    PCB_LAYER_ID GetLayer() const override { return m_layer; }
 
     const TRANSFORM_TRS& GetTransform() const { return m_transform; }
 

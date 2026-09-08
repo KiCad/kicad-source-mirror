@@ -93,6 +93,12 @@ public:
     void              SetGridItemType( PCB_GRIDITEM_TYPE aType ) { m_type = aType; }
     PCB_GRIDITEM_TYPE GetGridItemType() const { return m_type; }
 
+    PCB_LAYER_ID GetLayer() const override
+    {
+        wxFAIL_MSG( wxT( "Grids don't have layers.  Calling this has no meaning." ) );
+        return UNDEFINED_LAYER;
+    }
+
     // Half-extent: distance from centre to edge.  The grid is symmetric about the centre,
     // so extents are stored as magnitudes - a negative input describes the same box.
     void     SetExtent( const VECTOR2I& aExtent ) { m_extent = { std::abs( aExtent.x ), std::abs( aExtent.y ) }; }

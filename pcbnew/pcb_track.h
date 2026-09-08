@@ -527,10 +527,14 @@ public:
     bool IsTented( PCB_LAYER_ID aLayer ) const override;
     int GetSolderMaskExpansion() const;
 
+    PCB_LAYER_ID GetPrincipalLayer() const;
+
     PCB_LAYER_ID GetLayer() const override;
     void SetLayer( PCB_LAYER_ID aLayer ) override;
 
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
+
+    bool IsOnCopperLayer() const override;
 
     virtual LSET GetLayerSet() const override;
 

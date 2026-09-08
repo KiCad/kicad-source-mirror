@@ -1703,10 +1703,6 @@ bool PCB_TRACK::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
-#if 0
-    // Nice and simple, but raises its ugly head in performance profiles....
-    return GetLayerSet().test( aLayer );
-#endif
     if( IsCopperLayer( aLayer ) &&
         LAYER_RANGE::Contains( Padstack().Drill().start, Padstack().Drill().end, aLayer ) )
     {
@@ -1721,6 +1717,12 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
         return Padstack().Drill().end == B_Cu && !IsTented( B_Mask );
 
     return false;
+}
+
+
+bool PCB_VIA::IsOnCopperLayer() const
+{
+    return true;
 }
 
 

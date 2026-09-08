@@ -407,6 +407,12 @@ public:
         return m_boardUse == BOARD_USE::FPHOLDER;
     }
 
+    PCB_LAYER_ID GetLayer() const override
+    {
+        wxFAIL_MSG( wxT( "BOARD::GetLayer() desn't have meaning.  Don't call it." ) );
+        return UNDEFINED_LAYER;
+    }
+
     void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
 
     const wxString &GetFileName() const { return m_fileName; }
