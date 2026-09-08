@@ -103,6 +103,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24314_power_flag_designators.cpp
     test_annotation_units_integration.cpp
     test_connectivity_algo.cpp
+    test_connectivity_pin_name.cpp
     test_bus_migration_gate.cpp
     test_bus_migration_precondition.cpp
     test_issue18119_bus_hierarchy.cpp

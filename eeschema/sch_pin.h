@@ -204,6 +204,8 @@ public:
     /// and no loaded footprint (two-state form).
     wxString GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet, const wxString& aVariantName = wxEmptyString ) const;
 
+    static bool HasIdentityPad( const wxString& aPinNumber, const std::set<wxString>& aPads );
+
     void SetNumber( const wxString& aNumber );
 
     int GetNameTextSize() const;

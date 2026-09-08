@@ -23,6 +23,7 @@
 
 #include "sch_pin.h"
 
+#include <connectivity/conn_pin_name.h>
 #include <lib_id.h>
 #include <lib_symbol.h>
 #include <pin_map.h>
@@ -782,8 +783,7 @@ wxString SCH_PIN::GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet, const wxS
         return map->GetPadNumber( pinNumber );
     }
 
-    // 2. IDENTITY - no entry, but the footprint carries a pad with this number.
-    if( aFootprintPadNumbers && aFootprintPadNumbers->count( pinNumber ) )
+    if( aFootprintPadNumbers && HasIdentityPad( pinNumber, *aFootprintPadNumbers ) )
     {
         if( aState )
             *aState = PAD_RESOLUTION::IDENTITY;
@@ -791,32 +791,23 @@ wxString SCH_PIN::GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet, const wxS
         return pinNumber;
     }
 
-    // A stacked pin like [A1,A12] names several pads. Match on those.
-    if( aFootprintPadNumbers )
-    {
-        bool                  valid = false;
-        std::vector<wxString> logicalNumbers = ExpandStackedPinNotation( pinNumber, &valid );
-
-        if( valid )
-        {
-            for( const wxString& logicalNumber : logicalNumbers )
-            {
-                if( aFootprintPadNumbers->count( logicalNumber ) )
-                {
-                    if( aState )
-                        *aState = PAD_RESOLUTION::IDENTITY;
-
-                    return pinNumber;
-                }
-            }
-        }
-    }
-
     // 3. UNMAPPED, or assumed identity when no footprint is available (the painter path).
     if( aState )
         *aState = aFootprintPadNumbers ? PAD_RESOLUTION::UNMAPPED : PAD_RESOLUTION::IDENTITY;
 
     return aFootprintPadNumbers ? wxString() : pinNumber;
+}
+
+
+bool SCH_PIN::HasIdentityPad( const wxString& aPinNumber, const std::set<wxString>& aPads )
+{
+    if( aPads.contains( aPinNumber ) )
+        return true;
+
+    bool valid = false;
+    const auto numbers = ExpandStackedPinNotation( aPinNumber, &valid );
+    return valid && std::any_of( numbers.begin(), numbers.end(),
+                                [&]( const wxString& number ) { return aPads.contains( number ); } );
 }
 
 
@@ -1704,79 +1695,40 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
             return it->second.first;
     }
 
-    wxString name = "Net-(";
-    bool unconnected = false;
+    SCH_CONNECTIVITY::PIN_NAME_FACT fact;
+    fact.name = m_libPin ? m_libPin->GetShownName() : wxString( "??" );
+    fact.shownNumber = m_libPin ? m_libPin->GetShownNumber() : wxString( "??" );
+    fact.number = m_libPin ? m_libPin->GetNumber() : wxString( "??" );
+    fact.padNumber = m_libPin ? m_libPin->GetSmallestStackedPadNumber() : fact.shownNumber;
+    fact.noConnect = GetType() == ELECTRICAL_PINTYPE::PT_NC;
 
-    if( aForceNoConnect || GetType() == ELECTRICAL_PINTYPE::PT_NC )
+    if( !aForceNoConnect && !fact.noConnect )
     {
-        unconnected = true;
-        name = ( "unconnected-(" );
-    }
-
-    bool annotated = true;
-
-    std::vector<const SCH_PIN*> pins = symbol->GetPins( &aPath );
-    bool has_multiple = false;
-
-    for( const SCH_PIN* pin : pins )
-    {
-        if( pin->GetShownName() == GetShownName()
-                && pin->GetShownNumber() != GetShownNumber()
-                && unconnected == ( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC ) )
+        for( const SCH_PIN* pin : symbol->GetPins( &aPath ) )
         {
-            has_multiple = true;
-            break;
+            if( pin->GetShownName() == GetShownName()
+                    && pin->GetShownNumber() != GetShownNumber()
+                    && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
+            {
+                fact.hasDuplicateName = true;
+                break;
+            }
         }
     }
 
-    wxString libPinShownName   = m_libPin ? m_libPin->GetShownName()   : wxString( "??" );
-    wxString libPinShownNumber = m_libPin ? m_libPin->GetShownNumber() : wxString( "??" );
-    wxString effectivePadNumber = m_libPin ? m_libPin->GetSmallestStackedPadNumber() : libPinShownNumber;
-
-    if( effectivePadNumber != libPinShownNumber )
+    if( fact.padNumber != fact.shownNumber )
     {
         wxLogTrace( traceStackedPins,
                     wxString::Format( "GetDefaultNetName: stacked pin shown='%s' -> using smallest logical='%s'",
-                                      libPinShownNumber, effectivePadNumber ) );
+                                      fact.shownNumber, fact.padNumber ) );
     }
 
-    // Use a short hash of the UUID as the missing symbol number
-    if( symbol->GetRef( &aPath, false ).Last() == '?' )
-    {
-        name << symbol->GetRef( &aPath, false );
-        name << wxString::Format( wxS( "-%08x" ), (unsigned) ( symbol->m_Uuid.Hash() & 0xFFFFFFFF ) );
+    const SCH_CONNECTIVITY::PIN_NAME_REFERENCE reference{
+        symbol->GetRef( &aPath, false ), symbol->GetRef( &aPath, true ), symbol->m_Uuid.AsString()
+    };
+    const wxString name = SCH_CONNECTIVITY::RenderPinNetName( fact, reference, aForceNoConnect );
 
-        wxString libPinNumber = m_libPin ? m_libPin->GetNumber() : wxString( "??" );
-        // Apply same smallest-logical substitution for unannotated symbols
-        if( effectivePadNumber != libPinShownNumber && !effectivePadNumber.IsEmpty() )
-            libPinNumber = effectivePadNumber;
-
-        name << "-Pad" << libPinNumber << ")";
-        annotated = false;
-    }
-    else if( !libPinShownName.IsEmpty() && ( libPinShownName != libPinShownNumber ) )
-    {
-        // Pin names might not be unique between different units so we must have the
-        // unit token in the reference designator
-        name << symbol->GetRef( &aPath, true );
-        name << "-" << EscapeString( libPinShownName, CTX_NETNAME );
-
-        if( unconnected || has_multiple )
-        {
-            // Use effective (possibly de-stacked) pad number in net name
-            name << "-Pad" << EscapeString( effectivePadNumber, CTX_NETNAME );
-        }
-
-        name << ")";
-    }
-    else
-    {
-        // Pin numbers are unique, so we skip the unit token
-        name << symbol->GetRef( &aPath, false );
-        name << "-Pad" << EscapeString( effectivePadNumber, CTX_NETNAME ) << ")";
-    }
-
-    if( annotated )
+    if( !reference.reference.IsEmpty() && reference.reference.Last() != '?' )
         m_net_name_map[ aPath ] = std::make_pair( name, aForceNoConnect );
 
     return name;
