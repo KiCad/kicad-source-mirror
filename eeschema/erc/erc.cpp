@@ -146,8 +146,9 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
 {
     int err_count = 0;
 
-    for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
+    for( const SCH_SHEET_PATH& path : m_schematic->Hierarchy() )
     {
+        SCH_SCREEN* screen = path.LastScreen();
         std::vector<SCH_SHEET*> list;
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
@@ -164,12 +165,20 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
                 // We have found a second sheet: compare names
                 // we are using case insensitive comparison to avoid mistakes between
                 // similar names like Mysheet and mysheet
-                if( sheet->GetShownName( RESOLVED ).IsSameAs( test_item->GetShownName( RESOLVED ), false ) )
+                const wxString variant = m_schematic->GetCurrentVariant();
+                const wxString name =
+                        sheet->GetField( FIELD_T::SHEET_NAME )->GetShownText( &path, RESOLVED, variant, 0 );
+                const wxString other =
+                        test_item->GetField( FIELD_T::SHEET_NAME )->GetShownText( &path, RESOLVED, variant, 0 );
+
+                if( name.IsSameAs( other, false ) )
                 {
                     if( aCreateMarker )
                     {
                         auto ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_SHEET_NAME );
                         ercItem->SetItems( sheet, test_item );
+                        ercItem->SetSheetSpecificPath( path );
+                        ercItem->SetItemsSheetPaths( path, path );
 
                         SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), sheet->GetPosition() );
                         screen->Append( marker );
@@ -1007,7 +1016,8 @@ int ERC_TESTER::TestMissingNetclasses()
 
                             if( field->GetUntranslatedName() == wxT( "Netclass" ) )
                             {
-                                wxString netclass = field->GetShownText( &sheet, FOR_NETNAME );
+                                wxString netclass = field->GetShownText( &sheet, FOR_NETNAME,
+                                                                        m_schematic->GetCurrentVariant() );
 
                                 if( !netclass.empty() && !netclass.IsSameAs( defaultNetclass )
                                     && !settings->HasNetclass( netclass ) )
@@ -1255,6 +1265,28 @@ int ERC_TESTER::TestNoConnectPins()
 int ERC_TESTER::TestPinToPin()
 {
     int errors = 0;
+    std::set<wxString> powerDrivenNets;
+
+    if( !m_schematic->ConnectionGraph()->GetCommittedNetChains().empty() )
+    {
+        for( const auto& [key, subgraphs] : m_nets )
+        {
+            for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
+            {
+                for( SCH_ITEM* item : subgraph->GetItems() )
+                {
+                    if( item->Type() != SCH_PIN_T )
+                        continue;
+
+                    const SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+
+                    if( DrivingPowerPinTypes.contains( pin->GetType() ) )
+                        powerDrivenNets.insert( key.Name );
+                }
+            }
+        }
+    }
+
 
     // Map each net name to the pins (with sheet context) found on that net so we can later
     // perform cross-net compatibility checks for grouped net chains.
@@ -1292,10 +1324,7 @@ int ERC_TESTER::TestPinToPin()
                        if( ret == 0 )
                            ret = StrNumCmp( lhs.Pin()->GetNumber(), rhs.Pin()->GetNumber() );
 
-                       if( ret == 0 )
-                           ret = lhs < rhs; // Fallback to hash to guarantee deterministic sort
-
-                       return ret < 0;
+                       return ret != 0 ? ret < 0 : lhs < rhs;
                    } );
 
         ERC_SCH_PIN_CONTEXT needsDriver;
@@ -1496,33 +1525,6 @@ int ERC_TESTER::TestPinToPin()
                 const wxString& thisNetName = net.first.Name;
                 const auto& netChains = m_schematic->ConnectionGraph()->GetCommittedNetChains();
 
-                auto netHasPowerDriver = [&]( const wxString& aNetName ) -> bool
-                {
-                    // Scan m_nets for the named net and test its pins for a power driver type.
-                    for( const auto& n : m_nets )
-                    {
-                        if( n.first.Name != aNetName )
-                            continue;
-
-                        for( CONNECTION_SUBGRAPH* sg : n.second )
-                        {
-                            for( SCH_ITEM* item : sg->GetItems() )
-                            {
-                                if( item->Type() == SCH_PIN_T )
-                                {
-                                    SCH_PIN* p = static_cast<SCH_PIN*>( item );
-                                    if( DrivingPowerPinTypes.contains( p->GetType() ) )
-                                        return true;
-                                }
-                            }
-                        }
-
-                        break; // found matching net (whether driver or not)
-                    }
-
-                    return false;
-                };
-
                 for( const auto& sig : netChains )
                 {
                     if( !sig )
@@ -1540,7 +1542,7 @@ int ERC_TESTER::TestPinToPin()
                         if( otherNet == thisNetName )
                             continue; // skip same net (we already know it lacks a driver)
 
-                        if( netHasPowerDriver( otherNet ) )
+                        if( powerDrivenNets.contains( otherNet ) )
                         {
                             suppressForNetChainDriver = true;
                             break;
@@ -1614,7 +1616,12 @@ int ERC_TESTER::TestPinToPin()
             const auto& sigNets = sig->GetNets();
 
             // Collect all pin contexts across the nets in this chain.
-            std::vector<ERC_SCH_PIN_CONTEXT> netChainPins;
+            struct CHAIN_PIN
+            {
+                ERC_SCH_PIN_CONTEXT context;
+                const wxString* net;
+            };
+            std::vector<CHAIN_PIN> netChainPins;
             netChainPins.reserve( sigNets.size() * 4 );
 
             for( const wxString& n : sigNets )
@@ -1622,8 +1629,8 @@ int ERC_TESTER::TestPinToPin()
                 auto it = netToPins.find( n );
                 if( it != netToPins.end() )
                 {
-                    const auto& vec = it->second;
-                    netChainPins.insert( netChainPins.end(), vec.begin(), vec.end() );
+                    for( const ERC_SCH_PIN_CONTEXT& context : it->second )
+                        netChainPins.push_back( { context, &it->first } );
                 }
             }
 
@@ -1636,33 +1643,29 @@ int ERC_TESTER::TestPinToPin()
 
             // For deterministic behavior, sort by reference/pin number similar to earlier pass.
             std::sort( netChainPins.begin(), netChainPins.end(),
-                       []( const ERC_SCH_PIN_CONTEXT& lhs, const ERC_SCH_PIN_CONTEXT& rhs )
+                       []( const CHAIN_PIN& left, const CHAIN_PIN& right )
                        {
+                           const auto& lhs = left.context;
+                           const auto& rhs = right.context;
                            int ret = StrNumCmp( lhs.Pin()->GetParentSymbol()->GetRef( &lhs.Sheet() ),
                                                 rhs.Pin()->GetParentSymbol()->GetRef( &rhs.Sheet() ) );
                            if( ret == 0 )
                                ret = StrNumCmp( lhs.Pin()->GetNumber(), rhs.Pin()->GetNumber() );
-                           if( ret == 0 )
-                               ret = lhs < rhs;
-                           return ret < 0;
+                           return ret != 0 ? ret < 0 : lhs < rhs;
                        } );
-
-            // Build a quick map from pin -> net name for skipping intra-net pairs.
-            std::unordered_map<SCH_PIN*, wxString> pinNet;
-            for( const auto& netEntry : netToPins )
-                for( const auto& ctx : netEntry.second )
-                    pinNet[ ctx.Pin() ] = netEntry.first;
 
             for( size_t i = 0; i < netChainPins.size(); ++i )
             {
-                SCH_PIN* aPin = netChainPins[i].Pin();
+                const auto& aContext = netChainPins[i].context;
+                SCH_PIN* aPin = aContext.Pin();
                 ELECTRICAL_PINTYPE aType = aPin->GetType();
-                const wxString& aNet = pinNet[aPin];
+                const wxString& aNet = *netChainPins[i].net;
 
                 for( size_t j = i + 1; j < netChainPins.size(); ++j )
                 {
-                    SCH_PIN* bPin = netChainPins[j].Pin();
-                    const wxString& bNet = pinNet[bPin];
+                    const auto& bContext = netChainPins[j].context;
+                    SCH_PIN* bPin = bContext.Pin();
+                    const wxString& bNet = *netChainPins[j].net;
 
                     if( aNet == bNet )
                         continue; // already handled at net-level
@@ -1678,15 +1681,15 @@ int ERC_TESTER::TestPinToPin()
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ercCode );
 
                         ercItem->SetItems( aPin, bPin );
-                        ercItem->SetSheetSpecificPath( netChainPins[i].Sheet() );
-                        ercItem->SetItemsSheetPaths( netChainPins[i].Sheet(), netChainPins[j].Sheet() );
+                        ercItem->SetSheetSpecificPath( aContext.Sheet() );
+                        ercItem->SetItemsSheetPaths( aContext.Sheet(), bContext.Sheet() );
                         ercItem->SetErrorMessage( wxString::Format(
                                 _( "Pins of type %s and %s are connected via net chain %s" ),
                                 ElectricalPinTypeGetText( aType ),
                                 ElectricalPinTypeGetText( bType ), chainName ) );
 
                         SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), aPin->GetPosition() );
-                        netChainPins[i].Sheet().LastScreen()->Append( marker );
+                        aContext.Sheet().LastScreen()->Append( marker );
                         errors++;
                     }
                 }
@@ -1900,16 +1903,16 @@ int ERC_TESTER::TestGroundPins()
 
             for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
-                SCH_CONNECTION* conn = pin->Connection( &sheet );
-                wxString        net = conn ? conn->GetNetName() : wxString();
-                bool            netIsGround = isGround( net );
-
                 // We are only interested in power pins
                 if( pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_OUT
                     && pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_IN )
                 {
                     continue;
                 }
+
+                const SCH_CONNECTION* conn = pin->Connection( &sheet );
+                const wxString net = conn ? conn->Name( true ) : wxString();
+                const bool netIsGround = isGround( net );
 
                 if( netIsGround )
                     hasGroundNet = true;
