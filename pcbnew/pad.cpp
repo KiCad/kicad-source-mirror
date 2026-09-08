@@ -1579,37 +1579,37 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
     PAD_DRAW_CACHE_DATA& drawCache = getDrawCache();
 
     Padstack().ForEachUniqueLayer(
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            // Polygon
-            std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon =
-                    drawCache.m_effectivePolygons[ aLayer ][ aErrorLoc ];
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                // Polygon
+                std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon =
+                        drawCache.m_effectivePolygons[ aLayer ][ aErrorLoc ];
 
-            effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
-            TransformShapeToPolygon( *effectivePolygon, aLayer, 0, GetMaxError(), aErrorLoc );
-        } );
+                effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
+                TransformShapeToPolygon( *effectivePolygon, aLayer, 0, GetMaxError(), aErrorLoc );
+            } );
 
     if( doBoundingRadius )
     {
         m_effectiveBoundingRadius = 0;
 
         Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID aLayer )
-            {
-                std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon =
-                        drawCache.m_effectivePolygons[ aLayer ][ aErrorLoc ];
-
-                for( int cnt = 0; cnt < effectivePolygon->OutlineCount(); ++cnt )
+                [&]( PCB_LAYER_ID aLayer )
                 {
-                    const SHAPE_LINE_CHAIN& poly = effectivePolygon->COutline( cnt );
+                    std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon =
+                            drawCache.m_effectivePolygons[ aLayer ][ aErrorLoc ];
 
-                    for( int ii = 0; ii < poly.PointCount(); ++ii )
+                    for( int cnt = 0; cnt < effectivePolygon->OutlineCount(); ++cnt )
                     {
-                        int dist = KiROUND( ( poly.CPoint( ii ) - GetPosition() ).EuclideanNorm() );
-                        m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, dist );
+                        const SHAPE_LINE_CHAIN& poly = effectivePolygon->COutline( cnt );
+
+                        for( int ii = 0; ii < poly.PointCount(); ++ii )
+                        {
+                            int dist = KiROUND( ( poly.CPoint( ii ) - GetPosition() ).EuclideanNorm() );
+                            m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, dist );
+                        }
                     }
-                }
-            } );
+                } );
 
         m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeX() / 2.0 ) );
         m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeY() / 2.0 ) );
@@ -1837,16 +1837,16 @@ void PAD::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 void PAD::FlipPrimitives( FLIP_DIRECTION aFlipDirection )
 {
     Padstack().ForEachUniqueLayer(
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            for( std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives( aLayer ) )
+            [&]( PCB_LAYER_ID aLayer )
             {
-                // Ensure the primitive parent is up to date. Flip uses GetBoard() that
-                // imply primitive parent is valid
-                primitive->SetParent(this);
-                primitive->Flip( VECTOR2I( 0, 0 ), aFlipDirection );
-            }
-        } );
+                for( std::shared_ptr<PCB_SHAPE>& primitive : m_padStack.Primitives( aLayer ) )
+                {
+                    // Ensure the primitive parent is up to date. Flip uses GetBoard() that
+                    // imply primitive parent is valid
+                    primitive->SetParent(this);
+                    primitive->Flip( VECTOR2I( 0, 0 ), aFlipDirection );
+                }
+            } );
 
     SetDirty();
 }
@@ -1893,38 +1893,38 @@ bool PAD::IsOnCopperLayer() const
         bool hasAnnularRing = true;
 
         Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID aLayer )
-            {
-                switch( GetShape( aLayer ) )
+                [&]( PCB_LAYER_ID aLayer )
                 {
-                case PAD_SHAPE::CIRCLE:
-                    if( m_padStack.Offset( aLayer ) == VECTOR2I( 0, 0 )
-                        && m_padStack.Size( aLayer ).x <= m_padStack.Drill().size.x )
+                    switch( GetShape( aLayer ) )
                     {
-                        hasAnnularRing = false;
+                    case PAD_SHAPE::CIRCLE:
+                        if( m_padStack.Offset( aLayer ) == VECTOR2I( 0, 0 )
+                            && m_padStack.Size( aLayer ).x <= m_padStack.Drill().size.x )
+                        {
+                            hasAnnularRing = false;
+                        }
+
+                        break;
+
+                    case PAD_SHAPE::OVAL:
+                        if( m_padStack.Offset( aLayer ) == VECTOR2I( 0, 0 )
+                            && m_padStack.Size( aLayer ).x <= m_padStack.Drill().size.x
+                            && m_padStack.Size( aLayer ).y <= m_padStack.Drill().size.y )
+                        {
+                            hasAnnularRing = false;
+                        }
+
+                        break;
+
+                    default:
+                        // We could subtract the hole polygon from the shape polygon for these, but it
+                        // would be expensive and we're probably well out of the common use cases....
+                        break;
                     }
+                } );
 
-                    break;
-
-                case PAD_SHAPE::OVAL:
-                    if( m_padStack.Offset( aLayer ) == VECTOR2I( 0, 0 )
-                        && m_padStack.Size( aLayer ).x <= m_padStack.Drill().size.x
-                        && m_padStack.Size( aLayer ).y <= m_padStack.Drill().size.y )
-                    {
-                        hasAnnularRing = false;
-                    }
-
-                    break;
-
-                default:
-                    // We could subtract the hole polygon from the shape polygon for these, but it
-                    // would be expensive and we're probably well out of the common use cases....
-                    break;
-                }
-            } );
-
-            if( !hasAnnularRing )
-                return false;
+        if( !hasAnnularRing )
+            return false;
     }
 
     return ( m_padStack.LayerSet() & LSET::AllCuMask() ).any();
