@@ -179,14 +179,8 @@ void API_HANDLER_EDITOR::pushCurrentCommit( const std::string& aClientName,
 
 HANDLER_RESULT<bool> API_HANDLER_EDITOR::validateDocument( const DocumentSpecifier& aDocument )
 {
-    if( !validateDocumentInternal( aDocument ) )
-    {
-        ApiResponseStatus e;
-        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( fmt::format( "the requested document {} is not open",
-                                          aDocument.board_filename() ) );
-        return tl::unexpected( e );
-    }
+    if( tl::expected<bool, ApiResponseStatus> validation = validateDocumentInternal( aDocument ); !validation )
+        return tl::unexpected( validation.error() );
 
     return true;
 }
