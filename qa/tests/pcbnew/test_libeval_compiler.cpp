@@ -18,6 +18,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <pcbnew_utils/board_construction_utils.h>
 #include <boost/test/data/test_case.hpp>
 
 #include <wx/wx.h>
@@ -100,6 +101,7 @@ const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
     { "A.Netclass + 1.0", false, VAL( 1.0 ) },
     { "A.hasNetclass('HV_LINE')", false, VAL( 1.0 ) },
     { "A.hasNetclass('HV_*')", false, VAL( 1.0 ) },
+    { "A.existsOnLayer(B.Layer)", false, VAL( 1.0 ) },
     { "A.type == 'Track' && B.type == 'Track' && A.layer == 'F.Cu'", false, VAL( 1.0 ) },
     { "(A.type == 'Track') && (B.type == 'Track') && (A.layer == 'F.Cu')", false, VAL( 1.0 ) },
     { "A.type == 'Via' && A.isMicroVia()", false, VAL(0.0) }
@@ -525,6 +527,70 @@ BOOST_AUTO_TEST_CASE( ReceiverValidation )
     expectCompileError( wxT( "L.Width == 1mm" ) );
     expectCompileError( wxT( "AB.Width == A.Width" ) );
     expectCompileError( wxT( "AB.Parent.Reference == 'J1'" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( DynamicCourtyardArgument )
+{
+    PROPERTY_MANAGER::Instance().Rebuild();
+
+    BOARD board;
+    FOOTPRINT* target = new FOOTPRINT( &board );
+    target->SetReference( wxS( "U1" ) );
+    KI_TEST::DrawRect( *target, { 0, 0 }, { pcbIUScale.mmToIU( 4 ), pcbIUScale.mmToIU( 4 ) },
+                      0, pcbIUScale.mmToIU( 0.05 ), F_CrtYd );
+    board.Add( target );
+
+    FOOTPRINT* other = new FOOTPRINT( &board );
+    other->SetReference( wxS( "U2" ) );
+    board.Add( other );
+
+    PCB_SHAPE graphic( other, SHAPE_T::SEGMENT );
+    graphic.SetLayer( F_Fab );
+    graphic.SetStart( { 0, 0 } );
+    graphic.SetEnd( { pcbIUScale.mmToIU( 1 ), 0 } );
+    graphic.SetWidth( pcbIUScale.mmToIU( 0.05 ) );
+
+    PCB_TEXT targetChild( target );
+    PCB_TEXT otherChild( other );
+
+    for( const wxString& expression : {
+                 wxString( "A.intersectsFrontCourtyard(B.Parent)" ),
+                 wxString( "A.intersectsCourtyard(B.Parent.Reference)" ),
+                 wxString( "A.intersectsFrontCourtyard(B.Parent.getField('Reference'))" ) } )
+    {
+        BOOST_TEST_CONTEXT( expression )
+        {
+            PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
+            PCBEXPR_UCODE    ucode;
+            PCBEXPR_CONTEXT preflight( NULL_CONSTRAINT, F_Fab );
+            PCBEXPR_CONTEXT context( NULL_CONSTRAINT, F_Fab );
+
+            BOOST_REQUIRE( compiler.Compile( expression, &ucode, &preflight ) );
+            BOOST_REQUIRE_MESSAGE( !compiler.IsErrorPending(), compiler.GetError().message );
+            BOOST_CHECK( ucode.RequiresPairItems() );
+
+            context.SetItems( &graphic, &targetChild );
+            BOOST_CHECK_EQUAL( ucode.Run( &context )->AsDouble(), 1.0 );
+
+            context.SetItems( &graphic, &otherChild );
+            BOOST_CHECK_EQUAL( ucode.Run( &context )->AsDouble(), 0.0 );
+
+            context.SetItems( &graphic, &targetChild );
+            BOOST_CHECK_EQUAL( ucode.Run( &context )->AsDouble(), 1.0 );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( FunctionArgumentValidation )
+{
+    expectCompileError( wxS( "A.intersectsFrontCourtyard()" ) );
+    expectCompileError( wxS( "A.intersectsFrontCourtyard('')" ) );
+    expectCompileError( wxS( "A.memberOfFootprint('')" ) );
+    expectCompileError( wxS( "A.fromTo('U1-1')" ) );
+    expectCompileError( wxS( "A.intersectsFrontCourtyard(B.UnknownProperty)" ) );
+    expectCompileError( wxS( "A.intersectsFrontCourtyard(B.Parent.unknownFunction())" ) );
 }
 
 

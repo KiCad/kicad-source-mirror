@@ -2,6 +2,10 @@
 
 All function parameters support simple wildcards (`*` and `?`).
 
+Arguments can also be expressions. For example,
+`A.intersectsFrontCourtyard(B.Parent)` tests whether `A` intersects the front
+courtyard of `B`'s parent footprint.
+
 
 ```
     A.enclosedByArea('<zone_name>')

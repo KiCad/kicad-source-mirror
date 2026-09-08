@@ -988,10 +988,16 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                         reportError( CST_CODEGEN, msg, node->leaf[0]->srcPos + 1 );
                     }
 
-                    if( func )
-                    {
-                        // Preflight the function call
+                    // Expressions have no value until runtime; formatNode() would turn
+                    // them into empty strings and falsely report missing arguments
+                    const bool literalArgs = std::all_of( params.begin(), params.end(),
+                            []( const TREE_NODE* param )
+                            {
+                                return param->op == TR_STRING || param->op == TR_NUMBER;
+                            } );
 
+                    if( func && literalArgs )
+                    {
                         for( TREE_NODE* pnode : params )
                         {
                             VALUE*   param = aPreflightContext->AllocValue();
