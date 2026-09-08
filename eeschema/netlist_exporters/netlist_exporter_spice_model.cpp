@@ -92,10 +92,10 @@ void NETLIST_EXPORTER_SPICE_MODEL::readPorts( unsigned aNetlistOptions )
         {
             SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 
-            if( SCH_CONNECTION* conn = label->Connection( &sheet ) )
+            if( const auto netName = itemNetName( *label, sheet ) )
             {
                 wxString labelText = label->GetShownText( &sheet, FOR_NETNAME );
-                m_ports.insert( { conn->Name(), PORT_INFO{ labelText, label->GetShape() } } );
+                m_ports.insert( { *netName, PORT_INFO{ labelText, label->GetShape() } } );
             }
         }
     }

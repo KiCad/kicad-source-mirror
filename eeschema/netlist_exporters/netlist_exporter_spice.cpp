@@ -245,6 +245,8 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
 void NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( wxString* aNetName )
 {
+    const bool literalSlash = UnescapeString( aNetName->AfterLast( '/' ) ).Contains( '/' );
+    *aNetName = UnescapeString( *aNetName );
     MARKUP::MARKUP_PARSER         markupParser( aNetName->ToStdString() );
     std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
 
@@ -289,15 +291,14 @@ void NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( wxString* aNetName )
     aNetName->Replace( '~', '_' );
     aNetName->Replace( ' ', '_' );
 
-    // Make sure that SPICE zero should be zero anywhere, independent if it is local or not.
-    // Therefore any signal ending with '/0' is rewritten as '0' to be recognized by SPICE.
-    if( aNetName->EndsWith( wxS( "/0" ) ) && !aNetName->EndsWith( wxS( "//0" ) ) )
-        aNetName->assign( wxS( "0" ) );
+    // SPICE reserves ground names even when schematic power is local to a subsheet.
+    const wxString localName = aNetName->AfterLast( '/' );
 
-    // Make sure that local ground signals with leading slash ('/gnd') are rewritten as gloabal gnd to be recognized
-    // by SPICE as zero.
-    if( aNetName->IsSameAs( wxS( "/gnd" ), false /* caseSensitive=false */ ) )
-        aNetName->assign( aNetName->Mid( 1 ) );
+    if( !literalSlash && ( localName == wxS( "0" ) || localName.IsSameAs( wxS( "gnd" ), false ) )
+        && !aNetName->EndsWith( wxS( "//" ) + localName ) )
+    {
+        aNetName->assign( localName );
+    }
 
     // A net name on the root sheet with a label '/foo' is going to get titled "//foo".  This
     // will trip up ngspice as "//" opens a line comment.
@@ -937,7 +938,7 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( const wxString& aSimCommand, unsig
 wxString NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const wxString& aNetName,
                                                          int& aNcCounter ) const
 {
-    wxString netName = UnescapeString( aNetName );
+    wxString netName = aNetName;
 
     ConvertToSpiceMarkup( &netName );
 
@@ -950,17 +951,14 @@ wxString NETLIST_EXPORTER_SPICE::GenerateItemPinNetName( const wxString& aNetNam
 
 SCH_SHEET_LIST NETLIST_EXPORTER_SPICE::BuildSheetList( unsigned aNetlistOptions ) const
 {
-    SCH_SHEET_LIST sheets;
-
-    if( aNetlistOptions & OPTION_CUR_SHEET_AS_ROOT )
-        sheets = SCH_SHEET_LIST( m_schematic->CurrentSheet().Last() );
-    else
-        sheets = m_schematic->Hierarchy();
+    SCH_SHEET_LIST sheets = m_exportSheets;
 
     std::erase_if( sheets,
                     [&]( const SCH_SHEET_PATH& sheet )
                     {
-                        return sheet.GetExcludedFromSim();
+                        return sheet.GetExcludedFromSim( m_schematic->GetCurrentVariant() )
+                               || ( ( aNetlistOptions & OPTION_CUR_SHEET_AS_ROOT )
+                                    && !sheet.IsContainedWithin( m_schematic->CurrentSheet() ) );
                     } );
 
     return sheets;

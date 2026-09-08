@@ -1222,13 +1222,9 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
     if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
         && ( simType == ST_TRAN || simType == ST_DC || simType == ST_AC || simType == ST_FFT ) )
     {
-        for( const wxString& net : circuitModel()->GetNets() )
+        for( const wxString& netname : circuitModel()->GetNets() )
         {
-            // netnames are escaped (can contain "{slash}" for '/') Unscape them:
-            wxString netname = UnescapeString( net );
-            NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &netname );
-
-            if( netname == "GND" || netname == "0" || netname.StartsWith( unconnected ) )
+            if( netname.IsSameAs( wxS( "GND" ), false ) || netname == "0" || netname.StartsWith( unconnected ) )
                 continue;
 
             m_netnames.emplace_back( netname );

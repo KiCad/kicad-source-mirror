@@ -1434,8 +1434,9 @@ void SCHEMATIC::SyncLibSymbolPinMaps( const wxString& aSchLibSymbolName, const L
 
 wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision, const wxString& aRange )
 {
-    wxString spiceNetName( aNetName.Lower() );
+    wxString spiceNetName( aNetName );
     NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &spiceNetName );
+    spiceNetName.MakeLower();
 
     if( spiceNetName == wxS( "gnd" ) || spiceNetName == wxS( "0" ) )
         return wxEmptyString;
