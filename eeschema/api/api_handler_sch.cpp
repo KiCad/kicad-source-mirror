@@ -1277,7 +1277,10 @@ SCH_SCREEN* API_HANDLER_SCH::resolveScreenFromDocument( const DocumentSpecifier&
     if( std::optional<SCH_SHEET_PATH> current = m_context->GetCurrentSheet() )
         return current->LastScreen();
 
-    return nullptr;
+    // Headless mode has no current sheet; the root sheet is the implicit target.
+    SCH_SHEET_PATH path;
+    path.push_back( &schematic()->Root() );
+    return path.LastScreen();
 }
 
 

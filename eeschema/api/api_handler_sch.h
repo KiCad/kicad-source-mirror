@@ -185,8 +185,8 @@ private:
 
     void filterValidSchTypes( std::set<KICAD_T>& aTypeList );
 
-    /// Returns the sheet path's screen when one is given and it is found.
-    /// Returns the editor's current sheet if not.  May return null in either case.
+    /// Returns the sheet path's screen when one is given and it is found, or null.
+    /// Otherwise, returns the editor's current sheet (or root sheet in headless mode).
     SCH_SCREEN* resolveScreenFromDocument( const DocumentSpecifier& aDocument ) const;
 
 protected:
