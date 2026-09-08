@@ -1503,7 +1503,7 @@ int DIFF_PAIR::GuessMostLikelyGap() const
     }
 
     int bestGapLen = 0;
-    int bestGap;
+    int bestGap = 0;
 
     for( auto iter : gapMap )
     {

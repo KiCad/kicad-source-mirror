@@ -354,7 +354,7 @@ SIZES_SETTINGS LOGGER::parseSizesFromJSON( const nlohmann::json& aJSON )
         sizes.SetDiffPairGap( aJSON.at("diffPairGap").get<int>() );
         sizes.SetDiffPairWidth( aJSON.at("diffPairWidth").get<int>() );
     }
-    catch ( nlohmann::json::exception& xpt )
+    catch ( nlohmann::json::exception& )
     {
         // be lenient when something is wrong with these settings, they're not critical
     }

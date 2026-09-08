@@ -980,7 +980,7 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
     auto fits = gwsEntry.FitGateways( gwsEntry, gwsTarget, m_placingVia );
 
     const DP_GATEWAYS::FIT_RESULT* bestFits[2] = { nullptr, nullptr };
-    const DP_GATEWAYS::FIT_RESULT* bestestFit;
+    const DP_GATEWAYS::FIT_RESULT* bestestFit = nullptr;
 
     for( bool rejectNonObtuseAngles : { true, false } )
     {
