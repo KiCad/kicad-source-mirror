@@ -17,8 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "pcbexpr_evaluator.h"
-
 #include <inspectable_impl.h>
 
 #include <cstdio>
@@ -34,6 +32,8 @@
 #include <drc/drc_engine.h>
 #include <component_classes/component_class.h>
 #include <string_utils.h>
+
+#include "pcbexpr_evaluator.h"
 
 
 /* --------------------------------------------------------------------------------------------

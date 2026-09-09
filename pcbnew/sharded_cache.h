@@ -20,6 +20,18 @@
 #ifndef SHARDED_CACHE_H
 #define SHARDED_CACHE_H
 
+#if defined (__MINGW32__)
+#ifdef BS_THREAD_POOL_NATIVE_EXTENSIONS
+    // needed to avoid some undefined in wx in a few dialogs on MINGW
+    // due to some includes in thread_pool.h (especially  windows.h)
+    // this is mainly due to vars/functions name colliding with some defines in windows.h
+    #if 1
+        // Works fine but include a lot of not needed files
+        #include <wx/wx.h>
+    #endif
+#endif
+#endif
+
 #include <array>
 #include <shared_mutex>
 #include <unordered_map>

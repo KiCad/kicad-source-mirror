@@ -19,6 +19,22 @@
 
 #include <kiplatform/touchpad.h>
 
+// On mingw/msys2, the touchpad code does not compile (it is specific to MSVC)
+// So use a dummy code similar to gtk an osx ports
+#if defined( __MINGW32__ )
+bool KIPLATFORM::UI::IsNativeTouchpadGestureAvailable()
+{
+    return false;
+}
+
+
+std::unique_ptr<KIPLATFORM::UI::TOUCHPAD_GESTURE_HANDLER>
+KIPLATFORM::UI::CreateTouchpadGestureHandler( wxWindow*, TOUCHPAD_GESTURE_CALLBACK )
+{
+    return nullptr;
+}
+#else
+
 #include <InteractionContext.h>
 #include <windows.h>
 #include <commctrl.h>
@@ -361,3 +377,5 @@ KIPLATFORM::UI::CreateTouchpadGestureHandler( wxWindow* aInputWindow, TOUCHPAD_G
 
     return handler;
 }
+
+#endif

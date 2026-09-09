@@ -386,9 +386,13 @@ KICOMMON_API void PackProject( types::ProjectSpecifier& aOutput, const PROJECT& 
     aOutput.set_path( aInput.GetProjectPath().ToUTF8() );
 }
 
-
+#if defined( __MINGW32__ )
+const std::string KiwayClientName = "org.kicad.internal.kiway";
+const std::string StandaloneCrossProbeClientName = "org.kicad.internal.crossprobe";
+#else
 const KICOMMON_API std::string KiwayClientName = "org.kicad.internal.kiway";
 const KICOMMON_API std::string StandaloneCrossProbeClientName = "org.kicad.internal.crossprobe";
+#endif
 
 
 KICOMMON_API bool PackKiwayApiMessage( const google::protobuf::Message& aMessage, std::string& aBytes )

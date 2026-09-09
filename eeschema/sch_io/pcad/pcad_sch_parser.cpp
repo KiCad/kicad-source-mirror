@@ -30,6 +30,7 @@
 #include <wx/string.h>
 #include <wx/tokenzr.h>
 #include <wx/xlocale.h>
+#include <wx/translation.h>
 
 #include <cmath>
 
