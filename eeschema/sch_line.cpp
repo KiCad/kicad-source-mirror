@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <connectivity/conn_presentation.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <string_utils.h>
@@ -32,7 +33,7 @@
 #include <eda_shape.h>
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
-#include <connection_graph.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <sch_netchain.h>
 #include <schematic.h>
 #include <project/project_file.h>
@@ -1102,23 +1103,13 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     else
         m_stroke.GetMsgPanelInfo( aFrame, aList, true, false );
 
-    SCH_CONNECTION* conn = nullptr;
-
     if( !IsConnectivityDirty() && dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
-        conn = Connection();
-
-    if( conn )
     {
-        conn->AppendInfoToMsgPanel( aList );
-
-        if( !conn->IsBus() )
+        if( const auto name = SCH_CONNECTIVITY::AppendConnectionInfo( *this, aList ) )
         {
-            aList.emplace_back( _( "Resolved Netclass" ),
-                                UnescapeString( GetEffectiveNetClass()->GetHumanReadableName() ) );
-
             if( SCHEMATIC* schematic = Schematic() )
             {
-                if( SCH_NETCHAIN* chain = schematic->ConnectionGraph()->GetNetChainForNet( conn->Name() ) )
+                if( SCH_NETCHAIN* chain = schematic->NetChains().GetNetChainForNet( *name ) )
                     aList.emplace_back( _( "Net Chain" ), UnescapeString( chain->GetName() ) );
             }
         }
