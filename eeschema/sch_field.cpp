@@ -1721,7 +1721,10 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
     // Only use the path if it's non-empty; an empty path can't match any instances
     if( m_parent && aPath && !aPath->empty() )
     {
-        wxLogTrace( traceSchFieldRendering, "  Path is valid and non-empty, parent type=%d", m_parent->Type() );
+        const bool trace = wxLog::IsAllowedTraceMask( traceSchFieldRendering );
+
+        if( trace )
+            wxLogTrace( traceSchFieldRendering, "  Path is valid and non-empty, parent type=%d", m_parent->Type() );
 
         switch( m_parent->Type() )
         {
@@ -1730,12 +1733,16 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
             {
                 if( m_id == FIELD_T::REFERENCE )
                 {
-                    wxLogTrace( traceSchFieldRendering, "  Calling GetRef for symbol %s on path %s",
-                                symbol->m_Uuid.AsString(), aPath->Path().AsString() );
+                    if( trace )
+                    {
+                        wxLogTrace( traceSchFieldRendering, "  Calling GetRef for symbol %s on path %s",
+                                    symbol->m_Uuid.AsString(), aPath->Path().AsString() );
+                    }
 
                     retv = symbol->GetRef( aPath, true );
 
-                    wxLogTrace( traceSchFieldRendering, "  GetRef returned: '%s'", retv );
+                    if( trace )
+                        wxLogTrace( traceSchFieldRendering, "  GetRef returned: '%s'", retv );
                 }
                 else if( !aVariantName.IsEmpty() )
                 {

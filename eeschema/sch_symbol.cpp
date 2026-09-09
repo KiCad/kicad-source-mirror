@@ -1579,10 +1579,14 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     wxString  ref;
     wxString  subRef;
 
-    wxLogTrace( traceSchSymbolRef, "GetRef for symbol %s on path %s (sheet path has %zu sheets)",
-                m_Uuid.AsString(), path.AsString(), sheet->size() );
+    const bool traceEnabled = wxLog::IsAllowedTraceMask( traceSchSymbolRef );
 
-    wxLogTrace( traceSchSymbolRef, "  Symbol has %zu instance references", m_instances.size() );
+    if( traceEnabled )
+    {
+        wxLogTrace( traceSchSymbolRef, "GetRef for symbol %s on path %s (sheet path has %zu sheets)",
+                    m_Uuid.AsString(), path.AsString(), sheet->size() );
+        wxLogTrace( traceSchSymbolRef, "  Symbol has %zu instance references", m_instances.size() );
+    }
 
     if( auto it = m_instancePathIndex.find( path ); it != m_instancePathIndex.end() )
     {
@@ -1590,7 +1594,9 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
 
         ref = instance.m_Reference;
         subRef = SubReference( instance.m_Unit );
-        wxLogTrace( traceSchSymbolRef, "  MATCH FOUND: ref=%s", ref );
+
+        if( traceEnabled )
+            wxLogTrace( traceSchSymbolRef, "  MATCH FOUND: ref=%s", ref );
     }
 
     // If it was not found in m_Paths array, then see if it is in m_Field[REFERENCE] -- if so,
@@ -1600,19 +1606,24 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     if( ref.IsEmpty() && !GetField( FIELD_T::REFERENCE )->GetText().IsEmpty() )
     {
         ref = GetField( FIELD_T::REFERENCE )->GetText();
-        wxLogTrace( traceSchSymbolRef, "  Using fallback from REFERENCE field: %s", ref );
+
+        if( traceEnabled )
+            wxLogTrace( traceSchSymbolRef, "  Using fallback from REFERENCE field: %s", ref );
     }
 
     if( ref.IsEmpty() )
     {
         ref = UTIL::GetRefDesUnannotated( m_prefix );
-        wxLogTrace( traceSchSymbolRef, "  Using unannotated reference: %s", ref );
+
+        if( traceEnabled )
+            wxLogTrace( traceSchSymbolRef, "  Using unannotated reference: %s", ref );
     }
 
     if( aIncludeUnit && GetUnitCount() > 1 )
         ref += subRef;
 
-    wxLogTrace( traceSchSymbolRef, "  Final reference: %s", ref );
+    if( traceEnabled )
+        wxLogTrace( traceSchSymbolRef, "  Final reference: %s", ref );
 
     return ref;
 }
