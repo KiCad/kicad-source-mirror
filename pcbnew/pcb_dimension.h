@@ -261,14 +261,38 @@ public:
     void SetTextPositionMode( DIM_TEXT_POSITION aMode ) { m_textPosition = aMode; }
     DIM_TEXT_POSITION GetTextPositionMode() const { return m_textPosition; }
 
+    void ChangeTextPositionMode( DIM_TEXT_POSITION aMode )
+    {
+        SetTextPositionMode( aMode );
+        Update();
+    }
+
     int GetArrowLength() const { return m_arrowLength; }
     void SetArrowLength( int aLength ) { m_arrowLength = aLength; }
+
+    void ChangeArrowLength( int aLength )
+    {
+        SetArrowLength( aLength );
+        Update();
+    }
 
     void SetExtensionOffset( int aOffset ) { m_extensionOffset = aOffset; }
     int GetExtensionOffset() const { return m_extensionOffset; }
 
+    void ChangeExtensionOffset( int aOffset )
+    {
+        SetExtensionOffset( aOffset );
+        Update();
+    }
+
     int GetLineThickness() const        { return m_lineThickness; }
     void SetLineThickness( int aWidth ) { m_lineThickness = aWidth; }
+
+    void ChangeLineThickness( int aWidth )
+    {
+        SetLineThickness( aWidth );
+        Update();
+    }
 
     void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) override;
 

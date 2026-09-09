@@ -49,6 +49,8 @@ private:
     void onBoldToggle( wxCommandEvent &aEvent ) override;
     void onAlignButton( wxCommandEvent &aEvent ) override;
     void onThickness( wxCommandEvent &aEvent ) override;
+    void onAutoTextThickness( wxCommandEvent& aEvent ) override;
+    void onTextSize( wxCommandEvent& aEvent );
 
     void updateDimensionFromDialog( PCB_DIMENSION_BASE* aTarget );
 
