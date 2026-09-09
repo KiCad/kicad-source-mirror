@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-09 08:47+0000\n"
+"PO-Revision-Date: 2026-09-10 09:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -3625,7 +3625,7 @@ msgid ""
 "correctly, such as Excel. Can worsen compatibility in some cases."
 msgstr ""
 "Kann Kompatibilität mit älterer Software, die UTF-8 nicht korrekt "
-"importiert, verbessernm (beispielsweise Excel). Kann in manchen Fällen die "
+"importiert, verbessern (beispielsweise Excel). Kann in manchen Fällen die "
 "Kompatibilität beeinträchtigen."
 
 #: common/dialogs/dialog_fields_table_base.cpp:338
@@ -6947,7 +6947,7 @@ msgstr "Auf Pads einrasten:"
 
 #: common/dialogs/panel_snapping_base.cpp:68
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "Zeiger fangen wenn er sich in einen Pad-Bereich begibt"
+msgstr "Zeiger fangen, wenn er sich in einen Pad-Bereich begibt"
 
 #: common/dialogs/panel_snapping_base.cpp:72
 msgid "Snap to tracks and vias:"
@@ -6955,7 +6955,7 @@ msgstr "Auf Leiterbahnen und Vias einrasten:"
 
 #: common/dialogs/panel_snapping_base.cpp:79
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Zeiger fangen wenn er sich einer Leiterbahn nähert"
+msgstr "Zeiger fangen, wenn er sich einer Leiterbahn nähert"
 
 #: common/dialogs/panel_snapping_base.cpp:83
 msgid "Snap to graphics:"
@@ -6963,7 +6963,7 @@ msgstr "Auf Grafiken einrasten:"
 
 #: common/dialogs/panel_snapping_base.cpp:90
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr "Zeiger fangen wenn er sich einem Grafik-Kontrollpunkt nähert"
+msgstr "Zeiger fangen, wenn er sich einem Grafik-Kontrollpunkt nähert"
 
 #: common/dialogs/panel_snapping_base.cpp:97
 #, fuzzy
