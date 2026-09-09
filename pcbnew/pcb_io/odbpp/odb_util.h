@@ -348,18 +348,15 @@ public:
     ODB_DRILL_TOOLS( const wxString& aUnits, const wxString& aThickness = "0",
                      const wxString& aUserParams = wxEmptyString );
 
-    void AddDrillTools( const wxString& aType, const wxString& aFinishSize,
-                        const wxString& aType2 = wxT( "STANDARD" ) )
-    {
-        TOOLS tool;
-        tool.m_num = m_tools.size() + 1;
-        tool.m_type = aType;
-        tool.m_type2 = aType2;
-        tool.m_finishSize = aFinishSize;
-        tool.m_drillSize = aFinishSize;
-
-        m_tools.push_back( tool );
-    }
+    /**
+     * Record the drill bit used for a hole.
+     *
+     * @param aType is the ODB++ plating class of the hole (PLATED, NON_PLATED or VIA).
+     * @param aDiameter is the hole diameter in internal units.
+     * @param aType2 is the ODB++ drilling method (STANDARD, LASER, BLIND, ...).
+     */
+    void AddDrillTool( const wxString& aType, int aDiameter,
+                        const wxString& aType2 = wxT( "STANDARD" ) );
 
     void GenerateFile( std::ostream& aStream );
 
