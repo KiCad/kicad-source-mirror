@@ -55,8 +55,11 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxFileName& aFn )
     wxFileName pro( fn );
     pro.SetExt( FILEEXT::ProjectFileExtension );
 
+    // The plugin retains loaded root sheets for one schematic lifetime.
+    m_pi.reset( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
     // Schematic must be reset before a project is reloaded
-    m_schematic.release();
+    m_schematic.reset();
 
     m_manager.LoadProject( pro.GetFullPath() );
 

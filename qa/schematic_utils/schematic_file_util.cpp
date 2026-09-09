@@ -20,12 +20,16 @@
 #include <schematic_file_util.h>
 #include <qa_utils/wx_utils/unit_test_utils.h> // GetEeschemaTestDataDir()
 
+#include <stdexcept>
+#include <unordered_set>
+
 #include <settings/settings_manager.h>
 
 #include <connection_graph.h>
 #include <project.h>
 #include <schematic.h>
 #include <sch_screen.h>
+#include <sch_rule_area.h>
 
 // For SCH parsing
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
@@ -43,92 +47,21 @@ void DumpSchematicToFile( SCHEMATIC& aSchematic, SCH_SHEET& aSheet, const std::s
     io.SaveSchematicFile( aFilename, &aSheet, &aSchematic );
 }
 
-void LoadSheetSchematicContents( const std::string& fileName, SCH_SHEET* sheet )
-{
-    std::ifstream fileStream;
-    fileStream.open( fileName );
-    wxASSERT( fileStream.is_open() );
-    STDISTREAM_LINE_READER reader;
-    reader.SetStream( fileStream );
-    SCH_IO_KICAD_SEXPR_PARSER parser( &reader, nullptr, 0, sheet );
-    try
-    {
-        parser.ParseSchematic( sheet );
-    }
-    catch( const std::exception& e )
-    {
-        // Re-throw; Boost will report std::exception types normally.
-        throw;
-    }
-    catch( ... )
-    {
-        // Wrap unknown exception types so the test harness reports a useful message.
-        throw std::runtime_error( "LoadSheetSchematicContents: non-std exception during ParseSchematic" );
-    }
-}
-
-void LoadHierarchy( SCHEMATIC* schematic, SCH_SHEET* sheet, const std::string& sheetFilename,
-                    std::unordered_map<std::string, SCH_SCREEN*>& parsedScreens )
-{
-    SCH_SCREEN* screen = nullptr;
-
-    if( !sheet->GetScreen() )
-    {
-        // Construct paths
-        const wxFileName  fileName( sheetFilename );
-        const std::string filePath( fileName.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR ) );
-        const std::string fileBareName( fileName.GetFullName() );
-
-        // Check for existing screen
-        auto screenFound = parsedScreens.find( fileBareName );
-        if( screenFound != parsedScreens.end() )
-            screen = screenFound->second;
-
-        // Configure sheet with existing screen, or load screen
-        if( screen )
-        {
-            // Screen already loaded - assign to sheet
-            sheet->SetScreen( screen );
-            sheet->GetScreen()->SetParent( schematic );
-        }
-        else
-        {
-            // Load screen and assign to sheet
-            screen = new SCH_SCREEN( schematic );
-            parsedScreens.insert( { fileBareName, screen } );
-            sheet->SetScreen( screen );
-            sheet->GetScreen()->SetFileName( sheetFilename );
-            LoadSheetSchematicContents( sheetFilename, sheet );
-        }
-
-        // Recurse through child sheets
-        for( SCH_ITEM* item : sheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
-        {
-            SCH_SHEET* childSheet = static_cast<SCH_SHEET*>( item );
-            wxFileName childSheetFilename = childSheet->GetFileName();
-            if( !childSheetFilename.IsAbsolute() )
-                childSheetFilename.MakeAbsolute( filePath );
-            std::string childSheetFullFilename( childSheetFilename.GetFullPath() );
-            LoadHierarchy( schematic, childSheet, childSheetFullFilename, parsedScreens );
-        }
-    }
-}
-
 std::unique_ptr<SCHEMATIC> LoadHierarchyFromRoot( const std::string& rootFilename,
-                                                  PROJECT*           project )
+                                                  PROJECT* project )
 {
-    std::unique_ptr<SCHEMATIC>                   schematic( new SCHEMATIC( nullptr ) );
-    std::unordered_map<std::string, SCH_SCREEN*> parsedScreens;
-
-    schematic->SetProject( project );
+    auto schematic = std::make_unique<SCHEMATIC>( project );
     schematic->Reset();
     SCH_SHEET* defaultSheet = schematic->GetTopLevelSheet( 0 );
 
-    SCH_SHEET* rootSheet = new SCH_SHEET( schematic.get() );
-    LoadHierarchy( schematic.get(), rootSheet, rootFilename, parsedScreens );
+    SCH_IO_KICAD_SEXPR io;
+    SCH_SHEET* rootSheet = io.LoadSchematicFile( rootFilename, schematic.get() );
     schematic->AddTopLevelSheet( rootSheet );
     schematic->RemoveTopLevelSheet( defaultSheet );
     delete defaultSheet;
+
+    if( !io.GetError().IsEmpty() )
+        throw std::runtime_error( io.GetError().ToStdString( wxConvUTF8 ) );
 
     return schematic;
 }
@@ -240,6 +173,12 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
     // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
     // SchematicCleanUp must be freed from its UI dependencies.
 
+    std::unordered_set<SCH_SCREEN*> allScreens;
+
+    for( const SCH_SHEET_PATH& path : sheets )
+        allScreens.insert( path.LastScreen() );
+
+    SCH_RULE_AREA::UpdateRuleAreasInScreens( allScreens, nullptr );
     aSchematic->ConnectionGraph()->Recalculate( sheets, true );
 }
 
