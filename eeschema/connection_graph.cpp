@@ -83,6 +83,8 @@ static const wxChar ConnTrace[] = wxT( "CONN" );
 
 CONNECTION_GRAPH::~CONNECTION_GRAPH()
 {
+    // Item cleanup must stop calling into this graph before teardown starts.
+    m_lifetime.reset();
     // Ensure destruction happens in a translation unit that includes full SCH_NETCHAIN
     // definition to avoid incomplete type issues with std::unique_ptr<SCH_NETCHAIN>.
     Reset();
@@ -694,7 +696,10 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
                std::back_inserter( m_items ) );
 
     for( SCH_ITEM* item : aGraph.m_items )
+    {
         item->SetConnectionGraph( this );
+        item->registerConnectivityOwner( m_lifetime );
+    }
 
     std::copy( aGraph.m_subgraphs.begin(), aGraph.m_subgraphs.end(),
                std::back_inserter( m_subgraphs ) );
@@ -733,6 +738,7 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
     // to the item so a later removal could no longer find them.
     for( auto& [key, value] : aGraph.m_item_to_subgraph_map )
     {
+        key->registerConnectivityOwner( m_lifetime );
         std::vector<CONNECTION_SUBGRAPH*>& existing = m_item_to_subgraph_map[key];
 
         for( CONNECTION_SUBGRAPH* sg : value )
@@ -775,6 +781,7 @@ void CONNECTION_GRAPH::ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem )
 
         m_item_to_subgraph_map.erase( it );
         m_item_to_subgraph_map.emplace( aNew, std::move( sgs ) );
+        aNew->registerConnectivityOwner( m_lifetime );
 
         for( auto it2 = m_items.begin(); it2 != m_items.end(); ++it2 )
         {
@@ -1693,6 +1700,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
 
                 connection->SetSubgraphCode( subgraph->m_code );
                 m_item_to_subgraph_map[item].push_back( subgraph );
+                item->registerConnectivityOwner( m_lifetime );
 
                 std::list<SCH_ITEM*> memberlist;
 
@@ -1725,6 +1733,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                     {
                         connected_conn->SetSubgraphCode( subgraph->m_code );
                         m_item_to_subgraph_map[connected_item].push_back( subgraph );
+                        connected_item->registerConnectivityOwner( m_lifetime );
                         subgraph->AddItem( connected_item );
 
                         for( SCH_ITEM* citem : connected_item->ConnectedItems( sheet ) )

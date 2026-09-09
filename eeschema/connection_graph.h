@@ -369,6 +369,12 @@ namespace std
 /// Associate a #NET_CODE_NAME with all the subgraphs in that net.
 typedef std::unordered_map<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> NET_MAP;
 
+/// Lets indexed items detect graph destruction without traversing their schematic parents.
+struct CONNECTION_GRAPH_LIFETIME
+{
+    CONNECTION_GRAPH* graph;
+};
+
 
 /**
  * Calculate the connectivity of a schematic and generate netlists.
@@ -1037,6 +1043,10 @@ private:
     int m_last_subgraph_code;
 
     SCHEMATIC* m_schematic;     ///< The schematic this graph represents.
+
+    /// Retired before graph teardown so late item destruction cannot enter this graph.
+    std::shared_ptr<CONNECTION_GRAPH_LIFETIME> m_lifetime =
+            std::make_shared<CONNECTION_GRAPH_LIFETIME>( CONNECTION_GRAPH_LIFETIME{ this } );
 };
 
 #endif

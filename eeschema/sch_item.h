@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <memory>
 #include <optional>
 #include <unordered_map>
 #include <unordered_set>
@@ -36,6 +37,7 @@
 #include <plotters/plotter.h>
 
 class CONNECTION_GRAPH;
+struct CONNECTION_GRAPH_LIFETIME;
 class SCH_CONNECTION;
 class SCH_SHEET_PATH;
 class SCHEMATIC;
@@ -808,6 +810,13 @@ protected:
 
 private:
     friend class LIB_SYMBOL;
+    friend class CONNECTION_GRAPH;
+
+    /// Graph membership belongs to this item identity and must not propagate to clones.
+    void registerConnectivityOwner( const std::shared_ptr<CONNECTION_GRAPH_LIFETIME>& aOwner );
+
+    /// An item may be indexed by multiple graphs, each with an independent lifetime.
+    std::vector<std::weak_ptr<CONNECTION_GRAPH_LIFETIME>> m_connectivityOwners;
 };
 
 DECLARE_ENUM_TO_WXANY( SCH_LAYER_ID );

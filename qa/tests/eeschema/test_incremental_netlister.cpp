@@ -40,6 +40,67 @@ struct CONNECTIVITY_TEST_FIXTURE
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
 
+BOOST_FIXTURE_TEST_CASE( DestroyingAnotherSchematicPreservesPinCleanup, CONNECTIVITY_TEST_FIXTURE )
+{
+    KI_TEST::LoadSchematic( m_settingsManager, "issue7203", m_schematic );
+    auto* graph = m_schematic->ConnectionGraph();
+    graph->Recalculate( m_schematic->Hierarchy(), true );
+    SCH_SCREEN* screen = m_schematic->Hierarchy().front().LastScreen();
+    auto symbols = screen->Items().OfType( SCH_SYMBOL_T );
+    BOOST_REQUIRE( symbols.begin() != symbols.end() );
+    auto* symbol = static_cast<SCH_SYMBOL*>( *symbols.begin() );
+    std::vector<SCH_PIN*> pins = symbol->GetPins();
+    BOOST_REQUIRE( !pins.empty() );
+    BOOST_REQUIRE( graph->GetSubgraphForItem( pins.front() ) );
+
+    {
+        SCHEMATIC other( nullptr );
+    }
+
+    screen->Remove( symbol );
+    delete symbol;
+
+    for( SCH_PIN* pin : pins )
+        BOOST_CHECK( !graph->GetSubgraphForItem( pin ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PinCleanupHandlesMultipleGraphsAndExpiredOwners, CONNECTIVITY_TEST_FIXTURE )
+{
+    KI_TEST::LoadSchematic( m_settingsManager, "issue7203", m_schematic );
+    auto* mainGraph = m_schematic->ConnectionGraph();
+    const auto paths = m_schematic->Hierarchy();
+    mainGraph->Recalculate( paths, true );
+    auto expired = std::make_unique<CONNECTION_GRAPH>( m_schematic.get() );
+    expired->Recalculate( paths, true );
+    CONNECTION_GRAPH otherGraph( m_schematic.get() );
+    otherGraph.Recalculate( paths, true );
+    SCH_SCREEN* screen = paths.front().LastScreen();
+    auto symbols = screen->Items().OfType( SCH_SYMBOL_T );
+    BOOST_REQUIRE( symbols.begin() != symbols.end() );
+    auto* symbol = static_cast<SCH_SYMBOL*>( *symbols.begin() );
+    const auto pins = symbol->GetPins();
+    BOOST_REQUIRE( !pins.empty() );
+
+    for( SCH_PIN* pin : pins )
+    {
+        BOOST_REQUIRE( mainGraph->GetSubgraphForItem( pin ) );
+        BOOST_REQUIRE( otherGraph.GetSubgraphForItem( pin ) );
+    }
+
+    // ASAN detects stale owner access during symbol destruction below.
+    expired.reset();
+    screen->Remove( symbol );
+    delete symbol;
+
+    for( SCH_PIN* pin : pins )
+    {
+        BOOST_CHECK( !mainGraph->GetSubgraphForItem( pin ) );
+        BOOST_CHECK( !otherGraph.GetSubgraphForItem( pin ) );
+    }
+}
+
+
 BOOST_FIXTURE_TEST_CASE( RemoveAddItems, CONNECTIVITY_TEST_FIXTURE )
 {
     LOCALE_IO dummy;

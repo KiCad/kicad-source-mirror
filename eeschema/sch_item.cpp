@@ -91,22 +91,32 @@ SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
 
 SCH_ITEM::~SCH_ITEM()
 {
+    for( const auto& weakOwner : m_connectivityOwners )
+    {
+        if( const auto owner = weakOwner.lock() )
+            owner->graph->RemoveItem( this );
+    }
+
     for( const auto& it : m_connection_map )
         delete it.second;
 
     // Remove this item from any rule areas that contain it
     for( SCH_RULE_AREA* ruleArea : m_rule_areas_cache )
         ruleArea->RemoveItem( this );
+}
 
-    // Do not try to modify SCHEMATIC::ConnectionGraph()
-    // if the schematic does not exist
-    if( !SCHEMATIC::m_IsSchematicExists )
-        return;
 
-    SCHEMATIC* sch = Schematic();
+void SCH_ITEM::registerConnectivityOwner( const std::shared_ptr<CONNECTION_GRAPH_LIFETIME>& aOwner )
+{
+    std::erase_if( m_connectivityOwners, []( const auto& owner ) { return owner.expired(); } );
 
-    if( sch != nullptr )
-        sch->ConnectionGraph()->RemoveItem( this );
+    for( const auto& owner : m_connectivityOwners )
+    {
+        if( owner.lock() == aOwner )
+            return;
+    }
+
+    m_connectivityOwners.emplace_back( aOwner );
 }
 
 
