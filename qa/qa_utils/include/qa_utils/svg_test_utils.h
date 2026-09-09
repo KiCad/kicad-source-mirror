@@ -17,16 +17,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <vector>
+#include <tl/expected.hpp>
 
-#include "wx/string.h"
-
+#include <wx/string.h>
+#include <wx/xml/xml.h>
 
 namespace KI_TEST
 {
+struct SVG_VIEWBOX
+{
+    double m_X;
+    double m_Y;
+    double m_Width;
+    double m_Height;
+};
+
+
+tl::expected<wxXmlDocument, wxString> LoadSvg( const wxString& aSvg );
+
 /**
  * Parse the four numbers of the SVG viewBox attribute (min-x, min-y, width, height).
- * Returns an empty vector if the attribute is missing or cannot be parsed.
+ * Returns an error if the attribute is missing or cannot be parsed.
  */
-std::vector<double> ParseViewBox( const wxString& aSvg );
+tl::expected<SVG_VIEWBOX, wxString> ParseViewBox( const wxXmlNode& aRoot );
+
+/**
+ * Find the first <rect> element in the given XML node's descendants.
+ * Returns nullptr if no <rect> element is found.
+ */
+const wxXmlNode* FindFirstRect( const wxXmlNode& aNode );
+
 } // namespace KI_TEST

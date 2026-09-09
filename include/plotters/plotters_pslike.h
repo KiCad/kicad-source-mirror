@@ -739,6 +739,8 @@ public:
                            void*                  aData = nullptr ) override;
 
 protected:
+    virtual VECTOR2D userToDeviceCoordinates( const VECTOR2I& aCoordinate ) override;
+
     /**
      * Initialize m_pen_rgb_color from reduced values r, g ,b
      * ( reduced values are 0.0 to 1.0 )

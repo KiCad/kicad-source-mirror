@@ -19,58 +19,82 @@
 
 #include "qa_utils/svg_test_utils.h"
 
+#include <nanosvg.h>
+
 #include <wx/mstream.h>
 #include <wx/xml/xml.h>
 
 #include <fast_float/fast_float.h>
 
 
-std::vector<double> KI_TEST::ParseViewBox( const wxString& aSvg )
+tl::expected<wxXmlDocument, wxString> KI_TEST::LoadSvg( const wxString& aSvg )
 {
     const wxCharBuffer  utf8 = aSvg.ToUTF8();
     wxMemoryInputStream input( utf8.data(), utf8.length() );
     wxXmlDocument       doc;
 
     if( !doc.Load( input ) )
-        return {};
+        return tl::make_unexpected( wxString( wxS( "Failed to load SVG XML" ) ) );
 
-    const wxXmlNode* root = doc.GetRoot();
+    if( doc.GetRoot()->GetName() != wxT( "svg" ) )
+        return tl::make_unexpected( wxString( wxS( "Root element is not <svg>" ) ) );
 
-    if( !root || root->GetName() != wxT( "svg" ) )
-        return {};
+    return doc;
+}
+
+
+tl::expected<KI_TEST::SVG_VIEWBOX, wxString> KI_TEST::ParseViewBox( const wxXmlNode& aRoot )
+{
+    if( aRoot.GetName() != wxT( "svg" ) )
+        return tl::make_unexpected( wxS( "Root element is not <svg>" ) );
 
     wxString viewBox;
 
-    if( !root->GetAttribute( wxT( "viewBox" ), &viewBox ) )
-        return {};
+    if( !aRoot.GetAttribute( wxT( "viewBox" ), &viewBox ) )
+        return tl::make_unexpected( wxS( "Missing viewBox attribute" ) );
 
     // The viewBox is four whitespace-separated numbers: min-x, min-y, width, height.
-    const std::string   values = viewBox.ToStdString();
-    std::vector<double> parsed;
-    size_t              pos = 0;
+    const std::string values = viewBox.ToStdString();
+    SVG_VIEWBOX       parsed{};
+    double* const     valuesToParse[] = { &parsed.m_X, &parsed.m_Y, &parsed.m_Width, &parsed.m_Height };
+    size_t            pos = 0;
 
-    while( pos < values.size() )
+    for( double* value : valuesToParse )
     {
         while( pos < values.size() && ( values[pos] == ' ' || values[pos] == '\t' ) )
             pos++;
 
         if( pos >= values.size() )
-            break;
+            return tl::make_unexpected( wxS( "viewBox must contain four numbers" ) );
 
-        double val = 0.0;
-
-        const auto [ptr, ec] = fast_float::from_chars( values.data() + pos, values.data() + values.size(), val );
+        const auto [ptr, ec] = fast_float::from_chars( values.data() + pos, values.data() + values.size(), *value );
 
         if( ec != std::errc() )
-            return {};
+            return tl::make_unexpected( wxS( "Invalid viewBox number" ) );
 
-        parsed.push_back( val );
         pos = ptr - values.data();
     }
 
-    // We expect exactly four numbers. Anything else is a parse failure.
-    if( parsed.size() != 4 )
-        return {};
+    while( pos < values.size() && ( values[pos] == ' ' || values[pos] == '\t' ) )
+        pos++;
+
+    if( pos != values.size() )
+        return tl::make_unexpected( wxS( "viewBox must contain exactly four numbers" ) );
 
     return parsed;
+}
+
+
+const wxXmlNode* KI_TEST::FindFirstRect( const wxXmlNode& aNode )
+{
+    for( const wxXmlNode* child = aNode.GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() == wxT( "rect" ) )
+            return child;
+
+        if( const wxXmlNode* rect = FindFirstRect( *child ) )
+            return rect;
+    }
+
+    return nullptr;
 }

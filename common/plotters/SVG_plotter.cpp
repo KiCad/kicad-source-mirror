@@ -209,6 +209,22 @@ void SVG_PLOTTER::SetPlotBBox( const BOX2I& aBBoxIU )
 }
 
 
+VECTOR2D SVG_PLOTTER::userToDeviceCoordinates( const VECTOR2I& aCoordinate )
+{
+    VECTOR2D pos = PLOTTER::userToDeviceCoordinates( aCoordinate );
+
+    if( m_plotMirror )
+    {
+        if( m_mirrorIsHorizontal )
+            pos.x -= m_paperSize.x * m_iuPerDeviceUnit;
+        else
+            pos.y -= m_paperSize.y * m_iuPerDeviceUnit;
+    }
+
+    return pos;
+}
+
+
 void SVG_PLOTTER::setFillMode( FILL_T fill )
 {
     if( m_fillMode != fill )
@@ -780,24 +796,34 @@ bool SVG_PLOTTER::StartPlot( const wxString& aPageNumber )
     // transformed by the viewport, so the content keeps its origin at the SVG
     // origin even when it extends to negative coordinates. Otherwise the page
     // size is used and the origin is the viewbox (which is also the page) corner.
-    VECTOR2D origin( 0, 0 );
-    VECTOR2D size( m_paperSize.x * m_iuPerDeviceUnit, m_paperSize.y * m_iuPerDeviceUnit );
+    VECTOR2D viewBoxOrigin( 0, 0 );
+    VECTOR2D viewboxSize( m_paperSize.x * m_iuPerDeviceUnit, m_paperSize.y * m_iuPerDeviceUnit );
 
     if( m_plotBBoxIU )
     {
         double deviceScale = m_plotScale * m_iuPerDeviceUnit;
 
-        origin.x = ( m_plotBBoxIU->GetLeft() - m_plotOffset.x ) * deviceScale;
-        origin.y = ( m_plotBBoxIU->GetTop() - m_plotOffset.y ) * deviceScale;
-        size.x   = static_cast<double>( m_plotBBoxIU->GetWidth() ) * deviceScale;
-        size.y   = static_cast<double>( m_plotBBoxIU->GetHeight() ) * deviceScale;
+        viewBoxOrigin.x = ( m_plotBBoxIU->GetLeft() - m_plotOffset.x ) * deviceScale;
+        viewBoxOrigin.y = ( m_plotBBoxIU->GetTop() - m_plotOffset.y ) * deviceScale;
+        viewboxSize.x   = static_cast<double>( m_plotBBoxIU->GetWidth() ) * deviceScale;
+        viewboxSize.y   = static_cast<double>( m_plotBBoxIU->GetHeight() ) * deviceScale;
+    }
+
+    // When mirroring, the viewbox also needs to be mirrored, so that the same content is
+    // still visible in it.
+    if( m_plotMirror )
+    {
+        if( m_mirrorIsHorizontal )
+            viewBoxOrigin.x = -viewBoxOrigin.x - viewboxSize.x;
+        else
+            viewBoxOrigin.y = -viewBoxOrigin.y - viewboxSize.y;
     }
 
     fmt::print( m_outputFile,
                 "  width=\"{:.{}f}mm\" height=\"{:.{}f}mm\" viewBox=\"{:.{}f} {:.{}f} {:.{}f} {:.{}f}\">\n",
-                size.x, m_precision, size.y, m_precision,
-                origin.x, m_precision, origin.y, m_precision,
-                size.x, m_precision, size.y, m_precision );
+                viewboxSize.x, m_precision, viewboxSize.y, m_precision,
+                viewBoxOrigin.x, m_precision, viewBoxOrigin.y, m_precision,
+                viewboxSize.x, m_precision, viewboxSize.y, m_precision );
 
     // Write title
     wxString date = GetISO8601CurrentDateTime();

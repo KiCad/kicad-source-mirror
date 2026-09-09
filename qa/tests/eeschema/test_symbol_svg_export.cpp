@@ -22,6 +22,7 @@
  * Tests for symbol export to the SVG format
  */
 
+#include "tl/expected.hpp"
 #include <boost/test/unit_test.hpp>
 
 #include <wx/ffile.h>
@@ -38,6 +39,7 @@
 #include <settings/color_settings.h>
 
 #include <qa_utils/svg_test_utils.h>
+#include <wx/xml/xml.h>
 
 
 class SYMBOL_SVG_EXPORT_FIXTURE
@@ -271,6 +273,10 @@ BOOST_AUTO_TEST_CASE( SvgExport_ComplexSymbol )
  *
  * This is an important contract of the SVG export because it allows plotted symbols
  * to be placed into a parent document (e.g. for diffs) at a consistent position.
+ *
+ * Detailed tests of viewboxes relative to SVG content (as opposed to symbols) are in
+ * SvgExport, this test only checks that the PlotSymbolToSVG() function drives
+ * the plotter to produce a correct viewBox.
  */
 BOOST_AUTO_TEST_CASE( SvgExport_ViewBoxOrigin )
 {
@@ -279,22 +285,24 @@ BOOST_AUTO_TEST_CASE( SvgExport_ViewBoxOrigin )
 
     const wxString svg = PlotToSvgString();
 
-    const std::vector<double> viewBox = KI_TEST::ParseViewBox( svg );
+    tl::expected<wxXmlDocument, wxString> svgDoc = KI_TEST::LoadSvg( svg );
+    BOOST_REQUIRE( svgDoc.has_value() );
 
-    // We must be able to parse the viewBox attribute and get four numbers
-    BOOST_REQUIRE_EQUAL( viewBox.size(), 4u );
+    tl::expected<KI_TEST::SVG_VIEWBOX, wxString> viewBox = KI_TEST::ParseViewBox( *svgDoc->GetRoot() );
+
+    BOOST_REQUIRE( viewBox.has_value() );
 
     // The viewbox should be about 100 x 100 mils in size, plus some padding for stroke width.
     // The SVG export function doesn't promise a specific padding, so just make sure the viewBox
     // is larger than the rectangle and is offset appropriately.
 
     // The left and top edges of the viewport must be negative, not (0, 0).
-    BOOST_TEST( viewBox[0] < EDA_UNIT_UTILS::Mils2mm( -50 ) );
-    BOOST_TEST( viewBox[1] < EDA_UNIT_UTILS::Mils2mm( -50 ) );
+    BOOST_TEST( viewBox->m_X < EDA_UNIT_UTILS::Mils2mm( -50 ) );
+    BOOST_TEST( viewBox->m_Y < EDA_UNIT_UTILS::Mils2mm( -50 ) );
 
     // The viewport must still have a positive size
-    BOOST_TEST( viewBox[2] > EDA_UNIT_UTILS::Mils2mm( 100 ) );
-    BOOST_TEST( viewBox[3] > EDA_UNIT_UTILS::Mils2mm( 100 ) );
+    BOOST_TEST( viewBox->m_Width > EDA_UNIT_UTILS::Mils2mm( 100 ) );
+    BOOST_TEST( viewBox->m_Height > EDA_UNIT_UTILS::Mils2mm( 100 ) );
 }
 
 
