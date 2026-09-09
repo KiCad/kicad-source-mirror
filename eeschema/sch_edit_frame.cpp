@@ -3143,6 +3143,9 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
 
     if( m_schematic )
     {
+        ClearUndoRedoList();
+        ClearRepeatItemsList();
+        SetScreen( nullptr );
         m_schematic->SetProject( nullptr );
 
         // Detach before the outgoing schematic (and its tracker) is freed.

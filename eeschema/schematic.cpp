@@ -165,7 +165,7 @@ SCHEMATIC::~SCHEMATIC()
 
     delete m_currentSheet;
     delete m_connectionGraph;
-
+    delete m_rootSheet;
     m_IsSchematicExists = false;
 }
 
@@ -2404,7 +2404,7 @@ bool SCHEMATIC::RemoveTopLevelSheet( SCH_SHEET* aSheet )
     m_topLevelSheets.erase( it );
 
     if( m_rootSheet && m_rootSheet->GetScreen() )
-        m_rootSheet->GetScreen()->Items().remove( aSheet );
+        m_rootSheet->GetScreen()->Remove( aSheet, false );
 
     // If we're removing the current sheet, switch to another one
     if( !m_currentSheet->empty() && m_currentSheet->at( 0 ) == aSheet )

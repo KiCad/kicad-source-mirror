@@ -24,6 +24,9 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
 
+#include <lib_symbol.h>
+#include <sch_screen.h>
+#include <sch_symbol.h>
 #include <schematic.h>
 #include <bus_alias.h>
 #include <project.h>
@@ -114,5 +117,40 @@ BOOST_AUTO_TEST_CASE( BusAliasesKeepLastDefinitionAcrossReset )
     BOOST_CHECK( m_schematic->GetAllBusAliases().empty() );
     BOOST_CHECK( m_schematic->Project().GetProjectFile().m_BusAliases.empty() );
 }
+
+
+BOOST_AUTO_TEST_CASE( DestructionReleasesSharedHierarchySymbols )
+{
+    LoadSchematic( SchematicQAPath( "issue23840/BusAndVectors" ) );
+    const SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    BOOST_REQUIRE_EQUAL( sheets.size(), 3 );
+    std::set<SCH_SCREEN*> screens;
+
+    for( const SCH_SHEET_PATH& path : sheets )
+        screens.insert( path.LastScreen() );
+
+    BOOST_REQUIRE_EQUAL( screens.size(), 2 );
+    std::vector<std::weak_ptr<LIB_SYMBOL>> symbols;
+
+    for( SCH_SCREEN* screen : screens )
+    {
+        BOOST_REQUIRE( !screen->GetLibSymbols().empty() );
+        symbols.emplace_back( screen->GetLibSymbols().begin()->second->SharedPtr() );
+        auto items = screen->Items().OfType( SCH_SYMBOL_T );
+        BOOST_REQUIRE( items.begin() != items.end() );
+        const auto* symbol = static_cast<const SCH_SYMBOL*>( *items.begin() );
+        BOOST_REQUIRE( symbol->GetLibSymbolRef() );
+        symbols.emplace_back( symbol->GetLibSymbolRef()->SharedPtr() );
+    }
+
+    for( const std::weak_ptr<LIB_SYMBOL>& symbol : symbols )
+        BOOST_REQUIRE( !symbol.expired() );
+
+    m_schematic.reset();
+
+    for( const std::weak_ptr<LIB_SYMBOL>& symbol : symbols )
+        BOOST_CHECK( symbol.expired() );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
