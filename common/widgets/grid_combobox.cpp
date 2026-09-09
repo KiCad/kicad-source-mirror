@@ -46,6 +46,8 @@ void GRID_CELL_COMBOBOX_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wx
     arrowRect.x += textRect.width;
     arrowRect.width = arrowWidth;
 
+    aDC.DrawRectangle( arrowRect );     // needed at least on wxMSW to draw the background with current brush
+                                        // DrawDropArrow uses a transparent brush to draw the background
     wxRendererNative::Get().DrawDropArrow( &aGrid, aDC, arrowRect );
 }
 
