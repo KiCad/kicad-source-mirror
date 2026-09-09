@@ -2975,15 +2975,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             // Pushing the commit will update the connectivity.
             commit.Push( _( "Paste" ) );
 
-            if( sheetsPasted )
-            {
-                m_frame->UpdateHierarchyNavigator();
-                // UpdateHierarchyNavigator() will call RefreshNetNavigator()
-            }
-            else
-            {
+            if( !sheetsPasted )
                 m_frame->RefreshNetNavigator();
-            }
         }
         else
         {
