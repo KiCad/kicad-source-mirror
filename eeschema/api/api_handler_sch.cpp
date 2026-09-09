@@ -258,8 +258,7 @@ API_HANDLER_SCH::validateDocumentInternal( const DocumentSpecifier& aDocument ) 
     if( aDocument.type() != DocumentType::DOCTYPE_SCHEMATIC )
     {
         ApiResponseStatus e;
-        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( "the requested document is not a schematic" );
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
         return tl::unexpected( e );
     }
 
