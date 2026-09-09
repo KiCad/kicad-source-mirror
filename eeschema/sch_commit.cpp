@@ -480,7 +480,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 const SCH_SHEET* originalSheet = static_cast<const SCH_SHEET*>( itemCopy );
                 wxCHECK2( modifiedSheet && originalSheet, continue );
 
-                if( originalSheet->HasPageNumberChanges( *modifiedSheet ) )
+                if( originalSheet->HasHierarchyChanges( *modifiedSheet ) )
                     refreshHierarchy = true;
             }
 

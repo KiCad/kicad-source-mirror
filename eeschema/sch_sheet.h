@@ -586,6 +586,8 @@ public:
      */
     bool HasPageNumberChanges( const SCH_SHEET& aOther ) const;
 
+    bool HasHierarchyChanges( const SCH_SHEET& aOther ) const;
+
     /**
      * Compare page numbers of schematic sheets.
      *

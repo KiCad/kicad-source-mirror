@@ -404,17 +404,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                     wxCHECK2( origSheet && copySheet, continue );
 
-                    if( origSheet->GetName() != copySheet->GetName()
-                            || origSheet->GetFileName() != copySheet->GetFileName()
-                            || origSheet->HasPageNumberChanges( *copySheet ) )
+                    if( origSheet->HasHierarchyChanges( *copySheet ) )
                     {
                         rebuildHierarchyNavigator = true;
-                    }
-
-                    // Sheet name changes do not require rebuilding the hiearchy.
-                    if( origSheet->GetFileName() != copySheet->GetFileName()
-                            || origSheet->HasPageNumberChanges( *copySheet ) )
-                    {
                         refreshHierarchy = true;
                     }
 
@@ -619,5 +611,3 @@ void SCH_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCou
         }
     }
 }
-
-

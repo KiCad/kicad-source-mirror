@@ -1964,6 +1964,12 @@ void SCH_SHEET::setPageNumber( const KIID_PATH& aPath, const wxString& aPageNumb
 }
 
 
+bool SCH_SHEET::HasHierarchyChanges( const SCH_SHEET& aOther ) const
+{
+    return GetName() != aOther.GetName() || GetFileName() != aOther.GetFileName()
+           || GetScreen() != aOther.GetScreen() || HasPageNumberChanges( aOther );
+}
+
 bool SCH_SHEET::HasPageNumberChanges( const SCH_SHEET& aOther ) const
 {
     // Avoid self comparison.
