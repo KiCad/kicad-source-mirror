@@ -744,6 +744,11 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
+    static const std::vector<KICAD_T> voltageProbeTypes = {
+        SCH_ITEM_LOCATE_WIRE_T, SCH_JUNCTION_T, SCH_LABEL_T,
+        SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_SHEET_PIN_T
+    };
+
     PICKER_TOOL*     picker = m_toolMgr->GetTool<PICKER_TOOL>();
     KIWAY_PLAYER*    sim_player = m_frame->Kiway().Player( FRAME_SIMULATOR, false );
     SIMULATOR_FRAME* sim_Frame = static_cast<SIMULATOR_FRAME*>( sim_player );
@@ -837,11 +842,17 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         DisplayErrorMessage( m_frame, e.What() );
                     }
                 }
-                else if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } ) || item->IsType( { SCH_JUNCTION_T } ) )
+                else if( item->IsType( voltageProbeTypes ) )
                 {
-                    if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
+                    const SCH_ITEM* schItem = static_cast<const SCH_ITEM*>( item );
+
+                    if( schItem->HasBusConnection( &sheet ) )
+                        return true;
+
+                    if( const auto name = schItem->GetConnectionName( &sheet );
+                        name && !name->IsEmpty() )
                     {
-                        wxString spiceNet = UnescapeString( conn->Name() );
+                        wxString spiceNet = *name;
                         NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &spiceNet );
 
                         if( simFrame )
@@ -855,24 +866,22 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     picker->SetMotionHandler(
             [this]( const VECTOR2D& aPos )
             {
-                SCH_COLLECTOR collector;
-                collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-                collector.Collect( m_frame->GetScreen(), { SCH_ITEM_LOCATE_WIRE_T,
-                                                           SCH_PIN_T,
-                                                           SCH_SHEET_PIN_T }, aPos );
-
                 SCH_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-                selectionTool->GuessSelectionCandidates( collector, aPos );
+                EDA_ITEM* item = selectionTool->GetNode( aPos );
+                wxString connectionName;
 
-                EDA_ITEM* item = collector.GetCount() == 1 ? collector[0] : nullptr;
-                SCH_LINE* wire = dynamic_cast<SCH_LINE*>( item );
+                if( item && item->IsType( voltageProbeTypes ) )
+                {
+                    const SCH_ITEM* schItem = static_cast<const SCH_ITEM*>( item );
+                    const SCH_SHEET_PATH& sheet = m_frame->GetCurrentSheet();
+                    item = nullptr;
 
-                const SCH_CONNECTION* conn = nullptr;
-
-                if( wire )
+                    if( !schItem->HasBusConnection( &sheet ) )
+                        connectionName = schItem->GetConnectionName( &sheet ).value_or( wxString() );
+                }
+                else if( item && item->Type() != SCH_PIN_T )
                 {
                     item = nullptr;
-                    conn = wire->Connection();
                 }
 
                 if( item && item->Type() == SCH_PIN_T )
@@ -890,8 +899,6 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     if( m_pickerItem )
                         selectionTool->BrightenItem( m_pickerItem );
                 }
-
-                wxString connectionName = ( conn ) ? conn->Name() : wxString( wxS( "" ) );
 
                 if( m_frame->GetHighlightedConnection() != connectionName )
                 {
