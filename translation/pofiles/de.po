@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-09-09 08:51+0000\n"
+"PO-Revision-Date: 2026-09-10 09:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -44858,7 +44858,7 @@ msgstr "Auf Pads einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:338
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "Zeiger fangen wenn er sich in einen Pad-Bereich begibt"
+msgstr "Zeiger fangen, wenn er sich in einen Pad-Bereich begibt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 #: pcbnew/dialogs/panel_edit_options_base.cpp:356
@@ -44872,7 +44872,7 @@ msgstr "Auf Leiterbahnen und Vias einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:352
 #: pcbnew/dialogs/panel_edit_options_base.cpp:360
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Zeiger fangen wenn er sich einer Leiterbahn nähert"
+msgstr "Zeiger fangen, wenn er sich einer Leiterbahn nähert"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:364
 msgid "Snap to graphics:"
@@ -44881,7 +44881,7 @@ msgstr "Auf Grafiken einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:366
 #: pcbnew/dialogs/panel_edit_options_base.cpp:374
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr "Zeiger fangen wenn er sich einem Grafik-Kontrollpunkt nähert"
+msgstr "Zeiger fangen, wenn er sich einem Grafik-Kontrollpunkt nähert"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:394
 msgid "Always show selected ratsnest"
