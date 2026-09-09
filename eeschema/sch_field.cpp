@@ -1147,10 +1147,7 @@ void SCH_FIELD::SetText( const wxString& aText, const SCH_SHEET_PATH* aPath, con
     if( m_isGeneratedField )
         return;
 
-    wxString tmp = aText;
-
-    if( IsMandatory() )
-        tmp = aText.Strip( wxString::both ) ;
+    const wxString text = IsMandatory() ? aText.Strip( wxString::both ) : aText;
 
     switch( m_parent->Type() )
     {
@@ -1158,7 +1155,7 @@ void SCH_FIELD::SetText( const wxString& aText, const SCH_SHEET_PATH* aPath, con
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
         wxCHECK( symbol, /* void */ );
-        symbol->SetFieldText( GetName(), aText, aPath, aVariantName );
+        symbol->SetFieldText( GetName( false ), text, aPath, aVariantName );
         break;
     }
 
@@ -1166,12 +1163,12 @@ void SCH_FIELD::SetText( const wxString& aText, const SCH_SHEET_PATH* aPath, con
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
         wxCHECK( sheet, /* void */ );
-        sheet->SetFieldText( GetName(), aText, aPath, aVariantName );
+        sheet->SetFieldText( GetName( false ), text, aPath, aVariantName );
         break;
     }
 
     default:
-        SCH_FIELD::SetText( aText );
+        SCH_FIELD::SetText( text );
         break;
     }
 }
