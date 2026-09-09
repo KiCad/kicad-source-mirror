@@ -212,7 +212,11 @@ public:
     // Frees the memory allocated for the loaded footprints in #m_loaded_footprints.
     void ClearLoadedFootprints();
 
+    /// Internal units to the output units named by #m_unitsStr, for values written as data.
     static double      m_scale;
+
+    /// Internal units to thousandths of the output unit, the scale ODB++ symbol names use.
+    /// This is 1000x #m_scale, so writing a data value with it overstates the value 1000-fold.
     static double      m_symbolScale;
     static int         m_sigfig;
     static std::string m_unitsStr;

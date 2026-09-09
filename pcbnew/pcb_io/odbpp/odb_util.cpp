@@ -364,6 +364,33 @@ ODB_DRILL_TOOLS::ODB_DRILL_TOOLS( const wxString& aUnits, const wxString& aThick
 }
 
 
+void ODB_DRILL_TOOLS::AddDrillTool( const wxString& aType, int aDiameter,
+                                    const wxString& aType2 )
+{
+    // Tool sizes are in the file's own units, not the x1000 scale that symbol names use
+    wxString size = ODB::Data2String( aDiameter );
+
+    // NUM names a physical drill bit, so a size that recurs across holes reuses its tool
+    for( const TOOLS& existing : m_tools )
+    {
+        if( existing.m_type == aType && existing.m_type2 == aType2
+            && existing.m_drillSize == size )
+        {
+            return;
+        }
+    }
+
+    TOOLS tool;
+    tool.m_num = m_tools.size() + 1;
+    tool.m_type = aType;
+    tool.m_type2 = aType2;
+    tool.m_finishSize = size;
+    tool.m_drillSize = size;
+
+    m_tools.push_back( tool );
+}
+
+
 void ODB_DRILL_TOOLS::GenerateFile( std::ostream& aStream )
 {
     ODB_TEXT_WRITER twriter( aStream );
