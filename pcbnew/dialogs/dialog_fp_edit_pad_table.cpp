@@ -1522,6 +1522,7 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnAddRow( wxCommandEvent& aEvent )
                 {
                     PAD* last = m_rowPads.back();
                     newPad = std::make_unique<PAD>( *last );
+                    newPad->ResetUuidDirect();
                 }
                 else
                 {
