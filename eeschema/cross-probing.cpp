@@ -28,6 +28,9 @@
 #include <kiway.h>
 #include <kiway_mail.h>
 #include <connection_graph.h>
+#include <import_net_map.h>
+#include <import_proj_properties.h>
+#include <reporter.h>
 #include <sch_netchain.h>
 #include <sch_sheet.h>
 #include <sch_symbol.h>
@@ -719,8 +722,19 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         } while( true );
 
-        if( importFormat >= 0 )
-            importFile( fnameStr, importFormat, props.empty() ? nullptr : &props );
+        payload.clear();
+
+        if( importFormat >= 0 && importFile( fnameStr, importFormat, props.empty() ? nullptr : &props )
+            && importFormat == SCH_IO_MGR::SCH_ORCAD )
+        {
+            const IMPORT_NET_MAP*        map = Schematic().GetImportNetMap();
+            std::map<wxString, wxString> names;
+
+            if( map )
+                names = GetBoardNetNameMap( *map, LOAD_INFO_REPORTER::GetInstance() );
+
+            payload = TO_UTF8( IMPORT_PROJ_PROPS::JoinNetNameMap( names ) );
+        }
 
         break;
     }

@@ -38,6 +38,7 @@
 #include <footprint_import_reconciler.h>
 #include <footprint_library_adapter.h>
 #include <import_proj_properties.h>
+#include <import_net_names.h>
 #include <kiface_base.h>
 #include <macros.h>
 #include <trace_helpers.h>
@@ -723,6 +724,20 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             std::unique_ptr<BOARD> loaded =
                     BOARD_LOADER::Load( fullFileName, pluginType, &Prj(), loaderOptions );
+
+            if( loaded && props.count( IMPORT_PROJ_PROPS::NET_NAME_MAP ) )
+            {
+                std::optional<std::map<wxString, wxString>> netNames =
+                        IMPORT_PROJ_PROPS::SplitNetNameMap(
+                                props.at( IMPORT_PROJ_PROPS::NET_NAME_MAP ).wx_str() );
+
+                if( !netNames )
+                    THROW_IO_ERROR( _( "Invalid imported net-name map." ) );
+
+                if( !ApplyImportedNetNameMap( *loaded, *netNames, loadReporter ) )
+                    THROW_IO_ERROR( _( "Cannot apply imported net-name map to the board." ) );
+            }
+
             loadedBoard = loaded.release();
 
 #if USE_INSTRUMENTATION

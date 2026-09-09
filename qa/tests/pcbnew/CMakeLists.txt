@@ -96,6 +96,7 @@ set( QA_PCBNEW_SRCS
     test_pcb_differ.cpp
     test_diff_canvas_context.cpp
     test_pcb_merge_applier.cpp
+    test_import_net_names.cpp
     test_net_classes_diff_merge.cpp
     test_custom_drc_diff_merge.cpp
     test_lib_table_diff_merge.cpp

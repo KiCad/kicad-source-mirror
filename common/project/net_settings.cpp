@@ -919,6 +919,52 @@ bool NET_SETTINGS::RenameNetPathPrefix( const wxString& aOldPrefix, const wxStri
 }
 
 
+bool NET_SETTINGS::RenameNets( const std::map<wxString, wxString>& aNewNames )
+{
+    if( aNewNames.empty() )
+        return false;
+
+    bool changed = false;
+
+    // Only an exact-net pattern names one net; a wildcard may still match after the rename.
+    for( auto& [matcher, netclass] : m_netClassPatternAssignments )
+    {
+        auto rename = aNewNames.find( matcher->GetPattern() );
+
+        if( rename != aNewNames.end() && rename->second != rename->first )
+        {
+            matcher = std::make_unique<EDA_COMBINED_MATCHER>( rename->second, CTX_NETCLASS );
+            changed = true;
+        }
+    }
+
+    std::map<wxString, KIGFX::COLOR4D> updatedColors;
+
+    for( const auto& [netName, color] : m_netColorAssignments )
+    {
+        auto rename = aNewNames.find( netName );
+
+        if( rename != aNewNames.end() && rename->second != netName )
+        {
+            updatedColors[rename->second] = color;
+            changed = true;
+        }
+        else
+        {
+            updatedColors[netName] = color;
+        }
+    }
+
+    if( changed )
+    {
+        m_netColorAssignments = std::move( updatedColors );
+        ClearAllCaches();
+    }
+
+    return changed;
+}
+
+
 bool NET_SETTINGS::HasEffectiveNetClass( const wxString& aNetName ) const
 {
     return m_effectiveNetclassCache.count( aNetName ) > 0;

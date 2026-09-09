@@ -23,10 +23,24 @@
 #include <kiid.h>
 #include <wx/string.h>
 #include <cstdint>
-#include <optional>
+#include <iosfwd>
+#include <map>
 #include <vector>
 
 class REPORTER;
+
+/** How completely a source net survived conversion.  Only RESOLVED nets can be renamed on a board. */
+enum class IMPORT_NET_STATUS
+{
+    RESOLVED,    ///< exactly one physical net carries the source net
+    SPLIT,       ///< the source net reaches more than one physical net
+    BUS,         ///< the source net is carried by a bus
+    NO_CONNECT,  ///< the source marks the net as deliberately unconnected
+    UNCONNECTED  ///< the source net reaches no physical net
+};
+
+/// Name the status, so test diagnostics read as a status rather than an ordinal.
+std::ostream& operator<<( std::ostream& aStream, IMPORT_NET_STATUS aStatus );
 
 struct IMPORT_NET_TERMINAL
 {
@@ -35,7 +49,6 @@ struct IMPORT_NET_TERMINAL
     uint32_t sourcePinId = 0;
     wxString pinNumber;
     unsigned duplicateIndex = 0;
-    std::optional<KIID> pinUuid;
 };
 
 struct IMPORT_NET_MAP_ENTRY
@@ -44,23 +57,32 @@ struct IMPORT_NET_MAP_ENTRY
     std::vector<wxString> occurrence;
     uint32_t sourceNetId = 0;
     wxString originalName;
+    wxString generatedName;
     wxString nameAtImport;
-    wxString status;
+    IMPORT_NET_STATUS status = IMPORT_NET_STATUS::UNCONNECTED;
     std::vector<IMPORT_NET_TERMINAL> terminals;
     std::vector<KIID> itemUuids;
 };
 
-/** Import provenance only. Connectivity must never depend on this data. */
+/**
+ * Import provenance, held only for the lifetime of the importing SCHEMATIC.
+ *
+ * Connectivity must never depend on this data, and it is never written to the project.  The
+ * schematic import hands the reduced name map to the board import in memory, so nothing is left
+ * beside the converted files.
+ */
 struct IMPORT_NET_MAP
 {
-    wxString sourceDesignDigest;
     std::vector<IMPORT_NET_MAP_ENTRY> entries;
 };
 
-wxString ImportNetMapPath( const wxString& aRootPath );
-bool WriteImportNetMap( const IMPORT_NET_MAP& aMap, const KIID& aRootUuid,
-                        const wxString& aRootPath, REPORTER& aReporter );
-std::optional<IMPORT_NET_MAP> ReadImportNetMap( const KIID& aRootUuid,
-                                              const wxString& aRootPath, REPORTER& aReporter );
+/**
+ * Reduce the map to the board net renames it justifies.
+ *
+ * Only a source net that one physical net carries can be renamed, and only where the source name
+ * was machine-generated, since that is the name the paired board also uses.  A generated name that
+ * resolved to more than one KiCad name is reported and omitted rather than guessed at.
+ */
+std::map<wxString, wxString> GetBoardNetNameMap( const IMPORT_NET_MAP& aMap, REPORTER& aReporter );
 
 #endif

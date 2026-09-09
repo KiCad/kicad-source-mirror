@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <import_net_names.h>
 #include <richio.h>
 #include <wx/crt.h>
 #include <wx/dir.h>
@@ -3469,6 +3470,9 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT;
     }
 
+    if( job->m_probeOnly )
+        return CLI::EXIT_CODES::SUCCESS;
+
     // Determine output path
     wxString outputPath = job->GetConfiguredOutputPath();
 
@@ -3519,6 +3523,18 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     } transientProjectGuard{ mgr, projectPtr, createdTransientProject };
 
     std::unique_ptr<BOARD> board;
+
+    struct BOARD_PROJECT_GUARD
+    {
+        std::unique_ptr<BOARD>& board;
+
+        ~BOARD_PROJECT_GUARD()
+        {
+            if( board )
+                board->ClearProject();
+        }
+    } boardProjectGuard{ board };
+
     wxString               formatName = PCB_IO_MGR::ShowType( fileType );
     std::vector<wxString>  warnings;
 
@@ -3626,6 +3642,13 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
             m_reporter->Report( _( "Failed to load board\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
+
+        // Constraints that land in the project need the project attached before they are read.
+        if( PCB_IO_MGR::ImportPopulatesProjectSettings( fileType ) )
+            board->SetProject( projectPtr );
+
+        if( !ApplyImportedNetNameMap( *board, job->m_netNameMap, *m_reporter ) )
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
         // Extract a project footprint library and re-link FPIDs, as the board editor's import
         // does; without it the saved board references a nickname no library table row resolves.

@@ -173,7 +173,11 @@ void CONNECTION_SUBGRAPH::ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem )
 }
 
 
-static auto stableDriverIdentity( SCH_ITEM* aDriver )
+using DRIVER_IDENTITY = std::tuple<KIID, wxString, int, VECTOR2I>;
+using SUBGRAPH_IDENTITY = std::pair<KIID_PATH, DRIVER_IDENTITY>;
+
+
+static DRIVER_IDENTITY stableDriverIdentity( SCH_ITEM* aDriver )
 {
     KIID owner = aDriver->m_Uuid;
     wxString number;
@@ -185,7 +189,7 @@ static auto stableDriverIdentity( SCH_ITEM* aDriver )
         number = pin->GetNumber();
     }
 
-    return std::tuple( owner, number, aDriver->GetUnit(), aDriver->GetPosition() );
+    return { owner, number, aDriver->GetUnit(), aDriver->GetPosition() };
 }
 
 
@@ -2123,7 +2127,7 @@ void CONNECTION_GRAPH::processSubGraphs()
     // Here we do all the local (sheet) processing of each subgraph, including assigning net
     // codes, merging subgraphs together that use label connections, etc.
 
-    std::map<wxString, std::vector<size_t>> weakConflicts;
+    std::unordered_map<wxString, std::vector<size_t>> weakConflicts;
 
     for( size_t i = 0; i < m_driver_subgraphs.size(); ++i )
     {
@@ -2132,17 +2136,13 @@ void CONNECTION_GRAPH::processSubGraphs()
 
         if( !subgraph->m_absorbed && !subgraph->m_strong_driver && connection->IsNet() )
         {
-            auto peers = m_net_name_to_subgraphs_map.find( connection->Name() );
+            const wxString name = connection->Name();
+            auto peers = m_net_name_to_subgraphs_map.find( name );
 
             if( peers != m_net_name_to_subgraphs_map.end() && peers->second.size() > 1 )
-                weakConflicts[connection->Name()].push_back( i );
+                weakConflicts[name].push_back( i );
         }
     }
-
-    auto driverIdentity = []( const CONNECTION_SUBGRAPH* subgraph )
-    {
-        return std::pair( subgraph->m_sheet.Path(), stableDriverIdentity( subgraph->m_driver ) );
-    };
 
     // Spatial-index traversal changes after reload.  Only reorder competing weak drivers:
     // their processing order decides which physical net receives each numeric suffix.
@@ -2151,20 +2151,27 @@ void CONNECTION_GRAPH::processSubGraphs()
         if( positions.size() < 2 )
             continue;
 
-        std::vector<CONNECTION_SUBGRAPH*> ordered;
+        // Each identity allocates a sheet path and a pin number, so build them once per
+        // subgraph rather than twice per comparison.
+        std::vector<std::pair<SUBGRAPH_IDENTITY, CONNECTION_SUBGRAPH*>> ordered;
         ordered.reserve( positions.size() );
 
         for( size_t position : positions )
-            ordered.push_back( m_driver_subgraphs[position] );
+        {
+            CONNECTION_SUBGRAPH* subgraph = m_driver_subgraphs[position];
+            ordered.emplace_back( SUBGRAPH_IDENTITY{ subgraph->m_sheet.Path(),
+                                                     stableDriverIdentity( subgraph->m_driver ) },
+                                  subgraph );
+        }
 
         std::sort( ordered.begin(), ordered.end(),
-                   [&]( const CONNECTION_SUBGRAPH* left, const CONNECTION_SUBGRAPH* right )
+                   []( const auto& left, const auto& right )
                    {
-                       return driverIdentity( left ) < driverIdentity( right );
+                       return left.first < right.first;
                    } );
 
         for( size_t i = 0; i < positions.size(); ++i )
-            m_driver_subgraphs[positions[i]] = ordered[i];
+            m_driver_subgraphs[positions[i]] = ordered[i].second;
     }
 
     // Cache remaining valid subgraphs by sheet path

@@ -38,6 +38,7 @@
 #include <jobs/job_sym_export_svg.h>
 #include <jobs/job_sym_upgrade.h>
 #include <schematic.h>
+#include <import_net_map.h>
 #include <schematic_settings.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -1442,6 +1443,8 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
     if( !job )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
+    job->m_netNameMap.clear();
+
     if( !wxFile::Exists( job->m_inputFile ) )
     {
         m_reporter->Report( wxString::Format( _( "Input file not found: '%s'\n" ), job->m_inputFile ),
@@ -1669,7 +1672,9 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-    const bool netMapSaved = schematic->SaveImportNetMap( outputFn.GetFullPath(), *m_reporter );
+    // The board job renames its nets from this; nothing is written beside the schematic.
+    if( const IMPORT_NET_MAP* map = schematic->GetImportNetMap() )
+        job->m_netNameMap = GetBoardNetNameMap( *map, *m_reporter );
 
     m_reporter->Report( wxString::Format( _( "Successfully saved imported schematic to '%s'\n" ),
                                           outputFn.GetFullPath() ),
@@ -1737,14 +1742,7 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
             { wxS( "sheets" ), sheetCount }
         };
 
-        if( const IMPORT_NET_MAP* map = schematic->GetImportNetMap() )
-        {
-            reportData.m_statistics.emplace_back( wxS( "mapped_nets" ), map->entries.size() );
-            reportData.m_extraJson["net_map"] = {
-                { "file", ImportNetMapPath( outputFn.GetFullPath() ).ToStdString( wxConvUTF8 ) },
-                { "saved", netMapSaved }
-            };
-        }
+        reportData.m_statistics.emplace_back( wxS( "renamed_board_nets" ), job->m_netNameMap.size() );
 
         WriteImportReport( m_reporter, job->m_reportFormat, job->m_reportFile, reportData );
     }

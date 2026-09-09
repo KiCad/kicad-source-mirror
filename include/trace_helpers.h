@@ -415,6 +415,13 @@ extern KICOMMON_API const wxChar* const traceSymbolInheritance;
  */
 extern KICOMMON_API const wxChar* const traceSchNetChain;
 
+/**
+ * Flag to enable tracing of imported net-name reconciliation between a schematic and its board.
+ *
+ * Use "KICAD_IMPORT_NET_NAMES" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceImportNetNames;
+
 ///@}
 
 /**

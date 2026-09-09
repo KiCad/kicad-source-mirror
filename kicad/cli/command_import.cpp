@@ -145,25 +145,24 @@ int CLI::IMPORT_COMMAND::doPerform( KIWAY& aKiway )
     bool haveSch = false;
     int  retCode = EXIT_CODES::SUCCESS;
 
+    std::map<wxString, wxString> netNameMap;
+    wxString boardInput;
+
+    // Preserve board-first format detection, but defer loading until the schematic supplies its names.
     for( const wxString& input : inputFiles )
     {
-        // Classify by trial dispatch: a face that does not recognize the file returns the
-        // ERR_UNKNOWN_FILE_FORMAT sentinel before loading, so we fall through to the next face.
-        // Probe a face only while its slot is open so a duplicate input is rejected without
-        // overwriting an earlier output.
         if( !haveBoard )
         {
-            std::unique_ptr<JOB_PCB_IMPORT> pcbJob = std::make_unique<JOB_PCB_IMPORT>();
-            pcbJob->m_inputFile = input;
-            pcbJob->m_format = JOB_PCB_IMPORT::FORMAT::AUTO;
-            pcbJob->m_layerMap = layerMap;
-            pcbJob->SetConfiguredOutputPath( boardFn.GetFullPath() );
+            JOB_PCB_IMPORT probe;
+            probe.m_inputFile = input;
+            probe.m_probeOnly = true;
 
-            int pcbResult = aKiway.ProcessJob( KIWAY::FACE_PCB, pcbJob.get(), &reporter );
+            int pcbResult = aKiway.ProcessJob( KIWAY::FACE_PCB, &probe, &reporter );
 
             if( pcbResult == EXIT_CODES::SUCCESS )
             {
                 haveBoard = true;
+                boardInput = input;
                 continue;
             }
             else if( pcbResult != EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT )
@@ -175,16 +174,17 @@ int CLI::IMPORT_COMMAND::doPerform( KIWAY& aKiway )
 
         if( !haveSch )
         {
-            std::unique_ptr<JOB_SCH_IMPORT> schJob = std::make_unique<JOB_SCH_IMPORT>();
-            schJob->m_inputFile = input;
-            schJob->m_format = JOB_SCH_IMPORT::FORMAT::AUTO;
-            schJob->SetConfiguredOutputPath( schFn.GetFullPath() );
+            JOB_SCH_IMPORT schJob;
+            schJob.m_inputFile = input;
+            schJob.m_format = JOB_SCH_IMPORT::FORMAT::AUTO;
+            schJob.SetConfiguredOutputPath( schFn.GetFullPath() );
 
-            int schResult = aKiway.ProcessJob( KIWAY::FACE_SCH, schJob.get(), &reporter );
+            int schResult = aKiway.ProcessJob( KIWAY::FACE_SCH, &schJob, &reporter );
 
             if( schResult == EXIT_CODES::SUCCESS )
             {
                 haveSch = true;
+                netNameMap = std::move( schJob.m_netNameMap );
                 continue;
             }
             else if( schResult != EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT )
@@ -201,12 +201,22 @@ int CLI::IMPORT_COMMAND::doPerform( KIWAY& aKiway )
         }
         else
         {
-            wxFprintf( stderr, _( "No board or schematic importer recognizes the file: %s\n" ),
-                       input );
+            wxFprintf( stderr, _( "No board or schematic importer recognizes the file: %s\n" ), input );
         }
 
         retCode = EXIT_CODES::ERR_INVALID_INPUT_FILE;
         break;
+    }
+
+    if( retCode == EXIT_CODES::SUCCESS && haveBoard )
+    {
+        JOB_PCB_IMPORT pcbJob;
+        pcbJob.m_inputFile = boardInput;
+        pcbJob.m_format = JOB_PCB_IMPORT::FORMAT::AUTO;
+        pcbJob.m_layerMap = layerMap;
+        pcbJob.m_netNameMap = std::move( netNameMap );
+        pcbJob.SetConfiguredOutputPath( boardFn.GetFullPath() );
+        retCode = aKiway.ProcessJob( KIWAY::FACE_PCB, &pcbJob, &reporter );
     }
 
     if( retCode == EXIT_CODES::SUCCESS && !haveBoard && !haveSch )

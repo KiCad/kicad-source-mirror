@@ -36,6 +36,7 @@ class BOARD_ITEM;
 class BOARD_COMMIT;
 class MSG_PANEL_ITEM;
 class PCB_BASE_FRAME;
+class REPORTER;
 
 
 #define NO_NET _( "<no net>" )
@@ -253,6 +254,20 @@ public:
     const NETCODES_MAP& NetsByNetcode() const   { return m_netCodes; }
 
     void RebuildDisplayNetnames() const;
+
+    /**
+     * Rename nets in place, keeping the name lookup in sync.
+     *
+     * Net codes, item connectivity and net ownership are untouched, so renaming never moves
+     * copper between nets.  Source names that no net carries are ignored.  The whole batch is
+     * rejected, leaving every net unchanged, if a target name is empty, names the unconnected
+     * net, or collides with another net.
+     *
+     * @param aNewNames maps each existing net name to the name it should carry.
+     * @param aReporter receives the reason a rejected batch was rejected.
+     * @return true if the batch was applied.
+     */
+    bool RenameNets( const std::map<wxString, wxString>& aNewNames, REPORTER& aReporter );
 
     /// Constant that holds the "unconnected net" number (typically 0)
     /// all items "connected" to this net are actually not connected items

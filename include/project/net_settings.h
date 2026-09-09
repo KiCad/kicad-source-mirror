@@ -200,6 +200,11 @@ public:
     /// clears the caches if anything changed.
     bool RenameNetPathPrefix( const wxString& aOldPrefix, const wxString& aNewPrefix );
 
+    /// @brief Retarget exact-net netclass patterns and net colors after nets are renamed.
+    /// Rewrites any entry naming a key of aNewNames to the mapped name. Returns true and clears
+    /// the caches if anything changed.
+    bool RenameNets( const std::map<wxString, wxString>& aNewNames );
+
     /// @brief Assign a net chain to a named class (used by inNetChainClass() DRC scope).
     void SetNetChainClass( const wxString& aChain, const wxString& aClass )
     {

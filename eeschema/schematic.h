@@ -154,15 +154,7 @@ public:
         return m_importNetMap ? &*m_importNetMap : nullptr;
     }
 
-    void SetImportNetMap( IMPORT_NET_MAP aMap )
-    {
-        m_importNetMap = std::move( aMap );
-        m_pendingImportNetMapPath.clear();
-    }
-
-    bool SaveImportNetMap( const wxString& aRootPath, REPORTER& aReporter );
-    bool RetryImportNetMap( REPORTER& aReporter );
-    void LoadImportNetMap( const wxString& aRootPath, REPORTER& aReporter );
+    void SetImportNetMap( IMPORT_NET_MAP aMap ) { m_importNetMap = std::move( aMap ); }
 
     /// Return a reference to the project this schematic is part of
     PROJECT& Project() const { return *m_project; }
@@ -430,7 +422,7 @@ public:
      * connectivity after loading.
      * @param aOnSplit receives the retained wire and its new segment to preserve import provenance.
      */
-    int FixupJunctionsAfterImport( std::function<void( SCH_LINE*, SCH_LINE* )> aOnSplit = {} );
+    int FixupJunctionsAfterImport( const std::function<void( SCH_LINE*, SCH_LINE* )>& aOnSplit = {} );
 
     /**
      * Scan existing markers and record data from any that are Excluded.
@@ -696,7 +688,6 @@ private:
 
     PROJECT* m_project;
     std::optional<IMPORT_NET_MAP> m_importNetMap;
-    wxString m_pendingImportNetMapPath;
 
     /// Sentinel whose expiry signals to LOCAL_HISTORY that this schematic has been destroyed.
     std::shared_ptr<void> m_historyLifetime = std::make_shared<char>();

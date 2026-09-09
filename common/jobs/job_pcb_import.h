@@ -60,6 +60,9 @@ public:
     /// e.g. "F.Cu").  Source layers absent from the map keep the importer's automatic best-guess.
     /// An empty map means fully automatic layer mapping.
     std::map<wxString, wxString> m_layerMap;
+
+    std::map<wxString, wxString> m_netNameMap;
+    bool m_probeOnly = false;
 };
 
 #endif

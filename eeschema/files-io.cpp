@@ -398,9 +398,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 }
             }
 
-            if( schFileType == SCH_IO_MGR::SCH_KICAD )
-                newSchematic->LoadImportNetMap( newSchematic->RootScreen()->GetFileName(), loadReporter );
-
             if( !pi->GetError().IsEmpty() )
             {
                 DisplayErrorMessage( this, _( "The entire schematic could not be loaded.  Errors "
@@ -1278,13 +1275,6 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     }
     else if( !IsContentModified() )
     {
-        WX_STRING_REPORTER mapReporter;
-        const bool saved = Schematic().RetryImportNetMap( mapReporter );
-
-        if( !saved )
-            DisplayErrorMessage( this, _( "Imported net-name map could not be saved." ),
-                                 mapReporter.GetMessages() );
-
         return true;
     }
 
@@ -1367,7 +1357,6 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     screens.BuildClientSheetPathList();
 
     std::vector<wxString> savedSheetPaths;
-    wxString savedRootPath;
 
     for( size_t i = 0; i < screens.GetCount(); i++ )
     {
@@ -1421,27 +1410,13 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         bool savedThisSheet = saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath() );
 
         if( savedThisSheet )
-        {
             savedSheetPaths.push_back( tmpFn.GetFullPath() );
-
-            if( screen == Schematic().RootScreen() )
-                savedRootPath = tmpFn.GetFullPath();
-        }
 
         success &= savedThisSheet;
     }
 
     if( success )
     {
-        WX_STRING_REPORTER mapReporter;
-
-        if( !savedRootPath.IsEmpty() )
-            Schematic().SaveImportNetMap( savedRootPath, mapReporter );
-
-        if( !mapReporter.GetMessages().IsEmpty() )
-            DisplayErrorMessage( this, _( "Imported net-name map could not be saved." ),
-                                 mapReporter.GetMessages() );
-
         if( m_autoSaveTimer )
             m_autoSaveTimer->Stop();
 

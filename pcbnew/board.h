@@ -1113,6 +1113,12 @@ public:
         m_NetInfo.RemoveUnusedNets( aCommit );
     }
 
+    /// Rename nets without changing net codes or connectivity.  @see NETINFO_LIST::RenameNets.
+    bool RenameNets( const std::map<wxString, wxString>& aNewNames, REPORTER& aReporter )
+    {
+        return m_NetInfo.RenameNets( aNewNames, aReporter );
+    }
+
     /**
      * @return iterator to the first element of the NETINFO_ITEMs list.
      */

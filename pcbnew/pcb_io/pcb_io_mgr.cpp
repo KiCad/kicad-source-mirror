@@ -114,6 +114,19 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::EnumFromStr( const wxString& aType )
 }
 
 
+bool PCB_IO_MGR::ImportPopulatesProjectSettings( PCB_FILE_T aFileType )
+{
+    switch( aFileType )
+    {
+    case ALLEGRO:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+
 bool PCB_IO_MGR::ImportGeneratesProjectLibrary( PCB_FILE_T aFileType )
 {
     switch( aFileType )

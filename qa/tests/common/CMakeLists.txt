@@ -175,6 +175,7 @@ set( QA_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/kicad/project_template.cpp
 
     # Project file tests
+    test_import_proj_properties.cpp
     test_project_file.cpp
     test_settings_manager.cpp
     test_nested_settings.cpp

@@ -169,6 +169,10 @@ void IMPORT_PROJ_HELPER::doImport( const wxString& aFile, FRAME_T aFrameType, in
         std::string packet = ss.str();
         frame->Kiway().ExpressMail( aFrameType, MAIL_IMPORT_FILE, packet, m_frame );
 
+        if( aFrameType == FRAME_SCH && aImportedFileType == SCH_IO_MGR::SCH_ORCAD
+            && IMPORT_PROJ_PROPS::SplitNetNameMap( From_UTF8( packet ) ) )
+            m_properties[IMPORT_PROJ_PROPS::NET_NAME_MAP] = packet;
+
         if( !frame->IsShownOnScreen() )
             frame->Show( true );
 
@@ -696,8 +700,14 @@ static wxFileName findSiblingByExt( const wxFileName& aBase, const wxString& aEx
 
 void IMPORT_PROJ_HELPER::OrcadProjectHandler()
 {
+    m_properties.erase( IMPORT_PROJ_PROPS::NET_NAME_MAP );
+
     // Import selected OrCAD Capture schematic (.dsn) first
     ImportIndividualFile( SCHEMATIC_T, SCH_IO_MGR::SCH_ORCAD );
+
+    // Only a successful schematic import replies with a net-name map, even an empty one.
+    if( !m_properties.count( IMPORT_PROJ_PROPS::NET_NAME_MAP ) )
+        return;
 
     // OrCAD designs pair w/ Cadence Allegro board; offer import, defaulting to
     // sibling board (matched case-insensitively) next to schematic

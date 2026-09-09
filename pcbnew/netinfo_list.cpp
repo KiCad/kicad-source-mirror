@@ -28,7 +28,9 @@
 #include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
+#include <reporter.h>
 #include <string_utils.h>
+#include <trace_helpers.h>
 #include <zone.h>
 #include <unordered_map>
 
@@ -309,6 +311,74 @@ int NETINFO_LIST::getFreeNetCode()
     } while( m_netCodes.count( ++m_newNetCode ) != 0 );
 
     return m_newNetCode;
+}
+
+
+bool NETINFO_LIST::RenameNets( const std::map<wxString, wxString>& aNewNames, REPORTER& aReporter )
+{
+    if( aNewNames.empty() )
+        return true;
+
+    // Validate against a copy so a rejected batch leaves the live lookup untouched.
+    NETNAMES_MAP                                   finalNames = m_netNames;
+    std::vector<std::pair<NETINFO_ITEM*, wxString>> renames;
+    size_t                                         missing = 0;
+
+    for( const auto& [source, target] : aNewNames )
+    {
+        NETINFO_ITEM* net = GetNetItem( source );
+
+        if( !net )
+        {
+            // A caller may legitimately offer names for nets this board does not have, but a run
+            // where most names miss usually means the two sides qualify hierarchical names
+            // differently.
+            wxLogTrace( traceImportNetNames, wxS( "no net named '%s' to rename to '%s'" ), source,
+                        target );
+            ++missing;
+            continue;
+        }
+
+        if( net->GetNetCode() <= 0 || target.IsEmpty() )
+        {
+            aReporter.Report( wxString::Format( _( "Cannot rename net '%s' to '%s': net zero and empty "
+                                                   "names are reserved for unconnected items." ),
+                                                source, target ), RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        if( source == target )
+            continue;
+
+        renames.emplace_back( net, target );
+        finalNames.erase( source );
+    }
+
+    wxLogTrace( traceImportNetNames, wxS( "renaming %zu of %zu nets, %zu not on this board" ),
+                renames.size(), aNewNames.size(), missing );
+
+    if( renames.empty() )
+        return true;
+
+    for( const auto& [net, target] : renames )
+    {
+        if( !finalNames.emplace( target, net ).second )
+        {
+            aReporter.Report( wxString::Format( _( "Cannot rename net '%s' to '%s': another net would "
+                                                   "have the same name." ),
+                                                net->GetNetname(), target ), RPT_SEVERITY_ERROR );
+            return false;
+        }
+    }
+
+    // Removing and re-adding nets would disconnect copper and can reassign net codes.
+    for( const auto& [net, target] : renames )
+        net->SetNetname( target );
+
+    m_netNames.swap( finalNames );
+    m_DisplayNetnamesDirty = true;
+
+    return true;
 }
 
 

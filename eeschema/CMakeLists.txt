@@ -432,6 +432,7 @@ set( EESCHEMA_SRCS
     files-io.cpp
     generate_alias_info.cpp
     gfx_import_utils.cpp
+    import_net_map.cpp
     junction_helpers.cpp
     lib_fields_data_model.cpp
     lib_symbol.cpp
@@ -481,7 +482,6 @@ set( EESCHEMA_SRCS
     sch_textbox.cpp
     sch_validators.cpp
     sch_view.cpp
-    import_net_map.cpp
     schematic.cpp
     schematic_text_var_adapter.cpp
     schematic_settings.cpp

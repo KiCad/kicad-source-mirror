@@ -262,6 +262,12 @@ private:
                                               const PKG_KEY** aSourceUnit = nullptr );
     void finalizeNativePowerPackages();
 
+    /** Return the occurrence net id owning aName, which the table identifies by address. */
+    std::optional<uint32_t> occurrenceNetIdFor( const std::string* aName ) const;
+
+    /** Run the shared finalization sequence that ends every conversion entry point. */
+    void finishConversion();
+
     /** Key power symbols by net name because users can rename their ports. */
     std::string powerLibFor( const std::string& aSymbolName, const std::string& aNetName );
 
@@ -479,8 +485,6 @@ private:
     std::set<std::string>                                      m_currentConnectorInterfaceNetAliases;
     std::set<const ORCAD_PIN_INST*>                            m_currentImplicitPowerPins;
     std::map<std::string, std::map<std::string, std::string>> m_hierBusNamesByScreen;
-    std::map<std::string, std::string>                         m_occurrenceSuffixByScreen;
-    std::map<std::string, std::map<std::string, uint32_t>>     m_occurrenceNetIdsByScreen;
 
     struct NET_LABEL_INTENT
     {
@@ -505,6 +509,7 @@ private:
     std::map<SCH_SCREEN*, const ORCAD_RAW_PAGE*> m_sourcePages;
     std::map<std::pair<SCH_SCREEN*, uint32_t>, std::vector<SCH_ITEM*>> m_sourceNetItems;
     std::map<std::pair<SCH_SCREEN*, uint32_t>, std::set<std::string>> m_sourceNetNames;
+    std::map<std::pair<SCH_SCREEN*, uint32_t>, std::string> m_sourceGeneratedNetNames;
     struct SOURCE_PIN_IDENTITY
     {
         wxString number;

@@ -192,6 +192,13 @@ public:
     static bool ImportGeneratesProjectLibrary( PCB_FILE_T aFileType );
 
     /**
+     * Return true when importing \a aFileType writes netclasses, rules or other settings that
+     * belong to the project rather than to the board, so the board must be attached to a project
+     * before it is loaded.
+     */
+    static bool ImportPopulatesProjectSettings( PCB_FILE_T aFileType );
+
+    /**
      * Return a plugin type given a footprint library's libPath.
      */
     static PCB_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl = 0 );

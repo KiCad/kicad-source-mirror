@@ -154,29 +154,45 @@ Generated `N`-number names, including occurrence-qualified forms, do not become
 electrical naming labels. An explicit source wire alias with that spelling remains
 an explicit name. KiCad chooses the resulting dynamic or hierarchy-qualified name.
 
-Successful native saves write `<root-stem>.orcad-net-map.json` beside the actual
-root schematic. Schema version 1 records the source design digest and root UUID.
-Each entry records source view, occurrence path, source net ID, original spelling,
-`nameAtImport`, status, and imported item/terminal identities. Terminal identity
-uses symbol UUID, unit, pin number and duplicate index; source pin IDs retain the
-one-based placed-pin ordinal. Duplicate indices rank equal-number pins by library
-unit, body style, geometry, orientation, name, electrical type and source ordinal.
-Pin UUIDs are optional. Status distinguishes resolved, split, unconnected,
-no-connect and bus records; a split has no single resulting name. Bus records
-include their native bundle name and terminal membership. Scalar source members
-without local wires resolve through source bus IDs and native bus connections.
-An attached scalar connection takes precedence over a bus member's local identity
-after hierarchy propagation. Competing weak scalar drivers receive dynamic-name
-suffixes in stable physical-identity order so save/reload retains their assignment.
-Equal-name driver candidates also use persistent identity to break ties, including
-different units of a multiunit symbol connected to the same net.
+The importer records a net-name map in memory for the lifetime of the importing
+schematic. Nothing is written to the project. Each entry records source view,
+occurrence path, source net ID, original spelling, `nameAtImport`, status, and
+imported item/terminal identities. Terminal identity uses symbol UUID, unit, pin
+number and duplicate index; source pin IDs retain the one-based placed-pin ordinal.
+Duplicate indices rank equal-number pins by library unit, body style, geometry,
+orientation, name, electrical type and source ordinal. Status distinguishes
+resolved, split, unconnected, no-connect and bus records; a split has no single
+resulting name. Bus records include their native bundle name and terminal
+membership. Scalar source members without local wires resolve through source bus
+IDs and native bus connections. An attached scalar connection takes precedence over
+a bus member's local identity after hierarchy propagation. Competing weak scalar
+drivers receive dynamic-name suffixes in stable physical-identity order so
+save/reload retains their assignment. Equal-name driver candidates also use
+persistent identity to break ties, including different units of a multiunit symbol
+connected to the same net.
 
-The companion is provenance only: loading, deleting or editing it cannot change
-schematic connectivity. `nameAtImport` remains a snapshot after subsequent edits.
-Save As uses the new root stem. Writes are atomic and preserve an existing malformed
-or incompatible companion, reporting the failure without losing the schematic.
-An unchanged GUI Save retries a failed companion write. Import never writes a
-companion beside the source DSN.
+The map is provenance only: connectivity never depends on it. Only a resolved entry
+whose source name was machine-generated justifies renaming a board net, since that
+is the name the paired Allegro board also carries. The reduced source-to-KiCad name
+map is handed to the board import in memory, through the schematic editor's mail
+reply in the GUI and through the import job in the CLI. `nameAtImport` is a snapshot
+taken at import and is not updated by subsequent edits.
+
+Generated scalar entries also carry optional `generatedName`, the physical Capture
+net name including any occurrence suffix in Capture's uppercase physical spelling.
+Primary names in the serialized name
+table do not constitute explicit wire aliases. Names bound to source net IDs in
+the occurrence table also participate, even without a page-net table entry.
+Wireless generated names pad the
+instance ID to at least five digits before appending the zero-based pin index.
+Only unambiguous resolved generated names enter the board rename map.
+
+Cadence project import loads the schematic before the board in both the manager
+and CLI, regardless of CLI input order. The schematic supplies the map directly;
+project import does not read an existing companion to rename a board. Allegro nets
+are renamed before saving while retaining their net codes and connected objects.
+Exact netclass assignments follow the renamed nets. Name collisions abort board
+import before renaming; standalone board imports have no schematic name map.
 
 DSN import reads Library, Cache, local Packages, Views Directory, page-order,
 page, hierarchy, and CIS streams. The Views Directory supplies visible folders;

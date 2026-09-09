@@ -228,10 +228,6 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         screen->MigrateSimModels();
 
-    if( aFormat == SCH_IO_MGR::SCH_KICAD )
-        schematic->LoadImportNetMap( schematic->RootScreen()->GetFileName(),
-                                     LOAD_INFO_REPORTER::GetInstance() );
-
     schematic->LoadVariants();
 
     wxString projectName = project->GetProjectName();
