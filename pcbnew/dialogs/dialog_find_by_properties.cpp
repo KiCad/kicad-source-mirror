@@ -1048,7 +1048,7 @@ wxString DIALOG_FIND_BY_PROPERTIES::formatValueForExpression( PROPERTY_BASE* aPr
 }
 
 
-wxString DIALOG_FIND_BY_PROPERTIES::generateExpressionFromProperties()
+wxString DIALOG_FIND_BY_PROPERTIES::generateExpressionFromProperties( wxArrayString* aSkippedRows )
 {
     wxArrayString conditions;
 
@@ -1073,6 +1073,15 @@ wxString DIALOG_FIND_BY_PROPERTIES::generateExpressionFromProperties()
         }
 
         wxString value = formatValueForExpression( row.property, row.rawValue );
+
+        if( value.IsEmpty() )
+        {
+            if( aSkippedRows )
+                aSkippedRows->Add( wxGetTranslation( row.propertyName ) );
+
+            continue;
+        }
+
         wxString op = ( row.matchMode == PROPERTY_MATCH_MODE::MATCHING ) ? wxT( "==" ) : wxT( "!=" );
 
         conditions.Add( wxString::Format( wxT( "%s %s %s" ), lhs, op, value ) );
@@ -1094,12 +1103,20 @@ wxString DIALOG_FIND_BY_PROPERTIES::generateExpressionFromProperties()
 
 void DIALOG_FIND_BY_PROPERTIES::onCreateQueryClick( wxCommandEvent& event )
 {
-    wxString expr = generateExpressionFromProperties();
+    wxArrayString skipped;
+    wxString      expr = generateExpressionFromProperties( &skipped );
 
-    if( !expr.IsEmpty() )
+    if( !expr.IsEmpty() || !skipped.empty() )
     {
         m_queryEditor->SetText( expr );
         m_notebook->SetSelection( 1 );
+
+        if( skipped.empty() )
+            m_queryStatusLabel->SetLabel( wxEmptyString );
+        else if( skipped.size() == 1 )
+            m_queryStatusLabel->SetLabel( wxString::Format( _( "No value to match: %s" ), skipped[0] ) );
+        else
+            m_queryStatusLabel->SetLabel( wxString::Format( _( "%zu rows have no value to match" ), skipped.size() ) );
     }
 }
 

@@ -64,7 +64,7 @@ private:
     void                     selectMatchingFromProperties();
     void                     selectMatchingFromQuery();
     void                     applyMatchResults( EDA_ITEMS& aMatchList, wxStaticText* aStatusLabel );
-    wxString                 generateExpressionFromProperties();
+    wxString                 generateExpressionFromProperties( wxArrayString* aSkippedRows = nullptr );
     std::vector<BOARD_ITEM*> collectAllBoardItems();
     bool                     itemMatchesPropertyCriteria( BOARD_ITEM* aItem );
     void                     saveRecentQuery( const wxString& aQuery );
