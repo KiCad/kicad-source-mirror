@@ -705,6 +705,8 @@ void SCH_COMMIT::Revert()
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
+            item->ClearFlags( STRUCT_DELETED );
+
             if( view )
                 view->Add( item );
 
@@ -774,7 +776,6 @@ void SCH_COMMIT::Revert()
             if( view )
                 view->Add( item );
 
-            delete copy;
             break;
         }
 
@@ -782,6 +783,9 @@ void SCH_COMMIT::Revert()
             wxASSERT( false );
             break;
         }
+
+        delete copy;
+        ent.m_copy = nullptr;
     }
 
     if( schematic )

@@ -22,6 +22,7 @@
 #include <sch_commit.h>
 #include <sch_group.h>
 #include <sch_text.h>
+#include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_label.h>
 #include <schematic.h>
@@ -95,6 +96,36 @@ BOOST_AUTO_TEST_CASE( CommitCanDeferConnectivityUntilExplicitRebuild )
     const auto name = label->GetConnectionName( &path );
     BOOST_REQUIRE( name );
     BOOST_CHECK_EQUAL( *name, "/DEFERRED_CONNECTIVITY" );
+}
+
+BOOST_AUTO_TEST_CASE( RevertingCleanupRestoresMergedWireBeforeItsMove )
+{
+    SETTINGS_MANAGER settings;
+    std::unique_ptr<SCHEMATIC> schematic;
+    KI_TEST::LoadSchematic( settings, "issue12505", schematic );
+    SCH_SCREEN* screen = schematic->GetCurrentScreen();
+    auto* wire = dynamic_cast<SCH_LINE*>(
+            screen->GetConnectivityItem( KIID( "8d2c5f9b-5bc9-4d6f-9ddd-e2fce9531195" ) ) );
+    auto* other = dynamic_cast<SCH_LINE*>(
+            screen->GetConnectivityItem( KIID( "06af46a6-6f60-4f17-95ae-2a85a89f02a6" ) ) );
+    BOOST_REQUIRE( wire && other );
+    const VECTOR2I start = wire->GetStartPoint();
+    const VECTOR2I end = wire->GetEndPoint();
+    TOOL_MANAGER manager;
+    manager.SetEnvironment( schematic.get(), nullptr, nullptr, nullptr, nullptr );
+    SCH_COMMIT move( &manager );
+    move.Modify( wire, screen );
+    wire->Move( other->GetStartPoint() - start );
+    screen->Update( wire );
+    schematic->CleanUp( &move, screen );
+    BOOST_REQUIRE( !screen->CheckIfOnDrawList( wire ) );
+
+    move.Revert();
+    BOOST_CHECK( screen->CheckIfOnDrawList( wire ) );
+    BOOST_CHECK( wire->GetStartPoint() == start );
+    BOOST_CHECK( wire->GetEndPoint() == end );
+    BOOST_CHECK( !wire->HasFlag( STRUCT_DELETED ) );
+    BOOST_CHECK( screen->GetConnectivityItem( wire->m_Uuid ) == wire );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
