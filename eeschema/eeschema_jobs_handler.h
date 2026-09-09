@@ -92,7 +92,7 @@ public:
                              const wxString& aDrawingSheetOverride = wxEmptyString );
 
 private:
-    SCHEMATIC* getSchematic( const wxString& aPath );
+    SCHEMATIC* getSchematic( const wxString& aPath, bool aRequireRoot = true );
 
     int doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, SCH_RENDER_SETTINGS* aRenderSettings,
                         LIB_SYMBOL* symbol );
@@ -100,6 +100,7 @@ private:
     DS_PROXY_VIEW_ITEM* getDrawingSheetProxyView( SCHEMATIC* aSch );
 
     SCHEMATIC* m_cliSchematic;
+    bool       m_cliSchematicRootValidated = false;
 };
 
 #endif

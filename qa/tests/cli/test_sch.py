@@ -21,6 +21,7 @@
 import utils
 import cairosvg
 import re
+import shutil
 from pathlib import Path
 import pytest
 from typing import List
@@ -411,3 +412,37 @@ def test_sch_export_bom( kitest,
         assert expected in actual_headers, f"Expected header '{expected}' not found in BOM output. Got: {actual_headers}"
 
     kitest.add_attachment( output_filepath )
+
+
+@pytest.mark.parametrize( "trace", [False, True] )
+def test_sch_child_input_validation( kitest: KiTestFixture, tmp_path: Path, monkeypatch, trace ):
+    for variable in ("WXTRACE", "KICAD_ENABLE_WXTRACE", "KICAD_FORCE_CONSOLE_TRACE"):
+        monkeypatch.delenv( variable, raising=False )
+
+    if trace:
+        monkeypatch.setenv( "WXTRACE", "KICAD_SETTINGS" )
+        monkeypatch.setenv( "KICAD_ENABLE_WXTRACE", "1" )
+        monkeypatch.setenv( "KICAD_FORCE_CONSOLE_TRACE", "1" )
+
+    source = kitest.get_data_file_path( "eeschema/issue23840" )
+    project = tmp_path / "project-é-100%%"
+    shutil.copytree( source, project )
+    child = project / "LEDs.kicad_sch"
+    output = tmp_path / "child.net"
+
+    stdout, stderr, exitcode = utils.run_and_capture(
+        [utils.kicad_cli(), "sch", "export", "netlist", "-o", str(output), str(child)] )
+
+    assert exitcode != 0
+    diagnostic = f"Schematic '{child}' is a hierarchical subsheet; load its root schematic."
+    assert diagnostic in stderr
+
+    if trace:
+        assert stderr.index( "(KICAD_SETTINGS) " ) < stderr.index( diagnostic )
+
+    assert not output.exists()
+
+    stdout, stderr, exitcode = utils.run_and_capture(
+        [utils.kicad_cli(), "sch", "upgrade", str(child)] )
+
+    assert exitcode == 0

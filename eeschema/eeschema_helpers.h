@@ -27,6 +27,7 @@ class SCHEMATIC;
 class SCH_EDIT_FRAME;
 class SETTINGS_MANAGER;
 class PROJECT;
+class REPORTER;
 
 /**
  * Helper functions to do things like load schematics behind the scenes for special functions
@@ -38,15 +39,18 @@ class EESCHEMA_HELPERS
 {
 public:
     static void              SetSchEditFrame( SCH_EDIT_FRAME* aSchEditFrame );
+    // A root reporter requests strict root-input validation before loader recovery.
     static SCHEMATIC*        LoadSchematic( const wxString& aFileName, bool aSetActive,
                                             bool aForceDefaultProject,
                                             PROJECT* aProject = nullptr,
-                                            bool aCalculateConnectivity = true );
+                                            bool aCalculateConnectivity = true,
+                                            REPORTER* aRootReporter = nullptr );
     static SCHEMATIC*        LoadSchematic( const wxString& aFileName,
                                             SCH_IO_MGR::SCH_FILE_T aFormat,
                                             bool aSetActive, bool aForceDefaultProject,
                                             PROJECT* aProject = nullptr,
-                                            bool aCalculateConnectivity = true );
+                                            bool aCalculateConnectivity = true,
+                                            REPORTER* aRootReporter = nullptr );
 
 private:
     static SCH_EDIT_FRAME*   s_SchEditFrame;

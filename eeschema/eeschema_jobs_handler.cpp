@@ -203,10 +203,11 @@ void EESCHEMA_JOBS_HANDLER::ClearCachedSchematic()
 
     delete m_cliSchematic;
     m_cliSchematic = nullptr;
+    m_cliSchematicRootValidated = false;
 }
 
 
-SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
+SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath, bool aRequireRoot )
 {
     SCHEMATIC* sch = nullptr;
 
@@ -223,8 +224,15 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
             schPath = path.GetFullPath();
         }
 
+        if( m_cliSchematic && aRequireRoot && !m_cliSchematicRootValidated )
+            ClearCachedSchematic();
+
         if( !m_cliSchematic )
-            m_cliSchematic = EESCHEMA_HELPERS::LoadSchematic( schPath, true, false, &project );
+        {
+            m_cliSchematic = EESCHEMA_HELPERS::LoadSchematic(
+                    schPath, true, false, &project, true, aRequireRoot ? m_reporter : nullptr );
+            m_cliSchematicRootValidated = aRequireRoot;
+        }
 
         sch = m_cliSchematic;
     }
@@ -237,7 +245,8 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
     }
     else if( !aPath.IsEmpty() )
     {
-        sch = EESCHEMA_HELPERS::LoadSchematic( aPath, true, false );
+        sch = EESCHEMA_HELPERS::LoadSchematic(
+                aPath, true, false, nullptr, true, aRequireRoot ? m_reporter : nullptr );
     }
 
     if( !sch )
@@ -1411,7 +1420,7 @@ int EESCHEMA_JOBS_HANDLER::JobUpgrade( JOB* aJob )
     if( aUpgradeJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = getSchematic( aUpgradeJob->m_filename );
+    SCHEMATIC* sch = getSchematic( aUpgradeJob->m_filename, false );
 
     if( !sch )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;

@@ -217,6 +217,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_sheet.cpp
     test_issue24972_sheet_pin_constrain.cpp
     test_sch_sheet_path.cpp
+    test_schematic_root_input.cpp
     test_sch_sheet_list.cpp
     test_sch_symbol.cpp
     test_sch_table.cpp

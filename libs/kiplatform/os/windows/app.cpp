@@ -34,6 +34,7 @@
 #include <versionhelpers.h>
 #include <iostream>
 #include <cstdio>
+#include <io.h>
 
 #if defined( _MSC_VER )
 #include <werapi.h>     // issues on msys2
@@ -119,7 +120,9 @@ bool KIPLATFORM::APP::Init()
 #ifndef DEBUG
         wxLog::SetLogLevel( wxLOG_Trace );
 #endif
-        wxLog::SetActiveTarget( new wxLogStderr );
+        const int fd = _fileno( stderr );
+        wxLog::SetActiveTarget( fd >= 0 && !_isatty( fd ) ? new wxLogStderr( stderr, wxConvUTF8 )
+                                                       : new wxLogStderr );
     }
 
     return true;

@@ -40,6 +40,7 @@
 #include <kiface_base.h>
 
 #include <wx/app.h>
+#include <reporter.h>
 
 
 SCH_EDIT_FRAME*   EESCHEMA_HELPERS::s_SchEditFrame = nullptr;
@@ -52,18 +53,19 @@ void EESCHEMA_HELPERS::SetSchEditFrame( SCH_EDIT_FRAME* aSchEditFrame )
 
 
 SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName, bool aSetActive,
-                                            bool aForceDefaultProject, PROJECT* aProject, bool aCalculateConnectivity )
+                                            bool aForceDefaultProject, PROJECT* aProject,
+                                            bool aCalculateConnectivity, REPORTER* aRootReporter )
 {
     if( aFileName.EndsWith( FILEEXT::KiCadSchematicFileExtension ) )
         return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD, aSetActive, aForceDefaultProject,
-                              aProject, aCalculateConnectivity );
+                              aProject, aCalculateConnectivity, aRootReporter );
     else if( aFileName.EndsWith( FILEEXT::LegacySchematicFileExtension ) )
         return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject,
-                              aProject, aCalculateConnectivity );
+                              aProject, aCalculateConnectivity, aRootReporter );
 
     // as fall back for any other kind use the legacy format
     return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject, aProject,
-                          aCalculateConnectivity );
+                          aCalculateConnectivity, aRootReporter );
 }
 
 
@@ -89,7 +91,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
                                             bool aSetActive,
                                             bool aForceDefaultProject,
                                             PROJECT* aProject,
-                                            bool aCalculateConnectivity )
+                                            bool aCalculateConnectivity, REPORTER* aRootReporter )
 {
     wxFileName pro = aFileName;
     pro.SetExt( FILEEXT::ProjectFileExtension );
@@ -145,6 +147,61 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
         const TOP_LEVEL_SHEET_INFO* namedSheet = findDeclaredTopLevelSheet( projectSheets,
                                                                            projectDir, schFile );
         std::vector<SCH_SHEET*> loadedSheets;
+        const auto loadSheet = [&]( const wxString& aPath, bool aDeclaredRoot )
+        {
+            SCH_SHEET* sheet = pi->LoadSchematicFile( aPath, schematic.get() );
+
+            if( !sheet || !aRootReporter || aFormat != SCH_IO_MGR::SCH_KICAD
+                || sheet->GetScreen()->GetFileFormatVersionAtLoad() < 20221110 )
+                return sheet;
+
+            const SCH_SCREEN& screen = *sheet->GetScreen();
+            wxString error;
+
+            if( !screen.GetSheetInstances().empty() )
+            {
+                error = wxString::Format( _( "Schematic '%s' has a malformed root sheet instance path." ), aPath );
+            }
+            else if( !sheet->HasRootInstance() && !aDeclaredRoot )
+            {
+                bool parentPlacement = false;
+                bool rootPlacement = false;
+                const auto inspectPlacements = [&]( const auto& instances )
+                {
+                    for( const auto& instance : instances )
+                    {
+                        parentPlacement |= instance.m_Path.size() > 1;
+                        rootPlacement |= instance.m_Path.size() == 1
+                                         && instance.m_Path.front() == screen.GetUuid();
+                    }
+                };
+
+                for( SCH_ITEM* item : screen.Items() )
+                {
+                    if( item->Type() == SCH_SYMBOL_T )
+                        inspectPlacements( static_cast<SCH_SYMBOL*>( item )->GetInstances() );
+                    else if( item->Type() == SCH_SHEET_T )
+                        inspectPlacements( static_cast<SCH_SHEET*>( item )->GetInstances() );
+                }
+
+                if( parentPlacement && !rootPlacement )
+                    error = wxString::Format(
+                            _( "Schematic '%s' is a hierarchical subsheet; load its root schematic." ), aPath );
+            }
+
+            if( !error.IsEmpty() )
+            {
+                delete sheet;
+
+                for( SCH_SHEET* loaded : loadedSheets )
+                    delete loaded;
+
+                aRootReporter->Report( error, RPT_SEVERITY_ERROR );
+                THROW_IO_ERROR( error );
+            }
+
+            return sheet;
+        };
 
         // Load every declared top-level sheet so headless callers plot what the GUI does
         // A missing named file still fails to load rather than falling back to its siblings
@@ -158,7 +215,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
                 if( !sheetFn.FileExists() )
                     continue;
 
-                SCH_SHEET* sheet = pi->LoadSchematicFile( sheetFn.GetFullPath(), schematic.get() );
+                SCH_SHEET* sheet = loadSheet( sheetFn.GetFullPath(), true );
 
                 if( !sheet )
                     continue;
@@ -180,7 +237,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
         }
         else
         {
-            SCH_SHEET* rootSheet = pi->LoadSchematicFile( schFile.GetFullPath(), schematic.get() );
+            SCH_SHEET* rootSheet = loadSheet( schFile.GetFullPath(), namedSheet != nullptr );
 
             if( !rootSheet )
             {
