@@ -569,7 +569,7 @@ public:
     /**
      * Retrieve the set of items connected to this item on the given sheet.
      */
-    const std::vector<SCH_ITEM*>& ConnectedItems( const SCH_SHEET_PATH& aPath );
+    const std::vector<SCH_ITEM*>& ConnectedItems( const SCH_SHEET_PATH& aPath ) const;
 
     /**
      * Add a connection link between this item and another.

@@ -586,9 +586,11 @@ void SCH_ITEM::ClearConnectedItems( const SCH_SHEET_PATH& aSheet )
 }
 
 
-const std::vector<SCH_ITEM*>& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
+const std::vector<SCH_ITEM*>& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet ) const
 {
-    return m_connected_items[ aSheet ];
+    static const std::vector<SCH_ITEM*> empty;
+    const auto it = m_connected_items.find( aSheet );
+    return it == m_connected_items.end() ? empty : it->second;
 }
 
 
