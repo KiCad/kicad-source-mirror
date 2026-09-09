@@ -22,6 +22,7 @@
 
 #include <eda_item.h>
 #include <embedded_files.h>
+#include <erc/erc_exclusion.h>
 #include <properties/property_mgr.h>
 #include <schematic_holder.h>
 #include <sch_rtree.h>
@@ -440,6 +441,10 @@ public:
      */
     void RecordERCExclusions();
 
+    size_t GetUnresolvedERCExclusionCount() const { return m_unresolvedErcExclusions.size(); }
+
+    void ClearUnresolvedERCExclusions( int aErrorCode = -1 );
+
     /**
      * Update markers to match recorded exclusions.
      */
@@ -758,6 +763,9 @@ private:
      * Cache of the entire schematic hierarchy sorted by sheet page number.
      */
     SCH_SHEET_LIST m_hierarchy;
+
+    /// Exclusions whose saved identity cannot currently be reconstructed as a marker.
+    std::vector<ERC_EXCLUSION> m_unresolvedErcExclusions;
 
     /**
      * Currently installed listeners.

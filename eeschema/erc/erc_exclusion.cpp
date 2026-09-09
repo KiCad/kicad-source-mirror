@@ -19,6 +19,12 @@
  */
 
 #include <json_common.h>
+#include <cstdlib>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <base_units.h>
+#include <erc/erc_item.h>
+#include <wx/arrstr.h>
 
 #include <erc/erc_exclusion.h>
 #include <sch_marker.h>
@@ -27,6 +33,25 @@
 #include <api/schematic/schematic_rules.pb.h>
 #include <google/protobuf/any.h>
 #include <google/protobuf/util/json_util.h>
+
+
+static void canonicalizeExclusion( kiapi::schematic::ErcExclusion& aMessage )
+{
+    if( !aMessage.has_marker() )
+        return;
+
+    // Display names can change without changing an exclusion's sheet identity.
+    auto& marker = *aMessage.mutable_marker();
+
+    if( marker.has_sheet_specific_path() )
+        marker.mutable_sheet_specific_path()->clear_path_human_readable();
+
+    if( marker.has_main_item_sheet_path() )
+        marker.mutable_main_item_sheet_path()->clear_path_human_readable();
+
+    if( marker.has_aux_item_sheet_path() )
+        marker.mutable_aux_item_sheet_path()->clear_path_human_readable();
+}
 
 
 struct ERC_EXCLUSION::IMPL
@@ -60,6 +85,7 @@ ERC_EXCLUSION ERC_EXCLUSION::FromMarker( const SCH_MARKER& aMarker )
 
     aMarker.Serialize( container );
     container.UnpackTo( ex.m_impl->message.mutable_marker() );
+    canonicalizeExclusion( ex.m_impl->message );
     ex.SetComment( aMarker.GetComment() );
 
     return ex;
@@ -70,6 +96,7 @@ ERC_EXCLUSION ERC_EXCLUSION::FromProto( const kiapi::schematic::ErcExclusion& aM
 {
     ERC_EXCLUSION ex;
     ex.m_impl->message.CopyFrom( aMessage );
+    canonicalizeExclusion( ex.m_impl->message );
     return ex;
 }
 
@@ -78,13 +105,60 @@ ERC_EXCLUSION ERC_EXCLUSION::FromLegacyStrings( const SCH_SHEET_LIST& aSheetList
                                                 const wxString& aComment )
 {
     ERC_EXCLUSION ex;
+    const wxArrayString props = wxSplit( aMarkerData, '|' );
 
-    if( SCH_MARKER* marker = SCH_MARKER::FromLegacyString( aSheetList, aMarkerData ) )
+    if( props.size() != 5 && props.size() != 8 )
+        return ex;
+
+    const auto item = ERC_ITEM::Create( props[0] );
+
+    if( !item )
+        return ex;
+
+    const auto code = static_cast<ERCE_T>( item->GetErrorCode() );
+    auto& marker = *ex.m_impl->message.mutable_marker();
+    marker.set_error_type( ToProtoEnum<ERCE_T, kiapi::schematic::ErcErrorType>( code ) );
+    const VECTOR2I position( static_cast<int>( std::strtol( props[1].c_str(), nullptr, 10 ) ),
+                             static_cast<int>( std::strtol( props[2].c_str(), nullptr, 10 ) ) );
+    kiapi::common::PackVector2( *marker.mutable_position(), position, schIUScale );
+
+    const KIID main( props[3] );
+
+    if( main != niluuid )
+        marker.add_items()->set_value( main.AsStdString() );
+
+    const bool childText = ( code == ERCE_GENERIC_WARNING || code == ERCE_GENERIC_ERROR
+                             || code == ERCE_UNRESOLVED_VARIABLE )
+                           && main != niluuid && !props[4].IsEmpty() && props[4] != niluuid.AsString();
+
+    if( childText )
     {
-        google::protobuf::Any container;
-        marker->Serialize( container );
-        container.UnpackTo( ex.m_impl->message.mutable_marker() );
-        delete marker;
+        marker.mutable_child()->set_text_value( props[4].ToUTF8() );
+
+        // Match the current child ID without discarding an unavailable instance's saved path.
+        std::unique_ptr<SCH_MARKER> resolved( SCH_MARKER::FromProto( marker, aSheetList ) );
+
+        if( resolved )
+            marker.add_items()->set_value( resolved->GetRCItem()->GetMainItemID().AsStdString() );
+    }
+    else if( !props[4].IsEmpty() )
+    {
+        const KIID auxiliary( props[4] );
+
+        if( auxiliary != niluuid )
+            marker.add_items()->set_value( auxiliary.AsStdString() );
+    }
+
+    if( props.size() == 8 )
+    {
+        if( !props[5].IsEmpty() )
+            kiapi::common::PackSheetPath( *marker.mutable_sheet_specific_path(), KIID_PATH( props[5] ) );
+
+        if( !props[6].IsEmpty() )
+            kiapi::common::PackSheetPath( *marker.mutable_main_item_sheet_path(), KIID_PATH( props[6] ) );
+
+        if( !props[7].IsEmpty() )
+            kiapi::common::PackSheetPath( *marker.mutable_aux_item_sheet_path(), KIID_PATH( props[7] ) );
     }
 
     ex.SetComment( aComment );
@@ -120,6 +194,7 @@ void to_json( nlohmann::json& aJson, const ERC_EXCLUSION& aEx )
 void from_json( const nlohmann::json& aJson, ERC_EXCLUSION& aEx )
 {
     std::ignore = google::protobuf::util::JsonStringToMessage( aJson.dump(), &aEx.m_impl->message ).ok();
+    canonicalizeExclusion( aEx.m_impl->message );
 }
 
 

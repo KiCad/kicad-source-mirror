@@ -19,6 +19,7 @@
 
 #include <text_eval/text_eval_environment.h>
 #include <advanced_config.h>
+#include <api/api_enums.h>
 #include <algorithm>
 #include <common.h>
 #include <inspectable_impl.h>
@@ -173,6 +174,7 @@ SCHEMATIC::~SCHEMATIC()
 void SCHEMATIC::Reset()
 {
     m_importNetMap.reset();
+    m_unresolvedErcExclusions.clear();
     delete m_rootSheet;
 
     m_rootSheet = nullptr;
@@ -210,6 +212,7 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
         project.m_SchematicSettings = nullptr;
     }
 
+    m_unresolvedErcExclusions.clear();
     m_project = aPrj;
 
     if( m_project )
@@ -706,16 +709,16 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
     SCH_SHEET_LIST sheetList = Hierarchy();
     ERC_SETTINGS&  settings = ErcSettings();
 
-    // Have to handle legacy exclusions here rather than as a settings migration
-    // because we need to pass the built sheet list after the schematic is fully loaded
+    settings.m_ErcExclusions.insert( m_unresolvedErcExclusions.begin(), m_unresolvedErcExclusions.end() );
+    m_unresolvedErcExclusions.clear();
+
+    // Child exclusions need the loaded hierarchy to recover nonpersistent item IDs.
     for( const auto& [markerData, comment] : settings.m_ErcExclusionsLegacy )
     {
-        if( SCH_MARKER* testMarker = SCH_MARKER::FromLegacyString( sheetList, markerData ) )
-        {
-            ERC_EXCLUSION exclusion = ERC_EXCLUSION::FromMarker( *testMarker );
-            exclusion.SetComment( comment );
-            delete testMarker;
+        ERC_EXCLUSION exclusion = ERC_EXCLUSION::FromLegacyStrings( sheetList, markerData, comment );
 
+        if( !exclusion.GetSortKey().empty() )
+        {
             // Legacy format can sometimes have the same exclusion multiple times,
             // without and with a comment.  If this happens, replace the existing one
             // if we can go from no comment to comment
@@ -759,6 +762,10 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
         {
             marker->SetExcluded( true, exclusion.GetComment() );
             newMarkers.push_back( marker );
+        }
+        else
+        {
+            m_unresolvedErcExclusions.push_back( exclusion );
         }
     }
 
@@ -1558,6 +1565,22 @@ void SCHEMATIC::RemoveAllListeners()
 }
 
 
+void SCHEMATIC::ClearUnresolvedERCExclusions( int aErrorCode )
+{
+    std::erase_if( m_unresolvedErcExclusions,
+            [&]( const ERC_EXCLUSION& exclusion )
+            {
+                if( aErrorCode >= 0
+                    && FromProtoEnum<ERCE_T, kiapi::schematic::ErcErrorType>(
+                               exclusion.ToProto().marker().error_type() ) != aErrorCode )
+                    return false;
+
+                ErcSettings().m_ErcExclusions.erase( exclusion );
+                return true;
+            } );
+}
+
+
 void SCHEMATIC::RecordERCExclusions()
 {
     // Use a sorted sheetList to reduce file churn
@@ -1565,6 +1588,7 @@ void SCHEMATIC::RecordERCExclusions()
     ERC_SETTINGS& ercSettings = ErcSettings();
 
     ercSettings.m_ErcExclusions.clear();
+    ercSettings.m_ErcExclusions.insert( m_unresolvedErcExclusions.begin(), m_unresolvedErcExclusions.end() );
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {

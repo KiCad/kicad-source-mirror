@@ -409,8 +409,8 @@ void DIALOG_ERC::OnDeleteOneClick( wxCommandEvent& aEvent )
 
 void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
 {
-    bool includeExclusions = false;
-    int  numExcluded = 0;
+    bool   includeExclusions = false;
+    size_t numExcluded = m_parent->Schematic().GetUnresolvedERCExclusionCount();
 
     if( m_markerProvider )
         numExcluded += m_markerProvider->GetCount( RPT_SEVERITY_EXCLUSION );
@@ -429,6 +429,9 @@ void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
         else if( ret == wxID_NO )
             includeExclusions = true;
     }
+
+    if( includeExclusions )
+        m_parent->Schematic().ClearUnresolvedERCExclusions();
 
     DeleteAllMarkers( includeExclusions );
     m_ercRun = false;
@@ -942,6 +945,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
         SCH_SCREENS ScreenList( m_parent->Schematic().Root() );
         ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
+        m_parent->Schematic().ClearUnresolvedERCExclusions( rcItem->GetErrorCode() );
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, getSeverities() );
