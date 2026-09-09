@@ -292,4 +292,90 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_SelectsLabelNameIndependentlyOfItemOrder
     }
 }
 
+BOOST_FIXTURE_TEST_CASE( RebuildSignals_DistinguishesSharedScreenInstances, SIGNALS_TEST_FIXTURE )
+{
+    LOCALE_IO locale;
+    KI_TEST::LoadSchematic( m_settingsManager, "net_chains_four_nets_labeled", m_schematic );
+    SCH_SHEET* original = m_schematic->GetTopLevelSheet();
+    auto copy = std::unique_ptr<SCH_SHEET>( static_cast<SCH_SHEET*>( original->Clone() ) );
+    const_cast<KIID&>( copy->m_Uuid ) = KIID();
+    copy->SetName( "Second" );
+    BOOST_REQUIRE( copy->GetScreen() == original->GetScreen() );
+    m_schematic->AddTopLevelSheet( copy.release() );
+    const SCH_SHEET_LIST sheets = m_schematic->Hierarchy();
+    BOOST_REQUIRE_EQUAL( sheets.size(), 2 );
+    auto& manager = m_schematic->NetChains();
+
+    m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+    const auto& chains = manager.GetPotentialNetChains();
+    BOOST_REQUIRE_EQUAL( chains.size(), 2 );
+    BOOST_CHECK_EQUAL( chains[0]->GetNets().size(), 4 );
+    BOOST_CHECK_EQUAL( chains[1]->GetNets().size(), 4 );
+
+    for( const auto& chain : chains )
+    {
+        BOOST_CHECK_EQUAL( chain->GetName(), wxString( "SIG" ) );
+        BOOST_CHECK_EQUAL( chain->GetSymbols().size(), 3u );
+        std::set<wxString> references;
+
+        for( SCH_SYMBOL* symbol : chain->GetSymbols() )
+            references.insert( symbol->GetRef( &sheets[0] ) );
+
+        const std::set<wxString> expected{ "R1", "R2", "R3" };
+        BOOST_CHECK( references == expected );
+    }
+
+    for( const wxString& net : chains[0]->GetNets() )
+        BOOST_CHECK( !chains[1]->GetNets().contains( net ) );
+
+    BOOST_REQUIRE( !chains[0]->GetSymbols().empty() );
+    auto* bridge = *chains[0]->GetSymbols().begin();
+    const auto pins = bridge->GetPins( &sheets[0] );
+    BOOST_REQUIRE_EQUAL( pins.size(), 2u );
+    auto* first = manager.FindPotentialNetChainBetweenPins( pins[0], sheets[0], pins[1], sheets[0] );
+    auto* second = manager.FindPotentialNetChainBetweenPins( pins[0], sheets[1], pins[1], sheets[1] );
+    BOOST_REQUIRE( first );
+    BOOST_REQUIRE( second );
+    BOOST_CHECK( first != second );
+
+    for( int endpoint : { 0, 1 } )
+    {
+        BOOST_CHECK( first->GetTerminalPath( endpoint ) == sheets[0].Path() );
+        BOOST_CHECK( second->GetTerminalPath( endpoint ) == sheets[1].Path() );
+    }
+
+    BOOST_CHECK( !manager.FindPotentialNetChainBetweenPins( pins[0], sheets[0], pins[1], sheets[1] ) );
+
+    auto* ambiguous = manager.CreateManualNetChain(
+            "AMBIGUOUS_INSTANCE", first->GetSymbols(), first->GetNets(),
+            first->GetTerminalPinA(), first->GetTerminalPinB(),
+            first->GetTerminalRef( 0 ), first->GetTerminalPinNum( 0 ),
+            first->GetTerminalRef( 1 ), first->GetTerminalPinNum( 1 ) );
+    BOOST_CHECK( !ambiguous );
+
+    if( ambiguous )
+        manager.DeleteCommittedNetChain( "AMBIGUOUS_INSTANCE" );
+
+    auto* firstCommitted = manager.CreateNetChainFromPotential( first, "FIRST_INSTANCE" );
+    auto* secondCommitted = manager.CreateNetChainFromPotential( second, "SECOND_INSTANCE" );
+    BOOST_REQUIRE( firstCommitted );
+    BOOST_REQUIRE( secondCommitted );
+    const auto firstNets = firstCommitted->GetNets();
+    const auto secondNets = secondCommitted->GetNets();
+    BOOST_CHECK( !manager.ReplaceNetChainTerminalPin(
+            { "FIRST_INSTANCE", 0, pins[0]->m_Uuid, sheets[1].Path() } ) );
+    BOOST_CHECK( firstCommitted->GetTerminalPath( 0 ) == sheets[0].Path() );
+    BOOST_REQUIRE( manager.ReplaceNetChainTerminalPin(
+            { "FIRST_INSTANCE", 0, pins[0]->m_Uuid, sheets[0].Path() } ) );
+    BOOST_REQUIRE( manager.ReplaceNetChainTerminalPin(
+            { "SECOND_INSTANCE", 0, pins[0]->m_Uuid, sheets[1].Path() } ) );
+    m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+    BOOST_CHECK( firstCommitted->GetTerminalPath( 0 ) == sheets[0].Path() );
+    BOOST_CHECK( secondCommitted->GetTerminalPath( 0 ) == sheets[1].Path() );
+    BOOST_CHECK( firstCommitted->GetNets() == firstNets );
+    BOOST_CHECK( secondCommitted->GetNets() == secondNets );
+    BOOST_REQUIRE( manager.DeleteCommittedNetChain( "FIRST_INSTANCE" ) );
+    BOOST_REQUIRE( manager.DeleteCommittedNetChain( "SECOND_INSTANCE" ) );
+}
+
 // EOF

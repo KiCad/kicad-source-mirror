@@ -27,7 +27,7 @@
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
-#include <connection_graph.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_edit_frame.h>
 #include <sch_field.h>
@@ -97,10 +97,9 @@ DIALOG_CREATE_NET_CHAIN::~DIALOG_CREATE_NET_CHAIN()
 {
     // Clear highlighting on whichever sheet we last touched.  The user may have navigated
     // away via row selection, and we don't want stale brightening to outlive the dialog.
-    SCH_SCREEN* screen = !m_lastHighlightedSheet.empty() ? m_lastHighlightedSheet.LastScreen()
-                                                         : ( m_frame ? m_frame->GetCurrentSheet().LastScreen()
-                                                                     : nullptr );
-    highlightChainNets( {}, screen );
+    if( m_frame )
+        highlightChainNets( {}, !m_lastHighlightedSheet.empty() ? m_lastHighlightedSheet
+                                                               : m_frame->GetCurrentSheet() );
 }
 
 
@@ -171,15 +170,9 @@ bool DIALOG_CREATE_NET_CHAIN::validateAndCreate()
         return false;
     }
 
-    CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
+    auto& chains = m_frame->Schematic().NetChains();
 
-    if( !graph )
-    {
-        wxMessageBox( _( "Connection graph not available." ), _( "Create Net Chain" ), wxOK | wxICON_ERROR, this );
-        return false;
-    }
-
-    if( graph->GetNetChainByName( name ) )
+    if( chains.GetNetChainByName( name ) )
     {
         wxMessageBox( wxString::Format( _( "A net chain named '%s' already exists." ), name ), _( "Create Net Chain" ),
                       wxOK | wxICON_ERROR, this );
@@ -190,7 +183,7 @@ bool DIALOG_CREATE_NET_CHAIN::validateAndCreate()
 
     if( prow.livePtr )
     {
-        SCH_NETCHAIN* committed = graph->CreateNetChainFromPotential( prow.livePtr, name );
+        SCH_NETCHAIN* committed = chains.CreateNetChainFromPotential( prow.livePtr, name );
 
         if( !committed )
         {
@@ -211,7 +204,7 @@ bool DIALOG_CREATE_NET_CHAIN::validateAndCreate()
         if( toItem && toItem->Type() == SCH_SYMBOL_T )
             symbols.insert( static_cast<SCH_SYMBOL*>( toItem ) );
 
-        SCH_NETCHAIN* committed = graph->CreateManualNetChain( name, symbols, prow.memberNets,
+        SCH_NETCHAIN* committed = chains.CreateManualNetChain( name, symbols, prow.memberNets,
                                                                prow.forceFromPinUuid,
                                                                prow.forceToPinUuid,
                                                                prow.forceFromRef, prow.forceFromPinNum,
@@ -261,9 +254,8 @@ void DIALOG_CREATE_NET_CHAIN::OnChainSelected( wxGridEvent& aEvent )
     }
     else
     {
-        SCH_SCREEN* screen = !m_lastHighlightedSheet.empty() ? m_lastHighlightedSheet.LastScreen()
-                                                              : m_frame->GetCurrentSheet().LastScreen();
-        highlightChainNets( {}, screen );
+        highlightChainNets( {}, !m_lastHighlightedSheet.empty() ? m_lastHighlightedSheet
+                                                               : m_frame->GetCurrentSheet() );
     }
 
     aEvent.Skip();
@@ -272,9 +264,6 @@ void DIALOG_CREATE_NET_CHAIN::OnChainSelected( wxGridEvent& aEvent )
 
 void DIALOG_CREATE_NET_CHAIN::OnRefreshClicked( wxCommandEvent& aEvent )
 {
-    if( !m_frame->Schematic().ConnectionGraph() )
-        return;
-
     // Clear any focus-hint filter so Refresh truly restores the full list.  Otherwise the
     // empty-state message ("Use Refresh to restore the full list.") would refresh and
     // immediately re-apply the same no-match filter.
@@ -294,10 +283,7 @@ void DIALOG_CREATE_NET_CHAIN::recalculateAndReload( bool aRunRecalculate )
     m_filteredIndices.clear();
 
     if( aRunRecalculate )
-    {
-        if( CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph() )
-            graph->Recalculate( m_frame->Schematic().BuildSheetListSortedByPageNumbers(), true );
-    }
+        m_frame->Schematic().RebuildConnectivity();
 
     loadPotentials();
     rebuildGrid();
@@ -354,10 +340,7 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
         return;
     }
 
-    CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
-
-    if( !graph )
-        return;
+    auto& chains = m_frame->Schematic().NetChains();
 
     // Find ALL unique chains between all pin pairs of the two components
     struct FOUND_CHAIN
@@ -378,7 +361,7 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
     {
         for( SCH_PIN* pinB : toPins )
         {
-            SCH_NETCHAIN* chain = graph->FindPotentialNetChainBetweenPins( pinA, pinB );
+            SCH_NETCHAIN* chain = chains.FindPotentialNetChainBetweenPins( pinA, fromSheet, pinB, toSheet );
 
             if( chain && !seenChains.count( chain ) )
             {
@@ -413,9 +396,11 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
 
             for( SCH_PIN* pin : fromPins )
             {
-                if( pin->Connection() && !pin->Connection()->Name().IsEmpty() )
+                const auto name = pin->GetConnectionName( &fromSheet );
+
+                if( name && !name->IsEmpty() )
                 {
-                    fromNets.insert( pin->Connection()->Name() );
+                    fromNets.insert( *name );
 
                     if( !fromTerminalPin )
                         fromTerminalPin = pin;
@@ -424,9 +409,11 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
 
             for( SCH_PIN* pin : toPins )
             {
-                if( pin->Connection() && !pin->Connection()->Name().IsEmpty() )
+                const auto name = pin->GetConnectionName( &toSheet );
+
+                if( name && !name->IsEmpty() )
                 {
-                    toNets.insert( pin->Connection()->Name() );
+                    toNets.insert( *name );
 
                     if( !toTerminalPin )
                         toTerminalPin = pin;
@@ -477,7 +464,7 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
     // Filter out chains that are already committed
     std::set<wxString> committedNames;
 
-    for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetCommittedNetChains() )
+    for( const std::unique_ptr<SCH_NETCHAIN>& chain : chains.GetCommittedNetChains() )
     {
         if( chain )
             committedNames.insert( chain->GetName() );
@@ -491,7 +478,7 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
 
         for( const wxString& net : fc.nets )
         {
-            if( SCH_NETCHAIN* existing = graph->GetNetChainForNet( net ) )
+            if( SCH_NETCHAIN* existing = chains.GetNetChainForNet( net ) )
             {
                 if( committedNames.count( existing->GetName() ) )
                 {
@@ -576,20 +563,17 @@ void DIALOG_CREATE_NET_CHAIN::loadPotentials()
 {
     m_rows.clear();
 
-    CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
-
-    if( !graph )
-        return;
+    auto& chains = m_frame->Schematic().NetChains();
 
     std::set<wxString> committedNames;
 
-    for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetCommittedNetChains() )
+    for( const std::unique_ptr<SCH_NETCHAIN>& chain : chains.GetCommittedNetChains() )
     {
         if( chain )
             committedNames.insert( chain->GetName() );
     }
 
-    for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetPotentialNetChains() )
+    for( const std::unique_ptr<SCH_NETCHAIN>& chain : chains.GetPotentialNetChains() )
     {
         if( !chain )
             continue;
@@ -599,7 +583,7 @@ void DIALOG_CREATE_NET_CHAIN::loadPotentials()
 
         for( const wxString& net : chain->GetNets() )
         {
-            if( SCH_NETCHAIN* existing = graph->GetNetChainForNet( net ) )
+            if( SCH_NETCHAIN* existing = chains.GetNetChainForNet( net ) )
             {
                 if( committedNames.count( existing->GetName() ) )
                 {
@@ -831,16 +815,18 @@ int DIALOG_CREATE_NET_CHAIN::selectedRow() const
 }
 
 
-BOX2I DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNets, SCH_SCREEN* aScreen )
+BOX2I DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNets,
+                                                  const SCH_SHEET_PATH& aPath )
 {
     BOX2I highlightedBBox;
+    SCH_SCREEN* screen = aPath.LastScreen();
 
-    if( !m_frame || !aScreen )
+    if( !m_frame || !screen )
         return highlightedBBox;
 
     // Only the current sheet's view can be live-updated; brightening flags on items belonging
     // to other screens still apply visually next time that sheet is shown.
-    bool onCurrentSheet = aScreen == m_frame->GetCurrentSheet().LastScreen();
+    bool onCurrentSheet = screen == m_frame->GetCurrentSheet().LastScreen();
     KIGFX::VIEW*           view = onCurrentSheet ? m_frame->GetCanvas()->GetView() : nullptr;
     std::vector<EDA_ITEM*> itemsToRedraw;
 
@@ -852,7 +838,7 @@ BOX2I DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNe
             highlightedBBox.Merge( aItem->GetBoundingBox() );
     };
 
-    for( SCH_ITEM* item : aScreen->Items() )
+    for( SCH_ITEM* item : screen->Items() )
     {
         if( !item || !item->IsConnectable() )
             continue;
@@ -864,19 +850,19 @@ BOX2I DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNe
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
             bool        anyPinHighlighted = false;
 
-            for( SCH_PIN* pin : symbol->GetPins() )
+            for( SCH_PIN* pin : symbol->GetPins( &aPath ) )
             {
-                SCH_CONNECTION* pinConn = pin->Connection();
+                const auto pinConn = pin->GetConnectionName( &aPath );
 
                 if( pinConn && !aNets.empty() )
                 {
-                    if( !pin->IsBrightened() && aNets.count( pinConn->Name() ) )
+                    if( !pin->IsBrightened() && aNets.count( *pinConn ) )
                     {
                         pin->SetBrightened();
                         redrawItem = symbol;
                         anyPinHighlighted = true;
                     }
-                    else if( pin->IsBrightened() && !aNets.count( pinConn->Name() ) )
+                    else if( pin->IsBrightened() && !aNets.count( *pinConn ) )
                     {
                         pin->ClearBrightened();
                         redrawItem = symbol;
@@ -898,17 +884,17 @@ BOX2I DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNe
         }
         else
         {
-            SCH_CONNECTION* itemConn = item->Connection();
+            const auto itemConn = item->GetConnectionName( &aPath );
 
             if( itemConn && !aNets.empty() )
             {
-                if( !item->IsBrightened() && aNets.count( itemConn->Name() ) )
+                if( !item->IsBrightened() && aNets.count( *itemConn ) )
                 {
                     item->SetBrightened();
                     redrawItem = item;
                     recordHighlight( item );
                 }
-                else if( item->IsBrightened() && !aNets.count( itemConn->Name() ) )
+                else if( item->IsBrightened() && !aNets.count( *itemConn ) )
                 {
                     item->ClearBrightened();
                     redrawItem = item;
@@ -997,9 +983,9 @@ const SCH_SHEET_PATH& DIALOG_CREATE_NET_CHAIN::findSheetForRow( POTENTIAL_ROW& a
             if( !item || !item->IsConnectable() )
                 continue;
 
-            if( SCH_CONNECTION* conn = item->Connection() )
+            if( const auto conn = item->GetConnectionName( &path ) )
             {
-                if( aRow.memberNets.count( conn->Name() ) )
+                if( aRow.memberNets.count( *conn ) )
                 {
                     aRow.cachedSheet = path;
                     return aRow.cachedSheet;
@@ -1024,7 +1010,7 @@ void DIALOG_CREATE_NET_CHAIN::navigateAndHighlightChain( POTENTIAL_ROW& aRow )
     // sheet 1's items lit when the user pages back.  Skip when the path is unchanged so we
     // don't double-walk the same screen.
     if( !m_lastHighlightedSheet.empty() && m_lastHighlightedSheet != targetPath )
-        highlightChainNets( {}, m_lastHighlightedSheet.LastScreen() );
+        highlightChainNets( {}, m_lastHighlightedSheet );
 
     if( targetPath != m_frame->GetCurrentSheet() )
     {
@@ -1033,8 +1019,7 @@ void DIALOG_CREATE_NET_CHAIN::navigateAndHighlightChain( POTENTIAL_ROW& aRow )
         m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &targetPath );
     }
 
-    SCH_SCREEN* screen = m_frame->GetCurrentSheet().LastScreen();
-    BOX2I       bbox = highlightChainNets( aRow.memberNets, screen );
+    BOX2I bbox = highlightChainNets( aRow.memberNets, m_frame->GetCurrentSheet() );
 
     if( bbox.GetWidth() > 0 || bbox.GetHeight() > 0 )
     {

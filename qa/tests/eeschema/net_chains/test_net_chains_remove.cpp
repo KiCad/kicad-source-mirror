@@ -23,7 +23,9 @@
 #include <schematic_utils/schematic_file_util.h>
 
 #include <connection_graph.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <schematic.h>
+#include <sch_netchain.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_symbol.h>
@@ -47,65 +49,40 @@ BOOST_FIXTURE_TEST_CASE( RemoveFromSignal_DisablesPropagationAndSplitsGroup, SIG
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    size_t fourCount = 0;
+    auto& manager = m_schematic->NetChains();
     SCH_NETCHAIN* four = nullptr;
-    for( const auto& sig : graph->GetPotentialNetChains() )
+
+    for( const auto& sig : manager.GetPotentialNetChains() )
     {
         if( sig && sig->GetNets().size() == 4 )
-        {
             four = sig.get();
-            fourCount++;
-        }
     }
 
-    BOOST_REQUIRE_MESSAGE( fourCount >= 1, "Expected initial 4-net signal present" );
+    BOOST_REQUIRE_MESSAGE( four, "Expected initial 4-net signal present" );
 
-    wxString firstNet = *four->GetNets().begin();
-    SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
+    SCH_NETCHAIN* chain = manager.CreateNetChainFromPotential( four, wxS( "REMOVE" ) );
+    BOOST_REQUIRE( chain );
 
-    auto effectiveNetNameForPin = [&]( SCH_PIN* aPin ) -> wxString {
-        if( CONNECTION_SUBGRAPH* sg = graph->GetSubgraphForItem( aPin ) )
-        {
-            wxString n = sg->GetNetName();
-            if( !n.IsEmpty() )
-                return n;
-        }
-        return aPin->GetDefaultNetName( m_schematic->CurrentSheet() );
-    };
+    const wxString net = *chain->GetNets().begin();
+    const auto     bridges = manager.GetBridgeSymbols( *chain, net );
 
-    int disabledCount = 0;
-    for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+    BOOST_REQUIRE_MESSAGE( !bridges.empty(), "No bridging symbol reported for a chain member" );
+    BOOST_CHECK( manager.GetBridgeSymbols( *chain, wxS( "NOT_A_MEMBER" ) ).empty() );
+
+    for( const auto& [symbol, screen] : bridges )
     {
-        SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
-        auto pins = sym->GetPins( &m_schematic->CurrentSheet() );
-        if( pins.size() != 2 )
-            continue;
-
-        wxString nameA = effectiveNetNameForPin( pins[0] );
-        wxString nameB = effectiveNetNameForPin( pins[1] );
-
-        if( ( nameA == firstNet && nameB != firstNet ) || ( nameB == firstNet && nameA != firstNet ) )
-        {
-            sym->SetPassthrough( false );
-            disabledCount++;
-        }
+        BOOST_CHECK( screen == m_schematic->CurrentSheet().LastScreen() );
+        BOOST_CHECK( chain->GetSymbols().contains( symbol ) );
+        symbol->SetPassthroughMode( SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK );
     }
-
-    BOOST_REQUIRE_MESSAGE( disabledCount > 0, "Test did not find any bridging 2-pin symbol to disable" );
 
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    bool stillHasFour = false;
-    for( const auto& sig : graph->GetPotentialNetChains() )
+    for( const auto& sig : manager.GetPotentialNetChains() )
     {
-        if( sig && sig->GetNets().size() == 4 )
-        {
-            stillHasFour = true;
-            break;
-        }
+        BOOST_CHECK_MESSAGE( sig->GetNets().size() < 4, "Expected removal to split the 4-net signal" );
+        BOOST_CHECK_MESSAGE( !sig->GetNets().contains( net ), "Removed net still bridged into a chain" );
     }
-
-    BOOST_CHECK_MESSAGE( !stillHasFour, "Expected removal to split the 4-net signal" );
 }
 
 // EOF

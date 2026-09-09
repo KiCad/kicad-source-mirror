@@ -26,6 +26,12 @@
 #include <schematic.h>
 #include <sch_netchain.h>
 #include <sch_sheet.h>
+#include <sch_screen.h>
+#include <sch_pin.h>
+#include <sch_symbol.h>
+#include <lib_symbol.h>
+#include <fstream>
+#include <wx/filename.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
 
@@ -154,63 +160,113 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RefreshPreservesOverridesOnCommittedChain,
 }
 
 
-// Regression for [H-2].  ReplaceNetChainTerminalPin writes into m_netChainTerminalOverrides,
-// and the legacy pass-4 restore loop reapplies that override to potential chains by name.
-// The new in-place refresh helpers on the committed-chain path used to copy the source
-// chain's terminal pins unconditionally, silently undoing the user's "Replace terminal pin"
-// action across an unconditional Recalculate.  The fix consults the override map first.
-BOOST_FIXTURE_TEST_CASE( NetChain_RefreshPreservesTerminalPinOverride,
-                         NETCHAIN_RECALC_REFRESH_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( NetChain_RefreshPreservesTerminalPinOverride, NETCHAIN_RECALC_REFRESH_FIXTURE )
 {
-    LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets" ), m_schematic );
+    LOCALE_IO locale;
+    KI_TEST::LoadSchematic( m_settingsManager, "net_chains_four_nets", m_schematic );
+    m_schematic->ConnectionGraph()->Recalculate( m_schematic->Hierarchy(), true );
+    auto& chains = m_schematic->NetChains();
+    const auto sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    BOOST_REQUIRE_EQUAL( sheets.size(), 1u );
+    const auto& path = sheets.front();
+    BOOST_REQUIRE( !chains.GetPotentialNetChains().empty() );
+    auto* chain = chains.CreateNetChainFromPotential( chains.GetPotentialNetChains().front().get(),
+                                                     "TERM_OVERRIDE" );
+    BOOST_REQUIRE( chain );
+    const KIID originalA = chain->GetTerminalPinA();
+    const KIID originalB = chain->GetTerminalPinB();
+    auto* original = dynamic_cast<SCH_PIN*>( m_schematic->ResolveItem( originalA, nullptr, true ) );
+    BOOST_REQUIRE( original );
+    const auto connection = original->GetConnectionName( &path );
+    BOOST_REQUIRE( connection );
+    SCH_PIN* replacement = nullptr;
 
-    CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
-    BOOST_REQUIRE( graph );
+    for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( item )->GetPins( &path ) )
+        {
+            const auto net = pin->GetConnectionName( &path );
 
-    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
-    graph->Recalculate( sheets, /*aUnconditional=*/true );
+            if( pin->m_Uuid != originalA && pin->m_Uuid != originalB
+                && net && *net == *connection )
+            {
+                replacement = pin;
+                break;
+            }
+        }
 
-    const auto& potentials = graph->GetPotentialNetChains();
-    BOOST_REQUIRE( !potentials.empty() );
+        if( replacement )
+            break;
+    }
 
-    SCH_NETCHAIN* potential = potentials.front().get();
-    BOOST_REQUIRE( potential );
+    BOOST_REQUIRE( replacement );
+    const KIID replacementId = replacement->m_Uuid;
+    wxString replacementRef = replacement->GetParentSymbol()->GetRef( &path );
+    const wxString replacementNumber = replacement->GetNumber();
+    BOOST_CHECK( !chains.ReplaceNetChainTerminalPin( { "TERM_OVERRIDE", 1, originalA, path.Path() } ) );
+    BOOST_REQUIRE( chains.ReplaceNetChainTerminalPin( { "TERM_OVERRIDE", 1, replacementId, path.Path() } ) );
+    BOOST_CHECK( chain->GetTerminalPinA() == originalA );
+    BOOST_CHECK( chain->GetTerminalPinB() == replacementId );
+    BOOST_REQUIRE( chains.ReplaceNetChainTerminalPin( { "TERM_OVERRIDE", 1, originalB, path.Path() } ) );
+    BOOST_REQUIRE( chains.ReplaceNetChainTerminalPin( { "TERM_OVERRIDE", 0, replacementId, path.Path() } ) );
+    BOOST_CHECK_EQUAL( chain->GetTerminalRef( 0 ), replacementRef );
+    BOOST_CHECK( chain->GetTerminalPath( 0 ) == path.Path() );
+    BOOST_CHECK( !chains.ReplaceNetChainTerminalPin( { "TERM_OVERRIDE", 2, originalA, path.Path() } ) );
 
-    SCH_NETCHAIN* committed = graph->CreateNetChainFromPotential( potential, wxT( "TERM_OVERRIDE" ) );
-    BOOST_REQUIRE( committed );
+    for( int pass = 0; pass < 2; ++pass )
+    {
+        m_schematic->ConnectionGraph()->Recalculate( m_schematic->Hierarchy(), true );
+        BOOST_CHECK( chains.GetNetChainByName( "TERM_OVERRIDE" ) == chain );
+        BOOST_CHECK( chain->GetTerminalPinA() == replacementId );
+        BOOST_CHECK( chain->GetTerminalPinB() == originalB );
+        BOOST_CHECK( chain->GetTerminalPath( 0 ) == path.Path() );
+        BOOST_CHECK_EQUAL( chain->GetTerminalRef( 0 ), replacementRef );
+        BOOST_CHECK_EQUAL( chain->GetTerminalPinNum( 0 ), replacementNumber );
+    }
 
-    const KIID originalPinA = committed->GetTerminalPinA();
-    const KIID originalPinB = committed->GetTerminalPinB();
-    BOOST_REQUIRE( originalPinA != niluuid );
-    BOOST_REQUIRE( originalPinB != niluuid );
+    auto* replacementSymbol = static_cast<SCH_SYMBOL*>( replacement->GetParentSymbol() );
+    auto library = replacementSymbol->GetLibSymbolRef()->Flatten();
+    replacementSymbol->SetLibSymbol( library.release() );
+    m_schematic->ConnectionGraph()->Recalculate( m_schematic->Hierarchy(), true );
+    BOOST_CHECK( chain->GetTerminalPinA() == replacementId );
+    BOOST_CHECK( chain->GetTerminalPath( 0 ) == path.Path() );
+    BOOST_CHECK_EQUAL( chain->GetTerminalRef( 0 ), replacementRef );
+    BOOST_CHECK_EQUAL( chain->GetNets().size(), 4u );
 
-    // Synthesize a fresh KIID and retarget the A endpoint as if the user had selected
-    // "Replace terminal pin" on a different schematic pin.  We don't need the new id to
-    // resolve to a real pin in the schematic; the override map only stores the raw KIIDs.
-    const KIID newPinA;
-    BOOST_REQUIRE( newPinA != originalPinA );
+    replacementRef = "R900";
+    static_cast<SCH_SYMBOL*>( replacement->GetParentSymbol() )->SetRef( &path, replacementRef );
+    m_schematic->ConnectionGraph()->Recalculate( m_schematic->Hierarchy(), true );
+    BOOST_CHECK( chains.GetNetChainByName( "TERM_OVERRIDE" ) == chain );
+    BOOST_CHECK( chain->GetTerminalPinA() == replacementId );
+    BOOST_CHECK_EQUAL( chain->GetTerminalRef( 0 ), replacementRef );
+    BOOST_CHECK_EQUAL( chain->GetTerminalPinNum( 0 ), replacementNumber );
 
-    graph->ReplaceNetChainTerminalPin( wxT( "TERM_OVERRIDE" ), originalPinA, newPinA );
+    replacementRef = "R901";
+    static_cast<SCH_SYMBOL*>( replacement->GetParentSymbol() )->SetRef( &path, replacementRef );
 
-    BOOST_REQUIRE_EQUAL( committed->GetTerminalPinA().AsString(), newPinA.AsString() );
-    BOOST_REQUIRE_EQUAL( committed->GetTerminalPinB().AsString(), originalPinB.AsString() );
+    const wxString file = wxFileName::CreateTempFileName( "netchain-terminal-" );
+    KI_TEST::DumpSchematicToFile( *m_schematic, *m_schematic->GetTopLevelSheet(), file.ToStdString() );
+    std::ifstream stream( file.ToStdString() );
+    BOOST_REQUIRE( stream.good() );
+    auto reloaded = KI_TEST::ReadSchematicFromStream( stream, &m_schematic->Project() );
+    BOOST_REQUIRE( reloaded );
+    reloaded->ConnectionGraph()->Recalculate( reloaded->Hierarchy(), true );
+    auto* restored = reloaded->NetChains().GetNetChainByName( "TERM_OVERRIDE" );
+    BOOST_REQUIRE( restored );
+    BOOST_CHECK( restored->GetTerminalPinA() == replacementId );
+    BOOST_CHECK( restored->GetTerminalPinB() == originalB );
+    BOOST_CHECK_EQUAL( restored->GetTerminalRef( 0 ), replacementRef );
+    BOOST_CHECK_EQUAL( restored->GetTerminalPinNum( 0 ), replacementNumber );
+    stream.close();
+    wxRemoveFile( file );
 
-    graph->Recalculate( sheets, /*aUnconditional=*/true );
-
-    SCH_NETCHAIN* refreshed = graph->GetNetChainByName( wxT( "TERM_OVERRIDE" ) );
-    BOOST_REQUIRE( refreshed );
-
-    BOOST_CHECK_MESSAGE( refreshed->GetTerminalPinA() == newPinA,
-                         "Refresh helper overwrote the user's terminal-pin override on pin A" );
-    BOOST_CHECK_MESSAGE( refreshed->GetTerminalPinB() == originalPinB,
-                         "Refresh helper changed the unaffected terminal pin B" );
-
-    // Stability across a second round trip.
-    graph->Recalculate( sheets, /*aUnconditional=*/true );
-
-    SCH_NETCHAIN* twice = graph->GetNetChainByName( wxT( "TERM_OVERRIDE" ) );
-    BOOST_REQUIRE( twice );
-    BOOST_CHECK( twice->GetTerminalPinA() == newPinA );
-    BOOST_CHECK( twice->GetTerminalPinB() == originalPinB );
+    auto* removedSymbol = static_cast<SCH_SYMBOL*>( replacement->GetParentSymbol() );
+    path.LastScreen()->Remove( removedSymbol );
+    std::unique_ptr<SCH_SYMBOL> removed( removedSymbol );
+    static_cast<SCH_SYMBOL*>( original->GetParentSymbol() )->SetRef( &path, replacementRef );
+    m_schematic->ConnectionGraph()->Recalculate( m_schematic->Hierarchy(), true );
+    BOOST_CHECK( chain->GetTerminalPinA() == replacementId );
+    BOOST_CHECK( chain->GetTerminalPath( 0 ) == path.Path() );
+    BOOST_CHECK( !chain->GetSymbols().contains( removed.get() ) );
+    BOOST_CHECK( chain->GetNets().empty() );
 }

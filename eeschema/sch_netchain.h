@@ -20,15 +20,13 @@
 #ifndef SCH_NETCHAIN_H
 #define SCH_NETCHAIN_H
 
+#include <cstdint>
 #include <set>
 #include <type_traits>
 #include <utility>
-#include <vector>
 #include <wx/string.h>
 #include <gal/color4d.h>
 #include <kiid.h>
-
-class CONNECTION_GRAPH;
 
 /**
  * A net chain is a collection of nets that are connected together through
@@ -38,8 +36,16 @@ class SCH_NETCHAIN
 {
 public:
     /// Prefix used when synthesising net names for unnamed subgraphs.  Such names
-    /// embed the per-run subgraph code and so are not stable across reloads.
-    static constexpr char SYNTHETIC_NET_PREFIX[] = "__SG_";
+    /// embed a per-run component identity and so are not stable across reloads.
+    static constexpr wxStringCharType SYNTHETIC_NET_PREFIX[] = wxS( "__SG_" );
+
+    static wxString MakeKey( const wxString& aName, uint32_t aComponent );
+
+    /// Synthetic keys do not survive a reload, so only named nets are written out.
+    static bool IsPersistableNet( const wxString& aNet )
+    {
+        return !aNet.IsEmpty() && !aNet.StartsWith( SYNTHETIC_NET_PREFIX );
+    }
 
     SCH_NETCHAIN() {}
 
@@ -56,12 +62,11 @@ public:
         swapMember( aLeft.m_nets, aRight.m_nets );
         swapMember( aLeft.m_symbols, aRight.m_symbols );
         swapMember( aLeft.m_terminalPins, aRight.m_terminalPins );
+        swapMember( aLeft.m_terminalPaths, aRight.m_terminalPaths );
         swapMember( aLeft.m_terminalRef, aRight.m_terminalRef );
         swapMember( aLeft.m_terminalPinNum, aRight.m_terminalPinNum );
         swapMember( aLeft.m_netClass, aRight.m_netClass );
         swapMember( aLeft.m_color, aRight.m_color );
-        swapMember( aLeft.m_orderedNets, aRight.m_orderedNets );
-        swapMember( aLeft.m_orderedNetsDirty, aRight.m_orderedNetsDirty );
     }
 
     void SetName( const wxString& aName ) { m_name = aName; }
@@ -82,26 +87,22 @@ public:
     void AddNet( const wxString& aNet )
     {
         m_nets.insert( aNet );
-        m_orderedNetsDirty = true;
     }
 
     void RemoveNet( const wxString& aNet )
     {
         m_nets.erase( aNet );
-        m_orderedNetsDirty = true;
     }
 
     void ReplaceNets( const std::set<wxString>& aNew )
     {
         m_nets = aNew;
-        m_orderedNetsDirty = true;
     }
 
     // Track a symbol that participates in this chain (2-pin passthrough component).
     void AddSymbol( class SCH_SYMBOL* aSymbol )
     {
         m_symbols.insert( aSymbol );
-        m_orderedNetsDirty = true;
     }
 
     const std::set<class SCH_SYMBOL*>& GetSymbols() const { return m_symbols; }
@@ -109,59 +110,38 @@ public:
     void AbsorbSymbolsFrom( const SCH_NETCHAIN& aOther )
     {
         m_symbols.insert( aOther.m_symbols.begin(), aOther.m_symbols.end() );
-        m_orderedNetsDirty = true;
     }
 
     // The symbol set holds non-owning raw pointers to schematic items. Callers must invoke
-    // this before any pass that may free those items (e.g. CONNECTION_GRAPH::Reset()).
+    // this before any pass that may free those items.
     void ClearSymbols()
     {
         m_symbols.clear();
-        m_orderedNetsDirty = true;
     }
 
     const std::set<wxString>& GetNets() const { return m_nets; }
-
-    /**
-     * Return the chain's member nets ordered from terminal pin A's net to terminal pin
-     * B's net along the shortest bridge-graph path; any off-path member nets (branches)
-     * are appended alphabetically.  Empty if fewer than two nets, or if the terminal
-     * pins are unset / cannot be resolved on @p aGraph.  The returned vector is cached
-     * and invalidated by any mutator on this class.
-     *
-     * @param aGraph live connection graph the chain belongs to; required to resolve
-     *               pin KIIDs to nets.  Passing nullptr returns an empty vector
-     *               without caching.
-     */
-    const std::vector<wxString>& GetOrderedNets( CONNECTION_GRAPH* aGraph ) const;
-
-    /**
-     * Resolve terminal pin @p aIdx (0 or 1) to the net-chain key of its owning subgraph
-     * via @p aGraph.  Returns an empty string if the pin can't be located (e.g. the
-     * KIID refers to a removed item) or if @p aGraph is null.
-     */
-    wxString GetTerminalNetName( int aIdx, CONNECTION_GRAPH* aGraph ) const;
 
     void SetTerminalPins( const KIID& aPinA, const KIID& aPinB )
     {
         m_terminalPins[0] = aPinA;
         m_terminalPins[1] = aPinB;
-        m_orderedNetsDirty = true;
     }
 
     const KIID& GetTerminalPinA() const { return m_terminalPins[0]; }
     const KIID& GetTerminalPinB() const { return m_terminalPins[1]; }
 
-    void ReplaceTerminalPin( const KIID& aPrev, const KIID& aNew )
-    {
-        if( m_terminalPins[0] == aPrev )
-            m_terminalPins[0] = aNew;
-        else if( m_terminalPins[1] == aPrev )
-            m_terminalPins[1] = aNew;
-        else
-            return;
+    const KIID_PATH& GetTerminalPath( int aIdx ) const { return m_terminalPaths[aIdx]; }
 
-        m_orderedNetsDirty = true;
+    void SetTerminalPaths( const KIID_PATH& aPathA, const KIID_PATH& aPathB )
+    {
+        m_terminalPaths[0] = aPathA;
+        m_terminalPaths[1] = aPathB;
+    }
+
+    bool IsTerminal( const KIID& aPin, const KIID_PATH& aSheet ) const
+    {
+        return ( m_terminalPins[0] == aPin && m_terminalPaths[0] == aSheet )
+               || ( m_terminalPins[1] == aPin && m_terminalPaths[1] == aSheet );
     }
 
     /**
@@ -206,15 +186,11 @@ private:
     std::set<wxString>                m_nets;
     std::set<class SCH_SYMBOL*>       m_symbols;
     KIID                              m_terminalPins[2];
+    KIID_PATH                         m_terminalPaths[2];
     wxString                          m_terminalRef[2];
     wxString                          m_terminalPinNum[2];
     wxString                          m_netClass;
     KIGFX::COLOR4D                    m_color = KIGFX::COLOR4D::UNSPECIFIED;
-
-    // Cached topologically ordered net list.  Populated lazily by GetOrderedNets()
-    // and invalidated by any topology-mutating accessor above.
-    mutable std::vector<wxString>     m_orderedNets;
-    mutable bool                      m_orderedNetsDirty = true;
 };
 
 #endif

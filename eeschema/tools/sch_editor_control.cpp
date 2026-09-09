@@ -40,6 +40,7 @@
 #include <clipboard.h>
 #include <confirm.h>
 #include <connection_graph.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <design_block.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <dialogs/dialog_eeschema_page_settings.h>
@@ -1266,58 +1267,22 @@ int SCH_EDITOR_CONTROL::RemoveFromNetChain( const TOOL_EVENT& aEvent )
     if( !target )
         return 0;
 
-    SCH_CONNECTION* conn = target->Connection();
-    if( !conn )
+    auto&          chains = editFrame->Schematic().NetChains();
+    const wxString net = SCH_CONNECTIVITY::NETCHAIN_MANAGER::NetKeyForItem( *target, editFrame->GetCurrentSheet() );
+    const SCH_NETCHAIN* chain = chains.GetNetChainForNet( net );
+
+    if( !chain )
         return 0;
 
-    SCHEMATIC& schematic = editFrame->Schematic();
-    SCH_SCREEN* screen = editFrame->GetCurrentSheet().LastScreen();
+    SCH_COMMIT commit( editFrame );
 
-    // Find any 2-pin symbols that bridge this connection's net into another net and disable propagation
-    int disabled = 0;
-
-    for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+    for( const auto& [symbol, screen] : chains.GetBridgeSymbols( *chain, net ) )
     {
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-        std::vector<SCH_PIN*> pins = symbol->GetPins( &schematic.CurrentSheet() );
-
-        if( pins.size() != 2 )
-            continue;
-
-        SCH_PIN* pa = pins[0];
-        SCH_PIN* pb = pins[1];
-
-        SCH_CONNECTION* ca = pa->Connection();
-        SCH_CONNECTION* cb = pb->Connection();
-
-        if( !ca || !cb )
-            continue;
-
-        // If either side matches the selected net and the other side is a different net,
-        // this symbol is bridging the selected net into its chain.
-        if( ( ca->Name() == conn->Name() && cb->Name() != conn->Name() )
-            || ( cb->Name() == conn->Name() && ca->Name() != conn->Name() ) )
-        {
-            if( symbol->GetPassthroughMode() != SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK )
-            {
-                symbol->SetPassthroughMode( SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK );
-                disabled++;
-            }
-        }
+        commit.Modify( symbol, screen );
+        symbol->SetPassthroughMode( SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK );
     }
 
-    if( disabled > 0 )
-    {
-        // Rebuild connectivity/chains so the change takes effect
-        CONNECTION_GRAPH* graph = schematic.ConnectionGraph();
-        if( graph )
-        {
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RemoveFromNetChain: disabled=%d, rebuilding chains", disabled );
-            SCH_SHEET_LIST sheets = schematic.Hierarchy();
-            graph->Recalculate( sheets, /*aUnconditional=*/true );
-            m_frame->GetCanvas()->Refresh();
-        }
-    }
+    commit.Push( _( "Remove from Net Chain" ) );
 
     return 0;
 }
@@ -1796,15 +1761,17 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::ReplaceTerminalPin( const TOOL_EVENT& aEvent )
 {
     SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    auto ids = aEvent.Parameter<std::pair<wxString, wxString>>();
-    wxString oldStr = ids.first;
-    wxString newStr = ids.second;
-    KIID oldPin( oldStr );
-    KIID newPin( newStr );
-    wxString sig = editFrame->GetHighlightedNetChain();
+    const auto change = aEvent.Parameter<SCH_CONNECTIVITY::NETCHAIN_MANAGER::TERMINAL_CHANGE>();
 
-    if( !sig.IsEmpty() )
-        editFrame->Schematic().ConnectionGraph()->ReplaceNetChainTerminalPin( sig, oldPin, newPin );
+    if( editFrame->Schematic().NetChains().ReplaceNetChainTerminalPin( change ) )
+    {
+        editFrame->OnModify();
+        editFrame->GetCanvas()->Refresh();
+    }
+    else
+    {
+        DisplayError( editFrame, _( "Unable to replace the net chain terminal pin." ) );
+    }
 
     return 0;
 }
@@ -1816,25 +1783,36 @@ int SCH_EDITOR_CONTROL::NameNetChain( const TOOL_EVENT& aEvent )
     SCH_ITEM* item = static_cast<SCH_ITEM*>( selTool->GetSelection().Front() );
     SCH_PIN* pin = dynamic_cast<SCH_PIN*>( item );
 
-    if( !pin || !pin->Connection() )
+    if( !pin )
         return 0;
 
     SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph();
+    auto& chains = editFrame->Schematic().NetChains();
+    const auto netName = pin->GetConnectionName( &editFrame->GetCurrentSheet() );
 
-    if( SCH_NETCHAIN* sig = graph->GetNetChainForNet( pin->Connection()->Name() ) )
+    if( !netName )
+        return 0;
+
+    if( SCH_NETCHAIN* sig = chains.GetNetChainForNet( *netName ) )
     {
-        wxString newName = wxGetTextFromUser( _( "Net chain name:" ), _( "Name Net Chain" ), sig->GetName() );
+        const wxString oldName = sig->GetName();
+        const wxString newName = wxGetTextFromUser( _( "Net chain name:" ), _( "Name Net Chain" ), oldName );
 
-        if( !newName.IsEmpty() && newName != sig->GetName() )
+        if( newName.IsEmpty() || newName == oldName )
+            return 0;
+
+        if( !chains.RenameCommittedNetChain( oldName, newName ) )
         {
-            sig->SetName( newName );
-
-            editFrame->SetHighlightedNetChain( newName );
-            TOOL_EVENT dummy;
-            UpdateNetHighlighting( dummy );
-            editFrame->UpdateNetHighlightStatus();
+            DisplayError( editFrame, wxString::Format( _( "Unable to rename net chain '%s' to '%s'." ),
+                                                       oldName, newName ) );
+            return 0;
         }
+
+        editFrame->OnModify();
+        editFrame->SetHighlightedNetChain( newName );
+        TOOL_EVENT dummy;
+        UpdateNetHighlighting( dummy );
+        editFrame->UpdateNetHighlightStatus();
     }
 
     return 0;
@@ -1855,9 +1833,10 @@ int SCH_EDITOR_CONTROL::CreateNetChainBetweenPins( const TOOL_EVENT& aEvent )
         return 0;
 
     SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph();
+    auto& chains = editFrame->Schematic().NetChains();
+    const SCH_SHEET_PATH& path = editFrame->GetCurrentSheet();
 
-    SCH_NETCHAIN* potential = graph->FindPotentialNetChainBetweenPins( pinA, pinB );
+    SCH_NETCHAIN* potential = chains.FindPotentialNetChainBetweenPins( pinA, path, pinB, path );
     if( !potential )
     {
         DisplayError( editFrame, _( "No potential net chain connects the selected pins." ) );
@@ -1917,7 +1896,7 @@ int SCH_EDITOR_CONTROL::CreateNetChainBetweenPins( const TOOL_EVENT& aEvent )
         return 0; // cancelled
     }
 
-    if( graph->CreateNetChainFromPotential( potential, name ) )
+    if( chains.CreateNetChainFromPotential( potential, name ) )
     {
         // Replace temporary highlight with new chain name
         editFrame->SetHighlightedNetChain( name );
@@ -1935,13 +1914,7 @@ int SCH_EDITOR_CONTROL::ShowCreateNetChain( const TOOL_EVENT& aEvent )
 {
     SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
 
-    CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph();
-
-    if( graph && graph->GetPotentialNetChains().empty() )
-    {
-        SCH_SHEET_LIST sheets = editFrame->Schematic().Hierarchy();
-        graph->Recalculate( sheets, true );
-    }
+    editFrame->RecalculateConnections( nullptr, NO_CLEANUP );
 
     DIALOG_CREATE_NET_CHAIN::FOCUS_HINT hint;
 
@@ -1968,17 +1941,10 @@ int SCH_EDITOR_CONTROL::ShowCreateNetChain( const TOOL_EVENT& aEvent )
         {
             SCH_ITEM* schItem = static_cast<SCH_ITEM*>( sel.Front() );
 
-            if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( schItem ) )
+            if( schItem && schItem->IsType( { SCH_PIN_T, SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } ) )
             {
-                if( pin->Connection() )
-                    hint.netName = pin->Connection()->Name();
-            }
-            else if( schItem
-                     && schItem->Type() == SCH_LINE_T
-                     && schItem->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } )
-                     && schItem->Connection() )
-            {
-                hint.netName = schItem->Connection()->Name();
+                if( const auto name = schItem->GetConnectionName( &editFrame->GetCurrentSheet() ) )
+                    hint.netName = *name;
             }
         }
     }

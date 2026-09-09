@@ -1572,22 +1572,19 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> elecTypeInfo = cache.GetPinElectricalTypeInfo( shadowWidth ) )
         drawTextInfo( *elecTypeInfo, getColorForLayer( LAYER_PRIVATE_NOTES ) );
 
-    if( aPin->IsBrightened() && m_schematic && !m_schematic->GetHighlightedNetChain().IsEmpty() )
+    if( aPin->IsBrightened() && m_netChainTerminalPins.contains( aPin ) )
     {
-        if( SCH_NETCHAIN* sig = m_schematic->ConnectionGraph()->GetNetChainByName( m_schematic->GetHighlightedNetChain() ) )
+        if( SCH_NETCHAIN* sig = m_schematic->NetChains().GetNetChainByName( m_schematic->GetHighlightedNetChain() ) )
         {
-            if( sig->GetTerminalPinA() == aPin->m_Uuid || sig->GetTerminalPinB() == aPin->m_Uuid )
-            {
-                CIRCLE c = cache.GetDanglingIndicator();
-                COLOR4D emphasis = sig->GetColor() != COLOR4D::UNSPECIFIED
-                                        ? sig->GetColor()
-                                        : color.Brightened( 0.5 );
-                m_gal->SetStrokeColor( emphasis );
-                m_gal->SetIsFill( false );
-                m_gal->SetIsStroke( true );
-                m_gal->SetLineWidth( getShadowWidth( true ) );
-                m_gal->DrawCircle( c.Center, c.Radius );
-            }
+            CIRCLE c = cache.GetDanglingIndicator();
+            COLOR4D emphasis = sig->GetColor() != COLOR4D::UNSPECIFIED
+                                    ? sig->GetColor()
+                                    : color.Brightened( 0.5 );
+            m_gal->SetStrokeColor( emphasis );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( getShadowWidth( true ) );
+            m_gal->DrawCircle( c.Center, c.Radius );
         }
     }
 }
@@ -2718,6 +2715,10 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 
     // Copy the pin info from the symbol to the temp pins.
     std::vector<SCH_PIN*> symbolPins = aSymbol->MapLibPins( originalPins, usingAlternateSymbol );
+    SCH_NETCHAIN*         highlightedChain = nullptr;
+
+    if( m_schematic && !m_schematic->GetHighlightedNetChain().IsEmpty() )
+        highlightedChain = m_schematic->NetChains().GetNetChainByName( m_schematic->GetHighlightedNetChain() );
 
     for( unsigned i = 0; i < tempPins.size(); ++ i )
     {
@@ -2734,6 +2735,13 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         tempPin->SetFlags( symbolPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
                                                         // IS_SHOWN_AS_BITMAP
         tempPin->SetNetHighlighted( symbolPin->IsNetHighlighted() );
+
+        // Terminal markers match the schematic pin, not its library definition
+        if( highlightedChain
+            && highlightedChain->IsTerminal( symbolPin->m_Uuid, m_schematic->CurrentSheet().PathRef() ) )
+        {
+            m_netChainTerminalPins.insert( tempPin );
+        }
 
         tempPin->SetName( expandLibItemTextVars( symbolPin->GetShownName(), aSymbol ) );
         tempPin->SetType( symbolPin->GetType() );
@@ -2772,6 +2780,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     }
 
     draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetBodyStyle(), DNP );
+    m_netChainTerminalPins.clear();
 
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {

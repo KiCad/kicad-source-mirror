@@ -559,12 +559,14 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         }
     }
 
-    // Net chains are schematic-wide state owned by the connection graph, so they must be written
+    // Net chains are schematic-wide state, so they must be written
     // by exactly one sheet file.  Anchor the write to the schematic's first top-level sheet to
     // match the embedded files convention below.
     if( m_schematic->GetTopLevelSheet( 0 ) == aSheet )
     {
-        for( const auto& sigPtr : m_schematic->ConnectionGraph()->GetCommittedNetChains() )
+        m_schematic->NetChains().RefreshTerminalReferences();
+
+        for( const auto& sigPtr : m_schematic->NetChains().GetCommittedNetChains() )
         {
             if( !sigPtr )
                 continue;
@@ -600,7 +602,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
             for( const wxString& n : sig.GetNets() )
             {
-                if( !n.IsEmpty() && !n.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
+                if( SCH_NETCHAIN::IsPersistableNet( n ) )
                     persistableNets.push_back( n );
             }
 

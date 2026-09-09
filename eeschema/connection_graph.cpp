@@ -81,31 +81,6 @@ static const wxChar DanglingProfileMask[] = wxT( "CONN_PROFILE" );
 static const wxChar ConnTrace[] = wxT( "CONN" );
 
 
-wxString CONNECTION_GRAPH::MakeNetChainKey( const wxString& aRawNetName, long aSubgraphCode )
-{
-    if( !aRawNetName.IsEmpty() && aRawNetName.Find( wxS( "<NO NET>" ) ) == wxNOT_FOUND )
-        return aRawNetName;
-
-    return wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) << aSubgraphCode;
-}
-
-
-wxString CONNECTION_GRAPH::MakeNetChainKey( const CONNECTION_SUBGRAPH* aSubGraph )
-{
-    if( !aSubGraph )
-        return wxEmptyString;
-
-    return MakeNetChainKey( aSubGraph->GetNetName(), aSubGraph->m_code );
-}
-
-
-// Internal shim so the existing private call sites read unchanged.
-static inline wxString netChainKeyFor( const wxString& aRawNetName, long aSubgraphCode )
-{
-    return CONNECTION_GRAPH::MakeNetChainKey( aRawNetName, aSubgraphCode );
-}
-
-
 CONNECTION_GRAPH::~CONNECTION_GRAPH()
 {
     // Ensure destruction happens in a translation unit that includes full SCH_NETCHAIN
@@ -3044,27 +3019,52 @@ std::function<void( SCH_CONNECTIVITY::NETCHAIN_MANAGER& )>& CONNECTION_GRAPH::Re
 }
 
 
-
-
-
 void CONNECTION_GRAPH::RebuildNetChains()
 {
-    SCH_CONNECTIVITY::NETCHAIN_INPUT input;
-    input.sheets = m_sheetList;
-    input.items = m_items;
+    if( !m_schematic )
+        return;
 
-    for( SCH_ITEM* item : m_items )
+    SCH_CONNECTIVITY::NETCHAIN_INPUT connectivity;
+    connectivity.sheets.reserve( m_sheetList.size() );
+    std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTIVITY::NETCHAIN_INPUT::SHEET*> sheets;
+
+    for( const SCH_SHEET_PATH& path : m_sheetList )
     {
-        if( const CONNECTION_SUBGRAPH* subgraph = GetSubgraphForItem( item ) )
+        connectivity.sheets.emplace_back( path, &connectivity.storage );
+        sheets.emplace( path, &connectivity.sheets.back() );
+    }
+
+    for( const auto& [item, subgraphs] : m_item_to_subgraph_map )
+    {
+        if( item->Type() != SCH_PIN_T && item->Type() != SCH_LABEL_T )
+            continue;
+
+        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            input.nets.emplace( item, SCH_CONNECTIVITY::NETCHAIN_INPUT::NET{
-                    subgraph->GetNetName(), netChainKeyFor( subgraph->GetNetName(), subgraph->m_code ),
-                    subgraph->m_code } );
+            if( !subgraph )
+                continue;
+
+            const auto sheet = sheets.find( subgraph->GetSheet() );
+
+            if( sheet == sheets.end() )
+                continue;
+
+            while( subgraph && subgraph->m_absorbed )
+                subgraph = subgraph->m_absorbed_by;
+
+            if( subgraph )
+            {
+                const wxString name = subgraph->GetNetName();
+                sheet->second->nets.insert_or_assign(
+                        item, SCH_CONNECTIVITY::NETCHAIN_INPUT::NET{
+                                      name, SCH_NETCHAIN::MakeKey( name, subgraph->m_code ) } );
+            }
         }
     }
 
-    m_netChains->Rebuild( input, RebuildNetChainsTestHook() );
+    m_netChains->Rebuild( connectivity, RebuildNetChainsTestHook() );
 }
+
 
 SCH_NETCHAIN* CONNECTION_GRAPH::resolvePotentialChainByTerminals(
         const CHAIN_TERMINAL_REFS& aTermRefs,
@@ -3072,35 +3072,18 @@ SCH_NETCHAIN* CONNECTION_GRAPH::resolvePotentialChainByTerminals(
         const std::vector<std::unique_ptr<SCH_NETCHAIN>>& aPotentials,
         const wxString& aChainName )
 {
-    return SCH_CONNECTIVITY::NETCHAIN_MANAGER::resolvePotentialChainByTerminals( aTermRefs, aRefPinToNet, aPotentials,
-                                                                                 aChainName );
+    return SCH_CONNECTIVITY::NETCHAIN_MANAGER::resolvePotentialChainByTerminals(
+            aTermRefs, aRefPinToNet, aPotentials, aChainName );
 }
 
-
-SCH_NETCHAIN* CONNECTION_GRAPH::FindPotentialNetChainBetweenPins( SCH_PIN* aPinA, SCH_PIN* aPinB )
+SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainForNet( const wxString& aNet )
 {
-    if( !aPinA || !aPinB )
-        return nullptr;
+    return m_netChains->GetNetChainForNet( aNet );
+}
 
-    wxString netA;
-    wxString netB;
-
-    if( CONNECTION_SUBGRAPH* sgA = GetSubgraphForItem( aPinA ) )
-        netA = netChainKeyFor( sgA->GetNetName(), sgA->m_code );
-
-    if( CONNECTION_SUBGRAPH* sgB = GetSubgraphForItem( aPinB ) )
-        netB = netChainKeyFor( sgB->GetNetName(), sgB->m_code );
-
-    if( netA.IsEmpty() || netB.IsEmpty() )
-        return nullptr;
-
-    for( const auto& sigUP : m_netChains->m_potentialNetChains )
-    {
-        if( sigUP && sigUP->GetNets().contains( netA ) && sigUP->GetNets().contains( netB ) )
-            return sigUP.get();
-    }
-
-    return nullptr;
+SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainByName( const wxString& aName )
+{
+    return m_netChains->GetNetChainByName( aName );
 }
 
 bool CONNECTION_GRAPH::DeleteCommittedNetChain( const wxString& aName )
@@ -3108,66 +3091,11 @@ bool CONNECTION_GRAPH::DeleteCommittedNetChain( const wxString& aName )
     return m_netChains->DeleteCommittedNetChain( aName );
 }
 
-
 bool CONNECTION_GRAPH::RenameCommittedNetChain( const wxString& aOld, const wxString& aNew )
 {
     return m_netChains->RenameCommittedNetChain( aOld, aNew );
 }
 
-
-void CONNECTION_GRAPH::rekeyOverrideMaps( const wxString& aOld, const wxString& aNew )
-{
-    m_netChains->rekeyOverrideMaps( aOld, aNew );
-}
-
-
-void CONNECTION_GRAPH::refreshCommittedChainPayload( SCH_NETCHAIN* aTarget,
-                                                     const std::set<wxString>& aNets,
-                                                     const std::set<SCH_SYMBOL*>& aSymbols,
-                                                     const KIID& aTerminalPinA,
-                                                     const KIID& aTerminalPinB,
-                                                     const wxString& aRefA,
-                                                     const wxString& aPinNumA,
-                                                     const wxString& aRefB,
-                                                     const wxString& aPinNumB )
-{
-    m_netChains->refreshCommittedChainPayload( aTarget, aNets, aSymbols, aTerminalPinA, aTerminalPinB, aRefA, aPinNumA,
-                                               aRefB, aPinNumB );
-}
-
-
-void CONNECTION_GRAPH::refreshCommittedChainFromPotential( SCH_NETCHAIN* aTarget,
-                                                           const SCH_NETCHAIN& aSource )
-{
-    m_netChains->refreshCommittedChainFromPotential( aTarget, aSource );
-}
-
-
-SCH_NETCHAIN* CONNECTION_GRAPH::CreateNetChainFromPotential( SCH_NETCHAIN* aPotential, const wxString& aName )
-{
-    return m_netChains->CreateNetChainFromPotential( aPotential, aName );
-}
-
-
-SCH_NETCHAIN* CONNECTION_GRAPH::CreateManualNetChain( const wxString& aName,
-                                                      const std::set<SCH_SYMBOL*>& aSymbols,
-                                                      const std::set<wxString>& aNets,
-                                                      const KIID& aTerminalPinA,
-                                                      const KIID& aTerminalPinB,
-                                                      const wxString& aRefA,
-                                                      const wxString& aPinNumA,
-                                                      const wxString& aRefB,
-                                                      const wxString& aPinNumB )
-{
-    return m_netChains->CreateManualNetChain( aName, aSymbols, aNets, aTerminalPinA, aTerminalPinB, aRefA, aPinNumA,
-                                              aRefB, aPinNumB );
-}
-
-
-SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainForNet( const wxString& aNet )
-{
-    return m_netChains->GetNetChainForNet( aNet );
-}
 
 
 void CONNECTION_GRAPH::ApplyNetChainNetclasses()
@@ -3175,24 +3103,19 @@ void CONNECTION_GRAPH::ApplyNetChainNetclasses()
     m_netChains->ApplyNetChainNetclasses();
 }
 
-
-SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainByName( const wxString& aName )
+SCH_NETCHAIN* CONNECTION_GRAPH::CreateNetChainFromPotential( SCH_NETCHAIN* aPotential, const wxString& aName )
 {
-    return m_netChains->GetNetChainByName( aName );
+    return m_netChains->CreateNetChainFromPotential( aPotential, aName );
 }
 
-
-void CONNECTION_GRAPH::ReplaceNetChainTerminalPin( const wxString& aNetChain, const KIID& aPrev,
-                                                const KIID& aNew )
+SCH_NETCHAIN* CONNECTION_GRAPH::CreateManualNetChain( const wxString& aName,
+        const std::set<SCH_SYMBOL*>& aSymbols, const std::set<wxString>& aNets,
+        const KIID& aTerminalPinA, const KIID& aTerminalPinB,
+        const wxString& aRefA, const wxString& aPinNumA,
+        const wxString& aRefB, const wxString& aPinNumB )
 {
-    m_netChains->ReplaceNetChainTerminalPin( aNetChain, aPrev, aNew );
-}
-
-
-void CONNECTION_GRAPH::SetNetChainTerminalOverrides( const std::map<wxString,
-                                                std::pair<KIID, KIID>>& aOverrides )
-{
-    m_netChains->SetNetChainTerminalOverrides( aOverrides );
+    return m_netChains->CreateManualNetChain( aName, aSymbols, aNets, aTerminalPinA, aTerminalPinB,
+                                               aRefA, aPinNumA, aRefB, aPinNumB );
 }
 
 

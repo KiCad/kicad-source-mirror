@@ -892,13 +892,13 @@ public:
     };
 
     PASSTHROUGH_MODE GetPassthroughMode() const { return m_passthroughMode; }
-    void SetPassthroughMode( PASSTHROUGH_MODE aMode ) { m_passthroughMode = aMode; }
-
-    // Back-compat helpers used by existing code and old file formats
-    bool GetPassthrough() const { return m_passthroughMode != PASSTHROUGH_MODE::BLOCK; }
-    void SetPassthrough( bool aEnable )
+    void SetPassthroughMode( PASSTHROUGH_MODE aMode )
     {
-        m_passthroughMode = aEnable ? PASSTHROUGH_MODE::FORCE : PASSTHROUGH_MODE::BLOCK;
+        if( m_passthroughMode != aMode )
+        {
+            m_passthroughMode = aMode;
+            SetConnectivityDirty();
+        }
     }
 
     const wxString& GetNetChainName() const { return m_signalName; }

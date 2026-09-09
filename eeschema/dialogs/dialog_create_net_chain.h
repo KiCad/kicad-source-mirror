@@ -102,17 +102,17 @@ private:
     void populateComponentCombos();
 
     /**
-     * Walk @p aScreen and brighten/un-brighten items whose connection name is in @p aNets.
+     * Walk @p aPath and brighten/un-brighten items whose connection name is in @p aNets.
      * Returns the union bounding box of items that ended up brightened (empty if none).
-     * Pass an empty @p aNets set to clear all brightening on the screen.  When @p aScreen is
-     * null, the call is a no-op.
+     * Pass an empty @p aNets set to clear all brightening on the screen.  When @p aPath has
+     * no screen, the call is a no-op.
      *
      * Note: this brightens SCH_SYMBOL pins and connectable items.  Sheet pins and power-symbol
      * fields highlighted by SCH_EDITOR_CONTROL::UpdateNetHighlighting are NOT covered here; a
      * future refactor could route potential-chain highlight through that path once potentials
      * grow a stable temporary identifier.
      */
-    BOX2I highlightChainNets( const std::set<wxString>& aNets, SCH_SCREEN* aScreen );
+    BOX2I highlightChainNets( const std::set<wxString>& aNets, const SCH_SHEET_PATH& aPath );
 
     /**
      * Switch to the sheet owning @p aRow (if different from the current sheet), brighten the

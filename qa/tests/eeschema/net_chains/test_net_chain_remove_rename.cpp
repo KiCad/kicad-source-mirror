@@ -72,7 +72,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     BOOST_CHECK_EQUAL( committed->GetName(), wxT( "FIRST" ) );
     BOOST_CHECK_EQUAL( committed->GetNetClass(), wxT( "DDR_DATA" ) );
 
-    // Seed the terminal-ref / terminal-pin override maps from the live committed
+    // Seed the saved terminal references from the live committed
     // chain so the values match whatever pins the fixture's potential picked.
     // This exercises the same restore path RebuildNetChains() takes after a
     // file reload, and stays valid if the fixture is edited.
@@ -90,9 +90,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     termRefs[wxT( "FIRST" )] = { { liveRefA, livePinA }, { liveRefB, livePinB } };
     graph->SetNetChainTerminalRefOverrides( termRefs );
 
-    std::map<wxString, std::pair<KIID, KIID>> termPins;
-    termPins[wxT( "FIRST" )] = std::make_pair( livePinUA, livePinUB );
-    graph->SetNetChainTerminalOverrides( termPins );
+
 
     // Promote a second one so we have something to collide with.
     if( potentials.size() > 1 )
@@ -136,11 +134,8 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     BOOST_CHECK_EQUAL( refOverrides.at( wxT( "RENAMED" ) ).second.ref, liveRefB );
     BOOST_CHECK_EQUAL( refOverrides.at( wxT( "RENAMED" ) ).second.pin, livePinB );
 
-    const auto& pinOverrides = graph->GetNetChainTerminalOverrides();
-    BOOST_CHECK( pinOverrides.find( wxT( "FIRST" ) ) == pinOverrides.end() );
-    BOOST_REQUIRE( pinOverrides.find( wxT( "RENAMED" ) ) != pinOverrides.end() );
-    BOOST_CHECK( pinOverrides.at( wxT( "RENAMED" ) ).first == livePinUA );
-    BOOST_CHECK( pinOverrides.at( wxT( "RENAMED" ) ).second == livePinUB );
+    BOOST_CHECK( committed->GetTerminalPinA() == livePinUA );
+    BOOST_CHECK( committed->GetTerminalPinB() == livePinUB );
 
     // After Recalculate the chain must still appear only under the new name; the
     // committed restore path keys on m_netChainTerminalRefOverrides, so a stale
@@ -194,6 +189,4 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
                  == graph->GetNetChainColorOverrides().end() );
     BOOST_CHECK( graph->GetNetChainTerminalRefOverrides().find( wxT( "RENAMED" ) )
                  == graph->GetNetChainTerminalRefOverrides().end() );
-    BOOST_CHECK( graph->GetNetChainTerminalOverrides().find( wxT( "RENAMED" ) )
-                 == graph->GetNetChainTerminalOverrides().end() );
 }

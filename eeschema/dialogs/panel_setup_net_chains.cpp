@@ -27,7 +27,7 @@
 #include <wx/msgdlg.h>
 #include <wx/textdlg.h>
 
-#include <connection_graph.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <sch_edit_frame.h>
 #include <sch_netchain.h>
 #include <schematic.h>
@@ -117,10 +117,7 @@ void PANEL_SETUP_NET_CHAINS::loadFromModel()
     if( !m_frame )
         return;
 
-    CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
-
-    if( !graph )
-        return;
+    auto& manager = m_frame->Schematic().NetChains();
 
     std::shared_ptr<NET_SETTINGS> ns = m_frame->Prj().GetProjectFile().NetSettings();
     std::map<wxString, wxString>  chainToClass;
@@ -128,7 +125,7 @@ void PANEL_SETUP_NET_CHAINS::loadFromModel()
     if( ns )
         chainToClass = ns->GetNetChainClasses();
 
-    for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetCommittedNetChains() )
+    for( const std::unique_ptr<SCH_NETCHAIN>& chain : manager.GetCommittedNetChains() )
     {
         if( !chain )
             continue;
@@ -406,10 +403,7 @@ bool PANEL_SETUP_NET_CHAINS::ApplyEdits()
     if( !m_frame )
         return false;
 
-    CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
-
-    if( !graph )
-        return false;
+    auto& manager = m_frame->Schematic().NetChains();
 
     std::shared_ptr<NET_SETTINGS> ns = m_frame->Prj().GetProjectFile().NetSettings();
 
@@ -421,21 +415,8 @@ bool PANEL_SETUP_NET_CHAINS::ApplyEdits()
 
         if( !row.origName.IsEmpty() && row.origName != row.newName )
         {
-            if( graph->RenameCommittedNetChain( row.origName, row.newName ) )
-            {
-                if( ns && !row.origName.IsEmpty() )
-                {
-                    wxString oldClass = ns->GetNetChainClass( row.origName );
-
-                    if( !oldClass.IsEmpty() )
-                    {
-                        ns->SetNetChainClass( row.origName, wxEmptyString );
-                        ns->SetNetChainClass( row.newName, oldClass );
-                    }
-                }
-
+            if( manager.RenameCommittedNetChain( row.origName, row.newName ) )
                 row.origName = row.newName;
-            }
         }
     }
 
@@ -467,11 +448,8 @@ bool PANEL_SETUP_NET_CHAINS::ApplyEdits()
         if( !row.deletePending )
             continue;
 
-        if( !row.origName.IsEmpty() && graph->DeleteCommittedNetChain( row.origName ) )
-        {
-            if( ns )
-                ns->SetNetChainClass( row.origName, wxEmptyString );
-        }
+        if( !row.origName.IsEmpty() )
+            manager.DeleteCommittedNetChain( row.origName );
     }
 
     // Step 6 — chain-class master list.  Drop classes the user marked deleted

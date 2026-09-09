@@ -20,31 +20,50 @@
 #pragma once
 
 #include <sch_sheet_path.h>
-#include <unordered_map>
+#include <memory_resource>
 #include <vector>
+#include <unordered_map>
+#include <wx/string.h>
 
 class SCH_ITEM;
 
 namespace SCH_CONNECTIVITY
 {
-/** Immediate-use input for net-chain inference. */
+/** Immediate-use netchain input; shared-screen items are qualified by their instance. */
 struct NETCHAIN_INPUT
 {
     struct NET
     {
         wxString name;
         wxString key;
-        long component;
     };
 
-    SCH_SHEET_LIST sheets;
-    std::vector<SCH_ITEM*> items;
-    std::unordered_map<const SCH_ITEM*, NET> nets;
-
-    const NET* Find( const SCH_ITEM* aItem ) const
+    struct SHEET
     {
-        const auto item = nets.find( aItem );
-        return item == nets.end() ? nullptr : &item->second;
-    }
+        SHEET( const SCH_SHEET_PATH& aPath, std::pmr::memory_resource* aStorage ) :
+                path( aPath ), nets( aStorage )
+        {
+        }
+
+        SCH_SHEET_PATH path;
+        std::pmr::unordered_map<const SCH_ITEM*, NET> nets;
+
+        const NET* Find( const SCH_ITEM* aItem ) const
+        {
+            const auto item = nets.find( aItem );
+            return item == nets.end() ? nullptr : &item->second;
+        }
+
+        const wxString& Key( const SCH_ITEM* aItem ) const
+        {
+            static const wxString missing;
+            const NET*            net = Find( aItem );
+            return net ? net->key : missing;
+        }
+    };
+
+    // The maps must destroy their strings before their shared allocation storage is released.
+    std::pmr::monotonic_buffer_resource storage;
+    std::vector<SHEET> sheets;
 };
 }

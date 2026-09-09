@@ -20,6 +20,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <connection_graph.h>
+#include <sch_symbol.h>
+#include <schematic_utils/schematic_file_util.h>
 #include <netlist_exporter_xml.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_netchain.h>
@@ -34,12 +36,6 @@
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/xml/xml.h>
-
-
-// Test backdoor declared in connection_graph.h.  Pushes a fully-formed committed chain
-// into the graph so SaveSchematicFile / NETLIST_EXPORTER_XML have something to serialize.
-void boost_test_inject_committed_net_chain( CONNECTION_GRAPH& aGraph,
-                                            std::unique_ptr<SCH_NETCHAIN> aChain );
 
 
 struct NETCHAIN_SYNTHETIC_FILTER_FIXTURE
@@ -105,60 +101,54 @@ static wxXmlNode* find_child( wxXmlNode* parent, const wxString& name )
 }
 
 
-/**
- * Regression: synthetic per-run subgraph names (__SG_*) embed subgraph codes that are
- * not stable across reloads.  The sexpr writer filters them out at sch_io_kicad_sexpr.cpp,
- * but the XML netlist exporter previously emitted every member of the chain verbatim,
- * leaking unresolvable names into third-party netlist consumers (KiCost, custom BOM
- * pipelines).  Reloading the netlist could not match these synthetic strings against any
- * real BOARD net, so the chain assignment was silently dropped.
- *
- * This test injects a committed chain that mixes real net names with a __SG_* member,
- * runs both the XML exporter (KiCad-internal flag) and the sexpr writer over a single
- * fixture, and asserts that neither output contains the synthetic substring while the
- * real members survive.
- */
+// Keep native terminals and real nets while exercising transient member filtering.
 BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
                          NETCHAIN_SYNTHETIC_FILTER_FIXTURE )
 {
     LOCALE_IO dummy;
 
     const wxString chainName = wxT( "TEST_SYNTH_FILTER_CHAIN" );
-    const wxString realNetA  = wxT( "/SIG_A" );
-    const wxString realNetB  = wxT( "/SIG_B" );
-    const wxString synthName = wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX )
-                               + wxT( "0xdeadbeef" );
+    KI_TEST::LoadSchematic( m_settingsManager, "net_chains_four_nets_labeled", m_schematic );
+    m_project = &m_schematic->Project();
+    auto& manager = m_schematic->NetChains();
+    BOOST_REQUIRE( !manager.GetPotentialNetChains().empty() );
+    BOOST_REQUIRE( !manager.GetPotentialNetChains().front()->GetSymbols().empty() );
+    SCH_SYMBOL* driver = *manager.GetPotentialNetChains().front()->GetSymbols().begin();
 
-    m_schematic = std::make_unique<SCHEMATIC>( nullptr );
-    m_schematic->SetProject( m_project );
-    m_schematic->CreateDefaultScreens();
+    for( const SCH_SHEET_PATH& path : m_schematic->Hierarchy() )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            item->SetExcludedFromBoard( item != driver, &path );
+    }
 
-    std::vector<SCH_SHEET*> topSheets = m_schematic->GetTopLevelSheets();
-    BOOST_REQUIRE( !topSheets.empty() );
+    m_schematic->RebuildConnectivity();
+    BOOST_REQUIRE_EQUAL( manager.GetPotentialNetChains().size(), 1u );
+    auto* potential = manager.GetPotentialNetChains().front().get();
+    potential->AddNet( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) + wxString( "filter-test" ) );
+    std::vector<wxString> realNets;
+    std::vector<wxString> syntheticNets;
 
-    SCH_SHEET*  topSheet  = topSheets[0];
+    for( const wxString& net : potential->GetNets() )
+    {
+        if( net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
+            syntheticNets.push_back( net );
+        else
+            realNets.push_back( net );
+    }
+
+    BOOST_REQUIRE_GE( realNets.size(), 2u );
+    BOOST_REQUIRE( !syntheticNets.empty() );
+    const wxString realNetA = realNets[0];
+    const wxString realNetB = realNets[1];
+    const wxString synthName = syntheticNets.front();
+    SCH_NETCHAIN* committed = manager.CreateNetChainFromPotential( potential, chainName );
+    BOOST_REQUIRE( committed );
+    BOOST_REQUIRE_EQUAL( committed->GetNets().count( synthName ), 1u );
+    SCH_SHEET* topSheet = m_schematic->GetTopLevelSheet();
     SCH_SCREEN* topScreen = topSheet->GetScreen();
-    BOOST_REQUIRE( topScreen );
-
     wxString rootFileName = PathInWorkDir( wxT( "synth_filter.kicad_sch" ) );
     topSheet->SetFileName( wxT( "synth_filter.kicad_sch" ) );
     topScreen->SetFileName( rootFileName );
-
-    m_schematic->RefreshHierarchy();
-
-    auto chain = std::make_unique<SCH_NETCHAIN>();
-    chain->SetName( chainName );
-    chain->AddNet( realNetA );
-    chain->AddNet( realNetB );
-    chain->AddNet( synthName );
-
-    // Terminal refs are required by the sexpr writer; without them the chain is skipped
-    // before the synthetic-net filter loop runs and this test would not exercise the filter.
-    chain->SetTerminalRefs( wxT( "U1" ), wxT( "1" ), wxT( "U2" ), wxT( "2" ) );
-
-    boost_test_inject_committed_net_chain( *m_schematic->ConnectionGraph(), std::move( chain ) );
-
-    BOOST_REQUIRE_EQUAL( m_schematic->ConnectionGraph()->GetCommittedNetChains().size(), 1u );
 
     // 1. XML netlist exporter (KiCad-internal flag emits <net_chains>).
     wxFileName xmlFile( rootFileName );
@@ -167,9 +157,28 @@ BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
     m_tempFiles.push_back( xmlFile.GetFullPath() );
 
     {
+        struct FILTER_EXPORTER : NETLIST_EXPORTER_XML
+        {
+            using NETLIST_EXPORTER_XML::NETLIST_EXPORTER_XML;
+            wxString transient;
+
+            bool writeNetlist( const wxString& aPath, unsigned aOptions, REPORTER& aReporter ) override
+            {
+                const auto& chains = m_schematic->NetChains().GetCommittedNetChains();
+
+                if( chains.size() != 1u )
+                    return false;
+
+                // Export preparation rebuilds the chain before this serializer runs.
+                chains.front()->AddNet( transient );
+                return NETLIST_EXPORTER_XML::writeNetlist( aPath, aOptions, aReporter );
+            }
+        };
+
         WX_STRING_REPORTER                    reporter;
-        std::unique_ptr<NETLIST_EXPORTER_XML> exporter =
-                std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get() );
+        std::unique_ptr<FILTER_EXPORTER> exporter =
+                std::make_unique<FILTER_EXPORTER>( m_schematic.get() );
+        exporter->transient = synthName;
 
         BOOST_REQUIRE( exporter->WriteNetlist( xmlFile.GetFullPath(), GNL_OPT_KICAD,
                                                reporter ) );
@@ -268,9 +277,7 @@ BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
                              "kicad_sch must retain real net B in the chain's nets list" );
     }
 
-    // 3. Reload the saved file.  RebuildNetChains needs real schematic items to repopulate
-    //    GetCommittedNetChains(), so instead we verify the parser-side member-net overrides
-    //    that the IO layer hands to the connection graph during load.
+    // Check the persisted member list independently of connectivity reconstruction.
     {
         SCH_IO_KICAD_SEXPR loader;
         SCHEMATIC          reloaded( nullptr );

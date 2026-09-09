@@ -25,6 +25,7 @@
 
 #include <sch_render_settings.h>
 #include <sch_symbol.h>
+#include <set>
 
 #include <gal/painter.h>
 
@@ -145,6 +146,9 @@ public:
 private:
     SCH_RENDER_SETTINGS m_schSettings;
     SCHEMATIC*          m_schematic;
+
+    /// Temporary pins standing in for the highlighted chain's terminals during a symbol draw.
+    std::set<const SCH_PIN*> m_netChainTerminalPins;
 };
 
 }; // namespace KIGFX

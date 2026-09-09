@@ -4169,6 +4169,9 @@ bool SCH_SYMBOL::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SHEET_
     if( GetLibId() != symbol->GetLibId() )
         return true;
 
+    if( GetPassthroughMode() != symbol->GetPassthroughMode() )
+        return true;
+
     if( GetUnitSelection( aInstance ) != symbol->GetUnitSelection( aInstance ) )
         return true;
 

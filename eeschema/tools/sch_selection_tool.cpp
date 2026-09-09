@@ -29,6 +29,7 @@
 #include <sch_base_frame.h>
 #include <connection_graph.h>
 #include <sch_netchain.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
@@ -156,12 +157,6 @@ SELECTION_CONDITION SCH_CONDITIONS::AllPinsOrSheetPins = []( const SELECTION& aS
     return aSel.GetSize() >= 1 && aSel.OnlyContains( { SCH_PIN_T, SCH_SHEET_PIN_T } );
 };
 
-enum
-{
-    ID_REPLACE_TERMINAL_PIN_A = wxID_HIGHEST + 2000,
-    ID_REPLACE_TERMINAL_PIN_B
-};
-
 class REPLACE_TERMINAL_PIN_MENU : public ACTION_MENU
 {
 public:
@@ -193,27 +188,24 @@ protected:
         SCH_PIN* pin = dynamic_cast<SCH_PIN*>( sel.Front() );
         SCH_EDIT_FRAME* frame = static_cast<SCH_EDIT_FRAME*>( toolMgr->GetToolHolder() );
 
-        if( !pin || !frame || !pin->Connection() )
+        if( !pin || !frame )
             return;
 
-        CONNECTION_GRAPH* graph = frame->Schematic().ConnectionGraph();
-        if( !graph )
+        const auto netName = pin->GetConnectionName( &frame->GetCurrentSheet() );
+
+        if( !netName )
             return;
 
-        if( SCH_NETCHAIN* sig = graph->GetNetChainForNet( pin->Connection()->Name() ) )
+        if( SCH_NETCHAIN* sig = frame->Schematic().NetChains().GetNetChainForNet( *netName ) )
         {
-            m_oldA = sig->GetTerminalPinA();
-            m_oldB = sig->GetTerminalPinB();
-            m_new = pin->m_Uuid;
+            m_change = { sig->GetName(), 0, pin->m_Uuid, frame->GetCurrentSheet().Path() };
 
             wxMenuItem* itemA = Append( ID_REPLACE_TERMINAL_PIN_A, _( "Terminal A" ) );
             wxMenuItem* itemB = Append( ID_REPLACE_TERMINAL_PIN_B, _( "Terminal B" ) );
 
-            if( m_oldA == m_new )
-                itemA->Enable( false );
-
-            if( m_oldB == m_new )
-                itemB->Enable( false );
+            const bool isEndpoint = sig->IsTerminal( m_change.pin, m_change.sheet );
+            itemA->Enable( !isEndpoint );
+            itemB->Enable( !isEndpoint );
         }
     }
 
@@ -222,13 +214,15 @@ protected:
         if( aEvent.GetId() == ID_REPLACE_TERMINAL_PIN_A )
         {
             TOOL_EVENT te = SCH_ACTIONS::replaceTerminalPin.MakeEvent();
-            te.SetParameter( std::make_pair( m_oldA.AsString(), m_new.AsString() ) );
+            m_change.endpoint = 0;
+            te.SetParameter( m_change );
             return te;
         }
         else if( aEvent.GetId() == ID_REPLACE_TERMINAL_PIN_B )
         {
             TOOL_EVENT te = SCH_ACTIONS::replaceTerminalPin.MakeEvent();
-            te.SetParameter( std::make_pair( m_oldB.AsString(), m_new.AsString() ) );
+            m_change.endpoint = 1;
+            te.SetParameter( m_change );
             return te;
         }
 
@@ -236,9 +230,7 @@ protected:
     }
 
 private:
-    KIID m_oldA;
-    KIID m_oldB;
-    KIID m_new;
+    SCH_CONNECTIVITY::NETCHAIN_MANAGER::TERMINAL_CHANGE m_change;
 };
 
 // Forward declaration of helper used inside NET_CHAIN_MENU::update
@@ -295,13 +287,9 @@ protected:
 
         wxLogTrace( "KICAD_NET_CHAIN_MENU", "[NetChainMenu] selection size=%u", sel.GetSize() );
 
-        CONNECTION_GRAPH* graph = frame->Schematic().ConnectionGraph();
-
-        if( !graph )
-        {
-            wxLogTrace( "KICAD_NET_CHAIN_MENU", "[NetChainMenu] abort: no connection graph" );
-            return;
-        }
+        frame->RecalculateConnections( nullptr, NO_CLEANUP );
+        auto& chains = frame->Schematic().NetChains();
+        const SCH_SHEET_PATH& path = frame->GetCurrentSheet();
 
         if( sel.OnlyContains( { SCH_SYMBOL_T } ) )
         {
@@ -319,7 +307,7 @@ protected:
         };
 
         // Determine context flags
-        bool singlePin = sel.GetSize() == 1 && pinFrom( 0 ) && pinFrom( 0 )->Connection();
+        bool singlePin = sel.GetSize() == 1 && pinFrom( 0 ) && pinFrom( 0 )->GetConnectionName( &path );
         bool inSignal  = false; // at least one selected item participates in a committed chain
         bool canName   = false; // we can rename a chain (single pin with committed chain)
         bool canRemove = false; // we can remove an item from its chain
@@ -329,18 +317,19 @@ protected:
         {
             SCH_PIN* p = dynamic_cast<SCH_PIN*>( static_cast<SCH_ITEM*>( sel[i] ) );
 
-            if( !p || !p->Connection() )
+            const auto netName = p ? p->GetConnectionName( &path ) : std::nullopt;
+
+            if( !netName )
             {
                 wxLogTrace( "KICAD_NET_CHAIN_MENU", "[NetChainMenu] sel[%zu]: not a pin or no connection", i );
                 continue;
             }
 
-            wxString netName = p->Connection()->Name();
-            bool hasSignal = graph->GetNetChainForNet( netName );
+            bool hasSignal = chains.GetNetChainForNet( *netName );
             wxLogTrace( "KICAD_NET_CHAIN_MENU", "[NetChainMenu] sel[%zu]: pin uuid=%s net=%s committedSignal=%d", i,
-                        p->m_Uuid.AsString(), netName, hasSignal );
+                        p->m_Uuid.AsString(), *netName, hasSignal );
 
-            if( graph->GetNetChainForNet( p->Connection()->Name() ) )
+            if( hasSignal )
             {
                 inSignal = true;
                 canRemove = true; // current remove handler works on a pin in a chain
@@ -396,10 +385,10 @@ protected:
         if( sel.GetSize() == 1 )
         {
             SCH_ITEM* item = static_cast<SCH_ITEM*>( sel.Front() );
-            bool isConnectedPin = dynamic_cast<SCH_PIN*>( item ) && item->Connection();
+            bool isConnectedPin = dynamic_cast<SCH_PIN*>( item ) && item->GetConnectionName( &path );
             bool isConnectedWireOrBus = item && item->Type() == SCH_LINE_T
                                              && item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } )
-                                             && item->Connection();
+                                             && item->GetConnectionName( &path );
 
             if( isConnectedPin || isConnectedWireOrBus )
             {
@@ -433,9 +422,9 @@ static bool addCreateNetChainBetweenPinsIfApplicable( NET_CHAIN_MENU* aMenu, SCH
     if( !pa || !pb )
         return false;
 
-    CONNECTION_GRAPH* graph = aFrame->Schematic().ConnectionGraph();
+    const SCH_SHEET_PATH& path = aFrame->GetCurrentSheet();
 
-    if( graph->FindPotentialNetChainBetweenPins( pa, pb ) )
+    if( aFrame->Schematic().NetChains().FindPotentialNetChainBetweenPins( pa, path, pb, path ) )
     {
         wxString label = wxString::Format( _( "Create Net Chain between %s:%s and %s:%s" ),
                                            pa->GetParentSymbol()->GetRef( &aFrame->GetCurrentSheet() ), pa->GetNumber(),

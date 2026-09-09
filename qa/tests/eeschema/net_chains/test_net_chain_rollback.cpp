@@ -151,6 +151,65 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RebuildFailureLeavesResetGraphUnbuilt,
 }
 
 
+BOOST_FIXTURE_TEST_CASE( NetChain_FailedRefreshPreservesCommittedPayload,
+                         NETCHAIN_ROLLBACK_FIXTURE )
+{
+    LOCALE_IO locale;
+    KI_TEST::LoadSchematic( m_settingsManager, "net_chains_four_nets_labeled", m_schematic );
+    auto* graph = m_schematic->ConnectionGraph();
+    auto& chains = m_schematic->NetChains();
+    BOOST_REQUIRE( !chains.GetPotentialNetChains().empty() );
+    SCH_NETCHAIN* committed = chains.CreateNetChainFromPotential(
+            chains.GetPotentialNetChains().front().get(), "ATOMIC_CHAIN" );
+    BOOST_REQUIRE( committed );
+    const auto originalNets = committed->GetNets();
+    const auto originalMembers = chains.GetNetChainMemberNetOverrides();
+    const SCH_SHEET_LIST sheets = m_schematic->Hierarchy();
+    SCH_LABEL* renamed = nullptr;
+
+    for( const SCH_SHEET_PATH& path : sheets )
+    {
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_LABEL_T ) )
+        {
+            auto* label = static_cast<SCH_LABEL*>( item );
+            auto* connection = label->Connection( &path );
+
+            if( connection && originalNets.contains( connection->Name() ) )
+            {
+                renamed = label;
+                break;
+            }
+        }
+
+        if( renamed )
+            break;
+    }
+
+    BOOST_REQUIRE( renamed );
+    renamed->SetText( "ATOMIC_RENAMED" );
+    bool hookFired = false;
+    CONNECTION_GRAPH::RebuildNetChainsTestHook() =
+            [&]( SCH_CONNECTIVITY::NETCHAIN_MANAGER& )
+            {
+                hookFired = true;
+                throw std::runtime_error( "existing chain refresh failure" );
+            };
+
+    BOOST_CHECK_THROW( graph->Recalculate( sheets, true ), std::runtime_error );
+
+    CONNECTION_GRAPH::RebuildNetChainsTestHook() = nullptr;
+    BOOST_CHECK( hookFired );
+    BOOST_CHECK( chains.GetNetChainByName( "ATOMIC_CHAIN" ) == committed );
+    BOOST_CHECK( committed->GetNets() == originalNets );
+    // Graph reset retires raw symbol pointers before the manager transaction begins.
+    BOOST_CHECK( committed->GetSymbols().empty() );
+    BOOST_CHECK( chains.GetNetChainMemberNetOverrides() == originalMembers );
+    graph->Recalculate( sheets, true );
+    BOOST_CHECK( committed->GetNets().contains( "/ATOMIC_RENAMED" ) );
+    BOOST_CHECK( chains.GetNetChainMemberNetOverrides().at( "ATOMIC_CHAIN" ).contains( "/ATOMIC_RENAMED" ) );
+}
+
+
 BOOST_FIXTURE_TEST_CASE( NetChain_RebuildPublishesExistingAndNewChains, NETCHAIN_ROLLBACK_FIXTURE )
 {
     LOCALE_IO locale;

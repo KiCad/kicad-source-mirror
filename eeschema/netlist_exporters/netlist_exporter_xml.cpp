@@ -1447,7 +1447,7 @@ XNODE* NETLIST_EXPORTER_XML::makeNetChains()
         // limited to nets that have stable, user-visible names.
         for( const wxString& net : chain->GetNets() )
         {
-            if( net.IsEmpty() || net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
+            if( !SCH_NETCHAIN::IsPersistableNet( net ) )
                 continue;
 
             XNODE* xmember;
