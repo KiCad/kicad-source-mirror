@@ -184,8 +184,7 @@ void PCB_IO_SPRINT_LAYOUT::loadBoard( const wxString& aFileName, BOARD& aBoard, 
         std::vector<IMPORT_PROJECT_DESC> chosen = m_choose_project_handler( options );
 
         if( chosen.empty() )
-            // CANCEL is a magic string that supresses the error dialog
-            THROW_IO_ERROR( _( "CANCEL" ) );
+            THROW_IO_CANCELLED();
 
         unsigned long idx = std::stoul( chosen[0].PCBId.ToStdString() );
         boardIndex = static_cast<size_t>( idx );

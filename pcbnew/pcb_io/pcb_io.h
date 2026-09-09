@@ -127,6 +127,7 @@ public:
      * @throw IO_ERROR if there is a problem loading, and its contents should say what went
      *                 wrong, using line number and character offsets of the input file if
      *                 possible.
+     * @throw IO_CANCELLED if the user cancelled the load.
      */
     std::unique_ptr<BOARD> LoadBoard( const wxString&                    aFileName,
                                       const std::map<std::string, UTF8>* aProperties = nullptr,

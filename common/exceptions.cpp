@@ -69,6 +69,14 @@ const char* IO_ERROR::what() const throw()
 }
 
 
+IO_CANCELLED::IO_CANCELLED( const char* aThrowersFile, const char* aThrowersFunction, int aThrowersLineNumber,
+                            const wxString& aProblem ) :
+        IO_ERROR( aProblem.IsEmpty() ? _( "Canceled by user." ) : aProblem, aThrowersFile, aThrowersFunction,
+                  aThrowersLineNumber )
+{
+}
+
+
 void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
                         const char* aThrowersFunction, int aThrowersLineNumber,
                         const wxString& aSource, const char* aInputLine, int aLineNumber,

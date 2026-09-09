@@ -158,7 +158,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::checkpoint()
                                                             / std::max( 1U, m_lineCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( _( "Open canceled by user." ) );
+                THROW_IO_CANCELLED();
 
             m_lastProgressTime = curTime;
         }
@@ -1509,7 +1509,7 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             if( !m_queryUserCallback( _( "Undefined Layers Warning" ), wxICON_WARNING, msg,
                                       _( "Rescue" ) ) )
             {
-                THROW_IO_ERROR( wxT( "CANCEL" ) );
+                THROW_IO_CANCELLED();
             }
 
             // Make sure the destination layer is enabled, even if not in the file

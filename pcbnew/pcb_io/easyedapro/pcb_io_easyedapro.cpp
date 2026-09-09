@@ -109,8 +109,7 @@ void PCB_IO_EASYEDAPRO::loadBoard( const wxString& aFileName, BOARD& aBoard, boo
         m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !m_progressReporter->KeepRefreshing() )
-            // CANCEL is a magic string that supresses the error dialog
-            THROW_IO_ERROR( _( "CANCEL" ) );
+            THROW_IO_CANCELLED();
     }
 
     PCB_IO_EASYEDAPRO_PARSER parser( nullptr, nullptr );
@@ -141,8 +140,11 @@ void PCB_IO_EASYEDAPRO::loadBoard( const wxString& aFileName, BOARD& aBoard, boo
                 std::vector<IMPORT_PROJECT_DESC> chosen = m_choose_project_handler(
                         EASYEDAPRO::ProjectToSelectorDialog( project, true, false ) );
 
-                if( chosen.size() > 0 )
-                    pcbToLoad = chosen[0].PCBId;
+                // Quiet exit on cancel
+                if( chosen.size() == 0 )
+                    THROW_IO_CANCELLED();
+
+                pcbToLoad = chosen[0].PCBId;
             }
         }
 

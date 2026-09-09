@@ -491,7 +491,7 @@ void ALTIUM_PCB::checkpoint()
             m_progressReporter->SetCurrentProgress( (double) m_doneCount / std::max( 1U, m_totalCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( _( "File import canceled by user." ) );
+                THROW_IO_CANCELLED();
 
             m_lastProgressCount = m_doneCount;
         }

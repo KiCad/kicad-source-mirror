@@ -188,6 +188,10 @@ void PCB_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
 
             m_previewItem = pi->LoadBoard( aDesignBlock->GetBoardFile(), nullptr ).release();
         }
+        catch( const IO_CANCELLED& )
+        {
+            // A user-cancelled load is not an error; the preview simply stays empty.
+        }
         catch( const IO_ERROR& ioe )
         {
             // You wouldn't think boardFn.GetFullPath() would throw, but we get a stack buffer
@@ -195,12 +199,8 @@ void PCB_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
             // cost us much.
             try
             {
-                if( ioe.Problem() != wxT( "CANCEL" ) )
-                {
-                    wxString msg =
-                            wxString::Format( _( "Error loading board file:\n%s" ), aDesignBlock->GetBoardFile() );
-                    DisplayErrorMessage( this, msg, ioe.What() );
-                }
+                wxString msg = wxString::Format( _( "Error loading board file:\n%s" ), aDesignBlock->GetBoardFile() );
+                DisplayErrorMessage( this, msg, ioe.What() );
             }
             catch( ... )
             {

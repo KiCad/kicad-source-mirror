@@ -764,7 +764,7 @@ void PCB_IO_IPC2581::reportPhase( const wxString& aMessage )
     m_progressReporter->AdvancePhase( aMessage );
 
     if( !m_progressReporter->KeepRefreshing() )
-        THROW_IO_ERROR( _( "IPC-2581 export cancelled" ) );
+        THROW_IO_CANCELLED();
 }
 
 
@@ -783,7 +783,7 @@ void PCB_IO_IPC2581::tickProgress( const wxString& aMessage )
         return;
 
     if( !m_progressReporter->KeepRefreshing() )
-        THROW_IO_ERROR( _( "IPC-2581 export cancelled" ) );
+        THROW_IO_CANCELLED();
 }
 
 

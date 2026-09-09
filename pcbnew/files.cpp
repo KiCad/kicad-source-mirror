@@ -753,14 +753,16 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             failedLoad = true;
         }
+        catch( const IO_CANCELLED& )
+        {
+            // A user-cancelled load is not an error; abandon it without a dialog.
+            failedLoad = true;
+        }
         catch( const IO_ERROR& ioe )
         {
-            if( ioe.Problem() != wxT( "CANCEL" ) )
-            {
-                msg.Printf( _( "Error loading PCB '%s'." ), fullFileName );
-                progressReporter.Hide();
-                DisplayErrorMessage( this, msg, ioe.What() );
-            }
+            msg.Printf( _( "Error loading PCB '%s'." ), fullFileName );
+            progressReporter.Hide();
+            DisplayErrorMessage( this, msg, ioe.What() );
 
             failedLoad = true;
         }

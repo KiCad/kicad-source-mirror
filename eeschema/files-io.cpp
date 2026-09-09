@@ -1650,7 +1650,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                 progressReporter.Report( _( "Updating connections..." ) );
 
                 if( !progressReporter.KeepRefreshing() )
-                    THROW_IO_ERROR( _( "File import canceled by user." ) );
+                    THROW_IO_CANCELLED();
 
                 RecalculateConnections( nullptr, GLOBAL_CLEANUP, &progressReporter );
 

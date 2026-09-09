@@ -22,6 +22,7 @@
 #define KI_EXCEPTION_H_
 
 #include <kicommon.h>
+
 #include <wx/string.h>
 
 
@@ -105,6 +106,29 @@ protected:
     wxString    problem;
     wxString    where;
 };
+
+
+/**
+ * An exception saying that the user cancelled an interactive part of a load,
+ * import, or export, such as declining a query dialog or dismissing a progress
+ * dialog, rather than an error in the input.
+ */
+class KICOMMON_API IO_CANCELLED : public IO_ERROR
+{
+public:
+    /**
+     * Normally thrown via the macro #THROW_IO_CANCELLED(), which supplies the call-site
+     * file, function, and line.  An optional problem message can be given as the last
+     * argument. When omitted or empty, a default is used.
+     */
+    IO_CANCELLED( const char* aThrowersFile, const char* aThrowersFunction, int aThrowersLineNumber,
+                  const wxString& aProblem = wxEmptyString );
+};
+
+
+#define THROW_IO_CANCELLED() throw IO_CANCELLED( __FILE__, __FUNCTION__, __LINE__ )
+
+#define THROW_IO_CANCELLED_MSG( msg ) throw IO_CANCELLED( __FILE__, __FUNCTION__, __LINE__, msg )
 
 
 /**

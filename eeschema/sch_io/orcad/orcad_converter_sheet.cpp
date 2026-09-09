@@ -281,7 +281,7 @@ void pollProgress( PROGRESS_REPORTER* aReporter, const std::string& aPageName )
     aReporter->Report( wxString::Format( _( "Converting page '%s'..." ), FromOrcadString( aPageName ) ) );
 
     if( !aReporter->KeepRefreshing() )
-        THROW_IO_ERROR( _( "Open canceled by user." ) );
+        THROW_IO_CANCELLED();
 }
 
 

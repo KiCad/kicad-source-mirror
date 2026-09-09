@@ -410,6 +410,11 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
             okToProceed = m_layers->CheckCopperLayerCount( loadedBoard, otherBoard.get() );
         }
     }
+    catch( const IO_CANCELLED& )
+    {
+        // A user-cancelled load is not an error.
+        return;
+    }
     catch( const IO_ERROR& ioe )
     {
         // You wouldn't think boardFn.GetFullPath() would throw, but we get a stack buffer
@@ -417,11 +422,8 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         // cost us much.
         try
         {
-            if( ioe.Problem() != wxT( "CANCEL" ) )
-            {
-                wxString msg = wxString::Format( _( "Error loading board file:\n%s" ), boardFn.GetFullPath() );
-                DisplayErrorMessage( this, msg, ioe.What() );
-            }
+            wxString msg = wxString::Format( _( "Error loading board file:\n%s" ), boardFn.GetFullPath() );
+            DisplayErrorMessage( this, msg, ioe.What() );
         }
         catch(...)
         {

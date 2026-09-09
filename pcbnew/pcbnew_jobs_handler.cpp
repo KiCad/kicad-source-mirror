@@ -3663,11 +3663,23 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
                 wxString::Format( _( "Importing '%s' using %s format...\n" ), job->m_inputFile, formatName ),
                 RPT_SEVERITY_INFO );
 
-        board = pi->LoadBoard( job->m_inputFile );
-
-        if( !board )
+        // LoadBoard reports load failures and user cancellations by throwing.
+        try
         {
-            m_reporter->Report( _( "Failed to load board\n" ), RPT_SEVERITY_ERROR );
+            board = pi->LoadBoard( job->m_inputFile );
+        }
+        catch( const IO_CANCELLED& ioce )
+        {
+            // We should not be here, as the plugin should not have used an interactive dialog
+            // in the CLI context.
+            // But technically the file is not invalid
+            m_reporter->Report( wxString::Format( _( "Unexpected cancellation: %s\n" ), ioce.What() ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load board: %s\n" ), ioe.What() ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
 

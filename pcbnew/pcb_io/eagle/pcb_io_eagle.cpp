@@ -315,7 +315,7 @@ void PCB_IO_EAGLE::checkpoint()
             m_progressReporter->SetCurrentProgress( ( (double) m_doneCount ) / std::max( 1U, m_totalCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( _( "File import canceled by user." ) );
+                THROW_IO_CANCELLED();
 
             m_lastProgressCount = m_doneCount;
         }
@@ -350,7 +350,7 @@ void PCB_IO_EAGLE::loadBoard( const wxString& aFileName, BOARD& aBoard, bool aIs
             m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( _( "File import canceled by user." ) );
+                THROW_IO_CANCELLED();
         }
 
         wxFileName fn = aFileName;
