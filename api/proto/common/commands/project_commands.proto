@@ -123,3 +123,16 @@ message SaveDocument
 {
   kiapi.common.types.DocumentSpecifier document = 1;
 }
+
+// Creates a new document (in memory; does not save to disk)
+// Currently board and schematic files can be created.  A project will be created
+// for the document if it doesn't already exist.
+// Will return an error if the current document is unsaved: save or revert first
+// Returns OpenDocumentResponse
+// Since: 11.0
+message CreateDocument
+{
+  kiapi.common.types.DocumentType type = 1;
+
+  string path = 2;
+}

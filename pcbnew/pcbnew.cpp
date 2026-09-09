@@ -603,6 +603,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool handleOpenPcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError );
 
+    bool handleCreatePcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError );
+
     bool handleOpenFootprint( const wxString& aProjectPath, const wxString& aLibIdStr, KICAD_API_SERVER* aServer,
                               wxString* aError );
 
@@ -886,6 +888,9 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec, KICAD_API_SERVER*
     if( aSpec.kind == DOCUMENT_SPEC::KIND::FPID_KIND )
         return handleOpenFootprint( aSpec.path, aSpec.libId.GetUniStringLibId(), aServer, aError );
 
+    if( aSpec.kind == DOCUMENT_SPEC::KIND::CREATE_KIND )
+        return handleCreatePcb( aSpec.path, aServer, aError );
+
     if( aSpec.path.IsEmpty() )
     {
         if( aError )
@@ -1055,6 +1060,78 @@ bool IFACE::handleOpenPcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxS
     {
         if( aError )
             *aError = wxS( "Failed to load board" );
+
+        return false;
+    }
+
+    m_openContext = std::move( newContext );
+
+    m_openHandler = std::make_unique<API_HANDLER_PCB>( m_openContext, nullptr );
+    aServer->RegisterHandler( m_openHandler.get() );
+
+    return true;
+}
+
+
+bool IFACE::handleCreatePcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError )
+{
+    wxFileName boardPath( aPath );
+    boardPath.MakeAbsolute();
+
+    wxFileName projectPath( boardPath );
+    projectPath.SetExt( FILEEXT::ProjectFileExtension );
+
+    if( m_openContext && m_openContext->IsContentModified() )
+    {
+        if( aError )
+            *aError = wxS( "The current board has unsaved changes; save or revert it first" );
+
+        return false;
+    }
+
+    closeCurrentDocument( aServer );
+
+    SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
+
+    PROJECT* project = settingsManager.GetProject( projectPath.GetFullPath() );
+
+    if( !project )
+    {
+        settingsManager.LoadProject( projectPath.GetFullPath(), true );;
+        project = settingsManager.GetProject( projectPath.GetFullPath() );
+    }
+
+    if( !project )
+    {
+        if( aError )
+            *aError = wxString::Format( wxS( "Error creating project for %s" ), aPath );
+
+        return false;
+    }
+
+    std::shared_ptr<HEADLESS_PCB_CONTEXT> newContext;
+
+    try
+    {
+        std::unique_ptr<BOARD> newBoard = BOARD_LOADER::CreateEmptyBoard( project );
+
+        if( !newBoard )
+        {
+            if( aError )
+                *aError = wxS( "Failed to create board" );
+
+            return false;
+        }
+
+        newBoard->SetFileName( boardPath.GetFullPath() );
+
+        newContext = std::make_shared<HEADLESS_PCB_CONTEXT>( std::move( newBoard ), project,
+                                                             GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ), m_kiway );
+    }
+    catch( ... )
+    {
+        if( aError )
+            *aError = wxS( "Failed to create board" );
 
         return false;
     }

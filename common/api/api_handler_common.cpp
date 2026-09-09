@@ -69,7 +69,8 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
             &API_HANDLER_COMMON::handleCloseDocument );
     registerHandler<CloseAllDocuments, Empty>(
             &API_HANDLER_COMMON::handleCloseAllDocuments );
-
+    registerHandler<CreateDocument, OpenDocumentResponse>(
+            &API_HANDLER_COMMON::handleCreateDocument );
 }
 
 
@@ -438,6 +439,21 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleCloseDocument(
     }
 
     return m_closeDocumentHandler( aCtx.Request );
+}
+
+
+HANDLER_RESULT<OpenDocumentResponse>
+API_HANDLER_COMMON::handleCreateDocument( const HANDLER_CONTEXT<CreateDocument>& aCtx )
+{
+    if( !m_createDocumentHandler )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
+        e.set_error_message( "CreateDocument is not available in this KiCad mode" );
+        return tl::unexpected( e );
+    }
+
+    return m_createDocumentHandler( aCtx.Request );
 }
 
 

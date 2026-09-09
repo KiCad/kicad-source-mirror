@@ -157,6 +157,7 @@ struct KIFACE
         {
             FILE_KIND,   ///< Open the file at #path.
             FPID_KIND,   ///< Open the library element named by #libId
+            CREATE_KIND, ///< Create a new document at #path and open it (in memory, not persisted)
         };
 
         KIND     kind = KIND::FILE_KIND;

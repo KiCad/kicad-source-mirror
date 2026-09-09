@@ -468,6 +468,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                                 KICAD_API_SERVER* aServer,
                                 wxString* aError ) override;
 
+    bool handleCreateSchematic( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError );
     bool HandleApiCloseDocument( const wxString& aSchFileName,
                                  KICAD_API_SERVER* aServer,
                                  wxString* aError ) override;
@@ -888,6 +889,9 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
 {
     wxCHECK( aServer, false );
 
+    if( aSpec.kind == DOCUMENT_SPEC::KIND::CREATE_KIND )
+        return handleCreateSchematic( aSpec.path, aServer, aError );
+
     if( aSpec.path.IsEmpty() )
     {
         if( aError )
@@ -964,6 +968,63 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
     }
 
     m_openSchematic = schematic;
+
+    m_openContext = std::make_shared<HEADLESS_SCH_CONTEXT>( m_openSchematic, project, m_kiway );
+    m_openHandler = std::make_unique<API_HANDLER_SCH>( m_openContext );
+    aServer->RegisterHandler( m_openHandler.get() );
+
+    return true;
+}
+
+
+bool IFACE::handleCreateSchematic( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError )
+{
+    wxFileName schPath( aPath );
+    schPath.MakeAbsolute();
+
+    wxFileName projectPath( schPath );
+    projectPath.SetExt( FILEEXT::ProjectFileExtension );
+
+    if( m_openSchematic && m_openSchematic->HasHierarchy() )
+    {
+        if( m_openSchematic->Hierarchy().IsModified() )
+        {
+            if( aError )
+                *aError = wxS( "The current schematic has unsaved changes; save or revert it first" );
+
+            return false;
+        }
+    }
+
+    closeCurrentDocument( aServer );
+
+    SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
+
+    PROJECT* project = settingsManager.GetProject( projectPath.GetFullPath() );
+
+    if( !project )
+    {
+        // Create the project settings in memory (LoadProject falls back to defaults when the
+        // file does not exist on disk) without writing any files.
+        settingsManager.LoadProject( projectPath.GetFullPath(), true );
+        project = settingsManager.GetProject( projectPath.GetFullPath() );
+    }
+
+    if( !project )
+    {
+        if( aError )
+            *aError = wxString::Format( wxS( "Error creating project for %s" ), aPath );
+
+        return false;
+    }
+
+    std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( project );
+    schematic->CreateDefaultScreens();
+
+    SCH_SCREENS screens( schematic->Root() );
+    schematic->RootScreen()->SetFileName( schPath.GetFullPath() );
+
+    m_openSchematic = schematic.release();
 
     m_openContext = std::make_shared<HEADLESS_SCH_CONTEXT>( m_openSchematic, project, m_kiway );
     m_openHandler = std::make_unique<API_HANDLER_SCH>( m_openContext );

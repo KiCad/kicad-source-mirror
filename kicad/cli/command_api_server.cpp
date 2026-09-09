@@ -331,6 +331,74 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         return response;
     };
 
+    auto createDocument =
+            [&]( const commands::CreateDocument& aRequest ) -> HANDLER_RESULT<commands::OpenDocumentResponse>
+    {
+        types::DocumentType requestType = aRequest.type();
+
+        // TODO could allow creating entire projects in one go
+        // or expose create from template
+        if( requestType != types::DOCTYPE_PCB && requestType != types::DOCTYPE_SCHEMATIC )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
+            e.set_error_message( "Only PCB and schematic documents can be created" );
+            return tl::unexpected( e );
+        }
+
+        wxString inputPath = wxString::FromUTF8( aRequest.path() );
+
+        if( inputPath.IsEmpty() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "CreateDocument requires a non-empty path" );
+            return tl::unexpected( e );
+        }
+
+        wxFileName docPath( inputPath );
+        docPath.MakeAbsolute();
+        docPath.SetExt( requestType == types::DOCTYPE_PCB ? FILEEXT::KiCadPcbFileExtension
+                                                          : FILEEXT::KiCadSchematicFileExtension );
+
+        KIFACE::DOCUMENT_SPEC spec;
+        spec.kind = KIFACE::DOCUMENT_SPEC::KIND::CREATE_KIND;
+        spec.path = docPath.GetFullPath();
+
+        KIWAY::FACE_T face = ( requestType == types::DOCTYPE_PCB ) ? KIWAY::FACE_PCB : KIWAY::FACE_SCH;
+        wxString error;
+
+        if( !aKiway.ProcessApiOpenDocument( face, spec, server.get(), &error ) )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( error.ToStdString() );
+            return tl::unexpected( e );
+        }
+
+        PROJECT& project = Pgm().GetSettingsManager().Prj();
+        openProjectPath =
+                wxFileName( project.GetProjectPath(), project.GetProjectName(), FILEEXT::ProjectFileExtension );
+
+        OPEN_DOCUMENT doc;
+        doc.type = requestType;
+        doc.fileName = docPath.GetFullName();
+
+        openDocuments.push_back( doc );
+
+        commands::OpenDocumentResponse response;
+        types::DocumentSpecifier*      docSpec = response.mutable_document();
+
+        docSpec->set_type( requestType );
+
+        if( requestType == types::DOCTYPE_PCB )
+            docSpec->set_board_filename( doc.fileName.ToStdString() );
+
+        PackProject( *docSpec->mutable_project(), project );
+
+        return response;
+    };
+
     auto closeDocument =
             [&]( const commands::CloseDocument& aRequest ) -> HANDLER_RESULT<google::protobuf::Empty>
     {
@@ -441,6 +509,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     };
 
     commonHandler.SetOpenDocumentHandler( openDocument );
+    commonHandler.SetCreateDocumentHandler( createDocument );
     commonHandler.SetCloseDocumentHandler( closeDocument );
     commonHandler.SetCloseAllDocumentsHandler( closeAllDocuments );
 

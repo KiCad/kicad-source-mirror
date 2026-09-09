@@ -37,6 +37,8 @@ class API_HANDLER_COMMON : public API_HANDLER
 public:
     using OPEN_DOCUMENT_HANDLER = std::function<HANDLER_RESULT<commands::OpenDocumentResponse>(
             const commands::OpenDocument& )>;
+    using CREATE_DOCUMENT_HANDLER = std::function<HANDLER_RESULT<commands::OpenDocumentResponse>(
+            const commands::CreateDocument& )>;
     using CLOSE_DOCUMENT_HANDLER = std::function<HANDLER_RESULT<Empty>(
             const commands::CloseDocument& )>;
     using CLOSE_ALL_DOCUMENTS_HANDLER = std::function<HANDLER_RESULT<Empty>(
@@ -60,6 +62,11 @@ public:
     void SetCloseAllDocumentsHandler( CLOSE_ALL_DOCUMENTS_HANDLER aHandler )
     {
         m_closeAllDocumentsHandler = std::move( aHandler );
+    }
+
+    void SetCreateDocumentHandler( CREATE_DOCUMENT_HANDLER aHandler )
+    {
+        m_createDocumentHandler = std::move( aHandler );
     }
 
 private:
@@ -101,6 +108,9 @@ private:
     HANDLER_RESULT<commands::OpenDocumentResponse> handleOpenDocument(
         const HANDLER_CONTEXT<commands::OpenDocument>& aCtx );
 
+    HANDLER_RESULT<commands::OpenDocumentResponse> handleCreateDocument(
+        const HANDLER_CONTEXT<commands::CreateDocument>& aCtx );
+
     HANDLER_RESULT<Empty> handleCloseDocument(
         const HANDLER_CONTEXT<commands::CloseDocument>& aCtx );
 
@@ -111,6 +121,7 @@ private:
     OPEN_DOCUMENT_HANDLER m_openDocumentHandler;
     CLOSE_ALL_DOCUMENTS_HANDLER m_closeAllDocumentsHandler;
     CLOSE_DOCUMENT_HANDLER m_closeDocumentHandler;
+    CREATE_DOCUMENT_HANDLER m_createDocumentHandler;
 };
 
 #endif //KICAD_API_HANDLER_COMMON_H
