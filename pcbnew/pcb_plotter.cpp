@@ -81,7 +81,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
     // sanity, ensure one layer to print
     if( aLayersToPlot.size() < 1 )
     {
-        m_reporter->Report( _( "No layers selected for plotting." ), RPT_SEVERITY_ERROR );
+        if( m_reporter )
+            m_reporter->Report( _( "No layers selected for plotting." ), RPT_SEVERITY_ERROR );
+
         return false;
     }
 
@@ -305,8 +307,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
                 delete plotter;
                 plotter = nullptr;
 
-                msg.Printf( _( "Plotted to '%s'." ), fn.GetFullPath() );
-                m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                if( m_reporter )
+                    m_reporter->Report( wxString::Format( _( "Plotted to '%s'." ), fn.GetFullPath() ),
+                                        RPT_SEVERITY_ACTION );
 
                 if( aOutputFiles )
                     aOutputFiles->push_back( fn.GetFullPath() );
@@ -314,8 +317,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         }
         else
         {
-            msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
+            if( m_reporter )
+                m_reporter->Report( wxString::Format( _( "Failed to create file '%s'." ), fn.GetFullPath() ),
+                                    RPT_SEVERITY_ERROR );
 
             success = false;
         }
@@ -338,7 +342,8 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
             aOutputFiles->push_back( fn.GetFullPath() );
     }
 
-    m_reporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
+    if( m_reporter )
+        m_reporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 
     if( m_plotOpts.GetFormat() == PLOT_FORMAT::SVG && m_plotOpts.GetSvgFitPagetoBoard() )
     {
