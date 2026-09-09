@@ -177,8 +177,11 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool addToParentGroup, SCH_COMMIT* aCommit, bool 
     newItem->ClearFlags( SELECTED | BRIGHTENED );
 
     newItem->RunOnChildren(
-            []( SCH_ITEM* aChild )
+            [renewIdentity = !doClone && Type() == SCH_SYMBOL_T]( SCH_ITEM* aChild )
             {
+                if( renewIdentity )
+                    const_cast<KIID&>( aChild->m_Uuid ) = KIID();
+
                 aChild->ClearFlags( SELECTED | BRIGHTENED );
             },
             RECURSE_MODE::NO_RECURSE );
