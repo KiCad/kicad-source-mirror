@@ -104,6 +104,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblTextThickness;
 		wxTextCtrl* m_txtTextThickness;
 		wxStaticText* m_lblTextThicknessUnits;
+		BITMAP_BUTTON* m_autoTextThickness;
 		wxStaticText* m_lblTextOrientation;
 		wxComboBox* m_cbTextOrientation;
 		wxStaticText* m_lblTextPositionMode;
@@ -133,6 +134,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAlignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAutoTextThickness( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

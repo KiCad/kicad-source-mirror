@@ -133,6 +133,9 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
 
     m_separator3->SetIsSeparator();
 
+    m_autoTextThickness->SetIsCheckButton();
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+
     // Fix the size after hiding/showing some of the properties
     Layout();
 
@@ -212,6 +215,8 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
                 m_txtTextPosY->Enable( allowPositioning );
             } );
 
+    m_txtTextWidth->Bind( wxEVT_TEXT, &DIALOG_DIMENSION_PROPERTIES::onTextSize, this );
+
     m_cbKeepAligned->Bind( wxEVT_CHECKBOX,
             [&]( wxCommandEvent& aEvt )
             {
@@ -276,7 +281,18 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     m_textWidth.SetValue( m_dimension->GetTextSize().x );
     m_textHeight.SetValue( m_dimension->GetTextSize().y );
-    m_textThickness.SetValue( m_dimension->GetTextThickness() );
+
+    if( m_dimension->GetAutoThickness() )
+    {
+        // Must match EDA_TEXT::SetAutoThickness() so unchecking auto keeps the rendered width
+        m_autoTextThickness->Check( true );
+        m_textThickness.SetValue( GetPenSizeForNormal( m_dimension->GetTextWidth() ) );
+        m_textThickness.Enable( false );
+    }
+    else
+    {
+        m_textThickness.SetValue( m_dimension->GetTextThickness() );
+    }
 
     m_textPosX.SetValue( m_dimension->GetTextPos().x );
     m_textPosY.SetValue( m_dimension->GetTextPos().y );
@@ -338,7 +354,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_txtValueActual->SetValue( m_dimension->GetValueText() );
     }
 
-    if( PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( m_dimension ) )
+    if( PCB_DIM_LEADER* leader = dynamic_cast<PCB_DIM_LEADER*>( m_dimension ) )
         m_cbTextFrame->SetSelection( static_cast<int>( leader->GetTextBorder() ) );
 
     return DIALOG_DIMENSION_PROPERTIES_BASE::TransferDataToWindow();
@@ -533,7 +549,33 @@ void DIALOG_DIMENSION_PROPERTIES::resolveDrivingConstraint( PCB_CONSTRAINT* aCon
 
 void DIALOG_DIMENSION_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
 {
-    m_textThickness.Show( KIFONT::FONT::IsStroke( aEvent.GetString() ) );
+    bool stroke = KIFONT::FONT::IsStroke( aEvent.GetString() );
+
+    m_textThickness.Show( stroke );
+    m_autoTextThickness->Show( stroke );
+}
+
+
+void DIALOG_DIMENSION_PROPERTIES::onTextSize( wxCommandEvent& aEvent )
+{
+    if( m_autoTextThickness->IsChecked() )
+        m_textThickness.SetValue( GetPenSizeForNormal( m_textWidth.GetValue() ) );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_DIMENSION_PROPERTIES::onAutoTextThickness( wxCommandEvent& aEvent )
+{
+    if( aEvent.IsChecked() )
+    {
+        m_textThickness.SetValue( GetPenSizeForNormal( m_textWidth.GetValue() ) );
+        m_textThickness.Enable( false );
+    }
+    else
+    {
+        m_textThickness.Enable( true );
+    }
 }
 
 
@@ -611,7 +653,11 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     aTarget->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
     aTarget->SetTextWidth( m_textWidth.GetValue() );
     aTarget->SetTextHeight( m_textHeight.GetValue() );
-    aTarget->SetTextThickness( m_textThickness.GetValue() );
+
+    if( m_autoTextThickness->IsChecked() )
+        aTarget->SetAutoThickness( true );
+    else
+        aTarget->SetTextThickness( m_textThickness.GetValue() );
 
     if( m_fontCtrl->HaveFontSelection() )
         aTarget->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );

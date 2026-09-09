@@ -2112,6 +2112,11 @@ static struct DIMENSION_DESC
                     .Map( DIM_VALUE_MODE::DRIVING,   _HKI( "Driving" ) )
                     .Map( DIM_VALUE_MODE::ARBITRARY, _HKI( "Arbitrary" ) );
 
+        ENUM_MAP<DIM_TEXT_POSITION>::Instance()
+                    .Map( DIM_TEXT_POSITION::OUTSIDE, _HKI( "Outside" ) )
+                    .Map( DIM_TEXT_POSITION::INLINE,  _HKI( "Inline" ) )
+                    .Map( DIM_TEXT_POSITION::MANUAL,  _HKI( "Manual" ) );
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_DIMENSION_BASE );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_DIMENSION_BASE, PCB_TEXT> );
@@ -2135,6 +2140,12 @@ static struct DIMENSION_DESC
                 []( INSPECTABLE* aItem ) -> bool
                 {
                     return dynamic_cast<PCB_DIM_LEADER*>( aItem ) == nullptr;
+                };
+
+        auto isNotCenter =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    return dynamic_cast<PCB_DIM_CENTER*>( aItem ) == nullptr;
                 };
 
         auto isMultiArrowDirection =
@@ -2270,7 +2281,30 @@ static struct DIMENSION_DESC
                     groupDimension )
                 .SetAvailableFunc( isMultiArrowDirection ).SetIsCopyable();
 
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, int>( _HKI( "Line Thickness" ),
+                    &PCB_DIMENSION_BASE::ChangeLineThickness, &PCB_DIMENSION_BASE::GetLineThickness,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupDimension )
+                .SetIsCopyable();
+
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, int>( _HKI( "Arrow Length" ),
+                    &PCB_DIMENSION_BASE::ChangeArrowLength, &PCB_DIMENSION_BASE::GetArrowLength,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupDimension )
+                .SetAvailableFunc( isNotCenter ).SetIsCopyable();
+
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, int>( _HKI( "Extension Line Offset" ),
+                    &PCB_DIMENSION_BASE::ChangeExtensionOffset, &PCB_DIMENSION_BASE::GetExtensionOffset,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupDimension )
+                .SetAvailableFunc( isNotCenter ).SetIsCopyable();
+
         const wxString groupText = _HKI( "Text Properties" );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_TEXT_POSITION>( _HKI( "Text Position" ),
+                    &PCB_DIMENSION_BASE::ChangeTextPositionMode, &PCB_DIMENSION_BASE::GetTextPositionMode ),
+                    groupText )
+                .SetAvailableFunc( isNotLeader ).SetIsCopyable();
 
         const auto isTextOrientationWriteable =
                 []( INSPECTABLE* aItem ) -> bool
@@ -2297,6 +2331,7 @@ ENUM_TO_WXANY( DIM_UNITS_FORMAT )
 ENUM_TO_WXANY( DIM_UNITS_MODE )
 ENUM_TO_WXANY( DIM_ARROW_DIRECTION )
 ENUM_TO_WXANY( DIM_VALUE_MODE )
+ENUM_TO_WXANY( DIM_TEXT_POSITION )
 
 
 static struct ALIGNED_DIMENSION_DESC
