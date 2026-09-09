@@ -102,7 +102,13 @@ static wxString GetPadTypeString( const PAD& aPad )
 
 static void SetPadTypeFromString( PAD& aPad, const wxString& aType )
 {
-    const PAD_ATTRIB oldAttrib = aPad.GetAttribute();
+    // Heuristic for detecting pads that look like they mean to be
+    // back-only pads.
+    const auto isBackOnlyPad = []( const PAD& pad ) -> bool
+    {
+        const LSET layers = pad.GetLayerSet();
+        return ( layers & LSET::BackMask() ).any() && ( layers & LSET::FrontMask() ).none();
+    };
 
     if( MatchTranslationOrNative( aType, _HKI( "Through-hole" ), false ) )
     {
@@ -110,11 +116,20 @@ static void SetPadTypeFromString( PAD& aPad, const wxString& aType )
     }
     else if( MatchTranslationOrNative( aType, _HKI( "SMD" ), false ) )
     {
-        if( oldAttrib != PAD_ATTRIB::SMD )
+        // If the pad was already SMD, don't mess with the layers, but if it
+        // is _becoming_ SMD (including if it was an aperture pad), set
+        // default layerset
+        if( aPad.GetAttribute() != PAD_ATTRIB::SMD || aPad.IsAperturePad() )
         {
-            aPad.SetAttribute( PAD_ATTRIB::SMD );
-            aPad.SetLayerSet( LSET{ F_Cu } );
+            LSET newLayers = PAD::SMDMask();
+
+            if( isBackOnlyPad( aPad ) )
+                newLayers = newLayers.FlipStandardLayers();
+
+            aPad.SetLayerSet( newLayers );
         }
+
+        aPad.SetAttribute( PAD_ATTRIB::SMD );
     }
     else if( MatchTranslationOrNative( aType, _HKI( "Connector" ), false ) )
     {
@@ -133,6 +148,10 @@ static void SetPadTypeFromString( PAD& aPad, const wxString& aType )
 
             // Unset layers except F.Paste
             LSET apertureLayers{ F_Paste };
+
+            if( isBackOnlyPad( aPad ) )
+                apertureLayers = apertureLayers.FlipStandardLayers();
+
             aPad.SetLayerSet( apertureLayers );
         }
     }
@@ -1522,7 +1541,6 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnAddRow( wxCommandEvent& aEvent )
                 {
                     PAD* last = m_rowPads.back();
                     newPad = std::make_unique<PAD>( *last );
-                    newPad->ResetUuidDirect();
                 }
                 else
                 {
