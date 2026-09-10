@@ -1,0 +1,7 @@
+icon_qa_diff_merge ICON "../../resources/bitmaps_png/icons/icon_kicad.ico"
+
+#define RC_VER_FILE_DESCRIPTION "QA Diff Merge " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "qa_diff_merge"
+#define RC_VER_ORIGINALFILENAME "qa_diff_merge.exe"
+
+#include "kiwin32.rc"

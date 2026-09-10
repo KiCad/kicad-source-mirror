@@ -35,6 +35,9 @@
 #include <wx/filename.h>
 #include <wx/utils.h>
 
+#if defined (__MINGW32__)
+    #include <fileapi.h>
+#endif
 
 namespace
 {
