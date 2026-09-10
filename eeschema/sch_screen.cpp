@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <atomic>
 #include <stack>
 #include <vector>
 #include <wx/filefn.h>
@@ -76,8 +77,17 @@
 static const wxChar DanglingProfileMask[] = wxT( "DANGLING_PROFILE" );
 
 
+static uint64_t nextConnectivityId()
+{
+    static std::atomic<uint64_t> lastId{ 0 };
+    return ++lastId;
+}
+
+
 SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     BASE_SCREEN( aParent, SCH_SCREEN_T ),
+    m_connectivityId( nextConnectivityId() ),
+    m_connectivitySource( std::make_shared<CONNECTIVITY_SOURCE>( CONNECTIVITY_SOURCE{ this } ) ),
     m_fileFormatVersionAtLoad( 0 ),
     m_paper( PAGE_SIZE_TYPE::A4 ),
     m_isReadOnly( false ),
@@ -97,6 +107,7 @@ SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
 
 SCH_SCREEN::~SCH_SCREEN()
 {
+    m_connectivitySource->screen = nullptr;
     clearLibSymbols();
     FreeDrawList();
 }
@@ -271,6 +282,12 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem, bool aUpdateLibSymbol )
         }
 
         m_rtree.insert( aItem );
+
+        if( IsConnectivitySource( aItem ) )
+            BumpConnectivityRevision( aItem->Type() );
+        else
+            m_connectivityItems.reset();
+
         --m_modification_sync;
     }
 }
@@ -299,6 +316,7 @@ void SCH_SCREEN::Clear( bool aFree )
     else
     {
         m_rtree.clear();
+        BumpConnectivityRevision();
     }
 
     // Clear the project settings
@@ -310,6 +328,8 @@ void SCH_SCREEN::Clear( bool aFree )
 
 void SCH_SCREEN::FreeDrawList()
 {
+    BumpConnectivityRevision();
+
     // We don't know which order we will encounter dependent items (e.g. pins or fields), so
     // we store the items to be deleted until we've fully cleared the tree before deleting
     std::vector<SCH_ITEM*> delete_list;
@@ -334,9 +354,21 @@ void SCH_SCREEN::Update( SCH_ITEM* aItem, bool aUpdateLibSymbol )
 }
 
 
+void SCH_SCREEN::UpdateDisplayBounds( SCH_ITEM* aItem )
+{
+    if( m_rtree.remove( aItem ) )
+        m_rtree.insert( aItem );
+}
+
+
 bool SCH_SCREEN::Remove( SCH_ITEM* aItem, bool aUpdateLibSymbol )
 {
     bool retv = m_rtree.remove( aItem );
+
+    if( retv && IsConnectivitySource( aItem ) )
+        BumpConnectivityRevision( aItem->Type() );
+    else if( retv )
+        m_connectivityItems.reset();
 
     // Check if the library symbol for the removed schematic symbol is still required.
     if( retv && aItem->Type() == SCH_SYMBOL_T && aUpdateLibSymbol )
@@ -878,6 +910,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter, LEGACY_SYMBOL_LIBS* aLe
 
 void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 {
+    BumpConnectivityRevision();
+
     std::vector<SCH_SYMBOL*> symbols;
 
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
@@ -900,43 +934,70 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 }
 
 
-SCH_ITEM* SCH_SCREEN::GetConnectivityItem( const KIID& aId ) const
+void SCH_SCREEN::BumpConnectivityRevision( KICAD_T aChangedType )
 {
-    SCH_ITEM* result = nullptr;
-    bool ambiguous = false;
-    const auto consider = [&]( SCH_ITEM* item )
-    {
-        if( item->m_Uuid == aId )
-        {
-            ambiguous |= result && result != item;
-            result = item;
-        }
-    };
+    ++m_connectivityRevision;
 
-    for( SCH_ITEM* item : Items() )
-    {
-        consider( item );
+    if( aChangedType != SCH_LINE_T )
+        ++m_connectivitySymbolRevision;
 
-        if( item->Type() == SCH_SYMBOL_T || item->Type() == SCH_SHEET_T )
-        {
-            item->RunOnChildren(
-                    [&]( SCH_ITEM* child )
-                    {
-                        if( child->IsConnectable() )
-                            consider( child );
-                    },
-                    RECURSE_MODE::NO_RECURSE );
-        }
-    }
-
-    return ambiguous ? nullptr : result;
+    m_connectivityItems.reset();
 }
 
 
-void SCH_SCREEN::SetConnectivityDirty()
+bool SCH_SCREEN::IsConnectivitySource( const SCH_ITEM* aItem )
 {
-    for( SCH_ITEM* item : Items() )
-        item->SetConnectivityDirty( true );
+    switch( aItem->Type() )
+    {
+    case SCH_MARKER_T:
+    case SCH_BITMAP_T:
+    case SCH_SHAPE_T:
+    case SCH_GROUP_T:
+        return false;
+
+    case SCH_LINE_T:
+        return aItem->IsConnectable();
+
+    default:
+        return true;
+    }
+}
+
+
+SCH_ITEM* SCH_SCREEN::GetConnectivityItem( const KIID& aId ) const
+{
+    if( !m_connectivityItems )
+    {
+        auto& index = m_connectivityItems.emplace();
+
+        const auto add =
+                [&]( SCH_ITEM* aItem )
+                {
+                    auto [it, inserted] = index.emplace( aItem->m_Uuid, aItem );
+
+                    if( !inserted && it->second != aItem )
+                        it->second = nullptr;
+                };
+
+        for( SCH_ITEM* item : Items() )
+        {
+            add( item );
+
+            if( item->Type() == SCH_SYMBOL_T || item->Type() == SCH_SHEET_T )
+            {
+                item->RunOnChildren(
+                        [&]( SCH_ITEM* aChild )
+                        {
+                            if( aChild->IsConnectable() )
+                                add( aChild );
+                        },
+                        RECURSE_MODE::NO_RECURSE );
+            }
+        }
+    }
+
+    const auto it = m_connectivityItems->find( aId );
+    return it == m_connectivityItems->end() ? nullptr : it->second;
 }
 
 
@@ -2240,7 +2301,7 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
     if( items.size() < 2 )
         return 0;
 
-    for( EDA_ITEM* item : items )
+    for( SCH_ITEM* item : items )
     {
         if( !unique_stamps.insert( item ).second )
         {
@@ -2248,6 +2309,10 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
             // deterministic about it rather than to have duplicate UUIDs with random
             // side-effects.
             const_cast<KIID&>( item->m_Uuid ) = KIID();
+
+            if( SCH_SCREEN* screen = item->GetParentScreen() )
+                screen->BumpConnectivityRevision();
+
             count++;
 
             // @todo If the item is a sheet, we need to descend the hierarchy from the sheet

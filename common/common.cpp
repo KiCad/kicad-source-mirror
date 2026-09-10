@@ -302,7 +302,7 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
                     }
                 }
 
-                if( aContext == FOR_ERC_DRC && (   token.StartsWith( wxS( "ERC_WARNING" ) )
+                if( aContext != FOR_ERC_DRC && (   token.StartsWith( wxS( "ERC_WARNING" ) )
                                                 || token.StartsWith( wxS( "ERC_ERROR" ) )
                                                 || token.StartsWith( wxS( "DRC_WARNING" ) )
                                                 || token.StartsWith( wxS( "DRC_ERROR" ) ) ) )

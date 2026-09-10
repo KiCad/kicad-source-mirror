@@ -57,6 +57,7 @@ static constexpr int max_stack = 4096 * 4096;
 namespace AC_KEYS
 {
 
+static const wxChar ConnectivityEngine[] = wxT( "ConnectivityEngine" );
 static const wxChar IncrementalConnectivity[] = wxT( "IncrementalConnectivity" );
 static const wxChar Use3DConnexionDriver[] = wxT( "3DConnexionDriver" );
 static const wxChar ExtraFillMargin[] = wxT( "ExtraFillMargin" );
@@ -293,6 +294,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_Use3DConnexionDriver = true;
 
     m_IncrementalConnectivity = true;
+    m_ConnectivityEngine = false;
 
     m_DisambiguationMenuDelay = 500;
 
@@ -542,6 +544,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::Use3DConnexionDriver,
                 &m_Use3DConnexionDriver, m_Use3DConnexionDriver ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ConnectivityEngine,
+                &m_ConnectivityEngine, m_ConnectivityEngine ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::IncrementalConnectivity,
                 &m_IncrementalConnectivity, m_IncrementalConnectivity ) );

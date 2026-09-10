@@ -25,6 +25,7 @@
 #include <eeschema_settings.h>
 #include <eda_item.h>
 #include <sch_connection.h>
+#include <sch_screen.h>
 #include <sch_group.h>
 #include <sch_rule_area.h>
 #include <sch_draw_panel.h>
@@ -85,6 +86,9 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
 
 SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
 {
+    if( SCH_SCREEN* screen = GetParentScreen() )
+        screen->BumpConnectivityRevision( Type() );
+
     m_layer              = aItem.m_layer;
     m_unit               = aItem.m_unit;
     m_bodyStyle          = aItem.m_bodyStyle;
@@ -289,6 +293,44 @@ wxString SCH_ITEM::GetBodyStyleProp() const
 SCHEMATIC* SCH_ITEM::Schematic() const
 {
     return static_cast<SCHEMATIC*>( findParent( SCHEMATIC_T ) );
+}
+
+
+SCH_SCREEN* SCH_ITEM::GetParentScreen() const
+{
+    return static_cast<SCH_SCREEN*>( findParent( SCH_SCREEN_T ) );
+}
+
+
+void SCH_ITEM::SetConnectivityDirty( bool aDirty )
+{
+    m_connectivity_dirty = aDirty;
+
+    if( aDirty && SCH_SCREEN::IsConnectivitySource( this ) )
+        invalidateConnectivity( Type() );
+}
+
+
+void SCH_ITEM::invalidateConnectivity( KICAD_T aChangedType )
+{
+    SCH_SCREEN* screen = GetParentScreen();
+
+    if( !screen )
+        return;
+
+    if( auto* owner = dynamic_cast<SCH_ITEM*>( GetParent() ) )
+    {
+        // Plotting and property dialogs use child copies with a live parent pointer
+        bool owned = false;
+        owner->RunOnChildren( [&]( SCH_ITEM* child ) { owned |= child == this; }, RECURSE_MODE::NO_RECURSE );
+
+        if( owned && screen->CheckIfOnDrawList( owner ) )
+            screen->BumpConnectivityRevision( aChangedType );
+    }
+    else if( screen->CheckIfOnDrawList( this ) )
+    {
+        screen->BumpConnectivityRevision( aChangedType );
+    }
 }
 
 
@@ -674,6 +716,12 @@ void SCH_ITEM::SwapItemData( SCH_ITEM* aImage )
 {
     if( aImage == nullptr )
         return;
+
+    if( SCH_SCREEN* screen = GetParentScreen() )
+        screen->BumpConnectivityRevision( Type() );
+
+    if( SCH_SCREEN* screen = aImage->GetParentScreen() )
+        screen->BumpConnectivityRevision( aImage->Type() );
 
     EDA_ITEM* parent = GetParent();
 

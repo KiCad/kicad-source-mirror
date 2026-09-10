@@ -39,6 +39,12 @@ public:
     void Serialize( google::protobuf::Any& aContainer ) const override;
     bool Deserialize( const google::protobuf::Any& aContainer ) override;
 
+    void SetDanglingState( bool aStart, bool aEnd )
+    {
+        m_isStartDangling = aStart;
+        m_isEndDangling = aEnd;
+    }
+
     bool IsStartDangling() const { return m_isStartDangling; }
     bool IsEndDangling() const { return m_isEndDangling; }
 

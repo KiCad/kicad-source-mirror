@@ -153,7 +153,7 @@ public:
     static std::vector<DANGLING_END_ITEM>::iterator
     get_lower_type( std::vector<DANGLING_END_ITEM>& aItemListByType, const DANGLING_END_T& aType );
 
-    /** Both contain the same information */
+    // Both contain the same information
     static void sort_dangling_end_items( std::vector<DANGLING_END_ITEM>& aItemListByType,
                                          std::vector<DANGLING_END_ITEM>& aItemListByPos );
 };
@@ -326,6 +326,8 @@ public:
      * @return the parent schematic this item lives on, or nullptr.
      */
     SCHEMATIC* Schematic() const;
+
+    SCH_SCREEN* GetParentScreen() const;
 
     const SYMBOL* GetParentSymbol() const;
     SYMBOL* GetParentSymbol();
@@ -565,7 +567,7 @@ public:
      */
     SCH_CONNECTION* Connection( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
-    /** Return the connection name for this sheet instance, if connected. */
+    // Return the connection name for this sheet instance, if connected.
     std::optional<wxString> GetConnectionName( const SCH_SHEET_PATH* aSheet = nullptr,
                                               bool aLocal = false, bool aIgnoreSheet = false ) const;
 
@@ -602,7 +604,7 @@ public:
 
     bool IsConnectivityDirty() const { return m_connectivity_dirty; }
 
-    void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
+    void SetConnectivityDirty( bool aDirty = true );
 
     /**
      * Check if \a aItem has connectivity changes against this object.
@@ -740,6 +742,12 @@ protected:
      * @param aItem The item to swap the data structures with.
      */
     virtual void swapData( SCH_ITEM* aItem );
+
+    /**
+     * Bump the parent screen's connectivity revision when this item, or the item owning it as a
+     * child, is on its draw list.
+     */
+    void invalidateConnectivity( KICAD_T aChangedType = TYPE_NOT_INIT );
 
     SCH_RENDER_SETTINGS* getRenderSettings( PLOTTER* aPlotter ) const;
 

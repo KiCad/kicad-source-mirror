@@ -324,6 +324,12 @@ public:
                               std::vector<DANGLING_END_ITEM>& aItemListByPos,
                               const SCH_SHEET_PATH*           aPath = nullptr ) override;
 
+    void SetDanglingState( bool aStart, bool aEnd )
+    {
+        m_startIsDangling = aStart;
+        m_endIsDangling = aEnd;
+    }
+
     bool IsStartDangling() const { return m_startIsDangling; }
     bool IsEndDangling() const { return m_endIsDangling; }
     bool IsDangling() const override { return m_startIsDangling || m_endIsDangling; }

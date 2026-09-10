@@ -439,10 +439,8 @@ BOOST_AUTO_TEST_CASE( NoRewriteWhenUnchanged )
         return buffer.str();
     };
 
-    // Drop keys the file would omit if saved before those parameters existed. The scalar
-    // board.ipc2581 block covers the plain PARAM path; schematic.bus_aliases (default null in
-    // memory but serialized as {}) covers the PARAM_LAMBDA path. Both hold their defaults, so a
-    // no-op load must not resurrect them.
+    // Files saved before ipc2581 (PARAM) and bus_aliases (PARAM_LAMBDA) existed omit both keys, and a
+    // no-op load must not resurrect their defaults
     {
         nlohmann::json js = nlohmann::json::parse( readFile( proPath ) );
         js["board"].erase( "ipc2581" );
@@ -467,6 +465,44 @@ BOOST_AUTO_TEST_CASE( NoRewriteWhenUnchanged )
 
     // And the on-disk file must be byte-for-byte unchanged.
     BOOST_CHECK_EQUAL( before, readFile( proPath ) );
+
+    // An explicitly cleared alias table must survive reopening even when the old file omitted it
+    mgr.UnloadProject( &mgr.Prj(), false );
+    BOOST_REQUIRE( mgr.LoadProject( wxString( proPath.string() ), true ) );
+    PROJECT_FILE& edited = mgr.Prj().GetProjectFile();
+    BOOST_REQUIRE( !edited.GetJson( "schematic.bus_aliases" ) );
+    edited.m_BusAliasesDefined = true;
+    BOOST_REQUIRE( edited.SaveToFile( wxString( projectDir.string() ) ) );
+    nlohmann::json saved = nlohmann::json::parse( readFile( proPath ) );
+    BOOST_CHECK( saved["schematic"]["bus_aliases"].is_object() );
+    BOOST_CHECK( saved["schematic"]["bus_aliases"].empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( AliasMigrationPreservesNonemptyDefinitions )
+{
+    const fs::path projectPath = m_tempDir / "aliases.kicad_pro";
+    const nlohmann::json aliases = { { "USB", { "D+", "D-" } } };
+
+    {
+        std::ofstream output( projectPath );
+        output << nlohmann::json( { { "meta", { { "version", 3 } } },
+                                   { "schematic", { { "bus_aliases", aliases } } } } ).dump( 2 );
+        output.close();
+        BOOST_REQUIRE( output.good() );
+    }
+
+    SETTINGS_MANAGER manager;
+    BOOST_REQUIRE( manager.LoadProject( wxString( projectPath.string() ), true ) );
+    PROJECT_FILE& project = manager.Prj().GetProjectFile();
+    BOOST_REQUIRE( project.m_BusAliasesDefined );
+    BOOST_REQUIRE_EQUAL( project.m_BusAliases.size(), 1 );
+    BOOST_CHECK( project.m_BusAliases.at( "USB" ) == std::vector<wxString>( { "D+", "D-" } ) );
+    BOOST_REQUIRE( project.SaveToFile( wxString( m_tempDir.string() ) ) );
+    std::ifstream input( projectPath );
+    const nlohmann::json saved = nlohmann::json::parse( input );
+    BOOST_CHECK_EQUAL( saved["meta"]["version"].get<int>(), 4 );
+    BOOST_CHECK( saved["schematic"]["bus_aliases"] == aliases );
 }
 
 

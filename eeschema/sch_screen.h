@@ -21,8 +21,11 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#include <cstdint>
 #include <memory>
+#include <optional>
 #include <stddef.h>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 #include <wx/arrstr.h>
@@ -100,6 +103,7 @@ class SCH_SCREEN : public BASE_SCREEN
 {
 public:
     SCH_SCREEN( EDA_ITEM* aParent = nullptr );
+    SCH_SCREEN( const SCH_SCREEN& ) = delete;
 
     ~SCH_SCREEN();
 
@@ -170,7 +174,22 @@ public:
     void IncRefCount();
     int GetRefCount() const                                 { return m_refCount; }
 
-    void SetConnectivityDirty();
+    uint64_t ConnectivityRevision() const { return m_connectivityRevision; }
+    uint64_t ConnectivitySymbolRevision() const { return m_connectivitySymbolRevision; }
+    void BumpConnectivityRevision( KICAD_T aChangedType = TYPE_NOT_INIT );
+
+    // Markers, bitmaps, plain shapes, graphic lines and groups carry nothing captured by connectivity.
+    static bool IsConnectivitySource( const SCH_ITEM* aItem );
+
+    /// Process-local lifetime identity; file UUIDs can be shared by distinct screens.
+    uint64_t ConnectivityId() const { return m_connectivityId; }
+
+    struct CONNECTIVITY_SOURCE
+    {
+        SCH_SCREEN* screen = nullptr;
+    };
+
+    std::weak_ptr<const CONNECTIVITY_SOURCE> ConnectivitySource() const { return m_connectivitySource; }
 
     /// Resolve a drawing item or a connectable child on this screen; ambiguous IDs return null.
     SCH_ITEM* GetConnectivityItem( const KIID& aId ) const;
@@ -287,12 +306,15 @@ public:
     bool Remove( SCH_ITEM* aItem, bool aUpdateLibSymbol = true );
 
     /**
-     * Update \a aItem's bounding box in the tree
+     * Refresh a changed item in the tree and invalidate connectivity.
      *
      * @param[in] aItem Item that needs to be updated.
      * @param aUpdateLibSymbol removes the library symbol as required when true.
      */
     void Update( SCH_ITEM* aItem, bool aUpdateLibSymbol = true );
+
+    // Refresh display bounds only; the item's source and membership must be unchanged.
+    void UpdateDisplayBounds( SCH_ITEM* aItem );
 
     /**
      * Remove the library symbol cached under \a aName if no symbol on this screen still
@@ -698,6 +720,12 @@ public:
     double m_LastZoomLevel;
 
 private:
+    const uint64_t                                             m_connectivityId;
+    std::shared_ptr<CONNECTIVITY_SOURCE>                       m_connectivitySource;
+    uint64_t                                                   m_connectivityRevision = 1;
+    uint64_t                                                   m_connectivitySymbolRevision = 1;
+    mutable std::optional<std::unordered_map<KIID, SCH_ITEM*>> m_connectivityItems;
+
     wxString    m_fileName;                 // File used to load the screen.
     int         m_fileFormatVersionAtLoad;
     int         m_refCount;                 // Number of sheets referencing this screen.

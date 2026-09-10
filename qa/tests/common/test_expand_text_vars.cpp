@@ -66,6 +66,19 @@ struct ExpandTextVarsFixture
 
 BOOST_FIXTURE_TEST_SUITE( ExpandTextVarsTests, ExpandTextVarsFixture )
 
+BOOST_AUTO_TEST_CASE( AssertionsRemainAvailableOnlyDuringRuleChecks )
+{
+    for( const wxString& prefix : { wxString( "ERC_WARNING" ), wxString( "ERC_ERROR" ),
+                                    wxString( "DRC_WARNING" ), wxString( "DRC_ERROR" ) } )
+    {
+        const wxString assertion = "${" + prefix + " Check this item}";
+        BOOST_CHECK_EQUAL( ExpandTextVars( assertion, &resolver, FOR_ERC_DRC ), assertion );
+        BOOST_CHECK( ExpandTextVars( assertion, &resolver, FOR_CANVAS ).empty() );
+        BOOST_CHECK_EQUAL( ExpandTextVars( assertion, &resolver, RAW_VALUE ), assertion );
+    }
+}
+
+
 // Basic variable expansion
 BOOST_AUTO_TEST_CASE( SimpleVariable )
 {

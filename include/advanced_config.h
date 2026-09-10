@@ -532,6 +532,15 @@ public:
     bool m_IncrementalConnectivity;
 
     /**
+     * Run experimental schematic connectivity shadow updates and migrated consumers.
+     *
+     * Setting name: "ConnectivityEngine"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_ConnectivityEngine;
+
+    /**
      * The number of milliseconds to wait in a click before showing a disambiguation menu.
      *
      * Setting name: "DisambiguationTime"

@@ -36,7 +36,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int projectFileSchemaVersion = 3;
+const int projectFileSchemaVersion = 4;
 
 
 PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
@@ -162,6 +162,10 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "schematic.bus_aliases",
             [&]() -> nlohmann::json
             {
+                // A project may be saved before its legacy schematic aliases are imported
+                if( !m_BusAliasesDefined && m_BusAliases.empty() )
+                    return nlohmann::json();
+
                 nlohmann::json ret = nlohmann::json::object();
 
                 for( const auto& alias : m_BusAliases )
@@ -178,10 +182,11 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
+                m_BusAliasesDefined = aJson.is_object();
+                m_BusAliases.clear();
+
                 if( !aJson.is_object() )
                     return;
-
-                m_BusAliases.clear();
 
                 for( auto it = aJson.begin(); it != aJson.end(); ++it )
                 {
@@ -264,6 +269,7 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
     registerMigration( 1, 2, std::bind( &PROJECT_FILE::migrateSchema1To2, this ) );
     registerMigration( 2, 3, std::bind( &PROJECT_FILE::migrateSchema2To3, this ) );
+    registerMigration( 3, 4, std::bind( &PROJECT_FILE::migrateSchema3To4, this ) );
 }
 
 
@@ -298,6 +304,21 @@ bool PROJECT_FILE::migrateSchema2To3()
         PARAM_LAYER_PRESET::MigrateToNamedRenderLayers( entry );
 
     m_wasMigrated = true;
+
+    return true;
+}
+
+
+bool PROJECT_FILE::migrateSchema3To4()
+{
+    const auto aliases = GetJson( "schematic.bus_aliases" );
+
+    if( aliases && aliases->is_object() && aliases->empty() )
+    {
+        // Older project-only saves wrote empty tables before importing legacy sheet aliases
+        Set( "schematic.bus_aliases", nlohmann::json() );
+        m_wasMigrated = true;
+    }
 
     return true;
 }
@@ -807,6 +828,16 @@ bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
     }
 
     return success;
+}
+
+
+bool PROJECT_FILE::Store()
+{
+    // An absent alias table permits legacy imports; an explicitly empty table suppresses them
+    if( m_BusAliasesDefined && !GetJson( "schematic.bus_aliases" ) )
+        m_modified = true;
+
+    return JSON_SETTINGS::Store();
 }
 
 

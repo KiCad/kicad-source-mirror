@@ -178,6 +178,9 @@ public:
         return it != m_netClassChainPatternAssignments.end() && !it->second.empty();
     }
 
+    /// @brief Current chain-derived patterns, grouped by the editor that produced them.
+    const auto& GetChainPatternAssignments() const { return m_netClassChainPatternAssignments; }
+
     /// @brief Clears the net cache and cached bus classes derived from that net
     void ClearCacheForNet( const wxString& netName );
 

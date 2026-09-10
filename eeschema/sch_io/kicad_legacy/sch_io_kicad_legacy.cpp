@@ -353,7 +353,13 @@ void SCH_IO_KICAD_LEGACY::LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen
         else if( strCompare( "Text", line ) )
             aScreen->Append( loadText( aReader ) );
         else if( strCompare( "BusAlias", line ) )
-            aScreen->AddBusAlias( loadBusAlias( aReader, aScreen ) );
+        {
+            auto alias = loadBusAlias( aReader, aScreen );
+            const SCHEMATIC* schematic = aScreen->Schematic();
+
+            if( m_appending || !schematic || !schematic->HasProjectBusAliases() )
+                aScreen->AddBusAlias( std::move( alias ) );
+        }
         else if( strCompare( "Kmarq", line ) )
             continue; // Ignore legacy (until 2009) ERC marker entry
         else if( strCompare( "$EndSCHEMATC", line ) )

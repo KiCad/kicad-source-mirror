@@ -106,6 +106,8 @@ public:
 
     bool LoadFromFile( const wxString& aDirectory = "" ) override;
 
+    bool Store() override;
+
     bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
     bool SaveAs( const wxString& aDirectory, const wxString& aFile );
@@ -202,6 +204,9 @@ public:
     /// Bus alias definitions for the schematic project
     std::map<wxString, std::vector<wxString>> m_BusAliases;
 
+    /// An explicit alias table was loaded or set, including a deliberately empty table.
+    bool m_BusAliasesDefined = false;
+
     /**
      * CvPcb params
      */
@@ -269,6 +274,9 @@ private:
      * Schema version 3: move layer presets to use named render layers.
      */
     bool migrateSchema2To3();
+
+    /// Schema version 4 distinguishes explicit empty alias tables from older default writes.
+    bool migrateSchema3To4();
 
     /// An list of schematic sheets in this project
     std::vector<FILE_INFO_PAIR> m_sheets;

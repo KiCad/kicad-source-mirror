@@ -2544,6 +2544,41 @@ std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
     }
 #define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider, false )
 
+LIB_SYMBOL_ATTRIBUTES LIB_SYMBOL::ComparisonAttributes() const
+{
+    return { m_options, m_unitCount, m_fpFilters, m_pinMaps, m_associatedFootprints, m_keyWords,
+             m_pinNameOffset, m_showPinNames, m_showPinNumbers, m_excludedFromSim, m_excludedFromBOM,
+             m_excludedFromBoard, m_excludedFromPosFiles, m_DNP, m_unitsLocked, m_unitDisplayNames,
+             m_bodyStyleNames, m_duplicatePinNumbersAreJumpers };
+}
+
+bool LIB_SYMBOL_ATTRIBUTES::Matches( const LIB_SYMBOL_ATTRIBUTES& aOther, int aCompareFlags ) const
+{
+    using FLAGS = SCH_ITEM::COMPARE_FLAGS;
+
+    if( options != aOther.options || unitCount != aOther.unitCount || footprintFilters != aOther.footprintFilters
+        || pinMaps != aOther.pinMaps || associatedFootprints != aOther.associatedFootprints
+        || keywords != aOther.keywords || pinNameOffset != aOther.pinNameOffset
+        || unitsLocked != aOther.unitsLocked || unitDisplayNames != aOther.unitDisplayNames
+        || bodyStyleNames != aOther.bodyStyleNames )
+    {
+        return false;
+    }
+
+    if( ( aCompareFlags & FLAGS::PIN_VISIBILITIES )
+        && ( showPinNames != aOther.showPinNames || showPinNumbers != aOther.showPinNumbers ) )
+    {
+        return false;
+    }
+
+    return ( !( aCompareFlags & FLAGS::EXCLUDE_FROM_SIM ) || excludedFromSim == aOther.excludedFromSim )
+           && ( !( aCompareFlags & FLAGS::EXCLUDE_FROM_BOM ) || excludedFromBOM == aOther.excludedFromBOM )
+           && ( !( aCompareFlags & FLAGS::EXCLUDE_FROM_BOARD ) || excludedFromBoard == aOther.excludedFromBoard )
+           && ( !( aCompareFlags & FLAGS::EXCLUDE_FROM_POS_FILES )
+                || excludedFromPosFiles == aOther.excludedFromPosFiles )
+           && ( !( aCompareFlags & FLAGS::DNP ) || dnp == aOther.dnp );
+}
+
 int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aReporter ) const
 {
     UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MM );

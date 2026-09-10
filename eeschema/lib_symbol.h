@@ -36,7 +36,7 @@
 #include <jumper_group.h>
 #include <lib_tree_item.h>
 #include <pin_map.h>
-
+#include <lib_symbol_attributes.h>
 
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -58,15 +58,6 @@ namespace KIFONT
 
 typedef MULTIVECTOR<SCH_ITEM, SCH_SHAPE_T, SCH_PIN_T> LIB_ITEMS_CONTAINER;
 typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
-
-
-/* values for member .m_options */
-enum LIBRENTRYOPTIONS
-{
-    ENTRY_NORMAL,     // Libentry is a standard symbol (real or alias)
-    ENTRY_GLOBAL_POWER,      // Libentry is a power symbol
-    ENTRY_LOCAL_POWER // Libentry is a local power symbol
-};
 
 
 extern bool operator<( const LIB_SYMBOL& aItem1, const LIB_SYMBOL& aItem2 );
@@ -127,6 +118,8 @@ public:
     LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary = nullptr, bool aCopyEmbeddedFiles = true );
 
     virtual ~LIB_SYMBOL() = default;
+
+    LIB_SYMBOL_ATTRIBUTES ComparisonAttributes() const;
 
     /// http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared.
     std::shared_ptr<LIB_SYMBOL> SharedPtr() const { return m_me; }
@@ -440,23 +433,23 @@ public:
     const SCH_FIELD* GetField( FIELD_T aFieldType ) const;
     SCH_FIELD* GetField( FIELD_T aFieldType );
 
-    /** Return reference to the value field. */
+    // Return reference to the value field.
     SCH_FIELD& GetValueField() { return *GetField( FIELD_T::VALUE ); }
     const SCH_FIELD& GetValueField() const;
 
-    /** Return reference to the reference designator field. */
+    // Return reference to the reference designator field.
     SCH_FIELD& GetReferenceField() { return *GetField( FIELD_T::REFERENCE ); }
     const SCH_FIELD& GetReferenceField() const;
 
-    /** Return reference to the footprint field */
+    // Return reference to the footprint field
     SCH_FIELD& GetFootprintField() { return *GetField( FIELD_T::FOOTPRINT ); }
     const SCH_FIELD& GetFootprintField() const;
 
-    /** Return reference to the datasheet field. */
+    // Return reference to the datasheet field.
     SCH_FIELD& GetDatasheetField() { return *GetField( FIELD_T::DATASHEET ); }
     const SCH_FIELD& GetDatasheetField() const;
 
-    /** Return reference to the description field. */
+    // Return reference to the description field.
     SCH_FIELD& GetDescriptionField() {return *GetField( FIELD_T::DESCRIPTION ); }
     const SCH_FIELD& GetDescriptionField() const;
 

@@ -6018,6 +6018,11 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
 
     NeedRIGHT();
 
+    const SCHEMATIC* schematic = aScreen->Schematic();
+
+    if( !m_appending && !m_sheetLoad && schematic && schematic->HasProjectBusAliases() )
+        return;
+
     aScreen->AddBusAlias( busAlias );
 }
 

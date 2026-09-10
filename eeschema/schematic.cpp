@@ -468,6 +468,7 @@ void SCHEMATIC::AdoptContent( SCHEMATIC_CONTENT&& aContent ) noexcept
             screen->m_libSymbols.swap( aContent.screenLibSymbols->m_libSymbols );
 
         --screen->m_modification_sync;
+        screen->BumpConnectivityRevision();
 
         // The index now owns what it names, so the staged items lose their owners.
         for( std::unique_ptr<SCH_ITEM>& item : aContent.itemOwners )
@@ -836,6 +837,15 @@ void SCHEMATIC::SetBusAliases( const std::vector<std::shared_ptr<BUS_ALIAS>>& aA
 
     m_busAliases.swap( aliases );
     updateProjectBusAliases();
+
+    if( m_project )
+        m_project->GetProjectFile().m_BusAliasesDefined = true;
+}
+
+
+bool SCHEMATIC::HasProjectBusAliases() const
+{
+    return m_project && m_project->GetProjectFile().m_BusAliasesDefined;
 }
 
 
@@ -1993,7 +2003,10 @@ void SCHEMATIC::CleanUpConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aClea
             SCH_SCREEN* screen = sheet.LastScreen();
 
             if( cleanedScreens.insert( screen ).second )
+            {
+                screen->BumpConnectivityRevision();
                 CleanUp( aCommit, screen );
+            }
         }
     }
 

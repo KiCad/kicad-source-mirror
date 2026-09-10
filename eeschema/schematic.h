@@ -341,6 +341,9 @@ public:
 
     void SetBusAliases( const std::vector<std::shared_ptr<BUS_ALIAS>>& aAliases );
 
+    // An explicit project table, including an empty one, supersedes legacy sheet definitions.
+    bool HasProjectBusAliases() const;
+
     const std::vector<std::shared_ptr<BUS_ALIAS>>& GetAllBusAliases() const
     {
         return m_busAliases;
@@ -542,11 +545,11 @@ public:
      */
     void CleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen = nullptr );
 
-    /** Prepare source geometry and intersheet references before rebuilding connectivity. */
+    // Prepare source geometry and intersheet references before rebuilding connectivity.
     void CleanUpConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                              const std::set<SCH_SCREEN*>& aLocalScreens = {} );
 
-    /** Fully rebuild connectivity without changing source geometry. */
+    // Fully rebuild connectivity without changing source geometry.
     void RebuildConnectivity( std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr,
                               PROGRESS_REPORTER* aProgressReporter = nullptr,
                               KIGFX::SCH_VIEW* aSchView = nullptr );
