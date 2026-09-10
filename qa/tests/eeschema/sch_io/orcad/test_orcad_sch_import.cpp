@@ -1902,7 +1902,7 @@ BOOST_AUTO_TEST_CASE( PrimitiveSymbolVectorContents )
     std::optional<ORCAD_PRIMITIVE> primitive = OrcadReadPrimitive( stream );
 
     BOOST_REQUIRE( primitive );
-    BOOST_CHECK( primitive->kind == ORCAD_PRIM_KIND::GROUP );
+    BOOST_CHECK( primitive->kind == ORCAD_PRIM_KIND::GROUP_PRIM );
     BOOST_CHECK_EQUAL( primitive->x1, 12 );
     BOOST_CHECK_EQUAL( primitive->y1, 26 );
     BOOST_REQUIRE_EQUAL( primitive->children.size(), 1u );
@@ -4045,7 +4045,7 @@ BOOST_AUTO_TEST_CASE( BoxedSymbolTextRemainsCenteredInItsSourceBounds )
     definition.typeId = ORCAD_ST_LIBRARY_PART;
     definition.name = "BOXED_TEXT.Normal";
     definition.bbox = ORCAD_BBOX{ 0, 0, 100, 20 };
-    definition.primitives.push_back( ORCAD_PRIMITIVE{ .kind = ORCAD_PRIM_KIND::RECT,
+    definition.primitives.push_back( ORCAD_PRIMITIVE{ .kind = ORCAD_PRIM_KIND::RECTANGLE,
                                                        .x1 = 0,
                                                        .y1 = 0,
                                                        .x2 = 100,
@@ -4177,7 +4177,7 @@ BOOST_AUTO_TEST_CASE( LaterBoxStrokeOccludesSymbolTextUnderscores )
                                                        .y2 = 19,
                                                        .text = "ISO_EVB_LABEL",
                                                        .fontIdx = 1 } );
-    definition.primitives.push_back( ORCAD_PRIMITIVE{ .kind = ORCAD_PRIM_KIND::RECT,
+    definition.primitives.push_back( ORCAD_PRIMITIVE{ .kind = ORCAD_PRIM_KIND::RECTANGLE,
                                                        .x1 = 0,
                                                        .y1 = 0,
                                                        .x2 = 100,
@@ -4453,7 +4453,7 @@ BOOST_AUTO_TEST_CASE( ZeroLengthPinRetainsNativeNameAndNumberData )
     definition.bbox = ORCAD_BBOX{ 0, 0, 100, 20 };
     definition.generalFlags = 3;
     definition.primitives.push_back(
-            ORCAD_PRIMITIVE{ .kind = ORCAD_PRIM_KIND::RECT, .x1 = 0, .y1 = 0, .x2 = 40, .y2 = 20 } );
+            ORCAD_PRIMITIVE{ .kind = ORCAD_PRIM_KIND::RECTANGLE, .x1 = 0, .y1 = 0, .x2 = 40, .y2 = 20 } );
     definition.pins.push_back( ORCAD_SYMBOL_PIN{ .name = "LABEL",
                                                  .position = 0,
                                                  .startX = 0,
@@ -4639,7 +4639,7 @@ BOOST_AUTO_TEST_CASE( InputPinUsesCaptureBodyWedge )
     definition.bbox = ORCAD_BBOX{ 0, 0, 40, 20 };
     definition.pins = {
         ORCAD_SYMBOL_PIN{ .name = "IN", .position = 0, .startX = 0, .startY = 10,
-                          .hotptX = -30, .hotptY = 10, .portType = ORCAD_PORT_TYPE::INPUT,
+                          .hotptX = -30, .hotptY = 10, .portType = ORCAD_PORT_TYPE::INPUT_TYPE,
                           .shapeBits = 0x21 },
         ORCAD_SYMBOL_PIN{ .name = "OUT", .position = 1, .startX = 40, .startY = 10,
                           .hotptX = 70, .hotptY = 10, .portType = ORCAD_PORT_TYPE::OUTPUT,
@@ -6503,7 +6503,7 @@ BOOST_AUTO_TEST_CASE( HierarchicalBlockDisplayFieldsPreserveSourceGeometry )
         ORCAD_DISPLAY_PROP{ .name = "Reference", .y = -10, .fontIdx = 2, .dispMode = 0x101 },
         ORCAD_DISPLAY_PROP{ .name = "Value", .x = 85, .y = -10, .fontIdx = 9, .dispMode = 0x101 },
     };
-    drawn.pins.push_back( ORCAD_BLOCK_PIN{ .name = "Gate", .portType = ORCAD_PORT_TYPE::INPUT,
+    drawn.pins.push_back( ORCAD_BLOCK_PIN{ .name = "Gate", .portType = ORCAD_PORT_TYPE::INPUT_TYPE,
                                            .x = 100, .y = 230 } );
     rootPage.blocks.push_back( std::move( drawn ) );
 
@@ -6566,7 +6566,7 @@ BOOST_AUTO_TEST_CASE( MultiPageHierarchyFollowsCaptureFolderOrder )
     gateBlock.reference = "GATE";
     gateBlock.w = 100;
     gateBlock.h = 100;
-    gateBlock.pins.push_back( ORCAD_BLOCK_PIN{ .name = "IN", .portType = ORCAD_PORT_TYPE::INPUT,
+    gateBlock.pins.push_back( ORCAD_BLOCK_PIN{ .name = "IN", .portType = ORCAD_PORT_TYPE::INPUT_TYPE,
                                              .x = 0, .y = 50 } );
     mainPage.blocks.push_back( gateBlock );
 
@@ -7044,7 +7044,7 @@ BOOST_AUTO_TEST_CASE( S593487_ClosestCachedBodyIsFitted )
     primary.typeId = ORCAD_ST_LIBRARY_PART;
     primary.name = "BODY.Normal";
     primary.bbox = ORCAD_BBOX{ 0, 0, 20, 20 };
-    primary.primitives.push_back( ORCAD_PRIMITIVE{ .kind = ORCAD_PRIM_KIND::RECT, .x2 = 20, .y2 = 20 } );
+    primary.primitives.push_back( ORCAD_PRIMITIVE{ .kind = ORCAD_PRIM_KIND::RECTANGLE, .x2 = 20, .y2 = 20 } );
     primary.pins.resize( 2 );
     primary.pins[0].hotptX = 0;
     primary.pins[1].hotptX = 20;
@@ -11843,7 +11843,7 @@ BOOST_AUTO_TEST_CASE( OffpageParentBindingPreservesPinNameAndDirection )
     drawn.reference = "G1";
     drawn.x1 = drawn.y1 = 100;
     drawn.w = drawn.h = 100;
-    drawn.pins.push_back( ORCAD_BLOCK_PIN{ .name = "Gate", .portType = ORCAD_PORT_TYPE::INPUT,
+    drawn.pins.push_back( ORCAD_BLOCK_PIN{ .name = "Gate", .portType = ORCAD_PORT_TYPE::INPUT_TYPE,
                                            .x = 100, .y = 150 } );
     rootPage.blocks.push_back( std::move( drawn ) );
 
