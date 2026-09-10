@@ -4089,6 +4089,13 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
     SCH_ITEM* bus_item = nullptr;
     SCH_CONNECTION conn( this );
 
+    // m_items is ordered by pointer, so choose by UUID to report the same pair on every run
+    const auto pick = []( SCH_ITEM*& aChosen, SCH_ITEM* aItem )
+    {
+        if( !aChosen || aItem->m_Uuid < aChosen->m_Uuid )
+            aChosen = aItem;
+    };
+
     for( SCH_ITEM* item : aSubgraph->m_items )
     {
         switch( item->Type() )
@@ -4096,9 +4103,9 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
         case SCH_LINE_T:
         {
             if( item->GetLayer() == LAYER_BUS )
-                bus_item = ( !bus_item ) ? item : bus_item;
+                pick( bus_item, item );
             else
-                net_item = ( !net_item ) ? item : net_item;
+                pick( net_item, item );
 
             break;
         }
@@ -4112,9 +4119,9 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
             conn.ConfigureFromLabel( EscapeString( text->GetShownText( &sheet, FOR_NETNAME ), CTX_NETNAME ) );
 
             if( conn.IsBus() )
-                bus_item = ( !bus_item ) ? item : bus_item;
+                pick( bus_item, item );
             else
-                net_item = ( !net_item ) ? item : net_item;
+                pick( net_item, item );
 
             break;
         }
@@ -4319,6 +4326,10 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
     std::set<SCH_PIN*>        unique_pins;
     std::set<SCH_LABEL_BASE*> unique_labels;
+    std::set<const SCH_ITEM*> absorbedItems;
+
+    for( const CONNECTION_SUBGRAPH* absorbed : aSubgraph->m_absorbed_subgraphs )
+        absorbedItems.insert( absorbed->m_items.begin(), absorbed->m_items.end() );
 
     wxString netName = GetResolvedSubgraphName( aSubgraph );
 
@@ -4334,9 +4345,16 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             {
                 SCH_PIN* test_pin = static_cast<SCH_PIN*>( item );
 
-                // Only link NC to pin on the current subgraph being checked
-                if( aProcessGraph == aSubgraph )
+                const SYMBOL* parent = test_pin->GetParentSymbol();
+                const bool powerFlag = ( parent->IsGlobalPower() || parent->IsLocalPower() )
+                                       && test_pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_OUT;
+
+                // Link NC to a pin wired to it, chosen by UUID because m_items is ordered by pointer
+                if( aProcessGraph == aSubgraph && !absorbedItems.contains( test_pin ) && !powerFlag
+                    && ( !pin || test_pin->m_Uuid < pin->m_Uuid ) )
+                {
                     pin = test_pin;
+                }
 
                 if( std::none_of( unique_pins.begin(), unique_pins.end(),
                         [test_pin]( SCH_PIN* aPin )
