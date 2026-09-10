@@ -117,13 +117,15 @@ bool DIALOG_EDIT_LIBRARY_TABLES::CanClose()
     if( modified && !::HandleUnsavedChanges( this, _( "Save changes to library tables?" ),
             [&]() -> bool
             {
+                bool retVal = true;
+
                 for( LIB_TABLE_NOTEBOOK_PANEL* page : pages )
-                    modified |= page->SaveTable();
+                    retVal &= page->SaveTable();
 
                 m_GlobalTableChanged = true;
                 m_ProjectTableChanged = true;
 
-                return true;
+                return retVal;
             } ) )
     {
         return false;
