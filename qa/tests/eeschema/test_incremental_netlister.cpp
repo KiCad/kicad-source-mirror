@@ -99,7 +99,7 @@ BOOST_FIXTURE_TEST_CASE( RemoveAddItems, CONNECTIVITY_TEST_FIXTURE )
                 {
                     const std::vector<SCH_ITEM*>& conn_items = item->ConnectedItems( path );
                     SCH_CONNECTION*               conn = item->Connection();
-                    wxString                      netname = conn ? conn->GetNetName().ToStdString() : wxString( "NoNet" );
+                    wxString                      netname = conn ? conn->GetNetName() : wxString( "NoNet" );
                     int                           subgraph = conn ? conn->SubgraphCode() : -1;
 
                     BOOST_TEST_MESSAGE( test.ToStdString()
