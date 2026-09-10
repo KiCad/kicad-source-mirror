@@ -408,7 +408,7 @@ PCBEXPR_PROPERTY_KIND PCBEXPR_VAR_REF::ClassifyProperty( const PROPERTY_BASE* aP
     const TYPE_ID type = aProperty->TypeHash();
 
     if( type == TYPE_HASH( int ) )
-        return PCBEXPR_PROPERTY_KIND::INT;
+        return PCBEXPR_PROPERTY_KIND::INT_KIND;
     else if( type == TYPE_HASH( std::optional<int> ) )
         return PCBEXPR_PROPERTY_KIND::OPTIONAL_INT;
     else if( type == TYPE_HASH( unsigned ) )
@@ -420,7 +420,7 @@ PCBEXPR_PROPERTY_KIND PCBEXPR_VAR_REF::ClassifyProperty( const PROPERTY_BASE* aP
     else if( type == TYPE_HASH( std::optional<double> ) )
         return PCBEXPR_PROPERTY_KIND::OPTIONAL_DOUBLE;
     else if( type == TYPE_HASH( bool ) )
-        return PCBEXPR_PROPERTY_KIND::BOOL;
+        return PCBEXPR_PROPERTY_KIND::BOOL_KIND;
     else if( type == TYPE_HASH( wxString ) )
         return PCBEXPR_PROPERTY_KIND::STRING;
     else if( aProperty->HasChoices() )
@@ -438,11 +438,11 @@ LIBEVAL::VAR_TYPE_T PCBEXPR_VAR_REF::ExpressionType( PCBEXPR_PROPERTY_KIND aKind
 {
     switch( aKind )
     {
-    case PCBEXPR_PROPERTY_KIND::INT:
+    case PCBEXPR_PROPERTY_KIND::INT_KIND:
     case PCBEXPR_PROPERTY_KIND::OPTIONAL_INT:
     case PCBEXPR_PROPERTY_KIND::UNSIGNED:
     case PCBEXPR_PROPERTY_KIND::LONG_LONG:
-    case PCBEXPR_PROPERTY_KIND::BOOL: return LIBEVAL::VT_NUMERIC;
+    case PCBEXPR_PROPERTY_KIND::BOOL_KIND: return LIBEVAL::VT_NUMERIC;
 
     case PCBEXPR_PROPERTY_KIND::DOUBLE:
     case PCBEXPR_PROPERTY_KIND::OPTIONAL_DOUBLE:
@@ -510,7 +510,7 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
         switch( it->second.kind )
         {
-        case PCBEXPR_PROPERTY_KIND::INT:
+        case PCBEXPR_PROPERTY_KIND::INT_KIND:
             return new LIBEVAL::VALUE( static_cast<double>( item->Get<int>( it->second.property ) ) );
 
         case PCBEXPR_PROPERTY_KIND::OPTIONAL_INT:
@@ -541,7 +541,7 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
             return LIBEVAL::VALUE::MakeNullValue();
         }
 
-        case PCBEXPR_PROPERTY_KIND::BOOL:
+        case PCBEXPR_PROPERTY_KIND::BOOL_KIND:
             return new LIBEVAL::VALUE( static_cast<double>( item->Get<bool>( it->second.property ) ) );
 
         case PCBEXPR_PROPERTY_KIND::STRING:

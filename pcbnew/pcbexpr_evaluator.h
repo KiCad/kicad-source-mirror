@@ -49,13 +49,13 @@ enum class PCBEXPR_NAV_STEP
 enum class PCBEXPR_PROPERTY_KIND
 {
     UNSUPPORTED,
-    INT,
+    INT_KIND,
     OPTIONAL_INT,
     UNSIGNED,
     LONG_LONG,
     DOUBLE,
     OPTIONAL_DOUBLE,
-    BOOL,
+    BOOL_KIND,
     STRING,
     ENUM,
     ANGLE,
