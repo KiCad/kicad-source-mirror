@@ -41,6 +41,7 @@
 #include <pcb_textbox.h>
 #include <pcb_table.h>
 #include <pcb_generator.h>
+#include <generators/pcb_via_stitch.h>
 #include <zone.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>
@@ -3145,6 +3146,27 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             commit.Remove( board_item );
             itemsDeleted++;
             break;
+
+        case PCB_VIA_T:
+        {
+            if( !aIsCut )
+            {
+                EDA_GROUP* parent = board_item->GetParentGroup();
+                PCB_VIA_STITCH* stitch =
+                        parent ? dynamic_cast<PCB_VIA_STITCH*>( parent->AsEdaItem() ) : nullptr;
+
+                if( stitch && !aItems.Contains( stitch ) )
+                {
+                    // We need to mark the via as excluded on deletion
+                    commit.Modify( stitch );
+                    stitch->ExcludePosition( board_item->GetPosition() );
+                }
+            }
+
+            commit.Remove( board_item );
+            itemsDeleted++;
+            break;
+        }
 
         case PCB_GENERATOR_T:
         {
