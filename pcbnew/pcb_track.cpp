@@ -120,8 +120,7 @@ PCB_VIA::PCB_VIA( BOARD_ITEM* aParent ) :
     // For now, vias are always circles
     m_padStack.SetShape( PAD_SHAPE::CIRCLE, PADSTACK::ALL_LAYERS );
 
-    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
-        m_zoneLayerOverrides[layer] = ZLO_NONE;
+    ClearZoneLayerOverrides();
 
     m_isFree = false;
 }
@@ -134,7 +133,12 @@ PCB_VIA::PCB_VIA( const PCB_VIA& aOther ) :
     PCB_VIA::operator=( aOther );
 
     SetUuidDirect( aOther.m_Uuid );
-    m_zoneLayerOverrides = aOther.m_zoneLayerOverrides;
+
+    for( size_t ii = 0; ii < m_zoneLayerOverrides.size(); ++ii )
+    {
+        m_zoneLayerOverrides[ii].store( aOther.m_zoneLayerOverrides[ii].load( std::memory_order_relaxed ),
+                                        std::memory_order_relaxed );
+    }
 }
 
 
@@ -338,7 +342,22 @@ bool PCB_VIA::operator==( const PCB_VIA& aOther ) const
             && m_layer == aOther.m_layer
             && m_padStack == aOther.m_padStack
             && m_viaType == aOther.m_viaType
-            && m_zoneLayerOverrides == aOther.m_zoneLayerOverrides;
+            && sameZoneLayerOverrides( aOther );
+}
+
+
+bool PCB_VIA::sameZoneLayerOverrides( const PCB_VIA& aOther ) const
+{
+    for( size_t ii = 0; ii < m_zoneLayerOverrides.size(); ++ii )
+    {
+        if( m_zoneLayerOverrides[ii].load( std::memory_order_relaxed )
+                != aOther.m_zoneLayerOverrides[ii].load( std::memory_order_relaxed ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 
@@ -366,7 +385,7 @@ double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
     if( m_viaType != other.m_viaType )
         similarity *= 0.9;
 
-    if( m_zoneLayerOverrides != other.m_zoneLayerOverrides )
+    if( !sameZoneLayerOverrides( other ) )
         similarity *= 0.9;
 
     return similarity;
@@ -566,8 +585,13 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
     via.set_is_free( GetIsFree() );
 
     {
-        std::unique_lock lock( m_zoneLayerOverridesMutex );
-        kiapi::board::PackZoneLayerOverrides( via.mutable_zone_layer_overrides(), m_zoneLayerOverrides );
+        // Pack drops ZLO_NONE, so walking every copper layer emits only the overridden ones
+        std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> overrides;
+
+        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, MAX_CU_LAYERS ) )
+            overrides[layer] = GetZoneLayerOverride( layer );
+
+        kiapi::board::PackZoneLayerOverrides( via.mutable_zone_layer_overrides(), overrides );
     }
 
     kiapi::common::PackCustomProperties( via.mutable_custom_properties(), *this );
@@ -610,8 +634,11 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     ClearZoneLayerOverrides();
 
     {
-        std::unique_lock lock( m_zoneLayerOverridesMutex );
-        kiapi::board::UnpackZoneLayerOverrides( m_zoneLayerOverrides, via.zone_layer_overrides() );
+        std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> overrides;
+        kiapi::board::UnpackZoneLayerOverrides( overrides, via.zone_layer_overrides() );
+
+        for( const auto& [layer, value] : overrides )
+            SetZoneLayerOverride( layer, value );
     }
 
     return true;
@@ -2230,27 +2257,36 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
 }
 
 
-void PCB_VIA::ClearZoneLayerOverrides()
+// IsCopperLayer() accepts any even id below PCB_LAYER_ID_COUNT, but only F_Cu..In30_Cu carry a
+// distinct ordinal.  Anything above aliases B_Cu or indexes past the override array
+static bool hasLayerOrdinal( PCB_LAYER_ID aLayer )
 {
-    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
-
-    for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
-        m_zoneLayerOverrides[layer] = ZLO_NONE;
+    return IsCopperLayer( aLayer ) && aLayer <= In30_Cu;
 }
 
 
-const ZONE_LAYER_OVERRIDE& PCB_VIA::GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
+void PCB_VIA::ClearZoneLayerOverrides()
 {
-    static const ZONE_LAYER_OVERRIDE defaultOverride = ZLO_NONE;
-    auto it = m_zoneLayerOverrides.find( aLayer );
-    return it != m_zoneLayerOverrides.end() ? it->second : defaultOverride;
+    for( std::atomic<ZONE_LAYER_OVERRIDE>& entry : m_zoneLayerOverrides )
+        entry.store( ZLO_NONE, std::memory_order_relaxed );
+}
+
+
+ZONE_LAYER_OVERRIDE PCB_VIA::GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
+{
+    if( !hasLayerOrdinal( aLayer ) )
+        return ZLO_NONE;
+
+    return m_zoneLayerOverrides[CopperLayerToOrdinal( aLayer )].load( std::memory_order_relaxed );
 }
 
 
 void PCB_VIA::SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride )
 {
-    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
-    m_zoneLayerOverrides[aLayer] = aOverride;
+    if( !hasLayerOrdinal( aLayer ) )
+        return;
+
+    m_zoneLayerOverrides[CopperLayerToOrdinal( aLayer )].store( aOverride, std::memory_order_relaxed );
 }
 
 

@@ -31,8 +31,8 @@
 #pragma once
 
 #include <array>
+#include <atomic>
 #include <optional>
-#include <mutex>
 
 #include <board_connected_item.h>
 #include <base_units.h>
@@ -840,7 +840,10 @@ public:
 
     void ClearZoneLayerOverrides();
 
-    const ZONE_LAYER_OVERRIDE& GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const;
+    /**
+     * @return the override for \a aLayer, or ZLO_NONE if \a aLayer is not a copper layer.
+     */
+    ZONE_LAYER_OVERRIDE GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const;
 
     void SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride );
 
@@ -861,6 +864,8 @@ private:
     // Silence GCC warning about hiding the PCB_TRACK base method
     bool operator==( const PCB_TRACK& aOther ) const override;
 
+    bool sameZoneLayerOverrides( const PCB_VIA& aOther ) const;
+
 private:
     VIATYPE      m_viaType;                  ///< through, blind/buried or micro
 
@@ -868,6 +873,6 @@ private:
 
     bool         m_isFree;                   ///< "Free" vias don't get their nets auto-updated
 
-    mutable std::mutex                          m_zoneLayerOverridesMutex;
-    std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> m_zoneLayerOverrides;
+    // These are used in zone filling, so use a fixed size to avoid undefined behavior
+    std::array<std::atomic<ZONE_LAYER_OVERRIDE>, MAX_CU_LAYERS> m_zoneLayerOverrides;
 };
