@@ -194,7 +194,6 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
 
 void SCH_FIELD::Serialize( kiapi::schematic::types::SchematicField& field, const EDA_IU_SCALE& aScale ) const
 {
-
     field.set_name( GetName( false ).ToUTF8() );
     field.set_visible( IsVisible() );
     field.set_show_name( IsNameShown() );
@@ -202,6 +201,11 @@ void SCH_FIELD::Serialize( kiapi::schematic::types::SchematicField& field, const
     field.set_is_private( IsPrivate() );
 
     EDA_TEXT::Serialize( *field.mutable_text(), aScale );
+
+    // Override the position from the above for symbols so that they are in the right reference frame
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+        kiapi::common::PackVector2( *field.mutable_text()->mutable_position(), GetPosition(), aScale );
+
     kiapi::common::PackCustomProperties( field.mutable_custom_properties(), *this );
 }
 
@@ -222,7 +226,12 @@ bool SCH_FIELD::Deserialize( const kiapi::schematic::types::SchematicField& fiel
     SetCanAutoplace( field.allow_auto_place() );
     SetPrivate( field.is_private() );
 
-    return EDA_TEXT::Deserialize( field.text(), aScale );
+    bool result = EDA_TEXT::Deserialize( field.text(), aScale );
+
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+        SetPosition( kiapi::common::UnpackVector2( field.text().position(), aScale ) );
+
+    return result;
 }
 
 

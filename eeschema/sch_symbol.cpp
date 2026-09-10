@@ -1118,16 +1118,12 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
     // lib pins, and then we need to set the alternates for pins if applicable
 
     m_pins.clear();
-    TRANSFORM t = GetTransform().InverseTransform();
 
     for( SCH_PIN* pin : GetAllLibPins() )
     {
         m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
         m_pins.back()->SetParent( this );
         const_cast<::KIID&>( m_pins.back() ->m_Uuid ) = pin->m_Uuid;
-
-        // We also need to reset the lib pin to use relative coordinates
-        pin->SetPosition( t.TransformCoordinate( pin->GetLocalPosition() - m_pos ) );
     }
 
     UpdatePins();

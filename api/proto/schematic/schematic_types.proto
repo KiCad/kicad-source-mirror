@@ -362,6 +362,7 @@ message SchematicPin
   string name = 2;
   string number = 3;
 
+  // Pin position in the symbol definition's local coordinate frame.
   kiapi.common.types.Vector2 position = 4;
   kiapi.common.types.Distance length = 5;
   SchematicPinOrientation orientation = 6;
@@ -542,6 +543,9 @@ message SchematicBodyStyle
   string name = 1;
 }
 
+// A symbol definition, or a library symbol
+// Child items of a symbol definition are stored with positions relative to the symbol origin
+// and without any rotation/mirroring applied
 message SchematicSymbol
 {
   kiapi.common.types.LibraryIdentifier id = 1;

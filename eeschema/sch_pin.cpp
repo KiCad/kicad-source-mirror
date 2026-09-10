@@ -278,7 +278,7 @@ void SCH_PIN::Serialize( google::protobuf::Any& aContainer ) const
     pin.set_name( GetBaseName().ToUTF8() );
     pin.set_number( GetNumber().ToUTF8() );
 
-    PackVector2( *pin.mutable_position(), GetPosition(), schIUScale );
+    PackVector2( *pin.mutable_position(), GetLocalPosition(), schIUScale );
     PackDistance( *pin.mutable_length(), GetLength(), schIUScale );
     pin.set_orientation( ToProtoEnum<PIN_ORIENTATION, SchematicPinOrientation>( GetOrientation() ) );
 

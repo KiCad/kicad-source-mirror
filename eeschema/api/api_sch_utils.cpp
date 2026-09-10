@@ -181,6 +181,33 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
         pin->Serialize( *item->mutable_item() );
     }
 
+    // Also include the pins from non-placed units
+    if( const LIB_SYMBOL* lib = aInput->GetLibSymbolRef().get() )
+    {
+        std::set<wxString> placedNumbers;
+
+        for( const SCH_PIN* pin : pins )
+            placedNumbers.insert( pin->GetNumber() );
+
+        for( const SCH_PIN* libPin : lib->GetPins() )
+        {
+            if( libPin->GetBodyStyle() && aInput->GetBodyStyle()
+                    && aInput->GetBodyStyle() != libPin->GetBodyStyle() )
+            {
+                continue;
+            }
+
+            if( placedNumbers.count( libPin->GetNumber() ) )
+                continue;
+
+            kiapi::schematic::types::SchematicSymbolChild* item = def->add_items();
+            item->mutable_unit()->set_unit( libPin->GetUnit() );
+            item->mutable_body_style()->set_style( libPin->GetBodyStyle() );
+            item->set_is_private( libPin->IsPrivate() );
+            libPin->Serialize( *item->mutable_item() );
+        }
+    }
+
     if( const LIB_SYMBOL* lib = aInput->GetLibSymbolRef().get() )
     {
         kiapi::schematic::types::SymbolPinMaps* pinMaps = def->mutable_pin_maps();
