@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-09-08 05:57+0000\n"
+"PO-Revision-Date: 2026-09-10 09:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1.dev0\n"
+"X-Generator: Weblate 2026.9.1\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -6280,9 +6280,8 @@ msgid "How would you like KiCad to create them?"
 msgstr "Come si vuole che KiCad li crei?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "Inizia con le librerie KiCad integrate (consigliato)"
+msgstr "Inizia con le librerie KiCad integrate"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 msgid "Import tables from the previous version"
@@ -6299,9 +6298,8 @@ msgstr ""
 "create con le librerie KiCad predefinite."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
-#, fuzzy
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr "Inizia con le librerie KiCad integrate (consigliato)"
+msgstr "Migra le librerie integrate alla versione più recente (consigliato)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
@@ -6458,9 +6456,8 @@ msgid "Insert Group"
 msgstr "Inserisci gruppo"
 
 #: common/dialogs/panel_toolbar_customization.cpp:177
-#, fuzzy
 msgid "Filter actions"
-msgstr "Impostazioni filtro"
+msgstr "Azioni filtro"
 
 #: common/dialogs/panel_toolbar_customization.cpp:459
 #: common/dialogs/panel_toolbar_customization.cpp:784
@@ -6535,18 +6532,16 @@ msgid "Graphics error"
 msgstr "Errore grafico"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Errore grafico"
+msgstr "Errore grafico durante il recupero"
 
 #: common/draw_panel_gal.cpp:241
 msgid "Unknown exception during backend switch"
 msgstr "Eccezione sconosciuta durante il passaggio al backend"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Azione di pulizia sconosciuta"
+msgstr "Eccezione sconosciuta"
 
 #: common/draw_panel_gal.cpp:650
 msgid "Could not use OpenGL"
@@ -6755,14 +6750,14 @@ msgid "Invalid floating point number"
 msgstr "Numero in virgola mobile non valido"
 
 #: common/eda_base_frame.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallito recupero file auto-salvato '%s'."
 
 #: common/eda_base_frame.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Fallita scrittura file '%s'."
+msgstr "Fallita scrittura file recuperato '%s'."
 
 #: common/eda_base_frame.cpp:669 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -8103,34 +8098,34 @@ msgid "Cannot amend: the branch has no commits yet."
 msgstr "Impossibile modificare: il ramo non ha ancora commit."
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Fallito recupero commit: %s"
+msgstr "Fallito recupero del commit HEAD: %s"
 
 #: common/git/libgit_backend.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Fallito recupero commit: %s"
+msgstr "Fallito recupero commit genitore: %s"
 
 #: common/git/libgit_backend.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Fallito recupero riferimento HEAD: %s"
+msgstr "Fallito recupero albero HEAD: %s"
 
 #: common/git/libgit_backend.cpp:372 common/git/libgit_backend.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Fallita scrittura indice: %s"
+msgstr "Fallito reset indice: %s"
 
 #: common/git/libgit_backend.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Fallita scrittura albero: %s"
+msgstr "Fallita recupero albero genitore: %s"
 
 #: common/git/libgit_backend.cpp:464 kicad/project_tree_pane.cpp:3085
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Fallito recupero commit: %s"
+msgstr "Fallita correzione commit: %s"
 
 #: common/git/libgit_backend.cpp:491 common/git/libgit_backend.cpp:1065
 #, c-format
@@ -8161,9 +8156,9 @@ msgid "No repository available to set up remote"
 msgstr "Nessun repository disponibile per configurare il remote"
 
 #: common/git/libgit_backend.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Fallita creazione remoto: %s"
+msgstr "Fallita impostazione remoto: %s"
 
 #: common/git/libgit_backend.cpp:931
 msgid "No repository available"
@@ -8185,9 +8180,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Fallito passaggio a diramazione '%s': %s"
 
 #: common/git/libgit_backend.cpp:998
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Fallita ricerca diramazione '%s': %s"
+msgstr "Fallita creazione diramazione locale '%s': %s"
 
 #: common/git/libgit_backend.cpp:1012
 #, c-format
@@ -8284,9 +8279,8 @@ msgid "Could not read repository index after merge."
 msgstr "Impossibile leggere l'indice del repository dopo il merge."
 
 #: common/git/libgit_backend.cpp:1494
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "Impossibile scrivere i file di tracciatura nella cartella '%s'."
+msgstr "Impossibile scrivere il risultato del merge."
 
 #: common/git/libgit_backend.cpp:1502
 msgid "Could not get the repository head."
