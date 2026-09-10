@@ -40,6 +40,11 @@
 #include <sch_commit.h>
 #include <string_utils.h>
 #include <sch_edit_frame.h>
+#include <io/kicad/kicad_io_utils.h>
+#include <ki_error.h>
+#include <richio.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+
 #include <sch_label.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -132,6 +137,10 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
             &API_HANDLER_SCH::handleSaveCopyOfDocument );
     registerHandler<RevertDocument, google::protobuf::Empty>( &API_HANDLER_SCH::handleRevertDocument );
 
+    registerHandler<commands::SaveDocumentToString, commands::SavedDocumentResponse>(
+            &API_HANDLER_SCH::handleSaveDocumentToString );
+    registerHandler<commands::SaveSelectionToString, commands::SavedSelectionResponse>(
+            &API_HANDLER_SCH::handleSaveSelectionToString );
     registerHandler<GetItems, GetItemsResponse>( &API_HANDLER_SCH::handleGetItems );
     registerHandler<GetItemsById, GetItemsResponse>( &API_HANDLER_SCH::handleGetItemsById );
 
@@ -403,29 +412,88 @@ API_HANDLER_SCH::handleRevertDocument( const HANDLER_CONTEXT<RevertDocument>& aC
         return tl::unexpected( e );
     }
 
-    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "RevertDocument" ) )
-        return tl::unexpected( *headless );
-
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    wxFileName fn = project().AbsolutePath( schematic()->GetFileName() );
-
-    if( frame()->GetCurrentSheet().Last() != &schematic()->Root() )
+    if( !context()->RevertToSaved() )
     {
-        SCH_SHEET_PATH rootSheetPath = schematic()->Hierarchy().at( 0 );
-        frame()->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "could not revert: there is no saved file on disk to revert to" );
+        return tl::unexpected( e );
     }
 
-    SCH_SCREENS screenList( schematic()->Root() );
-
-    for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
-        screen->SetContentModified( false );
-
-    frame()->ReleaseFile();
-    frame()->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
-
     return google::protobuf::Empty();
+}
+
+
+HANDLER_RESULT<commands::SavedDocumentResponse>
+API_HANDLER_SCH::handleSaveDocumentToString( const HANDLER_CONTEXT<commands::SaveDocumentToString>& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    commands::SavedDocumentResponse response;
+
+    SCH_SHEET* topLevelSheet = schematic()->GetTopLevelSheet( 0 );
+
+    if( !topLevelSheet || !topLevelSheet->GetScreen() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "schematic has no top-level sheet to save" );
+        return tl::unexpected( e );
+    }
+
+    STRING_FORMATTER   formatter;
+    SCH_IO_KICAD_SEXPR plugin;
+
+    plugin.FormatSchematicToFormatter( &formatter, topLevelSheet, schematic(), nullptr );
+
+    std::string contents = formatter.GetString();
+    KICAD_FORMAT::Prettify( contents, KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES );
+    response.set_contents( contents );
+
+    return response;
+}
+
+
+HANDLER_RESULT<commands::SavedSelectionResponse>
+API_HANDLER_SCH::handleSaveSelectionToString( const HANDLER_CONTEXT<commands::SaveSelectionToString>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SaveSelectionToString" ) )
+        return tl::unexpected( *headless );
+
+    SCH_SELECTION_TOOL* selTool = toolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SELECTION&      selection = selTool->GetSelection();
+
+    if( selection.Empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "the selection is empty" );
+        return tl::unexpected( e );
+    }
+
+    commands::SavedSelectionResponse response;
+
+    SCH_SHEET_PATH selPath = frame()->GetCurrentSheet();
+
+    for( EDA_ITEM* item : selection )
+        response.add_ids()->set_value( item->m_Uuid.AsStdString() );
+
+    STRING_FORMATTER   formatter;
+    SCH_IO_KICAD_SEXPR plugin;
+
+    plugin.Format( &selection, &selPath, *schematic(), &formatter, true );
+
+    std::string contents = formatter.GetString();
+    KICAD_FORMAT::Prettify( contents, KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES );
+    response.set_contents( contents );
+
+    return response;
 }
 
 
@@ -1310,6 +1378,7 @@ bool API_HANDLER_SCH::setPageSettings( const DocumentSpecifier& aDocument, const
     if( SCH_SCREEN* screen = resolveScreenFromDocument( aDocument ) )
     {
         screen->SetPageSettings( aPageInfo );
+        screen->SetContentModified();
         return true;
     }
 
@@ -1339,6 +1408,10 @@ void API_HANDLER_SCH::onModified()
     {
         frame()->Refresh();
         frame()->OnModify();
+    }
+    else if( schematic()->GetCurrentScreen() )
+    {
+        schematic()->GetCurrentScreen()->SetContentModified();
     }
 }
 

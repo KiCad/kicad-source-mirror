@@ -27,6 +27,8 @@
 #include <netlist_reader/board_netlist_updater.h>
 #include <netlist_reader/netlist_reader.h>
 #include <netlist_reader/pcb_netlist_utils.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
 #include <project.h>
 #include <reporter.h>
 #include <settings/settings_manager.h>
@@ -206,4 +208,42 @@ void HEADLESS_PCB_CONTEXT::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater )
     SpreadFootprints( &newFootprints, { 0, 0 }, true );
 
     board->CompileRatsnest();
+}
+
+
+bool HEADLESS_PCB_CONTEXT::RevertToSaved()
+{
+    wxCHECK( m_board && m_project, false );
+
+    wxString fileName = m_board->GetFileName();
+
+    if( fileName.IsEmpty() || !wxFileExists( fileName ) )
+        return false;
+
+    PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( fileName, KICTL_KICAD_ONLY );
+
+    if( pluginType == PCB_IO_MGR::FILE_TYPE_NONE )
+        return false;
+
+    std::unique_ptr<BOARD> reloaded;
+
+    try
+    {
+        reloaded = BOARD_LOADER::Load( fileName, pluginType, m_project );
+    }
+    catch( ... )
+    {
+        return false;
+    }
+
+    if( !reloaded )
+        return false;
+
+    m_board = std::move( reloaded );
+    m_board->SetProject( m_project );
+    m_toolManager->SetEnvironment( m_board.get(), nullptr, nullptr, GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ),
+                                   nullptr );
+    m_contentModified = false;
+
+    return true;
 }

@@ -40,12 +40,14 @@ struct API_HANDLER_SCH_FIXTURE
 {
     SETTINGS_MANAGER                      m_settingsManager;
     std::unique_ptr<SCHEMATIC>            m_schematic;
+    SCHEMATIC*                            m_schematicSlot = nullptr;
     std::shared_ptr<HEADLESS_SCH_CONTEXT> m_context;
 
     SCHEMATIC* loadSchematic( const wxString& aRelPath )
     {
         KI_TEST::LoadSchematic( m_settingsManager, aRelPath, m_schematic );
-        m_context = std::make_shared<HEADLESS_SCH_CONTEXT>( m_schematic.get(),
+        m_schematicSlot = m_schematic.get();
+        m_context = std::make_shared<HEADLESS_SCH_CONTEXT>( &m_schematicSlot,
                                                             &m_settingsManager.Prj() );
         return m_schematic.get();
     }

@@ -57,6 +57,10 @@ public:
     virtual bool SaveSchematic() = 0;
 
     virtual bool SaveSchematicCopy( const wxString& aFileName, bool aCreateProject ) = 0;
+
+    // Reload the document from disk, discarding unsaved changes; returns false if there is no
+    // saved file to revert to or the reload failed
+    virtual bool RevertToSaved() = 0;
 };
 
 

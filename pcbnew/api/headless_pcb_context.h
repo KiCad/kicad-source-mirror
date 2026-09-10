@@ -68,6 +68,8 @@ public:
 
     void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater ) override;
 
+    bool RevertToSaved() override;
+
 private:
     std::unique_ptr<BOARD> m_board;
     PROJECT* m_project;

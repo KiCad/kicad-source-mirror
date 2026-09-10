@@ -61,6 +61,10 @@ public:
      * Post-import board sync (nets, classes, DRC, ratsnest, new footprint placement).
      */
     virtual void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater ) = 0;
+
+    // Reload the board from disk, discarding unsaved changes; returns false if there is no
+    // saved file to revert to or the reload failed
+    virtual bool RevertToSaved() = 0;
 };
 
 

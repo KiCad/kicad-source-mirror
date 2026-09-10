@@ -969,7 +969,7 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
 
     m_openSchematic = schematic;
 
-    m_openContext = std::make_shared<HEADLESS_SCH_CONTEXT>( m_openSchematic, project, m_kiway );
+    m_openContext = std::make_shared<HEADLESS_SCH_CONTEXT>( &m_openSchematic, project, m_kiway );
     m_openHandler = std::make_unique<API_HANDLER_SCH>( m_openContext );
     aServer->RegisterHandler( m_openHandler.get() );
 
@@ -1026,7 +1026,7 @@ bool IFACE::handleCreateSchematic( const wxString& aPath, KICAD_API_SERVER* aSer
 
     m_openSchematic = schematic.release();
 
-    m_openContext = std::make_shared<HEADLESS_SCH_CONTEXT>( m_openSchematic, project, m_kiway );
+    m_openContext = std::make_shared<HEADLESS_SCH_CONTEXT>( &m_openSchematic, project, m_kiway );
     m_openHandler = std::make_unique<API_HANDLER_SCH>( m_openContext );
     aServer->RegisterHandler( m_openHandler.get() );
 

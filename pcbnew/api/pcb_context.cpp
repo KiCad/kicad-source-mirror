@@ -100,6 +100,17 @@ public:
         m_frame->OnNetlistChanged( aUpdater, &runDragCommand );
     }
 
+    bool RevertToSaved() override
+    {
+        wxFileName fn = m_frame->Prj().AbsolutePath( m_frame->GetBoard()->GetFileName() );
+
+        m_frame->GetScreen()->SetContentModified( false );
+        m_frame->ReleaseFile();
+        m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
+
+        return true;
+    }
+
 private:
     PCB_EDIT_FRAME* m_frame;
 };

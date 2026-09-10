@@ -186,6 +186,38 @@ public:
         return true;
     }
 
+    bool CreateDocument( const wxString& aPath, kiapi::common::types::DocumentType aType,
+                         kiapi::common::types::DocumentSpecifier* aDocument = nullptr )
+    {
+        kiapi::common::commands::CreateDocument request;
+        request.set_type( aType );
+        request.set_path( aPath.ToStdString() );
+
+        kiapi::common::ApiResponse response;
+
+        if( !send( request, response ) )
+            return false;
+
+        if( response.status().status() != kiapi::common::AS_OK )
+        {
+            m_lastError = response.status().error_message();
+            return false;
+        }
+
+        kiapi::common::commands::OpenDocumentResponse openResponse;
+
+        if( !response.message().UnpackTo( &openResponse ) )
+        {
+            m_lastError = wxS( "Failed to unpack OpenDocumentResponse" );
+            return false;
+        }
+
+        if( aDocument )
+            *aDocument = openResponse.document();
+
+        return true;
+    }
+
     // Convenience overload for PCB documents (backward compatible)
     bool OpenDocument( const wxString& aPath, kiapi::common::types::DocumentSpecifier* aDocument = nullptr )
     {
