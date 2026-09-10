@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-08 05:57+0000\n"
+"PO-Revision-Date: 2026-09-10 09:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -126,7 +126,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1.dev0\n"
+"X-Generator: Weblate 2026.9.1\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -7027,19 +7027,17 @@ msgid "Snap to objects on all layers"
 msgstr "Magnetismo degli oggetti su tutti gli strati"
 
 #: common/dialogs/panel_snapping_base.cpp:98
-#, fuzzy
 msgid "When unchecked, only objects on the active layer are snapped to"
-msgstr "Abilita il magnetismo degli oggetti solo sullo strato attivo"
+msgstr ""
+"Se deselezionato, solo gli oggetti sul livello attivo vengono agganciati"
 
 #: common/dialogs/panel_snapping_base.cpp:108
-#, fuzzy
 msgid "Snap Inference"
-msgstr "Riferimento cima"
+msgstr "Inferenza scatto"
 
 #: common/dialogs/panel_snapping_base.cpp:117
-#, fuzzy
 msgid "Object geometry"
-msgstr "Oggetto A"
+msgstr "Geometria oggetto"
 
 #: common/dialogs/panel_snapping_base.cpp:118
 msgid "Snap to endpoints, midpoints, centres and edges of existing objects"
@@ -7047,9 +7045,8 @@ msgstr ""
 "Aggancia a punti finali, punti medi, centri e bordi di oggetti esistenti"
 
 #: common/dialogs/panel_snapping_base.cpp:122
-#, fuzzy
 msgid "Construction extensions"
-msgstr "Creazione cache"
+msgstr "Estensioni costruzione"
 
 #: common/dialogs/panel_snapping_base.cpp:123
 msgid "Snap to virtual extensions of lines and arcs"
@@ -7138,9 +7135,8 @@ msgid "How would you like KiCad to create them?"
 msgstr "Come si vuole che KiCad li crei?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "Inizia con le librerie KiCad integrate (consigliato)"
+msgstr "Inizia con le librerie KiCad integrate"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 msgid "Import tables from the previous version"
@@ -7157,9 +7153,8 @@ msgstr ""
 "create con le librerie KiCad predefinite."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
-#, fuzzy
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr "Inizia con le librerie KiCad integrate (consigliato)"
+msgstr "Migra le librerie integrate alla versione più recente (consigliato)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
@@ -7316,9 +7311,8 @@ msgid "Insert Group"
 msgstr "Inserisci gruppo"
 
 #: common/dialogs/panel_toolbar_customization.cpp:171
-#, fuzzy
 msgid "Filter actions"
-msgstr "Impostazioni filtro"
+msgstr "Azioni filtro"
 
 #: common/dialogs/panel_toolbar_customization.cpp:453
 #: common/dialogs/panel_toolbar_customization.cpp:777
@@ -7426,9 +7420,8 @@ msgid "Delete"
 msgstr "Cancella"
 
 #: common/diff_merge/auto_resolution.cpp:261
-#, fuzzy
 msgid "Keep (default)"
-msgstr "Reimposta al predefinito"
+msgstr "Mantieni (predefinito)"
 
 #: common/diff_merge/auto_resolution.cpp:265
 #, c-format
@@ -7444,9 +7437,8 @@ msgid "Collision"
 msgstr "Collisione"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
-#, fuzzy
 msgid "Duplicate ID"
-msgstr "Duplica"
+msgstr "Duplica ID"
 
 #: common/draw_panel_gal.cpp:223 common/draw_panel_gal.cpp:668
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -7457,18 +7449,16 @@ msgid "Graphics error"
 msgstr "Errore grafico"
 
 #: common/draw_panel_gal.cpp:234 common/draw_panel_gal.cpp:238
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Errore grafico"
+msgstr "Errore grafico durante il recupero"
 
 #: common/draw_panel_gal.cpp:239
 msgid "Unknown exception during backend switch"
 msgstr "Eccezione sconosciuta durante il passaggio al backend"
 
 #: common/draw_panel_gal.cpp:430
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Azione di pulizia sconosciuta"
+msgstr "Eccezione sconosciuta"
 
 #: common/draw_panel_gal.cpp:675
 msgid "Could not use OpenGL"
@@ -7678,14 +7668,14 @@ msgid "Invalid floating point number"
 msgstr "Numero in virgola mobile non valido"
 
 #: common/eda_base_frame.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallito recupero file auto-salvato '%s'."
 
 #: common/eda_base_frame.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Fallita scrittura file '%s'."
+msgstr "Fallita scrittura file recuperato '%s'."
 
 #: common/eda_base_frame.cpp:657 common/tool/actions.cpp:285
 #: pcbnew/dialogs/panel_setup_rules.cpp:133
@@ -7770,9 +7760,8 @@ msgstr "Opzioni di visualizzazione"
 #: common/eda_base_frame.cpp:1601 common/eda_base_frame.cpp:1612
 #: common/eda_base_frame.cpp:1637 common/eda_base_frame.cpp:1652
 #: common/eda_base_frame.cpp:1687 common/eda_base_frame.cpp:1707
-#, fuzzy
 msgid "Snapping"
-msgstr "Capping"
+msgstr "Magnetismo"
 
 #: common/eda_base_frame.cpp:1602 common/eda_base_frame.cpp:1613
 #: common/eda_base_frame.cpp:1639 common/eda_base_frame.cpp:1654
@@ -8111,9 +8100,8 @@ msgid "Barcode"
 msgstr "Codice a barre"
 
 #: common/eda_item.cpp:470
-#, fuzzy
 msgid "GridItem"
-msgstr "Griglia"
+msgstr "ElementoGriglia"
 
 #: common/eda_item.cpp:473 eeschema/sch_junction.cpp:343
 #: eeschema/sch_junction.h:101
@@ -8244,9 +8232,8 @@ msgstr "Ellisse"
 
 #: common/eda_shape.cpp:494 common/eda_shape.cpp:1506 common/eda_shape.cpp:4504
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:245
-#, fuzzy
 msgid "Elliptical Arc"
-msgstr "Dividi arco"
+msgstr "Arco ellittico"
 
 #: common/eda_shape.cpp:1490
 msgid "Pad Number Box"
@@ -8311,16 +8298,14 @@ msgstr "Angolo"
 #: common/eda_shape.cpp:1541 common/eda_shape.cpp:1548
 #: common/eda_shape.cpp:4668 pcbnew/dialogs/dialog_shape_properties.cpp:1270
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1284
-#, fuzzy
 msgid "Major Radius"
-msgstr "Raggio angolo"
+msgstr "Asse maggiore"
 
 #: common/eda_shape.cpp:1542 common/eda_shape.cpp:1549
 #: common/eda_shape.cpp:4674 pcbnew/dialogs/dialog_shape_properties.cpp:1272
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1286
-#, fuzzy
 msgid "Minor Radius"
-msgstr "Raggio angolo"
+msgstr "Asse minore"
 
 #: common/eda_shape.cpp:1551 pcbnew/dialogs/dialog_shape_properties.cpp:1227
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1290
@@ -8329,9 +8314,8 @@ msgstr "Angolo iniziale"
 
 #: common/eda_shape.cpp:1552 pcbnew/dialogs/dialog_shape_properties.cpp:1229
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1292
-#, fuzzy
 msgid "End Angle"
-msgstr "Angolo"
+msgstr "Angolo finale"
 
 #: common/eda_shape.cpp:1562 common/layer_id.cpp:147
 #: eeschema/sch_rule_area.cpp:436 pcbnew/widgets/appearance_controls.cpp:356
@@ -8450,14 +8434,12 @@ msgid "Corner Radius"
 msgstr "Raggio angolo"
 
 #: common/eda_shape.cpp:4680
-#, fuzzy
 msgid "Ellipse Rotation"
-msgstr "Rotazione"
+msgstr "Rotazione ellisse"
 
 #: common/eda_shape.cpp:4685
-#, fuzzy
 msgid "Arc Start Angle"
-msgstr "Angolo iniziale"
+msgstr "Angolo iniziale arco"
 
 #: common/eda_shape.cpp:4691
 msgid "Arc End Angle"
@@ -8504,49 +8486,40 @@ msgstr "Quadrato"
 #: common/eda_shape.cpp:4777 eeschema/dialogs/dialog_line_properties.cpp:115
 #: eeschema/dialogs/dialog_shape_properties.cpp:125 eeschema/sch_line.cpp:1380
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1112
-#, fuzzy
 msgid "Open Arrow"
-msgstr "Apri c&omunque"
+msgstr "Freccia aperta"
 
 #: common/eda_shape.cpp:4780 eeschema/sch_line.cpp:1461
-#, fuzzy
 msgid "Start Shape"
-msgstr "Comincia semplice:"
+msgstr "Inizia forma"
 
 #: common/eda_shape.cpp:4785 eeschema/sch_line.cpp:1465
-#, fuzzy
 msgid "Start Length"
-msgstr "Lunghezza obiettivo"
+msgstr "Lunghezza iniziale"
 
 #: common/eda_shape.cpp:4790 eeschema/sch_line.cpp:1469
-#, fuzzy
 msgid "Start Width"
-msgstr "Larghezza separatori"
+msgstr "Larghezza iniziale"
 
 #: common/eda_shape.cpp:4795 eeschema/sch_line.cpp:1473
-#, fuzzy
 msgid "Start Stroke Width"
-msgstr "Usa larghezza iniziale della pista"
+msgstr "Larghezza iniziale tratto"
 
 #: common/eda_shape.cpp:4801 eeschema/sch_line.cpp:1478
-#, fuzzy
 msgid "End Shape"
-msgstr "Forma piazzola"
+msgstr "Forma finale"
 
 #: common/eda_shape.cpp:4806 eeschema/sch_line.cpp:1482
-#, fuzzy
 msgid "End Length"
-msgstr "Lunghezza"
+msgstr "Lunghezza finale"
 
 #: common/eda_shape.cpp:4811 eeschema/sch_line.cpp:1486
-#, fuzzy
 msgid "End Width"
-msgstr "Larghezza conduttore"
+msgstr "Larghezza finale"
 
 #: common/eda_shape.cpp:4816 eeschema/sch_line.cpp:1490
-#, fuzzy
 msgid "End Stroke Width"
-msgstr "Larghezza minima pista"
+msgstr "Larghezza finale tratto"
 
 #: common/eda_text.cpp:1002 common/eda_text.cpp:1383
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
@@ -9156,34 +9129,34 @@ msgid "Cannot amend: the branch has no commits yet."
 msgstr "Impossibile modificare: il ramo non ha ancora commit."
 
 #: common/git/libgit_backend.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Fallito recupero commit: %s"
+msgstr "Fallito recupero del commit HEAD: %s"
 
 #: common/git/libgit_backend.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Fallito recupero commit: %s"
+msgstr "Fallito recupero commit genitore: %s"
 
 #: common/git/libgit_backend.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Fallito recupero riferimento HEAD: %s"
+msgstr "Fallito recupero albero HEAD: %s"
 
 #: common/git/libgit_backend.cpp:365 common/git/libgit_backend.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Fallita scrittura indice: %s"
+msgstr "Fallito reset indice: %s"
 
 #: common/git/libgit_backend.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Fallita scrittura albero: %s"
+msgstr "Fallita recupero albero genitore: %s"
 
 #: common/git/libgit_backend.cpp:457 kicad/project_tree_pane.cpp:3079
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Fallito recupero commit: %s"
+msgstr "Fallita correzione commit: %s"
 
 #: common/git/libgit_backend.cpp:485 common/git/libgit_backend.cpp:1060
 #, c-format
@@ -9214,9 +9187,9 @@ msgid "No repository available to set up remote"
 msgstr "Nessun repository disponibile per configurare il remote"
 
 #: common/git/libgit_backend.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Fallita creazione remoto: %s"
+msgstr "Fallita impostazione remoto: %s"
 
 #: common/git/libgit_backend.cpp:924
 msgid "No repository available"
@@ -9238,9 +9211,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Fallito passaggio a diramazione '%s': %s"
 
 #: common/git/libgit_backend.cpp:992
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Fallita ricerca diramazione '%s': %s"
+msgstr "Fallita creazione diramazione locale '%s': %s"
 
 #: common/git/libgit_backend.cpp:1007
 #, c-format
@@ -9337,9 +9310,8 @@ msgid "Could not read repository index after merge."
 msgstr "Impossibile leggere l'indice del repository dopo il merge."
 
 #: common/git/libgit_backend.cpp:1492
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "Impossibile scrivere i file di tracciatura nella cartella '%s'."
+msgstr "Impossibile scrivere il risultato del merge."
 
 #: common/git/libgit_backend.cpp:1500
 msgid "Could not get the repository head."
