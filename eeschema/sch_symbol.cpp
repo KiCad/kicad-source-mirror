@@ -835,6 +835,14 @@ void SCH_SYMBOL::Serialize( kiapi::schematic::types::SchematicSymbolInstance& aS
             drawItem.Serialize( *item->mutable_item() );
         }
 
+        SchematicSymbolType symbolType = SchematicSymbolType::SST_NORMAL;
+
+        if( m_part->IsGlobalPower() )
+            symbolType = SchematicSymbolType::SST_GLOBAL_POWER;
+        else if( m_part->IsLocalPower() )
+            symbolType = SchematicSymbolType::SST_LOCAL_POWER;
+
+        def->set_type( symbolType );
         def->set_unit_count( m_part->GetUnitCount() );
 
         for( int bodyStyle = BODY_STYLE::BASE; bodyStyle <= m_part->GetBodyStyleCount(); ++bodyStyle )
@@ -922,6 +930,10 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( libId.GetLibItemName() );
     libSymbol->SetLibId( libId );
 
+    if( def.type() == SchematicSymbolType::SST_GLOBAL_POWER )
+        libSymbol->SetGlobalPower();
+    else if( def.type() == SchematicSymbolType::SST_LOCAL_POWER )
+        libSymbol->SetLocalPower();
 
     libSymbol->GetField( FIELD_T::REFERENCE )->Deserialize( def.reference_field(), schIUScale );
     libSymbol->GetField( FIELD_T::VALUE )->Deserialize( def.value_field(), schIUScale );
@@ -1016,6 +1028,13 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
     libSymbol->SetShowPinNumbers( def.show_pin_numbers() );
     libSymbol->SetShowPinNames( def.show_pin_names() );
     libSymbol->SetPinNameOffset( UnpackDistance( def.pin_name_offset(), schIUScale ) );
+
+    switch( def.type() )
+    {
+    case SchematicSymbolType::SST_GLOBAL_POWER: libSymbol->SetGlobalPower(); break;
+    case SchematicSymbolType::SST_LOCAL_POWER:  libSymbol->SetLocalPower();  break;
+    default: break;
+    }
 
     if( def.has_pin_maps() )
     {
