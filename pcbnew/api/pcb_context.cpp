@@ -24,6 +24,8 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <pcb_edit_frame.h>
 #include <reporter.h>
+#include <board.h>
+#include <project.h>
 
 
 class PCB_EDIT_FRAME_CONTEXT : public PCB_CONTEXT
