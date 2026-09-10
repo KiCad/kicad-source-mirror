@@ -38,7 +38,7 @@
 #include <pcb_barcode.h>
 #include <pcb_reference_image.h>
 #include <pcb_track.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <zone.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/intersection.h>
@@ -100,9 +100,9 @@ std::optional<int64_t> FindSquareDistanceToItem( const BOARD_ITEM& item, const V
 }
 
 
-VECTOR2I SnapToGridItem( const PCB_GRIDITEM* aItem, const VECTOR2I& aWorld )
+VECTOR2I SnapToGrid( const PCB_GRID_ITEM* aGrid, const VECTOR2I& aWorld )
 {
-    const VECTOR2D snapped = aItem->AsGridGeometry().Snap( VECTOR2D( aWorld ) );
+    const VECTOR2D snapped = aGrid->AsGridGeometry().Snap( VECTOR2D( aWorld ) );
     return VECTOR2I( KiROUND( snapped.x ), KiROUND( snapped.y ) );
 }
 
@@ -324,13 +324,13 @@ VECTOR2I PCB_GRID_HELPER::Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid
 
     // Hidden grid items don't snap the cursor (placement/routing keep
     // following them — geometry tools follow data, not display).
-    if( !board->IsElementVisible( LAYER_GRIDITEMS ) )
+    if( !board->IsElementVisible( LAYER_SUBGRIDS ) )
         return GRID_HELPER::Align( aPoint, aGrid );
 
     // Priority + coverage-area resolution for the active CURSOR grid lives in
     // FindActiveGridAt; if one covers aPoint, snap exclusively to that grid.
-    if( PCB_GRIDITEM* active = FindActiveGridAt( *board, aPoint, PCB_GRIDITEM_ROLE::CURSOR ) )
-        return SnapToGridItem( active, aPoint );
+    if( PCB_GRID_ITEM* active = FindActiveGridAt( *board, aPoint, PCB_GRID_ROLE::CURSOR ) )
+        return SnapToGrid( active, aPoint );
 
     // No active grid covers aPoint - fall back to the display grid, but let any
     // nearby CURSOR-role grid contribute snap candidates within snapRange.
@@ -344,10 +344,10 @@ VECTOR2I PCB_GRID_HELPER::Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid
 
     for( BOARD_ITEM* item : board->Drawings() )
     {
-        if( item->Type() != PCB_GRIDITEM_T )
+        if( item->Type() != PCB_GRID_ITEM_T )
             continue;
 
-        PCB_GRIDITEM* grid = static_cast<PCB_GRIDITEM*>( item );
+        PCB_GRID_ITEM* grid = static_cast<PCB_GRID_ITEM*>( item );
 
         if( !grid->Affects().cursor )
             continue;
@@ -363,7 +363,7 @@ VECTOR2I PCB_GRID_HELPER::Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid
         if( !bbox.Contains( aPoint ) )
             continue;
 
-        const VECTOR2I candidate = SnapToGridItem( grid, aPoint );
+        const VECTOR2I candidate = SnapToGrid( grid, aPoint );
 
         const SEG::ecoord dist = ( candidate - aPoint ).SquaredEuclideanNorm();
 
@@ -2214,11 +2214,11 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_CENTER );
         break;
 
-    case PCB_GRIDITEM_T:
+    case PCB_GRID_ITEM_T:
     {
         // Edit handles only - grid intersections are rendered by the GAL and not
         // emitted as anchors (would flood the snap pool).
-        PCB_GRIDITEM*   griditem = static_cast<PCB_GRIDITEM*>( aItem );
+        PCB_GRID_ITEM*  griditem = static_cast<PCB_GRID_ITEM*>( aItem );
         const VECTOR2I  position = griditem->GetPosition();
         const EDA_ANGLE orient = griditem->GetOrientation();
 
@@ -2230,7 +2230,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             addAnchor( position + aLocal, CORNER | SNAPPABLE, griditem );
         };
 
-        if( griditem->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR )
+        if( griditem->GetGridItemType() == PCB_GRID_TYPE::POLAR )
         {
             const int    r = griditem->GetRadiusExtent();
             const double phi = griditem->GetPhiExtent().AsRadians();

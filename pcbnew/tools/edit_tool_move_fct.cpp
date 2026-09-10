@@ -34,7 +34,7 @@
 #include <padstack.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <pcb_edit_frame.h>
 #include <spread_footprints.h>
 #include <tool/tool_manager.h>
@@ -1078,7 +1078,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     if( frameRotate )
     {
         prevFrameAngle = GridFrameAngleAt( *board, frameFp ? frameFp->GetPosition() : originalCursorPos,
-                                           PCB_GRIDITEM_ROLE::PLACEMENT );
+                                           PCB_GRID_ROLE::PLACEMENT );
     }
 
     auto applyMoveFrameOrientation =
@@ -1089,7 +1089,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 // m_cursor is the pick-up point dragged along with the selection.
                 VECTOR2I  pivot = frameFp ? frameFp->GetPosition() : m_cursor;
-                EDA_ANGLE newAngle = GridFrameAngleAt( *board, pivot, PCB_GRIDITEM_ROLE::PLACEMENT );
+                EDA_ANGLE newAngle = GridFrameAngleAt( *board, pivot, PCB_GRID_ROLE::PLACEMENT );
                 EDA_ANGLE delta = GridFrameRotationDelta( prevFrameAngle, newAngle, editFrame->GetRotationAngle() );
 
                 prevFrameAngle = newAngle;
@@ -1333,7 +1333,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                         // Images and grid items are on non-cached layers and will not be updated automatically in
                         // the overlay, so explicitly tell the view they've moved.
-                        if( item->Type() == PCB_REFERENCE_IMAGE_T || item->Type() == PCB_GRIDITEM_T )
+                        if( item->Type() == PCB_REFERENCE_IMAGE_T || item->Type() == PCB_GRID_ITEM_T )
                             view()->Update( item, KIGFX::GEOMETRY );
                     }
 
@@ -1649,7 +1649,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     if( frameRotate )
                     {
                         prevFrameAngle = GridFrameAngleAt( *board, frameFp ? frameFp->GetPosition() : originalPos,
-                                                           PCB_GRIDITEM_ROLE::PLACEMENT );
+                                                           PCB_GRID_ROLE::PLACEMENT );
                     }
 
                     // Pick up new item

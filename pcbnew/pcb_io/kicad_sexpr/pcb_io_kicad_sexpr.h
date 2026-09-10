@@ -47,7 +47,7 @@ class PCB_POINT;
 class PCB_REFERENCE_IMAGE;
 class PCB_SHAPE;
 class PCB_TARGET;
-class PCB_GRIDITEM;
+class PCB_GRID_ITEM;
 class PAD;
 class PADSTACK;
 class PCB_GROUP;
@@ -491,7 +491,7 @@ private:
     void format( const PCB_TARGET* aTarget ) const;
     void format( const PCB_POINT* aPoint ) const;
 
-    void format( const PCB_GRIDITEM* aGridItem ) const;
+    void format( const PCB_GRID_ITEM* aGridItem ) const;
 
     void format( const FOOTPRINT* aFootprint ) const;
 
@@ -510,11 +510,9 @@ private:
 
     void format( const ZONE* aZone ) const;
 
-    void format( const ZONE_LAYER_PROPERTIES& aZoneLayerProperties, int aNestLevel,
-                 PCB_LAYER_ID aLayer ) const;
+    void format( const ZONE_LAYER_PROPERTIES& aZoneLayerProperties, int aNestLevel, PCB_LAYER_ID aLayer ) const;
 
-    void formatPolyPts( const SHAPE_LINE_CHAIN& outline,
-                        const FOOTPRINT* aParentFP = nullptr ) const;
+    void formatPolyPts( const SHAPE_LINE_CHAIN& outline, const FOOTPRINT* aParentFP = nullptr ) const;
 
     void formatRenderCache( const EDA_TEXT* aText ) const;
 

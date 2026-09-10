@@ -1071,7 +1071,7 @@ HANDLER_RESULT<FlipItemsResponse> API_HANDLER_BOARD::handleFlipItems(
             PCB_ZONE_T,
             PCB_GROUP_T,
             PCB_BARCODE_T,
-            PCB_GRIDITEM_T,
+            PCB_GRID_ITEM_T,
             PCB_MARKER_T,
             PCB_POINT_T,
             PCB_TARGET_T,

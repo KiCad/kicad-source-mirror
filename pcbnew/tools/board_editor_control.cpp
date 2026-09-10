@@ -38,7 +38,7 @@
 #include <collectors.h>
 #include <project/net_settings.h>
 #include <pcb_generator.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_target.h>
@@ -1420,7 +1420,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 if( !fp )
                     return;
 
-                EDA_ANGLE newAngle = GridFrameAngleAt( *board, fp->GetPosition(), PCB_GRIDITEM_ROLE::PLACEMENT );
+                EDA_ANGLE newAngle = GridFrameAngleAt( *board, fp->GetPosition(), PCB_GRID_ROLE::PLACEMENT );
                 EDA_ANGLE delta = GridFrameRotationDelta( prevFrameAngle, newAngle, m_frame->GetRotationAngle() );
 
                 prevFrameAngle = newAngle;
@@ -1436,7 +1436,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
         // A footprint handed over from another command may already carry the frame
         // rotation of the grid it sits in; count that as applied, like a move pick-up.
-        prevFrameAngle = GridFrameAngleAt( *board, fp->GetPosition(), PCB_GRIDITEM_ROLE::PLACEMENT );
+        prevFrameAngle = GridFrameAngleAt( *board, fp->GetPosition(), PCB_GRID_ROLE::PLACEMENT );
         fp->SetPosition( cursorPos );
         applyPlacementFrameOrientation();
         m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, fp );

@@ -42,7 +42,7 @@
 #include <pad.h>
 #include <pcb_dimension.h>
 #include <pcb_generator.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <pcb_group.h>
 #include <constraints/pcb_constraint.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
@@ -388,7 +388,9 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
         format( static_cast<const PCB_TARGET*>( aItem ) );
         break;
 
-    case PCB_GRIDITEM_T: format( static_cast<const PCB_GRIDITEM*>( aItem ) ); break;
+    case PCB_GRID_ITEM_T:
+        format( static_cast<const PCB_GRID_ITEM*>( aItem ) );
+        break;
 
     case PCB_FOOTPRINT_T:
         format( static_cast<const FOOTPRINT*>( aItem ) );
@@ -1311,9 +1313,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TARGET* aTarget ) const
 }
 
 
-void PCB_IO_KICAD_SEXPR::format( const PCB_GRIDITEM* aGridItem ) const
+void PCB_IO_KICAD_SEXPR::format( const PCB_GRID_ITEM* aGridItem ) const
 {
-    const bool polar = aGridItem->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR;
+    const bool polar = aGridItem->GetGridItemType() == PCB_GRID_TYPE::POLAR;
 
     // Grid type (polar/xy) must be emitted before extent/spacing: those tokens change
     // meaning based on the type (y component = angle for polar, length for cartesian).
@@ -1345,9 +1347,11 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GRIDITEM* aGridItem ) const
     if( aGridItem->GetTickInterval() > 0 )
         m_out->Print( " (tick_interval %u)", aGridItem->GetTickInterval() );
 
-    const PCB_GRIDITEM_AFFECTS& aff = aGridItem->Affects();
-    m_out->Print( " (affects (cursor %s) (routing %s) (placement %s))", aff.cursor ? "yes" : "no",
-                  aff.routing ? "yes" : "no", aff.placement ? "yes" : "no" );
+    const PCB_GRID_AFFECTS& aff = aGridItem->Affects();
+    m_out->Print( " (affects (cursor %s) (routing %s) (placement %s))",
+                  aff.cursor ? "yes" : "no",
+                  aff.routing ? "yes" : "no",
+                  aff.placement ? "yes" : "no" );
 
     if( aGridItem->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, "locked", true );

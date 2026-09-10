@@ -319,8 +319,8 @@ enum GAL_LAYER_ID: int
     /// Shadow layer for items bound to a constraint
     LAYER_CONSTRAINT_SHADOW  = GAL_LAYER_ID_START + 46,
 
-    /// Routing/placement grid items (PCB_GRIDITEM) visibility and color
-    LAYER_GRIDITEMS          = GAL_LAYER_ID_START + 47,
+    /// Routing/placement subgrids (PCB_GRID_ITEM) visibility and color
+    LAYER_SUBGRIDS           = GAL_LAYER_ID_START + 47,
 
     /// Outline of via stitching generators
     LAYER_VIA_STITCHING      = GAL_LAYER_ID_START + 48,

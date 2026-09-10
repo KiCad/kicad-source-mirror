@@ -142,10 +142,10 @@ wxString LayerName( int aLayer )
     case LAYER_DRC_ERROR:               return _( "DRC errors" );
     case LAYER_DRC_EXCLUSION:           return _( "DRC exclusions" );
     case LAYER_MARKER_SHADOWS:          return _( "DRC marker shadows" );
-    case LAYER_DRC_HIGHLIGHTED:          return _( "DRC highlighted" );
+    case LAYER_DRC_HIGHLIGHTED:         return _( "DRC highlighted" );
     case LAYER_ANCHOR:                  return _( "Anchors" );
     case LAYER_POINTS:                  return _( "Points" );
-    case LAYER_GRIDITEMS:               return _( "Grid items" );
+    case LAYER_SUBGRIDS:                return _( "Grids" );
     case LAYER_VIA_STITCHING:           return _( "Via stitching" );
     case LAYER_DRAWINGSHEET:            return _( "Drawing sheet" );
     case LAYER_PAGE_LIMITS:             return _( "Page limits" );

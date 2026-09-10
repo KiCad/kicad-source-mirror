@@ -55,7 +55,7 @@ enum class VISIBILITY_LAYER
     BOARD_OUTLINE_AREA,
     DRAWING_SHEET,
     GRID,
-    GRID_ITEMS
+    SUBGRIDS
 };
 
 /**

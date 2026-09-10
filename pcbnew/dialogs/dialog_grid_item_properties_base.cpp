@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_griditem_properties_base.h"
+#include "dialog_grid_item_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GRIDITEM_PROPERTIES_BASE::DIALOG_GRIDITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_GRID_ITEM_PROPERTIES_BASE::DIALOG_GRID_ITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -208,6 +208,6 @@ DIALOG_GRIDITEM_PROPERTIES_BASE::DIALOG_GRIDITEM_PROPERTIES_BASE( wxWindow* pare
 	bMainSizer->Fit( this );
 }
 
-DIALOG_GRIDITEM_PROPERTIES_BASE::~DIALOG_GRIDITEM_PROPERTIES_BASE()
+DIALOG_GRID_ITEM_PROPERTIES_BASE::~DIALOG_GRID_ITEM_PROPERTIES_BASE()
 {
 }

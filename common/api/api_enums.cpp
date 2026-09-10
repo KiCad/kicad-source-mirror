@@ -58,7 +58,7 @@ KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
     case types::KiCadObjectType::KOT_PCB_SHAPE:             return PCB_SHAPE_T;
     case types::KiCadObjectType::KOT_PCB_BARCODE:           return PCB_BARCODE_T;
     case types::KiCadObjectType::KOT_PCB_REFERENCE_IMAGE:   return PCB_REFERENCE_IMAGE_T;
-    case types::KiCadObjectType::KOT_PCB_GRIDITEM:          return PCB_GRIDITEM_T;
+    case types::KiCadObjectType::KOT_PCB_GRIDITEM:          return PCB_GRID_ITEM_T;
     case types::KiCadObjectType::KOT_PCB_FIELD:             return PCB_FIELD_T;
     case types::KiCadObjectType::KOT_PCB_GENERATOR:         return PCB_GENERATOR_T;
     case types::KiCadObjectType::KOT_PCB_TEXT:              return PCB_TEXT_T;
@@ -123,7 +123,7 @@ types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
     case PCB_SHAPE_T:            return types::KiCadObjectType::KOT_PCB_SHAPE;
     case PCB_BARCODE_T:          return types::KiCadObjectType::KOT_PCB_BARCODE;
     case PCB_REFERENCE_IMAGE_T:  return types::KiCadObjectType::KOT_PCB_REFERENCE_IMAGE;
-    case PCB_GRIDITEM_T:         return types::KiCadObjectType::KOT_PCB_GRIDITEM;
+    case PCB_GRID_ITEM_T:        return types::KiCadObjectType::KOT_PCB_GRIDITEM;
     case PCB_FIELD_T:            return types::KiCadObjectType::KOT_PCB_FIELD;
     case PCB_GENERATOR_T:        return types::KiCadObjectType::KOT_PCB_GENERATOR;
     case PCB_TEXT_T:             return types::KiCadObjectType::KOT_PCB_TEXT;

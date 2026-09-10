@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/dialog_griditem_properties_base.h>
+#include <dialogs/dialog_grid_item_properties_base.h>
 
 #include <algorithm>
 #include <functional>
@@ -27,7 +27,7 @@
 #include <dialogs/geom_field_helpers.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_edit_frame.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <string_utils.h>
 #include <trigo.h>
 #include <widgets/unit_binder.h>
@@ -35,15 +35,15 @@
 #include <wx/notebook.h>
 
 
-class DIALOG_GRIDITEM_PROPERTIES : public DIALOG_GRIDITEM_PROPERTIES_BASE
+class DIALOG_GRID_ITEM_PROPERTIES : public DIALOG_GRID_ITEM_PROPERTIES_BASE
 {
 public:
-    DIALOG_GRIDITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_GRIDITEM* aItem );
+    DIALOG_GRID_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_GRID_ITEM* aItem );
 
-private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+private:
     // The three notebook pages all edit the same extent rectangle; field order matches CTRL_IDX.
     enum CTRL_IDX
     {
@@ -125,13 +125,13 @@ private:
     void updatePolar();
 
     void onGridType( wxCommandEvent& aEvent );
-    void saveSpacingToItem( PCB_GRIDITEM_TYPE aType );
+    void saveSpacingToItem( PCB_GRID_TYPE aType );
     void updateSpacingRows();
     void updatePagesForType();
 
     PCB_BASE_EDIT_FRAME*       m_parent;
-    PCB_GRIDITEM*              m_item;
-    PCB_GRIDITEM               m_workingCopy;
+    PCB_GRID_ITEM*             m_item;
+    PCB_GRID_ITEM              m_workingCopy;
     std::vector<BOUND_CONTROL> m_boundFields;
     UNIT_BINDER                m_orientation;
     UNIT_BINDER                m_spacingX;
@@ -139,9 +139,8 @@ private:
 };
 
 
-DIALOG_GRIDITEM_PROPERTIES::DIALOG_GRIDITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
-                                                        PCB_GRIDITEM* aItem ) :
-        DIALOG_GRIDITEM_PROPERTIES_BASE( aParent ),
+DIALOG_GRID_ITEM_PROPERTIES::DIALOG_GRID_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_GRID_ITEM* aItem ) :
+        DIALOG_GRID_ITEM_PROPERTIES_BASE( aParent ),
         m_parent( aParent ),
         m_item( aItem ),
         m_workingCopy( *aItem ),
@@ -178,7 +177,7 @@ DIALOG_GRIDITEM_PROPERTIES::DIALOG_GRIDITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aPa
                             m_polarCenterRadius } )
         page->Layout();
 
-    m_gridTypeCtrl->Bind( wxEVT_CHOICE, &DIALOG_GRIDITEM_PROPERTIES::onGridType, this );
+    m_gridTypeCtrl->Bind( wxEVT_CHOICE, &DIALOG_GRID_ITEM_PROPERTIES::onGridType, this );
 
     // Corner fields are world coordinates on the rotated outline, so they track the angle.
     m_orientationCtrl->Bind( wxEVT_TEXT,
@@ -199,7 +198,7 @@ DIALOG_GRIDITEM_PROPERTIES::DIALOG_GRIDITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aPa
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::onCornersChange()
+void DIALOG_GRID_ITEM_PROPERTIES::onCornersChange()
 {
     const VECTOR2I p0( getInt( START_X ), getInt( START_Y ) );
     const VECTOR2I p1( getInt( END_X ), getInt( END_Y ) );
@@ -213,7 +212,7 @@ void DIALOG_GRIDITEM_PROPERTIES::onCornersChange()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::onCornerSizeChange()
+void DIALOG_GRID_ITEM_PROPERTIES::onCornerSizeChange()
 {
     const VECTOR2I p0( getInt( CORNER_X ), getInt( CORNER_Y ) );
     const VECTOR2I size( getInt( CORNER_W ), getInt( CORNER_H ) );
@@ -227,7 +226,7 @@ void DIALOG_GRIDITEM_PROPERTIES::onCornerSizeChange()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::onCenterSizeChange()
+void DIALOG_GRID_ITEM_PROPERTIES::onCenterSizeChange()
 {
     const VECTOR2I center( getInt( CENTER_X ), getInt( CENTER_Y ) );
     const VECTOR2I size( getInt( CENTER_W ), getInt( CENTER_H ) );
@@ -241,7 +240,7 @@ void DIALOG_GRIDITEM_PROPERTIES::onCenterSizeChange()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::onPolarChange()
+void DIALOG_GRID_ITEM_PROPERTIES::onPolarChange()
 {
     m_workingCopy.SetPosition( VECTOR2I( getInt( POLAR_CENTER_X ), getInt( POLAR_CENTER_Y ) ) );
     m_workingCopy.SetRadiusExtent( getInt( POLAR_RADIUS ) );
@@ -253,7 +252,7 @@ void DIALOG_GRIDITEM_PROPERTIES::onPolarChange()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::updateCorners()
+void DIALOG_GRID_ITEM_PROPERTIES::updateCorners()
 {
     const VECTOR2I half = toWorld( m_workingCopy.GetExtent() );
     const VECTOR2I p0 = m_workingCopy.GetPosition() - half;
@@ -266,7 +265,7 @@ void DIALOG_GRIDITEM_PROPERTIES::updateCorners()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::updateCornerSize()
+void DIALOG_GRID_ITEM_PROPERTIES::updateCornerSize()
 {
     const VECTOR2I p0 = m_workingCopy.GetPosition() - toWorld( m_workingCopy.GetExtent() );
 
@@ -277,7 +276,7 @@ void DIALOG_GRIDITEM_PROPERTIES::updateCornerSize()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::updateCenterSize()
+void DIALOG_GRID_ITEM_PROPERTIES::updateCenterSize()
 {
     changeValue( CENTER_X, m_workingCopy.GetPosition().x );
     changeValue( CENTER_Y, m_workingCopy.GetPosition().y );
@@ -286,7 +285,7 @@ void DIALOG_GRIDITEM_PROPERTIES::updateCenterSize()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::updatePolar()
+void DIALOG_GRID_ITEM_PROPERTIES::updatePolar()
 {
     changeValue( POLAR_CENTER_X, m_workingCopy.GetPosition().x );
     changeValue( POLAR_CENTER_Y, m_workingCopy.GetPosition().y );
@@ -295,9 +294,9 @@ void DIALOG_GRIDITEM_PROPERTIES::updatePolar()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::updatePagesForType()
+void DIALOG_GRID_ITEM_PROPERTIES::updatePagesForType()
 {
-    const bool polar = m_workingCopy.GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR;
+    const bool polar = m_workingCopy.GetGridItemType() == PCB_GRID_TYPE::POLAR;
 
     // RemovePage() keeps the window alive as a (visible) child, so hide it explicitly.
     while( m_notebookGridDefs->GetPageCount() > 0 )
@@ -321,19 +320,19 @@ void DIALOG_GRIDITEM_PROPERTIES::updatePagesForType()
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::onGridType( wxCommandEvent& aEvent )
+void DIALOG_GRID_ITEM_PROPERTIES::onGridType( wxCommandEvent& aEvent )
 {
     // Capture the field values under their old meaning before relabelling.
     saveSpacingToItem( m_workingCopy.GetGridItemType() );
-    m_workingCopy.SetGridItemType( static_cast<PCB_GRIDITEM_TYPE>( m_gridTypeCtrl->GetSelection() ) );
+    m_workingCopy.SetGridItemType( static_cast<PCB_GRID_TYPE>( m_gridTypeCtrl->GetSelection() ) );
     updateSpacingRows();
     updatePagesForType();
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::saveSpacingToItem( PCB_GRIDITEM_TYPE aType )
+void DIALOG_GRID_ITEM_PROPERTIES::saveSpacingToItem( PCB_GRID_TYPE aType )
 {
-    if( aType == PCB_GRIDITEM_TYPE::POLAR )
+    if( aType == PCB_GRID_TYPE::POLAR )
     {
         m_workingCopy.SetRadiusSpacing( m_spacingX.GetIntValue() );
         m_workingCopy.SetPhiSpacingDegrees( m_spacingY.GetAngleValue().AsDegrees() );
@@ -346,9 +345,9 @@ void DIALOG_GRIDITEM_PROPERTIES::saveSpacingToItem( PCB_GRIDITEM_TYPE aType )
 }
 
 
-void DIALOG_GRIDITEM_PROPERTIES::updateSpacingRows()
+void DIALOG_GRID_ITEM_PROPERTIES::updateSpacingRows()
 {
-    if( m_workingCopy.GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR )
+    if( m_workingCopy.GetGridItemType() == PCB_GRID_TYPE::POLAR )
     {
         m_spacingX.SetLabel( _( "Radius spacing:" ) );
         m_spacingY.SetLabel( _( "Angular spacing:" ) );
@@ -369,7 +368,7 @@ void DIALOG_GRIDITEM_PROPERTIES::updateSpacingRows()
 }
 
 
-bool DIALOG_GRIDITEM_PROPERTIES::TransferDataToWindow()
+bool DIALOG_GRID_ITEM_PROPERTIES::TransferDataToWindow()
 {
     updateCorners();
     updateCornerSize();
@@ -395,9 +394,9 @@ bool DIALOG_GRIDITEM_PROPERTIES::TransferDataToWindow()
 }
 
 
-bool DIALOG_GRIDITEM_PROPERTIES::TransferDataFromWindow()
+bool DIALOG_GRID_ITEM_PROPERTIES::TransferDataFromWindow()
 {
-    if( !DIALOG_GRIDITEM_PROPERTIES_BASE::TransferDataFromWindow() )
+    if( !DIALOG_GRID_ITEM_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
     saveSpacingToItem( m_workingCopy.GetGridItemType() );
@@ -436,10 +435,10 @@ bool DIALOG_GRIDITEM_PROPERTIES::TransferDataFromWindow()
 }
 
 
-void PCB_BASE_EDIT_FRAME::ShowGridItemPropertiesDialog( PCB_GRIDITEM* aGridItem )
+void PCB_BASE_EDIT_FRAME::ShowGridItemPropertiesDialog( PCB_GRID_ITEM* aGridItem )
 {
     wxCHECK_RET( aGridItem, wxT( "ShowGridItemPropertiesDialog() error: NULL item" ) );
 
-    DIALOG_GRIDITEM_PROPERTIES dlg( this, aGridItem );
+    DIALOG_GRID_ITEM_PROPERTIES dlg( this, aGridItem );
     dlg.ShowModal();
 }

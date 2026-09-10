@@ -48,7 +48,7 @@
 #include <pcb_generator.h>
 #include <pcb_point.h>
 #include <pcb_target.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <pcb_track.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -1386,7 +1386,7 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             break;
 
         case T_grid_item:
-            item = parsePCB_GRIDITEM();
+            item = parsePCB_GRID_ITEM();
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -9752,15 +9752,15 @@ PCB_TARGET* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TARGET()
 }
 
 
-PCB_GRIDITEM* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_GRIDITEM()
+PCB_GRID_ITEM* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_GRID_ITEM()
 {
     wxCHECK_MSG( CurTok() == T_grid_item, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GRIDITEM." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GRID_ITEM." ) );
 
     VECTOR2I pt;
     T        token;
 
-    std::unique_ptr<PCB_GRIDITEM> griditem = std::make_unique<PCB_GRIDITEM>( nullptr );
+    std::unique_ptr<PCB_GRID_ITEM> griditem = std::make_unique<PCB_GRID_ITEM>( nullptr );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -9769,9 +9769,13 @@ PCB_GRIDITEM* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_GRIDITEM()
 
         switch( token )
         {
-        case T_xy: griditem->SetGridItemType( PCB_GRIDITEM_TYPE::CARTESIAN ); break;
+        case T_xy:
+            griditem->SetGridItemType( PCB_GRID_TYPE::CARTESIAN );
+            break;
 
-        case T_polar: griditem->SetGridItemType( PCB_GRIDITEM_TYPE::POLAR ); break;
+        case T_polar:
+            griditem->SetGridItemType( PCB_GRID_TYPE::POLAR );
+            break;
 
         case T_at:
             pt.x = parseBoardUnits( "grid_item x position" );
@@ -9783,7 +9787,7 @@ PCB_GRIDITEM* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_GRIDITEM()
         case T_spacing:
             // Writer emits the grid type before extent/spacing, so the type is set here.
             // Polar y is an angle; cartesian y is a length.
-            if( griditem->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR )
+            if( griditem->GetGridItemType() == PCB_GRID_TYPE::POLAR )
             {
                 griditem->SetRadiusSpacing( parseBoardUnits( "grid_item radius spacing" ) );
                 griditem->SetPhiSpacingDegrees( parseDouble( "grid_item phi spacing" ) );
@@ -9798,7 +9802,7 @@ PCB_GRIDITEM* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_GRIDITEM()
             break;
 
         case T_extent:
-            if( griditem->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR )
+            if( griditem->GetGridItemType() == PCB_GRID_TYPE::POLAR )
             {
                 griditem->SetRadiusExtent( parseBoardUnits( "grid_item radius extent" ) );
                 griditem->SetPhiExtentDegrees( parseDouble( "grid_item phi extent" ) );
@@ -9830,7 +9834,7 @@ PCB_GRIDITEM* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_GRIDITEM()
         case T_affects:
         {
             // (affects (cursor yes|no) (routing yes|no) (placement yes|no))
-            PCB_GRIDITEM_AFFECTS aff;
+            PCB_GRID_AFFECTS aff;
             aff.SetAll( false );
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )

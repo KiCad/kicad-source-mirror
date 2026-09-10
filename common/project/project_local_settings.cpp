@@ -529,14 +529,14 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     registerMigration( 5, 6,
             [&]()
             {
-                // Schema version 5 to 6: LAYER_GRIDITEMS added to visibility controls
+                // Schema version 5 to 6: LAYER_GRID_ITEMS added to visibility controls
 
                 std::string ptr( "board.visible_items" );
 
                 if( Contains( ptr ) )
                 {
                     if( At( ptr ).is_array() && !At( ptr ).empty() )
-                        At( ptr ).push_back( VisibilityLayerToString( VISIBILITY_LAYER::GRID_ITEMS ) );
+                        At( ptr ).push_back( VisibilityLayerToString( VISIBILITY_LAYER::SUBGRIDS ) );
                     else
                         At( "board" ).erase( "visible_items" );
 

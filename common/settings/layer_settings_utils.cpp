@@ -51,7 +51,7 @@ GAL_SET UserVisbilityLayers()
         LAYER_BOARD_OUTLINE_AREA,
         LAYER_DRAWINGSHEET,
         LAYER_GRID,
-        LAYER_GRIDITEMS,
+        LAYER_SUBGRIDS,
     };
 
     static const GAL_SET saved( layers, arrayDim( layers ) );
@@ -87,7 +87,7 @@ GAL_LAYER_ID RenderLayerFromVisibilityLayer( VISIBILITY_LAYER aLayer )
     case VISIBILITY_LAYER::BOARD_OUTLINE_AREA:      return LAYER_BOARD_OUTLINE_AREA;
     case VISIBILITY_LAYER::DRAWING_SHEET:           return LAYER_DRAWINGSHEET;
     case VISIBILITY_LAYER::GRID:                    return LAYER_GRID;
-    case VISIBILITY_LAYER::GRID_ITEMS:              return LAYER_GRIDITEMS;
+    case VISIBILITY_LAYER::SUBGRIDS:                return LAYER_SUBGRIDS;
     }
 
     wxCHECK_MSG( false, GAL_LAYER_ID_END, "Unhandled layer in RenderLayerFromVisibilityLayer" );
@@ -122,7 +122,7 @@ std::optional<VISIBILITY_LAYER> VisibilityLayerFromRenderLayer( GAL_LAYER_ID aLa
     case LAYER_BOARD_OUTLINE_AREA:  return VISIBILITY_LAYER::BOARD_OUTLINE_AREA;
     case LAYER_DRAWINGSHEET:        return VISIBILITY_LAYER::DRAWING_SHEET;
     case LAYER_GRID:                return VISIBILITY_LAYER::GRID;
-    case LAYER_GRIDITEMS:           return VISIBILITY_LAYER::GRID_ITEMS;
+    case LAYER_SUBGRIDS:            return VISIBILITY_LAYER::SUBGRIDS;
     default:
         break;
     }

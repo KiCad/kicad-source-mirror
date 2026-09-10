@@ -1385,7 +1385,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_TARGET_T:
-    case PCB_GRIDITEM_T:
+    case PCB_GRID_ITEM_T:
         if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
             m_drawings.push_back( aBoardItem );
         else
@@ -1535,7 +1535,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_TARGET_T:
-    case PCB_GRIDITEM_T:
+    case PCB_GRID_ITEM_T:
         std::erase( m_drawings, aBoardItem );
 
         if( aBoardItem->Type() == PCB_TABLE_T )
@@ -2650,7 +2650,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
         case PCB_DIM_LEADER_T:
         case PCB_TARGET_T:
         case PCB_BARCODE_T:
-        case PCB_GRIDITEM_T:
+        case PCB_GRID_ITEM_T:
             if( !footprintsScanned )
             {
                 if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )

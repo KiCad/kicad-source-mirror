@@ -32,14 +32,14 @@ class EDA_ANGLE;
 class SHAPE_LINE_CHAIN;
 
 
-enum class PCB_GRIDITEM_TYPE
+enum class PCB_GRID_TYPE
 {
     CARTESIAN = 0,
     POLAR = 1
 };
 
 
-struct PCB_GRIDITEM_AFFECTS
+struct PCB_GRID_AFFECTS
 {
     bool cursor = true;    ///< Replace the display grid for cursor snapping inside coverage.
     bool routing = true;   ///< Used by the router as a local routing frame.
@@ -48,14 +48,14 @@ struct PCB_GRIDITEM_AFFECTS
     bool All() const { return cursor && routing && placement; }
     void SetAll( bool aState ) { cursor = routing = placement = aState; }
 
-    bool operator==( const PCB_GRIDITEM_AFFECTS& aOther ) const
+    bool operator==( const PCB_GRID_AFFECTS& aOther ) const
     {
         return cursor == aOther.cursor && routing == aOther.routing && placement == aOther.placement;
     }
 };
 
 
-enum class PCB_GRIDITEM_ROLE
+enum class PCB_GRID_ROLE
 {
     CURSOR,
     ROUTING,
@@ -63,12 +63,12 @@ enum class PCB_GRIDITEM_ROLE
 };
 
 
-class PCB_GRIDITEM : public BOARD_ITEM
+class PCB_GRID_ITEM : public BOARD_ITEM
 {
 public:
-    PCB_GRIDITEM( BOARD_ITEM* aParent );
+    PCB_GRID_ITEM( BOARD_ITEM* aParent );
 
-    static inline bool ClassOf( const EDA_ITEM* aItem ) { return aItem && PCB_GRIDITEM_T == aItem->Type(); }
+    static inline bool ClassOf( const EDA_ITEM* aItem ) { return aItem && PCB_GRID_ITEM_T == aItem->Type(); }
 
     wxString GetClass() const override { return wxT( "PCB_GRIDITEM" ); }
 
@@ -90,8 +90,8 @@ public:
      */
     EDA_ANGLE GetOrientationAt( const VECTOR2I& aPos ) const;
 
-    void              SetGridItemType( PCB_GRIDITEM_TYPE aType ) { m_type = aType; }
-    PCB_GRIDITEM_TYPE GetGridItemType() const { return m_type; }
+    void          SetGridItemType( PCB_GRID_TYPE aType ) { m_type = aType; }
+    PCB_GRID_TYPE GetGridItemType() const { return m_type; }
 
     PCB_LAYER_ID GetLayer() const override
     {
@@ -147,8 +147,8 @@ public:
     void     SetTickInterval( unsigned aInterval ) { m_tickInterval = aInterval; }
     unsigned GetTickInterval() const { return m_tickInterval; }
 
-    PCB_GRIDITEM_AFFECTS&       Affects() { return m_affects; }
-    const PCB_GRIDITEM_AFFECTS& Affects() const { return m_affects; }
+    PCB_GRID_AFFECTS&       Affects() { return m_affects; }
+    const PCB_GRID_AFFECTS& Affects() const { return m_affects; }
 
     void SetAffectsCursor( bool aOn ) { m_affects.cursor = aOn; }
     bool GetAffectsCursor() const { return m_affects.cursor; }
@@ -207,7 +207,7 @@ public:
     void      GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
     double    Similarity( const BOARD_ITEM& aOther ) const override;
 
-    bool operator==( const PCB_GRIDITEM& aOther ) const;
+    bool operator==( const PCB_GRID_ITEM& aOther ) const;
     bool operator==( const BOARD_ITEM& aOther ) const override;
 
 #if defined( DEBUG )
@@ -222,18 +222,18 @@ private:
     /// HitTest(BOX2I) and GetBoundingBox(); polar arc is sampled at 32 segments.
     SHAPE_LINE_CHAIN buildOutlineWorld() const;
 
-    PCB_GRIDITEM_TYPE m_type;
-    VECTOR2I          m_pos;
-    VECTOR2I          m_extent;  // cartesian half (x, y); polar (rMax, unused)
-    VECTOR2I          m_spacing; // cartesian (dx, dy);    polar (dr,   unused)
-    EDA_ANGLE         m_orientation;
-    EDA_ANGLE         m_phiExtent;  // polar only
-    EDA_ANGLE         m_phiSpacing; // polar only
+    PCB_GRID_TYPE    m_type;
+    VECTOR2I         m_pos;
+    VECTOR2I         m_extent;  // cartesian half (x, y); polar (rMax, unused)
+    VECTOR2I         m_spacing; // cartesian (dx, dy);    polar (dr,   unused)
+    EDA_ANGLE        m_orientation;
+    EDA_ANGLE        m_phiExtent;  // polar only
+    EDA_ANGLE        m_phiSpacing; // polar only
 
-    COLOR4D              m_color;
-    unsigned             m_priority = 1;     ///< Higher wins in overlap resolution; 0 reserved for global grid.
-    unsigned             m_tickInterval = 0; ///< 0 = no major ticks; N = every Nth line is major.
-    PCB_GRIDITEM_AFFECTS m_affects;
+    COLOR4D          m_color;
+    unsigned         m_priority = 1;     ///< Higher wins in overlap resolution; 0 reserved for global grid.
+    unsigned         m_tickInterval = 0; ///< 0 = no major ticks; N = every Nth line is major.
+    PCB_GRID_AFFECTS m_affects;
 };
 
 
@@ -245,13 +245,13 @@ class BOARD;
  *
  * @return nullptr if no applicable grid covers aPos.
  */
-PCB_GRIDITEM* FindActiveGridAt( const BOARD& aBoard, const VECTOR2I& aPos, PCB_GRIDITEM_ROLE aRole );
+PCB_GRID_ITEM* FindActiveGridAt( const BOARD& aBoard, const VECTOR2I& aPos, PCB_GRID_ROLE aRole );
 
 
 /**
  * World frame angle of the grid active for aRole at aPos; ANGLE_0 when no grid applies.
  */
-EDA_ANGLE GridFrameAngleAt( const BOARD& aBoard, const VECTOR2I& aPos, PCB_GRIDITEM_ROLE aRole );
+EDA_ANGLE GridFrameAngleAt( const BOARD& aBoard, const VECTOR2I& aPos, PCB_GRID_ROLE aRole );
 
 
 /**

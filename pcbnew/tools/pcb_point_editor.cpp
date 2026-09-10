@@ -52,7 +52,7 @@ using namespace std::placeholders;
 #include <pcb_group.h>
 #include <pcb_dimension.h>
 #include <pcb_barcode.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <pcb_textbox.h>
 #include <pcb_tablecell.h>
 #include <pcb_table.h>
@@ -841,10 +841,10 @@ private:
 };
 
 
-class PCB_GRIDITEM_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+class GRID_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    PCB_GRIDITEM_POINT_EDIT_BEHAVIOR( PCB_GRIDITEM& aGridItem ) :
+    GRID_POINT_EDIT_BEHAVIOR( PCB_GRID_ITEM& aGridItem ) :
             m_gridItem( aGridItem )
     {
     }
@@ -856,20 +856,22 @@ public:
 
         switch( m_gridItem.GetGridItemType() )
         {
-        case PCB_GRIDITEM_TYPE::POLAR:
+        case PCB_GRID_TYPE::POLAR:
             aPoints.AddPoint( toWorld( radiusEndLocal() ) );
             aPoints.AddPoint( toWorld( arcEndLocal() ) );
             aPoints.AddPoint( toWorld( arcMidLocal() ) );
             break;
 
-        case PCB_GRIDITEM_TYPE::CARTESIAN:
+        case PCB_GRID_TYPE::CARTESIAN:
             aPoints.AddPoint( toWorld( cornerLocal( 0, 0 ) ) );
             aPoints.AddPoint( toWorld( cornerLocal( 1, 0 ) ) );
             aPoints.AddPoint( toWorld( cornerLocal( 1, 1 ) ) );
             aPoints.AddPoint( toWorld( cornerLocal( 0, 1 ) ) );
             break;
 
-        default: wxFAIL_MSG( wxT( "MakePoints: unhandled PCB_GRIDITEM_TYPE" ) ); break;
+        default:
+            wxFAIL_MSG( wxT( "MakePoints: unhandled PCB_GRID_TYPE" ) );
+            break;
         }
     }
 
@@ -877,7 +879,7 @@ public:
     {
         switch( m_gridItem.GetGridItemType() )
         {
-        case PCB_GRIDITEM_TYPE::POLAR:
+        case PCB_GRID_TYPE::POLAR:
             if( aPoints.PointsSize() != 4 )
                 return false;
 
@@ -887,7 +889,7 @@ public:
             aPoints.Point( 3 ).SetPosition( toWorld( arcMidLocal() ) );
             return true;
 
-        case PCB_GRIDITEM_TYPE::CARTESIAN:
+        case PCB_GRID_TYPE::CARTESIAN:
             if( aPoints.PointsSize() != 5 )
                 return false;
 
@@ -898,7 +900,9 @@ public:
             aPoints.Point( 4 ).SetPosition( toWorld( cornerLocal( 0, 1 ) ) );
             return true;
 
-        default: wxFAIL_MSG( wxT( "UpdatePoints: unhandled PCB_GRIDITEM_TYPE" ) ); return false;
+        default:
+            wxFAIL_MSG( wxT( "UpdatePoints: unhandled PCB_GRID_TYPE" ) );
+            return false;
         }
     }
 
@@ -916,7 +920,7 @@ public:
 
         switch( m_gridItem.GetGridItemType() )
         {
-        case PCB_GRIDITEM_TYPE::POLAR:
+        case PCB_GRID_TYPE::POLAR:
         {
             // World offset from grid centre.
             const VECTOR2I worldOff = aEditedPoint.GetPosition() - m_gridItem.GetPosition();
@@ -966,7 +970,7 @@ public:
             break;
         }
 
-        case PCB_GRIDITEM_TYPE::CARTESIAN:
+        case PCB_GRID_TYPE::CARTESIAN:
         {
             // Dragging a corner resizes symmetrically about the centre.
             const int newHalfX = std::max( 1, std::abs( local.x ) );
@@ -978,7 +982,9 @@ public:
             break;
         }
 
-        default: wxFAIL_MSG( wxT( "UpdateItem: unhandled PCB_GRIDITEM_TYPE" ) ); break;
+        default:
+            wxFAIL_MSG( wxT( "UpdateItem: unhandled PCB_GRID_TYPE" ) );
+            break;
         }
     }
 
@@ -1021,7 +1027,7 @@ private:
         return VECTOR2I( KiROUND( r * std::cos( phi ) ), KiROUND( r * std::sin( phi ) ) );
     }
 
-    PCB_GRIDITEM& m_gridItem;
+    PCB_GRID_ITEM& m_gridItem;
 };
 
 
@@ -2267,10 +2273,10 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         m_editorBehavior = std::make_unique<BARCODE_POINT_EDIT_BEHAVIOR>( barcode );
         break;
     }
-    case PCB_GRIDITEM_T:
+    case PCB_GRID_ITEM_T:
     {
-        PCB_GRIDITEM& grid = static_cast<PCB_GRIDITEM&>( *aItem );
-        m_editorBehavior = std::make_unique<PCB_GRIDITEM_POINT_EDIT_BEHAVIOR>( grid );
+        PCB_GRID_ITEM& grid = static_cast<PCB_GRID_ITEM&>( *aItem );
+        m_editorBehavior = std::make_unique<GRID_POINT_EDIT_BEHAVIOR>( grid );
         break;
     }
     case PCB_TEXTBOX_T:

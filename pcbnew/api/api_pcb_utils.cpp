@@ -36,7 +36,7 @@
 #include <constraints/pcb_constraint.h>
 #include <mmh3_hash.h>
 #include <pcb_barcode.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
 #include <pcb_point.h>
@@ -53,12 +53,12 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
 {
     switch( aType )
     {
-    case PCB_TRACE_T:   return std::make_unique<PCB_TRACK>( aContainer );
-    case PCB_ARC_T:     return std::make_unique<PCB_ARC>( aContainer );
-    case PCB_VIA_T:     return std::make_unique<PCB_VIA>( aContainer );
-    case PCB_TEXT_T:    return std::make_unique<PCB_TEXT>( aContainer );
-    case PCB_TEXTBOX_T: return std::make_unique<PCB_TEXTBOX>( aContainer );
-    case PCB_TABLE_T:   return std::make_unique<PCB_TABLE>( aContainer );
+    case PCB_TRACE_T:           return std::make_unique<PCB_TRACK>( aContainer );
+    case PCB_ARC_T:             return std::make_unique<PCB_ARC>( aContainer );
+    case PCB_VIA_T:             return std::make_unique<PCB_VIA>( aContainer );
+    case PCB_TEXT_T:            return std::make_unique<PCB_TEXT>( aContainer );
+    case PCB_TEXTBOX_T:         return std::make_unique<PCB_TEXTBOX>( aContainer );
+    case PCB_TABLE_T:           return std::make_unique<PCB_TABLE>( aContainer );
     case PCB_TABLECELL_T:
     {
         PCB_TABLE* table = dynamic_cast<PCB_TABLE*>( aContainer );
@@ -68,14 +68,14 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
 
         return std::make_unique<PCB_TABLECELL>( aContainer );
     }
-    case PCB_SHAPE_T:   return std::make_unique<PCB_SHAPE>( aContainer );
-    case PCB_POINT_T:   return std::make_unique<PCB_POINT>( aContainer );
-    case PCB_BARCODE_T: return std::make_unique<PCB_BARCODE>( aContainer );
-    case PCB_ZONE_T:    return std::make_unique<ZONE>( aContainer );
-    case PCB_GROUP_T:   return std::make_unique<PCB_GROUP>( aContainer );
-    case PCB_CONSTRAINT_T: return std::make_unique<PCB_CONSTRAINT>( aContainer );
+    case PCB_SHAPE_T:           return std::make_unique<PCB_SHAPE>( aContainer );
+    case PCB_POINT_T:           return std::make_unique<PCB_POINT>( aContainer );
+    case PCB_BARCODE_T:         return std::make_unique<PCB_BARCODE>( aContainer );
+    case PCB_ZONE_T:            return std::make_unique<ZONE>( aContainer );
+    case PCB_GROUP_T:           return std::make_unique<PCB_GROUP>( aContainer );
+    case PCB_CONSTRAINT_T:      return std::make_unique<PCB_CONSTRAINT>( aContainer );
     case PCB_REFERENCE_IMAGE_T: return std::make_unique<PCB_REFERENCE_IMAGE>( aContainer );
-    case PCB_GRIDITEM_T: return std::make_unique<PCB_GRIDITEM>( aContainer );
+    case PCB_GRID_ITEM_T:        return std::make_unique<PCB_GRID_ITEM>( aContainer );
 
     case PCB_PAD_T:
     {
@@ -107,11 +107,11 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
         return std::make_unique<FOOTPRINT>( board );
     }
 
-    case PCB_DIM_ALIGNED_T: return std::make_unique<PCB_DIM_ALIGNED>( aContainer );
-    case PCB_DIM_ORTHOGONAL_T: return std::make_unique<PCB_DIM_ORTHOGONAL>( aContainer );
-    case PCB_DIM_RADIAL_T: return std::make_unique<PCB_DIM_RADIAL>( aContainer );
-    case PCB_DIM_LEADER_T: return std::make_unique<PCB_DIM_LEADER>( aContainer );
-    case PCB_DIM_CENTER_T: return std::make_unique<PCB_DIM_CENTER>( aContainer );
+    case PCB_DIM_ALIGNED_T:     return std::make_unique<PCB_DIM_ALIGNED>( aContainer );
+    case PCB_DIM_ORTHOGONAL_T:  return std::make_unique<PCB_DIM_ORTHOGONAL>( aContainer );
+    case PCB_DIM_RADIAL_T:      return std::make_unique<PCB_DIM_RADIAL>( aContainer );
+    case PCB_DIM_LEADER_T:      return std::make_unique<PCB_DIM_LEADER>( aContainer );
+    case PCB_DIM_CENTER_T:      return std::make_unique<PCB_DIM_CENTER>( aContainer );
 
     default:
         return nullptr;

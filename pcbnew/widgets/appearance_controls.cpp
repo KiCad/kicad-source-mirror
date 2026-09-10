@@ -354,7 +354,7 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _HKI( "DRC Exclusions" ),       LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
     RR( _HKI( "Anchors" ),              LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
     RR( _HKI( "Points" ),               LAYER_POINTS,             _HKI( "Show explicit snap points as crosses" ) ),
-    RR( _HKI( "Grid Items" ),           LAYER_GRIDITEMS,          _HKI( "Show custom routing/placement grids" ) ),
+    RR( _HKI( "Grids" ),                LAYER_SUBGRIDS,           _HKI( "Show custom routing/placement grids" ) ),
     RR( _HKI( "Via Stitching" ),        LAYER_VIA_STITCHING,      _HKI( "Show via stitching generator outlines" ) ),
     RR( _HKI( "Locked Item Shadow" ),   LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow on locked items" ) ),
     RR( _HKI( "Colliding Courtyards" ), LAYER_CONFLICTS_SHADOW,   _HKI( "Show colliding footprint courtyards" ) ),

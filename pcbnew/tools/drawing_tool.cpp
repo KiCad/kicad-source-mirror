@@ -83,7 +83,7 @@
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
 #include <pcb_dimension.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <constraints/board_constraint_adapter.h>
 #include <constraints/constraint_builder.h>
 #include <constraints/pcb_constraint.h>
@@ -2526,7 +2526,7 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
 
     // Turn grid items on if they are off, so that the created object will be visible after
     // completion
-    m_frame->SetObjectVisible( LAYER_GRIDITEMS );
+    m_frame->SetObjectVisible( LAYER_SUBGRIDS );
 
     SCOPED_TOOL_PUSHER raii( m_frame, aEvent );
 
@@ -2545,8 +2545,8 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    BOARD*        board = getModel<BOARD>();
-    PCB_GRIDITEM* griditem = nullptr;
+    BOARD*         board = getModel<BOARD>();
+    PCB_GRID_ITEM* griditem = nullptr;
 
     auto sizeToCursor =
             [&]( const VECTOR2I& aCursor )
@@ -2573,7 +2573,7 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
             {
                 // Only items on the board are picked up trough a GRID_SOURCE
                 // SetSelected highlights the grid and avoids snapping to itself
-                griditem = new PCB_GRIDITEM( board );
+                griditem = new PCB_GRID_ITEM( board );
                 griditem->SetPosition( cursorPos );
                 griditem->SetExtent( VECTOR2I( 0, 0 ) );
                 griditem->SetSelected();

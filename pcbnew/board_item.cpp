@@ -66,7 +66,7 @@ bool BOARD_ITEM::IsGroupableType() const
     case PCB_ZONE_T:
     case PCB_BARCODE_T:
     case PCB_POINT_T:
-    case PCB_GRIDITEM_T:
+    case PCB_GRID_ITEM_T:
         return true;
     default:
         return false;

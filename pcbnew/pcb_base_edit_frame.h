@@ -37,7 +37,7 @@ class PCB_SHAPE;
 class FILEDLG_HOOK_NEW_LIBRARY;
 struct PCB_SELECTION_FILTER_OPTIONS;
 class PCB_BARCODE;
-class PCB_GRIDITEM;
+class PCB_GRID_ITEM;
 class PCB_VERTEX_EDITOR_PANE;
 
 /**
@@ -192,7 +192,7 @@ public:
     void ShowTextPropertiesDialog( PCB_TEXT* aText );
     int ShowTextBoxPropertiesDialog( PCB_TEXTBOX* aTextBox );
     void ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape );
-    void ShowGridItemPropertiesDialog( PCB_GRIDITEM* aGridItem );
+    void ShowGridItemPropertiesDialog( PCB_GRID_ITEM* aGridItem );
 
     void OpenVertexEditor( BOARD_ITEM* aItem );
     void CloseVertexEditor();

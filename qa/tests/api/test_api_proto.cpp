@@ -34,7 +34,7 @@
 #include <footprint.h>
 #include <pcb_barcode.h>
 #include <pcb_dimension.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
 #include <pcb_table.h>
@@ -301,13 +301,14 @@ BOOST_FIXTURE_TEST_CASE( CopperThievingZoneRoundTrip, PROTO_TEST_FIXTURE )
 
 BOOST_AUTO_TEST_CASE( GridItems )
 {
-    const auto makeGridItem = []()
-    {
-        return std::make_unique<PCB_GRIDITEM>( nullptr );
-    };
+    const auto makeGridItem =
+            []()
+            {
+                return std::make_unique<PCB_GRID_ITEM>( nullptr );
+            };
 
-    PCB_GRIDITEM cartesian( nullptr );
-    cartesian.SetGridItemType( PCB_GRIDITEM_TYPE::CARTESIAN );
+    PCB_GRID_ITEM cartesian( nullptr );
+    cartesian.SetGridItemType( PCB_GRID_TYPE::CARTESIAN );
     cartesian.SetPosition( VECTOR2I( 1000000, -2000000 ) );
     cartesian.SetOrientationDegrees( 30.0 );
     cartesian.SetExtent( VECTOR2I( 5000000, 4000000 ) );
@@ -319,8 +320,8 @@ BOOST_AUTO_TEST_CASE( GridItems )
 
     testProtoFromKiCadObject<kiapi::board::types::GridItem>( &cartesian, makeGridItem );
 
-    PCB_GRIDITEM polar( nullptr );
-    polar.SetGridItemType( PCB_GRIDITEM_TYPE::POLAR );
+    PCB_GRID_ITEM polar( nullptr );
+    polar.SetGridItemType( PCB_GRID_TYPE::POLAR );
     polar.SetPosition( VECTOR2I( -750000, 125000 ) );
     polar.SetRadiusExtent( 8000000 );
     polar.SetRadiusSpacing( 1000000 );
@@ -336,10 +337,10 @@ BOOST_AUTO_TEST_CASE( GridItems )
     google::protobuf::Any any;
     polar.Serialize( any );
 
-    std::unique_ptr<PCB_GRIDITEM> roundTripped = makeGridItem();
+    std::unique_ptr<PCB_GRID_ITEM> roundTripped = makeGridItem();
     BOOST_REQUIRE( roundTripped->Deserialize( any ) );
 
-    BOOST_CHECK( roundTripped->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR );
+    BOOST_CHECK( roundTripped->GetGridItemType() == PCB_GRID_TYPE::POLAR );
     BOOST_CHECK_EQUAL( roundTripped->GetRadiusExtent(), 8000000 );
     BOOST_CHECK_EQUAL( roundTripped->GetRadiusSpacing(), 1000000 );
     BOOST_CHECK( roundTripped->GetPhiExtent() == EDA_ANGLE( 270.0, DEGREES_T ) );

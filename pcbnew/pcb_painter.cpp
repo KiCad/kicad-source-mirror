@@ -43,7 +43,7 @@
 #include <pcb_barcode.h>
 #include <pcb_target.h>
 #include <pcb_board_outline.h>
-#include <pcb_griditem.h>
+#include <pcb_grid_item.h>
 
 #include <layer_ids.h>
 #include <lset.h>
@@ -767,7 +767,9 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const PCB_POINT*>( item ), aLayer );
         break;
 
-    case PCB_GRIDITEM_T: draw( static_cast<const PCB_GRIDITEM*>( item ), aLayer ); break;
+    case PCB_GRID_ITEM_T:
+        draw( static_cast<const PCB_GRID_ITEM*>( item ), aLayer );
+        break;
 
     case PCB_MARKER_T:
         draw( static_cast<const PCB_MARKER*>( item ), aLayer );
@@ -3453,16 +3455,16 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const PCB_GRIDITEM* aGridItem, int aLayer )
+void PCB_PAINTER::draw( const PCB_GRID_ITEM* aGridItem, int aLayer )
 {
     // Grid content (lines/dots/crosses) is rendered by the GAL backend through
     // GRID_SOURCE (see PCB_DRAW_PANEL_GAL::prepareGridSources).  Only selection
-    // decorations - outline and centre marker - live here, on LAYER_GRIDITEMS.
+    // decorations - outline and centre marker - live here, on LAYER_GRID_ITEMS.
     // The item is also registered on m_layer for VIEW::Query (selection); skip
     // those passes.
     const bool shadow = aLayer == LAYER_LOCKED_ITEM_SHADOW; // happens only if locked
 
-    if( aLayer != LAYER_GRIDITEMS && !shadow )
+    if( aLayer != LAYER_SUBGRIDS && !shadow )
         return;
 
     if( !shadow && !aGridItem->IsSelected() )
@@ -3480,7 +3482,7 @@ void PCB_PAINTER::draw( const PCB_GRIDITEM* aGridItem, int aLayer )
 
     switch( aGridItem->GetGridItemType() )
     {
-    case PCB_GRIDITEM_TYPE::POLAR:
+    case PCB_GRID_TYPE::POLAR:
     {
         // hairline outline at the maximum radius, only over the active phi range
         const int    radius = aGridItem->GetRadiusExtent();
@@ -3496,7 +3498,7 @@ void PCB_PAINTER::draw( const PCB_GRIDITEM* aGridItem, int aLayer )
         break;
     }
 
-    case PCB_GRIDITEM_TYPE::CARTESIAN:
+    case PCB_GRID_TYPE::CARTESIAN:
     {
         // hairline outline rectangle centred on the grid origin
         const VECTOR2I extent = aGridItem->GetExtent();
@@ -3508,7 +3510,7 @@ void PCB_PAINTER::draw( const PCB_GRIDITEM* aGridItem, int aLayer )
     }
 
     default:
-        wxFAIL_MSG( wxT( "draw(PCB_GRIDITEM*): unhandled PCB_GRIDITEM_TYPE" ) );
+        wxFAIL_MSG( wxT( "draw(PCB_GRID_ITEM*): unhandled PCB_GRID_TYPE" ) );
         break;
     }
 

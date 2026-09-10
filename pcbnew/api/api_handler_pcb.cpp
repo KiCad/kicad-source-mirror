@@ -431,7 +431,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
         case PCB_TEXTBOX_T:
         case PCB_BARCODE_T:
         case PCB_REFERENCE_IMAGE_T:
-        case PCB_GRIDITEM_T:
+        case PCB_GRID_ITEM_T:
         {
             handledAnything = true;
             bool inserted = false;

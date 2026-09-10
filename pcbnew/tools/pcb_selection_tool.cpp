@@ -3653,7 +3653,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
         else
             return aFilterOptions.includeItemsOnTechLayers;
 
-    case PCB_GRIDITEM_T:
+    case PCB_GRID_ITEM_T:
         return aFilterOptions.includeItemsOnTechLayers;
 
     case PCB_FIELD_T:
@@ -3916,7 +3916,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
 
         break;
 
-    case PCB_GRIDITEM_T:
+    case PCB_GRID_ITEM_T:
         if( !m_filter.gridItems )
         {
             if( aRejected )
@@ -4328,8 +4328,8 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         break;
 
-    case PCB_GRIDITEM_T:
-        if( !board()->IsElementVisible( LAYER_GRIDITEMS ) )
+    case PCB_GRID_ITEM_T:
+        if( !board()->IsElementVisible( LAYER_SUBGRIDS ) )
             return false;
 
         break;
