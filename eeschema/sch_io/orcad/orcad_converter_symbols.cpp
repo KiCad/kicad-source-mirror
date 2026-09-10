@@ -368,7 +368,7 @@ bool laterRectangleOccludesTextUnderscores( const std::vector<ORCAD_PRIMITIVE>& 
     {
         const ORCAD_PRIMITIVE& rectangle = aPrimitives[i];
 
-        if( rectangle.kind != ORCAD_PRIM_KIND::RECT )
+        if( rectangle.kind != ORCAD_PRIM_KIND::RECTANGLE )
             continue;
 
         int rectangleLeft = std::min( rectangle.x1, rectangle.x2 );
@@ -393,7 +393,7 @@ ELECTRICAL_PINTYPE pinTypeFor( ORCAD_PORT_TYPE aType )
 {
     switch( aType )
     {
-    case ORCAD_PORT_TYPE::INPUT: return ELECTRICAL_PINTYPE::PT_INPUT;
+    case ORCAD_PORT_TYPE::INPUT_TYPE: return ELECTRICAL_PINTYPE::PT_INPUT;
     case ORCAD_PORT_TYPE::BIDIRECTIONAL: return ELECTRICAL_PINTYPE::PT_BIDI;
     case ORCAD_PORT_TYPE::OUTPUT: return ELECTRICAL_PINTYPE::PT_OUTPUT;
     case ORCAD_PORT_TYPE::OPEN_COLLECTOR: return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
@@ -1132,7 +1132,7 @@ ORCAD_CONVERTER::synthesizeSymbol( const std::string&                           
     sym.bbox = ORCAD_BBOX{ bx1 - s.x, by1 - s.y, bx2 - s.x, by2 - s.y };
 
     ORCAD_PRIMITIVE rect;
-    rect.kind = ORCAD_PRIM_KIND::RECT;
+    rect.kind = ORCAD_PRIM_KIND::RECTANGLE;
     rect.x1 = bx1 - s.x;
     rect.y1 = by1 - s.y;
     rect.x2 = bx2 - s.x;
@@ -2224,13 +2224,13 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
 
     switch( aPrim.kind )
     {
-    case ORCAD_PRIM_KIND::GROUP:
+    case ORCAD_PRIM_KIND::GROUP_PRIM:
         for( const ORCAD_PRIMITIVE& child : aPrim.children )
             addSymbolPrimitive( aSymbol, child, aUnit, aColor, aOffsetX + aPrim.x1, aOffsetY + aPrim.y1 );
 
         break;
 
-    case ORCAD_PRIM_KIND::RECT:
+    case ORCAD_PRIM_KIND::RECTANGLE:
     {
         SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
         shape->SetPosition( VECTOR2I( toX( aPrim.x1 ), toY( aPrim.y1 ) ) );
@@ -2615,7 +2615,7 @@ void ORCAD_CONVERTER::addSymbolPin( LIB_SYMBOL* aSymbol, const ORCAD_SYMBOL_PIN&
 
     aSymbol->AddDrawItem( pin, false );
 
-    if( !aPower && !aHidden && pinLength > 0 && aPin.portType == ORCAD_PORT_TYPE::INPUT )
+    if( !aPower && !aHidden && pinLength > 0 && aPin.portType == ORCAD_PORT_TYPE::INPUT_TYPE )
     {
         VECTOR2I direction( ( dx > 0 ) - ( dx < 0 ), ( dy > 0 ) - ( dy < 0 ) );
         VECTOR2I normal( -direction.y, direction.x );

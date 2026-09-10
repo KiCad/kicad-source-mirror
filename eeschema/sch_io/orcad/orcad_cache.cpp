@@ -85,7 +85,7 @@ std::optional<ORCAD_PRIMITIVE> readSymbolVector( ORCAD_STREAM& aStream )
     ORCAD_STREAM::LIMIT_GUARD limit( aStream, pfx.end );
 
     ORCAD_PRIMITIVE group;
-    group.kind = ORCAD_PRIM_KIND::GROUP;
+    group.kind = ORCAD_PRIM_KIND::GROUP_PRIM;
     group.x1 = aStream.ReadI16();
     group.y1 = aStream.ReadI16();
 
@@ -155,7 +155,7 @@ std::optional<ORCAD_PRIMITIVE> readPrimitiveBody( ORCAD_STREAM& aStream, int t1 
         if( t1 == ORCAD_PRIM_RECT || t1 == ORCAD_PRIM_ELLIPSE )
         {
             ORCAD_PRIMITIVE p;
-            p.kind = t1 == ORCAD_PRIM_RECT ? ORCAD_PRIM_KIND::RECT : ORCAD_PRIM_KIND::ELLIPSE;
+            p.kind = t1 == ORCAD_PRIM_RECT ? ORCAD_PRIM_KIND::RECTANGLE : ORCAD_PRIM_KIND::ELLIPSE;
             p.x1 = aStream.ReadI32();
             p.y1 = aStream.ReadI32();
             p.x2 = aStream.ReadI32();

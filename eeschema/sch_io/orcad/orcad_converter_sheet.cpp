@@ -1110,7 +1110,7 @@ static LABEL_FLAG_SHAPE hierarchicalPinShape( ORCAD_PORT_TYPE aType )
 {
     switch( aType )
     {
-    case ORCAD_PORT_TYPE::INPUT: return LABEL_FLAG_SHAPE::L_INPUT;
+    case ORCAD_PORT_TYPE::INPUT_TYPE: return LABEL_FLAG_SHAPE::L_INPUT;
     case ORCAD_PORT_TYPE::OUTPUT: return LABEL_FLAG_SHAPE::L_OUTPUT;
     case ORCAD_PORT_TYPE::BIDIRECTIONAL: return LABEL_FLAG_SHAPE::L_BIDI;
     case ORCAD_PORT_TYPE::TRI_STATE: return LABEL_FLAG_SHAPE::L_TRISTATE;
@@ -4248,7 +4248,7 @@ void ORCAD_CONVERTER::placePageFrame( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* a
         return;
 
     ORCAD_PRIMITIVE border;
-    border.kind = ORCAD_PRIM_KIND::RECT;
+    border.kind = ORCAD_PRIM_KIND::RECTANGLE;
     border.lineWidth = 0;
     border.lineStyle = 0;
     const KIGFX::COLOR4D color( 0.0, 0.0, 0.0, 1.0 );
@@ -4913,7 +4913,7 @@ void ORCAD_CONVERTER::placeDefinitionVectors( const ORCAD_SYMBOL_DEF& aDefinitio
     {
         for( const ORCAD_PRIMITIVE& source : aPrimitives )
         {
-            if( source.kind == ORCAD_PRIM_KIND::GROUP )
+            if( source.kind == ORCAD_PRIM_KIND::GROUP_PRIM )
             {
                 appendVectors( source.children, aOffsetX + source.x1, aOffsetY + source.y1 );
                 continue;
@@ -5007,7 +5007,7 @@ void ORCAD_CONVERTER::placeDefinitionImages( const ORCAD_SYMBOL_DEF& aDefinition
     {
         for( const ORCAD_PRIMITIVE& primitive : aPrimitives )
         {
-            if( primitive.kind == ORCAD_PRIM_KIND::GROUP )
+            if( primitive.kind == ORCAD_PRIM_KIND::GROUP_PRIM )
             {
                 placeImages( primitive.children, aOffsetX + primitive.x1, aOffsetY + primitive.y1 );
                 continue;
@@ -8209,7 +8209,7 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
         std::function<void( const ORCAD_PRIMITIVE&, int, int )> placePrimitive =
                 [&]( const ORCAD_PRIMITIVE& aSource, int aOffsetX, int aOffsetY )
         {
-            if( aSource.kind == ORCAD_PRIM_KIND::GROUP )
+            if( aSource.kind == ORCAD_PRIM_KIND::GROUP_PRIM )
             {
                 for( const ORCAD_PRIMITIVE& child : aSource.children )
                     placePrimitive( child, aOffsetX + aSource.x1, aOffsetY + aSource.y1 );
@@ -8243,7 +8243,7 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
 
             switch( prim.kind )
             {
-            case ORCAD_PRIM_KIND::GROUP: break;
+            case ORCAD_PRIM_KIND::GROUP_PRIM: break;
 
             case ORCAD_PRIM_KIND::IMAGE:
             {
@@ -8268,7 +8268,7 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
                                                      : KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 );
                     }
 
-                    frame.kind = ORCAD_PRIM_KIND::RECT;
+                    frame.kind = ORCAD_PRIM_KIND::RECTANGLE;
                     frame.lineStyle = 0;
                     frame.lineWidth = 0;
                     frame.fillStyle = 1;
@@ -8471,7 +8471,7 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
                                                prim, graphicColor, false, gfx.useSymbolLineWidths ) );
                 break;
 
-            case ORCAD_PRIM_KIND::RECT:
+            case ORCAD_PRIM_KIND::RECTANGLE:
                 appendPageItem( aScreen,
                                 makeSheetPoly( { OrcadDbuToIu( prim.x1, prim.y1 ),
                                                  OrcadDbuToIu( prim.x2, prim.y1 ),

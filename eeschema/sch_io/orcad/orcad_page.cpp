@@ -612,7 +612,7 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType )
     {
     case ORCAD_PRIM_RECT:
     case ORCAD_PRIM_ELLIPSE:
-        prim.kind = type == ORCAD_PRIM_RECT ? ORCAD_PRIM_KIND::RECT : ORCAD_PRIM_KIND::ELLIPSE;
+        prim.kind = type == ORCAD_PRIM_RECT ? ORCAD_PRIM_KIND::RECTANGLE : ORCAD_PRIM_KIND::ELLIPSE;
         prim.x1 = aStream.ReadI32();
         prim.y1 = aStream.ReadI32();
         prim.x2 = aStream.ReadI32();
@@ -688,7 +688,7 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType )
             aStream.ReadU16();
         }
 
-        prim.kind = ORCAD_PRIM_KIND::GROUP;
+        prim.kind = ORCAD_PRIM_KIND::GROUP_PRIM;
         prim.x1 = aStream.ReadI16();
         prim.y1 = aStream.ReadI16();
 

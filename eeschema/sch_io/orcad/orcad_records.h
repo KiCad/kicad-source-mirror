@@ -113,8 +113,8 @@ enum ORCAD_PRIM : int
 /** Decoded primitive kind after parsing. */
 enum class ORCAD_PRIM_KIND
 {
-    GROUP,
-    RECT,
+    GROUP_PRIM,
+    RECTANGLE,
     LINE,
     ARC,
     ELLIPSE,
@@ -129,7 +129,7 @@ enum class ORCAD_PRIM_KIND
 /** Map unknown electrical type codes to PASSIVE. */
 enum class ORCAD_PORT_TYPE : int
 {
-    INPUT = 0,
+    INPUT_TYPE = 0,
     BIDIRECTIONAL = 1,
     OUTPUT = 2,
     OPEN_COLLECTOR = 3,
