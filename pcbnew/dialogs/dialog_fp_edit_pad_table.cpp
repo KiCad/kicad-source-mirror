@@ -291,6 +291,8 @@ public:
             break;
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_SHAPE:
+            // Note that this will blow away any layer-specific shapes, but this process
+            // doesn't support layer-specific editing.
             aPad.Padstack().ForEachUniqueLayer(
                     [&]( PCB_LAYER_ID aLayer )
                     {
@@ -315,6 +317,7 @@ public:
         }
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_SIZE_X:
+            // Same as shape: overwrite all layers
             aPad.Padstack().ForEachUniqueLayer(
                     [&]( PCB_LAYER_ID aLayer )
                     {
@@ -325,6 +328,7 @@ public:
             break;
 
         case DIALOG_FP_EDIT_PAD_TABLE::COL_SIZE_Y:
+            // Same as shape: overwrite all layers
             aPad.Padstack().ForEachUniqueLayer(
                     [&]( PCB_LAYER_ID aLayer )
                     {
