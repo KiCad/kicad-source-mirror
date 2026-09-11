@@ -18,19 +18,17 @@
  */
 
 #include <eda_draw_frame.h>
+#include <footprint_library_query.h>
 #include <kiway.h>
-#include <kiface_ids.h>
 #include <widgets/footprint_choice.h>
 #include <widgets/footprint_select_widget.h>
-#include <json_common.h>
 #include <set>
 #include <wx/wupdlock.h>
 
 
 wxDEFINE_EVENT( EVT_FOOTPRINT_SELECTED, wxCommandEvent );
 
-FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent,
-                                                  int aMaxItems ) :
+FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent, int aMaxItems ) :
         wxPanel( aParent ),
         m_max_items( aMaxItems ),
         m_pin_count( 0 ),
@@ -102,8 +100,7 @@ void FOOTPRINT_SELECT_WIDGET::FilterByPinCount( int aPinCount )
 }
 
 
-void FOOTPRINT_SELECT_WIDGET::FilterByFootprintFilters( wxArrayString const& aFilters,
-                                                        bool aZeroFilters )
+void FOOTPRINT_SELECT_WIDGET::FilterByFootprintFilters( wxArrayString const& aFilters, bool aZeroFilters )
 {
     m_zero_filter = ( aZeroFilters && aFilters.size() == 0 );
     m_filters = aFilters;
@@ -151,68 +148,23 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
         return true;
     }
 
-    // Build JSON request for pcbnew
-    using json = nlohmann::json;
-    json request;
-    request["pin_count"] = m_pin_count;
-    request["zero_filters"] = m_zero_filter;
-    request["max_results"] = m_max_items;
+    FOOTPRINT_MATCH_QUERY query;
+    query.patterns.assign( m_filters.begin(), m_filters.end() );
+    query.pinCount = m_pin_count;
+    query.maxResults = m_max_items;
+    query.zeroFilters = m_zero_filter;
 
-    json filtersArray = json::array();
+    std::vector<wxString> matches;
 
-    for( const wxString& filter : m_filters )
-        filtersArray.push_back( filter.ToStdString() );
+    // The query fails when the PCB kiface is unavailable; the list is then just the default.
+    QueryMatchingFootprints( *m_kiway, query, matches );
 
-    request["filters"] = filtersArray;
-
-    // Get the filter function from pcbnew via KIWAY
-    try
+    for( const wxString& fpName : matches )
     {
-        KIFACE* kiface = m_kiway->KiFACE( KIWAY::FACE_PCB );
+        if( alwaysIncludedNames.count( fpName ) )
+            continue;
 
-        if( !kiface )
-        {
-            SelectDefault();
-            return true;
-        }
-
-        void* funcPtr = kiface->IfaceOrAddress( KIFACE_FILTER_FOOTPRINTS );
-
-        if( !funcPtr )
-        {
-            SelectDefault();
-            return true;
-        }
-
-        // Call the filter function
-        using FilterFunc = wxString ( * )( const wxString& );
-        FilterFunc filterFootprints = reinterpret_cast<FilterFunc>( funcPtr );
-
-        wxString requestStr = wxString::FromUTF8( request.dump() );
-        wxString responseStr = filterFootprints( requestStr );
-
-        // Parse the response
-        json response = json::parse( responseStr.ToStdString() );
-
-        if( response.is_array() )
-        {
-            for( const auto& item : response )
-            {
-                if( item.is_string() )
-                {
-                    wxString fpName = wxString::FromUTF8( item.get<std::string>() );
-
-                    if( alwaysIncludedNames.count( fpName ) )
-                        continue;
-
-                    m_fp_sel_ctrl->Append( fpName, new wxStringClientData( fpName ) );
-                }
-            }
-        }
-    }
-    catch( const std::exception& )
-    {
-        // JSON parsing or other error - just show default
+        m_fp_sel_ctrl->Append( fpName, new wxStringClientData( fpName ) );
     }
 
     SelectDefault();

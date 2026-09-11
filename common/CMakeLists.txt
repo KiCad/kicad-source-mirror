@@ -838,6 +838,7 @@ set( COMMON_SRCS
     filter_reader.cpp
     footprint_filter.cpp
     footprint_info.cpp
+    footprint_library_query.cpp
     gbr_metadata.cpp
     gr_basic.cpp
     hotkey_store.cpp
