@@ -1740,10 +1740,11 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
                                       libPinShownNumber, effectivePadNumber ) );
     }
 
-    // Use timestamp for unannotated symbols
+    // Use a short hash of the UUID as the missing symbol number
     if( symbol->GetRef( &aPath, false ).Last() == '?' )
     {
-        name << GetParentSymbol()->m_Uuid.AsString();
+        name << symbol->GetRef( &aPath, false );
+        name << wxString::Format( wxS( "-%08x" ), (unsigned) ( symbol->m_Uuid.Hash() & 0xFFFFFFFF ) );
 
         wxString libPinNumber = m_libPin ? m_libPin->GetNumber() : wxString( "??" );
         // Apply same smallest-logical substitution for unannotated symbols

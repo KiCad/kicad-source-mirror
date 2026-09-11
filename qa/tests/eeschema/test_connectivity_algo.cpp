@@ -131,3 +131,51 @@ BOOST_FIXTURE_TEST_CASE( Issue17771, CONNECTIVITY_TEST_FIXTURE )
     BOOST_CHECK_MESSAGE( tpNetCodes["TP102"] == tpNetCodes["TP402"],
                          "TP102 and TP402 should be on the same net (m.X.Y.Z2)" );
 }
+
+
+/**
+ * Issue #25086. Unannotated pins did not drive nets. Every wire got "<NO NET>"
+ * and highlighting one net lit up the whole schematic. Now each unannotated
+ * symbol drives its own net, named with a short hash of its UUID.
+ */
+BOOST_FIXTURE_TEST_CASE( Issue25086UnannotatedNetNames, CONNECTIVITY_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    KI_TEST::LoadSchematic( m_settingsManager, "issue25086_unannotated_pins", m_schematic );
+
+    SCH_SHEET_PATH sheet = m_schematic->BuildSheetListSortedByPageNumbers().at( 0 );
+    SCH_SCREEN*    screen = sheet.LastScreen();
+
+    std::vector<SCH_CONNECTION*> wireConns;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+    {
+        if( item->GetLayer() == LAYER_WIRE )
+            wireConns.push_back( item->Connection( &sheet ) );
+    }
+
+    BOOST_REQUIRE_EQUAL( wireConns.size(), 2 );
+    BOOST_REQUIRE( wireConns[0] && wireConns[1] );
+
+    // Each wire joins its own pair of unannotated pins, so the nets must be distinct
+    BOOST_CHECK_NE( wireConns[0]->Name(), wireConns[1]->Name() );
+
+    // Either pin on a wire may win the driver tie-break, so accept any symbol's name
+    std::vector<wxString> expectedNames;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        unsigned serial = (unsigned) ( item->m_Uuid.Hash() & 0xFFFFFFFF );
+        expectedNames.push_back( wxString::Format( wxS( "Net-(TP?-%08x-Pad1)" ), serial ) );
+    }
+
+    BOOST_REQUIRE_EQUAL( expectedNames.size(), 4 );
+
+    for( SCH_CONNECTION* conn : wireConns )
+    {
+        bool found = std::find( expectedNames.begin(), expectedNames.end(), conn->Name() ) != expectedNames.end();
+
+        BOOST_CHECK_MESSAGE( found, "Unexpected net name: " + conn->Name().ToStdString() );
+    }
+}

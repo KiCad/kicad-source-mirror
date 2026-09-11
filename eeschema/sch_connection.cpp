@@ -357,20 +357,7 @@ bool SCH_CONNECTION::IsDriver() const
     case SCH_HIER_LABEL_T:
     case SCH_SHEET_PIN_T:
     case SCH_SHEET_T:
-        return true;
-
-    case SCH_PIN_T:
-    {
-        const SCH_PIN* pin = static_cast<const SCH_PIN*>( Parent() );
-
-        if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( pin->GetParentSymbol() ) )
-        {
-            // Only annotated symbols should drive nets.
-            return pin->IsPower() || symbol->IsAnnotated( &m_sheet );
-        }
-
-        return true;
-    }
+    case SCH_PIN_T: return true;
 
     default:
         return false;
