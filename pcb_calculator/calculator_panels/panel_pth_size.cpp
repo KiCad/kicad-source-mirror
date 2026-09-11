@@ -329,7 +329,7 @@ PANEL_PTH_SIZE::PANEL_PTH_SIZE( wxWindow* parent, wxWindowID id, const wxPoint& 
     m_cbShowMinLeadSize->SetValue( true );
 
     // The copy button puts the current report text on the clipboard.
-    m_bpCopyAll->SetBitmap( KiBitmapBundle( BITMAPS::copy, 24 ) );
+    m_bpCopyAll->SetBitmap( KiBitmapBundle( BITMAPS::copy, 16 ) );
     m_bpCopyAll->SetToolTip( _( "Copy the report to the clipboard" ) );
 
     // Monospace so the columns of the report line up.
