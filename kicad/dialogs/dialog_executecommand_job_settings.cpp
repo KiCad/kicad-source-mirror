@@ -25,13 +25,16 @@
 #include <grid_tricks.h>
 #include <project.h>
 #include <env_vars.h>
+#include <common.h>
 #include <wx/regex.h>
 
 
-DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow* aParent,
-                                                                        JOB_SPECIAL_EXECUTE* aJob ) :
+DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow* aParent, JOB_SPECIAL_EXECUTE* aJob,
+                                                                        PROJECT* aProject ) :
         DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE( aParent ),
         m_job( aJob ),
+        m_project( aProject ),
+        m_lastFocusedInput( nullptr ),
         m_scintillaTricks( nullptr )
 {
     m_textCtrlCommand->SetWrapMode( wxSTC_WRAP_CHAR );
@@ -58,7 +61,30 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
 
+    m_textCtrlCommand->Bind( wxEVT_STC_CHANGE, &DIALOG_EXECUTECOMMAND_JOB_SETTINGS::onCommandChanged, this );
+
+    m_lastFocusedInput = m_textCtrlCommand;
+
+    m_textCtrlCommand->Bind( wxEVT_SET_FOCUS,
+                             [this]( wxFocusEvent& aEvent )
+                             {
+                                 m_lastFocusedInput = m_textCtrlCommand;
+                                 aEvent.Skip();
+                             } );
+
+    m_textCtrlOutputPath->Bind( wxEVT_SET_FOCUS,
+                                [this]( wxFocusEvent& aEvent )
+                                {
+                                    m_lastFocusedInput = m_textCtrlOutputPath;
+                                    aEvent.Skip();
+                                } );
+
+    m_path_subs_grid->Bind( wxEVT_GRID_CELL_LEFT_DCLICK, &DIALOG_EXECUTECOMMAND_JOB_SETTINGS::onVarGridDClick, this );
+
     populateEnvironReadOnlyTable();
+
+    // keep the grid at 10 rows, it scrolls for more
+    m_path_subs_grid->SetMinSize( wxSize( -1, m_path_subs_grid->GetDefaultRowSize() * 10 ) );
 
     m_path_subs_grid->SetColLabelValue( 0, _( "Name" ) );
     m_path_subs_grid->SetColLabelValue( 1, _( "Value" ) );
@@ -99,6 +125,8 @@ bool DIALOG_EXECUTECOMMAND_JOB_SETTINGS::TransferDataToWindow()
     m_textCtrlOutputPath->SetValue( m_job->GetConfiguredOutputPath() );
     m_textCtrlOutputPath->Enable( m_cbRecordOutput->GetValue() );
 
+    populateEnvironReadOnlyTable();
+
     return true;
 }
 
@@ -106,6 +134,29 @@ bool DIALOG_EXECUTECOMMAND_JOB_SETTINGS::TransferDataToWindow()
 void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::OnRecordOutputClicked( wxCommandEvent& aEvent )
 {
     m_textCtrlOutputPath->Enable( m_cbRecordOutput->GetValue() );
+}
+
+
+void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::onCommandChanged( wxStyledTextEvent& aEvent )
+{
+    populateEnvironReadOnlyTable();
+    aEvent.Skip();
+}
+
+
+void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::onVarGridDClick( wxGridEvent& aEvent )
+{
+    int row = aEvent.GetRow();
+
+    if( row < 0 || row >= m_path_subs_grid->GetNumberRows() )
+        return;
+
+    wxString token = m_path_subs_grid->GetCellValue( row, 0 );
+
+    if( m_lastFocusedInput == m_textCtrlOutputPath && m_textCtrlOutputPath->IsEnabled() )
+        m_textCtrlOutputPath->WriteText( token );
+    else
+        m_textCtrlCommand->ReplaceSelection( token );
 }
 
 
@@ -120,6 +171,21 @@ void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::populateEnvironReadOnlyTable()
     // clear the table
     m_path_subs_grid->ClearRows();
 
+    // all configured path and environment variables
+    wxArrayString envTokens;
+    ENV_VAR::GetEnvVarAutocompleteTokens( &envTokens );
+
+    for( const wxString& token : envTokens )
+        unique.insert( token );
+
+    // project text variables
+    if( m_project )
+    {
+        for( const auto& [varName, varValue] : m_project->GetTextVars() )
+            unique.insert( varName );
+    }
+
+    // variables referenced in the command, including undefined ones
     while( re.Matches( src ) )
     {
         wxString envvar = re.GetMatch( src, 2 );
@@ -156,7 +222,12 @@ void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::populateEnvironReadOnlyTable()
         }
         else
         {
-            wxGetEnv( evName, &evValue );
+            // resolve the same way the job runner will
+            wxString token = wxT( "${" ) + evName + wxT( "}" );
+            evValue = ExpandEnvVarSubstitutions( token, m_project );
+
+            if( evValue == token )
+                evValue = wxEmptyString;
         }
 
         m_path_subs_grid->SetCellValue( row, 1, evValue );
