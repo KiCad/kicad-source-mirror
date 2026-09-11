@@ -45,6 +45,9 @@ private:
     /// referenced in the command, resolved as the job runner will.
     void populateEnvironReadOnlyTable();
 
+    /// Show the command with variables expanded as the job runner will run it.
+    void updateExpandedPreview();
+
 private:
     JOB_SPECIAL_EXECUTE* m_job;
     PROJECT*             m_project;
