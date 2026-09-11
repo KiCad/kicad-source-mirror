@@ -31,8 +31,18 @@ enum KIFACE_ADDR_ID : int
 
     /// Function pointer type: wxString (*)(const wxString& aFilterJson)
     /// Input JSON: {"pin_count": N, "filters": ["pattern1", ...], "zero_filters": bool, "max_results": N}
-    /// Output JSON: ["lib:footprint1", "lib:footprint2", ...]
+    /// Output JSON: {"matches": ["lib:footprint1", "lib:footprint2", ...], "limited": bool, "success": bool}
     KIFACE_FILTER_FOOTPRINTS,
+
+    /// Function pointer type: bool (*)()
+    /// Starts loading the footprint libraries in the background. Never blocks.
+    /// Returns true if a load was started, false if a load is already running, or if something failed.
+    KIFACE_TRIGGER_FOOTPRINTS_LOAD,
+
+    /// Function pointer type: float (*)()
+    /// Returns how far the library loader has gotten as a fraction of the queued libraries
+    /// processed so far, or 1.0 when there is nothing to wait for. Never blocks.
+    KIFACE_FOOTPRINTS_LOAD_PROGRESS,
 
     KIFACE_LOAD_SCHEMATIC,
     KIFACE_NETLIST_SCHEMATIC,

@@ -22,8 +22,8 @@
 #include <pgm_base.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <dialogs/dialog_text_entry.h>
 #include <kiway.h>
+#include <footprint_library_query.h>
 #include <symbol_edit_frame.h>
 #include <lib_symbol_library_manager.h>
 #include <math/util.h> // for KiROUND
@@ -39,14 +39,15 @@
 #include <dialog_sim_model.h>
 #include <tools/sch_actions.h>
 #include <panel_embedded_files.h>
+#include <panel_footprint_filters.h>
 #include <panel_symbol_pin_map.h>
 #include <settings/common_settings.h>
 #include <symbol_editor_settings.h>
-#include <widgets/listbox_tricks.h>
 
+#include <map>
+#include <set>
 #include <vector>
 
-#include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
 
 #include "pin_numbers.h"
@@ -66,8 +67,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
         m_delayedFocusGrid( nullptr ),
         m_delayedFocusRow( -1 ),
         m_delayedFocusColumn( -1 ),
-        m_delayedFocusPage( -1 ),
-        m_fpFilterTricks( std::make_unique<LISTBOX_TRICKS>( *this, *m_FootprintFilterListBox ) )
+        m_delayedFocusPage( -1 )
 {
     std::vector<const EMBEDDED_FILES*> inheritedEmbeddedFiles;
 
@@ -82,6 +82,18 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry, 0, std::move( inheritedEmbeddedFiles ) );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
+
+    // The filters page is the third tab, between Units & Body Styles and Pin Connections.
+    m_fpFiltersPanel = new PANEL_FOOTPRINT_FILTERS( m_NoteBook, aParent->Kiway() );
+
+    // The Footprint field a match is assigned to lives on the General page.
+    m_fpFiltersPanel->SetFootprintFieldAccessors( [this]() { return canAssignFootprintToField(); },
+                                                  [this]( const wxString& aFootprintName )
+                                                  {
+                                                      assignFootprintToField( aFootprintName );
+                                                  } );
+
+    m_NoteBook->InsertPage( 2, m_fpFiltersPanel, _( "Footprint Filters" ) );
 
     m_pinMapPanel = new PANEL_SYMBOL_PIN_MAP( m_pinMapPage );
     bPinMapPageSizer->Add( m_pinMapPanel, 1, wxEXPAND, 5 );
@@ -159,10 +171,6 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_bpMoveDownBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
     m_bpDeleteBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
-    m_addFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_editFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
-    m_deleteFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-
     m_bpAddJumperGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpRemoveJumperGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
@@ -180,21 +188,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_grid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanged, this );
     m_grid->GetGridWindow()->Bind( wxEVT_MOTION, &DIALOG_LIB_SYMBOL_PROPERTIES::OnGridMotion, this );
 
-
-    // Forward the delete button to the tricks
-    m_deleteFilterButton->Bind( wxEVT_BUTTON,
-                                [&]( wxCommandEvent& aEvent )
-                                {
-                                    wxCommandEvent cmdEvent( EDA_EVT_LISTBOX_DELETE );
-                                    m_fpFilterTricks->ProcessEvent( cmdEvent );
-                                } );
-
-    // When the filter tricks modifies something, update ourselves
-    m_FootprintFilterListBox->Bind( EDA_EVT_LISTBOX_CHANGED,
-                                    [&]( wxCommandEvent& aEvent )
-                                    {
-                                        OnModify();
-                                    } );
+    // Send a request to load footprint libs (if not loaded)
+    // This will shorten the time it takes to display the matching filters when the user swaps tabs
+    // or opens the footprint assignment dialog.
+    StartFootprintLibrariesLoad( aParent->Kiway() );
 
     if( m_lastLayout != DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::NONE )
     {
@@ -380,8 +377,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_PinsNameInsideButt->SetValue( m_libEntry->GetPinNameOffset() != 0 );
     m_pinNameOffset.ChangeValue( m_libEntry->GetPinNameOffset() );
 
-    wxArrayString tmp = m_libEntry->GetFPFilters();
-    m_FootprintFilterListBox->Append( tmp );
+    m_fpFiltersPanel->SetFilters( m_libEntry->GetFPFilters() );
 
     m_cbDuplicatePinsAreJumpers->SetValue( m_libEntry->GetDuplicatePinNumbersAreJumpers() );
 
@@ -800,7 +796,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         m_libEntry->SetPinNameOffset( 0 );   // pin text outside the body (name is on the pin)
     }
 
-    m_libEntry->SetFPFilters( m_FootprintFilterListBox->GetStrings());
+    m_libEntry->SetFPFilters( m_fpFiltersPanel->GetFilters() );
 
     m_libEntry->SetDuplicatePinNumbersAreJumpers( m_cbDuplicatePinsAreJumpers->GetValue() );
 
@@ -1168,18 +1164,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnFpFilterDClick( wxMouseEvent& event )
-{
-    int            idx = m_FootprintFilterListBox->HitTest( event.GetPosition() );
-    wxCommandEvent dummy;
-
-    if( idx >= 0 )
-        OnEditFootprintFilter( dummy );
-    else
-        OnAddFootprintFilter( dummy );
-}
-
-
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 {
     // Running the Footprint Browser gums up the works and causes the automatic cancel
@@ -1188,44 +1172,25 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddFootprintFilter( wxCommandEvent& event )
+bool DIALOG_LIB_SYMBOL_PROPERTIES::canAssignFootprintToField()
 {
-    wxString  filterLine;
-    WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filter:" ), _( "Add Footprint Filter" ), filterLine );
+    int row = m_fields->GetFieldRow( FIELD_T::FOOTPRINT );
 
-    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue().IsEmpty() )
-        return;
-
-    filterLine = dlg.GetValue();
-    filterLine.Replace( wxT( " " ), wxT( "_" ) );
-
-    // duplicate filters do no harm, so don't be a nanny.
-    m_FootprintFilterListBox->Append( filterLine );
-    m_FootprintFilterListBox->SetSelection( (int) m_FootprintFilterListBox->GetCount() - 1 );
-
-    OnModify();
+    // The footprint field is read-only for a power symbol, which has no footprint.
+    return row != -1 && !m_grid->IsReadOnly( row, FDC_VALUE );
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditFootprintFilter( wxCommandEvent& event )
+void DIALOG_LIB_SYMBOL_PROPERTIES::assignFootprintToField( const wxString& aFootprintName )
 {
-    wxArrayInt selections;
-    int n = m_FootprintFilterListBox->GetSelections( selections );
+    int row = m_fields->GetFieldRow( FIELD_T::FOOTPRINT );
 
-    if( n > 0 )
-    {
-        // Just edit the first one
-        int idx = selections[0];
-        wxString filter = m_FootprintFilterListBox->GetString( idx );
+    if( row == -1 )
+        return;
 
-        WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filter:" ), _( "Edit Footprint Filter" ), filter );
-
-        if( dlg.ShowModal() == wxID_OK && !dlg.GetValue().IsEmpty() )
-        {
-            m_FootprintFilterListBox->SetString( (unsigned) idx, dlg.GetValue() );
-            OnModify();
-        }
-    }
+    m_grid->SetCellValue( row, FDC_VALUE, aFootprintName );
+    m_grid->ForceRefresh();
+    OnModify();
 }
 
 

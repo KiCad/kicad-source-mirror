@@ -149,22 +149,25 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
     }
 
     FOOTPRINT_MATCH_QUERY query;
-    query.patterns.assign( m_filters.begin(), m_filters.end() );
-    query.pinCount = m_pin_count;
-    query.maxResults = m_max_items;
-    query.zeroFilters = m_zero_filter;
+    query.m_Patterns.assign( m_filters.begin(), m_filters.end() );
+    query.m_PinCount = m_pin_count;
+    query.m_MaxResults = m_max_items;
+    query.m_ZeroFilters = m_zero_filter;
 
-    std::vector<wxString> matches;
+    FOOTPRINT_MATCH_RESULT matchResult = QueryMatchingFootprints( *m_kiway, query );
 
-    // The query fails when the PCB kiface is unavailable; the list is then just the default.
-    QueryMatchingFootprints( *m_kiway, query, matches );
-
-    for( const wxString& fpName : matches )
+    // The query fails when the PCB kiface is unavailable. Then the list is just the default.
+    if( matchResult.m_Success )
     {
-        if( alwaysIncludedNames.count( fpName ) )
-            continue;
+        const auto& matches = matchResult.m_MatchingNames;
 
-        m_fp_sel_ctrl->Append( fpName, new wxStringClientData( fpName ) );
+        for( const wxString& fpName : matches )
+        {
+            if( alwaysIncludedNames.count( fpName ) )
+                continue;
+
+            m_fp_sel_ctrl->Append( fpName, new wxStringClientData( fpName ) );
+        }
     }
 
     SelectDefault();

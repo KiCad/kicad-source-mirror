@@ -160,7 +160,14 @@ public:
     /// Validates that a library is loadable.  May not necessarily load the library!
     virtual std::optional<LIB_STATUS> CheckLibrary( LIB_DATA* aLib ) { return LoadOne( aLib ); }
 
-    /// Returns async load progress between 0.0 and 1.0, or nullopt if load is not in progress
+    /// Returns the fraction of the libraries queued by AsyncLoad() that have been
+    /// processed, or nullopt when there is nothing to report (no load has been requested
+    /// since the last reset, or every library was already loaded).
+    ///
+    /// This is the non-blocking view of the load: anything other than 1.0 means a load
+    /// may still be running.  It reaches 1.0 once the last library has been counted,
+    /// which can be a moment before the workers retire, so a path that must not stall
+    /// still waits with BlockUntilLoaded().
     std::optional<float> AsyncLoadProgress() const;
 
     void BlockUntilLoaded();

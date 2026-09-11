@@ -34,9 +34,10 @@ class WX_GRID;
 #include <wx/panel.h>
 #include <wx/spinctrl.h>
 #include <wx/radiobut.h>
-#include <wx/listbox.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
+#include <wx/listbox.h>
+#include <wx/listctrl.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -91,12 +92,6 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_bpMoveUpBodyStyle;
 		STD_BITMAP_BUTTON* m_bpMoveDownBodyStyle;
 		STD_BITMAP_BUTTON* m_bpDeleteBodyStyle;
-		wxPanel* m_PanelFootprintFilters;
-		wxStaticText* m_staticTextFootprints;
-		wxListBox* m_FootprintFilterListBox;
-		STD_BITMAP_BUTTON* m_addFilterButton;
-		STD_BITMAP_BUTTON* m_editFilterButton;
-		STD_BITMAP_BUTTON* m_deleteFilterButton;
 		wxPanel* m_PanelPinConnections;
 		wxCheckBox* m_cbDuplicatePinsAreJumpers;
 		wxStaticText* m_jumperGroupsLabel;
@@ -132,9 +127,6 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnBodyStyleMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBodyStyleMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteBodyStyle( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFpFilterDClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnEditFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddJumperGroup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveJumperGroup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
@@ -146,6 +138,36 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Library Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_LIB_SYMBOL_PROPERTIES_BASE();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class PANEL_FOOTPRINT_FILTERS_BASE
+///////////////////////////////////////////////////////////////////////////////
+class PANEL_FOOTPRINT_FILTERS_BASE : public wxPanel
+{
+	private:
+
+	protected:
+		wxStaticText* m_staticTextFootprints;
+		wxListBox* m_FootprintFilterListBox;
+		STD_BITMAP_BUTTON* m_addFilterButton;
+		STD_BITMAP_BUTTON* m_editFilterButton;
+		STD_BITMAP_BUTTON* m_deleteFilterButton;
+		wxStaticText* m_staticTextFootprints1;
+		wxListCtrl* m_matchingFootprints;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnFpFilterDClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnEditFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		PANEL_FOOTPRINT_FILTERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
+		~PANEL_FOOTPRINT_FILTERS_BASE();
 
 };
 

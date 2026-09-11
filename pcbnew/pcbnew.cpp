@@ -79,7 +79,8 @@
 
 #include <wx/tokenzr.h>
 
-#include "invoke_pcb_dialog.h"
+#include <footprint_library_query.h>
+#include <invoke_pcb_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include "pcbnew_jobs_handler.h"
 #include <diff_merge/diff_doc_kind.h>
@@ -100,26 +101,58 @@
 
 
 /**
+ * Return the project whose footprint libraries the kiface-level footprint services work
+ * with.
+ */
+static PROJECT* footprintLibraryProject()
+{
+    PROJECT* project = nullptr;
+
+    if( wxTheApp )
+    {
+        wxWindow* focus = wxWindow::FindFocus();
+        wxWindow* top = focus ? wxGetTopLevelParent( focus ) : wxTheApp->GetTopWindow();
+
+        if( top )
+        {
+            if( KIWAY_HOLDER* holder = dynamic_cast<KIWAY_HOLDER*>( top ) )
+                project = &holder->Prj();
+        }
+    }
+
+    if( !project )
+        project = &Pgm().GetSettingsManager().Prj();
+
+    return project;
+}
+
+
+/**
  * Filter footprints based on criteria passed as JSON.
  *
  * Input JSON format:
  *   {"pin_count": N, "filters": ["pattern1", ...], "zero_filters": bool, "max_results": N}
+ *   A "max_results" of zero or less means no limit.
  *
- * Output JSON format:
- *   ["lib:footprint1", "lib:footprint2", ...]
+ * Output JSON format: the object written by FOOTPRINT_MATCH_RESULT::ToJsonStr(), i.e.
+ *   {"matches": ["lib:footprint1", "lib:footprint2", ...], "limited": bool, "success": bool}
+ * where "success" is false when the query could not be performed.
  *
  * @param aFilterJson JSON string with filter parameters
- * @return JSON string with array of matching footprint LIB_IDs
+ * @return JSON string describing the matching footprint LIB_IDs
  */
 static wxString filterFootprints( const wxString& aFilterJson )
 {
     using json = nlohmann::json;
 
+    FOOTPRINT_MATCH_RESULT result;
+    result.m_Success = false;
+
     try
     {
-        json input = json::parse( aFilterJson.ToStdString() );
+        json input = json::parse( aFilterJson.utf8_string() );
 
-        int  pinCount = input.value( "pin_count", 0 );
+        unsigned pinCount = input.value( "pin_count", 0 );
         bool zeroFilters = input.value( "zero_filters", true );
         int  maxResults = input.value( "max_results", 400 );
 
@@ -141,37 +174,20 @@ static wxString filterFootprints( const wxString& aFilterJson )
 
         bool hasFilters = ( pinCount > 0 || !filterMatchers.empty() );
 
+        // A query that can only match nothing is a successful empty result, not a failure.
         if( zeroFilters && !hasFilters )
-            return wxS( "[]" );
-
-        PROJECT* project = nullptr;
-
-        if( wxTheApp )
         {
-            wxWindow* focus = wxWindow::FindFocus();
-            wxWindow* top = focus ? wxGetTopLevelParent( focus ) : wxTheApp->GetTopWindow();
-
-            if( top )
-            {
-                if( KIWAY_HOLDER* holder = dynamic_cast<KIWAY_HOLDER*>( top ) )
-                    project = &holder->Prj();
-            }
+            result.m_Success = true;
+            return result.ToJsonStr();
         }
 
-        if( !project )
-            project = &Pgm().GetSettingsManager().Prj();
-
-        FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( project );
+        FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( footprintLibraryProject() );
 
         if( !adapter )
-            return wxS( "[]" );
+            return result.ToJsonStr();
 
         adapter->AsyncLoad();
         adapter->BlockUntilLoaded();
-
-        // Iterate through preloaded footprints directly instead of re-reading from disk
-        json output = json::array();
-        int  count = 0;
 
         for( const wxString& nickname : adapter->GetLibraryNames() )
         {
@@ -185,7 +201,7 @@ static wxString filterFootprints( const wxString& aFilterJson )
                 // Pin count filter
                 if( pinCount > 0 )
                 {
-                    int fpPadCount = fp->GetNumberedPadCount();
+                    unsigned fpPadCount = fp->GetNumberedPadCount();
 
                     if( fpPadCount != pinCount )
                         continue;
@@ -217,23 +233,71 @@ static wxString filterFootprints( const wxString& aFilterJson )
                         continue;
                 }
 
-                wxString libId = fp->GetFPID().Format();
-                output.push_back( libId.ToStdString() );
-
-                if( ++count >= maxResults )
+                // The list is full already, so this match means the result set is
+                // truncated; the list itself keeps its maxResults entries.
+                if( maxResults > 0 && static_cast<int>( result.m_MatchingNames.size() ) >= maxResults )
+                {
+                    result.m_IsLimited = true;
                     break;
+                }
+
+                wxString libId = fp->GetFPID().Format();
+                result.m_MatchingNames.emplace_back( libId );
             }
 
-            if( count >= maxResults )
+            if( result.m_IsLimited )
                 break;
         }
 
-        return wxString::FromUTF8( output.dump() );
+        result.m_Success = true;
+
+        return result.ToJsonStr();
     }
     catch( const std::exception& )
     {
-        return wxS( "[]" );
+        // A failure carries no matches, even if the scan had already collected some.
+        result.m_MatchingNames.clear();
+        result.m_Success = false;
+        return result.ToJsonStr();
     }
+}
+
+
+/**
+ * Start loading the footprint libraries in the background. Never blocks.
+ */
+static bool startFootprintLibraryLoad()
+{
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( footprintLibraryProject() );
+
+    if( adapter )
+    {
+        adapter->AsyncLoad();
+        return true;
+    }
+
+    return false;
+}
+
+
+/**
+ * Return how far a background load has got.
+ *
+ * Never blocks: callers can poll this while showing a loading indication, and only run
+ * #filterFootprints() (which does wait for the load) after it returns 1.0.
+ */
+static float footprintLibraryLoadProgress()
+{
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( footprintLibraryProject() );
+
+    if( !adapter )
+        return 1.0f;
+
+    // Nothing to report means there is nothing to wait for.
+    if( std::optional<float> progress = adapter->AsyncLoadProgress() )
+        return *progress;
+
+    return 1.0f;
 }
 
 
@@ -568,6 +632,20 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             // Return function pointer for filtering footprints
             // Signature: wxString (*)(const wxString& aFilterJson)
             return reinterpret_cast<void*>( &filterFootprints );
+        }
+
+        case KIFACE_TRIGGER_FOOTPRINTS_LOAD:
+        {
+            // Start the background load of the libraries filtered by filterFootprints
+            // Signature: void (*)()
+            return reinterpret_cast<void*>( &startFootprintLibraryLoad );
+        }
+
+        case KIFACE_FOOTPRINTS_LOAD_PROGRESS:
+        {
+            // Report how far the load started by startFootprintMatchLoad() has got
+            // Signature: float (*)()
+            return reinterpret_cast<void*>( &footprintLibraryLoadProgress );
         }
 
         case KIFACE_MERGE_DOCUMENT:

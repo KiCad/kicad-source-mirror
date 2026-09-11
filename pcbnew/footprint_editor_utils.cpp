@@ -475,6 +475,19 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         break;
 
+    case MAIL_FP_EDIT_LIBID:
+    {
+        LIB_ID fpId;
+
+        if( fpId.Parse( wxString::FromUTF8( payload ) ) == -1 && fpId.IsValid() )
+        {
+            LoadFootprintFromLibrary( fpId );
+            Raise();
+        }
+
+        break;
+    }
+
     case MAIL_RELOAD_LIB:
         SyncLibraryTree( true );
         RefreshLibraryTree();

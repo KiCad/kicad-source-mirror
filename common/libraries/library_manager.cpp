@@ -2030,7 +2030,8 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
 
                         ++m_loadCount;
                     }
-                }, BS::pr::lowest ) );
+                },
+                BS::pr::lowest ) );
     }
 
     wxLogTrace( traceLibraries, "Started async load of %zu libraries", workQueue->size() );
