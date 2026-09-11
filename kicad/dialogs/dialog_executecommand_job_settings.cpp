@@ -51,10 +51,19 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow
             {
                 m_scintillaTricks->DoTextVarAutocomplete(
                         // getTokensFn
-                        []( const wxString& xRef, wxArrayString* tokens )
+                        [this]( const wxString& xRef, wxArrayString* tokens )
                         {
                             ENV_VAR::GetEnvVarAutocompleteTokens( tokens );
                             tokens->Add( OUTPUT_TMP_PATH_VAR_NAME );
+
+                            if( m_project )
+                            {
+                                for( const auto& [varName, varValue] : m_project->GetTextVars() )
+                                {
+                                    if( tokens->Index( varName ) == wxNOT_FOUND )
+                                        tokens->Add( varName );
+                                }
+                            }
                         } );
             } );
 
