@@ -379,7 +379,7 @@ static const std::vector<KICAD_T> s_allowedBoardTypes = {
     PCB_GROUP_T,
     PCB_BARCODE_T,
     PCB_CONSTRAINT_T,
-    PCB_GRIDITEM_T,
+    PCB_GRID_ITEM_T,
     PCB_POINT_T
 };
 
