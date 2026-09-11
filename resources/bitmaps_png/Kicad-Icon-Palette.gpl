@@ -2,7 +2,7 @@ GIMP Palette
 Name: KiCad icons
 Columns: 3
 #
- 84  84  84 Light: Primary Gray
+ 84  84  84 Light: Primary Gray (Outlines)
 132 132 132 Light: Medium Gray
 185 185 185 Light: Accent Gray
  26 129 196 Light: Primary Blue
@@ -12,9 +12,9 @@ Columns: 3
  72 150  72 Light: PCB Green
   0 100   0 Light: PCB Dark Green
 208 197 172 Light: Schematic Tan
-255 255 255 Light: Pure White
 243 243 243 Light: Area Fill
-222 211 221 Dark: Primary Gray
+255 255 255 Light: Pure White (Separation)
+222 211 221 Dark: Primary Gray (Outlines)
 132 132 132 Dark: Medium Gray
 224 224 224 Dark: Accent Gray
  66 184 235 Dark: Primary Blue
@@ -24,5 +24,5 @@ Columns: 3
  72 150  72 Dark: PCB Green
   0 100   0 Dark: PCB Dark Green
 208 197 172 Dark: Schematic Tan
-255 255 255 Dark: Pure White
-243 243 243 Dark: Area Fill
+ 84  84  84 Dark: Area Fill
+  0   0   0 Dark: Pure Black (Separation)
