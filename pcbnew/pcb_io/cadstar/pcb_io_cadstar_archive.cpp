@@ -257,7 +257,7 @@ void PCB_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath )
                                          m_reporter );
 
     NAME_TO_FOOTPRINT_MAP                   footprintMap;
-    std::vector<std::unique_ptr<FOOTPRINT>> footprints = csLoader.LoadLibrary();
+    std::vector<std::unique_ptr<FOOTPRINT>> footprints = csLoader.LoadFpLibrary();
 
     for( std::unique_ptr<FOOTPRINT>& fp : footprints )
     {

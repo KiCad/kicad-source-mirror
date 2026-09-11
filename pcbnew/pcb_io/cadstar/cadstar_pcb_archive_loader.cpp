@@ -180,7 +180,7 @@ std::vector<FOOTPRINT*> CADSTAR_PCB_ARCHIVE_LOADER::GetLoadedLibraryFootpints() 
 }
 
 
-std::vector<std::unique_ptr<FOOTPRINT>> CADSTAR_PCB_ARCHIVE_LOADER::LoadLibrary()
+std::vector<std::unique_ptr<FOOTPRINT>> CADSTAR_PCB_ARCHIVE_LOADER::LoadFpLibrary()
 {
     // loading the library after parsing takes almost no time in comparison
     if( m_progressReporter )
@@ -543,7 +543,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         enum class LOG_LEVEL
         {
             NONE,
-            MSG,
+            MSG_LOG,
             WARN
         };
 
@@ -560,7 +560,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                 case LOG_LEVEL::NONE:
                     break;
 
-                case LOG_LEVEL::MSG:
+                case LOG_LEVEL::MSG_LOG:
                     logBoardStackupMessage( curLayer.Name, kicadLayerID );
                     break;
 
@@ -615,23 +615,23 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                 // Attempt to detect technical layers by string matching.
                 if( layerName.Contains( wxT( "glue" ) ) || layerName.Contains( wxT( "adhesive" ) ) )
                 {
-                    selectLayerID( PCB_LAYER_ID::F_Adhes, PCB_LAYER_ID::B_Adhes, LOG_LEVEL::MSG );
+                    selectLayerID( PCB_LAYER_ID::F_Adhes, PCB_LAYER_ID::B_Adhes, LOG_LEVEL::MSG_LOG );
                 }
                 else if( layerName.Contains( wxT( "silk" ) ) || layerName.Contains( wxT( "legend" ) ) )
                 {
-                    selectLayerID( PCB_LAYER_ID::F_SilkS, PCB_LAYER_ID::B_SilkS, LOG_LEVEL::MSG );
+                    selectLayerID( PCB_LAYER_ID::F_SilkS, PCB_LAYER_ID::B_SilkS, LOG_LEVEL::MSG_LOG );
                 }
                 else if( layerName.Contains( wxT( "assembly" ) ) || layerName.Contains( wxT( "fabrication" ) ) )
                 {
-                    selectLayerID( PCB_LAYER_ID::F_Fab, PCB_LAYER_ID::B_Fab, LOG_LEVEL::MSG );
+                    selectLayerID( PCB_LAYER_ID::F_Fab, PCB_LAYER_ID::B_Fab, LOG_LEVEL::MSG_LOG );
                 }
                 else if( layerName.Contains( wxT( "resist" ) ) || layerName.Contains( wxT( "mask" ) ) )
                 {
-                    selectLayerID( PCB_LAYER_ID::F_Mask, PCB_LAYER_ID::B_Mask, LOG_LEVEL::MSG );
+                    selectLayerID( PCB_LAYER_ID::F_Mask, PCB_LAYER_ID::B_Mask, LOG_LEVEL::MSG_LOG );
                 }
                 else if( layerName.Contains( wxT( "paste" ) ) )
                 {
-                    selectLayerID( PCB_LAYER_ID::F_Paste, PCB_LAYER_ID::B_Paste, LOG_LEVEL::MSG );
+                    selectLayerID( PCB_LAYER_ID::F_Paste, PCB_LAYER_ID::B_Paste, LOG_LEVEL::MSG_LOG );
                 }
                 else
                 {
@@ -641,15 +641,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                 break;
 
             case LAYER_SUBTYPE::LAYERSUBTYPE_PASTE:
-                selectLayerID( PCB_LAYER_ID::F_Paste, PCB_LAYER_ID::B_Paste, LOG_LEVEL::MSG );
+                selectLayerID( PCB_LAYER_ID::F_Paste, PCB_LAYER_ID::B_Paste, LOG_LEVEL::MSG_LOG );
                 break;
 
             case LAYER_SUBTYPE::LAYERSUBTYPE_SILKSCREEN:
-                selectLayerID( PCB_LAYER_ID::F_SilkS, PCB_LAYER_ID::B_SilkS, LOG_LEVEL::MSG );
+                selectLayerID( PCB_LAYER_ID::F_SilkS, PCB_LAYER_ID::B_SilkS, LOG_LEVEL::MSG_LOG );
                 break;
 
             case LAYER_SUBTYPE::LAYERSUBTYPE_SOLDERRESIST:
-                selectLayerID( PCB_LAYER_ID::F_Mask, PCB_LAYER_ID::B_Mask, LOG_LEVEL::MSG );
+                selectLayerID( PCB_LAYER_ID::F_Mask, PCB_LAYER_ID::B_Mask, LOG_LEVEL::MSG_LOG );
                 break;
 
             case LAYER_SUBTYPE::LAYERSUBTYPE_ROUT:

@@ -87,8 +87,9 @@ public:
     /**
      * @brief Parse a CADSTAR PCB Archive and load the footprints contained within
      * @return Container with all the footprint definitions that were loaded (caller owns them)
+     * Note: do not use name LoadLibrary, on MINGW it collides with a Windows define
      */
-    std::vector<std::unique_ptr<FOOTPRINT>> LoadLibrary();
+    std::vector<std::unique_ptr<FOOTPRINT>> LoadFpLibrary();
 
     /**
      * @brief Return a copy of the loaded library footprints (caller owns the objects)

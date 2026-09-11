@@ -539,7 +539,7 @@ enum class mountType
 enum class netClassType
 {
     CLK,
-    FIXED,
+    NET_FIXED,
     GROUND,
     SIGNAL,
     POWER,
@@ -795,7 +795,7 @@ enum class unitModeType
     CAPACITANCE,
     IMPEDANCE,
     PERCENTAGE,
-    SIZE,
+    UNIT_SIZE,
     NONE
 };
 
