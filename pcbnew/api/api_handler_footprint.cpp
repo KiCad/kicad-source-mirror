@@ -297,6 +297,22 @@ HANDLER_RESULT<Empty> API_HANDLER_FOOTPRINT::handleRevertDocument(
 }
 
 
+// Footprint types that are directly retrievable by GetItems
+static const std::vector<KICAD_T> s_allowedFootprintTypes = {
+        PCB_PAD_T,
+        PCB_SHAPE_T,
+        PCB_FIELD_T,
+        PCB_TEXT_T,
+        PCB_TEXTBOX_T,
+        PCB_TABLE_T,
+        PCB_TABLECELL_T,
+        PCB_DIMENSION_T,
+        PCB_ZONE_T,
+        PCB_GROUP_T,
+        PCB_BARCODE_T
+};
+
+
 HANDLER_RESULT<GetItemsResponse> API_HANDLER_FOOTPRINT::handleGetItems(
         const HANDLER_CONTEXT<GetItems>& aCtx )
 {
@@ -318,14 +334,13 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_FOOTPRINT::handleGetItems(
     std::set<KICAD_T> typesRequested, typesInserted;
     bool handledAnything = false;
 
-    for( int typeRaw : aCtx.Request.types() )
+    std::vector<KICAD_T> requestedTypes = parseRequestedItemTypes( aCtx.Request.types() );
+
+    if( aCtx.Request.types().empty() )
+        requestedTypes.assign( s_allowedFootprintTypes.begin(), s_allowedFootprintTypes.end() );
+
+    for( KICAD_T type : requestedTypes )
     {
-        auto typeMessage = static_cast<common::types::KiCadObjectType>( typeRaw );
-        KICAD_T type = FromProtoEnum<KICAD_T>( typeMessage );
-
-        if( type == TYPE_NOT_INIT )
-            continue;
-
         typesRequested.emplace( type );
 
         if( typesInserted.count( type ) )

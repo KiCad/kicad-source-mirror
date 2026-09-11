@@ -243,7 +243,8 @@ message GetItems
   // Specifies which document to query, which fields to return, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  // List of one or more types of items to retreive
+  // List of types of items to retrieve; if omitted, all types valid for the
+  // target document will be returned
   repeated kiapi.common.types.KiCadObjectType types = 2;
 }
 

@@ -362,6 +362,28 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_PCB::validateDocumentInternal(
 }
 
 
+// Board types that are directly retrievable by GetItems
+static const std::vector<KICAD_T> s_allowedBoardTypes = {
+    PCB_FOOTPRINT_T,
+    PCB_PAD_T,
+    PCB_SHAPE_T,
+    PCB_REFERENCE_IMAGE_T,
+    PCB_TEXT_T,
+    PCB_TEXTBOX_T,
+    PCB_TABLE_T,
+    PCB_TRACE_T,
+    PCB_ARC_T,
+    PCB_VIA_T,
+    PCB_DIMENSION_T,
+    PCB_ZONE_T,
+    PCB_GROUP_T,
+    PCB_BARCODE_T,
+    PCB_CONSTRAINT_T,
+    PCB_GRIDITEM_T,
+    PCB_POINT_T
+};
+
+
 HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_CONTEXT<GetItems>& aCtx )
 {
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
@@ -382,7 +404,12 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
     std::set<KICAD_T> typesRequested, typesInserted;
     bool handledAnything = false;
 
-    for( KICAD_T type : parseRequestedItemTypes( aCtx.Request.types() ) )
+    std::vector<KICAD_T> requestedTypes = parseRequestedItemTypes( aCtx.Request.types() );
+
+    if( aCtx.Request.types().empty() )
+        requestedTypes.assign( s_allowedBoardTypes.begin(), s_allowedBoardTypes.end() );
+
+    for( KICAD_T type : requestedTypes )
     {
         typesRequested.emplace( type );
 

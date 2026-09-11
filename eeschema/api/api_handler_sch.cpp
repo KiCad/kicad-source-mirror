@@ -587,9 +587,14 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_SCH::handleGetItems( const HANDLER_
         return tl::unexpected( valid.error() );
     }
 
-    std::set<KICAD_T> typesRequested, typesInserted;
+    std::vector<KICAD_T> requestedTypes = parseRequestedItemTypes( aCtx.Request.types() );
 
-    for( KICAD_T type : parseRequestedItemTypes( aCtx.Request.types() ) )
+    if( aCtx.Request.types().empty() )
+        requestedTypes.assign( s_allowedTypes.begin(), s_allowedTypes.end() );
+
+    std::set<KICAD_T> typesRequested;
+
+    for( KICAD_T type : requestedTypes )
         typesRequested.insert( type );
 
     filterValidSchTypes( typesRequested );
@@ -648,14 +653,8 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_SCH::handleGetItems( const HANDLER_
     GetItemsResponse response;
     google::protobuf::Any any;
 
-    for( KICAD_T type : parseRequestedItemTypes( aCtx.Request.types() ) )
+    for( KICAD_T type : typesRequested )
     {
-        if( !s_allowedTypes.contains( type ) )
-            continue;
-
-        if( typesInserted.contains( type ) )
-            continue;
-
         for( const auto& [item, itemPath] : itemMap[type] )
         {
             if( packSchItem( any, static_cast<SCH_ITEM*>( item ), itemPath ) )
