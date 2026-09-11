@@ -213,7 +213,7 @@ private:
         ELLIPSE,
         ELLIPSE_ARC,
         POINT_PAIR, ///< A dimension's two feature points (start + end); no line/curve geometry.
-        RECT,       ///< An axis-aligned rectangle whose four corners alias the two stored corners
+        RECTANGLE,  ///< An axis-aligned rectangle whose four corners alias the two stored corners
                     ///< params so rectness holds by construction with no extra DOF
         POLYGON     ///< A single hole-free outline with one free param pair per vertex since
                     ///< write-back rebuilds one outline only

@@ -103,7 +103,7 @@ public:
         enum class CUTOUT_TYPE
         {
             CIRCLE,
-            RECT,
+            RECTANGLE,
             OCTAGON,
             EXACT
         };

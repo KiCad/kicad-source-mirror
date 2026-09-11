@@ -462,7 +462,7 @@ BOARD_CONSTRAINT_ADAPTER::ANCHOR_PARAMS BOARD_CONSTRAINT_ADAPTER::anchorParams( 
 
     // A rect exposes only its four indexed corners each an alias over a mixed start and end pair so
     // START END and CENTER never resolve indices 0 to 3 follow the canonical TL TR BR BL order
-    if( vars.kind == SHAPE_KIND::RECT )
+    if( vars.kind == SHAPE_KIND::RECTANGLE )
     {
         if( aMember.m_anchor != CONSTRAINT_ANCHOR::VERTEX || aMember.m_index < 0 || aMember.m_index > 3 )
             return {};
@@ -594,7 +594,7 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
         {
             // Only the two stored corners are params the four VERTEX corners alias mixed pairs of
             // them through anchorParams so rectness can never be violated corner roles frozen here
-            vars.kind = SHAPE_KIND::RECT;
+            vars.kind = SHAPE_KIND::RECTANGLE;
             vars.startIsLeft = shape->GetStart().x <= shape->GetEnd().x;
             vars.startIsTop = shape->GetStart().y <= shape->GetEnd().y;
             vars.startX = pushParam( normalizeX( shape->GetStart().x ) );
@@ -1754,7 +1754,7 @@ BOARD_CONSTRAINT_ADAPTER::collectRigidState( const std::set<KIID>& aEditedShapes
         switch( vars.kind )
         {
         case SHAPE_KIND::SEGMENT:
-        case SHAPE_KIND::RECT:
+        case SHAPE_KIND::RECTANGLE:
         case SHAPE_KIND::BEZIER:
         case SHAPE_KIND::POINT_PAIR:
             addPoint( vars.startX );
@@ -2153,7 +2153,7 @@ void BOARD_CONSTRAINT_ADAPTER::pinDraggedShapeRest( const CONSTRAINT_MEMBER& aDr
             softPinPoint( vars.arcEndX, aTag );
         }
     }
-    else if( vars.kind == SHAPE_KIND::RECT && aDragged.m_anchor == CONSTRAINT_ANCHOR::VERTEX )
+    else if( vars.kind == SHAPE_KIND::RECTANGLE && aDragged.m_anchor == CONSTRAINT_ANCHOR::VERTEX )
     {
         // Hold the diagonally opposite corner so grabbing a corner handle resizes the rectangle
         // about it instead of the whole shape drifting
@@ -2210,7 +2210,7 @@ void BOARD_CONSTRAINT_ADAPTER::pinUneditedShapes( const std::set<KIID>& aEdited,
         case SHAPE_KIND::SEGMENT:
         case SHAPE_KIND::BEZIER:
         case SHAPE_KIND::POINT_PAIR:
-        case SHAPE_KIND::RECT:
+        case SHAPE_KIND::RECTANGLE:
             // Pinning both stored points fixes the whole shape a segment entirely and a rect four
             // corners with them since the corners alias these params
             softPinPoint( vars.startX, aTag, STAY_PUT_WEIGHT );
@@ -2573,7 +2573,7 @@ std::vector<PCB_SHAPE*> BOARD_CONSTRAINT_ADAPTER::Apply( const std::function<voi
             continue;
         }
 
-        if( vars.kind == SHAPE_KIND::RECT )
+        if( vars.kind == SHAPE_KIND::RECTANGLE )
         {
             VECTOR2I start = pointAt( vars.startX );
             VECTOR2I end = pointAt( vars.endX );

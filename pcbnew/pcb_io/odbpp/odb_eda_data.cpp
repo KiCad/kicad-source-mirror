@@ -121,7 +121,7 @@ void EDA_DATA::SUB_NET_PLANE::WriteSubnet( std::ostream& ost ) const
 
     static const std::map<CUTOUT_TYPE, std::string> cutout_type_map = {
         { CUTOUT_TYPE::CIRCLE, "C" },
-        { CUTOUT_TYPE::RECT, "R" },
+        { CUTOUT_TYPE::RECTANGLE, "R" },
         { CUTOUT_TYPE::OCTAGON, "O" },
         { CUTOUT_TYPE::EXACT, "E" }
     };
