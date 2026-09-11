@@ -28,16 +28,23 @@
 #include <sch_shape.h>
 #include <sch_pin.h>
 #include <lib_symbol.h>
+#include <functional>
+#include <connectivity/conn_facts.h>
+#include <font/font.h>
 #include <locale_io.h>
 #include <sch_file_versions.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
 #include <locale_io.h>
+#include <units_provider.h>
 
 #include <wx/file.h>
 #include <wx/filename.h>
 
 #include "lib_field_test_utils.h"
+
+extern void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
+                               UNITS_PROVIDER* aUnitsProvider );
 
 class TEST_LIB_SYMBOL_FIXTURE
 {
@@ -519,6 +526,210 @@ BOOST_AUTO_TEST_CASE( NativeBezierComparisonHandlesUnequalCaches )
     BOOST_REQUIRE_NE( empty.Compare( &populated ), 0 );
     BOOST_CHECK_LT( empty.Compare( &populated ), 0 );
     BOOST_CHECK_GT( populated.Compare( &empty ), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeCapturedDuplicatePinsMatchChecker )
+{
+    LOCALE_IO locale;
+    const auto original = loadDeMorganSymbol();
+    BOOST_REQUIRE( original );
+    UNITS_PROVIDER units( schIUScale, EDA_UNITS::MILS );
+    std::vector<wxString> messages;
+    CheckDuplicatePins( original.get(), messages, &units );
+    BOOST_REQUIRE( messages.empty() );
+
+    for( int change = 0; change < 7; ++change )
+    {
+        BOOST_TEST_CONTEXT( "native duplicate pin change=" << change )
+        {
+            auto changed = std::make_unique<LIB_SYMBOL>( *original );
+            const auto pins = changed->GetGraphicalPins( 0, 0 );
+            BOOST_REQUIRE( !pins.empty() );
+            auto* extra = static_cast<SCH_PIN*>( pins.front()->Clone() );
+            changed->AddDrawItem( extra );
+
+            switch( change )
+            {
+            case 0: break;
+            case 1: extra->SetBodyStyle( 99 ); break;
+            case 2: extra->SetBodyStyle( 0 ); break;
+            case 3: extra->SetUnit( 0 ); break;
+            case 4: extra->SetNumber( wxS( "[" ) + pins.front()->GetNumber() + wxS( ",98765]" ) ); break;
+            case 5: extra->SetNumber( wxS( "[98765,98765]" ) ); break;
+            case 6: extra->SetNumber( wxS( "[malformed" ) ); break;
+            }
+
+            messages.clear();
+            CheckDuplicatePins( changed.get(), messages, &units );
+            const bool expected = change == 0 || change == 2 || change == 3 || change == 4;
+            BOOST_REQUIRE_EQUAL( !messages.empty(), expected );
+            const auto captured = SCH_CONNECTIVITY::ExtractLibrarySymbolFact( *changed );
+            BOOST_CHECK_EQUAL( captured.HasDuplicatePins(), expected );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeLibrarySnapshotsMatchLiveComparison )
+{
+    LOCALE_IO locale;
+    auto original = loadDeMorganSymbol();
+    BOOST_REQUIRE( original );
+    const auto captured = SCH_CONNECTIVITY::ExtractLibrarySymbolFact( *original );
+    using FLAGS = SCH_ITEM::COMPARE_FLAGS;
+    const int baseFlags = ~( FLAGS::UUID | FLAGS::UNIT | FLAGS::IDENTITY );
+    const std::vector<int> masks{ 0, FLAGS::PIN_VISIBILITIES, FLAGS::PIN_ALT_DEFS, FLAGS::FIELD_TEXT,
+            FLAGS::FIELD_POSITIONS, FLAGS::FIELD_SIZE_AND_STYLE, FLAGS::FIELD_VISIBILITY,
+            FLAGS::MISSING_FIELDS, FLAGS::EXTRA_FIELDS };
+
+    for( int change = 0; change < 13; ++change )
+    {
+        BOOST_TEST_CONTEXT( "native snapshot change=" << change )
+        {
+            LIB_SYMBOL changed( *original );
+            const auto pins = changed.GetGraphicalPins( 0, 0 );
+            BOOST_REQUIRE( !pins.empty() );
+            SCH_PIN* pin = pins.front();
+            SCH_FIELD* field = changed.GetField( FIELD_T::VALUE );
+            BOOST_REQUIRE( field );
+
+            switch( change )
+            {
+            case 0: break;
+            case 1: pin->SetName( pin->GetName() + "_Changed" ); break;
+            case 2: pin->SetVisible( !pin->IsVisible() ); break;
+            case 3:
+                pin->GetAlternates().emplace( wxS( "CapturedAlt" ),
+                        SCH_PIN::ALT{ wxS( "CapturedAlt" ), GRAPHIC_PINSHAPE::CLOCK,
+                                      ELECTRICAL_PINTYPE::PT_OUTPUT } );
+                break;
+            case 4:
+            {
+                auto* extra = static_cast<SCH_PIN*>( pin->Clone() );
+                extra->SetNumber( wxS( "CapturedExtra" ) );
+                changed.AddDrawItem( extra );
+                break;
+            }
+            case 5: changed.AddField( new SCH_FIELD( &changed, FIELD_T::USER, wxS( "CapturedField" ) ) ); break;
+            case 6: field->SetText( field->GetText() + "_Changed" ); break;
+            case 7: field->SetPosition( field->GetPosition() + VECTOR2I( 1000, 2000 ) ); break;
+            case 8: field->SetFont( field->GetFont() ? nullptr : KIFONT::FONT::GetFont( wxString() ) ); break;
+            case 9: changed.SetKeyWords( changed.GetKeyWords() + "_Changed" ); break;
+            case 10:
+                BOOST_REQUIRE( !changed.GetDrawItems()[SCH_SHAPE_T].empty() );
+                static_cast<SCH_SHAPE&>( changed.GetDrawItems()[SCH_SHAPE_T].front() ).Move( VECTOR2I( 1000, 2000 ) );
+                break;
+            case 11: changed.GetField( FIELD_T::REFERENCE )->SetText( wxS( "ChangedReference" ) ); break;
+            case 12: field->SetVisible( !field->IsVisible() ); break;
+            }
+
+            const auto values = SCH_CONNECTIVITY::ExtractLibrarySymbolFact( changed );
+
+            for( int mask : masks )
+            {
+                const int flags = baseFlags & ~mask;
+                BOOST_CHECK_EQUAL( captured.Matches( values, flags ), original->Compare( changed, flags ) == 0 );
+                BOOST_CHECK_EQUAL( values.Matches( captured, flags ), changed.Compare( *original, flags ) == 0 );
+            }
+        }
+    }
+
+    LIB_SYMBOL baseline( *original );
+    LIB_SYMBOL derived( *original );
+    derived.SetParent( original.get() );
+    const auto inherited = SCH_CONNECTIVITY::ExtractLibrarySymbolFact( derived );
+    BOOST_REQUIRE( inherited.inheritedPins );
+    BOOST_REQUIRE( captured.Matches( inherited, baseFlags ) );
+    SCH_PIN* parentPin = original->GetGraphicalPins( 0, 0 ).front();
+    parentPin->SetLength( parentPin->GetLength() + 1 );
+    const auto editedParent = SCH_CONNECTIVITY::ExtractLibrarySymbolFact( derived );
+    BOOST_CHECK( !captured.Matches( editedParent, baseFlags ) );
+    BOOST_CHECK_NE( baseline.Compare( derived, baseFlags ), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeSymbolAttributesMatchCompareFlags )
+{
+    LOCALE_IO locale;
+    auto original = loadDeMorganSymbol();
+    BOOST_REQUIRE( original );
+    const auto captured = original->ComparisonAttributes();
+    using FLAGS = SCH_ITEM::COMPARE_FLAGS;
+    const int flags = ~( FLAGS::UUID | FLAGS::UNIT | FLAGS::IDENTITY );
+    const std::vector<std::pair<int, std::function<void( LIB_SYMBOL& )>>> changes{
+        { 0, []( auto& symbol ) { symbol.SetLocalPower(); } },
+        { 0, []( auto& symbol ) { symbol.SetUnitCount( symbol.GetUnitCount() + 1, false ); } },
+        { 0, []( auto& symbol ) { symbol.SetKeyWords( symbol.GetKeyWords() + " CapturedKeyword" ); } },
+        { 0, []( auto& symbol ) { symbol.SetPinNameOffset( symbol.GetPinNameOffset() + 1 ); } },
+        { 0, []( auto& symbol ) { symbol.LockUnits( !symbol.UnitsLocked() ); } },
+        { 0, []( auto& symbol ) { symbol.GetUnitDisplayNames()[1] = wxS( "CapturedUnit" ); } },
+        { 0, []( auto& symbol ) { symbol.SetBodyStyleNames( { wxS( "CapturedBody" ) } ); } },
+        { 0, []( auto& symbol )
+            {
+                auto filters = symbol.GetFPFilters();
+                filters.Add( wxS( "CapturedFilter*" ) );
+                symbol.SetFPFilters( filters );
+            } },
+        { FLAGS::PIN_VISIBILITIES, []( auto& symbol ) { symbol.SetShowPinNames( !symbol.GetShowPinNames() ); } },
+        { FLAGS::PIN_VISIBILITIES, []( auto& symbol ) { symbol.SetShowPinNumbers( !symbol.GetShowPinNumbers() ); } },
+        { FLAGS::EXCLUDE_FROM_SIM,
+          []( auto& symbol ) { symbol.SetExcludedFromSim( !symbol.GetExcludedFromSim() ); } },
+        { FLAGS::EXCLUDE_FROM_BOM,
+          []( auto& symbol ) { symbol.SetExcludedFromBOM( !symbol.GetExcludedFromBOM() ); } },
+        { FLAGS::EXCLUDE_FROM_BOARD,
+          []( auto& symbol ) { symbol.SetExcludedFromBoard( !symbol.GetExcludedFromBoard() ); } },
+        { FLAGS::EXCLUDE_FROM_POS_FILES,
+          []( auto& symbol ) { symbol.SetExcludedFromPosFiles( !symbol.GetExcludedFromPosFiles() ); } },
+        { FLAGS::DNP, []( auto& symbol ) { symbol.SetDNP( !symbol.GetDNP() ); } }
+    };
+
+    for( size_t i = 0; i < changes.size(); ++i )
+    {
+        BOOST_TEST_CONTEXT( "native attribute change=" << i )
+        {
+            LIB_SYMBOL changed( *original );
+            BOOST_REQUIRE( captured.Matches( changed.ComparisonAttributes(), flags ) );
+            BOOST_REQUIRE_EQUAL( original->Compare( changed, flags ), 0 );
+            const auto& [optionalFlag, mutate] = changes[i];
+            mutate( changed );
+            const auto values = changed.ComparisonAttributes();
+            BOOST_CHECK( captured != values );
+            BOOST_CHECK( !captured.Matches( values, flags ) );
+            BOOST_CHECK_NE( original->Compare( changed, flags ), 0 );
+
+            if( optionalFlag )
+            {
+                BOOST_CHECK( captured.Matches( values, flags & ~optionalFlag ) );
+                BOOST_CHECK_EQUAL( original->Compare( changed, flags & ~optionalFlag ), 0 );
+            }
+        }
+    }
+
+    original->SetDuplicatePinNumbersAreJumpers( !captured.duplicatePinNumbersAreJumpers );
+    const auto jumpers = original->ComparisonAttributes();
+    BOOST_CHECK( captured != jumpers );
+    BOOST_CHECK( captured.Matches( jumpers, flags ) );
+
+    const auto pins = original->GetGraphicalPins( 0, 0 );
+    BOOST_REQUIRE( !pins.empty() );
+    PIN_MAP map( wxS( "CapturedAttributes" ) );
+    map.SetEntry( pins.front()->GetNumber(), wxS( "CapturedPad" ) );
+    original->PinMaps().AddOrReplace( map );
+    const auto mapped = original->ComparisonAttributes();
+    BOOST_CHECK( !captured.Matches( mapped, flags ) );
+    original->PinMaps().FindByName( map.GetName() )->SetEntry( pins.front()->GetNumber(), wxS( "LaterPad" ) );
+    BOOST_CHECK( !mapped.Matches( original->ComparisonAttributes(), flags ) );
+    BOOST_CHECK_EQUAL( mapped.pinMaps.FindByName( map.GetName() )->GetPadNumber( pins.front()->GetNumber() ),
+                       wxString( "CapturedPad" ) );
+
+    LIB_ID footprint;
+    footprint.SetLibNickname( wxS( "CapturedLibrary" ) );
+    footprint.SetLibItemName( wxS( "CapturedFootprint" ) );
+    original->SetAssociatedFootprints( { { footprint, map.GetName() } } );
+    const auto associated = original->ComparisonAttributes();
+    original->SetAssociatedFootprints( {} );
+    BOOST_CHECK( !associated.Matches( original->ComparisonAttributes(), flags ) );
 }
 
 

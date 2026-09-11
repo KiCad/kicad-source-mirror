@@ -32,6 +32,11 @@ class LIB_ID;
 class LIB_SYMBOL;
 class SCH_PIN;
 
+namespace SCH_CONNECTIVITY
+{
+struct LIBRARY_SYMBOL_FACT;
+}
+
 
 /**
  * Describes a single pin compatibility problem found when comparing a candidate symbol
@@ -87,5 +92,9 @@ using SYMBOL_COMPAT_FUNC = std::function<std::vector<VARIANT_COMPAT_RESULT>( con
  */
 std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB_SYMBOL& aBase,
                                                                         const LIB_SYMBOL& aCandidate );
+
+// Compare an owned embedded symbol snapshot against a freshly loaded alternate.
+std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility(
+        const SCH_CONNECTIVITY::LIBRARY_SYMBOL_FACT& aBase, const LIB_SYMBOL& aCandidate );
 
 #endif // VARIANT_SYMBOL_UTILS_H

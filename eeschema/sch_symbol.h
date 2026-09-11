@@ -676,6 +676,7 @@ public:
 
 
     std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
+    const std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() const { return m_pins; }
 
     /**
      * Set the reference for the given sheet path for this symbol.

@@ -24,6 +24,7 @@
 #include "variant_symbol_utils.h"
 
 #include <lib_symbol.h>
+#include <connectivity/conn_facts.h>
 #include <span>
 #include <pin_type.h>
 #include <sch_pin.h>
@@ -199,4 +200,14 @@ std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility( const LIB
 {
     return validateCompatibility( aBase.GetUnitCount(), aBase.GetBodyStyleCount(), variantPins( aBase ),
                                  aCandidate.GetUnitCount(), aCandidate.GetBodyStyleCount(), variantPins( aCandidate ) );
+}
+
+
+std::vector<VARIANT_COMPAT_RESULT> ValidateVariantSymbolCompatibility(
+        const SCH_CONNECTIVITY::LIBRARY_SYMBOL_FACT& aBase, const LIB_SYMBOL& aCandidate )
+{
+    return validateCompatibility( aBase.unitCount, aBase.bodyStyleCount,
+                                  aBase.inheritedPins ? *aBase.inheritedPins : aBase.pins,
+                                  aCandidate.GetUnitCount(), aCandidate.GetBodyStyleCount(),
+                                  variantPins( aCandidate ) );
 }

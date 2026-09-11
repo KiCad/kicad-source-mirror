@@ -27,6 +27,7 @@
 #include <sch_pin.h>
 #include <sch_symbol.h>
 #include <variant_symbol_utils.h>
+#include <connectivity/conn_facts.h>
 
 
 namespace
@@ -59,6 +60,26 @@ std::unique_ptr<LIB_SYMBOL> MakeTwoPinPassive( const wxString& aName )
     AddPin( *sym, wxS( "1" ), VECTOR2I( 0, 0 ) );
     AddPin( *sym, wxS( "2" ), VECTOR2I( 0, 5080000 ) );
     return sym;
+}
+
+
+std::vector<VARIANT_COMPAT_RESULT> CheckCompatibility( const LIB_SYMBOL& aBase, const LIB_SYMBOL& aCandidate )
+{
+    const auto expected = ValidateVariantSymbolCompatibility( aBase, aCandidate );
+    const auto captured = SCH_CONNECTIVITY::ExtractLibrarySymbolFact( aBase );
+    const auto actual = ValidateVariantSymbolCompatibility( captured, aCandidate );
+    BOOST_REQUIRE_EQUAL( actual.size(), expected.size() );
+
+    for( size_t i = 0; i < expected.size(); ++i )
+    {
+        BOOST_CHECK( actual[i].error == expected[i].error );
+        BOOST_CHECK_EQUAL( actual[i].detail, expected[i].detail );
+        BOOST_CHECK_EQUAL( actual[i].pinNumber, expected[i].pinNumber );
+        BOOST_CHECK_EQUAL( actual[i].unit, expected[i].unit );
+        BOOST_CHECK_EQUAL( actual[i].bodyStyle, expected[i].bodyStyle );
+    }
+
+    return actual;
 }
 
 
@@ -98,7 +119,7 @@ BOOST_AUTO_TEST_CASE( UnresolvedLibraryPinTypeIsUnspecified )
     auto candidate = MakeTwoPinPassive( wxS( "Candidate" ) );
     base->GetGraphicalPins().front()->SetType( ELECTRICAL_PINTYPE::PT_INHERIT );
     candidate->GetGraphicalPins().front()->SetType( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
-    BOOST_CHECK( ValidateVariantSymbolCompatibility( *base, *candidate ).empty() );
+    BOOST_CHECK( CheckCompatibility( *base, *candidate ).empty() );
 }
 
 
@@ -107,7 +128,7 @@ BOOST_AUTO_TEST_CASE( IdenticalSymbols_Compatible )
     auto base = MakeTwoPinPassive( wxS( "R_100R" ) );
     auto candidate = MakeTwoPinPassive( wxS( "R_100R" ) );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( results.empty() );
 }
@@ -118,7 +139,7 @@ BOOST_AUTO_TEST_CASE( SamePinLayout_Compatible )
     auto base = MakeTwoPinPassive( wxS( "R_100R" ) );
     auto candidate = MakeTwoPinPassive( wxS( "R_1K" ) );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( results.empty() );
 }
@@ -132,7 +153,7 @@ BOOST_AUTO_TEST_CASE( SamePinLayout_DifferentFootprint_Compatible )
     auto candidate = MakeTwoPinPassive( wxS( "R_10K" ) );
     candidate->GetFootprintField().SetText( wxS( "R_0603" ) );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( results.empty() );
 }
@@ -147,7 +168,7 @@ BOOST_AUTO_TEST_CASE( CandidateHasExtraPins_Incompatible )
     AddPin( *candidate, wxS( "2" ), VECTOR2I( 0, 5080000 ) );
     AddPin( *candidate, wxS( "3" ), VECTOR2I( 2540000, 2540000 ) );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
 }
@@ -163,7 +184,7 @@ BOOST_AUTO_TEST_CASE( DuplicatePinNumbersAtMatchingPositions_Compatible )
     AddPin( candidate, wxS( "1" ), VECTOR2I( 0, 2540000 ) );
     AddPin( candidate, wxS( "1" ), VECTOR2I( 0, 0 ) );
 
-    BOOST_CHECK( ValidateVariantSymbolCompatibility( base, candidate ).empty() );
+    BOOST_CHECK( CheckCompatibility( base, candidate ).empty() );
 }
 
 
@@ -176,7 +197,7 @@ BOOST_AUTO_TEST_CASE( DuplicatePinNumbersMissingOccurrence_Incompatible )
     LIB_SYMBOL candidate( wxS( "STACKED_CANDIDATE" ) );
     AddPin( candidate, wxS( "1" ), VECTOR2I( 0, 0 ) );
 
-    BOOST_CHECK( !ValidateVariantSymbolCompatibility( base, candidate ).empty() );
+    BOOST_CHECK( !CheckCompatibility( base, candidate ).empty() );
 }
 
 
@@ -215,7 +236,7 @@ BOOST_AUTO_TEST_CASE( CandidateMissingPin_Incompatible )
 
     auto candidate = MakeTwoPinPassive( wxS( "R_100R" ) );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
     BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::MISSING_PIN_NUMBER, wxS( "3" ) ) );
@@ -230,7 +251,7 @@ BOOST_AUTO_TEST_CASE( PinPositionMismatch_Incompatible )
     AddPin( *candidate, wxS( "1" ), VECTOR2I( 0, 0 ) );
     AddPin( *candidate, wxS( "2" ), VECTOR2I( 0, 7620000 ) );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
     BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_POSITION_MISMATCH,
@@ -246,7 +267,7 @@ BOOST_AUTO_TEST_CASE( PinTypeMismatch_Incompatible )
     AddPin( *candidate, wxS( "1" ), VECTOR2I( 0, 0 ), ELECTRICAL_PINTYPE::PT_INPUT );
     AddPin( *candidate, wxS( "2" ), VECTOR2I( 0, 5080000 ) );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
     BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_TYPE_MISMATCH,
@@ -262,7 +283,7 @@ BOOST_AUTO_TEST_CASE( DifferentSymbolType_Incompatible )
     AddPin( *candidate, wxS( "1" ), VECTOR2I( 0, 2540000 ) );
     AddPin( *candidate, wxS( "2" ), VECTOR2I( 0, -2540000 ) );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
     BOOST_CHECK( HasError( results, VARIANT_COMPAT_ERROR::PIN_POSITION_MISMATCH ) );
@@ -289,7 +310,7 @@ BOOST_AUTO_TEST_CASE( MultiUnit_AllUnitsMatch_Compatible )
     AddPin( *candidate, wxS( "6" ), VECTOR2I( 0, 2540000 ), ELECTRICAL_PINTYPE::PT_INPUT, 2 );
     AddPin( *candidate, wxS( "7" ), VECTOR2I( 5080000, 1270000 ), ELECTRICAL_PINTYPE::PT_OUTPUT, 2 );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( results.empty() );
 }
@@ -315,7 +336,7 @@ BOOST_AUTO_TEST_CASE( MultiUnit_OneUnitMismatch_Incompatible )
     AddPin( *candidate, wxS( "5" ), VECTOR2I( 0, 0 ), ELECTRICAL_PINTYPE::PT_INPUT, 2 );
     AddPin( *candidate, wxS( "6" ), VECTOR2I( 0, 2540000 ), ELECTRICAL_PINTYPE::PT_INPUT, 2 );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
     BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::MISSING_PIN_NUMBER, wxS( "7" ) ) );
@@ -336,7 +357,7 @@ BOOST_AUTO_TEST_CASE( CandidateFewerUnits_Incompatible )
     AddPin( *candidate, wxS( "1" ), VECTOR2I( 0, 0 ), ELECTRICAL_PINTYPE::PT_INPUT, 1 );
     AddPin( *candidate, wxS( "2" ), VECTOR2I( 0, 0 ), ELECTRICAL_PINTYPE::PT_INPUT, 2 );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
     BOOST_CHECK( HasError( results, VARIANT_COMPAT_ERROR::INSUFFICIENT_UNITS ) );
@@ -357,7 +378,7 @@ BOOST_AUTO_TEST_CASE( CandidateMoreUnits_Incompatible )
     AddPin( *candidate, wxS( "3" ), VECTOR2I( 0, 0 ), ELECTRICAL_PINTYPE::PT_INPUT, 3 );
     AddPin( *candidate, wxS( "4" ), VECTOR2I( 0, 0 ), ELECTRICAL_PINTYPE::PT_INPUT, 4 );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
 }
@@ -379,7 +400,7 @@ BOOST_AUTO_TEST_CASE( BodyStyle_BothHave_Compatible )
     AddPin( *candidate, wxS( "1" ), VECTOR2I( 0, 0 ), ELECTRICAL_PINTYPE::PT_INPUT, 1, 2 );
     AddPin( *candidate, wxS( "2" ), VECTOR2I( 0, 2540000 ), ELECTRICAL_PINTYPE::PT_OUTPUT, 1, 2 );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( results.empty() );
 }
@@ -398,7 +419,7 @@ BOOST_AUTO_TEST_CASE( BodyStyle_CandidateMissing_Incompatible )
     AddPin( *candidate, wxS( "1" ), VECTOR2I( 0, 0 ), ELECTRICAL_PINTYPE::PT_INPUT, 1, 1 );
     AddPin( *candidate, wxS( "2" ), VECTOR2I( 0, 2540000 ), ELECTRICAL_PINTYPE::PT_OUTPUT, 1, 1 );
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
     BOOST_CHECK( HasError( results, VARIANT_COMPAT_ERROR::MISSING_BODY_STYLE ) );
@@ -410,7 +431,7 @@ BOOST_AUTO_TEST_CASE( EmptySymbols_Compatible )
     LIB_SYMBOL base( wxS( "EMPTY_A" ) );
     LIB_SYMBOL candidate( wxS( "EMPTY_B" ) );
 
-    auto results = ValidateVariantSymbolCompatibility( base, candidate );
+    auto results = CheckCompatibility( base, candidate );
 
     BOOST_CHECK( results.empty() );
 }
@@ -430,7 +451,7 @@ BOOST_AUTO_TEST_CASE( MultipleErrors_AllReported )
     AddPin( *candidate, wxS( "2" ), VECTOR2I( 0, 7620000 ), ELECTRICAL_PINTYPE::PT_PASSIVE );
     // Pin 3 is missing
 
-    auto results = ValidateVariantSymbolCompatibility( *base, *candidate );
+    auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK_EQUAL( results.size(), 3 );
     BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_TYPE_MISMATCH, wxS( "1" ) ) );
