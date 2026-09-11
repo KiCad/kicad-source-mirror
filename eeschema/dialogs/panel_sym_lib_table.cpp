@@ -660,7 +660,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
 void PANEL_SYM_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
-    LIB_TABLE_GRID_TRICKS::AppendRowHandler( cur_grid() );
+    LIB_TABLE_GRID_TRICKS::AppendRowHandler( cur_grid(), SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
 }
 
 

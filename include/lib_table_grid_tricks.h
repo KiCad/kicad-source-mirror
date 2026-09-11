@@ -46,7 +46,7 @@ public:
     void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
     void doPopupSelection( wxCommandEvent& event ) override;
 
-    static void AppendRowHandler( WX_GRID* aGrid );
+    static void AppendRowHandler( WX_GRID* aGrid, const wxString& aType );
     static void DeleteRowHandler( WX_GRID* aGrid );
 
     static void MoveUpHandler( WX_GRID* aGrid );

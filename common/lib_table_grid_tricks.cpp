@@ -365,7 +365,7 @@ static bool isGridReadOnly( WX_GRID* aGrid )
 }
 
 
-void LIB_TABLE_GRID_TRICKS::AppendRowHandler( WX_GRID* aGrid )
+void LIB_TABLE_GRID_TRICKS::AppendRowHandler( WX_GRID* aGrid, const wxString& aType )
 {
     if( isGridReadOnly( aGrid ) )
     {
@@ -379,6 +379,7 @@ void LIB_TABLE_GRID_TRICKS::AppendRowHandler( WX_GRID* aGrid )
                 LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
 
                 aGrid->AppendRows( 1 );
+                aGrid->SetCellValue( aGrid->GetNumberRows() - 1, COL_TYPE, aType );
                 model->OnModify();
                 return { aGrid->GetNumberRows() - 1, COL_NICKNAME };
             } );

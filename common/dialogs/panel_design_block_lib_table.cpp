@@ -547,7 +547,8 @@ bool PANEL_DESIGN_BLOCK_LIB_TABLE::verifyTables()
 
 void PANEL_DESIGN_BLOCK_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
-    LIB_TABLE_GRID_TRICKS::AppendRowHandler( cur_grid() );
+    LIB_TABLE_GRID_TRICKS::AppendRowHandler( cur_grid(),
+                                             DESIGN_BLOCK_IO_MGR::ShowType( DESIGN_BLOCK_IO_MGR::KICAD_SEXP ) );
 }
 
 
