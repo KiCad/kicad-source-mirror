@@ -163,7 +163,7 @@ BOOST_AUTO_TEST_CASE( OdbNonPlatedDrillTools )
     props["units"] = "mm";
     props["sigfig"] = "6";
 
-    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( tempDir.Path().string(), *board, &props ) );
+    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( tempDir.Path().string(), board.get(), &props ) );
 
     fs::path toolsFile;
 
