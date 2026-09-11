@@ -263,7 +263,7 @@ public:
     enum class TYPE
     {
         UNDEFINED = 0,
-        POINT,
+        POINT_TYPE,
         CIRCLE,
         ARC
     };
@@ -628,7 +628,7 @@ public:
             BE_SHAPE()
     {
         m_pos = aPos;
-        m_type = CREEP_SHAPE::TYPE::POINT;
+        m_type = CREEP_SHAPE::TYPE::POINT_TYPE;
     }
 
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,

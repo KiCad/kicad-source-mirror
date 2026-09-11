@@ -259,7 +259,7 @@ bool areEquivalent( const CREEP_SHAPE* a, const CREEP_SHAPE* b )
     if( a->GetType() != b->GetType() )
         return false;
 
-    if( a->GetType() == CREEP_SHAPE::TYPE::POINT )
+    if( a->GetType() == CREEP_SHAPE::TYPE::POINT_TYPE )
         return a->GetPos() == b->GetPos();
 
     if( a->GetType() == CREEP_SHAPE::TYPE::CIRCLE )
@@ -615,7 +615,7 @@ void CREEPAGE_GRAPH::TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aSh
 
         switch( p1->GetType() )
         {
-        case CREEP_SHAPE::TYPE::POINT:  AddNode( GRAPH_NODE::TYPE::POINT, p1, p1->GetPos() );  break;
+        case CREEP_SHAPE::TYPE::POINT_TYPE:  AddNode( GRAPH_NODE::TYPE::POINT, p1, p1->GetPos() );  break;
         case CREEP_SHAPE::TYPE::CIRCLE: AddNode( GRAPH_NODE::TYPE::CIRCLE, p1, p1->GetPos() ); break;
         case CREEP_SHAPE::TYPE::ARC:    AddNode( GRAPH_NODE::TYPE::ARC, p1, p1->GetPos() );    break;
         default:                                                                               break;
@@ -2975,7 +2975,7 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                     std::lock_guard<std::mutex> lock( nodes_lock );
 
                     // Handle non-point node1
-                    if( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+                    if( gn1->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT_TYPE )
                     {
                         auto gnt1 = AddNode( GRAPH_NODE::POINT, gn1->m_parent, pc.a1 );
                         gnt1->m_connectDirectly = false;
@@ -2989,7 +2989,7 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                     }
 
                     // Handle non-point node2
-                    if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT )
+                    if( gn2->m_parent->GetType() != CREEP_SHAPE::TYPE::POINT_TYPE )
                     {
                         auto gnt2 = AddNode( GRAPH_NODE::POINT, gn2->m_parent, pc.a2 );
                         gnt2->m_connectDirectly = false;

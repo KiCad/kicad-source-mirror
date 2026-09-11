@@ -241,7 +241,7 @@ public:
         SELECTED_FIRST,
 
         // Both tracks selected
-        FIXED
+        FIXED_MODE
     };
 
     ///< Return the current mode of the tool

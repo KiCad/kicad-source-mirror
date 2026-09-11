@@ -156,7 +156,7 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             // Roll back our mode, or exit if we are in the initial hover mode
-            if( GetMode() == MODE::FIXED || GetMode() == MODE::SELECTED_FIRST )
+            if( GetMode() == MODE::FIXED_MODE || GetMode() == MODE::SELECTED_FIRST )
             {
                 m_pickerItemFirst = nullptr;
                 m_pickerItemFirstIsDiffPair = false;
@@ -189,7 +189,7 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
                 doInitialHover( selectionTool, guide );
                 updateMessagePanel();
             }
-            else if( GetMode() == MODE::FIXED )
+            else if( GetMode() == MODE::FIXED_MODE )
             {
                 doShowStatsAtCursor();
                 updateMessagePanel();
@@ -201,7 +201,7 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
 
             if( m_pickerItemFirstIsDiffPair )
             {
-                SetMode( MODE::FIXED );
+                SetMode( MODE::FIXED_MODE );
                 doDisplayOverlay();
             }
             else
@@ -214,7 +214,7 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) && GetMode() == MODE::SELECTED_FIRST && m_pickerItemSecond )
         {
             // First click to select the diff pair for inspection
-            SetMode( MODE::FIXED );
+            SetMode( MODE::FIXED_MODE );
             m_originSecond = m_cursorPos;
             doDisplayOverlay();
             updateMessagePanel();
@@ -231,7 +231,7 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
             {
                 cfg->m_DiffPhaseSkewSettings = settings;
 
-                if( GetMode() == MODE::FIXED )
+                if( GetMode() == MODE::FIXED_MODE )
                     doDisplayOverlay();
             }
         }
