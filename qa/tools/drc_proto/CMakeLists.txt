@@ -26,6 +26,8 @@ add_compile_definitions( BOOST_TEST_DYN_LINK PCBNEW DRC_PROTO TEST_APP_NO_MAIN)
 add_executable( drc_proto
     drc_proto_test.cpp
     drc_proto.cpp
+    ../../../pcbnew/net_chain_bridging.cpp
+    ../../../pcbnew/drc/drc_creepage_engine.cpp
     ../../../pcbnew/drc/drc_creepage_utils.cpp
     ../../../pcbnew/drc/drc_rule.cpp
     ../../../pcbnew/drc/drc_rule_condition.cpp
