@@ -30,9 +30,9 @@ target_link_libraries( kinng
 target_include_directories( kinng PUBLIC
     ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${NNG_INCLUDE_DIR}
     )
 
 target_include_directories( kinng PRIVATE
     ${PROJECT_SOURCE_DIR}/include
-    ${NNG_INCLUDE_DIR}
     )
