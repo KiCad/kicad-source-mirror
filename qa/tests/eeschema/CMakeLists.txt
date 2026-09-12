@@ -149,6 +149,7 @@ set( QA_EESCHEMA_SRCS
     test_issue25280_pin_sync_units.cpp
     test_issue25223_rule_area_netclass_stale.cpp
     test_issue25508_intersheet_refs_recursion.cpp
+    test_issue25469_empty_sheet_pin_name.cpp
     test_issue24360_root_sheetname.cpp
     test_unique_sheet_name.cpp
     test_unique_group_name.cpp

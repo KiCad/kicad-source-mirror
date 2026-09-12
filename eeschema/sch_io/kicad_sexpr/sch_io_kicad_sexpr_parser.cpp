@@ -2919,12 +2919,8 @@ SCH_SHEET_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
 
     wxString name = FromUTF8();
 
-    if( name.IsEmpty() )
-    {
-        THROW_PARSE_ERROR( _( "Empty sheet pin name" ), CurSource(), CurLine(), CurLineNumber(),
-                           CurOffset() );
-    }
-
+    // An unnamed pin is junk, but rejecting it makes the whole schematic unopenable with no way
+    // out but hand-editing the file.  Load it so the user can rename or delete it
     auto sheetPin = std::make_unique<SCH_SHEET_PIN>( aSheet, VECTOR2I( 0, 0 ), name );
 
     token = NextTok();

@@ -1862,9 +1862,6 @@ void SCH_IO_KICAD_LEGACY::saveSheet( SCH_SHEET* aSheet )
     {
         int type, side;
 
-        if( pin->GetText().IsEmpty() )
-            break;
-
         switch( pin->GetSide() )
         {
         default:
