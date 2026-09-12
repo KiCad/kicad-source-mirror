@@ -35,6 +35,7 @@
 #include <libraries/library_table.h>
 #include <lib_symbol.h>
 #include <paths.h>
+#include <project.h>
 #include <richio.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.h>
@@ -354,6 +355,11 @@ int lib_parser_main_func( int argc, char** argv )
 
     if( cl_parser.Found( "lib-table", &tablePath ) )
     {
+        // Infer the KIPRJMOD environment variable from the table's directory
+        wxFileName tableFn( tablePath );
+        tableFn.MakeAbsolute();
+        wxSetEnv( PROJECT_VAR_NAME, tableFn.GetPath() );
+
         std::set<wxString> visited;
         int                count = parseLibTable( tablePath, verbose, visited );
 
