@@ -248,17 +248,22 @@ BOOST_AUTO_TEST_CASE( HolesReportTheDrillSymbolLayerOfAMap )
 
     // Without this the canvas has nothing to draw the marks on, even though the plotter
     // renders them perfectly well from the same data
+
+    // note: for an ubscure reason, on MINGW, KIGFX::VIEW::VIEW_MAX_LAYERS need to be copied
+    // to an intermediate variable to avoid link issues
+    const int view_max_layers = KIGFX::VIEW::VIEW_MAX_LAYERS;
+
     BOOST_TEST_MESSAGE( "DRILL_SYMBOL_START=" << (int) LAYER_DRILL_SYMBOL_START
                         << " END=" << (int) LAYER_DRILL_SYMBOL_END
                         << " GAL_END=" << (int) GAL_LAYER_ID_END
-                        << " VIEW_MAX=" << KIGFX::VIEW::VIEW_MAX_LAYERS
+                        << " VIEW_MAX=" << view_max_layers
                         << " symbolLayer=" << symbolLayer );
 
     // The view creates layers 0..VIEW_MAX_LAYERS-1. Anything above that is silently dropped
     // when an item is indexed, so it would never be drawn
-    BOOST_CHECK_MESSAGE( symbolLayer < KIGFX::VIEW::VIEW_MAX_LAYERS,
+    BOOST_CHECK_MESSAGE( symbolLayer < view_max_layers,
                          "layer " << symbolLayer << " exceeds VIEW_MAX_LAYERS "
-                                  << KIGFX::VIEW::VIEW_MAX_LAYERS );
+                                  << view_max_layers );
 
     BOOST_CHECK_MESSAGE( reporting > 0, "no hole reports layer " << symbolLayer );
 
