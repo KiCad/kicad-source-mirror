@@ -1107,9 +1107,14 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
     for( const wxString& name : toRemove )
         RemoveField( name );
 
-    SetShowPinNames( aSymbol.show_pin_names() );
-    SetShowPinNumbers( aSymbol.show_pin_numbers() );
-    SetPinNameOffset( UnpackDistance( aSymbol.pin_name_offset(), schIUScale ) );
+    if( aSymbol.has_show_pin_names() )
+        SetShowPinNames( aSymbol.show_pin_names() );
+
+    if( aSymbol.has_show_pin_numbers() )
+        SetShowPinNumbers( aSymbol.show_pin_numbers() );
+
+    if( aSymbol.has_pin_name_offset() )
+        SetPinNameOffset( UnpackDistance( aSymbol.pin_name_offset(), schIUScale ) );
 
     // The proto is storing a single pin struct that has the UUID and alternate selection
     // as well as the library pin definition.  Deserializing the pin will have set up most

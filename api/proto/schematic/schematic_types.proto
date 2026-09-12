@@ -633,9 +633,15 @@ message SchematicSymbolInstance
 
   SchematicSymbolUnit unit = 13;
   optional SchematicSymbolBodyStyle body_style = 14;
-  bool show_pin_names = 15;
-  bool show_pin_numbers = 16;
-  kiapi.common.types.Distance pin_name_offset = 17;
+
+  // If absent, will use the value from definition.show_pin_names
+  optional bool show_pin_names = 15;
+
+  // If absent, will use the value from definition.show_pin_numbers
+  optional bool show_pin_numbers = 16;
+
+  // If absent, will use the value from definition.pin_name_offset
+  optional kiapi.common.types.Distance pin_name_offset = 17;
 
   SchematicSymbolVariants variants = 18;
 
