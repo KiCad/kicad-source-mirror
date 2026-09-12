@@ -96,10 +96,7 @@ public:
         return HitTestMarker( aPoly, aContained );
     }
 
-    EDA_ITEM* Clone() const override
-    {
-        return new PCB_MARKER( *this );
-    }
+    EDA_ITEM* Clone() const override;
 
     GAL_LAYER_ID GetColorLayer() const;
 

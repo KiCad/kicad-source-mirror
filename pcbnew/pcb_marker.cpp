@@ -263,6 +263,19 @@ PCB_MARKER* PCB_MARKER::FromLegacyString( const wxString& aData )
 }
 
 
+EDA_ITEM* PCB_MARKER::Clone() const
+{
+    PCB_MARKER* res = new PCB_MARKER( *this );
+
+    // An RC_ITEM is shared between its marker and various tree views.  It cannot be shared between
+    // two markers.
+    if( m_rcItem )
+        res->m_rcItem = std::make_shared<RC_ITEM>( *m_rcItem );
+
+    return res;
+}
+
+
 void PCB_MARKER::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == PCB_MARKER_T );

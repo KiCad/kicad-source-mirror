@@ -65,7 +65,14 @@ SCH_MARKER::~SCH_MARKER()
 
 EDA_ITEM* SCH_MARKER::Clone() const
 {
-    return new SCH_MARKER( *this );
+    SCH_MARKER* res = new SCH_MARKER( *this );
+
+    // An RC_ITEM is shared between its marker and various tree views.  It cannot be shared between
+    // two markers.
+    if( m_rcItem )
+        res->m_rcItem = std::make_shared<RC_ITEM>( *m_rcItem );
+
+    return res;
 }
 
 
