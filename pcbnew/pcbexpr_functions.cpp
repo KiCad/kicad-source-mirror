@@ -844,13 +844,17 @@ static void doIntersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self, bool aForK
                 bool           transient = ( item->GetFlags() & ROUTER_TRANSIENT ) != 0;
                 const wxString selector = arg->AsString();
 
+                auto&          resultsCache = aForKeepout ? board->m_IntersectsKeepoutResultCache
+                                                          : board->m_IntersectsAreaResultCache;
+
+                auto&          intersectsCache = aForKeepout ? board->m_IntersectsKeepoutCache
+                                                             : board->m_IntersectsAreaCache;
+
                 // See intersectsCourtyard: "A"/"B" are pair-relative and not memoizable here.
                 bool memoize = !transient && selector != wxT( "A" ) && selector != wxT( "B" );
-
-                ITEM_SELECTOR_LAYER_CACHE_KEY rkey{ item, selector, aLayer, context->GetConstraint() };
                 bool whole = false;
 
-                if( memoize && board->m_IntersectsAreaResultCache.Get( rkey, whole ) )
+                if( memoize && resultsCache.Get( { item, selector, aLayer, context->GetConstraint() }, whole ) )
                     return whole ? 1.0 : 0.0;
 
                 BOX2I itemBBox = item->GetBoundingBox();
@@ -895,10 +899,9 @@ static void doIntersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self, bool aForK
                             {
                                 for( PCB_LAYER_ID layer : testLayers.UIOrder() )
                                 {
-                                    PTR_PTR_LAYER_CACHE_KEY key = { aArea, item, layer };
-                                    bool                    cached = false;
+                                    bool cached = false;
 
-                                    if( board->m_IntersectsAreaCache.Get( key, cached ) )
+                                    if( intersectsCache.Get( { aArea, item, layer }, cached ) )
                                     {
                                         if( cached )
                                             return true;
@@ -922,7 +925,7 @@ static void doIntersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self, bool aForK
                                 bool collides = collidesWithArea( item, layer, context, aArea, aForKeepout );
 
                                 if( !isTransient )
-                                    board->m_IntersectsAreaCache.Set( { aArea, item, layer }, collides );
+                                    intersectsCache.Set( { aArea, item, layer }, collides );
 
                                 if( collides )
                                     anyCollision = true;
@@ -932,7 +935,7 @@ static void doIntersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self, bool aForK
                         } );
 
                 if( memoize )
-                    board->m_IntersectsAreaResultCache.Set( rkey, res );
+                    resultsCache.Set( { item, selector, aLayer, context->GetConstraint() }, res );
 
                 return res ? 1.0 : 0.0;
             } );

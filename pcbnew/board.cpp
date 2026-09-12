@@ -451,16 +451,30 @@ void BOARD::IncrementTimeStamp()
 
     m_footprintCourtyardIndex.reset();
 
-    if( !m_IntersectsAreaCache.Empty() || !m_EnclosedByAreaCache.Empty() || !m_IntersectsCourtyardCache.Empty()
-        || !m_IntersectsFCourtyardCache.Empty() || !m_IntersectsBCourtyardCache.Empty()
-        || !m_IntersectsCourtyardResultCache.Empty() || !m_IntersectsFCourtyardResultCache.Empty()
-        || !m_IntersectsBCourtyardResultCache.Empty() || !m_IntersectsAreaResultCache.Empty()
-        || !m_EnclosedByAreaResultCache.Empty() || !m_LayerExpressionCache.empty() || !m_ZoneBBoxCache.empty()
-        || m_CopperItemRTreeCache || m_maxClearanceValue.has_value() || !m_ItemNetclassCache.empty()
-        || !m_ZonesByNameCache.empty() || !m_DeflatedZoneOutlineCache.empty() || !m_ItemFieldCache.Empty()
+    if( !m_IntersectsAreaCache.Empty()
+        || !m_IntersectsKeepoutCache.Empty()
+        || !m_EnclosedByAreaCache.Empty()
+        || !m_IntersectsCourtyardCache.Empty()
+        || !m_IntersectsFCourtyardCache.Empty()
+        || !m_IntersectsBCourtyardCache.Empty()
+        || !m_IntersectsCourtyardResultCache.Empty()
+        || !m_IntersectsFCourtyardResultCache.Empty()
+        || !m_IntersectsBCourtyardResultCache.Empty()
+        || !m_IntersectsAreaResultCache.Empty()
+        || !m_IntersectsKeepoutResultCache.Empty()
+        || !m_EnclosedByAreaResultCache.Empty()
+        || !m_LayerExpressionCache.empty()
+        || !m_ZoneBBoxCache.empty()
+        || m_CopperItemRTreeCache
+        || m_maxClearanceValue.has_value()
+        || !m_ItemNetclassCache.empty()
+        || !m_ZonesByNameCache.empty()
+        || !m_DeflatedZoneOutlineCache.empty()
+        || !m_ItemFieldCache.Empty()
         || m_StackedMicroviaCache.has_value() )
     {
         m_IntersectsAreaCache.Clear();
+        m_IntersectsKeepoutCache.Clear();
         m_EnclosedByAreaCache.Clear();
         m_IntersectsCourtyardCache.Clear();
         m_IntersectsFCourtyardCache.Clear();
@@ -469,6 +483,7 @@ void BOARD::IncrementTimeStamp()
         m_IntersectsFCourtyardResultCache.Clear();
         m_IntersectsBCourtyardResultCache.Clear();
         m_IntersectsAreaResultCache.Clear();
+        m_IntersectsKeepoutResultCache.Clear();
         m_EnclosedByAreaResultCache.Clear();
         m_ItemFieldCache.Clear();
         m_StackedMicroviaCache.reset();

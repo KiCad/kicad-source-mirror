@@ -1819,11 +1819,13 @@ public:
     SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsFCourtyardCache;
     SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsBCourtyardCache;
     SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsAreaCache;
+    SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsKeepoutCache;
     SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_EnclosedByAreaCache;
     SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsCourtyardResultCache;
     SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsFCourtyardResultCache;
     SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsBCourtyardResultCache;
     SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsAreaResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsKeepoutResultCache;
     SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_EnclosedByAreaResultCache;
     SHARDED_CACHE<ITEM_FIELD_CACHE_KEY, wxString>         m_ItemFieldCache;
     std::unordered_map< wxString, LSET >                  m_LayerExpressionCache;
