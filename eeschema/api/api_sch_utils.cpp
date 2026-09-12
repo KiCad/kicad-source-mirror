@@ -158,7 +158,7 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
     if( !any.UnpackTo( aOutput ) )
         return false;
 
-    PackSheetPath( *aOutput->mutable_path(), path );
+    PackSheetPath( *aOutput->mutable_path(), aPath );
     aOutput->mutable_reference_field()->mutable_text()->set_text( instance.m_Reference.ToUTF8() );
     aOutput->mutable_unit()->set_unit( instance.m_Unit );
 
@@ -444,7 +444,7 @@ bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* 
     if( !any.UnpackTo( aOutput ) )
         return false;
 
-    PackSheetPath( *aOutput->mutable_path(), aPath.Path() );
+    PackSheetPath( *aOutput->mutable_path(), aPath );
 
     SCHEMATIC* schematic = aInput->Schematic();
 
@@ -579,4 +579,11 @@ tl::expected<bool, ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput, const kia
     }
 
     return true;
+}
+
+
+void PackSheetPath( types::SheetPath& aOutput, const SCH_SHEET_PATH& aInput )
+{
+    PackSheetPath( aOutput, aInput.Path() );
+    aOutput.set_path_human_readable( aInput.PathHumanReadable().ToUTF8() );
 }

@@ -21,6 +21,7 @@
 #include <sch_draw_panel.h>
 #include <google/protobuf/any.pb.h>
 #include <api/api_enums.h>
+#include <api/api_sch_utils.h>
 #include <api/api_utils.h>
 #include <api/schematic/schematic_rules.pb.h>
 #include <trigo.h>
@@ -111,13 +112,13 @@ static void ToProto( kiapi::schematic::ErcMarker& aMsg, const SCH_MARKER& aMarke
     kiapi::common::PackVector2( *aMsg.mutable_position(), aMarker.GetPos(), schIUScale );
 
     if( erc->IsSheetSpecific() )
-        kiapi::common::PackSheetPath( *aMsg.mutable_sheet_specific_path(), erc->GetSpecificSheetPath().Path() );
+        PackSheetPath( *aMsg.mutable_sheet_specific_path(), erc->GetSpecificSheetPath() );
 
     if( erc->MainItemHasSheetPath() )
-        kiapi::common::PackSheetPath( *aMsg.mutable_main_item_sheet_path(), erc->GetMainItemSheetPath().Path() );
+        PackSheetPath( *aMsg.mutable_main_item_sheet_path(), erc->GetMainItemSheetPath() );
 
     if( erc->AuxItemHasSheetPath() )
-        kiapi::common::PackSheetPath( *aMsg.mutable_aux_item_sheet_path(), erc->GetAuxItemSheetPath().Path() );
+        PackSheetPath( *aMsg.mutable_aux_item_sheet_path(), erc->GetAuxItemSheetPath() );
 
     if( erc->GetErrorCode() == ERCE_GENERIC_WARNING
             || erc->GetErrorCode() == ERCE_GENERIC_ERROR

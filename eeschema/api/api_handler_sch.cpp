@@ -517,7 +517,7 @@ HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_SCH::handleGetOpenDocuments
     doc.set_type( DocumentType::DOCTYPE_SCHEMATIC );
 
     if( std::optional<SCH_SHEET_PATH> path = m_context->GetCurrentSheet() )
-        PackSheetPath( *doc.mutable_sheet_path(), path->Path() );
+        PackSheetPath( *doc.mutable_sheet_path(), *path );
 
     PackProject( *doc.mutable_project(), m_context->Prj() );
 
@@ -1708,7 +1708,7 @@ void API_HANDLER_SCH::packSheetInstance( kiapi::schematic::types::SheetInstance*
 {
     aPath.push_back( aSheet );
 
-    PackSheetPath( *aInstance->mutable_path(), aPath.Path() );
+    PackSheetPath( *aInstance->mutable_path(), aPath );
 
     wxString sheetName = aSheet->GetShownName( false );
 
@@ -1846,7 +1846,7 @@ API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schemat
         for( CONNECTION_SUBGRAPH* subGraph : subgraphList )
         {
             kiapi::schematic::types::SchematicNetSheetContents* sheetContents = net->add_sheets();
-            PackSheetPath( *sheetContents->mutable_path(), subGraph->GetSheet().Path() );
+            PackSheetPath( *sheetContents->mutable_path(), subGraph->GetSheet() );
 
             for( SCH_ITEM* item : subGraph->GetItems() )
             {

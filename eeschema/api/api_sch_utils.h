@@ -80,4 +80,7 @@ tl::expected<bool, kiapi::common::ApiResponseStatus> UnpackSheet( SCH_SHEET* aOu
 void ApplySheetInstance( SCH_SHEET* aSheet, const kiapi::schematic::types::SheetSymbol& aInput,
                          const SCH_SHEET_PATH& aParentPath, SCHEMATIC* aSchematic );
 
+/// Specialization of PackSheetPath that includes the human-readable path
+void PackSheetPath( kiapi::common::types::SheetPath& aOutput, const SCH_SHEET_PATH& aInput );
+
 #endif //KICAD_API_SCH_UTILS_H
