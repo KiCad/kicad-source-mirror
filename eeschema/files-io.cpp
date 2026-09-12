@@ -1580,6 +1580,10 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
             LoadProjectSettings();
 
+            // SetSchematic() killed the previous schematic's history saver
+            // So we need a new one for the new schematic
+            ProjectChanged();
+
             if( loadedSheet )
             {
                 std::vector<SCH_SHEET*> topLevelSheets = Schematic().GetTopLevelSheets();
