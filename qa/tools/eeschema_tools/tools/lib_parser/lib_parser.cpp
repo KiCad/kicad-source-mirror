@@ -145,9 +145,11 @@ static bool parseStdin()
     if( content.empty() )
         return true; // empty input is not a parse error (important for fuzzing)
 
+    LIB_SYMBOL_MAP symbolMap;
+    bool           ok = true;
+
     try
     {
-        LIB_SYMBOL_MAP            symbolMap;
         STRING_LINE_READER        reader( content, wxS( "<stdin>" ) );
         SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
 
@@ -155,10 +157,15 @@ static bool parseStdin()
     }
     catch( const IO_ERROR& )
     {
-        return false;
+        // Any symbols parsed before the error are released below
+        ok = false;
     }
 
-    return true;
+    // LIB_SYMBOL_MAP owns the LIB_SYMBOL* objects
+    for( auto& entry : symbolMap )
+        delete entry.second;
+
+    return ok;
 }
 
 
