@@ -1639,12 +1639,12 @@ bool unpackLabel( const LabelProto& aInput, SCH_LABEL_BASE& aLabel )
     using namespace kiapi::schematic;
 
     const_cast<KIID&>( aLabel.m_Uuid ) = KIID( aInput.id().value() );
-    aLabel.SetSpinStyle( FromProtoEnum<SPIN_STYLE::SPIN, types::SchematicLabelSpinStyle>( aInput.spin_style() ) );
     aLabel.SetLocked( aInput.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
     if( !aLabel.EDA_TEXT::Deserialize( aInput.text(), schIUScale ) )
         return false;
 
+    aLabel.SetSpinStyle( FromProtoEnum<SPIN_STYLE::SPIN, types::SchematicLabelSpinStyle>( aInput.spin_style() ) );
     aLabel.SetPosition( kiapi::common::UnpackVector2( aInput.position(), schIUScale ) );
     aLabel.SetFieldsAutoplaced( aInput.fields_autoplaced() ? AUTOPLACE_AUTO : AUTOPLACE_NONE );
     aLabel.GetFields().clear();
