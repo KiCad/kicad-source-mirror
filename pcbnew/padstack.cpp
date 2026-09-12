@@ -1112,13 +1112,12 @@ const std::optional<int>& PADSTACK::ThermalGap( PCB_LAYER_ID aLayer ) const
 
 EDA_ANGLE PADSTACK::DefaultThermalSpokeAngleForShape( PCB_LAYER_ID aLayer ) const
 {
-    if( Shape( aLayer ) == PAD_SHAPE::OVAL || Shape( aLayer ) == PAD_SHAPE::RECTANGLE
-        || Shape( aLayer ) == PAD_SHAPE::ROUNDRECT || Shape( aLayer ) == PAD_SHAPE::CHAMFERED_RECT )
-    {
-        return ANGLE_90;
-    }
+    PAD_SHAPE shape = Shape( aLayer );
 
-    return ANGLE_45;
+    if( shape == PAD_SHAPE::CUSTOM )
+        shape = AnchorShape( aLayer );
+
+    return shape == PAD_SHAPE::CIRCLE ? ANGLE_45 : ANGLE_90;
 }
 
 
