@@ -28,6 +28,8 @@
 #include <wx/uri.h>
 #include <wx/window.h>
 
+#include <filesystem>
+#include <string>
 #include <windows.h>
 #include <shellapi.h>
 #include <shlwapi.h>
@@ -90,6 +92,23 @@ bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
 bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 {
     return ::PathIsNetworkPathW( aPath.wc_str() );
+}
+
+
+bool KIPLATFORM::ENV::IsRemovablePath( const wxString& aPath )
+{
+    // A link on a USB drive may actually refer to a network share or an internal drive.
+    std::error_code error;
+    std::filesystem::path path = std::filesystem::canonical( aPath.ToStdWstring(), error );
+
+    if( error || path.empty() )
+        return false;
+
+    // The volume root is a prefix of the resolved path, plus a possible trailing separator.
+    std::wstring root( path.native().size() + 2, L'\0' );
+
+    return GetVolumePathNameW( path.c_str(), root.data(), static_cast<DWORD>( root.size() ) )
+           && GetDriveTypeW( root.c_str() ) == DRIVE_REMOVABLE;
 }
 
 

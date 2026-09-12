@@ -75,6 +75,27 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 }
 
 
+bool KIPLATFORM::ENV::IsRemovablePath( const wxString& aPath )
+{
+    NSURL* url = [[NSURL fileURLWithPath:wxCFStringRef( aPath ).AsNSString()]
+                         URLByResolvingSymlinksInPath];
+    NSNumber* local = nil;
+    NSNumber* removable = nil;
+    NSNumber* ejectable = nil;
+
+    if( ![url getResourceValue:&local forKey:NSURLVolumeIsLocalKey error:nil]
+        || ![local boolValue] )
+    {
+        return false;
+    }
+
+    [url getResourceValue:&removable forKey:NSURLVolumeIsRemovableKey error:nil];
+    [url getResourceValue:&ejectable forKey:NSURLVolumeIsEjectableKey error:nil];
+
+    return [removable boolValue] || [ejectable boolValue];
+}
+
+
 wxString KIPLATFORM::ENV::GetDocumentsPath()
 {
     return wxStandardPaths::Get().GetDocumentsDir();

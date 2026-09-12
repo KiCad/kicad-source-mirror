@@ -30,6 +30,7 @@
 #include <wx/log.h>
 #include <wx/filename.h>
 #include <json_common.h>
+#include <kiplatform/environment.h>
 #include <kiplatform/io.h>
 #include <wildcards_and_files_ext.h>
 
@@ -97,9 +98,9 @@ public:
         readOwner();
 
         // Whoever wrote this lock holds it until their process dies, so a lock we can take is
-        // one nobody is using.  Only our own is safe to take over: where the filesystem locks
-        // locally, as network shares often do, another user's lock may be live elsewhere.
-        if( state == KIPLATFORM::IO::FILE_LOCK::STATE::HELD && IsLockedByMe() )
+        // one nobody is using. 
+        if( state == KIPLATFORM::IO::FILE_LOCK::STATE::HELD
+            && ( IsLockedByMe() || KIPLATFORM::ENV::IsRemovablePath( m_lockFilename ) ) )
         {
             claim();
             wxLogTrace( traceLockFile, "Reclaimed the abandoned lock on %s", filename );

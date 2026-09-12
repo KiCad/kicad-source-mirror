@@ -25,6 +25,7 @@
 #include <wx/uri.h>
 #include <wx/utils.h>
 #include <wx/sysopt.h>
+#include <cstdlib>
 
 
 void KIPLATFORM::ENV::Init()
@@ -89,6 +90,34 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 {
     // placeholder, we "nerf" behavior if its a network path so return false by default
     return false;
+}
+
+
+bool KIPLATFORM::ENV::IsRemovablePath( const wxString& aPath )
+{
+    char* resolved = realpath( aPath.fn_str(), nullptr );
+
+    if( !resolved )
+        return false;
+
+    GFile* file = g_file_new_for_path( resolved );
+    free( resolved );
+
+    GMount* mount = g_file_find_enclosing_mount( file, nullptr, nullptr );
+    g_object_unref( file );
+
+    if( !mount )
+        return false;
+
+    // A remote or virtual mount has no local hardware drive.
+    GDrive* drive = g_mount_get_drive( mount );
+    bool removable = drive && g_drive_is_removable( drive );
+
+    if( drive )
+        g_object_unref( drive );
+
+    g_object_unref( mount );
+    return removable;
 }
 
 

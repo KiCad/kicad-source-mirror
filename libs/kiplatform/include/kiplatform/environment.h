@@ -52,6 +52,13 @@ namespace KIPLATFORM
          */
         bool IsNetworkPath( const wxString& aPath );
 
+        /**
+         * @return true only if an existing path resolves to local removable media.
+         *         Network mounts and paths whose backing drive cannot be determined return
+         *         false.  Follows symlinks and volume mount points when identifying the drive.
+         */
+        bool IsRemovablePath( const wxString& aPath );
+
 
         /**
          * Retrieves the operating system specific path for a user's documents
