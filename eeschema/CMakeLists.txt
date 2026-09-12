@@ -429,6 +429,8 @@ set( EESCHEMA_SRCS
     connectivity/conn_pin_name.cpp
     connectivity/conn_facts.cpp
     connectivity/conn_frame.cpp
+    connectivity/conn_inputs.cpp
+    connectivity/conn_islands.cpp
     cross-probing.cpp
     sch_design_block_utils.cpp
     eeschema_config.cpp
