@@ -311,8 +311,14 @@ message SheetSymbol
 enum SchematicSymbolType
 {
   SST_UNKNOWN = 0;
+
+  // A non-power symbol.
   SST_NORMAL = 1;
+
+  // A power symbol that drives a global net based on its value field contents.
   SST_GLOBAL_POWER = 2;
+
+  // A power symbol that drives a sheet-local net based on its value field contents.
   SST_LOCAL_POWER = 3;
 }
 
@@ -325,6 +331,9 @@ enum SchematicSymbolOrientation
   SSO_270 = 4;
 }
 
+// Which way a schematic pin is oriented, relative to the connection point.
+// For example, `SPO_RIGHT` means the pin shape extends rightward from the connection
+// point, which usually means the pin is placed on the *left* side of a symbol.
 enum SchematicPinOrientation
 {
   SPO_UNKNOWN = 0;
