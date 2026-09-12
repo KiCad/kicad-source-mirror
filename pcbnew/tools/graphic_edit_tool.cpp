@@ -52,7 +52,8 @@ static double outlineProximity( const BOARD_ITEM& aItem, const VECTOR2I& aPointe
 
     switch( shape->GetShape() )
     {
-    case SHAPE_T::SEGMENT: return SEG( shape->GetStart(), shape->GetEnd() ).Distance( aPointer );
+    case SHAPE_T::SEGMENT:
+        return SEG( shape->GetStart(), shape->GetEnd() ).Distance( aPointer );
 
     case SHAPE_T::CIRCLE:
         return std::abs( shape->GetCenter().Distance( aPointer ) - (double) shape->GetRadius() );
@@ -70,13 +71,16 @@ static double outlineProximity( const BOARD_ITEM& aItem, const VECTOR2I& aPointe
         double                nearest = std::numeric_limits<double>::infinity();
 
         for( size_t i = 0; i < corners.size(); i++ )
-            nearest = std::min( nearest, (double) SEG( corners[i], corners[( i + 1 ) % corners.size()] )
-                                                         .Distance( aPointer ) );
+        {
+            SEG side( corners[i], corners[( i + 1 ) % corners.size()] );
+            nearest = std::min( nearest, (double) side.Distance( aPointer ) );
+        }
 
         return nearest;
     }
 
-    default: return std::numeric_limits<double>::infinity();
+    default:
+        return std::numeric_limits<double>::infinity();
     }
 }
 
@@ -120,11 +124,14 @@ static wxString refusalMessage( GRAPHIC_EDIT_REFUSAL aRefusal, const wxString& a
 {
     switch( aRefusal )
     {
-    case GRAPHIC_EDIT_REFUSAL::AMBIGUOUS: return _( "More than one shape meets this one here." );
+    case GRAPHIC_EDIT_REFUSAL::AMBIGUOUS:
+        return _( "More than one shape meets this one here." );
     case GRAPHIC_EDIT_REFUSAL::DEGENERATE:
         return _( "That shape is too small or too near a full circle to work with." );
-    case GRAPHIC_EDIT_REFUSAL::LOCKED_SOURCE: return _( "That shape is locked." );
-    default: return aNoResult;
+    case GRAPHIC_EDIT_REFUSAL::LOCKED_SOURCE:
+        return _( "That shape is locked." );
+    default:
+        return aNoResult;
     }
 }
 
@@ -186,110 +193,119 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent, const OPERATION
 
     // A locked shape is still hovered.  The planner refuses it by name, which tells the user
     // more than nothing lighting up.
-    auto hoveredSource = [&]( const VECTOR2I& aPointer ) -> PCB_SHAPE*
-    {
-        auto accepts = [&]( BOARD_ITEM& aItem )
-        {
-            const PCB_SHAPE* shape = GraphicEditShape( &aItem );
+    auto hoveredSource =
+            [&]( const VECTOR2I& aPointer ) -> PCB_SHAPE*
+            {
+                auto accepts =
+                        [&]( BOARD_ITEM& aItem )
+                        {
+                            const PCB_SHAPE* shape = GraphicEditShape( &aItem );
 
-            return shape && aOperation.m_Accepts( *shape );
-        };
+                            return shape && aOperation.m_Accepts( *shape );
+                        };
 
-        return static_cast<PCB_SHAPE*>( hover.Pick( aPointer, accepts, outlineProximity ) );
-    };
+                return static_cast<PCB_SHAPE*>( hover.Pick( aPointer, accepts, outlineProximity ) );
+            };
 
-    auto collectBoundaries = [&]( const BOX2I& aQueryBounds, const PCB_SHAPE& aSource )
-    {
-        std::set<const BOARD_ITEM*>    seen;
-        std::vector<const BOARD_ITEM*> boundaries;
-        const PCB_LAYER_ID             layer = aSource.GetLayer();
+    auto collectBoundaries =
+            [&]( const BOX2I& aQueryBounds, const PCB_SHAPE& aSource )
+            {
+                std::set<const BOARD_ITEM*>    seen;
+                std::vector<const BOARD_ITEM*> boundaries;
+                const PCB_LAYER_ID             layer = aSource.GetLayer();
 
-        // Selectable() is asked for visibility only, because footprint graphics are boundaries
-        // the board editor will not select.  It is also the costliest test, so it goes last.
-        view()->Query( aQueryBounds,
-                       [&]( KIGFX::VIEW_ITEM* aViewItem )
-                       {
-                           if( !aViewItem->IsBOARD_ITEM() )
-                               return true;
+                // Selectable() is asked for visibility only, because we do want to include footprint graphics,
+                // even though the board editor will not consider them selectable.  Similarly, we also ignore
+                // the currently entered group (if any).  Selectable() is the costliest test, so it goes last.
+                view()->Query( aQueryBounds,
+                               [&]( KIGFX::VIEW_ITEM* aViewItem )
+                               {
+                                   if( !aViewItem->IsBOARD_ITEM() )
+                                       return true;
 
-                           BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aViewItem );
+                                   BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aViewItem );
 
-                           if( item != &aSource && item->GetLayer() == layer && GraphicEditShape( item )
-                               && view()->IsVisible( item ) && m_selectionTool->Selectable( item, true )
-                               && seen.insert( item ).second )
-                           {
-                               boundaries.push_back( item );
-                           }
+                                   if( item != &aSource
+                                           && item->GetLayer() == layer
+                                           && GraphicEditShape( item )
+                                           && view()->IsVisible( item )
+                                           && m_selectionTool->Selectable( item, true /* checkVisibilityOnly */ )
+                                           && seen.insert( item ).second )
+                                   {
+                                       boundaries.push_back( item );
+                                   }
 
-                           return true;
-                       } );
+                                   return true;
+                               } );
 
-        return boundaries;
-    };
+                return boundaries;
+            };
 
-    auto resetPreview = [&]()
-    {
-        hover.ClearBrightening();
-        preview.ClearDrawables();
-        view()->Update( &preview );
-    };
+    auto resetPreview =
+            [&]()
+            {
+                hover.ClearBrightening();
+                preview.ClearDrawables();
+                view()->Update( &preview );
+            };
 
     // Returns the source it planned against, so the click handler can commit to the same one.
-    auto updatePreview = [&]( const VECTOR2I& aPointer, GRAPHIC_EDIT_RESULT& aResult ) -> PCB_SHAPE*
-    {
-        PCB_SHAPE* source = hoveredSource( aPointer );
+    auto updatePreview =
+            [&]( const VECTOR2I& aPointer, GRAPHIC_EDIT_RESULT& aResult ) -> PCB_SHAPE*
+            {
+                PCB_SHAPE* source = hoveredSource( aPointer );
 
-        preview.ClearDrawables();
+                preview.ClearDrawables();
 
-        if( !source )
-        {
-            aResult = {};
-            hover.ClearBrightening();
-            view()->Update( &preview );
-            return nullptr;
-        }
+                if( !source )
+                {
+                    aResult = {};
+                    hover.ClearBrightening();
+                    view()->Update( &preview );
+                    return nullptr;
+                }
 
-        BOX2I queryBounds = source->GetBoundingBox();
+                BOX2I queryBounds = source->GetBoundingBox();
 
-        if( aOperation.m_QueryBounds )
-        {
-            BOX2I rayBounds = worldBounds;
+                if( aOperation.m_QueryBounds )
+                {
+                    BOX2I rayBounds = worldBounds;
 
-            rayBounds.Merge( queryBounds );
-            queryBounds = aOperation.m_QueryBounds( *source, aPointer, rayBounds );
-        }
+                    rayBounds.Merge( queryBounds );
+                    queryBounds = aOperation.m_QueryBounds( *source, aPointer, rayBounds );
+                }
 
-        if( !queryBounds.IsValid() )
-        {
-            aResult = {};
-            hover.BrightenOnly( { source } );
-            view()->Update( &preview );
-            return source;
-        }
+                if( !queryBounds.IsValid() )
+                {
+                    aResult = {};
+                    hover.BrightenOnly( { source } );
+                    view()->Update( &preview );
+                    return source;
+                }
 
-        std::vector<const BOARD_ITEM*> candidates = collectBoundaries( queryBounds, *source );
+                std::vector<const BOARD_ITEM*> candidates = collectBoundaries( queryBounds, *source );
 
-        aResult = aOperation.m_Plan( *source, aPointer, candidates );
+                aResult = aOperation.m_Plan( *source, aPointer, candidates );
 
-        // The shape under the pointer is worth marking whether or not it can be edited here.
-        std::vector<BOARD_ITEM*> lit{ source };
+                // The shape under the pointer is worth marking whether or not it can be edited here.
+                std::vector<BOARD_ITEM*> lit{ source };
 
-        if( aResult )
-        {
-            const std::vector<GRAPHIC_EDIT_GEOMETRY>& shown =
-                    aResult.m_Preview.empty() ? aResult.m_Geometry : aResult.m_Preview;
+                if( aResult )
+                {
+                    const std::vector<GRAPHIC_EDIT_GEOMETRY>& shown = aResult.m_Preview.empty() ? aResult.m_Geometry
+                                                                                                : aResult.m_Preview;
 
-            for( const GRAPHIC_EDIT_GEOMETRY& geometry : shown )
-                preview.AddDrawable( drawable( geometry ), false, 4 );
+                    for( const GRAPHIC_EDIT_GEOMETRY& geometry : shown )
+                        preview.AddDrawable( drawable( geometry ), false, 4 );
 
-            for( const BOARD_ITEM* boundary : aResult.m_Boundaries )
-                lit.push_back( const_cast<BOARD_ITEM*>( boundary ) );
-        }
+                    for( const BOARD_ITEM* boundary : aResult.m_Boundaries )
+                        lit.push_back( const_cast<BOARD_ITEM*>( boundary ) );
+                }
 
-        hover.BrightenOnly( lit );
-        view()->Update( &preview );
-        return source;
-    };
+                hover.BrightenOnly( lit );
+                view()->Update( &preview );
+                return source;
+            };
 
     KIGFX::RENDER_SETTINGS* settings = view()->GetPainter()->GetSettings();
     KIGFX::COLOR4D          previewColor = settings->GetLayerColor( aOperation.m_PreviewLayer );
