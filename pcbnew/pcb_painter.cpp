@@ -3511,6 +3511,14 @@ bool KIGFX::ZoneOutlineDrawnOnLayer( bool aOutlineOnly, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 {
+    SHAPE_POLY_SET        zoneOutlineStorage;
+    const SHAPE_POLY_SET* zoneOutline = &zoneOutlineStorage;
+
+    if( aZone->GetParentFootprint() )
+        zoneOutlineStorage = aZone->GetBoardOutline();
+    else
+        zoneOutline = aZone->Outline();
+
     if( aLayer == LAYER_CONFLICTS_SHADOW )
     {
         if( aZone->IsConflicting() && aZone->GetIsRuleArea() )
@@ -3521,7 +3529,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
             m_gal->SetIsStroke( false );
             m_gal->SetFillColor( color );
 
-            m_gal->DrawPolygon( aZone->GetBoardOutline().Outline( 0 ) );
+            m_gal->DrawPolygon( zoneOutline->Outline( 0 ) );
         }
 
         return;
@@ -3557,11 +3565,9 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     // Draw the outline
     if( ZoneOutlineDrawnOnLayer( outlineOnly, aLayer ) )
     {
-        const SHAPE_POLY_SET  boardOutline = aZone->GetBoardOutline();
-        const SHAPE_POLY_SET* outline = &boardOutline;
         bool allowDrawOutline = aZone->GetHatchStyle() != ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER;
 
-        if( allowDrawOutline && !m_pcbSettings.m_isPrinting && outline && outline->OutlineCount() > 0 )
+        if( allowDrawOutline && !m_pcbSettings.m_isPrinting && zoneOutline && zoneOutline->OutlineCount() > 0 )
         {
             m_gal->SetStrokeColor( color.a > 0.0 ? color.WithAlpha( 1.0 ) : color );
             m_gal->SetIsFill( false );
@@ -3577,16 +3583,16 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
              */
 
             // Draw the main contour(s?)
-            for( int ii = 0; ii < outline->OutlineCount(); ++ii )
+            for( int ii = 0; ii < zoneOutline->OutlineCount(); ++ii )
             {
-                m_gal->DrawPolyline( outline->COutline( ii ) );
+                m_gal->DrawPolyline( zoneOutline->COutline( ii ) );
 
                 // Draw holes
-                int holes_count = outline->HoleCount( ii );
+                int holes_count = zoneOutline->HoleCount( ii );
 
                 for( int jj = 0; jj < holes_count; ++jj )
-                    m_gal->DrawPolyline( outline->CHole( ii, jj ) );
-            }
+                    m_gal->DrawPolyline( zoneOutline->CHole( ii, jj ) );
+        }
 
             // Draw hatch lines
             for( const SEG& hatchLine : aZone->GetHatchLines() )

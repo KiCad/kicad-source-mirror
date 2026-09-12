@@ -177,7 +177,9 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
         bool disallowFront = ( zone->GetLayerSet() & LSET::FrontMask() ).any();
         bool disallowBack = ( zone->GetLayerSet() & LSET::BackMask() ).any();
 
-        SHAPE_POLY_SET zoneOutline = zone->GetBoardOutline();
+        // Don't use GetBoardOutline().  We know we're looking at a board zone, and copying the outline
+        // is too expensive for DRC.
+        SHAPE_POLY_SET* boardZoneOutline = zone->Outline();
 
         for( FOOTPRINT* fp : m_FpInMove )
         {
@@ -187,7 +189,7 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 
                 if( !frontCourtyard.IsEmpty() )
                 {
-                    if( zoneOutline.Collide( &frontCourtyard.Outline( 0 ) ) )
+                    if( boardZoneOutline->Collide( &frontCourtyard.Outline( 0 ) ) )
                     {
                         m_itemsInConflict.insert( fp );
                         m_itemsInConflict.insert( zone );
@@ -202,7 +204,7 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 
                 if( !backCourtyard.IsEmpty() )
                 {
-                    if( zoneOutline.Collide( &backCourtyard.Outline( 0 ) ) )
+                    if( boardZoneOutline->Collide( &backCourtyard.Outline( 0 ) ) )
                     {
                         m_itemsInConflict.insert( fp );
                         m_itemsInConflict.insert( zone );

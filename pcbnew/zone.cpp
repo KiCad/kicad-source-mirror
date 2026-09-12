@@ -891,14 +891,22 @@ SHAPE_POLY_SET ZONE::GetLibraryOutline() const
 
 SHAPE_POLY_SET ZONE::GetBoardOutline() const
 {
-    SHAPE_POLY_SET poly = m_Poly ? *m_Poly : SHAPE_POLY_SET();
+    SHAPE_POLY_SET poly;
 
     if( const FOOTPRINT* fp = GetParentFootprint() )
     {
+        if( m_Poly )
+            poly = m_Poly->CloneDropTriangulation();
+
         const TRANSFORM_TRS& xform = fp->GetTransform();
 
         for( auto it = poly.IterateWithHoles(); it; it++ )
             poly.SetVertex( it.GetIndex(), xform.Apply( *it ) );
+    }
+    else
+    {
+        if( m_Poly )
+            poly = m_Poly->CloneDropTriangulation();
     }
 
     return poly;
@@ -981,14 +989,14 @@ bool ZONE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 
 bool ZONE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
 {
-    SHAPE_POLY_SET boardOutline = GetBoardOutline();
+    SHAPE_POLY_SET outline = GetBoardOutline();
 
     if( aContained )
     {
         auto outlineIntersectingSelection =
                 [&]()
                 {
-                    for( auto segment = boardOutline.IterateSegments(); segment; segment++ )
+                    for( auto segment = outline.IterateSegments(); segment; segment++ )
                     {
                         if( aPoly.Intersects( *segment ) )
                             return true;
@@ -1002,7 +1010,7 @@ bool ZONE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
         auto vertexInsideSelection =
                 [&]()
                 {
-                    return aPoly.PointInside( boardOutline.CVertex( 0 ) );
+                    return aPoly.PointInside( outline.CVertex( 0 ) );
                 };
 
         return vertexInsideSelection() && !outlineIntersectingSelection();
@@ -1011,7 +1019,7 @@ bool ZONE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
     {
         // Touching selection - check if any segment of the zone contours collides with the
         // selection shape.
-        for( auto segment = boardOutline.IterateSegmentsWithHoles(); segment; segment++ )
+        for( auto segment = outline.IterateSegmentsWithHoles(); segment; segment++ )
         {
             if( aPoly.PointInside( ( *segment ).A ) )
                 return true;
@@ -1208,6 +1216,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
         aList.emplace_back( _( "Outline Area" ),
                             aFrame->MessageTextFromValue( outline_area, true, EDA_DATA_TYPE::AREA ) );
 
+        // No need to determine board vs. library outline.  They'll have the same number of points.
         const SHAPE_POLY_SET* area_outline = Outline();
         count = area_outline->FullPointCount();
     }
@@ -1690,10 +1699,23 @@ void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aSameNe
 
         if( candidate->GetNetCode() == GetNetCode() )
         {
-            SHAPE_POLY_SET selfBoard = GetBoardOutline();
-            SHAPE_POLY_SET candidateBoard = candidate->GetBoardOutline();
+            SHAPE_POLY_SET        selfOutlineStorage;
+            const SHAPE_POLY_SET* selfOutline = &selfOutlineStorage;
+            SHAPE_POLY_SET        candidateOutlineStorage;
+            const SHAPE_POLY_SET* candidateOutline = &candidateOutlineStorage;
 
-            if( selfBoard.Collide( &candidateBoard ) )
+            // GetBoardOutline() is expensive.  Don't use it in Zone Filler unless we have to.
+            if( GetParentFootprint() )
+                selfOutlineStorage = GetBoardOutline();
+            else
+                selfOutline = Outline();
+
+            if( candidate->GetParentFootprint() )
+                candidateOutlineStorage = candidate->GetBoardOutline();
+            else
+                candidateOutline = candidate->Outline();
+
+            if( selfOutline->Collide( candidateOutline ) )
                 aSameNetCollidingZones->push_back( candidate );
         }
         else
@@ -1818,7 +1840,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
         if( diffNetPoly.OutlineCount() )
         {
-            SHAPE_POLY_SET thisPoly = Outline()->CloneDropTriangulation();
+            SHAPE_POLY_SET thisPoly = GetBoardOutline();
             thisPoly.ClearArcs();
 
             thisPoly.BooleanSubtract( diffNetPoly );
@@ -1907,10 +1929,16 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER
 
 std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
-    // Rule areas are never filled, so fall back to the outline.  DRC relies on this
-    // to collide tracks, vias and pads against keepout areas.
+    // Rule areas are never filled, so fall back to the outline.  DRC relies on this to collide tracks,
+    // vias and pads against keepout areas.
     if( GetIsRuleArea() )
-        return std::make_shared<SHAPE_POLY_SET>( GetBoardOutline() );
+    {
+        // GetBoardOutline() is expensive.  Don't use it in DRC if we don't have to.
+        if( GetParentFootprint() )
+            return std::make_shared<SHAPE_POLY_SET>( GetBoardOutline() );
+        else
+            return std::make_shared<SHAPE_POLY_SET>( *Outline() );
+    }
 
     std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
 

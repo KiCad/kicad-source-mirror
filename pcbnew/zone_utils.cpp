@@ -229,12 +229,24 @@ static std::vector<ZONE_OVERLAP_PAIR> findOverlappingPairs( BOARD* aBoard )
             if( !b->GetBoundingBox().Intersects( bboxA ) )
                 continue;
 
-            SHAPE_POLY_SET aOutline = a->GetBoardOutline();
-            SHAPE_POLY_SET bOutline = b->GetBoardOutline();
+            SHAPE_POLY_SET        aOutlineStorage;
+            const SHAPE_POLY_SET* aOutline = &aOutlineStorage;
+            SHAPE_POLY_SET        bOutlineStorage;
+            const SHAPE_POLY_SET* bOutline = &bOutlineStorage;
 
-            bool overlaps = aOutline.Collide( &bOutline )
-                            || ( bOutline.TotalVertices() > 0 && aOutline.Contains( bOutline.CVertex( 0 ) ) )
-                            || ( aOutline.TotalVertices() > 0 && bOutline.Contains( aOutline.CVertex( 0 ) ) );
+            if( a->GetParentFootprint() )
+                aOutlineStorage = a->GetBoardOutline();
+            else
+                aOutline = a->Outline();
+
+            if( b->GetParentFootprint() )
+                bOutlineStorage = b->GetBoardOutline();
+            else
+                bOutline = b->Outline();
+
+            bool overlaps = aOutline->Collide( bOutline )
+                            || ( bOutline->TotalVertices() > 0 && aOutline->Contains( bOutline->CVertex( 0 ) ) )
+                            || ( aOutline->TotalVertices() > 0 && bOutline->Contains( aOutline->CVertex( 0 ) ) );
 
             if( overlaps )
                 pairs.push_back( { a, b, shared } );
@@ -245,8 +257,7 @@ static std::vector<ZONE_OVERLAP_PAIR> findOverlappingPairs( BOARD* aBoard )
 }
 
 
-static std::optional<ZONE_PRIORITY_EDGE> computeConstraint( const ZONE_OVERLAP_PAIR& aPair,
-                                                             BOARD* aBoard )
+static std::optional<ZONE_PRIORITY_EDGE> computeConstraint( const ZONE_OVERLAP_PAIR& aPair, BOARD* aBoard )
 {
     SHAPE_POLY_SET polyA = aPair.zoneA->GetBoardOutline();
     SHAPE_POLY_SET polyB = aPair.zoneB->GetBoardOutline();
@@ -273,19 +284,20 @@ static std::optional<ZONE_PRIORITY_EDGE> computeConstraint( const ZONE_OVERLAP_P
     int countA = 0;
     int countB = 0;
 
-    auto countIfInOverlap = [&]( const VECTOR2I& aPos, int aNetCode, PCB_LAYER_ID aLayer )
-    {
-        if( !aPair.sharedLayers.test( aLayer ) )
-            return;
+    auto countIfInOverlap =
+            [&]( const VECTOR2I& aPos, int aNetCode, PCB_LAYER_ID aLayer )
+            {
+                if( !aPair.sharedLayers.test( aLayer ) )
+                    return;
 
-        if( intersection.Contains( aPos ) )
-        {
-            if( aNetCode == netCodeA )
-                countA++;
-            else if( aNetCode == netCodeB )
-                countB++;
-        }
-    };
+                if( intersection.Contains( aPos ) )
+                {
+                    if( aNetCode == netCodeA )
+                        countA++;
+                    else if( aNetCode == netCodeB )
+                        countB++;
+                }
+            };
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
@@ -321,8 +333,10 @@ static std::optional<ZONE_PRIORITY_EDGE> computeConstraint( const ZONE_OVERLAP_P
 
     if( countA == 0 && countB == 0 )
     {
-        double areaA = aPair.zoneA->GetBoardOutline().Area();
-        double areaB = aPair.zoneB->GetBoardOutline().Area();
+        double areaA = aPair.zoneA->GetParentFootprint() ? aPair.zoneA->GetBoardOutline().Area()
+                                                         : aPair.zoneA->Outline()->Area();
+        double areaB = aPair.zoneB->GetParentFootprint() ? aPair.zoneB->GetBoardOutline().Area()
+                                                         : aPair.zoneB->Outline()->Area();
 
         if( areaA == areaB )
             return std::nullopt;
@@ -340,8 +354,10 @@ static std::optional<ZONE_PRIORITY_EDGE> computeConstraint( const ZONE_OVERLAP_P
 
     if( ratio < SIMILARITY_THRESHOLD )
     {
-        double areaA = aPair.zoneA->GetBoardOutline().Area();
-        double areaB = aPair.zoneB->GetBoardOutline().Area();
+        double areaA = aPair.zoneA->GetParentFootprint() ? aPair.zoneA->GetBoardOutline().Area()
+                                                         : aPair.zoneA->Outline()->Area();
+        double areaB = aPair.zoneB->GetParentFootprint() ? aPair.zoneB->GetBoardOutline().Area()
+                                                         : aPair.zoneB->Outline()->Area();
 
         if( areaA == areaB )
             return std::nullopt;
@@ -357,8 +373,7 @@ static std::optional<ZONE_PRIORITY_EDGE> computeConstraint( const ZONE_OVERLAP_P
 }
 
 
-static void assignPrioritiesFromGraph( const std::vector<ZONE_PRIORITY_EDGE>& aEdges,
-                                       std::vector<ZONE*>&                    aAllZones )
+static void assignPrioritiesFromGraph( const std::vector<ZONE_PRIORITY_EDGE>& aEdges, std::vector<ZONE*>& aAllZones )
 {
     std::unordered_map<ZONE*, std::vector<ZONE*>> adj;
     std::unordered_map<ZONE*, int>                inDegree;
@@ -475,8 +490,7 @@ static ZONE* ufFind( std::unordered_map<ZONE*, ZONE*>& aParent, ZONE* aZone )
 }
 
 
-static void ufUnion( std::unordered_map<ZONE*, ZONE*>& aParent,
-                     std::unordered_map<ZONE*, int>&    aRank,
+static void ufUnion( std::unordered_map<ZONE*, ZONE*>& aParent, std::unordered_map<ZONE*, int>& aRank,
                      ZONE* aA, ZONE* aB )
 {
     ZONE* rootA = ufFind( aParent, aA );

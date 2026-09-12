@@ -230,17 +230,28 @@ bool collidesWithCourtyard( BOARD_ITEM* aItem, std::shared_ptr<SHAPE>& aItemShap
     if( !footprintCourtyard.BBox().Intersects( aItem->GetBoundingBox() ) )
         return false;
 
-    if( !aItemShape )
+    if( aItemShape )
     {
-        // Since rules are used for zone filling we can't rely on the filled shapes.
-        // Use the zone outline instead.
-        if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
-            aItemShape.reset( zone->GetBoardOutline().Clone() );
-        else
-            aItemShape = aItem->GetEffectiveShape( aCtx->GetLayer() );
+        return footprintCourtyard.Collide( aItemShape.get() );
     }
+    else if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+    {
+        // Since rules are used for zone filling we can't rely on the filled shapes.  Use the
+        // zone  outline instead.
+        SHAPE_POLY_SET  zoneOutlineStorage;
+        SHAPE_POLY_SET* zoneOutline = &zoneOutlineStorage;
 
-    return footprintCourtyard.Collide( aItemShape.get() );
+        if( zone->GetParentFootprint() )
+            zoneOutlineStorage = zone->GetBoardOutline();
+        else
+            zoneOutline = zone->Outline();
+
+        return footprintCourtyard.Collide( zoneOutline );
+    }
+    else
+    {
+        return footprintCourtyard.Collide( aItem->GetEffectiveShape( aCtx->GetLayer() ).get() );
+    }
 };
 
 
@@ -551,7 +562,7 @@ static SHAPE_POLY_SET getDeflatedZoneOutline( BOARD* aBoard, ZONE* aArea )
     }
 
     // Cache miss - compute deflated outline
-    SHAPE_POLY_SET areaOutline = aArea->Outline()->CloneDropTriangulation();
+    SHAPE_POLY_SET areaOutline = aArea->GetBoardOutline();
     areaOutline.ClearArcs();
     areaOutline.Deflate( aBoard->GetDesignSettings().GetDRCEpsilon(), CORNER_STRATEGY::ALLOW_ACUTE_CORNERS,
                          ARC_LOW_DEF );
@@ -669,7 +680,16 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, PCBEXPR_CONTEXT* 
         }
         else
         {
-            return areaOutline.Collide( zone->Outline() );
+            SHAPE_POLY_SET  zonePolyStorage;
+            SHAPE_POLY_SET* zonePoly = &zonePolyStorage;
+
+            // GetBoardOutline() is expensive.  Only use it where we have to.
+            if( zone->GetParentFootprint() )
+                zonePolyStorage = zone->GetBoardOutline();
+            else
+                zonePoly = zone->Outline();
+
+            return areaOutline.Collide( zonePoly );
         }
     }
     else
@@ -1027,8 +1047,17 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             }
                             else
                             {
+                                SHAPE_POLY_SET  areaOutlineStorage;
+                                SHAPE_POLY_SET* areaOutline = &areaOutlineStorage;
+
+                                // GetBoardOutline() is expensive.  Only use it where we have to.
+                                if( aArea->GetParentFootprint() )
+                                    areaOutlineStorage = aArea->GetBoardOutline();
+                                else
+                                    areaOutline = aArea->Outline();
+
                                 itemShape.ClearArcs();
-                                itemShape.BooleanSubtract( *aArea->Outline() );
+                                itemShape.BooleanSubtract( *areaOutline );
 
                                 enclosedByArea = itemShape.IsEmpty();
                             }

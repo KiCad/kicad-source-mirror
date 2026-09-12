@@ -1020,7 +1020,7 @@ public:
 
         size_t task( FILL_INFO& fillInfo ) override
         {
-            SHAPE_POLY_SET finalFillPolys = *fillInfo.m_Zone->Outline();
+            SHAPE_POLY_SET finalFillPolys = fillInfo.m_Zone->GetBoardOutline();
 
             finalFillPolys.ClearArcs();
             fillInfo.m_CombinedFill.ClearArcs();

@@ -3843,10 +3843,16 @@ static bool ItemHasDRCViolation( BOARD_CONNECTED_ITEM* aItem, BOARD_ITEM* aOther
     {
         if( via ? zone->GetDoNotAllowVias() : zone->GetDoNotAllowTracks() )
         {
-            SHAPE_POLY_SET zoneOutline = zone->GetBoardOutline();
+            SHAPE_POLY_SET  zoneOutlineStorage;
+            SHAPE_POLY_SET* zoneOutline = &zoneOutlineStorage;
+
+            if( zone->GetParentFootprint() )
+                zoneOutlineStorage = zone->GetBoardOutline();
+            else
+                zoneOutline = zone->Outline();
 
             if( !via )
-                return zoneOutline.Collide( aItem->GetEffectiveShape().get() );
+                return zoneOutline->Collide( aItem->GetEffectiveShape().get() );
 
             bool hit = false;
 
@@ -3856,7 +3862,7 @@ static bool ItemHasDRCViolation( BOARD_CONNECTED_ITEM* aItem, BOARD_ITEM* aOther
                         if( hit )
                             return;
 
-                        if( zoneOutline.Collide( via->GetPosition(), via->GetWidth( aLayer ) / 2 ) )
+                        if( zoneOutline->Collide( via->GetPosition(), via->GetWidth( aLayer ) / 2 ) )
                             hit = true;
                     } );
 

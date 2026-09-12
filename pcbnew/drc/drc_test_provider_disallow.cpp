@@ -272,10 +272,16 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                     std::shared_ptr<SHAPE> shape = track->GetEffectiveShape();
                                     int                    dummyActual;
                                     VECTOR2I               pos;
+                                    SHAPE_POLY_SET         zoneOutlineStorage;
+                                    SHAPE_POLY_SET*        zoneOutline = &zoneOutlineStorage;
 
-                                    SHAPE_POLY_SET zoneOutline = static_cast<ZONE*>( other )->GetBoardOutline();
+                                    // GetBoardOutline() is expensive.  Only use it in DRC where we have to.
+                                    if( other->GetParentFootprint() )
+                                        zoneOutlineStorage = static_cast<ZONE*>( other )->GetBoardOutline();
+                                    else
+                                        zoneOutline = static_cast<ZONE*>( other )->Outline();
 
-                                    if( zoneOutline.Collide( shape.get(), 0, &dummyActual, &pos ) )
+                                    if( zoneOutline->Collide( shape.get(), 0, &dummyActual, &pos ) )
                                     {
                                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
                                         drcItem->SetItems( track );
@@ -309,11 +315,10 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                 PCB_LAYER_ID              layer = item->GetLayerSet().ExtractLayer();
                                 VECTOR2I                  pos = item->GetPosition();
 
-                                // Provide a better location for keepout area collisions by
-                                // snapping to where the item actually crosses the keepout outline.
-                                // Use the cached BOARD_ITEM* rather than a UUID lookup, since
-                                // ResolveItem mutates an unsynchronized cache and this lambda
-                                // runs inside the parallel DRC worker pool.
+                                // Provide a better location for keepout area collisions by snapping to where
+                                // the item actually crosses the keepout outline.  Use the cached BOARD_ITEM*
+                                // rather than a UUID lookup, since ResolveItem mutates an unsynchronized cache
+                                // and this lambda runs inside the parallel DRC worker pool.
                                 if( rule->IsImplicit() )
                                 {
                                     if( ZONE* keepout = dynamic_cast<ZONE*>( rule->m_ImplicitItem ) )
@@ -321,6 +326,8 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                         std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( layer );
                                         int dummyActual;
 
+                                        // This is only done when reporting collisions, so we can afford the
+                                        // more expensive GetBoardOutline().
                                         SHAPE_POLY_SET keepoutOutline = keepout->GetBoardOutline();
                                         keepoutOutline.Collide( shape.get(), 0, &dummyActual, &pos );
                                     }

@@ -676,8 +676,7 @@ DRC_TEST_PROVIDER_MATCHED_LENGTH::chainTopologyFor( const wxString& aChain )
 
 
 SHAPE_POLY_SET*
-DRC_TEST_PROVIDER_MATCHED_LENGTH::zoneUnionFor( PCB_LAYER_ID aRefLayer,
-                                                const wxString& aRefNet )
+DRC_TEST_PROVIDER_MATCHED_LENGTH::zoneUnionFor( PCB_LAYER_ID aRefLayer, const wxString& aRefNet )
 {
     auto key = std::make_pair( aRefLayer, aRefNet );
     auto it = m_refUnionCache.find( key );
@@ -705,14 +704,17 @@ DRC_TEST_PROVIDER_MATCHED_LENGTH::zoneUnionFor( PCB_LAYER_ID aRefLayer,
         // (test fixtures, freshly imported designs).  GetFill returns
         // nullptr when the zone hasn't been filled for this layer; using
         // GetFilledPolysList here would assert.
-        if( SHAPE_POLY_SET* filled = zone->GetFill( aRefLayer );
-            filled && filled->OutlineCount() > 0 )
+        if( SHAPE_POLY_SET* filled = zone->GetFill( aRefLayer ); filled && filled->OutlineCount() > 0 )
         {
             refUnion.BooleanAdd( *filled );
         }
         else if( zone->Outline() )
         {
-            refUnion.BooleanAdd( zone->GetBoardOutline() );
+            // GetBoardOutline() is expensive.  Only use it in DRC where we have to.
+            if( zone->GetParentFootprint() )
+                refUnion.BooleanAdd( zone->GetBoardOutline() );
+            else
+                refUnion.BooleanAdd( *zone->Outline() );
         }
     }
 
@@ -721,24 +723,22 @@ DRC_TEST_PROVIDER_MATCHED_LENGTH::zoneUnionFor( PCB_LAYER_ID aRefLayer,
 }
 
 
-void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkStubLengths(
-        const DRC_CONSTRAINT& aConstraint, DRC_RULE* aRule,
-        const std::vector<CONNECTION>& aMatchedConnections )
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkStubLengths( const DRC_CONSTRAINT& aConstraint, DRC_RULE* aRule,
+                                                         const std::vector<CONNECTION>& aMatchedConnections )
 {
-    const bool isTimeDomain =
-            aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
-    const EDA_DATA_TYPE dataType =
-            isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+    const bool isTimeDomain = aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+    const EDA_DATA_TYPE dataType = isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
     const MINOPTMAX<int>& range = aConstraint.GetValue();
 
     if( !range.HasMax() && !range.HasMin() )
         return;
 
-    auto outOfRange = [&]( double aMeasured )
-    {
-        return ( range.HasMax() && aMeasured > range.Max() )
-            || ( range.HasMin() && aMeasured < range.Min() );
-    };
+    auto outOfRange =
+            [&]( double aMeasured )
+            {
+                return ( range.HasMax() && aMeasured > range.Max() )
+                    || ( range.HasMin() && aMeasured < range.Min() );
+            };
 
     // Collect the distinct chains touched by the rule's matched items, then
     // dispatch each chain through the topology if it's valid, falling back
@@ -834,9 +834,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkStubLengths(
 }
 
 
-void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkReturnPath(
-        const DRC_CONSTRAINT& aConstraint, DRC_RULE* aRule,
-        const std::map<wxString, CONNECTION>& aChainAgg )
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkReturnPath( const DRC_CONSTRAINT& aConstraint, DRC_RULE* aRule,
+                                                        const std::map<wxString, CONNECTION>& aChainAgg )
 {
     const wxString& refLayerName = aConstraint.m_ReferenceLayer;
     const wxString& refNetPattern = aConstraint.m_ReferenceNet;
@@ -856,23 +855,22 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkReturnPath(
         PCB_LAYER_ID                       layer = UNDEFINED_LAYER;
     };
 
-    auto flagItem = [&]( BOARD_CONNECTED_ITEM* aItem,
-                         std::vector<FlaggedRegion>& aFlagged,
-                         SHAPE_POLY_SET&& aRegion )
-    {
-        for( int o = 0; o < aRegion.OutlineCount(); ++o )
-        {
-            FlaggedRegion fr;
-            fr.poly.AddOutline( aRegion.Outline( o ) );
+    auto flagItem =
+            [&]( BOARD_CONNECTED_ITEM* aItem, std::vector<FlaggedRegion>& aFlagged, SHAPE_POLY_SET&& aRegion )
+            {
+                for( int o = 0; o < aRegion.OutlineCount(); ++o )
+                {
+                    FlaggedRegion fr;
+                    fr.poly.AddOutline( aRegion.Outline( o ) );
 
-            for( int h = 0; h < aRegion.HoleCount( o ); ++h )
-                fr.poly.AddHole( aRegion.Hole( o, h ) );
+                    for( int h = 0; h < aRegion.HoleCount( o ); ++h )
+                        fr.poly.AddHole( aRegion.Hole( o, h ) );
 
-            fr.items.push_back( aItem );
-            fr.layer = aItem->GetLayer();
-            aFlagged.push_back( std::move( fr ) );
-        }
-    };
+                    fr.items.push_back( aItem );
+                    fr.layer = aItem->GetLayer();
+                    aFlagged.push_back( std::move( fr ) );
+                }
+            };
 
     for( const auto& [chainName, agg] : aChainAgg )
     {
@@ -892,15 +890,13 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkReturnPath(
             {
                 // Nothing on the reference layer covers this item.
                 SHAPE_POLY_SET itemPoly;
-                item->TransformShapeToPolygon( itemPoly, item->GetLayer(),
-                                               0, ARC_HIGH_DEF, ERROR_INSIDE );
+                item->TransformShapeToPolygon( itemPoly, item->GetLayer(), 0, ARC_HIGH_DEF, ERROR_INSIDE );
                 flagItem( item, flagged, std::move( itemPoly ) );
                 continue;
             }
 
             SHAPE_POLY_SET itemPoly;
-            item->TransformShapeToPolygon( itemPoly, item->GetLayer(),
-                                           0, ARC_HIGH_DEF, ERROR_INSIDE );
+            item->TransformShapeToPolygon( itemPoly, item->GetLayer(), 0, ARC_HIGH_DEF, ERROR_INSIDE );
 
             SHAPE_POLY_SET diff = itemPoly;
             diff.BooleanSubtract( refUnion );
@@ -922,16 +918,17 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkReturnPath(
         std::vector<int> parent( flagged.size() );
         std::iota( parent.begin(), parent.end(), 0 );
 
-        auto find = [&]( int x )
-        {
-            while( parent[x] != x )
-            {
-                parent[x] = parent[parent[x]];
-                x = parent[x];
-            }
+        auto find =
+                [&]( int x )
+                {
+                    while( parent[x] != x )
+                    {
+                        parent[x] = parent[parent[x]];
+                        x = parent[x];
+                    }
 
-            return x;
-        };
+                    return x;
+                };
 
         for( size_t i = 0; i < flagged.size(); ++i )
         {
@@ -1004,9 +1001,9 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkReturnPath(
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CHAIN_RETURN_PATH_BREAK );
 
-            wxString msg = wxString::Format(
-                    _( "Net chain '%s' has no copper return path on reference layer '%s'." ),
-                    chainName, refLayerName );
+            wxString msg = wxString::Format( _( "Net chain '%s' has no copper return path on reference layer '%s'." ),
+                                             chainName,
+                                             refLayerName );
 
             if( !refNetPattern.IsEmpty() )
                 msg += wxString::Format( _( " (net '%s')" ), refNetPattern );

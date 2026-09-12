@@ -97,17 +97,18 @@ bool DRC_CACHE_GENERATOR::Run()
 
     std::set<ZONE*> allZones;
 
-    auto cacheBBoxes = []( ZONE* zone, const LSET& copperLayers )
-    {
-        if( !zone->GetParentFootprint() )
-            zone->Outline()->BuildBBoxCaches();
+    auto cacheBBoxes =
+            []( ZONE* zone, const LSET& copperLayers )
+            {
+                if( !zone->GetParentFootprint() )
+                    zone->Outline()->BuildBBoxCaches();
 
-        for( PCB_LAYER_ID layer : copperLayers )
-        {
-            if( SHAPE_POLY_SET* fill = zone->GetFill( layer ) )
-                fill->BuildBBoxCaches();
-        }
-    };
+                for( PCB_LAYER_ID layer : copperLayers )
+                {
+                    if( SHAPE_POLY_SET* fill = zone->GetFill( layer ) )
+                        fill->BuildBBoxCaches();
+                }
+            };
 
     for( ZONE* zone : m_board->Zones() )
     {

@@ -1363,18 +1363,19 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
                 tp.detach_task( std::move( aTask ) );
             };
 
-    auto cache_zones = [aReporter, &submitter]( ZONE* aZone ) -> size_t
-    {
-        if( aReporter && aReporter->IsCancelled() )
-            return 0;
+    auto cache_zones =
+            [aReporter, &submitter]( ZONE* aZone ) -> size_t
+            {
+                if( aReporter && aReporter->IsCancelled() )
+                    return 0;
 
-        aZone->CacheTriangulation( UNDEFINED_LAYER, submitter );
+                aZone->CacheTriangulation( UNDEFINED_LAYER, submitter );
 
-        if( aReporter )
-            aReporter->AdvanceProgress();
+                if( aReporter )
+                    aReporter->AdvanceProgress();
 
-        return 1;
-    };
+                return 1;
+            };
 
     for( ZONE* zone : zones )
         returns.emplace_back( tp.submit_task(
