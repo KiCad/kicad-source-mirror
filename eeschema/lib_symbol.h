@@ -492,6 +492,7 @@ public:
     void SetFootprintProp( const wxString& aFootprint )
     {
         GetFootprintField().SetText( aFootprint );
+        cacheSearchTerms();
     }
 
     wxString GetDatasheetProp() const
