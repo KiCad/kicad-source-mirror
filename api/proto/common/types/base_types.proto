@@ -293,7 +293,10 @@ message TextAttributes
   HorizontalAlignment         horizontal_alignment = 2;
   VerticalAlignment           vertical_alignment   = 3;
   kiapi.common.types.Angle    angle                = 4;
-  double                      line_spacing         = 5;
+
+  // Explicit optional since 10.0.7; leaving absent will use the default spacing of 1.0
+  optional double             line_spacing         = 5;
+
   kiapi.common.types.Distance stroke_width         = 6;
   bool                        italic               = 7;
   bool                        bold                 = 8;

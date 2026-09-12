@@ -71,7 +71,12 @@ void UnpackTextAttributes( TEXT_ATTRIBUTES& aOutput, const types::TextAttributes
     }
 
     aOutput.m_Angle = EDA_ANGLE( aInput.angle().value_degrees(), DEGREES_T );
-    aOutput.m_LineSpacing = aInput.line_spacing();
+
+    if( aInput.has_line_spacing() )
+        aOutput.m_LineSpacing = aInput.line_spacing();
+    else
+        aOutput.m_LineSpacing = 1.0;
+
     aOutput.m_StrokeWidth = UnpackDistance( aInput.stroke_width(), aScale );
     aOutput.m_Halign = FromProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>( aInput.horizontal_alignment() );
     aOutput.m_Valign = FromProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>( aInput.vertical_alignment() );

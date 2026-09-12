@@ -190,7 +190,12 @@ bool SCH_TEXTBOX::Deserialize( const kiapi::schematic::types::SchematicTextBox& 
         }
 
         attrs.m_Angle = EDA_ANGLE( aInput.textbox().attributes().angle().value_degrees(), DEGREES_T );
-        attrs.m_LineSpacing = aInput.textbox().attributes().line_spacing();
+
+        if( aInput.textbox().attributes().has_line_spacing() )
+            attrs.m_LineSpacing = aInput.textbox().attributes().line_spacing();
+        else
+            attrs.m_LineSpacing = 1.0;
+
         attrs.m_StrokeWidth = UnpackDistance( aInput.textbox().attributes().stroke_width(), aScale );
         attrs.m_Halign = FromProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>(
                 aInput.textbox().attributes().horizontal_alignment() );
