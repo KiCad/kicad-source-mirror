@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 
 #ifndef SYMBOL_LIBRARY_MANAGER_ADAPTER_H
 #define SYMBOL_LIBRARY_MANAGER_ADAPTER_H
@@ -93,12 +93,16 @@ public:
 
     std::vector<wxString> GetSymbolNames( const wxString& aNickname,
                                           SYMBOL_TYPE aType = SYMBOL_TYPE::ALL_SYMBOLS );
+
     /**
      * Load a #LIB_SYMBOL having @a aName from the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW
      * @param aName is the name of the #LIB_SYMBOL to load.
-     * @return the symbol alias if found or NULL if not found.
+     *
+     * @return the symbol alias if found or NULL if not found. If not null, the pointer
+     *         is borrowed from the library and should not be deleted by the caller.
+     *
      * @throw IO_ERROR if the library cannot be found or read.  No exception
      *                 is thrown in the case where \a aNickname cannot be found.
      */
