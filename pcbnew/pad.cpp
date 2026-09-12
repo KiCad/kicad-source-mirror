@@ -3162,7 +3162,18 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
                     if( !other || ( other->GetFlags() & SKIP_STRUCT ) )
                         continue;
 
-                    if( GetLayerSet().test( other->GetLayer() ) && aShape->Compare( other ) == 0 )
+                    if( Padstack().Mode() == PADSTACK::MODE::NORMAL )
+                    {
+                        if( !GetLayerSet().test( other->GetLayer() ) )
+                            continue;
+                    }
+                    else
+                    {
+                        if( aShape->GetLayer() != other->GetLayer() )
+                            continue;
+                    }
+
+                    if( aShape->GetLayer() == other->GetLayer() && aShape->Compare( other ) == 0 )
                         matching.push_back( other );
                 }
 
