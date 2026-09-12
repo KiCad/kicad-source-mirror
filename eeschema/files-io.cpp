@@ -1422,10 +1422,9 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
         m_autoSavePending = false;
         m_autoSaveRequired = false;
-    }
 
-    if( aSaveAs && success )
         LockFile( Schematic().RootScreen()->GetFileName() );
+    }
 
     if( updateFileHistory )
         UpdateFileHistory( Schematic().RootScreen()->GetFileName() );
