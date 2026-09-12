@@ -2822,7 +2822,11 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
             // is all digits is a text-count, and that any signame will contain at least one
             // symbol or letter.
 
-            if( std::all_of( seventhToken.begin(), seventhToken.end(), ::isdigit ) )
+            if( std::all_of( seventhToken.begin(), seventhToken.end(),
+                             [](unsigned char c)
+                             {
+                                 return std::isdigit( c );
+                             } ) )
             {
                 std::istringstream tiss( seventhToken );
                 tiss >> textCount;
