@@ -484,7 +484,6 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
 
     if( zone.filled() )
     {
-        // TODO(JE) check what else has to happen here
         SetIsFilled( true );
         SetNeedRefill( false );
 
@@ -495,6 +494,11 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
             m_FilledPolysList[layer] = std::make_shared<SHAPE_POLY_SET>( shape );
         }
     }
+    else
+    {
+        UnFill();
+    }
+
 
     HatchBorder();
 
