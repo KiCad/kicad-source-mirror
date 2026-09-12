@@ -33,7 +33,7 @@ namespace
 /// Checklist row order. Explicit rather than positional so reordering either list cannot
 /// silently rebind a checkbox to a different grouping key
 const DRILL_GROUP_KEY g_groupKeyRows[] = {
-    DRILL_GROUP_KEY::SIZE,          DRILL_GROUP_KEY::SLOT,
+    DRILL_GROUP_KEY::SIZE_GRP,      DRILL_GROUP_KEY::SLOT,
     DRILL_GROUP_KEY::PLATING,       DRILL_GROUP_KEY::SPAN,
     DRILL_GROUP_KEY::OPERATION,     DRILL_GROUP_KEY::HOLE_FUNCTION,
     DRILL_GROUP_KEY::PROTECTION,

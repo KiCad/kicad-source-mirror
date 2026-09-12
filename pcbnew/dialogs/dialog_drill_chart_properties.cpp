@@ -56,7 +56,7 @@ bool columnGroupKey( DRILL_CHART_COLUMN_ID aId, DRILL_GROUP_KEY& aKey )
 {
     switch( aId )
     {
-    case DRILL_CHART_COLUMN_ID::DRILL_DIAMETER: aKey = DRILL_GROUP_KEY::SIZE; return true;
+    case DRILL_CHART_COLUMN_ID::DRILL_DIAMETER: aKey = DRILL_GROUP_KEY::SIZE_GRP; return true;
     case DRILL_CHART_COLUMN_ID::SLOT_SIZE:      aKey = DRILL_GROUP_KEY::SLOT; return true;
     case DRILL_CHART_COLUMN_ID::PLATING:        aKey = DRILL_GROUP_KEY::PLATING; return true;
     case DRILL_CHART_COLUMN_ID::LAYER_SPAN:     aKey = DRILL_GROUP_KEY::SPAN; return true;

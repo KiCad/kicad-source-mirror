@@ -30,7 +30,7 @@ DRILL_SYMBOL_PROFILE::DRILL_SYMBOL_PROFILE() :
         m_symbolWidth( pcbIUScale.mmToIU( 0.15 ) ),
         m_freezeAssignments( true )
 {
-    m_groupBy = { DRILL_GROUP_KEY::SIZE,    DRILL_GROUP_KEY::SLOT,
+    m_groupBy = { DRILL_GROUP_KEY::SIZE_GRP,  DRILL_GROUP_KEY::SLOT,
                   DRILL_GROUP_KEY::PLATING, DRILL_GROUP_KEY::SPAN,
                   DRILL_GROUP_KEY::OPERATION, DRILL_GROUP_KEY::POST_MACHINING };
 }
@@ -64,7 +64,7 @@ std::string DRILL_SYMBOL_PROFILE::GroupKeyString( const DRILL_OPERATION& aOperat
 {
     std::string key = "v1";
 
-    if( IsGroupedBy( DRILL_GROUP_KEY::SIZE ) )
+    if( IsGroupedBy( DRILL_GROUP_KEY::SIZE_GRP ) )
         key += fmt::format( "|d{}", aOperation.m_Diameter );
 
     if( IsGroupedBy( DRILL_GROUP_KEY::SLOT ) )
@@ -196,7 +196,7 @@ struct TOKEN_MAP
 };
 
 const TOKEN_MAP groupKeyTokens[] = {
-    { "size", (int) DRILL_GROUP_KEY::SIZE },
+    { "size", (int) DRILL_GROUP_KEY::SIZE_GRP },
     { "slot", (int) DRILL_GROUP_KEY::SLOT },
     { "plating", (int) DRILL_GROUP_KEY::PLATING },
     { "span", (int) DRILL_GROUP_KEY::SPAN },

@@ -41,7 +41,7 @@ struct DRILL_OPERATION;
  */
 enum class DRILL_GROUP_KEY
 {
-    SIZE,
+    SIZE_GRP,
     SLOT,
     PLATING,
     SPAN,

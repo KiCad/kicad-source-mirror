@@ -2745,7 +2745,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseDrillSymbolProfile()
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     DRILL_SYMBOL_PROFILE&  profile = bds.GetDrillSymbolProfile();
 
-    for( DRILL_GROUP_KEY key : { DRILL_GROUP_KEY::SIZE, DRILL_GROUP_KEY::SLOT,
+    for( DRILL_GROUP_KEY key : { DRILL_GROUP_KEY::SIZE_GRP, DRILL_GROUP_KEY::SLOT,
                                  DRILL_GROUP_KEY::PLATING, DRILL_GROUP_KEY::SPAN,
                                  DRILL_GROUP_KEY::OPERATION, DRILL_GROUP_KEY::HOLE_FUNCTION,
                                  DRILL_GROUP_KEY::PROTECTION,
