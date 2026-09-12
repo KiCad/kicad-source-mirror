@@ -69,7 +69,7 @@
 #include <algorithm>
 #include <functional>
 #include <nlohmann/json.hpp>
-#include <typeinfo>
+#include <utility>
 
 BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
     EVT_CHAR_HOOK( DIALOG_SHIM::OnCharHook )
@@ -1417,13 +1417,30 @@ void DIALOG_SHIM::setControlValue( wxWindow* aCtrl, const wxVariant& aValue )
         {
             int rows = std::min( (int) j.size(), grid->GetNumberRows() );
 
+            std::vector<std::pair<int, int>> changedCells;
+
             for( int r = 0; r < rows; ++r )
             {
                 nlohmann::json row = j[r];
                 int cols = std::min( (int) row.size(), grid->GetNumberCols() );
 
                 for( int c = 0; c < cols; ++c )
-                    grid->SetCellValue( r, c, wxString( row[c].get<std::string>() ) );
+                {
+                    wxString value = wxString( row[c].get<std::string>() );
+
+                    if( grid->GetCellValue( r, c ) != value )
+                    {
+                        grid->SetCellValue( r, c, value );
+                        changedCells.emplace_back( r, c );
+                    }
+                }
+            }
+
+            for( const auto& [row, col] : changedCells )
+            {
+                wxGridEvent evt( grid->GetId(), wxEVT_GRID_CELL_CHANGED, grid, row, col );
+                evt.SetString( grid->GetCellValue( row, col ) );
+                grid->GetEventHandler()->ProcessEvent( evt );
             }
         }
     }
