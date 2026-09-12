@@ -1,0 +1,90 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "3b92f08a-b761-4b5e-bd0b-d9758bc61f79")
+	(paper "A3")
+	(lib_symbols)
+	(sheet
+		(at 154.94 68.58)
+		(size 86.36 81.28)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "732dfddb-91ac-4706-a6a7-f3bde641bec4")
+		(property "Sheetname" "Microcontroller"
+			(at 154.94 67.8684 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "microcontroller.kicad_sch"
+			(at 154.94 150.4446 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "" input
+			(at 154.94 71.12 180)
+			(uuid "618b964d-0930-4706-af79-c44fcd41043c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SCL" input
+			(at 154.94 73.66 180)
+			(uuid "64bd9b62-279f-46b8-9725-d4e40d250130")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SDA" input
+			(at 154.94 76.2 180)
+			(uuid "2fe20f79-fb73-4764-afb1-9796e5d24c5b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "issue25469"
+				(path "/3b92f08a-b761-4b5e-bd0b-d9758bc61f79"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

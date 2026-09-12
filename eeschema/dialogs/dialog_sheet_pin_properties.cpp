@@ -31,6 +31,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_validators.h>
 #include <sch_commit.h>
+#include <confirm.h>
 #include <dialog_sheet_pin_properties.h>
 #include <dialogs/html_message_box.h>
 #include <string_utils.h>
@@ -122,12 +123,23 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
 {
+    wxString name = EscapeString( m_comboName->GetValue(), CTX_NETNAME );
+    wxString visibleName = name;
+
+    visibleName.Trim( false ).Trim( true );
+
+    if( visibleName.IsEmpty() )
+    {
+        DisplayError( this, _( "Sheet pin name can not be empty." ) );
+        return false;
+    }
+
     SCH_COMMIT commit( m_frame );
 
     if( !m_sheetPin->IsNew() )
         commit.Modify( m_sheetPin->GetParent(), m_frame->GetScreen() );
 
-    m_sheetPin->SetText( EscapeString( m_comboName->GetValue(), CTX_NETNAME ) );
+    m_sheetPin->SetText( name );
 
     if( m_fontCtrl->HaveFontSelection() )
     {
