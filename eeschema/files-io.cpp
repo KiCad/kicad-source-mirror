@@ -1579,6 +1579,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
             SetSchematic( newSchematic.release() );
 
+            LoadProjectSettings();
+
             if( loadedSheet )
             {
                 std::vector<SCH_SHEET*> topLevelSheets = Schematic().GetTopLevelSheets();
