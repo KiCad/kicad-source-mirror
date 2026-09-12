@@ -183,8 +183,7 @@ bool ConvertSmartQuotesAndDashes( wxString* aString )
 
 wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
 {
-    wxString          converted;
-    std::vector<bool> braceStack;    // true == formatting construct
+    wxString converted;
 
     converted.reserve( aSource.length() );
 
