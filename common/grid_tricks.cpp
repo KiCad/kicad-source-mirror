@@ -940,7 +940,17 @@ void GRID_TRICKS::cutcopy( bool doCopy, bool doDelete )
                 // Do NOT allow clear of things that can take strings but aren't textEntries
                 // (ie: color swatches, textboxes, etc.).
                 if( isTextEntry( row, col ) && !isReadOnly( row, col ) )
+                {
+                    bool hadContent = !tbl->GetValue( row, col ).IsEmpty();
+
                     tbl->SetValue( row, col, wxEmptyString );
+
+                    if( hadContent )
+                    {
+                        wxGridEvent evt( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, row, col );
+                        m_grid->GetEventHandler()->ProcessEvent( evt );
+                    }
+                }
             }
         }
     }
