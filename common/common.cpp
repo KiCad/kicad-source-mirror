@@ -617,7 +617,7 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
                                                                    || strVarName == wxT( "ERC_ERROR" ) ) )
             {
                 // These aren't environment variables; pass them through unchanged
-                strResult << str_n << bracket << strVarName << str_m;
+                strResult << controlChar << bracket << strVarName << str_m;
                 n = m;
                 break;
             }
