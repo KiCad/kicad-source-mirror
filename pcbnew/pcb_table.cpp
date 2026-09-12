@@ -113,7 +113,7 @@ void PCB_TABLE::CopyFrom( const BOARD_ITEM* aOther )
     ClearCells();
 
     for( PCB_TABLECELL* cell : other->m_cells )
-        AddCell( new PCB_TABLECELL( *cell ) );
+        AddCell( static_cast<PCB_TABLECELL*>( cell->Clone() ) );
 }
 
 
