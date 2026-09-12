@@ -19,8 +19,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "dialog_shim.h"
+
 #include <app_monitor.h>
-#include <dialog_shim.h>
 #include <settings/common_settings.h>
 #include <settings/common_settings_internals.h>
 #include <core/ignore.h>
@@ -1180,15 +1181,45 @@ void DIALOG_SHIM::registerUndoRedoHandlers( wxWindowList& children )
 
 void DIALOG_SHIM::recordControlChange( wxWindow* aCtrl )
 {
-    wxVariant before = m_currentValues[ aCtrl ];
-    wxVariant after = getControlValue( aCtrl );
+    // If we are in an event handler that generates lots of events (e.g. cutting
+    // a range of cells in a grid), we want to coalesce all of those events into a
+    // single undo commit.
+    //
+    // So what we'll do is collect all of the controls that have changes,
+    // and enqueue a single call to flushPendingControlChanges() to be called after the
+    // current event handler (which is calling this function) has finished.
 
-    if( before != after )
+    const auto [it, inserted] = m_controlsWithPendingChanges.insert( aCtrl );
+
+    if( !inserted )
+        return;
+
+    if( m_controlsWithPendingChanges.size() == 1 )
+        CallAfter( &DIALOG_SHIM::flushPendingControlChanges );
+}
+
+
+void DIALOG_SHIM::flushPendingControlChanges()
+{
+    for( wxWindow* const ctrl : m_controlsWithPendingChanges )
     {
-        m_undoStack.push_back( { aCtrl, before, after } );
-        m_redoStack.clear();
-        m_currentValues[ aCtrl ] = after;
+        wxVariant before = m_currentValues[ctrl];
+        wxVariant after = getControlValue( ctrl );
+
+        if( before != after )
+        {
+            // Note this still produces an undo/redo entry per control,
+            // even if changed within a control are combined.
+            // If an event causes a multi-control change, the user will
+            // still have to hit undo multiple times to get back to the
+            // original state.`
+            m_undoStack.push_back( { ctrl, before, after } );
+            m_redoStack.clear();
+            m_currentValues[ctrl] = after;
+        }
     }
+
+    m_controlsWithPendingChanges.clear();
 }
 
 
@@ -1451,6 +1482,8 @@ void DIALOG_SHIM::setControlValue( wxWindow* aCtrl, const wxVariant& aValue )
 
 void DIALOG_SHIM::doUndo()
 {
+    flushPendingControlChanges();
+
     if( m_undoStack.empty() )
         return;
 
@@ -1466,6 +1499,8 @@ void DIALOG_SHIM::doUndo()
 
 void DIALOG_SHIM::doRedo()
 {
+    flushPendingControlChanges();
+
     if( m_redoStack.empty() )
         return;
 
@@ -1682,6 +1717,7 @@ void DIALOG_SHIM::resetUndoRedoForNewContent( wxWindowList& aChildren )
     m_undoStack.clear();
     m_redoStack.clear();
     m_currentValues.clear();
+    m_controlsWithPendingChanges.clear();
     registerUndoRedoHandlers( aChildren );
 }
 
