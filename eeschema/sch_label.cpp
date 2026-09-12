@@ -966,13 +966,14 @@ void SCH_LABEL_BASE::cacheShownText()
 
 wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
-    // Use local depth counter so each text element starts fresh
+    // ResolveTextVars counts expansion passes over this one string; aDepth counts re-entries
+    // and has to keep climbing, or a label that resolves through itself never stops
     int depth = 0;
 
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                return ResolveTextVar( aPath, token, depth + 1 );
+                return ResolveTextVar( aPath, token, aDepth + 1 );
             };
 
     wxString text = EDA_TEXT::GetShownText( aContext, depth );
@@ -2238,11 +2239,17 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
 
     if( token->IsSameAs( wxT( "INTERSHEET_REFS" ) ) )
     {
-        SCHEMATIC_SETTINGS& settings = schematic->Settings();
-        wxString            ref;
-        auto                it = schematic->GetPageRefsMap().find( GetShownText( aPath, FOR_GUI ) );
+        SCHEMATIC_SETTINGS&                settings = schematic->Settings();
+        std::map<wxString, std::set<int>>& pageRefs = schematic->GetPageRefsMap();
+        wxString                           ref;
+        auto                               it = pageRefs.end();
 
-        if( it == schematic->GetPageRefsMap().end() )
+        // The map is keyed on the label's own shown text, so only a label carrying variables can
+        // resolve through itself; that one has to stop before the stack does
+        if( !HasTextVars() || aDepth < ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth )
+            it = pageRefs.find( GetShownText( aPath, FOR_GUI, aDepth ) );
+
+        if( it == pageRefs.end() )
         {
             ref = "?";
         }
