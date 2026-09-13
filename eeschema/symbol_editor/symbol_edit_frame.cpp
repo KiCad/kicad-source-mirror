@@ -518,18 +518,16 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return m_symbol;
             };
 
-    auto isEditableCond =
+    auto isGraphicallyEditableCond =
             [this]( const SELECTION& )
             {
-                // Only root symbols from the new s-expression libraries or the schematic
-                // are editable.
-                return IsSymbolEditable() && !IsSymbolAlias();
+                return IsSymbolGraphicallyEditable();
             };
 
     auto isEditableInAliasCond =
             [this]( const SELECTION& )
             {
-                // Less restrictive than isEditableCond
+                // Less restrictive than isGraphicallyEditableCond
                 // Symbols fields (root symbols and aliases) from the new s-expression libraries
                 // or in the schematic are editable.
                 return IsSymbolEditable();
@@ -596,12 +594,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );
 
-    mgr->SetConditions( ACTIONS::cut,                 ENABLE( isEditableCond ) );
+    mgr->SetConditions( ACTIONS::cut,                 ENABLE( isGraphicallyEditableCond ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( haveSymbolCond ) );
     mgr->SetConditions( ACTIONS::copyAsText,          ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( ACTIONS::paste,               ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::doDelete,            ENABLE( isEditableCond ) );
-    mgr->SetConditions( ACTIONS::duplicate,           ENABLE( isEditableCond ) );
+    mgr->SetConditions( ACTIONS::paste,               ENABLE( isGraphicallyEditableCond && SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
+    mgr->SetConditions( ACTIONS::doDelete,            ENABLE( isGraphicallyEditableCond ) );
+    mgr->SetConditions( ACTIONS::duplicate,           ENABLE( isGraphicallyEditableCond ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( ACTIONS::unselectAll,         ENABLE( haveSymbolCond ) );
 
@@ -611,10 +609,10 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::rotateCCW,       ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableInAliasCond )
                                                           .HotkeyEnable( isEditableInAliasCond ) );
 
-    mgr->SetConditions( SCH_ACTIONS::mirrorH,         ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableCond )
-                                                          .HotkeyEnable( isEditableCond ) );
-    mgr->SetConditions( SCH_ACTIONS::mirrorV,         ENABLE( SELECTION_CONDITIONS::NotEmpty && isEditableCond )
-                                                          .HotkeyEnable( isEditableCond ) );
+    mgr->SetConditions( SCH_ACTIONS::mirrorH,         ENABLE( SELECTION_CONDITIONS::NotEmpty && isGraphicallyEditableCond )
+                                                          .HotkeyEnable( isGraphicallyEditableCond ) );
+    mgr->SetConditions( SCH_ACTIONS::mirrorV,         ENABLE( SELECTION_CONDITIONS::NotEmpty && isGraphicallyEditableCond )
+                                                          .HotkeyEnable( isGraphicallyEditableCond ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
@@ -691,15 +689,15 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::showDatasheet,            ENABLE( haveDatasheetCond ) );
     mgr->SetConditions( SCH_ACTIONS::symbolProperties,     ENABLE( symbolSelectedInTreeCondition || ( canEditProperties && haveSymbolCond ) ) );
     mgr->SetConditions( SCH_ACTIONS::runERC,               ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( SCH_ACTIONS::pinTable,             ENABLE( isEditableCond && haveSymbolCond ) );
-    mgr->SetConditions( SCH_ACTIONS::editSymbolPinMaps,    ENABLE( isEditableCond && haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::pinTable,             ENABLE( isGraphicallyEditableCond && haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::editSymbolPinMaps,    ENABLE( isGraphicallyEditableCond && haveSymbolCond ) );
     mgr->SetConditions( SCH_ACTIONS::updateSymbolFields,   ENABLE( canUpdateFieldsCond ) );
     mgr->SetConditions( SCH_ACTIONS::cycleBodyStyle,       ENABLE( multiBodyStyleModeCond ) );
 
     mgr->SetConditions( SCH_ACTIONS::toggleSyncedPinsMode, ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
 
 // Only enable a tool if the symbol is edtable
-#define EDIT_TOOL( tool ) ACTION_CONDITIONS().Enable( isEditableCond ).Check( cond.CurrentTool( tool ) )
+#define EDIT_TOOL( tool ) ACTION_CONDITIONS().Enable( isGraphicallyEditableCond ).Check( cond.CurrentTool( tool ) )
 
     mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
     mgr->SetConditions( SCH_ACTIONS::placeSymbolPin,     EDIT_TOOL( SCH_ACTIONS::placeSymbolPin ) );
@@ -2265,6 +2263,14 @@ bool SYMBOL_EDIT_FRAME::IsSymbolAlias() const
 bool SYMBOL_EDIT_FRAME::IsSymbolEditable() const
 {
     return m_symbol && ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
+}
+
+
+bool SYMBOL_EDIT_FRAME::IsSymbolGraphicallyEditable() const
+{
+    // Cannot edit graphics of symbols from legacy libraries, or of symbol aliases
+    // unless the symbol is from a schematic (in which case it is a working copy of the symbol).
+    return m_symbol && ( ( !IsSymbolFromLegacyLibrary() && !IsSymbolAlias() ) || IsSymbolFromSchematic() );
 }
 
 

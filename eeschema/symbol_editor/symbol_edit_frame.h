@@ -442,9 +442,24 @@ public:
      *  - The symbol must not be from a legacy library.
      *
      * Note that many things are not editable in a non-root symbol (ie: an alias), but others
-     * are so this routine no longer returns false for an alias.
+     * are so this routine is true for an alias symbol.  Use #IsSymbolGraphicallyEditable()
+     * to test if a symbol's graphical elements can be edited.
      */
     bool IsSymbolEditable() const;
+
+    /**
+     * Test if a symbol is loaded and can be edited graphically.
+     *
+     * The following conditions are required for a symbol to be graphically editable:
+     *  - The symbol must be selected from either a library or the schematic.
+     *  - The symbol must not be from a legacy library.
+     *  - The symbol must not be an alias unless it is from a schematic.
+     *
+     * This returns false for an alias symbol that is not from a schematic, even
+     * though some of its fields can be edited.  Use #IsSymbolEditable() to test if a symbol
+     * can be edited in any way.
+     */
+    bool IsSymbolGraphicallyEditable() const;
 
     bool IsSymbolAlias() const;
 

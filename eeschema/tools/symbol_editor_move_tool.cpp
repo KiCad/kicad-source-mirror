@@ -125,7 +125,12 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                                                         : m_selectionTool->RequestSelection();
     bool           unselect = selection.IsHover();
 
-    if( !m_frame->IsSymbolEditable() || selection.Empty() )
+    if( selection.Empty() )
+        return false;
+
+    // We can get here with (only) fields selected in an alias symbol, so we
+    // don't check graphical editability.
+    if( !m_frame->IsSymbolEditable() )
         return false;
 
     if( m_moveInProgress )

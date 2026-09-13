@@ -860,6 +860,14 @@ int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
     if( !parent )
         return 0;
 
+    if( IsSymbolEditor() )
+    {
+        SYMBOL_EDIT_FRAME* symFrame = frame<SYMBOL_EDIT_FRAME>();
+
+        if( !symFrame->IsSymbolGraphicallyEditable() )
+            return 0;
+    }
+
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     DIALOG_IMPORT_GFX_SCH dlg( frame() );

@@ -208,7 +208,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_S
     {
         m_fillBook->SetSelection( 1 );
 
-        if( !symbolEditor->IsSymbolEditable() || symbolEditor->IsSymbolAlias() )
+        if( !symbolEditor->IsSymbolGraphicallyEditable() )
         {
             m_sdbSizerCancel->SetDefault();
             m_sdbSizerOK->SetLabel( _( "Read Only" ) );

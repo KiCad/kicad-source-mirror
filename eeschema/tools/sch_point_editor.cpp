@@ -1207,7 +1207,7 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     {
         SYMBOL_EDIT_FRAME* editor = getEditFrame<SYMBOL_EDIT_FRAME>();
 
-        if( !editor->IsSymbolEditable() || editor->IsSymbolAlias() )
+        if( !editor->IsSymbolGraphicallyEditable() )
             return 0;
     }
 

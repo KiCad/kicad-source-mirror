@@ -969,7 +969,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     SetupStandardButtons();
 
-    if( !parent->IsSymbolEditable() || parent->IsSymbolAlias() )
+    if( !parent->IsSymbolGraphicallyEditable() )
     {
         m_ButtonsCancel->SetDefault();
         m_ButtonsOK->SetLabel( _( "Read Only" ) );

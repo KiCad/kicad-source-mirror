@@ -92,7 +92,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
             {
                 SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
-                return editor && editor->IsSymbolEditable() && !editor->IsSymbolAlias();
+                return editor && editor->IsSymbolGraphicallyEditable();
             };
 
     static const std::vector<KICAD_T> pinTypes = { SCH_PIN_T };
