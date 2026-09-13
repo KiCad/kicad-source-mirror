@@ -122,6 +122,8 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                         LIB_EDIT_FRAME_NAME ),
         m_unitSelectBox( nullptr ),
         m_bodyStyleSelectBox( nullptr ),
+        m_drawSpecificUnit( false ),
+        m_drawSpecificBodyStyle( true ),
         m_isSymbolFromSchematic( false ),
         m_libTreeAutoHiddenForSchematicEdit( false )
 {
