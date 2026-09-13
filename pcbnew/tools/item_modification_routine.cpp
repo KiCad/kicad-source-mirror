@@ -674,7 +674,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
      * the ones you want to outset anyway, most usually when making a courtyard for a footprint.
      */
 
-    PCB_LAYER_ID layer = m_params.useSourceLayers ? aItem.GetLayer() : m_params.layer;
+    PCB_LAYER_ID targetLayer = m_params.useSourceLayers ? aItem.GetLayer() : m_params.layer;
 
     // Not all items have a width, even if the parameters want to copy it
     // So fall back to the given width if we can't get one.
@@ -698,7 +698,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                 std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
 
                 new_shape->SetPolyShape( new_poly );
-                new_shape->SetLayer( layer );
+                new_shape->SetLayer( targetLayer );
                 new_shape->SetWidth( width );
 
                 handler.AddNewItem( std::move( new_shape ) );
@@ -730,7 +730,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                     std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
                     new_shape->SetStart( seg.A );
                     new_shape->SetEnd( seg.B );
-                    new_shape->SetLayer( layer );
+                    new_shape->SetLayer( targetLayer );
                     new_shape->SetWidth( width );
 
                     handler.AddNewItem( std::move( new_shape ) );
@@ -745,7 +745,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
 
                     std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::ARC );
                     new_shape->SetArcGeometry( arc.GetP0(), arc.GetArcMid(), arc.GetP1() );
-                    new_shape->SetLayer( layer );
+                    new_shape->SetLayer( targetLayer );
                     new_shape->SetWidth( width );
 
                     handler.AddNewItem( std::move( new_shape ) );
@@ -780,7 +780,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                     new_shape->SetRectangleHeight( grid_rect.GetHeight() );
                 }
 
-                new_shape->SetLayer( layer );
+                new_shape->SetLayer( targetLayer );
                 new_shape->SetWidth( width );
 
                 handler.AddNewItem( std::move( new_shape ) );
@@ -792,7 +792,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                 std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::CIRCLE );
                 new_shape->SetCenter( aCircle.Center );
                 new_shape->SetRadius( aCircle.Radius );
-                new_shape->SetLayer( layer );
+                new_shape->SetLayer( targetLayer );
                 new_shape->SetWidth( width );
 
                 handler.AddNewItem( std::move( new_shape ) );
@@ -822,6 +822,9 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
         pad.Padstack().ForEachUniqueLayer(
                 [&]( PCB_LAYER_ID aLayer )
                 {
+                    if( m_params.useSourceLayers )
+                        targetLayer = aLayer;
+
                     const PAD_SHAPE pad_shape = pad.GetShape( aLayer );
 
                     switch( pad_shape )
@@ -897,8 +900,8 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
         {
         case SHAPE_T::RECTANGLE:
         {
-            BOX2I box{ pcb_shape.GetPosition(),
-                       VECTOR2I{ pcb_shape.GetRectangleWidth(), pcb_shape.GetRectangleHeight() } };
+            BOX2I box{ pcb_shape.GetPosition(), VECTOR2I{ pcb_shape.GetRectangleWidth(),
+                                                          pcb_shape.GetRectangleHeight() } };
             box.Inflate( m_params.outsetDistance );
 
             if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
