@@ -833,6 +833,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                         const VECTOR2I pad_size = pad.GetSize( aLayer );
 
                         BOX2I box{ pad.GetPosition() - pad_size / 2, pad_size };
+                        box.Offset( pad.GetOffset( aLayer ) );
                         box.Inflate( m_params.outsetDistance );
 
                         if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
@@ -871,7 +872,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                             break;
                         }
 
-                        const CIRCLE circle( pad.GetPosition(), radius );
+                        const CIRCLE circle( pad.GetPosition() + pad.GetOffset( aLayer ), radius );
                         addCircleOrRect( circle );
                         AddSuccess();
                         break;
