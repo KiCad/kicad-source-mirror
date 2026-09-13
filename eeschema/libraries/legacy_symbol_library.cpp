@@ -217,7 +217,6 @@ LIB_SYMBOL* LEGACY_SYMBOL_LIB::ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL
     m_plugin->DeleteSymbol( fileName.GetFullPath(), aOldSymbol->GetName(), m_properties.get() );
 
     std::unique_ptr<LIB_SYMBOL> clonedPart = std::make_unique<LIB_SYMBOL>( *aNewSymbol, this );
-    LIB_SYMBOL*                 savedPart = clonedPart.get();
 
     m_plugin->SaveSymbol( fileName.GetFullPath(), std::move( clonedPart ), m_properties.get() );
 
@@ -227,6 +226,10 @@ LIB_SYMBOL* LEGACY_SYMBOL_LIB::ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL
         isModified = true;
 
     ++m_mod_hash;
+
+    // We cannot use the saved part after handing it to the plugin, we must borrow a new
+    // copy from the plugin cache.
+    LIB_SYMBOL* savedPart = m_plugin->LoadSymbol( fileName.GetFullPath(), aNewSymbol->GetName(), m_properties.get() );
     return savedPart;
 }
 

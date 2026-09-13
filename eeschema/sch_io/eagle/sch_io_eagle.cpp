@@ -2416,28 +2416,39 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                     std::map<std::string, UTF8> properties;
                     properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
 
-                    // The plugin cache owns the parent symbol after the save; keep a borrowed
-                    // pointer to reparent the derived symbols.
+
                     std::unique_ptr<LIB_SYMBOL> parentSymbol = std::make_unique<LIB_SYMBOL>( *libSymbol );
-                    LIB_SYMBOL* parent = parentSymbol.get();
 
                     m_pi->SaveSymbol( getLibFileName().GetFullPath(), std::move( parentSymbol ),
                                       &properties );
 
-                    for( std::unique_ptr<LIB_SYMBOL>& symbol : derivedSymbols )
+                    // The plugin cache owns the parent symbol after the save, we cannot use it
+                    // safely after handing it to the plugin.
+                    // Borrow the parent symbol from the plugin cache.
+                    LIB_SYMBOL* parent = m_pi->LoadSymbol( getLibFileName().GetFullPath(), libSymbol->GetName() );
+
+                    if( !parent )
                     {
-                        if( m_pi->LoadSymbol( getLibFileName().GetFullPath(), symbol->GetName() ) )
+                        Report( wxString::Format( _( "Could not reload saved symbol '%s'" ),
+                                                  UnescapeString( libSymbol->GetName() ) ),
+                                RPT_SEVERITY_ERROR );
+                    }
+                    else
+                    {
+                        for( std::unique_ptr<LIB_SYMBOL>& symbol : derivedSymbols )
                         {
-                            wxString tmp = aEagleLibrary->name + wxT( "_" ) + symbol->GetName();
-                            tmp = EscapeString( tmp, CTX_LIBID );
-                            symbol->SetName( tmp );
+                            if( m_pi->LoadSymbol( getLibFileName().GetFullPath(), symbol->GetName() ) )
+                            {
+                                wxString tmp = aEagleLibrary->name + wxT( "_" ) + symbol->GetName();
+                                tmp = EscapeString( tmp, CTX_LIBID );
+                                symbol->SetName( tmp );
+                            }
+
+                            std::unique_ptr<LIB_SYMBOL> derivedSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
+
+                            derivedSymbol->SetParent( parent );
+                            m_pi->SaveSymbol( getLibFileName().GetFullPath(), std::move( derivedSymbol ), &properties );
                         }
-
-                        std::unique_ptr<LIB_SYMBOL> derivedSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
-
-                        derivedSymbol->SetParent( parent );
-                        m_pi->SaveSymbol( getLibFileName().GetFullPath(), std::move( derivedSymbol ),
-                                          &properties );
                     }
                 }
                 catch(...)
