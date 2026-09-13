@@ -39,6 +39,13 @@ static wxString historyPath( const wxString& aProjectPath )
 }
 
 
+static wxString historyLockPath( const wxString& aProjectPath )
+{
+    // The lock must survive replacement of the history directory during trimming.
+    return historyPath( aProjectPath ) + wxS( ".repo" );
+}
+
+
 HISTORY_LOCK_MANAGER::HISTORY_LOCK_MANAGER( const wxString& aProjectPath, int aStaleTimeoutSec ) :
         m_projectPath( aProjectPath ),
         m_historyPath( historyPath( aProjectPath ) ),
@@ -136,18 +143,7 @@ bool HISTORY_LOCK_MANAGER::acquireFileLock()
         }
     }
 
-    // Check for stale lock before attempting acquisition
-    if( IsLockStale( m_projectPath, m_staleTimeoutSec ) )
-    {
-        wxLogWarning( "Detected stale lock file, removing it" );
-        BreakStaleLock( m_projectPath );
-    }
-
-    // Create lock file path: .history/.repo.lock
-    wxFileName lockPath( m_historyPath, wxS( ".repo" ) );
-
-    // Use existing LOCKFILE infrastructure
-    m_fileLock = std::make_unique<LOCKFILE>( lockPath.GetFullPath(), true );
+    m_fileLock = std::make_unique<LOCKFILE>( historyLockPath( m_projectPath ), true );
 
     if( !m_fileLock->Locked() )
     {
@@ -155,6 +151,14 @@ bool HISTORY_LOCK_MANAGER::acquireFileLock()
             _( "History repository is locked by %s@%s" ),
             m_fileLock->GetUsername(),
             m_fileLock->GetHostname() );
+        return false;
+    }
+
+    LOCKFILE legacyLock = LOCKFILE::Inspect( wxFileName( m_historyPath, wxS( ".repo" ) ).GetFullPath() );
+
+    if( !legacyLock.Valid() )
+    {
+        m_lockError = _( "History repository is locked by an older KiCad instance." );
         return false;
     }
 
@@ -243,8 +247,7 @@ bool HISTORY_LOCK_MANAGER::IsLockStale( const wxString& aProjectPath, int aStale
     if( aStaleTimeoutSec <= 0 )
         aStaleTimeoutSec = ADVANCED_CFG::GetCfg().m_HistoryLockStaleTimeout;
 
-    wxString histPath = historyPath( aProjectPath );
-    wxFileName lockPath( histPath, wxS( ".repo.lock" ) );
+    wxFileName lockPath( LOCKFILE::LockPathFor( historyLockPath( aProjectPath ) ) );
 
     if( !lockPath.FileExists() )
         return false; // No lock file exists
@@ -259,43 +262,16 @@ bool HISTORY_LOCK_MANAGER::IsLockStale( const wxString& aProjectPath, int aStale
     wxLogTrace( HISTORY_LOCK_TRACE, "Lock file age: %d seconds (stale threshold: %d)",
                (int)age.GetSeconds().ToLong(), aStaleTimeoutSec );
 
-    return age.GetSeconds().ToLong() > aStaleTimeoutSec;
+    return age.GetSeconds().ToLong() > aStaleTimeoutSec
+           && LOCKFILE::Inspect( historyLockPath( aProjectPath ) ).Valid();
 }
 
 
 bool HISTORY_LOCK_MANAGER::BreakStaleLock( const wxString& aProjectPath )
 {
-    wxString histPath = historyPath( aProjectPath );
-    wxFileName lockPath( histPath, wxS( ".repo.lock" ) );
-
-    if( !lockPath.FileExists() )
-        return true; // Already removed
-
-    // Also remove the LOCKFILE-style lock file if it exists
-    wxFileName lockFilePath( histPath, wxS( ".repo" ) );
-    lockFilePath.SetName( FILEEXT::LockFilePrefix + lockFilePath.GetName() );
-    lockFilePath.SetExt( lockFilePath.GetExt() + wxS( "." ) + FILEEXT::LockFileExtension );
-
-    bool result = true;
-
-    if( lockPath.FileExists() )
-    {
-        result = wxRemoveFile( lockPath.GetFullPath() );
-        if( result )
-            wxLogTrace( HISTORY_LOCK_TRACE, "Removed stale lock: %s", lockPath.GetFullPath() );
-        else
-            wxLogError( "Failed to remove stale lock: %s", lockPath.GetFullPath() );
-    }
-
-    if( lockFilePath.FileExists() )
-    {
-        bool lockFileResult = wxRemoveFile( lockFilePath.GetFullPath() );
-        if( lockFileResult )
-            wxLogTrace( HISTORY_LOCK_TRACE, "Removed stale lockfile: %s", lockFilePath.GetFullPath() );
-        result = result && lockFileResult;
-    }
-
-    return result;
+    // Claim the abandoned lock before removing it, so a concurrent owner cannot be unlinked.
+    LOCKFILE lock( historyLockPath( aProjectPath ), true );
+    return lock.Locked();
 }
 
 

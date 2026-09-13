@@ -20,6 +20,8 @@
 #ifndef HISTORY_LOCK_H
 #define HISTORY_LOCK_H
 
+#include <kicommon.h>
+
 #include <memory>
 #include <wx/string.h>
 
@@ -53,7 +55,7 @@ class LOCKFILE;
  *   // Lock automatically released when object goes out of scope
  * @endcode
  */
-class HISTORY_LOCK_MANAGER
+class KICOMMON_API HISTORY_LOCK_MANAGER
 {
 public:
     /**
@@ -122,8 +124,8 @@ public:
     static bool IsLockStale( const wxString& aProjectPath, int aStaleTimeoutSec = 0 );
 
     /**
-     * Forcibly remove a stale lock file.
-     * Should only be called after confirming with user or if IsLockStale() returns true.
+     * Claim and remove an abandoned lock belonging to this user.
+     * A lock held by another process or user is never removed.
      *
      * @param aProjectPath Path to project directory
      * @return true if lock was removed successfully
