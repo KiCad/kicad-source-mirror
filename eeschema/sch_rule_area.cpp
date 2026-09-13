@@ -67,7 +67,11 @@ wxString SCH_RULE_AREA::GetFriendlyName() const
 
 EDA_ITEM* SCH_RULE_AREA::Clone() const
 {
-    return new SCH_RULE_AREA( *this );
+    auto clone = new SCH_RULE_AREA( *this );
+
+    // A clone has no reciprocal links to the source schematic's items.
+    clone->resetCaches();
+    return clone;
 }
 
 
