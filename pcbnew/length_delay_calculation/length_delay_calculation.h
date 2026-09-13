@@ -188,6 +188,13 @@ public:
      */
     int64_t CalculateLengthForDelay( int64_t aDesiredDelay, const TUNING_PROFILE_GEOMETRY_CONTEXT& aCtx ) const;
 
+    /**
+     * Returns true if a track length can be derived from a delay in a specific geometry context
+     *
+     * @param aCtx is the track geometry context to calculate propagation velocity against
+     */
+    bool CanCalculateLengthForDelay( const TUNING_PROFILE_GEOMETRY_CONTEXT& aCtx ) const;
+
     /// Optimises the given trace / line to minimise the electrical path length within the given pad
     static void OptimiseTraceInPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad, PCB_LAYER_ID aPcbLayer );
 

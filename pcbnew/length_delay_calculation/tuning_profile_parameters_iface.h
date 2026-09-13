@@ -122,6 +122,13 @@ public:
                                                        const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) = 0;
 
     /**
+     * Returns true if a track length can be derived from a propagation delay in the given geometry context.
+     *
+     * @param aContext the geometry context in which to query the propagation delay
+     */
+    virtual bool CanCalculateLengthForDelay( const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) const = 0;
+
+    /**
      * Gets the propagation delay for the given shape line chain
      *
      * @param aShape is the shape to calculate delay for

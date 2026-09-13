@@ -44,6 +44,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <length_delay_calculation/length_delay_calculation.h>
 #include <drc/drc_engine.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
@@ -1161,7 +1162,21 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     if( !( GetFlags() & IN_EDIT ) )
         return false;
 
-    UNLOCKER raiiUnlocker( this );
+    if( m_settings.m_isTimeDomain && !IsNew() )
+    {
+        TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
+        ctx.NetClass = m_settings.m_netClass;
+        ctx.Layer = GetLayer();
+        ctx.Width = m_trackWidth;
+        ctx.IsDiffPairCoupled = m_tuningMode != SINGLE;
+        ctx.DiffPairCouplingGap = m_diffPairGap;
+
+        // Without a delay model the placer targets the baseline length and strips the meanders
+        if( !aBoard->GetLengthCalculation()->CanCalculateLengthForDelay( ctx ) )
+            return false;
+    }
+
+    UNLOCKER raiiUnlocker( this ); // Unlock the pattern for editing
 
     KIGFX::VIEW*     view = aTool->GetManager()->GetView();
     PNS::ROUTER*     router = aTool->Router();

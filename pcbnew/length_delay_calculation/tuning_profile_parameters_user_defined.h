@@ -85,6 +85,13 @@ public:
                                                const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) override;
 
     /**
+     * Returns true if the net class tuning profile defines a non-zero track delay for the context layer.
+     *
+     * @param aContext the geometry context in which to query the propagation delay
+     */
+    bool CanCalculateLengthForDelay( const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) const override;
+
+    /**
      * Gets the propagation delay for the given shape line chain
      *
      * @param aShape is the shape to calculate delay for
@@ -158,6 +165,14 @@ private:
      * @returns Valid pointer to a tuning profile, or nullptr if no profile found
      */
     const TUNING_PROFILE* GetTuningProfile( const wxString& aDelayProfileName ) const;
+
+    /**
+     * Gets the track propagation delay per millimetre for the given geometry context
+     *
+     * @param aContext the geometry context in which to query the propagation delay
+     * @returns the delay per millimetre, or 0 if the net class tuning profile has no delay for the layer
+     */
+    double getTrackDelayPerMM( const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) const;
 
     /// Cached map of tuning profile names to per-layer time domain parameters
     std::map<wxString, const TUNING_PROFILE*> m_delayProfilesCache;
