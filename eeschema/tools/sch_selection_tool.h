@@ -252,7 +252,7 @@ private:
     {
         STOP_AT_JUNCTION,   ///< Stop at the first junction, label, or pin reached
         STOP_AT_PIN,        ///< Walk through junctions and labels but stop at pins
-        STOP_NEVER          ///< Walk the entire connected sub-net
+        STOP_NEVER          ///< Include the whole net on the current sheet
     };
 
     std::set<SCH_ITEM*> expandConnectionWithGraph( const SCH_SELECTION& aItems,

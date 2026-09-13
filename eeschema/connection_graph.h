@@ -521,16 +521,6 @@ public:
     }
 
     /**
-     * Return the subgraph for a given net name on a given sheet.
-     *
-     * @param aNetName is the local net name to look for.
-     * @param aPath is a sheet path to look on.
-     * @return the subgraph matching the query, or nullptr if none is found.
-     */
-    CONNECTION_SUBGRAPH* FindSubgraphByName( const wxString& aNetName,
-                                             const SCH_SHEET_PATH& aPath );
-
-    /**
      * Retrieve a subgraph for the given net name, if one exists.
      *
      * Search every sheet.

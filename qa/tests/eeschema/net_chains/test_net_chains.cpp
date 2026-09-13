@@ -28,6 +28,8 @@
 #include <sch_screen.h>
 #include <netclass.h>
 #include <sch_label.h>
+#include <sch_line.h>
+#include <connectivity/conn_navigation.h>
 #include <project.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
@@ -376,6 +378,63 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_DistinguishesSharedScreenInstances, SIGN
     BOOST_CHECK( secondCommitted->GetNets() == secondNets );
     BOOST_REQUIRE( manager.DeleteCommittedNetChain( "FIRST_INSTANCE" ) );
     BOOST_REQUIRE( manager.DeleteCommittedNetChain( "SECOND_INSTANCE" ) );
+}
+
+BOOST_AUTO_TEST_CASE( WholeNetQueryIncludesSeparatedNativeLabelIsland )
+{
+    SETTINGS_MANAGER settings;
+    std::unique_ptr<SCHEMATIC> schematic;
+    KI_TEST::LoadSchematic( settings, "net_chains_four_nets_labeled", schematic );
+    const auto path = schematic->Hierarchy().front();
+    SCH_PIN* left = nullptr;
+    SCH_PIN* right = nullptr;
+    SCH_LABEL* label = nullptr;
+    SCH_LINE* wire = nullptr;
+
+    for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetRef( &path ) == wxString( "R1" ) )
+            left = symbol->GetPin( wxString( "2" ) );
+        else if( symbol->GetRef( &path ) == wxString( "R2" ) )
+            right = symbol->GetPin( wxString( "1" ) );
+    }
+
+    BOOST_REQUIRE( left );
+    BOOST_REQUIRE( right );
+
+    for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_LABEL_T ) )
+    {
+        if( static_cast<SCH_LABEL*>( item )->GetText() == wxString( "SIG" ) )
+            label = static_cast<SCH_LABEL*>( item );
+    }
+
+    for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_LINE_T ) )
+    {
+        if( item->IsConnected( left->GetPosition() ) && item->IsConnected( right->GetPosition() ) )
+            wire = static_cast<SCH_LINE*>( item );
+    }
+
+    BOOST_REQUIRE( label );
+    BOOST_REQUIRE( wire );
+    auto* copiedWire = static_cast<SCH_LINE*>( wire->Clone() );
+    auto* copiedLabel = static_cast<SCH_LABEL*>( label->Clone() );
+    const_cast<KIID&>( copiedWire->m_Uuid ) = KIID();
+    const_cast<KIID&>( copiedLabel->m_Uuid ) = KIID();
+    copiedWire->Move( VECTOR2I( 0, 10000000 ) );
+    copiedLabel->Move( VECTOR2I( 0, 10000000 ) );
+    path.LastScreen()->Append( copiedWire );
+    path.LastScreen()->Append( copiedLabel );
+    const std::set<SCH_ITEM*> expected{ left, right, wire, label, copiedWire, copiedLabel };
+
+    schematic->ConnectionGraph()->Recalculate( schematic->Hierarchy(), true );
+    const SCH_CONNECTIVITY::NAVIGATION_QUERY query( *schematic );
+    const auto items = query.WholeNetItems( { wire, wire, nullptr }, path );
+    BOOST_CHECK_EQUAL( items.size(), expected.size() );
+    BOOST_CHECK( std::set<SCH_ITEM*>( items.begin(), items.end() ) == expected );
+    BOOST_CHECK( query.WholeNetItems( {}, path ).empty() );
+    BOOST_CHECK( query.WholeNetItems( { wire }, SCH_SHEET_PATH() ).empty() );
 }
 
 // EOF

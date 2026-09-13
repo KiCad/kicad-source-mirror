@@ -25,6 +25,7 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <connection_graph.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <dialogs/dialog_erc.h>
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/dialog_symbol_fields_table.h>
@@ -2135,22 +2136,20 @@ void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
 {
     if( !GetHighlightedNetChain().IsEmpty() )
     {
-        if( CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph() )
+        if( SCH_NETCHAIN* sig = m_schematic->NetChains().GetNetChainByName( GetHighlightedNetChain() ) )
         {
-            if( SCH_NETCHAIN* sig = graph->GetNetChainByName( GetHighlightedNetChain() ) )
+            wxString nets;
+
+            for( const wxString& n : sig->GetNets() )
             {
-                wxString nets;
+                if( !nets.IsEmpty() )
+                    nets += wxT( ", " );
 
-                for( const wxString& n : sig->GetNets() )
-                {
-                    if( !nets.IsEmpty() )
-                        nets += wxT( ", " );
-                    nets += n;
-                }
-
-                SetStatusText( wxString::Format( _( "Net chain members: %s" ), nets ) );
-                return;
+                nets += n;
             }
+
+            SetStatusText( wxString::Format( _( "Net chain members: %s" ), nets ) );
+            return;
         }
     }
 

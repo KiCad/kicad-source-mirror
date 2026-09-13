@@ -35,7 +35,7 @@
 #include <sch_sheet_pin.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
-#include <connection_graph.h>
+#include <connectivity/conn_navigation.h>
 #include <widgets/wx_aui_utils.h>
 #include <tools/sch_actions.h>
 #include <mail_type.h>
@@ -204,57 +204,18 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
 
 void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
                                            const NET_NAVIGATOR_ITEM_DATA* aSelection,
-                                           bool aSingleSheetSchematic )
+                                           const SCH_CONNECTIVITY::NAVIGATION_QUERY& aQuery )
 {
     wxCHECK( !aNetName.IsEmpty(), /* void */ );
     wxCHECK( m_schematic, /* void */ );
     wxCHECK( m_netNavigator, /* void */ );
 
-    wxTreeItemId expandId = aParentId;
-    CONNECTION_GRAPH* connectionGraph = m_schematic->ConnectionGraph();
+    const auto itemsBySheet = aQuery.NetItems( aNetName, true );
 
-    wxCHECK( connectionGraph, /* void */ );
-
-    std::set<CONNECTION_SUBGRAPH*> subgraphs;
-    std::set<wxString> netNamesToSearch;
-
-    netNamesToSearch.insert( aNetName );
-
-    for( const wxString& equivalent : connectionGraph->GetEquivalentBusNames( aNetName ) )
-        netNamesToSearch.insert( equivalent );
-
-    for( const wxString& netName : netNamesToSearch )
+    for( const auto& [sheetPath, items] : itemsBySheet )
     {
-        const std::vector<CONNECTION_SUBGRAPH*>& tmp = connectionGraph->GetAllSubgraphs( netName );
-        subgraphs.insert( tmp.begin(), tmp.end() );
-    }
-
-    for( CONNECTION_SUBGRAPH* sg : subgraphs )
-    {
-        for( const auto& [_, bus_sgs] : sg->GetBusParents() )
-        {
-            for( const CONNECTION_SUBGRAPH* bus_sg : bus_sgs )
-            {
-                const std::vector<CONNECTION_SUBGRAPH*>& tmp =
-                        connectionGraph->GetAllSubgraphs( bus_sg->GetNetName() );
-                subgraphs.insert( tmp.begin(), tmp.end() );
-            }
-        }
-    }
-
-    std::map<wxString, wxTreeItemId> sheetIds;
-
-    for( const CONNECTION_SUBGRAPH* subGraph : subgraphs )
-    {
-        NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
-        SCH_SHEET_PATH sheetPath = subGraph->GetSheet();
-
-        wxCHECK2( subGraph && sheetPath.Last(), continue );
-
-        if( subGraph->GetItems().empty() )
-            continue;
-
-        itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, nullptr );
+        wxCHECK2( sheetPath.Last(), continue );
+        auto* itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, nullptr );
 
         // Build path string for net navigator - include top-level sheet name to distinguish
         // multiple top-level sheets
@@ -280,26 +241,12 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
             txt = sheetPath.PathHumanReadable( true, true );
         }
 
-        wxTreeItemId sheetId;
-
-        if( auto sheetIdIt = sheetIds.find( txt ); sheetIdIt != sheetIds.end() )
-        {
-            sheetId = sheetIdIt->second;
-        }
-        else
-        {
-            sheetIds[txt] = m_netNavigator->AppendItem( aParentId, txt, -1, -1, itemData );
-            sheetId = sheetIds[txt];
-        }
+        wxTreeItemId sheetId = m_netNavigator->AppendItem( aParentId, txt, -1, -1, itemData );
 
         if( aSelection && *aSelection == *itemData )
             m_netNavigator->SelectItem( sheetId );
 
-        // If there is only one sheet in the schematic, always expand the sheet tree.
-        if( aSingleSheetSchematic )
-            expandId = sheetId;
-
-        for( const SCH_ITEM* item : subGraph->GetItems() )
+        for( const SCH_ITEM* item : items )
         {
             if( item->Type() == SCH_LINE_T
                     || item->Type() == SCH_JUNCTION_T
@@ -316,7 +263,6 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
             if( aSelection && *aSelection == *itemData )
             {
-                expandId = sheetId;
                 m_netNavigator->EnsureVisible( id );
                 m_netNavigator->SelectItem( id );
             }
@@ -341,7 +287,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
     if( m_netNavigatorFilter )
         m_netNavigatorFilter->Enable( m_highlightedConn.IsEmpty() );
 
-    bool   singleSheetSchematic = m_schematic->Hierarchy().size() == 1;
+    const SCH_CONNECTIVITY::NAVIGATION_QUERY query( *m_schematic );
     size_t nodeCnt = 0;
 
     wxWindowUpdateLocker updateLock( m_netNavigator );
@@ -390,15 +336,9 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
         // Create a tree of all nets in the schematic.
         wxTreeItemId rootId = m_netNavigator->AddRoot( _( "Nets" ), 0 );
 
-        const NET_MAP& netMap = m_schematic->ConnectionGraph()->GetNetMap();
-
-        for( const auto& net : netMap )
+        for( const wxString& netName : query.NetNames() )
         {
-            // Skip bus member subgraphs for the moment.
-            if( net.first.Name.IsEmpty() )
-                continue;
-
-            wxString displayName = UnescapeString( net.first.Name );
+            wxString displayName = UnescapeString( netName );
 
             // Apply filter based on mode
             if( !filter.IsEmpty() )
@@ -429,7 +369,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
             nodeCnt++;
             wxTreeItemId netId = m_netNavigator->AppendItem( rootId, displayName, -1, -1 );
-            MakeNetNavigatorNode( net.first.Name, netId, aSelection, singleSheetSchematic );
+            MakeNetNavigatorNode( netName, netId, aSelection, query );
         }        m_netNavigator->Expand( rootId );
     }
     else if( !m_netNavigator->IsEmpty() )
@@ -444,7 +384,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
             wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
 
-            MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, singleSheetSchematic );
+            MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, query );
         }
         else
         {
@@ -467,7 +407,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
             wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
 
-            MakeNetNavigatorNode( m_highlightedConn, rootId, itemData, singleSheetSchematic );
+            MakeNetNavigatorNode( m_highlightedConn, rootId, itemData, query );
         }
     }
     else
@@ -476,7 +416,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
         wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
 
-        MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, singleSheetSchematic );
+        MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, query );
     }
 
     timer.Stop();

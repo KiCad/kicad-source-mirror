@@ -422,6 +422,7 @@ set( EESCHEMA_SRCS
     bus-wire-junction.cpp
     connection_graph.cpp
     connectivity/conn_netchain_manager.cpp
+    connectivity/conn_navigation.cpp
     connectivity/conn_pin_name.cpp
     cross-probing.cpp
     sch_design_block_utils.cpp

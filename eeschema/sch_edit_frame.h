@@ -70,6 +70,11 @@ class wxGenericTreeCtrl;
 class BITMAP_BUTTON;
 
 
+namespace SCH_CONNECTIVITY
+{
+class NAVIGATION_QUERY;
+}
+
 /// Schematic search type used by the socket link with Pcbnew
 enum SCH_SEARCH_T
 {
@@ -311,9 +316,9 @@ public:
     /**
      * Send a connection (net or bus) to Pcbnew for highlighting.
      *
-     * @param aConnection is the connection to highlight
+     * @param aName is the net or bus name to highlight, or empty to clear.
      */
-    void SetCrossProbeConnection( const SCH_CONNECTION* aConnection );
+    void SetCrossProbeConnection( const wxString& aName );
 
     /**
      * Tell Pcbnew to clear the existing highlighted net, if one exists
@@ -933,7 +938,7 @@ public:
 
     void MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
                                const NET_NAVIGATOR_ITEM_DATA* aSelection,
-                               bool aSingleSheetSchematic );
+                               const SCH_CONNECTIVITY::NAVIGATION_QUERY& aQuery );
 
     void SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
 

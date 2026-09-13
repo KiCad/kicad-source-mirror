@@ -30,6 +30,7 @@
 #include <connection_graph.h>
 #include <sch_netchain.h>
 #include <connectivity/conn_netchain_manager.h>
+#include <connectivity/conn_navigation.h>
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
@@ -3460,6 +3461,14 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
 
     for( SCH_ITEM* item : startItems )
         enqueue( item );
+
+    if( aStopCondition == STOP_CONDITION::STOP_NEVER )
+    {
+        SCH_CONNECTIVITY::NAVIGATION_QUERY query( editFrame->Schematic() );
+
+        for( SCH_ITEM* item : query.WholeNetItems( startItems, currentSheet ) )
+            enqueue( item );
+    }
 
     while( !queue.empty() )
     {

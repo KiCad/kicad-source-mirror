@@ -3775,28 +3775,6 @@ wxString CONNECTION_GRAPH::GetResolvedSubgraphName( const CONNECTION_SUBGRAPH* a
 }
 
 
-CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName( const wxString& aNetName,
-                                                           const SCH_SHEET_PATH& aPath )
-{
-    auto it = m_net_name_to_subgraphs_map.find( aNetName );
-
-    if( it == m_net_name_to_subgraphs_map.end() )
-        return nullptr;
-
-    for( CONNECTION_SUBGRAPH* sg : it->second )
-    {
-        // Cache is supposed to be valid by now
-        // Should we continue if the cache is not valid?
-        wxASSERT( sg && !sg->m_absorbed && sg->m_driver_connection );
-
-        if( sg->m_sheet == aPath && sg->m_driver_connection->Name() == aNetName )
-            return sg;
-    }
-
-    return nullptr;
-}
-
-
 CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindFirstSubgraphByName( const wxString& aNetName )
 {
     auto it = m_net_name_to_subgraphs_map.find( aNetName );
