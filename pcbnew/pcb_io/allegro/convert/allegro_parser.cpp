@@ -1647,7 +1647,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2B( FILE_STREAM& stream, FMT_VER
     data.m_UnknownPtr3 = stream.ReadU32();
     data.m_UnknownPtr4 = stream.ReadU32();
     data.m_UnknownPtr5 = stream.ReadU32();
-    data.m_SymLibPathPtr = stream.ReadU32();
+    data.m_FieldsPtr = stream.ReadU32();
     data.m_UnknownPtr6 = stream.ReadU32();
     data.m_UnknownPtr7 = stream.ReadU32();
     data.m_UnknownPtr8 = stream.ReadU32();

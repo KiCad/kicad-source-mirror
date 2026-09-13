@@ -654,6 +654,8 @@ enum FIELD_KEYS
     MIN_NECK_WIDTH = 0x5c,
     MAX_NECK_LENGTH = 0x1fb,
     PHYS_CONSTRAINT_SET = 0x1a0,  ///< Physical Constraint Set assignment
+    MODEL_3D_FILE = 0x345,        ///< 3D model file name, size, mtime and display colour
+    MODEL_3D_PLACEMENT = 0x346,   ///< 3D model units, XYZ offset and XYZ rotation
 };
 
 
@@ -1852,9 +1854,10 @@ struct BLK_0x2A_LAYER_LIST
 
 
 /**
- * Footprint definition (template) shared by multiple placed instances. Contains the
- * library symbol path (m_SymLibPathPtr), bounding box, and a linked list of placed
- * instances starting at m_FirstInstPtr (0x2D blocks).
+ * Footprint definition (template) shared by multiple placed instances. Contains a
+ * chain of 0x03 FIELD blocks (m_FieldsPtr) holding the library symbol path and the
+ * 3D model assignment, a bounding box, and a linked list of placed instances
+ * starting at m_FirstInstPtr (0x2D blocks).
  */
 struct BLK_0x2B_FOOTPRINT_DEF
 {
@@ -1873,7 +1876,10 @@ struct BLK_0x2B_FOOTPRINT_DEF
     uint32_t m_UnknownPtr3;
     uint32_t m_UnknownPtr4;
     uint32_t m_UnknownPtr5;
-    uint32_t m_SymLibPathPtr;
+
+    ///< Pointer to first 0x03 FIELD object or null
+    uint32_t m_FieldsPtr;
+
     uint32_t m_UnknownPtr6;
     uint32_t m_UnknownPtr7;
     uint32_t m_UnknownPtr8;

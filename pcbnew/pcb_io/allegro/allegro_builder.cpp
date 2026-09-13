@@ -21,6 +21,7 @@
 #include "allegro_builder.h"
 #include "allegro_db_utils.h"
 
+#include <array>
 #include <cmath>
 #include <limits>
 #include <regex>
@@ -31,6 +32,7 @@
 
 #include <convert/allegro_pcb_structs.h>
 
+#include <wx/arrstr.h>
 #include <wx/log.h>
 
 #include <core/profile.h>
@@ -2983,6 +2985,88 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 }
 
 
+static std::optional<double> modelUnitToMm( const wxString& aUnits )
+{
+    if( aUnits == wxS( "MM" ) )
+        return 1.0;
+    else if( aUnits == wxS( "CM" ) )
+        return 10.0;
+    else if( aUnits == wxS( "MICRONS" ) )
+        return 0.001;
+    else if( aUnits == wxS( "MILS" ) )
+        return 0.0254;
+    else if( aUnits == wxS( "INCH" ) )
+        return 25.4;
+
+    return std::nullopt;
+}
+
+
+// Allegro holds the model assignment on the package definition as two comma separated
+// properties, the file name plus cache metadata and the placement in the symbol frame
+static std::optional<FP_3DMODEL> build3DModel( const BRD_DB& aDb, const BLK_0x2B_FOOTPRINT_DEF& aFpDef )
+{
+    std::optional<FIELD_VALUE> fileField =
+            GetFirstFieldOfType( aDb, aFpDef.m_FieldsPtr, aFpDef.m_Key, FIELD_KEYS::MODEL_3D_FILE );
+
+    const wxString* fileValue = fileField.has_value() ? std::get_if<wxString>( &fileField.value() ) : nullptr;
+
+    if( !fileValue )
+        return std::nullopt;
+
+    wxString fileName = fileValue->BeforeFirst( ',' ).Trim( true ).Trim( false );
+
+    if( fileName.IsEmpty() )
+        return std::nullopt;
+
+    FP_3DMODEL model;
+    model.m_Filename = fileName;
+
+    std::optional<FIELD_VALUE> placementField =
+            GetFirstFieldOfType( aDb, aFpDef.m_FieldsPtr, aFpDef.m_Key, FIELD_KEYS::MODEL_3D_PLACEMENT );
+
+    const wxString* placementValue =
+            placementField.has_value() ? std::get_if<wxString>( &placementField.value() ) : nullptr;
+
+    if( !placementValue )
+        return model;
+
+    wxArrayString tokens = wxSplit( *placementValue, ',', '\0' );
+
+    if( tokens.size() < 7 )
+    {
+        wxLogTrace( traceAllegroBuilder, "  Ignoring malformed 3D placement '%s'", *placementValue );
+        return model;
+    }
+
+    const std::optional<double> toMm = modelUnitToMm( tokens[0].Trim( true ).Trim( false ).Upper() );
+
+    if( !toMm.has_value() )
+    {
+        wxLogTrace( traceAllegroBuilder, "  Unknown 3D placement units '%s'", tokens[0] );
+        return model;
+    }
+
+    std::array<double, 6> placement{};
+
+    for( size_t i = 0; i < placement.size(); ++i )
+    {
+        if( !tokens[i + 1].Trim( true ).Trim( false ).ToCDouble( &placement[i] ) )
+        {
+            wxLogTrace( traceAllegroBuilder, "  Ignoring malformed 3D placement '%s'", *placementValue );
+            return model;
+        }
+    }
+
+    // Allegro and the KiCad 3D scene share a Z-up, Y-up frame local to the symbol, but KiCad
+    // stores the negation of the rotation its renderers apply
+    model.m_Offset = VECTOR3D( placement[0] * *toMm, placement[1] * *toMm, placement[2] * *toMm );
+    model.m_Rotation = VECTOR3D( -placement[3], -placement[4], -placement[5] );
+
+    return model;
+}
+
+
 std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRINT_INST& aFpInstance )
 {
     std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( &m_board );
@@ -4682,12 +4766,17 @@ bool BOARD_BUILDER::BuildBoard()
                                        RPT_SEVERITY_ERROR );
                 } );
 
+        const std::optional<FP_3DMODEL> model3D = build3DModel( m_brdDb, fpBlock );
+
         for( const BLK_0x2D_FOOTPRINT_INST& inst : instWalker )
         {
             std::unique_ptr<FOOTPRINT> fp = buildFootprint( inst );
 
             if( fp )
             {
+                if( model3D.has_value() )
+                    fp->Models().push_back( *model3D );
+
                 stampIds( *fp, inst.m_Key );
                 bulkAddedItems.push_back( fp.get() );
                 m_board.Add( fp.release(), ADD_MODE::BULK_APPEND, true );

@@ -653,6 +653,38 @@ BOOST_AUTO_TEST_CASE( ImportIsRepeatable )
 }
 
 
+// The 3D model assignment lives on the Allegro package definition, so every placed instance
+// of a package that names one carries it
+BOOST_AUTO_TEST_CASE( Footprint3DModels )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "led_youtube/led_youtube.brd" );
+    BOOST_REQUIRE( board );
+
+    std::map<wxString, FP_3DMODEL> models;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        BOOST_REQUIRE_EQUAL( fp->Models().size(), 1u );
+        models.emplace( fp->Models().front().m_Filename, fp->Models().front() );
+    }
+
+    BOOST_REQUIRE_EQUAL( models.size(), 3u );
+    BOOST_CHECK_EQUAL( models.count( wxS( "led3d.stp" ) ), 1u );
+    BOOST_CHECK_EQUAL( models.count( wxS( "AC0805FR-07360RL.STEP" ) ), 1u );
+    BOOST_REQUIRE_EQUAL( models.count( wxS( "22272021.stp" ) ), 1u );
+
+    // Placement of the connector package is "MM,0.020000,-1.270000,1.580007,90.000,-0.000,90.000"
+    const FP_3DMODEL& conn = models.at( wxS( "22272021.stp" ) );
+
+    BOOST_CHECK_CLOSE( conn.m_Offset.x, 0.02, 1e-6 );
+    BOOST_CHECK_CLOSE( conn.m_Offset.y, -1.27, 1e-6 );
+    BOOST_CHECK_CLOSE( conn.m_Offset.z, 1.580007, 1e-6 );
+    BOOST_CHECK_CLOSE( conn.m_Rotation.x, -90.0, 1e-6 );
+    BOOST_CHECK_SMALL( conn.m_Rotation.y, 1e-9 );
+    BOOST_CHECK_CLOSE( conn.m_Rotation.z, -90.0, 1e-6 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 
