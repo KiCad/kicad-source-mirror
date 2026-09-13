@@ -7821,16 +7821,16 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad, PCB_LAYER_ID aLayer 
             token = NextTok();
 
             // TODO: m_customShapeInZoneMode is not per-layer at the moment
-            if( aLayer != F_Cu )
-                break;
-
-            // Custom shaped pads have a clearance area that is the pad shape (like usual pads) or the
-            // convex hull of the pad shape.
-            switch( token )
+            if( aLayer == F_Cu )
             {
-            case T_outline:    aPad->SetCustomShapeInZoneOpt( CUSTOM_SHAPE_ZONE_MODE::OUTLINE );    break;
-            case T_convexhull: aPad->SetCustomShapeInZoneOpt( CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL ); break;
-            default:           Expecting( "outline or convexhull" );
+                // Custom shaped pads have a clearance area that is the pad shape (like usual pads) or the
+                // convex hull of the pad shape.
+                switch( token )
+                {
+                case T_outline:    aPad->SetCustomShapeInZoneOpt( CUSTOM_SHAPE_ZONE_MODE::OUTLINE );    break;
+                case T_convexhull: aPad->SetCustomShapeInZoneOpt( CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL ); break;
+                default:           Expecting( "outline or convexhull" );
+                }
             }
 
             NeedRIGHT();
