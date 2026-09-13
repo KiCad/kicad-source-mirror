@@ -136,10 +136,9 @@ private:
 };
 
 
-ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, double aBaseValue ) :
+ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double aValue, double aBaseValue ) :
         wxPanel( aParent, wxID_ANY ),
-        m_baseValue( aBaseValue ),
-        m_value( &aValue )
+        m_baseValue( aBaseValue )
 {
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -204,24 +203,8 @@ int ZOOM_CORRECTION_CTRL::GetUnitsSelection() const
 }
 
 
-bool ZOOM_CORRECTION_CTRL::TransferDataToWindow()
-{
-    m_spinner->SetValue( (int)( *m_value * m_baseValue ) );
-    m_ruler->Refresh();
-    return true;
-}
-
-
-bool ZOOM_CORRECTION_CTRL::TransferDataFromWindow()
-{
-    *m_value = GetValue();
-    return true;
-}
-
-
 void ZOOM_CORRECTION_CTRL::spinnerChanged( wxSpinEvent& )
 {
-    *m_value = m_spinner->GetValue() / m_baseValue;
     m_ruler->Refresh();
 }
 
