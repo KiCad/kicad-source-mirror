@@ -27,6 +27,17 @@ class EDA_SHAPE;
 
 
 /**
+ * Outcome of an interactive shape drawing loop, telling the caller how to continue.
+ */
+enum class SHAPE_DRAW_RESULT
+{
+    CANCELLED,   ///< The user cancelled; nothing to commit, stop drawing.
+    NEXT_SHAPE,  ///< Commit the shape, if any, and start drawing another.
+    FINISHED     ///< The user finished; commit the shape, if any, and stop drawing.
+};
+
+
+/**
  * Abstract interface for interactive shape-drawing behaviours.
  *
  * Concrete implementations wrap a geometry manager (for the construction

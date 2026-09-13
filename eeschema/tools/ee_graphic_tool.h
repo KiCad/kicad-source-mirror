@@ -21,13 +21,13 @@
 
 #include <vector>
 
+#include <tool/shape_draw_behavior.h>
 #include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
 #include <sch_shape.h>
 
 class SCH_EDIT_FRAME;
 class SYMBOL_EDIT_FRAME;
-class SHAPE_DRAW_BEHAVIOR;
 
 
 /**
@@ -77,10 +77,11 @@ private:
      * Run the interactive drawing event loop for any shape driven by a
      * @ref SHAPE_DRAW_BEHAVIOR (arcs, ellipse arcs, etc.).
      *
-     * @return true if the shape was completed, false if cancelled.
+     * @return the outcome of the drawing loop, handle appropriately (commit,
+     *         start another, or stop).
      */
-    bool drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aShape, SHAPE_DRAW_BEHAVIOR& aBehavior,
-                           const std::vector<VECTOR2D>& aInitialPts );
+    SHAPE_DRAW_RESULT drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aShape,
+                                        SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts );
 
     FILL_T        m_lastFillStyle;
     COLOR4D       m_lastFillColor;

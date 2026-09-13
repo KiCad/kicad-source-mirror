@@ -27,6 +27,7 @@
 #include <stack>
 #include <optional>
 #include <eda_shape.h>
+#include <tool/shape_draw_behavior.h>
 #include <tool/tool_menu.h>
 #include <tools/pcb_selection.h>
 #include <tools/pcb_tool_base.h>
@@ -49,7 +50,6 @@ class BOARD_CONNECTED_ITEM;
 class PCB_VIA;
 class POLYGON_GEOM_MANAGER;
 class PCB_TUNING_PATTERN;
-class SHAPE_DRAW_BEHAVIOR;
 class STATUS_MIN_MAX_POPUP;
 
 
@@ -307,10 +307,10 @@ private:
      *                  on completion the caller can take ownership (e.g. to release into a COMMIT).
      * @param aInitialPts  points to pre-load into the behaviour before the first user click, e.g. start
      *                     point and mirrored control point for tangent-continuous bezier chaining.
-     * @return true if the shape was completed, false if cancelled.
+     * @return the outcome of the drawing loop: see @ref SHAPE_DRAW_RESULT.
      */
-    bool drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
-                           SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts );
+    SHAPE_DRAW_RESULT drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
+                                        SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts );
 
     /**
      * Get a source zone item for an action that takes an existing zone into account (for

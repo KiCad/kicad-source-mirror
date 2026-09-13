@@ -337,6 +337,7 @@ bool DRAWING_TOOL::Init()
             [this]( const SELECTION& aSel )
             {
                 return (   m_mode == MODE::ARC
+                        || m_mode == MODE::ELLIPSE_ARC
                         || m_mode == MODE::ZONE
                         || m_mode == MODE::KEEPOUT
                         || m_mode == MODE::GRAPHIC_POLYGON
@@ -357,6 +358,15 @@ bool DRAWING_TOOL::Init()
             [this]( const SELECTION& aSel )
             {
                 return m_mode == MODE::ARC;
+            };
+
+    // managed shape loops (arc, ellipse arc, bezier) can be finished early
+    auto canFinishShape =
+            [this]( const SELECTION& aSel )
+            {
+                return (   m_mode == MODE::ARC
+                        || m_mode == MODE::ELLIPSE_ARC
+                        || m_mode == MODE::BEZIER );
             };
 
     auto viaToolActive =
@@ -389,6 +399,7 @@ bool DRAWING_TOOL::Init()
     // tool-specific actions
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,          canCloseOutline, 200 );
     ctxMenu.AddItem( ACTIONS::deleteLastPoint,           canUndoPoint, 200 );
+    ctxMenu.AddItem( ACTIONS::finishInteractive,         canFinishShape, 200 );
     ctxMenu.AddItem( ACTIONS::arcPosture,                arcToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,       tuningToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,       tuningToolActive, 200 );
@@ -648,8 +659,12 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     ARC_DRAW_BEHAVIOR arcBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
-    while( drawManagedShape( originalEvent, arc, arcBehavior, initialPts ) )
+    SHAPE_DRAW_RESULT result = SHAPE_DRAW_RESULT::NEXT_SHAPE;
+
+    while( result == SHAPE_DRAW_RESULT::NEXT_SHAPE )
     {
+        result = drawManagedShape( originalEvent, arc, arcBehavior, initialPts );
+
         if( arc )
         {
             PCB_SHAPE* committedArc = arc.get();
@@ -687,10 +702,11 @@ int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    BOARD_ITEM*             parent = m_frame->GetModel();
+    BOARD_ITEM*                parent = m_frame->GetModel();
     std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( parent );
-    BOARD_COMMIT            commit( m_frame );
-    std::vector<VECTOR2D>   initialPts;
+    BOARD_COMMIT               commit( m_frame );
+    SCOPED_DRAW_MODE           scopedDrawMode( m_mode, MODE::ELLIPSE_ARC );
+    std::vector<VECTOR2D>      initialPts;
 
     arc->SetShape( SHAPE_T::ELLIPSE_ARC );
     arc->SetFlags( IS_NEW );
@@ -705,8 +721,12 @@ int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
 
     ELLIPSE_ARC_DRAW_BEHAVIOR ellipseBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
-    while( drawManagedShape( originalEvent, arc, ellipseBehavior, initialPts ) )
+    SHAPE_DRAW_RESULT result = SHAPE_DRAW_RESULT::NEXT_SHAPE;
+
+    while( result == SHAPE_DRAW_RESULT::NEXT_SHAPE )
     {
+        result = drawManagedShape( originalEvent, arc, ellipseBehavior, initialPts );
+
         if( arc )
         {
             PCB_SHAPE* committedArc = arc.get();
@@ -763,8 +783,12 @@ int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 
     BEZIER_DRAW_BEHAVIOR bezierBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
-    while( drawManagedShape( originalEvent, bezier, bezierBehavior, initialPts ) )
+    SHAPE_DRAW_RESULT result = SHAPE_DRAW_RESULT::NEXT_SHAPE;
+
+    while( result == SHAPE_DRAW_RESULT::NEXT_SHAPE )
     {
+        result = drawManagedShape( originalEvent, bezier, bezierBehavior, initialPts );
+
         if( bezier )
         {
             // Chain: next bezier starts at the end of this one
@@ -3192,11 +3216,12 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
 }
 
 
-bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
-                                     SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts )
+SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
+                                                  SHAPE_DRAW_BEHAVIOR&         aBehavior,
+                                                  const std::vector<VECTOR2D>& aInitialPts )
 {
     if( !aGraphic )
-        return false;
+        return SHAPE_DRAW_RESULT::CANCELLED;
 
     PCB_SHAPE* graphic = aGraphic.get();
 
@@ -3236,6 +3261,7 @@ bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PC
 
     bool started = false;
     bool cancelled = false;
+    bool finished = false;
 
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
@@ -3351,6 +3377,18 @@ bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PC
             }
 
             aBehavior.AddPoint( cursorPos );
+        }
+        else if( evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorDblClick )
+                || evt->IsAction( &ACTIONS::finishInteractive ) )
+        {
+            // Keep whatever we have so far, and bail.  The caller commits it, but does
+            // not start another shape in the chain.
+            if( !started )
+                cleanup();
+
+            finished = true;
+            break;
         }
         else if( evt->IsAction( &ACTIONS::deleteLastPoint ) )
         {
@@ -3492,12 +3530,13 @@ bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PC
     m_controls->ForceCursorPosition( false );
 
     if( cancelled )
+    {
         aGraphic.reset();
+        return SHAPE_DRAW_RESULT::CANCELLED;
+    }
 
-    return !cancelled;
+    return finished ? SHAPE_DRAW_RESULT::FINISHED : SHAPE_DRAW_RESULT::NEXT_SHAPE;
 }
-
-
 
 
 bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )

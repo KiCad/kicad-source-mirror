@@ -77,7 +77,7 @@ bool EE_GRAPHIC_TOOL::Init()
                 return m_mode == MODE::ARC;
             };
 
-    const auto canUndoPoint = [this]( const SELECTION& aSel )
+    const auto inManagedShape = [this]( const SELECTION& aSel )
             {
                 return m_mode == MODE::ARC || m_mode == MODE::BEZIER || m_mode == MODE::ELLIPSE_ARC;
             };
@@ -85,8 +85,9 @@ bool EE_GRAPHIC_TOOL::Init()
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
 
     // clang-format off
-    ctxMenu.AddItem( ACTIONS::arcPosture,          inDrawingArc,    200 );
-    ctxMenu.AddItem( ACTIONS::deleteLastPoint,     canUndoPoint,    200 );
+    ctxMenu.AddItem( ACTIONS::arcPosture,          inDrawingArc,      200 );
+    ctxMenu.AddItem( ACTIONS::deleteLastPoint,     inManagedShape,    200 );
+    ctxMenu.AddItem( ACTIONS::finishInteractive,   inManagedShape,    200 );
     // clang-format on
 
     return true;
@@ -460,8 +461,12 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     ARC_DRAW_BEHAVIOR arcBehavior( schIUScale, frame()->GetUserUnits() );
 
-    while( drawManagedShape( originalEvent, arc, arcBehavior, initialPts ) )
+    SHAPE_DRAW_RESULT result = SHAPE_DRAW_RESULT::NEXT_SHAPE;
+
+    while( result == SHAPE_DRAW_RESULT::NEXT_SHAPE )
     {
+        result = drawManagedShape( originalEvent, arc, arcBehavior, initialPts );
+
         if( arc )
         {
             m_lastStroke = arc->GetStroke();
@@ -526,8 +531,12 @@ int EE_GRAPHIC_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
 
     ELLIPSE_ARC_DRAW_BEHAVIOR ellipseBehavior( schIUScale, frame()->GetUserUnits() );
 
-    while( drawManagedShape( originalEvent, arc, ellipseBehavior, initialPts ) )
+    SHAPE_DRAW_RESULT result = SHAPE_DRAW_RESULT::NEXT_SHAPE;
+
+    while( result == SHAPE_DRAW_RESULT::NEXT_SHAPE )
     {
+        result = drawManagedShape( originalEvent, arc, ellipseBehavior, initialPts );
+
         if( arc )
         {
             m_lastStroke = arc->GetStroke();
@@ -592,8 +601,12 @@ int EE_GRAPHIC_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 
     BEZIER_DRAW_BEHAVIOR bezierBehavior( schIUScale, frame()->GetUserUnits() );
 
-    while( drawManagedShape( originalEvent, bezier, bezierBehavior, initialPts ) )
+    SHAPE_DRAW_RESULT result = SHAPE_DRAW_RESULT::NEXT_SHAPE;
+
+    while( result == SHAPE_DRAW_RESULT::NEXT_SHAPE )
     {
+        result = drawManagedShape( originalEvent, bezier, bezierBehavior, initialPts );
+
         if( bezier )
         {
             m_lastStroke = bezier->GetStroke();
@@ -630,11 +643,13 @@ int EE_GRAPHIC_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 }
 
 
-bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aShape,
-                                        SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts )
+SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool,
+                                                     std::unique_ptr<SCH_SHAPE>& aShape,
+                                                     SHAPE_DRAW_BEHAVIOR& aBehavior,
+                                                     const std::vector<VECTOR2D>& aInitialPts )
 {
     if( !aShape )
-        return false;
+        return SHAPE_DRAW_RESULT::CANCELLED;
 
     aBehavior.Reset();
 
@@ -666,6 +681,7 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
 
     bool started = false;
     bool cancelled = false;
+    bool finished = false;
 
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
@@ -750,6 +766,17 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
 
             aBehavior.AddPoint( cursorPos );
         }
+        else if( evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorDblClick )
+                || evt->IsAction( &ACTIONS::finishInteractive ) )
+        {
+            // Keep whatever we have so far, and report that we're finished.
+            if( !started )
+                cleanup();
+
+            finished = true;
+            break;
+        }
         else if( evt->IsAction( &ACTIONS::arcPosture ) )
         {
             aBehavior.ToggleClockwise();
@@ -816,9 +843,12 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     if( cancelled )
+    {
         aShape.reset();
+        return SHAPE_DRAW_RESULT::CANCELLED;
+    }
 
-    return !cancelled;
+    return finished ? SHAPE_DRAW_RESULT::FINISHED : SHAPE_DRAW_RESULT::NEXT_SHAPE;
 }
 
 
