@@ -92,10 +92,14 @@ public:
 
     /**
      * Reset the manager to the initial state.
+     *
+     * Subclasses that hold construction state beyond the step counter must override this
+     * and clear that state too.
      */
-    void Reset()
+    virtual void Reset()
     {
         m_step = 0;
+        m_lastPoint = VECTOR2I();
         setGeometryChanged();
     }
 

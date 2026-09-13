@@ -47,6 +47,22 @@ bool ARC_GEOM_MANAGER::acceptPoint( const VECTOR2I& aPt )
 }
 
 
+void ARC_GEOM_MANAGER::Reset()
+{
+    MULTISTEP_GEOM_MANAGER::Reset();
+
+    // The manager is reused for every arc in a chain, so the next arc must not inherit the
+    // previous arc's direction, its locked-in direction choice, or its geometry
+    m_clockwise = true;
+    m_directionLocked = false;
+    m_angleSnap = false;
+    m_origin = VECTOR2I();
+    m_radius = 0.0;
+    m_startAngle = ANGLE_0;
+    m_endAngle = ANGLE_0;
+}
+
+
 void ARC_GEOM_MANAGER::SetClockwise( bool aCw )
 {
     m_clockwise = aCw;

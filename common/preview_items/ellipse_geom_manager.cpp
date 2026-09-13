@@ -42,6 +42,22 @@ bool ELLIPSE_GEOM_MANAGER::acceptPoint( const VECTOR2I& aPt )
 }
 
 
+void ELLIPSE_GEOM_MANAGER::Reset()
+{
+    MULTISTEP_GEOM_MANAGER::Reset();
+
+
+    m_bboxC1 = VECTOR2I();
+    m_bboxC2 = VECTOR2I();
+    m_center = VECTOR2I();
+    m_majorRadius = 1.0;
+    m_minorRadius = 1.0;
+    m_rotation = ANGLE_0;
+    m_startAngle = ANGLE_0;
+    m_endAngle = ANGLE_360;
+}
+
+
 bool ELLIPSE_GEOM_MANAGER::setBboxCorner1( const VECTOR2I& aPt )
 {
     m_bboxC1 = aPt;

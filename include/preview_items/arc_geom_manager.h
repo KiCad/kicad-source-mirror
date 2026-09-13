@@ -62,6 +62,8 @@ public:
         return static_cast<ARC_STEPS>( getStep() );
     }
 
+    void Reset() override;
+
     ///< The arc to be clockwise from start
     void SetClockwise( bool aCw );
 

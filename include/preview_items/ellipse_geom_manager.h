@@ -55,6 +55,12 @@ public:
 
     ELLIPSE_STEPS GetStep() const { return static_cast<ELLIPSE_STEPS>( getStep() ); }
 
+    /**
+     * Reset the manager to its initial state, clearing all construction state so that the
+     * next ellipse in a chained drawing session is not fitted from the previous one.
+     */
+    void Reset() override;
+
     /*
     * Geometry query interface - used by clients of the manager
     */
