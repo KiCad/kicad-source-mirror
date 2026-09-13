@@ -701,8 +701,6 @@ SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool,
         preview.Add( aShape.get() );
         frame()->SetMsgPanel( aShape.get() );
 
-        m_toolMgr->PrimeTool( aInitialPts.back() );
-
         started = true;
     }
 

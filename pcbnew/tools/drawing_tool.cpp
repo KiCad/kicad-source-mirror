@@ -3290,8 +3290,6 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
         preview.Add( graphic );
         frame()->SetMsgPanel( graphic );
 
-        m_toolMgr->PrimeTool( aInitialPts.back() );
-
         started = true;
     }
 
