@@ -640,8 +640,11 @@ bool SCHEMATIC::ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* toke
     }
 
     // aSheetPath->LastScreen() can be null during schematic loading
-    if( aSheetPath->LastScreen() && aSheetPath->LastScreen()->GetTitleBlock().TextVarResolver( token, m_project ) )
+    if( aSheetPath->LastScreen()
+            && aSheetPath->LastScreen()->GetTitleBlock().TextVarResolver( token, m_project, INTERNAL ) )
+    {
         return true;
+    }
 
     if( m_project->TextVarResolver( token ) )
         return true;
@@ -1331,7 +1334,7 @@ void SCHEMATIC::RecomputeIntersheetRefs()
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
         {
             SCH_GLOBALLABEL* global = static_cast<SCH_GLOBALLABEL*>( item );
-            wxString         resolvedLabel = global->GetShownText( &sheet, false );
+            wxString         resolvedLabel = global->GetShownText( &sheet, FOR_GUI );
 
             pageRefsMap[resolvedLabel].insert( sheet.GetVirtualPageNumber() );
         }

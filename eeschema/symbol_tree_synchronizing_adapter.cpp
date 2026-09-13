@@ -307,9 +307,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
             const wxString& key = m_colIdxMap.at( aCol );
 
             if( m_frame->GetCurSymbol() && m_frame->GetCurSymbol()->GetLibId() == node->m_LibId )
-            {
-                node->m_Desc = m_frame->GetCurSymbol()->GetShownDescription();
-            }
+                node->m_Desc = m_frame->GetCurSymbol()->GetShownDescription( FOR_GUI );
 
             wxString valueStr;
 

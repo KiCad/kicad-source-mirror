@@ -207,13 +207,13 @@ public:
      * @return the associated LIB_SYMBOL's description field (or wxEmptyString).
      */
     wxString GetDescription() const override;
-    wxString GetShownDescription( int aDepth = 0 ) const override;
+    wxString GetShownDescription( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
     /**
      * @return the associated LIB_SYMBOL's keywords field (or wxEmptyString).
      */
     wxString GetKeyWords() const override;
-    wxString GetShownKeyWords( int aDepth = 0 ) const override;
+    wxString GetShownKeyWords( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
     /**
      * Return the documentation text for the given part alias
@@ -505,14 +505,14 @@ public:
     /**
      * @return the value for the instance on the given sheet.
      */
-    const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
-                             bool aAllowExtraText, const wxString& aVariantName = wxEmptyString ) const override;
+    const wxString GetValue( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext,
+                             const wxString& aVariantName = wxEmptyString ) const override;
 
     void SetValueFieldText( const wxString& aValue, const SCH_SHEET_PATH* aInstance = nullptr,
                             const wxString& aVariantName = wxEmptyString );
 
-    const wxString GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
-                                          bool aAllowExtraText, const wxString& aVariantName = wxEmptyString ) const;
+    const wxString GetFootprintFieldText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext,
+                                          const wxString& aVariantName = wxEmptyString ) const;
     void SetFootprintFieldText( const wxString& aFootprint );
 
     /*
@@ -527,7 +527,7 @@ public:
 
     wxString GetValueProp() const
     {
-        return GetValue( false, &Schematic()->CurrentSheet(), false, Schematic()->GetCurrentVariant() );
+        return GetValue( &Schematic()->CurrentSheet(), RAW_VALUE, Schematic()->GetCurrentVariant() );
     }
 
     void SetValueProp( const wxString& aValue );  // Implemented in sch_symbol.cpp for tracing

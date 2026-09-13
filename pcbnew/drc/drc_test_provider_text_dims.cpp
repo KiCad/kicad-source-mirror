@@ -132,7 +132,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     if( !constraint.Value().HasMin() || constraint.Value().Min() <= 0 )
                         return true;
 
-                    auto* glyphs = text->GetRenderCache( font, text->GetShownText( true ) );
+                    auto* glyphs = text->GetRenderCache( font, text->GetShownText( FOR_CANVAS ) );
                     bool  collapsedStroke = false;
                     bool  collapsedArea = false;
 

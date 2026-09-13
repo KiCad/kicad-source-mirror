@@ -781,7 +781,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetP
     }
 
     m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
-    m_footprint  = aSymbol->GetFootprintFieldText( true, &aSheetPath, false );
+    m_footprint  = aSymbol->GetFootprintFieldText( &aSheetPath, RESOLVED );
     m_sheetPath  = aSheetPath;
     m_isNew      = false;
     m_flag       = 0;
@@ -797,7 +797,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetP
 
     m_numRef = -1;
 
-    wxString value = aSymbol->GetValue( false, &aSheetPath, false );
+    wxString value = aSymbol->GetValue( &aSheetPath, RESOLVED );
 
     if( value.IsEmpty() )
         value = wxT( "~" );

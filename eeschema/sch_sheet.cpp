@@ -521,7 +521,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
 
         if( token->IsSameAs( fieldName ) )
         {
-            *token = field.GetShownText( aPath, false, aDepth + 1 );
+            *token = field.GetShownText( aPath, INTERNAL, wxEmptyString, aDepth + 1 );
             return true;
         }
     }
@@ -531,10 +531,8 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
 
     // We cannot resolve text variables initially on load as we need to first load the screen and
     // then parse the hierarchy.  So skip the resolution if the screen isn't set yet
-    if( m_screen && m_screen->GetTitleBlock().TextVarResolver( token, project ) )
-    {
+    if( m_screen && m_screen->GetTitleBlock().TextVarResolver( token, project, INTERNAL ) )
         return true;
-    }
 
     if( token->IsSameAs( wxT( "#" ) ) )
     {
@@ -1613,7 +1611,7 @@ wxString SCH_SHEET::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
     const SCH_FIELD* sheetnameField = GetField( FIELD_T::SHEET_NAME );
 
     return wxString::Format( _( "Hierarchical Sheet '%s'" ),
-                             aFull ? sheetnameField->GetShownText( false )
+                             aFull ? sheetnameField->GetShownText( FOR_GUI )
                                    : KIUI::EllipsizeMenuText( sheetnameField->GetText() ) );
 }
 
@@ -1718,8 +1716,9 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
         for( const SCH_FIELD& field : GetFields() )
         {
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), field.GetName(),
-                                                       field.GetShownText( false ) ) );
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       field.GetName(),
+                                                       field.GetShownText( FOR_GUI ) ) );
         }
 
         aPlotter->HyperlinkMenu( GetBoundingBox(), properties );

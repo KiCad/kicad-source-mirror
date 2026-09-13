@@ -558,7 +558,7 @@ void PCB_IO_KICAD_SEXPR::formatPolyPts( const SHAPE_LINE_CHAIN& outline,
 
 void PCB_IO_KICAD_SEXPR::formatRenderCache( const EDA_TEXT* aText ) const
 {
-    wxString resolvedText( aText->GetShownText( true ) );
+    wxString resolvedText( aText->GetShownText( FOR_CANVAS ) );
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( aText->GetFont(),
                                                                                 resolvedText );
 

@@ -800,8 +800,8 @@ BOOST_AUTO_TEST_CASE( PluginLoadKeepsSchematicVerticalOrderAndFootprints )
     BOOST_CHECK_MESSAGE( u7->GetPosition().y < u6->GetPosition().y,
                          "U7 should remain above U6 after EasyEDA Pro v3 import" );
 
-    wxString u6Footprint = u6->GetFootprintFieldText( false, nullptr, false );
-    wxString u1Footprint = u1->GetFootprintFieldText( false, nullptr, false );
+    wxString u6Footprint = u6->GetFootprintFieldText( nullptr, RAW_VALUE );
+    wxString u1Footprint = u1->GetFootprintFieldText( nullptr, RAW_VALUE );
 
     BOOST_CHECK( !u6Footprint.IsEmpty() );
     BOOST_CHECK( u6Footprint.Contains( wxS( "SOT-563-6" ) ) );
@@ -871,7 +871,7 @@ BOOST_AUTO_TEST_CASE( PluginLoadPowerSymbolsKeepValueAndVisibility )
             if( !valueField )
                 continue;
 
-            wxString valueText = valueField->GetShownText( &sheetPath, false );
+            wxString valueText = valueField->GetShownText( &sheetPath, INTERNAL );
 
             if( valueField->IsVisible() && !valueText.IsEmpty() )
             {

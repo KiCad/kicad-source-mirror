@@ -18,14 +18,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SCH_TEXT_H
-#define SCH_TEXT_H
+#pragma once
 
 
 #include <eda_text.h>
 #include <sch_item.h>
 #include <sch_connection.h>   // for CONNECTION_TYPE
 #include <schematic.h>
+#include <common.h>
 
 
 class HTML_MESSAGE_BOX;
@@ -60,14 +60,12 @@ public:
 
     KIFONT::FONT* GetDrawFont( const RENDER_SETTINGS* aSettings ) const override;
 
-    virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth = 0 ) const;
+    virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const;
 
-    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
+    wxString GetShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override
     {
-        SCHEMATIC* schematic = Schematic();
-
-        if( schematic )
-            return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
+        if( SCHEMATIC* schematic = Schematic() )
+            return GetShownText( &schematic->CurrentSheet(), aContext, aDepth );
         else
             return GetText();
     }
@@ -194,6 +192,3 @@ protected:
 protected:
     bool            m_excludedFromSim;
 };
-
-
-#endif /* SCH_TEXT_H */

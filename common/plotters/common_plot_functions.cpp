@@ -138,7 +138,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
                 DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
                 KIFONT::FONT*      font = text->GetDrawFont( settings );
                 COLOR4D            color = plotColor;
-                wxString           shownText( text->GetShownText( true ) );
+                wxString           shownText( text->GetShownText( FOR_CANVAS ) );
 
                 if( plotter->GetColorMode() && text->GetTextColor() != COLOR4D::UNSPECIFIED )
                     color = text->GetTextColor();

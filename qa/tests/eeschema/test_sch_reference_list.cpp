@@ -313,12 +313,12 @@ BOOST_AUTO_TEST_CASE( ReferenceListDoesNotMutateEmptyValue )
     BOOST_REQUIRE( symbol != nullptr );
 
     symbol->SetValueFieldText( wxEmptyString );
-    BOOST_REQUIRE( symbol->GetValue( false, &sheetPath, false ).IsEmpty() );
+    BOOST_REQUIRE( symbol->GetValue( &sheetPath, RAW_VALUE ).IsEmpty() );
 
     SCH_REFERENCE_LIST refs;
     sheetPath.AppendSymbol( refs, symbol, SYMBOL_FILTER_ALL );
 
-    BOOST_CHECK( symbol->GetValue( false, &sheetPath, false ).IsEmpty() );
+    BOOST_CHECK( symbol->GetValue( &sheetPath, RAW_VALUE ).IsEmpty() );
     BOOST_REQUIRE_EQUAL( refs.GetCount(), 1 );
     BOOST_CHECK_EQUAL( refs[0].GetValue(), wxT( "~" ) );
 }

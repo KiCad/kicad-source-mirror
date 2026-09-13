@@ -135,9 +135,9 @@ public:
     wxString GetFieldText( const wxString& aFieldName, const SCH_SHEET_PATH* aPath = nullptr,
                            const wxString& aVariantName = wxEmptyString ) const;
 
-    wxString GetShownName( bool aAllowExtraText ) const
+    wxString GetShownName( RESOLUTION_CONTEXT aContext ) const
     {
-        return GetField( FIELD_T::SHEET_NAME )->GetShownText( aAllowExtraText );
+        return GetField( FIELD_T::SHEET_NAME )->GetShownText( aContext );
     }
     wxString GetName() const { return GetField( FIELD_T::SHEET_NAME )->GetText(); }
     void SetName( const wxString& aName ) { GetField( FIELD_T::SHEET_NAME )->SetText( aName ); }

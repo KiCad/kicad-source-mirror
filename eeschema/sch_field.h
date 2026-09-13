@@ -157,10 +157,10 @@ public:
      * with the ${} stripped.
      */
     wxString GetShownName() const;
-    wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth = 0,
-                           const wxString& aVariantName = wxEmptyString ) const;
+    wxString GetShownText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext,
+                           const wxString& aVariantName = wxEmptyString, int aDepth = 0 ) const;
 
-    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
+    wxString GetShownText( RESOLUTION_CONTEXT aContextx, int aDepth = 0 ) const override;
 
     /**
      * Return the text of a field.
@@ -447,7 +447,7 @@ inline std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields, const w
         return "";
 
     if( const SCH_FIELD* field = FindField( *aFields, aFieldName ) )
-        return ( aResolve ? field->GetShownText( false, aDepth ) : field->GetText() ).ToStdString();
+        return ( aResolve ? field->GetShownText( INTERNAL, aDepth ) : field->GetText() ).ToStdString();
 
     return "";
 }
@@ -465,9 +465,9 @@ inline void SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFie
         if( aValue == "" )
         {
             std::erase_if( aFields, [&]( const SCH_FIELD& field )
-                                     {
-                                         return field.GetName() == aFieldName;
-                                     } );
+                                    {
+                                        return field.GetName() == aFieldName;
+                                    } );
             return;
         }
 

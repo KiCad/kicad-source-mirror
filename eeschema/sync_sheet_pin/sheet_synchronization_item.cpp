@@ -40,7 +40,7 @@ SCH_HIERLABEL_SYNCHRONIZATION_ITEM::SCH_HIERLABEL_SYNCHRONIZATION_ITEM( SCH_HIER
 
 wxString SCH_HIERLABEL_SYNCHRONIZATION_ITEM::GetName() const
 {
-    return m_label->GetShownText( true );
+    return m_label->GetShownText( FOR_CANVAS );
 }
 
 
@@ -79,7 +79,7 @@ SCH_SHEET_PIN_SYNCHRONIZATION_ITEM::SCH_SHEET_PIN_SYNCHRONIZATION_ITEM( SCH_SHEE
 
 wxString SCH_SHEET_PIN_SYNCHRONIZATION_ITEM::GetName() const
 {
-    return m_pin->GetShownText( true );
+    return m_pin->GetShownText( FOR_CANVAS );
 }
 
 
@@ -124,7 +124,7 @@ ASSOCIATED_SCH_LABEL_PIN::ASSOCIATED_SCH_LABEL_PIN( SCH_HIERLABEL_SYNCHRONIZATIO
 
 wxString ASSOCIATED_SCH_LABEL_PIN::GetName() const
 {
-    return m_label->GetShownText( true );
+    return m_label->GetShownText( FOR_CANVAS );
 }
 
 

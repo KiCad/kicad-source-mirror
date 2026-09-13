@@ -133,14 +133,13 @@ wxString PCB_FIELD::GetUntranslatedName() const
 }
 
 
-wxString PCB_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
+wxString PCB_FIELD::GetShownText( RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
-    wxUnusedVar( aAllowExtraText );
-
     const FOOTPRINT* parentFootprint = GetParentFootprint();
     const BOARD*     board = GetBoard();
     wxString         text;
     bool             hasVariantOverride = false;
+    bool             hasTextVars = HasTextVars();
 
     if( parentFootprint && board )
     {
@@ -153,6 +152,11 @@ wxString PCB_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
                 if( variant->HasFieldValue( GetName() ) )
                 {
                     text = parentFootprint->GetFieldValueForVariant( variantName, GetName() );
+
+                    // Variable references in variant values are considered to be in schematic scope,
+                    // and are thus resolved before the footprint gets them.
+                    hasTextVars = false;
+
                     hasVariantOverride = true;
                 }
             }
@@ -182,10 +186,10 @@ wxString PCB_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
                 return false;
             };
 
-    if( text.Contains( wxT( "${" ) ) || text.Contains( wxT( "@{" ) ) )
+    if( hasTextVars && aContext != RAW_VALUE )
     {
         text = ResolveTextVars( text, &resolver, aDepth );
-        FinalizeTextVarExpansion( text, aAllowExtraText );
+        FinalizeTextVarExpansion( text, aContext );
     }
 
     return text;
@@ -203,7 +207,7 @@ bool PCB_FIELD::IsMandatory() const
 
 bool PCB_FIELD::HasHypertext() const
 {
-    return IsURL( GetShownText( false ) );
+    return IsURL( GetShownText( FOR_GUI ) );
 }
 
 
@@ -227,7 +231,7 @@ bool PCB_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
 
 wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    wxString content = aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() );
+    wxString content = aFull ? GetShownText( FOR_GUI ) : KIUI::EllipsizeMenuText( GetText() );
     wxString ref = GetParentFootprint()->GetReference();
 
     switch( m_id )

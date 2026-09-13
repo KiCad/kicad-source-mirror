@@ -56,17 +56,17 @@ public:
     /// @return the spreadsheet nomenclature for the cell (ie: B3 for 2nd column, 3rd row)
     wxString GetAddr() const;
 
-    wxString GetShownText( const RENDER_SETTINGS* aSettings, const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
-                           int aDepth = 0 ) const override;
+    wxString GetShownText( const RENDER_SETTINGS* aSettings, const SCH_SHEET_PATH* aPath,
+                           RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
-    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
+    wxString GetShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override
     {
         SCH_SHEET_PATH* sheetPath = nullptr;
 
         if( SCHEMATIC* schematic = Schematic() )
             sheetPath = &schematic->CurrentSheet();
 
-        return GetShownText( nullptr, sheetPath, aAllowExtraText, aDepth );
+        return GetShownText( nullptr, sheetPath, aContext, aDepth );
     }
 
     int  GetColSpan() const { return m_colSpan; }

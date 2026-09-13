@@ -753,7 +753,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 {
     int           maxError = m_board->GetDesignSettings().m_MaxError;
     KIFONT::FONT* font = aText->GetDrawFont( m_plotter->RenderSettings() );
-    wxString      shownText( aText->GetShownText( true ) );
+    wxString      shownText( aText->GetShownText( FOR_CANVAS ) );
 
     const PCB_TEXTBOX* knockoutBox = aIsKnockout ? dynamic_cast<const PCB_TEXTBOX*>( aText ) : nullptr;
 

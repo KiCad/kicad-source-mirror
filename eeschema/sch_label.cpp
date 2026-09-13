@@ -171,7 +171,7 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KIC
     SetMultilineAllowed( false );
 
     if( !HasTextVars() )
-        m_cached_driver_name = EscapeString( EDA_TEXT::GetShownText( true, 0 ), CTX_NETNAME );
+        m_cached_driver_name = EscapeString( EDA_TEXT::GetShownText( FOR_NETNAME ), CTX_NETNAME );
 }
 
 
@@ -722,7 +722,7 @@ void SCH_LABEL_BASE::GetIntersheetRefs( const SCH_SHEET_PATH* aPath, std::vector
 
     if( Schematic() )
     {
-        wxString resolvedLabel = GetShownText( &Schematic()->CurrentSheet(), false );
+        wxString resolvedLabel = GetShownText( &Schematic()->CurrentSheet(), FOR_GUI );
         auto     it = Schematic()->GetPageRefsMap().find( resolvedLabel );
 
         if( it != Schematic()->GetPageRefsMap().end() )
@@ -909,7 +909,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
     {
         if( token->IsSameAs( field.GetName() ) )
         {
-            *token = field.GetShownText( false, aDepth + 1 );
+            *token = field.GetShownText( INTERNAL, aDepth + 1 );
             return true;
         }
     }
@@ -960,11 +960,11 @@ void SCH_LABEL_BASE::cacheShownText()
     EDA_TEXT::cacheShownText();
 
     if( !HasTextVars() )
-        m_cached_driver_name = EscapeString( EDA_TEXT::GetShownText( true, 0 ), CTX_NETNAME );
+        m_cached_driver_name = EscapeString( EDA_TEXT::GetShownText( FOR_NETNAME ), CTX_NETNAME );
 }
 
 
-wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth ) const
+wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
     // Use local depth counter so each text element starts fresh
     int depth = 0;
@@ -975,12 +975,12 @@ wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowE
                 return ResolveTextVar( aPath, token, depth + 1 );
             };
 
-    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
+    wxString text = EDA_TEXT::GetShownText( aContext, depth );
 
-    if( HasTextVars() )
+    if( HasTextVars() && aContext != RAW_VALUE )
     {
         text = ResolveTextVars( text, &textResolver, depth );
-        FinalizeTextVarExpansion( text, aAllowExtraText );
+        FinalizeTextVarExpansion( text, aContext );
     }
 
     return text;
@@ -1358,7 +1358,7 @@ bool SCH_LABEL_BASE::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SH
     if( GetPosition() != label->GetPosition() )
         return true;
 
-    if( GetShownText( aInstance ) != label->GetShownText( aInstance ) )
+    if( GetShownText( aInstance, FOR_NETNAME ) != label->GetShownText( aInstance, FOR_NETNAME ) )
         return true;
 
     std::vector<wxString> netclasses;
@@ -1484,7 +1484,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     }
     else
     {
-        aPlotter->PlotText( textpos, color, GetShownText( sheet, true ), attrs, font, GetFontMetrics() );
+        aPlotter->PlotText( textpos, color, GetShownText( sheet, FOR_CANVAS ), attrs, font, GetFontMetrics() );
 
         if( aPlotter->GetColorMode() )
         {
@@ -1571,8 +1571,9 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
 
             for( const SCH_FIELD& field : GetFields() )
             {
-                properties.emplace_back(
-                        wxString::Format( wxT( "!%s = %s" ), field.GetName(), field.GetShownText( false ) ) );
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           field.GetName(),
+                                                           field.GetShownText( FOR_GUI ) ) );
             }
 
             if( !properties.empty() )
@@ -1580,7 +1581,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
         }
 
         if( Type() == SCH_HIER_LABEL_T )
-            aPlotter->Bookmark( bodyBBox, GetShownText( false ), _( "Hierarchical Labels" ) );
+            aPlotter->Bookmark( bodyBBox, GetShownText( FOR_GUI ), _( "Hierarchical Labels" ) );
     }
 
     for( SCH_FIELD& field : m_fields )
@@ -1714,7 +1715,8 @@ const BOX2I SCH_LABEL::GetBodyBoundingBox( const RENDER_SETTINGS* aSettings ) co
 
 wxString SCH_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Label '%s'" ), aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Label '%s'" ), aFull ? GetShownText( FOR_GUI )
+                                                      : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -2034,16 +2036,12 @@ wxString SCH_DIRECTIVE_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider
     else
     {
         const SCH_FIELD& firstField = m_fields[0];
-        wxString content = aFull ? firstField.GetShownText( false ) : KIUI::EllipsizeMenuText( firstField.GetText() );
+        wxString content = aFull ? firstField.GetShownText( FOR_GUI ) : KIUI::EllipsizeMenuText( firstField.GetText() );
 
         if( content.IsEmpty() )
-        {
             return wxString::Format( _( "Directive Label [%s (empty)]" ), UnescapeString( m_fields[0].GetName() ) );
-        }
         else
-        {
             return wxString::Format( _( "Directive Label [%s %s]" ), UnescapeString( m_fields[0].GetName() ), content );
-        }
     }
 }
 
@@ -2242,7 +2240,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
     {
         SCHEMATIC_SETTINGS& settings = schematic->Settings();
         wxString            ref;
-        auto                it = schematic->GetPageRefsMap().find( GetShownText( aPath ) );
+        auto                it = schematic->GetPageRefsMap().find( GetShownText( aPath, FOR_GUI ) );
 
         if( it == schematic->GetPageRefsMap().end() )
         {
@@ -2263,9 +2261,10 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
 
             std::map<int, wxString> sheetPages = schematic->GetVirtualPageToSheetPagesMap();
 
-            if( ( settings.m_IntersheetRefsFormatShort ) && ( pageListCopy.size() > 2 ) )
+            if( settings.m_IntersheetRefsFormatShort && pageListCopy.size() > 2 )
             {
-                ref.Append( wxString::Format( wxT( "%s..%s" ), sheetPages[pageListCopy.front()],
+                ref.Append( wxString::Format( wxT( "%s..%s" ),
+                                              sheetPages[pageListCopy.front()],
                                               sheetPages[pageListCopy.back()] ) );
             }
             else
@@ -2359,8 +2358,8 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
 
 wxString SCH_GLOBALLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Global Label '%s'" ),
-                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Global Label '%s'" ), aFull ? GetShownText( FOR_GUI )
+                                                             : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -2510,10 +2509,10 @@ VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings
     switch( GetSpinStyle() )
     {
     default:
-    case SPIN_STYLE::LEFT: text_offset.x = -dist; break;  // Orientation horiz normale
-    case SPIN_STYLE::UP: text_offset.y = -dist; break;    // Orientation vert UP
-    case SPIN_STYLE::RIGHT: text_offset.x = dist; break;  // Orientation horiz inverse
-    case SPIN_STYLE::BOTTOM: text_offset.y = dist; break; // Orientation vert BOTTOM
+    case SPIN_STYLE::LEFT:   text_offset.x = -dist; break;   // Orientation horiz normale
+    case SPIN_STYLE::UP:     text_offset.y = -dist; break;   // Orientation vert UP
+    case SPIN_STYLE::RIGHT:  text_offset.x = dist;  break;   // Orientation horiz inverse
+    case SPIN_STYLE::BOTTOM: text_offset.y = dist;  break;   // Orientation vert BOTTOM
     }
 
     return text_offset;
@@ -2522,8 +2521,8 @@ VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings
 
 wxString SCH_HIERLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Hierarchical Label '%s'" ),
-                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Hierarchical Label '%s'" ), aFull ? GetShownText( FOR_GUI )
+                                                                   : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 

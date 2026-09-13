@@ -140,7 +140,7 @@ protected:
 
     void SetHtmlDesc()
     {
-        wxString esc_desc = EscapeHTML( UnescapeString( m_symbol->GetShownDescription() ) );
+        wxString esc_desc = EscapeHTML( UnescapeString( m_symbol->GetShownDescription( FOR_GUI ) ) );
 
         // Add line breaks
         esc_desc.Replace( wxS( "\n" ), wxS( "<br>" ) );
@@ -153,7 +153,7 @@ protected:
 
     void SetHtmlKeywords()
     {
-        wxString keywords = m_symbol->GetShownKeyWords();
+        wxString keywords = m_symbol->GetShownKeyWords( FOR_GUI );
 
         if( keywords.empty() )
             m_html.Replace( wxS( "__KEY__" ), wxEmptyString );
@@ -172,7 +172,7 @@ protected:
         switch( aField.GetId() )
         {
         case FIELD_T::DATASHEET:
-            text = m_symbol->GetDatasheetField().GetShownText( false );
+            text = m_symbol->GetDatasheetField().GetShownText( FOR_GUI );
 
             if( text.IsEmpty() || text == wxT( "~" ) )
             {
@@ -203,7 +203,7 @@ protected:
             break;
 
         default:
-            text = aField.GetShownText( false );
+            text = aField.GetShownText( FOR_GUI );
 
             if( aField.HasHypertext() )
             {

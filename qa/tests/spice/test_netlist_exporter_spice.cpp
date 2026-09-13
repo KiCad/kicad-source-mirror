@@ -756,7 +756,7 @@ BOOST_AUTO_TEST_CASE( ExportedFieldsSurviveSchematicReset )
     for( const SPICE_ITEM& item : exporter.GetItems() )
     {
         for( const SCH_FIELD& field : item.fields )
-            shownFields.push_back( field.GetShownText( false ) );
+            shownFields.push_back( field.GetShownText( INTERNAL ) );
     }
 
     BOOST_REQUIRE( !shownFields.empty() );
@@ -766,7 +766,7 @@ BOOST_AUTO_TEST_CASE( ExportedFieldsSurviveSchematicReset )
     for( const SPICE_ITEM& item : exporter.GetItems() )
     {
         for( const SCH_FIELD& field : item.fields )
-            BOOST_CHECK_EQUAL( field.GetShownText( false ), shownFields[index++] );
+            BOOST_CHECK_EQUAL( field.GetShownText( INTERNAL ), shownFields[index++] );
     }
 }
 

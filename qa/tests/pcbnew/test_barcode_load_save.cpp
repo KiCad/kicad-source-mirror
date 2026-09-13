@@ -244,7 +244,7 @@ BOOST_AUTO_TEST_CASE( BarcodeTextVariableExpansion )
     BOOST_CHECK_EQUAL( barcode->GetText(), wxT( "${PART_NUMBER}_${VERSION}" ) );
 
     // Verify GetShownText returns the expanded text
-    BOOST_CHECK_EQUAL( barcode->GetShownText(), wxT( "PN12345_1.0" ) );
+    BOOST_CHECK_EQUAL( barcode->GetShownText( FOR_CANVAS ), wxT( "PN12345_1.0" ) );
 
     // Assemble the barcode and verify the QR code encodes the expanded text
     barcode->AssembleBarcode();
@@ -299,7 +299,7 @@ BOOST_AUTO_TEST_CASE( BarcodeUndefinedVariable )
     BOOST_CHECK_EQUAL( barcode->GetText(), wxT( "${UNDEFINED_VAR}" ) );
 
     // Verify GetShownText returns the unexpanded text (since variable is undefined)
-    BOOST_CHECK_EQUAL( barcode->GetShownText(), wxT( "${UNDEFINED_VAR}" ) );
+    BOOST_CHECK_EQUAL( barcode->GetShownText( FOR_CANVAS ), wxT( "${UNDEFINED_VAR}" ) );
 
     // Assemble the barcode - for QR codes this should still work since QR can encode any text
     barcode->AssembleBarcode();

@@ -5652,7 +5652,7 @@ BOOST_AUTO_TEST_CASE( PowerSymbolDisplayNameDoesNotOverrideLogicalNet )
 
     SCH_SYMBOL* symbol = findConvertedSymbol( *root->GetScreen(), path, wxS( "#PWR0001" ) );
     BOOST_REQUIRE( symbol );
-    BOOST_CHECK_EQUAL( symbol->GetValue( false, &path, false ), wxS( "0" ) );
+    BOOST_CHECK_EQUAL( symbol->GetValue( &path, RAW_VALUE ), wxS( "0" ) );
     BOOST_REQUIRE_EQUAL( symbol->GetPins().size(), 1u );
     BOOST_CHECK_EQUAL( symbol->GetPins().front()->GetName(), wxS( "0" ) );
     BOOST_CHECK( symbol->GetPins().front()->GetPosition() == OrcadDbuToIu( 960, 270 ) );
@@ -5682,7 +5682,7 @@ BOOST_AUTO_TEST_CASE( PowerSymbolDisplayNameDoesNotOverrideLogicalNet )
 
     BOOST_REQUIRE( aliased );
     BOOST_REQUIRE_EQUAL( aliased->GetPins().size(), 1u );
-    BOOST_CHECK_EQUAL( aliased->GetValue( false, &path, false ), wxS( "VDD3" ) );
+    BOOST_CHECK_EQUAL( aliased->GetValue( &path, RAW_VALUE ), wxS( "VDD3" ) );
     BOOST_CHECK_EQUAL( aliased->GetPins().front()->GetName(), wxS( "VDD3" ) );
 
     schematic->ConnectionGraph()->Recalculate( schematic->BuildSheetListSortedByPageNumbers(), true );
@@ -6001,7 +6001,7 @@ BOOST_AUTO_TEST_CASE( PowerSymbolsSharingNetKeepSourceGraphicIdentity )
     BOOST_REQUIRE_EQUAL( supplySymbol->GetPins().size(), 1u );
     BOOST_CHECK_EQUAL( groundSymbol->GetPins().front()->GetName(), wxS( "0" ) );
     BOOST_CHECK_EQUAL( supplySymbol->GetPins().front()->GetName(), wxS( "0" ) );
-    BOOST_CHECK_EQUAL( supplySymbol->GetValue( false, &path, false ), wxS( "0" ) );
+    BOOST_CHECK_EQUAL( supplySymbol->GetValue( &path, RAW_VALUE ), wxS( "0" ) );
 }
 
 
@@ -8627,7 +8627,7 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
                         ++importedPowerSymbols;
                         ++perDesignPowerSymbols;
 
-                        if( symbol->GetValue( false, &path, false ) == wxS( "VDDM" ) )
+                        if( symbol->GetValue( &path, RAW_VALUE ) == wxS( "VDDM" ) )
                             ++perDesignVddmPowerSymbols;
                     }
                     else
@@ -10174,7 +10174,7 @@ BOOST_AUTO_TEST_CASE( CanonicalPropertiesIgnoreCaseInsensitiveDuplicates )
             platedHole->GetFields().begin(), platedHole->GetFields().end(),
             []( const SCH_FIELD& aField ) { return aField.GetName().CmpNoCase( wxS( "Value" ) ) == 0; } );
     BOOST_CHECK_EQUAL( valueFields, 1u );
-    BOOST_CHECK_EQUAL( platedHole->GetField( FIELD_T::VALUE )->GetShownText( true ), wxS( "PTH125_200PAD" ) );
+    BOOST_CHECK_EQUAL( platedHole->GetField( FIELD_T::VALUE )->GetShownText( FOR_CANVAS ), wxS( "PTH125_200PAD" ) );
 }
 
 

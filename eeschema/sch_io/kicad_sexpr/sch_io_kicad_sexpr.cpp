@@ -200,8 +200,8 @@ void SCH_IO_KICAD_SEXPR::loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, 
         // stores the file name and extension.  Add the project path to the file name and
         // extension to compare when calling SCH_SHEET::SearchHierarchy().
         // Resolve text variables in the filename. The field keeps the raw text for portability.
-        wxFileName fileName =
-                m_schematic ? ExpandTextVars( aSheet->GetFileName(), &m_schematic->Project() ) : aSheet->GetFileName();
+        wxFileName fileName = m_schematic ? ExpandTextVars( aSheet->GetFileName(), &m_schematic->Project(), INTERNAL )
+                                          : aSheet->GetFileName();
 
         if( !fileName.IsAbsolute() )
             fileName.MakeAbsolute( m_currentPath.top() );

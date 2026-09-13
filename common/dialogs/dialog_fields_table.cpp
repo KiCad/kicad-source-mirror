@@ -1326,7 +1326,7 @@ void DIALOG_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
         m_outputFileName->SetValue( path );
     }
 
-    path = ExpandTextVars( NormalizeFilePathForTextVars( path ), &textResolver );
+    path = ExpandTextVars( NormalizeFilePathForTextVars( path ), &textResolver, INTERNAL );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     wxFileName outputFile = wxFileName::FileName( path );

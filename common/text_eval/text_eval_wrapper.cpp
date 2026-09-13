@@ -1711,7 +1711,7 @@ EXPRESSION_EVALUATOR::createCombinedCallback( const std::unordered_map<wxString,
                         return false; // Don't replace, just detect
                     };
 
-            wxString expandedResult = ExpandTextVars( testString, &resolver );
+            wxString expandedResult = ExpandTextVars( testString, &resolver, INTERNAL );
 
             if( wasResolved )
             {
@@ -1724,7 +1724,7 @@ EXPRESSION_EVALUATOR::createCombinedCallback( const std::unordered_map<wxString,
                             return false; // Use default resolution
                         };
 
-                wxString resolvedValue = ExpandTextVars( testString, &valueResolver );
+                wxString resolvedValue = ExpandTextVars( testString, &valueResolver, INTERNAL );
 
                 // Check if it was actually resolved (not still ${varname})
                 if( resolvedValue != testString )

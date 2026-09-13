@@ -3057,7 +3057,7 @@ void PCB_PAINTER::draw( const PCB_FIELD* aField, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 {
-    wxString resolvedText( aText->GetShownText( true ) );
+    wxString resolvedText( aText->GetShownText( FOR_CANVAS ) );
 
     if( resolvedText.Length() == 0 )
         return;
@@ -3176,7 +3176,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     COLOR4D       color = m_pcbSettings.GetColor( aTextBox, aLayer );
     int           thickness = getLineThickness( aTextBox->GetWidth() );
     LINE_STYLE    lineStyle = aTextBox->GetStroke().GetLineStyle();
-    wxString      resolvedText( aTextBox->GetShownText( true ) );
+    wxString      resolvedText( aTextBox->GetShownText( FOR_CANVAS ) );
     KIFONT::FONT* font = aTextBox->GetDrawFont( &m_pcbSettings );
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
@@ -3747,7 +3747,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     }
 
     // Draw text
-    wxString        resolvedText = aDimension->GetShownText( true );
+    wxString        resolvedText = aDimension->GetShownText( FOR_CANVAS );
     TEXT_ATTRIBUTES attrs = aDimension->GetAttributes();
 
     if( m_gal->IsFlippedX() && !aDimension->IsSideSpecific() )

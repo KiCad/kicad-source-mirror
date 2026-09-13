@@ -19,14 +19,14 @@
  */
 
 
-#ifndef _ODB_FEATURE_H_
-#define _ODB_FEATURE_H_
+#pragma once
 
 #include "odb_attribute.h"
 #include "convert_basic_shapes_to_polygon.h"
 
 #include <list>
-#include "math/vector2d.h"
+#include <math/vector2d.h>
+#include <common.h>
 #include "odb_defines.h"
 
 
@@ -46,16 +46,26 @@ class PCB_IO_ODBPP;
 class FOOTPRINT;
 class PAD;
 class PCB_VIA;
+class PCB_DIMENSION_BASE;
+class PCB_TRACK;
 
 class FEATURES_MANAGER : public ATTR_MANAGER
 {
 public:
     FEATURES_MANAGER( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, const wxString& aLayerName ) :
-            m_board( aBoard ), m_plugin( aPlugin ), m_layerName( aLayerName )
-    {
-    }
+            m_board( aBoard ),
+            m_plugin( aPlugin ),
+            m_layerName( aLayerName )
+    {}
 
     virtual ~FEATURES_MANAGER() { m_featuresList.clear(); }
+
+    void AddPad( PCB_LAYER_ID aLayer, PAD* pad );
+    void AddDimension( PCB_LAYER_ID aLayer, PCB_DIMENSION_BASE* dimension );
+    void AddShape( PCB_LAYER_ID aLayer, PCB_SHAPE* shape );
+    void AddText( PCB_LAYER_ID aLayer, BOARD_ITEM* item, RESOLUTION_CONTEXT aContext );
+    void AddZone( PCB_LAYER_ID aLayer, ZONE* zone );
+    void AddTrack( PCB_LAYER_ID aLayer, PCB_TRACK* track );
 
     void InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_ITEM*>& aItems );
 
@@ -230,9 +240,11 @@ class ODB_LINE : public ODB_FEATURE
 public:
     ODB_LINE( uint32_t aIndex, const std::pair<wxString, wxString>& aStart,
               const std::pair<wxString, wxString>& aEnd, uint32_t aSym ) :
-            ODB_FEATURE( aIndex ), m_start( aStart ), m_end( aEnd ), m_symIndex( aSym )
-    {
-    }
+            ODB_FEATURE( aIndex ),
+            m_start( aStart ),
+            m_end( aEnd ),
+            m_symIndex( aSym )
+    {}
 
     inline virtual FEATURE_TYPE GetFeatureType() override { return FEATURE_TYPE::LINE; }
 
@@ -256,10 +268,13 @@ public:
              const std::pair<wxString, wxString>& aEnd,
              const std::pair<wxString, wxString>& aCenter, uint32_t aSym,
              ODB_DIRECTION aDirection ) :
-            ODB_FEATURE( aIndex ), m_start( aStart ), m_end( aEnd ), m_center( aCenter ),
-            m_symIndex( aSym ), m_direction( aDirection )
-    {
-    }
+            ODB_FEATURE( aIndex ),
+            m_start( aStart ),
+            m_end( aEnd ),
+            m_center( aCenter ),
+            m_symIndex( aSym ),
+            m_direction( aDirection )
+    {}
 
 protected:
     virtual void WriteRecordContent( std::ostream& ost ) override;
@@ -277,8 +292,12 @@ class ODB_PAD : public ODB_FEATURE
 public:
     ODB_PAD( uint32_t aIndex, const std::pair<wxString, wxString>& aCenter, uint32_t aSym,
              EDA_ANGLE aAngle = ANGLE_0, bool aMirror = false, double aResize = 1.0 ) :
-            ODB_FEATURE( aIndex ), m_center( aCenter ), m_symIndex( aSym ), m_angle( aAngle ),
-            m_mirror( aMirror ), m_resize( aResize )
+            ODB_FEATURE( aIndex ),
+            m_center( aCenter ),
+            m_symIndex( aSym ),
+            m_angle( aAngle ),
+            m_mirror( aMirror ),
+            m_resize( aResize )
     {
     }
 
@@ -325,15 +344,19 @@ public:
             SEGMENT,
             ARC
         };
+
         SURFACE_LINE() = default;
 
-        SURFACE_LINE( const VECTOR2I& aEnd ) : m_end( aEnd ) {}
+        SURFACE_LINE( const VECTOR2I& aEnd ) :
+                m_end( aEnd )
+        {}
 
         SURFACE_LINE( const VECTOR2I& aEnd, const VECTOR2I& aCenter, ODB_DIRECTION aDirection ) :
-                m_end( aEnd ), m_type( LINE_TYPE::ARC ), m_center( aCenter ),
+                m_end( aEnd ),
+                m_type( LINE_TYPE::ARC ),
+                m_center( aCenter ),
                 m_direction( aDirection )
-        {
-        }
+        {}
 
         VECTOR2I  m_end;
         LINE_TYPE m_type = LINE_TYPE::SEGMENT;
@@ -347,6 +370,3 @@ public:
 
     std::vector<std::vector<SURFACE_LINE>> m_polygons;
 };
-
-
-#endif // _ODB_FEATURE_H_

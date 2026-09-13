@@ -180,7 +180,7 @@ bool SCH_EDIT_FRAME::ChangeSheetFile( SCH_SHEET* aSheet, const wxString& aNewFil
     SCHEMATIC&  schematic = Schematic();
 
     // Resolve text variables before touching disk. The field keeps the raw text for portability.
-    wxFileName  sheetFileName( ExpandTextVars( aNewFilename, &schematic.Project() ) );
+    wxFileName  sheetFileName( ExpandTextVars( aNewFilename, &schematic.Project(), INTERNAL ) );
     SCH_SCREEN* currentScreen = GetCurrentSheet().LastScreen();
 
     wxCHECK( currentScreen, false );

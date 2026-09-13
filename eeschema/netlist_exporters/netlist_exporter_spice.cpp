@@ -215,7 +215,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                     if( field.GetId() == FIELD_T::REFERENCE )
                         spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
                     else
-                        spiceItem.fields.back().SetText( field.GetShownText( &sheet, false, 0, variant ) );
+                        spiceItem.fields.back().SetText( field.GetShownText( &sheet, FOR_NETNAME, variant ) );
 
                     // The simulator retains these resolved values after source symbols are deleted.
                     spiceItem.fields.back().SetParent( nullptr );
@@ -345,9 +345,9 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
                 continue;
 
             if( item->Type() == SCH_TEXT_T )
-                text = static_cast<SCH_TEXT*>( item )->GetShownText( &sheet, false );
+                text = static_cast<SCH_TEXT*>( item )->GetShownText( &sheet, FOR_NETNAME );
             else if( item->Type() == SCH_TEXTBOX_T )
-                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText( nullptr, &sheet, false );
+                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText( nullptr, &sheet, FOR_NETNAME );
             else
                 continue;
 
@@ -480,7 +480,7 @@ wxString NETLIST_EXPORTER_SPICE::collectMergedSimPins( SCH_SYMBOL& aSymbol,
 
     // First, parse pins from the current symbol
     if( SCH_FIELD* pinsField = aSymbol.GetField( SIM_PINS_FIELD ) )
-        parsePins( pinsField->GetShownText( &aSheet, false, 0, aVariantName ) );
+        parsePins( pinsField->GetShownText( &aSheet, FOR_NETNAME, aVariantName ) );
 
     // Then, find all other units with the same reference and collect their Sim.Pins
     for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
@@ -496,7 +496,7 @@ wxString NETLIST_EXPORTER_SPICE::collectMergedSimPins( SCH_SYMBOL& aSymbol,
                 continue;
 
             if( SCH_FIELD* pinsField = other->GetField( SIM_PINS_FIELD ) )
-                parsePins( pinsField->GetShownText( &sheet, false, 0, aVariantName ) );
+                parsePins( pinsField->GetShownText( &sheet, FOR_NETNAME, aVariantName ) );
         }
     }
 
@@ -540,7 +540,7 @@ std::vector<UNIT_PIN_MAP> NETLIST_EXPORTER_SPICE::collectUnitPinMaps( SCH_SYMBOL
                 if( !pinsField )
                     return;
 
-                wxString pins = pinsField->GetShownText( &aUnitSheet, false, 0, aVariantName );
+                wxString pins = pinsField->GetShownText( &aUnitSheet, FOR_NETNAME, aVariantName );
 
                 // The same logical unit can be reached more than once through a reused hierarchical
                 // sheet; gather it only once so it does not synthesize duplicate instances.
@@ -595,7 +595,7 @@ SIM_DECOMPOSITION NETLIST_EXPORTER_SPICE::getDecomposition( SCH_SYMBOL& aSymbol,
             [&]( SCH_SYMBOL& aUnit, const SCH_SHEET_PATH& aUnitSheet ) -> wxString
             {
                 if( SCH_FIELD* field = aUnit.GetField( SIM_DECOMPOSITION_FIELD ) )
-                    return field->GetShownText( &aUnitSheet, false, 0, aVariantName );
+                    return field->GetShownText( &aUnitSheet, FOR_NETNAME, aVariantName );
 
                 return wxEmptyString;
             };

@@ -223,7 +223,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
             if( !aMergedSimPins.IsEmpty() && field.GetName() == SIM_PINS_FIELD )
                 fields.back().SetText( aMergedSimPins );
             else
-                fields.back().SetText( field.GetShownText( aSheetPath, false, aDepth, aVariantName ) );
+                fields.back().SetText( field.GetShownText( aSheetPath, FOR_NETNAME, aVariantName, aDepth ) );
         }
     }
 

@@ -1366,7 +1366,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         }
                         else if( sheetPin )
                         {
-                            labelText = sheetPin->GetShownText( &sheetPath, false );
+                            labelText = sheetPin->GetShownText( &sheetPath, FOR_NETNAME );
                         }
                         else
                         {
@@ -1696,7 +1696,7 @@ OPT_TOOL_EVENT SCH_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_H
         {
             SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
             SCH_CONNECTION  possibleConnection( label->Schematic()->ConnectionGraph() );
-            possibleConnection.ConfigureFromLabel( label->GetShownText( false ) );
+            possibleConnection.ConfigureFromLabel( label->GetShownText( FOR_NETNAME ) );
 
             if( possibleConnection.IsBus() )
                 newEvt = SCH_ACTIONS::drawBus.MakeEvent();

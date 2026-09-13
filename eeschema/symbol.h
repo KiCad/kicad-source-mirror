@@ -107,9 +107,9 @@ public:
 
     virtual const LIB_ID& GetLibId() const = 0;
     virtual wxString GetDescription() const = 0;
-    virtual wxString GetShownDescription( int aDepth = 0 ) const = 0;
+    virtual wxString GetShownDescription( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const = 0;
     virtual wxString GetKeyWords() const = 0;
-    virtual wxString GetShownKeyWords( int aDepth = 0 ) const = 0;
+    virtual wxString GetShownKeyWords( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const = 0;
 
     virtual bool IsGlobalPower() const = 0;
     virtual bool IsLocalPower() const = 0;
@@ -141,8 +141,8 @@ public:
     virtual const wxString GetRef( const SCH_SHEET_PATH* aSheet,
                                    bool aIncludeUnit = false ) const = 0;
 
-    virtual const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
-                                     bool aAllowExtraText, const wxString& aVaraintName = wxEmptyString ) const = 0;
+    virtual const wxString GetValue( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext,
+                                     const wxString& aVaraintName = wxEmptyString ) const = 0;
 
     virtual void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly ) const = 0;
 

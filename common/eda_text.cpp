@@ -748,7 +748,7 @@ BOX2I EDA_TEXT::GetTextBox( const RENDER_SETTINGS* aSettings, int aLine ) const
 
     BOX2I         bbox;
     wxArrayString strings;
-    wxString      text = GetShownText( true );
+    wxString      text = GetShownText( FOR_CANVAS );
     int           thickness = GetEffectiveTextPenWidth();
 
     if( IsMultilineAllowed() )
@@ -895,7 +895,7 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     {
         std::vector<VECTOR2I> positions;
         wxArrayString         strings;
-        wxStringSplit( GetShownText( true ), strings, '\n' );
+        wxStringSplit( GetShownText( FOR_CANVAS ), strings, '\n' );
 
         positions.reserve( strings.Count() );
 
@@ -906,7 +906,7 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     }
     else
     {
-        printOneLineOfText( aSettings, aOffset, aColor, GetShownText( true ), GetDrawPos() );
+        printOneLineOfText( aSettings, aOffset, aColor, GetShownText( FOR_CANVAS ), GetDrawPos() );
     }
 }
 
@@ -991,7 +991,7 @@ bool recursiveDescent( const std::unique_ptr<MARKUP::NODE>& aNode )
 
 bool EDA_TEXT::containsURL() const
 {
-    wxString showntext = GetShownText( false );
+    wxString showntext = GetShownText( FOR_GUI );
     MARKUP::MARKUP_PARSER markupParser( TO_UTF8( showntext ) );
     return recursiveDescent( markupParser.Parse() );
 }
@@ -1129,7 +1129,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
     KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
     KIFONT::FONT*                   font = GetDrawFont( nullptr );
     int                             penWidth = GetEffectiveTextPenWidth();
-    wxString                        shownText( GetShownText( true ) );
+    wxString                        shownText( GetShownText( FOR_CANVAS ) );
     VECTOR2I                        drawPos = GetDrawPos();
     TEXT_ATTRIBUTES                 attrs = GetAttributes();
 

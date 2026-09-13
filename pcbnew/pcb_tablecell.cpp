@@ -155,7 +155,7 @@ wxString PCB_TABLECELL::GetAddr() const
 }
 
 
-wxString PCB_TABLECELL::GetShownText( bool aAllowExtraText, int aDepth ) const
+wxString PCB_TABLECELL::GetShownText( RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
     const FOOTPRINT* parentFootprint = GetParentFootprint();
     const BOARD*     board = GetBoard();
@@ -193,12 +193,12 @@ wxString PCB_TABLECELL::GetShownText( bool aAllowExtraText, int aDepth ) const
                 return false;
             };
 
-    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
+    wxString text = EDA_TEXT::GetShownText( aContext, aDepth );
 
-    if( HasTextVars() )
+    if( HasTextVars() && aContext != RAW_VALUE )
     {
         text = ResolveTextVars( text, &tableCellResolver, aDepth );
-        FinalizeTextVarExpansion( text, aAllowExtraText );
+        FinalizeTextVarExpansion( text, aContext );
     }
 
     KIFONT::FONT*         font = GetDrawFont( nullptr );

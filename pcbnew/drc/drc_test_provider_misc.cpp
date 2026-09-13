@@ -517,7 +517,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     {
                         // Don't run unresolved test
                     }
-                    else if( varRefRegEx.Matches( ExpandEnvVarSubstitutions( textItem->GetShownText( false ),
+                    else if( varRefRegEx.Matches( ExpandEnvVarSubstitutions( textItem->GetShownText( FOR_ERC_DRC ),
                                                                              nullptr /*project already done*/ ) ) )
                     {
                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
@@ -558,7 +558,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
             {
                 // Don't run unresolved test
             }
-            else if( varRefRegEx.Matches( text->GetShownText( false ) ) )
+            else if( varRefRegEx.Matches( text->GetShownText( FOR_ERC_DRC ) ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                 drcItem->SetItems( drawingSheet );

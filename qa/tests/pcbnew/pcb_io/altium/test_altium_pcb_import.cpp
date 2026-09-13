@@ -1008,7 +1008,7 @@ BOOST_AUTO_TEST_CASE( ProjectParametersToTextVars )
     BOOST_CHECK_EQUAL( textVars.at( wxS( "YEAR" ) ), wxS( "2026" ) );
 
     // Board text referencing the special string now resolves through the project variable.
-    wxString resolved = ExpandTextVars( wxS( "${PCB_REVISION}" ), &project );
+    wxString resolved = ExpandTextVars( wxS( "${PCB_REVISION}" ), &project, INTERNAL );
     BOOST_CHECK_EQUAL( resolved, wxS( "A" ) );
 
     // End-to-end: an actual imported board text that references ${PCB_REVISION} must render its
@@ -1024,7 +1024,7 @@ BOOST_AUTO_TEST_CASE( ProjectParametersToTextVars )
 
         if( text && text->GetText().Contains( wxS( "${PCB_REVISION}" ) ) )
         {
-            wxString shown = text->GetShownText( false );
+            wxString shown = text->GetShownText( INTERNAL );
             BOOST_CHECK( !shown.Contains( wxS( "${PCB_REVISION}" ) ) );
             BOOST_CHECK( shown.Contains( wxS( "A" ) ) );
             sawResolvedBoardText = true;

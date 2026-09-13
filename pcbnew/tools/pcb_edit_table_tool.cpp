@@ -210,7 +210,7 @@ int PCB_EDIT_TABLE_TOOL::ExportTableToCSV( const TOOL_EVENT& aEvent )
             PCB_TABLECELL* cell = parentTable->GetCell( row, col );
 
             // Get resolved text (with variables expanded)
-            wxString cellText = cell->GetShownText( false, 0 );
+            wxString cellText = cell->GetShownText( FOR_CANVAS, 0 );
 
             // Write escaped cell text
             outFile << escapeCSV( cellText ).ToStdString();

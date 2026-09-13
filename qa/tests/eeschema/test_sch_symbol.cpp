@@ -141,11 +141,11 @@ BOOST_AUTO_TEST_CASE( SchSymbolVariantTest )
     BOOST_CHECK( symbol->GetExcludedFromPosFiles( &m_schematic->Hierarchy()[0], variantName ) );
 
     // Test a value field variant change.
-    BOOST_CHECK( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                   false, 0 ) == wxS( "1K" ) );
+    BOOST_CHECK( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0], INTERNAL )
+                    == wxS( "1K" ) );
     symbol->GetField( FIELD_T::VALUE )->SetText( wxS( "10K" ), &m_schematic->Hierarchy()[0], variantName );
-    BOOST_CHECK( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                   false, 0, variantName ) == wxS( "10K" ) );
+    BOOST_CHECK( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0], INTERNAL, variantName )
+                    == wxS( "10K" ) );
     // BOOST_CHECK( symbol->GetFieldText( FIELD_T::VALUE, &m_schematic->Hierarchy()[0], variantName ) == wxS( "10K" ) );
 }
 
@@ -470,7 +470,7 @@ BOOST_AUTO_TEST_CASE( RenameVariantPreservesData )
     // Verify the data is set
     BOOST_CHECK( symbol->GetDNP( &m_schematic->Hierarchy()[0], oldName ) );
     BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                          false, 0, oldName ), wxS( "100K" ) );
+                                                                         INTERNAL, oldName ), wxS( "100K" ) );
 
     // Rename the variant
     m_schematic->RenameVariant( oldName, newName );
@@ -490,7 +490,7 @@ BOOST_AUTO_TEST_CASE( RenameVariantPreservesData )
     // Verify symbol variant data was preserved
     BOOST_CHECK( symbol->GetDNP( &m_schematic->Hierarchy()[0], newName ) );
     BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                          false, 0, newName ), wxS( "100K" ) );
+                                                                         INTERNAL, newName ), wxS( "100K" ) );
 }
 
 
@@ -542,7 +542,7 @@ BOOST_AUTO_TEST_CASE( CopyVariantCreatesIndependentCopy )
     BOOST_CHECK( symbol->GetExcludedFromBoard( &m_schematic->Hierarchy()[0], copyVariant ) );
     BOOST_CHECK( symbol->GetExcludedFromPosFiles( &m_schematic->Hierarchy()[0], copyVariant ) );
     BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                          false, 0, copyVariant ), wxS( "47K" ) );
+                                                                         INTERNAL, copyVariant ), wxS( "47K" ) );
 
     // Modify the copy and verify source is unchanged
     symbol->SetDNP( false, &m_schematic->Hierarchy()[0], copyVariant );
@@ -551,12 +551,12 @@ BOOST_AUTO_TEST_CASE( CopyVariantCreatesIndependentCopy )
     // Source should still have original values
     BOOST_CHECK( symbol->GetDNP( &m_schematic->Hierarchy()[0], sourceVariant ) );
     BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                          false, 0, sourceVariant ), wxS( "47K" ) );
+                                                                         INTERNAL, sourceVariant ), wxS( "47K" ) );
 
     // Copy should have modified values
     BOOST_CHECK( !symbol->GetDNP( &m_schematic->Hierarchy()[0], copyVariant ) );
     BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                          false, 0, copyVariant ), wxS( "100K" ) );
+                                                                         INTERNAL, copyVariant ), wxS( "100K" ) );
 }
 
 
@@ -582,7 +582,7 @@ BOOST_AUTO_TEST_CASE( VariantFieldDifferenceDetection )
 
     // Get the default value
     wxString defaultValue = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                               false, 0 );
+                                                                              INTERNAL );
     BOOST_CHECK_EQUAL( defaultValue, wxS( "1K" ) );
 
     // Add a variant and set a different value
@@ -591,7 +591,7 @@ BOOST_AUTO_TEST_CASE( VariantFieldDifferenceDetection )
 
     // Get variant value
     wxString variantValue = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                               false, 0, variantName1 );
+                                                                              INTERNAL, variantName1 );
     BOOST_CHECK_EQUAL( variantValue, wxS( "2.2K" ) );
 
     // Verify values differ
@@ -601,7 +601,7 @@ BOOST_AUTO_TEST_CASE( VariantFieldDifferenceDetection )
     m_schematic->AddVariant( variantName2 );
     symbol->GetField( FIELD_T::VALUE )->SetText( wxS( "1K" ), &m_schematic->Hierarchy()[0], variantName2 );
     wxString variantValue2 = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                                false, 0, variantName2 );
+                                                                               INTERNAL, variantName2 );
 
     // Second variant should have the same value as default
     BOOST_CHECK_EQUAL( defaultValue, variantValue2 );
@@ -750,11 +750,11 @@ BOOST_AUTO_TEST_CASE( SetValueFieldTextPersistsVariantValue )
     BOOST_CHECK_EQUAL( variant->m_Fields.at( fieldName ), newValue );
 
     // Verify through GetValue method as well
-    wxString retrievedValue = symbol->GetValue( false, &m_schematic->Hierarchy()[0], false, variantName );
+    wxString retrievedValue = symbol->GetValue( &m_schematic->Hierarchy()[0], RAW_VALUE, variantName );
     BOOST_CHECK_EQUAL( retrievedValue, newValue );
 
     // Verify default value is unchanged
-    wxString retrievedDefault = symbol->GetValue( false, &m_schematic->Hierarchy()[0], false, wxEmptyString );
+    wxString retrievedDefault = symbol->GetValue( &m_schematic->Hierarchy()[0], RAW_VALUE, wxEmptyString );
     BOOST_CHECK_EQUAL( retrievedDefault, defaultValue );
 }
 
@@ -805,8 +805,8 @@ BOOST_AUTO_TEST_CASE( SetFieldTextAndSetValueFieldTextConsistency )
     BOOST_CHECK_EQUAL( variant2->m_Fields.at( fieldName ), value2 );
 
     // Verify through GetValue
-    BOOST_CHECK_EQUAL( symbol->GetValue( false, &m_schematic->Hierarchy()[0], false, variantName1 ), value1 );
-    BOOST_CHECK_EQUAL( symbol->GetValue( false, &m_schematic->Hierarchy()[0], false, variantName2 ), value2 );
+    BOOST_CHECK_EQUAL( symbol->GetValue( &m_schematic->Hierarchy()[0], RAW_VALUE, variantName1 ), value1 );
+    BOOST_CHECK_EQUAL( symbol->GetValue( &m_schematic->Hierarchy()[0], RAW_VALUE, variantName2 ), value2 );
 
     // Verify through GetFieldText
     BOOST_CHECK_EQUAL( symbol->GetFieldText( fieldName, &m_schematic->Hierarchy()[0], variantName1 ), value1 );
@@ -919,22 +919,20 @@ BOOST_AUTO_TEST_CASE( VariantFieldUnicodeAndSpecialChars )
     wxString unicodeValue = wxS( "1kΩ ±5% 日本語" );
     symbol->GetField( FIELD_T::VALUE )->SetText( unicodeValue, &m_schematic->Hierarchy()[0], variantName );
 
-    wxString retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                            false, 0, variantName );
+    wxString retrieved;
+    retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0], INTERNAL, variantName );
     BOOST_CHECK_EQUAL( retrieved, unicodeValue );
 
     // Test special characters
     wxString specialChars = wxS( "R<1K>\"test\"'value'" );
     symbol->GetField( FIELD_T::VALUE )->SetText( specialChars, &m_schematic->Hierarchy()[0], variantName );
 
-    retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                   false, 0, variantName );
+    retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0], INTERNAL, variantName );
     BOOST_CHECK_EQUAL( retrieved, specialChars );
 
     // Test empty string
     symbol->GetField( FIELD_T::VALUE )->SetText( wxEmptyString, &m_schematic->Hierarchy()[0], variantName );
-    retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0],
-                                                                   false, 0, variantName );
+    retrieved = symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0], INTERNAL, variantName );
     BOOST_CHECK( retrieved.IsEmpty() );
 
     // Test description with unicode
@@ -971,7 +969,7 @@ BOOST_AUTO_TEST_CASE( VariantSpecificFieldDereferencing )
     symbol->SetDNP( true, &m_schematic->Hierarchy()[0], variantName );
 
     // Verify default value
-    BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0], false, 0 ),
+    BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetShownText( &m_schematic->Hierarchy()[0], INTERNAL ),
                        defaultValue );
 
     // Get the symbol's reference (R1) for cross-reference testing
@@ -1048,7 +1046,7 @@ BOOST_AUTO_TEST_CASE( FootprintFieldVariantSupport )
 
     // Set a base footprint first
     symbol->SetFootprintFieldText( baseFootprint );
-    BOOST_CHECK_EQUAL( symbol->GetFootprintFieldText( false, nullptr, false ), baseFootprint );
+    BOOST_CHECK_EQUAL( symbol->GetFootprintFieldText( nullptr, RAW_VALUE ), baseFootprint );
 
     // Add the variant
     m_schematic->AddVariant( variantName );
@@ -1057,7 +1055,7 @@ BOOST_AUTO_TEST_CASE( FootprintFieldVariantSupport )
     symbol->SetFieldText( fieldName, variantFootprint, &m_schematic->Hierarchy()[0], variantName );
 
     // Verify base footprint is unchanged
-    wxString retrievedBase = symbol->GetFootprintFieldText( false, nullptr, false );
+    wxString retrievedBase = symbol->GetFootprintFieldText( nullptr, RAW_VALUE );
     BOOST_CHECK_EQUAL( retrievedBase, baseFootprint );
 
     // Verify GetFieldText with no variant returns base footprint
@@ -1154,17 +1152,17 @@ BOOST_AUTO_TEST_CASE( VariantSwitchInvalidatesBoundingBoxCache )
     symbol->SetFieldText( fpField->GetName(), longFp, &m_schematic->Hierarchy()[0], variantName );
 
     // Confirm variant text resolution works
-    wxString resolvedDefault = fpField->GetShownText( &m_schematic->Hierarchy()[0], false, 0, wxEmptyString );
-    wxString resolvedVariant = fpField->GetShownText( &m_schematic->Hierarchy()[0], false, 0, variantName );
+    wxString resolvedDefault = fpField->GetShownText( &m_schematic->Hierarchy()[0], INTERNAL, wxEmptyString );
+    wxString resolvedVariant = fpField->GetShownText( &m_schematic->Hierarchy()[0], INTERNAL, variantName );
     BOOST_CHECK_EQUAL( resolvedDefault, shortFp );
     BOOST_CHECK_EQUAL( resolvedVariant, longFp );
 
     // Verify the implicit text resolution via GetShownText(bool) works for each variant
     m_schematic->SetCurrentVariant( wxEmptyString );
-    wxString implicitDefault = fpField->GetShownText( false );
+    wxString implicitDefault = fpField->GetShownText( INTERNAL );
 
     m_schematic->SetCurrentVariant( variantName );
-    wxString implicitVariant = fpField->GetShownText( false );
+    wxString implicitVariant = fpField->GetShownText( INTERNAL );
 
     BOOST_CHECK_EQUAL( implicitDefault, shortFp );
     BOOST_CHECK_EQUAL( implicitVariant, longFp );

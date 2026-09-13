@@ -652,7 +652,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         if( SCH_ITEM* item = m_schematic->ResolveItem( uuid, &path, true ) )
         {
             if( item->Type() == SCH_SHEET_T )
-                payload = static_cast<SCH_SHEET*>( item )->GetShownName( false );
+                payload = static_cast<SCH_SHEET*>( item )->GetShownName( INTERNAL );
             else if( item->Type() == SCH_SYMBOL_T )
                 payload = static_cast<SCH_SYMBOL*>( item )->GetRef( &path, true );
             else

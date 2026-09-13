@@ -200,7 +200,7 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( con
         if( field->IsPrivate() )
             return wxEmptyString;
         else
-            return field->GetShownText( false, 0 );
+            return field->GetShownText( INTERNAL, 0 );
     }
 
     // Handle generated fields with variables as names (e.g. ${QUANTITY}) that are not present in

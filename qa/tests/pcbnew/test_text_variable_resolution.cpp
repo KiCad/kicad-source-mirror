@@ -153,11 +153,11 @@ BOOST_AUTO_TEST_CASE( PcbTextResolvesProjectVars )
     PCB_TEXT text( &m_board );
     text.SetText( "Version: ${VERSION}" );
 
-    BOOST_CHECK_EQUAL( text.GetShownText( true ), "Version: 3.5" );
+    BOOST_CHECK_EQUAL( text.GetShownText( FOR_CANVAS ), "Version: 3.5" );
 
     ProjectVars()["VERSION"] = "4.0";
 
-    BOOST_CHECK_EQUAL( text.GetShownText( true ), "Version: 4.0" );
+    BOOST_CHECK_EQUAL( text.GetShownText( FOR_CANVAS ), "Version: 4.0" );
 }
 
 

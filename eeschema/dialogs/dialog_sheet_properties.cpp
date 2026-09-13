@@ -673,7 +673,7 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
     m_dummySheet.SetFields( *m_fields );
     m_dummySheetNameField.SetText( sheetName );
-    path += m_dummySheetNameField.GetShownText( false );
+    path += m_dummySheetNameField.GetShownText( FOR_GUI );
 
     editor->DecRef();
 

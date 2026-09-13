@@ -1454,7 +1454,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
     if( token->IsSameAs( wxT( "REFERENCE" ) ) )
     {
         if( const PCB_FIELD* reference = GetField( FIELD_T::REFERENCE ) )
-            *token = reference->GetShownText( false, aDepth + 1 );
+            *token = reference->GetShownText( INTERNAL, aDepth + 1 );
         else
             token->Clear();
 
@@ -1463,7 +1463,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
     else if( token->IsSameAs( wxT( "VALUE" ) ) )
     {
         if( const PCB_FIELD* value = GetField( FIELD_T::VALUE ) )
-            *token = value->GetShownText( false, aDepth + 1 );
+            *token = value->GetShownText( INTERNAL, aDepth + 1 );
         else
             token->Clear();
 
@@ -1553,7 +1553,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, const wxString& aVariantName, i
     }
     else if( PCB_FIELD* field = GetField( *token ) )
     {
-        *token = field->GetShownText( false, aDepth + 1 );
+        *token = field->GetShownText( INTERNAL, aDepth + 1 );
         return true;
     }
     // The great property resolver: ${PROPERTY.My_Property}

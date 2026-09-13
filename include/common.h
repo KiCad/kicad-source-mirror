@@ -20,13 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * The common library
- * @file common.h
- */
-
-#ifndef INCLUDE__COMMON_H_
-#define INCLUDE__COMMON_H_
+#pragma once
 
 #include <kicommon.h>
 #include <functional>
@@ -89,17 +83,24 @@ KICOMMON_API wxString JoinExtensions( const std::vector<std::string>& aExts );
  */
 KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject );
 
-/**
- * Expand '${var-name}' templates in text.
- */
-#define FOR_ERC_DRC 1
+enum RESOLUTION_CONTEXT
+{
+    FOR_CANVAS,
+    FOR_GUI,
+    FOR_NETNAME,
+    FOR_ERC_DRC,
+    INTERNAL,       // Importantly, keeps the escape on literal variable references (such as "\${foo}")
+    RESOLVED,
+    RAW_VALUE
+};
 
-KICOMMON_API void FinalizeTextVarExpansion( wxString& aText, bool aForCanvasDisplay );
+KICOMMON_API void FinalizeTextVarExpansion( wxString& aText, RESOLUTION_CONTEXT aContext );
 
 KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxString* )>* aResolver,
-                                      int aFlags = 0, int aDepth = 0 );
+                                      RESOLUTION_CONTEXT aContext, int aDepth = 0 );
 
-KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int aFlags = 0 );
+KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject,
+                                      RESOLUTION_CONTEXT aContext );
 
 /**
  * Normalize a file path so its text variables survive ExpandTextVars.
@@ -175,5 +176,3 @@ KICOMMON_API const wxString ResolveUriByEnvVars( const wxString& aUri, const PRO
  */
 KICOMMON_API bool WarnUserIfOperatingSystemUnsupported();
 
-
-#endif // INCLUDE__COMMON_H_

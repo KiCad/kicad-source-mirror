@@ -305,14 +305,14 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end();
              ++it )
         {
-            if( it->first->GetValue( false, &it->second, false )
-                != first_ele.first->GetValue( false, &first_ele.second, false ) )
+            if( it->first->GetValue( &it->second, RAW_VALUE )
+                != first_ele.first->GetValue( &first_ele.second, RAW_VALUE ) )
             {
                 continue;
             }
 
-            if( it->first->GetFootprintFieldText( false, &it->second, false )
-                != first_ele.first->GetFootprintFieldText( false, &first_ele.second, false ) )
+            if( it->first->GetFootprintFieldText( &it->second, RAW_VALUE )
+                != first_ele.first->GetFootprintFieldText( &first_ele.second, RAW_VALUE ) )
             {
                 continue;
             }
@@ -354,8 +354,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         SCH_SYMBOL* sym = ( beginIter->second ).first;
         SCH_SHEET_PATH sheetPath = ( beginIter->second ).second;
 
-        wxString valueText = sym->GetValue( false, &sheetPath, false );
-        wxString footprintText = sym->GetFootprintFieldText( false, &sheetPath, false);
+        wxString valueText = sym->GetValue( &sheetPath, RAW_VALUE );
+        wxString footprintText = sym->GetFootprintFieldText( &sheetPath, RAW_VALUE );
         wxString deviceType = valueText + wxString("_") + footprintText;
 
         while( deviceType.GetChar(deviceType.Length()-1) == '_' )
@@ -622,8 +622,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, std::vector<S
 }
 
 
-wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArrayString& aFieldArray,
-                                                  bool aSanitize )
+wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArrayString& aFieldArray, bool aSanitize )
 {
     auto pairIter = m_componentGroups.equal_range( aGroupIndex );
 
@@ -636,7 +635,8 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
         {
             if( SCH_FIELD* fld = sym->FindFieldCaseInsensitive( field ) )
             {
-                wxString fieldText = fld->GetShownText( &sheetPath, true );
+                // TODO: FOR_CANVAS seems like an odd context here....
+                wxString fieldText = fld->GetShownText( &sheetPath, FOR_CANVAS );
 
                 if( !fieldText.IsEmpty() )
                 {
@@ -657,7 +657,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
         {
             if( SCH_FIELD* fld = sym->GetLibSymbolRef()->FindFieldCaseInsensitive( field ) )
             {
-                wxString fieldText = fld->GetShownText( false, 0 );
+                wxString fieldText = fld->GetShownText( RESOLVED );
 
                 if( !fieldText.IsEmpty() )
                 {

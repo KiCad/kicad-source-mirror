@@ -64,7 +64,7 @@ DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS(
         PANEL_SYNC_SHEET_PINS* page = new PANEL_SYNC_SHEET_PINS( m_notebook, sheet, m_notebook,
                                                                  ++count, *m_agent, sheet_path );
         bool hasUndefined = page->HasUndefinedSheetPing();
-        m_notebook->AddPage( page, sheet->GetShownName( true ), {}, hasUndefined );
+        m_notebook->AddPage( page, sheet->GetShownName( FOR_GUI ), {}, hasUndefined );
         page->UpdateForms();
 
         if( aInitialSheet && sheet == aInitialSheet )

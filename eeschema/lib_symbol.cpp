@@ -95,24 +95,34 @@ static std::shared_ptr<LIB_SYMBOL> GetSafeRootSymbol( const LIB_SYMBOL* aSymbol,
 }
 
 
-wxString LIB_SYMBOL::GetShownDescription( int aDepth ) const
+wxString LIB_SYMBOL::getShownDescription( RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
-    return m_shownDescriptionCache;
-}
-
-void LIB_SYMBOL::cacheShownDescription()
-{
-    wxString shownText = GetDescriptionField().GetShownText( false, 0 );
+    wxString shownText = GetDescriptionField().GetShownText( aContext, aDepth );
 
     if( shownText.IsEmpty() && IsDerived() )
     {
         std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
 
         if( root.get() != this )
-            shownText = root->GetDescriptionField().GetShownText( false, 0 );
+            shownText = root->GetDescriptionField().GetShownText( aContext, aDepth );
     }
 
-    m_shownDescriptionCache = shownText;
+    return shownText;
+}
+
+
+wxString LIB_SYMBOL::GetShownDescription( RESOLUTION_CONTEXT aContext, int aDepth ) const
+{
+    if( aContext == FOR_GUI )
+        return m_shownDescriptionCache;
+
+    return getShownDescription( aContext, aDepth );
+}
+
+
+void LIB_SYMBOL::cacheShownDescription()
+{
+    m_shownDescriptionCache = getShownDescription( FOR_GUI, 0 );
 }
 
 
@@ -131,8 +141,11 @@ void LIB_SYMBOL::SetKeyWords( const wxString& aKeyWords )
 }
 
 
-wxString LIB_SYMBOL::GetShownKeyWords( int aDepth ) const
+wxString LIB_SYMBOL::GetShownKeyWords( RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
+    if( aContext == RAW_VALUE )
+        return GetKeyWords();
+
     wxString text = GetKeyWords();
 
     std::function<bool( wxString* )> libSymbolResolver =
@@ -165,14 +178,14 @@ void LIB_SYMBOL::cacheSearchTerms()
     m_searchTermsCache.emplace_back( SEARCH_TERM( GetName(), 8, true ) );
     m_searchTermsCache.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16, true ) );
 
-    wxStringTokenizer keywordTokenizer( GetShownKeyWords(), " \t\r\n", wxTOKEN_STRTOK );
+    wxStringTokenizer keywordTokenizer( GetShownKeyWords( FOR_GUI ), " \t\r\n", wxTOKEN_STRTOK );
 
     while( keywordTokenizer.HasMoreTokens() )
         m_searchTermsCache.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
 
     // Also include keywords as one long string, just in case
-    m_searchTermsCache.emplace_back( SEARCH_TERM( GetShownKeyWords(), 1 ) );
-    m_searchTermsCache.emplace_back( SEARCH_TERM( GetShownDescription(), 1 ) );
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetShownKeyWords( FOR_GUI ), 1 ) );
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetShownDescription( FOR_GUI ), 1 ) );
 
     // Add relational term for unit count
     m_searchTermsCache.emplace_back( SEARCH_TERM( wxString::Format( wxT( "units=%d" ), GetUnitCount() ), 1 ) );
@@ -199,7 +212,7 @@ void LIB_SYMBOL::cacheChooserFields()
         SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
 
         if( field->ShowInChooser() )
-            m_chooserFieldsCache[field->GetName()] = field->EDA_TEXT::GetShownText( false );
+            m_chooserFieldsCache[field->GetName()] = field->EDA_TEXT::GetShownText( FOR_GUI );
     }
 
     // If the user has a field named "Keywords", then prefer that.  Otherwise add the KiCad
@@ -207,7 +220,7 @@ void LIB_SYMBOL::cacheChooserFields()
     const wxString localizedKeywords = _( "Keywords" );
 
     if( !m_chooserFieldsCache.contains( localizedKeywords ) )
-        m_chooserFieldsCache[localizedKeywords] = GetShownKeyWords();
+        m_chooserFieldsCache[localizedKeywords] = GetShownKeyWords( FOR_GUI );
 }
 
 
@@ -583,7 +596,7 @@ wxString LIB_SYMBOL::GetFootprint()
     if( !GetField( FIELD_T::FOOTPRINT ) )
         return wxEmptyString;
 
-    return GetFootprintField().GetShownText( false );
+    return GetFootprintField().GetShownText( INTERNAL );
 }
 
 
@@ -897,11 +910,11 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
             const SCH_FIELD& field = static_cast<const SCH_FIELD&>( item );
 
             if( field.GetId() == FIELD_T::FOOTPRINT )
-                footprint = field.GetShownText( nullptr, false, aDepth + 1 );
+                footprint = field.GetShownText( nullptr, INTERNAL, wxEmptyString, aDepth + 1 );
 
             if( token->IsSameAs( field.GetUntranslatedName().Upper() ) || token->IsSameAs( field.GetName(), false ) )
             {
-                *token = field.GetShownText( nullptr, false, aDepth + 1 );
+                *token = field.GetShownText( nullptr, INTERNAL, wxEmptyString, aDepth + 1 );
                 return true;
             }
         }
@@ -950,12 +963,12 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "SYMBOL_DESCRIPTION" ) ) )
     {
-        *token = GetShownDescription( aDepth + 1 );
+        *token = GetShownDescription( INTERNAL, aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_KEYWORDS" ) ) )
     {
-        *token = GetShownKeyWords( aDepth + 1 );
+        *token = GetShownKeyWords( INTERNAL, aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_IS_POWER" ) ) )

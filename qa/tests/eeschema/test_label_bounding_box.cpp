@@ -76,7 +76,7 @@ struct LABEL_BBOX_FIXTURE
 
         VECTOR2I textSize = aText.GetTextSize();
         int      thickness = aText.GetEffectiveTextPenWidth();
-        wxString text = aText.GetShownText( true );
+        wxString text = aText.GetShownText( FOR_CANVAS );
 
         // Get the text width from the font using empty metrics (defaults)
         KIFONT::METRICS metrics;

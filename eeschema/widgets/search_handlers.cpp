@@ -225,9 +225,9 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
     if( aCol == 0 )
         return sym->GetRef( aHit.sheetPath, true );
     else if( aCol == 1 )
-        return sym->GetField( FIELD_T::VALUE )->GetShownText( aHit.sheetPath, false );
+        return sym->GetField( FIELD_T::VALUE )->GetShownText( aHit.sheetPath, FOR_GUI );
     else if( aCol == 2 )
-        return sym->GetField( FIELD_T::FOOTPRINT )->GetShownText( aHit.sheetPath, false );
+        return sym->GetField( FIELD_T::FOOTPRINT )->GetShownText( aHit.sheetPath, FOR_GUI );
     else if( aCol == 3 )
         return aHit.sheetPath->GetPageNumber();
     else if( aCol == 4 )
@@ -247,7 +247,7 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
     else if( aCol == 11 )
         return sym->GetLibId().Format();
     else if( aCol == 12 )
-        return sym->GetShownDescription();
+        return sym->GetShownDescription( FOR_GUI );
 
     return wxEmptyString;
 }
@@ -316,7 +316,7 @@ wxString POWER_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aC
     if( aCol == 0 )
         return sym->GetRef( aHit.sheetPath, true );
     else if( aCol == 1 )
-        return sym->GetField( FIELD_T::VALUE )->GetShownText( aHit.sheetPath, false );
+        return sym->GetField( FIELD_T::VALUE )->GetShownText( aHit.sheetPath, FOR_GUI );
     else if( aCol == 2 )
         return aHit.sheetPath->GetPageNumber();
     else if( aCol == 3 )
@@ -384,7 +384,7 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCo
         if( aCol == 0 )
             return _( "Text" );
         else if( aCol == 1 )
-            return txt->GetShownText( false );
+            return txt->GetShownText( FOR_GUI );
         else if( aCol == 2 )
             return aHit.sheetPath->GetPageNumber();
         else if( aCol == 3 )
@@ -402,7 +402,7 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCo
         if( aCol == 0 )
             return _( "Text Box" );
         else if( aCol == 1 )
-            return txt->GetShownText( false );
+            return txt->GetShownText( FOR_GUI );
         else if( aCol == 2 )
             return aHit.sheetPath->GetPageNumber();
         else if( aCol == 3 )
@@ -483,7 +483,7 @@ wxString LABEL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aC
             return _HKI( "Directive" );
     }
     else if( aCol == 1 )
-        return lbl->GetShownText( false );
+        return lbl->GetShownText( FOR_GUI );
     else if( aCol == 2 )
         return aHit.sheetPath->GetPageNumber();
     else if( aCol == 3 )

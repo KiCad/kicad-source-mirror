@@ -93,7 +93,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
                 if( symbol->GetExcludedFromBoard() )
                     continue;
 
-                footprint = symbol->GetFootprintFieldText( true, &sheet, false );
+                footprint = symbol->GetFootprintFieldText( &sheet, RESOLVED );
 
                 if( footprint.IsEmpty() )
                     footprint = "$noname";
@@ -102,7 +102,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
                 fmt::print( f, "{}     ", TO_UTF8( StartCmpDesc ) );
                 fmt::print( f, "{}", TO_UTF8( msg ) );
 
-                msg = symbol->GetValue( true, &sheet, false );
+                msg = symbol->GetValue( &sheet, RESOLVED );
                 msg.Replace( wxT( " " ), wxT( "_" ) );
                 fmt::print( f, "     \"{}\"", TO_UTF8( msg ) );
                 fmt::print( f, "     \"{}\"", TO_UTF8( footprint ) );

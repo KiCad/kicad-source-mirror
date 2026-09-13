@@ -685,7 +685,7 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
             {
                 wxString str( line );
                 str = m_board->ConvertCrossReferencesToKIIDs( str );
-                str = ExpandTextVars( str, &resolver );
+                str = ExpandTextVars( str, &resolver, INTERNAL );
 
                 rulesText << str << '\n';
             }

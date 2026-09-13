@@ -50,14 +50,14 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem )
     case SCH_SHEET_PIN_T:
     {
         const SCH_TEXT& text = static_cast<const SCH_TEXT&>( aItem );
-        return text.GetShownText( true );
+        return text.GetShownText( FOR_CANVAS );
     }
 
     case SCH_FIELD_T:
     {
         // Goes via EDA_TEXT
         const SCH_FIELD& field = static_cast<const SCH_FIELD&>( aItem );
-        return field.GetShownText( true );
+        return field.GetShownText( FOR_CANVAS );
     }
 
     case SCH_TEXTBOX_T:
@@ -68,7 +68,7 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem )
 
         // Call the correct GetShownText overload with nullptr for settings/path and aDepth=0
         // This ensures proper variable expansion and escape marker conversion
-        return textbox.GetShownText( nullptr, nullptr, true, 0 );
+        return textbox.GetShownText( nullptr, nullptr, FOR_CANVAS );
     }
 
     case SCH_PIN_T:
@@ -90,7 +90,7 @@ wxString GetSchItemAsText( const SCH_ITEM& aItem )
             for( int col = 0; col < table.GetColCount(); ++col )
             {
                 const SCH_TABLECELL* cell = table.GetCell( row, col );
-                s << cell->GetShownText( true );
+                s << cell->GetShownText( FOR_CANVAS );
 
                 if( col < table.GetColCount() - 1 )
                 {
@@ -128,9 +128,7 @@ wxString GetSelectedItemsAsText( const SELECTION& aSel )
             itemText.Trim( false ).Trim( true );
 
             if( !itemText.IsEmpty() )
-            {
-                itemTexts.Add( std::move( itemText ) );
-            }
+                itemTexts.Add( itemText );
         }
     }
 
@@ -442,7 +440,7 @@ std::set<wxString> GetSheetNamesFromPaths( const std::set<wxString>& aSheetPaths
                         if( !nameField )
                             continue;
 
-                        wxString name = nameField->GetShownText( false );
+                        wxString name = nameField->GetShownText( FOR_NETNAME );
 
                         if( name.IsEmpty() )
                             continue;
@@ -482,7 +480,7 @@ wxString UniqueSheetName( SCH_SCREEN* aScreen, const wxString& aBaseName )
     std::set<wxString> existing;
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SHEET_T ) )
-        existing.insert( static_cast<SCH_SHEET*>( item )->GetShownName( false ).Lower() );
+        existing.insert( static_cast<SCH_SHEET*>( item )->GetShownName( INTERNAL ).Lower() );
 
     if( !existing.count( aBaseName.Lower() ) )
         return aBaseName;

@@ -712,8 +712,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
             // Display parent footprint info
             msg.Printf( _("Footprint %s (%s), %s, rotated %g deg"),
-                         footprint->Reference().GetShownText( false ),
-                         footprint->Value().GetShownText( false ),
+                         footprint->Reference().GetShownText( FOR_GUI ),
+                         footprint->Value().GetShownText( FOR_GUI ),
                          footprint->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
                          footprint->GetOrientation().AsDegrees() );
 

@@ -779,7 +779,7 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 
     wxString var = *token;
 
-    if( GetTitleBlock().TextVarResolver( token, m_project ) )
+    if( GetTitleBlock().TextVarResolver( token, m_project, INTERNAL ) )
         return true;
 
     // Resolve from the project's live text variables before the board's cached properties so

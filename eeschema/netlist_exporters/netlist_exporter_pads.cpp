@@ -82,7 +82,7 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
                 if( symbol->GetExcludedFromBoard() )
                     continue;
 
-                footprint = symbol->GetFootprintFieldText( true, &sheet, false );
+                footprint = symbol->GetFootprintFieldText( &sheet, RESOLVED );
 
                 footprint = footprint.Trim( true );
                 footprint = footprint.Trim( false );
@@ -91,7 +91,7 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
                 if( footprint.IsEmpty() )
                 {
                     // fall back to value field
-                    footprint = symbol->GetValue( true, &sheet, false );
+                    footprint = symbol->GetValue( &sheet, RESOLVED );
                     footprint.Replace( wxT( " " ), wxT( "_" ) );
                     footprint = footprint.Trim( true );
                     footprint = footprint.Trim( false );

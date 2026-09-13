@@ -94,7 +94,7 @@ BOOST_FIXTURE_TEST_CASE( Issue24044ExpressionNetNames, ISSUE_24044_FIXTURE )
             if( item->Type() == SCH_HIER_LABEL_T )
             {
                 SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
-                labelTexts.insert( label->GetShownText( &childPath, false ) );
+                labelTexts.insert( label->GetShownText( &childPath, INTERNAL ) );
             }
         }
 
@@ -111,7 +111,7 @@ BOOST_FIXTURE_TEST_CASE( Issue24044ExpressionNetNames, ISSUE_24044_FIXTURE )
         // Every sheet pin's resolved name must appear in the child's hierarchical labels
         for( SCH_SHEET_PIN* pin : childSheet->GetPins() )
         {
-            wxString pinText = pin->GetShownText( &childPath, false );
+            wxString pinText = pin->GetShownText( &childPath, INTERNAL );
 
             BOOST_CHECK_MESSAGE( !pinText.Contains( wxT( "@{" ) )
                                          && !pinText.Contains( wxT( "${" ) ),
@@ -137,7 +137,7 @@ BOOST_FIXTURE_TEST_CASE( Issue24044ExpressionNetNames, ISSUE_24044_FIXTURE )
     for( const SCH_SHEET_PATH& childPath : childPaths )
     {
         for( SCH_SHEET_PIN* pin : childPath.Last()->GetPins() )
-            allPinTexts.insert( pin->GetShownText( &childPath, false ) );
+            allPinTexts.insert( pin->GetShownText( &childPath, INTERNAL ) );
     }
 
     BOOST_CHECK_EQUAL( allPinTexts.size(), 4U );
@@ -156,7 +156,7 @@ BOOST_FIXTURE_TEST_CASE( Issue24044ExpressionNetNames, ISSUE_24044_FIXTURE )
         std::set<wxString> actual;
 
         for( SCH_SHEET_PIN* pin : childPath.Last()->GetPins() )
-            actual.insert( pin->GetShownText( &childPath, false ) );
+            actual.insert( pin->GetShownText( &childPath, INTERNAL ) );
 
         wxString actualList;
 
@@ -221,8 +221,8 @@ BOOST_FIXTURE_TEST_CASE( Issue24044PathFormEquivalence, ISSUE_24044_FIXTURE )
 
         for( SCH_SHEET_PIN* pin : childSheet->GetPins() )
         {
-            wxString fromChildPath  = pin->GetShownText( &childPath, false );
-            wxString fromParentPath = pin->GetShownText( &parentPath, false );
+            wxString fromChildPath  = pin->GetShownText( &childPath, INTERNAL );
+            wxString fromParentPath = pin->GetShownText( &parentPath, INTERNAL );
 
             BOOST_CHECK_MESSAGE( fromChildPath == fromParentPath,
                                  wxString::Format( "Sheet pin resolution diverged between "

@@ -40,7 +40,7 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
 
     wxString outputPath = m_outputPath;
     outputPath.Replace( wxT( "\\" ), wxT( "/" ) );
-    outputPath = ExpandTextVars( outputPath, aProject );
+    outputPath = ExpandTextVars( outputPath, aProject, INTERNAL );
     outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
 
     if( outputPath.StartsWith( "~" ) )

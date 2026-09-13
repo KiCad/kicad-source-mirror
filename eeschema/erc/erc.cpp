@@ -164,7 +164,7 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
                 // We have found a second sheet: compare names
                 // we are using case insensitive comparison to avoid mistakes between
                 // similar names like Mysheet and mysheet
-                if( sheet->GetShownName( false ).IsSameAs( test_item->GetShownName( false ), false ) )
+                if( sheet->GetShownName( RESOLVED ).IsSameAs( test_item->GetShownName( RESOLVED ), false ) )
                 {
                     if( aCreateMarker )
                     {
@@ -348,7 +348,7 @@ int ERC_TESTER::TestPinMap( KIFACE* aCvPcb, PROJECT* aProject )
                 if( !lib || lib->GetEffectiveAssociatedFootprints().empty() )
                     continue;
 
-                wxString fpText = symbol->GetFootprintFieldText( true, &sheet, false );
+                wxString fpText = symbol->GetFootprintFieldText( &sheet, RESOLVED );
                 LIB_ID   fpId;
 
                 if( fpText.IsEmpty() || fpId.Parse( fpText, true ) >= 0 )
@@ -372,9 +372,10 @@ int ERC_TESTER::TestPinMap( KIFACE* aCvPcb, PROJECT* aProject )
 
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_MAP_UNMAPPED_PIN );
                     ercItem->SetItems( pin );
-                    ercItem->SetErrorMessage(
-                            wxString::Format( _( "Pin '%s' is connected but maps to no pad on footprint '%s'" ),
-                                              pin->GetNumber(), fpText ) );
+                    ercItem->SetErrorMessage(  wxString::Format( _( "Pin '%s' is connected but maps to no pad "
+                                                                    "on footprint '%s'" ),
+                                                                 pin->GetNumber(),
+                                                                 fpText ) );
                     sheet.LastScreen()->Append( new SCH_MARKER( std::move( ercItem ), pin->GetPosition() ) );
                     errors++;
                 }
@@ -487,7 +488,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     {
                         // Don't run unresolved test
                     }
-                    else if( unresolved( field.GetShownText( &sheet, true ) ) )
+                    else if( unresolved( field.GetShownText( &sheet, FOR_ERC_DRC ) ) )
                     {
                         auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( symbol );
@@ -516,7 +517,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                                     {
                                         // Don't run unresolved test
                                     }
-                                    else if( unresolved( textItem->GetShownText( &sheet, false ) ) )
+                                    else if( unresolved( textItem->GetShownText( &sheet, FOR_ERC_DRC ) ) )
                                     {
                                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                                         ercItem->SetItems( symbol );
@@ -539,7 +540,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                                     {
                                         // Don't run unresolved test
                                     }
-                                    else if( unresolved( textboxItem->GetShownText( nullptr, &sheet, true ) ) )
+                                    else if( unresolved( textboxItem->GetShownText( nullptr, &sheet, FOR_ERC_DRC ) ) )
                                     {
                                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                                         ercItem->SetItems( symbol );
@@ -565,7 +566,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     {
                         // Don't run unresolved test
                     }
-                    else if( unresolved( field.GetShownText( &sheet, true ) ) )
+                    else if( unresolved( field.GetShownText( &sheet, FOR_ERC_DRC ) ) )
                     {
                         auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( label );
@@ -586,7 +587,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     {
                         // Don't run unresolved test
                     }
-                    else if( unresolved( field.GetShownText( &sheet, true ) ) )
+                    else if( unresolved( field.GetShownText( &sheet, FOR_ERC_DRC ) ) )
                     {
                         auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( subSheet );
@@ -602,7 +603,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
                 for( SCH_SHEET_PIN* pin : subSheet->GetPins() )
                 {
-                    if( varRefRegEx.Matches( pin->GetShownText( &subSheetPath, false ) ) )
+                    if( varRefRegEx.Matches( pin->GetShownText( &subSheetPath, FOR_ERC_DRC ) ) )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( pin );
@@ -619,7 +620,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     // Don't run unresolved test
                 }
-                else if( varRefRegEx.Matches( text->GetShownText( &sheet, false ) ) )
+                else if( varRefRegEx.Matches( text->GetShownText( &sheet, FOR_ERC_DRC ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( text );
@@ -635,7 +636,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     // Don't run unresolved test
                 }
-                else if( varRefRegEx.Matches( textBox->GetShownText( nullptr, &sheet, true ) ) )
+                else if( varRefRegEx.Matches( textBox->GetShownText( nullptr, &sheet, FOR_ERC_DRC ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( textBox );
@@ -655,7 +656,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     // Don't run unresolved test
                 }
-                else if( varRefRegEx.Matches( text->GetShownText( false ) ) )
+                else if( varRefRegEx.Matches( text->GetShownText( FOR_ERC_DRC ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
@@ -1006,7 +1007,7 @@ int ERC_TESTER::TestMissingNetclasses()
 
                             if( field->GetUntranslatedName() == wxT( "Netclass" ) )
                             {
-                                wxString netclass = field->GetShownText( &sheet, false );
+                                wxString netclass = field->GetShownText( &sheet, FOR_NETNAME );
 
                                 if( !netclass.empty() && !netclass.IsSameAs( defaultNetclass )
                                     && !settings->HasNetclass( netclass ) )
@@ -1995,7 +1996,7 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
                 if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T )
                 {
                     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
-                    wxString        text = label->GetShownText( &sheet, false );
+                    wxString        text = label->GetShownText( &sheet, FOR_NETNAME );
 
                     auto& map = item->Type() == SCH_LABEL_T ? localLabels : globalLabels;
                     auto it   = map.find( text );
@@ -2017,8 +2018,8 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
                         continue;
 
                     wxString text = ( pin->IsGlobalPower() && !symbol->IsGlobalPower() )
-                                            ? pin->GetShownName()
-                                            : symbol->GetValue( true, &sheet, false );
+                                                                        ? pin->GetShownName()
+                                                                        : symbol->GetValue( &sheet, FOR_NETNAME );
 
                     auto& map = pin->IsGlobalPower() ? globalLabels : localLabels;
                     auto it   = map.find( text );
@@ -2038,8 +2039,8 @@ int ERC_TESTER::TestSameLocalGlobalLabel()
             if( globalText == localText )
             {
                 ERCE_T errorCode = ( globalItem.first->Type() == SCH_PIN_T && localItem.first->Type() == SCH_PIN_T )
-                                           ? ERCE_SAME_LOCAL_GLOBAL_POWER
-                                           : ERCE_SAME_LOCAL_GLOBAL_LABEL;
+                                                                                   ? ERCE_SAME_LOCAL_GLOBAL_POWER
+                                                                                   : ERCE_SAME_LOCAL_GLOBAL_LABEL;
 
                 if( !m_settings.IsTestEnabled( errorCode ) )
                     continue;
@@ -2111,7 +2112,7 @@ int ERC_TESTER::TestSimilarLabels()
                 case SCH_GLOBAL_LABEL_T:
                 {
                     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
-                    wxString        unnormalized = label->GetShownText( &sheet, false );
+                    wxString        unnormalized = label->GetShownText( &sheet, FOR_NETNAME );
 
                     generalMap[normalizeLabel( unnormalized )].push_back( { unnormalized, label, sheet } );
                     break;
@@ -2124,7 +2125,7 @@ int ERC_TESTER::TestSimilarLabels()
                         continue;
 
                     SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
-                    wxString    unnormalized = symbol->GetValue( true, &sheet, false );
+                    wxString    unnormalized = symbol->GetValue( &sheet, FOR_NETNAME );
 
                     generalMap[normalizeLabel( unnormalized )].push_back( { unnormalized, pin, sheet } );
                     break;
@@ -2358,7 +2359,7 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            wxString    footprint = symbol->GetFootprintFieldText( true, &sheet, false );
+            wxString    footprint = symbol->GetFootprintFieldText( &sheet, RESOLVED );
 
             if( footprint.IsEmpty() )
                 continue;
@@ -2444,7 +2445,7 @@ int ERC_TESTER::TestFootprintFilters()
             if( filters.empty() )
                 continue;
 
-            wxString lowerId = sch_symbol->GetFootprintFieldText( true, &sheet, false ).Lower();
+            wxString lowerId = sch_symbol->GetFootprintFieldText( &sheet, RESOLVED ).Lower();
             LIB_ID   footprint;
 
             if( footprint.Parse( lowerId ) > 0 )

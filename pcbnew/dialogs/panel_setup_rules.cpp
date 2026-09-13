@@ -228,7 +228,7 @@ void PANEL_SETUP_RULES::OnShowMatching()
                 };
 
         wxString rulesText = m_frame->GetBoard()->ConvertCrossReferencesToKIIDs( text );
-        rulesText = ExpandTextVars( rulesText, &resolver );
+        rulesText = ExpandTextVars( rulesText, &resolver, RESOLVED );
 
         DRC_RULES_PARSER parser( rulesText, _( "DRC rules" ) );
         parser.Parse( rules, m_errorsReport );
@@ -952,7 +952,7 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
 
         wxString rulesText = m_textEditor->GetText();
         rulesText = m_frame->GetBoard()->ConvertCrossReferencesToKIIDs( rulesText );
-        rulesText = ExpandTextVars( rulesText, &resolver );
+        rulesText = ExpandTextVars( rulesText, &resolver, RESOLVED );
 
         DRC_RULES_PARSER parser( rulesText, _( "DRC rules" ) );
 

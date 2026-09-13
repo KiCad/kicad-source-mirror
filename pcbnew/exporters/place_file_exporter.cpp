@@ -155,7 +155,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
         LIST_MOD item;
         item.m_Footprint = footprint;
-        item.m_Reference = footprint->Reference().GetShownText( false );
+        item.m_Reference = footprint->Reference().GetShownText( RESOLVED );
         item.m_Value     = UnescapeString( footprint->GetFieldValueForVariant( m_variant,
                                                                GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) ) );
         item.m_Layer     = footprint->GetLayer();
@@ -336,7 +336,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     for( FOOTPRINT* footprint : sortedFootprints )
     {
-        wxString ref = footprint->Reference().GetShownText( false );
+        wxString ref = footprint->Reference().GetShownText( RESOLVED );
         wxString value = UnescapeString(
                 footprint->GetFieldValueForVariant( m_variant,
                                                     GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) ) );

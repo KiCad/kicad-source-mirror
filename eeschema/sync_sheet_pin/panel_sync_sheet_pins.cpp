@@ -61,8 +61,7 @@ PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aShe
     m_btnUndo->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
 
     m_labelSheetName->SetLabel( aSheet->GetFileName() );
-    m_labelSymName->SetLabel( aSheet->GetShownName( true ) );
-
+    m_labelSymName->SetLabel( aSheet->GetShownName( FOR_GUI ) );
 
     for( auto& [idx, view] : m_views )
     {

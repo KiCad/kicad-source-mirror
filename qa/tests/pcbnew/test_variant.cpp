@@ -411,10 +411,10 @@ BOOST_AUTO_TEST_CASE( FootprintFieldShownTextForVariant )
     prodVariant.SetFieldValue( fp.Value().GetName(), "22K" );
     fp.SetVariant( prodVariant );
 
-    BOOST_CHECK_EQUAL( fp.Value().GetShownText( false ), "22K" );
+    BOOST_CHECK_EQUAL( fp.Value().GetShownText( INTERNAL ), "22K" );
 
     board.SetCurrentVariant( wxEmptyString );
-    BOOST_CHECK_EQUAL( fp.Value().GetShownText( false ), "10K" );
+    BOOST_CHECK_EQUAL( fp.Value().GetShownText( INTERNAL ), "10K" );
 }
 
 

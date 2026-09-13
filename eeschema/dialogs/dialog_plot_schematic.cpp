@@ -413,7 +413,7 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
             };
 
     wxString path = m_outputPath->GetValue();
-    path = ExpandTextVars( path, &textResolver );
+    path = ExpandTextVars( path, &textResolver, INTERNAL );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     fn.SetPath( path );

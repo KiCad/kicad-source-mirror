@@ -123,7 +123,7 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
         {
             if( curEntry.m_Val == footprint->GetValue() && curEntry.m_FPID == footprint->GetFPID() )
             {
-                curEntry.m_Refs.emplace_back( footprint->Reference().GetShownText( false ) );
+                curEntry.m_Refs.emplace_back( footprint->Reference().GetShownText( RESOLVED ) );
                 curEntry.m_Count++;
 
                 valExist = true;
@@ -136,8 +136,8 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
         {
             list.emplace_back();
             BOM_ENTRY& newEntry = list.back();
-            newEntry.m_Val = footprint->Value().GetShownText( false );
-            newEntry.m_Refs.emplace_back( footprint->Reference().GetShownText( false ) );
+            newEntry.m_Val = footprint->Value().GetShownText( RESOLVED );
+            newEntry.m_Refs.emplace_back( footprint->Reference().GetShownText( RESOLVED ) );
             newEntry.m_FPID = footprint->GetFPID();
             newEntry.m_Count = 1;
         }

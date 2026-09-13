@@ -507,7 +507,7 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
         SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
 
         // NB: any changes here will need corresponding changes in SCH_LABEL_BASE::cacheShownText()
-        return EscapeString( label->GetShownText( &m_sheet, false ), CTX_NETNAME );
+        return EscapeString( label->GetShownText( &m_sheet, FOR_NETNAME ), CTX_NETNAME );
     }
 
     case SCH_SHEET_PIN_T:
@@ -520,7 +520,7 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
         if( path.Last() != sheetPin->GetParent() )
             path.push_back( sheetPin->GetParent() );
 
-        return EscapeString( sheetPin->GetShownText( &path, false ), CTX_NETNAME );
+        return EscapeString( sheetPin->GetShownText( &path, FOR_NETNAME ), CTX_NETNAME );
     }
 
     default:
@@ -575,7 +575,7 @@ CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem ) const
 
                     if( field->GetUntranslatedName() == wxT( "Netclass" ) )
                     {
-                        wxString netclass = field->GetShownText( &m_sheet, false );
+                        wxString netclass = field->GetShownText( &m_sheet, FOR_NETNAME );
 
                         if( netclass != wxEmptyString )
                             foundNetclasses.push_back( { netclass, aItem } );
@@ -1977,10 +1977,10 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
 
             SCH_CONNECTION dummy( item, subgraph->m_sheet );
             dummy.SetGraph( this );
-            dummy.ConfigureFromLabel( label->GetShownText( &subgraph->m_sheet, false ) );
+            dummy.ConfigureFromLabel( label->GetShownText( &subgraph->m_sheet, FOR_NETNAME ) );
 
             wxLogTrace( ConnTrace, wxS( "new bus label (%s)" ),
-                        label->GetShownText( &subgraph->m_sheet, false ) );
+                        label->GetShownText( &subgraph->m_sheet, FOR_NETNAME ) );
 
             for( const auto& conn : dummy.Members() )
             {
@@ -2083,7 +2083,7 @@ void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
         // in the symbol, but we support legacy non-power symbols with global
         // power connections based on invisible, power-in, pin's names.
         if( libParent && libParent->IsGlobalPower() )
-            connection->SetName( pin->GetParentSymbol()->GetValue( true, &sheet, false ) );
+            connection->SetName( pin->GetParentSymbol()->GetValue( &sheet, FOR_NETNAME ) );
         else
             connection->SetName( pin->GetShownName() );
 
@@ -2914,14 +2914,14 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
         if( !sheet )
             continue;
 
-        wxString    pinText = pin->GetShownText( false );
+        wxString    pinText = pin->GetShownText( FOR_NETNAME );
         SCH_SCREEN* screen  = sheet->GetScreen();
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
         {
             SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
 
-            if( label->GetShownText( &subgraph->m_sheet, false ) == pinText )
+            if( label->GetShownText( &subgraph->m_sheet, FOR_NETNAME ) == pinText )
             {
                 SCH_SHEET_PATH path = subgraph->m_sheet;
                 path.push_back( sheet );
@@ -4974,11 +4974,11 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
         if( labels.size() > 1 )
         {
             bool different = false;
-            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetShownText( sheet, false );
+            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetShownText( sheet, FOR_NETNAME );
 
             for( unsigned i = 1; i < labels.size(); ++i )
             {
-                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText( sheet, false ) != first )
+                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText( sheet, FOR_NETNAME ) != first )
                 {
                     different = true;
                     break;
@@ -5365,7 +5365,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
         case SCH_HIER_LABEL_T:
         {
             SCH_TEXT* text = static_cast<SCH_TEXT*>( item );
-            conn.ConfigureFromLabel( EscapeString( text->GetShownText( &sheet, false ), CTX_NETNAME ) );
+            conn.ConfigureFromLabel( EscapeString( text->GetShownText( &sheet, FOR_NETNAME ), CTX_NETNAME ) );
 
             if( conn.IsBus() )
                 bus_item = ( !bus_item ) ? item : bus_item;
@@ -6226,8 +6226,7 @@ int CONNECTION_GRAPH::ercCheckSingleGlobalLabel()
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
         {
             SCH_TEXT* labelText = static_cast<SCH_TEXT*>( item );
-            wxString  resolvedLabelText =
-                    EscapeString( labelText->GetShownText( &sheet, false ), CTX_NETNAME );
+            wxString  resolvedLabelText = EscapeString( labelText->GetShownText( &sheet, FOR_NETNAME ), CTX_NETNAME );
 
             if( labelData.find( resolvedLabelText ) == labelData.end() )
             {
@@ -6313,7 +6312,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
 
                 msg.Printf( _( "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
                                "parent sheet" ),
-                            label->GetShownText( &sheet, true ) );
+                            label->GetShownText( &sheet, FOR_NETNAME ) );
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
                 ercItem->SetItems( item );
                 ercItem->SetErrorMessage( msg );
@@ -6338,7 +6337,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
             for( SCH_SHEET_PIN* pin : parentSheet->GetPins() )
             {
                 if( settings.IsTestEnabled( ERCE_HIERACHICAL_LABEL ) )
-                    pins[ pin->GetShownText( &parentSheetPath, false ) ] = pin;
+                    pins[ pin->GetShownText( &parentSheetPath, FOR_NETNAME ) ] = pin;
 
                 if( pin->IsDangling() && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
                 {
@@ -6363,7 +6362,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                     if( subItem->Type() == SCH_HIER_LABEL_T )
                     {
                         SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( subItem );
-                        wxString       labelText = label->GetShownText( &parentSheetPath, false );
+                        wxString       labelText = label->GetShownText( &parentSheetPath, FOR_NETNAME );
 
                         if( !pins.contains( labelText ) )
                             labels[ labelText ] = label;

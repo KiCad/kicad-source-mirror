@@ -119,7 +119,7 @@ wxString TITLE_BLOCK::GetCurrentTimeLocale()
 }
 
 
-bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject, int aFlags ) const
+bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject, RESOLUTION_CONTEXT aContext ) const
 {
     bool tokenUpdated = false;
     wxString originalToken = *aToken;
@@ -184,7 +184,7 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject, in
         if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) ) )
             *aToken = GetCurrentDate();
         else if( aProject )
-            *aToken = ExpandTextVars( *aToken, aProject, aFlags );
+            *aToken = ExpandTextVars( *aToken, aProject, aContext );
 
         // This is the default fallback, so don't claim we resolved it
         if( *aToken == wxT( "${" ) + originalToken + wxT( "}" ) )

@@ -231,7 +231,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     msg = fn.GetName();
 
     // build the <rev> string. All non ASCII chars are in UTF8 form
-    wxString rev = ExpandTextVars( m_pcb->GetTitleBlock().GetRevision(), m_pcb->GetProject() );
+    wxString rev = ExpandTextVars( m_pcb->GetTitleBlock().GetRevision(), m_pcb->GetProject(), FOR_GUI );
 
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );

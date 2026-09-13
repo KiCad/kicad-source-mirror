@@ -3977,17 +3977,17 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
                 {
                     // These can all go via the PCB_TEXT class
                     const PCB_TEXT& text = static_cast<const PCB_TEXT&>( aItem );
-                    return text.GetShownText( true );
+                    return text.GetShownText( FOR_CANVAS );
                 }
                 case PCB_TEXTBOX_T:
                 case PCB_TABLECELL_T:
                 {
                     // This one goes via EDA_TEXT
                     const PCB_TEXTBOX& textBox = static_cast<const PCB_TEXTBOX&>( aItem );
-                    return textBox.GetShownText( true );
+                    return textBox.GetShownText( FOR_CANVAS );
                 }
                 case PCB_TABLE_T:
-            case PCB_DRILL_CHART_T:
+                case PCB_DRILL_CHART_T:
                 {
                     const PCB_TABLE& table = static_cast<const PCB_TABLE&>( aItem );
                     wxString         s;
@@ -3997,7 +3997,7 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
                         for( int col = 0; col < table.GetColCount(); ++col )
                         {
                             const PCB_TABLECELL* cell = table.GetCell( row, col );
-                            s << cell->GetShownText( true );
+                            s << cell->GetShownText( FOR_CANVAS );
 
                             if( col < table.GetColCount() - 1 )
                                 s << '\t';

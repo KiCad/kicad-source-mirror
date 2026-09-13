@@ -413,7 +413,7 @@ SCH_RULE_AREA::GetResolvedNetclasses( const SCH_SHEET_PATH* aSheetPath ) const
 
                         if( field->GetUntranslatedName() == wxT( "Netclass" ) )
                         {
-                            wxString netclass = field->GetShownText( aSheetPath, false );
+                            wxString netclass = field->GetShownText( aSheetPath, FOR_NETNAME );
 
                             if( netclass != wxEmptyString )
                                 resolvedNetclasses.push_back( { netclass, directive } );

@@ -974,7 +974,7 @@ void BACK_ANNOTATE::applyChangelist()
                 // resolved value when the PCB is updated from the schematic.
                 if( symField
                     && !symField->HasTextVars()
-                    && symField->GetShownText( &ref.GetSheetPath(), false ) != fpFieldValue )
+                    && symField->GetShownText( &ref.GetSheetPath(), INTERNAL ) != fpFieldValue )
                 {
                     m_changesCount++;
                     msg.Printf( _( "Change %s field '%s' value to '%s'." ),

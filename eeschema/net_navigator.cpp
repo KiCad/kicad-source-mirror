@@ -263,7 +263,7 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
         if( !sheetPath.empty() && sheetPath.at( 0 )->GetScreen() )
         {
             // Get the top-level sheet name
-            txt = sheetPath.at( 0 )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+            txt = sheetPath.at( 0 )->GetField( FIELD_T::SHEET_NAME )->GetShownText( FOR_GUI );
 
             if( txt.IsEmpty() )
             {
@@ -273,7 +273,7 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
             // Add sub-sheet names
             for( unsigned i = 1; i < sheetPath.size(); i++ )
-                txt << wxS( "/" ) << sheetPath.at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+                txt << wxS( "/" ) << sheetPath.at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( FOR_GUI );
         }
         else
         {

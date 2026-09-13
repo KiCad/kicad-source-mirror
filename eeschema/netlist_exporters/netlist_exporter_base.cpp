@@ -208,7 +208,7 @@ std::vector<wxString> NETLIST_EXPORTER_BASE::resolvePadNumbers( const SCH_PIN*  
     {
         if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( aPin->GetParentSymbol() ) )
         {
-            wxString fpText = symbol->GetFootprintFieldText( true, &aSheetPath, false, variantName );
+            wxString fpText = symbol->GetFootprintFieldText( &aSheetPath, RESOLVED, variantName );
             LIB_ID   fpId;
 
             if( !fpText.IsEmpty() && fpId.Parse( fpText, true ) < 0 )

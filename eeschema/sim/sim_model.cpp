@@ -1390,7 +1390,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
     wxString existing_deviceSubtype;
 
     if( existing_deviceSubtypeField )
-        existing_deviceSubtype = existing_deviceSubtypeField->GetShownText( false ).Upper();
+        existing_deviceSubtype = existing_deviceSubtypeField->GetShownText( FOR_NETNAME ).Upper();
 
     if( existing_deviceField
         || existing_deviceSubtypeField

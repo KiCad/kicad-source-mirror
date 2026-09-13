@@ -99,7 +99,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
                     cmpList.push_back( SCH_REFERENCE( symbol, sheet ) );
                 }
 
-                footprint = symbol->GetFootprintFieldText( true, &sheet, false );
+                footprint = symbol->GetFootprintFieldText( &sheet, RESOLVED );
                 footprint.Replace( wxT( " " ), wxT( "_" ) );
 
                 if( footprint.IsEmpty() )
@@ -112,7 +112,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
                 field = symbol->GetRef( &sheet );
                 fmt::print( f, "  {}", TO_UTF8( field ) );
 
-                field = symbol->GetValue( true, &sheet, false );
+                field = symbol->GetValue( &sheet, RESOLVED );
                 field.Replace( wxT( " " ), wxT( "_" ) );
                 fmt::print( f, " {}", TO_UTF8( field ) );
 

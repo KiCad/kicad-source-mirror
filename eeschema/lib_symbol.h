@@ -176,7 +176,7 @@ public:
     wxString GetName() const override { return m_name; }
 
     LIB_ID GetLIB_ID() const override { return m_libId; }
-    wxString GetDesc() override { return GetShownDescription(); }
+    wxString GetDesc() override { return GetShownDescription( FOR_GUI ); }
     wxString GetFootprint() override;
     int GetSubUnitCount() const override { return GetUnitCount(); }
 
@@ -203,7 +203,7 @@ public:
         return GetDescriptionField().GetText();
     }
 
-    wxString GetShownDescription( int aDepth = 0 ) const override;
+    wxString GetShownDescription( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
     void SetKeyWords( const wxString& aKeyWords );
 
@@ -218,7 +218,7 @@ public:
         return m_keyWords;
     }
 
-    wxString GetShownKeyWords( int aDepth = 0 ) const override;
+    wxString GetShownKeyWords( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
     std::vector<SEARCH_TERM>& GetSearchTerms() override { return m_searchTermsCache; }
 
@@ -455,7 +455,7 @@ public:
         return GetReferenceField().GetText();
     }
 
-    const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
+    const wxString GetValue( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext,
                              const wxString& aVariantName = wxEmptyString ) const override
     {
         return GetValueField().GetText();
@@ -999,6 +999,8 @@ private:
     using EDA_ITEM::SetParent;
 
     void deleteAllFields();
+
+    wxString getShownDescription( RESOLUTION_CONTEXT aContext, int aDepth ) const;
 
     /// @return true when this symbol defines its own pin-map bundle (either named maps or
     ///         associated footprints), so the bundle is not inherited from the parent.

@@ -1155,6 +1155,9 @@ public:
      *
      * If the variant doesn't exist or doesn't override the field, returns the default field value.
      *
+     * NB: variant values do NOT resolve text variable references.  Any such refereneces are considered
+     * to be in schematic scope and are resolved before the footprint gets them.
+     *
      * @param aVariantName The variant name (empty for default).
      * @param aFieldName The field name.
      * @return The field value for the specified variant.

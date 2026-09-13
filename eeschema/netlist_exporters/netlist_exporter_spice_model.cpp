@@ -92,7 +92,7 @@ void NETLIST_EXPORTER_SPICE_MODEL::readPorts( unsigned aNetlistOptions )
 
             if( SCH_CONNECTION* conn = label->Connection( &sheet ) )
             {
-                wxString labelText = label->GetShownText( &sheet, false );
+                wxString labelText = label->GetShownText( &sheet, FOR_NETNAME );
                 m_ports.insert( { conn->Name(), PORT_INFO{ labelText, label->GetShape() } } );
             }
         }

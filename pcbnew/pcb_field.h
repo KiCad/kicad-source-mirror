@@ -114,7 +114,7 @@ public:
      */
     wxString GetUntranslatedName() const;
 
-    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
+    wxString GetShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
     void SetName( const wxString& aName ) { m_name = aName; }
 

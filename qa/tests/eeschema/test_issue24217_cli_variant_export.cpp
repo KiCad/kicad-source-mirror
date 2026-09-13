@@ -85,6 +85,6 @@ BOOST_AUTO_TEST_CASE( Issue24217_VariantSurvivesStaleInstancePath )
     SCH_FIELD* r1Value = r1->GetSymbol()->GetField( FIELD_T::VALUE );
     BOOST_REQUIRE( r1Value );
 
-    wxString resolved = r1Value->GetShownText( &r1->GetSheetPath(), false, 0, wxS( "H0" ) );
+    wxString resolved = r1Value->GetShownText( &r1->GetSheetPath(), INTERNAL, wxS( "H0" ) );
     BOOST_CHECK_EQUAL( resolved, wxS( "10k" ) );
 }

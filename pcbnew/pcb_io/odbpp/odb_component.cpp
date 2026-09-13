@@ -72,10 +72,10 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
     {
         if( m_plugin )
         {
-            m_plugin->Report( wxString::Format(
-                                      _( "Component '%s' has non-ASCII characters in its "
-                                         "designator; converted to '%s' for ODB++ export." ),
-                                      originalRef, comp.m_comp_name ),
+            m_plugin->Report( wxString::Format( _( "Component '%s' has non-ASCII characters in its "
+                                                   "designator; converted to '%s' for ODB++ export." ),
+                                                originalRef,
+                                                comp.m_comp_name ),
                               RPT_SEVERITY_WARNING );
         }
     }
@@ -94,10 +94,10 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 
         if( m_plugin )
         {
-            m_plugin->Report( wxString::Format(
-                                      _( "Component '%s' has an ambiguous designator after "
-                                         "conversion; renamed to '%s' for ODB++ export." ),
-                                      originalRef, candidate ),
+            m_plugin->Report( wxString::Format( _( "Component '%s' has an ambiguous designator after "
+                                                   "conversion; renamed to '%s' for ODB++ export." ),
+                                                originalRef,
+                                                candidate ),
                               RPT_SEVERITY_WARNING );
         }
 
@@ -111,7 +111,7 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 
         wxString key = field->GetName();
         ODB::RemoveWhitespace( key );
-        comp.m_prp[key] = wxString::Format( "'%s'", field->GetShownText( false ) );
+        comp.m_prp[key] = wxString::Format( "'%s'", field->GetShownText( RESOLVED ) );
     }
 
     if( aFp->GetDNPForVariant( aFp->GetBoard() ? aFp->GetBoard()->GetCurrentVariant() : wxString() ) )

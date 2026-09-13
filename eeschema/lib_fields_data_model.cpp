@@ -600,7 +600,7 @@ wxString LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( LIB_SYMBO
         if( field->IsPrivate() )
             return wxEmptyString;
         else
-            return field->GetShownText( nullptr, false, 0 );
+            return field->GetShownText( nullptr, INTERNAL );
     }
 
     // Handle generated fields with variables as names (e.g. ${QUANTITY}) that are not present in

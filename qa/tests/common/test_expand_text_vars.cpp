@@ -69,21 +69,21 @@ BOOST_FIXTURE_TEST_SUITE( ExpandTextVarsTests, ExpandTextVarsFixture )
 // Basic variable expansion
 BOOST_AUTO_TEST_CASE( SimpleVariable )
 {
-    wxString result = ExpandTextVars( wxT( "${VAR}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "${VAR}" ), &resolver, INTERNAL );
     BOOST_CHECK( result == wxT( "value" ) );
 }
 
 // Multiple variables in one string
 BOOST_AUTO_TEST_CASE( MultipleVariables )
 {
-    wxString result = ExpandTextVars( wxT( "${X}+${Y}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "${X}+${Y}" ), &resolver, INTERNAL );
     BOOST_CHECK( result == wxT( "5+2" ) );
 }
 
 // Escaped variable should produce escape marker (not expanded)
 BOOST_AUTO_TEST_CASE( EscapedVariable )
 {
-    wxString result = ExpandTextVars( wxT( "\\${VAR}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "\\${VAR}" ), &resolver, INTERNAL );
     // The escape marker should be in the output
     BOOST_CHECK( result.Contains( wxT( "<<<ESC_DOLLAR:" ) ) );
 }
@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE( EscapedVariable )
 // Escaped variable followed by regular variable - both should be processed correctly
 BOOST_AUTO_TEST_CASE( EscapedThenRegularVariable )
 {
-    wxString result = ExpandTextVars( wxT( "\\${literal}${VAR}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "\\${literal}${VAR}" ), &resolver, INTERNAL );
     // Should have escape marker for literal, and "value" for VAR
     BOOST_CHECK( result.Contains( wxT( "<<<ESC_DOLLAR:" ) ) );
     BOOST_CHECK( result.Contains( wxT( "value" ) ) );
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE( EscapedThenRegularVariable )
 // Regular variable followed by escaped variable
 BOOST_AUTO_TEST_CASE( RegularThenEscapedVariable )
 {
-    wxString result = ExpandTextVars( wxT( "${VAR}\\${literal}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "${VAR}\\${literal}" ), &resolver, INTERNAL );
     // Should have "value" for VAR and escape marker for literal
     BOOST_CHECK( result.StartsWith( wxT( "value" ) ) );
     BOOST_CHECK( result.Contains( wxT( "<<<ESC_DOLLAR:" ) ) );
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE( EscapedInsideMathExpression )
 {
     // First pass: @{\${X}+${Y}} should become @{<<<ESC_DOLLAR:X}+2}
     // Second pass: the marker should be preserved and +2 should NOT be lost
-    wxString result = ExpandTextVars( wxT( "@{\\${X}+${Y}}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "@{\\${X}+${Y}}" ), &resolver, INTERNAL );
 
     // The result should contain the escape marker
     BOOST_CHECK_MESSAGE( result.Contains( wxT( "<<<ESC_DOLLAR:" ) ),
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE( EscapedInsideVariableReference )
     // ${prefix\${suffix}} - looking up variable with literal ${suffix} in name
     // This should try to resolve "prefix\${suffix}" which won't resolve,
     // but the recursive expansion should convert \${suffix} to the marker
-    wxString result = ExpandTextVars( wxT( "${prefix\\${suffix}}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "${prefix\\${suffix}}" ), &resolver, INTERNAL );
 
     // The unresolved reference should be preserved with escape marker
     BOOST_CHECK( result.Contains( wxT( "<<<ESC_DOLLAR:" ) ) );
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE( EscapedInsideVariableReference )
 // Multiple escape markers in a math expression
 BOOST_AUTO_TEST_CASE( MultipleEscapedInMathExpression )
 {
-    wxString result = ExpandTextVars( wxT( "@{\\${A}+\\${B}+${Y}}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "@{\\${A}+\\${B}+${Y}}" ), &resolver, INTERNAL );
 
     // Should have two escape markers and the expanded Y (2)
     BOOST_CHECK_MESSAGE( result.Contains( wxT( "+2" ) ),
@@ -163,7 +163,7 @@ BOOST_AUTO_TEST_CASE( MultipleEscapedInMathExpression )
 // Math expression with escaped @ sign
 BOOST_AUTO_TEST_CASE( EscapedAtInExpression )
 {
-    wxString result = ExpandTextVars( wxT( "${VAR}\\@{literal}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "${VAR}\\@{literal}" ), &resolver, INTERNAL );
 
     // Should have "value" for VAR and escape marker for @{literal}
     BOOST_CHECK( result.StartsWith( wxT( "value" ) ) );
@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE( EscapedAtInExpression )
 // Escaped followed by escaped (both should be preserved)
 BOOST_AUTO_TEST_CASE( ConsecutiveEscaped )
 {
-    wxString result = ExpandTextVars( wxT( "\\${A}\\${B}" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "\\${A}\\${B}" ), &resolver, INTERNAL );
 
     // Should have two escape markers
     int dollarCount = 0;
@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE( ConsecutiveEscaped )
 // forward slashes before calling ExpandTextVars.
 BOOST_AUTO_TEST_CASE( BackslashBeforeVariableIsEscape )
 {
-    wxString result = ExpandTextVars( wxT( "subdir\\${VAR}_file.txt" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "subdir\\${VAR}_file.txt" ), &resolver, INTERNAL );
 
     // ExpandTextVars treats \${ as an escape, so VAR is NOT expanded
     BOOST_CHECK( result.Contains( wxT( "<<<ESC_DOLLAR:" ) ) );
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE( BackslashBeforeVariableIsEscape )
 // With forward slashes the variable is expanded normally
 BOOST_AUTO_TEST_CASE( ForwardSlashBeforeVariableExpands )
 {
-    wxString result = ExpandTextVars( wxT( "subdir/${VAR}_file.txt" ), &resolver );
+    wxString result = ExpandTextVars( wxT( "subdir/${VAR}_file.txt" ), &resolver, INTERNAL );
 
     BOOST_CHECK( result == wxT( "subdir/value_file.txt" ) );
 }
@@ -220,7 +220,7 @@ BOOST_FIXTURE_TEST_SUITE( NormalizeFilePathForTextVarsTests, ExpandTextVarsFixtu
 BOOST_AUTO_TEST_CASE( BackslashSeparatorBeforeVarExpands )
 {
     wxString path = NormalizeFilePathForTextVars( wxT( "Output\\BoM\\${VAR}_file.csv" ) );
-    wxString result = ExpandTextVars( path, &resolver );
+    wxString result = ExpandTextVars( path, &resolver, INTERNAL );
 
     // Only the backslash immediately before the variable is rewritten to a separator; the
     // variable expands and the earlier literal backslash is preserved.
@@ -233,7 +233,7 @@ BOOST_AUTO_TEST_CASE( BackslashSeparatorBeforeVarExpands )
 BOOST_AUTO_TEST_CASE( MultipleVarsAfterBackslashSeparators )
 {
     wxString path = NormalizeFilePathForTextVars( wxT( "Output\\BoM\\${X}_V${Y}.csv" ) );
-    wxString result = ExpandTextVars( path, &resolver );
+    wxString result = ExpandTextVars( path, &resolver, INTERNAL );
 
     BOOST_CHECK( result == wxT( "Output\\BoM/5_V2.csv" ) );
 }
@@ -242,7 +242,7 @@ BOOST_AUTO_TEST_CASE( MultipleVarsAfterBackslashSeparators )
 BOOST_AUTO_TEST_CASE( ForwardSlashPathUnchanged )
 {
     wxString path = NormalizeFilePathForTextVars( wxT( "Output/BoM/${VAR}.csv" ) );
-    wxString result = ExpandTextVars( path, &resolver );
+    wxString result = ExpandTextVars( path, &resolver, INTERNAL );
 
     BOOST_CHECK( result == wxT( "Output/BoM/value.csv" ) );
 }

@@ -549,7 +549,7 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
 
     for( unsigned i = loopStart; i < size(); i++ )
     {
-        wxString sheetName = at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+        wxString sheetName = at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( FOR_GUI );
 
         if( aEscapeSheetNames )
             sheetName = EscapeString( sheetName, CTX_NETNAME );
@@ -929,11 +929,10 @@ void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectNam
             if( !IsSharedPath() && ( LastScreen()->GetFileFormatVersionAtLoad() <= 20200310 ) )
             {
                 SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE );
-                symbolInstance.m_Reference = refField->GetShownText( this, true );
+                symbolInstance.m_Reference = refField->GetShownText( this, INTERNAL );
                 symbolInstance.m_Unit = symbol->GetUnit();
 
-                wxLogTrace( traceSchSheetPaths,
-                           "  Legacy format: Using reference '%s' from field, unit %d",
+                wxLogTrace( traceSchSheetPaths, "  Legacy format: Using reference '%s' from field, unit %d",
                            symbolInstance.m_Reference, symbolInstance.m_Unit );
             }
             else if( !symbol->GetInstances().empty() )

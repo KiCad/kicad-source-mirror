@@ -1113,7 +1113,7 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
 
     //TODO: handle multiline text
 
-    font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs, aFontMetrics );
+    font->Draw( &callback_gal, aText->GetShownText( FOR_CANVAS ), aText->GetDrawPos(), attrs, aFontMetrics );
 
     if( !pts.empty() )
         push_pts();
@@ -1944,8 +1944,8 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         // Use the footprint's Description field if it exists
         const PCB_FIELD* descField = fp_it->GetField( FIELD_T::DESCRIPTION );
 
-        if( descField && !descField->GetShownText( false ).IsEmpty() )
-            entry->m_description = descField->GetShownText( false );
+        if( descField && !descField->GetShownText( FOR_GUI ).IsEmpty() )
+            entry->m_description = descField->GetShownText( FOR_GUI );
 
         auto[ bom_iter, inserted ] = bom_entries.insert( std::move( entry ) );
 
@@ -1956,7 +1956,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         refdes.m_name = componentName( fp_it );
         refdes.m_pkg = iter->second;
         refdes.m_populate = !fp->GetDNPForVariant( variantName )
-                && !fp->GetExcludedFromBOMForVariant( variantName );
+                            && !fp->GetExcludedFromBOMForVariant( variantName );
         refdes.m_layer = m_layer_name_map[fp_it->GetLayer()];
 
         ( *bom_iter )->m_refdes->push_back( refdes );
@@ -1971,7 +1971,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
             if( prop->IsMandatory() && !prop->IsValue() )
                 continue;
 
-            ( *bom_iter )->m_props->emplace( prop->GetName(), prop->GetShownText( false ) );
+            ( *bom_iter )->m_props->emplace( prop->GetName(), prop->GetShownText( RESOLVED ) );
         }
     }
 
@@ -3771,10 +3771,7 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
         for( PAD* pad : fp->Pads() )
         {
             if( pad->GetNetCode() > 0 )
-            {
-                m_net_pin_dict[pad->GetNetCode()].emplace_back( componentName( fp ),
-                                                                pad->GetNumber() );
-            }
+                m_net_pin_dict[pad->GetNetCode()].emplace_back( componentName( fp ), pad->GetNumber() );
         }
         wxXmlNode* pkg = addPackage( componentNode, fp );
 
@@ -3790,18 +3787,21 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
 
         if( field && !field->GetText().empty() )
         {
-            name = field->GetShownText( false );
+            name = field->GetShownText( RESOLVED );
         }
         else
         {
-            name = wxString::Format( "%s_%s_%s", fp->GetFPID().GetFullLibraryName(),
+            name = wxString::Format( "%s_%s_%s",
+                                     fp->GetFPID().GetFullLibraryName(),
                                      fp->GetFPID().GetLibItemName().wx_str(),
                                      fp->GetValue() );
         }
 
         if( !m_OEMRef_dict.emplace( fp, name ).second )
+        {
             Report( _( "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect." ),
                     RPT_SEVERITY_ERROR );
+        }
 
         addAttribute( componentNode,  "part", genString( name, "REF" ) );
         addAttribute( componentNode,  "layerRef", m_layer_name_map[fp->GetLayer()] );
@@ -4417,10 +4417,7 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                             addAttribute( teardropLayerSetNode,  "geometryUsage", "TEARDROP" );
 
                             if( zone->GetNetCode() > 0 )
-                            {
-                                addAttribute( teardropLayerSetNode,  "net",
-                                              netName( zone->GetNetname() ) );
-                            }
+                                addAttribute( teardropLayerSetNode,  "net", netName( zone->GetNetname() ) );
 
                             wxXmlNode* new_teardrops = appendNode( teardropLayerSetNode, "Features" );
                             addLocationNode( new_teardrops, 0.0, 0.0 );
@@ -4442,8 +4439,10 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     {
                         wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
                         wxString refDes = componentName( fp );
+
                         if( componentRefEmitted() )
                             addAttribute( tempSetNode,  "componentRef", refDes );
+
                         wxXmlNode* newFeatures = appendNode( tempSetNode, "Features" );
                         addLocationNode( newFeatures, 0.0, 0.0 );
                         zoneFeatureNode = appendNode( newFeatures, "UserSpecial" );
@@ -4467,8 +4466,7 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     // The mask-layer copy of an exposed copper shape grows its stroke width
                     // by the solder mask expansion, matching BRDITEMS_PLOTTER::PlotShape().
                     maskShape.emplace( *shape );
-                    maskShape->SetWidth(
-                            std::max( shape->GetWidth() + 2 * shape->GetSolderMaskExpansion(), 0 ) );
+                    maskShape->SetWidth( std::max( shape->GetWidth() + 2 * shape->GetSolderMaskExpansion(), 0 ) );
                     shape = &maskShape.value();
                 }
 
@@ -4487,8 +4485,10 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                         link_to_component = false;
 
                     if( link_to_component )
+                    {
                         if( componentRefEmitted() )
                             addAttribute( tempSetNode,  "componentRef", componentName( fp ) );
+                    }
 
                     wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
 
@@ -4519,7 +4519,7 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
     auto add_text =
             [&] ( BOARD_ITEM* text )
             {
-                EDA_TEXT* text_item = nullptr;
+                EDA_TEXT*  text_item = nullptr;
                 FOOTPRINT* fp = text->GetParentFootprint();
 
                 if( PCB_TEXT* pcb_text = dynamic_cast<PCB_TEXT*>( text ) )
@@ -4527,10 +4527,15 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                 else if( PCB_TEXTBOX* pcb_textbox = dynamic_cast<PCB_TEXTBOX*>( text ) )
                     text_item = static_cast<EDA_TEXT*>( pcb_textbox );
 
-                if( !text_item || !text_item->IsVisible() || text_item->GetShownText( false ).empty() )
+                if( !text_item || !text_item->IsVisible() )
                     return;
 
-                bool isWhitespace = text_item->GetShownText( false ).Strip( wxString::both ).empty();
+                wxString content = text_item->GetShownText( RESOLVED );
+
+                if( content.empty() )
+                    return;
+
+                bool isWhitespace = content.Strip( wxString::both ).empty();
                 bool isKnockout = text->Type() == PCB_TEXT_T && static_cast<PCB_TEXT*>( text )->IsKnockout();
                 bool hasBorder = text->Type() == PCB_TEXTBOX_T && static_cast<PCB_TEXTBOX*>( text )->IsBorderEnabled();
 
@@ -4548,12 +4553,14 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     link_to_component = false;
 
                 if( link_to_component )
+                {
                     if( componentRefEmitted() )
                         addAttribute( tempSetNode, "componentRef", componentName( fp ) );
+                }
 
                 wxXmlNode* nonStandardAttributeNode = appendNode( tempSetNode, "NonstandardAttribute" );
                 addAttribute( nonStandardAttributeNode,  "name", "TEXT" );
-                addAttribute( nonStandardAttributeNode,  "value", text_item->GetShownText( false ) );
+                addAttribute( nonStandardAttributeNode,  "value", content );
                 addAttribute( nonStandardAttributeNode,  "type", "STRING" );
 
                 if( !isWhitespace || isKnockout )
@@ -4705,11 +4712,16 @@ void PCB_IO_IPC2581::generateLayerSetAuxilliary( wxXmlNode* aStepNode )
             continue;
 
         wxXmlNode* layerNode = appendNode( aStepNode, "LayerFeature" );
+
         if( std::get<2>( layers ) == UNDEFINED_LAYER )
+        {
             layerNode->AddAttribute( "layerRef", genLayerString( std::get<1>( layers ), TO_UTF8( name ) ) );
+        }
         else
+        {
             layerNode->AddAttribute( "layerRef", genLayersString( std::get<1>( layers ),
                                                                   std::get<2>( layers ), TO_UTF8( name ) ) );
+        }
 
         wxXmlNode* setNode = appendNode( layerNode, "Set" );
 
@@ -4780,7 +4792,7 @@ wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
         {
             if( nums[ii] )
             {
-                wxString mpn_name = nums[ii]->GetShownText( false );
+                wxString mpn_name = nums[ii]->GetShownText( RESOLVED );
 
                 if( mpn_name.empty() )
                     continue;
@@ -4799,7 +4811,7 @@ wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
                 // If the field resolves, then use that field content unless it is empty
                 if( !ii && company[ii] )
                 {
-                    wxString tmp = company[ii]->GetShownText( false );
+                    wxString tmp = company[ii]->GetShownText( RESOLVED );
 
                     if( !tmp.empty() )
                         vendor_name = tmp;

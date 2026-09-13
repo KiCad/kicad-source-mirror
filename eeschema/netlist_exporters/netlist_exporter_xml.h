@@ -19,13 +19,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef NETLIST_EXPORT_XML_H
-#define NETLIST_EXPORT_XML_H
+#pragma once
 
 #include <netlist_exporter_base.h>
-
 #include <project.h>
-
 #include <sch_edit_frame.h>
 
 class CONNECTION_GRAPH;
@@ -59,7 +56,7 @@ class NETLIST_EXPORTER_XML : public NETLIST_EXPORTER_BASE
 public:
     NETLIST_EXPORTER_XML( SCHEMATIC* aSchematic ) :
             NETLIST_EXPORTER_BASE( aSchematic ),
-            m_resolveTextVars( true )
+            m_resolveTextVars( RESOLVED )
     {}
 
     /**
@@ -70,8 +67,7 @@ public:
      *
      * @return true if the netlist was written successfully.
      */
-    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
-                       REPORTER& aReporter ) override;
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions, REPORTER& aReporter ) override;
 
 #define GNL_ALL     ( GNL_LIBRARIES | GNL_SYMBOLS | GNL_PARTS | GNL_HEADER | GNL_NETS )
 
@@ -143,20 +139,19 @@ protected:
     /**
      * Finds all component class names attached to any sub-unit of a given symbol
      */
-    std::vector<wxString>
-    getComponentClassNamesForAllSymbolUnits( SCH_SYMBOL*           aSymbol,
-                                             const SCH_SHEET_PATH& aSymbolSheet,
-                                             const SCH_SHEET_LIST& aSheetList );
-
-    bool                m_resolveTextVars;   // Export textVar references resolved
+    std::vector<wxString> getComponentClassNamesForAllSymbolUnits( SCH_SYMBOL* aSymbol,
+                                                                   const SCH_SHEET_PATH& aSymbolSheet,
+                                                                   const SCH_SHEET_LIST& aSheetList );
 
 private:
     void getSheetComponentClasses();
 
+protected:
+    RESOLUTION_CONTEXT  m_resolveTextVars;   // Export textVar references resolved
+
+private:
     std::set<wxString>  m_libraries;         // Set of library nicknames.
 
     /// Map of all sheets to component classes covering the whole sheet
     std::map<SCH_SHEET_PATH, std::unordered_set<wxString>> m_sheetComponentClasses;
 };
-
-#endif

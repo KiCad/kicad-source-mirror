@@ -1212,10 +1212,10 @@ wxString SCH_SYMBOL::GetDescription() const
 }
 
 
-wxString SCH_SYMBOL::GetShownDescription( int aDepth ) const
+wxString SCH_SYMBOL::GetShownDescription( RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
     if( m_part )
-        return m_part->GetShownDescription( aDepth );
+        return m_part->GetShownDescription( aContext, aDepth );
 
     return wxEmptyString;
 }
@@ -1230,10 +1230,10 @@ wxString SCH_SYMBOL::GetKeyWords() const
 }
 
 
-wxString SCH_SYMBOL::GetShownKeyWords( int aDepth ) const
+wxString SCH_SYMBOL::GetShownKeyWords( RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
     if( m_part )
-        return m_part->GetShownKeyWords( aDepth );
+        return m_part->GetShownKeyWords( aContext, aDepth );
 
     return wxEmptyString;
 }
@@ -1770,7 +1770,7 @@ wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName, const SCH_SHEET_P
             }
         }
 
-        return GetFootprintFieldText( false, nullptr, false );
+        return GetFootprintFieldText( nullptr, RAW_VALUE );
 
     default:
         if( aVariantName.IsEmpty() )
@@ -2273,16 +2273,11 @@ void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 }
 
 
-const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInstance,
-                                     bool aAllowExtraText, const wxString& aVariantName ) const
+const wxString SCH_SYMBOL::GetValue( const SCH_SHEET_PATH* aInstance, RESOLUTION_CONTEXT aContext,
+                                     const wxString& aVariantName ) const
 {
     if( aVariantName.IsEmpty() || !aInstance )
-    {
-        if( aResolve )
-            return GetField( FIELD_T::VALUE )->GetShownText( aInstance, aAllowExtraText );
-
-        return GetField( FIELD_T::VALUE )->GetText();
-    }
+        return GetField( FIELD_T::VALUE )->GetShownText( aInstance, aContext );
 
     std::optional variant = GetVariant( *aInstance, aVariantName );
 
@@ -2290,19 +2285,17 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInsta
     {
         const wxString& fieldName = GetField( FIELD_T::VALUE )->GetName();
 
-        auto resolve = [&]( const wxString& aText ) -> wxString
-        {
-            if( !aResolve )
-                return aText;
+        auto resolve =
+                [&]( const wxString& aText ) -> wxString
+                {
+                    std::function<bool( wxString* )> resolver =
+                            [&]( wxString* token ) -> bool
+                            {
+                                return ResolveTextVar( aInstance, token, aVariantName, 1 );
+                            };
 
-            std::function<bool( wxString* )> resolver =
-                    [&]( wxString* token ) -> bool
-                    {
-                        return ResolveTextVar( aInstance, token, aVariantName, 1 );
-                    };
-
-            return ExpandTextVars( aText, &resolver );
-        };
+                    return ExpandTextVars( aText, &resolver, aContext );
+                };
 
         if( variant->m_Fields.contains( fieldName ) )
             return resolve( variant->m_Fields[fieldName] );
@@ -2319,10 +2312,8 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInsta
     }
 
     // Fall back to default value when variant doesn't have an override
-    if( aResolve )
-        return GetField( FIELD_T::VALUE )->GetShownText( aInstance, aAllowExtraText );
 
-    return GetField( FIELD_T::VALUE )->GetText();
+    return GetField( FIELD_T::VALUE )->GetShownText( aInstance, aContext );
 }
 
 
@@ -2356,13 +2347,11 @@ void SCH_SYMBOL::SetValueFieldText( const wxString& aValue, const SCH_SHEET_PATH
 }
 
 
-const wxString SCH_SYMBOL::GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
-                                                  bool aAllowExtraText, const wxString& aVariantName ) const
+const wxString SCH_SYMBOL::GetFootprintFieldText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext,
+                                                  const wxString& aVariantName ) const
 {
-    if( aResolve )
-        return GetField( FIELD_T::FOOTPRINT )->GetShownText( aPath, aAllowExtraText, 0, aVariantName );
+    return GetField( FIELD_T::FOOTPRINT )->GetShownText( aPath, aContext, aVariantName );
 
-    return GetField( FIELD_T::FOOTPRINT )->GetText();
 }
 
 
@@ -2600,8 +2589,8 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                 if( updateValue )
                 {
                     otherUnit->SetFieldText( GetField( FIELD_T::VALUE )->GetName(),
-                                             GetValue( false, &aSourceSheet, false, aVariantName ), &sheet,
-                                             aVariantName );
+                                             GetValue( &aSourceSheet, RAW_VALUE, aVariantName ),
+                                             &sheet, aVariantName );
                 }
 
                 if( updateOtherFields )
@@ -3091,11 +3080,11 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                 if( symVariant && symVariant->m_Fields.contains( fieldName ) )
                     *token = symVariant->m_Fields.at( fieldName );
                 else
-                    *token = field.GetShownText( aPath, false, aDepth + 1 );
+                    *token = field.GetShownText( aPath, INTERNAL, wxEmptyString, aDepth + 1 );
             }
             else
             {
-                *token = field.GetShownText( aPath, false, aDepth + 1 );
+                *token = field.GetShownText( aPath, INTERNAL, wxEmptyString, aDepth + 1 );
             }
 
             return true;
@@ -3125,7 +3114,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
 
     if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
     {
-        wxString footprint = GetFootprintFieldText( true, aPath, false );
+        wxString footprint = GetFootprintFieldText( aPath, INTERNAL );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -3138,7 +3127,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     }
     else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
     {
-        wxString footprint = GetFootprintFieldText( true, aPath, false );
+        wxString footprint = GetFootprintFieldText( aPath, INTERNAL );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -3171,12 +3160,12 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     }
     else if( token->IsSameAs( wxT( "SYMBOL_DESCRIPTION" ) ) )
     {
-        *token = GetShownDescription( aDepth + 1 );
+        *token = GetShownDescription( INTERNAL, aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_KEYWORDS" ) ) )
     {
-        *token = GetShownKeyWords( aDepth + 1 );
+        *token = GetShownKeyWords( INTERNAL, aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_IS_POWER" ) ) )
@@ -4056,10 +4045,10 @@ bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) c
         if( EDA_ITEM::Matches( GetSchSymbolLibraryName(), aSearchData ) )
             return true;
 
-        if( EDA_ITEM::Matches( GetShownDescription(), aSearchData ) )
+        if( EDA_ITEM::Matches( GetShownDescription( FOR_GUI ), aSearchData ) )
             return true;
 
-        if( EDA_ITEM::Matches( GetShownKeyWords(), aSearchData ) )
+        if( EDA_ITEM::Matches( GetShownKeyWords( FOR_GUI ), aSearchData ) )
             return true;
     }
 
@@ -4190,7 +4179,7 @@ bool SCH_SYMBOL::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SHEET_
         return true;
 
     // Power symbol value field changes are connectivity changes.
-    if( IsPower() && ( GetValue( true, aInstance, false ) != symbol->GetValue( true, aInstance, false ) ) )
+    if( IsPower() && ( GetValue( aInstance, FOR_NETNAME ) != symbol->GetValue( aInstance, FOR_NETNAME ) ) )
         return true;
 
     if( m_pins.size() != symbol->m_pins.size() )
@@ -4519,7 +4508,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
                 // Use SCH_FIELD's text resolver
                 SCH_FIELD dummy( this, FIELD_T::USER );
                 dummy.SetText( text->GetText() );
-                text->SetText( dummy.GetShownText( false ) );
+                text->SetText( dummy.GetShownText( FOR_CANVAS ) );
             }
         }
 
@@ -4558,7 +4547,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
             for( const SCH_FIELD& field : GetFields() )
             {
-                wxString text_field = field.GetShownText( sheet, false, 0, variant );
+                wxString text_field = field.GetShownText( sheet, FOR_GUI, variant );
 
                 if( text_field.IsEmpty() )
                     continue;
@@ -4568,9 +4557,9 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
             if( !effectiveSym->GetKeyWords().IsEmpty() )
             {
-                properties.emplace_back(
-                        wxString::Format( wxT( "!%s = %s" ), _( "Keywords" ),
-                                          effectiveSym->GetKeyWords() ) );
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Keywords" ),
+                                                           effectiveSym->GetShownKeyWords( FOR_GUI ) ) );
             }
 
             aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
@@ -4624,10 +4613,14 @@ static void plotLocalPowerIcon( PLOTTER* aPlotter, const VECTOR2D& aPos, double 
         FILL_T filled = shape.GetFillMode() == FILL_T::NO_FILL ? FILL_T::NO_FILL : FILL_T::FILLED_SHAPE;
 
         if( shape.GetShape() == SHAPE_T::BEZIER )
+        {
             aPlotter->BezierCurve( shape.GetStart(), shape.GetBezierC1(), shape.GetBezierC2(), shape.GetEnd(),
                                    tolerance, lineWidth );
+        }
         else if( shape.GetShape() == SHAPE_T::CIRCLE )
+        {
             aPlotter->Circle( shape.getCenter(), shape.GetRadius() * 2, filled, lineWidth );
+        }
     }
 }
 
@@ -4860,8 +4853,8 @@ std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET
         {
             if( field.GetUntranslatedName() == wxT( "Component Class" ) )
             {
-                if( field.GetShownText( aPath, false ) != wxEmptyString )
-                    componentClass.insert( field.GetShownText( aPath, false ) );
+                if( field.GetShownText( aPath, INTERNAL ) != wxEmptyString )
+                    componentClass.insert( field.GetShownText( aPath, INTERNAL ) );
             }
         }
     };

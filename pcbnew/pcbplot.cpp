@@ -322,7 +322,7 @@ void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1Compa
     replaceReservedCharsField( msg );
 
     // build the <revision id> string. All non ASCII chars and reserved chars are replaced by '_'
-    wxString rev = ExpandTextVars( aBoard->GetTitleBlock().GetRevision(), aBoard->GetProject() );
+    wxString rev = ExpandTextVars( aBoard->GetTitleBlock().GetRevision(), aBoard->GetProject(), FOR_GUI );
     replaceReservedCharsField( rev );
 
     if( rev.IsEmpty() )

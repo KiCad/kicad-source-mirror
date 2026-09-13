@@ -130,7 +130,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
     plotter->SetColorMode( !aPlotOpts.m_blackAndWhite );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
     plotter->SetTitle( ExpandTextVars( m_schematic->RootScreen()->GetTitleBlock().GetTitle(),
-                                       &m_schematic->Project() ) );
+                                       &m_schematic->Project(), FOR_GUI ) );
 
     wxString   msg;
     wxFileName plotFileName;
@@ -142,7 +142,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
         m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
-        wxString    sheetName = sheetList[i].Last()->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+        wxString    sheetName = sheetList[i].Last()->GetField( FIELD_T::SHEET_NAME )->GetShownText( FOR_GUI );
 
         if( aPlotOpts.m_PDFMetadata )
         {
@@ -215,11 +215,9 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
                 parentSheet.pop_back();
             }
 
-            wxString parentSheetName =
-                    parentSheet.Last()->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+            wxString parentSheetName = parentSheet.Last()->GetField( FIELD_T::SHEET_NAME )->GetShownText( FOR_GUI );
 
-            plotter->StartPage( sheetList[i].GetPageNumber(), sheetName,
-                                parentSheet.GetPageNumber(), parentSheetName );
+            plotter->StartPage( sheetList[i].GetPageNumber(), sheetName, parentSheet.GetPageNumber(), parentSheetName );
         }
 
         plotOneSheetPDF( plotter, screen, aPlotOpts );

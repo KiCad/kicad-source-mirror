@@ -825,7 +825,7 @@ wxString SCH_PIN::GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet, const wxS
     LIB_ID footprintLibId;
 
     if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
-        footprintLibId.Parse( symbol->GetFootprintFieldText( true, &aSheet, false, aVariantName ) );
+        footprintLibId.Parse( symbol->GetFootprintFieldText( &aSheet, RESOLVED, aVariantName ) );
 
     return GetEffectivePadNumber( aSheet, aVariantName, footprintLibId, nullptr );
 }
@@ -1684,7 +1684,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
         if( parent && ( parent->IsGlobalPower() || parent->IsLocalPower() ) )
         {
-            return EscapeString( symbol->GetValue( true, &aPath, false ), CTX_NETNAME );
+            return EscapeString( symbol->GetValue( &aPath, FOR_NETNAME ), CTX_NETNAME );
         }
         else
         {

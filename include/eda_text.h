@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef EDA_TEXT_H_
-#define EDA_TEXT_H_
+#pragma once
 
 #include <memory>
 #include <mutex>
@@ -30,6 +29,7 @@
 #include <font/text_attributes.h>
 #include <api/serializable.h>
 #include <text_var_dependency.h>
+#include <common.h>
 
 
 class OUTPUTFORMATTER;
@@ -120,14 +120,16 @@ public:
     /**
      * Return the string actually shown after processing of the base text.
      *
-     * @param aAllowExtraText is true to allow adding more text than the initial expanded text,
-     * for intance a title, a prefix for texts in display functions.
-     * False to disable any added text (for instance when writing the shown text in netlists).
-     * @param aDepth is used to prevent infinite recursions and loops when expanding
-     * text variables.
+     * @param aContext controls some features of the expansion, such as whether or not field names
+     *                 are included, or whether or not escaped literal variable references should
+     *                 be prefixed with a '\'.
+     * @param aDepth is used to prevent infinite recursions and loops when expanding text variables.
      */
-    virtual wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const
+    virtual wxString GetShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const
     {
+        if( aContext == RAW_VALUE )
+            return m_text;
+
         return m_shown_text;
     }
 
@@ -543,5 +545,3 @@ struct std::hash<EDA_TEXT>
                          aText.GetTextPos().y );
     }
 };
-
-#endif   //  EDA_TEXT_H_

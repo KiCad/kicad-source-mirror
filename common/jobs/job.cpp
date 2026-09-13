@@ -102,14 +102,14 @@ wxString JOB::ResolveOutputPath( const wxString& aPath, bool aPathIsDirectory, P
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                if( m_titleBlock.TextVarResolver( token, aProject ) )
+                if( m_titleBlock.TextVarResolver( token, aProject, INTERNAL ) )
                     return true;
                 if( aProject )
                     return aProject->TextVarResolver( token );
                 return false;
             };
 
-    wxString outPath = ExpandTextVars( NormalizeFilePathForTextVars( aPath ), &textResolver );
+    wxString outPath = ExpandTextVars( NormalizeFilePathForTextVars( aPath ), &textResolver, INTERNAL );
     outPath = ExpandEnvVarSubstitutions( outPath, aProject );
 
     if( !m_tempOutputDirectory.IsEmpty() )

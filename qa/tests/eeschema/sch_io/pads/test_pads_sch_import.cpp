@@ -845,7 +845,7 @@ static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINAR
 
                 if( !symbol->GetRef( &path ).StartsWith( wxS( "#PWR" ) )
                     || symbol->GetPosition() != pagePoint( label.position, pageHeight )
-                    || symbol->GetValue( false, &path, false ) != label.text.text )
+                    || symbol->GetValue( &path, RAW_VALUE ) != label.text.text )
                 {
                     continue;
                 }
@@ -2805,7 +2805,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
         {
             auto* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            if( symbol->GetValue( false, &m_schematic.CurrentSheet(), false ) == aValue )
+            if( symbol->GetValue( &m_schematic.CurrentSheet(), RAW_VALUE ) == aValue )
                 return symbol;
         }
 
@@ -2923,7 +2923,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
                 auto* symbol = static_cast<SCH_SYMBOL*>( item );
 
                 if( symbol->GetPosition() == pagePoint( sourceLabel.position, pageHeight )
-                    && symbol->GetValue( false, &rootPath, false ) == sourceLabel.text.text )
+                    && symbol->GetValue( &rootPath, RAW_VALUE ) == sourceLabel.text.text )
                 {
                     SOURCE_POINT expectedTextPosition = sourceLabel.position;
                     expectedTextPosition.x += sourceLabel.textOffset.x;
@@ -2985,8 +2985,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
                                           [&]( const MODEL_NET& aNet )
                                           {
                                               return connection->GetNetName() == aNet.name.text
-                                                     || connection->GetNetName().EndsWith( wxS( "/" )
-                                                                                           + aNet.name.text );
+                                                  || connection->GetNetName().EndsWith( wxS( "/" ) + aNet.name.text );
                                           } ) );
     }
 
@@ -3001,9 +3000,8 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
         {
             SCH_CONNECTION* connection = pin->Connection( &rootPath );
             BOOST_REQUIRE( connection );
-            BOOST_CHECK(
-                    connection->GetNetName() == symbol->GetValue( false, &rootPath, false )
-                    || connection->GetNetName().EndsWith( wxS( "/" ) + symbol->GetValue( false, &rootPath, false ) ) );
+            BOOST_CHECK( connection->GetNetName() == symbol->GetValue( &rootPath, RAW_VALUE )
+                      || connection->GetNetName().EndsWith( wxS( "/" ) + symbol->GetValue( &rootPath, RAW_VALUE ) ) );
         }
     }
 

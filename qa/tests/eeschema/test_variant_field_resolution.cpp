@@ -297,6 +297,6 @@ BOOST_FIXTURE_TEST_CASE( VariantOverrideResolvesTextVars, TEST_VARIANT_FIELD_RES
     BOOST_REQUIRE( !mpn.IsEmpty() );
     BOOST_REQUIRE( description );
 
-    BOOST_CHECK_EQUAL( r1->GetValue( true, &sheet, false, wxS( "TextVars" ) ), mpn + wxS( "-ALT" ) );
-    BOOST_CHECK_EQUAL( description->GetShownText( &sheet, false, 0, wxS( "TextVars" ) ), mpn + wxS( "-DESC" ) );
+    BOOST_CHECK_EQUAL( r1->GetValue( &sheet, INTERNAL, wxS( "TextVars" ) ), mpn + wxS( "-ALT" ) );
+    BOOST_CHECK_EQUAL( description->GetShownText( &sheet, INTERNAL, wxS( "TextVars" ) ), mpn + wxS( "-DESC" ) );
 }

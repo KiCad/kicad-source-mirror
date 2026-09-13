@@ -952,7 +952,7 @@ HANDLER_RESULT<ExpandTextVariablesResponse> API_HANDLER_BOARD::handleExpandTextV
 
     for( const std::string& textMsg : aCtx.Request.text() )
     {
-        wxString text = ExpandTextVars( wxString::FromUTF8( textMsg ), &textResolver );
+        wxString text = ExpandTextVars( wxString::FromUTF8( textMsg ), &textResolver, INTERNAL );
 
         if( aCtx.Request.expand_env_vars() )
             text = ExpandEnvVarSubstitutions( text, board->GetProject() );

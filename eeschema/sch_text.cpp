@@ -356,7 +356,7 @@ const BOX2I SCH_TEXT::GetBoundingBox() const
 }
 
 
-wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth ) const
+wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
     // Use local depth counter so each text element starts fresh
     int depth = 0;
@@ -391,12 +391,12 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
                 return false;
             };
 
-    wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
+    wxString text = EDA_TEXT::GetShownText( aContext, depth );
 
-    if( HasTextVars() )
+    if( HasTextVars() && aContext != RAW_VALUE )
     {
         text = ResolveTextVars( text, &textResolver, depth );
-        FinalizeTextVarExpansion( text, aAllowExtraText );
+        FinalizeTextVarExpansion( text, aContext );
     }
 
     return text;
@@ -428,8 +428,8 @@ void SCH_TEXT::DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMouse
 
 wxString SCH_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Graphic Text '%s'" ),
-                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Graphic Text '%s'" ), aFull ? GetShownText( FOR_GUI )
+                                                             : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -598,7 +598,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
 
         // Compute line positions
         wxArrayString strings_list;
-        wxStringSplit( GetShownText( nullptr, true ), strings_list, '\n' );
+        wxStringSplit( GetShownText( nullptr, FOR_CANVAS ), strings_list, '\n' );
 
         int lineCount = (int) strings_list.Count();
 
@@ -642,7 +642,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
 
         std::vector<VECTOR2I> positions;
         wxArrayString         strings_list;
-        wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
+        wxStringSplit( GetShownText( sheet, FOR_CANVAS ), strings_list, '\n' );
         positions.reserve( strings_list.Count() );
 
         GetLinePositions( renderSettings, positions, (int) strings_list.Count() );

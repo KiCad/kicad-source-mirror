@@ -342,7 +342,7 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( const 
         if( field->IsPrivate() )
             return wxEmptyString;
         else
-            return field->GetShownText( &aRef.GetSheetPath(), false, 0, m_currentVariant );
+            return field->GetShownText( &aRef.GetSheetPath(), INTERNAL, m_currentVariant );
     }
 
     // Handle generated fields with variables as names (e.g. ${QUANTITY}) that are not present in

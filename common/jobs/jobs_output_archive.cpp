@@ -55,7 +55,7 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTemp
 
     wxString outputPath = m_outputPath;
     outputPath.Replace( wxT( "\\" ), wxT( "/" ) );
-    outputPath = ExpandTextVars( outputPath, aProject );
+    outputPath = ExpandTextVars( outputPath, aProject, INTERNAL );
     outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
 
     if( outputPath.StartsWith( "~" ) )

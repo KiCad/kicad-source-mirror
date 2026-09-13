@@ -120,10 +120,10 @@ BOOST_AUTO_TEST_CASE( ValueSyncUnderVariant )
     m_unitA->SetValueFieldText( wxS( "AAA" ), &m_path, wxS( "V1" ) );
     sync( m_unitA, wxS( "V1" ) );
 
-    BOOST_CHECK_EQUAL( m_unitB->GetValue( false, &m_path, false, wxS( "V1" ) ), wxS( "AAA" ) );
+    BOOST_CHECK_EQUAL( m_unitB->GetValue( &m_path, RAW_VALUE, wxS( "V1" ) ), wxS( "AAA" ) );
 
-    BOOST_CHECK_EQUAL( m_unitA->GetValue( false, &m_path, false ), m_baseValue );
-    BOOST_CHECK_EQUAL( m_unitB->GetValue( false, &m_path, false ), m_baseValue );
+    BOOST_CHECK_EQUAL( m_unitA->GetValue( &m_path, RAW_VALUE ), m_baseValue );
+    BOOST_CHECK_EQUAL( m_unitB->GetValue( &m_path, RAW_VALUE ), m_baseValue );
 }
 
 
@@ -182,7 +182,7 @@ BOOST_AUTO_TEST_CASE( ValueSyncWithoutVariant )
     m_unitA->SetValueFieldText( wxS( "BBB" ), &m_path, wxEmptyString );
     sync( m_unitA, wxEmptyString );
 
-    BOOST_CHECK_EQUAL( m_unitB->GetValue( false, &m_path, false ), wxS( "BBB" ) );
+    BOOST_CHECK_EQUAL( m_unitB->GetValue( &m_path, RAW_VALUE ), wxS( "BBB" ) );
 }
 
 

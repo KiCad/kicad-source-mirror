@@ -78,13 +78,13 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
                     if( symbol->GetUnitCount() > 1 )
                     {
                         msg.Printf( _( "Cleared annotation for %s (unit %s)." ),
-                                    symbol->GetValue( true, aSheet, false ),
+                                    symbol->GetValue( aSheet, FOR_GUI ),
                                     symbol->SubReference( symbol->GetUnit(), false ) );
                     }
                     else
                     {
                         msg.Printf( _( "Cleared annotation for %s." ),
-                                    symbol->GetValue( true, aSheet, false ) );
+                                    symbol->GetValue( aSheet, FOR_GUI ) );
                     }
 
                     symbol->ClearAnnotation( aSheet, aResetPrefixes );
@@ -445,7 +445,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
             if( symbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s." ),
-                            symbol->GetValue( true, sheet, false ),
+                            symbol->GetValue( sheet, FOR_GUI ),
                             symbol->SubReference( symbol->GetUnit(), false ),
                             prevRef,
                             newRef );
@@ -453,7 +453,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
             else
             {
                 msg.Printf( _( "Updated %s from %s to %s." ),
-                            symbol->GetValue( true, sheet, false ),
+                            symbol->GetValue( sheet, FOR_GUI ),
                             prevRef,
                             newRef );
             }
@@ -463,14 +463,14 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
             if( symbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Annotated %s (unit %s) as %s." ),
-                            symbol->GetValue( true, sheet, false ),
+                            symbol->GetValue( sheet, FOR_GUI ),
                             symbol->SubReference( symbol->GetUnit(), false ),
                             newRef );
             }
             else
             {
                 msg.Printf( _( "Annotated %s as %s." ),
-                            symbol->GetValue( true, sheet, false ),
+                            symbol->GetValue( sheet, FOR_GUI ),
                             newRef );
             }
         }

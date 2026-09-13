@@ -975,8 +975,8 @@ bool GENCAD_EXPORTER::createHeaderInfoData()
 
     fmt::print( m_file, "DRAWING \"{}\"\n", m_board->GetFileName() );
 
-    wxString rev = ExpandTextVars( m_board->GetTitleBlock().GetRevision(), m_board->GetProject() );
-    wxString date = ExpandTextVars( m_board->GetTitleBlock().GetDate(), m_board->GetProject() );
+    wxString rev = ExpandTextVars( m_board->GetTitleBlock().GetRevision(), m_board->GetProject(), FOR_GUI );
+    wxString date = ExpandTextVars( m_board->GetTitleBlock().GetDate(), m_board->GetProject(), FOR_GUI );
 
     fmt::print( m_file, "REVISION \"{} {}\"\n", rev, date );
     fmt::print( m_file, "UNITS INCH\n" );

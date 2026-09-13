@@ -152,9 +152,9 @@ wxString PCB_BARCODE::GetText() const
 }
 
 
-wxString PCB_BARCODE::GetShownText() const
+wxString PCB_BARCODE::GetShownText( RESOLUTION_CONTEXT aContext ) const
 {
-    return m_text.GetShownText( true );
+    return m_text.GetShownText( aContext );
 }
 
 
@@ -395,7 +395,7 @@ size_t PCB_BARCODE::computeCacheKey() const
     const VECTOR2I  pos = GetPosition();
     const EDA_ANGLE angle = GetAngle();
 
-    return hash_val( GetShownText(), m_width, m_height, pos.x, pos.y, m_margin.x, m_margin.y,
+    return hash_val( GetShownText( FOR_CANVAS ), m_width, m_height, pos.x, pos.y, m_margin.x, m_margin.y,
                      static_cast<int>( m_kind ), angle.AsDegrees(), static_cast<int>( m_errorCorrection ),
                      m_text.IsVisible(), m_text.GetTextHeight(), IsKnockout(), static_cast<int>( m_layer ) );
 }
@@ -562,7 +562,7 @@ void PCB_BARCODE::ComputeBarcode() const
         return;
     }
 
-    wxString text = GetShownText();
+    wxString text = GetShownText( FOR_CANVAS );
     wxScopedCharBuffer utf8Text = text.ToUTF8();
     size_t length = utf8Text.length();
     unsigned char* dataPtr = reinterpret_cast<unsigned char*>( utf8Text.data() );

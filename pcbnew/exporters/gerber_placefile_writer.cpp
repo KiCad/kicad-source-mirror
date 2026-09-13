@@ -145,7 +145,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( const wxString& aFullFilename, PCB
 
         // Add object attribute: component reference to flash (mainly useful for users)
         // using not quoted UTF8 string
-        wxString ref = ConvertNotAllowedCharsInGerber( footprint->Reference().GetShownText( false ),
+        wxString ref = ConvertNotAllowedCharsInGerber( footprint->Reference().GetShownText( FOR_GUI ),
                                                        allowUtf8, quoteOption );
 
         metadata.SetCmpReference( ref );

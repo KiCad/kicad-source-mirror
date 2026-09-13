@@ -24,6 +24,7 @@
 
 #include <wx/string.h>
 #include <wx/arrstr.h>
+#include <common.h>
 #include <ki_exception.h>
 
 class OUTPUTFORMATTER;
@@ -112,7 +113,7 @@ public:
     }
 
     static void GetContextualTextVars( wxArrayString* aVars );
-    bool TextVarResolver( wxString* aToken, const PROJECT* aProject, int aFlags = 0 ) const;
+    bool TextVarResolver( wxString* aToken, const PROJECT* aProject, RESOLUTION_CONTEXT aContext ) const;
 
     /**
      * Output the object to \a aFormatter in s-expression form.

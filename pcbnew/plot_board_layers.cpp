@@ -174,11 +174,11 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Reference designator" ),
-                                                   fp->Reference().GetShownText( false ) ) );
+                                                   fp->Reference().GetShownText( FOR_GUI ) ) );
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Value" ),
-                                                   fp->Value().GetShownText( false ) ) );
+                                                   fp->Value().GetShownText( FOR_GUI ) ) );
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Footprint" ),

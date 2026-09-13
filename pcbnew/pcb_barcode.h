@@ -235,7 +235,7 @@ public:
      */
     void     SetText( const wxString& aText );
     wxString GetText() const;
-    wxString GetShownText() const;
+    wxString GetShownText( RESOLUTION_CONTEXT aContext ) const;
 
     /**
      * Return the text variable references used by the barcode's content string.

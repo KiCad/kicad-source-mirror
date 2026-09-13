@@ -302,7 +302,7 @@ public:
         }
         else
         {
-            resolvedPath = ExpandTextVars( destination->GetPathInfo(), &m_frame->Prj() );
+            resolvedPath = ExpandTextVars( destination->GetPathInfo(), &m_frame->Prj(), INTERNAL );
             resolvedPath = ExpandEnvVarSubstitutions( resolvedPath, &m_frame->Prj() );
 
             if( resolvedPath.StartsWith( "~" ) )

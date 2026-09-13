@@ -94,14 +94,13 @@ void addROUND_SEGMENT_2D( CONTAINER_2D_BASE* aContainer, const SFVEC2F& aStart, 
 }
 
 
-void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContainer,
-                             const BOARD_ITEM* aOwner )
+void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContainer, const BOARD_ITEM* aOwner )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     TEXT_ATTRIBUTES            attrs = aText->GetAttributes();
     float                      penWidth_3DU = TO_3DU( aText->GetEffectiveTextPenWidth() );
     KIFONT::FONT*              font = aText->GetFont();
-    wxString                   shownText = aText->GetShownText( true );
+    wxString                   shownText = aText->GetShownText( FOR_CANVAS );
 
     if( !font )
         font = KIFONT::FONT::GetFont( wxEmptyString, aText->IsBold(), aText->IsItalic() );

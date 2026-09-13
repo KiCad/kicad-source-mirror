@@ -2227,7 +2227,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     m_gal->SetFillColor( color );
     m_gal->SetHoverColor( color );
 
-    wxString        shownText( aText->GetShownText( true ) );
+    wxString        shownText( aText->GetShownText( FOR_CANVAS ) );
     VECTOR2I        text_offset = aText->GetSchematicTextOffset( &m_schSettings );
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
     KIFONT::FONT*   font = getFont( aText );
@@ -2451,7 +2451,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
         }
         else
         {
-            wxString        shownText = aTextBox->GetShownText( true );
+            wxString        shownText = aTextBox->GetShownText( FOR_CANVAS );
             TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
             wxString        activeUrl;
 
@@ -2599,8 +2599,7 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
 }
 
 
-wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText,
-                                             const SCH_SYMBOL* aSymbolContext )
+wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext )
 {
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
@@ -2611,7 +2610,7 @@ wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText,
                 return aSymbolContext->ResolveTextVar( &m_schematic->CurrentSheet(), token );
             };
 
-    return ExpandTextVars( aSourceText, &symbolResolver );
+    return ExpandTextVars( aSourceText, &symbolResolver, FOR_CANVAS );
 }
 
 
@@ -2915,7 +2914,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
         variant = m_schematic->GetCurrentVariant();
     }
 
-    wxString shownText = aField->GetShownText( sheetPath, true, 0, variant );
+    wxString shownText = aField->GetShownText( sheetPath, FOR_CANVAS, variant );
 
     if( shownText.IsEmpty() )
         return;

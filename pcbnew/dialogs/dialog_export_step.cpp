@@ -542,7 +542,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
                     return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
                 };
 
-        path = ExpandTextVars( path, &textResolver );
+        path = ExpandTextVars( path, &textResolver, INTERNAL );
         path = ExpandEnvVarSubstitutions( path, &Prj() );
         path = Prj().AbsolutePath( path );
 

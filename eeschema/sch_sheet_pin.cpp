@@ -388,8 +388,8 @@ void SCH_SHEET_PIN::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
 
 wxString SCH_SHEET_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Hierarchical Sheet Pin '%s'" ),
-                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Hierarchical Sheet Pin '%s'" ), aFull ? GetShownText( FOR_GUI )
+                                                                       : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 

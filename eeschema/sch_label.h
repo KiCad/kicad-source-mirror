@@ -270,15 +270,12 @@ public:
      */
     virtual bool ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const;
 
-    wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
-                           int aDepth = 0 ) const override;
+    wxString GetShownText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
-    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
+    wxString GetShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override
     {
-        SCHEMATIC* schematic = Schematic();
-
-        if( schematic )
-            return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
+        if( SCHEMATIC* schematic = Schematic() )
+            return GetShownText( &schematic->CurrentSheet(), aContext, aDepth );
         else
             return GetText();
     }

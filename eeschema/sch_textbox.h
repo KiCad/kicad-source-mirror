@@ -89,16 +89,16 @@ public:
     KIFONT::FONT* GetDrawFont( const RENDER_SETTINGS* aSettings ) const override;
 
     virtual wxString GetShownText( const RENDER_SETTINGS* aSettings, const SCH_SHEET_PATH* aPath,
-                                   bool aAllowExtraText, int aDepth = 0 ) const;
+                                   RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const;
 
-    wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
+    wxString GetShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override
     {
         SCH_SHEET_PATH* sheetPath = nullptr;
 
         if( SCHEMATIC* schematic = Schematic() )
             sheetPath = &schematic->CurrentSheet();
 
-        return GetShownText( nullptr, sheetPath, aAllowExtraText, aDepth );
+        return GetShownText( nullptr, sheetPath, aContext, aDepth );
     }
 
     bool HasHypertext() const override;

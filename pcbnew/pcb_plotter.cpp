@@ -236,7 +236,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         if( plotter )
         {
             plotter->SetLayer( layer );
-            plotter->SetTitle( ExpandTextVars( m_board->GetTitleBlock().GetTitle(), &textResolver ) );
+            plotter->SetTitle( ExpandTextVars( m_board->GetTitleBlock().GetTitle(), &textResolver, FOR_GUI ) );
 
             if( m_plotOpts.m_PDFMetadata )
             {

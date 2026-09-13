@@ -817,7 +817,7 @@ void DIALOG_PLOT::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
             };
 
     wxString path = m_outputDirectoryName->GetValue();
-    path = ExpandTextVars( path, &textResolver );
+    path = ExpandTextVars( path, &textResolver, INTERNAL );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
     path = Prj().AbsolutePath( path );
 
@@ -1248,7 +1248,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
                 };
 
         wxString path = m_plotOpts.GetOutputDirectory();
-        path = ExpandTextVars( path, &textResolver );
+        path = ExpandTextVars( path, &textResolver, INTERNAL );
         path = ExpandEnvVarSubstitutions( path, board->GetProject() );
 
         wxFileName outputDir = wxFileName::DirName( path );
@@ -1366,7 +1366,7 @@ void DIALOG_PLOT::onOpenOutputDirectory( wxCommandEvent& event )
             };
 
     wxString path = m_outputDirectoryName->GetValue();
-    path = ExpandTextVars( path, &textResolver );
+    path = ExpandTextVars( path, &textResolver, INTERNAL );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
     path = Prj().AbsolutePath( path );
 

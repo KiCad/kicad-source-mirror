@@ -1704,13 +1704,13 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
 
 
 void API_HANDLER_SCH::packSheetInstance( kiapi::schematic::types::SheetInstance* aInstance, SCH_SHEET_PATH& aPath,
-                                          SCH_SHEET* aSheet )
+                                         SCH_SHEET* aSheet )
 {
     aPath.push_back( aSheet );
 
     PackSheetPath( *aInstance->mutable_path(), aPath );
 
-    wxString sheetName = aSheet->GetShownName( false );
+    wxString sheetName = aSheet->GetShownName( INTERNAL );
 
     if( sheetName.IsEmpty() && aSheet->GetScreen() )
     {
@@ -2390,7 +2390,7 @@ API_HANDLER_SCH::handleExpandTextVariables( const HANDLER_CONTEXT<ExpandTextVari
 
     for( const std::string& textMsg : aCtx.Request.text() )
     {
-        wxString text = ExpandTextVars( wxString::FromUTF8( textMsg ), &textResolver );
+        wxString text = ExpandTextVars( wxString::FromUTF8( textMsg ), &textResolver, INTERNAL );
 
         if( aCtx.Request.expand_env_vars() )
             text = ExpandEnvVarSubstitutions( text, &project );

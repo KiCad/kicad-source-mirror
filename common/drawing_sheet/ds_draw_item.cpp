@@ -184,7 +184,7 @@ const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
     // shows up large in profiles.
 
     const TEXT_ATTRIBUTES& attrs = GetAttributes();
-    const wxString         text = GetShownText( true );
+    const wxString         text = GetShownText( FOR_CANVAS );
     BOX2I                  bbox( GetTextPos() );
 
     bbox.SetWidth( KiROUND( (int) text.length() * attrs.m_Size.x * 1.3 ) );
@@ -235,8 +235,8 @@ bool DS_DRAW_ITEM_TEXT::HitTest( const BOX2I& aRect, bool aContains, int aAccura
 
 wxString DS_DRAW_ITEM_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
-    return wxString::Format( _( "Text '%s'" ),
-                             aFull ? GetShownText( false ) : KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Text '%s'" ), aFull ? GetShownText( FOR_GUI )
+                                                     : KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
