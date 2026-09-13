@@ -44,17 +44,18 @@ enum class ZOOM_CORRECTION_UNITS : int
 
 /**
  * Control to calibrate screen zoom to match real-world size.
+ *
+ * Keeps no handle on the setting it edits so that an abandoned dialog leaves it untouched; the
+ * owner reads GetValue() once the edit is accepted.
  */
 class ZOOM_CORRECTION_CTRL : public wxPanel
 {
 public:
-    ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, double aBaseValue );
+    ZOOM_CORRECTION_CTRL( wxWindow* aParent, double aValue, double aBaseValue );
 
     void   SetDisplayedValue( double aValue );
     double GetValue() const;
     int    GetUnitsSelection() const;
-    bool   TransferDataToWindow() override;
-    bool   TransferDataFromWindow() override;
 
 private:
     void unitsChanged( wxCommandEvent& aEvent );
@@ -62,7 +63,6 @@ private:
     void autoPressed( wxCommandEvent& aEvent );
 
     double                 m_baseValue;
-    double*                m_value;
     ZOOM_CORRECTION_RULER* m_ruler;
     wxStaticText*          m_label;
     wxButton*              m_autoButton;
