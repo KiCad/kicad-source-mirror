@@ -422,11 +422,15 @@ set( EESCHEMA_SRCS
     bus-wire-junction.cpp
     connection_graph.cpp
     connectivity/conn_bus.cpp
+    connectivity/conn_bindings.cpp
     connectivity/conn_netchain_manager.cpp
+    connectivity/conn_signals.cpp
     connectivity/conn_text.cpp
     connectivity/conn_keys.cpp
     connectivity/conn_claims.cpp
     connectivity/conn_records.cpp
+    connectivity/conn_partition.cpp
+    connectivity/conn_components.cpp
     connectivity/conn_summary.cpp
     connectivity/conn_navigation.cpp
     connectivity/conn_presentation.cpp
