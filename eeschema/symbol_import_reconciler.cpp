@@ -459,7 +459,7 @@ void SYMBOL_IMPORT_RECONCILER::writeAndRegisterCache(
 
             id.SetLibNickname( aCacheNickname );
             copy->SetLibId( id );
-            pi->SaveSymbol( tempPath, copy.release(), &properties );
+            pi->SaveSymbol( tempPath, std::move( copy ), &properties );
         }
 
         pi->SaveLibrary( tempPath );

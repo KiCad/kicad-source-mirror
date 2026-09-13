@@ -684,16 +684,17 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
     for( const std::pair<const LIB_ID, LIB_SYMBOL*>& it : libSymbols )
     {
-        LIB_SYMBOL* origSym = it.second;
-        LIB_SYMBOL* newSym = origSym->Flatten().release();
+        LIB_SYMBOL*                 origSym = it.second;
+        std::unique_ptr<LIB_SYMBOL> newSym = origSym->Flatten();
+        const wxString              newSymName = newSym->GetName();
 
         try
         {
-            pi->SaveSymbol( dest.GetFullPath(), newSym );
+            pi->SaveSymbol( dest.GetFullPath(), std::move( newSym ) );
         }
         catch( const IO_ERROR& ioe )
         {
-            msg.Printf( _( "Error saving symbol %s to library '%s'." ), newSym->GetName(), row->Nickname() );
+            msg.Printf( _( "Error saving symbol %s to library '%s'." ), newSymName, row->Nickname() );
             msg += wxS( "\n\n" ) + ioe.What();
             wxLogWarning( msg );
             return 0;

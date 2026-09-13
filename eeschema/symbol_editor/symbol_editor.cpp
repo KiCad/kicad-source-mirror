@@ -1152,7 +1152,7 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
         // The flattened symbol is most likely what the user would want.  As some point in
         // the future as more of the symbol library inheritance is implemented, this may have
         // to be changes to save symbols of inherited symbols.
-        pi->SaveSymbol( fn.GetFullPath(), flattenedSymbol.release() );
+        pi->SaveSymbol( fn.GetFullPath(), std::move( flattenedSymbol ) );
     }
     catch( const IO_ERROR& ioe )
     {

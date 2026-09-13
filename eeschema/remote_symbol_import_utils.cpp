@@ -223,13 +223,11 @@ bool SaveRemoteSymbolToLibrary( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxFileNa
         return false;
     }
 
-    if( aAdapter.SaveSymbol( aNickname, aSymbol.get(), true ) != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
+    if( aAdapter.SaveSymbol( aNickname, std::move( aSymbol ), true ) != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
     {
         aError = _( "Unable to save the downloaded symbol." );
         return false;
     }
-
-    (void) aSymbol.release();   // ownership transferred to library cache
 
     const LIBRARY_TABLE_SCOPE scope = aGlobalTable ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
 

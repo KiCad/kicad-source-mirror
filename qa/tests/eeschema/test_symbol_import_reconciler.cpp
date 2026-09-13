@@ -160,7 +160,7 @@ void publishLibrary( PROJECT& aProject, SYMBOL_LIBRARY_ADAPTER& aAdapter, const 
 
     auto copy = std::make_unique<LIB_SYMBOL>( aSymbol );
     copy->SetLibId( LIB_ID( aNickname, copy->GetName() ) );
-    pi->SaveSymbol( libFn.GetFullPath(), copy.release() );
+    pi->SaveSymbol( libFn.GetFullPath(), std::move( copy ) );
 
     LIBRARY_TABLE* table = aAdapter.ProjectTable().value_or( nullptr );
     BOOST_REQUIRE( table );

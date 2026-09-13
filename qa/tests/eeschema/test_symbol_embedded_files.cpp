@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolEmbeddedFiles )
     {
         IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
         plugin->CreateLibrary( GetLibPath() );
-        plugin->SaveSymbol( GetLibPath(), new LIB_SYMBOL( *parentSymbol ) );
+        plugin->SaveSymbol( GetLibPath(), std::make_unique<LIB_SYMBOL>( *parentSymbol ) );
         plugin->SaveLibrary( GetLibPath() );
     }
 
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolEmbeddedFiles )
         derivedSymbol->GetValueField().SetText( wxS( "DerivedSymbol" ) );
         derivedSymbol->SetParent( loadedParent );
 
-        plugin->SaveSymbol( GetLibPath(), new LIB_SYMBOL( *derivedSymbol ) );
+        plugin->SaveSymbol( GetLibPath(), std::make_unique<LIB_SYMBOL>( *derivedSymbol ) );
         plugin->SaveLibrary( GetLibPath() );
     }
 
@@ -178,7 +178,7 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolEmbeddedFiles )
 
         BOOST_CHECK( loadedDerived->HasFile( wxS( "derived_datasheet.pdf" ) ) );
 
-        plugin->SaveSymbol( GetLibPath(), new LIB_SYMBOL( *loadedDerived ) );
+        plugin->SaveSymbol( GetLibPath(), std::make_unique<LIB_SYMBOL>( *loadedDerived ) );
         plugin->SaveLibrary( GetLibPath() );
     }
 

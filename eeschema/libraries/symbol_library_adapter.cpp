@@ -278,7 +278,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname, const
 
 
 SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol( const wxString& aNickname,
-                                                                   const LIB_SYMBOL* aSymbol, bool aOverwrite )
+                                                                   std::unique_ptr<LIB_SYMBOL> aSymbol, bool aOverwrite )
 {
     wxCHECK( aSymbol, SAVE_SKIPPED );
 
@@ -302,13 +302,15 @@ SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol( const wxStrin
     SCH_IO* plugin = schplugin( lib );
     wxCHECK( plugin, SAVE_SKIPPED );
 
+    const wxString symbolName = aSymbol->GetName();
+
     std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
     if( !aOverwrite )
     {
         try
         {
-            std::unique_ptr<LIB_SYMBOL> existing( plugin->LoadSymbol( getUri( lib->row ), aSymbol->GetName(),
+            std::unique_ptr<LIB_SYMBOL> existing( plugin->LoadSymbol( getUri( lib->row ), symbolName,
                                                                       &options ) );
 
             if( existing )
@@ -317,18 +319,18 @@ SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol( const wxStrin
         catch( const IO_ERROR& e )
         {
             wxLogTrace( traceLibraries, "SaveSymbol: error checking for existing symbol %s:%s: %s", aNickname,
-                        aSymbol->GetName(), e.What() );
+                        symbolName, e.What() );
             return SAVE_SKIPPED;
         }
     }
 
     try
     {
-        plugin->SaveSymbol( getUri( lib->row ), aSymbol, &options );
+        plugin->SaveSymbol( getUri( lib->row ), std::move( aSymbol ), &options );
     }
     catch( const IO_ERROR& e )
     {
-        wxLogTrace( traceLibraries, "SaveSymbol: error saving %s:%s: %s", aNickname, aSymbol->GetName(), e.What() );
+        wxLogTrace( traceLibraries, "SaveSymbol: error saving %s:%s: %s", aNickname, symbolName, e.What() );
         return SAVE_SKIPPED;
     }
 

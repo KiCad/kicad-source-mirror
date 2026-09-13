@@ -211,9 +211,8 @@ LIB_SYMBOL* SCH_IO_LIB_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
 }
 
 
-void SCH_IO_LIB_CACHE::AddSymbol( const LIB_SYMBOL* aSymbol )
+void SCH_IO_LIB_CACHE::AddSymbol( std::unique_ptr<LIB_SYMBOL> aSymbol )
 {
-    // aSymbol is cloned in SYMBOL_LIB::AddSymbol().  The cache takes ownership of aSymbol.
     wxString name = aSymbol->GetName();
     LIB_SYMBOL_MAP::iterator it = m_symbols.find( name );
 
@@ -222,7 +221,7 @@ void SCH_IO_LIB_CACHE::AddSymbol( const LIB_SYMBOL* aSymbol )
         removeSymbol( it->second );
     }
 
-    m_symbols[ name ] = const_cast< LIB_SYMBOL* >( aSymbol );
+    m_symbols[name] = aSymbol.release();
     m_isModified = true;
     IncrementModifyHash();
 }

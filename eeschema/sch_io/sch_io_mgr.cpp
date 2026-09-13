@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <memory>
+
 #include <wx/filename.h>
 #include <wx/uri.h>
 
@@ -276,9 +278,9 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
     if( aReporter )
         oldFilePI->SetReporter( aReporter );
 
-    std::vector<LIB_SYMBOL*>           symbols;
-    std::vector<LIB_SYMBOL*>           newSymbols;
-    std::map<LIB_SYMBOL*, LIB_SYMBOL*> symbolMap;
+    std::vector<LIB_SYMBOL*>                 symbols;
+    std::vector<std::unique_ptr<LIB_SYMBOL>> newSymbols;
+    std::map<LIB_SYMBOL*, LIB_SYMBOL*>       symbolMap;
 
     report( wxString::Format( _( "Loading symbol library '%s'" ), aOldFilePath ), RPT_SEVERITY_ACTION );
 
@@ -294,8 +296,8 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
 
             symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
 
-            newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
-            symbolMap[symbol] = newSymbols.back();
+            newSymbols.push_back( std::make_unique<LIB_SYMBOL>( *symbol ) );
+            symbolMap[symbol] = newSymbols.back().get();
         }
 
         // Now do the derived symbols using the map to hook them up to their newSymbol parents
@@ -306,7 +308,7 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
 
             symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
 
-            newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
+            newSymbols.push_back( std::make_unique<LIB_SYMBOL>( *symbol ) );
             newSymbols.back()->SetParent( symbolMap[ symbol->GetParent().lock().get() ] );
         }
 
@@ -333,27 +335,29 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
 
     bool ok = true;
 
-    for( LIB_SYMBOL* symbol : newSymbols )
+    for( std::unique_ptr<LIB_SYMBOL>& symbol : newSymbols )
     {
+        const wxString symbolName = symbol->GetName();
+
         try
         {
-            kicadPI->SaveSymbol( aNewFilepath, symbol );
+            kicadPI->SaveSymbol( aNewFilepath, std::move( symbol ) );
         }
         catch( const IO_ERROR& io_err )
         {
-            report( wxString::Format( _( "Error saving symbol '%s': %s" ), symbol->GetName(), io_err.What() ),
+            report( wxString::Format( _( "Error saving symbol '%s': %s" ), symbolName, io_err.What() ),
                     RPT_SEVERITY_ERROR );
             ok = false;
         }
         catch( const std::exception& e )
         {
-            report( wxString::Format( _( "Error saving symbol '%s': %s" ), symbol->GetName(), e.what() ),
+            report( wxString::Format( _( "Error saving symbol '%s': %s" ), symbolName, e.what() ),
                     RPT_SEVERITY_ERROR );
             ok = false;
         }
         catch( ... )
         {
-            report( wxString::Format( _( "Error saving symbol '%s': unknown error" ), symbol->GetName() ),
+            report( wxString::Format( _( "Error saving symbol '%s': unknown error" ), symbolName ),
                     RPT_SEVERITY_ERROR );
             ok = false;
         }

@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE( SymbolLibraryLineEndingsRoundTrip )
         SCH_IO_KICAD_SEXPR io;
 
         io.CreateLibrary( tempLib.Path() );
-        io.SaveSymbol( tempLib.Path(), new LIB_SYMBOL( symbol ) );
+        io.SaveSymbol( tempLib.Path(), std::make_unique<LIB_SYMBOL>( symbol ) );
         io.SaveLibrary( tempLib.Path() );
     }
 

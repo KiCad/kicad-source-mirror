@@ -2416,8 +2416,13 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                     std::map<std::string, UTF8> properties;
                     properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
 
-                    LIB_SYMBOL* parentSymbol = new LIB_SYMBOL( *libSymbol );
-                    m_pi->SaveSymbol( getLibFileName().GetFullPath(), parentSymbol, &properties );
+                    // The plugin cache owns the parent symbol after the save; keep a borrowed
+                    // pointer to reparent the derived symbols.
+                    std::unique_ptr<LIB_SYMBOL> parentSymbol = std::make_unique<LIB_SYMBOL>( *libSymbol );
+                    LIB_SYMBOL* parent = parentSymbol.get();
+
+                    m_pi->SaveSymbol( getLibFileName().GetFullPath(), std::move( parentSymbol ),
+                                      &properties );
 
                     for( std::unique_ptr<LIB_SYMBOL>& symbol : derivedSymbols )
                     {
@@ -2428,10 +2433,11 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                             symbol->SetName( tmp );
                         }
 
-                        LIB_SYMBOL* derivedSymbol = new LIB_SYMBOL( *symbol );
+                        std::unique_ptr<LIB_SYMBOL> derivedSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
 
-                        derivedSymbol->SetParent( parentSymbol );
-                        m_pi->SaveSymbol( getLibFileName().GetFullPath(), derivedSymbol, &properties );
+                        derivedSymbol->SetParent( parent );
+                        m_pi->SaveSymbol( getLibFileName().GetFullPath(), std::move( derivedSymbol ),
+                                          &properties );
                     }
                 }
                 catch(...)

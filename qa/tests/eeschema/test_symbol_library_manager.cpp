@@ -250,14 +250,14 @@ BOOST_AUTO_TEST_CASE( DeletedSymbolsAreRemovedFromFile )
         parentSymbol->GetReferenceField().SetText( wxS( "U" ) );
 
         LIB_SYMBOL* parentPtr = parentSymbol.get();
-        plugin->SaveSymbol( libPath, new LIB_SYMBOL( *parentSymbol ) );
+        plugin->SaveSymbol( libPath, std::make_unique<LIB_SYMBOL>( *parentSymbol ) );
 
         // Create derived symbol
         std::unique_ptr<LIB_SYMBOL> derivedSymbol = std::make_unique<LIB_SYMBOL>( wxS( "Derived" ) );
         derivedSymbol->GetValueField().SetText( wxS( "Derived" ) );
         derivedSymbol->SetParent( parentPtr );
 
-        plugin->SaveSymbol( libPath, new LIB_SYMBOL( *derivedSymbol ) );
+        plugin->SaveSymbol( libPath, std::make_unique<LIB_SYMBOL>( *derivedSymbol ) );
         plugin->SaveLibrary( libPath );
     }
 
@@ -388,13 +388,13 @@ BOOST_AUTO_TEST_CASE( SaveLibraryAsToNewFile )
         parent->GetReferenceField().SetText( wxS( "U" ) );
         LIB_SYMBOL* parentPtr = parent.get();
 
-        plugin->SaveSymbol( srcPath, new LIB_SYMBOL( *parent ) );
+        plugin->SaveSymbol( srcPath, std::make_unique<LIB_SYMBOL>( *parent ) );
 
         auto derived = std::make_unique<LIB_SYMBOL>( wxS( "Derived" ) );
         derived->GetValueField().SetText( wxS( "Derived" ) );
         derived->SetParent( parentPtr );
 
-        plugin->SaveSymbol( srcPath, new LIB_SYMBOL( *derived ) );
+        plugin->SaveSymbol( srcPath, std::make_unique<LIB_SYMBOL>( *derived ) );
         plugin->SaveLibrary( srcPath );
     }
 
@@ -414,15 +414,16 @@ BOOST_AUTO_TEST_CASE( SaveLibraryAsToNewFile )
         // Buffer symbols into the destination plugin using the target path (which
         // does not exist yet). This must not throw.
         BOOST_CHECK_NO_THROW(
-                dstPlugin->SaveSymbol( dstPath, new LIB_SYMBOL( *loadedParent ), &properties ) );
+                dstPlugin->SaveSymbol( dstPath, std::make_unique<LIB_SYMBOL>( *loadedParent ),
+                                       &properties ) );
 
-        LIB_SYMBOL* newDerived = new LIB_SYMBOL( *loadedDerived );
+        auto newDerived = std::make_unique<LIB_SYMBOL>( *loadedDerived );
         LIB_SYMBOL* dstParent = dstPlugin->LoadSymbol( dstPath, wxS( "Parent" ), &properties );
         BOOST_REQUIRE( dstParent != nullptr );
         newDerived->SetParent( dstParent );
 
         BOOST_CHECK_NO_THROW(
-                dstPlugin->SaveSymbol( dstPath, newDerived, &properties ) );
+                dstPlugin->SaveSymbol( dstPath, std::move( newDerived ), &properties ) );
 
         BOOST_CHECK_NO_THROW( dstPlugin->SaveLibrary( dstPath ) );
     }
@@ -547,16 +548,16 @@ BOOST_AUTO_TEST_CASE( SaveCopyAsDerivedSymbolToNewLibrary )
         properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, "" );
 
         BOOST_CHECK_NO_THROW(
-                plugin->SaveSymbol( dstPath, new LIB_SYMBOL( *parent ), &properties ) );
+                plugin->SaveSymbol( dstPath, std::make_unique<LIB_SYMBOL>( *parent ), &properties ) );
 
         LIB_SYMBOL* dstParent = plugin->LoadSymbol( dstPath, wxS( "BaseSymbol" ), &properties );
         BOOST_REQUIRE( dstParent != nullptr );
 
-        LIB_SYMBOL* newChild = new LIB_SYMBOL( *derived );
+        auto newChild = std::make_unique<LIB_SYMBOL>( *derived );
         newChild->SetParent( dstParent );
         newChild->SetParentName( dstParent->GetName() );
 
-        BOOST_CHECK_NO_THROW( plugin->SaveSymbol( dstPath, newChild, &properties ) );
+        BOOST_CHECK_NO_THROW( plugin->SaveSymbol( dstPath, std::move( newChild ), &properties ) );
         BOOST_CHECK_NO_THROW( plugin->SaveLibrary( dstPath ) );
     }
 

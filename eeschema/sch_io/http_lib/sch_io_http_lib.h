@@ -109,7 +109,7 @@ public:
         m_sourcePatcher = std::move( aOverride );
     }
 
-    void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
+    void SaveSymbol( const wxString& aLibraryPath, std::unique_ptr<LIB_SYMBOL> aSymbol,
                      const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     const wxString& GetError() const override { return m_lastError; }

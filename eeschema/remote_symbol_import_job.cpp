@@ -324,8 +324,7 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
                         return false;
                     }
 
-                    plugin->SaveSymbol( outFile.GetFullPath(), loaded.get() );
-                    (void) loaded.release();   // ownership transferred to plugin's cache
+                    plugin->SaveSymbol( outFile.GetFullPath(), std::move( loaded ) );
                 }
                 catch( const IO_ERROR& e )
                 {

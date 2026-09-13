@@ -158,8 +158,8 @@ BOOST_AUTO_TEST_CASE( BodyStylesSurviveRoundTrip )
 
         IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
         plugin->CreateLibrary( GetLibPath() );
-        plugin->SaveSymbol( GetLibPath(), new LIB_SYMBOL( root ) );
-        plugin->SaveSymbol( GetLibPath(), new LIB_SYMBOL( derived ) );
+        plugin->SaveSymbol( GetLibPath(), std::make_unique<LIB_SYMBOL>( root ) );
+        plugin->SaveSymbol( GetLibPath(), std::make_unique<LIB_SYMBOL>( derived ) );
         plugin->SaveLibrary( GetLibPath() );
     }
 

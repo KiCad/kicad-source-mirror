@@ -124,7 +124,7 @@ static void saveToLib( const wxString& aLibPath, const LIB_SYMBOL& aSymbol )
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
     pi->CreateLibrary( aLibPath );
-    pi->SaveSymbol( aLibPath, new LIB_SYMBOL( aSymbol ) );
+    pi->SaveSymbol( aLibPath, std::make_unique<LIB_SYMBOL>( aSymbol ) );
     pi->SaveLibrary( aLibPath );
 }
 

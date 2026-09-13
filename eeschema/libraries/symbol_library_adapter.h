@@ -23,6 +23,7 @@
 #define SYMBOL_LIBRARY_MANAGER_ADAPTER_H
 
 #include <future>
+#include <memory>
 #include <optional>
 #include <lib_id.h>
 #include <core/leak_at_exit.h>
@@ -138,7 +139,7 @@ public:
      * @return SAVE_T - SAVE_OK or SAVE_SKIPPED.  If error saving, then IO_ERROR is thrown.
      * @throw IO_ERROR if there is a problem saving the symbol.
      */
-    SAVE_T SaveSymbol( const wxString& aNickname, const LIB_SYMBOL* aSymbol,
+    SAVE_T SaveSymbol( const wxString& aNickname, std::unique_ptr<LIB_SYMBOL> aSymbol,
                        bool aOverwrite = true );
 
     /**

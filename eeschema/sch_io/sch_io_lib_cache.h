@@ -23,6 +23,7 @@
 #define _SCH_IO_LIB_CACHE_H_
 
 #include <map>
+#include <memory>
 #include <mutex>
 #include <optional>
 
@@ -65,7 +66,7 @@ public:
 
     virtual void Load() = 0;
 
-    virtual void AddSymbol( const LIB_SYMBOL* aSymbol );
+    virtual void AddSymbol( std::unique_ptr<LIB_SYMBOL> aSymbol );
 
     virtual void DeleteSymbol( const wxString& aName ) = 0;
 

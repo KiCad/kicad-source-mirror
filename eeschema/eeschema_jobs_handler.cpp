@@ -2516,9 +2516,7 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
     const bool hadSilentFallback = applier.GetReport().mergePropsFallback > 0;
 
     // Serialize via the sexpr lib cache: create at output path, add each
-    // merged symbol, save. The cache owns its symbols once added; clone
-    // before handing off so the applier's unique_ptrs stay intact for the
-    // post-save report.
+    // merged symbol, save. The cache owns its symbols once added.
     wxFileName outFn( aOutput );
     outFn.MakeAbsolute();
 
@@ -2526,13 +2524,12 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
     {
         SCH_IO_KICAD_SEXPR_LIB_CACHE cache( outFn.GetFullPath() );
 
-        // SCH_IO_LIB_CACHE::AddSymbol takes ownership of the raw pointer; the
-        // cache destructor deletes from m_symbols. Release the unique_ptrs so
-        // we don't double-free.
+        // SCH_IO_LIB_CACHE::AddSymbol takes ownership; the cache destructor
+        // deletes the symbols it holds.
         for( auto& sym : merged )
         {
             if( sym )
-                cache.AddSymbol( sym.release() );
+                cache.AddSymbol( std::move( sym ) );
         }
 
         cache.SetModified( true );
