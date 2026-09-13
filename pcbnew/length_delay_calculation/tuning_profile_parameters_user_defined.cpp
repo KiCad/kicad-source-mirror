@@ -170,22 +170,40 @@ TUNING_PROFILE_PARAMETERS_USER_DEFINED::GetTuningProfile( const wxString& aDelay
 }
 
 
+double TUNING_PROFILE_PARAMETERS_USER_DEFINED::getTrackDelayPerMM(
+        const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) const
+{
+    if( !aContext.NetClass )
+        return 0.0;
+
+    const TUNING_PROFILE* profile = GetTuningProfile( aContext.NetClass->GetTuningProfile() );
+
+    if( !profile )
+        return 0.0;
+
+    auto entry = profile->m_TrackPropagationEntriesMap.find( aContext.Layer );
+
+    if( entry == profile->m_TrackPropagationEntriesMap.end() )
+        return 0.0;
+
+    return entry->second.GetDelay();
+}
+
+
+bool TUNING_PROFILE_PARAMETERS_USER_DEFINED::CanCalculateLengthForDelay(
+        const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) const
+{
+    return getTrackDelayPerMM( aContext ) > 0.0;
+}
+
+
 int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::GetTrackLengthForPropagationDelay(
         int64_t aDelay, const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext )
 {
-    const wxString        delayProfileName = aContext.NetClass->GetTuningProfile();
-    const TUNING_PROFILE* profile = GetTuningProfile( delayProfileName );
+    const double delayUnit = getTrackDelayPerMM( aContext );
 
-    if( !profile )
+    if( delayUnit <= 0.0 )
         return 0;
-
-    double delayUnit = 0.0;
-
-    if( profile->m_TrackPropagationEntriesMap.contains( aContext.Layer ) )
-    {
-        const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& entry = profile->m_TrackPropagationEntriesMap.at( aContext.Layer );
-        delayUnit = entry.GetDelay();
-    }
 
     const double lengthInMM = static_cast<double>( aDelay ) / delayUnit; // MM
     return static_cast<int64_t>( lengthInMM * PCB_IU_PER_MM );           // Length IU
@@ -195,19 +213,7 @@ int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::GetTrackLengthForPropagationDela
 int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::CalculatePropagationDelayForShapeLineChain(
         const SHAPE_LINE_CHAIN& aShape, const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext )
 {
-    const wxString        delayProfileName = aContext.NetClass->GetTuningProfile();
-    const TUNING_PROFILE* profile = GetTuningProfile( delayProfileName );
-
-    if( !profile )
-        return 0;
-
-    double delayUnit = 0.0;
-
-    if( profile->m_TrackPropagationEntriesMap.contains( aContext.Layer ) )
-    {
-        const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& entry = profile->m_TrackPropagationEntriesMap.at( aContext.Layer );
-        delayUnit = entry.GetDelay();
-    }
+    const double delayUnit = getTrackDelayPerMM( aContext );
 
     return static_cast<int64_t>( delayUnit * ( static_cast<double>( aShape.Length() ) / PCB_IU_PER_MM ) );
 }

@@ -978,6 +978,12 @@ int64_t LENGTH_DELAY_CALCULATION::CalculateLengthForDelay( const int64_t        
 }
 
 
+bool LENGTH_DELAY_CALCULATION::CanCalculateLengthForDelay( const TUNING_PROFILE_GEOMETRY_CONTEXT& aCtx ) const
+{
+    return m_tuningProfileParameters->CanCalculateLengthForDelay( aCtx );
+}
+
+
 int64_t LENGTH_DELAY_CALCULATION::CalculatePropagationDelayForShapeLineChain(
         const SHAPE_LINE_CHAIN& aShape, const TUNING_PROFILE_GEOMETRY_CONTEXT& aCtx ) const
 {
