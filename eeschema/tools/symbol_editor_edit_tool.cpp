@@ -765,6 +765,20 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 }
 
 
+bool SYMBOL_EDITOR_EDIT_TOOL::ShouldFocusPinNumber( SCH_PIN& aPin, const VECTOR2I& aMousePos,
+                                                    bool aCursorMovedByKeyboard )
+{
+    if( aCursorMovedByKeyboard )
+        return false;
+
+    // Mouse, not cursor, as grid points may well not be under any text
+    if( OPT_BOX2I numberBox = aPin.GetLayoutCache().GetPinNumberBBox() )
+        return numberBox->Contains( aMousePos );
+
+    return false;
+}
+
+
 int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION& selection = m_selectionTool->RequestSelection();
@@ -803,18 +817,12 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             SCH_PIN& pin = static_cast<SCH_PIN&>( *item );
 
-            // Mouse, not cursor, as grid points may well not be under any text
-            const VECTOR2I&   mousePos = m_toolMgr->GetMousePosition();
-            PIN_LAYOUT_CACHE& layout = pin.GetLayoutCache();
-
-            bool mouseOverNumber = false;
-            if( OPT_BOX2I numberBox = layout.GetPinNumberBBox() )
-            {
-                mouseOverNumber = numberBox->Contains( mousePos );
-            }
+            const VECTOR2I& mousePos = m_toolMgr->GetMousePosition();
+            const bool      keyboardCursor =
+                    getViewControls()->GetSettings().m_lastKeyboardCursorPositionValid;
 
             if( SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() )
-                pinTool->EditPinProperties( &pin, mouseOverNumber );
+                pinTool->EditPinProperties( &pin, ShouldFocusPinNumber( pin, mousePos, keyboardCursor ) );
 
             break;
         }
