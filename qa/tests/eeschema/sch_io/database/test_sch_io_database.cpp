@@ -128,13 +128,13 @@ BOOST_AUTO_TEST_CASE( FieldMappedDescriptionMatchesShownDescription )
 
     std::unique_ptr<LIB_SYMBOL> owned( symbol );
 
-    const wxString liveDescription = owned->GetField( FIELD_T::DESCRIPTION )->GetShownText( false );
+    const wxString liveDescription = owned->GetField( FIELD_T::DESCRIPTION )->GetShownText( FOR_GUI );
 
     // The database row for RES-001 carries a non-empty Description.
     BOOST_REQUIRE( !liveDescription.IsEmpty() );
 
     // The chooser tree / search path must agree with the live field the details panel shows.
-    BOOST_CHECK_EQUAL( owned->GetShownDescription(), liveDescription );
+    BOOST_CHECK_EQUAL( owned->GetShownDescription( FOR_GUI ), liveDescription );
     BOOST_CHECK_EQUAL( owned->GetDesc(), liveDescription );
 
     // The search-term cache feeds chooser filtering and is built from the shown description, so it
