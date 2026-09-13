@@ -310,8 +310,7 @@ SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol( const wxStrin
     {
         try
         {
-            std::unique_ptr<LIB_SYMBOL> existing( plugin->LoadSymbol( getUri( lib->row ), symbolName,
-                                                                      &options ) );
+            LIB_SYMBOL* existing = plugin->LoadSymbol( getUri( lib->row ), symbolName, &options );
 
             if( existing )
                 return SAVE_SKIPPED;
