@@ -40,6 +40,7 @@
 #include <bitmaps.h>
 #include <api/api_handler_common.h>
 #include <api/api_handler_footprint.h>
+#include <api/api_handler_libraries.h>
 #include <api/api_server.h>
 #include <board.h>
 #include <project/net_settings.h>
@@ -366,6 +367,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     {
         m_apiHandlerCommon = std::make_unique<API_HANDLER_COMMON>();
         Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
+        m_apiHandlerFpLibs = std::make_unique<API_HANDLER_LIBRARIES>(
+                LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
+        Pgm().GetApiServer().RegisterHandler( m_apiHandlerFpLibs.get() );
     }
 
     GetToolManager()->PostAction( ACTIONS::zoomFitScreen );

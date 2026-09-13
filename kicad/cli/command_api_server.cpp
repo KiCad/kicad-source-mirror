@@ -24,6 +24,8 @@
 #include <vector>
 
 #include <api/api_handler_common.h>
+#include <api/api_handler_libraries.h>
+#include <libraries/library_table.h>
 #include <api/api_utils.h>
 #include <api/api_server.h>
 #include <cli/exit_codes.h>
@@ -72,6 +74,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
 
     std::unique_ptr<KICAD_API_SERVER> server = std::make_unique<KICAD_API_SERVER>( false );
     API_HANDLER_COMMON                commonHandler;
+    API_HANDLER_LIBRARIES             designBlockLibrariesHandler( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
 
     wxString socketPath = wxString::FromUTF8( m_argParser.get<std::string>( ARG_SOCKET ) );
 
@@ -514,6 +517,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     commonHandler.SetCloseAllDocumentsHandler( closeAllDocuments );
 
     server->RegisterHandler( &commonHandler );
+    server->RegisterHandler( &designBlockLibrariesHandler );
     server->Start();
 
     if( !server->Running() )
@@ -546,6 +550,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         {
             wxFprintf( stderr, "%s\n", preloadResult.error().error_message() );
             server->DeregisterHandler( &commonHandler );
+            server->DeregisterHandler( &designBlockLibrariesHandler );
             return EXIT_CODES::ERR_ARGS;
         }
     }
@@ -578,6 +583,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     commands::CloseAllDocuments closeAllReq;
     closeAllDocuments( closeAllReq );
     server->DeregisterHandler( &commonHandler );
+    server->DeregisterHandler( &designBlockLibrariesHandler );
 
     return EXIT_CODES::OK;
 }

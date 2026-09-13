@@ -939,6 +939,7 @@ endif()
 list( APPEND COMMON_SRCS
     api/api_handler_common.cpp
     api/api_handler_editor.cpp
+    api/api_handler_libraries.cpp
 )
 
 add_library( common STATIC

@@ -38,6 +38,7 @@
 #include <wx/sizer.h>
 #include <wx/menu.h>
 #include <api/api_handler_common.h>
+#include <api/api_handler_libraries.h>
 #include <api/api_plugin_manager.h>
 #include <api/api_utils.h>
 #include <local_history.h>
@@ -457,6 +458,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     {
         m_apiHandlerCommon = std::make_unique<API_HANDLER_COMMON>();
         Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
+        m_apiLibrariesHandler = std::make_unique<API_HANDLER_LIBRARIES>( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
+        Pgm().GetApiServer().RegisterHandler( m_apiLibrariesHandler.get() );
     }
 
     // Default shutdown reason until a file is loaded

@@ -68,6 +68,7 @@ class WX_INFOBAR;
 class KICAD_API_SERVER;
 class API_HANDLER_PCB;
 class API_HANDLER_COMMON;
+class API_HANDLER_LIBRARIES;
 
 enum LAST_PATH_TYPE : unsigned int;
 
@@ -899,6 +900,7 @@ private:
 
     std::unique_ptr<API_HANDLER_PCB>    m_apiHandler;
     std::unique_ptr<API_HANDLER_COMMON> m_apiHandlerCommon;
+    std::unique_ptr<API_HANDLER_LIBRARIES> m_apiLibrariesHandler;
 };
 
 #endif  // __PCB_EDIT_FRAME_H__

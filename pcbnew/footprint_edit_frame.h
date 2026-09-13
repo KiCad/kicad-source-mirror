@@ -43,6 +43,7 @@ class UNDO_REDO_CONTAINER;
 
 class API_HANDLER_FOOTPRINT;
 class API_HANDLER_COMMON;
+class API_HANDLER_LIBRARIES;
 
 namespace PCB { struct IFACE; }     // A KIFACE coded in pcbnew.cpp
 
@@ -574,6 +575,7 @@ private:
 
     std::unique_ptr<API_HANDLER_FOOTPRINT> m_apiHandler;
     std::unique_ptr<API_HANDLER_COMMON>    m_apiHandlerCommon;
+    std::unique_ptr<API_HANDLER_LIBRARIES> m_apiHandlerFpLibs;
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H

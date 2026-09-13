@@ -25,6 +25,7 @@
 #include <cli_progress_reporter.h>
 #include <confirm.h>
 #include <api/api_handler_footprint.h>
+#include <api/api_handler_fp_libraries.h>
 #include <api/api_handler_pcb.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
@@ -626,6 +627,7 @@ private:
     std::unique_ptr<API_HANDLER_PCB>            m_openHandler;
     std::shared_ptr<HEADLESS_FOOTPRINT_CONTEXT> m_openFpContext;
     std::unique_ptr<API_HANDLER_FOOTPRINT>      m_openFpHandler;
+    std::unique_ptr<API_HANDLER_FP_LIBRARIES>   m_apiHandlerFpLibs;
 
 } kiface( "pcbnew", KIWAY::FACE_PCB );
 
@@ -706,6 +708,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
     KIGIT::RegisterMergeDriver( "kicad-pcb", &KIGIT_PCB_MERGE::Apply );
     KIGIT::RegisterMergeDriver( "kicad-fp",  &KIGIT_FP_MERGE::Apply );
 
+    if( Pgm().ApiServerOrNull() )
+    {
+        m_apiHandlerFpLibs = std::make_unique<API_HANDLER_FP_LIBRARIES>();
+        Pgm().GetApiServer().RegisterHandler( m_apiHandlerFpLibs.get() );
+    }
+
     return true;
 }
 
@@ -717,6 +725,14 @@ void IFACE::Reset()
 
 void IFACE::OnKifaceEnd()
 {
+    if( m_apiHandlerFpLibs )
+    {
+        if( Pgm().ApiServerOrNull() )
+            Pgm().GetApiServer().DeregisterHandler( m_apiHandlerFpLibs.get() );
+
+        m_apiHandlerFpLibs.reset();
+    }
+
     // Release the CLI-cached board while the static DRC_ITEM tables it serializes against are
     // still alive; deferring to static teardown crashes reading dangling severity keys
     if( m_jobHandler )
@@ -965,7 +981,20 @@ bool IFACE::handleOpenFootprint( const wxString& aProjectPath, const wxString& a
     }
 
     closeCurrentDocument( aServer );
+
+    if( !m_apiHandlerFpLibs )
+    {
+        m_apiHandlerFpLibs = std::make_unique<API_HANDLER_FP_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerFpLibs.get() );
+    }
+
     m_openFpContext = std::move( newContext );
+
+    if( !m_apiHandlerFpLibs )
+    {
+        m_apiHandlerFpLibs = std::make_unique<API_HANDLER_FP_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerFpLibs.get() );
+    }
 
     m_openFpHandler = std::make_unique<API_HANDLER_FOOTPRINT>( m_openFpContext, nullptr );
     aServer->RegisterHandler( m_openFpHandler.get() );
@@ -1064,6 +1093,12 @@ bool IFACE::handleOpenPcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxS
         return false;
     }
 
+    if( !m_apiHandlerFpLibs )
+    {
+        m_apiHandlerFpLibs = std::make_unique<API_HANDLER_FP_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerFpLibs.get() );
+    }
+
     m_openContext = std::move( newContext );
 
     m_openHandler = std::make_unique<API_HANDLER_PCB>( m_openContext, nullptr );
@@ -1137,6 +1172,12 @@ bool IFACE::handleCreatePcb( const wxString& aPath, KICAD_API_SERVER* aServer, w
     }
 
     m_openContext = std::move( newContext );
+
+    if( !m_apiHandlerFpLibs )
+    {
+        m_apiHandlerFpLibs = std::make_unique<API_HANDLER_FP_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerFpLibs.get() );
+    }
 
     m_openHandler = std::make_unique<API_HANDLER_PCB>( m_openContext, nullptr );
     aServer->RegisterHandler( m_openHandler.get() );

@@ -23,6 +23,8 @@
 
 #include <pgm_base.h>
 #include <api/api_handler_common.h>
+#include <api/api_handler_libraries.h>
+#include <libraries/library_table.h>
 #include <bin_mod.h>
 
 /**
@@ -67,6 +69,7 @@ protected:
     // In PGM_SINGLE_TOP because PGM_BASE is in kicommon, and this can't be in the DLL
     // because it depends on things like EDA_TEXT and EDA_SHAPE that aren't in the DLL
     std::unique_ptr<API_HANDLER_COMMON> m_api_common_handler;
+    std::unique_ptr<API_HANDLER_LIBRARIES> m_api_libraries_handler;
 };
 
 

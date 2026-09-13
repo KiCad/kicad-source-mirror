@@ -25,6 +25,7 @@
 #include <api/common/types/base_types.pb.h>
 #include <api/common/types/embedded_files.pb.h>
 #include <api/common/types/enums.pb.h>
+#include <api/common/types/library_types.pb.h>
 #include <api/board/board_commands.pb.h>
 #include <api/board/board.pb.h>
 #include <api/board/board_rules.pb.h>
@@ -33,6 +34,7 @@
 #include <api/schematic/schematic_types.pb.h>
 
 #include <core/typeinfo.h>
+#include <libraries/library_table.h>
 #include <line_ending.h>
 #include <eda_shape.h>
 #include <font/text_attributes.h>
@@ -908,4 +910,36 @@ common::types::EmbeddedFileType ToProtoEnum( EMBEDDED_FILES::EMBEDDED_FILE::FILE
 
     wxCHECK_MSG( false, common::types::EFT_UNKNOWN,
                  "Unhandled case in ToProtoEnum<EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE>" );
+}
+
+
+template<> KICOMMON_API
+LIBRARY_TABLE_TYPE FromProtoEnum( common::types::LibraryType aType )
+{
+    switch( aType )
+    {
+    case common::types::LibraryType::LT_SYMBOL:       return LIBRARY_TABLE_TYPE::SYMBOL;
+    case common::types::LibraryType::LT_FOOTPRINT:    return LIBRARY_TABLE_TYPE::FOOTPRINT;
+    case common::types::LibraryType::LT_DESIGN_BLOCK: return LIBRARY_TABLE_TYPE::DESIGN_BLOCK;
+    default:                                          return LIBRARY_TABLE_TYPE::UNINITIALIZED;
+    }
+
+    wxCHECK_MSG( false, LIBRARY_TABLE_TYPE::UNINITIALIZED,
+                 "Unhandled case in ToProtoEnum<LibraryType>" );
+}
+
+
+template<> KICOMMON_API
+common::types::LibraryType ToProtoEnum( LIBRARY_TABLE_TYPE aType )
+{
+    switch( aType )
+    {
+    case LIBRARY_TABLE_TYPE::SYMBOL:       return common::types::LibraryType::LT_SYMBOL;
+    case LIBRARY_TABLE_TYPE::FOOTPRINT:    return common::types::LibraryType::LT_FOOTPRINT;
+    case LIBRARY_TABLE_TYPE::DESIGN_BLOCK: return common::types::LibraryType::LT_DESIGN_BLOCK;
+    default:                               return common::types::LibraryType::LT_UNKNOWN;
+    }
+
+    wxCHECK_MSG( false, common::types::LT_UNKNOWN,
+                 "Unhandled case in ToProtoEnum<LIBRARY_TABLE_TYPE>" );
 }

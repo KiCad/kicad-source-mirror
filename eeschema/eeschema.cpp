@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <api/api_handler_sch.h>
+#include <api/api_handler_sch_libraries.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
 #include <api/cross_probe_client.h>
@@ -490,6 +491,7 @@ private:
     SCHEMATIC*                                m_openSchematic = nullptr;
     std::shared_ptr<HEADLESS_SCH_CONTEXT>     m_openContext;
     std::unique_ptr<API_HANDLER_SCH>          m_openHandler;
+    std::unique_ptr<API_HANDLER_SCH_LIBRARIES> m_apiHandlerSchLibs;
 
 } kiface( "eeschema", KIWAY::FACE_SCH );
 
@@ -555,6 +557,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
     {
         m_jobHandler->SetReporter( &CLI_REPORTER::GetInstance() );
         m_jobHandler->SetProgressReporter( &CLI_PROGRESS_REPORTER::GetInstance() );
+    }
+
+    if( Pgm().ApiServerOrNull() )
+    {
+        m_apiHandlerSchLibs = std::make_unique<API_HANDLER_SCH_LIBRARIES>();
+        Pgm().GetApiServer().RegisterHandler( m_apiHandlerSchLibs.get() );
     }
 
     // Register the schematic and symbol-library merge drivers with libgit2 so
@@ -701,6 +709,14 @@ void IFACE::ProjectChanged()
 
 void IFACE::OnKifaceEnd()
 {
+    if( m_apiHandlerSchLibs )
+    {
+        if( Pgm().ApiServerOrNull() )
+            Pgm().GetApiServer().DeregisterHandler( m_apiHandlerSchLibs.get() );
+
+        m_apiHandlerSchLibs.reset();
+    }
+
     // Release the CLI-cached schematic while the static ERC_ITEM tables it serializes against are
     // still alive; deferring to static teardown crashes reading dangling severity keys
     if( m_jobHandler )
@@ -970,6 +986,13 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
     m_openSchematic = schematic;
 
     m_openContext = std::make_shared<HEADLESS_SCH_CONTEXT>( &m_openSchematic, project, m_kiway );
+
+    if( !m_apiHandlerSchLibs )
+    {
+        m_apiHandlerSchLibs = std::make_unique<API_HANDLER_SCH_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerSchLibs.get() );
+    }
+
     m_openHandler = std::make_unique<API_HANDLER_SCH>( m_openContext );
     aServer->RegisterHandler( m_openHandler.get() );
 
