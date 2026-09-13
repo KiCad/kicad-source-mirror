@@ -22,11 +22,11 @@
 #include <geometry/eda_angle.h>
 #include <math/vector2d.h>
 #include <eda_units.h>
+#include <eda_shape.h>
 #include <preview_items/ellipse_assistant.h>
 #include <tool/managed_draw_behavior.h>
 
 struct EDA_IU_SCALE;
-class EDA_SHAPE;
 
 
 /**

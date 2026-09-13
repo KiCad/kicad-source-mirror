@@ -22,11 +22,12 @@
 #include <geometry/eda_angle.h>
 #include <math/vector2d.h>
 #include <eda_units.h>
+#include <eda_shape.h>
 #include <preview_items/arc_assistant.h>
 #include <tool/managed_draw_behavior.h>
 
+
 struct EDA_IU_SCALE;
-class EDA_SHAPE;
 
 
 /**
@@ -41,7 +42,7 @@ public:
     ARC_DRAW_BEHAVIOR& operator=( const ARC_DRAW_BEHAVIOR& ) = delete;
 
     void SetAngleSnap( bool aSnap ) override { m_manager.SetAngleSnap( aSnap ); }
-    void ToggleClockwise() override  { m_manager.ToggleClockwise(); }
+    void ToggleClockwise() override { m_manager.ToggleClockwise(); }
 
     bool OnProperties( EDA_SHAPE& aShape ) override
     {
