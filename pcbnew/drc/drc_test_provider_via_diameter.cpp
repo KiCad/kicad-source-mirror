@@ -75,6 +75,9 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 via->Padstack().ForEachUniqueLayer(
                         [&]( PCB_LAYER_ID aLayer )
                         {
+                            if( via->IsGhostLayer( aLayer ) )
+                                return;
+
                             DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, item,
                                                                                 nullptr, aLayer );
                             bool fail_min = false;

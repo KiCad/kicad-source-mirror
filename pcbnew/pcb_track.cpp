@@ -1262,6 +1262,9 @@ const BOX2I PCB_VIA::GetBoundingBox() const
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
+                if( IsGhostLayer( aLayer ) )
+                    return;
+
                 diameter = std::max( diameter, GetWidth( aLayer ) );
             } );
 
@@ -2192,6 +2195,40 @@ bool PCB_VIA::IsBuriedVia() const
 }
 
 
+bool PCB_VIA::IsGhostLayer( PCB_LAYER_ID aLayer ) const
+{
+    if( ( m_viaType == VIATYPE::MICROVIA || m_viaType == VIATYPE::BLIND || m_viaType == VIATYPE::BURIED )
+            && m_padStack.Mode() == PADSTACK::MODE::FRONT_INNER_BACK )
+    {
+        switch( aLayer )
+        {
+        case F_Cu:
+            if( Padstack().Drill().start != F_Cu )
+                return true;
+
+            break;
+
+        case B_Cu:
+            if( Padstack().Drill().end !=  B_Cu )
+                return true;
+
+            break;
+
+        case PADSTACK::INNER_LAYERS:
+            if( GetBoard() && GetBoard()->GetCopperLayerCount() == 2 )
+                return true;
+
+            break;
+
+        default:
+            wxFAIL_MSG( wxT( "Unsupported layer for FRONT_INNER_BACK" ) );
+        }
+    }
+
+    return false;
+}
+
+
 bool PCB_VIA::FlashLayer( const LSET& aLayers ) const
 {
     for( PCB_LAYER_ID layer : aLayers )
@@ -2734,6 +2771,9 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     m_padStack.ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
+                if( IsGhostLayer( aLayer ) )
+                    return;
+
                 widths.insert( GetWidth( aLayer ) );
             } );
 
@@ -2850,6 +2890,9 @@ bool PCB_VIA::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
                 if( hit )
                     return;
 
+                if( IsGhostLayer( aLayer ) )
+                    return;
+
                 int max_dist = aAccuracy + ( GetWidth( aLayer ) / 2 );
 
                 // rel_pos is aPosition relative to m_Start (or the center of the via)
@@ -2905,6 +2948,9 @@ bool PCB_VIA::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) cons
             [&]( PCB_LAYER_ID aLayer )
             {
                 if( hit )
+                    return;
+
+                if( IsGhostLayer( aLayer ) )
                     return;
 
                 BOX2I box( GetStart() );
@@ -3065,6 +3111,9 @@ std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
             Padstack().ForEachUniqueLayer(
                     [&]( PCB_LAYER_ID layer )
                     {
+                        if( IsGhostLayer( layer ) )
+                            return;
+
                         diameter = std::max( diameter, GetWidth( layer ) );
                     } );
         }

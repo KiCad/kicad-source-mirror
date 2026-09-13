@@ -378,6 +378,9 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     via->Padstack().ForEachUniqueLayer(
                             [&]( PCB_LAYER_ID aLayer )
                             {
+                                if( via->IsGhostLayer( aLayer ) )
+                                    return;
+
                                 auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, item,
                                                                           nullptr, aLayer );
 

@@ -208,13 +208,18 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
             {
                 bool shapesMatch = true;
 
-                if( pad->Padstack().UniqueLayers() != aSrcPad.Padstack().UniqueLayers() )
-                    shapesMatch = false;
-
+                // Compare in both directions to catch all potentialy unique layer defintions
                 pad->Padstack().ForEachUniqueLayer(
                         [&]( PCB_LAYER_ID aLayer )
                         {
                             if( pad->GetShape( aLayer ) != aSrcPad.GetShape( aLayer ) )
+                                shapesMatch = false;
+                        } );
+
+                aSrcPad.Padstack().ForEachUniqueLayer(
+                        [&]( PCB_LAYER_ID aLayer )
+                        {
+                            if( aSrcPad.GetShape( aLayer ) != pad->GetShape( aLayer ) )
                                 shapesMatch = false;
                         } );
 

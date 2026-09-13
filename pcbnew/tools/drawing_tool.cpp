@@ -3862,6 +3862,9 @@ static bool ItemHasDRCViolation( BOARD_CONNECTED_ITEM* aItem, BOARD_ITEM* aOther
                         if( hit )
                             return;
 
+                        if( via->IsGhostLayer( aLayer ) )
+                            return;
+
                         if( zoneOutline->Collide( via->GetPosition(), via->GetWidth( aLayer ) / 2 ) )
                             hit = true;
                     } );

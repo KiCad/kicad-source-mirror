@@ -419,6 +419,10 @@ public:
     PADSTACK& Padstack()                          { return m_padStack; }
     void SetPadstack( const PADSTACK& aPadstack ) { m_padStack = aPadstack; }
 
+    // A micro, blind, or buried via with a Front/Inner/Back padstack definition is an odd beast as it might
+    // not exist on F_Cu or B_Cu.
+    bool IsGhostLayer( PCB_LAYER_ID aLayer ) const;
+
     BACKDRILL_MODE GetBackdrillMode() const { return m_padStack.GetBackdrillMode(); }
     void SetBackdrillMode( BACKDRILL_MODE aMode ) { m_padStack.SetBackdrillMode( aMode ); }
 
