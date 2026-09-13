@@ -486,14 +486,14 @@ public:
         const VECTOR2I mid{ GetIntValue( SME_MID_X ), GetIntValue( SME_MID_Y ) };
         const VECTOR2I end{ GetIntValue( SME_END_X ), GetIntValue( SME_END_Y ) };
 
-        if( start == mid || mid == end || start == end )
+        if( start == mid || mid == end )
         {
-            aErrs.push_back( _( "Arc must have 3 distinct points" ) );
+            aErrs.push_back( _( "Arc must have at least 2 distinct points" ) );
             return false;
         }
         else
         {
-            const VECTOR2D center = CalcArcCenter( start, end, angle );
+            const VECTOR2D center = CalcArcCenter( start, mid, end );
 
             const double   radius = ( center - start ).EuclideanNorm();
             const double   max_offset = std::max( std::abs( center.x ), std::abs( center.y ) ) + radius;
