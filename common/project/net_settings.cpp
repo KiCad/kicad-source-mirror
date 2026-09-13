@@ -1665,7 +1665,8 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
 
     if( aMemberList )
     {
-        for( long idx = begin; idx <= end; ++idx )
+        // We can overflow the counter with the increment, so idx <= end is not safe here.
+        for( long idx = begin;; ++idx )
         {
             wxString number;
             number << idx;
@@ -1676,6 +1677,9 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
 
             str << number << suffix;
             aMemberList->emplace_back( str );
+
+            if( idx == end )
+                break;
         }
     }
 
