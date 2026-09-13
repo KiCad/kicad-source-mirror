@@ -914,14 +914,14 @@ common::types::EmbeddedFileType ToProtoEnum( EMBEDDED_FILES::EMBEDDED_FILE::FILE
 
 
 template<> KICOMMON_API
-LIBRARY_TABLE_TYPE FromProtoEnum( common::types::LibraryType aType )
+LIBRARY_TABLE_TYPE FromProtoEnum( types::LibraryType aType )
 {
     switch( aType )
     {
-    case common::types::LibraryType::LT_SYMBOL:       return LIBRARY_TABLE_TYPE::SYMBOL;
-    case common::types::LibraryType::LT_FOOTPRINT:    return LIBRARY_TABLE_TYPE::FOOTPRINT;
-    case common::types::LibraryType::LT_DESIGN_BLOCK: return LIBRARY_TABLE_TYPE::DESIGN_BLOCK;
-    default:                                          return LIBRARY_TABLE_TYPE::UNINITIALIZED;
+    case types::LibraryType::LT_SYMBOL:       return LIBRARY_TABLE_TYPE::SYMBOL;
+    case types::LibraryType::LT_FOOTPRINT:    return LIBRARY_TABLE_TYPE::FOOTPRINT;
+    case types::LibraryType::LT_DESIGN_BLOCK: return LIBRARY_TABLE_TYPE::DESIGN_BLOCK;
+    default:                                  return LIBRARY_TABLE_TYPE::UNINITIALIZED;
     }
 
     wxCHECK_MSG( false, LIBRARY_TABLE_TYPE::UNINITIALIZED,
@@ -930,14 +930,14 @@ LIBRARY_TABLE_TYPE FromProtoEnum( common::types::LibraryType aType )
 
 
 template<> KICOMMON_API
-common::types::LibraryType ToProtoEnum( LIBRARY_TABLE_TYPE aType )
+types::LibraryType ToProtoEnum( LIBRARY_TABLE_TYPE aType )
 {
     switch( aType )
     {
-    case LIBRARY_TABLE_TYPE::SYMBOL:       return common::types::LibraryType::LT_SYMBOL;
-    case LIBRARY_TABLE_TYPE::FOOTPRINT:    return common::types::LibraryType::LT_FOOTPRINT;
-    case LIBRARY_TABLE_TYPE::DESIGN_BLOCK: return common::types::LibraryType::LT_DESIGN_BLOCK;
-    default:                               return common::types::LibraryType::LT_UNKNOWN;
+    case LIBRARY_TABLE_TYPE::SYMBOL:       return types::LibraryType::LT_SYMBOL;
+    case LIBRARY_TABLE_TYPE::FOOTPRINT:    return types::LibraryType::LT_FOOTPRINT;
+    case LIBRARY_TABLE_TYPE::DESIGN_BLOCK: return types::LibraryType::LT_DESIGN_BLOCK;
+    default:                               return types::LibraryType::LT_UNKNOWN;
     }
 
     wxCHECK_MSG( false, common::types::LT_UNKNOWN,

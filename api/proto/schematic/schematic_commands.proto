@@ -71,7 +71,7 @@ message PlaceSymbolFromLibrary
   kiapi.common.types.Vector2 position = 3;
 
   // If unspecified, will use default orientation
-  optional kiapi.common.types.Angle orientation = 4;
+  optional kiapi.schematic.types.SchematicSymbolOrientation orientation = 4;
 
   // If unspecified, will place the first unit of a multi-unit symbol
   optional kiapi.schematic.types.SchematicSymbolUnit unit = 5;

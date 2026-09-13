@@ -60,7 +60,10 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 
+#include <api/common/commands/library_commands.pb.h>
 #include <api/common/types/base_types.pb.h>
+#include <libraries/symbol_library_adapter.h>
+#include <project_sch.h>
 #include <trace_helpers.h>
 
 using namespace kiapi::common::commands;
@@ -180,6 +183,8 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
             &API_HANDLER_SCH::handleGetCurrentVariant );
     registerHandler<ExpandTextVariables, ExpandTextVariablesResponse>(
             &API_HANDLER_SCH::handleExpandTextVariables );
+    registerHandler<PlaceSymbolFromLibrary, PlaceFromLibraryResponse>(
+            &API_HANDLER_SCH::handlePlaceSymbolFromLibrary );
 }
 
 
@@ -2701,6 +2706,136 @@ API_HANDLER_SCH::handleGetCurrentVariant( const HANDLER_CONTEXT<GetCurrentVarian
 
     if( wxString current = schematic()->GetCurrentVariant(); !current.IsEmpty() )
         response.set_name( current.ToUTF8() );
+
+    return response;
+}
+
+
+HANDLER_RESULT<PlaceFromLibraryResponse> API_HANDLER_SCH::handlePlaceSymbolFromLibrary(
+        const HANDLER_CONTEXT<schematic::commands::PlaceSymbolFromLibrary>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    LIB_ID libId = UnpackLibId( aCtx.Request.lib_id() );
+
+    if( !libId.IsValid() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "lib_id must specify both a library nickname and an entry name" );
+        return tl::unexpected( e );
+    }
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &project() );
+    LIB_SYMBOL* libSymbol = adapter->LoadSymbol( libId );
+
+    if( !libSymbol )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "symbol '{}' not found", libId.Format().wx_str() ) );
+        return tl::unexpected( e );
+    }
+
+    SCH_SHEET_LIST hierarchy = schematic()->Hierarchy();
+    SCH_SHEET_PATH targetPath = m_context->GetCurrentSheet().value_or( *hierarchy.begin() );
+
+    if( aCtx.Request.header().document().has_sheet_path() )
+    {
+        KIID_PATH kp = UnpackSheetPath( aCtx.Request.header().document().sheet_path() );
+
+        if( std::optional<SCH_SHEET_PATH> path = hierarchy.GetSheetPathByKIIDPath( kp ) )
+        {
+            targetPath = *path;
+        }
+        else
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( fmt::format( "the requested sheet path {} is not valid for this schematic",
+                                              kp.AsString().ToStdString() ) );
+            return tl::unexpected( e );
+        }
+    }
+
+    SCH_SCREEN* targetScreen = targetPath.LastScreen();
+
+    int unit = aCtx.Request.has_unit() ? aCtx.Request.unit().unit() : 1;
+
+    if( unit < 1 || ( libSymbol->GetUnitCount() > 0 && unit > libSymbol->GetUnitCount() ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "unit {} is out of range for symbol '{}' ({} units)", unit,
+                                          libId.Format().wx_str(), libSymbol->GetUnitCount() ) );
+        return tl::unexpected( e );
+    }
+
+    VECTOR2I position = UnpackVector2( aCtx.Request.position(), schIUScale );
+
+    std::unique_ptr<SCH_SYMBOL> symbol(
+            std::make_unique<SCH_SYMBOL>( *libSymbol, libId, &targetPath, unit, 0, position ) );
+
+    if( aCtx.Request.has_orientation() )
+        symbol->SetOrientationProp(  FromProtoEnum<SYMBOL_ORIENTATION_PROP>( aCtx.Request.orientation() ) );
+
+    if( !aCtx.Request.reference().empty() )
+    {
+        symbol->SetRef( &targetPath, wxString::FromUTF8( aCtx.Request.reference() ) );
+    }
+    else
+    {
+        SCH_REFERENCE      newReference( symbol.get(), targetPath );
+        SCH_REFERENCE_LIST existingRefs;
+        hierarchy.GetSymbols( existingRefs, SYMBOL_FILTER_ALL );
+
+        bool annotate = newReference.AlwaysAnnotate();
+
+        if( SCH_EDIT_FRAME* frame = this->frame() )
+            annotate |= frame->eeconfig()->m_AnnotatePanel.automatic;
+
+        if( annotate )
+        {
+            existingRefs.SortByReferenceOnly();
+
+            SCH_REFERENCE_LIST refs;
+            refs.AddItem( newReference );
+            refs.SetRefDesTracker( schematic()->Settings().m_refDesTracker );
+            refs.ReannotateByOptions( static_cast<ANNOTATE_ORDER_T>( schematic()->Settings().m_AnnotateSortOrder ),
+                                      static_cast<ANNOTATE_ALGO_T>( schematic()->Settings().m_AnnotateMethod ),
+                                      schematic()->Settings().m_AnnotateStartNum, existingRefs, false, &hierarchy );
+            refs.UpdateAnnotation();
+        }
+    }
+
+    if( SCH_EDIT_FRAME* frame = this->frame() )
+    {
+        if( frame->eeconfig()->m_AutoplaceFields.enable )
+            symbol->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
+    }
+
+    SCH_COMMIT* commit = static_cast<SCH_COMMIT*>( getCurrentCommit( aCtx.ClientName ) );
+    SCH_SYMBOL* placed = symbol.release();
+    commit->Add( placed, targetScreen );
+
+    if( !m_activeClients.contains( aCtx.ClientName ) )
+        pushCurrentCommit( aCtx.ClientName, _( "Placed symbol via API" ) );
+
+    PlaceFromLibraryResponse response;
+    response.mutable_header()->CopyFrom( aCtx.Request.header() );
+
+    kiapi::schematic::types::SchematicSymbolInstance packed;
+
+    if( PackSymbol( &packed, placed, targetPath ) )
+        response.mutable_item()->PackFrom( packed );
 
     return response;
 }

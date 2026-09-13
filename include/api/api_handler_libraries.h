@@ -47,6 +47,12 @@ protected:
     HANDLER_RESULT<kiapi::common::commands::LibraryItemsResponse>
     handleGetLibraryItems( const HANDLER_CONTEXT<kiapi::common::commands::GetLibraryItems>& aCtx );
 
+    HANDLER_RESULT<kiapi::common::commands::LibraryStatusResponse>
+    handleGetLibraryStatuses( const HANDLER_CONTEXT<kiapi::common::commands::GetLibraryStatuses>& aCtx );
+
+    HANDLER_RESULT<kiapi::common::types::LibraryCommandStatus>
+    handleReloadLibrary( const HANDLER_CONTEXT<kiapi::common::commands::ReloadLibrary>& aCtx );
+
     LIBRARY_TABLE_TYPE libraryType() const { return m_type; }
 
     virtual LIBRARY_MANAGER_ADAPTER* adapterForProject( PROJECT& aProject ) const;

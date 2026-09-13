@@ -28,6 +28,7 @@
 #include <api/api_pcb_utils.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
+#include <api/common/commands/library_commands.pb.h>
 #include <api/cross_probe_client.h>
 #include <wx/log.h>
 #include <base_screen.h>
@@ -36,6 +37,7 @@
 #include <board_design_settings.h>
 #include <core/kicad_algo.h>
 #include <footprint.h>
+#include <footprint_library_adapter.h>
 #include <kicad_clipboard.h>
 #include <netinfo.h>
 #include <pad.h>
@@ -62,6 +64,8 @@
 #include <jobs/job_export_pcb_ipcd356.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <jobs/job_export_pcb_pdf.h>
+#include <netlist_reader/pcb_netlist_utils.h>
+#include <project_pcb.h>
 #include <jobs/job_export_pcb_pos.h>
 #include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_stats.h>
@@ -94,6 +98,7 @@
 #include <wx/ffile.h>
 
 using namespace kiapi::common::commands;
+using namespace kiapi::board::commands;
 using types::CommandStatus;
 using types::DocumentType;
 using types::ItemRequestStatus;
@@ -192,6 +197,9 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
     registerHandler<CrossProbeAnnounce, CrossProbeAnnounceResponse>( &API_HANDLER_PCB::handleCrossProbeAnnounce );
     registerHandler<SyncSelection, SyncSelectionResponse>( &API_HANDLER_PCB::handleSyncSelection );
     registerHandler<HighlightNets, HighlightNetsResponse>( &API_HANDLER_PCB::handleHighlightNets );
+
+    registerHandler<PlaceFootprintFromLibrary, PlaceFromLibraryResponse>(
+            &API_HANDLER_PCB::handlePlaceFootprintFromLibrary );
 }
 
 
@@ -3166,6 +3174,82 @@ API_HANDLER_PCB::handleGetCurrentVariant( const HANDLER_CONTEXT<GetCurrentVarian
 
     if( wxString current = pcbContext()->GetBoard()->GetCurrentVariant(); !current.IsEmpty() )
         response.set_name( current.ToUTF8() );
+
+    return response;
+}
+
+
+HANDLER_RESULT<PlaceFromLibraryResponse>
+API_HANDLER_PCB::handlePlaceFootprintFromLibrary( const HANDLER_CONTEXT<PlaceFootprintFromLibrary>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    LIB_ID libId = UnpackLibId( aCtx.Request.lib_id() );
+
+    if( !libId.IsValid() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "lib_id must specify both a library nickname and an entry name" );
+        return tl::unexpected( e );
+    }
+
+    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( aCtx.Request.layer() );
+
+    // TODO update if we support inner layer footprints in the future
+    if( !IsExternalCopperLayer( layer ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "layer must be F_Cu or B_Cu" );
+        return tl::unexpected( e );
+    }
+
+    std::unique_ptr<FOOTPRINT> footprint( LoadFootprintFromProject( board(), libId ) );
+
+    if( !footprint )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "footprint '{}' not found", libId.Format().wx_str() ) );
+        return tl::unexpected( e );
+    }
+
+    footprint->SetUuid( KIID() );
+    footprint->RunOnChildren(
+            []( BOARD_ITEM* aChild )
+            {
+                aChild->ResetUuid();
+            },
+            RECURSE_MODE::RECURSE );
+
+    footprint->SetParent( board() );
+
+    footprint->SetPosition( UnpackVector2( aCtx.Request.position() ) );
+
+    if( aCtx.Request.has_orientation() )
+        footprint->SetOrientationDegrees( aCtx.Request.orientation().value_degrees() );
+
+    footprint->SetLayerAndFlip( layer );
+
+    BOARD_COMMIT* commit = static_cast<BOARD_COMMIT*>( getCurrentCommit( aCtx.ClientName ) );
+    FOOTPRINT*    placed = footprint.release();
+    commit->Add( placed );
+
+    if( !m_activeClients.contains( aCtx.ClientName ) )
+        pushCurrentCommit( aCtx.ClientName, _( "Placed footprint via API" ) );
+
+    PlaceFromLibraryResponse response;
+    response.mutable_header()->CopyFrom( aCtx.Request.header() );
+    placed->Serialize( *response.mutable_item() );
 
     return response;
 }

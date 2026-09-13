@@ -26,6 +26,7 @@
 #include <api/common/commands/cross_probe_commands.pb.h>
 #include <api/common/commands/editor_commands.pb.h>
 #include <api/common/commands/project_commands.pb.h>
+#include <api/common/commands/library_commands.pb.h>
 #include <google/protobuf/empty.pb.h>
 #include <api/common/commands/variant_commands.pb.h>
 #include <api/schematic/schematic_commands.pb.h>
@@ -188,6 +189,9 @@ private:
     handleGetCurrentVariant( const HANDLER_CONTEXT<commands::GetCurrentVariant>& aCtx );
     HANDLER_RESULT<commands::ExpandTextVariablesResponse>
     handleExpandTextVariables( const HANDLER_CONTEXT<commands::ExpandTextVariables>& aCtx );
+
+    HANDLER_RESULT<kiapi::common::commands::PlaceFromLibraryResponse> handlePlaceSymbolFromLibrary(
+            const HANDLER_CONTEXT<kiapi::schematic::commands::PlaceSymbolFromLibrary>& aCtx );
 
     SCHEMATIC* schematic() const;
 

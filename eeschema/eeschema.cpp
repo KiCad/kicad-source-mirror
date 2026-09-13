@@ -1050,6 +1050,13 @@ bool IFACE::handleCreateSchematic( const wxString& aPath, KICAD_API_SERVER* aSer
     m_openSchematic = schematic.release();
 
     m_openContext = std::make_shared<HEADLESS_SCH_CONTEXT>( &m_openSchematic, project, m_kiway );
+
+    if( !m_apiHandlerSchLibs )
+    {
+        m_apiHandlerSchLibs = std::make_unique<API_HANDLER_SCH_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerSchLibs.get() );
+    }
+
     m_openHandler = std::make_unique<API_HANDLER_SCH>( m_openContext );
     aServer->RegisterHandler( m_openHandler.get() );
 
