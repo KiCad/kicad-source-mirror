@@ -34,6 +34,7 @@
 #include <api/schematic/schematic_types.pb.h>
 
 #include <core/typeinfo.h>
+#include <libraries/library_manager.h>
 #include <libraries/library_table.h>
 #include <line_ending.h>
 #include <eda_shape.h>
@@ -942,4 +943,70 @@ types::LibraryType ToProtoEnum( LIBRARY_TABLE_TYPE aType )
 
     wxCHECK_MSG( false, common::types::LT_UNKNOWN,
                  "Unhandled case in ToProtoEnum<LIBRARY_TABLE_TYPE>" );
+}
+
+
+template<> KICOMMON_API
+LIBRARY_TABLE_SCOPE FromProtoEnum( types::LibraryTableScope aScope )
+{
+    switch( aScope )
+    {
+    case types::LibraryTableScope::LTS_GLOBAL:  return LIBRARY_TABLE_SCOPE::GLOBAL;
+    case types::LibraryTableScope::LTS_PROJECT: return LIBRARY_TABLE_SCOPE::PROJECT;
+    case types::LibraryTableScope::LTS_BOTH:    return LIBRARY_TABLE_SCOPE::BOTH;
+    default:                                    return LIBRARY_TABLE_SCOPE::UNINITIALIZED;
+    }
+
+    wxCHECK_MSG( false, LIBRARY_TABLE_SCOPE::UNINITIALIZED,
+                 "Unhandled case in FromProtoEnum<LibraryTableScope>" );
+}
+
+
+template<> KICOMMON_API
+types::LibraryTableScope ToProtoEnum( LIBRARY_TABLE_SCOPE aScope )
+{
+    switch( aScope )
+    {
+    case LIBRARY_TABLE_SCOPE::GLOBAL:        return types::LibraryTableScope::LTS_GLOBAL;
+    case LIBRARY_TABLE_SCOPE::PROJECT:       return types::LibraryTableScope::LTS_PROJECT;
+    case LIBRARY_TABLE_SCOPE::BOTH:          return types::LibraryTableScope::LTS_BOTH;
+    case LIBRARY_TABLE_SCOPE::UNINITIALIZED: return types::LibraryTableScope::LTS_UNKNOWN;
+    default: break;
+    }
+
+    wxCHECK_MSG( false, common::types::LibraryTableScope::LTS_UNKNOWN,
+                 "Unhandled case in ToProtoEnum<LIBRARY_TABLE_SCOPE>" );
+}
+
+
+template<> KICOMMON_API
+LOAD_STATUS FromProtoEnum( types::LibraryLoadStatus aStatus )
+{
+    switch( aStatus )
+    {
+    case types::LibraryLoadStatus::LLS_UNKNOWN:
+    case types::LibraryLoadStatus::LLS_INVALID: return LOAD_STATUS::INVALID;
+    case types::LibraryLoadStatus::LLS_LOADING: return LOAD_STATUS::LOADING;
+    case types::LibraryLoadStatus::LLS_LOADED:  return LOAD_STATUS::LOADED;
+    case types::LibraryLoadStatus::LLS_ERROR:   return LOAD_STATUS::LOAD_ERROR;
+    default: break;
+    }
+
+    wxCHECK_MSG( false, LOAD_STATUS::INVALID, "Unhandled case in FromProtoEnum<LibraryLoadStatus>" );
+}
+
+
+template<> KICOMMON_API
+types::LibraryLoadStatus ToProtoEnum( LOAD_STATUS aStatus )
+{
+    switch( aStatus )
+    {
+    case LOAD_STATUS::INVALID:      return types::LibraryLoadStatus::LLS_INVALID;
+    case LOAD_STATUS::LOADING:      return types::LibraryLoadStatus::LLS_LOADING;
+    case LOAD_STATUS::LOADED:       return types::LibraryLoadStatus::LLS_LOADED;
+    case LOAD_STATUS::LOAD_ERROR:   return types::LibraryLoadStatus::LLS_ERROR;
+    default: break;
+    }
+
+    wxCHECK_MSG( false, types::LibraryLoadStatus::LLS_UNKNOWN, "Unhandled case in ToProtoEnum<LOAD_STATUS>" );
 }

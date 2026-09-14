@@ -41,9 +41,10 @@
  * @tparam KiCadEnum is an enum type
  * @tparam ProtoEnum is a Protobuf enum type
  * @param aPartiallyMapped is true if only some of the KiCad enum values are exposed to the API
+ * @param aNullMapping can be used to specify that the null proto enum should map to a real KiCad value
  */
 template <typename KiCadEnum, typename ProtoEnum>
-void testEnums( bool aPartiallyMapped = false )
+void testEnums( bool aPartiallyMapped = false, std::optional<KiCadEnum> aNullMapping = std::nullopt )
 {
     boost::bimap<ProtoEnum, KiCadEnum> protoToKiCadSeen;
     std::set<ProtoEnum>                seenProtos;
@@ -105,7 +106,8 @@ void testEnums( bool aPartiallyMapped = false )
             }
 
             // Protobuf "unknown" should always be zero value by convention
-            BOOST_REQUIRE( result != static_cast<ProtoEnum>( 0 ) );
+            BOOST_REQUIRE( ( result != static_cast<ProtoEnum>( 0 ) )
+                           || ( aNullMapping && *aNullMapping == value ) );
 
             // There should be a 1:1 mapping
             BOOST_REQUIRE( !seenProtos.count( result ) );

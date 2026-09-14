@@ -34,6 +34,7 @@
 #include <core/typeinfo.h>
 #include <font/text_attributes.h>
 #include <layer_ids.h>
+#include <libraries/library_manager.h>
 #include <libraries/library_table.h>
 #include <pin_type.h>
 #include <stroke_params.h>
@@ -584,7 +585,17 @@ BOOST_AUTO_TEST_CASE( SchematicNetlistFormat )
 
 BOOST_AUTO_TEST_CASE( LibraryType )
 {
-    testEnums<LIBRARY_TABLE_TYPE, types::LibraryType>();
+    testEnums<LIBRARY_TABLE_TYPE, types::LibraryType>( false, LIBRARY_TABLE_TYPE::UNINITIALIZED );
+}
+
+BOOST_AUTO_TEST_CASE( LibraryTableScope )
+{
+    testEnums<LIBRARY_TABLE_SCOPE, types::LibraryTableScope>( false, LIBRARY_TABLE_SCOPE::UNINITIALIZED );
+}
+
+BOOST_AUTO_TEST_CASE( LibraryLoadStatus )
+{
+    testEnums<LOAD_STATUS, types::LibraryLoadStatus>();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
