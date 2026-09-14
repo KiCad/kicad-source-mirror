@@ -705,6 +705,10 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
             return nullptr;
     }
 
+    // Existing rules spell the layer under test "L.Layer"
+    if( baseVar == wxT( "L" ) && aField.CmpNoCase( wxT( "Layer" ) ) == 0 )
+        return std::make_unique<PCBEXPR_VAR_REF>( 2 );
+
     if( !aField.IsEmpty() && ( baseVar == wxT( "AB" ) || baseVar == wxT( "L" ) ) )
         return nullptr;
 

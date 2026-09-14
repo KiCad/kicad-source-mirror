@@ -533,6 +533,28 @@ BOOST_AUTO_TEST_CASE( ReceiverValidation )
 }
 
 
+BOOST_AUTO_TEST_CASE( LayerReceiverLayerField )
+{
+    PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
+    PCBEXPR_UCODE    ucode;
+    PCBEXPR_CONTEXT  preflight( NULL_CONSTRAINT, UNDEFINED_LAYER );
+
+    compiler.Compile( wxT( "L.Layer == '*.Paste'" ), &ucode, &preflight );
+    BOOST_REQUIRE( !compiler.IsErrorPending() );
+
+    BOARD           brd;
+    PCB_TRACK       track( &brd );
+    PCBEXPR_CONTEXT paste( NULL_CONSTRAINT, F_Paste );
+    PCBEXPR_CONTEXT copper( NULL_CONSTRAINT, F_Cu );
+
+    paste.SetItems( &track, &track );
+    copper.SetItems( &track, &track );
+
+    BOOST_CHECK_EQUAL( ucode.Run( &paste )->AsDouble(), 1.0 );
+    BOOST_CHECK_EQUAL( ucode.Run( &copper )->AsDouble(), 0.0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( DynamicCourtyardArgument )
 {
     PROPERTY_MANAGER::Instance().Rebuild();
