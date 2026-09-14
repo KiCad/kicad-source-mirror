@@ -34,6 +34,7 @@
 #include <trigo.h>
 #include <macros.h>
 #include <cmath>    // isnan
+#include <vector>
 #include <board.h>
 #include "common.h"
 
@@ -1060,6 +1061,39 @@ double DXF_IMPORT_PLUGIN::getCurrentUnitScale()
     }
 
     return scale;
+}
+
+
+static std::vector<std::pair<DXF_IMPORT_UNITS, wxString>> dxfImportUnitChoices()
+{
+    // Dialog state saving persists the selection index, so this order must stay stable
+    return { { DXF_IMPORT_UNITS::INCH, _( "Inches" ) },
+             { DXF_IMPORT_UNITS::FEET, _( "Feet" ) },
+             { DXF_IMPORT_UNITS::MM,   _( "Millimeters" ) },
+             { DXF_IMPORT_UNITS::CM,   _( "Centimeter" ) },
+             { DXF_IMPORT_UNITS::MILS, _( "Mils" ) } };
+}
+
+
+wxArrayString GetDxfImportUnitChoices()
+{
+    wxArrayString names;
+
+    for( const std::pair<DXF_IMPORT_UNITS, wxString>& choice : dxfImportUnitChoices() )
+        names.Add( choice.second );
+
+    return names;
+}
+
+
+DXF_IMPORT_UNITS DxfImportUnitFromChoice( int aSelection )
+{
+    std::vector<std::pair<DXF_IMPORT_UNITS, wxString>> choices = dxfImportUnitChoices();
+
+    if( aSelection < 0 || aSelection >= (int) choices.size() )
+        return DXF_IMPORT_UNITS::DEFAULT;
+
+    return choices[aSelection].first;
 }
 
 
