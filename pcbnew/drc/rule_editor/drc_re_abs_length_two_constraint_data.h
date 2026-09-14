@@ -52,17 +52,24 @@ public:
 
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
+        wxString unit = m_isTimeDomain ? wxS( "ps" ) : wxS( "mm" );
+
         // Format: { xStart, xEnd, yCenter, tabOrder }
         // Two fields side-by-side, opt_length and tolerance
         return {
-            { 80, 135, 127, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },                   // opt_length
-            { 185, 240, 127, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
+            { 80, 135, 127, 1, unit, LABEL_POSITION::RIGHT },                   // opt_length
+            { 185, 240, 127, 2, unit, LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
         };
     }
 
     double GetOptimumLength() const { return m_optLength; }
 
     void SetOptimumLength( double aLength ) { m_optLength = aLength; }
+
+    // When set, the values are picoseconds instead of millimeters.
+    bool IsTimeDomain() const { return m_isTimeDomain; }
+
+    void SetTimeDomain( bool aTimeDomain ) { m_isTimeDomain = aTimeDomain; }
 
     double GetTolerance() const { return m_tolerance; }
 
@@ -94,9 +101,9 @@ public:
 
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
-        auto formatDistance = []( double aValue )
+        auto formatDistance = [this]( double aValue )
         {
-            return formatDouble( aValue ) + wxS( "mm" );
+            return formatDouble( aValue ) + ( m_isTimeDomain ? wxS( "ps" ) : wxS( "mm" ) );
         };
 
         wxString code = GetConstraintCode();
@@ -125,11 +132,13 @@ public:
 
         m_optLength = source.m_optLength;
         m_tolerance = source.m_tolerance;
+        m_isTimeDomain = source.m_isTimeDomain;
     }
 
 private:
     double m_optLength{ 0 };
     double m_tolerance{ 0 };
+    bool   m_isTimeDomain{ false };
 };
 
 class DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA : public DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA

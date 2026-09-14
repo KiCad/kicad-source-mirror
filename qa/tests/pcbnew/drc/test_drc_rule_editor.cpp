@@ -2510,9 +2510,8 @@ BOOST_AUTO_TEST_CASE( RuleLoaderPermittedLayersStandardLoadsStructured )
 }
 
 
-// The structured panels only hold spatial values, so a time domain rule must fall back
-// to the text panel instead of being rewritten in mm.
-BOOST_AUTO_TEST_CASE( RuleLoaderTimeDomainLengthFallsBackToCustom )
+// A time domain length rule loads into the length panel with its values in ps.
+BOOST_AUTO_TEST_CASE( RuleLoaderTimeDomainLengthLoadsStructured )
 {
     wxString ruleText = "(version 1)\n"
                         "(rule \"clk_delay\"\n"
@@ -2523,12 +2522,94 @@ BOOST_AUTO_TEST_CASE( RuleLoaderTimeDomainLengthFallsBackToCustom )
     std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
 
     BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, ABSOLUTE_LENGTH );
+
+    auto data = std::dynamic_pointer_cast<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( data );
+    BOOST_CHECK( data->IsTimeDomain() );
+    BOOST_CHECK_CLOSE( data->GetOptimumLength(), 220.0, 0.0001 );
+    BOOST_CHECK_CLOSE( data->GetTolerance(), 10.0, 0.0001 );
+}
+
+
+BOOST_AUTO_TEST_CASE( RoundTripTimeDomainLength )
+{
+    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA original( 0, 0, 220.0, 10.0, "clk_delay" );
+    original.SetConstraintCode( "length" );
+    original.SetTimeDomain( true );
+
+    RULE_GENERATION_CONTEXT ctx;
+    ctx.ruleName = original.GetRuleName();
+    ctx.constraintCode = original.GetConstraintCode();
+
+    wxString ruleText = original.GenerateRule( ctx );
+
+    BOOST_CHECK( ruleText.Contains( wxS( "210ps" ) ) );
+    BOOST_CHECK( ruleText.Contains( wxS( "220ps" ) ) );
+    BOOST_CHECK( ruleText.Contains( wxS( "230ps" ) ) );
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+
+    auto parsed = std::dynamic_pointer_cast<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( parsed );
+    BOOST_CHECK( parsed->IsTimeDomain() );
+    BOOST_CHECK_CLOSE( parsed->GetOptimumLength(), 220.0, 0.0001 );
+    BOOST_CHECK_CLOSE( parsed->GetTolerance(), 10.0, 0.0001 );
+}
+
+
+// A rule with no optimum must keep its min and max through an open and save cycle.
+BOOST_AUTO_TEST_CASE( RoundTripLengthWithoutOpt )
+{
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"len_window\"\n"
+                        "    (constraint length (min 30mm) (max 50mm))\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, ABSOLUTE_LENGTH );
+
+    auto data = std::dynamic_pointer_cast<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( data );
+    BOOST_CHECK_CLOSE( data->GetOptimumLength(), 40.0, 0.0001 );
+    BOOST_CHECK_CLOSE( data->GetTolerance(), 10.0, 0.0001 );
+
+    RULE_GENERATION_CONTEXT ctx;
+    ctx.ruleName = entries[0].ruleName;
+    ctx.constraintCode = data->GetConstraintCode();
+
+    wxString saved = data->GenerateRule( ctx );
+
+    BOOST_CHECK( saved.Contains( wxS( "30mm" ) ) );
+    BOOST_CHECK( saved.Contains( wxS( "40mm" ) ) );
+    BOOST_CHECK( saved.Contains( wxS( "50mm" ) ) );
+}
+
+
+// The matched length pair panel still cannot hold time, so a ps skew stays as text.
+BOOST_AUTO_TEST_CASE( RuleLoaderTimeDomainSkewStillFallsBackToCustom )
+{
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"pair_ps\"\n"
+                        "    (constraint length (min 10mm) (opt 11mm) (max 12mm))\n"
+                        "    (constraint skew (max 5ps))\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
     BOOST_CHECK_EQUAL( entries[0].panelType, CUSTOM_RULE );
 
     auto customData = std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( entries[0].constraintData );
     BOOST_REQUIRE( customData );
-    BOOST_CHECK( customData->GetRuleText().Contains( wxS( "210ps" ) ) );
-    BOOST_CHECK( customData->GetRuleText().Contains( wxS( "230ps" ) ) );
+    BOOST_CHECK( customData->GetRuleText().Contains( wxS( "5ps" ) ) );
 }
 
 

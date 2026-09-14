@@ -56,12 +56,19 @@ public:
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override;
 
 private:
+    void updateDomainUnits();
+
+    double displayToIU( double aValue ) const;
+    double iuToDisplay( double aValue ) const;
+
     DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA* m_data;
 
     UNITS_PROVIDER m_unitsProvider;
 
     std::unique_ptr<UNIT_BINDER> m_optLengthBinder;
     std::unique_ptr<UNIT_BINDER> m_toleranceBinder;
+
+    wxCheckBox* m_timeDomainCheckbox = nullptr;
 };
 
 #endif // DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL_H
