@@ -38,6 +38,14 @@
 
 namespace
 {
+// UNDEFINED_LAYER means no filter so click authoring still reaches the whole board
+// IsOnLayer not GetLayer since a mask relieved copper shape is also present on its mask layer
+bool layerMatches( const BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
+{
+    return aLayer == UNDEFINED_LAYER || aItem->IsOnLayer( aLayer );
+}
+
+
 bool isSegment( const BOARD_ITEM* aItem )
 {
     return aItem->Type() == PCB_SHAPE_T
@@ -442,38 +450,36 @@ std::optional<CONSTRAINT_MEMBER> NearestAnchorAmong( const std::vector<PCB_SHAPE
 }
 
 
-std::vector<PCB_SHAPE*> CollectConstraintShapes( BOARD* aBoard )
+std::vector<PCB_SHAPE*> CollectConstraintShapes( BOARD* aBoard, PCB_LAYER_ID aLayer )
 {
     std::vector<PCB_SHAPE*> shapes;
 
     if( !aBoard )
         return shapes;
 
-    for( BOARD_ITEM* item : aBoard->Drawings() )
-    {
-        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ); shape && aBoard->IsLayerVisible( shape->GetLayer() ) )
-        {
-            shapes.push_back( shape );
-        }
-    }
+    auto collect =
+            [&]( const auto& aContainer )
+            {
+                for( BOARD_ITEM* item : aContainer )
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+                        shape && aBoard->IsLayerVisible( shape->GetLayer() ) && layerMatches( shape, aLayer ) )
+                    {
+                        shapes.push_back( shape );
+                    }
+                }
+            };
+
+    collect( aBoard->Drawings() );
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
-    {
-        for( BOARD_ITEM* item : footprint->GraphicalItems() )
-        {
-            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
-                shape && aBoard->IsLayerVisible( shape->GetLayer() ) )
-            {
-                shapes.push_back( shape );
-            }
-        }
-    }
+        collect( footprint->GraphicalItems() );
 
     return shapes;
 }
 
 
-std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard )
+std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard, PCB_LAYER_ID aLayer )
 {
     std::vector<BOARD_ITEM*> items;
 
@@ -486,7 +492,7 @@ std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard )
                 for( BOARD_ITEM* item : aContainer )
                 {
                     if( ( item->Type() == PCB_SHAPE_T || dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
-                        && aBoard->IsLayerVisible( item->GetLayer() ) )
+                        && aBoard->IsLayerVisible( item->GetLayer() ) && layerMatches( item, aLayer ) )
                     {
                         items.push_back( item );
                     }
@@ -504,12 +510,13 @@ std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard )
 
 std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const VECTOR2I& aPos,
                                                           double aMaxDist,
-                                                          const std::vector<CONSTRAINT_MEMBER>& aExclude )
+                                                          const std::vector<CONSTRAINT_MEMBER>& aExclude,
+                                                          PCB_LAYER_ID aLayer )
 {
     double                           best = aMaxDist;
     std::optional<CONSTRAINT_MEMBER> result;
 
-    for( BOARD_ITEM* item : CollectConstrainableItems( aBoard ) )
+    for( BOARD_ITEM* item : CollectConstrainableItems( aBoard, aLayer ) )
     {
         for( const CONSTRAINT_ANCHOR_POINT& a : ConstraintItemAnchors( item ) )
         {
@@ -534,7 +541,8 @@ std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const V
 
 
 std::vector<ENDPOINT_BINDING> SelectEndpointBindings( BOARD* aBoard, const KIID& aItem, const VECTOR2I& aStart,
-                                                      const std::optional<VECTOR2I>& aEnd, double aMaxDist )
+                                                      const std::optional<VECTOR2I>& aEnd, double aMaxDist,
+                                                      PCB_LAYER_ID aLayer )
 {
     std::vector<ENDPOINT_BINDING> bindings;
 
@@ -612,7 +620,7 @@ std::vector<ENDPOINT_BINDING> SelectEndpointBindings( BOARD* aBoard, const KIID&
         std::optional<ANCHOR_PAIR> bestPair;
         double                     bestSum = 0.0;
 
-        for( BOARD_ITEM* item : CollectConstrainableItems( aBoard ) )
+        for( BOARD_ITEM* item : CollectConstrainableItems( aBoard, aLayer ) )
         {
             if( item->m_Uuid == aItem )
                 continue;
@@ -641,7 +649,7 @@ std::vector<ENDPOINT_BINDING> SelectEndpointBindings( BOARD* aBoard, const KIID&
     // and either may find nothing
     std::vector<CONSTRAINT_MEMBER> exclude{ { aItem, CONSTRAINT_ANCHOR::START }, { aItem, CONSTRAINT_ANCHOR::END } };
 
-    if( auto startTarget = NearestConstraintAnchor( aBoard, aStart, aMaxDist, exclude ) )
+    if( auto startTarget = NearestConstraintAnchor( aBoard, aStart, aMaxDist, exclude, aLayer ) )
     {
         bindings.push_back( { CONSTRAINT_ANCHOR::START, *startTarget } );
         exclude.push_back( *startTarget );
@@ -649,7 +657,7 @@ std::vector<ENDPOINT_BINDING> SelectEndpointBindings( BOARD* aBoard, const KIID&
 
     if( aEnd )
     {
-        if( auto endTarget = NearestConstraintAnchor( aBoard, *aEnd, aMaxDist, exclude ) )
+        if( auto endTarget = NearestConstraintAnchor( aBoard, *aEnd, aMaxDist, exclude, aLayer ) )
             bindings.push_back( { CONSTRAINT_ANCHOR::END, *endTarget } );
     }
 
@@ -670,12 +678,13 @@ BOARD_ITEM* ResolveConstrainableItem( BOARD* aBoard, const KIID& aId )
 }
 
 
-std::optional<KIID> NearestOutlineShape( BOARD* aBoard, const VECTOR2I& aPos, double aMaxDist, bool aAllowCircle )
+std::optional<KIID> NearestOutlineShape( BOARD* aBoard, const VECTOR2I& aPos, double aMaxDist, bool aAllowCircle,
+                                         PCB_LAYER_ID aLayer )
 {
     double              best = aMaxDist;
     std::optional<KIID> result;
 
-    for( PCB_SHAPE* shape : CollectConstraintShapes( aBoard ) )
+    for( PCB_SHAPE* shape : CollectConstraintShapes( aBoard, aLayer ) )
     {
         const SHAPE_T shapeType = shape->GetShape();
         double        dist = 0;
@@ -1282,7 +1291,8 @@ std::vector<AUTO_CONSTRAINT> selectCenterBindings( BOARD* aBoard, const PCB_SHAP
 
     std::vector<CONSTRAINT_MEMBER> exclude = { { aShape->m_Uuid, CONSTRAINT_ANCHOR::CENTER } };
 
-    if( std::optional<CONSTRAINT_MEMBER> target = NearestConstraintAnchor( aBoard, center, tol, exclude ) )
+    if( std::optional<CONSTRAINT_MEMBER> target =
+                NearestConstraintAnchor( aBoard, center, tol, exclude, aShape->GetLayer() ) )
     {
         std::unique_ptr<PCB_CONSTRAINT> constraint;
 
@@ -1301,7 +1311,7 @@ std::vector<AUTO_CONSTRAINT> selectCenterBindings( BOARD* aBoard, const PCB_SHAP
 
         addUnlessDuplicate( aBoard, result, std::move( constraint ), false );
     }
-    else if( std::optional<KIID> outline = NearestOutlineShape( aBoard, center, tol, true ) )
+    else if( std::optional<KIID> outline = NearestOutlineShape( aBoard, center, tol, true, aShape->GetLayer() ) )
     {
         if( *outline != aShape->m_Uuid )
         {
@@ -1324,8 +1334,8 @@ void selectEndpointCoincidents( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_IT
 {
     const double tol = pcbIUScale.mmToIU( AUTO_BIND_TOL_MM );
 
-    std::vector<ENDPOINT_BINDING> bindings =
-            SelectEndpointBindings( aBoard, aShape->m_Uuid, aShape->GetStart(), aShape->GetEnd(), tol );
+    std::vector<ENDPOINT_BINDING> bindings = SelectEndpointBindings( aBoard, aShape->m_Uuid, aShape->GetStart(),
+                                                                     aShape->GetEnd(), tol, aShape->GetLayer() );
 
     for( const ENDPOINT_BINDING& binding : bindings )
     {
@@ -1357,7 +1367,7 @@ void selectOutlineFallbacks( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM*
             continue;
 
         VECTOR2I            pos = anchor == CONSTRAINT_ANCHOR::START ? aShape->GetStart() : aShape->GetEnd();
-        std::optional<KIID> target = NearestOutlineShape( aBoard, pos, tol, true );
+        std::optional<KIID> target = NearestOutlineShape( aBoard, pos, tol, true, aShape->GetLayer() );
 
         if( !target || *target == aShape->m_Uuid )
             continue;
@@ -1398,7 +1408,7 @@ void selectCorridorPins( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aPa
     SEG                   span( aShape->GetStart(), aShape->GetEnd() );
     std::vector<VECTOR2I> boundPos;
 
-    for( BOARD_ITEM* item : CollectConstrainableItems( aBoard ) )
+    for( BOARD_ITEM* item : CollectConstrainableItems( aBoard, aShape->GetLayer() ) )
     {
         if( item->m_Uuid == aShape->m_Uuid || item->Type() != PCB_SHAPE_T )
             continue;

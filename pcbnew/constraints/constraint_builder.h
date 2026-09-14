@@ -28,6 +28,7 @@
 
 #include <math/vector2d.h>
 #include <geometry/eda_angle.h>
+#include <layer_ids.h>
 
 #include <constraints/pcb_constraint.h>
 
@@ -86,11 +87,13 @@ std::optional<CONSTRAINT_ANCHOR_POINT> ConstraintShapeVertex( const PCB_SHAPE* a
 
 /// Every PCB_SHAPE on a visible layer (drawings plus footprint graphics) -- the candidates constraints
 /// can reference.  Shared by the anchor and segment hit-tests so the board walk lives in one place.
-std::vector<PCB_SHAPE*> CollectConstraintShapes( BOARD* aBoard );
+/// @p aLayer narrows the walk to one layer; UNDEFINED_LAYER keeps every visible layer.
+std::vector<PCB_SHAPE*> CollectConstraintShapes( BOARD* aBoard, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
 
 /// Every constrainable item on a visible layer -- shapes plus dimensions -- for board-wide anchor picking.
-std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard );
+/// @p aLayer narrows the walk to one layer; UNDEFINED_LAYER keeps every visible layer.
+std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
 
 /**
@@ -137,11 +140,14 @@ wxString ConstraintSelectionHint( PCB_CONSTRAINT_TYPE aType );
  * picked handle is passed over and the next-nearest is returned.  Two distinct shapes whose
  * endpoints coincide in space stay separately pickable, since only the exact handle is excluded.
  *
+ * @p aLayer narrows the candidates to one layer; UNDEFINED_LAYER searches every visible layer.
+ *
  * @return the {item, anchor} member, or std::nullopt if no anchor is close enough.
  */
 std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const VECTOR2I& aPos,
                                                           double aMaxDist,
-                                                          const std::vector<CONSTRAINT_MEMBER>& aExclude = {} );
+                                                          const std::vector<CONSTRAINT_MEMBER>& aExclude = {},
+                                                          PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
 
 /**
@@ -152,8 +158,10 @@ BOARD_ITEM* ResolveConstrainableItem( BOARD* aBoard, const KIID& aId );
 
 
 /// The shape whose outline is nearest aPos within aMaxDist. Circles, arcs and ellipses count
-/// only when aAllowCircle is set.
-std::optional<KIID> NearestOutlineShape( BOARD* aBoard, const VECTOR2I& aPos, double aMaxDist, bool aAllowCircle );
+/// only when aAllowCircle is set.  @p aLayer narrows the candidates to one layer; UNDEFINED_LAYER
+/// searches every visible layer.
+std::optional<KIID> NearestOutlineShape( BOARD* aBoard, const VECTOR2I& aPos, double aMaxDist, bool aAllowCircle,
+                                         PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
 
 /// One of a drawn item feature points bound coincident to an object anchor by draw time auto
@@ -173,9 +181,13 @@ struct ENDPOINT_BINDING
  * its own nearest anchor independently possibly on different objects and partial binding is fine
  * Excludes the item own anchors @p aEnd is std::nullopt for a single point item like a leader or
  * centre mark which binds only START
+ *
+ * @p aLayer narrows the candidates to one layer; UNDEFINED_LAYER binds to every visible layer,
+ * which is what a dimension wants since it measures geometry it does not share a layer with.
  */
 std::vector<ENDPOINT_BINDING> SelectEndpointBindings( BOARD* aBoard, const KIID& aItem, const VECTOR2I& aStart,
-                                                      const std::optional<VECTOR2I>& aEnd, double aMaxDist );
+                                                      const std::optional<VECTOR2I>& aEnd, double aMaxDist,
+                                                      PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
 
 /// One constraint chosen for a freshly drawn shape. needsSolve marks the inexact ones the
@@ -194,6 +206,9 @@ struct AUTO_CONSTRAINT
  * outline, tangent within a few degrees, and pin anchors the segment passes near.  Circles
  * and ellipses bind their centre concentric coincident or point on line.  A segment gets
  * horizontal or vertical when @p aAxisConstraint is set and it lies exactly on the axis.
+ *
+ * Only geometry on the drawn shape's own layer is a candidate: a courtyard line has nothing to
+ * say about where a fab or silk line belongs, and solving such a binding moves the other layer.
  *
  * The shape need not be on the board yet.  Duplicates of existing constraints are dropped.
  * Split out from the drawing tool so the decision logic is unit testable without the

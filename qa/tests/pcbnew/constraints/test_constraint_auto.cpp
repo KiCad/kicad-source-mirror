@@ -336,4 +336,36 @@ BOOST_AUTO_TEST_CASE( DuplicateNotReauthored )
 }
 
 
+// A courtyard line drawn past a fab outline corner binds only its own layer
+// Geometry from the D0452 footprint of issue 25504 where the drawn courtyard dragged fab and silk
+BOOST_AUTO_TEST_CASE( CorridorIgnoresOtherLayers )
+{
+    BOARD board;
+
+    // Body outline top edge, and the courtyard left edge already drawn NEAR_MISS clear of it
+    const int top = -MM - NEAR_MISS;
+    const int side = 9 * MM / 10;
+
+    PCB_SHAPE* fab = addSegment( board, { -MM / 2, -MM }, { MM / 2, -MM } );
+    fab->SetLayer( B_Fab );
+
+    PCB_SHAPE* courtyard = addSegment( board, { -side, top }, { -side, MM + NEAR_MISS } );
+    courtyard->SetLayer( F_CrtYd );
+
+    // The courtyard top edge passes both fab corners inside the corridor and starts on the left edge
+    auto drawn = drawnSegment( board, { -side, top }, { side, top } );
+    drawn->SetLayer( F_CrtYd );
+
+    auto picks = SelectShapeAutoConstraints( &board, drawn.get(), &board, false );
+
+    BOOST_REQUIRE_EQUAL( picks.size(), 1 );
+    BOOST_CHECK( picks[0].constraint->GetConstraintType() == PCB_CONSTRAINT_TYPE::COINCIDENT );
+
+    const std::vector<CONSTRAINT_MEMBER>& members = picks[0].constraint->GetMembers();
+    BOOST_REQUIRE_EQUAL( members.size(), 2 );
+    BOOST_CHECK( members[0] == CONSTRAINT_MEMBER( drawn->m_Uuid, CONSTRAINT_ANCHOR::START ) );
+    BOOST_CHECK( members[1] == CONSTRAINT_MEMBER( courtyard->m_Uuid, CONSTRAINT_ANCHOR::START ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
