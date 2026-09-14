@@ -22,9 +22,15 @@
 #include <eeschema_settings.h>
 #include <io/io_mgr.h>
 #include <lib_symbol.h>
+#include <libraries/library_manager.h>
+#include <libraries/symbol_library_adapter.h>
+#include <pgm_base.h>
 #include <picosha2.h>
+#include <project.h>
+#include <project_sch.h>
 #include <remote_symbol_download_manager.h>
 #include <remote_symbol_import_job.h>
+#include <remote_symbol_import_utils.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
 #include <settings/settings_manager.h>
@@ -337,6 +343,33 @@ BOOST_AUTO_TEST_CASE( ImportLinksFirstFootprintAndAddsAlternatesAsFilters )
     BOOST_CHECK_EQUAL( filters.GetCount(), 1u );
     if( filters.GetCount() == 1 )
         BOOST_CHECK_EQUAL( filters[0].ToStdString(), std::string( "R_0805_2012Metric" ) );
+}
+
+// The first save into a remote library must create its file rather than fail to load it
+BOOST_AUTO_TEST_CASE( SaveCreatesMissingSymbolLibrary )
+{
+    const wxString outputDir = tempDir();
+    wxFileName     projectFile( outputDir, wxS( "remote" ), wxS( "kicad_pro" ) );
+
+    Pgm().GetSettingsManager().LoadProject( projectFile.GetFullPath() );
+    PROJECT& project = Pgm().GetSettingsManager().Prj();
+    Pgm().GetLibraryManager().LoadProjectTables( project.GetProjectDirectory() );
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &project );
+    BOOST_REQUIRE( adapter );
+
+    const std::string payload = symbolPayload( "R" );
+    wxString          error;
+
+    std::unique_ptr<LIB_SYMBOL> symbol = LoadRemoteSymbolFromPayload(
+            std::vector<uint8_t>( payload.begin(), payload.end() ), wxS( "R" ), error );
+    BOOST_REQUIRE( symbol );
+
+    const wxString nickname = wxS( "testremote_device" );
+    wxFileName     libFile( outputDir, nickname, wxS( "kicad_sym" ) );
+
+    BOOST_CHECK_MESSAGE( SaveRemoteSymbolToLibrary( *adapter, libFile, nickname, false, std::move( symbol ), error ),
+                         error );
 }
 
 

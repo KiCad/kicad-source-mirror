@@ -31,6 +31,7 @@
 
 class LIB_SYMBOL;
 class SCH_EDIT_FRAME;
+class SYMBOL_LIBRARY_ADAPTER;
 enum class LIBRARY_TABLE_TYPE;
 
 
@@ -66,6 +67,16 @@ bool EnsureRemoteDestinationRoot( wxFileName& aOutDir, wxString& aError );
 bool EnsureRemoteLibraryEntry( LIBRARY_TABLE_TYPE aTableType, const wxFileName& aLibraryPath,
                                 const wxString& aNickname, bool aGlobalTable, bool aStrict,
                                 wxString& aError );
+
+/**
+ * Save a downloaded symbol into the remote symbol library \a aNickname backed by \a aLibraryFile.
+ *
+ * Registers the library table row and creates the library file when it does not exist yet, then
+ * reloads the library so the symbol can be placed. On success the library cache owns \a aSymbol.
+ */
+bool SaveRemoteSymbolToLibrary( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxFileName& aLibraryFile,
+                                const wxString& aNickname, bool aGlobalTable,
+                                std::unique_ptr<LIB_SYMBOL> aSymbol, wxString& aError );
 
 /**
  * Place a symbol from a remote download into the schematic editor.
