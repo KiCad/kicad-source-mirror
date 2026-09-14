@@ -237,7 +237,7 @@ struct SKEW_WORLD
 BOOST_AUTO_TEST_CASE( SkewBaselineDeltaIsZeroAfterStart )
 {
     BOARD      board;
-    SKEW_WORLD world( board, 10 '000' 000, 12 '000' 000 );
+    SKEW_WORLD world( board, 10000000, 12000000 );
 
     PNS::ITEM* startItem = world.m_router.GetWorld()->FindItemByParent( world.m_startTrack );
     BOOST_REQUIRE( startItem );
@@ -254,7 +254,7 @@ BOOST_AUTO_TEST_CASE( SkewBaselineDeltaIsZeroAfterStart )
 BOOST_AUTO_TEST_CASE( SkewBaselineSurvivesMatchedPair )
 {
     BOARD      board;
-    SKEW_WORLD world( board, 10 '000' 000, 10 '000' 000 );
+    SKEW_WORLD world( board, 10000000, 10000000 );
 
     PNS::ITEM* startItem = world.m_router.GetWorld()->FindItemByParent( world.m_startTrack );
     BOOST_REQUIRE( startItem );
