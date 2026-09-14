@@ -22,6 +22,7 @@
 // https://gitlab.com/kicad/code/kicad/-/issues/25203
 // https://gitlab.com/kicad/code/kicad/-/issues/25231
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/pdf_test_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
@@ -105,13 +106,6 @@ struct MULTI_TOP_LEVEL_PLOT_FIXTURE
 };
 
 
-std::string ReadFile( const wxString& aPath )
-{
-    std::vector<uint8_t> bytes = KI_TEST::LoadBinaryData( aPath.ToStdString() );
-    return std::string( bytes.begin(), bytes.end() );
-}
-
-
 int CountPdfPages( const wxString& aPath )
 {
     std::string contents;
@@ -184,7 +178,7 @@ BOOST_AUTO_TEST_CASE( PlotsEveryTopLevelSheetToItsOwnSvg )
         BOOST_REQUIRE( wxFileName::FileExists( path ) );
 
         // An empty file is not a plot
-        std::string contents = ReadFile( path );
+        std::string contents = KI_TEST::LoadStringData( path );
         BOOST_CHECK_MESSAGE( contents.find( "<svg" ) != std::string::npos,
                              path.ToStdString() + " is not an SVG" );
         BOOST_CHECK_MESSAGE( contents.find( "</svg>" ) != std::string::npos,

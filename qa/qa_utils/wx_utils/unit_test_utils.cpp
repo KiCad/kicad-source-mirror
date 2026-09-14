@@ -115,6 +115,14 @@ std::vector<uint8_t> KI_TEST::LoadBinaryData( const std::string& aFilePath, std:
 }
 
 
+std::string KI_TEST::LoadStringData( const wxString& aPath )
+{
+    const std::vector<uint8_t> data = KI_TEST::LoadBinaryData( aPath.ToStdString() );
+
+    return std::string( data.begin(), data.end() );
+}
+
+
 void KI_TEST::SetMockConfigDir()
 {
     if( !wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), nullptr ) )

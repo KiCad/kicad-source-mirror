@@ -56,21 +56,6 @@ void writeFileContents( const wxString& aPath, const std::string& aContent )
 }
 
 
-std::string readFileContents( const wxString& aPath )
-{
-    wxFFile fp( aPath, wxT( "rb" ) );
-
-    if( !fp.IsOpened() )
-        return std::string();
-
-    wxString buf;
-    fp.ReadAll( &buf );
-    std::string out = std::string( buf.mb_str( wxConvUTF8 ) );
-    fp.Close();
-    return out;
-}
-
-
 // Counts remaining sibling temp files matching the atomic-save pattern next to a target.
 // Used to assert no orphan temps leak out of a successful commit.
 unsigned countSiblingTemps( const wxString& aTargetPath )
@@ -100,7 +85,7 @@ BOOST_AUTO_TEST_CASE( PrettifiedFormatter_HappyPath )
     }
 
     BOOST_REQUIRE( wxFileName::FileExists( target ) );
-    std::string actual = readFileContents( target );
+    std::string actual = KI_TEST::LoadStringData( target );
     BOOST_REQUIRE( !actual.empty() );
     BOOST_REQUIRE( actual.find( "hello" ) != std::string::npos );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
@@ -129,7 +114,7 @@ BOOST_AUTO_TEST_CASE( PrettifiedFormatter_UnwindingPreservesOriginal )
         std::runtime_error );
 
     BOOST_REQUIRE( wxFileName::FileExists( target ) );
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), original );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
 
@@ -148,7 +133,7 @@ BOOST_AUTO_TEST_CASE( PrettifiedFormatter_DestructorDiscardsWithoutExplicitFinis
         f.Print( 0, "(uncommitted content)\n" );
     }
 
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), original );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
 
@@ -171,7 +156,7 @@ BOOST_AUTO_TEST_CASE( FileFormatter_UnwindingPreservesOriginal )
         std::runtime_error );
 
     BOOST_REQUIRE( wxFileName::FileExists( target ) );
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), original );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
 
@@ -189,7 +174,7 @@ BOOST_AUTO_TEST_CASE( FileFormatter_DestructorDiscardsWithoutExplicitFinish )
         f.Print( 0, "uncommitted streaming content\n" );
     }
 
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), original );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
 
@@ -205,7 +190,7 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_HappyPath )
                                                     &err ) );
     BOOST_REQUIRE( err.IsEmpty() );
     BOOST_REQUIRE( wxFileName::FileExists( target ) );
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), payload );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), payload );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
 
@@ -229,7 +214,7 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_OverwritePreservesOriginalOnFailure )
     BOOST_REQUIRE( !err.IsEmpty() );
 
     BOOST_REQUIRE( wxFileName::FileExists( target ) );
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), original );
 }
 
 
@@ -394,7 +379,7 @@ BOOST_AUTO_TEST_CASE( PrettifiedFormatter_CreatesNewTarget )
     }
 
     BOOST_REQUIRE( wxFileName::FileExists( target ) );
-    std::string actual = readFileContents( target );
+    std::string actual = KI_TEST::LoadStringData( target );
     BOOST_REQUIRE( actual.find( "new_file" ) != std::string::npos );
     BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
 }
@@ -423,7 +408,7 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_PreservesPosixMode )
     struct stat st;
     BOOST_REQUIRE_EQUAL( stat( target.fn_str(), &st ), 0 );
     BOOST_REQUIRE_EQUAL( st.st_mode & 0777, 0400 );
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), payload );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), payload );
 }
 
 
@@ -451,7 +436,7 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_FollowsSymlinkTarget )
     BOOST_REQUIRE( S_ISLNK( st.st_mode ) );
 
     // Referent must have the new content.
-    BOOST_REQUIRE_EQUAL( readFileContents( referent ), payload );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( referent ), payload );
 }
 
 
@@ -477,7 +462,7 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_FailedRenameRestoresTargetMode )
     struct stat st;
     BOOST_REQUIRE_EQUAL( stat( target.fn_str(), &st ), 0 );
     BOOST_REQUIRE_EQUAL( st.st_mode & 0777, 0400 );
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), original );
 }
 
 #else // _WIN32
@@ -504,7 +489,7 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_PreservesWindowsAttributes )
     BOOST_REQUIRE( attrs != INVALID_FILE_ATTRIBUTES );
     BOOST_REQUIRE( ( attrs & FILE_ATTRIBUTE_READONLY ) != 0 );
     BOOST_REQUIRE( ( attrs & FILE_ATTRIBUTE_HIDDEN ) != 0 );
-    BOOST_REQUIRE_EQUAL( readFileContents( target ), payload );
+    BOOST_REQUIRE_EQUAL( KI_TEST::ReadFileToString( target ), payload );
 
     // Clear READONLY so the SCOPED_TEMP_DIR teardown (std::filesystem::remove_all) can
     // delete the file on Windows, where remove() does not clear the attribute itself.

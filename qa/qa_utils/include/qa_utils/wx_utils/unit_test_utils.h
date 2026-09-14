@@ -432,6 +432,21 @@ std::string GetTestDataRootDir();
  */
 std::vector<uint8_t> LoadBinaryData( const std::string& aFilePath, std::optional<size_t> aLoadBytes = std::nullopt );
 
+/**
+ * Load the contents of a file into a string.
+ *
+ * The file is read in binary mode, so the string is byte-exact.
+ * This is a thin wrapper around #KI_TEST::LoadBinaryData(),
+ * so it fails in the same way.
+ *
+ * No assumptions are made about the encoding of the file: it is up
+ * to the caller to interpret the string as appropriate.
+ *
+ * @param aPath the path to the file to load
+ * @return the file's contents
+ */
+std::string LoadStringData( const wxString& aPath );
+
 void SetMockConfigDir();
 
 

@@ -28,6 +28,7 @@
 
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h>
@@ -1122,17 +1123,6 @@ BOOST_AUTO_TEST_CASE( ExposedPadPasteRespected_Issue24318 )
 
 
 /**
- * Read an exported file's full contents into a std::string.
- */
-static std::string ReadFile( const wxString& aPath )
-{
-    std::ifstream file( aPath.ToStdString() );
-    return std::string( ( std::istreambuf_iterator<char>( file ) ),
-                        std::istreambuf_iterator<char>() );
-}
-
-
-/**
  * Extract the text of the first LayerFeature block for a given layer reference.
  * Returns an empty string when no such LayerFeature exists.
  */
@@ -1183,7 +1173,7 @@ BOOST_AUTO_TEST_CASE( GrRectCornerRadius_Issue24754 )
     BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, board, &props ) );
     BOOST_REQUIRE( wxFileExists( tempPath ) );
 
-    std::string xml = ReadFile( tempPath );
+    std::string xml = KI_TEST::LoadStringData( tempPath );
 
     // The RectRound must round its corners and carry the 0.75 mm radius, not stroke_width/2.
     size_t rectPos = xml.find( "<RectRound" );
@@ -1238,7 +1228,7 @@ BOOST_AUTO_TEST_CASE( BackOnlyMaskNoFrontOpening_Issue24753 )
     BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, board, &props ) );
     BOOST_REQUIRE( wxFileExists( tempPath ) );
 
-    std::string xml = ReadFile( tempPath );
+    std::string xml = KI_TEST::LoadStringData( tempPath );
 
     // The pad must appear on B.Mask (authored) but never on F.Mask.
     std::string fMask = LayerFeatureRegion( xml, "F.Mask" );
@@ -1288,7 +1278,7 @@ BOOST_AUTO_TEST_CASE( RoundRectMaskRadius_Issue24751 )
     BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, board, &props ) );
     BOOST_REQUIRE( wxFileExists( tempPath ) );
 
-    std::string xml = ReadFile( tempPath );
+    std::string xml = KI_TEST::LoadStringData( tempPath );
 
     // Copper roundrect radius is 0.10 mm; with a -0.05 mm per-side margin the mask aperture is
     // 0.35 x 0.20 with radius 0.05 mm. Both distinct primitives must be present.
@@ -1340,7 +1330,7 @@ BOOST_AUTO_TEST_CASE( MultiLayerFootprintGraphic_Issue24752 )
     BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, board, &props ) );
     BOOST_REQUIRE( wxFileExists( tempPath ) );
 
-    std::string xml = ReadFile( tempPath );
+    std::string xml = KI_TEST::LoadStringData( tempPath );
 
     // The polygon graphic must show up under both F.Cu and F.Mask.
     std::string fCu = LayerFeatureRegion( xml, "F.Cu" );
@@ -1497,7 +1487,7 @@ BOOST_AUTO_TEST_CASE( ProcessLayerViaPads_Issue25149 )
     BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, *board, &props ) );
     BOOST_REQUIRE( wxFileExists( tempPath ) );
 
-    std::string xml = ReadFile( tempPath );
+    std::string xml = KI_TEST::LoadStringData( tempPath );
 
     std::string region = LayerFeatureRegion( xml, "F.Cu_2" );
     BOOST_REQUIRE_MESSAGE( !region.empty(), "Export should contain the F.Cu_2 process layer" );

@@ -26,6 +26,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <qa_utils/file_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include "api_e2e_utils.h"
 
@@ -93,22 +94,6 @@ bool textFilesMatch( const wxString& aGoldenPath, const wxString& aGeneratedPath
     }
 
     return true;
-}
-
-
-/**
- * Read @a aPath into a string, or return an empty string if it cannot be opened.
- */
-static std::string readFile( const wxString& aPath )
-{
-    std::ifstream stream( aPath.ToStdString(), std::ios::binary );
-
-    if( !stream.is_open() )
-        return {};
-
-    std::ostringstream contents;
-    contents << stream.rdbuf();
-    return contents.str();
 }
 
 
@@ -195,7 +180,7 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardSvg, API_SERVER_E2E_FIXTURE )
 
     // Plot fidelity is covered by the kicad-cli SVG regression tests, which rasterize and compare
     // against golden artwork.  All this test has to establish is that the job honoured the request.
-    const std::string svg = readFile( generatedPath );
+    const std::string svg = KI_TEST::LoadStringData( generatedPath );
 
     BOOST_REQUIRE_MESSAGE( !svg.empty(), "Generated SVG is empty or unreadable: " + generatedPath );
     BOOST_CHECK( svg.find( "<svg" ) != std::string::npos );

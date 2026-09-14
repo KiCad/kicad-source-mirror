@@ -24,9 +24,9 @@
 #include <boost/test/unit_test.hpp>
 
 #include <jobs/job_pcb_diff.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <wx/file.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/process.h>
@@ -141,26 +141,6 @@ void copyFixture( const wxString& aName, const wxString& aDest )
 }
 
 
-std::string readFileBytes( const wxString& aPath )
-{
-    wxFile file( aPath );
-    BOOST_REQUIRE_MESSAGE( file.IsOpened(), "Could not open " << aPath );
-
-    const wxFileOffset len = file.Length();
-    BOOST_REQUIRE_GE( len, 0 );
-
-    std::string bytes( static_cast<size_t>( len ), '\0' );
-
-    if( len > 0 )
-    {
-        ssize_t read = file.Read( bytes.data(), static_cast<size_t>( len ) );
-        BOOST_REQUIRE_EQUAL( read, len );
-    }
-
-    return bytes;
-}
-
-
 void expectCleanExit( const wxString& aName, const COMMAND_RESULT& aResult, int aExpectedExitCode )
 {
     BOOST_TEST_CONTEXT( aName )
@@ -185,7 +165,7 @@ void expectSvg( const wxString& aName, const wxString& aPath )
 {
     BOOST_TEST_CONTEXT( aName )
     {
-        std::string bytes = readFileBytes( aPath );
+        std::string bytes = KI_TEST::LoadStringData( aPath );
         BOOST_REQUIRE( !bytes.empty() );
         BOOST_CHECK( bytes.find( "<svg" ) != std::string::npos );
     }
@@ -198,7 +178,7 @@ void expectPng( const wxString& aName, const wxString& aPath )
 
     BOOST_TEST_CONTEXT( aName )
     {
-        std::string bytes = readFileBytes( aPath );
+        std::string bytes = KI_TEST::LoadStringData( aPath );
         BOOST_REQUIRE_GE( bytes.size(), PNG_HEADER.size() );
 
         for( size_t i = 0; i < PNG_HEADER.size(); ++i )
@@ -211,7 +191,7 @@ void expectFilesDiffer( const wxString& aName, const wxString& aPathA, const wxS
 {
     BOOST_TEST_CONTEXT( aName )
     {
-        BOOST_CHECK( readFileBytes( aPathA ) != readFileBytes( aPathB ) );
+        BOOST_CHECK( KI_TEST::LoadStringData( aPathA ) != KI_TEST::LoadStringData( aPathB ) );
     }
 }
 
