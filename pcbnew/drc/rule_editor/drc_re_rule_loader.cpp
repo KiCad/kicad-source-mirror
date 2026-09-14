@@ -95,15 +95,29 @@ static std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA> makeCustomRuleData( const DR
 
 wxString DRC_RULE_LOADER::ExtractRuleBody( const wxString& aOriginalText )
 {
-    int ruleKeyword = aOriginalText.Find( wxS( "rule " ) );
+    // Comment lines live in the comment field, not in the body.
+    wxArrayString kept;
+
+    for( const wxString& line : wxSplit( aOriginalText, '\n', '\0' ) )
+    {
+        wxString trimmed = line;
+        trimmed.Trim( false );
+
+        if( !trimmed.StartsWith( wxS( "#" ) ) )
+            kept.Add( line );
+    }
+
+    wxString text = wxJoin( kept, '\n', '\0' );
+
+    int ruleKeyword = text.Find( wxS( "rule " ) );
     if( ruleKeyword == wxNOT_FOUND )
         return aOriginalText;
 
-    int bodyStart = aOriginalText.find( '(', ruleKeyword + 5 );
+    int bodyStart = text.find( '(', ruleKeyword + 5 );
     if( bodyStart == (int) wxString::npos )
         return aOriginalText;
 
-    wxString body = aOriginalText.Mid( bodyStart );
+    wxString body = text.Mid( bodyStart );
     body.Trim( true );
 
     if( body.EndsWith( wxS( ")" ) ) )
