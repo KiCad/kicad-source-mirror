@@ -482,7 +482,7 @@ public:
         // make sure c++ expects '.' not ',':
         std::istringstream istr( str2 );
 
-        // istr.imbue(std::locale("C"));
+        istr.imbue( std::locale::classic() );
         istr >> ret;
         return ret;
     }

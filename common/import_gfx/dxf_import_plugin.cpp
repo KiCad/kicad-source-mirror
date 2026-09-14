@@ -221,8 +221,7 @@ bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxString& aFile )
     if( fp == nullptr )
         return false;
 
-    // Note the dxf reader takes care of switching to "C" locale before reading the file
-    // and will close the file after reading
+    // The DXF reader closes the file after reading.
     bool success = dxf_reader.in( fp, this );
 
     return success;
@@ -235,8 +234,6 @@ bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxMemoryBuffer& aMemBuffer )
 
     std::string str( reinterpret_cast<char*>( aMemBuffer.GetData() ), aMemBuffer.GetDataLen() );
 
-    // Note the dxf reader takes care of switching to "C" locale before reading the file
-    // and will close the file after reading
     bool success = dxf_reader.in( str, this );
 
     return success;

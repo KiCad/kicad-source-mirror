@@ -25,6 +25,8 @@
 #include <base_units.h>
 #include <algorithm>
 #include <cstring>
+#include <clocale>
+#include <locale>
 #include <limits>
 #include <wx/ffile.h>
 #include <wx/filefn.h>
@@ -308,6 +310,25 @@ BOOST_AUTO_TEST_CASE( DxfSourceLayersArePreserved )
     BOOST_REQUIRE_EQUAL( importer.m_lines.size(), 1 );
     BOOST_REQUIRE_EQUAL( importer.m_lineSourceLayers.size(), 1 );
     BOOST_CHECK_EQUAL( importer.m_lineSourceLayers[0], wxS( "Outline" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( NativeDxfImportPreservesLocales )
+{
+    DXF_IMPORT_PLUGIN plugin;
+    TEST_GRAPHICS_IMPORTER importer;
+    plugin.SetUnit( DXF_IMPORT_UNITS::MM );
+    plugin.SetImporter( &importer );
+
+    const std::string cLocale = std::setlocale( LC_ALL, nullptr );
+    const std::string cppLocale = std::locale().name();
+    const wxString path = wxString::FromUTF8( KI_TEST::GetTestDataRootDir() )
+                          + wxS( "/common/import_gfx/issue22127_fusion360_splines.dxf" );
+
+    BOOST_REQUIRE( plugin.Load( path ) );
+    BOOST_REQUIRE( plugin.Import() );
+    BOOST_CHECK_EQUAL( std::string( std::setlocale( LC_ALL, nullptr ) ), cLocale );
+    BOOST_CHECK_EQUAL( std::locale().name(), cppLocale );
 }
 
 
