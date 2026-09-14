@@ -74,8 +74,20 @@ public:
     static bool SplitArchiveEntryName( const wxString& aEntryName, wxArrayString& aParts );
 
     /**
+     * Check that a child path is safe to append to a parent directory.
+     *
+     * Rejects rather than sanitizes: an empty name, a name containing a path separator, or "." or
+     * ".." is not safe. A safe name is a single path component, so appending it to a directory
+     * cannot escape that directory.
+     *
+     * @param aChild is the child path to check.
+     * @return true if aChild is a single safe path component.
+     */
+    [[nodiscard]] static bool IsSafeChildPath( const wxString& aChild );
+
+    /**
      * Resolve an untrusted archive entry name against the directory it is extracted into.
-     * 
+     *
      * If this function returns false, don't attempt to extract the given entry.
      * Use the aResult parameter for the final destination to extract to otherwise.
      *

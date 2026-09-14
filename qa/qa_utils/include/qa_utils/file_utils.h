@@ -23,9 +23,11 @@
 
 #include <wx/string.h>
 
+#include <wx_filename.h>
+
+
 class PROJECT;
 class SETTINGS_MANAGER;
-
 
 namespace KI_TEST
 {
@@ -36,9 +38,23 @@ namespace KI_TEST
 class SCOPED_TEMP_DIR
 {
 public:
+    /**
+     * Create a temporary directory with a unique name based on the given prefix.
+     *
+     * The directory is removed on destruction unless the environment variable
+     * KICAD_QA_KEEP_TEMP, when interpreted as a comma-separated list of
+     * prefixes, contains the given prefix. The special value "ALL" will keep all
+     * temporary directories created by this class.
+     *
+     * @param aPrefix Prefix for the temporary directory name
+     */
     SCOPED_TEMP_DIR( const wxString& aPrefix );
 
     ~SCOPED_TEMP_DIR();
+
+    // Non-copyable: the destructor removes the directory, so instances must not be copied.
+    SCOPED_TEMP_DIR( const SCOPED_TEMP_DIR& ) = delete;
+    SCOPED_TEMP_DIR& operator=( const SCOPED_TEMP_DIR& ) = delete;
 
     /// Get the path to the temporary directory as a std::filesystem::path.
     const std::filesystem::path& Path() const { return m_path; }
@@ -46,8 +62,53 @@ public:
     /// Get the path to the temporary directory as a wxString.
     wxString PathStr() const { return wxString::FromUTF8( m_path.string() ); }
 
+    /**
+     * Get the path to a direct child of the temporary directory as a wxString,
+     * without creating the child.
+     *
+     * Note you don't need a ChildPath() as you can just use Path() / "childname"
+     * to get a std::filesystem::path.
+     *
+     * Also note that this is the easiest/less-racy way to get a temp file
+     * with a given extension rather than using wxFileName::CreateTempFileName() and
+     * then renaming it, which is easy to leak or race.
+     *
+     * @param aName Name of the child file or directory, must be a single path component
+     * @throws std::invalid_argument if aName is not a single path component
+     */
+    wxString ChildPathStr( const wxString& aName ) const;
+
+    /**
+     * Create and return the path to a direct child directory.
+     *
+     * @throws std::runtime_error if the directory cannot be created
+     */
+    std::filesystem::path CreateChildDir( const wxString& aName ) const;
+
+    /**
+     * Create and return the path to a direct child directory as a wxString.
+     *
+     * @throws std::runtime_error if the directory cannot be created
+     */
+    wxString CreateChildDirStr( const wxString& aName ) const;
+
+    /**
+     * Create and return the path to a direct child file.
+     *
+     * @throws std::runtime_error if the file cannot be created
+     */
+    std::filesystem::path CreateChildFile( const wxString& aName ) const;
+
+    /**
+     * Create and return the path to a direct child file as a wxString.
+     *
+     * @throws std::runtime_error if the file cannot be created
+     */
+    wxString CreateChildFileStr( const wxString& aName ) const;
+
 private:
     std::filesystem::path m_path;
+    bool                  m_keep = false;
 };
 
 

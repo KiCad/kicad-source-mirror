@@ -23,9 +23,13 @@
 #include <stdexcept>
 #include <string>
 
+#include <wx/ffile.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
+#include <wx/utils.h>
+#include <wx_filename.h>
 
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
@@ -33,9 +37,39 @@
 
 using namespace KI_TEST;
 
+
+static bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& aKeepEnvValue )
+{
+    const wxString envVar = wxT( "KICAD_QA_KEEP_TEMP" );
+    wxString       keepEnv;
+
+    if( !wxGetEnv( envVar, &keepEnv ) || keepEnv.IsEmpty() )
+        return false;
+
+    // Split the environment variable on commas (like WXTRACE)
+    wxStringTokenizer tokenizer( keepEnv, wxT( "," ) );
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString token = tokenizer.GetNextToken();
+
+        if( token == aKeepEnvValue || token == wxT( "ALL" ) )
+        {
+            // Probably do want to see this in the log, because if you are keeping the temp dirs,
+            // you may want to know which ones they are.
+            wxLogInfo( wxT( "Keeping temporary directory '%s' because %s is set to '%s'" ),
+                       wxString::FromUTF8( aPath.string() ), envVar, keepEnv );
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 SCOPED_TEMP_DIR::SCOPED_TEMP_DIR( const wxString& aPrefix )
 {
-    wxString reservedName = wxFileName::CreateTempFileName( aPrefix );
+    wxString reservedName = wxFileName::CreateTempFileName( aPrefix + "_" );
 
     if( reservedName.IsEmpty() )
     {
@@ -55,11 +89,57 @@ SCOPED_TEMP_DIR::SCOPED_TEMP_DIR( const wxString& aPrefix )
     {
         throw std::runtime_error( "Cannot create temporary directory '" + m_path.string() + "'" );
     }
+
+    m_keep = shouldKeepTemp( m_path, aPrefix );
+}
+
+
+wxString SCOPED_TEMP_DIR::ChildPathStr( const wxString& aName ) const
+{
+    return wxString::FromUTF8( ( m_path / aName.utf8_string() ).string() );
+}
+
+
+std::filesystem::path SCOPED_TEMP_DIR::CreateChildDir( const wxString& aName ) const
+{
+    std::filesystem::path childPath = m_path / aName.utf8_string();
+
+    if( !std::filesystem::create_directory( childPath ) )
+        throw std::runtime_error( "Cannot create temporary child directory '" + childPath.string() + "'" );
+
+    return childPath;
+}
+
+
+wxString SCOPED_TEMP_DIR::CreateChildDirStr( const wxString& aName ) const
+{
+    return wxString::FromUTF8( CreateChildDir( aName ).string() );
+}
+
+
+std::filesystem::path SCOPED_TEMP_DIR::CreateChildFile( const wxString& aName ) const
+{
+    std::filesystem::path childPath = m_path / aName.utf8_string();
+    wxFFile               file( wxString::FromUTF8( childPath.string() ), wxT( "w" ) );
+
+    if( !file.IsOpened() )
+        throw std::runtime_error( "Cannot create temporary child file '" + childPath.string() + "'" );
+
+    return childPath;
+}
+
+
+wxString SCOPED_TEMP_DIR::CreateChildFileStr( const wxString& aName ) const
+{
+    return wxString::FromUTF8( CreateChildFile( aName ).string() );
 }
 
 
 SCOPED_TEMP_DIR::~SCOPED_TEMP_DIR()
 {
+    if( m_keep )
+        return;
+
     try
     {
         std::filesystem::remove_all( m_path );
