@@ -787,10 +787,7 @@ void FOOTPRINT_EDIT_FRAME::updateInfoBar()
                 wxArrayString msgs;
                 int           infobarFlags = wxICON_INFORMATION;
                 FOOTPRINT*    footprint = GetBoard() ? GetBoard()->GetFirstFootprint() : nullptr;
-                wxString      lib;
-
-                if( footprint )
-                    lib = UnescapeString( footprint->GetFPID().GetLibNickname() );
+                wxString      lib = footprint ? footprint->GetFPID().GetLibNickname() : UTF8();
 
                 if( IsCurrentFPFromBoard() )
                 {
