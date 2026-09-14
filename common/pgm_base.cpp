@@ -357,6 +357,10 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 
     wxInitAllImageHandlers();
 
+    // libpng warnings such as "iCCP: known incorrect sRGB profile" otherwise pop up for
+    // benign plugin and user images; load failures are still reported by the callers
+    wxImage::SetDefaultLoadFlags( wxImage::GetDefaultLoadFlags() & ~wxImage::Load_Verbose );
+
 #if !wxCHECK_VERSION( 3, 3, 0 )
     // Without this the wxPropertyGridManager segfaults on Windows.
     if( !wxPGGlobalVars )
