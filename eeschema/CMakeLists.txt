@@ -423,7 +423,10 @@ set( EESCHEMA_SRCS
     connection_graph.cpp
     connectivity/conn_bus.cpp
     connectivity/conn_bindings.cpp
+    connectivity/conn_facade.cpp
     connectivity/conn_netchain_manager.cpp
+    connectivity/conn_engine.cpp
+    connectivity/conn_preview.cpp
     connectivity/conn_signals.cpp
     connectivity/conn_publish.cpp
     connectivity/conn_rows.cpp
@@ -439,6 +442,7 @@ set( EESCHEMA_SRCS
     connectivity/conn_navigation.cpp
     connectivity/conn_presentation.cpp
     connectivity/conn_pin_name.cpp
+    connectivity/conn_dump.cpp
     connectivity/conn_facts.cpp
     connectivity/conn_frame.cpp
     connectivity/conn_inputs.cpp

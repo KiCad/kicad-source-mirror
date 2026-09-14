@@ -386,7 +386,7 @@ public:
     wxString GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoConnect = false );
 
     bool IsDangling() const override;
-    void SetIsDangling( bool aIsDangling );
+    bool SetIsDangling( bool aIsDangling );
 
     /**
      * @param aPin Comparison Pin

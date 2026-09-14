@@ -21,6 +21,7 @@
 
 #include <sch_sheet_path.h>
 #include <map>
+#include <optional>
 #include <set>
 #include <unordered_set>
 #include <vector>
@@ -33,7 +34,8 @@ namespace SCH_CONNECTIVITY
 {
 using NET_ITEMS_BY_SHEET = std::map<SCH_SHEET_PATH, std::vector<SCH_ITEM*>, SHEET_PATH_CMP>;
 
-/** Net membership for one UI operation. Recreate after the schematic changes.
+/**
+ * One UI operation's hierarchy index. Recreate after the schematic changes.
  * Returned item pointers are borrowed for immediate use.
  */
 class NAVIGATION_QUERY
@@ -41,24 +43,30 @@ class NAVIGATION_QUERY
 public:
     explicit NAVIGATION_QUERY( const SCHEMATIC& aSchematic );
     std::vector<wxString> NetNames() const;
-    /** Signal itself or leaf signals of a bus, suitable for PCB cross-probing. */
+    // Signal itself or leaf signals of a bus, suitable for PCB cross-probing.
     std::vector<wxString> SignalNames( const wxString& aName ) const;
     bool HasNet( const wxString& aName ) const;
     std::set<KIID_PATH> NetSheets( const wxString& aName ) const;
     NET_ITEMS_BY_SHEET NetItems( const wxString& aName, bool aIncludeBusParents,
                                  bool aIncludeBusMembers = false ) const;
-    /** Add the items of a net on one sheet to \a aItems without building other sheets. */
+    // Add the items of a net on one sheet to \a aItems without building other sheets.
     void CollectNetItems( const wxString& aName, const SCH_SHEET_PATH& aSheet,
                           std::unordered_set<SCH_ITEM*>& aItems, bool aIncludeBusParents = false,
                           bool aIncludeBusMembers = false ) const;
-    /** Whole nets containing the seeds on this instance; excludes bus parents and members. */
+    // Whole nets containing the seeds on this instance; excludes bus parents and members.
     std::vector<SCH_ITEM*> WholeNetItems( const std::vector<SCH_ITEM*>& aSeeds,
                                         const SCH_SHEET_PATH& aSheet ) const;
 
 private:
     std::set<const CONNECTION_SUBGRAPH*> netSubgraphs( const wxString& aName, bool aIncludeBusParents,
                                                        bool aIncludeBusMembers ) const;
+    NET_ITEMS_BY_SHEET netItemsByEngine( const wxString& aName, bool aIncludeBusParents,
+                                         bool aIncludeBusMembers ) const;
+
+    using PATH_INDEX = std::map<KIID_PATH, SCH_SHEET_PATH>;
+    const PATH_INDEX& paths() const;
 
     const SCHEMATIC& m_schematic;
+    mutable std::optional<PATH_INDEX> m_paths;
 };
 }

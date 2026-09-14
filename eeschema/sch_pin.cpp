@@ -571,9 +571,11 @@ bool SCH_PIN::IsDangling() const
 }
 
 
-void SCH_PIN::SetIsDangling( bool aIsDangling )
+bool SCH_PIN::SetIsDangling( bool aIsDangling )
 {
+    const bool changed = m_isDangling != aIsDangling;
     m_isDangling = aIsDangling;
+    return changed;
 }
 
 
