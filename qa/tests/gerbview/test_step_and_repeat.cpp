@@ -26,9 +26,11 @@
 #include <wx/filefn.h>
 #include <wx/filename.h>
 
+#include <qa_utils/file_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
+
 #include <gerber_file_image.h>
 #include <gerber_draw_item.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
 
 
 static std::string GetGerbviewTestDataDir()
@@ -113,7 +115,8 @@ BOOST_AUTO_TEST_CASE( BlockReplication )
  */
 BOOST_AUTO_TEST_CASE( NoStepAndRepeat )
 {
-    wxString path = wxFileName::CreateTempFileName( wxS( "kicad_gbr_no_sr" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_gbr_no_sr" );
+    wxString                 path = tempDir.CreateChildFileStr( "test.gbr" );
     BOOST_REQUIRE( !path.IsEmpty() );
 
     FILE* file = wxFopen( path, wxT( "wt" ) );

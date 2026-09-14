@@ -18,13 +18,13 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/svg_test_utils.h>
+
+#include <wx/ffile.h>
 
 #include <page_info.h>
 #include <plotters/plotters_pslike.h>
-
-#include <wx/ffile.h>
-#include <wx/filename.h>
 
 #include <memory>
 #include <set>
@@ -40,8 +40,8 @@ namespace
 /// Plot one filled shape at the requested colour and return the whole SVG document.
 wxString plotFilledShape( const COLOR4D& aColor, bool aMirrored = false, bool aFitToBoard = false )
 {
-    wxFileName tempFile( wxFileName::CreateTempFileName( wxT( "kicad_svg_plotter" ) ) );
-    tempFile.SetExt( wxT( "svg" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_svg_plotter" );
+    const wxString           tempFile = tempDir.CreateChildFileStr( "plot.svg" );
 
     SVG_PLOTTER plotter;
     PAGE_INFO   pageInfo;
@@ -57,7 +57,7 @@ wxString plotFilledShape( const COLOR4D& aColor, bool aMirrored = false, bool aF
 
     plotter.SetColorMode( true );
 
-    BOOST_REQUIRE( plotter.OpenFile( tempFile.GetFullPath() ) );
+    BOOST_REQUIRE( plotter.OpenFile( tempFile ) );
     BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ) ) );
 
     plotter.SetColor( aColor );
@@ -76,14 +76,12 @@ wxString plotFilledShape( const COLOR4D& aColor, bool aMirrored = false, bool aF
 
     BOOST_REQUIRE( plotter.EndPlot() );
 
-    wxFFile file( tempFile.GetFullPath(), wxT( "r" ) );
-    BOOST_REQUIRE( file.IsOpened() );
+    wxFFile fileForReading( tempFile, wxT( "r" ) );
+    BOOST_REQUIRE( fileForReading.IsOpened() );
 
     wxString content;
-    file.ReadAll( &content );
-    file.Close();
-
-    wxRemoveFile( tempFile.GetFullPath() );
+    fileForReading.ReadAll( &content );
+    fileForReading.Close();
 
     return content;
 }

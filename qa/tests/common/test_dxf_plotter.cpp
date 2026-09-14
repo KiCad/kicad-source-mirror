@@ -18,6 +18,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
 
 #include <string>
 
@@ -41,7 +42,9 @@ BOOST_AUTO_TEST_CASE( R2000HandlesAndTableSkeleton )
 
     plotter.SetRenderSettings( &renderSettings );
 
-    wxString dxfPath = wxFileName::CreateTempFileName( wxT( "kicad_dxf_r2000" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_dxf_r2000" );
+    const wxString           dxfPath = tempDir.CreateChildFileStr( "plot.dxf" );
+
     BOOST_REQUIRE( !dxfPath.IsEmpty() );
     BOOST_TEST_MESSAGE( "DXF output: " << dxfPath.ToStdString() );
     BOOST_REQUIRE( plotter.OpenFile( dxfPath ) );
@@ -179,8 +182,6 @@ BOOST_AUTO_TEST_CASE( R2000HandlesAndTableSkeleton )
                          "Expected Model layout (precondition for the next check)" );
     BOOST_CHECK_MESSAGE( buffer.find( " 70\n1024\n" ) != std::string::npos,
                          "Expected ModelType (1024) flag on the Model layout" );
-
-    MaybeRemoveFile( dxfPath );
 }
 
 

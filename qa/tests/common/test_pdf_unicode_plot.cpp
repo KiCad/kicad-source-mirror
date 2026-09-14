@@ -33,6 +33,7 @@
 #include <math/util.h>
 #include <font/font.h>
 #include <font/stroke_font.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <qa_utils/pdf_test_utils.h>
 
@@ -44,15 +45,14 @@
 
 BOOST_AUTO_TEST_SUITE( PDFUnicodePlot )
 
-static wxString getTempPdfPath( const wxString& name ) { return MakeTempPdfPath( name ); }
-
 // Comprehensive mapping test: emit all four style variants in a single PDF and verify that
 // every style's ToUnicode CMap contains expected codepoints (Cyrillic 041F, Japanese 65E5, Chinese 672C).
 BOOST_AUTO_TEST_CASE( PlotMultilingualAllStylesMappings )
 {
     const std::string sampleUtf8 = "ABCDEF Привет 日本語 漢字";
     wxString sample = wxString::FromUTF8( sampleUtf8.c_str() );
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_unicode_allstyles" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_unicode_allstyles" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -98,8 +98,6 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualAllStylesMappings )
     requireAll( "041F", "Cyrillic PE" );
     requireAll( "65E5", "Kanji 日" );
     requireAll( "672C", "Kanji 本" );
-
-    MaybeRemoveFile( pdfPath );
 }
 
 BOOST_AUTO_TEST_CASE( PlotMultilingualText )
@@ -108,7 +106,8 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualText )
     const std::string sampleUtf8 = "ABCDEF Привет 日本語 漢字";
     wxString sample = wxString::FromUTF8( sampleUtf8.c_str() );
 
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_unicode" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_unicode" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
 
@@ -165,8 +164,6 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualText )
             BOOST_TEST_MESSAGE( "pdftoppm not available or failed; skipping raster validation" );
         }
     }
-
-    MaybeRemoveFile( pdfPath );
 }
 
 BOOST_AUTO_TEST_CASE( PlotMultilingualTextBold )
@@ -174,7 +171,8 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualTextBold )
     const std::string sampleUtf8 = "ABCDEF Привет 日本語 漢字";
     wxString sample = wxString::FromUTF8( sampleUtf8.c_str() );
 
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_unicode_bold" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_unicode_bold" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -193,15 +191,14 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualTextBold )
     auto contains = [&]( const char* needle ) { return PdfContains( buffer3, needle ); };
     BOOST_CHECK_MESSAGE( contains( "041F" ), "Missing Cyrillic glyph mapping (bold 041F)" );
     BOOST_CHECK_MESSAGE( contains( "65E5" ), "Missing Japanese glyph mapping (bold 65E5)" );
-
-    MaybeRemoveFile( pdfPath );
 }
 
 BOOST_AUTO_TEST_CASE( PlotMultilingualTextItalic )
 {
     const std::string sampleUtf8 = "ABCDEF Привет 日本語 漢字";
     wxString sample = wxString::FromUTF8( sampleUtf8.c_str() );
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_unicode_italic" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_unicode_italic" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
 
@@ -219,14 +216,14 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualTextItalic )
     auto contains = [&]( const char* n ) { return PdfContains( buffer4, n ); };
     BOOST_CHECK_MESSAGE( contains( "041F" ), "Missing Cyrillic glyph mapping (italic 041F)" );
     BOOST_CHECK_MESSAGE( contains( "65E5" ), "Missing Japanese glyph mapping (italic 65E5)" );
-    MaybeRemoveFile( pdfPath );
 }
 
 BOOST_AUTO_TEST_CASE( PlotMultilingualTextBoldItalic )
 {
     const std::string sampleUtf8 = "ABCDEF Привет 日本語 漢字";
     wxString          sample = wxString::FromUTF8( sampleUtf8.c_str() );
-    wxString          pdfPath = getTempPdfPath( "kicad_pdf_unicode_bolditalic" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_unicode_bolditalic" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
     PDF_PLOTTER       plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
 
@@ -247,7 +244,6 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualTextBoldItalic )
     auto contains = [&]( const char* n ) { return PdfContains( buffer5, n ); };
     BOOST_CHECK_MESSAGE( contains( "041F" ), "Missing Cyrillic glyph mapping (bold-italic 041F)" );
     BOOST_CHECK_MESSAGE( contains( "65E5" ), "Missing Japanese glyph mapping (bold-italic 65E5)" );
-    MaybeRemoveFile( pdfPath );
 }
 
 // Verify that d1 bounding boxes account for X offset and stroke width so PDF viewers don't
@@ -256,7 +252,8 @@ BOOST_AUTO_TEST_CASE( GlyphBBoxIncludesOffsetAndStrokeWidth )
 {
     const std::string sampleUtf8 = "MW";
     wxString sample = wxString::FromUTF8( sampleUtf8.c_str() );
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_bbox_check" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_bbox_check" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -335,8 +332,6 @@ BOOST_AUTO_TEST_CASE( GlyphBBoxIncludesOffsetAndStrokeWidth )
 
     BOOST_CHECK_MESSAGE( checkedGlyphs >= 2,
                          "Expected at least 2 non-notdef glyphs, found " << checkedGlyphs );
-
-    MaybeRemoveFile( pdfPath );
 }
 
 // Test Y offset bounding box fix: ensure characters are not clipped when Y offset is applied
@@ -349,7 +344,8 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualTextWithYOffset )
 
     const std::string sampleUtf8 = "Yg Test ñ";  // characters with ascenders and descenders
     wxString sample = wxString::FromUTF8( sampleUtf8.c_str() );
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_unicode_yoffset" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_unicode_yoffset" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -377,13 +373,12 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualTextWithYOffset )
     // Look for d1 operators which specify character bounding boxes
     BOOST_CHECK_MESSAGE( buffer6.find( "d1" ) != std::string::npos,
                          "PDF should contain d1 operators for glyph bounding boxes" );
-
-    MaybeRemoveFile( pdfPath );
 }
 
 BOOST_AUTO_TEST_CASE( PlotOutlineFontEmbedding )
 {
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_outline_font" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_outline_font" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     // Locate test font file (Noto Sans) in test resources
     wxFileName fontFile( KI_TEST::GetTestDataRootDir() );
@@ -441,7 +436,8 @@ BOOST_AUTO_TEST_CASE( PlotOutlineFontEmbedding )
     // Optional: rasterize PDF to image (requires poppler 'pdftoppm').
     // We treat absence of the tool as a skipped sub-check rather than a failure.
     {
-        wxString rasterBase = wxFileName::CreateTempFileName( wxT("kicad_pdf_raster") );
+        KI_TEST::SCOPED_TEMP_DIR rasterDir( "kicad_pdf_raster" );
+        wxString rasterBase = rasterDir.ChildPathStr( "raster" );
         wxString cmd = wxString::Format( wxT("pdftoppm -r 72 -singlefile -png \"%s\" \"%s\""),
                                          pdfPath, rasterBase );
 
@@ -483,9 +479,6 @@ BOOST_AUTO_TEST_CASE( PlotOutlineFontEmbedding )
                 BOOST_CHECK_MESSAGE( darkPixels > 100,
                                      "Rasterized PDF appears blank or too sparse (" << darkPixels
                                      << " dark pixels). Outline font may not be rendering correctly." );
-
-                // Housekeeping
-                wxRemoveFile( pngPath );
             }
             else
             {
@@ -497,8 +490,6 @@ BOOST_AUTO_TEST_CASE( PlotOutlineFontEmbedding )
             BOOST_TEST_MESSAGE( "pdftoppm not available or failed; skipping raster validation" );
         }
     }
-
-    MaybeRemoveFile( pdfPath );
 }
 
 // Extract the device-space X translation of every stroke-font text block ("... cm BT") in a
@@ -555,7 +546,8 @@ static std::vector<double> ExtractStrokeTextOriginsX( const std::string& aBuffer
 // text after the tab is placed exactly where the stroke font's own glyph model puts it.
 BOOST_AUTO_TEST_CASE( PlotStrokeTextTabStopMatchesFont )
 {
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_tabs" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_tabs" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -619,8 +611,6 @@ BOOST_AUTO_TEST_CASE( PlotStrokeTextTabStopMatchesFont )
                          "Post-tab text at " << measuredOffsetIu << " IU, font model expects "
                                              << expectedOffsetIu << " IU (old buggy rule: "
                                              << oldOffsetIu << " IU)" );
-
-    MaybeRemoveFile( pdfPath );
 }
 
 // Regression test for GitLab issue 23740: stroke-font Type3 glyphs in the PDF output were
@@ -634,7 +624,8 @@ BOOST_AUTO_TEST_CASE( PlotStrokeTextTabStopMatchesFont )
 // ctm_f deltas match FONT::getLinePositions (the constant YOffset cancel drops out of deltas).
 BOOST_AUTO_TEST_CASE( StrokeFontVerticalAlignmentMatchesScreen )
 {
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_valign" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_valign" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -739,8 +730,6 @@ BOOST_AUTO_TEST_CASE( StrokeFontVerticalAlignmentMatchesScreen )
     // V-alignment deltas on f remain the same under italic shear (Y cancel is constant).
     const double italic_delta_top_center = matrices[4].f - matrices[3].f;
     BOOST_CHECK_CLOSE( italic_delta_top_center, expected_delta_top_center, 1.0 );
-
-    MaybeRemoveFile( pdfPath );
 }
 
 
@@ -759,7 +748,8 @@ BOOST_AUTO_TEST_CASE( StrokeFontVerticalAlignmentMatchesScreen )
 // glyph-width sum rather than the inflated bbox.
 BOOST_AUTO_TEST_CASE( StrokeFontWordSpacingMatchesGlyphAdvance )
 {
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_wordspacing" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_wordspacing" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -842,8 +832,6 @@ BOOST_AUTO_TEST_CASE( StrokeFontWordSpacingMatchesGlyphAdvance )
                          "Word spacing matches the buggy inflated-bbox formula ("
                                  << observedTextAdvanceDev << " ~= " << inflatedTextAdvanceDev
                                  << "); the renderWord cursor fix appears inactive." );
-
-    MaybeRemoveFile( pdfPath );
 }
 
 // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23843
@@ -855,7 +843,8 @@ BOOST_AUTO_TEST_CASE( StrokeFontWordSpacingMatchesGlyphAdvance )
 // line "[] 0 d" when the requested pattern degenerates to all zeros.
 BOOST_AUTO_TEST_CASE( SetDashZeroWidthNoIllegalDashArray )
 {
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_zero_dash" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_zero_dash" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -902,8 +891,6 @@ BOOST_AUTO_TEST_CASE( SetDashZeroWidthNoIllegalDashArray )
     BOOST_CHECK_MESSAGE( buffer.find( " re f" ) != std::string::npos
                                  || buffer.find( "re\nf" ) != std::string::npos,
                          "Filled rectangle should still be plotted" );
-
-    MaybeRemoveFile( pdfPath );
 }
 
 
@@ -912,7 +899,8 @@ BOOST_AUTO_TEST_CASE( SetDashZeroWidthNoIllegalDashArray )
 // fix that collapsed every dashed style to solid would regress here.
 BOOST_AUTO_TEST_CASE( SetDashNonZeroWidthKeepsDashArray )
 {
-    wxString pdfPath = getTempPdfPath( "kicad_pdf_nonzero_dash" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_nonzero_dash" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
 
     PDF_PLOTTER plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;

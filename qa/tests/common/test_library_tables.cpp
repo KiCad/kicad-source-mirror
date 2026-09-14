@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
-#include <ranges>
 #include <utility>
 #include <vector>
 
@@ -30,6 +29,7 @@
 #include <mock_pgm_base.h>
 #include <richio.h>
 #include <io/kicad/kicad_io_utils.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <settings/settings_manager.h>
 #include <pegtl/contrib/analyze.hpp>
@@ -392,7 +392,9 @@ BOOST_AUTO_TEST_CASE( ReadOnlyTable )
     fn.AppendDir( "libraries" );
     fn.SetName( "sym-lib-table" );
 
-    wxFileName tmpFn = wxFileName::CreateTempFileName( "kicad_test_ro_" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_test_ro_table" );
+    wxFileName               tmpFn = tempDir.CreateChildFileStr( "sym-lib-table" );
+
     wxCopyFile( fn.GetFullPath(), tmpFn.GetFullPath() );
 
     // Verify a writable table is not read-only

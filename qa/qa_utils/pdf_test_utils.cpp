@@ -19,10 +19,10 @@
 
 #include <algorithm>
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/pdf_test_utils.h>
 #include <gal/color4d.h>
 
-#include <wx/filename.h>
 #include <wx/filefn.h>
 #include <wx/ffile.h>
 #include <wx/utils.h>
@@ -30,13 +30,6 @@
 #include <wx/imagpng.h>
 
 #include <zlib.h>
-
-wxString MakeTempPdfPath( const wxString& aPrefix )
-{
-    wxFileName fn = wxFileName::CreateTempFileName( aPrefix );
-    fn.SetExt( "pdf" );
-    return fn.GetFullPath();
-}
 
 SIMPLE_RENDER_SETTINGS::SIMPLE_RENDER_SETTINGS()
 {
@@ -188,7 +181,8 @@ bool RasterizePdfCountDark( const wxString& aPdfPath, int aDpi, int aNearWhiteTh
 {
     aOutDarkPixels = 0;
 
-    wxString rasterBase = wxFileName::CreateTempFileName( wxT( "kicad_pdf_raster" ) );
+    KI_TEST::SCOPED_TEMP_DIR rasterDir( "kicad_pdf_raster" );
+    wxString rasterBase = rasterDir.ChildPathStr( "raster" );
     wxString cmd = wxString::Format( wxT( "pdftoppm -r %d -singlefile -png \"%s\" \"%s\"" ),
                                      aDpi, aPdfPath, rasterBase );
     int ret = wxExecute( cmd, wxEXEC_SYNC );
@@ -227,14 +221,5 @@ bool RasterizePdfCountDark( const wxString& aPdfPath, int aDpi, int aNearWhiteTh
 
     aOutDarkPixels = dark;
 
-    // cleanup the rasterized file
-    wxRemoveFile( pngPath );
     return true;
-}
-
-void MaybeRemoveFile( const wxString& aPath, const wxString& aEnvVar )
-{
-    wxString keepEnv;
-    if( !wxGetEnv( aEnvVar, &keepEnv ) || keepEnv.IsEmpty() )
-        wxRemoveFile( aPath );
 }

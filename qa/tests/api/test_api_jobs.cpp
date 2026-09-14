@@ -22,8 +22,10 @@
 #include <sstream>
 #include <string>
 
-#include <boost/test/unit_test.hpp>
 #include <wx/filename.h>
+
+#include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
 
 #include "api_e2e_utils.h"
 
@@ -165,9 +167,9 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardSvg, API_SERVER_E2E_FIXTURE )
     BOOST_REQUIRE_MESSAGE( Client().OpenDocument( boardPath.GetFullPath(), &document ),
                            "OpenDocument failed: " + Client().LastError() );
 
-    wxString   tempFile = wxFileName::CreateTempFileName( wxS( "api_job_svg_" ) );
-    wxFileName outputPath( tempFile );
-    outputPath.SetExt( wxS( "svg" ) );
+
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "api_job_svg" );
+    wxFileName               outputPath( tempDir.ChildPathStr( "plot.svg" ) );
 
     kiapi::board::jobs::RunBoardJobExportSvg request;
     *request.mutable_job_settings()->mutable_document() = document;
@@ -213,17 +215,6 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardSvg, API_SERVER_E2E_FIXTURE )
 
     // F.Cu of this board is dense; a near-empty plot means the layer selection was dropped
     BOOST_CHECK_GT( countOccurrences( svg, "<path" ), 100u );
-
-    if( wxFileName::FileExists( generatedPath ) )
-        wxRemoveFile( generatedPath );
-
-    // A per-layer export turns the requested output path into a directory
-    if( wxFileName::DirExists( outputPath.GetFullPath() ) )
-        wxFileName::Rmdir( outputPath.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-    else if( wxFileName::FileExists( outputPath.GetFullPath() ) )
-        wxRemoveFile( outputPath.GetFullPath() );
-
-    wxRemoveFile( tempFile );
 }
 
 
@@ -240,9 +231,8 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardDrill, API_SERVER_E2E_FIXTURE )
     BOOST_REQUIRE_MESSAGE( Client().OpenDocument( boardPath.GetFullPath(), &document ),
                            "OpenDocument failed: " + Client().LastError() );
 
-    wxString outputDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator() + wxS( "api_job_drill_" )
-                         + wxString::Format( "%ld", wxGetProcessId() ) + wxFileName::GetPathSeparator();
-    wxFileName::Mkdir( outputDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "api_job_drill" );
+    wxString                 outputDir = tempDir.CreateChildDirStr( "drill" ) + wxFileName::GetPathSeparator();
 
     kiapi::board::jobs::RunBoardJobExportDrill request;
     *request.mutable_job_settings()->mutable_document() = document;
@@ -276,8 +266,6 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardDrill, API_SERVER_E2E_FIXTURE )
     wxString goldenPath = testDataDir + wxS( "basic_test_excellon_inches.drl" );
     BOOST_CHECK_MESSAGE( textFilesMatch( goldenPath, generatedDrillPath, 5 ),
                          "Drill output does not match golden file" );
-
-    wxFileName::Rmdir( outputDir, wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -295,8 +283,8 @@ BOOST_FIXTURE_TEST_CASE( ExportSchematicNetlist, API_SERVER_E2E_FIXTURE )
             Client().OpenDocument( schPath.GetFullPath(), kiapi::common::types::DOCTYPE_SCHEMATIC, &document ),
             "OpenDocument failed: " + Client().LastError() );
 
-    wxFileName outputPath = wxFileName::CreateTempFileName( wxS( "api_job_netlist_" ) );
-    outputPath.SetExt( wxS( "cadstar" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "api_job_netlist" );
+    wxFileName               outputPath( tempDir.ChildPathStr( "netlist.cadstar" ) );
 
     kiapi::schematic::jobs::RunSchematicJobExportNetlist request;
     *request.mutable_job_settings()->mutable_document() = document;
@@ -318,13 +306,6 @@ BOOST_FIXTURE_TEST_CASE( ExportSchematicNetlist, API_SERVER_E2E_FIXTURE )
     // 3 header lines to skip (contain timestamp/version)
     wxString goldenPath = testDataDir + wxS( "basic_test.netlist.cadstar" );
     BOOST_CHECK_MESSAGE( textFilesMatch( goldenPath, generatedPath, 3 ), "Netlist output does not match golden file" );
-
-    // Clean up
-    if( wxFileName::FileExists( generatedPath ) )
-        wxRemoveFile( generatedPath );
-
-    if( wxFileName::FileExists( outputPath.GetFullPath() ) )
-        wxRemoveFile( outputPath.GetFullPath() );
 }
 
 
@@ -342,8 +323,8 @@ BOOST_FIXTURE_TEST_CASE( ExportSchematicBom, API_SERVER_E2E_FIXTURE )
             Client().OpenDocument( schPath.GetFullPath(), kiapi::common::types::DOCTYPE_SCHEMATIC, &document ),
             "OpenDocument failed: " + Client().LastError() );
 
-    wxFileName outputPath = wxFileName::CreateTempFileName( wxS( "api_job_bom_" ) );
-    outputPath.SetExt( wxS( "csv" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "api_job_bom" );
+    wxFileName               outputPath( tempDir.ChildPathStr( "bom.csv" ) );
 
     kiapi::schematic::jobs::RunSchematicJobExportBOM request;
     *request.mutable_job_settings()->mutable_document() = document;
@@ -410,12 +391,6 @@ BOOST_FIXTURE_TEST_CASE( ExportSchematicBom, API_SERVER_E2E_FIXTURE )
 
     generatedStream.close();
     goldenStream.close();
-
-    if( wxFileName::FileExists( generatedPath ) )
-        wxRemoveFile( generatedPath );
-
-    if( wxFileName::FileExists( outputPath.GetFullPath() ) )
-        wxRemoveFile( outputPath.GetFullPath() );
 }
 
 

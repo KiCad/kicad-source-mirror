@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <eda_item.h>
@@ -30,7 +31,6 @@
 #include <limits>
 #include <wx/ffile.h>
 #include <wx/filefn.h>
-#include <wx/filename.h>
 
 
 class TEST_GRAPHICS_IMPORTER : public GRAPHICS_IMPORTER
@@ -280,7 +280,9 @@ BOOST_AUTO_TEST_CASE( DxfSourceLayersArePreserved )
         "0\n"
         "EOF\n";
 
-    wxString dxfPath = wxFileName::CreateTempFileName( wxS( "kicad_dxf_layers" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_dxf_layers" );
+    const wxString           dxfPath = tempDir.CreateChildFileStr( "layers.dxf" );
+
     BOOST_REQUIRE( !dxfPath.IsEmpty() );
 
     {
@@ -296,7 +298,6 @@ BOOST_AUTO_TEST_CASE( DxfSourceLayersArePreserved )
     plugin.SetImporter( &importer );
 
     BOOST_REQUIRE( plugin.Load( dxfPath ) );
-    wxRemoveFile( dxfPath );
 
     std::vector<wxString> sourceLayers = plugin.GetSourceLayers();
 

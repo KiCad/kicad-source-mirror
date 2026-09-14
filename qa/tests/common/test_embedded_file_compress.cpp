@@ -17,15 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <magic_enum.hpp>
-#include <magic_enum_iostream.hpp>
 #include <boost/test/unit_test.hpp>
-#include <mmh3_hash.h>
-#include <embedded_files.h>
+
+#include <random>
 
 #include <wx/wfstream.h>
 
-#include <random>
+#include <qa_utils/file_utils.h>
+
+#include <magic_enum.hpp>
+#include <magic_enum_iostream.hpp>
+
+#include <mmh3_hash.h>
+#include <embedded_files.h>
+
+
 using magic_enum::iostream_operators::operator<<;
 
 BOOST_AUTO_TEST_SUITE( EmbeddedFiles )
@@ -143,7 +149,8 @@ BOOST_AUTO_TEST_CASE( DecompressAndDecode_ChecksumError )
 BOOST_AUTO_TEST_CASE( ComputeFileHash_MatchesEmbeddedHash )
 {
     // Create a temp file with known content
-    wxFileName tempFile = wxFileName::CreateTempFileName( wxS( "kicad_embed_test" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_embed_test" );
+    wxFileName               tempFile = tempDir.CreateChildFileStr( "test.txt" );
     std::string data = "Test file content for hash computation";
 
     {
@@ -163,17 +170,17 @@ BOOST_AUTO_TEST_CASE( ComputeFileHash_MatchesEmbeddedHash )
     EMBEDDED_FILES::EMBEDDED_FILE* embedded = files.AddFile( tempFile, false );
     BOOST_REQUIRE( embedded != nullptr );
     BOOST_CHECK_EQUAL( computedHash, embedded->data_hash );
-
-    // Clean up
-    wxRemoveFile( tempFile.GetFullPath() );
 }
 
 
 BOOST_AUTO_TEST_CASE( ComputeFileHash_DifferentContent )
 {
     // Create two temp files with different content
-    wxFileName tempFile1 = wxFileName::CreateTempFileName( wxS( "kicad_embed_test1" ) );
-    wxFileName tempFile2 = wxFileName::CreateTempFileName( wxS( "kicad_embed_test2" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_embed_test_diff" );
+
+    wxFileName tempFile1 = tempDir.CreateChildFileStr( "file1.txt" );
+    wxFileName tempFile2 = tempDir.CreateChildFileStr( "file2.txt" );
+
     std::string data1 = "Content version 1";
     std::string data2 = "Content version 2";
 
@@ -198,10 +205,6 @@ BOOST_AUTO_TEST_CASE( ComputeFileHash_DifferentContent )
 
     // Hashes should be different
     BOOST_CHECK_NE( hash1, hash2 );
-
-    // Clean up
-    wxRemoveFile( tempFile1.GetFullPath() );
-    wxRemoveFile( tempFile2.GetFullPath() );
 }
 
 

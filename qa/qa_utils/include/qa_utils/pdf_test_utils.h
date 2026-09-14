@@ -31,11 +31,6 @@
 #include <font/stroke_font.h>
 
 /**
- * Make a temporary file path with .pdf extension using a given prefix.
- */
-wxString MakeTempPdfPath( const wxString& aPrefix );
-
-/**
  * Minimal concrete render settings suitable for plotters in tests.
  */
 class SIMPLE_RENDER_SETTINGS : public KIGFX::RENDER_SETTINGS
@@ -104,10 +99,5 @@ inline bool PdfContains( const std::string& aBuffer, const char* aNeedle )
  */
 bool RasterizePdfCountDark( const wxString& aPdfPath, int aDpi, int aNearWhiteThresh,
                             long& aOutDarkPixels );
-
-/**
- * Remove a file unless the given environment variable is set (defaults to KICAD_KEEP_TEST_PDF).
- */
-void MaybeRemoveFile( const wxString& aPath, const wxString& aEnvVar = wxT( "KICAD_KEEP_TEST_PDF" ) );
 
 #endif // QA_UTILS_PDF_TEST_UTILS_H

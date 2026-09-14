@@ -23,6 +23,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 
 // Code under test
 #include <filename_resolver.h>
@@ -39,11 +40,8 @@ BOOST_AUTO_TEST_SUITE( FilenameResolver )
 
 BOOST_AUTO_TEST_CASE( ResolveAbsoluteAndWorkingPath )
 {
-    fs::path temp = fs::temp_directory_path() / "fnres_test";
-    fs::create_directories( temp );
-
-    fs::path work = temp / "work";
-    fs::create_directories( work );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "fnres_test" );
+    fs::path work = tempDir.CreateChildDir( "work" );
 
     fs::path file = work / "model.txt";
     std::ofstream( file.string() ) << "dummy";
@@ -63,17 +61,16 @@ BOOST_AUTO_TEST_CASE( ResolveAbsoluteAndWorkingPath )
 
 BOOST_AUTO_TEST_CASE( ResolveAliasAndErrors )
 {
-    fs::path temp = fs::temp_directory_path() / "fnres_alias";
-    fs::create_directories( temp );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "fnres_alias" );
 
-    fs::path file = temp / "a.txt";
+    fs::path file = tempDir.Path() / "a.txt";
     std::ofstream( file.string() ) << "dummy";
 
     FILENAME_RESOLVER resolver;
 
     SEARCH_PATH sp;
     sp.m_Alias = wxS( "ALIAS" );
-    sp.m_Pathvar = wxString::FromUTF8( temp.string() );
+    sp.m_Pathvar = tempDir.PathStr();
     std::vector<SEARCH_PATH> paths = { sp };
     resolver.UpdatePathList( paths );
 
@@ -93,10 +90,9 @@ BOOST_AUTO_TEST_CASE( ResolveAliasAndErrors )
 // Verify that ShortenPath outputs ${ALIAS}/path and that the result round-trips through ResolvePath.
 BOOST_AUTO_TEST_CASE( ShortenPathRoundTrip )
 {
-    fs::path temp = fs::temp_directory_path() / "fnres_shorten";
-    fs::create_directories( temp );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "fnres_shorten" );
 
-    fs::path file = temp / "sub" / "model.wrl";
+    fs::path file = tempDir.Path() / "sub" / "model.wrl";
     fs::create_directories( file.parent_path() );
     std::ofstream( file.string() ) << "dummy";
 
@@ -104,7 +100,7 @@ BOOST_AUTO_TEST_CASE( ShortenPathRoundTrip )
 
     SEARCH_PATH sp;
     sp.m_Alias = wxS( "MYLIB" );
-    sp.m_Pathvar = wxString::FromUTF8( temp.string() );
+    sp.m_Pathvar = tempDir.PathStr();
     resolver.UpdatePathList( { sp } );
 
     wxString full = wxString::FromUTF8( file.string() );
@@ -124,17 +120,16 @@ BOOST_AUTO_TEST_CASE( ShortenPathRoundTrip )
 // for user-defined aliases must still resolve correctly.
 BOOST_AUTO_TEST_CASE( ResolveBackCompatColonAlias )
 {
-    fs::path temp = fs::temp_directory_path() / "fnres_colon_alias";
-    fs::create_directories( temp );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "fnres_colon_alias" );
 
-    fs::path file = temp / "model.wrl";
+    fs::path file = tempDir.Path() / "model.wrl";
     std::ofstream( file.string() ) << "dummy";
 
     FILENAME_RESOLVER resolver;
 
     SEARCH_PATH sp;
     sp.m_Alias = wxS( "MYLIB" );
-    sp.m_Pathvar = wxString::FromUTF8( temp.string() );
+    sp.m_Pathvar = tempDir.PathStr();
     resolver.UpdatePathList( { sp } );
 
     // :MYLIB:model.wrl is the legacy format produced by KiCad before e7d6c84aef
@@ -150,25 +145,25 @@ BOOST_AUTO_TEST_SUITE( SearchStack )
 
 BOOST_AUTO_TEST_CASE( RelativePathResolution )
 {
-    fs::path root = fs::temp_directory_path() / "ss_root";
-    fs::path sub = root / "sub";
-    fs::create_directories( sub );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "ss_root" );
+    fs::path sub = tempDir.CreateChildDir( "sub" );
 
     fs::path file = sub / "f.txt";
     std::ofstream( file.string() ) << "dummy";
 
     SEARCH_STACK stack;
-    stack.AddPaths( wxString::FromUTF8( root.string() ) );
+    stack.AddPaths( tempDir.PathStr() );
 
     wxString rel = stack.FilenameWithRelativePathInSearchList( wxString::FromUTF8( file.string() ),
-                                                               wxString::FromUTF8( root.string() ) );
+                                                               tempDir.PathStr() );
     BOOST_CHECK_EQUAL( rel, wxString::FromUTF8( ( fs::path( "sub" ) / "f.txt" ).string() ) );
 
-    fs::path outside = fs::temp_directory_path() / "outside.txt";
+    KI_TEST::SCOPED_TEMP_DIR outsideDir( "ss_outside" );
+    fs::path                 outside = outsideDir.Path() / "outside.txt";
     std::ofstream( outside.string() ) << "dummy";
 
     wxString full = stack.FilenameWithRelativePathInSearchList( wxString::FromUTF8( outside.string() ),
-                                                                wxString::FromUTF8( root.string() ) );
+                                                                tempDir.PathStr() );
     BOOST_CHECK_EQUAL( full, wxString::FromUTF8( outside.string() ) );
 }
 

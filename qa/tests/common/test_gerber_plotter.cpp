@@ -18,10 +18,10 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
 
 #include <string>
 
-#include <wx/filename.h>
 #include <wx/ffile.h>
 
 #include <plotters/plotter_gerber.h>
@@ -47,7 +47,9 @@ BOOST_AUTO_TEST_CASE( ZeroLengthSegmentEmitsSingleFlash )
 
     plotter.SetRenderSettings( &renderSettings );
 
-    wxString gbrPath = wxFileName::CreateTempFileName( wxT( "kicad_gbr_zero_seg" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_gbr_zero_seg" );
+    const wxString           gbrPath = tempDir.CreateChildFileStr( "plot.gbr" );
+
     BOOST_REQUIRE( !gbrPath.IsEmpty() );
     BOOST_TEST_MESSAGE( "Gerber output: " << gbrPath.ToStdString() );
     BOOST_REQUIRE( plotter.OpenFile( gbrPath ) );
@@ -94,8 +96,6 @@ BOOST_AUTO_TEST_CASE( ZeroLengthSegmentEmitsSingleFlash )
     BOOST_CHECK_MESSAGE( buffer.find( "X0Y0D02*" ) != std::string::npos
                                  && buffer.find( "X0Y0D01*" ) != std::string::npos,
                          "Expected single zero-length segment flash at origin" );
-
-    MaybeRemoveFile( gbrPath );
 }
 
 
