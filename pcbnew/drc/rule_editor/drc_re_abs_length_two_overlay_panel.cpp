@@ -26,9 +26,10 @@
 #include <eda_base_frame.h>
 #include <widgets/unit_binder.h>
 
+#include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/stattext.h>
-#include <dialogs/rule_editor_dialog_base.h> 
+#include <dialogs/rule_editor_dialog_base.h>
 
 DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
         wxWindow* aParent, DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA* aData, EDA_UNITS aUnits ) :
@@ -87,9 +88,52 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
     optLengthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
     toleranceField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
 
+    DRC_RE_FIELD_POSITION checkboxPos( 80, 300, 170, _( "Time domain (ps)" ), LABEL_POSITION::NONE,
+                                       _( "The values are picoseconds instead of a length" ) );
+
+    m_timeDomainCheckbox = static_cast<wxCheckBox*>( AddCheckbox( wxS( "time_domain" ), checkboxPos )->GetControl() );
+    m_timeDomainCheckbox->SetValue( m_data->IsTimeDomain() );
+
+    m_timeDomainCheckbox->Bind( wxEVT_CHECKBOX,
+                                [this, notifyModified]( wxCommandEvent& aEvent )
+                                {
+                                    TransferDataFromWindow();
+                                    m_data->SetTimeDomain( m_timeDomainCheckbox->GetValue() );
+                                    updateDomainUnits();
+                                    TransferDataToWindow();
+                                    notifyModified( aEvent );
+                                } );
+
+    SetMinSize( wxSize( GetMinSize().x, FromDIP( 190 ) ) );
+
     // Position all fields and update the panel layout
+    updateDomainUnits();
     PositionFields();
     TransferDataToWindow();
+}
+
+
+void DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::updateDomainUnits()
+{
+    bool timeDomain = m_data->IsTimeDomain();
+
+    for( UNIT_BINDER* binder : { m_optLengthBinder.get(), m_toleranceBinder.get() } )
+    {
+        binder->SetUnits( timeDomain ? EDA_UNITS::PS : m_unitsProvider.GetUserUnits() );
+        binder->SetDataType( timeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE );
+    }
+}
+
+
+double DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::displayToIU( double aValue ) const
+{
+    return m_data->IsTimeDomain() ? aValue * pcbIUScale.IU_PER_PS : pcbIUScale.mmToIU( aValue );
+}
+
+
+double DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::iuToDisplay( double aValue ) const
+{
+    return m_data->IsTimeDomain() ? aValue / pcbIUScale.IU_PER_PS : pcbIUScale.IUTomm( aValue );
 }
 
 
@@ -98,8 +142,8 @@ bool DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::TransferDataToWindow()
     if( !m_data )
         return false;
 
-    m_optLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetOptimumLength() ) );
-    m_toleranceBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetTolerance() ) );
+    m_optLengthBinder->ChangeDoubleValue( displayToIU( m_data->GetOptimumLength() ) );
+    m_toleranceBinder->ChangeDoubleValue( displayToIU( m_data->GetTolerance() ) );
 
     return true;
 }
@@ -110,8 +154,8 @@ bool DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::TransferDataFromWindow()
     if( !m_data )
         return false;
 
-    m_data->SetOptimumLength( pcbIUScale.IUTomm( m_optLengthBinder->GetDoubleValue() ) );
-    m_data->SetTolerance( pcbIUScale.IUTomm( m_toleranceBinder->GetDoubleValue() ) );
+    m_data->SetOptimumLength( iuToDisplay( m_optLengthBinder->GetDoubleValue() ) );
+    m_data->SetTolerance( iuToDisplay( m_toleranceBinder->GetDoubleValue() ) );
 
     return true;
 }

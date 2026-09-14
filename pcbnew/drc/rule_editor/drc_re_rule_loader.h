@@ -130,6 +130,11 @@ private:
     double toMM( int aValue );
 
     /**
+     * Convert internal time units to picoseconds.
+     */
+    double toPS( int aValue );
+
+    /**
      * Clean up a condition string after auto-generated tokens have been removed.
      * Strips empty parentheses, collapsed operators, and dangling leading/trailing operators.
      */

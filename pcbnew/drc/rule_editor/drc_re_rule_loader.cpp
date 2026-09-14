@@ -19,6 +19,7 @@
 
 #include "drc_re_rule_loader.h"
 
+#include <base_units.h>
 #include <reporter.h>
 #include <component_classes/component_class_assignment_rule.h>
 #include <drc/drc_rule_parser.h>
@@ -49,6 +50,12 @@ DRC_RULE_LOADER::DRC_RULE_LOADER()
 double DRC_RULE_LOADER::toMM( int aValue )
 {
     return aValue / 1000000.0;
+}
+
+
+double DRC_RULE_LOADER::toPS( int aValue )
+{
+    return aValue / pcbIUScale.IU_PER_PS;
 }
 
 
@@ -310,12 +317,22 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( length )
         {
-            double minMM = toMM( length->GetValue().Min() );
-            double optMM = toMM( length->GetValue().PinnedOpt() );
-            double maxMM = toMM( length->GetValue().Max() );
+            bool timeDomain = length->GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
 
-            data->SetOptimumLength( optMM );
-            data->SetTolerance( ( maxMM - minMM ) / 2.0 );
+            auto convert = [&]( int aValue )
+            {
+                return timeDomain ? toPS( aValue ) : toMM( aValue );
+            };
+
+            double min = convert( length->GetValue().Min() );
+            double max = convert( length->GetValue().Max() );
+
+            // A rule without an optimum gets the window center, so saving keeps its min and max.
+            double opt = length->GetValue().HasOpt() ? convert( length->GetValue().PinnedOpt() ) : ( min + max ) / 2.0;
+
+            data->SetTimeDomain( timeDomain );
+            data->SetOptimumLength( opt );
+            data->SetTolerance( ( max - min ) / 2.0 );
         }
 
         return data;
@@ -508,13 +525,13 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
     if( aRule.m_Condition )
         condition = aRule.m_Condition->GetExpression();
 
-    // The structured panels hold spatial values. A time domain rule does not fit, so
-    // keep it as text.
+    // Only the absolute length panel can hold time domain values.
     bool fitsStructuredPanels = true;
 
     for( const DRC_CONSTRAINT& constraint : aRule.m_Constraints )
     {
-        if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+        if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN )
+            && !( constraint.m_Type == LENGTH_CONSTRAINT && aRule.m_Constraints.size() == 1 ) )
         {
             fitsStructuredPanels = false;
             break;
