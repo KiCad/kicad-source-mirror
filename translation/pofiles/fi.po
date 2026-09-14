@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-13 16:51+0000\n"
+"PO-Revision-Date: 2026-09-14 13:51+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -3496,11 +3496,11 @@ msgstr "Koko projekti"
 
 #: common/dialogs/dialog_fields_table_base.cpp:216
 msgid "Current Sheet Only"
-msgstr "Vain nykyinen arkki"
+msgstr "Vain nykyinen sivu"
 
 #: common/dialogs/dialog_fields_table_base.cpp:216
 msgid "Current Sheet and Down"
-msgstr "Nykyinen arkki ja sen aliarkit"
+msgstr "Nykyinen sivu ja alatasot"
 
 #: common/dialogs/dialog_fields_table_base.cpp:216
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
@@ -3916,7 +3916,7 @@ msgstr "Lukittu"
 
 #: common/dialogs/dialog_group_properties_base.cpp:48
 msgid "Prevents group from being moved on canvas"
-msgstr "Estää ryhmän siirtämisen piirustuksessa"
+msgstr "Estää ryhmän siirtämisen piirtoalueella"
 
 #: common/dialogs/dialog_group_properties_base.cpp:52
 msgid "Group members:"
@@ -4172,7 +4172,7 @@ msgstr "Otsikkolohko"
 #: pcbnew/pcbnew_jobs_handler.cpp:3399
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "Virhe ladattaessa piirustusarkkia '%s'."
+msgstr "Virhe ladattaessa piirustupohjaa '%s'."
 
 #: common/dialogs/dialog_page_settings.cpp:667
 #: common/dialogs/dialog_page_settings_base.cpp:54
@@ -4786,7 +4786,7 @@ msgstr "Tekijä:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:187
 msgid "C&ommit"
-msgstr "Vah&vista"
+msgstr "&Muutos"
 
 #: common/dialogs/git/dialog_git_commit.cpp:231
 msgid "Commit message cannot be empty"
@@ -5088,14 +5088,15 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
-"Aseta piirtoalueelle mittakaava.\n"
+"Aseta piirtoalueen skaalauskerroin.\n"
 "\n"
-"Joillakin alustoilla korkean DPI: n näytöillä KiCad ei voi määrittää "
-"skaalauskerrointa. Tässä tapauksessa sinun on ehkä asetettava tämä arvoksi "
-"vastaamaan järjestelmän DPI-skaalausta. 2.0 on yhteinen arvo.\n"
+"Joillakin alustoilla KiCad ei pysty määrittämään skaalauskerrointa oikein "
+"suuritiheyksisillä (High-DPI) näytöillä. Tällöin tämä arvo on ehkä "
+"asetettava vastaamaan järjestelmän DPI-skaalausta. 2,0 on yleinen arvo.\n"
 "\n"
-"Jos tämä ei vastaa järjestelmän DPI-skaalausta, kangas ei vastaa ikkunan "
-"kokoa ja kohdistimen sijaintia."
+"Jos tämä arvo ei vastaa järjestelmän DPI-skaalausta, piirtoalueen koko ja "
+"hiiren kohdistimen sijainti eivät vastaa ikkunan kokoa ja kohdistimen "
+"sijaintia."
 
 #: common/dialogs/panel_common_settings.cpp:99
 msgid ""
@@ -5223,8 +5224,8 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
-"Jos hiiren osoitin siirretään kytkentäkaavion tai piirilevyeditorin ikkunan "
-"kankaan päälle, ikkuna nousee ylös."
+"Jos hiirenkohdistin siirretään kytkentäkaavio- tai piirilevyeditorin "
+"piirtoalueelle, kyseinen ikkuna tuodaan päällimmäiseksi."
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 msgid "Show popup indicator when toggling settings with hotkeys"
@@ -7353,7 +7354,7 @@ msgstr "Tiedostoa ei voitu avata."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1036
 msgid "Drawing sheet was not fully read."
-msgstr "Piirustusarkkia ei luettu kokonaan."
+msgstr "Piirustuspohjaa ei luettu kokonaan."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1063
 msgid "Ran out of memory."
@@ -7424,7 +7425,7 @@ msgstr "Kuva"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:122
 msgid "Error writing drawing sheet file"
-msgstr "Virhe kirjoitettaessa piirustusarkkitiedostoa"
+msgstr "Virhe kirjoitettaessa piirustuspohjatiedostoa"
 
 #: common/drawing_sheet/ds_draw_item.cpp:143
 msgid "First Page Only"
@@ -7735,7 +7736,7 @@ msgstr "Excellon Vaihtoehdot"
 #: pagelayout_editor/menubar.cpp:84 pagelayout_editor/menubar.cpp:85
 #: pagelayout_editor/pl_editor_frame.cpp:579
 msgid "Drawing Sheet Editor"
-msgstr "Piirustusarkkieditori"
+msgstr "Piirustuspohjaeditori"
 
 #: common/eda_base_frame.cpp:1715
 msgid "Packages and Updates"
@@ -8029,13 +8030,13 @@ msgstr "Nasta"
 
 #: common/eda_item.cpp:492 eeschema/sch_sheet_pin.h:96
 msgid "Sheet Pin"
-msgstr "Arkin nasta"
+msgstr "Sivunasta"
 
 #: common/eda_item.cpp:493 eeschema/dialogs/dialog_migrate_buses.cpp:118
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:41
 #: pcbnew/tools/pcb_actions.cpp:2778
 msgid "Sheet"
-msgstr "Arkki"
+msgstr "Sivu"
 
 #: common/eda_item.cpp:501
 msgid "SCH Screen"
@@ -10358,7 +10359,7 @@ msgstr "Symbolikentät"
 
 #: common/layer_id.cpp:84
 msgid "Sheet references"
-msgstr "Arkin viitteet"
+msgstr "Sivuviitteet"
 
 #: common/layer_id.cpp:85
 msgid "Net class references"
@@ -10402,28 +10403,28 @@ msgstr "Nastat"
 
 #: common/layer_id.cpp:94
 msgid "Sheet borders"
-msgstr "Arkin reunat"
+msgstr "Sivun reunat"
 
 #: common/layer_id.cpp:95
 msgid "Sheet backgrounds"
-msgstr "Arkin taustat"
+msgstr "Sivujen taustat"
 
 #: common/layer_id.cpp:96
 msgid "Sheet names"
-msgstr "Arkkien nimet"
+msgstr "Sivujen nimet"
 
 #: common/layer_id.cpp:97
 msgid "Sheet fields"
-msgstr "Arkkien kentät"
+msgstr "Sivujen kentät"
 
 #: common/layer_id.cpp:98
 msgid "Sheet file names"
-msgstr "Arkkien tiedostonimet"
+msgstr "Sivujen tiedostonimet"
 
 #: common/layer_id.cpp:99
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
 msgid "Sheet pins"
-msgstr "Arkin nastat"
+msgstr "Sivunastat"
 
 #: common/layer_id.cpp:100
 msgid "No-connect symbols"
@@ -10503,7 +10504,7 @@ msgstr "Valinnan korostus"
 
 #: common/layer_id.cpp:118 common/layer_id.cpp:150
 msgid "Drawing sheet"
-msgstr "Piirustuarkki"
+msgstr "Piirustuspohja"
 
 #: common/layer_id.cpp:120
 msgid "Operating point voltages"
@@ -10615,7 +10616,7 @@ msgstr "Ruudukko-objektit"
 
 #: common/layer_id.cpp:149
 msgid "Via stitching"
-msgstr "Läpivientien ketjutus"
+msgstr "Läpivientien pistotikkaus"
 
 #: common/layer_id.cpp:155
 msgid "Grid axes"
@@ -12250,7 +12251,7 @@ msgstr "Zoomaa Sopivaksi"
 msgid "Zoom to worksheet area if exists or edited object"
 msgstr ""
 "Zoomaa piirustuspohjan alueelle, jos sellainen on olemassa, tai muokattuun "
-"kohteeseen"
+"objektiin"
 
 #: common/tool/actions.cpp:743
 msgid "Zoom to All Objects"
@@ -12920,11 +12921,11 @@ msgstr "Signaalinimet eivät voi sisältää välilyöntejä"
 
 #: common/validators.cpp:294
 msgid "A sheet must have a name."
-msgstr "Arkilla on oltava nimi."
+msgstr "Sivulla on oltava nimi."
 
 #: common/validators.cpp:295
 msgid "A sheet must have a file specified."
-msgstr "Arkin on oltava määritetty tiedosto."
+msgstr "Sivulla täytyy olla määritetty tiedosto."
 
 #: common/validators.cpp:296
 msgid "The value of the field cannot be empty."
@@ -12977,12 +12978,12 @@ msgstr "Datalehden kenttä ei voi sisältää %s merkkiä."
 #: common/validators.cpp:364
 #, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "Arkin nimi ei voi sisältää %s merkkiä."
+msgstr "Sivun nimi ei voi sisältää %s merkkiä."
 
 #: common/validators.cpp:368
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "Arkin tiedostonimi ei voi sisältää %s merkkiä."
+msgstr "Sivun tiedostonimi ei voi sisältää %s merkkiä."
 
 #: common/validators.cpp:372
 #, c-format
@@ -14208,14 +14209,13 @@ msgstr ""
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
-"Sivuliitännälle '%s' ei löydy vastaavaa hierarkkista tunnistetta sivun "
-"sisältä"
+"Sivunasta '%s' ei löydy vastaavaa hierarkkista tunnistetta sivun sisältä"
 
 #: eeschema/connection_graph.cpp:6312
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
-"Hierarkkiselle tunnisteelle '%s' ei löydy vastaavaa sivuliitäntää yläsivulta"
+"Hierarkkiselle tunnisteelle '%s' ei löydy vastaavaa sivunastaa yläsivulta"
 
 #: eeschema/cross-probing.cpp:173
 #, c-format
@@ -14268,11 +14268,11 @@ msgstr "Koko kytkentäkaavio"
 #: eeschema/dialogs/dialog_annotate_base.cpp:46
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:50
 msgid "Current sheet only"
-msgstr "Vain nykyinen arkki"
+msgstr "Vain nykyinen sivu"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:52
 msgid "Recurse into subsheets"
-msgstr "Käy läpi aliarkit rekursiivisesti"
+msgstr "Käsittele myös alisivut"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:60
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:49
@@ -14314,12 +14314,12 @@ msgstr "Käytä ensimmäistä vapaata numeroa tämän jälkeen:"
 #: eeschema/dialogs/dialog_annotate_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:107
 msgid "First free after sheet number X 100"
-msgstr "Ensimmäinen vapaa arkinnumero X 100 jälkeen"
+msgstr "Ensimmäinen vapaa sivunumero X 100 jälkeen"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:123
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:110
 msgid "First free after sheet number X 1000"
-msgstr "Ensimmäinen vapaa arkinnumero X 1000 jälkeen"
+msgstr "Ensimmäinen vapaa sivunumero X 1000 jälkeen"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:146
 msgid "Clear Annotation"
@@ -15214,7 +15214,8 @@ msgstr "Ristivertaile valitut kohteet"
 
 #: eeschema/dialogs/dialog_erc.cpp:236
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "Korosta vastaavat kohteet kankaalla, kun ne on valittu ERC-luettelossa"
+msgstr ""
+"Korosta piirtoalueella vastaavat kohteet, kun ne on valittu ERC-luettelossa"
 
 #: eeschema/dialogs/dialog_erc.cpp:240 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Center on Cross-probe"
@@ -15492,12 +15493,12 @@ msgstr "Vie verkkolista SPICE-muodossa"
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_export_netlist.cpp:393
 msgid "Use current sheet as root"
-msgstr "Käytä nykyistä arkkia juurena"
+msgstr "Käytä nykyistä sivua pääsivuna"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 #: eeschema/dialogs/dialog_export_netlist.cpp:394
 msgid "Export netlist only for the current sheet"
-msgstr "Vie verkkolista vain nykyiselle arkille"
+msgstr "Vie verkkolista vain nykyiselle sivulle"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 #: eeschema/dialogs/dialog_sim_command_base.cpp:647
@@ -15642,8 +15643,8 @@ msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Väliarkkien viittauksen näkyvyyttä ohjataan globaalisti kohdasta "
-"Kytkentäkaavio asetukset > Yleiset> Muotoilu"
+"Sivujen välisten viitteiden näkyvyyttä ohjataan keskitetysti kohdasta "
+"Kytkentäkaavion asetukset > Yleiset > Muotoilu"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:56
@@ -15654,7 +15655,7 @@ msgstr "Mittayksikkö:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Arkin tiedostonimeä voi muokata vain Arkin ominaisuudet -dialogista."
+msgstr "Sivun tiedostonimeä voi muokata vain Sivun ominaisuudet -ikkunassa."
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:316
@@ -15845,15 +15846,15 @@ msgstr "Tunnistekentät"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
-msgstr "Arkkien otsikot"
+msgstr "Sivujen otsikot"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Other sheet fields"
-msgstr "Muut arkin kentät"
+msgstr "Muut sivujen kentät"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:66
 msgid "Sheet borders && backgrounds"
-msgstr "Arkin reunukset && taustat"
+msgstr "Sivun reunukset && taustat"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:77
@@ -16079,7 +16080,7 @@ msgstr "Lisäys määrällä:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
 msgid "All sheets"
-msgstr "Kaikki arkit"
+msgstr "Kaikki sivut"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
 msgid "Increment Annotations From"
@@ -16138,7 +16139,7 @@ msgstr "Ohjaavan tunnisteen ominaisuudet"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:106
 msgid "Hierarchical Sheet Pin Properties"
-msgstr "Hierarkkisen arkin nastan ominaisuudet"
+msgstr "Hierarkkisen sivunastan ominaisuudet"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:508
 msgid "Label can not be empty."
@@ -17483,11 +17484,11 @@ msgstr "A"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:79
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
 msgid "Plot drawing sheet"
-msgstr "Plottaa piirustusarkki"
+msgstr "Tulosta piirustuspohja"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:81
 msgid "Plot the drawing sheet border and title block"
-msgstr "Plottaa piirustusarkin reunus ja otsikkolohko"
+msgstr "Tulosta piirustuspohjan reunat ja otsikkolohko"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:90
 #: eeschema/printing/dialog_print_base.cpp:46
@@ -17919,7 +17920,7 @@ msgstr "Sisällytä &piilotetut kentät"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:99
 msgid "Search the current &sheet only"
-msgstr "Hae vain nykyisestä &arkista"
+msgstr "Etsi vain nykyisestä &sivusta"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:102
 msgid "Search the current selection &only"
@@ -18199,25 +18200,25 @@ msgstr "%s ominaisuudet"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:150
 msgid "Edit Sheet Pin Properties"
-msgstr "Muokkaa arkin nastan ominaisuuksia"
+msgstr "Muokkaa sivunastan ominaisuuksia"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
-msgstr "Arkin nastan ominaisuudet"
+msgstr "Sivunastan ominaisuudet"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:289
 #: eeschema/dialogs/dialog_sheet_properties.cpp:300
 #: eeschema/widgets/sch_properties_panel.cpp:1192
 msgid "A sheet must have a valid file name."
-msgstr "Arkilla on oltava kelvollinen tiedostonimi."
+msgstr "Sivulla on oltava kelvollinen tiedostonimi."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:336
 msgid "Use relative path for sheet file?"
-msgstr "Käytetäänkö suhteellista polkua arkin tiedostolle?"
+msgstr "Käytetäänkö suhteellista polkua sivun tiedostolle?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:337
 msgid "Sheet File Path"
-msgstr "Arkin tiedostopolku"
+msgstr "Sivun tiedostopolku"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:340
 msgid ""
@@ -18225,8 +18226,8 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
-"Suhteellisten tiedostopolkujen käyttö hierarkkisille arkeille parantaa "
-"siirrettävyyttä järjestelmien ja alustojen välillä. Absoluuttisten polkujen "
+"Suhteellisten tiedostopolkujen käyttö hierarkkisille sivuille parantaa "
+"siirrettävyyttä järjestelmien ja alustojen välillä.  Absoluuttisten polkujen "
 "käyttö voi aiheuttaa siirrettävyysongelmia."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:343
@@ -18239,7 +18240,7 @@ msgstr "Käytä absoluuttista polkua"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:385
 msgid "Untitled Sheet"
-msgstr "Nimeämätön arkki"
+msgstr "Nimeämätön sivu"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:493
 msgid "Note: item colors are overridden in the current color theme."
@@ -18276,7 +18277,7 @@ msgstr "polku"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:89
 msgid "Sheet Properties"
-msgstr "Arkin ominaisuudet"
+msgstr "Sivun ominaisuudet"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:269
 msgid "A DC source must be specified."
@@ -18689,7 +18690,7 @@ msgstr "Jännite"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:39
 #: eeschema/sim/sim_plot_tab.cpp:1600 eeschema/sim/sim_plot_tab.cpp:1736
 msgid "Current"
-msgstr "Virta"
+msgstr "Nykyinen"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:49
 #: eeschema/sim/sim_plot_tab.cpp:1505 eeschema/sim/sim_plot_tab.cpp:1527
@@ -19429,7 +19430,7 @@ msgstr "Tekstiruudun ominaisuudet"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:177 eeschema/schematic.cpp:1016
 msgid "<root sheet>"
-msgstr "<juuriarkki>"
+msgstr "<pääsivu>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:181
 #, c-format
@@ -19688,7 +19689,7 @@ msgstr "Värien esikatselu"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:444
 msgid "/path/to/sheet"
-msgstr "/polku/tiedostoon/arkki"
+msgstr "/polku/kansioon/sivulle"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
 #: pcbnew/dialogs/panel_display_options_base.cpp:158
@@ -19923,11 +19924,11 @@ msgstr "Uusien objektien oletusarvot"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:101
 msgid "Sheet border:"
-msgstr "Arkin reunus:"
+msgstr "Sivun reunat:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:110
 msgid "Sheet background:"
-msgstr "Arkin tausta:"
+msgstr "Sivun tausta:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:119
 msgid "Power symbols:"
@@ -20199,11 +20200,11 @@ msgstr "Yhteysruudukko:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:190
 msgid "Inter-sheet References"
-msgstr "Arkkien väliset viitteet"
+msgstr "Sivujen väliset viitteet"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:200
 msgid "Show inter-sheet references"
-msgstr "Näytä arkkien väliset viitteet"
+msgstr "Näytä sivujen väliset viitteet"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:209
 msgid "Show own page reference"
@@ -20868,13 +20869,12 @@ msgstr "Ladataan symbolikirjastoja"
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
-"Tiedostoa '%s' ei voi kopioida, koska uusi juuriarkkitiedosto ylikirjoittaa "
-"sen."
+"Tiedostoa ’%s’ ei voi kopioida, koska uusi pääsivun tiedosto korvaa sen."
 
 #: eeschema/eeschema_config.cpp:223
 #, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Piirrustusarkin tallennus epäonnistui '%s':%s"
+msgstr "Piirrustuspohjan tallennus epäonnistui '%s': %s"
 
 #: eeschema/eeschema_helpers.cpp:203 eeschema/files-io.cpp:382
 #: eeschema/picksymbol.cpp:130
@@ -20928,7 +20928,7 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:618
 #: eeschema/eeschema_jobs_handler.cpp:973
 msgid "Warning: duplicate sheet names.\n"
-msgstr "Varoitus: monistettu nimi arkeissa.\n"
+msgstr "Varoitus: päällekkäisiä sivujen nimiä.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:539
 msgid "Unknown netlist format.\n"
@@ -21108,8 +21108,8 @@ msgstr "Yhden tai useamman kytkentäkaavion lataaminen epäonnistui.\n"
 #: eeschema/eeschema_jobs_handler.cpp:2164
 msgid "sch merge requires each input to have a single top-level sheet\n"
 msgstr ""
-"Arkkien yhdistäminen vaatii, että jokaisella syötetiedostolla on vain yksi "
-"ylatason arkki\n"
+"Kytkentäkaavioiden yhdistäminen vaatii, että jokaisella syötteellä on vain "
+"yksi pääsivu.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2184 pcbnew/pcbnew_jobs_handler.cpp:3930
 msgid ""
@@ -21128,13 +21128,13 @@ msgid ""
 "Merge contains hierarchical sheet structure changes that sch merge cannot "
 "apply\n"
 msgstr ""
-"Yhdistys sisältää hierarkkisia arkkirakenteen muutoksia, joita arkkien "
-"yhdistäminen ei voi toteuttaa\n"
+"Yhdistäminen sisältää hierarkkisen sivurakenteen muutoksia, joita sch merge "
+"ei voi toteuttaa\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2270
 #, c-format
 msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
-msgstr "Ei voi purkaa aliarkkeja, joilla on sama perusnimi '%s'\n"
+msgstr "Alisivuja, joilla on sama perusnimi ’%s’, ei voi suoristaa.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2327
 #, c-format
@@ -31502,11 +31502,11 @@ msgstr "Ei itsenäistettävää symbolia"
 
 #: eeschema/tools/symbol_editor_control.cpp:885
 msgid "Failed to flatten symbol"
-msgstr "Symbolin tasoitus epäonnistui"
+msgstr "Symbolin itsenäistäminen epäonnistui"
 
 #: eeschema/tools/symbol_editor_control.cpp:889
 msgid "Failed to update library with flattened symbol"
-msgstr "Kirjaston päivitys tasoitetulla symbolilla epäonnistui"
+msgstr "Kirjaston päivittäminen itsenäistetyllä symbolilla epäonnistui"
 
 #: eeschema/tools/symbol_editor_control.cpp:1043
 msgid "Switch to Tab"
@@ -33527,9 +33527,8 @@ msgid "Generate a Bill of Materials (BOM)"
 msgstr "Luo materiaaliluettelo (BOM)"
 
 #: kicad/cli/command_export_bom.cpp:196
-#, fuzzy
 msgid "Input file does not exist or is not accessible\n"
-msgstr "Piirilevy-tiedostoa ei ole olemassa tai se ei ole käytettävissä\n"
+msgstr "Syötetiedostoa ei ole olemassa tai se ei ole käytettävissä.\n"
 
 #: kicad/cli/command_fp.h:31
 msgid "Footprint and Footprint Libraries"
@@ -33540,14 +33539,12 @@ msgid "Diff two .pretty footprint library directories"
 msgstr "Vertaile kahta .pretty jalanjälkikirjaston hakemistoa"
 
 #: kicad/cli/command_fp_diff.cpp:29
-#, fuzzy
 msgid "Reference .pretty directory"
-msgstr "Avaa Asetukset Hakemisto"
+msgstr "Viite .pretty kansio"
 
 #: kicad/cli/command_fp_diff.cpp:30
-#, fuzzy
 msgid "Comparison .pretty directory"
-msgstr "Projektin hakemisto"
+msgstr "Vertailtava .pretty-kansio"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
 msgid "Export utilities (svg)"
@@ -33593,9 +33590,8 @@ msgid "Convert a Gerber or Excellon file to PNG image"
 msgstr ""
 
 #: kicad/cli/command_gerber_convert_png.cpp:55
-#, fuzzy
 msgid "Resolution in DPI (default: 300)"
-msgstr "(valinnainen; oletus 0)"
+msgstr "Erotuskyky muodossa DPI (oletus: 300)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:61
 msgid "Output width in pixels (overrides DPI)"
@@ -33615,9 +33611,9 @@ msgid "Fail on any parse warnings or errors"
 msgstr ""
 
 #: kicad/cli/command_gerber_convert_png.cpp:80
-#, fuzzy
 msgid "Units for viewport parameters, options: mm, inch, mils (default: mm)"
-msgstr "Lähtöyksiköt, hyväksytyt vaihtoehdot: mm, tuuma"
+msgstr ""
+"Näkymäalueen parametrien yksiköt, vaihtoehdot: mm, inch, mils (oletus: mm)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:86
 msgid "Viewport origin X"
@@ -33848,9 +33844,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_mergetool.cpp:94
-#, fuzzy
 msgid "'Ours' file"
-msgstr "Kohdetiedosto"
+msgstr "'Meidän' -tiedosto"
 
 #: kicad/cli/command_mergetool.cpp:98
 msgid "'Theirs' file"
@@ -35704,9 +35699,8 @@ msgid "Import PADS Project Files"
 msgstr "Tuo PADS-projektitiedostoja"
 
 #: kicad/import_project.cpp:231
-#, fuzzy
 msgid "Import gEDA / Lepton EDA Project Files"
-msgstr "Tuo Eagle Projektitiedostot"
+msgstr "Tuo gEDA- / Lepton EDA -projektitiedostoja"
 
 #: kicad/import_project.cpp:239
 msgid "Import DipTrace Project Files"
@@ -35817,9 +35811,9 @@ msgid "Error opening jobs file"
 msgstr "Virhe avattaessa työtiedostoa"
 
 #: kicad/kicad_manager_frame.cpp:931 kicad/kicad_manager_frame.cpp:1298
-#, fuzzy, c-format
+#, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
-msgstr "Piirilevy '%s' on jo avattuna '%s' kohteessa '%s'."
+msgstr "Projekti '%s' on jo avattu käyttäjän '%s' toimesta kohteessa '%s'."
 
 #: kicad/kicad_manager_frame.cpp:974
 msgid ""
@@ -35828,9 +35822,8 @@ msgid ""
 msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:976
-#, fuzzy
 msgid "Recover Unsaved Changes"
-msgstr "Peru Muutokset"
+msgstr "Palauta tallentamattomat muutokset"
 
 #: kicad/kicad_manager_frame.cpp:978
 msgid ""
@@ -35867,9 +35860,8 @@ msgid "Restoring '%s'"
 msgstr "Palautetaan '%s'"
 
 #: kicad/local_history_pane.cpp:110
-#, fuzzy
 msgid "Moments ago"
-msgstr "Kommentit"
+msgstr "Hetki sitten"
 
 #: kicad/local_history_pane.cpp:115
 #, c-format
@@ -35882,9 +35874,8 @@ msgid "%d hours ago"
 msgstr ""
 
 #: kicad/local_history_pane.cpp:179
-#, fuzzy
 msgid "Restore Commit"
-msgstr "Viimeisin Commit"
+msgstr "Palauta versio (Commit)"
 
 #: kicad/menubar.cpp:60
 msgid "Clear Recent Projects"
@@ -35899,9 +35890,8 @@ msgid "Altium Project..."
 msgstr "Altium-projekti..."
 
 #: kicad/menubar.cpp:123
-#, fuzzy
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Tuo CADSTAR-arkistokaavio ja piirilevy (* .csa, * .cpa)"
+msgstr "Tuo Altium-kytkentäkaavio ja -piirilevy (*.PrjPcb)"
 
 #: kicad/menubar.cpp:126
 msgid "CADSTAR Project..."
@@ -35940,36 +35930,32 @@ msgid "PADS Project..."
 msgstr "PADS-projekti..."
 
 #: kicad/menubar.cpp:146
-#, fuzzy
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
-msgstr "Tuo CADSTAR-arkistokaavio ja piirilevy (* .csa, * .cpa)"
+msgstr "Import PADS Logic kytkentäkaavio ja PADS ASCII PCB (*.asc, *.txt)"
 
 #: kicad/menubar.cpp:149
 msgid "P-CAD Project..."
 msgstr "P-CAD-projekti..."
 
 #: kicad/menubar.cpp:150
-#, fuzzy
 msgid "Import P-CAD ASCII schematic and board"
-msgstr "Tuo EAGLE CAD XML kytkentäkaavio ja piirilevy"
+msgstr "Import P-CAD ASCII kytkentäkaavio ja piirilevy"
 
 #: kicad/menubar.cpp:153
 msgid "gEDA / Lepton EDA Project..."
 msgstr "gEDA / Leptron EDA -projekti..."
 
 #: kicad/menubar.cpp:154
-#, fuzzy
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
-msgstr "Tuo EAGLE CAD XML kytkentäkaavio ja piirilevy"
+msgstr "Tuo gEDA tai Lepton EDA -kytkentäkaavio ja -piirilevyasettelu"
 
 #: kicad/menubar.cpp:158
 msgid "DipTrace Project..."
 msgstr "DipTrace projekti..."
 
 #: kicad/menubar.cpp:159
-#, fuzzy
 msgid "Import DipTrace schematic and PCB (*.dch, *.dip)"
-msgstr "Tuo CADSTAR-arkistokaavio ja piirilevy (* .csa, * .cpa)"
+msgstr "Tuo DipTrace-kytkentäkaavio ja -piirilevy (*.dch, .dip)"
 
 #: kicad/menubar.cpp:163
 msgid "OrCAD Project..."
@@ -35980,19 +35966,16 @@ msgid "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
 msgstr ""
 
 #: kicad/menubar.cpp:193
-#, fuzzy
 msgid "Edit Advanced Config..."
-msgstr "Muokkaa edistyksellisiä asetuksia..."
+msgstr "Muokkaa lisäasetuksia..."
 
 #: kicad/menubar.cpp:194
-#, fuzzy
 msgid "Edit advanced settings"
-msgstr "Sivun asetukset"
+msgstr "Muokkaa lisäasetuksia"
 
 #: kicad/menubar.cpp:244
-#, fuzzy
 msgid "Compare Project Branches..."
-msgstr "Commit_projekti..."
+msgstr "Vertaa projektin haaroja..."
 
 #: kicad/menubar.cpp:245
 msgid "Review the file changes between two git refs in the current project"
@@ -36007,9 +35990,8 @@ msgid "Edit local file in text editor"
 msgstr "Muokkaa paikallista tiedostoa tekstieditorissa"
 
 #: kicad/mergetool_frame.cpp:61 kicad/mergetool_frame.cpp:90
-#, fuzzy
 msgid "KiCad Merge Tool"
-msgstr "Mittaustyökalu"
+msgstr "KiCad-yhdistämistyökalu"
 
 #: kicad/mergetool_frame.cpp:86
 #, c-format
@@ -36027,9 +36009,8 @@ msgid "Fully qualified repository url:"
 msgstr "Versionhallintavaraston täydellinen verkko-osoite:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
-#, fuzzy
 msgid "Add Repository"
-msgstr "Lisää ohjelmistokirjasto"
+msgstr "Lisää laajennusvarasto"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
 msgid "Add repository"
@@ -36117,9 +36098,8 @@ msgstr ""
 "muutokset?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:289
-#, fuzzy
 msgid "-- All repositories --"
-msgstr "Git-ohjelmistovarastot"
+msgstr "-- Kaikki tietovarastot --"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:339
 msgid "Install Package"
@@ -36268,9 +36248,8 @@ msgid "Save Package"
 msgstr "Tallenna paketti"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:546
-#, fuzzy
 msgid "Download Package"
-msgstr "Ladataan pakettia"
+msgstr "Lataa paketti"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:562
 msgid ""
@@ -36544,14 +36523,14 @@ msgid "Could not open the template path '%s'"
 msgstr "Ei voitu avata mallin polkua '%s'"
 
 #: kicad/project_template.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected 'meta' directory at '%s'"
-msgstr "Hakemistoa '%s' ei voitu luoda"
+msgstr "Odotettua metadataa ei löytynyt kansiosta '%s"
 
 #: kicad/project_template.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected meta HTML file at '%s'"
-msgstr "Kirjastotiedostoa %s ei löydy"
+msgstr "Odotettua metadataa ei löytynyt HTML -tiedostosta '%s'"
 
 #: kicad/project_template.cpp:347
 #, c-format
@@ -36575,9 +36554,8 @@ msgid "Unable to rename file ... "
 msgstr "Uudelleennimeäminen ei onnistu... "
 
 #: kicad/project_tree_item.cpp:143
-#, fuzzy
 msgid "Permission denied"
-msgstr "Lupa evätty"
+msgstr "Käyttöoikeus evätty"
 
 #: kicad/project_tree_item.cpp:162
 #, c-format
@@ -36694,18 +36672,16 @@ msgid "Initialize a new repository"
 msgstr "Alusta uusi arkisto"
 
 #: kicad/project_tree_pane.cpp:1037
-#, fuzzy
 msgid "Configure Default Remote..."
-msgstr "Määritä Polut..."
+msgstr "Määritä oletusarvoinen etäarkisto..."
 
 #: kicad/project_tree_pane.cpp:1038
 msgid "Set or change the default remote URL and credentials"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1041
-#, fuzzy
 msgid "Commit Project..."
-msgstr "Commit_projekti..."
+msgstr "Tee versiotallennus projektille..."
 
 #: kicad/project_tree_pane.cpp:1042 kicad/project_tree_pane.cpp:1069
 msgid "Commit changes to the local repository"
@@ -36733,9 +36709,9 @@ msgid "Push %s to %s"
 msgstr "Puske %s kohteeseen %s"
 
 #: kicad/project_tree_pane.cpp:1055
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
-msgstr "alkaen %s"
+msgstr "Nouda kohteesta %s"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Push committed local changes to remote repository"
@@ -36746,9 +36722,8 @@ msgid "Pull changes from remote repository into local"
 msgstr "Vedä muutokset etätietovarastosta paikalliseen"
 
 #: kicad/project_tree_pane.cpp:1068
-#, fuzzy
 msgid "Commit File..."
-msgstr "Toimita tiedosto..."
+msgstr "Tee versiotallennus tiedostolle..."
 
 #: kicad/project_tree_pane.cpp:1083
 msgid "Switch to branch "
@@ -36767,18 +36742,16 @@ msgid "Switch to Branch"
 msgstr "Vaihda haaraan"
 
 #: kicad/project_tree_pane.cpp:1098
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Ota Git-seuranta käyttöön"
+msgstr "Ota Git-Integraatio käyttöön"
 
 #: kicad/project_tree_pane.cpp:1099
 msgid "Re-enable Git integration for this project"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1103
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Ota Git-seuranta käyttöön"
+msgstr "Poista Git-Integraatio käytöstä"
 
 #: kicad/project_tree_pane.cpp:1104
 msgid "Disable Git integration for this project"
@@ -36798,9 +36771,8 @@ msgid "Please wait"
 msgstr "Odota hetki"
 
 #: kicad/project_tree_pane.cpp:1726
-#, fuzzy
 msgid "Closing project..."
-msgstr "Commit_projekti..."
+msgstr "Suljetaan projektia..."
 
 #: kicad/project_tree_pane.cpp:1743
 msgid ""
@@ -36809,27 +36781,22 @@ msgid ""
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1745
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "Etenemisviive"
+msgstr "Git-toiminto viivästyy"
 
 #: kicad/project_tree_pane.cpp:1747
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "Säilytä huomatukset"
+msgstr "Jatka odottamista"
 
 #: kicad/project_tree_pane.cpp:1747
-#, fuzzy
 msgid "Abandon"
-msgstr "Satunnainen"
+msgstr "Hylkää"
 
 #: kicad/project_tree_pane.cpp:1930
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Valittu hakemisto on jo git-projekti."
+msgstr "Valittu kansio on jo Git-projekti."
 
 #: kicad/project_tree_pane.cpp:1937
-#, fuzzy
 msgid "Failed to initialize Git project."
 msgstr "Git-projektin alustaminen epäonnistui."
 
@@ -36843,14 +36810,12 @@ msgstr "Etätietovaraston oletuksen asettaminen epäonnistui."
 
 #: kicad/project_tree_pane.cpp:1987 kicad/project_tree_pane.cpp:2089
 #: kicad/project_tree_pane.cpp:2188
-#, fuzzy
 msgid "Fetch Remote"
-msgstr "Noudetaan etätietovarastosta"
+msgstr "Nouda etävarastosta"
 
 #: kicad/project_tree_pane.cpp:2032
-#, fuzzy
 msgid "Configure Default Remote"
-msgstr "Aseta oletus etävarasto"
+msgstr "Määritä oletusarvoinen etävarasto"
 
 #: kicad/project_tree_pane.cpp:2048
 msgid "Failed to configure remote."
@@ -36861,9 +36826,9 @@ msgid "Already up to date."
 msgstr "Jo ajan tasalla."
 
 #: kicad/project_tree_pane.cpp:2102
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
-msgstr "Ratkaistu lämpöpinnan leveys: %s."
+msgstr "On jo ajan tasalla kohteen %s kanssa."
 
 #: kicad/project_tree_pane.cpp:2108
 msgid "Pulled changes (fast-forward)."
@@ -36893,9 +36858,8 @@ msgid ""
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2129
-#, fuzzy
 msgid "Pull Conflict"
-msgstr "Ristiriidat"
+msgstr "Noutoristiriita"
 
 #: kicad/project_tree_pane.cpp:2132
 msgid "&Use Remote (discard my changes)"
@@ -36906,18 +36870,16 @@ msgid "&Rebase"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2139
-#, fuzzy
 msgid "Reset to the remote version."
-msgstr "Palauta nykyiseen kulmaan vertailupaikasta."
+msgstr "Palauta etävaraston versioon."
 
 #: kicad/project_tree_pane.cpp:2141
 msgid "Failed to reset to remote"
 msgstr "Etäversion palauttaminen epäonnistui"
 
 #: kicad/project_tree_pane.cpp:2148
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "Muutosten työntäminen etätietovarastoon epäonnistui."
+msgstr "Omat muutokset siirretty etäversion päälle."
 
 #: kicad/project_tree_pane.cpp:2150
 msgid "Could not rebase"
@@ -36960,9 +36922,8 @@ msgid "Force Push?"
 msgstr "Pakota puskeminen?"
 
 #: kicad/project_tree_pane.cpp:2220
-#, fuzzy
 msgid "&Force Push"
-msgstr "Pakota koko A"
+msgstr "&Pakota lähetys"
 
 #: kicad/project_tree_pane.cpp:2229
 msgid "Push failed."
@@ -36973,9 +36934,8 @@ msgid "Failed to push project"
 msgstr "Projektin työntäminen epäonnistui"
 
 #: kicad/project_tree_pane.cpp:2592 kicad/project_tree_pane.cpp:2801
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Valittu hakemisto on jo git-projekti."
+msgstr "Valittu kansio ei ole Git-projekti."
 
 #: kicad/project_tree_pane.cpp:2629
 #, c-format
@@ -36989,19 +36949,16 @@ msgstr ""
 "Tallennetaanko ne ennen muutosten vahvistusta?"
 
 #: kicad/project_tree_pane.cpp:2632 kicad/project_tree_pane.cpp:2918
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "Peru Muutokset"
+msgstr "Tallentamattomat muutokset"
 
 #: kicad/project_tree_pane.cpp:2635
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Tallenna ja poistu"
+msgstr "&Tallenna ja vahvista versio"
 
 #: kicad/project_tree_pane.cpp:2635
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s tehdäksesi muutokset joka tapauksessa.)"
+msgstr "Pakota &vahvistus"
 
 #: kicad/project_tree_pane.cpp:2652 kicad/project_tree_pane.cpp:2938
 #, c-format
@@ -37030,9 +36987,8 @@ msgid "Amend Published Commit?"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2876 kicad/project_tree_pane.cpp:2921
-#, fuzzy
 msgid "Amend &Anyway"
-msgstr "Lisää joka tapauksessa"
+msgstr "Pakota &korjaus"
 
 #: kicad/project_tree_pane.cpp:2915
 #, c-format
@@ -37046,19 +37002,16 @@ msgstr ""
 "Tallennetaanko ne ennen commitin muokkaamista?"
 
 #: kicad/project_tree_pane.cpp:2921
-#, fuzzy
 msgid "&Save and Amend"
-msgstr "Tallenna levytiedosto"
+msgstr "&Tallenna ja korjaa"
 
 #: kicad/project_tree_pane.cpp:3060
-#, fuzzy
 msgid "Amend Last Commit"
-msgstr "Viimeisin Commit"
+msgstr "Korjaa viimeisin Commit"
 
 #: kicad/project_tree_pane.cpp:3069
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Hylätään muutos tyhjän toimitusviestin vuoksi."
+msgstr "Korjaus peruutettiin, koska tallennuksen kuvausteksti oli tyhjä."
 
 #: kicad/project_tree_pane.cpp:3150
 msgid "Fetched from remote."
@@ -37163,14 +37116,12 @@ msgid "Unarchive project files from zip archive"
 msgstr "Pura projektitiedostot zip-arkistosta"
 
 #: kicad/tools/kicad_manager_actions.cpp:223
-#, fuzzy
 msgid "Reveal Project in Finder"
-msgstr "Paljastaa projektikansio Finderissa"
+msgstr "Näytä projekti Finderissa"
 
 #: kicad/tools/kicad_manager_actions.cpp:224
-#, fuzzy
 msgid "Open project folder in Finder"
-msgstr "Paljastaa projektikansio Finderissa"
+msgstr "Avaa projektikansio Finderissa"
 
 #: kicad/tools/kicad_manager_actions.cpp:226
 msgid "Browse Project Files"
@@ -37181,14 +37132,12 @@ msgid "Open project directory in file explorer"
 msgstr "Avaa projektihakemisto resurssienhallinnassa"
 
 #: kicad/tools/kicad_manager_actions.cpp:235
-#, fuzzy
 msgid "Restore project files from local history"
-msgstr "Pura projektitiedostot zip-arkistosta"
+msgstr "Palauta projektitiedostot paikallisesta historiasta"
 
 #: kicad/tools/kicad_manager_actions.cpp:242
-#, fuzzy
 msgid "Show or hide local history panel"
-msgstr "Näytä tai piilota tämä kerros"
+msgstr "Näytä tai piilota paikallisen historian paneeli"
 
 #: kicad/tools/kicad_manager_control.cpp:82
 msgid "Create New Project"
@@ -37237,9 +37186,8 @@ msgid "Clone Project from Git Repository"
 msgstr "Kloonaa projekti Git-arkistosta"
 
 #: kicad/tools/kicad_manager_control.cpp:420
-#, fuzzy
 msgid "Clone Repository"
-msgstr "Kloonausvarasto"
+msgstr "Kloonaa etäarkisto"
 
 #: kicad/tools/kicad_manager_control.cpp:433
 msgid "No project files were found in the repository."
@@ -37266,15 +37214,15 @@ msgid "Save Project To"
 msgstr "Tallenna projekti kohteeseen"
 
 #: kicad/tools/kicad_manager_control.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Please make sure you have sufficient permissions."
 msgstr ""
-"Hakemistoa '%s' ei voitu luoda.\n"
+"Kansiota '%s' ei voitu luoda.\n"
 "\n"
-"Varmista, että sinulla on kirjoitusoikeudet ja yritä uudelleen."
+"Varmista, että sinulla on vaadittavat käyttöoikeudet ja yritä uudelleen."
 
 #: kicad/tools/kicad_manager_control.cpp:748
 msgid "Create (or open) a project to edit a schematic."
@@ -37315,9 +37263,8 @@ msgid "Success"
 msgstr "Onnistui"
 
 #: libs/kiplatform/include/printing.h:49
-#, fuzzy
 msgid "Cancelled"
-msgstr "Peru"
+msgstr "Peruutettu"
 
 #: libs/kiplatform/include/printing.h:50
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:684
@@ -37457,9 +37404,8 @@ msgid "(paper size)"
 msgstr "(paperikoko)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
-#, fuzzy
 msgid "Item Type"
-msgstr "Muuta Kohdetyyppi"
+msgstr "Kohteen tyyppi"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
@@ -37596,9 +37542,9 @@ msgid "The current drawing sheet has been modified. Save changes?"
 msgstr "Nykyistä piirustusarkkia on muutettu. Tallennetaako muutokset?"
 
 #: pagelayout_editor/files.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' loaded"
-msgstr "Tiedosto \"%s\" ladattu"
+msgstr "Tiedosto '%s' on ladattu"
 
 #: pagelayout_editor/files.cpp:128
 msgid "Append Existing Drawing Sheet"
@@ -37610,9 +37556,9 @@ msgid "Unable to load %s file"
 msgstr "Tiedostoa %s ei voi ladata"
 
 #: pagelayout_editor/files.cpp:148
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' inserted"
-msgstr "Tiedosto \"%s\" lisätty"
+msgstr "Tiedosto \"%s\" on lisätty"
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
@@ -37710,23 +37656,20 @@ msgstr ""
 "jotka eivät ole kaikilla sivuilla, näytetään"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:177
-#, fuzzy
 msgid "Origin selector"
-msgstr "Tulosta valitut"
+msgstr "Nollapisteen valitsin"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:178
 msgid "Select the origin of the status bar coordinates"
 msgstr "Valitse tilarivin koordinaattien lähtöpiste"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:181
-#, fuzzy
 msgid "Page selector"
-msgstr "Tason valinta"
+msgstr "Sivun valitsin"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:182
-#, fuzzy
 msgid "Select the page to simulate item displays"
-msgstr "Valitse elementtien näyttöominaisuuksia"
+msgstr "Valitse sivu, jolla simuloidaan kohteiden näyttämistä"
 
 #: pagelayout_editor/tools/pl_actions.cpp:68
 msgid "Place Bitmaps"
@@ -38276,7 +38219,6 @@ msgid "Overvoltage category:"
 msgstr "Ylijänniteluokka:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -38291,18 +38233,18 @@ msgid ""
 "OVC IV: Equipment at the origin of the installation (eg: electricity meters, "
 "primary overcurrent protection devices)"
 msgstr ""
-"OVC I: Laitteet, joissa ei ole suoraa yhteyttä verkkovirtaan\n"
+"OVC I: Laitteet, joilla ei ole suoraa yhteyttä sähköverkkoon.\n"
 "\n"
-"OVC II: Energiaa kuluttavat laitteet, jotka toimitetaan kiinteästä "
-"asennuksesta. (esim. kodinkoneet, kannettavat työkalut, kodin kuormat). "
-"OVCIII:a sovelletaan, jos on luotettavuus- ja käytettävyysvaatimuksia\n"
+"OVC II: Kiinteästä asennuksesta syötettävät sähkönkulutuslaitteet (esim. "
+"kodinkoneet, kannettavat työkalut, kotitalouskuormat).  OVC III -kategoriaa "
+"sovelletaan, jos laitteelta vaaditaan erityistä luotettavuutta ja "
+"käytettävyyttä.\n"
 "\n"
-"OVC III : Kiinteässä asennuksessa olevat laitteet, joilla on luotettavuus- "
-"ja käytettävyysvaatimukset. (esim.: sähkökytkimet, teollisuuskäyttöön "
-"tarkoitetut laitteet)\n"
+"OVC III:  Kiinteiden asennusten laitteet, joilta vaaditaan luotettavuutta ja "
+"käytettävyyttä (esim. sähkökytkimet, teollisuuslaitteet)\n"
 "\n"
-"OVC IV: Laitteet asennuksen alussa (esim. sähkömittarit, ensisijaiset "
-"ylivirtasuojalaitteet)"
+"OVC IV: Sähköasennuksen liittymiskohdan laitteet (esim. sähkömittarit, "
+"ensiöpuolen ylivirtasuojalaitteet)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
@@ -38435,7 +38377,6 @@ msgid "Pollution Degree:"
 msgstr "Saastumisaste:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
-#, fuzzy
 msgid ""
 "PD1: No pollution or only dry, non-conductive pollution occurs\n"
 "\n"
@@ -38592,9 +38533,8 @@ msgid "B4"
 msgstr "B4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:81
-#, fuzzy
 msgid "B5"
-msgstr "5"
+msgstr "B5"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:82
 msgid "A6"
@@ -38605,9 +38545,8 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:84
-#, fuzzy
 msgid "A8"
-msgstr "A"
+msgstr "A8"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:100
 msgid "0 .. 15 V"
@@ -38739,9 +38678,8 @@ msgid "Gold"
 msgstr "Kulta"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:101
-#, fuzzy
 msgid "Stainless steel 316L"
-msgstr "Ruostumaton teräs 18-9"
+msgstr "Ruostumaton teräs 316L"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
@@ -38752,9 +38690,8 @@ msgid "Indium"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
-#, fuzzy
 msgid "Titanium, passive"
-msgstr "Titaani"
+msgstr "Titaani, passivoitunut"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:117
 msgid "Stainless steel 18-9"
@@ -38781,9 +38718,8 @@ msgid "Nickel"
 msgstr "Nikkeli"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:141
-#, fuzzy
 msgid "Carbon (Graphitic)"
-msgstr "Siivoa Grafiikat"
+msgstr "Hiili (grafiitti)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:145
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:893
@@ -38849,14 +38785,12 @@ msgid "Carbon steel"
 msgstr "Hiiliteräs"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:205
-#, fuzzy
 msgid "Aluminium, chromated"
-msgstr "Alumiini"
+msgstr "Alumiini, kromattu"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:209
-#, fuzzy
 msgid "Aluminium, pure, passive"
-msgstr "Alumiini-Kupari"
+msgstr "Alumiini, puhdas, passivoitunut"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:213
 msgid "Cadmium"
@@ -39012,9 +38946,9 @@ msgid "Remove Regulator"
 msgstr "Poista Regulaattori"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:404
-#, fuzzy
 msgid "Vout must be greater than Vref"
-msgstr "Voutin on oltava suurempi kuin vref"
+msgstr ""
+"Ulostulojännitteen (Vout) on oltava suurempi kuin vertailujännitteen (Vref)"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:410
 msgid "Vref set to 0 !"
@@ -39346,9 +39280,8 @@ msgid "Stripline"
 msgstr "Liuskalinja"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
-#, fuzzy
 msgid "Coupled Stripline"
-msgstr "Yhdistetty Miksoliuska Linja"
+msgstr "Yhdistetty liuskajohto"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coplanar wave guide"
@@ -39379,9 +39312,8 @@ msgid "Substrate Parameters"
 msgstr "Alustan parametrit"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:46
-#, fuzzy
 msgid "Dielectric model:"
-msgstr "Dielektriset häviöt:"
+msgstr "Eristemalli:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:50
 msgid "Constant (εr, tan δ)"
@@ -39392,18 +39324,16 @@ msgid "Djordjevic-Sarkar causal"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:62
-#, fuzzy
 msgid "Soldermask present"
-msgstr "Juotosmaski"
+msgstr "Juotosmaski käytössä"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:65
 msgid "Mask fills gaps"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
-#, fuzzy
 msgid "Mask thickness:"
-msgstr "Johtimen paksuus:"
+msgstr "Maskin paksuus:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:85
 msgid "µm"
@@ -39469,9 +39399,8 @@ msgid "Frequency:"
 msgstr "Taajuus:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:277
-#, fuzzy
 msgid "Spec frequency:"
-msgstr "Pysäytystaajuus:"
+msgstr "Mittaustaajuus:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:314
 msgid "Physical Parameters"
@@ -39594,11 +39523,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Thermal resistance:"
-msgstr "Lämmönkestävyys:"
+msgstr "Lämpövastus:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:264
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr "Lämmönjohtavuusarvon 401 wattia / (metri-Kelvin) käyttö"
+msgstr "Käytetään lämmönjohtavuuden arvoa 401 W/(m·K)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:272
 msgid "deg C/W"
@@ -40148,9 +40077,8 @@ msgstr "Efektiivinen %s:"
 #: pcb_calculator/transline_ident.cpp:172
 #: pcb_calculator/transline_ident.cpp:207
 #: pcb_calculator/transline_ident.cpp:405
-#, fuzzy
 msgid "Unit propagation delay:"
-msgstr "Etenemisviive:"
+msgstr "Etenemisviive pituutta kohti:"
 
 #: pcb_calculator/transline_ident.cpp:130
 #: pcb_calculator/transline_ident.cpp:173
@@ -40659,9 +40587,8 @@ msgid "Value must be between %.3f and %.3f."
 msgstr "Arvon on oltava %.3f ja %.3f välillä."
 
 #: pcbnew/board_design_settings.cpp:1579
-#, fuzzy
 msgid "Value must be between 0 and 99."
-msgstr "Tekstin leveyden on oltava %s ja %s välillä."
+msgstr "Arvon on oltava väliltä 0–99."
 
 #: pcbnew/board_design_settings.cpp:1610 pcbnew/board_design_settings.cpp:1618
 msgid "Value must be greater than or equal to 0."
@@ -40694,9 +40621,9 @@ msgid "Cannot save board '%s': %s"
 msgstr "Levyä ei voi tallentaa '%s': %s"
 
 #: pcbnew/board_loader.cpp:204
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected error saving board '%s': %s"
-msgstr "Virhe ladattaessa piirilevyä '%s': %s"
+msgstr "Odottamaton virhe tallennettaessa piirilevyä '%s': %s"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:389
 #, c-format
@@ -40993,7 +40920,7 @@ msgstr "Dielektrinen malli"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Board thickness from stackup:"
-msgstr "Levyn paksuus kerrosrakenteesta:"
+msgstr "Piirilevyn paksuus kerrosrakenteesta:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:158
 msgid "Adjust Dielectric Thickness"
@@ -41622,9 +41549,9 @@ msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:1411
-#, fuzzy, c-format
+#, c-format
 msgid "Component pads differ between %s and %s."
-msgstr "Tekstin leveyden on oltava %s ja %s välillä."
+msgstr "Komponentin anturat eroavat kohteiden %s ja %s välillä."
 
 #: pcbnew/constraints/constraint_builder.cpp:277
 #, c-format
@@ -42277,9 +42204,8 @@ msgstr "Pituudensäätökuviot"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:205
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:87
-#, fuzzy
 msgid "Tuning Profiles"
-msgstr "Viritystila"
+msgstr "Viritysprofiilit"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:227
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -42308,9 +42234,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:381 pcbnew/files.cpp:556
 #: pcbnew/tools/pcb_control.cpp:2174
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:185
-#, fuzzy
 msgid "Load PCB"
-msgstr "Ladataan piirilevyä"
+msgstr "Lataa piirilevy"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:404
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:201
@@ -42335,24 +42260,20 @@ msgid "Units:"
 msgstr "Yksiköt:"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:56
-#, fuzzy
 msgid "Include Fields"
-msgstr "Sisällytä piilotetut kentät"
+msgstr "Sisällytä kentät"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:70
-#, fuzzy
 msgid "Loss tangent"
 msgstr "Häviötangentti"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:73
-#, fuzzy
 msgid "Board finish"
-msgstr "Piirilevyn pinnoite"
+msgstr "Piirilevyn pintakäsittely"
 
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:76
-#, fuzzy
 msgid "Board options"
-msgstr "Piirilevyn vaihtoehdot"
+msgstr "Piirilevyasetukset"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:128
 #: pcbnew/dialogs/dialog_render_job_base.cpp:43
@@ -42372,18 +42293,16 @@ msgid "Min track clearance:"
 msgstr "Pienin johtimen välys:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Min track width:"
-msgstr "Pienin raideleveys:"
+msgstr "Johdinraitojen vähimmäisleveys:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
 msgid "Min drill diameter:"
 msgstr "Porauksen pienin halkaisija:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Board stackup thickness:"
-msgstr "Piirilevyn paksuus:"
+msgstr "Piirilevyn kerrosrakenteen paksuus:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
 msgid "Front footprint area:"
@@ -42583,23 +42502,20 @@ msgstr "Siisti Johtimet ja Läpiviennit"
 #: pcbnew/dialogs/dialog_constraint_list_base.h:48
 #: pcbnew/menubar_pcb_editor.cpp:348 pcbnew/pcb_edit_frame.cpp:413
 #: pcbnew/tools/pcb_actions.cpp:277
-#, fuzzy
 msgid "Geometric Constraints"
-msgstr "Rajoitteet"
+msgstr "Geometriset rajoitteet"
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:105
 msgid "Enter an arc angle between 0 and 360 degrees."
 msgstr "Anna kaaren kulmaksi arvo väliltä 0–360 astetta."
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:120
-#, fuzzy
 msgid "Enter a value greater than zero."
-msgstr "Viivan leveyden on oltava suurempi kuin nolla."
+msgstr "Syötä nollaa suurempi arvo."
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:148
-#, fuzzy
 msgid "Edit Geometric Constraint"
-msgstr "Suhteelliset dielektriset vakiot"
+msgstr "Muokkaa geometrista rajoitetta"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.cpp:36
 msgid "Driving (locks the geometry)"
@@ -42658,9 +42574,8 @@ msgid "No layer selected."
 msgstr "Kerrosta ei ole valittu."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Open Zone Manager..."
-msgstr "Avaa aluemuokkaaja..."
+msgstr "Avaa alueiden hallinta..."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:62
 msgid "Copper Zone Properties"
@@ -42734,9 +42649,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array.cpp:561
-#, fuzzy
 msgid "Confirm Array"
-msgstr "Vahvista"
+msgstr "Vahvista taulukko"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:584
 msgid "Bad parameters"
@@ -42837,7 +42751,6 @@ msgid "Centre on source items"
 msgstr "Keskitä lähdekohteisiin"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#, fuzzy
 msgid "Renumber pads"
 msgstr "Numeroi anturat uudelleen"
 
@@ -42936,14 +42849,12 @@ msgid "Full circle"
 msgstr "Täysi ympyrä"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:361
-#, fuzzy
 msgid "Clockwise"
-msgstr "Käännä Myötäpäivään"
+msgstr "Myötäpäivään"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:361
-#, fuzzy
 msgid "Anti-clockwise"
-msgstr "Käännä Myötäpäivään"
+msgstr "Vastapäivään"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:363
 msgid "Direction"
@@ -42970,9 +42881,8 @@ msgid "How many items in the array."
 msgstr "Kuinka monta kohdetta taulukossa."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:398
-#, fuzzy
 msgid "First item angle:"
-msgstr "Suodata kohteet verkon(net) mukaan:"
+msgstr "Ensimmäisen kohteen kulma:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:403
 msgid "Angle offset of the first item in the array"
@@ -43005,20 +42915,17 @@ msgid "Circular Array"
 msgstr "Ympyrätaulukko"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:497
-#, fuzzy
 msgid "Item Source"
-msgstr "Lähde"
+msgstr "Kohteiden lähde"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:499
-#, fuzzy
 msgid "Duplicate selection"
-msgstr "Lehden nimen kaksoiskappale"
+msgstr "Monista valinta"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:503
 #: pcbnew/tools/array_tool.cpp:193
-#, fuzzy
 msgid "Arrange selection"
-msgstr "Vaihda valinnan tila"
+msgstr "Järjestä valinta"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:504
 #: pcbnew/dialogs/dialog_create_array_base.cpp:523
@@ -43067,9 +42974,8 @@ msgid "Logarithmic color scale"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.h:53
-#, fuzzy
 msgid "Differential Skew Display Properties"
-msgstr "Ohjaavan Nimikkeen Ominaisuudet"
+msgstr "Differentiaalikohdistuksen näyttöominaisuudet"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:266
 msgid ""
@@ -43105,9 +43011,8 @@ msgstr "Vapaa"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:528
 #: pcbnew/widgets/pcb_properties_panel.cpp:1110
-#, fuzzy
 msgid "Apply Dimension Length"
-msgstr "Mittalinja"
+msgstr "Käytä mittapituutta"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -43424,26 +43329,23 @@ msgid "Run DRC"
 msgstr "Suorita suunnittelusääntöjen tarkistus (DRC)"
 
 #: pcbnew/dialogs/dialog_drc.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Sääntö: %s"
+msgstr "Kesto: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:379
-#, fuzzy
 msgid "Report All Errors for Each Track"
-msgstr "Ilmoita kaikki virheet yksittäisestä johtimesta"
+msgstr "Raportoi kaikki virheet jokaisesta johdinraidasta"
 
 #: pcbnew/dialogs/dialog_drc.cpp:380
-#, fuzzy
 msgid "If unchecked, only the first error will be reported for each track"
 msgstr ""
-"Jos tämä on valittuna, vyöhykkeet täytetään uudelleen jokaisen "
-"muokkaustoimenpiteen jälkeen"
+"Jos valintaa ei ole valittu, raportoidaan vain ensimmäinen virhe jokaisesta "
+"johdinraidasta"
 
 #: pcbnew/dialogs/dialog_drc.cpp:387
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr "Korosta valittuja jalanjälkiä vastaavat symbolit"
+msgstr "Korosta piirtoalueella vastaavat kohteet, kun ne valitaan DRC-listasta"
 
 #: pcbnew/dialogs/dialog_drc.cpp:476
 msgid "DRC incomplete: could not compile custom design rules."
@@ -43464,14 +43366,13 @@ msgid "%1$d min %2$d s"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:541
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "Zoomaa %.2f"
+msgstr "%.2f s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:546
-#, fuzzy
 msgid "-------- DRC canceled by user.<br><br>"
-msgstr "-------- Käyttäjä keskeytti suunnittelusääntöjen tarkistuksen.<br><br>"
+msgstr "-------- Käyttäjä keskeytti DRC-tarkistuksen.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:549
 #, c-format
@@ -43585,14 +43486,12 @@ msgid "Update text layers and visibilities"
 msgstr "Päivitä tekstikerrokset ja näkyvyydet"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:70
-#, fuzzy
 msgid "Update text sizes and styles"
-msgstr "Päivitä kenttien koot ja tyylit"
+msgstr "Päivitä tekstien koot ja tyylit"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:71
-#, fuzzy
 msgid "Update text positions"
-msgstr "Päivitä kenttien sijainnit"
+msgstr "Päivitä tekstien sijainnit"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:72
 msgid "Update text content"
@@ -43603,9 +43502,8 @@ msgid "Update fabrication attributes"
 msgstr "Päivitä valmistusmääritteet"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Update clearance overrides"
-msgstr "Välyksien Ohitukset ja Asetukset"
+msgstr "Päivitä turvavälien ohitukset"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Update 3D models"
@@ -43674,23 +43572,20 @@ msgid "New footprint library id:"
 msgstr "Uusi kirjastotunnus:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Remove text items if not in library footprint"
-msgstr "Poista tekstikohteet, jotka eivät ole kirjaston jalanjäljissä"
+msgstr "Poista tekstikohteet, jos ne eivät ole kirjaston jalanjäljessä"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
 msgstr "Päivitä/nollaa tekstikerrokset ja näkyvyydet"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
-#, fuzzy
 msgid "Update/reset text sizes and styles"
-msgstr "Päivitä/nollaa kentän tekstin koot ja tyylit"
+msgstr "Päivitä/nollaa tekstin koot ja tyylit"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
-#, fuzzy
 msgid "Update/reset text position and rotation"
-msgstr "Päivitä/nollaa kenttien sijainnit"
+msgstr "Päivitä tai nollaa tekstien sijainti ja kääntö"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
@@ -43701,18 +43596,16 @@ msgid "Update/reset fabrication attributes"
 msgstr "Päivitä/nollaa valmistusmääritteet"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:139
-#, fuzzy
 msgid "Update/reset clearance overrides"
-msgstr "Välyksien Ohitukset ja Asetukset"
+msgstr "Päivitä/nollaa turvavälien ohitukset"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
 msgid "Update/reset 3D models"
 msgstr "Päivitä/nollaa 3D mallit"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:145
-#, fuzzy
 msgid "Reset scale"
-msgstr "Palauta näkymä"
+msgstr "Nollaa mittakaava"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:146
 msgid ""
@@ -43721,9 +43614,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:150
-#, fuzzy
 msgid "Match pad positions"
-msgstr "Päivitä kenttien sijainnit"
+msgstr "Kohdista anturoiden paikat"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:151
 msgid ""
@@ -43748,9 +43640,8 @@ msgid "Export IPC-2581 File"
 msgstr "Vie IPC-2581-tiedosto"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:194
-#, fuzzy
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "Piirilevy on tallennettava ennen IPC2581-tiedoston luomista."
+msgstr "Piirilevy on tallennettava ennen IPC-2581-tiedoston luomista."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:201 pcbnew/files.cpp:991
 #: pcbnew/files.cpp:1124 pcbnew/footprint_libraries_utils.cpp:303
@@ -43760,112 +43651,94 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "Ei riittäviä oikeuksia tiedostoon '%s' kirjoittamiseen."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:207
-#, fuzzy
 msgid "Generate IPC-2581 File"
 msgstr "Luo IPC-2581-tiedosto"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:213
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Tiedoston luonti onnistui."
+msgstr "IPC-2581 tiedoston luonti onnistui."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Virhe luotaessa IPC2581-tiedostoa '%s'.\n"
+"Virhe luotaessa IPC-2581-tiedostoa '%s'.\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Virhe luotaessa IPC2581-tiedostoa '%s'.\n"
-"Väliaikaisen tiedoston %s uudelleennimeäminen epäonnistui."
+"Virhe luotaessa IPC-2581-tiedostoa '%s'.\n"
+"Väliaikaistiedoston '%s' nimeäminen uudelleen epäonnistui."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:360
-#, fuzzy
 msgid "packages"
-msgstr "Pakkaajat"
+msgstr "Paketit"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:361
-#, fuzzy
 msgid "components"
-msgstr "komponentti %s"
+msgstr "komponentit"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:362
-#, fuzzy
 msgid "padstacks"
-msgstr "kupariliuskat"
+msgstr "Liitospintarakenteet"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:363
-#, fuzzy
 msgid "stackup"
-msgstr "Tasojen asettelu"
+msgstr "kerrosrakenne"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:364
-#, fuzzy
 msgid "board profile"
-msgstr "KiCad-projektitiedosto"
+msgstr "Piirilevyn profiili"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:365
-#, fuzzy
 msgid "solder mask"
-msgstr "Juotosmaski"
+msgstr "juotosmaski"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:366
-#, fuzzy
 msgid "solder paste"
-msgstr "Juotospasta"
+msgstr "juotostahna"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:367
-#, fuzzy
 msgid "silkscreen"
-msgstr "Silkkipaino"
+msgstr "silkkipaino"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:368
-#, fuzzy
 msgid "drill and router"
-msgstr "Poraa ja juoni alkuperä"
+msgstr "Poraus ja jyrsintä"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:369
-#, fuzzy
 msgid "documentation"
-msgstr "Dokumentaatio"
+msgstr "dokumentaatio"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:370
-#, fuzzy
 msgid "outer copper"
-msgstr "Ei kuparilla"
+msgstr "ulompi kupari"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:371
-#, fuzzy
 msgid "inner copper"
-msgstr "Sisempi kuparikerros"
+msgstr "sisempi kupari"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:372
-#, fuzzy
 msgid "dielectric"
-msgstr "Dielektrinen"
+msgstr "Eriste"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:373
-#, fuzzy
 msgid "misc fab layers"
-msgstr "Näkyvät kerrokset"
+msgstr "Muut valmistuskerrokset"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:374
-#, fuzzy
 msgid "logical netlist"
-msgstr "Vie verkkolista"
+msgstr "Looginen verkkolista"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:375
-#, fuzzy
 msgid "physical netlist"
-msgstr "Eeschema-verkkolista"
+msgstr "fyysinen verkkolista"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:397
 #, c-format
@@ -43878,9 +43751,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:441
 #: pcbnew/dialogs/dialog_export_2581.cpp:446
-#, fuzzy
 msgid "Customize Content"
-msgstr "Mukautettu koko"
+msgstr "Mukauta sisältöä"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:445
 msgid "Choose the optional sections to include."
@@ -43936,24 +43808,20 @@ msgid "All data (user-defined)"
 msgstr "Kaikki tiedot (käyttäjän määrittämät)"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Bill of materials"
-msgstr "Materiaaliluettelo"
+msgstr "Osaluettelo (BOM)"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Stackup"
-msgstr "Levyn kerrosrakenne"
+msgstr "Kerrosrakenne"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Fabrication"
-msgstr "Valmistusominaisuus"
+msgstr "Valmistus"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Assembly"
-msgstr "Kokoonpanonäkymä takaa"
+msgstr "Kokoonpano"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
 msgid "Stencil"
@@ -43971,9 +43839,8 @@ msgid "Net names:"
 msgstr "Verkkonimet:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:137
-#, fuzzy
 msgid "Anonymize"
-msgstr "Anonyymi"
+msgstr "Poista tunnistetiedot"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid ""
@@ -43997,16 +43864,18 @@ msgid ""
 "text drawn on silkscreen is artwork the fabricator must reproduce and is "
 "always kept."
 msgstr ""
+"Jättää osaviitteen (designator) pois komponentista, osaluettelosta (BOM) ja "
+"piirustuksen metatiedoista. \n"
+"Silkkipainoon piirretty viiteteksti on piirustusta, joka valmistajan on "
+"jäljennettävä, ja se säilytetään aina."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:160
-#, fuzzy
 msgid "Includes:"
-msgstr "Sisällytä:"
+msgstr "Sisältää:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:166
-#, fuzzy
 msgid "Customize..."
-msgstr "Mukautettu..."
+msgstr "Mukauta..."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:172
 msgid "BOM Fields..."
@@ -44021,9 +43890,8 @@ msgid "mfg"
 msgstr "valmistaja"
 
 #: pcbnew/dialogs/dialog_export_2581_bom_base.cpp:25
-#, fuzzy
 msgid "BOM revision:"
-msgstr "Versio:"
+msgstr "Osaluettelon versio:"
 
 #: pcbnew/dialogs/dialog_export_2581_bom_base.cpp:27
 #: pcbnew/dialogs/dialog_export_2581_bom_base.cpp:32
@@ -44046,9 +43914,8 @@ msgstr ""
 "Tämän numeron on oltava yksilöllinen jokaiselle osalle."
 
 #: pcbnew/dialogs/dialog_export_2581_bom_base.cpp:42
-#, fuzzy
 msgid "Generate unique"
-msgstr "Luo Uniikki"
+msgstr "Luo yksilölliset tunnisteet"
 
 #: pcbnew/dialogs/dialog_export_2581_bom_base.cpp:50
 msgid "Manufacturer P/N:"
@@ -44076,9 +43943,8 @@ msgid "Distributor:"
 msgstr "Jakelija:"
 
 #: pcbnew/dialogs/dialog_export_2581_bom_base.h:60
-#, fuzzy
 msgid "BOM Fields"
-msgstr "Kentät"
+msgstr "Osaluettelon kentät"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:71
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:197
@@ -44100,9 +43966,8 @@ msgid "*.emn"
 msgstr "*.emn (asettelutiedosto)"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:33
-#, fuzzy
 msgid "Set board reference point:"
-msgstr "Ruudukon vertailupiste:"
+msgstr "Aseta piirilevyn viitepiste:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
 #: pcbnew/dialogs/dialog_export_step_base.cpp:203
@@ -44260,9 +44125,8 @@ msgid "Universal 3D files"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:368
-#, fuzzy
 msgid "PDF files"
-msgstr "PLY-tiedostot"
+msgstr "PDF-tiedostot"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:376
 msgid "3D Model Output File"
@@ -44285,19 +44149,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:480
-#, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
-msgstr "Väliaikaisen tiedoston '%s' uudelleennimeäminen epäonnistui."
+msgstr "Väliaikaisen tiedostonimen varaaminen STEP-vientiä varten epäonnistui."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:499
-#, fuzzy
 msgid "Failed to save the current board state for export."
-msgstr "Jalanjälkikirjastotiedoston '%s' tallentaminen epäonnistui."
+msgstr "Piirilevyn nykyisen tilan tallentaminen vientiä varten epäonnistui."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:512
-#, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr "Muutosten työntäminen etätietovarastoon epäonnistui."
+msgstr "Projektitiedoston valmisteleminen STEP-vientiä varten epäonnistui."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:551
 msgid "No filename for output file"
@@ -44382,7 +44243,7 @@ msgstr "Vie silkkipaino"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:83
 msgid "Export silkscreen graphics as a set of flat faces."
-msgstr "Vie silkkipainografiikkaa tasaisten pintojen joukkona."
+msgstr "Vie silkkipainografiikat litteiden pintojen joukkona."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:87
 msgid "Export solder mask"
@@ -44739,9 +44600,8 @@ msgid "Find by Properties"
 msgstr "Etsi ominaisuuksien perusteella"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:58
-#, fuzzy
 msgid "Match"
-msgstr "Täyttöviivoitus"
+msgstr "Vertailu"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:488
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:24
@@ -44750,24 +44610,21 @@ msgstr "Kohteita ei valittu"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:664
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:774
-#, fuzzy
 msgid "Ignored"
-msgstr "Ohita"
+msgstr "Ohitettu"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:664
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:730
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:776
-#, fuzzy
 msgid "Matching"
-msgstr "Luetaan välimuistiin"
+msgstr "Täsmäävä"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:664
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:673
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:732
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:778
-#, fuzzy
 msgid "Different"
-msgstr "Differentiaali"
+msgstr "Poikkeava"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:899
 #, c-format
@@ -44794,53 +44651,45 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1126
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:372
-#, fuzzy
 msgid "Syntax OK"
-msgstr "Syntaksiohje"
+msgstr "Syntaksi kunnossa"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1128
 msgid "Syntax error: "
 msgstr "Syntaksivirhe: "
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:58
-#, fuzzy
 msgid "From Selection"
-msgstr "Muunna Valinta"
+msgstr "Valinnasta"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:70
-#, fuzzy
 msgid "Expression"
-msgstr "Epämuodostunut muoto"
+msgstr "Lauseke"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:121
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:48
-#, fuzzy
 msgid "Check Syntax"
-msgstr "Tarkista säännön syntaksit"
+msgstr "Tarkista syntaksi"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:124
-#, fuzzy
 msgid "Create from Selection Tab"
-msgstr "Luo Valinnasta"
+msgstr "Luo valinnasta -välilehti"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:136
 msgid "Query"
 msgstr "Kysely"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:143
-#, fuzzy
 msgid "Deselect non-matching items"
-msgstr "Piirrä valitut alatuotteet"
+msgstr "Poista valinta kohteista, jotka eivät sovi"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:147
-#, fuzzy
 msgid "Zoom to fit selected items"
-msgstr "Zoomaa ristikokoisiin kohteisiin"
+msgstr "Sovita valitut kohteet näkymään"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:162
-#, fuzzy
 msgid "Select Matching"
-msgstr "Valitse Polku"
+msgstr "Valitse sopivat"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:45
 msgid "Footprint: "
@@ -44880,9 +44729,8 @@ msgid "Footprint Fields Table"
 msgstr "Jalanjälkien kenttätaulukko"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:214
-#, fuzzy
 msgid "Apply, Save Board && Continue"
-msgstr "Käytä, Tallenna Kytkentäkaavio && Jatka"
+msgstr "Käytä, tallenna piirilevy && jatka"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:567
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:437
@@ -44900,9 +44748,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:573
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:443
-#, fuzzy
 msgid "Include 'Exclude from BOM' Footprints"
-msgstr "Näytä \"Sulje pois tuoteluettelosta\""
+msgstr "Sisällytä osaluettelosta poissuljetut jalanjäljet"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:574
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:444
@@ -44925,9 +44772,8 @@ msgstr "3D-Mallit"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1035
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:42
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
-#, fuzzy
 msgid "Solder paste clearance:"
-msgstr "Juotospastan absoluuttinen välys:"
+msgstr "Juotostahnan turvaväli:"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:136
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
@@ -44941,20 +44787,18 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:285
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved or oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
 msgstr ""
-"Lukittuja jalanjälkiä ei voi vapaasti siirtää tai kääntää näytöllä ja "
-"voidaan ainoastaan valita, kun 'Lukitut kohteet' valintaruutu on kytketty "
+"Lukittuja jalanjälkiä ei voi siirtää tai kääntää vapaasti piirtoalueella, ja "
+"ne voidaan valita vain, jos 'Lukitut kohteet' -valintaruutu on valittuna "
 "valintasuodattimessa."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:330
-#, fuzzy
 msgid "all pads with duplicate numbers"
-msgstr "Nastat, joissa on kaksoisnumerot, ovat jumppereita"
+msgstr "Kaikilla anturoilla, joilla on sama numero"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:431
 #, c-format
@@ -45180,16 +45024,15 @@ msgstr "Käytä alueasetuksia"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:902
 msgid "Thermal relief"
-msgstr "Terminen kevennys"
+msgstr "Lämpökevennys"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:358
 msgid "Jumper groups:"
 msgstr "Hyppyjohdinryhmät:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:376
-#, fuzzy
 msgid "Clearance Overrides && Pad Connections"
-msgstr "Välyksien Ohitukset ja Asetukset"
+msgstr "Turvavälien ohitukset ja anturaliitännät"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
 msgid ""
@@ -45267,9 +45110,8 @@ msgid "Component type:"
 msgstr "Komponenttityyppi:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:190
-#, fuzzy
 msgid "Custom Layers"
-msgstr "Mukautettu koko"
+msgstr "Mukautetut kerrokset"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:197
 msgid "Use custom stackup"
@@ -45280,9 +45122,8 @@ msgid "Copper layers"
 msgstr "Kuparikerrokset"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:213
-#, fuzzy
 msgid "User Layers"
-msgstr "Muut kerrokset"
+msgstr "Käyttäjäkerrokset"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:270
 msgid "Private Layers"
@@ -45381,14 +45222,12 @@ msgid "Pad groups allowed to short different nets:"
 msgstr "Anturaryhmät jotka saavat oikosulkea eri verkkoja:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:519
-#, fuzzy
 msgid "Jumpers"
-msgstr "hyppylanka"
+msgstr "Hyppylangat"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:521
-#, fuzzy
 msgid "All pads with duplicate numbers are jumpers"
-msgstr "Nastat, joissa on kaksoisnumerot, ovat jumppereita"
+msgstr "Kaikki samanumeroiset anturat ovat hyppylankoja"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:522
 msgid ""
@@ -45405,9 +45244,8 @@ msgid "Explicit jumper pad groups:"
 msgstr "Erikseen määritetyt hyppyjohdinanturaryhmät:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:47
-#, fuzzy
 msgid "Footprint Wizards"
-msgstr "Ohjattu jalanjälki"
+msgstr "Jalanjälkivelhot"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:67
 msgid "Traceback of Python Script Errors"
@@ -45443,9 +45281,8 @@ msgstr "Viistetty suorakulmio"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:59
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:75 pcbnew/pad.cpp:2543
-#, fuzzy
 msgid "Custom shape"
-msgstr "Mukautettu Muoto"
+msgstr "Mukautettu muoto"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:86
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:127
@@ -45467,14 +45304,12 @@ msgid "Connector"
 msgstr "Liitin"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:983
-#, fuzzy
 msgid "Edit Pads"
-msgstr "Muokkaa Anturaa"
+msgstr "Muokkaa anturoita"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1240
-#, fuzzy
 msgid "Select pad data file"
-msgstr "Valitse tiedosto"
+msgstr "Valitse anturan datatiedosto"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1267
 msgid ""
@@ -45484,9 +45319,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1268
-#, fuzzy
 msgid "Export Pad Table"
-msgstr "Anturataulukko"
+msgstr "Vie anturataulukko"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1369
 msgid "Imported pad data must include pad numbers."
@@ -45497,18 +45331,16 @@ msgid "Import error"
 msgstr "Tuontivirhe"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:31
-#, fuzzy
 msgid "Pad numbers:"
-msgstr "Anturan numero:"
+msgstr "Anturanumerot:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:42
 msgid "Pad count:"
 msgstr "Anturoiden määrä:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:53
-#, fuzzy
 msgid "Duplicate pads:"
-msgstr "Jäljennä nastat:"
+msgstr "Kaksoiskappaleanturat:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:92 pcbnew/pad.cpp:3873
 msgid "Size X"
@@ -45527,24 +45359,20 @@ msgid "Drill Y"
 msgstr "Poraus Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:96
-#, fuzzy
 msgid "Pad->Die Length"
-msgstr "Pituus Anturasta Mikropiiriin"
+msgstr "Antura–>siru-pituus"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:97
-#, fuzzy
 msgid "Pad->Die Delay"
-msgstr "Pituus Anturasta Mikropiiriin"
+msgstr "Antura–>siru-viive"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:145
-#, fuzzy
 msgid "Replace all existing pads"
-msgstr "Korvaa olemassa olevat sijoittelusääntöalueet"
+msgstr "Korvaa kaikki jo olemassa olevat anturat"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:148
-#, fuzzy
 msgid "Append to existing pads"
-msgstr "Liitä olemassa oleva piirikaavio"
+msgstr "Lisää jo olemassa oleviin anturoihin"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.h:77
 msgid "Pad Table"
@@ -45620,9 +45448,8 @@ msgid "Footprint Report"
 msgstr "Jalanjälkiraportti"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:70
-#, fuzzy
 msgid "Plain text"
-msgstr "Etsi teksti"
+msgstr "Pelkkä teksti"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:70
 msgid "Gerber X3"
@@ -45637,9 +45464,10 @@ msgid "Exclude all footprints with through hole pads"
 msgstr "Sulje pois kaikki jalanjäljet joissa on läpivientireikäanturat"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:113
-#, fuzzy
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "Sulje pois kaikki jalanjäljet Älä täytä -lipulla"
+msgstr ""
+"Poissulje kaikki jalanjäljet, joilla on 'Poista osaluettelosta' -lippu "
+"asetettuna"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:116
 msgid "Include board edge layer"
@@ -45724,9 +45552,8 @@ msgid "Gerber X2"
 msgstr "Gerber-X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate tenting layers"
-msgstr "Luo sijoittelutiedostot"
+msgstr "Luo peittomaskikerrokset"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:107
 msgid "Generate map:"
@@ -45863,9 +45690,8 @@ msgid "Unlocked tracks"
 msgstr "Lukitsemattomat johtimet"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
-#, fuzzy
 msgid "Locked vias"
-msgstr "Lukitut kohteet"
+msgstr "Lukitut läpiviennit"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:89
 msgid "Unlocked vias"
@@ -46127,9 +45953,8 @@ msgid "Set Teardrops"
 msgstr "Aseta kupariviisteet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:130
-#, fuzzy
 msgid "Text items"
-msgstr "Tekstikohdat"
+msgstr "Tekstikohteet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:131
 msgid "Graphic items"
@@ -46224,46 +46049,40 @@ msgid "PCB text items"
 msgstr "Piirilevyn tekstikohteet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
-#, fuzzy
 msgid "Other footprint fields"
-msgstr "Muut jalanjälkitekstit"
+msgstr "Muut jalanjäljen kentät"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:47
 msgid "Footprint fields that are not the reference designator or value field"
 msgstr "Jalanjälkikentät, jotka eivät ole viitemerkintä tai arvokenttä"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "PCB dimensions"
-msgstr "Piirilevyn mittakohteet"
+msgstr "Piirilevyn mitat"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:54
 msgid "Footprint graphic items"
 msgstr "Graafiset jalanjäljet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
-#, fuzzy
 msgid "Footprint text items"
-msgstr "Muut jalanjälkitekstit"
+msgstr "Jalanjäljen tekstikohteet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:61
 msgid "Footprint text items not associated with a field"
 msgstr "Jalanjälkitekstikohteet, joita ei ole liitetty kenttään"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:68
-#, fuzzy
 msgid "Footprint dimensions"
-msgstr "Jalanjälkien mittakohteet"
+msgstr "Jalanjäljen mitat"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:86
-#, fuzzy
 msgid "By layer:"
-msgstr "Tasoittaa:"
+msgstr "Kerroksittain:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Uusi kirjastotunnus:"
+msgstr "Alkuperäisen kantaosan kirjastolinkin mukaan:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:125
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:161
@@ -46271,9 +46090,8 @@ msgid "Set to specified values:"
 msgstr "Aseta määritettyihin arvoihin:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:153
-#, fuzzy
 msgid "Visible  (fields only)"
-msgstr "Näkyy  (vain teksti)"
+msgstr "Näkyvät  (vain kentät)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:241
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:102
@@ -46284,9 +46102,8 @@ msgstr "Pidä pystyssä"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:211
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:197
-#, fuzzy
 msgid "Adjust the text thickness"
-msgstr "Säädä Dielektristä Paksuutta"
+msgstr "Säädä tekstin paksuutta"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:270
 msgid "Center on footprint"
@@ -46298,12 +46115,10 @@ msgstr "Siirrä jalanjälkitekstit jalanjäljen keskelle"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:87
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:195
-#, fuzzy
 msgid "Unknown choice"
-msgstr "Tuntematon Menetelmä"
+msgstr "Tuntematon valinta"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Microvias"
 msgstr "Mikroläpiviennit"
 
@@ -46312,9 +46127,8 @@ msgid "Filter tracks by width:"
 msgstr "Suodata johdinraidat leveyden mukaan:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:127
-#, fuzzy
 msgid "Filter vias by diameter:"
-msgstr "Suodata läpiviennit koon mukaan:"
+msgstr "Suodata läpiviennit halkaisijan mukaan:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "-- leave unchanged --  "
@@ -46325,9 +46139,8 @@ msgid "Via size:"
 msgstr "Läpiviennin koko:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:196
-#, fuzzy
 msgid "Via annular rings:"
-msgstr "Sormuskehät:"
+msgstr "Läpivientien kuparirenkaat:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1226
@@ -46348,14 +46161,12 @@ msgstr "Vain yhdistetyt kerrokset"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:3785
-#, fuzzy
 msgid "Start and end layers only"
-msgstr "Alku, Loppu, ja yhdistetyt kerrokset"
+msgstr "Vain alku- ja loppukerroksissa"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:206
-#, fuzzy
 msgid "Via protection features:"
-msgstr "Poikkileikkauspinta-ala:"
+msgstr "Läpiviennin suojaominaisuudet:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:213
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:394
@@ -46398,9 +46209,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:311
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:83
-#, fuzzy
 msgid "Center and Radius"
-msgstr "Kulman säde"
+msgstr "Keskipiste ja säde"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:315
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:35
@@ -46421,20 +46231,17 @@ msgid "By Center and Size"
 msgstr "Keskikohdan ja koon mukaan"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:353
-#, fuzzy
 msgid "Radius spacing:"
-msgstr "Minimi väli(t):"
+msgstr "Säteittäinen väli:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:354
-#, fuzzy
 msgid "Angular spacing:"
-msgstr "Sormuskehät:"
+msgstr "Kulmaväli:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:362
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:121
-#, fuzzy
 msgid "Spacing X:"
-msgstr "Väli (t):"
+msgstr "X-väli:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:363
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:134
@@ -46442,9 +46249,8 @@ msgid "Spacing Y:"
 msgstr "Välistys Y:"
 
 #: pcbnew/dialogs/dialog_griditem_properties.cpp:433
-#, fuzzy
 msgid "Edit Grid Item Properties"
-msgstr "Graafisen Kohteen Ominaisuudet"
+msgstr "Muokkaa ruudukon kohteen ominaisuuksia"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:98
 msgid "Grid type:"
@@ -46452,33 +46258,29 @@ msgstr "Ruudukon tyyppi:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:102
 #: pcbnew/pcb_griditem.cpp:498
-#, fuzzy
 msgid "Cartesian"
-msgstr "Näytä karteesiset koordinaatit"
+msgstr "Suorakulmainen"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:102
 #: pcbnew/pcb_griditem.cpp:499
-#, fuzzy
 msgid "Polar"
-msgstr "Polariteetti"
+msgstr "Napakoordinaatisto"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:147
 msgid "Major tick every:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:156
-#, fuzzy
 msgid "lines"
-msgstr "Viivat"
+msgstr "viivat"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:160
 msgid "Priority:"
 msgstr "Prioriteetti:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:169
-#, fuzzy
 msgid "Affects:"
-msgstr "Efektiivinen %s:"
+msgstr "Vaikuttaa:"
 
 #: pcbnew/dialogs/dialog_griditem_properties_base.cpp:179
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:80
@@ -46601,9 +46403,8 @@ msgid "Predefined track && via dimensions"
 msgstr "Ennalta määritellyt johtimien && läpivientien mitat"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
-#, fuzzy
 msgid "Zone defaults"
-msgstr "Palauta Oletukset"
+msgstr "Alueen oletukset"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:75
 msgid "Teardrop defaults"
@@ -46614,7 +46415,6 @@ msgid "Length-tuning pattern defaults"
 msgstr "Pituudensäätökuvioiden oletusasetukset"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
-#, fuzzy
 msgid "Component classes"
 msgstr "Komponenttiluokat"
 
@@ -46702,14 +46502,13 @@ msgid "Select Copper Layer Pair"
 msgstr "Valitse Kuparikerrospari"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:189
-#, fuzzy
 msgid "Footprint Names"
-msgstr "Jalanjäljen Nimi"
+msgstr "Jalanjälkien nimet"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Fields Table ('%s' Library)"
-msgstr "Symbolikenttätaulukko ('%s' kirjasto)"
+msgstr "Jalanjälkikenttien taulukko (%s-kirjasto)"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:237
 #, c-format
@@ -46722,9 +46521,8 @@ msgid "Error loading footprint '%s': %s"
 msgstr "Virhe ladattaessa jalanjälkeä: '%s' : %s"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:263
-#, fuzzy
 msgid "No footprints could be loaded from the library."
-msgstr "Yhtään symbolia ei voitu ladata kirjastosta."
+msgstr "Kirjastosta ei voitu ladata jalanjälkiä."
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:380
 #: pcbnew/footprint.cpp:2365
@@ -46741,37 +46539,33 @@ msgid "KiCad Layer"
 msgstr "KiCad Kerros"
 
 #: pcbnew/dialogs/dialog_map_layers.cpp:363
-#, fuzzy
 msgid ""
 "All required layers (marked with '*') must be matched. Please click 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
-"Kaikki vaaditut tasot (merkitty *: llä) on sovitettava yhteen. Napsauta Auto-"
-"Match Layers -vaihtoehtoa, jotta jäljellä olevat tasot vastaavat "
-"automaattisesti"
+"Kaikille pakollisille kerroksille (merkitty merkillä '*') on valittava "
+"vastine. Napsauta 'Kohdista kerrokset automaattisesti' asettaaksesi loput "
+"kerrokset paikoilleen."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:434
 msgid "Auto-migrate 3D model references"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:660
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "Pidä olemassa olevat viitetunnukset"
+msgstr "(säilytä nykyinen viitetunnus)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:870
 msgid "Add 3D Model Search Directory"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:964
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "Valitse 3D-malli"
+msgstr "Valitse 3D-mallitiedosto"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:981
-#, fuzzy
 msgid "user-selected"
-msgstr "Ei väylää valittu"
+msgstr "käyttäjän valitsema"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1065
 msgid "Migrate 3D model references"
@@ -46792,28 +46586,24 @@ msgid "Potential replacements:"
 msgstr "Mahdollisia korvaavuuksia:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "Lisää hakuhakemisto..."
+msgstr "Lisää hakukansio..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
 msgid "Open External File..."
 msgstr "Avaa ulkoinen tiedosto..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "Korvaa Kaikki"
+msgstr "Korvaa mallit"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "Lisää Olemassa oleva"
+msgstr "Säilytä nykyinen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "Päivitä 3D-mallit"
+msgstr "Siirrä 3D-mallit"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:92
 msgid "Rotate around item anchor"
@@ -46906,7 +46696,6 @@ msgid "Rule area topologies do not match: %s"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:34
-#, fuzzy
 msgid "Reference rule area:"
 msgstr "Viittesääntöalue:"
 
@@ -46926,9 +46715,8 @@ msgid "Target areas:"
 msgstr "Kohdealueet:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Target Rule Area"
-msgstr "Piirrä sääntöalue"
+msgstr "Kohteen sääntöalue"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:100
 msgid "Copy footprint placement"
@@ -46961,9 +46749,8 @@ msgid "Group items with their target rule areas"
 msgstr "Ryhmittele kohteet niiden kohdesääntöalueiden kanssa"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:123
-#, fuzzy
 msgid "Include locked items"
-msgstr "Sisällytä&lukitut jalanjäljet"
+msgstr "Sisällytä lukitut kohteet"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:124
 msgid "Copy from reference area + delete / update in target area if included"
@@ -47129,9 +46916,8 @@ msgid "Offset Item"
 msgstr "Kohteen siirtymä"
 
 #: pcbnew/dialogs/dialog_outset_items.cpp:173
-#, fuzzy
 msgid "Line width must be a positive value."
-msgstr "Viivan leveyden on oltava suurempi kuin nolla."
+msgstr "Viivanleveyden on oltava positiivinen luku."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:26
 msgid "Outset:"
@@ -47180,9 +46966,8 @@ msgstr ""
 "alla olevaa arvoa."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
-#, fuzzy
 msgid "Layer Default"
-msgstr "Kerroksen oletukset"
+msgstr "Kerroksen oletusasetukset"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:92
 msgid "Delete source items after outset"
@@ -47506,7 +47291,7 @@ msgstr "Etupuolen silkkipaino"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:591
 msgid "Back silk screen"
-msgstr "Kääntöpuolen silkkipaino"
+msgstr "Takapuolen silkkipaino"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 msgid "Front solder mask"
@@ -47580,14 +47365,12 @@ msgid "Mechanical"
 msgstr "Mekaaninen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:621
-#, fuzzy
 msgid "Castellated pad (TH only)"
-msgstr "Uritettu antura (ainoastaan läpireikä)"
+msgstr "Puolireikäantura (vain läpiasennus)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:621
-#, fuzzy
 msgid "Press-fit (round TH only)"
-msgstr "Uritettu antura (ainoastaan läpireikä)"
+msgstr "Puristusliitos (vain pyöreä läpiasennus)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:627
 msgid "Simulation electrical type:"
@@ -47658,7 +47441,7 @@ msgstr "Kupera anturan runko"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:925
 msgid "Thermal Relief Overrides"
-msgstr "Termisen kevennyksen ohitukset"
+msgstr "Lämpökevennyksen ohitukset"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:933
 msgid "Relief gap:"
@@ -47728,9 +47511,8 @@ msgstr "Viisteupotus"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1165
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:534
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:581 pcbnew/pad.cpp:3750
-#, fuzzy
 msgid "Counterbore"
-msgstr "Laske"
+msgstr "Lieriöupotus"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1161
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:577
@@ -47738,20 +47520,17 @@ msgid "Back:"
 msgstr "Kääntöpuoli:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1203
-#, fuzzy
 msgid "Backdrilling"
-msgstr "Läpiviennin poraus"
+msgstr "Vastaporaus"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1205
-#, fuzzy
 msgid "Top & bottom"
-msgstr "Ylhäältä/alhaalta"
+msgstr "Ylä- ja alapuoli"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1254
-#, fuzzy
 msgid "Must-cut layer:"
-msgstr "Aloituskerros:"
+msgstr "Pakollisesti katkaistava taso:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1221
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
@@ -47766,25 +47545,20 @@ msgid "Top backdrill size:"
 msgstr "Yläpuolen vastaporauksen koko:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1265
-#, fuzzy
 msgid "Bottom backdrill size:"
-msgstr "Mukautetut läpiviennit:"
+msgstr "Alapuolen takaporauksen koko:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1291 pcbnew/pcb_track.cpp:3254
-#, fuzzy
 msgid "Backdrill"
-msgstr "Läpiviennin poraus"
+msgstr "Takaporaus"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1428
 msgid "Preview pad in sketch mode"
 msgstr "Esikatselualusta luonnostilassa"
 
 #: pcbnew/dialogs/dialog_plot.cpp:137
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr ""
-"Täytä kaikki alueet uudelleen ennen suunnittelusääntöjen tarkistuksen "
-"suorittamista"
+msgstr "Täytä alueet uudelleen ennen tulostusta"
 
 #: pcbnew/dialogs/dialog_plot.cpp:189
 msgid "Plot on All Layers"
@@ -47875,7 +47649,7 @@ msgstr "Avaa tulostehakemisto"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:120
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "Poista silkkipainatus juotteenestopinnoittamattomilta alueilta"
+msgstr "Poista silkkipaino alueilta, joilla ei ole juotosestomaskia"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:124
 msgid "Indicate DNP on fabrication layers"
@@ -48149,9 +47923,8 @@ msgstr ""
 "Valitse 4, jos et ole varma."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:398
-#, fuzzy
 msgid "Fit page to board"
-msgstr "Kuvan kopioiminen leikepöydälle ei onnistunut"
+msgstr "Sovita sivu piirilevyn kokoon"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:424
 msgid "Generate property popups for front footprints"
@@ -48315,9 +48088,8 @@ msgid "Suggest track finish"
 msgstr "Ehdota johtimen loppu"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:117
-#, fuzzy
 msgid "Dragging"
-msgstr "Vedä"
+msgstr "Vetäminen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:122
 msgid "Smooth dragged segments"
@@ -48346,9 +48118,8 @@ msgstr ""
 "raahauskohdan lähellä oleva alue optimoidaan."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:132
-#, fuzzy
 msgid "Avoid sharp angles"
-msgstr "Lisää suorakulmio"
+msgstr "Vältä teräviä kulmia"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:133
 msgid ""
@@ -48524,8 +48295,8 @@ msgid ""
 "be selected when the 'Locked items' checkbox is checked in the selection "
 "filter."
 msgstr ""
-"Lukittuja jalanjälkiä ei voi vapaasti siirtää tai kääntää näytöllä ja "
-"voidaan ainoastaan valita, kun 'Lukitut kohteet' valintaruutu on kytketty "
+"Lukittuja kohteita ei voi siirtää tai kääntää vapaasti piirtoalueella, ja ne "
+"voidaan valita vain, jos 'Lukitut kohteet' -valintaruutu on valittuna "
 "valintasuodattimessa."
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:74
@@ -48562,9 +48333,8 @@ msgid "Background style:"
 msgstr "Taustan tyyli:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:100
-#, fuzzy
 msgid "Procedural textures"
-msgstr "Menettelytavat"
+msgstr "Kuvaan perustuvat tekstuurit"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:104
 msgid "Add floor"
@@ -48575,11 +48345,10 @@ msgid "Anti-aliasing"
 msgstr "Reunojenpehmennys"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:112
-#, fuzzy
 msgid "Screen space ambient occlusions and global illumination reflections"
 msgstr ""
-"Käyttää näytötilan ympäröivää okkluusiota ja globaalin valaistuksen "
-"heijastuksia lopulliseen renderointiin (hidas)"
+"Käytä näytöntilan valonvaimennusta (SSAO) ja yleisvalaistuksen heijastuksia "
+"lopullisessa renderöinnissä (hidas)"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:123
 msgid "View"
@@ -48636,7 +48405,6 @@ msgid "Camera:"
 msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:307
-#, fuzzy
 msgid "Lights Position"
 msgstr "Valojen sijainti"
 
@@ -48649,37 +48417,32 @@ msgid "Render PCB Job Options"
 msgstr "Renderöi PCB työvaihtoehdot"
 
 #: pcbnew/dialogs/dialog_router_save_test_case_base.cpp:25
-#, fuzzy
 msgid "Test cases directory:"
-msgstr "Kohde:"
+msgstr "Testitapausten hakemisto:"
 
 #: pcbnew/dialogs/dialog_router_save_test_case_base.cpp:32
-#, fuzzy
 msgid "Test case name:"
-msgstr "Verkkonimi:"
+msgstr "Testitapauksen nimi:"
 
 #: pcbnew/dialogs/dialog_router_save_test_case_base.cpp:45
 msgid "Testcase (strict geometry)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_router_save_test_case_base.cpp:45
-#, fuzzy
 msgid "Testcase (connectivity only)"
-msgstr "Testaa yhteys"
+msgstr "Testitapaus (vain kytkennät)"
 
 #: pcbnew/dialogs/dialog_router_save_test_case_base.cpp:45
-#, fuzzy
 msgid "Testcase (expected fail)"
-msgstr "Nimeä valittu verkko uudelleen"
+msgstr "Testitapaus (odotettu epäonnistuminen)"
 
 #: pcbnew/dialogs/dialog_router_save_test_case_base.cpp:45
 msgid "Known bug"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_router_save_test_case_base.h:47
-#, fuzzy
 msgid "Save Router Testcase"
-msgstr "Tallenna reitittimen loki"
+msgstr "Tallenna reitittimen testitapaus"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:127
 #: pcbnew/tools/board_inspection_tool.cpp:1869
@@ -48741,15 +48504,13 @@ msgstr "Virheellinen kaari säteellä %f ja kulmalla %f."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:748
 #: pcbnew/dialogs/dialog_shape_properties.cpp:826
-#, fuzzy
 msgid "Major radius must be greater than 0"
-msgstr "Säteen on oltava suurempi kuin 0"
+msgstr "Ulkosäteen on oltava suurempi kuin 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:754
 #: pcbnew/dialogs/dialog_shape_properties.cpp:832
-#, fuzzy
 msgid "Minor radius must be greater than 0"
-msgstr "Säteen on oltava suurempi kuin 0"
+msgstr "Sisäsäteen on oltava suurempi kuin 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1206
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1221
@@ -48757,9 +48518,8 @@ msgid "Mid Point"
 msgstr "Keskipiste"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1218
-#, fuzzy
 msgid "Included Angle"
-msgstr "Sisällytä &vyöhykkeet"
+msgstr "Kaaren kulma"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1244
 msgid "Point on Circle"
@@ -48836,9 +48596,8 @@ msgid "By Start/Mid/End"
 msgstr "Alun/puolivälin/lopun mukaan"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
-#, fuzzy
 msgid "By Center/Radius/Angles"
-msgstr "Keskikohdan/säteen mukaan"
+msgstr "Keskipisteen, säteen ja kulmien mukaan"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
 msgid "By Center/Radius"
@@ -49073,9 +48832,8 @@ msgid "Annular rings:"
 msgstr "Sormuskehät:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:387
-#, fuzzy
 msgid "Protection features:"
-msgstr "Poikkileikkauspinta-ala:"
+msgstr "Suojaominaisuudet:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:426
 msgid "Backdrill:"
@@ -49262,14 +49020,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
-#, fuzzy
 msgid "Update Footprints"
-msgstr "Päivitä Jalanjälki"
+msgstr "Päivitä jalanjäljet"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:49
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Korvaa jalanjäljet netlist-luettelossa määritellyillä"
+msgstr "Korvaa jalanjäljet symboleissa määritetyillä jalanjäljillä"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:51
 msgid ""
@@ -49294,9 +49050,8 @@ msgstr ""
 "kytkentäkaaviosymboliin."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:72
-#, fuzzy
 msgid "Update footprint fields from symbols"
-msgstr "Päivitä jalanjälki %s arvosta %s arvoksi %s"
+msgstr "Päivitä jalanjälkien kentät symboleista"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:76
 msgid "Remove footprint fields not found in symbols"
@@ -49307,14 +49062,12 @@ msgid "Update PCB from Schematic"
 msgstr "Päivitä PCB kytkentäkaaviosta"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties.cpp:63
-#, fuzzy
 msgid "Via Stitching Properties"
-msgstr "Läpiviennin ominaisuudet"
+msgstr "Läpivientien pistotikkauksen ominaisuudet"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
-#, fuzzy
 msgid "Normal Grid"
-msgstr "Tavallinen"
+msgstr "Normaali ruudukko"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:76
 msgid "Staggered Grid"
@@ -49341,15 +49094,13 @@ msgid "Configure"
 msgstr "Määritä"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:105
-#, fuzzy
 msgid "Mode:"
 msgstr "Malli:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:110
 #: pcbnew/generators/pcb_via_stitch.cpp:1595
-#, fuzzy
 msgid "Stitch"
-msgstr "Vaihda"
+msgstr "Tikkaa"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:111
 #: pcbnew/generators/pcb_via_stitch.cpp:1596
@@ -49357,48 +49108,41 @@ msgid "Guard"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:83
-#, fuzzy
 msgid "Via Stitch Properties"
-msgstr "Läpiviennin ominaisuudet"
+msgstr "Läpivientien tikkausasetukset"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Error with conditions for component class assignment %s"
-msgstr "Virhe ehdoissa komponentin luokan sijoitukselle %s"
+msgstr "Virhe ehtojen täyttymisessä komponenttiluokan osoituksessa %s"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:362
-#, fuzzy
 msgid "Add Reference Condition"
-msgstr "Viitesijainti"
+msgstr "Lisää viitetunnusehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:363
-#, fuzzy
 msgid "Add Footprint Condition"
-msgstr "Lisää Jalanjälkisuodatin"
+msgstr "Lisää jalanjälkiehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:364
-#, fuzzy
 msgid "Add Side Condition"
-msgstr "Lisää keskimitta"
+msgstr "Lisää lisäehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:365
-#, fuzzy
 msgid "Add Rotation Condition"
-msgstr "Lisää keskimitta"
+msgstr "Lisää asennuskulmaehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:366
-#, fuzzy
 msgid "Add Footprint Field Value Condition"
-msgstr "Lisää Jalanjälkisuodatin"
+msgstr "Lisää jalanjäljen kenttäarvoehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:367
 msgid "Add Sheet Condition"
 msgstr "Lisää arkin sääntö"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:368
-#, fuzzy
 msgid "Add Custom Expression Condition"
-msgstr "Lisää verkkoluokan määritys"
+msgstr "Lisää mukautettu lauseke-ehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:561
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:614
@@ -49423,9 +49167,8 @@ msgid "Custom Assignments:"
 msgstr "Mukautetut osoitukset:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:35
-#, fuzzy
 msgid "Add Custom Assignment"
-msgstr "Lisää verkkoluokan määritys"
+msgstr "Lisää mukautettu osoitus"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:78
 msgid "Component class:"
@@ -49439,47 +49182,40 @@ msgstr "Komponenttiluokka:"
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:389
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:436
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:483
-#, fuzzy
 msgid "Delete row"
 msgstr "Poista rivi"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:106
-#, fuzzy
 msgid "Highlight matching footprints"
-msgstr ": %i vastaavaa jalanjälkeä"
+msgstr "Korosta täsmäävät jalanjäljet"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:116
-#, fuzzy
 msgid "Match all"
-msgstr "Päivitä Kaikki"
+msgstr "Täytä kaikki ehdot"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:120
-#, fuzzy
 msgid "Match any"
-msgstr "Yhdistetyt kerrokset"
+msgstr "Täytä mikä tahansa ehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:167
-#, fuzzy
 msgid "Import references"
-msgstr "Komponentin viite"
+msgstr "Tuo viitetunnukset"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:313
 msgid "Footprint:"
 msgstr "Jalanjälki:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:321
-#, fuzzy
 msgid "Show library"
-msgstr "&Kirjastot"
+msgstr "Näytä kirjasto"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:368
 msgid "Footprint field:"
 msgstr "Jalanjäljen kenttä:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:378
-#, fuzzy
 msgid "Field value:"
-msgstr "Loppuarvo:"
+msgstr "Kentän arvo:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
 msgid "Sheet name:"
@@ -49648,9 +49384,8 @@ msgid "Cmd:"
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:267
-#, fuzzy
 msgid "Option:"
-msgstr "Asetukset:"
+msgstr "Alt / Option:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:317
 msgid "Always show selected ratsnest"
@@ -49776,15 +49511,13 @@ msgstr "Sijoitusaluekerros"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:209
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Fabrication layer"
-msgstr "Valmistusominaisuus"
+msgstr "Valmistuskerros"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:210
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Silkscreen layer"
-msgstr "Silkkipaino päällekkäin"
+msgstr "Silkkipainokerros"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:211
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
@@ -49793,9 +49526,8 @@ msgstr "Nastan sijoituslaatikko"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:264
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:891
-#, fuzzy
 msgid "Component height must be greater than zero."
-msgstr "Viivan leveyden on oltava suurempi kuin nolla."
+msgstr "Komponentin korkeuden on oltava suurempi kuin nolla."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:264
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:274
@@ -49823,60 +49555,52 @@ msgstr "Tiedoston avaaminen ei onnistunut"
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:904
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:941
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:964
-#, fuzzy
 msgid "Export Extruded Body"
-msgstr "Vie levyn runko"
+msgstr "Vie pursotettu runko"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:904
 msgid "No extrusion outline could be generated for this footprint."
 msgstr "Tälle jalanjäljelle ei voitu muodostaa pursotuksen ääriviivaa."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:911
-#, fuzzy
 msgid "Export Extruded 3D Body"
-msgstr "Vie levyn runko"
+msgstr "Vie pursotettu 3D-runko"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:912
-#, fuzzy
 msgid "GLB files"
-msgstr "SVG-tiedostot"
+msgstr "GLB-tiedostot"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:913
-#, fuzzy
 msgid "BREP files"
-msgstr "STEP tiedostot"
+msgstr "BREP-tiedostot"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:941
 msgid "Failed to create extruded body geometry."
 msgstr "Pursotetun kappalegeometrian luominen epäonnistui."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:964
-#, fuzzy
 msgid "Failed to write file."
-msgstr "Tiedoston '%s' kirjoittaminen epäonnistui."
+msgstr "Tiedoston kirjoittaminen epäonnistui."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:45
 msgid "3D Model(s)"
 msgstr "3D-malli (t)"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:92
-#, fuzzy
 msgid "Enable extruded 3D model for this footprint"
-msgstr "Vain yksi antura tälle osalle"
+msgstr "Ota käyttöön pursotettu 3D-malli tälle jalanjäljelle"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:101
-#, fuzzy
 msgid "Show extruded 3D model"
-msgstr "Näytä määrittelemättömät 3D-mallit"
+msgstr "Näytä pursotettu 3D-malli"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:113
 msgid "Overall height:"
 msgstr "Kokonaiskorkeus:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:126
-#, fuzzy
 msgid "Standoff height:"
-msgstr "Tekstin korkeus:"
+msgstr "Korotuskorkeus:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:139
 msgid "Extrusion source:"
@@ -49887,24 +49611,20 @@ msgid "Material:"
 msgstr "Materiaali:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Plastic"
-msgstr "Todenmukainen"
+msgstr "Muovi"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Matte"
-msgstr "Kuvio"
+msgstr "Matta"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Metal"
-msgstr "Metadata"
+msgstr "Metalli"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:182
-#, fuzzy
 msgid "Export generated 3D model"
-msgstr "Vie 3D-malli"
+msgstr "Vie generoitu 3D-malli"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names.cpp:288
 #, c-format
@@ -50064,26 +49784,24 @@ msgid "Minimum clearance:"
 msgstr "Pienin välys:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:64
-#, fuzzy
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minimivälys kuparikohteiden välillä, jotka eivät kuulu samaan verkkoon. Jos "
-"asetettu, tämä on ehdoton minimi jota ei voi alittaa verkkoluokilla, "
-"mukautetuilla säännöillä tai muilla asetuksilla."
+"Pienin sallittu turvaväli sellaisten kuparikohteiden välillä, jotka eivät "
+"kuulu samaan johdinverkkoon. Jos tämä on määritetty, sitä voidaan pienentää "
+"vain mukautetuilla säännöillä."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid "Minimum track width:"
 msgstr "Pienin raideleveys:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
-#, fuzzy
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
-"Pienin johdinliuskan leveys. Jos asetettu, tämä on ehdoton minimi jota ei "
-"voi alittaa verkkoluokilla, mukautetuilla säännöillä tai muilla asetuksilla."
+"Pienin sallittu johdinraidan leveys. Jos tämä on määritetty, sitä voidaan "
+"pienentää vain mukautetuilla säännöillä."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
 msgid "Minimum connection width:"
@@ -50098,13 +49816,12 @@ msgid "Minimum annular width:"
 msgstr "Pienin rengasleveys:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
-#, fuzzy
 msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Pienin kauluksen leveys. Jos asetettu, tämä on absoluuttinen minimi jota ei "
-"voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
+"Pienin sallittu kuparirenkaan leveys. Jos tämä on määritetty, sitä voidaan "
+"pienentää vain mukautetuilla säännöillä."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
@@ -50122,28 +49839,26 @@ msgid "Copper to hole clearance:"
 msgstr "Kuparin välys reikään:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item. If "
 "set, this can only be reduced by custom rules."
 msgstr ""
-"Pienin välys reiän ja liittymättömän kuparin välillä. Jos asetettu, tämä on "
-"absoluuttinen minimi jota ei voi alittaa netclass:eilla, kustomisäännöillä "
-"tai muilla asetuksilla."
+"Pienin sallittu turvaväli reiän ja siihen liittymättömän kuparikohteen "
+"välillä. Jos tämä on määritetty, sitä voidaan pienentää vain mukautetuilla "
+"säännöillä."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:157
 msgid "Copper to edge clearance:"
 msgstr "Reunan välys kupariin:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:162
-#, fuzzy
 msgid ""
 "The minimum clearance between the board edge and any copper item. If set, "
 "this can only be reduced by custom rules."
 msgstr ""
-"Pienin välys piirilevyn reunan ja minkä tahansa kuparin välillä. Jos "
-"asetettu, tämä on absoluuttinen minimi jota ei voi alittaa netclass:eilla, "
-"kustomisäännöillä tai muilla asetuksilla."
+"Pienin sallittu turvaväli piirilevyn reunan ja minkä tahansa kuparikohteen "
+"välillä. Jos tämä on määritetty, sitä voidaan pienentää vain mukautetuilla "
+"säännöillä."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
 msgid "Minimum groove for creepage:"
@@ -50173,14 +49888,13 @@ msgid "Hole to hole clearance:"
 msgstr "Reikien välinen etäisyys:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
-#, fuzzy
 msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
-"Pienin välys kahden poratun reiän välillä. Jos asetettu, tämä on "
-"absoluuttinen minimi jota ei voi alittaa kustomisäännöillä tai muilla "
-"asetuksilla. (Huomioi: ei koske jyrsittyjä reikiä.)"
+"Pienin sallittu turvaväli kahden poratun reiän välillä. Jos tämä on "
+"määritetty, sitä voidaan pienentää vain mukautetuilla säännöillä. "
+"(Huomautus: ei koske jyrsittyjä reikiä.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
 msgid "uVias"
@@ -50191,14 +49905,12 @@ msgid "Minimum uVia diameter:"
 msgstr "Pienin mikroläpiviennin halkaisija:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:276
-#, fuzzy
 msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
 msgstr ""
-"Pienin mikroläpiviennin halkaisija. Jos asetettu, tämä on absoluuttinen "
-"minimi jota ei voi alittaa verkkoluokilla, mukautetuilla säännöillä tai "
-"muilla asetuksilla."
+"Pienin sallittu mikroläpivientien halkaisija. Jos tämä on määritetty, sitä "
+"voidaan pienentää vain mukautetuilla säännöillä."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:287
 msgid "Minimum uVia hole:"
@@ -50214,22 +49926,21 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:300
 msgid "Silk"
-msgstr ""
+msgstr "Silkki"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:328
 msgid "Minimum item clearance:"
 msgstr "Vähimmäisetäisyys:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:333
-#, fuzzy
 msgid ""
 "Minimum clearance between two items on the same silkscreen layer. If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Pienin välys kahden samalla silkkipainokerroksella olevan kohteen välillä. "
-"Tämä saattaa parantaa luettavuutta. (Huomioi: ei päde saman jalanjäljen "
-"sisällä olevien useiden muotojen välillä.)"
+"Minimietäisyys kahden samalla silkkipainatustasolla olevan kohteen välillä.\n"
+"Tämän arvon asettaminen voi parantaa luettavuutta.\n"
+"(Huomautus: ei koske saman jalanjäljen sisällä olevia useita muotoja.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:344
 msgid "Minimum text height:"
@@ -50240,9 +49951,8 @@ msgid "Minimum text thickness:"
 msgstr "Minimi tekstin paksuus:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:384
-#, fuzzy
 msgid "Arc/Circle Approximations"
-msgstr "Kaari/Ympyrä Arvioitu osioista"
+msgstr "Kaarien ja ympyröiden likiarvot"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:397
 msgid "Maximum allowed deviation:"
@@ -50283,7 +49993,7 @@ msgstr "Salli kaistaleet/viisteet vyöhykkeen ääriviivan ulkopuolella"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:449
 msgid "Minimum thermal relief spoke count:"
-msgstr "Termisten kevennysten minimi liuskojen määrä:"
+msgstr "Lämpöpinnojen vähimmäismäärä:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:465
 msgid "Length Tuning"
@@ -50360,9 +50070,8 @@ msgid "Apply board defaults to non-copper footprint shapes"
 msgstr "Käytä piirilevyn oletusasetuksia ei-kuparisen jalanjäljen muotoihin"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:75
-#, fuzzy
 msgid "Apply board defaults to footprint dimensions"
-msgstr "Käytä levyn oletusasetuksia jalanjälkikenttiin"
+msgstr "Käytä piirilevyn oletusasetuksia jalanjäljen mittoihin"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:78
 msgid "Apply board defaults to footprint barcodes"
@@ -50407,7 +50116,7 @@ msgstr "Jos sinä haluat juotospastakerroksen piirilevyn etupuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:203
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Haluttaessa etupuolen silkkipainokerros"
+msgstr "Jos haluat piirilevyn etupuolelle silkkipainatuskerroksen"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:221
 msgid "If you want a solder mask layer for the front of the board"
@@ -50419,7 +50128,7 @@ msgstr "Jos haluat juotosmaskikerroksen piirilevyn kääntöpuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:263
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "Haluttaessa kääntöpuolen silkkipainokerros"
+msgstr "Jos haluat piirilevyn takapuolelle silkkipainatuskerroksen"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:281
 msgid "If you want a solder paste layer for the back side of the board"
@@ -50528,9 +50237,8 @@ msgstr ""
 "kohteet poistetuista tasoista, eikä sitä voi kumota."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:929
-#, fuzzy
 msgid "Show Details"
-msgstr "Näytä yksityiskohdat"
+msgstr "Näytä tiedot"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:999
 msgid "Layer must have a name."
@@ -50581,21 +50289,20 @@ msgid "Add User Defined Layer..."
 msgstr "Lisää käyttäjän määrittämä kerros..."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
-#, fuzzy
 msgid ""
 "Consult your PCB manufacturer's specifications for solder mask expansion, "
 "web width, and clearance settings."
 msgstr ""
-"Käytä sinun piirilevyvalmistajasi suosituksia juotosmaskilaajennuksille ja "
-"pienintä verkkoleveyttä."
+"Tarkista piirilevynvalmistajasi määritykset juotosmaskin laajennukselle, "
+"sillan vähimmäisleveydelle ja turvaväliasetuksille."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:33
-#, fuzzy
 msgid ""
 "If no specifications are provided, setting these values to zero is "
 "recommended."
 msgstr ""
-"Jos mitään arvoa ei ole annettu, asettaminen nollaksi on suositeltavaa."
+"Jos määrityksiä ei ole annettu, näiden arvojen asettamista nollaan "
+"suositellaan."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:46
 msgid "Solder Mask Settings"
@@ -50675,7 +50382,6 @@ msgstr "Juotospasta-asetukset"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:167
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:172
-#, fuzzy
 msgid ""
 "Global clearance ratio between pads and the solder paste as a percentage of "
 "the pad size.\n"
@@ -50684,19 +50390,20 @@ msgid ""
 "Final clearance value is the sum of this value and the absolute clearance "
 "value."
 msgstr ""
-"Yleinen välys-suhde prosentteina anturoiden ja juotospastan välillä.\n"
-"Arvo 10 tarkoittaa, että välysarvo on 10 prosenttia anturan koosta.\n"
-"Tämä arvo voidaan korvata jalanjäljen tai anturan paikallisilla arvoilla.\n"
-"Lopullinen välysarvo on tämän arvon ja välysarvon summa."
+"Yleinen anturoita ja juotostahnaa koskeva turvavälisuhde prosenttiosuutena "
+"anturan koosta.\n"
+"Arvo 10 tarkoittaa, että turvaväli on 10 prosenttia anturan koosta.\n"
+"Jalanjäljen tai yksittäisen anturan paikalliset arvot voivat korvata tämän "
+"arvon.\n"
+"Lopullinen turvaväli on tämän arvon ja absoluuttisen turvavälin summa."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:115
 msgid "Cancel Changes?"
 msgstr "Perutaanko muutokset?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:154
-#, fuzzy
 msgid "Show Matching Items"
-msgstr "Näytä Seuranta"
+msgstr "Näytä täsmäävät kohteet"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:207
 msgid "Cannot show matching items without an open project."
@@ -50716,9 +50423,9 @@ msgid "ERROR:"
 msgstr "VIRHE:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
-msgstr "Ei voitu viedä etävarastoon: %s"
+msgstr "Sääntötekstin lukeminen epäonnistui: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:339
 msgid "Place the cursor inside a (rule ...) block to show matching items."
@@ -50729,9 +50436,9 @@ msgid "The rule under the cursor has no name; add a name to identify it."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Tiedostoa '%s' ei voitu luoda."
+msgstr "Sääntöä ”%s” ei löytynyt jäsennyksen jälkeen."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:387
 msgid "DRC engine not available."
@@ -50748,14 +50455,14 @@ msgid "Rules '%s' and '%s' share the same condition."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:1020
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
-msgstr "Vaihda viitetunnus %s muotoon '%s'."
+msgstr "Sääntö ”%s” viittaa määrittelemättömään verkkoluokkaan ”%s”."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
-msgstr "Vaihda %s viitenimikkeeksi %s."
+msgstr "Sääntö '%s' viittaa määrittelemättömiin kerroksiin: %s."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:1113
 msgid "Design rules cannot be added without a project"
@@ -50767,9 +50474,8 @@ msgid "Cannot save design rules to '%s': %s"
 msgstr "Suunnittelusääntöjä ei voi tallentaa kohteeseen ”%s”: %s"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
-#, fuzzy
 msgid "DRC Rules"
-msgstr "suunnittelusäännöt"
+msgstr "Suunnittelusäännöt (DRC)"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:133
@@ -50777,7 +50483,6 @@ msgid "Check rule syntax"
 msgstr "Tarkista säännön syntaksit"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
-#, fuzzy
 msgid ""
 "### Documentation\n"
 "\n"
@@ -50786,8 +50491,8 @@ msgid ""
 msgstr ""
 "### Dokumentaatio\n"
 "\n"
-"Täydelliset asiakirjat ovat osoitteessa [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+"Täydellinen dokumentaatio löytyy osoitteesta [https://docs.kicad.org]"
+"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
 "pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
@@ -51471,9 +51176,8 @@ msgstr ""
 ".\n"
 "\n"
 "\n"
-"\n"
 "```\n"
-"\tA.enclosedByArea('<zone_name>')\n"
+"    A.enclosedByArea('<zone_name>')\n"
 "```\n"
 "> Tosi, jos kaikki `A`:sta sijaitsee annetun vyöhykkeen ääriviivan sisällä.\n"
 "\n"
@@ -51483,7 +51187,7 @@ msgstr ""
 "\n"
 "\n"
 "```\n"
-"    A.existsOnLayer('<layer_name>')\n"
+" A.existsOnLayer('<layer_name>')\n"
 "```\n"
 "> Tosi, jos `A` on olemassa annetulla tasolla. Tason nimi voi olla\n"
 "joko Piirilevyn asetukset > Piirilevyeditorin kerrokset-kohdassa määritetty "
@@ -51496,16 +51200,16 @@ msgstr ""
 "\n"
 "\n"
 "```\n"
-"\tA.fromTo('x', 'y')\n"
+"    A.fromTo('x', 'y')\n"
 "```\n"
 "> Tosi, jos objekti sijaitsee annettujen anturoiden välisellä "
 "kuparipolulla.\n"
 " `x` ja `y` ovat suunnittelussa olevien anturoiden täydelliset nimet, kuten\n"
-"`R1-Pad1`.\n"
+" `R1-Pad1`.\n"
 "\n"
 "\n"
 "```\n"
-"\tA.getField('<field_name>')\n"
+"    A.getField('<field_name>')\n"
 "```\n"
 "> Annetun kentän arvo. Vain jalanjäljillä on kenttiä, joten kenttä "
 "palautetaan vain, jos\n"
@@ -51520,8 +51224,8 @@ msgstr ""
 "komponenttiluokan.\n"
 "\n"
 "\n"
-"```\n"
-"    A.hasNetclass('<netclass_name>')\n"
+" ```\n"
+" A.hasNetclass('<netclass_name>')\n"
 "```\n"
 "> Tosi, jos A:lle on määritetty annettu verkkoluokka joko suoralla "
 "tunnisteella\n"
@@ -51529,11 +51233,11 @@ msgstr ""
 "\n"
 "\n"
 "```\n"
-"    A.inDiffPair('<net_name>')\n"
+" A.inDiffPair('<net_name>')\n"
 "```\n"
 "> Tosi, jos `A`:lla on verkko, joka on osa määritettyä differentiaaliparia.\n"
-"> `<net_name>` on differentiaaliparin perusnimi.\n"
-"> Esimerkiksi `inDiffPair('/CLK')` vastaa kohteita verkoissa `/CLK_P` ja `/"
+">  `<net_name>` on differentiaaliparin perusnimi.\n"
+">  Esimerkiksi `inDiffPair('/CLK')` vastaa kohteita verkoissa `/CLK_P` ja `/"
 "CLK_N`.\n"
 "\n"
 "\n"
@@ -51555,9 +51259,9 @@ msgstr ""
 "\n"
 "\n"
 "```\n"
-"\tA.inNetChainClass('<class_name>')\n"
+"    A.inNetChainClass('<class_name>')\n"
 "```\n"
-"> Tosi, jos `A`:n verkko kuuluu ketjuun, jonka määritetty ketjuluokka\n"
+" > Tosi, jos `A`:n verkko kuuluu ketjuun, jonka määritetty ketjuluokka\n"
 "vastaa `<class_name>`-arvoa. Luokkien määritykset sijaitsevat projektin\n"
 "`net_chain_classes`-kartassa. `<class_name>` tukee jokerimerkkejä.\n"
 "\n"
@@ -51577,12 +51281,12 @@ msgstr ""
 "suoja-alueen sisällä.\n"
 "\n"
 "\n"
+"\n"
 "```\n"
 "    A.intersectsFrontCourtyard('<footprint_identifier>')\n"
 "```\n"
 "> Tosi, jos jokin osa `A`:sta sijaitsee annetun jalanjäljen etupuolen suoja-"
 "alueen sisällä.\n"
-"\n"
 "\n"
 "```\n"
 "    A.intersectsBackCourtyard('<footprint_identifier>')\n"
@@ -51604,7 +51308,6 @@ msgstr ""
 "   kirjainkoosta riippuvainen, mutta komponenttiluokkien nimet ovat "
 "kirjainkoolla merkitseviä.\n"
 "\n"
-"\n"
 "```\n"
 "    AB.isCoupledDiffPair()\n"
 "```\n"
@@ -51616,7 +51319,6 @@ msgstr ""
 "    A.isMicroVia()\n"
 "```\n"
 "> Tosi, jos `A` on mikroläpivienti.\n"
-"\n"
 "\n"
 "\n"
 "```\n"
@@ -51662,7 +51364,7 @@ msgstr ""
 "\n"
 "\n"
 "```\n"
-"    A.memberOfSheetOrChildren('<sheet_path>')\n"
+" A.memberOfSheetOrChildren('<sheet_path>')\n"
 "```\n"
 "> Tosi, jos `A` on annetun kaaviosivun jäsen tai jonkin sen alisteisen "
 "hierarkkisen sivun jäsen.\n"
@@ -52067,20 +51769,17 @@ msgstr "Differentiaaliparien vinoutumisen oletusominaisuudet"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:843
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:894
-#, fuzzy
 msgid "Could not compute track width"
-msgstr "Liian pieni liuskan leveys"
+msgstr "Johdinraidan leveyden laskeminen epäonnistui"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:848
-#, fuzzy
 msgid "Could not compute differential pair gap"
-msgstr "Reititä differentiaalipareja"
+msgstr "Differentiaaliparin välin laskeminen epäonnistui"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:853
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:899
-#, fuzzy
 msgid "Could not compute track propagation delay"
-msgstr "Määritystiedostoa ei voitu avata"
+msgstr "Johdinraidan etenemisviiveen laskeminen epäonnistui"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:919
 msgid "Tuning profile must have a name"
@@ -52094,9 +51793,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:973
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1039
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1045
-#, fuzzy
 msgid "Signal layer not found in stackup"
-msgstr "Signaalinimet eivät voi sisältää välilyöntejä"
+msgstr "Signaalikerrosta ei löytynyt piirilevyn kerrospinosta"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:968
 msgid "Internal error: Microstrip can only be on an outer copper layer"
@@ -52104,9 +51802,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:979
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1051
-#, fuzzy
 msgid "Signal layer thickness must be greater than 0"
-msgstr "Säteen on oltava suurempi kuin 0"
+msgstr "Signaalikerroksen paksuuden on oltava suurempi kuin 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:990
 msgid "Reference layer not found in stackup"
@@ -52117,9 +51814,8 @@ msgid "Reference layer must be different to signal layer"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1007
-#, fuzzy
 msgid "Dielectric height must be greater than 0"
-msgstr "Kaarikulman on oltava suurempi kuin 0"
+msgstr "Eristekerroksen paksuuden on oltava suurempi kuin 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1057
 msgid "Top reference layer not found in stackup"
@@ -52138,25 +51834,22 @@ msgid "Bottom reference layer must be below signal layer in board stackup"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1098
-#, fuzzy
 msgid "Dielectric heights must be greater than 0"
-msgstr "Kaarikulman on oltava suurempi kuin 0"
+msgstr "Eristekerrosten paksuuksien on oltava suurempia kuin 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1120
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1209
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1284
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1398
-#, fuzzy
 msgid "Target impedance must be greater than 0"
-msgstr "Kaarikulman on oltava suurempi kuin 0"
+msgstr "Tavoiteimpedanssin on oltava suurempi kuin 0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1186
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1261
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1370
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1494
-#, fuzzy
 msgid "Width calculation failed"
-msgstr "Muokkaa liitostiedostoa"
+msgstr "Leveyden laskeminen epäonnistui"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1189
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1264
@@ -52190,33 +51883,28 @@ msgid "Diff pair gap calculation failed"
 msgstr "Differentiaaliparin välin laskenta epäonnistui"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
-#, fuzzy
 msgid "Single"
-msgstr "Yksittäinen asiakirja"
+msgstr "Yksittäisjohdin"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target impedance:"
-msgstr "Kohdealueet:"
+msgstr "Tavoiteimpedanssi:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:69
 msgid "ohms"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:120
-#, fuzzy
 msgid "Enable time domain tuning"
-msgstr "Salli automaattinen näkymän &vieritys"
+msgstr "Ota käyttöön aikatason pituudensäätö"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
-#, fuzzy
 msgid "Model solder mask"
-msgstr "Yläpuolen Juotosmaski"
+msgstr "Mallinna juotosmaski"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:152
-#, fuzzy
 msgid "Net Chain Bridge Propagation"
-msgstr "Läpiviennin Ominaisuudet"
+msgstr "Verkkoketjun siltasignaalin eteneminen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:158
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:252
@@ -52229,63 +51917,52 @@ msgid "ps/cm"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:182
-#, fuzzy
 msgid "Track Propagation"
-msgstr "Johdinraidat risteävät"
+msgstr "Signaalin eteneminen johdinraidassa"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:201
-#, fuzzy
 msgid "Signal Layer"
-msgstr "Silkkikerrokset"
+msgstr "Signaalikerros"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:202
-#, fuzzy
 msgid "Top Reference"
-msgstr "Viite"
+msgstr "Yläviitetaso"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:203
-#, fuzzy
 msgid "Bottom Reference"
-msgstr "Viite"
+msgstr "Alaviitetaso"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:205
-#, fuzzy
 msgid "Diff Pair Gap"
-msgstr "Differentiaaliparin väli: %s"
+msgstr "Differentiaaliparin väli"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:206
-#, fuzzy
 msgid "Unit Delay"
-msgstr "Viive"
+msgstr "Yksikköviive"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:243
-#, fuzzy
 msgid "Via Propagation"
-msgstr "Läpiviennin Ominaisuudet"
+msgstr "Signaalin eteneminen läpiviennissä"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:269
 msgid "Via delay overrides:"
 msgstr "Läpivientien signaaliviiveen poikkeusarvot:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:286
-#, fuzzy
 msgid "Signal Layer From"
-msgstr "Silkkikerrokset"
+msgstr "Signaalikerroksesta"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:287
-#, fuzzy
 msgid "Signal Layer To"
-msgstr "Silkkikerrokset"
+msgstr "Signaalikerrokseen"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:288
-#, fuzzy
 msgid "Via Layer From"
-msgstr "KiCad Kerros"
+msgstr "Läpivientikerroksesta"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:289
-#, fuzzy
 msgid "Via Layer To"
-msgstr "Kerroksen yläosa"
+msgstr "Läpivientikerrokseen"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:19
 msgid "Zone Hatched Fill Offsets"
@@ -52303,18 +51980,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
-#, fuzzy
 msgid "Default Properties for New Zones"
-msgstr "Uusien mittaobjektien oletusominaisuudet"
+msgstr "Uusien alueiden oletusominaisuudet"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:407
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Lämpöpinnan leveys ei voi olla pienempi, kuin vähimmäisleveys."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:472
-#, fuzzy
 msgid "All zone layers already overridden."
-msgstr "Kaikki käyttäjän määrittämät kerrokset on jo lisätty."
+msgstr "Kaikki aluekerrokset on jo ohitettu."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:495
 msgid "<no net> will result in an isolated copper island."
@@ -52326,11 +52001,9 @@ msgstr "Vyöhykkeen nimi:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
 msgstr ""
-"Tämän vyöhykkeen yksilöllinen nimi sen tunnistamiseksi suunnittelusääntöjen "
-"tarkistuksessa"
+"Alueen yksilöllinen nimi, jota käytetään sen tunnistamiseen DRC-säännöissä"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -52387,28 +52060,24 @@ msgid "Width of copper in thermal reliefs."
 msgstr "Kuparin leveys termisissä kevennyksissä."
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:149
-#, fuzzy
 msgid "Clearances && Pad Connections"
-msgstr "Välyksien Ohitukset ja Asetukset"
+msgstr "Turvavälit && anturakytkennät"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:189
-#, fuzzy
 msgid "Display Overrides"
-msgstr "Ristikon Ohitukset"
+msgstr "Näyttöohitukset"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:200
-#, fuzzy
 msgid "Hatched fill"
-msgstr "Täyttöviivoitettu"
+msgstr "Ristiintäyttö"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:264
 msgid "Hatch offset overrides:"
 msgstr "Täyttökuvion siirtymän poikkeusarvot:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:325
-#, fuzzy
 msgid "Hatched Fill"
-msgstr "Täyttöviivoitettu"
+msgstr "Ristiintäytön asetukset"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:343
 #: pcbnew/tools/edit_tool.cpp:1399 pcbnew/tools/edit_tool.cpp:1581
@@ -52472,14 +52141,12 @@ msgid "board setup constraints edge"
 msgstr "levyn asennusrajoitukset reuna"
 
 #: pcbnew/drc/drc_engine.cpp:231
-#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "levyn asennusrajoitukset sijoitusalue"
+msgstr "piirilevyn asetukset > rajoitukset > suoja-alue"
 
 #: pcbnew/drc/drc_engine.cpp:238
-#, fuzzy
 msgid "board setup constraints micro-via"
-msgstr "levyn asennusrajoitukset"
+msgstr "piirilevyn asetukset > rajoitukset > mikroläpivienti"
 
 #: pcbnew/drc/drc_engine.cpp:253
 msgid "barcode visual separation default"
@@ -52493,14 +52160,14 @@ msgid "netclass '%s'"
 msgstr "verkkoluokka '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:312 pcbnew/drc/drc_engine.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' diff pair"
-msgstr "verkkoluokka '%s' (diff pari)"
+msgstr "verkkoluokan '%s' differentiaalipari"
 
 #: pcbnew/drc/drc_engine.cpp:399 pcbnew/drc/drc_engine.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' uvia"
-msgstr "verkkoluokka '%s' (mikroläpivienti)"
+msgstr "johdinverkkoluokan '%s' mikroläpivienti"
 
 #: pcbnew/drc/drc_engine.cpp:467 pcbnew/drc/drc_engine.cpp:493
 #: pcbnew/drc/drc_engine.cpp:511 pcbnew/drc/drc_engine.cpp:532
@@ -52509,9 +52176,9 @@ msgid "tuning profile '%s'"
 msgstr "viritysprofiili ”%s”"
 
 #: pcbnew/drc/drc_engine.cpp:593
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area of %s"
-msgstr "säilytysalue '%s'"
+msgstr "kohteen %s kieltoalue"
 
 #: pcbnew/drc/drc_engine.cpp:598
 msgid "keepout area"
@@ -52543,9 +52210,8 @@ msgid "Net tie on %s; clearance: 0."
 msgstr "Verkkosidonta kohteessa %s; välys: 0."
 
 #: pcbnew/drc/drc_engine.cpp:1131
-#, fuzzy
 msgid "net tie"
-msgstr "Lehtien otsikot"
+msgstr "Verkkosolmu"
 
 #: pcbnew/drc/drc_engine.cpp:1158 pcbnew/drc/drc_engine.cpp:1168
 #, c-format
@@ -52591,24 +52257,26 @@ msgid "%s min thickness: %s."
 msgstr "%s min paksuus %s."
 
 #: pcbnew/drc/drc_engine.cpp:1294
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder mask expansion: %s."
-msgstr "Paikallinen ohitus %s; välys: %s."
+msgstr "Paikallinen ohitus kohteessa %s; juotosmaskin laajennus: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1322
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder paste absolute clearance: %s."
-msgstr "Paikallinen ohitus %s; välys: %s."
+msgstr ""
+"Paikallinen ohitus kohteessa %s; juotostahnan absoluuttinen turvaväli: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1350
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder paste relative clearance: %s."
-msgstr "Paikallinen ohitus %s; välys: %s."
+msgstr ""
+"Paikallinen ohitus kohteessa %s; juotostahnan suhteellinen turvaväli: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1362
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion '%s'."
-msgstr "Tarkistetaan väitettä \"%s\"."
+msgstr "Tarkistetaan väitettä %s."
 
 #: pcbnew/drc/drc_engine.cpp:1366 pcbnew/drc/drc_engine.cpp:2218
 msgid "Assertion passed."
@@ -52649,9 +52317,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Tarkistetaan%s lämpöanturan leveyttä: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1428
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder mask expansion: %s."
-msgstr "Tarkistetaan %s reikäkoko: min %s."
+msgstr "Tarkistetaan kohteen %s juotosmaskin laajennus: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1434
 #, c-format
@@ -52744,9 +52412,9 @@ msgid "Netclass clearances apply only between copper items."
 msgstr "Verkkoluokan välykset ovat voimassa vain kuparikohteiden välillä."
 
 #: pcbnew/drc/drc_engine.cpp:1640 pcbnew/drc/drc_engine.cpp:1646
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Constraint ignored."
-msgstr "%s ei sisällä kuparia.  Sääntö ohitettu."
+msgstr "%s ei sisällä kuparia.  Rajoitus ohitetaan."
 
 #: pcbnew/drc/drc_engine.cpp:1657
 msgid "Keepout belongs to the footprint under test; constraint ignored."
@@ -52779,9 +52447,9 @@ msgid "Constraint layer not matched."
 msgstr "Rajoitustaso ei täsmää."
 
 #: pcbnew/drc/drc_engine.cpp:1777
-#, fuzzy, c-format
+#, c-format
 msgid "%s does not have a hole; rule ignored."
-msgstr "%s ei ole porattu reikä; sääntö ohitettu."
+msgstr "%s ei sisällä reikää; sääntö ohitetaan."
 
 #: pcbnew/drc/drc_engine.cpp:1786
 msgid "Unconditional constraint applied."
@@ -52796,9 +52464,9 @@ msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Ehdotonta sääntöä sovelletaan; ohittaa aiemmat rajoitukset."
 
 #: pcbnew/drc/drc_engine.cpp:1822 pcbnew/drc/drc_engine.cpp:2246
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition '%s'."
-msgstr "Tarkistetaan säännön tilaa \"%s\"."
+msgstr "Tarkistetaan säännön ehtoa %s."
 
 #: pcbnew/drc/drc_engine.cpp:1839
 msgid "Constraint applied."
@@ -52821,14 +52489,14 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Ehto ei täyty; sääntö ohitettu."
 
 #: pcbnew/drc/drc_engine.cpp:1936
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved minimum clearance: %s."
-msgstr "Ratkaistu minimietäisyys: %s."
+msgstr "Ratkaistu pienin sallittu turvaväli: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1960
-#, fuzzy, c-format
+#, c-format
 msgid "Inheriting from parent: %s."
-msgstr "Johdettu symbolista '%s'."
+msgstr "Perii kantasäännöt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1987 pcbnew/drc/drc_engine.cpp:1994
 #: pcbnew/drc/drc_engine.cpp:2001
@@ -52870,9 +52538,9 @@ msgid "%s thermal spoke width: %s."
 msgstr "%s lämpöpinnan leveys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:2212
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion '%s'."
-msgstr "Tarkistetaan säännön väitettä \"%s\"."
+msgstr "Tarkistetaan sääntöväitettä %s."
 
 #: pcbnew/drc/drc_item.cpp:40 pcbnew/zone.cpp:2464
 msgid "Electrical"
@@ -52907,9 +52575,8 @@ msgid "Items not allowed"
 msgstr "Kohteet eivät ole sallittuja"
 
 #: pcbnew/drc/drc_item.cpp:61
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Tekstiä(tai mittoja) ei löydy Edge.Cuts-kerroksesta"
+msgstr "Tekstiä tai grafiikkaa Edge.Cuts-kerroksella"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
@@ -52985,9 +52652,8 @@ msgid "Via diameter"
 msgstr "Läpiviennin halkaisija"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Padstack is questionable"
-msgstr "Anturapino ei ole kelvollinen"
+msgstr "Anturarakenne on kyseenalainen"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Padstack is not valid"
@@ -53050,13 +52716,12 @@ msgid "Footprint doesn't match symbol's footprint filters"
 msgstr "Jalanjälki ei vastaa symbolin jalanjälkisuodattimia"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Footprint field does not match symbol field"
-msgstr "Jalanjäljen määritteet eivät vastaa kirjastossa olevaa kopiota"
+msgstr "Jalanjälkikenttä ei täsmää symbolikenttään"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Via-stitching zones overlap for same net"
-msgstr ""
+msgstr "Pistotikkausalueet menevät päällekkäin samassa verkossa"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Footprint not found in libraries"
@@ -53087,9 +52752,8 @@ msgid "Silkscreen clipped by board edge"
 msgstr "Silkkipaino leikattu levyn reunasta"
 
 #: pcbnew/drc/drc_item.cpp:249
-#, fuzzy
 msgid "Silkscreen clearance"
-msgstr "Silkkipaino päällekkäin"
+msgstr "Silkkipainon turvaväli"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Text height out of range"
@@ -53100,14 +52764,12 @@ msgid "Text thickness out of range"
 msgstr "Tekstin paksuus alueen ulkopuolella"
 
 #: pcbnew/drc/drc_item.cpp:261
-#, fuzzy
 msgid "Track length out of range"
-msgstr "Jäljen pituus alueen ulkopuolella"
+msgstr "Johdinraidan pituus on sallitun alueen ulkopuolella"
 
 #: pcbnew/drc/drc_item.cpp:265
-#, fuzzy
 msgid "Net chain stub length out of range"
-msgstr "Jäljen pituus alueen ulkopuolella"
+msgstr "Verkkoketjun tyngän pituus on sallitun alueen ulkopuolella"
 
 #: pcbnew/drc/drc_item.cpp:269
 msgid ""
@@ -53119,9 +52781,8 @@ msgid "Net chain nets do not have consistent tuning profile assignment"
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:277
-#, fuzzy
 msgid "Skew between tracks out of range"
-msgstr "Kallistus johdinraitojen välillä alueen ulkopuolella"
+msgstr "Johdinraitojen välinen vaihe-ero on sallitun alueen ulkopuolella"
 
 #: pcbnew/drc/drc_item.cpp:282
 msgid "Too many or too few vias on a connection"
@@ -53160,9 +52821,8 @@ msgid "Non-Mirrored text on back layer"
 msgstr "Peilaamaton teksti takakerroksessa"
 
 #: pcbnew/drc/drc_item.cpp:318
-#, fuzzy
 msgid "Missing tuning profile"
-msgstr "Puuttuva liukuluku"
+msgstr "Pituudensäätöprofiili puuttuu"
 
 #: pcbnew/drc/drc_item.cpp:322
 msgid "Tuning profile track geometries"
@@ -53173,9 +52833,8 @@ msgid "Track connected to post-machined or backdrilled layer"
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:330
-#, fuzzy
 msgid "Track endpoint not centered on via"
-msgstr "Kaksi liuskan päätä"
+msgstr "Johdinraidan päätepiste ei ole keskellä läpivientiä"
 
 #: pcbnew/drc/drc_item.cpp:544
 #, c-format
@@ -53268,29 +52927,26 @@ msgid "Missing condition expression."
 msgstr "Ehtoilmaisu puuttuu."
 
 #: pcbnew/drc/drc_rule_parser.cpp:342 pcbnew/drc/drc_rule_parser.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Could not parse expression '%s'."
-msgstr "Arkkia ei voitu tuoda kohteesta %s."
+msgstr "Lausekkeen %s jäsentäminen epäonnistui."
 
 #: pcbnew/drc/drc_rule_parser.cpp:349 pcbnew/drc/drc_rule_parser.cpp:423
 #: pcbnew/drc/drc_rule_parser.cpp:737
-#, fuzzy
 msgid "quoted expression"
-msgstr "Epämuodostunut muoto"
+msgstr "lainattu lauseke"
 
 #: pcbnew/drc/drc_rule_parser.cpp:356
 msgid "'layer' keyword already present."
 msgstr "'kerroksen' avainsana on jo olemassa."
 
 #: pcbnew/drc/drc_rule_parser.cpp:389
-#, fuzzy
 msgid "Missing component class name."
-msgstr "Säännön nimi puuttuu."
+msgstr "Puuttuva komponenttiluokan nimi."
 
 #: pcbnew/drc/drc_rule_parser.cpp:459
-#, fuzzy
 msgid "Time based units not allowed for constraint type."
-msgstr "within_diff_pairs -vaihtoehto ei kelpaa rajoitustyypille."
+msgstr "Aikaan perustuvat yksiköt eivät ole sallittuja tälle rajoitustyypille."
 
 #: pcbnew/drc/drc_rule_parser.cpp:464
 msgid "Mixed units for constraint values."
@@ -53307,9 +52963,8 @@ msgid "Rule already has a '%s' constraint."
 msgstr "Säännössä on jo '%s' rajoite."
 
 #: pcbnew/drc/drc_rule_parser.cpp:714
-#, fuzzy
 msgid "number"
-msgstr "Numero"
+msgstr "numero"
 
 #: pcbnew/drc/drc_rule_parser.cpp:725
 msgid "Missing assertion expression."
@@ -53401,9 +53056,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Tarkistetaan kuparin graafisia välyksiä..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:159
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Tarkistetaan kuparin graafisia välyksiä..."
+msgstr "Tarkistetaan kuparigraafikan reikien turvavälejä..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:167
 msgid "Checking copper zone clearances..."
@@ -53492,9 +53146,8 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Tarkistetaan pitoja ja estetään rajoituksia ..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:183
-#, fuzzy
 msgid "Silkscreen outside board edge"
-msgstr "Silkkipaino leikattu levyn reunasta"
+msgstr "Silkkipaino piirilevyn reunan ulkopuolella"
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:267
 msgid "Checking copper to board edge clearances..."
@@ -53671,34 +53324,34 @@ msgid "%s shape primitives differ on layer %s."
 msgstr "%s muotoprimitiivit eroaa kerroksessa %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "%s text differs."
-msgstr "%s eroaa."
+msgstr "%s teksti eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:512
-#, fuzzy, c-format
+#, c-format
 msgid "%s width differs."
-msgstr "%s täyttöviivan leveys eroaa."
+msgstr "%s leveys eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "%s height differs."
 msgstr "%s nimi eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:517
-#, fuzzy, c-format
+#, c-format
 msgid "%s text size differs."
-msgstr "%s porauksen koko eroaa."
+msgstr "%s tekstikoko eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:520
-#, fuzzy, c-format
+#, c-format
 msgid "%s code differs."
-msgstr "%s kulmat eroaa."
+msgstr "%s koodi eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "%s error correction level differs."
-msgstr "%s täyttöviivoituksen pehmennystaso eroaa."
+msgstr "%s virheenkorjaustaso eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:630
 #, c-format
@@ -53726,9 +53379,9 @@ msgid "%s keep-out property differs."
 msgstr "%s pidä pois -ominaisuus eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:641
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out zone fill setting differs."
-msgstr "%s pidä poissa kuparitäyttöasetus eroaa."
+msgstr "%s kieltoalueen täyttöasetus eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:643
 #, c-format
@@ -53831,14 +53484,12 @@ msgid "%s corners differ."
 msgstr "%s kulmat eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:744
-#, fuzzy
 msgid "Footprint stackup mode differs."
-msgstr "Jalanjälkityypit eriävät."
+msgstr "Jalanjäljen kerrospinotila eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:750
-#, fuzzy
 msgid "Footprint layers differ."
-msgstr "Jalanjälkisuodattimet eriävät."
+msgstr "Jalanjäljen kerrokset eroavat."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:782
 #, c-format
@@ -53864,9 +53515,8 @@ msgid "'%s' settings differ."
 msgstr "'%s' asetukset eroavat."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:859
-#, fuzzy
 msgid "Footprint stackup differs."
-msgstr "Jalanjälkityypit eriävät."
+msgstr "Jalanjäljen kerrospino eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:877
 msgid "Pad clearance overridden."
@@ -54010,9 +53660,9 @@ msgid " (net '%s')"
 msgstr " (verkko '%s')"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "%s (gap %s)"
-msgstr "%s (Sivu %s)"
+msgstr "%s (väli %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:239
 msgid "(Suspicious items found on Edge.Cuts layer)"
@@ -54044,14 +53694,12 @@ msgid "Checking assertions..."
 msgstr "Tarkistetaan väitteitä..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:649
-#, fuzzy
 msgid "Checking for missing tuning profiles..."
-msgstr "Tarkistetaan jalanjälki-linkitysongelmia..."
+msgstr "Tarkistetaan puuttuvia pituudensäätöprofiileja..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:57
-#, fuzzy
 msgid "Checking net chain tuning profiles..."
-msgstr "Tarkistetaan jalanjälki-linkitysongelmia..."
+msgstr "Tarkistetaan verkkoketjujen pituudensäätöprofiileja..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:86
 #, c-format
@@ -54098,9 +53746,9 @@ msgid "'%s' settings differ"
 msgstr "'%s' asetukset eroavat"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Missing symbol field '%s' in footprint"
-msgstr "Tallennetaan symboli tiedostoon [%s]"
+msgstr "Symbolikenttä %s puuttuu jalanjäljestä"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:240
 #, c-format
@@ -54191,9 +53839,8 @@ msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s enimmäispaksuus %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:63
-#, fuzzy
 msgid "Checking text mirroring..."
-msgstr "Tarkistetaan tekstin mittoja..."
+msgstr "Tarkistetaan tekstin peilausta..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:65
 msgid "Checking track angles..."
@@ -54252,9 +53899,8 @@ msgid "(%s max diameter %s; actual %s on %s)"
 msgstr "(%s maksimihalkaisija %s; todellinen %s kohteessa %s)"
 
 #: pcbnew/drc/drc_test_provider_via_stitch.cpp:56
-#, fuzzy
 msgid "Checking via-stitch zone overlaps..."
-msgstr "Tarkastetaan läpivientien reiät..."
+msgstr "Tarkistetaan läpivientitikkauksen alueiden päällekkäisyyksiä..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:195
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
@@ -56257,14 +55903,12 @@ msgstr "Viritys"
 #: pcbnew/generators/pcb_via_stitch.h:73 pcbnew/generators/pcb_via_stitch.h:76
 #: pcbnew/generators/pcb_via_stitch.h:78
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Via Stitching"
-msgstr "Luetaan välimuistiin"
+msgstr "Läpivientien pistotikkaus"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1366
-#, fuzzy
 msgid "Edit Via Stitching"
-msgstr "Nopea ristikon kytkentä"
+msgstr "Muokkaa pistotikkausta"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1571
 #, fuzzy
@@ -56305,13 +55949,12 @@ msgid "Stitching Update"
 msgstr "Läpivientien päivitys"
 
 #: pcbnew/generators/via_stitch_tool.cpp:106
-#, fuzzy
 msgid "Exclude Via From Stitching"
-msgstr "Sulje pois simulaatiosta"
+msgstr "Poista läpivienti pistotikkauksesta"
 
 #: pcbnew/generators/via_stitch_tool.cpp:146 pcbnew/tools/pcb_actions.cpp:3150
 msgid "Clear Via Stitching Exclusions"
-msgstr ""
+msgstr "Tyhjennä pistotikkauksen poikkeukset"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:227
 msgid "Please select a file to import."
@@ -59275,7 +58918,7 @@ msgstr "Yksikköarvoa ei löytynyt, palautetaan oletuksena mils."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:326
 #, c-format
 msgid "Could not find column label %s."
-msgstr "Sarakkeen nimikettä %s ei löydy."
+msgstr "Sarakkeen tunnistetta %s ei löytynyt."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:360
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:431
@@ -62092,7 +61735,7 @@ msgstr "Siirrä kulma sijaintiin"
 
 #: pcbnew/tools/board_editor_control.cpp:2221
 msgid "Selection contains no items with labeled nets."
-msgstr "Valinta ei sisällä kohteita, joissa on nimettyjä verkkoja."
+msgstr "Valinta ei sisällä kohteita, joilla on nimetyt verkot."
 
 #: pcbnew/tools/board_inspection_tool.cpp:85
 msgid "Net Inspection Tools"
@@ -64117,7 +63760,7 @@ msgstr "Muokkaa jalanjälkeä"
 
 #: pcbnew/tools/pcb_actions.cpp:1142
 msgid "Show selected footprint on editor canvas"
-msgstr "Näytä valittu jalanjälki editorin kankaalla"
+msgstr "Näytä valittu jalanjälki editorin piirtoalueella"
 
 #: pcbnew/tools/pcb_actions.cpp:1148
 msgid "Duplicate Footprint"
@@ -66353,9 +65996,8 @@ msgid "Show custom routing/placement grids"
 msgstr "Salli automaattinen sijoittelu"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
-#, fuzzy
 msgid "Show via stitching generator outlines"
-msgstr "Näytä läpiviennit ääriviiva-tilassa"
+msgstr "Näytä pistotikkausalueen reunat"
 
 #: pcbnew/widgets/appearance_controls.cpp:359
 msgid "Locked Item Shadow"
@@ -67593,13 +67235,12 @@ msgid "Refill zones after changes made on board"
 msgstr "Täytä uudelleen vyöhykkeet piirilevyllä tehtyjen muutosten jälkeen"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:159
-#, fuzzy
 msgid "Select on canvas"
-msgstr "Valitse piirilevyltä"
+msgstr "Valitse piirtoalueelta"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:161
 msgid "Select and focus the highlighted zone on the board canvas"
-msgstr "Valitse ja keskitä korostettu alue piirilevynäkymässä"
+msgstr "Valitse korostettu alue piirilevyn piirtoalueella ja kohdista siihen"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:168
 msgid "Update Displayed Zones"
