@@ -40,6 +40,7 @@
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <dialogs/dialog_lib_new_symbol.h>
 #include <eda_list_dialog.h>
+#include <set>
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
@@ -1227,8 +1228,14 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
     if( toDelete.empty() )
         toDelete.emplace_back( GetTargetLibId() );
 
+    // A derived symbol selected together with its base is already gone once the base is removed
+    std::set<LIB_ID> removedWithBase;
+
     for( LIB_ID& libId : toDelete )
     {
+        if( removedWithBase.count( libId ) )
+            continue;
+
         if( m_libMgr->IsSymbolModified( libId.GetLibItemName(), libId.GetLibNickname() )
             && !IsOK( this, wxString::Format( _( "The symbol '%s' has been modified.\n"
                                                  "Do you want to remove it from the library?" ),
@@ -1278,6 +1285,9 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
         }
 
         m_libMgr->RemoveSymbol( libId.GetLibItemName(), libId.GetLibNickname() );
+
+        for( const wxString& derivedName : derived )
+            removedWithBase.emplace( libId.GetLibNickname().wx_str(), derivedName );
     }
 
     m_treePane->GetLibTree()->RefreshLibTree();
