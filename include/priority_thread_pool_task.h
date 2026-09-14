@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <progress_reporter.h>
 #include <thread_pool.h>
 
 
@@ -44,6 +45,9 @@ public:
      * Call this to execute the task on all items in aItems, using the thread pool
      * and dispatching the tasks in order of descending priority as determined by
      * comparePriority() implemented by the derived class.
+     *
+     * This method blocks until all tasks are complete, and re-throws any exceptions
+     * thrown by the tasks.
      */
     void Execute( ContainerT& aItems )
     {
@@ -83,7 +87,7 @@ public:
                     priority ) );
         }
 
-        for( const std::future<size_t>& ret : returns )
+        for( std::future<size_t>& ret : returns )
         {
             std::future_status status = ret.wait_for( m_reporterInterval );
 
@@ -94,6 +98,11 @@ public:
 
                 status = ret.wait_for( m_reporterInterval );
             }
+
+            // Re-throw an exception (if any) stored by the task future
+            // (we don't actually care about the return value (the number of
+            // items processed)
+            ret.get();
         }
     }
 

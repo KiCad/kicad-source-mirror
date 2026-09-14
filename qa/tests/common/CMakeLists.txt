@@ -98,6 +98,7 @@ set( QA_COMMON_SRCS
     test_reset_print_to_file.cpp
     test_wx_data_view_hyperlink_renderer.cpp
     test_grid_helper.cpp
+    test_priority_thread_pool_task.cpp
     test_snapping_options.cpp
     test_string_utils.cpp
     test_richio.cpp
