@@ -1024,7 +1024,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         wxLogTrace( traceSettings, wxT( "Project %s is locked; opening read-only" ), fullPath );
 
     // No MDI yet
-    if( aSetActive && !m_projects.empty() )
+    if( aSetActive && !m_projects_list.empty() )
     {
         // Cancel any in-progress library preloads and wait for them to finish before
         // modifying m_projects_list. Background preload threads access Prj() which becomes
@@ -1040,18 +1040,17 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         if( PgmOrNull() )
             Pgm().GetLibraryManager().AbortAsyncLoads();
 
-        PROJECT* oldProject = m_projects.begin()->second;
+        // The map is ordered by path, so its first entry may be a passive project
+        PROJECT* oldProject = m_projects_list.front().get();
         unloadProjectFile( oldProject, false );
-        m_projects.erase( m_projects.begin() );
 
-        auto it = std::find_if( m_projects_list.begin(), m_projects_list.end(),
-                                [&]( const std::unique_ptr<PROJECT>& ptr )
-                                {
-                                    return ptr.get() == oldProject;
-                                } );
+        std::erase_if( m_projects,
+                       [&]( const std::pair<const wxString, PROJECT*>& aEntry )
+                       {
+                           return aEntry.second == oldProject;
+                       } );
 
-        wxASSERT( it != m_projects_list.end() );
-        m_projects_list.erase( it );
+        m_projects_list.erase( m_projects_list.begin() );
     }
 
     wxLogTrace( traceSettings, wxT( "Load project %s" ), fullPath );
@@ -1096,8 +1095,13 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     if( lockFile.Valid() && aSetActive )
         project->SetProjectLock( new LOCKFILE( std::move( lockFile ) ) );
 
-    m_projects_list.push_back( std::move( project ) );
-    m_projects[fullPath] = m_projects_list.back().get();
+    m_projects[fullPath] = project.get();
+
+    // Prj() is the list front, so passive projects must not take that slot
+    if( aSetActive )
+        m_projects_list.insert( m_projects_list.begin(), std::move( project ) );
+    else
+        m_projects_list.push_back( std::move( project ) );
 
     wxString fn( path.GetName() );
 

@@ -375,6 +375,32 @@ BOOST_AUTO_TEST_CASE( UnloadProjectSavesToOwnDirectory )
 }
 
 
+// Switching projects must replace the active project even when a passive one sorts first
+BOOST_AUTO_TEST_CASE( LoadActiveProjectReplacesActiveNotPassive )
+{
+    auto projectPath = [&]( const std::string& aName )
+    {
+        fs::path dir = m_tempDir / aName;
+        fs::create_directories( dir );
+        return wxString( ( dir / ( aName + ".kicad_pro" ) ).string() );
+    };
+
+    const wxString active = projectPath( "z_active" );
+    const wxString passive = projectPath( "a_passive" );
+    const wxString next = projectPath( "m_next" );
+
+    SETTINGS_MANAGER mgr;
+
+    mgr.LoadProject( active, true );
+    mgr.LoadProject( passive, false );
+    mgr.LoadProject( next, true );
+
+    BOOST_CHECK_EQUAL( mgr.Prj().GetProjectFullName(), next );
+    BOOST_CHECK( mgr.GetProject( active ) == nullptr );
+    BOOST_CHECK( mgr.GetProject( passive ) != nullptr );
+}
+
+
 /**
  * Opening a project and saving it without any user change must not rewrite the .kicad_pro.
  *
